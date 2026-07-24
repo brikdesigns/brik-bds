@@ -106,6 +106,10 @@ Every Semantic-tier token name (`--text-*`, `--surface-*`, `--background-*`, `--
 
 Naming-pattern placeholders (`--surface-{role}`, `--text-*`, `--size-0…2200`) are not flagged. For a deliberate counter-example — a retired or invented name shown to teach what's wrong — wrap it in `{/* lint-mdx-tokens-ignore-start */}` … `{/* lint-mdx-tokens-ignore-end */}`, or add `lint-mdx-tokens-ignore` on the line.
 
+## Component prop tables
+
+The docs-site prop tables are curated summaries — the full auto-extracted reference lives in Storybook. A curated table can opt into source verification: put `{/* props-check: <PropsType> @ <path/to/Component.tsx> */}` on the line directly above the `| Prop | Type | Default |` header. `scripts/lint-component-props.mjs` (CI: Component Props Check) then verifies every documented prop against the TypeScript source — the prop exists, its type matches (alias or expanded literal union both accepted), and its literal default matches. A page with several tables (Button / LinkButton / IconButton) carries one marker per table, each naming its own props type. Unmarked tables are not checked, so annotate a table when you want its accuracy gated.
+
 ## Cross-link pattern
 
 Internal links use absolute docs paths: `[Foundation](/docs/primitives)`. Never `./` or `../`. Storybook lives at `https://storybook.brikdesigns.com` — link out explicitly when referencing visual playground.
