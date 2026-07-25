@@ -18,7 +18,7 @@ type Story = StoryObj;
 
 /* ═══════════════════════════════════════════════════════════════
    Multi-primitive form composition: TextInput × 3 + TextArea + Button.
-   Lives in Patterns/Forms/ per ADR-010 amendment §1 (compositions
+   Lives in Containers/ per the #1323 taxonomy decision (the #1330 8-bucket taxonomy defines no Patterns/ top-level) (compositions
    combining multiple distinct primitives don't live on the primitive's
    stories file).
    ═══════════════════════════════════════════════════════════════ */
