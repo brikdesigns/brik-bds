@@ -1,6 +1,6 @@
 import { type ReactNode, type HTMLAttributes, useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { CaretDownBold, CaretUpBold, X, CheckCircle, Circle, WarningCircle } from '../../icons';
 import { bdsClass } from '../../utils';
 import { Button } from '../Button';

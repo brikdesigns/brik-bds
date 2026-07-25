@@ -2,7 +2,7 @@
 
 import { type ReactNode, type HTMLAttributes } from 'react';
 import * as RadixCollapsible from '@radix-ui/react-collapsible';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { Plus, Minus } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Collapsible.css';

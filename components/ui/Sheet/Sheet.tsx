@@ -1,6 +1,6 @@
 import { type ReactNode, type CSSProperties, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { ArrowLeftBold, Pen } from '../../icons';
 import { Button } from '../Button';
 import { CloseButton } from '../CloseButton';
