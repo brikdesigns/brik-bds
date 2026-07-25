@@ -20,7 +20,19 @@ const meta: Meta<typeof Accordion> = {
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
+    items: {
+      control: 'object',
+      description: 'Sections to render. Each item supplies its own `id`, `title`, and `content`.',
+    },
     allowMultiple: { control: 'boolean', description: 'Allow multiple items open simultaneously' },
+    openItems: {
+      control: false,
+      description: 'Controlled open ids. When provided, internal state is ignored and `onOpenChange` is the only way state advances.',
+    },
+    onOpenChange: {
+      control: false,
+      description: 'Called with the next array of open ids whenever a section toggles. Required for controlled use.',
+    },
     defaultOpenItems: { control: 'object', description: 'IDs of items expanded on mount' },
   },
 };

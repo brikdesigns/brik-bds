@@ -24,10 +24,22 @@ const meta: Meta<typeof InteractiveListItem> = {
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
+    leading: {
+      control: false,
+      description: 'Leading slot — typically a `UserAvatar`, an icon inside a colored circle, or a status indicator. Fixed width; doesn\'t shrink.',
+    },
     title: { control: 'text', description: 'Primary title text.' },
     subtitle: {
       control: 'text',
       description: 'Optional secondary line. Also accepts multi-line ReactNode (see Variants).',
+    },
+    trailing: {
+      control: false,
+      description: 'Optional trailing slot — typically a `Tag`, `Badge`, progress block, or caret indicator. Fixed width; doesn\'t shrink.',
+    },
+    onClick: {
+      control: false,
+      description: 'Click handler. Ignored when `interactive={false}`.',
     },
     size: {
       control: 'inline-radio',

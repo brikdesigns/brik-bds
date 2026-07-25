@@ -11,7 +11,23 @@ const meta: Meta<typeof Collapsible> = {
   argTypes: {
     sectionLabel: { control: 'text' },
     title: { control: 'text' },
+    children: {
+      control: false,
+      description: 'Content revealed when expanded.',
+    },
+    isOpen: {
+      control: false,
+      description: 'Controlled: whether the section is expanded. Pair with `onOpenChange` — uncontrolled callers use `defaultOpen`.',
+    },
+    onOpenChange: {
+      control: false,
+      description: 'Callback fired when open state changes.',
+    },
     defaultOpen: { control: 'boolean' },
+    headerActions: {
+      control: false,
+      description: 'Additional actions rendered in the header alongside the toggle.',
+    },
   },
 };
 

@@ -52,6 +52,10 @@ const meta: Meta<typeof SelectableMediaTile> = {
       control: 'text',
       description: 'CSS aspect-ratio for the image box. Default `4 / 3`.',
     },
+    onClick: {
+      control: false,
+      description: 'Click handler for the tile.',
+    },
   },
 };
 

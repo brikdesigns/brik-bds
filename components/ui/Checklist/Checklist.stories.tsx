@@ -27,6 +27,10 @@ const meta: Meta<typeof Checklist> = {
       control: 'boolean',
       description: 'Locks the toggle and mutes styling — use during async save or on read-only items.',
     },
+    onCheckedChange: {
+      control: false,
+      description: 'Called with the new state when the row is clicked.',
+    },
   },
 };
 

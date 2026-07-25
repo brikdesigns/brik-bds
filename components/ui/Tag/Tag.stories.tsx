@@ -13,6 +13,18 @@ const meta: Meta<typeof Tag> = {
     layout: 'centered',
   },
   argTypes: {
+    children: {
+      control: 'text',
+      description: 'Tag label content (optional for xs/icon-only size).',
+    },
+    icon: {
+      control: false,
+      description: 'Optional leading icon (left) — required for xs size.',
+    },
+    trailingIcon: {
+      control: false,
+      description: 'Optional trailing icon (right).',
+    },
     size: {
       control: 'select',
       options: ['xs', 'sm', 'md', 'lg'],

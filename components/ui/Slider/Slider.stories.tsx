@@ -10,6 +10,12 @@ const meta: Meta<typeof Slider> = {
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
+    label: { control: 'text', description: 'Optional label rendered above the track.' },
+    value: {
+      control: false,
+      description: 'Current value (controlled). Pair with `onChange` — uncontrolled callers use `defaultValue`.',
+    },
+    defaultValue: { control: 'number', description: 'Default value (uncontrolled).' },
     size: {
       control: 'select',
       options: ['sm', 'md', 'lg'],
@@ -20,6 +26,7 @@ const meta: Meta<typeof Slider> = {
     step: { control: 'number' },
     showValue: { control: 'boolean' },
     disabled: { control: 'boolean' },
+    onChange: { control: false, description: 'Change handler, called with the new numeric value.' },
   },
 } satisfies Meta<typeof Slider>;
 

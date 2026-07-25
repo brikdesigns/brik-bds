@@ -8,6 +8,10 @@ const meta: Meta<typeof BulletList> = {
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
+    items: {
+      control: false,
+      description: 'Array of list items. Each item becomes one `<li>`.',
+    },
     marker: { control: 'select', options: ['disc', 'decimal', 'none'] },
     density: { control: 'select', options: ['compact', 'comfortable'] },
   },
