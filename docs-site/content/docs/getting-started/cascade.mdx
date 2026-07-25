@@ -162,7 +162,7 @@ This page is the **canonical adoption contract**: every consumer (portal, renew-
 
 1. **Declare the layer order** — `@layer bds-tokens, bds-components, client-theme, client-overrides;` before any imports ([CSS layers](#css-layers)).
 2. **Set the mode switches on `<html>`** — `data-theme` and any `data-mode-*` the consumer opts into ([switchboard](#html-attribute-switchboard)); omit an attribute to take the default.
-3. **Import `@brikdesigns/bds/tokens.css`** — never the internal bundle files directly, never a hand-rolled copy of a scale.
+3. **Import each BDS file into its layer** — `@import '@brikdesigns/bds/tokens.css' layer(bds-tokens);` and `styles.css layer(bds-components);`. `tokens.css` ships **unlayered**, so the `layer()` clause is what places it — without it the file wins as unlayered CSS and the client theme can never override. Never the internal bundle files directly, never a hand-rolled copy of a scale. (Astro/Vite JS `import`s can't carry `layer()`; those consumers cascade by source order instead — see [Framework Guides](/docs/getting-started/framework-guides).)
 4. **Hold zero token redefinitions** — see the rule below.
 
 <Callout type="warn">
