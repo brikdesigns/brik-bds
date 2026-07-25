@@ -1,5 +1,5 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { CaretDownBold, X } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Chip.css';

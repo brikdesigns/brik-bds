@@ -6,7 +6,7 @@ import {
   useEffect,
   useCallback,
 } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { CaretDownBold } from '../../icons';
 import { bdsClass } from '../../utils';
 import './FilterButton.css';
