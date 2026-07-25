@@ -95,7 +95,22 @@ jobs:
                   state
                   parent { number }
                   labels(first:50){ nodes { name } } } } }`;
-              const res = await github.graphql(q, { owner, repo, num: number });
+              // A `#N` mention that resolves to a PULL REQUEST (not an issue)
+              // makes GraphQL return `{ data:{ issue:null }, errors:[NOT_FOUND] }`.
+              // github.graphql() throws on the errors array even though data is
+              // present, so the `if (!issue) return null` guard below never runs
+              // and the whole step crashes. Treat a NOT_FOUND as "N is not an
+              // issue → skip it"; re-throw anything else so real failures surface.
+              let res;
+              try {
+                res = await github.graphql(q, { owner, repo, num: number });
+              } catch (e) {
+                if (Array.isArray(e.errors) && e.errors.length > 0 &&
+                    e.errors.every(err => err.type === 'NOT_FOUND')) {
+                  return null;
+                }
+                throw e;
+              }
               const issue = res.repository.issue;
               if (!issue) return null;
               const labels = issue.labels.nodes.map(n => n.name);
