@@ -1,6 +1,33 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import { Icon } from '@iconify/react';
 import * as Stories from './Badge.stories';
+import { Badge } from './Badge';
+import { Tag } from '../Tag/Tag';
+
+{/* Cross-component demo — Badge + Tag share the size scale. Lives here (docs),
+    not as a Badge story, because it isn't part of Badge's own API surface
+    (storybook-story-shape consolidation rule 4). */}
+export const BadgeTagAlignmentDemo = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+    {['xs', 'sm', 'md', 'lg'].map((size) => (
+      <div key={size} style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap', alignItems: 'center' }}>
+        <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: 'var(--size-600)' }}>{size}</span>
+        {size === 'xs' ? (
+          <>
+            <Badge size="xs" status="positive" icon={<Icon icon="ph:star" />} />
+            <Tag size="xs" icon={<Icon icon="ph:tag" />} />
+          </>
+        ) : (
+          <>
+            <Badge size={size} status="positive" icon={<Icon icon="ph:star" />}>Active</Badge>
+            <Tag size={size} icon={<Icon icon="ph:tag" />}>Category</Tag>
+          </>
+        )}
+      </div>
+    ))}
+  </div>
+);
 
 <Meta of={Stories} />
 
@@ -16,7 +43,7 @@ Status indicators and labels for displaying contextual information. Badges use s
 
 ## Variants
 
-The semantic axis is **status** — six tones an agent picks as a starting template. `appearance`, `size`, and `density` are Controls on any story; the size gallery below shows the size axis side-by-side.
+The semantic axis is **status** — six tones an agent picks as a starting template. `info` is the canonical tone shown in **Default** above; the other five each get a story below. `appearance`, `size`, and `density` are Controls on any story; the size gallery below shows the size axis side-by-side.
 
 ### Positive
 
@@ -29,10 +56,6 @@ The semantic axis is **status** — six tones an agent picks as a starting templ
 ### Error
 
 <Canvas of={Stories.Error} />
-
-### Info
-
-<Canvas of={Stories.Info} />
 
 ### Progress
 
@@ -56,7 +79,9 @@ Four size tokens at a single status. `xs` is icon-only by design — text doesn'
 
 Badge and Tag share the same height at every size tier — useful when mixing them inline.
 
-<Canvas of={Stories.BadgeTagAlignment} />
+<Canvas>
+  <BadgeTagAlignmentDemo />
+</Canvas>
 
 ### Content status
 
