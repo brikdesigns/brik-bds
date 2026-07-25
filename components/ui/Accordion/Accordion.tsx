@@ -4,7 +4,7 @@ import {
   useState,
   useCallback,
 } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { Plus, Minus } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Accordion.css';
