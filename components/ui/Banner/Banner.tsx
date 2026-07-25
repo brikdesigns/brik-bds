@@ -1,5 +1,5 @@
 import { type ReactNode, type HTMLAttributes } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { Warning, Info, CheckCircle } from '../../icons';
 import { Badge } from '../Badge';
 import { bdsClass } from '../../utils';
