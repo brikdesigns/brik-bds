@@ -15,6 +15,9 @@ const config: StorybookConfig = {
     '@storybook/addon-docs',
     '@storybook/addon-vitest',
     '@storybook/addon-mcp',
+    // Emits preview-stats.json so Chromatic TurboSnap (onlyChanged) can trace
+    // the Vite module graph and snapshot only stories affected by a diff. #771.
+    '@chromatic-com/storybook',
   ],
   framework: {
     name: '@storybook/react-vite',
