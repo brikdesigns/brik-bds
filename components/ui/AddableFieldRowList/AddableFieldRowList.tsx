@@ -1,5 +1,5 @@
 import { type CSSProperties, type HTMLAttributes, type ReactNode } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { bdsClass } from '../../utils';
 import { Button, type ButtonSize } from '../Button';
 import './AddableFieldRowList.css';
