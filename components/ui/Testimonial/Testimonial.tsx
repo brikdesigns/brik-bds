@@ -1,5 +1,5 @@
 import { type HTMLAttributes } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { bdsClass } from '../../utils';
 import './Testimonial.css';
 

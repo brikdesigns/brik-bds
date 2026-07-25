@@ -1,5 +1,5 @@
 import { type HTMLAttributes } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { ArrowSquareOut, CloudArrowUp, File as FileIcon, Trash } from '../../icons';
 import { bdsClass } from '../../utils';
 import './FileCard.css';

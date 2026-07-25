@@ -1,5 +1,5 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { Pen } from '../../icons';
 import { Button } from '../Button';
 import { ButtonGroup } from '../ButtonGroup';

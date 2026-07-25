@@ -1,5 +1,5 @@
 import { type HTMLAttributes, useState, useRef, useCallback } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { CloudArrowUp } from '../../icons';
 import { bdsClass } from '../../utils';
 import './FileUploader.css';
