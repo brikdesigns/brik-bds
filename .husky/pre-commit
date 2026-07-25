@@ -100,8 +100,11 @@ if [ -n "$STAGED_MDX" ]; then
 fi
 
 # ── Storybook story-shape (ADR-006) ──
-# Whole-repo scan; fires only when a story file is staged. Bans render-mode
-# gallery exports (Variants/Tones/Patterns/Examples/*And*). See #569.
+# Whole-repo scan; fires only when a story file is staged. `--enforce` hard-fails
+# on: banned render-mode gallery exports (Variants/Tones/Patterns/Examples/*And*,
+# #569), MCP-payload structural rules (#1321), and — since #1308 Step 7 —
+# consolidation rules 1–2 (duplicate-args / boolean-toggle-story), which
+# graduated from advisory once the audit sweep cleared the repo.
 STAGED_STORIES=$(git diff --cached --name-only --diff-filter=ACM -- '*.stories.tsx')
 if [ -n "$STAGED_STORIES" ]; then
   echo "Linting Storybook story shape (ADR-006)..."

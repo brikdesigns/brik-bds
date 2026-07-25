@@ -20,8 +20,9 @@
  *    (#1278, #1279) emptied the set repo-wide before the gate shipped, so every
  *    file is expected to pass. `--enforce` exits 1 on any HARD violation.
  *
- * 2. ADVISORY (non-gating) — the two statically-decidable "consolidation" slop
- *    patterns from the story-shape standard's `## Consolidation rules` section:
+ * 2. CONSOLIDATION (gating — graduated #1308 Step 7) — the two statically-
+ *    decidable "consolidation" slop patterns from the story-shape standard's
+ *    `## Consolidation rules` section:
  *
  *      duplicate-args        Two exports whose `args` are structurally identical
  *                            (same keys, same value text). One is dead weight —
@@ -30,13 +31,13 @@
  *                            ONLY in boolean-valued args. Per matrix Q2 a boolean
  *                            toggle is a Control, not a dedicated story.
  *
- *    Advisory findings PRINT but do NOT affect the exit code under `--enforce`
- *    (so CI/pre-commit stay green on the grandfathered files that predate these
- *    rules). They gate only under the explicit `--matrix-strict` flag, which
- *    nothing wires into CI yet — it graduates to `--enforce` once the Step 7
- *    audit sweep clears the repo. The other two consolidation rules
- *    (non-visual-prop-only stories; cross-component/shell relocation) are not
- *    statically decidable and stay skill/PR-review enforced.
+ *    These shipped ADVISORY (non-gating) in #1359 while the audit sweep ran, so
+ *    CI/pre-commit stayed green on files that predated the rules. #1308 Step 7
+ *    cleared the repo, so they GRADUATED to `--enforce`: they now fail the build
+ *    exactly like the HARD tier. (The `--matrix-strict` staging flag that used
+ *    to gate them is retired — `--enforce` covers both tiers.) The other two
+ *    consolidation rules (non-visual-prop-only stories; cross-component/shell
+ *    relocation) are not statically decidable and stay skill/PR-review enforced.
  *
  * `## Variants` / `## Patterns` are REQUIRED/optional *MDX H2 headings* on the
  * docs page (ADR-007) — a different layer. This lint only inspects `.stories.tsx`
@@ -45,14 +46,14 @@
  * Usage:
  *   node scripts/lint-story-shape.js                 # full report (exit 0)
  *   node scripts/lint-story-shape.js --json          # machine-readable
- *   node scripts/lint-story-shape.js --enforce       # exit 1 on HARD violations
- *   node scripts/lint-story-shape.js --matrix-strict # also exit 1 on advisories
+ *   node scripts/lint-story-shape.js --enforce       # exit 1 on HARD or
+ *                                                    #   CONSOLIDATION violations
  *   node scripts/lint-story-shape.js <file>...       # lint only the given files
  *
  * Exit codes:
  *   0 — report printed (default)
- *   1 — fatal error (no story files found), OR HARD violations under --enforce,
- *       OR advisory findings under --matrix-strict
+ *   1 — fatal error (no story files found), OR any HARD / CONSOLIDATION
+ *       violation under --enforce
  */
 
 const fs = require('fs');
@@ -60,7 +61,6 @@ const path = require('path');
 
 const args = process.argv.slice(2);
 const FLAG_ENFORCE = args.includes('--enforce');
-const FLAG_MATRIX_STRICT = args.includes('--matrix-strict');
 const FLAG_JSON = args.includes('--json');
 const EXPLICIT_FILES = args.filter((a) => !a.startsWith('--'));
 
@@ -553,7 +553,9 @@ function main() {
   }
 
   const results = files.map(lintFile);
-  const conforming = results.filter((r) => r.violations.length === 0);
+  // Conforming = clean on BOTH gating tiers (banned/structural + consolidation,
+  // which graduated to hard under --enforce in #1308 Step 7).
+  const conforming = results.filter((r) => r.violations.length === 0 && r.advisories.length === 0);
   const violating = results.filter((r) => r.violations.length > 0);
   const advised = results.filter((r) => r.advisories.length > 0);
   const advisoryCount = results.reduce((n, r) => n + r.advisories.length, 0);
@@ -573,7 +575,7 @@ function main() {
         2,
       ),
     );
-    const fail = (FLAG_ENFORCE && violating.length > 0) || (FLAG_MATRIX_STRICT && advisoryCount > 0);
+    const fail = FLAG_ENFORCE && (violating.length > 0 || advisoryCount > 0);
     process.exit(fail ? 1 : 0);
   }
 
@@ -581,8 +583,8 @@ function main() {
   console.log(`════════════════════════════════════════════════════════════`);
   console.log(`Total story files:  ${results.length}`);
   console.log(`Conforming:         ${conforming.length}`);
-  console.log(`Violating (hard):   ${violating.length}`);
-  console.log(`Advisory findings:  ${advisoryCount} in ${advised.length} file(s)\n`);
+  console.log(`Violating (banned): ${violating.length}`);
+  console.log(`Consolidation:      ${advisoryCount} in ${advised.length} file(s)\n`);
 
   if (violating.length === 0) {
     console.log(`✓ No banned story exports (Variants / Tones / Patterns / Examples / *And* compounds).`);
@@ -595,7 +597,7 @@ function main() {
   }
 
   if (advisoryCount > 0) {
-    console.log('\nConsolidation advisories (matrix Q2 / rule 1 — non-gating unless --matrix-strict):');
+    console.log('\nConsolidation violations (rules 1–2 / matrix Q2 — HARD, gate under --enforce):');
     for (const r of advised) {
       console.log(`\n  ${r.file}`);
       for (const a of r.advisories) console.log(`    [${a.rule}] L${a.line}: ${a.message}`);
@@ -603,12 +605,11 @@ function main() {
   }
   console.log('');
 
-  if (FLAG_ENFORCE && violating.length > 0) {
-    console.log('--enforce: banned story exports detected, exiting 1');
-    process.exit(1);
-  }
-  if (FLAG_MATRIX_STRICT && advisoryCount > 0) {
-    console.log('--matrix-strict: consolidation advisories detected, exiting 1');
+  if (FLAG_ENFORCE && (violating.length > 0 || advisoryCount > 0)) {
+    const parts = [];
+    if (violating.length > 0) parts.push('banned story exports');
+    if (advisoryCount > 0) parts.push('consolidation violations');
+    console.log(`--enforce: ${parts.join(' + ')} detected, exiting 1`);
     process.exit(1);
   }
   process.exit(0);
