@@ -1,0 +1,125 @@
+---
+title: Interactive list item
+description: Clickable horizontal row — leading + title/subtitle + trailing slots — with the whole row as a single button click target.
+---
+
+InteractiveListItem composes a leading slot, a title + subtitle stack, and a trailing slot into one horizontal row. The entire row is a single `<button>`, so it carries native keyboard support — focus ring, `Space` / `Enter` activation, `disabled` — with no extra wiring.
+
+## Use it for
+
+- A member row that opens a profile
+- An activity item that opens the related task
+- A persona row that switches the dev session
+- Any list where clicking anywhere on the row is the expected behavior
+
+## Import
+
+```tsx
+import { InteractiveListItem } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default row
+
+`leading`, `subtitle`, `trailing`, `size`, and `disabled` are all Controls-driven — no dedicated stories needed.
+
+```tsx
+<InteractiveListItem
+  leading={<Avatar name="Emily Rivera" size="md" />}
+  title="Emily Rivera"
+  subtitle="Hygienist · 2 years"
+  trailing={<Badge status="info">New hire</Badge>}
+  onClick={() => openProfile('emily-rivera')}
+/>
+```
+
+### Selectable
+
+Pass `selected` to turn the row into a toggle: a brand tint plus an inset brand ring, with `aria-pressed` reflecting the state. Use it for picker options and multi-select lists — a leading icon that swaps to a filled check pairs well with it. The ring is drawn with `box-shadow`, not `border`, so toggling a row never shifts its neighbours. Leave `selected` undefined for a plain drill-in row (no `aria-pressed`).
+
+```tsx
+<InteractiveListItem
+  selected={selectedId === option.id}
+  leading={<Icon icon={selectedId === option.id ? 'ph:check-circle-fill' : 'ph:file-text'} />}
+  title={option.title}
+  subtitle={option.subtitle}
+  onClick={() => setSelectedId(option.id)}
+/>
+```
+
+For a vertical image-first selectable (a photo grid, an avatar picker), reach for [SelectableMediaTile](/docs/components/selectable-media-tile) instead — same selected semantics, media-tile shape.
+
+### Read-only
+
+Pass `interactive={false}` for a display-only row — a status list, a per-page composition list, any row that shows data without drilling in. It renders a non-interactive `<div>` with the same slots and drops every interactive affordance: no click target, no hover, no active scale, no focus ring. The button-only props (`onClick`, `disabled`, `selected`) are ignored.
+
+Use the interactive default when clicking the row *does* something — drills into a profile, opens a task, switches a persona. Use `interactive={false}` when the row is purely informational and the state lives in the trailing slot (a Badge, a Tag). If a read-only row grows a click target later, drop `interactive={false}` rather than wrapping it.
+
+## Pattern: activity feed
+
+The `subtitle` slot accepts a `ReactNode`, so a row can carry multi-line metadata — a text line above a row of inline Badges — with a caret in the trailing slot.
+
+```tsx
+<InteractiveListItem
+  leading={<StatusGlyph kind="open" />}
+  title="Restock surgical gloves"
+  subtitle={
+    <>
+      <span>Acme Dental Supply · Submitted 2d ago</span>
+      <BadgeGroup>
+        <Badge status="warning" size="xs">In review</Badge>
+        <Badge status="error" size="xs">High</Badge>
+      </BadgeGroup>
+    </>
+  }
+  trailing={<span aria-hidden="true">›</span>}
+  onClick={() => openRequest(request.id)}
+/>
+```
+
+## List item vs card control
+
+If a row needs both — drilling in *and* a switch in the trailing slot — that's a UX conflict; pick one click target.
+
+| | InteractiveListItem | CardControl |
+|---|---|---|
+| Click target | The whole row | The trailing action only (Switch / Button / link) |
+| Trailing slot | Decorative — a Tag, Badge, progress block, caret | The interactive control itself |
+| Use for | Drilling into a profile, task, or record | A settings toggle or feature flag |
+
+See [Card control](/docs/components/card-control) for the settings-row shape.
+
+## When *not* to use
+
+- **Don't add a switch or button to the trailing slot expecting it to be independently clickable.** The whole row is one `<button>` — a nested interactive element breaks the click target. Use [CardControl](/docs/components/card-control) instead.
+- **Don't use InteractiveListItem for an image-first grid.** Use [SelectableMediaTile](/docs/components/selectable-media-tile).
+
+## Accessibility
+
+- Renders a real `<button>` (or a `<div>` when `interactive={false}`) — native focus ring, `Space` / `Enter` activation, and `disabled` come for free.
+- `selected` sets `aria-pressed` so assistive tech reads the toggle state; leave it `undefined` for a plain drill-in row.
+- `interactive={false}` rows carry no button semantics — they're purely presentational.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `ReactNode` *(required)* | — |
+| `subtitle` | `ReactNode` | — |
+| `leading` | `ReactNode` | — |
+| `trailing` | `ReactNode` | — |
+| `size` | `'sm' \| 'md'` | `'md'` |
+| `disabled` | `boolean` | `false` |
+| `selected` | `boolean` | — |
+| `interactive` | `boolean` | `true` |
+| `onClick` | `() => void` | — |
+
+Plus standard `<button>` (or `<div>` when `interactive={false}`) HTML attributes.
+
+## Related
+
+- [Card control](/docs/components/card-control) — trailing-action-is-the-click-target sibling
+- [SelectableMediaTile](/docs/components/selectable-media-tile) — vertical, image-first selectable sibling
+- [Badge](/docs/components/badge) / [Tag](/docs/components/tag) — common `trailing` slot content
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/blocks-interactive-list-item--overview)**

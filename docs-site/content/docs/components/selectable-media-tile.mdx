@@ -1,0 +1,97 @@
+---
+title: Selectable media tile
+description: Vertical, image-first toggle tile — full-bleed image, caption, and a persistent selected state.
+---
+
+SelectableMediaTile is a vertical, image-first toggle: a full-bleed image on top, a caption below, and a persistent selected state. The whole tile is a single `<button>` click target, with `aria-pressed` reflecting the selection.
+
+## Use it for
+
+- A hero-photo picker
+- A gallery multi-select
+- An avatar chooser
+- Any image / avatar grid where each cell toggles on and off
+
+## Import
+
+```tsx
+import { SelectableMediaTile } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default tile
+
+`selected`, `disabled`, `caption`, and `aspectRatio` are all Controls-driven — no dedicated per-state stories needed.
+
+```tsx
+<SelectableMediaTile
+  src={photo.src}
+  alt="Hero exterior photo"
+  caption="hero-exterior.jpg"
+  selected={false}
+  onClick={() => toggle(photo.id)}
+/>
+```
+
+## Pattern: single-select photo grid
+
+The irreducible composition is a single-select image grid — one tile pinned at a time, clicking the pinned tile clears it. Selection shows a brand ring, a check overlay on the image, and an emphasised caption.
+
+```tsx
+<Grid columns={3} gap="sm">
+  {photos.map((photo) => (
+    <SelectableMediaTile
+      key={photo.id}
+      src={photo.src}
+      alt={photo.name}
+      caption={photo.name}
+      selected={pinned === photo.id}
+      onClick={() => setPinned(pinned === photo.id ? null : photo.id)}
+    />
+  ))}
+</Grid>
+```
+
+## Selectable media tile vs interactive list item
+
+Both share the same selected semantics — a brand ring and `aria-pressed` — but different shapes.
+
+| | SelectableMediaTile | InteractiveListItem |
+|---|---|---|
+| Shape | Vertical — image on top, caption below | Horizontal — leading + title/subtitle + trailing |
+| The content | The image itself | Text + slots |
+| Use for | Photo / avatar grids | Text-first rows and lists |
+
+Reach for [InteractiveListItem](/docs/components/interactive-list-item)'s `selected` prop when the row is horizontal text + slots; reach for SelectableMediaTile when the image *is* the content.
+
+## When *not* to use
+
+- **Don't use SelectableMediaTile for a non-toggling image.** Leave `selected` `undefined`, or use a plain `<img>` if the tile never needs a selected state.
+- **Don't use SelectableMediaTile for a horizontal text row.** Use [InteractiveListItem](/docs/components/interactive-list-item) instead.
+
+## Accessibility
+
+- Renders a real `<button>` — native focus ring, `Space` / `Enter` activation, and `disabled` come for free.
+- `alt` is required — the tile is a real control, not decoration.
+- `selected` sets `aria-pressed` so assistive tech reads the toggle state.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `src` | `string` *(required)* | — |
+| `alt` | `string` *(required)* | — |
+| `caption` | `ReactNode` | — |
+| `selected` | `boolean` | — |
+| `disabled` | `boolean` | `false` |
+| `aspectRatio` | `string` | `'4 / 3'` |
+| `onClick` | `() => void` | — |
+
+Plus standard `<button>` HTML attributes.
+
+## Related
+
+- [InteractiveListItem](/docs/components/interactive-list-item) — horizontal, text-first selectable sibling
+- [Grid](/docs/components/grid) — common layout wrapper for a tile grid
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/blocks-selectable-media-tile--overview)**

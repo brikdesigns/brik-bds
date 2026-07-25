@@ -65,7 +65,7 @@ PageHeader has six optional regions plus a required title. From top to bottom:
 
 ### With service tag
 
-[ServiceTag](https://storybook.brikdesigns.com/?path=/docs/components-service-tag--overview) renders to the left of the title for service-line pages.
+[ServiceTag](/docs/components/service-tag) renders to the left of the title for service-line pages.
 
 ```tsx
 <PageHeader
@@ -129,6 +129,29 @@ PageHeader can drive a page-level read↔edit toggle. In `mode="read"` it render
   onSave={handleSave}
   onCancel={() => setMode('read')}
   saveLoading={saving}
+/>
+```
+
+### Structured actions
+
+`actions` accepts any `ReactNode`, but a bare flex row lets each surface pick its own ordering and mix button sizes. `PageHeaderActions` fixes the hierarchy once:
+
+- **Ordering** — `destructive` (far left) · `secondary` · `primary` (far right). The primary lands at the reading-end; the destructive is held away from it.
+- **Spacing + alignment** — composed on `ButtonGroup` (`align="end"`), the canonical action-row treatment.
+- **Size** — a single `size` (default `md`) is injected into every slotted button that doesn't set its own, so a group can't render a `sm` next to an `lg`.
+
+Slots accept rendered elements — a raw `Button` or a consumer wrapper (`DeleteCompanyButton`) — so it fits both catalog buttons and app-specific action components. Non-breaking: pass a `PageHeaderActions` into `actions` only when you want the enforced hierarchy; existing raw-`ReactNode` usage is unchanged.
+
+```tsx
+<PageHeader
+  title="Acme Corp"
+  actions={
+    <PageHeaderActions
+      destructive={<Button variant="destructive">Delete</Button>}
+      secondary={<Button variant="outline">Edit</Button>}
+      primary={<Button variant="primary">New Proposal</Button>}
+    />
+  }
 />
 ```
 
@@ -215,7 +238,7 @@ interface MetadataItem {
 
 - [Breadcrumb](/docs/components/breadcrumb) — common breadcrumbs prop content
 - [TabBar](/docs/components/tab-bar) — common tabs prop content
-- [ServiceTag](https://storybook.brikdesigns.com/?path=/docs/components-service-tag--overview) — common badge prop content (variant="icon")
+- [ServiceTag](/docs/components/service-tag) — common badge prop content (variant="icon")
 - [DataSection](/docs/components/data-section) — for body sections below the header
 - [Sheet](/docs/components/sheet) — has its own header for in-Sheet contexts
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-page-header--overview)**

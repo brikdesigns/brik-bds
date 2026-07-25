@@ -3,6 +3,12 @@ title: Pricing card
 description: Pricing tier display — title, price, features list, action. Optional highlighted state for the recommended plan.
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout';
+
+<Callout type="warn">
+  **PricingCard is deprecated as a standalone surface.** Its canonical story and guidance live with [`Card`](/docs/components/card) (the `Pricing` story in Card's Storybook file). The component file stays during the migration window for `surface-web` CSS isolation and is removed in a future major version.
+</Callout>
+
 PricingCard renders a single pricing tier — title, price + period, description, feature bullets, and call-to-action. Pair multiple in a [CardList](/docs/components/card-list) for the canonical 2-3-tier pricing grid.
 
 ## Use it for
@@ -147,4 +153,4 @@ Plus standard `<div>` HTML attributes.
 - [Card](/docs/components/card) — flexible-content alternative
 - [CardList](/docs/components/card-list) — for the multi-tier grid layout
 - [Badge](/docs/components/badge) — common `badge` content ("Most popular")
-- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/cards-pricing-card--overview)**
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/deprecated-pricing-card--overview)**

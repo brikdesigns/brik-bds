@@ -63,6 +63,21 @@ For 5+ level hierarchies, consider truncating with an ellipsis or root-only fall
 />
 ```
 
+## Service-line cascade
+
+When a breadcrumb sits inside a `[data-service-line='X']` subtree, the current-page label and separators rebind canonical `--text-secondary` and `--text-muted` to the matching `--text-service-{name}` value (`brand`, `marketing`, `information`, `product`, and `service` → back-office).
+
+The component itself stays scope-blind — only the cascade block in `Breadcrumb.css` knows about service lines. Consumers set `data-service-line` on any ancestor (page wrapper, hero card, sidebar column) and the breadcrumb inside picks up the hue. The legacy `data-audience` attribute still resolves during the deprecation window ([#788](https://github.com/brikdesigns/brik-bds/issues/788)).
+
+```tsx
+<div data-service-line="marketing">
+  <Breadcrumb items={[
+    { label: 'Services', href: '/services' },
+    { label: 'Website Design' },
+  ]} />
+</div>
+```
+
 ## When *not* to use
 
 - **Don't use Breadcrumb when there's no hierarchy.** Single-level apps don't benefit — drop the trail entirely.

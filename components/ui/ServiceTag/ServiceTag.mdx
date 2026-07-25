@@ -10,11 +10,6 @@ import * as Stories from './ServiceTag.stories';
 
 Colored indicator identifying Brik service categories. Each category has a dedicated color palette used across the Brik ecosystem for consistent service identification.
 
-Available in three variants:
-- **`text`** — colored pill with label text only
-- **`icon-text`** — colored pill with service icon + label text
-- **`icon`** — colored square with service icon only (the icon badge, previously `ServiceBadge`)
-
 ## Default
 
 Use the Controls panel to switch `category`, `variant`, and `size`.
@@ -24,14 +19,7 @@ Use the Controls panel to switch `category`, `variant`, and `size`.
 ## Variants
 
 ServiceTag has no dedicated per-category or per-variant stories — `category`,
-`variant`, and `size` are all fully explorable via Controls on Default. Each
-category maps to a dedicated color:
-
-- **Brand** — Yellow
-- **Marketing** — Green
-- **Information** — Blue
-- **Product** — Purple
-- **Back Office** — Orange
+`variant`, and `size` are all fully explorable via Controls on Default.
 
 <Canvas of={Stories.Default} />
 
@@ -39,27 +27,6 @@ category maps to a dedicated color:
 
 <ArgTypes of={Stories} />
 
-## Migration from ServiceBadge
+## Notes
 
-`ServiceBadge` was removed in [#572](https://github.com/brikdesigns/brik-bds/issues/572). Existing usages migrate to `ServiceTag variant="icon"`:
-
-```tsx
-// Old
-<ServiceBadge category="brand" serviceName="Brand Identity Bundle" size="lg" />
-
-// New
-<ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />
-```
-
-## Icon resolution
-
-The `serviceName` prop resolves to an SVG icon via two mechanisms:
-
-- **Explicit overrides** — common service names map directly to icon files (e.g., "Premium Logo Design" resolves to `brand-logo.svg`)
-- **Normalization** — service names are lowercased and hyphenated, then prefixed by category (e.g., "Brand Guidelines" resolves to `brand-guidelines.svg`)
-
-Icons are stored in `components/ui/ServiceTag/icons/[category]/` and served from `.storybook/public/icons/` in Storybook.
-
-### Coloring
-
-The glyph renders as a CSS `mask-image` painted with `currentColor`, so it inherits the tag's service text token (`--text-service-{name}`) and retones correctly in both `brik-light` and `brik-dark` — the icon always matches the label. To recolor an icon in a custom context, set `color` on the parent and the glyph follows. ([#574](https://github.com/brikdesigns/brik-bds/issues/574))
+> **Note** — Migrating from the removed `ServiceBadge`, or need icon-resolution / recoloring details? See [design.brikdesigns.com/docs/components/service-tag](https://design.brikdesigns.com/docs/components/service-tag).

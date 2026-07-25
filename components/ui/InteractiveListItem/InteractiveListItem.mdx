@@ -8,11 +8,7 @@ import * as Stories from './InteractiveListItem.stories';
 
 <ComponentLinks slug="interactive-list-item" />
 
-Clickable horizontal row composed of leading + (title + subtitle) + trailing slots. The whole row is the click target — single `<button>` for native a11y (focus ring, `Space` / `Enter` activation, `disabled`).
-
-Use when a list row drills into something — clicking a member opens their profile, clicking an activity item opens the related task, clicking a persona switches the dev session.
-
-**Distinct from `CardControl`.** `CardControl` is a settings card whose **trailing action** (Switch / Button / link) is the click target — the card itself is *not* interactive. `InteractiveListItem` is the inverse — the **whole row** is interactive, the trailing slot is decorative (a Tag, Badge, progress block, or caret indicator). If you need both — a row that drills in AND a switch in the trailing — you have a UX conflict; pick one click target.
+Clickable horizontal row composed of leading + (title + subtitle) + trailing slots — the whole row is a single `<button>` click target with native focus ring, `Space` / `Enter` activation, and `disabled` support. Use it when a list row drills into something, such as opening a profile or a related task.
 
 ## Default
 
@@ -20,13 +16,15 @@ Use when a list row drills into something — clicking a member opens their prof
 
 Slot presence (`leading` / `subtitle` / `trailing`), `size`, and `disabled` are all Controls on this story — toggle them in the Controls panel rather than reaching for a dedicated story.
 
-## Variants
+## Patterns
+
+### Activity feed
 
 The `subtitle` slot accepts a `ReactNode`, so a row can carry multi-line metadata — a text line above a row of inline `<Badge>`s — with a caret in the trailing slot. This activity-feed composition is the irreducible case Controls can't express.
 
 <Canvas of={Stories.ActivityFeed} />
 
-## Selectable
+### Selectable
 
 Pass `selected` to turn the row into a toggle: a brand tint plus an inset brand ring, with `aria-pressed` reflecting the state. Use it for picker options and multi-select lists — a leading icon that swaps to a filled check pairs well with it. The ring is drawn with `box-shadow`, not `border`, so toggling a row never shifts its neighbours. Leave `selected` `undefined` for a plain drill-in row (no `aria-pressed`).
 
