@@ -1,5 +1,5 @@
 import { type HTMLAttributes, useCallback } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { CaretLeft, CaretRight } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Pagination.css';
