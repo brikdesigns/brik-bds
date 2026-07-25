@@ -5,8 +5,8 @@ type: reference
 scope: brik-bds
 applies-to: "**/components/ui/**/*.stories.tsx, **/content-system/blueprints/**/*.stories.tsx, **/stories/**/*.stories.tsx"
 retrieved-via: brik-rag query "storybook story shape standard"
-last-verified: 2026-05-17
-last-updated: 2026-05-17
+last-verified: 2026-07-24
+last-updated: 2026-07-24
 ---
 
 # Storybook story-shape standard (BDS)
@@ -55,6 +55,42 @@ For every prop, state, or scenario, ask in order. First yes wins:
 | 5 | Interaction assertion (`play` function) | **`play`-only `InteractionTest…` story, tagged `['!manifest']`** |
 
 Full rationale, the Button before/after table, and the composite-component slot pattern live in [ADR-010](../../docs/adrs/ADR-010-storybook-axes-of-information.md). When applying the matrix produces a different answer than a sibling file's existing shape, **the matrix wins** — sibling files are grandfathered and not retroactively swept.
+
+## Consolidation rules — the recurring slop patterns
+
+The matrix says which prop *becomes* a story. These four rules say when an existing story *shouldn't exist* — the patterns that keep re-appearing in review (#1359 cleanup sweep). Each names the real file that motivated it. **A story carrying a distinguishing `play` or `render` is exempt from rules 1–2** (the behavior/composition is the point) — which is exactly why the `duplicate-args` / `boolean-toggle-story` lint inspects *declarative* stories only.
+
+**Rule 1 — `Default` is a neutral canonical instance; it must not duplicate a named story.** If `Default`'s discriminator value (`variant` / `tone` / `status`) equals a dedicated story's, one of them is dead weight.
+
+```tsx
+// ❌ TabBar — Default and Tab are both variant:'tab'; Badge — Default and Info are both status:'info'
+export const Default: Story = { args: { variant: 'tab', items: [...] } };
+export const Tab: Story = { args: { variant: 'tab', items: [...] } };
+// ✅ Default shows the representative instance; per-variant stories cover the *distinct* values
+export const Default: Story = { args: { variant: 'text', items: [...] } }; // or the most common variant, once
+export const Tab: Story = { args: { variant: 'tab', items: [...] } };
+```
+
+Linted as `duplicate-args` only for the exact-args subset; the "same discriminator, different other args" case (TabBar) stays PR-review/skill enforced.
+
+**Rule 2 — a story that differs from another only by a boolean prop is a Control, not a story** (matrix Q2, restated). `SubNavigation` `Default` vs `NoBorder` differ only by `bordered` (a `control:'boolean'` argType) → fold `NoBorder` away; the toggle lives in Controls on `Default`. Linted as `boolean-toggle-story` (advisory).
+
+**Rule 3 — a story that differs only by a *non-visual* prop is not a story.** A prop that changes wiring but not pixels (`linkComponent`, analytics id, `as`) renders identically to `Default`. Make it a `play`-only `InteractionTest…` that asserts the wiring, tagged `['!manifest']`, or document it in MDX — never a standalone visual story.
+
+```tsx
+// ❌ SidebarNavigation — WithLinkComponent renders the same as Default; only injects a router Link
+export const WithLinkComponent: Story = { args: { linkComponent: MockLink, ... } };
+// ✅ assert the injection instead of snapshotting an identical frame
+export const InteractionTestLinkComponent: Story = {
+  tags: ['!manifest'],
+  args: { linkComponent: MockLink, ... },
+  play: async ({ canvas }) => { await expect(canvas.getByRole('link')).toHaveAttribute('data-link-component'); },
+};
+```
+
+Not statically decidable ("visual" is semantic) — skill/PR-review enforced.
+
+**Rule 4 — cross-component & app-shell compositions live in `Blueprints/` or the MDX `## Patterns` section, not a leaf component's story file.** Q4 (irreducible render) is for a component's *own* hook/composition state — not a multi-component layout. `SubNavigation` `TwoColumnShell` (sidebar + sub-nav + main) is a page shell → `Blueprints/`. `Badge` `Badge + Tag alignment` is a cross-component comparison → the Badge MDX `## Patterns`. Neither exercises *that* component's API. Skill/PR-review enforced.
 
 ## `argTypes` is load-bearing — not decoration
 
@@ -381,6 +417,8 @@ The story-shape lint that bans `Variants` / `Tones` / `Patterns` / `Examples` ex
 
 The matrix's broader rule (Q2 collapses — `Disabled` / `Loading` / icon-slot stories become Controls) stays PR-review-enforced even after #569 ships. The lint catches named violations; the matrix catches structural ones.
 
+**Advisory consolidation tier (#1359).** `lint-story-shape.js` additionally reports two statically-decidable consolidation findings on *declarative* stories: `duplicate-args` (two exports with identical args — consolidation rule 1's exact-args subset) and `boolean-toggle-story` (a story differing from `Default` only by boolean args — rule 2). These **print but do not gate** under `--enforce`, so CI and pre-commit stay green on files that predate the rules. They exit non-zero only under the explicit `--matrix-strict` flag, which nothing wires into CI yet — it graduates to `--enforce` once the audit sweep clears the repo. Consolidation rules 3–4 (non-visual-prop-only stories; cross-component/shell relocation) are not statically decidable and stay skill/PR-review enforced.
+
 ## Existing files are grandfathered
 
 73 component story files were swept through ADR-007's page-recipe migration (PRs #428–#445, all merged). Many still export `Variants` / `Patterns` story names that this standard bans for new files. **ADR-006 §Migration explicitly waives retroactive cleanup of these.**
@@ -399,6 +437,7 @@ If you find yourself wanting to "clean up" an existing file's `export const Vari
 1. **Read three sibling story files** in the same `components/ui/<Subcategory>/` folder. Match their `title:` prefix, surface tag, and overall shape.
 2. **Verify the two-shape model** — file exports `Default` plus one story per meaningful state. No `Variants` / `Tones` / `Patterns` story exports (in new files).
 3. **Apply the matrix** — boolean / icon-slot states are Controls, not stories. Toolbar-global axes (theme/density/viewport/locale/motion) are never stories.
+3a. **Apply the consolidation rules** — `Default` doesn't duplicate a named story (1); no story differs from another only by a boolean (2) or a non-visual prop (3); cross-component / app-shell demos go to `Blueprints/` or MDX `## Patterns`, not a leaf story file (4). Run `node scripts/lint-story-shape.js <file>` — advisory findings flag rules 1–2.
 4. **Verify every export has an `@summary` JSDoc** under 60 characters.
 5. **Verify `meta.tags` has exactly one of** `surface-web` / `surface-product` / `surface-shared`.
 6. **If the component is deprecated**, verify `meta.tags` also includes `!manifest`.
