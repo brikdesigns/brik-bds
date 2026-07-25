@@ -147,7 +147,11 @@ const Card = ({
 
 /* ─── Catalog ─────────────────────────────────────────────────── */
 
-/** @summary All canonical ratios, semantic aliases, and deprecated mode-words side by side. */
+/**
+ * All canonical ratios, semantic aliases, and deprecated
+ * mode-words side by side.
+ * @summary Canonical ratios, aliases, deprecated mode-words
+ */
 export const Catalog: Story = {
   render: () => (
     <div style={{ fontFamily: 'var(--font-family-body)' }}>

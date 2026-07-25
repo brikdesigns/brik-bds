@@ -147,7 +147,7 @@ const SampleCard = () => (
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Toggle the spacing mode and watch padding/gap recompute live */
-export const Playground: Story = {
+export const Default: Story = {
   render: ({ mode }) => (
     <div
       data-mode-spacing={mode === 'default' ? undefined : mode}

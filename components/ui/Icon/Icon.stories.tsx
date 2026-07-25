@@ -43,11 +43,15 @@ export default meta;
 type Story = StoryObj<typeof Icon>;
 
 /** @summary Interactive playground — try any `ph:*` name */
-export const Playground: Story = {
+export const Default: Story = {
   args: { icon: 'ph:rocket', width: 48 },
 };
 
-/** @summary The full set bundled for offline use — every icon here renders with the network blocked */
+/**
+ * The full set bundled for offline use — every icon here renders
+ * with the network blocked.
+ * @summary Bundled icon set, renders with network blocked
+ */
 export const BundledSet: Story = {
   render: () => {
     const names = Object.keys((phSubset as { icons: Record<string, unknown> }).icons).sort();

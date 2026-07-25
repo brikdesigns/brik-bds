@@ -71,11 +71,11 @@ export const Default: Story = {
 };
 
 /**
- * @summary Missing fact — emits a `data-content-needed` stub.
- *
  * When a required contact fact is null at runtime, the method renders a
  * `data-content-needed` stub in place of the link (CI grep on `dist/`
  * blocks publish on the stub), matching the Astro twin.
+ *
+ * @summary Missing phone fact emits a data-content-needed stub
  */
 export const MissingPhone: Story = {
   args: {
