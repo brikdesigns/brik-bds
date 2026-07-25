@@ -159,6 +159,13 @@ Pre-existing `*.stories.tsx` files keep whatever shape ADR-007's page-recipe pas
 
 ## Amendments
 
+### 2026-07-25 — Taxonomy: form-pattern placement + Tools flattening (#1323)
+
+Two reconciliations between the written taxonomy and `.storybook/preview.tsx`, decided 2026-07-25:
+
+- **Form patterns stay in `Containers/`.** The five composed form stories (`stories/patterns/forms/` — contact, feedback, login, search, sign-up) keep their shipped `Containers/<name>` titles. Their header comments previously claimed a `Patterns/Forms/` home per an early ADR-010 amendment; the #1330 8-bucket taxonomy defines no `Patterns/` top-level, and adding one for five internal composition demos isn't warranted. The comments now match the titles.
+- **`Tools/` widget subcategory flattened.** `Tools/widgets/{events,feedback,inspect}` → `Tools/events-widget` / `Tools/feedback-widget` / `Tools/inspect-widget`, conforming to the flat `<Bucket>/<name>` rule. No exception carve-out.
+
 ### 2026-07-25 — Part A: date-picker + time-picker reclassified Blocks → Components (#1359)
 
 Both pickers move from `Blocks/` to `Components/`. Forward-only `title:` re-title (`Blocks/date-picker` → `Components/date-picker`, same for `time-picker`) plus the `storySort.order` edit in [`.storybook/preview.tsx`](../../.storybook/preview.tsx); no component code changes.
