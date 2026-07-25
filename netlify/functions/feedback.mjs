@@ -10,16 +10,13 @@ const NOTION_VERSION = '2022-06-28';
 const BACKLOG_DATABASE_ID = '32097d34-ed28-8051-8225-eb6800c2e05a';
 const PRODUCT_NAME = 'BDS Storybook';
 
-const SCOPE_MAP = {
-  bug: 'Critical',
-  ui: 'Normal',
-  suggestion: 'Low',
-  question: 'Low',
-};
-
-const FEEDBACK_TYPE_MAP = {
+// Widget feedback type → Backlog `Type [legacy]` select value. Mirrors
+// @brikdesigns/feedback-contract TYPE_MAP so the Storybook surface writes the
+// same values as the product /api/feedback routes (brik-llm#802). `ui` maps to
+// Enhancement — the post-OPE-29 Backlog has no dedicated "UI Issue" option.
+const TYPE_MAP = {
   bug: 'Bug',
-  ui: 'UI Issue',
+  ui: 'Enhancement',
   suggestion: 'Suggestion',
   question: 'Question',
 };
@@ -54,7 +51,9 @@ export default async (req) => {
     return jsonResponse(400, { error: 'Invalid JSON body' });
   }
 
-  const { page_url, feedback_type, description } = body;
+  const { page_url, feedback_type, description, page, section, component } = body;
+  const componentTitle = body.component_title;
+  const domPath = body.dom_path;
   if (!description) {
     return jsonResponse(400, { error: 'description is required' });
   }
@@ -62,6 +61,27 @@ export default async (req) => {
   const type = feedback_type ?? 'bug';
   const emoji = EMOJI_MAP[type] ?? '📝';
   const title = `${emoji} ${description.slice(0, 80)}${description.length > 80 ? '...' : ''}`;
+
+  // Post-OPE-29 Backlog schema (validated against the live DB): `Type`/
+  // `Severity` are relations (not writable by name), `Triage` → `Triage
+  // Status`, and the old `Client`/`Status`/`Scope`/`Feedback Type` selects were
+  // removed — the pre-migration payload 400s on all four (brik-llm#802).
+  // Element-context fields land in the rich_text columns the widget already
+  // populates; each is written only when present.
+  const properties = {
+    Name: { title: [{ text: { content: title } }] },
+    Description: { rich_text: [{ text: { content: description } }] },
+    Submitter: { rich_text: [{ text: { content: 'BDS Storybook' } }] },
+    'Type [legacy]': { select: { name: TYPE_MAP[type] ?? 'Bug' } },
+    Product: { select: { name: PRODUCT_NAME } },
+    'Triage Status': { select: { name: 'Not Triaged' } },
+    URL: { url: `https://storybook.brikdesigns.com/?path=/story/${page_url ?? ''}` },
+  };
+  if (page) properties.Page = { rich_text: [{ text: { content: page } }] };
+  if (section) properties.Section = { rich_text: [{ text: { content: section } }] };
+  if (component) properties.Component = { rich_text: [{ text: { content: component } }] };
+  if (componentTitle) properties['Component Title'] = { rich_text: [{ text: { content: componentTitle } }] };
+  if (domPath) properties['DOM Path'] = { rich_text: [{ text: { content: domPath } }] };
 
   try {
     const notionRes = await fetch(`${NOTION_API}/pages`, {
@@ -73,17 +93,7 @@ export default async (req) => {
       },
       body: JSON.stringify({
         parent: { database_id: BACKLOG_DATABASE_ID },
-        properties: {
-          Name: { title: [{ text: { content: title } }] },
-          Description: { rich_text: [{ text: { content: description } }] },
-          Submitter: { rich_text: [{ text: { content: 'BDS Storybook' } }] },
-          'Feedback Type': { select: { name: FEEDBACK_TYPE_MAP[type] ?? 'Bug' } },
-          Product: { select: { name: PRODUCT_NAME } },
-          Client: { select: { name: 'Brik Designs' } },
-          Status: { status: { name: 'Not Started' } },
-          Scope: { select: { name: SCOPE_MAP[type] ?? 'Normal' } },
-          URL: { url: `https://storybook.brikdesigns.com/?path=/story/${page_url ?? ''}` },
-        },
+        properties,
       }),
     });
 
