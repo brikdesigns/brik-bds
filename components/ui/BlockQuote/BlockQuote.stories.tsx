@@ -27,7 +27,7 @@ const SAMPLE =
 const ATTRIBUTION = 'Joelle, Owner of Impressionz Salon & Spa';
 
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   args: { quote: SAMPLE, attribution: ATTRIBUTION, serviceLine: 'marketing' },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

@@ -115,8 +115,6 @@ type Story = StoryObj<typeof Services3ColCardGrid>;
 /* ─── Stories ──────────────────────────────────────────────────── */
 
 /**
- * @summary Six service cards — the canonical fixture.
- *
  * Single Default story per ADR-006: shape-only blueprint stories
  * carry one canonical state, not a fan-out of content variations.
  * Per-card affordances (`hasOptions`, missing `imageUrl`, accent
@@ -124,6 +122,8 @@ type Story = StoryObj<typeof Services3ColCardGrid>;
  * (`Card.stories.tsx`, `ServiceTag.stories.tsx`, `Frame.stories.tsx`).
  * Theme (light/dark/client-sim) is switched via the Theme Switcher
  * toolbar; atmosphere variants are not encoded as separate stories.
+ *
+ * @summary Six service cards — the canonical fixture
  */
 export const Default: Story = {
   args: baseProps,

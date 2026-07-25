@@ -173,7 +173,7 @@ export const EditMode: Story = {
  * (default `md`) into every slotted button, so a group can't render
  * mismatched sizes side by side (BACKLOG-638).
  *
- * @summary Structured destructive / secondary / primary action hierarchy
+ * @summary Structured destructive / secondary / primary actions
  */
 export const StructuredActions: Story = {
   args: {

@@ -26,10 +26,10 @@ const meta: Meta<typeof CloseButton> = {
 export default meta;
 type Story = StoryObj<typeof CloseButton>;
 
-/* ─── Playground ─────────────────────────────────────────────── */
+/* ─── Default ────────────────────────────────────────────────── */
 
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     label: 'Close',
   },

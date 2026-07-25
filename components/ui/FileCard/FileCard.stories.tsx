@@ -98,7 +98,10 @@ export const Svg: Story = {
   },
 };
 
-/** @summary Icon preview — generic placeholder for non-renderable file types */
+/**
+ * Generic placeholder icon for non-renderable file types.
+ * @summary Icon preview for non-renderable file types
+ */
 export const Icon: Story = {
   args: {
     preview: 'icon',
