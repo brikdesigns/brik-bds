@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from '@iconify/react';
 import { Tag } from './Tag';
-import { Badge } from '../Badge/Badge';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -48,19 +47,6 @@ export default meta;
 type Story = StoryObj<typeof Tag>;
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const SectionLabel = ({ children }: { children: string }) => (
-  <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
-    textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
-  }}>
-    {children}
-  </div>
-);
 
 const Row = ({ children }: { children: React.ReactNode }) => (
   <div style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
@@ -141,42 +127,6 @@ export const Density: Story = {
           <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
           <Tag size={size} density="comfortable">Comfortable</Tag>
           <Tag size={size} density="compact">Compact</Tag>
-        </Row>
-      ))}
-    </Stack>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   BADGE + TAG ALIGNMENT — Q4 irreducible: cross-component demo,
-   args can't render two different components in one story.
-   ═══════════════════════════════════════════════════════════════ */
-
-/**
- * Badge and Tag share the same height at every size tier — useful when
- * mixing them inline.
- *
- * @summary Badge + Tag pixel-aligned at every size
- */
-export const BadgeTagAlignment: Story = {
-  name: 'Badge + Tag alignment',
-  render: () => (
-    <Stack>
-      <SectionLabel>Badge and Tag share the same height at every size tier</SectionLabel>
-      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
-        <Row key={size}>
-          <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
-          {size === 'xs' ? (
-            <>
-              <Badge size="xs" status="positive" icon={<Icon icon="ph:star" />} />
-              <Tag size="xs" icon={<Icon icon="ph:tag" />} />
-            </>
-          ) : (
-            <>
-              <Badge size={size} status="positive" icon={<Icon icon="ph:star" />}>Active</Badge>
-              <Tag size={size} icon={<Icon icon="ph:tag" />}>Category</Tag>
-            </>
-          )}
         </Row>
       ))}
     </Stack>
