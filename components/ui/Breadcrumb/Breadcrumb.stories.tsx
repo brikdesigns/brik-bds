@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { Breadcrumb } from './Breadcrumb';
 import { type BdsLinkComponent } from '../NavItem';
 
@@ -56,15 +57,18 @@ export const Default: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Q3 semantic starting points
+   2. INTERACTION TESTS — non-visual wiring assertions (rule 3)
    ═══════════════════════════════════════════════════════════════ */
 
 /**
- * Crumbs routed through an injected link component for
- * client-side routing.
- * @summary Linked crumbs via injected link component
+ * Injecting a router `Link` via `linkComponent` routes linked crumbs
+ * client-side. The rendered output is visually identical to `Default` —
+ * the only observable difference is the injected element — so this is a
+ * play-only assertion, not a snapshot story (consolidation rule 3).
+ * @summary Asserts injected linkComponent renders linked crumbs
  */
-export const WithLinkComponent: Story = {
+export const InteractionTestLinkComponent: Story = {
+  tags: ['!manifest'],
   args: {
     items: [
       { label: 'Home', href: '/' },
@@ -72,6 +76,11 @@ export const WithLinkComponent: Story = {
       { label: 'Design System' },
     ],
     linkComponent: MockLink,
+  },
+  play: async ({ canvas }) => {
+    const links = canvas.getAllByRole('link');
+    await expect(links.length).toBeGreaterThan(0);
+    await expect(links[0]).toHaveAttribute('data-link-component', 'mock');
   },
 };
 
