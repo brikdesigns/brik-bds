@@ -60,7 +60,7 @@ const IconsReference = () => <div />;
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof IconsReference> = {
-  title: 'Tools/icons',
+  title: 'Foundation/Assets/icons',
   component: IconsReference,
   // Browsable icon catalog, not a component — hidden from MCP discovery so
   // consumer-repo agents don't pick it as a primitive (#1314).
