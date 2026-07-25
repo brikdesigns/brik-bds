@@ -5,8 +5,8 @@ type: reference
 scope: brik-bds
 applies-to: "**/components/ui/**/*.stories.tsx, **/content-system/blueprints/**/*.stories.tsx, **/stories/**/*.stories.tsx"
 retrieved-via: brik-rag query "storybook story shape standard"
-last-verified: 2026-07-24
-last-updated: 2026-07-24
+last-verified: 2026-07-25
+last-updated: 2026-07-25
 ---
 
 # Storybook story-shape standard (BDS)
@@ -271,10 +271,10 @@ Components → Containers → Blocks → Layouts → Sections → Tools → * (c
 
 | Bucket | Role | Example members |
 | --- | --- | --- |
-| `Components/` | Single atomic primitive | button, badge, checkbox, banner, text-input, progress-stepper |
+| `Components/` | Atomic UI control — including composite input controls operated as one form field (`select`, `date-picker`) | button, badge, checkbox, text-input, select, date-picker, time-picker, progress-stepper |
 | `Cards/` | Card-family holder — bounded surface with the "card" affordance | card, card-list, pricing-card, product-summary-card |
 | `Containers/` | Bounded holder with own border/padding/elevation (non-card) | form, accordion, sheet, table, data-view |
-| `Blocks/` | Fixed slot shape filled with atoms | field, field-grid, date-picker |
+| `Blocks/` | Fixed slot shape filled with atoms | field, field-grid, checklist |
 | `Layouts/` | Pure arrangement — no styling beyond structure | stack, cluster, grid, frame, page |
 | `Navigation/` | Navigation + page-level chrome region | nav-bar, breadcrumb, sidebar-navigation, sub-navigation, tab-bar, page-header |
 | `Blueprints/` | Full-page composed section template | hero, cta, features, footer |
