@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { Icon } from '@iconify/react';
 import { SidebarNavigation, type SidebarNavigationProps, type SidebarNavItem } from './SidebarNavigation';
 import { type BdsLinkComponent } from '../NavItem';
@@ -156,15 +157,23 @@ export const Default: Story = {
 };
 
 /**
- * Nav items routed through an injected link component for
- * client-side routing.
- * @summary Nav items via injected link component
+ * Injecting a router `Link` (Next.js `Link`, Remix `Link`) via `linkComponent`
+ * routes nav items client-side. The rendered output is visually identical to
+ * `Default` — the only observable difference is the injected element — so this
+ * is a play-only assertion, not a snapshot story (consolidation rule 3).
+ * @summary Asserts injected linkComponent renders the nav items
  */
-export const WithLinkComponent: Story = {
+export const InteractionTestLinkComponent: Story = {
+  tags: ['!manifest'],
   args: {
     logo: <BrikLogomark />,
     navItems: defaultNavItems,
     linkComponent: MockLink,
     showProfile: true,
+  },
+  play: async ({ canvas }) => {
+    const links = canvas.getAllByRole('link');
+    await expect(links.length).toBeGreaterThan(0);
+    await expect(links[0]).toHaveAttribute('data-link-component', 'mock');
   },
 };
