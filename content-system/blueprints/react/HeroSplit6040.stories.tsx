@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { HeroSplit6040 } from './HeroSplit6040';
 import type { BlueprintProps } from '../astro/types';
+import { placeholderImage } from './_fixtures';
 
 const baseTheme: BlueprintProps['theme'] = {
   themeMode: 'light',
@@ -61,7 +62,7 @@ type Story = StoryObj<typeof HeroSplit6040>;
 export const Default: Story = {
   args: {
     section,
-    clientFacts: facts('https://placehold.co/960x1200/eaf1fb/1f3d70?text=Hero'),
+    clientFacts: facts(placeholderImage(960, 1200, '#eaf1fb', '#1f3d70', 'Hero')),
     theme: baseTheme,
   },
 };

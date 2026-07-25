@@ -8,6 +8,24 @@ import { BoardCard } from './BoardCard';
 import { Tag } from '../Tag';
 import { Badge } from '../Badge';
 
+/* Deterministic SVG data-URI avatars — replace i.pravatar.cc (#1319) so
+   stories render identically offline / in Chromatic. Hex = image content. */
+const boardAvatar = (bg: string, fg: string) =>
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">` +
+      `<rect width="96" height="96" fill="${bg}"/>` +
+      `<circle cx="48" cy="36" r="16" fill="${fg}"/>` +
+      `<path d="M18 96c4-20 16-30 30-30s26 10 30 30z" fill="${fg}"/>` +
+      `</svg>`,
+  );
+const AVATARS = {
+  rebecca: boardAvatar('#dbe7f4', '#41618c'),
+  john: boardAvatar('#e9e2d0', '#6b5d3a'),
+  sarah: boardAvatar('#dcefe0', '#3c6b49'),
+  alex: boardAvatar('#f4e4e0', '#8c5a4e'),
+};
+
 const meta: Meta<typeof Board> = {
   title: 'Containers/board',
   component: Board,
@@ -117,7 +135,7 @@ function InteractiveCards() {
         <BoardHeader
           name="Rebecca"
           subtitle="Maintenance"
-          avatarSrc="https://i.pravatar.cc/96?u=rebecca"
+          avatarSrc={AVATARS.rebecca}
           progress={33}
         />
         {tasks.map((task) => (
@@ -310,7 +328,7 @@ function FullBoardViewExample() {
           <BoardHeader
             name="Rebecca"
             subtitle="Maintenance"
-            avatarSrc="https://i.pravatar.cc/96?u=rebecca"
+            avatarSrc={AVATARS.rebecca}
             progress={completionPct('rebecca')}
             style={headerStyle}
           />
@@ -321,7 +339,7 @@ function FullBoardViewExample() {
           <BoardHeader
             name="John"
             subtitle="Maintenance"
-            avatarSrc="https://i.pravatar.cc/96?u=john"
+            avatarSrc={AVATARS.john}
             progress={completionPct('john')}
             style={headerStyle}
           />
@@ -332,7 +350,7 @@ function FullBoardViewExample() {
           <BoardHeader
             name="Sarah"
             subtitle="Clinician"
-            avatarSrc="https://i.pravatar.cc/96?u=sarah"
+            avatarSrc={AVATARS.sarah}
             progress={completionPct('sarah')}
             style={headerStyle}
           />
@@ -343,7 +361,7 @@ function FullBoardViewExample() {
           <BoardHeader
             name="Alex"
             subtitle="Front Desk"
-            avatarSrc="https://i.pravatar.cc/96?u=alex"
+            avatarSrc={AVATARS.alex}
             progress={completionPct('alex')}
             style={headerStyle}
           />

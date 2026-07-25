@@ -4,7 +4,7 @@ import { expect, fn, userEvent, within } from 'storybook/test';
 
 import { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
 import type { BlueprintProps } from '../astro/types';
-import { baseTheme, baseClientFacts } from './_fixtures';
+import { baseTheme, baseClientFacts, placeholderImage } from './_fixtures';
 
 /* ─── Demo data-service-line cascade ────────────────────────────────────
  *
@@ -59,7 +59,7 @@ const interiorHeroSection: BlueprintProps['section'] = {
   ],
   serviceLine: 'information',
   priceCard: {
-    imageUrl: 'https://placehold.co/600x600/eaf1fb/1f3d70?text=Deliverable',
+    imageUrl: placeholderImage(600, 600, '#eaf1fb', '#1f3d70', 'Deliverable'),
     imageAlt: '',
     priceLabel: 'Starting at',
     price: '$249',
@@ -252,7 +252,7 @@ export const InteractionTestNoPrice: Story = {
       ...interiorHeroSection,
       sectionKey: 'hero-img-card-no-price',
       priceCard: {
-        imageUrl: 'https://placehold.co/600x600/eaf1fb/1f3d70?text=Deliverable',
+        imageUrl: placeholderImage(600, 600, '#eaf1fb', '#1f3d70', 'Deliverable'),
         imageAlt: '',
         cta: { label: 'Request a quote', url: '#contact' },
       },
