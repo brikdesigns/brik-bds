@@ -213,6 +213,8 @@ function HealthDashboard() {
 
 const meta: Meta<typeof HealthDashboard> = {
   title: 'Overview/Health/Health Dashboard',
+  // Internal health dashboard — hidden from MCP discovery (#1321).
+  tags: ['surface-shared', '!manifest'],
   component: HealthDashboard,
   parameters: { layout: 'fullscreen' },
 };
@@ -220,4 +222,5 @@ const meta: Meta<typeof HealthDashboard> = {
 export default meta;
 type Story = StoryObj<typeof HealthDashboard>;
 
+/** @summary Design-system health metrics from health-data.json */
 export const Default: Story = {};

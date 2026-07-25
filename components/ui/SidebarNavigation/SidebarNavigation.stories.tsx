@@ -144,7 +144,7 @@ type Story = StoryObj<typeof meta>;
    Default — single story, rich controls
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Sidebar with icons; toggle collapsed, profile, footer in Controls */
+/** @summary Sidebar — toggle collapsed, profile, footer */
 export const Default: Story = {
   args: {
     logo: <BrikLogomark />,
@@ -155,7 +155,11 @@ export const Default: Story = {
   },
 };
 
-/** @summary Nav items routed through an injected link component for client-side routing */
+/**
+ * Nav items routed through an injected link component for
+ * client-side routing.
+ * @summary Nav items via injected link component
+ */
 export const WithLinkComponent: Story = {
   args: {
     logo: <BrikLogomark />,

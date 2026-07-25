@@ -58,7 +58,7 @@ const headshots = {
    status, and color are Controls (ADR-010 Q2).
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive Avatar — photo-backed, size/status/color via Controls */
+/** @summary Photo Avatar — size/status/color via Controls */
 export const Default: Story = {
   args: {
     name: 'Michael Scott',

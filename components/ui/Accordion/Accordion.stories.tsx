@@ -32,7 +32,11 @@ type Story = StoryObj<typeof Accordion>;
    1. DEFAULT — canonical instance; behavior modes are Controls
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Canonical accordion. Toggle `allowMultiple` and set `defaultOpenItems` via Controls to explore single-open, multi-open, and pre-opened behavior. */
+/**
+ * Toggle `allowMultiple` and set `defaultOpenItems` via Controls to
+ * explore single-open, multi-open, and pre-opened behavior.
+ * @summary Canonical accordion state combinations
+ */
 export const Default: Story = {
   args: {
     items: faqItems,
@@ -46,7 +50,11 @@ export const Default: Story = {
       (lists, multi-paragraph) that can't be authored via Controls
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Item `content` accepts any ReactNode — ordered lists, multi-paragraph blocks — which the Controls panel can't author. */
+/**
+ * Item `content` accepts any ReactNode — ordered lists, multi-paragraph
+ * blocks — which the Controls panel can't author.
+ * @summary Rich ReactNode content in accordion items
+ */
 export const WithRichContent: Story = {
   args: {
     defaultOpenItems: ['rich-1'],
