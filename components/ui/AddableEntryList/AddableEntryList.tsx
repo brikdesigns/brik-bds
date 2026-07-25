@@ -1,5 +1,5 @@
 import { useRef, useState, type KeyboardEvent } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { bdsClass } from '../../utils';
 import { Button, type ButtonSize } from '../Button';
 import { TextInput, type TextInputSize } from '../TextInput';
