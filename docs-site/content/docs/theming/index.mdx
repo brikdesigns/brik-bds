@@ -39,18 +39,7 @@ Full architecture, import order, and the `<html>` switch table: [The Cascade](/d
 
 Not every token is meant to vary per brand. The rule of thumb: **tokens that carry brand identity are overridable; tokens that carry functional or accessibility meaning are not.**
 
-| Token group | Per-client override? | Notes |
-|---|---|---|
-| Brand colors (`--background-brand-primary`, `--text-brand-primary`, `--surface-brand-primary`, `--border-brand-primary`) | **Required** | Core brand identity. |
-| Interaction states (`--background-brand-primary-hover`, `--background-brand-primary-pressed`) | **Required if brand colors change** | Defined at `:root` in `gap-fills.css`. If you change the brand color without overriding these, hover/press keep the default Poppy tint. |
-| Surfaces + page (`--surface-primary`, `--surface-secondary`, `--page-primary`) | **Recommended** | Tune neutrals to the brand. |
-| Font families (`--font-family-heading`, `--font-family-body`, `--font-family-label`) | **Optional** | Swap to match brand voice. |
-| Canonical status (`--background/surface/text/border-positive/negative/warning`) | **Yes** | First-class Figma variables. Override if the brand red/green/yellow clashes with the default. |
-| Extended status (`--background-status-info/neutral/purple/orange`) | **No** | Gap-fills using system colors with universal semantic meaning. |
-| Presence (`--background-presence-online/away/busy/offline`) | **No — intentionally frozen** | Shared chat/status semantics across products. |
-| Shadows + overlay | **No** | Hardcoded `rgba()` values; not expected to vary per brand. |
-
-Full override matrix and the minimal `theme-{client}.css` template: [Client Themes](/docs/theming/client-themes).
+Full override matrix and the minimal `theme-{client}.css` template: [Client Themes](/docs/theming/client-themes#overridability-matrix).
 
 ### Multi-brand within one client
 
