@@ -75,6 +75,15 @@ const meta = {
   component: Menu,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
+  argTypes: {
+    isOpen: { control: 'boolean', description: 'Whether the menu panel is visible' },
+    placement: {
+      control: 'inline-radio',
+      options: ['bottom', 'top'],
+      description: 'Direction the panel opens relative to its trigger',
+    },
+    activeId: { control: 'text', description: 'ID of the item to highlight as active' },
+  },
   decorators: [
     (Story) => (
       <div style={{ minHeight: 360, padding: 'var(--padding-lg)' }}>
@@ -218,5 +227,77 @@ export const WithTrigger: Story = {
       );
     }
     return <MenuTriggers />;
+  },
+};
+
+/**
+ * `placement="top"` opens the panel upward, anchored to the trigger's top edge
+ * — no consumer inline `bottom` / `top: auto` override. Use it when the trigger
+ * sits near the bottom of the viewport (e.g. a sidebar-footer switcher).
+ * Irreducible — the upward flip only shows against a real trigger.
+ *
+ * @summary Panel opens upward with placement="top"
+ */
+export const Placement: Story = {
+  args: { items: sampleItems, isOpen: true, onClose: () => {} },
+  render: () => {
+    function PlacementDemo() {
+      const [topOpen, setTopOpen] = useState(true);
+      const [bottomOpen, setBottomOpen] = useState(true);
+      const actions = [
+        { id: '1', label: 'Edit', onClick: () => {} },
+        { id: '2', label: 'Duplicate', onClick: () => {} },
+        { id: '3', label: 'Archive', onClick: () => {} },
+      ];
+      return (
+        <div style={{ display: 'flex', gap: 'var(--gap-huge)', alignItems: 'center' }}>
+          <div>
+            <SectionLabel>placement=&quot;bottom&quot;</SectionLabel>
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <Button variant="outline" onClick={() => setBottomOpen((o) => !o)}>
+                Down
+              </Button>
+              <Menu isOpen={bottomOpen} onClose={() => {}} items={actions} style={{ left: 0 }} />
+            </div>
+          </div>
+          <div style={{ marginTop: 200 }}>
+            <SectionLabel>placement=&quot;top&quot;</SectionLabel>
+            <div style={{ position: 'relative', display: 'inline-block' }}>
+              <Button variant="outline" onClick={() => setTopOpen((o) => !o)}>
+                Up
+              </Button>
+              <Menu
+                isOpen={topOpen}
+                onClose={() => {}}
+                items={actions}
+                placement="top"
+                style={{ left: 0 }}
+              />
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return <PlacementDemo />;
+  },
+};
+
+/**
+ * With 20+ items the panel is capped at `min(60vh, 24rem)` and scrolls
+ * internally instead of growing past the viewport. Irreducible — the scroll
+ * cap only shows with an overflowing item list.
+ *
+ * @summary Long item list scrolls inside a height-capped panel
+ */
+export const Scrolling: Story = {
+  args: {
+    items: Array.from({ length: 24 }, (_, i) => ({
+      id: String(i + 1),
+      label: `Menu item ${i + 1}`,
+      onClick: () => {},
+    })),
+    isOpen: true,
+    onClose: () => {},
+    style: { position: 'relative' },
   },
 };

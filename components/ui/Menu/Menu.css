@@ -25,8 +25,22 @@
   flex-direction: column;
   gap: var(--gap-md);
   min-width: 200px;
+  max-height: min(60vh, 24rem); /* bds-lint-ignore — viewport-relative scroll cap so a long item list never grows past the viewport */
+  overflow-y: auto;
   animation: bds-menu-enter var(--menu-enter-duration) var(--menu-enter-ease); /* bds-lint-ignore — component-scoped animation vars */
   transform-origin: top center;
+}
+
+/* ─── Placement (open direction relative to trigger) ─── */
+
+/* `bottom` (default) keeps the existing contract — the consumer's relatively
+   positioned wrapper anchors the downward panel. `top` anchors the panel above
+   the trigger internally so no consumer inline `bottom` / `top: auto` is needed. */
+.bds-menu--top {
+  top: auto;
+  bottom: 100%;
+  margin-bottom: var(--gap-md);
+  transform-origin: bottom center;
 }
 
 /* ─── Header (non-interactive label slot) ─────────────── */
