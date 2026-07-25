@@ -182,6 +182,80 @@ Inside a Sheet body, reach for the **sheet primitive set** first. Don't invent a
 
 Don't reach for raw `<h3>` / `<table>` / `<ul>` inside a Sheet body — each has a primitive that locks the type scale and spacing. Use [SheetSection](/docs/components/sheet-section) for section headings and [Field](/docs/components/field) for inline labels and values.
 
+## Composing a read-mode sheet
+
+A read-mode sheet is the narrow-view sibling of the [Read-Mode Page](https://storybook.brikdesigns.com/?path=/docs/containers-read-mode-page--overview) pattern — where a page surfaces an entire record at once, a sheet surfaces one facet of it. The composition is always the same four primitives: Sheet, [SheetSection](/docs/components/sheet-section), [FieldGrid](/docs/components/field-grid), and [Field](/docs/components/field). [DataSection](/docs/components/data-section) never appears inside a Sheet — it's page-scoped and carries page-tier title typography that overwhelms the narrow view; SheetSection is its sheet-side sibling.
+
+Three conventions cover how the read ↔ edit lifecycle attaches to that composition.
+
+### In-sheet toggle
+
+The sheet opens in whichever mode the caller specifies, and a `[View]` / `[Edit]` `ButtonGroup` in the sheet header flips between modes without closing. Use it for read-first traffic, where the record has a meaningful read-mode (formatted values, links, pills) richer than the form, and where the page-side `DataSection` entry should honor the user's click intent.
+
+```tsx
+const { mode, headerActions, footer } = useEditableSheetConfig({ initialMode });
+
+<Sheet title="Identity" subtitle="Company" headerActions={headerActions}>
+  {mode === 'view' ? <IdentityView data={company} /> : <IdentityForm data={company} />}
+  {footer}
+</Sheet>
+```
+
+`useEditableSheetConfig` owns the footer — it auto-renders `[Close]` / `[Edit]` in view mode and `[Cancel]` / `[Save]` in edit mode. Don't hand-roll it.
+
+### Edit-only sheet
+
+The sheet always opens in edit mode — no toggle, no read-mode rendering. Use it when the parent page's read-mode view already shows every field the user needs (e.g. a `DataSection` on the Overview tab), when editing is the only reason to open the sheet, or when the form is short (1–3 fields) and a mode toggle would be more friction than value.
+
+```tsx
+<Sheet title="Notes" subtitle="Company">
+  <SheetSection heading="Internal notes">
+    <TextArea label="Notes" fullWidth rows={10} value={notes} onChange={handleChange} />
+  </SheetSection>
+</Sheet>
+```
+
+The page-side entry is a single `Button` in the `DataSection.actions` slot, not a `ButtonGroup`.
+
+### Footer-driven navigation
+
+The canonical pattern for table-row sheets in catalog admins (services, offerings, service lines, industry pages). The sheet opens in `mode="read"` from a `[View]` action in a table row, shows a snapshot of core fields, and the footer's `[View details]` navigates to the full read page while `[Edit]` navigates to the edit page (see View details + edit target above). Read-only catalog tables drop both `viewDetailsAction` and `onEdit` — the row navigates straight to the read page.
+
+The `editTarget` prop documents which pattern is in play (`'page'` navigates, `'inline'` flips the sheet in place) — `data-edit-target` on the sheet root lets tests assert consumer intent.
+
+### Typography roles
+
+`SheetSection` owns all section-level typography — don't introduce alternatives.
+
+| Role | Primitive | Renders |
+|---|---|---|
+| Sheet title | `Sheet.title` | `<h2>`, one per sheet |
+| Sheet subtitle | `Sheet.subtitle` | `<p>`, small and muted above the title |
+| Section heading | `SheetSection.heading` | uppercase `<h3>` label — the only section heading inside a sheet body |
+| Section description | `SheetSection.description` | optional lead `<p>` under the heading |
+| Field label | `Field.label` | short, compact text |
+| Field value | `Field` children | any `ReactNode`; empty renders "Not set" automatically |
+
+### Section spacing
+
+The vertical gap between consecutive `SheetSection`s is `SheetSection`'s own concern — tune it with the `spacing` prop (`md` or `lg`) rather than inline `marginTop`, custom flex gaps, or spacer `<div>`s.
+
+```css
+.bds-sheet-section + .bds-sheet-section { margin-top: var(--padding-lg); }
+.bds-sheet-section--spacing-lg + .bds-sheet-section { margin-top: var(--padding-xl); }
+```
+
+## Sheet vs page
+
+Both [Read-Mode Page](https://storybook.brikdesigns.com/?path=/docs/containers-read-mode-page--overview) and a read-mode sheet compose the same atomic primitives (FieldGrid, Field, BulletList) — the wrapper is the decision.
+
+| Choose a page (`DataSection`) when… | Choose a sheet (`SheetSection`) when… |
+|---|---|
+| The user's primary task is scanning a whole record | The user's primary task is drilling into one facet |
+| Navigation context is valuable and a modal would lose it | The parent page stays useful while the overlay is open |
+| Every section is roughly equally important | One section is the focus; others are in the sheet because they're long |
+| Editing happens on many sections in a session | Editing is occasional and per-section |
+
 ## When to use which treatment
 
 | Scenario | Variant | Footer |
@@ -198,6 +272,11 @@ Don't reach for raw `<h3>` / `<table>` / `<ul>` inside a Sheet body — each has
 - **Don't use Sheet for short confirmations.** Use [Modal preset="confirm"](/docs/components/modal#confirm-preset).
 - **Don't use Sheet without a clear reason to leave the page.** If the content fits inline, render it on the page directly.
 - **Don't nest Sheets visually.** Use `onBack` push-stack navigation — Sheets stack semantically, not visually.
+- **Don't use `DataSection` inside a Sheet.** It's page-scoped and carries page-tier title typography that overwhelms the narrow view — see [Composing a read-mode sheet](#composing-a-read-mode-sheet).
+- **Don't invent a custom "SectionHeading" component.** `SheetSection.heading` is the entire API.
+- **Don't build a `ParagraphField` or `ListField`.** `Field` accepts any `ReactNode` value — paragraph-label and list-label are usages, not components. See [Naming Conventions](/docs/primitives/naming-conventions).
+- **Don't place a `Divider` between `SheetSection`s.** The inter-section rhythm is built in.
+- **Don't hide a `SheetSection` heading behind an empty `heading` prop** to get a "headingless" look — use `description` or plain children instead.
 
 ## Accessibility
 

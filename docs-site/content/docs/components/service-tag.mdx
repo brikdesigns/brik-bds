@@ -1,0 +1,97 @@
+---
+title: Service tag
+description: Colored indicator identifying a Brik service category or individual service, in text, icon, or icon+text form.
+---
+
+ServiceTag renders a Brik service category — or an individual service within it — as a colored pill or icon badge. Each of the five service lines has a dedicated color palette used across the Brik ecosystem so a category reads the same everywhere it appears.
+
+## Use it for
+
+- Classifying records by service line — company, project, or offering pages
+- A leading glyph on [PageHeader](/docs/components/page-header) for service-line detail pages
+- Table cells that need a compact service classification (`TableServiceTagCell`)
+- Replacing the removed `ServiceBadge` icon-only indicator (`variant="icon"`)
+
+## Import
+
+```tsx
+import { ServiceTag } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Display modes
+
+- **`text`** (default) — colored pill with label text only
+- **`icon-text`** — colored pill with service icon + label text
+- **`icon`** — colored square with service icon only, no label
+
+```tsx
+<ServiceTag category="marketing" />
+<ServiceTag category="marketing" variant="icon-text" serviceName="Email Drip Campaign" label="Email Drip Campaign" />
+<ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />
+```
+
+### Category colors
+
+Each `category` maps to a dedicated color:
+
+| Category | Color |
+|---|---|
+| Brand | Yellow |
+| Marketing | Green |
+| Information | Blue |
+| Product | Purple |
+| Back Office | Orange |
+
+`category`, `variant`, and `size` (`sm` / `md` / `lg`) are fully explorable via Controls in the [Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-service-tag--overview).
+
+## Migration from ServiceBadge
+
+`ServiceBadge` was removed in [#572](https://github.com/brikdesigns/brik-bds/issues/572). Existing usages migrate to `ServiceTag variant="icon"`:
+
+```tsx
+// Old
+<ServiceBadge category="brand" serviceName="Brand Identity Bundle" size="lg" />
+
+// New
+<ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />
+```
+
+## Icon resolution
+
+The `serviceName` prop resolves to an SVG icon via two mechanisms:
+
+- **Explicit overrides** — common service names map directly to icon files (e.g. "Premium Logo Design" resolves to `brand-logo.svg`)
+- **Normalization** — service names are lowercased and hyphenated, then prefixed by category (e.g. "Brand Guidelines" resolves to `brand-guidelines.svg`)
+
+Icons are bundled at build time from `components/ui/ServiceTag/icons/[category]/` (`service-icons.generated.ts`), so resolution always yields a glyph — a category tag with no `serviceName` falls back to the service-line default rather than rendering an empty box.
+
+### Coloring
+
+The glyph is an inline SVG painted with `fill="currentColor"`, so it inherits the tag's service text token (`--text-service-{name}`) and retones correctly in both `brik-light` and `brik-dark` — the icon always matches the label. To recolor an icon in a custom context, set `color` on the parent and the glyph follows.
+
+## Accessibility
+
+- Renders a `<span>` — non-interactive by default.
+- `variant="icon"` sets a `title` attribute (the resolved service or category label) since there's no visible text.
+- Color is never the only signal — `text` and `icon-text` variants always carry a label.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `category` | `'brand' \| 'marketing' \| 'information' \| 'product' \| 'back-office' \| 'service'` *(required)* | — |
+| `variant` | `'text' \| 'icon-text' \| 'icon'` | `'text'` |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `label` | `string` | category default label |
+| `serviceName` | `string` | — |
+
+`category="service"` is a deprecated alias of `'back-office'`. Plus standard `<span>` HTML attributes.
+
+## Related
+
+- [Badge](/docs/components/badge) — status indicator sibling
+- [Tag](/docs/components/tag) — neutral categorization sibling
+- [PageHeader](/docs/components/page-header) — common `badge` slot content
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-service-tag--overview)**
