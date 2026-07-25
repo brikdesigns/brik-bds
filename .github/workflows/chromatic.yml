@@ -41,6 +41,10 @@ jobs:
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           exitOnceUploaded: true
+          # TurboSnap: snapshot only stories affected by the diff instead of all
+          # ~399 every merge. Global CSS (tokens/themes) imports into preview.tsx,
+          # so a token edit still traces to every story → full re-snapshot. #771.
+          onlyChanged: true
 
       # Post build result + snapshot usage to Slack. No-ops until the
       # SLACK_CHROMATIC_WEBHOOK_URL secret is set, so it's safe to merge first.
