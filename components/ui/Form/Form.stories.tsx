@@ -14,12 +14,20 @@ const meta: Meta<typeof Form> = {
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
+    children: {
+      control: false,
+      description: 'Form fields and content.',
+    },
     layout: { control: 'select', options: ['vertical', 'horizontal'] },
     gap: { control: 'select', options: ['sm', 'md', 'lg'] },
     title: { control: 'text' },
     description: { control: 'text' },
     error: { control: 'text' },
     success: { control: 'text' },
+    footer: {
+      control: false,
+      description: 'Footer content (submit button, cancel, etc.).',
+    },
   },
 } satisfies Meta<typeof Form>;
 

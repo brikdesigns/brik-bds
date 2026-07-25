@@ -93,6 +93,10 @@ const meta: Meta<typeof FilterBar> = {
       action: 'cleared',
       description: 'Callback to clear all filters. When provided, a ghost "Clear filters" button appears while filtered < total.',
     },
+    activeFilterCount: {
+      control: false,
+      description: 'Number of currently-active filters. Drives the `Filters (N)` label when the bar collapses on narrow own-widths (ADR-019). Story computes this from the hook-filtered subset.',
+    },
   },
 };
 

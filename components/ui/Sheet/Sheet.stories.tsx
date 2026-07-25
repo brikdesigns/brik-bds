@@ -28,6 +28,50 @@ const meta: Meta<typeof Sheet> = {
       description:
         'Render header + body as Skeleton placeholders. Footer stays unchanged; secondaryAction and tabs are suppressed.',
     },
+    onEdit: {
+      control: false,
+      description: 'Triggered from the primary action in read mode (switch to edit).',
+    },
+    onSave: {
+      control: false,
+      description: 'Triggered from the primary action in edit mode (commit changes).',
+    },
+    onCancel: {
+      control: false,
+      description: 'Triggered from the secondary action in edit mode. Falls back to `onClose`.',
+    },
+    saveDisabled: {
+      control: 'boolean',
+      description: 'Disable the save button (e.g. while form is invalid).',
+    },
+    saveLoading: {
+      control: 'boolean',
+      description: 'Show loading state on the save button.',
+    },
+    secondaryAction: {
+      control: false,
+      description: 'Optional left-aligned ancillary action rendered in the auto-footer alongside the mode-driven primary actions. Suppressed in edit mode. Ignored when a custom `footer` is supplied.',
+    },
+    viewDetailsAction: {
+      control: false,
+      description: 'Navigation-to-read-page action surfaced in the read-mode footer between `[Close]` and `[Edit]`. Omit when the table has no corresponding read page.',
+    },
+    tabs: {
+      control: false,
+      description: 'Optional tabs rendered below the header. When provided, `children` is ignored.',
+    },
+    activeTab: {
+      control: 'text',
+      description: 'Controlled active tab id (defaults to first tab).',
+    },
+    onTabChange: {
+      control: false,
+      description: 'Called when a tab is selected.',
+    },
+    footer: {
+      control: false,
+      description: 'Custom footer. When provided, overrides mode-driven auto-footer.',
+    },
   },
 };
 

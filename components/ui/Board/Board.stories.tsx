@@ -15,6 +15,12 @@ const meta: Meta<typeof Board> = {
   parameters: {
     layout: 'padded',
   },
+  argTypes: {
+    children: {
+      control: false,
+      description: '`BoardColumn` elements. Columns flex equally and respect their min/max widths.',
+    },
+  },
 };
 
 export default meta;

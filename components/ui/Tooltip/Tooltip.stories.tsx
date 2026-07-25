@@ -30,6 +30,14 @@ const meta: Meta<typeof Tooltip> = {
       options: ['top', 'bottom', 'left', 'right'],
       description: 'Side the tooltip and its arrow anchor to.',
     },
+    delay: {
+      control: 'number',
+      description: 'Delay in ms before showing the tooltip (default: 0 = instant).',
+    },
+    children: {
+      control: false,
+      description: 'Trigger element the tooltip is anchored to.',
+    },
   },
 } satisfies Meta<typeof Tooltip>;
 

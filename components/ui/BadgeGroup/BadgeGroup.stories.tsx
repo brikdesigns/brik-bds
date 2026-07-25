@@ -18,6 +18,10 @@ const meta: Meta<typeof BadgeGroup> = {
       control: 'boolean',
       description: 'When true, badges wrap to additional rows. Default true.',
     },
+    children: {
+      control: false,
+      description: '`<Badge>` children, or anything with badge-sized footprint.',
+    },
   },
 };
 
