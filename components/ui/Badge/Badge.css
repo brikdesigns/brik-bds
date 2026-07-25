@@ -105,9 +105,11 @@
 
 /* ─── Status × Solid (default, saturated bg) ─────────────────── */
 
+/* Dark label: white on --background-positive (#27ae60) is 2.87:1 (fails AA);
+   --text-on-color-light is 6.00:1 in both themes (#995). */
 .bds-badge--solid.bds-badge--positive {
   background-color: var(--background-positive);
-  color: var(--text-on-color-dark);
+  color: var(--text-on-color-light);
 }
 
 .bds-badge--solid.bds-badge--warning {
@@ -115,9 +117,11 @@
   color: var(--text-status-neutral);
 }
 
+/* Dark label: white on --background-negative (#eb5757) is 3.48:1 (fails AA);
+   --text-on-color-light is 4.95:1 in both themes (#995). */
 .bds-badge--solid.bds-badge--error {
   background-color: var(--background-negative);
-  color: var(--text-on-color-dark);
+  color: var(--text-on-color-light);
 }
 
 .bds-badge--solid.bds-badge--info {
