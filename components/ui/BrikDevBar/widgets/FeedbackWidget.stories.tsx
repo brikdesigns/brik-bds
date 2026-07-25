@@ -22,7 +22,7 @@ import { BrikDevBar } from '../BrikDevBar';
  *   - **user** (Phase 2) — form-mode only; cookies for auth.
  */
 const meta: Meta = {
-  title: 'Tools/widgets/feedback',
+  title: 'Tools/feedback-widget',
   tags: ['surface-product'],
   parameters: { layout: 'fullscreen' },
 };
