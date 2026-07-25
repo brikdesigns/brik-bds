@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo, type CSSProperties, type ReactNode } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import {
   Select,
   type SelectOption,

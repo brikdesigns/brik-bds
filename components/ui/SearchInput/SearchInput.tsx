@@ -6,7 +6,7 @@ import {
   useState,
   type ChangeEvent,
 } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { MagnifyingGlass, X } from '../../icons';
 import { TextInput, type TextInputProps } from '../TextInput/TextInput';
 import './SearchInput.css';
