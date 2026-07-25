@@ -1,0 +1,21 @@
+---
+title: React Reference
+description: The React-specific surface of BDS — hooks, composition recipes, and the tooling that builds and discovers the system.
+---
+
+import { Cards, Card } from 'fumadocs-ui/components/card';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+What `@brikdesigns/bds` gives a React consumer beyond the components themselves: the hooks that expose runtime state, the recipes for composing primitives into product moments, and the BDS-side tooling that keeps the system discoverable and coherent.
+
+<Cards>
+  <Card title="Hooks" href="/docs/react-reference/hooks" description="Runtime hooks — theme access, sheet-stack management, suggestion-filter behavior, and the dev-bar API." />
+  <Card title="Patterns" href="/docs/react-reference/patterns" description="Cross-component recipes. How multiple primitives compose into the product moments in every Brik build. Recipes, not new components." />
+  <Card title="Utilities" href="/docs/react-reference/utilities" description="BDS-side tooling — the Style Dictionary build pipeline, the bds-find discovery CLI, and the Adopt / Extend / Graduate cascade." />
+</Cards>
+
+## Related
+
+- [Components](/docs/components) — Every primitive these hooks and patterns compose.
+- [The Cascade](/docs/getting-started/cascade) — How theme state the hooks read is emitted into CSS layers.
+- [Build Standards](/docs/build-standards) — The naming and composition rules the patterns follow.
