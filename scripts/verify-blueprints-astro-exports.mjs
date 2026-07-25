@@ -542,7 +542,11 @@ const assertions = [
   // Every shipped blueprint's marker present across direct-import pages
   { name: 'hero_split_60_40 marker (home)',         pass: homeHtml.includes('data-blueprint-key="hero_split_60_40"') },
   { name: 'stats_dark_bar marker (home)',           pass: homeHtml.includes('data-blueprint-key="stats_dark_bar"') },
-  { name: 'services_detail_two_column marker (home)',pass: homeHtml.includes('data-blueprint-key="services_detail_two_column"') },
+  // `services_detail_two_column` dispatches through the @deprecated
+  // ServicesDetailTwoColumn adapter, which delegates to <CardGrid> (brik-bds#580).
+  // The rendered marker is therefore CardGrid's `card_grid`, not the legacy key;
+  // the section content itself is covered by the 'services items rendered' probe.
+  { name: 'services_detail_two_column → card_grid marker (home)',pass: homeHtml.includes('data-blueprint-key="card_grid"') },
   { name: 'about_story_split marker (home)',        pass: homeHtml.includes('data-blueprint-key="about_story_split"') },
   { name: 'testimonials_featured_large marker (home)',pass: homeHtml.includes('data-blueprint-key="testimonials_featured_large"') },
   { name: 'cta_split_contact marker (home)',        pass: homeHtml.includes('data-blueprint-key="cta_split_contact"') },
@@ -573,7 +577,8 @@ const assertions = [
   { name: 'dispatcher: all 7 known sections rendered', pass:
       dispatchedHtml.includes('data-blueprint-key="hero_interior_minimal"') &&
       dispatchedHtml.includes('data-blueprint-key="stats_dark_bar"') &&
-      dispatchedHtml.includes('data-blueprint-key="services_detail_two_column"') &&
+      // services_detail_two_column dispatches to the CardGrid adapter (#580) → card_grid marker
+      dispatchedHtml.includes('data-blueprint-key="card_grid"') &&
       dispatchedHtml.includes('data-blueprint-key="about_story_split"') &&
       dispatchedHtml.includes('data-blueprint-key="testimonials_featured_large"') &&
       dispatchedHtml.includes('data-blueprint-key="cta_split_contact"') &&
@@ -671,6 +676,11 @@ const expectedFiles = [
   'dist/content-system/blueprints/astro/types.d.ts',
   // Barrel (source — excluded from tsc compile)
   'content-system/blueprints/astro/index.ts',
+  // Types (source) — the barrel's runtime `export { WIRED_BLUEPRINT_KEYS }
+  // from './types'` and every .astro's `import type … from './types'` resolve
+  // this co-located source file, NOT the dist copy. Omitting it from `files`
+  // breaks consumer `astro build` at "Could not resolve './types'" (#1428).
+  'content-system/blueprints/astro/types.ts',
   // Components (source, .astro) — v0.1 shipped blueprints + later additions
   'content-system/blueprints/astro/HeroSplit6040.astro',
   'content-system/blueprints/astro/HeroInteriorMinimal.astro',
