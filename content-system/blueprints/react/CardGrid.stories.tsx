@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Badge, Button, Card, Frame, Grid, ServiceTag, Stack } from '../../../components';
 import { CardGrid } from './CardGrid';
+import { placeholderImage } from './_fixtures';
 
 const meta: Meta<typeof CardGrid> = {
   title: 'Blueprints/card_grid',
@@ -31,15 +32,15 @@ type Story = StoryObj<typeof CardGrid>;
 /* ─── Stories ──────────────────────────────────────────────────── */
 
 const serviceItems = [
-  { title: 'Web Design', description: 'Custom websites that convert visitors into customers.', href: '#', imageUrl: 'https://placehold.co/480x320/eaf1fb/1f3d70?text=Web', category: 'marketing' as const },
-  { title: 'Brand Identity', description: 'Logo systems and brand guidelines that scale.', href: '#', imageUrl: 'https://placehold.co/480x320/fff4cc/5b4500?text=Brand', category: 'brand' as const, hasOptions: true },
-  { title: 'Customer Journey Maps', description: 'Map the experience from first touch to repeat purchase.', href: '#', imageUrl: 'https://placehold.co/480x320/d6e4f5/1f3d70?text=Maps', category: 'information' as const },
+  { title: 'Web Design', description: 'Custom websites that convert visitors into customers.', href: '#', imageUrl: placeholderImage(480, 320, '#eaf1fb', '#1f3d70', 'Web'), category: 'marketing' as const },
+  { title: 'Brand Identity', description: 'Logo systems and brand guidelines that scale.', href: '#', imageUrl: placeholderImage(480, 320, '#fff4cc', '#5b4500', 'Brand'), category: 'brand' as const, hasOptions: true },
+  { title: 'Customer Journey Maps', description: 'Map the experience from first touch to repeat purchase.', href: '#', imageUrl: placeholderImage(480, 320, '#d6e4f5', '#1f3d70', 'Maps'), category: 'information' as const },
 ];
 
 const blogItems = [
-  { title: 'Why your CTAs disappear in dark mode', description: 'A short read on token-pairing discipline.', href: '#', imageUrl: 'https://placehold.co/480x320/eaf1fb/1f3d70?text=Post+1', tagLabel: 'Design system' },
-  { title: 'How we ship 4 client sites a quarter', description: 'Process notes from the small Brik team.', href: '#', imageUrl: 'https://placehold.co/480x320/d6f1da/1f5b2e?text=Post+2', tagLabel: 'Operations' },
-  { title: 'Brik content vocabulary at a glance', description: 'A field guide to BCS for new contributors.', href: '#', imageUrl: 'https://placehold.co/480x320/ead6f5/4a1f70?text=Post+3', tagLabel: 'BCS' },
+  { title: 'Why your CTAs disappear in dark mode', description: 'A short read on token-pairing discipline.', href: '#', imageUrl: placeholderImage(480, 320, '#eaf1fb', '#1f3d70', 'Post 1'), tagLabel: 'Design system' },
+  { title: 'How we ship 4 client sites a quarter', description: 'Process notes from the small Brik team.', href: '#', imageUrl: placeholderImage(480, 320, '#d6f1da', '#1f5b2e', 'Post 2'), tagLabel: 'Operations' },
+  { title: 'Brik content vocabulary at a glance', description: 'A field guide to BCS for new contributors.', href: '#', imageUrl: placeholderImage(480, 320, '#ead6f5', '#4a1f70', 'Post 3'), tagLabel: 'BCS' },
 ];
 
 /**

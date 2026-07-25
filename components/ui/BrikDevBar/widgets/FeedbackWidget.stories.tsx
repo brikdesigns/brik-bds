@@ -37,6 +37,35 @@ function clearWidgetMounts() {
   document.querySelectorAll('[class*="bfb-"], [class*="bff-"]').forEach((n) => n.remove());
 }
 
+/* ─── Network stub (#1319) ─────────────────────────────────────────
+   The widget script fetches on load (pin mode pulls the review) and
+   POSTs on submit. Stories must not hit portal.brikdesigns.com or the
+   Storybook host — intercept those calls and answer with canned JSON;
+   everything else passes through. Returns a restore function. */
+function installFetchStub() {
+  const realFetch = window.fetch;
+  const stubbed = (url: string) =>
+    url.includes('portal.brikdesigns.com') || url.includes('/api/review/') || url.startsWith('/api/feedback');
+  window.fetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+    const url = typeof input === 'string' ? input : input instanceof URL ? input.href : input.url;
+    if (stubbed(url)) {
+      const method = init?.method ?? 'GET';
+      const body =
+        method === 'GET'
+          ? { review: { design_feedback: [] } }
+          : { ok: true, id: 'story-stub' };
+      return new Response(JSON.stringify(body), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    return realFetch(input, init);
+  };
+  return () => {
+    window.fetch = realFetch;
+  };
+}
+
 function loadPinScript(token: string) {
   clearWidgetMounts();
   const s = document.createElement('script');
@@ -63,8 +92,12 @@ function loadFormUserScript(endpoint: string) {
 
 function PinDemo({ token }: { token: string }) {
   useEffect(() => {
+    const restoreFetch = installFetchStub();
     loadPinScript(token);
-    return clearWidgetMounts;
+    return () => {
+      clearWidgetMounts();
+      restoreFetch();
+    };
   }, [token]);
 
   return (
@@ -77,8 +110,8 @@ function PinDemo({ token }: { token: string }) {
         a pin and leave a comment.
       </p>
       <p style={{ color: 'var(--text-muted)', fontSize: 'var(--body-sm)', marginTop: 'var(--gap-md)' }}>
-        Submissions will 401 in this story (no real review token) — the UI renders, but the POST
-        won&apos;t succeed. That&apos;s expected for the demo.
+        Network is stubbed in this story — the review fetch and pin submissions are answered
+        locally with canned JSON, so the full flow works without touching the portal.
       </p>
     </div>
   );
@@ -86,10 +119,14 @@ function PinDemo({ token }: { token: string }) {
 
 function FormUserDemo({ withDevBar, endpoint }: { withDevBar: boolean; endpoint: string }) {
   useEffect(() => {
+    const restoreFetch = installFetchStub();
     // Mount DevBar shell first when requested so the widget registers as a slot
     // instead of falling back to its FAB.
     loadFormUserScript(endpoint);
-    return clearWidgetMounts;
+    return () => {
+      clearWidgetMounts();
+      restoreFetch();
+    };
   }, [endpoint]);
 
   return (
@@ -106,7 +143,7 @@ function FormUserDemo({ withDevBar, endpoint }: { withDevBar: boolean; endpoint:
         </p>
         <p style={{ color: 'var(--text-muted)', fontSize: 'var(--body-sm)', marginTop: 'var(--gap-md)' }}>
           Submissions POST to <code>{endpoint}</code> with <code>credentials: &apos;include&apos;</code>.
-          In Storybook the call will 404; the UI exercises the full form flow regardless.
+          In Storybook the call is stubbed with a canned 200, so the full form flow works offline.
         </p>
       </div>
     </>

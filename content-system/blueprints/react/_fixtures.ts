@@ -38,3 +38,18 @@ export const baseClientFacts: BlueprintProps['clientFacts'] = {
   logoUrl: null,
   logoVariants: {},
 };
+
+/**
+ * Deterministic SVG data-URI placeholder — replaces placehold.co so blueprint
+ * stories render identically offline and in Chromatic (#1319). Hex values are
+ * image *content* (fake photography), not UI chrome — token rules don't apply.
+ */
+export function placeholderImage(width: number, height: number, bg: string, fg: string, label: string): string {
+  const fontSize = Math.round(Math.min(width, height) / 8);
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}">` +
+    `<rect width="${width}" height="${height}" fill="${bg}"/>` +
+    `<text x="${width / 2}" y="${height / 2 + fontSize / 3}" text-anchor="middle" font-family="sans-serif" font-size="${fontSize}" fill="${fg}">${label}</text>` +
+    `</svg>`;
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+}
