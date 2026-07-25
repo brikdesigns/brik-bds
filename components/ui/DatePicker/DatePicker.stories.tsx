@@ -6,7 +6,7 @@ import { DatePicker } from './DatePicker';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof DatePicker> = {
-  title: 'Blocks/date-picker',
+  title: 'Components/date-picker',
   component: DatePicker,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

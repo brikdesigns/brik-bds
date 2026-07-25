@@ -159,6 +159,14 @@ Pre-existing `*.stories.tsx` files keep whatever shape ADR-007's page-recipe pas
 
 ## Amendments
 
+### 2026-07-25 — Part A: date-picker + time-picker reclassified Blocks → Components (#1359)
+
+Both pickers move from `Blocks/` to `Components/`. Forward-only `title:` re-title (`Blocks/date-picker` → `Components/date-picker`, same for `time-picker`) plus the `storySort.order` edit in [`.storybook/preview.tsx`](../../.storybook/preview.tsx); no component code changes.
+
+**Rationale.** A date-picker / time-picker is a **composite input control the user operates as a single form field** — a trigger input plus a popover. That is the same shape as `select`, `multi-select`, and `address-input`, which have always lived in `Components/` (Part A table). The pickers were the odd members out in `Blocks/`, split from their sibling input controls. `Blocks/` is reserved for **slot-shaped layout fillers** — `field`, `field-grid`, `bullet-list`, `checklist`, `interactive-list-item` — a picker fills no slot shape, it *is* the control. Reclassifying restores the "composite input controls live in `Components/`" consistency. The Part A `Components/` role line ("Single atomic primitive") reads as "atomic UI **control**" — already inclusive of the composite inputs enumerated in that same row — so the frozen table is not rewritten (per the amendment convention this file follows).
+
+**Also in this pass:** `Navigation/` `storySort.order` alphabetized (`top-navigation` had been sequenced ahead of `page-header`). No membership change.
+
 ### 2026-07-22 — Part A: Cards top-level, Navigation rename, Blueprints promoted, Foundation/Assets, Displays dissolved (#1330)
 
 A sidebar-cleanup pass introduced three structural changes and two consolidations. All are forward-only `title:` re-titles plus a `storySort.order` rewrite in [`.storybook/preview.tsx`](../../.storybook/preview.tsx); no component code changes (the `NavBar → TopNavigation` component rename is a **separate breaking PR**, tracked apart from this taxonomy pass).
