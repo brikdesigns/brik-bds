@@ -52,6 +52,15 @@ function isItemGroup(entry: MenuItemData | MenuItemGroup): entry is MenuItemGrou
 }
 
 /**
+ * Menu open direction relative to its trigger.
+ * - `bottom` (default) — panel opens downward; the consumer's relatively
+ *   positioned wrapper anchors it (unchanged contract).
+ * - `top` — panel opens upward, anchored to the trigger's top edge, with no
+ *   consumer inline `bottom` / `top: auto` override needed.
+ */
+export type MenuPlacement = 'bottom' | 'top';
+
+/**
  * Menu component props
  */
 export interface MenuProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
@@ -74,6 +83,13 @@ export interface MenuProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childre
    * Default styling applies via `bds-menu__header`; pass any node to override.
    */
   header?: ReactNode;
+  /**
+   * Direction the panel opens relative to its trigger. `top` anchors the
+   * panel above the trigger internally (no consumer inline override). Default
+   * `bottom`. The panel is height-capped and scrolls internally when its
+   * content would overflow the viewport.
+   */
+  placement?: MenuPlacement;
 }
 
 /**
@@ -156,6 +172,7 @@ export function Menu({
   onClose,
   activeId,
   header,
+  placement = 'bottom',
   className = '',
   style,
   ...props
@@ -197,7 +214,7 @@ export function Menu({
     <div
       ref={menuRef}
       role="menu"
-      className={bdsClass('bds-menu', className)}
+      className={bdsClass('bds-menu', `bds-menu--${placement}`, className)}
       style={style}
       {...props}
     >
