@@ -19,8 +19,7 @@ type Story = StoryObj;
 
 /* ═══════════════════════════════════════════════════════════════
    Multi-primitive form composition: TextInput (email) + PasswordInput
-   + Button + TextLink (forgot-password). Lives in Patterns/Forms/ per
-   ADR-010 amendment §1.
+   + Button + TextLink (forgot-password). Lives in Containers/ per the #1323 taxonomy decision (the #1330 8-bucket taxonomy defines no Patterns/ top-level).
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Login form — email + password + sign-in + forgot-pwd link */

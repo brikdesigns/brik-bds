@@ -19,7 +19,7 @@ import { BrikDevBar } from '../BrikDevBar';
  * has something to display.
  */
 const meta: Meta = {
-  title: 'Tools/widgets/events',
+  title: 'Tools/events-widget',
   tags: ['surface-product'],
   parameters: { layout: 'fullscreen' },
 };

@@ -21,7 +21,7 @@ type Story = StoryObj;
 /* ═══════════════════════════════════════════════════════════════
    Multi-primitive form composition: TextInput × 2 + PasswordInput × 2
    + Checkbox + Button + TextLink. Six distinct primitive types.
-   Lives in Patterns/Forms/ per ADR-010 amendment §1.
+   Lives in Containers/ per the #1323 taxonomy decision (the #1330 8-bucket taxonomy defines no Patterns/ top-level).
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Sign-up form — name, email, password, confirm, terms */
