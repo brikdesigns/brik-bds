@@ -1,5 +1,5 @@
 import { forwardRef, type ButtonHTMLAttributes } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { XBold } from '../../icons';
 import { bdsClass } from '../../utils';
 import './CloseButton.css';
