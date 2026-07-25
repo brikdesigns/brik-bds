@@ -39,10 +39,15 @@ type Story = StoryObj<typeof TabBar>;
    DEFAULT — args-driven sandbox
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive playground for prop tweaking */
+/**
+ * Args-driven sandbox. Shows the default `variant: 'text'` (plain labels, brand
+ * color for the active tab, no indicator) — switch `variant` in Controls.
+ *
+ * @summary Interactive playground for prop tweaking
+ */
 export const Default: Story = {
   args: {
-    variant: 'tab',
+    variant: 'text',
     items: [
       { label: 'Overview', active: true },
       { label: 'Billing', dot: true },
@@ -52,20 +57,9 @@ export const Default: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   VARIANTS — one story per style (Q3 semantic starting points)
+   VARIANTS — one story per non-default style (Q3 semantic starting
+   points). `text` is the default, shown in `Default` above.
    ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Plain labels with brand color for the active tab; no indicator */
-export const Text: Story = {
-  args: {
-    variant: 'text',
-    items: [
-      { label: 'All', active: true },
-      { label: 'Active' },
-      { label: 'Archived' },
-    ],
-  },
-};
 
 /** @summary Text color behavior plus a brand-color underline below the active tab */
 export const TextUnderline: Story = {
