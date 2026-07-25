@@ -351,7 +351,7 @@ const preview: Preview = {
           // Flat taxonomy per ADR-006 Part A. Cards / Navigation / Blueprints added 2026-07-22 (#1330);
           // Foundation/Assets absorbs icon-family + logo + avatar + image; Displays dissolved into Containers.
           'Components',
-          ['address-input', 'badge', 'badge-group', 'banner', 'button', 'button-group', 'checkbox', 'chip', 'completion-toggle', 'counter', 'divider', 'dot', 'empty-state', 'file-card', 'file-uploader', 'filter-bar', 'filter-button', 'filter-toggle', 'meter', 'modal', 'multi-select', 'pagination', 'password-input', 'popover', 'progress-bar', 'progress-circle', 'progress-stepper', 'radio', 'segmented-control', 'select', 'service-tag', 'skeleton', 'slider', 'spinner', 'stepper', 'switch', 'tag', 'tag-group', 'text-area', 'text-input', 'text-link', 'toast', 'tooltip', '*'],
+          ['address-input', 'badge', 'badge-group', 'banner', 'button', 'button-group', 'checkbox', 'chip', 'completion-toggle', 'counter', 'date-picker', 'divider', 'dot', 'empty-state', 'file-card', 'file-uploader', 'filter-bar', 'filter-button', 'filter-toggle', 'meter', 'modal', 'multi-select', 'pagination', 'password-input', 'popover', 'progress-bar', 'progress-circle', 'progress-stepper', 'radio', 'segmented-control', 'select', 'service-tag', 'skeleton', 'slider', 'spinner', 'stepper', 'switch', 'tag', 'tag-group', 'text-area', 'text-input', 'text-link', 'time-picker', 'toast', 'tooltip', '*'],
           'Containers',
           [
             'accordion',
@@ -385,11 +385,11 @@ const preview: Preview = {
           'Cards',
           ['card', 'card-list', 'pricing-card', 'product-summary-card', '*'],
           'Blocks',
-          ['bullet-list', 'checklist', 'date-picker', 'field', 'field-grid', 'interactive-list-item', 'selectable-media-tile', 'time-picker', '*'],
+          ['bullet-list', 'checklist', 'field', 'field-grid', 'interactive-list-item', 'selectable-media-tile', '*'],
           'Layouts',
           ['cluster', 'frame', 'grid', 'page', 'stack', '*'],
           'Navigation',
-          ['breadcrumb', 'top-navigation', 'page-header', 'sidebar-navigation', 'sub-navigation', 'tab-bar', '*'],
+          ['breadcrumb', 'page-header', 'sidebar-navigation', 'sub-navigation', 'tab-bar', 'top-navigation', '*'],
           'Blueprints',
           ['*'],
           'Tools',
