@@ -1,5 +1,5 @@
 import { useState, useId } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { Eye, EyeSlash } from '../../icons';
 import { TextInput, type TextInputProps } from '../TextInput/TextInput';
 import './PasswordInput.css';

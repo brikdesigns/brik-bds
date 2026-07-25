@@ -4,7 +4,7 @@ import {
   useImperativeHandle,
   useRef,
 } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { CaretUpBold, CaretDownBold } from '../../icons';
 import { TextInput, type TextInputProps } from '../TextInput/TextInput';
 import './NumberInput.css';

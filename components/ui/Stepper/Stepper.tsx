@@ -1,5 +1,5 @@
 import { type HTMLAttributes } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { Minus, Plus } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Stepper.css';

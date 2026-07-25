@@ -1,5 +1,5 @@
 import { forwardRef, useId, useState, type SelectHTMLAttributes, type ReactNode } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { CaretDownBold } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Select.css';

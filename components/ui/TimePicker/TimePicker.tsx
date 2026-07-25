@@ -7,7 +7,7 @@ import {
   type MouseEvent as ReactMouseEvent,
 } from 'react';
 import * as Popover from '@radix-ui/react-popover';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { Clock } from '../../icons';
 import { bdsClass } from '../../utils';
 import './TimePicker.css';

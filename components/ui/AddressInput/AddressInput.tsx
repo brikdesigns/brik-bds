@@ -8,7 +8,7 @@ import {
   useEffect,
   useCallback,
 } from 'react';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import { MapPin } from '../../icons';
 import { bdsClass } from '../../utils';
 import './AddressInput.css';
