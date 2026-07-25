@@ -42,15 +42,19 @@ bun add @brikdesigns/bds
 
 ## Wire the token cascade
 
-In your global stylesheet (`globals.css`, `app.css`, etc.) import in this order:
+In your global stylesheet (`globals.css`, `app.css`, etc.) declare the `@layer` order first — **before any `@import`** — then import each file into its layer:
 
 ```css
-@import '@brikdesigns/bds/tokens.css';
-@import './styles/theme-{client}.css'; /* your client's theme overrides */
-@import '@brikdesigns/bds/styles.css';
+@layer bds-tokens, bds-components, client-theme, client-overrides;
+
+@import '@brikdesigns/bds/tokens.css' layer(bds-tokens);
+@import '@brikdesigns/bds/styles.css'  layer(bds-components);
+@import './styles/theme-{client}.css'  layer(client-theme); /* your client's brand overrides */
 ```
 
-Why this order, what each file contains, and the rule against redefining BDS tokens: [The Cascade](/docs/getting-started/cascade#the-adoption-contract).
+The `layer()` on each `@import` is load-bearing: `tokens.css` ships **unlayered**, and unlayered CSS beats layered CSS — so without `layer(bds-tokens)` the client theme in `@layer client-theme` could never override it. Once every file is assigned a layer, the `@layer` declaration order (not the import order) governs the cascade.
+
+What each file contains, and the rule against redefining BDS tokens: [The Cascade](/docs/getting-started/cascade#the-adoption-contract).
 
 ## Theme + mode switches
 
@@ -74,13 +78,15 @@ See [The Cascade](/docs/getting-started/cascade) for the full switch table inclu
 
 ## Optional atmosphere overlay
 
-Atmospheres add ambient decoration (vignettes, grain, orbs, spotlights) without overriding theme tokens. Import one after `tokens.css`:
+Atmospheres add ambient decoration (vignettes, grain, orbs, spotlights) without overriding theme tokens. Add one to the same block — it ships unlayered on purpose, so it decorates on top without touching the token cascade:
 
 ```css
-@import '@brikdesigns/bds/tokens.css';
-@import './styles/theme-{client}.css';
-@import '@brikdesigns/bds/atmospheres/minimal-clinical.css'; /* optional */
-@import '@brikdesigns/bds/styles.css';
+@layer bds-tokens, bds-components, client-theme, client-overrides;
+
+@import '@brikdesigns/bds/tokens.css' layer(bds-tokens);
+@import '@brikdesigns/bds/styles.css'  layer(bds-components);
+@import './styles/theme-{client}.css'  layer(client-theme);
+@import '@brikdesigns/bds/atmospheres/minimal-clinical.css'; /* optional — decoration only, unlayered */
 ```
 
 Atmospheres are decoration-only — surface color comes from the theme layer. See [Atmospheres](/docs/theming/atmospheres).
