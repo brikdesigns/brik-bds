@@ -13,7 +13,7 @@ This distinction is load-bearing for titles and headings — get it wrong and yo
 
 ## Slot pattern
 
-Per [ADR-017](../../../../docs/adrs/ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md), slot names are governed by a **structural pattern**, not an enumerated list. A `bds-*` class is canonical if and only if it matches the ADR-008 §4 BEM grammar:
+Per [ADR-017](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md), slot names are governed by a **structural pattern**, not an enumerated list. A `bds-*` class is canonical if and only if it matches the ADR-008 §4 BEM grammar:
 
 ```text
 bds-<block>
@@ -26,7 +26,7 @@ Every segment is **kebab-case** (`__item-label`, never `__itemLabel` or `__item_
 
 > A well-formed slot is canonical *because it is well-formed* — there is no registry to maintain and no PR needed to introduce a new one. Only malformed shapes fail.
 
-The gate is [`scripts/slot-pattern-check.mjs`](../../../../scripts/slot-pattern-check.mjs) — a pure source scan wired into `.husky/pre-commit` (staged) and CI (full-tree, via `.github/workflows/slot-pattern-check.yml`). It supersedes the closed enumerated allowlist, whose enforcing lint (ADR-008 Phase C) **never shipped**: by 2026-07 only 101 of the 396 slots in use were listed, so enumeration was unpayable. [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md) is repurposed from a list into the pattern spec (grammar + examples); the filename is kept to preserve inbound links.
+The gate is [`scripts/slot-pattern-check.mjs`](https://github.com/brikdesigns/brik-bds/blob/main/scripts/slot-pattern-check.mjs) — a pure source scan wired into `.husky/pre-commit` (staged) and CI (full-tree, via `.github/workflows/slot-pattern-check.yml`). It supersedes the closed enumerated allowlist, whose enforcing lint (ADR-008 Phase C) **never shipped**: by 2026-07 only 101 of the 396 slots in use were listed, so enumeration was unpayable. [`docs/SLOT-ALLOWLIST.md`](https://github.com/brikdesigns/brik-bds/blob/main/docs/SLOT-ALLOWLIST.md) is repurposed from a list into the pattern spec (grammar + examples); the filename is kept to preserve inbound links.
 
 ### Naming a new slot
 
@@ -52,7 +52,7 @@ Blueprints (`content-system/blueprints/*`) are page-level layouts — the Sectio
 
 ## Related
 
-- [`docs/SLOT-ALLOWLIST.md`](../../../../docs/SLOT-ALLOWLIST.md) — the pattern spec (grammar + examples); enforced by `scripts/slot-pattern-check.mjs`
-- [ADR-017](../../../../docs/adrs/ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md) — why the pattern gate superseded the closed allowlist
-- [ADR-008](../../../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md) — the naming canon (§1 namespace, §3 structural-only modifiers, §4 grammar); §2's closed allowlist is superseded by ADR-017
+- [`docs/SLOT-ALLOWLIST.md`](https://github.com/brikdesigns/brik-bds/blob/main/docs/SLOT-ALLOWLIST.md) — the pattern spec (grammar + examples); enforced by `scripts/slot-pattern-check.mjs`
+- [ADR-017](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md) — why the pattern gate superseded the closed allowlist
+- [ADR-008](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-008-naming-canon-closed-allowlist.md) — the naming canon (§1 namespace, §3 structural-only modifiers, §4 grammar); §2's closed allowlist is superseded by ADR-017
 - [Slot Vocabulary](/docs/build-standards/slot-vocabulary) — what each canonical slot means and when to use it
