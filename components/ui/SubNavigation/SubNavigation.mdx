@@ -8,33 +8,13 @@ import * as Stories from './SubNavigation.stories';
 
 <ComponentLinks slug="sub-navigation" />
 
-Second-column nav for app shells that pair a collapsed primary `SidebarNavigation` with a section-specific sub-nav. Internally renders `NavItem` per entry. For a single-sidebar shell, use `SidebarNavigation` directly.
+Second-column nav for app shells that pair a collapsed primary `SidebarNavigation` with a section-specific sub-nav. Internally renders `NavItem` per entry. For a single-sidebar shell, use `SidebarNavigation` directly. For the full two-column layout (collapsed primary + sub-nav + main), see **Layouts / app-shell**.
 
 ## Playground
 
-Toggle `showHeader`, `showFooter`, or override `width` in the Controls panel.
+Toggle `showHeader`, `showFooter`, `bordered` (set `false` when the shell supplies its own panel/content separation — only the right divider is removed), or override `width` in the Controls panel.
 
 <Canvas of={Stories.Default} />
-
-## Variants
-
-### Default
-
-<Canvas of={Stories.Default} />
-
-### No border
-
-Set `bordered={false}` when the app shell supplies its own panel/content separation. Only the right divider is removed — the header/footer dividers stay.
-
-<Canvas of={Stories.NoBorder} />
-
-## Patterns
-
-### Two-column shell
-
-Collapsed primary `SidebarNavigation` + `SubNavigation` + main.
-
-<Canvas of={Stories.TwoColumnShell} />
 
 ## Props
 
