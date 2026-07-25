@@ -20,7 +20,7 @@
  *                                        client-overrides
  *   "Layer 1/2/3/4"                     named CSS @layer (layers are never
  *                                        numbered)
- *   "four layers"                       four Theming Dimensions (Tokens ·
+ *   "four layers" / "four-layer"        four Theming Dimensions (Tokens ·
  *                                        Atmospheres · Layout Archetypes ·
  *                                        Blueprints); the cascade has four
  *                                        *named* @layers
@@ -85,7 +85,11 @@ const RULES = [
     fix: 'canonical CSS layers are named, never numbered → `bds-tokens` · `bds-components` · `client-theme` · `client-overrides`. See getting-started/cascade.mdx.',
   },
   {
-    re: /\bfour layers\b/gi,
+    // Matches "four layers", "four layer", and the hyphenated adjective
+    // "four-layer" (e.g. "four-layer cascade") — all retired for the theming
+    // Dimensions. Genuine CSS-cascade usage ("four-layer × modes") is exempted
+    // via an inline cascade-vocab-ok anchor.
+    re: /\bfour[- ]layers?\b/gi,
     fix: 'retired → the four Theming Dimensions are Tokens · Atmospheres · Layout Archetypes · Blueprints; the cascade has four *named* `@layer`s. See getting-started/cascade.mdx.',
   },
 ];
