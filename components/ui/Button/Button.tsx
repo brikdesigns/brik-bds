@@ -76,7 +76,7 @@ interface TextContentProps {
 }
 
 interface IconOnlyContentProps {
-  /** Icon to render (e.g. `<Icon icon="ph:plus" />` from `@iconify/react`). */
+  /** Icon to render (e.g. `<Icon icon="ph:plus" />` from `@brikdesigns/bds`). */
   icon: ReactNode;
   /** Required accessible label — announced by screen readers. */
   label: string;
