@@ -1,6 +1,33 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import { Icon } from '@iconify/react';
 import * as Stories from './Tag.stories';
+import { Tag } from './Tag';
+import { Badge } from '../Badge/Badge';
+
+{/* Cross-component demo — Badge + Tag share the size scale. Lives here (docs),
+    not as a Tag story, because it isn't part of Tag's own API surface
+    (storybook-story-shape consolidation rule 4). Mirrors the Badge.mdx twin. */}
+export const BadgeTagAlignmentDemo = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+    {['xs', 'sm', 'md', 'lg'].map((size) => (
+      <div key={size} style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap', alignItems: 'center' }}>
+        <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: 'var(--size-600)' }}>{size}</span>
+        {size === 'xs' ? (
+          <>
+            <Badge size="xs" status="positive" icon={<Icon icon="ph:star" />} />
+            <Tag size="xs" icon={<Icon icon="ph:tag" />} />
+          </>
+        ) : (
+          <>
+            <Badge size={size} status="positive" icon={<Icon icon="ph:star" />}>Active</Badge>
+            <Tag size={size} icon={<Icon icon="ph:tag" />}>Category</Tag>
+          </>
+        )}
+      </div>
+    ))}
+  </div>
+);
 
 <Meta of={Stories} />
 
@@ -22,7 +49,7 @@ Categorization labels for classifying records — industry, segment, owner, size
 - **`subtle`** — Transparent background with a hairline border. Lower visual weight when Tags sit on a colored surface.
 - **`muted`** — Quiet neutral fill for a low-emphasis category label, using the same AA-cleared pairing as Badge `info`. **Boundary:** `muted` is a quiet neutral label, not a status — for semantic status (positive/warning/error/etc.) use `Badge` instead.
 
-Below: appearance, sizes, density, and Badge alignment — axes where a side-by-side comparison is clearer than toggling Controls.
+Below: appearance, sizes, and density — axes where a side-by-side comparison is clearer than toggling Controls.
 
 ### Appearance
 
@@ -38,11 +65,15 @@ Below: appearance, sizes, density, and Badge alignment — axes where a side-by-
 
 <Canvas of={Stories.Density} />
 
+## Patterns
+
 ### Badge + Tag alignment
 
 Badge and Tag share the same height at every size tier — useful when mixing them inline.
 
-<Canvas of={Stories.BadgeTagAlignment} />
+<Canvas>
+  <BadgeTagAlignmentDemo />
+</Canvas>
 
 ## Props
 

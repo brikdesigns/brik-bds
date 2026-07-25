@@ -9,7 +9,7 @@ import { Button } from '../Button';
  * window and will be removed in a future release.
  */
 const meta: Meta<typeof PricingCard> = {
-  title: 'Cards/pricing-card',
+  title: 'Deprecated/pricing-card',
   component: PricingCard,
   tags: ['surface-web', '!manifest'],
   parameters: { layout: 'centered' },

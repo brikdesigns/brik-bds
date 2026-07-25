@@ -16,27 +16,17 @@ Pass `linkComponent` (e.g. `next/link`) so linked crumbs route client-side inste
 
 <Canvas of={Stories.Default} />
 
-## Variants
-
-### With link component
-
-<Canvas of={Stories.WithLinkComponent} />
-
 ## Patterns
 
-When a breadcrumb sits inside a `[data-service-line='X']` subtree, the
-current page label and separators rebind canonical `--text-secondary`
-and `--text-muted` to the matching `--text-service-{name}` value
-(`brand`, `marketing`, `information`, `product`, and `service` → back-office).
-
-The component itself stays scope-blind — only the cascade block in
-`Breadcrumb.css` knows about service lines. Consumers set `data-service-line`
-on any ancestor (page wrapper, hero card, sidebar column) and the
-breadcrumb inside picks up the hue. The legacy `data-audience` attribute
-still resolves during the deprecation window (#788).
+Inside a `[data-service-line='X']` subtree, the current-page label and
+separators rebind to the matching service color.
 
 <Canvas of={Stories.ServiceLineCascade} />
 
 ## Props
 
 <ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — For the service-line cascade token-rebinding rules and the legacy `data-audience` deprecation window, see [design.brikdesigns.com/docs/components/breadcrumb](https://design.brikdesigns.com/docs/components/breadcrumb#service-line-cascade).
