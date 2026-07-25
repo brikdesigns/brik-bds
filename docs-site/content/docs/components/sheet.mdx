@@ -86,7 +86,7 @@ function CompanySheet() {
 
 The header composes four optional pieces:
 
-- **`subtitle`** — uppercase label-tier line above the title (entity type, parent record). Renders in `text-muted`. ("Eyebrow" is a banned synonym — see [Naming Conventions / Subtitle](https://design.brikdesigns.com/docs/primitives/naming-conventions#subtitle).)
+- **`subtitle`** — uppercase label-tier line above the title (entity type, parent record). Renders in `text-muted`. ("Eyebrow" is a banned synonym — see [Slot Vocabulary → Subtitle](/docs/build-standards/slot-vocabulary#subtitle).)
 - **`title`** — main heading, rendered as `<h2>`.
 - **`description`** — long-form secondary text below the title (record state, timestamps).
 - **`onBack`** — back button for nested sheet navigation. Pair with your sheet stack controller.
@@ -274,7 +274,7 @@ Both [Read-Mode Page](https://storybook.brikdesigns.com/?path=/docs/containers-r
 - **Don't nest Sheets visually.** Use `onBack` push-stack navigation — Sheets stack semantically, not visually.
 - **Don't use `DataSection` inside a Sheet.** It's page-scoped and carries page-tier title typography that overwhelms the narrow view — see [Composing a read-mode sheet](#composing-a-read-mode-sheet).
 - **Don't invent a custom "SectionHeading" component.** `SheetSection.heading` is the entire API.
-- **Don't build a `ParagraphField` or `ListField`.** `Field` accepts any `ReactNode` value — paragraph-label and list-label are usages, not components. See [Naming Conventions](/docs/primitives/naming-conventions).
+- **Don't build a `ParagraphField` or `ListField`.** `Field` accepts any `ReactNode` value — paragraph-label and list-label are usages, not components. See [Naming Principles](/docs/build-standards/naming-principles).
 - **Don't place a `Divider` between `SheetSection`s.** The inter-section rhythm is built in.
 - **Don't hide a `SheetSection` heading behind an empty `heading` prop** to get a "headingless" look — use `description` or plain children instead.
 
