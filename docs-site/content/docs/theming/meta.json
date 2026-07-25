@@ -5,6 +5,8 @@
     "client-themes",
     "atmospheres",
     "layout-archetypes",
+    "navigation-archetypes",
+    "footer-archetypes",
     "blueprints"
   ]
 }
