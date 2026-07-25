@@ -11,16 +11,7 @@ Every page in this site follows one of three templates depending on what it docu
   **Don't invent new page shapes.** If your page doesn't fit a template here, propose a template change in `docs-site/content/docs/getting-started/page-templates.mdx` and update *every* page using that template in the same PR. The cost of two ad-hoc structures is a lot more than the cost of one rigid one.
 </Callout>
 
-## Frontmatter
-
-```yaml
----
-title: Button
-description: Trigger an event or action. The button family includes three components for different semantic needs.
----
-```
-
-Both `title` and `description` are required. The description renders below the page title in `<DocsDescription>`. Keep it under 140 characters and write it as a complete sentence — it doubles as the meta description.
+This page is the **page-shape and building-block reference**. The writing rules — frontmatter fields, heading depth, code blocks, callouts, links, and MDX authoring gotchas — live in the Fumadocs content standard at `.claude/standards/fumadocs-content.md`, retrieved by agents via `brik-rag query "fumadocs writing standard"`. This page does not restate them; it covers the structure a page takes and the components it can use.
 
 ## Templates
 
@@ -129,119 +120,6 @@ import { Callout } from 'fumadocs-ui/components/callout';
 import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
 import { Cards, Card } from 'fumadocs-ui/components/card';
 ```
-
-## Conventions
-
-### Code blocks
-
-Always tag the language. Use the canonical tag for the content type — `tsx` for TypeScript JSX, `ts` for plain TypeScript, `css` for CSS, `bash` for shell, `text` for plain text or ASCII art, `json` for JSON, `yaml` for YAML.
-
-````md
-```tsx
-<Button variant="primary">Save</Button>
-```
-````
-
-Never use unlabelled fences (\`\`\` alone) — they break syntax highlighting and can break the rehype pipeline.
-
-### Callouts
-
-Three types only.
-
-```mdx
-<Callout type="info">For principles, framing, context.</Callout>
-<Callout type="warn">For "don'ts" — cascade violations, scope creep, broken patterns.</Callout>
-<Callout type="error">For "this will break production" — security, data loss, accessibility lawsuits.</Callout>
-```
-
-Don't introduce other types. Don't nest callouts. Don't put more than 2-3 sentences inside one — if the callout grows, it should be a paragraph or its own section.
-
-### Tables
-
-Use markdown tables for static reference data:
-
-```md
-| Token | CSS Variable | Default |
-|---|---|---|
-| Small | `--shadow-sm` | `0px 2px 4px rgba(0,0,0,0.06)` |
-```
-
-Use HTML `<table>` only when you need JSX `.map()` over runtime data:
-
-```mdx
-<table>
-  <thead><tr><th>Term</th><th>Why</th></tr></thead>
-  <tbody>
-    {dental.vocabulary.avoid.map((v, i) => (
-      <tr key={i}><td><strong>{v.term}</strong></td><td>{v.reason}</td></tr>
-    ))}
-  </tbody>
-</table>
-```
-
-JSX expressions inside markdown table syntax don't get re-parsed at runtime — `{x.map(() => '\| col \|').join('\\n')}` renders as literal text, not a table.
-
-### Curly braces in prose
-
-MDX evaluates `{anything}` as a JSX expression — even inside plain text. Writing `"{n}-of-something"` in a bullet means MDX tries to read a variable called `n` and crashes the build with `ReferenceError: n is not defined`.
-
-Two ways to escape:
-
-```md
-✓  Wrap in backticks: `{n}`-of-something
-✓  Use HTML entity: &#123;n&#125;-of-something
-✗  Bare braces: {n}-of-something — crashes prerender
-```
-
-This bites hardest in feature-prop-shape descriptions and template-literal-style copy. When in doubt, backticks.
-
-### Headings
-
-H1 is the page title (driven by frontmatter — never write `# ` in the body). H2 for sections, H3 for sub-sections. Don't go below H4.
-
-### Internal links
-
-Always absolute paths starting with `/docs/`. Never relative paths.
-
-```md
-✓  [Cascade rules](/docs/getting-started/cascade)
-✗  [Cascade rules](../getting-started/cascade)
-```
-
-### External links to Storybook
-
-Always full URLs, never short paths. They survive Fumadocs path renames.
-
-```md
-✓  [Storybook → Button](https://storybook.brikdesigns.com/?path=/docs/components-button--overview)
-✗  Some shortened or relative path
-```
-
-### Tabs
-
-Always blank lines around code blocks inside `<Tab>` — MDX needs the whitespace to parse correctly. (When showing nested code fences in your own page, wrap the outer fence in **four** backticks; otherwise the inner three-backtick fence closes the outer prematurely.)
-
-````mdx
-<Tabs items={['npm', 'pnpm', 'bun']}>
-
-<Tab value="npm">
-
-```bash
-npm install @brikdesigns/bds
-```
-
-</Tab>
-
-<Tab value="pnpm">
-
-```bash
-pnpm add @brikdesigns/bds
-```
-
-</Tab>
-
-</Tabs>
-````
 
 ## How this site relates to Storybook
 

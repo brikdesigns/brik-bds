@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/docs-site/content/docs/**/*.mdx"
 retrieved-via: brik-rag query "fumadocs writing standard"
-last-verified: 2026-07-24
+last-verified: 2026-07-25
 ---
 
 # Fumadocs content standard
@@ -99,6 +99,16 @@ Concrete shorthand: terse, opinionated, knowledge-dense. "Patterns are recipes, 
 ````
 
 Never bare triple-backticks. Tags in use: `tsx`, `ts`, `js`, `bash`, `css`, `json`, `yaml`, `mdx`, `tree` (for ascii dir layouts).
+
+When a code block must itself show a fenced block (a snippet of MDX with a nested ` ``` `), wrap the outer fence in **four** backticks — otherwise the inner three-backtick fence closes the outer one early and the rest of the page renders as broken markdown.
+
+## MDX authoring gotchas
+
+MDX is not plain markdown — two constructs crash the prerender build rather than degrading gracefully.
+
+**Curly braces in prose.** MDX evaluates `{anything}` as a JSX expression, even inside a plain sentence. Writing `{n}-of-something` makes MDX read a variable `n` and fail the build with `ReferenceError: n is not defined`. Escape it — wrap in backticks (`` `{n}` ``) or use the HTML entity (`&#123;n&#125;`). This bites hardest in prop-shape descriptions and template-literal-style copy; when in doubt, backticks.
+
+**Tables over runtime data.** Use a markdown table for static reference data. Use an HTML `<table>` only when you need JSX `.map()` over runtime data (e.g. a vocabulary list built from pack data) — JSX expressions inside markdown table pipes are not re-parsed at runtime, so `{x.map(() => '| col |').join('\n')}` renders as literal text, not a table.
 
 ## Token names in code blocks and tables
 
