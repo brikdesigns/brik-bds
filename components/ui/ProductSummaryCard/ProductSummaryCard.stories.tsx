@@ -26,7 +26,7 @@ type Story = StoryObj<typeof ProductSummaryCard>;
  * Offering selection — echoes the offering/tier a visitor clicked through on.
  * Omit `price`/`frequency` via Controls to see the graceful collapse.
  *
- * @summary Offering summary — service tag + "Interested in" + price • frequency
+ * @summary Offering summary — tag, "Interested in", price
  */
 export const Default: Story = {
   args: {
@@ -43,7 +43,7 @@ export const Default: Story = {
  * Plan selection — same card with the parent service-line tag and recurring
  * frequency, as rendered in the Service Plan "Get Started" modal.
  *
- * @summary Plan summary — service-line tag + "Selected plan" + recurring price
+ * @summary Plan summary — tag, "Selected plan", recurring price
  */
 export const Plan: Story = {
   args: {

@@ -53,6 +53,7 @@ function AtmosphereStoryRender({ atmosphere, themeNumber }: AtmosphereStoryRende
 
 const meta: Meta<AtmosphereStoryArgs> = {
   title: 'Foundation/Atmospheres',
+  tags: ['surface-web'],
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -77,30 +78,37 @@ const meta: Meta<AtmosphereStoryArgs> = {
 export default meta;
 type Story = StoryObj<AtmosphereStoryArgs>;
 
+/** @summary Editorial-luxury atmosphere — serif display, generous space */
 export const EditorialLuxury: Story = {
   args: { atmosphere: 'editorial-luxury' },
 };
 
+/** @summary Cinematic-dramatic atmosphere — dark, high-contrast */
 export const CinematicDramatic: Story = {
   args: { atmosphere: 'cinematic-dramatic' },
 };
 
+/** @summary Minimal-clinical atmosphere — spare, precise, cool */
 export const MinimalClinical: Story = {
   args: { atmosphere: 'minimal-clinical' },
 };
 
+/** @summary Warm-soft atmosphere — rounded, approachable, warm */
 export const WarmSoft: Story = {
   args: { atmosphere: 'warm-soft' },
 };
 
+/** @summary Clean-bright atmosphere — light, open, energetic */
 export const CleanBright: Story = {
   args: { atmosphere: 'clean-bright' },
 };
 
+/** @summary Organic-textured atmosphere — natural texture accents */
 export const OrganicTextured: Story = {
   args: { atmosphere: 'organic-textured' },
 };
 
+/** @summary Baseline with no atmosphere overrides applied */
 export const None: Story = {
   args: { atmosphere: 'none' },
 };

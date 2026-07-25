@@ -83,7 +83,10 @@ function FeedbackForm({ onSubmit }: { onSubmit: (e: React.FormEvent) => void }) 
   );
 }
 
-/** @summary Feedback form — name + rating + comments with inline validation */
+/**
+ * Feedback form — name + rating + comments with inline validation.
+ * @summary Feedback form with inline validation
+ */
 export const Default: Story = {
   args: { onSubmit: fn() },
   render: (args) => (

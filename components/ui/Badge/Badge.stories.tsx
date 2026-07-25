@@ -102,7 +102,7 @@ export const Progress: Story = {
   args: { status: 'progress', children: 'In Progress' },
 };
 
-/** @summary Neutral — muted-gray, low-emphasis inert status (skipped, not linked) */
+/** @summary Neutral — muted-gray, inert status (skipped, not linked) */
 export const Neutral: Story = {
   args: { status: 'neutral', children: 'Not linked' },
 };

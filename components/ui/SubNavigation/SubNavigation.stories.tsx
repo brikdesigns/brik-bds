@@ -137,7 +137,11 @@ export const Default: Story = {
   },
 };
 
-/** @summary No right border (`bordered={false}`) — for shells that supply their own panel/content separation */
+/**
+ * `bordered={false}` — for shells that supply their own
+ * panel/content separation.
+ * @summary No right border, shell supplies separation
+ */
 export const NoBorder: Story = {
   args: {
     items: itemsWithIcons,

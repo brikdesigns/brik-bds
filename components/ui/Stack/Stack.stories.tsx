@@ -68,7 +68,7 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Interactive playground — tweak props in the Controls panel */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     direction: 'vertical',
     gap: 'md',

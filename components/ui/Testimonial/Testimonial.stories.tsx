@@ -22,7 +22,7 @@ type Story = StoryObj<typeof Testimonial>;
  * Brand variant (default) — brand-tinted surface for marketing sections.
  * Toggle `rating` and omit `authorRole` via Controls for other configurations.
  *
- * @summary Customer testimonial — brand surface, quote + attribution + stars
+ * @summary Testimonial — brand surface, quote + stars
  */
 export const Default: Story = {
   args: {

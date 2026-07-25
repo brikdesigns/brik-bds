@@ -56,7 +56,7 @@ const PlaceholderImage = () => (
 );
 
 /** @summary Interactive playground */
-export const Playground: Story = {
+export const Default: Story = {
   args: { ratio: 'landscape', fit: 'cover' },
   render: (args) => (
     <div style={{ maxWidth: 480 }}>

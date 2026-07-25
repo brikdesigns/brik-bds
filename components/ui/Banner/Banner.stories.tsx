@@ -54,10 +54,10 @@ const BannerAction = ({ children }: { children: string }) => (
   <Button variant="on-color" size="md">{children}</Button>
 );
 
-/* ─── Playground ─────────────────────────────────────────────── */
+/* ─── Default ────────────────────────────────────────────────── */
 
 /** @summary Interactive playground for prop tweaking */
-export const Playground: Story = {
+export const Default: Story = {
   args: {
     title: 'Title goes here',
     description: 'Description goes here',
@@ -67,7 +67,10 @@ export const Playground: Story = {
 
 /* ─── Variants — one story per tone (Q3 semantic starting points) ─ */
 
-/** @summary Announcement tone — brand-primary surface for marketing notices */
+/**
+ * Brand-primary surface for marketing notices.
+ * @summary Announcement tone banner
+ */
 export const Announcement: Story = {
   args: {
     title: 'Limited time offer',
@@ -76,7 +79,10 @@ export const Announcement: Story = {
   },
 };
 
-/** @summary Information tone — neutral status with leading Badge and `role="alert"` */
+/**
+ * Neutral status with leading Badge and `role="alert"`.
+ * @summary Information tone banner
+ */
 export const Information: Story = {
   args: {
     tone: 'information',
@@ -86,7 +92,10 @@ export const Information: Story = {
   },
 };
 
-/** @summary Warning tone — caution status with leading Badge and `role="alert"` */
+/**
+ * Caution status with leading Badge and `role="alert"`.
+ * @summary Warning tone banner
+ */
 export const Warning: Story = {
   args: {
     tone: 'warning',
@@ -95,7 +104,10 @@ export const Warning: Story = {
   },
 };
 
-/** @summary Error tone — failure status with leading Badge and `role="alert"` */
+/**
+ * Failure status with leading Badge and `role="alert"`.
+ * @summary Error tone banner
+ */
 export const Error: Story = {
   args: {
     tone: 'error',
@@ -105,7 +117,10 @@ export const Error: Story = {
   },
 };
 
-/** @summary Success tone — positive confirmation with leading Badge and `role="status"` */
+/**
+ * Positive confirmation with leading Badge and `role="status"`.
+ * @summary Success tone banner
+ */
 export const Success: Story = {
   args: {
     tone: 'success',

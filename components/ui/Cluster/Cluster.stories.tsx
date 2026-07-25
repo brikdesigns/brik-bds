@@ -57,7 +57,7 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
 );
 
 /** @summary Interactive playground */
-export const Playground: Story = {
+export const Default: Story = {
   args: { gap: 'sm', align: 'center' },
   render: (args) => (
     <Cluster {...args}>
@@ -84,7 +84,10 @@ export const TagList: Story = {
   ),
 };
 
-/** @summary Wrapping behavior — narrow width forces multiple rows with consistent gap */
+/**
+ * Narrow width forces multiple rows with consistent gap.
+ * @summary Wrapping behavior across multiple rows
+ */
 export const Wrapping: Story = {
   render: () => (
     <div style={{ maxWidth: 320, padding: 'var(--padding-md)', background: 'var(--surface-secondary)' }}>

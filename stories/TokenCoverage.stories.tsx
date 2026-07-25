@@ -198,6 +198,8 @@ function TokenCoverageDashboard() {
 
 const meta: Meta<typeof TokenCoverageDashboard> = {
   title: 'Overview/Health/Token Coverage',
+  // Internal coverage dashboard — hidden from MCP discovery (#1321).
+  tags: ['surface-shared', '!manifest'],
   component: TokenCoverageDashboard,
   parameters: { layout: 'fullscreen' },
 };
@@ -205,4 +207,5 @@ const meta: Meta<typeof TokenCoverageDashboard> = {
 export default meta;
 type Story = StoryObj<typeof TokenCoverageDashboard>;
 
+/** @summary Per-component token coverage and hardcoded-value counts */
 export const Default: Story = {};

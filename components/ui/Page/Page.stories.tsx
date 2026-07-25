@@ -85,10 +85,10 @@ const ServicesTable = ({ rows = 5 }: { rows?: number }) => (
   </Table>
 );
 
-/* ─── 1. Playground ──────────────────────────────────────────── */
+/* ─── 1. Default ─────────────────────────────────────────────── */
 
 /** @summary Interactive playground — tweak padding + gap on a full page */
-export const Playground: Story = {
+export const Default: Story = {
   args: { padding: 'md', gap: 'xl' },
   render: (args) => (
     <Shell>

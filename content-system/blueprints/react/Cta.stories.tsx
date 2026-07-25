@@ -50,11 +50,11 @@ export const Default: Story = {
 };
 
 /**
- * @summary Primary + secondary action (brik-bds#590).
- *
  * Distinct meaningful state: the "do the thing" + "hedge / talk first"
  * pair the single-`cta` legacy contract couldn't express. The secondary
  * renders after the primary at a lower emphasis.
+ *
+ * @summary Primary + secondary action (brik-bds#590)
  */
 export const WithSecondaryAction: Story = {
   args: {
@@ -66,11 +66,11 @@ export const WithSecondaryAction: Story = {
 };
 
 /**
- * @summary Split — two-column copy + contact aside (`bds-cta--split`).
- *
  * Distinct meaningful state: `layout="split"` flips to the two-column
  * grid on the primary surface with an `aside` (here, contact methods).
  * Replaces the legacy `cta_split_contact`.
+ *
+ * @summary Split — two-column copy + contact aside
  */
 export const Split: Story = {
   args: {

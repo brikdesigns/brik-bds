@@ -329,6 +329,8 @@ function ContrastComplianceDashboard() {
 
 const meta: Meta<typeof ContrastComplianceDashboard> = {
   title: 'Overview/Health/Contrast Compliance',
+  // Internal audit dashboard — hidden from MCP discovery (#1321).
+  tags: ['surface-shared', '!manifest'],
   component: ContrastComplianceDashboard,
   parameters: {
     layout: 'fullscreen',
@@ -350,4 +352,5 @@ const meta: Meta<typeof ContrastComplianceDashboard> = {
 export default meta;
 type Story = StoryObj<typeof ContrastComplianceDashboard>;
 
+/** @summary Live WCAG contrast audit across token pairings */
 export const Default: Story = {};

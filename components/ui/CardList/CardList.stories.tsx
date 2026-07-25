@@ -22,7 +22,7 @@ type Story = StoryObj<typeof CardList>;
  * Layout wrapper for arrays of cards. Toggle `orientation`, `gap`, and
  * `fitContent` via Controls to exercise the full layout surface.
  *
- * @summary Stack of cards — orientation, gap, and fitContent via Controls
+ * @summary Card stack — orientation, gap, fitContent via Controls
  */
 export const Default: Story = {
   args: {

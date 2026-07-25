@@ -130,7 +130,11 @@ export const Default: Story = {
    2. VARIANTS — Q3 semantic starting points
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Inner content constrained to a content width while the background spans full-bleed */
+/**
+ * Inner content constrained to a content width while the background
+ * spans full-bleed.
+ * @summary Content width constrained, full-bleed background
+ */
 export const Constrained: Story = {
   args: {
     logo: <LogoPlaceholder />,
@@ -142,7 +146,11 @@ export const Constrained: Story = {
   },
 };
 
-/** @summary Column + bottom-bar links routed through an injected link component for client-side routing */
+/**
+ * Column + bottom-bar links routed through an injected link
+ * component for client-side routing.
+ * @summary Column + bottom-bar links via injected link component
+ */
 export const WithLinkComponent: Story = {
   args: {
     logo: <LogoPlaceholder />,
@@ -156,7 +164,11 @@ export const WithLinkComponent: Story = {
   },
 };
 
-/** @summary External column links open in a new tab with `rel="noopener noreferrer"` and bypass the router linkComponent */
+/**
+ * External column links open in a new tab with
+ * `rel="noopener noreferrer"` and bypass the router linkComponent.
+ * @summary External links open in a new tab, bypass linkComponent
+ */
 export const ExternalLinks: Story = {
   args: {
     logo: <LogoPlaceholder />,
@@ -267,7 +279,11 @@ const ServiceDot = ({ color }: { color: string }) => (
   />
 );
 
-/** @summary Full marketing-site footer — newsletter, contact block, badged service columns, bottom links, and social */
+/**
+ * Full marketing-site footer — newsletter, contact block, badged
+ * service columns, bottom links, and social.
+ * @summary Full marketing-site footer with all features
+ */
 export const Marketing: Story = {
   args: {
     aboveTop: <NewsletterSection />,
@@ -315,7 +331,11 @@ export const Marketing: Story = {
    3. CSS OVERRIDE API — `--bds-footer-surface` demo
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary `--bds-footer-surface` pinned via inline style override so the inverse variant holds a fixed color across light + dark themes */
+/**
+ * `--bds-footer-surface` pinned via inline style override so the
+ * inverse variant holds a fixed color across light + dark themes.
+ * @summary `--bds-footer-surface` pinned across themes
+ */
 export const SurfaceOverride: Story = {
   args: {
     logo: <LogoPlaceholder />,

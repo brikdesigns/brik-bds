@@ -87,7 +87,167 @@ function reasonFor(name) {
   if (BANNED_COMPOUND.test(name)) {
     return `\`export const ${name}\` merges two axes ("And" in a story name). Split into one story per axis.`;
   }
+  if (name === 'Playground') {
+    return `\`export const Playground\` — the canonical sandbox story is named \`Default\` (renamed by #694; swept + gated by #1321). Rename the export and its MDX \`<Canvas of={Stories.Playground}>\` references.`;
+  }
   return null;
+}
+
+// ---------------------------------------------------------------------------
+// Structural HARD rules (#1321) — MCP-payload discipline
+//
+// These mirror the story-shape standard's MCP section: every story export
+// carries an `@summary` ≤ 60 chars (MCP truncates past that), every meta has
+// exactly one surface tag, deprecated components hide behind `!manifest`, and
+// play-assertion `InteractionTest…` stories are tagged out of discovery.
+// ---------------------------------------------------------------------------
+
+const SUMMARY_MAX = 60;
+const SURFACE_TAG_RE = /surface-(?:web|product|shared)/g;
+
+/** The meta object's top-level entries (`const meta … = { … }` or `export default { … }`), or null. */
+function metaEntries(content) {
+  const m = content.match(/(?:const meta[^=]*=|export default)\s*\{/);
+  if (!m) return null;
+  const open = m.index + m[0].length - 1;
+  const close = matchClose(content, open);
+  if (close === -1) return null;
+  return parseTopLevelEntries(content.slice(open + 1, close));
+}
+
+/** Collapse an `@summary` tag's text (runs until the next `@tag` or the end of the JSDoc). */
+function summaryTextFrom(jsdoc) {
+  const m = jsdoc.match(/@summary\s+([\s\S]*?)(?=\n\s*\*\s*@|\*\/)/);
+  if (!m) return null;
+  return m[1]
+    .split('\n')
+    .map((l) => l.replace(/^\s*\*\s?/, '').trim())
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
+ * The `@summary` for one story export — from the JSDoc block immediately
+ * preceding the export, or an inline JSDoc at the top of the story object
+ * (both shapes appear in the standard's examples).
+ */
+function summaryForExport(content, exportIndex, objOpen, objClose) {
+  // A single JSDoc block (no `*/` inside) whose end abuts the export.
+  const ONE_JSDOC = /\/\*\*(?:[^*]|\*(?!\/))*\*\//;
+  const before = content.slice(0, exportIndex);
+  const jm = before.match(new RegExp(`(${ONE_JSDOC.source})\\s*$`));
+  if (jm) {
+    const s = summaryTextFrom(jm[1]);
+    if (s !== null) return s;
+  }
+  // Inline shape: `export const X: Story = { /** … @summary … */ args: … }` —
+  // the JSDoc must open the story object, not annotate a nested member.
+  if (objOpen !== -1 && objClose !== -1) {
+    const body = content.slice(objOpen, objClose);
+    const im = body.match(new RegExp(`^\\{\\s*(${ONE_JSDOC.source})`));
+    if (im) {
+      const s = summaryTextFrom(im[1]);
+      if (s !== null) return s;
+    }
+  }
+  return null;
+}
+
+/** True when `<Name>/<Name>.tsx` carries a component-level `@deprecated` (JSDoc directly before an export — same bar as lint-mdx-deprecations). */
+function componentIsDeprecated(storyFilePath) {
+  const dir = path.dirname(storyFilePath);
+  const name = path.basename(storyFilePath).replace(/\.stories\.tsx$/, '');
+  const srcPath = path.join(dir, `${name}.tsx`);
+  if (!fs.existsSync(srcPath)) return false;
+  const src = fs.readFileSync(srcPath, 'utf8');
+  for (const m of src.matchAll(/\/\*\*[\s\S]*?\*\//g)) {
+    if (!/@deprecated/.test(m[0])) continue;
+    if (/^\s*export\s/.test(src.slice(m.index + m[0].length).split('\n').find((l) => l.trim() !== '') || '')) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/** Structural violations for one file (rules 2–5 of #1321). */
+function structuralViolations(filePath, content) {
+  const out = [];
+  const meta = metaEntries(content);
+  const metaTagsRaw = meta && meta.get('tags') ? meta.get('tags').raw : '';
+  const metaTitleRaw = meta && meta.get('title') ? meta.get('title').raw : '';
+
+  // Rule: exactly one surface tag on the meta.
+  const surfaceCount = (metaTagsRaw.match(SURFACE_TAG_RE) || []).length;
+  if (surfaceCount !== 1) {
+    out.push({
+      rule: 'surface-tag',
+      name: 'meta',
+      line: 1,
+      message: `meta.tags carries ${surfaceCount} surface tags — exactly one of surface-web / surface-product / surface-shared is required (MCP filtering depends on it).`,
+    });
+  }
+
+  // Rule: deprecated component (or Deprecated/ title) ⇒ meta !manifest.
+  const deprecated = componentIsDeprecated(filePath) || /^['"]Deprecated\//.test(metaTitleRaw);
+  if (deprecated && !metaTagsRaw.includes('!manifest')) {
+    out.push({
+      rule: 'deprecated-manifest',
+      name: 'meta',
+      line: 1,
+      message: `component is @deprecated (or titled Deprecated/) but meta.tags lacks '!manifest' — deprecated stories must hide from MCP discovery in the same PR that deprecates them.`,
+    });
+  }
+
+  // Per-export rules: @summary presence + length, InteractionTest tagging.
+  const re = /^export const ([A-Z][A-Za-z0-9_]*)\b[^=]*=\s*\{/gm;
+  let m;
+  while ((m = re.exec(content))) {
+    const name = m[1];
+    const line = content.slice(0, m.index).split('\n').length;
+    const objOpen = m.index + m[0].length - 1;
+    const objClose = matchClose(content, objOpen);
+    const top = objClose !== -1 ? parseTopLevelEntries(content.slice(objOpen + 1, objClose)) : new Map();
+
+    const summary = summaryForExport(content, m.index, objOpen, objClose);
+    if (summary === null || summary === '') {
+      out.push({
+        rule: 'missing-summary',
+        name,
+        line,
+        message: `\`${name}\` has no \`@summary\` JSDoc — every story export needs one (feeds the MCP get-documentation payload).`,
+      });
+    } else if (summary.length > SUMMARY_MAX) {
+      out.push({
+        rule: 'summary-too-long',
+        name,
+        line,
+        message: `\`${name}\` @summary is ${summary.length} chars — MCP truncates past ${SUMMARY_MAX}. Compress to one line.`,
+      });
+    }
+
+    if (name.startsWith('InteractionTest')) {
+      const tagsRaw = top.get('tags') ? top.get('tags').raw : '';
+      if (!tagsRaw.includes('!manifest')) {
+        out.push({
+          rule: 'interaction-test-manifest',
+          name,
+          line,
+          message: `\`${name}\` is a play-assertion story but lacks story-level \`tags: ['!manifest']\` — it pollutes MCP discovery.`,
+        });
+      }
+      if (top.has('name')) {
+        out.push({
+          rule: 'interaction-test-name-override',
+          name,
+          line,
+          message: `\`${name}\` overrides \`name:\` — the InteractionTest prefix must stay visible in the sidebar (drop the display-name override).`,
+        });
+      }
+    }
+  }
+
+  return out;
 }
 
 // ---------------------------------------------------------------------------
@@ -144,8 +304,21 @@ function parseTopLevelEntries(body) {
   let i = 0;
   const n = body.length;
   while (i < n) {
-    // Skip whitespace / commas.
-    while (i < n && /[\s,]/.test(body[i])) i++;
+    // Skip whitespace / commas / comments.
+    for (;;) {
+      while (i < n && /[\s,]/.test(body[i])) i++;
+      if (body[i] === '/' && body[i + 1] === '/') {
+        const nl = body.indexOf('\n', i);
+        i = nl === -1 ? n : nl + 1;
+        continue;
+      }
+      if (body[i] === '/' && body[i + 1] === '*') {
+        const end = body.indexOf('*/', i + 2);
+        i = end === -1 ? n : end + 2;
+        continue;
+      }
+      break;
+    }
     if (i >= n) break;
     // Read a key (identifier or quoted).
     let key = null;
@@ -181,6 +354,16 @@ function parseTopLevelEntries(body) {
       }
       if (c === "'" || c === '"' || c === '`') {
         str = c;
+        continue;
+      }
+      if (c === '/' && body[i + 1] === '/') {
+        const nl = body.indexOf('\n', i);
+        i = (nl === -1 ? n : nl) - 1; // -1: loop's i++ lands on the newline
+        continue;
+      }
+      if (c === '/' && body[i + 1] === '*') {
+        const end = body.indexOf('*/', i + 2);
+        i = (end === -1 ? n : end + 2) - 1;
         continue;
       }
       // Track only bracket pairs — NOT `<`/`>`, which collide with `=>` arrows
@@ -339,6 +522,12 @@ function lintFile(filePath) {
     const reason = reasonFor(name);
     if (reason) violations.push({ rule: 'banned-story-export', name, message: reason, line: i + 1 });
   });
+
+  try {
+    violations.push(...structuralViolations(filePath, content));
+  } catch {
+    // Structural parsing is best-effort on exotic files; never crash the lint.
+  }
 
   let advisories = [];
   try {

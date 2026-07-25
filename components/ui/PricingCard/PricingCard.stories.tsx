@@ -32,7 +32,10 @@ const commonFeatures = [
   'Analytics dashboard',
 ];
 
-/** @summary Pricing tier card — see Card stories for the canonical reference */
+/**
+ * Pricing tier card — see Card stories for the canonical reference.
+ * @summary Pricing tier card
+ */
 export const Default: Story = {
   args: {
     title: 'Professional',

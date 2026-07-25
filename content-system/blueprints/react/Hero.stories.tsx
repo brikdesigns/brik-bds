@@ -62,11 +62,11 @@ export const Default: Story = {
 };
 
 /**
- * @summary Interior-minimal — single narrow content column, no media.
- *
  * Distinct meaningful state: `layout="interior-minimal"` drops the media
  * column and constrains the measure for interior pages. Replaces the legacy
  * `hero_interior_minimal`.
+ *
+ * @summary Interior-minimal — narrow column, no media
  */
 export const InteriorMinimal: Story = {
   args: {

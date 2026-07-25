@@ -21,7 +21,10 @@ type Story = StoryObj;
    Relocated from Form.stories.tsx Variants → Patterns in #618 Batch C.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Horizontal search form — query + category + submit, inline layout */
+/**
+ * Query + category + submit, `layout="horizontal"` inline.
+ * @summary Horizontal search form, inline layout
+ */
 export const Default: Story = {
   args: { onSubmit: fn() },
   render: (args) => (
