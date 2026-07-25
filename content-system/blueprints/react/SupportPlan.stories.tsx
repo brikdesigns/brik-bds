@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Image } from '../../../components';
 import { SupportPlan } from './SupportPlan';
+import { placeholderImage } from './_fixtures';
 
 const meta: Meta<typeof SupportPlan> = {
   title: 'Blueprints/support_plan',
@@ -67,7 +68,7 @@ export const WithMedia: Story = {
     sectionKey: 'support-plan-with-media',
     media: (
       <Image
-        src="https://placehold.co/480x480/eaf1fb/1f3d70?text=Media"
+        src={placeholderImage(480, 480, '#eaf1fb', '#1f3d70', 'Media')}
         alt="Support plan media"
         ratio="square"
       />

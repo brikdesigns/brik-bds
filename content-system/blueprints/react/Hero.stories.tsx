@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Hero } from './Hero';
+import { placeholderImage } from './_fixtures';
 
 const meta: Meta<typeof Hero> = {
   title: 'Blueprints/hero',
@@ -33,7 +34,7 @@ const demoImage = (
   <div className="bds-hero__media">
     <img
       className="bds-hero__image"
-      src="https://placehold.co/960x1200/eaf1fb/1f3d70?text=Hero"
+      src={placeholderImage(960, 1200, '#eaf1fb', '#1f3d70', 'Hero')}
       alt=""
       width={960}
       height={1200}

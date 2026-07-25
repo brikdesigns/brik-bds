@@ -4,7 +4,17 @@ import { fn } from 'storybook/test';
 import { FileCard } from './FileCard';
 import { FileUploader } from '../FileUploader/FileUploader';
 
-const SAMPLE_IMAGE = 'https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=400&q=80';
+// Deterministic SVG data-URI photo placeholder — replaces Unsplash (#1319);
+// hex values are image content, not UI chrome.
+const SAMPLE_IMAGE =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">' +
+      '<rect width="400" height="300" fill="#d8e4d4"/>' +
+      '<circle cx="320" cy="60" r="28" fill="#f2e9c9"/>' +
+      '<path d="M0 300l120-140 90 100 70-70 120 110z" fill="#5f7a56"/>' +
+      '</svg>',
+  );
 const SAMPLE_SVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><path fill="%23333" d="M14 4l3 7h7l-5.5 4 2 7L14 18l-6.5 4 2-7L4 11h7z"/></svg>';
 
 /* ─── Meta ────────────────────────────────────────────────────── */

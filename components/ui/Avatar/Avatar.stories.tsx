@@ -44,13 +44,26 @@ const meta: Meta<typeof Avatar> = {
 export default meta;
 type Story = StoryObj<typeof Avatar>;
 
-/* ─── Character headshots (The Office) ────────────────────────── */
+/* ─── Deterministic headshots ─────────────────────────────────────
+   SVG data-URI silhouettes replace randomuser.me (#1319) — stories
+   must render identically offline / in Chromatic. Hex values are
+   image content (fake photography), not UI chrome. */
+
+const headshot = (bg: string, fg: string) =>
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">` +
+      `<rect width="96" height="96" fill="${bg}"/>` +
+      `<circle cx="48" cy="36" r="16" fill="${fg}"/>` +
+      `<path d="M18 96c4-20 16-30 30-30s26 10 30 30z" fill="${fg}"/>` +
+      `</svg>`,
+  );
 
 const headshots = {
-  michael: 'https://randomuser.me/api/portraits/men/32.jpg',
-  dwight:  'https://randomuser.me/api/portraits/men/44.jpg',
-  jim:     'https://randomuser.me/api/portraits/men/75.jpg',
-  pam:     'https://randomuser.me/api/portraits/women/68.jpg',
+  michael: headshot('#dbe7f4', '#41618c'),
+  dwight:  headshot('#e9e2d0', '#6b5d3a'),
+  jim:     headshot('#dcefe0', '#3c6b49'),
+  pam:     headshot('#f4e4e0', '#8c5a4e'),
 };
 
 /* ═══════════════════════════════════════════════════════════════

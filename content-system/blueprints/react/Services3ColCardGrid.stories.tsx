@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Services3ColCardGrid } from './Services3ColCardGrid';
 import type { BlueprintProps } from '../astro/types';
-import { baseTheme, baseClientFacts } from './_fixtures';
+import { baseTheme, baseClientFacts, placeholderImage } from './_fixtures';
 
 /* ─── Fixtures ─────────────────────────────────────────────────── */
 
@@ -33,7 +33,7 @@ const servicesGridSection: BlueprintProps['section'] = {
       description:
         'A two-line card description that sets the type rhythm without trying to tell the whole story.',
       href: '#',
-      imageUrl: 'https://placehold.co/480x320/eaf1fb/1f3d70?text=Service+One',
+      imageUrl: placeholderImage(480, 320, '#eaf1fb', '#1f3d70', 'Service One'),
       category: 'information',
     },
     {
@@ -41,7 +41,7 @@ const servicesGridSection: BlueprintProps['section'] = {
       description:
         'A two-line card description that sets the type rhythm without trying to tell the whole story.',
       href: '#',
-      imageUrl: 'https://placehold.co/480x320/eaf1fb/1f3d70?text=Service+Two',
+      imageUrl: placeholderImage(480, 320, '#eaf1fb', '#1f3d70', 'Service Two'),
       category: 'information',
       hasOptions: true,
     },
@@ -50,7 +50,7 @@ const servicesGridSection: BlueprintProps['section'] = {
       description:
         'A two-line card description that sets the type rhythm without trying to tell the whole story.',
       href: '#',
-      imageUrl: 'https://placehold.co/480x320/eaf1fb/1f3d70?text=Service+Three',
+      imageUrl: placeholderImage(480, 320, '#eaf1fb', '#1f3d70', 'Service Three'),
       category: 'information',
     },
     {
@@ -58,7 +58,7 @@ const servicesGridSection: BlueprintProps['section'] = {
       description:
         'A two-line card description that sets the type rhythm without trying to tell the whole story.',
       href: '#',
-      imageUrl: 'https://placehold.co/480x320/eaf1fb/1f3d70?text=Service+Four',
+      imageUrl: placeholderImage(480, 320, '#eaf1fb', '#1f3d70', 'Service Four'),
       category: 'information',
     },
     {
@@ -66,7 +66,7 @@ const servicesGridSection: BlueprintProps['section'] = {
       description:
         'A two-line card description that sets the type rhythm without trying to tell the whole story.',
       href: '#',
-      imageUrl: 'https://placehold.co/480x320/eaf1fb/1f3d70?text=Service+Five',
+      imageUrl: placeholderImage(480, 320, '#eaf1fb', '#1f3d70', 'Service Five'),
       category: 'information',
       hasOptions: true,
     },
@@ -75,7 +75,7 @@ const servicesGridSection: BlueprintProps['section'] = {
       description:
         'A two-line card description that sets the type rhythm without trying to tell the whole story.',
       href: '#',
-      imageUrl: 'https://placehold.co/480x320/eaf1fb/1f3d70?text=Service+Six',
+      imageUrl: placeholderImage(480, 320, '#eaf1fb', '#1f3d70', 'Service Six'),
       category: 'information',
     },
   ],
