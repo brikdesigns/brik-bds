@@ -413,9 +413,18 @@ Assertions in `play` functions:
 
 ## Story-shape lint posture
 
-The story-shape lint that bans `Variants` / `Tones` / `Patterns` / `Examples` exports in new files is tracked by [#569](https://github.com/brikdesigns/brik-bds/issues/569). Until it ships, this standard + the [storybook-story-shape skill](../../.claude/skills/storybook-story-shape/SKILL.md) are the gate, and PR review is the enforcement layer.
+The story-shape lint ([`scripts/lint-story-shape.js`](../../scripts/lint-story-shape.js), shipped by [#569](https://github.com/brikdesigns/brik-bds/issues/569)/[#1289](https://github.com/brikdesigns/brik-bds/pull/1289), gated on pre-commit + CI) hard-fails under `--enforce` on:
 
-The matrix's broader rule (Q2 collapses — `Disabled` / `Loading` / icon-slot stories become Controls) stays PR-review-enforced even after #569 ships. The lint catches named violations; the matrix catches structural ones.
+- **Banned exports** — `Variants` / `Tones` / `Patterns` / `Examples` and `*And*` axis-merge compounds (#569)
+- **`Playground` exports** — the canonical sandbox story is `Default` (#694; swept + gated by [#1321](https://github.com/brikdesigns/brik-bds/issues/1321))
+- **`@summary` discipline** — every story export carries an `@summary` JSDoc of ≤ 60 chars (MCP truncates past that) (#1321)
+- **Surface tag** — exactly one of `surface-web` / `surface-product` / `surface-shared` in `meta.tags` (#1321)
+- **Deprecated ⇒ hidden** — a component-level `@deprecated` (or a `Deprecated/` title) requires `!manifest` in `meta.tags` (#1321)
+- **InteractionTest tagging** — an `InteractionTest…` export requires story-level `tags: ['!manifest']` and no `name:` display override (#1321)
+
+There is no grandfather allowlist for any hard rule — each shipped in the same PR as the sweep that emptied its violation set.
+
+The matrix's broader Q2 rule (`Disabled` / `Loading` / icon-slot stories become Controls) stays PR-review-enforced where not statically decidable. The lint catches named + structural-metadata violations; the matrix catches semantic ones.
 
 **Advisory consolidation tier (#1359).** `lint-story-shape.js` additionally reports two statically-decidable consolidation findings on *declarative* stories: `duplicate-args` (two exports with identical args — consolidation rule 1's exact-args subset) and `boolean-toggle-story` (a story differing from `Default` only by boolean args — rule 2). These **print but do not gate** under `--enforce`, so CI and pre-commit stay green on files that predate the rules. They exit non-zero only under the explicit `--matrix-strict` flag, which nothing wires into CI yet — it graduates to `--enforce` once the audit sweep clears the repo. Consolidation rules 3–4 (non-visual-prop-only stories; cross-component/shell relocation) are not statically decidable and stay skill/PR-review enforced.
 

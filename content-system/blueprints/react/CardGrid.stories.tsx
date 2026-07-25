@@ -79,12 +79,12 @@ export const Default: Story = {
 };
 
 /**
- * @summary Blog posts — same primitive, different content type.
- *
  * Proves content-agnosticism: identical `<CardGrid>` + `<Card preset="display">`
  * composition, only the child content shape differs (a `<Badge>` tag for
  * blog category instead of a `<ServiceTag>`). One primitive serves many
  * content types — the dogfood goal from brik-bds#580.
+ *
+ * @summary Blog posts — same primitive, different content type
  */
 export const BlogPostsGrid: Story = {
   args: {
@@ -116,11 +116,11 @@ export const BlogPostsGrid: Story = {
 };
 
 /**
- * @summary Two-column title/description list — no card surface.
- *
  * `<CardGrid>` doesn't require `<Card>` inside — any content composition
  * works. This story matches the legacy `services_detail_two_column` shape:
  * 2-col layout, just title/description rows, no card chrome.
+ *
+ * @summary Two-column title/description list, no card surface
  */
 export const TwoColumnList: Story = {
   args: {
@@ -148,10 +148,10 @@ export const TwoColumnList: Story = {
 };
 
 /**
- * @summary Minimal — title only, no subtitle / description / cards.
- *
  * `<CardGrid>` works as a header-only section if that's what the
  * consumer needs — children are whatever fits.
+ *
+ * @summary Minimal — title only, no subtitle/description/cards
  */
 export const MinimalHeader: Story = {
   args: {

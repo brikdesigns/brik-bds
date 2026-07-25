@@ -59,7 +59,11 @@ export const Default: Story = {
    2. VARIANTS — Q3 semantic starting points
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Linked crumbs routed through an injected link component for client-side routing */
+/**
+ * Crumbs routed through an injected link component for
+ * client-side routing.
+ * @summary Linked crumbs via injected link component
+ */
 export const WithLinkComponent: Story = {
   args: {
     items: [

@@ -81,7 +81,11 @@ export const Default: Story = {
   },
 };
 
-/** @summary Nav links routed through an injected link component for client-side routing */
+/**
+ * Nav links routed through an injected link component for
+ * client-side routing.
+ * @summary Nav links via injected link component
+ */
 export const WithLinkComponent: Story = {
   args: {
     logo: <LogoPlaceholder />,
