@@ -11,8 +11,9 @@ import { addCollection } from '@iconify/react';
 import phData from '@iconify-json/ph/icons.json';
 addCollection(phData as Parameters<typeof addCollection>[0]);
 
-// Feedback widget — floating FAB in preview iframe
+// Dev widgets — feedback FAB + inspector, rendered into the preview iframe
 import { FeedbackWidget } from './FeedbackWidget';
+import { InspectWidget } from './InspectWidget';
 import isChromatic from 'chromatic/isChromatic';
 
 // Import token CSS in cascade order:
@@ -297,15 +298,19 @@ const preview: Preview = {
   },
   decorators: [
     withTheme,
-    // Feedback widget — on by default (devWidgets global) so every visitor to
-    // storybook.brikdesigns.com can submit design-system feedback. Suppressed
-    // under Chromatic so the FAB never appears in visual-regression snapshots;
-    // toggle off via the wrench toolbar for a clean canvas locally.
+    // Dev widgets — on by default (devWidgets global) so every visitor to
+    // storybook.brikdesigns.com can submit design-system feedback and inspect
+    // components. Suppressed under Chromatic so neither the feedback FAB nor the
+    // DevBar/Inspect chrome appears in visual-regression snapshots; toggle off
+    // via the wrench toolbar for a clean canvas locally.
     (Story, context) => (
       <>
         <Story />
         {context.globals.devWidgets === 'on' && !isChromatic() && (
-          <FeedbackWidget />
+          <>
+            <FeedbackWidget />
+            <InspectWidget />
+          </>
         )}
       </>
     ),
