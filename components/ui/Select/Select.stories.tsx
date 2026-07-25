@@ -36,6 +36,14 @@ const meta: Meta<typeof Select> = {
       control: 'text',
       description: 'Renders a selectable "no filter" entry (e.g. "All") with an empty value — a real, non-greyed choice, unlike `placeholder`. Mutually exclusive with `placeholder`.',
     },
+    value: {
+      control: 'text',
+      description: 'Controlled selection. Pair with `onChange` — uncontrolled callers use `defaultValue`.',
+    },
+    defaultValue: {
+      control: 'text',
+      description: 'Initial selection for uncontrolled use.',
+    },
     helperText: {
       control: 'text',
       description: 'Hint text under the select. Hidden when `error` is present.',

@@ -14,6 +14,14 @@ const meta: Meta<typeof DataSection> = {
   argTypes: {
     title: { control: 'text', description: 'Section title — renders as a heading (default `<h2>`).' },
     subtitle: { control: 'text', description: 'Optional secondary line below the title.' },
+    actions: {
+      control: false,
+      description: 'Action slot rendered flush-right of the title row. Typically a `<ButtonGroup>` with `[View]` / `[Edit]` toggle, or a single `<Button>`.',
+    },
+    children: {
+      control: false,
+      description: 'Section body — typically a `<FieldGrid>` of `<Field>`s, but any content works.',
+    },
     spacing: {
       control: 'select',
       options: ['md', 'lg'],

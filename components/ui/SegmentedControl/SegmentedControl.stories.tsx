@@ -44,6 +44,14 @@ const meta: Meta<typeof SegmentedControl> = {
       control: 'object',
       description: 'Segments in order. Each item is `{ label, value?, disabled? }`.',
     },
+    value: {
+      control: 'text',
+      description: 'Currently selected value — matches an item\'s `value` (or `label` if `value` is omitted).',
+    },
+    onChange: {
+      control: false,
+      description: 'Selection change handler, called with the newly selected value.',
+    },
     size: {
       control: 'select',
       options: ['sm', 'md', 'lg'],

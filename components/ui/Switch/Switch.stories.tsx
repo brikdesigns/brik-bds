@@ -23,7 +23,9 @@ const meta: Meta<typeof Switch> = {
         '`default` — track carries the on/off state. `accent-knob` — track stays neutral gray; the knob carries state instead.',
     },
     checked: { control: 'boolean' },
+    defaultChecked: { control: 'boolean' },
     disabled: { control: 'boolean' },
+    onChange: { control: false, description: 'Native change handler — receives the change event.' },
   },
 };
 

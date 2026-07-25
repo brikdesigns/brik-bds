@@ -22,7 +22,7 @@ const meta: Meta<typeof Counter> = {
     },
     size: {
       control: 'select',
-      options: ['sm', 'md', 'lg'],
+      options: ['xs', 'sm', 'md', 'lg'],
       description: 'Size token. Default `sm`.',
     },
     max: {

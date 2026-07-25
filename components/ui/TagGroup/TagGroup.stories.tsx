@@ -18,6 +18,10 @@ const meta: Meta<typeof TagGroup> = {
       control: 'boolean',
       description: 'When true, tags wrap to additional rows. Default true.',
     },
+    children: {
+      control: false,
+      description: '`<Tag>` children, or anything with tag-sized footprint.',
+    },
   },
 };
 

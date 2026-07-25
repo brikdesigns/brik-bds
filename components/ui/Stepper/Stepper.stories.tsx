@@ -21,6 +21,8 @@ const meta: Meta<typeof Stepper> = {
   tags: ['surface-product'],
   parameters: { layout: 'centered' },
   argTypes: {
+    value: { control: false, description: 'Current value.' },
+    onChange: { control: false, description: 'Change handler.' },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     disabled: { control: 'boolean' },
     min: { control: 'number' },
