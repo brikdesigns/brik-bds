@@ -1,4 +1,4 @@
 {
   "title": "React Reference",
-  "pages": ["hooks", "patterns", "utilities"]
+  "pages": ["index", "hooks", "patterns", "utilities"]
 }
