@@ -58,6 +58,9 @@
     { "group": "service", "label": "Service back-office — inverse card fill (dark)", "fg": "--background-service-back-office-on-dark", "bg": "--surface-service-back-office-inverse", "thresholdType": "AA-large", "appliesTo": ["dark"] },
 
     { "group": "positive", "label": "Positive/success text on surface", "fg": "--text-positive", "bg": "--surface-primary", "thresholdType": "AA" },
-    { "group": "positive", "label": "Positive/success text on page", "fg": "--text-positive", "bg": "--page-primary", "thresholdType": "AA" }
+    { "group": "positive", "label": "Positive/success text on page", "fg": "--text-positive", "bg": "--page-primary", "thresholdType": "AA" },
+
+    { "group": "positive", "label": "Solid positive Badge label on fill", "fg": "--text-on-color-light", "bg": "--background-positive", "thresholdType": "AA", "note": "Dark badge label on the saturated success fill (6.00:1 both modes). White label was 2.87:1 and failed AA (#995); the fill is light enough that dark text is the accessible pairing." },
+    { "group": "negative", "label": "Solid error Badge label on fill", "fg": "--text-on-color-light", "bg": "--background-negative", "thresholdType": "AA", "note": "Dark badge label on the saturated error fill (4.95:1 both modes). White label was 3.48:1 and failed AA (#995)." }
   ]
 }
