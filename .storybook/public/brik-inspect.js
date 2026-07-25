@@ -833,6 +833,12 @@
     // Exposed for regression tests (cascade-keyword skip — #1615). Not part of
     // the public surface; consumers use detectContext / the report event.
     window.BrikInspect.getDeclaredValue = getDeclaredValue;
+    // Drive inspect on/off from a host that owns the DevBar slot (host-managed
+    // mode — see registerWithDevBar). Idempotent: no-op when already in the
+    // requested state. Lets the BDS Storybook InspectWidget bind the slot's
+    // activate/deactivate to inspect mode without reaching into internals.
+    window.BrikInspect.setActive = (next) => { if (!!next !== active) toggleActive(); };
+    window.BrikInspect.isActive = () => active;
   }
 
   // ── Stylesheet rule index ───────────────────────────────────────────────
@@ -1410,7 +1416,11 @@
   // ── Init ────────────────────────────────────────────────────────────────
   function init() {
     injectStyles();
-    registerWithDevBar();
+    // A host (e.g. the BDS Storybook InspectWidget) may own the DevBar slot so
+    // its mount/unmount can add and remove Inspect in step with a UI toggle.
+    // When it signals host-managed mode, skip self-registration and let the
+    // host register the slot + drive activation via window.BrikInspect.setActive.
+    if (!window.__BRIK_INSPECT_DEVBAR_HOST_MANAGED__) registerWithDevBar();
     // Fetch the BDS inspector manifest + live Storybook index in parallel.
     // Both are best-effort: missing manifest → class-name-only behavior;
     // missing index → Storybook deep-link button is suppressed until
