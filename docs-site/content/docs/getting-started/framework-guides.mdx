@@ -50,12 +50,15 @@ export const poppins = Poppins({
 ```css
 /* src/app/globals.css */
 
-/* 1. BDS canon — never edit */
-@import '@brikdesigns/bds/tokens.css';
-@import '@brikdesigns/bds/styles.css';
+/* Declare the layer order first — before any @import. */
+@layer bds-tokens, bds-components, client-theme, client-overrides;
 
-/* 2. Your brand override (this app's theme — same token names, brand values) */
-@import '../styles/theme-{client}.css';
+/* 1. BDS canon — never edit. tokens.css ships unlayered; layer() places it. */
+@import '@brikdesigns/bds/tokens.css' layer(bds-tokens);
+@import '@brikdesigns/bds/styles.css'  layer(bds-components);
+
+/* 2. Your brand override (same token names, brand values). */
+@import '../styles/theme-{client}.css'  layer(client-theme);
 ```
 
 For the override matrix and a minimal `theme-{client}.css` template, see [Client Themes](/docs/theming/client-themes).
@@ -208,13 +211,13 @@ Astro has no `next/font` analog. Load fonts with a preconnect + stylesheet `<lin
 
 ### 4. Base layout
 
-Vite (Astro's bundler) lets you `import` CSS files. Order them so BDS canon loads first, then your client layer overrides:
+Vite (Astro's bundler) lets you `import` CSS files. Unlike a CSS `@import`, a JS `import` **can't** carry a `layer(…)` clause — so Astro's cascade is governed by **import order**, not by `@layer`. Order them so BDS canon loads first, then your client overrides last (last wins):
 
 ```astro
 ---
 // src/layouts/BaseLayout.astro
 
-// Cascade: BDS canon → client layer.
+// Cascade by source order (JS imports can't assign a layer): BDS canon → client overrides last.
 import '@brikdesigns/bds/tokens.css';
 import '@brikdesigns/bds/styles.css';
 import '../styles/global.css';
