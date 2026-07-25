@@ -73,6 +73,7 @@
     "content-system/atmospheres/*.css",
     "content-system/blueprints/astro/**/*.astro",
     "content-system/blueprints/astro/index.ts",
+    "content-system/blueprints/astro/types.ts",
     "scripts/bds-find.mjs",
     "scripts/canonical-check.mjs",
     "scripts/canonical-check.d.ts",
