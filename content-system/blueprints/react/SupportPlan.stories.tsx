@@ -55,11 +55,11 @@ export const Default: Story = {
 };
 
 /**
- * @summary With media — image beside the card.
- *
- * Distinct meaningful state from `Playground`: passing a `media` node
+ * Distinct meaningful state from `Default`: passing a `media` node
  * flips the layout from single-column to a two-column split. The `media`
  * slot accepts any node — here a square `<Image>`.
+ *
+ * @summary With media — image beside the card
  */
 export const WithMedia: Story = {
   args: {

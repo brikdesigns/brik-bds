@@ -61,7 +61,11 @@ export const Default: Story = {
    points). `text` is the default, shown in `Default` above.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Text color behavior plus a brand-color underline below the active tab */
+/**
+ * Text color behavior plus a brand-color underline below the
+ * active tab.
+ * @summary Text color plus underline below active tab
+ */
 export const TextUnderline: Story = {
   args: {
     variant: 'text-underline',
@@ -73,7 +77,7 @@ export const TextUnderline: Story = {
   },
 };
 
-/** @summary Bottom-border bar with a brand-color underline over the baseline */
+/** @summary Bottom-border bar with underline over the baseline */
 export const Tab: Story = {
   args: {
     variant: 'tab',

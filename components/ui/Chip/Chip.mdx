@@ -14,17 +14,6 @@ Compact interactive pill for filtering, selection, and removable tokens. Use for
 
 <Canvas of={Stories.Default} />
 
-## Variants
-
-Single hierarchy axis — primary / secondary. Pure color axis with no semantic difference between values, so it's a Control on the Default sandbox above, alongside size, dropdown/remove affordances, and disabled state.
-
-<Canvas of={Stories.Default} />
-
-- **`secondary`** (default) — Neutral filter chip. The everyday filter pill.
-- **`primary`** — Emphasized chip. Active/selected filter, current state.
-
-Chip is **interactive only** — appearance (`solid` / `outline`) was removed in v0.66 because it duplicated the hierarchy axis for an interactive component. Read-only fill variations live on [Badge](badge.mdx) and [Tag](tag.mdx).
-
 ## Props
 
 <ArgTypes of={Stories} />
@@ -45,3 +34,8 @@ Component-scoped CSS variables exposed on `.bds-chip`. Set on a wrapping element
   --chip-pressed-overlay: rgba(0, 0, 0, 0.14);
 }
 ```
+
+## Notes
+
+- `hierarchy` is a pure color axis driven by the Control on the Default sandbox: `secondary` (default) is the everyday neutral filter pill; `primary` is the emphasized active/selected state.
+- Chip is **interactive only** — appearance (`solid` / `outline`) was removed in v0.66 because it duplicated the hierarchy axis. Read-only fill variations live on [Badge](badge.mdx) and [Tag](tag.mdx).

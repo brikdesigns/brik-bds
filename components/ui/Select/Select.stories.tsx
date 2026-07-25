@@ -98,7 +98,10 @@ export const Default: Story = {
   },
 };
 
-/** @summary With a selectable "All" (no-filter) entry instead of a placeholder */
+/**
+ * A selectable "All" (no-filter) entry instead of a placeholder.
+ * @summary Selectable "All" entry instead of placeholder
+ */
 export const WithAllOption: Story = {
   args: {
     label: 'Service line',
