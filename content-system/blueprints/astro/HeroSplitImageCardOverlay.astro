@@ -29,7 +29,7 @@
  *   - section.body                 — lead paragraph (optional)
  *   - section.cta                  — primary CTA (label + url) (optional)
  *   - section.breadcrumb           — ordered trail (optional, 0-5 items typical)
- *   - section.audience             — service-line slug for data-audience binding (optional)
+ *   - section.serviceLine          — service-line slug for data-service-line binding (optional; `audience` is the @deprecated alias — #788)
  *   - section.priceCard            — right-column image + optional price overlay (REQUIRED for canonical render)
  *   - section.visualNotes.blueprintKey === 'hero_split_image_card_overlay'
  *
@@ -93,15 +93,17 @@ interface Props extends BlueprintProps {
   imageRatio?: FrameRatio;
   /**
    * When false, suppresses the eyebrow icon slot (raw `iconUrl` image or the
-   * audience-driven ServiceTag) while keeping `audience` driving the hero's
-   * `data-audience` theming. Default true. (brik-bds#871)
+   * service-line-driven ServiceTag) while keeping `serviceLine` driving the
+   * hero's `data-service-line` theming. Default true. (brik-bds#871)
    */
   showServiceTag?: boolean;
 }
 
 const { section, imageRatio = 'square', showServiceTag = true } = Astro.props;
 
-const { breadcrumb = [], audience, iconUrl, iconAlt, priceCard } = section;
+const { breadcrumb = [], serviceLine, audience, iconUrl, iconAlt, priceCard } = section;
+// `serviceLine` is canonical; `audience` is the deprecated alias (#788).
+const resolvedServiceLine = serviceLine ?? audience;
 const titleId = `${section.sectionKey}-title`;
 const eyebrow = section.subheading;
 const headline = section.heading ?? '';
@@ -113,7 +115,8 @@ const cta = section.cta;
   class="bds-hero bds-hero--with-pricing-card"
   aria-labelledby={titleId}
   data-blueprint-key="hero_split_image_card_overlay"
-  data-audience={audience}
+  data-service-line={resolvedServiceLine}
+  data-audience={resolvedServiceLine}
 >
   <div class="bds-hero__container">
     <div class="bds-hero__content">
@@ -143,14 +146,14 @@ const cta = section.cta;
       {/*
         Eyebrow icon precedence (brik-bds#546):
           1. iconUrl set → render raw <img> (legacy/decorative escape hatch)
-          2. audience set, no iconUrl → render canonical <ServiceTag variant="icon">
+          2. serviceLine set, no iconUrl → render canonical <ServiceTag variant="icon">
              markup inline (Astro can't import the React component; it emits
              the same `bds-service-tag*` classes so dist/styles.css renders
              it identically)
           3. neither → no eyebrow
 
         `showServiceTag={false}` suppresses this whole slot while leaving
-        `data-audience` theming intact (brik-bds#871).
+        `data-service-line` theming intact (brik-bds#871).
       */}
       {showServiceTag && (iconUrl ? (
         <img
@@ -160,11 +163,11 @@ const cta = section.cta;
           loading="eager"
           decoding="async"
         />
-      ) : audience ? (
+      ) : resolvedServiceLine ? (
         <span
-          class={`bds-service-tag bds-service-tag--icon bds-service-tag--icon-lg bds-service-tag--${audience} bds-hero__icon`}
+          class={`bds-service-tag bds-service-tag--icon bds-service-tag--icon-lg bds-service-tag--${resolvedServiceLine} bds-hero__icon`}
           role="img"
-          aria-label={`${audience} category`}
+          aria-label={`${resolvedServiceLine} category`}
         />
       ) : null)}
 
@@ -249,12 +252,16 @@ const cta = section.cta;
    * mode-aware companion fill consumed by the inverse `<Button>` variant
    * inside the hero, which IS a small bounded component.
    *
-   * Note: the `data-audience='service'` attribute value still reads "service"
-   * for component-API compat; the underlying tokens were renamed
-   * `service-service` → `service-back-office` in #563 (orange line — back
-   * office). API-level rename `data-audience` → `data-service-line` is a
-   * separate cross-repo follow-up. */
-  .bds-hero--with-pricing-card[data-audience='brand'] {
+   * `data-service-line` is canonical; `data-audience` is the @deprecated alias
+   * kept for component-API compat during the cross-repo rename (#788). Both are
+   * emitted during the deprecation window, so every rule below dual-targets
+   * `:is([data-audience='X'], [data-service-line='X'])` (mirrors React `Hero.css`).
+   *
+   * Note: the `data-*='service'` attribute value still reads "service" for
+   * back-office compat; the underlying tokens were renamed `service-service` →
+   * `service-back-office` in #563 (orange line — back office). Removal of the
+   * `data-audience` attribute is a separate cross-repo follow-up (#788 step 4). */
+  .bds-hero--with-pricing-card:is([data-audience='brand'], [data-service-line='brand']) {
     background: var(--surface-service-brand-inverse);
     --bds-hero-headline-color: var(--text-service-brand-on-light);
     --bds-hero-eyebrow-color: var(--text-service-brand-on-light);
@@ -263,7 +270,7 @@ const cta = section.cta;
     --background-inverse: var(--surface-service-brand-dark);
     --text-on-color-light: var(--color-grayscale-white);
   }
-  .bds-hero--with-pricing-card[data-audience='marketing'] {
+  .bds-hero--with-pricing-card:is([data-audience='marketing'], [data-service-line='marketing']) {
     background: var(--surface-service-marketing-inverse);
     --bds-hero-headline-color: var(--text-service-marketing-on-light);
     --bds-hero-eyebrow-color: var(--text-service-marketing-on-light);
@@ -272,7 +279,7 @@ const cta = section.cta;
     --background-inverse: var(--surface-service-marketing-dark);
     --text-on-color-light: var(--color-grayscale-white);
   }
-  .bds-hero--with-pricing-card[data-audience='information'] {
+  .bds-hero--with-pricing-card:is([data-audience='information'], [data-service-line='information']) {
     background: var(--surface-service-information-inverse);
     --bds-hero-headline-color: var(--text-service-information-on-light);
     --bds-hero-eyebrow-color: var(--text-service-information-on-light);
@@ -281,7 +288,7 @@ const cta = section.cta;
     --background-inverse: var(--surface-service-information-dark);
     --text-on-color-light: var(--color-grayscale-white);
   }
-  .bds-hero--with-pricing-card[data-audience='product'] {
+  .bds-hero--with-pricing-card:is([data-audience='product'], [data-service-line='product']) {
     background: var(--surface-service-product-inverse);
     --bds-hero-headline-color: var(--text-service-product-on-light);
     --bds-hero-eyebrow-color: var(--text-service-product-on-light);
@@ -290,8 +297,8 @@ const cta = section.cta;
     --background-inverse: var(--surface-service-product-dark);
     --text-on-color-light: var(--color-grayscale-white);
   }
-  .bds-hero--with-pricing-card[data-audience='back-office'],
-  .bds-hero--with-pricing-card[data-audience='service'] {
+  .bds-hero--with-pricing-card:is([data-audience='back-office'], [data-service-line='back-office']),
+  .bds-hero--with-pricing-card:is([data-audience='service'], [data-service-line='service']) {
     background: var(--surface-service-back-office-inverse);
     --bds-hero-headline-color: var(--text-service-back-office-on-light);
     --bds-hero-eyebrow-color: var(--text-service-back-office-on-light);
@@ -307,14 +314,14 @@ const cta = section.cta;
    * can't sustain white text (2.87–4.36:1); darker ones can. Override
    * --text-inverse per luminance group so all five lines pass AA in dark mode.
    * Uses mode-invariant --text-on-color-light (black) / --text-on-color-dark (white). */
-  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='brand'],
-  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='marketing'] {
+  :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='brand'], [data-service-line='brand']),
+  :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='marketing'], [data-service-line='marketing']) {
     --text-inverse: var(--text-on-color-light); /* black on yellow/green-darker: 4.82–7.33:1 */
   }
-  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='information'],
-  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='product'],
-  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='back-office'],
-  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='service'] {
+  :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='information'], [data-service-line='information']),
+  :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='product'], [data-service-line='product']),
+  :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='back-office'], [data-service-line='back-office']),
+  :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='service'], [data-service-line='service']) {
     --text-inverse: var(--text-on-color-dark);  /* white on blue/purple/orange-darker: 5.48–9.48:1 */
   }
 
@@ -326,32 +333,32 @@ const cta = section.cta;
    * (6.89–9.06:1) via contrast-gate (brik-bds#1017). The inner inverse <Button>
    * is unaffected: its label/fill ride --text-inverse / --background-inverse
    * (surface-service-{line}-dark), handled above. */
-  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='brand'] {
+  :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='brand'], [data-service-line='brand']) {
     --bds-hero-headline-color: var(--text-service-brand-on-dark);
     --bds-hero-eyebrow-color: var(--text-service-brand-on-dark);
     --bds-hero-lead-color: var(--text-service-brand-on-dark);
     --text-brand-primary: var(--text-service-brand-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='marketing'] {
+  :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='marketing'], [data-service-line='marketing']) {
     --bds-hero-headline-color: var(--text-service-marketing-on-dark);
     --bds-hero-eyebrow-color: var(--text-service-marketing-on-dark);
     --bds-hero-lead-color: var(--text-service-marketing-on-dark);
     --text-brand-primary: var(--text-service-marketing-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='information'] {
+  :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='information'], [data-service-line='information']) {
     --bds-hero-headline-color: var(--text-service-information-on-dark);
     --bds-hero-eyebrow-color: var(--text-service-information-on-dark);
     --bds-hero-lead-color: var(--text-service-information-on-dark);
     --text-brand-primary: var(--text-service-information-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='product'] {
+  :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='product'], [data-service-line='product']) {
     --bds-hero-headline-color: var(--text-service-product-on-dark);
     --bds-hero-eyebrow-color: var(--text-service-product-on-dark);
     --bds-hero-lead-color: var(--text-service-product-on-dark);
     --text-brand-primary: var(--text-service-product-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='back-office'],
-  :root[data-theme="dark"] .bds-hero--with-pricing-card[data-audience='service'] {
+  :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='back-office'], [data-service-line='back-office']),
+  :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='service'], [data-service-line='service']) {
     --bds-hero-headline-color: var(--text-service-back-office-on-dark);
     --bds-hero-eyebrow-color: var(--text-service-back-office-on-dark);
     --bds-hero-lead-color: var(--text-service-back-office-on-dark);

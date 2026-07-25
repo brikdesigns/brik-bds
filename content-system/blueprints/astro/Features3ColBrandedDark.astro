@@ -6,9 +6,9 @@
  * block; `--branded-dark` is banned by ADR-008 §3 (theme + appearance), and the
  * `3col` count lives in the responsive grid CSS, not the name. The dark surface
  * is the `--bds-features-bg` default, not a class. Dark section, grid of cards
- * filled with per-card brand colors — each card sets `data-audience` to re-bind
- * `--brand-primary` for that subtree. Drives brikdesigns.com's "Other Service
- * Lines" cross-sell module.
+ * filled with per-card brand colors — each card sets `data-service-line` to
+ * re-bind `--brand-primary` for that subtree. Drives brikdesigns.com's "Other
+ * Service Lines" cross-sell module.
  *
  * Spec: PR #477 (design proposal archived to brik-rag: blueprint-proposal-features-3col-branded-dark).
  *
@@ -22,16 +22,17 @@
  *       - href                  — Learn more target
  *       - imageUrl?             — top illustration src (omitted → blank brand block)
  *       - imageAlt?             — alt text for the illustration
- *       - audience              — REQUIRED — drives `data-audience` re-binding
+ *       - serviceLine           — REQUIRED — drives `data-service-line` re-binding (`audience` is the @deprecated alias — #788)
  *
  * required_facts: []. Section-driven.
  *
- * ## Audience scope binding (consumer responsibility)
+ * ## Service-line scope binding (consumer responsibility)
  *
- * Each card emits `data-audience={item.audience}`. Inside that subtree,
- * `--brand-primary` and `--background-brand-primary` resolve to the audience's
- * color — but ONLY if the consumer site defines the `[data-audience='X']`
- * cascade rules per
+ * Each card emits `data-service-line={item.serviceLine ?? item.audience}` (and
+ * the deprecated `data-audience` alias during the #788 window). Inside that
+ * subtree, `--brand-primary` and `--background-brand-primary` resolve to the
+ * service line's color — but ONLY if the consumer site defines the
+ * `[data-service-line='X']` cascade rules per
  * `docs/theming/client-themes#per-audience-or-service-line-scope-binding`.
  * Without those rules, every card resolves to the global brand color
  * (visually broken — three identical cards). BDS ships the pattern, not the
@@ -41,8 +42,8 @@
  *
  * Astro renderer uses HTML+CSS+tokens (matches the existing blueprint
  * pattern); React renderer composes BDS primitives (`<Card>`/`<ServiceTag>`).
- * Both emit the same `data-audience` attributes and `bds-features__*` slots so
- * the consumer's cascade works in both contexts. The one divergence: the React
+ * Both emit the same `data-service-line` attributes and `bds-features__*` slots
+ * so the consumer's cascade works in both contexts. The one divergence: the React
  * path shows a `<ServiceTag>` icon fallback when an image is absent; the Astro
  * path shows the neutral blank brand block (no React primitive available).
  *
@@ -89,11 +90,15 @@ const titleId = `${section.sectionKey}-title`;
     )}
 
     <ul class="bds-features__grid" role="list">
-      {section.items.map((item) => (
+      {section.items.map((item) => {
+        // `serviceLine` is canonical; `audience` is the deprecated alias (#788).
+        const serviceLine = item.serviceLine ?? item.audience;
+        return (
         <li class="bds-features__item">
           <article
             class="bds-features__card"
-            data-audience={item.audience ?? undefined}
+            data-service-line={serviceLine ?? undefined}
+            data-audience={serviceLine ?? undefined}
           >
             <a class="bds-features__card-link" href={item.href ?? '#'}>
               <div class="bds-features__media">
@@ -123,7 +128,8 @@ const titleId = `${section.sectionKey}-title`;
             </a>
           </article>
         </li>
-      ))}
+        );
+      })}
     </ul>
   </div>
 </section>
