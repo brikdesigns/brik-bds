@@ -118,6 +118,7 @@ function ArchetypeStoryRender({ archetype }: ArchetypeStoryArgs) {
 
 const meta: Meta<ArchetypeStoryArgs> = {
   title: 'Foundation/Navigation Archetypes',
+  tags: ['surface-web'],
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -136,22 +137,27 @@ const meta: Meta<ArchetypeStoryArgs> = {
 export default meta;
 type Story = StoryObj<ArchetypeStoryArgs>;
 
+/** @summary Editorial-transparent nav — overlays the hero */
 export const EditorialTransparent: Story = {
   args: { archetype: 'editorial-transparent' },
 };
 
+/** @summary Utility-first nav — dense links, prominent CTA */
 export const UtilityFirst: Story = {
   args: { archetype: 'utility-first' },
 };
 
+/** @summary Service-centric nav — service lines lead the menu */
 export const ServiceCentric: Story = {
   args: { archetype: 'service-centric' },
 };
 
+/** @summary Portfolio-minimal nav — sparse links, work-forward */
 export const PortfolioMinimal: Story = {
   args: { archetype: 'portfolio-minimal' },
 };
 
+/** @summary Calm-flat nav — quiet, flat, low-emphasis chrome */
 export const CalmFlat: Story = {
   args: { archetype: 'calm-flat' },
 };

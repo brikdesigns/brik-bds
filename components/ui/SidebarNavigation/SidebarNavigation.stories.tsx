@@ -145,7 +145,7 @@ type Story = StoryObj<typeof meta>;
    Default — single story, rich controls
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Sidebar with icons; toggle collapsed, profile, footer in Controls */
+/** @summary Sidebar — toggle collapsed, profile, footer */
 export const Default: Story = {
   args: {
     logo: <BrikLogomark />,

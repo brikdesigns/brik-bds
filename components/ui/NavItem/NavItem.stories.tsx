@@ -50,7 +50,7 @@ const meta: Meta<typeof NavItem> = {
 export default meta;
 type Story = StoryObj<typeof NavItem>;
 
-/** @summary Default nav item — toggle active, disabled, iconOnly in Controls */
+/** @summary Nav item — toggle active, disabled, iconOnly */
 export const Default: Story = {
   args: {
     label: 'Dashboard',

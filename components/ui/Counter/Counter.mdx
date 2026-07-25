@@ -14,19 +14,10 @@ Numeric count indicator with status colors. Pill-shaped badge for notification c
 
 <Canvas of={Stories.Default} />
 
-## Variants
-
-Status and size are pure color/dimension axes with no semantic difference between values — both are Controls on the Default sandbox above, not standalone stories.
-
-<Canvas of={Stories.Default} />
-
-- **`success`** -- Completed items, positive counts.
-- **`error`** -- Error counts, alerts.
-- **`warning`** -- Pending items, attention needed.
-- **`neutral`** -- Inactive counts, disabled.
-- **`progress`** -- In-progress items.
-- **`brand`** -- General counts, notifications.
-
 ## Props
 
 <ArgTypes of={Stories} />
+
+## Notes
+
+- `status` and `size` are pure color/dimension axes driven by Controls. Status semantics: `success` completed items / `error` alerts / `warning` pending / `neutral` inactive / `progress` in-flight / `brand` general counts and notifications.

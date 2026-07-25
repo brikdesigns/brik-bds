@@ -55,7 +55,7 @@ export const Default: Story = {
    VARIANTS — one story per style (Q3 semantic starting points)
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Plain labels with brand color for the active tab; no indicator */
+/** @summary Plain labels, brand color for active tab, no indicator */
 export const Text: Story = {
   args: {
     variant: 'text',
@@ -67,7 +67,11 @@ export const Text: Story = {
   },
 };
 
-/** @summary Text color behavior plus a brand-color underline below the active tab */
+/**
+ * Text color behavior plus a brand-color underline below the
+ * active tab.
+ * @summary Text color plus underline below active tab
+ */
 export const TextUnderline: Story = {
   args: {
     variant: 'text-underline',
@@ -79,7 +83,7 @@ export const TextUnderline: Story = {
   },
 };
 
-/** @summary Bottom-border bar with a brand-color underline over the baseline */
+/** @summary Bottom-border bar with underline over the baseline */
 export const Tab: Story = {
   args: {
     variant: 'tab',

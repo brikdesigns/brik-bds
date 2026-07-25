@@ -46,7 +46,7 @@ type Story = StoryObj<typeof AnimatedIcon>;
    ADR-010 the trigger axis lives in Controls, not separate stories.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive Lottie wrapper — trigger, size, loop via Controls */
+/** @summary Lottie wrapper — trigger, size, loop via Controls */
 export const Default: Story = {
   args: {
     animationData: fadeSquare,

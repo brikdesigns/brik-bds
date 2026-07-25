@@ -26,7 +26,10 @@ const meta: Meta<typeof Form> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** @summary Canonical Form — flip Controls to explore layout, gap, and inline messaging */
+/**
+ * Flip Controls to explore layout, gap, and inline messaging.
+ * @summary Canonical Form layout and messaging
+ */
 export const Default: Story = {
   args: {
     title: 'Contact Us',

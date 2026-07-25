@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from '@iconify/react';
 import { Badge } from './Badge';
-import { Tag } from '../Tag/Tag';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -92,17 +91,12 @@ export const Error: Story = {
   args: { status: 'error', children: 'Failed' },
 };
 
-/** @summary Info — neutral informational status (default tone) */
-export const Info: Story = {
-  args: { status: 'info', children: 'New' },
-};
-
 /** @summary Progress — in-flight status, often with a spinner */
 export const Progress: Story = {
   args: { status: 'progress', children: 'In Progress' },
 };
 
-/** @summary Neutral — muted-gray, low-emphasis inert status (skipped, not linked) */
+/** @summary Neutral — muted-gray, inert status (skipped, not linked) */
 export const Neutral: Story = {
   args: { status: 'neutral', children: 'Not linked' },
 };
@@ -127,37 +121,6 @@ export const Sizes: Story = {
 };
 
 /* ─── Patterns (Q4 irreducible + real-world composition) ──────── */
-
-/**
- * Badge and Tag share the same height at every size tier. Render-mode is
- * required because the value of the demo is the *cross-component* alignment
- * — args alone can't render two different components in one story.
- *
- * @summary Badge + Tag pixel-aligned at every size
- */
-export const BadgeTagAlignment: Story = {
-  name: 'Badge + Tag alignment',
-  render: () => (
-    <Stack>
-      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
-        <Row key={size}>
-          <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: 'var(--size-600)' }}>{size}</span>
-          {size === 'xs' ? (
-            <>
-              <Badge size="xs" status="positive" icon={<Icon icon="ph:star" />} />
-              <Tag size="xs" icon={<Icon icon="ph:tag" />} />
-            </>
-          ) : (
-            <>
-              <Badge size={size} status="positive" icon={<Icon icon="ph:star" />}>Active</Badge>
-              <Tag size={size} icon={<Icon icon="ph:tag" />}>Category</Tag>
-            </>
-          )}
-        </Row>
-      ))}
-    </Stack>
-  ),
-};
 
 /** @summary Content lifecycle statuses in a settings list */
 export const ContentStatusSolid: Story = {

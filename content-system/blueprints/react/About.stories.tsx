@@ -51,10 +51,10 @@ export const Default: Story = {
 };
 
 /**
- * @summary Narrative only — no pull-quote callout.
- *
  * Distinct meaningful state: with no `testimonial`, the `:has()` rule stays
  * inactive and the section renders as a single narrative column.
+ *
+ * @summary Narrative only — no pull-quote callout
  */
 export const NarrativeOnly: Story = {
   args: {

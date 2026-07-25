@@ -32,7 +32,10 @@ const Frame = ({ width = '360px', children }: { width?: string; children: React.
   </div>
 );
 
-/** @summary Canonical Field — flip Controls to explore layout + empty fallbacks */
+/**
+ * Flip Controls to explore layout + empty fallbacks.
+ * @summary Canonical Field label + value pair
+ */
 export const Default: Story = {
   args: {
     label: 'Status',
@@ -46,7 +49,10 @@ export const Default: Story = {
   ),
 };
 
-/** @summary EmptyState composed into the `empty` slot for section-level empties */
+/**
+ * EmptyState composed into the `empty` slot for section-level empties.
+ * @summary EmptyState composed into `empty` slot
+ */
 export const WithCompositeEmpty: Story = {
   render: () => (
     <Frame width="480px">
@@ -81,7 +87,7 @@ export const CompactTier: Story = {
   ),
 };
 
-/** @summary `children` accepts text, Tag groups, anchors, or bullet lists */
+/** @summary `children` accepts text, Tags, anchors, or lists */
 export const WithRichValue: Story = {
   render: () => (
     <Frame>
