@@ -16,6 +16,7 @@
     "chip",
     "counter",
     "dot",
+    "service-tag",
     "skeleton",
     "spinner",
     "tag",
@@ -99,6 +100,8 @@
     "footer",
     "page-header",
     "bullet-list",
+    "interactive-list-item",
+    "selectable-media-tile",
     "task-console"
   ]
 }

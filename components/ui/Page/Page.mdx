@@ -70,13 +70,6 @@ When `<PageHeader tabs>` is set, the header's bottom divider is suppressed and t
 
 <Canvas of={Stories.Headerless} />
 
-## Deferred (not in V1)
-
-- **Responsive `{ narrow, regular, wide }` props** for `padding` — the prop type widens to `Scalar | {…}` later without breaking existing call-sites.
-- **`Page.Pane` / `Page.Footer`** — namespace reserved for a future resizable rail + footer.
-- **Explicit `divider` prop** on regions — today the header divider is automatic (border, suppressed under tabs).
-- **DataDisplay family** (`TableView` / `ListView` / `BoardView` / `CalendarView` / `ProfileView`) — the loading/empty/error wrappers ship in a follow-up batch.
-
 ## Props
 
 <ArgTypes of={Stories} />

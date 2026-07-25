@@ -69,7 +69,7 @@ When the read page itself is bimodal (the whole record toggles between view and 
 />
 ```
 
-`PageHeader.mode` is symmetric with [`Sheet.mode`](?path=/docs/containers-sheet--docs) — see [`PageHeader`](?path=/docs/sections-page-header--docs) for the full API. Pair this with [Convention C of Read-Mode Sheet](?path=/docs/containers-read-mode-sheet--docs#convention-c--footer-driven-close-view-details-edit-table-row-sheet) (`Sheet.viewDetailsAction` + `editTarget="page"`) when a table row opens a snapshot sheet that links to the read/edit pages.
+`PageHeader.mode` is symmetric with [`Sheet.mode`](?path=/docs/containers-sheet--docs) — see [`PageHeader`](?path=/docs/sections-page-header--docs) for the full API. Pair this with the [footer-driven navigation](https://design.brikdesigns.com/docs/components/sheet#footer-driven-navigation) convention (`Sheet.viewDetailsAction` + `editTarget="page"`) when a table row opens a snapshot sheet that links to the read/edit pages.
 
 ## Two section-level edit conventions
 
@@ -199,7 +199,7 @@ const [mode, setMode] = useState<'view' | 'edit'>('view');
 
 ## Related
 
-- [Read-Mode Sheet](?path=/docs/containers-read-mode-sheet--docs) — the narrow-view sibling of this pattern, for focused sheet overlays.
+- [Composing a read-mode sheet](https://design.brikdesigns.com/docs/components/sheet#composing-a-read-mode-sheet) — the narrow-view sibling of this pattern, for focused sheet overlays.
 - [`DataSection`](?path=/docs/containers-data-section--docs) — the component this pattern composes.
 - [`FieldGrid`](?path=/docs/blocks-field-grid--docs) — grid wrapper.
 - [`Field`](?path=/docs/blocks-field--docs) — label + value primitive.
