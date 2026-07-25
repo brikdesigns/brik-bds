@@ -73,7 +73,7 @@ export const Tab: Story = { args: { variant: 'tab', items: [...] } };
 
 Linted as `duplicate-args` only for the exact-args subset; the "same discriminator, different other args" case (TabBar) stays PR-review/skill enforced.
 
-**Rule 2 — a story that differs from another only by a boolean prop is a Control, not a story** (matrix Q2, restated). `SubNavigation` `Default` vs `NoBorder` differ only by `bordered` (a `control:'boolean'` argType) → fold `NoBorder` away; the toggle lives in Controls on `Default`. Linted as `boolean-toggle-story` (advisory).
+**Rule 2 — a story that differs from another only by a boolean prop is a Control, not a story** (matrix Q2, restated). `SubNavigation` `Default` vs `NoBorder` differ only by `bordered` (a `control:'boolean'` argType) → fold `NoBorder` away; the toggle lives in Controls on `Default`. Linted as `boolean-toggle-story` (hard-gated under `--enforce` since #1308 Step 7).
 
 **Rule 3 — a story that differs only by a *non-visual* prop is not a story.** A prop that changes wiring but not pixels (`linkComponent`, analytics id, `as`) renders identically to `Default`. Make it a `play`-only `InteractionTest…` that asserts the wiring, tagged `['!manifest']`, or document it in MDX — never a standalone visual story.
 
@@ -421,12 +421,13 @@ The story-shape lint ([`scripts/lint-story-shape.js`](../../scripts/lint-story-s
 - **Surface tag** — exactly one of `surface-web` / `surface-product` / `surface-shared` in `meta.tags` (#1321)
 - **Deprecated ⇒ hidden** — a component-level `@deprecated` (or a `Deprecated/` title) requires `!manifest` in `meta.tags` (#1321)
 - **InteractionTest tagging** — an `InteractionTest…` export requires story-level `tags: ['!manifest']` and no `name:` display override (#1321)
+- **Consolidation rules 1–2** — `duplicate-args` (two declarative exports with structurally identical args — rule 1's exact-args subset) and `boolean-toggle-story` (a declarative story differing from `Default` only by boolean args — rule 2, matrix Q2). Graduated from advisory to hard by [#1308](https://github.com/brikdesigns/brik-bds/issues/1308) Step 7.
 
 There is no grandfather allowlist for any hard rule — each shipped in the same PR as the sweep that emptied its violation set.
 
 The matrix's broader Q2 rule (`Disabled` / `Loading` / icon-slot stories become Controls) stays PR-review-enforced where not statically decidable. The lint catches named + structural-metadata violations; the matrix catches semantic ones.
 
-**Advisory consolidation tier (#1359).** `lint-story-shape.js` additionally reports two statically-decidable consolidation findings on *declarative* stories: `duplicate-args` (two exports with identical args — consolidation rule 1's exact-args subset) and `boolean-toggle-story` (a story differing from `Default` only by boolean args — rule 2). These **print but do not gate** under `--enforce`, so CI and pre-commit stay green on files that predate the rules. They exit non-zero only under the explicit `--matrix-strict` flag, which nothing wires into CI yet — it graduates to `--enforce` once the audit sweep clears the repo. Consolidation rules 3–4 (non-visual-prop-only stories; cross-component/shell relocation) are not statically decidable and stay skill/PR-review enforced.
+**Consolidation tier (#1359 → graduated #1308 Step 7).** The two statically-decidable consolidation findings above — `duplicate-args` and `boolean-toggle-story` — shipped ADVISORY (print-only) in #1359 while the audit sweep ran, so CI and pre-commit stayed green on files that predated the rules. #1308 Step 7 cleared the repo, so they now **gate under `--enforce`** alongside the banned-export and structural tiers. (The `--matrix-strict` staging flag that used to gate them is retired.) Both rules inspect *declarative* stories only — a story carrying a distinguishing `play` or `render` is exempt, since the behavior/composition is the point. Consolidation rules 3–4 (non-visual-prop-only stories; cross-component/shell relocation) are not statically decidable and stay skill/PR-review enforced.
 
 ## Existing files are grandfathered
 
@@ -446,7 +447,7 @@ If you find yourself wanting to "clean up" an existing file's `export const Vari
 1. **Read three sibling story files** in the same `components/ui/<Subcategory>/` folder. Match their `title:` prefix, surface tag, and overall shape.
 2. **Verify the two-shape model** — file exports `Default` plus one story per meaningful state. No `Variants` / `Tones` / `Patterns` story exports (in new files).
 3. **Apply the matrix** — boolean / icon-slot states are Controls, not stories. Toolbar-global axes (theme/density/viewport/locale/motion) are never stories.
-3a. **Apply the consolidation rules** — `Default` doesn't duplicate a named story (1); no story differs from another only by a boolean (2) or a non-visual prop (3); cross-component / app-shell demos go to `Blueprints/` or MDX `## Patterns`, not a leaf story file (4). Run `node scripts/lint-story-shape.js <file>` — advisory findings flag rules 1–2.
+3a. **Apply the consolidation rules** — `Default` doesn't duplicate a named story (1); no story differs from another only by a boolean (2) or a non-visual prop (3); cross-component / app-shell demos go to `Blueprints/` or MDX `## Patterns`, not a leaf story file (4). Run `node scripts/lint-story-shape.js <file>` — `--enforce` hard-gates rules 1–2 (rules 3–4 stay PR-review/skill enforced).
 4. **Verify every export has an `@summary` JSDoc** under 60 characters.
 5. **Verify `meta.tags` has exactly one of** `surface-web` / `surface-product` / `surface-shared`.
 6. **If the component is deprecated**, verify `meta.tags` also includes `!manifest`.
