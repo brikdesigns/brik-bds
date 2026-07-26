@@ -88,7 +88,7 @@ export const Setup: Story = {
         <div
           style={{
             fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--body-xs)' /* bds-lint-ignore */,
+            fontSize: 'var(--body-xs)' /* bds-lint-ignore — story-only inline demo style, not shipped component CSS */,
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
             color: 'var(--text-muted)',
@@ -108,7 +108,7 @@ export const Setup: Story = {
         <div
           style={{
             fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--body-xs)' /* bds-lint-ignore */,
+            fontSize: 'var(--body-xs)' /* bds-lint-ignore — story-only inline demo style, not shipped component CSS */,
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
             color: 'var(--text-muted)',
@@ -127,7 +127,7 @@ export const Setup: Story = {
             background: 'var(--surface-secondary)',
             borderRadius: 'var(--border-radius-md)',
             fontFamily: 'var(--font-family-system, monospace)',
-            fontSize: 'var(--body-sm)' /* bds-lint-ignore */,
+            fontSize: 'var(--body-sm)' /* bds-lint-ignore — story-only inline demo style, not shipped component CSS */,
             color: 'var(--text-primary)',
             overflow: 'auto',
           }}
@@ -146,7 +146,7 @@ import { AnimatedIcon } from '@brikdesigns/bds';
         <div
           style={{
             fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--body-xs)' /* bds-lint-ignore */,
+            fontSize: 'var(--body-xs)' /* bds-lint-ignore — story-only inline demo style, not shipped component CSS */,
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
             color: 'var(--text-muted)',
@@ -169,7 +169,7 @@ import { AnimatedIcon } from '@brikdesigns/bds';
           background: 'var(--surface-secondary)',
           borderRadius: 'var(--border-radius-md)',
           color: 'var(--text-secondary)',
-          fontSize: 'var(--body-sm)' /* bds-lint-ignore */,
+          fontSize: 'var(--body-sm)' /* bds-lint-ignore — story-only inline demo style, not shipped component CSS */,
           lineHeight: 1.6,
         }}
       >

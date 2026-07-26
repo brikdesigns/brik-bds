@@ -33,7 +33,7 @@
 /* Unread dot */
 .bds-notification-item__dot {
   width: 8px; /* bds-lint-ignore — fixed unread dot size */
-  height: 8px; /* bds-lint-ignore */
+  height: 8px; /* bds-lint-ignore — fixed 8px unread dot, not a spacing-grid token */
   border-radius: var(--border-radius-pill);
   background-color: var(--surface-brand-primary);
   flex-shrink: 0;

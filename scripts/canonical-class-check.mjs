@@ -65,6 +65,7 @@ import { resolve, join, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { stripCssComments } from './canonical-check.mjs';
+import { hasLintIgnore } from './lib/bds-lint-ignore.cjs';
 
 // ── Defaults ─────────────────────────────────────────────────────────────
 
@@ -227,7 +228,7 @@ export function canonicalRoots(allowlist) {
 export function extractClassReferences(text) {
   const filtered = text
     .split(/\r?\n/)
-    .filter((line) => !line.includes('bds-lint-ignore'))
+    .filter((line) => !hasLintIgnore(line))
     .join('\n');
   const stripped = stripCssComments(filtered);
 

@@ -26,7 +26,7 @@ type Story = StoryObj<typeof SheetSection>;
 
 const bodyText: React.CSSProperties = {
   fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-md)', // bds-lint-ignore
+  fontSize: 'var(--body-md)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
   color: 'var(--text-primary)',
   margin: 0,
 };

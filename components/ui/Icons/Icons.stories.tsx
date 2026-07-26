@@ -8,7 +8,7 @@ import * as Icons from '../../icons';
 const SectionLabel = ({ children }: { children: string }) => (
   <div style={{
     fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore
+    fontSize: 'var(--body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
     textTransform: 'uppercase' as const,
     letterSpacing: '0.05em',
     marginBottom: 'var(--gap-md)',
@@ -107,7 +107,7 @@ export const Setup: Story = {
         <SectionLabel>Usage</SectionLabel>
         <pre style={{
           fontFamily: 'var(--font-family-system, monospace)',
-          fontSize: '13px', // bds-lint-ignore
+          fontSize: '13px', // bds-lint-ignore — story-only demo label sizing, not shipped component CSS
           background: 'var(--surface-primary)',
           padding: 'var(--padding-lg)',
           borderRadius: 'var(--border-radius-md)',
@@ -368,7 +368,7 @@ export const Sizing: Story = {
               <Icon icon={Icons.Star} style={{ fontSize: size, color: 'var(--text-primary)' }} />
               <span style={{
                 fontFamily: 'var(--font-family-system, monospace)',
-                fontSize: '10px', // bds-lint-ignore
+                fontSize: '10px', // bds-lint-ignore — story-only demo label sizing, not shipped component CSS
                 color: 'var(--text-secondary)',
               }}>
                 {size}

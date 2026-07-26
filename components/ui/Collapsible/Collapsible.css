@@ -74,7 +74,7 @@
 
 .bds-collapsible__toggle {
   width: 40px; /* bds-lint-ignore — icon button touch target */
-  height: 40px; /* bds-lint-ignore */
+  height: 40px; /* bds-lint-ignore — fixed 40px trigger height, not a spacing-grid token */
   display: flex;
   align-items: center;
   justify-content: center;

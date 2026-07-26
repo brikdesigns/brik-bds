@@ -56,6 +56,7 @@
 import { readFileSync, statSync, readdirSync } from 'node:fs';
 import { join, sep, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { hasLintIgnore } from './lib/bds-lint-ignore.cjs';
 
 // ── Grammar ────────────────────────────────────────────────────────────────
 
@@ -98,7 +99,7 @@ export const DEFAULT_EXCLUDE_PATH_PATTERNS = Object.freeze([
 export function extractBdsClasses(text) {
   const lines = text
     .split(/\r?\n/)
-    .filter((line) => !line.includes('bds-lint-ignore'));
+    .filter((line) => !hasLintIgnore(line));
   // Normalize interpolation so a dynamic tail doesn't read as a malformed one.
   const normalized = lines.join('\n').replace(/\$\{[^}]*\}/g, 'x');
   // Permissive token capture: start at `bds-`, consume anything that could be

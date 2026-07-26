@@ -37,7 +37,7 @@
   align-items: center;
   justify-content: center;
   width: 48px; /* bds-lint-ignore — Figma-driven arrow size */
-  height: 48px; /* bds-lint-ignore */
+  height: 48px; /* bds-lint-ignore — fixed 48px control height, not a spacing-grid token */
   border-radius: var(--border-radius-pill);
   background-color: var(--background-brand-primary);
   color: var(--text-on-color-dark);
@@ -82,7 +82,7 @@
   line-height: var(--font-line-height-tight);
   color: var(--text-muted);
   padding: var(--padding-sm);
-  min-width: 24px; /* bds-lint-ignore */
+  min-width: 24px; /* bds-lint-ignore — fixed 24px min tap target, not a spacing-grid token */
   text-align: center;
   cursor: default;
 }

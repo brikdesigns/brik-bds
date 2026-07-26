@@ -32,7 +32,7 @@ const Pill = ({ children }: { children: React.ReactNode }) => (
       border: '1px solid var(--border-secondary)',
       borderRadius: '9999px',
       fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--label-sm)', // bds-lint-ignore
+      fontSize: 'var(--label-sm)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
       color: 'var(--text-primary)',
       whiteSpace: 'nowrap' as const,
     }}
@@ -45,7 +45,7 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   <div
     style={{
       fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--body-xs)', // bds-lint-ignore
+      fontSize: 'var(--body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
       textTransform: 'uppercase' as const,
       letterSpacing: '0.05em',
       color: 'var(--text-muted)',

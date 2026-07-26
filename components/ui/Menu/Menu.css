@@ -133,7 +133,7 @@
   align-items: center;
   justify-content: center;
   width: 24px; /* bds-lint-ignore — icon wrapper touch target */
-  height: 24px; /* bds-lint-ignore */
+  height: 24px; /* bds-lint-ignore — fixed 24px menu-item icon slot, not a spacing-grid token */
   font-size: var(--icon-lg);
   color: var(--text-primary);
   flex-shrink: 0;

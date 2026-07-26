@@ -30,6 +30,13 @@
 
 const fs = require('fs');
 const path = require('path');
+const {
+  isBareLintIgnore,
+  BARE_IGNORE_RULE,
+  BARE_IGNORE_MESSAGE,
+  BARE_IGNORE_FIX,
+  LINT_IGNORE_MARKER,
+} = require('./lib/bds-lint-ignore.cjs');
 
 // ---------------------------------------------------------------------------
 // Config
@@ -615,7 +622,7 @@ function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
     return violations;
   }
 
-  // Skip bds-lint-ignore
+  // Skip lines carrying a lint-ignore marker
   if (line.includes('bds-lint-ignore')) return violations;
 
   // Skip lines inside template literal documentation blocks
@@ -950,6 +957,28 @@ function checkInlineVarTsx(line, lineNum, file) {
   return violations;
 }
 
+/**
+ * Rule 9: bare `bds-lint-ignore` — the marker must carry a reason
+ * (brikdesigns/brik-bds#1469). This is the authoritative bare-marker gate; it
+ * runs on every gathered line (component .css / .tsx incl. stories, and
+ * blueprints) so a suppression can never be added silently. The sibling gates
+ * (token-coverage, slot-pattern-check, canonical-class-check) share the
+ * marker-detection helper for their skip predicate but do not re-emit this
+ * error, to avoid duplicate output on lines they also scan.
+ */
+function checkBareLintIgnore(line, lineNum, file) {
+  if (!isBareLintIgnore(line)) return [];
+  return [{
+    rule: BARE_IGNORE_RULE,
+    severity: 'error',
+    file,
+    line: lineNum,
+    column: line.indexOf(LINT_IGNORE_MARKER) + 1,
+    message: BARE_IGNORE_MESSAGE,
+    suggestion: BARE_IGNORE_FIX,
+  }];
+}
+
 // ---------------------------------------------------------------------------
 // Reporter
 // ---------------------------------------------------------------------------
@@ -1071,6 +1100,7 @@ function main() {
       const line = lines[i];
       const lineNum = i + 1;
 
+      allViolations.push(...checkBareLintIgnore(line, lineNum, file));
       allViolations.push(...checkPrimitiveTokens(line, lineNum, file, isComponent));
       allViolations.push(...checkHardcodedValues(line, lineNum, file, isComponent));
       allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, isComponent));
@@ -1102,6 +1132,7 @@ function main() {
       const line = lines[i];
       const lineNum = i + 1;
 
+      allViolations.push(...checkBareLintIgnore(line, lineNum, file));
       // Rule 1: primitive token usage in CSS
       allViolations.push(...checkPrimitiveTokens(line, lineNum, file, true));
       // Rule 3: unknown token references in CSS (catches stale var() after renames)
@@ -1133,6 +1164,7 @@ function main() {
       const line = lines[i];
       const lineNum = i + 1;
 
+      allViolations.push(...checkBareLintIgnore(line, lineNum, file));
       allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, true));
       allViolations.push(...checkFallbackLiterals(line, lineNum, file, true));
       allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));

@@ -13,6 +13,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { hasLintIgnore } = require('./lib/bds-lint-ignore.cjs');
 
 const ROOT = path.join(__dirname, '..');
 const COMPONENTS_DIR = path.join(ROOT, 'components', 'ui');
@@ -90,7 +91,7 @@ function scanUsage() {
     const lines = content.split('\n');
     let count = 0;
     for (const line of lines) {
-      if (line.includes('bds-lint-ignore')) continue;
+      if (hasLintIgnore(line)) continue;
       if (line.trimStart().startsWith('//')) continue;
       if (line.trimStart().startsWith('/*')) continue;
       if (line.trimStart().startsWith('*')) continue;

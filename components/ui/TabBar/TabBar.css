@@ -158,7 +158,7 @@
    bds-lint-ignore on each such selector line keeps canonical-check from reading
    the class name as a token reference. */
 .bds-tab-bar--text,
-.bds-tab-bar--text-underline, /* bds-lint-ignore */
+.bds-tab-bar--text-underline, /* bds-lint-ignore — canonical-check: --text-underline modifier selector, not a token reference */
 .bds-tab-bar--tab {
   gap: var(--gap-xl);
 }
@@ -203,21 +203,21 @@
 }
 
 /* ── text-underline ── */
-.bds-tab-bar--text-underline .bds-tab-bar-item { /* bds-lint-ignore */
+.bds-tab-bar--text-underline .bds-tab-bar-item { /* bds-lint-ignore — canonical-check: --text-underline modifier selector, not a token reference */
   color: var(--text-secondary);
   border-bottom: var(--border-width-md) solid transparent;
   padding-bottom: var(--padding-sm);
 }
-.bds-tab-bar--text-underline .bds-tab-bar-item[aria-selected="true"] { /* bds-lint-ignore */
+.bds-tab-bar--text-underline .bds-tab-bar-item[aria-selected="true"] { /* bds-lint-ignore — canonical-check: --text-underline modifier selector, not a token reference */
   color: var(--text-brand-primary);
   border-bottom-color: var(--border-brand-primary);
 }
-.bds-tab-bar--text-underline.bds-tab-bar--on-color .bds-tab-bar-item { /* bds-lint-ignore */
+.bds-tab-bar--text-underline.bds-tab-bar--on-color .bds-tab-bar-item { /* bds-lint-ignore — canonical-check: --text-underline modifier selector, not a token reference */
   color: var(--text-on-color-dark);
   opacity: 0.6;
   border-bottom-color: transparent;
 }
-.bds-tab-bar--text-underline.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] { /* bds-lint-ignore */
+.bds-tab-bar--text-underline.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] { /* bds-lint-ignore — canonical-check: --text-underline modifier selector, not a token reference */
   opacity: 1;
   border-bottom-color: var(--border-on-color-dark);
 }

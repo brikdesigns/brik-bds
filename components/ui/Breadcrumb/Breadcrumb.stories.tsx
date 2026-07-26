@@ -114,7 +114,7 @@ export const ServiceLineCascade: Story = {
           <p
             style={{
               fontFamily: 'var(--font-family-label)',
-              fontSize: 'var(--body-xs)', // bds-lint-ignore
+              fontSize: 'var(--body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
               textTransform: 'uppercase' as const,
               letterSpacing: '0.05em',
               marginBottom: 'var(--gap-md)',
