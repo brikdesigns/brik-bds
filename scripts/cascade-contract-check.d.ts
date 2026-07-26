@@ -8,13 +8,16 @@
 
 export type ExemptPattern = string | RegExp;
 
-export type CascadeRule = 'no-redefinition' | 'typography-family';
+export type CascadeRule = 'no-redefinition' | 'typography-family' | 'import-layer';
 
 export interface CascadeViolation {
   /** Which rule fired. */
   rule: CascadeRule;
   severity: 'error';
-  /** The offending token name (the redefined token, or the font-family token). */
+  /**
+   * The offending token name (the redefined token, or the font-family token).
+   * For `import-layer`, the import specifier (`@brikdesigns/bds/tokens.css`).
+   */
   token: string;
   /** File the violation was found in (`<input>` for raw-string scans). */
   file: string;
@@ -28,7 +31,11 @@ export interface ScanOptions {
   css: string;
   /** File path — used for messages and whole-file brand-scope (`theme-*.css`). */
   file?: string;
-  /** Token names or RegExps to skip (transitional burn-down allowlist). */
+  /**
+   * Token names or RegExps to skip (transitional burn-down allowlist). Also
+   * matched against `import-layer` specifiers, so a consumer can wire the gate
+   * before its stylesheet is compliant and burn the exemption down.
+   */
   exemptTokens?: ExemptPattern[];
 }
 
@@ -57,3 +64,9 @@ export const BRANDABLE_FAMILIES: string[];
 
 /** `--font-family-{family}` → family map. */
 export const FONT_FAMILY_TO_FAMILY: Record<string, string>;
+
+/**
+ * BDS stylesheet basename → the layer the adoption contract assigns it.
+ * `{ 'tokens.css': 'bds-tokens', 'styles.css': 'bds-components' }`.
+ */
+export const LAYERED_BDS_IMPORTS: Record<string, string>;
