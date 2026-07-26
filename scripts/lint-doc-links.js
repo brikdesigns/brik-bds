@@ -222,26 +222,80 @@ const COMPONENT_LINKS = /<ComponentLinks\b[^>]*\bslug="([^"]+)"/g;
 // green now (authoring 18 docs pages is a separate content effort, tracked in
 // issue #1229). Self-cleaning: if a listed slug gains a docs page, the
 // gate fails until it is removed from this set — so the debt can only shrink.
-const COMPONENT_LINKS_WITHOUT_DOCS_PAGE = new Set([
-  'addable-tag-list',
-  'animated-icon',
-  'block-quote',
-  'collapsible',
-  'completion-toggle',
-  'data-view',
-  'dependent-select',
-  'file-card',
-  'logo',
-  'nav-item',
-  'number-input',
-  'page',
-  'search-input',
-  'sub-navigation',
-  'testimonial',
+// Components whose <ComponentLinks slug> has no docs-site page yet. Every entry
+// MUST carry a disposition — a missing page can no longer be silently
+// suppressed by dropping a bare slug into an allowlist:
+//
+//   • DOCS_PAGE_BACKLOG — slug → tracking issue number. The page is owed; the
+//     issue keeps it visible on the board. Remove the entry when the page lands
+//     (the debt-paid guard below fails until you do).
+//   • DOCS_PAGE_EXEMPT — slug → one-line reason. The component will NOT get a
+//     standalone docs-site page (internal / asset / sub-primitive). The reason
+//     is required so "exempt" is a decision, not a default.
+//
+// A <ComponentLinks slug="x"> whose slug is in neither map and has no page
+// hard-fails (default-deny). This replaces the old flat
+// COMPONENT_LINKS_WITHOUT_DOCS_PAGE allowlist, which let missing pages sit with
+// no owner and no issue — the exact drift #1466 exposed (checklist +
+// progress-circle hid here for months). See #1466 for the backlog these are.
+const DOCS_PAGE_BACKLOG = {
+  'addable-tag-list': 1466,
+  'animated-icon': 1466,
+  'block-quote': 1466,
+  'collapsible': 1466,
+  'completion-toggle': 1466,
+  'data-view': 1466,
+  'dependent-select': 1466,
+  'file-card': 1466,
+  'logo': 1466,
+  'nav-item': 1466,
+  'number-input': 1466,
+  'page': 1466,
+  'search-input': 1466,
+  'sub-navigation': 1466,
+  'testimonial': 1466,
+};
+const DOCS_PAGE_EXEMPT = {
+  // slug: 'reason' — populated by #1466 triage as components are classified
+  // won't-document. Empty today: nothing has been triaged exempt yet.
+};
+const DOCS_PAGE_WITHOUT_PAGE = new Set([
+  ...Object.keys(DOCS_PAGE_BACKLOG),
+  ...Object.keys(DOCS_PAGE_EXEMPT),
 ]);
 const acknowledgedSeen = new Set();
 
 const dead = []; // { file, line, kind, target, reason }
+
+// Disposition integrity — every docless slug must be exactly one of
+// backlog-with-issue or exempt-with-reason. This is what stops the allowlist
+// from silently accumulating untracked debt again (#1466).
+for (const [slug, issue] of Object.entries(DOCS_PAGE_BACKLOG)) {
+  if (!Number.isInteger(issue) || issue <= 0) {
+    dead.push({
+      file: 'scripts/lint-doc-links.js', line: 0, kind: 'slug',
+      target: `DOCS_PAGE_BACKLOG["${slug}"]`,
+      reason: `backlog entry needs a positive tracking issue number (got ${JSON.stringify(issue)}) — file/link an issue or move it to DOCS_PAGE_EXEMPT with a reason`,
+    });
+  }
+  if (slug in DOCS_PAGE_EXEMPT) {
+    dead.push({
+      file: 'scripts/lint-doc-links.js', line: 0, kind: 'slug',
+      target: `"${slug}"`,
+      reason: `slug is in both DOCS_PAGE_BACKLOG and DOCS_PAGE_EXEMPT — pick one`,
+    });
+  }
+}
+for (const [slug, reason] of Object.entries(DOCS_PAGE_EXEMPT)) {
+  if (typeof reason !== 'string' || !reason.trim()) {
+    dead.push({
+      file: 'scripts/lint-doc-links.js', line: 0, kind: 'slug',
+      target: `DOCS_PAGE_EXEMPT["${slug}"]`,
+      reason: `exempt entry needs a non-empty reason string explaining why it gets no docs-site page`,
+    });
+  }
+}
+
 // Anchor checks are deferred: resolving them needs github-slugger (ESM-only),
 // loaded via dynamic import after the synchronous scan. Each entry:
 // { file, line, target, targetFile, fragment }.
@@ -334,17 +388,17 @@ for (const file of mdxFiles) {
       const slug = cl[1];
       checkedSlug++;
       const pageExists = docPageExists(path.posix.join('components', slug));
-      if (COMPONENT_LINKS_WITHOUT_DOCS_PAGE.has(slug)) {
+      if (DOCS_PAGE_WITHOUT_PAGE.has(slug)) {
         acknowledgedSeen.add(slug);
         if (pageExists) {
-          // The debt was paid — the allowlist entry is now stale. Fail so it
+          // The debt was paid — the disposition entry is now stale. Fail so it
           // gets removed, keeping the list honest.
           dead.push({
             file: rel,
             line: i + 1,
             kind: 'slug',
             target: `<ComponentLinks slug="${slug}">`,
-            reason: `docs-site page for /docs/components/${slug} now exists — remove "${slug}" from COMPONENT_LINKS_WITHOUT_DOCS_PAGE in scripts/lint-doc-links.js`,
+            reason: `docs-site page for /docs/components/${slug} now exists — remove "${slug}" from DOCS_PAGE_BACKLOG / DOCS_PAGE_EXEMPT in scripts/lint-doc-links.js`,
           });
         }
         continue;
@@ -366,14 +420,14 @@ for (const file of mdxFiles) {
 // appears anywhere is stale (component or its ComponentLinks was removed) and
 // must leave the allowlist. Skip when a --files subset was scanned.
 if (!explicitFiles) {
-  for (const slug of COMPONENT_LINKS_WITHOUT_DOCS_PAGE) {
+  for (const slug of DOCS_PAGE_WITHOUT_PAGE) {
     if (!acknowledgedSeen.has(slug)) {
       dead.push({
         file: 'scripts/lint-doc-links.js',
         line: 0,
         kind: 'slug',
-        target: `COMPONENT_LINKS_WITHOUT_DOCS_PAGE: "${slug}"`,
-        reason: `no <ComponentLinks slug="${slug}"> remains in the corpus — remove this stale allowlist entry`,
+        target: `DOCS_PAGE_BACKLOG / DOCS_PAGE_EXEMPT: "${slug}"`,
+        reason: `no <ComponentLinks slug="${slug}"> remains in the corpus — remove this stale disposition entry`,
       });
     }
   }
