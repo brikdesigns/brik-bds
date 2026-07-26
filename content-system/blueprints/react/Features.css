@@ -20,7 +20,7 @@
 }
 
 .bds-features__container {
-  max-width: var(--size-container-xl, 1280px);
+  max-width: var(--content-width-xl);
   margin-inline: auto;
   padding-inline: var(--padding-lg);
 }
