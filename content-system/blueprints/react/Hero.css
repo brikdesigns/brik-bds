@@ -8,8 +8,8 @@
  * Tier-4 `--bds-hero-*` hooks let a consumer retheme without forking the block.
  *
  * Section rhythm + the centred container live in `../section-shell.css`
- * (`bds-blueprint-section` / `bds-blueprint-section__container`, ADR-021) — composed onto the same
- * elements in Hero.tsx, not redeclared here.
+ * (ADR-021): `bds-blueprint-section` and `bds-blueprint-section__container`
+ * are composed onto the same elements in Hero.tsx, not redeclared here.
  */
 
 .bds-hero {

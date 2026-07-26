@@ -625,6 +625,21 @@ const assertions = [
       return all.includes('.bds-blueprint-section') && scoped === null;
     })()
   },
+  { name: 'shell: rules stay inside @layer bds-components', pass: (() => {
+      // The safety property behind shipping global CSS to consumer sites: the
+      // shell is LAYERED, so any unlayered rule in a client repo outranks it.
+      // If a build step ever strips the @layer wrapper, that guarantee is gone
+      // and the package starts winning cascades it has no business winning.
+      const hrefs = [...homeHtml.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="([^"]+)"/g)].map((m) => m[1]);
+      const inline = [...homeHtml.matchAll(/<style>([\s\S]*?)<\/style>/g)].map((m) => m[1]);
+      const sources = [...hrefs.map((h) => {
+        try { return readFileSync(resolve(scratch, 'dist', h.replace(/^\//, '')), 'utf8'); }
+        catch { return ''; }
+      }), ...inline];
+      const carriers = sources.filter((css) => css.includes('.bds-blueprint-section'));
+      return carriers.length > 0 && carriers.every((css) => /@layer\s+bds-components/.test(css));
+    })()
+  },
   { name: 'shell: sr-only utility replaced the duplicated bp-* headings', pass:
       homeHtml.includes('class="bds-visually-hidden"') &&
       !homeHtml.includes('__sr-heading')

@@ -24,8 +24,8 @@
  * cascade rules. Section background inherits the page surface.
  *
  * Section rhythm + the centred container live in `../section-shell.css`
- * (`bds-blueprint-section` / `bds-blueprint-section__container`, ADR-021) — composed onto the same
- * elements in CardGrid.tsx, not redeclared here.
+ * (ADR-021): `bds-blueprint-section` and `bds-blueprint-section__container`
+ * are composed onto the same elements in CardGrid.tsx, not redeclared here.
  */
 
 /* Documented rhythm exception: a grid section needs more air under the last

@@ -13,9 +13,10 @@
  * let a consumer retheme without forking the block.
  *
  * Section rhythm + the centred container live in `../section-shell.css`
- * (`bds-blueprint-section` / `bds-blueprint-section__container`, ADR-021) — composed onto the same
- * elements in Features.tsx, not redeclared here. This family's rhythm moved
- * from 9vw to the harmonised 7vw with that extraction.
+ * (ADR-021): `bds-blueprint-section` and `bds-blueprint-section__container`
+ * are composed onto the same elements in Features.tsx, not redeclared here.
+ * This family's rhythm moved from 9vw to the harmonised 7vw with that
+ * extraction.
  */
 
 .bds-features {

@@ -11,10 +11,11 @@
  * structural (single column vs two column), per ADR-008 §3.
  *
  * Section rhythm + the centred container live in `../section-shell.css`
- * (`bds-blueprint-section` / `bds-blueprint-section__container`, ADR-021) — composed onto the same
- * elements in Cta.tsx, not redeclared here. This family's rhythm moved from
- * 8vw to the harmonised 7vw with that extraction; its deliberately narrower
- * band survives as the two Tier-4 overrides below (ADR-021 §3).
+ * (ADR-021): `bds-blueprint-section` and `bds-blueprint-section__container`
+ * are composed onto the same elements in Cta.tsx, not redeclared here. This
+ * family's rhythm moved from 8vw to the harmonised 7vw with that extraction;
+ * its deliberately narrower band survives as the two Tier-4 overrides below
+ * (ADR-021 §3).
  */
 
 .bds-cta {
