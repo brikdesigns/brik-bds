@@ -49,6 +49,16 @@ So in the **default** mode every desktop width renders identically before and af
 
 An earlier draft of this ADR claimed a 108px → 84px shift at 1200px in the *default* mode. That was wrong — it misread the `[data-mode-spacing]` blocks in `dist/tokens.css` as viewport breakpoints. The numbers above are computed from the actual token values.
 
+**Measured, not asserted.** Both Storybooks (base commit `5eecb87` and this change) were built and every `Blueprints/*` story rendered headless at 500 / 768 / 1440px, capturing computed `padding-block`, container `max-width` and `padding-inline` plus a full-page screenshot:
+
+| Viewport | Stories with any computed-style change | Screenshots differing |
+|---|---|---|
+| 500px | 8 of 17 | 6 of 17 |
+| 768px | 0 of 17 | 0 of 17 |
+| 1440px | 0 of 17 | 0 of 17 |
+
+The only deltas are the intended ones — `cta` 40px → 35px (8vw → 7vw), `features` and `support_plan` 45px → 35px (9vw → 7vw) — and they occur only below the saturation width. `hero`, `about` and `card_grid` (already 7vw) are untouched at every width. **Container `max-width` and `padding-inline` are identical for all 17 stories at all three widths**, so the container extraction and decision 3's `bds-cta` override are pixel-neutral.
+
 **The shell's own rhythm is deliberately not a Tier-4 hook.** ADR-014 requires a Tier-4 fallback to resolve to a Semantic token, never a raw `clamp()` literal, so `var(--bds-blueprint-section-padding-y, clamp(…))` is out. A family that genuinely needs different rhythm re-declares `padding-block` on its own selector and wins by being unlayered (see decision 2).
 
 **Two rhythm exceptions survive, both because they are twin-consistent:**
