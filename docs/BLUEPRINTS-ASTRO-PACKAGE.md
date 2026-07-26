@@ -247,6 +247,25 @@ export type { BlueprintProps, BlueprintSection, ClientFacts, ResolvedTheme, Know
 
 **Verification is prerequisite to first implementation PR:** a 10-line scratch Astro project `install`s `@brikdesigns/bds@task/blueprints-astro-spec` from the BDS worktree and imports `SiteHeader`. If resolution fails, fix the exports before shipping even one blueprint component.
 
+#### Amendment 2026-07-26 (#1439 / [ADR-021](adrs/ADR-021-blueprint-section-shell.md)) — the package now ships one global stylesheet
+
+Every blueprint was originally fully scoped: all CSS lived in the component's own `<style>` block, so the package shipped no global styles at all. That model cannot express a class shared *between* components, which is what the section shell needs.
+
+`content-system/blueprints/section-shell.css` is therefore shipped as source and side-effect-imported from each family blueprint's frontmatter:
+
+```astro
+---
+import type { BlueprintProps } from './types';
+import '../section-shell.css';   // global — Astro emits it unscoped and dedupes it
+---
+```
+
+Consumer impact:
+
+- **Nothing to import.** Astro bundles the file automatically, and only on pages that actually render a blueprint.
+- **It cannot outrank consumer CSS.** Every rule in it sits in `@layer bds-components`; an unlayered rule in a client repo always wins. This is the property that makes global CSS from a shared package safe — see ADR-021 §2.
+- **Package contract:** the file is listed in `files[]`, and `scripts/verify-blueprints-astro-exports.mjs` asserts its presence in the packed tarball. Omitting it breaks consumer `astro build` at import resolution.
+
 ### 2.8 Versioning + maintenance at scale
 
 - **Semver.** Adding a blueprint/archetype/vocabulary = minor. Changing a blueprint's props shape = MAJOR. Changing a CSS custom property name a client can override = MAJOR.

@@ -31,6 +31,9 @@
  */
 import type { BlueprintProps } from './types';
 
+// Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
+import '../section-shell.css';
+
 interface Props extends BlueprintProps {}
 
 const { section, clientFacts } = Astro.props;
@@ -40,11 +43,11 @@ const email = clientFacts.email;
 ---
 
 <section
-  class="bds-cta bds-cta--split"
+  class="bds-blueprint-section bds-cta bds-cta--split"
   aria-labelledby={titleId}
   data-blueprint-key="cta_split_contact"
 >
-  <div class="bds-cta__container">
+  <div class="bds-blueprint-section__container bds-cta__container">
     <div class="bds-cta__message">
       <h2 id={titleId} class="bds-cta__title">{section.heading}</h2>
       {section.body && (
@@ -86,15 +89,15 @@ const email = clientFacts.email;
 </section>
 
 <style>
+  /* Section rhythm + centred container: ../section-shell.css (ADR-021). */
   .bds-cta {
     background: var(--bds-cta-bg, var(--surface-primary));
-    padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
   }
 
   .bds-cta__container {
-    max-width: var(--content-width-xl);
-    margin-inline: auto;
-    padding-inline: var(--padding-xl);
+    /* The two-column CTA uses the shared full-width band with the cta
+       family's wider inline inset (ADR-021 §3). */
+    --bds-blueprint-section-padding-inline: var(--padding-xl);
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--gap-xl);

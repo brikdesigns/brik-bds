@@ -30,6 +30,9 @@ export interface Props {
   cta?: BlueprintCta;
 }
 
+// Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
+import '../section-shell.css';
+
 const {
   sectionKey,
   title,
@@ -46,12 +49,12 @@ const ctaUrl = cta && 'url' in cta ? cta.url : undefined;
 ---
 
 <section
-  class="bds-support-plan"
+  class="bds-blueprint-section bds-support-plan"
   data-blueprint-key="support_plan_callout_split"
   data-has-media={hasMedia ? 'true' : 'false'}
   aria-labelledby={titleId}
 >
-  <div class="bds-support-plan__container">
+  <div class="bds-blueprint-section__container">
     {(subtitle || title || description) && (
       <header class="bds-support-plan__header">
         {subtitle && <p class="bds-support-plan__subtitle">{subtitle}</p>}
@@ -91,15 +94,10 @@ const ctaUrl = cta && 'url' in cta ? cta.url : undefined;
   /* Mirrors ../react/SupportPlan.css — keep in sync until a unified CSS
      distribution lands across the React + Astro twins. */
 
+  /* Section rhythm + centred container: ../section-shell.css (ADR-021).
+     This family's rhythm moved from 9vw to the harmonised 7vw. */
   .bds-support-plan {
     background: var(--bds-support-plan-bg, var(--page-primary));
-    padding-block: clamp(var(--padding-xl), 9vw, var(--padding-huge));
-  }
-
-  .bds-support-plan__container {
-    max-width: 1280px;
-    margin-inline: auto;
-    padding-inline: var(--padding-lg);
   }
 
   /* ── Section header ─────────────────────────────────────────── */

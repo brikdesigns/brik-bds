@@ -26,6 +26,9 @@
  */
 import type { BlueprintProps } from './types';
 
+// Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
+import '../section-shell.css';
+
 interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
@@ -39,7 +42,7 @@ const featured = section.items[0];
   data-blueprint-key="testimonials_featured_large"
 >
   <div class="bp-testimonials-featured__container">
-    <h2 id={titleId} class="bp-testimonials-featured__sr-heading">
+    <h2 id={titleId} class="bds-visually-hidden">
       {section.heading ?? 'Featured testimonial'}
     </h2>
 
@@ -67,18 +70,6 @@ const featured = section.items[0];
     margin-inline: auto;
     padding-inline: var(--padding-xl);
     text-align: center;
-  }
-
-  .bp-testimonials-featured__sr-heading {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
   }
 
   .bp-testimonials-featured__quote {

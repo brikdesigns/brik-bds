@@ -25,16 +25,19 @@ export interface Props {
   description?: string;
 }
 
+// Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
+import '../section-shell.css';
+
 const { sectionKey, title, subtitle, description } = Astro.props;
 const titleId = `${sectionKey}-title`;
 ---
 
 <section
-  class="bds-card-grid"
+  class="bds-blueprint-section bds-card-grid"
   aria-labelledby={titleId}
   data-blueprint-key="card_grid"
 >
-  <div class="bds-card-grid__container">
+  <div class="bds-blueprint-section__container">
     <header class="bds-card-grid__header">
       {subtitle && (
         <p class="bds-card-grid__subtitle">{subtitle}</p>
@@ -52,19 +55,15 @@ const titleId = `${sectionKey}-title`;
   /* Mirrors ../react/CardGrid.css — keep in sync until a unified CSS
      distribution lands across the React + Astro twins. */
 
+  /* Section rhythm + centred container: ../section-shell.css (ADR-021).
+     The heavier bottom inset is a documented exception — unlayered here, so
+     it outranks the layered `.bds-blueprint-section` shorthand. */
   .bds-card-grid {
-    padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
     padding-block-end: clamp(
       var(--padding-huge),
       9vw,
       calc(var(--padding-huge) * 1.5)
     );
-  }
-
-  .bds-card-grid__container {
-    max-width: 1280px;
-    margin-inline: auto;
-    padding-inline: var(--padding-lg);
   }
 
   .bds-card-grid__header {

@@ -6,19 +6,14 @@
  * Per docs/COMPONENT-PATTERNS.md the CTA button styling lives in `.bds-button`
  * (the <Button> component). This file owns ONLY layout + non-component text.
  * Tier-4 `--bds-hero-*` hooks let a consumer retheme without forking the block.
- * Responsive padding uses a direct clamp() (no hook) per ADR-014 — a Tier-4
- * fallback must resolve to a Semantic token, never a raw clamp() literal.
+ *
+ * Section rhythm + the centred container live in `../section-shell.css`
+ * (ADR-021): `bds-blueprint-section` and `bds-blueprint-section__container`
+ * are composed onto the same elements in Hero.tsx, not redeclared here.
  */
 
 .bds-hero {
   background: var(--bds-hero-bg, var(--page-primary));
-  padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
-}
-
-.bds-hero__container {
-  max-width: var(--content-width-xl);
-  margin-inline: auto;
-  padding-inline: var(--padding-lg);
 }
 
 .bds-hero__content {
@@ -108,25 +103,11 @@
  * slot in a <Frame> (its own `.bds-frame--ratio-*` class provides the ratio),
  * so the block must not impose 4-5 there. */
 .bds-hero__missing {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--padding-xl);
-  background: var(--surface-secondary);
-  border: 2px dashed var(--border-secondary);
   border-radius: var(--bds-hero-image-radius, var(--border-radius-lg));
 }
 
 .bds-hero--split .bds-hero__missing {
   aspect-ratio: var(--aspect-4-5);
-}
-
-.bds-hero__missing-label {
-  margin: 0;
-  font-family: var(--font-family-body);
-  font-size: var(--body-xl);
-  color: var(--text-secondary);
-  text-align: center;
 }
 
 /* ── --with-pricing-card: interior split (content trail + image/price card) ──
