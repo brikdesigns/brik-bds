@@ -46,7 +46,7 @@ const section: BlueprintProps['section'] = {
 };
 
 const meta: Meta<typeof CtaDarkCentered> = {
-  title: 'Blueprints/cta_dark_centered',
+  title: 'Deprecated/cta-dark-centered',
   component: CtaDarkCentered,
   tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
   argTypes: {

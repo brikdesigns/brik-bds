@@ -43,7 +43,7 @@ const interiorSection: BlueprintProps['section'] = {
 };
 
 const meta: Meta<typeof HeroInteriorMinimal> = {
-  title: 'Blueprints/hero_interior_minimal',
+  title: 'Deprecated/hero-interior-minimal',
   component: HeroInteriorMinimal,
   tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
   argTypes: {
