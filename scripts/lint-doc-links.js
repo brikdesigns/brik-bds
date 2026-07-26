@@ -246,9 +246,7 @@ const DOCS_PAGE_BACKLOG = {
   'data-view': 1466,
   'dependent-select': 1466,
   'file-card': 1466,
-  'nav-item': 1466,
   'page': 1466,
-  'sub-navigation': 1466,
   'testimonial': 1466,
 };
 const DOCS_PAGE_EXEMPT = {
