@@ -1,0 +1,45 @@
+name: Cascade Contract Check
+
+# Runs the published `cascade-contract-check` engine against this repo's OWN
+# consumer surface: docs-site/app/global.css.
+#
+# docs-site consumes @brikdesigns/bds through the same two package entry points
+# every other consumer uses, so it is a consumer and the adoption contract
+# applies to it. It was importing both files UNLAYERED while the page it serves
+# (getting-started/cascade) documents the layer() requirement — brik-bds#1437.
+#
+# The engine itself is unit-tested in scripts/__tests__ (the `test` job). This
+# gate is the other half: it points the engine at the real file, so the docs
+# site can't drift back off the contract it publishes.
+#
+# Cheap by design: a plain Node script over one source file — no `npm ci`, no
+# build. The script has no runtime dependencies.
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: cascade-contract-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cascade-contract-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Check docs-site honors the cascade adoption contract
+        run: npm run cascade-contract-check
