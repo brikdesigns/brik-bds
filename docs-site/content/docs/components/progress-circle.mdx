@@ -1,0 +1,122 @@
+---
+title: Progress circle
+description: Circular indicator of completion. Use when a ring reads better than a bar — compact dashboards, completion meters, single-value tiles.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+ProgressCircle is the circular sibling of [ProgressBar](/docs/components/progress-bar) — same measurable 0–100 value, drawn as a ring instead of a bar. Reach for it when the layout favors a compact circle over a horizontal bar: dashboard tiles, completion meters, or a percentage that sits inside its own footprint. For unmeasurable loading, use [Spinner](/docs/components/spinner).
+
+## Use it for
+
+- Dashboard completion tiles ("Onboarding 72%")
+- Compact single-value progress where a bar would waste horizontal space
+- Score / goal rings with a centered percentage or custom label
+- Known-eventual operations that briefly need an indeterminate spin
+
+## Import
+
+```tsx
+import { ProgressCircle } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+`value` is a number 0–100. Pass `showValue` to render the percentage in the center.
+
+```tsx
+<ProgressCircle value={72} showValue label="Onboarding completion" />
+```
+
+### Sizes
+
+`sm` (64px), `md` (96px, default), `lg` (128px). Stroke width scales with the diameter.
+
+```tsx
+<ProgressCircle value={72} size="sm" showValue label="Compact" />
+<ProgressCircle value={72} size="md" showValue label="Default" />
+<ProgressCircle value={72} size="lg" showValue label="Prominent" />
+```
+
+### Status
+
+`status` recolors the fill stroke via canonical status tokens — `default`, `positive`, `warning`, `negative`.
+
+```tsx
+<ProgressCircle value={100} status="positive" showValue label="Complete" />
+<ProgressCircle value={40} status="warning" showValue label="Low" />
+<ProgressCircle value={15} status="negative" showValue label="Critical" />
+```
+
+### Custom center content
+
+`showValue` also accepts a ReactNode — pair the percentage with a sub-label instead of the plain `${value}%` default.
+
+```tsx
+<ProgressCircle
+  value={70}
+  size="lg"
+  label="Tasks complete"
+  showValue={
+    <div style={{ textAlign: 'center' }}>
+      <div style={{ fontSize: 'var(--heading-md)', fontWeight: 'var(--font-weight-bold)' }}>70%</div>
+      <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>of 200</div>
+    </div>
+  }
+/>
+```
+
+### Indeterminate
+
+`indeterminate` renders a continuous spin for unknown-duration progress. `value` is ignored and `aria-valuenow` is dropped in favor of `aria-busy`.
+
+```tsx
+<ProgressCircle value={0} indeterminate label="Loading" />
+```
+
+### Custom fill color
+
+`fillColor` is an escape hatch that overrides the status-token stroke. Prefer `status` for semantic color; reach for `fillColor` only for one-off brand-coded rings.
+
+```tsx
+<ProgressCircle value={60} fillColor="var(--background-brand-primary)" showValue label="Brand progress" />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use ProgressCircle for unmeasurable loading.** If you can't compute a percentage, use [Spinner](/docs/components/spinner). The `indeterminate` mode is for a *measurable* task that momentarily lacks a value (e.g. waiting on the first byte) — not as a permanent spinner substitute.
+</Callout>
+
+- **Don't use ProgressCircle for multi-step flows.** Step position is [ProgressStepper](/docs/components/progress-stepper); ProgressCircle is a single 0–100 value.
+- **Don't use it for a rating or score gauge.** A horizontal gauge bar for scores is [Meter](/docs/components/meter).
+
+## Accessibility
+
+- Renders a `<div role="progressbar">` with `aria-valuemin="0"`, `aria-valuemax="100"`, and `aria-valuenow` set to the clamped value.
+- In `indeterminate` mode, `aria-valuenow` is omitted and `aria-busy="true"` is set so assistive tech announces the pending state.
+- **Always pass `label`** — it becomes the accessible name. The centered `showValue` content is decorative; the SVG is `aria-hidden`.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `number` (0–100) *(required)* | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `status` | `'default' \| 'positive' \| 'warning' \| 'negative'` | `'default'` |
+| `label` | `string` | — |
+| `showValue` | `boolean \| ReactNode` | — |
+| `indeterminate` | `boolean` | `false` |
+| `fillColor` | `string` | status token stroke |
+
+Plus all standard `<div>` HTML attributes (excluding `role` and `children`, which ProgressCircle owns).
+
+## Related
+
+- [ProgressBar](/docs/components/progress-bar) — same value, drawn as a linear bar
+- [ProgressStepper](/docs/components/progress-stepper) — multi-step flow position, not a single value
+- [Spinner](/docs/components/spinner) — for indeterminate loading with no measurable value
+- [Meter](/docs/components/meter) — horizontal gauge for scores and ratings
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-progress-circle--overview)**

@@ -43,6 +43,7 @@
     "tooltip",
     "empty-state",
     "progress-bar",
+    "progress-circle",
     "---Control---",
     "switch",
     "slider",
