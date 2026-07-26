@@ -249,9 +249,7 @@ const DOCS_PAGE_BACKLOG = {
   'file-card': 1466,
   'logo': 1466,
   'nav-item': 1466,
-  'number-input': 1466,
   'page': 1466,
-  'search-input': 1466,
   'sub-navigation': 1466,
   'testimonial': 1466,
 };

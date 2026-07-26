@@ -25,6 +25,8 @@
     "text-input",
     "text-area",
     "password-input",
+    "search-input",
+    "number-input",
     "address-input",
     "select",
     "multi-select",

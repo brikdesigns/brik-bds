@@ -168,11 +168,11 @@ describe('lint-doc-links', () => {
   });
 
   it('tolerates a ComponentLinks slug on the acknowledged-debt allowlist', () => {
-    // `number-input` is a known docless component; the fixture docs-root has no
-    // page for it, so this passes only because it is allowlisted. (The former
-    // fixture slug `checklist` gained a docs page and left the list; before that,
-    // `service-tag` did the same in #1318.)
-    const { code } = run('<ComponentLinks slug="number-input" />\n');
+    // `dependent-select` is a known docless component; the fixture docs-root has
+    // no page for it, so this passes only because it is allowlisted. (The former
+    // fixture slug `number-input` gained a docs page and left the list; before
+    // that, `checklist` did the same, and `service-tag` in #1318.)
+    const { code } = run('<ComponentLinks slug="dependent-select" />\n');
     expect(code).toBe(0);
   });
 });

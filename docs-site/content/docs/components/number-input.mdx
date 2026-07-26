@@ -1,0 +1,102 @@
+---
+title: Number input
+description: Numeric field with BDS-styled increment and decrement steppers. Reach for it when a value is entered by number and nudged up or down — quantities, counts, durations.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+NumberInput is [TextInput](/docs/components/text-input) forced to `type="number"` with the native browser spinners hidden and replaced by BDS caret buttons. It respects `min`, `max`, and `step`, and works identically in controlled and uncontrolled modes. Reach for it whenever a value is typed as a number and adjusted by small increments — a quantity on a line item, a count, a duration.
+
+## Use it for
+
+- Quantity and count fields ("Qty", "Seats", "Rooms")
+- Bounded numeric entry where `min` / `max` guard the range
+- Values nudged by a fixed `step` (increments of 1, 5, 0.25)
+- Any numeric input that benefits from click-to-step alongside typing
+
+## Import
+
+```tsx
+import { NumberInput } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+The stepper buttons are always present. Clicking increment or decrement fires `onChange` with the clamped next value, so controlled and uncontrolled modes behave identically.
+
+```tsx
+// Uncontrolled
+<NumberInput label="Quantity" defaultValue={1} min={0} max={99} step={1} />
+
+// Controlled
+<NumberInput
+  label="Quantity"
+  value={qty}
+  onChange={(e) => setQty(Number(e.target.value))}
+  min={0}
+  max={99}
+/>
+```
+
+### Sizes
+
+`sm` (32px), `md` (40px, default), `lg` (48px) — inherited from TextInput.
+
+```tsx
+<NumberInput label="Compact" size="sm" defaultValue={1} />
+<NumberInput label="Default" size="md" defaultValue={1} />
+<NumberInput label="Prominent" size="lg" defaultValue={1} />
+```
+
+### Bounds and step
+
+`min`, `max`, and `step` are forwarded to the native input and enforced by the steppers — clicking never pushes the value past `min` / `max`, and each click moves by `step`.
+
+```tsx
+<NumberInput label="Rating" defaultValue={2.5} min={0} max={5} step={0.5} />
+```
+
+### Error and helper text
+
+Inherited from TextInput. `error` triggers `aria-invalid` and replaces `helperText`.
+
+```tsx
+<NumberInput label="Seats" defaultValue={0} min={1} error="At least one seat is required" />
+<NumberInput label="Seats" defaultValue={2} min={1} helperText="Between 1 and 8" />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use NumberInput for a plain text, email, tel, or url field.** Those are [TextInput](/docs/components/text-input) directly — NumberInput's steppers and `type="number"` are wrong for non-numeric entry.
+</Callout>
+
+- **Don't use it for a standalone `+` / `−` counter** with no typed value — that is [Stepper](/docs/components/stepper).
+- **Don't use it for a bounded value picked on a track.** A range chosen by dragging is [Slider](/docs/components/slider).
+
+## Accessibility
+
+- The steppers are `<button type="button">` with `aria-label` "Increment" / "Decrement" and `tabIndex={-1}` — they are reachable by pointer, and keyboard users step the value with the native `ArrowUp` / `ArrowDown` on the focused input.
+- **Always pass `label`** — it becomes the accessible name for the field.
+- `type="number"` is reserved by NumberInput and cannot be overridden.
+
+## API
+
+{/* props-check: NumberInputProps @ components/ui/NumberInput/NumberInput.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `min` | `number` | — |
+| `max` | `number` | — |
+| `step` | `number` | `1` |
+
+Inherits all [TextInput](/docs/components/text-input) props except `type` (forced to `"number"`) and `iconAfter` (reserved for the steppers) — including `label`, `size`, `error`, `helperText`, `fullWidth`, and `disabled`.
+
+## Related
+
+- [TextInput](/docs/components/text-input) — the base field NumberInput wraps
+- [Stepper](/docs/components/stepper) — standalone increment / decrement counter with no typed value
+- [Slider](/docs/components/slider) — bounded value chosen on a track
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-number-input--overview)**
