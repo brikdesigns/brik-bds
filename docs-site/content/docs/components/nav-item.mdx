@@ -1,0 +1,96 @@
+---
+title: Nav item
+description: The atomic navigation link — one label, optional icon, with hover, active, and disabled states. The building block SidebarNavigation and SubNavigation compose.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+NavItem is a single navigation link with built-in hover, active, and disabled styling. It is the primitive that [SidebarNavigation](/docs/components/sidebar-navigation) and [SubNavigation](/docs/components/sub-navigation) render internally — reach for it directly only when composing a custom navigation surface those two don't cover.
+
+## Use it for
+
+- Composing a bespoke navigation rail or bar from individual links
+- A one-off nav link that sits outside a full navigation component
+- Icon-only nav entries in a collapsed rail
+
+## Import
+
+```tsx
+import { NavItem } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+`label` is the visible text; `href` makes it a link, or omit `href` and pass `onClick` for button-style behavior. `active` marks the current page and sets `aria-current="page"`.
+
+```tsx
+<NavItem label="Overview" href="/overview" active />
+<NavItem label="Settings" href="/settings" icon={<Icon icon={Gear} />} />
+```
+
+### Disabled
+
+`disabled` blocks the click, mutes the styling, sets `aria-disabled`, and drops the item out of the tab order.
+
+```tsx
+<NavItem label="Billing" href="/billing" disabled />
+```
+
+### Icon only
+
+`iconOnly` hides the label and promotes it to the `aria-label` — for collapsed rails where only the icon shows.
+
+```tsx
+<NavItem label="Search" href="/search" icon={<Icon icon={MagnifyingGlass} />} iconOnly />
+```
+
+### Client-side routing
+
+`linkComponent` swaps the default bare `<a>` for a router-aware component (Next.js `Link`, Remix `Link`) so navigation stays client-side. It is ignored when `disabled` or when `href` is omitted. See [ADR-012](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-012-link-component-escape-hatch.md).
+
+```tsx
+import Link from 'next/link';
+
+<NavItem label="Dashboard" href="/dashboard" linkComponent={Link} />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't hand-assemble a full nav out of NavItems** when a navigation component already fits. A vertical app rail is [SidebarNavigation](/docs/components/sidebar-navigation); a second-column section nav is [SubNavigation](/docs/components/sub-navigation). NavItem is the primitive underneath both — use it directly only for surfaces they don't cover.
+</Callout>
+
+- **Don't use it for in-page tabs.** Switching panels within a page is [TabBar](/docs/components/tab-bar).
+- **Don't use it as a button.** A general action trigger is [Button](/docs/components/button); NavItem is for navigation.
+
+## Accessibility
+
+- Renders an `<a>` (or the injected `linkComponent`); `active` sets `aria-current="page"`.
+- `disabled` sets `aria-disabled`, clears `href`, and removes the item from the tab order (`tabIndex={-1}`).
+- In `iconOnly` mode the `label` becomes the `aria-label`, so the control keeps an accessible name with no visible text.
+
+## API
+
+{/* props-check: NavItemProps @ components/ui/NavItem/NavItem.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` | `string` *(required)* | — |
+| `icon` | `ReactNode` | — |
+| `href` | `string` | — |
+| `onClick` | `(e: MouseEvent<HTMLAnchorElement>) => void` | — |
+| `active` | `boolean` | `false` |
+| `disabled` | `boolean` | `false` |
+| `iconOnly` | `boolean` | `false` |
+| `linkComponent` | `BdsLinkComponent` | — |
+
+Plus `className` for layout-slot integration.
+
+## Related
+
+- [SidebarNavigation](/docs/components/sidebar-navigation) — vertical app rail built from NavItems
+- [SubNavigation](/docs/components/sub-navigation) — second-column section nav built from NavItems
+- [TabBar](/docs/components/tab-bar) — in-page panel switching
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-nav-item--overview)**
