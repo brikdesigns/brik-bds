@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ProgressStepper, type ProgressStep } from './ProgressStepper';
+import { Button } from '../Button';
 
 const meta: Meta<typeof ProgressStepper> = {
   title: 'Components/progress-stepper',
@@ -124,19 +125,20 @@ export const WithStepNavigation: Story = {
               : 'All steps completed!'}
           </p>
           <div style={{ display: 'flex', gap: 'var(--gap-md)' }}>
-            <button
+            <Button
+              variant="secondary"
               onClick={() => setActive(Math.max(0, active - 1))}
               disabled={active === 0}
             >
               Previous
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="primary"
               onClick={() => setActive(Math.min(steps.length, active + 1))}
               disabled={active >= steps.length}
-              style={{ backgroundColor: 'var(--background-brand-primary)', color: 'var(--text-inverse)', border: 'none', padding: 'var(--padding-tiny) var(--padding-md)', borderRadius: 'var(--border-radius-md)', cursor: 'pointer' }}
             >
               Next
-            </button>
+            </Button>
           </div>
         </div>
       </div>
