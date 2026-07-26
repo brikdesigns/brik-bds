@@ -68,54 +68,17 @@ The token-layer utility classes apply named keyframes with BDS duration tokens. 
 | `.bds-enter-slide-up` | translateY(8px → 0) + fade |
 | `.bds-enter-pop` | scale(0 → 1) with spring overshoot |
 
-## Scroll-triggered reveals
+## Effects in this tier
 
-Add the class + `data-reveal` attribute. The IntersectionObserver snippet above applies `.is-visible` when the element enters the viewport.
+Class tables, code, and live demos live on the effect pages. This page owns what the tier loads and when to escalate off it.
 
-| Class | Effect |
-|---|---|
-| `.animate-fade-up` | Most common reveal — opacity + translateY(20px → 0) |
-| `.animate-fade-down` | For above-the-fold drops — opacity + translateY(-20px → 0) |
-| `.animate-fade-left` | Horizontal entrance — opacity + translateX(-20px → 0) |
-| `.animate-fade-right` | opacity + translateX(20px → 0) |
-
-## Stagger patterns
-
-Combine entrance classes with stagger helpers for sequential list reveals.
-
-```html
-<ul>
-  <li class="bds-enter-fade bds-stagger-1">First item</li>
-  <li class="bds-enter-fade bds-stagger-2">Second item</li>
-  <li class="bds-enter-fade bds-stagger-3">Third item</li>
-</ul>
-```
-
-Six stagger delays available: `.bds-stagger-1` through `.bds-stagger-6`. Values come from `--stagger-1` through `--stagger-6` tokens in `gap-fills.css`. For dynamic stagger (unknown item count, reversed sequences), see the [GSAP tier](/docs/motion/tiers/gsap).
-
-## Hover effects
-
-CSS-only micro-interactions. No JS required.
-
-| Class | Effect | Typical use |
+| Effect | Classes | Reference |
 |---|---|---|
-| `.hover-lift` | `translateY(-4px)` + subtle shadow increase | Buttons, CTAs |
-| `.hover-scale` | `scale(1.03)` | Cards, image tiles |
-| `.hover-glow` | Box shadow glow in brand color | Accent buttons, badges |
-| `.hover-dim` | `opacity: 0.75` | Image overlays, nav items |
-| `.hover-underline` | Animated underline grows from left | Text links |
-| `.click-press` | `scale(0.97)` on `:active` | Pair with `.hover-lift` on buttons |
+| Fade / slide scroll reveals | `.animate-fade-up` and siblings | [Scroll reveals](/docs/motion/effects/scroll-reveals) |
+| Stagger | `.bds-stagger-1` through `.bds-stagger-6` | [Scroll reveals](/docs/motion/effects/scroll-reveals) |
+| Hover micro-interactions | `.hover-lift` and siblings, `.click-press` | [Hover](/docs/motion/effects/hover) |
 
-<EffectGrid columns={3}>
-  <HoverDemo className="hover-lift" label=".hover-lift" />
-  <HoverDemo className="hover-scale" label=".hover-scale" />
-  <HoverDemo className="hover-glow" label=".hover-glow" />
-  <HoverDemo className="hover-dim" label=".hover-dim" />
-  <HoverDemo className="hover-underline" label=".hover-underline" />
-  <HoverDemo className="hover-lift click-press" label=".hover-lift.click-press" />
-</EffectGrid>
-
-See [Hover Effects](/docs/motion/effects/hover) for magnetic and cursor-spotlight variants (those require Premium).
+Stagger delays read `--stagger-1` through `--stagger-6` from `gap-fills.css`, so a static item count needs no JS. Escalate to the [GSAP tier](/docs/motion/tiers/gsap) when the count is dynamic, the sequence reverses on exit, or the stagger is non-linear. Magnetic cursor and cursor-spotlight hover variants are Premium — see [Hover](/docs/motion/effects/hover).
 
 ## Attention animations
 
