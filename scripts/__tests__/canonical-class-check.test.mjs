@@ -163,6 +163,18 @@ describe('extractClassReferences', () => {
     expect(refs.has('card')).toBe(true);
   });
 
+  // A bare marker is still skipped here — the sibling gates suppress on ANY
+  // marker; the reason-required hard-fail (brikdesigns/brik-bds#1469) is
+  // centralized in lint-tokens to avoid duplicate output across gates.
+  it('honors a bare bds-lint-ignore too (reason enforced by lint-tokens)', () => {
+    const refs = extractClassReferences([
+      '.btn { padding: 0; } /* bds-lint-ignore */',
+      '.card { padding: 0; }',
+    ].join('\n'));
+    expect(refs.has('btn')).toBe(false);
+    expect(refs.has('card')).toBe(true);
+  });
+
   it('skips classes inside block comments', () => {
     const refs = extractClassReferences('/* example: .btn--primary */ .real-class { color: red; }');
     expect(refs.has('btn--primary')).toBe(false);
