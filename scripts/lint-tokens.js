@@ -1118,8 +1118,13 @@ function main() {
     }
   }
 
-  // Blueprint files: Tier 4 rule subset only (#1043 / ADR-014) — fallback-literal
-  // + retired-bp namespace. NOT the full token suite (see discovery note above).
+  // Blueprint files: Tier 4 hook discipline (fallback-literal + retired-bp) PLUS
+  // the unknown-token gate (#491). The unknown-token rule is the specific check
+  // that would have caught the fictional `--space-*` / `--size-container-*` /
+  // `--line-height-*` names that shipped to Astro consumers rendering as zero
+  // padding. Rule 1 (primitive-in-CSS) and Rule 2 (hardcoded value) stay OFF for
+  // blueprints for now — the primitive `--color-*` service-mapping and the raw
+  // rgba box-shadow are separate debt tracked under #1438.
   for (const file of blueprintFiles) {
     const content = fs.readFileSync(file, 'utf8');
     const lines = content.split('\n');
@@ -1128,6 +1133,7 @@ function main() {
       const line = lines[i];
       const lineNum = i + 1;
 
+      allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, true));
       allViolations.push(...checkFallbackLiterals(line, lineNum, file, true));
       allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));
     }

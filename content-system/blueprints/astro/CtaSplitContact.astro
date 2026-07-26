@@ -88,30 +88,30 @@ const email = clientFacts.email;
 <style>
   .bds-cta {
     background: var(--bds-cta-bg, var(--surface-primary));
-    padding-block: clamp(var(--space-3xl), 7vw, var(--space-5xl));
+    padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
   }
 
   .bds-cta__container {
-    max-width: var(--size-container-xl, 1280px);
+    max-width: var(--content-width-xl);
     margin-inline: auto;
-    padding-inline: var(--space-xl);
+    padding-inline: var(--padding-xl);
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-2xl);
+    gap: var(--gap-xl);
     align-items: center;
   }
 
   @media (min-width: 768px) {
     .bds-cta__container {
       grid-template-columns: 3fr 2fr;
-      gap: var(--space-3xl);
+      gap: var(--gap-huge);
     }
   }
 
   .bds-cta__message {
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
+    gap: var(--gap-md);
   }
 
   .bds-cta__title {
@@ -119,7 +119,7 @@ const email = clientFacts.email;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-xl));
     font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-tight);
+    line-height: var(--font-line-height-tight);
     color: var(--bds-cta-heading-color, var(--text-primary));
   }
 
@@ -127,7 +127,7 @@ const email = clientFacts.email;
     margin: 0;
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);
-    line-height: var(--line-height-relaxed);
+    line-height: var(--font-line-height-relaxed);
     color: var(--bds-cta-body-color, var(--text-secondary));
     max-width: 55ch;
   }
@@ -136,23 +136,23 @@ const email = clientFacts.email;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--space-md);
-    margin-top: var(--space-sm);
+    gap: var(--gap-md);
+    margin-top: var(--gap-sm);
   }
 
   .bds-cta__aside {
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
+    gap: var(--gap-md);
     border-left: 1px solid var(--bds-cta-divider, var(--border-secondary));
-    padding-inline-start: var(--space-lg);
+    padding-inline-start: var(--padding-lg);
   }
 
   @media (max-width: 767px) {
     .bds-cta__aside {
       border-left: none;
       border-top: 1px solid var(--bds-cta-divider, var(--border-secondary));
-      padding-top: var(--space-lg);
+      padding-top: var(--padding-lg);
       padding-inline-start: 0;
     }
   }
@@ -160,7 +160,7 @@ const email = clientFacts.email;
   .bds-cta__method {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2xs);
+    gap: var(--gap-tiny);
     color: var(--bds-cta-method-color, var(--text-primary));
     text-decoration: none;
     transition: color 120ms ease-out;

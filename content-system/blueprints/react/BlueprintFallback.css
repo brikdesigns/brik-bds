@@ -44,7 +44,7 @@
 }
 
 .bp-fallback code {
-  font-family: var(--font-family-mono, ui-monospace, monospace);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.9em;
   padding: 0 4px;
   background: var(--surface-primary);

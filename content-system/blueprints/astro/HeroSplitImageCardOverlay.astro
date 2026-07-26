@@ -188,7 +188,7 @@ const cta = section.cta;
       <aside class="bds-hero__media-card">
         <div
           class="bds-hero__image-frame"
-          style={imageRatio !== 'square' ? `--_bds-hero-image-ratio: ${aspectToken(imageRatio)}` : undefined}
+          style={imageRatio !== 'square' ? `--bds-hero-image-ratio: ${aspectToken(imageRatio)}` : undefined}
         >
           <img
             src={priceCard.imageUrl}
@@ -219,7 +219,7 @@ const cta = section.cta;
         class="bds-hero__missing"
         data-content-needed="hero_image_url"
         role="presentation"
-        style={imageRatio !== 'square' ? `--_bds-hero-image-ratio: ${aspectToken(imageRatio)}` : undefined}
+        style={imageRatio !== 'square' ? `--bds-hero-image-ratio: ${aspectToken(imageRatio)}` : undefined}
       >
         <p class="bds-hero__missing-label">
           Hero image card missing for this page.
@@ -366,7 +366,7 @@ const cta = section.cta;
   }
 
   .bds-hero__container {
-    max-width: var(--size-container-xl, 1280px);
+    max-width: var(--content-width-xl);
     margin-inline: auto;
     padding-inline: var(--padding-lg);
     display: grid;
@@ -419,7 +419,7 @@ const cta = section.cta;
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-xl), 5vw, var(--heading-xxl));
     font-weight: var(--font-weight-bold);
-    line-height: var(--line-height-tight, 1.05);
+    line-height: var(--font-line-height-tight);
     color: var(--bds-hero-headline-color, var(--text-primary));
   }
 
@@ -427,7 +427,7 @@ const cta = section.cta;
     margin: 0;
     font-family: var(--font-family-body);
     font-size: var(--body-xl);
-    line-height: var(--line-height-relaxed, 1.5);
+    line-height: var(--font-line-height-relaxed);
     color: var(--bds-hero-lead-color, var(--text-primary));
     max-width: 55ch;
   }
@@ -443,7 +443,7 @@ const cta = section.cta;
   }
 
   .bds-hero__image-frame {
-    aspect-ratio: var(--_bds-hero-image-ratio, var(--aspect-1-1));
+    aspect-ratio: var(--bds-hero-image-ratio, var(--aspect-1-1));
     overflow: hidden;
     border-radius: var(--border-radius-md);
     background: var(--surface-secondary);
@@ -482,7 +482,7 @@ const cta = section.cta;
   }
 
   .bds-hero__missing {
-    aspect-ratio: var(--_bds-hero-image-ratio, var(--aspect-1-1));
+    aspect-ratio: var(--bds-hero-image-ratio, var(--aspect-1-1));
     display: flex;
     align-items: center;
     justify-content: center;
