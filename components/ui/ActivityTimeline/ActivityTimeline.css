@@ -33,7 +33,7 @@
 /* Dot */
 .bds-activity-timeline__dot {
   width: 28px; /* bds-lint-ignore — fixed dot size */
-  height: 28px; /* bds-lint-ignore */
+  height: 28px; /* bds-lint-ignore — fixed 28px timeline marker size, not a spacing-grid token */
   border-radius: var(--border-radius-pill);
   background-color: var(--surface-secondary);
   display: flex;

@@ -39,7 +39,7 @@ const Box = ({ children, w }: { children?: React.ReactNode; w?: string }) => (
       border: '1px dashed var(--border-secondary)',
       borderRadius: 'var(--border-radius-sm)',
       fontFamily: 'var(--font-family-body)',
-      fontSize: 'var(--body-sm)', // bds-lint-ignore
+      fontSize: 'var(--body-sm)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
       color: 'var(--text-primary)',
       textAlign: 'center' as const,
     }}
@@ -52,7 +52,7 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   <div
     style={{
       fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--body-xs)', // bds-lint-ignore
+      fontSize: 'var(--body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
       textTransform: 'uppercase' as const,
       letterSpacing: '0.05em',
       color: 'var(--text-muted)',

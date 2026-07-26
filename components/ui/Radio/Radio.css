@@ -31,7 +31,7 @@
 
 .bds-radio__indicator {
   width: 22px; /* bds-lint-ignore — fixed radio indicator size */
-  height: 22px; /* bds-lint-ignore */
+  height: 22px; /* bds-lint-ignore — fixed 22px control size, not a spacing-grid token */
   flex-shrink: 0;
   border-radius: 50%;
   border: var(--border-width-lg) solid var(--border-primary);
@@ -47,7 +47,7 @@
 .bds-radio__indicator::after {
   content: '';
   width: 10px; /* bds-lint-ignore — fixed inner dot size */
-  height: 10px; /* bds-lint-ignore */
+  height: 10px; /* bds-lint-ignore — fixed 10px inner dot size, not a spacing-grid token */
   border-radius: 50%;
   background-color: transparent;
   transition: background-color 0.15s;

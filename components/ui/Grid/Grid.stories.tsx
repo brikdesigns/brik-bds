@@ -45,7 +45,7 @@ const Tile = ({ children }: { children: React.ReactNode }) => (
       border: '1px solid var(--border-secondary)',
       borderRadius: 'var(--border-radius-md)',
       fontFamily: 'var(--font-family-body)',
-      fontSize: 'var(--body-sm)', // bds-lint-ignore
+      fontSize: 'var(--body-sm)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
       color: 'var(--text-primary)',
       textAlign: 'center' as const,
       minHeight: 80,
@@ -62,7 +62,7 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   <div
     style={{
       fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--body-xs)', // bds-lint-ignore
+      fontSize: 'var(--body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
       textTransform: 'uppercase' as const,
       letterSpacing: '0.05em',
       color: 'var(--text-muted)',
