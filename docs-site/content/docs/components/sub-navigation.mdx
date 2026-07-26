@@ -1,0 +1,104 @@
+---
+title: Sub navigation
+description: The second-column section nav for two-column app shells. Pairs a collapsed primary sidebar with section-specific links, each rendered as a NavItem.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+SubNavigation is the second column of a two-column app shell — it pairs a collapsed primary [SidebarNavigation](/docs/components/sidebar-navigation) with a panel of section-specific links. It takes an `items` array and renders each entry as a [NavItem](/docs/components/nav-item) inside a `<nav>` landmark, with optional header and footer slots. For a single-sidebar shell, use SidebarNavigation directly.
+
+## Use it for
+
+- The section-nav column in a two-column app shell (collapsed rail + sub-nav + content)
+- Grouping the pages of one product area behind a shared section header
+- Any vertical list of section links that needs a header, footer, or a panel divider
+
+## Import
+
+```tsx
+import { SubNavigation } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+`items` is an array of `{ label, href, active?, icon?, disabled? }`. Each becomes a NavItem; mark the current page with `active`.
+
+```tsx
+<SubNavigation
+  ariaLabel="Settings navigation"
+  items={[
+    { label: 'Profile', href: '/settings/profile', active: true },
+    { label: 'Security', href: '/settings/security' },
+    { label: 'Billing', href: '/settings/billing' },
+  ]}
+/>
+```
+
+### Header and footer
+
+`header` and `footer` render above and below the item list — a section title up top, a secondary action or account row at the bottom.
+
+```tsx
+<SubNavigation
+  header={<span>Settings</span>}
+  footer={<NavItem label="Sign out" href="/logout" />}
+  items={items}
+/>
+```
+
+### Borderless
+
+`bordered` (default `true`) draws the right-side divider between the sub-nav panel and the content column. Set `false` when the shell supplies its own separation — only the right border is removed; header/footer dividers are unaffected.
+
+```tsx
+<SubNavigation bordered={false} items={items} />
+```
+
+### Custom width and routing
+
+`width` overrides the default `194px`. `linkComponent` forwards a router-aware component to every NavItem for client-side routing. See [ADR-012](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-012-link-component-escape-hatch.md).
+
+```tsx
+import Link from 'next/link';
+
+<SubNavigation width="220px" linkComponent={Link} items={items} />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use SubNavigation as the primary app rail.** The top-level product navigation is [SidebarNavigation](/docs/components/sidebar-navigation). SubNavigation is the *second* column — it assumes a primary nav already exists.
+</Callout>
+
+- **Don't use it for in-page tabs.** Switching panels within a single page is [TabBar](/docs/components/tab-bar).
+- **Don't hand-build the rows.** Each item is a [NavItem](/docs/components/nav-item) — pass the `items` array rather than composing children.
+
+## Accessibility
+
+- Renders an `<aside>` wrapping a `<nav>` landmark. Pass `ariaLabel` (defaults to `"Section navigation"`) — **required when more than one nav is on the page** so each landmark is distinguishable.
+- Active state and keyboard/focus behavior come from the underlying [NavItem](/docs/components/nav-item) — the current item carries `aria-current="page"`.
+
+## API
+
+{/* props-check: SubNavigationProps @ components/ui/SubNavigation/SubNavigation.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `SubNavItem[]` *(required)* | — |
+| `header` | `ReactNode` | — |
+| `footer` | `ReactNode` | — |
+| `width` | `string` | `'194px'` |
+| `bordered` | `boolean` | `true` |
+| `ariaLabel` | `string` | `'Section navigation'` |
+| `linkComponent` | `BdsLinkComponent` | — |
+
+Each `SubNavItem` is `{ label, href, active?, icon?, disabled? }`.
+
+## Related
+
+- [SidebarNavigation](/docs/components/sidebar-navigation) — the primary rail SubNavigation pairs with
+- [NavItem](/docs/components/nav-item) — the link primitive each row renders as
+- [TabBar](/docs/components/tab-bar) — in-page panel switching
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-sub-navigation--overview)**

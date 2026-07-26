@@ -72,6 +72,8 @@
     "---Navigation---",
     "top-navigation",
     "sidebar-navigation",
+    "sub-navigation",
+    "nav-item",
     "tab-bar",
     "breadcrumb",
     "menu",
