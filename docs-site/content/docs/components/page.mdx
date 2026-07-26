@@ -1,0 +1,99 @@
+---
+title: Page
+description: The page shell container — a shared horizontal inset and a known header-to-body rhythm. The connective tissue PageHeader and PageContent compose inside.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Page is the shell container every product page shares: a [PageHeader](/docs/components/page-header) handing off to a `PageContent` body across a known vertical gap, inside one shared horizontal column. It owns the page's inset and header-to-body rhythm so individual pages stop re-deriving them. Composition uses **sibling named exports** — `Page`, `PageHeader`, `PageContent` — not a compound `Page.Header` namespace (a compound static does not survive Next/Turbopack RSC bundling).
+
+## Use it for
+
+- The outer shell of any product page — header + body in a shared column
+- Standardizing horizontal inset and header→body spacing across a product
+- Full-bleed board / table pages that need the body to break out and own its scroll
+
+## Import
+
+```tsx
+import { Page, PageHeader, PageContent } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+`padding` sets the shared horizontal inset (single source of truth for the column); `gap` sets the vertical space between header and body.
+
+```tsx
+// The parent must be a flex column — the app shell provides this.
+<Page padding="md" gap="xl">
+  <PageHeader title="Services" subtitle="…" actions={<Button>Add</Button>} />
+  <PageContent>
+    <FilterBar total={49} filtered={49} label="services" />
+    <Table>…</Table>
+  </PageContent>
+</Page>
+```
+
+<Callout type="info">
+  `Page` always sets `flex: 1; min-height: 0` on itself so fill-height bodies work — but that only takes effect inside a flex-column parent (the app shell). In a non-flex parent it sizes to content: degraded, not broken.
+</Callout>
+
+### Full-bleed body with internal scroll
+
+`PageContent` inherits the page inset by default. Set `padding="none"` to break out edge-to-edge for a board or table, and `scroll` so the body scrolls internally while the page frame stays put.
+
+```tsx
+<Page padding="md">
+  <PageHeader title="Board" />
+  <PageContent padding="none" scroll>
+    <Board>…</Board>
+  </PageContent>
+</Page>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use Page for generic content grouping.** It is the page-level shell (header + body column). For arranging content *within* the body, use the layout primitives [Stack](/docs/components/stack), [Grid](/docs/components/grid), [Cluster](/docs/components/cluster), or [Frame](/docs/components/frame).
+</Callout>
+
+- **Don't nest Page inside Page.** One shell per page — additional structure comes from the layout primitives inside `PageContent`.
+
+## Accessibility
+
+- Page is a structural `<div>` shell — semantics come from what you place inside it ([PageHeader](/docs/components/page-header)'s heading, the body's landmarks).
+- Keep the app shell a flex column so the fill-height + internal-scroll contract holds; otherwise the body won't own its scroll region.
+
+## API
+
+### Page
+
+{/* props-check: PageProps @ components/ui/Page/Page.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `padding` | `'none' \| 'sm' \| 'md' \| 'lg'` | `'md'` |
+| `gap` | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| 'huge'` | `'xl'` |
+| `children` | `ReactNode` *(required)* | — |
+
+Plus all standard `<div>` HTML attributes.
+
+### PageContent
+
+{/* props-check: PageContentProps @ components/ui/Page/PageContent.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `padding` | `'inherit' \| 'none' \| 'sm' \| 'md' \| 'lg'` | `'inherit'` |
+| `gap` | `'none' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| 'huge'` | `'lg'` |
+| `scroll` | `boolean` | `false` |
+
+Plus all standard `<div>` HTML attributes.
+
+## Related
+
+- [PageHeader](/docs/components/page-header) — the header region that pairs with PageContent inside Page
+- [Stack](/docs/components/stack) · [Grid](/docs/components/grid) · [Cluster](/docs/components/cluster) · [Frame](/docs/components/frame) — layout primitives for arranging body content
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/layouts-page--overview)**

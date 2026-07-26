@@ -1,0 +1,98 @@
+---
+title: Addable tag list
+description: A reveal-on-click list of removable text tags. Plain text entry by default, or a filtering combobox when you pass a suggestion set.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+AddableTagList is a reveal-on-click field for building a list of removable text tags. Click Add, type a value, press Enter — it becomes a removable [Tag](/docs/components/tag). Pass a `suggestions` set and it upgrades to a filtering combobox; omit it and it is a plain text input. It is the single successor API to the older `AddableTextList` (plain) and `AddableComboList` (suggestion-backed) per ADR-003.
+
+## Use it for
+
+- Free-form tag or keyword entry (anti-messages, aliases, labels)
+- Suggestion-backed entry where users pick from a known set but can also add their own
+- A bounded list of short string values that each need a remove affordance
+
+## Import
+
+```tsx
+import { AddableTagList } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Plain
+
+Without `suggestions`, it is a plain text input — Enter commits the value, Backspace on an empty input removes the last tag.
+
+```tsx
+const [msgs, setMsgs] = useState<string[]>([]);
+
+<AddableTagList label="Anti-messages" values={msgs} onChange={setMsgs} />
+```
+
+### Suggestion combobox
+
+Pass `suggestions` and typing filters the list; Enter commits the highlighted suggestion or a free-form value. Add `strict` to reject anything not in the set.
+
+```tsx
+<AddableTagList
+  label="Services offered"
+  values={services}
+  onChange={setServices}
+  suggestions={getIndustryServices(industrySlug)}
+  placeholder="Search or add a service…"
+/>
+```
+
+### Constraints
+
+`maxItems` hides the input once the limit is reached; `allowDuplicates` (default `false`) permits case-insensitive repeats; `disabled` renders the tags as read-only chips with no controls.
+
+```tsx
+<AddableTagList values={tags} onChange={setTags} maxItems={5} />
+<AddableTagList values={tags} onChange={setTags} disabled />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use it to pick from a fixed set with no free-form entry.** If users only ever choose from known options, use [MultiSelect](/docs/components/multi-select) — AddableTagList's value is the add-your-own affordance.
+</Callout>
+
+- **Don't use it for structured rows.** Key/value or multi-field entries are [AddableFieldRowList](/docs/components/addable-field-row-list) or [AddableEntryList](/docs/components/addable-entry-list).
+
+## Accessibility
+
+- In suggestion mode the input is a `role="combobox"` with `aria-expanded`, `aria-controls`, and `aria-activedescendant` wired to the `role="listbox"` dropdown.
+- Each committed value is a removable [Tag](/docs/components/tag) with an accessible remove label (default "Remove").
+- Strict-mode rejections announce via an `aria-live="polite"` hint.
+
+## API
+
+{/* props-check: AddableTagListProps @ components/ui/AddableTagList/AddableTagList.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `values` | `string[]` *(required)* | — |
+| `onChange` | `(next: string[]) => void` *(required)* | — |
+| `suggestions` | `string[]` | — |
+| `strict` | `boolean` | `false` |
+| `label` | `string` | — |
+| `helperText` | `string` | — |
+| `placeholder` | `string` | — |
+| `addLabel` | `string` | `'Add'` |
+| `removeLabel` | `string` | `'Remove'` |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `disabled` | `boolean` | `false` |
+| `maxItems` | `number` | — |
+| `allowDuplicates` | `boolean` | `false` |
+
+## Related
+
+- [AddableTextList](/docs/components/addable-text-list) — the plain-text predecessor this consolidates
+- [AddableComboList](/docs/components/addable-combo-list) — the suggestion-backed predecessor this consolidates
+- [AddableEntryList](/docs/components/addable-entry-list) — multi-field rows, not single tags
+- [MultiSelect](/docs/components/multi-select) — picking from a fixed set with no free-form entry
+- [Tag](/docs/components/tag) — the removable chip each value renders as
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-addable-tag-list--overview)**

@@ -1,0 +1,79 @@
+---
+title: Block quote
+description: An inline styled block-quote for narrative body content — a quote with optional attribution, and an optional service-line color accent. Flows within longer copy.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+BlockQuote is an inline styled quote for narrative body content — a customer story, a blog post, a long-form page. It renders semantic `<figure>` / `<blockquote>` / `<figcaption>` / `<cite>` HTML, with an optional attribution and an optional service-line color accent (a left border + soft tint drawn from the `--border-service-*` / `--surface-service-*` token families).
+
+It is **distinct from [Testimonial](/docs/components/testimonial)**: Testimonial is a discrete card with attribution and rating slots; BlockQuote is an inline element that flows *within* a longer piece of copy.
+
+## Use it for
+
+- A pulled quote inside a longer article or case study
+- Customer stories woven into narrative body content
+- Any inline quotation that should accent to a service line's color
+
+## Import
+
+```tsx
+import { BlockQuote } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+`quote` is the body; `attribution` is an optional footer rendered as a `<cite>`.
+
+```tsx
+<BlockQuote
+  quote="The website has made it so much easier to share what we do."
+  attribution="Joelle, Owner of Impressionz Salon & Spa"
+/>
+```
+
+### Service-line accent
+
+`serviceLine` tints the left border and background to a service line's color. Omit it for the neutral treatment.
+
+```tsx
+<BlockQuote
+  quote="Our booking rate doubled within a month."
+  attribution="Dana, Northwind Dental"
+  serviceLine="marketing"
+/>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use BlockQuote as a standalone social-proof card.** A discrete testimonial card with attribution and a star rating is [Testimonial](/docs/components/testimonial). BlockQuote is inline narrative quotation, not a card.
+</Callout>
+
+- **Don't use it for UI copy or callouts.** An inline warning or note in docs/product is a `Callout`, not a quotation.
+
+## Accessibility
+
+- Renders semantic `<figure>` / `<blockquote>` / `<figcaption>` / `<cite>`, so the quotation and its attribution carry correct roles automatically.
+- The service-line accent is purely visual — meaning is never conveyed by the tint alone.
+
+## API
+
+{/* props-check: BlockQuoteProps @ components/ui/BlockQuote/BlockQuote.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `quote` | `ReactNode` *(required)* | — |
+| `attribution` | `ReactNode` | — |
+| `serviceLine` | `ServiceLine` | — |
+
+Plus all standard HTML attributes for the root `<figure>`.
+
+## Related
+
+- [Testimonial](/docs/components/testimonial) — the discrete card variant with attribution + rating slots
+- [ServiceTag](/docs/components/service-tag) — the source of the `ServiceLine` vocabulary the accent uses
+- [Text link](/docs/components/text-link) — inline links within the same narrative body copy
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-block-quote--overview)**

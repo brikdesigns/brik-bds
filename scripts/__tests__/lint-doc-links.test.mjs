@@ -168,11 +168,14 @@ describe('lint-doc-links', () => {
   });
 
   it('tolerates a ComponentLinks slug on the acknowledged-debt allowlist', () => {
-    // `dependent-select` is a known docless component; the fixture docs-root has
-    // no page for it, so this passes only because it is allowlisted. (The former
-    // fixture slug `number-input` gained a docs page and left the list; before
-    // that, `checklist` did the same, and `service-tag` in #1318.)
-    const { code } = run('<ComponentLinks slug="dependent-select" />\n');
+    // The #1466 backlog is fully drained, so the only tolerated docless slugs
+    // left are the DOCS_PAGE_EXEMPT ones. `animated-icon` is exempt (a
+    // Foundation/Assets primitive); the fixture docs-root has no page for it, so
+    // this passes only because it is classified exempt. (The former fixture slug
+    // `dependent-select` gained a docs page and drained the last backlog entry;
+    // before that `number-input`, `checklist`, and `service-tag` in #1318 each
+    // left the list the same way.)
+    const { code } = run('<ComponentLinks slug="animated-icon" />\n');
     expect(code).toBe(0);
   });
 });
