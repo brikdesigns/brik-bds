@@ -1,0 +1,89 @@
+---
+title: Dependent select
+description: A parent select whose value filters a child select's options — a cascading pair. The child's committed selection stays cumulative across parent changes.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+DependentSelect is a cascading pair of selects: a parent [Select](/docs/components/select) whose value filters the options visible in a child [Select](/docs/components/select) or [MultiSelect](/docs/components/multi-select). The child receives its full option set and shows only options matching the current parent — but already-selected options stay resolved, so the child's committed selection is **cumulative across parent changes** (switching the parent never clears the child).
+
+## Use it for
+
+- Service line → services, category → subcategory, region → location
+- Any two-level pick where the second list depends on the first
+- Cascades where the user builds a selection across several parent values without losing prior picks
+
+## Import
+
+```tsx
+import { DependentSelect } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Single-select child
+
+`parent` and `child` are config objects. The parent should be controlled (`value` + `onChange`) so DependentSelect can filter on it. A single-select child is the default.
+
+```tsx
+<DependentSelect
+  parent={{ label: 'Service line', options: lines, value: lineId, onChange: setLineId }}
+  child={{
+    label: 'Service',
+    options: allServices,        // each tagged with service_line_id
+    parentKey: 'service_line_id',
+    value: serviceId,
+    onChange: setServiceId,
+  }}
+/>
+```
+
+### Multi-select child
+
+Set `child.multiple: true` for a [MultiSelect](/docs/components/multi-select) child — `value` / `onChange` become array-shaped, and the cumulative behavior lets the user gather services from several service lines.
+
+```tsx
+<DependentSelect
+  parent={{ label: 'Service line', options: lines, value: lineId, onChange: setLineId }}
+  child={{
+    label: 'Services',
+    options: allServices,
+    parentKey: 'service_line_id',
+    value: serviceIds,
+    onChange: setServiceIds,
+    multiple: true,
+  }}
+/>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use it for two unrelated selects.** DependentSelect exists for the filtering relationship — if the second select doesn't depend on the first, use two plain [Select](/docs/components/select)s.
+</Callout>
+
+- **Don't clear the child on parent change.** That is deliberately *not* what this does — the cumulative selection is the point. If you need reset-on-change, drive two selects yourself.
+
+## Accessibility
+
+- Composes [Select](/docs/components/select) and [MultiSelect](/docs/components/multi-select), inheriting their labels, keyboard handling, and ARIA — DependentSelect only manages the option filtering between them.
+- Each select carries its own `label`; pass both so the pair is self-describing.
+
+## API
+
+{/* props-check: DependentSelectProps @ components/ui/DependentSelect/DependentSelect.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `parent` | `DependentSelectParentConfig` *(required)* | — |
+| `child` | `DependentSelectChildConfig` *(required)* | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `disabled` | `boolean` | `false` |
+
+`parent` carries `{ label?, options, value?, defaultValue?, placeholder?, onChange? }`; `child` adds `parentKey` (the field on each option holding its parent value) and a `multiple` flag that switches it between Select and MultiSelect shapes.
+
+## Related
+
+- [Select](/docs/components/select) — the single-select primitive both parent and child use
+- [MultiSelect](/docs/components/multi-select) — the child when `multiple` is set
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-dependent-select--overview)**
