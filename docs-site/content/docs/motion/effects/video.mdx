@@ -57,7 +57,19 @@ import { TierBadge } from '@/components/mdx/motion/tier-badge';
 
 ## Scroll-scrubbed video <TierBadge tier="premium" />
 
-Video playback tied to scroll position — user scrolls to advance the video frame-by-frame. Requires `premium-scroll.js` and GSAP. See [Premium tier](/docs/motion/tiers/premium) for the implementation pattern.
+Video playback tied to scroll position — the user's scroll advances the video frame by frame. `data-premium-video-scrub` registers the container with the scrub handler in `premium-scroll.js`, which needs GSAP and ScrollTrigger already loaded.
+
+```html
+<div data-premium-video-scrub data-scrub-pin="true" data-scrub-distance="300vh">
+  <video muted playsinline preload="auto">
+    <source src="product-reveal.mp4" type="video/mp4">
+  </video>
+</div>
+
+<script>BrikPremium.init();</script>
+```
+
+`data-scrub-distance` controls how far the user scrolls to play the full video. `data-scrub-pin="true"` pins the container during playback. Scrubbing needs the whole file decoded up front, so `preload="auto"` is required here — the opposite of the autoplay-background guidance above.
 
 ## Related
 

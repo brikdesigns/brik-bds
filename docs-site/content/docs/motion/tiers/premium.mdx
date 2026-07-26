@@ -23,43 +23,18 @@ import { TierBadge } from '@/components/mdx/motion/tier-badge';
 
 `premium-scroll.js` expects GSAP and ScrollTrigger to already be loaded. Load order matters.
 
-## Atmosphere effects
+## Effects in this tier
 
-See [Overlays](/docs/motion/effects/overlays) for the full grain and glass reference.
+Class tables, code, and live demos live on the effect pages. This page owns what the tier loads, the section-theming presets, and the `premium-scroll.js` orchestration API below.
 
-### Grain overlays
-
-<EffectGrid columns={3}>
-  <GrainDemo />
-  <GrainDemo variant="heavy" />
-  <GrainDemo variant="light" />
-</EffectGrid>
-
-```html
-<!-- Standard grain (4% opacity) -->
-<section class="grain-overlay">Content</section>
-
-<!-- Heavy grain for dark sections (8%) -->
-<section class="grain-overlay grain-overlay--heavy">Dark content</section>
-
-<!-- Animated grain for hero sections -->
-<section class="grain-overlay grain-overlay--animated">Hero</section>
-```
-
-### Glassmorphism
-
-<EffectGrid columns={3}>
-  <GlassDemo />
-  <GlassDemo variant="light" />
-  <GlassDemo variant="dark" />
-</EffectGrid>
-
-```html
-<div class="glass">Default frosted glass</div>
-<div class="glass--light">Light glass (70% white bg)</div>
-<div class="glass--dark">Dark glass (40% black bg)</div>
-<div class="glass-card">Card with 16px blur + border-radius</div>
-```
+| Effect | Classes | Reference |
+|---|---|---|
+| Film grain | `.grain-overlay` and modifiers | [Overlays](/docs/motion/effects/overlays) |
+| Glassmorphism | `.glass`, `.glass--light`, `.glass--dark`, `.glass-card` | [Overlays](/docs/motion/effects/overlays) |
+| Magnetic cursor, cursor spotlight | `.magnetic`, `.cursor-spotlight` | [Hover](/docs/motion/effects/hover) |
+| Clip-path reveals | `.clip-circle-reveal` and siblings | [Scroll reveals](/docs/motion/effects/scroll-reveals) |
+| Advanced typography | `.text-gradient`, `.text-stroke` and siblings | [Typography](/docs/motion/effects/typography) |
+| Video backgrounds, scroll-scrubbed video | `.video-bg` and modifiers | [Video](/docs/motion/effects/video) |
 
 ## Section theming
 
@@ -126,31 +101,6 @@ Numbers count up when scrolled into view.
   </div>
 </div>
 ```
-
-## Magnetic cursor buttons
-
-Buttons that attract the cursor, creating a tactile feel. The `data-premium-magnetic` attribute registers the element with the magnetic cursor handler in `premium-scroll.js`.
-
-```html
-<a href="/book" class="magnetic" data-premium-magnetic>Book Now</a>
-<button class="magnetic" data-premium-magnetic>Get Started</button>
-```
-
-Strength is configurable via a `data-magnetic-strength` attribute (default `0.4`; range `0.1–0.8`).
-
-## Scroll-scrubbed video
-
-Video playback tied to scroll position — the user's scroll controls the video frame.
-
-```html
-<div data-premium-video-scrub data-scrub-pin="true" data-scrub-distance="300vh">
-  <video muted playsinline preload="auto">
-    <source src="product-reveal.mp4" type="video/mp4">
-  </video>
-</div>
-```
-
-`data-scrub-distance` controls how far the user scrolls to play the full video. `data-scrub-pin="true"` pins the container during playback.
 
 ## Scroll-activated tabs
 

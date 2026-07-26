@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/docs-site/content/docs/**/*.mdx"
 retrieved-via: brik-rag query "fumadocs writing standard"
-last-verified: 2026-07-25
+last-verified: 2026-07-26
 ---
 
 # Fumadocs content standard
@@ -37,6 +37,18 @@ Ask in this order; first YES wins:
 | Does this fact already live on another page? | Cross-link with `[label](/docs/path)` — do not duplicate |
 
 If you add a new top-level dir under `content/docs/`, update `meta.json`. Do not rely on alphabetical fallback.
+
+### Cross-cutting page families — name the canonical home
+
+Some sections carry two page families that index the same material on different axes (Motion's `tiers/` × `effects/`; a future Components `by-platform` × `by-category`). Both families legitimately want the same class table, so "do not duplicate" is not self-executing — you have to say which one owns it.
+
+Write the ownership split into the section's `index.mdx`, then hold it:
+
+- One family owns **decisions** — when to reach for this, what to load, how to escalate.
+- The other owns **implementation** — class tables, code samples, live demos.
+- The non-owner cross-links. A pointer table (`| Effect | Classes | Reference |`) beats a prose list because it stays scannable as the family grows.
+
+The failure mode is additive: an author lands a class table on the page they happened to be editing, the other page already had it, and neither is now authoritative. brik-bds#1361 found six such pairs across four motion pages. When you add reference material to a section with two page families, check the sibling family first.
 
 ## Section placement — where the page lives
 
