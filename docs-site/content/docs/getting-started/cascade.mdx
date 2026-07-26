@@ -177,6 +177,7 @@ This page is the **canonical adoption contract**: every consumer (portal, renew-
 | `scripts/canonical-check.mjs` | `--text-*` / `--surface-*` / `--background-*` / `--border-*` / `--color-*` names exist in `dist/tokens.css` | BDS pre-commit + CI |
 | `@brikdesigns/bds/canonical-check` (consumer dep) | Same engine published for consumer repos | Consumer pre-commit + CI via `token-audit.sh --canonical-only` |
 | `@brikdesigns/bds/cascade-contract-check` (consumer dep) | Three rules: `no-redefinition` (clause 4 above), `typography-family` (font-family family matches font-size family within a rule), `import-layer` (clause 3 above — every CSS `@import` of `tokens.css` / `styles.css` carries a named `layer()`) | BDS-owned export, imported by consumer `lint-tokens`. Live in brikdesigns; portal wiring tracked in [#1437](https://github.com/brikdesigns/brik-bds/issues/1437) |
+| `npm run cascade-contract-check` | The same engine pointed at this docs site's own `app/global.css` — the site that publishes the contract is itself a consumer of it | BDS CI + `npm run validate` |
 
 Run BDS gates locally: `npm run validate`. Consumer gates: `./scripts/token-audit.sh --canonical-only`.
 

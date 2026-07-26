@@ -10,12 +10,24 @@
 @source "../node_modules/fumadocs-ui/dist/**/*.js";
 
 /* BDS — eat our own dog food. Use the same two package entry points
- * consumers do (matches docs-site/installation.mdx):
+ * consumers do, wired the way the adoption contract requires (see
+ * content/docs/getting-started/cascade.mdx § The adoption contract):
  *   tokens.css → full cascade (figma + dark + corrections + brand-brik + animations)
  *   styles.css → component CSS bundle (.bds-badge, .bds-button, etc.)
- * Without styles.css, every <ComponentPreview> renders unstyled DOM. */
-@import '@brikdesigns/bds/tokens.css';
-@import '@brikdesigns/bds/styles.css';
+ * Without styles.css, every <ComponentPreview> renders unstyled DOM.
+ *
+ * The `layer()` clauses are load-bearing for tokens.css specifically: it ships
+ * fully unlayered, so a plain `@import` makes it unlayered CSS, which outranks
+ * every layered rule. Enforced by the `import-layer` rule in
+ * @brikdesigns/bds/cascade-contract-check (brik-bds#1437).
+ *
+ * This site declares no client-theme — it renders the Brik brand directly —
+ * but the two client layers are declared anyway so the order matches every
+ * other consumer and a future theme has somewhere to land. */
+@layer bds-tokens, bds-components, client-theme, client-overrides;
+
+@import '@brikdesigns/bds/tokens.css' layer(bds-tokens);
+@import '@brikdesigns/bds/styles.css' layer(bds-components);
 
 /* The docs site itself uses BDS tokens for branded surfaces (preview frames,
  * code examples, callouts) so guidance and live demos stay visually coherent. */
