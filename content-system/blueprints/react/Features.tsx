@@ -54,8 +54,10 @@ export interface FeatureItem {
   title: string;
   /** Optional one-to-two-line card description. */
   description?: string;
-  /** "Learn more" link target. Defaults to `#`. */
+  /** CTA link target. Defaults to `#`. */
   href?: string;
+  /** CTA affordance label. Defaults to `Learn more`. */
+  ctaLabel?: string;
   /** Optional top illustration. Omitted → a `ServiceTag` icon or blank block. */
   imageUrl?: string;
   /** Alt text for `imageUrl`. Empty (decorative) when omitted. */
@@ -175,7 +177,7 @@ export function Features({
                         </p>
                       )}
                       <span className="bds-features__cta">
-                        Learn more
+                        {item.ctaLabel ?? 'Learn more'}
                         <span
                           aria-hidden="true"
                           className="bds-features__cta-arrow"

@@ -152,6 +152,15 @@
 
 /* Service-line cascade — canonical --*-service-{service-line} tokens.
  *
+ * INTENTIONAL theming hook, not client-specific rigidity: the five slugs
+ * (brand / marketing / information / product / back-office) are BDS's canonical
+ * service-line taxonomy — the same set the `--*-service-{line}` token families,
+ * ServiceTag, and the ADR-011 / ADR-020 service-token model are built on, not
+ * any one client's sections. Consumers opt a hero into a line via the
+ * `data-service-line` attribute; heroes that set nothing render the neutral
+ * default. Adding or renaming a line is a token-model change (ADR-011), not an
+ * edit here.
+ *
  * Background uses the `surface` family (not `background`) because the hero
  * is a broad page-level container, not a small bounded component — per the
  * service-token decision tree (`-surface-` for sections/heroes/cards;
