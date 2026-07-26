@@ -47,7 +47,7 @@ const baseProps: BlueprintProps = {
 /* ─── Meta ─────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof SupportPlanCalloutSplit> = {
-  title: 'Blueprints/support_plan_callout_split',
+  title: 'Deprecated/support-plan-callout-split',
   component: SupportPlanCalloutSplit,
   tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
   argTypes: {
