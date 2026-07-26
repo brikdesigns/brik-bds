@@ -19,8 +19,9 @@ The "how do we keep BDS lean" cluster. Each ADR is one decision in a longer stor
 | [ADR-003](./ADR-003-addable-list-family.md) | Proposed | Collapse the Addable\* family from 3 components to 2 (AddableTagList + AddableEntryList) |
 | [ADR-004](./ADR-004-component-bloat-guardrails.md) | **Accepted** (2026-05-08) | Rules that prevent new bloat — three-uses test, >70% overlap rule, container-coupled typography ban, audit-gate questions in every component PR |
 | [ADR-005](./ADR-005-addable-field-row-list.md) | **Accepted** (2026-05-08) | Introduce `AddableFieldRowList` as a new BDS primitive — the multi-field-row shape the portal had hand-rolled three times |
+| [ADR-022](./ADR-022-progress-linear-circle-consolidation.md) | Proposed | Consolidate `ProgressBar` + `ProgressCircle` into one `Progress` component (`variant: 'linear' \| 'circle'`) — `status`/`indeterminate`/`showValue` extend to linear, `size` (diameter preset) stays circle-only. Migration across 6 downstream consumers is a separate follow-up Project. |
 
-These compose: ADR-004 sets the rules; ADR-003 applies them to consolidate Addable\*; ADR-005 uses the three-uses test to justify a *new* primitive (the shape that's hand-rolled three times in portal warrants a BDS abstraction).
+These compose: ADR-004 sets the rules; ADR-003 applies them to consolidate Addable\*; ADR-005 uses the three-uses test to justify a *new* primitive (the shape that's hand-rolled three times in portal warrants a BDS abstraction); ADR-022 applies the ADR-004 §3 overlap rule + purpose-test amendment a second time, to `ProgressBar`/`ProgressCircle`.
 
 ### Storybook standards
 
