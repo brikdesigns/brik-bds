@@ -100,6 +100,86 @@ describe('Rule 2 — typography-family', () => {
   });
 });
 
+describe('Rule 3 — import-layer', () => {
+  it('flags a plain @import of tokens.css', () => {
+    const css = `@import '@brikdesigns/bds/tokens.css';`;
+    const v = scan(css);
+    expect(v).toHaveLength(1);
+    expect(v[0].rule).toBe('import-layer');
+    expect(v[0].token).toBe('@brikdesigns/bds/tokens.css');
+    expect(v[0].message).toContain('layer(bds-tokens)');
+  });
+
+  it('flags a plain @import of styles.css, naming bds-components', () => {
+    const css = `@import "@brikdesigns/bds/styles.css";`;
+    const v = scan(css);
+    expect(v).toHaveLength(1);
+    expect(v[0].message).toContain('layer(bds-components)');
+  });
+
+  it('passes when both imports carry their named layer', () => {
+    const css = [
+      `@layer bds-tokens, bds-components, client-theme, client-overrides;`,
+      `@import '@brikdesigns/bds/tokens.css' layer(bds-tokens);`,
+      `@import '@brikdesigns/bds/styles.css' layer(bds-components);`,
+    ].join('\n');
+    expect(scan(css)).toHaveLength(0);
+  });
+
+  it('accepts the url() form and a trailing media query', () => {
+    const css = `@import url("@brikdesigns/bds/tokens.css") layer(bds-tokens) screen;`;
+    expect(scan(css)).toHaveLength(0);
+  });
+
+  it('flags a bare `layer` — an anonymous layer cannot be ordered', () => {
+    const css = `@import '@brikdesigns/bds/tokens.css' layer;`;
+    const v = scan(css);
+    expect(v).toHaveLength(1);
+    expect(v[0].message).toContain('anonymous layer');
+  });
+
+  it('does not flag a JS/TS import of the same stylesheet', () => {
+    // Astro/Vite consumers import CSS from JS, which cannot carry layer() —
+    // the contract names source-order as their legal path. Anchoring the rule
+    // on the `@import` at-rule excludes these structurally (brik-bds#1437).
+    const js = `import '@brikdesigns/bds/tokens.css';\nimport "@brikdesigns/bds/styles.css";`;
+    expect(scan(js)).toHaveLength(0);
+  });
+
+  it('ignores non-BDS and non-layer-governed BDS imports', () => {
+    const css = [
+      `@import 'tailwindcss';`,
+      `@import '../styles/theme-brik-portal.css';`,
+      `@import '@brikdesigns/bds/atmospheres/warm-soft.css';`,
+    ].join('\n');
+    expect(scan(css)).toHaveLength(0);
+  });
+
+  it('reports the line the offending @import sits on', () => {
+    const css = [
+      `/* header */`,
+      `@layer bds-tokens, client-theme;`,
+      ``,
+      `@import '@brikdesigns/bds/tokens.css';`,
+    ].join('\n');
+    expect(scan(css)[0].line).toBe(4);
+  });
+
+  it('ignores a commented-out @import', () => {
+    const css = `/* @import '@brikdesigns/bds/tokens.css'; */`;
+    expect(scan(css)).toHaveLength(0);
+  });
+
+  it('flags each offending import independently', () => {
+    const css = [
+      `@import '@brikdesigns/bds/tokens.css';`,
+      `@import '@brikdesigns/bds/styles.css' layer(bds-components);`,
+      `@import '@brikdesigns/bds/styles.css';`,
+    ].join('\n');
+    expect(scan(css).map((v) => v.line)).toEqual([1, 3]);
+  });
+});
+
 describe('exempt allowlist (transitional burn-down)', () => {
   it('skips an exact token name', () => {
     const css = `:root { --heading-lg: var(--font-size-700); }`;
@@ -109,6 +189,13 @@ describe('exempt allowlist (transitional burn-down)', () => {
   it('skips by regex', () => {
     const css = `:root {\n  --heading-lg: 1rem;\n  --heading-huge: 2rem;\n}`;
     expect(scan(css, { exemptTokens: [/^--heading-/] })).toHaveLength(0);
+  });
+
+  it('skips an import-layer violation by specifier', () => {
+    // Lets a consumer wire the gate before its stylesheet is compliant.
+    const css = `@import '@brikdesigns/bds/tokens.css';`;
+    expect(scan(css, { exemptTokens: ['@brikdesigns/bds/tokens.css'] })).toHaveLength(0);
+    expect(scan(css, { exemptTokens: [/tokens\.css$/] })).toHaveLength(0);
   });
 });
 

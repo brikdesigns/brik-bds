@@ -7,7 +7,7 @@
  *   - cascade-contract-check  → forbids REDEFINING canonical tokens, and
  *                               catches typography family↔size mismatches.
  *
- * Two rules:
+ * Three rules:
  *
  * 1. no-redefinition — a consumer consumes BDS tokens; it does not redefine
  *    them (the cascade adoption contract, see cascade.mdx).
@@ -27,6 +27,17 @@
  *    var(--font-family-X)` declaration and a font-size token `var(--Y-…)` must
  *    share a family (X === Y). Catches e.g. a display family paired with a
  *    heading-scale size (the home-hero token-pairing bug, brikdesigns #536).
+ *
+ * 3. import-layer — every CSS `@import` of `@brikdesigns/bds/tokens.css` or
+ *    `styles.css` carries a NAMED `layer()` clause. `dist/tokens.css` ships
+ *    fully unlayered, so `layer(bds-tokens)` at the import site is the only
+ *    thing placing it in the cascade; a plain `@import` makes it unlayered CSS,
+ *    which beats every layered rule and silently defeats a client theme in
+ *    `@layer client-theme`. A bare `layer` (anonymous) also fails — an
+ *    anonymous layer can't be named in a `@layer` statement, so it can't be
+ *    ordered against `client-theme`. Astro/Vite **JS** `import '….css'` cannot
+ *    carry `layer()` and cascades by source order instead; the rule anchors on
+ *    the `@import` at-rule so those are never flagged (brik-bds#1437).
  *
  * Why this lives in @brikdesigns/bds (not a per-repo copy): one owner, no
  * fork. `bds@x.y` ships the gate that matches `bds@x.y`'s token registry;
@@ -123,6 +134,47 @@ const SIZE_PREFIX_TO_FAMILY = [
 /** Selectors that establish Brand-Kit scope (the redefinition exception). */
 const BRAND_SCOPE_SELECTOR_RE = /\.theme-[a-z0-9-]+|\[data-(?:audience|service|department)\b/i;
 
+// ── Rule 3: import-layer model ──────────────────────────────────────────────
+
+/**
+ * BDS stylesheets that MUST be imported into a named layer, and the layer the
+ * contract assigns each one. `dist/tokens.css` ships fully unlayered, so the
+ * `layer()` clause at the import site is the only thing placing it in the
+ * cascade — a plain `@import` makes it unlayered CSS, which beats every
+ * layered rule and silently defeats a client theme in `@layer client-theme`.
+ * `dist/styles.css` self-wraps `@layer bds-components`, so its `layer()` is
+ * belt-and-braces rather than load-bearing; the contract still requires it so
+ * the layer order is declarable in one place.
+ */
+export const LAYERED_BDS_IMPORTS = {
+  'tokens.css': 'bds-tokens',
+  'styles.css': 'bds-components',
+};
+
+/**
+ * A CSS `@import` of a BDS stylesheet. Captures the specifier and everything
+ * up to the terminating `;` so the tail can be checked for a `layer()` clause.
+ * Matches both the string form (`@import '…'`) and the `url()` form
+ * (`@import url("…")`), single or double quoted.
+ *
+ * Deliberately anchored on `@import` so a JS/TS `import '…css'` statement can
+ * never match: those cannot carry a `layer()` clause at all, and the contract
+ * names source-order as their legal path (Astro/Vite — see framework-guides).
+ */
+const BDS_IMPORT_RE =
+  /@import\s+(?:url\(\s*)?['"]([^'"]*@brikdesigns\/bds\/[^'"]+)['"]\s*\)?([^;]*);/g;
+
+/** The `layer(name)` clause of an `@import` tail: 'named' | 'anonymous' | null. */
+function importLayerClause(tail) {
+  const named = tail.match(/\blayer\s*\(\s*([a-zA-Z][\w-]*)/);
+  if (named) return { kind: 'named', name: named[1] };
+  // `@import "x.css" layer;` is legal CSS but creates an *anonymous* layer,
+  // which cannot be named in a `@layer` statement and so cannot be ordered
+  // against `client-theme`. Off-contract for the same reason as no layer.
+  if (/\blayer\b(?!\s*\()/.test(tail)) return { kind: 'anonymous' };
+  return null;
+}
+
 /** Filenames that ARE a Brand Kit output (whole-file brand scope). */
 const BRAND_SCOPE_FILE_RE = /(?:^|[\\/])theme-[a-z0-9-]+\.css$/i;
 
@@ -157,6 +209,61 @@ function isExempt(token, exemptPatterns) {
 // ── Core scan ─────────────────────────────────────────────────────────────
 
 /**
+ * Rule 3: every CSS `@import` of a BDS stylesheet carries a named `layer()`.
+ *
+ * A statement-level pass rather than part of the declaration scanner below —
+ * `@import` is an at-rule, not a declaration, and carries no `:` for
+ * `flushDeclaration` to split on.
+ *
+ * Only CSS `@import` at-rules are considered. A JS/TS `import '….css'` cannot
+ * carry `layer()` and is contract-legal via source order, so it must never be
+ * flagged; anchoring on `@import` excludes it structurally.
+ */
+function scanImportLayers({ stripped, file, exemptTokens = [] }) {
+  const violations = [];
+  BDS_IMPORT_RE.lastIndex = 0;
+  let m;
+  while ((m = BDS_IMPORT_RE.exec(stripped)) !== null) {
+    const [, specifier, tail] = m;
+    const basename = specifier.split('/').pop();
+    const expectedLayer = LAYERED_BDS_IMPORTS[basename];
+    // Only the two contract-governed stylesheets. An `@import` of e.g.
+    // `@brikdesigns/bds/atmospheres/warm-soft.css` is not layer-governed.
+    if (!expectedLayer) continue;
+    if (isExempt(specifier, exemptTokens)) continue;
+
+    const clause = importLayerClause(tail);
+    if (clause?.kind === 'named') continue;
+
+    const line = stripped.slice(0, m.index).split('\n').length;
+    const why =
+      basename === 'tokens.css'
+        ? 'ships unlayered, so the `layer()` clause is the only thing placing it in ' +
+          'the cascade — without it the file wins as unlayered CSS and a client theme ' +
+          'in `@layer client-theme` can never override it'
+        : 'must be placed explicitly so the layer order is declarable in one place';
+    const problem =
+      clause?.kind === 'anonymous'
+        ? 'uses a bare `layer` (an anonymous layer, which cannot be named in a ' +
+          '`@layer` statement and so cannot be ordered against `client-theme`)'
+        : 'has no `layer()` clause';
+
+    violations.push({
+      rule: 'import-layer',
+      severity: 'error',
+      token: specifier,
+      file,
+      line,
+      message:
+        `\`@import '${specifier}'\` ${problem}. Use ` +
+        `\`@import '${specifier}' layer(${expectedLayer});\` — ${basename} ${why}. ` +
+        `(cascade adoption contract / ADR-013)`,
+    });
+  }
+  return violations;
+}
+
+/**
  * Scan one CSS string for cascade-contract violations.
  *
  * A char-level scanner tracks the selector stack and line numbers so it works
@@ -171,7 +278,7 @@ export function scanCascadeContract({ css, file = '<input>', exemptTokens = [] }
   const fileBrandScoped = BRAND_SCOPE_FILE_RE.test(file);
   const stripped = maskComments(css);
 
-  const violations = [];
+  const violations = [...scanImportLayers({ stripped, file, exemptTokens })];
   // Selector stack: each frame { selectors: string, brand: boolean }.
   const stack = [];
   // Per-rule accumulator for the typography-family check, parallel to `stack`.
@@ -339,6 +446,8 @@ Checks consumer CSS for:
   • no-redefinition  — redefining a BDS scale (--heading/display/font-size) token
                        anywhere, or a semantic color token outside Brand-Kit scope
   • typography-family — font-family family must match font-size family in a rule
+  • import-layer      — @import of bds/tokens.css or styles.css must carry a named
+                        layer() clause (JS imports are exempt by construction)
 `;
 
 function main() {
@@ -370,7 +479,10 @@ function main() {
   if (opts.format === 'json') {
     process.stdout.write(JSON.stringify({ violations: all }, null, 2) + '\n');
   } else if (all.length === 0) {
-    process.stdout.write('cascade-contract-check: OK — no redefinitions, no family mismatches.\n');
+    process.stdout.write(
+      'cascade-contract-check: OK — no redefinitions, no family mismatches, ' +
+      'every BDS @import layered.\n',
+    );
   } else {
     process.stdout.write(`cascade-contract-check: ${all.length} violation(s):\n`);
     for (const v of all) {
