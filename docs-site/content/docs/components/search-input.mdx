@@ -1,0 +1,91 @@
+---
+title: Search input
+description: Search field with a leading magnifying glass and a clear button that appears once the field has a value. Reach for it whenever a control filters or queries a set.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+SearchInput is [TextInput](/docs/components/text-input) forced to `type="search"` with a built-in magnifying-glass affordance and a clear button that appears once the field holds a value. It inherits every TextInput prop and adds a controlled `onClear` hook. Reach for it whenever a text control filters or queries a set — a product search, a table filter, a directory lookup.
+
+## Use it for
+
+- Product / catalog search fields
+- Table, list, or directory filter inputs
+- Any query field that benefits from a one-click clear
+- Search surfaces that should read as search, not plain text
+
+## Import
+
+```tsx
+import { SearchInput } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+Uncontrolled, the field tracks its own value to toggle the clear button and resets itself when cleared. Controlled, wire `value` + `onChange` + `onClear` together and reset `value` to `''` in your `onClear` handler.
+
+```tsx
+// Uncontrolled
+<SearchInput label="Search" placeholder="Search products..." />
+
+// Controlled
+<SearchInput
+  value={query}
+  onChange={(e) => setQuery(e.target.value)}
+  onClear={() => setQuery('')}
+  placeholder="Search products..."
+/>
+```
+
+### Sizes
+
+`sm` (32px), `md` (40px, default), `lg` (48px) — inherited from TextInput.
+
+```tsx
+<SearchInput size="sm" placeholder="Compact" />
+<SearchInput size="md" placeholder="Default" />
+<SearchInput size="lg" placeholder="Prominent" />
+```
+
+### Error and helper text
+
+Inherited from TextInput. `error` triggers `aria-invalid` and replaces `helperText`.
+
+```tsx
+<SearchInput placeholder="Search" helperText="Searches names and tags" />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use SearchInput for general text entry.** A name, email, or note field is [TextInput](/docs/components/text-input) — the magnifying glass and clear button read as "search" and are misleading on a plain field.
+</Callout>
+
+- **Don't pair it with a submit button and call it a filter bar.** A composed search-plus-filters region is [FilterBar](/docs/components/filter-bar).
+- **Don't rebuild the clear affordance.** The ✕ button is owned by the component; don't add a second one.
+
+## Accessibility
+
+- Renders a native `<input type="search">`, so assistive tech announces it as a search field.
+- The clear button is a keyboard-reachable `<button type="button">` (`tabIndex={0}`) with `aria-label` "Clear search"; the magnifying glass is decorative.
+- **Pass a `label`** (or an `aria-label` via passthrough props) so the field has an accessible name.
+- `type`, `iconBefore`, and `iconAfter` are reserved by SearchInput and cannot be overridden.
+
+## API
+
+{/* props-check: SearchInputProps @ components/ui/SearchInput/SearchInput.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `onClear` | `() => void` | — |
+
+Inherits all [TextInput](/docs/components/text-input) props except `type` (forced to `"search"`), `iconBefore` (reserved for the magnifying glass), and `iconAfter` (reserved for the clear button) — including `label`, `size`, `error`, `helperText`, `fullWidth`, and `disabled`.
+
+## Related
+
+- [TextInput](/docs/components/text-input) — the base field SearchInput wraps
+- [FilterBar](/docs/components/filter-bar) — composed search-and-filters region
+- [MultiSelect](/docs/components/multi-select) — for picking from a searchable set rather than free-text query
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-search-input--overview)**
