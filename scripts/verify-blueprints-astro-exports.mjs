@@ -592,6 +592,44 @@ const assertions = [
       dispatchedHtml.includes('Blueprint not yet shipped')
   },
 
+  // Section shell (#1439 / ADR-021) — the package's only global stylesheet.
+  // Astro emits scoped <style> per component; the shell is the one file that
+  // must arrive UNSCOPED and reach the page. Asserting the class in markup is
+  // not enough — if the frontmatter CSS import silently failed to bundle, the
+  // markup would still be correct and every section would lose its rhythm and
+  // container width. So we assert the emitted CSS too.
+  { name: 'shell: bds-blueprint-section composed on section roots', pass:
+      /class="[^"]*\bbds-blueprint-section\b[^"]*"/.test(homeHtml) &&
+      /class="[^"]*\bbds-blueprint-section__container\b[^"]*"/.test(homeHtml)
+  },
+  { name: 'shell: global stylesheet emitted and linked', pass: (() => {
+      const hrefs = [...homeHtml.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="([^"]+)"/g)].map((m) => m[1]);
+      const inline = [...homeHtml.matchAll(/<style>([\s\S]*?)<\/style>/g)].map((m) => m[1]);
+      const linked = hrefs.map((h) => {
+        try { return readFileSync(resolve(scratch, 'dist', h.replace(/^\//, '')), 'utf8'); }
+        catch { return ''; }
+      });
+      return [...linked, ...inline].some((css) => css.includes('.bds-blueprint-section'));
+    })()
+  },
+  { name: 'shell: rules are unscoped (no Astro data-astro-cid on the class)', pass: (() => {
+      const hrefs = [...homeHtml.matchAll(/<link[^>]+rel="stylesheet"[^>]+href="([^"]+)"/g)].map((m) => m[1]);
+      const inline = [...homeHtml.matchAll(/<style>([\s\S]*?)<\/style>/g)].map((m) => m[1]);
+      const all = [...hrefs.map((h) => {
+        try { return readFileSync(resolve(scratch, 'dist', h.replace(/^\//, '')), 'utf8'); }
+        catch { return ''; }
+      }), ...inline].join('\n');
+      // Every `.bds-blueprint-section…` selector must be free of Astro's
+      // per-component scope attribute — otherwise it is not actually shared.
+      const scoped = all.match(/\.bds-blueprint-section[a-z_-]*\[data-astro-cid-[^\]]+\]/g);
+      return all.includes('.bds-blueprint-section') && scoped === null;
+    })()
+  },
+  { name: 'shell: sr-only utility replaced the duplicated bp-* headings', pass:
+      homeHtml.includes('class="bds-visually-hidden"') &&
+      !homeHtml.includes('__sr-heading')
+  },
+
   // Cross-blueprint contract checks
   { name: 'home: no data-content-needed stubs (all facts provided)', pass: !homeHtml.includes('data-content-needed=') },
   { name: 'home: exactly one h1 (hero owns it)',    pass: (homeHtml.match(/<h1[\s>]/g) || []).length === 1 },
@@ -681,6 +719,12 @@ const expectedFiles = [
   // this co-located source file, NOT the dist copy. Omitting it from `files`
   // breaks consumer `astro build` at "Could not resolve './types'" (#1428).
   'content-system/blueprints/astro/types.ts',
+  // Shared section shell (source, global CSS) — every family blueprint
+  // side-effect-imports `../section-shell.css` from its frontmatter. Omitting
+  // it from `files` breaks consumer `astro build` at "Failed to resolve
+  // import" and silently drops section rhythm + container width (#1439,
+  // ADR-021).
+  'content-system/blueprints/section-shell.css',
   // Components (source, .astro) — v0.1 shipped blueprints + later additions
   'content-system/blueprints/astro/HeroSplit6040.astro',
   'content-system/blueprints/astro/HeroInteriorMinimal.astro',

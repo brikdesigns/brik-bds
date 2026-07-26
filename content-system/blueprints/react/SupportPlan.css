@@ -20,17 +20,15 @@
  *   --bds-support-plan-card-radius (default: var(--border-radius-lg))
  *   --bds-support-plan-gap         (default: var(--gap-xl))
  *   --bds-support-plan-card-pad    (default: var(--padding-xl))
+ *
+ * Section rhythm + the centred container live in `../section-shell.css`
+ * (`bds-blueprint-section` / `bds-blueprint-section__container`, ADR-021) — composed onto the same
+ * elements in SupportPlan.tsx, not redeclared here. This family's rhythm moved
+ * from 9vw to the harmonised 7vw with that extraction.
  */
 
 .bds-support-plan {
   background: var(--bds-support-plan-bg, var(--page-primary));
-  padding-block: clamp(var(--padding-xl), 9vw, var(--padding-huge));
-}
-
-.bds-support-plan__container {
-  max-width: 1280px;
-  margin-inline: auto;
-  padding-inline: var(--padding-lg);
 }
 
 /* ── Section header ────────────────────────────────────────────── */

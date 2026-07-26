@@ -86,6 +86,7 @@ jobs:
           npm run contrast-gate
           npm run lint-jsdoc
           npm run validate:blueprints
+          npm run lint-blueprints:naming
           npm run typecheck
 
       - name: Publish to GitHub Packages

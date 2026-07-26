@@ -11,18 +11,16 @@
  * the consumer's `[data-audience='X']` cascade. BDS ships the pattern; the
  * consumer ships the audience-specific values. Tier-4 `--bds-features-*` hooks
  * let a consumer retheme without forking the block.
+ *
+ * Section rhythm + the centred container live in `../section-shell.css`
+ * (`bds-blueprint-section` / `bds-blueprint-section__container`, ADR-021) — composed onto the same
+ * elements in Features.tsx, not redeclared here. This family's rhythm moved
+ * from 9vw to the harmonised 7vw with that extraction.
  */
 
 .bds-features {
   background: var(--bds-features-bg, var(--page-inverse));
-  padding-block: clamp(var(--padding-xl), 9vw, var(--padding-huge));
   color: var(--text-on-color-dark);
-}
-
-.bds-features__container {
-  max-width: var(--content-width-xl);
-  margin-inline: auto;
-  padding-inline: var(--padding-lg);
 }
 
 /* ── Section header ────────────────────────────────────────────── */

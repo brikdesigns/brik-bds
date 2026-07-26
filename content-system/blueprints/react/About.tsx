@@ -20,6 +20,9 @@
  * Slots (all pass `scripts/slot-pattern-check.mjs`):
  *   bds-about, __container, __narrative, __subtitle, __title, __lead, __callout
  *
+ * Composed with the shared shell (ADR-021): `bds-blueprint-section` on the root,
+ * `bds-blueprint-section__container` on the container.
+ *
  * Token pairs (paired family ↔ size — never mix):
  *   subtitle    — --font-family-label + --label-lg (uppercase eyebrow)
  *   title (h2)  — --font-family-heading + clamp(--heading-lg … --heading-xl)
@@ -34,6 +37,7 @@ import { type HTMLAttributes } from 'react';
 
 import { CardTestimonial } from '../../../components';
 import { bdsClass } from '../../../components/utils';
+import '../section-shell.css';
 import './About.css';
 
 /** Optional pull-quote rendered as a `CardTestimonial` aside. */
@@ -79,11 +83,11 @@ export function About({
 
   return (
     <section
-      className={bdsClass('bds-about', className)}
+      className={bdsClass('bds-blueprint-section', 'bds-about', className)}
       aria-labelledby={titleId}
       {...rest}
     >
-      <div className="bds-about__container">
+      <div className="bds-blueprint-section__container bds-about__container">
         <div className="bds-about__narrative">
           {subtitle && <p className="bds-about__subtitle">{subtitle}</p>}
           <h2 id={titleId} className="bds-about__title">

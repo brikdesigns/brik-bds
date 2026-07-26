@@ -91,8 +91,8 @@ export const MissingImage: Story = {
     ...Default.args,
     sectionKey: 'hero-split-missing',
     media: (
-      <div className="bds-hero__missing" data-content-needed="hero_image_url" role="presentation">
-        <p className="bds-hero__missing-label">Hero image missing for this client.</p>
+      <div className="bds-blueprint-section__missing bds-hero__missing" data-content-needed="hero_image_url" role="presentation">
+        <p className="bds-blueprint-section__missing-label">Hero image missing for this client.</p>
       </div>
     ),
   },

@@ -39,10 +39,15 @@
  *   title (h2)  — --font-family-heading + clamp(--heading-lg, ..., --heading-huge)
  *   description — --font-family-body + --body-md
  *
+ * Composed with the shared shell (ADR-021): `bds-blueprint-section` on the root,
+ * `bds-blueprint-section__container` on the container. This family keeps its heavier
+ * bottom inset as a documented rhythm exception in CardGrid.css.
+ *
  * @summary Generic section wrapper for any header + grid-of-cards layout.
  */
 import { type HTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../../components/utils';
+import '../section-shell.css';
 import './CardGrid.css';
 
 export interface CardGridProps extends HTMLAttributes<HTMLElement> {
@@ -82,12 +87,12 @@ export function CardGrid({
   const titleId = `${sectionKey}-title`;
   return (
     <section
-      className={bdsClass('bds-card-grid', className)}
+      className={bdsClass('bds-blueprint-section', 'bds-card-grid', className)}
       aria-labelledby={titleId}
       data-blueprint-key="card_grid"
       {...rest}
     >
-      <div className="bds-card-grid__container">
+      <div className="bds-blueprint-section__container">
         <header className="bds-card-grid__header">
           {subtitle && (
             <p className="bds-card-grid__subtitle">{subtitle}</p>

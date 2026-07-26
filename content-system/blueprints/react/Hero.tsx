@@ -34,6 +34,9 @@
  *   __subtitle, __title, __lead, __media, __image, __missing, __missing-label,
  *   __media-card, __image-frame, __price, __price-label, __price-value
  *
+ * Composed with the shared shell (ADR-021): `bds-blueprint-section` on the root,
+ * `bds-blueprint-section__container` on the container, `bds-blueprint-section__missing` on the stub.
+ *
  * Token pairs (paired family ↔ size — never mix):
  *   subtitle    — --font-family-label + --label-lg (uppercase eyebrow)
  *   title (h1)  — --font-family-heading + clamp(--heading-xl … --display-sm)
@@ -51,6 +54,7 @@ import type { ButtonVariant } from '../../../components/ui/Button';
 import { bdsClass } from '../../../components/utils';
 import type { BlueprintCta } from '../astro/types';
 import { isActionCta } from '../astro/types';
+import '../section-shell.css';
 import './Hero.css';
 
 export type HeroLayout = 'split' | 'interior-minimal' | 'with-pricing-card';
@@ -120,11 +124,11 @@ export function Hero({
 
   return (
     <section
-      className={bdsClass('bds-hero', `bds-hero--${layout}`, className)}
+      className={bdsClass('bds-blueprint-section', 'bds-hero', `bds-hero--${layout}`, className)}
       aria-labelledby={titleId}
       {...rest}
     >
-      <div className="bds-hero__container">
+      <div className="bds-blueprint-section__container bds-hero__container">
         <div className="bds-hero__content">
           {breadcrumb}
           {eyebrow}

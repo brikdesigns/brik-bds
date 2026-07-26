@@ -8,19 +8,18 @@
  * surface/border/typography live in `.bds-card-testimonial` (the
  * <CardTestimonial> primitive). Tier-4 `--bds-about-*` hooks let a consumer
  * retheme without forking the block; each falls back to a Semantic token per
- * ADR-014. Responsive padding uses a direct clamp() (no hook) per ADR-014 — a
- * Tier-4 fallback must resolve to a Semantic token, never a raw clamp() literal.
+ * ADR-014.
+ *
+ * Section rhythm + the centred container live in `../section-shell.css`
+ * (`bds-blueprint-section` / `bds-blueprint-section__container`, ADR-021) — composed onto the same
+ * elements in About.tsx, not redeclared here.
  */
 
 .bds-about {
   background: var(--bds-about-bg, var(--page-primary));
-  padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
 }
 
 .bds-about__container {
-  max-width: var(--content-width-xl);
-  margin-inline: auto;
-  padding-inline: var(--padding-lg);
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--gap-xl);

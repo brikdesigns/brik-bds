@@ -19,6 +19,8 @@
  *      a11y plumbing (`id="bp-{layout}-${key}-h"`).
  *   4. Blueprint .tsx files that import zero BDS components — almost
  *      always hand-rolled drift.
+ *   5. A canonical family re-declaring section rhythm or the centred
+ *      container instead of composing the shared shell (#1439 / ADR-021).
  *
  * NOTE: a `variant` axis check was removed once it produced false
  * positives against legitimate per-component variants (ServiceTag's
@@ -276,6 +278,85 @@ function checkHardcodedAspectRatio(file, errors) {
   }
 }
 
+// ── Section-shell re-declaration check (#1439 / ADR-021) ──────────────────
+//
+// The six canonical families consume the shared shell (`bds-blueprint-section` /
+// `bds-blueprint-section__container` in `content-system/blueprints/section-shell.css`)
+// for section rhythm and the centred container. Re-declaring either in a
+// family stylesheet is exactly the drift #1439 burned down — twelve copies of
+// one clamp() that had diverged to five different `Nvw` values.
+//
+// Flagged on a BARE block or container selector only:
+//   .bds-hero            { padding-block: … }   ✗ family re-declares rhythm
+//   .bds-hero__container { max-width: … }       ✗ family re-declares container
+//
+// A MODIFIER-scoped or descendant-scoped rule is the sanctioned override
+// path and passes — it is unlayered, so it outranks the layered shell
+// without `!important` (ADR-021 §2):
+//   .bds-hero--with-pricing-card       { padding-block: … }  ✓
+//   .bds-hero--interior-minimal .bds-hero__container { max-width: 72ch }  ✓
+//
+// `padding-block-end` / `-start` longhands also pass: `bds-card-grid`'s
+// heavier bottom inset is a documented asymmetry, not a rhythm re-declaration.
+
+const SHELL_FAMILIES = [
+  'bds-hero',
+  'bds-about',
+  'bds-features',
+  'bds-cta',
+  'bds-card-grid',
+  'bds-support-plan',
+];
+
+// `.bds-hero {` — bare block, no modifier, no descendant, no compound.
+const BARE_BLOCK_RE = new RegExp(`^\\s*\\.(${SHELL_FAMILIES.join('|')})\\s*\\{\\s*$`);
+// `.bds-hero__container {` — bare container, same constraints.
+const BARE_CONTAINER_RE = new RegExp(`^\\s*\\.(${SHELL_FAMILIES.join('|')})__container\\s*\\{\\s*$`);
+
+const SHELL_RHYTHM_PROP = /^\s*padding-block\s*:/;
+const SHELL_CONTAINER_PROPS = /^\s*(max-width|margin-inline|padding-inline)\s*:/;
+
+function checkSectionShellRedeclaration(file, errors) {
+  if (!file.endsWith('.css') && !file.endsWith('.astro')) return;
+  if (file.endsWith('section-shell.css')) return;
+  const lines = readLines(file);
+
+  let mode = null; // 'block' | 'container' | null
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+
+    if (mode === null) {
+      if (BARE_BLOCK_RE.test(line)) mode = 'block';
+      else if (BARE_CONTAINER_RE.test(line)) mode = 'container';
+      continue;
+    }
+
+    if (/^\s*\}/.test(line)) {
+      mode = null;
+      continue;
+    }
+
+    const isViolation =
+      mode === 'block' ? SHELL_RHYTHM_PROP.test(line) : SHELL_CONTAINER_PROPS.test(line);
+    if (!isViolation) continue;
+
+    const prop = line.trim().split(':')[0].trim();
+    errors.push({
+      file,
+      line: i + 1,
+      severity: 'error',
+      rule: 'section-shell-redeclared',
+      message:
+        `\`${prop}\` is owned by the shared section shell — compose ` +
+        `\`bds-blueprint-section\`/\`bds-blueprint-section__container\` instead of re-declaring it here. ` +
+        `For a deliberate exception use a modifier-scoped selector, or set ` +
+        `\`--bds-blueprint-section-content-width\` / \`--bds-blueprint-section-padding-inline\` ` +
+        `(content-system/blueprints/section-shell.css, ADR-021).`,
+      snippet: line.trim().slice(0, 120),
+    });
+  }
+}
+
 // ── Run ───────────────────────────────────────────────────────────────────
 
 const files = explicitFiles
@@ -292,6 +373,7 @@ for (const file of files) {
   checkBlueprintComposition(file, findings);
   checkHardcodedAspectRatio(file, findings);
   checkInventedVariants(file, findings);
+  checkSectionShellRedeclaration(file, findings);
 }
 
 const errors = findings.filter((f) => f.severity === 'error');
