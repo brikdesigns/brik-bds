@@ -4,7 +4,7 @@ import { NavItem } from './NavItem';
 import * as Icons from '../../icons';
 
 const meta: Meta<typeof NavItem> = {
-  title: 'Components/nav-item',
+  title: 'Navigation/nav-item',
   component: NavItem,
   tags: ['surface-shared'],
   argTypes: {

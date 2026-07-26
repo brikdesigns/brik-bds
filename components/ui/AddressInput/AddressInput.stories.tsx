@@ -20,7 +20,7 @@ const meta: Meta<typeof AddressInput> = {
   title: 'Components/address-input',
   component: AddressInput,
   tags: ['surface-shared'],
-  parameters: { layout: 'padded' },
+  parameters: { layout: 'centered' },
   decorators: [
     (Story) => (
       <div style={{ minHeight: 360, width: 420 }}>
