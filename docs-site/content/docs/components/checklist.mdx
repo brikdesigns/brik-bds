@@ -1,0 +1,106 @@
+---
+title: Checklist
+description: Row-style completion control. The whole row toggles a task done — line-through, muted color, and a subtle completion background.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Checklist is a completion control: a circular toggle + label wrapped in a native `<label>`, so the **entire row** is the click target. Checking a row strikes the label through, mutes its color, and tints the row background.
+
+It is **distinct from [Checkbox](/docs/components/checkbox)** — same shape, different meaning. Checkbox represents a *selection* (this option is chosen); Checklist represents a *completion* (this unit of work is done). Reach for Checklist in task lists, clinical procedures, and compliance checks.
+
+## Use it for
+
+- Task / to-do lists where items get marked done
+- Clinical procedure or compliance checklists
+- Daily-maintenance runbooks with a running "n of N completed" counter
+- Any discrete unit of work that is completed rather than selected
+
+## Import
+
+```tsx
+import { Checklist } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+`checked` drives the completion styling; `onCheckedChange` fires with the next state when the row is clicked. Native `Space` / `Enter` toggle it — no manual key handling.
+
+```tsx
+const [done, setDone] = useState(false);
+
+<Checklist
+  label="Restock surgical gloves"
+  checked={done}
+  onCheckedChange={setDone}
+/>
+```
+
+### Disabled
+
+`disabled` locks the toggle and mutes the row — use during an async save or on read-only items.
+
+```tsx
+<Checklist label="Verify autoclave log" checked disabled onCheckedChange={() => {}} />
+```
+
+## Pattern: checklist with a completion counter
+
+The canonical use — a task sheet where the completion background makes done-vs-not glanceable and a counter tracks progress across rows.
+
+```tsx
+const [items, setItems] = useState([
+  { id: 'a', label: 'Refill hand sanitizer stations', checked: true },
+  { id: 'b', label: 'Restock surgical gloves', checked: false },
+  { id: 'c', label: 'Verify autoclave temperature log', checked: false },
+]);
+const toggle = (id) =>
+  setItems((prev) => prev.map((i) => (i.id === id ? { ...i, checked: !i.checked } : i)));
+const completed = items.filter((i) => i.checked).length;
+
+<>
+  <span>{completed} of {items.length} completed</span>
+  {items.map((item) => (
+    <Checklist
+      key={item.id}
+      label={item.label}
+      checked={item.checked}
+      onCheckedChange={() => toggle(item.id)}
+    />
+  ))}
+</>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use Checklist for form selection.** If the box means "this option is selected" (filters, multi-select, opt-in), use [Checkbox](/docs/components/checkbox). Checklist's line-through + completion tint is wrong for a selection.
+</Callout>
+
+- **Don't use it for a single on/off setting.** A lone preference toggle is a [Switch](/docs/components/switch).
+- **Don't rebuild the row.** The label is the click target by design — don't wrap it in another interactive element.
+
+## Accessibility
+
+- Renders a native `<label>` wrapping a real `<input type="checkbox">`, so the whole row is clickable and `Space` / `Enter` toggle for free — no manual `onKeyDown`.
+- The circular toggle visual is `aria-hidden`; the checkbox carries the state and the `label` provides the accessible name.
+- Pass a text (or lightly marked-up) `label` — it is the accessible name for the control.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` | `ReactNode` *(required)* | — |
+| `checked` | `boolean` *(required)* | — |
+| `onCheckedChange` | `(checked: boolean) => void` *(required)* | — |
+| `disabled` | `boolean` | `false` |
+
+Plus all standard `<label>` HTML attributes (excluding `onChange`).
+
+## Related
+
+- [Checkbox](/docs/components/checkbox) — for *selection*, not completion
+- [Switch](/docs/components/switch) — single on/off setting
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/blocks-checklist--overview)**
