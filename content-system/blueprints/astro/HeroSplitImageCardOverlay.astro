@@ -56,6 +56,9 @@
  */
 import type { BlueprintProps } from './types';
 
+// Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
+import '../section-shell.css';
+
 /**
  * Aspect-ratio slug — mirrors the BDS `FrameRatio` vocabulary backed by the
  * `--aspect-*` token family (#486). Defined locally rather than imported from
@@ -112,13 +115,13 @@ const cta = section.cta;
 ---
 
 <section
-  class="bds-hero bds-hero--with-pricing-card"
+  class="bds-blueprint-section bds-hero bds-hero--with-pricing-card"
   aria-labelledby={titleId}
   data-blueprint-key="hero_split_image_card_overlay"
   data-service-line={resolvedServiceLine}
   data-audience={resolvedServiceLine}
 >
-  <div class="bds-hero__container">
+  <div class="bds-blueprint-section__container bds-hero__container">
     <div class="bds-hero__content">
       {breadcrumb.length > 0 && (
         <nav class="bds-breadcrumb bds-hero__breadcrumb" aria-label="Breadcrumb">
@@ -216,12 +219,12 @@ const cta = section.cta;
       </aside>
     ) : (
       <aside
-        class="bds-hero__missing"
+        class="bds-blueprint-section__missing bds-hero__missing"
         data-content-needed="hero_image_url"
         role="presentation"
         style={imageRatio !== 'square' ? `--bds-hero-image-ratio: ${aspectToken(imageRatio)}` : undefined}
       >
-        <p class="bds-hero__missing-label">
+        <p class="bds-blueprint-section__missing-label">
           Hero image card missing for this page.
         </p>
       </aside>
@@ -230,6 +233,9 @@ const cta = section.cta;
 </section>
 
 <style>
+  /* Centred container: ../section-shell.css (ADR-021). The tighter interior
+     rhythm below is a documented modifier-level exception — twin-consistent
+     with React `Hero.css`, and unlayered so it outranks `.bds-blueprint-section`. */
   .bds-hero--with-pricing-card {
     background: var(--bds-hero-bg, var(--page-secondary));
     padding-block: var(
@@ -366,9 +372,6 @@ const cta = section.cta;
   }
 
   .bds-hero__container {
-    max-width: var(--content-width-xl);
-    margin-inline: auto;
-    padding-inline: var(--padding-lg);
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--gap-xl);
@@ -481,22 +484,10 @@ const cta = section.cta;
     line-height: 1;
   }
 
+  /* Stub treatment: ../section-shell.css `.bds-blueprint-section__missing`. Only the
+     ratio + corner radius vary per renderer. */
   .bds-hero__missing {
     aspect-ratio: var(--bds-hero-image-ratio, var(--aspect-1-1));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--padding-xl);
-    background: var(--surface-secondary);
-    border: 2px dashed var(--border-secondary);
     border-radius: var(--bds-hero-radius, var(--border-radius-lg));
-  }
-
-  .bds-hero__missing-label {
-    margin: 0;
-    font-family: var(--font-family-body);
-    font-size: var(--body-xl);
-    color: var(--text-secondary);
-    text-align: center;
   }
 </style>

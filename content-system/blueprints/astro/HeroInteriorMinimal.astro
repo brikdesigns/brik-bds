@@ -23,6 +23,9 @@
  */
 import type { BlueprintProps } from './types';
 
+// Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
+import '../section-shell.css';
+
 interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
@@ -35,11 +38,11 @@ const cta = section.cta;
 ---
 
 <section
-  class="bds-hero bds-hero--interior-minimal"
+  class="bds-blueprint-section bds-hero bds-hero--interior-minimal"
   aria-labelledby={titleId}
   data-blueprint-key="hero_interior_minimal"
 >
-  <div class="bds-hero__container">
+  <div class="bds-blueprint-section__container bds-hero__container">
     <div class="bds-hero__content">
       {eyebrow && <p class="bds-hero__subtitle">{eyebrow}</p>}
       <h1 id={titleId} class="bds-hero__title">{headline}</h1>
@@ -52,18 +55,25 @@ const cta = section.cta;
 </section>
 
 <style>
+  /* Section rhythm + centred container: ../section-shell.css (ADR-021).
+     This renderer's rhythm moved from 6vw to the harmonised 7vw. */
   .bds-hero {
     background: var(--bds-hero-bg, var(--page-primary));
-    padding-block: clamp(var(--padding-xl), 6vw, var(--padding-huge));
   }
 
   .bds-hero__container {
-    max-width: 72ch;
-    margin-inline: auto;
-    padding-inline: var(--padding-xl);
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
+  }
+
+  /* Narrow reading column + wider inline inset — a deliberate modifier-scoped
+     exception to the shared container (ADR-021 §3), matching the React twin's
+     `.bds-hero--interior-minimal .bds-hero__container` rule. Values unchanged
+     by #1439. */
+  .bds-hero--interior-minimal .bds-hero__container {
+    max-width: 72ch;
+    --bds-blueprint-section-padding-inline: var(--padding-xl);
   }
 
   .bds-hero__content {

@@ -1,0 +1,105 @@
+/*
+ * Blueprint section shell — the one place section rhythm, the centred
+ * container, the sr-only utility, and the content-needed media stub are
+ * defined for BOTH renderers (brik-bds#1439, umbrella #1438).
+ *
+ * Before this file, all six canonical families (`bds-hero`, `bds-about`,
+ * `bds-features`, `bds-cta`, `bds-card-grid`, `bds-support-plan`) re-declared
+ * the same four blocks in their own CSS — once in `react/*.css`, again in each
+ * `astro/*.astro` scoped <style>. The copies had drifted: the vertical-rhythm
+ * clamp used 5/6/7/8/9vw depending on the file, and the React and Astro twins
+ * of the SAME family disagreed with each other (hero was 7vw in React and
+ * 8vw/6vw/6vw across its three Astro renderers). Twins of one family cannot
+ * both be intentional tuning — that is copy-paste drift, so #1439 harmonises
+ * to the plurality value (7vw). See docs/adrs/ADR-021 for the decision record.
+ *
+ * ── Delivery ──────────────────────────────────────────────────────────────
+ * React: each family's `.tsx` side-effect-imports this file, so it lands in
+ * the `dist/styles.css` bundle exactly once. No consumer action required.
+ *
+ * Astro: each blueprint's frontmatter imports it, which makes Astro emit it as
+ * a GLOBAL (unscoped) stylesheet — the scoped `<style>` model cannot express a
+ * shared class. Astro dedupes it and only ships it on pages that actually
+ * render a blueprint. This is a package-contract change: the file is listed in
+ * package.json `files` so it reaches the tarball, and it is the first global
+ * CSS `@brikdesigns/bds/blueprints-astro` has ever shipped.
+ *
+ * ── Cascade safety ────────────────────────────────────────────────────────
+ * Every rule here sits in `@layer bds-components`. All existing blueprint CSS
+ * (react `.css` and astro scoped `<style>`) is UNLAYERED, and an unlayered
+ * rule always outranks a layered one regardless of source order. So:
+ *   - a family that needs a different value just declares it as it always has
+ *     — no `!important`, no specificity bump, no import-order dependency;
+ *   - a consumer site's own unlayered CSS can never be outranked by this file.
+ * That is what makes shipping global CSS to consumer sites safe.
+ *
+ * ── Overriding ────────────────────────────────────────────────────────────
+ * Container width and inline padding are Tier-4 hooks whose fallbacks resolve
+ * to Semantic tokens (ADR-014). Set them on the container itself:
+ *
+ *   .bds-cta__container {
+ *     --bds-blueprint-section-content-width: var(--content-width-wide);
+ *     --bds-blueprint-section-padding-inline: var(--padding-xl);
+ *   }
+ *
+ * Vertical rhythm is deliberately NOT hooked: ADR-014 forbids a Tier-4
+ * fallback that is a raw `clamp()` literal, so it stays a direct declaration
+ * (the same reasoning already documented in `react/Hero.css`). A family that
+ * genuinely needs different rhythm re-declares `padding-block` on a selector
+ * of its own, which wins by being unlayered. Two do — `bds-card-grid`'s
+ * heavier bottom inset, and `.bds-hero--with-pricing-card`'s tighter interior
+ * rhythm — and `scripts/lint-blueprint-naming.mjs` accepts exactly that shape
+ * (modifier- or descendant-scoped) while rejecting a bare re-declaration.
+ */
+
+@layer bds-components {
+  /* Section vertical rhythm. 7vw is the harmonised value (#1439 decision 1). */
+  .bds-blueprint-section {
+    padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
+  }
+
+  /* Centred content band. Both hooks fall back to Semantic tokens. */
+  .bds-blueprint-section__container {
+    max-width: var(--bds-blueprint-section-content-width, var(--content-width-xl));
+    margin-inline: auto;
+    padding-inline: var(--bds-blueprint-section-padding-inline, var(--padding-lg));
+  }
+
+  /* Visually-hidden utility — collapses the `__sr-heading` blocks that were
+     copy-pasted verbatim into StatsDarkBar.astro and
+     TestimonialsFeaturedLarge.astro. */
+  .bds-visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Content-needed media stub. Loud on purpose — a reviewer opening the page
+     sees the gap instead of an invisible empty box, and CI greps the
+     `data-content-needed` attribute that accompanies it. Composed alongside
+     the family slot (`bds-hero__missing bds-blueprint-section__missing`) so the
+     published family slot keeps working as a consumer override target; the
+     family keeps only what actually varies (aspect-ratio, corner radius). */
+  .bds-blueprint-section__missing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--padding-xl);
+    background: var(--surface-secondary);
+    border: 2px dashed var(--border-secondary);
+  }
+
+  .bds-blueprint-section__missing-label {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--body-xl);
+    color: var(--text-secondary);
+    text-align: center;
+  }
+}

@@ -180,11 +180,11 @@ export function HeroSplitImageCardOverlay({
     <Frame
       ratio={imageRatio}
       as="aside"
-      className="bds-hero__missing"
+      className="bds-blueprint-section__missing bds-hero__missing"
       data-content-needed="hero_image_url"
       role="presentation"
     >
-      <p className="bds-hero__missing-label">
+      <p className="bds-blueprint-section__missing-label">
         Hero image card missing for this page.
       </p>
     </Frame>

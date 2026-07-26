@@ -20,6 +20,9 @@
  *   bds-support-plan, __container, __header, __subtitle, __title,
  *   __description, __columns, __illustration, __main, __cta
  *
+ * Composed with the shared shell (ADR-021): `bds-blueprint-section` on the root,
+ * `bds-blueprint-section__container` on the container.
+ *
  * Token pairs (paired family ↔ size — never mix):
  *   subtitle    — --font-family-label + --label-lg (uppercase eyebrow)
  *   title (h2)  — --font-family-heading + clamp(--heading-lg, …, --heading-huge)
@@ -38,6 +41,7 @@ import { Button, Card, Stack } from '../../../components';
 import { bdsClass } from '../../../components/utils';
 import type { BlueprintCta } from '../astro/types';
 import { isActionCta } from '../astro/types';
+import '../section-shell.css';
 import './SupportPlan.css';
 
 export interface SupportPlanProps extends HTMLAttributes<HTMLElement> {
@@ -83,13 +87,13 @@ export function SupportPlan({
 
   return (
     <section
-      className={bdsClass('bds-support-plan', className)}
+      className={bdsClass('bds-blueprint-section', 'bds-support-plan', className)}
       data-blueprint-key="support_plan_callout_split"
       data-has-media={hasMedia ? 'true' : 'false'}
       aria-labelledby={titleId}
       {...rest}
     >
-      <div className="bds-support-plan__container">
+      <div className="bds-blueprint-section__container">
         {(subtitle || title || description) && (
           <Stack as="header" gap="md" className="bds-support-plan__header">
             {subtitle && (

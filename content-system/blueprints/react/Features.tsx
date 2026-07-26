@@ -34,6 +34,9 @@
  *   __item, __card, __card-link, __media, __image, __image-fallback,
  *   __content, __description, __cta, __cta-arrow
  *
+ * Composed with the shared shell (ADR-021): `bds-blueprint-section` on the root,
+ * `bds-blueprint-section__container` on the container.
+ *
  * a11y: section uses `h2` + aria-labelledby; cards are a `<ul role="list">`;
  * card title is an `h3`. Card title uses `--font-weight-bold` + 18px and the
  * description 16px regular to clear AA on saturated brand backgrounds (BDS
@@ -46,6 +49,7 @@ import { type HTMLAttributes } from 'react';
 
 import { Card, ServiceTag, Stack, type ServiceLine } from '../../../components';
 import { bdsClass } from '../../../components/utils';
+import '../section-shell.css';
 import './Features.css';
 
 /** A single feature card. */
@@ -105,12 +109,12 @@ export function Features({
 
   return (
     <section
-      className={bdsClass('bds-features', className)}
+      className={bdsClass('bds-blueprint-section', 'bds-features', className)}
       data-blueprint-key="features_3col_branded_dark"
       aria-labelledby={title ? titleId : undefined}
       {...rest}
     >
-      <div className="bds-features__container">
+      <div className="bds-blueprint-section__container">
         {hasHeader && (
           <Stack as="header" gap="md" className="bds-features__header">
             {subtitle && <p className="bds-features__subtitle">{subtitle}</p>}

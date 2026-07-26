@@ -38,6 +38,9 @@
  */
 import type { BlueprintProps } from './types';
 
+// Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
+import '../section-shell.css';
+
 interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
@@ -46,11 +49,11 @@ const callout = section.items[0];
 ---
 
 <section
-  class="bds-about"
+  class="bds-blueprint-section bds-about"
   aria-labelledby={titleId}
   data-blueprint-key="about_story_split"
 >
-  <div class="bds-about__container">
+  <div class="bds-blueprint-section__container bds-about__container">
     <div class="bds-about__narrative">
       {section.subheading && (
         <p class="bds-about__subtitle">{section.subheading}</p>
@@ -73,15 +76,12 @@ const callout = section.items[0];
 </section>
 
 <style>
+  /* Section rhythm + centred container: ../section-shell.css (ADR-021). */
   .bds-about {
     background: var(--bds-about-bg, var(--page-primary));
-    padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
   }
 
   .bds-about__container {
-    max-width: var(--content-width-xl);
-    margin-inline: auto;
-    padding-inline: var(--padding-lg);
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--gap-xl);

@@ -24,6 +24,9 @@
  * Slots (all pass `scripts/slot-pattern-check.mjs`):
  *   bds-cta, __container, __message, __title, __description, __actions, __aside
  *
+ * Composed with the shared shell (ADR-021): `bds-blueprint-section` on the root,
+ * `bds-blueprint-section__container` on the container.
+ *
  * Token pairs (paired family ↔ size — never mix):
  *   title (h2)  — --font-family-heading + clamp(--heading-xl … --display-sm)
  *   description — --font-family-body + --heading-sm
@@ -39,6 +42,7 @@ import { Button } from '../../../components';
 import { bdsClass } from '../../../components/utils';
 import type { BlueprintCta } from '../astro/types';
 import { isActionCta } from '../astro/types';
+import '../section-shell.css';
 import './Cta.css';
 
 export type CtaLayout = 'default' | 'split';
@@ -111,11 +115,11 @@ export function Cta({
 
   return (
     <section
-      className={bdsClass('bds-cta', isSplit && 'bds-cta--split', className)}
+      className={bdsClass('bds-blueprint-section', 'bds-cta', isSplit && 'bds-cta--split', className)}
       aria-labelledby={titleId}
       {...rest}
     >
-      <div className="bds-cta__container">
+      <div className="bds-blueprint-section__container bds-cta__container">
         <div className="bds-cta__message">
           <h2 id={titleId} className="bds-cta__title">
             {title}
