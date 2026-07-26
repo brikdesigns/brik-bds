@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent } from 'storybook/test';
 import { FileUploader } from './FileUploader';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
@@ -95,5 +96,31 @@ export const WithFileList: Story = {
       );
     }
     return <UploadWithFileList />;
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   INTERACTION TEST — play-only, hidden from MCP discovery
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * The dropzone is a hand-rolled `role="button"` whose `onKeyDown` opens the
+ * hidden file input on Enter/Space. A native file dialog can't open in a test,
+ * so we spy on the input's `click` and assert the keyboard path invokes it —
+ * the operability that would otherwise silently regress (WCAG 2.1.1).
+ * @summary Enter on the dropzone opens the file input
+ */
+export const InteractionTestKeyboardActivation: Story = {
+  tags: ['!manifest'],
+  args: { label: 'Upload a file' },
+  play: async ({ canvas, canvasElement }) => {
+    const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement;
+    const clickSpy = fn();
+    input.click = clickSpy;
+
+    const dropzone = canvas.getByRole('button', { name: 'File upload dropzone' });
+    dropzone.focus();
+    await userEvent.keyboard('{Enter}');
+    await expect(clickSpy).toHaveBeenCalled();
   },
 };

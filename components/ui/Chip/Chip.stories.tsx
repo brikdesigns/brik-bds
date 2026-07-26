@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from '@iconify/react';
+import { expect, fn, userEvent } from 'storybook/test';
 import { Chip } from './Chip';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
@@ -71,5 +72,30 @@ export const Default: Story = {
     label: 'Chip',
     icon: <Icon icon="ph:funnel" />,
     showDropdown: true,
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   INTERACTION TEST — play-only, hidden from MCP discovery
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * A clickable chip (`onChipClick`) is a hand-rolled `role="button"` div whose
+ * `onKeyDown` fires the handler on Enter/Space — no native button, so the
+ * keyboard path lives entirely in that handler. Assert it so it can't silently
+ * regress (WCAG 2.1.1).
+ * @summary Enter on a clickable chip fires onChipClick
+ */
+export const InteractionTestKeyboardActivation: Story = {
+  tags: ['!manifest'],
+  args: {
+    label: 'Filter',
+    onChipClick: fn(),
+  },
+  play: async ({ args, canvas }) => {
+    const chip = canvas.getByRole('button', { name: 'Filter' });
+    chip.focus();
+    await userEvent.keyboard('{Enter}');
+    await expect(args.onChipClick).toHaveBeenCalled();
   },
 };

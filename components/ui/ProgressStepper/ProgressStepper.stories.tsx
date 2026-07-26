@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent } from 'storybook/test';
 import { ProgressStepper, type ProgressStep } from './ProgressStepper';
 import { Button } from '../Button';
 
@@ -143,5 +144,32 @@ export const WithStepNavigation: Story = {
         </div>
       </div>
     );
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   INTERACTION TEST — play-only, hidden from MCP discovery
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Each clickable step is a hand-rolled `role="button"` div whose `onKeyDown`
+ * fires `onStepClick` on Enter/Space — there is no native button, so keyboard
+ * operability lives entirely in that handler. Assert it so the path can't
+ * silently regress (WCAG 2.1.1). `activeStep={2}` makes step 1 complete →
+ * clickable.
+ * @summary Enter on a step fires onStepClick
+ */
+export const InteractionTestKeyboardActivation: Story = {
+  tags: ['!manifest'],
+  args: {
+    steps: onboardingSteps,
+    activeStep: 2,
+    onStepClick: fn(),
+  },
+  play: async ({ args, canvas }) => {
+    const step = canvas.getByRole('button', { name: 'Go to step 1: Account setup' });
+    step.focus();
+    await userEvent.keyboard('{Enter}');
+    await expect(args.onStepClick).toHaveBeenCalledWith(0);
   },
 };
