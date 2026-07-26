@@ -1,0 +1,83 @@
+---
+title: Completion toggle
+description: The atomic circular control for a complete / not-complete state. The self-contained button primitive underneath Checklist — reach for it when the toggle stands alone.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+CompletionToggle is a circular completion control that renders as a self-contained `<button>`. It marks a discrete unit of work complete or not — task cards, completion lists, the toggle in a [Checklist](/docs/components/checklist) row. It is deliberately **distinct from [Checkbox](/docs/components/checkbox)**: Checkbox is rectangular and means *selection* ("I agree"), CompletionToggle is circular and means *completion* ("this is done").
+
+## Use it for
+
+- The complete / not-complete control on a task card
+- A standalone completion toggle where the button *is* the click target
+- Building custom completion surfaces that need the circular control without a full row
+
+## Import
+
+```tsx
+import { CompletionToggle } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+`checked` drives the state; `onCheckedChange` fires with the next state on click. The button owns its own click target and stops propagation, so it is safe to nest inside a clickable card.
+
+```tsx
+const [done, setDone] = useState(false);
+
+<CompletionToggle checked={done} onCheckedChange={setDone} />
+```
+
+### Accent
+
+`accent` controls the incomplete-state hover affordance. `neutral` (default) borders in `--border-primary`; `brand` tints the hover with a brand border and fill, reading as more overtly interactive.
+
+```tsx
+<CompletionToggle checked={false} onCheckedChange={setDone} accent="brand" />
+```
+
+### Disabled
+
+`disabled` locks the toggle and mutes it — during an async save or on read-only items.
+
+```tsx
+<CompletionToggle checked disabled onCheckedChange={() => {}} />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use CompletionToggle for form selection.** A rectangular box meaning "this option is chosen" (filters, opt-in, terms) is [Checkbox](/docs/components/checkbox). CompletionToggle's circular completion semantics are wrong for a selection.
+</Callout>
+
+- **Don't rebuild the Checklist row.** If you want the whole row (label + toggle) to be one click target, use [Checklist](/docs/components/checklist) — it pairs this control's visual with a native `<label>` + `<input>`.
+- **Don't use it for a single on/off setting.** A lone preference toggle is a [Switch](/docs/components/switch).
+
+## Accessibility
+
+- Renders a `<button type="button">` with `aria-pressed` reflecting `checked`.
+- The accessible name defaults to `"Mark complete"` / `"Mark incomplete"` based on state; pass `aria-label` to override.
+- The check glyph is `aria-hidden` — state is conveyed by `aria-pressed`, not the icon.
+
+## API
+
+{/* props-check: CompletionToggleProps @ components/ui/CompletionToggle/CompletionToggle.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `checked` | `boolean` *(required)* | — |
+| `onCheckedChange` | `(checked: boolean) => void` *(required)* | — |
+| `disabled` | `boolean` | `false` |
+| `accent` | `'neutral' \| 'brand'` | `'neutral'` |
+
+Plus all standard `<button>` HTML attributes (excluding `type` and `onChange`).
+
+## Related
+
+- [Checklist](/docs/components/checklist) — the row-style control that pairs this toggle with a label
+- [Checkbox](/docs/components/checkbox) — rectangular control for *selection*, not completion
+- [Switch](/docs/components/switch) — single on/off setting
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-completion-toggle--overview)**

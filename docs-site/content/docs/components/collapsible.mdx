@@ -1,0 +1,94 @@
+---
+title: Collapsible
+description: A progressive-disclosure section — a header with a section label, title, and +/− toggle that reveals content. Radix-backed for correct aria and keyboard handling.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Collapsible is a single expandable section: a clickable header (optional section label + title + `+`/`−` toggle) that reveals its content. It wraps `@radix-ui/react-collapsible`, so `aria-expanded`, keyboard activation, and focus management are correct out of the box. It supports uncontrolled (`defaultOpen`) and controlled (`isOpen` + `onOpenChange`) modes.
+
+<Callout type="info">
+  Collapsible is the Radix-backed successor to `CollapsibleCard` ([#701](https://github.com/brikdesigns/brik-bds/issues/701)) — identical props. If you land on the deprecated [Collapsible card](/docs/components/collapsible-card) page, this is the component to use.
+</Callout>
+
+## Use it for
+
+- A single expandable section — details, an optional form step, supplementary content
+- Progressive disclosure where one region opens independently
+- Section shells with a label + title header and inline header actions
+
+## Import
+
+```tsx
+import { Collapsible } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Uncontrolled
+
+`title` is the header (required); `children` is the revealed content. `defaultOpen` sets the initial state and the component manages the rest.
+
+```tsx
+<Collapsible sectionLabel="Section 01" title="Overview and Goals" defaultOpen>
+  <p>Revealed content…</p>
+</Collapsible>
+```
+
+### Controlled
+
+Drive the open state yourself with `isOpen` + `onOpenChange` — for accordion-like coordination or persisting the state.
+
+```tsx
+const [open, setOpen] = useState(false);
+
+<Collapsible title="Overview" isOpen={open} onOpenChange={setOpen}>
+  <p>Revealed content…</p>
+</Collapsible>
+```
+
+### Header actions
+
+`headerActions` renders alongside the toggle — a secondary control that sits in the header without stealing the expand click.
+
+```tsx
+<Collapsible title="Attachments" headerActions={<Badge>3</Badge>}>
+  {/* … */}
+</Collapsible>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't stack Collapsibles for a mutually-exclusive set.** A group of sections where opening one closes the others is [Accordion](/docs/components/accordion) — it owns the single-open coordination. Collapsible is one independent section.
+</Callout>
+
+- **Don't reach for the deprecated `CollapsibleCard`.** It is a stub that redirects here — use Collapsible directly.
+
+## Accessibility
+
+- Wraps `@radix-ui/react-collapsible`, so the trigger carries `aria-expanded` and the content region is correctly associated; `Space` / `Enter` toggle and focus is managed for you.
+- The `+`/`−` toggle glyph is `aria-hidden` — expanded state is announced via `aria-expanded`, not the icon.
+- The `title` renders as an `<h3>`; keep the surrounding heading hierarchy consistent.
+
+## API
+
+{/* props-check: CollapsibleProps @ components/ui/Collapsible/Collapsible.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `string` *(required)* | — |
+| `children` | `ReactNode` *(required)* | — |
+| `sectionLabel` | `string` | — |
+| `isOpen` | `boolean` | — |
+| `onOpenChange` | `(isOpen: boolean) => void` | — |
+| `defaultOpen` | `boolean` | `false` |
+| `headerActions` | `ReactNode` | — |
+
+Plus all standard `<div>` HTML attributes.
+
+## Related
+
+- [Accordion](/docs/components/accordion) — multiple sections with single-open coordination
+- [Collapsible card](/docs/components/collapsible-card) — deprecated predecessor (redirects here)
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-collapsible--overview)**
