@@ -1,0 +1,93 @@
+---
+title: Testimonial
+description: A customer testimonial block — quote, attribution, and an optional star rating — in semantic figure/blockquote markup. For marketing pages and client sites.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Testimonial is a customer-quote block: the quote, an attribution (name + role), and an optional 1–5 star rating, rendered as semantic `<figure>` / `<blockquote>` / `<figcaption>` / `<cite>` HTML. It is a **`surface-web`** component — for marketing pages and Webflow client sites, not product UI.
+
+<Callout type="info">
+  Testimonial is the renamed successor to `CardTestimonial` ([#702](https://github.com/brikdesigns/brik-bds/issues/702)) — identical props. If you land on the deprecated [Card testimonial](/docs/components/card-testimonial) page, this is the component to use.
+</Callout>
+
+## Use it for
+
+- A single customer quote on a landing or marketing page
+- Social-proof blocks with attribution and a star rating
+- Client-site testimonial sections
+
+## Import
+
+```tsx
+import { Testimonial } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Brand
+
+`variant="brand"` (default) renders the quote on a brand-tinted surface. `quote` is the body, `authorName` + `authorRole` the attribution.
+
+```tsx
+<Testimonial
+  quote="Brik rebuilt our site in a week and it finally looks like us."
+  authorName="Dana Reyes"
+  authorRole="Founder, Northwind Dental"
+/>
+```
+
+### Outlined
+
+`variant="outlined"` swaps to a neutral surface with a border — for pages where the brand tint is too heavy.
+
+```tsx
+<Testimonial variant="outlined" quote="…" authorName="Dana Reyes" authorRole="Founder" />
+```
+
+### With a rating
+
+`rating` (1–5) renders filled stars beneath the attribution.
+
+```tsx
+<Testimonial
+  quote="Best decision we made all year."
+  authorName="Sam Okonkwo"
+  authorRole="Owner, Vale Partners"
+  rating={5}
+/>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use Testimonial in product UI.** It is a `surface-web` marketing component. Inside the app, a quote or note belongs in a [Card](/docs/components/card) or the relevant data component.
+</Callout>
+
+- **Don't reach for the deprecated `CardTestimonial`.** It is a stub that redirects here — use Testimonial directly.
+
+## Accessibility
+
+- Renders semantic `<figure>` / `<blockquote>` / `<figcaption>` / `<cite>`, so the quote and attribution carry correct roles for free.
+- The decorative quote mark is `aria-hidden`; the star rating is exposed as `role="img"` with an `aria-label` like `"5 out of 5 stars"`.
+
+## API
+
+{/* props-check: TestimonialProps @ components/ui/Testimonial/Testimonial.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `quote` | `string` *(required)* | — |
+| `authorName` | `string` *(required)* | — |
+| `authorRole` | `string` | — |
+| `rating` | `1 \| 2 \| 3 \| 4 \| 5` | — |
+| `variant` | `'brand' \| 'outlined'` | `'brand'` |
+
+Plus all standard HTML attributes for the root `<figure>`.
+
+## Related
+
+- [Card testimonial](/docs/components/card-testimonial) — deprecated predecessor (redirects here)
+- [Pricing card](/docs/components/pricing-card) — sibling marketing surface
+- [Card](/docs/components/card) — general content surface for in-product quotes
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-testimonial--overview)**

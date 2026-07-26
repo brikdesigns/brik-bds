@@ -241,11 +241,8 @@ const COMPONENT_LINKS = /<ComponentLinks\b[^>]*\bslug="([^"]+)"/g;
 const DOCS_PAGE_BACKLOG = {
   'addable-tag-list': 1466,
   'block-quote': 1466,
-  'collapsible': 1466,
-  'completion-toggle': 1466,
   'dependent-select': 1466,
   'page': 1466,
-  'testimonial': 1466,
 };
 const DOCS_PAGE_EXEMPT = {
   // slug: 'reason' — populated by #1466 triage as components are classified
