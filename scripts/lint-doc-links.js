@@ -226,7 +226,6 @@ const COMPONENT_LINKS_WITHOUT_DOCS_PAGE = new Set([
   'addable-tag-list',
   'animated-icon',
   'block-quote',
-  'checklist',
   'collapsible',
   'completion-toggle',
   'data-view',
