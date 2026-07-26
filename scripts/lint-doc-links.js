@@ -243,9 +243,7 @@ const DOCS_PAGE_BACKLOG = {
   'block-quote': 1466,
   'collapsible': 1466,
   'completion-toggle': 1466,
-  'data-view': 1466,
   'dependent-select': 1466,
-  'file-card': 1466,
   'page': 1466,
   'testimonial': 1466,
 };
