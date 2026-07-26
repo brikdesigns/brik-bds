@@ -5,7 +5,7 @@
 **Supersedes:** —
 **Superseded by:** —
 **Owner:** Nick Stanerson
-**Related:** #1439 (this change), #1438 (blueprint cleanup umbrella), #1443 (token burn-down — canonicalised the token names this shell now consumes), ADR-014 (Tier-4 hook namespace — why rhythm is not hooked), ADR-017 (slot pattern gate — why `bds-section__*` needs no allowlist entry), ADR-008 (naming canon)
+**Related:** #1439 (this change), #1438 (blueprint cleanup umbrella), #1443 (token burn-down — canonicalised the token names this shell now consumes), ADR-014 (Tier-4 hook namespace — why rhythm is not hooked), ADR-017 (slot pattern gate — why `bds-blueprint-section__*` needs no allowlist entry), ADR-008 (naming canon)
 
 ## Context
 
@@ -36,7 +36,18 @@ A React-only primitive cannot fix this: half the duplication lives in `.astro` f
 
 The 7/8/9vw spread was **not** intentional per-section tuning. The decisive evidence is that the React and Astro twins of the *same* family disagree with each other — hero is 7vw in React and 8vw/6vw/6vw across its three Astro renderers; cta is 8vw in React and 8vw/7vw across its two. One family cannot have two intentional rhythms, so the spread is copy-paste drift. No commit message, comment, or design doc records an intent for any of the values.
 
-Visible effect: `bds-features` and `bds-support-plan` tighten in the ~890–1430px band (at 1200px, 108px → 84px of section padding). Above ~1430px every value clamps to `--padding-huge` and nothing changes. Reviewed in Chromatic before merge.
+**Visible effect is much smaller than the 7-vs-9 spread suggests**, because the clamp saturates. `--padding-xl` / `--padding-huge` are *density-mode* tokens, not viewport-responsive ones, so both bounds are fixed at a given `[data-mode-spacing]` and every `Nvw ≥ 7` pins to `--padding-huge` past a threshold viewport:
+
+| Spacing mode | `--padding-xl` → `--padding-huge` | 9vw saturates | 7vw saturates | Where 7vw and 9vw differ |
+|---|---|---|---|---|
+| `compact` | 24 → 32px | 356px | 457px | 267–457px only |
+| default | 32 → 48px | 533px | 686px | 356–686px, peak ~10px @ 500px |
+| `comfortable` | 40 → 80px | 889px | 1143px | 444–1143px, peak ~15px @ 768px |
+| `spacious` | 80 → 128px | 1422px | 1829px | 889–1829px, peak ~27px @ 1440px |
+
+So in the **default** mode every desktop width renders identically before and after — the harmonisation is a no-op above 686px. The change is visible on mobile/tablet in default mode (≤10px) and on desktop only under `spacious` (up to ~27px at 1440px). The same saturation applies to the 8vw → 7vw moves.
+
+An earlier draft of this ADR claimed a 108px → 84px shift at 1200px in the *default* mode. That was wrong — it misread the `[data-mode-spacing]` blocks in `dist/tokens.css` as viewport breakpoints. The numbers above are computed from the actual token values.
 
 **The shell's own rhythm is deliberately not a Tier-4 hook.** ADR-014 requires a Tier-4 fallback to resolve to a Semantic token, never a raw `clamp()` literal, so `var(--bds-blueprint-section-padding-y, clamp(…))` is out. A family that genuinely needs different rhythm re-declares `padding-block` on its own selector and wins by being unlayered (see decision 2).
 
@@ -107,7 +118,7 @@ Keeping them would leave a `bds-*` class in shipped markup with no rule anywhere
 
 - **Four blocks have one definition each** instead of 12, 12, 2 and 3. A rhythm change is now a one-line edit, not a twelve-file sweep.
 - **React and Astro twins can no longer drift** on rhythm or container width — they read the same file.
-- **`bds-features` and `bds-support-plan` render tighter** between ~890px and ~1430px; `HeroSplit6040` / `CtaDarkCentered` likewise (8vw → 7vw), and `HeroInteriorMinimal` loosens slightly (6vw → 7vw). These are the only intended visual changes.
+- **The rhythm change is invisible at desktop widths in the default spacing mode** (the clamp saturates above 686px) and caps at ~10px on mobile/tablet. It is only materially visible under `[data-mode-spacing="spacious"]`, where `bds-features` / `bds-support-plan` / `HeroSplit6040` / `CtaDarkCentered` tighten by up to ~27px at 1440px and `HeroInteriorMinimal` loosens. See the saturation table above — these are the only intended visual changes.
 - **Four family slots are retired** (table above). A consumer stylesheet targeting `bds-card-grid__container`, `bds-features__container`, `bds-support-plan__container` or `bds-hero__missing-label` must retarget the shell class. Per the package spec §1.4 new-architecture client repos hand-roll no sections and take fixes via `npm update`, so the exposure is limited to bespoke override CSS.
 - **A gate ships with the fix.** `lint-blueprint-naming.mjs` gains a `section-shell-redeclared` rule that fails any bare `.bds-<family> { padding-block }` or `.bds-<family>__container { max-width | margin-inline | padding-inline }`, and it now runs in `npm run validate` and the release workflow, not just pre-commit. It caught a real inconsistency in this change's own first draft.
 - **The Astro package now ships one global stylesheet.** Consumers get it automatically on `npm update`; nothing to import. The layer guarantees it cannot outrank their own CSS.
