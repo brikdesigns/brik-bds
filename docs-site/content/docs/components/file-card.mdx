@@ -1,0 +1,108 @@
+---
+title: File card
+description: The populated state of a file upload — one asset shown as a card with preview, filename, metadata, and Replace / Delete actions. Pairs with FileUploader.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+FileCard is the *populated* state of a file upload: one uploaded asset rendered as a card surface with a preview thumbnail, filename, optional metadata line, an optional open-in-new-tab link, and an action row with optional Replace / Delete buttons. It composes alongside [FileUploader](/docs/components/file-uploader), which owns the empty dropzone state. The `aspectRatio` slug consumes the `--aspect-*` token family so a CMS encodes the target image shape once and the same slug feeds [Frame](/docs/components/frame) on the consumer side.
+
+## Use it for
+
+- Showing an already-uploaded file (image, SVG, or generic type)
+- The filled slot in an upload UI — pair with FileUploader for the empty slot
+- A grid or list of uploaded assets, each with its own Replace / Delete actions
+
+## Import
+
+```tsx
+import { FileCard } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Image preview
+
+`preview="image"` renders `src` in the thumbnail. `name` is the filename; `meta` is an optional dimensions / size line; `href` makes the thumbnail an open-in-new-tab link.
+
+```tsx
+<FileCard
+  preview="image"
+  src="https://cdn.example/hero.jpg"
+  aspectRatio="16-9"
+  name="hero.jpg"
+  meta="1600 × 900 • 248 KB"
+  href="https://cdn.example/hero.jpg"
+  onReplace={() => openFilePicker()}
+  onDelete={() => clearImage()}
+/>
+```
+
+### SVG and icon previews
+
+`preview="svg"` renders a vector `src`; `preview="icon"` renders a generic file-type placeholder for non-renderable types (PDF, ZIP) and ignores `src`.
+
+```tsx
+<FileCard preview="svg" src="/logo.svg" name="logo.svg" />
+<FileCard preview="icon" name="report.pdf" meta="PDF • 1.2 MB" />
+```
+
+### Actions and disabled
+
+`onReplace` and `onDelete` each render their button only when the handler is passed. `disabled` locks the action buttons while preserving the visual.
+
+```tsx
+<FileCard preview="icon" name="locked.pdf" onDelete={remove} disabled />
+```
+
+## Pattern: compose with FileUploader
+
+Render [FileUploader](/docs/components/file-uploader) while the slot is empty, then swap to FileCard once a file has been uploaded.
+
+```tsx
+{file ? (
+  <FileCard preview="image" src={file.url} name={file.name} onDelete={() => setFile(null)} />
+) : (
+  <FileUploader onUpload={setFile} />
+)}
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use FileCard for the empty / dropzone state.** Accepting a new upload is [FileUploader](/docs/components/file-uploader) — FileCard assumes a file already exists.
+</Callout>
+
+- **Don't use it as a generic content card.** A general titled surface is [Card](/docs/components/card); FileCard is specifically the uploaded-asset shape.
+
+## Accessibility
+
+- Image and SVG previews use `previewAlt` for alt text, falling back to `name`; the icon preview is `aria-hidden` since it carries no information beyond the filename.
+- The open-in-new-tab links carry an explicit `aria-label` (`Open {name} in new tab`) and use `rel="noopener noreferrer"`.
+- Replace / Delete are real `<button>`s and honor `disabled`.
+
+## API
+
+{/* props-check: FileCardProps @ components/ui/FileCard/FileCard.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `preview` | `'image' \| 'icon' \| 'svg'` *(required)* | — |
+| `src` | `string` | — |
+| `aspectRatio` | `FileCardAspectRatio` | `'1-1'` |
+| `name` | `string` *(required)* | — |
+| `meta` | `string` | — |
+| `href` | `string` | — |
+| `onReplace` | `() => void` | — |
+| `onDelete` | `() => void` | — |
+| `disabled` | `boolean` | `false` |
+| `previewAlt` | `string` | — |
+
+Plus all standard `<div>` HTML attributes (excluding `onChange`).
+
+## Related
+
+- [FileUploader](/docs/components/file-uploader) — the empty / dropzone state FileCard pairs with
+- [Frame](/docs/components/frame) — consumes the same `aspectRatio` slug for the preview shape
+- [Card](/docs/components/card) — the general titled-surface card
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-file-card--overview)**

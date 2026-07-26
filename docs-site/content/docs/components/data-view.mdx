@@ -1,0 +1,115 @@
+---
+title: Data view
+description: The loading, empty, and error shell every data display needs. Wrap a Table, CardList, or Board and let the view own the four states so pages stop rebuilding them.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+DataView is a family of four thin shells — `TableView`, `ListView`, `ProfileView`, `BoardView` — that own the loading, empty, and error states every data display needs. Pass the display primitive ([Table](/docs/components/table), [CardList](/docs/components/card-list), a [DataSection](/docs/components/data-section) stack, a [Board](/docs/components/board)) as `children`; the view renders exactly one state in precedence order — **error → loading → empty → content**. It exists so consumers stop hand-rolling a skeleton, an [EmptyState](/docs/components/empty-state), and an error [Banner](/docs/components/banner) on every page.
+
+## Use it for
+
+- Wrapping any async data display that needs loading / empty / error handling
+- A Table, list, profile, or Board that loads from the network
+- Standardizing the four data states across a product so they look and behave identically
+
+## Import
+
+Each shape has its own named view — they are distinct components, not one polymorphic `variant`, each carrying a display-shaped default skeleton.
+
+```tsx
+import { TableView, ListView, ProfileView, BoardView } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### TableView
+
+Wrap a [Table](/docs/components/table); the default loading skeleton is a header row plus body rows. Toggle `loading`, `empty`, or `error` to switch state.
+
+```tsx
+<TableView
+  loading={isLoading}
+  error={error}
+  empty={rows.length === 0}
+  emptyState={{ title: 'No items yet', description: 'Add your first record.' }}
+>
+  <Table>{/* … */}</Table>
+</TableView>
+```
+
+### ListView, ProfileView, BoardView
+
+Same prop surface, different display-shaped skeleton — a card list, a profile section stack, and a horizontal column board respectively.
+
+```tsx
+<ListView loading={isLoading} empty={items.length === 0} emptyState={{ title: 'No items' }}>
+  <CardList>{/* … */}</CardList>
+</ListView>
+
+<BoardView loading={isLoading} empty={lanes.length === 0} emptyState={{ title: 'No lanes yet' }}>
+  <Board>{/* … */}</Board>
+</BoardView>
+```
+
+### Empty state as a ReactNode
+
+`emptyState` accepts either a config object (renders [EmptyState](/docs/components/empty-state)) or any `ReactNode` for full control.
+
+```tsx
+<ListView empty emptyState={<MyCustomEmpty />}>
+  <CardList>{/* … */}</CardList>
+</ListView>
+```
+
+### Custom skeleton
+
+`skeleton` overrides the display-shaped default when you want a higher-fidelity match to the real content.
+
+```tsx
+<TableView loading skeleton={<MyTableSkeleton />}>
+  <Table>{/* … */}</Table>
+</TableView>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't reach for DataView when there are no async states to manage.** A static table or list that always has data needs no shell — render the [Table](/docs/components/table) or [CardList](/docs/components/card-list) directly.
+</Callout>
+
+- **Don't swallow errors.** `error` renders a loud error [Banner](/docs/components/banner) by design — pass the real error string; don't catch-and-hide.
+- **Don't build a fifth polymorphic view.** The four shapes are distinct components on purpose. A new display shape gets its own thin shell, not a `variant` prop.
+
+## Accessibility
+
+- Loading skeletons are marked `aria-hidden="true"` so assistive tech skips the placeholder and announces content when it arrives.
+- The error state renders a [Banner](/docs/components/banner) with `tone="error"`; the empty state renders [EmptyState](/docs/components/empty-state) — each carries its own semantics.
+
+## API
+
+The same surface on every view.
+
+{/* props-check: DataViewProps @ components/ui/DataView/DataView.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `loading` | `boolean` | — |
+| `error` | `string \| null` | — |
+| `errorTitle` | `string` | `"Couldn't load"` |
+| `empty` | `boolean` | — |
+| `emptyState` | `DataViewEmpty` | — |
+| `skeleton` | `ReactNode` | — |
+| `children` | `ReactNode` *(required)* | — |
+
+`emptyState` is a `DataViewEmptyConfig` (`{ title, description?, buttonProps? }`) or any `ReactNode`.
+
+## Related
+
+- [Table](/docs/components/table) — the display TableView wraps
+- [CardList](/docs/components/card-list) — the display ListView wraps
+- [Board](/docs/components/board) — the display BoardView wraps
+- [EmptyState](/docs/components/empty-state) — rendered for the empty state
+- [Banner](/docs/components/banner) — rendered for the error state
+- [Skeleton](/docs/components/skeleton) — the loading-state primitive
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-data-view--overview)**
