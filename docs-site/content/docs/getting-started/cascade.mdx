@@ -162,7 +162,7 @@ This page is the **canonical adoption contract**: every consumer (portal, renew-
 
 1. **Declare the layer order** — `@layer bds-tokens, bds-components, client-theme, client-overrides;` before any imports ([CSS layers](#css-layers)).
 2. **Set the mode switches on `<html>`** — `data-theme` and any `data-mode-*` the consumer opts into ([switchboard](#html-attribute-switchboard)); omit an attribute to take the default.
-3. **Import each BDS file into its layer** — `@import '@brikdesigns/bds/tokens.css' layer(bds-tokens);` and `styles.css layer(bds-components);`. `tokens.css` ships **unlayered**, so the `layer()` clause is what places it — without it the file wins as unlayered CSS and the client theme can never override. Never the internal bundle files directly, never a hand-rolled copy of a scale. (Astro/Vite JS `import`s can't carry `layer()`; those consumers cascade by source order instead — see [Framework Guides](/docs/getting-started/framework-guides).)
+3. **Import each BDS file into its layer** — `@import '@brikdesigns/bds/tokens.css' layer(bds-tokens);` and `styles.css layer(bds-components);`. `tokens.css` ships **unlayered**, so the `layer()` clause is what places it — without it the file wins as unlayered CSS and the client theme can never override. Never the internal bundle files directly, never a hand-rolled copy of a scale. A bare `layer` (no name) fails too: an anonymous layer can't be named in a `@layer` statement, so it can't be ordered against `client-theme`. Enforced by the `import-layer` rule in [`cascade-contract-check`](#where-the-cascade-is-enforced). (Astro/Vite JS `import`s can't carry `layer()`; those consumers cascade by source order instead — see [Framework Guides](/docs/getting-started/framework-guides) — and the rule skips them by construction.)
 4. **Hold zero token redefinitions** — see the rule below.
 
 <Callout type="warn">
@@ -176,9 +176,12 @@ This page is the **canonical adoption contract**: every consumer (portal, renew-
 | `scripts/lint-tokens.js` | Hex values in component CSS, nonexistent `var()` references, Primitives used outside their Semantic category | BDS pre-commit + CI (`npm run validate`) |
 | `scripts/canonical-check.mjs` | `--text-*` / `--surface-*` / `--background-*` / `--border-*` / `--color-*` names exist in `dist/tokens.css` | BDS pre-commit + CI |
 | `@brikdesigns/bds/canonical-check` (consumer dep) | Same engine published for consumer repos | Consumer pre-commit + CI via `token-audit.sh --canonical-only` |
-| consumer-redefinition + typography family↔size rule | The zero-redefinition clause above + font-family family matches font-size family within a rule | ⏳ [ADR-013 §2](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-013-token-last-mile-enforce-contract-complete-emission.md) — BDS-owned export, imported by consumer `lint-tokens` |
+| `@brikdesigns/bds/cascade-contract-check` (consumer dep) | Three rules: `no-redefinition` (clause 4 above), `typography-family` (font-family family matches font-size family within a rule), `import-layer` (clause 3 above — every CSS `@import` of `tokens.css` / `styles.css` carries a named `layer()`) | BDS-owned export, imported by consumer `lint-tokens`. Live in brikdesigns; portal wiring tracked in [#1437](https://github.com/brikdesigns/brik-bds/issues/1437) |
+| `npm run cascade-contract-check` | The same engine pointed at this docs site's own `app/global.css` — the site that publishes the contract is itself a consumer of it | BDS CI + `npm run validate` |
 
 Run BDS gates locally: `npm run validate`. Consumer gates: `./scripts/token-audit.sh --canonical-only`.
+
+The three rules split by what they can see. `canonical-check` answers "does this name exist"; `cascade-contract-check` answers "is this name allowed *here*" — a redefinition passes the first and fails the second. `import-layer` is the only one of the three that reads a statement rather than a declaration, which is why a non-compliant import went unnoticed: nothing was looking above the first `{`. See [ADR-013 §2](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-013-token-last-mile-enforce-contract-complete-emission.md).
 
 ## Related
 
