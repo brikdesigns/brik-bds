@@ -85,30 +85,30 @@ const imageAlt = '';
 <style>
   .bds-hero {
     background: var(--bds-hero-bg, var(--page-primary));
-    padding-block: clamp(var(--space-3xl), 8vw, var(--space-5xl));
+    padding-block: clamp(var(--padding-xl), 8vw, var(--padding-huge));
   }
 
   .bds-hero__container {
-    max-width: var(--size-container-xl, 1280px);
+    max-width: var(--content-width-xl);
     margin-inline: auto;
-    padding-inline: var(--space-lg);
+    padding-inline: var(--padding-lg);
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--space-xl);
+    gap: var(--gap-xl);
     align-items: center;
   }
 
   @media (min-width: 768px) {
     .bds-hero__container {
       grid-template-columns: 3fr 2fr;
-      gap: var(--space-3xl);
+      gap: var(--gap-huge);
     }
   }
 
   .bds-hero__content {
     display: flex;
     flex-direction: column;
-    gap: var(--space-md);
+    gap: var(--gap-md);
     align-items: flex-start;
   }
 
@@ -127,7 +127,7 @@ const imageAlt = '';
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-xxl), 5vw, var(--display-sm));
     font-weight: var(--font-weight-semibold);
-    line-height: var(--line-height-tight);
+    line-height: var(--font-line-height-tight);
     color: var(--bds-hero-headline-color, var(--text-primary));
     position: relative;
   }
@@ -138,16 +138,16 @@ const imageAlt = '';
       display: block;
       width: 3rem;
       height: 2px;
-      margin-top: var(--space-lg);
+      margin-top: var(--gap-lg);
       background: var(--bds-hero-accent-line, var(--border-brand-primary));
     }
   }
 
   .bds-hero__lead {
-    margin: var(--space-md) 0 0;
+    margin: var(--gap-md) 0 0;
     font-family: var(--font-family-body);
     font-size: var(--heading-sm);
-    line-height: var(--line-height-relaxed);
+    line-height: var(--font-line-height-relaxed);
     color: var(--bds-hero-lead-color, var(--text-secondary));
     max-width: 55ch;
   }
@@ -170,7 +170,7 @@ const imageAlt = '';
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--space-xl);
+    padding: var(--padding-xl);
     background: var(--surface-secondary);
     border: 2px dashed var(--border-secondary);
     border-radius: var(--bds-hero-image-radius, var(--border-radius-lg));

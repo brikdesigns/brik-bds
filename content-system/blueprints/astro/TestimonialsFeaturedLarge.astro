@@ -58,14 +58,14 @@ const featured = section.items[0];
     background: var(--bds-testimonials-featured-bg, var(--surface-primary));
     padding-block: var(
       --bds-testimonials-featured-padding-y,
-      clamp(var(--space-3xl), 7vw, var(--space-5xl))
+      clamp(var(--padding-xl), 7vw, var(--padding-huge))
     );
   }
 
   .bp-testimonials-featured__container {
-    max-width: var(--size-container-md, 960px);
+    max-width: var(--content-width-wide);
     margin-inline: auto;
-    padding-inline: var(--space-xl);
+    padding-inline: var(--padding-xl);
     text-align: center;
   }
 
@@ -86,7 +86,7 @@ const featured = section.items[0];
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--space-lg);
+    gap: var(--gap-lg);
   }
 
   .bp-testimonials-featured__mark {
@@ -101,7 +101,7 @@ const featured = section.items[0];
     font-family: var(--font-family-heading);
     font-size: clamp(var(--heading-md), 2.5vw, var(--heading-xl));
     font-weight: var(--font-weight-medium);
-    line-height: var(--line-height-relaxed);
+    line-height: var(--font-line-height-relaxed);
     color: var(--bds-testimonials-featured-quote-color, var(--text-primary));
     max-width: 60ch;
   }
