@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn, userEvent } from 'storybook/test';
 import { NotificationList, NotificationPopover } from './NotificationList';
 import type { NotificationItemData } from './NotificationList';
 
@@ -87,5 +87,35 @@ export const Popover: Story = {
         emptyMessage="You're all caught up!"
       />
     );
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   INTERACTION TEST — play-only, hidden from MCP discovery
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Each row is a hand-rolled `role="button"` with an `onKeyDown` that fires
+ * `onItemClick` on Enter/Space — no native button, so keyboard activation
+ * lives entirely in that handler. Assert it so the path can't silently
+ * regress (WCAG 2.1.1).
+ * @summary Enter on a row fires onItemClick
+ */
+export const InteractionTestKeyboardActivation: Story = {
+  tags: ['!manifest'],
+  args: {
+    notifications: SAMPLE_NOTIFICATIONS,
+    onItemClick: fn(),
+  },
+  render: (args) => (
+    <div style={{ width: 360 }}>
+      <NotificationList {...args} />
+    </div>
+  ),
+  play: async ({ args, canvas }) => {
+    const rows = canvas.getAllByRole('button');
+    rows[0].focus();
+    await userEvent.keyboard('{Enter}');
+    await expect(args.onItemClick).toHaveBeenCalledWith(SAMPLE_NOTIFICATIONS[0]);
   },
 };
