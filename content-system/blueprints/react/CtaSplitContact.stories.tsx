@@ -43,7 +43,7 @@ const section: BlueprintProps['section'] = {
 };
 
 const meta: Meta<typeof CtaSplitContact> = {
-  title: 'Blueprints/cta_split_contact',
+  title: 'Deprecated/cta-split-contact',
   component: CtaSplitContact,
   tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
   argTypes: {

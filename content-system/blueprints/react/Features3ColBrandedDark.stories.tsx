@@ -105,7 +105,7 @@ const withAudienceCascade = (Story: () => JSX.Element) => (
 /* ─── Meta ─────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Features3ColBrandedDark> = {
-  title: 'Blueprints/features_3col_branded_dark',
+  title: 'Deprecated/features-3col-branded-dark',
   component: Features3ColBrandedDark,
   tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
   decorators: [withAudienceCascade],
