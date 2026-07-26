@@ -236,7 +236,6 @@ const COMPONENT_LINKS_WITHOUT_DOCS_PAGE = new Set([
   'nav-item',
   'number-input',
   'page',
-  'progress-circle',
   'search-input',
   'sub-navigation',
   'testimonial',
