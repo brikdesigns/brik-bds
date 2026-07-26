@@ -318,6 +318,11 @@ const preview: Preview = {
   parameters: {
     options: {
       storySort: {
+        // Curated sections (Overview, Foundation, Motion, Content System) pin
+        // their own child order below. Every other category omits its child
+        // list so `method: 'alphabetical'` sorts components automatically —
+        // no hand-maintained per-section arrays to drift (#1444).
+        method: 'alphabetical',
         order: [
           'Overview',
           [
@@ -355,50 +360,17 @@ const preview: Preview = {
           ],
           // Flat taxonomy per ADR-006 Part A. Cards / Navigation / Blueprints added 2026-07-22 (#1330);
           // Foundation/Assets absorbs icon-family + logo + avatar + image; Displays dissolved into Containers.
+          // Component-bearing categories omit child lists — sorted
+          // alphabetically by `method` above. `read-mode-page` is the one
+          // Containers entry still curated elsewhere (docs consolidation, #1453).
           'Components',
-          ['address-input', 'badge', 'badge-group', 'banner', 'button', 'button-group', 'checkbox', 'chip', 'completion-toggle', 'counter', 'date-picker', 'divider', 'dot', 'empty-state', 'file-card', 'file-uploader', 'filter-bar', 'filter-button', 'filter-toggle', 'meter', 'modal', 'multi-select', 'pagination', 'password-input', 'popover', 'progress-bar', 'progress-circle', 'progress-stepper', 'radio', 'segmented-control', 'select', 'service-tag', 'skeleton', 'slider', 'spinner', 'stepper', 'switch', 'tag', 'tag-group', 'text-area', 'text-input', 'text-link', 'time-picker', 'toast', 'tooltip', '*'],
           'Containers',
-          [
-            'accordion',
-            'activity-timeline',
-            'addable-combo-list',
-            'addable-entry-list',
-            'addable-field-row-list',
-            'addable-text-list',
-            'board',
-            'calendar',
-            'catalog-picker',
-            'contact-form',
-            'data-section',
-            'data-view',
-            'dialog',
-            'feedback-form',
-            'form',
-            'login-form',
-            'menu',
-            'notification-list',
-            'read-mode-page',
-            'read-mode-sheet',
-            'search-form',
-            'sheet',
-            'sheet-section',
-            'sign-up-form',
-            'table',
-            'task-console',
-            '*',
-          ],
           'Cards',
-          ['card', 'card-list', 'pricing-card', 'product-summary-card', '*'],
           'Blocks',
-          ['bullet-list', 'checklist', 'field', 'field-grid', 'interactive-list-item', 'selectable-media-tile', '*'],
           'Layouts',
-          ['cluster', 'frame', 'grid', 'page', 'stack', '*'],
           'Navigation',
-          ['breadcrumb', 'footer', 'page-header', 'sidebar-navigation', 'sub-navigation', 'tab-bar', 'top-navigation', '*'],
           'Blueprints',
-          ['*'],
           'Tools',
-          ['brik-dev-bar', 'dev-feedback-widget', 'widgets', '*'],
           '*',
           'Deprecated',
         ],
