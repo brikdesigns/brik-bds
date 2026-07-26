@@ -240,14 +240,12 @@ const COMPONENT_LINKS = /<ComponentLinks\b[^>]*\bslug="([^"]+)"/g;
 // progress-circle hid here for months). See #1466 for the backlog these are.
 const DOCS_PAGE_BACKLOG = {
   'addable-tag-list': 1466,
-  'animated-icon': 1466,
   'block-quote': 1466,
   'collapsible': 1466,
   'completion-toggle': 1466,
   'data-view': 1466,
   'dependent-select': 1466,
   'file-card': 1466,
-  'logo': 1466,
   'nav-item': 1466,
   'number-input': 1466,
   'page': 1466,
@@ -257,7 +255,10 @@ const DOCS_PAGE_BACKLOG = {
 };
 const DOCS_PAGE_EXEMPT = {
   // slug: 'reason' — populated by #1466 triage as components are classified
-  // won't-document. Empty today: nothing has been triaged exempt yet.
+  // won't-document.
+  'animated-icon':
+    'Foundation/Assets Lottie wrapper — asset primitive; usage lives in Storybook (Foundation/Assets), no standalone docs-site component page',
+  logo: 'Foundation/Assets brand mark — static asset, not a functional component (per icons.mdx, brand marks are not documented as components)',
 };
 const DOCS_PAGE_WITHOUT_PAGE = new Set([
   ...Object.keys(DOCS_PAGE_BACKLOG),
