@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Icon } from '@iconify/react';
 import { Badge } from './Badge';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
@@ -50,10 +49,6 @@ type Story = StoryObj<typeof Badge>;
 
 /* ─── Layout helpers (story-only) ─────────────────────────────── */
 
-const Row = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
-);
-
 const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
 );
@@ -101,24 +96,8 @@ export const Neutral: Story = {
   args: { status: 'neutral', children: 'Not linked' },
 };
 
-/* ─── Size axis (the one args-lean axis gallery) ──────────────── */
-
-/**
- * Size axis — the four size tokens (xs / sm / md / lg) side-by-side.
- * `xs` is icon-only (no text fits); the other sizes take text or icon + text.
- *
- * @summary All four sizes side-by-side
- */
-export const Sizes: Story = {
-  render: () => (
-    <Row>
-      <Badge size="xs" status="positive" icon={<Icon icon="ph:check" />} />
-      <Badge size="sm" status="positive">Small</Badge>
-      <Badge size="md" status="positive">Medium</Badge>
-      <Badge size="lg" status="positive">Large</Badge>
-    </Row>
-  ),
-};
+/* `size` is a Control on Default — the side-by-side scale lives in Badge.mdx
+   as a docs-local demo (#1489). */
 
 /* ─── Patterns (Q4 irreducible + real-world composition) ──────── */
 
