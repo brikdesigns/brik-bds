@@ -1,9 +1,9 @@
 ---
 name: Chromatic — BDS Storybook hosting
-description: Stable URLs, app ID, publish command, the per-build URL warning, and why a local full build is not a usable pre-merge visual diff under TurboSnap. The endpoint consumer-repo Claude sessions query for live MCP + manifest data.
+description: Stable URLs, app ID, publish command, the snapshot budget model and trigger table, the `visual-review` PR gate, and why a local full build is not a usable pre-merge visual diff under TurboSnap. The endpoint consumer-repo Claude sessions query for live MCP + manifest data.
 type: reference
-last_updated: 2026-07-26
-last-verified: 2026-07-26
+last_updated: 2026-07-27
+last-verified: 2026-07-27
 ---
 
 # Chromatic — BDS Storybook hosting
@@ -31,24 +31,57 @@ BDS Storybook is published to Chromatic for two purposes:
 
 The Netlify deploy at `storybook.brikdesigns.com` is browseable but does **not** serve `/mcp` (static build only). Agent MCP queries must use the Chromatic stable URL.
 
+### ⚠ `main--` now refreshes daily, not per-merge
+
+The `main--` alias tracks the latest build **on `main`**, and since #771 that is the 09:00 UTC scheduled build. So `/mcp`, `/index.json`, and the manifests can lag `main` by up to 24h, and a consumer-repo agent may read a component API one day stale.
+
+A local `npm run chromatic` does **not** fix this — it publishes under your *branch* alias, not `main--`. To refresh the endpoint immediately, fire the workflow on `main`:
+
+```bash
+gh workflow run chromatic.yml --repo brikdesigns/brik-bds --ref main
+```
+
+That costs the ~80-billed floor. Accepting a ≤24h lag is the deliberate trade for staying on the free plan; if it bites in practice, that is the evidence for revisiting #771.
+
+## Snapshot budget — read before triggering any build (#771)
+
+Chromatic bills a **captured** snapshot at 1 and a TurboSnap-skipped ("turbosnap") story at **0.2**. With ~403 stories, *every* build costs a floor of ~80 billed even when it captures nothing. The free plan allows **5,000 billed/month**, and the cycle resets around the **26th** (observed: quota exhausted through 2026-07-25 21:37Z, capturing again by 2026-07-26 13:53Z).
+
+| Trigger | Frequency | Approx. billed |
+|---|---|---|
+| Daily scheduled build on `main` | ~30/mo | ~2,400 |
+| `visual-review`-labelled PR | opt-in | ~80 each |
+| `workflow_dispatch` with `full_capture` | rare | ~403 each |
+
+That leaves roughly 2,600 billed/month of headroom. Two things blow it: a burst of full captures, and re-labelling PRs casually. The per-build Slack message reports an approximate billed figure — the Chromatic billing page is the ground truth.
+
 ## Publish
 
 ```bash
-npm run chromatic
+npm run chromatic        # TurboSnap-scoped (--only-changed) — the default
+npm run chromatic:full   # full re-capture, ~403 billed (~8% of the month)
 ```
 
-Run after any component CSS or story changes are committed. Consumer agents query the published Chromatic build, not your local Storybook — unpublished changes won't reach them.
+Run after any component CSS or story changes are committed. Consumer agents query the published Chromatic build, not your local Storybook — unpublished changes won't reach them. Both scripts publish the Storybook (so the `/mcp` endpoint updates either way); they differ only in how many stories get re-captured.
 
-## ⚠ A local run is NOT a usable pre-merge visual diff (#1472)
+## Getting a pre-merge visual diff
 
-`npm run chromatic` runs **without TurboSnap** and re-captures all ~399 stories. CI (`.github/workflows/chromatic.yml`) runs **with** `onlyChanged: true`, which skips almost everything — the run on main for `#1452` captured **0 snapshots and skipped 399**. Most baselines are therefore inherited images from well before current main.
+Add the **`visual-review`** label to the PR. That fires the Chromatic workflow on the PR *without* `exitOnceUploaded`, so unreviewed visual changes fail the check and block merge. Pushing more commits to a labelled PR re-runs it (~80 billed each), so label when you're ready for review, not at open.
+
+It is opt-in rather than always-on for cost: 49% of merges touch component/CSS paths (154 of 313 over 30 days), and an always-on PR gate would bill ~12,300/month against a 5,000 allotment.
+
+## ⚠ A local full run is NOT a usable pre-merge visual diff (#1472)
+
+`npm run chromatic:full` re-captures all ~403 stories. CI runs **with** `onlyChanged: true`, which skips almost everything — the run on main for `#1452` captured **0 snapshots and skipped 399**. Most baselines are therefore inherited images from well before current main.
 
 Diffing a full local re-capture against those stale baselines reports **every story as changed**. Observed on build 989: 399 of 399 flagged for a branch touching only `content-system/blueprints/**`. That is baseline staleness, not your change.
 
 **So:**
 
-- Don't read a local full-build change count as a verdict on your branch. Check the *scoped* post-merge run instead (CI picks the affected story files), or verify the specific thing you changed directly.
-- For a targeted pre-merge check, render the affected stories from `storybook-static` headless and compare computed styles / screenshots against a build of the base commit. That is how #1439 was verified — see [ADR-021](../../docs/adrs/ADR-021-blueprint-section-shell.md) § "Measured, not asserted".
-- The Chromatic workflow triggers on **push to main + `workflow_dispatch` only** — there is no `pull_request` trigger, so opening a PR produces no Chromatic check.
+- Don't read a local full-build change count as a verdict on your branch. Use the `visual-review` label instead, or verify the specific thing you changed directly.
+- For a targeted pre-merge check without spending snapshots at all, render the affected stories from `storybook-static` headless and compare computed styles / screenshots against a build of the base commit. That is how #1439 was verified — see [ADR-021](../../docs/adrs/ADR-021-blueprint-section-shell.md) § "Measured, not asserted".
+- The workflow triggers on a **daily schedule**, a **`visual-review`-labelled PR**, and **`workflow_dispatch`**. It no longer runs on every push to `main` — a per-push trigger billed ~22,600/month against a 5,000 allotment (#771).
+
+Until the baselines are reset (#1472), even a labelled PR run can over-report on stories TurboSnap invalidates broadly. Reset them with `workflow_dispatch` → `full_capture: true` on `main`, then accept the build.
 
 Fixing the underlying staleness is **#1472**.

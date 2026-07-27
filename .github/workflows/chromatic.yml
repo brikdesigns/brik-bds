@@ -1,17 +1,38 @@
 name: Chromatic
 
+# Snapshot budget model (#771)
+# ---------------------------
+# Chromatic bills a *captured* snapshot at 1 and a TurboSnap-skipped ("turbosnap")
+# story at 0.2. With 403 stories that puts a ~80-billed floor on EVERY build, even
+# one that captures nothing. The free plan allows 5,000 billed/month.
+#
+#   push-per-merge (old):  ~283 builds/mo x ~80  = ~22,600 billed  -> 4.5x over
+#   daily schedule (new):   ~30 builds/mo x ~80  =  ~2,400 billed  -> fits
+#
+# That is why this workflow no longer runs on every push to main. The remaining
+# headroom (~2,600 billed) covers opt-in PR gates and occasional full re-captures.
+
 on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '*.md'
-      - 'tokens/**'
-      - 'design-tokens/**'
-      - 'updates/**'
-  # Manual trigger — lets you fire a build on demand (e.g. to test the Slack
-  # notifier after wiring SLACK_CHROMATIC_WEBHOOK_URL) without a push to main.
+  # Batched daily build on main. Replaces the per-push trigger — see the budget
+  # model above. TurboSnap still scopes captures to what changed since the last
+  # build, so a quiet day costs the floor and a busy day costs a little more.
+  schedule:
+    - cron: '0 9 * * *' # 09:00 UTC daily
+
+  # Opt-in blocking gate. Add the `visual-review` label to a PR and this runs
+  # WITHOUT exitOnceUploaded, so unreviewed visual changes fail the check and
+  # block merge. Opt-in rather than always-on because 49% of merges touch
+  # component/CSS paths (154 of 313 over 30 days) — an always-on PR gate would
+  # bill ~12,300/month, 2.5x the entire free allotment.
+  pull_request:
+    types: [labeled, synchronize, reopened]
+
   workflow_dispatch:
+    inputs:
+      full_capture:
+        description: 'Disable TurboSnap and re-capture every story (~403 billed, ~8% of the monthly free allotment). Use for baseline resets — #1472.'
+        type: boolean
+        default: false
 
 concurrency:
   group: chromatic-${{ github.ref }}
@@ -19,6 +40,13 @@ concurrency:
 
 jobs:
   chromatic:
+    # PR runs only when the author/reviewer opted in with the `visual-review`
+    # label. The three-way condition avoids re-billing a build every time an
+    # unrelated label is added to an already-labelled PR.
+    if: >-
+      github.event_name != 'pull_request' ||
+      (github.event.action == 'labeled' && github.event.label.name == 'visual-review') ||
+      (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'visual-review'))
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -40,11 +68,16 @@ jobs:
         uses: chromaui/action@07791f8243f4cb2698bf4d00426baf4b2d1cb7e0  # v13.3.5
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          exitOnceUploaded: true
+          # Blocking on PRs (wait for results, non-zero exit on unreviewed
+          # changes); advisory on the scheduled main build, where the merge has
+          # already happened and blocking buys nothing.
+          exitOnceUploaded: ${{ github.event_name != 'pull_request' }}
           # TurboSnap: snapshot only stories affected by the diff instead of all
-          # ~399 every merge. Global CSS (tokens/themes) imports into preview.tsx,
+          # ~403 every build. Global CSS (tokens/themes) imports into preview.tsx,
           # so a token edit still traces to every story → full re-snapshot. #771.
-          onlyChanged: true
+          # Disabled deliberately via the full_capture dispatch input when a
+          # baseline reset is the point (#1472).
+          onlyChanged: ${{ inputs.full_capture != true }}
 
       # Post build result + snapshot usage to Slack. No-ops until the
       # SLACK_CHROMATIC_WEBHOOK_URL secret is set, so it's safe to merge first.
@@ -57,11 +90,15 @@ jobs:
           CODE: ${{ steps.chromatic.outputs.code }}
           CHANGES: ${{ steps.chromatic.outputs.changeCount }}
           CAPTURED: ${{ steps.chromatic.outputs.actualCaptureCount }}
+          # TurboSnap-inherited snapshots. Not free — they bill at 0.2 each.
+          INHERITED: ${{ steps.chromatic.outputs.inheritedCaptureCount }}
           SPECS: ${{ steps.chromatic.outputs.specCount }}
           COMPONENTS: ${{ steps.chromatic.outputs.componentCount }}
           STORYBOOK_URL: ${{ steps.chromatic.outputs.storybookUrl }}
           BUILD_URL: ${{ steps.chromatic.outputs.buildUrl }}
           COMMIT_SHA: ${{ github.sha }}
+          # Which build this was — the workflow no longer runs only on main.
+          BUILD_CONTEXT: ${{ github.event_name == 'pull_request' && format('PR #{0}', github.event.pull_request.number) || format('`{0}`', github.ref_name) }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           set -euo pipefail
@@ -80,12 +117,25 @@ jobs:
           fi
 
           captured="${CAPTURED:-0}"
-          usage_line="📸 Snapshots this build: *${captured}* (${COMPONENTS:-?} components / ${SPECS:-?} stories)"
+          inherited="${INHERITED:-0}"
+          specs="${SPECS:-0}"
+          usage_line="📸 Snapshots this build: *${captured}* captured + *${inherited}* inherited (${COMPONENTS:-?} components / ${specs} stories)"
+
+          # Billed cost = captured x 1 + inherited x 0.2. Surfacing it per build
+          # is the only running meter we have against the 5,000/mo free allotment
+          # without opening the Chromatic billing page. Counts are in snapshots,
+          # not stories — a story spans several snapshots (viewport/theme), so
+          # never substitute specCount here. #771.
+          if [ -n "${captured}${inherited}" ] && [ "$((captured + inherited))" -gt 0 ] 2>/dev/null; then
+            billed=$(awk -v c="${captured}" -v i="${inherited}" 'BEGIN{printf "%.0f", c + i * 0.2}')
+            usage_line="${usage_line}
+          💳 Approx. billed: *${billed}* of 5,000/mo"
+          fi
 
           # Heuristic: stories exist but nothing was captured on a passing build
           # → likely snapshot quota exhausted (or a no-op / TurboSnap build).
           quota_note=""
-          if [ "${captured}" = "0" ] && [ "${SPECS:-0}" != "0" ] && [ "${CODE:-1}" = "0" ]; then
+          if [ "${captured}" = "0" ] && [ "${specs}" != "0" ] && [ "${CODE:-1}" = "0" ]; then
             quota_note=$'\n⚠️ 0 snapshots captured with stories present — possible snapshot quota exhaustion. Check Chromatic billing/usage.'
           fi
 
@@ -95,7 +145,7 @@ jobs:
           [ -n "${BUILD_URL:-}" ] && links="<${BUILD_URL}|Build> · ${links}"
 
           short_sha="${COMMIT_SHA:0:7}"
-          text="${status_emoji} *Chromatic build ${status_text}* on \`main\` (\`${short_sha}\`)
+          text="${status_emoji} *Chromatic build ${status_text}* on ${BUILD_CONTEXT} (\`${short_sha}\`)
           ${change_line}
           ${usage_line}${quota_note}
           ${links}"
