@@ -1,0 +1,27 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './TaskConsole.stories';
+
+<Meta of={Stories} />
+
+# TaskConsole
+
+<ComponentLinks slug="task-console" />
+
+Floating progress console for long-running background work — a corner-anchored checklist that reports each task's `pending` / `in_progress` / `completed` state while the work runs. Feed it `items`; drive `isOpen`, `position`, `defaultCollapsed`, and `autoDismissDelay` via props.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+`title`, `subtitle`, `isOpen`, `position` (`bottom-right` / `bottom-left`), `defaultCollapsed`, and `autoDismissDelay` are Controls on this story. `items` and `onDismiss` are set in code — each item carries `id` / `label` / `status` and an optional `detail` line.
+
+## Patterns
+
+A real run drives `items` from state, advancing each entry `pending → in_progress → completed` as the work completes and setting `autoDismissDelay` once every item is done. The progression is hook-driven, so it lives in a dedicated story rather than Controls.
+
+<Canvas of={Stories.LiveSimulation} />
+
+## Props
+
+<ArgTypes of={Stories} />
