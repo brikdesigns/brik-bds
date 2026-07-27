@@ -98,15 +98,15 @@ Or in the UI: Actions → Chromatic → *Run workflow* → tick **full_capture**
 
 That sets `onlyChanged: false` for the run, so every story is re-captured against `main`. Then triage the changed-story list in the Chromatic UI and accept the baselines you've confirmed. A subsequent full capture on an unmodified `main` should report **0 changes** — that is the signal the floor is trustworthy again.
 
-**Cost and cadence.** One run is ~399 snapshots against the quota #771 tracks. It is deliberately **on-demand, not scheduled** — there is no standing snapshot cost, and the trade-off is that baselines drift again between runs. Run one:
+**Cost and cadence.** One run bills ~403 — roughly 8% of the monthly allotment, and the single most expensive thing you can trigger (see the budget table above). The *full capture* is deliberately on-demand rather than scheduled, so it adds no standing cost of its own; the daily `main` build is the standing line item. The trade-off is that baselines drift again between full captures. Run one:
 
 - before you need a full build to be readable (i.e. before relying on a visual verdict for a risky change),
 - after a merge you expect to move many stories (token, theme, or `preview.tsx` edits),
-- not routinely.
+- not routinely — two or three in a month is a meaningful dent in the headroom.
 
 **Two things it deliberately does not do:**
 
 - **No auto-accept.** `autoAcceptChanges` is unset, so a full capture surfaces changes for review instead of silently moving baselines. Don't set it to `false` to "be explicit" — the action forwards that input to `--auto-accept-changes`, which takes an optional branch glob, so a literal `false` is ambiguous.
-- **No PR-scoped diff.** A full capture runs on `main`, not on your branch. It makes a *later* build readable; it is not itself a pre-merge check. For a per-branch verdict, use the headless render-and-diff above.
+- **No PR-scoped diff.** A full capture runs on `main`, not on your branch. It makes a *later* build readable; it is not itself a pre-merge check. For a per-branch verdict use the **`visual-review`** label above — and note that until the baselines are actually reset, a labelled run can still over-report, which is why the reset comes first.
 
-Full captures also run in their own concurrency group, so a routine push to `main` can't cancel one mid-flight.
+Full captures also run in their own concurrency group, keyed on `full_capture`, so the daily scheduled build or a labelled-PR run can't cancel one mid-flight.
