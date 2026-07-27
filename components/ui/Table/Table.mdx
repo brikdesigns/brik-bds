@@ -8,7 +8,7 @@ import * as Stories from './Table.stories';
 
 <ComponentLinks slug="table" />
 
-Data table with composable sub-components (`TableHeader` / `TableBody` / `TableRow` / `TableHead` / `TableCell` / `TableActionsCell` / `TableSkeletonRow`, plus the typed media cells `TableAvatarCell` / `TableImageCell` / `TableServiceTagCell`). Supports sorting, row selection, striped rows, size variants, and arbitrary cell content. Trailing `[View][Edit][⋯]` clusters compose via `<TableActionsCell>`; cell-level affordances (Name / FK / Actions) replace whole-row click — see [Read and edit conventions](https://github.com/brikdesigns/brik-client-portal/blob/staging/.claude/references/settings-ia.md#read-and-edit-conventions).
+Data table with composable sub-components (`TableHeader` / `TableBody` / `TableRow` / `TableHead` / `TableCell` / `TableSubheader` / `TableActionsCell` / `TableSkeletonRow`, plus the typed media cells `TableAvatarCell` / `TableImageCell` / `TableLogoCell` / `TableServiceTagCell`). Supports sorting, row selection, striped rows, size variants, and arbitrary cell content. Trailing `[View][Edit][⋯]` clusters compose via `<TableActionsCell>`; cell-level affordances (Name / FK / Actions) replace whole-row click — see [Read and edit conventions](https://github.com/brikdesigns/brik-client-portal/blob/staging/.claude/references/settings-ia.md#read-and-edit-conventions).
 
 ## Default
 
@@ -42,9 +42,11 @@ The canonical read/edit row has three click-target classes — **Name** (`<TextL
 
 ### Forbidden — whole-row click
 
-`onClick` on `<TableRow>` violates table cell semantics, breaks screen-reader expectations, and conflicts with cell-level affordances. Use cell-level click targets instead — the row should never carry the handler.
+`onClick` on `<TableRow>` violates table cell semantics, breaks screen-reader expectations, and conflicts with cell-level affordances. Use cell-level click targets instead — the row should never carry the handler. The canonical replacement is the `CellLevelInteractivity` story above (Name / FK cells as `<TextLink>`, trailing actions in `<TableActionsCell>`).
 
-<Canvas of={Stories.RowClickAntiPattern} />
+`<TableSubheader>` groups body rows into labeled sections — drop it inside `<TableBody>` between row groups.
+
+<Canvas of={Stories.WithSubheaders} />
 
 ### Media cells
 
@@ -55,6 +57,10 @@ The canonical read/edit row has three click-target classes — **Name** (`<TextL
 `<TableImageCell>` renders a fixed square (1:1) thumbnail for a logo or product image — `fit="contain"` for logos (no crop), `fit="cover"` for product photos. Upload / edit wiring is consumer-side.
 
 <Canvas of={Stories.WithImageCell} />
+
+`<TableLogoCell>` is the name-referenced counterpart — a bundled brand `Logo` (`set` + `name`) in the same square footprint. Use it for payment methods, integrations, or bundled client marks; use `<TableImageCell src>` for per-tenant uploaded logos.
+
+<Canvas of={Stories.WithLogoCell} />
 
 `<TableServiceTagCell>` hosts one or more `ServiceTag`s — `variant="icon"` for icon-only classification, `variant="icon-text"` for a labeled tag.
 
