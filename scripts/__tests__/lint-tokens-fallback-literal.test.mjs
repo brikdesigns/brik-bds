@@ -85,6 +85,106 @@ describe('lint-tokens Rule 7 (fallback-literal) — #1043 / ADR-014', () => {
     const violations = runLinter({ cssFiles: [file], rule: 'fallback-literal' });
     expect(violations).toEqual([]);
   });
+
+  // ── Line-wrapped declarations — #1473 ─────────────────────────────────────
+  // The rule used to bail on any `var(` whose parens didn't close on the same
+  // line, so a formatter line-break silently defeated it. That is how four real
+  // ADR-014 violations shipped undetected in the blueprints.
+
+  it('fires on a wrapped declaration — a line break must not defeat the rule', () => {
+    // NB: use a token that is NOT in FALLBACK_LITERAL_BASELINE — the real
+    // `--bds-*-padding-y` knobs are grandfathered to `warning`, and runLinter
+    // filters on --errors-only.
+    const file = join(tmpDir, 'Wrapped.css');
+    writeFileSync(file, `
+      .x {
+        padding-block: var(
+          --bds-wrapped-padding-y,
+          clamp(16px, 6vw, 48px)
+        );
+      }
+    `);
+    const violations = runLinter({ cssFiles: [file], rule: 'fallback-literal' });
+    expect(violations).toHaveLength(1);
+    expect(violations[0].message).toMatch(/var\(--bds-wrapped-padding-y/);
+    // The wrap is collapsed so the reported literal reads as one declaration.
+    expect(violations[0].message).toContain('clamp(16px, 6vw, 48px)');
+  });
+
+  it('treats the wrapped and one-line forms of one declaration identically', () => {
+    const wrapped = join(tmpDir, 'FormA.css');
+    const oneLine = join(tmpDir, 'FormB.css');
+    writeFileSync(wrapped, `
+      .x {
+        padding-block: var(
+          --bds-probe-padding-y,
+          clamp(16px, 6vw, 48px)
+        );
+      }
+    `);
+    writeFileSync(oneLine, `
+      .x { padding-block: var(--bds-probe-padding-y, clamp(16px, 6vw, 48px)); }
+    `);
+    const a = runLinter({ cssFiles: [wrapped], rule: 'fallback-literal' });
+    const b = runLinter({ cssFiles: [oneLine], rule: 'fallback-literal' });
+    expect(a).toHaveLength(1);
+    expect(b).toHaveLength(1);
+    expect(a[0].message).toEqual(b[0].message);
+  });
+
+  it('reports a wrapped violation once, at the line the var() opens on', () => {
+    const file = join(tmpDir, 'WrappedOnce.css');
+    writeFileSync(file, `.x {
+  padding-block: var(
+    --bds-once-padding-y,
+    clamp(16px, 6vw, 48px)
+  );
+}
+`);
+    const violations = runLinter({ cssFiles: [file], rule: 'fallback-literal' });
+    expect(violations).toHaveLength(1);
+    expect(violations[0].line).toBe(2); // the `padding-block: var(` line
+  });
+
+  it('passes a wrapped nested-token fallback (the correct Tier 4 shape)', () => {
+    const file = join(tmpDir, 'WrappedNested.css');
+    writeFileSync(file, `
+      .x {
+        box-shadow: var(
+          --bds-toast-shadow,
+          var(--shadow-md)
+        );
+      }
+    `);
+    const violations = runLinter({ cssFiles: [file], rule: 'fallback-literal' });
+    expect(violations).toEqual([]);
+  });
+
+  it('honours bds-lint-ignore anywhere inside a wrapped declaration', () => {
+    const file = join(tmpDir, 'WrappedIgnored.css');
+    writeFileSync(file, `
+      .x {
+        padding-block: var(
+          --bds-ignored-padding-y,
+          clamp(16px, 6vw, 48px) /* bds-lint-ignore — intentional */
+        );
+      }
+    `);
+    const violations = runLinter({ cssFiles: [file], rule: 'fallback-literal' });
+    expect(violations).toEqual([]);
+  });
+
+  it('does not let an unterminated paren swallow later declarations', () => {
+    // A stray `(` must not cause the scanner to run away and mis-attribute a
+    // violation from a later, unrelated rule.
+    const file = join(tmpDir, 'Runaway.css');
+    writeFileSync(file, `
+      .a { content: "("; }
+      .b { color: var(--bds-safe-fg, var(--text-primary)); }
+    `);
+    const violations = runLinter({ cssFiles: [file], rule: 'fallback-literal' });
+    expect(violations).toEqual([]);
+  });
 });
 
 describe('lint-tokens Rule 8 (retired-bp-namespace) — #1043 / ADR-014', () => {

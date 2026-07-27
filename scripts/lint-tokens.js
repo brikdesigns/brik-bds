@@ -75,6 +75,15 @@ const FALLBACK_LITERAL_BASELINE = new Set([
   '--line-height-relaxed',
   '--bds-hero-img-card-icon-size',        // numeric knob, no backing size token
   '--bds-features-branded-dark-hover-scale', // numeric knob, no backing scale token
+  // Section-rhythm knobs whose fallback is a responsive clamp() — no single
+  // Semantic token can express `clamp(--padding-xl, Nvw, --padding-huge)`, so
+  // the literal is load-bearing exactly like the entries above. These were
+  // invisible until #1473 taught the rule to read line-wrapped declarations;
+  // they are pre-existing, not new. Whether a clamp() fallback can ever satisfy
+  // ADR-014 — or whether these hooks should exist at all — is #1044's call.
+  '--bds-hero-padding-y',                 // react/Hero.css + astro/HeroSplitImageCardOverlay.astro
+  '--bds-stats-dark-bar-padding-y',       // astro/StatsDarkBar.astro
+  '--bds-testimonials-featured-padding-y',// astro/TestimonialsFeaturedLarge.astro
 ]);
 
 // `--theme-*` is a retired drift namespace (token-anatomy Drift table; #712).
@@ -678,32 +687,88 @@ function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
  * BlueprintFallback.* is exempt — it is a deliberate loud-stub renderer whose
  * literal defaults are intentional (mirrors scripts/lint-blueprint-naming.mjs).
  * Tokens in FALLBACK_LITERAL_BASELINE / -PREFIXES are grandfathered to warning.
+ *
+ * Line-wrapped declarations (#1473): the rule reads whole logical declarations,
+ * not single lines. It originally bailed on any `var(` whose parens didn't close
+ * on the same line, so a formatter line-break silently defeated it — the same
+ * declaration errored on one line and passed when wrapped. Four real ADR-014
+ * violations shipped in the blueprints that way. When a line leaves a `var(`
+ * open, following lines are appended (up to FALLBACK_LITERAL_MAX_WRAP_LINES)
+ * until the parens balance; the violation is reported at the opening line.
  */
-function checkFallbackLiterals(line, lineNum, file, isComponent) {
+// How many following lines a wrapped `var(` may span before we give up. A
+// formatter-wrapped declaration is 2-4 lines; the cap stops a stray unbalanced
+// paren from swallowing the rest of the file.
+const FALLBACK_LITERAL_MAX_WRAP_LINES = 8;
+
+/**
+ * Net unclosed `(` in a chunk of CSS — >0 means a declaration is still open at
+ * the end of it. Parens inside quoted strings (e.g. `content: "("`) are
+ * ignored so a decorative bracket can't fake an open declaration.
+ */
+function countUnbalancedParens(text) {
+  let depth = 0;
+  let quote = null;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (quote) {
+      if (c === '\\') i++;
+      else if (c === quote) quote = null;
+      continue;
+    }
+    if (c === '"' || c === "'") quote = c;
+    else if (c === '(') depth++;
+    else if (c === ')') depth--;
+  }
+  return depth;
+}
+
+function checkFallbackLiterals(line, lineNum, file, isComponent, lines = null) {
   const violations = [];
   const trimmed = line.trim();
   if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) return violations;
   if (line.includes('bds-lint-ignore')) return violations;
   if (/BlueprintFallback\.(astro|css|tsx)$/.test(file)) return violations;
 
+  // Text this line's `var(`s are parsed against. Normally the line itself; when
+  // a `var(` is left open at end-of-line, the following lines are appended so a
+  // formatter-wrapped declaration parses as the single logical declaration it
+  // is (#1473). Without this the rule was defeated by a line break — the same
+  // declaration errored on one line and passed when wrapped, which is exactly
+  // how the offending blueprint declarations happened to be formatted.
+  let scanText = line;
+  if (lines && countUnbalancedParens(line) > 0) {
+    const start = lineNum - 1; // lineNum is 1-based
+    for (let k = start + 1; k < lines.length && k <= start + FALLBACK_LITERAL_MAX_WRAP_LINES; k++) {
+      // An ignore marker anywhere in the logical declaration suppresses it.
+      if (lines[k].includes('bds-lint-ignore')) return violations;
+      scanText += '\n' + lines[k];
+      if (countUnbalancedParens(scanText) === 0) break;
+    }
+  }
+
   // Walk every `var(` and balance-parse its argument list so nested parens
-  // (rgba(), cubic-bezier(), nested var()) split correctly on the top-level comma.
+  // (rgba(), cubic-bezier(), nested var()) split correctly on the top-level
+  // comma. Only `var(`s that START on this line are considered — ones opening
+  // on a continuation line are reported when that line is itself scanned, so
+  // nothing is double-counted.
   for (let i = 0; i + 4 <= line.length; i++) {
-    if (line.slice(i, i + 4) !== 'var(') continue;
+    if (scanText.slice(i, i + 4) !== 'var(') continue;
     let depth = 0;
     let commaIdx = -1;
     let j = i + 3;
-    for (; j < line.length; j++) {
-      const c = line[j];
+    for (; j < scanText.length; j++) {
+      const c = scanText[j];
       if (c === '(') depth++;
       else if (c === ')') { depth--; if (depth === 0) break; }
       else if (c === ',' && depth === 1 && commaIdx === -1) commaIdx = j;
     }
-    if (depth !== 0 || j >= line.length) continue; // unbalanced (line-wrapped) — skip
+    if (depth !== 0 || j >= scanText.length) continue; // still unbalanced — skip
     if (commaIdx === -1) continue;                 // no fallback
-    const token = line.slice(i + 4, commaIdx).trim();
+    const token = scanText.slice(i + 4, commaIdx).trim();
     if (!/^--[\w-]+$/.test(token)) continue;       // not a simple var() reference
-    const fallback = line.slice(commaIdx + 1, j).trim();
+    // Collapse the wrap so the reported literal reads as one declaration.
+    const fallback = scanText.slice(commaIdx + 1, j).replace(/\s+/g, ' ').trim();
     if (fallback.startsWith('var(')) continue;     // nested token fallback — correct shape
 
     const isRawValue = /[#\d]/.test(fallback) || /\b(rgb|rgba|hsl|hsla|cubic-bezier)\s*\(/i.test(fallback);
@@ -1113,7 +1178,7 @@ function main() {
       }
 
       // Rule 7 + 8: Tier 4 hook discipline (#1043) — apply to component source too.
-      allViolations.push(...checkFallbackLiterals(line, lineNum, file, isComponent));
+      allViolations.push(...checkFallbackLiterals(line, lineNum, file, isComponent, lines));
       allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));
 
       // Rule 4: grid compliance (opt-in via --check-grid)
@@ -1140,7 +1205,7 @@ function main() {
       // Rule 5: token-family pairing
       allViolations.push(...checkTokenFamilyPairing(line, lineNum, file, true));
       // Rule 7 + 8: Tier 4 hook discipline (#1043)
-      allViolations.push(...checkFallbackLiterals(line, lineNum, file, true));
+      allViolations.push(...checkFallbackLiterals(line, lineNum, file, true, lines));
       allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));
 
       if (checkGrid) {
@@ -1166,7 +1231,7 @@ function main() {
 
       allViolations.push(...checkBareLintIgnore(line, lineNum, file));
       allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, true));
-      allViolations.push(...checkFallbackLiterals(line, lineNum, file, true));
+      allViolations.push(...checkFallbackLiterals(line, lineNum, file, true, lines));
       allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));
     }
   }
