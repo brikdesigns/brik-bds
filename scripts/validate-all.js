@@ -53,6 +53,11 @@ const steps = [
   // source for any table carrying a {/* props-check: … */} marker. Opt-in, so
   // ordering is not load-bearing.
   { name: 'Component Props', cmd: 'node scripts/lint-component-props.mjs' },
+  // Every PUBLIC component export (index.ts re-export) must be referenced in
+  // its sibling MDX page. Reads index.ts + .tsx + MDX; no build, ordering not
+  // load-bearing. Exempts wip/!manifest placeholders, Tools/ dev utilities,
+  // and Foundation galleries. Shipped with an empty violation set (#1495).
+  { name: 'MDX Coverage', cmd: 'node scripts/lint-mdx-coverage.mjs' },
 ];
 
 console.log('\n═══════════════════════════════════════════');
