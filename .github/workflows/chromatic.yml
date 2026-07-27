@@ -30,13 +30,15 @@ on:
   workflow_dispatch:
     inputs:
       full_capture:
-        description: 'Re-capture every story (TurboSnap off) to refresh baselines — ~399 snapshots against the #771 quota. Leave off for a normal build.'
+        description: 'Re-capture every story (TurboSnap off) to refresh baselines — bills ~403, about 8% of the monthly allotment (#771). Leave off for a normal build.'
         type: boolean
         default: false
 
 concurrency:
-  # Full captures get their own group so a routine push to main can't cancel an
-  # in-flight ~399-snapshot run halfway through (#1472).
+  # Full captures get their own group so the daily scheduled build or a
+  # labelled-PR run can't cancel an in-flight ~403-billed run halfway
+  # through (#1472). The per-push trigger this originally guarded against
+  # was removed in #771.
   group: chromatic-${{ github.ref }}-${{ inputs.full_capture == true && 'full' || 'turbo' }}
   cancel-in-progress: true
 
