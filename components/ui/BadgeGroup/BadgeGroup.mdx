@@ -1,6 +1,63 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './BadgeGroup.stories';
+import { BadgeGroup } from './BadgeGroup';
+import { Badge } from '../Badge';
+import { Field } from '../Field';
+
+{/* Axis comparisons — gap and Badge appearance. Docs-local, not story exports:
+    `gap` is a Control on Default, and side-by-side galleries are an MDX
+    concern (#1489). */}
+export const Frame = ({ width = '360px', children }) => (
+  <div style={{ width, padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+    {children}
+  </div>
+);
+
+export const GapScale = () => (
+  <Frame>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+      <BadgeGroup gap="xs">
+        <Badge status="positive" size="sm">xs gap</Badge>
+        <Badge status="info" size="sm">tight</Badge>
+        <Badge status="brand" size="sm">cluster</Badge>
+      </BadgeGroup>
+      <BadgeGroup gap="sm">
+        <Badge status="positive" size="sm">sm gap</Badge>
+        <Badge status="info" size="sm">standard</Badge>
+        <Badge status="brand" size="sm">list</Badge>
+      </BadgeGroup>
+      <BadgeGroup gap="md">
+        <Badge status="positive" size="md">md gap</Badge>
+        <Badge status="info" size="md">roomy</Badge>
+        <Badge status="brand" size="md">display</Badge>
+      </BadgeGroup>
+    </div>
+  </Frame>
+);
+
+export const AppearanceMix = () => (
+  <Frame width="480px">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+      <Field label="Solid appearance">
+        <BadgeGroup>
+          <Badge status="positive" size="sm" appearance="solid">Paid</Badge>
+          <Badge status="warning" size="sm" appearance="solid">Overdue</Badge>
+          <Badge status="error" size="sm" appearance="solid">Failed</Badge>
+          <Badge status="info" size="sm" appearance="solid">Scheduled</Badge>
+        </BadgeGroup>
+      </Field>
+      <Field label="Subtle appearance">
+        <BadgeGroup>
+          <Badge status="positive" size="sm" appearance="subtle">Paid</Badge>
+          <Badge status="warning" size="sm" appearance="subtle">Overdue</Badge>
+          <Badge status="error" size="sm" appearance="subtle">Failed</Badge>
+          <Badge status="info" size="sm" appearance="subtle">Scheduled</Badge>
+        </BadgeGroup>
+      </Field>
+    </div>
+  </Frame>
+);
 
 <Meta of={Stories} />
 
@@ -20,13 +77,17 @@ Horizontal cluster of `<Badge>` elements with locked spacing. Use as a `Field` v
 
 `solid` and `subtle` appearance values from Badge composed in the same group.
 
-<Canvas of={Stories.Appearance} />
+<Canvas>
+  <AppearanceMix />
+</Canvas>
 
 ### Gaps
 
 Three locked gap sizes — `xs` for tight clusters, `sm` for standard lists, `md` for roomy displays.
 
-<Canvas of={Stories.Gaps} />
+<Canvas>
+  <GapScale />
+</Canvas>
 
 ## Patterns
 

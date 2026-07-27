@@ -1,13 +1,6 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Tooltip } from './Tooltip';
 import { Button } from '../Button';
-
-/* ─── Layout helper (story-only) ──────────────────────────────── */
-
-const Row = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexWrap: 'wrap', gap, alignItems: 'center' }}>{children}</div>
-);
 
 /* ─── Meta ────────────────────────────────────────────── */
 
@@ -66,27 +59,5 @@ export const Default: Story = {
    VARIANTS — placement axis gallery
    ═══════════════════════════════════════════════════════════════ */
 
-/**
- * All four placements around the trigger. Side-by-side is the point —
- * the Controls panel can only show one placement at a time.
- *
- * @summary All four placements side by side
- */
-export const Placements: Story = {
-  render: () => (
-    <Row>
-      <Tooltip content="Top placement" placement="top">
-        <Button variant="outline" size="sm">Top</Button>
-      </Tooltip>
-      <Tooltip content="Bottom placement" placement="bottom">
-        <Button variant="outline" size="sm">Bottom</Button>
-      </Tooltip>
-      <Tooltip content="Left placement" placement="left">
-        <Button variant="outline" size="sm">Left</Button>
-      </Tooltip>
-      <Tooltip content="Right placement" placement="right">
-        <Button variant="outline" size="sm">Right</Button>
-      </Tooltip>
-    </Row>
-  ),
-};
+/* `placement` is a Control on Default — the four-placement comparison lives
+   in Tooltip.mdx as a docs-local demo (#1489). */

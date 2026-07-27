@@ -398,15 +398,21 @@ function extractStories(content) {
     const objClose = matchClose(content, objOpen);
     let argsMap = null;
     let declarative = false;
+    let hasRender = false;
+    let hasPlay = false;
+    let body = '';
     if (objClose !== -1) {
       const top = parseTopLevelEntries(content.slice(objOpen + 1, objClose));
       declarative = !top.has('render') && !top.has('play');
+      hasRender = top.has('render');
+      hasPlay = top.has('play');
+      body = content.slice(objOpen + 1, objClose);
       const argsEntry = top.get('args');
       if (argsEntry && argsEntry.raw.startsWith('{')) {
         argsMap = parseTopLevelEntries(argsEntry.raw.slice(1, -1));
       }
     }
-    stories.push({ name, line, args: argsMap, declarative });
+    stories.push({ name, line, args: argsMap, declarative, hasRender, hasPlay, body });
   }
   return stories;
 }
@@ -416,6 +422,86 @@ function serializeArgs(map) {
     .map(([k, v]) => `${k}=${v.raw}`)
     .sort()
     .join(' ');
+}
+
+
+// ---------------------------------------------------------------------------
+// Axis galleries (#1489)
+//
+// The story-shape standard used to carve out a "narrow axis-only-gallery
+// exception" letting each axis keep one side-by-side story. The BDS-27 review
+// reversed that: an axis is a Control, and the side-by-side belongs in the
+// component's MDX as a docs-local demo. See ADR-010.
+//
+// Two tiers, because detection precision differs sharply:
+//
+//   HARD  `axis-gallery-story` — the export is *named* after an axis AND is
+//         render-mode. Unambiguous; the review named these five axes.
+//         Exempt: a distinguishing `play` (the assertion is the point — e.g.
+//         Board.Density guards the density typography contract, #412) or hook
+//         usage (a genuine Q4 state machine — e.g. Menu.Placement's upward
+//         flip only shows against a real trigger).
+//
+//   NOTICE `axis-gallery-shape` — the render *looks* like a gallery (maps a
+//         value array, or repeats the component 3+ times) but isn't
+//         axis-named. Reported, never gated: ~1/3 are legitimate Q4
+//         compositions (Badge.ContentStatusSolid, Checkbox.Vertical,
+//         Field.CompactTier), and "is this a gallery" is the same
+//         not-statically-decidable judgment the standard leaves to review for
+//         consolidation rules 3–4.
+// ---------------------------------------------------------------------------
+
+/** Axis names the BDS-27 review named. Render-mode exports here are gated. */
+const AXIS_NAMES =
+  /^(Sizes?|Densit(?:y|ies)|Placements?|Gaps?|Spacings?|Markers?|Appearances?|Styles?|Alignments?)$/;
+
+/**
+ * A `play` or a hook means the story is doing something a Control can't.
+ * The generic-args branch is load-bearing: `useState<Record<string, boolean>>({...})`
+ * puts a type argument between the hook name and the call parens, so a bare
+ * `use[A-Z]\w*\s*\(` misses it and the story gets gated by mistake.
+ */
+function isAxisExempt(story) {
+  return story.hasPlay || /\buse[A-Z]\w*\s*(?:<[^;{}]*?>)?\s*\(/.test(story.body);
+}
+
+function axisGalleryViolations(stories) {
+  const out = [];
+  for (const s of stories) {
+    if (s.name === 'Default' || !s.hasRender) continue;
+    if (!AXIS_NAMES.test(s.name)) continue;
+    if (isAxisExempt(s)) continue;
+    out.push({
+      rule: 'axis-gallery-story',
+      name: s.name,
+      line: s.line,
+      message: `\`${s.name}\` is an axis gallery. The axis belongs in \`argTypes\` as a Control on \`Default\`; move the side-by-side into the component's MDX as a docs-local demo (#1489, ADR-010). If this is really a Q4 state machine or carries a distinguishing \`play\`, it is exempt — make that visible in the story.`,
+    });
+  }
+  return out;
+}
+
+function axisGalleryNotices(stories, componentName) {
+  const out = [];
+  for (const s of stories) {
+    if (s.name === 'Default' || !s.hasRender) continue;
+    if (AXIS_NAMES.test(s.name)) continue; // already covered by the hard rule
+    if (isAxisExempt(s)) continue;
+    const mapsValueArray = /\[\s*'[^']+',\s*'[^']+'[^\]]*\]\s*(?:as const)?\s*\)?\s*\.map/.test(s.body);
+    let repeats = 0;
+    if (componentName) {
+      const tag = new RegExp(`<${componentName}[\\s/>]`, 'g');
+      repeats = (s.body.match(tag) || []).length;
+    }
+    if (!mapsValueArray && repeats < 3) continue;
+    out.push({
+      rule: 'axis-gallery-shape',
+      name: s.name,
+      line: s.line,
+      message: `\`${s.name}\` renders like an axis gallery (${mapsValueArray ? 'maps a value array' : `repeats <${componentName}> ${repeats}×`}). If it is comparing one axis, move it to MDX per #1489. If it is a real Q4 composition, leave it — this tier never gates.`,
+    });
+  }
+  return out;
 }
 
 /** Advisory findings for one file's parsed stories. */
@@ -530,14 +616,21 @@ function lintFile(filePath) {
   }
 
   let advisories = [];
+  let notices = [];
   try {
-    advisories = advisoriesFor(extractStories(content));
+    const stories = extractStories(content);
+    advisories = advisoriesFor(stories);
+    // Axis galleries: named+render is a hard violation, shape-only is a notice.
+    violations.push(...axisGalleryViolations(stories));
+    const componentName = path.basename(filePath, '.stories.tsx');
+    notices = axisGalleryNotices(stories, componentName);
   } catch {
-    // Parsing is best-effort; never let an advisory-tier parse error fail lint.
+    // Parsing is best-effort; never let a parse error fail lint.
     advisories = [];
+    notices = [];
   }
 
-  return { file: path.relative(REPO_ROOT, filePath), violations, advisories };
+  return { file: path.relative(REPO_ROOT, filePath), violations, advisories, notices };
 }
 
 // ---------------------------------------------------------------------------
@@ -559,6 +652,8 @@ function main() {
   const violating = results.filter((r) => r.violations.length > 0);
   const advised = results.filter((r) => r.advisories.length > 0);
   const advisoryCount = results.reduce((n, r) => n + r.advisories.length, 0);
+  const noticed = results.filter((r) => r.notices.length > 0);
+  const noticeCount = results.reduce((n, r) => n + r.notices.length, 0);
 
   if (FLAG_JSON) {
     console.log(
@@ -569,6 +664,8 @@ function main() {
           violating: violating.length,
           advisoryFiles: advised.length,
           advisoryCount,
+          noticeFiles: noticed.length,
+          noticeCount,
           results,
         },
         null,
@@ -584,7 +681,8 @@ function main() {
   console.log(`Total story files:  ${results.length}`);
   console.log(`Conforming:         ${conforming.length}`);
   console.log(`Violating (banned): ${violating.length}`);
-  console.log(`Consolidation:      ${advisoryCount} in ${advised.length} file(s)\n`);
+  console.log(`Consolidation:      ${advisoryCount} in ${advised.length} file(s)`);
+  console.log(`Axis-gallery shape: ${noticeCount} in ${noticed.length} file(s) (notice only)\n`);
 
   if (violating.length === 0) {
     console.log(`✓ No banned story exports (Variants / Tones / Patterns / Examples / *And* compounds).`);
@@ -601,6 +699,13 @@ function main() {
     for (const r of advised) {
       console.log(`\n  ${r.file}`);
       for (const a of r.advisories) console.log(`    [${a.rule}] L${a.line}: ${a.message}`);
+    }
+  }
+  if (noticeCount > 0) {
+    console.log('\nAxis-gallery shape (NOTICE — never gates; review and either move to MDX or leave as Q4):');
+    for (const r of noticed) {
+      console.log(`\n  ${r.file}`);
+      for (const n of r.notices) console.log(`    [${n.rule}] L${n.line}: ${n.message}`);
     }
   }
   console.log('');

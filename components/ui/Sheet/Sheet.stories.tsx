@@ -240,35 +240,8 @@ export const Floating: Story = {
   },
 };
 
-/**
- * Compact density tightens the body and footer vertical padding one step
- * (body `padding-block` xl→lg, footer lg→md) for data-dense sheets that
- * need more content per viewport. Horizontal padding is unchanged.
- *
- * @summary Compact density — tighter body + footer padding
- */
-export const Compact: Story = {
-  render: () => {
-    const [open, setOpen] = useState(false);
-    return (
-      <>
-        <Button onClick={() => setOpen(true)}>View company (compact)</Button>
-        <Sheet
-          isOpen={open}
-          onClose={() => setOpen(false)}
-          density="compact"
-          subtitle="Company"
-          title="Brik Designs"
-          description="Active · Updated 2 days ago"
-          mode="read"
-          onEdit={() => alert('Switch to edit mode')}
-        >
-          <ReadOnlyFields />
-        </Sheet>
-      </>
-    );
-  },
-};
+/* `density` is a Control on Default (which threads args through its trigger
+   render), so a dedicated compact story was redundant (#1489). */
 
 /**
  * `loading` swaps the header (title / subtitle / description) and body for

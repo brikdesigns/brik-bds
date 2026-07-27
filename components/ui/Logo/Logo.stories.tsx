@@ -75,29 +75,8 @@ export const Integration: Story = {
   ),
 };
 
-/** The four square footprints, keyed to the Avatar / Card-media scale.
- *  @summary Size scale sm / md / lg / xl */
-export const Sizes: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'flex-end' }}>
-      {(['sm', 'md', 'lg', 'xl'] as const).map((size) => (
-        <div key={size} style={{ textAlign: 'center' }}>
-          <Logo set="integration" name="figma" size={size} />
-          <p
-            style={{
-              margin: 'var(--gap-sm) 0 0',
-              fontFamily: 'var(--font-family-label)',
-              fontSize: 'var(--label-sm)',
-              color: 'var(--text-secondary)',
-            }}
-          >
-            {size}
-          </p>
-        </div>
-      ))}
-    </div>
-  ),
-};
+/* `size` is a Control on Default — the size scale lives in Logo.mdx as a
+   docs-local demo (#1489). */
 
 /** Logo dropped into the container media slots it's built for — the default
  *  Card `media={{ logo }}` slot and a `TableLogoCell`. Composition an

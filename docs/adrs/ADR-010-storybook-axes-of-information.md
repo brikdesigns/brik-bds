@@ -1,6 +1,6 @@
 # ADR-010 — Storybook axes of information: story vs. control vs. toolbar
 
-**Status:** Accepted (2026-05-13); Amended (2026-05-14 — Q3 axis clarification + Patterns/Forms relocation; 2026-05-14 §2 — input-component specialization rule; 2026-05-18 §3 — canonical first-story name unified to `Default`, all driven by [#618](https://github.com/brikdesigns/brik-bds/issues/618))
+**Status:** Accepted (2026-05-13); Amended (2026-05-14 — Q3 axis clarification + Patterns/Forms relocation; 2026-05-14 §2 — input-component specialization rule; 2026-05-18 §3 — canonical first-story name unified to `Default`, all driven by [#618](https://github.com/brikdesigns/brik-bds/issues/618); **2026-07-27 §4 — axis-only-gallery exception reversed**, see [#1489](https://github.com/brikdesigns/brik-bds/issues/1489))
 **Date:** 2026-05-13
 **Supersedes:** Part of [ADR-006 §Part B](./ADR-006-storybook-taxonomy-and-story-shape.md) — operational decision about *which axis becomes a story* now lives here. ADR-006 retains the two-shape model.
 **Superseded by:** —
@@ -89,7 +89,7 @@ The Button story file is the named test case. **Before the audit: 22 exports.**
 | `Disabled` `Loading` | Collapse | Q2 — boolean state, becomes Control |
 | `WithIconBefore` `WithIconAfter` | Collapse | Q2 — icon-slot prop, becomes Control |
 | `FullWidth` | Collapse | Q2 — boolean, becomes Control |
-| `Sizes` | Keep | ADR-006 axis-only-gallery exception (one axis, side-by-side comparison) |
+| `Sizes` | Move to MDX | ~~ADR-006 axis-only-gallery exception~~ — reversed by §4 below (2026-07-27); the axis is a Control, the side-by-side is a docs-local MDX demo |
 | `Tiny` `Small` `Medium` `Large` `ExtraLarge` | Collapse into `Sizes` | Q2 — covered by the axis gallery |
 
 **After: ~3 exports** (`Default` + `IconOnly` discriminated-union showcase + `Sizes` axis gallery). The 12 per-variant rows above were the initial proposal; the realized refactor collapsed further once it became clear Button variants don't carry semantic-role differences. Same coverage, ~85% fewer exports, every state navigable via Controls on `Default`.
@@ -259,6 +259,25 @@ Q5 stories exist for interaction assertions; they are not artifacts an agent sho
 - **Story-shape lint** (closes [#569](https://github.com/brikdesigns/brik-bds/issues/569)) — Phase 4 wires the lint that bans the named story-export anti-patterns (`Variants`, `Tones`, `Patterns`, `Examples`) in new files. The matrix's broader rule (Q2 collapses) stays PR-review-enforced.
 - **MCP audit** — the `extract-component-inventory.ts` script (PR-C of #587 Phase 1) walks `*.stories.tsx`, surfaces export counts + `argTypes` coverage gaps, and upserts to the Notion Components DB. The Notion view becomes the "outliers" dashboard for review.
 - **Existing files are not retroactively swept.** Phase 2 picks one reference; Phase 3 batch-migrates; the matrix applies to new files from acceptance date forward.
+
+## Amendment §4 — the axis-only-gallery exception is reversed (2026-07-27)
+
+**Decision.** An axis is a **Control on `Default`**. Its side-by-side comparison lives in the component's **MDX page as a docs-local demo**, never as a story export. This reverses the *narrow axis-only-gallery exception* that ADR-006 introduced and this ADR's Q3 row relied on.
+
+**Why it changed.** The BDS-27 Storybook review flagged the size / density / style / spacing / placement galleries as redundant story exports. The exception had been granted on the premise that side-by-side comparison justified a story slot. It doesn't: a story slot costs a Chromatic snapshot (against the #771 budget), an MCP manifest entry that consumer-repo agents page through, and a sidebar row — for something that is not a distinct component state. MDX gets the same visual for none of that.
+
+**Why the comparison survives rather than being deleted.** The docs pages argued the visual case in prose — `Tooltip.mdx` read *"side-by-side because the Controls panel shows only one at a time."* That reasoning was sound about **presentation** and wrong only about **layer**. `Tag.mdx` already had the precedent: `BadgeTagAlignmentDemo` is a docs-local demo whose own comment says it *"Lives here (docs), not as a Tag story, because it isn't part of Tag's own API surface."* Rule 5 generalizes that.
+
+**Exemptions.** Two, both where the story does something a Control cannot:
+
+| Exempt | Case | Example |
+| --- | --- | --- |
+| Distinguishing `play` | The assertion is the point — deleting the story deletes a test | `Board` `Density` guards the density typography contract by computed style (#412) |
+| Hook-driven Q4 | A state machine args can't express | `Menu` `Placement` — the upward flip only shows against a real trigger |
+
+**Enforcement is deliberately two-tier.** `axis-gallery-story` gates hard on axis-*named* render-mode exports (unambiguous). `axis-gallery-shape` is a **notice that never gates**, for renders that merely look like galleries: roughly a third of those are legitimate Q4 compositions, and "is this a gallery" is the same not-statically-decidable judgment consolidation rules 3–4 already leave to review. A hard gate on shape would have failed `Badge.ContentStatusSolid`, `Checkbox.Vertical`, and `Field.CompactTier`; a hard gate on names alone would have silently passed `Stack.GapScale`, `Frame.RatioPresets`, and `Image.Ratios`. Neither signal is sufficient alone, so the ADR ships both at the strength each earns.
+
+**Scope applied.** #1489 converted 16 stories across 12 components and left 2 exempt. The 7 non-axis-named galleries the notice tier surfaces (`CardList.GapScale`, `Cluster.GapScale`, `Frame.RatioPresets`, `Frame.FitModes`, `Icons.Sizing`, `Image.Ratios`, `Image.FitModes`) are follow-up, tracked on #1489 — they are visible in every lint run rather than silently unaddressed.
 
 ## Open questions tracked separately
 

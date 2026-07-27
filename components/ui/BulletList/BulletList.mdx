@@ -1,6 +1,17 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './BulletList.stories';
+import { BulletList } from './BulletList';
+
+{/* Marker-axis comparison — docs-local, not a story export: `marker` is a
+    Control on Default, and a side-by-side gallery is an MDX concern (#1489). */}
+export const MarkerScale = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+    <BulletList marker="disc" items={['First disc item', 'Second disc item', 'Third disc item']} />
+    <BulletList marker="decimal" items={['First numbered item', 'Second numbered item', 'Third numbered item']} />
+    <BulletList marker="none" items={['No marker row one', 'No marker row two', 'No marker row three']} />
+  </div>
+);
 
 <Meta of={Stories} />
 
@@ -20,7 +31,9 @@ Structured list of short text items — anti-messages, proof points, approved CT
 
 Three marker styles — `disc` (default), `decimal`, `none`. Use the Controls panel on Default to try `density` (`compact` / `comfortable`).
 
-<Canvas of={Stories.Markers} />
+<Canvas>
+  <MarkerScale />
+</Canvas>
 
 ## Patterns
 
