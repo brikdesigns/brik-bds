@@ -121,6 +121,12 @@ export const BlogPostsGrid: Story = {
  * works. This story matches the legacy `services_detail_two_column` shape:
  * 2-col layout, just title/description rows, no card chrome.
  *
+ * Kept deliberately (#1490): a blueprint story is AI-mockup grounding, not
+ * just a visual sample, and this is the one that proves `children` is
+ * unconstrained — a `card_grid` is a *section* contract (header + rhythm +
+ * container), not a promise of card chrome. Removing it would leave the
+ * family looking card-only to a generating agent.
+ *
  * @summary Two-column title/description list, no card surface
  */
 export const TwoColumnList: Story = {
@@ -148,18 +154,3 @@ export const TwoColumnList: Story = {
   },
 };
 
-/**
- * `<CardGrid>` works as a header-only section if that's what the
- * consumer needs — children are whatever fits.
- *
- * @summary Minimal — title only, no subtitle/description/cards
- */
-export const MinimalHeader: Story = {
-  args: {
-    sectionKey: 'minimal-grid',
-    title: 'Generic content slot',
-    children: (
-      <p>Children can be any composition — this story shows the section wrapper without item content.</p>
-    ),
-  },
-};

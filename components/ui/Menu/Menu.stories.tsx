@@ -138,9 +138,12 @@ export const Grouped: Story = {
 };
 
 /**
- * Set `content` on a `MenuItemData` to render a custom node — e.g. a
- * line-colored `ServiceTag` — instead of the default icon + label. The
- * item stays a `role="menuitem"`; its `label` is the accessible name.
+ * Each item can carry a `content` ReactNode instead of a plain `label` —
+ * here `ServiceTag`s, so a service picker reads as tags rather than text.
+ *
+ * Kept deliberately (#1490): `content` lives per-item inside the `items`
+ * array, so it cannot be surfaced as a top-level Control. Without this story
+ * the slot is invisible to both the Controls panel and MCP consumers.
  *
  * @summary Custom node (ServiceTag) as item content
  */
@@ -236,6 +239,10 @@ export const WithTrigger: Story = {
  * sits near the bottom of the viewport (e.g. a sidebar-footer switcher).
  * Irreducible — the upward flip only shows against a real trigger.
  *
+ * Kept deliberately (#1490) and exempt from the axis rule (#1489): the two
+ * panels are hook-driven — `placement` here is a state machine against a real
+ * trigger, not a side-by-side of one prop's values.
+ *
  * @summary Panel opens upward with placement="top"
  */
 export const Placement: Story = {
@@ -283,9 +290,12 @@ export const Placement: Story = {
 };
 
 /**
- * With 20+ items the panel is capped at `min(60vh, 24rem)` and scrolls
- * internally instead of growing past the viewport. Irreducible — the scroll
- * cap only shows with an overflowing item list.
+ * 24 items overflow the panel's max-height and scroll inside it.
+ *
+ * Kept deliberately (#1490): the flag proposed folding this into a Control
+ * alongside `placement`, but the overflow contract is driven by item *count*,
+ * not by a prop — there is nothing to toggle. It is the only place the
+ * height cap and inner scroll are visible.
  *
  * @summary Long item list scrolls inside a height-capped panel
  */
