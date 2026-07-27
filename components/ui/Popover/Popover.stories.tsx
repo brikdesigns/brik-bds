@@ -1,13 +1,6 @@
-import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Popover } from './Popover';
 import { Button } from '../Button';
-
-/* ─── Layout helper (story-only) ──────────────────────────────── */
-
-const Row = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexWrap: 'wrap', gap, alignItems: 'flex-start' }}>{children}</div>
-);
 
 /* ─── Shared Content ──────────────────────────────────── */
 
@@ -95,27 +88,5 @@ export const Default: Story = {
    show one placement at a time. Mirrors the sibling Tooltip file.
    ═══════════════════════════════════════════════════════════════ */
 
-/**
- * All four placements around the trigger. Side-by-side is the point —
- * the Controls panel can only show one placement at a time.
- *
- * @summary All four placements side by side
- */
-export const Placements: Story = {
-  render: () => (
-    <Row>
-      <Popover content={sampleContent} placement="top">
-        <Button variant="outline" size="sm">Top</Button>
-      </Popover>
-      <Popover content={sampleContent} placement="bottom">
-        <Button variant="outline" size="sm">Bottom</Button>
-      </Popover>
-      <Popover content={sampleContent} placement="left">
-        <Button variant="outline" size="sm">Left</Button>
-      </Popover>
-      <Popover content={sampleContent} placement="right">
-        <Button variant="outline" size="sm">Right</Button>
-      </Popover>
-    </Row>
-  ),
-};
+/* `placement` is a Control on Default — the four-placement comparison lives
+   in Popover.mdx as a docs-local demo (#1489). */

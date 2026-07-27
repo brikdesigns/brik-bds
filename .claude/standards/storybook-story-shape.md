@@ -50,7 +50,7 @@ For every prop, state, or scenario, ask in order. First yes wins:
 |---|---|---|
 | 1 | Orthogonal environmental axis (theme/density/viewport/locale/motion) | **Toolbar global** — never a story |
 | 2 | State prop that's not a semantic starting point (`disabled`, `loading`, icon slot, boolean toggle) | **`argTypes` only** — no story |
-| 3 | Value an agent would reach for as a starting template (`variant: 'destructive'`, `tone: 'warning'`) | **Dedicated args-driven story** |
+| 3 | Value an agent would reach for as a starting template (`variant: 'destructive'`, `tone: 'warning'`) | **Dedicated args-driven story** — but an *axis* comparison is a Control + an MDX demo, never a story (rule 5) |
 | 4 | Composition or hook-driven state machine args can't express | **Irreducible render-mode story** |
 | 5 | Interaction assertion (`play` function) | **`play`-only `InteractionTest…` story, tagged `['!manifest']`** |
 
@@ -131,15 +131,50 @@ export const OnboardingChecklist: Story = ...
 <Canvas of={Stories.OnboardingChecklist} />
 ```
 
-## The narrow axis-only-gallery exception
+## Axis comparisons are an MDX concern, never a story export
 
-A comparison gallery earns **one** dedicated story when **and only when** all three apply:
+**Rule 5.** An axis — `size`, `density`, `appearance` / `style`, `gap` / `spacing`, `placement`, `direction`, `align` — is a **Control on `Default`**. The side-by-side comparison lives in the component's **MDX page as a docs-local demo**, never as a story export.
 
-1. Side-by-side comparison is the entire point (e.g., `Sizes` showing `xs/sm/md/lg/xl`).
-2. The autodocs page can't make the same comparison clear — sidebar order isn't enough.
-3. It's one axis, not a mix — `Sizes` is fine; `Sizes-and-tones` is not.
+```tsx
+// ❌ a story whose only job is showing one axis side-by-side
+export const Sizes: Story = {
+  render: () => (<Row><Tag size="xs" /><Tag size="sm">Small</Tag>…</Row>),
+};
+```
 
-Story is named after the axis (`Sizes`, `Densities`, `Placements`) — **never** `Variants` / `Patterns` / `Examples`.
+```mdx
+{/* ✅ in Tag.mdx — docs-local, not exported from the stories file */}
+export const SizeScale = () => (
+  <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
+    <Tag size="xs" icon={<Icon icon="ph:tag" />} />
+    <Tag size="sm">Small</Tag>
+    <Tag size="md">Medium</Tag>
+    <Tag size="lg">Large</Tag>
+  </div>
+);
+
+### Sizes
+
+<Canvas>
+  <SizeScale />
+</Canvas>
+```
+
+Why the MDX layer rather than deleting the comparison: side-by-side genuinely reads better than toggling a Control for these axes, and the docs page is where a reader is already comparing. What it must not do is consume a story slot — each one costs a Chromatic snapshot, an MCP manifest entry, and a sidebar row for something that is not a distinct component state.
+
+**Two exemptions**, both because the story is doing something a Control can't:
+
+| Exempt when | Example |
+| --- | --- |
+| It carries a distinguishing `play` — the assertion is the point | `Board` `Density` guards the density typography contract by computed style (#412) |
+| It is hook-driven Q4 — a state machine args can't express | `Menu` `Placement` — the upward flip only shows against a real trigger |
+
+**Enforcement is two-tier**, because precision differs:
+
+- **`axis-gallery-story` (HARD, gates under `--enforce`)** — an export *named* after an axis and in render mode, minus the two exemptions above. Unambiguous.
+- **`axis-gallery-shape` (NOTICE, never gates)** — a render that *looks* like a gallery (maps a value array, or repeats the component 3+ times) but isn't axis-named. Reported for review only: roughly a third are legitimate Q4 compositions (`Badge` `ContentStatusSolid`, `Checkbox` `Vertical`, `Field` `CompactTier`), and "is this a gallery" is the same not-statically-decidable judgment rules 3–4 leave to review.
+
+**History.** This section previously granted a *narrow axis-only-gallery exception* — one dedicated story per axis, when side-by-side was the whole point and autodocs couldn't show it. The BDS-27 Storybook review reversed that, and #1489 applied the reversal across 16 stories. [ADR-010](../../docs/adrs/ADR-010-storybook-axes-of-information.md) records the decision.
 
 ## Multi-preset Container pattern
 

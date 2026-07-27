@@ -9,10 +9,6 @@ const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode;
   <div style={{ display: 'flex', flexDirection: 'column', gap, alignItems: 'center' }}>{children}</div>
 );
 
-const Row = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexWrap: 'wrap', gap, alignItems: 'center' }}>{children}</div>
-);
-
 /* ─── Meta ────────────────────────────────────────────── */
 
 const meta: Meta<typeof Stepper> = {
@@ -53,21 +49,8 @@ export const Default: Story = {
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   2. SIZES — axis-only gallery (sm / md / lg)
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary All three sizes side by side */
-export const Sizes: Story = {
-  args: { value: 1, onChange: () => {} },
-  render: () => (
-    <Row>
-      <Stepper value={3} onChange={() => {}} size="sm" min={0} max={10} />
-      <Stepper value={5} onChange={() => {}} size="md" min={0} max={10} />
-      <Stepper value={7} onChange={() => {}} size="lg" min={0} max={10} />
-    </Row>
-  ),
-};
+/* `size` is a Control on Default — the size scale lives in Stepper.mdx as a
+   docs-local demo (#1489). */
 
 /* ═══════════════════════════════════════════════════════════════
    3. QUANTITY SELECTOR — real-world composition (default step)

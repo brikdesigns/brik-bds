@@ -1,6 +1,17 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Stepper.stories';
+import { Stepper } from './Stepper';
+
+{/* Size-axis comparison — docs-local, not a story export: `size` is a Control
+    on Default, and a side-by-side gallery is an MDX concern (#1489). */}
+export const SizeScale = () => (
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-xl)', alignItems: 'center' }}>
+    <Stepper value={3} onChange={() => {}} size="sm" min={0} max={10} />
+    <Stepper value={5} onChange={() => {}} size="md" min={0} max={10} />
+    <Stepper value={7} onChange={() => {}} size="lg" min={0} max={10} />
+  </div>
+);
 
 <Meta of={Stories} />
 
@@ -20,7 +31,9 @@ Numeric input with increment and decrement buttons. Use for quantity selectors, 
 
 `sm`, `md`, `lg` side by side. Bounds and `disabled` are available via Controls on Default.
 
-<Canvas of={Stories.Sizes} />
+<Canvas>
+  <SizeScale />
+</Canvas>
 
 ## Patterns
 

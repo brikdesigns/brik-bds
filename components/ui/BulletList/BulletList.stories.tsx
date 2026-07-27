@@ -46,29 +46,8 @@ export const Default: Story = {
   ),
 };
 
-/* ─── 2. Markers (axis-only gallery) ─────────────────────────── */
-
-/** @summary Marker styles side by side */
-export const Markers: Story = {
-  render: () => (
-    <Frame>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
-        <BulletList
-          marker="disc"
-          items={['First disc item', 'Second disc item', 'Third disc item']}
-        />
-        <BulletList
-          marker="decimal"
-          items={['First numbered item', 'Second numbered item', 'Third numbered item']}
-        />
-        <BulletList
-          marker="none"
-          items={['No marker row one', 'No marker row two', 'No marker row three']}
-        />
-      </div>
-    </Frame>
-  ),
-};
+/* `marker` is a Control on Default — the marker comparison lives in
+   BulletList.mdx as a docs-local demo (#1489). */
 
 /* ─── 3. Inside a Field ──────────────────────────────────────── */
 

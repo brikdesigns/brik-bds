@@ -1,6 +1,38 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './TagGroup.stories';
+import { TagGroup } from './TagGroup';
+import { Tag } from '../Tag';
+
+{/* Gap-axis comparison — docs-local, not a story export: `gap` is a Control on
+    Default, and a side-by-side gallery is an MDX concern (#1489). */}
+export const Frame = ({ width = '360px', children }) => (
+  <div style={{ width, padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+    {children}
+  </div>
+);
+
+export const GapScale = () => (
+  <Frame>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+      <TagGroup gap="xs">
+        <Tag size="sm">xs gap</Tag>
+        <Tag size="sm">tight</Tag>
+        <Tag size="sm">cluster</Tag>
+      </TagGroup>
+      <TagGroup gap="sm">
+        <Tag size="sm">sm gap</Tag>
+        <Tag size="sm">standard</Tag>
+        <Tag size="sm">list</Tag>
+      </TagGroup>
+      <TagGroup gap="md">
+        <Tag size="md">md gap</Tag>
+        <Tag size="md">roomy</Tag>
+        <Tag size="md">display</Tag>
+      </TagGroup>
+    </div>
+  </Frame>
+);
 
 <Meta of={Stories} />
 
@@ -20,7 +52,9 @@ Horizontal cluster of `<Tag>` elements with locked spacing. Use as a `Field` val
 
 Three locked gap sizes — `xs` for tight clusters, `sm` for standard lists, `md` for roomy displays.
 
-<Canvas of={Stories.Gaps} />
+<Canvas>
+  <GapScale />
+</Canvas>
 
 ## Patterns
 

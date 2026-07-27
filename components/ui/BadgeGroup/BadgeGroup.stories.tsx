@@ -54,34 +54,8 @@ export const Default: Story = {
   ),
 };
 
-/* ─── 2. Gaps ────────────────────────────────────────────────── */
-
-/** @summary Gaps */
-export const Gaps: Story = {
-  render: () => (
-    <Frame>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
-        <BadgeGroup gap="xs">
-          <Badge status="positive" size="sm">xs gap</Badge>
-          <Badge status="info" size="sm">tight</Badge>
-          <Badge status="brand" size="sm">cluster</Badge>
-        </BadgeGroup>
-
-        <BadgeGroup gap="sm">
-          <Badge status="positive" size="sm">sm gap</Badge>
-          <Badge status="info" size="sm">standard</Badge>
-          <Badge status="brand" size="sm">list</Badge>
-        </BadgeGroup>
-
-        <BadgeGroup gap="md">
-          <Badge status="positive" size="md">md gap</Badge>
-          <Badge status="info" size="md">roomy</Badge>
-          <Badge status="brand" size="md">display</Badge>
-        </BadgeGroup>
-      </div>
-    </Frame>
-  ),
-};
+/* `gap` is a Control on Default — the gap-scale comparison lives in
+   BadgeGroup.mdx as a docs-local demo (#1489). */
 
 /* ─── 3. Inside a Field ──────────────────────────────────────── */
 
@@ -101,37 +75,5 @@ export const InsideField: Story = {
   ),
 };
 
-/* ─── 4. Appearance — axis-only gallery (solid vs subtle) ────── */
-
-/**
- * `solid` and `subtle` appearance values from Badge composed in the same
- * group — a single axis, side by side.
- *
- * @summary Solid vs subtle appearance, composed in a group
- */
-export const Appearance: Story = {
-  name: 'Appearance mix',
-  render: () => (
-    <Frame width="480px">
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-        <Field label="Solid appearance">
-          <BadgeGroup>
-            <Badge status="positive" size="sm" appearance="solid">Paid</Badge>
-            <Badge status="warning" size="sm" appearance="solid">Overdue</Badge>
-            <Badge status="error" size="sm" appearance="solid">Failed</Badge>
-            <Badge status="info" size="sm" appearance="solid">Scheduled</Badge>
-          </BadgeGroup>
-        </Field>
-
-        <Field label="Subtle appearance">
-          <BadgeGroup>
-            <Badge status="positive" size="sm" appearance="subtle">Paid</Badge>
-            <Badge status="warning" size="sm" appearance="subtle">Overdue</Badge>
-            <Badge status="error" size="sm" appearance="subtle">Failed</Badge>
-            <Badge status="info" size="sm" appearance="subtle">Scheduled</Badge>
-          </BadgeGroup>
-        </Field>
-      </div>
-    </Frame>
-  ),
-};
+/* Badge `appearance` composed in a group — the solid-vs-subtle comparison
+   lives in BadgeGroup.mdx as a docs-local demo (#1489). */
