@@ -12,7 +12,9 @@ import {
   TableActionsCell,
   TableAvatarCell,
   TableImageCell,
+  TableLogoCell,
   TableServiceTagCell,
+  TableSubheader,
 } from './Table';
 import { Badge } from '../Badge';
 import { Tag } from '../Tag';
@@ -23,12 +25,6 @@ import { TextLink } from '../TextLink';
 import { Tooltip } from '../Tooltip';
 import { ServiceTag, type ServiceLine } from '../ServiceTag';
 import { Eye, Pen, EllipsisVertical } from '../../icons';
-
-/* ─── Layout helper (story-only) ──────────────────────────────── */
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
 
 /* ─── Shared cell styles + helpers (story-only) ───────────────── */
 
@@ -369,19 +365,19 @@ export const CellLevelInteractivity: Story = {
           {services.map((service) => (
             <TableRow key={service.name}>
               <TableCell>
-                <TextLink href="#" size="small" onClick={(e) => { e.preventDefault(); alert(`Open ${service.name} read sheet`); }}>
+                <TextLink href="#" size="small" onClick={(e) => e.preventDefault()}>
                   {service.name}
                 </TextLink>
               </TableCell>
               <TableCell>
-                <TextLink href="#" size="small" onClick={(e) => { e.preventDefault(); alert(`Open ${service.serviceLine} service line read sheet`); }}>
+                <TextLink href="#" size="small" onClick={(e) => e.preventDefault()}>
                   {service.serviceLine}
                 </TextLink>
               </TableCell>
               <TableCell><Badge status={service.status} size="sm">{statusLabel(service.status)}</Badge></TableCell>
               <TableActionsCell>
-                <Button variant="primary" size="sm" icon={<Icon icon={Eye} />} label="View" onClick={() => alert(`View ${service.name}`)} />
-                <Button variant="primary" size="sm" icon={<Icon icon={Pen} />} label="Edit" onClick={() => alert(`Edit ${service.name}`)} />
+                <Button variant="primary" size="sm" icon={<Icon icon={Eye} />} label="View" />
+                <Button variant="primary" size="sm" icon={<Icon icon={Pen} />} label="Edit" />
               </TableActionsCell>
             </TableRow>
           ))}
@@ -392,67 +388,51 @@ export const CellLevelInteractivity: Story = {
 };
 
 /**
- * **Anti-pattern — do not do this.** Whole-row `onClick` violates table
- * cell semantics, breaks screen-reader expectations, and conflicts with
- * cell-level affordances. The row appears clickable but the keyboard /
- * AT user has no equivalent activation path, and any nested `<TextLink>`
- * or `<Button>` fights the row handler for click events.
+ * `<TableSubheader>` is a thin full-width section-divider row for grouping
+ * body rows by phase or category. Drop it inside `<TableBody>` between row
+ * groups; `colSpan` defaults to 100 so it spans any table. Irreducible —
+ * the value is the exported subcomponent, not a `Table` arg.
  *
- * The canonical pattern is shown in `CellLevelInteractivity` above —
- * Name and FK cells are `<TextLink>`s, and a `<TableActionsCell>` hosts
- * the trailing actions. Consumers migrating off `onRowClick` should
- * delete the `<tr>` handler and add cell-level affordances.
- *
- * @summary Row click anti pattern
+ * @summary Section-divider rows grouping the body
  */
-export const RowClickAntiPattern: Story = {
+export const WithSubheaders: Story = {
   render: () => (
-    <Stack>
-      <div
-        role="note"
-        style={{
-          padding: 'var(--padding-md)',
-          background: 'var(--surface-warning)',
-          color: 'var(--text-primary)',
-          borderRadius: 'var(--border-radius-md)',
-          border: 'var(--border-width-sm) solid var(--border-warning)',
-          fontFamily: 'var(--font-family-body)',
-          fontSize: 'var(--body-sm)',
-        }}
-      >
-        <strong>Anti-pattern.</strong> The row below has{' '}
-        <code>onClick</code> bound to the <code>&lt;tr&gt;</code>. Do not
-        ship this. See <code>CellLevelInteractivity</code> for the
-        canonical replacement.
-      </div>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>Role</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {users.slice(0, 3).map((user) => (
-            <TableRow
-              key={user.email}
-              onClick={() => alert(`Don't do this. Row click on ${user.name}.`)}
-              style={{ cursor: 'pointer' }}
-            >
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Name</TableHead>
+          <TableHead>Email</TableHead>
+          <TableHead>Status</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        <TableSubheader label="Admins" />
+        {users
+          .filter((u) => u.role === 'Admin')
+          .map((user) => (
+            <TableRow key={user.email}>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>
-              <TableCell>{user.role}</TableCell>
+              <TableCell><Badge status={user.status} size="sm">{statusLabel(user.status)}</Badge></TableCell>
             </TableRow>
           ))}
-        </TableBody>
-      </Table>
-    </Stack>
+        <TableSubheader label="Editors & viewers" />
+        {users
+          .filter((u) => u.role !== 'Admin')
+          .map((user) => (
+            <TableRow key={user.email}>
+              <TableCell>{user.name}</TableCell>
+              <TableCell>{user.email}</TableCell>
+              <TableCell><Badge status={user.status} size="sm">{statusLabel(user.status)}</Badge></TableCell>
+            </TableRow>
+          ))}
+      </TableBody>
+    </Table>
   ),
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   MEDIA CELLS — avatar / image / service-tag typed cells (#1096)
+   MEDIA CELLS — avatar / image / logo / service-tag typed cells (#1096)
    ═══════════════════════════════════════════════════════════════ */
 
 /** Map a Badge status onto an Avatar presence dot (story-only). */
@@ -536,6 +516,47 @@ export const WithImageCell: Story = {
               <TableCell>{o.plan}</TableCell>
               <TableCell>
                 <Badge status={o.status} size="sm">{statusLabel(o.status)}</Badge>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    );
+  },
+};
+
+/**
+ * `<TableLogoCell>` is the name-referenced counterpart to `<TableImageCell>` —
+ * it renders a bundled brand `Logo` (referenced by `set` + `name`) in the same
+ * square 1:1 footprint. Use it for payment methods, integrations, or client
+ * marks bundled into BDS; use `<TableImageCell src>` for per-tenant uploaded
+ * logos. Irreducible composition.
+ *
+ * @summary Bundled brand-logo cells (payment methods)
+ */
+export const WithLogoCell: Story = {
+  render: () => {
+    const methods = [
+      { logo: { set: 'credit-card', name: 'visa' } as const, label: 'Visa ending 4242', status: 'positive' as const },
+      { logo: { set: 'credit-card', name: 'mastercard' } as const, label: 'Mastercard ending 5555', status: 'positive' as const },
+      { logo: { set: 'credit-card', name: 'amex' } as const, label: 'Amex ending 0005', status: 'warning' as const },
+    ];
+    return (
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Card</TableHead>
+            <TableHead>Account</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {methods.map((m) => (
+            <TableRow key={m.label}>
+              <TableLogoCell logo={m.logo} decorative />
+              <TableCell>{m.label}</TableCell>
+              <TableCell>
+                <Badge status={m.status} size="sm">{statusLabel(m.status)}</Badge>
               </TableCell>
             </TableRow>
           ))}
