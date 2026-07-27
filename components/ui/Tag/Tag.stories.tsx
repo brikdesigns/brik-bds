@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Icon } from '@iconify/react';
 import { Tag } from './Tag';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
@@ -46,16 +45,6 @@ const meta: Meta<typeof Tag> = {
 export default meta;
 type Story = StoryObj<typeof Tag>;
 
-/* ─── Layout Helpers (story-only) ─────────────────────────────── */
-
-const Row = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
-);
-
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
-);
-
 /* ═══════════════════════════════════════════════════════════════
    DEFAULT — args-driven sandbox. Controls work.
    ═══════════════════════════════════════════════════════════════ */
@@ -65,70 +54,5 @@ export const Default: Story = {
   args: { children: 'Tag', size: 'md' },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   APPEARANCE — axis-only gallery (solid / subtle / muted, side by side)
-   ═══════════════════════════════════════════════════════════════ */
-
-/**
- * Appearance axis — `solid` (neutral filled background, default), `subtle`
- * (transparent + hairline border), and `muted` (quiet neutral fill for a
- * low-emphasis category label). `muted` is a Tag-only value — for semantic
- * status (positive/warning/error) use `Badge` instead.
- *
- * @summary Solid, subtle, and muted appearances side-by-side
- */
-export const Appearance: Story = {
-  render: () => (
-    <Row>
-      <Tag appearance="solid">Solid</Tag>
-      <Tag appearance="subtle">Subtle</Tag>
-      <Tag appearance="muted">Muted</Tag>
-    </Row>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   SIZES — axis-only gallery (four size tokens, side by side)
-   ═══════════════════════════════════════════════════════════════ */
-
-/**
- * Sizes axis — the four size tokens (xs / sm / md / lg). `xs` is icon-only
- * by design — it's too small for legible text.
- *
- * @summary All four sizes side-by-side
- */
-export const Sizes: Story = {
-  render: () => (
-    <Row>
-      <Tag size="xs" icon={<Icon icon="ph:tag" />} />
-      <Tag size="sm">Small</Tag>
-      <Tag size="md">Medium</Tag>
-      <Tag size="lg">Large</Tag>
-    </Row>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   DENSITY — axis-only gallery (comfortable vs compact, per size)
-   ═══════════════════════════════════════════════════════════════ */
-
-/**
- * Density axis — `comfortable` (default) vs `compact` at each text size.
- * Compact tightens horizontal padding one token-step down so more Tags fit
- * inline in a dense table row; height is unchanged.
- *
- * @summary Comfortable vs compact density across sizes
- */
-export const Density: Story = {
-  render: () => (
-    <Stack gap="var(--gap-lg)">
-      {(['sm', 'md', 'lg'] as const).map((size) => (
-        <Row key={size}>
-          <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', width: '24px' }}>{size}</span>
-          <Tag size={size} density="comfortable">Comfortable</Tag>
-          <Tag size={size} density="compact">Compact</Tag>
-        </Row>
-      ))}
-    </Stack>
-  ),
-};
+/* `appearance`, `size`, and `density` are Controls on Default — the
+   side-by-side comparisons live in Tag.mdx as docs-local demos (#1489). */

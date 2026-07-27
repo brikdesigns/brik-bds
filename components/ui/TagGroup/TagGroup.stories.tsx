@@ -54,34 +54,8 @@ export const Default: Story = {
   ),
 };
 
-/* ─── 2. Gaps ────────────────────────────────────────────────── */
-
-/** @summary Gaps */
-export const Gaps: Story = {
-  render: () => (
-    <Frame>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
-        <TagGroup gap="xs">
-          <Tag size="sm">xs gap</Tag>
-          <Tag size="sm">tight</Tag>
-          <Tag size="sm">cluster</Tag>
-        </TagGroup>
-
-        <TagGroup gap="sm">
-          <Tag size="sm">sm gap</Tag>
-          <Tag size="sm">standard</Tag>
-          <Tag size="sm">list</Tag>
-        </TagGroup>
-
-        <TagGroup gap="md">
-          <Tag size="md">md gap</Tag>
-          <Tag size="md">roomy</Tag>
-          <Tag size="md">display</Tag>
-        </TagGroup>
-      </div>
-    </Frame>
-  ),
-};
+/* `gap` is a Control on Default — the gap-scale comparison lives in
+   TagGroup.mdx as a docs-local demo (#1489). */
 
 /* ─── 3. Inside a Field ──────────────────────────────────────── */
 
