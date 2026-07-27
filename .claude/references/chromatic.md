@@ -1,6 +1,6 @@
 ---
 name: Chromatic — BDS Storybook hosting
-description: Stable URLs, app ID, publish command, the snapshot budget model and trigger table, the `visual-review` PR gate, and why a local full build is not a usable pre-merge visual diff under TurboSnap. The endpoint consumer-repo Claude sessions query for live MCP + manifest data.
+description: Stable URLs, app ID, publish command, the snapshot budget model and trigger table, the `visual-review` PR gate, why a local full build is not a usable pre-merge visual diff under TurboSnap, and the on-demand full_capture path for refreshing the baseline floor. The endpoint consumer-repo Claude sessions query for live MCP + manifest data.
 type: reference
 last_updated: 2026-07-27
 last-verified: 2026-07-27
@@ -82,6 +82,31 @@ Diffing a full local re-capture against those stale baselines reports **every st
 - For a targeted pre-merge check without spending snapshots at all, render the affected stories from `storybook-static` headless and compare computed styles / screenshots against a build of the base commit. That is how #1439 was verified — see [ADR-021](../../docs/adrs/ADR-021-blueprint-section-shell.md) § "Measured, not asserted".
 - The workflow triggers on a **daily schedule**, a **`visual-review`-labelled PR**, and **`workflow_dispatch`**. It no longer runs on every push to `main` — a per-push trigger billed ~22,600/month against a 5,000 allotment (#771).
 
-Until the baselines are reset (#1472), even a labelled PR run can over-report on stories TurboSnap invalidates broadly. Reset them with `workflow_dispatch` → `full_capture: true` on `main`, then accept the build.
+Until the baselines are reset (#1472), even a labelled PR run can over-report on stories TurboSnap invalidates broadly. See the `full_capture` section below for the reset.
 
-Fixing the underlying staleness is **#1472**.
+## Refreshing the baseline floor — `full_capture` (#1472)
+
+TurboSnap keeps per-merge cost near zero, but it also means the baselines it diffs against go stale. The fix is not to disable TurboSnap; it is to re-capture the floor on `main` on demand.
+
+**How to run one:**
+
+```bash
+gh workflow run chromatic.yml --ref main -f full_capture=true
+```
+
+Or in the UI: Actions → Chromatic → *Run workflow* → tick **full_capture**.
+
+That sets `onlyChanged: false` for the run, so every story is re-captured against `main`. Then triage the changed-story list in the Chromatic UI and accept the baselines you've confirmed. A subsequent full capture on an unmodified `main` should report **0 changes** — that is the signal the floor is trustworthy again.
+
+**Cost and cadence.** One run is ~399 snapshots against the quota #771 tracks. It is deliberately **on-demand, not scheduled** — there is no standing snapshot cost, and the trade-off is that baselines drift again between runs. Run one:
+
+- before you need a full build to be readable (i.e. before relying on a visual verdict for a risky change),
+- after a merge you expect to move many stories (token, theme, or `preview.tsx` edits),
+- not routinely.
+
+**Two things it deliberately does not do:**
+
+- **No auto-accept.** `autoAcceptChanges` is unset, so a full capture surfaces changes for review instead of silently moving baselines. Don't set it to `false` to "be explicit" — the action forwards that input to `--auto-accept-changes`, which takes an optional branch glob, so a literal `false` is ambiguous.
+- **No PR-scoped diff.** A full capture runs on `main`, not on your branch. It makes a *later* build readable; it is not itself a pre-merge check. For a per-branch verdict, use the headless render-and-diff above.
+
+Full captures also run in their own concurrency group, so a routine push to `main` can't cancel one mid-flight.
