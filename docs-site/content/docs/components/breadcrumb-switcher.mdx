@@ -1,0 +1,117 @@
+---
+title: BreadcrumbSwitcher
+description: Breadcrumb trail plus a caret that opens a menu of sibling records to switch between.
+---
+
+BreadcrumbSwitcher renders a `Breadcrumb` trail plus a caret that opens a menu of sibling records — other services in the same service line, other projects for the same client — so a visitor can jump between them without navigating back to an index page. The trail is unchanged: the last crumb keeps `aria-current="page"`; the caret is a separate `aria-haspopup="menu"` control alongside it, never folded into the current crumb.
+
+## Use it for
+
+- A detail page's hero breadcrumb, where visitors switch between sibling service pages in the same service line
+- An admin record page, where an operator switches between sibling projects or services for the same client
+- Any breadcrumb trail whose trailing crumb has more than one sibling worth surfacing inline
+
+## Import
+
+```tsx
+import { BreadcrumbSwitcher } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Many options
+
+More than one sibling renders the caret, which opens a menu of the options.
+
+```tsx
+<BreadcrumbSwitcher
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Services', href: '/services' },
+    { label: 'Brand strategy' },
+  ]}
+  options={[
+    { label: 'Brand strategy', href: '/services/brand-strategy', current: true },
+    { label: 'Brand identity', href: '/services/brand-identity' },
+    { label: 'Brand guidelines', href: '/services/brand-guidelines' },
+  ]}
+  switchLabel="Switch service"
+/>
+```
+
+### Single option
+
+A single option means there's nothing to switch to, so the caret is omitted entirely and the trail renders as a plain `Breadcrumb`.
+
+```tsx
+<BreadcrumbSwitcher
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Services', href: '/services' },
+    { label: 'Brand strategy' },
+  ]}
+  options={[{ label: 'Brand strategy', href: '/services/brand-strategy', current: true }]}
+  switchLabel="Switch service"
+/>
+```
+
+## Client-side routing
+
+BDS owns no router. Pass `linkComponent` (e.g. Next.js `Link`) so linked crumbs in the trail route client-side, and `onNavigate` so selecting a sibling option does too — otherwise selecting an option falls back to a full-page navigation (`window.location.href`). See [framework guides](/docs/getting-started/framework-guides).
+
+```tsx
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+function ServiceHeroBreadcrumb({ items, options }) {
+  const router = useRouter();
+  return (
+    <BreadcrumbSwitcher
+      items={items}
+      options={options}
+      switchLabel="Switch service"
+      linkComponent={Link}
+      onNavigate={(href) => router.push(href)}
+    />
+  );
+}
+```
+
+## When *not* to use
+
+- **Don't use it when there's only ever one record.** If `options` never has more than one entry, use plain [Breadcrumb](/docs/components/breadcrumb) instead.
+- **Don't fold the switcher into the current crumb.** The caret is a separate control alongside the trail — this is enforced by the component, not a consumer choice.
+
+## Accessibility
+
+- The trail renders via `Breadcrumb` unchanged — the last crumb keeps `aria-current="page"`.
+- The caret trigger is a `Button` with `aria-haspopup="menu"` and `aria-expanded` reflecting open state.
+- Escape closes the menu and returns focus to the caret trigger.
+- The caret's open/closed rotation respects `prefers-reduced-motion: reduce`.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `BreadcrumbItem[]` *(required)* | — |
+| `options` | `BreadcrumbSwitcherOption[]` *(required)* | — |
+| `switchLabel` | `string` *(required)* | — |
+| `linkComponent` | `BdsLinkComponent` | `undefined` (bare `<a>`) |
+| `onNavigate` | `(href: string, option: BreadcrumbSwitcherOption) => void` | `undefined` (`window.location.href = href`) |
+
+### BreadcrumbSwitcherOption
+
+```ts
+interface BreadcrumbSwitcherOption {
+  label: string;
+  href: string;
+  /** The record currently being viewed — highlighted and non-navigating. */
+  current?: boolean;
+}
+```
+
+## Related
+
+- [Breadcrumb](/docs/components/breadcrumb) — the trail this component wraps
+- [Menu](/docs/components/menu) — the switcher's dropdown panel
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-breadcrumb-switcher--overview)**
