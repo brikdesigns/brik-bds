@@ -74,7 +74,9 @@ jobs:
                 if (e.status !== 404) throw e;
                 await github.rest.issues.createLabel({
                   owner, repo, name: NEEDS, color: 'd93f0b',
-                  description: 'Auto-applied by merge-reconcile: a merged PR referenced this issue without closing it. Close or re-scope, then the flag clears.',
+                  // GitHub caps label descriptions at 100 chars; a longer string
+                  // 422s and fails the whole job on every PR (#1507).
+                  description: 'Auto-applied by merge-reconcile: merged PR referenced this issue without closing it',
                 });
                 core.info(`Created label ${NEEDS}`);
               });
