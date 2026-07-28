@@ -1,0 +1,39 @@
+@layer bds-components {
+/* BreadcrumbSwitcher — breadcrumb trail + sibling-record switcher menu */
+
+/* ─── Root ────────────────────────────────────────────── */
+
+.bds-breadcrumb-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+}
+
+/* ─── Trigger (anchors the Menu) ──────────────────────── */
+
+.bds-breadcrumb-switcher__trigger {
+  position: relative;
+  display: inline-flex;
+}
+
+.bds-breadcrumb-switcher__menu {
+  top: calc(100% + var(--gap-xs));
+  left: 0;
+}
+
+/* ─── Caret rotation ──────────────────────────────────── */
+
+.bds-breadcrumb-switcher__caret {
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.bds-breadcrumb-switcher__trigger [aria-expanded='true'] .bds-breadcrumb-switcher__caret {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-breadcrumb-switcher__caret {
+    transition: none;
+  }
+}
+}
