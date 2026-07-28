@@ -1,0 +1,33 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './BreadcrumbSwitcher.stories';
+
+<Meta of={Stories} />
+
+# BreadcrumbSwitcher
+
+<ComponentLinks slug="breadcrumb-switcher" />
+
+A `Breadcrumb` trail plus a caret that opens a menu of sibling records — switch between other services in the same line, or other projects on the same client, without navigating back to an index page.
+
+Pass `linkComponent` (e.g. `next/link`) so linked crumbs route client-side, and `onNavigate` so selecting a sibling option routes client-side too — BDS owns no router, so the default is a full-page navigation (`window.location.href`). See [framework guides → client-side routing](/docs/getting-started/framework-guides).
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Single option
+
+A single option means there is nothing to switch to — the caret is omitted entirely, and the trail renders as a plain `Breadcrumb`.
+
+<Canvas of={Stories.SingleOption} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — The trailing crumb keeps `aria-current="page"` unchanged; the caret is a separate `aria-haspopup="menu"` control alongside the trail, never folded into the current crumb.

@@ -16,6 +16,7 @@ export * from './Banner';
 export * from './BlockQuote';
 export * from './BrikDevBar';
 export * from './Breadcrumb';
+export * from './BreadcrumbSwitcher';
 export * from './BulletList';
 export * from './Button';
 export * from './Calendar';
