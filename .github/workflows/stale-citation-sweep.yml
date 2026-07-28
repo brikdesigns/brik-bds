@@ -1,0 +1,296 @@
+name: stale-citation-sweep
+
+# Anti-staleness gate, Backstop B to `merge-reconcile`. That gate catches issues
+# a merged PR *referenced*; this one catches issue bodies whose *citations* have
+# rotted — a path that was deleted or moved, or a token name that no longer
+# exists in the registry.
+#
+# Why it matters: a builder picking up the issue is sent to a file that isn't
+# there, so the stated scope is unworkable before any code gets written. On the
+# 2026-07-28 backlog, 24 of 129 open issues cited at least one path absent from
+# `git ls-files` (#1509).
+#
+# Weekly sweep over every open issue. Anything with a dead citation gets the
+# `needs:citation-fix` label plus ONE marker-guarded comment, rewritten in place
+# on later runs rather than re-posted. The flag self-clears when the issue is
+# closed or edited, and the sweep also drops it from issues whose citations now
+# all resolve.
+#
+# Advisory only — it never hard-fails. Some citations are deliberate forward
+# references to files the issue will create, so this reports, it does not block.
+# Measured on the 2026-07-28 backlog: 32 of 129 issues hit, 24 on paths and 8 on
+# tokens. The token hits skew toward proposals (#456 proposes a whole opacity
+# taxonomy), which is why an issue can opt out with `<!-- citation-sweep:ignore -->`.
+#
+# Exemptions (same as issue-size-gate / merge-reconcile): sub-issues (parent
+# owns the lifecycle), `meta:project` parents, `icebox` (parked).
+#
+# Rollout to other repos: copy this single file. Path checking derives its
+# top-level directories from `git ls-files`, and token checking is skipped
+# entirely when there is no token registry to check against.
+#
+# Issue: brikdesigns/brik-bds#1509
+
+on:
+  schedule:
+    # Tuesdays 08:00 UTC — a day after merge-reconcile so the two sweeps don't
+    # contend for the same API budget.
+    - cron: '0 8 * * 2'
+  issues:
+    types: [closed, edited]
+  workflow_dispatch:
+
+concurrency:
+  group: stale-citation-sweep-${{ github.event.issue.number || github.run_id }}
+  cancel-in-progress: false
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        # Only the token half needs a build; the path half runs off git alone.
+        if: github.event_name != 'issues'
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        if: github.event_name != 'issues'
+        run: npm ci
+
+      - name: Build token registry
+        if: github.event_name != 'issues'
+        # dist/tokens.css is git-ignored, so build it from the committed
+        # tokens/*.css. Best-effort: if this fails the sweep still checks paths
+        # rather than skipping entirely. Never fail an advisory job on a build.
+        run: npm run build:dist-tokens || echo "token registry unavailable — path-only sweep"
+
+      - name: Sweep open issues for dead citations
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const { execSync } = require('child_process');
+            const { owner, repo } = context.repo;
+            const NEEDS = 'needs:citation-fix';
+            const MARKER = '<!-- stale-citation-sweep -->';
+            const TOKEN_REGISTRY = 'dist/tokens.css';
+
+            // ── Self-clear path: issue closed or edited → drop the flag ──
+            // Mirrors merge-reconcile. Editing the body is the fix action, so
+            // the flag must not survive it.
+            if (context.eventName === 'issues') {
+              const issue = context.payload.issue;
+              const labels = (issue.labels || []).map(l => (typeof l === 'string' ? l : l.name));
+              if (labels.includes(NEEDS)) {
+                await github.rest.issues.removeLabel({
+                  owner, repo, issue_number: issue.number, name: NEEDS,
+                }).catch(e => { if (e.status !== 404) throw e; });
+                core.info(`Cleared ${NEEDS} on #${issue.number} (issue ${context.payload.action})`);
+              }
+              return;
+            }
+
+            // ── Build the two authorities ──
+
+            const tracked = new Set(
+              execSync('git ls-files', { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
+                .split('\n').filter(Boolean)
+            );
+            core.info(`Tracked files: ${tracked.size}`);
+
+            // Top-level dirs come from the repo itself, so a cited path only
+            // counts when it is plausibly repo-relative. This is also what
+            // makes cross-repo citations (`brik-client-portal/src/...`) exempt
+            // for free — that prefix is not a directory here.
+            const topDirs = new Set(
+              [...tracked].map(p => p.split('/')[0]).filter(p => p.includes('.') === false)
+            );
+
+            // Token names declared in the registry, plus the set of their first
+            // segments. The prefix set is what separates a real token citation
+            // (`--surface-primary`) from a CLI flag (`--json`, `--limit`):
+            // no `json` prefix is declared, so the flag is never considered.
+            const declaredTokens = new Set();
+            const tokenPrefixes = new Set();
+            let tokensAvailable = false;
+            if (fs.existsSync(TOKEN_REGISTRY)) {
+              const css = fs.readFileSync(TOKEN_REGISTRY, 'utf8');
+              for (const m of css.matchAll(/^\s*(--[a-z0-9-]+)\s*:/gm)) {
+                declaredTokens.add(m[1]);
+                tokenPrefixes.add(m[1].slice(2).split('-')[0]);
+              }
+              tokensAvailable = declaredTokens.size > 0;
+            }
+            core.info(tokensAvailable
+              ? `Token registry: ${declaredTokens.size} tokens, ${tokenPrefixes.size} prefixes`
+              : `Token registry absent — checking paths only`);
+
+            // ── Citation extraction ──
+
+            const SRC_EXT = 'tsx?|jsx?|mjs|cjs|css|mdx?|json|ya?ml|sh|py';
+            const PATH_RE = new RegExp(
+              String.raw`(?:^|[\s(\[\`'"])([A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)+\.(?:${SRC_EXT}))`,
+              'g'
+            );
+            // Two-or-more segments only. Single-segment flags (`--json`) can
+            // never collide with a namespaced token.
+            const TOKEN_RE = /--([a-z][a-z0-9]*)-([a-z0-9-]+)/g;
+
+            // Escape hatch. Two legitimate cases produce citations that will
+            // never resolve: an issue *proposing* new tokens or files, and an
+            // issue whose subject IS dead citations (this gate's own tracking
+            // issue quotes them as examples). Both opt out with one line.
+            const OPT_OUT = '<!-- citation-sweep:ignore -->';
+
+            function deadCitations(body) {
+              const paths = new Set();
+              const tokens = new Set();
+              if (!body || body.includes(OPT_OUT)) return { paths, tokens };
+
+              for (const m of body.matchAll(PATH_RE)) {
+                // Strip a markdown line anchor: `Card.tsx#L197` → `Card.tsx`.
+                const p = m[1].replace(/#L\d+(-L\d+)?$/, '');
+                if (!topDirs.has(p.split('/')[0])) continue;   // not repo-relative
+                if (!tracked.has(p)) paths.add(p);
+              }
+
+              if (tokensAvailable) {
+                for (const m of body.matchAll(TOKEN_RE)) {
+                  const name = m[0];
+                  if (!tokenPrefixes.has(m[1])) continue;       // not a token namespace
+                  if (name.includes('{') || name.endsWith('-')) continue;  // placeholder
+                  if (!declaredTokens.has(name)) tokens.add(name);
+                }
+              }
+              return { paths, tokens };
+            }
+
+            // ── Label plumbing ──
+
+            async function ensureLabel() {
+              await github.rest.issues.getLabel({ owner, repo, name: NEEDS }).catch(async (e) => {
+                if (e.status !== 404) throw e;
+                await github.rest.issues.createLabel({
+                  owner, repo, name: NEEDS, color: 'd4a72c',
+                  // GitHub caps label descriptions at 100 chars; a longer one
+                  // 422s and kills the job (the #1507 failure).
+                  description: 'Auto-applied by stale-citation-sweep: body cites a file or token that no longer exists',
+                });
+                core.info(`Created label ${NEEDS}`);
+              });
+            }
+
+            // Sub-issue / meta:project / icebox exemptions, batched.
+            async function exemptions(numbers) {
+              const out = new Map();
+              for (let s = 0; s < numbers.length; s += 25) {
+                const chunk = numbers.slice(s, s + 25);
+                const q = `query{repository(owner:"${owner}",name:"${repo}"){` +
+                  chunk.map(n => `i${n}:issue(number:${n}){number parent{number} labels(first:50){nodes{name}}}`).join(' ') +
+                  `}}`;
+                const res = await github.graphql(q);
+                for (const n of chunk) {
+                  const it = res.repository[`i${n}`];
+                  if (!it) { out.set(n, true); continue; }
+                  const labels = it.labels.nodes.map(x => x.name);
+                  out.set(n, !!it.parent || labels.includes('meta:project') || labels.includes('icebox'));
+                }
+              }
+              return out;
+            }
+
+            // ── Sweep ──
+
+            const open = await github.paginate(github.rest.issues.listForRepo, {
+              owner, repo, state: 'open', per_page: 100,
+            });
+            const issues = open.filter(i => !i.pull_request);
+            core.info(`Scanning ${issues.length} open issues`);
+
+            const hits = [];
+            for (const i of issues) {
+              const { paths, tokens } = deadCitations(i.body);
+              if (paths.size || tokens.size) hits.push({ n: i.number, paths, tokens, labels: i.labels.map(l => l.name) });
+            }
+
+            const exempt = hits.length ? await exemptions(hits.map(h => h.n)) : new Map();
+            const flagged = hits.filter(h => !exempt.get(h.n));
+            core.info(`Dead citations in ${hits.length} issues; ${flagged.length} after exemptions`);
+
+            if (flagged.length) await ensureLabel();
+
+            for (const h of flagged) {
+              const lines = [
+                `${MARKER}`,
+                `**This issue cites files or tokens that no longer exist.** A builder following them would be sent nowhere.`,
+                ``,
+              ];
+              if (h.paths.size) {
+                lines.push(`Not in \`git ls-files\`:`, ``);
+                for (const p of [...h.paths].sort()) lines.push(`- \`${p}\``);
+                lines.push(``);
+              }
+              if (h.tokens.size) {
+                lines.push(`Not in \`${TOKEN_REGISTRY}\`:`, ``);
+                for (const t of [...h.tokens].sort()) lines.push(`- \`${t}\``);
+                lines.push(``);
+              }
+              lines.push(
+                `Update the body to point at what exists, or close the issue if the work is moot.`,
+                `Editing or closing clears the \`${NEEDS}\` flag automatically.`,
+                ``,
+                `_Deliberate forward reference — proposing a token or file this issue will create? Add \`${OPT_OUT}\` to the body and this check will skip the issue._`,
+              );
+              const body = lines.join('\n');
+
+              if (!h.labels.includes(NEEDS)) {
+                await github.rest.issues.addLabels({
+                  owner, repo, issue_number: h.n, labels: [NEEDS],
+                }).catch(e => { if (e.status !== 404) throw e; });
+              }
+
+              // One comment per issue, rewritten in place — never a weekly
+              // repost. Skipped entirely when the findings haven't changed.
+              const comments = await github.paginate(github.rest.issues.listComments, {
+                owner, repo, issue_number: h.n, per_page: 100,
+              });
+              const existing = comments.find(c => c.body && c.body.includes(MARKER));
+              if (!existing) {
+                await github.rest.issues.createComment({ owner, repo, issue_number: h.n, body });
+                core.info(`Flagged #${h.n} (${h.paths.size} paths, ${h.tokens.size} tokens)`);
+              } else if (existing.body.trim() !== body.trim()) {
+                await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
+                core.info(`Updated #${h.n} (findings changed)`);
+              } else {
+                core.info(`#${h.n} unchanged — no comment written`);
+              }
+            }
+
+            // Reconcile the other direction: issues still carrying the flag
+            // whose citations now all resolve. Without this the label would
+            // only ever clear via the issues:edited event.
+            const flaggedNow = new Set(flagged.map(h => h.n));
+            for (const i of issues) {
+              if (!i.labels.some(l => l.name === NEEDS)) continue;
+              if (flaggedNow.has(i.number)) continue;
+              await github.rest.issues.removeLabel({
+                owner, repo, issue_number: i.number, name: NEEDS,
+              }).catch(e => { if (e.status !== 404) throw e; });
+              core.info(`Cleared ${NEEDS} on #${i.number} — all citations resolve`);
+            }
+
+            core.summary
+              .addHeading('stale-citation-sweep', 2)
+              .addRaw(`Scanned **${issues.length}** open issues. `)
+              .addRaw(`Dead citations in **${hits.length}**, **${flagged.length}** flagged after exemptions.`)
+              .write();
