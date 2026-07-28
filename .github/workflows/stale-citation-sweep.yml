@@ -22,8 +22,17 @@ name: stale-citation-sweep
 # tokens. The token hits skew toward proposals (#456 proposes a whole opacity
 # taxonomy), which is why an issue can opt out with `<!-- citation-sweep:ignore -->`.
 #
-# Exemptions (same as issue-size-gate / merge-reconcile): sub-issues (parent
-# owns the lifecycle), `meta:project` parents, `icebox` (parked).
+# Exemptions: `meta:project` parents (umbrella bodies cite broadly and are read
+# as roadmaps, not build instructions) and `icebox` (parked — nobody is
+# following its links).
+#
+# NOTE — this deliberately DIVERGES from issue-size-gate and merge-reconcile,
+# which also exempt sub-issues. Those two decide whether an issue should be
+# closed or re-scoped, and a parent owns its children's lifecycle. Citation
+# accuracy is not a lifecycle question: a sub-issue is precisely what a builder
+# opens and works from, so a dead path there misleads more reliably, not less.
+# Inheriting the sub-issue exemption suppressed 22 of 31 findings on the first
+# run — see #1513 for the measurement behind this change.
 #
 # Rollout to other repos: copy this single file. Path checking derives its
 # top-level directories from `git ls-files`, and token checking is skipped
@@ -190,20 +199,28 @@ jobs:
               });
             }
 
-            // Sub-issue / meta:project / icebox exemptions, batched.
+            // `meta:project` / `icebox` exemptions, batched. Sub-issues are
+            // NOT exempt here — see the divergence note in the header.
             async function exemptions(numbers) {
               const out = new Map();
               for (let s = 0; s < numbers.length; s += 25) {
                 const chunk = numbers.slice(s, s + 25);
                 const q = `query{repository(owner:"${owner}",name:"${repo}"){` +
-                  chunk.map(n => `i${n}:issue(number:${n}){number parent{number} labels(first:50){nodes{name}}}`).join(' ') +
+                  chunk.map(n => `i${n}:issue(number:${n}){number labels(first:50){nodes{name}}}`).join(' ') +
                   `}}`;
                 const res = await github.graphql(q);
                 for (const n of chunk) {
                   const it = res.repository[`i${n}`];
-                  if (!it) { out.set(n, true); continue; }
+                  if (!it) {
+                    // Exempt on a lookup miss so a transient API hiccup can't
+                    // spray labels — but say so, since a silent skip here
+                    // looks identical to "nothing was wrong".
+                    core.warning(`#${n}: issue lookup returned null — exempting this run`);
+                    out.set(n, true);
+                    continue;
+                  }
                   const labels = it.labels.nodes.map(x => x.name);
-                  out.set(n, !!it.parent || labels.includes('meta:project') || labels.includes('icebox'));
+                  out.set(n, labels.includes('meta:project') || labels.includes('icebox'));
                 }
               }
               return out;
