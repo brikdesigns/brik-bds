@@ -14,6 +14,15 @@ const meta: Meta<typeof Toast> = {
       options: ['default', 'success', 'error', 'warning', 'info'],
       description: 'Status tone — selects the colored `Badge` icon. The surface stays white.',
     },
+    // Controls-only per ADR-010: urgency changes `role` / `aria-live`, which
+    // is inaudible to a visual snapshot. A dedicated story would render
+    // pixel-identical to Default.
+    urgency: {
+      control: 'inline-radio',
+      options: ['polite', 'assertive'],
+      description:
+        'Screen-reader announcement priority. `polite` (default) waits for a pause; `assertive` interrupts. Independent of `variant`.',
+    },
   },
 };
 
