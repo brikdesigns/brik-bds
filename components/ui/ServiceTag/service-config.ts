@@ -89,18 +89,6 @@ export function normalizeServiceName(name: string): string {
 }
 
 /**
- * On-disk icon directory for a service line. Assets live under
- * `icons/back-office/` (dir === category) since the #800 rename. The only
- * override left is the **@deprecated** `service` alias, mapped to the canonical
- * `back-office` dir so the compat path keeps resolving until its removal.
- * Every other line: dir === category.
- */
-const iconDirOverrides: Partial<Record<ServiceLine, string>> = { service: 'back-office' };
-function iconDir(category: ServiceLine): string {
-  return iconDirOverrides[category] ?? category;
-}
-
-/**
  * Derive the glyph key (file basename, no dir/extension) for a service name —
  * override map first, then the per-line naming convention. Pure string logic;
  * the returned key may or may not exist in the bundled set (callers that need a
@@ -115,17 +103,6 @@ function deriveIconName(category: ServiceLine, serviceName: string): string {
     return `info-${normalized.replace('information-', '')}`;
   }
   return `${category}-${normalized.replace(`${category}-`, '')}`;
-}
-
-/**
- * @deprecated ServiceTag now renders glyphs from the BDS-bundled inline set
- * (#1242) — it no longer fetches a URL from the consumer's `/public/icons/`, so
- * this path is unused internally. Kept one release for API compat; consumers on
- * the old URL model can migrate off their `/public/icons/` service assets. Use
- * {@link resolveServiceIcon} to get a guaranteed-bundled glyph key instead.
- */
-export function getServiceIconPath(category: ServiceLine, serviceName: string): string {
-  return `/icons/${iconDir(category)}/${deriveIconName(category, serviceName)}.svg`;
 }
 
 /**
@@ -163,11 +140,3 @@ const serviceLineDefaultIcon: Record<ServiceLine, string> = {
   service: 'back-office-design',
 };
 
-/**
- * @deprecated Superseded by {@link resolveServiceIcon} (glyphs render from the
- * BDS-bundled inline set, not a consumer URL — #1242). Kept one release for API
- * compat.
- */
-export function getServiceLineIconPath(category: ServiceLine): string {
-  return `/icons/${iconDir(category)}/${serviceLineDefaultIcon[category]}.svg`;
-}
