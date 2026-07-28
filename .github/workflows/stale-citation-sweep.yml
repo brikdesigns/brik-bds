@@ -165,9 +165,13 @@ jobs:
 
             // ── Citation extraction ──
 
-            const SRC_EXT = 'tsx?|jsx?|mjs|cjs|css|mdx?|json|ya?ml|sh|py';
+            // Longest-first, then a trailing boundary. Regex alternation is
+            // ORDERED, so `jsx?` before `json` makes `.json` match as `.js` and
+            // leaves the `on` behind — every .json citation then reads as dead.
+            // The boundary stops `.jsonl` / `.mdxx` matching a shorter prefix.
+            const SRC_EXT = 'tsx|ts|jsx|js|mjs|cjs|css|mdx|md|json|yaml|yml|sh|py';
             const PATH_RE = new RegExp(
-              String.raw`(?:^|[\s(\[\`'"])([A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)+\.(?:${SRC_EXT}))`,
+              String.raw`(?:^|[\s(\[\`'"])([A-Za-z0-9._-]+(?:/[A-Za-z0-9._-]+)+\.(?:${SRC_EXT})(?![A-Za-z0-9]))`,
               'g'
             );
             // Two-or-more segments only. Single-segment flags (`--json`) can
