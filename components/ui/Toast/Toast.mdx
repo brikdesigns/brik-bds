@@ -54,3 +54,18 @@ Component-scoped CSS variables exposed on `.bds-toast`. Set on a wrapping elemen
   --bds-toast-shadow: 0px 2px 8px rgba(0, 0, 0, 0.12);
 }
 ```
+
+## Notes
+
+### Announcement priority
+
+Toasts announce **politely** by default — `role="status"` with `aria-live="polite"`, which waits for a pause before speaking. That suits the confirmations and status updates most toasts carry.
+
+Pass `urgency="assertive"` to escalate to `role="alert"` / `aria-live="assertive"`, which interrupts whatever the screen reader is saying. Reserve it for messages the user must act on immediately — unsaved work about to be lost, a session expiring.
+
+`urgency` is **independent of `variant`**. A red `error` toast reporting a retry that already succeeded is still `polite`; the colour communicates severity to sighted users, the live region communicates interruption priority to screen-reader users, and those are different questions.
+
+| `urgency` | `role` | `aria-live` | Use for |
+|---|---|---|---|
+| `polite` *(default)* | `status` | `polite` | Saved, copied, sent, background sync finished |
+| `assertive` | `alert` | `assertive` | Data loss, session expiry, an action that must be undone now |

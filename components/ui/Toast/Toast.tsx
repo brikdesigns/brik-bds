@@ -8,6 +8,8 @@ import './Toast.css';
 
 export type ToastVariant = 'default' | 'success' | 'error' | 'warning' | 'info';
 
+export type ToastUrgency = 'polite' | 'assertive';
+
 export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Bold title text */
   title: ReactNode;
@@ -15,6 +17,18 @@ export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'
   description?: ReactNode;
   /** Visual variant — renders a colored Badge icon; surface stays neutral */
   variant?: ToastVariant;
+  /**
+   * How insistently a screen reader announces the toast.
+   *
+   * `polite` (default) waits for a pause in speech — correct for the
+   * confirmations and status updates most toasts carry. `assertive`
+   * interrupts whatever is being spoken, so reserve it for messages the
+   * user must act on immediately (data loss, session expiry).
+   *
+   * Note this is independent of `variant`: an `error` toast reporting a
+   * failed autosave retry is still `polite`.
+   */
+  urgency?: ToastUrgency;
   /** Called when the close button is clicked */
   onDismiss?: () => void;
 }
@@ -32,21 +46,34 @@ const variantBadge: Record<Exclude<ToastVariant, 'default'>, { status: 'positive
  * The surface NEVER changes color — only the badge communicates
  * success, error, warning, or info status.
  *
+ * Announces politely by default. Pass `urgency="assertive"` to interrupt.
+ *
  * @summary White-surface notification with optional Badge
  */
 export function Toast({
   title,
   description,
   variant = 'default',
+  urgency = 'polite',
   onDismiss,
   className,
   style,
   ...props
 }: ToastProps) {
   const badge = variant !== 'default' ? variantBadge[variant] : null;
+  // `role="alert"` carries an implicit `aria-live="assertive"`, so pairing
+  // role with the matching live value keeps the two from disagreeing in
+  // browsers that read one and not the other.
+  const assertive = urgency === 'assertive';
 
   return (
-    <div role="alert" className={bdsClass('bds-toast', className)} style={style} {...props}>
+    <div
+      role={assertive ? 'alert' : 'status'}
+      aria-live={assertive ? 'assertive' : 'polite'}
+      className={bdsClass('bds-toast', className)}
+      style={style}
+      {...props}
+    >
       <div className="bds-toast__content">
         {badge && (
           <Badge
