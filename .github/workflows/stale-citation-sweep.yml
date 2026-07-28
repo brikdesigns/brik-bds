@@ -93,6 +93,7 @@ jobs:
             const NEEDS = 'needs:citation-fix';
             const MARKER = '<!-- stale-citation-sweep -->';
             const TOKEN_REGISTRY = 'dist/tokens.css';
+            const DOCS_ROOT = 'docs-site/content/docs';
 
             // ── Self-clear path: issue closed or edited → drop the flag ──
             // Mirrors merge-reconcile. Editing the body is the fix action, so
@@ -139,6 +140,24 @@ jobs:
                 tokenPrefixes.add(m[1].slice(2).split('-')[0]);
               }
               tokensAvailable = declaredTokens.size > 0;
+
+              // ∪ every custom property this repo's CSS knows about — the
+              // CSS-Override-API knobs, which legitimately never enter the
+              // registry. Two widenings over the obvious version, both learned
+              // from real false positives:
+              //
+              //   1. ALL tracked .css, not just components/ui/. `--bds-hero-bg`
+              //      lives in content-system/blueprints/react/Hero.css.
+              //   2. `var(--name)` reads count, not only `--name:` writes. A
+              //      consumer-supplied knob is only ever READ with a fallback —
+              //      `var(--bds-hero-bg, var(--page-primary))` — so it is never
+              //      declared anywhere and a declarations-only union misses it.
+              for (const f of tracked) {
+                if (!f.endsWith('.css')) continue;
+                const src = fs.readFileSync(f, 'utf8');
+                for (const m of src.matchAll(/^\s*(--[a-z0-9-]+)\s*:/gm)) declaredTokens.add(m[1]);
+                for (const m of src.matchAll(/var\(\s*(--[a-z0-9-]+)/g)) declaredTokens.add(m[1]);
+              }
             }
             core.info(tokensAvailable
               ? `Token registry: ${declaredTokens.size} tokens, ${tokenPrefixes.size} prefixes`
@@ -170,7 +189,13 @@ jobs:
                 // Strip a markdown line anchor: `Card.tsx#L197` → `Card.tsx`.
                 const p = m[1].replace(/#L\d+(-L\d+)?$/, '');
                 if (!topDirs.has(p.split('/')[0])) continue;   // not repo-relative
-                if (!tracked.has(p)) paths.add(p);
+                if (tracked.has(p)) continue;
+                // Docs pages are habitually cited by their route rather than
+                // their path — `content-system/index.mdx` for the file at
+                // `docs-site/content/docs/content-system/index.mdx`. Shorthand,
+                // not rot, so resolve it before calling the citation dead.
+                if (tracked.has(`${DOCS_ROOT}/${p}`)) continue;
+                paths.add(p);
               }
 
               if (tokensAvailable) {
