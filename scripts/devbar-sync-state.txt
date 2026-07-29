@@ -1,0 +1,17 @@
+12b840d25d59658dd076670a0668ab0e928b662a66579f875d5240301dfa5045  brik-bds/.storybook/public/brik-feedback-widget.js
+12b840d25d59658dd076670a0668ab0e928b662a66579f875d5240301dfa5045  brik/brik-llm/scripts/brik-dev-tool/widgets/feedback-widget.js
+12b840d25d59658dd076670a0668ab0e928b662a66579f875d5240301dfa5045  product/brik-client-portal/scripts/mockup-shared/feedback-widget.js
+592c979f4d4b710f255714b1f50f324bde78495098d7f92d5845462bb925de14  brik-bds/.storybook/public/brik-inspect.js
+592c979f4d4b710f255714b1f50f324bde78495098d7f92d5845462bb925de14  brik/brik-llm/scripts/brik-dev-tool/widgets/inspect-widget.js
+592c979f4d4b710f255714b1f50f324bde78495098d7f92d5845462bb925de14  brik/brikdesigns/public/brik-inspect.js
+592c979f4d4b710f255714b1f50f324bde78495098d7f92d5845462bb925de14  product/brik-client-portal/public/brik-inspect.js
+592c979f4d4b710f255714b1f50f324bde78495098d7f92d5845462bb925de14  product/brik-client-portal/scripts/mockup-shared/inspect-widget.js
+6b180f4b5e39e9199d9b4661a89373d9411f4238e4cead88fc8fae8b6b446090  brik-bds/.storybook/public/brik-devbar.js
+6b180f4b5e39e9199d9b4661a89373d9411f4238e4cead88fc8fae8b6b446090  brik/brik-llm/scripts/brik-dev-tool/widgets/devbar.js
+6b180f4b5e39e9199d9b4661a89373d9411f4238e4cead88fc8fae8b6b446090  brik/brikdesigns/public/brik-devbar.js
+6b180f4b5e39e9199d9b4661a89373d9411f4238e4cead88fc8fae8b6b446090  product/brik-client-portal/public/brik-devbar.js
+6b180f4b5e39e9199d9b4661a89373d9411f4238e4cead88fc8fae8b6b446090  product/brik-client-portal/scripts/mockup-shared/devbar.js
+fd8fc5e839a25471923c40d223ac9ce22bd35a83f28a82b1d7355395a85066ab  brik-bds/.storybook/public/brik-events-widget.js
+fd8fc5e839a25471923c40d223ac9ce22bd35a83f28a82b1d7355395a85066ab  brik/brik-llm/scripts/brik-dev-tool/widgets/events-widget.js
+fd8fc5e839a25471923c40d223ac9ce22bd35a83f28a82b1d7355395a85066ab  product/brik-client-portal/public/brik-events-widget.js
+fd8fc5e839a25471923c40d223ac9ce22bd35a83f28a82b1d7355395a85066ab  product/brik-client-portal/scripts/mockup-shared/events-widget.js
