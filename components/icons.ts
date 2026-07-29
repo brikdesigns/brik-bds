@@ -10,9 +10,11 @@ export const CaretDown = 'ph:caret-down';
 export const CaretUp = 'ph:caret-up';
 export const CaretLeft = 'ph:caret-left';
 export const CaretRight = 'ph:caret-right';
-// Bold carets — form-control chevrons (dropdown triggers, steppers, disclosure).
-// Phosphor regular reads as a hairline at small UI sizes; bold is the BDS-canon
-// weight for glyphs at sm size. See rag:components-icons "Phosphor weights".
+// Explicit-bold caret constants. Bold is the canonical BDS UI icon weight on
+// every surface (navigation included) — the `<Icon>` atom applies it by default
+// (`weight="bold"`), rewriting bare `ph:*` names to their `-bold` twin at
+// render; `fill` stays reserved for active/selected + status. See the Icon
+// weight section of docs-site components/icons.mdx.
 export const CaretDownBold = 'ph:caret-down-bold';
 export const CaretUpBold = 'ph:caret-up-bold';
 export const MagnifyingGlass = 'ph:magnifying-glass';

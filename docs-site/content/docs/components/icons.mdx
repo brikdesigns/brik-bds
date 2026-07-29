@@ -81,6 +81,8 @@ For inline icons inside text, use `1em` sizing so the icon scales with the surro
 
 BDS renders `ph:*` icons at **`bold`** weight by default — BDS's standard line density (Phosphor's own regular weight reads as a hairline at small UI sizes). Set the `weight` prop to change it. An icon whose name already encodes a weight (`ph:star-fill`) keeps it; the `weight` prop only rewrites otherwise-unweighted `ph:*` names, and non-`ph:*` icons ignore it.
 
+**Canonical convention:** bold is the BDS UI icon weight on **every** surface — navigation, form controls, and general glyphs alike. There is no per-surface split; `fill` is reserved for active/selected states and status. Because the atom applies bold by default, routing a glyph through `<Icon>` is enough to inherit the canonical weight — only reach for the `weight` prop to opt a specific icon back to `regular` (or another Phosphor weight) for a deliberate reason.
+
 ```tsx
 <Icon icon="ph:star" />                    {/* bold (default) */}
 <Icon icon="ph:star" weight="regular" />   {/* Phosphor's thin default stroke */}
