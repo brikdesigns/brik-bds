@@ -78,6 +78,13 @@ const steps = [
   // by head ref, and the fail-loud-on-gh-error branch. Both the git read and the
   // gh read are injected, so this touches no repo and no network. brik-bds#1545.
   { name: 'PR Path Overlap', cmd: 'bash scripts/__tests__/test-pr-path-overlap.sh' },
+
+  // Base-freshness decision logic. The fixture rebuilds the brik-client-portal
+  // #2538 empty merge from scratch and asserts that the OBVIOUS predicate (the
+  // three-dot diff) still reads healthy there — so swapping the check for
+  // `git diff base...HEAD --stat` fails here with an explanation rather than
+  // shipping a gate that cannot fire. brik-bds#1546.
+  { name: 'Base Freshness', cmd: 'bash scripts/__tests__/test-base-freshness.sh' },
 ];
 
 console.log('\n═══════════════════════════════════════════');
