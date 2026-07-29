@@ -1,5 +1,32 @@
 #!/bin/sh
 
+# ── Base-branch commit guard (#1568) ──
+# Task work lives in dedicated worktrees on task/* branches; `main` and
+# `staging` are only ever reached via PR-merge. A direct local commit to a
+# base branch is almost always task edits that landed in the primary worktree
+# by mistake (e.g. a `cd` into a not-yet-created worktree that failed, leaving
+# the shell on the primary checkout). The worktree guard checks branch *drift*;
+# this checks the *commit*. See brikdesigns/brik-bds#1568.
+_bds_branch="$(git branch --show-current 2>/dev/null || true)"
+case "$_bds_branch" in
+  main|staging)
+    if [ "${BDS_ALLOW_BASE_COMMIT:-}" != "1" ]; then
+      echo ""
+      echo "✗ Refusing to commit directly to '$_bds_branch'."
+      echo ""
+      echo "  Base branches are reached only via PR-merge. This is probably"
+      echo "  task edits that landed in the primary worktree — move them:"
+      echo ""
+      echo "    git stash"
+      echo "    ./scripts/new-task.sh --issue <N> <slug>"
+      echo "    cd ../brik-bds-worktrees/<slug> && git stash apply"
+      echo ""
+      echo "  Intentional maintenance commit? Re-run with BDS_ALLOW_BASE_COMMIT=1."
+      exit 1
+    fi
+    ;;
+esac
+
 # ── Secret scan (gitleaks) ──
 # Defense-in-depth for the secret-leak prevention layer (renew-pms#258 +
 # brik-llm#193). Runs gitleaks on the staged diff; blocks commits containing
