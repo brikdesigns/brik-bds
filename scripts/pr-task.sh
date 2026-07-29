@@ -21,6 +21,13 @@ NC='\033[0m'
 
 BASE_BRANCH="main"
 
+# Same-path open-PR check. The ticket-keyed gate in new-task.sh (#1533) cannot
+# see two DIFFERENT tickets editing one file — #1528 and #1529 both rewrote
+# scripts/propagate.sh, 54 minutes apart. brik-bds#1545 / brik-llm#1485.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=scripts/lib/pr-path-overlap.sh
+source "${SCRIPT_DIR}/lib/pr-path-overlap.sh"
+
 # ── Parse flags ──
 POSITIONAL_ARGS=()
 while [[ $# -gt 0 ]]; do
@@ -147,6 +154,13 @@ if [ "$BEHIND" -gt 0 ]; then
     exit 1
   fi
 fi
+
+# ── Same-path open-PR check ──
+# Runs AFTER the base-sync above so the diff is measured against the base this
+# PR will actually target, and BEFORE the push so the collision is visible while
+# nothing has been published yet. Warns and returns 0 — two sessions on one file
+# is often legitimate, and the cost this removes is finding out at merge time.
+check_pr_path_overlap "$BASE_BRANCH" "$BRANCH"
 
 # ── Push if needed ──
 UPSTREAM=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || echo "")
