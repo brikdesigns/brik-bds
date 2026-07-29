@@ -231,9 +231,31 @@ check_issue_overlap() {
   echo "" >&2
   echo -e "${_IO_YELLOW}   Another track may already be building this ticket.${_IO_NC}" >&2
   echo -e "${_IO_YELLOW}   Check the hits above before duplicating work (brik-llm#1485).${_IO_NC}" >&2
-  echo -e "${_IO_YELLOW}   Press Enter to continue anyway, Ctrl+C to abort.${_IO_NC}" >&2
-  read -r
+  _io_confirm
   return 0
+}
+
+# Gate the warning on acknowledgement WITHOUT ever aborting the caller.
+#
+# This replaces a bare `read -r`, which killed the pickup outright: on EOF `read`
+# returns 1, new-task.sh calls this function unguarded under `set -euo pipefail`
+# (scripts/new-task.sh:190), so a closed stdin took down the script before the
+# worktree was created — and the usual trigger is a false-positive org-wide
+# search hit. Reproduced twice on 2026-07-29 while building #1545/#1546
+# (brik-bds#1549).
+#
+# Same contract as new-task.sh's own confirm() (scripts/new-task.sh:134-140,
+# from #1099): interactive TTY waits, everything else prints and proceeds.
+# NEW_TASK_YES=1 is honoured so one env var covers both prompts.
+_io_confirm() {
+  if [ "${NEW_TASK_YES:-0}" = "1" ] || [ ! -t 0 ]; then
+    echo -e "${_IO_YELLOW}   → non-interactive: proceeding automatically.${_IO_NC}" >&2
+    return 0
+  fi
+  echo -e "${_IO_YELLOW}   Press Enter to continue anyway, Ctrl+C to abort.${_IO_NC}" >&2
+  # `|| true` even on a TTY: a terminal can still deliver EOF (Ctrl+D), and that
+  # must not be the difference between a worktree and no worktree.
+  read -r || true
 }
 
 # Standalone invocation: scripts/lib/issue-overlap.sh [--report] <issue-ref>
