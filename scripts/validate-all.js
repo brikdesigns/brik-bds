@@ -74,6 +74,11 @@ const steps = [
   // comment rather than an assignee. brik-bds#1541.
   { name: 'Issue Claim', cmd: 'bash scripts/__tests__/test-issue-claim.sh' },
 
+  // Same-path overlap decision logic — exact-path intersection, self-exclusion
+  // by head ref, and the fail-loud-on-gh-error branch. Both the git read and the
+  // gh read are injected, so this touches no repo and no network. brik-bds#1545.
+  { name: 'PR Path Overlap', cmd: 'bash scripts/__tests__/test-pr-path-overlap.sh' },
+
   // Base-freshness decision logic. The fixture rebuilds the brik-client-portal
   // #2538 empty merge from scratch and asserts that the OBVIOUS predicate (the
   // three-dot diff) still reads healthy there — so swapping the check for
