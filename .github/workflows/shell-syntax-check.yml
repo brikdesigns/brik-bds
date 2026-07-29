@@ -1,0 +1,58 @@
+name: Shell Syntax Check
+
+# Runs `bash -n` (parse-only, no execution) over every tracked scripts/**/*.sh
+# on any PR (and push to main) that touches a shell script or this workflow.
+#
+# Why this is a CI gate (not just pre-push):
+#   - The pre-push suite *sources* scripts/lib/*.sh (e.g. base-freshness.sh) but
+#     never parse-checks them, so a syntax error in a sourced lib surfaces only
+#     when a later push happens to exercise it — and by then it is already on
+#     main, blocking every push fleet-wide (brikdesigns/brik-bds#1546 lib landed
+#     with an unescaped apostrophe that broke `bash -n` for all pushers).
+#   - Cloud-agent commits (OpenClaw, scheduled routines) bypass local hooks.
+#   - Fork / fresh-clone PRs may not have husky installed.
+#
+# Parse-only: `bash -n` validates syntax without running anything, so it is safe
+# on scripts with side effects.
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'scripts/**/*.sh'
+      - '.github/workflows/shell-syntax-check.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/**/*.sh'
+      - '.github/workflows/shell-syntax-check.yml'
+
+concurrency:
+  group: shell-syntax-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  shell-syntax-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Parse-check every scripts/**/*.sh
+        run: |
+          fail=0
+          while IFS= read -r -d '' f; do
+            if ! bash -n "$f"; then
+              echo "::error file=$f::bash -n found a syntax error"
+              fail=1
+            fi
+          done < <(find scripts -name '*.sh' -type f -print0)
+          if [ "$fail" -ne 0 ]; then
+            echo "Shell syntax check failed — fix the errors above." >&2
+            exit 1
+          fi
+          echo "All scripts/**/*.sh parse cleanly."
