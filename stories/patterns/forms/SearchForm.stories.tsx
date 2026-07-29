@@ -6,7 +6,7 @@ import { Select } from '../../../components/ui/Select';
 import { Button } from '../../../components/ui/Button';
 
 const meta: Meta = {
-  title: 'Containers/search-form',
+  title: 'Forms/search-form',
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
 };

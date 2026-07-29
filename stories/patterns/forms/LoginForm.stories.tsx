@@ -9,7 +9,7 @@ import { TextLink } from '../../../components/ui/TextLink';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta = {
-  title: 'Containers/login-form',
+  title: 'Forms/login-form',
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
 };

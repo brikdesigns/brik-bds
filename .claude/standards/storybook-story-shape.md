@@ -289,7 +289,7 @@ Never combine two prop axes in one story. Write `Sizes` and `Variants` as separa
 
 ## Sidebar taxonomy
 
-**[ADR-006](../../docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md) (last amended 2026-07-29) defines the flat sidebar taxonomy.** Current component top-levels: `Components/`, `Cards/`, `Containers/`, `Layouts/`, `Navigation/`, `Blueprints/`, `Tools/` — plus the structural top-levels below. `Blocks/` was dissolved into `Components/` on 2026-07-29; its former members (`field`, `field-grid`, `bullet-list`, `checklist`, `interactive-list-item`, `selectable-media-tile`) now sit under `Components/`. [`.storybook/preview.tsx`](../../.storybook/preview.tsx) `storySort.order` is the live source of truth and matches this table.
+**[ADR-006](../../docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md) (last amended 2026-07-29) defines the flat sidebar taxonomy.** Current component top-levels: `Components/`, `Cards/`, `Forms/`, `Containers/`, `Layouts/`, `Navigation/`, `Blueprints/`, `Tools/` — plus the structural top-levels below. `Blocks/` was dissolved into `Components/` on 2026-07-29; its former members (`field`, `field-grid`, `bullet-list`, `checklist`, `interactive-list-item`, `selectable-media-tile`) now sit under `Components/`. `Forms/` was added on 2026-07-29 (#1565); the form family (`form`, `contact-form`, `feedback-form`, `login-form`, `sign-up-form`, `search-form`) moved there out of `Containers/`. [`.storybook/preview.tsx`](../../.storybook/preview.tsx) `storySort.order` is the live source of truth and matches this table.
 
 **Migration window rule:** existing stories keep their current `title:` strings until the rename sweep touches their file. New stories use the flat bucket path from 2026-05-16 forward.
 
@@ -297,7 +297,7 @@ Never combine two prop axes in one story. Write `Sizes` and `Variants` as separa
 
 ```text
 Overview → Foundation → Theming → Motion → Content System →
-Components → Containers → Cards → Layouts → Navigation → Blueprints → Tools → * (catch-all) → Deprecated
+Components → Containers → Cards → Forms → Layouts → Navigation → Blueprints → Tools → * (catch-all) → Deprecated
 ```
 
 **No subcategory layer.** Stories sit at `<Bucket>/<component>` — not `<Bucket>/<Subcategory>/<component>`.
@@ -308,7 +308,8 @@ Components → Containers → Cards → Layouts → Navigation → Blueprints �
 | --- | --- | --- |
 | `Components/` | Atomic UI control — including composite input controls operated as one form field (`select`, `date-picker`) and slot-shaped fillers filled with atoms (`field`, `checklist`) | button, badge, checkbox, text-input, select, date-picker, progress-stepper, field, field-grid, bullet-list, checklist, interactive-list-item, selectable-media-tile |
 | `Cards/` | Card-family holder — bounded surface with the "card" affordance | card, card-list, pricing-card, product-summary-card |
-| `Containers/` | Bounded holder with own border/padding/elevation (non-card) | form, accordion, sheet, table, data-view |
+| `Forms/` | Form-family holder — the base form container + composed form demos | form, contact-form, feedback-form, login-form, sign-up-form, search-form |
+| `Containers/` | Bounded holder with own border/padding/elevation (non-card, non-form) | accordion, sheet, table, data-view |
 | `Layouts/` | Pure arrangement — no styling beyond structure | stack, cluster, grid, frame, page |
 | `Navigation/` | Navigation + page-level chrome region | nav-bar, breadcrumb, sidebar-navigation, sub-navigation, tab-bar, page-header |
 | `Blueprints/` | Full-page composed section template | hero, cta, features, footer |
@@ -322,7 +323,8 @@ Components → Containers → Cards → Layouts → Navigation → Blueprints �
 | --- | --- |
 | `components/ui/<Component>` (atomic primitive) | `Components/<component>` (e.g. `Components/button`) |
 | `components/ui/<Component>` (card-family holder) | `Cards/<component>` (e.g. `Cards/card`) |
-| `components/ui/<Component>` (bounded holder, non-card) | `Containers/<component>` (e.g. `Containers/form`) |
+| `components/ui/Form` + `stories/patterns/forms/<Form>` (form-family holder) | `Forms/<component>` (e.g. `Forms/form`, `Forms/login-form`) |
+| `components/ui/<Component>` (bounded holder, non-card, non-form) | `Containers/<component>` (e.g. `Containers/table`) |
 | `components/ui/<Component>` (slot + atoms) | `Components/<component>` (e.g. `Components/field`) |
 | `components/ui/<Component>` (arrangement only) | `Layouts/<component>` (e.g. `Layouts/stack`) |
 | `components/ui/<Component>` (navigation / page chrome) | `Navigation/<component>` (e.g. `Navigation/nav-bar`) |
