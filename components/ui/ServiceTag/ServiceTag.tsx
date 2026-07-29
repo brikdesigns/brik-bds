@@ -1,4 +1,4 @@
-import { type HTMLAttributes } from 'react';
+import { type HTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
 import { categoryConfig, resolveServiceIcon, type ServiceLine, type ServiceTagSize } from './service-config';
 import { SERVICE_ICON_SVGS } from './service-icons.generated';
@@ -21,6 +21,13 @@ export interface ServiceTagProps extends Omit<HTMLAttributes<HTMLSpanElement>, '
    * default glyph instead of rendering an empty box.
    */
   serviceName?: string;
+  /**
+   * Trailing affordance rendered *inside* the tag — e.g. the dismiss control
+   * `MultiSelect` supplies for a selected chip. It inherits the tag's service
+   * text color, so it stays WCAG AA on every service fill without the caller
+   * picking a token. Ignored by the `icon` variant (a square badge has no room).
+   */
+  trailing?: ReactNode;
 }
 
 // bds-lint-ignore — component-level icon px sizes. Code/Storybook is the source
@@ -64,6 +71,7 @@ export function ServiceTag({
   size = 'md',
   label,
   serviceName,
+  trailing,
   className,
   style,
   ...props
@@ -106,6 +114,7 @@ export function ServiceTag({
         `bds-service-tag--${size}`,
         `bds-service-tag--${category}`,
         showIcon && 'bds-service-tag--has-icon',
+        !!trailing && 'bds-service-tag--has-trailing',
         className,
       )}
       style={style}
@@ -113,6 +122,7 @@ export function ServiceTag({
     >
       {showIcon && <ServiceTagIcon glyph={resolveServiceIcon(category, serviceName)} size={iconSize} />}
       {displayLabel}
+      {!!trailing && <span className="bds-service-tag__trailing">{trailing}</span>}
     </span>
   );
 }

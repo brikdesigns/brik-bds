@@ -1,6 +1,6 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
 import { Icon } from '../Icon';
-import { X } from '../../icons';
+import { XBold } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Tag.css';
 
@@ -112,7 +112,7 @@ export function Tag({
           className="bds-tag__remove bds-tag__icon"
           aria-label="Remove"
         >
-          <Icon icon={X} />
+          <Icon icon={XBold} />
         </button>
       )}
     </span>

@@ -36,13 +36,17 @@
   border: none;
   background: none;
   cursor: pointer;
-  color: var(--text-secondary);
+  /* Inherit so the control takes its host's color: inside a chip's trailing
+     slot that's the chip's AA-cleared on-color token (ServiceTag), and beside
+     the chip it's the surrounding text color. Same contract as Tag/Chip
+     __remove, which is why hover dims rather than shifting hue. */
+  color: inherit;
   font-size: var(--icon-sm);
   border-radius: var(--border-radius-sm);
 }
 
 .bds-multi-select__remove:hover {
-  color: var(--text-primary);
+  opacity: 0.7;
 }
 
 .bds-multi-select__remove:focus-visible {
