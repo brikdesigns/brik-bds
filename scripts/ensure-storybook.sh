@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ensure-storybook.sh — shared helper for BDS-consumer session guards.
 #
-# Each consumer's scripts/session-guard.sh (portal, renew-pms, brikdesigns)
+# Each consumer's scripts/session-guard.sh (portal, brikdesigns)
 # pipes its Claude Code hook `tool_input` JSON into this script on stdin.
 # If the edit targets a UI file and Storybook isn't already running on
 # port 6006, this helper launches `npm run storybook` in the BDS repo in

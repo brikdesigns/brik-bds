@@ -7,7 +7,6 @@
 # Destinations (per #466 sync map):
 #   - brik-client-portal/public/                  (browser-served)
 #   - brik-client-portal/scripts/mockup-shared/   (mockup pipeline)
-#   - renew-pms/public/                            (browser-served)
 #   - brikdesigns/public/                          (browser-served, staging dev-tools)
 #   - brik-bds/.storybook/public/                  (Storybook iframe)
 #   - brik-llm/scripts/brik-dev-tool/widgets/     (Astro mockup pipeline cache)
@@ -66,12 +65,6 @@ sync_one "$WIDGETS/devbar.js"         "$PORTAL_PUBLIC/brik-devbar.js"        "po
 sync_one "$WIDGETS/inspect-widget.js" "$PORTAL_PUBLIC/brik-inspect.js"       "portal public/    brik-inspect.js"
 sync_one "$WIDGETS/events-widget.js"  "$PORTAL_PUBLIC/brik-events-widget.js" "portal public/    brik-events-widget.js"
 
-# renew-pms public/ (browser-served)
-RENEW_PUBLIC="$GH_ROOT/product/renew-pms/public"
-sync_one "$WIDGETS/devbar.js"         "$RENEW_PUBLIC/brik-devbar.js"        "renew-pms public/ brik-devbar.js"
-sync_one "$WIDGETS/inspect-widget.js" "$RENEW_PUBLIC/brik-inspect.js"       "renew-pms public/ brik-inspect.js"
-sync_one "$WIDGETS/events-widget.js"  "$RENEW_PUBLIC/brik-events-widget.js" "renew-pms public/ brik-events-widget.js"
-
 # brikdesigns public/ (browser-served, staging dev-tools)
 # brikdesigns is Brik's own Next.js marketing-site repo under brik/, NOT web/
 # (web/brikdesigns was a stale build husk — no repo, no public/). #1047
@@ -104,7 +97,6 @@ BDS_MANIFEST="$BDS_PRIMARY/dist/bds-manifest.json"
 if [[ -f "$BDS_MANIFEST" ]]; then
   echo ""
   sync_one "$BDS_MANIFEST" "$PORTAL_PUBLIC/bds-manifest.json"        "portal public/      bds-manifest.json"
-  sync_one "$BDS_MANIFEST" "$RENEW_PUBLIC/bds-manifest.json"         "renew-pms public/   bds-manifest.json"
   sync_one "$BDS_MANIFEST" "$BRIKDESIGNS_PUBLIC/bds-manifest.json"   "brikdesigns public/ bds-manifest.json"
   sync_one "$BDS_MANIFEST" "$BDS_STORYBOOK_PUBLIC/bds-manifest.json" "bds storybook       bds-manifest.json"
 else
