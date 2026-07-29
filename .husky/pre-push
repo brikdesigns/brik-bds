@@ -1,16 +1,40 @@
+# ── Ref scope ──
+# git hands pre-push one line per pushed ref on stdin:
+#   <local ref> <local sha> <remote ref> <remote sha>
+# Capture it ONCE — a second read gets nothing.
+PUSHED_REFS="$(cat)"
+
+SCRIPT_DIR="$(cd "$(dirname "$0")/../scripts" && pwd)"
+# shellcheck source=scripts/lib/prepush-guards.sh
+. "${SCRIPT_DIR}/lib/prepush-guards.sh"
+
+# A tags-only push publishes no new commits — the commits the tag points at were
+# gated when they were pushed, and CI ran on them. `git tag v0.X.Y && git push
+# origin v0.X.Y` (docs/RELEASE.md) is the release path, and gating it on the
+# working tree's dependency state is what killed a propagation tag push on
+# 2026-07-29 (#1547). A MIXED push (branch + tag) carries commits and is NOT
+# tags-only, so it still runs everything below.
+if printf '%s\n' "$PUSHED_REFS" | push_is_tags_only; then
+  echo "▸ Tags-only push — skipping the dependency guard and validate:full."
+  echo "  The tagged commits were gated when they were pushed."
+  exit 0
+fi
+
 # ── Dependency guard (#812) ──
 # validate:full runs tsc / build-storybook / canonical-check, all of which need
 # node_modules. A missing or stale install (the secondary-machine drift that
 # blocked the v0.83.0 tag push) otherwise fails with opaque MODULE_NOT_FOUND /
 # "tsc not found". Fail fast with an actionable message instead.
-if [ ! -d node_modules ] || [ ! -f node_modules/.package-lock.json ]; then
-  echo "✗ node_modules is missing or incomplete — pre-push gates will fail with MODULE_NOT_FOUND."
-  echo "  Fix: run \`npm ci\` from $(pwd), then push again."
-  exit 1
-fi
-if [ package-lock.json -nt node_modules/.package-lock.json ]; then
-  echo "✗ node_modules is stale (package-lock.json is newer than the last install)."
-  echo "  Fix: run \`npm ci\` from $(pwd), then push again."
+#
+# The predicate compares CONTENT, not mtimes (#1547). git rewrites
+# package-lock.json on merge, pull, checkout and `worktree add`, moving its mtime
+# ahead of the last install even when the bytes are identical — the old
+# `[ package-lock.json -nt node_modules/.package-lock.json ]` then refused every
+# push until a pointless `npm ci`, three times in one session. The replacement
+# compares the lock against npm's own install record; see
+# scripts/check-install-freshness.mjs for why platform-gated entries are excluded.
+if ! node scripts/check-install-freshness.mjs; then
+  echo "  (working tree: $(pwd))"
   exit 1
 fi
 
