@@ -1,0 +1,54 @@
+name: Base Freshness Check
+
+# Fails a PR whose diff is already present on its base — i.e. one that would
+# squash-merge to an EMPTY commit.
+#
+# Why this is a CI gate and not just a script: brik-client-portal#2538 was
+# verified by hand (CI review, importer grep, Toast audit, a written comment) and
+# merged anyway, twelve minutes after #2539 had moved the same pin. It squashed
+# to f10a22f6 with 0 files. Every human-facing signal read healthy, because the
+# three-dot diff a reviewer sees still lists both files. Nothing re-read the base
+# at merge time. brikdesigns/brik-llm#1485, class (c).
+#
+# The predicate is NOT "is the diff empty" — see scripts/lib/base-freshness.sh
+# for why, and scripts/__tests__/test-base-freshness.sh for the fixture that
+# fails if someone swaps it for the obvious version.
+#
+# Cheap by design: git only, no npm ci, no build. fetch-depth 0 because the check
+# needs the merge base and the base tip, not just the PR head.
+#
+# Issue: brikdesigns/brik-bds#1546
+
+on:
+  pull_request:
+    branches:
+      - main
+      - staging
+
+concurrency:
+  group: base-freshness-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  base-freshness:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout (full history)
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          # Check the PR's own head, not the synthetic merge commit GitHub
+          # provides by default — the merge commit already contains the base, so
+          # every diff against it would read empty and the gate would fire on
+          # every PR.
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Fetch base branch
+        run: git fetch origin "${{ github.base_ref }}" --quiet
+
+      - name: Check the diff still applies to the base
+        run: |
+          bash scripts/lib/base-freshness.sh --local \
+            "origin/${{ github.base_ref }}" "${{ github.event.pull_request.head.sha }}"

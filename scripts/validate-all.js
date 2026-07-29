@@ -73,6 +73,13 @@ const steps = [
   // so it runs anywhere; see the lib header for why the claim is a marker
   // comment rather than an assignee. brik-bds#1541.
   { name: 'Issue Claim', cmd: 'bash scripts/__tests__/test-issue-claim.sh' },
+
+  // Base-freshness decision logic. The fixture rebuilds the brik-client-portal
+  // #2538 empty merge from scratch and asserts that the OBVIOUS predicate (the
+  // three-dot diff) still reads healthy there — so swapping the check for
+  // `git diff base...HEAD --stat` fails here with an explanation rather than
+  // shipping a gate that cannot fire. brik-bds#1546.
+  { name: 'Base Freshness', cmd: 'bash scripts/__tests__/test-base-freshness.sh' },
 ];
 
 console.log('\n═══════════════════════════════════════════');
