@@ -10,10 +10,17 @@ name: Sync staging to main
 # workflow prevents that from happening again.
 #
 # Failure modes intentionally NOT masked:
-# - If someone pushes to staging out-of-band, the ff push here will fail
-#   (non-fast-forward). That's the desired signal — we want to know about
-#   divergence, not silently clobber it. Fix: investigate the staging push,
-#   then either delete those commits or promote them to a proper PR.
+# - If someone pushes to staging out-of-band, this workflow fails. That's the
+#   desired signal — we want to know about divergence, not silently clobber it.
+#   Fix: investigate the staging push, then either delete those commits or
+#   promote them to a proper PR.
+#
+#   The "Check staging can fast-forward" step below detects this before the
+#   push and writes the diverging commits plus the reconcile procedure to the
+#   run summary (#1557). It fails loud with a remedy rather than leaving a
+#   maintainer to decode git's bare "(non-fast-forward)" rejection — which is
+#   all the 2026-06→07 run of failures surfaced while staging sat one obsolete
+#   commit ahead (#1540).
 
 on:
   push:
@@ -37,10 +44,54 @@ jobs:
           ref: main
           fetch-depth: 0
 
+      # Check before pushing so the failure names the remedy, not just git's
+      # raw rejection. Before this, a divergence surfaced only as
+      # "! [rejected] HEAD -> staging (non-fast-forward)", which says nothing
+      # about which commits diverged or how to reconcile them in this repo
+      # (#1557). The push below is unchanged — this step only fails earlier,
+      # with the context a maintainer actually needs.
+      - name: Check staging can fast-forward
+        run: |
+          git fetch origin staging
+          if git merge-base --is-ancestor origin/staging HEAD; then
+            echo "staging is an ancestor of main — fast-forward is safe."
+            exit 0
+          fi
+
+          {
+            echo "staging has commits main does not, so the fast-forward below would be rejected."
+            echo ""
+            echo "Diverging commits (on staging, absent from main):"
+            git log --oneline origin/staging --not HEAD | sed 's/^/  /'
+            echo ""
+            echo "Triage this by hand — the two outcomes are equally likely, so it is"
+            echo "deliberately not automated:"
+            echo ""
+            echo "  a) The commits are obsolete -> discard them from staging."
+            echo "  b) The commits are wanted   -> land them on main via a PR."
+            echo ""
+            echo "If you reconcile by merging staging into main, the merge MUST land as a"
+            echo "merge commit. This repo is squash-only, and a squash discards the second"
+            echo "parent — so the reconcile silently does nothing while the PR goes green"
+            echo "and staging stays divergent. That is how PR #1542 failed before #1544"
+            echo "landed the same change correctly."
+            echo ""
+            echo "  gh api -X PATCH repos/${{ github.repository }} -F allow_merge_commit=true -F allow_squash_merge=false"
+            echo "  gh pr merge <n> --merge"
+            echo "  gh api -X PATCH repos/${{ github.repository }} -F allow_squash_merge=true -F allow_merge_commit=false"
+            echo ""
+            echo "Verify with:  git merge-base --is-ancestor origin/staging origin/main  # 0 = fixed"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          echo "::error title=staging diverged from main::staging carries commits main does not; the fast-forward cannot proceed. See this run's summary for the diverging commits and the reconcile procedure (#1557)."
+          exit 1
+
       - name: Fast-forward staging to main
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # Plain push (no --force) — this is a fast-forward by design. If it
-          # fails, staging has out-of-band commits that need human triage.
+          # Plain push (no --force) — this is a fast-forward by design. The
+          # preflight step above has already confirmed staging is an ancestor,
+          # so a rejection here means staging moved mid-run; the next push to
+          # main re-runs this workflow and re-checks.
           git push origin HEAD:refs/heads/staging
