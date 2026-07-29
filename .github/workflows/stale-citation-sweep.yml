@@ -10,11 +10,23 @@ name: stale-citation-sweep
 # 2026-07-28 backlog, 24 of 129 open issues cited at least one path absent from
 # `git ls-files` (#1509).
 #
-# Weekly sweep over every open issue. Anything with a dead citation gets the
-# `needs:citation-fix` label plus ONE marker-guarded comment, rewritten in place
-# on later runs rather than re-posted. The flag self-clears when the issue is
-# closed or edited, and the sweep also drops it from issues whose citations now
-# all resolve.
+# Two entry points, one checker:
+#
+#   1. At filing time — an issue opened or edited is scanned immediately, so a
+#      dead citation is flagged within a minute of being written instead of
+#      waiting up to seven days for the cron. #1383 sat misleading for four days
+#      citing a component deleted 68 days earlier; anyone picking it up in that
+#      window would have designed against an architecture that was gone (#1521).
+#   2. Weekly sweep over every open issue — catches bodies that were accurate
+#      when written and rotted afterwards, which the filing-time check cannot
+#      see by definition.
+#
+# Anything with a dead citation gets the `needs:citation-fix` label plus ONE
+# marker-guarded comment, rewritten in place on later runs rather than re-posted.
+# Closing an issue clears the flag outright; editing one re-scans it, so the flag
+# drops only when the citations actually resolve — not merely because someone
+# touched the body. The weekly sweep clears it the same way for issues fixed
+# without an edit event.
 #
 # Advisory only — it never hard-fails. Some citations are deliberate forward
 # references to files the issue will create, so this reports, it does not block.
@@ -46,7 +58,7 @@ on:
     # contend for the same API budget.
     - cron: '0 8 * * 2'
   issues:
-    types: [closed, edited]
+    types: [opened, edited, closed]
   workflow_dispatch:
 
 concurrency:
@@ -64,26 +76,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v6
 
+      # Only the token half needs a build; the path half runs off git alone.
+      # Skipped on `issues: closed`, which drops the flag without scanning
+      # anything — every other event checks tokens, so a filing-time scan is not
+      # a weaker check than the weekly one. Costs ~25s of the ~40s a full sweep
+      # takes, which still lands a filing-time flag inside a minute.
       - name: Setup Node.js
-        # Only the token half needs a build; the path half runs off git alone.
-        if: github.event_name != 'issues'
+        if: github.event.action != 'closed'
         uses: actions/setup-node@v6
         with:
           node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
-        if: github.event_name != 'issues'
+        if: github.event.action != 'closed'
         run: npm ci
 
       - name: Build token registry
-        if: github.event_name != 'issues'
+        if: github.event.action != 'closed'
         # dist/tokens.css is git-ignored, so build it from the committed
         # tokens/*.css. Best-effort: if this fails the sweep still checks paths
         # rather than skipping entirely. Never fail an advisory job on a build.
         run: npm run build:dist-tokens || echo "token registry unavailable — path-only sweep"
 
-      - name: Sweep open issues for dead citations
+      - name: Check citations (one issue on an issues event, all open issues otherwise)
         uses: actions/github-script@v7
         with:
           script: |
@@ -95,19 +111,38 @@ jobs:
             const TOKEN_REGISTRY = 'dist/tokens.css';
             const DOCS_ROOT = 'docs-site/content/docs';
 
-            // ── Self-clear path: issue closed or edited → drop the flag ──
-            // Mirrors merge-reconcile. Editing the body is the fix action, so
-            // the flag must not survive it.
-            if (context.eventName === 'issues') {
-              const issue = context.payload.issue;
-              const labels = (issue.labels || []).map(l => (typeof l === 'string' ? l : l.name));
-              if (labels.includes(NEEDS)) {
-                await github.rest.issues.removeLabel({
-                  owner, repo, issue_number: issue.number, name: NEEDS,
-                }).catch(e => { if (e.status !== 404) throw e; });
-                core.info(`Cleared ${NEEDS} on #${issue.number} (issue ${context.payload.action})`);
+            // Webhook payloads and the REST list both carry labels as objects;
+            // tolerate plain strings so one helper serves every call site.
+            const labelNames = i => (i.labels || []).map(l => (typeof l === 'string' ? l : l.name));
+
+            // ── Single-issue path: opened / edited / closed ──
+            // `closed` drops the flag and stops — a closed issue misleads nobody.
+            // `opened` and `edited` fall through to the same checker the weekly
+            // sweep runs, and the scan result decides the final label state: the
+            // flag is added when citations are dead and cleared by the reconcile
+            // pass at the bottom when they all resolve.
+            //
+            // Deciding from the scan rather than clearing up front is deliberate.
+            // The previous version cleared on ANY edit and waited for Tuesday, so
+            // an edit that did not actually repair the citation left the issue
+            // unflagged for up to a week — the exposure window #1521 exists to
+            // close. Clearing first and re-adding would also churn the timeline
+            // with an unlabeled/labeled pair on every edit.
+            const SINGLE = context.eventName === 'issues';
+            const single = SINGLE ? context.payload.issue : null;
+
+            if (SINGLE) {
+              // `issues` does not fire for pull requests; belt and braces.
+              if (single.pull_request) return;
+              if (context.payload.action === 'closed') {
+                if (labelNames(single).includes(NEEDS)) {
+                  await github.rest.issues.removeLabel({
+                    owner, repo, issue_number: single.number, name: NEEDS,
+                  }).catch(e => { if (e.status !== 404) throw e; });
+                  core.info(`Cleared ${NEEDS} on #${single.number} (issue closed)`);
+                }
+                return;
               }
-              return;
             }
 
             // ── Build the two authorities ──
@@ -228,8 +263,15 @@ jobs:
               });
             }
 
-            // `meta:project` / `icebox` exemptions, batched. Sub-issues are
-            // NOT exempt here — see the divergence note in the header.
+            // `meta:project` parents cite broadly and are read as roadmaps;
+            // `icebox` is parked and nobody is following its links. Sub-issues
+            // are NOT exempt — see the divergence note in the header.
+            const EXEMPT_LABELS = ['meta:project', 'icebox'];
+            const isExempt = labels => labels.some(l => EXEMPT_LABELS.includes(l));
+
+            // Batched lookup for the weekly sweep, which only has issue numbers.
+            // The single-issue path already has the labels in its payload and
+            // calls isExempt() directly instead.
             async function exemptions(numbers) {
               const out = new Map();
               for (let s = 0; s < numbers.length; s += 25) {
@@ -248,28 +290,38 @@ jobs:
                     out.set(n, true);
                     continue;
                   }
-                  const labels = it.labels.nodes.map(x => x.name);
-                  out.set(n, labels.includes('meta:project') || labels.includes('icebox'));
+                  out.set(n, isExempt(it.labels.nodes.map(x => x.name)));
                 }
               }
               return out;
             }
 
-            // ── Sweep ──
+            // ── Scan ──
 
-            const open = await github.paginate(github.rest.issues.listForRepo, {
-              owner, repo, state: 'open', per_page: 100,
-            });
-            const issues = open.filter(i => !i.pull_request);
-            core.info(`Scanning ${issues.length} open issues`);
+            // The webhook payload already carries the body and the labels, so
+            // the single-issue path spends ZERO extra API calls collecting them.
+            // It is not a one-issue rerun of the 129-issue sweep.
+            let issues;
+            if (SINGLE) {
+              issues = [single];
+              core.info(`Scanning #${single.number} (issue ${context.payload.action})`);
+            } else {
+              const open = await github.paginate(github.rest.issues.listForRepo, {
+                owner, repo, state: 'open', per_page: 100,
+              });
+              issues = open.filter(i => !i.pull_request);
+              core.info(`Scanning ${issues.length} open issues`);
+            }
 
             const hits = [];
             for (const i of issues) {
               const { paths, tokens } = deadCitations(i.body);
-              if (paths.size || tokens.size) hits.push({ n: i.number, paths, tokens, labels: i.labels.map(l => l.name) });
+              if (paths.size || tokens.size) hits.push({ n: i.number, paths, tokens, labels: labelNames(i) });
             }
 
-            const exempt = hits.length ? await exemptions(hits.map(h => h.n)) : new Map();
+            const exempt = SINGLE
+              ? new Map([[single.number, isExempt(labelNames(single))]])
+              : (hits.length ? await exemptions(hits.map(h => h.n)) : new Map());
             const flagged = hits.filter(h => !exempt.get(h.n));
             core.info(`Dead citations in ${hits.length} issues; ${flagged.length} after exemptions`);
 
@@ -322,12 +374,13 @@ jobs:
               }
             }
 
-            // Reconcile the other direction: issues still carrying the flag
-            // whose citations now all resolve. Without this the label would
-            // only ever clear via the issues:edited event.
+            // Reconcile the other direction: anything still carrying the flag
+            // whose citations now all resolve. This serves both entry points —
+            // for a single edited issue it IS the self-clear, and for the weekly
+            // sweep it catches issues fixed without an edit event.
             const flaggedNow = new Set(flagged.map(h => h.n));
             for (const i of issues) {
-              if (!i.labels.some(l => l.name === NEEDS)) continue;
+              if (!labelNames(i).includes(NEEDS)) continue;
               if (flaggedNow.has(i.number)) continue;
               await github.rest.issues.removeLabel({
                 owner, repo, issue_number: i.number, name: NEEDS,
@@ -337,6 +390,8 @@ jobs:
 
             core.summary
               .addHeading('stale-citation-sweep', 2)
-              .addRaw(`Scanned **${issues.length}** open issues. `)
+              .addRaw(SINGLE
+                ? `Scanned **#${single.number}** at ${context.payload.action}. `
+                : `Scanned **${issues.length}** open issues. `)
               .addRaw(`Dead citations in **${hits.length}**, **${flagged.length}** flagged after exemptions.`)
               .write();
