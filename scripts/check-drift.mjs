@@ -25,9 +25,11 @@ const SUBMODULE_CONSUMERS = [
   { name: 'brikdesigns', repo: 'brikdesigns/brikdesigns', submodulePath: 'brik-bds' },
 ];
 
+// renew-pms is not here on purpose — it is a retired repo (dead, unsupported,
+// archived on GitHub). Drift against a repo nobody may commit to is noise.
+// Canonical list: brik-llm/operations/retired-repos.txt.
 const NPM_CONSUMERS = [
   { name: 'brik-client-portal', repo: 'brikdesigns/brik-client-portal', branch: 'staging' },
-  { name: 'renew-pms',          repo: 'brikdesigns/renew-pms',          branch: 'staging' },
 ];
 
 // ─── Helpers ─────────────────────────────────────────────────────
