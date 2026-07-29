@@ -22,6 +22,11 @@
 # Adding a consumer:
 #   Add an entry to SUBMODULE_CONSUMERS or NPM_CONSUMERS below.
 #   Fields are pipe-delimited (|) to allow colons in paths.
+#
+# Freezing a consumer:
+#   Add its name to FROZEN_CONSUMERS below with the reason. It is skipped with a
+#   warning on every run — including an explicit --only — and the run still
+#   exits 0. Remove the line to thaw it.
 
 set -euo pipefail
 
@@ -43,6 +48,21 @@ NPM_CONSUMERS=(
   "brik-client-portal|/Users/nickstanerson/Documents/GitHub/product/brik-client-portal|staging"
   "renew-pms|/Users/nickstanerson/Documents/GitHub/product/renew-pms|staging"
   "brikdesigns|/Users/nickstanerson/Documents/GitHub/brik/brikdesigns|staging"
+)
+
+# Frozen consumers: name|reason
+# A code-frozen repo accepts NO writes — no commits, PRs, merges, dependency
+# bumps, or migrations — until the freeze is lifted. That rule lives in the
+# cross-repo CLAUDE.md, which only humans and agent sessions read; this list is
+# how the unattended 09:00 run learns it. Without it, renew-pms took 14 merged
+# bump PRs (#429–#444) between its freeze date and 2026-07-29 while every
+# interactive session was correctly refusing the same work. brik-bds#1526.
+#
+# Leave the consumer in its track above and add it here — deleting its row
+# instead loses the path + base branch and the reason it stopped. To lift a
+# freeze, remove the one line here; nothing else changes.
+FROZEN_CONSUMERS=(
+  "renew-pms|TOTAL CODE FREEZE since 2026-07-05 — no commits, PRs, or dependency bumps until it is lifted"
 )
 
 # ─── Argument Parsing ─────────────────────────────────────────────
@@ -71,6 +91,18 @@ info()  { echo -e "${BLUE}→${NC} $1"; }
 ok()    { echo -e "${GREEN}✓${NC} $1"; }
 warn()  { echo -e "${YELLOW}!${NC} $1"; }
 err()   { echo -e "${RED}✗${NC} $1"; }
+
+# Echoes the freeze reason and returns 0 when $1 is in FROZEN_CONSUMERS.
+# Kept to bash-3.2 constructs (no associative arrays) — the launchd plist runs
+# this under /bin/bash, which is 3.2 on macOS.
+frozen_reason() {
+  local candidate="$1" entry name reason
+  for entry in "${FROZEN_CONSUMERS[@]}"; do
+    IFS='|' read -r name reason <<< "$entry"
+    [ "$name" = "$candidate" ] && { echo "$reason"; return 0; }
+  done
+  return 1
+}
 
 # ─── Headless-aware git ───────────────────────────────────────────
 # Signing is enforced globally on the operator's machines (commit.gpgsign=true,
@@ -509,15 +541,28 @@ EOF
 }
 
 # ─── Main ─────────────────────────────────────────────────────────
+# A freeze skip is a correct outcome, not a failure: it must not set DEGRADED,
+# so the run still exits 0 and the daily digest keeps meaning "something broke".
+# It also outranks --only — naming a frozen consumer explicitly does not thaw it.
 for entry in "${SUBMODULE_CONSUMERS[@]}"; do
   IFS='|' read -r name path subpath base <<< "$entry"
   [ -n "$ONLY" ] && [ "$ONLY" != "$name" ] && continue
+  if reason=$(frozen_reason "$name"); then
+    warn "$name skipped — $reason"
+    echo ""
+    continue
+  fi
   propagate_submodule "$name" "$path" "$subpath" "$base"
 done
 
 for entry in "${NPM_CONSUMERS[@]}"; do
   IFS='|' read -r name path base <<< "$entry"
   [ -n "$ONLY" ] && [ "$ONLY" != "$name" ] && continue
+  if reason=$(frozen_reason "$name"); then
+    warn "$name skipped — $reason"
+    echo ""
+    continue
+  fi
   propagate_npm "$name" "$path" "$base"
 done
 
