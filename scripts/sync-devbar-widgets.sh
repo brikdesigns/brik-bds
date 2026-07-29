@@ -32,7 +32,9 @@ FORCE=0
 for arg in "$@"; do
   case "$arg" in
     --force) FORCE=1 ;;
-    -h|--help) sed -n '2,29p' "$0"; exit 0 ;;
+    # Print the header comment and stop at the first non-comment line, so the
+    # range cannot drift out of date when the header grows (#1561).
+    -h|--help) sed -n '2,${/^#/!q;p;}' "$0"; exit 0 ;;
     *) echo "sync-devbar-widgets: unknown arg: $arg" >&2; exit 2 ;;
   esac
 done
