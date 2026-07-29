@@ -23,10 +23,11 @@
 #   Add an entry to SUBMODULE_CONSUMERS or NPM_CONSUMERS below.
 #   Fields are pipe-delimited (|) to allow colons in paths.
 #
-# Freezing a consumer:
+# Freezing or retiring a consumer:
 #   Add its name to FROZEN_CONSUMERS below with the reason. It is skipped with a
 #   warning on every run — including an explicit --only — and the run still
-#   exits 0. Remove the line to thaw it.
+#   exits 0. Remove the line to thaw a freeze; a retirement is permanent and
+#   must not be removed to unblock a run.
 
 set -euo pipefail
 
@@ -59,10 +60,17 @@ NPM_CONSUMERS=(
 # interactive session was correctly refusing the same work. brik-bds#1526.
 #
 # Leave the consumer in its track above and add it here — deleting its row
-# instead loses the path + base branch and the reason it stopped. To lift a
-# freeze, remove the one line here; nothing else changes.
+# instead loses the path + base branch and the reason it stopped.
+#
+# Freeze vs retirement — the difference matters to whoever reads this next:
+#   - A freeze is temporary. Remove the one line here to thaw it.
+#   - A retirement is permanent. The canonical list is
+#     brik-llm/operations/retired-repos.txt, CI-asserted by
+#     brik-llm/operations/hooks/test/test-retired-repos.sh. Never remove a
+#     retired entry to unblock a run — the repo is dead and archived on GitHub,
+#     so the push would fail anyway.
 FROZEN_CONSUMERS=(
-  "renew-pms|TOTAL CODE FREEZE since 2026-07-05 — no commits, PRs, or dependency bumps until it is lifted"
+  "renew-pms|RETIRED 2026-07-29 (frozen since 2026-07-05) — dead and unsupported, permanently; not a liftable freeze. See brik-llm/operations/retired-repos.txt"
 )
 
 # ─── Argument Parsing ─────────────────────────────────────────────
