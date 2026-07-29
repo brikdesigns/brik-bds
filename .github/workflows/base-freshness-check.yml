@@ -35,15 +35,18 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Checkout (full history)
+      # Default ref for a pull_request event is refs/pull/N/merge (base merged with
+      # head). Do NOT pin `ref: head.sha`: a branch cut before this lib landed does
+      # not contain it, and the step then exits 127 for a missing file rather than a
+      # stale diff (#1559 — measured in the sibling repo, brik-llm#1700). The merge
+      # ref always carries the base's copy of the lib, and the head sha is one of
+      # its parents, so the check below still measures the PR's own tree: both refs
+      # are passed explicitly and neither is the merge commit. Verified on
+      # brik-llm#1705 — `✓ FRESH — 1 path(s)`, the one file that PR changed.
+      - name: Checkout (merge ref, full history)
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
-          # Check the PR's own head, not the synthetic merge commit GitHub
-          # provides by default — the merge commit already contains the base, so
-          # every diff against it would read empty and the gate would fire on
-          # every PR.
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Fetch base branch
         run: git fetch origin "${{ github.base_ref }}" --quiet
