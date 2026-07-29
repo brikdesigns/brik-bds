@@ -154,9 +154,13 @@ git -C "$REPO2" add -A && git -C "$REPO2" commit -qm bump
 git -C "$REPO2" checkout -q main
 
 assert_eq "local mode calls a real bump FRESH" "FRESH" \
-  "$(cd "$REPO2" && check_base_freshness_local main bump 2>/dev/null)"
-assert_eq "and names the path that still needs applying" "package.json" \
-  "$(cd "$REPO2" && check_base_freshness_local main bump 2>&1 >/dev/null | flat)"
+  "$(cd "$REPO2" && check_base_freshness_local main bump | head -1)"
+# One stream, verdict first: the CLI reporter reads both halves from a single
+# evaluation instead of running the whole check twice.
+assert_eq "and lists the path still needing apply after the verdict line" "package.json" \
+  "$(cd "$REPO2" && check_base_freshness_local main bump | tail -n +2 | flat)"
+assert_eq "REDUNDANT emits the verdict and nothing else" "REDUNDANT" \
+  "$(cd "$REPO" && check_base_freshness_local main bump | flat)"
 assert_eq "the CLI exits 0 on FRESH" "0" \
   "$(cd "$REPO2" && bash "$LIB" --local main bump >/dev/null 2>&1; echo $?)"
 

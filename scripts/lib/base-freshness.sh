@@ -108,15 +108,19 @@ _bf_three_dot() { git diff --name-only "${1}...${2}"; }
 _bf_two_dot()   { git diff --name-only "${1}..${2}"; }
 
 # check_base_freshness_local <base-ref> [head-ref]
-# Echoes the verdict; the paths still needing application go to stderr.
+#
+# Echoes the verdict on line 1, then one path per line for the paths a merge
+# would still have to write. One stream and one evaluation, so the CLI reporter
+# below does not have to run the whole check twice to get both halves.
 check_base_freshness_local() {
   local base="${1:?check_base_freshness_local needs a base ref}" head="${2:-HEAD}"
   local three_dot two_dot needing
   three_dot="$(${BF_GIT_THREE_DOT:-_bf_three_dot} "$base" "$head")" || return 2
   two_dot="$(${BF_GIT_TWO_DOT:-_bf_two_dot} "$base" "$head")" || return 2
   needing="$(paths_needing_apply "$three_dot" "$two_dot")"
-  [ -n "$needing" ] && printf '%s\n' "$needing" >&2
-  freshness_verdict "$three_dot" "$needing"
+  printf '%s\n' "$(freshness_verdict "$three_dot" "$needing")"
+  [ -n "$needing" ] && printf '%s\n' "$needing"
+  return 0
 }
 
 # ── gh reads (remote mode) ─────────────────────────────────────────
@@ -160,9 +164,14 @@ _bf_remote_needing() {
 # ── CLI ────────────────────────────────────────────────────────────
 
 _bf_report_local() {
-  local base="$1" head="${2:-HEAD}" verdict needing
-  needing="$(check_base_freshness_local "$base" "$head" 2>&1 >/dev/null)"
-  verdict="$(check_base_freshness_local "$base" "$head" 2>/dev/null)"
+  local base="$1" head="${2:-HEAD}" out verdict needing rc=0
+  out="$(check_base_freshness_local "$base" "$head" 2>/dev/null)" || rc=$?
+  if [ "$rc" -ne 0 ]; then
+    echo -e "${_BF_YELLOW}⚠  Could not read the diff against ${base} — reporting UNKNOWN, not FRESH.${_BF_NC}" >&2
+    return 0
+  fi
+  verdict="$(printf '%s\n' "$out" | head -1)"
+  needing="$(printf '%s\n' "$out" | tail -n +2)"
   case "$verdict" in
     REDUNDANT)
       echo -e "${_BF_RED}✗ REDUNDANT — every changed path already holds this content on ${base}.${_BF_NC}"
