@@ -8,7 +8,7 @@ import { Select } from '../../../components/ui/Select';
 import { Button } from '../../../components/ui/Button';
 
 const meta: Meta = {
-  title: 'Containers/feedback-form',
+  title: 'Forms/feedback-form',
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
 };

@@ -159,6 +159,25 @@ Pre-existing `*.stories.tsx` files keep whatever shape ADR-007's page-recipe pas
 
 ## Amendments
 
+### 2026-07-29 — Part A: `Forms/` top-level added; form family pulled out of `Containers/` (#1565)
+
+A new `Forms/` top-level bucket, sequenced right after `Cards/`, groups the six form-family stories that previously lived in `Containers/`:
+
+- `Containers/form` → `Forms/form`
+- `Containers/contact-form` → `Forms/contact-form`
+- `Containers/feedback-form` → `Forms/feedback-form`
+- `Containers/login-form` → `Forms/login-form`
+- `Containers/sign-up-form` → `Forms/sign-up-form`
+- `Containers/search-form` → `Forms/search-form`
+
+Forward-only `title:` re-titles plus a `'Forms'` entry after `'Cards'` in the `storySort.order` in [`.storybook/preview.tsx`](../../.storybook/preview.tsx); no component code changes. The one docs-site `storybook.brikdesigns.com/?path=/docs/containers-form--overview` link re-points to `forms-form--*`.
+
+**Rationale.** This is the same name-family move as the [2026-07-22 `Cards/` bucket (#1330)](#2026-07-22--part-a-cards-top-level-navigation-rename-blueprints-promoted-foundationassets-displays-dissolved-1330): name-family grouping wins over composition-role for a family large and cohesive enough that sidebar discoverability beats taxonomic purity. The form family — one base `Form` container plus five composed form demos — reads as one thing, and burying it inside `Containers/` alongside tables, sheets, and accordions made the family hard to find. All six are card-less form compositions; a `Forms/` bucket names the family the way `Cards/` names the card family.
+
+**Supersedes the [2026-07-25 form-placement decision (#1323)](#2026-07-25--taxonomy-form-pattern-placement--tools-flattening-1323).** That amendment kept the composed forms in `Containers/`, reasoning that a `Patterns/` top-level for "five internal composition demos isn't warranted." That reasoning was against a *`Patterns/` nesting*; it predates applying the `Cards/` name-family precedent to the form family, and it excluded the base `Form` container. This amendment supersedes it: the family (all six, base `Form` included) moves to a flat `Forms/` bucket, not a `Patterns/Forms/` nesting. The #1323 Tools-flattening half of that amendment is unaffected.
+
+Per the amendment convention this file follows, the frozen Part A table is not rewritten; this entry is the source of truth for the current bucket set. The living taxonomy tables in [`.claude/standards/storybook-story-shape.md`](../../.claude/standards/storybook-story-shape.md) are updated to match.
+
 ### 2026-07-29 — Part A: `Blocks/` dissolved into `Components/`
 
 The `Blocks/` top-level bucket is retired; its six members re-title into `Components/`:

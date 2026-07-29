@@ -9,7 +9,7 @@ import { Button } from '../Button';
  * @summary Form container with layout and inline messaging
  */
 const meta: Meta<typeof Form> = {
-  title: 'Containers/form',
+  title: 'Forms/form',
   component: Form,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
