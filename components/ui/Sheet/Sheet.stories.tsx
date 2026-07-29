@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { Sheet } from './Sheet';
 import { Button } from '../Button';
 import { TextInput } from '../TextInput';
@@ -169,6 +170,31 @@ export const ReadMode: Story = {
         </Sheet>
       </>
     );
+  },
+  // Opened in `play` so the body is actually captured. Without it the snapshot
+  // is just the trigger button — which is how sheet-tier label sizing went
+  // unphotographed until #1383: the `<Field>` rows the container tier applies
+  // to had never appeared in a visual baseline at all.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole('button', { name: 'View company' }));
+
+    // Sheet renders in a portal — query from document.body. Scoped to the
+    // field-label slot: "Company" is also the sheet's subtitle, and the tier
+    // under test belongs to the Field, not the header.
+    const label = await within(document.body).findByText('Owner', {
+      selector: '.bds-field__label',
+    });
+
+    // No Field in `ReadOnlyFields` passes `tier`, so this asserts the tier
+    // INHERITED from the sheet body rather than a prop — the #1383 regression
+    // guard. Compared against the resolved tokens rather than a literal `14px`,
+    // so retuning the type scale can't quietly make the assertion vacuous.
+    const root = getComputedStyle(document.documentElement);
+    const sheetTier = root.getPropertyValue('--label-sm').trim();
+    const pageTier = root.getPropertyValue('--label-md').trim();
+    await expect(sheetTier).not.toBe(pageTier);
+    await expect(getComputedStyle(label).fontSize).toBe(sheetTier);
   },
 };
 
