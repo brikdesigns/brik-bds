@@ -159,6 +159,27 @@ Pre-existing `*.stories.tsx` files keep whatever shape ADR-007's page-recipe pas
 
 ## Amendments
 
+### 2026-07-29 — Part A: `Blocks/` dissolved into `Components/`
+
+The `Blocks/` top-level bucket is retired; its six members re-title into `Components/`:
+
+- `Blocks/field` → `Components/field`
+- `Blocks/field-grid` → `Components/field-grid`
+- `Blocks/bullet-list` → `Components/bullet-list`
+- `Blocks/checklist` → `Components/checklist`
+- `Blocks/interactive-list-item` → `Components/interactive-list-item`
+- `Blocks/selectable-media-tile` → `Components/selectable-media-tile`
+
+Forward-only `title:` re-titles plus removal of `'Blocks'` from the `storySort.order` in [`.storybook/preview.tsx`](../../.storybook/preview.tsx); no component code changes. The six docs-site `storybook.brikdesigns.com/?path=/docs/blocks-*` links re-point to `components-*`.
+
+**Rationale.** `Blocks/` never earned its own top-level. It held six members against `Components/`'s ~48, and the "slot-shaped filler vs atomic primitive" split it encoded is a distinction users don't make when *reaching for* a component — they browse `Components/` for anything reusable and non-holder. The bucket added a navigation hop without a discovery payoff. Folding the fillers into `Components/` leaves the composition-role taxonomy intact where it does work (holders → `Containers/`/`Cards/`, arrangement → `Layouts/`, page regions → `Navigation/`/`Blueprints/`).
+
+**Relationship to the [2026-07-25 picker reclassification (#1359)](#2026-07-25--part-a-date-picker--time-picker-reclassified-blocks--components-1359).** That amendment moved the pickers *out* of `Blocks/` on the reasoning that `Blocks/` was reserved for slot-shaped fillers and a picker fills no slot. This amendment goes further and concludes the reserved bucket itself isn't worth a top-level — the fillers are more discoverable alongside every other `Components/` primitive. #1359's picker move stands (a picker is a composite input control regardless); this pass simply removes the bucket the pickers were being distinguished *from*.
+
+**Not affected.** This is a *sidebar-taxonomy* change only. The **Block composition layer** (Section→Layout→Container→Block→Component) in the build standards and [ADR-018](./ADR-018-card-preset-boundary.md)'s "conceptually Blocks" language refer to the composition-layer sense of "block," not this sidebar bucket, and are unchanged.
+
+Per the amendment convention this file follows, the frozen Part A table is not rewritten; this entry is the source of truth for the current bucket set. The living taxonomy tables in [`.claude/standards/storybook-story-shape.md`](../../.claude/standards/storybook-story-shape.md) are updated to match.
+
 ### 2026-07-25 — Taxonomy: form-pattern placement + Tools flattening (#1323)
 
 Two reconciliations between the written taxonomy and `.storybook/preview.tsx`, decided 2026-07-25:

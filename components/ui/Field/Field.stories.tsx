@@ -8,7 +8,7 @@ import { EmptyState } from '../EmptyState';
  * @summary Read-mode label + value pair for Sheet body rows
  */
 const meta: Meta<typeof Field> = {
-  title: 'Blocks/field',
+  title: 'Components/field',
   component: Field,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
