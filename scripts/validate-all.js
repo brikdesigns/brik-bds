@@ -75,6 +75,11 @@ const steps = [
   // new-task.sh calls the gate unguarded under `set -e`. brik-bds#1549.
   { name: 'Overlap Confirm', cmd: 'bash scripts/__tests__/test-issue-overlap-confirm.sh' },
 
+  // The pre-push hook's own ref-scope decision (tags-only vs carries commits).
+  // A hook can't be exercised without pushing, so its logic lives in a lib and
+  // this locks it against recorded real `git push` stdin. brik-bds#1547.
+  { name: 'Pre-push Guards', cmd: 'bash scripts/__tests__/test-prepush-guards.sh' },
+
   // Claim-gate decision logic — staleness, identity, marker round-trip. Pure,
   // so it runs anywhere; see the lib header for why the claim is a marker
   // comment rather than an assignee. brik-bds#1541.
