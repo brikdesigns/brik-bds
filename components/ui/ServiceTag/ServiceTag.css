@@ -46,6 +46,29 @@
   padding-inline: var(--padding-sm);
 }
 
+/* ─── Trailing slot ──────────────────────────────────────────── */
+
+/* A trailing control (e.g. MultiSelect's dismiss button) lives inside the tag,
+   so the trailing inline padding tightens — at full size padding the glyph
+   reads as floating away from the edge. Two-class selector so it outranks the
+   size rules above, including the lg + has-icon pair. */
+.bds-service-tag.bds-service-tag--has-trailing {
+  gap: var(--gap-xs);
+  padding-inline-end: var(--padding-tiny);
+}
+
+/* `color: inherit` is load-bearing: the slot picks up the tag's
+   `--text-service-*-on-light` token, whose pairing against this fill is
+   already AA-cleared (see Category colors above). A control placed outside
+   the tag can't inherit it and would need a token that clears every service
+   fill in both themes — which is why the dismiss control moved inside. */
+.bds-service-tag__trailing {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: inherit;
+}
+
 /* ─── Category colors ────────────────────────────────────────── */
 
 .bds-service-tag--brand       { background-color: var(--background-service-brand);       color: var(--text-service-brand-on-light); }

@@ -51,8 +51,10 @@ const serviceTagOptions: MultiSelectOption[] = [
 ].map((o) => ({
   label: o.label,
   value: o.value,
-  chip: (
-    <ServiceTag category={o.category as 'brand' | 'marketing' | 'product'} variant="icon-text" serviceName={o.label} label={o.label} size="sm" />
+  // Function form: the remove control goes into ServiceTag's trailing slot, so
+  // it renders inside the pill and inherits the service text color.
+  chip: (remove) => (
+    <ServiceTag category={o.category as 'brand' | 'marketing' | 'product'} variant="icon-text" serviceName={o.label} label={o.label} size="sm" trailing={remove} />
   ),
 }));
 

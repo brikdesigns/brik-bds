@@ -9,7 +9,7 @@ import {
   type SelectSize,
 } from '../Select/Select';
 import { Tag } from '../Tag/Tag';
-import { X } from '../../icons';
+import { XBold } from '../../icons';
 import { bdsClass } from '../../utils';
 import './MultiSelect.css';
 
@@ -25,12 +25,22 @@ export interface MultiSelectOption {
   icon?: ReactNode;
   /**
    * Custom node rendered as the selected chip instead of the default neutral
-   * `Tag` — e.g. a line-colored `ServiceTag`. MultiSelect supplies its own
-   * remove control beside the node (the node itself need not be removable).
-   * The native dropdown still shows the plain `label` (a native `<option>`
-   * can't render a node); use the `icon` for a dropdown glyph.
+   * `Tag` — e.g. a line-colored `ServiceTag`. The native dropdown still shows
+   * the plain `label` (a native `<option>` can't render a node); use the
+   * `icon` for a dropdown glyph.
+   *
+   * Two forms, both supported:
+   *
+   * - **Function** (preferred) — receives MultiSelect's remove control and
+   *   places it wherever the chip wants it. Hand it to a slot that renders
+   *   *inside* the pill (`ServiceTag`'s `trailing`) so the control inherits
+   *   the chip's on-color text token and stays AA on every service fill:
+   *   `chip: (remove) => <ServiceTag category="brand" trailing={remove} />`
+   * - **Node** — MultiSelect renders its remove control beside the node. Kept
+   *   for back-compat; the control can't inherit the chip's color from out
+   *   there, so prefer the function form for colored chips.
    */
-  chip?: ReactNode;
+  chip?: ReactNode | ((remove: ReactNode) => ReactNode);
 }
 
 /**
@@ -233,21 +243,29 @@ export function MultiSelect({
           {selectedValues.map((val) => {
             const opt = optionMap.get(val);
             if (!opt) return null;
-            // Custom chip node (e.g. a line-colored ServiceTag): render it as the
-            // pill and supply our own remove control alongside.
+            // Custom chip (e.g. a line-colored ServiceTag). MultiSelect always
+            // owns the remove control; the function form lets the chip place it
+            // in its own trailing slot, the node form renders it alongside.
             if (opt.chip) {
+              const remove = disabled ? null : (
+                <button
+                  type="button"
+                  className="bds-multi-select__remove"
+                  aria-label={`Remove ${opt.label}`}
+                  onClick={() => removeValue(val)}
+                >
+                  <Icon icon={XBold} />
+                </button>
+              );
               return (
                 <span key={val} className="bds-multi-select__item">
-                  {opt.chip}
-                  {!disabled && (
-                    <button
-                      type="button"
-                      className="bds-multi-select__remove"
-                      aria-label={`Remove ${opt.label}`}
-                      onClick={() => removeValue(val)}
-                    >
-                      <Icon icon={X} />
-                    </button>
+                  {typeof opt.chip === 'function' ? (
+                    opt.chip(remove)
+                  ) : (
+                    <>
+                      {opt.chip}
+                      {remove}
+                    </>
                   )}
                 </span>
               );

@@ -26,6 +26,11 @@ const meta: Meta<typeof ServiceTag> = {
       control: 'select',
       options: ['sm', 'md', 'lg'],
     },
+    trailing: {
+      control: false,
+      description:
+        'Node rendered inside the tag after the label — e.g. `MultiSelect`’s dismiss control. Inherits the service text color. Ignored by the `icon` variant.',
+    },
   },
 };
 
