@@ -14,8 +14,13 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
   /** Stacked = label above value (default). Inline = label / value on one row. */
   layout?: FieldLayout;
   /**
-   * Typography tier. `standard` = `--label-md` label (default, matches edit-mode controls).
-   * `compact` = `--label-sm` label — use inside dense Sheet layouts.
+   * Typography tier override. **Omit it** — the tier is derived from the
+   * container, so a Field is page-tier (`--label-md`) by default and sheet-tier
+   * (`--label-sm`) inside a `Sheet` body, with no prop passed.
+   *
+   * Pass a value only to pin against the container: `standard` forces
+   * `--label-md` even inside a Sheet body, `compact` forces `--label-sm`
+   * anywhere. A dual-context component should not pass this at all.
    */
   tier?: FieldTier;
   /**
@@ -36,22 +41,23 @@ function isEmpty(value: ReactNode): boolean {
 }
 
 /**
- * Field — label + value pair for read-mode display inside a Sheet.
+ * Field — label + value pair for read-mode display on a page or in a Sheet.
  *
  * The single biggest win over ad-hoc markup: one API covers text,
  * tags, URLs, bullet lists, and empty states. Locks label typography,
  * value spacing, and the "Not set" empty treatment.
  *
- * Use `tier="compact"` inside dense Sheet layouts. Use `helper` + `helperTone`
- * for validation or hint text below the value.
+ * The typography tier is **derived from the container**: page-tier by default,
+ * sheet-tier inside a `Sheet` body. Pass `tier` only to pin against that. Use
+ * `helper` + `helperTone` for validation or hint text below the value.
  *
- * @summary Read-mode label + value pair for use inside a Sheet
+ * @summary Read-mode label + value pair, page- or sheet-tier by context
  */
 export function Field({
   label,
   children,
   layout = 'stacked',
-  tier = 'standard',
+  tier,
   empty = 'Not set',
   helper,
   helperTone = 'neutral',
@@ -66,7 +72,9 @@ export function Field({
       className={bdsClass(
         'bds-field',
         `bds-field--${layout}`,
-        tier === 'compact' && 'bds-field--compact',
+        // Only an explicit tier emits a class. No class = the container's
+        // inherited default applies, which is how context adaptivity works.
+        tier && `bds-field--${tier}`,
         className,
       )}
       style={style}

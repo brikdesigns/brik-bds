@@ -69,7 +69,14 @@ export const WithCompositeEmpty: Story = {
   ),
 };
 
-/** @summary `tier="compact"` for dense Sheet label + value pairs */
+/**
+ * Pinning `tier="compact"` outside a Sheet. Inside a Sheet body this prop is
+ * unnecessary — the tier is inherited from the container (#1383) — so pass it
+ * only to force sheet-tier type on a page, or `tier="standard"` to force
+ * page-tier type inside a sheet.
+ *
+ * @summary `tier="compact"` pinned outside a Sheet
+ */
 export const CompactTier: Story = {
   render: () => (
     <Frame>

@@ -28,7 +28,18 @@
  */
 .bds-field__label {
   font-family: var(--font-family-label);
-  font-size: var(--label-md);
+  /*
+   * Tier resolution. The size is read from a Component-tier custom property so
+   * a container can set the DEFAULT by inheritance — `.bds-sheet__body` declares
+   * `--label-sm`, so a Field dropped into a Sheet body is compact without the
+   * caller knowing it landed there (#1383).
+   *
+   * This is inheritance, not a specificity contest. An explicit `tier` prop
+   * declares the property on the Field root itself, and a declaration on the
+   * element always beats a value inherited from an ancestor — so a pinned tier
+   * wins inside a Sheet without needing `!important` or a longer selector.
+   */
+  font-size: var(--bds-field-label-size, var(--label-md));
   font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--text-muted);
@@ -69,11 +80,22 @@
   text-align: right;
 }
 
-/* ─── Compact tier ──────────────────────────────────────── */
+/* ─── Tier pins ─────────────────────────────────────────── */
 
-/* Compact swaps the label to --label-sm for dense Sheet layouts. */
-.bds-field--compact .bds-field__label {
-  font-size: var(--label-sm);
+/*
+ * These fire only when the caller passes `tier` explicitly. Omitting the prop
+ * emits no class, which is what lets the container default above apply.
+ *
+ * Both declare on the Field root, so they override an inherited container
+ * default — `tier="standard"` is the escape hatch for a page-tier field that
+ * happens to render inside a Sheet body.
+ */
+.bds-field--standard {
+  --bds-field-label-size: var(--label-md);
+}
+
+.bds-field--compact {
+  --bds-field-label-size: var(--label-sm);
 }
 
 /* ─── Helper slot ───────────────────────────────────────── */
