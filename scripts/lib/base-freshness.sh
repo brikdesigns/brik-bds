@@ -280,7 +280,7 @@ _bf_maybe_close() {
   body="$(cat <<EOF
 Closing as redundant: ${reason}, so merging this would produce an empty commit.
 
-Detected by \`scripts/lib/base-freshness.sh\` (brikdesigns/brik-bds#1546, the merge-time slice of brikdesigns/brik-llm#1485). Reopen if this reads wrong — the check compares each changed path's blob at the base tip against the same path at the PR head.
+Detected by \`scripts/lib/base-freshness.sh\` (brikdesigns/brik-bds#1546, the merge-time slice of brikdesigns/brik-llm#1485). Reopen if this reads wrong — the check compares the blob of each changed path at the base tip against the same path at the PR head.
 EOF
 )"
   if gh pr close "$num" --repo "$nwo" --comment "$body" >/dev/null 2>&1; then
