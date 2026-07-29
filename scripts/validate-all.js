@@ -73,6 +73,11 @@ const steps = [
   // so it runs anywhere; see the lib header for why the claim is a marker
   // comment rather than an assignee. brik-bds#1541.
   { name: 'Issue Claim', cmd: 'bash scripts/__tests__/test-issue-claim.sh' },
+
+  // Same-path overlap decision logic — exact-path intersection, self-exclusion
+  // by head ref, and the fail-loud-on-gh-error branch. Both the git read and the
+  // gh read are injected, so this touches no repo and no network. brik-bds#1545.
+  { name: 'PR Path Overlap', cmd: 'bash scripts/__tests__/test-pr-path-overlap.sh' },
 ];
 
 console.log('\n═══════════════════════════════════════════');
