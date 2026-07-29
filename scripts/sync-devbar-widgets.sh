@@ -216,25 +216,17 @@ for i in "${!DESTS[@]}"; do
 done
 sort -o "$STATE_FILE" "$STATE_FILE.tmp" && rm -f "$STATE_FILE.tmp"
 
-# BDS inspector manifest — built by scripts/build-inspector-manifest.mjs.
-# The inspect widget reads it for component status + token enrichment.
-# Unguarded: this is a generated build artifact, not hand-editable widget
-# source, so a consumer copy differing from it is staleness, never lost work.
-BDS_MANIFEST="$BDS_PRIMARY/dist/bds-manifest.json"
-if [[ -f "$BDS_MANIFEST" ]]; then
-  echo ""
-  for dest in "$PORTAL_PUBLIC/bds-manifest.json" "$BRIKDESIGNS_PUBLIC/bds-manifest.json" "$BDS_STORYBOOK_PUBLIC/bds-manifest.json"; do
-    if [[ -d "$(dirname "$dest")" ]]; then
-      cp "$BDS_MANIFEST" "$dest"
-      echo -e "  ${GREEN}✓${NC} $(state_key "$dest")"
-    else
-      echo -e "  ${YELLOW}-${NC} $(state_key "$dest")  (skipped — destination dir missing)"
-    fi
-  done
-else
-  echo ""
-  echo -e "  ${YELLOW}-${NC} bds-manifest.json  (not built — run 'npm run build:inspector-manifest' first)"
-fi
+# The inspector manifest is deliberately NOT synced here (#1552). Copying it was
+# the drift vector: this script only runs on a dev machine with brik-bds checked
+# out, so each consumer's copy froze at whatever version last ran the sync —
+# .storybook/public reached bds_version 0.41.0 against a 0.138.0 package, and
+# the portal's committed copy sat at 0.10.0 for three months.
+#
+# Each consumer now generates it at build time instead, from the BDS version it
+# actually has installed: brik-bds from its local dist/ via prestorybook, and
+# the app consumers from node_modules/@brikdesigns/bds/dist/bds-manifest.json
+# (kept fresh by BDS's prepublishOnly). A copy that is always regenerated from
+# the installed package cannot drift.
 
 echo ""
 echo "Done. Commit the sync in each affected repo (including $STATE_REL)."
