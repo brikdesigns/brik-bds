@@ -59,6 +59,13 @@ const steps = [
   // and Foundation galleries. Shipped with an empty violation set (#1495).
   { name: 'MDX Coverage', cmd: 'node scripts/lint-mdx-coverage.mjs' },
 
+  // Every bash test below must unset the inherited git environment. A test run
+  // from a hook gets GIT_DIR exported, and GIT_DIR beats directory discovery, so
+  // its fixture `git` calls drive the LIVE repo — #1539 pushed fixture refs to
+  // origin that way. This list keeps growing; the requirement was unenforced.
+  // Static read only: the gate must never run the tests it inspects. #1548.
+  { name: 'Test Git Env', cmd: 'node scripts/lint-test-git-env.mjs' },
+
   // Guards the overlap gate's pure helpers. new-task.sh refuses to run outside
   // the primary worktree, so its inline logic can't be exercised by a test —
   // that is why the helpers live in scripts/lib/. brik-llm ships this same test
