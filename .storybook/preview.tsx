@@ -366,7 +366,6 @@ const preview: Preview = {
           'Components',
           'Containers',
           'Cards',
-          'Blocks',
           'Layouts',
           'Navigation',
           'Blueprints',

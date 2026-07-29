@@ -35,7 +35,7 @@ const Grid = ({ children }: { children: React.ReactNode }) => (
 /* ─── Meta ───────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof SelectableMediaTile> = {
-  title: 'Blocks/selectable-media-tile',
+  title: 'Components/selectable-media-tile',
   component: SelectableMediaTile,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
