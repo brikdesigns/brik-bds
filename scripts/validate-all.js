@@ -69,6 +69,12 @@ const steps = [
   // only globs .test.* so it never collides with `npm test`.
   { name: 'Overlap Filters', cmd: 'bash scripts/__tests__/test-overlap-filters.sh' },
 
+  // The overlap gate's control flow, driven end-to-end through a fake `gh` on
+  // PATH: a hit must WARN, never abort the caller. It aborted for months' worth
+  // of agent sessions in one afternoon — `read -r` returns 1 on EOF and
+  // new-task.sh calls the gate unguarded under `set -e`. brik-bds#1549.
+  { name: 'Overlap Confirm', cmd: 'bash scripts/__tests__/test-issue-overlap-confirm.sh' },
+
   // Claim-gate decision logic — staleness, identity, marker round-trip. Pure,
   // so it runs anywhere; see the lib header for why the claim is a marker
   // comment rather than an assignee. brik-bds#1541.
