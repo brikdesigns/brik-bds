@@ -31,6 +31,18 @@ NC='\033[0m'
 
 # ── Config ──
 BASE_BRANCH="main"
+ISSUE_REF=""
+NO_ISSUE=0
+
+# Issue-number overlap gate. Worktrees isolate FILES, not INTENT: two sessions
+# can each create a correct worktree and build the same fix. brik-bds took four
+# collisions in 95 minutes on 2026-07-29 — see brik-llm#1485 for the evidence —
+# and this repo was the only one of three with no gate at all (brik-bds#1533).
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=scripts/lib/issue-overlap.sh
+source "${SCRIPT_DIR}/lib/issue-overlap.sh"
+# shellcheck source=scripts/lib/overlap-filters.sh
+source "${SCRIPT_DIR}/lib/overlap-filters.sh"
 
 # Auto-proceed past interactive warnings when there's no TTY (agent / headless
 # session), or when explicitly opted in via --yes / NEW_TASK_YES=1. Without
@@ -84,6 +96,14 @@ while [[ $# -gt 0 ]]; do
       BASE_BRANCH="$2"
       shift 2
       ;;
+    --issue)
+      ISSUE_REF="$2"
+      shift 2
+      ;;
+    --no-issue)
+      NO_ISSUE=1
+      shift
+      ;;
     --yes|-y)
       AUTO_YES=1
       shift
@@ -116,13 +136,21 @@ confirm() {
 
 # ── Validate input ──
 if [ $# -lt 1 ]; then
-  echo -e "${RED}Usage: $0 [--base branch] {scope}-{name}${NC}"
+  echo -e "${RED}Usage: $0 [--base branch] (--issue N | --no-issue) {scope}-{name}${NC}"
   echo ""
   echo "  scope = area of BDS (bds, tokens, stories, indicators, actions, forms, layout, content-system)"
   echo "  name  = what the task delivers (button-variants, figma-pull, badge-chip-typography)"
   echo ""
   echo "  Example: $0 bds-button-variants"
-  echo "  Example: $0 tokens-figma-pull"
+  echo "  Example: $0 --issue 1533 tooling-overlap-gate"
+  echo ""
+  echo "  --issue takes 1533 or owner/repo#1533 and reports any branch or PR"
+  echo "  already carrying that ticket, in this repo or any other."
+  echo ""
+  echo "  A ticket is REQUIRED. It is derived automatically when the slug ends in"
+  echo "  the number (e.g. tooling-overlap-gate-1533). Use --no-issue only for"
+  echo "  genuinely ticketless work — it disables the one check that catches a"
+  echo "  parallel session working the same problem."
   echo ""
   echo "  Base branch: ${BASE_BRANCH} (override with --base)"
   exit 1
@@ -139,6 +167,36 @@ if [[ ! "$TASK_NAME" =~ ^[a-z]+-[a-z0-9]+ ]]; then
   echo "  Expected: {scope}-{name}  (e.g., bds-button-variants, tokens-figma-pull)"
   echo ""
   echo "  Valid scopes: bds, tokens, stories, indicators, actions, forms, layout, content-system, docs"
+  exit 1
+fi
+
+# ── Issue-number overlap gate ──
+# Order: explicit --issue > derived from the slug > refuse. --no-issue is the
+# deliberate escape hatch for genuinely ticketless work, and it is loud.
+if [ -z "$ISSUE_REF" ] && [ "$NO_ISSUE" != "1" ]; then
+  DERIVED_ISSUE="$(derive_issue_from_slug "$TASK_NAME")"
+  if [ -n "$DERIVED_ISSUE" ]; then
+    ISSUE_REF="$DERIVED_ISSUE"
+    echo -e "${YELLOW}▸ Derived --issue ${ISSUE_REF} from the slug (pass --issue to override, --no-issue to skip).${NC}"
+  fi
+fi
+
+if [ -n "$ISSUE_REF" ]; then
+  check_issue_overlap "$ISSUE_REF"
+elif [ "$NO_ISSUE" = "1" ]; then
+  echo -e "${YELLOW}⚠  --no-issue: ticket-overlap gate deliberately skipped.${NC}"
+  echo -e "${YELLOW}   Nothing will catch a parallel session working the same problem.${NC}"
+else
+  echo -e "${RED}✗ Refusing to create a worktree with no ticket.${NC}"
+  echo ""
+  echo -e "${RED}  The ticket-overlap gate is the only check that catches a parallel${NC}"
+  echo -e "${RED}  session already working this problem. Worktrees isolate files, not${NC}"
+  echo -e "${RED}  intent — brik-llm#1485 is two sessions building the same fix in two${NC}"
+  echo -e "${RED}  correctly-created worktrees.${NC}"
+  echo ""
+  echo "  Pass a ticket:      $0 --issue <N> ${TASK_NAME}"
+  echo "  Or embed it:        $0 ${TASK_NAME}-<N>"
+  echo "  Genuinely none:     $0 --no-issue ${TASK_NAME}"
   exit 1
 fi
 
@@ -173,14 +231,39 @@ if command -v gh &>/dev/null; then
   fi
 fi
 
-# ── Check for overlapping scope (local branches) ──
+# ── Check for overlapping scope (remote task branches) ──
+# Merged-but-undeleted branches must be excluded or this gate is pure noise.
+# Measured in brik-bds on 2026-07-29: 6 of 6 open `origin/task/*` branches
+# already had MERGED PRs, so 100% of the warnings this could emit were false
+# positives — the same result brik-llm measured before filtering (20 of 20). A
+# gate that is always wrong teaches everyone to press Enter, and then the one
+# real overlap rides through with the noise. brik-llm#1485 / brik-bds#1533.
+#
+# Two cheap local checks, then ONE gh call for the rest. Never one call per
+# candidate: the fleet shares an hourly GitHub API bucket
+# (rag:github-api-quota-is-shared-across-the-fleet), and this runs on every task.
 SCOPE_KEYWORD="${TASK_NAME%%-*}"
-SIMILAR_BRANCHES=$(git branch -r 2>/dev/null | grep -i "origin/task/.*${SCOPE_KEYWORD}" | grep -v HEAD || true)
+CANDIDATES=$(git branch -r 2>/dev/null | grep -i "origin/task/.*${SCOPE_KEYWORD}" | grep -v HEAD || true)
+SIMILAR_BRANCHES=""
+
+if [ -n "$CANDIDATES" ]; then
+  # One API call for all merged head-refs. Empty on failure, which degrades to
+  # the ancestor check inside filter_live_branches rather than to silence.
+  MERGED_HEADS=$(gh pr list --state merged --limit 400 --json headRefName \
+                   --jq '.[].headRefName' 2>/dev/null || true)
+  # Bulk filter first (cheap), then verify only the survivors individually — the
+  # bulk list misses PRs older than its window, and squash-merges defeat the
+  # ancestor check. See drop_merged_by_lookup.
+  SIMILAR_BRANCHES=$(printf '%s\n' "$CANDIDATES" \
+    | filter_live_branches "origin/${BASE_BRANCH}" "$MERGED_HEADS" \
+    | drop_merged_by_lookup)
+fi
+
 if [ -n "$SIMILAR_BRANCHES" ]; then
-  echo -e "${YELLOW}⚠  Branches with similar scope already exist:${NC}"
+  echo -e "${YELLOW}⚠  LIVE branches with similar scope (merged/landed ones excluded):${NC}"
   echo "$SIMILAR_BRANCHES" | sed 's/^/    /'
   echo ""
-  echo -e "${YELLOW}   Verify these don't overlap before proceeding.${NC}"
+  echo -e "${YELLOW}   These carry unlanded work — a real overlap risk, not stale refs.${NC}"
   echo -e "${YELLOW}   Press Enter to continue, Ctrl+C to abort.${NC}"
   confirm
 fi

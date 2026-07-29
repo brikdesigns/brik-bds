@@ -58,6 +58,16 @@ const steps = [
   // load-bearing. Exempts wip/!manifest placeholders, Tools/ dev utilities,
   // and Foundation galleries. Shipped with an empty violation set (#1495).
   { name: 'MDX Coverage', cmd: 'node scripts/lint-mdx-coverage.mjs' },
+
+  // Guards the overlap gate's pure helpers. new-task.sh refuses to run outside
+  // the primary worktree, so its inline logic can't be exercised by a test —
+  // that is why the helpers live in scripts/lib/. brik-llm ships this same test
+  // but wires it to nothing, which is how an untested guard rots. brik-bds#1533.
+  //
+  // A bash test in a directory of .test.mjs files, deliberately: it is kept
+  // byte-identical to the brik-llm and brik-client-portal copies, and vitest
+  // only globs .test.* so it never collides with `npm test`.
+  { name: 'Overlap Filters', cmd: 'bash scripts/__tests__/test-overlap-filters.sh' },
 ];
 
 console.log('\n═══════════════════════════════════════════');
