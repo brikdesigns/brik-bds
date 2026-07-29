@@ -43,6 +43,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/lib/issue-overlap.sh"
 # shellcheck source=scripts/lib/overlap-filters.sh
 source "${SCRIPT_DIR}/lib/overlap-filters.sh"
+# Claim gate — the overlap gate above keys on branches and PRs, and two of the
+# four collisions on 2026-07-29 had neither (a close race and a body edit).
+# brik-bds#1541.
+# shellcheck source=scripts/lib/issue-claim.sh
+source "${SCRIPT_DIR}/lib/issue-claim.sh"
 
 # Auto-proceed past interactive warnings when there's no TTY (agent / headless
 # session), or when explicitly opted in via --yes / NEW_TASK_YES=1. Without
@@ -183,6 +188,10 @@ fi
 
 if [ -n "$ISSUE_REF" ]; then
   check_issue_overlap "$ISSUE_REF"
+  # Refuses when another session holds a live claim; otherwise claims it.
+  if ! check_issue_claim "$ISSUE_REF" "$BRANCH_NAME"; then
+    exit 1
+  fi
 elif [ "$NO_ISSUE" = "1" ]; then
   echo -e "${YELLOW}⚠  --no-issue: ticket-overlap gate deliberately skipped.${NC}"
   echo -e "${YELLOW}   Nothing will catch a parallel session working the same problem.${NC}"

@@ -68,6 +68,11 @@ const steps = [
   // byte-identical to the brik-llm and brik-client-portal copies, and vitest
   // only globs .test.* so it never collides with `npm test`.
   { name: 'Overlap Filters', cmd: 'bash scripts/__tests__/test-overlap-filters.sh' },
+
+  // Claim-gate decision logic — staleness, identity, marker round-trip. Pure,
+  // so it runs anywhere; see the lib header for why the claim is a marker
+  // comment rather than an assignee. brik-bds#1541.
+  { name: 'Issue Claim', cmd: 'bash scripts/__tests__/test-issue-claim.sh' },
 ];
 
 console.log('\n═══════════════════════════════════════════');
