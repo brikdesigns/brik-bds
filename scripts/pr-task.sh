@@ -197,8 +197,8 @@ ${COMMIT_BULLETS}
 
 ## Consumer sync plan
 - [ ] Portal: \`npm update @brikdesigns/bds\` after merge + version publish
-- [ ] renew-pms: submodule bump (until npm migration lands)
-- [ ] brikdesigns: \`./scripts/bds-sync.sh\`
+- [ ] brikdesigns: \`npm update @brikdesigns/bds\` after merge + version publish
+- [ ] brik-llm: submodule pointer bump
 
 ## Test plan
 - [ ] Storybook: visual verification on affected stories
