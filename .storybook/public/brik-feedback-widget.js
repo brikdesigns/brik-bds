@@ -46,13 +46,23 @@
   // Values are canonical BDS poppy/neutral hexes (inlined because the widget
   // ships raw to Storage and runs inside self-contained mockups where the BDS
   // token sheet isn't present).
+  // Text-bearing fills vs decorative fills (#1576). White on poppy-light is
+  // 3.78:1 — under the 4.5:1 AA minimum — so any fill that carries a label uses
+  // `brandText` (poppy-dark, 6.23:1). `brand` stays poppy-light for borders,
+  // focus rings and pulse shadows, where the 3:1 non-text threshold applies and
+  // 3.78:1 clears it. Both are canonical poppy-ramp values; the brand reads the
+  // same. This widget inlines hexes so it cannot be covered by contrast-gate.yml
+  // — the pairings below are asserted by the a11y test instead.
   const C = {
-    brand: '#e35335', // poppy-light — primary actions, pins, focus
+    brand: '#e35335', // poppy-light — borders, focus rings, non-text fills
+    brandText: '#b0351b', // poppy-dark — fills carrying white text (6.23:1)
     brandDark: '#b0351b', // poppy-dark — hover
+    brandDarker: '#7d1d09', // poppy-darker — hover for brandText fills (9.13:1)
     brandTintBg: '#ffefeb', // poppy-lightest — context / dropzone tint
     brandTintBorder: '#ffa693', // poppy-lighter — tint border
-    danger: '#ef4444', // destructive — cancel-active, remove
-    dangerDark: '#dc2626',
+    danger: '#ef4444', // destructive — cancel-active, non-text fills
+    dangerDark: '#dc2626', // red-600 — destructive fills carrying white text (4.83:1)
+    dangerDarker: '#b91c1c', // red-700 — hover for dangerDark fills (6.47:1)
     active: '#1b1b1b', // grayscale-darkest — active/toggled toolbar button
     activeDark: '#333333', // grayscale-darker — active button hover
     pending: '#f59e0b', // amber — pending pin
@@ -101,7 +111,7 @@
       align-items: center;
     }
     .bfb-btn {
-      background: ${C.brand};
+      background: ${C.brandText};
       color: #fff;
       border: none;
       border-radius: var(--radius-button, 100px);
@@ -139,7 +149,7 @@
       position: absolute;
       width: 28px;
       height: 28px;
-      background: ${C.brand};
+      background: ${C.brandText};
       border: 2px solid #fff;
       border-radius: 50%;
       transform: translate(-50%, -50%);
@@ -156,7 +166,7 @@
       transition: transform 0.15s;
     }
     .bfb-pin:hover { transform: translate(-50%, -50%) scale(1.15); }
-    .bfb-pin--pending { background: ${C.pending}; animation: bfb-pulse 1.5s infinite; }
+    .bfb-pin--pending { background: ${C.pending}; color: ${C.ink}; animation: bfb-pulse 1.5s infinite; }
 
     @keyframes bfb-pulse {
       0%, 100% { box-shadow: 0 0 0 0 rgba(245,158,11,0.4); }
@@ -247,7 +257,7 @@
       border: none;
       font-size: 18px;
       line-height: 1;
-      color: #888;
+      color: #666;
       cursor: pointer;
       padding: 0 2px;
     }
@@ -269,7 +279,7 @@
       width: 22px;
       height: 22px;
       border-radius: 50%;
-      background: ${C.brand};
+      background: ${C.brandText};
       color: #fff;
       font-size: 11px;
       font-weight: 700;
@@ -279,9 +289,9 @@
     }
     .bfb-list__item--done .bfb-list__num { background: #9aa0a6; }
     .bfb-list__body { min-width: 0; }
-    .bfb-list__meta { font-size: 11px; color: #888; margin-bottom: 2px; }
+    .bfb-list__meta { font-size: 11px; color: #666; margin-bottom: 2px; }
     .bfb-list__comment { font-size: 13px; color: #333; line-height: 1.35; overflow-wrap: anywhere; }
-    .bfb-list__empty { padding: 24px 12px; text-align: center; color: #888; font-size: 13px; }
+    .bfb-list__empty { padding: 24px 12px; text-align: center; color: #666; font-size: 13px; }
 
     .bfb-form {
       position: fixed;
@@ -326,7 +336,7 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: #888;
+      color: #666;
       margin-bottom: 6px;
     }
     .bfb-tags { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -349,8 +359,8 @@
       outline-offset: 2px;
     }
     .bfb-tag--active {
-      background: var(--background-brand-primary, ${C.brand});
-      border-color: var(--background-brand-primary, ${C.brand});
+      background: ${C.brandText};
+      border-color: ${C.brandText};
       color: #fff;
     }
     .bfb-form-actions {
@@ -367,8 +377,8 @@
       cursor: pointer;
       font-family: inherit;
     }
-    .bfb-submit { background: ${C.brand}; color: #fff; }
-    .bfb-submit:hover { background: ${C.brandDark}; }
+    .bfb-submit { background: ${C.brandText}; color: #fff; }
+    .bfb-submit:hover { background: ${C.brandDarker}; }
     .bfb-submit:disabled { opacity: 0.5; cursor: not-allowed; }
     .bfb-cancel { background: #f3f3f3; color: #666; }
     .bfb-cancel:hover { background: #e8e8e8; }
@@ -392,7 +402,7 @@
       gap: 4px;
     }
     .bfb-context-label {
-      color: #888;
+      color: #666;
       min-width: 50px;
     }
 
@@ -422,7 +432,7 @@
       margin-bottom: 10px;
       text-align: center;
       font-size: 12px;
-      color: #888;
+      color: #666;
       cursor: pointer;
       transition: border-color 0.15s, background 0.15s;
       position: relative;
@@ -456,7 +466,7 @@
       right: -6px;
       width: 20px;
       height: 20px;
-      background: ${C.danger};
+      background: ${C.dangerDark};
       color: #fff;
       border: 2px solid #fff;
       border-radius: 50%;
@@ -466,7 +476,7 @@
       cursor: pointer;
       box-shadow: 0 1px 4px rgba(0,0,0,0.2);
     }
-    .bfb-screenshot-remove:hover { background: ${C.dangerDark}; }
+    .bfb-screenshot-remove:hover { background: ${C.dangerDarker}; }
 
     .bfb-crosshair { cursor: crosshair !important; }
     .bfb-crosshair * { cursor: crosshair !important; }
@@ -970,7 +980,7 @@
       </div>
       <div class="bfb-screenshot-zone">
         \uD83D\uDCCE Paste, drag, or <u>upload</u> a screenshot
-        <input type="file" accept="image/*" />
+        <input type="file" accept="image/*" aria-label="Upload a screenshot" />
       </div>
       <div class="bfb-form-actions">
         <button type="button" class="bfb-cancel">Cancel</button>
