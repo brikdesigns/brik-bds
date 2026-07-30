@@ -27,6 +27,8 @@ on:
       - 'scripts/lib/gh-error-classify.sh'
       - 'scripts/lib/tests/test-gh-error-classify.sh'
       - 'scripts/cleanup-merged-worktrees.sh'
+      - 'scripts/lib/issue-claim.sh'
+      - 'scripts/__tests__/test-issue-claim.sh'
       - '.github/workflows/gh-error-classify-check.yml'
   push:
     branches: [main]
@@ -34,6 +36,8 @@ on:
       - 'scripts/lib/gh-error-classify.sh'
       - 'scripts/lib/tests/test-gh-error-classify.sh'
       - 'scripts/cleanup-merged-worktrees.sh'
+      - 'scripts/lib/issue-claim.sh'
+      - 'scripts/__tests__/test-issue-claim.sh'
       - '.github/workflows/gh-error-classify-check.yml'
   workflow_dispatch:
 
@@ -53,6 +57,13 @@ jobs:
       - name: Classification contract
         run: bash scripts/lib/tests/test-gh-error-classify.sh
 
+      # issue-claim.sh became a consumer of the helper in brikdesigns/brik-llm#1754
+      # (it resolves the repo slug via gh_repo_slug instead of spending a GraphQL
+      # point on `gh repo view`). Its own suite already covers _ic_resolve_ref, so
+      # gating it here is what stops the slug path regressing to the old shape.
+      - name: Issue-claim contract
+        run: bash scripts/__tests__/test-issue-claim.sh < /dev/null
+
       - name: shellcheck
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
@@ -64,3 +75,11 @@ jobs:
           shellcheck -e SC2148 scripts/lib/gh-error-classify.sh
           shellcheck -e SC1091,SC2329,SC2317 scripts/lib/tests/test-gh-error-classify.sh
           shellcheck -e SC1091 scripts/cleanup-merged-worktrees.sh
+          # issue-claim.sh predates this gate and carries pre-existing findings,
+          # so it is checked at the `-S warning` threshold brik-llm and
+          # brik-client-portal use for these same libs — that clears info-level
+          # SC2016 on :75-76 (literal `\(.*\)` inside single-quoted sed) without
+          # blanket-excluding anything. SC1010 is excluded on top: :106 declares
+          # a local named `then`, which is legal and deliberate. Both are left
+          # as-is rather than edited, so this gate smuggles in no unrelated diff.
+          shellcheck -S warning -e SC1091,SC1010 scripts/lib/issue-claim.sh
