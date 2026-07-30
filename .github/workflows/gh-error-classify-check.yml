@@ -57,8 +57,10 @@ jobs:
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
           # SC2148: sourced library, no shebang contract. SC1091: sourced at
-          # runtime. SC2329: the tests define git()/gh() stubs that the function
-          # under test calls indirectly — the exception shellcheck itself names.
+          # runtime. SC2329 + SC2317: the tests define git()/gh() stubs that the
+          # function under test calls indirectly, which shellcheck cannot see —
+          # the exception it names itself. Newer builds than the local 0.11.0
+          # report both, so both are excluded explicitly.
           shellcheck -e SC2148 scripts/lib/gh-error-classify.sh
-          shellcheck -e SC1091,SC2329 scripts/lib/tests/test-gh-error-classify.sh
+          shellcheck -e SC1091,SC2329,SC2317 scripts/lib/tests/test-gh-error-classify.sh
           shellcheck -e SC1091 scripts/cleanup-merged-worktrees.sh
