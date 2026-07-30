@@ -38,6 +38,42 @@ _IO_GREEN='\033[0;32m'
 _IO_RED='\033[0;31m'
 _IO_NC='\033[0m'
 
+# gh_repo_slug / gh_explain_failure (brik-llm#1590). Guarded because a twin repo
+# may not carry the file yet — _io_repo_slug degrades to the old API call then.
+_IO_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ -r "${_IO_LIB_DIR}/gh-error-classify.sh" ]; then
+  # shellcheck source=scripts/lib/gh-error-classify.sh
+  source "${_IO_LIB_DIR}/gh-error-classify.sh"
+fi
+
+# owner/name for the current repo, for zero GraphQL points (brik-llm#1748).
+#
+# `gh repo view --json nameWithOwner` costs 1 point and runs on the fleet's hot
+# path — new-task.sh sources this lib on every task branch. Worse, an exhausted
+# bucket makes it echo nothing, so the caller returned 2 ("unresolvable issue
+# reference") for what is a quota problem. `gh_repo_slug` reads `origin` locally
+# and costs nothing; the API is the fallback for a checkout with no usable
+# remote, and its failure is named by class instead of swallowed.
+_io_repo_slug() {
+  local slug err
+  if declare -F gh_repo_slug >/dev/null 2>&1 && slug="$(gh_repo_slug)"; then
+    printf '%s\n' "$slug"
+    return 0
+  fi
+  err="$(mktemp "${TMPDIR:-/tmp}/io-slug-err.XXXXXXXX")"
+  if slug="$(gh repo view --json nameWithOwner --jq .nameWithOwner 2>"$err")" \
+    && [ -n "$slug" ]; then
+    rm -f "$err"
+    printf '%s\n' "$slug"
+    return 0
+  fi
+  if declare -F gh_explain_failure >/dev/null 2>&1; then
+    gh_explain_failure "$(cat "$err" 2>/dev/null)" >/dev/null
+  fi
+  rm -f "$err"
+  return 1
+}
+
 # Resolve "1525" or "owner/repo#1525" into OWNER REPO NUMBER on stdout.
 # Bare numbers resolve against the current repo.
 _io_resolve_ref() {
@@ -47,7 +83,7 @@ _io_resolve_ref() {
   elif [[ "$ref" =~ ^#?([0-9]+)$ ]]; then
     num="${BASH_REMATCH[1]}"
     local nwo
-    nwo="$(gh repo view --json nameWithOwner --jq .nameWithOwner 2>/dev/null || true)"
+    nwo="$(_io_repo_slug)" || return 2
     [ -z "$nwo" ] && return 2
     owner="${nwo%%/*}"; repo="${nwo##*/}"
   else

@@ -60,6 +60,14 @@ _BF_GREEN='\033[0;32m'
 _BF_RED='\033[0;31m'
 _BF_NC='\033[0m'
 
+# gh_repo_slug / gh_explain_failure (brik-llm#1590). Guarded because a twin repo
+# may not carry the file yet — _bf_repo_slug degrades to the old API call then.
+_BF_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ -r "${_BF_LIB_DIR}/gh-error-classify.sh" ]; then
+  # shellcheck source=scripts/lib/gh-error-classify.sh
+  source "${_BF_LIB_DIR}/gh-error-classify.sh"
+fi
+
 # Above this many changed paths, remote mode stops rather than spending 2 API
 # calls per path — the fleet shares one hourly bucket
 # (rag:github-api-quota-is-shared-across-the-fleet). An empty-merge bump is a
@@ -125,15 +133,44 @@ check_base_freshness_local() {
 
 # ── gh reads (remote mode) ─────────────────────────────────────────
 
-# "1546" or "owner/repo#1546" → OWNER REPO NUMBER. Self-contained rather than
-# reusing issue-overlap.sh's resolver, so this file stands alone.
+# owner/name for the current repo, for zero GraphQL points (brik-llm#1748).
+#
+# `gh repo view --json nameWithOwner` costs 1 point and runs per PR in the
+# base-freshness-contract workflow. An exhausted bucket made it echo nothing, so
+# the caller returned 2 ("unresolvable reference") for what is a quota problem.
+# `gh_repo_slug` reads `origin` locally and costs nothing; the API is the
+# fallback for a checkout with no usable remote, and its failure is named by
+# class instead of swallowed.
+_bf_repo_slug() {
+  local slug err
+  if declare -F gh_repo_slug >/dev/null 2>&1 && slug="$(gh_repo_slug)"; then
+    printf '%s\n' "$slug"
+    return 0
+  fi
+  err="$(mktemp "${TMPDIR:-/tmp}/bf-slug-err.XXXXXXXX")"
+  if slug="$(gh repo view --json nameWithOwner --jq .nameWithOwner 2>"$err")" \
+    && [ -n "$slug" ]; then
+    rm -f "$err"
+    printf '%s\n' "$slug"
+    return 0
+  fi
+  if declare -F gh_explain_failure >/dev/null 2>&1; then
+    gh_explain_failure "$(cat "$err" 2>/dev/null)" >/dev/null
+  fi
+  rm -f "$err"
+  return 1
+}
+
+# "1546" or "owner/repo#1546" → OWNER REPO NUMBER. Reference parsing stays
+# self-contained (issue-overlap.sh's resolver is not reused); only the slug
+# lookup is shared, via the leaf gh-error-classify.sh sourced above.
 _bf_resolve_ref() {
   local ref="$1" owner repo num nwo
   if [[ "$ref" =~ ^([A-Za-z0-9._-]+)/([A-Za-z0-9._-]+)#?([0-9]+)$ ]]; then
     owner="${BASH_REMATCH[1]}"; repo="${BASH_REMATCH[2]}"; num="${BASH_REMATCH[3]}"
   elif [[ "$ref" =~ ^#?([0-9]+)$ ]]; then
     num="${BASH_REMATCH[1]}"
-    nwo="$(gh repo view --json nameWithOwner --jq .nameWithOwner 2>/dev/null || true)"
+    nwo="$(_bf_repo_slug)" || return 2
     [ -z "$nwo" ] && return 2
     owner="${nwo%%/*}"; repo="${nwo##*/}"
   else
