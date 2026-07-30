@@ -109,8 +109,14 @@ sys.exit(1)
 # ── Reset-time rendering ────────────────────────────────────────────────────
 # BSD date (macOS) takes -r <epoch>; GNU date (CI) takes -d @<epoch>.
 gh_format_reset() {
-  local epoch="$1" when mins
-  [ -n "$epoch" ] && [ "$epoch" -gt 0 ] 2>/dev/null || { printf 'unknown'; return; }
+  local epoch="${1:-}" when mins
+  # Explicit if, not `A && B || C` — with the numeric test guarded by
+  # 2>/dev/null for a non-integer epoch, the short-circuit form would run the
+  # fallback even on success (SC2015).
+  if [ -z "$epoch" ] || ! [ "$epoch" -gt 0 ] 2>/dev/null; then
+    printf 'unknown'
+    return
+  fi
   when="$(date -u -r "$epoch" +'%H:%M UTC' 2>/dev/null \
        || date -u -d "@$epoch" +'%H:%M UTC' 2>/dev/null)"
   mins=$(( (epoch - $(date +%s)) / 60 ))
