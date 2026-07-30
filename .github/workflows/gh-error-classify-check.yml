@@ -1,0 +1,66 @@
+name: gh Error Classify Check
+
+# Locks the contract of scripts/lib/gh-error-classify.sh: a failed `gh` call must
+# be named for what actually failed.
+#
+# Why a gate and not just a script: the helper exists because
+# cleanup-merged-worktrees.sh read ANY `gh` failure — including a rate-limit 403 —
+# as "gh CLI not authenticated". On 2026-07-26 the fleet-shared 5,000-points/hour
+# GraphQL bucket hit zero and that message sent a live session hunting a token
+# problem while `gh auth status` was healthy the whole time
+# (brikdesigns/brik-llm#1590 / #1587). A wrong label is worse than no label,
+# and nothing in this repo would catch a regression to it.
+#
+# This file is a deliberate TWIN. Identical copies of the helper + test live in
+# brik-llm/scripts/lib/ (gated by gh-quota-guardrails.yml) and
+# brik-client-portal/scripts/lib/ (gated inside ci.yml). Separate git repos, so
+# the copy is intentional — but an untested twin drifts silently, which is the
+# class that produced brik-bds#1538.
+#
+# Cheap and hermetic: bash only, no npm ci, no build, no network. The rate-limit
+# probe is stubbed via GH_CLASSIFY_RATE_LIMIT_JSON, so the gate spends zero
+# GitHub quota — which matters, because quota is the thing it is about.
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/lib/gh-error-classify.sh'
+      - 'scripts/lib/tests/test-gh-error-classify.sh'
+      - 'scripts/cleanup-merged-worktrees.sh'
+      - '.github/workflows/gh-error-classify-check.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/lib/gh-error-classify.sh'
+      - 'scripts/lib/tests/test-gh-error-classify.sh'
+      - 'scripts/cleanup-merged-worktrees.sh'
+      - '.github/workflows/gh-error-classify-check.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: gh-error-classify-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  classify-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Classification contract
+        run: bash scripts/lib/tests/test-gh-error-classify.sh
+
+      - name: shellcheck
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+          # SC2148: sourced library, no shebang contract. SC1091: sourced at
+          # runtime. SC2329 + SC2317: the tests define git()/gh() stubs that the
+          # function under test calls indirectly, which shellcheck cannot see —
+          # the exception it names itself. Newer builds than the local 0.11.0
+          # report both, so both are excluded explicitly.
+          shellcheck -e SC2148 scripts/lib/gh-error-classify.sh
+          shellcheck -e SC1091,SC2329,SC2317 scripts/lib/tests/test-gh-error-classify.sh
+          shellcheck -e SC1091 scripts/cleanup-merged-worktrees.sh

@@ -54,10 +54,27 @@ if [ "$PROJECT_ROOT" != "$PRIMARY_PATH" ]; then
   exit 1
 fi
 
-REPO_SLUG="$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null || echo '')"
+# Resolve the repo slug from the git remote — local, free, and it keeps working
+# when the shared GraphQL bucket is empty. This used to call `gh repo view`
+# (1 GraphQL point) and read ANY failure, including a rate-limit 403, as
+# "gh CLI not authenticated" — which sent a live session hunting a token problem
+# on 2026-07-26 while auth was healthy the whole time (brik-llm#1590 / #1587).
+# shellcheck source=scripts/lib/gh-error-classify.sh
+source "$(dirname "${BASH_SOURCE[0]}")/lib/gh-error-classify.sh"
+
+REPO_SLUG="$(gh_repo_slug || true)"
 if [ -z "$REPO_SLUG" ]; then
-  echo -e "${RED}Error: gh CLI not authenticated or no repo detected.${NC}"
-  exit 1
+  # No usable origin remote, so fall back to gh and let the classifier name
+  # whatever actually failed instead of guessing "not authenticated".
+  GH_ERR="$(mktemp)"
+  REPO_SLUG="$(gh repo view --json nameWithOwner -q .nameWithOwner 2>"$GH_ERR" || true)"
+  if [ -z "$REPO_SLUG" ]; then
+    echo -e "${RED}Error: could not determine the GitHub repo for this checkout.${NC}" >&2
+    gh_explain_failure "$(cat "$GH_ERR")" >/dev/null
+    rm -f "$GH_ERR"
+    exit 1
+  fi
+  rm -f "$GH_ERR"
 fi
 
 git fetch --prune origin --quiet
