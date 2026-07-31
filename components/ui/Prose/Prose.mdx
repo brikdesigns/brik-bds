@@ -1,0 +1,31 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Prose.stories';
+
+<Meta of={Stories} />
+
+# Prose
+
+<ComponentLinks slug="prose" />
+
+Free-form CMS-HTML Block. Formalizes brikdesigns' `.rich-content`: renders already-sanitized markup and owns the vertical rhythm BETWEEN its elements (element-adjacency rhythm, not named-slot rhythm — `ContentBlock` owns that case). A heading directly followed by a paragraph gets the medium gap; two consecutive paragraphs get the wide gap (ADR-023 §3).
+
+`Prose` does not sanitize. Pass `html` that the caller already sanitized (mirrors brikdesigns' `RichContentBlock`, which sanitizes server-side at ISR time before handing markup to `.rich-content`) — never raw user or CMS input.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Patterns
+
+Empty or falsy `html` renders nothing — `Prose` is a no-op rather than an empty wrapper element.
+
+<Canvas of={Stories.EmptyHtml} />
+
+The medium heading→paragraph gap and the wide paragraph→paragraph gap keep their relative size across every spacing density mode.
+
+<Canvas of={Stories.SpacingModes} />
+
+## Props
+
+<ArgTypes of={Stories} />

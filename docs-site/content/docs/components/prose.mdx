@@ -1,0 +1,54 @@
+---
+title: Prose
+description: Free-form, already-sanitized rich-text Block. Formalizes the legacy .rich-content pattern.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Prose is the free-form CMS-HTML Block-layer unit. It formalizes brikdesigns' `.rich-content` pattern: renders already-sanitized HTML and owns the vertical rhythm between its rendered elements. A heading directly followed by a paragraph gets the medium gap; two consecutive paragraphs get the wide gap. See [ADR-023](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-023-content-blocks-and-prose-rhythm.md).
+
+<Callout type="warn">
+  Prose does not sanitize. Pass `html` that the caller already sanitized — never raw user or CMS input. brikdesigns' `RichContentBlock` sanitizes server-side at ISR time before handing markup to `.rich-content`; consume the same pattern before passing `html` to `Prose`.
+</Callout>
+
+## Use it for
+
+- CMS-authored rich text with no fixed slot shape (event descriptions, long-form marketing copy)
+- Migrating brikdesigns' `.rich-content` blocks to a shared, versioned component
+
+For named content with a known title/subtitle/description/actions shape, use [ContentBlock](/docs/components/content-block) instead — fixed slots and free prose need different spacing mechanisms.
+
+## Import
+
+```tsx
+import { Prose } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Sanitized HTML
+
+```tsx
+import { sanitizeHtml } from '@/lib/sanitize';
+
+<Prose html={sanitizeHtml(cmsField)} />
+```
+
+### Empty content
+
+Empty or falsy `html` renders nothing — `Prose` is a no-op, not an empty wrapper element.
+
+```tsx
+<Prose html="" /> // renders null
+```
+
+## Props
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `html` | `string` | — (required) |
+
+## Related
+
+- [ContentBlock](/docs/components/content-block) — the fixed-slot counterpart
+- [Page Structure — Content blocks and prose](/docs/build-standards/page-structure#content-blocks-and-prose) — the spacing map both components share
