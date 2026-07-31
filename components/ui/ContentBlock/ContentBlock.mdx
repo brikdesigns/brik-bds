@@ -1,0 +1,31 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './ContentBlock.stories';
+
+<Meta of={Stories} />
+
+# ContentBlock
+
+<ComponentLinks slug="content-block" />
+
+Fixed-slot Block-layer unit — `title` / `subtitle` / `description` / `actions`, each independently omittable. Owns the vertical rhythm BETWEEN its own slots (ADR-023): a tight gap ties `title` to `subtitle`, a medium gap separates the last text slot from `description`, and the same medium gap leads into `actions`. It never owns layout — column count and orientation come from a Layout primitive (`Stack`, `Grid`) or a Container (`Card`) wrapped around it.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+All four slots filled — the full shape. `title` renders as `titleAs` (default `h3`); pick the element by outline position, not by convenience — see [HTML Semantics](/docs/build-standards/html-semantics#heading-element-selection).
+
+## Patterns
+
+Any slot can be omitted independently. Dropping `subtitle` collapses `title` straight to the medium `description` gap, with no leftover tight spacing.
+
+<Canvas of={Stories.OmittedSlots} />
+
+The tight title→subtitle gap and the medium gap into `description`/`actions` stay in the same relative order across every spacing density mode.
+
+<Canvas of={Stories.SpacingModes} />
+
+## Props
+
+<ArgTypes of={Stories} />
