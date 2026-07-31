@@ -226,3 +226,43 @@ export const AsLink: Story = {
     </Row>
   ),
 };
+
+/**
+ * Disabled state across variants. Filled variants take the disabled surface;
+ * ghost variants stay transparent — a disabled fill would render them as a
+ * solid gray block (regression guard for the disabled ghost icon-button).
+ *
+ * @summary Disabled Button — ghost variants stay transparent
+ */
+export const Disabled: Story = {
+  name: 'Disabled',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Disabled treatment per variant. The play function asserts a disabled ghost icon-button keeps a transparent background (regression guard).',
+      },
+    },
+  },
+  render: () => (
+    <Row>
+      <Button variant="primary" disabled>
+        Primary
+      </Button>
+      <Button variant="ghost" disabled>
+        Ghost
+      </Button>
+      <Button variant="ghost" icon={<Close />} label="Close" disabled />
+      <Button variant="danger-ghost" icon={<Trash />} label="Delete" disabled />
+    </Row>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const ghostIcon = canvas.getByRole('button', { name: 'Close' });
+
+    await expect(ghostIcon).toBeDisabled();
+    // Disabled ghost must not paint a solid fill — background stays transparent.
+    const bg = getComputedStyle(ghostIcon).backgroundColor;
+    await expect(['rgba(0, 0, 0, 0)', 'transparent']).toContain(bg);
+  },
+};

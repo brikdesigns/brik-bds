@@ -267,6 +267,15 @@
   cursor: not-allowed;
 }
 
+/* Ghost variants have no background — a disabled fill turns them into a solid
+ * gray block. Keep them transparent and let the dimmed text/icon color carry
+ * the disabled state. */
+.bds-button--ghost:disabled:not(.bds-button--loading),
+.bds-button--danger-ghost:disabled:not(.bds-button--loading) {
+  background-color: transparent;
+  border-color: transparent;
+}
+
 /* ── Focus (all variants) ── */
 .bds-button:focus-visible {
   outline: var(--button-focus-outline-width) solid var(--border-focus); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
