@@ -105,6 +105,45 @@ Use [Layout primitives](/docs/build-standards/composition-layers#the-five-layers
 </div>
 ```
 
+## Content blocks and prose
+
+Text inside `__content` (or any Block-layer slot) renders through one of two Block components rather than raw `<h2>`/`<p>` — each owns the vertical rhythm its shape needs. See [ADR-023](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-023-content-blocks-and-prose-rhythm.md).
+
+- **`ContentBlock`** — a fixed-slot unit (`title` / `subtitle` / `description` / `actions`, each omittable) for named content with a known shape: a card's text, a feature's copy, a CTA's heading + button.
+- **`Prose`** — free-form, already-sanitized CMS HTML (formalizes the legacy `.rich-content` pattern) for open-ended rich text with no fixed slot shape.
+
+Fixed slots and free prose need different spacing mechanisms — named-slot adjacency vs. element adjacency — so one component owns each, rather than a `mode` prop hiding two behaviors behind one name.
+
+```tsx
+import { ContentBlock, Prose } from '@brikdesigns/bds';
+
+<ContentBlock
+  title="Membership Plans"
+  subtitle="Choose the plan that fits your practice"
+  description="Every plan includes unlimited support and quarterly reviews."
+  actions={<Button variant="primary">View Plans</Button>}
+/>
+
+<Prose html={sanitizedHtml} />
+```
+
+### Spacing map
+
+Both components use only mode-tied `--gap-*` tokens — never raw px, never `--gap-xs`/`--gap-tiny` (both resolve to `0px` outside default mode, which would collapse the tight gap).
+
+| Component | Relationship | Token |
+|---|---|---|
+| `ContentBlock` | `title` → `subtitle` | `--gap-sm` |
+| `ContentBlock` | `title`/`subtitle` → `description`, and last text slot → `actions` | `--gap-md` |
+| `Prose` | `:is(h1,h2,h3) + p` | `--gap-md` |
+| `Prose` | `p + p` | `--gap-lg` |
+
+Block-to-block spacing — the gap between one `ContentBlock`/`Prose` and the next — is unchanged: it's the surrounding section container's existing `--gap-xl`, not something either component owns.
+
+<Callout type="info">
+  `title` element level follows outline position, same as any other `__title` slot — see [HTML Semantics — Heading element selection](/docs/build-standards/html-semantics#heading-element-selection). `ContentBlock` defaults `titleAs` to `h3` (the common case nests inside a `Card`); pass `h2` when it's a direct outline sibling of the page's `<h1>`.
+</Callout>
+
 ## Container widths
 
 Sections span full viewport width. Content is constrained by an inner container slot — this is CSS, not a wrapper element with a `.container` class.

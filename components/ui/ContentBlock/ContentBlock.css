@@ -1,0 +1,72 @@
+@layer bds-components {
+/* ─── ContentBlock ─────────────────────────────────────────────── */
+
+.bds-content-block {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Title ────────────────────────────────────────────────────── */
+
+.bds-content-block__title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ─── Subtitle ─────────────────────────────────────────────────── */
+
+.bds-content-block__subtitle {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ─── Description ──────────────────────────────────────────────── */
+
+.bds-content-block__description {
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-relaxed);
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ─── Actions ──────────────────────────────────────────────────── */
+
+.bds-content-block__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+/* ─── Rhythm between slots (ADR-023 §3) ────────────────────────────
+   Mode-tied `--gap-*` only — `--gap-xs`/`--gap-tiny` resolve to 0px outside
+   default mode and would collapse the tight gap. Margin-based (not flex
+   `gap`) so each relationship is the exact token, not additive. */
+
+.bds-content-block__title + .bds-content-block__subtitle {
+  margin-top: var(--gap-sm);
+}
+
+:is(.bds-content-block__title, .bds-content-block__subtitle)
+  + .bds-content-block__description {
+  margin-top: var(--gap-md);
+}
+
+:is(
+    .bds-content-block__title,
+    .bds-content-block__subtitle,
+    .bds-content-block__description
+  )
+  + .bds-content-block__actions {
+  margin-top: var(--gap-md);
+}
+}
