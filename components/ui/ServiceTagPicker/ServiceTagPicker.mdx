@@ -1,0 +1,31 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './ServiceTagPicker.stories';
+
+<Meta of={Stories} />
+
+# Service tag picker
+
+<ComponentLinks slug="service-tag-picker" />
+
+Single-select radiogroup of [ServiceTag](?path=/docs/components-service-tag--docs) pills for choosing a Brik service category. Colors and labels come from the shared `categoryConfig`, so consumers stop maintaining a parallel category/color taxonomy.
+
+## Default
+
+Use the Controls panel to switch `value`, `size`, and `disabled`.
+
+<Canvas of={Stories.Default} />
+
+## Controlled selection
+
+Clicking a pill (or arrowing within the group) updates the selected category. Keyboard behavior is the browser's native radiogroup — Tab to the group, arrows to move selection — so there is no custom key handling.
+
+<Canvas of={Stories.WithControlledSelection} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Accessibility** — Each option is a visually-hidden native `<input type="radio">` wrapped in a `<label>` around a `ServiceTag`. The group is a `role="radiogroup"`; the selected pill carries an emphasis ring and the focused radio shows a focus outline.

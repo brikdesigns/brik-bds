@@ -85,6 +85,7 @@ export * from './SegmentedControl';
 export * from './Select';
 export * from './SelectableMediaTile';
 export * from './ServiceTag';
+export * from './ServiceTagPicker';
 // Internal shared hooks (not part of the public package surface — barrel
 // export required by the component-completeness pre-commit check)
 export * from './shared';

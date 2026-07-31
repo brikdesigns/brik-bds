@@ -1,0 +1,78 @@
+---
+title: Service tag picker
+description: Single-select radiogroup of ServiceTag pills for choosing a Brik service category.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+ServiceTagPicker is a single-select control for picking a **Brik service category** — Brand, Marketing, Information, Product, Back Office. It renders each category as a selectable [ServiceTag](/docs/components/service-tag) pill, drawing colors and labels from the shared `categoryConfig` so callers never restate the taxonomy.
+
+## Use it for
+
+- Assigning a service category to a service line, event, or record
+- Any single-choice picker where the options are the Brik service lines
+
+## Import
+
+```tsx
+import { ServiceTagPicker } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+import { useState } from 'react';
+import type { ServiceLine } from '@brikdesigns/bds';
+
+const [category, setCategory] = useState<ServiceLine>('brand');
+
+<ServiceTagPicker value={category} onChange={setCategory} />
+```
+
+### Sizes
+
+The `size` prop is forwarded to the underlying ServiceTag pills.
+
+- **`sm`** — dense forms and inline editing
+- **`md`** — default for panels and sheets
+- **`lg`** — prominent, page-level selection
+
+### Limiting the options
+
+Pass `categories` to offer a subset, in your own order. Omit it to render all canonical service lines.
+
+```tsx
+<ServiceTagPicker
+  value={category}
+  onChange={setCategory}
+  categories={['brand', 'marketing', 'product']}
+/>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use ServiceTagPicker for non-service categories.** It is bound to the Brik service lines. For a generic single choice, use [SegmentedControl](/docs/components/segmented-control) or [Select](/docs/components/select).
+</Callout>
+
+- **Don't use it for multi-select.** It is single-select; for multiple categories use a Checkbox group or [MultiSelect](/docs/components/multi-select).
+- **Don't restate the category list.** Import `SERVICE_LINES` rather than hard-coding the categories.
+
+## Accessibility
+
+- Renders a `<div role="radiogroup">`; each option is a visually-hidden native `<input type="radio">` wrapped in a `<label>` around a ServiceTag.
+- Keyboard behavior is the browser's native radiogroup — Tab reaches the group, arrow keys move selection — with no custom key handling.
+- The selected pill carries an emphasis ring; the focused radio shows a focus outline.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `ServiceLine` | — |
+| `onChange` | `(category: ServiceLine) => void` | — |
+| `categories` | `readonly ServiceLine[]` | `SERVICE_LINES` |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `disabled` | `boolean` | `false` |
+| `ariaLabel` | `string` | `'Service category'` |

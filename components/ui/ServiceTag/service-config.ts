@@ -37,6 +37,22 @@ export const categoryConfig: Record<ServiceLine, { token: string; label: string 
   service: { token: 'orange', label: 'Back Office' },
 };
 
+/**
+ * Canonical, ordered list of the real service lines — the display order used
+ * across the Brik ecosystem. Excludes the **@deprecated** `service` alias (it
+ * duplicates `back-office`), so it is safe to map over for pickers/legends
+ * without rendering a category twice. Single source of truth for consumers that
+ * previously kept their own parallel category arrays (e.g. the portal's
+ * `SERVICE_TAG_CATEGORIES`).
+ */
+export const SERVICE_LINES: readonly ServiceLine[] = [
+  'brand',
+  'marketing',
+  'information',
+  'product',
+  'back-office',
+] as const;
+
 export const serviceIconOverrides: Record<string, string> = {
   // Brand
   'Brand Identity': 'brand-design',

@@ -5,6 +5,7 @@ export type { ServiceTagProps, ServiceTagVariant } from './ServiceTag';
 // Shared service-tag domain config — re-exported for consumer convenience
 export {
   categoryConfig,
+  SERVICE_LINES,
   serviceIconOverrides,
   normalizeServiceName,
   resolveServiceIcon,
