@@ -25,7 +25,7 @@ The trigger was an events-landing cleanup (BRIK-WEB-68): a single CMS prose blob
    | Relationship | Token | default | compact | comfortable | spacious |
    |---|---|---|---|---|---|
    | title → subtitle (tight) | `--gap-sm` | 6 | 2 | 8 | 16 |
-   | title/subtitle → paragraph (medium) | `--gap-md` | 8 | 4 | 32 | 48 |
+   | title/subtitle/description → paragraph or actions (medium) | `--gap-md` | 8 | 4 | 32 | 48 |
    | paragraph → paragraph (wide) | `--gap-lg` | 16 | 8 | 40 | 56 |
    | block → block (unchanged) | `--gap-xl` | 24 | 16 | 48 | 104 |
 
