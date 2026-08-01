@@ -15,8 +15,8 @@ export interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
   children: ReactNode;
   /** Layout direction for form fields */
   layout?: FormLayout;
-  /** Gap between form fields */
-  gap?: 'sm' | 'md' | 'lg';
+  /** Gap between form fields — value names match the emitted `--gap-*` token */
+  gap?: 'md' | 'lg' | 'xl';
   /** Form-level error message */
   error?: string;
   /** Form-level success message */
@@ -54,7 +54,7 @@ export interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
 export function Form({
   children,
   layout = 'vertical',
-  gap = 'md',
+  gap = 'lg',
   error,
   success,
   title,

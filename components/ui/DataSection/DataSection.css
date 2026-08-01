@@ -84,6 +84,7 @@
 .bds-data-section__skeleton-field {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  /* Mirrors Field's stacked label ↔ value tight step (ADR-023 map: --gap-sm). */
+  gap: var(--gap-sm);
 }
 }

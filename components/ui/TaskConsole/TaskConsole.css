@@ -54,7 +54,8 @@
 .bds-task-console__header-text {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  /* Title ↔ subtitle is the tight step (ADR-023 content-rhythm map: --gap-sm). */
+  gap: var(--gap-sm);
   min-width: 0;
   flex: 1;
 }

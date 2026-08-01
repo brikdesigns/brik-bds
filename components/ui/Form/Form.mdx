@@ -21,7 +21,7 @@ Form has no semantic-variant axis — all variation (layout, gap, title, descrip
 <Canvas of={Stories.Default} />
 
 - **`layout`** — `vertical` (default) stacks fields; `horizontal` lays them out inline (use with the search-form pattern below).
-- **`gap`** — `sm` / `md` (default) / `lg`. Controls the vertical rhythm between fields.
+- **`gap`** — `md` / `lg` (default) / `xl`, named for the `--gap-*` token it emits. Controls the vertical rhythm between fields.
 - **`title` / `description`** — optional header pair; the title renders as an `h3`, description as a `p` underneath.
 - **`error` / `success`** — inline form-level messaging announced via `role="alert"` / `role="status"`. Pass at most one.
 - **`footer`** — typically a submit `<Button>`; can hold a button group for submit + cancel.
