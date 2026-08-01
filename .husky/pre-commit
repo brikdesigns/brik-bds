@@ -107,6 +107,15 @@ if [ -n "$STAGED_TSX" ] || [ -n "$STAGED_CSS" ]; then
     node scripts/lint-inline-var.mjs --staged
   fi
 
+  # Ban NEW hardcoded px/rem text-rhythm spacing in staged component CSS
+  # (ADR-023 §3 / brik-bds#1608). Content rhythm comes from the mode-tied
+  # `--gap-*` scale, never a literal; reasoned `bds-lint-ignore` exempts a
+  # genuine non-rhythm case.
+  if [ -n "$STAGED_CSS" ]; then
+    echo "Checking staged CSS for hardcoded text-rhythm spacing..."
+    node scripts/lint-content-rhythm.mjs --staged
+  fi
+
   # JSDoc / story-metadata gate. Whole-repo scan (fast) — fires only when a
   # component or story TSX is staged so we don't pay the cost on token-only
   # commits. Enforces @summary on every component + story export and a
