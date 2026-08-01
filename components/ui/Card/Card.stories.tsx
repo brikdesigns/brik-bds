@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Card, CardTitle, CardDescription, CardFooter } from './Card';
+import { Image } from '../Image';
 import { Logo } from '../Logo';
 import { Button } from '../Button';
 import { Badge } from '../Badge';
@@ -16,6 +17,19 @@ const iphoneThumb =
       '<rect x="77" y="32" width="46" height="136" rx="8" fill="#3a7bd5"/>' +
       '<rect x="90" y="28" width="20" height="5" rx="2.5" fill="#0d0d0f"/>' +
       '<rect x="88" y="170" width="24" height="3" rx="1.5" fill="#48484a"/>' +
+      '</svg>',
+  );
+
+/* Story-only 3:2 landscape thumbnail (data URI, no network) — a schematic
+   photo standing in for real display-card media in the image-slot demos. */
+const landscapeThumb =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200">' +
+      '<rect width="300" height="200" fill="#eef1f4"/>' +
+      '<circle cx="232" cy="52" r="24" fill="#f4c542"/>' +
+      '<path d="M0 200 L96 104 L156 156 L214 96 L300 200 Z" fill="#5b8266"/>' +
+      '<path d="M0 200 L70 150 L138 200 Z" fill="#3f5e4b"/>' +
       '</svg>',
   );
 
@@ -344,20 +358,7 @@ export const Display: Story = {
     title: 'Service one',
     description:
       'A two-line card description that sets the type rhythm without trying to tell the whole story.',
-    image: (
-      <div
-        style={{
-          aspectRatio: '3 / 2',
-          background: 'var(--surface-secondary)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'var(--text-muted)',
-        }}
-      >
-        Image slot
-      </div>
-    ),
+    image: <Image src={landscapeThumb} alt="Marketing service" ratio="3-2" />,
     tag: <Badge>Marketing</Badge>,
     badge: <Badge status="positive">Has Options</Badge>,
     action: (
@@ -419,21 +420,7 @@ export const DisplayRow: Story = {
     title: 'Web Design Retainer',
     description:
       'Ongoing design partnership for teams shipping a steady stream of marketing pages, lifecycle assets, and product UI.',
-    image: (
-      <div
-        style={{
-          aspectRatio: '3 / 2',
-          background: 'var(--surface-secondary)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'var(--text-muted)',
-          height: '100%',
-        }}
-      >
-        Image slot
-      </div>
-    ),
+    image: <Image src={landscapeThumb} alt="Web design retainer" ratio="3-2" />,
     tag: <Badge>Marketing</Badge>,
     extras: (
       <>
