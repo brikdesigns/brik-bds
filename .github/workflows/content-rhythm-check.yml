@@ -1,0 +1,44 @@
+name: Content Rhythm Check
+
+# Fails when a component CSS file sets a rhythm-bearing property (vertical
+# margin / gap) to a hardcoded px/rem/em literal between text-role elements
+# (ADR-023 §3, brik-bds#1608). Content rhythm comes from the mode-tied
+# `--gap-*` scale — a literal doesn't re-modulate per spacing mode. A genuine
+# non-rhythm case is exempted with a reasoned `bds-lint-ignore` (#1469).
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'components/**/*.css'
+      - 'scripts/lint-content-rhythm.mjs'
+  push:
+    branches:
+      - main
+    paths:
+      - 'components/**/*.css'
+      - 'scripts/lint-content-rhythm.mjs'
+
+concurrency:
+  group: content-rhythm-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  content-rhythm-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Content rhythm check
+        run: npm run lint-content-rhythm
