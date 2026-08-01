@@ -51,7 +51,7 @@
     "---Control---",
     "checklist",
     "completion-toggle",
-    "switch",
+    "toggle-switch",
     "slider",
     "stepper",
     "progress-stepper",
