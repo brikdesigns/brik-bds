@@ -98,7 +98,17 @@ const callout = section.items[0];
   .bds-about__narrative {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-md);
+  }
+
+  /* Content rhythm (ADR-023 §3), mirroring the React twin in About.css:
+     eyebrow→title is tight (--gap-sm), title→lead is medium (--gap-md). */
+
+  .bds-about__narrative > * + * {
+    margin-top: var(--gap-md);
+  }
+
+  .bds-about__subtitle + .bds-about__title {
+    margin-top: var(--gap-sm);
   }
 
   .bds-about__subtitle {
@@ -169,7 +179,9 @@ const callout = section.items[0];
   .bds-about__callout figcaption {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xs);
+    /* Tight text pairing: --gap-sm. Not --gap-xs, which resolves to 0px
+       outside default spacing mode (ADR-023 §3). */
+    gap: var(--gap-sm);
   }
 
   .bds-about__callout cite {

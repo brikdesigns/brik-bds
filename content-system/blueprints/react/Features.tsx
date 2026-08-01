@@ -115,8 +115,11 @@ export function Features({
       {...rest}
     >
       <div className="bds-blueprint-section__container">
+        {/* gap="none": the header's three text roles step at two different
+            sizes (ADR-023 §3), which a uniform Stack gap cannot express.
+            Features.css owns the adjacency margins instead. */}
         {hasHeader && (
-          <Stack as="header" gap="md" className="bds-features__header">
+          <Stack as="header" gap="none" className="bds-features__header">
             {subtitle && <p className="bds-features__subtitle">{subtitle}</p>}
             {title && (
               <h2 id={titleId} className="bds-features__title">

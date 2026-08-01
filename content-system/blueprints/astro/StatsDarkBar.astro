@@ -95,7 +95,9 @@ const items = section.items;
   .bp-stats-dark-bar__item {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-tiny);
+    /* Value↔label is a tight text pairing: --gap-sm. Not --gap-tiny, which
+       resolves to 0px outside default spacing mode (ADR-023 §3). */
+    gap: var(--gap-sm);
     padding-block: var(--padding-sm);
     border-left: 1px solid var(--bds-stats-dark-bar-divider, var(--border-secondary));
     padding-left: var(--padding-md);
