@@ -166,7 +166,11 @@
 .bds-card__preset-control-text {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  /* Title → description is the readable-separation step (ADR-023
+     content-rhythm map: heading/subtitle ↔ body = `--gap-md`), matching the
+     display-preset card bodies so the same relationship reads consistently
+     across variants. */
+  gap: var(--gap-md);
   min-width: 0;
 }
 
