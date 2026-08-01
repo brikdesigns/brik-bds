@@ -31,6 +31,9 @@
 
 set -euo pipefail
 
+# shellcheck source=scripts/lib/mirror-widgets.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/mirror-widgets.sh"
+
 # ─── Configuration ────────────────────────────────────────────────
 BDS_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 BDS_REMOTE="origin"
@@ -509,6 +512,17 @@ propagate_npm() {
     git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
     echo ""
     return
+  fi
+
+  # Re-sync mirrored widgets in the SAME commit as the bump (#1587) — without
+  # this the portal's #1583 parity gate fails the PR propagate just opened.
+  # See scripts/lib/mirror-widgets.sh for why the source is node_modules.
+  local synced
+  synced=$(sync_mirrored_widgets "$worktree_path" "$BDS_PACKAGE_NAME" \
+             "$BDS_DIR/scripts/sync-devbar-widgets.sh" --list-portal-mirror)
+  if [ -n "$synced" ]; then
+    echo "$synced" | while IFS= read -r f; do git add "$f"; done
+    info "Re-synced $(echo "$synced" | wc -l | tr -d ' ') mirrored widget(s) from the installed package"
   fi
 
   git add package.json package-lock.json

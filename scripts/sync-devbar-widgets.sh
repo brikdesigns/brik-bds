@@ -25,13 +25,26 @@
 # Usage:
 #   ./scripts/sync-devbar-widgets.sh            # guarded sync
 #   ./scripts/sync-devbar-widgets.sh --force    # overwrite divergent copies, reseed state
+#   ./scripts/sync-devbar-widgets.sh --list-portal-mirror
+#       Print the widget filenames mirrored into brik-client-portal's
+#       scripts/mockup-shared/, one per line, and exit. propagate.sh reads this
+#       when bumping the portal so the mirror is re-synced in the same commit as
+#       the version bump — the portal's #1583 parity gate asserts the committed
+#       mirror is byte-identical to the INSTALLED package, so a bump alone lands
+#       a red PR (brikdesigns/brik-client-portal#2585 fixed one by hand).
+#       A list rather than a sync: propagate must write into its own PR worktree
+#       and source from that worktree's node_modules, while the registrations
+#       below target the primary checkout. Sharing the list keeps one place to
+#       add a widget; sharing the copy would need the destinations to move.
 
 set -e
 
 FORCE=0
+LIST_PORTAL_MIRROR=0
 for arg in "$@"; do
   case "$arg" in
     --force) FORCE=1 ;;
+    --list-portal-mirror) LIST_PORTAL_MIRROR=1 ;;
     # Print the header comment and stop at the first non-comment line, so the
     # range cannot drift out of date when the header grows (#1561).
     -h|--help) sed -n '2,${/^#/!q;p;}' "$0"; exit 0 ;;
@@ -102,8 +115,12 @@ register() {
   SRCS+=("$1"); DESTS+=("$2"); LABELS+=("$3")
 }
 
-echo "Syncing canonical devbar widgets from $WIDGETS"
-echo ""
+# Silent under --list-portal-mirror: that output is parsed by propagate.sh, so a
+# banner on stdout would be read as a filename.
+if [ "$LIST_PORTAL_MIRROR" != "1" ]; then
+  echo "Syncing canonical devbar widgets from $WIDGETS"
+  echo ""
+fi
 
 # brik-client-portal mirror (mockup pipeline)
 PORTAL_MIRROR="$GH_ROOT/product/brik-client-portal/scripts/mockup-shared"
@@ -111,6 +128,18 @@ register "$WIDGETS/devbar.js"          "$PORTAL_MIRROR/devbar.js"          "port
 register "$WIDGETS/feedback-widget.js" "$PORTAL_MIRROR/feedback-widget.js" "portal mirror     feedback-widget.js"
 register "$WIDGETS/inspect-widget.js"  "$PORTAL_MIRROR/inspect-widget.js"  "portal mirror     inspect-widget.js"
 register "$WIDGETS/events-widget.js"   "$PORTAL_MIRROR/events-widget.js"   "portal mirror     events-widget.js"
+
+# Emit just the mockup-shared mirror filenames, before the other consumers are
+# registered — propagate.sh mirrors only this set. Exiting here keeps the list
+# authoritative: a widget added above appears in propagate's next run for free.
+if [ "$LIST_PORTAL_MIRROR" = "1" ]; then
+  for i in "${!DESTS[@]}"; do
+    case "${DESTS[$i]}" in
+      "$PORTAL_MIRROR"/*) basename "${DESTS[$i]}" ;;
+    esac
+  done
+  exit 0
+fi
 
 # brik-client-portal public/ (browser-served)
 PORTAL_PUBLIC="$GH_ROOT/product/brik-client-portal/public"

@@ -1,0 +1,73 @@
+name: Mirror Widgets Check
+
+# Locks the step that keeps a propagate bump PR green: when a release changes a
+# devbar widget, the consumer's mirrored copy must be re-synced in the SAME
+# commit as the version bump.
+#
+# brik-client-portal keeps a copy of the widgets under scripts/mockup-shared/
+# (they ship raw to Supabase Storage for self-contained client mockups), and its
+# #1583 parity gate asserts that copy is byte-identical to the INSTALLED package.
+# propagate.sh committed only package.json + package-lock.json, so any release
+# touching a widget opened a PR that failed the consumer's own CI and sat waiting
+# for a human — brikdesigns/brik-client-portal#2585 is one that was re-synced by
+# hand. The unattended 09:00 run cannot do that. brik-bds#1587.
+#
+# Cheap and hermetic: bash only, fixture directories, no npm, no network. It
+# covers the copy decision, not a full release round-trip — that needs a
+# published version and the consumer's CI, and is called out in the test header.
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/lib/mirror-widgets.sh'
+      - 'scripts/lib/tests/test-mirror-widgets.sh'
+      - 'scripts/propagate.sh'
+      - 'scripts/sync-devbar-widgets.sh'
+      - '.github/workflows/mirror-widgets-check.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/lib/mirror-widgets.sh'
+      - 'scripts/lib/tests/test-mirror-widgets.sh'
+      - 'scripts/propagate.sh'
+      - 'scripts/sync-devbar-widgets.sh'
+      - '.github/workflows/mirror-widgets-check.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: mirror-widgets-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  mirror-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Mirror re-sync contract
+        run: bash scripts/lib/tests/test-mirror-widgets.sh
+
+      # The filename list has one home. If --list-portal-mirror stops emitting
+      # bare filenames, propagate silently mirrors nothing and the bug returns
+      # looking exactly like a pass.
+      - name: The widget list is still machine-readable
+        run: |
+          out="$(bash scripts/sync-devbar-widgets.sh --list-portal-mirror)"
+          echo "$out"
+          [ -n "$out" ] || { echo "::error::--list-portal-mirror printed nothing"; exit 1; }
+          while IFS= read -r line; do
+            case "$line" in
+              *.js) : ;;
+              *) echo "::error::not a bare widget filename: $line"; exit 1 ;;
+            esac
+          done <<< "$out"
+
+      - name: shellcheck
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+          # SC2148: sourced library, no shebang contract. SC1091: sourced at runtime.
+          shellcheck -e SC2148 scripts/lib/mirror-widgets.sh
+          shellcheck -e SC1091 scripts/lib/tests/test-mirror-widgets.sh
