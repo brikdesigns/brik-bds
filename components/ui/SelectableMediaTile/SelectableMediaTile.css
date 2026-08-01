@@ -42,21 +42,13 @@
   }
 
   /* ─── Media box ─────────────────────────────────────────────────
-     aspect-ratio comes inline from the `aspectRatio` prop (default
-     4 / 3); the box reserves space and clips the image. */
+     Renders through <Frame customRatio={aspectRatio} fit="cover">, which
+     owns the aspect-ratio, sizing, clipping, and the image object-fit.
+     This rule adds only the placeholder backdrop shown before the image
+     loads (and behind `object-fit` letterboxing). */
 
   .bds-selectable-media-tile__media {
-    position: relative;
-    display: block;
-    width: 100%;
     background-color: var(--surface-secondary);
-  }
-
-  .bds-selectable-media-tile__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
   }
 
   /* ─── Selected check overlay ────────────────────────────────────
