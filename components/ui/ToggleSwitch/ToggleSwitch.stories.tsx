@@ -85,7 +85,7 @@ export const InteractionTestLabelTypography: Story = {
     const toggle = canvas.getByRole('switch');
 
     const label = canvas.getByText('Enable feature');
-    await expect(label).toHaveClass('bds-switch__label--lg');
+    await expect(label).toHaveClass('bds-toggle-switch__label--lg');
     await expect(getComputedStyle(label).fontSize).toBe('18px');
 
     await expect(toggle).not.toBeChecked();
