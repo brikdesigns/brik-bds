@@ -1,0 +1,77 @@
+---
+title: Page Grid
+description: The horizontal frame around every Brik page — one width-container recipe, one canonical gutter token, and which content width each band role gets.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+[Content Rhythm](/docs/build-standards/content-rhythm) governs the vertical axis; this page governs the horizontal one. Every content band on a Brik page — a marketing section's container, a header, a footer, a consumer site's nav — is framed the same way: a `--content-width-*` band, centred, inset from the viewport edge by the canonical page gutter. One recipe, so BDS sections and consumer containers stay flush-aligned at every breakpoint ([ADR-025](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-025-page-grid-standard.md)).
+
+## The width-container recipe
+
+Three declarations, always together:
+
+```css
+.my-container {
+  max-width: var(--content-width-xl);   /* the band */
+  margin-inline: auto;                  /* centred */
+  padding-inline: var(--gutter-page);   /* the page gutter */
+}
+```
+
+`--content-width-xl` (1280px) is the default band — the value the section shell, `SiteHeader`, `Footer`, and the brikdesigns nav all resolve to. Narrower bands are a per-role choice from the [width roles table](#content-width-roles), not a new number.
+
+The `lint-page-grid` gate fails any container rule whose `padding-inline` bypasses `--gutter-page` — a container on an ad-hoc inset drifts out of alignment with every other band on the page.
+
+## Two kinds of gutter
+
+"Gutter" names two different relationships. Only the page edge gets a dedicated token; space between columns is already governed by the [component rhythm map](/docs/build-standards/content-rhythm#component-rhythm).
+
+| Sense | Relationship | Mechanism |
+|---|---|---|
+| Page gutter | Viewport edge ↔ content band | `padding-inline: var(--gutter-page)` on the container |
+| Column gutter | Sibling ↔ sibling in a `Grid` or `Cluster` | The primitive's `gap`, from the `--gap-*` scale |
+
+This is the gap-vs-padding rule from [Content Rhythm](/docs/build-standards/content-rhythm#gap-padding-or-margin) applied horizontally: gap is between siblings, padding is the edge.
+
+`--gutter-page` is a fixed alias of `--padding-lg`, so it re-modulates under [spacing modes](/docs/primitives/spacing#spacing-modes) but does not vary with viewport width. That is deliberate: a fluid `clamp()` gutter misaligns consumer containers from BDS section content at intermediate widths — brikdesigns shipped one and had to walk it back. In TS, import `pageGutter` from `@bds-tokens` rather than writing the `var()` string inline.
+
+## Content width roles
+
+| Token | Width | Role |
+|---|---|---|
+| `--content-width-narrow` | 640px | Prose, reading columns, focused forms |
+| `--content-width-default` | 800px | Standard text-led body sections |
+| `--content-width-wide` | 1024px | Feature grids, CTA bands |
+| `--content-width-xl` | 1280px | The page band — hero, header, footer, most sections |
+| `--content-width-full` | 100% | Full-bleed; prefer an explicit width |
+
+These are content constraints, **not** breakpoints — even where the pixel values coincide. For media queries use the `breakpoints` TS export from `@bds-tokens`; CSS custom properties cannot appear inside `@media` conditions, so the `--breakpoint-*` CSS variables are reference-only.
+
+<Callout type="warn">
+  There is no responsive-spacing axis: density modes are the only spacing modulation in BDS. Do not introduce breakpoint-varying gutters or gaps.
+</Callout>
+
+## Where the recipe is set
+
+Like the rhythm scale, you rarely write the recipe by hand — it is baked into the layer that owns each surface.
+
+- **Marketing sections** → `.bds-blueprint-section__container` ([ADR-021](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-021-blueprint-section-shell.md)). Override band or inset via the section's hooks, never by hand-rolling a sibling container:
+
+```css
+.bds-cta__container {
+  --bds-blueprint-section-content-width: var(--content-width-wide);
+  --bds-blueprint-section-padding-inline: var(--padding-xl);
+}
+```
+
+- **Product apps** → the `Page` primitive; its `padding` prop sets the shell inset (`lg` is the page gutter).
+- **Full-bleed backgrounds with constrained content** → `Footer`'s `containerMaxWidth` shape: the background spans the viewport while `padding-inline: max(var(--gutter-page), calc((100% - var(--content-width-xl)) / 2))` centres the content band.
+- **Section vertical band** → unchanged from ADR-021: `padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge))`. A page is a stack of full-bleed sections; the vertical band is the clamp, the horizontal band is this recipe.
+
+## Related
+
+- [Content Rhythm](/docs/build-standards/content-rhythm) — the vertical axis this page mirrors.
+- [Page Structure](/docs/build-standards/page-structure) — the HTML skeleton these containers live in.
+- [Composition Layers](/docs/build-standards/composition-layers) — the Section → Layout → Container → Block → Component model.
+- [Spacing](/docs/primitives/spacing) — the `--padding-*` scale behind the gutter and the density modes that modulate it.

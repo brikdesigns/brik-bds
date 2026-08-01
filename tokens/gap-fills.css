@@ -214,6 +214,23 @@
   --content-width-xl:      1280px;  /* hero bands, wide layouts */
   --content-width-full:     100%;   /* full-bleed (use sparingly — prefer explicit widths) */
 
+  /* ── Page gutter (ADR-025) ──
+     The inline inset between the viewport edge and a page's content band —
+     the third leg of the width-container recipe (max-width + margin-inline:
+     auto + padding-inline). One canonical name so BDS containers (section
+     shell, Footer) and consumer containers (nav, page shells) resolve to the
+     SAME inset and stay flush-aligned at every breakpoint.
+
+     A fixed alias of --padding-lg, NOT a fluid clamp: brikdesigns tried a
+     clamp() gutter and had to abandon it because it misaligned the nav from
+     BDS section content (brikdesigns globals.css, --site-gutter). Mode
+     modulation comes free through --padding-lg. Minted here for the same
+     reason as the --border-width-* aliases above — consumers were already
+     inventing the name (--site-gutter). Gutters BETWEEN columns are not this
+     token: sibling↔sibling space is the layout primitive's gap, governed by
+     the ADR-024 rhythm map. */
+  --gutter-page: var(--padding-lg);
+
   /* Breakpoint reference values — supplement figma-tokens.css --breakpoint-mobile/tablet/web.
      These CSS vars are for Figma/documentation reference only.
      Use `breakpoints` TS export from @bds-tokens for actual @media query values. */
