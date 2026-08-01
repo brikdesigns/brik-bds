@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Icon } from '@iconify/react';
 import { CardControl } from './CardControl';
 import { Badge } from '../Badge';
-import { Switch } from '../Switch';
+import { ToggleSwitch } from '../ToggleSwitch';
 
 /**
  * @deprecated Use `Card preset="control"` instead. See the
@@ -36,7 +36,7 @@ export const Default: Story = {
       <CardControl
         {...args}
         badge={<Badge size="xs" status="positive" icon={<Icon icon="ph:check" />} />}
-        action={<Switch checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
+        action={<ToggleSwitch checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
       />
     );
   },

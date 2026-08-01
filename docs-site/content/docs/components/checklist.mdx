@@ -79,7 +79,7 @@ const completed = items.filter((i) => i.checked).length;
   **Don't use Checklist for form selection.** If the box means "this option is selected" (filters, multi-select, opt-in), use [Checkbox](/docs/components/checkbox). Checklist's line-through + completion tint is wrong for a selection.
 </Callout>
 
-- **Don't use it for a single on/off setting.** A lone preference toggle is a [Switch](/docs/components/switch).
+- **Don't use it for a single on/off setting.** A lone preference toggle is a [Toggle Switch](/docs/components/toggle-switch).
 - **Don't rebuild the row.** The label is the click target by design — don't wrap it in another interactive element.
 
 ## Accessibility
@@ -102,5 +102,5 @@ Plus all standard `<label>` HTML attributes (excluding `onChange`).
 ## Related
 
 - [Checkbox](/docs/components/checkbox) — for *selection*, not completion
-- [Switch](/docs/components/switch) — single on/off setting
+- [Toggle Switch](/docs/components/toggle-switch) — single on/off setting
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-checklist--overview)**
