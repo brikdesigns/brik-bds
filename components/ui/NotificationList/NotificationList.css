@@ -61,7 +61,8 @@
   font-size: var(--body-xs);
   color: var(--text-secondary);
   line-height: var(--font-line-height-normal);
-  margin-top: var(--gap-xs);
+  /* Title → body is the readable-separation step (ADR-023 map: --gap-md). */
+  margin-top: var(--gap-md);
 }
 
 /* Timestamp */
@@ -69,7 +70,9 @@
   font-family: var(--font-family-label);
   font-size: var(--body-tiny);
   color: var(--text-muted);
-  margin-top: var(--gap-xs);
+  /* Body → timestamp is the tight step (ADR-023 map: --gap-sm);
+     --gap-xs collapses to 0px outside default spacing mode. */
+  margin-top: var(--gap-sm);
 }
 
 /* ═══════════════════════════════════════════════════════════════

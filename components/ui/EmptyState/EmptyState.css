@@ -39,7 +39,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--gap-sm);
+  /* Title → description is the readable-separation step (ADR-023
+     content-rhythm map: heading ↔ body = --gap-md). */
+  gap: var(--gap-md);
   width: 100%;
 }
 

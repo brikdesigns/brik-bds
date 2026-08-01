@@ -34,7 +34,10 @@
 .bds-card-control__text {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  /* Title → description is the readable-separation step (ADR-023
+     content-rhythm map: heading ↔ body = --gap-md), matching Card's
+     control preset so the same relationship reads consistently. */
+  gap: var(--gap-md);
   min-width: 0;
 }
 

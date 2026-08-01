@@ -8,7 +8,9 @@
 
 .bds-field--stacked {
   flex-direction: column;
-  gap: var(--gap-xs);
+  /* Label ↔ value is the tight step (ADR-023 content-rhythm map: --gap-sm);
+     --gap-xs collapses to 0px outside default spacing mode. */
+  gap: var(--gap-sm);
 }
 
 .bds-field--inline {

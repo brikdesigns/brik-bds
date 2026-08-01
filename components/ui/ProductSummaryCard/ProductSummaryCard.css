@@ -21,7 +21,8 @@
 .bds-product-summary-card__content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  /* Label ↔ value is the tight step (ADR-023 content-rhythm map: --gap-sm). */
+  gap: var(--gap-sm);
   min-width: 0;
 }
 

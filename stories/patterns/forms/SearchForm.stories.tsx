@@ -32,7 +32,7 @@ export const Default: Story = {
       <Form
         title="Quick Search"
         layout="horizontal"
-        gap="sm"
+        gap="md"
         onSubmit={(e) => {
           e.preventDefault();
           (args as { onSubmit?: (e: React.FormEvent) => void }).onSubmit?.(e);
