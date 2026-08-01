@@ -15,6 +15,13 @@
  *
  *   Flagged   — a rhythm-bearing property set to a non-zero px/rem/em literal:
  *                 gap: 8px;   margin-top: 12px;   margin: 0 0 1rem;
+ *             — a mode-collapsing token (`--gap-xs` / `--gap-tiny`, both 0px in
+ *               every non-default spacing mode) on an unambiguously VERTICAL
+ *               property (`row-gap`, `margin`, `margin-top/-bottom/-block*`):
+ *                 margin-top: var(--gap-xs);   row-gap: var(--gap-tiny);
+ *               The `gap` shorthand is exempt from this rule — its direction
+ *               depends on flex-direction, which a line-scanner can't see, and
+ *               horizontal icon/label gaps legitimately use `--gap-xs`.
  *
  *   Allowed   — the same property driven by a token (the whole point):
  *                 gap: var(--gap-md);   margin-top: var(--gap-sm);
@@ -64,6 +71,28 @@ const RHYTHM_PROP_RE =
 
 /** A numeric px/rem/em literal (signed, decimal). */
 const LITERAL_RE = /(-?\d*\.?\d+)(px|rem|em)\b/g;
+
+/**
+ * Properties that are vertical no matter the layout context. The `gap`
+ * shorthand is deliberately absent: its axis depends on flex-direction,
+ * and horizontal icon/label gaps legitimately use `--gap-xs`.
+ */
+const VERTICAL_PROPS = new Set([
+  'row-gap',
+  'margin',
+  'margin-top',
+  'margin-bottom',
+  'margin-block',
+  'margin-block-start',
+  'margin-block-end',
+]);
+
+/**
+ * Tokens that resolve to 0px in every non-default spacing mode
+ * (tokens/modes-spacing.css) — banned from vertical rhythm positions
+ * per ADR-023 §3 / ADR-024.
+ */
+const MODE_COLLAPSING_RE = /var\(\s*--gap-(?:xs|tiny)\s*[,)]/;
 
 /** Files exempt wholesale — the sanctioned element-adjacency owners. */
 const FILE_ALLOWLIST = new Set(['components/ui/Prose/Prose.css']);
@@ -141,7 +170,10 @@ export function scanCssText(text, rel = '') {
     let m;
     while ((m = RHYTHM_PROP_RE.exec(line)) !== null) {
       const [prop, value] = [m[1], m[2]];
-      if (!hasHardcodedLiteral(value)) continue;
+      const literal = hasHardcodedLiteral(value);
+      const collapsing =
+        VERTICAL_PROPS.has(prop.toLowerCase()) && MODE_COLLAPSING_RE.test(value);
+      if (!literal && !collapsing) continue;
       const reason = lintIgnoreReason(line);
       // reason: null → no marker (flag); '' → bare marker (hard-fail, #1469);
       // non-empty → reasoned suppression (allowed).
@@ -152,6 +184,7 @@ export function scanCssText(text, rel = '') {
         prop,
         text: line.trim(),
         bare: reason === '',
+        collapsing: !literal && collapsing,
       });
     }
   }
@@ -176,11 +209,15 @@ function render(violations, scanned) {
     return `lint-content-rhythm: clean — ${scanned} CSS file(s) scanned, 0 hardcoded text-rhythm spacing\n`;
   }
   const out = [
-    `lint-content-rhythm: ${violations.length} hardcoded text-rhythm spacing declaration(s) in component CSS`,
+    `lint-content-rhythm: ${violations.length} rhythm violation(s) in component CSS (hardcoded literal or mode-collapsing token)`,
     '',
   ];
   for (const v of violations) {
-    const tag = v.bare ? '  ← bare bds-lint-ignore (needs a reason, brik-bds issue 1469)' : '';
+    const tag = v.bare
+      ? '  ← bare bds-lint-ignore (needs a reason, brik-bds issue 1469)'
+      : v.collapsing
+        ? '  ← --gap-xs/--gap-tiny is 0px outside default spacing mode (ADR-024)'
+        : '';
     out.push(`  ${v.file}:${v.line}  ${v.text}${tag}`);
   }
   out.push('');

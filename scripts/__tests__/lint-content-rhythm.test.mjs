@@ -72,6 +72,48 @@ describe('scanCssText — rhythm-bearing properties', () => {
   });
 });
 
+describe('scanCssText — mode-collapsing tokens on vertical props (ADR-024)', () => {
+  it.each([
+    ['margin-top: var(--gap-xs)'],
+    ['margin-bottom: var(--gap-tiny)'],
+    ['row-gap: var(--gap-xs)'],
+    ['margin-block-start: var(--gap-tiny)'],
+    ['margin: var(--gap-xs) 0'],
+  ])('flags %s', (decl) => {
+    const v = scanCssText(`.x { ${decl}; }`);
+    expect(v).toHaveLength(1);
+    expect(v[0].collapsing).toBe(true);
+  });
+
+  it('does NOT flag the gap shorthand (direction-ambiguous, horizontal use is legit)', () => {
+    expect(scanCssText('.x { gap: var(--gap-xs); }')).toHaveLength(0);
+  });
+
+  it('does NOT flag column-gap (horizontal)', () => {
+    expect(scanCssText('.x { column-gap: var(--gap-tiny); }')).toHaveLength(0);
+  });
+
+  it('does NOT flag non-collapsing tokens on vertical props', () => {
+    expect(scanCssText('.x { margin-top: var(--gap-sm); row-gap: var(--gap-lg); }')).toHaveLength(0);
+  });
+
+  it('does NOT flag a component-scoped var that merely defaults to a collapsing token name elsewhere', () => {
+    expect(scanCssText('.x { margin-top: var(--bds-thing); }')).toHaveLength(0);
+  });
+
+  it('flags a collapsing token used as the outer var (with fallback)', () => {
+    const v = scanCssText('.x { margin-top: var(--gap-xs, 4px); }');
+    expect(v).toHaveLength(1);
+    expect(v[0].collapsing).toBe(true);
+  });
+
+  it('allows a reasoned ignore on a collapsing token', () => {
+    const css =
+      '.x { margin-top: var(--gap-xs); /* bds-lint-ignore — deliberate collapse in dense mode */ }';
+    expect(scanCssText(css)).toHaveLength(0);
+  });
+});
+
 describe('scanCssText — bds-lint-ignore semantics (#1469)', () => {
   it('allows a reasoned ignore', () => {
     const css = '.x { margin: -1px; /* bds-lint-ignore — visually-hidden clip, not rhythm */ }';

@@ -20,8 +20,23 @@ Tighter means more coupled. As the relationship loosens — words in a heading p
 | Section ↔ section | Page-level break | `padding-block: clamp(--padding-xl, 7vw, --padding-huge)` | 32–48px, fluid |
 
 <Callout type="warn">
-  Never use `--gap-xs` or `--gap-tiny` for content rhythm — both collapse to `0px` outside the default [spacing mode](/docs/primitives/spacing#spacing-modes), which would erase the tight step. And never hardcode a px value: the scale re-modulates per mode, a literal does not.
+  Never use `--gap-xs` or `--gap-tiny` in any vertical rhythm position — content or component. Both collapse to `0px` outside the default [spacing mode](/docs/primitives/spacing#spacing-modes), which erases the step entirely. And never hardcode a px value: the scale re-modulates per mode, a literal does not. The `lint-content-rhythm` gate enforces both rules on component CSS.
 </Callout>
+
+## Component rhythm
+
+The same discipline extends one layer up: vertical space **between components** is also keyed to the relationship, not to the component ([ADR-024](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-024-layout-rhythm-map.md)).
+
+| Relationship | Intent | Token | Base |
+|---|---|---|---|
+| Label ↔ the control it names | Reads as one unit — meter label ↔ bar, stacked field label ↔ value | `--gap-sm` | 6px |
+| Row ↔ row in a dense container | Menu options, list items, bullet items (comfortable density steps up one) | `--gap-sm` | 6px |
+| Control ↔ control in a cluster | Footer actions, a filter-chip row | `--gap-md` | 8px |
+| Field ↔ field in a form | Distinct inputs, one flow | `--gap-lg` | 16px |
+| Card ↔ card in a grid or list | Separate bounded units | `--gap-lg` | 16px |
+| Container ↔ container | Same as block ↔ block above | `--gap-xl` | 24px |
+
+Layout primitives (`Stack`, `Grid`, `Cluster`) stay generic — they can't know which relationship they're arranging, so this table governs **which `gap` value you pass**, not the primitive. Horizontal gaps (icon ↔ label, chips in a row) are outside this table; `--gap-xs` remains legitimate there.
 
 ## Gap, padding, or margin
 
