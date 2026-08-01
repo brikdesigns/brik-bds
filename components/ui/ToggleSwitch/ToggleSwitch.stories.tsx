@@ -46,27 +46,7 @@ export const Default: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. VARIANTS — Q3 semantic starting points
-   ═══════════════════════════════════════════════════════════════ */
-
-/**
- * Accent-knob variant — the track stays a neutral gray in both states and the
- * knob carries state (brand-fill when on, muted-gray when off). Used where a
- * subtler track reads better, e.g. an inline theme toggle.
- * @summary Neutral track; the knob carries on/off state
- */
-export const AccentKnob: Story = {
-  args: {
-    label: 'Dark mode',
-    variant: 'accent-knob',
-    size: 'lg',
-    checked: true,
-    onChange: fn(),
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. INTERACTION TESTS — play-only, hidden from MCP discovery
+   2. INTERACTION TESTS — play-only, hidden from MCP discovery
    ═══════════════════════════════════════════════════════════════ */
 
 /**
