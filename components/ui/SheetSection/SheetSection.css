@@ -45,9 +45,11 @@
 }
 
 /* Heading + content gap is tighter than content gap so the heading
-   reads as the label for the block below it. */
+   reads as the label for the block below it. `--gap-sm` is the tightest
+   step that stays non-zero across all spacing modes (ADR-023 §3 —
+   `--gap-xs` collapses to 0px outside default mode). */
 .bds-sheet-section__heading + .bds-sheet-section__content,
 .bds-sheet-section__description + .bds-sheet-section__content {
-  margin-top: var(--gap-xs);
+  margin-top: var(--gap-sm);
 }
 }
