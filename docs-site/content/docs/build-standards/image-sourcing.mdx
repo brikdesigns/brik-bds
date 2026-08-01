@@ -1,0 +1,37 @@
+---
+title: Image Sourcing
+description: Where imagery comes from on a Brik web build — the photography-first sourcing ladder, the AI-imagery policy, and how to wire the asset into Image and Frame.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+BDS owns the *shape* of an image — its aspect ratio, fit, and semantics — through [Image](/docs/components/image) and [Frame](/docs/components/frame). It does **not** own the asset. Choosing where a picture comes from is a build decision, and on a client site the wrong source is a brand and trust problem, not a layout one. This page is the sourcing rule an agent should follow before it reaches for any picture.
+
+## The sourcing ladder
+
+Work down the ladder — use the highest source that fits the slot, and only drop to the next when it genuinely can't.
+
+| Source | Use for | Status |
+|---|---|---|
+| Real client photography | Anything depicting the client — team, space, work, product | **Default.** Always prefer a real photo of the real thing. |
+| AI illustration (Recraft) | Motifs, backdrops, spot illustration, vector marks, decorative furniture | Allowed. Illustration reads as illustration — it never claims to be a photo. |
+| AI enhancement of a real photo | Upscaling, cleanup, or background work on an existing *real* client photo | Allowed. The subject is still real; AI only improves the capture. |
+| AI-fabricated photorealistic imagery | — | **Not allowed (yet).** Never generate a photo-real image of a person, place, or product that does not exist. |
+
+<Callout type="warn">
+  Never ship an AI-fabricated photorealistic image as if it were a real photograph. A generated "photo" of a team, office, or product the client does not have misrepresents the business — the line is fabricated *photorealism*, not AI involvement. Illustration and enhancement of real photos are both fine.
+</Callout>
+
+## Wiring the asset into a component
+
+Once you have the asset, the frame is BDS's job. Pass it through [Image](/docs/components/image) so the shape is locked and the layout reserves space before the picture paints:
+
+```tsx
+<Image src={hero} alt="The Vale Partners team in their Memphis office" ratio="3-2" />
+```
+
+- **Always set `ratio`** (or wrap raw media in [Frame](/docs/components/frame)) so the box holds its shape and nothing shifts as the image loads — the primary CLS lever.
+- **Always write real `alt`.** Describe what the picture shows; pass `alt=""` only for purely decorative illustration.
+- **Set `eager` on the one above-the-fold hero** so it loads with high priority; everything else lazy-loads by default.
+
+`Image` is not an optimization layer. Pair it with the consumer framework's image pipeline — `next/image`, `@astrojs/image`, or a CDN — for resizing and format negotiation. BDS owns the design-system constraints; the consumer owns the bytes.
