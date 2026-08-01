@@ -44,7 +44,7 @@ export function TypographyScale({ title, scale, prefix }: TypographyScaleProps) 
                 color: 'var(--text-muted)',
               }}
             >
-              {prefix}--{step}
+              {prefix}-{step}
             </code>
             <span
               style={{
@@ -245,7 +245,7 @@ export function FontWeightShowcase({ weights }: FontWeightShowcaseProps) {
                 color: 'var(--text-muted)',
               }}
             >
-              --font-weight--{name}
+              --font-weight-{name}
             </code>
             <span
               style={{

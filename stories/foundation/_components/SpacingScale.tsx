@@ -47,7 +47,7 @@ export function SpacingScale({ title, scale, prefix }: SpacingScaleProps) {
                   color: 'var(--text-muted)',
                 }}
               >
-                {prefix}--{step}
+                {prefix}-{step}
               </code>
               <div
                 style={{
@@ -112,7 +112,7 @@ export function SemanticSpacing({ title, tokens, varPrefix }: SemanticSpacingPro
         </thead>
         <tbody>
           {entries.map(([name, value]) => {
-            const fullVar = `${varPrefix}---${name}`;
+            const fullVar = `${varPrefix}-${name}`;
             return (
               <tr key={name}>
                 <td style={{ ...tdStyle, width: '120px' }}>
