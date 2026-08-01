@@ -50,7 +50,9 @@
   flex-direction: column;
   padding: var(--padding-tiny) var(--padding-tiny) var(--padding-md);
   border-bottom: var(--border-width-md) solid var(--border-muted);
-  margin-bottom: var(--gap-tiny);
+  /* Tight structural step below the divider; --gap-tiny is 0px outside
+     default spacing mode. */
+  margin-bottom: var(--gap-sm);
   font-family: var(--font-family-label);
   font-size: var(--body-xs);
   font-weight: var(--font-weight-semibold);
