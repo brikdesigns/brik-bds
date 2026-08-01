@@ -34,7 +34,10 @@
 .bds-data-section__titles {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  /* Title → subtitle is the tight, one-unit step (ADR-023 content-rhythm
+     map). `--gap-sm`, not `--gap-xs`: the latter collapses to 0px outside
+     default spacing mode and would erase the pairing. */
+  gap: var(--gap-sm);
   min-width: 0;
 }
 
