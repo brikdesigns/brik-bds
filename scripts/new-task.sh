@@ -9,6 +9,9 @@
 #   ./scripts/new-task.sh bds-button-variants
 #   ./scripts/new-task.sh tokens-figma-pull
 #
+# Flags (--issue / --no-issue / --base / --yes) may be written before or after
+# the slug.
+#
 # Creates:
 #   ../brik-bds-worktrees/{scope}-{name}/   on branch  task/{scope}-{name}
 #
@@ -95,6 +98,12 @@ case "$PRIMARY_BRANCH" in
 esac
 
 # ── Parse flags ──
+# Flags are accepted on either side of the slug. The loop used to `break` at the
+# first positional, so `new-task.sh {slug} --issue N` silently dropped the flag
+# and fell through to derive_issue_from_slug — gating AND claiming whatever
+# trailing number the slug happened to carry rather than N. A trailing --yes was
+# dropped the same way, leaving a headless session on a blocking prompt. #1619.
+POSITIONAL=()
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --base)
@@ -118,10 +127,13 @@ while [[ $# -gt 0 ]]; do
       exit 1
       ;;
     *)
-      break
+      POSITIONAL+=("$1")
+      shift
       ;;
   esac
 done
+# `${arr[@]+...}` guards the empty-array expansion under `set -u` on bash 3.2.
+set -- ${POSITIONAL[@]+"${POSITIONAL[@]}"}
 
 # No interactive stdin (agent / piped / CI) → treat as opt-in to proceed.
 if [ ! -t 0 ]; then
