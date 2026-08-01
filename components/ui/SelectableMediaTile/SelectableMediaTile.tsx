@@ -1,5 +1,6 @@
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
+import { Frame } from '../Frame';
 import './SelectableMediaTile.css';
 
 export interface SelectableMediaTileProps
@@ -23,7 +24,8 @@ export interface SelectableMediaTileProps
   disabled?: boolean;
   /**
    * CSS `aspect-ratio` for the image box. Default `4 / 3`. Pass `1 / 1`
-   * for avatar / square grids.
+   * for avatar / square grids. Forwarded to the wrapping `<Frame>` as
+   * `customRatio`, so any valid CSS `aspect-ratio` value works.
    */
   aspectRatio?: string;
 }
@@ -85,9 +87,14 @@ export const SelectableMediaTile = forwardRef<HTMLButtonElement, SelectableMedia
         onClick={onClick}
         {...props}
       >
-        <span className="bds-selectable-media-tile__media" style={{ aspectRatio }}>
+        <Frame
+          as="span"
+          customRatio={aspectRatio}
+          fit="cover"
+          className="bds-selectable-media-tile__media"
+        >
           {/* eslint-disable-next-line @next/next/no-img-element -- BDS is framework-agnostic; consumers pass their own URL */}
-          <img src={src} alt={alt} className="bds-selectable-media-tile__image" />
+          <img src={src} alt={alt} loading="lazy" decoding="async" />
           {selected && (
             <span className="bds-selectable-media-tile__check" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
@@ -101,7 +108,7 @@ export const SelectableMediaTile = forwardRef<HTMLButtonElement, SelectableMedia
               </svg>
             </span>
           )}
-        </span>
+        </Frame>
         {caption !== undefined && caption !== null && (
           <span className="bds-selectable-media-tile__caption">{caption}</span>
         )}
