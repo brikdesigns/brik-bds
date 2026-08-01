@@ -1,0 +1,57 @@
+---
+title: Content Rhythm
+description: Space content by role, not by eye — one escalating scale from tight text pairings to section breaks, and when to reach for gap, padding, or margin.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Every vertical gap between content — a heading and its subtitle, two paragraphs, one block and the next, one section and the next — comes from a single escalating scale keyed to the **relationship** between the two elements, not from a per-page judgment call. Pick the step by what the elements are to each other; the token re-modulates automatically under each [spacing mode](/docs/primitives/spacing#spacing-modes), so the rhythm holds across compact product UI and spacious marketing pages without re-tuning.
+
+## The rhythm scale
+
+Tighter means more coupled. As the relationship loosens — words in a heading pair, sentences in a paragraph, blocks in a section, sections on a page — the step widens by one notch.
+
+| Relationship | Intent | Token | Base |
+|---|---|---|---|
+| Title ↔ subtitle / eyebrow | Tightly coupled — reads as one unit | `--gap-sm` | 6px |
+| Heading / subtitle ↔ body | Readable separation | `--gap-md` | 8px |
+| Paragraph ↔ paragraph | Distinct thoughts | `--gap-lg` | 16px |
+| Block ↔ block | Separate content units | `--gap-xl` | 24px |
+| Section ↔ section | Page-level break | `padding-block: clamp(--padding-xl, 7vw, --padding-huge)` | 32–48px, fluid |
+
+<Callout type="warn">
+  Never use `--gap-xs` or `--gap-tiny` for content rhythm — both collapse to `0px` outside the default [spacing mode](/docs/primitives/spacing#spacing-modes), which would erase the tight step. And never hardcode a px value: the scale re-modulates per mode, a literal does not.
+</Callout>
+
+## Gap, padding, or margin
+
+The scale above answers *how much*. This answers *with which property* — and the answer shifts as you move up the layers.
+
+| Mechanism | Controls | Reach for it when | Token family |
+|---|---|---|---|
+| `gap` (flex / grid) | Uniform space between sibling elements | One repeating step between peers — blocks in a `Stack`, cells in a `Grid` | `--gap-*` |
+| Adjacency margin (`a + b`) | Exact space between two specific elements | Each pair needs a *different* step — the text slots inside a Block, elements inside `Prose` | `--gap-*` |
+| `padding` | Inset from a container's own edge | Space between content and the box boundary; a section's vertical band | `--padding-*` |
+
+The distinction the layers turn on: **`gap` is between siblings; `padding` is the edge.** A section break is `padding`, not `gap` — each section owns its own `padding-block` band, sections don't sit in a gapped flow. So block-to-block spacing inside a section is the layout primitive's `gap`, but section-to-section spacing is each section's padding.
+
+Adjacency margin covers the one case a single flex `gap` cannot: a Block's title → subtitle is `--gap-sm` while its subtitle → description is `--gap-md` — two different steps between three stacked elements. `ContentBlock` sets each with `margin-top` rather than one uniform gap ([ADR-023](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-023-content-blocks-and-prose-rhythm.md)); `Prose` spaces `h + p` and `p + p` differently for the same reason.
+
+<Callout type="info">
+  Adjacency margin is the **only** place margin sets vertical rhythm. Never use margin to space one component from another — that space belongs to the parent layout's `gap`.
+</Callout>
+
+## Where each step is set
+
+You rarely set these values by hand — the standard is baked into the layer that owns each relationship.
+
+- **Text within a block** → `ContentBlock` (named slots) or `Prose` (free HTML) own it. See [Content blocks and prose](/docs/build-standards/page-structure#content-blocks-and-prose).
+- **Block ↔ block** → the layout primitive's `gap` (`Stack`, `Grid`) — `--gap-xl` in a section's content region.
+- **Section ↔ section** → the section shell's `padding-block` clamp, harmonised to `7vw` ([ADR-021](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-021-blueprint-section-shell.md)). A section needing a different band re-declares `padding-block` on its own selector.
+
+## Related
+
+- [Spacing](/docs/primitives/spacing) — the `--gap-*` / `--padding-*` token scales and the density modes that modulate them.
+- [Composition Layers](/docs/build-standards/composition-layers) — the Section → Layout → Container → Block → Component model these adjacencies span.
+- [Page Structure](/docs/build-standards/page-structure) — the HTML skeleton the rhythm applies within.
+- [Typography](/docs/primitives/typography) — the type scale for the content being spaced.

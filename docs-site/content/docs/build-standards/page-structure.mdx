@@ -129,16 +129,7 @@ import { ContentBlock, Prose } from '@brikdesigns/bds';
 
 ### Spacing map
 
-Both components use only mode-tied `--gap-*` tokens — never raw px, never `--gap-xs`/`--gap-tiny` (both resolve to `0px` outside default mode, which would collapse the tight gap).
-
-| Component | Relationship | Token |
-|---|---|---|
-| `ContentBlock` | `title` → `subtitle` | `--gap-sm` |
-| `ContentBlock` | `title`/`subtitle` → `description`, and last text slot → `actions` | `--gap-md` |
-| `Prose` | `:is(h1,h2,h3) + p` | `--gap-md` |
-| `Prose` | `p + p` | `--gap-lg` |
-
-Block-to-block spacing — the gap between one `ContentBlock`/`Prose` and the next — is unchanged: it's the surrounding section container's existing `--gap-xl`, not something either component owns.
+Both components draw their slot and element rhythm from the same role→step scale — `title` → `subtitle` is `--gap-sm`, heading/subtitle → body is `--gap-md`, paragraph → paragraph is `--gap-lg` — set with adjacency margin so each pair lands its exact step. Block-to-block spacing between one `ContentBlock`/`Prose` and the next is `--gap-xl`, owned by the section's layout, not by either component. The full scale and the gap-vs-padding-vs-margin rule live in [Content Rhythm](/docs/build-standards/content-rhythm).
 
 <Callout type="info">
   `title` element level follows outline position, same as any other `__title` slot — see [HTML Semantics — Heading element selection](/docs/build-standards/html-semantics#heading-element-selection). `ContentBlock` defaults `titleAs` to `h3` (the common case nests inside a `Card`); pass `h2` when it's a direct outline sibling of the page's `<h1>`.
