@@ -1,0 +1,57 @@
+---
+title: Headings
+description: Pick a heading token by composition layer and the HTML element by outline intent — the two independent choices every title makes.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+A heading makes two independent choices, and conflating them is the usual mistake:
+
+1. **Which token sizes it** — decided by the heading's **composition layer** (a section headline is not a card title).
+2. **Which HTML element renders it** — decided by whether it is a **document outline node**, not by the token or the BEM name.
+
+Get these from two different rules. The token comes from the table below; the element comes from [HTML Semantics — Heading element selection](/docs/build-standards/html-semantics#heading-element-selection).
+
+## Role by layer
+
+| Layer | Role token | Weight / line-height | Example |
+|---|---|---|---|
+| Section headline | `--heading-xl` … `--heading-huge` (`--display-*` for oversized marketing) | semibold / tight | Hero headline, page title |
+| Container / Block title | `--heading-sm` … `--heading-md` | semibold / tight | Card title, `ContentBlock` title, `DataSection` title |
+| Component label | `--label-*` | medium / normal | Field label, stat label, chip / tab label |
+
+`ContentBlock`'s title slot is `--heading-sm` + `--font-weight-semibold` + `--font-line-height-tight` — the Block-title row, made concrete. Blueprint section headlines run the upper steps (`--heading-lg`/`--heading-huge`); `--display-*` is the mode-invariant tier available for oversized editorial headlines, though current blueprints render heroes with the top `--heading-*` steps.
+
+<Callout type="warn">
+  A **component label** is not a small heading. Field labels, stat labels, and chip / tab labels are the [label family](/docs/build-standards/slot-vocabulary#label-family) and use `--label-*` with `--font-family-label` — never a `--heading-*` token. The marketing "eyebrow / kicker" above a headline is a `subtitle` in BDS ([slot vocabulary](/docs/build-standards/slot-vocabulary#subtitle)), a `--body-*` role covered in [Paragraphs](/docs/build-standards/paragraphs) — not a heading either.
+</Callout>
+
+## Element by outline intent
+
+Size and element are orthogonal: `<div class="bds-card__title">` and `<h3 class="bds-card__title">` are both valid and both use heading-tier tokens — the choice is outline intent, not appearance.
+
+- **An outline node** (a section title a screen-reader user navigates to) renders `<h1>`/`<h2>`/`<h3>`.
+- **A decorative or repeating title** (one card in a grid of many, a metric tile) renders `<div>` or `<p>`, still with `__title` BEM and heading tokens.
+
+### The titleAs prop
+
+`ContentBlock` exposes this choice as the `titleAs` prop (`h1`–`h4` \| `div` \| `p`):
+
+- **Default `h3`** — the common case nests inside a `Card`, an outline child two levels below the page `<h1>`.
+- **Pass `h2`** when the block is a direct outline sibling of the page's `<h1>` (a top-level page region).
+- **Pass `div` / `p`** when the block repeats decoratively and is not an outline node.
+
+```tsx
+<ContentBlock titleAs="h2" title="Membership Plans" description="…" />
+```
+
+## Casing
+
+Headings and section titles use **title case** — the copy-side companion to the font-family role rule. The full rule (major vs minor words, hyphenated compounds, the CMS-content and microcopy exceptions) lives in [Typography — Heading casing](/docs/primitives/typography#heading-casing).
+
+## Related
+
+- [Typography](/docs/primitives/typography) — the `--heading-*` / `--display-*` / `--label-*` scales and the font-family role rule.
+- [Paragraphs](/docs/build-standards/paragraphs) — the body roles a heading sits above.
+- [Content Rhythm](/docs/build-standards/content-rhythm) — the spacing between a heading and what follows it.
+- [HTML Semantics](/docs/build-standards/html-semantics) — outline nodes, stable IDs, and element selection.
