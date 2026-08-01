@@ -68,7 +68,7 @@ const featured = section.items[0];
   .bp-testimonials-featured__container {
     max-width: var(--content-width-wide);
     margin-inline: auto;
-    padding-inline: var(--padding-xl);
+    padding-inline: var(--padding-xl); /* bds-lint-ignore — legacy bp-* inset predates --gutter-page; realigning 32→24px is a visual change gated on Chromatic quota (#771), same deferral as #1630 */
     text-align: center;
   }
 

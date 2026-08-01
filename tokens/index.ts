@@ -515,6 +515,14 @@ export const contentWidths = {
 
 export type ContentWidth = keyof typeof contentWidths;
 
+/**
+ * Page gutter — the inline inset between the viewport edge and a page's
+ * content band (ADR-025). A fixed alias of --padding-lg (mode-modulated),
+ * so it is exposed as a var() reference, not a raw px value.
+ * Maps to the --gutter-page CSS custom property in gap-fills.css.
+ */
+export const pageGutter = 'var(--gutter-page)' as const;
+
 // Theme registry — consumer entry point for adding client themes to the
 // Contrast Compliance audit (and future multi-theme probes). See
 // ./theme-registry for usage.
