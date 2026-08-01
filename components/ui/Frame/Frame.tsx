@@ -75,6 +75,15 @@ export interface FrameProps extends HTMLAttributes<HTMLElement> {
    * `<img>` / `<video>` / `<svg>` descendant. Default `cover`.
    */
   fit?: FrameFit;
+  /**
+   * Which axis is fixed. `width` (default) fills the container width and
+   * derives height from `ratio` — the common case. `height` releases the
+   * `width:100%` default so a caller-set height drives the width instead
+   * (fixed-height thumbnail: the shape holds but the box stays as tall as
+   * the caller sets, regardless of ratio). With `height`, the caller must
+   * supply a height via `className` / `style`.
+   */
+  anchor?: 'width' | 'height';
   /** HTML element to render as. Default `div`. */
   as?: ElementType;
   /** Slotted child content. */
@@ -113,6 +122,7 @@ export function Frame({
   ratio = '4-3',
   customRatio,
   fit = 'cover',
+  anchor = 'width',
   as: Element = 'div',
   className,
   style,
@@ -129,6 +139,7 @@ export function Frame({
         'bds-frame',
         !customRatio && `bds-frame--ratio-${ratio}`,
         `bds-frame--fit-${fit}`,
+        anchor === 'height' && 'bds-frame--anchor-height',
         className,
       )}
       style={composedStyle}

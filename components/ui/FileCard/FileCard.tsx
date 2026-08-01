@@ -1,5 +1,6 @@
 import { type HTMLAttributes } from 'react';
 import { Icon } from '../Icon';
+import { Frame, type FrameRatio } from '../Frame';
 import { ArrowSquareOut, CloudArrowUp, File as FileIcon, Trash } from '../../icons';
 import { bdsClass } from '../../utils';
 import './FileCard.css';
@@ -11,22 +12,12 @@ import './FileCard.css';
 export type FileCardPreview = 'image' | 'icon' | 'svg';
 
 /**
- * Aspect-ratio slug applied to the preview thumbnail. Matches `Frame`'s
- * `ratio` vocabulary — backed by the `--aspect-*` token family.
+ * Aspect-ratio slug applied to the preview thumbnail.
+ *
+ * Legacy alias of `FrameRatio` — the FileCard preview now renders through
+ * `<Frame>`, which owns the ratio vocabulary. Prefer importing `FrameRatio`.
  */
-export type FileCardAspectRatio =
-  | '1-1'
-  | '3-2'
-  | '2-3'
-  | '4-3'
-  | '3-4'
-  | '16-9'
-  | '9-16'
-  | '21-9'
-  | 'square'
-  | 'photo-landscape'
-  | 'photo-portrait'
-  | 'cinema';
+export type FileCardAspectRatio = FrameRatio;
 
 /**
  * `FileCard` component props.
@@ -36,8 +27,8 @@ export interface FileCardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onC
   preview: FileCardPreview;
   /** Source URL for the preview. Required for `preview="image"` and `preview="svg"`; ignored for `preview="icon"`. */
   src?: string;
-  /** Aspect-ratio slug applied to the preview thumbnail (default `1-1`). Maps to the `--aspect-*` token family. */
-  aspectRatio?: FileCardAspectRatio;
+  /** Aspect-ratio slug applied to the preview thumbnail (default `1-1`). A `FrameRatio` — backed by the `--aspect-*` token family. */
+  aspectRatio?: FrameRatio;
   /** Filename label (required). */
   name: string;
   /** Optional metadata line — typically dimensions / size / mime info. */
@@ -103,26 +94,26 @@ export function FileCard({
 }: FileCardProps) {
   const altText = previewAlt ?? name;
   const previewBox = (
-    <span
-      className={bdsClass(
-        'bds-file-card__preview',
-        `bds-file-card__preview--ratio-${aspectRatio}`,
-        `bds-file-card__preview--${preview}`,
-      )}
+    <Frame
+      as="span"
+      ratio={aspectRatio}
+      anchor="height"
+      fit="cover"
+      className={bdsClass('bds-file-card__preview', `bds-file-card__preview--${preview}`)}
       aria-hidden={preview === 'icon' ? true : undefined}
     >
       {preview === 'image' && src && (
-        <img className="bds-file-card__preview-img" src={src} alt={altText} />
+        <img className="bds-file-card__preview-img" src={src} alt={altText} loading="lazy" decoding="async" />
       )}
       {preview === 'svg' && src && (
-        <img className="bds-file-card__preview-svg" src={src} alt={altText} />
+        <img className="bds-file-card__preview-svg" src={src} alt={altText} loading="lazy" decoding="async" />
       )}
       {preview === 'icon' && (
         <span className="bds-file-card__preview-icon">
           <Icon icon={FileIcon} />
         </span>
       )}
-    </span>
+    </Frame>
   );
 
   return (
