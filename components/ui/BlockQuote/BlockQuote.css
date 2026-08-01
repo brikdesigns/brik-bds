@@ -29,7 +29,8 @@
   .bds-block-quote__attribution {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-xs);
+    /* Cite ↔ role is the tight step (ADR-023 content-rhythm map: --gap-sm). */
+    gap: var(--gap-sm);
   }
 
   .bds-block-quote__cite {

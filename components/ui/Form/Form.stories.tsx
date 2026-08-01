@@ -19,7 +19,7 @@ const meta: Meta<typeof Form> = {
       description: 'Form fields and content.',
     },
     layout: { control: 'select', options: ['vertical', 'horizontal'] },
-    gap: { control: 'select', options: ['sm', 'md', 'lg'] },
+    gap: { control: 'select', options: ['md', 'lg', 'xl'] },
     title: { control: 'text' },
     description: { control: 'text' },
     error: { control: 'text' },

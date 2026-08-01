@@ -56,7 +56,8 @@
 .bds-testimonial__attribution {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  /* Name ↔ role is the tight step (ADR-023 content-rhythm map: --gap-sm). */
+  gap: var(--gap-sm);
 }
 
 /* ─── Author name ────────────────────────────────────────────── */

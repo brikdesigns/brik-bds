@@ -20,16 +20,20 @@
 
 /* ─── Gap variants ────────────────────────────────────────────── */
 
-.bds-form--gap-sm { gap: var(--gap-md); }
-.bds-form--gap-md { gap: var(--gap-lg); }
-.bds-form--gap-lg { gap: var(--gap-xl); }
+/* Variant names match the token they emit (was off-by-one: `--gap-sm`
+   class emitted var(--gap-md), etc. — renamed with identical pixels). */
+.bds-form--gap-md { gap: var(--gap-md); }
+.bds-form--gap-lg { gap: var(--gap-lg); }
+.bds-form--gap-xl { gap: var(--gap-xl); }
 
 /* ─── Header ──────────────────────────────────────────────────── */
 
 .bds-form__header {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  /* Title → description is the readable-separation step (ADR-023
+     content-rhythm map: heading ↔ body = --gap-md). */
+  gap: var(--gap-md);
 }
 
 .bds-form__title {
@@ -92,9 +96,9 @@
   flex-wrap: wrap;
 }
 
-.bds-form__fields--gap-sm { gap: var(--gap-md); }
-.bds-form__fields--gap-md { gap: var(--gap-lg); }
-.bds-form__fields--gap-lg { gap: var(--gap-xl); }
+.bds-form__fields--gap-md { gap: var(--gap-md); }
+.bds-form__fields--gap-lg { gap: var(--gap-lg); }
+.bds-form__fields--gap-xl { gap: var(--gap-xl); }
 
 /* ─── Footer ──────────────────────────────────────────────────── */
 
