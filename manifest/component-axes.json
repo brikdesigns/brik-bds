@@ -322,17 +322,6 @@
       "lg"
     ]
   },
-  "Switch": {
-    "size": [
-      "lg",
-      "md",
-      "sm"
-    ],
-    "variant": [
-      "default",
-      "accent-knob"
-    ]
-  },
   "TabBar": {
     "variant": [
       "text",
@@ -408,6 +397,17 @@
       "error",
       "warning",
       "info"
+    ]
+  },
+  "ToggleSwitch": {
+    "size": [
+      "lg",
+      "md",
+      "sm"
+    ],
+    "variant": [
+      "default",
+      "accent-knob"
     ]
   }
 }
