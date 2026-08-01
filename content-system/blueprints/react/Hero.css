@@ -19,8 +19,22 @@
 .bds-hero__content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
   align-items: flex-start;
+}
+
+/* ── Content rhythm (ADR-023 §3) ──────────────────────────────────────────
+   Adjacency margins, not one uniform flex `gap`: the eyebrow→title step is
+   tight (--gap-sm) while title→lead is medium (--gap-md), and a single `gap`
+   renders both identically. Margin-based so each step is exactly its token
+   rather than a gap plus a margin. Composed slots (breadcrumb, eyebrow icon,
+   CTA button) take the medium default through `> * + *`. */
+
+.bds-hero__content > * + * {
+  margin-top: var(--gap-md);
+}
+
+.bds-hero__subtitle + .bds-hero__title {
+  margin-top: var(--gap-sm);
 }
 
 .bds-hero__subtitle {
@@ -43,7 +57,9 @@
 }
 
 .bds-hero__lead {
-  margin: var(--gap-sm) 0 0;
+  /* Rhythm comes from the `> * + *` adjacency above — a margin here would
+     stack on top of it (the additive case ADR-023 §3 rules out). */
+  margin: 0;
   font-family: var(--font-family-body);
   font-size: var(--heading-sm);
   line-height: var(--font-line-height-relaxed);
@@ -348,7 +364,9 @@ img.bds-hero__icon {
 .bds-hero__price {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  /* Label↔value is a tight text pairing: --gap-sm. Not --gap-xs, which
+     resolves to 0px outside default spacing mode (ADR-023 §3). */
+  gap: var(--gap-sm);
   padding-inline: var(--padding-sm);
   align-items: flex-start;
 }

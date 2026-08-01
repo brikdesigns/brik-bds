@@ -139,8 +139,10 @@ const email = clientFacts.email;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    /* Horizontal step between buttons. The step DOWN from the message block is
+       the container's own gap — a margin-top here would stack on top of it
+       (the additive case ADR-023 §3 rules out). */
     gap: var(--gap-md);
-    margin-top: var(--gap-sm);
   }
 
   .bds-cta__aside {
@@ -163,7 +165,9 @@ const email = clientFacts.email;
   .bds-cta__method {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-tiny);
+    /* Label↔value is a tight text pairing: --gap-sm. Not --gap-tiny, which
+       resolves to 0px outside default spacing mode (ADR-023 §3). */
+    gap: var(--gap-sm);
     color: var(--bds-cta-method-color, var(--text-primary));
     text-decoration: none;
     transition: color 120ms ease-out;

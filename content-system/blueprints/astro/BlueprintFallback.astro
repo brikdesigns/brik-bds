@@ -66,7 +66,10 @@ const attrValue = unknownKey ?? '__null__';
     margin-inline: auto;
     display: flex;
     flex-direction: column;
-    gap: var(--gap-tiny);
+    /* --gap-md, matching the React twin in BlueprintFallback.css. Was
+       --gap-tiny, which resolves to 0px outside default spacing mode and
+       collapsed these four lines into one block (ADR-023 §3). */
+    gap: var(--gap-md);
   }
 
   .bp-fallback__label {
