@@ -1,0 +1,46 @@
+---
+title: Paragraphs
+description: The body-text roles and line-height pairings, and how to decide between a ContentBlock description, Prose, and a raw slot paragraph.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Body copy is sized with `--body-*` and paired with a line-height that matches its length: the more a reader has to track across lines, the more leading it needs. Pick the role by what the text is, then let the owning component set the rhythm.
+
+## Role by intent
+
+| Intent | Role token | Line-height | Example |
+|---|---|---|---|
+| Lead / intro | `--body-lg` … `--body-xl` | `--font-line-height-normal` | A section's opening sentence |
+| Default reading copy | `--body-md` | `--font-line-height-relaxed` | Descriptions, prose, card body |
+| Secondary / caption | `--body-sm` … `--body-xs` | `--font-line-height-normal` | Metadata, captions, helper text |
+| Subtitle line under a title | `--body-md` | `--font-line-height-normal` | The `subtitle` slot paired with a title |
+
+`--font-line-height-relaxed` (175%) is the reading default for multi-line copy — `ContentBlock`'s description slot and `Prose`'s base both use it. `--font-line-height-tight` (110%) is headings-only; don't put it on body text. The `subtitle` line is a `--body-md` role, [not a heading](/docs/build-standards/headings).
+
+<Callout type="warn">
+  Body copy uses `--font-family-body`; never a `--heading-*` size or `--font-family-heading` on a paragraph. See the [font-family role rule](/docs/primitives/typography).
+</Callout>
+
+## Which component renders the paragraph
+
+Three ways a paragraph reaches the page — pick by the shape of the content, not by appearance.
+
+| Use | When | Owns |
+|---|---|---|
+| `ContentBlock` `description` | A known, single block of supporting copy under a title — a card, feature, or CTA | Fixed slot; adjacency rhythm to the title above it |
+| `Prose` | Free-form, already-sanitized CMS / rich HTML — multiple paragraphs, lists, and headings authored elsewhere | Element-adjacency rhythm (`h + p`, `p + p`) |
+| Raw `<p>` in a `__description` slot | A one-off paragraph that is neither a fixed content block nor CMS HTML | Nothing — the surrounding slot sets spacing |
+
+Prefer a Block over a raw `<p>` when the text has a title, a subtitle, or an action beside it — that is a `ContentBlock`, and it carries the rhythm for free. Reach for `Prose` the moment the copy is open-ended rich text with no fixed slot shape.
+
+<Callout type="info">
+  `description` is explanatory prose under a title — longer and more neutral than a `subtitle`. Never name a body slot `__body`; see [slot vocabulary](/docs/build-standards/slot-vocabulary#never-__body).
+</Callout>
+
+## Related
+
+- [Typography](/docs/primitives/typography) — the `--body-*` scale and the line-height tokens.
+- [Headings](/docs/build-standards/headings) — the titles body copy sits beneath.
+- [Content Rhythm](/docs/build-standards/content-rhythm) — the spacing between paragraphs and between a paragraph and its heading.
+- [Page Structure — Content blocks and prose](/docs/build-standards/page-structure#content-blocks-and-prose) — the `ContentBlock` / `Prose` split in context.
