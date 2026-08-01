@@ -84,12 +84,14 @@
   text-transform: capitalize;
 }
 
+/* Label ↔ bar is the tight step (--gap-sm); --gap-xs collapses to 0px
+   outside default spacing mode. */
 .bds-meter__label--above {
-  margin-bottom: var(--gap-xs);
+  margin-bottom: var(--gap-sm);
 }
 
 .bds-meter__label--below {
-  margin-top: var(--gap-xs);
+  margin-top: var(--gap-sm);
 }
 
 /* ─── Value ──────────────────────────────────────────────────── */
