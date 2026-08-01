@@ -8,6 +8,13 @@
   width: 100%;
 }
 
+/* Height-anchored: release the width:100% default so a caller-set height
+   drives the width via `aspect-ratio` (fixed-height thumbnails). Placed after
+   the base rule so it wins at equal specificity. */
+.bds-frame--anchor-height {
+  width: auto;
+}
+
 /* ─── Ratio presets ───────────────────────────────────────────
    Token-backed via --aspect-* (BDS #486). Single source of truth lives in
    tokens/ratios.css; this file just attaches them to Frame's BEM modifier. */

@@ -17,6 +17,7 @@ const meta: Meta<typeof Frame> = {
   argTypes: {
     ratio: { control: 'select', options: ['square', 'portrait', 'landscape', 'wide', 'ultrawide'] },
     fit: { control: 'select', options: ['cover', 'contain', 'fill', 'none'] },
+    anchor: { control: 'inline-radio', options: ['width', 'height'] },
     customRatio: { control: 'text' },
   },
 };
@@ -116,6 +117,34 @@ export const FitModes: Story = {
               alt=""
               style={{ width: '100%', height: '100%' }}
             />
+          </Frame>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+/**
+ * Default Frame is width-anchored (fills the container, height derives from
+ * ratio). `anchor="height"` inverts that: the caller sets a height and the
+ * ratio derives the width. Used for fixed-height thumbnail rows (e.g.
+ * `FileCard`) where wide ratios must stay tall enough to read.
+ *
+ * @summary Height-anchored — fixed height, ratio drives width
+ */
+export const HeightAnchored: Story = {
+  render: () => (
+    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--gap-lg)' }}>
+      {(['1-1', '4-3', '16-9', '21-9'] as const).map((r) => (
+        <div key={r}>
+          <SectionLabel>ratio=&quot;{r}&quot;</SectionLabel>
+          <Frame
+            ratio={r}
+            anchor="height"
+            fit="cover"
+            style={{ height: 'var(--size-1400)', background: 'var(--surface-secondary)' }}
+          >
+            <PlaceholderImage />
           </Frame>
         </div>
       ))}
