@@ -126,6 +126,17 @@ else
   echo "No staged component files — skipping token + JSDoc lint."
 fi
 
+# ── Page-grid gutter (ADR-025) ──
+# A page container (max-width: var(--content-width-*) or a content-width
+# centering inset) must inset with the canonical --gutter-page, never an
+# ad-hoc padding token (brik-bds#1628). Covers blueprint .astro styles too,
+# so it runs on its own staged set, not just STAGED_CSS.
+STAGED_PAGE_GRID=$(git diff --cached --name-only --diff-filter=ACM -- 'components/**/*.css' 'content-system/**/*.css' 'content-system/**/*.astro')
+if [ -n "$STAGED_PAGE_GRID" ]; then
+  echo "Checking staged CSS for page containers bypassing --gutter-page..."
+  node scripts/lint-page-grid.mjs --staged
+fi
+
 # ── Storybook page recipe (ADR-007) ──
 # Whole-repo scan; fires only when a component MDX file is staged so
 # token-only or test-only commits don't pay the cost.

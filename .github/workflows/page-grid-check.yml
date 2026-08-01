@@ -1,0 +1,49 @@
+name: Page Grid Check
+
+# Fails when a page-container rule (max-width: var(--content-width-*) or a
+# content-width centering inset) declares a padding-inline that bypasses the
+# canonical --gutter-page token (ADR-025, brik-bds#1628). One gutter name is
+# what keeps BDS sections and consumer containers flush-aligned at the page
+# edge. A genuine exception is exempted with a reasoned `bds-lint-ignore`
+# (#1469).
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'components/**/*.css'
+      - 'content-system/**/*.css'
+      - 'content-system/**/*.astro'
+      - 'scripts/lint-page-grid.mjs'
+  push:
+    branches:
+      - main
+    paths:
+      - 'components/**/*.css'
+      - 'content-system/**/*.css'
+      - 'content-system/**/*.astro'
+      - 'scripts/lint-page-grid.mjs'
+
+concurrency:
+  group: page-grid-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  page-grid-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Page grid check
+        run: npm run lint-page-grid

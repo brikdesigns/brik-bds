@@ -179,6 +179,7 @@
     "token-cascade-vocab-check": "node scripts/token-cascade-vocab-check.mjs",
     "lint-inline-var": "node scripts/lint-inline-var.mjs",
     "lint-content-rhythm": "node scripts/lint-content-rhythm.mjs",
+    "lint-page-grid": "node scripts/lint-page-grid.mjs",
     "canonical-check": "node scripts/canonical-check.mjs --allowlist dist/tokens.css components content-system/blueprints content-system/atmospheres content-system/industries",
     "canonical-check:report": "node scripts/canonical-check.mjs --allowlist dist/tokens.css --format md components content-system stories || true",
     "canonical-class-check": "node scripts/canonical-class-check.mjs --allowlist dist/styles.css content-system/blueprints",
