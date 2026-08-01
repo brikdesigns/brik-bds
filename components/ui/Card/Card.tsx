@@ -262,9 +262,9 @@ interface CardDisplayPresetProps extends CardBaseProps {
    */
   description?: string;
   /**
-   * Top media slot. Pass a `<Frame>`-wrapped image (or any ReactNode) for
-   * the aspect-ratio-controlled top region. When omitted, the card
-   * renders without media.
+   * Top media slot. Pass an `<Image ratio="…">` (or any `<Frame>`-wrapped
+   * media / ReactNode) for the aspect-ratio-controlled top region. When
+   * omitted, the card renders without media.
    */
   image?: ReactNode;
   /**
@@ -320,9 +320,9 @@ interface CardDisplayRowPresetProps extends CardBaseProps {
   /** Body copy under the title. Renders as `<p>` with `--font-family-body` + `--body-md`. */
   description?: string;
   /**
-   * Left media slot. Pass a `<Frame>`-wrapped image (or any ReactNode). The
-   * media column owns its own aspect ratio via `<Frame>`; the column width
-   * is controlled by `imageWidth`.
+   * Left media slot. Pass an `<Image ratio="…">` (or any `<Frame>`-wrapped
+   * media / ReactNode). The media owns its own aspect ratio; the column
+   * width is controlled by `imageWidth`.
    */
   image?: ReactNode;
   /**
