@@ -94,8 +94,11 @@ export function SupportPlan({
       {...rest}
     >
       <div className="bds-blueprint-section__container">
+        {/* gap="none": the header's three text roles step at two different
+            sizes (ADR-023 §3), which a uniform Stack gap cannot express.
+            SupportPlan.css owns the adjacency margins instead. */}
         {(subtitle || title || description) && (
-          <Stack as="header" gap="md" className="bds-support-plan__header">
+          <Stack as="header" gap="none" className="bds-support-plan__header">
             {subtitle && (
               <p className="bds-support-plan__subtitle">{subtitle}</p>
             )}

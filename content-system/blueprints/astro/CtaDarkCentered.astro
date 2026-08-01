@@ -103,7 +103,9 @@ const titleId = `${section.sectionKey}-title`;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    /* Horizontal step between buttons. The step DOWN from the message block is
+       the container's own gap — a margin-top here would stack on top of it
+       (the additive case ADR-023 §3 rules out). */
     gap: var(--gap-md);
-    margin-top: var(--gap-sm);
   }
 </style>
