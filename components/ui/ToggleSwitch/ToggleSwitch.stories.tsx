@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, waitFor, within, fn } from 'storybook/test';
-import { Switch } from './Switch';
+import { ToggleSwitch } from './ToggleSwitch';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
-const meta: Meta<typeof Switch> = {
-  title: 'Components/switch',
-  component: Switch,
+const meta: Meta<typeof ToggleSwitch> = {
+  title: 'Components/toggle-switch',
+  component: ToggleSwitch,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
   argTypes: {
@@ -30,7 +30,7 @@ const meta: Meta<typeof Switch> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Switch>;
+type Story = StoryObj<typeof ToggleSwitch>;
 
 /* ═══════════════════════════════════════════════════════════════
    1. DEFAULT — args-driven sandbox. Controls work.
@@ -85,7 +85,7 @@ export const InteractionTestLabelTypography: Story = {
     const toggle = canvas.getByRole('switch');
 
     const label = canvas.getByText('Enable feature');
-    await expect(label).toHaveClass('bds-switch__label--lg');
+    await expect(label).toHaveClass('bds-toggle-switch__label--lg');
     await expect(getComputedStyle(label).fontSize).toBe('18px');
 
     await expect(toggle).not.toBeChecked();

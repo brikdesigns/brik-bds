@@ -6,16 +6,16 @@ import {
   useCallback,
 } from 'react';
 import { bdsClass } from '../../utils';
-import './Switch.css';
+import './ToggleSwitch.css';
 
-export type SwitchSize = 'lg' | 'md' | 'sm';
+export type ToggleSwitchSize = 'lg' | 'md' | 'sm';
 
-export type SwitchVariant = 'default' | 'accent-knob';
+export type ToggleSwitchVariant = 'default' | 'accent-knob';
 
-export interface SwitchProps
+export interface ToggleSwitchProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
   label?: ReactNode;
-  size?: SwitchSize;
+  size?: ToggleSwitchSize;
   /**
    * Visual variant. `default` carries state on the track (brand-fill when on,
    * neutral when off) with a surface knob. `accent-knob` keeps the track a
@@ -23,7 +23,7 @@ export interface SwitchProps
    * (brand-fill when on, muted-gray when off) — used where a subtler track
    * reads better, e.g. an inline theme toggle. Default: `default`.
    */
-  variant?: SwitchVariant;
+  variant?: ToggleSwitchVariant;
   checked?: boolean;
   defaultChecked?: boolean;
   disabled?: boolean;
@@ -40,14 +40,14 @@ const sizes = {
 } as const;
 
 /**
- * Switch — toggle control for binary on/off states.
+ * ToggleSwitch — toggle control for binary on/off states.
  *
  * Track/knob dimensions are size-dependent (runtime-calculated inline styles).
- * Colors and typography are in Switch.css.
+ * Colors and typography are in ToggleSwitch.css.
  *
  * @summary Toggle control for binary on/off states
  */
-export function Switch({
+export function ToggleSwitch({
   label,
   size = 'lg',
   variant = 'default',
@@ -58,7 +58,7 @@ export function Switch({
   className,
   style,
   ...props
-}: SwitchProps) {
+}: ToggleSwitchProps) {
   const isControlled = checked !== undefined;
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   const isChecked = isControlled ? checked : internalChecked;
@@ -77,8 +77,8 @@ export function Switch({
   const isAccentKnob = variant === 'accent-knob';
 
   // Size-dependent, Figma-driven dimensions stay inline (runtime-calculated).
-  // State colors (track brand/neutral, accent-knob fill) live in Switch.css,
-  // driven by :checked + the .bds-switch--accent-knob modifier.
+  // State colors (track brand/neutral, accent-knob fill) live in ToggleSwitch.css,
+  // driven by :checked + the .bds-toggle-switch--accent-knob modifier.
   const trackStyle: CSSProperties = {
     width: `${s.trackW}px`,
     height: `${s.trackH}px`,
@@ -95,9 +95,9 @@ export function Switch({
   return (
     <label
       className={bdsClass(
-        'bds-switch',
-        isAccentKnob && 'bds-switch--accent-knob',
-        disabled && 'bds-switch--disabled',
+        'bds-toggle-switch',
+        isAccentKnob && 'bds-toggle-switch--accent-knob',
+        disabled && 'bds-toggle-switch--disabled',
         className,
       )}
       style={style}
@@ -105,18 +105,18 @@ export function Switch({
       <input
         type="checkbox"
         role="switch"
-        className="bds-switch__input"
+        className="bds-toggle-switch__input"
         checked={isControlled ? checked : undefined}
         defaultChecked={isControlled ? undefined : defaultChecked}
         disabled={disabled}
         onChange={handleChange}
         {...props}
       />
-      <span className="bds-switch__track" style={trackStyle}>
-        <span className="bds-switch__knob" style={knobStyle} />
+      <span className="bds-toggle-switch__track" style={trackStyle}>
+        <span className="bds-toggle-switch__knob" style={knobStyle} />
       </span>
       {label && (
-        <span className={bdsClass('bds-switch__label', `bds-switch__label--${size}`)}>
+        <span className={bdsClass('bds-toggle-switch__label', `bds-toggle-switch__label--${size}`)}>
           {label}
         </span>
       )}
@@ -124,4 +124,4 @@ export function Switch({
   );
 }
 
-export default Switch;
+export default ToggleSwitch;

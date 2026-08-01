@@ -1,7 +1,7 @@
 @layer bds-components {
 /* ─── Switch ─────────────────────────────────────────────────── */
 
-.bds-switch {
+.bds-toggle-switch {
   display: inline-flex;
   align-items: center;
   gap: var(--gap-md);
@@ -11,7 +11,7 @@
   text-transform: capitalize;
 }
 
-.bds-switch--disabled {
+.bds-toggle-switch--disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
@@ -20,17 +20,17 @@
 /* Label-family + per-size scale, matching the form-input family
    (TextInput / Select / TextArea labels). */
 
-.bds-switch__label {
+.bds-toggle-switch__label {
   font-family: var(--font-family-label);
 }
 
-.bds-switch__label--sm { font-size: var(--label-sm); }
-.bds-switch__label--md { font-size: var(--label-md); }
-.bds-switch__label--lg { font-size: var(--label-lg); }
+.bds-toggle-switch__label--sm { font-size: var(--label-sm); }
+.bds-toggle-switch__label--md { font-size: var(--label-md); }
+.bds-toggle-switch__label--lg { font-size: var(--label-lg); }
 
 /* ─── Hidden input ───────────────────────────────────────────── */
 
-.bds-switch__input {
+.bds-toggle-switch__input {
   position: absolute;
   opacity: 0;
   width: 0;
@@ -40,7 +40,7 @@
 /* ─── Track ──────────────────────────────────────────────────── */
 /* Track and knob dimensions are size-dependent (runtime calculated) */
 
-.bds-switch__track {
+.bds-toggle-switch__track {
   position: relative;
   display: inline-block;
   border-radius: var(--border-radius-pill);
@@ -51,18 +51,18 @@
   cursor: inherit;
 }
 
-.bds-switch__input:checked ~ .bds-switch__track {
+.bds-toggle-switch__input:checked ~ .bds-toggle-switch__track {
   background-color: var(--background-brand-primary);
 }
 
 /* accent-knob keeps the track neutral in both states — state moves to the knob */
-.bds-switch--accent-knob .bds-switch__input:checked ~ .bds-switch__track {
+.bds-toggle-switch--accent-knob .bds-toggle-switch__input:checked ~ .bds-toggle-switch__track {
   background-color: var(--border-muted); /* bds-lint-ignore token-family — accent-knob track stays neutral */
 }
 
 /* ─── Knob ───────────────────────────────────────────────────── */
 
-.bds-switch__knob {
+.bds-toggle-switch__knob {
   position: absolute;
   background-color: var(--surface-primary);
   border-radius: 50%;
@@ -71,11 +71,11 @@
 }
 
 /* accent-knob variant carries state on the knob: muted off, brand on */
-.bds-switch--accent-knob .bds-switch__knob {
+.bds-toggle-switch--accent-knob .bds-toggle-switch__knob {
   background-color: var(--text-secondary); /* bds-lint-ignore token-family — muted-gray knob fill; no semantic switch-knob-off token */
 }
 
-.bds-switch--accent-knob .bds-switch__input:checked ~ .bds-switch__track .bds-switch__knob {
+.bds-toggle-switch--accent-knob .bds-toggle-switch__input:checked ~ .bds-toggle-switch__track .bds-toggle-switch__knob {
   background-color: var(--background-brand-primary);
 }
 }

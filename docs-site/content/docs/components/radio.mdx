@@ -12,7 +12,7 @@ Radio is a themed radio button with required label text. Group radios by their s
 - Mutually exclusive settings (Layout: Compact / Comfortable / Spacious)
 - Fixed-set choices with ≤5 options
 
-For ≥6 options, use [Select](/docs/components/select). For boolean (single yes/no), use [Checkbox](/docs/components/checkbox) or [Switch](/docs/components/switch).
+For ≥6 options, use [Select](/docs/components/select). For boolean (single yes/no), use [Checkbox](/docs/components/checkbox) or [Toggle Switch](/docs/components/toggle-switch).
 
 ## Import
 
@@ -66,7 +66,7 @@ const [selected, setSelected] = useState('pro');
 ## When *not* to use
 
 - **Don't use Radio for ≥6 options.** A vertical list of radios is unscannable. Use [Select](/docs/components/select).
-- **Don't use Radio for boolean.** "Yes / No" with two radios is awkward; use a [Checkbox](/docs/components/checkbox) for opt-in or [Switch](/docs/components/switch) for a setting.
+- **Don't use Radio for boolean.** "Yes / No" with two radios is awkward; use a [Checkbox](/docs/components/checkbox) for opt-in or [Toggle Switch](/docs/components/toggle-switch) for a setting.
 - **Don't forget `name`.** Radios without a shared `name` aren't grouped — multiple can be selected, defeating the entire control.
 
 ## Accessibility
