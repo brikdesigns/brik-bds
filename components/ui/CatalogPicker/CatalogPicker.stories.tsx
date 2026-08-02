@@ -191,7 +191,7 @@ export const MixedSources: Story = {
  * @summary Alias match commits as catalog
  */
 export const InteractionTestAliasMatchCommitsAsCatalog: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services Offered',
     catalog: DENTAL_SERVICES_CATALOG,
@@ -227,7 +227,7 @@ export const InteractionTestAliasMatchCommitsAsCatalog: Story = {
  * @summary Free text commits as custom
  */
 export const InteractionTestFreeTextCommitsAsCustom: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services Offered',
     catalog: DENTAL_SERVICES_CATALOG,

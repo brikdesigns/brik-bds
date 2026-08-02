@@ -160,7 +160,7 @@ export const WithStepNavigation: Story = {
  * @summary Enter on a step fires onStepClick
  */
 export const InteractionTestKeyboardActivation: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     steps: onboardingSteps,
     activeStep: 2,

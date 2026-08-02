@@ -38,6 +38,13 @@ const config: StorybookConfig = {
   },
   tags: {
     wip: { excludeFromSidebar: true },
+    // ADR-026 Arm A — play-only `InteractionTest…` stories are assertions, not
+    // artifacts to browse: their result belongs in the vitest run (they already
+    // execute there via @storybook/addon-vitest), not in the sidebar. Keyed on a
+    // dedicated tag rather than the built-in `play-fn` — 71 story entries carry
+    // `play-fn` and only 41 are interaction tests; the other 30 (Button/Default,
+    // Modal/Two Column Form, …) are canonical stories that must stay visible.
+    'interaction-test': { excludeFromSidebar: true },
   },
   features: {
     experimentalCodeExamples: true,

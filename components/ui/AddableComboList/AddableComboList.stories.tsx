@@ -197,7 +197,7 @@ export const StrictMode: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestSelectFromDropdown: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
@@ -232,7 +232,7 @@ export const InteractionTestSelectFromDropdown: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestFreeFormEntry: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
@@ -259,7 +259,7 @@ export const InteractionTestFreeFormEntry: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestKeyboardNavigation: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
@@ -293,7 +293,7 @@ export const InteractionTestKeyboardNavigation: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestEscapeClosesDropdown: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
@@ -327,7 +327,7 @@ export const InteractionTestEscapeClosesDropdown: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestBackspaceRemovesLastTag: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
@@ -356,7 +356,7 @@ export const InteractionTestBackspaceRemovesLastTag: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestStrictRejectsFreeForm: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Insurance Providers',
     suggestions: DENTAL_INSURANCE,
@@ -385,7 +385,7 @@ export const InteractionTestStrictRejectsFreeForm: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestDuplicateRejected: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services Offered',
     suggestions: DENTAL_SERVICES,
