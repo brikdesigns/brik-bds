@@ -93,7 +93,12 @@
   --text-brand-primary: var(--color-poppy-light);
   --text-on-color-dark: var(--color-grayscale-white);
   --text-on-color-light: var(--color-grayscale-black);
-  --text-disabled: var(--color-grayscale-dark);
+  /* One step lighter than the generated -dark (#5a5a5a), which sat at 1.83:1
+   * on the --background-disabled fill (--color-grayscale-darker #333333) —
+   * a disabled Button label that was there but unreadable. -light (#828282)
+   * lifts it to 3.29:1: still visibly muted against the enabled state, but
+   * legible. Light mode is corrected in gap-fills.css. (#1571) */
+  --text-disabled: var(--color-grayscale-light);
   /* Surface */
   --surface-primary: var(--color-grayscale-black);
   /* darkest (#333) not darker (#4f4f4f): keeps --text-secondary (#bdbdbd) at
