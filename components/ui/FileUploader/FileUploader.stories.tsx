@@ -111,7 +111,7 @@ export const WithFileList: Story = {
  * @summary Enter on the dropzone opens the file input
  */
 export const InteractionTestKeyboardActivation: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: { label: 'Upload a file' },
   play: async ({ canvas, canvasElement }) => {
     const input = canvasElement.querySelector('input[type="file"]') as HTMLInputElement;

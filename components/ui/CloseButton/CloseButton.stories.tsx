@@ -39,7 +39,7 @@ export const Default: Story = {
 
 /** @summary Verifies the click handler fires on activation */
 export const InteractionTestClick: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Close',
     onClick: fn(),

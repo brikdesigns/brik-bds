@@ -109,7 +109,7 @@ export const WithControlledSelection: Story = {
  * @summary Verifies roving-tabindex keyboard navigation
  */
 export const InteractionTestKeyboardNavigation: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   render: () => (
     <InteractiveSegmentedControl
       items={[
