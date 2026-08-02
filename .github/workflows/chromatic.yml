@@ -1,56 +1,41 @@
 name: Chromatic
 
-# Snapshot budget model (#771)
-# ---------------------------
-# Chromatic bills a *captured* snapshot at 1 and a TurboSnap-skipped ("turbosnap")
-# story at 0.2. With 403 stories that puts a ~80-billed floor on EVERY build, even
-# one that captures nothing. The free plan allows 5,000 billed/month.
+# PUBLISH-ONLY — this workflow hosts Storybook. It is NOT a visual-regression gate.
+# ------------------------------------------------------------------------------
+# ADR-026 (#1616) split Chromatic's two roles. Visual regression moved to the
+# self-hosted Vitest `toMatchScreenshot` gate in test.yml (#1637), which is free on
+# public-repo runners and blocking for real. What stays here is the half that has
+# no free replacement: publishing the Storybook that backs the `main--` alias, i.e.
+# the `/mcp`, `/index.json` and `/manifests/*` endpoints consumer-repo agents read.
 #
-#   push-per-merge (old):  ~283 builds/mo x ~80  = ~22,600 billed  -> 4.5x over
-#   daily schedule (new):   ~30 builds/mo x ~80  =  ~2,400 billed  -> fits
+# Why the visual gate had to move: the free plan's 5,000 billed snapshots/month was
+# exhausted on every build sampled from 981 (2026-07-26) to 1024 (2026-08-01),
+# including all three `visual-review`-labelled PR builds. A quota-limited build
+# still exits 0, so the "blocking" label gate passed while capturing nothing.
 #
-# That is why this workflow no longer runs on every push to main. The remaining
-# headroom (~2,600 billed) covers opt-in PR gates and occasional full re-captures.
+# A quota-limited build DOES still publish ("✔ Storybook published" on build 1020),
+# so hosting survives an empty quota — which is what makes publish-only viable at $0.
+#
+# There is no zero-cost publish mode: `chromatic --skip` does not upload at all
+# ("Skipped build for commit … due to --skip", CLI v15.3.0, verified 2026-08-02),
+# which refutes the leading candidate in #1498. Publishing costs whatever a
+# TurboSnap-scoped build costs, so the cadence stays daily rather than per-merge.
 
 on:
-  # Batched daily build on main. Replaces the per-push trigger — see the budget
-  # model above. TurboSnap still scopes captures to what changed since the last
-  # build, so a quiet day costs the floor and a busy day costs a little more.
+  # Daily publish on main. This is the MCP-freshness cadence: `main--` can lag main
+  # by up to 24h (#1498 tracks whether that lag is acceptable).
   schedule:
     - cron: '0 9 * * *' # 09:00 UTC daily
 
-  # Opt-in blocking gate. Add the `visual-review` label to a PR and this runs
-  # WITHOUT exitOnceUploaded, so unreviewed visual changes fail the check and
-  # block merge. Opt-in rather than always-on because 49% of merges touch
-  # component/CSS paths (154 of 313 over 30 days) — an always-on PR gate would
-  # bill ~12,300/month, 2.5x the entire free allotment.
-  pull_request:
-    types: [labeled, synchronize, reopened]
-
+  # Manual refresh — use after a merge that consumer agents need to see immediately.
   workflow_dispatch:
-    inputs:
-      full_capture:
-        description: 'Re-capture every story (TurboSnap off) to refresh baselines — bills ~403, about 8% of the monthly allotment (#771). Leave off for a normal build.'
-        type: boolean
-        default: false
 
 concurrency:
-  # Full captures get their own group so the daily scheduled build or a
-  # labelled-PR run can't cancel an in-flight ~403-billed run halfway
-  # through (#1472). The per-push trigger this originally guarded against
-  # was removed in #771.
-  group: chromatic-${{ github.ref }}-${{ inputs.full_capture == true && 'full' || 'turbo' }}
+  group: chromatic-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   chromatic:
-    # PR runs only when the author/reviewer opted in with the `visual-review`
-    # label. The three-way condition avoids re-billing a build every time an
-    # unrelated label is added to an already-labelled PR.
-    if: >-
-      github.event_name != 'pull_request' ||
-      (github.event.action == 'labeled' && github.event.label.name == 'visual-review') ||
-      (github.event.action != 'labeled' && contains(github.event.pull_request.labels.*.name, 'visual-review'))
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -72,24 +57,13 @@ jobs:
         uses: chromaui/action@07791f8243f4cb2698bf4d00426baf4b2d1cb7e0  # v13.3.5
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          # Blocking on PRs (wait for results, non-zero exit on unreviewed
-          # changes); advisory on the scheduled main build, where the merge has
-          # already happened and blocking buys nothing.
-          exitOnceUploaded: ${{ github.event_name != 'pull_request' }}
-          # TurboSnap: snapshot only stories affected by the diff instead of all
-          # ~403 every build. Global CSS (tokens/themes) imports into preview.tsx,
-          # so a token edit still traces to every story → full re-snapshot. #771.
-          #
-          # Off when dispatched with full_capture — TurboSnap skips leave baselines
-          # inherited from well before current main, which makes any later full
-          # build unreadable (399/399 flagged on build 989). This is the escape
-          # hatch that re-captures the floor. #1472
-          onlyChanged: ${{ inputs.full_capture != true }}
-          # autoAcceptChanges is deliberately NOT set (defaults off) — the changed-story
-          # list on a full capture must be triaged by a human into real drift vs noise
-          # before baselines move. Don't set it to `false` either: the action forwards
-          # this input to `--auto-accept-changes`, which takes an optional branch glob,
-          # so a literal "false" is ambiguous rather than a disable.
+          # Always exit as soon as the Storybook is uploaded. Publishing is the
+          # whole point of this job — snapshot results are not a gate here, and
+          # waiting on them would make an unrelated visual diff fail a publish.
+          exitOnceUploaded: true
+          # TurboSnap keeps a publish from re-capturing all ~403 stories. It stays
+          # on purely as cost control; nothing downstream reads the diff.
+          onlyChanged: true
 
       # Post build result + snapshot usage to Slack. No-ops until the
       # SLACK_CHROMATIC_WEBHOOK_URL secret is set, so it's safe to merge first.
@@ -109,10 +83,8 @@ jobs:
           STORYBOOK_URL: ${{ steps.chromatic.outputs.storybookUrl }}
           BUILD_URL: ${{ steps.chromatic.outputs.buildUrl }}
           COMMIT_SHA: ${{ github.sha }}
-          # Which build this was — the workflow no longer runs only on main.
-          # Quoted: the ' #' inside the format string would otherwise start a
-          # YAML comment and silently truncate the expression.
-          BUILD_CONTEXT: "${{ github.event_name == 'pull_request' && format('PR #{0}', github.event.pull_request.number) || format('`{0}`', github.ref_name) }}"
+          # Publish-only, so every run is a branch publish (scheduled or dispatched).
+          BUILD_CONTEXT: "`${{ github.ref_name }}`"
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
           set -euo pipefail
@@ -123,11 +95,13 @@ jobs:
             status_emoji="❌"; status_text="failed"
           fi
 
+          # Informational only. Chromatic snapshots are not a gate since ADR-026 —
+          # pixel drift is caught by the Vitest visual gate in test.yml (#1637).
           changes="${CHANGES:-0}"
           if [ "${changes}" != "0" ]; then
-            change_line="🔍 *${changes}* visual change(s) need review"
+            change_line="🔍 *${changes}* Chromatic visual change(s) — FYI, not a gate (ADR-026)"
           else
-            change_line="No visual changes"
+            change_line="No Chromatic visual changes"
           fi
 
           captured="${CAPTURED:-0}"
