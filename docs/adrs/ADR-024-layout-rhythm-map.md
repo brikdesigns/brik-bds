@@ -29,11 +29,11 @@ ADR-023 locked the rhythm map for **content** relationships (title→subtitle `-
 
 3. **Layout primitives keep generic per-primitive defaults; the map governs what builders pass.** `Stack`/`Grid`/`Cluster` cannot know which relationship they're laying out, so the map is expressed as "which `gap` value to choose", documented in build-standards. Defaults that already match their dominant relationship stay (`Grid`=`lg` = card↔card).
 
-4. **Two default divergences are flagged, not changed here:** `FieldGrid` default `xl` (vs field↔field `--gap-lg`) and `CardList` default `md` (vs card↔card `--gap-lg`). Both are consumer-visible visual changes and Chromatic's snapshot quota is exhausted this month (#771) — realignment ships separately once a visual diff can gate it.
+4. **Two default divergences were flagged, not changed here:** `FieldGrid` default `xl` (vs field↔field `--gap-lg`) and `CardList` default `md` (vs card↔card `--gap-lg`). Both are consumer-visible visual changes that needed a visual diff to gate. **Resolved in #1630** — both now default `lg`, gated by the self-hosted visual regression suite (ADR-026) that replaced the quota-exhausted Chromatic gate.
 
 ## Consequences
 
 - Six vertical declarations fixed in this change (Menu, FilterButton, Meter ×2, BulletList ×2); BulletList's density ladder shifts one step (compact `--gap-sm`, comfortable `--gap-md`) to stay distinct and mode-safe.
-- Primitive-default realignment (FieldGrid, CardList) is #1630, gated on Chromatic quota reset.
+- Primitive-default realignment (FieldGrid `xl`→`lg`, CardList `md`→`lg`) shipped in #1630, gated by the self-hosted visual regression suite (ADR-026).
 - The page-grid standard (#1628) builds on this map: gutters are the horizontal siblings of these vertical relationships.
 - Horizontal rhythm (icon↔label, chip clusters) remains ungoverned by this ADR — file against #1625 if drift appears there.

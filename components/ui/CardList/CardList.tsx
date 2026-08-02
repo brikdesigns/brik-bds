@@ -8,7 +8,7 @@ export type CardListGap = 'sm' | 'md' | 'lg' | 'xl';
 export interface CardListProps extends HTMLAttributes<HTMLUListElement> {
   /** Stacking direction. `vertical` (default) for column lists, `horizontal` for rows. */
   orientation?: CardListOrientation;
-  /** Spacing between items. Default `md`. */
+  /** Spacing between items. Default `lg` — the card↔card rhythm-map value (ADR-024). */
   gap?: CardListGap;
   /** Horizontal only — when true, items size to their content instead of filling equal columns */
   fitContent?: boolean;
@@ -23,7 +23,7 @@ export interface CardListProps extends HTMLAttributes<HTMLUListElement> {
  */
 export function CardList({
   orientation = 'vertical',
-  gap = 'md',
+  gap = 'lg',
   fitContent = false,
   children,
   className,
