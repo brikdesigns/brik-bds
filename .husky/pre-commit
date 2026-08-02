@@ -1,5 +1,16 @@
 #!/bin/sh
 
+# ── Test-identity guard (#1634) ──
+# `git -C "" config user.name Test` is a silent no-op on the path, so a fixture
+# that means to write to its sandbox writes to the current repo instead — and
+# worktrees share the primary's .git/config, so every checkout inherits it.
+# 68ab0ac reached main authored by Test <t@example.com> that way. First guard in
+# the file because it is the cheapest and it gates authorship of everything below.
+_bds_scripts="$(cd "$(dirname "$0")/../scripts" && pwd)"
+# shellcheck source=scripts/lib/identity-guard.sh
+. "${_bds_scripts}/lib/identity-guard.sh"
+check_commit_identity || exit 1
+
 # ── Base-branch commit guard (#1568) ──
 # Task work lives in dedicated worktrees on task/* branches; `main` and
 # `staging` are only ever reached via PR-merge. A direct local commit to a
