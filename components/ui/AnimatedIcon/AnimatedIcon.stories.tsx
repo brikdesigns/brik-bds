@@ -7,7 +7,9 @@ import fadeSquare from './_examples/fade-square.json';
 const meta: Meta<typeof AnimatedIcon> = {
   title: 'Foundation/Assets/animated-icon',
   component: AnimatedIcon,
-  tags: ['surface-shared'],
+  // no-visual: lottie canvases animate via JS — the visual gate's CSS freeze
+  // can't pause them, so they never yield a stable screenshot (ADR-026).
+  tags: ['surface-shared', 'no-visual'],
   parameters: { layout: 'centered' },
   argTypes: {
     animationData: {

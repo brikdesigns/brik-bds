@@ -300,13 +300,16 @@ const preview: Preview = {
     withTheme,
     // Dev widgets — on by default (devWidgets global) so every visitor to
     // storybook.brikdesigns.com can submit design-system feedback and inspect
-    // components. Suppressed under Chromatic so neither the feedback FAB nor the
-    // DevBar/Inspect chrome appears in visual-regression snapshots; toggle off
-    // via the wrench toolbar for a clean canvas locally.
+    // components. Suppressed under Chromatic AND under the vitest browser
+    // runner (behavioral + ADR-026 visual gate) so neither the feedback FAB
+    // nor the DevBar/Inspect chrome appears in visual-regression snapshots;
+    // toggle off via the wrench toolbar for a clean canvas locally.
     (Story, context) => (
       <>
         <Story />
-        {context.globals.devWidgets === 'on' && !isChromatic() && (
+        {context.globals.devWidgets === 'on' &&
+          !isChromatic() &&
+          !('__vitest_browser__' in globalThis) && (
           <>
             <FeedbackWidget />
             <InspectWidget />
