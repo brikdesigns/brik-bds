@@ -22,6 +22,13 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 const pkg = JSON.parse(
   fs.readFileSync(path.join(dirname, 'package.json'), 'utf8'),
 );
+// Visual gate (ADR-026 Arm B, #1637). VISUAL_GATE=1 arms a toMatchScreenshot
+// afterEach on the `storybook` project (.storybook/vitest.visual.setup.ts).
+// CI-only: the `visual` job in test.yml sets it inside a pinned Playwright
+// container; baselines are platform-suffixed, so local (darwin) runs can never
+// match the committed linux references — leave it unset on dev machines.
+const visualGate = process.env.VISUAL_GATE === '1';
+
 const storybookOptimizeInclude = [
   'react',
   'react-dom',
@@ -54,11 +61,49 @@ export default defineConfig({
         },
         test: {
           name: 'storybook',
+          // Single string, not an array — the addon-vitest plugin only
+          // preserves a pre-existing string setupFiles when it prepends its
+          // own internal setup files; an array would be silently dropped.
+          ...(visualGate && {
+            setupFiles: './.storybook/vitest.visual.setup.ts',
+          }),
           browser: {
             enabled: true,
             headless: true,
             provider: playwright(),
             instances: [{ browser: 'chromium' }],
+            ...(visualGate && {
+              expect: {
+                toMatchScreenshot: {
+                  // Stable-screenshot detection captures until two consecutive
+                  // frames match. The 5s default is too tight for the heaviest
+                  // galleries (Icon "Bundled Set" renders ~400 SVGs; each
+                  // capture+compare is slow enough that two identical frames
+                  // don't land in 5s), and cold CI containers are slower than
+                  // a warm dev machine. 20s covers the tail without masking a
+                  // genuinely-animating story — that still fails, just later.
+                  timeout: 20_000,
+                  comparatorName: 'pixelmatch' as const,
+                  comparatorOptions: {
+                    // Per-pixel YIQ color distance below which a pixel counts
+                    // as matching — absorbs sub-pixel antialiasing jitter.
+                    threshold: 0.2,
+                    // Hard failure floor: >0.1% of pixels differing fails the
+                    // story. An 8px gap change on a 1200×900 canvas moves far
+                    // more than this; icon-level AA noise moves far less.
+                    allowedMismatchedPixelRatio: 0.001,
+                  },
+                  // Baselines live in one committed tree (not scattered next
+                  // to each *.stories.tsx, which is what the per-test-file
+                  // default would do across 144 story files).
+                  resolveScreenshotPath: (data) =>
+                    `${data.root}/tests/visual/__screenshots__/${data.arg}-${data.browserName}-${data.platform}${data.ext}`,
+                  // Diffs + actuals are CI artifacts, never committed.
+                  resolveDiffPath: (data) =>
+                    `${data.root}/tests/visual/__diffs__/${data.arg}-${data.browserName}-${data.platform}${data.ext}`,
+                },
+              },
+            }),
           },
         },
       },
