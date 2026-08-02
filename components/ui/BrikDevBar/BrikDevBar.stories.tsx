@@ -209,11 +209,18 @@ function ApiRow({ label, value }: { label: string; value: boolean }) {
 /** @summary With slots */
 export const WithSlots: Story = {
   name: 'With Registered Slots',
+  // no-visual: live slot registration re-renders the bar asynchronously, so
+  // the visual gate can't capture a stable frame (ADR-026). Behavioral
+  // coverage stays via the storybook project's normal render test.
+  tags: ['no-visual'],
   render: () => <DevBarWithSlots />,
 };
 
 /** @summary Imperative api */
 export const ImperativeApi: Story = {
   name: 'Imperative API (useDevBarApi)',
+  // no-visual: useDevBarApi mutates the bar imperatively after mount — no
+  // stable frame for a screenshot (ADR-026).
+  tags: ['no-visual'],
   render: () => <DevBarApiDemo />,
 };

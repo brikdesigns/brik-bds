@@ -1,0 +1,58 @@
+name: Visual Regression
+
+# Self-hosted visual gate (ADR-026 Arm B, #1637). Re-runs the `storybook`
+# vitest project with VISUAL_GATE=1 — arms a toMatchScreenshot afterEach on
+# every story (.storybook/vitest.visual.setup.ts) against the committed
+# baselines in tests/visual/__screenshots__/.
+#
+# The container image is load-bearing, not a convenience: baselines are named
+# per browser + platform and pixel output shifts with font/GPU stacks, so
+# references are only valid inside this exact image. Bump the tag DELIBERATELY,
+# in lockstep with the `playwright` npm dependency, and regenerate baselines in
+# the same PR (run the Update Visual Baselines workflow on the branch).
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: visual-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run visual regression suite
+        run: VISUAL_GATE=1 npx vitest run --project storybook
+
+      # On failure, the diff PNGs (and vitest's actual-screenshot attachments)
+      # are the review surface — there is no hosted UI (ADR-026 tradeoff).
+      - name: Upload visual diffs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs
+          path: |
+            tests/visual/__diffs__/
+            **/.vitest-attachments/
+          if-no-files-found: ignore
+          retention-days: 14

@@ -165,11 +165,16 @@ export const PinNoToken: Story = {
 /** @summary Form mode in DevBar slot */
 export const FormUserInDevBar: Story = {
   name: 'Form + user-auth · in DevBar slot',
+  // no-visual: the FAB mounts with an entrance transition and async auth
+  // state, so no stable frame lands within the gate's window (ADR-026).
+  tags: ['no-visual'],
   render: () => <FormUserDemo withDevBar={true} endpoint="/api/feedback" />,
 };
 
 /** @summary Form mode standalone FAB */
 export const FormUserStandalone: Story = {
   name: 'Form + user-auth · standalone FAB (no DevBar)',
+  // no-visual: same entrance-animated FAB, standalone (ADR-026).
+  tags: ['no-visual'],
   render: () => <FormUserDemo withDevBar={false} endpoint="/api/feedback" />,
 };
