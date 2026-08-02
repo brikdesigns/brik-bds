@@ -52,7 +52,7 @@ For every prop, state, or scenario, ask in order. First yes wins:
 | 2 | State prop that's not a semantic starting point (`disabled`, `loading`, icon slot, boolean toggle) | **`argTypes` only** — no story |
 | 3 | Value an agent would reach for as a starting template (`variant: 'destructive'`, `tone: 'warning'`) | **Dedicated args-driven story** — but an *axis* comparison is a Control + an MDX demo, never a story (rule 5) |
 | 4 | Composition or hook-driven state machine args can't express | **Irreducible render-mode story** |
-| 5 | Interaction assertion (`play` function) | **`play`-only `InteractionTest…` story, tagged `['!manifest']`** |
+| 5 | Interaction assertion (`play` function) | **`play`-only `InteractionTest…` story, tagged `['!manifest', 'interaction-test']`** — out of MCP discovery *and* out of the sidebar |
 
 Full rationale, the Button before/after table, and the composite-component slot pattern live in [ADR-010](../../docs/adrs/ADR-010-storybook-axes-of-information.md). When applying the matrix produces a different answer than a sibling file's existing shape, **the matrix wins** — sibling files are grandfathered and not retroactively swept.
 
@@ -75,7 +75,7 @@ Linted as `duplicate-args` only for the exact-args subset; the "same discriminat
 
 **Rule 2 — a story that differs from another only by a boolean prop is a Control, not a story** (matrix Q2, restated). `SubNavigation` `Default` vs `NoBorder` differ only by `bordered` (a `control:'boolean'` argType) → fold `NoBorder` away; the toggle lives in Controls on `Default`. Linted as `boolean-toggle-story` (hard-gated under `--enforce` since #1308 Step 7).
 
-**Rule 3 — a story that differs only by a *non-visual* prop is not a story.** A prop that changes wiring but not pixels (`linkComponent`, analytics id, `as`) renders identically to `Default`. Make it a `play`-only `InteractionTest…` that asserts the wiring, tagged `['!manifest']`, or document it in MDX — never a standalone visual story.
+**Rule 3 — a story that differs only by a *non-visual* prop is not a story.** A prop that changes wiring but not pixels (`linkComponent`, analytics id, `as`) renders identically to `Default`. Make it a `play`-only `InteractionTest…` that asserts the wiring, tagged `['!manifest', 'interaction-test']`, or document it in MDX — never a standalone visual story.
 
 ```tsx
 // ❌ SidebarNavigation — WithLinkComponent renders the same as Default; only injects a router Link
@@ -283,6 +283,10 @@ const meta = {
 
 Same tag applies to `InteractionTest…` stories (Q5 from the matrix) so they don't pollute discovery.
 
+### Interaction tests hide from the sidebar too
+
+A Q5 story carries **two** tags: `['!manifest', 'interaction-test']`. `!manifest` keeps it out of MCP discovery, `interaction-test` out of the sidebar via `excludeFromSidebar` in [`.storybook/main.ts`](../../.storybook/main.ts) — the assertion already runs in the vitest suite, so it is not a story to browse ([ADR-026](../../docs/adrs/ADR-026-regression-test-home-and-visual-gate.md) Arm A). Never key that on the built-in `play-fn` tag: it also covers 30 canonical stories. Linted `interaction-test-tag` (hard).
+
 ### Single concept per story
 
 Never combine two prop axes in one story. Write `Sizes` and `Variants` as separate stories — never `SizesAndVariants`. If a story name needs "and" to describe it, split it.
@@ -457,7 +461,7 @@ The story-shape lint ([`scripts/lint-story-shape.js`](../../scripts/lint-story-s
 - **`@summary` discipline** — every story export carries an `@summary` JSDoc of ≤ 60 chars (MCP truncates past that) (#1321)
 - **Surface tag** — exactly one of `surface-web` / `surface-product` / `surface-shared` in `meta.tags` (#1321)
 - **Deprecated ⇒ hidden** — a component-level `@deprecated` (or a `Deprecated/` title) requires `!manifest` in `meta.tags` (#1321)
-- **InteractionTest tagging** — an `InteractionTest…` export requires story-level `tags: ['!manifest']` and no `name:` display override (#1321)
+- **InteractionTest tagging** — an `InteractionTest…` export requires story-level `tags: ['!manifest', 'interaction-test']` and no `name:` display override (#1321, #1638)
 - **Consolidation rules 1–2** — `duplicate-args` (two declarative exports with structurally identical args — rule 1's exact-args subset) and `boolean-toggle-story` (a declarative story differing from `Default` only by boolean args — rule 2, matrix Q2). Graduated from advisory to hard by [#1308](https://github.com/brikdesigns/brik-bds/issues/1308) Step 7.
 
 There is no grandfather allowlist for any hard rule — each shipped in the same PR as the sweep that emptied its violation set.

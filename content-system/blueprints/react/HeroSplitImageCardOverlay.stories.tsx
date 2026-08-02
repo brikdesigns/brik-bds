@@ -143,7 +143,7 @@ export const Default: Story = {
  * @summary Decorative icon slot is aria-hidden
  */
 export const InteractionTestDecorativeIconSlot: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     ...baseProps,
     icon: (
@@ -177,7 +177,7 @@ export const InteractionTestDecorativeIconSlot: Story = {
  * @summary Price-CTA link intercept fires the handler
  */
 export const InteractionTestPriceCtaAsAction: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     ...baseProps,
     onPriceCtaClick: fn(),
@@ -213,7 +213,7 @@ export const InteractionTestPriceCtaAsAction: Story = {
  * @summary onClick price-CTA renders a button
  */
 export const InteractionTestPriceCtaActionButton: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     ...baseProps,
     section: {
@@ -245,7 +245,7 @@ export const InteractionTestPriceCtaActionButton: Story = {
  * @summary Price-suppressed card renders image + CTA
  */
 export const InteractionTestNoPrice: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     ...baseProps,
     section: {
