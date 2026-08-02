@@ -1,0 +1,131 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Icons.stories';
+import { Icon } from '@iconify/react';
+import * as Icons from '../../icons';
+
+<Meta of={Stories} />
+
+export const DemoLabel = ({ children }) => (
+  <div
+    style={{
+      fontFamily: 'var(--font-family-label)',
+      fontSize: 'var(--body-xs)',
+      textTransform: 'uppercase',
+      letterSpacing: '0.05em',
+      marginBottom: 'var(--gap-md)',
+      color: 'var(--text-muted)',
+    }}
+  >
+    {children}
+  </div>
+);
+
+export const SizeScale = () => (
+  <div>
+    <DemoLabel>fontSize scale</DemoLabel>
+    <div style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'end' }}>
+      {['12px', '16px', '20px', '24px', '32px'].map((size) => (
+        <div
+          key={size}
+          style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-sm)' }}
+        >
+          <Icon icon={Icons.Star} style={{ fontSize: size, color: 'var(--text-primary)' }} />
+          <span
+            style={{
+              fontFamily: 'var(--font-family-system, monospace)',
+              fontSize: 'var(--label-sm)',
+              color: 'var(--text-secondary)',
+            }}
+          >
+            {size}
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+export const FixedWidthAlignment = () => (
+  <div>
+    <DemoLabel>Fixed-width column alignment</DemoLabel>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)' }}>
+      {[Icons.House, Icons.User, Icons.Envelope, Icons.Gear].map((icon, i) => (
+        <div
+          key={icon}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 'var(--gap-sm)',
+            fontFamily: 'var(--font-family-body)',
+            fontSize: 'var(--body-md)',
+            color: 'var(--text-primary)',
+          }}
+        >
+          <Icon icon={icon} width={16} style={{ color: 'var(--text-secondary)', flexShrink: 0 }} />
+          <span>Menu item {i + 1}</span>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+# Icons
+
+<ComponentLinks slug="icons" />
+
+The BDS icon set — Phosphor glyphs re-exported from `components/icons` and rendered with Iconify's `<Icon>`. Import the name, not the string: `import { House } from '@brikdesigns/bds/icons'` gives you a tree-shakeable reference the bundler can drop when unused.
+
+Icons are sized by `fontSize` (they inherit `currentColor` and the text cursor), so an icon beside text matches that text without a hard-coded pixel value.
+
+## Default
+
+Import and render — the shape every other section builds on.
+
+<Canvas of={Stories.Setup} />
+
+## Variants
+
+The set is grouped by intent so a consumer can find a glyph without scanning all of it. These are catalogue galleries, not component states.
+
+### System
+
+<Canvas of={Stories.System} />
+
+### Navigation
+
+<Canvas of={Stories.Navigation} />
+
+### Actions
+
+<Canvas of={Stories.Actions} />
+
+### Objects
+
+<Canvas of={Stories.Objects} />
+
+### Domain
+
+<Canvas of={Stories.Domain} />
+
+### Sizing
+
+`fontSize` drives the glyph — the scale below is the same axis a Control would expose, shown side by side because comparing sizes is the point (rule 5, #1489).
+
+<Canvas>
+  <SizeScale />
+</Canvas>
+
+## Patterns
+
+### Fixed-width column alignment
+
+Pass an explicit `width` (not `fontSize`) when icons head a vertical list: a fixed box keeps the labels on one optical column even though the glyphs differ in natural width. `flexShrink: 0` stops a long label from squeezing the icon.
+
+<Canvas>
+  <FixedWidthAlignment />
+</Canvas>
+
+## Props
+
+<ArgTypes of={Stories} />

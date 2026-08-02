@@ -355,50 +355,5 @@ export const Domain: Story = {
    7. SIZING — Scale reference
    ═══════════════════════════════════════════════════════════════ */
 
-/**
- * bds-lint-ignore — this IS a `fontSize` gallery and belongs in MDX per rule 5,
- * but Icons ships no MDX page to host it; the move is tracked in #1643 (#1502).
- * @summary Sizing
- */
-export const Sizing: Story = {
-  name: 'Sizing',
-  render: () => (
-    <Stack>
-      <div>
-        <SectionLabel>fontSize scale</SectionLabel>
-        <div style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'end' }}>
-          {(['12px', '16px', '20px', '24px', '32px'] as const).map((size) => (
-            <div key={size} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-xs)' }}>
-              <Icon icon={Icons.Star} style={{ fontSize: size, color: 'var(--text-primary)' }} />
-              <span style={{
-                fontFamily: 'var(--font-family-system, monospace)',
-                fontSize: '10px', // bds-lint-ignore — story-only demo label sizing, not shipped component CSS
-                color: 'var(--text-secondary)',
-              }}>
-                {size}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div>
-        <SectionLabel>Fixed-width column alignment</SectionLabel>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xs)' }}>
-          {[Icons.House, Icons.User, Icons.Envelope, Icons.Gear].map((icon, i) => (
-            <div key={icon} style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'var(--gap-sm)',
-              fontFamily: 'var(--font-family-body)',
-              fontSize: 'var(--body-md)',
-              color: 'var(--text-primary)',
-            }}>
-              <Icon icon={icon} width={16} style={{ color: 'var(--text-secondary)', flexShrink: 0 }} />
-              <span>Menu item {i + 1}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </Stack>
-  ),
-};
+/* `fontSize` sizing + the fixed-width alignment pattern live in Icons.mdx as
+   docs-local demos (rule 5, #1489 / #1643). */
