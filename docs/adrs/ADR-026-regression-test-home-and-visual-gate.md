@@ -1,4 +1,4 @@
-# ADR-024 — Regression-test home + visual-regression cost model
+# ADR-026 — Regression-test home + visual-regression cost model
 
 **Status:** Proposed
 **Date:** 2026-08-01
