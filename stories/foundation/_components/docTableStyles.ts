@@ -23,14 +23,14 @@ export const docTh: CSSProperties = {
   fontWeight: 600,
   textTransform: 'uppercase' as const,
   letterSpacing: '0.04em',
-  borderBottom: '2px solid var(--border-primary)', // bds-lint-ignore
+  borderBottom: '2px solid var(--border-primary)',
 };
 
 export const docTd: CSSProperties = {
   padding: 'var(--gap-xs) var(--gap-sm)',
   fontFamily: 'var(--font-family-body)',
   fontSize: 'var(--body-sm)',
-  borderBottom: '1px solid var(--border-muted)', // bds-lint-ignore
+  borderBottom: '1px solid var(--border-muted)',
   color: 'var(--text-primary)',
 };
 
