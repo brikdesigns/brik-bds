@@ -40,6 +40,8 @@ LIB="$(cd "$(dirname "$0")/.." && pwd)/lib/overlap-filters.sh"
 [ -f "$LIB" ] || { echo "lib not found at $LIB"; exit 1; }
 # shellcheck source=/dev/null
 source "$LIB"
+# shellcheck source=/dev/null
+source "$(cd "$(dirname "$0")/.." && pwd)/lib/identity-guard.sh"
 
 PASS=0
 FAIL=0
@@ -116,23 +118,10 @@ git init -q -b main "$REPO"
 
 # Belt to the unset above's braces: prove the fixture repo is what the git calls
 # actually resolve to before any of them mutate anything. If a git env var ever
-# leaks past the unset, this fails loudly instead of silently rewriting refs in
-# whatever repository the caller happened to be standing in.
-#
-# Compare PHYSICAL paths: on macOS `mktemp -d` hands back /var/folders/… while
-# `--absolute-git-dir` resolves the /var → /private/var symlink, so a literal
-# prefix match on $TMPROOT reports an escape that never happened.
-FIXTURE_GITDIR="$(cd "$REPO" && git rev-parse --absolute-git-dir)"
-TMPROOT_REAL="$(cd "$TMPROOT" && pwd -P)"
-case "$FIXTURE_GITDIR" in
-  "$TMPROOT_REAL"/*) : ;;
-  *)
-    echo "refusing to run: fixture git-dir escaped the sandbox"
-    echo "  expected under: $TMPROOT_REAL"
-    echo "  actually:       $FIXTURE_GITDIR"
-    exit 1
-    ;;
-esac
+# leaks past the unset — or $REPO comes through empty, which makes `git -C ""`
+# target the live repo — this fails loudly instead of silently rewriting refs in
+# whatever repository the caller happened to be standing in (#1539, #1634).
+assert_throwaway_repo "$REPO" "overlap-filters fixture"
 git -C "$REPO" config user.email t@example.com
 git -C "$REPO" config user.name Test
 git -C "$REPO" remote add origin "$BARE"
