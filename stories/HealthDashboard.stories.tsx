@@ -89,14 +89,14 @@ function CompletenessGrid({ gaps }: { gaps: { name: string; missing: string[] }[
   return (
     <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)' }}>
       <thead>
-        <tr style={{ borderBottom: '1px solid var(--border-muted)' }}>{/* bds-lint-ignore */}
+        <tr style={{ borderBottom: '1px solid var(--border-muted)' }}>
           <th style={{ textAlign: 'left', padding: 'var(--gap-xs)', color: 'var(--text-secondary)' }}>Component</th>
           <th style={{ textAlign: 'left', padding: 'var(--gap-xs)', color: 'var(--text-secondary)' }}>Missing</th>
         </tr>
       </thead>
       <tbody>
         {gaps.map(g => (
-          <tr key={g.name} style={{ borderBottom: '1px solid var(--border-muted)' }}>{/* bds-lint-ignore */}
+          <tr key={g.name} style={{ borderBottom: '1px solid var(--border-muted)' }}>
             <td style={{ padding: 'var(--gap-xs)', color: 'var(--text-primary)' }}>{g.name}</td>
             <td style={{ padding: 'var(--gap-xs)' }}>
               {g.missing.map(m => <span key={m} style={{ ...badge(false), marginRight: 'var(--gap-xs)' }}>{m}</span>)}
