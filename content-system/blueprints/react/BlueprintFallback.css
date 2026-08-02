@@ -1,17 +1,27 @@
 /*
- * BlueprintFallback (React) — visible stub for an unknown blueprint
- * key. Mirrors `../astro/BlueprintFallback.astro` styling 1:1.
+ * BlueprintFallback (React) — visible stub for an unknown blueprint key.
+ *
+ * Mirrors `../astro/BlueprintFallback.astro`, with one deliberate difference:
+ * the Astro twin carries hex fallbacks (`var(--surface-secondary, #f5f5f5)`)
+ * because it renders in client repos where the token sheet may not be loaded.
+ * This file consumes BDS directly, so the bare `var()` is correct here — do
+ * NOT "sync" the fallbacks over.
+ *
+ * Everything else must stay identical. It drifted before (#1641): a raw
+ * `max-width: 960px` here against `var(--content-width-wide)` (1024px) there,
+ * plus `4px`/`2px` literals where the twin used tokens — all invisible to the
+ * token lint, which reads var() fallbacks, not bare literals.
  */
 
 .bp-fallback {
   padding: var(--padding-xl) var(--padding-lg);
   background: var(--surface-secondary);
-  border: 2px dashed var(--border-secondary);
+  border: var(--border-width-lg) dashed var(--border-secondary);
   margin-block: var(--gap-md);
 }
 
 .bp-fallback__container {
-  max-width: 960px;
+  max-width: var(--content-width-wide);
   margin-inline: auto;
   display: flex;
   flex-direction: column;
@@ -46,7 +56,7 @@
 .bp-fallback code {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.9em;
-  padding: 0 4px;
+  padding: 0 var(--padding-tiny);
   background: var(--surface-primary);
-  border-radius: 2px;
+  border-radius: var(--border-radius-sm);
 }

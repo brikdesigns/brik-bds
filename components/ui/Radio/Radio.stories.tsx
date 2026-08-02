@@ -87,7 +87,11 @@ export const Single: Story = {
    one radio per group sets initial selection.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Vertical group — radios stacked top-to-bottom */
+/**
+ * bds-lint-ignore — orientation is a group-layout concern, not a Radio prop, and
+ * a group needs several radios sharing `name` to be real (ADR-010, #1502).
+ * @summary Vertical group — radios stacked top-to-bottom
+ */
 export const Vertical: Story = {
   parameters: { layout: 'padded' },
   render: () => (
@@ -99,7 +103,11 @@ export const Vertical: Story = {
   ),
 };
 
-/** @summary Horizontal group — radios inline */
+/**
+ * bds-lint-ignore — orientation is a group-layout concern, not a Radio prop, and
+ * a group needs several radios sharing `name` to be real (ADR-010, #1502).
+ * @summary Horizontal group — radios inline
+ */
 export const Horizontal: Story = {
   parameters: { layout: 'padded' },
   render: () => (

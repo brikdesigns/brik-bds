@@ -60,7 +60,7 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
         margin: 0,
         marginBottom: 'var(--gap-lg)',
         fontFamily: 'var(--font-family-heading)',
-        fontSize: 'var(--heading-lg)', // bds-lint-ignore
+        fontSize: 'var(--heading-lg)',
         color: 'var(--text-primary)',
       }}
     >
@@ -113,7 +113,7 @@ const Card = ({
           alignItems: 'center',
           justifyContent: 'center',
           fontFamily: 'var(--font-family-label)',
-          fontSize: 'var(--body-sm)', // bds-lint-ignore
+          fontSize: 'var(--body-sm)',
           color: 'var(--text-secondary)',
           background:
             'repeating-linear-gradient(45deg, var(--surface-primary), var(--surface-primary) 8px, var(--surface-secondary) 8px, var(--surface-secondary) 16px)',
@@ -128,13 +128,13 @@ const Card = ({
         flexDirection: 'column',
         gap: 'var(--gap-tiny)',
         fontFamily: 'var(--font-family-body)',
-        fontSize: 'var(--body-sm)', // bds-lint-ignore
+        fontSize: 'var(--body-sm)',
       }}
     >
       <code
         style={{
           fontFamily: 'ui-monospace, monospace',
-          fontSize: 'var(--body-xs)', // bds-lint-ignore
+          fontSize: 'var(--body-xs)',
           color: 'var(--text-primary)',
         }}
       >
@@ -194,7 +194,7 @@ export const Catalog: Story = {
           style={{
             margin: 0,
             marginBottom: 'var(--gap-md)',
-            fontSize: 'var(--body-sm)', // bds-lint-ignore
+            fontSize: 'var(--body-sm)',
             color: 'var(--text-secondary)',
           }}
         >
@@ -210,7 +210,7 @@ export const Catalog: Story = {
             flexDirection: 'column',
             gap: 'var(--gap-sm)',
             fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-sm)', // bds-lint-ignore
+            fontSize: 'var(--body-sm)',
             color: 'var(--text-secondary)',
           }}
         >
@@ -227,7 +227,12 @@ export const Catalog: Story = {
 
 /* ─── Frame usage ─────────────────────────────────────────────── */
 
-/** @summary `Frame` consuming the new slug vocabulary. */
+/**
+ * bds-lint-ignore — theming reference, not a component story: this file IS the
+ * docs surface for the `--aspect-*` slug vocabulary, and `stories/theming/` has
+ * no MDX page, so rule 5 has no target here (#1502).
+ * @summary `Frame` consuming the new slug vocabulary.
+ */
 export const FrameSlugs: Story = {
   render: () => (
     <Section title="Frame ratio prop — slug vocabulary">
@@ -246,7 +251,7 @@ export const FrameSlugs: Story = {
             <code
               style={{
                 fontFamily: 'ui-monospace, monospace',
-                fontSize: 'var(--body-xs)', // bds-lint-ignore
+                fontSize: 'var(--body-xs)',
                 color: 'var(--text-primary)',
               }}
             >

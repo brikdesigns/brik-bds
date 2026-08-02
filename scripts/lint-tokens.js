@@ -47,6 +47,12 @@ const SD_CSS_PATH = path.join(
 );
 const REPO_ROOT = path.join(__dirname, '..');
 const COMPONENTS_DIR = path.join(__dirname, '..', 'components', 'ui');
+// Roots that get the bare-`bds-lint-ignore` rule ONLY (#1646). Not the token
+// suite — these carry story/demo styling the token rules intentionally allow.
+const BARE_IGNORE_ONLY_DIRS = [
+  path.join(__dirname, '..', 'stories'),
+  path.join(__dirname, '..', '.storybook'),
+];
 const BLUEPRINTS_DIR = path.join(__dirname, '..', 'content-system', 'blueprints');
 
 // Repo-relative POSIX path, stable regardless of cwd or how the file was passed
@@ -1024,12 +1030,18 @@ function checkInlineVarTsx(line, lineNum, file) {
 
 /**
  * Rule 9: bare `bds-lint-ignore` — the marker must carry a reason
- * (brikdesigns/brik-bds#1469). This is the authoritative bare-marker gate; it
- * runs on every gathered line (component .css / .tsx incl. stories, and
- * blueprints) so a suppression can never be added silently. The sibling gates
- * (token-coverage, slot-pattern-check, canonical-class-check) share the
- * marker-detection helper for their skip predicate but do not re-emit this
- * error, to avoid duplicate output on lines they also scan.
+ * (brikdesigns/brik-bds#1469). This is the authoritative bare-marker gate. The
+ * sibling gates (token-coverage, slot-pattern-check, canonical-class-check)
+ * share the marker-detection helper for their skip predicate but do not
+ * re-emit this error, to avoid duplicate output on lines they also scan.
+ *
+ * "Authoritative" was aspirational until #1646: the scan walked `components/ui`
+ * + blueprints only, so `stories/` and `.storybook/` — which no other gate
+ * walks either — could carry bare markers indefinitely, and 16 did. Those roots
+ * now get this rule via BARE_IGNORE_ONLY_DIRS, and only this rule: the token
+ * rules deliberately tolerate inline demo styling there, but an unexplained
+ * escape hatch is wrong everywhere, so its coverage must be repo-wide even
+ * where the rules it can suppress are not.
  */
 function checkBareLintIgnore(line, lineNum, file) {
   if (!isBareLintIgnore(line)) return [];
@@ -1141,7 +1153,25 @@ function main() {
     ? [...new Set(explicitAll.filter(f => isBlueprint(f) && /\.(css|astro|tsx)$/.test(f)).map(f => path.resolve(f)))]
     : findFiles(BLUEPRINTS_DIR, /\.(css|astro|tsx)$/);
 
-  const totalFiles = tsxFiles.length + cssFiles.length + blueprintFiles.length;
+  // Rule 9 is repo-wide, unlike every other rule here (#1646).
+  //
+  // The token rules are deliberately scoped to components/ui + blueprints —
+  // `stories/` and `.storybook/` carry inline demo styling the suite would
+  // drown in. But the bare-marker rule is about the *escape hatch*, not about
+  // tokens: a `bds-lint-ignore` with no reason is an ungated bypass wherever it
+  // sits (#1469). Scoping it to components/ui meant 7 bare markers sat in
+  // stories/theming/AspectRatios.stories.tsx passing CI indefinitely — and
+  // suppressing nothing, since the rules they'd have silenced don't apply to
+  // stories anyway. These roots therefore get rule 9 ONLY.
+  const bareOnlyFiles = anyExplicit
+    ? [...new Set(explicitAll
+        .map(f => path.resolve(f))
+        .filter(f => BARE_IGNORE_ONLY_DIRS.some(d => f.startsWith(d))
+                  && /\.(tsx|ts|css|astro|mdx)$/.test(f)))]
+    : BARE_IGNORE_ONLY_DIRS.flatMap(d =>
+        fs.existsSync(d) ? findFiles(d, /\.(tsx|ts|css|astro|mdx)$/) : []);
+
+  const totalFiles = tsxFiles.length + cssFiles.length + blueprintFiles.length + bareOnlyFiles.length;
   if (totalFiles === 0) {
     if (!jsonMode) console.log('  No files to scan — skipping.\n');
     if (jsonMode) {
@@ -1149,7 +1179,7 @@ function main() {
     }
     process.exit(0);
   }
-  if (!jsonMode) console.log(`  Scanning ${tsxFiles.length} .tsx + ${cssFiles.length} .css + ${blueprintFiles.length} blueprint files...\n`);
+  if (!jsonMode) console.log(`  Scanning ${tsxFiles.length} .tsx + ${cssFiles.length} .css + ${blueprintFiles.length} blueprint + ${bareOnlyFiles.length} marker-only files...\n`);
 
   // 3. Scan components for token usage violations
   const allViolations = [];
@@ -1185,6 +1215,14 @@ function main() {
       if (checkGrid) {
         allViolations.push(...checkGridCompliance(line, lineNum, file));
       }
+    }
+  }
+
+  // Rule 9 only — see BARE_IGNORE_ONLY_DIRS (#1646).
+  for (const file of bareOnlyFiles) {
+    const lines = fs.readFileSync(file, 'utf8').split('\n');
+    for (let i = 0; i < lines.length; i++) {
+      allViolations.push(...checkBareLintIgnore(lines[i], i + 1, file));
     }
   }
 

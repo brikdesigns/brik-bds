@@ -58,6 +58,12 @@
 
 const fs = require('fs');
 const path = require('path');
+const {
+  hasLintIgnore,
+  lintIgnoreReason,
+  BARE_IGNORE_RULE,
+  BARE_IGNORE_MESSAGE,
+} = require('./lib/bds-lint-ignore.cjs');
 
 const args = process.argv.slice(2);
 const FLAG_ENFORCE = args.includes('--enforce');
@@ -115,9 +121,17 @@ function metaEntries(content) {
   return parseTopLevelEntries(content.slice(open + 1, close));
 }
 
-/** Collapse an `@summary` tag's text (runs until the next `@tag` or the end of the JSDoc). */
+/**
+ * Collapse an `@summary` tag's text (runs until the next `@tag`, a
+ * `bds-lint-ignore` marker line, or the end of the JSDoc).
+ *
+ * The marker terminates the summary because it is not an `@tag`: without this,
+ * a marker written *after* `@summary` is swallowed into the summary text and
+ * surfaces as a baffling `summary-too-long` violation instead of suppressing
+ * the notice it was meant to suppress (#1502).
+ */
 function summaryTextFrom(jsdoc) {
-  const m = jsdoc.match(/@summary\s+([\s\S]*?)(?=\n\s*\*\s*@|\*\/)/);
+  const m = jsdoc.match(/@summary\s+([\s\S]*?)(?=\n\s*\*\s*@|\n\s*\*\s*bds-lint-ignore|\*\/)/);
   if (!m) return null;
   return m[1]
     .split('\n')
@@ -236,12 +250,20 @@ function structuralViolations(filePath, content) {
           message: `\`${name}\` is a play-assertion story but lacks story-level \`tags: ['!manifest']\` — it pollutes MCP discovery.`,
         });
       }
+      if (!tagsRaw.includes('interaction-test')) {
+        out.push({
+          rule: 'interaction-test-tag',
+          name,
+          line,
+          message: `\`${name}\` lacks the \`'interaction-test'\` tag — \`.storybook/main.ts\` keys \`excludeFromSidebar\` on it, so without the tag the assertion shows up as a browsable story (ADR-026 Arm A). Tag it \`['!manifest', 'interaction-test']\`.`,
+        });
+      }
       if (top.has('name')) {
         out.push({
           rule: 'interaction-test-name-override',
           name,
           line,
-          message: `\`${name}\` overrides \`name:\` — the InteractionTest prefix must stay visible in the sidebar (drop the display-name override).`,
+          message: `\`${name}\` overrides \`name:\` — the InteractionTest prefix is the convention that makes a play-assertion recognisable in the vitest output (drop the display-name override).`,
         });
       }
     }
@@ -387,6 +409,17 @@ function parseTopLevelEntries(body) {
  * output isn't defined by args at all.
  * @returns {{ name: string, line: number, args: Map|null, declarative: boolean }[]}
  */
+/**
+ * The JSDoc block immediately preceding an export, or `''`. Same "abuts the
+ * export" bar as `summaryForExport`, so a doc block separated by other code
+ * does not leak onto the wrong story.
+ */
+function jsdocForExport(content, exportIndex) {
+  const ONE_JSDOC = /\/\*\*(?:[^*]|\*(?!\/))*\*\//;
+  const jm = content.slice(0, exportIndex).match(new RegExp(`(${ONE_JSDOC.source})\\s*$`));
+  return jm ? jm[1] : '';
+}
+
 function extractStories(content) {
   const stories = [];
   const re = /^export const ([A-Z][A-Za-z0-9_]*)\b[^=]*=\s*\{/gm;
@@ -396,6 +429,7 @@ function extractStories(content) {
     const line = content.slice(0, m.index).split('\n').length;
     const objOpen = m.index + m[0].length - 1; // index of the `{`
     const objClose = matchClose(content, objOpen);
+    const jsdoc = jsdocForExport(content, m.index);
     let argsMap = null;
     let declarative = false;
     let hasRender = false;
@@ -412,7 +446,7 @@ function extractStories(content) {
         argsMap = parseTopLevelEntries(argsEntry.raw.slice(1, -1));
       }
     }
-    stories.push({ name, line, args: argsMap, declarative, hasRender, hasPlay, body });
+    stories.push({ name, line, args: argsMap, declarative, hasRender, hasPlay, body, jsdoc });
   }
   return stories;
 }
@@ -481,12 +515,51 @@ function axisGalleryViolations(stories) {
   return out;
 }
 
+/**
+ * A story marked reviewed-and-intentional via the shared `bds-lint-ignore`
+ * escape hatch in its JSDoc (#1502). Returns:
+ *   - `null`     → unmarked; the notice stands
+ *   - `''`       → bare marker; a hard violation, same bar as every other gate
+ *   - `<reason>` → reviewed; the notice is suppressed
+ *
+ * Reusing `bds-lint-ignore` rather than minting an axis-specific tag keeps one
+ * suppression vocabulary across the BDS gates, and inherits #1469's rule that a
+ * suppression must say why.
+ */
+function axisReviewReason(story) {
+  if (!hasLintIgnore(story.jsdoc)) return null;
+  // The marker's own line, so a multi-line JSDoc's later prose isn't read as
+  // the reason (`lintIgnoreReason` scans from the marker to end-of-line).
+  const line = story.jsdoc.split('\n').find((l) => hasLintIgnore(l)) || '';
+  return lintIgnoreReason(line.replace(/\s*\*\/\s*$/, ''));
+}
+
+/**
+ * A bare `bds-lint-ignore` in a story JSDoc is a hard violation — an ungated
+ * escape hatch on a real gate (#1469). Checked across every story, not only
+ * gallery-shaped ones, so the marker means the same thing everywhere.
+ */
+function bareLintIgnoreViolations(stories) {
+  const out = [];
+  for (const s of stories) {
+    if (axisReviewReason(s) !== '') continue; // null → unmarked; string → reasoned
+    out.push({
+      rule: BARE_IGNORE_RULE,
+      name: s.name,
+      line: s.line,
+      message: `\`${s.name}\`: ${BARE_IGNORE_MESSAGE} — say why this story is a Q4 composition rather than an axis gallery (#1502).`,
+    });
+  }
+  return out;
+}
+
 function axisGalleryNotices(stories, componentName) {
   const out = [];
   for (const s of stories) {
     if (s.name === 'Default' || !s.hasRender) continue;
     if (AXIS_NAMES.test(s.name)) continue; // already covered by the hard rule
     if (isAxisExempt(s)) continue;
+    if (axisReviewReason(s)) continue; // reviewed + justified (#1502)
     const mapsValueArray = /\[\s*'[^']+',\s*'[^']+'[^\]]*\]\s*(?:as const)?\s*\)?\s*\.map/.test(s.body);
     let repeats = 0;
     if (componentName) {
@@ -622,6 +695,7 @@ function lintFile(filePath) {
     advisories = advisoriesFor(stories);
     // Axis galleries: named+render is a hard violation, shape-only is a notice.
     violations.push(...axisGalleryViolations(stories));
+    violations.push(...bareLintIgnoreViolations(stories));
     const componentName = path.basename(filePath, '.stories.tsx');
     notices = axisGalleryNotices(stories, componentName);
   } catch {
@@ -720,4 +794,14 @@ function main() {
   process.exit(0);
 }
 
-main();
+/* Run only as a CLI, so the unit tests can import the pure helpers below
+   without executing a full repo scan (#1502). */
+if (require.main === module) main();
+
+module.exports = {
+  extractStories,
+  summaryTextFrom,
+  axisReviewReason,
+  axisGalleryNotices,
+  bareLintIgnoreViolations,
+};

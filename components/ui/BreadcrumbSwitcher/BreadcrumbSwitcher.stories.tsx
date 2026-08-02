@@ -89,7 +89,7 @@ export const SingleOption: Story = {
  * @summary Asserts keyboard open/close and focus return
  */
 export const InteractionTestKeyboardOpenClose: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     items: SERVICE_TRAIL,
     options: SIBLING_SERVICES,
@@ -116,7 +116,7 @@ export const InteractionTestKeyboardOpenClose: Story = {
  * @summary Asserts onNavigate wiring on option select
  */
 export const InteractionTestOnNavigate: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     items: SERVICE_TRAIL,
     options: SIBLING_SERVICES,
