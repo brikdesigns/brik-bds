@@ -261,6 +261,23 @@
   --state-focus: currentColor; /* bds-lint-ignore — resolves at use-site */
   --state-disabled-opacity: 0.4;
 
+  /* ── Disabled pair — light-mode correction (#1571)
+     The Figma source emits --text-disabled, --background-disabled AND
+     --border-disabled as the same --color-grayscale-light (#828282), so a
+     disabled Button painted its label in its own background colour: measured
+     1.00:1 on `components-button--disabled`, a solid grey blob with no visible
+     text. WCAG 1.4.3 exempts inactive components, so this is a legibility
+     defect rather than a conformance failure — but invisible is invisible.
+
+     Pale fill + mid-grey label reads as disabled and measures 5.45:1.
+     --border-disabled stays at the generated -light: it is the edge against the
+     page, not against the fill. Dark mode is corrected in theme-brand-brik.css,
+     which owns the dark values at a higher specificity than this block.
+
+     RETIRE both lines once the Figma variables are corrected and re-synced. */
+  --background-disabled: var(--color-grayscale-lighter);
+  --text-disabled: var(--color-grayscale-dark);
+
   /* ── Motion semantic aliases ──
      Semantic duration + easing tokens consumed by all BDS component CSS.
      Map to Figma primitive duration/easing tokens where available.
@@ -300,4 +317,17 @@
      the light/dark pair in lockstep and self-documenting. Figma source still
      emits mid-green for both — correct it and drop both lines. (#913) */
   --text-positive: var(--color-system-green);
+
+  /* Dark values for the disabled pair (light values above, in :root). The
+     generated dark layer repeats the light-mode defect — figma-tokens-dark.css
+     emits BOTH --text-disabled and --background-disabled as
+     --color-grayscale-dark, so a consumer running data-theme="dark" WITHOUT
+     .theme-brand-brik gets the same 1:1 invisible label. theme-brand-brik.css
+     corrects the branded dark case at a higher specificity; this block covers
+     the bare one, landing on the same pair (3.29:1).
+
+     RETIRE both lines once the Figma variables are corrected and re-synced.
+     (#1571) */
+  --background-disabled: var(--color-grayscale-darker);
+  --text-disabled: var(--color-grayscale-light);
 }

@@ -268,5 +268,31 @@ export const Disabled: Story = {
     // Disabled ghost must not paint a solid fill — background stays transparent.
     const bg = getComputedStyle(ghostIcon).backgroundColor;
     await expect(['rgba(0, 0, 0, 0)', 'transparent']).toContain(bg);
+
+    // A filled disabled Button must not paint its label in its own background
+    // colour. The Figma source shipped --text-disabled and --background-disabled
+    // as the same grayscale step, so this rendered at 1.00:1 — a grey blob with
+    // no visible text (#1571). Threshold is 3:1, not 4.5: WCAG 1.4.3 exempts
+    // inactive components, so the bar is legibility, not conformance.
+    // Source of truth for the pairing is tokens/contrast-pairings.json +
+    // `npm run contrast-gate`; this is the rendered smoke guard.
+    const filled = canvas.getByRole('button', { name: 'Primary' });
+    const filledStyle = getComputedStyle(filled);
+    const channel = (v: number) => {
+      const c = v / 255;
+      return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+    };
+    const luminance = (color: string) => {
+      const [r, g, b] = (color.match(/\d+(\.\d+)?/g) ?? [])
+        .slice(0, 3)
+        .map(Number);
+      return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+    };
+    const [lighter, darker] = [
+      luminance(filledStyle.color),
+      luminance(filledStyle.backgroundColor),
+    ].sort((a, b) => b - a);
+
+    await expect((lighter + 0.05) / (darker + 0.05)).toBeGreaterThanOrEqual(3);
   },
 };
