@@ -140,7 +140,7 @@ export const WithSuggestions: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestPlainEnterCommits: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: { label: 'Tags', values: [], addLabel: 'Add', onChange: fn() },
   render: (args) => <Controlled {...args} />,
   play: async ({ canvasElement, args }) => {
@@ -157,7 +157,7 @@ export const InteractionTestPlainEnterCommits: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestSelectFromDropdown: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services', suggestions: DENTAL_SERVICES, values: [],
     placeholder: 'Search…', addLabel: 'Add Service', onChange: fn(),
@@ -179,7 +179,7 @@ export const InteractionTestSelectFromDropdown: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestStrictRejectsFreeForm: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Insurance', suggestions: DENTAL_INSURANCE, values: [],
     strict: true, placeholder: 'Search…', addLabel: 'Add', onChange: fn(),

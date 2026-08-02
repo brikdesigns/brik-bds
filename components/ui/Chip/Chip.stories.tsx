@@ -87,7 +87,7 @@ export const Default: Story = {
  * @summary Enter on a clickable chip fires onChipClick
  */
 export const InteractionTestKeyboardActivation: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Filter',
     onChipClick: fn(),

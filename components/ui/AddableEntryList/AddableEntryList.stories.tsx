@@ -172,7 +172,7 @@ export const WithSuggestions: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestAddAppendsRow: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Competitors',
     primaryInputType: 'url',
@@ -204,7 +204,7 @@ export const InteractionTestAddAppendsRow: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestRemoveEntry: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Competitors',
     primaryInputType: 'url',
@@ -234,7 +234,7 @@ export const InteractionTestRemoveEntry: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestReadModeUrlAnchor: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Competitors',
     primaryInputType: 'url',
@@ -259,7 +259,7 @@ export const InteractionTestReadModeUrlAnchor: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestSuggestionKeyboardFlow: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services',
     primaryLabel: 'Service Name',
@@ -304,7 +304,7 @@ export const InteractionTestSuggestionKeyboardFlow: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestStrictRejectsFreeForm: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services',
     primaryLabel: 'Service Name',
@@ -340,7 +340,7 @@ export const InteractionTestStrictRejectsFreeForm: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestClickSelectSuggestion: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services',
     primaryLabel: 'Service Name',
@@ -377,7 +377,7 @@ export const InteractionTestClickSelectSuggestion: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestEscapeClosesDropdown: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services',
     primaryLabel: 'Service Name',

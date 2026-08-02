@@ -68,7 +68,7 @@ export const Default: Story = {
  * @summary Asserts injected linkComponent renders linked crumbs
  */
 export const InteractionTestLinkComponent: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     items: [
       { label: 'Home', href: '/' },

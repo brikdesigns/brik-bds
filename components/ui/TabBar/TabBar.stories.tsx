@@ -151,7 +151,7 @@ const tabClickHandler = fn();
 
 /** @summary Verifies clicking a tab fires its onClick handler */
 export const InteractionTest: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     variant: 'tab',
     items: [

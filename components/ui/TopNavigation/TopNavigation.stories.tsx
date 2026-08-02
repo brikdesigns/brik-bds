@@ -90,7 +90,7 @@ export const Default: Story = {
  * @summary Asserts injected linkComponent renders nav links
  */
 export const InteractionTestLinkComponent: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     logo: <LogoPlaceholder />,
     links: sampleLinks,

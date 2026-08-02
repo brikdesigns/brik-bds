@@ -102,7 +102,7 @@ export const Popover: Story = {
  * @summary Enter on a row fires onItemClick
  */
 export const InteractionTestKeyboardActivation: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     notifications: SAMPLE_NOTIFICATIONS,
     onItemClick: fn(),

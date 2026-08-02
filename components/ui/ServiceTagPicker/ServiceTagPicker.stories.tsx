@@ -97,7 +97,7 @@ export const WithControlledSelection: Story = {
  * @summary Verifies radio selection + keyboard navigation
  */
 export const InteractionTestSelection: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   render: () => <InteractiveServiceTagPicker defaultValue="brand" />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

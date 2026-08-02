@@ -96,7 +96,7 @@ export const StructuredContentWarning: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestAddEntry: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Payment Types',
     placeholder: 'e.g. Aetna',
@@ -125,7 +125,7 @@ export const InteractionTestAddEntry: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestRemoveEntry: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services Offered',
     values: ['Cleaning', 'Whitening', 'Braces'],
@@ -145,7 +145,7 @@ export const InteractionTestRemoveEntry: Story = {
  * @summary Play-function interaction test
  */
 export const InteractionTestDuplicateBlocked: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     label: 'Services Offered',
     values: ['Cleaning'],

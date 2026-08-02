@@ -236,12 +236,20 @@ function structuralViolations(filePath, content) {
           message: `\`${name}\` is a play-assertion story but lacks story-level \`tags: ['!manifest']\` — it pollutes MCP discovery.`,
         });
       }
+      if (!tagsRaw.includes('interaction-test')) {
+        out.push({
+          rule: 'interaction-test-tag',
+          name,
+          line,
+          message: `\`${name}\` lacks the \`'interaction-test'\` tag — \`.storybook/main.ts\` keys \`excludeFromSidebar\` on it, so without the tag the assertion shows up as a browsable story (ADR-026 Arm A). Tag it \`['!manifest', 'interaction-test']\`.`,
+        });
+      }
       if (top.has('name')) {
         out.push({
           rule: 'interaction-test-name-override',
           name,
           line,
-          message: `\`${name}\` overrides \`name:\` — the InteractionTest prefix must stay visible in the sidebar (drop the display-name override).`,
+          message: `\`${name}\` overrides \`name:\` — the InteractionTest prefix is the convention that makes a play-assertion recognisable in the vitest output (drop the display-name override).`,
         });
       }
     }

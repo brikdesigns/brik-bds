@@ -164,7 +164,7 @@ export const Default: Story = {
  * @summary Asserts injected linkComponent renders the nav items
  */
 export const InteractionTestLinkComponent: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: {
     logo: <BrikLogomark />,
     navItems: defaultNavItems,

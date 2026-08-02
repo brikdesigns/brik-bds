@@ -55,7 +55,7 @@ export const Default: Story = {
  * @summary Verifies label typography + click fires onChange
  */
 export const InteractionTestLabelTypography: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: { label: 'Enable feature', size: 'lg', onChange: fn() },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
@@ -79,7 +79,7 @@ export const InteractionTestLabelTypography: Story = {
  * @summary Verifies a disabled switch blocks clicks
  */
 export const InteractionTestDisabledBlocksToggle: Story = {
-  tags: ['!manifest'],
+  tags: ['!manifest', 'interaction-test'],
   args: { label: 'Locked setting', size: 'lg', disabled: true, onChange: fn() },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
