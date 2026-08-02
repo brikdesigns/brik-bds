@@ -27,6 +27,8 @@ LIB="$(cd "$(dirname "$0")/.." && pwd)/lib/base-freshness.sh"
 [ -f "$LIB" ] || { echo "lib not found at $LIB"; exit 1; }
 # shellcheck source=/dev/null
 source "$LIB"
+# shellcheck source=/dev/null
+source "$(cd "$(dirname "$0")/.." && pwd)/lib/identity-guard.sh"
 
 PASS=0; FAIL=0; FAILED_CASES=()
 
@@ -86,14 +88,9 @@ REPO="$TMPROOT/r"
 git init -q -b main "$REPO"
 
 # Prove the fixture is what the git calls actually resolve to before any of them
-# mutate anything — belt to the unset above's braces (#1539). Physical paths:
-# macOS mktemp hands back /var/folders/… while git resolves /private/var.
-FIXTURE_GITDIR="$(cd "$REPO" && git rev-parse --absolute-git-dir)"
-TMPROOT_REAL="$(cd "$TMPROOT" && pwd -P)"
-case "$FIXTURE_GITDIR" in
-  "$TMPROOT_REAL"/*) : ;;
-  *) echo "refusing to run: fixture git-dir escaped the sandbox"; echo "  expected under: $TMPROOT_REAL"; echo "  actually: $FIXTURE_GITDIR"; exit 1 ;;
-esac
+# mutate anything — belt to the unset above's braces (#1539), and a guard against
+# an empty $REPO making `git -C ""` write to the live repo (#1634).
+assert_throwaway_repo "$REPO" "base-freshness fixture"
 
 git -C "$REPO" config user.email t@example.com
 git -C "$REPO" config user.name Test
@@ -144,6 +141,8 @@ echo "── local mode: a genuinely fresh bump ──"
 # Same setup, but main never moved the pin.
 REPO2="$TMPROOT/r2"
 git init -q -b main "$REPO2"
+# The second fixture went unguarded until #1634 — same writes, same blast radius.
+assert_throwaway_repo "$REPO2" "base-freshness second fixture"
 git -C "$REPO2" config user.email t@example.com
 git -C "$REPO2" config user.name Test
 printf '{"dependencies":{"@brikdesigns/bds":"^0.136.0"}}\n' > "$REPO2/package.json"

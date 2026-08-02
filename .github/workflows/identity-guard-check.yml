@@ -1,0 +1,71 @@
+name: Identity Guard Check
+
+# Locks the guard that keeps test-fixture git identity out of the live repo.
+#
+# `git -C "" config user.name Test` is a silent no-op on the path argument, so a
+# fixture that means to write to its sandbox writes to whatever repo is current.
+# Worktrees share the primary's .git/config, so one such call pollutes every
+# checkout at once — this repo carried `user.name=Test / user.email=t@example.com`
+# from at least 2026-07-29, and `68ab0ac` reached main authored by it (#1634).
+#
+# The load-bearing assertions are the live-repo ones: assert_throwaway_repo must
+# refuse an empty path and a repo outside $TMPDIR. "It accepts a sandbox" would
+# have passed against the bug. The suite's negative control rebuilds a permissive
+# guard and requires the 68ab0ac identity to slip through.
+#
+# The two fixture suites are in the paths list because they are the guard's
+# callers — a change that drops an assert_throwaway_repo call must re-run this.
+#
+# Cheap and hermetic: bash only, no npm ci, no build, no network.
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/lib/identity-guard.sh'
+      - 'scripts/__tests__/test-identity-guard.sh'
+      - 'scripts/__tests__/test-overlap-filters.sh'
+      - 'scripts/__tests__/test-base-freshness.sh'
+      - '.husky/pre-commit'
+      - '.github/workflows/identity-guard-check.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/lib/identity-guard.sh'
+      - 'scripts/__tests__/test-identity-guard.sh'
+      - 'scripts/__tests__/test-overlap-filters.sh'
+      - 'scripts/__tests__/test-base-freshness.sh'
+      - '.husky/pre-commit'
+      - '.github/workflows/identity-guard-check.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: identity-guard-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  identity-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fixture identity cannot reach the live repo
+        run: bash scripts/__tests__/test-identity-guard.sh < /dev/null
+
+      # The callers, so a dropped assert_throwaway_repo shows up as a red suite
+      # rather than a silently unguarded fixture.
+      - name: Guarded fixtures still pass
+        run: |
+          bash scripts/__tests__/test-overlap-filters.sh < /dev/null
+          bash scripts/__tests__/test-base-freshness.sh < /dev/null
+
+      # --severity=warning: the fixture suites predate this gate and carry SC1091
+      # (unfollowed `source`) plus style notes. Warning-and-above keeps real
+      # findings failing without demanding an unrelated cleanup in this PR.
+      - name: shellcheck the guard + its callers
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+          shellcheck --severity=warning \
+                     scripts/lib/identity-guard.sh \
+                     scripts/__tests__/test-identity-guard.sh \
+                     scripts/__tests__/test-overlap-filters.sh \
+                     scripts/__tests__/test-base-freshness.sh
