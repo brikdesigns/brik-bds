@@ -169,6 +169,8 @@ export const Default: Story = {
  * (screen-reader announcement). Icon buttons share the same variant scale
  * and size scale as text buttons — only the content shape differs.
  *
+ * bds-lint-ignore — Q4 reference for the icon-only branch of the discriminated
+ * union; the branch is a type-level shape, not a prop value (#1502).
  * @summary Icon-only Button — same variant + size scale as text mode
  */
 export const IconOnly: Story = {
@@ -197,6 +199,8 @@ export const IconOnly: Story = {
  * Anchor-mode rendering. When `href` is set, Button renders as `<a>` instead
  * of `<button>` — same visual styling, semantically a link.
  *
+ * bds-lint-ignore — Q4 reference for the anchor branch of the discriminated
+ * union; the rendered element differs, which no Control can show (#1502).
  * @summary Button as anchor — render as `<a href>` for navigation
  */
 export const AsLink: Story = {

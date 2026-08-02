@@ -62,6 +62,10 @@ export const EmptyHtml: Story = {
  * The heading→paragraph and paragraph→paragraph gaps hold across all four
  * `[data-mode-spacing]` density modes — the wide gap stays visibly larger
  * than the medium gap in every mode (ADR-023 §3 monotonic guarantee).
+ *
+ * bds-lint-ignore — the assertion is a *relationship across* modes (wide stays
+ * larger than medium in all four), so the four must be visible at once; the
+ * spacing-mode toolbar global shows one at a time (#1502).
  * @summary Rhythm across all four spacing density modes
  */
 export const SpacingModes: Story = {

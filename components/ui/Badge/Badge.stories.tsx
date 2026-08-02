@@ -101,7 +101,11 @@ export const Neutral: Story = {
 
 /* ─── Patterns (Q4 irreducible + real-world composition) ──────── */
 
-/** @summary Content lifecycle statuses in a settings list */
+/**
+ * bds-lint-ignore — Q4 composition, not a `status` gallery: each Badge is paired
+ * with the real-world row label that gives the status meaning (#1502).
+ * @summary Content lifecycle statuses in a settings list
+ */
 export const ContentStatusSolid: Story = {
   render: () => (
     <Stack gap="var(--gap-lg)">

@@ -136,6 +136,8 @@ export const Loading: Story = {
  * and mixed body content (FieldGrid, prose, BulletList). Irreducible because
  * the value is the multi-section page rhythm, which a single section can't show.
  *
+ * bds-lint-ignore — Q4 page composition; the repeat is several *different*
+ * sections, not one prop varied across a scale (#1502).
  * @summary Read-mode page — several stacked DataSections
  */
 export const ReadModePage: Story = {

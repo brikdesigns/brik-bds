@@ -74,7 +74,11 @@ export const Single: Story = {
    be expressed as a prop on a single Checkbox.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Vertical group — checkboxes stacked top-to-bottom */
+/**
+ * bds-lint-ignore — orientation is a group-layout concern, not a Checkbox prop,
+ * so it cannot reduce to a Control on Default (ADR-010, #1502).
+ * @summary Vertical group — checkboxes stacked top-to-bottom
+ */
 export const Vertical: Story = {
   parameters: { layout: 'padded' },
   render: () => (
@@ -87,7 +91,11 @@ export const Vertical: Story = {
   ),
 };
 
-/** @summary Horizontal group — checkboxes inline */
+/**
+ * bds-lint-ignore — orientation is a group-layout concern, not a Checkbox prop,
+ * so it cannot reduce to a Control on Default (ADR-010, #1502).
+ * @summary Horizontal group — checkboxes inline
+ */
 export const Horizontal: Story = {
   parameters: { layout: 'padded' },
   render: () => (
