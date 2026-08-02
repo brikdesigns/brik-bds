@@ -68,21 +68,8 @@ export const Default: Story = {
   ),
 };
 
-/** @summary All named ratio presets */
-export const RatioPresets: Story = {
-  render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--gap-lg)' }}>
-      {(['square', 'portrait', 'landscape', 'wide', 'ultrawide'] as const).map((r) => (
-        <div key={r}>
-          <SectionLabel>ratio=&quot;{r}&quot;</SectionLabel>
-          <Frame ratio={r}>
-            <PlaceholderImage />
-          </Frame>
-        </div>
-      ))}
-    </div>
-  ),
-};
+/* `ratio` is a Control on Default — the preset gallery lives in Frame.mdx
+   as a docs-local demo (rule 5, #1489 / #1502). */
 
 /** @summary Custom ratio via the `customRatio` prop */
 export const CustomRatio: Story = {
@@ -104,25 +91,8 @@ export const CustomRatio: Story = {
   ),
 };
 
-/** @summary Object-fit modes — cover crops, contain letterboxes */
-export const FitModes: Story = {
-  render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--gap-lg)' }}>
-      {(['cover', 'contain', 'fill', 'none'] as const).map((f) => (
-        <div key={f}>
-          <SectionLabel>fit=&quot;{f}&quot;</SectionLabel>
-          <Frame ratio="square" fit={f} style={{ background: 'var(--surface-secondary)' }}>
-            <img
-              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MCA1MCI+PHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjZTM1MzM1Ii8+PC9zdmc+"
-              alt=""
-              style={{ width: '100%', height: '100%' }}
-            />
-          </Frame>
-        </div>
-      ))}
-    </div>
-  ),
-};
+/* `fit` is a Control on Default — the mode gallery lives in Frame.mdx
+   as a docs-local demo (rule 5, #1489 / #1502). */
 
 /**
  * Default Frame is width-anchored (fills the container, height derives from
@@ -130,6 +100,9 @@ export const FitModes: Story = {
  * ratio derives the width. Used for fixed-height thumbnail rows (e.g.
  * `FileCard`) where wide ratios must stay tall enough to read.
  *
+ * bds-lint-ignore — the subject is `anchor`, not `ratio`: showing that height
+ * anchoring inverts the sizing model needs ratio varied underneath it, so it is
+ * a two-axis interaction rather than one axis (#1502).
  * @summary Height-anchored — fixed height, ratio drives width
  */
 export const HeightAnchored: Story = {

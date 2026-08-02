@@ -50,7 +50,12 @@ export const Neutral: Story = {
   args: { quote: SAMPLE, attribution: ATTRIBUTION },
 };
 
-/** @summary Service-line accents — left-border + soft tint per line. */
+/**
+ * bds-lint-ignore — token-contract reference: each service line resolves a
+ * different border + tint token pair, and the guarantee is that all five stay
+ * distinguishable together, which one-at-a-time cannot show (#1502).
+ * @summary Service-line accents — left-border + soft tint per line.
+ */
 export const ServiceLineAccents: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>

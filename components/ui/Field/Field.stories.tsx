@@ -75,6 +75,8 @@ export const WithCompositeEmpty: Story = {
  * only to force sheet-tier type on a page, or `tier="standard"` to force
  * page-tier type inside a sheet.
  *
+ * bds-lint-ignore — the repeat varies *field state* (plain / empty / helper /
+ * error) at a fixed tier, not the `tier` axis itself (#1502).
  * @summary `tier="compact"` pinned outside a Sheet
  */
 export const CompactTier: Story = {
@@ -94,7 +96,11 @@ export const CompactTier: Story = {
   ),
 };
 
-/** @summary `children` accepts text, Tags, anchors, or lists */
+/**
+ * bds-lint-ignore — the repeat varies the *content type* of `children` (text /
+ * Tag / anchor / list), which is not a prop scale a Control can express (#1502).
+ * @summary `children` accepts text, Tags, anchors, or lists
+ */
 export const WithRichValue: Story = {
   render: () => (
     <Frame>

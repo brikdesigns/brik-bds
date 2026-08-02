@@ -174,6 +174,8 @@ Why the MDX layer rather than deleting the comparison: side-by-side genuinely re
 - **`axis-gallery-story` (HARD, gates under `--enforce`)** — an export *named* after an axis and in render mode, minus the two exemptions above. Unambiguous.
 - **`axis-gallery-shape` (NOTICE, never gates)** — a render that *looks* like a gallery (maps a value array, or repeats the component 3+ times) but isn't axis-named. Reported for review only: roughly a third are legitimate Q4 compositions (`Badge` `ContentStatusSolid`, `Checkbox` `Vertical`, `Field` `CompactTier`), and "is this a gallery" is the same not-statically-decidable judgment rules 3–4 leave to review.
 
+**Marking a notice reviewed (#1502).** A Q4 story clears its notice with a `bds-lint-ignore` line in its JSDoc stating why — bare is a hard violation (#1469). It must sit *before* `@summary`, which otherwise swallows it. The count should reach 0: a survivor is unreviewed, or a blocked move naming its ticket (#1643).
+
 **History.** This section previously granted a *narrow axis-only-gallery exception* — one dedicated story per axis, when side-by-side was the whole point and autodocs couldn't show it. The BDS-27 Storybook review reversed that, and #1489 applied the reversal across 16 stories. [ADR-010](../../docs/adrs/ADR-010-storybook-axes-of-information.md) records the decision.
 
 ## Multi-preset Container pattern

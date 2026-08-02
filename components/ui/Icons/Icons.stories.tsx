@@ -355,7 +355,11 @@ export const Domain: Story = {
    7. SIZING — Scale reference
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Sizing */
+/**
+ * bds-lint-ignore — this IS a `fontSize` gallery and belongs in MDX per rule 5,
+ * but Icons ships no MDX page to host it; the move is tracked in #1643 (#1502).
+ * @summary Sizing
+ */
 export const Sizing: Story = {
   name: 'Sizing',
   render: () => (

@@ -1,8 +1,53 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Cluster.stories';
+import { Cluster } from './Cluster';
 
 <Meta of={Stories} />
+
+export const Pill = ({ children }) => (
+  <span
+    style={{
+      padding: '4px 12px',
+      background: 'var(--surface-secondary)',
+      border: '1px solid var(--border-secondary)',
+      borderRadius: '9999px',
+      fontFamily: 'var(--font-family-label)',
+      fontSize: 'var(--label-sm)',
+      color: 'var(--text-primary)',
+      whiteSpace: 'nowrap',
+    }}
+  >
+    {children}
+  </span>
+);
+
+export const GapScale = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+    {['tiny', 'xs', 'sm', 'md', 'lg', 'xl'].map((g) => (
+      <div key={g}>
+        <div
+          style={{
+            fontFamily: 'var(--font-family-label)',
+            fontSize: 'var(--body-xs)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            color: 'var(--text-muted)',
+            marginBottom: 'var(--gap-sm)',
+          }}
+        >
+          gap="{g}"
+        </div>
+        <Cluster gap={g}>
+          <Pill>one</Pill>
+          <Pill>two</Pill>
+          <Pill>three</Pill>
+          <Pill>four</Pill>
+        </Cluster>
+      </div>
+    ))}
+  </div>
+);
 
 # Cluster
 
@@ -24,7 +69,9 @@ The behaviors Cluster varies on: wrapping to new rows under constrained width, a
 
 ### Gap scale
 
-<Canvas of={Stories.GapScale} />
+<Canvas>
+  <GapScale />
+</Canvas>
 
 ## Patterns
 

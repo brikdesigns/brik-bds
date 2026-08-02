@@ -53,26 +53,5 @@ export const Default: Story = {
   ),
 };
 
-/**
- * All four gap values side by side — `sm`, `md`, `lg`, `xl`.
- *
- * @summary Gap scale — sm / md / lg / xl
- */
-export const GapScale: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', maxWidth: 720 }}>
-      {(['sm', 'md', 'lg', 'xl'] as const).map((g) => (
-        <div key={g}>
-          <p style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 'var(--gap-sm)' }}>{`gap = ${g}`}</p>
-          <CardList orientation="horizontal" gap={g}>
-            {[1, 2, 3].map((n) => (
-              <Card key={n} variant="outlined" padding="md">
-                <CardTitle as="h4">{`Card ${n}`}</CardTitle>
-              </Card>
-            ))}
-          </CardList>
-        </div>
-      ))}
-    </div>
-  ),
-};
+/* `gap` is a Control on Default — the side-by-side scale lives in CardList.mdx
+   as a docs-local demo (rule 5, #1489 / #1502). */

@@ -60,52 +60,11 @@ export const Default: Story = {
   ),
 };
 
-/** @summary Aspect-ratio slugs from the --aspect-* family */
-export const Ratios: Story = {
-  render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--gap-lg)' }}>
-      {(['1-1', '3-2', '4-3', '3-4', '16-9', '9-16'] as const).map((r) => (
-        <div key={r}>
-          <p
-            style={{
-              margin: '0 0 var(--gap-sm)',
-              fontFamily: 'var(--font-family-label)',
-              fontSize: 'var(--label-sm)',
-              color: 'var(--text-secondary)',
-            }}
-          >
-            ratio=&quot;{r}&quot;
-          </p>
-          <Image src={landscape} alt="" ratio={r} />
-        </div>
-      ))}
-    </div>
-  ),
-};
+/* `ratio` is a Control on Default — the slug gallery lives in Image.mdx
+   as a docs-local demo (rule 5, #1489 / #1502). */
 
-/** @summary object-fit modes inside a fixed ratio */
-export const FitModes: Story = {
-  render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--gap-lg)' }}>
-      {(['cover', 'contain', 'fill'] as const).map((f) => (
-        <div key={f}>
-          <p
-            style={{
-              margin: '0 0 var(--gap-sm)',
-              fontFamily: 'var(--font-family-label)',
-              fontSize: 'var(--label-sm)',
-              color: 'var(--text-secondary)',
-            }}
-          >
-            fit=&quot;{f}&quot;
-          </p>
-          {/* Portrait source in a square frame — the difference is visible */}
-          <Image src={portrait} alt="" ratio="1-1" fit={f} />
-        </div>
-      ))}
-    </div>
-  ),
-};
+/* `fit` is a Control on Default — the mode gallery lives in Image.mdx
+   as a docs-local demo (rule 5, #1489 / #1502). */
 
 /** @summary Figure with a figcaption */
 export const WithCaption: Story = {

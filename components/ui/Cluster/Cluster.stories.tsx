@@ -117,21 +117,5 @@ export const ActionRow: Story = {
   ),
 };
 
-/** @summary Gap scale */
-export const GapScale: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-      {(['tiny', 'xs', 'sm', 'md', 'lg', 'xl'] as const).map((g) => (
-        <div key={g}>
-          <SectionLabel>gap=&quot;{g}&quot;</SectionLabel>
-          <Cluster gap={g}>
-            <Pill>one</Pill>
-            <Pill>two</Pill>
-            <Pill>three</Pill>
-            <Pill>four</Pill>
-          </Cluster>
-        </div>
-      ))}
-    </div>
-  ),
-};
+/* `gap` is a Control on Default — the side-by-side scale lives in Cluster.mdx
+   as a docs-local demo (rule 5, #1489 / #1502). */
