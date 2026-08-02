@@ -8,7 +8,7 @@ export type FieldGridGap = 'md' | 'lg' | 'xl';
 export interface FieldGridProps extends HTMLAttributes<HTMLDivElement> {
   /** Number of columns. Default `2`. */
   columns?: FieldGridColumns;
-  /** Gap between cells. Default `xl` (matches existing portal field grids). */
+  /** Gap between cells. Default `lg` — the field↔field rhythm-map value (ADR-024). */
   gap?: FieldGridGap;
   /** Cells to lay out side by side — typically `Field` components, but works for any equal-weight content. */
   children?: ReactNode;
@@ -26,7 +26,7 @@ export interface FieldGridProps extends HTMLAttributes<HTMLDivElement> {
  */
 export function FieldGrid({
   columns = 2,
-  gap = 'xl',
+  gap = 'lg',
   className,
   style,
   children,
