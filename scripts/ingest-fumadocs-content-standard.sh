@@ -26,6 +26,11 @@ if ! command -v brik-rag >/dev/null 2>&1; then
   exit 1
 fi
 
+# Chunked ingest — a standard over brik-rag's 32k lesson cap is split at H2
+# boundaries instead of failing the commit (brik-bds#1648).
+# shellcheck source=scripts/lib/rag-ingest.sh
+source "$REPO_ROOT/scripts/lib/rag-ingest.sh"
+
 # Strip YAML frontmatter (everything from first --- to second ---).
 BODY="$(awk 'BEGIN{c=0} /^---$/{c++; next} c>=2' "$STANDARD_FILE")"
 
@@ -36,12 +41,11 @@ fi
 
 echo "▸ Ingesting fumadocs-writing-standard ($(echo "$BODY" | wc -l | tr -d ' ') lines)..."
 
-brik-rag remember \
-  --name "fumadocs-writing-standard" \
-  --description "Canonical Fumadocs MDX writing standard for brik-bds docs-site — frontmatter shape, IA decision tree (page/section/callout/cross-link), heading depth cap, voice pointer, anti-patterns. Source: brik-bds/.claude/standards/fumadocs-content.md" \
-  --type reference \
-  --project brik-bds \
-  --human \
-  - <<< "$BODY"
+rag_ingest_standard \
+  "fumadocs-writing-standard" \
+  "Canonical Fumadocs MDX writing standard for brik-bds docs-site — frontmatter shape, IA decision tree (page/section/callout/cross-link), heading depth cap, voice pointer, anti-patterns. Source: brik-bds/.claude/standards/fumadocs-content.md" \
+  reference \
+  brik-bds \
+  "$BODY"
 
 echo "✓ Ingested. Verify with: brik-rag query \"fumadocs writing standard\" --top-k 3 --human"

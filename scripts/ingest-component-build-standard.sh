@@ -22,6 +22,11 @@ if ! command -v brik-rag >/dev/null 2>&1; then
   exit 1
 fi
 
+# Chunked ingest — a standard over brik-rag's 32k lesson cap is split at H2
+# boundaries instead of failing the commit (brik-bds#1648).
+# shellcheck source=scripts/lib/rag-ingest.sh
+source "$REPO_ROOT/scripts/lib/rag-ingest.sh"
+
 # Strip YAML frontmatter (everything from first --- to second ---).
 BODY="$(awk 'BEGIN{c=0} /^---$/{c++; next} c>=2' "$STANDARD_FILE")"
 
@@ -32,12 +37,11 @@ fi
 
 echo "▸ Ingesting component-build-standard ($(echo "$BODY" | wc -l | tr -d ' ') lines)..."
 
-brik-rag remember \
-  --name "component-build-standard" \
-  --description "Canonical BDS component build standard — file layout, CSS-over-inline, BEM under bds- namespace with closed slot allowlist (ADR-008), semantic tokens only (@/lib/tokens in TS), Radix-primitives composition, prop conventions, bdsClass, interactive states, semantic splitting, danger variants, accessibility minimums, 4-point sizing grid, table-cell patterns, anti-patterns. Source: brik-bds/.claude/standards/component-build.md" \
-  --type reference \
-  --project brik-bds \
-  --human \
-  - <<< "$BODY"
+rag_ingest_standard \
+  "component-build-standard" \
+  "Canonical BDS component build standard — file layout, CSS-over-inline, BEM under bds- namespace with closed slot allowlist (ADR-008), semantic tokens only (@/lib/tokens in TS), Radix-primitives composition, prop conventions, bdsClass, interactive states, semantic splitting, danger variants, accessibility minimums, 4-point sizing grid, table-cell patterns, anti-patterns. Source: brik-bds/.claude/standards/component-build.md" \
+  reference \
+  brik-bds \
+  "$BODY"
 
 echo "✓ Ingested. Verify with: brik-rag query \"component build standard\" --top-k 3 --human"

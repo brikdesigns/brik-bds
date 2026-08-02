@@ -22,6 +22,11 @@ if ! command -v brik-rag >/dev/null 2>&1; then
   exit 1
 fi
 
+# Chunked ingest — a standard over brik-rag's 32k lesson cap is split at H2
+# boundaries instead of failing the commit (brik-bds#1648).
+# shellcheck source=scripts/lib/rag-ingest.sh
+source "$REPO_ROOT/scripts/lib/rag-ingest.sh"
+
 BODY="$(awk 'BEGIN{c=0} /^---$/{c++; next} c>=2' "$STANDARD_FILE")"
 
 if [[ -z "$BODY" ]]; then
@@ -31,12 +36,11 @@ fi
 
 echo "▸ Ingesting storybook-mdx-recipe-standard ($(echo "$BODY" | wc -l | tr -d ' ') lines)..."
 
-brik-rag remember \
-  --name "storybook-mdx-recipe-standard" \
-  --description "Canonical BDS MDX recipe for components/ui/**/*.mdx — six-section shape (Title → ComponentLinks → Description → Playground → Variants → Patterns → Props), optional CSS Override API + Notes, banned sections (## Usage, ## When to use, --- dividers, emoji headings), callout vocabulary, ADR-006/007 same-words-different-layers reconciliation, foundation + dashboard page templates, stub pattern, 9-criterion acceptance enforced by scripts/lint-storybook-recipe.js. Source: brik-bds/.claude/standards/storybook-mdx-recipe.md" \
-  --type reference \
-  --project brik-bds \
-  --human \
-  - <<< "$BODY"
+rag_ingest_standard \
+  "storybook-mdx-recipe-standard" \
+  "Canonical BDS MDX recipe for components/ui/**/*.mdx — six-section shape (Title → ComponentLinks → Description → Playground → Variants → Patterns → Props), optional CSS Override API + Notes, banned sections (## Usage, ## When to use, --- dividers, emoji headings), callout vocabulary, ADR-006/007 same-words-different-layers reconciliation, foundation + dashboard page templates, stub pattern, 9-criterion acceptance enforced by scripts/lint-storybook-recipe.js. Source: brik-bds/.claude/standards/storybook-mdx-recipe.md" \
+  reference \
+  brik-bds \
+  "$BODY"
 
 echo "✓ Ingested. Verify with: brik-rag query \"storybook mdx recipe standard\" --top-k 3 --human"

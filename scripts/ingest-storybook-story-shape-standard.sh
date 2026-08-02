@@ -22,6 +22,11 @@ if ! command -v brik-rag >/dev/null 2>&1; then
   exit 1
 fi
 
+# Chunked ingest — a standard over brik-rag's 32k lesson cap is split at H2
+# boundaries instead of failing the commit (brik-bds#1648).
+# shellcheck source=scripts/lib/rag-ingest.sh
+source "$REPO_ROOT/scripts/lib/rag-ingest.sh"
+
 BODY="$(awk 'BEGIN{c=0} /^---$/{c++; next} c>=2' "$STANDARD_FILE")"
 
 if [[ -z "$BODY" ]]; then
@@ -31,12 +36,11 @@ fi
 
 echo "▸ Ingesting storybook-story-shape-standard ($(echo "$BODY" | wc -l | tr -d ' ') lines)..."
 
-brik-rag remember \
-  --name "storybook-story-shape-standard" \
-  --description "Canonical BDS story-shape standard for *.stories.tsx — two-shape model (Playground + per-state), ADR-010 story-vs-control matrix (Q1–Q5: toolbar global / argTypes / dedicated / irreducible / play-only), banned exports (Variants/Tones/Patterns/Examples), MCP discipline (@summary + surface tag), sidebar taxonomy, Storybook 9 imports, mocking, play-function patterns. Source: brik-bds/.claude/standards/storybook-story-shape.md" \
-  --type reference \
-  --project brik-bds \
-  --human \
-  - <<< "$BODY"
+rag_ingest_standard \
+  "storybook-story-shape-standard" \
+  "Canonical BDS story-shape standard for *.stories.tsx — two-shape model (Playground + per-state), ADR-010 story-vs-control matrix (Q1–Q5: toolbar global / argTypes / dedicated / irreducible / play-only), banned exports (Variants/Tones/Patterns/Examples), MCP discipline (@summary + surface tag), sidebar taxonomy, Storybook 9 imports, mocking, play-function patterns. Source: brik-bds/.claude/standards/storybook-story-shape.md" \
+  reference \
+  brik-bds \
+  "$BODY"
 
 echo "✓ Ingested. Verify with: brik-rag query \"storybook story shape standard\" --top-k 3 --human"
