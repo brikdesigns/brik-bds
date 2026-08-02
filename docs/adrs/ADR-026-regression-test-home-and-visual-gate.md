@@ -1,13 +1,13 @@
 # ADR-026 — Regression-test home + visual-regression cost model
 
-**Status:** Proposed
+**Status:** Accepted (2026-08-02)
 **Date:** 2026-08-01
 **Supersedes:** —
 **Superseded by:** —
 **Owner:** Nick Stanerson
 **Related:** [#1616](https://github.com/brikdesigns/brik-bds/issues/1616) (this decision); [ADR-010](./ADR-010-storybook-axes-of-information.md) §Q5 — extended, not amended (the Q5 outcome gains a second tag); [#771](https://github.com/brikdesigns/brik-bds/issues/771) (Chromatic plan evaluation — this ADR supplies the measurement it was waiting for); [#1497](https://github.com/brikdesigns/brik-bds/pull/1497) (the label-gated trigger being reassessed); [#1613](https://github.com/brikdesigns/brik-bds/issues/1613) / [#1614](https://github.com/brikdesigns/brik-bds/pull/1614) (the ToggleSwitch fold that surfaced this)
 
-Proposed rather than Accepted: Arm B changes what protects the merge path and declines a $179/mo purchase, so it needs sign-off before the implementation slices land.
+Ratified by the owner on 2026-08-02 (held at Proposed because Arm B changes what protects the merge path and declines a $179/mo purchase). Follow-on sub-issues filed under #1616: [#1637](https://github.com/brikdesigns/brik-bds/issues/1637) (visual gate), [#1638](https://github.com/brikdesigns/brik-bds/issues/1638) (interaction-test tag), [#1639](https://github.com/brikdesigns/brik-bds/issues/1639) (Chromatic retarget). #771 closes with this ratification (Consequences §4).
 
 ## Context
 
