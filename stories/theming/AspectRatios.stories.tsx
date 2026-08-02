@@ -227,7 +227,12 @@ export const Catalog: Story = {
 
 /* ─── Frame usage ─────────────────────────────────────────────── */
 
-/** @summary `Frame` consuming the new slug vocabulary. */
+/**
+ * bds-lint-ignore — theming reference, not a component story: this file IS the
+ * docs surface for the `--aspect-*` slug vocabulary, and `stories/theming/` has
+ * no MDX page, so rule 5 has no target here (#1502).
+ * @summary `Frame` consuming the new slug vocabulary.
+ */
 export const FrameSlugs: Story = {
   render: () => (
     <Section title="Frame ratio prop — slug vocabulary">

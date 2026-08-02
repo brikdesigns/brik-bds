@@ -1,8 +1,70 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Frame.stories';
+import { Frame } from './Frame';
 
 <Meta of={Stories} />
+
+export const SectionLabel = ({ children }) => (
+  <div
+    style={{
+      fontFamily: 'var(--font-family-label)',
+      fontSize: 'var(--body-xs)',
+      textTransform: 'uppercase',
+      letterSpacing: '0.05em',
+      color: 'var(--text-muted)',
+      marginBottom: 'var(--gap-sm)',
+    }}
+  >
+    {children}
+  </div>
+);
+
+export const PlaceholderImage = () => (
+  <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+    <rect width="400" height="300" fill="var(--surface-secondary)" />
+    <text
+      x="200"
+      y="160"
+      textAnchor="middle"
+      fontFamily="var(--font-family-body)"
+      fontSize="20"
+      fill="var(--text-muted)"
+    >
+      400 × 300 placeholder
+    </text>
+  </svg>
+);
+
+export const RatioPresets = () => (
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--gap-lg)' }}>
+    {['square', 'portrait', 'landscape', 'wide', 'ultrawide'].map((r) => (
+      <div key={r}>
+        <SectionLabel>ratio="{r}"</SectionLabel>
+        <Frame ratio={r}>
+          <PlaceholderImage />
+        </Frame>
+      </div>
+    ))}
+  </div>
+);
+
+export const FitModes = () => (
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--gap-lg)' }}>
+    {['cover', 'contain', 'fill', 'none'].map((f) => (
+      <div key={f}>
+        <SectionLabel>fit="{f}"</SectionLabel>
+        <Frame ratio="square" fit={f} style={{ background: 'var(--surface-secondary)' }}>
+          <img
+            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MCA1MCI+PHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjZTM1MzM1Ii8+PC9zdmc+"
+            alt=""
+            style={{ width: '100%', height: '100%' }}
+          />
+        </Frame>
+      </div>
+    ))}
+  </div>
+);
 
 # Frame
 
@@ -20,7 +82,9 @@ The two axes Frame varies on: the aspect ratio (named preset or custom) and how 
 
 ### Ratio presets
 
-<Canvas of={Stories.RatioPresets} />
+<Canvas>
+  <RatioPresets />
+</Canvas>
 
 ### Custom ratio
 
@@ -28,7 +92,9 @@ The two axes Frame varies on: the aspect ratio (named preset or custom) and how 
 
 ### Fit modes
 
-<Canvas of={Stories.FitModes} />
+<Canvas>
+  <FitModes />
+</Canvas>
 
 ## Patterns
 

@@ -72,6 +72,10 @@ export const OmittedSlots: Story = {
  * The rhythm holds across all four `[data-mode-spacing]` density modes —
  * tight title→subtitle stays smaller than the medium subtitle→description
  * step in every mode (ADR-023 §3 monotonic guarantee).
+ *
+ * bds-lint-ignore — the assertion is a *relationship across* modes (tight stays
+ * smaller than medium in all four), so the four must be visible at once; the
+ * spacing-mode toolbar global shows one at a time (#1502).
  * @summary Rhythm across all four spacing density modes
  */
 export const SpacingModes: Story = {
