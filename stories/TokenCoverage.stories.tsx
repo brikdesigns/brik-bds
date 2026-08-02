@@ -21,7 +21,7 @@ const card: CSSProperties = {
   padding: 'var(--padding-lg)',
   backgroundColor: 'var(--surface-primary)',
   borderRadius: 'var(--border-radius-md)',
-  border: '1px solid var(--border-muted)', // bds-lint-ignore
+  border: '1px solid var(--border-muted)',
 };
 
 const metric: CSSProperties = {
@@ -35,7 +35,7 @@ const tableCell: CSSProperties = {
   padding: 'var(--gap-xs) var(--gap-sm)',
   fontFamily: 'var(--font-family-body)',
   fontSize: 'var(--body-sm)',
-  borderBottom: '1px solid var(--border-muted)', // bds-lint-ignore
+  borderBottom: '1px solid var(--border-muted)',
   color: 'var(--text-primary)',
 };
 
@@ -44,8 +44,8 @@ const tableCell: CSSProperties = {
 function Bar({ value, max, color }: { value: number; max: number; color: string }) {
   const pct = max > 0 ? Math.min((value / max) * 100, 100) : 0;
   return (
-    <div style={{ width: '100%', height: 6, backgroundColor: 'var(--background-secondary)', borderRadius: 3, overflow: 'hidden' }}>{/* bds-lint-ignore */}
-      <div style={{ width: `${pct}%`, height: '100%', backgroundColor: color, borderRadius: 3 }} />{/* bds-lint-ignore */}
+    <div style={{ width: '100%', height: 6, backgroundColor: 'var(--background-secondary)', borderRadius: 3, overflow: 'hidden' }}>
+      <div style={{ width: `${pct}%`, height: '100%', backgroundColor: color, borderRadius: 3 }} />
     </div>
   );
 }
@@ -54,7 +54,7 @@ function TokenUsageTable({ tokens, maxCount }: { tokens: CoverageData['used']; m
   return (
     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
       <thead>
-        <tr style={{ borderBottom: '2px solid var(--border-muted)' }}>{/* bds-lint-ignore */}
+        <tr style={{ borderBottom: '2px solid var(--border-muted)' }}>
           <th style={{ ...tableCell, textAlign: 'left', color: 'var(--text-secondary)' }}>Token</th>
           <th style={{ ...tableCell, textAlign: 'right', color: 'var(--text-secondary)', width: 60 }}>Uses</th>
           <th style={{ ...tableCell, color: 'var(--text-secondary)', width: 120 }}>Coverage</th>
