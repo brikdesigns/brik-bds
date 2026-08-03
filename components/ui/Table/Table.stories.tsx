@@ -1,4 +1,3 @@
-import React, { type CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from '@iconify/react';
 import {
@@ -11,6 +10,8 @@ import {
   TableSkeletonRow,
   TableActionsCell,
   TableAvatarCell,
+  TableTextCell,
+  TableIconCell,
   TableImageCell,
   TableLogoCell,
   TableServiceTagCell,
@@ -25,31 +26,6 @@ import { TextLink } from '../TextLink';
 import { Tooltip } from '../Tooltip';
 import { ServiceTag, type ServiceLine } from '../ServiceTag';
 import { Eye, Pen, EllipsisVertical } from '../../icons';
-
-/* ─── Shared cell styles + helpers (story-only) ───────────────── */
-
-const twoLinePrimary: CSSProperties = {
-  fontWeight: 'var(--font-weight-semibold)' as unknown as number,
-  fontSize: 'var(--body-md)',
-  color: 'var(--text-primary)',
-  lineHeight: 'var(--font-line-height-normal)',
-};
-
-const twoLineSecondary: CSSProperties = {
-  fontSize: 'var(--body-sm)',
-  color: 'var(--text-muted)',
-  lineHeight: 'var(--font-line-height-normal)',
-};
-
-/** Standard icon-left cell layout: 24px icon + text, vertically centered */
-const IconLeftCell = ({ icon, children }: { icon: string; children: React.ReactNode }) => (
-  <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-xs)' }}>
-    <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, fontSize: 'var(--label-lg)', color: 'var(--text-primary)', flexShrink: 0 }}>
-      <Icon icon={icon} />
-    </span>
-    {children}
-  </span>
-);
 
 /* ─── Sample data ─────────────────────────────────────────────── */
 
@@ -196,10 +172,11 @@ export const SortableWithSelection: Story = {
 
 /**
  * A `<TableCell>` accepts any content. This realistic table exercises the
- * cell-composition catalog in one place: icon-left name, a two-line
- * owner cell, a `<Tag>`, a status `<Badge>`, an inline `<TextInput>`, a
- * `<Tooltip>` header indicator, and a `<TextLink>`. Irreducible because
- * the cell variety is composition, not a prop.
+ * cell-composition catalog in one place: `<TableIconCell>` for the icon-left
+ * name, `<TableTextCell>` for the two-line owner, then a `<Tag>`, a status
+ * `<Badge>`, an inline `<TextInput>`, a `<Tooltip>` header indicator, and a
+ * `<TextLink>` inside plain cells. Irreducible because the cell variety is
+ * composition, not a prop.
  *
  * @summary Cell-content catalog — icons, tags, badges, inputs, links
  */
@@ -234,13 +211,8 @@ export const CellTypes: Story = {
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.service}>
-              <TableCell><IconLeftCell icon={row.icon}>{row.service}</IconLeftCell></TableCell>
-              <TableCell>
-                <div>
-                  <div style={twoLinePrimary}>{row.owner}</div>
-                  <div style={twoLineSecondary}>{row.email}</div>
-                </div>
-              </TableCell>
+              <TableIconCell icon={<Icon icon={row.icon} />}>{row.service}</TableIconCell>
+              <TableTextCell primary={row.owner} secondary={row.email} />
               <TableCell><Tag size="sm">{row.category}</Tag></TableCell>
               <TableCell><Badge status={row.status} size="sm">{statusLabel(row.status)}</Badge></TableCell>
               <TableCell><TextInput size="sm" placeholder={row.service} /></TableCell>

@@ -454,6 +454,96 @@ export function TableAvatarCell({
   );
 }
 
+// ─── TableTextCell (<td> for a two-line primary / secondary stack) ──
+
+export interface TableTextCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
+  /** Primary line — the row's identifying text (may be a `TextLink`). */
+  primary: ReactNode;
+  /** Secondary line — email, role, or other supporting metadata. */
+  secondary?: ReactNode;
+}
+
+/**
+ * TableTextCell — two-line identity cell stacking a primary line over an
+ * optional secondary line. The avatar-less counterpart to `TableAvatarCell`.
+ *
+ * Owns only the text stack and its truncation behavior, and shares
+ * `TableAvatarCell`'s type ramp so the two read identically side by side in
+ * one table. Pass `primary` as a `TextLink` when the name should navigate
+ * (per the table name-column convention).
+ *
+ * @example
+ * ```tsx
+ * <TableTextCell primary={u.name} secondary={u.email} />
+ * ```
+ *
+ * @summary Two-line primary / secondary text table cell
+ */
+export function TableTextCell({
+  primary,
+  secondary,
+  className,
+  style,
+  ...props
+}: TableTextCellProps) {
+  return (
+    <td className={bdsClass('bds-table-text-cell', className)} style={style} {...props}>
+      <div className="bds-table-text-cell__stack">
+        <span className="bds-table-text-cell__primary">{primary}</span>
+        {secondary != null && (
+          <span className="bds-table-text-cell__secondary">{secondary}</span>
+        )}
+      </div>
+    </td>
+  );
+}
+
+// ─── TableIconCell (<td> for an icon-left label) ────────────────
+
+export interface TableIconCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
+  /**
+   * Leading icon element — a bundled BDS icon (`<Eye />`) or `<Icon icon="ph:…" />`.
+   * Rendered decoratively; `children` carries the accessible text.
+   */
+  icon: ReactNode;
+  /** Cell label, sitting to the right of the icon. */
+  children: ReactNode;
+}
+
+/**
+ * TableIconCell — label preceded by a fixed-box leading icon, vertically
+ * centered. The icon box is a constant footprint so labels align down the
+ * column even when glyph widths differ.
+ *
+ * Owns only the icon box, the gap, and its own row-density padding. The icon
+ * is `aria-hidden` — it repeats the label, so announcing it would duplicate.
+ *
+ * @example
+ * ```tsx
+ * <TableIconCell icon={<Icon icon="ph:palette" />}>Brand Identity</TableIconCell>
+ * ```
+ *
+ * @summary Icon-left label table cell
+ */
+export function TableIconCell({
+  icon,
+  children,
+  className,
+  style,
+  ...props
+}: TableIconCellProps) {
+  return (
+    <td className={bdsClass('bds-table-icon-cell', className)} style={style} {...props}>
+      <span className="bds-table-icon-cell__group">
+        <span className="bds-table-icon-cell__icon" aria-hidden="true">
+          {icon}
+        </span>
+        {children}
+      </span>
+    </td>
+  );
+}
+
 // ─── TableImageCell (<td> for a square 1:1 logo / product image) ──
 
 export type TableImageFit = 'contain' | 'cover';
