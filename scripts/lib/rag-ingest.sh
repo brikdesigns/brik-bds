@@ -32,6 +32,12 @@ set -euo pipefail
 # measures just under 32,000 locally still lands.
 RAG_CHUNK_LIMIT="${RAG_CHUNK_LIMIT:-28000}"
 
+# How far past the last emitted part the reaper probes for stale chunks (#1652).
+# Deliberately a small fixed window, not an until-exhausted sweep: `forget` costs
+# ~1.3s per call, so every extra step is 1.3s on a pre-commit hook. 5 covers a
+# shrink from 6 parts to 1, and the largest standard today splits into 2.
+RAG_INGEST_STALE_WINDOW="${RAG_INGEST_STALE_WINDOW:-5}"
+
 # Longest run of sections that fits in RAG_CHUNK_LIMIT, emitted to stdout as
 # NUL-delimited chunks. Splits only at `## ` (H2) so a rule is never cut in
 # half; a single H2 section larger than the limit is emitted whole and the
@@ -63,8 +69,41 @@ _rag_split_h2() {
   ' <<< "$body"
 }
 
+# Delete continuation chunks left behind by a longer previous version of this
+# standard. Stranded parts keep matching queries with content no longer in the
+# file — a silent wrong answer, the worst failure mode for retrieval, because
+# nothing errors and the reader cannot tell.
+#
+# Probes a fixed RAG_INGEST_STALE_WINDOW past the last emitted part. A
+# stop-after-N-consecutive-misses sweep was tried and rejected: brik-rag dedupes
+# structurally identical chunks, so a part sequence can have HOLES — an ingest of
+# 8 chunks stored parts 2 and 8 and deduped 3-7 — and any miss-run heuristic
+# terminates inside the hole and strands the tail it was built to catch. A fixed
+# window has the same blind spot past its edge but is at least predictable, and
+# at ~1.3s per `forget` an until-exhausted sweep is too slow for a hook.
+#
+# `brik-rag forget` answers {"status":"forgotten"} on a hit and
+# {"status":"not-found"} on a miss, exiting 0 either way — so the count keys on
+# the payload, never the exit status.
+_rag_reap_stale_parts() {
+  local project="$1" name="$2" total="$3"
+  local stale=$((total + 1)) removed=0 out
+
+  while [ "$stale" -le $((total + RAG_INGEST_STALE_WINDOW)) ]; do
+    out="$(brik-rag forget --project "$project" --name "${name}-part-${stale}" 2>/dev/null || true)"
+    case "$out" in
+      *'"status": "forgotten"'*) removed=$((removed + 1)) ;;
+    esac
+    stale=$((stale + 1))
+  done
+
+  if [ "$removed" -gt 0 ]; then
+    echo "  Reaped ${removed} stale part chunk(s) from a previous, longer version."
+  fi
+}
+
 # Ingest one standard, chunking only when the body exceeds the limit.
-# A single-chunk ingest is byte-identical to the old behavior.
+# A single-chunk ingest sends the same payload as before, and now also reaps.
 rag_ingest_standard() {
   local name="$1" description="$2" type="$3" project="$4" body="$5"
 
@@ -72,6 +111,12 @@ rag_ingest_standard() {
     brik-rag remember \
       --name "$name" --description "$description" \
       --type "$type" --project "$project" --human - <<< "$body"
+    # Reap on this path too: a standard that shrinks back under the limit emits
+    # one chunk, and every continuation from when it was oversized is still in
+    # the corpus answering queries. The old early `return` skipped the reaper
+    # entirely, which made shrink-to-fit the worst case rather than the safe
+    # one (#1652).
+    _rag_reap_stale_parts "$project" "$name" 1
     return
   fi
 
@@ -99,11 +144,5 @@ rag_ingest_standard() {
 ${chunk}"
   done
 
-  # Reap parts left behind by a standard that shrank (5 parts → 3 would strand
-  # part4/part5 in the corpus, where they would keep matching queries).
-  local stale=$((total + 1))
-  while [ "$stale" -le $((total + 5)) ]; do
-    brik-rag forget --project "$project" --name "${name}-part-${stale}" >/dev/null 2>&1 || true
-    stale=$((stale + 1))
-  done
+  _rag_reap_stale_parts "$project" "$name" "$total"
 }
