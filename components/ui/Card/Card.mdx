@@ -20,7 +20,13 @@ Flexible content container. A default flexible content slot (no `preset`), plus 
 
 The `preset` prop selects the shape. Default (no `preset`) gives a flexible `children` slot composable with `CardTitle`, `CardDescription`, and `CardFooter`. Each preset locks the layout in exchange for a typed API.
 
-The default shape also takes a `variant`: `outlined` (default, secondary border), `brand` (primary-color border), `elevated` (surface fill, no border, no shadow), and `borderless`.
+The default shape also takes a `variant`: `outlined` (default, secondary border), `brand` (primary-color border), `elevated` (surface fill, no border, no shadow), `raised` (surface fill, no border, `--box-shadow-md` drop shadow), and `borderless`.
+
+### Raised variant
+
+`variant="raised"` — surface-primary fill, no border, with a cast `--box-shadow-md` drop shadow. The shadow-casting counterpart to the now-flat `elevated` (brik-bds#1146 / BACKLOG-493 removed `elevated`'s shadow so portal cards read flat). Use for a focal/lone card or a grid cell that needs a lifted, contained read.
+
+<Canvas of={Stories.Raised} />
 
 ### Borderless variant
 

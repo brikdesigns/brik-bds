@@ -7,7 +7,7 @@ import { Dot, type DotStatus } from '../Dot';
 import type { ServiceLine } from '../ServiceTag/service-config';
 import './Card.css';
 
-export type CardVariant = 'outlined' | 'brand' | 'elevated' | 'borderless';
+export type CardVariant = 'outlined' | 'brand' | 'elevated' | 'raised' | 'borderless';
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 export type CardPreset = 'control' | 'summary' | 'display' | 'display-row';
 /** Heading level for a card's title — decouples document outline from the token-driven visual size. */
@@ -124,7 +124,14 @@ interface CardBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
 interface CardDefaultProps extends CardBaseProps {
   /** No preset — default flexible Card with `children` content slot. */
   preset?: undefined;
-  /** Visual variant — outlined / brand / elevated / borderless (default `outlined`). Use `borderless` for cards sitting on a colored surface, where the border ring reads as visual noise. */
+  /**
+   * Visual variant — outlined / brand / elevated / raised / borderless
+   * (default `outlined`). Use `borderless` for cards sitting on a colored
+   * surface, where the border ring reads as visual noise. `raised` —
+   * surface-primary fill, no border, with a `--box-shadow-md` drop shadow;
+   * use for a focal/lone card or a grid cell that needs a lifted, contained
+   * read (the shadow-casting counterpart to the now-flat `elevated`).
+   */
   variant?: CardVariant;
   /** Padding scale (default `md`). */
   padding?: CardPadding;
@@ -237,8 +244,12 @@ interface CardDisplayPresetProps extends CardBaseProps {
    * a card grid on a colored surface still needs a contained "card" read but
    * the border ring is unwanted (the restored-fill counterpart to
    * `borderless`).
+   *
+   * `raised` — surface-primary fill, no border, with a `--box-shadow-md`
+   * drop shadow. Use for a lifted, contained cell (the shadow-casting
+   * counterpart to the now-flat `elevated`).
    */
-  variant?: 'borderless' | 'elevated';
+  variant?: 'borderless' | 'elevated' | 'raised';
   /**
    * Optional service-line surface tint — a pale wash keyed to a service line
    * (`--surface-service-{line}-light`). Use for a service-identified cell in a
