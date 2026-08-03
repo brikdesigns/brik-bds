@@ -3,6 +3,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, within } from 'storybook/test';
 import { Icon } from '@iconify/react';
 import { FilterButton, type FilterButtonOption } from './FilterButton';
+// Same helper the contrast gate uses (scripts/validate-themes.js), so a story
+// assertion and the token-level gate can never disagree on the arithmetic.
+import { contrastRatio } from '../../../scripts/lib/wcag.mjs';
 
 /* ─── Sample data ─────────────────────────────────────────────── */
 
@@ -117,22 +120,9 @@ export const InteractionTestDisabledLabelLegible: Story = {
     // Token-level source of truth: tokens/contrast-pairings.json +
     // `npm run contrast-gate`.
     const style = getComputedStyle(trigger);
-    const channel = (v: number) => {
-      const c = v / 255;
-      return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
-    };
-    const luminance = (color: string) => {
-      const [r, g, b] = (color.match(/\d+(\.\d+)?/g) ?? [])
-        .slice(0, 3)
-        .map(Number);
-      return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
-    };
-    const [lighter, darker] = [
-      luminance(style.color),
-      luminance(style.backgroundColor),
-    ].sort((a, b) => b - a);
-
-    await expect((lighter + 0.05) / (darker + 0.05)).toBeGreaterThanOrEqual(3);
+    await expect(
+      contrastRatio(style.color, style.backgroundColor),
+    ).toBeGreaterThanOrEqual(3);
   },
 };
 

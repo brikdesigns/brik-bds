@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn, within } from 'storybook/test';
+// Same helper the contrast gate uses (scripts/validate-themes.js), so a story
+// assertion and the token-level gate can never disagree on the arithmetic.
+import { contrastRatio } from '../../../scripts/lib/wcag.mjs';
 import { FilterToggle } from './FilterToggle';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
@@ -66,5 +69,38 @@ export const Default: Story = {
         }}
       />
     );
+  },
+};
+
+/**
+ * @summary Disabled toggle keeps a legible label
+ */
+export const InteractionTestDisabledLabelLegible: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    label: 'Show archived',
+    active: false,
+    disabled: true,
+    size: 'md',
+    onToggle: fn(),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const toggle = canvas.getByRole('button', { name: /Show archived/ });
+
+    await expect(toggle).toBeDisabled();
+
+    // FilterToggle repaints itself when disabled (FilterToggle.css:32-35 sets
+    // --background-disabled + --text-disabled), the same treatment that rendered
+    // an invisible label at 1:1 in Button (#1571) and FilterButton (#1503).
+    // 3:1 rather than 4.5: WCAG 1.4.3 exempts inactive components, so the bar is
+    // legibility. Token-level source of truth: tokens/contrast-pairings.json +
+    // `npm run contrast-gate`. Whether this treatment should become the opacity
+    // fade the other 21 components use is #1667.
+    const style = getComputedStyle(toggle);
+
+    await expect(
+      contrastRatio(style.color, style.backgroundColor),
+    ).toBeGreaterThanOrEqual(3);
   },
 };
