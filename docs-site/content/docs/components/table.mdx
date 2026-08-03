@@ -5,7 +5,7 @@ description: Data table with composable subcomponents. Sorting, selection, strip
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Table is a composable data-display primitive. The container plus its subcomponents (`TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`, `TableActionsCell`, `TableSubheader`) handle the structural HTML; the consumer composes cells with whatever content the row needs — text, badges, links, action buttons. Three typed media cells (`TableAvatarCell`, `TableImageCell`, `TableServiceTagCell`) package the common identity / logo / classification layouts so consumers stop hand-rolling them.
+Table is a composable data-display primitive. The container plus its subcomponents (`TableHeader`, `TableBody`, `TableRow`, `TableHead`, `TableCell`, `TableActionsCell`, `TableSubheader`) handle the structural HTML; the consumer composes cells with whatever content the row needs — text, badges, links, action buttons. Typed cells (`TableIconCell`, `TableTextCell`, `TableAvatarCell`, `TableImageCell`, `TableServiceTagCell`) package the common icon / identity / logo / classification layouts so consumers stop hand-rolling them — see [ADR-027](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-027-table-cell-layer-ownership.md) for which layer owns a new cell.
 
 ## Use it for
 
@@ -154,20 +154,21 @@ Wrap info icons in a [Tooltip](/docs/components/tooltip) so they reveal context 
 </Tooltip>
 ```
 
-### Icon-left cells
+### Typed cells
 
-Pair a 24px icon with text using `gap: var(--gap-xs)`.
+Typed cells package the recurring cell layouts. Each renders the `<td>` itself, composes an existing primitive, and owns only cell-level concerns (alignment, gap, fixed sizing, row-density padding) — reach for these instead of hand-rolling flex wrappers inside a plain `<TableCell>`. [ADR-027](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-027-table-cell-layer-ownership.md) is the rule for which layer owns a new cell: it earns a component when it renders the table element *and* owns a cell-level concern. Anything else is a primitive inside `<TableCell>`.
+
+**`TableIconCell`** — a label preceded by a fixed 24px icon box, so labels align down the column even when glyph widths differ. The icon is `aria-hidden` — the label carries the accessible text.
 
 ```tsx
-<span style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-xs)' }}>
-  <Icon icon="ph:palette" />
-  Design
-</span>
+<TableIconCell icon={<Icon icon="ph:palette" />}>Design</TableIconCell>
 ```
 
-### Media cells
+**`TableTextCell`** — a two-line primary / secondary stack; the avatar-less counterpart to `TableAvatarCell`, sharing its type ramp so the two read identically in one table.
 
-Three typed cells package the recurring media layouts. Each composes an existing primitive and owns only its own layout (alignment, gap, fixed sizing) — reach for these instead of hand-rolling flex wrappers inside a plain `<TableCell>`.
+```tsx
+<TableTextCell primary={user.name} secondary={user.email} />
+```
 
 **`TableAvatarCell`** — an [Avatar](/docs/components/avatar) paired with a name and an optional secondary line (email / role). Initials render when `src` is omitted; pass `primary` as a `<TextLink>` when the name should open a read sheet.
 
@@ -232,6 +233,8 @@ Plus standard `<table>` HTML attributes.
 | `TableCell` | `<td>` | — |
 | `TableActionsCell` | `<td>` | `align: 'right' \| 'center'` — owns the trailing `[View][Edit][⋯]` cluster |
 | `TableAvatarCell` | `<td>` | `src`, `name`, `primary`, `secondary`, `size: 'sm' \| 'md'`, `status` — Avatar + identity |
+| `TableTextCell` | `<td>` | `primary` *(req)*, `secondary` — two-line identity stack, no avatar |
+| `TableIconCell` | `<td>` | `icon` *(req)*, `children` *(req)* — fixed-box leading icon + label |
 | `TableImageCell` | `<td>` | `src` *(req)*, `alt` *(req)*, `size: 'sm' \| 'md'`, `fit: 'contain' \| 'cover'` — square 1:1 thumbnail |
 | `TableServiceTagCell` | `<td>` | `children` — one or more `ServiceTag`s |
 

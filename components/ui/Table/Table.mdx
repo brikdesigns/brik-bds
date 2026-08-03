@@ -8,7 +8,7 @@ import * as Stories from './Table.stories';
 
 <ComponentLinks slug="table" />
 
-Data table with composable sub-components (`TableHeader` / `TableBody` / `TableRow` / `TableHead` / `TableCell` / `TableSubheader` / `TableActionsCell` / `TableSkeletonRow`, plus the typed media cells `TableAvatarCell` / `TableImageCell` / `TableLogoCell` / `TableServiceTagCell`). Supports sorting, row selection, striped rows, size variants, and arbitrary cell content. Trailing `[View][Edit][⋯]` clusters compose via `<TableActionsCell>`; cell-level affordances (Name / FK / Actions) replace whole-row click — see [Read and edit conventions](https://github.com/brikdesigns/brik-client-portal/blob/staging/.claude/references/settings-ia.md#read-and-edit-conventions).
+Data table with composable sub-components (`TableHeader` / `TableBody` / `TableRow` / `TableHead` / `TableCell` / `TableSubheader` / `TableActionsCell` / `TableSkeletonRow`, plus the typed cells `TableIconCell` / `TableTextCell` / `TableAvatarCell` / `TableImageCell` / `TableLogoCell` / `TableServiceTagCell`). Supports sorting, row selection, striped rows, size variants, and arbitrary cell content. Trailing `[View][Edit][⋯]` clusters compose via `<TableActionsCell>`; cell-level affordances (Name / FK / Actions) replace whole-row click — see [Read and edit conventions](https://github.com/brikdesigns/brik-client-portal/blob/staging/.claude/references/settings-ia.md#read-and-edit-conventions).
 
 ## Default
 
@@ -22,7 +22,7 @@ Sortable headers (`sortable` + `sortDirection` on `<TableHead>`) and checkbox ro
 
 <Canvas of={Stories.SortableWithSelection} />
 
-A `<TableCell>` accepts any content. This table exercises the composition catalog in one place — icon-left name, two-line owner, `<Tag>`, status `<Badge>`, inline `<TextInput>`, a `<Tooltip>` header indicator, and a `<TextLink>`.
+A `<TableCell>` accepts any content. This table exercises the composition catalog in one place — `<TableIconCell>` for the icon-left name, `<TableTextCell>` for the two-line owner, then `<Tag>`, a status `<Badge>`, an inline `<TextInput>`, a `<Tooltip>` header indicator, and a `<TextLink>` inside plain cells.
 
 <Canvas of={Stories.CellTypes} />
 
@@ -48,7 +48,11 @@ The canonical read/edit row has three click-target classes — **Name** (`<TextL
 
 <Canvas of={Stories.WithSubheaders} />
 
-### Media cells
+### Typed cells
+
+A cell earns a component when it renders the `<td>` itself *and* owns a cell-level concern — intrinsic width / alignment, an `aria` contract, or a row-density-coupled internal layout ([ADR-027](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-027-table-cell-layer-ownership.md)). Anything else is a primitive nested inside a plain `<TableCell>`.
+
+`<TableIconCell>` pairs a label with a fixed 24px leading icon box, so labels align down the column even when glyph widths differ. `<TableTextCell>` stacks a primary line over an optional secondary — the avatar-less counterpart to `<TableAvatarCell>`, sharing its type ramp. Both appear in the `CellTypes` story above.
 
 `<TableAvatarCell>` pairs an `Avatar` with a name and an optional secondary line (email / role). Initials render when no `src` is set; pass `primary` as a `<TextLink>` when the name should navigate.
 
