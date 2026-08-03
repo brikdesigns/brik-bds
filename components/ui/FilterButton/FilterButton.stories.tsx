@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn, within } from 'storybook/test';
 import { Icon } from '@iconify/react';
 import { FilterButton, type FilterButtonOption } from './FilterButton';
 
@@ -88,6 +88,51 @@ export const Default: Story = {
         }}
       />
     );
+  },
+};
+
+/**
+ * @summary Disabled trigger keeps a legible label
+ */
+export const InteractionTestDisabledLabelLegible: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    label: 'Category',
+    options: categoryOptions,
+    size: 'md',
+    disabled: true,
+    onChange: fn(),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: /Category/ });
+
+    await expect(trigger).toBeDisabled();
+
+    // The disabled trigger must not paint its label in its own background
+    // colour. It reads --text-disabled / --background-disabled, which the Figma
+    // source emitted as the same grayscale step — 1:1, an empty-looking pill
+    // (#1503, root-caused and fixed in #1571). 3:1 rather than 4.5:1 because
+    // WCAG 1.4.3 exempts inactive components; the bar is legibility.
+    // Token-level source of truth: tokens/contrast-pairings.json +
+    // `npm run contrast-gate`.
+    const style = getComputedStyle(trigger);
+    const channel = (v: number) => {
+      const c = v / 255;
+      return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+    };
+    const luminance = (color: string) => {
+      const [r, g, b] = (color.match(/\d+(\.\d+)?/g) ?? [])
+        .slice(0, 3)
+        .map(Number);
+      return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b);
+    };
+    const [lighter, darker] = [
+      luminance(style.color),
+      luminance(style.backgroundColor),
+    ].sort((a, b) => b - a);
+
+    await expect((lighter + 0.05) / (darker + 0.05)).toBeGreaterThanOrEqual(3);
   },
 };
 
