@@ -5,8 +5,8 @@ type: reference
 scope: brik-bds
 applies-to: "**/components/ui/**/*.stories.tsx, **/content-system/blueprints/**/*.stories.tsx, **/stories/**/*.stories.tsx"
 retrieved-via: brik-rag query "storybook story shape standard"
-last-verified: 2026-07-25
-last-updated: 2026-07-25
+last-verified: 2026-08-03
+last-updated: 2026-08-03
 ---
 
 # Storybook story-shape standard (BDS)
@@ -91,6 +91,31 @@ export const InteractionTestLinkComponent: Story = {
 Not statically decidable ("visual" is semantic) — skill/PR-review enforced.
 
 **Rule 4 — cross-component & app-shell compositions live in `Blueprints/` or the MDX `## Patterns` section, not a leaf component's story file.** Q4 (irreducible render) is for a component's *own* hook/composition state — not a multi-component layout. `SubNavigation` `TwoColumnShell` (sidebar + sub-nav + main) is a page shell → `Blueprints/`. `Badge` `Badge + Tag alignment` is a cross-component comparison → the Badge MDX `## Patterns`. Neither exercises *that* component's API. Skill/PR-review enforced.
+
+**Rule 4 governs the story's *subject*, not a wrapper's *fixture*.** (Scoped by [#1492](https://github.com/brikdesigns/brik-bds/issues/1492).) The rule asks what a story *documents*. A **state shell** — a wrapper that renders loading / empty / error *in place of* `children` — has no content of its own, so it cannot be exercised without content standing in. That content is a fixture, not the subject, and rule 4 does not reach it.
+
+The test: **remove the composed content — is there still a story?** If yes, the composition was the subject and rule 4 applies (`SubNavigation` still renders without the page shell around it). If no, it was a fixture (`DataView`'s four views render nothing at all — `children` is the only thing they have to replace).
+
+```tsx
+// ✅ DataView — the fixture is what the shell replaces; the subject is state precedence
+export const Board: Story = {
+  args: { loading: false, empty: false, error: '' },   // the subject, as Controls
+  render: (args) => <BoardView {...args}><DemoBoard /></BoardView>,  // the fixture
+};
+// ❌ still a rule-4 violation — the composition IS the subject, wrapper or not
+export const BoardInsideAPage: Story = {
+  render: () => <Page><SidebarNavigation … /><BoardView><DemoBoard /></BoardView></Page>,
+};
+```
+
+Two constraints keep this from becoming an escape hatch:
+
+1. **Fixtures stay minimum-legible.** A fixture exists so the shell's states read correctly against real content — a `BoardView` skeleton is only legible beside something board-shaped. Build the thinnest thing that still reads as the right shape, and no thinner. Extra rows, columns, or props are not fixture, they are a gallery.
+2. **The fixture is never the documented artifact.** If the composition is worth showing *as* a composition, that copy belongs in `Blueprints/` or MDX `## Patterns` — same as always.
+
+This scopes rule 4; it does not weaken it. The rule still catches every case where a leaf story file grows a page shell or a cross-component comparison, because in each of those the composition survives the removal test.
+
+**Independent of the family exception.** `DataView` also carries a documented four-views-one-meta exception (four sibling views sharing one `DataViewProps` surface, one stories file, one `meta`). That exception is about **file and meta count**; this scoping is about **what the render wraps**. They are orthogonal — a single-component state shell gets the fixture scoping without the family exception, and a family sharing one meta gets no fixture licence unless its members are actually shells. Do not cite one to justify the other.
 
 ## `argTypes` is load-bearing — not decoration
 
@@ -490,7 +515,7 @@ If you find yourself wanting to "clean up" an existing file's `export const Vari
 1. **Read three sibling story files** in the same `components/ui/<Subcategory>/` folder. Match their `title:` prefix, surface tag, and overall shape.
 2. **Verify the two-shape model** — file exports `Default` plus one story per meaningful state. No `Variants` / `Tones` / `Patterns` story exports (in new files).
 3. **Apply the matrix** — boolean / icon-slot states are Controls, not stories. Toolbar-global axes (theme/density/viewport/locale/motion) are never stories.
-3a. **Apply the consolidation rules** — `Default` doesn't duplicate a named story (1); no story differs from another only by a boolean (2) or a non-visual prop (3); cross-component / app-shell demos go to `Blueprints/` or MDX `## Patterns`, not a leaf story file (4). Run `node scripts/lint-story-shape.js <file>` — `--enforce` hard-gates rules 1–2 (rules 3–4 stay PR-review/skill enforced).
+3a. **Apply the consolidation rules** — `Default` doesn't duplicate a named story (1); no story differs from another only by a boolean (2) or a non-visual prop (3); cross-component / app-shell demos go to `Blueprints/` or MDX `## Patterns`, not a leaf story file (4) — unless the composition is a state shell's fixture, which rule 4 does not reach (apply the removal test). Run `node scripts/lint-story-shape.js <file>` — `--enforce` hard-gates rules 1–2 (rules 3–4 stay PR-review/skill enforced).
 4. **Verify every export has an `@summary` JSDoc** under 60 characters.
 5. **Verify `meta.tags` has exactly one of** `surface-web` / `surface-product` / `surface-shared`.
 6. **If the component is deprecated**, verify `meta.tags` also includes `!manifest`.
