@@ -51,6 +51,7 @@ jobs:
           VISUAL_GATE=1 npx vitest run --project storybook --update
 
       - name: Commit and push baselines
+        id: commit
         run: |
           # The container user differs from the checkout owner — git refuses
           # to operate on "dubiously owned" repos without this.
@@ -60,7 +61,48 @@ jobs:
           git add -A tests/visual/__screenshots__
           if git diff --cached --quiet; then
             echo "Baselines unchanged — nothing to commit."
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git commit -m "chore(visual): regenerate baselines ($(git rev-parse --short HEAD))"
           git push
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+      # The push above is authenticated with the default GITHUB_TOKEN, and
+      # GitHub deliberately does not let that retrigger CI: "events triggered by
+      # the GITHUB_TOKEN will not create a new workflow run", except that
+      # `pull_request` events land in an approval-required state instead.
+      # https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow
+      #
+      # So the PR ends up showing NO gate results rather than a failure, which
+      # reads as "not triggered yet" and not as "waiting on you" — that cost 40
+      # minutes of confusion on #1659, the gate's first real token change.
+      # Escaping it for real needs a PAT or GitHub App installation token
+      # (tracked in #1662); until that decision is made, print the release
+      # commands rather than leaving the operator to work it out.
+      - name: Explain how to release the held checks
+        if: ${{ steps.commit.outputs.pushed == 'true' }}
+        env:
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          {
+            echo "## Baselines pushed — the PR's checks are parked"
+            echo
+            echo 'The baseline commit is authored by `github-actions[bot]`, so every'
+            echo 'check on it sits at `action_required` instead of running. The PR will'
+            echo 'show no `visual`/`test` results until you release them.'
+            echo
+            echo "### Release them in place (no PR churn)"
+            echo
+            echo '```bash'
+            echo "for id in \$(gh run list --branch ${BRANCH} --limit 40 \\"
+            echo "              --json databaseId,conclusion \\"
+            echo "              -q '.[]|select(.conclusion==\"action_required\")|.databaseId'); do"
+            echo "  gh api -X POST repos/${GITHUB_REPOSITORY}/actions/runs/\$id/approve"
+            echo 'done'
+            echo '```'
+            echo
+            echo '### Or close and reopen the PR'
+            echo
+            echo 'Cheaper to remember, but it re-runs every check from scratch.'
+          } >> "$GITHUB_STEP_SUMMARY"
