@@ -18,6 +18,8 @@ A family of four thin shells — `TableView`, `ListView`, `ProfileView`, `BoardV
 
 Each named view wraps a different display primitive with the same state surface. Toggle `loading` / `empty` / `error` in Controls to see any state.
 
+The content inside each view below is a **minimum-legible fixture** — just enough shape for the skeleton and empty state to read correctly. It is not a recommended composition; build `children` from whatever the page actually needs.
+
 ### ListView
 
 <Canvas of={Stories.List} />
