@@ -303,3 +303,94 @@ if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
   fi
   exit $?
 fi
+
+# ── Sibling-issue detection (#1663) ────────────────────────────────────────────
+#
+# The number-keyed gate above is blind to the commonest duplicate shape: two
+# sessions each notice the same problem, each FILE THEIR OWN ISSUE, and each
+# claim their own number. Both gates are satisfied while the work is identical.
+# Measured 2026-08-02: #1645 (14:16Z) and #1648 (14:40Z) were the same brik-rag
+# ingest-cap fix, and produced PRs #1650 and #1651 thirty seconds apart.
+#
+# Scores open issue titles against this one by SHARED SIGNIFICANT TOKENS, then
+# weights each shared token by inverse document frequency across the open set —
+# so a rare pair like "standards"+"ingest" outranks a common domain phrase like
+# "story"+"shape", which otherwise buries the signal under six false positives.
+# Verified against the real pair: scoring #1648's title with #1645 open returns
+# #1645 alone at 2.00, and an unrelated title returns only itself.
+#
+# It protects the SECOND mover only, and cannot see a session that files later.
+# Neither this nor pr-path-overlap.sh could have caught the 30-second PR race in
+# #1660/#1661 — nothing polling GitHub can. This closes the 23-minute case.
+_IO_TITLE_MIN_TOKENS="${_IO_TITLE_MIN_TOKENS:-2}"
+_IO_TITLE_MIN_SCORE="${_IO_TITLE_MIN_SCORE:-0.5}"
+
+# Emits "number<TAB>score<TAB>shared<TAB>title" per candidate, best first.
+_io_similar_open_issues() {
+  local owner="$1" repo="$2" num="$3" title="$4" rows
+  command -v node >/dev/null 2>&1 || return 0
+
+  rows="$(gh issue list --repo "${owner}/${repo}" --state open --limit 200 \
+            --json number,title 2>/dev/null)" || return 0
+  [ -z "$rows" ] && return 0
+
+  SELF_NUM="$num" TITLE="$title" node --input-type=commonjs -e '
+    const fs = require("node:fs");
+    const STOP = new Set(("a an the and or but if is are was were be been being of to in on for " +
+      "from with without at by as it its this that these those not no never when where which who " +
+      "whom how why what add adds added fix fixes fixed use uses using make makes made into onto " +
+      "over under every all any some more most less least than then so such via per we our you your"
+      ).split(/\s+/));
+    const sig = (t) => [...new Set(String(t || "").toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, " ").split(/[\s-]+/)
+      .filter((w) => w.length >= 4 && !STOP.has(w)))];
+    const rows = JSON.parse(fs.readFileSync(0, "utf8"));
+    const self = Number(process.env.SELF_NUM);
+    const minTokens = Number(process.env.MIN_TOKENS || 2);
+    const minScore = Number(process.env.MIN_SCORE || 0.5);
+    const df = new Map();
+    for (const r of rows) for (const w of sig(r.title)) df.set(w, (df.get(w) ?? 0) + 1);
+    const target = sig(process.env.TITLE);
+    rows.map((r) => {
+      const have = new Set(sig(r.title));
+      const shared = target.filter((w) => have.has(w));
+      return { r, shared, score: shared.reduce((a, w) => a + 1 / (df.get(w) ?? 1), 0) };
+    })
+      .filter((x) => x.r.number !== self && x.shared.length >= minTokens && x.score >= minScore)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5)
+      .forEach((x) => console.log([x.r.number, x.score.toFixed(2), x.shared.join("+"), x.r.title].join("\t")));
+  ' <<<"$rows"
+}
+
+# Warn (never block) when another OPEN issue looks like the same problem.
+check_title_overlap() {
+  local ref="${1:-}" mode="${2:-prompt}"
+  [ -z "$ref" ] && return 0
+  command -v gh >/dev/null 2>&1 || return 0
+
+  local resolved owner repo num
+  _io_resolve_ref "$ref" >/dev/null 2>&1 || return 0
+  resolved="$(_io_resolve_ref "$ref")"
+  read -r owner repo num <<<"$resolved"
+
+  local state_line title siblings
+  state_line="$(_io_issue_state "$owner" "$repo" "$num")"
+  [ -z "$state_line" ] && return 0
+  title="${state_line#*$'\t'}"
+
+  siblings="$(MIN_TOKENS="$_IO_TITLE_MIN_TOKENS" MIN_SCORE="$_IO_TITLE_MIN_SCORE" \
+              _io_similar_open_issues "$owner" "$repo" "$num" "$title")"
+  [ -z "$siblings" ] && return 0
+
+  echo "" >&2
+  echo -e "${_IO_YELLOW}⚠  Open issues that look like the same problem:${_IO_NC}" >&2
+  printf '%s\n' "$siblings" | awk -F'\t' '{ printf "    #%s  [%s]  %s\n", $1, $3, $4 }' >&2
+  echo "" >&2
+  echo -e "${_IO_YELLOW}   Two sessions each filing their own ticket is how #1645/#1648 became${_IO_NC}" >&2
+  echo -e "${_IO_YELLOW}   duplicate PRs #1650/#1651. Read those before building (#1663).${_IO_NC}" >&2
+
+  [ "$mode" = "--report" ] && return 0
+  _io_confirm
+  return 0
+}

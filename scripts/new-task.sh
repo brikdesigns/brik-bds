@@ -200,6 +200,10 @@ fi
 
 if [ -n "$ISSUE_REF" ]; then
   check_issue_overlap "$ISSUE_REF"
+  # Catches the shape the number-keyed check cannot see: another session filed
+  # its OWN issue for the same problem, so both claims are satisfied while the
+  # work is identical (#1663).
+  check_title_overlap "$ISSUE_REF"
   # Refuses when another session holds a live claim; otherwise claims it.
   if ! check_issue_claim "$ISSUE_REF" "$BRANCH_NAME"; then
     exit 1
