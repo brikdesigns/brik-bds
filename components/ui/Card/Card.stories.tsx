@@ -41,9 +41,9 @@ const meta: Meta<typeof Card> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['outlined', 'brand', 'elevated', 'borderless'],
+      options: ['outlined', 'brand', 'elevated', 'raised', 'borderless'],
       description:
-        'Visual variant (Default shape only). `outlined` = secondary border; `brand` = primary-color border; `elevated` = drop shadow; `borderless` = transparent, no border, no shadow (for cards on a colored surface).',
+        'Visual variant (Default shape only). `outlined` = secondary border; `brand` = primary-color border; `elevated` = surface fill, no border, no shadow; `raised` = surface fill, no border, `--box-shadow-md` drop shadow; `borderless` = transparent, no border, no shadow (for cards on a colored surface).',
     },
     padding: {
       control: 'select',
@@ -140,6 +140,50 @@ export const Borderless: Story = {
           width: 320,
           padding: 'var(--padding-xl)',
           backgroundColor: 'var(--background-brand-primary)',
+          borderRadius: 'var(--border-radius-md)',
+        }}
+      >
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
+ * `variant="raised"` — surface-primary fill, no border, with a
+ * `--box-shadow-md` drop shadow. The shadow-casting counterpart to the
+ * now-flat `elevated` (brik-bds#1146 / BACKLOG-493 removed its shadow so
+ * portal cards read flat). Use for a focal/lone card or a grid cell that
+ * needs a lifted, contained read. Shown here on a secondary surface so the
+ * cast shadow reads clearly.
+ *
+ * @summary variant="raised" — surface fill + cast shadow
+ */
+export const Raised: Story = {
+  args: {
+    variant: 'raised',
+    padding: 'md',
+    children: (
+      <>
+        <CardTitle>Card title</CardTitle>
+        <CardDescription>
+          Surface-primary fill, no border, with a cast drop shadow.
+        </CardDescription>
+        <CardFooter>
+          <Button variant="primary" size="sm">
+            Action
+          </Button>
+        </CardFooter>
+      </>
+    ),
+  },
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          width: 320,
+          padding: 'var(--padding-xl)',
+          backgroundColor: 'var(--surface-secondary)',
           borderRadius: 'var(--border-radius-md)',
         }}
       >
@@ -348,7 +392,8 @@ export const Summary: Story = {
  * property listing, team bio, support plan — via optional slot props (`image`,
  * `tag`, `badge`, `action`, `href`). The `variant` Control switches the surface
  * treatment for cells on a colored (service-tinted) grid: `borderless`
- * (transparent) or `elevated` (fill + shadow).
+ * (transparent), `elevated` (fill, no shadow), or `raised` (fill + cast
+ * `--box-shadow-md` shadow).
  *
  * @summary preset="display" — CardGrid cell
  */
@@ -370,10 +415,15 @@ export const Display: Story = {
   argTypes: {
     variant: {
       control: 'inline-radio',
-      options: ['default', 'borderless', 'elevated'],
-      mapping: { default: undefined, borderless: 'borderless', elevated: 'elevated' },
+      options: ['default', 'borderless', 'elevated', 'raised'],
+      mapping: {
+        default: undefined,
+        borderless: 'borderless',
+        elevated: 'elevated',
+        raised: 'raised',
+      },
       description:
-        'Surface treatment for a cell on a colored (service-tinted) grid. `borderless` = transparent, no border/shadow; `elevated` = fill + shadow, no border. Default = outlined white fill.',
+        'Surface treatment for a cell on a colored (service-tinted) grid. `borderless` = transparent, no border/shadow; `elevated` = fill + shadow, no border; `raised` = fill, no border, `--box-shadow-md` shadow. Default = outlined white fill.',
     },
     tint: {
       control: 'select',

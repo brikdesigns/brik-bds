@@ -46,7 +46,8 @@ Compose freely with the Title / Description / Footer subcomponents.
 
 - **`outlined`** (default) — Subtle secondary border.
 - **`brand`** — Primary-color border for emphasis.
-- **`elevated`** — Shadow for visual prominence.
+- **`elevated`** — Surface-primary fill, no border, no shadow (flat since brik-bds#1146; for a shadow use `raised`).
+- **`raised`** — Surface-primary fill, no border, with a cast `--box-shadow-md` drop shadow. The shadow-casting counterpart to the now-flat `elevated`; use for a focal/lone card or a grid cell that needs a lifted, contained read.
 - **`borderless`** — Transparent fill, no border, no shadow. Use for cards sitting on a colored surface, where the border ring reads as visual noise.
 
 ### Padding
@@ -139,7 +140,7 @@ The `media` prop turns the default card into a horizontal "media object" — an 
 />
 ```
 
-`title` renders as `titleAs` (default `h3`) — set it to keep the document outline correct under a grid-section heading; the visual size is token-driven and unchanged by the level. For a cell on a colored (service-tinted) grid, `variant="borderless"` (transparent) or `variant="elevated"` (fill + shadow) swaps the surface treatment, and `tint` applies a pale service-line wash. `badge` renders only when `image` is also set.
+`title` renders as `titleAs` (default `h3`) — set it to keep the document outline correct under a grid-section heading; the visual size is token-driven and unchanged by the level. For a cell on a colored (service-tinted) grid, `variant="borderless"` (transparent), `variant="elevated"` (fill + shadow), or `variant="raised"` (fill + cast `--box-shadow-md` shadow) swaps the surface treatment, and `tint` applies a pale service-line wash. `badge` renders only when `image` is also set.
 
 ## Display-row preset
 
@@ -177,7 +178,7 @@ The `media` prop turns the default card into a horizontal "media object" — an 
 
 | Prop | Type | Default |
 |---|---|---|
-| `variant` | `'outlined' \| 'brand' \| 'elevated' \| 'borderless'` | `'outlined'` |
+| `variant` | `'outlined' \| 'brand' \| 'elevated' \| 'raised' \| 'borderless'` | `'outlined'` |
 | `padding` | `'none' \| 'sm' \| 'md' \| 'lg'` | `'md'` |
 | `interactive` | `boolean` | `false` |
 | `href` | `string` | — |
@@ -213,7 +214,7 @@ The `media` prop turns the default card into a horizontal "media object" — an 
 | `title` | `string` *(required)* | — |
 | `titleAs` | `'h2' \| 'h3' \| 'h4'` | `'h3'` |
 | `description` | `string` | — |
-| `variant` | `'borderless' \| 'elevated'` | — |
+| `variant` | `'borderless' \| 'elevated' \| 'raised'` | — |
 | `tint` | `CardTint` (service line) | — |
 | `image` | `ReactNode` | — |
 | `tag` | `ReactNode` | — |

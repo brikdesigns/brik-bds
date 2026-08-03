@@ -32,6 +32,15 @@
   box-shadow: var(--box-shadow-none);
 }
 
+/* Raised — surface-primary fill, no border, casts a real drop shadow. The
+ * shadow-casting counterpart to the now-flat `elevated` (brik-bds#1146 /
+ * BACKLOG-493 removed the shadow there so portal cards read flat). */
+.bds-card--raised {
+  background-color: var(--surface-primary);
+  border: none;
+  box-shadow: var(--box-shadow-md);
+}
+
 /* Borderless — transparent, no border, no shadow. For cards on a colored
  * surface (service-tier / brand-image background) where the outlined ring
  * reads as visual noise; the card inherits the parent surface. */
@@ -392,6 +401,16 @@
   /* Drop shadow removed (brik-bds#1146 / BACKLOG-493) — matches the base
      --elevated variant, which no longer casts a shadow. */
   box-shadow: var(--box-shadow-none);
+}
+
+/* Raised override for display preset — same specificity rationale as the
+ * elevated/borderless overrides above: .bds-card--preset-display redeclares
+ * border after .bds-card--raised in source order, so the ring needs explicit
+ * removal here. surface-primary fill, no border, --box-shadow-md drop shadow. */
+.bds-card--preset-display.bds-card--raised {
+  background-color: var(--surface-primary);
+  border: none;
+  box-shadow: var(--box-shadow-md);
 }
 
 /* Service-line surface tint — a pale wash keyed to a service line, shared by
