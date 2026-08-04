@@ -8,15 +8,32 @@ name: Update Visual Baselines
 # runs in. A baseline committed from a dev machine is platform-suffixed
 # (darwin/win32) or pixel-shifted and guarantees a false positive.
 #
-# The screenshot tree is wiped before regeneration so baselines for deleted
-# or renamed stories are pruned instead of rotting in git.
+# `vitest --update` rewrites a reference ONLY when the comparator fails against
+# the committed one (@vitest/browser determineOutcome: a present reference that
+# compares clean returns `matched-after-comparison` and writes nothing). So
+# leaving the tree in place makes the commit contain exactly the baselines that
+# really changed — which is what makes the git diff usable as the review surface
+# (ADR-026: there is no hosted approve-UI).
+#
+# This job used to `rm -rf` the tree first, which made every reference "missing"
+# and therefore written fresh with no comparison at all. Chromium antialiasing
+# is not byte-reproducible between container runs, so that rewrote baselines the
+# comparator scores as identical: 9 of the 10 files in one measured commit had
+# ZERO mismatched pixels under the gate's own comparator (#1673).
+#
+# Pruning is now opt-in via the `prune` input, because it is the only thing the
+# wipe was for. Run with prune=true after deleting or renaming stories; expect
+# that run to touch many files, and review it as the churn-heavy run it is.
 #
 # Usage: Actions → Update Visual Baselines → Run workflow → pick the branch.
-# Review the resulting commit like any other — baseline churn IS the review
-# surface (ADR-026 accepted tradeoff: no hosted approve-UI).
 
 on:
   workflow_dispatch:
+    inputs:
+      prune:
+        description: 'Wipe baselines first, pruning references for deleted/renamed stories. Rewrites every file — only needed after a story is removed or renamed.'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -45,10 +62,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Prune baselines before regenerating
+        if: ${{ inputs.prune }}
+        run: rm -rf tests/visual/__screenshots__
+
       - name: Regenerate baselines
-        run: |
-          rm -rf tests/visual/__screenshots__
-          VISUAL_GATE=1 npx vitest run --project storybook --update
+        run: VISUAL_GATE=1 npx vitest run --project storybook --update
 
       - name: Commit and push baselines
         id: commit
@@ -61,10 +80,20 @@ jobs:
           git add -A tests/visual/__screenshots__
           if git diff --cached --quiet; then
             echo "Baselines unchanged — nothing to commit."
+            {
+              echo "## No baseline change"
+              echo
+              echo 'Every reference compared clean against a fresh capture, so'
+              echo '`vitest --update` wrote nothing and there is no commit. The'
+              echo "PR's existing \`visual\` result already reflects this branch —"
+              echo 'nothing to release.'
+            } >> "$GITHUB_STEP_SUMMARY"
             echo "pushed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          git commit -m "chore(visual): regenerate baselines ($(git rev-parse --short HEAD))"
+          echo "Baselines changed:"
+          git diff --cached --name-only
+          git commit -m "chore(visual): regenerate baselines ($(git rev-parse --short HEAD))${{ inputs.prune && ' [pruned]' || '' }}"
           git push
           echo "pushed=true" >> "$GITHUB_OUTPUT"
 
