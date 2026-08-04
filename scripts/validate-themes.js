@@ -17,6 +17,12 @@
  *     this for components that swap fg AND bg by theme (e.g. the inverse-surface
  *     hero card, brik-bds#1017), where the off-theme token combination never
  *     paints and scoring it would be meaningless.
+ *   - A pairing carrying `alpha` is a FADED state (a disabled control under
+ *     `opacity`). Both fg and bg are composited over `over` (default
+ *     `--background-primary`) at that alpha before scoring, because `opacity`
+ *     moves the label AND the fill toward the same backdrop. Without this the
+ *     gate scores token names that never paint and reports a fade as safe —
+ *     the blind spot ADR-028 § Consequences pt-2 documents (brik-bds#1687).
  *
  * Source of truth: tokens/contrast-pairings.json (also feeds the Storybook
  * ContrastCompliance dashboard and the primitives/color-pairings.mdx matrix).
@@ -88,6 +94,47 @@ function resolveAll(merged) {
   return out;
 }
 
+// ─── Alpha compositing (faded / disabled states) ────────────────────
+// Mirrors scripts/measure-disabled-contrast.mjs exactly, so a pairing's gate
+// ratio and that script's reported ratio are the same number.
+
+const DEFAULT_BACKDROP = '--background-primary';
+
+function hexToRgb(hex) {
+  const h = hex.replace('#', '');
+  const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+  return [0, 2, 4].map((i) => parseInt(full.slice(i, i + 2), 16));
+}
+
+/**
+ * A pairing's `alpha` is either a literal or a token name. Prefer the token:
+ * `alpha: "--state-disabled-opacity"` means retuning that token re-scores every
+ * faded pairing automatically, so the value and its gate cannot drift.
+ */
+function resolveAlpha(spec, theme) {
+  const raw = typeof spec === 'string' && spec.startsWith('--') ? theme.vars[spec] : spec;
+  const n = typeof raw === 'string' ? Number.parseFloat(raw) : raw;
+  if (!Number.isFinite(n) || n <= 0 || n > 1) {
+    throw new Error(
+      `alpha "${spec}" resolved to "${raw}" in the ${theme.key} theme — ` +
+        `expected a number in (0, 1].`,
+    );
+  }
+  return n;
+}
+
+/** `over` painted at `alpha` on top of opaque `under`. */
+function composite(over, under, alpha) {
+  const u = hexToRgb(under);
+  return (
+    '#' +
+    hexToRgb(over)
+      .map((v, i) => Math.round(alpha * v + (1 - alpha) * u[i]))
+      .map((v) => v.toString(16).padStart(2, '0'))
+      .join('')
+  );
+}
+
 // ─── Theme assembly (the real Brik default cascade) ─────────────────
 // light = figma :root + gap-fills :root + .theme-brand-brik
 // dark  = light + figma dark :root[data-theme=dark] + gap-fills dark + dark .theme-brand-brik
@@ -129,9 +176,23 @@ async function main() {
     // AAA (7:1) is an aspiration for body text, not a blocking gate.
     const floor = pairing.thresholdType === 'AA-large' ? thresholds['AA-large'] : thresholds['AA'];
     for (const theme of THEMES) {
-      const fgVal = theme.vars[pairing.fg];
-      const bgVal = theme.vars[pairing.bg];
+      let fgVal = theme.vars[pairing.fg];
+      let bgVal = theme.vars[pairing.bg];
       let status, ratio = null;
+
+      // A faded pairing scores the composited result, not the raw token pair.
+      if (pairing.alpha !== undefined && isHex(fgVal) && isHex(bgVal)) {
+        const alpha = resolveAlpha(pairing.alpha, theme);
+        const backdrop = theme.vars[pairing.over ?? DEFAULT_BACKDROP];
+        if (!isHex(backdrop)) {
+          throw new Error(
+            `Pairing "${pairing.label}": backdrop ${pairing.over ?? DEFAULT_BACKDROP} ` +
+              `does not resolve to a hex colour in the ${theme.key} theme.`,
+          );
+        }
+        fgVal = composite(fgVal, backdrop, alpha);
+        bgVal = composite(bgVal, backdrop, alpha);
+      }
 
       if (pairing.appliesTo && !pairing.appliesTo.includes(theme.key)) {
         // Pairing is mode-scoped: it only renders in the listed theme(s). The
@@ -149,7 +210,9 @@ async function main() {
           status = 'warn';
           aaaWarnings++;
         } else if (theme.key === 'dark' && pairing.darkException) {
-          // Genuine sub-AA in dark on a known-fragile service pairing (brik-bds#823).
+          // Genuine sub-threshold in dark on a pairing whose cause is tracked
+          // elsewhere (the service-tier gap #823; the faded Chip --secondary
+          // fill #1689). The row prints its own issue number.
           status = 'exception';
           exceptions++;
         } else {
@@ -212,7 +275,12 @@ function report(results, hardFailures, exceptions, aaaWarnings) {
   console.log('\n  ─────────────────────────────');
   console.log(`  ${hardFailures === 0 ? '✅ PASS (WCAG AA floor)' : `❌ FAIL — ${hardFailures} pairing(s) below the AA floor`}`);
   if (aaaWarnings > 0) console.log(`  ·  ${aaaWarnings} pairing(s) clear AA but miss the AAA body aim (non-blocking)`);
-  if (exceptions > 0) console.log(`  ⚠  ${exceptions} dark-mode service pairing(s) below AA — tracked exception (brik-bds#823)`);
+  if (exceptions > 0) {
+    // Each row prints its own issue number above; don't restate one here — the
+    // summary said "brik-bds#823" unconditionally, which misattributed every
+    // non-service exception added since (#1687).
+    console.log(`  ⚠  ${exceptions} dark-mode pairing(s) below threshold — tracked exception(s), see the rows above`);
+  }
   console.log('');
 }
 

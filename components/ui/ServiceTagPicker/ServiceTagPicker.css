@@ -48,7 +48,7 @@
 
 .bds-service-tag-picker--disabled .bds-service-tag-picker__option {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: var(--state-disabled-opacity);
 }
 
 /* ── Visually-hidden native radio (stays focusable for keyboard + SR) ── */

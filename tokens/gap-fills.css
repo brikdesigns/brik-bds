@@ -259,7 +259,14 @@
   --state-hover-overlay: rgba(0, 0, 0, 0.04); /* bds-lint-ignore — rgba overlay, no token equivalent */
   --state-pressed-overlay: rgba(0, 0, 0, 0.08); /* bds-lint-ignore — rgba overlay, no token equivalent */
   --state-focus: currentColor; /* bds-lint-ignore — resolves at use-site */
-  --state-disabled-opacity: 0.4;
+  /* 0.5 is the measured floor, not a preference: a faded fill-less control's
+     label composites toward the page, and --text-primary clears the AA-large
+     3:1 floor at 0.5 in BOTH modes (3.32:1 light / 4.82:1 dark) and fails at
+     0.45 in light. Verify with `node scripts/measure-disabled-contrast.mjs
+     --sweep`; gated by the faded pairings in tokens/contrast-pairings.json
+     (ADR-028 pt-2, #1687). Every disabled-scoped `opacity` in components/ui
+     reads this token — do not reintroduce a literal. */
+  --state-disabled-opacity: 0.5;
 
   /* ── Disabled pair — light-mode correction (#1571)
      The Figma source emits --text-disabled, --background-disabled AND

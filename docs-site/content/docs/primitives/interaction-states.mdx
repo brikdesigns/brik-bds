@@ -19,7 +19,7 @@ These four tokens are mode-invariant — they resolve to the same value in light
 | `--state-hover-overlay` | `rgba(0, 0, 0, 0.04)` | Subtle hover overlay on any surface |
 | `--state-pressed-overlay` | `rgba(0, 0, 0, 0.08)` | Stronger overlay for `:active` / press |
 | `--state-focus` | `currentColor` | Keyboard focus ring color — resolves to the element's own text color at use-site |
-| `--state-disabled-opacity` | `0.4` | Opacity for disabled elements |
+| `--state-disabled-opacity` | `0.5` | Opacity for disabled elements that have no fill of their own |
 
 <Callout type="warn">
   The overlays are a fixed black `rgba` in **both** modes — there is no white-overlay override for dark surfaces today, so a hover/press overlay reads faintly on very dark backgrounds. Wire a dark-mode override if a dark surface needs a stronger cue.
@@ -53,13 +53,23 @@ These four tokens are mode-invariant — they resolve to the same value in light
   background-color: var(--background-brand-primary-hover);
 }
 
-/* Disabled */
+/* Disabled — only for a component with no fill of its own. See the callout. */
 .bds-component--disabled {
   opacity: var(--state-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
 }
 ```
+
+<Callout type="warn">
+  **The fade is not the universal disabled treatment.** It applies only to a control with no fill of its own, where the page or an ancestor surface shows through. A control that paints its own fill swaps tokens instead: `--background-disabled`, `--text-disabled`, `--border-disabled`. `Button`, `FilterButton`, and `FilterToggle` are the fill-bearing cases today.
+
+  The reason is measurable, not stylistic. `opacity` composites the label **and** the fill toward the same backdrop, so a filled control's contrast collapses as it fades — a brand-filled button lands at 1.68:1 in light mode against a 3:1 floor it clears at 5.22:1 with the swap. Pick by asking whether the control has a fill, not by counting which treatment is more common.
+</Callout>
+
+<Callout type="info">
+  Never set a disabled `opacity` literal. Every disabled rule reads `--state-disabled-opacity` so one token governs the whole cohort and the contrast gate can score it. `0.5` is the measured floor: below it, a faded `--text-primary` label misses 3:1 in light mode. Do not pair the fade with a `--text-muted` label either — that stacks two reductions on the same text and no opacity value rescues it in dark mode.
+</Callout>
 
 ## Brand state pairs
 

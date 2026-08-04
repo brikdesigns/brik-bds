@@ -53,10 +53,11 @@
   flex-shrink: 0;
 }
 
+/* ADR-028 pt-2: fade only — the --text-muted swap under the fade compounded
+   two reductions on the same label (#1687). Inherits --text-primary. */
 .bds-stepper__button--disabled {
-  color: var(--text-muted);
   cursor: not-allowed;
-  opacity: 0.4;
+  opacity: var(--state-disabled-opacity);
 }
 
 /* ─── Value display ───────────────────────────────────── */
@@ -70,7 +71,8 @@
   user-select: none;
 }
 
+/* Fill-less value display — ADR-028 pt-2, same reason as the button above. */
 .bds-stepper__value--disabled {
-  color: var(--text-muted);
+  opacity: var(--state-disabled-opacity);
 }
 }

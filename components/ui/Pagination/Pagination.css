@@ -48,7 +48,7 @@
 }
 
 .bds-pagination__arrow--disabled {
-  opacity: 0.4;
+  opacity: var(--state-disabled-opacity);
   cursor: not-allowed;
 }
 
