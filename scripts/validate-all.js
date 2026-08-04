@@ -92,6 +92,11 @@ const steps = [
   // comment rather than an assignee. brik-bds#1541.
   { name: 'Issue Claim', cmd: 'bash scripts/__tests__/test-issue-claim.sh' },
 
+  // Ticketless claim keying — per-slug markers, the prefix case, and the reuse
+  // contract with issue-claim.sh. Pure; the shared staleness logic is covered by
+  // the suite above rather than retested here. brik-bds#1663.
+  { name: 'Slug Claim', cmd: 'bash scripts/__tests__/test-slug-claim.sh' },
+
   // Same-path overlap decision logic — exact-path intersection, self-exclusion
   // by head ref, and the fail-loud-on-gh-error branch. Both the git read and the
   // gh read are injected, so this touches no repo and no network. brik-bds#1545.

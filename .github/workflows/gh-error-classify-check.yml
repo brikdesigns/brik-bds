@@ -29,6 +29,8 @@ on:
       - 'scripts/cleanup-merged-worktrees.sh'
       - 'scripts/lib/issue-claim.sh'
       - 'scripts/__tests__/test-issue-claim.sh'
+      - 'scripts/lib/slug-claim.sh'
+      - 'scripts/__tests__/test-slug-claim.sh'
       - '.github/workflows/gh-error-classify-check.yml'
   push:
     branches: [main]
@@ -38,6 +40,8 @@ on:
       - 'scripts/cleanup-merged-worktrees.sh'
       - 'scripts/lib/issue-claim.sh'
       - 'scripts/__tests__/test-issue-claim.sh'
+      - 'scripts/lib/slug-claim.sh'
+      - 'scripts/__tests__/test-slug-claim.sh'
       - '.github/workflows/gh-error-classify-check.yml'
   workflow_dispatch:
 
@@ -64,6 +68,13 @@ jobs:
       - name: Issue-claim contract
         run: bash scripts/__tests__/test-issue-claim.sh < /dev/null
 
+      # slug-claim.sh sources issue-claim.sh for the staleness/identity half, so
+      # it is a second consumer of the same slug-resolution path. Gated here for
+      # the same reason: the per-slug marker keying is what stops one ticketless
+      # branch blocking every other, and it fails silently (#1663).
+      - name: Slug-claim contract
+        run: bash scripts/__tests__/test-slug-claim.sh < /dev/null
+
       - name: shellcheck
         run: |
           sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
@@ -83,3 +94,10 @@ jobs:
           # a local named `then`, which is legal and deliberate. Both are left
           # as-is rather than edited, so this gate smuggles in no unrelated diff.
           shellcheck -S warning -e SC1091,SC1010 scripts/lib/issue-claim.sh
+          # slug-claim.sh parses the claim table with the same single-quoted
+          # sed as issue-claim.sh, so it carries the same info-level SC2016 on
+          # the literal `\(.*\)`. Held at `-S warning` for that reason, not as a
+          # blanket allowance. Its test suite has no such pattern and runs at the
+          # default threshold.
+          shellcheck -S warning -e SC1091 scripts/lib/slug-claim.sh
+          shellcheck -e SC1091 scripts/__tests__/test-slug-claim.sh
