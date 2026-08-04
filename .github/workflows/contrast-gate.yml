@@ -61,6 +61,16 @@ jobs:
       - name: Contrast matrix drift check
         run: npm run contrast-matrix:check
 
+      # Every Brand Kit override of a generated token must say why. Without this,
+      # a typo and a brand decision look identical in the diff — which is how
+      # --background-inverse shipped pinned to --text-inverse's own value and
+      # rendered two components at 1.00:1 for four months (#1686, found only
+      # because someone measured dark mode by hand). Lives here rather than in a
+      # new workflow because it reads the same four token files and answers the
+      # same question: is this colour deliberate? (#1689)
+      - name: Theme divergence lint
+        run: npm run lint-theme-divergence
+
       # ADR-015 brand-text rule: --text-brand-primary (3.78:1) never on small
       # body copy. Advisory in the pairing gate (scores pairings, not sizes) —
       # asserted here (#1064 AC1).

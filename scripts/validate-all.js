@@ -24,6 +24,11 @@ const steps = [
   { name: 'JSDoc Lint', cmd: 'node scripts/lint-jsdoc.js' },
   { name: 'Grid Audit', cmd: 'node scripts/audit-grid.js --summary' },
   { name: 'Theme Compliance', cmd: 'node scripts/validate-themes.js' },
+
+  // Every Brand Kit override of a generated token must carry a comment saying
+  // why. A typo and a brand decision are indistinguishable in the diff without
+  // one — #1686 survived four months that way. brik-bds#1689.
+  { name: 'Theme Divergence', cmd: 'node scripts/lint-theme-divergence.mjs' },
   { name: 'Blueprint Library', cmd: 'node scripts/validate-blueprints.mjs' },
   { name: 'BCS Vocab',        cmd: 'node scripts/bcs-vocab-check.mjs' },
   { name: 'Cascade Vocab',    cmd: 'node scripts/token-cascade-vocab-check.mjs' },
