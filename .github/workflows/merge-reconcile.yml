@@ -17,7 +17,9 @@ name: merge-reconcile
 # when the issue is closed or edited (the reconcile action).
 #
 # Exemptions (same as issue-size-gate): sub-issues (parent owns the lifecycle),
-# `meta:project` parents (closed via their rollup), `icebox` (parked).
+# `meta:project` parents (closed via their rollup), `icebox` (parked), and any
+# issue whose body carries `<!-- claim-board -->` (infrastructure that is never
+# closed by design — brik-bds#1699).
 #
 # Rollout to other repos: copy this single file — it is self-contained (creates
 # its own `needs:reconcile` label on first run) and has no repo-specific paths.
@@ -95,6 +97,7 @@ jobs:
               const q = `query($owner:String!,$repo:String!,$num:Int!){
                 repository(owner:$owner,name:$repo){ issue(number:$num){
                   state
+                  body
                   parent { number }
                   labels(first:50){ nodes { name } } } } }`;
               // A `#N` mention that resolves to a PULL REQUEST (not an issue)
@@ -116,9 +119,18 @@ jobs:
               const issue = res.repository.issue;
               if (!issue) return null;
               const labels = issue.labels.nodes.map(n => n.name);
+              // The ticketless claim board (brik-bds#1699) is infrastructure, not
+              // work: it holds one comment per live `--no-issue` branch and is
+              // never closed, so "a PR referenced it and didn't close it" is its
+              // normal state, not drift. Every PR touching the claim mechanism
+              // would otherwise re-flag it forever. Keyed on the body marker
+              // because labels are centrally managed in brik-llm/scripts/github/
+              // labels.json and a new one would be a cross-repo change (#1663).
+              const isClaimBoard = (issue.body || '').includes('<!-- claim-board -->');
               return {
                 open: issue.state === 'OPEN',
-                exempt: !!issue.parent || labels.includes('meta:project') || labels.includes('icebox'),
+                exempt: !!issue.parent || labels.includes('meta:project') ||
+                        labels.includes('icebox') || isClaimBoard,
               };
             }
 
