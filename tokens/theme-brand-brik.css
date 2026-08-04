@@ -122,7 +122,17 @@
   --background-brand-secondary: var(--color-grayscale-darkest);
   --background-primary: var(--color-grayscale-black);
   --background-secondary: var(--color-grayscale-light);
-  --background-inverse: var(--color-grayscale-black);
+  /* Inverse means "opposite of the page", and in dark mode the page is black —
+   * so this must be LIGHT. It shipped as -black in the original dark theme
+   * (#50), which put it on the same value as --text-inverse (also -black, :92)
+   * and rendered `Chip --primary` and `Button --inverse` at 1.00:1: the label
+   * painted in its own fill, invisible, in the ENABLED state. Restored to the
+   * generated dark value (figma-tokens-dark.css:71), which was right all along
+   * — black on -lightest measures 18.76:1, and BDS already publishes this pair
+   * as safe for dark atmospheres ("light strip inside the dark page",
+   * content-system/atmospheres/index.ts:168). Gated in
+   * contrast-pairings.json so it cannot collapse again. (#1686) */
+  --background-inverse: var(--color-grayscale-lightest);
   --background-input: var(--color-grayscale-black);
   --background-muted: var(--color-grayscale-darker);
   --background-image: #000000cc;
