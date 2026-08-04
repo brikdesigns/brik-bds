@@ -118,7 +118,7 @@
 /* Disabled */
 .bds-slider-input:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: var(--state-disabled-opacity);
   pointer-events: none;
 }
 

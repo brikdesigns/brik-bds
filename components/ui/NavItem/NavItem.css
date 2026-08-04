@@ -33,9 +33,13 @@
   background-color: var(--background-brand-primary-hover);
 }
 
+/* Fill-less (transparent background), so ADR-028 pt-2 applies: fade, do not
+   swap the label to --text-muted. The muted swap darkened the label toward the
+   page while the page stayed put — 1.88:1 light / 1.35:1 dark against a 3:1
+   floor, and no alpha rescues --text-muted in dark (#1687). */
 .bds-nav-item--disabled {
-  color: var(--text-muted);
   cursor: not-allowed;
+  opacity: var(--state-disabled-opacity);
   pointer-events: none;
 }
 

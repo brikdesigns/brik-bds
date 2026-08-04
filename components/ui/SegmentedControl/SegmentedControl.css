@@ -87,7 +87,7 @@
 
 .bds-segmented-control-item:disabled {
   cursor: not-allowed;
-  opacity: 0.4;
+  opacity: var(--state-disabled-opacity);
   pointer-events: none;
 }
 
