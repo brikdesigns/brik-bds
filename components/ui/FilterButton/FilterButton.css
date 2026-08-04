@@ -24,7 +24,6 @@
   color: var(--text-primary);
   white-space: nowrap;
   text-transform: capitalize;
-  min-width: 120px;
   box-sizing: border-box;
 }
 
