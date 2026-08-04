@@ -6,7 +6,7 @@
 
 .bds-prose {
   font-family: var(--font-family-body);
-  font-size: var(--body-md);
+  font-size: var(--body-xl);
   line-height: var(--font-line-height-relaxed);
   color: var(--text-primary);
 }
