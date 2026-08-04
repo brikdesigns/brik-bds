@@ -43,10 +43,22 @@ design surfaces.
 
 Never from a dev machine — baselines are platform-suffixed, so a
 Mac-generated PNG is a guaranteed false positive in CI. Run the
-**Update Visual Baselines** workflow (Actions → pick your branch). It wipes
-`__screenshots__/`, regenerates inside the pinned container (pruning stale
-baselines for deleted stories), and pushes the commit to your branch for
-review.
+**Update Visual Baselines** workflow (Actions → pick your branch). It
+regenerates inside the pinned container and pushes the commit to your branch
+for review.
+
+The commit contains only the baselines that actually changed. `vitest --update`
+rewrites a reference **only when the comparator fails** against the committed
+one, so a story that still matches is left untouched — and a branch with no
+visual change produces no commit at all (the job summary says so).
+
+Leave `prune` off unless you deleted or renamed a story. `prune: true` wipes
+`__screenshots__/` first, which drops references for stories that no longer
+exist — but it also makes every remaining reference "missing", so all of them
+are written fresh with no comparison. Chromium antialiasing is not
+byte-reproducible between container runs, so that rewrites files the comparator
+scores as identical (measured: 9 of 10 in one commit had zero mismatched
+pixels — #1673). Expect a pruned run to be churn-heavy and review it as such.
 
 ## Bumping the container / Playwright
 
