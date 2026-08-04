@@ -107,7 +107,7 @@
 }
 
 .bds-text-input-field:disabled {
-  opacity: 0.5;
+  opacity: var(--state-disabled-opacity);
   cursor: not-allowed;
 }
 
