@@ -56,6 +56,12 @@ jobs:
             const hasNeeds = labels.includes(NEEDS);
             const isProject = labels.includes('meta:project');
             const isIcebox = labels.includes('icebox');
+            // A claim board is infrastructure, not work — it holds one comment
+            // per live ticketless branch and is never closed, so there is no
+            // effort to size. Keyed on the body marker rather than a label
+            // because labels are centrally managed in brik-llm/scripts/github/
+            // labels.json and a new one would be a cross-repo change (#1663).
+            const isClaimBoard = (issue.body || '').includes('<!-- claim-board -->');
 
             // Sub-issue check (size inherited from parent).
             const q = `query($owner:String!,$repo:String!,$num:Int!){
@@ -63,7 +69,7 @@ jobs:
             const res = await github.graphql(q, { owner, repo, num: number });
             const isSubIssue = !!res.repository.issue.parent;
 
-            const exempt = isProject || isIcebox || isSubIssue;
+            const exempt = isProject || isIcebox || isSubIssue || isClaimBoard;
 
             async function clearNeeds() {
               if (!hasNeeds) return;

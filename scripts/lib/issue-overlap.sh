@@ -394,3 +394,40 @@ check_title_overlap() {
   _io_confirm
   return 0
 }
+
+# Same warning for work that has no issue to compare FROM — `--no-issue`, where
+# the branch slug is the only statement of intent that exists.
+#
+# This is the half of #1663 that check_title_overlap structurally cannot cover:
+# it needs an issue number to read a title off. #1660 was a `--no-issue` branch
+# that duplicated issue #1661, so the duplicate was an OPEN ISSUE the session
+# never looked for. Scoring the slug against open titles is the only signal
+# available before a PR exists.
+#
+# Self-exclusion is passed 0: a ticketless slug has no issue of its own to skip,
+# and issue numbering starts at 1.
+check_phrase_overlap() {
+  local phrase="${1:-}" mode="${2:-prompt}"
+  [ -z "$phrase" ] && return 0
+  command -v gh >/dev/null 2>&1 || return 0
+
+  local nwo owner repo siblings
+  nwo="$(_io_repo_slug)" || return 0
+  [ -z "$nwo" ] && return 0
+  owner="${nwo%%/*}"; repo="${nwo##*/}"
+
+  siblings="$(MIN_TOKENS="$_IO_TITLE_MIN_TOKENS" MIN_SCORE="$_IO_TITLE_MIN_SCORE" \
+              _io_similar_open_issues "$owner" "$repo" 0 "$phrase")"
+  [ -z "$siblings" ] && return 0
+
+  echo "" >&2
+  echo -e "${_IO_YELLOW}⚠  This slug looks like an open issue that already exists:${_IO_NC}" >&2
+  printf '%s\n' "$siblings" | awk -F'\t' '{ printf "    #%s  [%s]  %s\n", $1, $3, $4 }' >&2
+  echo "" >&2
+  echo -e "${_IO_YELLOW}   --no-issue means \"genuinely no ticket\". If one of these IS the ticket,${_IO_NC}" >&2
+  echo -e "${_IO_YELLOW}   re-run with --issue <N> so the claim gate can see you (#1663).${_IO_NC}" >&2
+
+  [ "$mode" = "--report" ] && return 0
+  _io_confirm
+  return 0
+}

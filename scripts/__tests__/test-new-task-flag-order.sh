@@ -116,10 +116,13 @@ echo "── --no-issue, --base and --yes are honoured in trailing position ─�
 PRIMARY="$(build_repo "$TMPROOT/noissue" "$SCRIPTS/new-task.sh")"
 NOISSUE_OUT="$( cd "$PRIMARY" && PATH="$TMPROOT/bin:$PATH" \
     ./scripts/new-task.sh tokens-plain-slug --no-issue 2>&1 </dev/null || true )"
+# Matches the banner rather than the whole branch, so the assertion stays about
+# flag CONSUMPTION. The text changed in #1663 when --no-issue stopped being a
+# pure skip and started claiming the slug on the claim board.
 case "$NOISSUE_OUT" in
-  *'--no-issue: ticket-overlap gate deliberately skipped'*) NOISSUE_RESULT=honoured ;;
-  *'Refusing to create a worktree with no ticket'*)         NOISSUE_RESULT=dropped ;;
-  *)                                                        NOISSUE_RESULT=unknown ;;
+  *'--no-issue: no ticket to key the overlap gate on'*) NOISSUE_RESULT=honoured ;;
+  *'Refusing to create a worktree with no ticket'*)     NOISSUE_RESULT=dropped ;;
+  *)                                                    NOISSUE_RESULT=unknown ;;
 esac
 assert_eq "trailing --no-issue is consumed" "honoured" "$NOISSUE_RESULT"
 

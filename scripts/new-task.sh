@@ -51,6 +51,10 @@ source "${SCRIPT_DIR}/lib/overlap-filters.sh"
 # brik-bds#1541.
 # shellcheck source=scripts/lib/issue-claim.sh
 source "${SCRIPT_DIR}/lib/issue-claim.sh"
+# Ticketless claim gate — --no-issue had nothing to write a claim to, so it
+# claimed nothing and a parallel --no-issue session got no signal. brik-bds#1663.
+# shellcheck source=scripts/lib/slug-claim.sh
+source "${SCRIPT_DIR}/lib/slug-claim.sh"
 
 # Auto-proceed past interactive warnings when there's no TTY (agent / headless
 # session), or when explicitly opted in via --yes / NEW_TASK_YES=1. Without
@@ -166,8 +170,9 @@ if [ $# -lt 1 ]; then
   echo ""
   echo "  A ticket is REQUIRED. It is derived automatically when the slug ends in"
   echo "  the number (e.g. tooling-overlap-gate-1533). Use --no-issue only for"
-  echo "  genuinely ticketless work — it disables the one check that catches a"
-  echo "  parallel session working the same problem."
+  echo "  genuinely ticketless work — it then keys both checks on the SLUG:"
+  echo "  it warns if an open issue looks like the same problem, and refuses if"
+  echo "  another session already claimed that slug on the claim board."
   echo ""
   echo "  Base branch: ${BASE_BRANCH} (override with --base)"
   exit 1
@@ -209,8 +214,17 @@ if [ -n "$ISSUE_REF" ]; then
     exit 1
   fi
 elif [ "$NO_ISSUE" = "1" ]; then
-  echo -e "${YELLOW}⚠  --no-issue: ticket-overlap gate deliberately skipped.${NC}"
-  echo -e "${YELLOW}   Nothing will catch a parallel session working the same problem.${NC}"
+  echo -e "${YELLOW}⚠  --no-issue: no ticket to key the overlap gate on.${NC}"
+  # The slug is the only statement of intent a ticketless branch has, so both
+  # checks below read it instead of an issue title (#1663).
+  # 1. Is there already an open issue for this? #1660 was a --no-issue branch
+  #    that duplicated issue #1661.
+  check_phrase_overlap "$(slug_to_phrase "$TASK_NAME")"
+  # 2. Is another session already on this slug? Refuses, like the issue-keyed
+  #    claim would.
+  if ! check_slug_claim "$TASK_NAME" "$BRANCH_NAME"; then
+    exit 1
+  fi
 else
   echo -e "${RED}✗ Refusing to create a worktree with no ticket.${NC}"
   echo ""
