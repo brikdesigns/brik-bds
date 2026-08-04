@@ -47,6 +47,13 @@ Mac-generated PNG is a guaranteed false positive in CI. Run the
 regenerates inside the pinned container and pushes the commit to your branch
 for review.
 
+The push uses a `brik-ci-bot` App installation token, so the gates re-run on
+the new commit on their own. That is deliberate and load-bearing: a push
+authenticated with the default `GITHUB_TOKEN` cannot trigger CI, which used to
+leave every check parked at `action_required` and the PR showing no results at
+all — indistinguishable from "not run yet" (#1662). If you ever see a baseline
+commit with no checks against it, the token is the first thing to look at.
+
 The commit contains only the baselines that actually changed. `vitest --update`
 rewrites a reference **only when the comparator fails** against the committed
 one, so a story that still matches is left untouched — and a branch with no

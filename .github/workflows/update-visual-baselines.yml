@@ -25,6 +25,11 @@ name: Update Visual Baselines
 # wipe was for. Run with prune=true after deleting or renaming stories; expect
 # that run to touch many files, and review it as the churn-heavy run it is.
 #
+# The commit is pushed with a brik-ci-bot App installation token rather than the
+# default GITHUB_TOKEN, because GitHub refuses to let a GITHUB_TOKEN-authored
+# push trigger CI — that left every check on the PR parked at `action_required`
+# and showing no results at all (#1662). Nothing needs approving or reopening now.
+#
 # Usage: Actions → Update Visual Baselines → Run workflow → pick the branch.
 
 on:
@@ -35,8 +40,11 @@ on:
         type: boolean
         default: false
 
+# The baseline commit is pushed with a brik-ci-bot App installation token, NOT
+# the default GITHUB_TOKEN — see the mint step below for why. GITHUB_TOKEN itself
+# needs nothing beyond read here.
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: visual-baselines-${{ github.ref }}
@@ -50,8 +58,39 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
     steps:
+      # WHY an App token instead of the default GITHUB_TOKEN (#1662):
+      # GitHub will not let a GITHUB_TOKEN-authored push trigger CI — "events
+      # triggered by the GITHUB_TOKEN will not create a new workflow run", and
+      # for `pull_request` the runs are created in an approval-required state
+      # instead. So the baseline commit left every check on the PR parked at
+      # `action_required` and the PR showed NO gate results, which reads as "not
+      # run yet" rather than "waiting on you". That cost 40 minutes on #1659 and
+      # two close/reopen cycles on #1683.
+      #
+      # GitHub names an App installation token (or a PAT) as the escape; we use
+      # the pre-existing brik-ci-bot App, which is already installed org-wide
+      # with contents:write, so nothing had to be minted. Registered in
+      # brik-llm secrets.yaml as `github-app-fleet-automation` — rotating the
+      # App key now requires `brik-secrets propagate` to reach these secrets.
+      #
+      # Least privilege: the App holds more than this, but permission-contents
+      # scopes the MINTED token to contents:write alone, so a leak of this
+      # token cannot touch issues, PRs, or workflows.
+      # Docs: https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow
+      - name: Mint push token (brik-ci-bot App)
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.BRIK_CI_BOT_APP_ID }}
+          private-key: ${{ secrets.BRIK_CI_BOT_PRIVATE_KEY }}
+          permission-contents: write
+
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          # Persisted for the `git push` below — this is what makes the commit
+          # App-authored and therefore CI-triggering.
+          token: ${{ steps.app-token.outputs.token }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -75,8 +114,11 @@ jobs:
           # The container user differs from the checkout owner — git refuses
           # to operate on "dubiously owned" repos without this.
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # brik-ci-bot[bot], matching the App whose token pushes this commit.
+          # The numeric prefix is that bot account's user id (290376200) — the
+          # noreply form GitHub requires to attribute the commit to the App.
+          git config user.name "brik-ci-bot[bot]"
+          git config user.email "290376200+brik-ci-bot[bot]@users.noreply.github.com"
           git add -A tests/visual/__screenshots__
           if git diff --cached --quiet; then
             echo "Baselines unchanged — nothing to commit."
@@ -97,41 +139,28 @@ jobs:
           git push
           echo "pushed=true" >> "$GITHUB_OUTPUT"
 
-      # The push above is authenticated with the default GITHUB_TOKEN, and
-      # GitHub deliberately does not let that retrigger CI: "events triggered by
-      # the GITHUB_TOKEN will not create a new workflow run", except that
-      # `pull_request` events land in an approval-required state instead.
-      # https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow
-      #
-      # So the PR ends up showing NO gate results rather than a failure, which
-      # reads as "not triggered yet" and not as "waiting on you" — that cost 40
-      # minutes of confusion on #1659, the gate's first real token change.
-      # Escaping it for real needs a PAT or GitHub App installation token
-      # (tracked in #1662); until that decision is made, print the release
-      # commands rather than leaving the operator to work it out.
-      - name: Explain how to release the held checks
+      # #1672's stopgap — printing the `gh api .../approve` loop — is gone: the
+      # App-token push above triggers CI directly, so there is nothing held to
+      # release. What the operator needs now is just the review pointer, because
+      # ADR-026 makes the git diff the review surface (there is no hosted UI).
+      - name: Summarise the pushed baselines
         if: ${{ steps.commit.outputs.pushed == 'true' }}
         env:
           BRANCH: ${{ github.ref_name }}
         run: |
           {
-            echo "## Baselines pushed — the PR's checks are parked"
+            echo "## Baselines pushed to \`${BRANCH}\`"
             echo
-            echo 'The baseline commit is authored by `github-actions[bot]`, so every'
-            echo 'check on it sits at `action_required` instead of running. The PR will'
-            echo 'show no `visual`/`test` results until you release them.'
+            echo 'Pushed as `brik-ci-bot[bot]` with an App installation token, so the'
+            echo 'gates re-ran on the new commit automatically — no approval step, no'
+            echo 'close/reopen. Watch the PR checks.'
             echo
-            echo "### Release them in place (no PR churn)"
+            echo '### Review the diff — it IS the gate (ADR-026)'
             echo
-            echo '```bash'
-            echo "for id in \$(gh run list --branch ${BRANCH} --limit 40 \\"
-            echo "              --json databaseId,conclusion \\"
-            echo "              -q '.[]|select(.conclusion==\"action_required\")|.databaseId'); do"
-            echo "  gh api -X POST repos/${GITHUB_REPOSITORY}/actions/runs/\$id/approve"
-            echo 'done'
+            echo 'Only baselines the comparator actually failed were rewritten, so every'
+            echo 'file below is a real pixel change. Confirm each one is intended:'
+            echo
             echo '```'
-            echo
-            echo '### Or close and reopen the PR'
-            echo
-            echo 'Cheaper to remember, but it re-runs every check from scratch.'
+            git diff --name-only 'HEAD^' HEAD -- tests/visual/__screenshots__
+            echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
