@@ -158,20 +158,13 @@
 /* When an outer border is present (any rounded edge), the last body row
    drops its divider so the boundary isn't doubled. Without rounding there
    is no outer border, so the trailing divider stays (matches legacy look). */
-.bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > .bds-table-cell,
-.bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > .bds-table-actions-cell,
-.bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > .bds-table-avatar-cell,
-.bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > .bds-table-text-cell,
-.bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > .bds-table-icon-cell,
-.bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > .bds-table-image-cell,
-.bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > .bds-table-service-tag-cell,
-.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-cell,
-.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-actions-cell,
-.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-avatar-cell,
-.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-text-cell,
-.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-icon-cell,
-.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-image-cell,
-.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > .bds-table-service-tag-cell {
+/* Matched on the `td` element, not on each cell class. Every typed cell renders
+   a `<td>` — that is ADR-027's gate for being a cell component at all — so the
+   element selector is complete by construction and a new cell needs no edit
+   here. `> td` and not `> *`: a `<th>` used as a row header inside the body
+   keeps its divider, which is the behaviour the class list had. */
+.bds-table[data-rounded-top="true"] .bds-table-body .bds-table-row:last-child > td,
+.bds-table[data-rounded-bottom="true"] .bds-table-body .bds-table-row:last-child > td {
   border-bottom: none;
 }
 
