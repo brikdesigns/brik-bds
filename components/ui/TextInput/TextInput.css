@@ -65,6 +65,9 @@
   line-height: var(--font-line-height-normal);
   color: var(--text-primary);
   background-color: var(--text-input-bg); /* bds-lint-ignore — component-scoped CSS variable, not a design token; defaults to --background-input */
+  /* Theme native date/time/number controls (calendar popup, spin buttons) to
+     the brand instead of the browser default blue. Mirrors Checkbox.css. */
+  accent-color: var(--background-brand-primary);
   border: var(--border-width-md) solid var(--border-input);
   border-radius: var(--border-radius-md);
   outline: none;
