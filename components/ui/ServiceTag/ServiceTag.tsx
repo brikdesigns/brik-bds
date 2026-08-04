@@ -4,7 +4,7 @@ import { categoryConfig, resolveServiceIcon, type ServiceLine, type ServiceTagSi
 import { SERVICE_ICON_SVGS } from './service-icons.generated';
 import './ServiceTag.css';
 
-export type ServiceTagVariant = 'text' | 'icon-text' | 'icon';
+export type ServiceTagVariant = 'text' | 'icon-text' | 'icon' | 'dot';
 
 export interface ServiceTagProps extends Omit<HTMLAttributes<HTMLSpanElement>, 'children'> {
   /** Service line — determines color and default label */
@@ -25,7 +25,8 @@ export interface ServiceTagProps extends Omit<HTMLAttributes<HTMLSpanElement>, '
    * Trailing affordance rendered *inside* the tag — e.g. the dismiss control
    * `MultiSelect` supplies for a selected chip. It inherits the tag's service
    * text color, so it stays WCAG AA on every service fill without the caller
-   * picking a token. Ignored by the `icon` variant (a square badge has no room).
+   * picking a token. Ignored by the `icon` and `dot` variants (no room / no
+   * colored fill to inherit against).
    */
   trailing?: ReactNode;
 }
@@ -45,10 +46,12 @@ const boxSizeMap: Record<ServiceTagSize, number> = { sm: 20, md: 28, lg: 40 };
 /**
  * ServiceTag — text label or icon badge for a Brik service category or individual service.
  *
- * Three variants:
+ * Four variants:
  * - `text` — colored pill with label text only
  * - `icon-text` — colored pill with service icon + label text
  * - `icon` — colored square with service icon only (replaces ServiceBadge)
+ * - `dot` — neutral pill with a small service-colored dot marker + label text
+ *   (the "status dot" reading — only the dot carries the service color)
  *
  * @example
  * // Service line label
@@ -63,7 +66,10 @@ const boxSizeMap: Record<ServiceTagSize, number> = { sm: 20, md: 28, lg: 40 };
  * // Icon-only badge (square)
  * <ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />
  *
- * @summary Brik service category indicator — text, icon, or icon+text
+ * // Color-dot marker on a neutral pill
+ * <ServiceTag category="product" variant="dot" />
+ *
+ * @summary Brik service category indicator — text, icon, icon+text, or dot
  */
 export function ServiceTag({
   category,
@@ -100,6 +106,25 @@ export function ServiceTag({
         {...props}
       >
         <ServiceTagIcon glyph={resolveServiceIcon(category, serviceName)} size={iconSize} />
+      </span>
+    );
+  }
+
+  if (variant === 'dot') {
+    // Neutral pill (`--dot` fill, not the per-category fill the other
+    // variants use) — only the marker below carries the service color, so
+    // the label reads as "status dot + text" rather than a flooded pill.
+    return (
+      <span
+        className={bdsClass('bds-service-tag', 'bds-service-tag--dot', `bds-service-tag--${size}`, className)}
+        style={style}
+        {...props}
+      >
+        <span
+          className={bdsClass('bds-service-tag__dot', `bds-service-tag__dot--${size}`, `bds-service-tag--${category}`)}
+          aria-hidden
+        />
+        {displayLabel}
       </span>
     );
   }
