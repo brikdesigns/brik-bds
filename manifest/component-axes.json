@@ -287,7 +287,8 @@
     "variant": [
       "text",
       "icon-text",
-      "icon"
+      "icon",
+      "dot"
     ]
   },
   "Sheet": {
