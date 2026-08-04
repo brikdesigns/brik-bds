@@ -19,8 +19,9 @@ const meta: Meta<typeof ServiceTag> = {
     },
     variant: {
       control: 'select',
-      options: ['text', 'icon-text', 'icon'],
-      description: 'Display mode: colored pill (`text`), pill + glyph (`icon-text`), or icon-only square (`icon`).',
+      options: ['text', 'icon-text', 'icon', 'dot'],
+      description:
+        'Display mode: colored pill (`text`), pill + glyph (`icon-text`), icon-only square (`icon`), or a color-dot marker + label on a neutral pill (`dot`).',
     },
     size: {
       control: 'select',
@@ -29,7 +30,7 @@ const meta: Meta<typeof ServiceTag> = {
     trailing: {
       control: false,
       description:
-        'Node rendered inside the tag after the label — e.g. `MultiSelect`’s dismiss control. Inherits the service text color. Ignored by the `icon` variant.',
+        'Node rendered inside the tag after the label — e.g. `MultiSelect`’s dismiss control. Inherits the service text color. Ignored by the `icon` and `dot` variants.',
     },
   },
 };

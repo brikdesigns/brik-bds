@@ -107,4 +107,35 @@
 .bds-service-tag--icon-sm { width: 20px; height: 20px; border-radius: var(--border-radius-sm); } /* bds-lint-ignore — Figma-driven 20px icon dimensions, not spacing-grid tokens */
 .bds-service-tag--icon-md { width: 28px; height: 28px; border-radius: var(--border-radius-md); } /* bds-lint-ignore — Figma-driven 28px icon dimensions, not spacing-grid tokens */
 .bds-service-tag--icon-lg { width: 40px; height: 40px; border-radius: var(--border-radius-md); } /* bds-lint-ignore — Figma-driven 40px icon dimensions, not spacing-grid tokens */
+
+/* ─── Dot variant (color-dot marker + neutral pill) ─────────────── */
+
+/* Neutral fill — deliberately NOT a `.bds-service-tag--{category}` fill.
+   Same AA-cleared pairing Tag `--solid` and SegmentedControl's track already
+   use (`--background-secondary` + `--text-on-color-light`; see Tag.css) —
+   holds AA in both light and dark. Only the dot marker below carries the
+   service color, so the pill itself reads neutral. */
+.bds-service-tag--dot {
+  gap: var(--gap-xs);
+  background-color: var(--background-secondary);
+  color: var(--text-on-color-light);
+}
+
+.bds-service-tag__dot {
+  display: inline-block;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+/* Reuses the `.bds-service-tag--{category}` background-color rules above for
+   the marker's fill (same token lookup as every other variant — no parallel
+   color map). The `color` those rules also set is inert here; the dot has no
+   text content. */
+
+/* bds-lint-ignore — dot marker dimensions match the shared Dot component's
+   sm/md/lg scale (Dot.css), not the pill's own sm/md/lg (28/32/40 height)
+   scale, so both "dot" concepts in BDS stay visually consistent. */
+.bds-service-tag__dot--sm { width: 6px; height: 6px; }
+.bds-service-tag__dot--md { width: 8px; height: 8px; }
+.bds-service-tag__dot--lg { width: 10px; height: 10px; }
 }
