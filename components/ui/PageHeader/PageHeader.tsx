@@ -31,7 +31,17 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   /** Optional subtitle paragraph rendered under the title. */
   subtitle?: string;
-  /** Badge displayed to the left of the title (e.g. `<ServiceTag variant="icon">`) */
+  /**
+   * Leading identity mark rendered to the left of the title — an `Avatar` for a
+   * company or software entity, a `ServiceTag variant="icon"` for a service.
+   */
+  media?: ReactNode;
+  /**
+   * @deprecated Renamed to {@link PageHeaderProps.media}. `Badge` is the status
+   * component; this slot has only ever held an identity mark, and the mismatch
+   * got a correctly-rendered company avatar reported as a defect (#1705). Kept
+   * as a non-breaking alias for one release — pass `media` in new code.
+   */
   badge?: ReactNode;
   /** Breadcrumb element (typically a `Breadcrumb` component) rendered above the title row. */
   breadcrumbs?: ReactNode;
@@ -78,7 +88,7 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * PageHeader — composable page-level header with breadcrumbs, badge, actions, metadata, and tabs.
+ * PageHeader — composable page-level header with breadcrumbs, media, actions, metadata, and tabs.
  *
  * ## Tunable spacing
  *
@@ -104,6 +114,7 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
 export function PageHeader({
   title,
   subtitle,
+  media,
   badge,
   breadcrumbs,
   actions,
@@ -124,6 +135,9 @@ export function PageHeader({
   style,
   ...props
 }: PageHeaderProps) {
+  // `media` is the canonical slot; `badge` is the deprecated alias (#1705).
+  const resolvedMedia: ReactNode = media ?? badge;
+
   // Explicit `actions` wins; otherwise compose mode-driven actions.
   // `mode='read'` + `onEdit` → `[Edit]` (primary, pen icon).
   // `mode='edit'` + (onSave || onCancel) → `[Cancel] [Save]` ButtonGroup.
@@ -177,7 +191,9 @@ export function PageHeader({
       <div className="bds-page-header__inner">
         <div className="bds-page-header__content">
           <div className="bds-page-header__title-row">
-            {badge && <div className="bds-page-header__badge">{badge}</div>}
+            {/* `media` wins over the deprecated `badge` alias, so a consumer
+                mid-migration that passes both renders one mark, not two. */}
+            {resolvedMedia && <div className="bds-page-header__media">{resolvedMedia}</div>}
             <h1 className="bds-page-header__title">{title}</h1>
           </div>
           {subtitle && <p className="bds-page-header__subtitle">{subtitle}</p>}

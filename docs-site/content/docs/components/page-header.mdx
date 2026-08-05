@@ -25,7 +25,7 @@ import { PageHeader } from '@brikdesigns/bds';
 PageHeader has six optional regions plus a required title. From top to bottom:
 
 1. **`breadcrumbs`** — [Breadcrumb](/docs/components/breadcrumb) above the title row
-2. **`badge`** + **`title`** — service icon (left) + page H1
+2. **`media`** + **`title`** — identity mark (left) + page H1
 3. **`subtitle`** — supporting paragraph under the title
 4. **`actions`** — right-aligned action buttons (typically a [Button](/docs/components/button) or [ButtonGroup](/docs/components/button-group))
 5. **`metadata`** — built-in key/value grid (Owner, Status, Updated)
@@ -71,7 +71,7 @@ PageHeader has six optional regions plus a required title. From top to bottom:
 <PageHeader
   title="Website Design"
   subtitle="Custom web development and design."
-  badge={<ServiceTag category="marketing" variant="icon" serviceName="Custom Web Development" size="lg" />}
+  media={<ServiceTag category="marketing" variant="icon" serviceName="Custom Web Development" size="lg" />}
   actions={<Button variant="primary">Edit Service</Button>}
 />
 ```
@@ -157,7 +157,7 @@ Slots accept rendered elements — a raw `Button` or a consumer wrapper (`Delete
 
 ## Pattern: full company detail page
 
-The canonical layout — breadcrumb + service badge + title + actions + metadata + tabs.
+The canonical layout — breadcrumb + identity mark + title + actions + metadata + tabs.
 
 ```tsx
 <PageHeader
@@ -169,7 +169,7 @@ The canonical layout — breadcrumb + service badge + title + actions + metadata
       { label: 'Birdwell & Mutlak' },
     ]} />
   }
-  badge={<ServiceTag category="dental" variant="icon" size="lg" />}
+  media={<ServiceTag category="dental" variant="icon" size="lg" />}
   actions={<ButtonGroup>
     <Button variant="ghost">Archive</Button>
     <Button variant="primary">Edit</Button>
@@ -208,7 +208,8 @@ The canonical layout — breadcrumb + service badge + title + actions + metadata
 |---|---|---|
 | `title` | `string` *(required)* | — |
 | `subtitle` | `string` | — |
-| `badge` | `ReactNode` | — |
+| `media` | `ReactNode` | — |
+| `badge` | `ReactNode` | *deprecated* — alias for `media` (#1705) |
 | `breadcrumbs` | `ReactNode` | — |
 | `actions` | `ReactNode` | — |
 | `tabs` | `ReactNode` | — |
@@ -238,7 +239,7 @@ interface MetadataItem {
 
 - [Breadcrumb](/docs/components/breadcrumb) — common breadcrumbs prop content
 - [TabBar](/docs/components/tab-bar) — common tabs prop content
-- [ServiceTag](/docs/components/service-tag) — common badge prop content (variant="icon")
+- [ServiceTag](/docs/components/service-tag) — common `media` prop content (variant="icon")
 - [DataSection](/docs/components/data-section) — for body sections below the header
 - [Sheet](/docs/components/sheet) — has its own header for in-Sheet contexts
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-page-header--overview)**
