@@ -82,6 +82,7 @@ These are well-*shaped* but wrong-*meaning*. Listed so an agent sees the wrong w
 | `__underline` | CSS, not a slot | Visual treatment, not a role |
 | `__hero-title`, `__page-heading` | `__title` | The parent block already says "hero" or "page" |
 | `__hero-cta`, `__page-actions` | `__cta` / `__actions` | Same |
+| `__badge` | `__media` | `Badge` is the status component; a slot holding an identity mark (`Avatar`, `ServiceTag variant="icon"`) is `__media`. Naming it `__badge` got a correctly-rendered company avatar filed as a UI defect — the portal feedback widget captures the slot's class name, so a wrong slot name becomes a wrong bug report (#1705) |
 
 ## Naming a new slot
 
