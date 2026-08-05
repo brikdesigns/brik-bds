@@ -291,9 +291,9 @@ export const WithActionsCell: Story = {
             <TableCell>{user.email}</TableCell>
             <TableCell><Badge status={user.status} size="sm">{statusLabel(user.status)}</Badge></TableCell>
             <TableActionsCell>
-              <Button variant="primary" size="sm" icon={<Icon icon={Eye} />} label="View" />
-              <Button variant="primary" size="sm" icon={<Icon icon={Pen} />} label="Edit" />
-              <Button variant="ghost" size="sm" icon={<Icon icon={EllipsisVertical} />} label="More" />
+              <Button variant="secondary" size="md" icon={<Icon icon={Eye} />} label="View" />
+              <Button variant="secondary" size="md" icon={<Icon icon={Pen} />} label="Edit" />
+              <Button variant="secondary" size="md" icon={<Icon icon={EllipsisVertical} />} label="More" />
             </TableActionsCell>
           </TableRow>
         ))}
