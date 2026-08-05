@@ -320,7 +320,7 @@ export function TableSkeletonRow({
 export type TableActionsCellAlign = 'right' | 'center';
 
 export interface TableActionsCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
-  /** Action buttons — typically `IconButton` (or `Button icon={...}`) in `size="sm"`. */
+  /** Action buttons — icon-only `Button icon={...}` in `size="md"` with `variant="secondary"` (`IconButton` is `@deprecated`). */
   children: ReactNode;
   /**
    * Horizontal alignment of the action cluster. Default `right` (canonical
@@ -357,8 +357,8 @@ export interface TableActionsCellProps extends TdHTMLAttributes<HTMLTableCellEle
  *   <TableCell><TextLink size="small" onClick={openFkSheet}>{service.serviceLine}</TextLink></TableCell>
  *   <TableCell><Badge status="positive" size="sm">Active</Badge></TableCell>
  *   <TableActionsCell>
- *     <Button variant="primary" size="sm" icon={<Eye />} label="View" onClick={openSheet} />
- *     <Button variant="primary" size="sm" icon={<Pen />} label="Edit" onClick={navigateEdit} />
+ *     <Button variant="secondary" size="md" icon={<Eye />} label="View" onClick={openSheet} />
+ *     <Button variant="secondary" size="md" icon={<Pen />} label="Edit" onClick={navigateEdit} />
  *   </TableActionsCell>
  * </TableRow>
  * ```
