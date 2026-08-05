@@ -62,7 +62,7 @@
   gap: var(--gap-md);
 }
 
-.bds-page-header__badge {
+.bds-page-header__media {
   flex-shrink: 0;
 }
 

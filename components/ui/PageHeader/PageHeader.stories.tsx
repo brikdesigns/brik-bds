@@ -24,9 +24,14 @@ const meta: Meta<typeof PageHeader> = {
   argTypes: {
     title: { control: 'text' },
     subtitle: { control: 'text' },
+    media: {
+      control: false,
+      description:
+        'Leading identity mark left of the title — `Avatar` for an entity, `<ServiceTag variant="icon">` for a service.',
+    },
     badge: {
       control: false,
-      description: 'Badge displayed left of the title, e.g. `<ServiceTag variant="icon">`.',
+      description: 'Deprecated alias for `media`. Kept one release for non-breaking migration (#1705).',
     },
     breadcrumbs: {
       control: false,
@@ -98,7 +103,7 @@ export const Default: Story = {
   args: {
     title: 'My Account',
     subtitle: 'Manage your membership plan.',
-    badge: <ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />,
+    media: <ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />,
     breadcrumbs: <Breadcrumb items={sampleBreadcrumbs} />,
     actions: (
       <>
@@ -265,5 +270,19 @@ export const TunableSpacing: Story = {
       ['--page-header-actions-gap' as string]: 'var(--gap-md)',
       ['--page-header-padding-bottom' as string]: 'var(--padding-md)',
     } as CSSProperties,
+  },
+};
+
+/**
+ * The pre-#1705 `badge` prop still renders, so a consumer can bump the package
+ * before migrating its call sites. Passing both prefers `media`.
+ *
+ * @summary Deprecated `badge` alias still fills the media slot
+ */
+export const DeprecatedBadgeAlias: Story = {
+  args: {
+    title: 'Brik Designs',
+    subtitle: 'Rendered through the deprecated `badge` prop — pass `media` in new code.',
+    badge: <ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />,
   },
 };
