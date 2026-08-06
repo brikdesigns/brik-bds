@@ -41,8 +41,35 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run visual regression suite
-        run: VISUAL_GATE=1 npx vitest run --project storybook
+      # MEASUREMENT SCAFFOLD (#1696) — TEMPORARY, reverted before merge.
+      # Two runs in one job so the jitter floor and the regression signal are
+      # measured in the same container instance:
+      #   A. unmodified tree  -> every nonzero count is pure Chromium AA jitter
+      #   B. badge repro      -> pill radius flipped to 8px, the regression the
+      #      0.1% ratio floor was measured to miss (run 30926514063)
+      # Both run with allowedMismatchedPixels: 0 (see vitest.config.ts), so
+      # every story reports its exact count instead of silently passing.
+      - name: Measure A — AA jitter, unmodified tree
+        continue-on-error: true
+        run: VISUAL_GATE=1 npx vitest run --project storybook --reporter=default --reporter=json --outputFile=/tmp/measure-jitter.json
+
+      - name: Apply badge repro (pill -> 8px radius)
+        run: |
+          sed -i '19s|--border-radius-pill|--border-radius-sm|' components/ui/Badge/Badge.css
+          sed -n '17,21p' components/ui/Badge/Badge.css
+
+      - name: Measure B — badge regression signal
+        continue-on-error: true
+        run: VISUAL_GATE=1 npx vitest run --project storybook --reporter=default --reporter=json --outputFile=/tmp/measure-signal.json
+
+      - name: Upload measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pixel-floor-measurements
+          path: /tmp/measure-*.json
+          if-no-files-found: error
+          retention-days: 7
 
       # On failure, the diff PNGs (and vitest's actual-screenshot attachments)
       # are the review surface — there is no hosted UI (ADR-026 tradeoff).

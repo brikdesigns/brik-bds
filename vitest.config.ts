@@ -92,6 +92,14 @@ export default defineConfig({
                     // story. An 8px gap change on a 1200×900 canvas moves far
                     // more than this; icon-level AA noise moves far less.
                     allowedMismatchedPixelRatio: 0.001,
+                    // MEASUREMENT SCAFFOLD (#1696) — TEMPORARY, reverted
+                    // before merge. The effective allowance is
+                    // min(allowedMismatchedPixels, ratio × area), so 0 makes
+                    // every story with any mismatch fail and report its exact
+                    // pixel count. That is the only way to read the AA-jitter
+                    // distribution out of the pinned container (no Docker on
+                    // the agent hosts, so it cannot be measured locally).
+                    allowedMismatchedPixels: 0,
                   },
                   // Baselines live in one committed tree (not scattered next
                   // to each *.stories.tsx, which is what the per-test-file
