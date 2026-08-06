@@ -98,6 +98,7 @@ export const fontWeightThin: string;
 export const fontWeightBlack: string;
 export const fontWeightSemibold: string;
 export const fontWeightExtrabold: string;
+export const fontWeightHeading: string;
 export const fontFamilyDisplay: string;
 export const fontFamilyHeading: string;
 export const fontFamilyLabel: string;

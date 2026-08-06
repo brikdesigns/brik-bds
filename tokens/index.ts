@@ -10,6 +10,8 @@
  * For component development, import from @/lib/tokens (consuming project) instead.
  */
 
+import type { CSSProperties } from 'react';
+
 /**
  * Available theme identifiers
  *
@@ -448,6 +450,197 @@ export const fontLineHeights = {
   "175": "175%",
   "200": "200%",
   "none": "0%"
+} as const;
+
+/**
+ * Semantic font weights, exposed as `var()` references (never literal
+ * numbers) so weight remains themeable through the same cascade as size
+ * and color. `heading` is the single weight every `heading.*` preset below
+ * uses — one source for "heading weight," see `--font-weight-heading` in
+ * dist/tokens.css (aliases `--font-weight-semibold`).
+ */
+export const weight = {
+  thin: 'var(--font-weight-thin)',
+  regular: 'var(--font-weight-regular)',
+  medium: 'var(--font-weight-medium)',
+  semibold: 'var(--font-weight-semibold)',
+  bold: 'var(--font-weight-bold)',
+  extrabold: 'var(--font-weight-extrabold)',
+  black: 'var(--font-weight-black)',
+  heading: 'var(--font-weight-heading)',
+} as const;
+
+// ─── Shared typography presets ────────────────────────────────────────
+//
+// Composable CSSProperties objects built from BDS tokens, mirroring the
+// per-repo `src/lib/styles.ts` presets (brik-client-portal, brikdesigns) so
+// consumers can swap their local exports for these verbatim. Plain
+// serializable objects — SSR/RSC-safe, no client boundary required.
+//
+// Every `heading.*` entry uses `weight.heading` (`--font-weight-heading`,
+// = semibold/600) — no bold(700) in a heading preset, full stop.
+
+export const text = {
+  /** body/md · 16/150 — default body text */
+  body: {
+    fontFamily: 'var(--font-family-body)',
+    fontSize: 'var(--body-md)',
+    fontWeight: weight.regular,
+    lineHeight: 'var(--font-line-height-normal)',
+    color: 'var(--text-primary)',
+  } satisfies CSSProperties,
+
+  /** body/lg · 18/150 — larger body text (marketing) */
+  bodyLg: {
+    fontFamily: 'var(--font-family-body)',
+    fontSize: 'var(--body-lg)',
+    fontWeight: weight.regular,
+    lineHeight: 'var(--font-line-height-normal)',
+    color: 'var(--text-primary)',
+  } satisfies CSSProperties,
+
+  /** body/sm · 14/150 — secondary body text */
+  bodySmall: {
+    fontFamily: 'var(--font-family-body)',
+    fontSize: 'var(--body-sm)',
+    fontWeight: weight.regular,
+    lineHeight: 'var(--font-line-height-normal)',
+    color: 'var(--text-secondary)',
+  } satisfies CSSProperties,
+
+  /** body/xs · 11.5/150 — fine print, timestamps */
+  bodyXs: {
+    fontFamily: 'var(--font-family-body)',
+    fontSize: 'var(--body-xs)',
+    fontWeight: weight.regular,
+    lineHeight: 'var(--font-line-height-normal)',
+    color: 'var(--text-muted)',
+  } satisfies CSSProperties,
+
+  /** body/md muted — descriptive text, notes */
+  muted: {
+    fontFamily: 'var(--font-family-body)',
+    fontSize: 'var(--body-md)',
+    fontWeight: weight.regular,
+    lineHeight: 'var(--font-line-height-normal)',
+    color: 'var(--text-secondary)',
+  } satisfies CSSProperties,
+} as const;
+
+export const heading = {
+  /** Page-level heading (heading/large · 32px) */
+  page: {
+    fontFamily: 'var(--font-family-heading)',
+    fontSize: 'var(--heading-lg)',
+    fontWeight: weight.heading,
+    lineHeight: 'var(--font-line-height-snug)',
+    color: 'var(--text-primary)',
+    margin: 0,
+  } satisfies CSSProperties,
+
+  /** Section heading inside a card (heading/sm · 20px) */
+  section: {
+    fontFamily: 'var(--font-family-heading)',
+    fontSize: 'var(--heading-sm)',
+    fontWeight: weight.heading,
+    color: 'var(--text-primary)',
+    margin: 0,
+  } satisfies CSSProperties,
+
+  /** Sub-section heading (heading/tiny · 16px) */
+  subsection: {
+    fontFamily: 'var(--font-family-heading)',
+    fontSize: 'var(--heading-tiny)',
+    fontWeight: weight.heading,
+    color: 'var(--text-primary)',
+    margin: 0,
+  } satisfies CSSProperties,
+
+  /** Card title (heading/small, no margin) */
+  card: {
+    fontFamily: 'var(--font-family-heading)',
+    fontSize: 'var(--heading-sm)',
+    fontWeight: weight.heading,
+    color: 'var(--text-primary)',
+    margin: 0,
+  } satisfies CSSProperties,
+
+  /** heading/lg · 32/110 (marketing) — top-level page heading */
+  lg: {
+    fontFamily: 'var(--font-family-heading)',
+    fontSize: 'var(--heading-lg)',
+    fontWeight: weight.heading,
+    lineHeight: 'var(--font-line-height-tight)',
+    color: 'var(--text-primary)',
+    margin: 0,
+  } satisfies CSSProperties,
+
+  /** heading/md · 25.3/125 (marketing) */
+  md: {
+    fontFamily: 'var(--font-family-heading)',
+    fontSize: 'var(--heading-md)',
+    fontWeight: weight.heading,
+    lineHeight: 'var(--font-line-height-snug)',
+    color: 'var(--text-primary)',
+    margin: 0,
+  } satisfies CSSProperties,
+
+  /** heading/sm · 20/125 (marketing) */
+  sm: {
+    fontFamily: 'var(--font-family-heading)',
+    fontSize: 'var(--heading-sm)',
+    fontWeight: weight.heading,
+    lineHeight: 'var(--font-line-height-snug)',
+    color: 'var(--text-primary)',
+    margin: 0,
+  } satisfies CSSProperties,
+} as const;
+
+export const label = {
+  /** subtitle/md — uppercase label (Figma "subtitle/md") */
+  subtitle: {
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--label-sm)',
+    fontWeight: weight.medium,
+    color: 'var(--text-secondary)',
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
+  } satisfies CSSProperties,
+
+  /** Standard label (label/sm · 14px) */
+  sm: {
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--label-sm)',
+    fontWeight: weight.medium,
+    color: 'var(--text-primary)',
+  } satisfies CSSProperties,
+
+  /** Label/md (16px) */
+  md: {
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--label-md)',
+    fontWeight: weight.medium,
+    color: 'var(--text-primary)',
+  } satisfies CSSProperties,
+
+  /** label/sm · 14/125 semibold (marketing) — bolder counterpart to `label.sm` */
+  smBold: {
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--label-sm)',
+    fontWeight: weight.semibold,
+    lineHeight: 'var(--font-line-height-snug)',
+    color: 'var(--text-primary)',
+    whiteSpace: 'nowrap' as const,
+    margin: 0,
+  } satisfies CSSProperties,
+
+  /** label/tiny — semibold for badges and compact metadata */
+  tiny: {
+    fontFamily: 'var(--font-family-label)',
+    fontSize: 'var(--label-tiny)',
+    fontWeight: weight.semibold,
+    color: 'var(--text-primary)',
+  } satisfies CSSProperties,
 } as const;
 
 /**
