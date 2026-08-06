@@ -280,6 +280,7 @@
   --breakpoint-web: 1200px;
   --breakpoint-tablet: 768px;
   --breakpoint-mobile: 320px;
+  --font-weight-heading: var(--font-weight-semibold);
   --border-radius-lg: var(--border-radius-600);
   --border-radius-md: var(--border-radius-400);
   --border-radius-none: var(--border-radius-0);
