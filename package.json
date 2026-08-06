@@ -158,6 +158,7 @@
     "contrast-gate": "node scripts/validate-themes.js",
     "contrast-matrix:check": "node scripts/validate-themes.js --check-matrix",
     "lint-theme-divergence": "node scripts/lint-theme-divergence.mjs",
+    "lint-disabled-fade": "node scripts/lint-disabled-fade.mjs",
     "lint-brand-text": "node scripts/lint-brand-text-size.js",
     "lint-doc-links": "node scripts/lint-doc-links.js",
     "lint-mdx-tokens": "node scripts/lint-mdx-tokens.mjs",
