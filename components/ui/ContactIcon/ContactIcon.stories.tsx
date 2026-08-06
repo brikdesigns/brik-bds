@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { SocialIcon, SOCIAL_ICON_PLATFORMS } from './SocialIcon';
-import type { SocialIconTone, SocialIconType } from './SocialIcon';
+import { ContactIcon, CONTACT_ICON_PLATFORMS } from './ContactIcon';
+import type { ContactIconTone, ContactIconType } from './ContactIcon';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
-const meta: Meta<typeof SocialIcon> = {
-  title: 'Foundation/Assets/social-icon',
-  component: SocialIcon,
+const meta: Meta<typeof ContactIcon> = {
+  title: 'Foundation/Assets/contact-icon',
+  component: ContactIcon,
   tags: ['surface-shared'],
   parameters: {
     layout: 'centered',
@@ -14,8 +14,8 @@ const meta: Meta<typeof SocialIcon> = {
   argTypes: {
     platform: {
       control: 'select',
-      options: SOCIAL_ICON_PLATFORMS,
-      description: 'Which social mark to render.',
+      options: CONTACT_ICON_PLATFORMS,
+      description: 'Which contact mark to render.',
     },
     type: {
       control: 'select',
@@ -25,9 +25,9 @@ const meta: Meta<typeof SocialIcon> = {
     },
     tone: {
       control: 'select',
-      options: ['grayscale', 'brand', 'accent'],
+      options: ['grayscale', 'accent'],
       description:
-        'Recolor scheme: `grayscale` (neutral `--text-muted`), `brand` (the platform\'s Foundations brand-color token — every platform has one), `accent` (`--text-brand-primary`).',
+        'Recolor scheme: `grayscale` (neutral `--text-muted`), `accent` (`--text-brand-primary`). Contact marks have no brand identity, so there is no `brand` tone (see `SocialIcon`).',
     },
     size: {
       control: 'select',
@@ -35,17 +35,17 @@ const meta: Meta<typeof SocialIcon> = {
     },
     label: {
       control: 'text',
-      description: 'Accessible-name override (defaults to the platform\'s display name, e.g. "YouTube").',
+      description: 'Accessible-name override (defaults to the mark\'s display name, e.g. "Email").',
     },
     decorative: {
       control: 'boolean',
-      description: 'Render aria-hidden when a sibling text label already names the platform.',
+      description: 'Render aria-hidden when a sibling text label already names the mark.',
     },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof SocialIcon>;
+type Story = StoryObj<typeof ContactIcon>;
 
 /* ═══════════════════════════════════════════════════════════════
    DEFAULT — args-driven sandbox. Controls work.
@@ -54,7 +54,7 @@ type Story = StoryObj<typeof SocialIcon>;
 /** @summary Interactive playground for prop tweaking */
 export const Default: Story = {
   args: {
-    platform: 'youtube',
+    platform: 'email',
     type: 'badge',
     tone: 'grayscale',
     size: 'lg',
@@ -62,25 +62,23 @@ export const Default: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   ALL MARKS — the full type × tone matrix, every bundled platform.
-   Irreducible: a single args set can't show 36 combinations at once
-   (mirrors Icon's `BundledSet` / Logo's `CreditCard` coverage galleries).
+   ALL MARKS — the full type × tone matrix, every bundled mark.
+   Irreducible: a single args set can't show 20 combinations at once
+   (mirrors SocialIcon's own coverage gallery — brik-bds#1716 split).
    ═══════════════════════════════════════════════════════════════ */
 
-const TYPES: SocialIconType[] = ['badge', 'glyph'];
-const TONES: SocialIconTone[] = ['grayscale', 'brand', 'accent'];
+const TYPES: ContactIconType[] = ['badge', 'glyph'];
+const TONES: ContactIconTone[] = ['grayscale', 'accent'];
 
 /**
- * Every bundled platform across the full `type` × `tone` matrix — the
- * coverage grid brik-bds#1716 asked for. Every platform has a Foundations
- * brand-color token, so `brand` never falls back to a neutral here (contrast
- * the pre-split #1713 behavior).
- * @summary Full type × tone matrix, every bundled platform
+ * Every bundled mark across the full `type` × `tone` matrix — the coverage
+ * grid brik-bds#1716 asked for.
+ * @summary Full type × tone matrix, every bundled mark
  */
 export const AllMarks: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
-      {SOCIAL_ICON_PLATFORMS.map((platform) => (
+      {CONTACT_ICON_PLATFORMS.map((platform) => (
         <div key={platform} style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
           <span
             style={{
@@ -97,7 +95,7 @@ export const AllMarks: Story = {
             {TYPES.flatMap((type) =>
               TONES.map((tone) => (
                 <div key={`${type}-${tone}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-2xs)' }}>
-                  <SocialIcon platform={platform} type={type} tone={tone} size="sm" />
+                  <ContactIcon platform={platform} type={type} tone={tone} size="sm" />
                   <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)' }}>
                     {type}/{tone}
                   </span>

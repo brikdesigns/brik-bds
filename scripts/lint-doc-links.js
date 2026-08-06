@@ -252,6 +252,8 @@ const DOCS_PAGE_EXEMPT = {
   logo: 'Foundation/Assets brand mark — static asset, not a functional component (per icons.mdx, brand marks are not documented as components)',
   'social-icon':
     'Foundation/Assets recolorable mark — asset primitive alongside icon/logo, not a functional component; usage lives in Storybook (Foundation/Assets)',
+  'contact-icon':
+    'Foundation/Assets recolorable mark — split from social-icon in brik-bds#1716; same asset-primitive disposition, usage lives in Storybook (Foundation/Assets)',
 };
 const DOCS_PAGE_WITHOUT_PAGE = new Set([
   ...Object.keys(DOCS_PAGE_BACKLOG),

@@ -137,6 +137,13 @@
       "secondary"
     ]
   },
+  "ContactIcon": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
   "Counter": {
     "status": [
       "success",
