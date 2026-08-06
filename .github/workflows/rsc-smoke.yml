@@ -1,0 +1,64 @@
+name: RSC Smoke
+
+# Asserts @brikdesigns/bds is consumable from a Next.js App Router SERVER
+# component — that its root data exports arrive as real values, not opaque
+# client references.
+#
+# Why this is a CI gate:
+#   - BDS never builds itself as an RSC consumer, so tsc / vitest / plain
+#     Node-ESM all see the real values. Only a real RSC bundle substitutes
+#     client references for the exports of a 'use client' module.
+#   - v0.151.0 shipped SOCIAL_ICON_PLATFORMS as `typeof 'function'`. It cleared
+#     every gate in this repo and broke on `.includes()` in brik-client-portal
+#     (brik-bds#1721, worked around in brik-client-portal#2792).
+#
+# The static counterpart is the ESM Bundle Check workflow, which pins the
+# 'use client' banner to scripts/server-safe-modules.mjs. That catches a
+# build-config regression; only this proves the runtime contract. The static one
+# is also the `prepublishOnly` backstop — it is hermetic, whereas this gate needs
+# an npm install of Next, which does not belong on the release path.
+#
+# Issue: brikdesigns/brik-bds#1721
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: rsc-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rsc-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The fixture consumes a packed tarball, so dist/ must be current. Only
+      # the lib bundle and the content-system emit are in the published export
+      # surface the fixture resolves.
+      - name: Build library bundle (Vite ESM/CJS)
+        run: npx vite build --config vite.config.lib.ts
+
+      - name: Build content-system ESM emit
+        run: npm run build:content-system
+
+      - name: Build type declarations
+        run: npm run build:types
+
+      - name: RSC smoke (pack + install + next build)
+        run: npm run test:rsc

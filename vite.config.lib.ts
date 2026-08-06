@@ -1,12 +1,22 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { resolve, isAbsolute } from 'path';
+import { isServerSafe } from './scripts/server-safe-modules.mjs';
 
 // 'use client' banner — Next.js App Router requires this directive for modules
 // that call React.createContext, useState, etc. Without it, SSR fails with
 // "createContext is not a function". Under preserveModules it lands on every
-// emitted module (whole bundle is client today; per-module is consistent).
+// emitted module EXCEPT the server-safe allowlist: those must stay banner-free
+// so a server component can read their exports as real values instead of
+// opaque client references (brik-bds#1721). The allowlist, and the reasoning
+// for every entry, lives in scripts/server-safe-modules.mjs — shared with the
+// publish gate in scripts/check-esm-bundle.mjs so the two cannot drift.
 const USE_CLIENT_BANNER = "'use client';";
+
+// Rollup calls `banner` per emitted chunk. Under preserveModules `chunk.name`
+// is the source-tree-relative path minus extension, matching the allowlist.
+const bannerFor = (chunk: { name: string }) =>
+  isServerSafe(chunk.name) ? '' : USE_CLIENT_BANNER;
 
 // Rename the extracted CSS asset to a stable `styles.css` (consumers import
 // `@brikdesigns/bds/styles.css`). cssCodeSplit is false in lib mode, so a
@@ -55,7 +65,7 @@ export default defineConfig({
           preserveModules: true,
           preserveModulesRoot: '.',
           entryFileNames: '[name].mjs',
-          banner: USE_CLIENT_BANNER,
+          banner: bannerFor,
           globals,
           assetFileNames,
         },
@@ -65,7 +75,7 @@ export default defineConfig({
           preserveModulesRoot: '.',
           entryFileNames: '[name].cjs',
           exports: 'named',
-          banner: USE_CLIENT_BANNER,
+          banner: bannerFor,
           globals,
           assetFileNames,
         },
