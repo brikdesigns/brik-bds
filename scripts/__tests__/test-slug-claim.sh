@@ -76,6 +76,32 @@ assert_eq "hyphens become spaces so the IDF title scorer tokenises the slug" \
   "tooling slug claim board" "$(slug_to_phrase tooling-slug-claim-board)"
 assert_eq "a single-word slug survives unchanged" "tokens" "$(slug_to_phrase tokens)"
 
+echo "── claim_sweep_verdict (cleanup phase 3) ──"
+FRESH="$(date -u -j -f %s "$(( 1900000000 - 600 ))" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null \
+         || date -u -d "@$(( 1900000000 - 600 ))" +%Y-%m-%dT%H:%M:%SZ)"
+STALE="$(date -u -j -f %s "$(( 1900000000 - 90000 ))" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null \
+         || date -u -d "@$(( 1900000000 - 90000 ))" +%Y-%m-%dT%H:%M:%SZ)"
+NOW=1900000000
+
+assert_eq "a merged PR's claim is swept" "sweep" "$(claim_sweep_verdict MERGED "$FRESH" "$NOW")"
+assert_eq "a closed (rejected) PR's claim is swept" "sweep" "$(claim_sweep_verdict CLOSED "$FRESH" "$NOW")"
+assert_eq "an OPEN PR's claim is kept — that claim is doing its job" \
+  "keep" "$(claim_sweep_verdict OPEN "$STALE" "$NOW")"
+
+# The dangerous case. An early sweep mis-extracted the slug, so every claim
+# looked like "no PR, stale" and a live claim would have been deleted. A claim
+# with no PR yet is a session that has not pushed — keep it while it is fresh.
+assert_eq "no PR + FRESH claim is kept (session may not have pushed yet)" \
+  "keep" "$(claim_sweep_verdict "" "$FRESH" "$NOW")"
+assert_eq "no PR + stale claim is swept (it already blocks nobody)" \
+  "sweep" "$(claim_sweep_verdict "" "$STALE" "$NOW")"
+assert_eq "an unknown PR state is never deleted" \
+  "keep" "$(claim_sweep_verdict WEIRD "$STALE" "$NOW")"
+# An unparseable stamp reads as stale upstream; with no PR that means sweep, and
+# the caller separately refuses to act on a claim whose fields did not extract.
+assert_eq "an unreadable stamp with no PR is swept, not silently kept forever" \
+  "sweep" "$(claim_sweep_verdict "" "garbage" "$NOW")"
+
 echo "── reuse contract with issue-claim.sh ──"
 # If these stop resolving, slug-claim.sh has been detached from the shared
 # staleness logic and this suite is no longer covering what it claims to.
