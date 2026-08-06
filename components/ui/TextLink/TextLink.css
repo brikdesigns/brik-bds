@@ -41,6 +41,17 @@
   font-size: var(--body-sm);
 }
 
+/* ─── Underline-always variant ──────────────────────────────────
+   Persistent underline at rest AND hover. Functional a11y affordance
+   for links embedded inline in running prose — WCAG 1.4.1 (Use of
+   Color): at body size, color alone isn't a sufficient cue to
+   distinguish a link from surrounding text. Hover color transition
+   above still applies unchanged. */
+
+.bds-text-link--underline-always {
+  text-decoration: underline;
+}
+
 /* ─── Icon slots ─────────────────────────────────────────────── */
 
 .bds-text-link-icon-before,
