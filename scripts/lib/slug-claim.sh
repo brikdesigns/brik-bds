@@ -126,6 +126,32 @@ slug_to_phrase() {
   printf '%s' "${1:?}" | tr '-' ' '
 }
 
+# Is a board claim finished, given its PR state and age? Echoes "sweep" or
+# "keep". Pure, so cleanup-merged-worktrees.sh's phase 3 can be tested without a
+# network — and so the one dangerous case is locked down: a claim with no PR yet
+# must be KEPT while fresh, because a live session may simply not have pushed.
+# An early version of the sweep mis-extracted the slug, classified every claim as
+# "no PR, stale", and would have deleted live claims.
+#
+# Usage: claim_sweep_verdict <pr_state> <stamp> <now_epoch>
+#   pr_state: MERGED | CLOSED | OPEN | "" (no PR)
+claim_sweep_verdict() {
+  local pr_state="${1:-}" stamp="${2:-}" now="${3:?}"
+  case "$pr_state" in
+    MERGED|CLOSED) printf 'sweep' ;;
+    OPEN)          printf 'keep' ;;   # active work — the claim is doing its job
+    "")
+      # Only past the staleness window, where it already blocks nobody.
+      if claim_is_stale "$stamp" "$now" "$CLAIM_STALE_SECONDS"; then
+        printf 'sweep'
+      else
+        printf 'keep'
+      fi
+      ;;
+    *)             printf 'keep' ;;   # unknown state → never delete
+  esac
+}
+
 # ── Network-touching orchestration ─────────────────────────────────
 
 # Echo "id<TAB>body" for this slug's marker comment on the board. One API call.

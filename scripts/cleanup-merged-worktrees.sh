@@ -2,11 +2,16 @@
 # cleanup-merged-worktrees.sh — Remove worktrees + remote refs whose PR is merged.
 #
 # Run this after merging PRs. Safe by default: prints a plan, asks "y" to apply.
-# Two phases:
+# Three phases:
 #   1. Worktree sweep — remove local worktrees whose PR is MERGED/CLOSED, plus
 #      their local branch and (unless --no-remote-sweep) their origin ref.
 #   2. Orphan-remote sweep — origin/task/* refs with no local worktree whose
 #      PR is MERGED/CLOSED also get deleted (skipped under --no-remote-sweep).
+#   3. Board-claim sweep — delete finished `--no-issue` claims from the ticketless
+#      claim board (skipped under --no-board-sweep). Runs independently of phases
+#      1-2 on purpose: a claim outlives its worktree, so keying the sweep on a
+#      present worktree would never clean the ones that actually accumulate.
+#      Six claims from merged PRs had piled up by 2026-08-06 (brik-bds#1663).
 # Spares:
 #   - The primary worktree (git worktree list's first entry)
 #   - Any branch whose PR is OPEN
@@ -20,6 +25,7 @@
 #   ./scripts/cleanup-merged-worktrees.sh --dry-run        # show plan only
 #   ./scripts/cleanup-merged-worktrees.sh --keep foo       # spare a specific worktree
 #   ./scripts/cleanup-merged-worktrees.sh --no-remote-sweep  # skip phase 2 + remote deletes
+#   ./scripts/cleanup-merged-worktrees.sh --no-board-sweep   # skip phase 3 (board claims)
 
 set -euo pipefail
 
@@ -33,6 +39,7 @@ DRY_RUN=0
 ASSUME_YES=0
 KEEP_LIST=()
 REMOTE_SWEEP=1
+BOARD_SWEEP=1
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -40,7 +47,8 @@ while [[ $# -gt 0 ]]; do
     --yes|-y)          ASSUME_YES=1; shift ;;
     --keep)            KEEP_LIST+=("$2"); shift 2 ;;
     --no-remote-sweep) REMOTE_SWEEP=0; shift ;;
-    -h|--help)         sed -n '2,23p' "$0"; exit 0 ;;
+    --no-board-sweep)  BOARD_SWEEP=0; shift ;;
+    -h|--help)         sed -n '2,30p' "$0"; exit 0 ;;
     *)                 echo -e "${RED}Unknown flag: $1${NC}"; exit 1 ;;
   esac
 done
@@ -183,6 +191,61 @@ if [ "$REMOTE_SWEEP" = "1" ]; then
   done < <(git for-each-ref 'refs/remotes/origin/task/*' --format='%(refname:lstrip=3)')
 fi
 
+# Phase 3 — board-claim sweep. `--no-issue` writes a slug-keyed claim comment to
+# the ticketless claim board (brik-bds#1663) so a second session is refused. The
+# claim is rewritten in place per slug but nothing ever removed it when the work
+# merged, so the board accreted one comment per slug ever used instead of one per
+# LIVE branch, which is what its body promises.
+#
+# Deliberately NOT keyed on a present worktree: a claim outlives its worktree, and
+# every one of the six that had piled up by 2026-08-06 had no worktree and no
+# branch. Keying on the worktree would clean exactly the claims that never
+# accumulate.
+TO_REMOVE_CLAIMS=()  # entries: comment_id|||slug|||reason
+if [ "$BOARD_SWEEP" = "1" ] && [ -r "$(dirname "${BASH_SOURCE[0]}")/lib/slug-claim.sh" ]; then
+  # shellcheck source=scripts/lib/slug-claim.sh
+  source "$(dirname "${BASH_SOURCE[0]}")/lib/slug-claim.sh"
+
+  # jq extracts id/slug/stamp so the shell never has to parse the rendered
+  # markdown table. An earlier version used printf+sed for that and silently
+  # produced an EMPTY slug, which made every claim look like "no PR, stale" —
+  # including live ones. A sweep that deletes live claims is worse than one that
+  # never runs, so the fields come out of jq or the entry is skipped.
+  BOARD_JSON="$(gh api "repos/$REPO_SLUG/issues/$SLUG_CLAIM_BOARD/comments" --paginate \
+                 --jq '[.[]
+                        | select(.body | test("<!-- claim:slug="))
+                        | { id: .id,
+                            slug:  (.body | capture("claim:slug=(?<s>[^ ]+) -->")   | .s),
+                            stamp: (.body | capture("\\| Since \\| (?<d>[^ |]+) ") | .d) }]' \
+               2>/dev/null || echo '[]')"
+  BOARD_COUNT="$(echo "$BOARD_JSON" | jq 'length' 2>/dev/null || echo 0)"
+
+  for (( i=0; i<BOARD_COUNT; i++ )); do
+    c_id="$(echo "$BOARD_JSON" | jq -r ".[$i].id // empty")"
+    c_slug="$(echo "$BOARD_JSON" | jq -r ".[$i].slug // empty")"
+    c_stamp="$(echo "$BOARD_JSON" | jq -r ".[$i].stamp // empty")"
+    # An unparseable claim is left alone rather than swept: it is someone's
+    # marker and deleting what we cannot read is the wrong default.
+    if [ -z "$c_id" ] || [ -z "$c_slug" ] || [ -z "$c_stamp" ]; then
+      continue
+    fi
+
+    c_pr_json="$(gh pr list --repo "$REPO_SLUG" --state all --head "task/$c_slug" --limit 1 --json number,state 2>/dev/null || echo '[]')"
+    c_pr_state="$(echo "$c_pr_json" | jq -r '.[0].state // empty')"
+    c_pr_number="$(echo "$c_pr_json" | jq -r '.[0].number // empty')"
+
+    case "$(claim_sweep_verdict "$c_pr_state" "$c_stamp" "$(date -u +%s)")" in
+      sweep)
+        case "$c_pr_state" in
+          MERGED|CLOSED) c_reason="PR #${c_pr_number} ${c_pr_state}" ;;
+          *)             c_reason="no PR and claim is stale (>${CLAIM_STALE_SECONDS}s) — already non-blocking" ;;
+        esac
+        TO_REMOVE_CLAIMS+=("$c_id|||$c_slug|||$c_reason")
+        ;;
+    esac
+  done
+fi
+
 echo -e "${BLUE}=========================================${NC}"
 echo -e "${BLUE}  Worktree cleanup plan${NC}"
 echo -e "${BLUE}=========================================${NC}"
@@ -198,7 +261,8 @@ if [ ${#SPARED[@]} -gt 0 ]; then
   echo ""
 fi
 
-if [ ${#TO_REMOVE[@]} -eq 0 ] && [ ${#TO_REMOVE_ORPHAN_REMOTE[@]} -eq 0 ]; then
+if [ ${#TO_REMOVE[@]} -eq 0 ] && [ ${#TO_REMOVE_ORPHAN_REMOTE[@]} -eq 0 ] \
+   && [ ${#TO_REMOVE_CLAIMS[@]} -eq 0 ]; then
   echo -e "${GREEN}Nothing to remove.${NC}"
   exit 0
 fi
@@ -223,6 +287,15 @@ if [ ${#TO_REMOVE_ORPHAN_REMOTE[@]} -gt 0 ]; then
     printf "  - origin/%s\n      reason: %s\n" "$branch_name" "$reason"
   done
   echo ""
+fi
+
+if [ ${#TO_REMOVE_CLAIMS[@]} -gt 0 ]; then
+  echo -e "${RED}Will delete finished claims from the ticketless board (${#TO_REMOVE_CLAIMS[@]}):${NC}"
+  for entry in "${TO_REMOVE_CLAIMS[@]}"; do
+    rest="${entry#*|||}"; c_slug="${rest%%|||*}"; reason="${rest#*|||}"
+    printf "  - %s\n      reason: %s\n" "$c_slug" "$reason"
+  done
+  printf "      board: %s\n\n" "https://github.com/$REPO_SLUG/issues/${SLUG_CLAIM_BOARD:-?}"
 fi
 
 if [ "$DRY_RUN" = "1" ]; then
@@ -278,6 +351,18 @@ if [ ${#REMOTE_DELETE_BATCH[@]} -gt 0 ]; then
     push_args+=("--delete" "$br")
   done
   git push "${push_args[@]}" 2>&1 | sed 's/^/    /' || true
+fi
+
+if [ ${#TO_REMOVE_CLAIMS[@]} -gt 0 ]; then
+  echo -e "${YELLOW}~ Deleting ${#TO_REMOVE_CLAIMS[@]} finished board claim(s)...${NC}"
+  for entry in "${TO_REMOVE_CLAIMS[@]}"; do
+    c_id="${entry%%|||*}"; rest="${entry#*|||}"; c_slug="${rest%%|||*}"
+    if gh api -X DELETE "repos/$REPO_SLUG/issues/comments/$c_id" >/dev/null 2>&1; then
+      echo "    removed claim: $c_slug"
+    else
+      echo -e "    ${YELLOW}could not remove claim: $c_slug (left in place)${NC}"
+    fi
+  done
 fi
 
 git worktree prune
