@@ -91,6 +91,7 @@ export const fontWeightThin = "300";
 export const fontWeightBlack = "900";
 export const fontWeightSemibold = "600";
 export const fontWeightExtrabold = "800";
+export const fontWeightHeading = "600";
 export const fontFamilyDisplay = "Poppins";
 export const fontFamilyHeading = "Poppins";
 export const fontFamilyLabel = "Poppins";

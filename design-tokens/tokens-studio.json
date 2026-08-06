@@ -4247,6 +4247,17 @@
         "$type": "number",
         "$value": "{font-size.25}"
       }
+    },
+    "font-weight": {
+      "heading": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-weight.semibold}"
+      }
     }
   },
   "typography/compact": {

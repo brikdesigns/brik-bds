@@ -11,7 +11,7 @@
 .bds-content-block__title {
   font-family: var(--font-family-heading);
   font-size: var(--heading-sm);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-heading);
   line-height: var(--font-line-height-tight);
   color: var(--text-primary);
   margin: 0;
