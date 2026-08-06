@@ -368,6 +368,10 @@
     "extrabold": {
       "$value": "800",
       "$type": "number"
+    },
+    "heading": {
+      "$value": "{font-weight.semibold}",
+      "$type": "number"
     }
   },
   "font-family": {
