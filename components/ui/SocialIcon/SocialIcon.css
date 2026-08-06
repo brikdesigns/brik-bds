@@ -1,0 +1,63 @@
+@layer bds-components {
+/* ─── SocialIcon ─────────────────────────────────────────────── */
+
+/* Sizing + display only — the badge shape (rounded square) is baked into the
+   bundled mark's own background path, not CSS. Width/height are set on the
+   element in SocialIcon.tsx (bds-lint-ignore — component-level badge
+   dimensions, mirrors ServiceTag's icon-only box scale; see the sizeMap
+   comment in SocialIcon.tsx). */
+.bds-social-icon {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ─── Glyph — always currentColor ────────────────────────────── */
+
+/* The glyph path is baked as fill="currentColor" in the bundled mark (see
+   scripts/gen-social-icons.mjs) — it recolors via the `color` set below,
+   never a direct fill rule here. */
+
+/* ─── type="badge" — background carries the tone, glyph knocked out white ── */
+
+/* Constant white regardless of theme (context-pinned, unlike --text-inverse
+   which flips with theme polarity) — the glyph always reads as a white
+   knockout on a colored badge, matching every real-world social badge
+   (YouTube red + white play, Facebook blue + white F, …) regardless of the
+   app's light/dark mode. */
+.bds-social-icon--badge {
+  color: var(--text-on-color-dark);
+}
+
+.bds-social-icon--badge.bds-social-icon--grayscale .bds-social-icon__bg {
+  fill: var(--text-muted);
+}
+
+.bds-social-icon--badge.bds-social-icon--accent .bds-social-icon__bg {
+  fill: var(--text-brand-primary);
+}
+
+/* `--bds-social-icon-brand` is set inline (SocialIcon.tsx) only for platforms
+   with a sourced brand hex; falls back to the same neutral as `grayscale` for
+   the 5 non-platform marks (message/email/website/calendar/phone). */
+.bds-social-icon--badge.bds-social-icon--brand .bds-social-icon__bg {
+  fill: var(--bds-social-icon-brand, var(--text-muted));
+}
+
+/* ─── type="glyph" — background neutral/transparent, glyph carries the tone ── */
+
+.bds-social-icon--glyph .bds-social-icon__bg {
+  fill: none;
+}
+
+.bds-social-icon--glyph.bds-social-icon--grayscale {
+  color: var(--text-muted);
+}
+
+.bds-social-icon--glyph.bds-social-icon--accent {
+  color: var(--text-brand-primary);
+}
+
+.bds-social-icon--glyph.bds-social-icon--brand {
+  color: var(--bds-social-icon-brand, var(--text-muted));
+}
+}

@@ -1,0 +1,36 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './SocialIcon.stories';
+import { SocialIcon } from './SocialIcon';
+
+<Meta of={Stories} />
+
+# Social icon
+
+<ComponentLinks slug="social-icon" />
+
+Recolorable social + contact mark (message, youtube, twitter, instagram, facebook, linkedin, email, website, calendar, phone). Resolves offline like `Icon`, but recolors via `type` and `tone` instead of a single `currentColor` fill — unlike `Logo`, which renders brand art exactly as authored and is never recolored.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+`type` (`badge` / `glyph`) and `tone` (`grayscale` / `brand` / `accent`) are both Controls on `Default`. The gallery below is the full matrix across every bundled platform — `platform` is a Control, so the sidebar can't show it side-by-side.
+
+<Canvas of={Stories.AllMarks} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Accessible name by default** — unlike `ServiceTag` (always paired with visible sibling text), `SocialIcon` is frequently the *only* content of an icon-only link (e.g. a portal Social card). It renders `role="img"` + `aria-label` (the platform's display name, or `label`) unless you pass `decorative` — use `decorative` only when a sibling text label already announces the platform.
+
+> **Never recolored?** Use [`Logo`](?path=/docs/foundation-assets-logo--docs) instead — it renders full-color, multi-fill brand art exactly as authored (brand guidelines own the color). `SocialIcon` is for the opposite case: a single-tone mark that recolors to a BDS token.
+
+> **`brand` fallback** — only `youtube`, `facebook`, `linkedin`, `instagram`, and `twitter` have a sourced brand color (via [Simple Icons](https://simpleicons.org)). The other 5 marks (`message`, `email`, `website`, `calendar`, `phone`) have no brand identity — `tone="brand"` falls back to the same neutral as `tone="grayscale"` for them.
+
+> **Adding a mark** — drop a two-path (`.bds-social-icon__bg` + `.bds-social-icon__glyph`, `fill="currentColor"`) master into `components/ui/SocialIcon/icons/{platform}.svg`, run `npm run gen:social-icons`, and commit the regenerated `social-icons.generated.ts`.

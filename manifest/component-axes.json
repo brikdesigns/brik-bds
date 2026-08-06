@@ -311,6 +311,13 @@
       "lg"
     ]
   },
+  "SocialIcon": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
   "Spinner": {
     "size": [
       "sm",

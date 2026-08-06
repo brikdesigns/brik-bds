@@ -95,6 +95,7 @@ export * from './Sheet';
 export * from './SheetSection';
 export * from './SidebarNavigation';
 export * from './Skeleton';
+export * from './SocialIcon';
 export * from './Slider';
 export * from './Spinner';
 export * from './Stack';

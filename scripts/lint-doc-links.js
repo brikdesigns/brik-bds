@@ -250,6 +250,8 @@ const DOCS_PAGE_EXEMPT = {
   'animated-icon':
     'Foundation/Assets Lottie wrapper — asset primitive; usage lives in Storybook (Foundation/Assets), no standalone docs-site component page',
   logo: 'Foundation/Assets brand mark — static asset, not a functional component (per icons.mdx, brand marks are not documented as components)',
+  'social-icon':
+    'Foundation/Assets recolorable mark — asset primitive alongside icon/logo, not a functional component; usage lives in Storybook (Foundation/Assets)',
 };
 const DOCS_PAGE_WITHOUT_PAGE = new Set([
   ...Object.keys(DOCS_PAGE_BACKLOG),
