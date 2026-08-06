@@ -14,6 +14,12 @@ const meta: Meta<typeof TextLink> = {
       options: ['default', 'small'],
       description: 'Size variant. `default` is body-md; `small` is body-sm for tight contexts (footnotes, captions).',
     },
+    underline: {
+      control: 'select',
+      options: ['hover', 'always'],
+      description:
+        'Underline visibility. `hover` (default) reveals the underline on hover only — for a standalone link. `always` keeps the underline visible at rest — required for a link embedded inline in running prose (WCAG 1.4.1 Use of Color).',
+    },
     href: {
       control: 'text',
       description: 'Link destination. Any standard URL or anchor.',
@@ -61,6 +67,25 @@ export const Default: Story = {
   args: {
     href: '#',
     size: 'default',
+    underline: 'hover',
+    children: 'Learn more',
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   ALWAYS-UNDERLINED — Q3 per ADR-010: `underline="always"` is a
+   semantic starting point an agent reaches for when placing a link
+   inline in running prose (color alone isn't a sufficient cue —
+   WCAG 1.4.1 Use of Color), so it earns its own dedicated story
+   rather than collapsing to Controls-only.
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Persistent underline at rest — for links inline in prose */
+export const AlwaysUnderlined: Story = {
+  args: {
+    href: '#',
+    size: 'default',
+    underline: 'always',
     children: 'Learn more',
   },
 };
@@ -70,7 +95,9 @@ export const Default: Story = {
    link visually integrates with flowing paragraph text (baseline
    alignment, color contrast against body text, underline behavior).
    Surrounding text is structural, not a component prop, so this
-   case can't be expressed via args alone.
+   case can't be expressed via args alone. Uses `underline="always"`
+   — an inline link in running prose is exactly the case that needs
+   a persistent underline (WCAG 1.4.1 Use of Color).
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Link integrated with flowing paragraph text */
@@ -87,8 +114,8 @@ export const InParagraph: Story = {
       }}
     >
       Our team specializes in web design and development.{' '}
-      <TextLink href="#">Learn more about our services</TextLink> or{' '}
-      <TextLink href="#">contact us</TextLink> to get started.
+      <TextLink href="#" underline="always">Learn more about our services</TextLink> or{' '}
+      <TextLink href="#" underline="always">contact us</TextLink> to get started.
     </p>
   ),
 };

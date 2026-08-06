@@ -8,7 +8,7 @@ import * as Stories from './TextLink.stories';
 
 <ComponentLinks slug="text-link" />
 
-Themed inline anchor link styled to match BDS body typography. Muted text color that transitions to brand color on hover. Two sizes (`default`, `small`); accepts standard `<a>` attributes (`href`, `target`, `rel`) and optional leading / trailing icon slots.
+Themed inline anchor link styled to match BDS body typography. Muted text color that transitions to brand color on hover. Two sizes (`default`, `small`); an underline-visibility axis (`hover`, `always`); accepts standard `<a>` attributes (`href`, `target`, `rel`) and optional leading / trailing icon slots.
 
 ## Playground
 
@@ -16,18 +16,25 @@ Themed inline anchor link styled to match BDS body typography. Muted text color 
 
 ## Variants
 
-TextLink has no semantic-variant axis on the component — size is the only Q3-candidate prop (2 values) and is exposed via Controls. External-link behavior is set via standard anchor Controls (`target`, `rel`), not a separate story. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
+TextLink has no semantic *style* variant axis — size and underline-visibility are the only Q3-candidate props, both exposed via Controls (and each with its own dedicated story, since both are semantic starting points an agent reaches for). External-link behavior is set via standard anchor Controls (`target`, `rel`), not a separate story. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
 <Canvas of={Stories.Default} />
 
 - **`default`** — body-md (16px)
 - **`small`** — body-sm (14px), for footnotes / captions
 
+### Underline visibility
+
+<Canvas of={Stories.AlwaysUnderlined} />
+
+- **`hover`** (default) — no underline at rest, underline appears on hover. Use for a **standalone** link (nav item, card action, button-adjacent link) where the surrounding context already signals it's interactive.
+- **`always`** — underline visible at rest and on hover. Use for a link **inline in a sentence of body text** — at body size, color alone isn't a sufficient cue to distinguish a link from surrounding text (WCAG 1.4.1 Use of Color). This is a backward-compatible addition: the default is unchanged `hover` behavior.
+
 ## Patterns
 
 ### In paragraph
 
-Demonstrates how the link visually integrates with flowing paragraph text. Surrounding body text is structural composition, not a component prop, so this case is irreducible (Q4) per [ADR-010](../../../docs/adrs/ADR-010-storybook-axes-of-information.md).
+Demonstrates how the link visually integrates with flowing paragraph text, using `underline="always"` — the a11y-correct choice for a link inline in a sentence. Surrounding body text is structural composition, not a component prop, so this case is irreducible (Q4) per [ADR-010](../../../docs/adrs/ADR-010-storybook-axes-of-information.md).
 
 <Canvas of={Stories.InParagraph} />
 
