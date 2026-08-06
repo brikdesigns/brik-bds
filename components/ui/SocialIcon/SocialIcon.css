@@ -36,11 +36,12 @@
   fill: var(--text-brand-primary);
 }
 
-/* `--bds-social-icon-brand` is set inline (SocialIcon.tsx) only for platforms
-   with a sourced brand hex; falls back to the same neutral as `grayscale` for
-   the 5 non-platform marks (message/email/website/calendar/phone). */
+/* `--bds-social-icon-brand` is bound per-platform below (via `[data-platform]`
+   attribute selectors, brik-bds#1716) directly from the Foundations color
+   system primitive for that platform — every bundled platform has one, so
+   there is no fallback. */
 .bds-social-icon--badge.bds-social-icon--brand .bds-social-icon__bg {
-  fill: var(--bds-social-icon-brand, var(--text-muted));
+  fill: var(--bds-social-icon-brand);
 }
 
 /* ─── type="glyph" — background neutral/transparent, glyph carries the tone ── */
@@ -58,6 +59,35 @@
 }
 
 .bds-social-icon--glyph.bds-social-icon--brand {
-  color: var(--bds-social-icon-brand, var(--text-muted));
+  color: var(--bds-social-icon-brand);
+}
+
+/* ─── tone="brand" — per-platform Foundations token binding ─────────────── */
+
+/* Each platform's brand color is a canonical Foundations primitive
+   (design-tokens/foundations.json primitives/value/color/system,
+   brik-bds#1716) — never a hardcoded hex or a component-local JS map. */
+.bds-social-icon--brand[data-platform='youtube'] {
+  --bds-social-icon-brand: var(--color-system-youtube);
+}
+
+.bds-social-icon--brand[data-platform='twitter'] {
+  --bds-social-icon-brand: var(--color-system-twitter);
+}
+
+.bds-social-icon--brand[data-platform='facebook'] {
+  --bds-social-icon-brand: var(--color-system-facebook);
+}
+
+.bds-social-icon--brand[data-platform='instagram'] {
+  --bds-social-icon-brand: var(--color-system-instagram);
+}
+
+.bds-social-icon--brand[data-platform='linkedin'] {
+  --bds-social-icon-brand: var(--color-system-linkedin);
+}
+
+.bds-social-icon--brand[data-platform='yelp'] {
+  --bds-social-icon-brand: var(--color-system-yelp);
 }
 }

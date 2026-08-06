@@ -1,5 +1,7 @@
 /**
- * SocialIcon offline-resolution / no-404 regression test (brik-bds#1713).
+ * SocialIcon offline-resolution / no-404 regression test (brik-bds#1713;
+ * split from the contact marks — see ContactIcon.offline.test.ts — in
+ * brik-bds#1716).
  *
  * The guarantee: SocialIcon renders every platform mark from a BDS-bundled
  * inline set with no request to a consumer's `/public/icons/` or a CDN — so it
@@ -7,7 +9,7 @@
  * The `components` vitest project runs in node with no network, so this
  * asserts the invariants that make the guarantee hold:
  *   1. `SOCIAL_ICON_SVGS` bundles a non-empty inline set at module load.
- *   2. Every one of the 10 platforms from brik-bds#1713 is bundled.
+ *   2. Every one of the 6 platforms from brik-bds#1716 is bundled.
  *   3. Every bundled mark carries the badge (`.bds-social-icon__bg`) + glyph
  *      (`.bds-social-icon__glyph`, `fill="currentColor"`) split the `type`
  *      prop depends on.
@@ -24,18 +26,7 @@ import { describe, it, expect } from 'vitest';
 import { SOCIAL_ICON_SVGS, SOCIAL_ICON_PLATFORMS, type SocialIconPlatform } from './social-icons.generated';
 import { socialIconLabel } from './SocialIcon';
 
-const EXPECTED_PLATFORMS: SocialIconPlatform[] = [
-  'message',
-  'youtube',
-  'twitter',
-  'instagram',
-  'facebook',
-  'linkedin',
-  'email',
-  'website',
-  'calendar',
-  'phone',
-];
+const EXPECTED_PLATFORMS: SocialIconPlatform[] = ['youtube', 'twitter', 'instagram', 'facebook', 'linkedin', 'yelp'];
 
 describe('SocialIcon — offline mark resolution (no 404)', () => {
   it('bundles a non-empty inline SVG set at module load (zero network)', () => {
@@ -44,7 +35,7 @@ describe('SocialIcon — offline mark resolution (no 404)', () => {
     expect(SOCIAL_ICON_SVGS[keys[0]]).toContain('<path');
   });
 
-  it('bundles all 10 platforms from the brik-bds#1713 set', () => {
+  it('bundles all 6 platforms from the brik-bds#1716 social-only set', () => {
     expect(SOCIAL_ICON_PLATFORMS.sort()).toEqual([...EXPECTED_PLATFORMS].sort());
     for (const platform of EXPECTED_PLATFORMS) {
       expect(SOCIAL_ICON_SVGS[platform], `"${platform}" must be bundled`).toBeDefined();
@@ -93,12 +84,8 @@ describe('SocialIcon — default accessible name (decorative vs labeled branch)'
   });
 
   it('humanizes the remaining platforms (no override needed)', () => {
-    expect(socialIconLabel('message')).toBe('Message');
     expect(socialIconLabel('instagram')).toBe('Instagram');
     expect(socialIconLabel('facebook')).toBe('Facebook');
-    expect(socialIconLabel('email')).toBe('Email');
-    expect(socialIconLabel('website')).toBe('Website');
-    expect(socialIconLabel('calendar')).toBe('Calendar');
-    expect(socialIconLabel('phone')).toBe('Phone');
+    expect(socialIconLabel('yelp')).toBe('Yelp');
   });
 });

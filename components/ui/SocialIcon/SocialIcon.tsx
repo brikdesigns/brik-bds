@@ -1,11 +1,4 @@
-/**
- * @token-exempt — BRAND_COLORS below is a per-platform flat brand-hex map
- * (Simple Icons, cited per entry), not a BDS design token. `tone="brand"`
- * is explicitly a third-party-brand-identity axis (YouTube red, Facebook
- * blue, …) — brik-bds#1713 directs a component-local constant map here,
- * same reason `Logo` renders un-tokenized brand art as authored.
- */
-import { forwardRef, type CSSProperties, type SVGAttributes } from 'react';
+import { forwardRef, type SVGAttributes } from 'react';
 import { bdsClass } from '../../utils';
 import { SOCIAL_ICON_SVGS, SOCIAL_ICON_PLATFORMS, type SocialIconPlatform } from './social-icons.generated';
 import './SocialIcon.css';
@@ -25,9 +18,9 @@ export type SocialIconType = 'badge' | 'glyph';
  * Recolor scheme, applied on top of `type`:
  * - `grayscale` — neutral `--text-muted` token (the authored look: a
  *   `#828282` mid-gray badge, white glyph).
- * - `brand` — the platform's flat brand color. Non-platform marks (`message`,
- *   `email`, `website`, `calendar`, `phone`) have no brand color and fall back
- *   to the `grayscale` neutral.
+ * - `brand` — the platform's Foundations brand-color token, e.g.
+ *   `--color-system-youtube` (brik-bds#1716). See SocialIcon.css for the
+ *   full per-platform mapping — every bundled platform has one, no fallback.
  * - `accent` — Brik's brand color, `--text-brand-primary`.
  */
 export type SocialIconTone = 'grayscale' | 'brand' | 'accent';
@@ -41,7 +34,7 @@ export type SocialIconSize = 'sm' | 'md' | 'lg';
 const sizeMap: Record<SocialIconSize, number> = { sm: 20, md: 28, lg: 40 };
 
 export interface SocialIconProps extends Omit<SVGAttributes<SVGSVGElement>, 'children'> {
-  /** Which social/contact mark to render. */
+  /** Which social mark to render. */
   platform: SocialIconPlatform;
   /** Which path carries the recolored fill. Default: `'badge'` */
   type?: SocialIconType;
@@ -51,7 +44,7 @@ export interface SocialIconProps extends Omit<SVGAttributes<SVGSVGElement>, 'chi
   size?: SocialIconSize;
   /**
    * Accessible name. Defaults to the platform's display name (e.g.
-   * "YouTube", "LinkedIn", "Email"). Override to add context (`"Follow us on
+   * "YouTube", "LinkedIn"). Override to add context (`"Follow us on
    * YouTube"`); prefer `decorative` when an adjacent text label already names
    * the platform.
    */
@@ -66,21 +59,6 @@ export interface SocialIconProps extends Omit<SVGAttributes<SVGSVGElement>, 'chi
    */
   decorative?: boolean;
 }
-
-/**
- * Brand hex per platform — flat brand color, sourced from Simple Icons
- * (https://simpleicons.org), cited per-platform below. Non-platform marks
- * (message/email/website/calendar/phone) have no brand identity and are
- * intentionally absent — `tone="brand"` falls back to the neutral
- * `--text-muted` token for them (see SocialIcon.css).
- */
-const BRAND_COLORS: Partial<Record<SocialIconPlatform, string>> = {
-  youtube: '#FF0000', // https://simpleicons.org/icons/youtube.svg
-  facebook: '#1877F2', // https://simpleicons.org/icons/facebook.svg
-  linkedin: '#0A66C2', // https://simpleicons.org/icons/linkedin.svg
-  instagram: '#E4405F', // https://simpleicons.org/icons/instagram.svg
-  twitter: '#000000', // https://simpleicons.org/icons/x.svg (a.k.a. X / Twitter)
-};
 
 /**
  * Display-name overrides for platforms `humanize` can't capitalize correctly
@@ -107,13 +85,16 @@ export function socialIconLabel(platform: SocialIconPlatform): string {
 }
 
 /**
- * SocialIcon — recolorable social + contact mark, offline-bundled (brik-bds#1713).
+ * SocialIcon — recolorable social-platform mark, offline-bundled
+ * (brik-bds#1713; split from contact marks in brik-bds#1716).
  *
- * Renders one of 10 platform marks (message, youtube, twitter, instagram,
- * facebook, linkedin, email, website, calendar, phone) from a BDS-bundled
- * inline set — the mark paints on first render with no fetch and no possible
- * 404, the same offline contract as `ServiceTag`
- * (`components/ui/ServiceTag/ServiceTag.tsx:159-177`).
+ * Renders one of 6 platform marks (youtube, twitter, instagram, facebook,
+ * linkedin, yelp) from a BDS-bundled inline set — the mark paints on first
+ * render with no fetch and no possible 404, the same offline contract as
+ * `ServiceTag` (`components/ui/ServiceTag/ServiceTag.tsx:159-177`). For the
+ * non-platform contact marks (message, email, website, calendar, phone), use
+ * `<ContactIcon>` instead — they have no brand identity, so that component
+ * has no `tone="brand"`.
  *
  * Unlike `Logo` (multi-fill brand art that renders exactly as authored and is
  * NEVER recolored), each SocialIcon master is a two-path badge — a background
@@ -124,9 +105,9 @@ export function socialIconLabel(platform: SocialIconPlatform): string {
  *   white.
  * - `type="glyph"` — background neutral/transparent, glyph carries the color.
  *
- * `tone="brand"` uses the platform's flat brand color (YouTube red, Facebook
- * blue, LinkedIn blue, Instagram pink/red, X black); non-platform marks have
- * no brand identity and fall back to the `grayscale` neutral.
+ * `tone="brand"` uses the platform's Foundations brand-color token (YouTube
+ * red, X black, Facebook blue, Instagram black, LinkedIn blue, Yelp red);
+ * every bundled platform has one — see SocialIcon.css.
  *
  * Renders `role="img"` + `aria-label` (the platform's display name, or
  * `label`) by default — a bare `<SocialIcon platform="twitter" />` is
@@ -137,11 +118,11 @@ export function socialIconLabel(platform: SocialIconPlatform): string {
  * @example
  * <SocialIcon platform="youtube" />
  * <SocialIcon platform="linkedin" type="glyph" tone="brand" />
- * <SocialIcon platform="email" tone="accent" size="lg" />
+ * <SocialIcon platform="yelp" tone="accent" size="lg" />
  * // decorative — a sibling label already names the platform
  * <SocialIcon platform="twitter" decorative /> <span>Follow us on X</span>
  *
- * @summary Recolorable social + contact mark — badge or glyph, 3 tones
+ * @summary Recolorable social-platform mark — badge or glyph, 3 tones
  */
 export const SocialIcon = forwardRef<SVGSVGElement, SocialIconProps>(function SocialIcon(
   { platform, type = 'badge', tone = 'grayscale', size = 'md', label, decorative = false, className, style, ...props },
@@ -151,7 +132,6 @@ export const SocialIcon = forwardRef<SVGSVGElement, SocialIconProps>(function So
   if (!svg) return null;
 
   const box = sizeMap[size];
-  const brandColor = tone === 'brand' ? BRAND_COLORS[platform] : undefined;
   const accessibleName = label ?? socialIconLabel(platform);
 
   return (
@@ -162,15 +142,15 @@ export const SocialIcon = forwardRef<SVGSVGElement, SocialIconProps>(function So
       width={box}
       height={box}
       viewBox="0 0 36 36"
-      style={{
-        ...style,
-        ...(brandColor ? ({ '--bds-social-icon-brand': brandColor } as CSSProperties) : {}),
-      }}
+      style={style}
       {...props}
-      // a11y + the trusted, build-time-bundled markup (SocialIcon/icons/*.svg
-      // — never user input) are placed after the `{...props}` spread so a
-      // caller can never silently contradict `decorative` (or inject markup)
-      // via a raw role/aria-label/aria-hidden/dangerouslySetInnerHTML prop.
+      // a11y, the `data-platform` brand-token binding, and the trusted,
+      // build-time-bundled markup (SocialIcon/icons/*.svg — never user input)
+      // are placed after the `{...props}` spread so a caller can never
+      // silently contradict `decorative`, break the `tone="brand"` CSS binding,
+      // or inject markup via a raw role/aria-label/aria-hidden/data-platform/
+      // dangerouslySetInnerHTML prop.
+      data-platform={platform}
       role={decorative ? undefined : 'img'}
       aria-label={decorative ? undefined : accessibleName}
       aria-hidden={decorative || undefined}

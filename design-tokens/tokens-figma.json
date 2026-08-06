@@ -96,6 +96,30 @@
       "purple-light": {
         "$value": "#e9d8fc",
         "$type": "color"
+      },
+      "youtube": {
+        "$value": "#cd201f",
+        "$type": "color"
+      },
+      "twitter": {
+        "$value": "#1da1f2",
+        "$type": "color"
+      },
+      "facebook": {
+        "$value": "#1877f2",
+        "$type": "color"
+      },
+      "instagram": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "linkedin": {
+        "$value": "#0072b1",
+        "$type": "color"
+      },
+      "yelp": {
+        "$value": "#ff1a1a",
+        "$type": "color"
       }
     },
     "annotation": {

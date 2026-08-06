@@ -35,6 +35,7 @@ export * from './Cluster';
 export * from './Collapsible';
 export * from './CollapsibleCard';
 export * from './CompletionToggle';
+export * from './ContactIcon';
 export * from './ContentBlock';
 export * from './Counter';
 export * from './DataSection';
