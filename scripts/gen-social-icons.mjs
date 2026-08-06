@@ -1,14 +1,19 @@
 #!/usr/bin/env node
 /**
- * gen-social-icons.mjs — Bundled social/contact mark registry for BDS <SocialIcon>.
+ * gen-social-icons.mjs — Bundled social-mark registry for BDS <SocialIcon>.
  *
- * Reads the 10 per-platform two-path masters in `components/ui/SocialIcon/icons/
+ * Reads the 6 per-platform two-path masters in `components/ui/SocialIcon/icons/
  * *.svg` and emits `components/ui/SocialIcon/social-icons.generated.ts`: a map of
  * platform → inner SVG markup (a `.bds-social-icon__bg` path + a
  * `.bds-social-icon__glyph` path). <SocialIcon> renders this inline so a mark
  * resolves synchronously with NO runtime fetch — the same offline contract as
  * the <Icon> Phosphor subset (#1002), <Logo> registry, and <ServiceTag> glyph
  * set (#1242), but for a two-path recolorable badge/glyph split (brik-bds#1713).
+ *
+ * brik-bds#1716 split the original 10-platform <SocialIcon> into this 6-mark
+ * social-only component (youtube/twitter/instagram/facebook/linkedin/yelp) and
+ * a sibling <ContactIcon> (message/email/website/calendar/phone) — see
+ * `scripts/gen-contact-icons.mjs`, which mirrors this script for that registry.
  *
  * Unlike <Logo> (multi-fill brand art, never recolored — brand guidelines own
  * the color) and <ServiceTag> (single currentColor path), a SocialIcon master

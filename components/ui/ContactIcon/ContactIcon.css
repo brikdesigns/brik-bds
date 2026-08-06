@@ -1,0 +1,50 @@
+@layer bds-components {
+/* ─── ContactIcon ────────────────────────────────────────────── */
+
+/* Sizing + display only — the badge shape (rounded square) is baked into the
+   bundled mark's own background path, not CSS. Width/height are set on the
+   element in ContactIcon.tsx (bds-lint-ignore — component-level badge
+   dimensions, mirrors ServiceTag's icon-only box scale; see the sizeMap
+   comment in ContactIcon.tsx). */
+.bds-contact-icon {
+  display: block;
+  flex-shrink: 0;
+}
+
+/* ─── Glyph — always currentColor ────────────────────────────── */
+
+/* The glyph path is baked as fill="currentColor" in the bundled mark (see
+   scripts/gen-contact-icons.mjs) — it recolors via the `color` set below,
+   never a direct fill rule here. */
+
+/* ─── type="badge" — background carries the tone, glyph knocked out white ── */
+
+/* Constant white regardless of theme (context-pinned, unlike --text-inverse
+   which flips with theme polarity) — the glyph always reads as a white
+   knockout on a colored badge regardless of the app's light/dark mode. */
+.bds-contact-icon--badge {
+  color: var(--text-on-color-dark);
+}
+
+.bds-contact-icon--badge.bds-contact-icon--grayscale .bds-contact-icon__bg {
+  fill: var(--text-muted);
+}
+
+.bds-contact-icon--badge.bds-contact-icon--accent .bds-contact-icon__bg {
+  fill: var(--text-brand-primary);
+}
+
+/* ─── type="glyph" — background neutral/transparent, glyph carries the tone ── */
+
+.bds-contact-icon--glyph .bds-contact-icon__bg {
+  fill: none;
+}
+
+.bds-contact-icon--glyph.bds-contact-icon--grayscale {
+  color: var(--text-muted);
+}
+
+.bds-contact-icon--glyph.bds-contact-icon--accent {
+  color: var(--text-brand-primary);
+}
+}
