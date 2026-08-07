@@ -106,7 +106,8 @@ no visual impact.
 | `disabled`, `loading`, every boolean toggle + icon slot | ADR-010 Q2 routes them to `argTypes` controls, not stories. Storybook renders the default arg value, so the gate only ever sees the enabled control. | `contrast-gate` (value) + `lint-disabled-fade` (mechanism) — see below |
 | `:hover` / `:focus` / `:active` | No story forces a pseudo-class, and the setup file screenshots the mounted render as-is. Zero hover/focus/active baselines exist. | nothing — accepted gap |
 | Dark theme, other viewports, Firefox/WebKit | Out of the day-one matrix above. | nothing — deliberate follow-up |
-| A small component on a large canvas | `allowedMismatchedPixelRatio: 0.001` is measured against the whole canvas, so a Badge losing its pill radius moves ~0.007% of pixels and passes ([#1696](https://github.com/brikdesigns/brik-bds/issues/1696), measured). | nothing yet — #1696 is open |
+| A small component on a large canvas | ~~`allowedMismatchedPixelRatio: 0.001` is measured against the whole canvas~~ — **fixed in [#1696](https://github.com/brikdesigns/brik-bds/issues/1696)**. The floor is now `allowedMismatchedPixels: 10`, absolute, so a Badge losing its pill radius fails. | the gate itself |
+| A low-contrast change on any canvas | `threshold: 0.2` ignores a pixel unless its YIQ delta clears 1408.6, so a grey-on-white change is invisible at any pixel floor ([#1727](https://github.com/brikdesigns/brik-bds/issues/1727), measured — see [Known remaining blind spot](#known-remaining-blind-spot-low-contrast-changes)). | nothing yet — #1727 is open |
 
 Reproduce the first row:
 

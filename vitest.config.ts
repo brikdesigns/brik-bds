@@ -88,7 +88,10 @@ export default defineConfig({
                     // Per-pixel YIQ color distance below which a pixel counts
                     // as matching. THIS is what absorbs antialiasing jitter,
                     // and it does the whole job on its own — measured below.
-                    threshold: 0.2,
+                    // MEASUREMENT SCAFFOLD (#1727) — TEMPORARY, reverted
+                    // before merge. Lets the CI job sweep candidate thresholds
+                    // in one container instance; defaults to the shipped 0.2.
+                    threshold: Number(process.env.VISUAL_THRESHOLD ?? 0.2),
                     // Hard failure floor, in absolute pixels (#1696). NOT a
                     // ratio: the previous allowedMismatchedPixelRatio: 0.001
                     // was measured against the whole 960×720 canvas, so it
@@ -107,7 +110,11 @@ export default defineConfig({
                     // regression measured was 12 px, so 10 catches every
                     // change we have evidence for while still tolerating a
                     // stray pixel or two from a future font/GPU shift.
-                    allowedMismatchedPixels: 10,
+                    // MEASUREMENT SCAFFOLD (#1727) — TEMPORARY. 0 makes every
+                    // story report its exact count instead of passing.
+                    allowedMismatchedPixels: Number(
+                      process.env.VISUAL_FLOOR_PIXELS ?? 10,
+                    ),
                   },
                   // Baselines live in one committed tree (not scattered next
                   // to each *.stories.tsx, which is what the per-test-file
