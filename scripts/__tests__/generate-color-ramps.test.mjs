@@ -64,9 +64,28 @@ describe('generate-color-ramps — anchors are preserved byte for byte', () => {
   const kit = JSON.parse(readFileSync(BRAND_KIT, 'utf8'))['primitives/value'].color;
 
   it.each(families)('$label round-trips all six named steps', ({ family, stops }) => {
+    // Post-#1739 the kit holds the value on the numeric stop and the legacy
+    // name is an alias onto it, so the assertion resolves one hop. That is
+    // strictly stronger than the pre-#1739 literal comparison: it pins BOTH
+    // that the alias targets the right stop and that the value is unchanged.
     for (const [name, stop] of Object.entries(ANCHOR_STOPS)) {
       expect(kindOf(stops, stop)).toBe('anchor');
-      expect(hexOf(stops, stop)).toBe(String(kit[family][name].$value).toLowerCase());
+      expect(kit[family][name].$value).toBe(`{color.${family}.${stop}}`);
+      expect(hexOf(stops, stop)).toBe(String(kit[family][stop].$value).toLowerCase());
+    }
+  });
+
+  it.each(families)('$label emits all 11 numeric stops as literals in the kit', ({ family, stops }) => {
+    for (const stop of STOPS) {
+      const value = kit[family][stop].$value;
+      expect(value, `${family}.${stop}`).toMatch(/^#[0-9a-f]{6}$/);
+      expect(value).toBe(hexOf(stops, stop));
+    }
+  });
+
+  it.each(families)('$label marks every legacy alias deprecated', ({ family }) => {
+    for (const name of Object.keys(ANCHOR_STOPS)) {
+      expect(kit[family][name].$description).toMatch(/^DEPRECATED —/);
     }
   });
 
@@ -174,7 +193,7 @@ describe('generate-color-ramps — CLI', () => {
   it('--check fails when the committed file is stale', () => {
     const original = readFileSync(OUTPUT, 'utf8');
     try {
-      writeFileSync(OUTPUT, original.replace('#ffefeb', '#ff0000'));
+      writeFileSync(OUTPUT, original.replace('"#ffefeb"', '"#ff0000"'));
       const result = spawnSync('node', [GENERATOR, '--check'], {
         cwd: REPO_ROOT,
         encoding: 'utf8',

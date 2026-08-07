@@ -1,6 +1,50 @@
 {
   "color": {
     "grayscale": {
+      "50": {
+        "$value": "#f8f8f8",
+        "$type": "color"
+      },
+      "100": {
+        "$value": "#f2f2f2",
+        "$type": "color"
+      },
+      "200": {
+        "$value": "#e9e9e9",
+        "$type": "color"
+      },
+      "300": {
+        "$value": "#e0e0e0",
+        "$type": "color"
+      },
+      "400": {
+        "$value": "#b0b0b0",
+        "$type": "color"
+      },
+      "500": {
+        "$value": "#828282",
+        "$type": "color"
+      },
+      "600": {
+        "$value": "#6e6e6e",
+        "$type": "color"
+      },
+      "700": {
+        "$value": "#5a5a5a",
+        "$type": "color"
+      },
+      "800": {
+        "$value": "#333333",
+        "$type": "color"
+      },
+      "900": {
+        "$value": "#272727",
+        "$type": "color"
+      },
+      "950": {
+        "$value": "#1b1b1b",
+        "$type": "color"
+      },
       "white": {
         "$value": "#ffffff",
         "$type": "color"
@@ -10,34 +54,34 @@
         "$type": "color"
       },
       "darkest": {
-        "$value": "#1b1b1b",
+        "$value": "{color.grayscale.950}",
         "$type": "color",
-        "$description": "Primary Text on Light Backgrounds"
+        "$description": "DEPRECATED — use color.grayscale.950 (brik-bds#1739)"
       },
       "darker": {
-        "$value": "#333333",
+        "$value": "{color.grayscale.800}",
         "$type": "color",
-        "$description": "Secondary Text / Icons"
+        "$description": "DEPRECATED — use color.grayscale.800 (brik-bds#1739)"
       },
       "dark": {
-        "$value": "#5a5a5a",
+        "$value": "{color.grayscale.700}",
         "$type": "color",
-        "$description": "Placeholder Text / Tertiary Content"
+        "$description": "DEPRECATED — use color.grayscale.700 (brik-bds#1739)"
       },
       "light": {
-        "$value": "#828282",
+        "$value": "{color.grayscale.500}",
         "$type": "color",
-        "$description": "Secondary Borders / Muted UI"
+        "$description": "DEPRECATED — use color.grayscale.500 (brik-bds#1739)"
       },
       "lighter": {
-        "$value": "#e0e0e0",
+        "$value": "{color.grayscale.300}",
         "$type": "color",
-        "$description": "Borders / Disabled Text"
+        "$description": "DEPRECATED — use color.grayscale.300 (brik-bds#1739)"
       },
       "lightest": {
-        "$value": "#f2f2f2",
+        "$value": "{color.grayscale.100}",
         "$type": "color",
-        "$description": "Light Background / UI Elements"
+        "$description": "DEPRECATED — use color.grayscale.100 (brik-bds#1739)"
       }
     },
     "system": {
@@ -149,218 +193,618 @@
       }
     },
     "blue": {
-      "lightest": {
+      "50": {
+        "$value": "#fcfeff",
+        "$type": "color"
+      },
+      "100": {
         "$value": "#f8fdff",
         "$type": "color"
       },
-      "lighter": {
+      "200": {
+        "$value": "#d6f0fa",
+        "$type": "color"
+      },
+      "300": {
         "$value": "#b2e3f5",
         "$type": "color"
       },
-      "light": {
+      "400": {
+        "$value": "#a0cfe0",
+        "$type": "color"
+      },
+      "500": {
         "$value": "#8ebbcc",
         "$type": "color"
       },
-      "dark": {
+      "600": {
+        "$value": "#7da8b7",
+        "$type": "color"
+      },
+      "700": {
         "$value": "#6c95a3",
         "$type": "color"
       },
-      "darker": {
+      "800": {
         "$value": "#4d6e7b",
         "$type": "color"
       },
-      "darkest": {
+      "900": {
+        "$value": "#3f5b66",
+        "$type": "color"
+      },
+      "950": {
         "$value": "#314952",
         "$type": "color"
+      },
+      "lightest": {
+        "$value": "{color.blue.100}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.blue.100 (brik-bds#1739)"
+      },
+      "lighter": {
+        "$value": "{color.blue.300}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.blue.300 (brik-bds#1739)"
+      },
+      "light": {
+        "$value": "{color.blue.500}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.blue.500 (brik-bds#1739)"
+      },
+      "dark": {
+        "$value": "{color.blue.700}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.blue.700 (brik-bds#1739)"
+      },
+      "darker": {
+        "$value": "{color.blue.800}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.blue.800 (brik-bds#1739)"
+      },
+      "darkest": {
+        "$value": "{color.blue.950}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.blue.950 (brik-bds#1739)"
       }
     },
     "green": {
-      "lightest": {
+      "50": {
+        "$value": "#fcfff9",
+        "$type": "color"
+      },
+      "100": {
         "$value": "#f8fff3",
         "$type": "color"
       },
-      "lighter": {
+      "200": {
+        "$value": "#eaffda",
+        "$type": "color"
+      },
+      "300": {
         "$value": "#daffc0",
         "$type": "color"
       },
-      "light": {
+      "400": {
+        "$value": "#ccffa8",
+        "$type": "color"
+      },
+      "500": {
         "$value": "#bcff8c",
         "$type": "color"
       },
-      "dark": {
+      "600": {
+        "$value": "#abec7c",
+        "$type": "color"
+      },
+      "700": {
         "$value": "#9ada6c",
         "$type": "color"
       },
-      "darker": {
+      "800": {
         "$value": "#71a74a",
         "$type": "color"
       },
-      "darkest": {
+      "900": {
+        "$value": "#437f4e",
+        "$type": "color"
+      },
+      "950": {
         "$value": "#2a5542",
         "$type": "color"
+      },
+      "lightest": {
+        "$value": "{color.green.100}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.green.100 (brik-bds#1739)"
+      },
+      "lighter": {
+        "$value": "{color.green.300}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.green.300 (brik-bds#1739)"
+      },
+      "light": {
+        "$value": "{color.green.500}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.green.500 (brik-bds#1739)"
+      },
+      "dark": {
+        "$value": "{color.green.700}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.green.700 (brik-bds#1739)"
+      },
+      "darker": {
+        "$value": "{color.green.800}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.green.800 (brik-bds#1739)"
+      },
+      "darkest": {
+        "$value": "{color.green.950}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.green.950 (brik-bds#1739)"
       }
     },
     "orange": {
-      "lightest": {
+      "50": {
+        "$value": "#fff4ee",
+        "$type": "color"
+      },
+      "100": {
         "$value": "#ffe8dc",
         "$type": "color"
       },
-      "lighter": {
+      "200": {
+        "$value": "#ffccb6",
+        "$type": "color"
+      },
+      "300": {
         "$value": "#ffad92",
         "$type": "color"
       },
-      "light": {
+      "400": {
+        "$value": "#f48865",
+        "$type": "color"
+      },
+      "500": {
         "$value": "#e76134",
         "$type": "color"
       },
-      "dark": {
+      "600": {
+        "$value": "#cd5127",
+        "$type": "color"
+      },
+      "700": {
         "$value": "#b4411a",
         "$type": "color"
       },
-      "darker": {
+      "800": {
         "$value": "#812608",
         "$type": "color"
       },
-      "darkest": {
+      "900": {
+        "$value": "#5f1b02",
+        "$type": "color"
+      },
+      "950": {
         "$value": "#3f1000",
         "$type": "color"
+      },
+      "lightest": {
+        "$value": "{color.orange.100}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.orange.100 (brik-bds#1739)"
+      },
+      "lighter": {
+        "$value": "{color.orange.300}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.orange.300 (brik-bds#1739)"
+      },
+      "light": {
+        "$value": "{color.orange.500}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.orange.500 (brik-bds#1739)"
+      },
+      "dark": {
+        "$value": "{color.orange.700}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.orange.700 (brik-bds#1739)"
+      },
+      "darker": {
+        "$value": "{color.orange.800}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.orange.800 (brik-bds#1739)"
+      },
+      "darkest": {
+        "$value": "{color.orange.950}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.orange.950 (brik-bds#1739)"
       }
     },
     "pink": {
-      "lightest": {
+      "50": {
+        "$value": "#fff4fa",
+        "$type": "color"
+      },
+      "100": {
         "$value": "#ffe9f6",
         "$type": "color"
       },
-      "lighter": {
+      "200": {
+        "$value": "#ffcaea",
+        "$type": "color"
+      },
+      "300": {
         "$value": "#ffa8dd",
         "$type": "color"
       },
-      "light": {
+      "400": {
+        "$value": "#ff8ad1",
+        "$type": "color"
+      },
+      "500": {
         "$value": "#ff67c3",
         "$type": "color"
       },
-      "dark": {
+      "600": {
+        "$value": "#ff4db7",
+        "$type": "color"
+      },
+      "700": {
         "$value": "#ff25aa",
         "$type": "color"
       },
-      "darker": {
+      "800": {
         "$value": "#d20080",
         "$type": "color"
       },
-      "darkest": {
+      "900": {
+        "$value": "#af006b",
+        "$type": "color"
+      },
+      "950": {
         "$value": "#8e0057",
         "$type": "color"
+      },
+      "lightest": {
+        "$value": "{color.pink.100}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.pink.100 (brik-bds#1739)"
+      },
+      "lighter": {
+        "$value": "{color.pink.300}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.pink.300 (brik-bds#1739)"
+      },
+      "light": {
+        "$value": "{color.pink.500}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.pink.500 (brik-bds#1739)"
+      },
+      "dark": {
+        "$value": "{color.pink.700}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.pink.700 (brik-bds#1739)"
+      },
+      "darker": {
+        "$value": "{color.pink.800}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.pink.800 (brik-bds#1739)"
+      },
+      "darkest": {
+        "$value": "{color.pink.950}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.pink.950 (brik-bds#1739)"
       }
     },
     "poppy": {
-      "lightest": {
+      "50": {
+        "$value": "#fff7f5",
+        "$type": "color"
+      },
+      "100": {
         "$value": "#ffefeb",
         "$type": "color",
         "$description": "Subtle tints / hover backgrounds"
       },
-      "lighter": {
+      "200": {
+        "$value": "#ffccc0",
+        "$type": "color"
+      },
+      "300": {
         "$value": "#ffa693",
         "$type": "color",
         "$description": "Light accent"
       },
-      "light": {
+      "400": {
+        "$value": "#f27e66",
+        "$type": "color"
+      },
+      "500": {
         "$value": "#e35335",
         "$type": "color",
         "$description": "Brand primary base"
       },
-      "dark": {
+      "600": {
+        "$value": "#c94428",
+        "$type": "color"
+      },
+      "700": {
         "$value": "#b0351b",
         "$type": "color",
         "$description": "Hover state"
       },
-      "darker": {
+      "800": {
         "$value": "#7d1d09",
         "$type": "color",
         "$description": "Pressed state"
       },
-      "darkest": {
+      "900": {
+        "$value": "#631503",
+        "$type": "color"
+      },
+      "950": {
         "$value": "#4a0d00",
         "$type": "color",
         "$description": "Deep accent"
+      },
+      "lightest": {
+        "$value": "{color.poppy.100}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.poppy.100 (brik-bds#1739)"
+      },
+      "lighter": {
+        "$value": "{color.poppy.300}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.poppy.300 (brik-bds#1739)"
+      },
+      "light": {
+        "$value": "{color.poppy.500}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.poppy.500 (brik-bds#1739)"
+      },
+      "dark": {
+        "$value": "{color.poppy.700}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.poppy.700 (brik-bds#1739)"
+      },
+      "darker": {
+        "$value": "{color.poppy.800}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.poppy.800 (brik-bds#1739)"
+      },
+      "darkest": {
+        "$value": "{color.poppy.950}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.poppy.950 (brik-bds#1739)"
       }
     },
     "purple": {
-      "lightest": {
+      "50": {
+        "$value": "#f8f7fb",
+        "$type": "color"
+      },
+      "100": {
         "$value": "#f2f0f7",
         "$type": "color"
       },
-      "lighter": {
+      "200": {
+        "$value": "#dad0f2",
+        "$type": "color"
+      },
+      "300": {
         "$value": "#c4b0eb",
         "$type": "color"
       },
-      "light": {
+      "400": {
+        "$value": "#b19dd6",
+        "$type": "color"
+      },
+      "500": {
         "$value": "#9e8bc2",
         "$type": "color"
       },
-      "dark": {
+      "600": {
+        "$value": "#8b7aad",
+        "$type": "color"
+      },
+      "700": {
         "$value": "#796999",
         "$type": "color"
       },
-      "darker": {
+      "800": {
         "$value": "#574a71",
         "$type": "color"
       },
-      "darkest": {
+      "900": {
+        "$value": "#403758",
+        "$type": "color"
+      },
+      "950": {
         "$value": "#2b2440",
         "$type": "color"
+      },
+      "lightest": {
+        "$value": "{color.purple.100}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.purple.100 (brik-bds#1739)"
+      },
+      "lighter": {
+        "$value": "{color.purple.300}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.purple.300 (brik-bds#1739)"
+      },
+      "light": {
+        "$value": "{color.purple.500}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.purple.500 (brik-bds#1739)"
+      },
+      "dark": {
+        "$value": "{color.purple.700}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.purple.700 (brik-bds#1739)"
+      },
+      "darker": {
+        "$value": "{color.purple.800}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.purple.800 (brik-bds#1739)"
+      },
+      "darkest": {
+        "$value": "{color.purple.950}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.purple.950 (brik-bds#1739)"
       }
     },
     "tan": {
-      "lightest": {
+      "50": {
+        "$value": "#f8f7f5",
+        "$type": "color"
+      },
+      "100": {
         "$value": "#f1f0ec",
         "$type": "color",
         "$description": "Accent background"
       },
-      "lighter": {
+      "200": {
+        "$value": "#e0ded8",
+        "$type": "color"
+      },
+      "300": {
         "$value": "#cfcdc5",
         "$type": "color"
       },
-      "light": {
+      "400": {
+        "$value": "#bebbb2",
+        "$type": "color"
+      },
+      "500": {
         "$value": "#adaaa0",
         "$type": "color"
       },
-      "dark": {
+      "600": {
+        "$value": "#9c998e",
+        "$type": "color"
+      },
+      "700": {
         "$value": "#8b887d",
         "$type": "color"
       },
-      "darker": {
+      "800": {
         "$value": "#69665c",
         "$type": "color"
       },
-      "darkest": {
+      "900": {
+        "$value": "#58554c",
+        "$type": "color"
+      },
+      "950": {
         "$value": "#47453c",
         "$type": "color"
+      },
+      "lightest": {
+        "$value": "{color.tan.100}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.tan.100 (brik-bds#1739)"
+      },
+      "lighter": {
+        "$value": "{color.tan.300}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.tan.300 (brik-bds#1739)"
+      },
+      "light": {
+        "$value": "{color.tan.500}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.tan.500 (brik-bds#1739)"
+      },
+      "dark": {
+        "$value": "{color.tan.700}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.tan.700 (brik-bds#1739)"
+      },
+      "darker": {
+        "$value": "{color.tan.800}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.tan.800 (brik-bds#1739)"
+      },
+      "darkest": {
+        "$value": "{color.tan.950}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.tan.950 (brik-bds#1739)"
       }
     },
     "yellow": {
-      "lightest": {
+      "50": {
+        "$value": "#fffff0",
+        "$type": "color"
+      },
+      "100": {
         "$value": "#fffee1",
         "$type": "color"
       },
-      "lighter": {
+      "200": {
+        "$value": "#fef6c7",
+        "$type": "color"
+      },
+      "300": {
         "$value": "#ffecac",
         "$type": "color"
       },
-      "light": {
+      "400": {
+        "$value": "#f9e08a",
+        "$type": "color"
+      },
+      "500": {
         "$value": "#f4d364",
         "$type": "color"
       },
-      "dark": {
+      "600": {
+        "$value": "#dabb53",
+        "$type": "color"
+      },
+      "700": {
         "$value": "#c1a443",
         "$type": "color"
       },
-      "darker": {
+      "800": {
         "$value": "#8e7729",
         "$type": "color"
       },
-      "darkest": {
+      "900": {
+        "$value": "#795e1f",
+        "$type": "color"
+      },
+      "950": {
         "$value": "#634716",
         "$type": "color"
+      },
+      "lightest": {
+        "$value": "{color.yellow.100}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.yellow.100 (brik-bds#1739)"
+      },
+      "lighter": {
+        "$value": "{color.yellow.300}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.yellow.300 (brik-bds#1739)"
+      },
+      "light": {
+        "$value": "{color.yellow.500}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.yellow.500 (brik-bds#1739)"
+      },
+      "dark": {
+        "$value": "{color.yellow.700}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.yellow.700 (brik-bds#1739)"
+      },
+      "darker": {
+        "$value": "{color.yellow.800}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.yellow.800 (brik-bds#1739)"
+      },
+      "darkest": {
+        "$value": "{color.yellow.950}",
+        "$type": "color",
+        "$description": "DEPRECATED — use color.yellow.950 (brik-bds#1739)"
       }
     }
   },

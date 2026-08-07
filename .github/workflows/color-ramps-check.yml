@@ -26,6 +26,8 @@ on:
       - 'design-tokens/color-ramps.generated.json'
       - 'scripts/generate-color-ramps.mjs'
       - 'scripts/lib/oklch.mjs'
+      - 'tokens/figma-tokens.css'
+      - 'scripts/lint-tokens.js'
   push:
     branches:
       - main
@@ -34,6 +36,8 @@ on:
       - 'design-tokens/color-ramps.generated.json'
       - 'scripts/generate-color-ramps.mjs'
       - 'scripts/lib/oklch.mjs'
+      - 'tokens/figma-tokens.css'
+      - 'scripts/lint-tokens.js'
 
 concurrency:
   group: color-ramps-check-${{ github.ref }}
@@ -60,3 +64,6 @@ jobs:
 
       - name: Ramp invariants (anchors, monotonic lightness, hue, AA steps)
         run: npx vitest run scripts/__tests__/generate-color-ramps.test.mjs
+
+      - name: Alias layer preserves every legacy value (#1739)
+        run: npx vitest run scripts/__tests__/lint-tokens-deprecated.test.mjs
