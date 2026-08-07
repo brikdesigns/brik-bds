@@ -205,6 +205,61 @@ each fight a standard — a cohort gallery story is the export shape ADR-010 §4
 reversed, and capturing args-applied variants makes the baseline set a function
 of the arg matrix rather than the sidebar. The rationale is in the ADR amendment.
 
+## What the gate is proven to catch (#662 AC 5)
+
+The gate exists because of the portal #512/#553 rollback. That failure had
+**two** halves, and only one of them is this gate's job — which is why AC 5
+asks for a repro rather than a re-run of the original PR.
+
+**Half 1 — invented token names.**
+[portal#553](https://github.com/brikdesigns/brik-client-portal/pull/553)
+introduced `--text-on-paper`, `--surface-paper-elevated`,
+`--text-on-ink-muted` and nine more that were never in `dist/tokens.css`. In
+BDS this is gated **statically**, before a pixel is rendered:
+
+```bash
+printf '.probe { color: var(--text-on-paper); background: var(--surface-paper-elevated); }' > /tmp/w2probe.css
+node scripts/canonical-check.mjs /tmp/w2probe.css   # exit 1 — both rejected
+```
+
+Reconstructing that half against the visual gate proves nothing:
+`canonical-check` fails the PR first, so the change never reaches a screenshot.
+
+**Half 2 — a canonical name carrying a wrong value.** No static check can see
+this one. The name is legitimate, the value is wrong, and the only evidence is
+the render. Reconstructed against `tokens/theme-brand-brik.css` — the
+definition that wins in Storybook's `brik` light theme — with the repro applied
+and reverted inside the job, so nothing landed on the branch
+([run 31185854393](https://github.com/brikdesigns/brik-bds/actions/runs/31185854393)):
+
+| Case | Change | YIQ delta | Shipped gate (0.1 / floor 10) | Pre-#1727 gate (0.2) |
+| --- | --- | --- | --- | --- |
+| 1 — high contrast | `--text-primary` → `--color-system-red` | 8008.1 | **259 / 405 stories fail** | — |
+| 2 — low contrast | `--text-secondary` one grayscale step, `#333333` → `#5a5a5a` | 768.6 | **142 / 403 stories fail** | **1 fails** |
+
+Both tokens pass `canonical-check` (exit 0). Only the render disagrees.
+
+**Case 2 is the load-bearing one.** Its delta of 768.6 sits inside the window
+[#1727](https://github.com/brikdesigns/brik-bds/issues/1727) opened — over
+0.1's bar of 352.2, under 0.2's 1408.6 — the same window that hid Badge Default
+at 934 and Neutral at 486. It is the shape of the real W2 regression, and until
+#1727 landed the comparator could not see it at all: at `threshold: 0.2` the
+same change passes 141 of the 142 stories the shipped gate now fails.
+
+The one story that still fails at 0.2 is not a counter-example.
+`stories/ContrastCompliance.stories.tsx` computes each pairing's contrast ratio
+from the live token value and renders it as text
+([line 88](../../stories/ContrastCompliance.stories.tsx#L88),
+[line 208](../../stories/ContrastCompliance.stories.tsx#L208)) — so the digits
+change, not just the colour, and glyph-vs-white easily clears 1408.6. It caught
+the change by printing it, not by seeing it.
+
+Both counts exclude the two `InspectWidget` exports. They reported 372 px on a
+tree verified byte-identical to `HEAD` in the same job, with `Matcher did not
+succeed in time` — that story does not stabilise inside a job that runs the
+suite six times, so its counts are not attributable to the repro. It is stable
+in a normal single-run job.
+
 ## Opting a story out
 
 Tag it `no-visual` (JS-driven animation that can never produce a stable
