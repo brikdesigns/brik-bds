@@ -41,34 +41,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # MEASUREMENT SCAFFOLD (#1743) — TEMPORARY, reverted before merge.
-      #
-      # The two InspectWidget exports failed on a tree verified byte-identical
-      # to HEAD in #1729's six-run measurement job (run 31185854393), with
-      # `Matcher did not succeed in time` — the stable-screenshot loop giving
-      # up. Single-run jobs are green, including `visual` on main. AC 1 asks
-      # which invocation it first fails at, so: same suite, unmodified tree,
-      # six times, one JSON each. `|| true` keeps the loop going past a
-      # failing run so every invocation is measured, not just the first.
-      - name: Repro — six suite invocations on an unmodified tree
-        run: |
-          for i in 1 2 3 4 5 6; do
-            echo "::group::invocation $i"
-            VISUAL_GATE=1 npx vitest run --project storybook \
-              --reporter=default --reporter=json \
-              --outputFile="/tmp/repro-$i.json" || true
-            echo "::endgroup::"
-          done
-
-      - name: Upload repro measurements
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: inspectwidget-stability-repro
-          path: /tmp/repro-*.json
-          if-no-files-found: error
-          retention-days: 7
-
       - name: Run visual regression suite
         run: VISUAL_GATE=1 npx vitest run --project storybook
 

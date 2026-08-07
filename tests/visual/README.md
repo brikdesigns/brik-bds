@@ -242,8 +242,8 @@ Both tokens pass `canonical-check` (exit 0). Only the render disagrees.
 **Case 2 is the load-bearing one.** Its delta of 768.6 sits inside the window
 [#1727](https://github.com/brikdesigns/brik-bds/issues/1727) opened — over
 0.1's bar of 352.2, under 0.2's 1408.6 — the same window that hid Badge Default
-at 934 and Neutral at 486. It is the shape of the real W2 regression, and until
-#1727 landed the comparator could not see it at all: at `threshold: 0.2` the
+at 934 and Neutral at 486. It is the shape of the real W2 regression, and the
+comparator could not see it at all until #1727 landed: at `threshold: 0.2` the
 same change passes 141 of the 142 stories the shipped gate now fails.
 
 The one story that still fails at 0.2 is not a counter-example.
@@ -259,6 +259,51 @@ tree verified byte-identical to `HEAD` in the same job, with `Matcher did not
 succeed in time` — that story does not stabilise inside a job that runs the
 suite six times, so its counts are not attributable to the repro. It is stable
 in a normal single-run job.
+
+## Measuring the gate — only invocation 1 is trustworthy (#1743)
+
+Every calibration pass so far (#1696, #1727, #1729, #1732) used the same
+instrument: a temporary CI step that re-runs the suite with
+`VISUAL_FLOOR_PIXELS=0` so each story reports its exact mismatch count instead
+of silently passing. Reuse it — but know its one failure mode.
+
+**Running the suite repeatedly inside one container job destabilises it.**
+Measured on an unmodified tree, six invocations back to back
+([run 31199980487](https://github.com/brikdesigns/brik-bds/actions/runs/31199980487)):
+
+| Invocation | Result |
+| --- | --- |
+| 1 | **0 of 405 failed** |
+| 2 | 1 — `Icons :: Setup`, 16623 px |
+| 3 | 0 |
+| 4, 5, 6 | 1 — `DevFeedbackWidget :: Default`, **2644 px each time** |
+| 7 (the job's real gate step) | same, 2644 px |
+
+Two things to take from that shape:
+
+- **It is not one bad story.** Three different stories have been caught this
+  way — `Icons :: Setup` and `DevFeedbackWidget :: Default` above, and the two
+  `InspectWidget` exports in #1729's job. #1743 was filed blaming InspectWidget
+  and the repro falsified that: InspectWidget passed all six times.
+- **It is not a timing flake.** Once `DevFeedbackWidget` starts failing it
+  fails *identically* — 2644 px, four invocations running, no
+  `Matcher did not succeed in time`. A race would vary. Something changes state
+  and stays changed, and it survives into the next `vitest run`.
+
+So, when measuring:
+
+1. **Take clean-tree numbers from invocation 1 only.** A later invocation's
+   count may be measuring the harness, not the tree.
+2. **Corroborate any late-invocation failure** against a fresh single-run job
+   before believing it. #1729 excluded InspectWidget on exactly this basis, and
+   the repro vindicated that call.
+3. **Order the runs so the ones you care about come first**, and treat the
+   count of failing stories as the signal — not which story failed.
+
+**The gate itself is unaffected**, which is why this is documented rather than
+fixed: [`visual.yml`](../../.github/workflows/visual.yml) runs the suite once,
+and invocation 1 is clean. The root cause is unidentified and tracked
+separately — tracked in #1746.
 
 ## Opting a story out
 
