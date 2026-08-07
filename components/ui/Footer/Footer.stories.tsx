@@ -345,7 +345,7 @@ export const SurfaceOverride: Story = {
     variant: 'inverse',
     style: {
       // bds-lint-ignore — component-scoped CSS variable override, not a design token
-      ['--bds-footer-surface' as string]: 'var(--color-grayscale-darkest)',
+      ['--bds-footer-surface' as string]: 'var(--color-grayscale-950)',
     } as CSSProperties,
   },
 };
