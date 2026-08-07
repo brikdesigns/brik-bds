@@ -105,23 +105,8 @@ jobs:
         if: ${{ inputs.prune }}
         run: rm -rf tests/visual/__screenshots__
 
-      # MEASUREMENT SCAFFOLD (#1732) — TEMPORARY, reverted before merge.
-      #
-      # `--update` rewrites a reference only when the comparator FAILS against
-      # it, and the two stale baselines this issue found are stale by less than
-      # the shipped threshold can see (Pagination 1043 px and Stepper 7 px at
-      # 0.05, both 0 at 0.1). At the default they compare clean and the regen
-      # writes nothing — the same blindness that let them go unrecorded through
-      # #1695's own regen run. Dropping to 0.05 for this one dispatch is what
-      # lets the comparator fail them and rewrite them.
-      #
-      # Floor 0 as well, because Stepper's staleness is 7 px — under the 10 px
-      # noise margin, so at the shipped floor the first dispatch rewrote only
-      # Pagination. Exactly two stories are nonzero at 0.05 on a clean tree
-      # (measured, run 31181714819), so floor 0 here rewrites those two and
-      # nothing else.
       - name: Regenerate baselines
-        run: VISUAL_GATE=1 VISUAL_THRESHOLD=0.05 VISUAL_FLOOR_PIXELS=0 npx vitest run --project storybook --update
+        run: VISUAL_GATE=1 npx vitest run --project storybook --update
 
       - name: Commit and push baselines
         id: commit
