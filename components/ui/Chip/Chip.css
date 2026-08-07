@@ -82,8 +82,17 @@
 
 /* ─── Disabled ────────────────────────────────────────────────── */
 
+/* Chip paints its own fill at the root, so it takes the token swap, not the
+   fade (ADR-028 pt-1). Fading composited the label and the pill toward the same
+   backdrop and left `--secondary` at 2.34:1 in dark against the 3:1 floor; the
+   swap measures 5.22:1 light / 3.29:1 dark. Moving the label to
+   `--text-on-color-light` — the fix Tag and SegmentedControl used for this same
+   fill — makes the faded number *worse* (2.06:1), which is why the mechanism
+   had to change rather than the foreground. `node
+   scripts/measure-disabled-contrast.mjs` reproduces all four. #1701 */
 .bds-chip--disabled {
-  opacity: var(--state-disabled-opacity);
+  background-color: var(--background-disabled);
+  color: var(--text-disabled);
   cursor: not-allowed;
   pointer-events: none;
 }

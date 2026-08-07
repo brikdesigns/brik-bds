@@ -156,6 +156,18 @@ const CASES = [
   // ── fill-bearing, already faded (the precedent the fade route relies on) ──
   { group: 'fill-bearing (already fades)', label: 'Chip primary', fill: '--background-inverse', text: '--text-inverse' },
   { group: 'fill-bearing (already fades)', label: 'Chip secondary', fill: '--background-secondary', text: '--text-primary' },
+  // The same fill with the on-color foreground its two siblings already moved
+  // to. Tag.css:34-43 and SegmentedControl.css:10-13 both pair
+  // `--background-secondary` with `--text-on-color-light` precisely because
+  // `--text-primary` fails dark AA on it; Chip is the last holdout (#1701).
+  { group: 'fill-bearing (already fades)', label: 'Chip secondary → on-color', fill: '--background-secondary', text: '--text-on-color-light' },
+  { group: 'fill-bearing (already fades)', label: 'Tag solid', fill: '--background-secondary', text: '--text-on-color-light' },
+  { group: 'fill-bearing (already fades)', label: 'Tag muted', fill: '--background-status-neutral', text: '--text-status-neutral' },
+  // Only the ITEM carries :disabled here, never the track — so these fade
+  // toward the track, not the page. An inactive item is transparent (fill-less
+  // against the track); an active one paints the `--background-primary` pill.
+  { group: 'fill-bearing (already fades)', label: 'SegmentedControl item, inactive', fill: null, backdrop: '--background-secondary', text: '--text-on-color-light' },
+  { group: 'fill-bearing (already fades)', label: 'SegmentedControl item, active', fill: '--background-primary', backdrop: '--background-secondary', text: '--text-primary' },
   // ── fill-less (the cohort the fade suits) ──
   { group: 'fill-less', label: 'Button outline / ghost label', fill: null, text: '--text-primary' },
   { group: 'fill-less', label: 'TextInput value', fill: null, text: '--text-primary' },
@@ -166,8 +178,15 @@ const CASES = [
 
 const PAGE = '--background-primary';
 
+/**
+ * `backdrop` overrides what the fade composites toward. It defaults to the page,
+ * which is right for a control sitting directly on it — but a segment inside a
+ * filled track fades toward the TRACK, and scoring it against the page reports
+ * a failure the user never sees. Only the disabled element fades; its container
+ * stays put, so the container is the backdrop.
+ */
 function score(c, vars, alpha) {
-  const page = hexOf(PAGE, vars);
+  const page = hexOf(c.backdrop ?? PAGE, vars);
   const fill = c.fill ? hexOf(c.fill, vars) : page;
   const text = hexOf(c.text, vars);
   return {

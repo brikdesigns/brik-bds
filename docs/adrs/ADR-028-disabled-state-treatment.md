@@ -161,3 +161,30 @@ Picking that number and that token is a visible change to 26 components with its
 **What remains uncovered, and where it is written down.** A disabled fade that reads the right token at the right value can still be *positioned* wrongly — a layout regression inside a disabled control is invisible to both gates. That is accepted, and the honest statement of it lives in [`tests/visual/README.md` § What the suite cannot see](../../tests/visual/README.md), alongside the other three blind spots (pseudo-class states, non-default theme/viewport/browser, and #1696's whole-canvas mismatch floor). #1697's load-bearing AC was that this list exist at all, so that the next author cannot read a one-file baseline diff as "no visual impact" — which is exactly how #1687's own review had to be annotated by hand.
 
 **Correction to § Context.** That table's inventory is pre-#1687: the fade cohort is now **27** components across **30** disabled-scoped rules, not 26 across 28. `NavItem` joined it when #1687 retired its muted-text swap (pt-4), and the "27 rules hardcoding a literal" of § Consequences pt-3 are all resolved. `npm run lint-disabled-fade -- --report` prints the live inventory, so the count above does not have to be trusted either.
+
+## Amendment §2 — "paints its own fill" is a same-element, non-surface test (2026-08-07)
+
+> Driven by [#1701](https://github.com/brikdesigns/brik-bds/issues/1701), which asked whether `Chip` and `Tag` should adopt the token swap and whether pt-1's boundary needed sharpening. It needed sharpening: the boundary as written was structurally unenforceable, and § Amendment §1's gate passed the one open violation of the rule it was named for.
+
+**The gap.** §1's gate asserts pt-2 conformance — that a fade reads `var(--state-disabled-opacity)` rather than a literal. It never asserts pt-1, the rule that *picks* the mechanism. So `Chip` and `Tag` printed `✓` while being the two components § Context already flagged as filled-but-fading ("`Chip` is the closest precedent to a filled control that fades", measured at 1.00:1 and 2.01:1 dark). The ADR named its own counterexample, listed it in the fade cohort, and shipped.
+
+**Decision.** pt-1's *"does the control paint its own fill"* resolves to three conjunctive tests, all mechanical:
+
+1. **Same element.** The fill and the disabled state land on the same BEM element. `SegmentedControl`'s track paints `--background-secondary` but only the *item* ever carries `:disabled`, and that item is transparent — it is a correctly-faded fill-less control on a filled parent, not a violation.
+2. **Same variant.** A `--modifier` that paints is only compared against a fade on the same modifier. Post-conversion `Tag` has `--solid` / `--muted` on the swap and `--subtle` on the fade, all on `.bds-tag`.
+3. **Not a surface token.** A control painting `--surface-*`, `--background-primary`, `--background-input`, or `--text-input-bg` is materialising the surface it sits on. This is pt-2's *"the page or an ancestor surface shows through"* expressed as a token rather than inherited — a `TextInput` reading `--background-input` is the sentence pt-2 already wrote.
+
+**Why test 3 is load-bearing.** A raw "declares a `background-color`" scan returns **20 of the 26** faders — the number #1701 was filed on. Seventeen of those paint a surface token. Gating them would have converted the entire input family against pt-2's explicit text; reporting them as violations while not gating would have been noise. The surface list above is this ADR's, not the gate's: extend it here first.
+
+**What converted.** `Chip` (both variants) and `Tag` `--solid` / `--muted`. Faded, they measured 2.34:1 / 2.06:1 dark and 2.31:1 light against a 3:1 floor; the swap measures **5.22:1 light / 3.29:1 dark**. Only the `Chip --secondary` row was in `contrast-pairings.json` — the other three were invisible to `contrast-gate`, which is the same "unmeasured by construction" shape #1687 closed for the fade cohort.
+
+**The foreground trap, recorded so it is not re-derived.** Moving `Chip --secondary`'s label to `--text-on-color-light` — the fix `Tag` and `SegmentedControl` already applied for this exact fill — improves the *enabled* pair (3.43:1 → 5.46:1) and makes the *faded* pair **worse** (2.34:1 → 2.06:1). Fading composites the label and the fill toward the same backdrop, so a foreground chosen for the enabled state is not evidence about the faded one. The mechanism had to change; the foreground could not save it. `node scripts/measure-disabled-contrast.mjs --alpha 0.5` reproduces all four numbers.
+
+**What is reported but not gated,** because this amendment does not rule on it — tracked in [#1742](https://github.com/brikdesigns/brik-bds/issues/1742):
+
+- **Sub-part fills** — `Pagination`'s arrow, `Slider`'s track and thumb. A fill inside a faded subtree, where nothing has yet measured whether the parent's single `opacity` is the same defect or acceptable composition.
+- **Surface-token fills** — the 13 components test 3 excludes. Covered by pt-2 in prose, never measured against it.
+
+`npm run lint-disabled-fade -- --report` prints both populations under `RULE C`, so neither is silently absorbed.
+
+**Correction to § Amendment §1.** Its table's *Mechanism* row now covers pt-1 as well as pt-2; `lint-disabled-fade` exits 1 on a fill-bearing fader. Verified against the pre-fix tree: `node scripts/lint-disabled-fade.mjs --root <main>/components/ui` reports the four violations above, and 0 after conversion.
