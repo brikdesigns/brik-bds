@@ -49,6 +49,32 @@ If a story ever does flake, do not raise this number — that trades the gate's
 whole purpose for one story's convenience. Tag the story `no-visual`, or add a
 per-story override, and record why here.
 
+### Known remaining blind spot: low-contrast changes
+
+The pixel floor fixes the *denominator*. It does nothing about the *per-pixel*
+gate in front of it, and that has its own blind spot worth knowing before you
+trust a green run.
+
+`threshold: 0.2` means a pixel only counts as mismatched when its YIQ distance
+exceeds `35215 × 0.2² = 1408.6`. A light grey against white does not clear
+that bar. Measured on the badge repro — same CSS change, same story file:
+
+| Badge story | Fill | YIQ delta vs white | Gate |
+| --- | --- | --- | --- |
+| Progress | `rgb(47,128,237)` | 11858 | counted → **failed** |
+| Error | `rgb(235,87,87)` | 10258 | counted → **failed** |
+| Positive | `rgb(39,174,96)` | 10039 | counted → **failed** |
+| Warning | `rgb(242,201,76)` | 3017 | counted → **failed** |
+| Default | `rgb(212,212,212)` | 934 | **ignored — passed silently** |
+| Neutral | `rgb(224,224,224)` | 486 | **ignored — passed silently** |
+
+So the identical shape regression is caught on the saturated badges and
+invisible on the grey ones, at any pixel floor. Lowering `threshold` is the
+lever, and pixelmatch's own default (`0.1` → maxDelta 352) would catch both —
+but it also re-opens the antialiasing question this file spent #1696 closing,
+so it needs the same measurement protocol before it moves. Tracked separately;
+do not tune it blind.
+
 Note this does **not** contradict #1673's "antialiasing is not byte-reproducible
 between container runs". PNG bytes can differ while the mismatched-pixel count
 stays 0, because `threshold: 0.2` scores those sub-threshold differences as
