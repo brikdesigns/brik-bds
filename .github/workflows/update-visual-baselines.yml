@@ -114,8 +114,14 @@ jobs:
       # writes nothing — the same blindness that let them go unrecorded through
       # #1695's own regen run. Dropping to 0.05 for this one dispatch is what
       # lets the comparator fail them and rewrite them.
+      #
+      # Floor 0 as well, because Stepper's staleness is 7 px — under the 10 px
+      # noise margin, so at the shipped floor the first dispatch rewrote only
+      # Pagination. Exactly two stories are nonzero at 0.05 on a clean tree
+      # (measured, run 31181714819), so floor 0 here rewrites those two and
+      # nothing else.
       - name: Regenerate baselines
-        run: VISUAL_GATE=1 VISUAL_THRESHOLD=0.05 npx vitest run --project storybook --update
+        run: VISUAL_GATE=1 VISUAL_THRESHOLD=0.05 VISUAL_FLOOR_PIXELS=0 npx vitest run --project storybook --update
 
       - name: Commit and push baselines
         id: commit
