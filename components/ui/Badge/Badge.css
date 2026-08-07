@@ -16,7 +16,7 @@
   font-family: var(--font-family-label);
   font-weight: var(--font-weight-semibold);
   line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically */
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--border-radius-pill);
   white-space: nowrap;
   text-transform: uppercase;
   letter-spacing: 0.05em;
