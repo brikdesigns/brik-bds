@@ -19,24 +19,24 @@ import { baseTheme, baseClientFacts } from './_fixtures';
  */
 const serviceLineCascadeStyles = `
 [data-service-line='brand'] {
-  --background-brand-primary: var(--color-yellow-light);
-  --text-brand-primary: var(--color-yellow-dark);
+  --background-brand-primary: var(--color-yellow-500);
+  --text-brand-primary: var(--color-yellow-700);
 }
 [data-service-line='marketing'] {
-  --background-brand-primary: var(--color-green-light);
-  --text-brand-primary: var(--color-green-dark);
+  --background-brand-primary: var(--color-green-500);
+  --text-brand-primary: var(--color-green-700);
 }
 [data-service-line='information'] {
-  --background-brand-primary: var(--color-blue-light);
-  --text-brand-primary: var(--color-blue-dark);
+  --background-brand-primary: var(--color-blue-500);
+  --text-brand-primary: var(--color-blue-700);
 }
 [data-service-line='product'] {
-  --background-brand-primary: var(--color-purple-light);
-  --text-brand-primary: var(--color-purple-dark);
+  --background-brand-primary: var(--color-purple-500);
+  --text-brand-primary: var(--color-purple-700);
 }
 [data-service-line='service'] {
-  --background-brand-primary: var(--color-orange-light);
-  --text-brand-primary: var(--color-orange-dark);
+  --background-brand-primary: var(--color-orange-500);
+  --text-brand-primary: var(--color-orange-700);
 }
 `;
 

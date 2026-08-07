@@ -63,7 +63,7 @@
   /* ── Missing Semantic Tokens ── */
   /* Light value here; dark value in the :root[data-theme="dark"] block below.
      Keep the two in lockstep, and move both together when promoted to Figma. */
-  --background-tertiary: var(--color-grayscale-lighter);
+  --background-tertiary: var(--color-grayscale-300);
 
   /* Theme-responsive positive/success TEXT role (light value here, dark in the
      :root[data-theme="dark"] block below). The generated --text-positive
@@ -72,7 +72,7 @@
      light surfaces (8.5:1 AAA). Fill roles (--background/surface/border-positive)
      stay mid-green — text role only. RETIRE once the Figma source emits these
      theme-responsive values and re-syncs. (#913) */
-  --text-positive: var(--color-green-darkest);
+  --text-positive: var(--color-green-950);
 
   /* System color surface variants (used by TaskConsole status rows) */
   --color-system-red-surface:   var(--color-system-red-light);
@@ -107,10 +107,10 @@
   /* ── Semantic Tokens Not Yet in Figma/SD ── */
   --surface-nav: var(--color-grayscale-white);
   --surface-navigation: var(--color-grayscale-white); /* canonical; --surface-nav kept for backward compat */
-  --surface-brand-secondary: var(--color-yellow-light);
+  --surface-brand-secondary: var(--color-yellow-500);
   --background-brand-secondary: var(--color-grayscale-white);
   --background-image: #17171799; /* bds-lint-ignore — semi-transparent dark overlay; no primitive equivalent exists yet. Promote to Figma once an opacity token primitive is available. */
-  --background-image-brand: var(--color-poppy-light);
+  --background-image-brand: var(--color-poppy-500);
   --box-shadow-none: 0px;
 
   /* ── Status Semantic Tokens ── (now in figma-tokens.css via Style Dictionary) */
@@ -172,7 +172,7 @@
   --background-presence-online:  var(--color-system-green);
   --background-presence-away:    var(--color-system-yellow);
   --background-presence-busy:    var(--color-system-red);
-  --background-presence-offline: var(--color-grayscale-light);
+  --background-presence-offline: var(--color-grayscale-500);
 
   /* ── Shadow Semantic Tokens ──
      Composed box-shadow values for consistent elevation.
@@ -200,7 +200,7 @@
   --background-overlay: rgba(0, 0, 0, 0.4);
 
   /* ── Tooltip component tokens ── */
-  --tooltip-background: var(--color-grayscale-darkest);
+  --tooltip-background: var(--color-grayscale-950);
   --tooltip-text: var(--text-inverse);
 
   /* ── Layout width tokens ──
@@ -270,7 +270,7 @@
 
   /* ── Disabled pair — light-mode correction (#1571)
      The Figma source emits --text-disabled, --background-disabled AND
-     --border-disabled as the same --color-grayscale-light (#828282), so a
+     --border-disabled as the same --color-grayscale-500 (#828282), so a
      disabled Button painted its label in its own background colour: measured
      1.00:1 on `components-button--disabled`, a solid grey blob with no visible
      text. WCAG 1.4.3 exempts inactive components, so this is a legibility
@@ -282,8 +282,8 @@
      which owns the dark values at a higher specificity than this block.
 
      RETIRE both lines once the Figma variables are corrected and re-synced. */
-  --background-disabled: var(--color-grayscale-lighter);
-  --text-disabled: var(--color-grayscale-dark);
+  --background-disabled: var(--color-grayscale-300);
+  --text-disabled: var(--color-grayscale-700);
 
   /* ── Motion semantic aliases ──
      Semantic duration + easing tokens consumed by all BDS component CSS.
@@ -314,7 +314,7 @@
      --background-primary-hover dark step so --text-primary clears AA on it.
      No dark value previously existed → light #e0e0e0 fill + light #f2f2f2 text
      = ~1.1:1, invisible. (#916) */
-  --background-tertiary: var(--color-grayscale-darkest);
+  --background-tertiary: var(--color-grayscale-950);
 
   /* Dark value for the --text-positive gap-fill (light value above, in :root).
      On --surface-primary = black in dark mode, mid-green --color-system-green
@@ -328,13 +328,13 @@
   /* Dark values for the disabled pair (light values above, in :root). The
      generated dark layer repeats the light-mode defect — figma-tokens-dark.css
      emits BOTH --text-disabled and --background-disabled as
-     --color-grayscale-dark, so a consumer running data-theme="dark" WITHOUT
+     --color-grayscale-700, so a consumer running data-theme="dark" WITHOUT
      .theme-brand-brik gets the same 1:1 invisible label. theme-brand-brik.css
      corrects the branded dark case at a higher specificity; this block covers
      the bare one, landing on the same pair (3.29:1).
 
      RETIRE both lines once the Figma variables are corrected and re-synced.
      (#1571) */
-  --background-disabled: var(--color-grayscale-darker);
-  --text-disabled: var(--color-grayscale-light);
+  --background-disabled: var(--color-grayscale-800);
+  --text-disabled: var(--color-grayscale-500);
 }
