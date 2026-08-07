@@ -41,6 +41,37 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # MEASUREMENT SCAFFOLD (#1732) — TEMPORARY, reverted before merge.
+      #
+      # `Pagination :: With Result Count` reports 1043 px at threshold 0.05 and
+      # 0 at 0.1 on a clean tree (run 31137880167). Either text antialiasing
+      # below the perceptual floor, or a stale baseline like the one #1696
+      # found on `TextLink :: In Paragraph` — and until it is attributed, no
+      # one can argue for going below 0.1.
+      #
+      # Re-runs the clean tree at 0.05 with allowedMismatchedPixels: 0, which
+      # forces the comparator to FAIL the story and therefore to write both the
+      # diff PNG and the actual screenshot. Those two artifacts are the
+      # discriminator: scattered pixels along glyph edges = antialiasing, a
+      # coherent region = a real change. The actual PNG also lets the count be
+      # re-derived at any threshold offline, against the committed baseline,
+      # without burning another container run.
+      - name: Measure — threshold 0.05, floor 0, clean tree
+        continue-on-error: true
+        run: VISUAL_GATE=1 VISUAL_THRESHOLD=0.05 VISUAL_FLOOR_PIXELS=0 npx vitest run --project storybook --reporter=default --reporter=json --outputFile=/tmp/measure-t005-clean.json
+
+      - name: Upload measurements
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pagination-attribution
+          path: |
+            /tmp/measure-t005-clean.json
+            tests/visual/__diffs__/
+            **/.vitest-attachments/
+          if-no-files-found: error
+          retention-days: 7
+
       # MEASUREMENT SCAFFOLD (#1729) — TEMPORARY, reverted before merge.
       #
       # #662 AC 5 — show a historical regression failing the gate. The W2
@@ -100,7 +131,7 @@ jobs:
           git checkout HEAD -- tokens/theme-brand-brik.css
           git diff --exit-code -- tokens/theme-brand-brik.css
 
-      - name: Upload measurements
+      - name: Upload token-value repro measurements
         if: always()
         uses: actions/upload-artifact@v4
         with:
