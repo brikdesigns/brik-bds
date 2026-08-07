@@ -123,6 +123,80 @@ describe('lint-disabled-fade', () => {
     expect(code).toBe(0);
   });
 
+  // ── RULE C: the pt-1 fill boundary (#1701) ──
+  // The regression these guard is the one the gate shipped blind to: Chip and
+  // Tag printed `✓` while being the only open violation of pt-1, because the
+  // gate only ever asked which token the fade read.
+
+  it('fails a fader that paints its own fill at the root', () => {
+    const { code, out } = run(
+      tree({
+        Chip: `.bds-chip--secondary {\n  background-color: var(--background-secondary);\n}\n` + FADE.replace(/thing/g, 'chip'),
+      }),
+    );
+    expect(code).toBe(1);
+    const v = JSON.parse(out).violations;
+    expect(v).toHaveLength(1);
+    expect(v[0].rule).toBe('fill-bearing-fader');
+    expect(v[0].component).toBe('Chip');
+  });
+
+  it('passes once that component moves to the swap', () => {
+    const { code } = run(
+      tree({
+        Chip:
+          `.bds-chip--secondary {\n  background-color: var(--background-secondary);\n}\n` +
+          `.bds-chip--disabled {\n  background-color: var(--background-disabled);\n  color: var(--text-disabled);\n}\n`,
+      }),
+    );
+    expect(code).toBe(0);
+  });
+
+  it('passes a fader whose fill is a surface token', () => {
+    // ADR-028 pt-2 in prose: an input materialises the surface it sits on.
+    // Gating these would flag 13 components the ADR explicitly covers.
+    const { code, out } = run(
+      tree({
+        TextInput: `.bds-text-input {\n  background-color: var(--background-input);\n}\n` + FADE.replace(/thing/g, 'text-input'),
+      }),
+    );
+    expect(code).toBe(0);
+    expect(JSON.parse(out).ruleCCandidates.map((c) => c.component)).toEqual(['TextInput']);
+  });
+
+  it('passes when the fill and the disabled state are different elements', () => {
+    // SegmentedControl: the track paints, only the item ever goes disabled, and
+    // that item is transparent. Converting it would repaint a track nothing
+    // disables — the false positive that element matching exists to kill.
+    const { code, out } = run(
+      tree({
+        SegmentedControl:
+          `.bds-segmented-control {\n  background-color: var(--background-secondary);\n}\n` +
+          `.bds-segmented-control-item {\n  background-color: transparent;\n}\n` +
+          `.bds-segmented-control-item:disabled {\n  opacity: var(--state-disabled-opacity);\n}\n`,
+      }),
+    );
+    expect(code).toBe(0);
+    expect(JSON.parse(out).ruleCCandidates).toEqual([]);
+  });
+
+  it('passes when the fill and the fade are different variants', () => {
+    // Tag after #1701: `--subtle` is an outline and fades, `--solid` paints and
+    // swaps. Both are `.bds-tag`, so element matching alone reports the swapped
+    // variant as a violation of the faded one.
+    const { code, out } = run(
+      tree({
+        Tag:
+          `.bds-tag--solid {\n  background-color: var(--background-secondary);\n}\n` +
+          `.bds-tag--solid.bds-tag--disabled {\n  background-color: var(--background-disabled);\n  color: var(--text-disabled);\n}\n` +
+          `.bds-tag--subtle {\n  background-color: transparent;\n}\n` +
+          `.bds-tag--subtle.bds-tag--disabled {\n  opacity: var(--state-disabled-opacity);\n}\n`,
+      }),
+    );
+    expect(code).toBe(0);
+    expect(JSON.parse(out).ruleCCandidates).toEqual([]);
+  });
+
   it('honours a reasoned bds-lint-ignore but not a bare one', () => {
     const reasoned = run(
       tree({

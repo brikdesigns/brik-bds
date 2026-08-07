@@ -83,6 +83,40 @@ const SWAP_TOKENS = [
   '--border-disabled',
 ];
 
+/**
+ * A `background` value that paints nothing. `currentColor` is deliberately NOT
+ * here: it resolves to the label colour and is a fill.
+ */
+const NO_FILL = /^(transparent|none|inherit|initial|unset|revert|revert-layer)$/i;
+
+/**
+ * Backdrop tokens — a control painting one of these is materialising the
+ * surface it sits on, not painting a fill of its own, so it stays on the fade.
+ * ADR-028 pt-2 already says this in prose ("the page or an ancestor surface
+ * shows through — inputs, checkboxes, radios, switches"); a `TextInput` reading
+ * `--background-input` IS that sentence expressed as a token.
+ *
+ * Ratified in ADR-028 § Amendment 2026-08-07. This list is the ADR's, not the
+ * gate's — extend it there first. Without it RULE C reports 13 components that
+ * pt-2 explicitly covers, which is how a gate ends up fitted around the tree
+ * instead of the rule.
+ */
+const SURFACE_TOKENS = [
+  '--background-primary',
+  '--background-input',
+  '--text-input-bg',
+];
+const isSurfaceFill = (value) =>
+  SURFACE_TOKENS.some((t) => value.includes(`var(${t})`)) || /var\(--surface-/.test(value);
+
+/**
+ * Selector tokens that make a rule a *state* fill rather than a resting one.
+ * ADR-028's property is the fill the control paints at rest — a hover overlay
+ * or a checked-only fill is not what composites under the fade.
+ */
+const STATE_SELECTOR =
+  /:hover|:active|:focus|:checked|:target|\[aria-(selected|checked|expanded|current)|\[data-state|--(selected|active|checked|current|open|pressed|dragging)\b/;
+
 /** `.css` files under the scan root, one component per directory. */
 function cssFiles(root) {
   const out = [];
@@ -132,6 +166,111 @@ function disabledRules(css) {
     });
   }
   return rules;
+}
+
+/**
+ * The BEM base element(s) a selector's rightmost compound targets, with
+ * `--modifier` suffixes and pseudos stripped: `.bds-tag--solid.bds-tag--disabled`
+ * → `bds-tag`, `.bds-segmented-control-item:disabled` → `bds-segmented-control-item`.
+ *
+ * pt-1 asks whether the control paints ITS OWN fill, which means the fill and
+ * the disabled state have to land on the same element. SegmentedControl is why:
+ * its track paints `--background-secondary` but only the ITEM ever goes
+ * disabled, and that item is transparent. Matching on the file alone called it
+ * a violation; it is a correctly-faded fill-less control sitting on a filled
+ * parent, and converting it would have repainted a track nothing disabled.
+ */
+function baseElements(selector) {
+  const compound = selector.trim().split(/\s*[>+~]\s*|\s+/).pop() ?? '';
+  const classes = compound.match(/\.[A-Za-z0-9_-]+/g) ?? [];
+  return new Set(classes.map((c) => c.slice(1).split('--')[0]));
+}
+
+/**
+ * The `--modifier` names a selector's rightmost compound carries, minus the
+ * disabled state itself. Two rules that each name a modifier, and share none,
+ * are talking about different variants of the same element.
+ *
+ * Tag is why: after #1701 its `--subtle` variant fades (transparent, an outline)
+ * while `--solid` and `--muted` swap. All three are `.bds-tag`, so element
+ * matching alone reports the swapped variants as violations of the faded one.
+ * An empty set means the rule is variant-agnostic and applies to all of them.
+ */
+function variantModifiers(selector) {
+  const compound = selector.trim().split(/\s*[>+~]\s*|\s+/).pop() ?? '';
+  const classes = compound.match(/\.[A-Za-z0-9_-]+/g) ?? [];
+  return new Set(
+    classes
+      .map((c) => c.slice(1).split('--')[1])
+      .filter((mod) => mod && mod !== 'disabled'),
+  );
+}
+
+/** Do a fill rule and a fade rule describe the same variant? */
+function sameVariant(fillSel, fadeSel) {
+  const a = variantModifiers(fillSel);
+  const b = variantModifiers(fadeSel);
+  if (a.size === 0 || b.size === 0) return true;
+  return [...a].some((mod) => b.has(mod));
+}
+
+/**
+ * Every rule in a file that paints a background, split by whether the fill is
+ * resting or state-only. This is the pt-1 predicate — "does the control paint
+ * its own fill" — which nothing in the repo measured: ADR-028's 26/3 inventory
+ * came from scanning for disabled-scoped `opacity` rules, so it partitioned by
+ * the mechanism components already had rather than by the property the decision
+ * rule names (#1701).
+ *
+ * Disabled-scoped rules are skipped: a `--background-disabled` repaint IS the
+ * swap, and counting it as evidence of a fill would make every swapped
+ * component its own violation.
+ *
+ * Longhand only where it matters — `background: <color>` and `background-color`
+ * both count, but a `background-image` / gradient is left out. It paints, but it
+ * is not a flat fill the contrast measurement can score, so folding it in here
+ * would put components into the cohort that `measure-disabled-contrast.mjs`
+ * cannot then evaluate.
+ */
+function fillRules(css) {
+  const rest = [];
+  const state = [];
+  const re = /([^{}]+)\{([^{}]*)\}/g;
+  let m;
+  while ((m = re.exec(css)) !== null) {
+    const selector = m[1].replace(/\/\*[\s\S]*?\*\//g, '').trim();
+    if (!selector || selector.startsWith('@')) continue;
+    if (isDisabledScoped(selector)) continue;
+
+    for (const decl of m[2].split(';').map((d) => d.trim()).filter(Boolean)) {
+      const bg = /^background(-color)?\s*:\s*(.+)$/i.exec(
+        decl.replace(/\/\*[\s\S]*?\*\//g, '').trim(),
+      );
+      if (!bg) continue;
+      const value = bg[2].trim();
+      if (NO_FILL.test(value)) continue;
+      // `var(--x, transparent)` paints nothing until the var lands; treat the
+      // fallback as the value, the same way `classify` treats an opacity one.
+      const fallback = /^var\([^,]+,\s*(.+)\)$/.exec(value);
+      if (fallback && NO_FILL.test(fallback[1].trim())) continue;
+
+      const flat = selector.split('\n').map((s) => s.trim()).filter(Boolean).join(' ');
+      // Root vs sub-part, read off the BEM selector: a fill on `__element` or a
+      // pseudo-element is a part of the control, not the control's own fill.
+      // Mechanical, so the report stays an observation — which token counts as a
+      // "fill" rather than a surface is ADR-028's call to make, not this gate's.
+      const last = flat.split(/\s+/).pop();
+      const hit = {
+        selector: flat,
+        value,
+        scope: last.includes('__') || last.includes('::') ? 'sub-part' : 'root',
+        elements: baseElements(flat),
+        line: lineOf(css, m.index + m[1].length),
+      };
+      (STATE_SELECTOR.test(selector) ? state : rest).push(hit);
+    }
+  }
+  return { rest, state };
 }
 
 /**
@@ -193,9 +332,11 @@ const violations = [];
 for (const { component, path } of files) {
   const css = readFileSync(path, 'utf8');
   const rel = relative(ROOT, path);
+  const fills = fillRules(css);
   for (const rule of disabledRules(css)) {
     const verdict = classify(rule.body);
-    const entry = inventory.get(component) ?? { mechanisms: new Set(), rules: [] };
+    const entry = inventory.get(component) ?? { mechanisms: new Set(), rules: [], fills };
+    entry.fills = fills;
     entry.rules.push({ ...rule, ...verdict, file: rel });
     if (verdict.kind === 'fade') entry.mechanisms.add('fade');
     if (verdict.kind === 'swap') entry.mechanisms.add('swap');
@@ -256,6 +397,65 @@ const swapCohort = [...inventory]
   .sort();
 const fadeRules = [...inventory].flatMap(([, e]) => e.rules.filter((r) => r.kind === 'fade'));
 
+// RULE C — a fading component that paints its OWN resting fill, on the SAME
+// element and variant that fades, is on the wrong mechanism (ADR-028 pt-1).
+//
+// Enforced only for a fill at the component root painting a non-surface token;
+// that is the boundary ADR-028 § Amendment 2026-08-07 ratifies, and the set
+// #1701 converted (Chip, Tag solid/muted). Two narrower populations stay
+// report-only because the ADR has not ruled on them — see #1742:
+//   - sub-part fills (Pagination's arrow, Slider's track) — a fill inside a
+//     faded subtree, where nothing has measured whether the parent's single
+//     opacity is the same defect or an acceptable composition
+//   - surface-token fills, which pt-2 covers in prose
+// Reporting them while gating only the ratified half is deliberate: silently
+// dropping them would read as "covered", and gating them would be this gate
+// inventing a boundary the ADR never set.
+const ruleCCandidates = [...inventory]
+  .map(([component, e]) => {
+    if (!e.mechanisms.has('fade')) return null;
+    // The elements that actually fade, so a fill only counts when it lands on
+    // one of them (see baseElements).
+    const fadeRulesHere = e.rules.filter((r) => r.kind === 'fade');
+    const own = (e.fills?.rest ?? []).filter((f) =>
+      fadeRulesHere.some(
+        (r) =>
+          [...baseElements(r.selector)].some((el) => f.elements.has(el)) &&
+          sameVariant(f.selector, r.selector),
+      ),
+    );
+    return own.length ? [component, { ...e, ownFills: own }] : null;
+  })
+  .filter(Boolean)
+  .sort();
+
+// The enforced subset. Everything else in ruleCCandidates is reported, not gated.
+for (const [component, entry] of ruleCCandidates) {
+  for (const f of entry.ownFills) {
+    if (f.scope !== 'root' || isSurfaceFill(f.value)) continue;
+    const fade = entry.rules.find((r) => r.kind === 'fade');
+    violations.push({
+      rule: 'fill-bearing-fader',
+      component,
+      file: fade.file,
+      line: f.line,
+      selector: f.selector,
+      detail:
+        `paints ${f.value} at its root, then fades at ${fade.file}:${fade.line} — ` +
+        `ADR-028 pt-1 puts a control that paints its own fill on the ` +
+        `${SWAP_TOKENS.join(' / ')} trio, because opacity moves the label and the ` +
+        'fill toward the same backdrop',
+      bareIgnore: false,
+    });
+  }
+}
+// A fading component whose only fill is state-scoped is pt-2-correct today, but
+// it is the population that flips if #1701 widens the predicate — so it is
+// listed separately rather than silently dropped.
+const stateOnlyFills = [...inventory]
+  .filter(([, e]) => e.mechanisms.has('fade') && !e.fills?.rest.length && e.fills?.state.length)
+  .sort();
+
 if (jsonMode) {
   console.log(
     JSON.stringify(
@@ -263,6 +463,16 @@ if (jsonMode) {
         fadeCohort,
         swapCohort,
         fadeRuleCount: fadeRules.length,
+        ruleCCandidates: ruleCCandidates.map(([component, e]) => ({
+          component,
+          restFills: e.ownFills.map((f) => ({
+            selector: f.selector,
+            value: f.value,
+            scope: f.scope,
+            line: f.line,
+          })),
+        })),
+        stateOnlyFills: stateOnlyFills.map(([component]) => component),
         violations,
       },
       null,
@@ -286,6 +496,27 @@ if (reportMode) {
     const rules = inventory.get(component).rules.filter((r) => r.kind === 'swap');
     console.log(`   ${GREEN}✓${NC} ${component} ${DIM}${rules.map((r) => `${r.file}:${r.line}`).join(', ')}${NC}`);
   }
+
+  console.log(
+    `\n  ── RULE C candidates: fading, but paint a RESTING fill ── ${DIM}${ruleCCandidates.length} component(s)${NC}`,
+  );
+  console.log(
+    `  ${DIM}ADR-028 pt-1 says these belong on the token swap. Report-only pending #1701.${NC}`,
+  );
+  for (const [component, entry] of ruleCCandidates) {
+    const fade = entry.rules.find((r) => r.kind === 'fade');
+    console.log(`   ${YELLOW}▸${NC} ${component} ${DIM}fades at ${fade.file}:${fade.line}${NC}`);
+    for (const f of entry.ownFills) {
+      console.log(
+        `       ${DIM}${f.line}:${NC} [${f.scope}] ${f.selector} ${DIM}→${NC} ${f.value}`,
+      );
+    }
+  }
+
+  console.log(
+    `\n  ── fading, state-only fill (pt-2-correct today) ── ${DIM}${stateOnlyFills.length} component(s)${NC}`,
+  );
+  console.log(`   ${DIM}${stateOnlyFills.map(([c]) => c).join(', ') || '(none)'}${NC}`);
   console.log('');
 }
 
