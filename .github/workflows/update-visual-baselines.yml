@@ -39,6 +39,14 @@ on:
         description: 'Wipe baselines first, pruning references for deleted/renamed stories. Rewrites every file — only needed after a story is removed or renamed.'
         type: boolean
         default: false
+      threshold:
+        description: 'Comparator threshold for this dispatch. Leave blank for the shipped 0.1. Lower it (e.g. 0.05) when the change is below what the gate can see — otherwise the regen writes nothing (#1732).'
+        type: string
+        default: ''
+      floor:
+        description: 'allowedMismatchedPixels for this dispatch. Leave blank for the shipped 10. Set 0 when the change is smaller than the noise margin (#1732).'
+        type: string
+        default: ''
 
 # The baseline commit is pushed with a brik-ci-bot App installation token, NOT
 # the default GITHUB_TOKEN — see the mint step below for why. GITHUB_TOKEN itself
@@ -105,7 +113,17 @@ jobs:
         if: ${{ inputs.prune }}
         run: rm -rf tests/visual/__screenshots__
 
+      # `--update` rewrites a reference only when the comparator FAILS it, so
+      # the regen is exactly as sensitive as the gate — and a change below the
+      # gate's bar cannot be recorded at all. Two references rotted for three
+      # months that way (#1732: Pagination 1043 px and Stepper 7 px, both from
+      # #1695's disabled-fade change, both scored as passing at the then
+      # shipped threshold 0.2). Lowering threshold / floor for one dispatch is
+      # the only way out; blank leaves the shipped values untouched.
       - name: Regenerate baselines
+        env:
+          VISUAL_THRESHOLD: ${{ inputs.threshold }}
+          VISUAL_FLOOR_PIXELS: ${{ inputs.floor }}
         run: VISUAL_GATE=1 npx vitest run --project storybook --update
 
       - name: Commit and push baselines
