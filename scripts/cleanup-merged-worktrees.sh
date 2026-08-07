@@ -7,7 +7,12 @@
 #      their local branch and (unless --no-remote-sweep) their origin ref.
 #   2. Orphan-remote sweep — origin/task/* refs with no local worktree whose
 #      PR is MERGED/CLOSED also get deleted (skipped under --no-remote-sweep).
-#   3. Board-claim sweep — delete finished `--no-issue` claims from the ticketless
+#   3. Orphan-local sweep — local task/* branches with NO worktree and NO origin
+#      ref whose PR is MERGED/CLOSED. Phases 1-2 cannot see these: phase 1 walks
+#      worktrees, phase 2 walks origin refs, and a squash-merged branch whose
+#      remote was deleted has neither. Eight accumulated on brik-mini in two days
+#      before this existed, each needing a manual `git branch -D`.
+#   4. Board-claim sweep — delete finished `--no-issue` claims from the ticketless
 #      claim board (skipped under --no-board-sweep). Runs independently of phases
 #      1-2 on purpose: a claim outlives its worktree, so keying the sweep on a
 #      present worktree would never clean the ones that actually accumulate.
@@ -25,7 +30,8 @@
 #   ./scripts/cleanup-merged-worktrees.sh --dry-run        # show plan only
 #   ./scripts/cleanup-merged-worktrees.sh --keep foo       # spare a specific worktree
 #   ./scripts/cleanup-merged-worktrees.sh --no-remote-sweep  # skip phase 2 + remote deletes
-#   ./scripts/cleanup-merged-worktrees.sh --no-board-sweep   # skip phase 3 (board claims)
+#   ./scripts/cleanup-merged-worktrees.sh --no-branch-sweep  # skip phase 3 (local branches)
+#   ./scripts/cleanup-merged-worktrees.sh --no-board-sweep   # skip phase 4 (board claims)
 
 set -euo pipefail
 
@@ -40,6 +46,7 @@ ASSUME_YES=0
 KEEP_LIST=()
 REMOTE_SWEEP=1
 BOARD_SWEEP=1
+BRANCH_SWEEP=1
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -48,6 +55,7 @@ while [[ $# -gt 0 ]]; do
     --keep)            KEEP_LIST+=("$2"); shift 2 ;;
     --no-remote-sweep) REMOTE_SWEEP=0; shift ;;
     --no-board-sweep)  BOARD_SWEEP=0; shift ;;
+    --no-branch-sweep) BRANCH_SWEEP=0; shift ;;
     -h|--help)         sed -n '2,30p' "$0"; exit 0 ;;
     *)                 echo -e "${RED}Unknown flag: $1${NC}"; exit 1 ;;
   esac
@@ -191,6 +199,48 @@ if [ "$REMOTE_SWEEP" = "1" ]; then
   done < <(git for-each-ref 'refs/remotes/origin/task/*' --format='%(refname:lstrip=3)')
 fi
 
+# Phase 3 — orphan-local sweep: local task/* branches with no worktree and no
+# origin ref. Invisible to phases 1-2 by construction, because phase 1 walks
+# worktrees and phase 2 walks origin refs, and a squash-merged branch whose
+# remote was deleted on merge has neither.
+#
+# The guard is the PR state, NOT a commit count. `git rev-list main..task/x`
+# reports 5-6 commits for a branch whose PR merged cleanly, because a squash
+# merge rewrites them and the originals are never ancestors of main — so
+# "unmerged commits" and "lost work" look identical here, and only the PR can
+# tell them apart. Same reason `git branch --merged main` lists nothing useful
+# in this repo.
+TO_REMOVE_LOCAL_BRANCHES=()  # entries: branch|||reason
+if [ "$BRANCH_SWEEP" = "1" ]; then
+  while IFS= read -r local_branch; do
+    [ -z "$local_branch" ] && continue
+
+    # Skip anything a worktree still holds (phase 1 owns those).
+    seen=0
+    if [ ${#SEEN_BRANCHES[@]} -gt 0 ]; then
+      for sb in "${SEEN_BRANCHES[@]}"; do
+        if [ "$sb" = "$local_branch" ]; then seen=1; break; fi
+      done
+    fi
+    [ "$seen" = "1" ] && continue
+
+    # Still on origin → phase 2's territory; let it decide and delete both.
+    git show-ref --verify --quiet "refs/remotes/origin/$local_branch" && continue
+
+    pr_json="$(gh pr list --repo "$REPO_SLUG" --state all --head "$local_branch" --limit 1 --json number,state 2>/dev/null || echo '[]')"
+    pr_state="$(echo "$pr_json" | jq -r '.[0].state // empty')"
+    pr_number="$(echo "$pr_json" | jq -r '.[0].number // empty')"
+
+    case "$pr_state" in
+      MERGED) TO_REMOVE_LOCAL_BRANCHES+=("$local_branch|||PR #${pr_number} MERGED") ;;
+      CLOSED) TO_REMOVE_LOCAL_BRANCHES+=("$local_branch|||PR #${pr_number} CLOSED (rejected)") ;;
+      # OPEN → active. "" → never had a PR, so it may be the only copy of that
+      # work; both are left alone for manual review.
+    esac
+  done < <(git for-each-ref 'refs/heads/task/*' --format='%(refname:lstrip=2)')
+fi
+
+
 # Phase 3 — board-claim sweep. `--no-issue` writes a slug-keyed claim comment to
 # the ticketless claim board (brik-bds#1663) so a second session is refused. The
 # claim is rewritten in place per slug but nothing ever removed it when the work
@@ -262,7 +312,7 @@ if [ ${#SPARED[@]} -gt 0 ]; then
 fi
 
 if [ ${#TO_REMOVE[@]} -eq 0 ] && [ ${#TO_REMOVE_ORPHAN_REMOTE[@]} -eq 0 ] \
-   && [ ${#TO_REMOVE_CLAIMS[@]} -eq 0 ]; then
+   && [ ${#TO_REMOVE_CLAIMS[@]} -eq 0 ] && [ ${#TO_REMOVE_LOCAL_BRANCHES[@]} -eq 0 ]; then
   echo -e "${GREEN}Nothing to remove.${NC}"
   exit 0
 fi
@@ -285,6 +335,15 @@ if [ ${#TO_REMOVE_ORPHAN_REMOTE[@]} -gt 0 ]; then
   for entry in "${TO_REMOVE_ORPHAN_REMOTE[@]}"; do
     branch_name="${entry%%|||*}"; reason="${entry#*|||}"
     printf "  - origin/%s\n      reason: %s\n" "$branch_name" "$reason"
+  done
+  echo ""
+fi
+
+if [ ${#TO_REMOVE_LOCAL_BRANCHES[@]} -gt 0 ]; then
+  echo -e "${RED}Will delete orphan local branches (${#TO_REMOVE_LOCAL_BRANCHES[@]}):${NC}"
+  for entry in "${TO_REMOVE_LOCAL_BRANCHES[@]}"; do
+    branch_name="${entry%%|||*}"; reason="${entry#*|||}"
+    printf "  - %s\n      reason: %s\n" "$branch_name" "$reason"
   done
   echo ""
 fi
@@ -351,6 +410,20 @@ if [ ${#REMOTE_DELETE_BATCH[@]} -gt 0 ]; then
     push_args+=("--delete" "$br")
   done
   git push "${push_args[@]}" 2>&1 | sed 's/^/    /' || true
+fi
+
+if [ ${#TO_REMOVE_LOCAL_BRANCHES[@]} -gt 0 ]; then
+  echo -e "${YELLOW}~ Deleting ${#TO_REMOVE_LOCAL_BRANCHES[@]} orphan local branch(es)...${NC}"
+  for entry in "${TO_REMOVE_LOCAL_BRANCHES[@]}"; do
+    branch_name="${entry%%|||*}"
+    # -D not -d: a squash-merged branch is never an ancestor of main, so -d
+    # refuses every one of them. The PR state above is what authorised this.
+    if git branch -D "$branch_name" >/dev/null 2>&1; then
+      echo "    removed branch: $branch_name"
+    else
+      echo -e "    ${YELLOW}could not remove branch: $branch_name (left in place)${NC}"
+    fi
+  done
 fi
 
 if [ ${#TO_REMOVE_CLAIMS[@]} -gt 0 ]; then
