@@ -44,9 +44,14 @@ identical across two runner machines and four suite invocations. The 405th was
 the stale TextLink baseline above — a real diff, not noise.
 
 So the ratio was removed rather than lowered, and `allowedMismatchedPixels: 10`
-is a **noise margin, not a tolerance**: measured noise is 0, the smallest real
-regression measured was 12 px, and 10 leaves room for a stray pixel or two from
-a future font/GPU shift without giving up any change we have evidence for.
+is a **noise margin, not a tolerance**: measured noise is 0, and 10 leaves room
+for a stray pixel or two from a future font/GPU shift.
+
+It is not free. The smallest real regression measured in this repo is now
+**7 px** — `Stepper :: Quantity Selector` under #1695, found in #1732 — which
+is under the floor and therefore invisible to the gate *and* to the baseline
+regen. The margin is still the right trade against a font/GPU shift flagging
+hundreds of stories at once, but it is a trade, not a free win.
 
 If a story ever does flake, do not raise this number — that trades the gate's
 whole purpose for one story's convenience. Tag the story `no-visual`, or add a
@@ -83,22 +88,61 @@ BDS was in that gap: disabled states, skeletons, dividers, grey borders.
 Candidates were swept in the pinned container at `allowedMismatchedPixels: 0`,
 clean and with the repro ([run 31137880167](https://github.com/brikdesigns/brik-bds/actions/runs/31137880167)):
 
-| threshold | maxDelta | Clean tree | Badge Default / Neutral under the repro |
+| threshold | maxDelta | Clean tree, as measured then | Badge Default / Neutral under the repro |
 | --- | --- | --- | --- |
 | 0.2 | 1408.6 | 0 nonzero | passed silently / passed silently |
-| **0.1** | **352.2** | **1 nonzero — Stepper "Quantity Selector", 7 px** | **41 px / 44 px → both fail** |
-| 0.05 | 88.0 | 2 nonzero — Stepper 7 px, **Pagination "With Result Count" 1043 px** | 41 px / 44 px |
+| **0.1** | **352.2** | 1 nonzero — Stepper "Quantity Selector", 7 px | **41 px / 44 px → both fail** |
+| 0.05 | 88.0 | 2 nonzero — Stepper 7 px, Pagination "With Result Count" 1043 px | 41 px / 44 px |
 
 `0.1` is pixelmatch's own default. It closes the blind spot and costs nothing:
-its single clean-tree count is 7 px, under the 10 px floor, so the full suite
-still passes. That 7 px is also the first evidence the floor's margin is
-load-bearing rather than decorative.
+its one clean-tree count was 7 px, under the 10 px floor, so the full suite
+still passed. `0.05` buys no extra sensitivity on the thing being fixed.
 
-`0.05` buys no extra sensitivity on the thing being fixed and costs a real
-false positive. The Pagination story's 1043 px at that threshold is
-**uninvestigated** — it could be text antialiasing across a large block, or
-another stale baseline like the TextLink one #1696 found. Settle that before
-anyone proposes going below 0.1.
+**Neither nonzero count was noise.** Both were stale baselines — see below.
+After #1732 regenerated them, the clean tree measures **0 mismatched pixels on
+all 405 stories at 0.05**
+([run 31186002918](https://github.com/brikdesigns/brik-bds/actions/runs/31186002918)).
+0.05 is therefore viable on the evidence, and 0.1 is kept only because it is
+already sufficient — it catches everything 0.05 does on every regression
+measured so far.
+
+### The 0.05 "false positives" were stale baselines (#1732)
+
+`Pagination :: With Result Count` was the reason the row above said "settle
+this before going below 0.1". It is settled, and the answer was not
+antialiasing.
+
+All **1043** counted pixels carry **one identical** reference→actual pair,
+`rgb(243,185,173) → rgb(240,168,153)`, filling a coherent 37×38 disc — the
+disabled "previous page" arrow. Antialiasing cannot produce that; it scatters
+across many intermediate values along an edge. (pixelmatch's own AA detection
+excluded the 39 genuinely-antialiased rim pixels, which is why the solid-fill
+count and the reported count are the same number.)
+
+Solving the composite over white gives **alpha 0.400 in the baseline and 0.500
+in the render** — `--state-disabled-opacity` 0.4 → 0.5 in
+[`64641309`](https://github.com/brikdesigns/brik-bds/commit/64641309) (#1695),
+which also moved `.bds-pagination__arrow--disabled` off its `opacity: 0.4`
+literal onto the token. `Stepper :: Quantity Selector` is the same commit's
+other half: #1695 retired the `--text-muted` swap under the fade on that
+button, and its 9×2 disabled minus glyph is the 7 px.
+
+**#1695 ran the baseline regen and it wrote neither file.** At the
+then-shipped `threshold: 0.2` the comparator scored both as passing — the
+pixels differ by a YIQ delta of 89–114 against a bar of 1408.6 — and
+`--update` only rewrites a reference it fails. This is the third instance of
+that mechanism, after `TextLink :: In Paragraph` in #1696.
+
+Two things follow, and they are the reason this section exists:
+
+- **A regen run is only as sensitive as the comparator it runs under.** Both
+  files were regenerated by dispatching **Update Visual Baselines** with
+  `VISUAL_THRESHOLD=0.05`, and Stepper needed `VISUAL_FLOOR_PIXELS=0` on top
+  because 7 px sits under the noise margin. If a PR changes something the gate
+  cannot see, the regen cannot see it either, and the reference silently rots.
+- **Zero mismatched pixels means "nothing above the bar", not "nothing
+  changed".** That is exactly what a green run on those two stories meant for
+  three months.
 
 ## Captured matrix (day-one scope, ADR-026)
 
@@ -187,6 +231,14 @@ The commit contains only the baselines that actually changed. `vitest --update`
 rewrites a reference **only when the comparator fails** against the committed
 one, so a story that still matches is left untouched — and a branch with no
 visual change produces no commit at all (the job summary says so).
+
+That coupling cuts both ways: **a change the gate cannot see, the regen cannot
+record.** Two references rotted for three months that way (#1732 — see
+[The 0.05 "false positives"](#the-005-false-positives-were-stale-baselines-1732)).
+If a PR moves something below the comparator's bar — a fade, an opacity token,
+any low-contrast value — dispatch this workflow with `VISUAL_THRESHOLD` lowered
+(and `VISUAL_FLOOR_PIXELS=0` if the change is under 10 px) rather than trusting
+an empty regen commit.
 
 Leave `prune` off unless you deleted or renamed a story. `prune: true` wipes
 `__screenshots__/` first, which drops references for stories that no longer
