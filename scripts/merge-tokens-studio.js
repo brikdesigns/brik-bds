@@ -18,10 +18,19 @@
  *     all sets; Brand Kit doesn't define themes).
  *
  * Usage:
- *   node scripts/merge-tokens-studio.js [--slug=brik] [--dry-run]
+ *   node scripts/merge-tokens-studio.js [--slug=brik] [--dry-run] [--check]
  *
  * The default slug is "brik". Add more Brand Kits by running with a different
  * slug once the corresponding brand-kits/{slug}.json exists.
+ *
+ * --check is the drift gate (brik-bds#1747). tokens-studio.json is GENERATED,
+ * but it is committed and it looks hand-editable, so an edit lands there
+ * instead of in the Library file that owns the token — and survives until the
+ * next regeneration silently deletes it. That is exactly what happened to
+ * `typography/default.font-weight.heading`: #1717 added it here, neither
+ * Library got it, and a rebuild dropped `--font-weight-heading` from every
+ * Style Dictionary output. Nothing failed, because no check compared this
+ * file against its own sources.
  */
 
 const fs = require('fs');
@@ -29,6 +38,7 @@ const path = require('path');
 
 const args = process.argv.slice(2);
 const dryRun = args.includes('--dry-run');
+const check = args.includes('--check');
 const slugArg = args.find((a) => a.startsWith('--slug='));
 const slug = slugArg ? slugArg.split('=')[1] : 'brik';
 
@@ -109,10 +119,28 @@ if (foundations.$themes) {
 console.log(`Merging foundations (${foundationsOrder.length} sets) + brand-kits/${slug} (${brandKitOrder.length} sets)`);
 console.log(`tokenSetOrder (${mergedOrder.length}): ${mergedOrder.join(', ')}`);
 
+const output = JSON.stringify(merged, null, 2) + '\n';
+
 if (dryRun) {
   console.log('\n--dry-run: no files written.');
   process.exit(0);
 }
 
-fs.writeFileSync(OUTPUT_FILE, JSON.stringify(merged, null, 2) + '\n', 'utf8');
+if (check) {
+  const committed = fs.existsSync(OUTPUT_FILE) ? fs.readFileSync(OUTPUT_FILE, 'utf8') : null;
+  if (committed !== output) {
+    console.error(
+      `\n✗ design-tokens/tokens-studio.json does not match a fresh merge of its sources.\n` +
+        `  It is GENERATED — the fix is never to edit it. Put the token in the Library\n` +
+        `  that owns it (design-tokens/foundations.json or design-tokens/brand-kits/${slug}.json),\n` +
+        `  then run: npm run merge:tokens-studio\n` +
+        `  Inspect the drift with: npm run merge:tokens-studio && git diff design-tokens/tokens-studio.json\n`,
+    );
+    process.exit(1);
+  }
+  console.log('\n✓ design-tokens/tokens-studio.json is in sync with its Library sources.');
+  process.exit(0);
+}
+
+fs.writeFileSync(OUTPUT_FILE, output, 'utf8');
 console.log(`\n✅ Wrote ${OUTPUT_FILE}`);

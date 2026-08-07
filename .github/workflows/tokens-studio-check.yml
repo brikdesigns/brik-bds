@@ -1,0 +1,75 @@
+name: Tokens Studio Merge Check
+
+# Ensures design-tokens/tokens-studio.json stays reproducible from its two
+# Library sources — design-tokens/foundations.json and
+# design-tokens/brand-kits/*.json. Fails the build if the committed merge does
+# not match a fresh one.
+#
+# Why this is a CI gate (brik-bds#1747):
+#   - tokens-studio.json is GENERATED but committed, and it reads like a source
+#     file. #1717 added `typography/default.font-weight.heading` directly to it;
+#     neither Library got the token, so the next regeneration deleted
+#     `--font-weight-heading` from every Style Dictionary output. Nothing
+#     failed, because no check compared the file against its own sources.
+#   - The loss only surfaces on `npm run merge:tokens-studio`, which is exactly
+#     what the Figma sync (#1738) and the alias layer (#1739) both do — so the
+#     drift would have shipped inside an unrelated PR's diff.
+#   - Cloud-agent commits bypass local hooks entirely.
+#
+# Source: scripts/merge-tokens-studio.js
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'design-tokens/foundations.json'
+      - 'design-tokens/brand-kits/**/*.json'
+      - 'design-tokens/tokens-studio.json'
+      - 'scripts/merge-tokens-studio.js'
+  push:
+    branches:
+      - main
+    paths:
+      - 'design-tokens/foundations.json'
+      - 'design-tokens/brand-kits/**/*.json'
+      - 'design-tokens/tokens-studio.json'
+      - 'scripts/merge-tokens-studio.js'
+
+concurrency:
+  group: tokens-studio-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tokens-studio-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check tokens-studio.json is reproducible from its Libraries
+        run: npm run merge:tokens-studio:check
+
+      - name: Check the Style Dictionary outputs match that merge
+        # A reproducible merge is not enough on its own: the per-platform files
+        # under build/figma/ are committed too, and they are what consumers and
+        # tokens/figma-tokens.css are copied from. Regenerate and require a
+        # clean tree.
+        run: |
+          npm run build:sd-figma
+          if ! git diff --quiet; then
+            echo "✗ Style Dictionary outputs are stale. Run:"
+            echo "    npm run merge:tokens-studio && npm run build:sd-figma"
+            git --no-pager diff --stat
+            exit 1
+          fi
+          echo "✓ Style Dictionary outputs match the committed sources."
