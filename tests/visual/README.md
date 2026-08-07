@@ -12,11 +12,73 @@ Decision record: [ADR-026](../../docs/adrs/ADR-026-regression-test-home-and-visu
   screenshots `document.body` per story and asserts
   `toMatchScreenshot(storyId)` against `__screenshots__/`.
 - Comparator: `pixelmatch`, `threshold: 0.2`,
-  `allowedMismatchedPixelRatio: 0.001` (set in
-  [`vitest.config.ts`](../../vitest.config.ts)).
+  `allowedMismatchedPixels: 10` (set in
+  [`vitest.config.ts`](../../vitest.config.ts)) — see
+  [Why the floor is absolute](#why-the-floor-is-absolute-not-a-ratio).
 - On failure, diff PNGs land in `__diffs__/` and are uploaded as the
   `visual-diffs` workflow artifact. There is no hosted approve-UI — the fix or
   the new baseline lands as a reviewed commit (ADR-026 accepted tradeoff).
+
+## Why the floor is absolute, not a ratio
+
+The gate shipped with `allowedMismatchedPixelRatio: 0.001`. The effective
+allowance is `min(allowedMismatchedPixels, ratio × area)`, and every story
+canvas is 960×720 — so that ratio let **691 mismatched pixels** through on
+every story, whether the thing under test was a full page or a badge. Two
+regressions were measured slipping under it:
+
+| Change | Pixels moved | Verdict at 691 |
+| --- | --- | --- |
+| `.bds-badge` `border-radius` pill → 8px (synthetic repro, #1696) | 38–155 per Badge story | passed silently |
+| `TextLink :: In Paragraph` gaining a persistent underline (#1712, real) | 241 | passed silently — the baseline was never regenerated, and nobody knew |
+
+**The ratio was never the thing absorbing antialiasing noise — `threshold: 0.2`
+is.** That is applied per pixel, before anything is counted as mismatched.
+Measured with `allowedMismatchedPixels: 0` in the pinned container
+([run 31119311151](https://github.com/brikdesigns/brik-bds/actions/runs/31119311151)):
+**404 of 405 stories report exactly 0 mismatched pixels**, and the counts are
+identical across two runner machines and four suite invocations. The 405th was
+the stale TextLink baseline above — a real diff, not noise.
+
+So the ratio was removed rather than lowered, and `allowedMismatchedPixels: 10`
+is a **noise margin, not a tolerance**: measured noise is 0, the smallest real
+regression measured was 12 px, and 10 leaves room for a stray pixel or two from
+a future font/GPU shift without giving up any change we have evidence for.
+
+If a story ever does flake, do not raise this number — that trades the gate's
+whole purpose for one story's convenience. Tag the story `no-visual`, or add a
+per-story override, and record why here.
+
+### Known remaining blind spot: low-contrast changes
+
+The pixel floor fixes the *denominator*. It does nothing about the *per-pixel*
+gate in front of it, and that has its own blind spot worth knowing before you
+trust a green run.
+
+`threshold: 0.2` means a pixel only counts as mismatched when its YIQ distance
+exceeds `35215 × 0.2² = 1408.6`. A light grey against white does not clear
+that bar. Measured on the badge repro — same CSS change, same story file:
+
+| Badge story | Fill | YIQ delta vs white | Gate |
+| --- | --- | --- | --- |
+| Progress | `rgb(47,128,237)` | 11858 | counted → **failed** |
+| Error | `rgb(235,87,87)` | 10258 | counted → **failed** |
+| Positive | `rgb(39,174,96)` | 10039 | counted → **failed** |
+| Warning | `rgb(242,201,76)` | 3017 | counted → **failed** |
+| Default | `rgb(212,212,212)` | 934 | **ignored — passed silently** |
+| Neutral | `rgb(224,224,224)` | 486 | **ignored — passed silently** |
+
+So the identical shape regression is caught on the saturated badges and
+invisible on the grey ones, at any pixel floor. Lowering `threshold` is the
+lever, and pixelmatch's own default (`0.1` → maxDelta 352) would catch both —
+but it also re-opens the antialiasing question this file spent #1696 closing,
+so it needs the same measurement protocol before it moves. Tracked separately;
+do not tune it blind.
+
+Note this does **not** contradict #1673's "antialiasing is not byte-reproducible
+between container runs". PNG bytes can differ while the mismatched-pixel count
+stays 0, because `threshold: 0.2` scores those sub-threshold differences as
+matching. Byte-level churn is real; comparator-level churn is not.
 
 ## Captured matrix (day-one scope, ADR-026)
 
