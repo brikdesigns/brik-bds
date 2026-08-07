@@ -107,7 +107,10 @@ export default defineConfig({
                     // the repro at 41 and 44 px. 0.05 gains nothing on either
                     // and costs a real false positive (Pagination "With
                     // Result Count", 1043 px).
-                    threshold: 0.1,
+                    // MEASUREMENT SCAFFOLD (#1732) — TEMPORARY, reverted
+                    // before merge. Lets the CI job re-run the suite at the
+                    // 0.05 candidate; defaults to the shipped 0.1.
+                    threshold: Number(process.env.VISUAL_THRESHOLD ?? 0.1),
                     // Hard failure floor, in absolute pixels (#1696). NOT a
                     // ratio: the previous allowedMismatchedPixelRatio: 0.001
                     // was measured against the whole 960×720 canvas, so it
@@ -130,7 +133,13 @@ export default defineConfig({
                     // 0.1 it is finally load-bearing: Stepper "Quantity
                     // Selector" reports 7 px on a clean tree (#1727). The
                     // smallest real regression measured is still 12 px.
-                    allowedMismatchedPixels: 10,
+                    // MEASUREMENT SCAFFOLD (#1732) — TEMPORARY. 0 makes every
+                    // story report its exact count instead of passing, and
+                    // makes the comparator write the diff + actual PNGs this
+                    // issue needs to attribute the 1043 px.
+                    allowedMismatchedPixels: Number(
+                      process.env.VISUAL_FLOOR_PIXELS ?? 10,
+                    ),
                   },
                   // Baselines live in one committed tree (not scattered next
                   // to each *.stories.tsx, which is what the per-test-file
