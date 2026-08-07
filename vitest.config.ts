@@ -88,10 +88,26 @@ export default defineConfig({
                     // Per-pixel YIQ color distance below which a pixel counts
                     // as matching. THIS is what absorbs antialiasing jitter,
                     // and it does the whole job on its own — measured below.
-                    // MEASUREMENT SCAFFOLD (#1727) — TEMPORARY, reverted
-                    // before merge. Lets the CI job sweep candidate thresholds
-                    // in one container instance; defaults to the shipped 0.2.
-                    threshold: Number(process.env.VISUAL_THRESHOLD ?? 0.2),
+                    // Per-pixel YIQ distance below which a pixel counts as
+                    // matching. A pixel is only ever counted as mismatched
+                    // above 35215 × threshold², so this — not the floor below
+                    // — decides what the gate is capable of seeing at all.
+                    //
+                    // 0.1 (pixelmatch's own default), not 0.2 (#1727). At 0.2
+                    // the bar was 1408.6, and grey-on-white does not clear it:
+                    // the same pill → 8px badge repro failed the four
+                    // saturated Badge stories and passed silently on Default
+                    // (YIQ 934) and Neutral (486). Every muted surface in BDS
+                    // was in that blind spot.
+                    //
+                    // Swept in the pinned container at floor 0
+                    // (run 31137880167): 0.1 leaves exactly one story nonzero
+                    // on a clean tree — Stepper "Quantity Selector" at 7 px,
+                    // under the floor — while making Default and Neutral fail
+                    // the repro at 41 and 44 px. 0.05 gains nothing on either
+                    // and costs a real false positive (Pagination "With
+                    // Result Count", 1043 px).
+                    threshold: 0.1,
                     // Hard failure floor, in absolute pixels (#1696). NOT a
                     // ratio: the previous allowedMismatchedPixelRatio: 0.001
                     // was measured against the whole 960×720 canvas, so it
@@ -110,11 +126,11 @@ export default defineConfig({
                     // regression measured was 12 px, so 10 catches every
                     // change we have evidence for while still tolerating a
                     // stray pixel or two from a future font/GPU shift.
-                    // MEASUREMENT SCAFFOLD (#1727) — TEMPORARY. 0 makes every
-                    // story report its exact count instead of passing.
-                    allowedMismatchedPixels: Number(
-                      process.env.VISUAL_FLOOR_PIXELS ?? 10,
-                    ),
+                    // 10 is a noise margin, not a tolerance, and at threshold
+                    // 0.1 it is finally load-bearing: Stepper "Quantity
+                    // Selector" reports 7 px on a clean tree (#1727). The
+                    // smallest real regression measured is still 12 px.
+                    allowedMismatchedPixels: 10,
                   },
                   // Baselines live in one committed tree (not scattered next
                   // to each *.stories.tsx, which is what the per-test-file

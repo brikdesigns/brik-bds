@@ -11,10 +11,11 @@ Decision record: [ADR-026](../../docs/adrs/ADR-026-regression-test-home-and-visu
   ([`.storybook/vitest.visual.setup.ts`](../../.storybook/vitest.visual.setup.ts))
   screenshots `document.body` per story and asserts
   `toMatchScreenshot(storyId)` against `__screenshots__/`.
-- Comparator: `pixelmatch`, `threshold: 0.2`,
+- Comparator: `pixelmatch`, `threshold: 0.1`,
   `allowedMismatchedPixels: 10` (set in
   [`vitest.config.ts`](../../vitest.config.ts)) — see
-  [Why the floor is absolute](#why-the-floor-is-absolute-not-a-ratio).
+  [Why the floor is absolute](#why-the-floor-is-absolute-not-a-ratio) and
+  [Why the threshold is 0.1](#why-the-threshold-is-01-not-02).
 - On failure, diff PNGs land in `__diffs__/` and are uploaded as the
   `visual-diffs` workflow artifact. There is no hosted approve-UI — the fix or
   the new baseline lands as a reviewed commit (ADR-026 accepted tradeoff).
@@ -32,8 +33,10 @@ regressions were measured slipping under it:
 | `.bds-badge` `border-radius` pill → 8px (synthetic repro, #1696) | 38–155 per Badge story | passed silently |
 | `TextLink :: In Paragraph` gaining a persistent underline (#1712, real) | 241 | passed silently — the baseline was never regenerated, and nobody knew |
 
-**The ratio was never the thing absorbing antialiasing noise — `threshold: 0.2`
+**The ratio was never the thing absorbing antialiasing noise — `threshold`
 is.** That is applied per pixel, before anything is counted as mismatched.
+(It was `0.2` when this was measured; #1727 has since moved it to `0.1`, which
+does not change the conclusion below — see the next section.)
 Measured with `allowedMismatchedPixels: 0` in the pinned container
 ([run 31119311151](https://github.com/brikdesigns/brik-bds/actions/runs/31119311151)):
 **404 of 405 stories report exactly 0 mismatched pixels**, and the counts are
@@ -49,36 +52,53 @@ If a story ever does flake, do not raise this number — that trades the gate's
 whole purpose for one story's convenience. Tag the story `no-visual`, or add a
 per-story override, and record why here.
 
-### Known remaining blind spot: low-contrast changes
-
-The pixel floor fixes the *denominator*. It does nothing about the *per-pixel*
-gate in front of it, and that has its own blind spot worth knowing before you
-trust a green run.
-
-`threshold: 0.2` means a pixel only counts as mismatched when its YIQ distance
-exceeds `35215 × 0.2² = 1408.6`. A light grey against white does not clear
-that bar. Measured on the badge repro — same CSS change, same story file:
-
-| Badge story | Fill | YIQ delta vs white | Gate |
-| --- | --- | --- | --- |
-| Progress | `rgb(47,128,237)` | 11858 | counted → **failed** |
-| Error | `rgb(235,87,87)` | 10258 | counted → **failed** |
-| Positive | `rgb(39,174,96)` | 10039 | counted → **failed** |
-| Warning | `rgb(242,201,76)` | 3017 | counted → **failed** |
-| Default | `rgb(212,212,212)` | 934 | **ignored — passed silently** |
-| Neutral | `rgb(224,224,224)` | 486 | **ignored — passed silently** |
-
-So the identical shape regression is caught on the saturated badges and
-invisible on the grey ones, at any pixel floor. Lowering `threshold` is the
-lever, and pixelmatch's own default (`0.1` → maxDelta 352) would catch both —
-but it also re-opens the antialiasing question this file spent #1696 closing,
-so it needs the same measurement protocol before it moves. Tracked separately;
-do not tune it blind.
-
 Note this does **not** contradict #1673's "antialiasing is not byte-reproducible
 between container runs". PNG bytes can differ while the mismatched-pixel count
-stays 0, because `threshold: 0.2` scores those sub-threshold differences as
+stays 0, because `threshold` scores those sub-threshold differences as
 matching. Byte-level churn is real; comparator-level churn is not.
+
+## Why the threshold is 0.1, not 0.2
+
+The floor above fixes the *denominator*. `threshold` is the gate in front of
+it, and it decides what the comparator can see **at all**: a pixel is only ever
+counted as mismatched once its YIQ distance clears `35215 × threshold²`.
+
+At the original `0.2` that bar was **1408.6**, and a light grey against white
+does not clear it. One CSS change — `.bds-badge` pill → 8px radius — split the
+7 Badge stories straight down the contrast line (#1727):
+
+| Badge story | Fill | YIQ delta vs white | At threshold 0.2 |
+| --- | --- | --- | --- |
+| Progress | `rgb(47,128,237)` | 11858 | counted → failed |
+| Error | `rgb(235,87,87)` | 10258 | counted → failed |
+| Positive | `rgb(39,174,96)` | 10039 | counted → failed |
+| Warning | `rgb(242,201,76)` | 3017 | counted → failed |
+| **Default** | `rgb(212,212,212)` | **934** | **ignored — passed silently** |
+| **Neutral** | `rgb(224,224,224)` | **486** | **ignored — passed silently** |
+
+Same component, same regression, opposite verdicts, decided purely by fill
+saturation — and no pixel floor could have changed that. Every muted surface in
+BDS was in that gap: disabled states, skeletons, dividers, grey borders.
+
+Candidates were swept in the pinned container at `allowedMismatchedPixels: 0`,
+clean and with the repro ([run 31137880167](https://github.com/brikdesigns/brik-bds/actions/runs/31137880167)):
+
+| threshold | maxDelta | Clean tree | Badge Default / Neutral under the repro |
+| --- | --- | --- | --- |
+| 0.2 | 1408.6 | 0 nonzero | passed silently / passed silently |
+| **0.1** | **352.2** | **1 nonzero — Stepper "Quantity Selector", 7 px** | **41 px / 44 px → both fail** |
+| 0.05 | 88.0 | 2 nonzero — Stepper 7 px, **Pagination "With Result Count" 1043 px** | 41 px / 44 px |
+
+`0.1` is pixelmatch's own default. It closes the blind spot and costs nothing:
+its single clean-tree count is 7 px, under the 10 px floor, so the full suite
+still passes. That 7 px is also the first evidence the floor's margin is
+load-bearing rather than decorative.
+
+`0.05` buys no extra sensitivity on the thing being fixed and costs a real
+false positive. The Pagination story's 1043 px at that threshold is
+**uninvestigated** — it could be text antialiasing across a large block, or
+another stale baseline like the TextLink one #1696 found. Settle that before
+anyone proposes going below 0.1.
 
 ## Captured matrix (day-one scope, ADR-026)
 
@@ -107,7 +127,7 @@ no visual impact.
 | `:hover` / `:focus` / `:active` | No story forces a pseudo-class, and the setup file screenshots the mounted render as-is. Zero hover/focus/active baselines exist. | nothing — accepted gap |
 | Dark theme, other viewports, Firefox/WebKit | Out of the day-one matrix above. | nothing — deliberate follow-up |
 | A small component on a large canvas | ~~`allowedMismatchedPixelRatio: 0.001` is measured against the whole canvas~~ — **fixed in [#1696](https://github.com/brikdesigns/brik-bds/issues/1696)**. The floor is now `allowedMismatchedPixels: 10`, absolute, so a Badge losing its pill radius fails. | the gate itself |
-| A low-contrast change on any canvas | `threshold: 0.2` ignores a pixel unless its YIQ delta clears 1408.6, so a grey-on-white change is invisible at any pixel floor ([#1727](https://github.com/brikdesigns/brik-bds/issues/1727), measured — see [Known remaining blind spot](#known-remaining-blind-spot-low-contrast-changes)). | nothing yet — #1727 is open |
+| A low-contrast change on any canvas | ~~`threshold: 0.2` ignores a pixel unless its YIQ delta clears 1408.6~~ — **fixed in [#1727](https://github.com/brikdesigns/brik-bds/issues/1727)**. The threshold is now 0.1 (bar 352.2), so grey-on-white changes are counted; see [Why the threshold is 0.1](#why-the-threshold-is-01-not-02). | the gate itself |
 
 Reproduce the first row:
 
