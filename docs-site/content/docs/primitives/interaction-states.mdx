@@ -68,7 +68,7 @@ These four tokens are mode-invariant — they resolve to the same value in light
 </Callout>
 
 <Callout type="info">
-  Never set a disabled `opacity` literal. Every disabled rule reads `--state-disabled-opacity` so one token governs the whole cohort and the contrast gate can score it. `0.5` is the measured floor: below it, a faded `--text-primary` label misses 3:1 in light mode. Do not pair the fade with a `--text-muted` label either — that stacks two reductions on the same text and no opacity value rescues it in dark mode.
+  Never set a disabled `opacity` literal — `npm run lint-disabled-fade` fails the build on one, because the visual suite cannot catch it (`disabled` is an `argTypes` control, so it has no baseline to move). Every disabled rule reads `--state-disabled-opacity` so one token governs the whole cohort and the contrast gate can score it. `0.5` is the measured floor: below it, a faded `--text-primary` label misses 3:1 in light mode. Do not pair the fade with a `--text-muted` label either — that stacks two reductions on the same text and no opacity value rescues it in dark mode.
 </Callout>
 
 ## Brand state pairs

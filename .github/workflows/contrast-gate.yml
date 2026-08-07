@@ -76,3 +76,14 @@ jobs:
       # asserted here (#1064 AC1).
       - name: Brand-text usage lint
         run: npm run lint-brand-text
+
+      # ADR-028's disabled mechanisms: every disabled-scoped rule reads
+      # var(--state-disabled-opacity) or the --*-disabled trio. The pairing gate
+      # above scores the token's VALUE (via the `alpha` field #1687 added);
+      # nothing scored whether components still READ it, and the visual gate
+      # cannot — ADR-010 Q2 makes `disabled` an argTypes control, so 27 of the
+      # 28 disabled states have no baseline to move (#1697). Lives here because
+      # it answers the other half of the same question the pairing gate asks:
+      # is this disabled state actually legible?
+      - name: Disabled-treatment lint
+        run: npm run lint-disabled-fade

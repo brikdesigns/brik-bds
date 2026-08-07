@@ -1,7 +1,7 @@
 # Visual regression baselines (ADR-026)
 
 Committed reference screenshots for every Storybook story, compared by the
-`visual` job in [`test.yml`](../../.github/workflows/test.yml) on every PR.
+`visual` job in [`visual.yml`](../../.github/workflows/visual.yml) on every PR.
 Decision record: [ADR-026](../../docs/adrs/ADR-026-regression-test-home-and-visual-gate.md).
 
 ## How it works
@@ -93,6 +93,52 @@ matching. Byte-level churn is real; comparator-level churn is not.
 
 Expansions (dark theme, Firefox/WebKit, more viewports) are deliberate
 follow-ups, not day-one scope.
+
+## What the suite cannot see
+
+**The suite captures stories, not states.** A state with no story export has no
+baseline, however visible it is — so an empty baseline diff means "no *story*
+changed", never "no pixels changed". Read this list before concluding a PR has
+no visual impact.
+
+| Blind spot | Why | Gated instead by |
+| --- | --- | --- |
+| `disabled`, `loading`, every boolean toggle + icon slot | ADR-010 Q2 routes them to `argTypes` controls, not stories. Storybook renders the default arg value, so the gate only ever sees the enabled control. | `contrast-gate` (value) + `lint-disabled-fade` (mechanism) — see below |
+| `:hover` / `:focus` / `:active` | No story forces a pseudo-class, and the setup file screenshots the mounted render as-is. Zero hover/focus/active baselines exist. | nothing — accepted gap |
+| Dark theme, other viewports, Firefox/WebKit | Out of the day-one matrix above. | nothing — deliberate follow-up |
+| A small component on a large canvas | `allowedMismatchedPixelRatio: 0.001` is measured against the whole canvas, so a Badge losing its pill radius moves ~0.007% of pixels and passes ([#1696](https://github.com/brikdesigns/brik-bds/issues/1696), measured). | nothing yet — #1696 is open |
+
+Reproduce the first row:
+
+```bash
+ls tests/visual/__screenshots__/ | wc -l              # 356
+ls tests/visual/__screenshots__/ | grep -i disabled   # 1 — components-button-disabled
+```
+
+One disabled baseline out of 356, and it belongs to `Button` — the token-swap
+component that #1687 deliberately did **not** touch. That is why #1687 changed
+the disabled treatment of 27 components and regenerated exactly one baseline,
+which was an unrelated dashboard screenshot.
+
+### Disabled states are gated numerically + structurally, not by pixels (#1697)
+
+The decision, recorded here and in
+[ADR-028 § Amendment 2026-08-06](../../docs/adrs/ADR-028-disabled-state-treatment.md):
+
+- **Value** — `npm run contrast-gate` composites the fade through the `alpha`
+  field on `tokens/contrast-pairings.json` pairings (#1687) and fails below the
+  AA-large 3:1 floor. Retuning `--state-disabled-opacity` below **0.5** fails CI.
+- **Mechanism** — `npm run lint-disabled-fade` asserts every disabled-scoped CSS
+  rule implements one of ADR-028's two treatments: `opacity:
+  var(--state-disabled-opacity)` for a fill-less control, or the
+  `--background-disabled` / `--text-disabled` / `--border-disabled` trio for one
+  that paints its own fill. A component that hardcodes a literal again, drops
+  the fade, or reintroduces the retired muted-text swap fails.
+
+Pixel coverage was considered and rejected: the two routes that would provide it
+each fight a standard — a cohort gallery story is the export shape ADR-010 §4
+reversed, and capturing args-applied variants makes the baseline set a function
+of the arg matrix rather than the sidebar. The rationale is in the ADR amendment.
 
 ## Opting a story out
 
