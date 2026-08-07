@@ -1,6 +1,6 @@
 # ADR-028 — Disabled treatment is chosen by whether the control paints its own fill
 
-**Status:** Accepted (2026-08-04) — the **boundary rule** and its consequence that `Button` / `FilterButton` / `FilterToggle` keep today's grey-pill look are ratified by the owner. Supersedes the "pending ratification" framing. The narrower question #1667 posed — "should the 3 adopt the fade?" — is answered **no** by measurement, not by taste (§ Decision pt-1).
+**Status:** Accepted (2026-08-04) — the **boundary rule** and its consequence that `Button` / `FilterButton` / `FilterToggle` keep today's grey-pill look are ratified by the owner. Supersedes the "pending ratification" framing. The narrower question #1667 posed — "should the 3 adopt the fade?" — is answered **no** by measurement, not by taste (§ Decision pt-1). **Amended 2026-08-06** — § Amendment: the mechanism is gated structurally, not by pixels, driven by [#1697](https://github.com/brikdesigns/brik-bds/issues/1697).
 **Date:** 2026-08-04
 **Supersedes:** —
 **Superseded by:** —
@@ -138,3 +138,26 @@ Picking that number and that token is a visible change to 26 components with its
 6. **`docs-site` interaction-states documentation is now incomplete, not wrong.** [`interaction-states.mdx:58`](../../docs-site/content/docs/primitives/interaction-states.mdx) shows `opacity: var(--state-disabled-opacity)` as *the* disabled pattern with no fill caveat. It gains pt-1's exception in the follow-up that settles the value, so the page changes once rather than twice.
 
 7. **The `three-uses` instinct does not apply to token treatments.** ADR-004 counts usages to decide whether an abstraction is earned. This ADR is the counter-case: the majority treatment was the wrong one, and the count was the reason nobody checked. When a convention is a *rendering* choice, measure it; do not poll it.
+
+## Amendment §1 — the mechanism is gated structurally, not by pixels (2026-08-06)
+
+> Driven by [#1697](https://github.com/brikdesigns/brik-bds/issues/1697), which asked whether disabled states should get pixel coverage in the ADR-026 visual gate. Answers § Consequences pt-2's "knowingly unmeasured" with the measurement that now exists, and names the one that deliberately does not.
+
+**Decision.** A disabled state is gated on two axes, and pixels are not one of them:
+
+| Axis | Gate | What it catches |
+|---|---|---|
+| **Value** | `npm run contrast-gate` — the `alpha` field on `tokens/contrast-pairings.json` pairings composites the fade (#1687) | `--state-disabled-opacity` retuned below the measured **0.5** floor |
+| **Mechanism** | `npm run lint-disabled-fade` — [`scripts/lint-disabled-fade.mjs`](../../scripts/lint-disabled-fade.mjs), wired in [`contrast-gate.yml`](../../.github/workflows/contrast-gate.yml) | a component hardcoding a literal again, dropping the fade, or reintroducing the pt-4 muted-text swap |
+| **Pixels** | — none, deliberately | *nothing* — see below |
+
+**Why the two-axis gate was incomplete without the second row.** #1687 pointed all 30 disabled-scoped `opacity` rules at the token and moved it 0.4 → 0.5. Nothing kept them there. `contrast-gate` scores the token's *value*, so it cannot see a component that stops *reading* it; the visual gate cannot see it either (below). Reverting `Checkbox.css:13` to `opacity: 0.4` was verified to leave `contrast-gate`, `lint-tokens`, `lint-theme-divergence`, and `lint-inline-var` all green, with no baseline to move — the new gate is the only thing that exits 1 on it. That is the same green-but-empty shape as the quota-exhausted Chromatic build (#1639) and the pre-`alpha` pairing set (#1687), and it is now the third instance closed rather than described.
+
+**Why not pixels.** The visual gate captures **stories**, and ADR-010 Q2 routes `disabled` to an `argTypes` control rather than a story. So 27 of the 28 disabled states have no baseline: `tests/visual/__screenshots__/` holds **356** references and exactly one matches `disabled` — `components-button-disabled`, which exists only because #1571 needed it, and which belongs to the token-swap component pt-1 leaves untouched. Both routes that would close that gap contradict a ratified standard:
+
+- **A cohort gallery story** is precisely the export shape [ADR-010 § Amendment §4](./ADR-010-storybook-axes-of-information.md) *reversed* on 2026-07-27 (#1489). #1697's write-up cited the axis-only-gallery exception as support for this route; that exception no longer exists, and `axis-gallery-story` hard-gates against its named form.
+- **Capturing args-applied variants** makes the baseline set a function of the arg matrix rather than the sidebar. `disabled` is one boolean among many an `argTypes` panel carries (`loading`, `fullWidth`, icon slots), so the rule that admits it admits all of them — a combinatorial baseline count for states the structural gate already covers deterministically.
+
+**What remains uncovered, and where it is written down.** A disabled fade that reads the right token at the right value can still be *positioned* wrongly — a layout regression inside a disabled control is invisible to both gates. That is accepted, and the honest statement of it lives in [`tests/visual/README.md` § What the suite cannot see](../../tests/visual/README.md), alongside the other three blind spots (pseudo-class states, non-default theme/viewport/browser, and #1696's whole-canvas mismatch floor). #1697's load-bearing AC was that this list exist at all, so that the next author cannot read a one-file baseline diff as "no visual impact" — which is exactly how #1687's own review had to be annotated by hand.
+
+**Correction to § Context.** That table's inventory is pre-#1687: the fade cohort is now **27** components across **30** disabled-scoped rules, not 26 across 28. `NavItem` joined it when #1687 retired its muted-text swap (pt-4), and the "27 rules hardcoding a literal" of § Consequences pt-3 are all resolved. `npm run lint-disabled-fade -- --report` prints the live inventory, so the count above does not have to be trusted either.
