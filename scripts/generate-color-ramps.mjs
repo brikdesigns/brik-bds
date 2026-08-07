@@ -55,6 +55,13 @@
  *   node scripts/generate-color-ramps.mjs            # write the generated file
  *   node scripts/generate-color-ramps.mjs --check    # fail if committed file is stale (CI drift gate)
  *   node scripts/generate-color-ramps.mjs --report   # read-only table + WCAG ratios
+ *   node scripts/generate-color-ramps.mjs --apply    # write the ramps INTO the Brand Kits (#1739)
+ *
+ * `--apply` is the #1739 step that makes the scale real: it moves each family's
+ * literal values onto the numeric stops and turns the six legacy names into
+ * `{color.<family>.<stop>}` aliases, which Style Dictionary emits as `var()`.
+ * It is idempotent — re-running against an applied kit is a no-op, because
+ * `resolveAnchor` follows the aliases back to the stops.
  *
  * Out of scope here (separate sub-issues): writing the ramps back to Figma
  * (#1738), aliasing the 6-step names onto the numeric stops (#1739), and
@@ -114,6 +121,39 @@ const whiteAt = (hue) => [1, 0, hue];
  */
 const NON_RAMP_KEYS = new Set(['white', 'black']);
 
+/**
+ * Resolve one legacy anchor to a literal lowercase hex, or null.
+ *
+ * Accepts both shapes the Brand Kit can be in, which is what makes `--apply`
+ * idempotent:
+ *
+ *   before --apply:  "light": { "$value": "#e35335" }
+ *   after  --apply:  "light": { "$value": "{color.poppy.500}" }
+ *
+ * Without this the generator would break the moment its own output was applied
+ * — the anchors it reads would all be aliases, every family would report
+ * "missing anchor(s)", and `--check` would fail on a correct tree.
+ *
+ * Only same-family numeric-stop references resolve. A cross-family alias is
+ * deliberately NOT followed: an anchor that points at another family's ramp is
+ * a modelling error, not a value, and silently resolving it would generate a
+ * ramp with no relationship to the family it is named for.
+ */
+function resolveAnchor(familyName, entries, name) {
+  const raw = entries[name]?.$value;
+  if (typeof raw !== 'string') return null;
+  if (raw.startsWith('#')) return raw.toLowerCase();
+
+  const alias = raw.match(/^\{color\.([\w-]+)\.(\d+)\}$/);
+  if (!alias) return null;
+  const [, aliasFamily, stop] = alias;
+  if (aliasFamily !== familyName) return null;
+
+  const target = entries[stop]?.$value;
+  if (typeof target !== 'string' || !target.startsWith('#')) return null;
+  return target.toLowerCase();
+}
+
 /** Read a Brand Kit's `primitives/value.color` map, or throw with the path. */
 function readKitFamilies(kitPath) {
   const kit = JSON.parse(fs.readFileSync(kitPath, 'utf8'));
@@ -137,21 +177,21 @@ export function buildRamp(familyName, entries) {
   const skipped = [];
 
   for (const [name, entry] of Object.entries(entries)) {
-    const value = entry?.$value;
-    if (typeof value !== 'string' || !value.startsWith('#')) {
-      // An alias (`{color.x.y}`) or a non-color entry. Anchors must be literal
-      // hex — a family built on aliases has no value to interpolate.
-      skipped.push({ name, reason: 'not a literal hex value' });
-      continue;
-    }
     if (NON_RAMP_KEYS.has(name)) continue;
+    if (STOPS.includes(name)) continue; // an already-applied numeric stop
 
     const stop = ANCHOR_STOPS[name];
     if (!stop) {
       skipped.push({ name, reason: 'not one of the six named steps' });
       continue;
     }
-    stops[stop] = { hex: value.toLowerCase(), source: 'anchor', legacyName: name };
+
+    const hex = resolveAnchor(familyName, entries, name);
+    if (!hex) {
+      skipped.push({ name, reason: 'not a literal hex value or a numeric-stop alias' });
+      continue;
+    }
+    stops[stop] = { hex, source: 'anchor', legacyName: name };
   }
 
   const missing = Object.entries(ANCHOR_STOPS)
@@ -178,10 +218,28 @@ export function buildRamp(familyName, entries) {
   // a subset". If this ever fires, the anchors were not preserved byte for byte
   // and every consumer of the 6-step names would shift on the alias swap.
   for (const [name, stop] of Object.entries(ANCHOR_STOPS)) {
-    if (stops[stop].hex !== String(entries[name].$value).toLowerCase()) {
+    const source = resolveAnchor(familyName, entries, name);
+    if (stops[stop].hex !== source) {
       throw new Error(
         `family "${familyName}": anchor ${name} did not round-trip ` +
-          `(${entries[name].$value} → ${stops[stop].hex})`,
+          `(${source} → ${stops[stop].hex})`,
+      );
+    }
+  }
+
+  // Once --apply has run, the Brand Kit carries the numeric stops as literals
+  // and the generated file is a second copy of them. Nothing else compares the
+  // two: this generator derives its output from the ANCHORS, so an edit to a
+  // non-anchor stop in the kit (say poppy 600) would leave both files
+  // internally consistent and silently disagreeing. Check it here.
+  for (const stop of STOPS) {
+    const applied = entries[stop]?.$value;
+    if (typeof applied !== 'string') continue;
+    if (applied.toLowerCase() !== stops[stop].hex) {
+      throw new Error(
+        `family "${familyName}": Brand Kit stop ${stop} is ${applied}, but the ramp ` +
+          `generates ${stops[stop].hex}. The kit's numeric stops are written by ` +
+          `--apply; re-run it rather than editing them.`,
       );
     }
   }
@@ -232,6 +290,91 @@ export function buildAll() {
   return { payload, skipLog };
 }
 
+/**
+ * Rewrite the Brand Kits so the numeric stops carry the literal values and the
+ * six legacy names become aliases onto them (brik-bds#1739).
+ *
+ *   "500":   { "$type": "color", "$value": "#e35335" }
+ *   "light": { "$type": "color", "$value": "{color.poppy.500}" }
+ *
+ * Style Dictionary emits a `{…}` reference as `var(--…)`, so
+ * `--color-poppy-light: var(--color-poppy-500)` — one value per color, and
+ * every one of the 606 existing call sites keeps resolving. The alternative
+ * (both names emitting literal hex) leaves the same color with two sources of
+ * truth that drift apart on the next retune.
+ *
+ * `$description` moves to the numeric stop, because it describes the COLOR;
+ * the alias gets a deprecation note instead, which Style Dictionary carries
+ * through as the CSS comment a reader sees at the call site.
+ *
+ * Idempotent: re-running against an already-applied kit produces the identical
+ * file, because `resolveAnchor` follows the aliases back to the stops.
+ */
+export function applyToKits() {
+  const kitFiles = fs
+    .readdirSync(KITS_DIR)
+    .filter((f) => f.endsWith('.json'))
+    .sort();
+
+  const changed = [];
+
+  for (const file of kitFiles) {
+    const kitPath = path.join(KITS_DIR, file);
+    const kit = JSON.parse(fs.readFileSync(kitPath, 'utf8'));
+    const families = kit['primitives/value'].color;
+    const before = JSON.stringify(kit);
+
+    for (const familyName of Object.keys(families)) {
+      const entries = families[familyName];
+      const { stops } = buildRamp(familyName, entries);
+
+      const next = {};
+
+      // Absolute endpoints first, unchanged — white and black are shared by the
+      // whole system, not steps in any family's ladder.
+      for (const key of Object.keys(entries)) {
+        if (NON_RAMP_KEYS.has(key)) next[key] = entries[key];
+      }
+
+      // Numeric stops carry the values.
+      for (const stop of STOPS) {
+        const { hex, source, legacyName } = stops[stop];
+        const carried = source === 'anchor' ? entries[legacyName] : undefined;
+        next[stop] = {
+          $extensions: carried?.$extensions ?? entries[stop]?.$extensions ?? {
+            'com.figma.scopes': ['ALL_SCOPES'],
+          },
+          $type: 'color',
+          $value: hex,
+          ...(carried?.$description ? { $description: carried.$description } : {}),
+        };
+      }
+
+      // Legacy names become aliases onto their pinned stop.
+      for (const [legacyName, stop] of Object.entries(ANCHOR_STOPS)) {
+        next[legacyName] = {
+          $extensions: entries[legacyName]?.$extensions ?? {
+            'com.figma.scopes': ['ALL_SCOPES'],
+          },
+          $type: 'color',
+          $value: `{color.${familyName}.${stop}}`,
+          $description: `DEPRECATED — use color.${familyName}.${stop} (brik-bds#1739)`,
+        };
+      }
+
+      families[familyName] = next;
+    }
+
+    const after = `${JSON.stringify(kit, null, 2)}\n`;
+    if (before !== JSON.stringify(JSON.parse(after))) {
+      changed.push(path.relative(REPO_ROOT, kitPath));
+    }
+    fs.writeFileSync(kitPath, after);
+  }
+
+  return changed;
+}
+
 function serialize(payload) {
   return `${JSON.stringify(
     {
@@ -273,6 +416,19 @@ function main() {
   const args = process.argv.slice(2);
   const check = args.includes('--check');
   const wantReport = args.includes('--report');
+  const apply = args.includes('--apply');
+
+  if (apply) {
+    const changed = applyToKits();
+    process.stdout.write(
+      changed.length > 0
+        ? `✓ applied ramps to ${changed.join(', ')}\n` +
+            `  Next: npm run merge:tokens-studio && npm run build:sd-figma\n`
+        : '✓ Brand Kits already carry the applied ramps — no change.\n',
+    );
+    // Fall through so the generated file is rewritten from the new kit state;
+    // they must agree or `--check` fails on the very tree --apply produced.
+  }
 
   const { payload, skipLog } = buildAll();
   const next = serialize(payload);

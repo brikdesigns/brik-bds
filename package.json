@@ -213,6 +213,7 @@
     "gen:color-ramps": "node scripts/generate-color-ramps.mjs",
     "gen:color-ramps:check": "node scripts/generate-color-ramps.mjs --check",
     "gen:color-ramps:report": "node scripts/generate-color-ramps.mjs --report",
+    "gen:color-ramps:apply": "node scripts/generate-color-ramps.mjs --apply",
     "gen:color-ramps:update": "node scripts/generate-color-ramps.mjs && git add design-tokens/color-ramps.generated.json",
     "chromatic": "op run --no-masking --env-file=.env.op -- npx chromatic --only-changed",
     "chromatic:full": "op run --no-masking --env-file=.env.op -- npx chromatic",

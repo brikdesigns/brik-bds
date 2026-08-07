@@ -678,6 +678,84 @@ function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
 }
 
 /**
+ * The 6-step → numeric primitive map, derived from
+ * design-tokens/color-ramps.generated.json (brik-bds#1739).
+ *
+ * Read, not hand-maintained: the generator already records each anchor's
+ * `legacyName` next to the numeric stop it was pinned to, so that file IS the
+ * mapping. Hand-listing 54 pairs here would be a second source of truth that
+ * drifts the first time a family is retuned.
+ *
+ * Returns an empty map if the generated file is absent, so the linter still
+ * runs in a checkout that has not built tokens.
+ */
+let deprecatedPrimitivesCache = null;
+function loadDeprecatedPrimitives() {
+  if (deprecatedPrimitivesCache) return deprecatedPrimitivesCache;
+
+  const RAMPS = path.join(__dirname, '..', 'design-tokens', 'color-ramps.generated.json');
+  const map = new Map();
+  if (fs.existsSync(RAMPS)) {
+    const data = JSON.parse(fs.readFileSync(RAMPS, 'utf8'));
+    for (const [kitName, kit] of Object.entries(data)) {
+      if (kitName.startsWith('$')) continue;
+      for (const [family, stops] of Object.entries(kit['primitives/value'].color)) {
+        for (const [stop, entry] of Object.entries(stops)) {
+          const ramp = entry.$extensions?.['com.brikdesigns.ramp'];
+          if (ramp?.source !== 'anchor') continue;
+          map.set(`--color-${family}-${ramp.legacyName}`, `--color-${family}-${stop}`);
+        }
+      }
+    }
+  }
+  deprecatedPrimitivesCache = map;
+  return map;
+}
+
+/**
+ * Rule 12: deprecated-token — brik-bds#1739
+ *
+ * The six named color steps (`--color-poppy-light`) still resolve — they are
+ * aliases onto the numeric scale — but they are deprecated, and #1740 retires
+ * them once no consumer references them. Report each use with its numeric
+ * replacement so the migration is mechanical.
+ *
+ * WARNING, never error, on purpose: the aliases are live and correct today.
+ * Erroring would fail the build on 411 in-repo call sites that this PR
+ * deliberately did not touch, and would make the deprecation a breaking change
+ * rather than a signal.
+ */
+function checkDeprecatedTokens(line, lineNum, file) {
+  const violations = [];
+  const trimmed = line.trim();
+  if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) {
+    return violations;
+  }
+  if (line.includes('bds-lint-ignore')) return violations;
+
+  const deprecated = loadDeprecatedPrimitives();
+  if (deprecated.size === 0) return violations;
+
+  const regex = /var\(\s*(--color-[\w-]+)\s*[,)]/g;
+  let match;
+  while ((match = regex.exec(line)) !== null) {
+    const replacement = deprecated.get(match[1]);
+    if (!replacement) continue;
+    violations.push({
+      rule: 'deprecated-token',
+      severity: 'warning',
+      file,
+      line: lineNum,
+      column: match.index + 1,
+      message: `"${match[1]}" is deprecated — use "${replacement}"`,
+      suggestion: `The 6-step names are aliases onto the 11-step numeric scale (brik-bds#1739) and are retired by #1740`,
+    });
+  }
+
+  return violations;
+}
+
+/**
  * Rule 7: Fallback-literal — brik-bds#1043 / ADR-014
  *
  * A Tier 4 knob's var() fallback must resolve to a Semantic token, never a raw
@@ -1199,6 +1277,7 @@ function main() {
       allViolations.push(...checkPrimitiveTokens(line, lineNum, file, isComponent));
       allViolations.push(...checkHardcodedValues(line, lineNum, file, isComponent));
       allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, isComponent));
+      allViolations.push(...checkDeprecatedTokens(line, lineNum, file));
       allViolations.push(...checkTokenFamilyPairing(line, lineNum, file, isComponent));
 
       // Rule 6: raw inline var() — component .tsx only (stories/tests may use
@@ -1240,6 +1319,7 @@ function main() {
       allViolations.push(...checkPrimitiveTokens(line, lineNum, file, true));
       // Rule 3: unknown token references in CSS (catches stale var() after renames)
       allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, true));
+      allViolations.push(...checkDeprecatedTokens(line, lineNum, file));
       // Rule 5: token-family pairing
       allViolations.push(...checkTokenFamilyPairing(line, lineNum, file, true));
       // Rule 7 + 8: Tier 4 hook discipline (#1043)
@@ -1269,6 +1349,7 @@ function main() {
 
       allViolations.push(...checkBareLintIgnore(line, lineNum, file));
       allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, true));
+      allViolations.push(...checkDeprecatedTokens(line, lineNum, file));
       allViolations.push(...checkFallbackLiterals(line, lineNum, file, true, lines));
       allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));
     }
