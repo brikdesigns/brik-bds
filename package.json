@@ -154,6 +154,7 @@
     "health:json": "node scripts/health.js --json",
     "typecheck": "tsc --noEmit",
     "check:esm": "node scripts/check-esm-bundle.mjs",
+    "test:rsc": "bash scripts/test-rsc-smoke.sh",
     "validate:blueprints": "node scripts/validate-blueprints.mjs",
     "contrast-gate": "node scripts/validate-themes.js",
     "contrast-matrix:check": "node scripts/validate-themes.js --check-matrix",

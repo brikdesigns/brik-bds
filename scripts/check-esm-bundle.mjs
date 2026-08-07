@@ -3,7 +3,7 @@
  * check-esm-bundle.mjs — assert the published package is import-clean for
  * plain Node-ESM consumers (Netlify functions, Astro/Vite SSR, turbopack).
  *
- * Two failure classes this gate covers:
+ * Three failure classes this gate covers:
  *
  * 1. require() inlined into the ESM root entry.
  *    `@brikdesigns/bds` is consumed as ESM by SSR/prerender builds. If a
@@ -24,11 +24,22 @@
  *    CJS-under-`import` subpath publish-blocking, and proves each ESM subpath
  *    actually loads under Node-ESM.
  *
+ * 3. A 'use client' banner on a module whose exports the server must READ.
+ *    'use client' makes a module a client boundary, so a Next.js App Router
+ *    server component receives opaque client references instead of values —
+ *    `SOCIAL_ICON_PLATFORMS` arrived as `typeof 'function'` and `.includes()`
+ *    threw (brik-bds#1721). Node-ESM and `tsc` both see a real array, so
+ *    nothing else catches it. This gate pins the banner to exactly the modules
+ *    outside `SERVER_SAFE_MODULES` — both directions, so neither a stray banner
+ *    nor a silently-dropped one can ship. It is a static check: that a
+ *    banner-free module still works under SSR is proven by `npm run test:rsc`.
+ *
  * Run after `build:lib`, before publish (wired into `prepublishOnly`).
  */
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, dirname, extname, join, relative } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
+import { SERVER_SAFE_MODULES } from './server-safe-modules.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const pkgRoot = resolve(__dirname, '..');
@@ -133,6 +144,55 @@ if (!existsSync(distDir)) {
     if (offenders.length > 10) console.error(`   …and ${offenders.length - 10} more.`);
   } else {
     console.log(`✅ ESM bundle check: all ${mjsFiles.length} emitted .mjs modules are require()-free.`);
+  }
+
+  /* ── 'use client' banner matches the server-safe allowlist ───────────────
+   * brik-bds#1721. Checked in BOTH directions: a stray banner on an allowlisted
+   * module silently re-breaks RSC data reads, and a dropped banner on a
+   * component module breaks SSR with "createContext is not a function". Neither
+   * shows up in Node-ESM or `tsc`.
+   *
+   * Scoped to the vite lib output. The two entries below are emitted by
+   * `build:content-system` (esbuild, see package.json) which never applies the
+   * banner, so the rule does not apply to them. */
+  const NON_VITE_OUTPUTS = new Set([
+    'content-system/index.mjs',
+    'content-system/blueprints/astro/types.mjs',
+  ]);
+  const bannerRe = /^\s*(['"])use client\1\s*;?/;
+  const missingBanner = [];
+  const strayBanner = [];
+  for (const file of mjsFiles) {
+    const rel = relative(distDir, file);
+    if (NON_VITE_OUTPUTS.has(rel)) continue;
+    const moduleName = rel.replace(/\.mjs$/, '');
+    const hasBanner = bannerRe.test(readFileSync(file, 'utf8').slice(0, 200));
+    const shouldBeServerSafe = SERVER_SAFE_MODULES.includes(moduleName);
+    if (shouldBeServerSafe && hasBanner) strayBanner.push(moduleName);
+    if (!shouldBeServerSafe && !hasBanner) missingBanner.push(moduleName);
+  }
+  if (strayBanner.length > 0) {
+    fail(
+      `❌ 'use client' check FAILED — ${strayBanner.length} server-safe module(s) carry the banner:`,
+    );
+    console.error("   These are listed in SERVER_SAFE_MODULES, so a server component must be able");
+    console.error('   to READ their exports. With the banner it receives opaque client references');
+    console.error('   instead (brik-bds#1721). Fix: `bannerFor` in vite.config.lib.ts.');
+    strayBanner.forEach((m) => console.error(`   ${m}`));
+  }
+  if (missingBanner.length > 0) {
+    fail(`❌ 'use client' check FAILED — ${missingBanner.length} module(s) missing the banner:`);
+    console.error('   Next.js App Router needs the directive on any module touching a client-only');
+    console.error('   React API; without it SSR fails with "createContext is not a function".');
+    console.error('   Fix: either restore the banner, or — if the module is genuinely pure data —');
+    console.error('   add it to SERVER_SAFE_MODULES and prove it with `npm run test:rsc`.');
+    missingBanner.forEach((m) => console.error(`   ${m}`));
+  }
+  if (strayBanner.length === 0 && missingBanner.length === 0) {
+    console.log(
+      `✅ 'use client' check: ${SERVER_SAFE_MODULES.length} server-safe module(s) banner-free, ` +
+        `all others banner-stamped.`,
+    );
   }
 }
 
