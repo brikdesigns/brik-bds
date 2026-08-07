@@ -41,45 +41,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # MEASUREMENT SCAFFOLD (#1727) — TEMPORARY, reverted before merge.
-      # Sweeps candidate `threshold` values in one container instance, all at
-      # allowedMismatchedPixels: 0 so every story reports its exact count.
-      #
-      # Lowering threshold is the only lever on the low-contrast blind spot
-      # (grey-on-white scores a YIQ delta of 486-934 against the 1408.6 bar at
-      # 0.2), but it is also the setting that absorbs antialiasing — so each
-      # candidate needs a clean run before it can be trusted. Runs 3 and 4 add
-      # the badge repro at the two most promising values: Default + Neutral
-      # must fail there, and they are the whole point of #1727.
-      - name: Measure — threshold 0.10, clean tree
-        continue-on-error: true
-        run: VISUAL_GATE=1 VISUAL_THRESHOLD=0.10 VISUAL_FLOOR_PIXELS=0 npx vitest run --project storybook --reporter=default --reporter=json --outputFile=/tmp/measure-t010-clean.json
-
-      - name: Measure — threshold 0.05, clean tree
-        continue-on-error: true
-        run: VISUAL_GATE=1 VISUAL_THRESHOLD=0.05 VISUAL_FLOOR_PIXELS=0 npx vitest run --project storybook --reporter=default --reporter=json --outputFile=/tmp/measure-t005-clean.json
-
-      - name: Apply badge repro (pill -> 8px radius)
-        run: |
-          sed -i '19s|--border-radius-pill|--border-radius-sm|' components/ui/Badge/Badge.css
-          sed -n '17,21p' components/ui/Badge/Badge.css
-
-      - name: Measure — threshold 0.10, badge repro
-        continue-on-error: true
-        run: VISUAL_GATE=1 VISUAL_THRESHOLD=0.10 VISUAL_FLOOR_PIXELS=0 npx vitest run --project storybook --reporter=default --reporter=json --outputFile=/tmp/measure-t010-repro.json
-
-      - name: Measure — threshold 0.05, badge repro
-        continue-on-error: true
-        run: VISUAL_GATE=1 VISUAL_THRESHOLD=0.05 VISUAL_FLOOR_PIXELS=0 npx vitest run --project storybook --reporter=default --reporter=json --outputFile=/tmp/measure-t005-repro.json
-
-      - name: Upload measurements
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: contrast-threshold-measurements
-          path: /tmp/measure-*.json
-          if-no-files-found: error
-          retention-days: 7
+      - name: Run visual regression suite
+        run: VISUAL_GATE=1 npx vitest run --project storybook
 
       # On failure, the diff PNGs (and vitest's actual-screenshot attachments)
       # are the review surface — there is no hosted UI (ADR-026 tradeoff).
