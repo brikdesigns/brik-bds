@@ -86,20 +86,28 @@ export default defineConfig({
                   comparatorName: 'pixelmatch' as const,
                   comparatorOptions: {
                     // Per-pixel YIQ color distance below which a pixel counts
-                    // as matching — absorbs sub-pixel antialiasing jitter.
+                    // as matching. THIS is what absorbs antialiasing jitter,
+                    // and it does the whole job on its own — measured below.
                     threshold: 0.2,
-                    // Hard failure floor: >0.1% of pixels differing fails the
-                    // story. An 8px gap change on a 1200×900 canvas moves far
-                    // more than this; icon-level AA noise moves far less.
-                    allowedMismatchedPixelRatio: 0.001,
-                    // MEASUREMENT SCAFFOLD (#1696) — TEMPORARY, reverted
-                    // before merge. The effective allowance is
-                    // min(allowedMismatchedPixels, ratio × area), so 0 makes
-                    // every story with any mismatch fail and report its exact
-                    // pixel count. That is the only way to read the AA-jitter
-                    // distribution out of the pinned container (no Docker on
-                    // the agent hosts, so it cannot be measured locally).
-                    allowedMismatchedPixels: 0,
+                    // Hard failure floor, in absolute pixels (#1696). NOT a
+                    // ratio: the previous allowedMismatchedPixelRatio: 0.001
+                    // was measured against the whole 960×720 canvas, so it
+                    // allowed 691 px on every story regardless of how small
+                    // the component under test was. Flipping .bds-badge from
+                    // a pill to an 8px radius moved 38–155 px and passed
+                    // silently; so did a real one, TextLink "In Paragraph"
+                    // gaining a persistent underline in #1712 (241 px, never
+                    // baselined).
+                    //
+                    // 10 is a noise margin, not a tolerance. With threshold
+                    // 0.2 applied per pixel, the measured mismatch count in
+                    // the pinned container is ZERO on 404 of 405 stories —
+                    // identical across two runner machines and four suite
+                    // invocations (run 31119311151). The smallest real
+                    // regression measured was 12 px, so 10 catches every
+                    // change we have evidence for while still tolerating a
+                    // stray pixel or two from a future font/GPU shift.
+                    allowedMismatchedPixels: 10,
                   },
                   // Baselines live in one committed tree (not scattered next
                   // to each *.stories.tsx, which is what the per-test-file
