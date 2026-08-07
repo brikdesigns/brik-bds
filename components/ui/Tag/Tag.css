@@ -109,9 +109,27 @@
 
 /* ─── Disabled ────────────────────────────────────────────────── */
 
+/* Split by variant, the way Button.css:263-277 splits its own: `solid` and
+   `muted` paint a fill at the root and take the token swap (ADR-028 pt-1),
+   `subtle` is an outline with `background-color: transparent` and keeps the
+   fade (pt-2). Faded, the filled pair sat at 2.06:1 dark (`solid`) and 2.31:1
+   light (`muted`) against a 3:1 floor — neither was in
+   `tokens/contrast-pairings.json`, so neither was visible to `contrast-gate`.
+   The swap measures 5.22:1 light / 3.29:1 dark. #1701 */
 .bds-tag--disabled {
-  opacity: var(--state-disabled-opacity);
   cursor: not-allowed;
+}
+
+.bds-tag--solid.bds-tag--disabled,
+.bds-tag--muted.bds-tag--disabled {
+  background-color: var(--background-disabled);
+  color: var(--text-disabled);
+}
+
+/* No fill of its own — a disabled fill would turn the outline into a solid grey
+   block, the carve-out Button.css:270-276 already discovered. */
+.bds-tag--subtle.bds-tag--disabled {
+  opacity: var(--state-disabled-opacity);
 }
 
 /* ─── Icon Wrapper (shared sizing with Badge) ────────────────── */
