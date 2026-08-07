@@ -41,37 +41,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # MEASUREMENT SCAFFOLD (#1732) — TEMPORARY, reverted before merge.
-      #
-      # `Pagination :: With Result Count` reports 1043 px at threshold 0.05 and
-      # 0 at 0.1 on a clean tree (run 31137880167). Either text antialiasing
-      # below the perceptual floor, or a stale baseline like the one #1696
-      # found on `TextLink :: In Paragraph` — and until it is attributed, no
-      # one can argue for going below 0.1.
-      #
-      # Re-runs the clean tree at 0.05 with allowedMismatchedPixels: 0, which
-      # forces the comparator to FAIL the story and therefore to write both the
-      # diff PNG and the actual screenshot. Those two artifacts are the
-      # discriminator: scattered pixels along glyph edges = antialiasing, a
-      # coherent region = a real change. The actual PNG also lets the count be
-      # re-derived at any threshold offline, against the committed baseline,
-      # without burning another container run.
-      - name: Measure — threshold 0.05, floor 0, clean tree
-        continue-on-error: true
-        run: VISUAL_GATE=1 VISUAL_THRESHOLD=0.05 VISUAL_FLOOR_PIXELS=0 npx vitest run --project storybook --reporter=default --reporter=json --outputFile=/tmp/measure-t005-clean.json
-
-      - name: Upload measurements
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: pagination-attribution
-          path: |
-            /tmp/measure-t005-clean.json
-            tests/visual/__diffs__/
-            **/.vitest-attachments/
-          if-no-files-found: error
-          retention-days: 7
-
       # MEASUREMENT SCAFFOLD (#1729) — TEMPORARY, reverted before merge.
       #
       # #662 AC 5 — show a historical regression failing the gate. The W2
@@ -94,10 +63,19 @@ jobs:
       # Badge Default at 934 and Neutral at 486. Running case 2 at 0.2 shows
       # the pre-#1727 gate passing it silently, which is what makes this a
       # demonstration rather than an assertion.
+      # Reverting via `git checkout HEAD --` does not work here: git refuses to
+      # touch the workspace from inside the container ("detected dubious
+      # ownership"), the same reason update-visual-baselines.yml sets
+      # safe.directory explicitly. A pristine copy needs no git and lets each
+      # revert be verified with `diff` rather than a grep that could pass on an
+      # unrelated line — `--color-grayscale-darker` appears 10 times in this file.
+      - name: Snapshot the pristine theme file
+        run: cp tokens/theme-brand-brik.css /tmp/theme-pristine.css
+
       - name: Apply case 1 — high-contrast, --text-primary → wrong hue
         run: |
           sed -i '27s|--color-grayscale-darkest|--color-system-red|' tokens/theme-brand-brik.css
-          sed -n '27p' tokens/theme-brand-brik.css
+          diff /tmp/theme-pristine.css tokens/theme-brand-brik.css && { echo "case 1 sed matched nothing"; exit 1; } || true
 
       - name: Case 1 — shipped gate (0.1 / floor 10), expected FAIL
         continue-on-error: true
@@ -109,10 +87,10 @@ jobs:
 
       - name: Revert case 1, apply case 2 — low-contrast, --text-secondary one step lighter
         run: |
-          git checkout HEAD -- tokens/theme-brand-brik.css
-          grep -q 'grayscale-darkest' tokens/theme-brand-brik.css || { echo "case 1 revert failed"; exit 1; }
+          cp /tmp/theme-pristine.css tokens/theme-brand-brik.css
+          diff /tmp/theme-pristine.css tokens/theme-brand-brik.css
           sed -i '36s|--color-grayscale-darker|--color-grayscale-dark|' tokens/theme-brand-brik.css
-          sed -n '36p' tokens/theme-brand-brik.css
+          diff /tmp/theme-pristine.css tokens/theme-brand-brik.css && { echo "case 2 sed matched nothing"; exit 1; } || true
 
       - name: Case 2 — shipped gate (0.1 / floor 10), expected FAIL
         continue-on-error: true
@@ -128,8 +106,8 @@ jobs:
 
       - name: Revert case 2
         run: |
-          git checkout HEAD -- tokens/theme-brand-brik.css
-          git diff --exit-code -- tokens/theme-brand-brik.css
+          cp /tmp/theme-pristine.css tokens/theme-brand-brik.css
+          diff /tmp/theme-pristine.css tokens/theme-brand-brik.css
 
       - name: Upload token-value repro measurements
         if: always()
