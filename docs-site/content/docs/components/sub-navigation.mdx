@@ -74,10 +74,11 @@ import Link from 'next/link';
 
 - **Don't use it for in-page tabs.** Switching panels within a single page is [TabBar](/docs/components/tab-bar).
 - **Don't hand-build the rows.** Each item is a [NavItem](/docs/components/nav-item) — pass the `items` array rather than composing children.
+- **Don't nest SubNavigation inside SubNavigation, or stack two on one route.** One section-nav column per shell — further drill-down is [PageHeader](/docs/components/page-header)'s `tabs` (TabBar) or inline sections in the content column.
 
 ## Accessibility
 
-- Renders an `<aside>` wrapping a `<nav>` landmark. Pass `ariaLabel` (defaults to `"Section navigation"`) — **required when more than one nav is on the page** so each landmark is distinguishable.
+- Renders an `<aside>` wrapping a `<nav>` landmark. Pass `ariaLabel` (defaults to `"Section navigation"`) — **required when more than one nav landmark is on the page**, e.g. this SubNavigation alongside the primary [SidebarNavigation](/docs/components/sidebar-navigation), so each is distinguishable. It does not license stacking two SubNavigations.
 - Active state and keyboard/focus behavior come from the underlying [NavItem](/docs/components/nav-item) — the current item carries `aria-current="page"`.
 
 ## API

@@ -10,6 +10,8 @@ import * as Stories from './SubNavigation.stories';
 
 Second-column nav for app shells that pair a collapsed primary `SidebarNavigation` with a section-specific sub-nav. Internally renders `NavItem` per entry. For a single-sidebar shell, use `SidebarNavigation` directly. For the full two-column layout (collapsed primary + sub-nav + main), see **Layouts / app-shell**.
 
+**Don't nest SubNavigation inside SubNavigation, or stack two on one route.** One section-nav column per shell — further drill-down is PageHeader's `tabs` (TabBar) or inline sections in the content column.
+
 ## Playground
 
 Toggle `showHeader`, `showFooter`, `bordered` (set `false` when the shell supplies its own panel/content separation — only the right divider is removed), or override `width` in the Controls panel.

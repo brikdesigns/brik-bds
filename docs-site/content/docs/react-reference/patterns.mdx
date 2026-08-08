@@ -95,13 +95,16 @@ Three templates cover roughly 95% of the product surface. Treat them as a starti
 
 ## Navigation
 
-Three navigation surfaces, three components — keep them straight. They are not interchangeable.
+Four navigation surfaces, four components — keep them straight. They are not interchangeable, and they don't stack past one level each.
 
 | Surface | Component | When |
 | --- | --- | --- |
 | **Top app bar** | `<TopNavigation>` | Global brand + primary destinations + user menu |
 | **Section sidebar** | `<SidebarNavigation>` | Within an app section (Settings, Admin) — collapsible groups |
+| **Second-column section nav** | `<SubNavigation>` | Section-specific links beside a collapsed `<SidebarNavigation>`, one column per shell |
 | **Within-page** | `<Breadcrumb>` + `<Pagination>` | Position + page-by-page traversal |
+
+Max depth is one `<SubNavigation>` per shell. Drill down further with `<PageHeader>`'s `tabs` (TabBar) or inline sections in the content column — never a second `<SubNavigation>`.
 
 **Breadcrumbs** appear in detail views where the user drilled in (`Clients › Acme › Contracts › #4821`). They do **not** appear in flat lists or top-level pages — that creates noise.
 
