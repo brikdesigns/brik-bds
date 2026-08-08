@@ -164,6 +164,22 @@
       "yelp": {
         "$value": "#ff1a1a",
         "$type": "color"
+      },
+      "google": {
+        "$value": "#4285f4",
+        "$type": "color"
+      },
+      "apple": {
+        "$value": "#000000",
+        "$type": "color"
+      },
+      "bing": {
+        "$value": "#1f70f1",
+        "$type": "color"
+      },
+      "tiktok": {
+        "$value": "#000000",
+        "$type": "color"
       }
     },
     "annotation": {

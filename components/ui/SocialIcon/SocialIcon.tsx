@@ -69,6 +69,7 @@ const PLATFORM_LABELS: Partial<Record<SocialIconPlatform, string>> = {
   youtube: 'YouTube',
   linkedin: 'LinkedIn',
   twitter: 'X (Twitter)',
+  tiktok: 'TikTok',
 };
 
 function humanize(platform: string): string {
@@ -88,8 +89,9 @@ export function socialIconLabel(platform: SocialIconPlatform): string {
  * SocialIcon — recolorable social-platform mark, offline-bundled
  * (brik-bds#1713; split from contact marks in brik-bds#1716).
  *
- * Renders one of 6 platform marks (youtube, twitter, instagram, facebook,
- * linkedin, yelp) from a BDS-bundled inline set — the mark paints on first
+ * Renders one of 10 platform marks — the 6 social marks (youtube, twitter,
+ * instagram, facebook, linkedin, yelp) plus 4 search/review marks (google,
+ * apple, bing, tiktok) — from a BDS-bundled inline set; the mark paints on first
  * render with no fetch and no possible 404, the same offline contract as
  * `ServiceTag` (`components/ui/ServiceTag/ServiceTag.tsx:159-177`). For the
  * non-platform contact marks (message, email, website, calendar, phone), use
@@ -106,8 +108,9 @@ export function socialIconLabel(platform: SocialIconPlatform): string {
  * - `type="glyph"` — background neutral/transparent, glyph carries the color.
  *
  * `tone="brand"` uses the platform's Foundations brand-color token (YouTube
- * red, X black, Facebook blue, Instagram black, LinkedIn blue, Yelp red);
- * every bundled platform has one — see SocialIcon.css.
+ * red, X black, Facebook blue, Instagram black, LinkedIn blue, Yelp red,
+ * Google blue, Apple black, Bing blue, TikTok black); every bundled platform
+ * has one — see SocialIcon.css.
  *
  * Renders `role="img"` + `aria-label` (the platform's display name, or
  * `label`) by default — a bare `<SocialIcon platform="twitter" />` is
