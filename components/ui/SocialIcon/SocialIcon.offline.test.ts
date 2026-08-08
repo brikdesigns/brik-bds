@@ -9,7 +9,8 @@
  * The `components` vitest project runs in node with no network, so this
  * asserts the invariants that make the guarantee hold:
  *   1. `SOCIAL_ICON_SVGS` bundles a non-empty inline set at module load.
- *   2. Every one of the 6 platforms from brik-bds#1716 is bundled.
+ *   2. Every one of the 10 platforms is bundled — the 6 social marks from
+ *      brik-bds#1716 plus the 4 search/review marks added alongside them.
  *   3. Every bundled mark carries the badge (`.bds-social-icon__bg`) + glyph
  *      (`.bds-social-icon__glyph`, `fill="currentColor"`) split the `type`
  *      prop depends on.
@@ -26,7 +27,18 @@ import { describe, it, expect } from 'vitest';
 import { SOCIAL_ICON_SVGS, SOCIAL_ICON_PLATFORMS, type SocialIconPlatform } from './social-icons.generated';
 import { socialIconLabel } from './SocialIcon';
 
-const EXPECTED_PLATFORMS: SocialIconPlatform[] = ['youtube', 'twitter', 'instagram', 'facebook', 'linkedin', 'yelp'];
+const EXPECTED_PLATFORMS: SocialIconPlatform[] = [
+  'youtube',
+  'twitter',
+  'instagram',
+  'facebook',
+  'linkedin',
+  'yelp',
+  'apple',
+  'bing',
+  'google',
+  'tiktok',
+];
 
 describe('SocialIcon — offline mark resolution (no 404)', () => {
   it('bundles a non-empty inline SVG set at module load (zero network)', () => {
@@ -35,7 +47,7 @@ describe('SocialIcon — offline mark resolution (no 404)', () => {
     expect(SOCIAL_ICON_SVGS[keys[0]]).toContain('<path');
   });
 
-  it('bundles all 6 platforms from the brik-bds#1716 social-only set', () => {
+  it('bundles all 10 platforms (6 social + 4 search/review)', () => {
     expect(SOCIAL_ICON_PLATFORMS.sort()).toEqual([...EXPECTED_PLATFORMS].sort());
     for (const platform of EXPECTED_PLATFORMS) {
       expect(SOCIAL_ICON_SVGS[platform], `"${platform}" must be bundled`).toBeDefined();
@@ -81,11 +93,15 @@ describe('SocialIcon — default accessible name (decorative vs labeled branch)'
     expect(socialIconLabel('youtube')).toBe('YouTube');
     expect(socialIconLabel('linkedin')).toBe('LinkedIn');
     expect(socialIconLabel('twitter')).toBe('X (Twitter)');
+    expect(socialIconLabel('tiktok')).toBe('TikTok');
   });
 
   it('humanizes the remaining platforms (no override needed)', () => {
     expect(socialIconLabel('instagram')).toBe('Instagram');
     expect(socialIconLabel('facebook')).toBe('Facebook');
     expect(socialIconLabel('yelp')).toBe('Yelp');
+    expect(socialIconLabel('apple')).toBe('Apple');
+    expect(socialIconLabel('bing')).toBe('Bing');
+    expect(socialIconLabel('google')).toBe('Google');
   });
 });

@@ -41,7 +41,7 @@ function assertServerReadableArray(name: string, value: readonly string[], expec
 }
 
 export default function Page() {
-  assertServerReadableArray('SOCIAL_ICON_PLATFORMS', SOCIAL_ICON_PLATFORMS, 6);
+  assertServerReadableArray('SOCIAL_ICON_PLATFORMS', SOCIAL_ICON_PLATFORMS, 10);
   assertServerReadableArray('CONTACT_ICON_PLATFORMS', CONTACT_ICON_PLATFORMS, 5);
 
   if (!SOCIAL_ICON_PLATFORMS.includes('youtube')) {

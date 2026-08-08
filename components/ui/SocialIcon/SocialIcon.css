@@ -90,4 +90,20 @@
 .bds-social-icon--brand[data-platform='yelp'] {
   --bds-social-icon-brand: var(--color-system-yelp);
 }
+
+.bds-social-icon--brand[data-platform='google'] {
+  --bds-social-icon-brand: var(--color-system-google);
+}
+
+.bds-social-icon--brand[data-platform='apple'] {
+  --bds-social-icon-brand: var(--color-system-apple);
+}
+
+.bds-social-icon--brand[data-platform='bing'] {
+  --bds-social-icon-brand: var(--color-system-bing);
+}
+
+.bds-social-icon--brand[data-platform='tiktok'] {
+  --bds-social-icon-brand: var(--color-system-tiktok);
+}
 }
