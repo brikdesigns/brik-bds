@@ -4,6 +4,8 @@ import { fn } from 'storybook/test';
 import { FilterBar } from './FilterBar';
 import { FilterButton } from '../FilterButton';
 import { FilterToggle } from '../FilterToggle';
+import { Button } from '../Button';
+import { ButtonGroup } from '../ButtonGroup';
 import type { CounterStatus } from '../Counter';
 
 /* ─── Counter status options for the activeStatus Control ───────
@@ -96,6 +98,11 @@ const meta: Meta<typeof FilterBar> = {
     activeFilterCount: {
       control: false,
       description: 'Number of currently-active filters. Drives the `Filters (N)` label when the bar collapses on narrow own-widths (ADR-019). Story computes this from the hook-filtered subset.',
+    },
+    actions: {
+      control: false,
+      description:
+        'Action buttons (typically a `ButtonGroup`) rendered flush-right, after the filter controls. Unlike `children`, `actions` does NOT fold into the `Filters` popover on collapse — it stays reachable at any width.',
     },
   },
 };
@@ -217,6 +224,87 @@ export const Collapsed: Story = {
         filtered={filteredRows.length}
         activeFilterCount={activeFilterCount}
         onClear={handleClear}
+      >
+        <FilterButton
+          label="Industry"
+          options={industryOptions}
+          value={industry}
+          onChange={setIndustry}
+        />
+        <FilterToggle
+          label="Active only"
+          active={activeOnly}
+          onToggle={() => setActiveOnly((prev) => !prev)}
+        />
+      </FilterBar>
+    );
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   WITH ACTIONS — a primary/secondary ButtonGroup flush-right of the
+   filter controls. Unlike `children`, `actions` is exempt from the
+   narrow-own-width collapse (ADR-019): shrink the canvas below ~600px
+   and the filter controls fold into the `Filters (N)` popover while
+   the ButtonGroup stays put, so a primary action (e.g. "Assign
+   service") is never hidden behind a popover trigger.
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary ButtonGroup flush-right, exempt from collapse */
+export const WithActions: Story = {
+  args: {
+    title: 'Engagements',
+    label: 'engagements',
+    clearLabel: 'Clear filters',
+    activeStatus: 'brand',
+    onClear: fn(),
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 420, minHeight: 320 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  render: (args) => {
+    const [industry, setIndustry] = useState<string | undefined>(undefined);
+    const [activeOnly, setActiveOnly] = useState(false);
+
+    const filteredRows = useMemo(
+      () =>
+        rows.filter((r) => {
+          if (industry && r.industry !== industry) return false;
+          if (activeOnly && r.status !== 'active') return false;
+          return true;
+        }),
+      [industry, activeOnly],
+    );
+
+    const activeFilterCount = (industry ? 1 : 0) + (activeOnly ? 1 : 0);
+
+    const handleClear = () => {
+      setIndustry(undefined);
+      setActiveOnly(false);
+      args.onClear?.();
+    };
+
+    return (
+      <FilterBar
+        {...args}
+        total={rows.length}
+        filtered={filteredRows.length}
+        activeFilterCount={activeFilterCount}
+        onClear={handleClear}
+        actions={
+          <ButtonGroup align="end">
+            <Button variant="outline" size="md">
+              Export
+            </Button>
+            <Button variant="primary" size="md">
+              Assign service
+            </Button>
+          </ButtonGroup>
+        }
       >
         <FilterButton
           label="Industry"
