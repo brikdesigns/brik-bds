@@ -43,4 +43,20 @@
   gap: var(--gap-sm);
   min-width: 200px;
 }
+
+/* ─── Actions (always-visible, e.g. a primary/secondary ButtonGroup) ──── */
+/*
+ * No margin-left: auto here — .bds-filter-bar__controls (or __collapse)
+ * always renders before this (children is required), and its own
+ * margin-left: auto already pushes everything after it, including this
+ * element, flush right. Multiple auto margins on the same flex line split
+ * the free space between them instead of hugging adjacent items together,
+ * which would open an unwanted gap between the controls/popover trigger and
+ * actions — so this intentionally relies on the sibling's auto margin.
+ */
+.bds-filter-bar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-xs);
+}
 }

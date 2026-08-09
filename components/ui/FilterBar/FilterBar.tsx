@@ -39,12 +39,20 @@ export interface FilterBarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'ti
    * trigger — the counter still reflects the filtered result count.
    */
   activeFilterCount?: number;
+  /**
+   * Action buttons (typically a `<ButtonGroup>`) rendered flush-right, AFTER
+   * the filter controls. Unlike `children` (filter controls), `actions` stays
+   * visible when the bar collapses on narrow widths — it does NOT fold into
+   * the `Filters` popover — so primary/secondary actions (e.g. "Assign")
+   * remain reachable. Omit when the bar has no actions.
+   */
+  actions?: ReactNode;
 }
 
 /**
  * FilterBar — shared heading + counter + filter-controls row for list views.
  *
- * Layout: `[title] [counter]          [filter children] [clear?]`
+ * Layout: `[title] [counter]          [filter children] [clear?] [actions]`
  *
  * The counter shows the current filtered count. When `filtered < total` the
  * counter switches to `activeStatus` (default `brand`) and, if `onClear` is
@@ -53,6 +61,9 @@ export interface FilterBarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'ti
  * On narrow *own* widths (below ~600px, via ResizeObserver — ADR-019) the
  * filter controls collapse into a `Filters` popover so they never wrap
  * awkwardly; pass `activeFilterCount` to surface `Filters (N)` when collapsed.
+ * `actions` is exempt from this collapse — it always renders flush-right
+ * after the controls/popover, so a primary action never hides behind a
+ * popover trigger.
  *
  * @example
  * ```tsx
@@ -81,6 +92,7 @@ export function FilterBar({
   clearLabel = 'Clear filters',
   children,
   activeFilterCount,
+  actions,
   className,
   style,
   ...props
@@ -141,6 +153,8 @@ export function FilterBar({
       ) : (
         <div className="bds-filter-bar__controls">{controls}</div>
       )}
+
+      {actions && <div className="bds-filter-bar__actions">{actions}</div>}
     </div>
   );
 }
