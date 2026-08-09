@@ -10,11 +10,17 @@ import * as Stories from './FilterBar.stories';
 
 Toolbar that pairs a result counter with one or more filter controls ([`FilterButton`](/?path=/docs/components-filter-button--docs), [`FilterToggle`](/?path=/docs/components-filter-toggle--docs), or any compatible child). Use above tables and lists to expose filtering plus a clear-all affordance.
 
-Layout: `[title] [counter] ... [filter children] [clear?]`
+Layout: `[title] [counter] ... [filter children] [clear?] [actions]`
 
 ## Playground
 
 <Canvas of={Stories.Default} />
+
+## Actions slot
+
+<Canvas of={Stories.WithActions} />
+
+`actions` renders a primary/secondary `ButtonGroup` (or any node) flush-right, after the filter controls and clear button. It is intentionally **exempt from the narrow-own-width collapse** (ADR-019): shrink the bar below ~600px of its own width and the filter controls fold into the `Filters (N)` popover, but `actions` stays visible outside it — a primary action like "Assign service" must never hide behind a popover trigger.
 
 ## Variants
 
