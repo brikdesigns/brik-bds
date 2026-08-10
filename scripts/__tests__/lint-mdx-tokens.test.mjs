@@ -27,6 +27,8 @@ beforeAll(() => {
       '  --background-brand-primary: #e35335;\n' +
       '  --size-400: 16px;\n' +
       '  --border-muted: #ccc;\n' +
+      '  --color-poppy-500: #e35335;\n' +
+      '  --color-poppy-light: var(--color-poppy-500); /** DEPRECATED — use color.poppy.500 (brik-bds#1739) */\n' +
       '}\n',
   );
 });
@@ -127,6 +129,54 @@ describe('lint-mdx-tokens', () => {
       '{/* lint-mdx-tokens-ignore-end */}\n';
     const { code } = run(mdx);
     expect(code).toBe(0);
+  });
+
+  it('FAILS on a deprecated alias in a code fence (#1753)', () => {
+    const { code, json } = run(fence('background: var(--color-poppy-light);'));
+    expect(code).toBe(1);
+    expect(json.violations).toHaveLength(1);
+    expect(json.violations[0]).toMatchObject({
+      token: '--color-poppy-light',
+      kind: 'deprecated',
+      replacement: '--color-poppy-500',
+    });
+  });
+
+  it('FAILS on a deprecated alias in a table', () => {
+    const { code, json } = run(table('`--color-poppy-light`'));
+    expect(code).toBe(1);
+    expect(json.violations.map((v) => v.kind)).toEqual(['deprecated']);
+  });
+
+  it('passes the numeric stop the alias points at', () => {
+    const { code } = run(fence('background: var(--color-poppy-500);'));
+    expect(code).toBe(0);
+  });
+
+  it('does not flag a deprecated alias in prose (same scope as rule 1)', () => {
+    const { code } = run('The retired `--color-poppy-light` alias.\n');
+    expect(code).toBe(0);
+  });
+
+  it('honors the ignore hatch for a deliberate deprecated-alias mapping table', () => {
+    const mdx =
+      '{/* lint-mdx-tokens-ignore-start */}\n' +
+      table('`--color-poppy-light`') +
+      '{/* lint-mdx-tokens-ignore-end */}\n';
+    const { code } = run(mdx);
+    expect(code).toBe(0);
+  });
+
+  it('separates deprecated from phantom in one file', () => {
+    const { code, json } = run(
+      fence('a: var(--color-poppy-light);\nb: var(--surface-success);'),
+    );
+    expect(code).toBe(1);
+    const byKind = Object.fromEntries(json.violations.map((v) => [v.token, v.kind]));
+    expect(byKind).toEqual({
+      '--color-poppy-light': 'deprecated',
+      '--surface-success': 'phantom',
+    });
   });
 
   it('resumes flagging after an ignore block closes', () => {

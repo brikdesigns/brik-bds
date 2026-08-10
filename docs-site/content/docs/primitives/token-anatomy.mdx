@@ -132,21 +132,21 @@ Every token sits at exactly one Tier. Higher tiers reference lower tiers via `va
 │  Tier 3 — Semantic     (what components consume)        │
 │  --{purpose}-{role}: var(--color-{family}-{step})       │
 │  Example: --background-brand-primary:                   │
-│             var(--color-poppy-dark)                     │
+│             var(--color-poppy-500)                      │
 └─────────────────────────────────────────────────────────┘
                           ▲
                           │ var()
 ┌─────────────────────────────────────────────────────────┐
 │  Tier 2 — Primitive    (named raw values)               │
 │  --color-{family}-{step}: #hex                          │
-│  Example: --color-poppy-dark: #b0351b                   │
+│  Example: --color-poppy-500: #e35335                    │
 └─────────────────────────────────────────────────────────┘
                           ▲
                           │
 ┌─────────────────────────────────────────────────────────┐
 │  Tier 1 — Raw          (literal hex / numeric value)    │
 │  Not a CSS variable — the literal value before naming.  │
-│  Example: #b0351b                                       │
+│  Example: #e35335                                       │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -154,13 +154,13 @@ Every token sits at exactly one Tier. Higher tiers reference lower tiers via `va
 
 | Tier | Naming | Source | Components reference it? |
 |---|---|---|---|
-| **Raw** | Literal `#b0351b` | Figma swatch / hex chosen by design | **No** — never in component CSS |
+| **Raw** | Literal `#e35335` | Figma swatch / hex chosen by design | **No** — never in component CSS |
 | **Primitive** | `--color-{family}-{step}` (color), `--font-size-{step}` (type), `--space-{step}` (spacing), etc. | Auto-generated from Figma Variables → Style Dictionary | **No** — never in component CSS (use Semantic) |
 | **Semantic** | `--{purpose}-{role}` — Color foundations vocabulary | Auto-generated; client themes override **values** with same **names** | **Yes** — this is the contract |
 | **Component** | `--bds-{component}-{property}` | Authored in component / blueprint CSS; runtime values set by the component's JS/TSX | **Yes** — but only as a *knob*: it must resolve to a Semantic token (see below) |
 
 <Callout type="warn">
-  **Components consume Semantic tokens, never Primitives directly.** A button's CSS references `--background-brand-primary`, not `--color-poppy-dark`. Why: Semantic is the layer that varies per brand. Bypassing it locks the component to one brand.
+  **Components consume Semantic tokens, never Primitives directly.** A button's CSS references `--background-brand-primary`, not `--color-poppy-500`. Why: Semantic is the layer that varies per brand. Bypassing it locks the component to one brand.
 </Callout>
 
 {/* cascade-vocab-ok:start — the abstraction Tier stack (Raw · Primitive · Semantic · Component), not the CSS cascade */}

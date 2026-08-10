@@ -40,7 +40,7 @@ Service lines (`brand`/`marketing`/`information`/`product`/`back-office` → yel
 
 The locked rule for text-bearing service regions:
 
-- **Use the pale `-lightest` surface step** (`--surface-service-{line}-light`) with `--text-service-{line}-on-light`. This clears **AAA in light** on all five lines.
+- **Use the pale `100` surface step** (`--surface-service-{line}-light`) with `--text-service-{line}-on-light`. This clears **AAA in light** on all five lines.
 - **The mid-tone base step** (`--surface-service-{line}` / `--background-service-{line}`) is **decorative** — gated at AA only, for large/near-black labels, not small body copy.
 - For a **solid service button**, prefer pattern 2 (the `on-color` neutral) and verify, rather than a mid-tone fill with tinted text.
 
@@ -58,11 +58,17 @@ The gate **fails** any pairing below its floor. An AAA-aim body pairing that cle
 
 ## The brand-color contract
 
-Brik's brand color is Poppy (`--color-poppy-light`, `#e35335`) — a vibrant red that white text hits at **3.78:1**: clears **AA-large (3:1)**, not AA-normal (4.5:1). Rather than darken the brand to pass, BDS holds the vibrant color and gates it by *role* ([ADR-015](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-015-brand-primary-aa-large-contrast-policy.md)):
+Brik's brand color is Poppy (`--color-poppy-500`, `#e35335`) — a vibrant red that white text hits at **3.78:1**: clears **AA-large (3:1)**, not AA-normal (4.5:1). Rather than darken the brand to pass, BDS holds the vibrant color and gates it by *role* ([ADR-015](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-015-brand-primary-aa-large-contrast-policy.md)):
 
 - **Fills, headings, and accent/link/tab/breadcrumb affordances** — gated **AA-large (3:1)**. That is WCAG's bar for large/bold text and UI-component graphics, and the call every white-on-red CTA makes.
 - **Small body copy** — **never** `--text-brand-primary`; use `--text-primary`. Formerly advisory (the gate scores token pairings, not rendered font sizes), now CI-asserted by `npm run lint-brand-text`, which flags `--text-brand-primary` on `--body-*`-sized text ([#1064](https://github.com/brikdesigns/brik-bds/issues/1064)).
-- **Small primary buttons** — no button label qualifies as WCAG large text (all ≤20px, semibold), so sizes below the floor take the darker `poppy-dark` fill until an AA-passing near-Poppy step lands. See [ADR-016](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-016-small-primary-button-contrast.md).
+- **Primary buttons at every size** — no button label qualifies as WCAG large text (all ≤20px, semibold), so the vibrant fill is an **owner-accepted AA-large / 1.4.11 risk**, not a resolved pairing. [ADR-016](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-016-small-primary-button-contrast.md) ratified **Option C** (mint an AA-passing near-Poppy step) and explicitly declined a size floor — there is no size-gated fill in `Button` today; every size resolves `--background-brand-primary`.
+
+<Callout type="info">
+  **The AA-passing near-Poppy step now exists — and is not wired up yet.** `--color-poppy-600` (`#c94428`) hits **4.84:1** on white: it clears AA-normal while staying visibly Poppy, which is exactly what ADR-015 and ADR-016 recorded as unavailable. It shipped with the [11-step scale](/docs/primitives/color#the-11-step-scale) in v0.152.0, unblocking ADR-016's Option C.
+
+  No Semantic token points at `600` today, so nothing has changed at the component layer. Repointing the on-color fills is [#479](https://github.com/brikdesigns/brik-bds/issues/479). Don't reach for `600` directly in component CSS — Primitives never enter components; wait for the Semantic role.
+</Callout>
 
 <Callout type="info">
   **Client brands are the mirror image, one contract.** Brik *chose* vibrancy and relaxes to AA-large where the role allows. A client whose identity color can't clear AA on its own surfaces takes the opposite lever: tag a darker primitive [`brand-fill`](/docs/content-system/vocabularies/color-primitive-tier) — the contrast-safe twin that fills `--background-brand-primary` / `--text-brand-primary` with an AA-passing value in-slot. Same rule ("brand text must be legible"), opposite mechanism (keep-the-hue-relax-the-tier vs. darken-the-slot).
@@ -137,13 +143,13 @@ The three `Faded …` rows are disabled states. A faded pairing is scored after 
 
 ## The dark-mode service gap
 
-Historically, ADR-011's dark-mode softening (context text shifts one tier lighter while service surfaces stay fixed-light) dropped service text below AA in dark mode. That active gap is **largely closed** for the recommended pairings — [brik-bds#865](https://github.com/brikdesigns/brik-bds/issues/865) pinned the dark service context tokens to their `-darkest` primitives, and [#827](https://github.com/brikdesigns/brik-bds/issues/827) darkened the light-mode primitives so even the mid-tone step clears AA.
+Historically, ADR-011's dark-mode softening (context text shifts one tier lighter while service surfaces stay fixed-light) dropped service text below AA in dark mode. That active gap is **largely closed** for the recommended pairings — [brik-bds#865](https://github.com/brikdesigns/brik-bds/issues/865) pinned the dark service context tokens to their darkest primitive (stop `950`), and [#827](https://github.com/brikdesigns/brik-bds/issues/827) darkened the light-mode primitives so even the mid-tone step clears AA.
 
 What remains is the **non-recommended anti-pattern**: a white label on a mid-tone service *base fill* in dark mode (marketing/brand), which is sub-AA. The foundation steers away from it (use pattern 2 or 3). Service pairings in the dataset carry a `darkException` guard linked to [#823](https://github.com/brikdesigns/brik-bds/issues/823): if a future token change pushes a dark service pairing below AA, the gate **reports it as a tracked exception** rather than hard-failing — the gap stays visible and owned, never silently passing.
 
 ## Client themes inherit this for free
 
-Pairing safety is **relationship-based, not per-HEX**. A client theme ([`theme-{client}.css`](/docs/theming/client-themes), `[data-audience]`/`[data-service]` scope binding, `registerClientTheme()`) that fills its ramp per the documented step-roles — pale `-lightest` for text-bearing surfaces, `-darkest` for context text, `on-color` neutrals for solid fills — inherits AA-safety without anyone hand-tuning a hex to pass a checker.
+Pairing safety is **relationship-based, not per-HEX**. A client theme ([`theme-{client}.css`](/docs/theming/client-themes), `[data-audience]`/`[data-service]` scope binding, `registerClientTheme()`) that fills its ramp per the documented step-roles — pale `100` for text-bearing surfaces, `950` for context text, `on-color` neutrals for solid fills — inherits AA-safety without anyone hand-tuning a hex to pass a checker.
 
 Validation comes from the same source: the [Contrast Compliance](https://storybook.brikdesigns.com/?path=/story/overview-health-contrast-compliance--default) dashboard probes **every registered theme** — including client themes — against this exact pairing set via `getComputedStyle`. A new client ramp is audited against the full matrix the moment it's registered.
 

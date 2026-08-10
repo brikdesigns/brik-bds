@@ -4,7 +4,7 @@ description: Semantic color tokens, interaction states, status colors, and the p
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
-import { grayscale, poppy, tan, orange, yellow, green, blue, purple, pink } from '@bds-tokens';
+import { grayscale, poppy, tan, orange, yellow, green, blue, purple, pink } from '@/lib/color-scales';
 
 Color tokens define the visual identity across all BDS themes. The system separates **primitive color scales** (raw hex values) from **semantic color roles** (purpose-bound aliases). Components reference the semantic roles only.
 
@@ -167,19 +167,57 @@ Online/offline indicator tokens used by Avatar and Dot components.
   columns={4}
 />
 
+## The 11-step scale
+
+Every family is an **11-step numeric ramp** — `50, 100, 200, … 900, 950`, lightest to darkest. `50` and `950` bracket the ends; the middle nine carry the working values. The scale is **generated, not hand-tuned per family**: `scripts/generate-color-ramps.mjs` pins the six historical swatches as anchors and interpolates the other five stops as OKLCh midpoints, writing `design-tokens/color-ramps.generated.json` ([#1737](https://github.com/brikdesigns/brik-bds/issues/1737)). Shipped in v0.152.0.
+
+Reach for a stop by its number. `--color-{family}-{stop}` is the Primitive-tier name; components still consume Semantic tokens only.
+
+### Deprecated 6-step aliases
+
+The old ladder (`lightest → lighter → light → dark → darker → darkest`) still resolves — [#1739](https://github.com/brikdesigns/brik-bds/issues/1739) aliased each name onto its stop so nothing broke on upgrade. The aliases are **deprecated** and land at these positions in every family:
+
+{/* lint-mdx-tokens-ignore-start — the deprecated names are the subject of this table */}
+
+| Deprecated alias | Resolves to | Anchor? |
+|---|---|---|
+| `--color-{family}-lightest` | `100` | anchor |
+| `--color-{family}-lighter` | `300` | anchor |
+| `--color-{family}-light` | `500` | anchor |
+| `--color-{family}-dark` | `700` | anchor |
+| `--color-{family}-darker` | `800` | anchor |
+| `--color-{family}-darkest` | `950` | anchor |
+
+{/* lint-mdx-tokens-ignore-end */}
+
+Note the ladder was never evenly spaced: `dark` and `darker` sit one stop apart (`700`/`800`) while `darker` to `darkest` skips `900`. Prose that said "one step deeper" under the 6-step names does not translate to one numeric stop — count stops, don't translate names.
+
+<Callout type="warn">
+  **Don't write a deprecated alias into new code.** `npm run lint-mdx-tokens` fails the build on one in a docs code block or table, and `lint-tokens` Rule 12 covers component CSS. Consumer migration is tracked in [#1740](https://github.com/brikdesigns/brik-bds/issues/1740); the aliases are removed only once it closes.
+</Callout>
+
+### The two new stops that matter
+
+Five stops per family are new. Two of them close specific, filed gaps:
+
+| Stop | Value | Why it exists |
+|---|---|---|
+| `--color-poppy-600` | `#c94428` | **4.84:1 on white — clears AA (4.5:1).** The near-Poppy step [ADR-015](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-015-brand-primary-aa-large-contrast-policy.md)/[ADR-016](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-016-small-primary-button-contrast.md) said did not exist, unblocking [#479](https://github.com/brikdesigns/brik-bds/issues/479) |
+| `--color-grayscale-400` | `#b0b0b0` | Fills the `#828282` → `#e0e0e0` gap from [#1726](https://github.com/brikdesigns/brik-bds/issues/1726). It is **not** `#bdbdbd` — no even OKLCh ramp lands there, so consumers that hand-pinned `#bdbdbd` are migrating to this value, not matching it |
+
 ## Primitives
 
-Raw color scales from the Figma Brand Kit. **Components reference these via semantic tokens — never directly.** The primitives change rarely; the semantic mappings change per theme.
+Raw color scales from the Figma Brand Kit, rendered from `color-ramps.generated.json`. **Components reference these via semantic tokens — never directly.** The primitives change rarely; the semantic mappings change per theme.
 
-<PaletteGrid title="Grayscale" palette={grayscale} prefix="--color-grayscale" columns={8} />
-<PaletteGrid title="Poppy (brand primary)" palette={poppy} prefix="--color-poppy" columns={6} />
-<PaletteGrid title="Tan" palette={tan} prefix="--color-tan" columns={6} />
-<PaletteGrid title="Orange" palette={orange} prefix="--color-orange" columns={6} />
-<PaletteGrid title="Yellow" palette={yellow} prefix="--color-yellow" columns={6} />
-<PaletteGrid title="Green" palette={green} prefix="--color-green" columns={6} />
-<PaletteGrid title="Blue" palette={blue} prefix="--color-blue" columns={6} />
-<PaletteGrid title="Purple" palette={purple} prefix="--color-purple" columns={6} />
-<PaletteGrid title="Pink" palette={pink} prefix="--color-pink" columns={6} />
+<PaletteGrid title="Grayscale" palette={grayscale} prefix="--color-grayscale" columns={11} />
+<PaletteGrid title="Poppy (brand primary)" palette={poppy} prefix="--color-poppy" columns={11} />
+<PaletteGrid title="Tan" palette={tan} prefix="--color-tan" columns={11} />
+<PaletteGrid title="Orange" palette={orange} prefix="--color-orange" columns={11} />
+<PaletteGrid title="Yellow" palette={yellow} prefix="--color-yellow" columns={11} />
+<PaletteGrid title="Green" palette={green} prefix="--color-green" columns={11} />
+<PaletteGrid title="Blue" palette={blue} prefix="--color-blue" columns={11} />
+<PaletteGrid title="Purple" palette={purple} prefix="--color-purple" columns={11} />
+<PaletteGrid title="Pink" palette={pink} prefix="--color-pink" columns={11} />
 
 ## Related
 

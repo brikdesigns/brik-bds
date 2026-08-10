@@ -18,8 +18,8 @@ Tokens load via a two-tier cascade — BDS canon first (`@brikdesigns/bds/tokens
 
 | Type | Purpose | Example | Used in |
 |------|---------|---------|---------|
-| **Primitive** | Raw scale value — the number or color itself | `--color-poppy-light: #e35335` | Never in components |
-| **Semantic** | Purpose-bound alias pointing to a primitive | `--background-brand-primary: var(--color-poppy-light)` | Components, always |
+| **Primitive** | Raw scale value — the number or color itself | `--color-poppy-500: #e35335` | Never in components |
+| **Semantic** | Purpose-bound alias pointing to a primitive | `--background-brand-primary: var(--color-poppy-500)` | Components, always |
 
 Primitives define the palette. Semantics define the intent. Components only know intent.
 
@@ -31,7 +31,7 @@ Primitives define the palette. Semantics define the intent. Components only know
 .bds-button { background: #e35335; }
 
 /* ❌ Wrong — primitive, breaks the abstraction */
-.bds-button { background: var(--color-poppy-light); }
+.bds-button { background: var(--color-poppy-500); }
 ```
 
 ## Naming convention
@@ -52,7 +52,7 @@ Primitives define the palette. Semantics define the intent. Components only know
 | Spacing | `--padding-{size}`, `--gap-{size}` | `--padding-lg`, `--gap-md` |
 | Border radius | `--border-radius-{size}` | `--border-radius-sm`, `--border-radius-md` |
 | Shadow | `--shadow-{size}` | `--shadow-sm`, `--shadow-lg` |
-| Scale step | `--{category}-{index}` | `--space-400`, `--font-size-700`, `--color-grayscale-dark` |
+| Scale step | `--{category}-{index}` | `--space-400`, `--font-size-700`, `--color-grayscale-700` |
 
 Full vocabulary rules — title vs heading, label family, axes, no-unclassed-wrappers — in [Build Standards](/docs/build-standards).
 
@@ -110,7 +110,7 @@ A client brand is a single CSS file (~12–27 token overrides) that redefines se
 
 ```css
 /* ❌ Never use a primitive in a component */
-.card { color: var(--color-grayscale-darkest); }
+.card { color: var(--color-grayscale-950); }
 /* ✅ Use the semantic alias */
 .card { color: var(--text-primary); }
 
