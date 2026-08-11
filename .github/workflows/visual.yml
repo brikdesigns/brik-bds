@@ -41,8 +41,34 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Capacity the runner actually gave us. Printed because the #1778 flake
+      # is capacity-sensitive and invisible otherwise: the same tree that ran
+      # green on 2026-08-10 started losing browser pages the next day with no
+      # repo change and an identical container digest. When this job goes red
+      # again, this is the first line to read.
+      - name: Report runner capacity
+        run: |
+          echo "nproc: $(nproc)"
+          free -m || true
+
+      # --maxWorkers=2 bounds how many browser pages drive the one Vite server
+      # at a time. Unbounded (the default, = runner CPUs) the gate dropped pages
+      # mid-run and reported them as ~85-138 suite-level "NetworkError: A network
+      # error occurred." with ZERO test failures — 4 red / 2 green on 2026-08-11,
+      # including a red run whose diff was package.json only (#1778).
+      #
+      # The discriminator: `npm test` in test.yml runs these SAME 146 storybook
+      # suites in browser mode and stays green. Only VISUAL_GATE=1 fails, and the
+      # gate is what adds the per-story cost — a stable-frame screenshot capture
+      # (up to the 20s budget in vitest.config.ts) plus a pixelmatch compare. So
+      # the load, not the code, is what exhausts the runner.
+      #
+      # Bounded, not retried, on purpose: a `retry` would paper over a gate that
+      # gets more capacity-sensitive as the suite grows past 146 files. Cost of
+      # the cap is wall clock — the last green unbounded run was 3m15s. Raise the
+      # number only against a measured pass rate, never on a hunch.
       - name: Run visual regression suite
-        run: VISUAL_GATE=1 npx vitest run --project storybook
+        run: VISUAL_GATE=1 npx vitest run --project storybook --maxWorkers=2
 
       # On failure, the diff PNGs (and vitest's actual-screenshot attachments)
       # are the review surface — there is no hosted UI (ADR-026 tradeoff).
