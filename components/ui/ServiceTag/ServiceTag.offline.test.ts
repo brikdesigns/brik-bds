@@ -11,7 +11,7 @@
  * JSX is avoided to keep this a `.test.ts` file (include glob is `**\/*.test.ts`).
  */
 import { describe, it, expect } from 'vitest';
-import { resolveServiceIcon, type ServiceLine } from './service-config';
+import { resolveServiceIcon, serviceIconOverrides, type ServiceLine } from './service-config';
 import { SERVICE_ICON_SVGS } from './service-icons.generated';
 
 const LINES: ServiceLine[] = [
@@ -56,5 +56,35 @@ describe('ServiceTag — offline glyph resolution (no 404)', () => {
       const key = resolveServiceIcon(line, `${line} definitely-not-a-real-service xyz`);
       expect(SERVICE_ICON_SVGS[key]).toBeDefined();
     }
+  });
+
+  // `deriveIconName` matches the override key by EXACT string, so a CMS record
+  // spelled "X and Y" misses an "X & Y"-only entry and silently renders the
+  // line default. Two such gaps shipped a generic glyph on brikdesigns.com
+  // (#1774): "Training Setup and Organization" and "Web Design and
+  // Development". Both conjunction spellings must be present, on the same glyph.
+  it('pairs every " & " override key with its " and " spelling, and vice versa', () => {
+    const missing: string[] = [];
+    for (const [name, glyph] of Object.entries(serviceIconOverrides)) {
+      const sibling = name.includes(' & ')
+        ? name.replace(/ & /g, ' and ')
+        : name.includes(' and ')
+          ? name.replace(/ and /g, ' & ')
+          : null;
+      if (!sibling) continue;
+      if (serviceIconOverrides[sibling] !== glyph) {
+        missing.push(`"${name}" → ${glyph} has no matching "${sibling}"`);
+      }
+    }
+    expect(missing, `alias-pair parity gaps:\n${missing.join('\n')}`).toEqual([]);
+  });
+
+  it('resolves the #1774 regressions to their own glyph, not the line default', () => {
+    expect(resolveServiceIcon('back-office', 'Training Setup and Organization')).toBe(
+      'back-office-training-setup',
+    );
+    expect(resolveServiceIcon('marketing', 'Web Design and Development')).toBe(
+      'marketing-web-design',
+    );
   });
 });

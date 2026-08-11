@@ -53,6 +53,17 @@ export const SERVICE_LINES: readonly ServiceLine[] = [
   'back-office',
 ] as const;
 
+/**
+ * Service name → bundled-glyph key. `deriveIconName` looks the name up by
+ * EXACT string, so a name that differs only in its conjunction misses and
+ * falls back to the line-default glyph.
+ *
+ * Invariant: any key containing ` & ` also appears with ` and ` (and vice
+ * versa), both pointing at the same glyph — consumer CMS records drift between
+ * the two spellings for the same service. Enforced by the alias-pair-parity
+ * test in `ServiceTag.offline.test.ts`; two missing `and` forms shipped a
+ * generic glyph on brikdesigns.com plan/services pages (#1774).
+ */
 export const serviceIconOverrides: Record<string, string> = {
   // Brand
   'Brand Identity': 'brand-design',
@@ -62,11 +73,16 @@ export const serviceIconOverrides: Record<string, string> = {
   'Standard Logo Design': 'brand-logo',
   'Print Materials': 'info-print-design',
   // Marketing
+  'Comprehensive Marketing Audit and Consultation': 'marketing-consulting',
   'Comprehensive Marketing Audit & Consultation': 'marketing-consulting',
   'Custom Large E-Commerce Web Development and Design': 'marketing-web-design',
+  'Custom Large E-Commerce Web Development & Design': 'marketing-web-design',
   'Custom Large Web Development and Design': 'marketing-web-design',
+  'Custom Large Web Development & Design': 'marketing-web-design',
   'Custom Standard E-Commerce Web Development and Design': 'marketing-web-design',
+  'Custom Standard E-Commerce Web Development & Design': 'marketing-web-design',
   'Custom Standard Web Development and Design': 'marketing-web-design',
+  'Custom Standard Web Development & Design': 'marketing-web-design',
   'Email Drip Campaign (Up to 6 Emails)': 'marketing-email',
   'Landing Pages': 'marketing-landing-pages',
   'Patient Experience Mapping': 'patient-experience',
@@ -74,6 +90,7 @@ export const serviceIconOverrides: Record<string, string> = {
   'Social Media Graphics': 'marketing-social-graphics',
   'Swag and Merchandise Design': 'marketing-swag',
   'Swag & Merchandise Design': 'marketing-swag',
+  'Web Design and Development': 'marketing-web-design',
   'Web Design & Development': 'marketing-web-design',
   'Website Experience Mapping': 'website-experience',
   // Information
@@ -97,6 +114,7 @@ export const serviceIconOverrides: Record<string, string> = {
   'Software Automation Setup': 'back-office-automated-workflow',
   'SOP Creation': 'back-office-sop-creation',
   'Standard Operating Procedures (SOP) Creation': 'back-office-business-solutions',
+  'Training Setup and Organization': 'back-office-training-setup',
   'Training Setup & Organization': 'back-office-training-setup',
 };
 
