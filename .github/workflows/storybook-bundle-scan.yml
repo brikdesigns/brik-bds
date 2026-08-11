@@ -1,0 +1,80 @@
+name: storybook-bundle-scan
+
+# Scans the BUILT Storybook artifact for secrets. Sibling to gitleaks.yml, not a
+# duplicate of it: that workflow scans the PR diff (source), this one scans
+# storybook-static/ (build output).
+#
+# The distinction is the whole point. Vite inlines `import.meta.env.*` at build
+# time, so a secret can be absent from every diff and present in the shipped JS
+# — CVE-2025-68429, the reason brik-llm#692 put a password wall in front of
+# storybook.brikdesigns.com in the first place.
+#
+# That wall was removed by operator decision on 2026-08-11 (brik-llm#2167): the
+# brik-bds repo is public, so the wall never protected the source, and the live
+# bundle scanned clean. This gate is the control that replaced it — it covers
+# the one thing the wall actually covered. brik-bds#1776.
+#
+# netlify.toml publishes `storybook-static`, so this scans exactly the bytes
+# that go live.
+#
+# Known limit, verified 2026-08-11: gitleaks' default ruleset allowlists the
+# canonical vendor example credentials, so inlining one of those documented
+# placeholder keys does NOT fail this gate, while a realistic `ghp_…` token
+# does. The gate catches secret shapes that are not known placeholder values —
+# it is not a substitute for keeping real credentials out of the Storybook env.
+
+on:
+  pull_request:
+    paths:
+      - 'stories/**'
+      - 'src/**'
+      - '.storybook/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.*'
+      - '.gitleaks-bundle.toml'
+      - '.brik-gitleaks-rules.toml'
+      - '.github/workflows/storybook-bundle-scan.yml'
+
+concurrency:
+  group: storybook-bundle-scan-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  storybook-bundle-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      # Same pinned CLI + version as gitleaks.yml. The gitleaks GitHub Action
+      # requires a paid GITLEAKS_LICENSE for org repos; the CLI is MIT.
+      - name: Install gitleaks
+        run: |
+          set -e
+          VERSION=8.30.1
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${VERSION}/gitleaks_${VERSION}_linux_x64.tar.gz" \
+            | sudo tar -xz -C /usr/local/bin gitleaks
+          gitleaks version
+
+      # Scans the whole tree, not a sample. --redact keeps a real finding out of
+      # the public job log: the log says which file and rule, never the value.
+      - name: Scan the built bundle
+        run: |
+          set -e
+          gitleaks detect --no-git --source storybook-static \
+            --config .gitleaks-bundle.toml \
+            --redact --no-banner --verbose --exit-code 1

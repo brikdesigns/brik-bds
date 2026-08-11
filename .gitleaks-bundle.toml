@@ -1,0 +1,39 @@
+# Gitleaks config for scanning the BUILT Storybook artifact (storybook-static/).
+#
+# Separate from .gitleaks.toml on purpose. That config scans source, where a
+# secret is a committed string. This one scans build output, where a secret is
+# something Vite INLINED at build time — the CVE-2025-68429 failure mode, in
+# which .env content lands in the built JS without ever appearing in a diff.
+# Source-diff gitleaks cannot see it. See brik-bds#1776, brik-llm#2167.
+#
+# Why the two allowlists cannot be shared: .gitleaks.toml allowlists by PATH,
+# and every path in storybook-static/ is content-hashed (iframe-56U6075h.js),
+# so it changes on every build. Anything allowlisted here must be matched by
+# REGEX against the finding itself.
+#
+# Used by .github/workflows/storybook-bundle-scan.yml.
+
+[extend]
+# Same canonical Brik rule set the source scan uses — a secret shape is a
+# secret shape regardless of which side of the build it is found on. The
+# canonical file declares useDefault = true and gitleaks chains it through.
+path = ".brik-gitleaks-rules.toml"
+
+[allowlist]
+description = "storybook-static allowlist — minified-code false positives only"
+
+# Match against the full matched text, not the extracted secret. gitleaks
+# defaults regexTarget to "secret", which for this finding is only the
+# `o=e.childrens` fragment — too short to disambiguate from a real one.
+regexTarget = "match"
+
+regexes = [
+  # Minified property access that the generic-api-key rule reads as `key = <value>`.
+  # Observed 2026-08-11 in iframe-*.js on both the local build and the live
+  # storybook.brikdesigns.com bundle; it is Storybook's own minified source,
+  # `e.key, o = e.childrens`, not a credential.
+  #
+  # Deliberately narrow: it matches this construct and nothing else. Widening
+  # it to something like `\.key` would blind the scan to a real `apiKey = "..."`.
+  '''[A-Za-z_$][\w$]*\.key,\s*[A-Za-z_$][\w$]*\s*=\s*[A-Za-z_$][\w$]*\.childrens''',
+]
