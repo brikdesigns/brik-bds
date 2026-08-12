@@ -56,9 +56,26 @@ on:
   push:
     branches:
       - main
+  # Manual runs exist to make the ten-consecutive-greens bar in #1778
+  # MEASURABLE. Until this trigger, the only way to sample the gate's pass rate
+  # was to generate real PR or push traffic, so the bar could be waited on but
+  # never actually run — and a bar nobody can measure is not a bar.
+  workflow_dispatch:
 
 concurrency:
-  group: visual-${{ github.ref }}
+  # Manual runs get their own group so a campaign does not cancel itself.
+  #
+  # `cancel-in-progress` is right for pull_request and push — a superseded
+  # commit's result is worthless, so grouping those on the ref is correct and is
+  # left exactly as it was. It is wrong for workflow_dispatch: sampling the same
+  # commit N times is the entire point, and under a ref-keyed group each
+  # dispatch would cancel the previous one. Ten dispatches would have yielded
+  # one result and nine cancellations, which reads as "the bar is unreachable"
+  # rather than "the trigger is misconfigured".
+  #
+  # run_id is unique per run, so every manual run is its own group. Adding the
+  # trigger without this is the whole change silently not working.
+  group: visual-${{ github.ref }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || 'auto' }}
   cancel-in-progress: true
 
 jobs:
