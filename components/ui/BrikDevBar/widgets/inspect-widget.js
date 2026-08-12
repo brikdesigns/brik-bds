@@ -109,22 +109,31 @@
   };
 
   // ── BDS Tokens (Brik Design System — standalone inline values) ─────────
-  // Names match figma-tokens.css exactly; values inlined for zero-dependency
-  // deploy. Mirror the T block in feedback-widget.js — keep them in sync.
+  // Values inlined for zero-dependency deploy: the css block below is built at
+  // module init, synchronously, long before the optional manifest fetch lands.
+  // Mirror the T block in feedback-widget.js — keep them in sync.
+  //
+  // Entries annotated with a `--color-*` token are GENERATED: run
+  // `npm run gen:widget-tokens` to re-sync them, and `:check` gates them in CI
+  // (scripts/gen-widget-tokens.mjs). Everything else here is hand-maintained.
   const T = {
     // Primitives
-    colorPoppyLight:       '#e35335', // --color-poppy-light
-    colorPoppyDark:        '#b0351b', // --color-poppy-dark
-    colorPoppyLightest:    '#ffefeb', // --color-poppy-lightest
-    colorPoppyLighter:     '#ffa693', // --color-poppy-lighter
+    colorPoppyLight:       '#e35335', // --color-poppy-500
+    colorPoppyDark:        '#b0351b', // --color-poppy-700
+    colorPoppyLightest:    '#ffefeb', // --color-poppy-100
+    colorPoppyLighter:     '#ffa693', // --color-poppy-300
     colorGrayscaleWhite:   '#ffffff', // --color-grayscale-white
-    colorGrayscaleLightest:'#f7f7f7', // --color-grayscale-lightest
-    colorGrayscaleLighter: '#e0e0e0', // --color-grayscale-lighter
-    colorGrayscaleLight:   '#bdbdbd', // --color-grayscale-light
-    colorGrayscaleDark:    '#828282', // --color-grayscale-dark
-    colorGrayscaleDarker:  '#4f4f4f', // --color-grayscale-darker
-    colorGrayscaleDarkest: '#333333', // --color-grayscale-darkest
-    colorTanLightest:      '#f1f0ec', // --color-tan-lightest
+    colorGrayscaleLightest:'#f2f2f2', // --color-grayscale-100
+    colorGrayscaleLighter: '#e0e0e0', // --color-grayscale-300
+    // Muted text ON the near-black pill/panel chrome. Not grayscale-500: that
+    // is the muted stop for LIGHT surfaces, and on grayscale-950 it measures
+    // 4.48:1 — under AA for the 10.26px pill meta. 400 is 7.94:1, and is the
+    // stop #1737 minted for the hand-pinned #bdbdbd this chrome used to carry.
+    colorGrayscaleMuted:   '#b0b0b0', // --color-grayscale-400
+    colorGrayscaleDark:    '#5a5a5a', // --color-grayscale-700
+    colorGrayscaleDarker:  '#333333', // --color-grayscale-800
+    colorGrayscaleDarkest: '#1b1b1b', // --color-grayscale-950
+    colorTanLightest:      '#f1f0ec', // --color-tan-100
     // Semantic surfaces (light theme — inspector mirrors feedback widget)
     backgroundBrandPrimary: '#e35335', // --background-brand-primary
     interactionBrandHover:  '#b0351b', // --interaction-background-brand-primary-hover
@@ -287,7 +296,7 @@
     .bi-pill__tag { color: ${T.colorPoppyLighter}; }
     .bi-pill__class { color: ${T.colorTanLightest}; }
     .bi-pill__size {
-      color: ${T.colorGrayscaleLight};
+      color: ${T.colorGrayscaleMuted};
       font-size: ${T.fontSizeXs};
     }
     .bi-pill__badge {
