@@ -82,9 +82,11 @@ jobs:
       # to that step instead of failing here, so a dropped page can never be
       # reported as a visual regression — the classifier decides which it was and
       # sets the exit code.
+      # Note the shell: this container has no bash on the Actions default path,
+      # so steps run under `sh -e`. No bashisms here (`set -o pipefail` fails
+      # outright as "Illegal option").
       - name: Run visual regression suite
         run: |
-          set -o pipefail
           VISUAL_GATE=1 npx vitest run --project storybook --maxWorkers=2 \
             --reporter=default --reporter=json --outputFile=visual-report.json || true
 
