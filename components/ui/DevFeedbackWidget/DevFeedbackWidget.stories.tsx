@@ -53,6 +53,20 @@ type Story = StoryObj<typeof DevFeedbackWidget>;
 
 /** @summary Feedback widget — toggle variant / endpoint via Controls */
 export const Default: Story = {
+  // no-visual: the same entrance-animated FAB its sibling stories are already
+  // excluded for (FeedbackWidget.stories.tsx `FormUserStandalone`), plus a
+  // JS detection loop the gate's CSS freeze cannot stop — setInterval(100ms)
+  // under a setTimeout(2000ms) window in DevFeedbackWidget.tsx:264-273.
+  //
+  // The failure is deterministic, not flaky, and NOT the #1785 mono issue it
+  // was first read as: 2644 px on three consecutive runs (31620041578,
+  // 31622254489, and shard 8 of 31619232876), with the font-load assertion
+  // above never firing — so the webfont resolved fine every time. `--update`
+  // writes the first frame it gets; the gate polls for a stable one, times out
+  // ("Matcher did not succeed in time"), and compares a post-detection frame
+  // against a pre-detection baseline. That gap cannot be regenerated away,
+  // which is why regen kept "succeeding" while the gate kept failing.
+  tags: ['no-visual'],
   args: {
     variant: 'fab',
     endpoint: '/api/feedback',

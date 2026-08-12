@@ -312,6 +312,28 @@ screenshot — e.g. lottie canvases) — see AnimatedIcon. Stories tagged
 `interaction-test` (#1638) are also skipped: behavioral end states aren't
 design surfaces.
 
+### `DevFeedbackWidget :: Default` — a regen-proof async story
+
+Excluded because it cannot be fixed by regenerating its baseline, which is the
+tell worth recognising: **a story that fails at the same pixel count on every
+run is not flaky, and regenerating it is a no-op.**
+
+`--update` writes the first frame it captures. The gate instead polls for a
+stable frame, gives up (`Matcher did not succeed in time`), and compares a
+post-detection frame against that pre-detection baseline. The widget's
+`setInterval(100ms)` under a `setTimeout(2000ms)` DevBar-detection window
+(`DevFeedbackWidget.tsx:264-273`) is JS state, so the CSS freeze in
+`vitest.visual.setup.ts` does not touch it. Regen kept reporting success while
+the gate kept failing at **2644 px** — identical on runs 31619232876 (shard 8),
+31620041578 and 31622254489.
+
+It was first read as the #1785 mono flake because the story has two bare
+`<code>` spans. It is not: the font-load assertion never fired on any of those
+runs, so IBM Plex Mono resolved every time, and a font coin-flip would not
+land on the same pixel count three times. Its sibling FABs in
+`FeedbackWidget.stories.tsx` were already excluded for this same entrance
+animation — this story was the one that got missed.
+
 ## Updating baselines
 
 Never from a dev machine — baselines are platform-suffixed, so a

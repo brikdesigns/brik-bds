@@ -65,6 +65,15 @@ jobs:
     # npm dependency — baselines are only valid inside this exact image.
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
+      # Same reason as the `visual` job (#1778). Without --ipc=host Chromium is
+      # capped at Docker's 64 MB default /dev/shm and dies mid-run: this workflow
+      # lost 121 of 146 suites to `NetworkError` on run 31613614226 and therefore
+      # regenerated nothing. The gate being broken is bad; the tool that fixes
+      # the gate's baselines being broken the same way is what made #1785
+      # unfixable. Playwright: "Using --ipc=host is recommended when using
+      # Chromium. Without it, Chromium can run out of memory and crash."
+      # https://playwright.dev/docs/docker
+      options: --ipc=host
     steps:
       # WHY an App token instead of the default GITHUB_TOKEN (#1662):
       # GitHub will not let a GITHUB_TOKEN-authored push trigger CI — "events
@@ -120,11 +129,69 @@ jobs:
       # #1695's disabled-fade change, both scored as passing at the then
       # shipped threshold 0.2). Lowering threshold / floor for one dispatch is
       # the only way out; blank leaves the shipped values untouched.
+      # --maxWorkers=1 for the same reason as the gate (#1778): concurrent
+      # screenshot captures lose pages, and a lost page silently regenerates
+      # NOTHING for its stories — the job would push a partial update that looks
+      # complete. Determinism matters more than wall clock here.
+      #
+      # `|| true` then a retry of only the dropped files: `--update` exits
+      # non-zero for every reference it rewrites, so its exit code cannot
+      # distinguish "wrote a baseline" from "page died". The classifier can, and
+      # a drop here means those stories were never even rendered.
       - name: Regenerate baselines
         env:
           VISUAL_THRESHOLD: ${{ inputs.threshold }}
           VISUAL_FLOOR_PIXELS: ${{ inputs.floor }}
-        run: VISUAL_GATE=1 npx vitest run --project storybook --update
+          DROP_ATTEMPTS: '4'
+        run: |
+          : > /tmp/still-dropped.txt
+
+          # Shard sequentially in one job. The drop rate scales with how many
+          # suites a single browser session handles: unsharded this regenerated
+          # nothing (121/146 lost, run 31613614226) and converged only 120 -> 29
+          # over four whole-list retries (run 31614179816). The `visual` gate
+          # needed exactly ONE retry per 19-suite shard. Each vitest invocation
+          # launches a fresh browser, so looping shards here buys that same small
+          # exposure while keeping one working tree for the commit step below.
+          i=1
+          while [ "$i" -le 8 ]; do
+            echo ""
+            echo "═══ regen shard $i/8 ═══"
+            VISUAL_GATE=1 npx vitest run --project storybook --update --maxWorkers=1 \
+              --shard="$i/8" \
+              --reporter=default --reporter=json --outputFile=visual-report.json || true
+
+            n=0
+            while [ "$n" -lt "$DROP_ATTEMPTS" ]; do
+              node scripts/classify-visual-failure.mjs visual-report.json --list-drops > dropped.txt
+              COUNT=$(wc -l < dropped.txt | tr -d ' ')
+              [ "$COUNT" -eq 0 ] && break
+              n=$((n + 1))
+              echo "  ↻ shard $i retry $n/$DROP_ATTEMPTS — $COUNT suite(s) never rendered"
+              sed 's/^/      /' dropped.txt
+              # No --shard: the file list already IS the selection.
+              VISUAL_GATE=1 npx vitest run --project storybook --update --maxWorkers=1 \
+                $(tr '\n' ' ' < dropped.txt) \
+                --reporter=default --reporter=json --outputFile=visual-report.json || true
+            done
+
+            node scripts/classify-visual-failure.mjs visual-report.json --list-drops >> /tmp/still-dropped.txt
+            i=$((i + 1))
+          done
+
+          # A suite that never rendered must NOT be committed as a silent no-op —
+          # it keeps its stale baseline while the commit message claims a complete
+          # regeneration.
+          LEFT=$(sort -u /tmp/still-dropped.txt | grep -c . || true)
+          if [ "$LEFT" -ne 0 ]; then
+            echo ""
+            echo "✗ $LEFT suite(s) never rendered after $DROP_ATTEMPTS retries in their shard:"
+            sort -u /tmp/still-dropped.txt | sed 's/^/    /'
+            echo "  Refusing to push a partial regeneration. See #1778."
+            exit 1
+          fi
+          echo ""
+          echo "✓ all 8 shards rendered every suite; the baseline diff below is real."
 
       - name: Commit and push baselines
         id: commit
