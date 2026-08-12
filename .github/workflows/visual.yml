@@ -10,6 +10,44 @@ name: Visual Regression
 # references are only valid inside this exact image. Bump the tag DELIBERATELY,
 # in lockstep with the `playwright` npm dependency, and regenerate baselines in
 # the same PR (run the Update Visual Baselines workflow on the branch).
+#
+# ─── #1778: what actually goes wrong here, and what does not ────────────────
+#
+# The gate loses browser pages mid-run. A lost page reports as a suite-level
+# `NetworkError: A network error occurred.` with its tests SKIPPED, so it is
+# indistinguishable in raw vitest output from a real screenshot mismatch — and
+# 121 of them read as 121 visual regressions. The `Classify` step below is what
+# makes the two legible; it, not vitest, owns the job verdict.
+#
+# THREE LEVERS WERE MEASURED AND NONE OF THEM DETERMINES THE OUTCOME:
+#
+#   run         | /dev/shm | workers | result  | suites dropped
+#   ------------|----------|---------|---------|---------------
+#   31595897130 |    64 MB |    2    | PASS    |   0
+#   31596457904 |    64 MB |    2    | fail    | 121
+#   31603449967 |    64 MB |    2    | fail    | 126
+#   31607031103 |   7.9 GB |    2    | fail    |  64
+#   31607740675 |   7.9 GB |    1    | PASS    |   0
+#   31608413482 |   7.9 GB |    1    | fail    |  82
+#
+# Every configuration has both a pass and a fail. So:
+#   · #1781's `--maxWorkers=2` did not fix it (rows 2-3 are that config).
+#   · `--ipc=host` did not fix it either (rows 4 and 6).
+#   · `--maxWorkers=1` did not fix it (rows 5-6 are the same config, one each).
+#
+# Anyone reaching for one of these knobs again: it has been tried. Two
+# consecutive greens is what made #1781 look like a fix; at this pass rate two
+# greens in a row happens by luck often enough to be worthless as evidence. The
+# bar is ten consecutive greens on one commit.
+#
+# What the shape does say: the drops are runner-capacity-driven and external to
+# the repo. The same tree ran reliably green on 2026-08-10 and started dropping
+# on 2026-08-11 with an identical container digest and nothing landed between.
+# So this workflow stops trying to out-tune the fleet and instead bounds its
+# exposure — small shards in fresh containers, plus a retry that fires ONLY for
+# the drop class, never for a real regression. That retry is deliberate and
+# earned: the issue allowed one "only if the measurement shows the drop is
+# genuinely unavoidable," and the table above is that measurement.
 
 on:
   pull_request:
@@ -24,28 +62,36 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  visual:
+  # Shards run the suite in slices. 146 suites in one browser session was the
+  # exposure: reds completed as few as 20 suites before pages started dying, so
+  # a slice of ~19 keeps each session inside the range that has never failed
+  # mid-slice. Fresh container per shard means a fresh browser and a fresh
+  # /dev/shm, so one bad slice cannot poison the rest.
+  #
+  # This job is deliberately NOT named `visual` — a matrix would expand it to
+  # `visual (1)`, `visual (2)`, … and the branch-protection check named `visual`
+  # would never appear again. The aggregate job below carries that name.
+  shard:
+    name: shard ${{ matrix.shard }}/8
     runs-on: ubuntu-latest
+    strategy:
+      # One shard failing must not cancel the others — the whole point is to
+      # see the per-shard drop counts in one run.
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6, 7, 8]
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
-      # --ipc=host is load-bearing, not tuning. Docker gives a container a 64 MB
-      # /dev/shm by default; Chromium allocates screenshot bitmaps there, so the
-      # gate exhausted it mid-run and the browser died — 121/146 suites dropped
-      # on `main` (run 31596457904) with ZERO failed tests. Playwright documents
-      # exactly this: "Using --ipc=host is recommended when using Chromium.
-      # Without it, Chromium can run out of memory and crash."
-      # https://playwright.dev/docs/docker
+      # Docker gives a container a 64 MB /dev/shm by default and Chromium
+      # allocates screenshot bitmaps there. Playwright: "Using --ipc=host is
+      # recommended when using Chromium. Without it, Chromium can run out of
+      # memory and crash." https://playwright.dev/docs/docker
       #
-      # This is why `npm test` (test.yml) runs the SAME 146 storybook suites and
-      # stays green while only VISUAL_GATE=1 fails: the screenshot capture is
-      # what allocates in /dev/shm. It is also why `free -m` looked healthy in
-      # every red run (14 GB available) — system RAM was never the constraint,
-      # shared memory was, and free -m does not show that ceiling.
-      #
-      # Necessary but NOT sufficient on its own: with 7.9 GB of shm and two
-      # workers the gate still lost 64 suites (it stopped dying outright and
-      # completed instead, dropping pages individually). See the worker cap
-      # below — both halves are required.
+      # Kept because it removes a documented failure mode and costs nothing —
+      # NOT because it fixed #1778. It did not (see the table above). Without it
+      # the browser died outright and the run coasted to the end losing every
+      # remaining suite; with it, a bad run degrades instead, dropping pages
+      # individually while the Vite server stays up. Better shape, same verdict.
       options: --ipc=host
     steps:
       - name: Checkout code
@@ -60,75 +106,77 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Capacity the runner actually gave us. Kept after the #1778 fix because
-      # the drop was invisible without it. /dev/shm is listed FIRST: that is the
-      # ceiling that actually broke the gate, and it is the one `free -m` does
-      # not show. Expect ~7.8 GB (half of RAM, the --ipc=host default), not the
-      # 64 MB Docker gives an isolated container.
+      # Capacity the runner actually gave us. `shm:` is first because it is the
+      # ceiling `free -m` does not show — expect ~7.9G from --ipc=host, and if
+      # it ever reads 64M the container options were dropped.
       - name: Report runner capacity
         run: |
           echo "shm:   $(df -h /dev/shm | tail -1)"
           echo "nproc: $(nproc)"
           free -m || true
 
-      # --maxWorkers=1: ONE browser page capturing screenshots at a time. Both
-      # halves of #1778 were needed and each is measured.
+      # This container has no bash on the Actions default path, so steps run
+      # under `sh -e`. No bashisms (`set -o pipefail` fails as "Illegal option").
       #
-      # The measurement that chose this number, all on --ipc=host:
-      #
-      #   workers | /dev/shm | result                          | vitest wall
-      #   --------|----------|---------------------------------|------------
-      #   default |    64 MB | 121/146 dropped (run 31596457904)|  75.96s (died)
-      #        2  |    64 MB | 93 then 126 dropped (PR #1783)  |  ~76s   (died)
-      #        2  |   7.9 GB | 64 dropped, run completed        |  99.49s
-      #        1  |   7.9 GB | 146/146 PASS (run 31607740675)   | 131.38s
-      #
-      # Read the third row against the fourth: raising shm stopped the browser
-      # dying outright but two concurrent screenshot captures still lost pages.
-      # Only one page at a time is actually green.
-      #
-      # The cap is free. 131.38s at workers=1 vs 134.74s for the best
-      # workers=2 green (run 31595897130) — the gate serialises on I/O, not CPU,
-      # so removing the second page costs no wall clock. Do not "optimise" this
-      # back up: #1781 raised the same lever on two consecutive greens against a
-      # ~1-in-3-green process and read luck as a fix. Ten consecutive greens on
-      # one commit is the bar; anything less cannot distinguish the two.
-      #
-      # If the suite outgrows this (a single page is now the floor, so the next
-      # lever is wall clock, not concurrency), shard across a matrix rather than
-      # raising the worker count.
-      #
-      # The JSON report feeds the classifier below. `|| true` hands the verdict
-      # to that step instead of failing here, so a dropped page can never be
-      # reported as a visual regression — the classifier decides which it was and
-      # sets the exit code.
-      #
-      # Note the shell: this container has no bash on the Actions default path,
-      # so steps run under `sh -e`. No bashisms here (`set -o pipefail` fails
-      # outright as "Illegal option").
-      - name: Run visual regression suite
+      # `|| true` on vitest hands the verdict to the classifier, which is the
+      # only thing that can tell a dropped page from a regression. The retry
+      # fires ONLY on exit 2 (drops, zero real failures). Exit 1 — any real
+      # regression, or any failure shape the classifier does not recognise — is
+      # returned immediately and never retried, so a genuine mismatch can never
+      # be retried away.
+      - name: Run visual regression shard
+        env:
+          SHARD: ${{ matrix.shard }}/8
         run: |
-          VISUAL_GATE=1 npx vitest run --project storybook --maxWorkers=1 \
-            --reporter=default --reporter=json --outputFile=visual-report.json || true
+          attempt() {
+            VISUAL_GATE=1 npx vitest run --project storybook --maxWorkers=1 \
+              --shard="$SHARD" \
+              --reporter=default --reporter=json \
+              --outputFile=visual-report.json || true
+            set +e
+            node scripts/classify-visual-failure.mjs visual-report.json
+            CLASS=$?
+            set -e
+          }
 
-      # #1778 AC 1: a dropped browser page must not read as a visual regression.
-      # vitest prints both as a red `FAIL <file>`; the exact discriminator is
-      # that a dropped suite has ZERO failed tests (its tests are skipped,
-      # because the page died before they ran). This step is what makes the two
-      # legible, and it owns the job's pass/fail verdict.
-      - name: Classify the failure class
-        run: node scripts/classify-visual-failure.mjs visual-report.json
+          attempt
+          if [ "$CLASS" -eq 2 ]; then
+            echo ""
+            echo "↻ shard $SHARD lost pages with zero real failures — retrying once."
+            echo "  This retry is scoped to the drop class only (#1778); a real"
+            echo "  regression exits 1 above and is never retried."
+            echo ""
+            attempt
+          fi
+          exit "$CLASS"
 
-      # On failure, the diff PNGs (and vitest's actual-screenshot attachments)
-      # are the review surface — there is no hosted UI (ADR-026 tradeoff).
       - name: Upload visual diffs
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: visual-diffs
+          name: visual-diffs-shard-${{ matrix.shard }}
           path: |
             tests/visual/__diffs__/
             **/.vitest-attachments/
             visual-report.json
           if-no-files-found: ignore
           retention-days: 14
+
+  # The branch-protection check. Keeps the name `visual` stable while the work
+  # above fans out, and fails if ANY shard failed — `needs` alone would let a
+  # skipped/failed shard pass this job, so the result is asserted explicitly.
+  visual:
+    name: visual
+    runs-on: ubuntu-latest
+    needs: shard
+    if: always()
+    steps:
+      - name: Assert every shard passed
+        run: |
+          echo "shard job result: ${{ needs.shard.result }}"
+          if [ "${{ needs.shard.result }}" != "success" ]; then
+            echo "✗ at least one visual shard did not pass — open the shard jobs above."
+            echo "  Each shard prints its own drop-vs-regression classification (#1778)."
+            exit 1
+          fi
+          echo "✓ all 8 visual shards passed."
