@@ -77,6 +77,25 @@ beforeAll(async () => {
   // keeps animated elements at their current frame instead of unmounting
   // keyframe effects; transition-duration 0 makes interaction end states
   // land instantly; caret-color hides the blinking text cursor in inputs.
+  //
+  // The mono pin is determinism of the same kind, for the same reason. A bare
+  // <code> (e.g. InspectWidget.stories.tsx:44) sets no font-family, so it
+  // inherits the generic `monospace`, and Chromium resolves that through
+  // fontconfig. The gate's mono stack is all macOS/Windows faces
+  // (ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas), so every one
+  // misses in the Linux container and the alias is free to land on any of the
+  // three installed families — FreeMono, Liberation Mono, WenQuanYi Zen Hei
+  // Mono (`fc-list | grep -i mono`, printed by the visual job). Different
+  // advance widths, so the span's width changes and shifts the text after it:
+  // 372 px of "regression" that is really a font-resolution coin flip (#1785).
+  //
+  // `document.fonts.ready` below cannot cover this — it settles @font-face
+  // webfonts, and there is no mono @font-face to settle.
+  //
+  // Liberation Mono is named explicitly because it is installed in the pinned
+  // image and is the metric-compatible standard substitute. The generic stays
+  // as the tail so a local (darwin) run still renders its own mono; those
+  // baselines are platform-suffixed anyway.
   const style = document.createElement('style');
   style.id = 'bds-visual-freeze';
   style.textContent = `
@@ -84,6 +103,9 @@ beforeAll(async () => {
       animation-play-state: paused !important;
       transition-duration: 0s !important;
       caret-color: transparent !important;
+    }
+    code, kbd, samp, pre, tt {
+      font-family: 'Liberation Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace !important;
     }
   `;
   document.head.appendChild(style);
