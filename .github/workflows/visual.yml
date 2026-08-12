@@ -87,7 +87,7 @@ jobs:
       # outright as "Illegal option").
       - name: Run visual regression suite
         run: |
-          VISUAL_GATE=1 npx vitest run --project storybook --maxWorkers=2 \
+          VISUAL_GATE=1 npx vitest run --project storybook --maxWorkers=1 \
             --reporter=default --reporter=json --outputFile=visual-report.json || true
 
       # #1778 AC 1: a dropped browser page must not read as a visual regression.
