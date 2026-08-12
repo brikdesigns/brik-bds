@@ -85,3 +85,6 @@ tests/visual/__diffs__/
 .vitest-attachments/
 tests/visual/__screenshots__/*-darwin.png
 tests/visual/__screenshots__/*-win32.png
+# vitest JSON report the visual job feeds to scripts/classify-visual-failure.mjs
+# (#1778) — a per-run artifact, uploaded on failure, never committed.
+visual-report.json
