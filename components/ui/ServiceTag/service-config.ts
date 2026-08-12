@@ -68,7 +68,10 @@ export const serviceIconOverrides: Record<string, string> = {
   // Brand
   'Brand Identity': 'brand-design',
   'Brand Identity Bundle': 'brand-design',
+  'Letterhead Stationary': 'brand-stationary',
+  'Logo Design': 'brand-logo',
   'Logo Update': 'brand-logo',
+  'Online Business Listings': 'brand-listings',
   'Premium Logo Design': 'brand-logo',
   'Standard Logo Design': 'brand-logo',
   'Print Materials': 'info-print-design',
@@ -84,6 +87,7 @@ export const serviceIconOverrides: Record<string, string> = {
   'Custom Standard Web Development and Design': 'marketing-web-design',
   'Custom Standard Web Development & Design': 'marketing-web-design',
   'Email Drip Campaign (Up to 6 Emails)': 'marketing-email',
+  'Email Marketing': 'marketing-email',
   'Landing Pages': 'marketing-landing-pages',
   'Patient Experience Mapping': 'patient-experience',
   'Social Media Graphic Designs': 'marketing-social-graphics',
@@ -96,6 +100,14 @@ export const serviceIconOverrides: Record<string, string> = {
   // Information
   'Information Design': 'information-design',
   'Infographics': 'info-infographics',
+  'Intake Forms': 'info-intake-form',
+  'Sales Resources': 'info-sales-materials',
+  'Signage Design': 'info-signage',
+  'Welcome Onboarding Kit': 'info-welcome-kit',
+  // Product
+  'Mobile App Design': 'product-app-design',
+  'SaaS and Enterprise Design': 'product-enterprise-design',
+  'SaaS & Enterprise Design': 'product-enterprise-design',
   // Back Office (service) — DB uses & where overrides used "and"
   'Automated Workflow and AI Integration': 'back-office-automation-ai',
   'Automated Workflow & AI Integration': 'back-office-automation-ai',

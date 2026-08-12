@@ -87,4 +87,41 @@ describe('ServiceTag — offline glyph resolution (no 404)', () => {
       'marketing-web-design',
     );
   });
+
+  // #1775: 14 of the 37 live brikdesigns.com service names resolved to their
+  // line default because they had no override and their normalized name did not
+  // match a bundled basename — so they read as generic on the plans/services
+  // pages. These ten had an obvious bundled pair; each must reach it.
+  it('resolves the #1775 names to their own glyph, not the line default', () => {
+    const expected: [ServiceLine, string, string][] = [
+      ['brand', 'Logo Design', 'brand-logo'],
+      ['brand', 'Letterhead Stationary', 'brand-stationary'],
+      ['brand', 'Online Business Listings', 'brand-listings'],
+      ['marketing', 'Email Marketing', 'marketing-email'],
+      ['product', 'Mobile App Design', 'product-app-design'],
+      ['product', 'SaaS and Enterprise Design', 'product-enterprise-design'],
+      ['product', 'SaaS & Enterprise Design', 'product-enterprise-design'],
+      ['information', 'Intake Forms', 'info-intake-form'],
+      ['information', 'Sales Resources', 'info-sales-materials'],
+      ['information', 'Signage Design', 'info-signage'],
+      ['information', 'Welcome Onboarding Kit', 'info-welcome-kit'],
+    ];
+    for (const [line, name, glyph] of expected) {
+      expect(resolveServiceIcon(line, name), `"${name}" must resolve to ${glyph}`).toBe(glyph);
+      expect(SERVICE_ICON_SVGS[glyph]).toContain('<path');
+    }
+  });
+
+  // The remaining four #1775 names have NO bundled art that fits, so they keep
+  // the line default by decision, not by oversight. This pins that decision: if
+  // art lands (or a mapping is guessed at) this test fails and forces the
+  // mapping to be added above rather than landing unnoticed.
+  it('leaves the four #1775 names without fitting art on the line default', () => {
+    for (const name of ['Presentation Design', 'One-Pager', 'Sales Pitch Deck', 'Sales Proposal']) {
+      expect(
+        resolveServiceIcon('information', name),
+        `"${name}" now resolves to specific art — record the mapping in serviceIconOverrides`,
+      ).toBe('information-design');
+    }
+  });
 });
