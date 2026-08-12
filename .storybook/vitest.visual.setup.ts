@@ -45,6 +45,9 @@ const FONT_WARMUP: Array<[family: string, weights: number[]]> = [
   ['Hind', [300, 400, 500, 600, 700]],
   ['Playfair Display', [400, 600, 700, 900]],
   ['Droid Sans', [400, 700]],
+  // Mono. Load-bearing for determinism, not just for looks — see the pin in
+  // beforeAll. A webfont is the ONLY mono the gate can await (#1785).
+  ['IBM Plex Mono', [400, 600]],
 ];
 
 beforeAll(async () => {
@@ -54,7 +57,7 @@ beforeAll(async () => {
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href =
-    'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&family=Open+Sans:wght@300;400;600;700&family=Newsreader:wght@300;400;600;700&family=Source+Sans+3:wght@300;400;600;700&family=IBM+Plex+Sans:wght@300;400;600;700&family=Hind:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700;900&family=Droid+Sans:wght@400;700&display=swap';
+    'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&family=Open+Sans:wght@300;400;600;700&family=Newsreader:wght@300;400;600;700&family=Source+Sans+3:wght@300;400;600;700&family=IBM+Plex+Sans:wght@300;400;600;700&family=Hind:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700;900&family=Droid+Sans:wght@400;700&family=IBM+Plex+Mono:wght@400;600&display=swap';
   const cssLoaded = new Promise((resolve) => {
     link.onload = resolve;
     link.onerror = resolve;
@@ -92,23 +95,25 @@ beforeAll(async () => {
   // `document.fonts.ready` below cannot cover this — it settles @font-face
   // webfonts, and there is no mono @font-face to settle.
   //
-  // Liberation Mono is named explicitly because it is installed in the pinned
-  // image and is the metric-compatible standard substitute. The generic stays
-  // as the tail so a local (darwin) run still renders its own mono; those
-  // baselines are platform-suffixed anyway.
+  // IBM Plex Mono, and the reason it is a WEBFONT is the whole fix. Naming a
+  // system face here (the first attempt pinned Liberation Mono) does not work:
+  // `document.fonts.load` above can only warm and await an @font-face, so a
+  // system font is the one kind of font this gate cannot wait for. That left
+  // the declaration racing the fontconfig lookup, and it lost intermittently —
+  // the Liberation Mono pin was present in the tree the baselines were
+  // regenerated from (ad37e2fd), yet tools-dev-feedback-widget-default matched
+  // its PRE-pin baseline during that regen and then failed the gate at 2644 px
+  // (run 31615511652). Same declaration, two different faces.
   //
-  // INCOMPLETE — #1785 is still open. This reduces the flake but does not
-  // reliably win. Proof: this pin was in the tree the baseline regen ran on
-  // (ad37e2fd), yet tools-dev-feedback-widget-default MATCHED its pre-pin
-  // baseline during that regen and then failed the gate at 2644 px on attempt
-  // 3 of run 31615511652 — identical text, different mono advance widths
-  // across its two code spans. So the declaration is not always the face that
-  // gets used, and the reason is not yet known.
+  // IBM Plex Mono is warmed in FONT_WARMUP above like every other brand face,
+  // so by the time any story renders it is in the font cache and cannot be
+  // resolved to anything else. It also pairs with IBM Plex Sans, which the
+  // brand already loads, and it replaces a mono that never actually worked:
+  // preview-head.html's Geist Mono link is a jsdelivr 404 (see FONT_WARMUP).
   //
-  // Do NOT add another font lever on a hunch — three were already tried and
-  // disproved for the page drops (#1778). The next step is a measurement:
-  // print the resolved face for a code span inside the container, and diff two
-  // renders of the same story within one session.
+  // Liberation Mono stays as the next fallback — installed in the pinned image,
+  // so even a failed webfont fetch lands on something deterministic rather than
+  // back on the fontconfig coin flip.
   const style = document.createElement('style');
   style.id = 'bds-visual-freeze';
   style.textContent = `
@@ -118,7 +123,7 @@ beforeAll(async () => {
       caret-color: transparent !important;
     }
     code, kbd, samp, pre, tt {
-      font-family: 'Liberation Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace !important;
+      font-family: 'IBM Plex Mono', 'Liberation Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace !important;
     }
   `;
   document.head.appendChild(style);
