@@ -144,36 +144,54 @@ jobs:
           VISUAL_FLOOR_PIXELS: ${{ inputs.floor }}
           DROP_ATTEMPTS: '4'
         run: |
-          VISUAL_GATE=1 npx vitest run --project storybook --update --maxWorkers=1 \
-            --reporter=default --reporter=json --outputFile=visual-report.json || true
+          : > /tmp/still-dropped.txt
 
-          n=0
-          while [ "$n" -lt "$DROP_ATTEMPTS" ]; do
-            node scripts/classify-visual-failure.mjs visual-report.json --list-drops > dropped.txt
-            COUNT=$(wc -l < dropped.txt | tr -d ' ')
-            [ "$COUNT" -eq 0 ] && break
-            n=$((n + 1))
+          # Shard sequentially in one job. The drop rate scales with how many
+          # suites a single browser session handles: unsharded this regenerated
+          # nothing (121/146 lost, run 31613614226) and converged only 120 -> 29
+          # over four whole-list retries (run 31614179816). The `visual` gate
+          # needed exactly ONE retry per 19-suite shard. Each vitest invocation
+          # launches a fresh browser, so looping shards here buys that same small
+          # exposure while keeping one working tree for the commit step below.
+          i=1
+          while [ "$i" -le 8 ]; do
             echo ""
-            echo "↻ regen retry $n/$DROP_ATTEMPTS — $COUNT suite(s) never rendered:"
-            sed 's/^/    /' dropped.txt
-            echo ""
+            echo "═══ regen shard $i/8 ═══"
             VISUAL_GATE=1 npx vitest run --project storybook --update --maxWorkers=1 \
-              $(tr '\n' ' ' < dropped.txt) \
+              --shard="$i/8" \
               --reporter=default --reporter=json --outputFile=visual-report.json || true
+
+            n=0
+            while [ "$n" -lt "$DROP_ATTEMPTS" ]; do
+              node scripts/classify-visual-failure.mjs visual-report.json --list-drops > dropped.txt
+              COUNT=$(wc -l < dropped.txt | tr -d ' ')
+              [ "$COUNT" -eq 0 ] && break
+              n=$((n + 1))
+              echo "  ↻ shard $i retry $n/$DROP_ATTEMPTS — $COUNT suite(s) never rendered"
+              sed 's/^/      /' dropped.txt
+              # No --shard: the file list already IS the selection.
+              VISUAL_GATE=1 npx vitest run --project storybook --update --maxWorkers=1 \
+                $(tr '\n' ' ' < dropped.txt) \
+                --reporter=default --reporter=json --outputFile=visual-report.json || true
+            done
+
+            node scripts/classify-visual-failure.mjs visual-report.json --list-drops >> /tmp/still-dropped.txt
+            i=$((i + 1))
           done
 
-          # A suite that never rendered after every retry must NOT be committed as
-          # a silent no-op — the operator would read the resulting commit as a
-          # complete regeneration.
-          LEFT=$(node scripts/classify-visual-failure.mjs visual-report.json --list-drops | wc -l | tr -d ' ')
+          # A suite that never rendered must NOT be committed as a silent no-op —
+          # it keeps its stale baseline while the commit message claims a complete
+          # regeneration.
+          LEFT=$(sort -u /tmp/still-dropped.txt | grep -c . || true)
           if [ "$LEFT" -ne 0 ]; then
-            echo "✗ $LEFT suite(s) still never rendered — refusing to push a partial"
-            echo "  regeneration. These stories would keep their stale baselines while"
-            echo "  the commit message claimed otherwise. See #1778."
-            node scripts/classify-visual-failure.mjs visual-report.json || true
+            echo ""
+            echo "✗ $LEFT suite(s) never rendered after $DROP_ATTEMPTS retries in their shard:"
+            sort -u /tmp/still-dropped.txt | sed 's/^/    /'
+            echo "  Refusing to push a partial regeneration. See #1778."
             exit 1
           fi
-          echo "✓ every suite rendered; baselines below are the real diff."
+          echo ""
+          echo "✓ all 8 shards rendered every suite; the baseline diff below is real."
 
       - name: Commit and push baselines
         id: commit
