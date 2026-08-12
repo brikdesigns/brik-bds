@@ -1,0 +1,53 @@
+name: Widget Token Check
+
+# Ensures the color primitives inlined in the BrikDevBar widgets' `const T` blocks
+# stay in sync with tokens/figma-tokens.css. The widgets are zero-dependency IIFEs
+# that build their chrome CSS synchronously at module init, so the values cannot be
+# read from a token file at runtime — they are inlined, and each carries the token
+# it mirrors as a comment.
+#
+# Why this is a CI gate: a comment is not a reference, so nothing enforced it. Five
+# of the six grayscale entries silently fell a rung behind the 11-step ramp minted
+# in #1737 and stayed there (#1750). Only a check that resolves the commented token
+# and compares the literal can see that class of drift.
+#
+# Source: scripts/gen-widget-tokens.mjs
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'tokens/figma-tokens.css'
+      - 'components/ui/BrikDevBar/widgets/**/*.js'
+      - 'scripts/gen-widget-tokens.mjs'
+  push:
+    branches:
+      - main
+    paths:
+      - 'tokens/figma-tokens.css'
+      - 'components/ui/BrikDevBar/widgets/**/*.js'
+      - 'scripts/gen-widget-tokens.mjs'
+
+concurrency:
+  group: widget-tokens-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  widget-tokens-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check inlined widget tokens are in sync
+        run: npm run gen:widget-tokens:check
