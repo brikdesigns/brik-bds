@@ -118,8 +118,13 @@
   // (scripts/gen-widget-tokens.mjs). Everything else here is hand-maintained.
   const T = {
     // Primitives
+    // poppy-500 is 3.78:1 against white — it clears the 3:1 non-text threshold
+    // for outlines and borders, and fails AA for anything carrying a label.
+    // Fills and text that carry a label use poppy-700 (6.23:1), hovering to
+    // poppy-800 (10.24:1). Same split #1576 made in feedback-widget.js.
     colorPoppyLight:       '#e35335', // --color-poppy-500
     colorPoppyDark:        '#b0351b', // --color-poppy-700
+    colorPoppyDarker:      '#7d1d09', // --color-poppy-800
     colorPoppyLightest:    '#ffefeb', // --color-poppy-100
     colorPoppyLighter:     '#ffa693', // --color-poppy-300
     colorGrayscaleWhite:   '#ffffff', // --color-grayscale-white
@@ -136,15 +141,22 @@
     colorTanLightest:      '#f1f0ec', // --color-tan-100
     // Semantic surfaces (light theme — inspector mirrors feedback widget)
     backgroundBrandPrimary: '#e35335', // --background-brand-primary
-    interactionBrandHover:  '#b0351b', // --interaction-background-brand-primary-hover
     textPrimary:   '#333333', // --text-primary
     textSecondary: '#4f4f4f', // --text-secondary
+    // --text-muted (#828282) is 3.84:1 on white — sanctioned at AA-LARGE only
+    // (tokens/contrast-pairings.json). Every label in this panel is 10–12px, so
+    // nothing here qualifies; they use --text-secondary (7.44:1) instead. The
+    // entry stays because the panel may yet need a large-text muted role.
     textMuted:     '#828282', // --text-muted
     textInverse:   '#ffffff', // --text-inverse
     borderPrimary: '#e0e0e0', // --border-primary
-    // Status (kept neutral to BDS — used for OK/warn states in panel)
-    statusOk:   '#3aa86b',
-    statusWarn: '#e3a335',
+    // Status. Each carries white text or sits on white, so each is picked to
+    // clear AA 4.5:1 rather than to match the 6-step status hues.
+    colorGreenLightest:    '#f8fff3', // --color-green-100
+    statusOk:   '#437f4e', // --color-green-900
+    statusWarn: '#795e1f', // --color-yellow-900
+    // Standalone by necessity: BDS has no red ramp, and --color-system-red
+    // (#eb5757) is 3.30:1 on this panel's white. #d83a3a is 4.58:1.
     statusErr:  '#d83a3a',
     // Typography
     fontFamily:         "'Poppins', system-ui, sans-serif",
@@ -266,8 +278,8 @@
       box-sizing: border-box; -webkit-appearance: none; appearance: none;
     }
     .bi-btn:hover { background: ${T.colorGrayscaleDarker}; transform: translateY(-1px); }
-    .bi-btn--active { background: ${T.backgroundBrandPrimary}; }
-    .bi-btn--active:hover { background: ${T.interactionBrandHover}; }
+    .bi-btn--active { background: ${T.colorPoppyDark}; }
+    .bi-btn--active:hover { background: ${T.colorPoppyDarker}; }
 
     .bi-outline {
       position: fixed; pointer-events: none; z-index: 2147483640;
@@ -307,7 +319,7 @@
       letter-spacing: 0.04em; text-transform: uppercase;
     }
     .bi-pill__badge--bds  { background: ${T.statusOk}; color: ${T.colorGrayscaleWhite}; }
-    .bi-pill__badge--warn { background: ${T.backgroundBrandPrimary}; color: ${T.colorGrayscaleWhite}; }
+    .bi-pill__badge--warn { background: ${T.colorPoppyDark}; color: ${T.colorGrayscaleWhite}; }
 
     .bi-panel {
       position: fixed; top: 76px; left: ${T.space600};
@@ -339,7 +351,7 @@
     }
     .bi-panel__close {
       background: transparent; border: none;
-      color: ${T.textMuted};
+      color: ${T.textSecondary};
       font-size: 20px; cursor: pointer; padding: 0 ${T.space100};
       line-height: 1; flex-shrink: 0;
     }
@@ -354,7 +366,7 @@
       font-family: ${T.fontFamily};
       font-size: ${T.fontSizeXs};
       font-weight: ${T.fontWeightBold};
-      color: ${T.textMuted};
+      color: ${T.textSecondary};
       text-transform: uppercase;
       letter-spacing: 0.08em;
       margin-bottom: ${T.space200};
@@ -366,7 +378,7 @@
       font-family: ${T.fontFamilyMono};
     }
     .bi-row__label {
-      color: ${T.textMuted};
+      color: ${T.textSecondary};
       flex: 0 0 110px;
       font-size: ${T.fontSizeSm};
     }
@@ -376,10 +388,10 @@
       word-break: break-word;
       color: ${T.textPrimary};
     }
-    .bi-token { color: ${T.backgroundBrandPrimary}; font-weight: ${T.fontWeightMedium}; }
+    .bi-token { color: ${T.colorPoppyDark}; font-weight: ${T.fontWeightMedium}; }
     .bi-token--unknown { color: ${T.statusWarn}; }
     .bi-computed {
-      color: ${T.textMuted};
+      color: ${T.textSecondary};
       font-size: ${T.fontSizeXs};
       margin-left: ${T.space200};
     }
@@ -406,7 +418,7 @@
       display: inline-flex; align-items: center; gap: ${T.space100};
     }
     .bi-stat--warn { background: ${T.colorPoppyLightest}; color: ${T.colorPoppyDark}; }
-    .bi-stat--ok   { background: rgba(58,168,107,0.12); color: #1f7a4a; }
+    .bi-stat--ok   { background: ${T.colorGreenLightest}; color: ${T.statusOk}; }
 
     .bi-class-chip {
       display: inline-block;
@@ -418,7 +430,7 @@
       color: ${T.textSecondary};
     }
     .bi-class-chip--bds {
-      background: rgba(58,168,107,0.12); color: #1f7a4a;
+      background: ${T.colorGreenLightest}; color: ${T.statusOk};
     }
 
     .bi-actions {
@@ -439,9 +451,9 @@
       transition: background 0.12s ease, color 0.12s ease;
     }
     .bi-action-btn:hover {
-      background: ${T.backgroundBrandPrimary};
+      background: ${T.colorPoppyDark};
       color: ${T.colorGrayscaleWhite};
-      border-color: ${T.backgroundBrandPrimary};
+      border-color: ${T.colorPoppyDark};
     }
   `;
 
@@ -1417,7 +1429,7 @@
       <div class="bi-panel__section">
         <div class="bi-panel__section-title">Accessibility</div>
         ${(contrastBadge || aaaBadge) ? `<div class="bi-summary" style="margin-bottom:8px;">${contrastBadge}${aaaBadge}</div>` : ''}
-        ${issueRows || (issues.length === 0 && contrast?.passesAA ? '<div class="bi-row"><span class="bi-row__value" style="color:#3aa86b;">No runtime accessibility issues detected.</span></div>' : '')}
+        ${issueRows || (issues.length === 0 && contrast?.passesAA ? '<div class="bi-row"><span class="bi-row__value" style="color:${T.statusOk};">No runtime accessibility issues detected.</span></div>' : '')}
       </div>
     `;
   }
