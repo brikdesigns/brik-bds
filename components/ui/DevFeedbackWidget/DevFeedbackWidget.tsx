@@ -190,11 +190,6 @@ export function DevFeedbackWidget({
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<string>('bug');
   const [description, setDescription] = useState('');
-  // Bug reports carry structured expected/actual so a stale item isn't a
-  // one-line title with no context (brik-client-portal#2937). Only shown +
-  // required for the 'bug' type; other types keep the single free-text field.
-  const [expected, setExpected] = useState('');
-  const [actual, setActual] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [contextValue, setContextValue] = useState('');
@@ -358,24 +353,9 @@ export function DevFeedbackWidget({
     return () => document.removeEventListener('paste', onPaste);
   }, [open, processImageFile]);
 
-  // Capture-time minimum (brik-client-portal#2937). A bug must carry a
-  // description, expected, actual, AND a screenshot before it can be submitted;
-  // every other type keeps the original description-only bar. `missing` drives
-  // the inline hint so the block is explained, not silent.
-  const isBug = type === 'bug';
-  const missing = isBug
-    ? [
-        !description.trim() && 'a summary',
-        !expected.trim() && 'what you expected',
-        !actual.trim() && 'what actually happened',
-        !screenshot && 'a screenshot',
-      ].filter((v): v is string => Boolean(v))
-    : [!description.trim() && 'a description'].filter((v): v is string => Boolean(v));
-  const canSubmit = missing.length === 0;
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (!canSubmit) return;
+    if (!description.trim()) return;
     setSubmitting(true);
     try {
       const res = await fetch(endpoint, {
@@ -386,11 +366,6 @@ export function DevFeedbackWidget({
             typeof window !== 'undefined' ? window.location.pathname : '',
           feedback_type: type,
           description: description.trim(),
-          // Structured bug context (brik-client-portal#2937). Sent only for
-          // bugs; the portal route 400s a bug missing either field or a
-          // screenshot, so this mirrors the server's minimum.
-          expected: isBug ? expected.trim() : undefined,
-          actual: isBug ? actual.trim() : undefined,
           context: contextValue,
           // Element context (feedback-contract 0.2.0). Page name is always
           // known; section/component arrive as props when a host wires the
@@ -416,8 +391,6 @@ export function DevFeedbackWidget({
           setOpen(false);
           setSubmitted(false);
           setDescription('');
-          setExpected('');
-          setActual('');
           setType('bug');
           setScreenshot(null);
         }, 1500);
@@ -537,20 +510,6 @@ export function DevFeedbackWidget({
     resize: 'vertical',
     outline: 'none',
     boxSizing: 'border-box',
-  };
-
-  // Expected/Actual sit below the summary; a shorter min-height keeps the
-  // three-field bug form from overflowing the 320px panel (#2937).
-  const shortTextareaStyle: CSSProperties = {
-    ...textareaStyle,
-    minHeight: '52px',
-  };
-
-  const hintStyle: CSSProperties = {
-    fontSize: '11px', // bds-lint-ignore — dev overlay renders fixed
-    color: BDS.poppyDark,
-    fontFamily: BDS.fontFamily,
-    lineHeight: 1.3, // bds-lint-ignore — dev overlay renders fixed
   };
 
   const contextStyle: CSSProperties = {
@@ -689,35 +648,13 @@ export function DevFeedbackWidget({
                   ))}
                 </div>
 
-                {isBug && <div style={headerStyle}>Summary</div>}
                 <textarea
                   style={textareaStyle}
-                  placeholder={
-                    isBug ? 'One line: what is broken?' : 'Describe what you found...'
-                  }
+                  placeholder="Describe what you found..."
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   autoFocus
                 />
-
-                {isBug && (
-                  <>
-                    <div style={headerStyle}>Expected</div>
-                    <textarea
-                      style={shortTextareaStyle}
-                      placeholder="What did you expect to happen?"
-                      value={expected}
-                      onChange={(e) => setExpected(e.target.value)}
-                    />
-                    <div style={headerStyle}>Actual</div>
-                    <textarea
-                      style={shortTextareaStyle}
-                      placeholder="What actually happened?"
-                      value={actual}
-                      onChange={(e) => setActual(e.target.value)}
-                    />
-                  </>
-                )}
 
                 {screenshot ? (
                   <div style={screenshotPreviewStyle}>
@@ -754,7 +691,7 @@ export function DevFeedbackWidget({
                       processImageFile(e.dataTransfer.files?.[0]);
                     }}
                   >
-                    📎 Paste, drag, or upload a screenshot{isBug ? ' (required)' : ''}
+                    📎 Paste, drag, or upload a screenshot
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -769,16 +706,10 @@ export function DevFeedbackWidget({
                   {contextLabel}: {contextValue}
                 </div>
 
-                {!canSubmit && (
-                  <div style={hintStyle} role="status">
-                    Still needed: {missing.join(', ')}.
-                  </div>
-                )}
-
                 <button
                   type="submit"
-                  style={submitBtnStyle(submitting || !canSubmit)}
-                  disabled={submitting || !canSubmit}
+                  style={submitBtnStyle(submitting || !description.trim())}
+                  disabled={submitting || !description.trim()}
                 >
                   {submitting ? 'Submitting...' : 'Submit Feedback'}
                 </button>
