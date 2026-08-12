@@ -64,7 +64,7 @@
 .docblock-source pre.prismjs {
   background-color: var(--sb-code-block-bg) !important;
   color: var(--sb-code-block-text) !important;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace !important;
   font-size: 13px !important;
   line-height: 1.5 !important;
   border: none !important;
@@ -84,7 +84,7 @@ pre code,
 pre[class*="language-"] code {
   background: transparent !important;
   color: var(--sb-code-block-text) !important;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace !important;
   text-shadow: none !important;
   font-size: inherit !important;
   line-height: inherit !important;
@@ -103,7 +103,7 @@ pre,
 .prismjs {
   background-color: var(--sb-code-block-bg) !important;
   color: var(--sb-code-block-text) !important;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace !important;
   border: none !important;
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -164,7 +164,7 @@ code:not([class*="language-"]):not(pre code) {
   padding: 0.15em 0.4em !important;
   border-radius: 4px !important;
   font-size: 0.875em !important;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace !important;
 }
 
 /* ============================================
@@ -274,7 +274,7 @@ button.docblock-code-toggle::after {
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
   border-radius: 4px !important;
   box-shadow: none !important;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace !important;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace !important;
   font-size: 12px !important;
   padding: 4px 12px !important;
   cursor: pointer !important;
