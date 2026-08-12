@@ -174,19 +174,28 @@ beforeAll(async () => {
   // keyframe effects; transition-duration 0 makes interaction end states
   // land instantly; caret-color hides the blinking text cursor in inputs.
   //
-  // The mono pin is determinism of the same kind, for the same reason. A bare
-  // <code> (e.g. InspectWidget.stories.tsx:44) sets no font-family, so it
-  // inherits the generic `monospace`, and Chromium resolves that through
-  // fontconfig. The gate's mono stack is all macOS/Windows faces
-  // (ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas), so every one
-  // misses in the Linux container and the alias is free to land on any of the
-  // three installed families — FreeMono, Liberation Mono, WenQuanYi Zen Hei
-  // Mono (`fc-list | grep -i mono`, printed by the visual job). Different
-  // advance widths, so the span's width changes and shifts the text after it:
-  // 372 px of "regression" that is really a font-resolution coin flip (#1785).
+  // The mono rule below is NOT what makes code spans deterministic, and it is
+  // important not to read it that way — believing it did cost #1785 three fix
+  // attempts. `storybook-overrides.css` styles inline code with
   //
-  // `document.fonts.ready` below cannot cover this — it settles @font-face
-  // webfonts, and there is no mono @font-face to settle.
+  //     code:not([class*="language-"]):not(pre code) { font-family: … !important }
+  //
+  // which is specificity (0,1,3) against this rule's bare `code` at (0,0,1).
+  // Both carry !important, so the stylesheet wins and this declaration has
+  // never applied to an inline <code> in the gate's entire history. Measured,
+  // not reasoned: a probe reading getComputedStyle on the InspectWidget span
+  // reported `declared="ui-monospace, SFMono-Regular, …"` — the override's
+  // stack, with no IBM Plex Mono in it — while this rule was present.
+  //
+  // That is why the real fix is in storybook-overrides.css, where every mono
+  // stack now leads with "IBM Plex Mono" and falls back to "Liberation Mono"
+  // (installed in the image) before the generic alias. Storybook and the gate
+  // then agree on one face by construction instead of racing.
+  //
+  // This rule is kept only for `kbd, samp, pre, tt`, which the overrides do not
+  // cover. `document.fonts.ready` below cannot substitute for any of it — it
+  // settles @font-face webfonts, and says nothing about which family the
+  // cascade picked.
   //
   // IBM Plex Mono, and the reason it is a WEBFONT is the whole fix. Naming a
   // system face here (the first attempt pinned Liberation Mono) does not work:
