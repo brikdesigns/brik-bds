@@ -265,14 +265,18 @@ if [[ "$MULTI_LIBRARY" == "true" ]]; then
     log "Pulling Foundations Library..."
     pull_library "$CHANNEL_FOUNDATIONS" "$OUTPUT_FOUNDATIONS" || fail "Foundations pull failed."
     log "Syncing Foundations → design-tokens/foundations.json..."
-    node "$SYNC_SCRIPT" "$OUTPUT_FOUNDATIONS" --library=foundations --no-merge || warn "Foundations sync had warnings."
+    # sync-figma-mcp.js exits non-zero only on hard errors — bad usage, a failed
+    # merge/build, or the #1797 reference guard refusing to prune a token source
+    # still consumes. It writes nothing in any of those cases, so continuing to
+    # the merge would silently discard the whole pull under a "warnings" label.
+    node "$SYNC_SCRIPT" "$OUTPUT_FOUNDATIONS" --library=foundations --no-merge || fail "Foundations sync failed — nothing was written. See the error above."
   fi
 
   if [[ -n "$CHANNEL_BRAND_KIT" ]]; then
     log "Pulling Brand Kit Library (brik)..."
     pull_library "$CHANNEL_BRAND_KIT" "$OUTPUT_BRAND_KIT" || fail "Brand Kit pull failed."
     log "Syncing Brand Kit → design-tokens/brand-kits/brik.json..."
-    node "$SYNC_SCRIPT" "$OUTPUT_BRAND_KIT" --library=brand-kit --no-merge || warn "Brand Kit sync had warnings."
+    node "$SYNC_SCRIPT" "$OUTPUT_BRAND_KIT" --library=brand-kit --no-merge || fail "Brand Kit sync failed — nothing was written. See the error above."
   fi
 
   log "Merging Libraries → design-tokens/tokens-studio.json..."
@@ -309,7 +313,7 @@ else
   if node "$SYNC_SCRIPT" "$OUTPUT_FILE" --build 2>&1; then
     ok "Token sync + build complete"
   else
-    warn "Sync completed with warnings (check output above)"
+    fail "Token sync failed — nothing was written. See the error above."
   fi
 
   echo ""
