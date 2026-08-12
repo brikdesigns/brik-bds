@@ -114,6 +114,12 @@ jobs:
           echo "shm:   $(df -h /dev/shm | tail -1)"
           echo "nproc: $(nproc)"
           free -m || true
+          # Monospace faces actually installed in this image. The gate's mono
+          # stack is all macOS/Windows faces, so code spans land on the generic
+          # fontconfig alias and flake by 372px between runs (#1785). Printed so
+          # the eventual pin is chosen against what is really here.
+          echo "mono faces:"
+          fc-list 2>/dev/null | grep -i mono | sed 's/^/  /' | sort -u || echo "  (fc-list unavailable)"
 
       # This container has no bash on the Actions default path, so steps run
       # under `sh -e`. No bashisms (`set -o pipefail` fails as "Illegal option").
@@ -127,26 +133,62 @@ jobs:
       - name: Run visual regression shard
         env:
           SHARD: ${{ matrix.shard }}/8
+          # Attempts for the drop class only. A whole-shard retry was too coarse
+          # — shard 5 went 16 drops -> 3 and shard 8 went 10 -> 11 on run
+          # 31609177266, because re-running all 19 suites re-exposes the healthy
+          # ones. Retrying only the files that died converges instead: each round
+          # is a handful of suites, so the surviving set shrinks monotonically.
+          DROP_ATTEMPTS: '4'
         run: |
-          attempt() {
-            VISUAL_GATE=1 npx vitest run --project storybook --maxWorkers=1 \
-              --shard="$SHARD" \
-              --reporter=default --reporter=json \
-              --outputFile=visual-report.json || true
+          classify() {
             set +e
             node scripts/classify-visual-failure.mjs visual-report.json
             CLASS=$?
             set -e
           }
 
-          attempt
+          # Full shard, then classify.
+          VISUAL_GATE=1 npx vitest run --project storybook --maxWorkers=1 \
+            --shard="$SHARD" \
+            --reporter=default --reporter=json \
+            --outputFile=visual-report.json || true
+          classify
+
+          # Exit 1 is a real regression, or a failure shape the classifier does
+          # not recognise. Never retried — that is the whole point of separating
+          # the classes, and retrying here would defeat the gate.
+          if [ "$CLASS" -eq 1 ]; then
+            exit 1
+          fi
+
+          # Exit 2 is drops only: retry just the files that died, up to
+          # DROP_ATTEMPTS rounds, until none is left.
+          n=0
+          while [ "$CLASS" -eq 2 ] && [ "$n" -lt "$DROP_ATTEMPTS" ]; do
+            n=$((n + 1))
+            node scripts/classify-visual-failure.mjs visual-report.json --list-drops > dropped.txt
+            COUNT=$(wc -l < dropped.txt | tr -d ' ')
+            echo ""
+            echo "↻ retry $n/$DROP_ATTEMPTS — re-running $COUNT dropped suite(s) only:"
+            sed 's/^/    /' dropped.txt
+            echo ""
+            # No --shard here: the file list already IS the selection. Passing
+            # both would re-shard the list and silently run a fraction of it.
+            VISUAL_GATE=1 npx vitest run --project storybook --maxWorkers=1 \
+              $(tr '\n' ' ' < dropped.txt) \
+              --reporter=default --reporter=json \
+              --outputFile=visual-report.json || true
+            classify
+            # A retry that surfaces a real regression is a real regression.
+            if [ "$CLASS" -eq 1 ]; then
+              echo "✗ a retried suite failed for real, not as a drop — not retrying further."
+              exit 1
+            fi
+          done
+
           if [ "$CLASS" -eq 2 ]; then
-            echo ""
-            echo "↻ shard $SHARD lost pages with zero real failures — retrying once."
-            echo "  This retry is scoped to the drop class only (#1778); a real"
-            echo "  regression exits 1 above and is never retried."
-            echo ""
-            attempt
+            echo "✗ suites still dropping after $DROP_ATTEMPTS targeted retries — this is"
+            echo "  not transient. Do not raise DROP_ATTEMPTS; read #1778 first."
           fi
           exit "$CLASS"
 

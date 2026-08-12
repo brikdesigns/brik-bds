@@ -121,3 +121,16 @@ describe('classifyReport', () => {
     expect(exitCodeFor(classifyReport(report))).toBe(1);
   });
 });
+
+// --list-drops feeds the workflow's targeted retry: only the suites that died
+// get re-run. If it ever emitted a regression's path, that regression would be
+// retried away — so the contract is that it lists drops and nothing else.
+describe('--list-drops contract', () => {
+  it('lists only dropped paths, never a regression', () => {
+    const r = classifyReport({
+      testResults: [droppedSuite('dropped.stories.tsx'), regressedSuite('regressed.stories.tsx'), passedSuite('ok.stories.tsx')],
+    });
+    expect(r.drops.map((d) => d.name)).toEqual(['dropped.stories.tsx']);
+    expect(r.drops.map((d) => d.name)).not.toContain('regressed.stories.tsx');
+  });
+});

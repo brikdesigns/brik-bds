@@ -24,7 +24,13 @@
  *   1 — REGRESSION (at least one real test failure; diffs are worth reviewing)
  *   2 — INFRASTRUCTURE (only dropped pages; nothing about the UI is known)
  *
- * Usage: node scripts/classify-visual-failure.mjs <vitest-json-report>
+ * Usage:
+ *   node scripts/classify-visual-failure.mjs <report>               # verdict
+ *   node scripts/classify-visual-failure.mjs <report> --list-drops  # file paths
+ *
+ * `--list-drops` prints one dropped suite path per line and nothing else, so a
+ * retry can target exactly the pages that died instead of re-running a whole
+ * shard. It exits 0 even when there are drops — it is a query, not a verdict.
  */
 
 import fs from 'node:fs';
@@ -170,6 +176,20 @@ if (isMain) {
     process.exit(1);
   }
   const result = classifyReport(report);
+
+  // Query mode: emit just the dropped paths for a targeted retry. Deliberately
+  // exits 0 — the caller decides what a drop means; this only answers "which".
+  if (process.argv.includes('--list-drops')) {
+    // vitest reports absolute paths; emit them repo-relative. `vitest run <arg>`
+    // treats each arg as a path filter, and a relative path is the form that
+    // matches regardless of where the checkout lives (/__w/... in CI).
+    const cwd = process.cwd().endsWith('/') ? process.cwd() : `${process.cwd()}/`;
+    for (const d of result.drops) {
+      console.log(d.name.startsWith(cwd) ? d.name.slice(cwd.length) : d.name);
+    }
+    process.exit(0);
+  }
+
   console.log(render(result));
   process.exit(exitCodeFor(result));
 }
