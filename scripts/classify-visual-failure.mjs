@@ -128,10 +128,13 @@ function render({ drops, regressions, unknown, totalSuites, failedSuites }) {
     lines.push('  before the story rendered. Zero failed tests in these suites, so this says');
     lines.push('  NOTHING about whether the UI regressed — the gate did not measure it.');
     lines.push('');
-    lines.push('  This is the #1778 failure mode. First things to check:');
+    lines.push('  This is the #1778 failure mode. Check, in this order:');
     lines.push('    · Is `--ipc=host` still on the job container? Without it Chromium');
-    lines.push('      exhausts its 64 MB default /dev/shm and crashes mid-run.');
-    lines.push('    · `Report runner capacity` output above (nproc / free -m).');
+    lines.push('      exhausts its 64 MB default /dev/shm and the browser dies outright.');
+    lines.push('      The `shm:` line in "Report runner capacity" should read ~7.9G, not 64M.');
+    lines.push('    · Is `--maxWorkers=1` still set? At 2 the gate dropped 64 suites even');
+    lines.push('      with 7.9 GB of shm — one screenshot capture at a time is the floor.');
+    lines.push('    · Did the suite grow? Shard across a matrix; do not raise the workers.');
     if (regressions.length === 0 && unknown.length === 0) {
       lines.push('');
       lines.push('  No real regression was found alongside these — this run is INCONCLUSIVE,');

@@ -41,6 +41,11 @@ jobs:
       # what allocates in /dev/shm. It is also why `free -m` looked healthy in
       # every red run (14 GB available) — system RAM was never the constraint,
       # shared memory was, and free -m does not show that ceiling.
+      #
+      # Necessary but NOT sufficient on its own: with 7.9 GB of shm and two
+      # workers the gate still lost 64 suites (it stopped dying outright and
+      # completed instead, dropping pages individually). See the worker cap
+      # below — both halves are required.
       options: --ipc=host
     steps:
       - name: Checkout code
@@ -66,22 +71,38 @@ jobs:
           echo "nproc: $(nproc)"
           free -m || true
 
-      # --maxWorkers=2 bounds how many browser pages drive the one Vite server at
-      # a time. Kept, but it is NOT what fixed #1778: the cap landed in #1781 and
-      # the drops continued (121/146 on `main` run 31596457904, 93 then 126 on
-      # PR #1783 — all with the cap applied). The #1781 close rested on two
-      # consecutive greens against a ~1-in-3-green process, which cannot tell a
-      # fix from luck. --ipc=host on the container above is the actual fix.
+      # --maxWorkers=1: ONE browser page capturing screenshots at a time. Both
+      # halves of #1778 were needed and each is measured.
       #
-      # The cap stays because it is free: measured 3m10s/3m14s capped vs 3m15s
-      # for the best unbounded green, so the screenshot capture and pixelmatch
-      # compare were serialising on I/O, not CPU. Raise it only against a
-      # measured pass rate over ten runs, never on a hunch.
+      # The measurement that chose this number, all on --ipc=host:
+      #
+      #   workers | /dev/shm | result                          | vitest wall
+      #   --------|----------|---------------------------------|------------
+      #   default |    64 MB | 121/146 dropped (run 31596457904)|  75.96s (died)
+      #        2  |    64 MB | 93 then 126 dropped (PR #1783)  |  ~76s   (died)
+      #        2  |   7.9 GB | 64 dropped, run completed        |  99.49s
+      #        1  |   7.9 GB | 146/146 PASS (run 31607740675)   | 131.38s
+      #
+      # Read the third row against the fourth: raising shm stopped the browser
+      # dying outright but two concurrent screenshot captures still lost pages.
+      # Only one page at a time is actually green.
+      #
+      # The cap is free. 131.38s at workers=1 vs 134.74s for the best
+      # workers=2 green (run 31595897130) — the gate serialises on I/O, not CPU,
+      # so removing the second page costs no wall clock. Do not "optimise" this
+      # back up: #1781 raised the same lever on two consecutive greens against a
+      # ~1-in-3-green process and read luck as a fix. Ten consecutive greens on
+      # one commit is the bar; anything less cannot distinguish the two.
+      #
+      # If the suite outgrows this (a single page is now the floor, so the next
+      # lever is wall clock, not concurrency), shard across a matrix rather than
+      # raising the worker count.
       #
       # The JSON report feeds the classifier below. `|| true` hands the verdict
       # to that step instead of failing here, so a dropped page can never be
       # reported as a visual regression — the classifier decides which it was and
       # sets the exit code.
+      #
       # Note the shell: this container has no bash on the Actions default path,
       # so steps run under `sh -e`. No bashisms here (`set -o pipefail` fails
       # outright as "Illegal option").
