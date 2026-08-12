@@ -17,6 +17,59 @@
 import { afterEach, beforeAll, expect } from 'vitest';
 import { page } from '@vitest/browser/context';
 
+// Every face the gate renders, bundled by Vite instead of fetched from
+// fonts.googleapis.com at run time (#1785). The gate used to hard-depend on a
+// live network request from inside the CI container for its own determinism —
+// the one dependency whose failure is indistinguishable from a real regression,
+// because a fallback render diffs exactly like a changed component.
+//
+// Safe to swap because @fontsource ships the SAME BYTES Google serves. Verified
+// per family, latin/400, sha256 of the woff2 from fonts.gstatic.com against the
+// file in the package: poppins 7d93459d, open-sans 0e44026a, newsreader
+// e6606781, source-sans-3 0f73f35e, ibm-plex-sans 3b646991, hind aca5dec4,
+// playfair-display 1fe9ad5d, ibm-plex-mono 08949f72 — all 8 identical. Same
+// bytes means same rasterisation, which is why this lands with ZERO baseline
+// churn.
+//
+// These 8 are pinned to EXACT versions in package.json, not carets, and that is
+// load-bearing rather than caution. @fontsource republishes when Google updates
+// a family, so a caret would let a routine `npm update` swap the font bytes and
+// silently shift every text baseline in the suite — arriving as hundreds of
+// "regressions" with no code change to explain them. Pinned, a font update is an
+// explicit dependency bump that a reviewer can pair with a baseline regen.
+import '@fontsource/poppins/300.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+import '@fontsource/poppins/900.css';
+import '@fontsource/open-sans/300.css';
+import '@fontsource/open-sans/400.css';
+import '@fontsource/open-sans/600.css';
+import '@fontsource/open-sans/700.css';
+import '@fontsource/newsreader/300.css';
+import '@fontsource/newsreader/400.css';
+import '@fontsource/newsreader/600.css';
+import '@fontsource/newsreader/700.css';
+import '@fontsource/source-sans-3/300.css';
+import '@fontsource/source-sans-3/400.css';
+import '@fontsource/source-sans-3/600.css';
+import '@fontsource/source-sans-3/700.css';
+import '@fontsource/ibm-plex-sans/300.css';
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/600.css';
+import '@fontsource/ibm-plex-sans/700.css';
+import '@fontsource/hind/300.css';
+import '@fontsource/hind/400.css';
+import '@fontsource/hind/500.css';
+import '@fontsource/hind/600.css';
+import '@fontsource/hind/700.css';
+import '@fontsource/playfair-display/400.css';
+import '@fontsource/playfair-display/600.css';
+import '@fontsource/playfair-display/700.css';
+import '@fontsource/playfair-display/900.css';
+import '@fontsource/ibm-plex-mono/400.css';
+import '@fontsource/ibm-plex-mono/600.css';
+
 /**
  * Story tags that opt a story out of the visual gate:
  * - `no-visual` — JS-driven animation (e.g. lottie canvases) that never
@@ -28,13 +81,28 @@ import { page } from '@vitest/browser/context';
 const SKIP_TAGS = ['no-visual', 'interaction-test'];
 
 /**
- * Every family × weight the preview-head Google Fonts request serves. Warmed
- * eagerly in beforeAll: relying on `document.fonts.ready` after render is a
- * race (the swap can land between the stability check and the reference
- * compare — caught as a real flake on foundation-navigation-archetypes).
- * Keep in sync with preview-head.html. The Geist jsdelivr links are NOT
- * mirrored: they 404 (verified 2026-08-02), so Geist deterministically never
- * loads in Storybook either.
+ * Every family × weight imported above. Warmed eagerly in beforeAll: relying on
+ * `document.fonts.ready` after render is a race (the swap can land between the
+ * stability check and the reference compare — caught as a real flake on
+ * foundation-navigation-archetypes). Keep in sync with the import block and
+ * with preview-head.html. The Geist jsdelivr links are NOT mirrored: they 404
+ * (verified 2026-08-02), so Geist deterministically never loads in Storybook
+ * either.
+ *
+ * Droid Sans is deliberately absent, and its removal is a fix rather than a
+ * regression in coverage. It has no @fontsource package, and it is retired from
+ * Google Fonts — `fonts.google.com/metadata/fonts/Droid Sans` answers 404 and
+ * the family is absent from the catalog list (verified 2026-08-12), so there is
+ * no published license record to vendor a binary against. The legacy css2 route
+ * still serves v19, which is exactly the problem: the gate's own assertion
+ * below made a retired font a hard requirement, so the day Google stops serving
+ * it every story in the suite fails at once.
+ *
+ * Nothing in the gate renders it. `spacious` is the only theme that names it
+ * (design-tokens/themes/spacious/overrides.json heading + display), and that
+ * theme has zero baselines (`ls tests/visual/__screenshots__ | grep -c
+ * spacious` → 0). The token still references a retired family — tracked
+ * separately, not fixed here.
  */
 const FONT_WARMUP: Array<[family: string, weights: number[]]> = [
   ['Poppins', [300, 400, 600, 700, 900]],
@@ -44,7 +112,6 @@ const FONT_WARMUP: Array<[family: string, weights: number[]]> = [
   ['IBM Plex Sans', [300, 400, 600, 700]],
   ['Hind', [300, 400, 500, 600, 700]],
   ['Playfair Display', [400, 600, 700, 900]],
-  ['Droid Sans', [400, 700]],
   // Mono. Load-bearing for determinism, not just for looks — see the pin in
   // beforeAll. A webfont is the ONLY mono the gate can await (#1785).
   ['IBM Plex Mono', [400, 600]],
@@ -53,50 +120,22 @@ const FONT_WARMUP: Array<[family: string, weights: number[]]> = [
 beforeAll(async () => {
   // The vitest browser runner serves its own tester page — Storybook's
   // .storybook/preview-head.html (which loads the brand webfonts) never runs
-  // here. Mirror its font stylesheet so screenshots capture real typography.
-  const FONT_CSS_URL =
-    'https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&family=Open+Sans:wght@300;400;600;700&family=Newsreader:wght@300;400;600;700&family=Source+Sans+3:wght@300;400;600;700&family=IBM+Plex+Sans:wght@300;400;600;700&family=Hind:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700;900&family=Droid+Sans:wght@400;700&family=IBM+Plex+Mono:wght@400;600&display=swap';
-
-  // Every face the gate renders comes off this ONE network request, and it used
-  // to fail silently: `link.onerror` resolved the same promise as `onload`, and
-  // `document.fonts.load()` resolves with an EMPTY array for a family it cannot
-  // find rather than rejecting. So a failed or slow fetch produced a complete
-  // fallback render with no error anywhere — the story just quietly used
-  // different fonts, at different advance widths, and failed the pixel compare
-  // as a "regression".
+  // here. The import block at the top of this file replaces it, so the faces
+  // arrive over the Vite dev server rather than a Google Fonts request.
   //
-  // That is the shape of the residual #1785 flake: tools-dev-feedback-widget-default
-  // failed at EXACTLY 2644 px against two different baselines (runs 31615511652
-  // and 31620041578). Identical diff against a changed reference means the story
-  // has two rendering states and alternates between them — pixel diffing is
-  // symmetric, so whichever state the baseline holds, the other scores the same.
-  // Two states = fonts loaded vs fonts not loaded.
+  // What that removes: this used to be ONE network fetch from inside the CI
+  // container that every face depended on, and it failed silently. `onerror`
+  // resolved the same promise as `onload`, and `document.fonts.load()` resolves
+  // with an EMPTY array for a family it cannot find rather than rejecting. So a
+  // failed or slow fetch produced a complete fallback render with no error
+  // anywhere — the story just quietly used different fonts, at different advance
+  // widths, and failed the pixel compare as a "regression". A retry-with-verify
+  // made that loud, but the dependency was still there; bundling deletes it.
   //
-  // So retry the fetch, then VERIFY. A font the gate silently failed to load is
-  // the one failure mode that cannot be told apart from a real regression by
-  // looking at the diff, which makes it the most expensive kind to leave silent.
-  // Same URL each attempt, no cache-buster: a fetch that failed left nothing
-  // cached to bust. (css2 does tolerate unknown query keys — verified 200 with a
-  // `&cb=1` — so a buster could be added if a cached 4xx ever turns up.)
-  const loadFontCss = () =>
-    new Promise<boolean>((resolve) => {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = FONT_CSS_URL;
-      link.onload = () => resolve(true);
-      link.onerror = () => resolve(false);
-      document.head.appendChild(link);
-    });
-
-  let attempt = 0;
-  let cssOk = false;
-  while (attempt < 3 && !cssOk) {
-    attempt += 1;
-    cssOk = await loadFontCss();
-    if (!cssOk && attempt < 3) {
-      await new Promise((r) => setTimeout(r, 500 * attempt));
-    }
-  }
+  // The assertion below is KEPT even though the faces are now local. It is cheap,
+  // and it still catches the case that actually matters: an import silently
+  // dropped from the block above, or a @fontsource layout change that moves the
+  // CSS files. Local does not mean guaranteed.
 
   // Force every face into the font cache BEFORE any story renders, so no
   // screenshot can catch a mid-swap frame.
@@ -119,12 +158,13 @@ beforeAll(async () => {
   );
   if (missing.length > 0) {
     throw new Error(
-      `Visual gate: ${missing.length} font face(s) never loaded after ${attempt} ` +
-        `stylesheet attempt(s) (css ${cssOk ? 'loaded' : 'FAILED'}): ${missing.join(', ')}. ` +
-        'Every screenshot in this run would compare a fallback render against a ' +
-        'real-typography baseline and fail as a bogus regression (#1785). This is a ' +
-        'network dependency on fonts.googleapis.com from inside the CI container — ' +
-        'the durable fix is to vendor the woff2 files into the repo and drop the fetch.',
+      `Visual gate: ${missing.length} bundled font face(s) never registered: ` +
+        `${missing.join(', ')}. Every screenshot in this run would compare a ` +
+        'fallback render against a real-typography baseline and fail as a bogus ' +
+        'regression (#1785). These faces are bundled by Vite from @fontsource, not ' +
+        'fetched — so this is no longer a network fault. Check that the family and ' +
+        'weight have a matching import at the top of this file, and that the ' +
+        '@fontsource package still ships per-weight CSS at `<pkg>/<weight>.css`.',
     );
   }
 
@@ -180,7 +220,9 @@ beforeAll(async () => {
     }
   `;
   document.head.appendChild(style);
-  // Cold CI containers fetch ~30 font files here; don't trip the 10s default.
+  // ~30 faces still decode here, now off the Vite dev server rather than the
+  // network. Kept generous rather than retuned: the timeout was never the
+  // constraint, and lowering it is a separate measurement.
 }, 120_000);
 
 afterEach(async (ctx) => {

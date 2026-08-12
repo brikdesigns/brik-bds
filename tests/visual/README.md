@@ -376,3 +376,42 @@ The image tag pins font + GPU stacks; bumping it can flag hundreds of
 stories at once. Bump `mcr.microsoft.com/playwright:vX.Y.Z-noble` (both
 workflows) in lockstep with the `playwright` npm dependency, and regenerate
 baselines in the same PR.
+
+## Bumping the `@fontsource/*` packages — pins are load-bearing (#1785)
+
+The gate's typography is bundled from eight `@fontsource/*` packages, imported
+at the top of [`vitest.visual.setup.ts`](../../.storybook/vitest.visual.setup.ts).
+They are pinned to **exact** versions, not carets, and that is deliberate.
+
+`@fontsource` republishes when Google updates a family. Under a caret, a routine
+`npm update` would swap the font bytes and shift every text baseline in the
+suite — landing as hundreds of "regressions" with no code change to explain
+them. Pinned, a font update is an explicit bump a reviewer can pair with a
+baseline regen, exactly like a container bump.
+
+So: **treat a `@fontsource` bump like a Playwright bump** — regenerate baselines
+in the same PR, and expect wide churn rather than being surprised by it.
+
+These packages replaced a live `fonts.googleapis.com` request that the gate used
+to make from inside the CI container. That request was the gate's own worst
+failure mode: `document.fonts.load()` resolves with an empty array for a family
+it cannot find rather than rejecting, so a failed fetch produced a complete
+fallback render with no error anywhere — indistinguishable from a real
+regression, because a font shift diffs exactly like a changed component.
+
+The swap was safe because the bytes are the same. Verified per family
+(latin/400) by sha256 of the woff2 from `fonts.gstatic.com` against the file in
+the package — all eight identical, so zero baseline churn. Re-run that
+comparison if a bump ever needs justifying.
+
+**Droid Sans is intentionally not in the set.** It has no `@fontsource` package
+and is retired from Google Fonts — `fonts.google.com/metadata/fonts/Droid Sans`
+answers 404 and the family is absent from the catalog list (verified
+2026-08-12), so there is no published license record to vendor a binary
+against. The legacy `css2` route still serves v19, which was the hazard: the
+gate's font assertion made a retired family a hard requirement, so the day
+Google stops serving it, every story fails at once. Nothing in the gate renders
+it — `spacious` is the only theme that names it
+(`design-tokens/themes/spacious/overrides.json`, heading + display) and that
+theme has zero baselines (`ls tests/visual/__screenshots__ | grep -c spacious`
+→ 0). The token still points at a retired family; tracked separately.
