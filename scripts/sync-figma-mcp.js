@@ -47,6 +47,10 @@
  *     the pull-shape dump (shape 1); the legacy flat-map (shape 2) is partial
  *     by nature and never triggers deletion. `--dry-run` prints the delete set
  *     before anything is written so reviewers can sanity-check it.
+ *   - DELETIONS ARE GUARDED (brik-bds#1797): a leaf whose CSS custom-property
+ *     name is still referenced under `components/**` or `tokens/*.ts` aborts
+ *     the run instead of being pruned. Override per-token with
+ *     `--allow-prune=<name>` once the consumers are migrated.
  *
  * Usage:
  *   node scripts/sync-figma-mcp.js <pull-output.json> [--library=<lib>] [--dry-run] [--build] [--no-merge]
@@ -68,6 +72,12 @@
  *                               intentionally partial dump (e.g. emitting only
  *                               the service-line subset of a collection) so the
  *                               omitted siblings are NOT deleted.
+ *   --allow-prune=<a>[,<b>…]    Permit pruning tokens the reference guard would
+ *                               otherwise refuse. Names are CSS custom-property
+ *                               names with or without the leading `--`.
+ *   --source-root=<dir>         Directory the reference guard scans for token
+ *                               usage. Defaults to the repo root (tests point
+ *                               it at a fixture).
  *
  * Zero dependencies — Node.js stdlib only.
  */
@@ -85,7 +95,18 @@ const noMerge = args.includes('--no-merge');
 const noPrune = args.includes('--no-prune');
 const libraryArg = args.find((a) => a.startsWith('--library='));
 const targetArg = args.find((a) => a.startsWith('--target='));
+const sourceRootArg = args.find((a) => a.startsWith('--source-root='));
 const inputFile = args.find((a) => !a.startsWith('--'));
+
+// Tokens the operator has explicitly cleared for deletion despite still being
+// referenced in source. Accepts `--font-weight-heading` or `font-weight-heading`.
+const allowPrune = new Set(
+  args
+    .filter((a) => a.startsWith('--allow-prune='))
+    .flatMap((a) => a.replace(/^--allow-prune=/, '').split(','))
+    .map((n) => n.trim().replace(/^--/, ''))
+    .filter(Boolean)
+);
 
 // Resolve target Library file from --library flag.
 function resolveLibraryFile(librarySpec) {
@@ -293,6 +314,67 @@ function deleteLeaf(set, varName) {
       break;
     }
   }
+}
+
+// ─── Reference guard (brik-bds#1797) ─────────────────────────────
+// A leaf path maps 1:1 onto its CSS custom-property name by swapping `/` for
+// `-`: `font-weight/heading` → `--font-weight-heading`, `color/system/youtube`
+// → `--color-system-youtube`. Verified against tokens/figma-tokens.css.
+function leafPathToVarName(leafPath) {
+  return `--${leafPath.replace(/\//g, '-')}`;
+}
+
+// Directories the guard walks, relative to the source root, each with the
+// extensions that count as a CONSUMER of a token. `tokens/` is deliberately
+// TS-only: its `.css` files are generated output where every token declares
+// itself, so scanning them would mark all 400-odd tokens as referenced and
+// disable deletion-propagation (#754) wholesale.
+const REFERENCE_SCAN_DIRS = [
+  { dir: 'components', exts: new Set(['.css', '.ts', '.tsx']) },
+  { dir: 'tokens', exts: new Set(['.ts', '.tsx']) },
+];
+const REFERENCE_SKIP_DIRS = new Set(['node_modules', 'dist', 'build', '.git']);
+
+function walkSourceFiles(dir, exts, out) {
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return; // directory absent — nothing to scan
+  }
+  for (const entry of entries) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (REFERENCE_SKIP_DIRS.has(entry.name)) continue;
+      walkSourceFiles(full, exts, out);
+    } else if (exts.has(path.extname(entry.name))) {
+      out.push(full);
+    }
+  }
+}
+
+// Map every `--token-name` occurring in source → the files that reference it.
+// Built once, lazily, and only when there is something to prune.
+function buildReferenceIndex(sourceRoot) {
+  const files = [];
+  for (const { dir, exts } of REFERENCE_SCAN_DIRS) {
+    walkSourceFiles(path.join(sourceRoot, dir), exts, files);
+  }
+  const index = new Map(); // varName → Set<relative path>
+  for (const file of files) {
+    let text;
+    try {
+      text = fs.readFileSync(file, 'utf8');
+    } catch {
+      continue;
+    }
+    for (const match of text.matchAll(/--[a-z0-9]+(?:-[a-z0-9]+)*/gi)) {
+      const name = match[0];
+      if (!index.has(name)) index.set(name, new Set());
+      index.get(name).add(path.relative(sourceRoot, file));
+    }
+  }
+  return index;
 }
 
 // Convert Figma's normalized RGBA (0-1 floats) into a CSS hex string.
@@ -531,6 +613,19 @@ if (isPullShape && !noPrune) {
   for (const names of changes.seenPaths.values()) {
     for (const name of names) seenAnywhere.add(name);
   }
+  // Reference guard (#1797). `seenAnywhere` above only spares a primitive that
+  // MOVED collections in Figma. A token genuinely deleted there but still
+  // consumed here — `--font-weight-heading`, a deliberate hand-add restored by
+  // #1748 — passes that check and disappears silently: canonical-check
+  // validates references against an allowlist regenerated from the same pull,
+  // so the removal validates itself. Refuse instead, and make the operator say
+  // so out loud with --allow-prune.
+  const sourceRoot = sourceRootArg
+    ? path.resolve(sourceRootArg.replace(/^--source-root=/, ''))
+    : path.join(__dirname, '..');
+  const referenceIndex = buildReferenceIndex(sourceRoot);
+  const blocked = [];
+
   for (const [setKey, seen] of changes.seenPaths) {
     const set = tokensStudio[setKey];
     if (!set) continue; // unknown set — nothing to prune
@@ -538,10 +633,35 @@ if (isPullShape && !noPrune) {
     collectLeafPaths(set, '', existingLeaves);
     for (const leafPath of existingLeaves) {
       if (seen.has(leafPath) || seenAnywhere.has(leafPath)) continue;
+      const varName = leafPathToVarName(leafPath);
+      const refs = referenceIndex.get(varName);
+      if (refs && !allowPrune.has(varName.replace(/^--/, ''))) {
+        blocked.push({ setKey, leafPath, varName, refs: Array.from(refs).sort() });
+        continue;
+      }
+      if (refs) {
+        console.log(`⚠️  --allow-prune: deleting ${varName}, still referenced in ${Array.from(refs).sort().join(', ')}`);
+      }
       deleteLeaf(set, leafPath);
       bucket(setKey).removed.push({ path: leafPath });
       changes.totalRemoved += 1;
     }
+  }
+
+  // Refusal is terminal and happens BEFORE any write — a partially applied sync
+  // is worse than none, because the next run sees a different starting state.
+  if (blocked.length > 0) {
+    console.error(`\n❌ Refusing to prune ${blocked.length} token(s) still referenced in source:\n`);
+    for (const b of blocked) {
+      console.error(`  ${b.varName}  [${b.setKey} ${b.leafPath}]`);
+      for (const ref of b.refs) console.error(`      ← ${ref}`);
+    }
+    console.error('\nThe pull says Figma no longer has these. Source still consumes them, so');
+    console.error('pruning ships a broken build that no existing check catches (brik-bds#1797).');
+    console.error('\nEither:');
+    console.error('  • restore the token in Figma, re-pull, and re-run; or');
+    console.error(`  • migrate the consumers off it, then re-run with --allow-prune=${blocked.map((b) => b.varName).join(',')}`);
+    process.exit(1);
   }
 }
 
