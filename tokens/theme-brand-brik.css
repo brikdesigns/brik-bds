@@ -137,9 +137,10 @@
    * -darkest. Surfaces sit flush with the page in dark mode; separation comes
    * from --border-* hairlines rather than a fill step. (#1689) */
   --surface-primary: var(--color-grayscale-black);
-  /* darkest (#333) not darker (#4f4f4f): keeps --text-secondary (#bdbdbd) at
-     AA (~6.7:1) on this band. The #1106 grayscale-ramp sync lightened darker
-     to #4f4f4f, dropping the pair to 4.35:1. See brik-bds#1136. */
+  /* 950 (#1b1b1b) — the one non-black surface in the true-black system. It
+     matches the generated dark value, so this is not a divergence.
+     --text-secondary (300 #e0e0e0) reads 13.05:1 on this band. The note that
+     stood here measured a pre-#1136 ramp whose values no longer exist. */
   --surface-secondary: var(--color-grayscale-950);
   /* Brand canon: vibrant poppy-light base in dark mode too; state pair DARKENS
      on interaction (matches light mode + --background-brand-primary-hover/-pressed
@@ -216,16 +217,17 @@
   --background-secondary-pressed: var(--color-grayscale-950);
   /* Border */
   --border-primary: var(--color-grayscale-800);
-  /* One step darker than the generated dark value (--color-grayscale-500
-   * #828282) so secondary dividers/outlines read as quieter chrome against the
-   * near-black dark surfaces instead of bright gray hairlines. --border-input
-   * deliberately stays at -dark (#828282) to preserve the 3:1 field-boundary
-   * contrast (WCAG 1.4.11) on the black --background-input dark fill. */
+  /* One step LIGHTER than the generated 800 (#333333): a secondary divider has
+   * to stay visible on the true-black page, and 800 measures 1.66:1 against it
+   * where 700 (#5a5a5a) reaches 3.04:1 (WCAG 1.4.11's boundary bar).
+   * --border-input lands on 700 as well, which IS the generated value, so it is
+   * not a divergence — the same 3.04:1 carries its field boundary on the black
+   * --background-input dark fill. */
   --border-secondary: var(--color-grayscale-700);
-  /* Same reasoning as --border-secondary above, one step the other way from the
-   * generated -darker: a muted hairline still has to be visible on the true-black
-   * page, and -darker measures 1.66:1 against it while -dark reaches 3.04:1
-   * (WCAG 1.4.11's boundary bar). (#1689) */
+  /* Same reasoning and the same direction as --border-secondary above: one step
+   * lighter than the generated 800. A muted hairline still has to be visible on
+   * the true-black page, and 800 measures 1.66:1 against it while 700 reaches
+   * 3.04:1 (WCAG 1.4.11's boundary bar). (#1689) */
   --border-muted: var(--color-grayscale-700);
   --border-brand-primary: var(--color-poppy-500);
   --border-input: var(--color-grayscale-700);
