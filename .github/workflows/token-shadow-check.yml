@@ -1,0 +1,63 @@
+name: Token Shadow Check
+
+# Fails the build when a token is declared twice in the same scope of
+# `dist/tokens.css` with different values, so the earlier declaration is dead.
+#
+# Why this needs CI rather than a per-file lint: `dist/tokens.css` is eight
+# source files concatenated (build-dist-tokens.js:7), several of which declare
+# `:root`. Every source file is correct in isolation — the shadow exists only in
+# the concatenation, which nothing else reads. Eleven tokens were shadowed when
+# this gate landed, including `--text-disabled`, whose dead declaration carries a
+# doc comment describing behaviour it never produced.
+#
+# A shadow is allowed only with a disposition (a `bds-lint-ignore — <reason>` on
+# the winning declaration, or a SHADOW_BACKLOG entry naming a tracking issue);
+# a bare one hard-fails. Class-5 rule, per #1468.
+#
+# Issue: brikdesigns/brik-bds#1808 · class: brikdesigns/brik-llm#2206
+# Runtime sibling (a component rule beating a token rule): #926
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: token-shadow-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  token-shadow-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # `dist/` is gitignored, so the gate has nothing to read until the
+      # registry is built. Same cheap path canonical-check.yml uses — a
+      # concatenation, not the full `build:lib`.
+      - name: Build dist tokens
+        run: npm run build:dist-tokens
+
+      - name: Token shadow check
+        run: npm run lint-token-shadowing
+
+      # The gate's own proof. `assertions-must-be-proven-to-fail`: these cases
+      # plant a shadow and require a non-zero exit, so a gate that silently
+      # stops detecting anything fails here rather than going quietly green.
+      - name: Gate self-test (proves it fails)
+        run: npx vitest run scripts/__tests__/lint-token-shadowing.test.mjs
