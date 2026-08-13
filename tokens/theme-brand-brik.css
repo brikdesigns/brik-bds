@@ -9,6 +9,10 @@
  *
  * Color + typography overrides only; spacing uses Base mode defaults from figma-tokens.css.
  *
+ * Primitives reference the 11-step numeric scale (brik-bds#1739/#1740). Some
+ * comments below still name steps by their retired 6-step nicknames, which map:
+ * lightest=100, lighter=300, light=500, dark=700, darker=800, darkest=950.
+ *
  * Selector contract: `.theme-brand-brik` for light mode, scoped with the
  * consumer-standard `[data-theme="dark"]` attribute for dark mode. Matches
  * figma-tokens-dark.css's dark-mode mechanism so Storybook and consumers
@@ -21,10 +25,10 @@
 .theme-brand-brik {
   /* Page */
   --page-primary: var(--color-grayscale-white);
-  --page-secondary: var(--color-grayscale-lightest);
-  --page-brand-primary: var(--color-poppy-light);
+  --page-secondary: var(--color-grayscale-100);
+  --page-brand-primary: var(--color-poppy-500);
   /* Text */
-  --text-primary: var(--color-grayscale-darkest);
+  --text-primary: var(--color-grayscale-950);
   /* Both text steps sit one step DARKER than the generated theme, which puts
    * --text-secondary at -dark (#5a5a5a, 6.90:1 on white) and --text-muted at
    * -light (#828282, 3.84:1). At those values "muted" barely clears AA-large and
@@ -33,52 +37,52 @@
    * becomes usable for real copy and secondary stops competing with primary.
    * Gated as "Secondary text on page" / "Muted text on page" in
    * contrast-pairings.json. (#1689) */
-  --text-secondary: var(--color-grayscale-darker);
-  --text-muted: var(--color-grayscale-dark);
+  --text-secondary: var(--color-grayscale-800);
+  --text-muted: var(--color-grayscale-700);
   --text-inverse: var(--color-grayscale-white);
   /* Brand canon (brand-kit brik.json): brand-primary text is vibrant poppy-light
      (#e35335). On white = 3.80:1 — clears AA-large (3:1), the bar for the
      heading/accent role this token serves; small body copy uses --text-primary
      (usage rule tracked in BDS-18). Restored from the poppy-dark AA divergence (BDS-22). */
-  --text-brand-primary: var(--color-poppy-light);
+  --text-brand-primary: var(--color-poppy-500);
   /* Surface */
   --surface-primary: var(--color-grayscale-white);
-  --surface-secondary: var(--color-grayscale-lightest);
+  --surface-secondary: var(--color-grayscale-100);
   /* Brand canon (brand-kit brik.json): vibrant poppy-light base, darkening on
      interaction. White label on poppy-light = 3.78:1 — clears AA-large (3:1),
      the correct bar for a UI-component fill + CTA label (gated as such in
      contrast-pairings.json). Restored from the poppy-dark AA divergence (BDS-22). */
-  --surface-brand-primary: var(--color-poppy-light);
-  --surface-brand-primary-hover: var(--color-poppy-dark);
-  --surface-brand-primary-pressed: var(--color-poppy-darker);
-  --surface-brand-secondary: var(--color-tan-lightest);
+  --surface-brand-primary: var(--color-poppy-500);
+  --surface-brand-primary-hover: var(--color-poppy-700);
+  --surface-brand-primary-pressed: var(--color-poppy-800);
+  --surface-brand-secondary: var(--color-tan-100);
   --surface-nav: var(--color-grayscale-white);
   /* Background — vibrant poppy-light base per brand canon; darkens on interaction (BDS-22) */
-  --background-brand-primary: var(--color-poppy-light);
-  --background-brand-primary-hover: var(--color-poppy-dark);
-  --background-brand-primary-pressed: var(--color-poppy-darker);
-  --background-brand-secondary: var(--color-tan-lightest);
+  --background-brand-primary: var(--color-poppy-500);
+  --background-brand-primary-hover: var(--color-poppy-700);
+  --background-brand-primary-pressed: var(--color-poppy-800);
+  --background-brand-secondary: var(--color-tan-100);
   --background-primary: var(--color-grayscale-white);
-  --background-secondary: var(--color-grayscale-lightest);
+  --background-secondary: var(--color-grayscale-100);
   /* Hover must DARKEN a light fill by one step, not jump to the generated
    * -darker (#333333) — that is a near-black fill under a dark --text-primary
    * label, i.e. the #1686 shape. -lighter keeps the label legible and reads as a
    * hover. The pressed step below is the genuinely dark one, and it is paired
    * with white --text-inverse (#902). (#1689) */
-  --background-secondary-hover: var(--color-grayscale-lighter);
+  --background-secondary-hover: var(--color-grayscale-300);
   /* Dark fill used by the inverse Button :hover (paired with white --text-inverse).
    * No longer consumed by secondary :active — that holds the hover fill (#902). */
-  --background-secondary-pressed: var(--color-grayscale-darker);
-  --background-inverse: var(--color-grayscale-darkest);
+  --background-secondary-pressed: var(--color-grayscale-800);
+  --background-inverse: var(--color-grayscale-950);
   --background-input: var(--color-grayscale-white);
   --background-image: #17171799;
-  --background-image-brand: var(--color-poppy-light);
+  --background-image-brand: var(--color-poppy-500);
   /* Border */
-  --border-primary: var(--color-grayscale-darkest);
-  --border-secondary: var(--color-grayscale-lighter);
-  --border-muted: var(--color-grayscale-lighter);
-  --border-brand-primary: var(--color-poppy-light);
-  --border-input: var(--color-grayscale-light);
+  --border-primary: var(--color-grayscale-950);
+  --border-secondary: var(--color-grayscale-300);
+  --border-muted: var(--color-grayscale-300);
+  --border-brand-primary: var(--color-poppy-500);
+  --border-input: var(--color-grayscale-500);
   --border-inverse: var(--color-grayscale-white);
   --border-on-color-dark: white;
   /* Typography — all four families add the `, sans-serif` fallback the generated
@@ -106,14 +110,14 @@
    * The generated value is -black — identical to --page-primary — which would
    * erase the band. Inverted relative to light mode, where -lightest sits above
    * white, and deliberately so. (#1689) */
-  --page-secondary: var(--color-grayscale-darker);
-  --page-brand-primary: var(--color-poppy-light);
+  --page-secondary: var(--color-grayscale-800);
+  --page-brand-primary: var(--color-poppy-500);
   /* Text */
-  --text-primary: var(--color-grayscale-lightest);
-  --text-secondary: var(--color-grayscale-lighter);
-  --text-muted: var(--color-grayscale-dark);
+  --text-primary: var(--color-grayscale-100);
+  --text-secondary: var(--color-grayscale-300);
+  --text-muted: var(--color-grayscale-700);
   --text-inverse: var(--color-grayscale-black);
-  --text-brand-primary: var(--color-poppy-light);
+  --text-brand-primary: var(--color-poppy-500);
   --text-on-color-dark: var(--color-grayscale-white);
   /* Pinned to true black rather than the generated -darkest (#1b1b1b), matching
    * the true-black system in --background-primary. This is the label for a
@@ -123,11 +127,11 @@
    * it must not follow the page. (#1689) */
   --text-on-color-light: var(--color-grayscale-black);
   /* One step lighter than the generated -dark (#5a5a5a), which sat at 1.83:1
-   * on the --background-disabled fill (--color-grayscale-darker #333333) —
+   * on the --background-disabled fill (--color-grayscale-800 #333333) —
    * a disabled Button label that was there but unreadable. -light (#828282)
    * lifts it to 3.29:1: still visibly muted against the enabled state, but
    * legible. Light mode is corrected in gap-fills.css. (#1571) */
-  --text-disabled: var(--color-grayscale-light);
+  --text-disabled: var(--color-grayscale-500);
   /* Surface */
   /* True-black system (see --background-primary): black, not the generated
    * -darkest. Surfaces sit flush with the page in dark mode; separation comes
@@ -136,7 +140,7 @@
   /* darkest (#333) not darker (#4f4f4f): keeps --text-secondary (#bdbdbd) at
      AA (~6.7:1) on this band. The #1106 grayscale-ramp sync lightened darker
      to #4f4f4f, dropping the pair to 4.35:1. See brik-bds#1136. */
-  --surface-secondary: var(--color-grayscale-darkest);
+  --surface-secondary: var(--color-grayscale-950);
   /* Brand canon: vibrant poppy-light base in dark mode too; state pair DARKENS
      on interaction (matches light mode + --background-brand-primary-hover/-pressed
      below). Brightening to poppy-lighter/-lightest made the white --text-on-color-dark
@@ -145,16 +149,16 @@
      Covers --surface-brand-primary, --surface-brand-primary-hover and
      --surface-brand-primary-pressed — all three diverge from the generated
      grayscale for this reason. */
-  --surface-brand-primary: var(--color-poppy-light);
-  --surface-brand-primary-hover: var(--color-poppy-dark);
-  --surface-brand-primary-pressed: var(--color-poppy-darker);
-  --surface-brand-secondary: var(--color-grayscale-darkest);
+  --surface-brand-primary: var(--color-poppy-500);
+  --surface-brand-primary-hover: var(--color-poppy-700);
+  --surface-brand-primary-pressed: var(--color-poppy-800);
+  --surface-brand-secondary: var(--color-grayscale-950);
   --surface-nav: var(--color-grayscale-black);
-  --surface-muted: var(--color-grayscale-darkest);
+  --surface-muted: var(--color-grayscale-950);
   --surface-overlay: var(--color-grayscale-black);
   /* Background — vibrant poppy-light base per brand canon (BDS-22) */
-  --background-brand-primary: var(--color-poppy-light);
-  --background-brand-secondary: var(--color-grayscale-darkest);
+  --background-brand-primary: var(--color-poppy-500);
+  --background-brand-secondary: var(--color-grayscale-950);
   /* True-black system: the Brik dark page is #000000, not the generated -darkest
    * (#1b1b1b). --page-primary, --surface-primary and this token all collapse to
    * black so the page reads as one unbroken field; the generated theme instead
@@ -185,7 +189,7 @@
    * So do NOT put body copy on this fill: --text-primary lands at 3.43:1. Both
    * pairings are gated in contrast-pairings.json. Reproduce with
    * `node scripts/validate-themes.js`. (#1689) */
-  --background-secondary: var(--color-grayscale-light);
+  --background-secondary: var(--color-grayscale-500);
   /* Inverse means "opposite of the page", and in dark mode the page is black —
    * so this must be LIGHT. It shipped as -black in the original dark theme
    * (#50), which put it on the same value as --text-inverse (also -black, :92)
@@ -196,35 +200,35 @@
    * as safe for dark atmospheres ("light strip inside the dark page",
    * content-system/atmospheres/index.ts:168). Gated in
    * contrast-pairings.json so it cannot collapse again. (#1686) */
-  --background-inverse: var(--color-grayscale-lightest);
+  --background-inverse: var(--color-grayscale-100);
   --background-input: var(--color-grayscale-black);
-  --background-muted: var(--color-grayscale-darker);
+  --background-muted: var(--color-grayscale-800);
   --background-image: #000000cc;
-  --background-image-brand: var(--color-poppy-light);
+  --background-image-brand: var(--color-poppy-500);
   /* Darkens on interaction (mirrors light mode) so the white on-color label stays
      legible — poppy-lighter/-lightest failed AA-large (1.89:1 / 1.12:1) (#1055). */
-  --background-brand-primary-hover: var(--color-poppy-dark);
-  --background-brand-primary-pressed: var(--color-poppy-darker);
-  --background-disabled: var(--color-grayscale-darker);
-  --background-primary-hover: var(--color-grayscale-darkest);
-  --background-primary-pressed: var(--color-grayscale-darker);
-  --background-secondary-hover: var(--color-grayscale-darker);
-  --background-secondary-pressed: var(--color-grayscale-darkest);
+  --background-brand-primary-hover: var(--color-poppy-700);
+  --background-brand-primary-pressed: var(--color-poppy-800);
+  --background-disabled: var(--color-grayscale-800);
+  --background-primary-hover: var(--color-grayscale-950);
+  --background-primary-pressed: var(--color-grayscale-800);
+  --background-secondary-hover: var(--color-grayscale-800);
+  --background-secondary-pressed: var(--color-grayscale-950);
   /* Border */
-  --border-primary: var(--color-grayscale-darker);
-  /* One step darker than the generated dark value (--color-grayscale-light
-   * #bdbdbd) so secondary dividers/outlines read as quieter chrome against the
+  --border-primary: var(--color-grayscale-800);
+  /* One step darker than the generated dark value (--color-grayscale-500
+   * #828282) so secondary dividers/outlines read as quieter chrome against the
    * near-black dark surfaces instead of bright gray hairlines. --border-input
    * deliberately stays at -dark (#828282) to preserve the 3:1 field-boundary
    * contrast (WCAG 1.4.11) on the black --background-input dark fill. */
-  --border-secondary: var(--color-grayscale-dark);
+  --border-secondary: var(--color-grayscale-700);
   /* Same reasoning as --border-secondary above, one step the other way from the
    * generated -darker: a muted hairline still has to be visible on the true-black
    * page, and -darker measures 1.66:1 against it while -dark reaches 3.04:1
    * (WCAG 1.4.11's boundary bar). (#1689) */
-  --border-muted: var(--color-grayscale-dark);
-  --border-brand-primary: var(--color-poppy-light);
-  --border-input: var(--color-grayscale-dark);
+  --border-muted: var(--color-grayscale-700);
+  --border-brand-primary: var(--color-poppy-500);
+  --border-input: var(--color-grayscale-700);
   /* Inverse border for a LIGHT strip inside the dark page, so it pairs with
    * --background-inverse (-lightest) above and must be dark. -black rather than
    * the generated -darkest, per the true-black system. Opposite polarity to
@@ -240,7 +244,7 @@
    * which is what makes a disabled control read as one flat shape. The generated
    * -dark would outline it instead. Pairs with the #1571 --text-disabled fix
    * above. (#1689) */
-  --border-disabled: var(--color-grayscale-darker);
+  --border-disabled: var(--color-grayscale-800);
 }
 
 /* No `prefers-color-scheme` fallback here on purpose.
