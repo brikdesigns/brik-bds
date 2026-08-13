@@ -134,12 +134,34 @@ function isExplanatory(text) {
   return text.length >= EXPLANATION_MIN_CHARS;
 }
 
-/** `--color-*: #hex` primitives, for normalising an alias against a literal. */
+/**
+ * `--color-*: #hex` primitives, for normalising an alias against a literal.
+ *
+ * Values are followed through primitive-to-primitive indirection, because the
+ * 6-step names are themselves aliases onto the numeric scale since #1739
+ * (`--color-grayscale-lightest: var(--color-grayscale-100)`). Storing the raw
+ * declaration would leave the legacy name resolving to the string
+ * `var(--color-grayscale-100)` while the numeric name resolves to `#f2f2f2`, so
+ * a #1740 rename that changes nothing about the colour would read as 25
+ * divergences needing explanation. Resolving both to the hex keeps this gate
+ * measuring value, which is what its normalise() contract promises.
+ */
 function primitives() {
   const css = readFileSync(GEN_LIGHT, 'utf8');
-  const out = new Map();
+  const raw = new Map();
   for (const m of css.matchAll(/(--color-[\w-]+)\s*:\s*([^;]+);/g)) {
-    out.set(m[1], m[2].trim().toLowerCase());
+    raw.set(m[1], m[2].trim().toLowerCase());
+  }
+  const out = new Map();
+  for (const name of raw.keys()) {
+    let value = raw.get(name);
+    // Bounded: a cyclic alias would otherwise spin here.
+    for (let hops = 0; hops < 10; hops++) {
+      const alias = /^var\(\s*(--[\w-]+)\s*\)$/.exec(value);
+      if (!alias || !raw.has(alias[1])) break;
+      value = raw.get(alias[1]);
+    }
+    out.set(name, value);
   }
   return out;
 }
