@@ -276,7 +276,9 @@
      text. WCAG 1.4.3 exempts inactive components, so this is a legibility
      defect rather than a conformance failure — but invisible is invisible.
 
-     Pale fill + mid-grey label reads as disabled and measures 5.45:1.
+     Pale fill + mid-grey label reads as disabled and measures 5.22:1
+     (300 #e0e0e0 behind 700 #5a5a5a; re-derived against the current ramp at
+     #1809, replacing an unreproducible 5.45:1).
      --border-disabled stays at the generated -light: it is the edge against the
      page, not against the fill. Dark mode is corrected in theme-brand-brik.css,
      which owns the dark values at a higher specificity than this block.
@@ -318,8 +320,10 @@
 
   /* Dark value for the --text-positive gap-fill (light value above, in :root).
      On --surface-primary = black in dark mode, mid-green --color-system-green
-     #27ae60 clears AA (6.0:1) — consumer-validated in brikdesigns#455. So dark
-     mode keeps the generated mid-green; only the LIGHT value needed correcting.
+     #27ae60 clears AA at 7.31:1 (re-derived against the current ramp at #1809,
+     replacing an unreproducible 6.0:1) — consumer-validated in brikdesigns#455.
+     So dark mode keeps the generated mid-green; only the LIGHT value needed
+     correcting.
      Re-pinned explicitly here (rather than left to the generated layer) to keep
      the light/dark pair in lockstep and self-documenting. Figma source still
      emits mid-green for both — correct it and drop both lines. (#913) */
