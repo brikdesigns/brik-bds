@@ -56,13 +56,20 @@ import process from 'node:process';
  * hard-fails, same as no entry at all.
  */
 const SHADOW_BACKLOG = {
-  // Three semantic tokens whose first declaration is dead with no marker.
-  // Whether the winning value is the intended one is a token-owner call, not
-  // this gate's — brik-bds#1809 records the decision and removes the dead
-  // declarations from their Style Dictionary sources.
-  '--text-positive': 1809,
-  '--text-disabled': 1809,
-  '--background-disabled': 1809,
+  // Three semantic tokens the Figma source emits at a value that fails WCAG, so
+  // tokens/gap-fills.css re-declares them last in the cascade. brik-bds#1809
+  // confirmed the winning (gap-fill) value is the intended one in all three
+  // cases, with the ratios re-derived.
+  //
+  // The dead declarations CANNOT be deleted here: they live in
+  // tokens/figma-tokens{,-dark}.css, which carry "Do not edit directly, this
+  // file was auto-generated" and are rebuilt from Figma Variables — the next
+  // `npm run build:sd-figma` would restore them. Removing the shadow means
+  // correcting the Figma variables first (Plugin-API-only, laptop-bound), which
+  // is brik-bds#1812. These entries retire with it, not before.
+  '--text-positive': 1812,
+  '--text-disabled': 1812,
+  '--background-disabled': 1812,
 };
 
 const IGNORE_MARKER = 'bds-lint-ignore';
