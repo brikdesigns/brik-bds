@@ -18,12 +18,17 @@ afterAll(() => rmSync(dir, { recursive: true, force: true }));
 
 // A generated light file needs the --color-* primitives too: the gate resolves
 // aliases through them so `white` and var(--color-grayscale-white) compare equal.
+// `--color-grayscale-lightest` carries the #1739 shape on purpose: a 6-step
+// name is an ALIAS onto a numeric stop, not a literal. The gate has to follow
+// that hop, or a #1740 rename to the numeric stop reads as a divergence.
 const PRIMS = `
   --color-grayscale-white: #ffffff;
   --color-grayscale-black: #000000;
   --color-grayscale-darkest: #1b1b1b;
   --color-grayscale-dark: #5a5a5a;
   --color-grayscale-light: #828282;
+  --color-grayscale-100: #f2f2f2;
+  --color-grayscale-lightest: var(--color-grayscale-100);
 `;
 
 function run({ light = '', dark = '', brandLight = '', brandDark = '' }) {
@@ -136,6 +141,30 @@ describe('lint-theme-divergence', () => {
     });
     expect(code).toBe(0);
     expect(json.total).toBe(0);
+  });
+
+  // #1740. Renaming a brand override from the deprecated 6-step name to the
+  // numeric stop it already aliases changes no colour, so it must not surface as
+  // a divergence needing a comment. Before the primitives() alias-hop fix this
+  // reported all 25 renamed declarations in theme-brand-brik.css as unexplained.
+  it('treats a 6-step name and the numeric stop it aliases as the same value', () => {
+    const { code, json } = run({
+      light: '  --page-secondary: var(--color-grayscale-lightest);',
+      brandLight: '  --page-secondary: var(--color-grayscale-100);',
+    });
+    expect(code).toBe(0);
+    expect(json.total).toBe(0);
+  });
+
+  // The paired negative control: the alias hop must not flatten genuinely
+  // different stops into each other.
+  it('still reports a divergence when the numeric stop is a different colour', () => {
+    const { code, json } = run({
+      light: '  --page-secondary: var(--color-grayscale-lightest);',
+      brandLight: '  --page-secondary: var(--color-grayscale-dark);',
+    });
+    expect(code).toBe(1);
+    expect(names(json)).toEqual(['--page-secondary']);
   });
 
   it('ignores a brand-only token with nothing generated to diverge from', () => {
