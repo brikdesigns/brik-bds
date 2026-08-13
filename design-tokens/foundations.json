@@ -4159,6 +4159,17 @@
         "$type": "number",
         "$value": "{font-size.300}"
       }
+    },
+    "font-weight": {
+      "heading": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.semibold}"
+      }
     }
   },
   "typography/comfortable": {
@@ -4479,6 +4490,17 @@
         "$type": "number",
         "$value": "{font-size.500}"
       }
+    },
+    "font-weight": {
+      "heading": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.semibold}"
+      }
     }
   },
   "typography/spacious": {
@@ -4798,6 +4820,17 @@
         },
         "$type": "number",
         "$value": "{font-size.500}"
+      }
+    },
+    "font-weight": {
+      "heading": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.semibold}"
       }
     }
   },
@@ -5149,6 +5182,17 @@
         "$type": "number",
         "$value": "{font-size.25}"
       }
+    },
+    "font-weight": {
+      "heading": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.semibold}"
+      }
     }
   },
   "color/light": {
@@ -5188,6 +5232,105 @@
         },
         "$type": "color",
         "$value": "{color.system.red}"
+      },
+      "primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darkest}"
+      },
+      "secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.dark}"
+      },
+      "muted": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.light}"
+      },
+      "inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "on-color-dark": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "on-color-light": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow}"
+      },
+      "accent-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.blue}"
+      },
+      "accent-green": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.purple}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral}"
       }
     },
     "border": {
@@ -5226,6 +5369,69 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.light}"
+      },
+      "primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.lighter}"
+      },
+      "secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.dark}"
+      },
+      "muted": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.light}"
+      },
+      "inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "on-color-dark": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "on-color-light": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral}"
       }
     },
     "background": {
@@ -5318,6 +5524,96 @@
         },
         "$type": "color",
         "$value": "{color.system.green}"
+      },
+      "primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "primary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.lighter}"
+      },
+      "secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.dark}"
+      },
+      "muted": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.lighter}"
+      },
+      "inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
+      },
+      "input": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "on-color-dark": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "on-color-light": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral}"
       }
     },
     "surface": {
@@ -5375,6 +5671,98 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.white}"
+      },
+      "primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "primary-hover": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.lightest}"
+      },
+      "primary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.lighter}"
+      },
+      "secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.lighter}"
+      },
+      "secondary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.dark}"
+      },
+      "inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral-light}"
+      }
+    },
+    "page": {
+      "primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.lighter}"
+      },
+      "inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
       }
     }
   },
@@ -5415,6 +5803,105 @@
         },
         "$type": "color",
         "$value": "{color.system.red}"
+      },
+      "primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.lightest}"
+      },
+      "secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.light}"
+      },
+      "muted": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.dark}"
+      },
+      "inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
+      },
+      "on-color-dark": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "on-color-light": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow}"
+      },
+      "accent-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.blue}"
+      },
+      "accent-green": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.purple}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral}"
       }
     },
     "border": {
@@ -5453,6 +5940,69 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.dark}"
+      },
+      "primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darker}"
+      },
+      "secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.light}"
+      },
+      "muted": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.dark}"
+      },
+      "inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
+      },
+      "on-color-dark": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "on-color-light": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral}"
       }
     },
     "background": {
@@ -5545,6 +6095,96 @@
         },
         "$type": "color",
         "$value": "{color.system.green}"
+      },
+      "primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
+      },
+      "primary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darker}"
+      },
+      "secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.light}"
+      },
+      "muted": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darker}"
+      },
+      "inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "input": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
+      },
+      "on-color-dark": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "on-color-light": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral}"
       }
     },
     "surface": {
@@ -5602,6 +6242,98 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.black}"
+      },
+      "primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
+      },
+      "primary-hover": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darkest}"
+      },
+      "primary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darker}"
+      },
+      "secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darkest}"
+      },
+      "secondary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darkest}"
+      },
+      "inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral-light}"
+      }
+    },
+    "page": {
+      "primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
+      },
+      "secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darker}"
+      },
+      "inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
       }
     }
   }
