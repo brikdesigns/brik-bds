@@ -5553,6 +5553,17 @@
         "$type": "number",
         "$value": "{font-size.300}"
       }
+    },
+    "font-weight": {
+      "heading": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.semibold}"
+      }
     }
   },
   "typography/comfortable": {
@@ -5872,6 +5883,17 @@
         },
         "$type": "number",
         "$value": "{font-size.500}"
+      }
+    },
+    "font-weight": {
+      "heading": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.semibold}"
       }
     }
   },
@@ -6193,6 +6215,17 @@
         "$type": "number",
         "$value": "{font-size.500}"
       }
+    },
+    "font-weight": {
+      "heading": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.semibold}"
+      }
     }
   },
   "typography/expressive": {
@@ -6513,6 +6546,17 @@
         "$type": "number",
         "$value": "{font-size.25}"
       }
+    },
+    "font-weight": {
+      "heading": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.semibold}"
+      }
     }
   },
   "color/light": {
@@ -6571,14 +6615,14 @@
         "$type": "color",
         "$value": "{color.grayscale.dark}"
       },
-      "brand-primary": {
+      "muted": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.grayscale.light}"
       },
       "inverse": {
         "$extensions": {
@@ -6588,6 +6632,24 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.white}"
+      },
+      "on-color-dark": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "on-color-light": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darkest}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -6625,6 +6687,24 @@
         "$type": "color",
         "$value": "{color.system.purple}"
       },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral}"
+      },
+      "brand-primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.light}"
+      },
       "accent-orange": {
         "$extensions": {
           "com.figma.scopes": [
@@ -6634,24 +6714,6 @@
         "$type": "color",
         "$value": "{color.system.orange}"
       },
-      "muted": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.light}"
-      },
-      "on-color-dark": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.white}"
-      },
       "text-link": {
         "$extensions": {
           "com.figma.scopes": [
@@ -6660,15 +6722,6 @@
         },
         "$type": "color",
         "$value": "{color.poppy.light}"
-      },
-      "on-color-light": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.darkest}"
       },
       "disabled": {
         "$extensions": {
@@ -6871,24 +6924,6 @@
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
       },
-      "brand-primary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.poppy.light}"
-      },
-      "on-color-dark": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.white}"
-      },
       "secondary": {
         "$extensions": {
           "com.figma.scopes": [
@@ -6916,6 +6951,15 @@
         "$type": "color",
         "$value": "{color.grayscale.white}"
       },
+      "on-color-dark": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
       "on-color-light": {
         "$extensions": {
           "com.figma.scopes": [
@@ -6924,6 +6968,24 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral}"
+      },
+      "brand-primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.light}"
       },
       "disabled": {
         "$extensions": {
@@ -7090,6 +7152,15 @@
         "$type": "color",
         "$value": "{color.grayscale.white}"
       },
+      "primary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.lighter}"
+      },
       "secondary": {
         "$extensions": {
           "com.figma.scopes": [
@@ -7099,14 +7170,14 @@
         "$type": "color",
         "$value": "{color.grayscale.lightest}"
       },
-      "brand-primary": {
+      "muted": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.grayscale.lighter}"
       },
       "inverse": {
         "$extensions": {
@@ -7116,24 +7187,6 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
-      },
-      "accent-yellow": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.system.yellow}"
-      },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.system.orange}"
       },
       "input": {
         "$extensions": {
@@ -7153,15 +7206,6 @@
         "$type": "color",
         "$value": "{color.grayscale.white}"
       },
-      "muted": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.lighter}"
-      },
       "on-color-light": {
         "$extensions": {
           "com.figma.scopes": [
@@ -7170,6 +7214,42 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral}"
+      },
+      "brand-primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.light}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
       },
       "brand-primary-hover": {
         "$extensions": {
@@ -7411,6 +7491,24 @@
         "$type": "color",
         "$value": "{color.grayscale.white}"
       },
+      "primary-hover": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.lightest}"
+      },
+      "primary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.lighter}"
+      },
       "secondary": {
         "$extensions": {
           "com.figma.scopes": [
@@ -7420,14 +7518,14 @@
         "$type": "color",
         "$value": "{color.grayscale.lightest}"
       },
-      "brand-primary": {
+      "secondary-pressed": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.grayscale.dark}"
       },
       "inverse": {
         "$extensions": {
@@ -7437,6 +7535,24 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral-light}"
+      },
+      "brand-primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.light}"
       },
       "brand-primary-hover": {
         "$extensions": {
@@ -7667,15 +7783,6 @@
         "$type": "color",
         "$value": "{color.grayscale.lightest}"
       },
-      "brand-primary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.poppy.light}"
-      },
       "inverse": {
         "$extensions": {
           "com.figma.scopes": [
@@ -7684,6 +7791,15 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
+      },
+      "brand-primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.light}"
       },
       "service-brand": {
         "$extensions": {
@@ -7797,14 +7913,14 @@
         "$type": "color",
         "$value": "{color.grayscale.lighter}"
       },
-      "brand-primary": {
+      "muted": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.grayscale.dark}"
       },
       "inverse": {
         "$extensions": {
@@ -7814,6 +7930,24 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.black}"
+      },
+      "on-color-dark": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
+      "on-color-light": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darkest}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -7851,6 +7985,24 @@
         "$type": "color",
         "$value": "{color.system.purple}"
       },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral}"
+      },
+      "brand-primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.light}"
+      },
       "accent-orange": {
         "$extensions": {
           "com.figma.scopes": [
@@ -7860,24 +8012,6 @@
         "$type": "color",
         "$value": "{color.system.orange}"
       },
-      "muted": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.dark}"
-      },
-      "on-color-dark": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.white}"
-      },
       "text-link": {
         "$extensions": {
           "com.figma.scopes": [
@@ -7886,15 +8020,6 @@
         },
         "$type": "color",
         "$value": "{color.poppy.light}"
-      },
-      "on-color-light": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.darkest}"
       },
       "disabled": {
         "$extensions": {
@@ -8097,24 +8222,6 @@
         "$type": "color",
         "$value": "{color.grayscale.darker}"
       },
-      "brand-primary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.poppy.light}"
-      },
-      "on-color-dark": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.white}"
-      },
       "secondary": {
         "$extensions": {
           "com.figma.scopes": [
@@ -8142,6 +8249,15 @@
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
       },
+      "on-color-dark": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
+      },
       "on-color-light": {
         "$extensions": {
           "com.figma.scopes": [
@@ -8150,6 +8266,24 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral}"
+      },
+      "brand-primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.light}"
       },
       "disabled": {
         "$extensions": {
@@ -8316,6 +8450,15 @@
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
       },
+      "primary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darker}"
+      },
       "secondary": {
         "$extensions": {
           "com.figma.scopes": [
@@ -8325,14 +8468,14 @@
         "$type": "color",
         "$value": "{color.grayscale.black}"
       },
-      "brand-primary": {
+      "muted": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.grayscale.darker}"
       },
       "inverse": {
         "$extensions": {
@@ -8342,24 +8485,6 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.lightest}"
-      },
-      "accent-yellow": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.system.yellow}"
-      },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.system.orange}"
       },
       "input": {
         "$extensions": {
@@ -8379,15 +8504,6 @@
         "$type": "color",
         "$value": "{color.grayscale.white}"
       },
-      "muted": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.darker}"
-      },
       "on-color-light": {
         "$extensions": {
           "com.figma.scopes": [
@@ -8396,6 +8512,42 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral}"
+      },
+      "brand-primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.light}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
       },
       "brand-primary-hover": {
         "$extensions": {
@@ -8637,6 +8789,24 @@
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
       },
+      "primary-hover": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darkest}"
+      },
+      "primary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darker}"
+      },
       "secondary": {
         "$extensions": {
           "com.figma.scopes": [
@@ -8646,7 +8816,7 @@
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
       },
-      "brand-primary": {
+      "secondary-pressed": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -8656,6 +8826,24 @@
         "$value": "{color.grayscale.darkest}"
       },
       "inverse": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.darkest}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.neutral-light}"
+      },
+      "brand-primary": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -8893,15 +9081,6 @@
         "$type": "color",
         "$value": "{color.grayscale.black}"
       },
-      "brand-primary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.poppy.light}"
-      },
       "inverse": {
         "$extensions": {
           "com.figma.scopes": [
@@ -8910,6 +9089,15 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.lightest}"
+      },
+      "brand-primary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.light}"
       },
       "service-brand": {
         "$extensions": {

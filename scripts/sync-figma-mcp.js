@@ -221,13 +221,25 @@ const FIGMA_NAME_DENYLIST = new Set([
   'typography/logo',
 ]);
 
+// Collection-level deny: the whole `icon` collection (modes solid/outline; vars
+// `logo`/`icon`) holds Font Awesome family names — the same abandoned FA
+// references FIGMA_NAME_DENYLIST drops at the variable level. Its vars are named
+// `logo`/`icon` (not `font-family/*`), so the name deny-list misses them and the
+// sets surface as unknown. Drop by collection to keep the codebase FA-free
+// without creating icon/solid + icon/outline sets in tokens-studio.json.
+const FIGMA_COLLECTION_DENYLIST = new Set([
+  'icon',
+]);
+
 if (Array.isArray(rawData.variables)) {
   const beforeCount = rawData.variables.length;
-  rawData.variables = rawData.variables.filter((v) => !FIGMA_NAME_DENYLIST.has(v.name));
+  rawData.variables = rawData.variables.filter(
+    (v) => !FIGMA_NAME_DENYLIST.has(v.name) && !FIGMA_COLLECTION_DENYLIST.has(v.collection),
+  );
   rawData.totalVariables = rawData.variables.length;
   const dropped = beforeCount - rawData.variables.length;
   if (dropped > 0) {
-    console.log(`Deny-list filtered ${dropped} variable(s): ${[...FIGMA_NAME_DENYLIST].join(', ')}`);
+    console.log(`Deny-list filtered ${dropped} variable(s): ${[...FIGMA_NAME_DENYLIST].join(', ')}; collections: ${[...FIGMA_COLLECTION_DENYLIST].join(', ')}`);
   }
 }
 
