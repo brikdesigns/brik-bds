@@ -5,6 +5,7 @@ import {
   type ComponentType,
 } from 'react';
 import { bdsClass } from '../../utils';
+import { Dot, type DotStatus } from '../Dot';
 import './NavItem.css';
 
 /**
@@ -39,6 +40,12 @@ export interface NavItemProps {
    * Ignored when `disabled` or when `href` is omitted. See ADR-012.
    */
   linkComponent?: BdsLinkComponent;
+  /**
+   * Show a small indicator dot after the label — a decorative attention cue.
+   * `true` renders the brand-default dot; pass a {@link DotStatus} for a
+   * specific status.
+   */
+  dot?: boolean | DotStatus;
 }
 
 /**
@@ -59,12 +66,14 @@ export function NavItem({
   iconOnly = false,
   className,
   linkComponent,
+  dot,
 }: NavItemProps) {
   const classes = bdsClass(
     'bds-nav-item',
     active && 'bds-nav-item--active',
     disabled && 'bds-nav-item--disabled',
     iconOnly && 'bds-nav-item--icon-only',
+    dot && 'bds-nav-item--has-dot',
     className,
   );
 
@@ -80,6 +89,7 @@ export function NavItem({
     <>
       {icon && <span className="bds-nav-item__icon">{icon}</span>}
       {!iconOnly && <span className="bds-nav-item__label">{label}</span>}
+      {dot && <Dot status={dot === true ? 'default' : dot} size="sm" aria-hidden="true" />}
     </>
   );
 

@@ -44,6 +44,10 @@ const meta: Meta<typeof NavItem> = {
       description: 'Render the link with a router-aware component (Next.js `Link`, Remix `Link`) for client-side routing instead of the default `<a>`. Ignored when `disabled` or `href` is omitted. See ADR-012.',
       control: false,
     },
+    dot: {
+      description: 'Show a small indicator dot after the label — a decorative attention cue. `true` renders the brand-default dot; pass a `DotStatus` for a specific status.',
+      control: false,
+    },
   },
 };
 
@@ -67,4 +71,14 @@ export const Default: Story = {
       </div>
     ),
   ],
+};
+
+/** @summary Attention-cue dot on active + inactive items */
+export const Dot: Story = {
+  render: () => (
+    <div style={{ width: 240, padding: 'var(--padding-md)', backgroundColor: 'var(--surface-primary)' }}>
+      <NavItem label="Dashboard" icon={<Icon icon={Icons.House} />} href="#dashboard" active dot />
+      <NavItem label="Notifications" icon={<Icon icon={Icons.House} />} href="#notifications" dot="warning" />
+    </div>
+  ),
 };
