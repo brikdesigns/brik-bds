@@ -283,6 +283,13 @@
       "upcoming"
     ]
   },
+  "RelationshipField": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
   "SegmentedControl": {
     "size": [
       "sm",
