@@ -12,6 +12,8 @@ Second-column nav for app shells that pair a collapsed primary `SidebarNavigatio
 
 **Don't nest SubNavigation inside SubNavigation, or stack two on one route.** One section-nav column per shell — further drill-down is PageHeader's `tabs` (TabBar) or inline sections in the content column.
 
+**Don't nest SubNavigation inside `PageContent`.** It is a **full-height sibling column of `Page`** — top flush to the content area, `bordered` divider running the entire height — not page content. Put it beside `Page`, with `PageHeader` + `PageContent` to its right; see the composed shell in **Layouts / app-shell → With Page**. Nesting it inside `PageContent` drops the rail below the header and breaks the two-column shell (brik-client-portal#3162).
+
 ## Playground
 
 Toggle `showHeader`, `showFooter`, `bordered` (set `false` when the shell supplies its own panel/content separation — only the right divider is removed), or override `width` in the Controls panel.
