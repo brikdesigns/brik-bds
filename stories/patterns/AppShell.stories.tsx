@@ -2,6 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from '@iconify/react';
 import { SubNavigation, type SubNavItem } from '../../components/ui/SubNavigation/SubNavigation';
 import { SidebarNavigation, type SidebarNavItem } from '../../components/ui/SidebarNavigation';
+import { Page, PageContent } from '../../components/ui/Page';
+import { PageHeader } from '../../components/ui/PageHeader';
+import { TabBar } from '../../components/ui/TabBar';
 import * as Icons from '../../components/icons';
 
 /* ─── Shared Assets ───────────────────────────────────────────── */
@@ -93,6 +96,64 @@ export const Default: Story = {
           middle, main content on the right. The active primary item
           ("Settings") determines which sub-nav is shown.
         </p>
+      </main>
+    </div>
+  ),
+};
+
+/* ─── Composed with Page ──────────────────────────────────────── */
+
+/**
+ * The same shell composed with the `Page` primitives — the shape product pages
+ * actually render, and the one to copy.
+ *
+ * **Usage principle — the sub-nav is a FULL-HEIGHT sibling of the page body.**
+ * `SubNavigation` is a direct child of the 100vh shell row, so it fills the
+ * height: its top is flush to the top of the content area and its `bordered`
+ * `border-right` divider runs the entire column, even when the page content is
+ * short. `Page` (`PageHeader` + `PageContent`) sits to its right inside `<main>`
+ * — the **flex-column parent** `Page` requires (`Page.mdx` precondition).
+ *
+ * Do NOT nest `SubNavigation` inside `PageContent`: that drops the rail into the
+ * content column below the header, breaking the two-column shell (brik-client-
+ * portal#3162). Second-level drill-down is `PageHeader`'s `tabs` slot (a
+ * `TabBar`), never a second rail.
+ *
+ * @summary Canonical shell composed with the Page primitives
+ */
+export const WithPage: Story = {
+  render: () => (
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
+      <SidebarNavigation
+        logo={<BrikLogomark />}
+        navItems={collapsedPrimaryItems}
+        collapsed
+        position="sticky"
+      />
+      <SubNavigation items={subNavItems} />
+      {/* <main> is the flex-COLUMN parent Page needs so its fill-height body works. */}
+      <main style={{
+        flex: 1,
+        minWidth: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 'var(--padding-xl)',
+        backgroundColor: 'var(--page-primary)',
+      }}>
+        <Page padding="none">
+          <PageHeader
+            title="Services"
+            subtitle="Everything the client can be sold, grouped by service line."
+            tabs={<TabBar items={[{ label: 'Active', active: true }, { label: 'Archived' }]} />}
+          />
+          <PageContent>
+            <p style={{ fontSize: 'var(--body-md)', color: 'var(--text-secondary)' }}>
+              The rail on the left is a sibling of this `Page`, not a child of
+              `PageContent`. The header + this body render to its right, past the
+              divider — the arrangement every product page copies.
+            </p>
+          </PageContent>
+        </Page>
       </main>
     </div>
   ),

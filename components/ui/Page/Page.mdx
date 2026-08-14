@@ -38,6 +38,10 @@ The compound page shell — the connective tissue every product page shares. A `
 
 `<Page>` sets `flex: 1; min-height: 0` so fill-height bodies and internal scroll work. That only takes effect inside a **flex-column parent** (the app shell provides this). In a non-flex parent `flex: 1` no-ops and the page sizes to content — degraded, not broken. The Storybook `Shell` helper makes the precondition visible.
 
+### Where the sub-nav goes
+
+A page-level sub-nav (`SubNavigation`) is a **full-height sibling column of `Page`**, never a child of `PageContent`: it stands beside the page body so its `bordered` divider runs the full height, with `PageHeader` + `PageContent` to its right. See the composed shell in **Layouts / app-shell → With Page**. Nesting the rail inside `PageContent` drops it below the header into the content column and breaks the two-column shell (brik-client-portal#3162). Second-level drill-down belongs in `PageHeader`'s `tabs`, not a second rail.
+
 ## Variants
 
 ### Stats in the body
