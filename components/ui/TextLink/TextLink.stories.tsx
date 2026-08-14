@@ -1,6 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TextLink } from './TextLink';
 
+/* ─── Inline SVG icon (story-only) ────────────────────────────── */
+
+const ArrowLeft = () => (
+  <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+    <path d="M7.646 2.146a.5.5 0 0 1 0 .708L3.207 7.5H13.5a.5.5 0 0 1 0 1H3.207l4.439 4.646a.5.5 0 0 1-.708.708l-5.5-5.5a.5.5 0 0 1 0-.708l5.5-5.5a.5.5 0 0 1 .708 0z" />
+  </svg>
+);
+
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof TextLink> = {
@@ -117,5 +125,23 @@ export const InParagraph: Story = {
       <TextLink href="#" underline="always">Learn more about our services</TextLink> or{' '}
       <TextLink href="#" underline="always">contact us</TextLink> to get started.
     </p>
+  ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   WITH-ICON — Q4 irreducible per ADR-010. `iconBefore` / `iconAfter`
+   are ReactNode slots (control:false), so the icon case can't be
+   expressed through Controls — it needs a render story. Demonstrates
+   the seamless-underline standard: the underline runs as one line
+   under icon + gap + text, not the text alone. Shown with
+   `underline="always"` so the line is visible at rest.
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Icon link — seamless underline under icon + text */
+export const WithIcon: Story = {
+  render: () => (
+    <TextLink href="#" underline="always" iconBefore={<ArrowLeft />}>
+      Back to Customers
+    </TextLink>
   ),
 };

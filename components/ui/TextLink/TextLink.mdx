@@ -30,6 +30,8 @@ TextLink has no semantic *style* variant axis — size and underline-visibility 
 - **`hover`** (default) — no underline at rest, underline appears on hover. Use for a **standalone** link (nav item, card action, button-adjacent link) where the surrounding context already signals it's interactive.
 - **`always`** — underline visible at rest and on hover. Use for a link **inline in a sentence of body text** — at body size, color alone isn't a sufficient cue to distinguish a link from surrounding text (WCAG 1.4.1 Use of Color). This is a backward-compatible addition: the default is unchanged `hover` behavior.
 
+When a link carries an `iconBefore` / `iconAfter`, the underline is drawn as **one seamless line** under the icon, the gap, and the text — the icon underlines with the words, not just the words alone. This is automatic for any icon-bearing TextLink under both `hover` and `always`; no prop is required.
+
 ## Patterns
 
 ### In paragraph
@@ -37,6 +39,12 @@ TextLink has no semantic *style* variant axis — size and underline-visibility 
 Demonstrates how the link visually integrates with flowing paragraph text, using `underline="always"` — the a11y-correct choice for a link inline in a sentence. Surrounding body text is structural composition, not a component prop, so this case is irreducible (Q4) per [ADR-010](../../../docs/adrs/ADR-010-storybook-axes-of-information.md).
 
 <Canvas of={Stories.InParagraph} />
+
+### With icon
+
+An icon-bearing link (`iconBefore` / `iconAfter`) underlines as **one seamless line** under the icon, the gap, and the text. The icon slots are ReactNode props (not a Controls axis), so this is an irreducible render case (Q4).
+
+<Canvas of={Stories.WithIcon} />
 
 ## Props
 
