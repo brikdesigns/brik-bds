@@ -61,4 +61,26 @@
   flex-shrink: 0;
 }
 
+/* ─── Icon links: seamless underline ─────────────────────────────
+   Standard: when a TextLink carries an icon, the underline reads as
+   ONE continuous line under icon + gap + text — the icon underlines
+   with the text, not just the words. `text-decoration` can't do this:
+   it skips the atomic inline icon box and never fills the flex gap,
+   so the icon and the space beside it stay bare. Draw the underline
+   as a bottom box-shadow across the whole flex row instead — it spans
+   every child seamlessly and adds no layout shift. `currentColor`
+   locks it to the link's text color (including consumers that pin
+   their own, e.g. the site BackLink). The text's own text-decoration
+   is suppressed so the two lines never stack. */
+
+.bds-text-link:has(.bds-text-link-icon-before, .bds-text-link-icon-after):hover {
+  text-decoration: none;
+  box-shadow: 0 1px 0 0 currentColor;
+}
+
+.bds-text-link--underline-always:has(.bds-text-link-icon-before, .bds-text-link-icon-after) {
+  text-decoration: none;
+  box-shadow: 0 1px 0 0 currentColor;
+}
+
 } /* end @layer bds-components */
