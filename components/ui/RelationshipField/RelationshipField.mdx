@@ -1,0 +1,41 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './RelationshipField.stories';
+
+<Meta of={Stories} />
+
+# RelationshipField
+
+<ComponentLinks slug="relationship-field" />
+
+Orderable multi-pick control for a catalog-backed relationship — services on a plan, linked resources, team roles. Adds from `options`, removes, and reorders with up/down buttons. Array position **is** the persisted order (a `sort_order`-style column) — that's the deciding factor for reaching for this component over `MultiSelect` or `CatalogPicker` (see below).
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+`disabled` (read mode), `maxItems`, and the empty state are all Controls on `Default` — toggle `disabled` to see the icon-text `ServiceTag` / neutral `Tag` `TagGroup` read rendering.
+
+### Empty
+
+<Canvas of={Stories.Empty} />
+
+### Max items
+
+<Canvas of={Stories.MaxItems} />
+
+## When to use RelationshipField vs. MultiSelect / CatalogPicker
+
+| Component | Order matters? | Free-text additions? | Read mode |
+| --- | --- | --- | --- |
+| `RelationshipField` | **Yes** — array position is the saved value | No — pick from `options` only | Icon-text `ServiceTag` / `Tag` `TagGroup` |
+| `MultiSelect` | No — selection is a set | No — pick from `options` only | N/A (edit-only chip control) |
+| `CatalogPicker` | No — selection is a set | Yes — catalog pick or free-text, with `source` attribution | `AddableEntryList` read mode |
+
+If reordering the selected items would change what gets persisted (a `sort_order` column, a rendered sequence), use `RelationshipField`. If the set of selections is all that's saved — order is incidental — use `MultiSelect` or `CatalogPicker` instead. See [ADR-031](../../../docs/adrs/ADR-031-relationship-field-ordering-and-read-mode-convention.md).
+
+## Props
+
+<ArgTypes of={Stories} />

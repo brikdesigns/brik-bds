@@ -1,0 +1,120 @@
+---
+title: Relationship field
+description: Orderable add/remove/reorder control for a catalog relationship where array position is the persisted value.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+RelationshipField is the right primitive when a picked list's **order is part of what gets saved** — a plan's supported services in display order, a `sort_order` column, a rendered sequence a client sees. It adds from a catalog (`options`), removes, and reorders with up/down buttons; array position in `value` **is** the persisted order.
+
+## Use it for
+
+- Any catalog-backed relationship where reordering the picks changes what's persisted or rendered downstream (a `sort_order` column, a sequence shown to the client)
+- Replacing hand-rolled "list + ↑/↓/× buttons + Select-to-add" UI (the pattern this component generalizes out of `settings-plan-edit-page.tsx`'s Supported Services list)
+- Fields where a read surface needs to show the same relationship as an icon-text `ServiceTag` list, matching the edit picker's component family (see [read/edit parity](/docs/components/service-tag))
+
+For selections where order is incidental — the set matters, not the sequence — use [MultiSelect](/docs/components/multi-select) (locked vocabulary) or [CatalogPicker](/docs/components/catalog-picker) (vocabulary + free-text escape) instead.
+
+## Import
+
+```tsx
+import { RelationshipField } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+<RelationshipField
+  label="Supported Services"
+  value={services}
+  onChange={setServices}
+  options={allServices}
+  addPlaceholder="Select a service"
+  emptyLabel="No services yet — pick one below to add."
+/>
+```
+
+### Read mode
+
+Renders the same items as a `TagGroup` of icon-text `ServiceTag`s (when an item carries `category`) or neutral `Tag`s otherwise — order preserved, no controls.
+
+```tsx
+<RelationshipField disabled value={services} onChange={() => {}} options={allServices} label="Supported Services" />
+```
+
+### Max items
+
+Once `value.length >= maxItems`, the add row (dropdown + button) hides.
+
+```tsx
+<RelationshipField
+  value={services}
+  onChange={setServices}
+  options={allServices}
+  maxItems={allServices.length}
+/>
+```
+
+### Sizes
+
+`sm`, `md` (default), `lg` — matching the AddableEntryList / CatalogPicker scale.
+
+## Item + option shape
+
+```ts
+interface RelationshipItem {
+  id: string;
+  label: string;
+  /** Service-line category — drives the read-mode icon-text ServiceTag. Omit for non-service relationships. */
+  category?: ServiceLine;
+}
+
+type RelationshipOption = RelationshipItem;
+```
+
+`options` is the full catalog; the add dropdown automatically offers `options` minus whatever's already in `value` (matched by `id`) — consumers don't hand-filter "already added."
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use RelationshipField when order is incidental.** If the set of picks is all that's saved, `MultiSelect`/`CatalogPicker` are the simpler controls — adding reorder machinery to a set-shaped relationship is unnecessary surface area.
+</Callout>
+
+- **Don't use for free-text additions.** RelationshipField is catalog-only, like `MultiSelect`. Use `CatalogPicker` if users need to add entries outside the catalog.
+- **Don't use for drag-and-drop reorder.** v1 ships arrow-button reorder only; drag-and-drop is a tracked follow-up, not a current capability.
+
+## Accessibility
+
+- Reorder buttons carry per-item accessible labels (`moveUpLabel`/`moveDownLabel`, default `Move {label} up` / `Move {label} down`) — screen reader users distinguish rows without relying on document order alone.
+- The remove button similarly defaults to `Remove {label}`.
+- The add control is a native `<select>` + `<button>` — full keyboard support, no custom key handling.
+
+## API
+
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `RelationshipItem[]` *(required)* | — |
+| `onChange` | `(next: RelationshipItem[]) => void` *(required)* | — |
+| `options` | `readonly RelationshipOption[]` *(required)* | — |
+| `label` | `string` | — |
+| `helperText` | `string` | — |
+| `addPlaceholder` | `string` | `'Select…'` |
+| `addLabel` | `string` | `'Add'` |
+| `emptyLabel` | `string` | — |
+| `allAddedLabel` | `string` | `'All options already added'` |
+| `removeLabel` | `(item: RelationshipItem) => string` | `Remove {label}` |
+| `moveUpLabel` | `(item: RelationshipItem) => string` | `Move {label} up` |
+| `moveDownLabel` | `(item: RelationshipItem) => string` | `Move {label} down` |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `disabled` | `boolean` | `false` |
+| `maxItems` | `number` | — |
+| `className` | `string` | — |
+
+## Related
+
+- [MultiSelect](/docs/components/multi-select) — set-shaped alternative, no reorder
+- [CatalogPicker](/docs/components/catalog-picker) — set-shaped alternative with free-text escape
+- [ServiceTag](/docs/components/service-tag) — read-mode rendering for service-categorized items
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-relationship-field--overview)**

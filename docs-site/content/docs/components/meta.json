@@ -65,6 +65,7 @@
     "addable-combo-list",
     "addable-entry-list",
     "addable-field-row-list",
+    "relationship-field",
     "---Structure---",
     "card",
     "divider",
