@@ -1,6 +1,24 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './ContentBlock.stories';
+import { ContentBlock } from './ContentBlock';
+
+{/* Size-axis comparison — docs-local, not a story export: `size` is a Control
+    on Default, and a side-by-side gallery is an MDX concern (#1489). */}
+export const SizeScale = () => (
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-xl)' }}>
+    {['sm', 'md', 'lg'].map((size) => (
+      <div key={size} style={{ width: '300px', padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+        <ContentBlock
+          size={size}
+          title="Membership Plans"
+          subtitle="Choose the plan that fits your practice"
+          description="Every plan includes unlimited support and quarterly reviews."
+        />
+      </div>
+    ))}
+  </div>
+);
 
 <Meta of={Stories} />
 
@@ -15,6 +33,14 @@ Fixed-slot Block-layer unit — `title` / `subtitle` / `description` / `actions`
 <Canvas of={Stories.Default} />
 
 All four slots filled — the full shape. `title` renders as `titleAs` (default `h3`); pick the element by outline position, not by convenience — see [HTML Semantics](/docs/build-standards/html-semantics#heading-element-selection).
+
+### Sizes
+
+`size` scales `title` only (`--heading-sm/md/lg`) — `subtitle`/`description` stay body-md at every size. Default `sm`. It's a Control on any story above; the gallery below shows the three side by side.
+
+<Canvas>
+  <SizeScale />
+</Canvas>
 
 ## Patterns
 

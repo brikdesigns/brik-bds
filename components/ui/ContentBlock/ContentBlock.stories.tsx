@@ -21,6 +21,7 @@ const meta: Meta<typeof ContentBlock> = {
     subtitle: { control: 'text' },
     description: { control: 'text' },
     titleAs: { control: 'select', options: ['h1', 'h2', 'h3', 'h4', 'div', 'p'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg'] },
   },
 };
 

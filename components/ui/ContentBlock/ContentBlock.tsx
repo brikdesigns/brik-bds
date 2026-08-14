@@ -4,6 +4,9 @@ import './ContentBlock.css';
 
 export type ContentBlockTitleAs = 'h1' | 'h2' | 'h3' | 'h4' | 'div' | 'p';
 
+/** Title scale — sm/md/lg map to `--heading-sm/md/lg`. `subtitle`/`description` stay body-md at every size. */
+export type ContentBlockSize = 'sm' | 'md' | 'lg';
+
 export interface ContentBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Primary text slot. Omit for a description/actions-only block. */
   title?: ReactNode;
@@ -21,6 +24,8 @@ export interface ContentBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, 
    * See build-standards/html-semantics.mdx#heading-element-selection.
    */
   titleAs?: ContentBlockTitleAs;
+  /** Title scale (`--heading-{size}`). `subtitle`/`description` are unaffected. Default `sm`. */
+  size?: ContentBlockSize;
 }
 
 /**
@@ -41,13 +46,18 @@ export function ContentBlock({
   description,
   actions,
   titleAs = 'h3',
+  size = 'sm',
   className,
   style,
   ...props
 }: ContentBlockProps) {
   const TitleTag = titleAs;
   return (
-    <div className={bdsClass('bds-content-block', className)} style={style} {...props}>
+    <div
+      className={bdsClass('bds-content-block', `bds-content-block--${size}`, className)}
+      style={style}
+      {...props}
+    >
       {title && <TitleTag className="bds-content-block__title">{title}</TitleTag>}
       {subtitle && <p className="bds-content-block__subtitle">{subtitle}</p>}
       {description && <p className="bds-content-block__description">{description}</p>}
