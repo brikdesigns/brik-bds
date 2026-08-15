@@ -1,0 +1,89 @@
+---
+title: Section header
+description: Centered, measure-capped section intro — composes ContentBlock and adds the horizontal measure that groups a title + description inside a band.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+SectionHeader is the section intro that sits above a card grid, a CTA band, or a hero: an eyebrow / title / description, centered and capped to a readable width. It composes [ContentBlock](/docs/components/content-block) for the vertical slot rhythm ([ADR-023](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-023-content-blocks-and-prose-rhythm.md)) and adds the one thing ContentBlock deliberately does not own — the horizontal **measure** and alignment that group the intro inside its band. See [ADR-032](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-032-section-header-and-content-measure.md).
+
+It exists so a section intro is one component with one measure, instead of a hand-rolled wrapper that caps text at 600px on one page and full-width on the next. Drop it inside the section's width-container ([Page Grid](/docs/build-standards/page-grid)) and it caps the text within — it never sets a band width itself.
+
+## Use it for
+
+- The centered heading + supporting line above a card grid or feature section
+- A CTA band's heading, supporting line, and button
+- Any section-level intro that reads as one centered (or left-anchored) text column
+
+For a card's or CTA's inner text with no measure/centering of its own, use [ContentBlock](/docs/components/content-block) directly. For the page's own top-of-page header, use [PageHeader](/docs/components/page-header).
+
+## Import
+
+```tsx
+import { SectionHeader } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+Centered, `measure-md` (60ch), title as `<h2>` at `heading-lg` — the section-intro default.
+
+```tsx
+<SectionHeader
+  title="What we do"
+  description="From branding to websites to behind-the-scenes systems — we help you build a business that looks good and works better."
+/>
+```
+
+### Measure
+
+`measure` caps the text column: `sm` (44ch) for a short intro, `md` (60ch, default), `lg` (72ch) for longer prose. The cap is the readable column inside the band — not the band width.
+
+```tsx
+<SectionHeader measure="sm" title="Ready to get started?" description="Book a 15-minute walkthrough." />
+```
+
+### Alignment
+
+`align="start"` anchors the column to the band's start (left) instead of centering it; the measure cap still applies.
+
+```tsx
+<SectionHeader align="start" title="Built for how you already work" description="Import your existing client list in minutes." />
+```
+
+### With actions
+
+The `actions` slot follows the description; in a centered header it centers under the text.
+
+```tsx
+<SectionHeader
+  title="Ready to get started?"
+  description="Book a 15-minute walkthrough — no commitment required."
+  actions={<Button variant="primary">Book a demo</Button>}
+/>
+```
+
+<Callout type="warn">
+  A measure is not a band. Never cap a section intro with a `--content-width-*` token or a raw px / percentage — that is what SectionHeader (or `--measure-*`) is for. The band width belongs to the section's width-container.
+</Callout>
+
+## Props
+
+| Prop | Type | Default |
+| --- | --- | --- |
+| `title` | `ReactNode` | — |
+| `subtitle` | `ReactNode` | — |
+| `description` | `ReactNode` | — |
+| `actions` | `ReactNode` | — |
+| `align` | `'center' \| 'start'` | `'center'` |
+| `measure` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `titleAs` | `'h1' \| 'h2' \| 'h3' \| 'h4' \| 'div' \| 'p'` | `'h2'` |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'lg'` |
+
+## Related
+
+- [Content block](/docs/components/content-block) — the slot-rhythm unit SectionHeader composes
+- [Page Header](/docs/components/page-header) — the top-of-page header, distinct from a section intro
+- [Page Grid — Content measure](/docs/build-standards/page-grid#content-measure) — the `--measure-*` scale and the band-vs-measure distinction
+- [Content Rhythm](/docs/build-standards/content-rhythm) — the vertical rhythm inside the intro

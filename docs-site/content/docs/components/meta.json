@@ -74,6 +74,7 @@
     "---Content---",
     "content-block",
     "prose",
+    "section-header",
     "---Layout---",
     "page",
     "frame",

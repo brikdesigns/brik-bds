@@ -231,6 +231,19 @@
      the ADR-024 rhythm map. */
   --gutter-page: var(--padding-lg);
 
+  /* ── Content measure (ADR-032) ──
+     The max inline width of a CENTERED text column INSIDE a band — distinct
+     from --content-width-* (the band itself, ADR-025). A section header sits in
+     a 1280px xl band but its title + description read best capped to a measure
+     and centered. Consumers were hand-rolling this (600px / 700px / 640px /
+     70% / uncapped across brikdesigns) — the same invention pressure that
+     minted --gutter-page. ch-based so the cap tracks the type size, not a px
+     literal; static across spacing modes (a measure is a readability constant,
+     not a density knob). */
+  --measure-sm:  44ch;  /* short intro / single-line eyebrow + title */
+  --measure-md:  60ch;  /* section-header title + description — the default */
+  --measure-lg:  72ch;  /* long-form prose / rich-text body */
+
   /* Breakpoint reference values — supplement figma-tokens.css --breakpoint-mobile/tablet/web.
      These CSS vars are for Figma/documentation reference only.
      Use `breakpoints` TS export from @bds-tokens for actual @media query values. */

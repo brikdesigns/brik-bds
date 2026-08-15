@@ -1,6 +1,6 @@
 ---
 title: Page Grid
-description: The horizontal frame around every Brik page — one width-container recipe, one canonical gutter token, and which content width each band role gets.
+description: The horizontal frame around every Brik page — the width-container recipe, the canonical gutter token, which content width each band gets, and the measure that caps the readable text column inside it.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -50,6 +50,43 @@ These are content constraints, **not** breakpoints — even where the pixel valu
 
 <Callout type="warn">
   There is no responsive-spacing axis: density modes are the only spacing modulation in BDS. Do not introduce breakpoint-varying gutters or gaps.
+</Callout>
+
+## Content measure
+
+A band width is not a text width. `--content-width-xl` (1280px) sizes the *band*; a title or description spanning the full 1280px is unreadable. The **measure** is the max width of the readable text column *inside* the band — a separate, narrower cap applied to the text group, not to the container ([ADR-032](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-032-section-header-and-content-measure.md)).
+
+| Token | Width | Role |
+|---|---|---|
+| `--measure-sm` | 44ch | Short intro — a single-line eyebrow + title |
+| `--measure-md` | 60ch | Section-header title + description — the default |
+| `--measure-lg` | 72ch | Long-form prose, rich-text body |
+
+`ch`, not px: a measure tracks the type size, so the line stays readable if the font scales. And unlike `--gap-*` and `--padding-*`, measures are **static across [spacing modes](/docs/primitives/spacing#spacing-modes)** — a readable line length is a typographic constant, not a density knob.
+
+Band and measure are two different jobs — keep them separate:
+
+| | Sizes | Token family | Mechanism |
+|---|---|---|---|
+| **Band** | The container / section width | `--content-width-*` | `max-width` + `margin-inline: auto` on the container |
+| **Measure** | The text column inside it | `--measure-*` | `max-width` on the text group — usually via `SectionHeader` |
+
+### SectionHeader
+
+Don't hand-roll the cap. A centered section intro — eyebrow / title / description above a card grid, a CTA band, a hero — is a `SectionHeader`: it composes [`ContentBlock`](/docs/build-standards/content-rhythm#where-each-step-is-set) for the slot rhythm ([ADR-023](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-023-content-blocks-and-prose-rhythm.md)) and adds only the measure + centering — the concern ContentBlock deliberately does not own.
+
+```tsx
+<SectionHeader
+  title="What we do"
+  description="From branding to websites to behind-the-scenes systems…"
+/>
+// centered · measure-md (60ch) · <h2> title at heading-lg — nothing to override
+```
+
+`measure` (`sm` / `md` / `lg`, default `md`) picks the cap; `align` (`center` / `start`, default `center`) picks whether the column centers in the band or anchors to its start. `SectionHeader` never sets a band width — drop it inside the section's width-container and it caps the text within. This is the single replacement for the ad-hoc measures a section header used to be written with (`600px`, `700px`, `width: 70%`, `max-width: none`, a reused `--content-width-narrow`).
+
+<Callout type="warn">
+  A measure is not a band. Never cap a section intro with a `--content-width-*` token (that sizes the container) or with a raw px / percentage. Reach for `SectionHeader` — or `--measure-*` directly only when hand-rolling a text group `SectionHeader` doesn't cover.
 </Callout>
 
 ## Where the recipe is set

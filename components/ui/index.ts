@@ -85,6 +85,7 @@ export * from './ProgressStepper';
 export * from './Prose';
 export * from './Radio';
 export * from './RelationshipField';
+export * from './SectionHeader';
 export * from './SegmentedControl';
 export * from './Select';
 export * from './SelectableMediaTile';

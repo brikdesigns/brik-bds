@@ -1,0 +1,22 @@
+@layer bds-components {
+/* ─── SectionHeader ────────────────────────────────────────────── */
+/* Block box (not flex) — a single ContentBlock child which is itself
+   flex-column and fills the measure, so text-align applies across the
+   full column. */
+
+.bds-section-header--measure-sm { max-width: var(--measure-sm); }
+.bds-section-header--measure-md { max-width: var(--measure-md); }
+.bds-section-header--measure-lg { max-width: var(--measure-lg); }
+
+/* Centered: cap + auto margins center the column in the band; text-align
+   centers the lines; actions row centers too. */
+.bds-section-header--center {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.bds-section-header--center .bds-content-block__actions { justify-content: center; }
+
+/* Start: left-anchored column (no auto margins), inherits text-align: start. */
+.bds-section-header--start { text-align: start; }
+}
