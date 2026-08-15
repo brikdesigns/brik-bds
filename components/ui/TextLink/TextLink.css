@@ -73,6 +73,18 @@
    their own, e.g. the site BackLink). The text's own text-decoration
    is suppressed so the two lines never stack. */
 
+/* Shrink-wrap the icon link so the box-shadow underline tracks the
+   content, not the container. Left inline-flex, a TextLink already
+   hugs its content — but blockified as a stretched flex/grid item
+   (e.g. the site BackLink in a column-flex header) it fills the track,
+   and the box-shadow above then draws a full-width rule under the whole
+   row on hover. `fit-content` pins the box to icon + gap + text in that
+   case and is a no-op for inline-in-prose links. */
+
+.bds-text-link:has(.bds-text-link-icon-before, .bds-text-link-icon-after) {
+  width: fit-content;
+}
+
 .bds-text-link:has(.bds-text-link-icon-before, .bds-text-link-icon-after):hover {
   text-decoration: none;
   box-shadow: 0 1px 0 0 currentColor;
