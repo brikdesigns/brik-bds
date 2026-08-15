@@ -75,7 +75,7 @@
     // --easing- is the Style-Dictionary primitive export. See tokens.css.
     '--transition-', '--motion-', '--duration-', '--easing-', '--ease-',
     '--delay-', '--iteration-', '--stagger-',
-    '--icon-', '--size-', '--content-width-', '--gutter-', '--aspect-', '--blur-radius-',
+    '--icon-', '--size-', '--content-width-', '--gutter-', '--measure-', '--aspect-', '--blur-radius-',
     '--layout-', '--page-', '--state-', '--tooltip-', '--bds-',
     '--breakpoint-', '--z-', '--interaction-',
   ];

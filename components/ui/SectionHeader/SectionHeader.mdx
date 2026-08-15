@@ -1,0 +1,46 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './SectionHeader.stories';
+
+<Meta of={Stories} />
+
+# SectionHeader
+
+<ComponentLinks slug="section-header" />
+
+SectionHeader is the primitive that groups a **section intro**: a centered, measure-capped `ContentBlock` sitting inside a band. It composes `ContentBlock` for the `title` / `subtitle` / `description` / `actions` rhythm (ADR-023) and adds only the horizontal concerns `ContentBlock` deliberately doesn't own (ADR-023 §5) — inline measure (`measure`, `--measure-*`, ADR-032) and column alignment (`align`).
+
+## When to use it
+
+- **`SectionHeader`** is the intro to a marketing or product section inside a page: centered by default, capped to a readable measure, sits in a wide band (e.g. `content-width-xl`).
+- **`ContentBlock`** is the bare slot rhythm with no measure or alignment opinion; use it directly when a Layout primitive or Container already owns width and centering (e.g. inside a `Card`).
+- **`PageHeader`** is the page-level header (breadcrumbs, `<h1>`, metadata, tabs) — a different layer, not a section intro.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+Centered, `measure="md"` (60ch) — the default shape for a section intro. `title` renders as `titleAs` (default `h2` — section headers are outline nodes, one level under the page `<h1>`); `size` scales the title (default `lg`, the canonical section-heading size).
+
+## Variants
+
+`align` — `'center'` (default) centers the column with auto margins and centers text/actions; `'start'` left-anchors the column with no auto margins.
+
+<Canvas of={Stories.StartAligned} />
+
+`measure` — the inline cap on the centered text column (`--measure-sm` 44ch / `--measure-md` 60ch / `--measure-lg` 72ch). Pick by content length, not by band width — a `measure-sm` intro can sit in an `xl` band.
+
+<Canvas of={Stories.MeasureSm} />
+<Canvas of={Stories.MeasureLg} />
+
+`subtitle` pairs with `title` at the tight ADR-023 rhythm step.
+
+<Canvas of={Stories.WithSubtitle} />
+
+`actions` centers with the rest of the column.
+
+<Canvas of={Stories.WithActions} />
+
+## Props
+
+<ArgTypes of={Stories} />
