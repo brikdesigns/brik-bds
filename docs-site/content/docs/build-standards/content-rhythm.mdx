@@ -61,6 +61,7 @@ Adjacency margin covers the one case a single flex `gap` cannot: a Block's title
 You rarely set these values by hand — the standard is baked into the layer that owns each relationship.
 
 - **Text within a block** → `ContentBlock` (named slots) or `Prose` (free HTML) own it. See [Content blocks and prose](/docs/build-standards/page-structure#content-blocks-and-prose).
+- **A section intro (centered title + description)** → `SectionHeader`. It composes `ContentBlock` for this rhythm and adds the one thing rhythm alone doesn't: the horizontal **measure** that caps and centers the text column so intros stop being 600px on one page and full-width on the next. See [Content measure](/docs/build-standards/page-grid#content-measure).
 - **Block ↔ block** → the layout primitive's `gap` (`Stack`, `Grid`) — `--gap-xl` in a section's content region.
 - **Section ↔ section** → the section shell's `padding-block` clamp, harmonised to `7vw` ([ADR-021](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-021-blueprint-section-shell.md)). A section needing a different band re-declares `padding-block` on its own selector.
 

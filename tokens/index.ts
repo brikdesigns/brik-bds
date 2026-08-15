@@ -716,6 +716,20 @@ export type ContentWidth = keyof typeof contentWidths;
  */
 export const pageGutter = 'var(--gutter-page)' as const;
 
+/**
+ * Content measure — the max inline width of a CENTERED text column inside a
+ * band (ADR-032). Distinct from `contentWidths` (the band itself, ADR-025):
+ * a section header sits in an `xl` band but reads best capped to a measure.
+ * Maps to the --measure-* CSS custom properties in gap-fills.css.
+ */
+export const measures = {
+  sm: '44ch',
+  md: '60ch',
+  lg: '72ch',
+} as const;
+
+export type Measure = keyof typeof measures;
+
 // Theme registry — consumer entry point for adding client themes to the
 // Contrast Compliance audit (and future multi-theme probes). See
 // ./theme-registry for usage.
