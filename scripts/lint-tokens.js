@@ -75,12 +75,6 @@ function repoRel(file) {
 // a real token. Tracked in the follow-up issue filed by #1043. New literal
 // fallbacks error. As each gets a real token, delete its entry.
 const FALLBACK_LITERAL_BASELINE = new Set([
-  '--size-container-xl',   // no container-width token in the registry yet
-  '--size-container-md',
-  '--line-height-tight',   // .astro refs a name that doesn't exist (.css uses --font-line-height-*)
-  '--line-height-relaxed',
-  '--bds-hero-img-card-icon-size',        // numeric knob, no backing size token
-  '--bds-features-branded-dark-hover-scale', // numeric knob, no backing scale token
   // Section-rhythm knobs whose fallback is a responsive clamp() — no single
   // Semantic token can express `clamp(--padding-xl, Nvw, --padding-huge)`, so
   // the literal is load-bearing exactly like the entries above. These were
@@ -104,12 +98,7 @@ const FALLBACK_LITERAL_BASELINE_PREFIXES = ['--theme-'];
 // follow-up (repo-wide component literal-fallback cleanup). RATCHET: delete an
 // entry once its file is clean.
 const FALLBACK_LITERAL_BASELINE_FILES = new Set([
-  'components/ui/Checklist/Checklist.css',
-  'components/ui/Chip/Chip.css',
-  'components/ui/CompletionToggle/CompletionToggle.css',
   'components/ui/Grid/Grid.css',
-  'components/ui/InteractiveListItem/InteractiveListItem.css',
-  'components/ui/Sheet/Sheet.css',
   'components/ui/Slider/Slider.css',
 ]);
 
