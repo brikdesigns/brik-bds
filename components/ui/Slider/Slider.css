@@ -58,7 +58,7 @@
 /* Track */
 .bds-slider-input::-webkit-slider-runnable-track {
   height: var(--bds-slider-track-height, 6px);
-  border-radius: 999px;
+  border-radius: var(--border-radius-pill);
   background: linear-gradient(
     to right,
     var(--background-brand-primary) 0%,
@@ -70,14 +70,14 @@
 
 .bds-slider-input::-moz-range-track {
   height: var(--bds-slider-track-height, 6px);
-  border-radius: 999px;
+  border-radius: var(--border-radius-pill);
   background: var(--border-secondary); /* bds-lint-ignore token-family — intentional alias: track rail (thin neutral line, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md */
   border: none;
 }
 
 .bds-slider-input::-moz-range-progress {
   height: var(--bds-slider-track-height, 6px);
-  border-radius: 999px;
+  border-radius: var(--border-radius-pill);
   background: var(--background-brand-primary);
 }
 
