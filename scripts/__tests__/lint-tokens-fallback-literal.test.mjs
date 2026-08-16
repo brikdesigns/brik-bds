@@ -187,6 +187,64 @@ describe('lint-tokens Rule 7 (fallback-literal) — #1043 / ADR-014', () => {
   });
 });
 
+// ── Typed exemptions — #1044 / ADR-014 ──────────────────────────────────────
+// Defaults that no design token can express: runtime bindings, off-scale
+// geometry knobs, and responsive clamp()/min()/max() anchored on tokens. Each
+// is exempt; everything else still errors (the baselines were burned down).
+describe('lint-tokens Rule 7 (fallback-literal) — typed exemptions #1044', () => {
+  let tmpDir;
+  beforeAll(() => { tmpDir = mkdtempSync(join(tmpdir(), 'bds-lint-exempt-')); });
+  afterAll(() => { rmSync(tmpDir, { recursive: true, force: true }); });
+
+  it('exempts a runtime-binding hook (--bds-slider-percent, set in TSX)', () => {
+    const file = join(tmpDir, 'RuntimeBinding.css');
+    writeFileSync(file, `
+      .x { background: linear-gradient(to right, red var(--bds-slider-percent, 50%), blue 0); }
+    `);
+    expect(runLinter({ cssFiles: [file], rule: 'fallback-literal' })).toEqual([]);
+  });
+
+  it('exempts an off-scale geometry knob (--bds-grid-min-col-width, no scale rung)', () => {
+    const file = join(tmpDir, 'GeometryKnob.css');
+    writeFileSync(file, `
+      .x { grid-template-columns: repeat(auto-fit, minmax(var(--bds-grid-min-col-width, 240px), 1fr)); }
+    `);
+    expect(runLinter({ cssFiles: [file], rule: 'fallback-literal' })).toEqual([]);
+  });
+
+  it('exempts a clamp() fallback anchored on Semantic tokens', () => {
+    const file = join(tmpDir, 'TokenClamp.css');
+    writeFileSync(file, `
+      .x { padding-block: var(--bds-hero-padding-y, clamp(var(--padding-xl), 6vw, var(--padding-huge))); }
+    `);
+    expect(runLinter({ cssFiles: [file], rule: 'fallback-literal' })).toEqual([]);
+  });
+
+  it('exempts a min()/max() fallback anchored on tokens', () => {
+    const file = join(tmpDir, 'TokenMinMax.css');
+    writeFileSync(file, `
+      .x { inline-size: var(--bds-panel-w, min(var(--size-2200), 90vw)); }
+    `);
+    expect(runLinter({ cssFiles: [file], rule: 'fallback-literal' })).toEqual([]);
+  });
+
+  it('STILL fires on a clamp() with raw px anchors (Tier-1 leakage, not exempt)', () => {
+    const file = join(tmpDir, 'RawClamp.css');
+    writeFileSync(file, `
+      .x { padding-block: var(--bds-raw-padding-y, clamp(16px, 6vw, 48px)); }
+    `);
+    expect(runLinter({ cssFiles: [file], rule: 'fallback-literal' })).toHaveLength(1);
+  });
+
+  it('STILL fires on a non-exempt token with a bare % literal (allowlist is not blanket)', () => {
+    const file = join(tmpDir, 'BarePercent.css');
+    writeFileSync(file, `
+      .x { width: var(--bds-not-listed, 50%); }
+    `);
+    expect(runLinter({ cssFiles: [file], rule: 'fallback-literal' })).toHaveLength(1);
+  });
+});
+
 describe('lint-tokens Rule 8 (retired-bp-namespace) — #1043 / ADR-014', () => {
   let tmpDir;
   beforeAll(() => { tmpDir = mkdtempSync(join(tmpdir(), 'bds-lint-bp-')); });

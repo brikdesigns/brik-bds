@@ -62,45 +62,43 @@ function repoRel(file) {
 }
 
 // ---------------------------------------------------------------------------
-// Tier 4 fallback-literal baseline (ratchet) — brik-bds#1043 / ADR-014
+// Tier 4 fallback-literal rule — brik-bds#1043 / #1044 / ADR-014
 // ---------------------------------------------------------------------------
-// A Tier 4 knob's var() fallback must resolve to a Semantic token, never a raw
-// Tier-1 value (`var(--bds-toast-shadow, var(--shadow-md))`, never
-// `var(--bds-toast-shadow, 0 4px 12px …)`). The fallback-literal rule flags raw
-// design values inside var() fallbacks.
+// A Tier 4 knob's var() fallback must resolve to a token, never a raw Tier-1
+// value (`var(--bds-toast-shadow, var(--shadow-md))`, never
+// `var(--bds-toast-shadow, 0 4px 12px …)`). The rule flags raw design values in
+// var() fallbacks and errors — the #1043 grandfathering baselines were burned
+// down in #1044 (PRs #1853 + this one) and are gone.
 //
-// These tokens carry a LOAD-BEARING literal fallback today because no registry
-// token backs them yet — grandfathered to `warning` (Category B, deferred per
-// #1043). Dropping the literal would break rendering; the proper fix is to mint
-// a real token. Tracked in the follow-up issue filed by #1043. New literal
-// fallbacks error. As each gets a real token, delete its entry.
-const FALLBACK_LITERAL_BASELINE = new Set([
-  // Section-rhythm knobs whose fallback is a responsive clamp() — no single
-  // Semantic token can express `clamp(--padding-xl, Nvw, --padding-huge)`, so
-  // the literal is load-bearing exactly like the entries above. These were
-  // invisible until #1473 taught the rule to read line-wrapped declarations;
-  // they are pre-existing, not new. Whether a clamp() fallback can ever satisfy
-  // ADR-014 — or whether these hooks should exist at all — is #1044's call.
-  '--bds-hero-padding-y',                 // react/Hero.css + astro/HeroSplitImageCardOverlay.astro
-  '--bds-stats-dark-bar-padding-y',       // astro/StatsDarkBar.astro
-  '--bds-testimonials-featured-padding-y',// astro/TestimonialsFeaturedLarge.astro
+// Two typed exemptions survive the burn-down (ADR-014 §Decision — the same
+// carve-out shape as `BlueprintFallback.*`), because their default genuinely
+// CANNOT be a design token:
+
+// 1. Hooks whose fallback is a load-bearing default that no registry token can
+//    express. NOT a blanket knob escape hatch — each entry needs a one-line
+//    justification, and geometry that DOES land on --size-*/--space-* must adopt
+//    the rung (e.g. Slider track/thumb → --size-150/--size-500) instead of being
+//    listed here.
+const FALLBACK_LITERAL_EXEMPT_TOKENS = new Set([
+  '--bds-slider-percent',      // runtime binding — Slider.tsx sets it per render; 50% is the pre-hydration default
+  '--bds-grid-min-col-width',  // min-column-width knob; 240px default sits off every registry scale (no container-width scale)
 ]);
 
-// `--theme-*` is a retired drift namespace (token-anatomy Drift table; #712).
-// Its literal fallbacks in blueprint CSS are grandfathered here and remediated
-// under the #712 retirement, not #1043.
-const FALLBACK_LITERAL_BASELINE_PREFIXES = ['--theme-'];
-
-// Component .css files with KNOWN pre-existing literal fallbacks that predate
-// this rule and sit OUTSIDE #1043's scope (blueprints + #41 hooks). Grandfathered
-// to `warning` so the gate ships without forcing a library-wide cleanup; new
-// literal fallbacks in any file NOT listed here error. Burn down under the #1043
-// follow-up (repo-wide component literal-fallback cleanup). RATCHET: delete an
-// entry once its file is clean.
-const FALLBACK_LITERAL_BASELINE_FILES = new Set([
-  'components/ui/Grid/Grid.css',
-  'components/ui/Slider/Slider.css',
-]);
+// 2. Responsive math-function fallbacks — clamp()/min()/max() whose design
+//    anchors are all var() tokens. No single Semantic token can express a
+//    responsive `clamp(var(--padding-xl), 6vw, var(--padding-huge))`; the
+//    vw/%/number literals are the responsive necessity, not off-token leakage.
+//    A raw px/rem/hex anchor (`clamp(16px, 6vw, 48px)`) is NOT exempt — that is
+//    the Tier-1 leakage the rule exists to catch.
+function isResponsiveMathFallback(fallback) {
+  if (!/^(clamp|min|max)\s*\(/i.test(fallback)) return false;
+  const stripped = fallback.replace(/var\(\s*--[\w-]+\s*\)/g, '');
+  if (/var\(/.test(stripped)) return false;                 // a non-simple var() arg — don't reason about it
+  if (!/var\(\s*--/.test(fallback)) return false;           // must anchor on ≥1 token
+  if (/#[0-9a-f]{3,8}\b/i.test(stripped)) return false;     // raw color anchor
+  if (/\d*\.?\d+(px|rem|em|pt|cm|mm|in|pc|ex|ch)\b/i.test(stripped)) return false; // raw length anchor
+  return true;
+}
 
 // Primitive token prefixes that should be replaced with semantic equivalents
 // Covers both Webflow (double-dash) and SD (single-dash) naming
@@ -759,7 +757,9 @@ function checkDeprecatedTokens(line, lineNum, file) {
  *
  * BlueprintFallback.* is exempt — it is a deliberate loud-stub renderer whose
  * literal defaults are intentional (mirrors scripts/lint-blueprint-naming.mjs).
- * Tokens in FALLBACK_LITERAL_BASELINE / -PREFIXES are grandfathered to warning.
+ * Two further typed exemptions (ADR-014 §Decision): FALLBACK_LITERAL_EXEMPT_TOKENS
+ * (runtime bindings + off-scale geometry knobs) and isResponsiveMathFallback()
+ * (clamp()/min()/max() anchored on tokens). Everything else errors.
  *
  * Line-wrapped declarations (#1473): the rule reads whole logical declarations,
  * not single lines. It originally bailed on any `var(` whose parens didn't close
@@ -847,21 +847,18 @@ function checkFallbackLiterals(line, lineNum, file, isComponent, lines = null) {
     const isRawValue = /[#\d]/.test(fallback) || /\b(rgb|rgba|hsl|hsla|cubic-bezier)\s*\(/i.test(fallback);
     if (!isRawValue) continue;                     // CSS keyword fallback — permitted
 
-    const grandfathered =
-      FALLBACK_LITERAL_BASELINE.has(token) ||
-      FALLBACK_LITERAL_BASELINE_PREFIXES.some(p => token.startsWith(p)) ||
-      FALLBACK_LITERAL_BASELINE_FILES.has(repoRel(file));
+    // Typed exemptions (ADR-014 §Decision) — defaults that no token can express.
+    if (FALLBACK_LITERAL_EXEMPT_TOKENS.has(token)) continue; // runtime binding / off-scale geometry knob
+    if (isResponsiveMathFallback(fallback)) continue;        // clamp()/min()/max() anchored on tokens
 
     violations.push({
       rule: 'fallback-literal',
-      severity: grandfathered ? 'warning' : 'error',
+      severity: 'error',
       file,
       line: lineNum,
       column: i + 1,
-      message: `Raw literal "${fallback}" in var(${token}, …) fallback — Tier 4 must resolve to a Semantic token, never a raw value`,
-      suggestion: grandfathered
-        ? `Grandfathered (FALLBACK_LITERAL_BASELINE) pending a real backing token. Do NOT add new literal fallbacks. See ADR-014 / #1043.`
-        : `Point the fallback at a Semantic token: var(${token}, var(--<semantic>)) — or drop the fallback if ${token} already resolves. See ADR-014.`,
+      message: `Raw literal "${fallback}" in var(${token}, …) fallback — Tier 4 must resolve to a token, never a raw value`,
+      suggestion: `Point the fallback at a token: var(${token}, var(--<token>)) — or drop the fallback if ${token} already resolves. See ADR-014.`,
     });
   }
   return violations;
