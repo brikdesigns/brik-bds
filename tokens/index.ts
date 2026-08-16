@@ -604,7 +604,7 @@ export const label = {
     fontWeight: weight.medium,
     color: 'var(--text-secondary)',
     textTransform: 'uppercase' as const,
-    letterSpacing: '0.05em',
+    letterSpacing: 'var(--letter-spacing-wide)',
   } satisfies CSSProperties,
 
   /** Standard label (label/sm · 14px) */

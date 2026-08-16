@@ -9,7 +9,7 @@
   line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically; shared with Badge + Tag */
   white-space: nowrap;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--letter-spacing-wide);
   border-radius: var(--border-radius-sm);
   box-sizing: border-box;
 }

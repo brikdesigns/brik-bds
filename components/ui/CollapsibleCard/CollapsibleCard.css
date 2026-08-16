@@ -43,7 +43,7 @@
   font-size: var(--heading-tiny);
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--letter-spacing-wide);
   line-height: var(--font-line-height-tight);
   margin: 0;
 }
