@@ -27,13 +27,13 @@
 }
 
 .bds-service-tag--md {
-  height: 32px;
+  height: var(--size-800);
   padding-inline: var(--padding-sm);
   font-size: var(--label-sm);
 }
 
 .bds-service-tag--lg {
-  height: 40px;
+  height: var(--size-1000);
   padding-inline: var(--padding-md);
   font-size: var(--label-md);
 }

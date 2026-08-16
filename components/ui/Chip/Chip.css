@@ -58,14 +58,14 @@
   padding: var(--padding-sm) var(--padding-md);
   font-size: var(--label-sm);
   gap: var(--gap-sm);
-  height: 32px;
+  height: var(--size-800);
 }
 
 .bds-chip--lg {
   padding: var(--padding-sm) var(--padding-md);
   font-size: var(--label-md);
   gap: var(--gap-md);
-  height: 40px;
+  height: var(--size-1000);
 }
 
 /* ─── Variants (hierarchy only) ───────────────────────────────── */
