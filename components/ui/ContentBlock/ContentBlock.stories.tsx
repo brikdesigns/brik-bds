@@ -22,17 +22,26 @@ const meta: Meta<typeof ContentBlock> = {
     description: { control: 'text' },
     titleAs: { control: 'select', options: ['h1', 'h2', 'h3', 'h4', 'div', 'p'] },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    onColor: {
+      control: { type: 'boolean' },
+      description:
+        'Swaps the text slots to `--text-on-color-dark` for a block on a filled brand/dark surface. On `--surface-brand-primary` the pair is 3.78:1 — AA-large, not AA.',
+    },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof ContentBlock>;
 
-const Frame = ({ width = '360px', children }: { width?: string; children: React.ReactNode }) => (
-  <div style={{ width, padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
-    {children}
-  </div>
-);
+const Frame = ({
+  width = '360px',
+  background = 'var(--surface-primary)',
+  children,
+}: {
+  width?: string;
+  background?: string;
+  children: React.ReactNode;
+}) => <div style={{ width, padding: 'var(--padding-lg)', background }}>{children}</div>;
 
 /**
  * All four slots filled — the full shape.
@@ -65,6 +74,32 @@ export const OmittedSlots: Story = {
         title="First Impressions"
         description="75% of website credibility comes from design — a first impression forms in about 0.05 seconds."
       />
+    </Frame>
+  ),
+};
+
+/**
+ * `onColor` — the block sitting on a filled brand band. All three text slots
+ * swap to `--text-on-color-dark`, so the consumer never pushes a per-instance
+ * `color` into a slot the block owns. `--text-on-color-dark` is mode-invariant
+ * white, so the same story holds in light and dark.
+ *
+ * Contrast: white on `--surface-brand-primary` (`--color-poppy-500`) is
+ * **3.78:1 — AA-large (3:1), not AA (4.5:1)**. Brand-primary fills are gated
+ * AA-large by policy (`tokens/contrast-pairings.json`, BDS-22 / ADR-015). The
+ * title is large text and unaffected; keep `description` short on a band.
+ * @summary On a filled brand band — on-color text slots
+ */
+export const OnColor: Story = {
+  args: {
+    title: 'Get in touch',
+    description: 'Starting a new project or want to collaborate with us?',
+    actions: <Button variant="on-color">Let&apos;s Talk</Button>,
+    onColor: true,
+  },
+  render: (args) => (
+    <Frame background="var(--surface-brand-primary)">
+      <ContentBlock {...args} />
     </Frame>
   ),
 };

@@ -64,6 +64,23 @@ The `actions` slot follows the description; in a centered header it centers unde
 />
 ```
 
+### On a filled brand band
+
+`onColor` is forwarded straight to [ContentBlock](/docs/components/content-block), which owns the swap to `--text-on-color-dark`. SectionHeader adds no colour CSS of its own — it still owns only measure and alignment. This is the supported route for a CTA band; the alternative it replaces was pushing a `style={{ color }}` through SectionHeader into a slot it does not own.
+
+```tsx
+<SectionHeader
+  onColor
+  title="Get in touch"
+  description="Starting a new project or want to collaborate with us?"
+  actions={<Button variant="on-color">Let&apos;s Talk</Button>}
+/>
+```
+
+<Callout type="warn">
+  White on `--surface-brand-primary` is **3.78:1 — AA-large (3:1), not AA (4.5:1)**; brand-primary fills are gated AA-large by policy (see [Color Pairings](/docs/primitives/color-pairings), BDS-22 / ADR-015). The `size="lg"` title is large text; keep a band `description` short.
+</Callout>
+
 <Callout type="warn">
   A measure is not a band. Never cap a section intro with a `--content-width-*` token or a raw px / percentage — that is what SectionHeader (or `--measure-*`) is for. The band width belongs to the section's width-container.
 </Callout>
@@ -80,6 +97,7 @@ The `actions` slot follows the description; in a centered header it centers unde
 | `measure` | `'sm' \| 'md' \| 'lg'` | `'md'` |
 | `titleAs` | `'h1' \| 'h2' \| 'h3' \| 'h4' \| 'div' \| 'p'` | `'h2'` |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'lg'` |
+| `onColor` | `boolean` | `false` |
 
 ## Related
 

@@ -41,6 +41,12 @@ Centered, `measure="md"` (60ch) — the default shape for a section intro. `titl
 
 <Canvas of={Stories.WithActions} />
 
+`onColor` — the CTA-band shape. Forwarded straight to `ContentBlock`, which owns the swap to `--text-on-color-dark`; SectionHeader adds no colour CSS of its own and still owns only measure + alignment. Use this instead of pushing a `color` override through `SectionHeader` into a slot it doesn't own.
+
+<Canvas of={Stories.OnColor} />
+
+White on `--surface-brand-primary` is **3.78:1 — AA-large (3:1), not AA (4.5:1)**; brand-primary fills are gated AA-large by policy (`tokens/contrast-pairings.json`, BDS-22 / ADR-015). The `size="lg"` title is large text; keep a band `description` short.
+
 ## Props
 
 <ArgTypes of={Stories} />

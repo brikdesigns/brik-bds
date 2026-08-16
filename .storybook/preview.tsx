@@ -381,8 +381,18 @@ const preview: Preview = {
       },
     },
     controls: {
+      // The color matcher is name-based and OVERRIDES a component's own
+      // `argTypes.onColor.control`, so it must not claim the boolean
+      // surface-context props. `onColor` is established BDS vocabulary for
+      // "render on a filled brand/dark surface" (TabBar, ContentBlock,
+      // SectionHeader) — matched as a color it renders a colour picker for a
+      // boolean and logs `Control of type color only supports string,
+      // received "boolean"`. The `(?!on[A-Z])` guard excludes `onColor` /
+      // `onBackground` while keeping `color`, `backgroundColor`, `textColor`,
+      // `borderColor`; the case-sensitive prefix check is why this one drops
+      // the `i` flag (`onlyColor` still matches).
       matchers: {
-        color: /(background|color)$/i,
+        color: /^(?!on[A-Z])\w*([Bb]ackground|[Cc]olor)$/,
         date: /Date$/i,
       },
     },
