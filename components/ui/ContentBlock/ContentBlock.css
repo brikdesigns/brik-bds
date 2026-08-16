@@ -67,9 +67,15 @@
    modes) this is 3.78:1 — AA-large (3:1), NOT AA (4.5:1). Brand-primary
    fills are gated AA-large by policy (tokens/contrast-pairings.json,
    BDS-22 / ADR-015). Titles are large text and unaffected; keep
-   `description` on a band short rather than running body copy long. */
+   `description` on a band short rather than running body copy long.
 
-.bds-content-block--on-color :is(
+   CHILD combinator, not descendant: the four slots are always direct children
+   of `.bds-content-block`, so `>` covers every real case — while a descendant
+   selector would also repaint a NESTED ContentBlock passed into the
+   `description`/`actions` slot (a neutral card inside a brand band), which
+   the parent does not own. */
+
+.bds-content-block--on-color > :is(
     .bds-content-block__title,
     .bds-content-block__subtitle,
     .bds-content-block__description

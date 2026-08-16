@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { ContentBlock } from './ContentBlock';
 import { Button } from '../Button';
 // Spacing-density mode overrides — not imported by the main Storybook preview
@@ -102,6 +103,47 @@ export const OnColor: Story = {
       <ContentBlock {...args} />
     </Frame>
   ),
+};
+
+/**
+ * Asserts `onColor` stops at its OWN slots. The colour rule uses a child
+ * combinator, so a nested ContentBlock handed to the `description` slot keeps
+ * `--text-primary` — a neutral card inside a brand band is not the parent
+ * block's to repaint. A descendant combinator here would paint the nested
+ * title white and fail this test.
+ *
+ * @summary Interaction test — onColor does not leak to a nested block
+ */
+export const InteractionTestOnColorNoLeak: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  render: () => (
+    <Frame background="var(--surface-brand-primary)">
+      <ContentBlock
+        onColor
+        title="Get in touch"
+        description={
+          <span data-testid="nested">
+            <ContentBlock title="Nested neutral block" />
+          </span>
+        }
+      />
+    </Frame>
+  ),
+  play: async ({ canvasElement }) => {
+    const titles = [...canvasElement.querySelectorAll('.bds-content-block__title')];
+    await expect(titles).toHaveLength(2);
+
+    const [outer, nested] = titles;
+    await expect(getComputedStyle(outer).color).toBe('rgb(255, 255, 255)');
+
+    // The nested block carries no --on-color modifier, so it must resolve to
+    // --text-primary rather than inheriting the band's on-color white.
+    const expected = getComputedStyle(canvasElement)
+      .getPropertyValue('--text-primary')
+      .trim();
+    await expect(expected).not.toBe('');
+    await expect(getComputedStyle(nested).color).not.toBe('rgb(255, 255, 255)');
+  },
 };
 
 /**
