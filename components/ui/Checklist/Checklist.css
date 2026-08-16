@@ -61,7 +61,7 @@
   /* When the input is focused (keyboard nav), surface the focus ring
      on the visible toggle. */
   .bds-checklist__input:focus-visible + .bds-checklist__toggle {
-    outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
+    outline: var(--border-width-lg) solid var(--state-focus, currentColor);
     outline-offset: 2px;
   }
 

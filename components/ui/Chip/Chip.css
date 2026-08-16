@@ -41,7 +41,7 @@
 }
 
 .bds-chip:focus-visible {
-  outline: var(--border-width-lg, 2px) solid var(--state-focus, currentColor);
+  outline: var(--border-width-lg) solid var(--state-focus, currentColor);
   outline-offset: 2px;
 }
 
