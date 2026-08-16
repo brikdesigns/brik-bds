@@ -40,18 +40,22 @@ BDS_REMOTE="origin"
 BDS_BRANCH="main"
 BDS_PACKAGE_NAME="@brikdesigns/bds"
 
-# Submodule consumers: name|path|subpath|base_branch
+# Submodule consumers: name|path|subpath|base_branch|area_label
+# area_label is applied to the opened PR — every consumer's require-area-label
+# gate hard-fails a label-less PR, and gh pr create --label errors if the label
+# is absent in the target repo, so the name must match that repo's own taxonomy
+# (brik-llm uses area:ops; the npm consumers use area:infra).
 SUBMODULE_CONSUMERS=(
-  "brik-llm|/Users/nickstanerson/Documents/GitHub/brik/brik-llm|foundations/brik-bds|main"
+  "brik-llm|/Users/nickstanerson/Documents/GitHub/brik/brik-llm|foundations/brik-bds|main|area:ops"
 )
 
-# npm consumers: name|path|base_branch
+# npm consumers: name|path|base_branch|area_label
 # brikdesigns migrated submodule → npm (@brikdesigns/bds in package.json; no
 # .gitmodules). It is pre-launch, so PRs target staging.
 NPM_CONSUMERS=(
-  "brik-client-portal|/Users/nickstanerson/Documents/GitHub/product/brik-client-portal|staging"
-  "renew-pms|/Users/nickstanerson/Documents/GitHub/product/renew-pms|staging"
-  "brikdesigns|/Users/nickstanerson/Documents/GitHub/brik/brikdesigns|staging"
+  "brik-client-portal|/Users/nickstanerson/Documents/GitHub/product/brik-client-portal|staging|area:infra"
+  "renew-pms|/Users/nickstanerson/Documents/GitHub/product/renew-pms|staging|area:infra"
+  "brikdesigns|/Users/nickstanerson/Documents/GitHub/brik/brikdesigns|staging|area:infra"
 )
 
 # Frozen consumers: name|reason
@@ -282,7 +286,7 @@ generate_changelog() {
 
 # ─── Submodule Track ──────────────────────────────────────────────
 propagate_submodule() {
-  local name="$1" path="$2" subpath="$3" base="$4"
+  local name="$1" path="$2" subpath="$3" base="$4" area_label="$5"
 
   echo -e "${BOLD}━━━ submodule :: $name ━━━${NC}"
 
@@ -392,7 +396,8 @@ EOF
     --title "chore(bds): update submodule to bds@$BDS_VERSION" \
     --body "$pr_body" \
     --base "$base" \
-    --head "$pr_branch")
+    --head "$pr_branch" \
+    --label "$area_label")
   ok "PR: $pr_url"
   ANY_UPDATED=true
 
@@ -405,7 +410,7 @@ EOF
 
 # ─── npm Track ────────────────────────────────────────────────────
 propagate_npm() {
-  local name="$1" path="$2" base="$3"
+  local name="$1" path="$2" base="$3" area_label="$4"
 
   echo -e "${BOLD}━━━ npm :: $name ━━━${NC}"
 
@@ -551,7 +556,8 @@ EOF
     --title "chore(bds): bump $BDS_PACKAGE_NAME to $BDS_VERSION" \
     --body "$pr_body" \
     --base "$base" \
-    --head "$pr_branch")
+    --head "$pr_branch" \
+    --label "$area_label")
   ok "PR: $pr_url"
   ANY_UPDATED=true
 
@@ -567,25 +573,25 @@ EOF
 # so the run still exits 0 and the daily digest keeps meaning "something broke".
 # It also outranks --only — naming a frozen consumer explicitly does not thaw it.
 for entry in "${SUBMODULE_CONSUMERS[@]}"; do
-  IFS='|' read -r name path subpath base <<< "$entry"
+  IFS='|' read -r name path subpath base area_label <<< "$entry"
   [ -n "$ONLY" ] && [ "$ONLY" != "$name" ] && continue
   if reason=$(frozen_reason "$name"); then
     warn "$name skipped — $reason"
     echo ""
     continue
   fi
-  propagate_submodule "$name" "$path" "$subpath" "$base"
+  propagate_submodule "$name" "$path" "$subpath" "$base" "$area_label"
 done
 
 for entry in "${NPM_CONSUMERS[@]}"; do
-  IFS='|' read -r name path base <<< "$entry"
+  IFS='|' read -r name path base area_label <<< "$entry"
   [ -n "$ONLY" ] && [ "$ONLY" != "$name" ] && continue
   if reason=$(frozen_reason "$name"); then
     warn "$name skipped — $reason"
     echo ""
     continue
   fi
-  propagate_npm "$name" "$path" "$base"
+  propagate_npm "$name" "$path" "$base" "$area_label"
 done
 
 # ─── Tag Release ──────────────────────────────────────────────────
