@@ -99,7 +99,7 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
  *
  * - `--page-header-section-gap` (default `--gap-xl`, 24px) — between
  *   root sections (inner / metadata / tabs).
- * - `--page-header-content-gap` (default `--gap-sm`, 6px) — between
+ * - `--page-header-content-gap` (default `--gap-lg`, 16px) — between
  *   the title-row and the subtitle.
  * - `--page-header-actions-gap` (default `--gap-sm`, 6px) — between
  *   the content column (title + subtitle) and the actions column.

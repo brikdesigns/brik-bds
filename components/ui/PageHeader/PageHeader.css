@@ -7,7 +7,7 @@
      a per-instance style prop) to dial in the right rhythm without
      forking the component. Defaults preserve the lean 0.57.0 shape. */
   --page-header-section-gap: var(--gap-xl);     /* between root sections (inner/metadata/tabs) */
-  --page-header-content-gap: var(--gap-sm);     /* between title-row and subtitle */
+  --page-header-content-gap: var(--gap-lg);     /* between title-row and subtitle */
   --page-header-actions-gap: var(--gap-sm);     /* between content column and actions column */
   --page-header-padding-bottom: 0; /* set to a padding token if a consumer restores a manual divider */
 
