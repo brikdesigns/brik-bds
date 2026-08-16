@@ -46,14 +46,14 @@
   padding: var(--padding-sm) var(--padding-md);
   gap: var(--gap-sm);
   font-size: var(--label-sm);
-  height: 32px;
+  height: var(--size-800);
 }
 
 .bds-badge--lg {
   padding: var(--padding-sm) var(--padding-md);
   gap: var(--gap-md);
   font-size: var(--label-md);
-  height: 40px;
+  height: var(--size-1000);
 }
 
 /* ─── Density (compact — tighter horizontal padding for dense rows) ── */
