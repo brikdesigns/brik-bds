@@ -4,7 +4,7 @@
 **Date:** 2026-06-29
 **Supersedes:** —
 **Superseded by:** —
-**Related:** [#1043](https://github.com/brikdesigns/brik-bds/issues/1043) (this ADR's issue), [#565](https://github.com/brikdesigns/brik-bds/issues/565) (Composition + scoped-token program — owns the formula), [#41](https://github.com/brikdesigns/brik-bds/issues/41) (introduced the `--{component}-*` override surface), [token-anatomy.mdx](../../docs-site/content/docs/primitives/token-anatomy.mdx) (the Tier 4 canon this ADR fills in), [ADR-008](./ADR-008-naming-canon-closed-allowlist.md) (closed-allowlist precedent — stop drift at the source), [portal #512](https://github.com/brikdesigns/brik-client-portal/pull/512) / [#553](https://github.com/brikdesigns/brik-client-portal/pull/553) (parallel-taxonomy rollback this guards against)
+**Related:** [#1043](https://github.com/brikdesigns/brik-bds/issues/1043) (this ADR's issue), [#1044](https://github.com/brikdesigns/brik-bds/issues/1044) (fallback-literal burn-down + the typed-exemption amendment), [#565](https://github.com/brikdesigns/brik-bds/issues/565) (Composition + scoped-token program — owns the formula), [#41](https://github.com/brikdesigns/brik-bds/issues/41) (introduced the `--{component}-*` override surface), [token-anatomy.mdx](../../docs-site/content/docs/primitives/token-anatomy.mdx) (the Tier 4 canon this ADR fills in), [ADR-008](./ADR-008-naming-canon-closed-allowlist.md) (closed-allowlist precedent — stop drift at the source), [portal #512](https://github.com/brikdesigns/brik-client-portal/pull/512) / [#553](https://github.com/brikdesigns/brik-client-portal/pull/553) (parallel-taxonomy rollback this guards against)
 **Owner:** Nick Stanerson
 
 ## Context
@@ -29,7 +29,7 @@ Why `--bds-*` over the alternatives:
 - **It carries the design-system prefix**, disambiguating component knobs from arbitrary global custom properties (the collision risk of bare `--toast-shadow`).
 - **It matches the shape the canon already proposed**, so no third name is introduced.
 
-**2. A Tier 4 knob must resolve to a Semantic token, never a raw literal.** `var(--bds-toast-shadow, var(--shadow-md))` is correct; `var(--bds-toast-shadow, 0 4px 12px …)` is Tier-1 leakage. Tier 4 never terminates at a raw value.
+**2. A Tier 4 knob must resolve to a token, never a raw literal.** `var(--bds-toast-shadow, var(--shadow-md))` is correct; `var(--bds-toast-shadow, 0 4px 12px …)` is Tier-1 leakage. Tier 4 never terminates at a raw value. Prefer a Semantic token; where no Semantic layer exists above the value (component geometry), a **scale primitive** (`--size-*` / `--space-*`) is the correct target — adopt the rung, do not hardcode the number. Three narrowly-typed exemptions where no token can express the default are carved out below (see the exemption note under pt-4).
 
 **3. The two retired namespaces migrate to `--bds-*`** (`--bp-* → --bds-*`, bare `--{component}-* → --bds-{component}-*`), deduplicating redundant slot segments on the way (`--bp-hero-img-card-card-bg → --bds-hero-img-card-bg`). This is a pure prefix/rename pass — resolved values are unchanged, so no visual delta.
 
@@ -38,6 +38,15 @@ Why `--bds-*` over the alternatives:
    - **Fallback-literal rule** — flags a raw literal inside a `var(--token, <literal>)` fallback on a tokenized property. A nested token fallback (`var(--x, var(--y))`) stays legal. Ships with a vitest fixture proving it fails.
 
 `BlueprintFallback.*` is exempt from the fallback-literal rule: it is a deliberate loud-stub renderer whose HEX defaults are intentional (mirrors the existing `scripts/lint-blueprint-naming.mjs` exemption).
+
+### Amendment (2026-08-16, #1044)
+
+The #1043 grandfathering baselines (`FALLBACK_LITERAL_BASELINE` / `_PREFIXES` / `_FILES`) are burned down and removed; the rule is **error-only**. Burning them down surfaced defaults that pt-2 cannot satisfy because **no token can express them** — pt-1 blesses `--bds-slider-percent` as a runtime binding, yet pt-2 as written would flag its `50%` default. Two typed exemptions resolve that, on the same "deliberate, not leakage" footing as `BlueprintFallback.*`:
+
+1. **`FALLBACK_LITERAL_EXEMPT_TOKENS`** — an explicit, justified allowlist (not a blanket knob escape hatch). Each entry is a hook whose fallback is a load-bearing default with no possible token:
+   - `--bds-slider-percent` — a **runtime binding**; `Slider.tsx` sets it per render, and `50%` is only the pre-hydration default.
+   - `--bds-grid-min-col-width` — an **off-scale geometry knob**; the `240px` min-column-width default lands on no registry scale (there is no container-width scale). A new entry requires a one-line justification; geometry that *does* land on `--size-*` / `--space-*` must adopt the rung instead of being listed.
+2. **Responsive math-function fallbacks** — `clamp()` / `min()` / `max()` whose design anchors are all `var()` tokens (`clamp(var(--padding-xl), 6vw, var(--padding-huge))`). No single Semantic token expresses a responsive expression, and the `vw`/`%`/number literals are the responsive necessity, not off-token leakage. A math function with a **raw** `px`/`rem`/hex anchor (`clamp(16px, 6vw, 48px)`) is **not** exempt — that is the Tier-1 leakage the rule exists to catch.
 
 ## Consequences
 
