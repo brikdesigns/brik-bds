@@ -68,7 +68,9 @@
   background-color: var(--surface-brand-primary);
   color: var(--text-on-color-dark);
   padding: var(--padding-md) var(--padding-lg);
-  border-radius: var(--border-radius-100);
+  /* Match Button's base radius (--border-radius-md) so the announcement banner
+   * reads as cohesive with adjacent buttons. #1840. */
+  border-radius: var(--border-radius-md);
 }
 
 /* ─── Tones: warning / error / information (status surfaces) ──── */
