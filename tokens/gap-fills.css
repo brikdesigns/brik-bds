@@ -35,6 +35,15 @@
   --text-transform-body: none;
   --text-transform-display: none;
 
+  /* ── Letter-spacing (gap-fill — not yet in Figma/SD; #1845) ──
+     One semantic tracking token for the wide, uppercase-label style shared by
+     ServiceTag, Tag, Badge, Counter, Menu, Sheet, Collapsible(Card). Minted
+     because 0.05em was duplicated across those component CSS files with no
+     backing token (drift risk). The one-off 0.04em (Board) and 0.08em (Table)
+     stay inline — two singletons don't justify tokens.
+     Promote to a Figma letterSpacing variable once that primitive type lands. */
+  --letter-spacing-wide: 0.05em;
+
   /* ── System Color Extras ── */
   --color-system-transparent: #0000;
   --color-system-lightbox: #000000a3;

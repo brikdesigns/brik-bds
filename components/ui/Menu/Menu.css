@@ -59,7 +59,7 @@
   line-height: var(--font-line-height-normal);
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--letter-spacing-wide);
   user-select: none;
 }
 
@@ -79,7 +79,7 @@
   line-height: var(--font-line-height-normal);
   color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--letter-spacing-wide);
   user-select: none;
 }
 
