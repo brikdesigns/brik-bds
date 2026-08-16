@@ -45,21 +45,21 @@
 /* Size variants — height scale matches Button/IconButton (4px grid, 8px steps) */
 
 .bds-filter-button__trigger--sm {
-  height: 32px;
+  height: var(--size-800);
   padding-inline: var(--padding-md);
   font-size: var(--label-sm);
   gap: var(--gap-sm);
 }
 
 .bds-filter-button__trigger--md {
-  height: 40px;
+  height: var(--size-1000);
   padding-inline: var(--padding-lg);
   font-size: var(--label-md);
   gap: var(--gap-md);
 }
 
 .bds-filter-button__trigger--lg {
-  height: 48px;
+  height: var(--size-1200);
   padding-inline: var(--padding-xl);
   font-size: var(--label-lg);
   gap: var(--gap-lg);

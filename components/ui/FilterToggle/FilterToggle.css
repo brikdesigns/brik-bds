@@ -40,19 +40,19 @@
 /* ─── Size variants — matches FilterButton/Button height scale (4px grid, 8px steps) ─── */
 
 .bds-filter-toggle--sm {
-  height: 32px;
+  height: var(--size-800);
   padding-inline: var(--padding-md);
   font-size: var(--label-sm);
 }
 
 .bds-filter-toggle--md {
-  height: 40px;
+  height: var(--size-1000);
   padding-inline: var(--padding-lg);
   font-size: var(--label-md);
 }
 
 .bds-filter-toggle--lg {
-  height: 48px;
+  height: var(--size-1200);
   padding-inline: var(--padding-xl);
   font-size: var(--label-lg);
 }
