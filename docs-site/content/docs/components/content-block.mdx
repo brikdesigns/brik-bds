@@ -63,6 +63,25 @@ Any slot can be dropped independently — the rhythm collapses to whatever slots
   See [HTML Semantics — Heading element selection](/docs/build-standards/html-semantics#heading-element-selection) for the full rule.
 </Callout>
 
+### On a filled brand band
+
+`onColor` swaps `title` / `subtitle` / `description` to `--text-on-color-dark` for a block on a filled brand or dark surface. The block owns its own inverse story ([ADR-023 amendment 2026-08-16](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-023-content-blocks-and-prose-rhythm.md)) — never push a `color` override from the consumer into a slot the block renders. `--text-on-color-dark` is mode-invariant white, so one prop covers light and dark with no theme branch.
+
+```tsx
+<ContentBlock
+  onColor
+  title="Get in touch"
+  description="Starting a new project or want to collaborate with us?"
+  actions={<Button variant="on-color">Let&apos;s Talk</Button>}
+/>
+```
+
+<Callout type="warn">
+  White on `--surface-brand-primary` is **3.78:1 — AA-large (3:1), not AA (4.5:1)**. Brand-primary fills are gated AA-large by policy (see [Color Pairings](/docs/primitives/color-pairings), BDS-22 / ADR-015). The `title` is large text and unaffected; keep a band `description` short rather than running body copy long on the fill. Long-form copy belongs on a neutral surface.
+</Callout>
+
+For a *centered, measure-capped* section intro on a band, use [SectionHeader](/docs/components/section-header) — it forwards `onColor`.
+
 ## Props
 
 | Prop | Type | Default |
@@ -72,6 +91,7 @@ Any slot can be dropped independently — the rhythm collapses to whatever slots
 | `description` | `ReactNode` | — |
 | `actions` | `ReactNode` | — |
 | `titleAs` | `'h1' \| 'h2' \| 'h3' \| 'h4' \| 'div' \| 'p'` | `'h3'` |
+| `onColor` | `boolean` | `false` |
 
 ## Related
 

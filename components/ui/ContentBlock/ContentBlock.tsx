@@ -26,6 +26,14 @@ export interface ContentBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   titleAs?: ContentBlockTitleAs;
   /** Title scale (`--heading-{size}`). `subtitle`/`description` are unaffected. Default `sm`. */
   size?: ContentBlockSize;
+  /**
+   * On-color mode — for a block sitting on a filled brand/dark surface.
+   * Swaps `title`/`subtitle`/`description` to `--text-on-color-dark` so the
+   * consumer never pushes a per-instance `color` override into a slot it does
+   * not own. On `--surface-brand-primary` the pair is 3.78:1 — AA-large, not
+   * AA (`tokens/contrast-pairings.json`); keep band body copy short.
+   */
+  onColor?: boolean;
 }
 
 /**
@@ -47,6 +55,7 @@ export function ContentBlock({
   actions,
   titleAs = 'h3',
   size = 'sm',
+  onColor = false,
   className,
   style,
   ...props
@@ -54,7 +63,12 @@ export function ContentBlock({
   const TitleTag = titleAs;
   return (
     <div
-      className={bdsClass('bds-content-block', `bds-content-block--${size}`, className)}
+      className={bdsClass(
+        'bds-content-block',
+        `bds-content-block--${size}`,
+        onColor ? 'bds-content-block--on-color' : '',
+        className,
+      )}
       style={style}
       {...props}
     >

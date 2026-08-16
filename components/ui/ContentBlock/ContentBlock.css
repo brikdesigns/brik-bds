@@ -53,6 +53,30 @@
   gap: var(--gap-sm);
 }
 
+/* ─── On-color (filled brand / dark band) ──────────────────────────
+   The block owns its own inverse story so a consumer never pushes a
+   per-instance `color` into a slot it doesn't own (ADR-023 amendment
+   2026-08-16). Same shape as TabBar --on-color, Footer --inverse,
+   CardTestimonial --brand, Banner --tone-announcement.
+
+   One declaration covers both themes: --text-on-color-dark is
+   mode-invariant white — it names the FILL, not the mode — so there is
+   no [data-theme] branch here.
+
+   Contrast: on --surface-brand-primary (--color-poppy-500 #e35335 in both
+   modes) this is 3.78:1 — AA-large (3:1), NOT AA (4.5:1). Brand-primary
+   fills are gated AA-large by policy (tokens/contrast-pairings.json,
+   BDS-22 / ADR-015). Titles are large text and unaffected; keep
+   `description` on a band short rather than running body copy long. */
+
+.bds-content-block--on-color :is(
+    .bds-content-block__title,
+    .bds-content-block__subtitle,
+    .bds-content-block__description
+  ) {
+  color: var(--text-on-color-dark);
+}
+
 /* ─── Rhythm between slots (ADR-023 §3) ────────────────────────────
    Mode-tied `--gap-*` only — `--gap-xs`/`--gap-tiny` resolve to 0px outside
    default mode and would collapse the tight gap. Margin-based (not flex

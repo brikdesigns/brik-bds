@@ -22,19 +22,30 @@ const meta: Meta<typeof SectionHeader> = {
     measure: { control: 'select', options: ['sm', 'md', 'lg'] },
     titleAs: { control: 'select', options: ['h1', 'h2', 'h3', 'h4', 'div', 'p'] },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    onColor: {
+      control: { type: 'boolean' },
+      description:
+        'Forwarded to `ContentBlock` — swaps the text slots to `--text-on-color-dark` for a section intro on a filled brand band. AA-large, not AA, on `--surface-brand-primary`.',
+    },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof SectionHeader>;
 
-const Band = ({ children }: { children: React.ReactNode }) => (
+const Band = ({
+  background = 'var(--surface-primary)',
+  children,
+}: {
+  background?: string;
+  children: React.ReactNode;
+}) => (
   <div
     style={{
       maxWidth: 'var(--content-width-xl)',
       marginInline: 'auto',
       padding: 'var(--padding-lg)',
-      background: 'var(--surface-primary)',
+      background,
     }}
   >
     {children}
@@ -113,6 +124,33 @@ export const MeasureLg: Story = {
 };
 
 /**
+ * `onColor` on a filled brand band — the CTA-band shape. Forwarded to
+ * `ContentBlock`, which owns the swap to `--text-on-color-dark`; SectionHeader
+ * still owns only measure + centering. This is what replaces a hand-rolled
+ * `<h2>` + `<p>` with a per-instance `color` override on a CTA band
+ * (brikdesigns/brikdesigns#937).
+ *
+ * Contrast: white on `--surface-brand-primary` is **3.78:1 — AA-large (3:1),
+ * not AA (4.5:1)**, gated that way by policy for brand-primary fills
+ * (`tokens/contrast-pairings.json`, BDS-22 / ADR-015). The `size="lg"` title is
+ * large text; keep `description` short on a band.
+ * @summary CTA band — on-color section intro on a brand fill
+ */
+export const OnColor: Story = {
+  args: {
+    title: 'Get in touch',
+    description: 'Starting a new project or want to collaborate with us?',
+    actions: <Button variant="on-color">Let&apos;s Talk</Button>,
+    onColor: true,
+  },
+  render: (args) => (
+    <Band background="var(--surface-brand-primary)">
+      <SectionHeader {...args} />
+    </Band>
+  ),
+};
+
+/**
  * Asserts the defaults ADR-032 locks: `title` renders as an `<h2>` (outline
  * node, one level under the page `<h1>`), the wrapper carries the `center` +
  * `measure-md` modifier classes, and it composes `ContentBlock`'s
@@ -139,6 +177,33 @@ export const InteractionTestDefaultMarkup: Story = {
     const wrapper = canvasElement.querySelector('.bds-section-header');
     await expect(wrapper).toHaveClass('bds-section-header--center');
     await expect(wrapper).toHaveClass('bds-section-header--measure-md');
+  },
+};
+
+/**
+ * Asserts the `onColor` passthrough: SectionHeader owns no colour, so the
+ * modifier must land on the composed `ContentBlock` wrapper — never on
+ * `.bds-section-header` and never as an inline `style` on a slot. A silent
+ * break here would send consumers back to per-instance `color` overrides.
+ *
+ * @summary Play-function interaction test — onColor forwarding
+ */
+export const InteractionTestOnColorForwarding: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    title: 'Get in touch',
+    description: 'Starting a new project or want to collaborate with us?',
+    onColor: true,
+  },
+  play: async ({ canvasElement }) => {
+    const block = canvasElement.querySelector('.bds-content-block');
+    await expect(block).toHaveClass('bds-content-block--on-color');
+
+    const wrapper = canvasElement.querySelector('.bds-section-header');
+    await expect(wrapper).not.toHaveClass('bds-section-header--on-color');
+
+    const title = canvasElement.querySelector('.bds-content-block__title');
+    await expect(title).not.toHaveAttribute('style');
   },
 };
 

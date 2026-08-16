@@ -52,6 +52,14 @@ The tight title→subtitle gap and the medium gap into `description`/`actions` s
 
 <Canvas of={Stories.SpacingModes} />
 
+### On a filled brand band
+
+`onColor` swaps `title`/`subtitle`/`description` to `--text-on-color-dark` for a block sitting on a filled brand or dark surface. The block owns this — never push a per-instance `color` from the consumer into a slot the block renders. `--text-on-color-dark` is mode-invariant white, so one prop covers light and dark.
+
+<Canvas of={Stories.OnColor} />
+
+White on `--surface-brand-primary` is **3.78:1 — AA-large (3:1), not AA (4.5:1)**. Brand-primary fills are gated AA-large by policy (`tokens/contrast-pairings.json`, BDS-22 / ADR-015). The `title` is large text and unaffected; keep a band `description` short rather than running body copy long on the fill. For a *centered, measure-capped* section intro on a band, reach for [SectionHeader](/docs/components/section-header), which forwards `onColor`.
+
 ## Props
 
 <ArgTypes of={Stories} />

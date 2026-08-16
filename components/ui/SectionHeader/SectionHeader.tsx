@@ -27,6 +27,12 @@ export interface SectionHeaderProps extends Omit<HTMLAttributes<HTMLDivElement>,
   titleAs?: ContentBlockTitleAs;
   /** Title scale. Default `'lg'` — the canonical section-heading size. */
   size?: ContentBlockSize;
+  /**
+   * On-color mode — for a section intro on a filled brand/dark band (a CTA
+   * band). Forwarded to `ContentBlock`, which owns the colour swap; see its
+   * `onColor` prop for the AA-large contrast caveat on band body copy.
+   */
+  onColor?: boolean;
 }
 
 /**
@@ -46,6 +52,7 @@ export function SectionHeader({
   measure = 'md',
   titleAs = 'h2',
   size = 'lg',
+  onColor = false,
   className,
   style,
   ...props
@@ -64,6 +71,7 @@ export function SectionHeader({
       <ContentBlock
         titleAs={titleAs}
         size={size}
+        onColor={onColor}
         title={title}
         subtitle={subtitle}
         description={description}
