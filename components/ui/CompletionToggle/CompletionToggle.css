@@ -55,8 +55,8 @@
   /* CSS-only checkmark — no icon font dependency */
   .bds-completion-toggle__icon {
     display: block;
-    border-left: 2px solid var(--text-on-color-dark, #fff);
-    border-bottom: 2px solid var(--text-on-color-dark, #fff);
+    border-left: 2px solid var(--text-on-color-dark);
+    border-bottom: 2px solid var(--text-on-color-dark);
     transform: rotate(-45deg) translate(1px, -1px);
     width: 10px;
     height: 6px;
