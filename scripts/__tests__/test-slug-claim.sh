@@ -76,7 +76,7 @@ assert_eq "hyphens become spaces so the IDF title scorer tokenises the slug" \
   "tooling slug claim board" "$(slug_to_phrase tooling-slug-claim-board)"
 assert_eq "a single-word slug survives unchanged" "tokens" "$(slug_to_phrase tokens)"
 
-echo "── claim_sweep_verdict (cleanup phase 3) ──"
+echo "── claim_sweep_verdict (sweep-board-claims.sh) ──"
 FRESH="$(date -u -j -f %s "$(( 1900000000 - 600 ))" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null \
          || date -u -d "@$(( 1900000000 - 600 ))" +%Y-%m-%dT%H:%M:%SZ)"
 STALE="$(date -u -j -f %s "$(( 1900000000 - 90000 ))" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null \

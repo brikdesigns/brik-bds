@@ -127,7 +127,7 @@ slug_to_phrase() {
 }
 
 # Is a board claim finished, given its PR state and age? Echoes "sweep" or
-# "keep". Pure, so cleanup-merged-worktrees.sh's phase 3 can be tested without a
+# "keep". Pure, so sweep-board-claims.sh can be tested without a
 # network — and so the one dangerous case is locked down: a claim with no PR yet
 # must be KEPT while fresh, because a live session may simply not have pushed.
 # An early version of the sweep mis-extracted the slug, classified every claim as

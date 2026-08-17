@@ -5,7 +5,10 @@ name: gh Error Classify Check
 #
 # Why a gate and not just a script: the helper exists because
 # cleanup-merged-worktrees.sh read ANY `gh` failure — including a rate-limit 403 —
-# as "gh CLI not authenticated". On 2026-07-26 the fleet-shared 5,000-points/hour
+# as "gh CLI not authenticated". That script is gone (brikdesigns/brik-llm#2252 split
+# it into the canonical sweep-merged-worktrees.sh plus sweep-board-claims.sh); the
+# latter inherited the slug-resolution path and is the consumer gated below.
+# On 2026-07-26 the fleet-shared 5,000-points/hour
 # GraphQL bucket hit zero and that message sent a live session hunting a token
 # problem while `gh auth status` was healthy the whole time
 # (brikdesigns/brik-llm#1590 / #1587). A wrong label is worse than no label,
@@ -26,7 +29,7 @@ on:
     paths:
       - 'scripts/lib/gh-error-classify.sh'
       - 'scripts/lib/tests/test-gh-error-classify.sh'
-      - 'scripts/cleanup-merged-worktrees.sh'
+      - 'scripts/sweep-board-claims.sh'
       - 'scripts/lib/issue-claim.sh'
       - 'scripts/__tests__/test-issue-claim.sh'
       - 'scripts/lib/slug-claim.sh'
@@ -37,7 +40,7 @@ on:
     paths:
       - 'scripts/lib/gh-error-classify.sh'
       - 'scripts/lib/tests/test-gh-error-classify.sh'
-      - 'scripts/cleanup-merged-worktrees.sh'
+      - 'scripts/sweep-board-claims.sh'
       - 'scripts/lib/issue-claim.sh'
       - 'scripts/__tests__/test-issue-claim.sh'
       - 'scripts/lib/slug-claim.sh'
@@ -85,7 +88,7 @@ jobs:
           # report both, so both are excluded explicitly.
           shellcheck -e SC2148 scripts/lib/gh-error-classify.sh
           shellcheck -e SC1091,SC2329,SC2317 scripts/lib/tests/test-gh-error-classify.sh
-          shellcheck -e SC1091 scripts/cleanup-merged-worktrees.sh
+          shellcheck -e SC1091 scripts/sweep-board-claims.sh
           # issue-claim.sh predates this gate and carries pre-existing findings,
           # so it is checked at the `-S warning` threshold brik-llm and
           # brik-client-portal use for these same libs — that clears info-level
