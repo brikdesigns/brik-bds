@@ -1,0 +1,42 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './PeriodNav.stories';
+
+<Meta of={Stories} />
+
+# Period nav
+
+<ComponentLinks slug="period-nav" />
+
+A minimal period-navigation bar in the [`FilterBar`](/?path=/docs/components-filter-bar--docs) family. Where `FilterBar` is count-based (heading + result counter + filter controls), `PeriodNav` is date/period-based: a labelled current period flanked by Previous / Next controls. Use it for period-scoped surfaces — a monthly report, a billing cycle — where the caller supplies the current-period label and steps to the adjacent period.
+
+Layout: `[◂ Previous] [label] [Next ▸]`
+
+## Playground
+
+<Canvas of={Stories.Default} />
+
+## First / last period
+
+<Canvas of={Stories.FirstPeriod} />
+
+<Canvas of={Stories.LastPeriod} />
+
+A control is disabled when its target is absent — no `onPrev`/`hrefPrev` (first period) or no `onNext`/`hrefNext` (last period) — or when you force it with `prevDisabled` / `nextDisabled`. The disabled control still renders, so the bar never collapses from three items to two at the timeline edges.
+
+## Navigation modes
+
+- **Link mode** — pass `hrefPrev` / `hrefNext`; each control renders as an anchor. Use for server-rendered period routes (e.g. `?month=2025-07`).
+- **Button mode** — pass `onPrev` / `onNext`; each control renders as a button. Use for client-state navigation.
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — Each control is a `secondary` Button. Its visible text is its accessible name (WCAG 2.1 AA); override via `prevLabel` / `nextLabel` for a more specific name like "Previous month". The whole bar is a labelled `<nav>` — set `aria-label` to describe the axis being navigated (default "Period navigation").
+
+> **Note** — A disabled control renders as a button (never an anchor), even in link mode, so a disabled Previous/Next can't follow its href.
+
+> **Note** — Deliberately minimal: prev / label / next only. Future period affordances (a date picker, a granularity toggle) can extend this without breaking the current API.
