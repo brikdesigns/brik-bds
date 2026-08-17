@@ -42,9 +42,9 @@
 }
 
 /* ─── Neutral tone ───────────────────────────────────────────────
-   Lower-emphasis link: `--text-primary` at rest so it reads as an
+   Lower-emphasis link: primary text color at rest so it reads as an
    identifier (e.g. a table name cell) rather than a call-to-action.
-   The `:hover` color transition to `--text-brand-primary` above is
+   The base `:hover` color transition to the brand color above is
    unchanged and still applies — color remains the interactivity cue.
    Ordered after the base so it overrides its rest color at equal
    specificity. */
