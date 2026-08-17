@@ -41,6 +41,18 @@
   font-size: var(--body-sm);
 }
 
+/* ─── Neutral tone ───────────────────────────────────────────────
+   Lower-emphasis link: primary text color at rest so it reads as an
+   identifier (e.g. a table name cell) rather than a call-to-action.
+   The base `:hover` color transition to the brand color above is
+   unchanged and still applies — color remains the interactivity cue.
+   Ordered after the base so it overrides its rest color at equal
+   specificity. */
+
+.bds-text-link--tone-neutral {
+  color: var(--text-primary);
+}
+
 /* ─── Underline-always variant ──────────────────────────────────
    Persistent underline at rest AND hover. Functional a11y affordance
    for links embedded inline in running prose — WCAG 1.4.1 (Use of
@@ -93,6 +105,23 @@
 .bds-text-link--underline-always:has(.bds-text-link-icon-before, .bds-text-link-icon-after) {
   text-decoration: none;
   box-shadow: 0 1px 0 0 currentColor;
+}
+
+/* ─── No-underline variant ───────────────────────────────────────
+   Suppresses the underline entirely — at rest AND on hover — including
+   the seamless icon/avatar box-shadow underline. For a link that cues
+   interactivity through color alone and must never draw a line under a
+   leading Avatar / indicator (e.g. a table name cell). Ordered last so
+   it overrides the base `:hover` underline and the icon box-shadow at
+   equal specificity. Not for links inline in prose (WCAG 1.4.1). */
+
+.bds-text-link--underline-none,
+.bds-text-link--underline-none:hover {
+  text-decoration: none;
+}
+
+.bds-text-link--underline-none:has(.bds-text-link-icon-before, .bds-text-link-icon-after):hover {
+  box-shadow: none;
 }
 
 } /* end @layer bds-components */
