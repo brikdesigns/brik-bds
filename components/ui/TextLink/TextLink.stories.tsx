@@ -22,11 +22,17 @@ const meta: Meta<typeof TextLink> = {
       options: ['default', 'small'],
       description: 'Size variant. `default` is body-md; `small` is body-sm for tight contexts (footnotes, captions).',
     },
+    tone: {
+      control: 'select',
+      options: ['brand', 'neutral'],
+      description:
+        'Color tone. `brand` (default) uses the brand link color at rest — for a page link or CTA. `neutral` uses `--text-primary` at rest — a lower-emphasis link that reads as an identifier (e.g. a table name cell). Both transition to `--text-brand-primary` on hover.',
+    },
     underline: {
       control: 'select',
-      options: ['hover', 'always'],
+      options: ['hover', 'always', 'none'],
       description:
-        'Underline visibility. `hover` (default) reveals the underline on hover only — for a standalone link. `always` keeps the underline visible at rest — required for a link embedded inline in running prose (WCAG 1.4.1 Use of Color).',
+        'Underline visibility. `hover` (default) reveals the underline on hover only — for a standalone link. `always` keeps the underline visible at rest — required for a link embedded inline in running prose (WCAG 1.4.1 Use of Color). `none` suppresses the underline entirely (rest + hover, including the icon/avatar box-shadow) — for a color-only affordance such as a table cell.',
     },
     href: {
       control: 'text',
@@ -96,6 +102,40 @@ export const AlwaysUnderlined: Story = {
     underline: 'always',
     children: 'Learn more',
   },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   NEUTRAL — Q3 per ADR-010: `tone="neutral"` is a semantic starting
+   point an agent reaches for when the link names a row / identifier
+   rather than issuing a call-to-action (table name cell), so it earns
+   its own dedicated story. `--text-primary` at rest, brand on hover.
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Neutral tone — identifier link, not a call-to-action */
+export const Neutral: Story = {
+  args: {
+    href: '#',
+    size: 'default',
+    tone: 'neutral',
+    children: 'Acme Corporation',
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   NO-UNDERLINE — Q3 per ADR-010: `underline="none"` is the color-only
+   affordance for a table cell. Shown with a leading icon to prove the
+   seamless box-shadow underline is suppressed too — an Avatar in a
+   cell must never underline. Paired with `tone="neutral"`, the exact
+   table-cell composition.
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary No underline — color-only affordance (table cell) */
+export const NoUnderline: Story = {
+  render: () => (
+    <TextLink href="#" tone="neutral" underline="none" iconBefore={<ArrowLeft />}>
+      Acme Corporation
+    </TextLink>
+  ),
 };
 
 /* ═══════════════════════════════════════════════════════════════
