@@ -89,21 +89,38 @@ export const serviceIconOverrides: Record<string, string> = {
   'Email Drip Campaign (Up to 6 Emails)': 'marketing-email',
   'Email Marketing': 'marketing-email',
   'Landing Pages': 'marketing-landing-pages',
-  'Patient Experience Mapping': 'patient-experience',
+  'Patient Experience Mapping': 'marketing-patient-experience',
   'Social Media Graphic Designs': 'marketing-social-graphics',
   'Social Media Graphics': 'marketing-social-graphics',
   'Swag and Merchandise Design': 'marketing-swag',
   'Swag & Merchandise Design': 'marketing-swag',
   'Web Design and Development': 'marketing-web-design',
   'Web Design & Development': 'marketing-web-design',
-  'Website Experience Mapping': 'website-experience',
+  'Website Experience Mapping': 'marketing-website-experience',
   // Information
-  'Information Design': 'information-design',
+  'Information Design': 'info-design',
   'Infographics': 'info-infographics',
   'Intake Forms': 'info-intake-form',
   'Sales Resources': 'info-sales-materials',
   'Signage Design': 'info-signage',
   'Welcome Onboarding Kit': 'info-welcome-kit',
+  // #1775 AC 2 — the last four live `information` names. No bundled art depicts
+  // a slide deck or a proposal, and commissioning it needs the source set these
+  // glyphs come from, which is not recorded anywhere in this repo (no
+  // provenance file under icons/; they are 20×20 with ~30% inset and are NOT
+  // the Phosphor set `@iconify-json/ph` bundles for <Icon> — that is 256×256).
+  // So each name is pointed at the closest bundled glyph rather than left on the
+  // line default. Sharing one glyph across names is the established pattern
+  // here (`marketing-web-design` serves 10 names, `brand-logo` 4).
+  //
+  // Why NOT the line default `info-design`: it draws a presentation
+  // screen on a stand, so every unmapped information service currently reads as
+  // "a presentation" — actively wrong for Intake Forms, and the reason
+  // Presentation Design below looks correct today purely by accident.
+  'Presentation Design': 'info-layout-design', // designed slide layouts
+  'Sales Pitch Deck': 'info-sales-materials', // sales collateral (bar chart)
+  'Sales Proposal': 'info-sales-materials', // sales collateral (bar chart)
+  'One-Pager': 'info-intake-form', // single-sheet document
   // Product
   'Mobile App Design': 'product-app-design',
   'SaaS and Enterprise Design': 'product-enterprise-design',
@@ -135,20 +152,49 @@ export function normalizeServiceName(name: string): string {
 }
 
 /**
+ * Glyph-key prefix for each service line — the naming convention every file in
+ * `ServiceTag/icons/{line}/` must follow, and the prefix `deriveIconName` builds
+ * when no override matches.
+ *
+ * The prefix is the line id, EXCEPT `information`, which abbreviates to `info-`.
+ * That abbreviation is deliberate and load-bearing (every information glyph but
+ * default included after the #1775 rename), so it is declared here rather
+ * than left implicit in a branch. `service` is the deprecated `back-office`
+ * alias and shares its prefix.
+ *
+ * Enforced by the convention test in `ServiceTag.offline.test.ts`: a glyph whose
+ * basename does not start with its line's prefix can only ever be reached by an
+ * override, never by derivation — a silent trap for the next person adding art.
+ * Two glyphs had already fallen into it (`patient-experience`,
+ * `website-experience`, renamed in #1775).
+ */
+export const SERVICE_LINE_GLYPH_PREFIX: Record<ServiceLine, string> = {
+  brand: 'brand',
+  marketing: 'marketing',
+  information: 'info',
+  product: 'product',
+  'back-office': 'back-office',
+  service: 'back-office',
+};
+
+/**
  * Derive the glyph key (file basename, no dir/extension) for a service name —
- * override map first, then the per-line naming convention. Pure string logic;
- * the returned key may or may not exist in the bundled set (callers that need a
- * guaranteed-present key use {@link resolveServiceIcon}, which falls back).
+ * override map first, then the per-line naming convention
+ * ({@link SERVICE_LINE_GLYPH_PREFIX}). Pure string logic; the returned key may
+ * or may not exist in the bundled set (callers that need a guaranteed-present
+ * key use {@link resolveServiceIcon}, which falls back).
  */
 function deriveIconName(category: ServiceLine, serviceName: string): string {
   if (serviceIconOverrides[serviceName]) {
     return serviceIconOverrides[serviceName];
   }
   const normalized = normalizeServiceName(serviceName);
-  if (category === 'information') {
-    return `info-${normalized.replace('information-', '')}`;
-  }
-  return `${category}-${normalized.replace(`${category}-`, '')}`;
+  const prefix = SERVICE_LINE_GLYPH_PREFIX[category];
+  // Strip a leading line id the service name already carries, so "Information
+  // Design" yields `info-design` rather than `info-information-design`. Both the
+  // prefix and the spelled-out line id are stripped, because `information`
+  // abbreviates (a name starting "Information" must not survive as-is).
+  return `${prefix}-${normalized.replace(`${category}-`, '').replace(`${prefix}-`, '')}`;
 }
 
 /**
@@ -179,7 +225,7 @@ export function resolveServiceIcon(category: ServiceLine, serviceName?: string):
 const serviceLineDefaultIcon: Record<ServiceLine, string> = {
   brand: 'brand-design',
   marketing: 'marketing-design',
-  information: 'information-design',
+  information: 'info-design',
   product: 'product-design',
   'back-office': 'back-office-design',
   // @deprecated alias of 'back-office' — same default icon.
