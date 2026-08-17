@@ -1,6 +1,6 @@
 ---
 name: mobbin-research
-description: Discipline for the Mobbin MCP (`search_screens`, `search_flows`, `search_sections`) and the motion-capture script that fills the gap Mobbin leaves. Mobbin returns rendered screenshots plus four metadata fields — no CSS, no code, no token values, no timing data. This skill enforces research-only use: Mobbin output may inform which components, states, and sections BDS needs, and may never emit a token name, a CSS value, or component code. For animation, Mobbin is not a source at all — `scripts/capture-motion.mjs` reads computed transition/animation values off a live URL and maps them onto the existing `--duration-*` / `--ease-*` scale in dist/tokens.css. Covers per-tool routing, the citation rule, the one-way token mapping, and the licensing caveat.
+description: Discipline for the Mobbin MCP (`search_screens`, `search_flows`, `search_sections`) and the motion-capture script that fills the gap Mobbin leaves. Mobbin returns rendered screenshots plus four metadata fields — no CSS, no code, no token values, no timing data. This skill enforces research-only use: Mobbin output may inform which components, states, and sections BDS needs, and may never emit a token name, a CSS value, or component code. For animation, Mobbin is not a source at all — `scripts/capture-motion.mjs` reads computed transition/animation values off a live URL and maps them onto the existing `--duration-*` / `--ease-*` scale in dist/tokens.css. Covers per-tool routing, the citation rule, the one-way token mapping, and what the Mobbin ToS permits — publication in limited extent with IP-Holder credit, no caching or re-hosting, no watermark removal, no AI-derived works from Platform materials.
 triggers:
   - About to call `mcp__mobbin__search_screens`, `mcp__mobbin__search_flows`, or `mcp__mobbin__search_sections`
   - User asks to research, benchmark, or find references for a UI pattern, screen, flow, or marketing-site section
@@ -9,6 +9,8 @@ triggers:
   - User asks to capture, measure, or match the animation or motion of a referenced site
   - User mentions Mobbin, a `mobbin.com` URL, or pattern/competitive research for BDS or a `web/{slug}/` build
 last-verified: 2026-08-17
+references:
+  - https://mobbin.com/terms (ToS, effective 2026-05-16)
 ---
 
 # mobbin-research — reference in, discipline out
@@ -138,13 +140,47 @@ page is that site's scale, not a recommendation.
 
 ## Licensing
 
-Mobbin's image licensing terms are **not** stated at
-https://docs.mobbin.com/mcp/introduction (fetched 2026-08-17); that page covers
-plan availability only — Pro, Team, and Enterprise. Treat returned images as
-internal pattern research. Do not paste them into client-facing decks,
-Notion pages shared outside Brik, or committed docs until the terms are
-confirmed.
+Source: [Mobbin Terms of Service](https://mobbin.com/terms), effective
+2026-05-16, read 2026-08-17. The MCP docs carry no licensing page — the terms
+live on the main site. Re-read before relying on any summary below.
 
-The MCP is also in beta and its pricing is stated differently in-product
-("included with all paid plans during beta") than in the docs — expect access to
-move.
+Using the MCP for Brik's own design research is expressly covered:
+
+> Mobbin's API or MCP Services are provided for (i) your personal or internal
+> business use, or (ii) integration into your own proprietary products or
+> services ("Permitted Use").
+
+**Publishing a reference is allowed, with conditions.** Per §10.3, Mobbin does
+not own the captured interfaces — the app's owner does:
+
+> Citations, images, and paraphrasing may only be published elsewhere in limited
+> extent, and only if crediting the respective IP Holders.
+
+So a screen can go in a deck or a doc if you keep it to a few and credit the
+**IP Holder** — the app's owner (Stripe, Duolingo), not Mobbin.
+
+Five prohibitions from §3 and §10 that bear on normal use:
+
+| Don't                                                   | Clause                                                                                                                        |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Crop or remove the "curated by Mobbin" watermark        | §3 — "remove any copyright or other proprietary notations"                                                                    |
+| Cache, archive, mirror, or re-host returned images      | §3 — no "aggregate, 'mirror', cache, archive or re-host […] on any other website, server or platform" without written consent |
+| Sell, sublicense, or resell access or content           | §3 — no "exploit for any commercial purposes"; no "resell, sublicense or lease access to the API or MCP Services"             |
+| Build a standalone repository from retrieved content    | §3 — no "standalone content repository", nothing "competitive to Mobbin's Platform"                                           |
+| Use AI to create derivative works of Platform materials | §3 — no automated tools "to create derivative works of any materials, software or content contained on the Platform"          |
+
+Link the `mobbin_url` rather than saving the asset. That satisfies both the
+citation rule and the no-cache rule in one move.
+
+The last row is why [the research-only rule](#the-rule) is a licensing position
+and not only token discipline. Keeping code, CSS, and token values out of a
+Mobbin session is what keeps an agent clear of the derivative-works prohibition.
+
+**Open question — do not resolve in code.** §10.1 says _"All derivative works
+produced with the use of the Services […] belong to Mobbin."_ How far that
+reaches is a commercial/legal call, tracked in #1885. Until it is answered, hold
+the research-only line.
+
+The MCP is in beta, and pricing is stated differently in-product ("included with
+all paid plans during beta") than in the docs (Pro, Team, Enterprise) — expect
+access to move.
