@@ -25,6 +25,12 @@ const steps = [
   { name: 'Grid Audit', cmd: 'node scripts/audit-grid.js --summary' },
   { name: 'Theme Compliance', cmd: 'node scripts/validate-themes.js' },
 
+  // The published matrix in primitives/color-pairings.mdx must match the
+  // generator. Only CI ran this, so editing tokens/contrast-pairings.json
+  // passed local validation and then failed the contrast-gate job on drift
+  // (#1859/#1863 burned a round-trip that way). brik-bds#1864.
+  { name: 'Contrast Matrix', cmd: 'node scripts/validate-themes.js --check-matrix' },
+
   // Every Brand Kit override of a generated token must carry a comment saying
   // why. A typo and a brand decision are indistinguishable in the diff without
   // one — #1686 survived four months that way. brik-bds#1689.
