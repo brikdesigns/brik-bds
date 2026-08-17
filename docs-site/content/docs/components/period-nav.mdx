@@ -1,0 +1,89 @@
+---
+title: Period nav
+description: Previous / current-period label / Next navigation bar.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+PeriodNav is a minimal period-navigation bar in the [FilterBar](/docs/components/filter-bar) family. Where FilterBar is count-based (heading + result counter + filter controls), PeriodNav is date/period-based: a labelled current period flanked by Previous / Next controls.
+
+Layout: `[◂ Previous] [label] [Next ▸]`
+
+## Use it for
+
+- A monthly report, billing cycle, or any period-scoped surface where the user steps between adjacent periods
+- Cases where the caller owns the period label and the previous/next targets
+
+## Import
+
+```tsx
+import { PeriodNav } from '@brikdesigns/bds';
+```
+
+## Navigation modes
+
+### Link mode
+
+Pass `hrefPrev` / `hrefNext`; each control renders as an anchor. Use for server-rendered period routes.
+
+```tsx
+<PeriodNav
+  aria-label="Browse months"
+  label="August 2025"
+  hrefPrev="/reporting?month=2025-07"
+  hrefNext="/reporting?month=2025-09"
+/>
+```
+
+### Button mode
+
+Pass `onPrev` / `onNext`; each control renders as a button. Use for client-state navigation.
+
+```tsx
+<PeriodNav
+  aria-label="Browse months"
+  label={months[i].label}
+  onPrev={() => setIndex(i + 1)}
+  onNext={() => setIndex(i - 1)}
+/>
+```
+
+## Disabled edges
+
+A control is disabled when its target is absent — no `onPrev`/`hrefPrev` (first period) or no `onNext`/`hrefNext` (last period) — or when forced with `prevDisabled` / `nextDisabled`. The disabled control still renders, so the bar never collapses from three items to two at the timeline edges.
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use PeriodNav for page numbers.** For page-indexed navigation over a known page count, use [Pagination](/docs/components/pagination) — it renders page numbers with ellipsis. PeriodNav is for stepping one period at a time with a caller-supplied label.
+</Callout>
+
+## Accessibility
+
+- The bar is a `<nav>` with an `aria-label` (default `"Period navigation"`) — set it to describe the axis being navigated (e.g. `"Browse months"`).
+- Each control's visible text is its accessible name; override via `prevLabel` / `nextLabel` for a more specific name like `"Previous month"`.
+- A disabled control renders as a button (never an anchor) so it can't be activated or followed.
+
+## API
+
+### PeriodNav
+
+| Prop | Type | Default |
+|---|---|---|
+| `label` | `ReactNode` *(required)* | — |
+| `onPrev` | `() => void` | — |
+| `onNext` | `() => void` | — |
+| `hrefPrev` | `string` | — |
+| `hrefNext` | `string` | — |
+| `prevDisabled` | `boolean` | disabled when no `onPrev`/`hrefPrev` |
+| `nextDisabled` | `boolean` | disabled when no `onNext`/`hrefNext` |
+| `prevLabel` | `ReactNode` | `'Previous'` |
+| `nextLabel` | `ReactNode` | `'Next'` |
+
+Plus all standard `<nav>` HTML attributes.
+
+## Related
+
+- [FilterBar](/docs/components/filter-bar) — the count-based sibling in the same family
+- [Pagination](/docs/components/pagination) — page-indexed navigation with page numbers
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-period-nav--overview)**
