@@ -1,0 +1,308 @@
+name: pr-issue-link-gate
+
+# Pre-merge gate: every `feat` / `fix` PR body must reference the issue it is
+# for, so GitHub's `closingIssuesReferences` is populated and the project board
+# can see the work.
+#
+# This repo had the DETECTOR without the PREVENTER (#1882). `merge-reconcile.yml`
+# flags missing linkage after merge, and the fallout is a standing queue of
+# `needs:reconcile` issues cleaned up by hand. Of the last 21 merged feat/fix
+# PRs, 16 carried no reference in the body — five of them (#1855, #1852, #1837,
+# #1814, #1811) put `(#N)` in the TITLE and nowhere else. GitHub does not parse
+# closing keywords from titles, so `closingIssuesReferences` came back empty and
+# the board lost the link every time.
+#
+# The failure this shape was first written for is brik-client-portal#2861
+# (portal #2893): its commit body carried `Closes #2703`, its PR body was the
+# untouched pr-task.sh boilerplate, and #2703 stayed open. issue-style.md
+# § `Closes #N` already mandated the line; nothing enforced it.
+#
+# Scope is decided from the PR title, conventional-commit style
+# (brik-llm/.claude/references/conventional-commits.md): `feat` and `fix` ship
+# tracked work and must link. `chore`, `docs`, `refactor`, `ci`, `test`,
+# `build`, `perf`, `style`, `revert` — and any title that is not a conventional
+# commit at all — pass explicitly. Dependabot needs no exception: its titles are
+# `chore(deps):` / `chore(deps-dev):`, already out of scope.
+#
+# Accepted forms come from issue-style.md § `Closes #N` — the closing keywords
+# GitHub itself parses, plus the canonical NON-closing forms that repo prescribes
+# for a slice ("To disclaim completion, reference the number with no keyword
+# beside it: `Part of #N`, `Refs #N`, `Partial for #N`, `#N stays open`"). A gate
+# that failed a body written exactly as canon prescribes would be a bug. Bare
+# `See #123` or a naked `#123` is NOT accepted — an unmarked number is the
+# ambiguity this gate exists to remove.
+#
+# `pull_request`, not `pull_request_target`: this gate only READS the event
+# payload (title, body, labels). It has no checkout, calls no API, and needs no
+# write scope, so it takes the least-privileged trigger.
+#
+# `types:` is load-bearing, and separate from the event choice. The defaults
+# (opened, synchronize, reopened) refresh only on a PUSH, but every input this
+# gate reads comes out of the frozen event payload:
+#
+#   * edited            — the whole point. A contributor who fails this gate
+#                         fixes it by EDITING the PR body; without `edited` that
+#                         needs a dummy commit to be re-checked. Also re-scopes a
+#                         PR retitled `chore:` → `fix:` after CI went green.
+#   * labeled/unlabeled — the `issue:none` hatch is a label, so taking or
+#                         dropping it has to re-run the gate.
+#   * ready_for_review  — a draft promoted to review is the last moment before
+#                         merge where the body is still cheap to fix.
+#
+# Extra runs are bounded by the concurrency group below (cancel-in-progress).
+#
+# Self-testing: the FIXTURES matrix runs before the real PR body is scanned and
+# fails the job on any mismatch, so this file verifies its own detection logic on
+# every PR. Same idiom as bump-pr-closing-keyword-guard.yml, its sibling in this
+# directory — that guard scans the same bodies for the opposite polarity, and the
+# two must agree about what counts as a live reference.
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, labeled, unlabeled, ready_for_review]
+
+concurrency:
+  group: pr-issue-link-gate-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  require-issue-link:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require an issue reference in the PR body
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // ── Patterns ─────────────────────────────────────────────────
+            // In-scope conventional-commit types. `feat(scope):`, `fix!:` and
+            // `FEAT:` all count; `fixup:` and `feature:` must not.
+            const IN_SCOPE_TITLE = /^(feat|fix)(\([^)]*\))?!?:\s/i;
+
+            // GitHub's own closing-keyword grammar, spelled exactly as
+            // bump-pr-closing-keyword-guard.yml spells it (its `KEYWORD`). The
+            // two gates read the same bodies and must not drift apart about what
+            // a live reference looks like.
+            const CLOSING = String.raw`close[sd]?|fix(?:e[sd])?|resolve[sd]?`;
+
+            // Canonical non-closing link forms (issue-style.md § `Closes #N`,
+            // "To disclaim completion"). These do not auto-close, but they do
+            // record which issue the PR is for — which is what the board needs.
+            const LINKING = String.raw`part\s+of|refs?|related\s+to|partial\s+for`;
+
+            // Same-repo `#123`, cross-repo `brikdesigns/brik-client-portal#2703`,
+            // and the `GH-123` form GitHub also parses.
+            const REF = String.raw`(?:[\w.-]+\/[\w.-]+)?#\d+|GH-\d+`;
+
+            // `\s*` (not `\s+`) between keyword and ref: `closes#123` with no
+            // space is accepted, because bump-pr-closing-keyword-guard.yml
+            // already treats it as a live reference (its VIOLATION pattern uses
+            // the same `\s*`). Two gates in one repo disagreeing about the same
+            // syntax — one failing a PR for linking, the other failing it for
+            // linking too effectively — is worse than accepting an unlovely but
+            // functional form. Style is issue-style.md's job, not the gate's.
+            const ISSUE_LINK = new RegExp(
+              String.raw`\b(?:${CLOSING}|${LINKING})\b:?\s*(?:${REF})`,
+              'i',
+            );
+
+            // The one canonical form where the keyword TRAILS the number.
+            const STAYS_OPEN = /#\d+\s+stays\s+open\b/i;
+
+            // Escape hatch, mirroring repro-before-fix's `repro:none` pair
+            // (brik-llm/.claude/references/issue-style.md § Escape hatch).
+            // Both halves required: the label alone is a silent waiver, the
+            // reason alone is invisible on the board.
+            const EXEMPT_LABEL = 'issue:none';
+            const EXEMPT_LINE = /^\s*Issue-exempt:\s*(\S.*?)\s*$/m;
+            const MIN_REASON_CHARS = 20;
+
+            // ── Pure scanner (exercised by FIXTURES below) ────────────────
+            // Fenced blocks do not count. A pasted changelog inside a fence is
+            // exactly what bump-pr-closing-keyword-guard.yml FAILS a PR for, so
+            // letting one satisfy this gate would put the two guards in direct
+            // contradiction. The link has to be the author's own prose.
+            function findLink(body) {
+              const lines = (body || '').split(/\r?\n/);
+              let inFence = false;
+              for (let i = 0; i < lines.length; i += 1) {
+                const line = lines[i];
+                if (/^\s*(```|~~~)/.test(line)) {
+                  inFence = !inFence;
+                  continue;
+                }
+                if (inFence) continue;
+                if (ISSUE_LINK.test(line) || STAYS_OPEN.test(line)) {
+                  return { line: i + 1, text: line.trim() };
+                }
+              }
+              return null;
+            }
+
+            function findExemption(body, labels) {
+              const m = EXEMPT_LINE.exec(body || '');
+              const reason = m ? m[1] : null;
+              return {
+                hasLabel: labels.includes(EXEMPT_LABEL),
+                reason,
+                reasonLongEnough: !!reason && reason.length >= MIN_REASON_CHARS,
+              };
+            }
+
+            // ── Fixture matrix ───────────────────────────────────────────
+            // `H` keeps this matrix from carrying live references of its own.
+            const H = '#';
+            const FIXTURES = [
+              // Scope.
+              { name: 'feat title in scope', title: 'feat(tokens): mint the motion scale', expect: { inScope: true } },
+              { name: 'fix title in scope', title: 'fix(content-block): scope --on-color to own slots', expect: { inScope: true } },
+              { name: 'bang title in scope', title: 'feat!: drop the legacy surface tokens', expect: { inScope: true } },
+              { name: 'uppercase title in scope', title: 'FIX: casing is not an escape', expect: { inScope: true } },
+              { name: 'chore exempt', title: 'chore(deps): bump vite from 7.1.2 to 7.1.3', expect: { inScope: false } },
+              { name: 'docs exempt', title: 'docs(primitives): document the motion token scale', expect: { inScope: false } },
+              { name: 'refactor exempt', title: 'refactor(lib): extract a token helper', expect: { inScope: false } },
+              { name: 'ci exempt', title: 'ci: pin the playwright image', expect: { inScope: false } },
+              { name: 'non-conventional title exempt', title: 'Update the thing', expect: { inScope: false } },
+              { name: 'fixup is not fix', title: 'fixup: squash me', expect: { inScope: false } },
+              { name: 'feature is not feat', title: 'feature: not the canonical type', expect: { inScope: false } },
+              // Bodies that MUST pass.
+              { name: 'plain Closes', body: `Closes ${H}1882`, expect: { linked: true } },
+              { name: 'cross-repo Fixes', body: `Fixes brikdesigns/brik-client-portal${H}2703`, expect: { linked: true } },
+              { name: 'Part of', body: `Part of ${H}1882`, expect: { linked: true } },
+              { name: 'Refs', body: `Refs ${H}123`, expect: { linked: true } },
+              { name: 'Partial for', body: `Partial for ${H}123`, expect: { linked: true } },
+              { name: 'Related to', body: `Related to ${H}123`, expect: { linked: true } },
+              { name: 'stays open, trailing keyword', body: `${H}123 stays open`, expect: { linked: true } },
+              { name: 'no space after keyword', body: `closes${H}123`, expect: { linked: true } },
+              { name: 'lowercase keyword', body: `fixes ${H}123`, expect: { linked: true } },
+              { name: 'colon form', body: `Closes: ${H}123`, expect: { linked: true } },
+              { name: 'GH- form', body: `Closes GH-123`, expect: { linked: true } },
+              { name: 'buried in a real body', body: `## Summary\n- did a thing\n\n## Test plan\n- [ ] \`npm test -- --run\` passes\n\nCloses ${H}1882`, expect: { linked: true } },
+              // Bodies that MUST fail.
+              { name: 'boilerplate body', body: `## Summary\n- did a thing`, expect: { linked: false } },
+              { name: 'pr-task.sh boilerplate (the 16-of-21 shape)', body: `## Summary\n- fix(page-header): default content gap to --gap-lg\n\n## Consumer sync plan\n- [ ] Portal: \`npm update @brikdesigns/bds\` after merge + version publish\n- [ ] brikdesigns: \`npm update @brikdesigns/bds\` after merge + version publish\n- [ ] brik-llm: submodule pointer bump\n\n## Test plan\n- [ ] Storybook: visual verification on affected stories\n- [ ] \`npm test -- --run\` passes\n- [ ] \`npm run lint-tokens\` passes\n- [ ] Dark mode checked (if applicable)\n\nGenerated with [Claude Code](https://claude.ai/code)`, expect: { linked: false } },
+              { name: 'title-only ref does not reach the body', body: `## Summary\n- feat(tokens): typed fallback-literal exemptions\n\nGenerated with [Claude Code](https://claude.ai/code)`, expect: { linked: false } },
+              { name: 'See is not a keyword', body: `See ${H}123`, expect: { linked: false } },
+              { name: 'bare number is not a link', body: `Follows on from ${H}123`, expect: { linked: false } },
+              { name: 'Addresses does not link', body: `Addresses ${H}123`, expect: { linked: false } },
+              { name: 'empty body', body: '', expect: { linked: false } },
+              { name: 'markdown heading is not a ref', body: `## Summary\n### Detail`, expect: { linked: false } },
+              { name: 'prefixes is not a keyword', body: `Renames prefixes ${H}12`, expect: { linked: false } },
+              { name: 'fenced ref does not count', body: `\`\`\`\n- abc123 fix(tokens): closes ${H}607\n\`\`\``, expect: { linked: false } },
+              { name: 'fenced ref plus prose ref counts', body: `\`\`\`\n- abc123 closes ${H}607\n\`\`\`\n\nCloses ${H}1882`, expect: { linked: true } },
+              // Escape hatch.
+              { name: 'hatch complete', body: `Issue-exempt: one-off CI credential rotation, no tracked issue`, labels: ['issue:none'], expect: { hatchComplete: true } },
+              { name: 'hatch label without reason', body: `## Summary`, labels: ['issue:none'], expect: { hatchComplete: false } },
+              { name: 'hatch reason without label', body: `Issue-exempt: one-off CI credential rotation, no tracked issue`, labels: [], expect: { hatchComplete: false } },
+              { name: 'hatch reason too short', body: `Issue-exempt: because`, labels: ['issue:none'], expect: { hatchComplete: false } },
+            ];
+
+            const selfTestFailures = [];
+            for (const f of FIXTURES) {
+              const labels = f.labels || [];
+              const ex = findExemption(f.body, labels);
+              const got = {
+                inScope: IN_SCOPE_TITLE.test(f.title || ''),
+                linked: findLink(f.body) !== null,
+                hatchComplete: ex.hasLabel && ex.reasonLongEnough,
+              };
+              for (const [key, want] of Object.entries(f.expect)) {
+                if (got[key] !== want) {
+                  selfTestFailures.push(`  ${f.name}: ${key} expected ${want}, got ${got[key]}`);
+                }
+              }
+            }
+            if (selfTestFailures.length > 0) {
+              core.setFailed(
+                [
+                  `Gate self-test failed on ${selfTestFailures.length} fixture assertion(s) —`,
+                  'the detection logic in this workflow is broken, so its verdict on this PR',
+                  'cannot be trusted. Fix the patterns (or the fixture) before merging.',
+                  '',
+                  ...selfTestFailures,
+                ].join('\n'),
+              );
+              return;
+            }
+            core.info(`Gate self-test: ${FIXTURES.length}/${FIXTURES.length} fixtures pass.`);
+
+            // ── Evaluate this PR ─────────────────────────────────────────
+            const pr = context.payload.pull_request;
+            const title = pr.title || '';
+            const body = pr.body || '';
+            const labels = (pr.labels || []).map((l) => (typeof l === 'string' ? l : l.name));
+
+            if (!IN_SCOPE_TITLE.test(title)) {
+              core.info(
+                `Title "${title}" is not a feat/fix conventional commit — out of scope. ` +
+                'This gate says nothing about chore, docs, refactor, ci, test, build, perf, style, or revert PRs.',
+              );
+              return;
+            }
+
+            const link = findLink(body);
+            if (link) {
+              core.info(`✓ Issue reference found on body line ${link.line}: ${link.text}`);
+              return;
+            }
+
+            // No link — the hatch is the only way through.
+            const ex = findExemption(body, labels);
+            if (ex.hasLabel && ex.reasonLongEnough) {
+              core.warning(
+                `This ${title.split(':')[0]} PR ships with NO issue link, waived via \`${EXEMPT_LABEL}\`.\n` +
+                `  Reason: ${ex.reason}\n` +
+                'The work will not appear on the project board. Review should confirm the waiver is right.',
+              );
+              return;
+            }
+
+            const messages = [
+              'This PR\'s title declares a `feat` or `fix`, but its body contains no issue reference.',
+              '',
+              `  Title: ${title}`,
+              '',
+              'GitHub parses closing keywords from the PR BODY — not from the title, and not from',
+              'commit messages. With no reference here, `closingIssuesReferences` is empty on merge:',
+              'the issue stays open, `merge-reconcile.yml` flags it after the fact, and the cleanup',
+              'is manual. A `(#N)` in the title does NOT satisfy this — that is exactly how 16 of',
+              'the last 21 merged feat/fix PRs in this repo lost their link (#1882).',
+              '',
+              'Fix — add ONE of these lines to the PR body (`gh pr edit <n> --body-file -`):',
+              '',
+              '  Closes #N                          — this PR completes the issue',
+              '  Fixes #N                           — same, for a bug',
+              '  Closes brikdesigns/<repo>#N        — cross-repo',
+              '  Part of #N                         — a slice; the issue stays open',
+              '  Refs #N                            — mentions it, closes nothing',
+              '',
+              '`./scripts/pr-task.sh` pre-fills this from the issue numbers in your commit',
+              'subjects and bodies, so a PR opened that way passes without editing.',
+              '',
+              'Genuinely issue-less work takes the hatch — BOTH halves, mirroring `repro:none`:',
+              '',
+              `  1. label the PR \`${EXEMPT_LABEL}\`   (gh pr edit <n> --add-label ${EXEMPT_LABEL})`,
+              `  2. add a body line          Issue-exempt: <reason, >= ${MIN_REASON_CHARS} chars>`,
+              '',
+              '`./scripts/pr-task.sh --no-issue "<reason>"` does both in one step.',
+              '',
+              'Either half alone still fails: a label with no reason is a silent waiver, a reason',
+              'with no label is invisible on the board.',
+            ];
+
+            // Say which half of a half-taken hatch is missing, rather than
+            // re-printing the generic instructions and letting the author guess.
+            if (ex.hasLabel || ex.reason) {
+              messages.push('', 'Your hatch is incomplete:');
+              if (!ex.hasLabel) messages.push(`  - \`Issue-exempt:\` line present, \`${EXEMPT_LABEL}\` label missing.`);
+              if (!ex.reason) messages.push(`  - \`${EXEMPT_LABEL}\` label present, \`Issue-exempt:\` line missing.`);
+              if (ex.reason && !ex.reasonLongEnough) {
+                messages.push(
+                  `  - reason is ${ex.reason.length} chars, needs >= ${MIN_REASON_CHARS}: "${ex.reason}"`,
+                );
+              }
+            }
+
+            core.setFailed(messages.join('\n'));
