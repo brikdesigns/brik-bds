@@ -39,7 +39,9 @@ fresh.
 3. **Tag and push.** From the tip of `main`:
    ```bash
    git pull --ff-only
-   git tag v0.46.0
+   git tag -a v0.46.0 -m 'v0.46.0'   # -a required: tag.gpgSign is on globally,
+                                     # so a lightweight tag aborts with
+                                     # "fatal: no tag message?"
    git push origin v0.46.0
    ```
    Or, in a single step before PR:
