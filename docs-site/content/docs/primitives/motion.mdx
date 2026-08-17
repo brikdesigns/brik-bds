@@ -1,0 +1,86 @@
+---
+title: Motion
+description: Duration and easing tokens — reach for the semantic aliases, and know that the numeric suffix is a step index rather than a millisecond value.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Motion tokens define how long a transition runs and how it accelerates. Three semantic duration aliases cover almost every case; the numeric primitives underneath them exist for the rare long-running animation.
+
+<Callout type="warn">
+  **The numeric suffix is a step index, not a millisecond value.** `--duration-400` is `500ms`, not `400ms`. The suffix tracks milliseconds up to `--duration-300` and then stops. Reach for `--duration-fast` / `--duration-normal` / `--duration-slow` instead — they name the intent and cannot be misread.
+</Callout>
+
+## Semantic durations
+
+The default choice. These carry the overwhelming majority of motion in BDS, and every component CSS file should reach for one of them first.
+
+| Token | Resolves to | Use case |
+|---|---|---|
+| `--duration-fast` | `100ms` | Micro-interactions — hover, focus |
+| `--duration-normal` | `200ms` | Standard transitions — buttons, cards |
+| `--duration-slow` | `300ms` | Emphasis — modals, sheets, reveals |
+
+Defined in `tokens/gap-fills.css` as aliases of the numeric primitives below.
+
+## Numeric durations
+
+The underlying primitive scale, generated from Figma. Use one of these only when no semantic alias fits — a long-running progress animation, for example.
+
+| Token | Value | Suffix matches value |
+|---|---|---|
+| `--duration-100` | `100ms` | yes |
+| `--duration-200` | `200ms` | yes |
+| `--duration-300` | `300ms` | yes |
+| `--duration-400` | `500ms` | **no** |
+| `--duration-500` | `800ms` | **no** |
+| `--duration-600` | `1000ms` | **no** |
+
+The break at `--duration-400` is the trap: it reads as 400ms and resolves to 500ms, so an animation lands 25% slower than intended and nothing errors. If you are reaching past `--duration-300`, read the value rather than the name.
+
+## Easing
+
+Four curves, each with a distinct job. Pair `--ease-out` with most UI transitions — deceleration reads as responsive because the motion starts fast.
+
+| Token | Value | Use case |
+|---|---|---|
+| `--ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` | Decelerate — most UI transitions |
+| `--ease-in` | `cubic-bezier(0.7, 0, 0.84, 0)` | Accelerate — exits, collapses |
+| `--ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | Symmetric — looping, continuous |
+| `--ease-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` | Overshoot bounce — pop-in, badge appear |
+
+Defined alongside the semantic durations in `tokens/gap-fills.css`.
+
+## Stagger
+
+Fixed offsets for sequencing a group of elements into view — apply an increasing stagger as `animation-delay` across siblings.
+
+| Token | Value |
+|---|---|
+| `--stagger-1` | `0ms` |
+| `--stagger-2` | `50ms` |
+| `--stagger-3` | `100ms` |
+| `--stagger-4` | `150ms` |
+| `--stagger-5` | `200ms` |
+| `--stagger-6` | `250ms` |
+
+<Callout type="info">
+  Stagger tokens ship in `dist/bridge.css`, **not** `dist/tokens.css`. They sit outside the canonical token registry, so a consumer that imports only the token bundle will not have them.
+</Callout>
+
+## Where these live
+
+Motion tokens are authored in three different places, which matters when you need to change one.
+
+| Token group | Source | Editable |
+|---|---|---|
+| `--duration-100` … `--duration-600` | Figma → `design-tokens/tokens-studio.json` → `tokens/figma-tokens.css` | Figma only — the CSS is auto-generated |
+| `--duration-fast` / `-normal` / `-slow`, all `--ease-*` | `tokens/gap-fills.css` | Hand-authored |
+| `--stagger-1` … `--stagger-6` | `tokens/bridge.css` | Hand-authored |
+
+Ready-made utility classes built on these tokens — `.bds-enter-*`, `.bds-anim-*` — live in `tokens/motion-classes.css` over the keyframes in `tokens/animations.css`. Prefer an existing class before writing a new animation.
+
+## Related
+
+- [Motion](/docs/motion) — tiers, effects, and when to escalate beyond CSS
+- [Interaction states](/docs/primitives/interaction-states) — the states these transitions animate between
