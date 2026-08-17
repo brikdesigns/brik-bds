@@ -6,6 +6,16 @@
 # Usage:
 #   ./scripts/pr-task.sh              # auto-generate title + body from commits
 #   ./scripts/pr-task.sh "Custom PR title"   # override title
+#   ./scripts/pr-task.sh --no-issue "<reason>"  # feat/fix with no tracked issue
+#
+# Issue link: the issue numbers resolved from the commit range are written into
+# the PR body as `Closes #N` / `Refs #N` lines. GitHub parses closing keywords
+# from the PR BODY only, never from commit messages, so a `(#N)` in a commit
+# subject leaves `closingIssuesReferences` empty and the board loses the work —
+# 16 of the last 21 merged feat/fix PRs in this repo landed that way (#1882).
+# The pr-issue-link-gate CI check hard-fails any feat/fix PR whose body has no
+# reference, so this script refuses to open one — add `Closes #N` to a commit
+# body, or take the documented hatch with --no-issue "<reason>".
 #
 # Requirements:
 #   - Must be on a task/* branch (not main).
@@ -27,14 +37,23 @@ BASE_BRANCH="main"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=scripts/lib/pr-path-overlap.sh
 source "${SCRIPT_DIR}/lib/pr-path-overlap.sh"
+# shellcheck source=scripts/lib/issue-links.sh
+source "${SCRIPT_DIR}/lib/issue-links.sh"
 
 # ── Parse flags ──
+NO_ISSUE_REASON=""
 POSITIONAL_ARGS=()
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --skip-story-check)
       SKIP_STORY_CHECK=1
       shift
+      ;;
+    --no-issue)
+      # Escape hatch for genuinely issue-less feat/fix work. Mirrors the
+      # repro:none pair: label + reason, both required, neither hidden.
+      NO_ISSUE_REASON="$2"
+      shift 2
       ;;
     -*)
       echo -e "${RED}Unknown flag: $1${NC}"
@@ -131,10 +150,73 @@ if [ -n "$EXISTING_PR" ]; then
   exit 0
 fi
 
-# ── Sync with base (catches semantic conflicts from parallel work) ──
+# ── Fetch base (every range below is origin/BASE..HEAD) ──
 echo -e "${YELLOW}~ Fetching origin/${BASE_BRANCH}...${NC}"
 git fetch origin "${BASE_BRANCH}" --quiet
 
+# ── Build PR title ──
+# Resolved here, BEFORE the base-sync merge and the push, because the
+# issue-link gate below is scoped on it. Prefer the latest NON-MERGE commit
+# subject — a conventional-commit line (`fix(build): …`). `--no-merges` skips
+# the `Merge origin/main …` commit a base-sync from a PRIOR run created, so an
+# advanced base never turns the PR title into the merge-commit subject or the
+# branch slug (brik-bds#1018; same root cause as the portal fix in
+# brik-client-portal#1444).
+if [ $# -ge 1 ]; then
+  PR_TITLE="$1"
+else
+  PR_TITLE=$(git log --no-merges --format=%s -1 "${BASE_BRANCH}..HEAD")
+  if [ -z "$PR_TITLE" ]; then
+    # Fallback: task/bds-button-variants → bds: button variants
+    SCOPE=$(echo "$BRANCH" | sed 's|task/||' | cut -d'-' -f1)
+    DESC=$(echo "$BRANCH" | sed 's|task/[a-z]*-||' | tr '-' ' ')
+    PR_TITLE="${SCOPE}: ${DESC}"
+  fi
+fi
+
+# ── Resolve the issues this PR is for ──
+# Polarity rules, the closing-keyword grammar and the portable word boundary all
+# live in lib/issue-links.sh, where scripts/__tests__/test-issue-links.sh can
+# exercise them without a repo or a network.
+#
+# --no-issue: the documented hatch. Both halves — the `Issue-exempt:` line this
+# adds to the body and the `issue:none` label applied after the PR is created —
+# are required by pr-issue-link-gate; a label with no reason is a silent waiver,
+# a reason with no label is invisible on the board.
+if [ -n "$NO_ISSUE_REASON" ] && ! issue_exempt_reason_ok "$NO_ISSUE_REASON"; then
+  echo -e "${RED}✗ --no-issue reason is ${#NO_ISSUE_REASON} chars; pr-issue-link-gate needs >= ${ISSUE_LINK_MIN_REASON_CHARS}.${NC}"
+  echo -e "${RED}  Say what the work is and why no issue tracks it.${NC}"
+  exit 1
+fi
+ISSUE_LINKS=$(resolve_issue_links "origin/${BASE_BRANCH}..HEAD" "$NO_ISSUE_REASON")
+
+# Gate: never open a feat/fix PR that pr-issue-link-gate will immediately fail.
+# Runs BEFORE the base-sync merge and the push, deliberately — two reasons, both
+# learned in brik-client-portal#3105:
+#
+#   1. A gate that fires after the push leaves the branch on the remote, so its
+#      own advice ("amend, then re-run") would need a non-fast-forward push to
+#      follow — which the git rules disallow. Gate first, and a failure leaves
+#      origin untouched.
+#   2. The merge below makes HEAD a merge commit. `git commit --amend` then
+#      rewrites the MERGE commit's message, not the work commit's, silently
+#      producing a merge commit wearing a `feat(...)` subject. Gating first
+#      makes that state unreachable.
+#
+# Only feat/fix are in the gate's scope, so a chore/docs/ci branch with no issue
+# refs opens normally.
+if issue_link_required "$PR_TITLE" && [ -z "$ISSUE_LINKS" ]; then
+  echo -e "${RED}✗ No issue reference could be resolved for this feat/fix PR.${NC}"
+  echo -e "${RED}  The pr-issue-link-gate CI check requires one in the PR body. Either:${NC}"
+  echo -e "${RED}    - add \`Closes #N\` to the commit body, then re-run:${NC}"
+  echo -e "${RED}        git commit --amend        (HEAD is $(git log --format=%h -1) \"$(git log --format=%s -1 | cut -c1-40)\")${NC}"
+  echo -e "${RED}    - reference the issue as #N in a commit subject, then re-run, or${NC}"
+  echo -e "${RED}    - re-run with --no-issue \"<reason, >= ${ISSUE_LINK_MIN_REASON_CHARS} chars>\" if no issue tracks this work.${NC}"
+  echo -e "${YELLOW}  Nothing has been pushed — the merge and push run after this gate.${NC}"
+  exit 1
+fi
+
+# ── Sync with base (catches semantic conflicts from parallel work) ──
 BEHIND=$(git rev-list --count "HEAD..origin/${BASE_BRANCH}")
 if [ "$BEHIND" -gt 0 ]; then
   echo -e "${YELLOW}~ Base moved ${BEHIND} commit(s) ahead — merging to detect semantic conflicts...${NC}"
@@ -163,6 +245,10 @@ fi
 check_pr_path_overlap "$BASE_BRANCH" "$BRANCH"
 
 # ── Push if needed ──
+# SC1083: `@{u}` is git's upstream shorthand, not a brace expansion. Annotated
+# rather than rewritten because issue-link-resolver-check.yml shellchecks this
+# file at --severity=warning (#1882).
+# shellcheck disable=SC1083
 UPSTREAM=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || echo "")
 EXPECTED_UPSTREAM="origin/${BRANCH}"
 if [ -z "$UPSTREAM" ] || [ "$UPSTREAM" != "$EXPECTED_UPSTREAM" ]; then
@@ -170,28 +256,11 @@ if [ -z "$UPSTREAM" ] || [ "$UPSTREAM" != "$EXPECTED_UPSTREAM" ]; then
   git push -u origin "$BRANCH"
 else
   LOCAL=$(git rev-parse HEAD)
+  # shellcheck disable=SC1083  # `@{u}` is git's upstream shorthand
   REMOTE=$(git rev-parse @{u} 2>/dev/null || echo "")
   if [ "$LOCAL" != "$REMOTE" ]; then
     echo -e "${YELLOW}~ Pushing new commits to origin...${NC}"
     git push
-  fi
-fi
-
-# ── Build PR title ──
-if [ $# -ge 1 ]; then
-  PR_TITLE="$1"
-else
-  # Prefer the latest NON-MERGE commit subject — a conventional-commit line
-  # (`fix(build): …`). `--no-merges` skips the `Merge origin/main …` commit a
-  # base-sync creates, so an advanced base never turns the PR title into the
-  # merge-commit subject or the branch slug (brik-bds#1018; same root cause as
-  # the portal fix in brik-client-portal#1444).
-  PR_TITLE=$(git log --no-merges --format=%s -1 "${BASE_BRANCH}..HEAD")
-  if [ -z "$PR_TITLE" ]; then
-    # Fallback: task/bds-button-variants → bds: button variants
-    SCOPE=$(echo "$BRANCH" | sed 's|task/||' | cut -d'-' -f1)
-    DESC=$(echo "$BRANCH" | sed 's|task/[a-z]*-||' | tr '-' ' ')
-    PR_TITLE="${SCOPE}: ${DESC}"
   fi
 fi
 
@@ -223,6 +292,7 @@ ${COMMIT_BULLETS}
 ## Knowledge capture
 - [ ] Non-obvious decisions / learnings captured: \`brik-rag remember "<key insight>"\`
 
+${ISSUE_LINKS}
 Generated with [Claude Code](https://claude.ai/code)
 EOF
 )
@@ -245,6 +315,22 @@ if ! PR_URL=$(gh pr create --base "${BASE_BRANCH}" --title "$PR_TITLE" --body "$
   echo "    gh pr create --base ${BASE_BRANCH} --title \"<title>\""
   echo ""
   exit 1
+fi
+
+# ── Apply the hatch's other half ──
+# `Issue-exempt:` in the body is only half the waiver; pr-issue-link-gate needs
+# the `issue:none` label too, and it re-runs on `labeled` so the PR flips green
+# the moment the label arrives. Failing to apply it would leave a PR whose body
+# claims an exemption the gate rejects, so say so loudly rather than warn.
+if [ -n "$NO_ISSUE_REASON" ]; then
+  PR_NUMBER=$(gh pr view "$BRANCH" --json number --jq '.number' 2>/dev/null || echo "")
+  if [ -n "$PR_NUMBER" ] && gh pr edit "$PR_NUMBER" --add-label "issue:none" >/dev/null 2>&1; then
+    echo -e "${GREEN}~ Applied \`issue:none\` (the --no-issue hatch's other half).${NC}"
+  else
+    echo -e "${RED}⚠ Could not apply the \`issue:none\` label — the hatch is HALF-TAKEN and${NC}"
+    echo -e "${RED}  pr-issue-link-gate will fail. Add it by hand:${NC}"
+    echo -e "${RED}    gh pr edit ${PR_NUMBER:-<n>} --add-label issue:none${NC}"
+  fi
 fi
 
 echo ""

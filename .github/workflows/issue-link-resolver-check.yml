@@ -1,0 +1,67 @@
+name: Issue Link Resolver Check
+
+# Locks the resolver that pre-fills `Closes #N` / `Refs #N` into a PR body
+# (scripts/lib/issue-links.sh, brik-bds#1882).
+#
+# pr-issue-link-gate.yml self-tests its own detection on every PR. This is the
+# other half: the script that WRITES the body it will read. The two must agree,
+# and they are written in different languages against the same grammar, so the
+# only thing keeping them aligned is a test that fails when one drifts.
+#
+# The load-bearing assertions are the two that produce a WRONG close rather than
+# a missing one — a subject `(#N)` must become `Refs`, never `Closes`, and
+# `Renames prefixes #12` must resolve nothing (`fixes` lives inside `prefixes`).
+# "A Closes line is emitted" would have passed against both bugs.
+#
+# pr-task.sh is in the paths list because it is the resolver's caller — a change
+# that stops sourcing the lib, or moves the gate back after the push, must re-run
+# this.
+#
+# Cheap and hermetic: bash only, no npm ci, no build, no network.
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/lib/issue-links.sh'
+      - 'scripts/__tests__/test-issue-links.sh'
+      - 'scripts/pr-task.sh'
+      - '.github/workflows/pr-issue-link-gate.yml'
+      - '.github/workflows/issue-link-resolver-check.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/lib/issue-links.sh'
+      - 'scripts/__tests__/test-issue-links.sh'
+      - 'scripts/pr-task.sh'
+      - '.github/workflows/pr-issue-link-gate.yml'
+      - '.github/workflows/issue-link-resolver-check.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: issue-link-resolver-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  issue-link-resolver:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Runs on ubuntu here and on darwin locally. That matters: the word
+      # boundary in the lib is `(^|[^[:alnum:]_])` rather than `\b` precisely
+      # because BSD grep leaves `\b` undefined, and a GNU-only pattern would
+      # pass this job while resolving the wrong issue on the machine that
+      # actually opens the PR.
+      - name: Resolver contract holds
+        run: bash scripts/__tests__/test-issue-links.sh < /dev/null
+
+      # --severity=warning: pr-task.sh predates this gate and carries SC1091
+      # (unfollowed `source`) plus style notes. Warning-and-above keeps real
+      # findings failing without demanding an unrelated cleanup in this PR.
+      - name: shellcheck the resolver + its caller
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+          shellcheck --severity=warning \
+                     scripts/lib/issue-links.sh \
+                     scripts/__tests__/test-issue-links.sh \
+                     scripts/pr-task.sh
