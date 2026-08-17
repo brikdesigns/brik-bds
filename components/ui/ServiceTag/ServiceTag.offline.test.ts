@@ -11,7 +11,13 @@
  * JSX is avoided to keep this a `.test.ts` file (include glob is `**\/*.test.ts`).
  */
 import { describe, it, expect } from 'vitest';
-import { resolveServiceIcon, serviceIconOverrides, type ServiceLine } from './service-config';
+import {
+  resolveServiceIcon,
+  serviceIconOverrides,
+  normalizeServiceName,
+  SERVICE_LINE_GLYPH_PREFIX,
+  type ServiceLine,
+} from './service-config';
 import { SERVICE_ICON_SVGS } from './service-icons.generated';
 
 const LINES: ServiceLine[] = [
@@ -112,16 +118,72 @@ describe('ServiceTag — offline glyph resolution (no 404)', () => {
     }
   });
 
-  // The remaining four #1775 names have NO bundled art that fits, so they keep
-  // the line default by decision, not by oversight. This pins that decision: if
-  // art lands (or a mapping is guessed at) this test fails and forces the
-  // mapping to be added above rather than landing unnoticed.
-  it('leaves the four #1775 names without fitting art on the line default', () => {
-    for (const name of ['Presentation Design', 'One-Pager', 'Sales Pitch Deck', 'Sales Proposal']) {
-      expect(
-        resolveServiceIcon('information', name),
-        `"${name}" now resolves to specific art — record the mapping in serviceIconOverrides`,
-      ).toBe('information-design');
+  // #1775 AC 2 — the last four names now reach a specific glyph. No bundled art
+  // depicts a slide deck or a proposal, so these share the closest existing
+  // glyph rather than sitting on the line default. Sharing is the established
+  // pattern (`marketing-web-design` serves 10 names). If art is commissioned
+  // later, repoint these; the assertion that matters is "not the line default".
+  it('gives the four #1775 art-less names a specific glyph, not the line default', () => {
+    const expected: [string, string][] = [
+      ['Presentation Design', 'info-layout-design'],
+      ['Sales Pitch Deck', 'info-sales-materials'],
+      ['Sales Proposal', 'info-sales-materials'],
+      ['One-Pager', 'info-intake-form'],
+    ];
+    for (const [name, glyph] of expected) {
+      expect(resolveServiceIcon('information', name), name).toBe(glyph);
+      expect(resolveServiceIcon('information', name)).not.toBe('info-design');
+      expect(SERVICE_ICON_SVGS[glyph]).toContain('<path');
     }
+  });
+
+  // Zero live `information` service may fall back now. This is the AC-4 gate for
+  // the whole #1775 effort: it fails the moment a new name lands unmapped, which
+  // is exactly how 14 of 37 went generic unnoticed.
+  it('leaves NO live information service on the line default', () => {
+    const live = [
+      'Infographics', 'Intake Forms', 'Layout Design', 'One-Pager',
+      'Presentation Design', 'Print Materials', 'Sales Pitch Deck',
+      'Sales Proposal', 'Sales Resources', 'Signage Design',
+      'Welcome Onboarding Kit',
+    ];
+    const generic = live.filter((n) => resolveServiceIcon('information', n) === 'info-design');
+    expect(generic, `still generic: ${generic.join(', ')}`).toEqual([]);
+  });
+
+  // The naming convention, enforced. A glyph whose basename does not start with
+  // its line's prefix is unreachable by derivation and can only ever be found via
+  // an override — a silent trap for the next person adding art. Two glyphs had
+  // already fallen in (`patient-experience`, `website-experience`, renamed in
+  // #1775), and nothing would have caught a third.
+  it('names every bundled glyph with its service line prefix', () => {
+    const prefixes = [...new Set(Object.values(SERVICE_LINE_GLYPH_PREFIX))];
+    const offenders = Object.keys(SERVICE_ICON_SVGS).filter(
+      (key) => !prefixes.some((p) => key.startsWith(`${p}-`)),
+    );
+    expect(
+      offenders,
+      `glyphs with no line prefix (unreachable by derivation):\n${offenders.join('\n')}\n` +
+        `valid prefixes: ${prefixes.join(', ')}`,
+    ).toEqual([]);
+  });
+
+  // The prefix table must actually match what deriveIconName builds, or the
+  // convention above is documentation that lies.
+  it('derives keys that match the declared prefix for every line', () => {
+    for (const [line, prefix] of Object.entries(SERVICE_LINE_GLYPH_PREFIX)) {
+      const key = resolveServiceIcon(line as ServiceLine, 'Totally Unmapped Service Xyz');
+      // Unmapped -> line default, which must itself carry the line prefix.
+      expect(key.startsWith(`${prefix}-`), `${line} default "${key}" lacks "${prefix}-"`).toBe(true);
+    }
+  });
+
+  // `information` abbreviates to `info-`; assert the abbreviation rather than
+  // trusting the branch, since it is the one line whose prefix != its id.
+  it('abbreviates the information line to info-', () => {
+    expect(SERVICE_LINE_GLYPH_PREFIX.information).toBe('info');
+    expect(normalizeServiceName('Sales Pitch Deck')).toBe('sales-pitch-deck');
+    // A brand-new information service with matching art resolves with no override.
+    expect(resolveServiceIcon('information', 'Signage')).toBe('info-signage');
   });
 });
