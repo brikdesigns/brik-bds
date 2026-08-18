@@ -76,7 +76,7 @@
 /* ─── Body ───────────────────────────────────────────────────── */
 
 .bds-modal__body {
-  padding: var(--padding-xl);
+  padding: var(--padding-lg);
   overflow-y: auto;
   flex: 1;
   font-family: var(--font-family-body);
@@ -88,7 +88,7 @@
 /* ─── Footer ─────────────────────────────────────────────────── */
 
 .bds-modal__footer {
-  padding: var(--padding-xl);
+  padding: var(--padding-lg);
   display: flex;
   gap: var(--gap-lg);
   justify-content: flex-end;
@@ -104,7 +104,7 @@
 /* bds-lint-ignore — design-spec max-width for confirmation dialogs */
 .bds-modal--preset-confirm {
   max-width: 440px;
-  padding: var(--padding-xl);
+  padding: var(--padding-lg);
   gap: var(--gap-lg);
   overflow: visible;
 }
