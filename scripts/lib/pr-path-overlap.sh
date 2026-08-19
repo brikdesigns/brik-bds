@@ -1,6 +1,13 @@
 #!/usr/bin/env bash
 # pr-path-overlap.sh — warn when an open PR already touches a path in this diff.
 #
+# Two entry points, same predicate, different moment:
+#   check_pr_path_overlap    — pr-task.sh, after the base-sync. Paths come from
+#                              the diff, so they are exact but the work is done.
+#   check_ticket_path_overlap — new-task.sh, before the worktree exists. Paths
+#                              come from the TICKET, so they are approximate but
+#                              nothing has been written yet (#2313).
+#
 # Sourced by pr-task.sh after the base-sync, before the PR is created. Closes
 # brik-bds#1545 (the same-path slice of brik-llm#1485).
 #
@@ -22,7 +29,15 @@
 #
 # Usage (sourced):
 #   source scripts/lib/pr-path-overlap.sh
-#   check_pr_path_overlap main "$BRANCH"
+#   check_pr_path_overlap main "$BRANCH"     # PR-create time, paths from the diff
+#   check_ticket_path_overlap 2313           # task-start time, paths from the ticket
+#
+# An identical twin of this file lives in brik-llm/scripts/lib/. Separate git
+# repos, so it is a deliberate copy, not an import — keep both in sync when
+# either changes (brik-llm#2052). brik-client-portal carries issue-overlap.sh but NOT
+# this file (verified 2026-08-18: `ls scripts/lib/` there lists base-freshness,
+# gh-error-classify, git-transport, identity-guard, issue-overlap only), so the
+# third mirror is a port, not a sync — tracked separately.
 #
 # Return codes: always 0. This is a warning, not a gate.
 
@@ -154,6 +169,180 @@ check_pr_path_overlap() {
   # Never block and never hang: a closed stdin in an agent session must not sit
   # on `read` (#1099, and the same defect still live in issue-overlap.sh's
   # prompt — brik-bds#1549).
+  if [ -t 0 ]; then
+    echo -e "${_PPO_YELLOW}   Press Enter to continue, Ctrl+C to abort.${_PPO_NC}"
+    read -r || true
+  else
+    echo -e "${_PPO_YELLOW}   → non-interactive: continuing.${_PPO_NC}"
+  fi
+  return 0
+}
+
+# ── Task-start variant (#2313) ─────────────────────────────────────
+#
+# Same predicate, moved to where it is still actionable. Everything above runs
+# at PR-create, which makes it a collision REPORT: on 2026-08-18 a session
+# finished the whole handoff-lint R19 change and only then read
+# "No open PR touches a path in this diff." Correct, and useless — the cost was
+# already sunk.
+#
+# The hard part at task-start is that there is no diff to read. The paths have
+# to come from the ticket, which means text, which means false positives — and
+# brik-llm#2101 is the standing evidence that a gate which cries wolf gets
+# switched off.
+# The defence is that a candidate only counts if it is a file that actually
+# exists in this repo. `brikdesigns/brik-llm`, `https://research.trychroma.com/
+# context-rot` and `e.g.` all match a path-shaped regex; none of them survives
+# `git ls-files`.
+
+# Path-like tokens named in TEXT, narrowed to paths present in TRACKED.
+#
+#   in:   arg1 = free text (issue title + body), arg2 = newline-separated
+#         tracked paths (git ls-files)
+#   out:  repo-relative paths, text order, de-duplicated
+#
+# A bare basename with no directory is resolved only when it is UNAMBIGUOUS —
+# exactly one tracked file carries it. Issue prose overwhelmingly writes
+# `new-task.sh`, not `scripts/new-task.sh` (brik-llm#2313's own body does it five
+# times), so dropping the bare form entirely would miss the file most tickets
+# are about. The uniqueness test is what stops a duplicated basename resolving
+# to an arbitrary one of its candidates.
+#
+# It costs real coverage, and the cost is worth naming: this repo has TWO
+# tracked `new-task.sh` (`scripts/` and `scripts/shared/`, verified 2026-08-18
+# with `git ls-files | grep 'new-task.sh$'`), so brik-llm#2313's own bare mentions
+# resolve to nothing. Emitting both candidates instead would flag a PR touching
+# `scripts/shared/new-task.sh` for a ticket that meant `scripts/` — a warning
+# that is wrong, which is the brik-llm#2101 failure and worse than a warning
+# that is missing. An under-report is the safe direction for a warning; a full path
+# written anywhere in the body still matches exactly.
+ticket_paths_from_text() {
+  local text="${1:-}" tracked="${2:-}"
+  [ -n "$text" ] && [ -n "$tracked" ] || return 0
+  awk '
+    NR == FNR {
+      if ($0 == "") next
+      full[$0] = 1
+      n = split($0, seg, "/")
+      basecount[seg[n]]++
+      basepath[seg[n]] = $0
+      next
+    }
+    {
+      if ($0 == "") next
+      if ($0 in full) { if (!seen[$0]++) print $0; next }
+      # Require a dot so a bare directory-ish word ("main", "operations") cannot
+      # resolve; require uniqueness so an ambiguous basename resolves to nothing.
+      if (index($0, "/") == 0 && index($0, ".") > 0 && basecount[$0] == 1) {
+        if (!seen[basepath[$0]]++) print basepath[$0]
+      }
+    }
+  ' <(printf '%s\n' "$tracked") \
+    <(printf '%s\n' "$text" \
+        | grep -oE '[A-Za-z0-9_.@-]+(/[A-Za-z0-9_.@-]+)*' \
+        | sed 's/[].,;:)]*$//')
+}
+
+# Split open-PR records by whether the TITLE references this ticket.
+#
+# A PR already open on this ticket is not a collision to report — issue-overlap.sh
+# (brik-llm#1533) has just named it by number, and repeating it as a path hit
+# is the duplicate-warning noise that trains the operator past both. Its changed paths
+# are still the single best statement of what this ticket touches, so it moves
+# from the hit list to the path list. Costs no extra `gh` call: the records are
+# already in hand.
+_pto_partition_records() {
+  local num="$1" want="$2"   # want = mine | others
+  awk -F'\t' -v n="$num" -v want="$want" '
+    { hit = ($3 ~ "#" n "([^0-9]|$)") }
+    (want == "mine") == (hit == 1) { print }
+  '
+}
+
+# ONE REST call. `{owner}`/`{repo}` are expanded by gh from the current
+# checkout, so a bare number needs no slug lookup and spends no GraphQL points.
+_pto_issue_text() {
+  local api_path="$1"
+  gh api "$api_path" --jq '"\(.title)\n\(.body // "")"' 2>/dev/null
+}
+
+_pto_tracked_files() {
+  git ls-files 2>/dev/null
+}
+
+# `2313`, `#2313` and `owner/repo#2313` — the three forms new-task.sh --issue
+# already accepts (issue-overlap.sh:76-87). A cross-repo ticket still resolves
+# against THIS repo's tracked files, which is correct: a path that does not
+# exist here cannot collide with an open PR here.
+_pto_issue_api_path() {
+  local ref="${1:-}"
+  if [[ "$ref" =~ ^([A-Za-z0-9._-]+)/([A-Za-z0-9._-]+)#?([0-9]+)$ ]]; then
+    printf 'repos/%s/%s/issues/%s\n' "${BASH_REMATCH[1]}" "${BASH_REMATCH[2]}" "${BASH_REMATCH[3]}"
+  elif [[ "$ref" =~ ^#?([0-9]+)$ ]]; then
+    printf 'repos/{owner}/{repo}/issues/%s\n' "${BASH_REMATCH[1]}"
+  else
+    return 1
+  fi
+}
+
+# check_ticket_path_overlap <issue-ref>
+# Always returns 0 — this warns, it never blocks branch creation.
+check_ticket_path_overlap() {
+  local ref="${1:-}"
+  [ -n "$ref" ] || return 0
+
+  if ! command -v gh >/dev/null 2>&1; then
+    echo -e "${_PPO_YELLOW}⚠  gh not on PATH — skipping the ticket path-overlap check.${_PPO_NC}" >&2
+    return 0
+  fi
+
+  local api_path num
+  api_path="$(_pto_issue_api_path "$ref")" || return 0
+  num="${api_path##*/}"
+
+  local records rc=0
+  records="$(${GH_OPEN_PR_CMD:-_ppo_open_prs})" || rc=$?
+  if [ "$rc" -ne 0 ]; then
+    # Same rule as the PR-time path: a failed call says SKIPPED, never all-clear.
+    echo -e "${_PPO_YELLOW}⚠  Could not list open PRs — ticket path-overlap skipped, not passed.${_PPO_NC}" >&2
+    return 0
+  fi
+
+  local mine
+  mine="$(ticket_paths_from_text \
+            "$(${PTO_TEXT_CMD:-_pto_issue_text} "$api_path")" \
+            "$(${PTO_TRACKED_CMD:-_pto_tracked_files})")"
+
+  local own_paths
+  own_paths="$(printf '%s\n' "$records" | _pto_partition_records "$num" mine \
+               | cut -f4 | tr ',' '\n' | grep -v '^$' || true)"
+  [ -n "$own_paths" ] && mine="$(printf '%s\n%s\n' "$mine" "$own_paths" | grep -v '^$' | awk '!seen[$0]++')"
+
+  if [ -z "$mine" ]; then
+    # AC: degrade to a no-op WITH A NOTE. Silence here is indistinguishable from
+    # an all-clear, and a gate that blocks branch creation on missing data gets
+    # switched off.
+    echo -e "  ${_PPO_YELLOW}No repo paths named in #${num} — same-path check skipped, not passed.${_PPO_NC}"
+    return 0
+  fi
+
+  local hits
+  hits="$(printf '%s\n' "$records" | _pto_partition_records "$num" others \
+          | overlapping_prs "$mine" '')"
+  if [ -z "$hits" ]; then
+    echo -e "  ${_PPO_GREEN}No open PR touches a path named in #${num}.${_PPO_NC}"
+    return 0
+  fi
+
+  echo ""
+  echo -e "${_PPO_YELLOW}⚠  Open PR(s) already touching a path this ticket names:${_PPO_NC}"
+  printf '%s\n' "$hits" | awk -F'\t' '{ printf "    PR #%s — %s\n        %s\n", $1, $2, $3 }'
+  echo ""
+  echo -e "${_PPO_YELLOW}   The ticket-number gate (brik-llm#1533) cannot see this: those PRs are on${_PPO_NC}"
+  echo -e "${_PPO_YELLOW}   DIFFERENT tickets. Read them before you start writing — that is the${_PPO_NC}"
+  echo -e "${_PPO_YELLOW}   whole point of asking now rather than at PR-create. brik-llm#2313.${_PPO_NC}"
+  echo ""
+
   if [ -t 0 ]; then
     echo -e "${_PPO_YELLOW}   Press Enter to continue, Ctrl+C to abort.${_PPO_NC}"
     read -r || true

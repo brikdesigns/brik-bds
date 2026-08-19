@@ -184,6 +184,176 @@ assert_eq "non-interactive continues instead of reading stdin" "yes" \
 assert_eq "my own branch: overlap with itself is not reported" "no" \
   "$(run_check fake_diff fake_prs task/infra-propagate-freeze | grep -q 'PR #1528' && echo yes || echo no)"
 
+echo "── ticket_paths_from_text: the false-positive bar (brik-llm#2313) ──"
+
+# A realistic tracked-file list. `config.json` lives in two directories and
+# nowhere at root, which is what makes the uniqueness rule load-bearing rather
+# than decorative. `README.md` is deliberately BOTH a root path and a duplicated
+# basename — the two rules have to be tested apart.
+TRACKED='scripts/new-task.sh
+scripts/pr-task.sh
+scripts/lib/pr-path-overlap.sh
+scripts/lib/issue-overlap.sh
+scripts/test/test-pr-path-overlap.sh
+web/alpha/config.json
+web/beta/config.json
+README.md
+operations/mcp/README.md'
+
+assert_eq "a full path written in the body is found" "scripts/lib/pr-path-overlap.sh" \
+  "$(ticket_paths_from_text 'see `scripts/lib/pr-path-overlap.sh` for the predicate' "$TRACKED")"
+
+# The reason bare basenames are resolved at all: brik-llm#2313's own body writes
+# new-task.sh five times and never once writes scripts/new-task.sh.
+assert_eq "an unambiguous bare basename resolves to its tracked path" "scripts/new-task.sh" \
+  "$(ticket_paths_from_text 'new-task.sh is where the question is cheap to answer' "$TRACKED")"
+
+# The near-miss the whole gate lives or dies on (brik-llm#2101 — a gate that cries wolf
+# gets disabled). Two tracked files carry config.json, so it resolves to neither
+# rather than to an arbitrary one.
+assert_eq "an AMBIGUOUS bare basename resolves to nothing" "" \
+  "$(ticket_paths_from_text 'bump the version in config.json while you are there' "$TRACKED")"
+
+# The paired rule, and the reason the two cases need separate fixtures: a
+# duplicated basename that is ALSO a tracked path in its own right is an exact
+# match, not an ambiguous one. `README.md` is a real repo-relative path.
+assert_eq "a duplicated basename that IS a root path still matches exactly" "README.md" \
+  "$(ticket_paths_from_text 'update the README.md while you are in there' "$TRACKED")"
+
+assert_eq "a path-shaped string that is not a tracked file is dropped" "" \
+  "$(ticket_paths_from_text 'filed against brikdesigns/brik-llm as a sub-issue' "$TRACKED")"
+assert_eq "a URL is dropped" "" \
+  "$(ticket_paths_from_text 'see https://research.trychroma.com/context-rot for why' "$TRACKED")"
+assert_eq "prose with no paths at all yields nothing" "" \
+  "$(ticket_paths_from_text 'Turn the advisory guidance into enforced gates.' "$TRACKED")"
+assert_eq "a bare word with no dot never resolves" "" \
+  "$(ticket_paths_from_text 'the operations directory and the scripts directory' "$TRACKED")"
+
+# file:line references are how this repo cites code, so the suffix must not
+# defeat the match.
+assert_eq "a file:line citation still matches the file" "scripts/new-task.sh" \
+  "$(ticket_paths_from_text 'beside the existing source at scripts/new-task.sh:44-45' "$TRACKED")"
+assert_eq "a trailing sentence period is stripped" "scripts/pr-task.sh" \
+  "$(ticket_paths_from_text 'It is only wired into scripts/pr-task.sh.' "$TRACKED")"
+assert_eq "a markdown-link target matches" "scripts/pr-task.sh" \
+  "$(ticket_paths_from_text 'see [the script](scripts/pr-task.sh) for detail' "$TRACKED")"
+
+assert_eq "the same path named twice is returned once" "scripts/new-task.sh" \
+  "$(ticket_paths_from_text 'new-task.sh … and scripts/new-task.sh again' "$TRACKED")"
+
+# The live under-report, pinned so it is a known cost rather than a surprise:
+# brik-llm tracks two new-task.sh, so brik-llm#2313's own bare mentions resolve to
+# nothing and only its fully-qualified paths are seen. Emitting both candidates
+# would warn about scripts/shared/ for a ticket that meant scripts/ (brik-llm#2101).
+DUP_TRACKED='scripts/new-task.sh
+scripts/shared/new-task.sh
+scripts/lib/pr-path-overlap.sh'
+assert_eq "a bare basename tracked twice yields nothing — under-report, not a wrong report" "" \
+  "$(ticket_paths_from_text 'wire the check into new-task.sh' "$DUP_TRACKED")"
+assert_eq "…and the fully-qualified sibling in the same body still matches" "scripts/new-task.sh" \
+  "$(ticket_paths_from_text 'wire it into new-task.sh, at scripts/new-task.sh:44-45' "$DUP_TRACKED")"
+assert_eq "empty text → nothing" "" "$(ticket_paths_from_text '' "$TRACKED")"
+assert_eq "empty tracked list → nothing (never guess without the repo)" "" \
+  "$(ticket_paths_from_text 'scripts/new-task.sh' '')"
+
+echo "── _pto_partition_records ──"
+
+# 2313's own PR, plus two unrelated tickets — one of which shares a file.
+TRECORDS="$(printf '%s\n' \
+  '2400	task/path-overlap-at-task-start	feat(new-task): path overlap at task-start (#2313)	scripts/new-task.sh' \
+  '2401	task/budget-note	docs(budget): note the ledger key (#2404)	scripts/new-task.sh,docs/x.md' \
+  '2402	task/unrelated	chore: bump submodule (#2405)	package.json')"
+
+assert_eq "the ticket's own PR is partitioned out by title reference" "2400" \
+  "$(printf '%s\n' "$TRECORDS" | _pto_partition_records 2313 mine | cut -f1 | paste -sd'|' -)"
+assert_eq "every other PR stays in the comparison set" "2401|2402" \
+  "$(printf '%s\n' "$TRECORDS" | _pto_partition_records 2313 others | cut -f1 | paste -sd'|' -)"
+# Prefix safety: the token 2313 must not claim #23130's PR, nor #231's.
+assert_eq "a longer number is not this ticket" "" \
+  "$(printf '%s\n' '2500	task/x	feat: thing (#23130)	a.sh' | _pto_partition_records 2313 mine | cut -f1)"
+
+echo "── _pto_issue_api_path ──"
+assert_eq "a bare number uses gh's owner/repo placeholders" \
+  "repos/{owner}/{repo}/issues/2313" "$(_pto_issue_api_path 2313)"
+assert_eq "a #-prefixed number is accepted" \
+  "repos/{owner}/{repo}/issues/2313" "$(_pto_issue_api_path '#2313')"
+assert_eq "a cross-repo ref resolves to that repo" \
+  "repos/brikdesigns/brik-bds/issues/1545" "$(_pto_issue_api_path 'brikdesigns/brik-bds#1545')"
+assert_eq "garbage is refused rather than guessed at" "1" \
+  "$(_pto_issue_api_path 'not-a-ticket' >/dev/null 2>&1; echo $?)"
+
+echo "── check_ticket_path_overlap: full orchestration (all three reads injected) ──"
+
+fake_tracked() { printf '%s\n' "$TRACKED"; }
+fake_text()    { printf 'Run the path-overlap check at task-start\nWire it into new-task.sh before the worktree exists.\n'; }
+empty_text()   { printf 'Decide the claim mechanism and record it.\n'; }
+t_prs()        { printf '%s\n' "$TRECORDS"; }
+t_unrelated()  { printf '%s\n' '2402	task/unrelated	chore: bump submodule (#2405)	package.json'; }
+
+run_tcheck() {
+  PTO_TEXT_CMD=fake_text PTO_TRACKED_CMD=fake_tracked GH_OPEN_PR_CMD="$1" \
+    check_ticket_path_overlap "${2:-2313}" 2>&1
+}
+
+OUT="$(run_tcheck t_prs)"
+assert_eq "the colliding PR on a DIFFERENT ticket is named" "yes" \
+  "$(printf '%s' "$OUT" | grep -q 'PR #2401' && echo yes || echo no)"
+assert_eq "the shared path is printed" "yes" \
+  "$(printf '%s' "$OUT" | grep -q 'scripts/new-task.sh' && echo yes || echo no)"
+# The duplicate-warning noise this must not produce: brik-llm#1533 already named #2400.
+assert_eq "the ticket's OWN open PR is not re-reported as a collision" "no" \
+  "$(printf '%s' "$OUT" | grep -q 'PR #2400' && echo yes || echo no)"
+assert_eq "it returns 0 — this warns, it never blocks worktree creation" "0" \
+  "$(run_tcheck t_prs >/dev/null 2>&1; echo $?)"
+assert_eq "non-interactive continues instead of reading stdin" "yes" \
+  "$(run_tcheck t_prs </dev/null | grep -q 'non-interactive: continuing' && echo yes || echo no)"
+
+OUT="$(run_tcheck t_unrelated)"
+assert_eq "no overlap says so once, and names no PR" "yes" \
+  "$(printf '%s' "$OUT" | grep -q 'No open PR touches a path named in #2313' && echo yes || echo no)"
+assert_eq "no overlap prints no PR number" "no" \
+  "$(printf '%s' "$OUT" | grep -q 'PR #' && echo yes || echo no)"
+
+# AC: paths not knowable up front → no-op WITH A NOTE, never a failure and never
+# a silence that reads as an all-clear.
+OUT="$(PTO_TEXT_CMD=empty_text PTO_TRACKED_CMD=fake_tracked GH_OPEN_PR_CMD=t_unrelated \
+       check_ticket_path_overlap 2315 2>&1)"
+assert_eq "a ticket naming no paths says SKIPPED, not passed" "yes" \
+  "$(printf '%s' "$OUT" | grep -q 'No repo paths named in #2315 — same-path check skipped, not passed' && echo yes || echo no)"
+assert_eq "a ticket naming no paths never prints the all-clear" "no" \
+  "$(printf '%s' "$OUT" | grep -q 'No open PR touches' && echo yes || echo no)"
+assert_eq "a ticket naming no paths still returns 0" "0" \
+  "$(PTO_TEXT_CMD=empty_text PTO_TRACKED_CMD=fake_tracked GH_OPEN_PR_CMD=t_unrelated \
+     check_ticket_path_overlap 2315 >/dev/null 2>&1; echo $?)"
+
+OUT="$(run_tcheck failing_gh)"
+assert_eq "a failed gh call warns that the check was SKIPPED" "yes" \
+  "$(printf '%s' "$OUT" | grep -q 'ticket path-overlap skipped, not passed' && echo yes || echo no)"
+assert_eq "a failed gh call never prints the all-clear" "no" \
+  "$(printf '%s' "$OUT" | grep -q 'No open PR touches' && echo yes || echo no)"
+
+# The blind spot brik-llm#2313 exists to close, end to end: two sessions, two tickets,
+# one file. The number-keyed gate reports clean on this input.
+assert_eq "the same-file-different-ticket case is caught before any file is written" "yes" \
+  "$(run_tcheck t_prs </dev/null | grep -q 'DIFFERENT tickets' && echo yes || echo no)"
+
+echo "── new-task.sh wiring (brik-llm#2313) ──"
+
+# The gate is only a gate if it is CALLED. Everything above passes with the call
+# site deleted — which is precisely how both of new-task.sh's overlap gates
+# failed silently in production for months (lib/overlap-filters.sh:8-10). This
+# reads the script as text; no git, no network, consistent with the rest.
+NEW_TASK="$(cd "$(dirname "$0")/.." && pwd)/new-task.sh"
+assert_eq "new-task.sh sources the same-path lib" "yes" \
+  "$(grep -q 'lib/pr-path-overlap.sh' "$NEW_TASK" && echo yes || echo no)"
+assert_eq "new-task.sh actually calls the task-start check" "yes" \
+  "$(grep -qE '^[[:space:]]*check_ticket_path_overlap[[:space:]]' "$NEW_TASK" && echo yes || echo no)"
+# Ordering: before the worktree exists is the entire premise of brik-llm#2313.
+assert_eq "the check runs BEFORE git worktree add" "yes" \
+  "$(awk '/^[[:space:]]*check_ticket_path_overlap[[:space:]]/ {c=NR}
+          /git worktree add/ {w=NR}
+          END { print (c > 0 && w > 0 && c < w) ? "yes" : "no" }' "$NEW_TASK")"
+
 echo ""
 if [ "$FAIL" -gt 0 ]; then
   echo "── pr-path-overlap: $PASS passed, $FAIL failed"

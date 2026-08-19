@@ -46,6 +46,11 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/lib/issue-overlap.sh"
 # shellcheck source=scripts/lib/overlap-filters.sh
 source "${SCRIPT_DIR}/lib/overlap-filters.sh"
+# Same-path overlap gate (brik-llm#2313). Complements every gate above, all of
+# which key on the TICKET — none can see two sessions on different tickets
+# editing the same file.
+# shellcheck source=scripts/lib/pr-path-overlap.sh
+source "${SCRIPT_DIR}/lib/pr-path-overlap.sh"
 # Claim gate — the overlap gate above keys on branches and PRs, and two of the
 # four collisions on 2026-07-29 had neither (a close race and a body edit).
 # brik-bds#1541.
@@ -209,6 +214,7 @@ if [ -n "$ISSUE_REF" ]; then
   # its OWN issue for the same problem, so both claims are satisfied while the
   # work is identical (#1663).
   check_title_overlap "$ISSUE_REF"
+  check_ticket_path_overlap "$ISSUE_REF"
   # Refuses when another session holds a live claim; otherwise claims it.
   if ! check_issue_claim "$ISSUE_REF" "$BRANCH_NAME"; then
     exit 1
