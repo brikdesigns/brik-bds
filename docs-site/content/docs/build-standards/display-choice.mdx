@@ -1,0 +1,98 @@
+---
+title: Display Choice
+description: Which display a given shape of data gets — table, field grid, card grid, list, accordion, or banner — the shape that rules each one out, and the state shell that wraps it.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+[Content rhythm](/docs/build-standards/content-rhythm) answers *how much space* goes between things, and [composition layers](/docs/build-standards/composition-layers) answers *which layer owns* a thing. Neither answers the question that comes first: **given this data, which display does it get?**
+
+The answer comes from the **shape of the data** — not from the page's mood, the section's importance, or how much room is left. Shape means two properties only:
+
+1. **Do the items share an attribute set?** Every item has the same named slots, or they don't.
+2. **Does each item carry its own identity or action?** A link, a button, a name you would address it by — or nothing.
+
+Everything below falls out of those two.
+
+## The decision
+
+| Display | The shape that selects it | The shape that rules it out | Component |
+|---|---|---|---|
+| **Table** | Two or more items whose attributes are **peers** — you would scan one of them down a column. Includes a *fixed* key→value→why set, where the keys are the rows | Items don't share an attribute set; the attributes are hierarchical rather than peers; or each row needs its own action control | [`Table`](/docs/components/table) |
+| **Field grid** | One record's **own** scalar attributes — each label appears exactly once on the surface | The same label repeats across items; that is rows, not fields | [`FieldGrid`](/docs/components/field-grid) → [`Field`](/docs/components/field) |
+| **Card grid** | Peer **entities**, each with its own identity and its own action | Items share an attribute set and carry no per-item action; that is a table or a list | [`Card`](/docs/components/card) in [`Grid`](/docs/components/grid) or [`CardList`](/docs/components/card-list) |
+| **List** | Items whose attributes are **hierarchical** — one names the item, the rest gloss or mark it. Or plain strings, one per item | The attributes are peers you would compare down a column; or each item carries its own action | [`BulletList`](/docs/components/bullet-list) for plain strings; [`InteractiveListItem`](/docs/components/interactive-list-item) in a `Stack` when a row has a leading marker, a subtitle, or a trailing status |
+| **Accordion** | Long-form sections the reader **chooses among** rather than scans | The reader needs to compare across items — collapsing hides the comparison | [`Accordion`](/docs/components/accordion) |
+| **Banner** | One status assertion about the **surrounding surface** | The status varies per item; that is a column, a [`Badge`](/docs/components/badge), or a `Tag` | [`Banner`](/docs/components/banner) |
+
+<Callout type="warn">
+  **Value length is not a selector.** How long a value happens to be decides nothing about which display holds it. A homogeneous set gets **one** display for all of it — splitting a five-attribute brief into "the long one" and "the short four" produces two displays for one list, which reads as arbitrary because it is.
+</Callout>
+
+## The tie-breaks
+
+When two rows above both look defensible, these resolve it.
+
+- **Peer attributes are a table; hierarchical attributes are a list.** This is the one that separates the two most-confused rows, and it is a question about the *reader*: would they scan an attribute down a column to compare items (peers → table), or read each item as a name with its qualifiers attached (hierarchical → list)? Three items with `key`, `name`, `theme` are a list — the key marks and the theme glosses the name. Three items with `mode`, `style`, `rationale` are a table — you read the style column.
+- **A shared attribute set beats visual weight.** Four items with the same three slots are a table even when there are only four of them and the section looks sparse. Sparse is a spacing problem, not a display problem.
+- **A per-item action forces cards.** The moment each item needs its own button or link, a table row has nowhere correct to put it, and the set is cards.
+- **One item is never a grid.** A single entity's attributes are a field grid inside its [`DataSection`](/docs/components/data-section). A one-cell card grid is a card with extra steps.
+- **The display never demotes its content.** A display that pushes the item's most substantive content down the type scale is the wrong display. A card's supporting text sits below body; a table's body data is **body text in every column**, with de-emphasis carried by `--text-muted` alone. If the pick costs the content two type steps, re-pick.
+- **If two still hold, the decision is underspecified.** That is a gap in this page, not a judgment call to make locally. File it.
+
+## State shells
+
+Every display above sits inside one of the four [`DataView`](/docs/components/data-view) shells, which own the states the display itself does not — **error → loading → empty → content**, resolved in that precedence order.
+
+| Display | Shell |
+|---|---|
+| Table | `TableView` |
+| Card grid / list | `ListView` |
+| Field grid, or a `DataSection` stack | `ProfileView` |
+| Kanban columns | `BoardView` |
+
+Reach for the shell before hand-rolling a `loading &&` ternary and an empty paragraph. That pairing is the drift the family exists to absorb.
+
+## Worked cases
+
+Each of these shipped, each was defensible in isolation, and together they read as arbitrary — so these are what the rules above reject. The failure mode is a plausible-but-wrong pick, which means the "don't" cases carry more weight than the "do" cases.
+
+### A fixed attribute set rendered as a card grid
+
+Four expression modes — `spacing`, `borderRadius`, `elevation`, `motion`, each with a mode and a rationale — rendered as a 2-up card grid.
+
+**Why it's wrong:** four items, one attribute set, no per-item action. That is the table row of the decision table. The card grid also dropped the rationale — the item's most substantive content — two type steps below the surrounding body text, which the *display never demotes its content* tie-break rejects on its own.
+
+**Correct:** a Mode / Style / Description table.
+
+### One homogeneous list split across two displays
+
+A five-attribute brief rendered as one full-width card plus a 2-up card grid of the remaining four.
+
+**Why it's wrong:** the split was by value length and nothing else. One homogeneous set, one display.
+
+**Correct:** one Attribute / Direction / Description table covering all five.
+
+### A per-item status list rendered as one banner
+
+A readiness checklist drawn as a single bordered, tinted box with every item's pass-or-fail status inside it.
+
+**Why it's wrong:** a banner is *one status assertion about the surrounding surface*. A per-item status list is items with a status attribute — a list with a trailing badge, or a table with a status column. The hand-rolled chrome compounded it: a bordered, tinted box is [`Card`](/docs/components/card), not a `<div>` carrying a `border` and a `backgroundColor`.
+
+**Correct:** [`InteractiveListItem`](/docs/components/interactive-list-item) rows in a `Stack`, each with a leading status icon and a trailing [`Badge`](/docs/components/badge).
+
+## Enforcement
+
+> Advisory only — not CI-asserted.
+
+**This standard is review-enforced, and a lint rule for the choice itself is not feasible.** The selecting input is the shape of the *data*, which is not in the AST. `<Grid><Card/></Grid>` is the correct display for peer entities each carrying an action and the wrong one for a fixed key→value set — and the two are indistinguishable in the JSX. A rule keyed on the markup would fire on both or on neither.
+
+What *is* mechanically checkable is narrower, and lives in the consuming repo: a hand-rolled bordered box where `Card` exists, an inline uppercase micro-label where `Field` exists, a raw `<table>` where `Table` exists. Those are component-substitution rules — sound regardless of the data behind them — and they are gated per-repo (`no-inline-microlabel`, `no-raw-table`, `no-raw-filterbar-stack` in the portal's `eslint.config.mjs`). They catch the chrome. They never catch the choice.
+
+## Related
+
+- [Content Rhythm](/docs/build-standards/content-rhythm) — the spacing between whatever this page selected.
+- [Composition Layers](/docs/build-standards/composition-layers) — which layer the selected display sits in.
+- [Slot Vocabulary](/docs/build-standards/slot-vocabulary) — the slot names inside it, and `Tag` vs `Badge` for a per-item status.
+- [Headings](/docs/build-standards/headings) — the heading role above a `DataSection`.
+- [Page Grid](/docs/build-standards/page-grid) — the horizontal width the display is laid out within.
