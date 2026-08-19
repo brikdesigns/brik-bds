@@ -12,6 +12,7 @@ import './DatePicker.css';
 // ─── Types ──────────────────────────────────────────────────────────
 
 export type DatePickerSize = 'sm' | 'md' | 'lg';
+export type DatePickerPrecision = 'day' | 'month';
 
 export interface DatePickerProps {
   /** Selected date value */
@@ -20,6 +21,12 @@ export interface DatePickerProps {
   onChange?: (date: Date | null) => void;
   /** Size variant matching BDS form components */
   size?: DatePickerSize;
+  /**
+   * Selection granularity. `'day'` (default) renders the day-grid calendar.
+   * `'month'` renders a 12-month grid with year navigation and snaps
+   * `onChange` to the first of the selected month.
+   */
+  precision?: DatePickerPrecision;
   /** Optional label */
   label?: string;
   /** Helper text below input */
@@ -80,12 +87,35 @@ function formatDate(date: Date): string {
   });
 }
 
+function formatMonthYear(date: Date): string {
+  return date.toLocaleDateString('en-US', {
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
 function isDateDisabled(date: Date, minDate?: Date, maxDate?: Date): boolean {
   if (minDate && date < new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate())) {
     return true;
   }
   if (maxDate && date > new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate())) {
     return true;
+  }
+  return false;
+}
+
+// A month is disabled only when its *entire* span falls outside the
+// min/max range — a month straddling the boundary stays selectable.
+function isMonthDisabled(year: number, month: number, minDate?: Date, maxDate?: Date): boolean {
+  const monthStart = new Date(year, month, 1);
+  const monthEnd = new Date(year, month + 1, 0);
+  if (minDate) {
+    const min = new Date(minDate.getFullYear(), minDate.getMonth(), minDate.getDate());
+    if (monthEnd < min) return true;
+  }
+  if (maxDate) {
+    const max = new Date(maxDate.getFullYear(), maxDate.getMonth(), maxDate.getDate());
+    if (monthStart > max) return true;
   }
   return false;
 }
@@ -220,6 +250,104 @@ function Calendar({
   );
 }
 
+// ─── MonthGrid Sub-component ────────────────────────────────────────
+
+function MonthGrid({
+  value,
+  onChange,
+  minDate,
+  maxDate,
+  onClose,
+}: {
+  value: Date | null;
+  onChange: (date: Date) => void;
+  minDate?: Date;
+  maxDate?: Date;
+  onClose: () => void;
+}) {
+  const [viewYear, setViewYear] = useState(() => (value ?? new Date()).getFullYear());
+
+  const prevYear = useCallback(() => {
+    setViewYear((y) => y - 1);
+  }, []);
+
+  const nextYear = useCallback(() => {
+    setViewYear((y) => y + 1);
+  }, []);
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLDivElement>) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    },
+    [onClose]
+  );
+
+  return (
+    <div
+      className="bds-date-picker__calendar"
+      onKeyDown={handleKeyDown}
+    >
+      {/* Header: year nav */}
+      <div className="bds-date-picker__calendar-header">
+        <button
+          type="button"
+          className="bds-date-picker__nav-button"
+          onClick={prevYear}
+          aria-label="Previous year"
+        >
+          ‹
+        </button>
+        <span className="bds-date-picker__month-label">{viewYear}</span>
+        <button
+          type="button"
+          className="bds-date-picker__nav-button"
+          onClick={nextYear}
+          aria-label="Next year"
+        >
+          ›
+        </button>
+      </div>
+
+      {/* Month grid */}
+      <div
+        className="bds-date-picker__month-grid"
+        role="grid"
+        aria-label={`${viewYear}`}
+      >
+        {MONTHS.map((monthName, monthIndex) => {
+          const monthDate = new Date(viewYear, monthIndex, 1);
+          const selected = value
+            ? value.getFullYear() === viewYear && value.getMonth() === monthIndex
+            : false;
+          const disabled = isMonthDisabled(viewYear, monthIndex, minDate, maxDate);
+
+          return (
+            <button
+              key={monthName}
+              type="button"
+              className={bdsClass(
+                'bds-date-picker__month-cell',
+                selected && 'bds-date-picker__month-cell--selected',
+              )}
+              disabled={disabled}
+              onClick={() => {
+                if (!disabled) onChange(monthDate);
+              }}
+              aria-label={formatMonthYear(monthDate)}
+              aria-selected={selected}
+              role="gridcell"
+            >
+              {monthName.slice(0, 3)}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 // ─── DatePicker Component ───────────────────────────────────────────
 
 /**
@@ -234,6 +362,7 @@ function Calendar({
  * <DatePicker size="sm" label="Start date" placeholder="Select a date" />
  * <DatePicker size="md" label="Due date" helperText="Task must be completed by this date" />
  * <DatePicker size="lg" label="Appointment" error="Date is required" />
+ * <DatePicker precision="month" label="Reporting month" />
  * ```
  *
  * @summary Themed date picker (Radix Popover + calendar grid)
@@ -244,6 +373,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
       value = null,
       onChange,
       size = 'md',
+      precision = 'day',
       label,
       helperText,
       error,
@@ -308,7 +438,11 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
               }
             >
               <span className={value ? undefined : 'bds-date-picker__placeholder'}>
-                {value ? formatDate(value) : placeholder}
+                {value
+                  ? precision === 'month'
+                    ? formatMonthYear(value)
+                    : formatDate(value)
+                  : placeholder}
               </span>
               <span className="bds-date-picker__caret" aria-hidden>
                 ▾
@@ -321,15 +455,25 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
               sideOffset={4}
               align="start"
               style={{ outline: 'none' }}
-              aria-label="Choose date"
+              aria-label={precision === 'month' ? 'Choose month' : 'Choose date'}
             >
-              <Calendar
-                value={value}
-                onChange={handleSelect}
-                minDate={minDate}
-                maxDate={maxDate}
-                onClose={() => setOpen(false)}
-              />
+              {precision === 'month' ? (
+                <MonthGrid
+                  value={value}
+                  onChange={handleSelect}
+                  minDate={minDate}
+                  maxDate={maxDate}
+                  onClose={() => setOpen(false)}
+                />
+              ) : (
+                <Calendar
+                  value={value}
+                  onChange={handleSelect}
+                  minDate={minDate}
+                  maxDate={maxDate}
+                  onClose={() => setOpen(false)}
+                />
+              )}
             </Popover.Content>
           </Popover.Portal>
         </Popover.Root>

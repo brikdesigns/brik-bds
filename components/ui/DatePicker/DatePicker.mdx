@@ -8,7 +8,7 @@ import * as Stories from './DatePicker.stories';
 
 <ComponentLinks slug="date-picker" />
 
-Themed date picker for forms — a trigger button that opens a calendar popover for single-date selection. Built on [Radix Popover](https://www.radix-ui.com/primitives/docs/components/popover) for portal + focus-management behavior; BDS owns the visual layer (trigger styling, day grid, hover / selected / today states). Fully controlled — the consumer manages the `value` externally and receives updates via `onChange`.
+Themed date picker for forms — a trigger button that opens a calendar popover for single-date or single-month selection. Built on [Radix Popover](https://www.radix-ui.com/primitives/docs/components/popover) for portal + focus-management behavior; BDS owns the visual layer (trigger styling, day/month grid, hover / selected / today states). Fully controlled — the consumer manages the `value` externally and receives updates via `onChange`.
 
 ## Playground
 
@@ -16,9 +16,13 @@ Themed date picker for forms — a trigger button that opens a calendar popover 
 
 ## Variants
 
-DatePicker has no semantic-variant axis — all variation (size, label, helper text, error, min/max constraints, disabled state) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
+### Month precision
 
-<Canvas of={Stories.Default} />
+<Canvas of={Stories.Month} />
+
+`precision="month"` (default `'day'`) swaps the day grid for a 12-month grid with year navigation — no day-of-week header, no day grid. Selecting a month calls `onChange` with a `Date` snapped to the first of that month (day `1`, time zeroed); the trigger label formats as `"<Month> <Year>"`. `minDate`/`maxDate` gate at month granularity — a month is disabled only when its entire span falls outside the range.
+
+All other variation (size, label, helper text, error, disabled state) is exposed via Controls on the canvas above rather than a dedicated story. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
 - **`sm`** — 32px trigger height, 14px body
 - **`md`** — 40px trigger height, 16px body (default)
@@ -32,6 +36,6 @@ DatePicker has no semantic-variant axis — all variation (size, label, helper t
 
 > **Note** — DatePicker is fully controlled. Consumers track the selected `Date | null` externally (`useState`, form library, store, URL param) and pass `value` + `onChange` to receive update events. There is no internal value state.
 
-> **Note** — `minDate` / `maxDate` constrain which days are clickable in the grid. The constraint is inclusive at day-granularity (time-of-day on the boundary dates is ignored). Days outside the range render with `disabled` styling and ignore click events.
+> **Note** — `minDate` / `maxDate` constrain which days (or, in `precision="month"`, months) are selectable. The constraint is inclusive at the picker's granularity (time-of-day on the boundary dates is ignored). Out-of-range cells render with `disabled` styling and ignore click events.
 
 > **Note** — The error state is announced via `role="alert"` on the helper text and `aria-invalid="true"` on the trigger. Setting `error` to a non-empty string also suppresses `helperText` so the two never co-render.
