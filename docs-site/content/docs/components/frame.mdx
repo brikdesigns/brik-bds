@@ -62,15 +62,21 @@ When no preset fits, `customRatio` accepts any CSS `aspect-ratio` string.
 
 ## API
 
+{/* props-check: FrameProps @ components/ui/Frame/Frame.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `ratio` | `'1-1' \| '3-2' \| '2-3' \| '4-3' \| '3-4' \| '4-5' \| '16-9' \| '9-16' \| '21-9' \| 'square' \| 'photo-landscape' \| 'photo-portrait' \| 'cinema'` | `'4-3'` |
-| `customRatio` | `string` (CSS `aspect-ratio`) | — |
-| `fit` | `'cover' \| 'contain' \| 'fill' \| 'none'` | `'cover'` |
-| `as` | element type | `'div'` |
+| `ratio` | `FrameRatio` | `'4-3'` |
+| `customRatio` | `string` | — |
+| `fit` | `FrameFit` | `'cover'` |
+| `as` | `ElementType` | `'div'` |
 | `children` | `ReactNode` | — |
 
-Plus all standard HTML attributes for the rendered element.
+Plus all standard HTML attributes for the rendered element. `customRatio` takes a
+CSS `aspect-ratio` value and overrides `ratio` when both are set.
+
+`FrameRatio` carries four deprecated mode-words alongside the ratios and semantic
+aliases — `portrait`, `landscape`, `wide`, and `ultrawide`. They still compile;
+use `3-4`, `4-3`, `16-9`, and `21-9` instead.
 
 ## Related
 
