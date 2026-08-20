@@ -223,10 +223,42 @@ if [ -z "$ISSUE_REF" ] && [ "$NO_ISSUE" != "1" ]; then
 fi
 
 if [ -n "$ISSUE_REF" ]; then
-  check_issue_overlap "$ISSUE_REF"
+  # Guarded, and the guard is load-bearing in BOTH directions (brik-llm#2422,
+  # ported here by brik-llm#2442).
+  #
+  # Findings return 0 — an overlap warns and proceeds, which is #1549/brik-llm#1692
+  # and must not regress. But rc 4 (no such issue) and rc 5 (unreadable) mean the
+  # gate DID NOT RUN, and creating the worktree on that is the fail-open. Until
+  # this landed, the bare call read an unanswered lookup as an all-clear — so a
+  # dead network or an expired token created the branch with no check at all,
+  # which is the brik-llm#1485 duplicate-work class the gate exists to stop.
+  overlap_rc=0
+  check_issue_overlap "$ISSUE_REF" || overlap_rc=$?
+  if [ "$overlap_rc" -ne 0 ]; then
+    echo ""
+    echo -e "${RED}✗ Refusing to create a worktree — the overlap gate could not run.${NC}"
+    echo ""
+    echo -e "${RED}  Worktrees isolate files, not intent. Without this check nothing${NC}"
+    echo -e "${RED}  catches a parallel session on the same ticket (brik-llm#1485,${NC}"
+    echo -e "${RED}  where #1525 was built twice).${NC}"
+    echo ""
+    case "$overlap_rc" in
+      2) echo -e "${YELLOW}  The reference could not be parsed. Use 1525 or owner/repo#1525.${NC}" ;;
+      4) echo -e "${YELLOW}  That issue does not exist in the repo the number resolved against.${NC}"
+         echo -e "${YELLOW}  Check the number, or pass the cross-repo form owner/repo#N.${NC}" ;;
+      5) echo -e "${YELLOW}  The read failed rather than came back empty — usually transient.${NC}"
+         echo -e "${YELLOW}  Re-run the same command; it retries once on its own first.${NC}" ;;
+      *) echo -e "${YELLOW}  Unexpected gate status ${overlap_rc}.${NC}" ;;
+    esac
+    echo ""
+    echo -e "${YELLOW}  Deliberately proceeding without the gate: re-run with --no-issue${NC}"
+    echo -e "${YELLOW}  (which also forgoes the session size budget).${NC}"
+    exit 1
+  fi
   # Catches the shape the number-keyed check cannot see: another session filed
   # its OWN issue for the same problem, so both claims are satisfied while the
-  # work is identical (#1663).
+  # work is identical (#1663). Advisory — it never refuses, and never aborts on
+  # an unreadable title either (see the `|| return 0` in check_title_overlap).
   check_title_overlap "$ISSUE_REF"
   check_ticket_path_overlap "$ISSUE_REF"
   # Guarded: check_session_budget returns 1 to refuse; an unguarded call under
