@@ -122,6 +122,7 @@ By default duplicates are blocked case-insensitively. Set `allowDuplicates` if d
 
 ## API
 
+{/* props-check: AddableTextListProps @ components/ui/AddableTextList/AddableTextList.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `values` | `string[]` *(required)* | — |
@@ -129,9 +130,9 @@ By default duplicates are blocked case-insensitively. Set `allowDuplicates` if d
 | `label` | `string` | — |
 | `helperText` | `string` | — |
 | `placeholder` | `string` | — |
-| `addLabel` | `string` | `'Add'` |
+| `addLabel` | `string` | `'Add New'` |
 | `emptyLabel` | `string` | — |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `size` | `AddableTextListSize` | `'md'` |
 | `disabled` | `boolean` | `false` |
 | `maxItems` | `number` | unlimited |
 | `allowDuplicates` | `boolean` | `false` |

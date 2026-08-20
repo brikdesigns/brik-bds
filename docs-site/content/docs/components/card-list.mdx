@@ -86,14 +86,16 @@ Four sizes — `sm`, `md` (default), `lg`, `xl`. Match the visual density of the
 
 ## API
 
+{/* props-check: CardListProps @ components/ui/CardList/CardList.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` |
-| `gap` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` |
-| `fitContent` | `boolean` (horizontal only) | `false` |
+| `orientation` | `CardListOrientation` | `'vertical'` |
+| `gap` | `CardListGap` | `'lg'` |
+| `fitContent` | `boolean` | `false` |
 | `children` | `ReactNode` *(required)* | — |
 
-Plus standard `<ul>` HTML attributes.
+`fitContent` only applies to the horizontal orientation. Plus standard `<ul>` HTML
+attributes.
 
 ## Related
 

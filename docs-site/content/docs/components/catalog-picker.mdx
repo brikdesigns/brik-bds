@@ -112,6 +112,7 @@ Consumers persist the full array as a single JSONB column (e.g. `company_profile
 
 ## API
 
+{/* props-check: CatalogPickerProps @ components/ui/CatalogPicker/CatalogPicker.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `catalog` | `readonly CatalogEntry[]` *(required)* | — |
@@ -121,16 +122,19 @@ Consumers persist the full array as a single JSONB column (e.g. `company_profile
 | `helperText` | `string` | — |
 | `searchPlaceholder` | `string` | — |
 | `descriptionPlaceholder` | `string` | — |
-| `addLabel` | `string` | `'Add'` |
-| `removeLabel` | `string` | auto |
+| `addLabel` | `string` | `'Add New'` |
+| `removeLabel` | `string` | `'Remove entry'` |
 | `emptyLabel` | `string` | — |
 | `emptyDescriptionLabel` | `string` | `'No description'` |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `size` | `AddableEntryListSize` | `'md'` |
 | `disabled` | `boolean` | `false` |
 | `strict` | `boolean` | `false` |
 | `maxItems` | `number` | — |
 | `descriptionRows` | `number` | `2` |
 | `className` | `string` | — |
+
+`AddableEntryListSize` is shared with the rest of the addable-list family and is
+re-exported from this module as `CatalogPickerSize`.
 
 ### Entry shapes
 
