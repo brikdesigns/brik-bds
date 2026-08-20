@@ -31,8 +31,16 @@ const TOKEN_SOURCES = [
   'tokens/gap-fills.css',
 ];
 
-// Standalone breakpoint primitives — numeric values consumed in media-query
-// math, never as `var(--web)`. Not worth a prefix; documented as exceptions.
+// Standalone breakpoint primitives — unitless Figma values that carry no
+// purpose slot. Deliberate exceptions, not a rename target: measured 2026-08-20
+// they have zero `var()` consumers, and neither does the `--breakpoint-*`
+// family a rename would move them to, so renaming one dead family into another
+// buys nothing (brik-bds#1910 axis 3). Whether BDS ships breakpoint tokens at
+// all is an open question for the naming ADR.
+//
+// The earlier note here said they were "consumed in media-query math". That was
+// never verified and is not true — nothing consumes them. Corrected rather than
+// deleted because the false rationale is what made this look settled.
 const EXCEPTIONS = new Set(['--web', '--tablet', '--mobile']);
 
 const widgetSrc = readFileSync(
