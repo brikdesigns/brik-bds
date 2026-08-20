@@ -119,17 +119,20 @@ The Component tier is unchanged — `--bds-{component}-{property}`, per [ADR-014
 
 ### Named exceptions
 
-These slots are drift that still ships. They are in the registry today and are **renames owed**, tracked on [#1910](https://github.com/brikdesigns/brik-bds/issues/1910). Do not reference them in new work.
+Two kinds of thing live outside the tables above. Both are in the registry today; neither should be referenced in new work.
+
+**Renames owed** — tracked on [#1910](https://github.com/brikdesigns/brik-bds/issues/1910), sequenced behind the naming ADR.
 
 {/* lint-mdx-tokens-ignore-start — this table is the retired/drift list by definition */}
 
 | Shipping name | Why it's drift | Use instead |
 |---|---|---|
-| `--web`, `--tablet`, `--mobile` | No slot at all — the exact shape the callout above retires. Unitless duplicates, zero `var()` references in `dist/` or `components/`. | `--breakpoint-web` / `-tablet` / `-mobile` |
 | `--tooltip-background`, `--tooltip-text` | Component tier without the mandatory `--bds-` prefix — the retired `--{component}-{prop}` pattern. | `--bds-tooltip-*` |
 | `--easing-ease-in`, `--easing-ease-out`, `--easing-ease-in-out` | Style Dictionary's primitive export. A second name for one concept, at *different* curve values, and the `easing-ease-` stutter is the tell. Zero references in `components/`; `--ease-*` carries all 70. | `--ease-in` / `--ease-out` / `--ease-in-out` |
 
 {/* lint-mdx-tokens-ignore-end */}
+
+**Slotless by exception** — `--web`, `--tablet`, `--mobile` ([tokens/figma-tokens.css:319-321](https://github.com/brikdesigns/brik-bds/blob/main/tokens/figma-tokens.css)) carry no purpose slot and are a deliberate carve-out, not a rename target: they are unitless Figma primitives, and the `--breakpoint-*` family that would receive a rename has no consumers either. Measured on 2026-08-20, both families are unconsumed — zero `var()` references to `--web`/`--tablet`/`--mobile` **or** `--breakpoint-*` anywhere in brik-bds, brik-client-portal, or brikdesigns. Whether BDS should ship breakpoint tokens at all is an open question for the naming ADR; until it answers, renaming one dead family into another buys nothing. Mirrored in `EXCEPTIONS` at `scripts/__tests__/inspect-widget-tokens.test.mjs`.
 
 <Callout type="info">
   **Step vocabularies are not settled here.** Nine slots draw from more than one — `--border-width-*` carries numeric (`100`), t-shirt (`md`), *and* `thin`/`standard`/`bold`; `--duration-*` carries both `200` and `fast`. A second kind of split the census does **not** flag, because both halves are t-shirt: `--icon-*` spells the same step `tiny` in one place and `2xs` in another. Which scale is canonical per family is [#1910](https://github.com/brikdesigns/brik-bds/issues/1910) axis 5, decided in the naming ADR. Run `npm run lint-token-purpose-slots -- --census` for the current measurement.
