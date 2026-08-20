@@ -1,0 +1,76 @@
+name: Bump PR Guard Check
+
+# Locks the check that stops propagate.sh opening a second PR for a bump the
+# consumer is already reviewing.
+#
+# propagate reads origin/<base> to decide whether a consumer is behind. An
+# unmerged PR never moves that ref, and the branch name is date-stamped
+# (bds-update/<date>-v<version>), so the next unattended run collides with
+# nothing and opens an identical PR. brikdesigns #981/#982 (v0.165.0) and
+# #475/#476 (v0.93.2) are the pairs that landed — whichever went green first
+# merged and the other sat open with an obsolete diff. brik-bds#1918.
+#
+# Cheap and hermetic: bash only, stubbed PR listings, no gh, no network. It
+# covers the match decision, not a real propagate round-trip — that needs a
+# published release and a consumer repo, and is called out in the test header.
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/lib/bump-pr-guard.sh'
+      - 'scripts/lib/tests/test-bump-pr-guard.sh'
+      - 'scripts/propagate.sh'
+      - '.github/workflows/bump-pr-guard-check.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/lib/bump-pr-guard.sh'
+      - 'scripts/lib/tests/test-bump-pr-guard.sh'
+      - 'scripts/propagate.sh'
+      - '.github/workflows/bump-pr-guard-check.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: bump-pr-guard-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  duplicate-pr-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Duplicate-bump-PR contract
+        run: bash scripts/lib/tests/test-bump-pr-guard.sh
+
+      # A green contract test proves nothing if propagate stops calling it. Both
+      # tracks open PRs, so both need the guard — the submodule track keyed on
+      # the BDS short SHA, the npm track on the version.
+      - name: propagate.sh still calls the guard on both tracks
+        run: |
+          grep -q 'lib/bump-pr-guard.sh' scripts/propagate.sh \
+            || { echo "::error::propagate.sh no longer sources bump-pr-guard.sh"; exit 1; }
+          grep -q 'existing_bump_pr "-\$SHORT_HASH"' scripts/propagate.sh \
+            || { echo "::error::submodule track no longer guards on \$SHORT_HASH"; exit 1; }
+          grep -q 'existing_bump_pr "-v\$BDS_VERSION"' scripts/propagate.sh \
+            || { echo "::error::npm track no longer guards on \$BDS_VERSION"; exit 1; }
+
+      # The guard reads `<headRefName><TAB><url>` lines. If the gh query in
+      # open_prs_of drifts from that shape it silently matches nothing and the
+      # duplicate returns looking exactly like a pass.
+      - name: the PR query still emits the shape the guard parses
+        run: |
+          grep -q 'json headRefName,url' scripts/propagate.sh \
+            || { echo "::error::open_prs_of no longer requests headRefName,url"; exit 1; }
+          grep -qF '\(.headRefName)\t\(.url)' scripts/propagate.sh \
+            || { echo "::error::open_prs_of no longer emits TAB-separated head/url"; exit 1; }
+
+      - name: shellcheck
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+          # SC2148: sourced library, no shebang contract. SC1091: sourced at runtime.
+          shellcheck -e SC2148 scripts/lib/bump-pr-guard.sh
+          shellcheck -e SC1091 scripts/lib/tests/test-bump-pr-guard.sh
