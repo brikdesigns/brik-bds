@@ -26,7 +26,7 @@ Every BDS token answers six independent questions. Without distinct vocabulary f
 
 ## Anatomy
 
-Token names follow one of two parallel formulas — an **intent** form and a **scoped-intent** form:
+**Color** tokens follow one of two parallel formulas — an **intent** form and a **scoped-intent** form. Everything that is not a color follows a third: see [Non-color anatomy](#non-color-anatomy).
 
 ```
 Intent:         --{purpose}-{role}[-{modifier}][-{state}]
@@ -67,6 +67,75 @@ Never preemptively. A role starts as a **single-level token set** — one token,
 {/* lint-mdx-tokens-ignore-end */}
 
 The pair earns its place only when a second emphasis tier actually ships alongside the first; until then, `--text-secondary` / `--text-muted` already cover generic de-emphasis. Scoped tokens never stack a hierarchy modifier under a context modifier either — the (text, surface) pairing carries emphasis implicitly, so `--text-service-brand-on-dark` is complete without a `-primary`.
+
+## Non-color anatomy
+
+Half the registry is not a color. 325 of the 701 token names in `dist/tokens.css` sit outside the color `purpose` list above — `--font-size-100`, `--gap-md`, `--ease-spring`. **They are a second legitimate formula, not drift.** The distinction the color form draws between *purpose* and *role* does not apply, because there is no hue to place: a length, a duration, or a weight is fully described by the property it feeds and the step on that property's scale.
+
+```
+Primitive:  --{property}-{step}      --font-size-100, --border-radius-400
+Semantic:   --{role}-{step}          --gap-md, --heading-xl, --ease-spring
+```
+
+The first slot is a **CSS property name** at the Primitive tier and a **semantic role** at the Semantic tier. Both may be hyphenated (`font-line-height`, `content-width`) — the slot is the whole property or role name, not the first segment.
+
+### Primitive tier property scales
+
+| Slot | Step vocabulary | Feeds |
+|---|---|---|
+| `--font-size-*` | numeric (`100` = 16px) | `font-size` |
+| `--font-weight-*` | word (`semibold`) | `font-weight` |
+| `--font-family-*` | role (`body`, `heading`) | `font-family` |
+| `--font-line-height-*` | word (`normal`, `snug`) | `line-height` |
+| `--font-casing-*` | word (`uppercase`) | `text-transform` |
+| `--letter-spacing-*` | word (`wide`) | `letter-spacing` |
+| `--space-*` | numeric (`400` = 16px) | any spacing property |
+| `--size-*` | numeric + `pill` / `circle` | width / height |
+| `--border-radius-*` | numeric + t-shirt | `border-radius` |
+| `--border-width-*` | numeric + t-shirt | `border-width` |
+| `--shadow-blur-*` · `--shadow-offset-*` · `--shadow-spread-*` | numeric | the parts of a `box-shadow` |
+| `--blur-radius-*` | t-shirt | `filter: blur()` |
+| `--duration-*` · `--delay-*` · `--iteration-*` | numeric | `transition` / `animation` |
+| `--breakpoint-*` | word (`desktop`) | media queries |
+| `--aspect-*` | ratio (`16-9`) | `aspect-ratio` |
+
+### Semantic tier roles
+
+| Slot | Step vocabulary | What it names |
+|---|---|---|
+| `--gap-*` · `--padding-*` · `--gutter-*` | t-shirt | spacing by intent, not by pixel step |
+| `--heading-*` · `--display-*` · `--body-*` · `--label-*` · `--subtitle-*` | t-shirt | the type ramp per text role |
+| `--icon-*` | t-shirt | icon sizes, aligned to the type ramp |
+| `--shadow-*` · `--box-shadow-*` | t-shirt | elevation |
+| `--ease-*` | word (`spring`) | easing curves |
+| `--content-width-*` · `--measure-*` | t-shirt | layout and line-length ceilings |
+| `--state-*` | state (`hover`, `disabled`) | interaction overlays and opacities |
+
+The Component tier is unchanged — `--bds-{component}-{property}`, per [ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md).
+
+<Callout type="warn">
+  **Two first segments carry both formulas.** `--border-*` is 20 color tokens *and* 38 length tokens (`--border-radius-*`, `--border-width-*`); `--shadow-*` is elevation *and* the primitive parts (`--shadow-blur-*`, `--shadow-offset-*`, `--shadow-spread-*`). Match on the longest slot, never the first segment — `--border-radius-100` is a length, not a color.
+</Callout>
+
+### Named exceptions
+
+These slots are drift that still ships. They are in the registry today and are **renames owed**, tracked on [#1910](https://github.com/brikdesigns/brik-bds/issues/1910). Do not reference them in new work.
+
+{/* lint-mdx-tokens-ignore-start — this table is the retired/drift list by definition */}
+
+| Shipping name | Why it's drift | Use instead |
+|---|---|---|
+| `--web`, `--tablet`, `--mobile` | No slot at all — the exact shape the callout above retires. Unitless duplicates, zero `var()` references in `dist/` or `components/`. | `--breakpoint-web` / `-tablet` / `-mobile` |
+| `--tooltip-background`, `--tooltip-text` | Component tier without the mandatory `--bds-` prefix — the retired `--{component}-{prop}` pattern. | `--bds-tooltip-*` |
+| `--easing-ease-in`, `--easing-ease-out`, `--easing-ease-in-out` | Style Dictionary's primitive export. A second name for one concept, at *different* curve values, and the `easing-ease-` stutter is the tell. Zero references in `components/`; `--ease-*` carries all 70. | `--ease-in` / `--ease-out` / `--ease-in-out` |
+
+{/* lint-mdx-tokens-ignore-end */}
+
+<Callout type="info">
+  **Step vocabularies are not settled here.** Nine slots draw from more than one — `--border-width-*` carries numeric (`100`), t-shirt (`md`), *and* `thin`/`standard`/`bold`; `--duration-*` carries both `200` and `fast`. A second kind of split the census does **not** flag, because both halves are t-shirt: `--icon-*` spells the same step `tiny` in one place and `2xs` in another. Which scale is canonical per family is [#1910](https://github.com/brikdesigns/brik-bds/issues/1910) axis 5, decided in the naming ADR. Run `npm run lint-token-purpose-slots -- --census` for the current measurement.
+</Callout>
+
+This section is gated: `npm run lint-token-purpose-slots` fails when a slot ships in `dist/tokens.css` that is neither named above nor dispositioned as drift. That is the only thing keeping the tables from going stale — a color-only formula describing half a system is exactly how #1910 started.
 
 ## Color modifiers
 

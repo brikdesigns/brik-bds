@@ -1,0 +1,65 @@
+name: Token Purpose Slot Check
+
+# Fails the build when a purpose slot ships in `dist/tokens.css` that is neither
+# registered in the gate nor named in docs/primitives/token-anatomy.
+#
+# Why this needs a gate: token-anatomy documented ONE formula — the colour
+# intent form, whose `purpose` list is page/surface/background/text/border/color
+# — while 325 of the 701 shipping token names sit outside it (`--font-size-100`,
+# `--gap-md`, `--ease-spring`). Nobody had decided whether those were drift or a
+# second formula, so #1910's naming ADR was blocked on the question. The verdict
+# is now written down (§ Non-color anatomy); this is what stops it rotting back.
+#
+# This is NOT #1910 AC#5's naming gate. That one rejects a name whose *segments*
+# fall outside the ADR and cannot exist until the ADR does. This one answers the
+# narrower already-decided question: does the doc still name every slot that
+# ships?
+#
+# Issue: brikdesigns/brik-bds#1910 (axis 3 — token purpose slots)
+# Sibling: token-shadow-check.yml (one NAME declared twice, not one SLOT)
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: token-purpose-slot-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  token-purpose-slot-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # `dist/` is gitignored, so the gate has nothing to read until the
+      # registry is built. Same cheap path token-shadow-check.yml uses — a
+      # concatenation, not the full `build:lib`.
+      - name: Build dist tokens
+        run: npm run build:dist-tokens
+
+      - name: Token purpose slot check
+        run: npm run lint-token-purpose-slots -- --census
+
+      # The gate's own proof. `assertions-must-be-proven-to-fail`: these cases
+      # plant an unregistered slot and require a non-zero exit, so a gate that
+      # silently stops detecting anything fails here rather than going quietly
+      # green.
+      - name: Gate self-test (proves it fails)
+        run: npx vitest run scripts/__tests__/lint-token-purpose-slots.test.mjs
