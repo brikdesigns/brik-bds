@@ -33,6 +33,8 @@ set -euo pipefail
 
 # shellcheck source=scripts/lib/mirror-widgets.sh
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/mirror-widgets.sh"
+# shellcheck source=scripts/lib/bump-pr-guard.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/bump-pr-guard.sh"
 
 # ─── Configuration ────────────────────────────────────────────────
 BDS_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -134,6 +136,15 @@ frozen_reason() {
 # push, fetch, submodule update). Local ops (checkout/add/status/branch/…) stay
 # on plain git so we don't spawn an agent for nothing. Off the mini, the desktop
 # agent works — call git directly.
+# Lists a consumer's OPEN PRs as `<headRefName><TAB><url>` — the input shape
+# existing_bump_pr (scripts/lib/bump-pr-guard.sh) reads. Run from the consumer
+# checkout so gh resolves the repo from that repo's own remote.
+open_prs_of() {
+  local path="$1"
+  (cd "$path" && gh pr list --state open --limit 100 \
+     --json headRefName,url --jq '.[] | "\(.headRefName)\t\(.url)"')
+}
+
 GIT_SIGN_HEADLESS="/Users/nickstanerson/Documents/GitHub/brik/brik-llm/operations/security/bin/git-sign-headless"
 git_signed() {
   if [ "$(hostname -s 2>/dev/null)" = "brik-mini" ] && [ -x "$GIT_SIGN_HEADLESS" ]; then
@@ -314,6 +325,17 @@ propagate_submodule() {
     return
   fi
 
+  # An unmerged PR from a previous run leaves origin/<base> untouched, so the
+  # commits-behind count above still says "behind" — and the date-stamped branch
+  # name means nothing collides. Without this the next day's run opens a second
+  # PR for the same SHA (#1918). Not a DEGRADED condition: skipping is correct.
+  local open_pr
+  if open_pr=$(existing_bump_pr "-$SHORT_HASH" open_prs_of "$path"); then
+    ok "$name already has an open PR for $SHORT_HASH — $open_pr"
+    echo ""
+    return
+  fi
+
   info "$name is $new_commits commits behind"
   # Neutralize closing-keywords BEFORE the changelog is shown or embedded: the
   # BDS commit subjects carry `closes #N` for BDS issues, but pasted into the
@@ -465,6 +487,17 @@ propagate_npm() {
     err "$name: refusing to propagate bds@$BDS_VERSION — it is OLDER than the consumer's current $current_version (downgrade)."
     err "  This usually means the brik-bds checkout was stale at run time. The version is now sourced from $BDS_REMOTE/$BDS_BRANCH; re-run once the intended release is on origin."
     DEGRADED=true
+    echo ""
+    return
+  fi
+
+  # Same hole as the submodule track: an unmerged bump PR does not move
+  # origin/<base>, so the version check above still says "behind" tomorrow, and
+  # the date-stamped branch name collides with nothing. brikdesigns #981/#982
+  # (v0.165.0) and #475/#476 (v0.93.2) are the duplicates this closes (#1918).
+  local open_pr
+  if open_pr=$(existing_bump_pr "-v$BDS_VERSION" open_prs_of "$path"); then
+    ok "$name already has an open PR for $BDS_VERSION — $open_pr"
     echo ""
     return
   fi
