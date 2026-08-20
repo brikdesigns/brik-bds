@@ -115,11 +115,12 @@ Pass `icon` for a leading visual. Required when `size="xs"` (icon-only).
 
 ## API
 
+{/* props-check: BadgeProps @ components/ui/Badge/Badge.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `status` | `'positive' \| 'warning' \| 'error' \| 'info' \| 'progress' \| 'brand'` | — |
-| `size` | `'xs' \| 'sm' \| 'md' \| 'lg'` | `'md'` |
-| `appearance` | `'solid' \| 'subtle'` | `'solid'` |
+| `status` | `BadgeStatus` | — |
+| `size` | `BadgeSize` | `'md'` |
+| `appearance` | `BadgeAppearance` | `'solid'` |
 | `icon` | `ReactNode` | — |
 | `children` | `ReactNode` | — |
 

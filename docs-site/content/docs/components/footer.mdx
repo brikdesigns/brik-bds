@@ -153,6 +153,7 @@ The canonical 4-column layout — Product, Resources, Company, Legal.
 
 ## API
 
+{/* props-check: FooterProps @ components/ui/Footer/Footer.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `logo` | `ReactNode` | — |
@@ -160,7 +161,7 @@ The canonical 4-column layout — Product, Resources, Company, Legal.
 | `columns` | `FooterColumn[]` | — |
 | `copyright` | `string` | — |
 | `socialLinks` | `ReactNode` | — |
-| `variant` | `'default' \| 'brand'` | `'default'` |
+| `variant` | `FooterVariant` | `'default'` |
 
 Plus standard `<footer>` HTML attributes.
 

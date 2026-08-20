@@ -79,15 +79,18 @@ The glyph is an inline SVG painted with `fill="currentColor"`, so it inherits th
 
 ## API
 
+{/* props-check: ServiceTagProps @ components/ui/ServiceTag/ServiceTag.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `category` | `'brand' \| 'marketing' \| 'information' \| 'product' \| 'back-office' \| 'service'` *(required)* | — |
-| `variant` | `'text' \| 'icon-text' \| 'icon'` | `'text'` |
-| `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `category` | `ServiceLine` *(required)* | — |
+| `variant` | `ServiceTagVariant` | `'text'` |
+| `size` | `ServiceTagSize` | `'md'` |
 | `label` | `string` | category default label |
 | `serviceName` | `string` | — |
 
-`category="service"` is a deprecated alias of `'back-office'`. Plus standard `<span>` HTML attributes.
+`ServiceTagVariant` adds `dot` alongside the three above — a colour-only marker with
+no label. `category="service"` is a deprecated alias of `'back-office'`. Plus standard
+`<span>` HTML attributes.
 
 ## Related
 

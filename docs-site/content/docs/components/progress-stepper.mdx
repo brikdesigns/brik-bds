@@ -109,17 +109,42 @@ Restrict navigation to sequential steps — clicking a future step beyond `activ
 
 ## API
 
+`ProgressStepperProps` is a discriminated union of two shapes, so `variant` selects
+which of `steps` / `count` is required. The shared props first:
+
+{/* props-check: CommonProgressStepperProps @ components/ui/ProgressStepper/ProgressStepper.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `variant` | `'steps' \| 'dots'` | `'steps'` |
-| `activeStep` | `number` (0-indexed) | — |
-| `steps` | `Array<{ label: string; description?: string }>` (steps variant) | — |
-| `count` | `number` (dots variant) | — |
+| `activeStep` | `number` *(required)* | — |
+| `size` | `ProgressStepperSize` | `'md'` |
 | `linear` | `boolean` | `false` |
-| `onStepClick` | `(step: number) => void` | — |
-| `size` | `'sm' \| 'md'` | `'md'` |
+| `onStepClick` | `(index: number) => void` | — |
 
-The `steps` and `count` props are mutually exclusive — `variant="steps"` requires `steps`, `variant="dots"` requires `count`.
+Then one of the two variant shapes:
+
+{/* props-check: StepsProgressStepperProps @ components/ui/ProgressStepper/ProgressStepper.tsx */}
+| Prop | Type | Default |
+|---|---|---|
+| `variant` | `'steps'` | `'steps'` |
+| `steps` | `ProgressStep[]` *(required)* | — |
+
+{/* props-check: DotsProgressStepperProps @ components/ui/ProgressStepper/ProgressStepper.tsx */}
+| Prop | Type | Default |
+|---|---|---|
+| `variant` | `'dots'` *(required)* | — |
+| `count` | `number` *(required)* | — |
+
+`activeStep` is zero-indexed. `steps` and `count` are mutually exclusive — the union
+makes passing the wrong one a type error rather than a runtime surprise.
+
+### ProgressStep
+
+```ts
+interface ProgressStep {
+  label: string;
+  description?: string;
+}
+```
 
 ## Related
 

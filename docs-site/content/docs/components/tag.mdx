@@ -101,15 +101,20 @@ Pass `icon` (left) or `trailingIcon` (right). Icon is **required** when `size="x
 
 ## API
 
+{/* props-check: TagProps @ components/ui/Tag/Tag.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `size` | `'xs' \| 'sm' \| 'md' \| 'lg'` | `'md'` |
-| `appearance` | `'solid' \| 'subtle'` | `'solid'` |
+| `size` | `TagSize` | `'md'` |
+| `appearance` | `TagAppearance` | `'solid'` |
 | `icon` | `ReactNode` | — |
 | `trailingIcon` | `ReactNode` | — |
 | `disabled` | `boolean` | `false` |
 | `children` | `ReactNode` | — |
-| ~~`onRemove`~~ | ~~`() => void`~~ | *(deprecated — use Chip)* |
+| `onRemove` | `() => void` | — |
+
+`onRemove` is deprecated and will be removed — use [Chip](/docs/components/chip),
+which owns the removable case. It is listed plainly rather than struck through so
+the props gate can verify it against source; strikethrough made the row unparseable.
 
 ## Related
 

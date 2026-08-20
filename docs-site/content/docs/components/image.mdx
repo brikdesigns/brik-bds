@@ -105,13 +105,14 @@ For automatic candidate generation and format negotiation (WebP/AVIF), let `next
 
 ## API
 
+{/* props-check: ImageProps @ components/ui/Image/Image.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `src` | `string` (required) | — |
-| `alt` | `string` (required) | — |
-| `ratio` | `FrameRatio` slug | — |
-| `fit` | `'cover' \| 'contain' \| 'fill' \| 'none'` | `'cover'` |
-| `position` | `string` (`object-position`) | — |
+| `src` | `string` *(required)* | — |
+| `alt` | `string` *(required)* | — |
+| `ratio` | `FrameRatio` | — |
+| `fit` | `FrameFit` | `'cover'` |
+| `position` | `string` | — |
 | `eager` | `boolean` | `false` |
 | `srcSet` | `string` | — |
 | `sizes` | `string` | — |
@@ -119,7 +120,10 @@ For automatic candidate generation and format negotiation (WebP/AVIF), let `next
 | `height` | `number \| string` | — |
 | `caption` | `ReactNode` | — |
 
-Plus standard `<figure>` HTML attributes.
+Plus standard `<figure>` HTML attributes. `position` takes a CSS `object-position`
+value (`"top"`, `"50% 25%"`) and only applies together with `ratio` and a cropping
+`fit`. `ratio` and `fit` are the same aliases [Frame](/docs/components/frame) uses —
+`FrameRatio` includes four deprecated mode-words listed there.
 
 ## Related
 
