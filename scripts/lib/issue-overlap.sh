@@ -12,13 +12,35 @@
 # on branch-name slug, and the two slugs shared no keyword. Keying on the ISSUE
 # NUMBER is what catches that class.
 #
-# Identical twins of this file live in brik-llm/scripts/lib/ and
-# brik-client-portal/scripts/lib/. They are separate git repos, so these are
-# deliberate copies, not an import — keep all THREE in sync when any changes.
-# brik-llm was the origin; brik-bds is the third copy (brik-bds#1533).
+# ── This file is a byte-identical copy. brikdesigns/brik-llm is the SOURCE. ────
 #
-# The brik-llm and brik-client-portal headers still say "the two" — they predate
-# this copy. Correcting them is a one-line edit in each, tracked on brik-bds#1533.
+# Four repos ship it, and they are separate git repos, so these are deliberate
+# copies and not an import:
+#
+#   brikdesigns/brik-llm                       ← SOURCE OF TRUTH, edit here
+#   brikdesigns/brik-bds                       ← copy
+#   brikdesigns/brik-client-portal             ← copy
+#   brikdesigns/treehouse-pediatric-dentistry  ← copy
+#
+# all at scripts/lib/issue-overlap.sh.
+#
+# NEVER edit this file anywhere but brik-llm. Fix it there and re-sync every copy
+# in the same change — brik-llm's `overlap-twin-drift` workflow compares each
+# copy's sha256 against brik-llm's and reads a local edit as DRIFT, not an
+# improvement. It fails on a missing copy too.
+#
+# (This paragraph is deliberately worded to be TRUE in all four copies. The
+# header it replaced said "identical twins … keep all three in sync", which read
+# as an instruction to whichever copy you had open and was false in every copy.)
+#
+# What that cost, measured 2026-08-20 for #2442: four copies, four different
+# md5s, a 130-line spread, and the fourth copy not named at all. All three
+# consumers still carried the fail-open #2422/#2298 had already fixed in
+# brik-llm, so `new-task.sh --issue` there created a branch when this gate could
+# not run — the #1485 duplicate-work class it exists to stop. Drift ran the other
+# way too: brik-bds grew sibling detection (#1663) that brik-llm lacked for 18
+# days. A sync claim with no gate behind it is what let both happen, so the gate
+# ships with the re-sync.
 #
 # Usage (sourced):
 #   source scripts/lib/issue-overlap.sh
@@ -32,21 +54,27 @@
 #   0  no overlap found, or the operator chose to continue
 #   1  operator aborted at the prompt (sourced mode only)
 #   2  bad usage / unresolvable issue reference
+#   4  the issue does not exist in the resolved repo — check did NOT run (#2298)
+#   5  the issue could not be read (transport/auth) — check did NOT run (#2422)
+#
+# 4 and 5 are NOT "no overlap". A caller that treats any non-zero as "proceed"
+# has reinstated the fail-open both of those tickets are about; see
+# new-task.sh's guarded call for the shape that refuses instead.
 
 _IO_YELLOW='\033[1;33m'
 _IO_GREEN='\033[0;32m'
 _IO_RED='\033[0;31m'
 _IO_NC='\033[0m'
 
-# gh_repo_slug / gh_explain_failure (brik-llm#1590). Guarded because a twin repo
-# may not carry the file yet — _io_repo_slug degrades to the old API call then.
+# gh_repo_slug / gh_explain_failure (#1590). Guarded because a twin repo may not
+# carry the file yet — _io_repo_slug degrades to the old API call if it's absent.
 _IO_LIB_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [ -r "${_IO_LIB_DIR}/gh-error-classify.sh" ]; then
   # shellcheck source=scripts/lib/gh-error-classify.sh
   source "${_IO_LIB_DIR}/gh-error-classify.sh"
 fi
 
-# owner/name for the current repo, for zero GraphQL points (brik-llm#1748).
+# owner/name for the current repo, for zero GraphQL points (#1748).
 #
 # `gh repo view --json nameWithOwner` costs 1 point and runs on the fleet's hot
 # path — new-task.sh sources this lib on every task branch. Worse, an exhausted
@@ -162,9 +190,63 @@ _io_searched_prs() {
     2>/dev/null | head -8 || true
 }
 
+# Read "<state>\t<title>". THREE outcomes, and collapsing them is what #2422 and
+# #2298 both are:
+#
+#   rc 0 + stdout   the read succeeded
+#   rc 3            the API answered definitively: no such issue
+#   rc 2            the read FAILED — transport, auth, timeout. "Could not tell."
+#
+# Measured with gh 2.x on 2026-08-20, because the three are NOT separable by
+# stdout alone:
+#
+#   ok          rc=0  stdout="open\tTitle"    stderr=""
+#   404         rc=1  stdout=<raw JSON body>  stderr="gh: Not Found (HTTP 404)"
+#   401         rc=1  stdout=<raw JSON body>  stderr="gh: Bad credentials (HTTP 401)"
+#   no network  rc=1  stdout=""               stderr='Get "https://…": proxyconnect…'
+#
+# Note the PAYLOAD ON STDOUT whenever `--jq` cannot apply. The previous body was
+#
+#     gh api … --jq '…' 2>/dev/null || true
+#
+# so a 404 body became the issue's "state" and landed under the ⚠ PRs-already-
+# linked banner (#2298), while a network failure became the empty string that the
+# caller reported as "no parallel work" (#2422). gh's EXIT STATUS is what
+# separates all four; stdout cannot.
+#
+# Retried ONCE, and only on a transport failure: the observed rate was 1 in 4 on
+# an issue that was readable seconds before and after, while a 404 is a settled
+# answer that a retry cannot improve.
+#
+# gh's stderr is handed back through $4, a caller-owned file — NOT a global. This
+# function is invoked inside a command substitution, so anything it assigns to a
+# global is set in a subshell and lost; the first cut of this fix did exactly
+# that and the diagnostic came out empty.
 _io_issue_state() {
-  local owner="$1" repo="$2" num="$3"
-  gh api "repos/$owner/$repo/issues/$num" --jq '.state + "\t" + .title' 2>/dev/null || true
+  local owner="$1" repo="$2" num="$3" errout="${4:-}"
+  local out rc errfile attempt
+  errfile="$(mktemp)"
+  for attempt in 1 2; do
+    if out="$(gh api "repos/$owner/$repo/issues/$num" --jq '.state + "\t" + .title' 2>"$errfile")"; then
+      rc=0
+    else
+      rc=$?
+    fi
+    if [ "$rc" -eq 0 ] && [ -n "$out" ]; then
+      rm -f "$errfile"
+      printf '%s' "$out"
+      return 0
+    fi
+    if grep -q 'HTTP 404' "$errfile" 2>/dev/null; then
+      [ -n "$errout" ] && tr '\n' ' ' < "$errfile" > "$errout"
+      rm -f "$errfile"
+      return 3
+    fi
+    if [ "$attempt" -eq 1 ]; then sleep 1; fi
+  done
+  [ -n "$errout" ] && tr '\n' ' ' < "$errfile" > "$errout"
+  rm -f "$errfile"
+  return 2
 }
 
 # Branches (local + remote) whose name carries the issue number as a distinct
@@ -196,12 +278,31 @@ check_issue_overlap() {
   fi
   read -r owner repo num <<<"$resolved"
 
-  local state_line state title
-  state_line="$(_io_issue_state "$owner" "$repo" "$num")"
-  if [ -z "$state_line" ]; then
-    echo -e "${_IO_YELLOW}⚠  Could not read ${owner}/${repo}#${num} — skipping the overlap check.${_IO_NC}" >&2
-    return 0
+  # "I could not tell" must NOT wear the shape of "I found nothing". Both of the
+  # old fail-open branches returned 0, so new-task.sh:270 read an unanswered
+  # lookup as an all-clear and created the branch with the gate never having run
+  # (#2422) — the failure mode #2298's own AC4 calls the more serious half.
+  local state_line state title read_rc=0 read_err errfile
+  errfile="$(mktemp)"
+  state_line="$(_io_issue_state "$owner" "$repo" "$num" "$errfile")" || read_rc=$?
+  read_err="$(cat "$errfile" 2>/dev/null)"
+  rm -f "$errfile"
+
+  if [ "$read_rc" -eq 3 ]; then
+    echo "" >&2
+    echo -e "${_IO_RED}✗ ${owner}/${repo}#${num} not found — the overlap check did NOT run.${_IO_NC}" >&2
+    echo -e "   A bare number resolves against ${owner}/${repo}; for another repo pass 'owner/repo#${num}'." >&2
+    return 4
   fi
+
+  if [ "$read_rc" -ne 0 ] || [ -z "$state_line" ]; then
+    echo "" >&2
+    echo -e "${_IO_RED}✗ Could not read ${owner}/${repo}#${num} — the overlap check did NOT run.${_IO_NC}" >&2
+    echo -e "   ${_IO_YELLOW}This is NOT a 'no parallel work' result. Retry before starting work.${_IO_NC}" >&2
+    [ -n "$read_err" ] && echo "   gh: ${read_err}" >&2
+    return 5
+  fi
+
   state="${state_line%%$'\t'*}"
   title="${state_line#*$'\t'}"
 
@@ -275,14 +376,14 @@ check_issue_overlap() {
 #
 # This replaces a bare `read -r`, which killed the pickup outright: on EOF `read`
 # returns 1, new-task.sh calls this function unguarded under `set -euo pipefail`
-# (scripts/new-task.sh:190), so a closed stdin took down the script before the
-# worktree was created — and the usual trigger is a false-positive org-wide
-# search hit. Reproduced twice on 2026-07-29 while building #1545/#1546
-# (brik-bds#1549).
+# (scripts/new-task.sh:236 / :19), so a closed stdin took down the script before
+# the worktree was created — and the usual trigger is a noisy org-wide search hit
+# on a long-merged PR. Reproduced on 2026-07-29 (#1692); fixed first in
+# brikdesigns/brik-bds#1549, ported here.
 #
-# Same contract as new-task.sh's own confirm() (scripts/new-task.sh:134-140,
-# from #1099): interactive TTY waits, everything else prints and proceeds.
-# NEW_TASK_YES=1 is honoured so one env var covers both prompts.
+# Same contract as new-task.sh's own confirm(): interactive TTY waits, everything
+# else prints and proceeds. NEW_TASK_YES=1 is honoured so one env var covers every
+# prompt in the pickup path.
 _io_confirm() {
   if [ "${NEW_TASK_YES:-0}" = "1" ] || [ ! -t 0 ]; then
     echo -e "${_IO_YELLOW}   → non-interactive: proceeding automatically.${_IO_NC}" >&2
@@ -293,16 +394,6 @@ _io_confirm() {
   # must not be the difference between a worktree and no worktree.
   read -r || true
 }
-
-# Standalone invocation: scripts/lib/issue-overlap.sh [--report] <issue-ref>
-if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
-  if [ "${1:-}" = "--report" ]; then
-    check_issue_overlap "${2:-}" --report
-  else
-    check_issue_overlap "${1:-}"
-  fi
-  exit $?
-fi
 
 # ── Sibling-issue detection (#1663) ────────────────────────────────────────────
 #
@@ -322,6 +413,14 @@ fi
 # It protects the SECOND mover only, and cannot see a session that files later.
 # Neither this nor pr-path-overlap.sh could have caught the 30-second PR race in
 # #1660/#1661 — nothing polling GitHub can. This closes the 23-minute case.
+#
+# Written first in brik-bds (#1663) and ported here by #2442, which is the whole
+# point of the gate below: this block existed in ONE of four copies for 18 days,
+# so brik-llm's own new-task.sh never had sibling detection at all.
+#
+# It sits BEFORE the standalone guard on purpose. brik-bds had it after, past an
+# `exit $?`, so `issue-overlap.sh --report N` never defined these at all — only
+# sourced callers saw them.
 _IO_TITLE_MIN_TOKENS="${_IO_TITLE_MIN_TOKENS:-2}"
 _IO_TITLE_MIN_SCORE="${_IO_TITLE_MIN_SCORE:-0.5}"
 
@@ -370,12 +469,17 @@ check_title_overlap() {
   command -v gh >/dev/null 2>&1 || return 0
 
   local resolved owner repo num
-  _io_resolve_ref "$ref" >/dev/null 2>&1 || return 0
-  resolved="$(_io_resolve_ref "$ref")"
+  resolved="$(_io_resolve_ref "$ref")" || return 0
   read -r owner repo num <<<"$resolved"
 
+  # `|| return 0` is load-bearing, and was NOT needed in brik-bds's version.
+  # There, _io_issue_state ended in `|| true` and could only return 0; #2422 gave
+  # it rc 2 (unreadable) and rc 3 (no such issue). new-task.sh runs under
+  # `set -euo pipefail`, so an unguarded assignment from a command substitution
+  # that returns non-zero takes the whole script down before the worktree exists.
+  # This gate is advisory — an unreadable title means no advice, never an abort.
   local state_line title siblings
-  state_line="$(_io_issue_state "$owner" "$repo" "$num")"
+  state_line="$(_io_issue_state "$owner" "$repo" "$num")" || return 0
   [ -z "$state_line" ] && return 0
   title="${state_line#*$'\t'}"
 
@@ -431,3 +535,13 @@ check_phrase_overlap() {
   _io_confirm
   return 0
 }
+
+# Standalone invocation: scripts/lib/issue-overlap.sh [--report] <issue-ref>
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+  if [ "${1:-}" = "--report" ]; then
+    check_issue_overlap "${2:-}" --report
+  else
+    check_issue_overlap "${1:-}"
+  fi
+  exit $?
+fi
