@@ -106,11 +106,12 @@ const unreadCount = notifications.filter((n) => !n.read).length;
 
 ## API
 
+{/* props-check: NotificationListProps @ components/ui/NotificationList/NotificationList.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `notifications` | `NotificationItemData[]` *(required)* | — |
 | `onItemClick` | `(notification: NotificationItemData) => void` | — |
-| `emptyMessage` | `string` | `'No notifications'` |
+| `emptyMessage` | `string` | `'No notifications yet'` |
 | `className` | `string` | — |
 
 The `NotificationItemData` shape is defined alongside the component — typically `{ id, title, timestamp, read }` plus consumer-specific metadata.
