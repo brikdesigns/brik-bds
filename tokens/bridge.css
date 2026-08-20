@@ -154,34 +154,18 @@
   --size-huge: var(--size-1200);
 
   /* ═══════════════════════════════════════════════
-     Border Width
-     ═══════════════════════════════════════════════ */
-  --border-width-none: var(--border-width-none);
-  --border-width-sm: var(--border-width-sm);
-  --border-width-md: var(--border-width-md);
-  --border-width-lg: var(--border-width-lg);
-
-  /* ═══════════════════════════════════════════════
      Border Radius
-     ═══════════════════════════════════════════════ */
-  --border-radius-none: var(--border-radius-none);
-  --border-radius-sm: var(--border-radius-sm);
-  --border-radius-md: var(--border-radius-md);
-  --border-radius-lg: var(--border-radius-lg);
+     ═══════════════════════════════════════════════
+     Only the two shape aliases below belong here. The word-scale names
+     (--border-width-*, --border-radius-*, --box-shadow-*, --blur-radius-*)
+     are already defined by tokens/figma-tokens.css and tokens/gap-fills.css,
+     which land in dist/tokens.css. This file used to re-declare all fifteen
+     of them as `--x: var(--x)` — a dependency cycle, so every one computed to
+     the guaranteed-invalid value and any consumer that loaded bridge.css lost
+     the name entirely (#1919). Deleted rather than re-aliased: bridge.css maps
+     clean names to LEGACY names, and these were neither. */
   --border-radius-input: var(--border-radius-50);
   --border-radius-button: var(--border-radius-50);
-
-  /* ═══════════════════════════════════════════════
-     Shadow
-     ═══════════════════════════════════════════════ */
-  --box-shadow-none: var(--box-shadow-none);
-  --box-shadow-sm: var(--box-shadow-sm);
-  --box-shadow-md: var(--box-shadow-md);
-  --box-shadow-lg: var(--box-shadow-lg);
-  --blur-radius-none: var(--blur-radius-sm);
-  --blur-radius-sm: var(--blur-radius-sm);
-  --blur-radius-md: var(--blur-radius-md);
-  --blur-radius-lg: var(--blur-radius-lg);
 
   /* ═══════════════════════════════════════════════
      Motion — Client-Themeable Animation Surface
