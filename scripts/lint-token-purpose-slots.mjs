@@ -31,12 +31,13 @@
  *
  * ── Disposition ────────────────────────────────────────────────────────────
  *
- * A slot is green three ways:
+ * A slot is green four ways:
  *   • `family: 'color'`    — the intent formula token-anatomy already documents
  *   • `family: 'property'` / `'role'` / `'component'` — the second formula,
  *     documented in § Non-color anatomy; the slot name must appear there
  *   • an entry in DRIFT_BACKLOG (slot → tracking issue) — known drift, still
  *     shipping, visible on the board rather than silently green
+ *   • a member of SLOTLESS_EXCEPTIONS — decided carve-out, no rename owed
  *
  * An unregistered slot has none of the three and hard-fails. That is the whole
  * point: a new prefix cannot ship undocumented.
@@ -131,14 +132,6 @@ const SLOT_REGISTRY = [
  * A bare entry (no issue number) hard-fails, same as no entry at all.
  */
 const DRIFT_BACKLOG = {
-  // No purpose prefix at all — the exact shape token-anatomy's own callout
-  // retires (`--brand-primary`, brik-bds#712). Unitless duplicates of
-  // `--breakpoint-web/tablet/mobile`, and zero `var()` references anywhere in
-  // `dist/` or `components/`, so they delete rather than rename.
-  web: 1910,
-  tablet: 1910,
-  mobile: 1910,
-
   // Tier 4 without the mandatory `--bds-` prefix — the retired
   // `--{component}-{prop}` pattern in token-anatomy § Drift patterns
   // (ADR-014). 6 live references in components/ui/Tooltip/Tooltip.css.
@@ -150,6 +143,23 @@ const DRIFT_BACKLOG = {
   // `--ease-*` carries all 70.
   easing: 1910,
 };
+
+/**
+ * Slots that legitimately carry no purpose prefix. Not drift, not a rename
+ * owed — a deliberate carve-out, mirrored in `EXCEPTIONS` at
+ * scripts/__tests__/inspect-widget-tokens.test.mjs.
+ *
+ * `--web` / `--tablet` / `--mobile` are unitless Figma primitives with zero
+ * `var()` consumers, and `--breakpoint-*` — the family a rename would move them
+ * to — has none either (measured 2026-08-20 across brik-bds, brik-client-portal,
+ * brikdesigns). Renaming one dead family into another buys nothing. Whether BDS
+ * ships breakpoint tokens at all is the brik-bds#1910 naming ADR's call.
+ *
+ * Kept as an explicit set rather than a DRIFT_BACKLOG entry because the two are
+ * different claims: drift is owed a rename, an exception is not, and a gate that
+ * prints "drift" for a decided carve-out re-opens a settled question every run.
+ */
+const SLOTLESS_EXCEPTIONS = new Set(['web', 'tablet', 'mobile']);
 
 const DOC_PATH = path.join('docs-site', 'content', 'docs', 'primitives', 'token-anatomy.mdx');
 
@@ -229,18 +239,21 @@ function analyse(cssPath) {
     if (!entry) {
       const bare = name.replace(/^--/, '');
       const drifted = bare.split('-')[0];
+      const excepted = SLOTLESS_EXCEPTIONS.has(drifted);
       const backlogged = Object.prototype.hasOwnProperty.call(DRIFT_BACKLOG, drifted)
         && Number.isInteger(DRIFT_BACKLOG[drifted]);
-      const key = `${drifted} (drift)`;
+      const family = excepted ? 'exception' : 'drift';
+      const key = `${drifted} (${family})`;
       if (!bySlot.has(key)) {
         bySlot.set(key, {
-          slot: drifted, family: 'drift', tier: '—', scale: '—',
+          slot: drifted, family, tier: '—',
           names: [], firstLine: line,
-          disposition: backlogged ? `#${DRIFT_BACKLOG[drifted]}` : null,
+          disposition: excepted ? 'slotless by exception'
+            : backlogged ? `#${DRIFT_BACKLOG[drifted]}` : null,
         });
       }
       bySlot.get(key).names.push({ name, line });
-      if (!backlogged) unregistered.push({ name, line, slot: drifted });
+      if (!excepted && !backlogged) unregistered.push({ name, line, slot: drifted });
       continue;
     }
     if (!bySlot.has(entry.slot)) {
@@ -344,8 +357,12 @@ function main() {
     }
   }
 
+  for (const s of slots.filter((x) => x.family === 'exception')) {
+    console.error(`  · --${s.slot} — slotless by exception, ${s.names.length} token(s), line ${s.firstLine}`);
+  }
+
   for (const s of slots.filter((x) => x.family === 'drift')) {
-    const tag = s.disposition ? `drift, disposed (${s.disposition})` : 'UNREGISTERED';
+    const tag = s.disposition ? `drift, rename owed (${s.disposition})` : 'UNREGISTERED';
     console.error(`  ${s.disposition ? '·' : '✗'} --${s.slot}-* — ${tag}, ${s.names.length} token(s), first at line ${s.firstLine}`);
   }
 
@@ -368,7 +385,8 @@ function main() {
   }
 
   const drift = slots.filter((s) => s.family === 'drift').length;
-  console.error(`clean — every slot registered and documented (${drift} disposed drift slot(s)).`);
+  const exc = slots.filter((s) => s.family === 'exception').length;
+  console.error(`clean — every slot registered and documented (${drift} rename(s) owed, ${exc} slotless exception(s)).`);
   process.exit(0);
 }
 
