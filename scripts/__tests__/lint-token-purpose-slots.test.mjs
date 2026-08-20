@@ -98,8 +98,24 @@ describe('lint-token-purpose-slots', () => {
   it('passes an unregistered slot that is dispositioned as drift', () => {
     // `--tooltip-*` is in DRIFT_BACKLOG with a tracking issue.
     const { code, out } = run(CLEAN.replace('}\n', '  --tooltip-background: #000;\n}\n'));
-    expect(out).toMatch(/--tooltip-\* — drift, disposed \(#1910\)/);
+    expect(out).toMatch(/--tooltip-\* — drift, rename owed \(#1910\)/);
     expect(code).toBe(0);
+  });
+
+  it('a slotless exception is not reported as drift', () => {
+    // `--web` is in SLOTLESS_EXCEPTIONS: decided carve-out, no rename owed.
+    // A gate that prints "drift" here re-opens a settled question every run.
+    const { code, out } = run(CLEAN.replace('}\n', '  --web: 1200;\n}\n'));
+    expect(out).toMatch(/--web — slotless by exception/);
+    expect(out).not.toMatch(/--web.*rename owed/);
+    expect(code).toBe(0);
+  });
+
+  it('drift and exception are different verdicts, not one bucket', () => {
+    const css = CLEAN.replace('}\n', '  --web: 1200;\n  --tooltip-background: #000;\n}\n');
+    const json = JSON.parse(run(css, ['--json']).out);
+    expect(json.slots.find((s) => s.slot === 'web').family).toBe('exception');
+    expect(json.slots.find((s) => s.slot === 'tooltip').family).toBe('drift');
   });
 
   it('longest slot wins — --border-radius-* is a length, not a color', () => {
