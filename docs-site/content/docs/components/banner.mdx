@@ -122,11 +122,13 @@ Pass `onDismiss` to render a close button. Common with announcements.
 
 ## API
 
+{/* props-check: BannerProps @ components/ui/Banner/Banner.tsx */}
+
 | Prop | Type | Default |
 |---|---|---|
 | `title` | `ReactNode` *(required)* | — |
 | `description` | `ReactNode` | — |
-| `tone` | `'announcement' \| 'warning' \| 'error' \| 'information'` | `'announcement'` |
+| `tone` | `BannerTone` | `'announcement'` |
 | `action` | `ReactNode` | — |
 | `onDismiss` | `() => void` | — |
 
