@@ -36,6 +36,7 @@ NC='\033[0m'
 BASE_BRANCH="main"
 ISSUE_REF=""
 NO_ISSUE=0
+OVER_BUDGET=0
 
 # Issue-number overlap gate. Worktrees isolate FILES, not INTENT: two sessions
 # can each create a correct worktree and build the same fix. brik-bds took four
@@ -51,6 +52,10 @@ source "${SCRIPT_DIR}/lib/overlap-filters.sh"
 # editing the same file.
 # shellcheck source=scripts/lib/pr-path-overlap.sh
 source "${SCRIPT_DIR}/lib/pr-path-overlap.sh"
+# Session size-budget gate (brik-llm#2045, mirrored per brik-llm#2052). Sourced
+# after issue-overlap.sh — _sb_resolve_ref reuses _io_resolve_ref when present.
+# shellcheck source=scripts/lib/session-budget.sh
+source "${SCRIPT_DIR}/lib/session-budget.sh"
 # Claim gate — the overlap gate above keys on branches and PRs, and two of the
 # four collisions on 2026-07-29 had neither (a close race and a body edit).
 # brik-bds#1541.
@@ -127,6 +132,10 @@ while [[ $# -gt 0 ]]; do
       NO_ISSUE=1
       shift
       ;;
+    --over-budget)
+      OVER_BUDGET=1
+      shift
+      ;;
     --yes|-y)
       AUTO_YES=1
       shift
@@ -162,7 +171,7 @@ confirm() {
 
 # ── Validate input ──
 if [ $# -lt 1 ]; then
-  echo -e "${RED}Usage: $0 [--base branch] (--issue N | --no-issue) {scope}-{name}${NC}"
+  echo -e "${RED}Usage: $0 [--base branch] [--over-budget] (--issue N | --no-issue) {scope}-{name}${NC}"
   echo ""
   echo "  scope = area of BDS (bds, tokens, stories, indicators, actions, forms, layout, content-system)"
   echo "  name  = what the task delivers (button-variants, figma-pull, badge-chip-typography)"
@@ -180,6 +189,11 @@ if [ $# -lt 1 ]; then
   echo "  another session already claimed that slug on the claim board."
   echo ""
   echo "  Base branch: ${BASE_BRANCH} (override with --base)"
+  echo ""
+  echo "  The ticket's size:* label is charged against this session's budget"
+  echo "  (1 L, or 2-3 M, or ~5 S/XS). Over budget refuses; --over-budget takes"
+  echo "  it anyway. See .claude/references/session-contract.md § Entry."
+  echo "    scripts/lib/session-budget.sh --status   # running total"
   exit 1
 fi
 
@@ -215,6 +229,11 @@ if [ -n "$ISSUE_REF" ]; then
   # work is identical (#1663).
   check_title_overlap "$ISSUE_REF"
   check_ticket_path_overlap "$ISSUE_REF"
+  # Guarded: check_session_budget returns 1 to refuse; an unguarded call under
+  # set -e would exit before the refusal's remedy lines are read. brik-llm#2045.
+  if ! check_session_budget "$ISSUE_REF" "$OVER_BUDGET"; then
+    exit 1
+  fi
   # Refuses when another session holds a live claim; otherwise claims it.
   if ! check_issue_claim "$ISSUE_REF" "$BRANCH_NAME"; then
     exit 1
