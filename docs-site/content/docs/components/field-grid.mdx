@@ -79,10 +79,11 @@ Wrapping each grid cell in `<Card variant="outlined">` gives you the canonical s
 
 ## API
 
+{/* props-check: FieldGridProps @ components/ui/FieldGrid/FieldGrid.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `columns` | `2 \| 3 \| 4` | `2` |
-| `gap` | `'md' \| 'lg' \| 'xl'` | `'xl'` |
+| `columns` | `FieldGridColumns` | `2` |
+| `gap` | `FieldGridGap` | `'lg'` |
 | `children` | `ReactNode` | — |
 
 Plus all standard `<div>` HTML attributes.

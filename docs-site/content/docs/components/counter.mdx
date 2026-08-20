@@ -83,11 +83,12 @@ Use `max` to cap the displayed value. Anything over renders as `{max}+`.
 
 ## API
 
+{/* props-check: CounterProps @ components/ui/Counter/Counter.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `count` | `number` *(required)* | — |
-| `status` | `'success' \| 'error' \| 'warning' \| 'neutral' \| 'progress' \| 'brand'` | `'brand'` |
-| `size` | `'xs' \| 'sm' \| 'md' \| 'lg'` | `'md'` |
+| `status` | `CounterStatus` | `'success'` |
+| `size` | `CounterSize` | `'sm'` |
 | `max` | `number` | — |
 
 ## Related

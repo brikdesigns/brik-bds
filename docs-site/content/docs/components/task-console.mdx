@@ -125,16 +125,20 @@ async function generatePages(slugs: string[]) {
 
 ## API
 
+{/* props-check: TaskConsoleProps @ components/ui/TaskConsole/TaskConsole.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `title` | `ReactNode` *(required)* | — |
 | `items` | `TaskConsoleItem[]` *(required)* | — |
 | `isOpen` | `boolean` | `true` |
-| `position` | `'bottom-right' \| 'bottom-left'` | `'bottom-right'` |
+| `position` | `TaskConsolePosition` | `'bottom-right'` |
 | `onDismiss` | `() => void` | — |
 | `defaultCollapsed` | `boolean` | `false` |
-| `autoDismissDelay` | `number` (ms) | `0` (no auto-dismiss) |
+| `autoDismissDelay` | `number` | `0` |
 | `subtitle` | `ReactNode` | — |
+
+`autoDismissDelay` is in milliseconds; `0` means no auto-dismiss, and it only fires
+once every item is done and `onDismiss` is supplied.
 
 The `TaskConsoleItem` shape is defined alongside the component: `{ id, label, status: 'pending' \| 'in_progress' \| 'completed' \| 'failed', detail?, href? }`. The `status` string stays snake_case for API stability; only the CSS BEM modifier kebab-cases it (`in_progress` → `--in-progress`).
 
