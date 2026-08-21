@@ -101,11 +101,12 @@ Pass a custom `footer` to override the auto-rendered actions while keeping the r
 
 ### Default mode
 
+{/* props-check: ModalProps @ components/ui/Modal/Modal.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `isOpen` | `boolean` *(required)* | — |
 | `onClose` | `() => void` *(required)* | — |
-| `title` | `string` | — |
+| `title` | `ReactNode` | — |
 | `size` | `'sm' \| 'md' \| 'lg' \| 'xl' \| 'full'` | `'md'` |
 | `children` | `ReactNode` | — |
 | `footer` | `ReactNode` | — |
@@ -115,11 +116,12 @@ Pass a custom `footer` to override the auto-rendered actions while keeping the r
 
 ### Confirm preset
 
+{/* props-check: ModalProps @ components/ui/Modal/Modal.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `preset` | `'confirm'` *(required)* | — |
-| `title` | `string` *(required)* | — |
-| `description` | `string` | — |
+| `title` | `ReactNode` *(required)* | — |
+| `description` | `ReactNode` | — |
 | `confirmLabel` | `string` | `'Confirm'` |
 | `cancelLabel` | `string` | `'Cancel'` |
 | `confirmVariant` | `'primary' \| 'destructive'` | `'primary'` |

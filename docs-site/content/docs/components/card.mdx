@@ -176,13 +176,14 @@ The `media` prop turns the default card into a horizontal "media object" — an 
 
 ### Default mode
 
+{/* props-check: CardProps @ components/ui/Card/Card.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `variant` | `'outlined' \| 'brand' \| 'elevated' \| 'raised' \| 'borderless'` | `'outlined'` |
 | `padding` | `'none' \| 'sm' \| 'md' \| 'lg'` | `'md'` |
 | `interactive` | `boolean` | `false` |
 | `href` | `string` | — |
-| `media` | `{ avatar: CardAvatarMedia } \| { image: CardImageMedia }` | — |
+| `media` | `CardMedia` (exactly one of avatar / image / logo) | — |
 | `children` | `ReactNode` *(required)* | — |
 
 ### Control preset
@@ -199,13 +200,14 @@ The `media` prop turns the default card into a horizontal "media object" — an 
 
 ### Summary preset
 
+{/* props-check: CardProps @ components/ui/Card/Card.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `preset` | `'summary'` *(required)* | — |
 | `label` | `string` *(required)* | — |
 | `value` | `string \| number` *(required)* | — |
 | `type` | `'numeric' \| 'price'` | `'numeric'` |
-| `textLink` | `{ label: string; href: string }` | — |
+| `textLink` | `CardSummaryTextLink` | — |
 
 ### Display preset
 
@@ -226,6 +228,7 @@ The `media` prop turns the default card into a horizontal "media object" — an 
 
 ### Display-row preset
 
+{/* props-check: CardProps @ components/ui/Card/Card.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `preset` | `'display-row'` *(required)* | — |
@@ -234,7 +237,7 @@ The `media` prop turns the default card into a horizontal "media object" — an 
 | `description` | `string` | — |
 | `tint` | `CardTint` (service line) | — |
 | `image` | `ReactNode` | — |
-| `imageWidth` | `'narrow' \| 'standard' \| 'wide' \| string` | `'standard'` |
+| `imageWidth` | `CardDisplayRowImageWidth` (narrow / standard / wide, or any CSS length) | `'standard'` |
 | `tag` | `ReactNode` | — |
 | `extras` | `ReactNode` | — |
 | `action` | `ReactNode` | — |
