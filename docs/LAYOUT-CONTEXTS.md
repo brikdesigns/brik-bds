@@ -8,16 +8,16 @@ Companion to [`.claude/standards/component-build.md`](../.claude/standards/compo
 
 ## Why this doc exists
 
-BDS ships `<Sheet>`, `<SheetSection>`, `<Form>`, `<TextInput>`, and `<Select>`. It does not ship primitives for **field label**, **section heading**, or **field value** inside a sheet or form. Consumers wire their own — and every consumer picks a different size.
+BDS ships `<Sheet>`, `<SheetSection>`, `<DataSection>`, `<FieldGrid>`, `<Field>`, `<Form>`, `<TextInput>`, and `<Select>` — every tier below is enforced by one of them. This doc exists because the *assignment* still has to be chosen: which tier belongs to which surface is a judgment call the components cannot make for you, and getting it wrong produced the inversions catalogued here.
 
-Result in the portal today (audit 2026-04-22):
+The audit that prompted it (portal, 2026-04-22 — predates the primitives below):
 
 - 21 of 31 sheets follow the onboarding-shared pattern; 9 are ad-hoc.
 - At least one sheet renders field labels **larger** than the section heading — label-tier > heading-tier is an inversion that never reads as intended.
 - Dividers between sheet sections compete with BDS's tight vertical rhythm.
 - "Subtitle" styling gets applied to field-grouping labels like "Messaging" over CTA approved/rejected — blocks the grouping the heading tier is supposed to provide.
 
-This doc defines four contexts, locks a typography tier to each, and names the primitives BDS will ship to enforce them.
+This doc defines four contexts, locks a typography tier to each, and names the shipped primitive that enforces each one.
 
 ---
 
@@ -52,6 +52,8 @@ Full horizontal space, reading and editing both common, may contain multiple she
 | Helper / caption | `--label-sm` | label | regular | Secondary context under a field |
 | Body paragraph | `--body-md` | body | regular | Prose blocks (rare on admin pages) |
 
+**Two rows in this table are aspirational, not shipped.** `PageHeader` renders its `<h1>` at `--heading-lg` bold, not `--heading-xl` (`PageHeader.css:69-72`), and `DataSection` renders its title at `--heading-sm`, not `--heading-md` (`DataSection.css:46-49`). The component is the authority — build against what it renders. Reconciling the two is tracked in [#1971](https://github.com/brikdesigns/brik-bds/issues/1971); do not hand-restyle either to match this table.
+
 ### Sheet
 
 Narrower than a page, denser, title + sections + fields. `<Sheet>` owns the title.
@@ -66,7 +68,7 @@ Narrower than a page, denser, title + sections + fields. `<Sheet>` owns the titl
 
 **Key inversion to kill:** section heading uses `--heading-sm` (heading family); field label uses `--label-sm` (label family). Different families, different sizes — field label is always **smaller** than section heading. If a sheet's labels look bigger than its section headings, the label-tier / heading-tier assignment is swapped. Fix the assignment, not the size.
 
-**SheetSection today uses `--label-sm` uppercase.** That treatment conflicts with the rule above — it's a label tier masquerading as a heading. Section headings become `--heading-sm` (heading family, not uppercase) in the new primitives. The uppercase label-tier treatment survives only as a context-specific styling of the `__subtitle` slot, not as a section heading. (BEM role is `__subtitle` per the [Naming Conventions canon](https://design.brikdesigns.com/docs/primitives/naming-conventions#subtitle) — "eyebrow" is a banned synonym.)
+**`SheetSection` used to render `--label-sm` uppercase** — a label tier masquerading as a heading, which conflicts with the rule above. It is now `--heading-sm`, heading family, semibold, not uppercase (`SheetSection.css:20-27`). The uppercase label-tier treatment survives only as a context-specific styling of the `__subtitle` slot, never as a section heading. (BEM role is `__subtitle` per the [Naming Conventions canon](https://design.brikdesigns.com/docs/primitives/naming-conventions#subtitle) — "eyebrow" is a banned synonym.)
 
 ### Form
 
@@ -141,65 +143,44 @@ Per ecosystem rule. Never sentence case for UI text.
 
 ---
 
-## Primitives BDS will ship to enforce this
+## Primitives that enforce this
 
-These land in a follow-up PR (Stream D2/D3 of the intel-architecture plan). Listed here so consumers know what's coming and don't build duplicates.
+The tiers above are enforced by **container-context primitives** — a small set of components that derive the tier from where they are rendered — not by a per-tier wrapper component. An earlier revision of this doc promised one wrapper per container × tier; that shape was **rejected** by [ADR-004](./adrs/ADR-004-component-bloat-guardrails.md)'s first guardrail, "Container-coupled typography is forbidden", because N containers × M tiers is N×M components. Container-context typography lands in tokens, props, and docs instead.
 
-### Sheet context
+### What to reach for
 
-```
-<SheetSectionTitle>     → enforces --heading-sm, heading family, semibold
-<SheetFieldLabel>       → enforces --label-sm, label family, semibold
-<SheetFieldValue>       → enforces --body-md, body family, regular
-<SheetHelperText>       → enforces --label-xs, label family, regular
-```
+| Need | Primitive | Tier it enforces |
+|---|---|---|
+| Page title | `PageHeader` | `--heading-lg` bold, via its own `<h1>` (`PageHeader.css:69-72`) |
+| Page section heading + edit affordance | `DataSection` (`title`) | `--heading-sm` semibold (`DataSection.css:46-49`) |
+| Sheet section heading | `SheetSection` (`heading`) | its own heading tier, `h3` by default |
+| Field label + value, read mode | `Field` inside `FieldGrid` | `--label-md` on a page, `--label-sm` inside a `Sheet` body — derived from the container, no prop |
+| Form title + description | `Form` | rendered by `Form`, do not restyle |
+| Input label + helper + error | `TextInput` / `Select` / `Checkbox` | the input owns its own label; never wrap it |
+| Card title, subtitle, metadata | `Card` with a `preset` (`control`, `summary`, `display`, `display-row`) | the preset locks the tiers |
 
-### Form context
+`Field`'s label tier is the pattern to copy: the same component reads `--label-md` on a page and `--label-sm` in a sheet body, driven by the container, with no prop passed. Pass `tier` only to pin against the container.
 
-```
-<FormField>             → wraps label + input + helper with locked tiers
-<FormFieldsetHeading>   → enforces --label-lg, label family, semibold
-```
+### The collection surface
 
-### Page context
-
-```
-<PageTitle>             → enforces --heading-xl
-<PageSectionTitle>      → enforces --heading-md
-<PageSubsectionTitle>   → enforces --heading-sm
-<PageFieldLabel>        → enforces --label-md
-<PageFieldValue>        → enforces --body-md
-```
-
-### Card context
-
-Existing `<Card>` primitive extends with:
-
-```
-<CardTitle>             → enforces --heading-tiny
-<CardSubtitle>          → enforces --label-xs + uppercase (BEM: __subtitle — canon bans `eyebrow`)
-<CardMetadata>          → paired label + value, locked tiers
-```
-
-Consumers that need custom typography fall back to passing a `className` with tokens — but the default of every primitive produces correct hierarchy without any consumer choice.
+A filter bar, tab bar, or pagination row is a **Control**, not a heading tier — see [Composition Layers](https://design.brikdesigns.com/docs/build-standards/composition-layers) for the Control layer and the rule for choosing between a control bar and a section header.
 
 ---
 
 ## Migration path for consumers
 
-Once primitives ship:
+The primitives are shipped, so there is no interim period. New surfaces use them directly.
 
-1. **New sheets** use the primitives. No exceptions.
-2. **Existing sheets** migrate in a planned pass (portal has 31 sheets — tracked as Stream D4 of the intel-architecture plan).
-3. **Interim sheets** (those that need to ship before primitives land) follow the tier rules in this doc with inline token application. Consumer-side inline styling is a short-lived bridge.
+1. **New sheets and pages** compose `PageHeader` / `DataSection` / `SheetSection` / `FieldGrid` / `Field`. No inline tier application.
+2. **Existing surfaces** migrate as they are touched. Nothing is blocked waiting on BDS.
 
-Specifically for the portal `detail.*` style presets in `src/lib/styles.ts`:
+For the portal `detail.*` style presets in `src/lib/styles.ts`:
 
-- `detail.sectionHeading` → replaced by `<SheetSectionTitle>` or `<PageSectionTitle>`
-- `detail.fieldHeading` → replaced by `<SheetFieldLabel>` or `<PageFieldLabel>`
-- `detail.value` → replaced by `<SheetFieldValue>` or `<PageFieldValue>`
+- `detail.sectionHeading` → `DataSection`'s `title` (page) or `SheetSection`'s `heading` (sheet)
+- `detail.fieldHeading` → `Field`'s `label`
+- `detail.value` → `Field`'s children
 
-Portal's `styles.ts` presets stay functional during migration but don't get new consumers.
+A `detail.*` preset still in use is a surface that has not been migrated, not a supported path. Don't add consumers.
 
 ---
 
@@ -214,7 +195,7 @@ The inversion bug. Swap the tier assignments.
 Remove. `--padding-xl` between sections does the job.
 
 **"Messaging" subtitle wrapping CTA Approved + Rejected**
-Remove the subtitle. Use `<SheetSectionTitle>CTA Language</SheetSectionTitle>` with Approved and Rejected as two field blocks underneath.
+Remove the subtitle. Use `<SheetSection heading="CTA Language">` with Approved and Rejected as two `<Field>`s underneath.
 
 **Two-column input grid in a narrow sheet**
 Collapse to single column. The sheet width doesn't support it.
