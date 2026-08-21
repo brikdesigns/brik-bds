@@ -309,6 +309,17 @@ describe('rule 4 — a BEM modifier carries its axis prefix (ADR-033 § 4)', () 
     expect(out).toMatch(/--tone-error — retired valence word `error` → `negative`/);
   });
 
+  it('a boolean state adjective is not an axis value — `collapsible`', () => {
+    // Regression guard for #1961, which turned `main` red. Breadcrumb applies
+    // `--collapsible` on a predicate (`isIntermediate && collapses`,
+    // Breadcrumb.tsx:104) — a boolean state, ADR-008 § 3's territory, not a
+    // choice along an axis. Baselining it would have recorded correct code as
+    // debt. `collapsed` was already on the list; the adjective form was not.
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-breadcrumb__item--collapsible { opacity: 0; }\n` });
+    expect(out).not.toMatch(/--collapsible/);
+    expect(code).toBe(0);
+  });
+
   it('a boolean state modifier is not an axis value', () => {
     // `--disabled` is the presence of a state, not a choice along an axis, so
     // ADR-008 § 3 governs it and § 4 does not reach it. Both are in the fixture.
