@@ -1,4 +1,4 @@
-import { type HTMLAttributes, type ReactNode } from 'react';
+import { Fragment, type HTMLAttributes, type ReactNode } from 'react';
 import { type BdsLinkComponent } from '../NavItem';
 import { bdsClass } from '../../utils';
 import './Breadcrumb.css';
@@ -70,6 +70,13 @@ export function Breadcrumb({
 }: BreadcrumbProps) {
   const separatorChar = SEPARATOR_CHARS[separator];
 
+  /* Below the tablet breakpoint the intermediate crumbs collapse behind a
+   * single `…` (Breadcrumb.css). Only worth doing with two or more of them —
+   * a three-crumb trail fits at 375px and would lose its one middle label for
+   * nothing. Everything else relies on the always-on wrap + per-crumb
+   * ellipsis. See #468. */
+  const collapses = items.length > 3;
+
   return (
     <nav
       className={bdsClass('bds-breadcrumb', className)}
@@ -79,26 +86,43 @@ export function Breadcrumb({
     >
       {items.map((item, i) => {
         const isLast = i === items.length - 1;
+        const isIntermediate = i > 0 && !isLast;
         return (
-          <span key={`${item.label}-${i}`} style={{ display: 'contents' }}>
-            {i > 0 && (
-              <span className="bds-breadcrumb__separator" aria-hidden="true">
-                {separatorChar}
-              </span>
-            )}
-            {isLast || !item.href ? (
+          <Fragment key={`${item.label}-${i}`}>
+            {collapses && i === 1 && (
               <span
-                className="bds-breadcrumb__current"
-                aria-current={isLast ? 'page' : undefined}
+                className="bds-breadcrumb__item bds-breadcrumb__item--ellipsis"
+                aria-hidden="true"
               >
-                {item.label}
+                <span className="bds-breadcrumb__separator">{separatorChar}</span>
+                <span className="bds-breadcrumb__ellipsis">…</span>
               </span>
-            ) : (
-              <BreadcrumbLink linkComponent={linkComponent} href={item.href}>
-                {item.label}
-              </BreadcrumbLink>
             )}
-          </span>
+            <span
+              className={bdsClass(
+                'bds-breadcrumb__item',
+                isIntermediate && collapses && 'bds-breadcrumb__item--collapsible'
+              )}
+            >
+              {i > 0 && (
+                <span className="bds-breadcrumb__separator" aria-hidden="true">
+                  {separatorChar}
+                </span>
+              )}
+              {isLast || !item.href ? (
+                <span
+                  className="bds-breadcrumb__current"
+                  aria-current={isLast ? 'page' : undefined}
+                >
+                  {item.label}
+                </span>
+              ) : (
+                <BreadcrumbLink linkComponent={linkComponent} href={item.href}>
+                  {item.label}
+                </BreadcrumbLink>
+              )}
+            </span>
+          </Fragment>
         );
       })}
     </nav>
