@@ -72,13 +72,13 @@ export interface DataSectionProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
  *
  * Groups a titled block of data (typically a `<FieldGrid>` of `<Field>`s) with
  * an optional actions slot. Page analog to `<SheetSection>`, which lives
- * inside a Sheet body and uses an uppercase `<h3>` label style.
+ * inside a Sheet body and renders its heading at `h3` by default.
  *
  * The title is a real heading node in the page outline — default `<h2>`,
  * rendered with heading-tier typography. It is NOT an uppercase label.
  * @summary Page-side wrapper for read-mode data sections
  *
- * @see Displays/Form/Read-Mode Page — composition with FieldGrid + Field + ButtonGroup.
+ * @see Containers/read-mode-page — composition with FieldGrid + Field + ButtonGroup.
  */
 export function DataSection({
   title,
