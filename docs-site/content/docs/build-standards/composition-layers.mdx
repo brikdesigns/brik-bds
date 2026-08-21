@@ -1,13 +1,13 @@
 ---
 title: Composition Layers
-description: Five conceptual layers — Section, Layout, Container, Block, Component — and the decision rules for assembling them.
+description: Six conceptual layers — Section, Layout, Container, Block, Control, Component — and the decision rules for assembling them.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-A page in BDS is composed in five layers. Each has a single responsibility, a single vocabulary, and only knows about the layer below it. This model is **pedagogical** — it explains how to think about a page — and is intentionally non-binding on the BEM canon ([ADR-008](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-008-naming-canon-closed-allowlist.md)).
+A page in BDS is composed in six layers. Each has a single responsibility, a single vocabulary, and only knows about the layer below it. Block and Control sit at the same depth — both are fixed-slot shapes one step above Component; one holds content, the other holds controls. This model is **pedagogical** — it explains how to think about a page — and is intentionally non-binding on the BEM canon ([ADR-008](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-008-naming-canon-closed-allowlist.md)).
 
-## The five layers
+## The layers
 
 | Layer | Responsibility | Vocabulary | Examples |
 |---|---|---|---|
@@ -15,6 +15,7 @@ A page in BDS is composed in five layers. Each has a single responsibility, a si
 | **Layout** | Pure composition primitive — arranges children. No styling beyond structure. | Composition | `Stack`, `Cluster`, `Grid`, `Split`, `Row` |
 | **Container** | Styled holder that composes blocks into a self-contained unit. Carries border / padding / elevation / radius. | Bounded unit | `Card`, `List`, `Form`, `Accordion`, `Tabs` |
 | **Block** | Composed content unit — fixed slot shape filled with atoms. | Slot + atoms | `ContentBlock`, `MediaBlock`, `ListItem`, `FormField`, `Stat` |
+| **Control** | Interactive bar that operates on an adjacent display or heads a page. Fixed slot shape filled with controls, not content. | Slot + controls | `FilterBar`, `PageHeader`, `TabBar`, `SubNavigation`, `Pagination` |
 | **Component** | Single primitive atom. | One primitive | `Button`, `Input`, `Image`, `Badge`, `Icon` |
 
 ## Where each layer lives
@@ -25,6 +26,7 @@ A page in BDS is composed in five layers. Each has a single responsibility, a si
 | Layout | `components/ui/` | `Stack`, `Cluster`, `Grid`, `Split`, `Row` |
 | Container | `components/ui/` | `Card`, `Accordion`, `List` |
 | Block | `components/ui/` | `Field`, `Card preset="summary"` |
+| Control | `components/ui/` | `FilterBar`, `PageHeader`, `TabBar`, `SubNavigation`, `Pagination` |
 | Component | `components/ui/` | Atomic primitives |
 
 ## Block vs container
@@ -80,6 +82,60 @@ This keeps `CardImageLeft`, `CardStacked`, `CardHorizontal` from existing — th
 
 If you find yourself reaching for a `StatCard`, you're conflating block and container — write it as `Card` + `Stat` instead.
 
+## Control vs block and container
+
+> If the thing is described by **which atoms fill its slots** → it's a **block**. If it's described by **what it does to something else on the page** (filter, paginate, switch, act) → it's a **control**.
+
+A control never holds the content it governs. `FilterBar` heads the table it filters; that table is its **sibling**, not its child. `Pagination` pages a list it does not contain. `TabBar` switches a panel it knows nothing about. That is the line against **Container**: a container *bounds* its children, a control *operates on* a neighbour and bounds nothing.
+
+The line against **Block** is subtler, because both are fixed-slot shapes at the same depth. Ask what the slot content is *about*:
+
+- A `ContentBlock` with a `<Button>` in its action slot is still a **block** — the button acts on the block's own content.
+- A `FilterBar` with a title in its title slot is still a **control** — the title names the display underneath it.
+
+Reaching for a `Cluster` with `justify="between"` to build a bar is the tell that a control is missing. `Cluster` is a Layout primitive: it arranges, it carries no vocabulary, and every hand-rolled instance diverges. Use the control, or file for one.
+
+## Control bar or section header
+
+A control bar and a section header both render a title at `--heading-sm`, so the rendered output gives you no signal about which produced it. Pick by **what the title is over**:
+
+| The title heads | Reach for | Component |
+|---|---|---|
+| A display — table, list, board, card grid | A control bar | `FilterBar` |
+| A record — fields in read or edit mode | The section container's own header | `DataSection` `title`, `SheetSection` `heading` |
+| The whole page | The page header | `PageHeader` |
+
+```tsx
+// ✅ Collection — the control bar heads the display it filters
+<FilterBar title="Service plans" label="plans" total={42} filtered={12}>
+  <FilterButton ... />
+</FilterBar>
+<Table ... />
+
+// ✅ Record — the section container owns its own header
+<DataSection title="Billing details">
+  <FieldGrid>
+    <Field label="Plan">Growth</Field>
+  </FieldGrid>
+</DataSection>
+
+// ❌ Don't head a record with a control bar
+<FilterBar title="Billing details" label="fields" total={6} filtered={6} />
+<FieldGrid>...</FieldGrid>
+
+// ❌ Don't hand-roll a control bar out of a section header
+<DataSection title="Service plans" actions={<Button>Clear filters</Button>}>
+  <Badge>12 of 42</Badge>
+  <Table ... />
+</DataSection>
+```
+
+The last case is the one that ships. A section header plus a hand-placed count and clear button is a `FilterBar` reimplemented without its collapse behaviour, its counter status, or its accessible name — the mixture found on one product page in `brik-client-portal`, where `bds-data-section__header`, `bds-filter-bar`, and `bds-cluster--justify-between` all did this job at once.
+
+<Callout type="warn">
+  `SectionHeader` is **not** the section header this rule means. It is the centered marketing section intro (title + description + [content measure](/docs/build-standards/page-grid#content-measure)), not a record header. On a product page the record header is the section container's own `title` slot.
+</Callout>
+
 ## Container reference
 
 | Container | Purpose | When |
@@ -94,7 +150,7 @@ Don't reach for a `Card` when a `DataSection` is right. Cards are self-contained
 
 ## Identify the layer before you target it
 
-When a change names an element ("the card", "the section", "the button"), find the target by its **layer**, reading the DOM top-down (Section → Layout → Container → Block → Component) — **never by selector-name resemblance.**
+When a change names an element ("the card", "the section", "the button"), find the target by its **layer**, reading the DOM top-down (Section → Layout → Container → Block or Control → Component) — **never by selector-name resemblance.**
 
 A BEM **block name** identifies the blueprint family; it does **not** define the element's layer. A block whose name contains "card" can still be a **Section**. The Card is whichever nested element plays the **Container** role.
 
@@ -108,5 +164,6 @@ The block-vs-container decision rule above answers "what layer is this?"; apply 
 
 - [Naming Principles](/docs/build-standards/naming-principles) — the slot pattern and blueprint naming rules
 - [Page Structure](/docs/build-standards/page-structure) — how sections are structured in HTML
-- [Content Rhythm](/docs/build-standards/content-rhythm) — the spacing scale between these layers, from text pairings to section breaks
+- [Content Rhythm](/docs/build-standards/content-rhythm) — the spacing scale between these layers, from text pairings to section breaks, and which layer owns the separator between sections
+- [Display Choice](/docs/build-standards/display-choice) — which display a Control layer bar heads
 - [Theming — Blueprints](/docs/theming/blueprints) — blueprint families that play the Section role

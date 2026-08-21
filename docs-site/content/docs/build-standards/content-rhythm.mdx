@@ -56,6 +56,22 @@ Adjacency margin covers the one case a single flex `gap` cannot: a Block's title
   Adjacency margin is the **only** place margin sets vertical rhythm. Never use margin to space one component from another — that space belongs to the parent layout's `gap`.
 </Callout>
 
+## The section separator
+
+**The section component owns the separator between sections.** A hand-placed `<Divider />` between two sections is duplicate chrome — the line is already there.
+
+On a product page, consecutive `DataSection` siblings draw their own rule and their own space from one adjacency selector: `--padding-lg` of `margin-top`, the same again as `padding-top`, and a `--border-width-md` `--border-muted` top border. That is the identical token treatment `<Divider />` renders, so placing one between two `DataSection`s paints the line twice. `SheetSection` takes the spacing half of the same rule (`margin-top: var(--padding-lg)`) and deliberately draws **no** border — a sheet body is already a bounded surface.
+
+| Between | Separator comes from | Hand-place a `Divider`? |
+|---|---|---|
+| Two `DataSection` siblings | The adjacency rule on `DataSection` | No — it is already drawn |
+| Two `SheetSection` siblings | The adjacency rule on `SheetSection`, spacing only | No — a sheet body needs no rule |
+| A section and a non-section block | Nothing — the sibling selector does not match | Yes, this is the one correct case |
+
+<Callout type="info">
+  The sibling selector is what makes this automatic and what makes the exception real. Insert any non-section element between two sections and the adjacency breaks, so the second section loses its rule — that gap is the only place a hand-placed `Divider` belongs. If you find one anywhere else, delete it rather than tuning the space around it.
+</Callout>
+
 ## Where each step is set
 
 You rarely set these values by hand — the standard is baked into the layer that owns each relationship.
@@ -69,7 +85,7 @@ You rarely set these values by hand — the standard is baked into the layer tha
 
 - [Display Choice](/docs/build-standards/display-choice) — which display holds the content this page then spaces.
 - [Spacing](/docs/primitives/spacing) — the `--gap-*` / `--padding-*` token scales and the density modes that modulate them.
-- [Composition Layers](/docs/build-standards/composition-layers) — the Section → Layout → Container → Block → Component model these adjacencies span.
+- [Composition Layers](/docs/build-standards/composition-layers) — the Section → Layout → Container → Block or Control → Component model these adjacencies span.
 - [Headings](/docs/build-standards/headings) — the heading roles these steps sit above.
 - [Paragraphs](/docs/build-standards/paragraphs) — the body roles the paragraph steps space.
 - [Page Grid](/docs/build-standards/page-grid) — the horizontal axis: the width-container recipe and the page gutter.
