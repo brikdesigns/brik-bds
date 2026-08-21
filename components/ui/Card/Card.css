@@ -283,7 +283,7 @@
 }
 
 .bds-card__preset-control-status--syncing .bds-card__preset-control-status-label {
-  color: var(--text-status-info);
+  color: var(--text-info);
 }
 
 .bds-card__preset-control-status--synced .bds-card__preset-control-status-label {

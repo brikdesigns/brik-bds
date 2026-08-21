@@ -28,6 +28,6 @@
 .bds-counter--error    { background-color: var(--background-negative);      color: var(--text-on-color-dark);  }
 .bds-counter--warning  { background-color: var(--background-warning);       color: var(--text-on-color-light); }
 .bds-counter--neutral  { background-color: var(--surface-neutral);       color: var(--text-on-color-light); }
-.bds-counter--progress { background-color: var(--background-status-info);   color: var(--text-on-color-dark);  }
+.bds-counter--progress { background-color: var(--background-info);   color: var(--text-on-color-dark);  }
 .bds-counter--brand    { background-color: var(--background-brand-primary); color: var(--text-on-color-dark);  }
 }
