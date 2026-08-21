@@ -3,8 +3,26 @@
 
 .bds-breadcrumb {
   display: flex;
+  /* Wrap at crumb boundaries so a trail that outgrows its container never
+     clips the terminal crumb (#468). Below the tablet breakpoint the
+     intermediate crumbs collapse instead — see the media query below. */
+  flex-wrap: wrap;
   gap: var(--gap-md);
   align-items: center;
+  min-width: 0;
+}
+
+/* ─── Crumb ──────────────────────────────────────────────────── */
+
+/* Each crumb is a real flex box holding its own leading separator, so the
+   pair wraps as a unit (no orphaned `/` starting a line) and the label has a
+   box to ellipsis against. The item's internal gap matches the nav's, so
+   spacing is identical to the `display: contents` wrappers this replaced. */
+.bds-breadcrumb__item {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  min-width: 0;
 }
 
 /* ─── Link ───────────────────────────────────────────────────── */
@@ -18,6 +36,12 @@
   text-decoration: none;
   text-transform: capitalize;
   cursor: pointer;
+  /* A single label longer than its container ellipsises rather than
+     overflowing — the case wrapping alone can't reach (#468). */
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ─── Current page ───────────────────────────────────────────── */
@@ -34,6 +58,10 @@
   color: var(--text-secondary);
   text-transform: capitalize;
   cursor: default;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ─── Separator ──────────────────────────────────────────────── */
@@ -44,6 +72,48 @@
   color: var(--text-muted);
   line-height: var(--font-line-height-tight);
   padding: 0 var(--padding-tiny);
+  flex-shrink: 0;
+}
+
+/* ─── Collapsed marker ───────────────────────────────────────────
+ * Rendered only when the trail has two or more intermediate crumbs
+ * (Breadcrumb.tsx), and shown only below the tablet breakpoint. */
+
+.bds-breadcrumb__item--ellipsis {
+  display: none;
+}
+
+.bds-breadcrumb__ellipsis {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-secondary);
+}
+
+/* ─── Narrow viewports — collapse the middle of the trail ────────
+ * `Home / … / Current`. 767px is one below --breakpoint-tablet (768px);
+ * CSS custom properties can't be used inside @media rules (tokens/index.ts).
+ * The intermediate crumbs are visually hidden rather than `display: none`,
+ * so screen-reader users keep the full trail — only the sighted mobile
+ * layout trades it for the ellipsis. */
+
+@media (max-width: 767px) {
+  .bds-breadcrumb__item--ellipsis {
+    display: flex;
+  }
+
+  .bds-breadcrumb__item--collapsible {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px; /* bds-lint-ignore — visually-hidden clip pattern, not text rhythm */
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 }
 
 /* ─── Audience cascade — service-line tinting ────────────────────

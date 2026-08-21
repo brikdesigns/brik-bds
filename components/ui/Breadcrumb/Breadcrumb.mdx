@@ -16,6 +16,18 @@ Pass `linkComponent` (e.g. `next/link`) so linked crumbs route client-side inste
 
 <Canvas of={Stories.Default} />
 
+## Variants
+
+A deep trail is mobile-safe by default — no prop required. The trail wraps at
+crumb boundaries instead of clipping, and any single label longer than its
+container ellipsises. Below 768px the intermediate crumbs collapse behind a
+single `…` (`Home / … / Amendment 4821`) whenever there are two or more of
+them; they stay in the accessibility tree, so screen readers still announce the
+full trail. Switch the **Viewport** toolbar global to Mobile (375px) and Tablet
+(768px) to compare.
+
+<Canvas of={Stories.LongTrail} />
+
 ## Patterns
 
 Inside a `[data-service-line='X']` subtree, the current-page label and

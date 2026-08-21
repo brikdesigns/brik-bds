@@ -56,6 +56,27 @@ export const Default: Story = {
   },
 };
 
+/**
+ * A deep record trail — the shape that outgrows a narrow container. Switch the
+ * **Viewport** toolbar global to Mobile (375px) to see the intermediate crumbs
+ * collapse to `Home / … / Amendment 4821`; at Tablet (768px) and above the full
+ * trail shows and wraps rather than clipping. See #468.
+ * @summary Deep trail exercising the narrow-viewport collapse
+ */
+export const LongTrail: Story = {
+  args: {
+    items: [
+      { label: 'Home', href: '#' },
+      { label: 'Clients', href: '#' },
+      { label: 'Acme Holdings', href: '#' },
+      { label: 'Contracts', href: '#' },
+      { label: '2026 Renewal', href: '#' },
+      { label: 'Amendment 4821' },
+    ],
+    separator: 'slash',
+  },
+};
+
 /* ═══════════════════════════════════════════════════════════════
    2. INTERACTION TESTS — non-visual wiring assertions (rule 3)
    ═══════════════════════════════════════════════════════════════ */

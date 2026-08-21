@@ -7,6 +7,12 @@
   display: inline-flex;
   align-items: center;
   gap: var(--gap-xs);
+  /* Shrink-to-fit would size this to the trail's max-content width, so the
+     Breadcrumb inside never sees a constraint and its wrap/collapse never
+     engages. Cap at the parent so the overflow handling reaches here too
+     (#468). */
+  max-width: 100%;
+  min-width: 0;
 }
 
 /* ─── Trigger (anchors the Menu) ──────────────────────── */
@@ -14,6 +20,8 @@
 .bds-breadcrumb-switcher__trigger {
   position: relative;
   display: inline-flex;
+  /* The trail absorbs the shrinking, never the caret. */
+  flex-shrink: 0;
 }
 
 .bds-breadcrumb-switcher__menu {
