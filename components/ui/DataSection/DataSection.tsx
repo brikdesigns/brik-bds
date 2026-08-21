@@ -38,6 +38,14 @@ export interface DataSectionProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
    */
   actions?: ReactNode;
   /**
+   * Centered control slot rendered between the title and `actions` in the
+   * header — e.g. a month `<DatePicker>` for a section that browses a time
+   * series. When set, the header lays out as a `1fr auto 1fr` grid so the
+   * control is optically centered regardless of title/action widths.
+   * Suppressed while `loading`, like `actions`.
+   */
+  headerControl?: ReactNode;
+  /**
    * Section body — typically a `<FieldGrid>` of `<Field>`s, but any content works.
    */
   children?: ReactNode;
@@ -76,6 +84,7 @@ export function DataSection({
   title,
   subtitle,
   actions,
+  headerControl,
   children,
   spacing = 'lg',
   titleAs = 'h2',
@@ -85,7 +94,8 @@ export function DataSection({
   ...props
 }: DataSectionProps) {
   const TitleTag = titleAs;
-  const hasHeader = Boolean(title || subtitle || (actions && !loading));
+  const showControl = Boolean(headerControl) && !loading;
+  const hasHeader = Boolean(title || subtitle || (actions && !loading) || showControl);
   const skeletonShape = loading ? resolveSkeletonShape(children) : null;
 
   return (
@@ -100,12 +110,20 @@ export function DataSection({
       {...props}
     >
       {hasHeader && (
-        <header className="bds-data-section__header">
+        <header
+          className={bdsClass(
+            'bds-data-section__header',
+            showControl && 'bds-data-section__header--with-control',
+          )}
+        >
           {(title || subtitle) && (
             <div className="bds-data-section__titles">
               {title && <TitleTag className="bds-data-section__title">{title}</TitleTag>}
               {subtitle && <p className="bds-data-section__subtitle">{subtitle}</p>}
             </div>
+          )}
+          {showControl && (
+            <div className="bds-data-section__header-control">{headerControl}</div>
           )}
           {actions && !loading && <div className="bds-data-section__actions">{actions}</div>}
         </header>

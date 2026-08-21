@@ -65,6 +65,31 @@
   flex-shrink: 0;
 }
 
+/* Centered header control (e.g. a month DatePicker). The header switches to a
+   symmetric `1fr auto 1fr` grid so the control sits optically centered
+   independent of title/action widths; explicit column placement keeps each
+   slot in its lane even when title or actions is absent. */
+.bds-data-section__header--with-control {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+}
+
+.bds-data-section__header--with-control .bds-data-section__titles {
+  grid-column: 1;
+  justify-self: start;
+}
+
+.bds-data-section__header--with-control .bds-data-section__header-control {
+  grid-column: 2;
+  justify-self: center;
+}
+
+.bds-data-section__header--with-control .bds-data-section__actions {
+  grid-column: 3;
+  justify-self: end;
+}
+
 /* ─── Content ──────────────────────────────────────────────────── */
 
 .bds-data-section__content {
