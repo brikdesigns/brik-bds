@@ -182,7 +182,8 @@
      comment truncates the light :root block and every token declared after it
      resolves to undefined. It cost 18494 -> 8489 chars of parsed block when
      this comment first shipped that shorthand, and contrast-gate failed on an
-     unrelated token 150 lines below. Filed as brik-bds#1960. brik-bds#1955 */
+     unrelated token 150 lines below. Filed as brik-bds#1965 — delete this
+     paragraph when that lands. brik-bds#1955 */
   --text-neutral:                     var(--color-system-neutral);
   --border-neutral:                   var(--color-system-neutral);
   --background-neutral:               var(--color-system-neutral-light);
