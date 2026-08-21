@@ -24,6 +24,14 @@ A single option means there is nothing to switch to — the caret is omitted ent
 
 <Canvas of={Stories.SingleOption} />
 
+### Chevron separator
+
+`separator` is forwarded to the internal `Breadcrumb`, so a switcher trail can
+match the chevron breadcrumbs elsewhere on the same page. `Breadcrumb` owns the
+`slash` default.
+
+<Canvas of={Stories.ChevronSeparator} />
+
 ## Props
 
 <ArgTypes of={Stories} />
