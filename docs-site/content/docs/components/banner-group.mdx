@@ -83,7 +83,9 @@ import { Banner, BannerGroup, Button, Page, PageContent, PageHeader } from '@bri
 ## When *not* to use
 
 <Callout type="warn">
-  **Don't wrap a single Banner.** At count=1 the group adds a DOM node and no arrangement. Render `<Banner>` directly and let the parent layout's `gap` space it — the same rule BadgeGroup and TagGroup carry.
+  **Don't wrap a *statically* single Banner.** If the surface has one banner and always will, the group adds a DOM node and no arrangement — render `<Banner>` directly and let the parent layout's `gap` space it. The same rule BadgeGroup and TagGroup carry.
+
+  A **data-driven** set keeps its group even when today's data yields one banner: the count varies per render, and toggling between a group and a bare banner puts the arrangement rule back in the page.
 </Callout>
 
 - **Don't stack more than three.** Three `role="alert"` banners announce serially with no way to skip. Cap the rendered set and roll the remainder into one summarizing banner. See [when *not* to stack banners](/docs/build-standards/banner-groups#when-not-to-stack-banners).
