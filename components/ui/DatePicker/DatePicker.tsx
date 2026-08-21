@@ -45,6 +45,13 @@ export interface DatePickerProps {
   maxDate?: Date;
   /** Input id */
   id?: string;
+  /**
+   * Accessible name for the trigger when no visible `label` is rendered —
+   * e.g. a header-embedded picker whose purpose the surrounding title already
+   * conveys visually. Forwarded to the trigger's `aria-label`. Ignored when a
+   * visible `label` is present (the `<label htmlFor>` association wins).
+   */
+  'aria-label'?: string;
   /** Additional className */
   className?: string;
 }
@@ -383,6 +390,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
       minDate,
       maxDate,
       id,
+      'aria-label': ariaLabel,
       className = '',
     },
     ref
@@ -432,6 +440,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                 disabled && 'bds-date-picker__trigger--disabled',
                 open && 'bds-date-picker__trigger--open',
               )}
+              aria-label={label ? undefined : ariaLabel}
               aria-invalid={hasError}
               aria-describedby={
                 error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
