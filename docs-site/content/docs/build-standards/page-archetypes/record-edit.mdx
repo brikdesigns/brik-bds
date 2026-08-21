@@ -1,0 +1,105 @@
+---
+title: Record Edit
+description: The page-level write half of read and edit parity — one form for the whole record, with the header owning Save and Cancel.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+The write half of [record read](/docs/build-standards/page-archetypes/record-read). One route, one form, the whole record editable at once. A catalog admin's service editor, a settings page with a dozen coupled fields, any record where saving half of it is meaningless.
+
+Reach for it only when the *whole* record edits together. A page where one section at a time opens a sheet or swaps its body in place is still record read with an edit affordance — those two conventions are documented in [Storybook](https://storybook.brikdesigns.com/?path=/docs/containers-read-mode-page--overview), and this archetype is not a third one.
+
+## Composition
+
+`PageHeader mode="edit"` supplies Cancel and Save. The body is a `Form` whose fields lay out in `FieldGrid`, grouped by `DataSection` when the record has more than one logical group.
+
+```tsx
+<Page padding="md" gap="xl">
+  <PageHeader
+    title={`Edit ${service.name}`}
+    breadcrumbs={<Breadcrumb items={crumbs} />}
+    mode="edit"
+    onSave={handleSave}
+    onCancel={() => router.push(`/services/${slug}`)}
+    saveLoading={pending}
+    saveDisabled={!isValid}
+  />
+  <PageContent>
+    <Form onSubmit={handleSave} error={submitError}>
+      <DataSection title="Identity">
+        <FieldGrid columns={2}>
+          <TextInput label="Business Name" defaultValue={service.name} />
+          <Select label="Industry" defaultValue={service.industry} options={industries} />
+        </FieldGrid>
+      </DataSection>
+      <DataSection title="Pricing">
+        <FieldGrid columns={2}>
+          <NumberInput label="Monthly Rate" defaultValue={service.rate} />
+          <Select label="Billing Cycle" defaultValue={service.cycle} options={cycles} />
+        </FieldGrid>
+      </DataSection>
+    </Form>
+  </PageContent>
+</Page>
+```
+
+`FieldGrid` holds the inputs, exactly as it holds the `Field` pairs on the read page. Same columns, same cells, same alignment — that symmetry is what makes read and edit read as one record rather than two screens.
+
+<Callout type="warn">
+  The header's Save is **not** a `type="submit"` inside the form. `PageHeader onSave` is an `onClick` handler, and the header renders outside `PageContent`, so it cannot submit the form implicitly. Wire `onSave` and `Form onSubmit` to the **same** handler, or keyboard Enter silently does nothing.
+</Callout>
+
+## Route split
+
+Read and edit are two routes on the same record, not one route with a mode toggle.
+
+| Route | Header | Body |
+|---|---|---|
+| `/{table}/[slug]` | `mode="read"` plus `onEdit` | `DataSection` stack of `Field` pairs |
+| `/{table}/[slug]/edit` | `mode="edit"` plus `onSave` and `onCancel` | `Form` of the same grids, filled with inputs |
+
+`PageHeader.mode` is symmetric with `Sheet.mode`, so a table row that opens a snapshot sheet can hand off to either route with the same vocabulary.
+
+## Spacing and heading tiers
+
+Nothing on this page sets a margin. Every step is a `gap` owned by the layer above it, and the defaults are already correct:
+
+| Between | Owned by | Default |
+|---|---|---|
+| Header and body | `Page gap` | `--gap-xl` |
+| Two body regions | `PageContent gap` | `--gap-lg` |
+| Two `DataSection` siblings | The `DataSection` adjacency rule | `--padding-lg` plus a top border |
+| Two form fields in one column | `Form gap` | `--gap-lg` |
+| Two cells in one `FieldGrid` | `FieldGrid gap` | `--gap-lg` |
+
+The heading ramp is the read page's ramp unchanged: `PageHeader title` is the `<h1>`, each `DataSection title` is an `<h2>` at `--heading-sm`, and every input's own label is the label family, never a heading token.
+
+<Callout type="warn">
+  **Do not use `Form title` as a region heading.** It renders a hardcoded `<h3>` at `--heading-sm` bold — the same size as `DataSection title` at a different weight, one outline level deeper, and it skips `<h2>` when it is the first heading under the page's `<h1>`. Group with `DataSection` and leave `Form title` unset on a record edit page. `Form title` and `description` are for a standalone form that is not inside a page archetype.
+</Callout>
+
+## State shell
+
+**None of the four [`DataView`](/docs/components/data-view) shells applies.** They wrap a *display* and own error, loading, and empty for it; a form has no empty state, and its errors and pending state already have slots:
+
+- **Loading the record before the form renders** — `DataSection loading`, which draws field-shaped skeletons matching the `FieldGrid` the section will hold.
+- **Submitting** — `PageHeader saveLoading` on the Save button, plus `saveDisabled` while the form is invalid.
+- **Submit failure** — `Form error`, which renders the form-level message inline. Never swallow it.
+
+Wrapping a `Form` in `ProfileView` is the mistake this section exists to name — the shell's empty state has nothing to be empty of, and its skeleton is field-shaped rather than input-shaped.
+
+## Don'ts
+
+- **Don't toggle read and edit on one route.** Two routes, one record. A `mode` state variable driving the whole page reimplements routing badly and loses the back button.
+- **Don't put a Save inside the body.** The header owns Save and Cancel. A second submit in `Form footer` gives the page two primary actions.
+- **Don't hand-roll the input grid.** An inline `display: grid` above two inputs is `FieldGrid`, and hand-rolling it breaks the read-to-edit column symmetry.
+- **Don't change the columns between read and edit.** A two-column read grid edits as a two-column grid. Re-flowing on mode change reads as a different record.
+- **Don't reach for `Form title`.** See the callout above.
+
+## Related
+
+- [Record Read](/docs/build-standards/page-archetypes/record-read) — the read half this page pairs with.
+- [Collection](/docs/build-standards/page-archetypes/collection) — the archetype the route above this record's list page uses.
+- [Profile](/docs/build-standards/page-archetypes/profile) — when the record is large enough that editing belongs per tab.
+- [Content Rhythm](/docs/build-standards/content-rhythm) — the full role-to-step scale behind the spacing table above.
+- [Headings](/docs/build-standards/headings) — why the token and the element are two separate choices.
