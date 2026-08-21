@@ -15,11 +15,15 @@ let root;
 
 const COMPONENT = `
 export type WidgetSize = 'sm' | 'md' | 'lg';
+export type WidgetSpan = 1 | 2 | 3 | 'auto-fit' | 'auto-fill';
+export type WidgetLevel = 1 | 2 | 3;
 
 export interface WidgetProps {
   /** style variant */
   variant?: 'a' | 'b';
   size?: WidgetSize;
+  span?: WidgetSpan;
+  level?: WidgetLevel;
   count?: number;
   loading?: boolean;
   label: string;
@@ -87,6 +91,33 @@ describe('lint-component-props', () => {
   it('accepts the expanded literal union for an aliased source type', () => {
     const { code } = run(["| `size` | `'sm' \\| 'md' \\| 'lg'` | `'md'` |"]);
     expect(code).toBe(0);
+  });
+
+  // ── Mixed literal-kind unions (#1917) ────────────────────────────────────
+  // A union of numeric literals — or numeric mixed with string, the
+  // `GridColumns` shape — is the same authoring style as an all-string union,
+  // and a docs page spells it out for the same reason.
+
+  it('accepts an expanded union mixing numeric and string literals', () => {
+    const { code, json } = run(["| `span` | `1 \\| 2 \\| 3 \\| 'auto-fit' \\| 'auto-fill'` | — |"]);
+    expect(json.violations).toEqual([]);
+    expect(code).toBe(0);
+  });
+
+  it('accepts an all-numeric expanded union', () => {
+    const { code } = run(['| `level` | `1 \\| 2 \\| 3` | — |']);
+    expect(code).toBe(0);
+  });
+
+  it('accepts the alias name for a mixed-literal union too', () => {
+    const { code } = run(['| `span` | `WidgetSpan` | — |']);
+    expect(code).toBe(0);
+  });
+
+  it('FAILS on a wrong member in a numeric union — widening is not blanket acceptance', () => {
+    const { code, json } = run(['| `level` | `1 \\| 2 \\| 3 \\| 4` | — |']);
+    expect(code).toBe(1);
+    expect(kinds(json)).toContain('level:type-mismatch');
   });
 
   it('accepts union members in any order', () => {

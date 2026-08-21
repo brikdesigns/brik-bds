@@ -120,9 +120,10 @@ For more sophisticated positioning (collision detection, viewport-aware flips), 
 
 ## API
 
+{/* props-check: MenuProps @ components/ui/Menu/Menu.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `items` | `MenuItemData[]` *(required)* | — |
+| `items` | `(MenuItemData \| MenuItemGroup)[]` *(required)* | — |
 | `isOpen` | `boolean` *(required)* | — |
 | `onClose` | `() => void` *(required)* | — |
 | `activeId` | `string` | — |

@@ -83,9 +83,10 @@ By default selected-item tags match the dropdown size. Override with `tagSize` f
 
 ## API
 
+{/* props-check: MultiSelectProps @ components/ui/MultiSelect/MultiSelect.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `options` | `MultiSelectOption[]` *(required)* | — |
+| `options` | `(MultiSelectOption \| MultiSelectOptionGroup)[]` *(required)* | — |
 | `value` / `defaultValue` | `string[]` | — |
 | `onChange` | `(values: string[]) => void` | — |
 | `placeholder` | `string` | — |
