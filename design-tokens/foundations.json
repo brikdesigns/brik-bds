@@ -5323,7 +5323,7 @@
         "$type": "color",
         "$value": "{color.system.purple}"
       },
-      "info": {
+      "neutral": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5424,7 +5424,7 @@
         "$type": "color",
         "$value": "{color.grayscale.black}"
       },
-      "info": {
+      "neutral": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5606,7 +5606,7 @@
         "$type": "color",
         "$value": "{color.system.yellow}"
       },
-      "info": {
+      "neutral": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5726,7 +5726,7 @@
         "$type": "color",
         "$value": "{color.grayscale.black}"
       },
-      "info": {
+      "neutral": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5894,7 +5894,7 @@
         "$type": "color",
         "$value": "{color.system.purple}"
       },
-      "info": {
+      "neutral": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5995,7 +5995,7 @@
         "$type": "color",
         "$value": "{color.grayscale.black}"
       },
-      "info": {
+      "neutral": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -6177,7 +6177,7 @@
         "$type": "color",
         "$value": "{color.system.yellow}"
       },
-      "info": {
+      "neutral": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -6297,7 +6297,7 @@
         "$type": "color",
         "$value": "{color.grayscale.white}"
       },
-      "info": {
+      "neutral": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"

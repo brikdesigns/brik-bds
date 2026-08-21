@@ -1983,7 +1983,7 @@
       "$value": "{color.system.purple}",
       "$type": "color"
     },
-    "info": {
+    "neutral": {
       "$value": "{color.system.neutral}",
       "$type": "color"
     },
@@ -2110,7 +2110,7 @@
       "$value": "{color.grayscale.darkest}",
       "$type": "color"
     },
-    "info": {
+    "neutral": {
       "$value": "{color.system.neutral}",
       "$type": "color"
     },
@@ -2225,7 +2225,7 @@
       "$value": "{color.system.yellow}",
       "$type": "color"
     },
-    "info": {
+    "neutral": {
       "$value": "{color.system.neutral}",
       "$type": "color"
     },
@@ -2367,7 +2367,7 @@
       "$value": "{color.grayscale.darkest}",
       "$type": "color"
     },
-    "info": {
+    "neutral": {
       "$value": "{color.system.neutral-light}",
       "$type": "color"
     },

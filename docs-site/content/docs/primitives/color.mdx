@@ -114,19 +114,37 @@ Canonical Figma tokens for positive, negative, and warning states. Background va
   columns={3}
 />
 
-**Extended status (gap-fills)** — additional status tokens not yet in Figma.
+**The `info` signal** — blue, and one of the five valence values. It came from Figma under the `status-` segment until [#1959](https://github.com/brikdesigns/brik-bds/issues/1959) freed the name: the gray family that used to hold `--*-info` is now `--*-neutral`, so `info` means blue and only blue. The `--*-status-info*` spellings still resolve as deprecated aliases for one minor ([#1958](https://github.com/brikdesigns/brik-bds/issues/1958) deletes them). There is no `--border-info` — the gray one retired with the rename and blue has no border counterpart.
 
 <ColorGrid
   colors={[
-    { name: 'background-status-info', cssVar: '--background-status-info' },
-    { name: 'background-status-info-subtle', cssVar: '--background-status-info-subtle' },
-    { name: 'background-status-neutral', cssVar: '--background-status-neutral' },
-    { name: 'background-status-purple', cssVar: '--background-status-purple' },
-    { name: 'background-status-orange', cssVar: '--background-status-orange' },
-    { name: 'text-status-info', cssVar: '--text-status-info', isText: true },
-    { name: 'surface-status-info', cssVar: '--surface-status-info' },
+    { name: 'background-info', cssVar: '--background-info' },
+    { name: 'surface-info', cssVar: '--surface-info' },
+    { name: 'text-info', cssVar: '--text-info', isText: true },
+  ]}
+  columns={3}
+/>
+
+**The `neutral` intent family** — gray, Figma-sourced across all four purposes since [#1959](https://github.com/brikdesigns/brik-bds/issues/1959). Note the purpose split the rename made honest: `--background-neutral` is the *saturated* charcoal, `--surface-neutral` the subtle tint. A gray Badge or Tag chip wants `--surface-neutral`.
+
+<ColorGrid
+  colors={[
+    { name: 'background-neutral', cssVar: '--background-neutral' },
+    { name: 'surface-neutral', cssVar: '--surface-neutral' },
+    { name: 'text-neutral', cssVar: '--text-neutral', isText: true },
+    { name: 'border-neutral', cssVar: '--border-neutral' },
   ]}
   columns={4}
+/>
+
+**Hues with no valence (gap-fills)** — `purple` and `orange` are hue names, not valence values, so ADR-033 § 1 has no home for them yet. Amendment owed on [#1958](https://github.com/brikdesigns/brik-bds/issues/1958).
+
+<ColorGrid
+  colors={[
+    { name: 'background-status-purple', cssVar: '--background-status-purple' },
+    { name: 'background-status-orange', cssVar: '--background-status-orange' },
+  ]}
+  columns={2}
 />
 
 ## Accent
