@@ -114,7 +114,7 @@
 
 .bds-badge--solid.bds-badge--warning {
   background-color: var(--background-warning);
-  color: var(--text-status-neutral);
+  color: var(--text-neutral);
 }
 
 /* Dark label: white on --background-negative (#eb5757) is 3.48:1 (fails AA);
@@ -125,8 +125,8 @@
 }
 
 .bds-badge--solid.bds-badge--info {
-  background-color: var(--background-status-neutral);
-  color: var(--text-status-neutral);
+  background-color: var(--background-neutral);
+  color: var(--text-neutral);
 }
 
 .bds-badge--solid.bds-badge--progress {
@@ -155,7 +155,7 @@
 
 .bds-badge--subtle.bds-badge--warning {
   background-color: var(--background-status-warning-subtle);
-  color: var(--text-status-neutral);
+  color: var(--text-neutral);
 }
 
 .bds-badge--subtle.bds-badge--error {
@@ -164,8 +164,8 @@
 }
 
 .bds-badge--subtle.bds-badge--info {
-  background-color: var(--background-status-neutral);
-  color: var(--text-status-neutral);
+  background-color: var(--background-neutral);
+  color: var(--text-neutral);
 }
 
 .bds-badge--subtle.bds-badge--progress {

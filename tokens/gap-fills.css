@@ -162,18 +162,54 @@
      comment at line 118 for the info-family distinction. */
   --text-link: var(--text-text-link);
 
-  /* ── Info / Neutral / Purple / Orange status tokens (no Figma equivalent) ──
+  /* ── The `neutral` intent family (ADR-033 § 1) ──
+     `neutral` is one of the five valence values, so it takes the same four
+     purposes as positive / negative / warning. Only --background-neutral
+     shipped, which is why consumers reached for --text-status-neutral instead —
+     an out-of-formula name (`status` is neither a documented purpose nor a
+     documented scope) that #1958 retires.
+
+     Theme-invariant by construction: --color-system-neutral and
+     --color-system-neutral-light are declared once in figma-tokens.css
+     (:25, :27) with no dark override, so these inherit that. Do not add a
+     dark-theme entry for them without changing the primitives first — a dark
+     entry here would be a shadow, not a theme value.
+
+     NOTE: never write a curly brace in this file's comments, not even in prose
+     (the brace-expansion shorthand for a token pair is the tempting case).
+     scripts/validate-themes.js:77 finds a block's end with a bare indexOf on
+     the closing brace and does not strip comments first, so one brace in a
+     comment truncates the light :root block and every token declared after it
+     resolves to undefined. It cost 18494 -> 8489 chars of parsed block when
+     this comment first shipped that shorthand, and contrast-gate failed on an
+     unrelated token 150 lines below. Filed as brik-bds#1965 — delete this
+     paragraph when that lands. brik-bds#1955 */
+  --text-neutral:                     var(--color-system-neutral);
+  --border-neutral:                   var(--color-system-neutral);
+  --background-neutral:               var(--color-system-neutral-light);
+  --surface-neutral:                  var(--color-system-neutral-light);
+
+  /* ── Info / Purple / Orange status tokens (no Figma equivalent) ──
      Note: Figma's --background-info / --text-info / --surface-info map to system/neutral (gray),
-     NOT blue. These blue "info" status tokens are a separate concept — keep as gap-fills. */
+     NOT blue. These blue "info" status tokens are a separate concept — keep as gap-fills.
+     ADR-033 § 5 rules that `info` names the BLUE signal and the gray family folds
+     into `neutral` above; freeing the name needs a Figma variable rename, which is
+     brik-bds#1959. Until then the two concepts stay one segment apart. */
   --background-status-info:           var(--color-system-blue);
   --background-status-info-subtle:    var(--color-system-blue-light);
-  --background-status-neutral:        var(--color-system-neutral-light);
-  --background-neutral:               var(--color-system-neutral-light); /* sibling to --background-positive/negative/warning — use for neutral/gray semantic surfaces. */
   --background-status-purple:         var(--color-system-purple);
   --background-status-orange:         var(--color-system-orange);
   --text-status-info:                 var(--color-system-blue);
-  --text-status-neutral:              var(--color-system-neutral);
   --surface-status-info:              var(--color-system-blue-light);
+
+  /* ⚠️ DEPRECATED (brik-bds#1955) — the `status-` segment is out of formula.
+     Re-pointed at the intent-form names above rather than deleted: six repos
+     consume @brikdesigns/bds and ADR-033 § Consequences requires the alias to
+     ship alongside the new name. Values are unchanged — --background-status-neutral
+     and --background-neutral were already declared at the same value, one line
+     apart. Deletion is brik-bds#1958. */
+  --background-status-neutral:        var(--background-neutral);
+  --text-status-neutral:              var(--text-neutral);
 
   /* ── System color hover/pressed states ──
      Darken system colors for interactive feedback on destructive/positive buttons.

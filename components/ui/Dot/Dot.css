@@ -21,7 +21,7 @@
 .bds-dot--warning  { background-color: var(--background-warning); }
 .bds-dot--error    { background-color: var(--background-negative); }
 .bds-dot--info     { background-color: var(--background-status-info); }
-.bds-dot--neutral  { background-color: var(--background-status-neutral); }
+.bds-dot--neutral  { background-color: var(--background-neutral); }
 
 /* ─── Pulse animation (keyframe in tokens/animations.css) ────── */
 
