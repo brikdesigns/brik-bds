@@ -34,6 +34,15 @@ name: stale-citation-sweep
 # tokens. The token hits skew toward proposals (#456 proposes a whole opacity
 # taxonomy), which is why an issue can opt out with `<!-- citation-sweep:ignore -->`.
 #
+# The opt-out covers BOTH directions, because the detector parses prose and so
+# cannot tell a citation from a subject — and should not try (#1929):
+#   • forward — a token or file the issue will CREATE and that does not exist yet
+#   • backward — a token or file the issue exists to REMOVE and that is already gone
+# #1928 is the backward case: filed to delete three phantom token names from a
+# docs page, it had to quote them to be actionable, and the sweep flagged the
+# quote. Neither direction is a dead link a builder would follow, which is the
+# only thing this gate is for.
+#
 # Exemptions: `meta:project` parents (umbrella bodies cite broadly and are read
 # as roadmaps, not build instructions) and `icebox` (parked — nobody is
 # following its links).
@@ -347,7 +356,7 @@ jobs:
                 `Update the body to point at what exists, or close the issue if the work is moot.`,
                 `Editing or closing clears the \`${NEEDS}\` flag automatically.`,
                 ``,
-                `_Deliberate forward reference — proposing a token or file this issue will create? Add \`${OPT_OUT}\` to the body and this check will skip the issue._`,
+                `_Is the missing name the **subject** of this issue rather than a citation? Either direction counts — a token or file this issue will **create**, or one it exists to **remove** — and neither is a dead link a builder would follow. Add \`${OPT_OUT}\` to the body and this check will skip the issue._`,
               );
               const body = lines.join('\n');
 
