@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState, type HTMLAttributes } from 'react';
-import { Breadcrumb, type BreadcrumbItem } from '../Breadcrumb/Breadcrumb';
+import {
+  Breadcrumb,
+  type BreadcrumbItem,
+  type BreadcrumbSeparator,
+} from '../Breadcrumb/Breadcrumb';
 import { type BdsLinkComponent } from '../NavItem';
 import { Menu } from '../Menu/Menu';
 import { Button } from '../Button/Button';
@@ -27,6 +31,11 @@ export interface BreadcrumbSwitcherProps extends Omit<HTMLAttributes<HTMLDivElem
   options: BreadcrumbSwitcherOption[];
   /** Accessible label for the switch trigger, e.g. `Switch service`. */
   switchLabel: string;
+  /**
+   * Visual separator between crumbs. Forwarded to the internal `Breadcrumb`.
+   * Default `slash` (`/`); `chevron` renders `›`.
+   */
+  separator?: BreadcrumbSeparator;
   /**
    * Render linked crumbs with a router-aware component (Next.js `Link`, Remix
    * `Link`) for client-side routing instead of the default `<a>`. Forwarded
@@ -60,6 +69,7 @@ export function BreadcrumbSwitcher({
   items,
   options,
   switchLabel,
+  separator,
   linkComponent,
   onNavigate,
   className,
@@ -85,7 +95,9 @@ export function BreadcrumbSwitcher({
 
   return (
     <div className={bdsClass('bds-breadcrumb-switcher', className)} style={style} {...props}>
-      <Breadcrumb items={items} linkComponent={linkComponent} />
+      {/* `separator` is forwarded undefined when unset so `Breadcrumb` stays the
+          single owner of the `slash` default — no second copy to drift. */}
+      <Breadcrumb items={items} separator={separator} linkComponent={linkComponent} />
 
       {hasSwitcher && (
         <span className="bds-breadcrumb-switcher__trigger">
