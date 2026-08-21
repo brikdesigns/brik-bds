@@ -2,12 +2,14 @@ import { type ReactNode, useEffect, useId } from 'react';
 import { createPortal } from 'react-dom';
 import { Button } from '../Button';
 import { CloseButton } from '../CloseButton';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredValue } from '../../utils';
 import './Modal.css';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 export type ModalPreset = 'confirm';
-export type ModalConfirmVariant = 'primary' | 'destructive';
+export type ModalConfirmVariant = 'primary' | 'negative';
+
+const RETIRED_CONFIRM_VARIANTS: Record<string, ModalConfirmVariant> = { destructive: 'negative' };
 
 interface ModalBaseProps {
   isOpen: boolean;
@@ -52,7 +54,7 @@ interface ModalConfirmPresetProps extends ModalBaseProps {
    *   - hides the X close button (footer is the dismissal surface)
    *   - auto-renders Cancel / Confirm buttons from `confirmLabel`,
    *     `cancelLabel`, `onConfirm`
-   *   - supports `confirmVariant="destructive"` for delete-type actions
+   *   - supports `confirmVariant="negative"` for delete-type actions
    *
    * Pass a custom `footer` to override the auto-rendered actions while
    * keeping the rest of the preset.
@@ -108,7 +110,7 @@ export type ModalProps = ModalDefaultProps | ModalConfirmPresetProps;
  *   title="Delete this item?"
  *   description="This action cannot be undone."
  *   confirmLabel="Delete"
- *   confirmVariant="destructive"
+ *   confirmVariant="negative"
  *   onConfirm={handleDelete}
  * />
  * ```
@@ -198,7 +200,7 @@ function renderConfirmPreset(
     confirmLabel = 'Confirm',
     cancelLabel = 'Cancel',
     onConfirm,
-    confirmVariant = 'primary',
+    confirmVariant,
     confirmDisabled,
     confirmLoading,
     'aria-label': ariaLabel,
@@ -206,6 +208,8 @@ function renderConfirmPreset(
   onClose: () => void,
   titleId: string,
 ) {
+  const resolvedConfirmVariant =
+    resolveRetiredValue('Modal', 'confirmVariant', confirmVariant, RETIRED_CONFIRM_VARIANTS) ?? 'primary';
   const descId = description ? `${titleId}-desc` : undefined;
 
   const autoFooter = (
@@ -214,7 +218,7 @@ function renderConfirmPreset(
         {cancelLabel}
       </Button>
       <Button
-        variant={confirmVariant === 'destructive' ? 'destructive' : 'primary'}
+        variant={resolvedConfirmVariant === 'negative' ? 'negative' : 'primary'}
         onClick={() => onConfirm?.()}
         disabled={confirmDisabled}
         loading={confirmLoading}

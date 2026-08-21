@@ -14,7 +14,7 @@ export const GapScale = () => (
     </BannerGroup>
     <BannerGroup gap="md">
       <Banner tone="warning" title="md gap (default)" description="Banners read as one notice block." />
-      <Banner tone="information" title="Second notice" />
+      <Banner tone="info" title="Second notice" />
     </BannerGroup>
     <BannerGroup gap="lg">
       <Banner tone="warning" title="lg gap" description="Only when the banners are genuinely unrelated." />
@@ -33,7 +33,7 @@ Vertical stack of `<Banner>` elements with locked spacing. Replaces the per-bann
 
 The group owns the space **between** banners only. The space below the group belongs to the parent layout's `gap`, same as any other block.
 
-Order is the author's responsibility, not the component's — sort children `error → warning → information → success → announcement`, global before contextual within a tone. The full rule, page placement, and the cases where a second banner is the wrong answer live in the [banner-groups build standard](https://design.brikdesigns.com/docs/build-standards/banner-groups).
+Order is the author's responsibility, not the component's — sort children `negative → warning → info → positive → announcement`, global before contextual within a tone. The full rule, page placement, and the cases where a second banner is the wrong answer live in the [banner-groups build standard](https://design.brikdesigns.com/docs/build-standards/banner-groups).
 
 ## Default
 

@@ -421,7 +421,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
             htmlFor={inputId}
             className={bdsClass(
               'bds-date-picker__label',
-              hasError && 'bds-date-picker__label--error',
+              hasError && 'bds-date-picker__label--tone-negative',
             )}
           >
             {label}
@@ -436,7 +436,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
               type="button"
               className={bdsClass(
                 'bds-date-picker__trigger',
-                hasError && 'bds-date-picker__trigger--error',
+                hasError && 'bds-date-picker__trigger--tone-negative',
                 disabled && 'bds-date-picker__trigger--disabled',
                 open && 'bds-date-picker__trigger--open',
               )}
@@ -490,7 +490,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
         {error && (
           <span
             id={`${inputId}-error`}
-            className="bds-date-picker__helper bds-date-picker__helper--error"
+            className="bds-date-picker__helper bds-date-picker__helper--tone-negative"
             role="alert"
           >
             {error}

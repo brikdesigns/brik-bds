@@ -40,7 +40,7 @@ export const Default: Story = {
         action={<Button variant="secondary" size="sm">View</Button>}
       />
       <Banner
-        tone="information"
+        tone="info"
         title="Two invoices are past due"
         description="Payment reminders were sent on the 14th."
         action={<Button variant="secondary" size="sm">Review</Button>}
@@ -60,7 +60,7 @@ export const Default: Story = {
 /* ─── 2. Severity order ──────────────────────────────────────── */
 
 /**
- * The order rule, rendered. `error → warning → information → success →
+ * The order rule, rendered. `negative → warning → info → positive →
  * announcement`; marketing tone always lands last.
  *
  * @summary Severity order
@@ -69,7 +69,7 @@ export const SeverityOrder: Story = {
   render: () => (
     <BannerGroup>
       <Banner
-        tone="error"
+        tone="negative"
         title="Card on file declined"
         description="Update the payment method to keep services active."
         action={<Button variant="secondary" size="sm">Update</Button>}
@@ -80,7 +80,7 @@ export const SeverityOrder: Story = {
         description="Three logo orientations are missing."
       />
       <Banner
-        tone="information"
+        tone="info"
         title="Reporting now covers paid search"
         description="New metrics appear from this month forward."
       />

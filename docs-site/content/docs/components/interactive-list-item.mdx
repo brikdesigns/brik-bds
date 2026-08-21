@@ -29,7 +29,7 @@ import { InteractiveListItem } from '@brikdesigns/bds';
   leading={<Avatar name="Emily Rivera" size="md" />}
   title="Emily Rivera"
   subtitle="Hygienist · 2 years"
-  trailing={<Badge status="info">New hire</Badge>}
+  trailing={<Badge tone="info">New hire</Badge>}
   onClick={() => openProfile('emily-rivera')}
 />
 ```
@@ -68,8 +68,8 @@ The `subtitle` slot accepts a `ReactNode`, so a row can carry multi-line metadat
     <>
       <span>Acme Dental Supply · Submitted 2d ago</span>
       <BadgeGroup>
-        <Badge status="warning" size="xs">In review</Badge>
-        <Badge status="error" size="xs">High</Badge>
+        <Badge tone="warning" size="xs">In review</Badge>
+        <Badge tone="negative" size="xs">High</Badge>
       </BadgeGroup>
     </>
   }

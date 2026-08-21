@@ -45,7 +45,7 @@ Same shape, same defaults, same destructive flow — just renamed under Modal.
 | `confirmLabel` | `confirmLabel` |
 | `cancelLabel` | `cancelLabel` |
 | `onConfirm` | `onConfirm` |
-| `variant="destructive"` | `confirmVariant="destructive"` |
+| `variant="negative"` | `confirmVariant="negative"` |
 | `closeOnBackdrop` | `closeOnBackdrop` |
 
 The Modal preset adds `confirmDisabled` and `confirmLoading` props for in-flight requests, which Dialog never had.
@@ -70,7 +70,7 @@ For reference while migrating. New code should not use this component.
 | `confirmLabel` | `string` | `'Confirm'` |
 | `cancelLabel` | `string` | `'Cancel'` |
 | `onConfirm` | `() => void` | — |
-| `variant` | `'default' \| 'destructive'` | `'default'` |
+| `variant` | `DialogVariant` | `'default'` |
 | `closeOnBackdrop` | `boolean` | `true` |
 
 ## Related

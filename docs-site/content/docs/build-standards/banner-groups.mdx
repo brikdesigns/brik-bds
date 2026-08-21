@@ -16,7 +16,7 @@ A page with two banners has three decisions hiding in it: which order they read 
 ```tsx
 // ✅ one group owns the arrangement
 <BannerGroup>
-  <Banner tone="error" title="Card on file declined" />
+  <Banner tone="negative" title="Card on file declined" />
   <Banner tone="warning" title="Brand assets are incomplete" />
   <Banner title="Refer a client, get a credit" />
 </BannerGroup>
@@ -49,10 +49,10 @@ Banners are read top-down and cleared top-down, so the order is **descending sev
 
 | Rank | Tone | Reads as |
 |---|---|---|
-| 1 | `error` | Something is broken and blocks work |
+| 1 | `negative` | Something is broken and blocks work |
 | 2 | `warning` | Something needs attention but nothing is blocked |
-| 3 | `information` | A fact the reader should know; no action implied |
-| 4 | `success` | A confirmation of something already done |
+| 3 | `info` | A fact the reader should know; no action implied |
+| 4 | `positive` | A confirmation of something already done |
 | 5 | `announcement` | Marketing, promotion, feature news |
 
 Two tie-breaks, applied in order:
@@ -61,7 +61,7 @@ Two tie-breaks, applied in order:
 2. **Newest first.** Within one tone and one scope, most recent leads.
 
 <Callout type="warn">
-  **`announcement` is last, unconditionally** — and it does not belong in a group that also carries an `error`. A promotion sitting above, beside, or below a payment failure reads as the system not knowing what state the reader is in. Suppress the announcement while any `error` banner is live.
+  **`announcement` is last, unconditionally** — and it does not belong in a group that also carries an `negative`. A promotion sitting above, beside, or below a payment failure reads as the system not knowing what state the reader is in. Suppress the announcement while any `negative` banner is live.
 </Callout>
 
 The ordering is the **author's** job, not the component's. `BannerGroup` renders children in source order and asserts nothing about tone — a component cannot know whether a given `warning` is global or contextual, so it cannot sort. Sort the array before you map it.
@@ -106,8 +106,8 @@ The order and spacing rules above assume the second banner has earned its place.
 
 The stacking rules are not only visual — Banner switches `role` by tone ([`Banner.tsx:79`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/Banner/Banner.tsx#L79)), and roles compound.
 
-- **`error` / `warning` / `information` render `role="alert"`** — assertive. Several mounting in the same paint queue several interruptions at once, and a screen-reader user hears them serially with no way to skip ahead. This is the hard reason behind the cap of three, not a layout preference.
-- **`success` renders `role="status"`** — polite, so it queues behind live alerts rather than competing with them. Nothing to manage.
+- **`negative` / `warning` / `info` render `role="alert"`** — assertive. Several mounting in the same paint queue several interruptions at once, and a screen-reader user hears them serially with no way to skip ahead. This is the hard reason behind the cap of three, not a layout preference.
+- **`positive` renders `role="status"`** — polite, so it queues behind live alerts rather than competing with them. Nothing to manage.
 - **The group itself is a plain `<div>`** — no `role`, no `aria-label`. Each Banner keeps its own semantics; a landmark or label on the container would announce a wrapper the reader gains nothing from.
 - **Order is announced order.** Source order is what assistive tech reads, so the severity rule above *is* the screen-reader experience — not a sighted-only convention.
 

@@ -23,17 +23,17 @@ import { Dot } from '@brikdesigns/bds';
 ### Status colors
 
 <ComponentPreview code={`<BDS.Dot status="default" />
-<BDS.Dot status="positive" />
-<BDS.Dot status="warning" />
-<BDS.Dot status="error" />
-<BDS.Dot status="info" />
-<BDS.Dot status="neutral" />`}>
+<BDS.Dot tone="positive" />
+<BDS.Dot tone="warning" />
+<BDS.Dot tone="negative" />
+<BDS.Dot tone="info" />
+<BDS.Dot tone="neutral" />`}>
   <BDS.Dot status="default" />
-  <BDS.Dot status="positive" />
-  <BDS.Dot status="warning" />
-  <BDS.Dot status="error" />
-  <BDS.Dot status="info" />
-  <BDS.Dot status="neutral" />
+  <BDS.Dot tone="positive" />
+  <BDS.Dot tone="warning" />
+  <BDS.Dot tone="negative" />
+  <BDS.Dot tone="info" />
+  <BDS.Dot tone="neutral" />
 </ComponentPreview>
 
 - **`default`** — Brand primary. General-purpose indicator.
@@ -45,12 +45,12 @@ import { Dot } from '@brikdesigns/bds';
 
 ### Sizes
 
-<ComponentPreview code={`<BDS.Dot size="sm" status="positive" />
-<BDS.Dot size="md" status="positive" />
-<BDS.Dot size="lg" status="positive" />`}>
-  <BDS.Dot size="sm" status="positive" />
-  <BDS.Dot size="md" status="positive" />
-  <BDS.Dot size="lg" status="positive" />
+<ComponentPreview code={`<BDS.Dot size="sm" tone="positive" />
+<BDS.Dot size="md" tone="positive" />
+<BDS.Dot size="lg" tone="positive" />`}>
+  <BDS.Dot size="sm" tone="positive" />
+  <BDS.Dot size="md" tone="positive" />
+  <BDS.Dot size="lg" tone="positive" />
 </ComponentPreview>
 
 ### Pulse
@@ -58,14 +58,14 @@ import { Dot } from '@brikdesigns/bds';
 Use `pulse` for active/running states — a continuously running process, a live feed, an in-progress sync.
 
 ```tsx
-<Dot status="positive" pulse />
+<Dot tone="positive" pulse />
 ```
 
 ## Pattern: inline with label
 
 ```tsx
 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-  <Dot status="positive" />
+  <Dot tone="positive" />
   <span>Online</span>
 </div>
 ```
@@ -86,7 +86,8 @@ Use `pulse` for active/running states — a continuously running process, a live
 
 | Prop | Type | Default |
 |---|---|---|
-| `status` | `'default' \| 'positive' \| 'warning' \| 'error' \| 'info' \| 'neutral'` | `'default'` |
+| `tone` | `DotTone` | `'default'` |
+| `status` | `DotTone` | — |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
 | `pulse` | `boolean` | `false` |
 

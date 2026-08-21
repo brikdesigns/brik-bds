@@ -38,7 +38,7 @@
 .bds-text-area__label--md { font-size: var(--label-md); }
 .bds-text-area__label--lg { font-size: var(--label-lg); }
 
-.bds-text-area__label--error {
+.bds-text-area__label--tone-negative {
   color: var(--text-negative);
 }
 
@@ -71,7 +71,7 @@
 .bds-text-area-field--resize-horizontal { resize: horizontal; }
 .bds-text-area-field--resize-vertical { resize: vertical; }
 
-.bds-text-area-field--error {
+.bds-text-area-field--tone-negative {
   border-color: var(--border-negative);
 }
 

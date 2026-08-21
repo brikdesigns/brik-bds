@@ -83,7 +83,7 @@
   color: var(--text-on-color-dark);
 }
 
-.bds-dialog__button--destructive {
+.bds-dialog__button--tone-negative {
   background-color: var(--background-negative);
   color: var(--text-on-color-dark);
 }

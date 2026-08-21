@@ -168,7 +168,17 @@ function summaryForExport(content, exportIndex, objOpen, objClose) {
   return null;
 }
 
-/** True when `<Name>/<Name>.tsx` carries a component-level `@deprecated` (JSDoc directly before an export — same bar as lint-mdx-deprecations). */
+/**
+ * True when `<Name>/<Name>.tsx` carries a component-level `@deprecated` (JSDoc
+ * directly before an export — same bar as lint-mdx-deprecations).
+ *
+ * A deprecated *type* export does not deprecate the component. ADR-033's
+ * renames ship the old union name as `@deprecated export type BadgeStatus =
+ * BadgeTone`, and reading that as a component-level deprecation would demand
+ * `!manifest` on five live components — hiding Badge, Counter, Dot, Meter and
+ * Toast from MCP discovery because one of their type aliases was renamed
+ * (#1957). Only a value export can deprecate the component.
+ */
 function componentIsDeprecated(storyFilePath) {
   const dir = path.dirname(storyFilePath);
   const name = path.basename(storyFilePath).replace(/\.stories\.tsx$/, '');
@@ -177,9 +187,10 @@ function componentIsDeprecated(storyFilePath) {
   const src = fs.readFileSync(srcPath, 'utf8');
   for (const m of src.matchAll(/\/\*\*[\s\S]*?\*\//g)) {
     if (!/@deprecated/.test(m[0])) continue;
-    if (/^\s*export\s/.test(src.slice(m.index + m[0].length).split('\n').find((l) => l.trim() !== '') || '')) {
-      return true;
-    }
+    const next = src.slice(m.index + m[0].length).split('\n').find((l) => l.trim() !== '') || '';
+    if (!/^\s*export\s/.test(next)) continue;
+    if (/^\s*export\s+(?:type|interface)\s/.test(next)) continue;
+    return true;
   }
   return false;
 }

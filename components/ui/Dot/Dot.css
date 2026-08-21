@@ -14,14 +14,16 @@
 .bds-dot--md { width: 8px; height: 8px; }
 .bds-dot--lg { width: 10px; height: 10px; }
 
-/* ─── Status colors ──────────────────────────────────────────── */
+/* ─── Tone colors ────────────────────────────────────────────── */
+/* Dot is an indicator — a small element placed ON a surface — so every fill
+   is a `--background-*` token. `--surface-*` is for the surface underneath. */
 
-.bds-dot--default  { background-color: var(--background-brand-primary); }
-.bds-dot--positive { background-color: var(--background-positive); }
-.bds-dot--warning  { background-color: var(--background-warning); }
-.bds-dot--error    { background-color: var(--background-negative); }
-.bds-dot--info     { background-color: var(--background-info); }
-.bds-dot--neutral  { background-color: var(--surface-neutral); }
+.bds-dot--tone-default  { background-color: var(--background-brand-primary); }
+.bds-dot--tone-positive { background-color: var(--background-positive); }
+.bds-dot--tone-warning  { background-color: var(--background-warning); }
+.bds-dot--tone-negative { background-color: var(--background-negative); }
+.bds-dot--tone-info     { background-color: var(--background-info); }
+.bds-dot--tone-neutral  { background-color: var(--background-neutral); }
 
 /* ─── Pulse animation (keyframe in tokens/animations.css) ────── */
 

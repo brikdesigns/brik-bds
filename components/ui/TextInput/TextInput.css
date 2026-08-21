@@ -40,7 +40,7 @@
 .bds-text-input__label--md { font-size: var(--label-md); }
 .bds-text-input__label--lg { font-size: var(--label-lg); }
 
-.bds-text-input__label--error {
+.bds-text-input__label--tone-negative {
   color: var(--text-negative);
 }
 
@@ -113,10 +113,10 @@
 
 /* Error border — wins over hover/focus, mirroring the previous inline-style
    precedence (inline borderColor beat the stylesheet :hover/:focus rules). */
-.bds-text-input-field--error,
-.bds-text-input-field--error:hover:not(:disabled),
-.bds-text-input-field--error:focus,
-.bds-text-input-field--error:focus-visible {
+.bds-text-input-field--tone-negative,
+.bds-text-input-field--tone-negative:hover:not(:disabled),
+.bds-text-input-field--tone-negative:focus,
+.bds-text-input-field--tone-negative:focus-visible {
   border-color: var(--border-negative);
 }
 

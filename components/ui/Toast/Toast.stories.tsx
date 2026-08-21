@@ -11,7 +11,7 @@ const meta: Meta<typeof Toast> = {
     description: { control: 'text', description: 'Optional secondary line; omit for a title-only toast.' },
     variant: {
       control: 'select',
-      options: ['default', 'success', 'error', 'warning', 'info'],
+      options: ['default', 'positive', 'negative', 'warning', 'info'],
       description: 'Status tone — selects the colored `Badge` icon. The surface stays white.',
     },
     // Controls-only per ADR-010: urgency changes `role` / `aria-live`, which
@@ -54,12 +54,12 @@ export const Default: Story = {
 
 /** @summary Success — positive badge, circle-check icon */
 export const Success: Story = {
-  args: { title: 'Changes saved', description: 'Your settings have been updated successfully.', variant: 'success', onDismiss: () => {} },
+  args: { title: 'Changes saved', description: 'Your settings have been updated successfully.', tone: 'positive', onDismiss: () => {} },
 };
 
 /** @summary Error — error badge, circle-exclamation icon */
 export const Error: Story = {
-  args: { title: 'Something went wrong', description: 'Please try again or contact support.', variant: 'error', onDismiss: () => {} },
+  args: { title: 'Something went wrong', description: 'Please try again or contact support.', tone: 'negative', onDismiss: () => {} },
 };
 
 /** @summary Warning — warning badge, triangle-exclamation icon */

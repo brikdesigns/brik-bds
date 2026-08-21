@@ -494,7 +494,7 @@ export const CustomFooter: Story = {
           title="Company details"
           footer={(
             <>
-              <Button variant="danger-ghost" onClick={close}>Archive</Button>
+              <Button variant="ghost" onClick={close}>Archive</Button>
               <Button variant="ghost" onClick={close}>Cancel</Button>
               <Button variant="primary" onClick={close}>Save</Button>
             </>

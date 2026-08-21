@@ -11,10 +11,10 @@ Badge displays contextual status. It uses semantic system colors to communicate 
   items={[
     {
       title: 'Badge',
-      preview: <BDS.Badge status="positive">Done</BDS.Badge>,
+      preview: <BDS.Badge tone="positive">Done</BDS.Badge>,
       whenToUse: 'Read-only status with a value judgment (good/bad/waiting). Published, Active, Failed.',
       whenNotToUse: 'Wire onClick — Badge is an indicator, not an action.',
-      code: `<Badge status="positive">Done</Badge>`,
+      code: `<Badge tone="positive">Done</Badge>`,
     },
     {
       title: 'Tag',
@@ -53,40 +53,40 @@ Six status colors across four sizes, each available in `solid` and `subtle` appe
 
 ### Status colors
 
-<ComponentPreview code={`<BDS.Badge status="positive">Done</BDS.Badge>
-<BDS.Badge status="warning">Pending</BDS.Badge>
-<BDS.Badge status="error">Failed</BDS.Badge>
-<BDS.Badge status="info">Note</BDS.Badge>
-<BDS.Badge status="progress">In progress</BDS.Badge>
-<BDS.Badge status="brand">Featured</BDS.Badge>`}>
-  <BDS.Badge status="positive">Done</BDS.Badge>
-  <BDS.Badge status="warning">Pending</BDS.Badge>
-  <BDS.Badge status="error">Failed</BDS.Badge>
-  <BDS.Badge status="info">Note</BDS.Badge>
-  <BDS.Badge status="progress">In progress</BDS.Badge>
-  <BDS.Badge status="brand">Featured</BDS.Badge>
+<ComponentPreview code={`<BDS.Badge tone="positive">Done</BDS.Badge>
+<BDS.Badge tone="warning">Pending</BDS.Badge>
+<BDS.Badge tone="negative">Failed</BDS.Badge>
+<BDS.Badge tone="info">Note</BDS.Badge>
+<BDS.Badge tone="info">In progress</BDS.Badge>
+<BDS.Badge tone="brand">Featured</BDS.Badge>`}>
+  <BDS.Badge tone="positive">Done</BDS.Badge>
+  <BDS.Badge tone="warning">Pending</BDS.Badge>
+  <BDS.Badge tone="negative">Failed</BDS.Badge>
+  <BDS.Badge tone="info">Note</BDS.Badge>
+  <BDS.Badge tone="info">In progress</BDS.Badge>
+  <BDS.Badge tone="brand">Featured</BDS.Badge>
 </ComponentPreview>
 
 ### Subtle appearance
 
 Lower-emphasis pastel fill. Use inline with content, in table cells, on cards — anywhere `solid` would over-emphasize.
 
-<ComponentPreview code={`<BDS.Badge status="positive" appearance="subtle">Done</BDS.Badge>
-<BDS.Badge status="progress" appearance="subtle">In progress</BDS.Badge>`}>
-  <BDS.Badge status="positive" appearance="subtle">Done</BDS.Badge>
-  <BDS.Badge status="progress" appearance="subtle">In progress</BDS.Badge>
+<ComponentPreview code={`<BDS.Badge tone="positive" appearance="subtle">Done</BDS.Badge>
+<BDS.Badge tone="info" appearance="subtle">In progress</BDS.Badge>`}>
+  <BDS.Badge tone="positive" appearance="subtle">Done</BDS.Badge>
+  <BDS.Badge tone="info" appearance="subtle">In progress</BDS.Badge>
 </ComponentPreview>
 
 ### Sizes
 
 Four sizes — `xs` is icon-only (no text), `sm` `md` `lg` carry text.
 
-<ComponentPreview code={`<BDS.Badge size="sm" status="positive">Done</BDS.Badge>
-<BDS.Badge size="md" status="positive">Done</BDS.Badge>
-<BDS.Badge size="lg" status="positive">Done</BDS.Badge>`}>
-  <BDS.Badge size="sm" status="positive">Done</BDS.Badge>
-  <BDS.Badge size="md" status="positive">Done</BDS.Badge>
-  <BDS.Badge size="lg" status="positive">Done</BDS.Badge>
+<ComponentPreview code={`<BDS.Badge size="sm" tone="positive">Done</BDS.Badge>
+<BDS.Badge size="md" tone="positive">Done</BDS.Badge>
+<BDS.Badge size="lg" tone="positive">Done</BDS.Badge>`}>
+  <BDS.Badge size="sm" tone="positive">Done</BDS.Badge>
+  <BDS.Badge size="md" tone="positive">Done</BDS.Badge>
+  <BDS.Badge size="lg" tone="positive">Done</BDS.Badge>
 </ComponentPreview>
 
 ### With icon
@@ -94,8 +94,8 @@ Four sizes — `xs` is icon-only (no text), `sm` `md` `lg` carry text.
 Pass `icon` for a leading visual. Required when `size="xs"` (icon-only).
 
 ```tsx
-<Badge status="positive" icon={<CheckIcon />}>Done</Badge>
-<Badge size="xs" status="error" icon={<XCircleIcon />} />
+<Badge tone="positive" icon={<CheckIcon />}>Done</Badge>
+<Badge size="xs" tone="negative" icon={<XCircleIcon />} />
 ```
 
 ## When *not* to use
@@ -118,7 +118,8 @@ Pass `icon` for a leading visual. Required when `size="xs"` (icon-only).
 {/* props-check: BadgeProps @ components/ui/Badge/Badge.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `status` | `BadgeStatus` | — |
+| `tone` | `BadgeTone` | `'info'` |
+| `status` | `BadgeTone` | — |
 | `size` | `BadgeSize` | `'md'` |
 | `appearance` | `BadgeAppearance` | `'solid'` |
 | `icon` | `ReactNode` | — |
