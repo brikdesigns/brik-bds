@@ -1,0 +1,115 @@
+---
+title: Banner group
+description: Vertical stack of Banner elements with locked spacing, for a surface carrying more than one notice.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+BannerGroup is the vertical-axis sibling of [BadgeGroup](/docs/components/badge-group) and [TagGroup](/docs/components/tag-group). It replaces the per-banner `marginBottom` and the ad-hoc `Stack` wrapper consumers reach for when a page needs more than one [Banner](/docs/components/banner).
+
+The order, placement, and don't-stack rules live in the [banner-groups build standard](/docs/build-standards/banner-groups) — this page is the API.
+
+## Use it for
+
+- A page whose top region carries two or more banners (an account-level alert plus a page-level nudge)
+- A small, bounded set of same-tone banners where each item needs its own action
+- Any surface where the banner set is assembled from data and the count varies
+
+## Import
+
+```tsx
+import { BannerGroup, Banner } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+Children render in source order — sort before you map. `error → warning → information → success → announcement`.
+
+<ComponentPreview code={`<BDS.BannerGroup>
+  <BDS.Banner tone="error" title="Card on file declined" description="Update the payment method to keep services active." />
+  <BDS.Banner tone="warning" title="Brand assets are incomplete" description="Three logo orientations are missing." />
+  <BDS.Banner title="Refer a client, get a credit" description="Both accounts receive one month of managed hosting." />
+</BDS.BannerGroup>`}>
+  <BDS.BannerGroup>
+    <BDS.Banner tone="error" title="Card on file declined" description="Update the payment method to keep services active." />
+    <BDS.Banner tone="warning" title="Brand assets are incomplete" description="Three logo orientations are missing." />
+    <BDS.Banner title="Refer a client, get a credit" description="Both accounts receive one month of managed hosting." />
+  </BDS.BannerGroup>
+</ComponentPreview>
+
+### Gap sizes
+
+Three locked gaps — `md` (default) so the banners read as one notice block, `sm` for two facets of one incident, `lg` only when the banners are genuinely unrelated.
+
+<ComponentPreview code={`<BDS.BannerGroup gap="sm">
+  <BDS.Banner tone="warning" title="Sync paused" />
+  <BDS.Banner tone="warning" title="Last sync was 6 days ago" />
+</BDS.BannerGroup>`}>
+  <BDS.BannerGroup gap="sm">
+    <BDS.Banner tone="warning" title="Sync paused" />
+    <BDS.Banner tone="warning" title="Last sync was 6 days ago" />
+  </BDS.BannerGroup>
+</ComponentPreview>
+
+## Pattern: the top of a page
+
+The canonical use — the first child of `PageContent`, above the first section. The group spaces its own children; the space below it comes from `PageContent`'s `gap`, so nothing here carries a margin.
+
+```tsx
+import { Banner, BannerGroup, Button, Page, PageContent, PageHeader } from '@brikdesigns/bds';
+
+<Page padding="none">
+  <PageHeader title="Good morning, Nick" subtitle="Portal activity and quick stats." />
+
+  <PageContent>
+    <BannerGroup>
+      {alerts.map((a) => (
+        <Banner key={a.id} tone="warning" title={a.title} description={a.description} />
+      ))}
+      <Banner
+        title="Want to set up a new client?"
+        description="Click to begin the setup workflow for new clients."
+        action={<Button variant="on-color" size="md" href="/admin/companies/new">Get Started</Button>}
+      />
+    </BannerGroup>
+
+    {/* sections… */}
+  </PageContent>
+</Page>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't wrap a single Banner.** At count=1 the group adds a DOM node and no arrangement. Render `<Banner>` directly and let the parent layout's `gap` space it — the same rule BadgeGroup and TagGroup carry.
+</Callout>
+
+- **Don't stack more than three.** Three `role="alert"` banners announce serially with no way to skip. Cap the rendered set and roll the remainder into one summarizing banner. See [when *not* to stack banners](/docs/build-standards/banner-groups#when-not-to-stack-banners).
+- **Don't render a per-item status list as banners.** Items sharing an attribute set are a table with a status column or a list with a trailing [Badge](/docs/components/badge).
+- **Don't put an `announcement` in a group carrying an `error`.** Suppress the marketing banner while anything is broken.
+- **Don't use non-Banner children.** The group locks the vertical rhythm for Banner's footprint; arbitrary nodes misalign.
+- **Don't add margins to the children.** The group's `gap` is the only spacing mechanism between banners, and the parent layout owns the space below.
+
+## Accessibility
+
+- Renders a plain `<div>` — no `role`, no `aria-label`. Each Banner keeps its own semantics (`role="alert"` for `error` / `warning` / `information`, `role="status"` for `success`, `role="banner"` for `announcement`).
+- **Source order is announced order.** The severity ordering rule is the screen-reader experience, not a sighted-only convention.
+- The three-banner cap exists because assertive roles compound — see the standard's [accessibility section](/docs/build-standards/banner-groups#accessibility).
+
+## API
+
+{/* props-check: BannerGroupProps @ components/ui/BannerGroup/BannerGroup.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `gap` | `'sm' \| 'md' \| 'lg'` | `'md'` |
+| `children` | `ReactNode` | — |
+
+## Related
+
+- [Banner](/docs/components/banner) — the child component
+- [Banner groups](/docs/build-standards/banner-groups) — order, placement, and when not to stack
+- [BadgeGroup](/docs/components/badge-group) / [TagGroup](/docs/components/tag-group) — horizontal-axis siblings
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-banner-group--overview)**
