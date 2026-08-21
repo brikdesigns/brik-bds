@@ -28,6 +28,11 @@ const meta: Meta<typeof DatePicker> = {
       description:
         'Optional label rendered above the trigger. Wired to the trigger via `htmlFor` so clicking the label focuses the trigger.',
     },
+    'aria-label': {
+      control: 'text',
+      description:
+        'Accessible name for the trigger when no visible `label` is rendered (e.g. a header-embedded picker whose surrounding title conveys its purpose). Ignored when `label` is present.',
+    },
     placeholder: {
       control: 'text',
       description: 'Trigger placeholder when no date is selected. Default `Select a date`.',
@@ -216,6 +221,30 @@ export const InteractionTestMonthSelectionSnapsToFirstOfMonth: Story = {
     await waitFor(() => {
       expect(args.onChange).toHaveBeenCalledWith(new Date(year, 5, 1));
     });
+  },
+};
+
+/**
+ * With no visible `label`, an `aria-label` becomes the trigger's accessible
+ * name — so a header-embedded picker announces its purpose ("Reporting month")
+ * to assistive tech rather than only its value. Closes the a11y gap the
+ * label-less Reporting month picker (brik-client-portal #3453) left open.
+ * @summary Play-function interaction test
+ */
+export const InteractionTestAriaLabelWithoutVisibleLabel: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    precision: 'month',
+    'aria-label': 'Reporting month',
+    value: new Date(2026, 6, 1),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // Accessible name is the aria-label, NOT the rendered value "July 2026".
+    const trigger = canvas.getByRole('button', { name: 'Reporting month' });
+    await expect(trigger).toBeInTheDocument();
+    // No visible label element is rendered.
+    expect(canvasElement.querySelector('.bds-date-picker__label')).toBeNull();
   },
 };
 
