@@ -68,6 +68,20 @@
  * the file can only shrink. That is the difference between an allowlist with an
  * owner and the drift this ADR exists to stop.
  *
+ * ── The baseline is a SNAPSHOT, and that races the merge queue ──────────────
+ *
+ * A violation absent from the baseline fails, which is the point — but the
+ * baseline is generated against one commit. If another PR lands a new violation
+ * between generation and merge, both PRs are individually green and `main` goes
+ * red on the merge, with no conflict to block it. That is #1961: #1952's branch
+ * was cut before #1953 landed two bare Breadcrumb modifiers, so its baseline
+ * never listed them.
+ *
+ * The fix is branch protection — require branches up to date before merging, so
+ * this gate re-runs against the merge RESULT. Do not "fix" it by downgrading an
+ * unbaselined violation to a warning: that lets a genuinely new violation reach
+ * `main` unnoticed, which is the whole failure the gate exists to prevent.
+ *
  * ── CLI ────────────────────────────────────────────────────────────────────
  *   node scripts/lint-naming-canon.mjs              all five rules
  *   node scripts/lint-naming-canon.mjs --rule 3     one rule
@@ -192,8 +206,9 @@ const MODIFIER_AXES = new Set([
  */
 const BOOLEAN_MODIFIERS = new Set([
   'disabled', 'active', 'selected', 'open', 'closed', 'loading', 'readonly',
-  'required', 'checked', 'expanded', 'collapsed', 'sticky', 'unread', 'empty',
-  'hidden', 'visible', 'focused', 'hovered', 'pressed', 'dragging', 'invalid',
+  'required', 'checked', 'expanded', 'collapsed', 'collapsible', 'sticky',
+  'unread', 'empty', 'hidden', 'visible', 'focused', 'hovered', 'pressed',
+  'dragging', 'invalid',
 ]);
 
 /**

@@ -1,5 +1,5 @@
 {
-  "$comment": "ADR-033 violations that ship on main today, each keyed to the remediation issue that burns it down. Generated from `node scripts/lint-naming-canon.mjs --no-baseline --json`; see that gate's header for why this exists.  THIS FILE CAN ONLY SHRINK. lint-naming-canon fails on a STALE entry — one that no longer violates — so an entry cannot outlive its fix. Adding a row to keep a new violation green is the one edit that defeats the gate; do not.",
+  "$comment": "ADR-033 violations that ship on main today, each keyed to the remediation issue that burns it down. Generated from `node scripts/lint-naming-canon.mjs --no-baseline --json`; see that gate's header for why this exists.  THIS FILE CAN ONLY SHRINK. lint-naming-canon fails on a STALE entry \u2014 one that no longer violates \u2014 so an entry cannot outlive its fix. Adding a row to keep a new violation green is the one edit that defeats the gate; do not.",
   "rules": {
     "1": {
       "--body-huge": 1923,
@@ -107,6 +107,7 @@
       "--destructive": 1909,
       "--dot": 1927,
       "--elevated": 1927,
+      "--ellipsis": 1927,
       "--error": 1909,
       "--exiting": 1927,
       "--failed": 1927,
