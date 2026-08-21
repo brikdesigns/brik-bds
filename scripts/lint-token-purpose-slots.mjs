@@ -58,6 +58,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
+import { fileURLToPath } from 'node:url';
 
 /**
  * Every purpose slot that ships, longest-match-first at lookup time so
@@ -73,7 +74,7 @@ import process from 'node:process';
  * see stepVocabulary(). Two sources of truth for one fact is how the docs came
  * to disagree with the registry in the first place.
  */
-const SLOT_REGISTRY = [
+export const SLOT_REGISTRY = [
   // ── Colour intent formula (already documented) ──────────────────────────
   { slot: 'color', family: 'color', tier: 'primitive' },
   { slot: 'page', family: 'color', tier: 'semantic' },
@@ -390,4 +391,19 @@ function main() {
   process.exit(0);
 }
 
-main();
+/**
+ * CLI-entry guard. `SLOT_REGISTRY` is imported by lint-naming-canon.mjs, which
+ * needs to know which slots are colour purposes (ADR-033 § 3's step rule governs
+ * the non-colour formulas only). Without the guard, that import would run this
+ * gate and exit the importing process.
+ */
+const isCliEntry = (() => {
+  try {
+    return path.resolve(fileURLToPath(import.meta.url)) === path.resolve(process.argv[1] ?? '');
+  } catch (err) {
+    console.error(`lint-token-purpose-slots: could not determine CLI entry — ${err.message}`);
+    return false;
+  }
+})();
+
+if (isCliEntry) main();

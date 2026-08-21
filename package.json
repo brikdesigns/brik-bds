@@ -199,6 +199,8 @@
     "lint-token-shadowing": "node scripts/lint-token-shadowing.mjs",
     "lint-token-self-reference": "node scripts/lint-token-self-reference.mjs",
     "lint-token-purpose-slots": "node scripts/lint-token-purpose-slots.mjs",
+    "lint-naming-canon": "node scripts/lint-naming-canon.mjs",
+    "lint-naming-canon:census": "node scripts/lint-naming-canon.mjs --census",
     "slot-pattern-check": "node scripts/slot-pattern-check.mjs components content-system/blueprints",
     "slot-pattern-check:report": "node scripts/slot-pattern-check.mjs --format md components content-system/blueprints stories || true",
     "build:types": "tsc --project tsconfig.build.json",
