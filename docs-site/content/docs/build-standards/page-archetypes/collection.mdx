@@ -1,0 +1,133 @@
+---
+title: Collection
+description: Many peer records behind a control bar — table, card list, or board — where the control bar is the region header and nothing sits above it.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+The page for many peer records. The user's task is scanning, filtering, or picking one. A services index, an engagements list, a task board, a companies table.
+
+Reach for it when the page is about a set rather than a record. Which display the set gets is not this page's decision — [Display Choice](/docs/build-standards/display-choice) makes it from the shape of the data, and the archetype is the same either way.
+
+## Composition
+
+`PageHeader` names the collection, an optional stat row summarises it, `FilterBar` heads the display, and the display sits in its state shell.
+
+```tsx
+<Page padding="md" gap="xl">
+  <PageHeader
+    title="Services"
+    subtitle="Every service offered across all lines."
+    actions={<Button variant="primary">Add service</Button>}
+  />
+  <PageContent>
+    <Grid columns="auto-fit" minColumnWidth="180px" gap="md">
+      <Card preset="summary" label="Total" value={49} />
+      <Card preset="summary" label="Public" value={33} />
+    </Grid>
+
+    <FilterBar
+      title="Services"
+      label="services"
+      total={rows.length}
+      filtered={filtered.length}
+      onClear={() => setStatus(undefined)}
+      activeFilterCount={activeCount}
+    >
+      <FilterButton label="Status" value={status} onChange={setStatus} options={statusOptions} />
+    </FilterBar>
+
+    <TableView
+      loading={isLoading}
+      error={error?.message}
+      empty={filtered.length === 0}
+      emptyState={{ title: 'No services match', description: 'Clear a filter to see more.' }}
+    >
+      <Table>{/* rows */}</Table>
+    </TableView>
+  </PageContent>
+</Page>
+```
+
+The three body regions are direct `PageContent` children. The gap between them is `PageContent gap` (`--gap-lg` by default) — `FilterBar` deliberately owns no outer margin, so the space to the display below belongs to the layout, not the bar.
+
+## The control bar is the header
+
+**`FilterBar` is the region header. Nothing goes above it.** No `DataSection`, no `SectionHeader`, no `Cluster` holding a heading and a count. The bar's own `title` slot is the heading — a real `<h2>` by default — and its counter is the item count.
+
+This is the display half of [Control bar or section header](/docs/build-standards/composition-layers#control-bar-or-section-header): a control bar heads a display, a section container heads a record. Both render their title at `--heading-sm`, so the rendered output tells you nothing about which one produced it — the rule has to come from what the title is *over*.
+
+```tsx
+// ✅ The bar is the header
+<FilterBar title="Services" label="services" total={49} filtered={49} />
+<Table>…</Table>
+
+// ❌ A section header above a control bar — two headings for one region
+<DataSection title="Services">
+  <FilterBar label="services" total={49} filtered={49} />
+  <Table>…</Table>
+</DataSection>
+
+// ❌ A hand-rolled bar — no collapse behaviour, no counter status, no accessible name
+<Cluster justify="between">
+  <h2>Services</h2>
+  <Badge>12 of 49</Badge>
+</Cluster>
+<Table>…</Table>
+```
+
+The third case is the one that ships. A `Cluster justify="between"` holding a heading and a count is a `FilterBar` reimplemented without its narrow-width collapse, its counter status, or its accessible name — and every hand-rolled instance diverges from the next.
+
+<Callout type="warn">
+  `SectionHeader` is not an option here either. It is the centered marketing section intro, not a region header for a product display.
+</Callout>
+
+## No filterable axes
+
+A collection with nothing to filter still gets a `FilterBar`. `children` is optional: pass the title, label, and counts, omit the controls, and the bar drops the controls row entirely rather than rendering it empty.
+
+```tsx
+<FilterBar title="Audit log" label="entries" total={entries.length} filtered={entries.length} />
+<Table>…</Table>
+```
+
+Pass the same value for `total` and `filtered` when no filter is active. An unfilterable list never needs a hand-rolled heading row, and reaching for one is how a page ends up with two vocabularies for the same job.
+
+## State shell
+
+The shell follows the display, not the archetype. Every one of them resolves error, loading, and empty in that precedence order, and renders a skeleton shaped like the display it wraps.
+
+| Display | Shell | Selected when |
+|---|---|---|
+| `Table` | `TableView` | Items share a peer attribute set you would scan down a column |
+| `CardList` or a card `Grid` | `ListView` | Peer entities, each with its own identity and action |
+| `Board` with `BoardColumn` | `BoardView` | Items grouped into kanban columns |
+
+The shell wraps the **display only**. `FilterBar` stays outside it, above, and keeps rendering while the display is loading or empty — its counter reading zero is the signal, and hiding the bar would take the Clear button away exactly when the user needs it.
+
+## Summary stats and pagination
+
+Both belong in `PageContent`, not in `PageHeader`.
+
+- **Stats** go above the bar as a `Grid` of `Card preset="summary"`. They summarise the whole collection, so they do not move when a filter narrows the display.
+- **Pagination** goes below the display as `Pagination`, wired to `currentPage`, `totalPages`, and `onChange`. It is a Control that pages a list it does not contain, so it is a sibling of the display, never a child.
+
+A full-bleed display — an edge-to-edge board or table — takes `PageContent padding="none"`, and `scroll` when the body should own its own vertical scroll rather than the page frame.
+
+## Don'ts
+
+- **Don't put a heading above the bar.** The bar is the heading.
+- **Don't wrap a collection in a `DataSection`.** That container heads a record; its adjacency rule and its outline node are for field grids.
+- **Don't hand-roll the bar out of a `Cluster`.** Reaching for `justify="between"` to build a bar is the tell that a Control is missing. Use it, or file for one.
+- **Don't hide the bar while the display is loading.** The shell wraps the display; the bar stays.
+- **Don't put stats in the header.** `PageHeader metadata` is for the record's own key-value pairs, not for collection totals.
+- **Don't set a margin on the bar.** It owns none by design; the gap is `PageContent`'s.
+
+## Related
+
+- [Display Choice](/docs/build-standards/display-choice) — which display the set gets, and what rules each one out.
+- [Record Read](/docs/build-standards/page-archetypes/record-read) — the archetype a row in this collection opens into.
+- [Record Edit](/docs/build-standards/page-archetypes/record-edit) — the write half of that record.
+- [Profile](/docs/build-standards/page-archetypes/profile) — this archetype as one tab of a tabbed entity page, where the bar's title drops to `h3`.
+- [Composition Layers](/docs/build-standards/composition-layers#control-vs-block-and-container) — why a control bar is a Control and not a Block or a Container.
+- [Content Rhythm](/docs/build-standards/content-rhythm) — the gap between the bar and the display it heads.

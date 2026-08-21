@@ -40,7 +40,9 @@ The group owns the space **between** banners. The space **below** the group belo
 `md` is one step tighter than the `card ↔ card` step in [content rhythm](/docs/build-standards/content-rhythm#component-rhythm), and deliberately so: cards are peer entities the reader compares, banners are a queue the reader clears. The tighter step is what makes a stack read as one block of notices instead of a column of cards.
 
 <Callout type="warn">
-  **Never wrap a single banner.** At count=1 the group adds a DOM node and no arrangement. Render `<Banner>` directly, and let the parent layout's `gap` space it.
+  **Never wrap a *statically* single banner.** If the surface has exactly one banner and always will, the group adds a DOM node and no arrangement — render `<Banner>` directly and let the parent layout's `gap` space it.
+
+  A group whose count comes from **data** is the opposite case: keep the group even when today's data yields one banner. The count varies per render, and conditionally swapping between a group and a bare banner puts the arrangement rule back in the page, which is what the group exists to remove.
 </Callout>
 
 ## The order
@@ -95,7 +97,7 @@ Two axes decide placement: what the banner is **about** (global vs contextual), 
 
 The order and spacing rules above assume the second banner has earned its place. Most of the time it hasn't.
 
-- **One banner — no group.** Covered above, and the most common violation.
+- **One banner, statically — no group.** Covered above, and the most common violation. A data-driven set that happens to render one banner keeps its group.
 - **More than three — cap the set.** Render the top three and roll the remainder into one summarizing banner (`"4 more prospects have proposals in process"`) that links to the surface listing them. Past three, a stack stops being a notice and becomes a display the reader has to scroll.
 - **A per-item status list is not a set of banners.** N banners, one per row of the same table, is the [display-choice failure](/docs/build-standards/display-choice#a-per-item-status-list-rendered-as-one-banner) in its plural form: the items share an attribute set, so they are a table with a status column or a list with a trailing [`Badge`](/docs/components/badge). Reach for banners only when each item genuinely needs its own action *and* the count is small and bounded.
 - **Two banners that always appear together are one banner.** If banner B is only ever live when banner A is, they are one assertion with two sentences — `title` plus `description`.
