@@ -24,6 +24,12 @@ const meta: Meta<typeof BreadcrumbSwitcher> = {
       control: 'text',
       description: 'Accessible label for the switch trigger, e.g. `Switch service`.',
     },
+    separator: {
+      control: 'select',
+      options: ['slash', 'chevron'],
+      description:
+        'Visual separator between crumbs. Forwarded to the internal `Breadcrumb`. Default `slash` (`/`); `chevron` renders `›`.',
+    },
     linkComponent: {
       description:
         'Render linked crumbs with a router-aware component (Next.js `Link`, Remix `Link`) for client-side routing instead of the default `<a>`. Forwarded to the internal `Breadcrumb`. See ADR-012.',
@@ -76,6 +82,22 @@ export const SingleOption: Story = {
     items: SERVICE_TRAIL,
     options: [{ label: 'Brand strategy', href: '#brand-strategy', current: true }],
     switchLabel: 'Switch service',
+  },
+};
+
+/**
+ * `separator="chevron"` reaches the internal `Breadcrumb`, so a switcher trail
+ * can match the chevron breadcrumbs elsewhere on the same page. The visual
+ * gate is the only thing that catches a regression here. See #1941.
+ * @summary Chevron separator forwarded to the inner Breadcrumb
+ */
+export const ChevronSeparator: Story = {
+  args: {
+    items: SERVICE_TRAIL,
+    options: SIBLING_SERVICES,
+    switchLabel: 'Switch service',
+    separator: 'chevron',
+    onNavigate: fn(),
   },
 };
 
