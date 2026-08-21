@@ -156,24 +156,25 @@
      chain — per-theme --brand-primary overrides still flow through.
 
      ⚠️ Use ONLY for interactive hyperlinks (text that does something on
-     click). Categorically distinct from --background-info / --text-info
-     (static informational status, neutral/gray) and --background-status-info
-     (informational signal, blue). See the BDS Vocabulary docs and the
-     comment at line 118 for the info-family distinction. */
+     click). Categorically distinct from --background-info / --text-info,
+     which since brik-bds#1959 are the BLUE informational signal (ADR-033 § 5).
+     The gray family that used to hold those names is now --*-neutral. */
   --text-link: var(--text-text-link);
 
-  /* ── The `neutral` intent family (ADR-033 § 1) ──
-     `neutral` is one of the five valence values, so it takes the same four
-     purposes as positive / negative / warning. Only --background-neutral
-     shipped, which is why consumers reached for --text-status-neutral instead —
-     an out-of-formula name (`status` is neither a documented purpose nor a
-     documented scope) that #1958 retires.
+  /* ── The `neutral` intent family — now Figma-sourced (brik-bds#1959) ──
+     All four purposes come from figma-tokens.css since the Foundations rename
+     of color/light+dark/text|border|background|surface/info -> .../neutral.
+     #1955 minted them here as gap-fills because the name was still occupied;
+     re-declaring them now would shadow the generated value, which is what
+     scripts/lint-token-shadowing.mjs rejects.
 
-     Theme-invariant by construction: --color-system-neutral and
-     --color-system-neutral-light are declared once in figma-tokens.css
-     (:25, :27) with no dark override, so these inherit that. Do not add a
-     dark-theme entry for them without changing the primitives first — a dark
-     entry here would be a shadow, not a theme value.
+     One value moved in the handover, deliberately. Figma emits
+     --background-neutral as --color-system-neutral (saturated, #363636);
+     the gap-fill declared --color-system-neutral-light (#d4d4d4). Figma is
+     formula-correct per docs/primitives/color — background variants are
+     saturated, surface variants are subtle tints — so the generated value
+     stands and the five consumers that wanted the subtle tint moved to
+     --surface-neutral, which is the same #d4d4d4 they already rendered.
 
      NOTE: never write a curly brace in this file's comments, not even in prose
      (the brace-expansion shorthand for a token pair is the tempting case).
@@ -183,33 +184,39 @@
      resolves to undefined. It cost 18494 -> 8489 chars of parsed block when
      this comment first shipped that shorthand, and contrast-gate failed on an
      unrelated token 150 lines below. Filed as brik-bds#1965 — delete this
-     paragraph when that lands. brik-bds#1955 */
-  --text-neutral:                     var(--color-system-neutral);
-  --border-neutral:                   var(--color-system-neutral);
-  --background-neutral:               var(--color-system-neutral-light);
-  --surface-neutral:                  var(--color-system-neutral-light);
+     paragraph when that lands. */
 
-  /* ── Info / Purple / Orange status tokens (no Figma equivalent) ──
-     Note: Figma's --background-info / --text-info / --surface-info map to system/neutral (gray),
-     NOT blue. These blue "info" status tokens are a separate concept — keep as gap-fills.
-     ADR-033 § 5 rules that `info` names the BLUE signal and the gray family folds
-     into `neutral` above; freeing the name needs a Figma variable rename, which is
-     brik-bds#1959. Until then the two concepts stay one segment apart. */
-  --background-status-info:           var(--color-system-blue);
-  --background-status-info-subtle:    var(--color-system-blue-light);
-  --background-status-purple:         var(--color-system-purple);
-  --background-status-orange:         var(--color-system-orange);
-  --text-status-info:                 var(--color-system-blue);
-  --surface-status-info:              var(--color-system-blue-light);
+  /* ── The blue `info` signal (ADR-033 § 5, brik-bds#1959) ──
+     `info` now names the BLUE informational signal. The gray family that held
+     these names moved to --*-neutral above, so the two concepts are no longer
+     one `status-` segment apart.
 
-  /* ⚠️ DEPRECATED (brik-bds#1955) — the `status-` segment is out of formula.
-     Re-pointed at the intent-form names above rather than deleted: six repos
-     consume @brikdesigns/bds and ADR-033 § Consequences requires the alias to
-     ship alongside the new name. Values are unchanged — --background-status-neutral
-     and --background-neutral were already declared at the same value, one line
-     apart. Deletion is brik-bds#1958. */
-  --background-status-neutral:        var(--background-neutral);
-  --text-status-neutral:              var(--text-neutral);
+     There is no --border-info: the gray one retired with the rename and blue
+     has no border counterpart. Purple and orange remain hue names with no home
+     under ADR-033 § 1 — amendment owed, tracked on brik-bds#1958. */
+  --background-info:                 var(--color-system-blue);
+  --text-info:                       var(--color-system-blue);
+  --surface-info:                    var(--color-system-blue-light);
+  --background-status-purple:        var(--color-system-purple);
+  --background-status-orange:        var(--color-system-orange);
+
+  /* ⚠️ DEPRECATED (brik-bds#1955, brik-bds#1959) — the `status-` segment is out
+     of formula. Re-pointed at the intent-form names rather than deleted: six
+     repos consume @brikdesigns/bds and ADR-033 § Consequences requires the
+     alias to ship alongside the new name. Deletion is brik-bds#1958.
+
+     Every one of these resolves to exactly what it resolved to before, with two
+     re-pointings worth naming. --background-status-info-subtle folds into
+     --surface-info: `surface` already means the subtle tint, so the -subtle
+     modifier was redundant (#1909 § D). --background-status-neutral now aliases
+     --surface-neutral rather than --background-neutral, because that is the
+     token still carrying its historical #d4d4d4. */
+  --background-status-info:          var(--background-info);
+  --background-status-info-subtle:   var(--surface-info);
+  --text-status-info:                var(--text-info);
+  --surface-status-info:             var(--surface-info);
+  --background-status-neutral:       var(--surface-neutral);
+  --text-status-neutral:             var(--text-neutral);
 
   /* ── System color hover/pressed states ──
      Darken system colors for interactive feedback on destructive/positive buttons.
