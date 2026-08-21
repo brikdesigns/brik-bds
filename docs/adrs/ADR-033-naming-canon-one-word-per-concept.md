@@ -1,7 +1,8 @@
 # ADR-033 — Naming canon: one word per concept, one prop name per axis, one step vocabulary per tier
 
-**Status:** Proposed
+**Status:** Accepted
 **Date:** 2026-08-20
+**Accepted:** 2026-08-21 — § Enforcement's gate shipped as [`lint-naming-canon`](../../scripts/lint-naming-canon.mjs) ([#1936](https://github.com/brikdesigns/brik-bds/issues/1936)), all five rules demonstrated failing on planted violations.
 **Supersedes:** —
 **Superseded by:** —
 **Owner:** Nick Stanerson
@@ -280,7 +281,7 @@ Every mapping below is positional and measured; values do not change.
 
 ## Enforcement
 
-This ADR is the spec for #1910 AC #5's gate, which is a separate issue and the reason this ADR's status is **Proposed** rather than Accepted. The gate must reject, and must be demonstrated failing on a planted violation of each:
+This ADR is the spec for #1910 AC #5's gate, which shipped as [`lint-naming-canon`](../../scripts/lint-naming-canon.mjs) ([#1936](https://github.com/brikdesigns/brik-bds/issues/1936)) and is the condition of this ADR's **Accepted** status. `npm run lint-naming-canon`, wired to [`naming-canon-check.yml`](../../.github/workflows/naming-canon-check.yml) on every PR to `main`. The gate must reject, and is demonstrated failing on a planted violation of each ([`lint-naming-canon.test.mjs`](../../scripts/__tests__/lint-naming-canon.test.mjs)):
 
 1. A token name whose step falls outside its Tier's vocabulary in § 3, and is not a § Named exception.
 2. A token name defined twice with different value *types* (the `--box-shadow-md` class) — distinct from the existing `lint-token-shadowing`, which allows a marked override.
@@ -290,4 +291,21 @@ This ADR is the spec for #1910 AC #5's gate, which is a separate issue and the r
 
 Rules 1 and 2 read `dist/tokens.css`; rules 3 and 4 read `components/ui/**/*.{tsx,css}`. Existing gates the new one must not duplicate: [`lint-token-purpose-slots`](../../scripts/lint-token-purpose-slots.mjs) (does the *slot* ship documented — structure, not vocabulary), `lint-token-shadowing` (double definition, type-blind), [`slot-pattern-check.mjs`](../../scripts/slot-pattern-check.mjs) (modifier *shape*), `lint-component-props` (docs match source), `lint-mdx-tokens` (phantom names in docs).
 
-Until the gate ships, the retired lists above are the review surface, and `npm run lint-token-purpose-slots -- --census` is the live measurement of what still violates § 3.
+### The baseline
+
+Every rule was red on `main` when the gate landed — 22 step words, 6 type collisions, 17 mixed-or-retired unions, 197 bare-or-retired modifiers, 4 default-deny words. A gate that fails `main` on merge is not shippable, so all 246 are listed in [`tokens/naming-canon-baseline.json`](../../tokens/naming-canon-baseline.json), each keyed to the remediation issue that burns it down:
+
+| Rule | Baselined | Owned by |
+|---|---|---|
+| 1 — step vocabulary | 22 | #1923 |
+| 2 — type collision | 6 | #1924 (`--box-shadow-*` ×4) · #1910 (`--easing-ease-*` ×2) |
+| 3 — union axis | 17 | #1909 (valence ×11) · #1925 (hue source ×6) |
+| 4 — BEM modifier | 197 | #1927 (×171) · #1909 (valence ×17) · #1926 (the nine twins) |
+| 5 — default-deny | 4 | #1925 |
+
+**The baseline is a countdown, not a carve-out.** A stale entry — one that no longer violates — is itself a failure, so an entry cannot outlive its fix and the file can only shrink. Adding a row to keep a *new* violation green is the one edit that defeats the gate. `npm run lint-naming-canon:census` prints the remaining count per rule.
+
+Two limits are worth naming, because a gate whose blind spots are undocumented gets trusted past them:
+
+- **Rule 1 does not read colour tokens.** A colour token's tail is a role, not a step (`--color-blue-light`, `--background-brand-primary`), and § 3's numeric/t-shirt vocabulary cannot express either. The colour ramps *do* carry two vocabularies in one family — `--color-blue-500` beside `--color-blue-light`, across 10 hues — which this ADR never dispositioned. Filed as [#1949](https://github.com/brikdesigns/brik-bds/issues/1949) for a § 6 amendment; the gate may not assert a disposition the ADR has not made.
+- **Rule 4 reads CSS only.** A modifier built from a runtime value (`` `bds-badge--${tone}` ``) has no static spelling to judge — the same blind spot [`slot-pattern-check.mjs`](../../scripts/slot-pattern-check.mjs) documents at `:38-42`.
