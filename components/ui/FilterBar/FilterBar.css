@@ -56,25 +56,25 @@
 
 /* ─── Actions (always-visible, e.g. a primary/secondary ButtonGroup) ──── */
 /*
- * No margin-left: auto in the base rule — whenever a controls row exists,
- * .bds-filter-bar__controls (or __collapse) renders before this and its own
- * margin-left: auto already pushes everything after it, including this
- * element, flush right. Multiple auto margins on the same flex line split
- * the free space between them instead of hugging adjacent items together,
- * which would open an unwanted gap between the controls/popover trigger and
- * actions — so this intentionally relies on the sibling's auto margin.
+ * Exactly one element on the flex line carries `margin-left: auto`, because
+ * multiple auto margins split the free space between them instead of hugging
+ * adjacent items together — which would open an unwanted gap between the
+ * controls/popover trigger and actions.
  *
- * A bar with no filter controls renders no such sibling, so the modifier
- * below moves the auto margin onto actions instead. Exactly one element on
- * the line ever carries it.
+ * Which element that is depends on whether a controls row exists, so the two
+ * rules below decide it structurally rather than through a modifier class:
+ * actions claims the auto margin by default, and yields it back to
+ * .bds-filter-bar__controls (or __collapse) whenever one precedes it.
  */
 .bds-filter-bar__actions {
   display: flex;
   align-items: center;
   gap: var(--gap-xs);
+  margin-left: auto;
 }
 
-.bds-filter-bar--no-controls .bds-filter-bar__actions {
-  margin-left: auto;
+.bds-filter-bar__controls ~ .bds-filter-bar__actions,
+.bds-filter-bar__collapse ~ .bds-filter-bar__actions {
+  margin-left: 0;
 }
 }

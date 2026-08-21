@@ -155,11 +155,7 @@ export function FilterBar({
   return (
     <div
       ref={ref}
-      className={bdsClass(
-        'bds-filter-bar',
-        !hasControls && 'bds-filter-bar--no-controls',
-        className,
-      )}
+      className={bdsClass('bds-filter-bar', className)}
       style={style}
       aria-label={ariaLabel}
       {...props}
