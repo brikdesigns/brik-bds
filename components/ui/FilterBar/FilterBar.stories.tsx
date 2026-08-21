@@ -6,6 +6,7 @@ import { FilterButton } from '../FilterButton';
 import { FilterToggle } from '../FilterToggle';
 import { Button } from '../Button';
 import { ButtonGroup } from '../ButtonGroup';
+import { DataSection } from '../DataSection';
 import type { CounterStatus } from '../Counter';
 
 /* ─── Counter status options for the activeStatus Control ───────
@@ -209,14 +210,16 @@ export const NoFilters: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   NESTED HEADING — `titleAs="h3"`. A collection nested under a
-   section that already owns the `<h2>` needs the bar to step down a
-   level, or the document outline skips. Purely semantic: h2 and h3
-   render identically here (both `heading-sm`), so the surrounding
-   `<h2>` is in the story to make the nesting legible.
+   NESTED HEADING — `titleAs="h3"`. A collection nested inside a
+   record section that already owns the `<h2>` has to step down a
+   level, or the document outline skips. The wrapping `DataSection`
+   is the real-world case, not scaffolding: it renders the `<h2>`
+   this bar nests under. Purely semantic — both render at
+   `heading-sm`, which is exactly why the level cannot be inferred
+   from the rendered output.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary titleAs="h3" for a collection nested under an existing h2 */
+/** @summary titleAs="h3" for a collection nested in a DataSection */
 export const NestedHeading: Story = {
   args: {
     title: 'Engagements',
@@ -226,8 +229,7 @@ export const NestedHeading: Story = {
     filtered: rows.length,
   },
   render: (args) => (
-    <section>
-      <h2>Acme Co</h2>
+    <DataSection title="Acme Co" subtitle="Client record">
       <FilterBar {...args}>
         <FilterButton
           label="Industry"
@@ -236,7 +238,7 @@ export const NestedHeading: Story = {
           onChange={() => {}}
         />
       </FilterBar>
-    </section>
+    </DataSection>
   ),
 };
 
