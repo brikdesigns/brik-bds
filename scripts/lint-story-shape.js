@@ -815,4 +815,5 @@ module.exports = {
   axisReviewReason,
   axisGalleryNotices,
   bareLintIgnoreViolations,
+  componentIsDeprecated,
 };
