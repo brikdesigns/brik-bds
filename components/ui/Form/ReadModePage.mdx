@@ -7,6 +7,8 @@ import * as DataSectionStories from '../DataSection/DataSection.stories';
 
 A page layout archetype for surfaces that **primarily display read-only data** with per-section edit affordances. Client profile Overview, engagement detail, company settings, onboarding summaries — anywhere the default user task is *looking at data*, and editing is a secondary action.
 
+This is one of four product page archetypes. The index — and the rule for picking between them — lives at [Build Standards → Page Archetypes](https://design.brikdesigns.com/docs/build-standards/page-archetypes); the decision page for this one is [Record Read](https://design.brikdesigns.com/docs/build-standards/page-archetypes/record-read). **This page owns the live canvases and the two section-level edit conventions below**; the docs-site page owns which archetype a surface gets.
+
 This page pattern composes four BDS components:
 
 1. **`PageHeader`** — page-level `<h1>`, breadcrumbs, metadata.
@@ -199,6 +201,10 @@ const [mode, setMode] = useState<'view' | 'edit'>('view');
 
 ## Related
 
+- [Page Archetypes](https://design.brikdesigns.com/docs/build-standards/page-archetypes) — the index for all four product page archetypes, and the rule for picking one.
+- [Record Edit](https://design.brikdesigns.com/docs/build-standards/page-archetypes/record-edit) — the page-level edit half, when the whole record edits at once instead of per section.
+- [Collection](https://design.brikdesigns.com/docs/build-standards/page-archetypes/collection) — the archetype for many peer records behind a control bar.
+- [Profile](https://design.brikdesigns.com/docs/build-standards/page-archetypes/profile) — this archetype as one tab of a tabbed entity page.
 - [Composing a read-mode sheet](https://design.brikdesigns.com/docs/components/sheet#composing-a-read-mode-sheet) — the narrow-view sibling of this pattern, for focused sheet overlays.
 - [`DataSection`](?path=/docs/containers-data-section--docs) — the component this pattern composes.
 - [`FieldGrid`](?path=/docs/blocks-field-grid--docs) — grid wrapper.

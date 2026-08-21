@@ -1,0 +1,99 @@
+---
+title: Profile
+description: One entity across tabs, where each tab picks its own archetype — and the rule for switching between a record tab and a collection tab inside one page.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+The page for one entity too large for a single view. `PageHeader` establishes the entity once and never changes; a `TabBar` partitions everything about it. A company profile, a client workspace, an engagement hub.
+
+Reach for it when one record's material splits into groups a user moves between rather than scrolls through, and when some of those groups are *other records* — a company's own attributes in one tab, its engagements in the next. That mix is what distinguishes a profile from a long [record read](/docs/build-standards/page-archetypes/record-read).
+
+## Composition
+
+The header is the entity. The body is one tab panel at a time, and each panel is a whole archetype in miniature.
+
+```tsx
+<Page padding="md" gap="xl">
+  <PageHeader
+    title={company.name}
+    subtitle={company.tagline}
+    media={<Avatar name={company.name} src={company.logoUrl} />}
+    breadcrumbs={<Breadcrumb items={crumbs} />}
+    metadata={[
+      { label: 'Owner', value: company.owner },
+      { label: 'Status', value: <Badge status="positive">Active</Badge> },
+    ]}
+    actions={<Button variant="primary">Add engagement</Button>}
+    tabs={
+      <TabBar
+        variant="tab"
+        items={[
+          { label: 'Overview', active: tab === 'overview', onClick: () => setTab('overview') },
+          { label: 'Engagements', active: tab === 'engagements', onClick: () => setTab('engagements') },
+        ]}
+      />
+    }
+  />
+  <PageContent>
+    {tab === 'overview' && <OverviewTab company={company} />}
+    {tab === 'engagements' && <EngagementsTab companyId={company.id} />}
+  </PageContent>
+</Page>
+```
+
+Filling `tabs` suppresses the header's bottom divider — the `TabBar` baseline becomes the handoff to the body, so nothing else draws a rule there.
+
+## Switching archetype per tab
+
+**Each tab picks its own archetype from the other three. The page picks none.** A profile is a container for archetypes, not a fourth shape competing with them.
+
+| The tab is about | Tab body | Follow |
+|---|---|---|
+| The entity's own attributes | `DataSection` stack in `ProfileView` | [Record read](/docs/build-standards/page-archetypes/record-read) |
+| A set of related records | `FilterBar` plus a display in its shell | [Collection](/docs/build-standards/page-archetypes/collection) |
+| The entity edited whole | A `Form` of `FieldGrid`s | [Record edit](/docs/build-standards/page-archetypes/record-edit) |
+
+Three rules make the switch safe:
+
+- **The header does not change between tabs.** `title`, `media`, `metadata`, and `breadcrumbs` describe the entity, so they are identical in every tab. A tab that needs a different title is a different page.
+- **A tab body starts at the archetype's own first region.** A record tab's first element is a `DataSection`; a collection tab's first element is a `FilterBar`. Neither gets a heading naming the tab — the tab label already did that, and repeating it gives the region two names.
+- **Edit stays inside the tab that owns it.** A record tab keeps its per-section edit affordance; a whole-record edit is a separate route, not a tab. Putting `mode="edit"` on the shared header would claim the header for one tab.
+
+<Callout type="warn">
+  Do not mix archetypes *within* one tab. A tab holding a `DataSection` stack and a filtered table is two tabs. That mixture is exactly the four-idiom page this section exists to replace.
+</Callout>
+
+## Heading ramp inside a tab
+
+**A tab adds no heading level.** `TabBar` renders `role="tablist"` with `role="tab"` children — navigation, not an outline node — so a tab panel's first heading is still an `<h2>` under the page's single `<h1>`.
+
+| Region | Element | How |
+|---|---|---|
+| `PageHeader title` | `<h1>` | The entity, once per page |
+| A tab panel's first region | `<h2>` | `DataSection` default, or `FilterBar` default |
+| A region nested under that `<h2>` | `<h3>` | `titleAs="h3"` on `DataSection` or `FilterBar` |
+
+`titleAs="h3"` is for the genuinely nested case — a small collection sitting *inside* a record section, under that section's own `<h2>`. It is not for "this is in a tab, so it must be deeper."
+
+## State shell
+
+Per tab, following that tab's display: `ProfileView` for a record tab, `TableView`, `ListView`, or `BoardView` for a collection tab. There is no page-level shell — one failed tab must not blank the header that identifies the entity.
+
+Fetch per tab too. A profile that loads every tab's data up front pays for tabs nobody opened, and its skeleton has to guess a shape it cannot know.
+
+## Don'ts
+
+- **Don't render a heading naming the tab.** The tab label is the name.
+- **Don't change the header between tabs.** It describes the entity, not the view.
+- **Don't put `mode="edit"` on a profile header.** Whole-record edit is its own route.
+- **Don't nest a `TabBar` inside a tab panel.** Two levels of tabs on one entity means the second level is really a filter, or the entity should have been split.
+- **Don't wrap the whole body in one state shell.** Per tab, or a single failure takes the page.
+- **Don't demote a tab's headings to `h3` because it is in a tab.** A tab is not an outline node.
+
+## Related
+
+- [Record Read](/docs/build-standards/page-archetypes/record-read) — the archetype a record tab follows.
+- [Collection](/docs/build-standards/page-archetypes/collection) — the archetype a collection tab follows.
+- [Record Edit](/docs/build-standards/page-archetypes/record-edit) — the separate route a whole-record edit takes.
+- [Headings](/docs/build-standards/headings) — why the element follows outline intent and not nesting depth.

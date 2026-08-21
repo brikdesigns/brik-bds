@@ -1,0 +1,4 @@
+{
+  "title": "Page Archetypes",
+  "pages": ["index", "record-read", "record-edit", "collection", "profile"]
+}

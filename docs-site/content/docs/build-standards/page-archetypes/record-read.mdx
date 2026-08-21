@@ -1,0 +1,92 @@
+---
+title: Record Read
+description: One record's own attributes rendered read-only in a DataSection stack, with per-section edit affordances and no page-level form.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+The default page for a single record. The user's task is *looking at data*; editing is a secondary action reached per section. Client profile overview, engagement detail, company settings, an onboarding summary.
+
+Reach for it when the page is about one record and the reader is reading. If the whole record goes into one form, that is [record edit](/docs/build-standards/page-archetypes/record-edit). If the record is split across tabs, the page is a [profile](/docs/build-standards/page-archetypes/profile) and this archetype fills its record tabs.
+
+## Composition
+
+`PageHeader` names the record, then the body is a flat stack of `DataSection` siblings, each holding one `FieldGrid` of `Field` pairs.
+
+```tsx
+<Page padding="md" gap="xl">
+  <PageHeader
+    title={client.name}
+    subtitle={client.tagline}
+    media={<Avatar name={client.name} src={client.logoUrl} />}
+    breadcrumbs={<Breadcrumb items={crumbs} />}
+    mode="read"
+    onEdit={() => router.push(`/clients/${slug}/edit`)}
+  />
+  <PageContent>
+    <ProfileView loading={isLoading} error={error?.message}>
+      <DataSection title="Identity" actions={<Button size="sm" variant="secondary">Edit</Button>}>
+        <FieldGrid columns={2}>
+          <Field label="Business Name">{client.name}</Field>
+          <Field label="Industry">{client.industry}</Field>
+        </FieldGrid>
+      </DataSection>
+      <DataSection title="Location">
+        <FieldGrid columns={2}>
+          <Field label="City">{client.city}</Field>
+          <Field label="State">{client.state}</Field>
+        </FieldGrid>
+      </DataSection>
+    </ProfileView>
+  </PageContent>
+</Page>
+```
+
+Stack the sections as direct `PageContent` children. Do not wrap them in a `Stack` with a hand-set gap — the space *and* the rule between two `DataSection` siblings come from the component's own adjacency selector, per [the section separator](/docs/build-standards/content-rhythm#the-section-separator). Any element inserted between two sections breaks that selector and the second section silently loses its rule.
+
+## State shell
+
+`ProfileView` — the shell for a `DataSection` stack. It resolves error, loading, and empty in that precedence order and renders a field-shaped skeleton otherwise.
+
+`DataSection` also takes its own `loading` prop, which reads `columns` and the cell count off its `FieldGrid` child and swaps the body for skeleton rows shaped to match. Use it when sections resolve independently; use `ProfileView` when the whole record loads as one.
+
+<Callout type="warn">
+  Do not use both for the same data. A `ProfileView loading` around `DataSection loading` renders two skeletons stacked. Pick the granularity the fetch actually has.
+</Callout>
+
+## Heading ramp
+
+Three levels, and the element follows outline position rather than the token — see [Headings](/docs/build-standards/headings).
+
+| Region | Element | Token |
+|---|---|---|
+| `PageHeader title` | `<h1>` | Section-headline step |
+| `DataSection title` | `<h2>`, its default | `--heading-sm` |
+| `DataSection` nested one level deeper | `<h3>` via `titleAs` | `--heading-sm` |
+| `Field label` | `<span>` | Label family, never a heading token |
+
+`titleAs` only accepts `h2` and `h3`. A record read page nesting deeper than `h3` is a page that should have become a [profile](/docs/build-standards/page-archetypes/profile).
+
+## Edit affordance
+
+The record read page never holds a form. Editing is per section, and BDS supports two conventions — a `Sheet` overlay, or an in-place body swap. Both keep the page in read mode; neither adds a page-level Save.
+
+Those two conventions, their selection rules, and the live canvases live in Storybook: [`Containers/read-mode-page`](https://storybook.brikdesigns.com/?path=/docs/containers-read-mode-page--overview). Do not mix them on one page.
+
+The page-level `[Edit]` in `PageHeader` is a different thing — it routes to the [record edit](/docs/build-standards/page-archetypes/record-edit) page. Wire it with `mode="read"` plus `onEdit`, which auto-renders the button; a hand-placed `actions` button overrides mode-driven actions entirely.
+
+## Don'ts
+
+- **Don't place a `Divider` between two `DataSection` siblings.** The rule is already drawn, and a second one paints the line twice.
+- **Don't head a record region with a `FilterBar`.** A control bar heads a display; a section container heads a record. That rule is [Control bar or section header](/docs/build-standards/composition-layers#control-bar-or-section-header).
+- **Don't use `SheetSection` on a page.** Its uppercase label heading belongs inside a sheet body; on a page the section is `DataSection`.
+- **Don't hand-roll a titled region.** A `Cluster` with `justify="between"` above a `FieldGrid` is a `DataSection` reimplemented without the adjacency rule or the outline node.
+- **Don't add a page-level Save.** In this archetype the page never edits.
+
+## Related
+
+- [Record Edit](/docs/build-standards/page-archetypes/record-edit) — the write half of the same record.
+- [Collection](/docs/build-standards/page-archetypes/collection) — the archetype when the page is about a set rather than one record.
+- [Profile](/docs/build-standards/page-archetypes/profile) — this archetype as one tab of a tabbed entity page.
+- [Storybook — read-mode-page](https://storybook.brikdesigns.com/?path=/docs/containers-read-mode-page--overview) — live canvases and the two section-level edit conventions.
+- [Display Choice](/docs/build-standards/display-choice) — why one record's own scalars are a field grid and not a table.

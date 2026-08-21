@@ -1,0 +1,79 @@
+---
+title: Page Archetypes
+description: The four product page shapes — record read, record edit, collection, profile — which one a given surface gets, and the shell all four share.
+---
+
+import { Cards, Card } from 'fumadocs-ui/components/card';
+import { Callout } from 'fumadocs-ui/components/callout';
+
+A **page archetype** is a named composition for a whole product page: which Control heads it, which display fills its body, and which state shell wraps that display. [Composition Layers](/docs/build-standards/composition-layers) names the parts and [Display Choice](/docs/build-standards/display-choice) picks the display; an archetype is the assembled page those two decisions land in.
+
+Product apps get four. Marketing pages get [blueprint families](/docs/theming/blueprints) instead — the archetypes here assume the [product app shell](/docs/build-standards/page-structure#product-app-shell), not the section-and-band structure of a marketing page.
+
+<Cards>
+  <Card title="Record Read" href="/docs/build-standards/page-archetypes/record-read" description="One record's own attributes, read-only, with per-section edit affordances." />
+  <Card title="Record Edit" href="/docs/build-standards/page-archetypes/record-edit" description="The page-level edit half of read and edit parity — one form for the whole record." />
+  <Card title="Collection" href="/docs/build-standards/page-archetypes/collection" description="Many peer items behind a control bar — table, card list, or board." />
+  <Card title="Profile" href="/docs/build-standards/page-archetypes/profile" description="One entity across tabs, where each tab is itself a record or a collection." />
+</Cards>
+
+## Pick the archetype
+
+Ask how many records the page is about, then whether the user is reading or writing.
+
+| The page is about | The user is | Archetype |
+|---|---|---|
+| One record, one view | Reading | [Record read](/docs/build-standards/page-archetypes/record-read) |
+| One record, one view | Writing the whole record at once | [Record edit](/docs/build-standards/page-archetypes/record-edit) |
+| Many peer records | Scanning, filtering, or picking one | [Collection](/docs/build-standards/page-archetypes/collection) |
+| One entity split across tabs | Both, per tab | [Profile](/docs/build-standards/page-archetypes/profile) |
+
+Two tie-breaks resolve the cases that look like more than one row:
+
+- **Per-section edit is still record read.** A page where each `DataSection` opens its own sheet or swaps its own body in place is the read archetype with an edit affordance, not the edit archetype. Record edit is for a page that puts the *whole* record in one form.
+- **A tab is not an archetype.** Tabs make a page a profile; each tab's body then picks its own archetype from the three rows above.
+
+## The shared shell
+
+All four compose the same three primitives. `Page` owns the horizontal inset and the header-to-body gap, `PageHeader` is the page's only `<h1>`, and `PageContent` owns the rhythm between stacked body regions.
+
+```tsx
+import { Page, PageHeader, PageContent } from '@brikdesigns/bds';
+
+<Page padding="md" gap="xl">
+  <PageHeader title="…" />
+  <PageContent>{/* archetype-specific body */}</PageContent>
+</Page>
+```
+
+The archetypes differ only in what fills `PageContent` and which props `PageHeader` carries. Nothing below the shell re-declares the page inset or the header gap.
+
+<Callout type="warn">
+  `Page` sets `flex: 1; min-height: 0` on itself, which only takes effect inside a flex-column parent. The app shell provides that. In a non-flex parent the page sizes to content — degraded, not broken — and `PageContent scroll` stops working.
+</Callout>
+
+## State shells
+
+Every archetype names which [`DataView`](/docs/components/data-view) shell wraps its display, because the display itself owns none of the error, loading, or empty states. The mapping follows the display, not the archetype:
+
+| Display in the body | Shell |
+|---|---|
+| `Table` | `TableView` |
+| `CardList` or a card `Grid` | `ListView` |
+| A `DataSection` stack of field grids | `ProfileView` |
+| `Board` columns | `BoardView` |
+| A `Form` | None — see [Record edit](/docs/build-standards/page-archetypes/record-edit#state-shell) |
+
+## Where each part is documented
+
+These pages own the **decision**: which archetype a surface gets, what composes it, and which rules apply. Storybook owns the **live renders and the interaction conventions** — the canvases you look at, and the two section-level edit conventions for a read page.
+
+The one page that predates this section is `Containers/read-mode-page` in Storybook. It stays there and keeps its canvases; [Record read](/docs/build-standards/page-archetypes/record-read) links into it rather than restating it.
+
+## Related
+
+- [Composition Layers](/docs/build-standards/composition-layers) — the Section, Layout, Container, Block, Control, and Component parts these pages assemble.
+- [Display Choice](/docs/build-standards/display-choice) — which display a body region gets, and the state shell that wraps it.
+- [Page Structure](/docs/build-standards/page-structure#product-app-shell) — the landmark and skip-link rules the app shell around these pages must satisfy.
+- [Content Rhythm](/docs/build-standards/content-rhythm) — the spacing steps between the regions each archetype stacks.
+- [Headings](/docs/build-standards/headings) — the heading token and element rules each archetype's ramp follows.
