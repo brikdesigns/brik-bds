@@ -27,6 +27,11 @@
  * one `ButtonProps`). Unmarked tables are ignored — the gate is opt-in, so it
  * ships green and grows as components are annotated.
  *
+ * An optional `omit=` list drops named props from the coverage check below,
+ * for a prop the page deliberately does not curate:
+ *
+ *   {/* props-check: FooProps @ components/ui/Foo/Foo.tsx omit=legacyMode *\/}
+ *
  * ── The type-note convention ─────────────────────────────────────────────────
  * A Type cell may end in a parenthetical note carrying information the source
  * type cannot — a unit, the concrete shape a slot expects, an example value:
@@ -53,11 +58,30 @@
  *     with no extractable source default are not default-checked (no false
  *     positive on HTML-inherited defaults like `disabled` → `false`).
  *
- * Props that exist in source but the author chose NOT to document are fine —
- * curation is the author's call; the gate only polices what's written.
+ * ── What is checked, per SOURCE prop (coverage, #1944) ────────────────────────
+ * Every prop DECLARED on the props type appears in some marked table for that
+ * type on the page. Reported as `undocumented-prop`.
+ *
+ * This narrows the original curation model. That model held that omitting a
+ * prop was always the author's call, on the grounds that Storybook
+ * auto-extracts the full reference — true for a human browsing Storybook, and
+ * false for every text-based path into the docs. `<ArgTypes>` is rendered at
+ * runtime and never enters the MDX, so the docs-site, brik-rag, and grep all
+ * see only the curated subset. A prop absent from both the docs-site table and
+ * the component's own MDX prose is unreachable to an agent, which is how
+ * consumers end up hand-rolling chrome for a slot that already exists
+ * (`DataSection.headerControl` is the worked case).
+ *
+ * Curation is still the author's call — it is now explicit rather than silent:
+ *   • `omit=` on the marker drops a prop deliberately.
+ *   • `className` / `style` / `id` / `key` / `ref` are never required; the
+ *     table's "plus all standard HTML attributes" sentence documents them.
+ *   • Only DECLARED props count. `getPropertiesOfType` resolves the full
+ *     structural type, so inherited HTML attributes would otherwise flood the
+ *     check with hundreds of DOM props that no curated table should list.
  *
  * ── Exit codes ─────────────────────────────────────────────────────────────────
- *   0  Clean — every documented prop matches source
+ *   0  Clean — every documented prop matches source, every declared prop is documented
  *   1  Drift found
  *   2  Bad invocation (marker points at a missing file/type, malformed table)
  *
@@ -84,7 +108,12 @@ const ts = require('typescript');
 // still loads from the real repo above.
 let ROOT = REPO_ROOT;
 
-const MARKER_RE = /props-check:\s*([A-Za-z_]\w*)\s*@\s*([^\s*]+?\.tsx)/;
+const MARKER_RE = /props-check:\s*([A-Za-z_]\w*)\s*@\s*([^\s*]+?\.tsx)((?:\s+omit=[\w,]+)?)/;
+
+// Props every table covers collectively via its "plus all standard HTML
+// attributes" sentence rather than a row of their own. Excluded from the
+// coverage check so that sentence stays the single place they're documented.
+const PASSTHROUGH_PROPS = new Set(['className', 'style', 'id', 'key', 'ref']);
 
 // ── MDX: find marked prop tables ──────────────────────────────────────────────
 
@@ -129,7 +158,10 @@ function findMarkedTables(mdxFile) {
       const c = cells(lines[k]);
       rows.push({ cells: c, line: k + 1 });
     }
-    tables.push({ typeName: m[1], file: m[2], header, rows, markerLine: i + 1 });
+    const omit = new Set(
+      (m[3] || '').replace(/\s*omit=/, '').split(',').map((s) => s.trim()).filter(Boolean),
+    );
+    tables.push({ typeName: m[1], file: m[2], header, rows, omit, markerLine: i + 1 });
   }
   return tables;
 }
@@ -201,7 +233,42 @@ function propsOfType(program, checker, absFile, typeName) {
       map.set(sym.getName(), entry);
     }
   }
-  return { map };
+  return { map, own: ownProps(decl) };
+}
+
+// The prop names declared DIRECTLY on `decl` — the component's own API surface,
+// excluding everything reached through `extends` / `Omit<HTMLAttributes<…>>`.
+//
+// This is what makes the coverage check (§ What is checked, per SOURCE prop)
+// possible at all: `getPropertiesOfType` resolves the full structural type, so
+// it hands back every inherited DOM attribute — hundreds of them, none of which
+// a curated table should list. Only the members written in this declaration are
+// the component's own contract, so only those are required to appear.
+//
+// An interface contributes `decl.members`. A type alias contributes the members
+// of its type literal, or of each type-literal constituent of an intersection
+// (`type FooProps = Base & { extra: string }`). An alias with no literal of its
+// own (a bare `Omit<…>` / mapped type) contributes nothing — there is no
+// hand-written surface to require.
+function ownProps(decl) {
+  const out = new Set();
+  const addMembers = (members) => {
+    for (const mem of members ?? []) {
+      if (!ts.isPropertySignature(mem) && !ts.isMethodSignature(mem)) continue;
+      if (ts.isIdentifier(mem.name) || ts.isStringLiteral(mem.name)) out.add(mem.name.text);
+    }
+  };
+  if (ts.isInterfaceDeclaration(decl)) {
+    addMembers(decl.members);
+  } else if (ts.isTypeAliasDeclaration(decl)) {
+    const collect = (node) => {
+      if (ts.isTypeLiteralNode(node)) addMembers(node.members);
+      else if (ts.isIntersectionTypeNode(node) || ts.isUnionTypeNode(node)) node.types.forEach(collect);
+      else if (ts.isParenthesizedTypeNode(node)) collect(node.type);
+    };
+    collect(decl.type);
+  }
+  return out;
 }
 
 // Collect literal defaults from every object-binding destructure of a param in
@@ -338,8 +405,14 @@ function main() {
   const defaultsCache = new Map(); // abs → Map
 
   const violations = [];
+  const documentedByType = new Map(); // `${abs}#${typeName}` → Set<propName>
+  const firstTableForType = new Map(); // same key → the table to report against
   for (const t of tablesByFile) {
     const key = `${t.abs}#${t.typeName}`;
+    if (!documentedByType.has(key)) {
+      documentedByType.set(key, new Set());
+      firstTableForType.set(key, t);
+    }
     if (!typeCache.has(key)) typeCache.set(key, propsOfType(program, checker, t.abs, t.typeName));
     const resolved = typeCache.get(key);
     if (resolved.error) {
@@ -360,6 +433,7 @@ function main() {
     for (const row of t.rows) {
       const names = propNames(row.cells[pi] ?? '');
       if (names.length === 0) continue;
+      names.forEach((n) => documentedByType.get(key).add(n));
       const loc = { file: relPosix(t.mdx), line: row.line, type: t.typeName };
 
       // Existence — every documented name must be a real property.
@@ -397,6 +471,29 @@ function main() {
             detail: `default documented as "${docDefault}", source is "${srcDefault}"` });
         }
       }
+    }
+  }
+
+  // ── Coverage: every own-declared prop appears in SOME table for its type ────
+  //
+  // Keyed on type, not table. One props type is often curated into several
+  // tables on a page (Button / LinkButton / IconButton are three views of
+  // `ButtonProps`), and a prop documented in any one of them is documented.
+  // Reported against the FIRST marker for that type, which is where an author
+  // adding the missing row will start.
+  for (const [key, seen] of documentedByType) {
+    const t = firstTableForType.get(key);
+    const own = typeCache.get(key)?.own;
+    if (!own || own.size === 0) continue;
+    const undocumented = [...own].filter(
+      (p) => !seen.has(p) && !PASSTHROUGH_PROPS.has(p) && !t.omit.has(p),
+    );
+    for (const p of undocumented) {
+      violations.push({
+        file: relPosix(t.mdx), line: t.markerLine, type: t.typeName, prop: p,
+        kind: 'undocumented-prop',
+        detail: `${t.typeName} declares "${p}" but no marked table on this page documents it`,
+      });
     }
   }
 
