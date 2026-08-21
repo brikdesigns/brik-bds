@@ -101,13 +101,14 @@ import { ProgressCircle } from '@brikdesigns/bds';
 
 ## API
 
+{/* props-check: ProgressCircleProps @ components/ui/ProgressCircle/ProgressCircle.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `value` | `number` (0–100) *(required)* | — |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
 | `status` | `'default' \| 'positive' \| 'warning' \| 'negative'` | `'default'` |
 | `label` | `string` | — |
-| `showValue` | `boolean \| ReactNode` | — |
+| `showValue` | `ReactNode` (`true` renders the percentage) | — |
 | `indeterminate` | `boolean` | `false` |
 | `fillColor` | `string` | status token stroke |
 

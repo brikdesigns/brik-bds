@@ -93,11 +93,12 @@ type RelationshipOption = RelationshipItem;
 
 ## API
 
+{/* props-check: RelationshipFieldProps @ components/ui/RelationshipField/RelationshipField.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `value` | `RelationshipItem[]` *(required)* | — |
 | `onChange` | `(next: RelationshipItem[]) => void` *(required)* | — |
-| `options` | `readonly RelationshipOption[]` *(required)* | — |
+| `options` | `readonly RelationshipItem[]` *(required)* | — |
 | `label` | `string` | — |
 | `helperText` | `string` | — |
 | `addPlaceholder` | `string` | `'Select…'` |

@@ -146,14 +146,22 @@ function buildProgram(files) {
 const FMT = () =>
   ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope | ts.TypeFormatFlags.NoTruncation;
 
-// If `pt` (or `pt` minus `undefined`) is a union of string literals, return the
-// expanded `'a' | 'b' | 'c'` form (single-quoted); else null. Lets a doc that
-// spells out an aliased union match source.
-function expandStringLiteralUnion(pt) {
+// If `pt` (or `pt` minus `undefined`) is a union of literals, return the
+// expanded `'a' | 'b' | 'c'` form (strings single-quoted, numbers bare); else
+// null. Lets a doc that spells out an aliased union match source.
+//
+// Numeric literals count (#1917). `GridColumns = 1 | 2 | 3 | 4 | 5 | 6 |
+// 'auto-fit' | 'auto-fill'` is the same authoring style as an all-string union
+// and the docs page spells it out for the same reason — a consumer wants the
+// allowed values, not the alias name. Requiring every member to be a *string*
+// literal rejected the whole union for its numeric half, so the only way to
+// pass was to delete the expansion.
+function expandLiteralUnion(pt) {
   if (!pt.isUnion()) return null;
   const members = pt.types.filter((m) => (m.flags & ts.TypeFlags.Undefined) === 0);
-  if (members.length === 0 || !members.every((m) => m.isStringLiteral())) return null;
-  return members.map((m) => `'${m.value}'`).join(' | ');
+  if (members.length === 0) return null;
+  if (!members.every((m) => m.isStringLiteral() || m.isNumberLiteral())) return null;
+  return members.map((m) => (m.isStringLiteral() ? `'${m.value}'` : `${m.value}`)).join(' | ');
 }
 
 // Resolve `typeName` in `absFile` → Map<propName, {type, optional}>.
@@ -188,7 +196,7 @@ function propsOfType(program, checker, absFile, typeName) {
       // and the expanded literal union (`'lg' | 'md' | 'sm'`). Record both so a
       // documented type matches whichever the author wrote.
       entry.types.add(checker.typeToString(pt, decl, FMT()));
-      const expanded = expandStringLiteralUnion(pt);
+      const expanded = expandLiteralUnion(pt);
       if (expanded) entry.types.add(expanded);
       map.set(sym.getName(), entry);
     }

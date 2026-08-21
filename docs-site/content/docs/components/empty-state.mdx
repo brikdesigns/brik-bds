@@ -84,11 +84,12 @@ When even a description would be excess noise.
 
 ## API
 
+{/* props-check: EmptyStateProps @ components/ui/EmptyState/EmptyState.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `title` | `string` *(required)* | — |
 | `description` | `string` | — |
-| `buttonProps` | `Pick<ButtonProps, 'children' \| 'onClick' \| 'iconBefore' \| 'iconAfter'>` | — |
+| `buttonProps` | `{ children: ReactNode; onClick?: MouseEventHandler<HTMLButtonElement>; iconBefore?: ReactNode; iconAfter?: ReactNode; }` | — |
 | `children` | `ReactNode` (replaces button) | — |
 
 Plus all standard `<div>` HTML attributes (excluding `title`).
