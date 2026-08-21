@@ -1,0 +1,79 @@
+name: Naming Canon Check
+
+# Fails the build when a name violates ADR-033's vocabulary — one word per
+# concept, one prop name per axis, one step vocabulary per tier.
+#
+# Why this needs a gate: ADR-008/017/030 govern the SHAPE of a name and
+# token-anatomy governs its STRUCTURE. Nothing governed the WORDS, so every
+# component and token was free to invent a synonym for a concept the system
+# already had a word for — and every existing gate passed, because the shape was
+# correct. `negative` has four spellings; `--box-shadow-md` is a blur length at
+# one line and a shadow list at another; `.bds-banner--tone-error` sits beside
+# `.bds-badge--error`. ADR-033 closes those lists; this is what stops them
+# re-opening.
+#
+# This is brik-bds#1910 AC #5 — the last one open on that umbrella, and the
+# condition ADR-033 § Enforcement sets for its own Proposed → Accepted move.
+#
+# Siblings, and why this is none of them:
+#   token-purpose-slot-check.yml  does the SLOT ship documented (structure)
+#   token-shadow-check.yml        one NAME declared twice (value, type-blind)
+# This one reads the words those two are blind to.
+#
+# Issue: brikdesigns/brik-bds#1936
+# Spec:  docs/adrs/ADR-033-naming-canon-one-word-per-concept.md § Enforcement
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: naming-canon-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  naming-canon-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # `dist/` is gitignored, so rules 1 and 2 have nothing to read until the
+      # registry is built. Same cheap path token-purpose-slot-check.yml uses — a
+      # concatenation, not the full `build:lib`.
+      - name: Build dist tokens
+        run: npm run build:dist-tokens
+
+      # `--census` also lists the baselined findings with their remediation
+      # issue, so the log shows the countdown and not just the live count.
+      - name: Naming canon check
+        run: npm run lint-naming-canon:census
+
+      # The gate's own proof. `assertions-must-be-proven-to-fail`: ADR-033
+      # § Enforcement requires each of the five rules to be demonstrated failing
+      # on a planted violation, so a rule that silently stops detecting anything
+      # fails here rather than going quietly green. Also covers the baseline's
+      # stale-entry check, which is what keeps it a countdown and not a carve-out.
+      - name: Gate self-test (proves all five rules fail)
+        run: npx vitest run scripts/__tests__/lint-naming-canon.test.mjs
+
+      # SLOT_REGISTRY is now imported by lint-naming-canon, which required a
+      # CLI-entry guard in the sibling gate. Re-run its self-test so the import
+      # cannot silently break it.
+      - name: Sibling gate still passes (SLOT_REGISTRY export)
+        run: npx vitest run scripts/__tests__/lint-token-purpose-slots.test.mjs
