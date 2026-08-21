@@ -27,13 +27,27 @@
  * one `ButtonProps`). Unmarked tables are ignored — the gate is opt-in, so it
  * ships green and grows as components are annotated.
  *
+ * ── The type-note convention ─────────────────────────────────────────────────
+ * A Type cell may end in a parenthetical note carrying information the source
+ * type cannot — a unit, the concrete shape a slot expects, an example value:
+ *
+ *   | `delay` | `number (ms)` | `200` |
+ *   | `children` | `ReactNode (BoardColumns)` | — |
+ *
+ * The note is stripped only as a FALLBACK, after the cell as written has failed
+ * to match, and only when what remains matches source exactly. So a note adds
+ * information but can never mask drift: `string (ms)` against a `number` source
+ * strips to `string`, still mismatches, and still fails. Keep notes short — the
+ * cell is a summary, and prose belongs in the surrounding copy (#1916).
+ *
  * ── What is checked, per DOCUMENTED prop ───────────────────────────────────────
  *   • Existence — the prop is a real property of the resolved type (via the TS
  *     type-checker, so intersections / unions / `Omit` / HTML-attribute spreads
  *     all resolve). A documented-but-nonexistent prop (rename, typo) fails.
  *   • Type — the documented type equals the source type, alias-preserved
  *     (`ButtonVariant`, `ReactNode`), after stripping ` | undefined`, a leading
- *     `React.`, and the `*(required)*` curation note.
+ *     `React.`, and the `*(required)*` curation note — or, failing that, after
+ *     also stripping a trailing type note (§ The type-note convention).
  *   • Default — when the component destructures a literal default for the prop
  *     (`{ variant = 'primary' }`), the documented default must match it. Props
  *     with no extractable source default are not default-checked (no false
@@ -217,10 +231,19 @@ function literalDefaults(program, absFile) {
 // different authoring order (`'a' | 'b'` vs `'b' | 'a'`) is not spurious drift.
 // Function signatures (`=>`) are NOT type-checked (param names differ benignly);
 // normType returns '' for them so the caller skips the check.
-const normType = (t) => {
+//
+// `stripNote` additionally drops a TRAILING parenthetical curation note —
+// `number (ms)`, `ReactNode (BoardColumns)`, `string (CSS grid template)`. The
+// caller only passes it as a fallback, after the verbatim cell has already
+// failed to match, so a note can never mask a real mismatch: `string (ms)`
+// against a `number` source strips to `string` and still fails (#1916).
+const normType = (t, { stripNote = false } = {}) => {
   let s = t
     .replace(/`/g, '')
-    .replace(/\*?\(required\)\*?/gi, '')
+    .replace(/\*?\(required\)\*?/gi, '');
+  // Before the union sort below, so a note containing `|` can't reorder members.
+  if (stripNote) s = s.replace(/\s*\*?\([^()]*\)\*?\s*$/, '');
+  s = s
     .replace(/\s*\|\s*undefined\b/g, '')
     .replace(/\bReact\./g, '')
     .replace(/"/g, "'")
@@ -344,11 +367,17 @@ function main() {
 
       if (ti !== -1 && row.cells[ti] != null) {
         const docType = normType(row.cells[ti]);
-        const srcTypes = [...meta.types].map(normType).filter(Boolean);
+        const srcTypes = [...meta.types].map((s) => normType(s)).filter(Boolean);
         // docType === '' ⇒ function/uncomparable → skip. No src types ⇒ skip.
         if (docType !== '' && srcTypes.length > 0 && !srcTypes.includes(docType)) {
-          violations.push({ ...loc, prop: name, kind: 'type-mismatch',
-            detail: `type documented as "${docType}", source is ${srcTypes.map((s) => `"${s}"`).join(' | ')}` });
+          // Fallback only: a trailing curation note is allowed when what remains
+          // matches source EXACTLY. Anything else is reported against the cell as
+          // written, never against the stripped form (#1916).
+          const bare = normType(row.cells[ti], { stripNote: true });
+          if (bare === docType || !srcTypes.includes(bare)) {
+            violations.push({ ...loc, prop: name, kind: 'type-mismatch',
+              detail: `type documented as "${docType}", source is ${srcTypes.map((s) => `"${s}"`).join(' | ')}` });
+          }
         }
       }
 

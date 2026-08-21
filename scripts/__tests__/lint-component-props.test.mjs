@@ -106,6 +106,43 @@ describe('lint-component-props', () => {
     expect(kinds(json)).toContain('count:type-mismatch');
   });
 
+  // ── Trailing type notes (#1916) ──────────────────────────────────────────
+  // A note carries what the source type cannot — a unit, a slot's concrete
+  // shape, an example. It is stripped only as a fallback, so it can add
+  // information without ever masking drift.
+
+  it('accepts a trailing type note when the remainder matches source', () => {
+    const { code, json } = run([
+      '| `count` | `number (ms)` | `3` |',
+      "| `size` | `WidgetSize (t-shirt scale)` | `'md'` |",
+      '| `label` | `string (e.g. \'Save\')` | — |',
+    ]);
+    expect(json.violations).toEqual([]);
+    expect(code).toBe(0);
+  });
+
+  it('strips the note before the union sort, so a `|` inside it is inert', () => {
+    const { code } = run(['| `count` | `number (ms \\| s)` | `3` |']);
+    expect(code).toBe(0);
+  });
+
+  it('FAILS on a wrong type inside a note — the note must not mask drift', () => {
+    const { code, json } = run(['| `count` | `string (ms)` | `3` |']);
+    expect(code).toBe(1);
+    expect(kinds(json)).toContain('count:type-mismatch');
+  });
+
+  it('reports the cell as written, never the stripped form', () => {
+    const { json } = run(['| `count` | `string (ms)` | `3` |']);
+    expect(json.violations[0].detail).toContain('"string (ms)"');
+  });
+
+  it('only strips a TRAILING note — a leading one still fails', () => {
+    const { code, json } = run(['| `count` | `(ms) number` | `3` |']);
+    expect(code).toBe(1);
+    expect(kinds(json)).toContain('count:type-mismatch');
+  });
+
   it('FAILS on a wrong default', () => {
     const { code, json } = run(["| `size` | `WidgetSize` | `'sm'` |"]);
     expect(code).toBe(1);
