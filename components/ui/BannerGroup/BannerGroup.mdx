@@ -1,0 +1,64 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './BannerGroup.stories';
+import { BannerGroup } from './BannerGroup';
+import { Banner } from '../Banner';
+
+{/* Gap comparison — docs-local, not a story export: `gap` is a Control on
+    Default, and side-by-side galleries are an MDX concern (#1489). */}
+export const GapScale = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+    <BannerGroup gap="sm">
+      <Banner tone="warning" title="sm gap" description="Tighter than the standard — one incident, two facets." />
+      <Banner tone="warning" title="Same incident, second facet" />
+    </BannerGroup>
+    <BannerGroup gap="md">
+      <Banner tone="warning" title="md gap (default)" description="Banners read as one notice block." />
+      <Banner tone="information" title="Second notice" />
+    </BannerGroup>
+    <BannerGroup gap="lg">
+      <Banner tone="warning" title="lg gap" description="Only when the banners are genuinely unrelated." />
+      <Banner title="Unrelated announcement" />
+    </BannerGroup>
+  </div>
+);
+
+<Meta of={Stories} />
+
+# BannerGroup
+
+<ComponentLinks slug="banner-group" />
+
+Vertical stack of `<Banner>` elements with locked spacing. Replaces the per-banner `marginBottom` and the ad-hoc `<Stack>` wrapper consumers reach for when a page needs more than one banner.
+
+The group owns the space **between** banners only. The space below the group belongs to the parent layout's `gap`, same as any other block.
+
+Order is the author's responsibility, not the component's — sort children `error → warning → information → success → announcement`, global before contextual within a tone. The full rule, page placement, and the cases where a second banner is the wrong answer live in the [banner-groups build standard](https://design.brikdesigns.com/docs/build-standards/banner-groups).
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Gaps
+
+Three locked gaps — `md` (default) so banners read as one notice block, `sm` for two facets of one incident, `lg` only when the banners are genuinely unrelated.
+
+<Canvas>
+  <GapScale />
+</Canvas>
+
+## Patterns
+
+### Severity order
+
+<Canvas of={Stories.SeverityOrder} />
+
+### Repeated tone
+
+<Canvas of={Stories.RepeatedTone} />
+
+## Props
+
+<ArgTypes of={Stories} />

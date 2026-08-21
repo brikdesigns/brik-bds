@@ -1,0 +1,119 @@
+---
+title: Banner Groups
+description: The order, placement, and spacing rules for a surface carrying more than one banner — and the cases where the second banner is the wrong answer.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+[Display choice](/docs/build-standards/display-choice) answers whether a thing is a banner at all: *one status assertion about the surrounding surface.* This page answers the question that follows — **what happens when a surface has more than one.**
+
+A page with two banners has three decisions hiding in it: which order they read in, where they sit relative to the page's other chrome, and whether the second one should exist. Left to the page author, each is re-decided per page, and the answers diverge — one page ends up with `marginBottom` on each banner and a `Stack gap="sm"` around a subset, another with the marketing notice above the payment failure.
+
+## The group
+
+**Two or more banners on one surface are one [`BannerGroup`](/docs/components/banner-group), never sibling banners carrying their own margins.**
+
+```tsx
+// ✅ one group owns the arrangement
+<BannerGroup>
+  <Banner tone="error" title="Card on file declined" />
+  <Banner tone="warning" title="Brand assets are incomplete" />
+  <Banner title="Refer a client, get a credit" />
+</BannerGroup>
+
+// ❌ N siblings, each spacing itself
+<Banner tone="warning" title="…" style={{ marginBottom: space.xl }} />
+<Stack gap="sm" style={{ marginBottom: space.xl }}>…</Stack>
+<Banner title="…" style={{ marginBottom: space.xl }} />
+```
+
+The group owns the space **between** banners. The space **below** the group belongs to the parent layout's `gap` — `PageContent` already sets `--gap-lg` between its stacked children ([`PageContent.tsx:59`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/Page/PageContent.tsx#L59)), so a `marginBottom` on the last banner is double spacing, not spacing.
+
+### Gap
+
+| Gap | Use it when | Token |
+|---|---|---|
+| `md` — **default** | The banners are separate notices about the same surface. They should read as one notice block, not as three unrelated interruptions | `--gap-md` |
+| `sm` | Two facets of a *single* incident that could not be phrased as one banner | `--gap-sm` |
+| `lg` | The banners are genuinely unrelated and the page needs the reader to treat them as separate blocks. Rare — reach for it only after asking whether the second banner belongs on the page at all | `--gap-lg` |
+
+`md` is one step tighter than the `card ↔ card` step in [content rhythm](/docs/build-standards/content-rhythm#component-rhythm), and deliberately so: cards are peer entities the reader compares, banners are a queue the reader clears. The tighter step is what makes a stack read as one block of notices instead of a column of cards.
+
+<Callout type="warn">
+  **Never wrap a single banner.** At count=1 the group adds a DOM node and no arrangement. Render `<Banner>` directly, and let the parent layout's `gap` space it.
+</Callout>
+
+## The order
+
+Banners are read top-down and cleared top-down, so the order is **descending severity** — and the one tone the reader can safely skip goes last.
+
+| Rank | Tone | Reads as |
+|---|---|---|
+| 1 | `error` | Something is broken and blocks work |
+| 2 | `warning` | Something needs attention but nothing is blocked |
+| 3 | `information` | A fact the reader should know; no action implied |
+| 4 | `success` | A confirmation of something already done |
+| 5 | `announcement` | Marketing, promotion, feature news |
+
+Two tie-breaks, applied in order:
+
+1. **Global before contextual.** Within one tone, a notice true of the whole account outranks a notice about one record on this page — the account-level fact is the one that changes what the reader does about the record.
+2. **Newest first.** Within one tone and one scope, most recent leads.
+
+<Callout type="warn">
+  **`announcement` is last, unconditionally** — and it does not belong in a group that also carries an `error`. A promotion sitting above, beside, or below a payment failure reads as the system not knowing what state the reader is in. Suppress the announcement while any `error` banner is live.
+</Callout>
+
+The ordering is the **author's** job, not the component's. `BannerGroup` renders children in source order and asserts nothing about tone — a component cannot know whether a given `warning` is global or contextual, so it cannot sort. Sort the array before you map it.
+
+## Placement
+
+Two axes decide placement: what the banner is **about** (global vs contextual), and which **surface** the reader is on.
+
+### Global vs contextual
+
+| | True of | Example | Belongs to |
+|---|---|---|---|
+| **Global** | The account or the system, regardless of route | Service degradation, unpaid account, session impersonation | The outermost surface the reader is on — rendered once |
+| **Contextual** | The data this surface renders | This prospect has an unsigned proposal; this project is missing brand assets | The page or sheet that renders that data |
+
+**The same assertion never renders in two places.** A global notice repeated inside a sheet, or a page banner echoed in the shell, trains the reader to skip both.
+
+### Which surface
+
+| Surface | Position | What goes there |
+|---|---|---|
+| **Page** | First child of [`PageContent`](/docs/components/page), above the first section | Global notices, and contextual notices about the page's own data. This is the default and covers nearly every case |
+| **Sheet / modal** | Top of the sheet body, above the first [`SheetSection`](/docs/components/sheet-section) | Only notices scoped to the record the sheet opened. Never a page-level or global notice — the reader already passed it on the way in |
+| **Above `PageHeader`** | — | Nothing. Do not put a banner between the shell and the page title; it displaces the page's own identity and reads as chrome the reader cannot dismiss |
+
+<Callout type="info">
+  BDS exposes no shell-level banner slot today — `Page`, `PageHeader`, and `Sheet` have no banner prop (`rg -i banner components/ui/{Page,PageHeader,Sheet}` returns nothing). A genuinely global notice therefore renders as the **first child of the page group**, repeated per route by the layout that owns it. If you need one banner rendered once for a whole app shell, that is a missing primitive — file it rather than hand-rolling a fixed-position wrapper.
+</Callout>
+
+## When *not* to stack banners
+
+The order and spacing rules above assume the second banner has earned its place. Most of the time it hasn't.
+
+- **One banner — no group.** Covered above, and the most common violation.
+- **More than three — cap the set.** Render the top three and roll the remainder into one summarizing banner (`"4 more prospects have proposals in process"`) that links to the surface listing them. Past three, a stack stops being a notice and becomes a display the reader has to scroll.
+- **A per-item status list is not a set of banners.** N banners, one per row of the same table, is the [display-choice failure](/docs/build-standards/display-choice#a-per-item-status-list-rendered-as-one-banner) in its plural form: the items share an attribute set, so they are a table with a status column or a list with a trailing [`Badge`](/docs/components/badge). Reach for banners only when each item genuinely needs its own action *and* the count is small and bounded.
+- **Two banners that always appear together are one banner.** If banner B is only ever live when banner A is, they are one assertion with two sentences — `title` plus `description`.
+- **The same assertion in two tones is one banner.** Pick the tone that matches what the reader must do.
+- **A dismissible banner and a permanent one about the same thing** — the reader dismisses one and the other stays, which reads as a bug. Make it one banner and decide whether it is dismissible.
+
+## Accessibility
+
+The stacking rules are not only visual — Banner switches `role` by tone ([`Banner.tsx:79`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/Banner/Banner.tsx#L79)), and roles compound.
+
+- **`error` / `warning` / `information` render `role="alert"`** — assertive. Several mounting in the same paint queue several interruptions at once, and a screen-reader user hears them serially with no way to skip ahead. This is the hard reason behind the cap of three, not a layout preference.
+- **`success` renders `role="status"`** — polite, so it queues behind live alerts rather than competing with them. Nothing to manage.
+- **The group itself is a plain `<div>`** — no `role`, no `aria-label`. Each Banner keeps its own semantics; a landmark or label on the container would announce a wrapper the reader gains nothing from.
+- **Order is announced order.** Source order is what assistive tech reads, so the severity rule above *is* the screen-reader experience — not a sighted-only convention.
+
+## Related
+
+- [BannerGroup](/docs/components/banner-group) — the component
+- [Banner](/docs/components/banner) — the child, and the `tone` axis this page orders on
+- [Display Choice](/docs/build-standards/display-choice) — whether the content is a banner at all
+- [Content Rhythm](/docs/build-standards/content-rhythm) — the scale `gap-md` sits in
