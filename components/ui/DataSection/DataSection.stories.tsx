@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { DataSection } from './DataSection';
 import { Field } from '../Field';
@@ -5,6 +6,7 @@ import { FieldGrid } from '../FieldGrid';
 import { BulletList } from '../BulletList';
 import { Button } from '../Button';
 import { ButtonGroup } from '../ButtonGroup';
+import { DatePicker } from '../DatePicker';
 
 const meta: Meta<typeof DataSection> = {
   title: 'Containers/data-section',
@@ -17,6 +19,10 @@ const meta: Meta<typeof DataSection> = {
     actions: {
       control: false,
       description: 'Action slot rendered flush-right of the title row. Typically a `<ButtonGroup>` with `[View]` / `[Edit]` toggle, or a single `<Button>`.',
+    },
+    headerControl: {
+      control: false,
+      description: 'Centered control slot between title and actions — e.g. a month `<DatePicker>`. Switches the header to a `1fr auto 1fr` grid. Suppressed while `loading`.',
     },
     children: {
       control: false,
@@ -93,6 +99,55 @@ export const Default: Story = {
 /* ═══════════════════════════════════════════════════════════════
    VARIANTS — irreducible composition (stacked read-mode page)
    ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * `headerControl` places a control centered in the header, between the title
+ * and the `actions` slot — the header lays out as a `1fr auto 1fr` grid so the
+ * control stays optically centered regardless of title/action widths. The
+ * canonical use is a month `<DatePicker>` on a section that browses a time
+ * series (Reporting → Monthly). A future calendar-picker variant reuses the
+ * same slot.
+ *
+ * @summary Centered header control — date picker in the section header
+ */
+export const WithHeaderControl: Story = {
+  name: 'Centered Header Control (date)',
+  render: () => {
+    const DatedSection = () => {
+      const [month, setMonth] = useState<Date | null>(new Date(2026, 6, 1));
+      return (
+        <DataSection
+          title="Monthly"
+          headerControl={
+            <DatePicker
+              id="ds-header-month"
+              precision="month"
+              size="sm"
+              value={month}
+              onChange={setMonth}
+            />
+          }
+          actions={
+            <Button size="sm" variant="secondary">
+              Open Report
+            </Button>
+          }
+        >
+          <FieldGrid columns={3}>
+            <Field label="Sessions">12,481</Field>
+            <Field label="Users">9,204</Field>
+            <Field label="Page Views">31,077</Field>
+          </FieldGrid>
+        </DataSection>
+      );
+    };
+    return (
+      <Frame>
+        <DatedSection />
+      </Frame>
+    );
+  },
+};
 
 /**
  * `loading` swaps the body for Skeleton field rows matching the shape
