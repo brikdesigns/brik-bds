@@ -130,7 +130,7 @@
 }
 
 .bds-badge--solid.bds-badge--progress {
-  background-color: var(--background-status-info);
+  background-color: var(--background-info);
   color: var(--text-on-color-dark);
 }
 
@@ -169,8 +169,8 @@
 }
 
 .bds-badge--subtle.bds-badge--progress {
-  background-color: var(--background-status-info-subtle);
-  color: var(--text-status-info);
+  background-color: var(--surface-info);
+  color: var(--text-info);
 }
 
 .bds-badge--subtle.bds-badge--brand {
