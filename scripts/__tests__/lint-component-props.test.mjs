@@ -51,13 +51,19 @@ beforeAll(() => {
 
 afterAll(() => rmSync(root, { recursive: true, force: true }));
 
-const MARKER = '{/* props-check: WidgetProps @ components/ui/Widget/Widget.tsx */}';
+const ALL_PROPS = ['variant', 'size', 'span', 'level', 'count', 'loading', 'label', 'onChange'];
+
+// Every prop opted out of the coverage check. The tests below each document ONE
+// row to isolate a single axis (type, default, note-stripping); without this
+// they would all also trip `undocumented-prop` on the other seven props, which
+// is a different axis with its own tests (§ Coverage).
+const MARKER = `{/* props-check: WidgetProps @ components/ui/Widget/Widget.tsx omit=${ALL_PROPS.join(',')} */}`;
 
 // Build a docs page whose single prop table has the given rows, run the linter,
-// return { code, json }.
-function run(rows) {
+// return { code, json }. `marker` overrides the default all-omitted marker.
+function run(rows, marker = MARKER) {
   const mdx =
-    `# Widget\n\n## API\n\n${MARKER}\n` +
+    `# Widget\n\n## API\n\n${marker}\n` +
     `| Prop | Type | Default |\n|---|---|---|\n${rows.join('\n')}\n`;
   const file = join(root, 'docs', 'widget.mdx');
   writeFileSync(file, mdx);
@@ -209,6 +215,124 @@ describe('lint-component-props', () => {
   it('is a no-op when no markers are present', () => {
     const mdx = '# X\n\n| Prop | Type | Default |\n|---|---|---|\n| `whatever` | `nope` | — |\n';
     const file = join(root, 'docs', 'unmarked.mdx');
+    writeFileSync(file, mdx);
+    const stdout = execFileSync('node', [SCRIPT, '--json', '--root', root, '--files', file], { encoding: 'utf8' });
+    expect(JSON.parse(stdout).violations).toEqual([]);
+  });
+
+  // ── Coverage: every own-declared prop is documented somewhere ─────────────
+  // The reverse of the existence check. `getPropertiesOfType` resolves the full
+  // structural type, so this axis can only work off the props DECLARED on the
+  // type — inherited HTML attributes are not the component's own contract.
+
+  const BARE = '{/* props-check: WidgetProps @ components/ui/Widget/Widget.tsx */}';
+
+  it('FAILS on a prop declared in source but absent from the table', () => {
+    const { code, json } = run(["| `variant` | `'a' \\| 'b'` | `'a'` |"], BARE);
+    expect(code).toBe(1);
+    expect(kinds(json)).toContain('size:undocumented-prop');
+    expect(kinds(json)).toContain('onChange:undocumented-prop');
+    expect(kinds(json)).not.toContain('variant:undocumented-prop');
+  });
+
+  it('passes when every declared prop has a row', () => {
+    const { code, json } = run([
+      "| `variant` | `'a' \\| 'b'` | `'a'` |",
+      "| `size` | `WidgetSize` | `'md'` |",
+      '| `span` | `WidgetSpan` | — |',
+      '| `level` | `WidgetLevel` | — |',
+      '| `count` | `number` | `3` |',
+      '| `loading` | `boolean` | `false` |',
+      '| `label` | `string` *(required)* | — |',
+      '| `onChange` | `(value: string) => void` | — |',
+    ], BARE);
+    expect(json.violations).toEqual([]);
+    expect(code).toBe(0);
+  });
+
+  it('counts a prop documented in a multi-name cell as covered', () => {
+    const { code, json } = run([
+      "| `variant` / `size` | `'a' \\| 'b'` | — |",
+      '| `span` | `WidgetSpan` | — |',
+      '| `level` | `WidgetLevel` | — |',
+      '| `count` | `number` | `3` |',
+      '| `loading` | `boolean` | `false` |',
+      '| `label` | `string` *(required)* | — |',
+      '| `onChange` | `(value: string) => void` | — |',
+    ], BARE);
+    expect(kinds(json)).not.toContain('size:undocumented-prop');
+    expect(code).toBe(0);
+  });
+
+  it('honours omit= for a deliberately-uncurated prop', () => {
+    const marker =
+      '{/* props-check: WidgetProps @ components/ui/Widget/Widget.tsx omit=span,level,onChange */}';
+    const { code, json } = run([
+      "| `variant` | `'a' \\| 'b'` | `'a'` |",
+      "| `size` | `WidgetSize` | `'md'` |",
+      '| `count` | `number` | `3` |',
+      '| `loading` | `boolean` | `false` |',
+      '| `label` | `string` *(required)* | — |',
+    ], marker);
+    expect(json.violations).toEqual([]);
+    expect(code).toBe(0);
+  });
+
+  it('does not require inherited HTML attributes', () => {
+    // WidgetProps declares 8 props and inherits nothing; a type that spreads
+    // HTMLAttributes must not have its hundreds of DOM props required.
+    mkdirSync(join(root, 'components', 'ui', 'Spread'), { recursive: true });
+    writeFileSync(
+      join(root, 'components', 'ui', 'Spread', 'Spread.tsx'),
+      `import type { HTMLAttributes } from 'react';
+export interface SpreadProps extends HTMLAttributes<HTMLDivElement> {
+  tone?: 'a' | 'b';
+}
+export function Spread(props: SpreadProps) { return null; }
+`,
+    );
+    const mdx =
+      '# Spread\n\n{/* props-check: SpreadProps @ components/ui/Spread/Spread.tsx */}\n' +
+      "| Prop | Type | Default |\n|---|---|---|\n| `tone` | `'a' \\| 'b'` | — |\n";
+    const file = join(root, 'docs', 'spread.mdx');
+    writeFileSync(file, mdx);
+    const stdout = execFileSync('node', [SCRIPT, '--json', '--root', root, '--files', file], { encoding: 'utf8' });
+    expect(JSON.parse(stdout).violations).toEqual([]);
+  });
+
+  it('does not require className / style — the passthrough sentence covers them', () => {
+    mkdirSync(join(root, 'components', 'ui', 'Passthru'), { recursive: true });
+    writeFileSync(
+      join(root, 'components', 'ui', 'Passthru', 'Passthru.tsx'),
+      `export interface PassthruProps {
+  tone?: 'a' | 'b';
+  className?: string;
+  style?: Record<string, string>;
+}
+export function Passthru(props: PassthruProps) { return null; }
+`,
+    );
+    const mdx =
+      '# Passthru\n\n{/* props-check: PassthruProps @ components/ui/Passthru/Passthru.tsx */}\n' +
+      "| Prop | Type | Default |\n|---|---|---|\n| `tone` | `'a' \\| 'b'` | — |\n";
+    const file = join(root, 'docs', 'passthru.mdx');
+    writeFileSync(file, mdx);
+    const stdout = execFileSync('node', [SCRIPT, '--json', '--root', root, '--files', file], { encoding: 'utf8' });
+    expect(JSON.parse(stdout).violations).toEqual([]);
+  });
+
+  it('treats several tables for one type as one curation surface', () => {
+    // Button / LinkButton / IconButton are three curated views of ButtonProps;
+    // a prop documented in any of them is documented.
+    const mdx =
+      '# Widget\n\n## A\n\n' + BARE + '\n' +
+      "| Prop | Type | Default |\n|---|---|---|\n| `variant` | `'a' \\| 'b'` | `'a'` |\n" +
+      "| `size` | `WidgetSize` | `'md'` |\n| `span` | `WidgetSpan` | — |\n" +
+      '| `level` | `WidgetLevel` | — |\n\n## B\n\n' + BARE + '\n' +
+      '| Prop | Type | Default |\n|---|---|---|\n| `count` | `number` | `3` |\n' +
+      '| `loading` | `boolean` | `false` |\n| `label` | `string` *(required)* | — |\n' +
+      '| `onChange` | `(value: string) => void` | — |\n';
+    const file = join(root, 'docs', 'split.mdx');
     writeFileSync(file, mdx);
     const stdout = execFileSync('node', [SCRIPT, '--json', '--root', root, '--files', file], { encoding: 'utf8' });
     expect(JSON.parse(stdout).violations).toEqual([]);
