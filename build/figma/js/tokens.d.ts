@@ -524,7 +524,7 @@ export const textAccentYellow: string;
 export const textAccentBlue: string;
 export const textAccentGreen: string;
 export const textAccentPurple: string;
-export const textInfo: string;
+export const textNeutral: string;
 export const textBrandPrimary: string;
 export const textAccentOrange: string;
 export const textTextLink: string;
@@ -556,7 +556,7 @@ export const borderMuted: string;
 export const borderInverse: string;
 export const borderOnColorDark: string;
 export const borderOnColorLight: string;
-export const borderInfo: string;
+export const borderNeutral: string;
 export const borderBrandPrimary: string;
 /** Disabled button border (all variants) */
 export const borderDisabled: string;
@@ -585,7 +585,7 @@ export const backgroundInput: string;
 export const backgroundOnColorDark: string;
 export const backgroundOnColorLight: string;
 export const backgroundAccentYellow: string;
-export const backgroundInfo: string;
+export const backgroundNeutral: string;
 export const backgroundBrandPrimary: string;
 export const backgroundAccentOrange: string;
 /** Primary button hover background */
@@ -623,7 +623,7 @@ export const surfacePrimaryPressed: string;
 export const surfaceSecondary: string;
 export const surfaceSecondaryPressed: string;
 export const surfaceInverse: string;
-export const surfaceInfo: string;
+export const surfaceNeutral: string;
 export const surfaceBrandPrimary: string;
 /** Primary surface hover */
 export const surfaceBrandPrimaryHover: string;
