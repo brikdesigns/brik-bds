@@ -34,6 +34,7 @@ The same discipline extends one layer up: vertical space **between components** 
 | Control ↔ control in a cluster | Footer actions, a filter-chip row | `--gap-md` | 8px |
 | Field ↔ field in a form | Distinct inputs, one flow | `--gap-lg` | 16px |
 | Card ↔ card in a grid or list | Separate bounded units | `--gap-lg` | 16px |
+| Banner ↔ banner in a group | A queue the reader clears, not peers they compare — one step tighter than cards so the stack reads as one notice block ([banner groups](/docs/build-standards/banner-groups)) | `--gap-md` | 8px |
 | Container ↔ container | Same as block ↔ block above | `--gap-xl` | 24px |
 
 Layout primitives (`Stack`, `Grid`, `Cluster`) stay generic — they can't know which relationship they're arranging, so this table governs **which `gap` value you pass**, not the primitive. Horizontal gaps (icon ↔ label, chips in a row) are outside this table; `--gap-xs` remains legitimate there.
