@@ -58,6 +58,24 @@ When `filtered < total`, the counter switches to its `brand` style (configurable
 
 The title is optional. When omitted the counter leads the row.
 
+### No filters
+
+`children` is optional. A collection with nothing to filter on still gets a title + counter; the controls row is omitted entirely.
+
+```tsx
+<FilterBar title="Brand assets" total={12} filtered={12} label="assets" />
+```
+
+### Nested under a record heading
+
+Pass `titleAs="h3"` when the bar sits inside a section that already owns the `<h2>`.
+
+```tsx
+<FilterBar title="Engagements" titleAs="h3" total={42} filtered={42} label="engagements">
+  <FilterButton ... />
+</FilterBar>
+```
+
 ### No clear callback
 
 Omit `onClear` to suppress the Clear button entirely — useful for table views that don't support bulk-clearing all filters at once.
@@ -103,12 +121,14 @@ function EngagementsTable({ rows }) {
 ## When *not* to use
 
 <Callout type="warn">
-  **Don't show a FilterBar with no filters.** If the view has no filterable axes, the header should be a regular `<h2>` + counter, not a FilterBar. The empty controls slot reads as a styling mistake.
+  **Don't head a record with a FilterBar.** A control bar heads a collection — a table, list, or board of like items. A record — one entity's fields — is headed by a [DataSection](/docs/components/data-section). The two render at the same `heading-sm` size, so the choice is about what sits below, not how it looks.
 </Callout>
+
+FilterBar is still the right component for a collection with no filterable axes: pass `title` and the counts, omit `children`, and the controls row is dropped rather than rendered empty. Don't hand-roll a heading row for that case.
 
 ## Accessibility
 
-- The title renders as an `<h2>` — ensure the surrounding page uses a sensible heading hierarchy (typically `<h1>` on the page and `<h2>` per table).
+- The title renders as an `<h2>` by default. Pass `titleAs="h3"` when the bar sits under an existing `<h2>` — a collection tab inside a record page — so the document outline stays contiguous.
 - The container carries an `aria-label` (falls back to `"{title} filter bar"` or `"{label} filter bar"`).
 - The counter announces `"Count: {n}"` via `aria-label`.
 
@@ -123,8 +143,9 @@ function EngagementsTable({ rows }) {
 | `total` | `number` *(required)* | — |
 | `filtered` | `number` *(required)* | — |
 | `label` | `string` *(required)* | — |
-| `children` | `ReactNode` *(required)* | — |
+| `children` | `ReactNode` | — |
 | `title` | `ReactNode` | — |
+| `titleAs` | `'h2' \| 'h3'` | `'h2'` |
 | `activeStatus` | `CounterStatus` | `'brand'` |
 | `onClear` | `() => void` | — |
 | `clearLabel` | `string` | `'Clear filters'` |
