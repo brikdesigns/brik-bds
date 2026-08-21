@@ -63,6 +63,12 @@ const meta: Meta<typeof FilterBar> = {
       control: 'text',
       description: 'Optional section heading rendered at heading-sm inline with the counter.',
     },
+    titleAs: {
+      control: 'inline-radio',
+      options: ['h2', 'h3'],
+      description:
+        'HTML element for the title. Default `h2` — one collection sibling of the page\'s `<h1>`. Pick `h3` only when the bar nests under an existing `<h2>`, e.g. a collection tab inside a record page.',
+    },
     label: {
       control: 'text',
       description: 'Plural entity label used in the aria-label fallback (e.g. "companies", "tasks").',
@@ -89,7 +95,8 @@ const meta: Meta<typeof FilterBar> = {
     },
     children: {
       control: false,
-      description: 'FilterButton / FilterToggle children rendered to the right of the title + counter. Story injects industry + active-only filters.',
+      description:
+        'FilterButton / FilterToggle children rendered to the right of the title + counter. Story injects industry + active-only filters. Optional — omit them and the controls row is dropped rather than left empty (see the NoFilters story).',
     },
     onClear: {
       action: 'cleared',
@@ -169,6 +176,68 @@ export const Default: Story = {
       </FilterBar>
     );
   },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   NO FILTERS — a collection with no filterable axes. `children` is
+   optional, so this shape is a FilterBar and not a hand-rolled
+   heading row: no controls slot, no `Filters` popover on collapse,
+   and `actions` picks up the flush-right auto margin the absent
+   controls row would otherwise have carried.
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Title + counter only — no filter children, no empty slot */
+export const NoFilters: Story = {
+  args: {
+    title: 'Brand assets',
+    label: 'assets',
+    total: rows.length,
+    filtered: rows.length,
+  },
+  render: (args) => (
+    <FilterBar
+      {...args}
+      actions={
+        <ButtonGroup align="end">
+          <Button variant="primary" size="md">
+            Upload
+          </Button>
+        </ButtonGroup>
+      }
+    />
+  ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   NESTED HEADING — `titleAs="h3"`. A collection nested under a
+   section that already owns the `<h2>` needs the bar to step down a
+   level, or the document outline skips. Purely semantic: h2 and h3
+   render identically here (both `heading-sm`), so the surrounding
+   `<h2>` is in the story to make the nesting legible.
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary titleAs="h3" for a collection nested under an existing h2 */
+export const NestedHeading: Story = {
+  args: {
+    title: 'Engagements',
+    titleAs: 'h3',
+    label: 'engagements',
+    total: rows.length,
+    filtered: rows.length,
+  },
+  render: (args) => (
+    <section>
+      <h2>Acme Co</h2>
+      <FilterBar {...args}>
+        <FilterButton
+          label="Industry"
+          options={industryOptions}
+          value={undefined}
+          onChange={() => {}}
+        />
+      </FilterBar>
+    </section>
+  ),
 };
 
 /* ═══════════════════════════════════════════════════════════════

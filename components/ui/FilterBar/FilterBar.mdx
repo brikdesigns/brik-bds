@@ -22,6 +22,18 @@ Layout: `[title] [counter] ... [filter children] [clear?] [actions]`
 
 `actions` renders a primary/secondary `ButtonGroup` (or any node) flush-right, after the filter controls and clear button. It is intentionally **exempt from the narrow-own-width collapse** (ADR-019): shrink the bar below ~600px of its own width and the filter controls fold into the `Filters (N)` popover, but `actions` stays visible outside it — a primary action like "Assign service" must never hide behind a popover trigger.
 
+## No filters
+
+<Canvas of={Stories.NoFilters} />
+
+`children` is optional. A collection with no filterable axes still uses a FilterBar for its title + counter — the controls row is dropped entirely, not rendered empty — so an unfilterable list never needs a hand-rolled heading row. With no controls row present, `actions` takes over the flush-right auto margin.
+
+## Nested heading
+
+<Canvas of={Stories.NestedHeading} />
+
+`titleAs` picks the title's element (`h2` default, `h3` when the bar nests under a section that already owns the `<h2>`). It is a semantic switch only — both render at `heading-sm`.
+
 ## Variants
 
 FilterBar has no semantic-variant axis — all variation (title presence, counter status, clear-button visibility, filter children) is exposed via Controls + the hook-driven Default story. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.

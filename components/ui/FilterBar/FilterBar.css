@@ -1,15 +1,26 @@
 @layer bds-components {
 /* FilterBar — heading + counter + filter-controls row for list/table views */
 
+/*
+ * No outer margin: the gap to the display below is the consumer's to set on
+ * the wrapping layout primitive. The bar used to ship `margin-bottom:
+ * var(--padding-lg)`, which does not collapse inside a flex `Stack` and so
+ * silently added 24px on top of whatever gap the consumer passed.
+ */
 .bds-filter-bar {
   display: flex;
   align-items: center;
   gap: var(--gap-sm);
-  margin-bottom: var(--padding-lg);
   flex-wrap: wrap;
 }
 
 /* ─── Title (heading-sm) ───────────────────────────────── */
+/*
+ * No `text-transform`: the title renders as authored. `capitalize` uppercased
+ * every word including minor ones, and it masked the source string from every
+ * surface the CSS does not reach — the derived `aria-label`, a document title,
+ * an export. Casing is the consumer's to author (and to lint).
+ */
 
 .bds-filter-bar__title {
   font-family: var(--font-family-heading);
@@ -18,7 +29,6 @@
   line-height: var(--font-line-height-snug);
   color: var(--text-primary);
   margin: 0;
-  text-transform: capitalize;
 }
 
 /* ─── Controls (filter buttons + clear button) ─────────── */
@@ -46,17 +56,25 @@
 
 /* ─── Actions (always-visible, e.g. a primary/secondary ButtonGroup) ──── */
 /*
- * No margin-left: auto here — .bds-filter-bar__controls (or __collapse)
- * always renders before this (children is required), and its own
+ * No margin-left: auto in the base rule — whenever a controls row exists,
+ * .bds-filter-bar__controls (or __collapse) renders before this and its own
  * margin-left: auto already pushes everything after it, including this
  * element, flush right. Multiple auto margins on the same flex line split
  * the free space between them instead of hugging adjacent items together,
  * which would open an unwanted gap between the controls/popover trigger and
  * actions — so this intentionally relies on the sibling's auto margin.
+ *
+ * A bar with no filter controls renders no such sibling, so the modifier
+ * below moves the auto margin onto actions instead. Exactly one element on
+ * the line ever carries it.
  */
 .bds-filter-bar__actions {
   display: flex;
   align-items: center;
   gap: var(--gap-xs);
+}
+
+.bds-filter-bar--no-controls .bds-filter-bar__actions {
+  margin-left: auto;
 }
 }
