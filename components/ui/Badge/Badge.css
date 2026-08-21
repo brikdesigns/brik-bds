@@ -125,7 +125,7 @@
 }
 
 .bds-badge--solid.bds-badge--info {
-  background-color: var(--background-neutral);
+  background-color: var(--surface-neutral);
   color: var(--text-neutral);
 }
 
@@ -164,7 +164,7 @@
 }
 
 .bds-badge--subtle.bds-badge--info {
-  background-color: var(--background-neutral);
+  background-color: var(--surface-neutral);
   color: var(--text-neutral);
 }
 
