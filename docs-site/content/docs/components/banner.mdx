@@ -110,7 +110,7 @@ Pass `onDismiss` to render a close button. Common with announcements.
 ## When *not* to use
 
 - **Don't use Banner for short-lived confirmations** ("Saved", "Copied"). Those are [Toast](/docs/components/toast)s.
-- **Don't stack multiple Banners.** A second Banner stack reads as visual noise. Pick the highest-priority message and surface it; queue others.
+- **Don't hand-stack multiple Banners.** Sibling Banners each carrying their own margin is the drift [BannerGroup](/docs/components/banner-group) exists to absorb — and most second banners shouldn't ship at all. The order, placement, and don't-stack rules are the [banner-groups standard](/docs/build-standards/banner-groups).
 - **Don't put navigation actions in Banner.** Use it for "this state needs your attention," not "here's a link to somewhere else."
 
 ## Accessibility

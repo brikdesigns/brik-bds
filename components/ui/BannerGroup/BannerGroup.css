@@ -1,0 +1,23 @@
+@layer bds-components {
+/* ─── BannerGroup ─────────────────────────────────────────────── */
+
+.bds-banner-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ─── Gap ───────────────────────────────────────────────────── */
+
+.bds-banner-group--gap-sm {
+  gap: var(--gap-sm);
+}
+
+.bds-banner-group--gap-md {
+  gap: var(--gap-md);
+}
+
+.bds-banner-group--gap-lg {
+  gap: var(--gap-lg);
+}
+}
