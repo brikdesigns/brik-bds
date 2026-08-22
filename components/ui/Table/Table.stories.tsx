@@ -34,11 +34,11 @@ const users = [
   { name: 'Bob Smith', email: 'bob@example.com', role: 'Editor', status: 'positive' as const },
   { name: 'Carol Davis', email: 'carol@example.com', role: 'Viewer', status: 'warning' as const },
   { name: 'Dan Lee', email: 'dan@example.com', role: 'Editor', status: 'info' as const },
-  { name: 'Eve Johnson', email: 'eve@example.com', role: 'Admin', status: 'error' as const },
+  { name: 'Eve Johnson', email: 'eve@example.com', role: 'Admin', status: 'negative' as const },
 ];
 
 const statusLabel = (s: string) =>
-  s === 'positive' ? 'Active' : s === 'warning' ? 'Pending' : s === 'error' ? 'Suspended' : 'Inactive';
+  s === 'positive' ? 'Active' : s === 'warning' ? 'Pending' : s === 'negative' ? 'Suspended' : 'Inactive';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -122,7 +122,7 @@ export const Default: Story = {
             <TableCell>{user.email}</TableCell>
             <TableCell>{user.role}</TableCell>
             <TableCell>
-              <Badge status={user.status} size="sm">{statusLabel(user.status)}</Badge>
+              <Badge tone={user.status} size="sm">{statusLabel(user.status)}</Badge>
             </TableCell>
           </TableRow>
         ))}
@@ -162,7 +162,7 @@ export const SortableWithSelection: Story = {
             <TableCell>{u.name}</TableCell>
             <TableCell>{u.email}</TableCell>
             <TableCell>{u.role}</TableCell>
-            <TableCell><Badge status={u.status} size="sm">{statusLabel(u.status)}</Badge></TableCell>
+            <TableCell><Badge tone={u.status} size="sm">{statusLabel(u.status)}</Badge></TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -214,7 +214,7 @@ export const CellTypes: Story = {
               <TableIconCell icon={<Icon icon={row.icon} />}>{row.service}</TableIconCell>
               <TableTextCell primary={row.owner} secondary={row.email} />
               <TableCell><Tag size="sm">{row.category}</Tag></TableCell>
-              <TableCell><Badge status={row.status} size="sm">{statusLabel(row.status)}</Badge></TableCell>
+              <TableCell><Badge tone={row.status} size="sm">{statusLabel(row.status)}</Badge></TableCell>
               <TableCell><TextInput size="sm" placeholder={row.service} /></TableCell>
               <TableCell>
                 <TextLink href="#" size="small" iconAfter={<Icon icon="ph:arrow-square-out" />}>Open</TextLink>
@@ -289,7 +289,7 @@ export const WithActionsCell: Story = {
           <TableRow key={user.email}>
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.email}</TableCell>
-            <TableCell><Badge status={user.status} size="sm">{statusLabel(user.status)}</Badge></TableCell>
+            <TableCell><Badge tone={user.status} size="sm">{statusLabel(user.status)}</Badge></TableCell>
             <TableActionsCell>
               <Button variant="secondary" size="md" icon={<Icon icon={Eye} />} label="View" />
               <Button variant="secondary" size="md" icon={<Icon icon={Pen} />} label="Edit" />
@@ -346,7 +346,7 @@ export const CellLevelInteractivity: Story = {
                   {service.serviceLine}
                 </TextLink>
               </TableCell>
-              <TableCell><Badge status={service.status} size="sm">{statusLabel(service.status)}</Badge></TableCell>
+              <TableCell><Badge tone={service.status} size="sm">{statusLabel(service.status)}</Badge></TableCell>
               <TableActionsCell>
                 <Button variant="primary" size="sm" icon={<Icon icon={Eye} />} label="View" />
                 <Button variant="primary" size="sm" icon={<Icon icon={Pen} />} label="Edit" />
@@ -385,7 +385,7 @@ export const WithSubheaders: Story = {
             <TableRow key={user.email}>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>
-              <TableCell><Badge status={user.status} size="sm">{statusLabel(user.status)}</Badge></TableCell>
+              <TableCell><Badge tone={user.status} size="sm">{statusLabel(user.status)}</Badge></TableCell>
             </TableRow>
           ))}
         <TableSubheader label="Editors & viewers" />
@@ -395,7 +395,7 @@ export const WithSubheaders: Story = {
             <TableRow key={user.email}>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>
-              <TableCell><Badge status={user.status} size="sm">{statusLabel(user.status)}</Badge></TableCell>
+              <TableCell><Badge tone={user.status} size="sm">{statusLabel(user.status)}</Badge></TableCell>
             </TableRow>
           ))}
       </TableBody>
@@ -407,9 +407,9 @@ export const WithSubheaders: Story = {
    MEDIA CELLS — avatar / image / logo / service-tag typed cells (#1096)
    ═══════════════════════════════════════════════════════════════ */
 
-/** Map a Badge status onto an Avatar presence dot (story-only). */
+/** Map a Badge tone onto an Avatar presence dot (story-only). */
 const presence = (s: string): 'online' | 'away' | 'busy' | 'offline' =>
-  s === 'positive' ? 'online' : s === 'warning' ? 'away' : s === 'error' ? 'busy' : 'offline';
+  s === 'positive' ? 'online' : s === 'warning' ? 'away' : s === 'negative' ? 'busy' : 'offline';
 
 /**
  * `<TableAvatarCell>` pairs an `Avatar` with a name and an optional secondary
@@ -446,7 +446,7 @@ export const WithAvatarCell: Story = {
             />
             <TableCell>{u.role}</TableCell>
             <TableCell>
-              <Badge status={u.status} size="sm">{statusLabel(u.status)}</Badge>
+              <Badge tone={u.status} size="sm">{statusLabel(u.status)}</Badge>
             </TableCell>
           </TableRow>
         ))}
@@ -487,7 +487,7 @@ export const WithImageCell: Story = {
               <TableCell>{o.name}</TableCell>
               <TableCell>{o.plan}</TableCell>
               <TableCell>
-                <Badge status={o.status} size="sm">{statusLabel(o.status)}</Badge>
+                <Badge tone={o.status} size="sm">{statusLabel(o.status)}</Badge>
               </TableCell>
             </TableRow>
           ))}
@@ -528,7 +528,7 @@ export const WithLogoCell: Story = {
               <TableLogoCell logo={m.logo} decorative />
               <TableCell>{m.label}</TableCell>
               <TableCell>
-                <Badge status={m.status} size="sm">{statusLabel(m.status)}</Badge>
+                <Badge tone={m.status} size="sm">{statusLabel(m.status)}</Badge>
               </TableCell>
             </TableRow>
           ))}

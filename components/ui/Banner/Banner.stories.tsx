@@ -85,7 +85,7 @@ export const Announcement: Story = {
  */
 export const Information: Story = {
   args: {
-    tone: 'information',
+    tone: 'info',
     title: 'Heads up',
     description: 'Your trial period ends in 7 days. Upgrade to keep access.',
     action: <Button size="sm">Upgrade</Button>,
@@ -110,7 +110,7 @@ export const Warning: Story = {
  */
 export const Error: Story = {
   args: {
-    tone: 'error',
+    tone: 'negative',
     title: 'Sync failed',
     description: "We couldn't reach the server. Check your connection and try again.",
     action: <Button size="sm" variant="secondary">Retry</Button>,
@@ -123,7 +123,7 @@ export const Error: Story = {
  */
 export const Success: Story = {
   args: {
-    tone: 'success',
+    tone: 'positive',
     title: 'Changes published',
     description: 'Your updates are live and visible to clients.',
   },

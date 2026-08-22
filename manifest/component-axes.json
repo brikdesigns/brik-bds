@@ -56,15 +56,6 @@
     ]
   },
   "Badge": {
-    "status": [
-      "positive",
-      "warning",
-      "error",
-      "info",
-      "progress",
-      "brand",
-      "neutral"
-    ],
     "size": [
       "xs",
       "sm",
@@ -84,11 +75,8 @@
       "ghost",
       "inverse",
       "on-color",
-      "destructive",
-      "positive",
-      "danger",
-      "danger-outline",
-      "danger-ghost"
+      "negative",
+      "positive"
     ],
     "size": [
       "tiny",
@@ -111,7 +99,7 @@
       "connected",
       "syncing",
       "synced",
-      "error"
+      "failed"
     ],
     "size": [
       "sm",
@@ -152,14 +140,6 @@
     ]
   },
   "Counter": {
-    "status": [
-      "success",
-      "error",
-      "warning",
-      "neutral",
-      "progress",
-      "brand"
-    ],
     "size": [
       "xs",
       "sm",
@@ -184,18 +164,10 @@
   "Dialog": {
     "variant": [
       "default",
-      "destructive"
+      "negative"
     ]
   },
   "Dot": {
-    "status": [
-      "default",
-      "positive",
-      "warning",
-      "error",
-      "info",
-      "neutral"
-    ],
     "size": [
       "sm",
       "md",
@@ -230,12 +202,6 @@
     ]
   },
   "Meter": {
-    "status": [
-      "positive",
-      "warning",
-      "error",
-      "neutral"
-    ],
     "size": [
       "sm",
       "md",
@@ -252,7 +218,7 @@
     ],
     "variant": [
       "primary",
-      "destructive"
+      "negative"
     ]
   },
   "ProgressCircle": {
@@ -418,15 +384,6 @@
       "sm",
       "md",
       "lg"
-    ]
-  },
-  "Toast": {
-    "variant": [
-      "default",
-      "success",
-      "error",
-      "warning",
-      "info"
     ]
   },
   "ToggleSwitch": {

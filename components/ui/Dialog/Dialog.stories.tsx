@@ -15,7 +15,7 @@ const meta: Meta<typeof Dialog> = {
     cancelLabel: { control: 'text' },
     variant: {
       control: 'select',
-      options: ['default', 'destructive'],
+      options: ['default', 'negative'],
       description: '`destructive` is the starting template for delete-type confirmations.',
     },
     closeOnBackdrop: { control: 'boolean' },
@@ -83,11 +83,11 @@ export const Default: Story = {
 
 /* ═══════════════════════════════════════════════════════════════
    DESTRUCTIVE — Q3 starting template (ADR-010's own canonical
-   example: "variant: 'destructive' for a delete CTA").
+   example: "variant: 'negative' for a delete CTA").
    ═══════════════════════════════════════════════════════════════ */
 
 /**
- * `variant="destructive"` switches the confirm button to the destructive
+ * `variant="negative"` switches the confirm button to the destructive
  * treatment — the starting template for delete-style confirmations.
  *
  * @summary Destructive variant — delete-style confirm action
@@ -96,7 +96,7 @@ export const Destructive: Story = {
   args: {
     isOpen: false,
     onClose: () => {},
-    variant: 'destructive',
+    variant: 'negative',
     title: 'Delete item?',
     description: 'This will permanently remove the item. You cannot undo this action.',
     confirmLabel: 'Delete',

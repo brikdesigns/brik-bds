@@ -30,7 +30,7 @@ const meta: Meta<typeof Modal> = {
     cancelLabel: { control: 'text', description: 'Confirm-preset only.' },
     confirmVariant: {
       control: 'select',
-      options: ['primary', 'destructive'],
+      options: ['primary', 'negative'],
       description: 'Confirm-preset only — `destructive` is the starting template for delete-type actions.',
     },
     confirmDisabled: { control: 'boolean', description: 'Confirm-preset only.' },
@@ -120,7 +120,7 @@ export const Default: Story = {
 /* ═══════════════════════════════════════════════════════════════
    CONFIRM PRESET — two Q3 starting templates (ADR-010): the base
    confirm shape, and the destructive variant named in the matrix's
-   own canonical example ("variant: 'destructive' for a delete CTA").
+   own canonical example ("variant: 'negative' for a delete CTA").
    ═══════════════════════════════════════════════════════════════ */
 
 /**
@@ -163,11 +163,11 @@ export const Confirm: Story = {
 };
 
 /**
- * `confirmVariant="destructive"` — switches the confirm button to the
+ * `confirmVariant="negative"` — switches the confirm button to the
  * destructive treatment while keeping the compact alertdialog shape. The
  * starting template for delete-type confirmations.
  *
- * @summary confirmVariant="destructive" — delete-style confirm action
+ * @summary confirmVariant="negative" — delete-style confirm action
  */
 export const ConfirmDestructive: Story = {
   args: {
@@ -177,7 +177,7 @@ export const ConfirmDestructive: Story = {
     title: 'Delete this item?',
     description: 'This action cannot be undone.',
     confirmLabel: 'Delete',
-    confirmVariant: 'destructive',
+    confirmVariant: 'negative',
   },
   argTypes: {
     size: { table: { disable: true } },
@@ -189,7 +189,7 @@ export const ConfirmDestructive: Story = {
     const [isOpen, setIsOpen] = useState(false);
     return (
       <>
-        <Button variant="destructive" onClick={() => setIsOpen(true)}>Delete item</Button>
+        <Button variant="negative" onClick={() => setIsOpen(true)}>Delete item</Button>
         <Modal
           {...(args as ModalConfirmArgs)}
           isOpen={isOpen}

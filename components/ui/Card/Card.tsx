@@ -1,9 +1,9 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredValue } from '../../utils';
 import { Avatar, type AvatarStatus } from '../Avatar';
 import { Image } from '../Image';
 import { Logo, type LogoProps } from '../Logo';
-import { Dot, type DotStatus } from '../Dot';
+import { Dot, type DotTone } from '../Dot';
 import type { ServiceLine } from '../ServiceTag/service-config';
 import './Card.css';
 
@@ -28,14 +28,18 @@ export type CardSummaryType = 'numeric' | 'price';
  * - `connected`      → `--text-positive` / `--background-positive`
  * - `syncing`        → `--text-status-info` / `--background-status-info` (blue/in-progress)
  * - `synced`         → `--text-positive` / `--background-positive`
- * - `error`          → `--text-negative` / `--background-negative`
+ * - `failed`         → `--text-negative` / `--background-negative`
  */
 export type CardControlConnectionStatus =
   | 'not-configured'
   | 'connected'
   | 'syncing'
   | 'synced'
-  | 'error';
+  | 'failed';
+
+const RETIRED_CONNECTION_STATUS: Record<string, CardControlConnectionStatus> = {
+  error: 'failed',
+};
 /**
  * Image-column width for `preset="display-row"`. Named values resolve to
  * fixed percentages (`narrow` 25%, `standard` 35%, `wide` 50%); pass a CSS
@@ -187,7 +191,7 @@ interface CardControlPresetProps extends CardBaseProps {
    * - `connected`      — OAuth/API key accepted, not yet synced
    * - `syncing`        — sync in progress (blue/info)
    * - `synced`         — last sync completed successfully (green)
-   * - `error`          — last sync failed (red)
+   * - `failed`         — last sync failed (red)
    */
   connectionStatus?: CardControlConnectionStatus;
   /**
@@ -573,7 +577,7 @@ const CONNECTION_STATUS_LABELS: Record<CardControlConnectionStatus, string> = {
   connected:        'Connected',
   syncing:          'Syncing',
   synced:           'Synced',
-  error:            'Error',
+  failed:           'Error',
 };
 
 /**
@@ -581,12 +585,12 @@ const CONNECTION_STATUS_LABELS: Record<CardControlConnectionStatus, string> = {
  * (which owns the dot's size + semantic-token color per status) instead of a
  * bespoke dot — `not-configured` maps to Dot's `neutral`, which `Badge` lacks.
  */
-const CONNECTION_STATUS_DOT: Record<CardControlConnectionStatus, DotStatus> = {
+const CONNECTION_STATUS_DOT: Record<CardControlConnectionStatus, DotTone> = {
   'not-configured': 'neutral',
   connected:        'positive',
   syncing:          'info',
   synced:           'positive',
-  error:            'error',
+  failed:           'negative',
 };
 
 function renderControlPreset({
@@ -603,7 +607,13 @@ function renderControlPreset({
   preset: _preset,
   ...rest
 }: CardControlPresetProps) {
-  const hasTrailing = action || connectionStatus;
+  const resolvedConnectionStatus = resolveRetiredValue(
+    'Card',
+    'connectionStatus',
+    connectionStatus,
+    RETIRED_CONNECTION_STATUS,
+  );
+  const hasTrailing = action || resolvedConnectionStatus;
   return (
     <div
       className={bdsClass(
@@ -625,22 +635,22 @@ function renderControlPreset({
       </div>
       {hasTrailing && (
         <div className="bds-card__preset-control-trailing">
-          {connectionStatus && (
+          {resolvedConnectionStatus && (
             <div
               className={bdsClass(
                 'bds-card__preset-control-status',
-                `bds-card__preset-control-status--${connectionStatus}`,
+                `bds-card__preset-control-status--${resolvedConnectionStatus}`,
               )}
               role="status"
-              aria-label={`Connection status: ${CONNECTION_STATUS_LABELS[connectionStatus]}`}
+              aria-label={`Connection status: ${CONNECTION_STATUS_LABELS[resolvedConnectionStatus]}`}
             >
               {/* Decorative — the wrapper's role="status" + aria-label is the
                   single announcement; Dot is the visual mark only. */}
-              <Dot status={CONNECTION_STATUS_DOT[connectionStatus]} aria-hidden />
+              <Dot tone={CONNECTION_STATUS_DOT[resolvedConnectionStatus]} aria-hidden />
               <span className="bds-card__preset-control-status-label">
-                {CONNECTION_STATUS_LABELS[connectionStatus]}
+                {CONNECTION_STATUS_LABELS[resolvedConnectionStatus]}
               </span>
-              {lastSynced && connectionStatus !== 'not-configured' && (
+              {lastSynced && resolvedConnectionStatus !== 'not-configured' && (
                 <span className="bds-card__preset-control-status-synced">{lastSynced}</span>
               )}
             </div>

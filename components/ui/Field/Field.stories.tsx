@@ -90,7 +90,7 @@ export const CompactTier: Story = {
         <Field label="Phone" tier="compact" helper="Primary contact number">
           (555) 867-5309
         </Field>
-        <Field label="Insurance" tier="compact" helper="Required field" helperTone="error" />
+        <Field label="Insurance" tier="compact" helper="Required field" helperTone="negative" />
       </div>
     </Frame>
   ),

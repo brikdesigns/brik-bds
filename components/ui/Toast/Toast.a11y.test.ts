@@ -36,7 +36,7 @@ describe('Toast live region', () => {
   it('keeps urgency independent of variant', () => {
     // A red toast is not automatically an interrupting one — colour is for
     // sighted users, live-region priority is a separate axis.
-    const html = render({ variant: 'error' });
+    const html = render({ tone: 'negative' });
     expect(html).toContain('role="status"');
     expect(html).toContain('aria-live="polite"');
   });

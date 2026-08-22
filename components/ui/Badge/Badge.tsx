@@ -1,9 +1,23 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredValue } from '../../utils';
 import './Badge.css';
 
-/** Badge status variants */
-export type BadgeStatus = 'positive' | 'warning' | 'error' | 'info' | 'progress' | 'brand' | 'neutral';
+/** Badge valence variants */
+export type BadgeTone = 'positive' | 'warning' | 'negative' | 'info' | 'brand' | 'neutral';
+
+/** @deprecated Renamed `BadgeTone` (ADR-033 § 2). */
+export type BadgeStatus = BadgeTone;
+
+/**
+ * `progress` was a third spelling of the blue info signal (Counter.css proved
+ * it), and the old `info` was the gray system-neutral. ADR-033 § 5 gives the
+ * blue to `info` and the gray family to `neutral`, so both fold inward.
+ */
+const RETIRED_TONES: Record<string, BadgeTone> = {
+  error: 'negative',
+  success: 'positive',
+  progress: 'info',
+};
 
 /** Badge size variants — shared scale with Tag */
 export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
@@ -27,11 +41,15 @@ export type BadgeAppearance = 'solid' | 'subtle';
 /** Badge component props */
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   /**
-   * Status variant. `neutral` is a low-emphasis muted-gray tone for
-   * inert states (skipped, not-started, not-linked) — distinct from
-   * `info`, which carries the informational system-neutral tone.
+   * Valence variant. `info` is the blue informational signal; `neutral` is
+   * the gray tone for inert states (skipped, not-started, not-linked).
    */
-  status?: BadgeStatus;
+  tone?: BadgeTone;
+  /**
+   * @deprecated Use `tone` instead (ADR-033 § 2). Honoured for one minor
+   * version; `tone` wins when both are passed.
+   */
+  status?: BadgeTone;
   /** Size variant — xs is icon-only (no text) */
   size?: BadgeSize;
   /** Fill appearance — solid (saturated bg) or subtle (pastel bg). */
@@ -59,15 +77,16 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
  *
  * @example
  * ```tsx
- * <Badge status="positive">Success</Badge>
- * <Badge status="warning" size="sm" appearance="subtle">Pending</Badge>
- * <Badge status="error" size="lg">Failed</Badge>
+ * <Badge tone="positive">Success</Badge>
+ * <Badge tone="warning" size="sm" appearance="subtle">Pending</Badge>
+ * <Badge tone="negative" size="lg">Failed</Badge>
  * ```
  *
  * @summary Status indicator with semantic tones and sizes
  */
 export function Badge({
-  status = 'info',
+  tone,
+  status,
   size = 'md',
   appearance = 'solid',
   density = 'comfortable',
@@ -77,11 +96,14 @@ export function Badge({
   style,
   ...props
 }: BadgeProps) {
+  const resolvedTone =
+    resolveRetiredValue('Badge', tone !== undefined ? 'tone' : 'status', tone ?? status, RETIRED_TONES) ??
+    'info';
   const isIconOnly = size === 'xs';
 
   const classes = bdsClass(
     'bds-badge',
-    `bds-badge--${status}`,
+    `bds-badge--tone-${resolvedTone}`,
     `bds-badge--${size}`,
     `bds-badge--${appearance}`,
     density === 'compact' && 'bds-badge--compact',

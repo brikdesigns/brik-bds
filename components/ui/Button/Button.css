@@ -117,30 +117,14 @@
   color: var(--text-on-color-light);
 }
 
-.bds-button--danger {
-  background-color: var(--background-accent-red);
-  color: var(--text-on-color-dark);
-}
-
-.bds-button--danger-outline {
-  background-color: transparent;
-  color: var(--text-accent-red);
-  border-color: var(--border-negative);
-}
-
-.bds-button--danger-ghost {
-  background-color: transparent;
-  color: var(--text-accent-red);
-}
-
 /* ─── System Variants (semantic actions) ─────────────────────── */
 
-.bds-button--destructive {
+.bds-button--tone-negative {
   background-color: var(--background-negative);
   color: var(--text-on-color-dark);
 }
 
-.bds-button--positive {
+.bds-button--tone-positive {
   background-color: var(--background-positive);
   color: var(--text-on-color-dark);
 }
@@ -229,34 +213,23 @@
 }
 
 /* ── Destructive ── */
-.bds-button--destructive:hover:not(:disabled):not(.bds-button--loading) {
+.bds-button--tone-negative:hover:not(:disabled):not(.bds-button--loading) {
   background-color: var(--background-negative-hover);
 }
 
-.bds-button--destructive:active:not(:disabled) {
+.bds-button--tone-negative:active:not(:disabled) {
   background-color: var(--background-negative-pressed);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ── Positive ── */
-.bds-button--positive:hover:not(:disabled):not(.bds-button--loading) {
+.bds-button--tone-positive:hover:not(:disabled):not(.bds-button--loading) {
   background-color: var(--background-positive-hover);
 }
 
-.bds-button--positive:active:not(:disabled) {
+.bds-button--tone-positive:active:not(:disabled) {
   background-color: var(--background-positive-pressed);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
-/* ── Danger variants ── */
-.bds-button--danger-outline:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-accent-red);
-  color: var(--text-on-color-dark);
-}
-
-.bds-button--danger-ghost:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-accent-red);
-  color: var(--text-on-color-dark);
 }
 
 /* ── Disabled (all variants, except loading) ── */
@@ -270,8 +243,7 @@
 /* Ghost variants have no background — a disabled fill turns them into a solid
  * gray block. Keep them transparent and let the dimmed text/icon color carry
  * the disabled state. */
-.bds-button--ghost:disabled:not(.bds-button--loading),
-.bds-button--danger-ghost:disabled:not(.bds-button--loading) {
+.bds-button--ghost:disabled:not(.bds-button--loading) {
   background-color: transparent;
   border-color: transparent;
 }
@@ -282,16 +254,13 @@
   outline-offset: var(--button-focus-outline-offset); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
-/* Danger: red focus ring */
-.bds-button--danger:focus-visible,
-.bds-button--danger-outline:focus-visible,
-.bds-button--danger-ghost:focus-visible,
-.bds-button--destructive:focus-visible {
+/* Negative: red focus ring */
+.bds-button--tone-negative:focus-visible {
   outline-color: var(--border-negative);
 }
 
 /* Positive: green focus ring */
-.bds-button--positive:focus-visible {
+.bds-button--tone-positive:focus-visible {
   outline-color: var(--border-positive);
 }
 

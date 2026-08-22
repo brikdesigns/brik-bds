@@ -45,10 +45,10 @@ export const Default: Story = {
   render: (args) => (
     <Frame>
       <BadgeGroup {...args}>
-        <Badge status="positive" size="sm">Active</Badge>
-        <Badge status="warning" size="sm">Pending</Badge>
-        <Badge status="info" size="sm">Draft</Badge>
-        <Badge status="error" size="sm">Blocked</Badge>
+        <Badge tone="positive" size="sm">Active</Badge>
+        <Badge tone="warning" size="sm">Pending</Badge>
+        <Badge tone="info" size="sm">Draft</Badge>
+        <Badge tone="negative" size="sm">Blocked</Badge>
       </BadgeGroup>
     </Frame>
   ),
@@ -65,10 +65,10 @@ export const InsideField: Story = {
     <Frame>
       <Field label="Integrations health">
         <BadgeGroup>
-          <Badge status="positive" size="sm">Helicone</Badge>
-          <Badge status="positive" size="sm">Supabase</Badge>
-          <Badge status="warning" size="sm">Stripe</Badge>
-          <Badge status="error" size="sm">Twilio</Badge>
+          <Badge tone="positive" size="sm">Helicone</Badge>
+          <Badge tone="positive" size="sm">Supabase</Badge>
+          <Badge tone="warning" size="sm">Stripe</Badge>
+          <Badge tone="negative" size="sm">Twilio</Badge>
         </BadgeGroup>
       </Field>
     </Frame>

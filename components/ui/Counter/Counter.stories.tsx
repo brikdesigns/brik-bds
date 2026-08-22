@@ -45,7 +45,7 @@ type Story = StoryObj<typeof Counter>;
 export const Default: Story = {
   args: {
     count: 5,
-    status: 'success',
+    tone: 'positive',
     size: 'sm',
   },
 };

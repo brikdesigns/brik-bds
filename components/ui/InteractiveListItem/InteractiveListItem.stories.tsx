@@ -86,7 +86,7 @@ export const Default: Story = {
       <InteractiveListItem
         {...args}
         leading={<Avatar name="Emily Rivera" size="md" />}
-        trailing={<Badge status="info">New hire</Badge>}
+        trailing={<Badge tone="info">New hire</Badge>}
         onClick={() => {}}
       />
     </div>
@@ -133,8 +133,8 @@ export const ActivityFeed: Story = {
             <>
               <span>Acme Dental Supply · Submitted 2d ago</span>
               <span style={{ display: 'flex', gap: 'var(--gap-sm)' }}>
-                <Badge status="warning" size="xs">In review</Badge>
-                <Badge status="error" size="xs">High</Badge>
+                <Badge tone="warning" size="xs">In review</Badge>
+                <Badge tone="negative" size="xs">High</Badge>
               </span>
             </>
           }
@@ -164,7 +164,7 @@ export const ActivityFeed: Story = {
             <>
               <span>Sarah Mitchell · Resolved 5d ago</span>
               <span style={{ display: 'flex', gap: 'var(--gap-sm)' }}>
-                <Badge status="positive" size="xs">Resolved</Badge>
+                <Badge tone="positive" size="xs">Resolved</Badge>
               </span>
             </>
           }
@@ -257,9 +257,9 @@ export const Selectable: Story = {
 export const ReadOnly: Story = {
   render: () => {
     const rows = [
-      { title: 'Discovery', subtitle: 'Completed 2d ago', badge: <Badge status="positive" size="sm">Done</Badge> },
-      { title: 'Design', subtitle: 'In progress', badge: <Badge status="progress" size="sm">Active</Badge> },
-      { title: 'Content', subtitle: 'Not started', badge: <Badge status="neutral" size="sm">Skipped</Badge> },
+      { title: 'Discovery', subtitle: 'Completed 2d ago', badge: <Badge tone="positive" size="sm">Done</Badge> },
+      { title: 'Design', subtitle: 'In progress', badge: <Badge tone="info" size="sm">Active</Badge> },
+      { title: 'Content', subtitle: 'Not started', badge: <Badge tone="neutral" size="sm">Skipped</Badge> },
     ];
     return (
       <div style={{ minWidth: 360 }}>

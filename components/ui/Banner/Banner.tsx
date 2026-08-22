@@ -2,11 +2,17 @@ import { type ReactNode, type HTMLAttributes } from 'react';
 import { Icon } from '../Icon';
 import { Warning, Info, CheckCircle } from '../../icons';
 import { Badge } from '../Badge';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredValue } from '../../utils';
 import { CloseButton } from '../CloseButton';
 import './Banner.css';
 
-export type BannerTone = 'announcement' | 'warning' | 'error' | 'information' | 'success';
+export type BannerTone = 'announcement' | 'warning' | 'negative' | 'info' | 'positive';
+
+const RETIRED_TONES: Record<string, BannerTone> = {
+  error: 'negative',
+  information: 'info',
+  success: 'positive',
+};
 
 export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Bold title text */
@@ -16,10 +22,10 @@ export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title
   /**
    * Visual tone:
    * - `announcement` (default) — brand-primary surface for marketing notices
-   * - `warning` / `error` / `information` — secondary surface with leading
+   * - `warning` / `negative` / `info` — secondary surface with leading
    *   status Badge icon. Switches `role` to `alert` for assistive tech.
    *   Replaces the legacy `AlertBanner` component.
-   * - `success` — secondary surface with a leading positive Badge (check
+   * - `positive` — secondary surface with a leading positive Badge (check
    *   icon). Renders `role="status"` (polite) — it confirms rather than alerts.
    */
   tone?: BannerTone;
@@ -31,19 +37,19 @@ export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title
 
 const STATUS_ICON: Record<Exclude<BannerTone, 'announcement'>, string> = {
   warning: Warning,
-  error: Warning,
-  information: Info,
-  success: CheckCircle,
+  negative: Warning,
+  info: Info,
+  positive: CheckCircle,
 };
 
 const STATUS_BADGE: Record<
   Exclude<BannerTone, 'announcement'>,
-  'warning' | 'error' | 'info' | 'positive'
+  'warning' | 'negative' | 'info' | 'positive'
 > = {
   warning: 'warning',
-  error: 'error',
-  information: 'info',
-  success: 'positive',
+  negative: 'negative',
+  info: 'info',
+  positive: 'positive',
 };
 
 /**
@@ -54,11 +60,11 @@ const STATUS_BADGE: Record<
  * - **`announcement`** (default) — brand-primary surface with inverse text.
  *   Use for site-wide announcements, promotions, or marketing notices.
  *   Renders with `role="banner"`.
- * - **`warning` / `error` / `information`** — secondary surface with a
+ * - **`warning` / `negative` / `info`** — secondary surface with a
  *   leading status Badge icon and primary text. Renders with `role="alert"`.
  *   Replaces the legacy `AlertBanner` component (per ADR-004 §3 — same
  *   shape, different presets = one component with a tone prop).
- * - **`success`** — secondary surface with a leading positive Badge (check
+ * - **`positive`** — secondary surface with a leading positive Badge (check
  *   icon). Renders with `role="status"` (polite) — a confirmation, not an alert.
  *
  * @summary Full-width banner — announcement or status tones
@@ -66,30 +72,32 @@ const STATUS_BADGE: Record<
 export function Banner({
   title,
   description,
-  tone = 'announcement',
+  tone,
   action,
   onDismiss,
   className,
   style,
   ...props
 }: BannerProps) {
-  const isStatus = tone !== 'announcement';
+  const resolvedTone =
+    resolveRetiredValue('Banner', 'tone', tone, RETIRED_TONES) ?? 'announcement';
+  const isStatus = resolvedTone !== 'announcement';
   // success is a polite confirmation (role="status"); other status tones are
   // assertive (role="alert"); announcement is a plain landmark (role="banner").
-  const role = !isStatus ? 'banner' : tone === 'success' ? 'status' : 'alert';
+  const role = !isStatus ? 'banner' : resolvedTone === 'positive' ? 'status' : 'alert';
 
   const badge = isStatus ? (
     <Badge
       size="xs"
-      status={STATUS_BADGE[tone]}
-      icon={<Icon icon={STATUS_ICON[tone]} />}
+      tone={STATUS_BADGE[resolvedTone]}
+      icon={<Icon icon={STATUS_ICON[resolvedTone]} />}
     />
   ) : null;
 
   return (
     <div
       role={role}
-      className={bdsClass('bds-banner', `bds-banner--tone-${tone}`, className)}
+      className={bdsClass('bds-banner', `bds-banner--tone-${resolvedTone}`, className)}
       style={style}
       {...props}
     >

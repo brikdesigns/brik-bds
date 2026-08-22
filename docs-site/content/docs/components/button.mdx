@@ -95,30 +95,22 @@ Twelve variants. Pick by **action emphasis** and **destructive intent**, not by 
   ]}
 />
 
-### Destructive ladder
+### Destructive
 
-Three flavors of destructive map onto the same ladder.
+`negative` is the destructive action — confirm dialogs, delete-and-go flows.
 
-<EmphasisLadder
-  caption="highest emphasis → lowest"
-  rungs={[
-    {
-      label: 'danger',
-      example: <BDS.Button variant="danger">Delete project</BDS.Button>,
-      use: 'Primary destructive action — confirm dialogs, delete-and-go flows.',
-    },
-    {
-      label: 'danger-outline',
-      example: <BDS.Button variant="danger-outline">Delete</BDS.Button>,
-      use: 'Destructive with less emphasis. Pairs with a non-destructive primary.',
-    },
-    {
-      label: 'danger-ghost',
-      example: <BDS.Button variant="danger-ghost">Remove</BDS.Button>,
-      use: 'Inline delete in lists, table rows, repeated remove affordances.',
-    },
-  ]}
-/>
+<ComponentPreview code={`<Button variant="negative">Delete project</Button>`}>
+  <BDS.Button variant="negative">Delete project</BDS.Button>
+</ComponentPreview>
+
+The `danger` / `danger-outline` / `danger-ghost` trio that used to sit below it was
+retired in #1957: it carried the brand accent-red rather than the system negative, and
+had zero call sites across every consumer repo. The retired spellings still resolve to
+`negative` for one minor and warn once in the console.
+
+Lower-emphasis destructive (an outline or ghost button that is *also* negative) is not
+expressible today, because `variant` carries form and valence on one axis. Tracked in
+#1983.
 
 ### State variants
 
@@ -206,7 +198,7 @@ An icon-only button with a **required** `label` prop for accessibility. The labe
 ```tsx
 // Preferred — unified Button API
 <Button icon={<CloseIcon />} label="Close dialog" variant="ghost" />
-<Button icon={<TrashIcon />} label="Delete item" variant="danger-ghost" />
+<Button icon={<TrashIcon />} label="Delete item" variant="negative" />
 
 // Deprecated — thin wrapper, same result
 <IconButton icon={<CloseIcon />} label="Close dialog" variant="ghost" />

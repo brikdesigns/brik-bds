@@ -86,7 +86,7 @@ export function TextArea({
           className={bdsClass(
             'bds-text-area__label',
             `bds-text-area__label--${size}`,
-            hasError && 'bds-text-area__label--error',
+            hasError && 'bds-text-area__label--tone-negative',
           )}
         >
           {label}
@@ -106,7 +106,7 @@ export function TextArea({
           'bds-text-area-field',
           `bds-text-area-field--${size}`,
           `bds-text-area-field--resize-${resize}`,
-          hasError && 'bds-text-area-field--error',
+          hasError && 'bds-text-area-field--tone-negative',
           className,
         )}
         style={style}

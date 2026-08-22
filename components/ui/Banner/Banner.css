@@ -73,14 +73,14 @@
   border-radius: var(--border-radius-md);
 }
 
-/* ─── Tones: warning / error / information (status surfaces) ──── */
+/* ─── Tones: warning / negative / info / positive (status surfaces) ─── */
 /* Replaces the legacy AlertBanner styling. Secondary surface, primary
  * text, leading Badge icon. Wider stack gap matches the alert hierarchy. */
 
 .bds-banner--tone-warning,
-.bds-banner--tone-error,
-.bds-banner--tone-information,
-.bds-banner--tone-success {
+.bds-banner--tone-negative,
+.bds-banner--tone-info,
+.bds-banner--tone-positive {
   background-color: var(--surface-secondary);
   color: var(--text-primary);
   padding: var(--padding-lg);
@@ -89,16 +89,16 @@
 }
 
 .bds-banner--tone-warning .bds-banner__inner,
-.bds-banner--tone-error .bds-banner__inner,
-.bds-banner--tone-information .bds-banner__inner,
-.bds-banner--tone-success .bds-banner__inner {
+.bds-banner--tone-negative .bds-banner__inner,
+.bds-banner--tone-info .bds-banner__inner,
+.bds-banner--tone-positive .bds-banner__inner {
   align-items: flex-start;
 }
 
 .bds-banner--tone-warning .bds-banner__content,
-.bds-banner--tone-error .bds-banner__content,
-.bds-banner--tone-information .bds-banner__content,
-.bds-banner--tone-success .bds-banner__content {
+.bds-banner--tone-negative .bds-banner__content,
+.bds-banner--tone-info .bds-banner__content,
+.bds-banner--tone-positive .bds-banner__content {
   gap: var(--gap-sm);
 }
 }
