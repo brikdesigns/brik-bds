@@ -7,6 +7,13 @@
 #   ./scripts/pr-task.sh              # auto-generate title + body from commits
 #   ./scripts/pr-task.sh "Custom PR title"   # override title
 #   ./scripts/pr-task.sh --no-issue "<reason>"  # feat/fix with no tracked issue
+#   ./scripts/pr-task.sh --area area:tooling    # set the area:* label explicitly
+#
+# Labels: GitHub does NOT copy a linked issue's labels onto its PR, so this
+# script inherits the area:* / size:* / theme:* labels of every issue the commit
+# range references, plus a Type label from the conventional-commit prefix. The
+# pr-label-gate CI check requires at least one area:*, so the script refuses to
+# open a PR without one — pass --area, or label the linked issue (#1979).
 #
 # Issue link: the issue numbers resolved from the commit range are written into
 # the PR body as `Closes #N` / `Refs #N` lines. GitHub parses closing keywords
@@ -39,15 +46,25 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/lib/pr-path-overlap.sh"
 # shellcheck source=scripts/lib/issue-links.sh
 source "${SCRIPT_DIR}/lib/issue-links.sh"
+# shellcheck source=scripts/lib/pr-labels.sh
+source "${SCRIPT_DIR}/lib/pr-labels.sh"
 
 # ── Parse flags ──
 NO_ISSUE_REASON=""
+AREA_OVERRIDE=""
 POSITIONAL_ARGS=()
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --skip-story-check)
       SKIP_STORY_CHECK=1
       shift
+      ;;
+    --area)
+      # Set the area:* label explicitly, for work whose linked issue carries
+      # none (or for --no-issue work). Accepts "area:tooling" or bare "tooling".
+      AREA_OVERRIDE="$2"
+      [[ "$AREA_OVERRIDE" == area:* ]] || AREA_OVERRIDE="area:${AREA_OVERRIDE}"
+      shift 2
       ;;
     --no-issue)
       # Escape hatch for genuinely issue-less feat/fix work. Mirrors the
@@ -216,6 +233,78 @@ if issue_link_required "$PR_TITLE" && [ -z "$ISSUE_LINKS" ]; then
   exit 1
 fi
 
+# ── Resolve project-tracking labels (before pushing anything) ──
+# GitHub does NOT copy a linked issue's labels onto its PR, so PRs opened by this
+# script were born label-less and needed a manual `gh pr edit` to reach parity —
+# three in a row (#1969, #1974, #1978) before #1979 filed it. Resolve up front:
+#   - a Type label from the conventional-commit prefix, IF this repo has one
+#   - the area:* / size:* / theme:* labels of every issue this PR references
+#   - an explicit --area override
+#
+# The resolution policy lives in lib/pr-labels.sh (pure, offline, tested by
+# scripts/__tests__/test-pr-labels.sh). This block only supplies it with live
+# data — the repo's label list and each referenced issue's labels.
+#
+# One deliberate divergence from the portal: `lib/issue-links.sh` resolves bare
+# `#N` only (`issue_refs_in_subjects` strips to digits), so there is no
+# cross-repo `owner/repo#N` form to split here. If that lib ever grows one, port
+# the portal's split too or cross-repo refs will silently inherit nothing.
+LABELS_TO_ADD=()
+
+# Fetched once, then grepped as a VARIABLE — never `gh … | grep -q`; see the
+# pipefail/SIGPIPE note in lib/pr-labels.sh. Resolved before every branch below
+# because each existence-checks against it and `set -u` aborts if it is unset.
+REPO_LABELS=$(gh label list --limit 200 --json name --jq '.[].name')
+
+TYPE_LABEL=$(type_label_for_title "$PR_TITLE")
+if [ -n "$TYPE_LABEL" ] && label_known "$TYPE_LABEL" "$REPO_LABELS"; then
+  LABELS_TO_ADD+=("$TYPE_LABEL")
+fi
+
+# The --no-issue hatch's label half, folded in here so it lands in the same
+# `gh pr edit` as everything else (it used to be its own call after create).
+if [ -n "$NO_ISSUE_REASON" ]; then
+  LABELS_TO_ADD+=("issue:none")
+fi
+
+if [ -n "$AREA_OVERRIDE" ]; then
+  # Fail fast on a typo'd override. Otherwise it satisfies the area gate below
+  # but `gh pr edit` silently drops it (the label does not exist), which
+  # reintroduces the label-less PR this guard exists to prevent.
+  if ! label_known "$AREA_OVERRIDE" "$REPO_LABELS"; then
+    echo -e "${RED}✗ --area '${AREA_OVERRIDE}' is not an existing label in this repo.${NC}"
+    echo -e "${RED}  Valid area labels:${NC}"
+    grep '^area:' <<< "$REPO_LABELS" | sed 's/^/    /'
+    exit 1
+  fi
+  LABELS_TO_ADD+=("$AREA_OVERRIDE")
+fi
+
+# Inherit from the issues this PR is for, read off the rendered $ISSUE_LINKS
+# block so the labels and the linkage can never disagree.
+for ref_num in $(refs_from_issue_links "$ISSUE_LINKS"); do
+  ISSUE_LABELS=$(gh issue view "$ref_num" --json labels --jq '.labels[].name' 2>/dev/null || true)
+  for l in $(inheritable_labels "$ISSUE_LABELS"); do
+    if label_known "$l" "$REPO_LABELS"; then
+      LABELS_TO_ADD+=("$l")
+    else
+      echo -e "${YELLOW}⚠  #${ref_num} carries '${l}', which does not exist in this repo — skipped.${NC}" >&2
+    fi
+  done
+done
+
+# Gate: never open a PR that pr-label-gate will immediately fail.
+if ! has_area_label "$(printf '%s\n' "${LABELS_TO_ADD[@]+"${LABELS_TO_ADD[@]}"}")"; then
+  echo -e "${RED}✗ No area:* label could be resolved for this PR.${NC}"
+  echo -e "${RED}  The pr-label-gate CI check requires one. Either:${NC}"
+  echo -e "${RED}    - re-run with --area area:<x>   (e.g. --area area:tooling), or${NC}"
+  echo -e "${RED}    - add an area:* label to the linked issue, then re-run.${NC}"
+  echo -e "${YELLOW}  Valid area labels:${NC}"
+  grep '^area:' <<< "$REPO_LABELS" | sed 's/^/    /'
+  echo -e "${YELLOW}  Nothing has been pushed — the merge and push run after this gate.${NC}"
+  exit 1
+fi
+
 # ── Sync with base (catches semantic conflicts from parallel work) ──
 BEHIND=$(git rev-list --count "HEAD..origin/${BASE_BRANCH}")
 if [ "$BEHIND" -gt 0 ]; then
@@ -317,19 +406,29 @@ if ! PR_URL=$(gh pr create --base "${BASE_BRANCH}" --title "$PR_TITLE" --body "$
   exit 1
 fi
 
-# ── Apply the hatch's other half ──
-# `Issue-exempt:` in the body is only half the waiver; pr-issue-link-gate needs
-# the `issue:none` label too, and it re-runs on `labeled` so the PR flips green
-# the moment the label arrives. Failing to apply it would leave a PR whose body
-# claims an exemption the gate rejects, so say so loudly rather than warn.
-if [ -n "$NO_ISSUE_REASON" ]; then
-  PR_NUMBER=$(gh pr view "$BRANCH" --json number --jq '.number' 2>/dev/null || echo "")
-  if [ -n "$PR_NUMBER" ] && gh pr edit "$PR_NUMBER" --add-label "issue:none" >/dev/null 2>&1; then
-    echo -e "${GREEN}~ Applied \`issue:none\` (the --no-issue hatch's other half).${NC}"
+# ── Apply the resolved labels ──
+# One `gh pr edit` for everything resolved above: the inherited area:* / size:* /
+# theme:*, the Type label, and `issue:none` when the hatch was taken. Both gates
+# that read labels re-run on `labeled`, so the PR flips green as they arrive.
+#
+# A failure here is LOUD, not a warning. Two gates depend on this call:
+# pr-label-gate needs the area:* (guaranteed present by the gate above), and
+# pr-issue-link-gate needs `issue:none` whenever the body claims an exemption —
+# a body claiming a waiver the gate rejects is worse than no waiver at all.
+PR_NUMBER=$(gh pr view "$BRANCH" --json number --jq '.number' 2>/dev/null || echo "")
+if [ -n "$PR_NUMBER" ]; then
+  UNIQUE=$(dedupe_labels "$(printf '%s\n' "${LABELS_TO_ADD[@]+"${LABELS_TO_ADD[@]}"}")")
+  ADD_ARGS=()
+  while IFS= read -r l; do
+    [ -z "$l" ] && continue
+    ADD_ARGS+=(--add-label "$l")
+  done <<< "$UNIQUE"
+  if [ ${#ADD_ARGS[@]} -gt 0 ] && gh pr edit "$PR_NUMBER" "${ADD_ARGS[@]}" >/dev/null 2>&1; then
+    echo -e "${GREEN}~ Labels applied:${NC} $(echo "$UNIQUE" | tr '\n' ' ')"
   else
-    echo -e "${RED}⚠ Could not apply the \`issue:none\` label — the hatch is HALF-TAKEN and${NC}"
-    echo -e "${RED}  pr-issue-link-gate will fail. Add it by hand:${NC}"
-    echo -e "${RED}    gh pr edit ${PR_NUMBER:-<n>} --add-label issue:none${NC}"
+    echo -e "${RED}⚠ Could not apply labels — pr-label-gate will fail (and if --no-issue${NC}"
+    echo -e "${RED}  was used, the hatch is HALF-TAKEN). Add them by hand:${NC}"
+    echo -e "${RED}    gh pr edit ${PR_NUMBER:-<n>} $(echo "$UNIQUE" | sed 's/^/--add-label /' | tr '\n' ' ')${NC}"
   fi
 fi
 
