@@ -8,6 +8,7 @@
  * so no `## Patterns` story; recipe amendment tracked separately.
  */
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { fn, expect, userEvent, within } from 'storybook/test';
 import { Banner } from './Banner';
 import { Button } from '../Button';
 
@@ -27,11 +28,11 @@ const meta: Meta<typeof Banner> = {
     },
     tone: {
       control: 'select',
-      options: ['announcement', 'warning', 'error', 'information', 'success'],
+      options: ['announcement', 'warning', 'negative', 'info', 'positive'],
       description:
         '`announcement` (default) = brand-primary surface, `role="banner"`. ' +
-        '`warning` / `error` / `information` = secondary surface with leading status Badge, `role="alert"`. ' +
-        '`success` = secondary surface with a leading positive Badge, `role="status"`.',
+        '`warning` / `negative` / `info` = secondary surface with leading status Badge, `role="alert"`. ' +
+        '`positive` = secondary surface with a leading positive Badge, `role="status"`.',
     },
     action: {
       control: false,
@@ -41,8 +42,8 @@ const meta: Meta<typeof Banner> = {
     onDismiss: {
       action: 'dismissed',
       description:
-        'Optional close handler. When provided, renders an × close button at the trailing edge. ' +
-        'Caller owns the visibility state — see the Dismissible pattern story.',
+        'Optional close handler. When provided, renders a CloseButton at the trailing edge, ' +
+        'labelled `aria-label="Dismiss banner"`. Caller owns the visibility state.',
     },
   },
 };
@@ -126,6 +127,31 @@ export const Success: Story = {
     tone: 'positive',
     title: 'Changes published',
     description: 'Your updates are live and visible to clients.',
+  },
+};
+
+/* ─── Interaction test (Q5 — hidden from MCP) ────────────────── */
+
+/**
+ * Gates the dismiss affordance's accessible name. `Banner` overrides
+ * `CloseButton`'s default `"Close"` with the contextual `"Dismiss banner"`,
+ * and that string is documented on the component page — asserting it here
+ * means a change to the label breaks a test instead of silently orphaning
+ * the doc, which is how it drifted in the first place (#1989).
+ *
+ * @summary Verifies the dismiss label and that onDismiss fires
+ */
+export const InteractionTestDismiss: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    tone: 'warning',
+    title: 'Brand assets are incomplete',
+    onDismiss: fn(),
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByLabelText('Dismiss banner'));
+    await expect(args.onDismiss).toHaveBeenCalled();
   },
 };
 
