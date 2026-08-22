@@ -25,7 +25,7 @@ import { BannerGroup, Banner } from '@brikdesigns/bds';
 
 ### Default
 
-Children render in source order — sort before you map. `error → warning → information → success → announcement`.
+Children render in source order — sort before you map. `negative → warning → info → positive → announcement`.
 
 <ComponentPreview code={`<BDS.BannerGroup>
   <BDS.Banner tone="negative" title="Card on file declined" description="Update the payment method to keep services active." />
@@ -90,13 +90,13 @@ import { Banner, BannerGroup, Button, Page, PageContent, PageHeader } from '@bri
 
 - **Don't stack more than three.** Three `role="alert"` banners announce serially with no way to skip. Cap the rendered set and roll the remainder into one summarizing banner. See [when *not* to stack banners](/docs/build-standards/banner-groups#when-not-to-stack-banners).
 - **Don't render a per-item status list as banners.** Items sharing an attribute set are a table with a status column or a list with a trailing [Badge](/docs/components/badge).
-- **Don't put an `announcement` in a group carrying an `error`.** Suppress the marketing banner while anything is broken.
+- **Don't put an `announcement` in a group carrying a `negative`.** Suppress the marketing banner while anything is broken.
 - **Don't use non-Banner children.** The group locks the vertical rhythm for Banner's footprint; arbitrary nodes misalign.
 - **Don't add margins to the children.** The group's `gap` is the only spacing mechanism between banners, and the parent layout owns the space below.
 
 ## Accessibility
 
-- Renders a plain `<div>` — no `role`, no `aria-label`. Each Banner keeps its own semantics (`role="alert"` for `error` / `warning` / `information`, `role="status"` for `success`, `role="banner"` for `announcement`).
+- Renders a plain `<div>` — no `role`, no `aria-label`. Each Banner keeps its own semantics (`role="alert"` for `negative` / `warning` / `info`, `role="status"` for `positive`, `role="banner"` for `announcement`).
 - **Source order is announced order.** The severity ordering rule is the screen-reader experience, not a sighted-only convention.
 - The three-banner cap exists because assertive roles compound — see the standard's [accessibility section](/docs/build-standards/banner-groups#accessibility).
 

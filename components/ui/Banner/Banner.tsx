@@ -82,7 +82,7 @@ export function Banner({
   const resolvedTone =
     resolveRetiredValue('Banner', 'tone', tone, RETIRED_TONES) ?? 'announcement';
   const isStatus = resolvedTone !== 'announcement';
-  // success is a polite confirmation (role="status"); other status tones are
+  // positive is a polite confirmation (role="status"); other status tones are
   // assertive (role="alert"); announcement is a plain landmark (role="banner").
   const role = !isStatus ? 'banner' : resolvedTone === 'positive' ? 'status' : 'alert';
 

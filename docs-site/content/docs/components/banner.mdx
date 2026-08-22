@@ -36,7 +36,7 @@ Banner is the canonical full-width banner component. The `tone` prop switches be
 ## Use it for
 
 - Site-wide marketing announcements (brand-primary surface, default tone)
-- Persistent status alerts that need to stay visible (`tone="warning|error|information"`)
+- Persistent status alerts that need to stay visible (`tone="warning|negative|info"`)
 - Trial-expires / quota-exceeded / system-degraded warnings
 - Maintenance windows, deployment notices
 
@@ -65,7 +65,7 @@ Brand-primary surface with inverse text. The marketing-notice mode.
 
 ### Status tones
 
-`information`, `warning`, `error` render on a secondary surface with a leading status Badge and `role="alert"` for assistive tech. **Replaces the deprecated AlertBanner** — same shape, same Badge, same surface.
+`info`, `warning`, `negative` render on a secondary surface with a leading status Badge and `role="alert"` for assistive tech. **Replaces the deprecated AlertBanner** — same shape, same Badge, same surface.
 
 ```tsx
 <Banner
@@ -115,10 +115,10 @@ Pass `onDismiss` to render a close button. Common with announcements.
 
 ## Accessibility
 
-- Tone-coded banners (`warning|error|information`) get `role="alert"` so assistive tech announces them on render.
+- Tone-coded banners (`warning|negative|info`) get `role="alert"` so assistive tech announces them on render.
 - Announcement banners (default) render as a generic landmark.
 - The leading Badge uses an `aria-hidden` icon plus the tone-implicit semantics — title text carries the meaning.
-- `onDismiss` adds a button with `aria-label="Dismiss"`.
+- `onDismiss` adds a [CloseButton](/docs/components/close-button) with `aria-label="Dismiss banner"` — Banner's contextual override of CloseButton's `"Close"` default. Gated by the `InteractionTestDismiss` story.
 
 ## API
 

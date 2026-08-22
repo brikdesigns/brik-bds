@@ -63,7 +63,7 @@ Two tie-breaks, applied in order:
 2. **Newest first.** Within one tone and one scope, most recent leads.
 
 <Callout type="warn">
-  **`announcement` is last, unconditionally** — and it does not belong in a group that also carries an `negative`. A promotion sitting above, beside, or below a payment failure reads as the system not knowing what state the reader is in. Suppress the announcement while any `negative` banner is live.
+  **`announcement` is last, unconditionally** — and it does not belong in a group that also carries a `negative`. A promotion sitting above, beside, or below a payment failure reads as the system not knowing what state the reader is in. Suppress the announcement while any `negative` banner is live.
 </Callout>
 
 The ordering is the **author's** job, not the component's. `BannerGroup` renders children in source order and asserts nothing about tone — a component cannot know whether a given `warning` is global or contextual, so it cannot sort. Sort the array before you map it.
