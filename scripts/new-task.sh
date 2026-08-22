@@ -417,6 +417,18 @@ npm ci --prefer-offline 2>&1 | tail -1
 echo -e "${YELLOW}▸ Installing Playwright chromium (Storybook visual gate)...${NC}"
 npx playwright install chromium chromium-headless-shell 2>&1 | tail -1
 
+# ── Install docs-site dependencies ──
+# `docs-site/` is a separate npm project with its own lockfile — the root
+# `npm ci` above does not reach it, so `next` is absent and
+# `cd docs-site && npm run build` dies on "sh: next: command not found".
+# That matters because `docs-site-build.yml` runs `next build` on every PR
+# touching `docs-site/**` while the root `npm run validate` does not, so
+# without this a worktree cannot pre-run the check that will gate its own PR
+# (#1980). Unconditional: measured at ~6s with a warm cache, which is cheaper
+# than the class of footgun it removes.
+echo -e "${YELLOW}▸ Installing docs-site dependencies (separate lockfile)...${NC}"
+(cd docs-site && npm ci --prefer-offline 2>&1 | tail -1)
+
 # ── Summary ──
 echo ""
 echo -e "${GREEN}═══════════════════════════════════════${NC}"
@@ -432,6 +444,9 @@ echo "    cd ${WORKTREE_BASE}/${TASK_NAME}"
 echo "    claude -p \"Task: ... Follow CLAUDE.md rules.\""
 echo ""
 echo "  Before merge: sync both consumers (portal, brikdesigns)."
+echo ""
+echo "  Gates: 'npm run validate' does NOT cover docs-site. On a docs-site/** change also run:"
+echo "    (cd docs-site && npm run build)   # what docs-site-build.yml gates"
 echo ""
 echo "  When done (REQUIRED — branches without PRs rot):"
 echo "    git diff ${BASE_BRANCH}..${BRANCH_NAME}   # review changes"
