@@ -24,10 +24,10 @@
 
 /* ─── Status colors ──────────────────────────────────────────── */
 
-.bds-counter--success  { background-color: var(--background-positive);      color: var(--text-on-color-dark);  }
-.bds-counter--error    { background-color: var(--background-negative);      color: var(--text-on-color-dark);  }
-.bds-counter--warning  { background-color: var(--background-warning);       color: var(--text-on-color-light); }
-.bds-counter--neutral  { background-color: var(--surface-neutral);       color: var(--text-on-color-light); }
-.bds-counter--progress { background-color: var(--background-info);   color: var(--text-on-color-dark);  }
-.bds-counter--brand    { background-color: var(--background-brand-primary); color: var(--text-on-color-dark);  }
+.bds-counter--tone-positive { background-color: var(--background-positive); color: var(--text-on-color-dark);  }
+.bds-counter--tone-negative { background-color: var(--background-negative); color: var(--text-on-color-dark);  }
+.bds-counter--tone-warning  { background-color: var(--background-warning);  color: var(--text-on-color-light); }
+.bds-counter--tone-neutral  { background-color: var(--background-neutral); color: var(--text-on-color-dark);  }
+.bds-counter--tone-info     { background-color: var(--background-info);     color: var(--text-on-color-dark);  }
+.bds-counter--tone-brand    { background-color: var(--background-brand-primary); color: var(--text-on-color-dark);  }
 }

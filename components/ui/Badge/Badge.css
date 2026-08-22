@@ -103,85 +103,83 @@
   font-size: var(--label-xl);
 }
 
-/* ─── Status × Solid (default, saturated bg) ─────────────────── */
+/* ─── Tone × Solid (default, saturated bg) ───────────────────── */
+/* Badge is an indicator — a small element placed ON a surface — so every
+   `solid` fill is a `--background-*` token. `--surface-*` belongs to the card
+   or menu underneath it, and is used here only by `appearance="subtle"`,
+   whose whole contract is a pastel tint (#1909 § D). */
 
 /* Dark label: white on --background-positive (#27ae60) is 2.87:1 (fails AA);
    --text-on-color-light is 6.00:1 in both themes (#995). */
-.bds-badge--solid.bds-badge--positive {
+.bds-badge--solid.bds-badge--tone-positive {
   background-color: var(--background-positive);
   color: var(--text-on-color-light);
 }
 
-.bds-badge--solid.bds-badge--warning {
+.bds-badge--solid.bds-badge--tone-warning {
   background-color: var(--background-warning);
   color: var(--text-neutral);
 }
 
 /* Dark label: white on --background-negative (#eb5757) is 3.48:1 (fails AA);
    --text-on-color-light is 4.95:1 in both themes (#995). */
-.bds-badge--solid.bds-badge--error {
+.bds-badge--solid.bds-badge--tone-negative {
   background-color: var(--background-negative);
   color: var(--text-on-color-light);
 }
 
-.bds-badge--solid.bds-badge--info {
-  background-color: var(--surface-neutral);
-  color: var(--text-neutral);
-}
-
-.bds-badge--solid.bds-badge--progress {
+/* Blue — the info signal, freed for this family in #1959. Was spelled
+   `progress` until ADR-033 § 1 retired the third synonym. */
+.bds-badge--solid.bds-badge--tone-info {
   background-color: var(--background-info);
   color: var(--text-on-color-dark);
 }
 
-.bds-badge--solid.bds-badge--brand {
+.bds-badge--solid.bds-badge--tone-brand {
   background-color: var(--background-brand-primary);
   color: var(--text-on-color-dark);
 }
 
-/* Neutral — muted-gray for inert states. Uses the pure grayscale ramp
-   (not system-neutral) so it reads lower-emphasis than `info`. */
-.bds-badge--solid.bds-badge--neutral {
-  background-color: var(--background-muted);
-  color: var(--text-secondary);
+/* Neutral — the saturated system neutral. `--text-neutral` resolves to the
+   same #363636, so the label must be --text-on-color-dark (10.6:1), not
+   --text-neutral (1.00:1 — the trap contrast-pairings.json records). */
+.bds-badge--solid.bds-badge--tone-neutral {
+  background-color: var(--background-neutral);
+  color: var(--text-on-color-dark);
 }
 
-/* ─── Status × Subtle (pastel bg, saturated text) ────────────── */
+/* ─── Tone × Subtle (pastel bg, saturated text) ──────────────── */
 
-.bds-badge--subtle.bds-badge--positive {
+.bds-badge--subtle.bds-badge--tone-positive {
   background-color: var(--surface-positive);
   color: var(--text-positive);
 }
 
-.bds-badge--subtle.bds-badge--warning {
+.bds-badge--subtle.bds-badge--tone-warning {
   background-color: var(--surface-warning);
   color: var(--text-neutral);
 }
 
-.bds-badge--subtle.bds-badge--error {
+.bds-badge--subtle.bds-badge--tone-negative {
   background-color: var(--surface-negative);
   color: var(--text-negative);
 }
 
-.bds-badge--subtle.bds-badge--info {
-  background-color: var(--surface-neutral);
-  color: var(--text-neutral);
-}
-
-.bds-badge--subtle.bds-badge--progress {
+/* --text-info on --surface-info measures 2.86:1 — an AA failure the blue
+   family carries library-wide, tracked in #1972, not introduced here. */
+.bds-badge--subtle.bds-badge--tone-info {
   background-color: var(--surface-info);
   color: var(--text-info);
 }
 
-.bds-badge--subtle.bds-badge--brand {
+.bds-badge--subtle.bds-badge--tone-brand {
   background-color: var(--background-brand-secondary);
   color: var(--text-brand-primary);
 }
 
-/* Neutral subtle — lightest grayscale surface, one emphasis step below solid. */
-.bds-badge--subtle.bds-badge--neutral {
-  background-color: var(--surface-muted);
-  color: var(--text-secondary);
+.bds-badge--subtle.bds-badge--tone-neutral {
+  background-color: var(--surface-neutral);
+  color: var(--text-neutral);
 }
 
 /* ─── Notification micro-interactions (keyframes in tokens/animations.css) ── */

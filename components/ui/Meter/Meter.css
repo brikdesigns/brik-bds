@@ -58,20 +58,20 @@
   border-radius: 8px; /* bds-lint-ignore — half of bar height */
 }
 
-/* Status colors */
-.bds-meter__fill--positive {
+/* Tone colors */
+.bds-meter__fill--tone-positive {
   background-color: var(--background-positive);
 }
 
-.bds-meter__fill--warning {
+.bds-meter__fill--tone-warning {
   background-color: var(--background-warning);
 }
 
-.bds-meter__fill--error {
+.bds-meter__fill--tone-negative {
   background-color: var(--background-negative);
 }
 
-.bds-meter__fill--neutral {
+.bds-meter__fill--tone-neutral {
   background-color: var(--background-secondary);
 }
 

@@ -28,18 +28,18 @@ Six status colors across four sizes.
 
 ### Status colors
 
-<ComponentPreview code={`<BDS.Counter count={5} status="success" />
-<BDS.Counter count={3} status="error" />
-<BDS.Counter count={2} status="warning" />
-<BDS.Counter count={7} status="progress" />
-<BDS.Counter count={4} status="brand" />
-<BDS.Counter count={9} status="neutral" />`}>
-  <BDS.Counter count={5} status="success" />
-  <BDS.Counter count={3} status="error" />
-  <BDS.Counter count={2} status="warning" />
-  <BDS.Counter count={7} status="progress" />
-  <BDS.Counter count={4} status="brand" />
-  <BDS.Counter count={9} status="neutral" />
+<ComponentPreview code={`<BDS.Counter count={5} tone="positive" />
+<BDS.Counter count={3} tone="negative" />
+<BDS.Counter count={2} tone="warning" />
+<BDS.Counter count={7} tone="info" />
+<BDS.Counter count={4} tone="brand" />
+<BDS.Counter count={9} tone="neutral" />`}>
+  <BDS.Counter count={5} tone="positive" />
+  <BDS.Counter count={3} tone="negative" />
+  <BDS.Counter count={2} tone="warning" />
+  <BDS.Counter count={7} tone="info" />
+  <BDS.Counter count={4} tone="brand" />
+  <BDS.Counter count={9} tone="neutral" />
 </ComponentPreview>
 
 - **`success`** — Completed items, positive counts
@@ -51,24 +51,24 @@ Six status colors across four sizes.
 
 ### Sizes
 
-<ComponentPreview code={`<BDS.Counter count={3} size="xs" status="error" />
-<BDS.Counter count={3} size="sm" status="error" />
-<BDS.Counter count={3} size="md" status="error" />
-<BDS.Counter count={3} size="lg" status="error" />`}>
-  <BDS.Counter count={3} size="xs" status="error" />
-  <BDS.Counter count={3} size="sm" status="error" />
-  <BDS.Counter count={3} size="md" status="error" />
-  <BDS.Counter count={3} size="lg" status="error" />
+<ComponentPreview code={`<BDS.Counter count={3} size="xs" tone="negative" />
+<BDS.Counter count={3} size="sm" tone="negative" />
+<BDS.Counter count={3} size="md" tone="negative" />
+<BDS.Counter count={3} size="lg" tone="negative" />`}>
+  <BDS.Counter count={3} size="xs" tone="negative" />
+  <BDS.Counter count={3} size="sm" tone="negative" />
+  <BDS.Counter count={3} size="md" tone="negative" />
+  <BDS.Counter count={3} size="lg" tone="negative" />
 </ComponentPreview>
 
 ### Max overflow
 
 Use `max` to cap the displayed value. Anything over renders as `{max}+`.
 
-<ComponentPreview code={`<BDS.Counter count={150} max={99} status="brand" />
-<BDS.Counter count={9} max={99} status="brand" />`}>
-  <BDS.Counter count={150} max={99} status="brand" />
-  <BDS.Counter count={9} max={99} status="brand" />
+<ComponentPreview code={`<BDS.Counter count={150} max={99} tone="brand" />
+<BDS.Counter count={9} max={99} tone="brand" />`}>
+  <BDS.Counter count={150} max={99} tone="brand" />
+  <BDS.Counter count={9} max={99} tone="brand" />
 </ComponentPreview>
 
 ## When *not* to use
@@ -87,7 +87,8 @@ Use `max` to cap the displayed value. Anything over renders as `{max}+`.
 | Prop | Type | Default |
 |---|---|---|
 | `count` | `number` *(required)* | — |
-| `status` | `CounterStatus` | `'success'` |
+| `tone` | `CounterTone` | `'positive'` |
+| `status` | `CounterTone` | `'success'` |
 | `size` | `CounterSize` | `'sm'` |
 | `max` | `number` | — |
 

@@ -254,7 +254,7 @@ export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(
             htmlFor={inputId}
             className={bdsClass(
               'bds-time-picker__label',
-              hasError && 'bds-time-picker__label--error',
+              hasError && 'bds-time-picker__label--tone-negative',
             )}
           >
             {label}
@@ -269,7 +269,7 @@ export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(
               type="button"
               className={bdsClass(
                 'bds-time-picker__trigger',
-                hasError && 'bds-time-picker__trigger--error',
+                hasError && 'bds-time-picker__trigger--tone-negative',
                 disabled && 'bds-time-picker__trigger--disabled',
                 open && 'bds-time-picker__trigger--open',
               )}
@@ -325,7 +325,7 @@ export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(
         {error && (
           <span
             id={`${inputId}-error`}
-            className="bds-time-picker__helper bds-time-picker__helper--error"
+            className="bds-time-picker__helper bds-time-picker__helper--tone-negative"
             role="alert"
           >
             {error}

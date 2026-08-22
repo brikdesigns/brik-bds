@@ -17,7 +17,7 @@ const meta: Meta<typeof Badge> = {
   argTypes: {
     status: {
       control: 'select',
-      options: ['positive', 'warning', 'error', 'info', 'progress', 'neutral'],
+      options: ['positive', 'warning', 'negative', 'info', 'neutral', 'brand'],
       description:
         'Semantic status tone — drives the badge color. `neutral` is a muted-gray, low-emphasis tone for inert states.',
     },
@@ -83,12 +83,12 @@ export const Warning: Story = {
 
 /** @summary Error status — failed, archived, blocked */
 export const Error: Story = {
-  args: { status: 'error', children: 'Failed' },
+  args: { tone: 'negative', children: 'Failed' },
 };
 
 /** @summary Progress — in-flight status, often with a spinner */
 export const Progress: Story = {
-  args: { status: 'progress', children: 'In Progress' },
+  args: { tone: 'info', children: 'In Progress' },
 };
 
 /** @summary Neutral — muted-gray, inert status (skipped, not linked) */
@@ -110,16 +110,16 @@ export const ContentStatusSolid: Story = {
   render: () => (
     <Stack gap="var(--gap-lg)">
       <StatusRow label="Article is live and visible">
-        <Badge status="positive">Published</Badge>
+        <Badge tone="positive">Published</Badge>
       </StatusRow>
       <StatusRow label="Being reviewed by editor">
-        <Badge status="progress">In Review</Badge>
+        <Badge tone="info">In Review</Badge>
       </StatusRow>
       <StatusRow label="Saved but not published">
-        <Badge status="warning">Draft</Badge>
+        <Badge tone="warning">Draft</Badge>
       </StatusRow>
       <StatusRow label="Has been removed">
-        <Badge status="error">Archived</Badge>
+        <Badge tone="negative">Archived</Badge>
       </StatusRow>
     </Stack>
   ),

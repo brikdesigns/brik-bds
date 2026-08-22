@@ -27,7 +27,7 @@ export interface DataViewProps {
   /** Render the loading skeleton instead of `children`. */
   loading?: boolean;
   /**
-   * When set (non-empty string), render an error `Banner` (`tone="error"`)
+   * When set (non-empty string), render an error `Banner` (`tone="negative"`)
    * instead of `children`. Fail loud — never silently swallow.
    */
   error?: string | null;
@@ -68,7 +68,7 @@ export function DataViewShell({
   children,
 }: DataViewProps & { defaultSkeleton: ReactNode }) {
   if (error) {
-    return <Banner tone="error" title={errorTitle} description={error} />;
+    return <Banner tone="negative" title={errorTitle} description={error} />;
   }
   if (loading) {
     return <>{skeleton ?? defaultSkeleton}</>;

@@ -181,7 +181,7 @@ export function FileUploader({
           'bds-file-uploader__dropzone',
           isDragOver ? 'bds-file-uploader__dropzone--active' : undefined,
           disabled ? 'bds-file-uploader__dropzone--disabled' : undefined,
-          displayError ? 'bds-file-uploader__dropzone--error' : undefined,
+          displayError ? 'bds-file-uploader__dropzone--tone-negative' : undefined,
         )}
         aria-label="File upload dropzone"
       >

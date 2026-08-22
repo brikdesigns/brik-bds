@@ -115,7 +115,7 @@ export function TaskConsole({
       className={bdsClass(
         'bds-task-console',
         `bds-task-console--${position}`,
-        allSucceeded && 'bds-task-console--success',
+        allSucceeded && 'bds-task-console--tone-positive',
         allDone && failedCount > 0 && 'bds-task-console--has-errors',
         className,
       )}
@@ -159,7 +159,7 @@ export function TaskConsole({
         <ProgressBar
           className={bdsClass(
             'bds-task-console__progress',
-            failedCount > 0 && 'bds-task-console__progress--error',
+            failedCount > 0 && 'bds-task-console__progress--tone-negative',
           )}
           value={progressValue}
           label="Task progress"

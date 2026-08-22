@@ -51,7 +51,7 @@
   cursor: not-allowed;
 }
 
-.bds-file-uploader__dropzone--error {
+.bds-file-uploader__dropzone--tone-negative {
   border-color: var(--border-negative);
 }
 

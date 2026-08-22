@@ -193,7 +193,7 @@ export const StructuredActions: Story = {
     ),
     actions: (
       <PageHeaderActions
-        destructive={<Button variant="destructive">Delete</Button>}
+        destructive={<Button variant="negative">Delete</Button>}
         secondary={<Button variant="outline">Edit</Button>}
         primary={<Button variant="primary">New Proposal</Button>}
       />

@@ -1,11 +1,16 @@
 import { type HTMLAttributes } from 'react';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredValue } from '../../utils';
 import './Meter.css';
 
 /**
- * Meter status variants — maps to BDS system color tokens
+ * Meter tone variants — maps to BDS system color tokens
  */
-export type MeterStatus = 'positive' | 'warning' | 'error' | 'neutral';
+export type MeterTone = 'positive' | 'warning' | 'negative' | 'neutral';
+
+/** @deprecated Renamed `MeterTone` (ADR-033 § 2). */
+export type MeterStatus = MeterTone;
+
+const RETIRED_TONES: Record<string, MeterTone> = { error: 'negative' };
 
 /**
  * Meter size variants — controls bar height
@@ -27,8 +32,13 @@ export interface MeterProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
   value: number;
   /** Maximum value */
   max: number;
-  /** Status variant — drives fill color via system tokens */
-  status?: MeterStatus;
+  /** Valence variant — drives fill color via system tokens */
+  tone?: MeterTone;
+  /**
+   * @deprecated Use `tone` instead (ADR-033 § 2). Honoured for one minor
+   * version; `tone` wins when both are passed.
+   */
+  status?: MeterTone;
   /** Bar height: sm=8px, md=12px, lg=16px */
   size?: MeterSize;
   /** Label text (e.g. "Pass", "Fair", "Fail") */
@@ -41,7 +51,7 @@ export interface MeterProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
   labelPosition?: MeterLabelPosition;
   /** Suffix rendered after the value (default: " Score"). Pass "" to suppress. */
   valueSuffix?: string;
-  /** Override the fill color. When set, `status` no longer drives the bar color (status is still used for ARIA semantics). Mirrors ProgressBar's `fillColor` escape hatch. */
+  /** Override the fill color. When set, `tone` no longer drives the bar color. Mirrors ProgressBar's `fillColor` escape hatch. */
   fillColor?: string;
 }
 
@@ -52,13 +62,13 @@ function defaultFormatter(value: number, max: number): string {
 /**
  * Meter — a horizontal bar gauge for visualizing scores and ratings.
  *
- * Uses BDS system color tokens for status-driven fill colors.
+ * Uses BDS system color tokens for tone-driven fill colors.
  *
  * @example
  * ```tsx
- * <Meter value={6} max={7} status="positive" label="Pass" />
- * <Meter value={3} max={10} status="warning" label="Fair" size="lg" />
- * <Meter value={1} max={5} status="error" label="Fail" showValue={false} />
+ * <Meter value={6} max={7} tone="positive" label="Pass" />
+ * <Meter value={3} max={10} tone="warning" label="Fair" size="lg" />
+ * <Meter value={1} max={5} tone="negative" label="Fail" showValue={false} />
  *
  * // Plain "X/Y" with no suffix (e.g. completion counters):
  * <Meter value={4} max={10} valueSuffix="" />
@@ -72,7 +82,8 @@ function defaultFormatter(value: number, max: number): string {
 export function Meter({
   value,
   max,
-  status = 'neutral',
+  tone,
+  status,
   size = 'md',
   label,
   showValue = true,
@@ -84,6 +95,8 @@ export function Meter({
   style,
   ...rest
 }: MeterProps) {
+  const resolvedTone =
+    resolveRetiredValue('Meter', tone !== undefined ? 'tone' : 'status', tone ?? status, RETIRED_TONES) ?? 'neutral';
   const percentage = max > 0 ? Math.min(Math.max((value / max) * 100, 0), 100) : 0;
 
   const textContent = (
@@ -110,7 +123,7 @@ export function Meter({
         className={bdsClass(
           'bds-meter__fill',
           `bds-meter__fill--${size}`,
-          !fillColor && `bds-meter__fill--${status}`,
+          !fillColor && `bds-meter__fill--tone-${resolvedTone}`,
         )}
         style={{
           width: `${percentage}%`,

@@ -1,10 +1,12 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredValue } from '../../utils';
 import './Field.css';
 
 export type FieldLayout = 'stacked' | 'inline';
 export type FieldTier = 'standard' | 'compact';
-export type FieldHelperTone = 'neutral' | 'error';
+export type FieldHelperTone = 'neutral' | 'negative';
+
+const RETIRED_TONES: Record<string, FieldHelperTone> = { error: 'negative' };
 
 export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   /** Field label — rendered above (stacked) or beside (inline) the value. */
@@ -32,7 +34,7 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
   empty?: ReactNode;
   /** Helper or validation text rendered below the value. */
   helper?: ReactNode;
-  /** Tone for the helper slot. `neutral` = muted gray (default). `error` = red. */
+  /** Tone for the helper slot. `neutral` = muted gray (default). `negative` = red. */
   helperTone?: FieldHelperTone;
 }
 
@@ -60,11 +62,13 @@ export function Field({
   tier,
   empty = 'Not set',
   helper,
-  helperTone = 'neutral',
+  helperTone,
   className,
   style,
   ...props
 }: FieldProps) {
+  const resolvedHelperTone =
+    resolveRetiredValue('Field', 'helperTone', helperTone, RETIRED_TONES) ?? 'neutral';
   const showEmpty = isEmpty(children);
 
   return (
@@ -90,7 +94,7 @@ export function Field({
         <span
           className={bdsClass(
             'bds-field__helper',
-            helperTone === 'error' && 'bds-field__helper--error',
+            resolvedHelperTone === 'negative' && 'bds-field__helper--tone-negative',
           )}
         >
           {helper}

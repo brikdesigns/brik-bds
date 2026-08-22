@@ -90,7 +90,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             className={bdsClass(
               'bds-text-input__label',
               `bds-text-input__label--${size}`,
-              hasError && 'bds-text-input__label--error',
+              hasError && 'bds-text-input__label--tone-negative',
             )}
           >
             {label}
@@ -114,7 +114,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
               Boolean(iconBefore) && 'bds-text-input-field--has-icon-before',
               Boolean(iconAfter) && 'bds-text-input-field--has-icon-after',
               hideBorder && 'bds-text-input-field--no-border',
-              hasError && 'bds-text-input-field--error',
+              hasError && 'bds-text-input-field--tone-negative',
             )}
             aria-invalid={hasError}
             aria-describedby={

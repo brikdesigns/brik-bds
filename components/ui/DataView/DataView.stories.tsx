@@ -47,7 +47,7 @@ const meta: Meta<typeof TableView> = {
     error: {
       control: 'text',
       description:
-        'Non-empty string renders an error `Banner` (`tone="error"`). Highest precedence — error → loading → empty → content.',
+        'Non-empty string renders an error `Banner` (`tone="negative"`). Highest precedence — error → loading → empty → content.',
     },
     errorTitle: {
       control: 'text',

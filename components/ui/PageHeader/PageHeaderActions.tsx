@@ -18,7 +18,7 @@ export interface PageHeaderActionsProps {
    */
   secondary?: ReactNode;
   /**
-   * Destructive action (`Button variant="destructive"` or an equivalent
+   * Destructive action (`Button variant="negative"` or an equivalent
    * wrapper). Rendered far left, visually separated from the affirmative
    * actions so it is never adjacent to the primary.
    */
@@ -63,7 +63,7 @@ export interface PageHeaderActionsProps {
  *   title="Acme Corp"
  *   actions={
  *     <PageHeaderActions
- *       destructive={<Button variant="destructive">Delete</Button>}
+ *       destructive={<Button variant="negative">Delete</Button>}
  *       secondary={<Button variant="outline">Edit</Button>}
  *       primary={<Button variant="primary">New Proposal</Button>}
  *     />

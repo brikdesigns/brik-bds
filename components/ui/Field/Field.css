@@ -112,7 +112,7 @@
   display: block;
 }
 
-.bds-field__helper--error {
+.bds-field__helper--tone-negative {
   color: var(--text-accent-red);
 }
 }

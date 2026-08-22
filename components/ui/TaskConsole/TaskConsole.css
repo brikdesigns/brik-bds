@@ -43,7 +43,7 @@
   box-sizing: border-box;
 }
 
-.bds-task-console--success .bds-task-console__header {
+.bds-task-console--tone-positive .bds-task-console__header {
   background-color: var(--surface-positive);
 }
 
@@ -97,7 +97,7 @@
   border-radius: 0;
 }
 
-.bds-task-console__progress--error .bds-progress-bar__fill {
+.bds-task-console__progress--tone-negative .bds-progress-bar__fill {
   background-color: var(--background-negative);
 }
 

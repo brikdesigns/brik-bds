@@ -7,20 +7,20 @@ import { FilterToggle } from '../FilterToggle';
 import { Button } from '../Button';
 import { ButtonGroup } from '../ButtonGroup';
 import { DataSection } from '../DataSection';
-import type { CounterStatus } from '../Counter';
+import type { CounterTone } from '../Counter';
 
-/* ─── Counter status options for the activeStatus Control ───────
-   Mirrors `CounterStatus` from ../Counter exactly. The `satisfies`
-   cast catches drift if Counter adds / renames statuses.
+/* ─── Counter tone options for the activeStatus Control ─────────
+   Mirrors `CounterTone` from ../Counter exactly. The `satisfies`
+   cast catches drift if Counter adds / renames tones.
    ─────────────────────────────────────────────────────────────── */
-const counterStatusOptions = [
+const counterToneOptions = [
   'brand',
-  'success',
-  'error',
+  'positive',
+  'negative',
   'warning',
-  'progress',
+  'info',
   'neutral',
-] satisfies CounterStatus[];
+] satisfies CounterTone[];
 
 /* ─── Sample data ─────────────────────────────────────────────── */
 
@@ -80,7 +80,7 @@ const meta: Meta<typeof FilterBar> = {
     },
     activeStatus: {
       control: 'select',
-      options: counterStatusOptions,
+      options: counterToneOptions,
       description:
         'Counter status when a filter is active. Default `brand` — gives the count a brand-color pill while filtered. ' +
         '`success` / `error` / `warning` / `progress` convey semantic meaning about the filtered set (e.g. error status when filtering to error rows). ' +

@@ -32,15 +32,15 @@
     stroke var(--duration-200) var(--ease-out);
 }
 
-.bds-progress-circle--positive .bds-progress-circle__fill {
+.bds-progress-circle--tone-positive .bds-progress-circle__fill {
   stroke: var(--background-positive);
 }
 
-.bds-progress-circle--warning .bds-progress-circle__fill {
+.bds-progress-circle--tone-warning .bds-progress-circle__fill {
   stroke: var(--background-warning);
 }
 
-.bds-progress-circle--negative .bds-progress-circle__fill {
+.bds-progress-circle--tone-negative .bds-progress-circle__fill {
   stroke: var(--background-negative);
 }
 

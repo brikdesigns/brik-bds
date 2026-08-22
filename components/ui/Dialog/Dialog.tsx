@@ -1,9 +1,11 @@
 import { type ReactNode, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredValue } from '../../utils';
 import './Dialog.css';
 
-export type DialogVariant = 'default' | 'destructive';
+export type DialogVariant = 'default' | 'negative';
+
+const RETIRED_VARIANTS: Record<string, DialogVariant> = { destructive: 'negative' };
 
 export interface DialogProps {
   /** Whether the dialog is rendered. Returns `null` when false. */
@@ -22,7 +24,7 @@ export interface DialogProps {
   cancelLabel?: string;
   /** Called when the primary action is clicked. Caller is responsible for closing the dialog (typically by toggling `isOpen`). */
   onConfirm?: () => void;
-  /** Visual variant. `default` uses the brand-primary confirm button; `destructive` switches it to the destructive treatment for delete-style confirmations. */
+  /** Visual variant. `default` uses the brand-primary confirm button; `negative` switches it to the destructive treatment for delete-style confirmations. */
   variant?: DialogVariant;
   /** Close when the backdrop is clicked. Default `true`. */
   closeOnBackdrop?: boolean;
@@ -35,19 +37,19 @@ export interface DialogProps {
  *
  * @deprecated Use `<Modal preset="confirm">` instead. Same behavior, same
  * API (title, description, confirmLabel, cancelLabel, onConfirm), with
- * `confirmVariant="destructive"` covering this component's `variant="destructive"`.
+ * `confirmVariant="negative"` covering this component's `variant="negative"`.
  * Slated for deletion in a future major version once consumers migrate.
  *
  * Migration:
  * ```tsx
  * // before
  * <Dialog isOpen={open} onClose={close} title="Delete?" description="..."
- *   confirmLabel="Delete" onConfirm={handleDelete} variant="destructive" />
+ *   confirmLabel="Delete" onConfirm={handleDelete} variant="negative" />
  *
  * // after
  * <Modal isOpen={open} onClose={close} preset="confirm" title="Delete?"
  *   description="..." confirmLabel="Delete" onConfirm={handleDelete}
- *   confirmVariant="destructive" />
+ *   confirmVariant="negative" />
  * ```
  *
  * Tracked under ADR-004 — see docs/adrs/ADR-004-component-bloat-guardrails.md.
@@ -63,9 +65,11 @@ export function Dialog({
   confirmLabel = 'Confirm',
   cancelLabel = 'Cancel',
   onConfirm,
-  variant = 'default',
+  variant,
   closeOnBackdrop = true,
 }: DialogProps) {
+  const resolvedVariant =
+    resolveRetiredValue('Dialog', 'variant', variant, RETIRED_VARIANTS) ?? 'default';
   const handleEscape = useCallback(
     (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); },
     [onClose],
@@ -117,7 +121,9 @@ export function Dialog({
             type="button"
             className={bdsClass(
               'bds-dialog__button',
-              variant === 'destructive' ? 'bds-dialog__button--destructive' : 'bds-dialog__button--confirm',
+              resolvedVariant === 'negative'
+                ? 'bds-dialog__button--tone-negative'
+                : 'bds-dialog__button--confirm',
             )}
             onClick={() => onConfirm?.()}
           >

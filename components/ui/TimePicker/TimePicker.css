@@ -30,7 +30,7 @@
   text-transform: capitalize;
 }
 
-.bds-time-picker__label--error {
+.bds-time-picker__label--tone-negative {
   color: var(--color-system-red);
 }
 
@@ -66,11 +66,11 @@
   border-color: var(--border-primary);
 }
 
-.bds-time-picker__trigger--error {
+.bds-time-picker__trigger--tone-negative {
   border-color: var(--border-negative);
 }
 
-.bds-time-picker__trigger--error:hover:not(:disabled) {
+.bds-time-picker__trigger--tone-negative:hover:not(:disabled) {
   border-color: var(--border-negative);
 }
 
@@ -111,7 +111,7 @@
   color: var(--text-muted);
 }
 
-.bds-time-picker__helper--error {
+.bds-time-picker__helper--tone-negative {
   color: var(--color-system-red);
 }
 

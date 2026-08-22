@@ -290,7 +290,7 @@
   color: var(--text-positive);
 }
 
-.bds-card__preset-control-status--error .bds-card__preset-control-status-label {
+.bds-card__preset-control-status--failed .bds-card__preset-control-status-label {
   color: var(--text-negative);
 }
 

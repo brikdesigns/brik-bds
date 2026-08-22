@@ -28,11 +28,11 @@ const meta: Meta<typeof Button> = {
         'ghost',
         'inverse',
         'on-color',
-        'destructive',
+        'negative',
         'positive',
         'danger',
-        'danger-outline',
-        'danger-ghost',
+        'outline',
+        'ghost',
       ],
       description:
         'Brand hierarchy: `primary` → `outline` → `secondary` → `ghost`. ' +
@@ -192,7 +192,7 @@ export const IconOnly: Story = {
       <Button variant="outline" icon={<Download />} label="Download" />
       <Button variant="secondary" icon={<Plus />} label="Add" />
       <Button variant="ghost" icon={<Close />} label="Close" />
-      <Button variant="destructive" icon={<Trash />} label="Delete" />
+      <Button variant="negative" icon={<Trash />} label="Delete" />
       <Button variant="positive" icon={<Plus />} label="Approve" />
     </Row>
   ),
@@ -260,7 +260,7 @@ export const Disabled: Story = {
         Ghost
       </Button>
       <Button variant="ghost" icon={<Close />} label="Close" disabled />
-      <Button variant="danger-ghost" icon={<Trash />} label="Delete" disabled />
+      <Button variant="ghost" icon={<Trash />} label="Delete" disabled />
     </Row>
   ),
   play: async ({ canvasElement }) => {

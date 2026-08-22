@@ -157,7 +157,7 @@ function InteractiveCards() {
                 <Tag size="sm">Daily</Tag>
               </>
             }
-            trailingTag={<Badge status="error" size="sm">Critical</Badge>}
+            trailingTag={<Badge tone="negative" size="sm">Critical</Badge>}
           />
         ))}
       </BoardColumn>
@@ -196,7 +196,7 @@ export const Density: Story = {
           checked={false}
           onCheckedChange={() => {}}
           tags={<Tag size="sm">Engineering</Tag>}
-          trailingTag={<Badge status="error" size="sm">Critical</Badge>}
+          trailingTag={<Badge tone="negative" size="sm">Critical</Badge>}
         />
         <BoardCard
           title="Clean countertops and surfaces"
@@ -215,7 +215,7 @@ export const Density: Story = {
           checked={false}
           onCheckedChange={() => {}}
           tags={<Tag size="sm">Engineering</Tag>}
-          trailingTag={<Badge status="error" size="sm">Critical</Badge>}
+          trailingTag={<Badge tone="negative" size="sm">Critical</Badge>}
         />
         <BoardCard
           density="compact"
@@ -319,7 +319,7 @@ function FullBoardViewExample() {
             <Tag size="sm">Daily</Tag>
           </>
         }
-        trailingTag={<Badge status="error" size="sm">Critical</Badge>}
+        trailingTag={<Badge tone="negative" size="sm">Critical</Badge>}
       />
     ));
 

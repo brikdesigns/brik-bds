@@ -27,10 +27,10 @@ import { Meter } from '@brikdesigns/bds';
 Four status colors map to fill colors via system tokens.
 
 ```tsx
-<Meter value={6} max={7} status="positive" label="Pass" />
-<Meter value={4} max={7} status="warning" label="Fair" />
-<Meter value={2} max={7} status="error" label="Fail" />
-<Meter value={5} max={7} status="neutral" />
+<Meter value={6} max={7} tone="positive" label="Pass" />
+<Meter value={4} max={7} tone="warning" label="Fair" />
+<Meter value={2} max={7} tone="negative" label="Fail" />
+<Meter value={5} max={7} tone="neutral" />
 ```
 
 | Status | Use |
@@ -67,7 +67,7 @@ By default, Meter renders the value as `{value}/{max}`. Use `valueFormatter` to 
 <Meter
   value={0.73}
   max={1}
-  status="warning"
+  tone="warning"
   label="Completion"
   valueFormatter={(v) => `${Math.round(v * 100)}%`}
 />
@@ -78,7 +78,7 @@ By default, Meter renders the value as `{value}/{max}`. Use `valueFormatter` to 
 Set `showValue={false}` to hide the displayed value.
 
 ```tsx
-<Meter value={45} max={100} status="warning" showValue={false} />
+<Meter value={45} max={100} tone="warning" showValue={false} />
 ```
 
 ## When *not* to use
@@ -101,7 +101,8 @@ Set `showValue={false}` to hide the displayed value.
 |---|---|---|
 | `value` | `number` *(required)* | — |
 | `max` | `number` *(required)* | — |
-| `status` | `'positive' \| 'warning' \| 'error' \| 'neutral'` | `'neutral'` |
+| `tone` | `MeterTone` | `'neutral'` |
+| `status` | `MeterTone` | — |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
 | `label` | `string` | — |
 | `showValue` | `boolean` | `true` |

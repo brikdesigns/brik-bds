@@ -5,7 +5,7 @@ import {
   type ReactNode,
   type Ref,
 } from 'react';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredValue } from '../../utils';
 import './Button.css';
 
 /**
@@ -19,12 +19,15 @@ import './Button.css';
  * - `inverse`     — For dark theme surfaces (flips with theme)
  * - `on-color`    — For brand-colored surfaces (does not flip with theme)
  *
- * System variants (semantic actions):
- * - `destructive` — Destructive action (system red)
+ * Valence variants (semantic actions):
+ * - `negative`    — Destructive action (system red)
  * - `positive`    — Confirming action (system green)
  *
- * Legacy aliases (still supported, prefer system variants):
- * - `danger` / `danger-outline` / `danger-ghost` — kept for back-compat.
+ * Retired spellings (ADR-033 § 1, honoured for one minor then removed):
+ * `destructive`, `danger`, `danger-outline`, `danger-ghost` → `negative`.
+ * The `danger*` trio carried the brand accent-red rather than the system
+ * negative; it had zero call sites across all eight consumer repos, so it
+ * folds into `negative` rather than earning a tone × form split.
  *
  * `selected` is NOT a variant — it is a boolean state prop. Pass
  * `selected={true}` alongside any variant to render the selected modifier.
@@ -36,11 +39,26 @@ export type ButtonVariant =
   | 'ghost'
   | 'inverse'
   | 'on-color'
-  | 'destructive'
-  | 'positive'
-  | 'danger'
-  | 'danger-outline'
-  | 'danger-ghost';
+  | 'negative'
+  | 'positive';
+
+const RETIRED_VARIANTS: Record<string, ButtonVariant> = {
+  destructive: 'negative',
+  danger: 'negative',
+  'danger-outline': 'negative',
+  'danger-ghost': 'negative',
+};
+
+/**
+ * The two valence values live in a form-axis union, so their modifier carries
+ * the `tone-` prefix ADR-033 § 4 requires while the form values stay bare
+ * (those are #1927's caseload, not this one).
+ */
+const VALENCE_VARIANTS = new Set<ButtonVariant>(['negative', 'positive']);
+
+function variantModifier(variant: ButtonVariant): string {
+  return VALENCE_VARIANTS.has(variant) ? `bds-button--tone-${variant}` : `bds-button--${variant}`;
+}
 
 /** Button sizes — shared across text and icon-only modes. */
 export type ButtonSize = 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
@@ -149,7 +167,7 @@ export function composeButtonClasses({
   return bdsClass(
     'bds-button',
     iconOnly && 'bds-icon-button',
-    `bds-button--${variant}`,
+    variantModifier(resolveRetiredValue('Button', 'variant', variant, RETIRED_VARIANTS) ?? 'primary'),
     iconOnly ? `bds-icon-button--${size}` : `bds-button--${size}`,
     fullWidth && 'bds-button--full-width',
     loading && 'bds-button--loading',

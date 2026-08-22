@@ -18,10 +18,10 @@ Banner is the canonical full-width banner component. The `tone` prop switches be
     },
     {
       title: 'Toast',
-      preview: <BDS.Toast title="Saved" variant="success" />,
+      preview: <BDS.Toast title="Saved" tone="positive" />,
       whenToUse: 'Ephemeral confirmation that auto-dismisses. Save success, error retry, copied-to-clipboard.',
       whenNotToUse: 'Persistent state — user might miss it.',
-      code: `<Toast title="..." variant="success" />`,
+      code: `<Toast title="..." tone="positive" />`,
     },
     {
       title: 'Tooltip',
@@ -76,13 +76,13 @@ Brand-primary surface with inverse text. The marketing-notice mode.
 />
 
 <Banner
-  tone="error"
+  tone="negative"
   title="Deployment failed"
   description="Build #4291 hit an unrecoverable error. Logs attached."
 />
 
 <Banner
-  tone="information"
+  tone="info"
   title="Maintenance window"
   description="System will be unavailable Saturday 2-4am UTC."
 />
@@ -104,7 +104,7 @@ Pass `onDismiss` to render a close button. Common with announcements.
 `description` is optional — title-only banners work for short messages.
 
 ```tsx
-<Banner title="System updates tonight at 11pm UTC" tone="information" />
+<Banner title="System updates tonight at 11pm UTC" tone="info" />
 ```
 
 ## When *not* to use
@@ -140,7 +140,7 @@ AlertBanner was deprecated and removed (see [brik-bds#725](https://github.com/br
 
 ```tsx
 // Before
-<AlertBanner variant="warning" title="..." description="..." />
+<AlertBanner tone="warning" title="..." description="..." />
 
 // After
 <Banner tone="warning" title="..." description="..." />

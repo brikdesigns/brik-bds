@@ -1,12 +1,20 @@
 import { type ReactNode, type HTMLAttributes } from 'react';
 import { Icon } from '../Icon';
 import { CheckCircle, WarningCircle, Warning, Info } from '../../icons';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredValue } from '../../utils';
 import { Badge } from '../Badge';
 import { CloseButton } from '../CloseButton';
 import './Toast.css';
 
-export type ToastVariant = 'default' | 'success' | 'error' | 'warning' | 'info';
+export type ToastTone = 'default' | 'positive' | 'negative' | 'warning' | 'info';
+
+/** @deprecated Renamed `ToastTone` (ADR-033 § 2). */
+export type ToastVariant = ToastTone;
+
+const RETIRED_TONES: Record<string, ToastTone> = {
+  success: 'positive',
+  error: 'negative',
+};
 
 export type ToastUrgency = 'polite' | 'assertive';
 
@@ -15,8 +23,13 @@ export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'
   title: ReactNode;
   /** Description text below the title */
   description?: ReactNode;
-  /** Visual variant — renders a colored Badge icon; surface stays neutral */
-  variant?: ToastVariant;
+  /** Valence variant — renders a colored Badge icon; surface stays neutral */
+  tone?: ToastTone;
+  /**
+   * @deprecated Use `tone` instead (ADR-033 § 2). Honoured for one minor
+   * version; `tone` wins when both are passed.
+   */
+  variant?: ToastTone;
   /**
    * How insistently a screen reader announces the toast.
    *
@@ -25,7 +38,7 @@ export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'
    * interrupts whatever is being spoken, so reserve it for messages the
    * user must act on immediately (data loss, session expiry).
    *
-   * Note this is independent of `variant`: an `error` toast reporting a
+   * Note this is independent of `tone`: a `negative` toast reporting a
    * failed autosave retry is still `polite`.
    */
   urgency?: ToastUrgency;
@@ -33,11 +46,11 @@ export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'
   onDismiss?: () => void;
 }
 
-const variantBadge: Record<Exclude<ToastVariant, 'default'>, { status: 'positive' | 'error' | 'warning' | 'info'; icon: string }> = {
-  success: { status: 'positive', icon: CheckCircle },
-  error: { status: 'error', icon: WarningCircle },
-  warning: { status: 'warning', icon: Warning },
-  info: { status: 'info', icon: Info },
+const toneBadge: Record<Exclude<ToastTone, 'default'>, { tone: 'positive' | 'negative' | 'warning' | 'info'; icon: string }> = {
+  positive: { tone: 'positive', icon: CheckCircle },
+  negative: { tone: 'negative', icon: WarningCircle },
+  warning: { tone: 'warning', icon: Warning },
+  info: { tone: 'info', icon: Info },
 };
 
 /**
@@ -53,14 +66,18 @@ const variantBadge: Record<Exclude<ToastVariant, 'default'>, { status: 'positive
 export function Toast({
   title,
   description,
-  variant = 'default',
+  tone,
+  variant,
   urgency = 'polite',
   onDismiss,
   className,
   style,
   ...props
 }: ToastProps) {
-  const badge = variant !== 'default' ? variantBadge[variant] : null;
+  const resolvedTone =
+    resolveRetiredValue('Toast', tone !== undefined ? 'tone' : 'variant', tone ?? variant, RETIRED_TONES) ??
+    'default';
+  const badge = resolvedTone !== 'default' ? toneBadge[resolvedTone] : null;
   // `role="alert"` carries an implicit `aria-live="assertive"`, so pairing
   // role with the matching live value keeps the two from disagreeing in
   // browsers that read one and not the other.
@@ -77,7 +94,7 @@ export function Toast({
       <div className="bds-toast__content">
         {badge && (
           <Badge
-            status={badge.status}
+            tone={badge.tone}
             size="xs"
             icon={<Icon icon={badge.icon} />}
           />

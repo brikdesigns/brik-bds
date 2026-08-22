@@ -22,7 +22,7 @@ export interface BannerGroupProps extends HTMLAttributes<HTMLDivElement> {
  * belongs to the parent layout's `gap`, same as any other block.
  *
  * Order is the author's responsibility, not the component's: sort children
- * `error → warning → information → success → announcement`, global before
+ * `negative → warning → info → positive → announcement`, global before
  * contextual within a tone. See the banner-groups build standard.
  *
  * Sibling of `BadgeGroup` / `TagGroup` — same API shape, vertical axis.
