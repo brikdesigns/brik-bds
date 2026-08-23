@@ -32,7 +32,7 @@
  *     - section.visualNotes is null →
  *         same as unknown — falls back
  *
- * ## Registry (12 blueprints)
+ * ## Registry (11 blueprints)
  *
  * Every key in BLUEPRINT_REGISTRY has a corresponding component file in
  * this folder and a re-export in index.ts. The registry key set is
@@ -45,7 +45,6 @@
  *   hero_split_60_40              → HeroSplit6040.astro
  *   hero_split_image_card_overlay → HeroSplitImageCardOverlay.astro
  *   hero_interior_minimal         → HeroInteriorMinimal.astro
- *   stats_dark_bar                → StatsDarkBar.astro
  *   services_detail_two_column    → ServicesDetailTwoColumn.astro
  *   services_3col_card_grid       → Services3ColCardGrid.astro
  *   support_plan_callout_split    → SupportPlanCalloutSplit.astro
@@ -65,7 +64,6 @@ import type { BlueprintSection, ClientFacts, ResolvedTheme } from './types';
 import HeroSplit6040 from './HeroSplit6040.astro';
 import HeroSplitImageCardOverlay from './HeroSplitImageCardOverlay.astro';
 import HeroInteriorMinimal from './HeroInteriorMinimal.astro';
-import StatsDarkBar from './StatsDarkBar.astro';
 import ServicesDetailTwoColumn from './ServicesDetailTwoColumn.astro';
 import Services3ColCardGrid from './Services3ColCardGrid.astro';
 import SupportPlanCalloutSplit from './SupportPlanCalloutSplit.astro';
@@ -83,7 +81,6 @@ const BLUEPRINT_REGISTRY = {
   hero_split_60_40: HeroSplit6040,
   hero_split_image_card_overlay: HeroSplitImageCardOverlay,
   hero_interior_minimal: HeroInteriorMinimal,
-  stats_dark_bar: StatsDarkBar,
   services_detail_two_column: ServicesDetailTwoColumn,
   services_3col_card_grid: Services3ColCardGrid,
   support_plan_callout_split: SupportPlanCalloutSplit,

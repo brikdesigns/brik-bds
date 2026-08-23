@@ -57,6 +57,7 @@ import { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
 import { HeroInteriorMinimal } from './HeroInteriorMinimal';
 import { ServicesDetailTwoColumn } from './ServicesDetailTwoColumn';
 import { AboutStorySplit } from './AboutStorySplit';
+import { TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge';
 import { CtaDarkCentered } from './CtaDarkCentered';
 import { CtaSplitContact } from './CtaSplitContact';
 import { BlueprintFallback } from './BlueprintFallback';
@@ -72,6 +73,7 @@ const BLUEPRINT_REGISTRY: Partial<
   support_plan_callout_split: SupportPlanCalloutSplit,
   features_3col_branded_dark: Features3ColBrandedDark,
   about_story_split: AboutStorySplit,
+  testimonials_featured_large: TestimonialsFeaturedLarge,
   cta_dark_centered: CtaDarkCentered,
   cta_split_contact: CtaSplitContact,
 };

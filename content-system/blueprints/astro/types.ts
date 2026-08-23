@@ -71,7 +71,6 @@ export const WIRED_BLUEPRINT_KEYS = [
   'hero_split_60_40',
   'hero_split_image_card_overlay',
   'hero_interior_minimal',
-  'stats_dark_bar',
   'services_detail_two_column',
   'services_3col_card_grid',
   'support_plan_callout_split',
