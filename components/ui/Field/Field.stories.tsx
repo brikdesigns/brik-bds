@@ -15,7 +15,7 @@ const meta: Meta<typeof Field> = {
   argTypes: {
     label: { control: 'text' },
     children: { control: 'text' },
-    layout: { control: 'select', options: ['stacked', 'inline'] },
+    orientation: { control: 'select', options: ['vertical', 'horizontal'] },
     tier: { control: 'select', options: ['standard', 'compact'] },
     empty: { control: 'text' },
     helper: { control: 'text' },
@@ -33,14 +33,14 @@ const Frame = ({ width = '360px', children }: { width?: string; children: React.
 );
 
 /**
- * Flip Controls to explore layout + empty fallbacks.
+ * Flip Controls to explore orientation + empty fallbacks.
  * @summary Canonical Field label + value pair
  */
 export const Default: Story = {
   args: {
     label: 'Status',
     children: 'Active',
-    layout: 'stacked',
+    orientation: 'vertical',
   },
   render: (args) => (
     <Frame>

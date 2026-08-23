@@ -2,18 +2,33 @@ import { type HTMLAttributes, type ReactNode } from 'react';
 import { bdsClass, resolveRetiredValue } from '../../utils';
 import './Field.css';
 
-export type FieldLayout = 'stacked' | 'inline';
+export type FieldOrientation = 'vertical' | 'horizontal';
+
+/** @deprecated Renamed `FieldOrientation`; values `stacked`/`inline` → `vertical`/`horizontal` (ADR-033 § 2). */
+export type FieldLayout = FieldOrientation;
+
 export type FieldTier = 'standard' | 'compact';
 export type FieldHelperTone = 'neutral' | 'negative';
 
 const RETIRED_TONES: Record<string, FieldHelperTone> = { error: 'negative' };
 
+/** Retired orientation spellings, honoured for one minor version (ADR-033 § 2). */
+const RETIRED_ORIENTATIONS: Record<string, FieldOrientation> = {
+  stacked: 'vertical',
+  inline: 'horizontal',
+};
+
 export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
-  /** Field label — rendered above (stacked) or beside (inline) the value. */
+  /** Field label — rendered above (vertical) or beside (horizontal) the value. */
   label: string;
   /** Value content — text, <TagGroup>, <BulletList>, <a>, or any ReactNode. */
   children?: ReactNode;
-  /** Stacked = label above value (default). Inline = label / value on one row. */
+  /** `vertical` = label above value (default). `horizontal` = label / value on one row. */
+  orientation?: FieldOrientation;
+  /**
+   * @deprecated Use `orientation` instead; `stacked`→`vertical`, `inline`→`horizontal`
+   * (ADR-033 § 2). Honoured for one minor version; `orientation` wins when both are passed.
+   */
   layout?: FieldLayout;
   /**
    * Typography tier override. **Omit it** — the tier is derived from the
@@ -58,7 +73,8 @@ function isEmpty(value: ReactNode): boolean {
 export function Field({
   label,
   children,
-  layout = 'stacked',
+  orientation,
+  layout,
   tier,
   empty = 'Not set',
   helper,
@@ -69,13 +85,21 @@ export function Field({
 }: FieldProps) {
   const resolvedHelperTone =
     resolveRetiredValue('Field', 'helperTone', helperTone, RETIRED_TONES) ?? 'neutral';
+  // `orientation` wins; `layout` accepts the retired `stacked`/`inline` spellings.
+  const resolvedOrientation =
+    resolveRetiredValue(
+      'Field',
+      orientation !== undefined ? 'orientation' : 'layout',
+      (orientation ?? layout) as FieldOrientation,
+      RETIRED_ORIENTATIONS,
+    ) ?? 'vertical';
   const showEmpty = isEmpty(children);
 
   return (
     <div
       className={bdsClass(
         'bds-field',
-        `bds-field--${layout}`,
+        `bds-field--${resolvedOrientation}`,
         // Only an explicit tier emits a class. No class = the container's
         // inherited default applies, which is how context adaptivity works.
         tier && `bds-field--${tier}`,
