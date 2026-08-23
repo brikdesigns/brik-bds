@@ -137,12 +137,12 @@ Canonical Figma tokens for positive, negative, and warning states. Background va
   columns={4}
 />
 
-**Hues with no valence (gap-fills)** — `purple` and `orange` are hue names, not valence values, so ADR-033 § 1 has no home for them yet. Amendment owed on [#1958](https://github.com/brikdesigns/brik-bds/issues/1958).
+**Hues with no valence** — `purple` and `orange` are hue names, not valence values, so ADR-033 § 1's five words have no slot for them. They belong to the hue-source scope documented under [Accent](#accent) below and are Figma-sourced there, so [#1958](https://github.com/brikdesigns/brik-bds/issues/1958) retired the `--background-status-{purple,orange}` spellings into it rather than amending the ADR.
 
 <ColorGrid
   colors={[
-    { name: 'background-status-purple', cssVar: '--background-status-purple' },
-    { name: 'background-status-orange', cssVar: '--background-status-orange' },
+    { name: 'background-accent-purple', cssVar: '--background-accent-purple' },
+    { name: 'background-accent-orange', cssVar: '--background-accent-orange' },
   ]}
   columns={2}
 />

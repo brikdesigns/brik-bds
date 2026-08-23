@@ -24,7 +24,7 @@ const TIER_STYLES: Record<TierName, { bg: string; color: string; label: string }
     label: 'GSAP',
   },
   premium: {
-    bg: 'var(--background-status-purple)',
+    bg: 'var(--background-accent-purple)',
     color: 'var(--text-on-color-dark)',
     label: 'Premium',
   },

@@ -16,7 +16,7 @@
  * ADR-033 closes those lists. This gate is what stops them re-opening — it is
  * #1910 AC #5, and ADR-033 § Enforcement is its spec.
  *
- * ── The five rules (ADR-033 § Enforcement) ─────────────────────────────────
+ * ── The six rules (ADR-033 § Enforcement) ──────────────────────────────────
  *
  *   1  step        A token's step falls outside its family's vocabulary (§ 3)
  *                  and is not a § Named exception. Reads dist/tokens.css.
@@ -28,6 +28,19 @@
  *                  word. Reads components/ui/**\/*.css.
  *   5  vocabulary  A word in a governed axis position that is on no closed
  *                  list — § 6's default-deny. Reads both.
+ *   6  reference   A `var(--*-status-*)` consumption of the family § Token
+ *                  families retired and #1958 deleted. Reads components/,
+ *                  content-system/, lib/, docs-site/.
+ *
+ * ── Why rule 6 reads references, when 1-5 read names ───────────────────────
+ *
+ * Rules 1-5 judge a name at the site that DECLARES it, which is the right unit
+ * for a word that is merely wrong. It is the wrong unit for a word that is
+ * gone. Deleting `--background-status-error` does not break a build: an
+ * unresolvable custom property is not a CSS error, so `background: var(--back
+ * ground-status-error)` renders transparent and ships. #1958 deleted twenty
+ * such names, and the only thing that can catch the twenty-first typo is a gate
+ * reading the consumption side.
  *
  * ── Why rule 2 is not lint-token-shadowing ─────────────────────────────────
  *
@@ -677,6 +690,158 @@ function vocabularyFindings(unions, mods) {
   return findings;
 }
 
+// ── Rule 6 — the deleted family must not come back ─────────────────────────
+
+/**
+ * Every directory in this repo where a reference to a deleted token can live.
+ * `components/` + `content-system/` are the published surface, `stories/` +
+ * `.storybook/` render it, `tokens/` can alias one name to another, and
+ * `docs-site/` is where both of the live references #1958 found actually were —
+ * #1956 had cleared `components/ui`, and no gate had ever read the docs site.
+ *
+ * #1958's AC also named `lib/`, from the `@/lib/tokens` import path in
+ * CLAUDE.md. That path is a CONSUMER-repo alias; brik-bds has no root `lib/`
+ * (`find . -maxdepth 3 -type d -name lib` returns only `docs-site/lib`, already
+ * covered here, and `scripts/lib`, which is tooling). Listing it would have
+ * been a silently-empty scan, which is why a named-but-missing directory is a
+ * hard failure below rather than an empty walk.
+ */
+const REFERENCE_DIRS = ['components', 'content-system', 'docs-site', 'stories', 'tokens', '.storybook'];
+const REFERENCE_EXTS = ['.css', '.ts', '.tsx', '.mdx'];
+const REFERENCE_SKIP_DIRS = new Set(['node_modules', '__tests__', '.next', 'dist', 'out', 'build']);
+
+/**
+ * The two shapes a reference takes. Prose ABOUT the retired family is legal —
+ * this ADR, this file, and the migration notes all have to be able to name it —
+ * so matching a bare token name would make the gate un-documentable. Both
+ * patterns therefore require the syntax that makes the name load-bearing.
+ */
+const REFERENCE_PATTERNS = [
+  // The CSS consumption. This is the form that renders nothing once the name is
+  // deleted, and the form the AC names.
+  { re: /var\(\s*(--(?:[a-z0-9-]+-)?status-[a-z0-9-]+)/g, form: 'var()' },
+  // The docs-site ColorGrid form: the name is a data string the component wraps
+  // in var() at render time, so a stale one paints a blank swatch and no
+  // var()-shaped grep finds it. Both `status-` swatches in color.mdx were live
+  // in this form when #1958 started, and the handoff that scoped the issue read
+  // them as zero consumers because it grepped for `var(`.
+  { re: /cssVar:\s*'(--(?:[a-z0-9-]+-)?status-[a-z0-9-]+)'/g, form: 'cssVar' },
+];
+
+function walkExts(dir, exts, acc = []) {
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return acc;
+  }
+  for (const e of entries) {
+    const child = path.join(dir, e.name);
+    if (e.isDirectory()) {
+      if (REFERENCE_SKIP_DIRS.has(e.name)) continue;
+      walkExts(child, exts, acc);
+    } else if (exts.some((x) => e.name.endsWith(x))) {
+      // Stories and tests are IN scope here, unlike walk(): a story that paints
+      // itself with a deleted token is a broken story, and there is no
+      // vocabulary judgement to be blind to — the name either exists or it does
+      // not.
+      acc.push(child);
+    }
+  }
+  return acc;
+}
+
+function collectReferences(dirs) {
+  const byName = new Map();
+  let files = 0;
+  for (const dir of dirs) {
+    // A directory that moved or was renamed must not read as a directory with
+    // nothing in it. walkExts() swallows ENOENT so one bad entry cannot abort
+    // the others; the coverage claim is asserted here instead.
+    if (!fs.existsSync(dir)) {
+      throw new Error(`reference dir ${dir} does not exist — fix REFERENCE_DIRS or pass --refs`);
+    }
+    for (const file of walkExts(dir, REFERENCE_EXTS)) {
+      files += 1;
+      const src = fs.readFileSync(file, 'utf8');
+      for (const { re, form } of REFERENCE_PATTERNS) {
+        for (const m of src.matchAll(re)) {
+          const name = m[1];
+          if (!byName.has(name)) byName.set(name, []);
+          byName.get(name).push({ where: `${file}:${lineOf(src, m.index)}`, form });
+        }
+      }
+    }
+  }
+  return { byName, files };
+}
+
+/**
+ * What each deleted name actually resolved to, transcribed from the block
+ * #1958 removed from `tokens/gap-fills.css` rather than derived from the name.
+ *
+ * Deriving it is what makes a gate print a target that breaks the thing it was
+ * asked to fix — #1982's failure mode, one rule over. Three of these are not
+ * "drop the `status-` segment": the `-subtle` names fold into `surface`
+ * (the purpose already means the subtle tint, #1909 § D), `status-neutral`
+ * aliased `--surface-neutral` and NOT `--background-neutral` (the saturated
+ * #363636 is a different colour from the #d4d4d4 it shipped), and a retired
+ * valence word has to route through § 1 — `--background-status-error` is
+ * `--background-negative`, never `--background-error`, which does not exist.
+ */
+const REFERENCE_TARGETS = {
+  '--background-status-error': '--background-negative',
+  '--background-status-error-subtle': '--surface-negative',
+  '--background-status-success': '--background-positive',
+  '--background-status-success-subtle': '--surface-positive',
+  '--background-status-warning': '--background-warning',
+  '--background-status-warning-subtle': '--surface-warning',
+  '--text-status-error': '--text-negative',
+  '--text-status-success': '--text-positive',
+  '--text-status-warning': '--text-warning',
+  '--surface-status-error': '--surface-negative',
+  '--surface-status-success': '--surface-positive',
+  '--surface-status-warning': '--surface-warning',
+  '--background-status-info': '--background-info',
+  '--background-status-info-subtle': '--surface-info',
+  '--text-status-info': '--text-info',
+  '--surface-status-info': '--surface-info',
+  '--background-status-neutral': '--surface-neutral',
+  '--text-status-neutral': '--text-neutral',
+  '--background-status-purple': '--background-accent-purple',
+  '--background-status-orange': '--background-accent-orange',
+};
+
+/**
+ * A name outside the twenty is a novel `status-` spelling, not a stale
+ * reference — nothing was deleted that it could point at. Say so instead of
+ * guessing a target, because the guess is the dangerous half.
+ */
+function referenceTarget(name) {
+  return Object.prototype.hasOwnProperty.call(REFERENCE_TARGETS, name)
+    ? REFERENCE_TARGETS[name]
+    : null;
+}
+
+function referenceFindings(refs) {
+  const findings = [];
+  for (const [name, sites] of refs.byName) {
+    const target = referenceTarget(name);
+    const extra = sites.length > 1 ? ` (+${sites.length - 1} more site(s))` : '';
+    findings.push({
+      rule: 6,
+      id: name,
+      where: sites[0].where,
+      detail: target
+        ? `\`${name}\` was deleted with the status family (#1958) → \`${target}\`; `
+          + `reference is a ${sites[0].form}${extra}`
+        : `\`${name}\` uses the retired \`status-\` segment (§ Token families) and was never `
+          + `a token — no migration target; reference is a ${sites[0].form}${extra}`,
+    });
+  }
+  return findings;
+}
+
 // ── Baseline ────────────────────────────────────────────────────────────────
 
 /**
@@ -703,6 +868,7 @@ const RULE_NAMES = {
   3: 'union mixes axes or carries a retired word (§ 2)',
   4: 'BEM modifier without its axis prefix (§ 4)',
   5: 'word on no closed list — default-deny (§ 6)',
+  6: 'reference to a deleted --*-status-* token (§ Token families)',
 };
 
 function main() {
@@ -717,10 +883,11 @@ function main() {
   const tokensPath = flag('--tokens', DEFAULT_TOKENS);
   const componentsDir = flag('--components', DEFAULT_COMPONENTS);
   const baselinePath = flag('--baseline', BASELINE_PATH);
+  const referenceDirs = flag('--refs', REFERENCE_DIRS.join(',')).split(',').filter(Boolean);
   const onlyRule = args.includes('--rule') ? Number(flag('--rule', '0')) : null;
 
   if (onlyRule !== null && !RULE_NAMES[onlyRule]) {
-    console.error(`lint-naming-canon: --rule must be 1-5, got ${onlyRule}`);
+    console.error(`lint-naming-canon: --rule must be 1-6, got ${onlyRule}`);
     process.exit(2);
   }
 
@@ -733,11 +900,12 @@ function main() {
     process.exit(2);
   }
 
-  let tokens; let unions; let modifiers;
+  let tokens; let unions; let modifiers; let refs;
   try {
     tokens = collectDeclarations(tokensPath);
     unions = collectUnions(componentsDir);
     modifiers = collectModifiers(componentsDir);
+    refs = collectReferences(referenceDirs);
   } catch (err) {
     console.error(`SCAN FAILED — ${err.message}`);
     process.exit(2);
@@ -750,6 +918,7 @@ function main() {
     ['token names', tokens.byName.size],
     ['prop unions', unions.unions.length],
     ['BEM modifiers', modifiers.mods.size],
+    ['reference files', refs.files],
   ];
   const empty = denominators.filter(([, n]) => n === 0);
   if (empty.length > 0) {
@@ -770,6 +939,7 @@ function main() {
     ...unionFindings(unions.unions),
     ...modifierFindings(modifiers.mods),
     ...vocabularyFindings(unions.unions, modifiers.mods),
+    ...referenceFindings(refs),
   ];
   if (onlyRule !== null) all = all.filter((f) => f.rule === onlyRule);
 
@@ -813,10 +983,11 @@ function main() {
   console.error(
     `lint-naming-canon: ${tokens.byName.size} token name(s) / ${tokens.declarations} declaration(s), `
     + `${unions.unions.length} prop union(s) in ${unions.files} file(s), `
-    + `${modifiers.mods.size} BEM modifier(s) in ${modifiers.files} file(s)`
+    + `${modifiers.mods.size} BEM modifier(s) in ${modifiers.files} file(s), `
+    + `${refs.files} file(s) scanned for references in ${referenceDirs.length} dir(s)`
   );
 
-  for (const rule of onlyRule !== null ? [onlyRule] : [1, 2, 3, 4, 5]) {
+  for (const rule of onlyRule !== null ? [onlyRule] : [1, 2, 3, 4, 5, 6]) {
     const l = live.filter((f) => f.rule === rule);
     const b = baselined.filter((f) => f.rule === rule);
     if (l.length === 0 && b.length === 0) continue;

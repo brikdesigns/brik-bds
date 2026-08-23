@@ -103,10 +103,23 @@ const CLEAN_CSS = `.bds-badge--tone-negative { color: var(--text-negative); }
 `;
 
 /**
- * Run the gate over a fixture tree. `--no-baseline` by default so a case is
- * judged on its own, not against the repo's live baseline.
+ * Rule 6 reads a separate tree (the CONSUMPTION side), so the fixture needs its
+ * own. Clean means: canonical references, plus the two shapes the rule must not
+ * flag — prose that names the retired family, which the ADR and the migration
+ * notes both have to be able to do.
  */
-function run({ tokens = CLEAN_TOKENS, tsx = CLEAN_TSX, css = CLEAN_CSS, baseline, args = [] } = {}) {
+const CLEAN_REFS = `/* The --*-status-* family was deleted in #1958; do not re-add one. */
+.bds-badge--tone-negative { background: var(--background-negative); }
+.bds-badge--tone-info { background: var(--surface-info); }
+`;
+
+/**
+ * Run the gate over a fixture tree. `--no-baseline` by default so a case is
+ * judged on its own, not against the repo's live baseline. `--refs` is always
+ * pointed at the fixture too: left to its default it would scan the real
+ * `components/`, `docs-site/`, … and every case would then depend on repo state.
+ */
+function run({ tokens = CLEAN_TOKENS, tsx = CLEAN_TSX, css = CLEAN_CSS, refs = CLEAN_REFS, refsDir, baseline, args = [] } = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'naming-canon-'));
   const tokensPath = path.join(dir, 'tokens.css');
   const componentsDir = path.join(dir, 'ui', 'Badge');
@@ -115,7 +128,14 @@ function run({ tokens = CLEAN_TOKENS, tsx = CLEAN_TSX, css = CLEAN_CSS, baseline
   fs.writeFileSync(path.join(componentsDir, 'Badge.tsx'), tsx);
   fs.writeFileSync(path.join(componentsDir, 'Badge.css'), css);
 
-  const argv = [GATE, '--tokens', tokensPath, '--components', path.join(dir, 'ui'), ...args];
+  const refsPath = path.join(dir, 'refs');
+  fs.mkdirSync(refsPath, { recursive: true });
+  fs.writeFileSync(path.join(refsPath, 'consumer.css'), refs);
+
+  const argv = [
+    GATE, '--tokens', tokensPath, '--components', path.join(dir, 'ui'),
+    '--refs', refsDir === undefined ? refsPath : refsDir, ...args,
+  ];
   if (baseline === undefined) {
     argv.push('--no-baseline');
   } else {
@@ -136,7 +156,7 @@ function withTokens(...decls) {
 }
 
 describe('lint-naming-canon — fixture', () => {
-  it('the clean fixture passes all five rules', () => {
+  it('the clean fixture passes all six rules', () => {
     const { code, out } = run();
     expect(out).toMatch(/clean — 0 live violation/);
     expect(code).toBe(0);
@@ -362,6 +382,55 @@ describe('rule 5 — default-deny (ADR-033 § 6)', () => {
   });
 });
 
+describe('rule 6 — the deleted --*-status-* family cannot come back (§ Token families)', () => {
+  it('fails on a var() reference to a deleted name', () => {
+    const { code, out } = run({ refs: '.x { background: var(--surface-status-warning); }' });
+    expect(code).toBe(1);
+    expect(out).toMatch(/Rule 6/);
+    expect(out).toMatch(/--surface-status-warning/);
+  });
+
+  it('routes a retired valence word through § 1 — negative, never `error`', () => {
+    const { out } = run({ refs: '.x { background: var(--background-status-error); }' });
+    expect(out).toMatch(/→ `--background-negative`/);
+    // The derived target is the dangerous one: dropping the `status-` segment
+    // yields `--background-error`, which is not a token. #1982 is the same
+    // failure one rule over — a gate printing a migration that breaks the build.
+    expect(out).not.toMatch(/--background-error/);
+  });
+
+  it('fails on the docs-site cssVar form, which no var()-shaped grep finds', () => {
+    const { code, out } = run({
+      refs: "export const S = [{ name: 'p', cssVar: '--background-status-purple' }];",
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/reference is a cssVar/);
+    expect(out).toMatch(/→ `--background-accent-purple`/);
+  });
+
+  it('does NOT flag prose that names the retired family — the ADR has to be writable', () => {
+    const { code, out } = run({
+      refs: `/* --background-status-error was deleted; use --background-negative. */
+.x { background: var(--background-negative); }`,
+    });
+    expect(out).toMatch(/clean — 0 live violation/);
+    expect(code).toBe(0);
+  });
+
+  it('a novel `status-` name gets no invented migration target', () => {
+    const { code, out } = run({ refs: '.x { color: var(--text-status-catastrophic); }' });
+    expect(code).toBe(1);
+    expect(out).toMatch(/no migration target/);
+  });
+
+  it('a reference dir that does not exist is a SCAN FAILURE, not an empty scan', () => {
+    const { code, out } = run({ refsDir: 'does-not-exist' });
+    expect(out).toMatch(/SCAN FAILED/);
+    expect(out).toMatch(/does-not-exist/);
+    expect(code).toBe(2);
+  });
+});
+
 describe('the baseline can only shrink', () => {
   const planted = { tokens: withTokens('--gap-tiny: 2px;') };
 
@@ -436,6 +505,6 @@ describe('a broken scan never reads as clean', () => {
   it('exit 2 on a bad --rule', () => {
     const { code, out } = run({ args: ['--rule', '9'] });
     expect(code).toBe(2);
-    expect(out).toMatch(/--rule must be 1-5/);
+    expect(out).toMatch(/--rule must be 1-6/);
   });
 });
