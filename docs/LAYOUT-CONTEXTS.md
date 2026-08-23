@@ -45,14 +45,16 @@ Full horizontal space, reading and editing both common, may contain multiple she
 | Tier | Token | Family | Weight | When |
 |------|-------|--------|--------|------|
 | Page title | `--heading-xl` | heading | semibold | Top of route; one per page |
-| Section title | `--heading-md` | heading | semibold | Major section anchor inside the page |
+| Section title | `--heading-sm` | heading | semibold | Major section anchor inside the page |
 | Subsection title | `--heading-sm` | heading | semibold | Nested grouping below a section |
 | Field label | `--label-md` | label | semibold | Above a value or input |
 | Field value | `--body-md` | body | regular | Read-mode display |
 | Helper / caption | `--label-sm` | label | regular | Secondary context under a field |
 | Body paragraph | `--body-md` | body | regular | Prose blocks (rare on admin pages) |
 
-**Two rows in this table are aspirational, not shipped.** `PageHeader` renders its `<h1>` at `--heading-lg` bold, not `--heading-xl` (`PageHeader.css:69-72`), and `DataSection` renders its title at `--heading-sm`, not `--heading-md` (`DataSection.css:46-49`). The component is the authority — build against what it renders. Reconciling the two is tracked in [#1971](https://github.com/brikdesigns/brik-bds/issues/1971); do not hand-restyle either to match this table.
+**Section title and Subsection title share `--heading-sm` by design** — the tier is carried by the heading *element* (`<h2>` vs `<h3>`, via `DataSection`'s `titleAs`), not by a size step. `DataSection.css:46-49` renders both, and the [record-read heading ramp](../docs-site/content/docs/build-standards/page-archetypes/record-read.mdx) states the same. The `--heading-sm` step is also what `FilterBar` renders, which is why "control bar or section header" is decided by [what the title is over](../docs-site/content/docs/build-standards/composition-layers.mdx), never by rendered size.
+
+Every row above matches shipped CSS. `PageHeader.css:69-76` renders the Page title row at its `size="lg"` default; `--md` / `--sm` are reduced scales outside this table.
 
 ### Sheet
 
@@ -151,7 +153,7 @@ The tiers above are enforced by **container-context primitives** — a small set
 
 | Need | Primitive | Tier it enforces |
 |---|---|---|
-| Page title | `PageHeader` | `--heading-lg` bold, via its own `<h1>` (`PageHeader.css:69-72`) |
+| Page title | `PageHeader` | `--heading-xl` semibold, via its own `<h1>` (`PageHeader.css:69-76`) |
 | Page section heading + edit affordance | `DataSection` (`title`) | `--heading-sm` semibold (`DataSection.css:46-49`) |
 | Sheet section heading | `SheetSection` (`heading`) | its own heading tier, `h3` by default |
 | Field label + value, read mode | `Field` inside `FieldGrid` | `--label-md` on a page, `--label-sm` inside a `Sheet` body — derived from the container, no prop |

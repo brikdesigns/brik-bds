@@ -66,10 +66,14 @@
   flex-shrink: 0;
 }
 
+/* The page's <h1> is a Section-headline step (`--heading-xl` … `--heading-huge`,
+   semibold), not a Container title. Build standards: headings § Role by layer,
+   and the record-read archetype's heading ramp. This is the `size="lg"` default;
+   `--md` / `--sm` below are the reduced scales. brik-bds#1971. */
 .bds-page-header__title {
   font-family: var(--font-family-heading);
-  font-size: var(--heading-lg);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--heading-xl);
+  font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   margin: 0;
 }
