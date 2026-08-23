@@ -18,7 +18,7 @@ const meta: Meta<typeof Form> = {
       control: false,
       description: 'Form fields and content.',
     },
-    layout: { control: 'select', options: ['vertical', 'horizontal'] },
+    orientation: { control: 'select', options: ['vertical', 'horizontal'] },
     gap: { control: 'select', options: ['md', 'lg', 'xl'] },
     title: { control: 'text' },
     description: { control: 'text' },
@@ -35,7 +35,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Flip Controls to explore layout, gap, and inline messaging.
+ * Flip Controls to explore orientation, gap, and inline messaging.
  * @summary Canonical Form layout and messaging
  */
 export const Default: Story = {

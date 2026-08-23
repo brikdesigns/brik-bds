@@ -45,7 +45,7 @@ import { Form, TextInput, TextArea, Button } from '@brikdesigns/bds';
 `vertical` (default) stacks fields. `horizontal` lays them side by side for compact forms.
 
 ```tsx
-<Form layout="horizontal" {...props}>
+<Form orientation="horizontal" {...props}>
   <TextInput label="First" />
   <TextInput label="Last" />
 </Form>
@@ -105,7 +105,8 @@ import { Form, TextInput, TextArea, Button } from '@brikdesigns/bds';
 | Prop | Type | Default |
 |---|---|---|
 | `children` | `ReactNode` *(required)* | — |
-| `layout` | `'vertical' \| 'horizontal'` | `'vertical'` |
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` |
+| `layout` | `'vertical' \| 'horizontal'` | — |
 | `gap` | `'md' \| 'lg' \| 'xl'` | `'lg'` |
 | `title` | `string` | — |
 | `description` | `string` | — |
