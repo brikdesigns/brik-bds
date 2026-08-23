@@ -55,21 +55,51 @@ const MATRIX_END = '{/* matrix:end */}';
 
 // ─── CSS parsing ────────────────────────────────────────────────────
 
+/**
+ * Blank every comment body, preserving byte offsets so positions stay true.
+ * Same helper, same reason, as `lint-token-shadowing.mjs` and
+ * `lint-token-purpose-slots.mjs`; this parser was the one that lacked it
+ * (#1965), and comments here are load-bearing prose that names tokens.
+ *
+ * Two distinct failures came from reading comments as CSS, and both were silent:
+ *
+ *  1. **A brace truncated the block.** `extractBlock` ends the block at the
+ *     first `}`, comment or not, so one brace in a comment — the tempting case
+ *     is `--color-x{,-light}` shorthand for a token pair — dropped every
+ *     declaration below it. During #1955 that cut the light `:root` from 20633
+ *     to 8489 parsed chars and surfaced as a contrast-gate error on
+ *     `--state-disabled-opacity`, ~150 lines away and unrelated.
+ *
+ *  2. **A comment minted a phantom declaration that ate a real one.** Prose
+ *     reading "There is no --border-info: the gray one retired…" matches
+ *     `(--[\w-]+)\s*:\s*([^;]+);`, and `[^;]+` then runs to the next real
+ *     semicolon — which was the end of `--background-info`'s declaration two
+ *     paragraphs later. `--background-info` resolved to undefined from #1959
+ *     until #1972, and nothing noticed, because no pairing referenced it. The
+ *     first one that did read `n/a`. That is the #1571 unmeasurable-pairing
+ *     shape one layer down: the gate could not see the token, so it could not
+ *     fail on it.
+ */
+function blankComments(src) {
+  return src.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
+}
+
 function parseDecls(blockBody) {
   const vars = {};
   const re = /(--[\w-]+)\s*:\s*([^;]+);/g;
   let m;
   while ((m = re.exec(blockBody)) !== null) {
-    vars[m[1]] = m[2].replace(/\/\*[\s\S]*?\*\//g, '').trim();
+    vars[m[1]] = m[2].trim();
   }
   return vars;
 }
 
 /** Extract the flat declaration body of the first rule whose selector matches
- *  `selectorRe` (a RegExp matching the selector text immediately before `{`). */
+ *  `selectorRe` (a RegExp matching the selector text immediately before `{`).
+ *  Comments are blanked first — see `blankComments`. */
 function extractBlock(cssPath, selectorRe) {
   if (!fs.existsSync(cssPath)) return {};
-  const css = fs.readFileSync(cssPath, 'utf8');
+  const css = blankComments(fs.readFileSync(cssPath, 'utf8'));
   const src = new RegExp(selectorRe.source + '\\s*\\{', selectorRe.flags);
   const m = src.exec(css);
   if (!m) return {};
@@ -344,7 +374,14 @@ function checkMatrix(results) {
   process.exit(0);
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+// Only run the gate when invoked as a CLI, so the parsers below can be unit
+// tested. #1965's two failures were both silent misreads of comment text, and
+// neither was reachable through the CLI without a fixture repo.
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
+
+module.exports = { blankComments, parseDecls, extractBlock };
