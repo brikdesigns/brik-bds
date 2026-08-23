@@ -24,7 +24,7 @@ import { Field } from '@brikdesigns/bds';
 
 ## Variants
 
-### Stacked
+### Vertical
 
 Label above value. Default for sheet body rows where the value needs full width.
 
@@ -33,13 +33,13 @@ Label above value. Default for sheet body rows where the value needs full width.
 <Field label="Industry">Dental — General Practice</Field>
 ```
 
-### Inline
+### Horizontal
 
 Label left, value right-aligned. Compact stat row pattern — `Status · Active`, `Scraped · 8`.
 
 ```tsx
-<Field layout="inline" label="Scraped">8</Field>
-<Field layout="inline" label="Status">Active</Field>
+<Field orientation="horizontal" label="Scraped">8</Field>
+<Field orientation="horizontal" label="Status">Active</Field>
 ```
 
 ### Empty states
@@ -115,7 +115,8 @@ For a section-level empty state (the whole section has no data, not just one fie
 |---|---|---|
 | `label` | `string` *(required)* | — |
 | `children` | `ReactNode` | — |
-| `layout` | `'stacked' \| 'inline'` | `'stacked'` |
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` |
+| `layout` | `'vertical' \| 'horizontal'` | — |
 | `empty` | `ReactNode` | `'Not set'` |
 | `tier` | `FieldTier` | — |
 | `helper` | `ReactNode` | — |

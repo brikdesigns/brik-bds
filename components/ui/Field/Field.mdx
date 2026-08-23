@@ -18,12 +18,12 @@ The label's typography tier is **derived from the container**: page-tier (`--lab
 
 ## Variants
 
-Field has no semantic-variant axis — all variation (label, value content, layout, empty fallback) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
+Field has no semantic-variant axis — all variation (label, value content, orientation, empty fallback) is exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
 <Canvas of={Stories.Default} />
 
-- **`stacked`** — label above value (default). Full-width value content; use for sheet body rows.
-- **`inline`** — label / value on one row. Use for compact stat rows ("Status · Active", "Scraped · 8").
+- **`vertical`** — label above value (default). Full-width value content; use for sheet body rows.
+- **`horizontal`** — label / value on one row. Use for compact stat rows ("Status · Active", "Scraped · 8").
 
 ## Patterns
 
