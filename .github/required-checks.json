@@ -1,0 +1,36 @@
+{
+  "_why": [
+    "The status check contexts branch protection requires on `main`, declared in-tree so a",
+    "rename can be caught by the auditor instead of by an unmergeable `main`. brik-llm#1914",
+    "established the shape; brik-llm#2519 extended the auditor to reach this repo.",
+    "",
+    "A context in `contexts` MUST be the job name of a workflow triggering on",
+    "`pull_request` or `pull_request_target` with NO `paths:` filter, no `types:` narrower",
+    "than [opened, synchronize, reopened], and no `branches:` filter excluding `main`. A",
+    "restricted trigger that does not match produces no check-run at all — not a skipped",
+    "one — so protection waits forever on a status that never reports (brik-llm#1937 arm B).",
+    "",
+    "`require-area-label` is the job in pr-label-gate.yml, a `pull_request_target` workflow.",
+    "That trigger reads its workflow FILE from the base branch, which is why the gate could",
+    "not police its own introducing PR (#1988) — but it reports normally from the next PR",
+    "onward, and #1993 verified both directions live on #1998: label removed produced a",
+    "check `failure` and `mergeStateStatus=BLOCKED`; label re-added produced `success` and",
+    "`CLEAN`.",
+    "",
+    "Editing this file does NOT change protection. Apply it with:",
+    "  brik-llm/scripts/audit/required-check-contract.py --root <this repo> --check-protection",
+    "to see the drift, then PATCH .../branches/main/protection/required_status_checks.",
+    "Use that sub-endpoint, never the full-object PUT on .../protection — the PUT drops",
+    "every setting you omit.",
+    "",
+    "Gate: brik-llm/scripts/audit/required-check-contract.py",
+    "Gate's test: brik-llm/scripts/audit/tests/test_required_check_contract.py"
+  ],
+  "repo": "brikdesigns/brik-bds",
+  "branch": "main",
+  "contexts": [
+    "canonical-check",
+    "require-area-label"
+  ],
+  "accepted_collisions": {}
+}

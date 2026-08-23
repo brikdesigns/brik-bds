@@ -24,9 +24,19 @@ on:
     branches:
       - main
 
+# `canonical-check` is a REQUIRED context on `main`, so this block may not cancel.
+# A cancelled check-run is not an absent one — protection can keep reporting the
+# context as `expected`, and a green re-run does not clear it; only a new head SHA
+# does (brik-llm#2094). `queue: max` covers the pending run the flag does not: the
+# default `queue: single` lets a newer run evict the waiter, leaving a check-suite
+# with zero check-runs and the same stuck `expected` (brik-llm#2176).
+#
+# `queue: max` and `cancel-in-progress: true` together are a workflow validation
+# error, so the two lines change as a pair.
 concurrency:
   group: canonical-check-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
+  queue: max
 
 jobs:
   canonical-check:
