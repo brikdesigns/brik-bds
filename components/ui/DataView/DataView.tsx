@@ -128,7 +128,7 @@ export function ProfileSkeleton() {
 
 export function BoardSkeleton() {
   return (
-    <Stack direction="horizontal" gap="md" align="start" className="bds-data-view__skeleton" aria-hidden="true">
+    <Stack orientation="horizontal" gap="md" align="start" className="bds-data-view__skeleton" aria-hidden="true">
       {Array.from({ length: 3 }).map((_, col) => (
         <Stack key={col} gap="sm" className="bds-data-view__skeleton-column">
           <Skeleton variant="text" width="45%" height={18} />

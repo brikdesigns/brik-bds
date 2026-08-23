@@ -2,7 +2,10 @@ import { type HTMLAttributes, type ReactNode, type ElementType } from 'react';
 import { bdsClass } from '../../utils';
 import './Stack.css';
 
-export type StackDirection = 'horizontal' | 'vertical';
+export type StackOrientation = 'horizontal' | 'vertical';
+
+/** @deprecated Renamed `StackOrientation` (ADR-033 § 2). */
+export type StackDirection = StackOrientation;
 export type StackGap = 'none' | 'tiny' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'huge';
 export type StackAlign = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
 export type StackJustify =
@@ -14,8 +17,13 @@ export type StackJustify =
   | 'evenly';
 
 export interface StackProps extends HTMLAttributes<HTMLElement> {
-  /** Layout direction. Maps to `flex-direction`. Default `vertical`. */
-  direction?: StackDirection;
+  /** Layout orientation. Maps to `flex-direction`. Default `vertical`. */
+  orientation?: StackOrientation;
+  /**
+   * @deprecated Use `orientation` instead (ADR-033 § 2). Honoured for one minor
+   * version; `orientation` wins when both are passed.
+   */
+  direction?: StackOrientation;
   /** Spacing between children. Maps to BDS `--gap-*` tokens. Default `md`. */
   gap?: StackGap;
   /** Cross-axis alignment of children. */
@@ -38,27 +46,28 @@ export interface StackProps extends HTMLAttributes<HTMLElement> {
  *
  * @example
  * ```tsx
- * <Stack direction="vertical" gap="md">
+ * <Stack orientation="vertical" gap="md">
  *   <Heading>Title</Heading>
  *   <Text>Body</Text>
  *   <Button>Action</Button>
  * </Stack>
  *
- * <Stack direction="horizontal" gap="sm" align="center">
+ * <Stack orientation="horizontal" gap="sm" align="center">
  *   <Avatar />
  *   <span>User name</span>
  * </Stack>
  * ```
  *
  * Multi-platform note: prop API mirrors SwiftUI HStack/VStack
- * (`direction` ↔ HStack/VStack/ZStack) and Compose Row/Column
+ * (`orientation` ↔ HStack/VStack/ZStack) and Compose Row/Column
  * (`gap` ↔ `Arrangement.spacedBy`) so a Swift / Kotlin port can
  * implement the same surface without breaking changes.
  *
  * @summary Vertical or horizontal flex container with consistent BDS gap.
  */
 export function Stack({
-  direction = 'vertical',
+  orientation,
+  direction,
   gap = 'md',
   align,
   justify,
@@ -67,11 +76,12 @@ export function Stack({
   className,
   ...props
 }: StackProps) {
+  const resolvedOrientation = orientation ?? direction ?? 'vertical';
   return (
     <Element
       className={bdsClass(
         'bds-stack',
-        `bds-stack--${direction}`,
+        `bds-stack--${resolvedOrientation}`,
         gap !== 'none' && `bds-stack--gap-${gap}`,
         align && `bds-stack--align-${align}`,
         justify && `bds-stack--justify-${justify}`,

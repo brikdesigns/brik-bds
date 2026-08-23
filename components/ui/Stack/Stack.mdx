@@ -3,7 +3,7 @@ import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Stack.stories';
 import { Stack } from './Stack';
 
-{/* Axis comparisons — direction / gap / align. Docs-local, not story exports:
+{/* Axis comparisons — orientation / gap / align. Docs-local, not story exports:
     each is a Control on Default, and side-by-side galleries are an MDX
     concern (#1489). The Box/SectionLabel helpers are gallery scaffolding, which
     the story-shape standard says never belongs in a story file. */}
@@ -19,19 +19,19 @@ export const SectionLabel = ({ children }) => (
   </div>
 );
 
-export const DirectionScale = () => (
-  <Stack direction="vertical" gap="xl">
+export const OrientationScale = () => (
+  <Stack orientation="vertical" gap="xl">
     <div>
-      <SectionLabel>direction="vertical" (default)</SectionLabel>
-      <Stack direction="vertical" gap="sm">
+      <SectionLabel>orientation="vertical" (default)</SectionLabel>
+      <Stack orientation="vertical" gap="sm">
         <Box>Stacked top</Box>
         <Box>Stacked middle</Box>
         <Box>Stacked bottom</Box>
       </Stack>
     </div>
     <div>
-      <SectionLabel>direction="horizontal"</SectionLabel>
-      <Stack direction="horizontal" gap="sm">
+      <SectionLabel>orientation="horizontal"</SectionLabel>
+      <Stack orientation="horizontal" gap="sm">
         <Box>Left</Box>
         <Box>Center</Box>
         <Box>Right</Box>
@@ -41,11 +41,11 @@ export const DirectionScale = () => (
 );
 
 export const GapScaleDemo = () => (
-  <Stack direction="vertical" gap="lg">
+  <Stack orientation="vertical" gap="lg">
     {['tiny', 'xs', 'sm', 'md', 'lg', 'xl', 'huge'].map((g) => (
       <div key={g}>
         <SectionLabel>gap="{g}"</SectionLabel>
-        <Stack direction="horizontal" gap={g}>
+        <Stack orientation="horizontal" gap={g}>
           <Box w="60px">A</Box>
           <Box w="60px">B</Box>
           <Box w="60px">C</Box>
@@ -56,12 +56,12 @@ export const GapScaleDemo = () => (
 );
 
 export const AlignmentScale = () => (
-  <Stack direction="vertical" gap="lg">
+  <Stack orientation="vertical" gap="lg">
     {['start', 'center', 'end', 'stretch'].map((a) => (
       <div key={a}>
         <SectionLabel>align="{a}" (horizontal stack)</SectionLabel>
         <div style={{ height: 80, background: 'var(--surface-secondary)', padding: 'var(--padding-xs)' }}>
-          <Stack direction="horizontal" gap="sm" align={a} style={{ height: '100%' }}>
+          <Stack orientation="horizontal" gap="sm" align={a} style={{ height: '100%' }}>
             <Box w="60px">A</Box>
             <Box w="60px">B</Box>
             <Box w="60px">C</Box>
@@ -78,7 +78,7 @@ export const AlignmentScale = () => (
 
 <ComponentLinks slug="stack" />
 
-Stack lays out children along one axis with a consistent `gap`. Vertical by default; set `direction="horizontal"` for a row. `align` controls cross-axis alignment.
+Stack lays out children along one axis with a consistent `gap`. Vertical by default; set `orientation="horizontal"` for a row. `align` controls cross-axis alignment.
 
 ## Default
 
@@ -86,12 +86,12 @@ Stack lays out children along one axis with a consistent `gap`. Vertical by defa
 
 ## Variants
 
-The axes Stack varies on: `direction`, the `gap` scale, and cross-axis `align`.
+The axes Stack varies on: `orientation`, the `gap` scale, and cross-axis `align`.
 
-### Directions
+### Orientations
 
 <Canvas>
-  <DirectionScale />
+  <OrientationScale />
 </Canvas>
 
 ### Gap scale
