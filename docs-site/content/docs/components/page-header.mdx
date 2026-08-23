@@ -111,6 +111,14 @@ PageHeader has six optional regions plus a required title. From top to bottom:
 
 `size` controls the title scale. Default `lg`.
 
+The step names are offset from the tokens they render. `lg` is the page-title default, so it renders `--heading-xl` — the [Section-headline step](/docs/build-standards/headings) a page's `<h1>` gets. Only `md` and `sm` name-match their token.
+
+| `size` | Title token |
+|---|---|
+| `lg` (default) | `--heading-xl` |
+| `md` | `--heading-md` |
+| `sm` | `--heading-sm` |
+
 ```tsx
 <PageHeader title="Compact dashboard header" size="sm" />
 <PageHeader title="Standard page header" size="md" />
