@@ -44,9 +44,23 @@ on:
   pull_request_target:
     types: [opened, edited, labeled, unlabeled, synchronize, reopened, ready_for_review]
 
+# `require-area-label` became a REQUIRED context in #1993, which changes what this
+# block is allowed to do. A cancelled check-run is not an absent one: protection can
+# go on reporting the context as `expected` afterwards, and a green re-run does not
+# clear it — only a new head SHA does (brik-llm#2094). `queue: max` is the other
+# half: the default `queue: single` lets a newer run evict the PENDING one, leaving
+# a check-suite that never started a job and carries zero check-runs (brik-llm#2176).
+#
+# This workflow is squarely in that blast radius — its `labeled` / `unlabeled` types
+# mean `gh pr edit --add-label` with N labels delivers N events. Verifying #1993 on
+# #1998 produced three runs on one head SHA, two of them `completed/cancelled`.
+#
+# `queue: max` and `cancel-in-progress: true` together are a workflow validation
+# error, so the two lines change as a pair.
 concurrency:
   group: pr-label-gate-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  cancel-in-progress: false
+  queue: max
 
 permissions:
   contents: read
