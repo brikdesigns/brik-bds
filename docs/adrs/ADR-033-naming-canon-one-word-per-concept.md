@@ -182,6 +182,13 @@ The 173 bare modifiers migrate; the 38 prefixed ones are already correct.
 
 This does not touch ADR-008 §3, which governs **blueprint** modifiers and bans appearance/theme words there (`--dark`, `--centered`). §3's structural-only rule stands unchanged for blueprint families; this rule governs the axis-prefix grammar of **component** modifiers, which §3 does not address.
 
+**The service-line axis is a named exception** ([#1982](https://github.com/brikdesigns/brik-bds/issues/1982)). A bare `--{service-line}` modifier — `brand`, `marketing`, `information`, `product`, `back-office`, `service`, per `ServiceLine` in [`service-config.ts`](../../components/ui/ServiceTag/service-config.ts) — is legal on a block that emits it from a `ServiceLine`-typed value, and the gate does not report it. Two reasons, and the second is why this is an exception rather than a migration:
+
+1. **Derivability, the property § 4 exists to protect, already holds.** `category="information"` → `--information` is mechanically derivable in both directions. The prefix buys nothing that is not already there.
+2. **`information` collides with a retired valence word, and the gate's migration target was actively wrong.** § 1 retires `information` as a spelling of `info`, so rule 4 read `.bds-service-tag--information` as valence and printed `--tone-info`. Following it renames the selector while `ServiceTag.tsx` keeps emitting `bds-service-tag--information`, and every Information ServiceTag silently loses its fill — an unmatched selector is not an error. The rename was made and reverted while working [#1957](https://github.com/brikdesigns/brik-bds/issues/1957); the gate's own advice produced it.
+
+The exception is scoped to the **block**, not the value. `.bds-card--brand` is still a § 4 finding: Card imports `ServiceLine` and derives `CardTint` from it, but paints that class from an unrelated `variant`, and emits its actual service tint as the already-compliant `bds-card--tint-${tint}`. An import-level or directory-level carve-out would have exempted it and hidden real drift, so the gate requires the block to interpolate a `ServiceLine`-annotated identifier. Removing this exception means renaming the CSS and the TSX template together, in one commit.
+
 ### 5. `info` means the blue signal; the gray one is `neutral`. `--shadow-*` is the elevation family
 
 Two names, each currently carrying two concepts, dispositioned:
@@ -257,7 +264,7 @@ Every mapping below is positional and measured; values do not change.
 
 ### Named exceptions — not retired
 
-`--size-pill` · `--size-circle` · `--border-radius-pill` · `--border-radius-circle` (shape constants) · `--aspect-{square,cinema,photo-landscape,photo-portrait}` (semantic ratio aliases) · `--iteration-infinite` (CSS keyword) · `--content-width-full` (not a step) · `--shadow-overlay` (a role, not a step) · `--web` · `--tablet` · `--mobile` (slotless carve-out, per [#1912](https://github.com/brikdesigns/brik-bds/pull/1912)).
+`--size-pill` · `--size-circle` · `--border-radius-pill` · `--border-radius-circle` (shape constants) · `--aspect-{square,cinema,photo-landscape,photo-portrait}` (semantic ratio aliases) · `--iteration-infinite` (CSS keyword) · `--content-width-full` (not a step) · `--shadow-overlay` (a role, not a step) · `--web` · `--tablet` · `--mobile` (slotless carve-out, per [#1912](https://github.com/brikdesigns/brik-bds/pull/1912)) · the bare **service-line** modifiers on service-line-emitting blocks (§ 4, [#1982](https://github.com/brikdesigns/brik-bds/issues/1982) — sourced from `ServiceLine`, never re-listed).
 
 ## Alternatives considered
 
@@ -287,7 +294,7 @@ This ADR is the spec for #1910 AC #5's gate, which shipped as [`lint-naming-cano
 1. A token name whose step falls outside its Tier's vocabulary in § 3, and is not a § Named exception.
 2. A token name defined twice with different value *types* (the `--box-shadow-md` class) — distinct from the existing `lint-token-shadowing`, which allows a marked override.
 3. A prop union mixing axes from § 2's table, or containing a § Retired valence word.
-4. A BEM modifier without its axis prefix (§ 4), or carrying a retired word.
+4. A BEM modifier without its axis prefix (§ 4), or carrying a retired word — except a bare service-line modifier on a block that emits from a `ServiceLine`-typed value (§ 4's named exception). The value list is read from `ServiceLine` at scan time; a rename of that type is a scan failure, not a silently-lifted carve-out.
 5. Any word not on a closed list here — the § 6 default.
 6. A reference to a token in the `--*-status-*` family, which § Token families retires and [#1958](https://github.com/brikdesigns/brik-bds/issues/1958) deleted.
 
@@ -305,6 +312,7 @@ Every rule was red on `main` when the gate landed — 22 step words, 6 type coll
 | 2 — type collision | 6 | #1924 (`--box-shadow-*` ×4) · #1910 (`--easing-ease-*` ×2) |
 | 3 — union axis | 17 | #1909 (valence ×11) · #1925 (hue source ×6) |
 | 4 — BEM modifier | 197 | #1927 (×171) · #1909 (valence ×17) · #1926 (the nine twins) |
+| 4 — five rows retired, not fixed | −5 | #1982 shipped § 4's service-line exception, so `--information` (#1982) and `--marketing` / `--product` / `--back-office` / `--service` (#1927) stopped violating and left the baseline. `--brand` stays: it is still bare on five non-service blocks |
 | 5 — default-deny | 4 | #1925 |
 
 **The baseline is a countdown, not a carve-out.** A stale entry — one that no longer violates — is itself a failure, so an entry cannot outlive its fix and the file can only shrink. Adding a row to keep a *new* violation green is the one edit that defeats the gate. `npm run lint-naming-canon:census` prints the remaining count per rule.

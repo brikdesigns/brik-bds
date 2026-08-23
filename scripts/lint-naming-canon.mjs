@@ -25,7 +25,9 @@
  *   3  union       A prop union mixes axes from § 2's table, or carries a
  *                  § Retired valence word. Reads components/ui/**\/*.tsx.
  *   4  modifier    A BEM modifier with no axis prefix (§ 4), or a retired
- *                  word. Reads components/ui/**\/*.css.
+ *                  word. Reads components/ui/**\/*.css. Exempts a bare
+ *                  service-line modifier on a block that emits from a
+ *                  `ServiceLine` value — § 4's named exception, #1982.
  *   5  vocabulary  A word in a governed axis position that is on no closed
  *                  list — § 6's default-deny. Reads both.
  *   6  reference   A `var(--*-status-*)` consumption of the family § Token
@@ -580,20 +582,91 @@ function unionFindings(unions) {
 function collectModifiers(componentsDir) {
   const files = walk(componentsDir, '.css');
   const mods = new Map();
+  const occurrences = [];
   for (const file of files) {
     const src = fs.readFileSync(file, 'utf8');
-    for (const m of src.matchAll(/\.bds-[a-z0-9-]+(?:__[a-z0-9-]+)?--([a-z0-9-]+)/g)) {
-      if (!mods.has(m[1])) mods.set(m[1], new Set());
-      mods.get(m[1]).add(file);
+    // The block is captured lazily so `.bds-service-tag__dot--sm` yields block
+    // `service-tag`, not `service`: a greedy block would swallow the element
+    // separator, and rule 4's service-line carve-out is keyed on the block.
+    for (const m of src.matchAll(/\.bds-([a-z0-9-]+?)(?:__[a-z0-9-]+)?--([a-z0-9-]+)/g)) {
+      const [, block, mod] = m;
+      if (!mods.has(mod)) mods.set(mod, new Set());
+      mods.get(mod).add(file);
+      occurrences.push({ block, mod, file });
     }
   }
-  return { mods, files: files.length };
+  return { mods, occurrences, files: files.length };
 }
 
-function modifierFindings(mods) {
+// ── Rule 4's service-line carve-out (§ Named exceptions) ───────────────────
+
+/**
+ * The six service lines, read from the type that defines them rather than
+ * re-listed here. A second copy is a second thing to forget: `back-office` was
+ * renamed from `service` once already, and the alias is still in the union
+ * pending a major.
+ */
+function serviceLines(componentsDir) {
+  const config = path.join(componentsDir, 'ServiceTag', 'service-config.ts');
+  const src = fs.readFileSync(config, 'utf8');
+  const m = /export type ServiceLine\s*=\s*([^;]+);/.exec(src);
+  if (!m) throw new Error(`${config} no longer declares \`export type ServiceLine\` — the carve-out cannot be sourced`);
+  const values = new Set([...m[1].matchAll(/'([^']+)'/g)].map((x) => x[1]));
+  if (values.size === 0) throw new Error(`${config} declares ServiceLine with no string members`);
+  return values;
+}
+
+/**
+ * The BEM blocks that emit a modifier from a `ServiceLine`-typed value. Both
+ * halves are required: the identifier has to be annotated `ServiceLine`, AND
+ * the block has to interpolate that identifier. Card is why — it imports
+ * `ServiceLine` and derives `CardTint` from it, but emits its service tint as
+ * the already-compliant `bds-card--tint-${tint}` while `.bds-card--brand` is an
+ * unrelated variant. A directory-level "imports ServiceLine" test would exempt
+ * that variant and hide a real § 4 finding.
+ */
+function serviceLineBlocks(componentsDir) {
+  const blocks = new Set();
+  for (const file of walk(componentsDir, '.tsx')) {
+    const src = fs.readFileSync(file, 'utf8');
+    const idents = new Set(
+      [...src.matchAll(/(\w+)\??\s*:\s*ServiceLine\b(?!\w)/g)].map((m) => m[1])
+    );
+    if (idents.size === 0) continue;
+    for (const m of src.matchAll(/`bds-([a-z0-9-]+?)--\$\{(\w+)\}`/g)) {
+      if (idents.has(m[2])) blocks.add(m[1]);
+    }
+  }
+  return blocks;
+}
+
+/**
+ * `exempt(mod, file)` — true when every occurrence of `mod` in `file` sits on a
+ * service-line-emitting block. "Every" is the load-bearing word: one file can
+ * declare two blocks, and a single non-service occurrence has to keep the whole
+ * (mod, file) pair reportable, or the carve-out becomes the blanket allowlist
+ * #1982 AC #2 forbids.
+ */
+function serviceLineExemption(occurrences, lines, blocks) {
+  const byPair = new Map();
+  for (const { block, mod, file } of occurrences) {
+    const key = `${mod} ${file}`;
+    if (!byPair.has(key)) byPair.set(key, []);
+    byPair.get(key).push(block);
+  }
+  return (mod, file) => {
+    if (!lines.has(mod)) return false;
+    const seen = byPair.get(`${mod} ${file}`);
+    return Array.isArray(seen) && seen.length > 0 && seen.every((b) => blocks.has(b));
+  };
+}
+
+function modifierFindings(mods, exempt = () => false) {
   const findings = [];
   for (const [mod, files] of mods) {
-    const where = [...files].sort()[0];
+    const live = [...files].filter((f) => !exempt(mod, f)).sort();
+    if (live.length === 0) continue;
+    const where = live[0];
     const prefix = [...MODIFIER_AXES].find((a) => mod.startsWith(`${a}-`));
 
     if (prefix) {
@@ -900,12 +973,14 @@ function main() {
     process.exit(2);
   }
 
-  let tokens; let unions; let modifiers; let refs;
+  let tokens; let unions; let modifiers; let refs; let lines; let slBlocks;
   try {
     tokens = collectDeclarations(tokensPath);
     unions = collectUnions(componentsDir);
     modifiers = collectModifiers(componentsDir);
     refs = collectReferences(referenceDirs);
+    lines = serviceLines(componentsDir);
+    slBlocks = serviceLineBlocks(componentsDir);
   } catch (err) {
     console.error(`SCAN FAILED — ${err.message}`);
     process.exit(2);
@@ -919,6 +994,12 @@ function main() {
     ['prop unions', unions.unions.length],
     ['BEM modifiers', modifiers.mods.size],
     ['reference files', refs.files],
+    // Both halves of rule 4's carve-out. Zero service lines means the type moved
+    // and the exemption silently stopped applying; zero blocks means the
+    // emission regex stopped matching. Either way the carve-out is not doing
+    // what the ADR says it does, so neither may read as a clean scan.
+    ['service lines', lines.size],
+    ['service-line blocks', slBlocks.size],
   ];
   const empty = denominators.filter(([, n]) => n === 0);
   if (empty.length > 0) {
@@ -937,7 +1018,10 @@ function main() {
     ...stepFindings(tokens.byName),
     ...typeFindings(tokens.byName),
     ...unionFindings(unions.unions),
-    ...modifierFindings(modifiers.mods),
+    ...modifierFindings(
+      modifiers.mods,
+      serviceLineExemption(modifiers.occurrences, lines, slBlocks)
+    ),
     ...vocabularyFindings(unions.unions, modifiers.mods),
     ...referenceFindings(refs),
   ];
@@ -984,7 +1068,8 @@ function main() {
     `lint-naming-canon: ${tokens.byName.size} token name(s) / ${tokens.declarations} declaration(s), `
     + `${unions.unions.length} prop union(s) in ${unions.files} file(s), `
     + `${modifiers.mods.size} BEM modifier(s) in ${modifiers.files} file(s), `
-    + `${refs.files} file(s) scanned for references in ${referenceDirs.length} dir(s)`
+    + `${refs.files} file(s) scanned for references in ${referenceDirs.length} dir(s), `
+    + `${lines.size} service line(s) exempt on ${slBlocks.size} block(s)`
   );
 
   for (const rule of onlyRule !== null ? [onlyRule] : [1, 2, 3, 4, 5, 6]) {
