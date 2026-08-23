@@ -6,14 +6,14 @@
   min-width: 0; /* allow flex/grid children to shrink */
 }
 
-.bds-field--vertical {
+.bds-field--orientation-vertical {
   flex-direction: column;
   /* Label ↔ value is the tight step (ADR-023 content-rhythm map: --gap-sm);
      --gap-xs collapses to 0px outside default spacing mode. */
   gap: var(--gap-sm);
 }
 
-.bds-field--horizontal {
+.bds-field--orientation-horizontal {
   flex-direction: row;
   align-items: baseline;
   gap: var(--gap-md);
@@ -49,7 +49,7 @@
   margin: 0;
 }
 
-.bds-field--horizontal .bds-field__label {
+.bds-field--orientation-horizontal .bds-field__label {
   flex-shrink: 0;
 }
 
@@ -64,7 +64,7 @@
   min-width: 0;
 }
 
-.bds-field--horizontal .bds-field__value {
+.bds-field--orientation-horizontal .bds-field__value {
   text-align: right;
 }
 
@@ -78,7 +78,7 @@
   margin: 0;
 }
 
-.bds-field--horizontal .bds-field__empty {
+.bds-field--orientation-horizontal .bds-field__empty {
   text-align: right;
 }
 

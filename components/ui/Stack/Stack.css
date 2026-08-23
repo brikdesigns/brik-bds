@@ -6,8 +6,8 @@
   min-width: 0; /* prevent flex blowout on overflowing children */
 }
 
-.bds-stack--vertical   { flex-direction: column; }
-.bds-stack--horizontal { flex-direction: row; }
+.bds-stack--orientation-vertical   { flex-direction: column; }
+.bds-stack--orientation-horizontal { flex-direction: row; }
 
 .bds-stack--wrap { flex-wrap: wrap; }
 

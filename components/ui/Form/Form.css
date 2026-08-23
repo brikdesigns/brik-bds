@@ -87,11 +87,11 @@
   width: 100%;
 }
 
-.bds-form__fields--vertical {
+.bds-form__fields--orientation-vertical {
   flex-direction: column;
 }
 
-.bds-form__fields--horizontal {
+.bds-form__fields--orientation-horizontal {
   flex-direction: row;
   flex-wrap: wrap;
 }

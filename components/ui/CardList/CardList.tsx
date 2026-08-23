@@ -32,7 +32,7 @@ export function CardList({
 }: CardListProps) {
   const classes = bdsClass(
     'bds-card-list',
-    `bds-card-list--${orientation}`,
+    `bds-card-list--orientation-${orientation}`,
     `bds-card-list--gap-${gap}`,
     orientation === 'horizontal' && fitContent && 'bds-card-list--fit',
     className,
