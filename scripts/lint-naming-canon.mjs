@@ -141,6 +141,10 @@ const RETIRED_VALENCE = {
  * per-subject, so rule 5 cannot default-deny their members. The axes with a
  * library-wide closed list are the ones rule 5 polices.
  */
+/** § 2. The orientation axis (#2001 amendment). Shared so the name-identified
+ * check below reads the same closed value list rule 5 does. */
+const ORIENTATION_VALUES = new Set(['horizontal', 'vertical']);
+
 const AXES = {
   tone: { concept: 'valence', values: VALENCE },
   status: { concept: 'presence/lifecycle', values: null },
@@ -148,6 +152,37 @@ const AXES = {
   emphasis: { concept: 'hue source', values: new Set(['neutral', 'brand', 'accent']) },
   appearance: { concept: 'fill treatment', values: new Set(['solid', 'subtle', 'muted']) },
   density: { concept: 'spacing compression', values: new Set(['comfortable', 'compact']) },
+  orientation: { concept: 'layout direction', values: ORIENTATION_VALUES },
+};
+
+/**
+ * § 2 axes a union carries in its TYPE NAME, not only in its member values.
+ *
+ * The orientation axis (#2001) is the first, and needed a mechanism the
+ * value-based rule-3 path could not supply, for two reasons the audit measured:
+ *
+ *   1. A retired PROP NAME with CANONICAL values. `StackDirection` and
+ *      `FormLayout` are `'horizontal' | 'vertical'` — the values are already
+ *      right, so nothing in rule 3/5 can see that `direction`/`layout` is the
+ *      wrong word. Only the type name carries the drift.
+ *   2. A retired VALUE that collides with an unrelated per-component union.
+ *      Field spells the axis `'stacked' | 'inline'`, but `inline` also means
+ *      "edit in place" on `SheetEditTarget = 'inline' | 'page'` — so `inline`
+ *      cannot be retired the library-wide way a valence word is, or Sheet's
+ *      legitimate value fails. Scoping the retirement to unions this axis
+ *      actually NAMES leaves Sheet alone.
+ *
+ * The value-corroboration guard (every member ∈ the axis vocabulary) is what
+ * keeps `SortDirection = 'asc' | 'desc' | 'none'` — a real `direction` that is
+ * not this axis — out of the finding set.
+ */
+const NAME_IDENTIFIED_AXES = {
+  orientation: {
+    canonical: 'orientation',
+    retiredNames: { direction: 'orientation', layout: 'orientation' },
+    values: ORIENTATION_VALUES,
+    retiredValues: { stacked: 'vertical', inline: 'horizontal' },
+  },
 };
 
 /** § Retired vocabulary → Axis words. Value-level retirements, with their axis. */
@@ -566,6 +601,55 @@ function unionFindings(unions) {
         where: `${u.file}:${u.line}`,
         detail: `mixes ${mixed.length} axes (${mixed.join(' + ')}) — split the union`,
       });
+    }
+  }
+  return findings;
+}
+
+// ── Rule 3 (name-identified axes) — a retired PROP NAME, or a retired value
+//    on a union this axis names (§ 2, #2001) ──────────────────────────────────
+
+/**
+ * A union carries a name-identified axis when its type name ends in the axis's
+ * canonical word OR one of its retired words, AND every member belongs to the
+ * axis's vocabulary — the second half is what excludes a homonym like
+ * `SortDirection`. A canonically-named union with canonical values (e.g.
+ * `DividerOrientation`) is correct and produces nothing.
+ */
+function nameIdentifiedAxisFindings(unions) {
+  const findings = [];
+  for (const u of unions) {
+    const lowered = u.name.toLowerCase();
+    for (const [axis, spec] of Object.entries(NAME_IDENTIFIED_AXES)) {
+      const retiredName = Object.keys(spec.retiredNames).find((n) => lowered.endsWith(n));
+      const usesCanonical = lowered.endsWith(spec.canonical);
+      if (!retiredName && !usesCanonical) continue;
+
+      // Corroborate before asserting the axis: a shared word is not the axis.
+      const vocab = new Set([...spec.values, ...Object.keys(spec.retiredValues)]);
+      if (!u.members.every((m) => vocab.has(m))) continue;
+
+      if (retiredName) {
+        findings.push({
+          rule: 3,
+          id: `${u.name}#name`,
+          where: `${u.file}:${u.line}`,
+          detail: `type name carries the retired ${axis} word \`${retiredName}\` → \`${spec.canonical}\` (§ 2)`,
+        });
+      }
+      const retiredVals = u.members.filter(
+        (m) => Object.prototype.hasOwnProperty.call(spec.retiredValues, m)
+      );
+      if (retiredVals.length > 0) {
+        findings.push({
+          rule: 3,
+          id: `${u.name}#values`,
+          where: `${u.file}:${u.line}`,
+          detail: `retired ${axis} value(s) ${retiredVals
+            .map((v) => `\`${v}\` → \`${spec.retiredValues[v]}\``)
+            .join(', ')}`,
+        });
+      }
     }
   }
   return findings;
@@ -1018,6 +1102,7 @@ function main() {
     ...stepFindings(tokens.byName),
     ...typeFindings(tokens.byName),
     ...unionFindings(unions.unions),
+    ...nameIdentifiedAxisFindings(unions.unions),
     ...modifierFindings(
       modifiers.mods,
       serviceLineExemption(modifiers.occurrences, lines, slBlocks)

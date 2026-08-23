@@ -125,6 +125,7 @@ The prop layer migrates to the token layer's vocabulary, not the reverse. `error
 | Hue source — which palette paints it | `emphasis` | `neutral` · `brand` · `accent` | — | TextLink, SocialIcon, ContactIcon (`tone` → `emphasis`; `grayscale` → `neutral`); Banner, Badge, Counter (brand member extracted, below) |
 | Fill treatment intensity | `appearance` | `solid` · `subtle` · `muted` | Tag | — |
 | Spacing compression | `density` | `comfortable` · `compact` | Tag, Sheet | — |
+| Orientation — mutually-exclusive layout direction, no valence | `orientation` | `horizontal` · `vertical` | ButtonGroup, Divider, CardList | Stack, Form (`direction`/`layout` → `orientation`); Field (`layout` → `orientation`; `stacked`/`inline` → `vertical`/`horizontal`) — added by § Amendments (#2001) |
 
 **`tone` takes valence, not `status`.** `status` is the word English already uses for the state of a subject — `online`, `pending` — and BDS already backs that reading with scoped-intent tokens — `--background-presence-{online,offline,busy,away}` ship today and match `AvatarStatus` member-for-member, in the `--{purpose}-{scope}-{scope-value}` form token-anatomy documents. Forcing `status` to mean valence would require renaming Avatar's and TaskConsole's correct props to free the word, and orphaning the presence token family from the prop it backs. `tone` is the narrower word and is already the prop name on the two components that use it for valence.
 
@@ -234,6 +235,10 @@ The explicit retired-synonym list. Every row is rejected in new work; the Migrat
 | `grayscale` | `emphasis="neutral"` | `SocialIconTone`, `ContactIconTone` |
 | `announcement` | `emphasis="brand"` | `BannerTone`, `--tone-announcement` |
 | `brand` as a valence member | `emphasis="brand"` | `BadgeStatus`, `CounterStatus` |
+| `direction` for orientation | `orientation` | Stack (`StackDirection`) — § Amendments (#2001) |
+| `layout` for orientation | `orientation` | Field (`FieldLayout`), Form (`FormLayout`) — § Amendments (#2001) |
+| `stacked` (orientation value) | `orientation="vertical"` | Field — § Amendments (#2001) |
+| `inline` (orientation value) | `orientation="horizontal"` | Field — § Amendments (#2001) |
 
 ### Step words
 
@@ -293,7 +298,7 @@ This ADR is the spec for #1910 AC #5's gate, which shipped as [`lint-naming-cano
 
 1. A token name whose step falls outside its Tier's vocabulary in § 3, and is not a § Named exception.
 2. A token name defined twice with different value *types* (the `--box-shadow-md` class) — distinct from the existing `lint-token-shadowing`, which allows a marked override.
-3. A prop union mixing axes from § 2's table, or containing a § Retired valence word.
+3. A prop union mixing axes from § 2's table, or containing a § Retired valence word — or, for a **name-identified axis** (the orientation axis, § Amendments), a union whose type name carries a retired axis word (`StackDirection`, `FormLayout`) or a retired axis value (`FieldLayout`'s `stacked`/`inline`). The name path is value-corroborated — every member must belong to the axis vocabulary — so a homonym like `SortDirection = 'asc' | 'desc' | 'none'` is not a finding.
 4. A BEM modifier without its axis prefix (§ 4), or carrying a retired word — except a bare service-line modifier on a block that emits from a `ServiceLine`-typed value (§ 4's named exception). The value list is read from `ServiceLine` at scan time; a rename of that type is a scan failure, not a silently-lifted carve-out.
 5. Any word not on a closed list here — the § 6 default.
 6. A reference to a token in the `--*-status-*` family, which § Token families retires and [#1958](https://github.com/brikdesigns/brik-bds/issues/1958) deleted.
@@ -321,3 +326,20 @@ Two limits are worth naming, because a gate whose blind spots are undocumented g
 
 - **Rule 1 does not read colour tokens.** A colour token's tail is a role, not a step (`--color-blue-light`, `--background-brand-primary`), and § 3's numeric/t-shirt vocabulary cannot express either. The colour ramps *do* carry two vocabularies in one family — `--color-blue-500` beside `--color-blue-light`, across 10 hues — which this ADR never dispositioned. Filed as [#1949](https://github.com/brikdesigns/brik-bds/issues/1949) for a § 6 amendment; the gate may not assert a disposition the ADR has not made.
 - **Rule 4 reads CSS only.** A modifier built from a runtime value (`` `bds-badge--${tone}` ``) has no static spelling to judge — the same blind spot [`slot-pattern-check.mjs`](../../scripts/slot-pattern-check.mjs) documents at `:38-42`.
+
+## Amendments
+
+New words admitted or retired after acceptance, per § 6. Each entry names the word, its axis, its closed value list, and the negative search that admitted it.
+
+### Orientation axis (2026-08-23, [#2001](https://github.com/brikdesigns/brik-bds/issues/2001))
+
+**Does an existing § 2 word name this axis?** No. The concept's synonyms across the five known components were `orientation` (ButtonGroup, Divider, CardList), `direction` (Stack), and `layout` (Field) — plus `layout` again on Form, a sixth component the umbrella's first repro missed — and none of § 2's six words (`tone`, `status`, `variant`, `emphasis`, `appearance`, `density`) names a layout direction. `orientation` is the majority prop spelling (4 of 6) and the token layer holds no competing word.
+
+- **Axis:** orientation — a mutually-exclusive layout direction, carrying no valence.
+- **Word:** `orientation`. **Closed values:** `horizontal` · `vertical`.
+- **Retired for this axis:** prop names `direction` (Stack) and `layout` (Field, Form); values `stacked` → `vertical`, `inline` → `horizontal` (Field).
+- **Correct today:** ButtonGroup, Divider, CardList.
+
+**Enforcement.** This is the first **name-identified** axis: `StackDirection` / `FormLayout` carry canonical *values* (`horizontal`/`vertical`) under a retired prop *name*, so the value-based rule-3 path cannot see them — the retirement lives in the type name. And `inline` cannot be retired library-wide the way a valence word is, because `SheetEditTarget = 'inline' | 'page'` uses it for an unrelated axis; the retirement is therefore scoped to unions the orientation axis actually names, value-corroborated so `SortDirection = 'asc' | 'desc' | 'none'` is left alone. `lint-naming-canon` gained `AXES.orientation`, `NAME_IDENTIFIED_AXES`, and `nameIdentifiedAxisFindings()` in this PR (§ Enforcement rule 3), with a planted violation per the § Enforcement bar.
+
+**Baseline.** The four live violations at amendment time — `StackDirection#name` (#2004), `FormLayout#name` (#2008), `FieldLayout#name` + `FieldLayout#values` (#2005) — are baselined against their rename issues. The bare `--vertical`/`--horizontal`/`--stacked`/`--inline` BEM modifiers were already baselined under #1927; their `--orientation-` prefix migration is [#2007](https://github.com/brikdesigns/brik-bds/issues/2007). The countdown is complete when all four rename PRs land.

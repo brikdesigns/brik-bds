@@ -339,6 +339,55 @@ describe('rule 3 — a union carries one axis (ADR-033 § 2)', () => {
   });
 });
 
+describe('rule 3 — the name-identified orientation axis (§ Amendments, #2001)', () => {
+  it('fails on a retired prop NAME even when the values are canonical', () => {
+    // Stack's real shape: `horizontal`/`vertical` are already right, so only the
+    // type name `direction` carries the drift — the value-based path is blind.
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type StackDirection = 'horizontal' | 'vertical';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/StackDirection#name — type name carries the retired orientation word `direction` → `orientation`/);
+  });
+
+  it('fails on a retired value in a union the axis names', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type FieldLayout = 'stacked' | 'inline';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/FieldLayout#name — type name carries the retired orientation word `layout` → `orientation`/);
+    expect(out).toMatch(/FieldLayout#values — retired orientation value\(s\) `stacked` → `vertical`, `inline` → `horizontal`/);
+  });
+
+  it('does NOT flag a homonym whose values are not the axis (value-corroboration)', () => {
+    // `SortDirection = 'asc' | 'desc' | 'none'` shares the word `direction` but
+    // is not the orientation axis — the member check keeps it out.
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type SortDirection = 'asc' | 'desc' | 'none';\n`,
+    });
+    expect(out).not.toMatch(/SortDirection/);
+    expect(code).toBe(0);
+  });
+
+  it('does NOT flag a canonically-named union with canonical values', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type DividerOrientation = 'horizontal' | 'vertical';\n`,
+    });
+    expect(out).not.toMatch(/DividerOrientation/);
+    expect(code).toBe(0);
+  });
+
+  it('does NOT retire `inline` on an unrelated per-component axis', () => {
+    // `SheetEditTarget = 'inline' | 'page'` — `inline` means edit-in-place, not
+    // orientation. Scoping the retirement to name-identified unions leaves it be.
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type SheetEditTarget = 'inline' | 'page';\n`,
+    });
+    expect(out).not.toMatch(/SheetEditTarget/);
+    expect(code).toBe(0);
+  });
+});
+
 describe('rule 4 — a BEM modifier carries its axis prefix (ADR-033 § 4)', () => {
   it('fails on a bare modifier', () => {
     const { code, out } = run({ css: `${CLEAN_CSS}.bds-badge--marketing { color: red; }\n` });
