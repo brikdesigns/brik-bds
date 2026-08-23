@@ -54,7 +54,14 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   tabs?: ReactNode;
   /** Key/value pairs rendered below the title row (e.g. Owner, Status, Updated). */
   metadata?: MetadataItem[];
-  /** Title scale. Default: 'lg' */
+  /**
+   * Title scale. Default: 'lg'.
+   *
+   * The step names are offset from the tokens they render — `lg` is the
+   * page-title default and renders `--heading-xl`, the Section-headline step
+   * the build standards assign a page's `<h1>`. Only `md` and `sm` name-match
+   * their token. `lg` is not `--heading-lg`. See brik-bds#1997.
+   */
   size?: 'sm' | 'md' | 'lg';
   /**
    * Pin the header to the top of its scroll container on scroll
