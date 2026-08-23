@@ -114,12 +114,35 @@ const CLEAN_REFS = `/* The --*-status-* family was deleted in #1958; do not re-a
 `;
 
 /**
+ * The service-line fixture. `information` is the case #1982 was filed for: it
+ * is a service LINE, and rule 4 used to read it as the retired valence word and
+ * print `--tone-info` — a migration that unmatches the selector from the class
+ * ServiceTag.tsx actually emits.
+ */
+const CLEAN_SERVICE_CONFIG = `export type ServiceLine = 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
+`;
+const CLEAN_SERVICE_TSX = `import type { ServiceLine } from './service-config';
+export interface ServiceTagProps { category: ServiceLine }
+export function ServiceTag({ category }: ServiceTagProps) {
+  return <span className={\`bds-service-tag--\${category}\`} />;
+}
+`;
+const CLEAN_SERVICE_CSS = `.bds-service-tag--information { background: var(--background-service-information); }
+.bds-service-tag--marketing { background: var(--background-service-marketing); }
+.bds-service-tag--brand { background: var(--background-service-brand); }
+`;
+
+/**
  * Run the gate over a fixture tree. `--no-baseline` by default so a case is
  * judged on its own, not against the repo's live baseline. `--refs` is always
  * pointed at the fixture too: left to its default it would scan the real
  * `components/`, `docs-site/`, … and every case would then depend on repo state.
  */
-function run({ tokens = CLEAN_TOKENS, tsx = CLEAN_TSX, css = CLEAN_CSS, refs = CLEAN_REFS, refsDir, baseline, args = [] } = {}) {
+function run({
+  tokens = CLEAN_TOKENS, tsx = CLEAN_TSX, css = CLEAN_CSS, refs = CLEAN_REFS, refsDir,
+  serviceConfig = CLEAN_SERVICE_CONFIG, serviceTsx = CLEAN_SERVICE_TSX, serviceCss = CLEAN_SERVICE_CSS,
+  baseline, args = [],
+} = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'naming-canon-'));
   const tokensPath = path.join(dir, 'tokens.css');
   const componentsDir = path.join(dir, 'ui', 'Badge');
@@ -127,6 +150,14 @@ function run({ tokens = CLEAN_TOKENS, tsx = CLEAN_TSX, css = CLEAN_CSS, refs = C
   fs.writeFileSync(tokensPath, tokens);
   fs.writeFileSync(path.join(componentsDir, 'Badge.tsx'), tsx);
   fs.writeFileSync(path.join(componentsDir, 'Badge.css'), css);
+
+  // Rule 4's carve-out sources its value list from this exact path, so every
+  // fixture needs it — a missing one is a SCAN FAILED, which is the point.
+  const serviceDir = path.join(dir, 'ui', 'ServiceTag');
+  fs.mkdirSync(serviceDir, { recursive: true });
+  if (serviceConfig !== null) fs.writeFileSync(path.join(serviceDir, 'service-config.ts'), serviceConfig);
+  if (serviceTsx !== null) fs.writeFileSync(path.join(serviceDir, 'ServiceTag.tsx'), serviceTsx);
+  if (serviceCss !== null) fs.writeFileSync(path.join(serviceDir, 'ServiceTag.css'), serviceCss);
 
   const refsPath = path.join(dir, 'refs');
   fs.mkdirSync(refsPath, { recursive: true });
@@ -346,6 +377,69 @@ describe('rule 4 — a BEM modifier carries its axis prefix (ADR-033 § 4)', () 
     const { code, out } = run();
     expect(out).not.toMatch(/--disabled|--loading/);
     expect(code).toBe(0);
+  });
+});
+
+describe('rule 4 — the service-line carve-out (§ Named exceptions, #1982)', () => {
+  it('does NOT flag a service line on a block that emits from a ServiceLine value', () => {
+    // The whole bug: `--information` is the Information service line, and the
+    // gate used to print `--tone-info` for it.
+    const { code, out } = run();
+    expect(out).not.toMatch(/--information/);
+    expect(out).toMatch(/clean — 0 live violation/);
+    expect(code).toBe(0);
+  });
+
+  it('AC #2 — the same value on a NON-service block still fails', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}\n.bds-badge--information { color: red; }` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/✗ --information/);
+    expect(out).toMatch(/Badge\.css/);
+  });
+
+  it('one non-service occurrence keeps the whole file reportable', () => {
+    // Two blocks in one file, one of them not a service emitter. Exempting the
+    // (mod, file) pair on the strength of the service block alone would hide it.
+    const { code, out } = run({
+      serviceCss: `${CLEAN_SERVICE_CSS}\n.bds-service-legend--information { color: red; }`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/✗ --information/);
+  });
+
+  it('importing ServiceLine is not enough — the block must emit from it (the Card case)', () => {
+    // Card imports ServiceLine and derives a type from it, but paints
+    // `.bds-card--brand` from an unrelated `variant`. A directory- or
+    // import-level test would exempt that and hide a real § 4 finding.
+    const { code, out } = run({
+      tsx: `import type { ServiceLine } from '../ServiceTag/service-config';
+export type CardTint = Exclude<ServiceLine, 'service'>;
+export type CardVariant = 'brand' | 'plain';
+export interface CardProps { variant: CardVariant; tint?: CardTint }
+export function Card({ variant }: CardProps) {
+  return <div className={\`bds-card--\${variant}\`} />;
+}`,
+      css: '.bds-card--brand { border: 1px solid red; }',
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/✗ --brand/);
+  });
+
+  it('the value list is SOURCED — a renamed ServiceLine type is a SCAN FAILURE', () => {
+    const { code, out } = run({ serviceConfig: 'export type ServiceCategory = \'brand\';' });
+    expect(out).toMatch(/SCAN FAILED/);
+    expect(out).toMatch(/ServiceLine/);
+    expect(code).toBe(2);
+  });
+
+  it('a carve-out that matches nothing never reads as clean', () => {
+    // The silent-failure mode: the emission regex stops matching, no block is
+    // exempt, and the carve-out is gone. It must fail on the denominator, not
+    // quietly re-flag every service line as a naming violation.
+    const { code, out } = run({ serviceTsx: 'export const nothing = 1;' });
+    expect(out).toMatch(/SCAN FAILED/);
+    expect(out).toMatch(/service-line blocks/);
+    expect(code).toBe(2);
   });
 });
 
