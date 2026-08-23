@@ -70,12 +70,13 @@ Stack buttons in a column. Pair with `fullWidth` on each button for stacked auth
 
 - **Don't put more than 3 buttons in a group.** A "toolbar" of 5 unrelated actions is a different pattern — use spacing, not grouping.
 - **Don't mix sizes inside a group.** All buttons should share the same `size`. Mixed sizes break the rhythm.
+- **Don't use it in a width-constrained cell** (a data-grid action column). ButtonGroup `flex-wrap`s and forces `--gap-md` — two icon buttons overflow a narrow (~120px) column and wrap onto a second line ([portal #2782](https://github.com/brikdesigns/brik-client-portal/issues/2782)). Keep a non-wrapping `<Stack direction="horizontal" gap="xs" justify="end">` in those cells; reach for ButtonGroup only where the row has room (footers, bars).
 
 ## Accessibility
 
-- Renders a plain `<div>` container. Each child Button keeps its own keyboard semantics.
+- Renders a `<div role="group">` container. Each child Button keeps its own keyboard semantics.
 - Tab order follows DOM order — for vertical groups, primary actions should appear first in source.
-- No `role="group"` is added by default; if the group represents a single ARIA group (e.g. radiogroup-like behavior), wrap in your own labeled `<fieldset>` or `<div role="group" aria-labelledby="...">`.
+- The group has no accessible name by default. If it needs one (e.g. radiogroup-like behavior), pass `aria-label` / `aria-labelledby` — the `role="group"` is already applied.
 
 ## API
 
