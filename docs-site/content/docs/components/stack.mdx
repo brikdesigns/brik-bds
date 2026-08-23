@@ -5,7 +5,7 @@ description: One-axis layout primitive with a consistent gap. Use for vertical c
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Stack lays out children along a single axis with a consistent `gap` from the spacing scale. Vertical by default — the workhorse for card bodies, form sections, and page content flow. Set `direction="horizontal"` for a row.
+Stack lays out children along a single axis with a consistent `gap` from the spacing scale. Vertical by default — the workhorse for card bodies, form sections, and page content flow. Set `orientation="horizontal"` for a row.
 
 ## Use it for
 
@@ -21,13 +21,13 @@ import { Stack } from '@brikdesigns/bds';
 
 ## Variants
 
-### Direction
+### Orientation
 
 `vertical` (default) or `horizontal`. For a horizontal row that *wraps*, use [Cluster](/docs/components/cluster) instead.
 
 ```tsx
 <Stack gap="sm">…</Stack>
-<Stack direction="horizontal" gap="md">…</Stack>
+<Stack orientation="horizontal" gap="md">…</Stack>
 ```
 
 ### Gap
@@ -44,7 +44,7 @@ The full spacing scale — `tiny` through `huge` (default `md`). Use `none` to r
 
 ```tsx
 <Stack align="center">…</Stack>
-<Stack direction="horizontal" justify="between">…</Stack>
+<Stack orientation="horizontal" justify="between">…</Stack>
 ```
 
 ## When *not* to use
@@ -64,7 +64,8 @@ The full spacing scale — `tiny` through `huge` (default `md`). Use `none` to r
 {/* props-check: StackProps @ components/ui/Stack/Stack.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `direction` | `'vertical' \| 'horizontal'` | `'vertical'` |
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` |
+| `direction` | `'vertical' \| 'horizontal'` | — |
 | `gap` | `'none' \| 'tiny' \| 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| 'huge'` | `'md'` |
 | `align` | `'start' \| 'center' \| 'end' \| 'stretch' \| 'baseline'` | — |
 | `justify` | `'start' \| 'center' \| 'end' \| 'between' \| 'around' \| 'evenly'` | — |

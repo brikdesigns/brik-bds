@@ -17,7 +17,7 @@ const meta: Meta<typeof Stack> = {
     },
   },
   argTypes: {
-    direction: { control: 'select', options: ['horizontal', 'vertical'] },
+    orientation: { control: 'select', options: ['horizontal', 'vertical'] },
     gap: { control: 'select', options: ['none', 'tiny', 'xs', 'sm', 'md', 'lg', 'xl', 'huge'] },
     align: { control: 'select', options: [undefined, 'start', 'center', 'end', 'stretch', 'baseline'] },
     justify: { control: 'select', options: [undefined, 'start', 'center', 'end', 'between', 'around', 'evenly'] },
@@ -47,7 +47,7 @@ const Box = ({ children, w }: { children?: React.ReactNode; w?: string }) => (
   </div>
 );
 
-/* direction / gap / align are Controls on Default — the side-by-side
+/* orientation / gap / align are Controls on Default — the side-by-side
    comparisons live in Stack.mdx as docs-local demos (#1489). SectionLabel
    was gallery-only scaffolding and moved there with them. */
 
@@ -58,7 +58,7 @@ const Box = ({ children, w }: { children?: React.ReactNode; w?: string }) => (
 /** @summary Interactive playground — tweak props in the Controls panel */
 export const Default: Story = {
   args: {
-    direction: 'vertical',
+    orientation: 'vertical',
     gap: 'md',
     align: undefined,
     justify: undefined,
@@ -81,7 +81,7 @@ export const Default: Story = {
 export const CardBody: Story = {
   render: () => (
     <Stack
-      direction="vertical"
+      orientation="vertical"
       gap="sm"
       style={{
         maxWidth: 320,
@@ -97,7 +97,7 @@ export const CardBody: Story = {
       <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
         Card description with a couple of sentences of supporting copy that demonstrates the typical Stack-with-md-gap rhythm.
       </p>
-      <Stack direction="horizontal" gap="xs" justify="end">
+      <Stack orientation="horizontal" gap="xs" justify="end">
         <Box>Cancel</Box>
         <Box>Save</Box>
       </Stack>
