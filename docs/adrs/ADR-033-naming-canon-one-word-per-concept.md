@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 **Date:** 2026-08-20
-**Accepted:** 2026-08-21 — § Enforcement's gate shipped as [`lint-naming-canon`](../../scripts/lint-naming-canon.mjs) ([#1936](https://github.com/brikdesigns/brik-bds/issues/1936)), all five rules demonstrated failing on planted violations.
+**Accepted:** 2026-08-21 — § Enforcement's gate shipped as [`lint-naming-canon`](../../scripts/lint-naming-canon.mjs) ([#1936](https://github.com/brikdesigns/brik-bds/issues/1936)), all rules demonstrated failing on planted violations.
 **Supersedes:** —
 **Superseded by:** —
 **Owner:** Nick Stanerson
@@ -249,7 +249,8 @@ Every mapping below is positional and measured; values do not change.
 | Retired | Migrates to | Notes |
 |---|---|---|
 | `--box-shadow-*` | `--shadow-{sm,md,lg,xl}` | § 5. Removes the `--box-shadow-md` type collision, four `bds-lint-ignore`s, and `--box-shadow-none` |
-| `--{purpose}-status-{value}` | `--{purpose}-{value}` | Already self-documented as deprecated at `:1333-1334`; #1909 is the propagation |
+| `--{purpose}-status-{value}` | `--{purpose}-{value}` | Already self-documented as deprecated at `:1333-1334`; #1909 is the propagation. **Deleted in [#1958](https://github.com/brikdesigns/brik-bds/issues/1958)** — all 20 declarations gone, § Enforcement rule 6 now rejects a reference. Three targets are not "drop the segment": the `-subtle` names fold into `surface` (§ D — the purpose already means the tint), `status-neutral` resolved to `--surface-neutral` and not the saturated `--background-neutral`, and a retired valence word routes through § 1 |
+| `--background-status-{purple,orange}` | `--background-accent-{purple,orange}` | #1958. These are hue-source names, and § 6 turned out to owe **no amendment**: the `accent-{hue}` scope is already documented ([color § Accent](../../docs-site/content/docs/primitives/color.mdx)) and already Figma-sourced to the same `--color-system-{purple,orange}` primitives, so the two names retired into an existing family rather than minting a word |
 | `--{purpose}-info` (gray) | `--{purpose}-neutral` | § 5. Frees `info` for the blue signal |
 | `--easing-ease-*` | `--ease-*` | Already dispositioned in [token-anatomy § Named exceptions](../../docs-site/content/docs/primitives/token-anatomy.mdx) |
 | `--tooltip-*` | `--bds-tooltip-*` | Already dispositioned there; ADR-014 form |
@@ -288,8 +289,11 @@ This ADR is the spec for #1910 AC #5's gate, which shipped as [`lint-naming-cano
 3. A prop union mixing axes from § 2's table, or containing a § Retired valence word.
 4. A BEM modifier without its axis prefix (§ 4), or carrying a retired word.
 5. Any word not on a closed list here — the § 6 default.
+6. A reference to a token in the `--*-status-*` family, which § Token families retires and [#1958](https://github.com/brikdesigns/brik-bds/issues/1958) deleted.
 
-Rules 1 and 2 read `dist/tokens.css`; rules 3 and 4 read `components/ui/**/*.{tsx,css}`. Existing gates the new one must not duplicate: [`lint-token-purpose-slots`](../../scripts/lint-token-purpose-slots.mjs) (does the *slot* ship documented — structure, not vocabulary), `lint-token-shadowing` (double definition, type-blind), [`slot-pattern-check.mjs`](../../scripts/slot-pattern-check.mjs) (modifier *shape*), `lint-component-props` (docs match source), `lint-mdx-tokens` (phantom names in docs).
+Rules 1–5 judge a name where it is *declared*, which is the right unit for a word that is merely wrong and the wrong unit for a word that is **gone**: an unresolvable custom property is not a CSS error, so a `var()` pointing at a deleted token renders transparent and ships. Rule 6 therefore reads the consumption side, and matches two shapes — `var(--*-status-*)`, and the `cssVar: '--*-status-*'` data form the docs-site `ColorGrid` wraps in `var()` at render time. Prose naming the retired family stays legal, or this ADR could not describe it. Its migration targets are transcribed from the deleted declarations rather than derived, because dropping the `status-` segment yields `--background-error` — not a token, and § 1's retirement is what makes the answer `--background-negative`.
+
+Rules 1 and 2 read `dist/tokens.css`; rules 3 and 4 read `components/ui/**/*.{tsx,css}`; rule 6 reads `components/`, `content-system/`, `docs-site/`, `stories/`, `tokens/`, `.storybook/`, and hard-fails on a listed directory that does not exist so the coverage list cannot rot into a silently-empty scan. Existing gates the new one must not duplicate: [`lint-token-purpose-slots`](../../scripts/lint-token-purpose-slots.mjs) (does the *slot* ship documented — structure, not vocabulary), `lint-token-shadowing` (double definition, type-blind), [`slot-pattern-check.mjs`](../../scripts/slot-pattern-check.mjs) (modifier *shape*), `lint-component-props` (docs match source), `lint-mdx-tokens` (phantom names in docs).
 
 ### The baseline
 
