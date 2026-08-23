@@ -1,14 +1,14 @@
 ---
 title: Sheet section
-description: Named wrapper for a content block inside a Sheet. Pairs uppercase heading with locked vertical rhythm.
+description: Named wrapper for a content block inside a Sheet. Pairs a section title with locked vertical rhythm.
 ---
 
-SheetSection is the only structural wrapper you should need inside a [Sheet](/docs/components/sheet) body. Pairs an uppercase section heading with content and locks the spacing between sections. Replaces the ad-hoc flex-column + raw `<h3>` + `detail.sectionHeading` patterns.
+SheetSection is the only structural wrapper you should need inside a [Sheet](/docs/components/sheet) body. Pairs a section title with content and locks the spacing between sections. Replaces the ad-hoc flex-column + raw `<h3>` + `detail.sectionHeading` patterns.
 
 ## Use it for
 
 - Each logical grouping of fields inside a [Sheet](/docs/components/sheet) body
-- Lead paragraphs at the top of a sheet (heading omitted, description-only)
+- Lead paragraphs at the top of a sheet (title omitted, description-only)
 - Section breaks between Brand Identity / Color / Typography blocks in a brand sheet
 
 ## Import
@@ -19,10 +19,10 @@ import { SheetSection } from '@brikdesigns/bds';
 
 ## Variants
 
-### Heading + content
+### Title + content
 
 ```tsx
-<SheetSection heading="Color Primitives">
+<SheetSection title="Color Primitives">
   <FieldGrid columns={4}>
     <Field label="Gold">#c49a2f</Field>
     <Field label="Gray">#b0b0b0</Field>
@@ -32,11 +32,11 @@ import { SheetSection } from '@brikdesigns/bds';
 </SheetSection>
 ```
 
-### Heading + description
+### Title + description
 
 ```tsx
 <SheetSection
-  heading="Brand Voice"
+  title="Brand Voice"
   description="Confident, direct, occasionally playful. Never corporate."
 >
   <Field label="Approved CTAs">
@@ -47,7 +47,7 @@ import { SheetSection } from '@brikdesigns/bds';
 
 ### Description-only
 
-When `heading` is omitted, the section renders as an intro paragraph. Use as the first SheetSection inside a sheet to introduce the content.
+When `title` is omitted, the section renders as an intro paragraph. Use as the first SheetSection inside a sheet to introduce the content.
 
 ```tsx
 <SheetSection description="Birdwell & Mutlak presents a bold, editorial identity grounded in legal-industry trust signals." />
@@ -58,7 +58,7 @@ When `heading` is omitted, the section renders as an intro paragraph. Use as the
 `children` is optional. Use to reserve a slot when content is loading or conditionally rendered.
 
 ```tsx
-<SheetSection heading="Activity" spacing="md">
+<SheetSection title="Activity" spacing="md">
   {activity.length ? <ActivityList items={activity} /> : <EmptyState title="No activity yet" />}
 </SheetSection>
 ```
@@ -66,6 +66,21 @@ When `heading` is omitted, the section renders as an intro paragraph. Use as the
 ### Spacing
 
 `spacing="md"` for tighter rhythm in dense sheets; `spacing="lg"` (default) elsewhere.
+
+### Nested sections and the size ramp
+
+`titleAs` drives both the rendered element and its visual size — `h2`/`h3`/`h4` → `--heading-md`/`--heading-sm`/`--heading-tiny`. An `h3` super-group can wrap `h4` sub-groups so the nesting reads as a visible hierarchy, not just a DOM-level change.
+
+```tsx
+<SheetSection title="Color Primitives" titleAs="h3">
+  <SheetSection title="Light Mode" titleAs="h4">
+    ...
+  </SheetSection>
+  <SheetSection title="Dark Mode" titleAs="h4">
+    ...
+  </SheetSection>
+</SheetSection>
+```
 
 ## Pattern: full sheet layout
 
@@ -75,7 +90,7 @@ The canonical "Brand Identity" sheet — lead description followed by named sect
 <Sheet title="Brand Identity">
   <SheetSection description="Birdwell & Mutlak presents a bold, editorial identity..." />
 
-  <SheetSection heading="Color Primitives">
+  <SheetSection title="Color Primitives">
     <FieldGrid columns={4}>
       <Field label="Gold">#c49a2f</Field>
       <Field label="Gray">#b0b0b0</Field>
@@ -84,11 +99,11 @@ The canonical "Brand Identity" sheet — lead description followed by named sect
     </FieldGrid>
   </SheetSection>
 
-  <SheetSection heading="Typography">
+  <SheetSection title="Typography">
     <Table columns={typographyCols} rows={typographyRows} />
   </SheetSection>
 
-  <SheetSection heading="Mode Recommendations">
+  <SheetSection title="Mode Recommendations">
     <Field label="Spacing">Comfortable</Field>
     <Field label="Density">Relaxed</Field>
   </SheetSection>
@@ -97,14 +112,12 @@ The canonical "Brand Identity" sheet — lead description followed by named sect
 
 ## Rules
 
-- **Headings are uppercase labels**, not headings. They read as "this is the label for the block below."
-- **Don't nest SheetSections.** If you need sub-structure, use [Field](/docs/components/field) or [FieldGrid](/docs/components/field-grid) inside one section.
-- **No raw `<h3>` / `<h4>` inside a Sheet body.** Use SheetSection's `heading` prop or [Field](/docs/components/field)'s `label` prop.
+- **`title` is a real heading**, not an uppercase label. Default `<h3>` keeps the Sheet's own `<h2>` title as the outline root; use `titleAs="h4"` for a sub-group nested under another SheetSection.
+- **No raw `<h3>` / `<h4>` inside a Sheet body.** Use SheetSection's `title` prop or [Field](/docs/components/field)'s `label` prop.
 
 ## Accessibility
 
-- Renders a `<section>` with the heading as a `<h3>` semantic by default.
-- Uppercase styling is visual only — screen readers receive the original case.
+- Renders a `<section>` with the title as an `<h3>` semantic by default.
 
 ## API
 
@@ -112,11 +125,15 @@ The canonical "Brand Identity" sheet — lead description followed by named sect
 
 | Prop | Type | Default |
 |---|---|---|
+| `title` | `string` | — |
 | `heading` | `string` | — |
+| `titleAs` | `'h2' \| 'h3' \| 'h4'` | `'h3'` |
+| `headingLevel` | `'h2' \| 'h3' \| 'h4'` | — |
 | `description` | `ReactNode` | — |
 | `children` | `ReactNode` | — |
 | `spacing` | `'md' \| 'lg'` | `'lg'` |
-| `headingLevel` | `SheetSectionHeadingLevel` | `'h3'` |
+
+`heading` / `headingLevel` are `@deprecated` — renamed `title` / `titleAs`; `title`/`titleAs` win when both are passed.
 
 Plus standard `<section>` HTML attributes (excluding `title`).
 

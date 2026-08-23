@@ -8,7 +8,9 @@ import * as Stories from './SheetSection.stories';
 
 <ComponentLinks slug="sheet-section" />
 
-The named wrapper for a block of content inside a `<Sheet>` body. Pairs an uppercase section heading with its content and locks the vertical rhythm between sections.
+The named wrapper for a block of content inside a `<Sheet>` body. Pairs a section title with its content and locks the vertical rhythm between sections.
+
+`heading` / `headingLevel` are `@deprecated` — renamed `title` / `titleAs` to match `DataSection`'s prop shape. Both still work for one minor version (`title`/`titleAs` win when both are passed); consumers should sweep `heading` → `title` and `headingLevel` → `titleAs` at their own pace.
 
 ## Default
 
@@ -16,9 +18,12 @@ The named wrapper for a block of content inside a `<Sheet>` body. Pairs an upper
 
 ## Variants
 
-SheetSection has no semantic-variant axis — heading-only, heading + description, description-only (sheet lead), and empty shells are all presence/absence of `heading` and `description`, exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
+SheetSection has no semantic-variant axis — title-only, title + description, description-only (sheet lead), and empty shells are all presence/absence of `title` and `description`, exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
+
+`titleAs` also drives the visual size on a `h2`/`h3`/`h4` → `--heading-md`/`--heading-sm`/`--heading-tiny` ramp — see the Level → Size Ramp story below.
 
 <Canvas of={Stories.Default} />
+<Canvas of={Stories.LevelRamp} />
 
 ## Props
 
