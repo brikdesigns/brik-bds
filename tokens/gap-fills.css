@@ -173,15 +173,11 @@
      stands and the five consumers that wanted the subtle tint moved to
      --surface-neutral, which is the same #d4d4d4 they already rendered.
 
-     NOTE: never write a curly brace in this file's comments, not even in prose
-     (the brace-expansion shorthand for a token pair is the tempting case).
-     scripts/validate-themes.js:77 finds a block's end with a bare indexOf on
-     the closing brace and does not strip comments first, so one brace in a
-     comment truncates the light :root block and every token declared after it
-     resolves to undefined. It cost 18494 -> 8489 chars of parsed block when
-     this comment first shipped that shorthand, and contrast-gate failed on an
-     unrelated token 150 lines below. Filed as brik-bds#1965 — delete this
-     paragraph when that lands. */
+     (The paragraph that used to stand here banned curly braces in this file's
+     comments, because validate-themes.js ended a block at the first closing
+     brace without stripping comments and one brace in prose truncated the light
+     :root block. brik-bds#1965 fixed the parser, so the ban is retired — the
+     rule is now enforced by a test rather than by everyone remembering it.) */
 
   /* ── The blue `info` signal (ADR-033 § 5, brik-bds#1959) ──
      `info` now names the BLUE informational signal. The gray family that held
