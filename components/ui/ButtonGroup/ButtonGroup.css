@@ -23,7 +23,7 @@
 
 /* ─── Orientation: vertical ──────────────────────────────────── */
 
-.bds-button-group--vertical {
+.bds-button-group--orientation-vertical {
   flex-direction: column;
   align-items: stretch;
 }

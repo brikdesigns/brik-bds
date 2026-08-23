@@ -71,7 +71,7 @@ export function ButtonGroup({
 }: ButtonGroupProps) {
   const classes = bdsClass(
     'bds-button-group',
-    orientation === 'vertical' && 'bds-button-group--vertical',
+    orientation === 'vertical' && 'bds-button-group--orientation-vertical',
     `bds-button-group--align-${align}`,
     fullWidth && 'bds-button-group--full-width',
     className

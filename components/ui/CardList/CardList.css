@@ -13,11 +13,11 @@
 
 /* ─── Orientation ────────────────────────────────────────────── */
 
-.bds-card-list--vertical {
+.bds-card-list--orientation-vertical {
   flex-direction: column;
 }
 
-.bds-card-list--horizontal {
+.bds-card-list--orientation-horizontal {
   flex-direction: row;
   flex-wrap: wrap;
   align-items: stretch;
@@ -37,17 +37,17 @@
   min-width: 0;
 }
 
-.bds-card-list--vertical > .bds-card-list__item {
+.bds-card-list--orientation-vertical > .bds-card-list__item {
   flex-direction: column;
   width: 100%;
 }
 
-.bds-card-list--horizontal > .bds-card-list__item {
+.bds-card-list--orientation-horizontal > .bds-card-list__item {
   flex: 1 1 0;
   flex-direction: column;
 }
 
-.bds-card-list--horizontal.bds-card-list--fit > .bds-card-list__item {
+.bds-card-list--orientation-horizontal.bds-card-list--fit > .bds-card-list__item {
   flex: 0 0 auto;
 }
 
