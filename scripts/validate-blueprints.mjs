@@ -24,7 +24,9 @@ import { dirname, resolve } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const libraryPath = resolve(__dirname, '..', 'blueprints', 'blueprint-library.json');
 const astroDir = resolve(__dirname, '..', 'content-system', 'blueprints', 'astro');
+const reactDir = resolve(__dirname, '..', 'content-system', 'blueprints', 'react');
 const dispatcherPath = resolve(astroDir, 'BlueprintDispatcher.astro');
+const reactDispatcherPath = resolve(reactDir, 'BlueprintDispatcher.tsx');
 const typesPath = resolve(astroDir, 'types.ts');
 
 const MOOD_VALUES = new Set([
@@ -176,6 +178,22 @@ function extractRegistryKeys(source) {
 }
 
 /**
+ * Extract the BLUEPRINT_REGISTRY key set from the React
+ * BlueprintDispatcher.tsx. The React registry is a
+ * `const BLUEPRINT_REGISTRY: Partial<Record<...>> = { key: Component, ... };`
+ * object (no `as const`); we read the `key:` identifiers from that block.
+ */
+function extractReactRegistryKeys(source) {
+  const block = source.match(/const BLUEPRINT_REGISTRY\b[\s\S]*?=\s*\{([\s\S]*?)\n\}/);
+  if (!block) return null;
+  return block[1]
+    .split('\n')
+    .map((line) => line.match(/^\s*([a-z][a-z0-9_]*)\s*:/))
+    .filter(Boolean)
+    .map((m) => m[1]);
+}
+
+/**
  * Extract the WIRED_BLUEPRINT_KEYS array literal from types.ts.
  */
 function extractWiredKeys(source) {
@@ -222,6 +240,43 @@ function validateRegistrySync(library, dispatcherSrc, typesSrc) {
   return issues;
 }
 
+/**
+ * Gate: the Astro and React BlueprintDispatcher registries must expose the
+ * SAME key set. The two dispatchers are hand-maintained twins (brik-bds#2010);
+ * a key wired in one runtime but not the other renders a real section in one
+ * consumer and silently falls through to `<BlueprintFallback>` in the other —
+ * the exact drift that shipped `stats_dark_bar` + `testimonials_featured_large`
+ * to Astro only. This gate fails the build the moment the sets diverge.
+ */
+function validateRuntimeParity(astroDispatcherSrc, reactDispatcherSrc) {
+  const issues = [];
+  const push = (field, message) => issues.push({ key: '<runtime-parity>', field, message });
+
+  const astroKeys = extractRegistryKeys(astroDispatcherSrc);
+  const reactKeys = extractReactRegistryKeys(reactDispatcherSrc);
+
+  if (!astroKeys) {
+    push('astro/BlueprintDispatcher.astro', 'Could not parse BLUEPRINT_REGISTRY in the Astro dispatcher.');
+    return issues;
+  }
+  if (!reactKeys) {
+    push('react/BlueprintDispatcher.tsx', 'Could not parse BLUEPRINT_REGISTRY in the React dispatcher.');
+    return issues;
+  }
+
+  const astroSet = new Set(astroKeys);
+  const reactSet = new Set(reactKeys);
+
+  for (const k of astroSet) {
+    if (!reactSet.has(k)) push('react/BlueprintDispatcher.tsx', `Astro key "${k}" has no React registry entry — it renders in Astro but falls back in React.`);
+  }
+  for (const k of reactSet) {
+    if (!astroSet.has(k)) push('astro/BlueprintDispatcher.astro', `React key "${k}" has no Astro registry entry — it renders in React but falls back in Astro.`);
+  }
+
+  return issues;
+}
+
 const RED = '\x1b[31m';
 const GREEN = '\x1b[32m';
 const DIM = '\x1b[2m';
@@ -231,10 +286,12 @@ try {
   const raw = await readFile(libraryPath, 'utf8');
   const library = JSON.parse(raw);
   const dispatcherSrc = await readFile(dispatcherPath, 'utf8');
+  const reactDispatcherSrc = await readFile(reactDispatcherPath, 'utf8');
   const typesSrc = await readFile(typesPath, 'utf8');
   const issues = [
     ...validateLibrary(library),
     ...validateRegistrySync(library, dispatcherSrc, typesSrc),
+    ...validateRuntimeParity(dispatcherSrc, reactDispatcherSrc),
   ];
 
   if (issues.length === 0) {
