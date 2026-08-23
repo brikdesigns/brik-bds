@@ -99,7 +99,7 @@ These are different layers.
 The slot is not the text. When documenting a section header with a `[View]` / `[Edit]` toggle:
 
 - The slot holding the toggle → `actions`
-- The component rendering two buttons → `ButtonGroup`
+- The component rendering two buttons → `ButtonGroup` (but in a **width-constrained data-grid cell**, keep a non-wrapping `<Stack direction="horizontal" justify="end">` — ButtonGroup wraps + forces `gap-md`, see [Button group → When *not* to use](/docs/components/button-group))
 - The text on each button → button-label
 
 ## Value

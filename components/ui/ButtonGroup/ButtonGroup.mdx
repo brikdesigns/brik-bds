@@ -53,3 +53,5 @@ Modal and sheet bottom rows follow the platform convention: **primary action far
 > **Note** — Migrating from the old manual `<Row style={{ justifyContent: 'space-between' }}>` ActionBar pattern: replace with `<ButtonGroup align="end">` for modal / sheet rows or `<ButtonGroup align="between">` for destructive-on-left + primary-on-right patterns.
 
 > **Note** — For mutually-exclusive segmented option toolbars (Day / Week / Month, View modes), reach for [`SegmentedControl`](/?path=/docs/components-segmented-control--docs) instead. ButtonGroup is for action sets and freeform toolbars where buttons are independent actions.
+
+> **Note** — ButtonGroup `flex-wrap`s and its spacing is a fixed `--gap-md` (no `gap` prop). That makes it wrong for a **width-constrained data-grid action cell**: two icon buttons overflow a ~120px column and wrap onto a second line (portal [#2782](https://github.com/brikdesigns/brik-client-portal/issues/2782)). Keep a non-wrapping `<Stack direction="horizontal" gap="xs" justify="end">` in those cells; use ButtonGroup only where the row has room (footers, bars).
