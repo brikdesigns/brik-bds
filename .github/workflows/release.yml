@@ -53,7 +53,6 @@ jobs:
           cache: "npm"
           registry-url: "https://npm.pkg.github.com"
           scope: "@brikdesigns"
-          cache: "npm"
 
       - name: Resolve target version
         id: version
