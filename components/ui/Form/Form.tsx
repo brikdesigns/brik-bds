@@ -3,9 +3,12 @@ import { bdsClass } from '../../utils';
 import './Form.css';
 
 /**
- * Form layout direction
+ * Form field orientation
  */
-export type FormLayout = 'vertical' | 'horizontal';
+export type FormOrientation = 'vertical' | 'horizontal';
+
+/** @deprecated Renamed `FormOrientation` (ADR-033 § 2). */
+export type FormLayout = FormOrientation;
 
 /**
  * Form component props
@@ -13,8 +16,13 @@ export type FormLayout = 'vertical' | 'horizontal';
 export interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
   /** Form fields and content */
   children: ReactNode;
-  /** Layout direction for form fields */
-  layout?: FormLayout;
+  /** Orientation for form fields. Default `vertical`. */
+  orientation?: FormOrientation;
+  /**
+   * @deprecated Use `orientation` instead (ADR-033 § 2). Honoured for one minor
+   * version; `orientation` wins when both are passed.
+   */
+  layout?: FormOrientation;
   /** Gap between form fields — value names match the emitted `--gap-*` token */
   gap?: 'md' | 'lg' | 'xl';
   /** Form-level error message */
@@ -53,7 +61,8 @@ export interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
  */
 export function Form({
   children,
-  layout = 'vertical',
+  orientation,
+  layout,
   gap = 'lg',
   error,
   success,
@@ -64,6 +73,7 @@ export function Form({
   style,
   ...props
 }: FormProps) {
+  const resolvedOrientation = orientation ?? layout ?? 'vertical';
   return (
     <form
       className={bdsClass('bds-form', `bds-form--gap-${gap}`, className)}
@@ -85,7 +95,7 @@ export function Form({
       {/* Fields */}
       <div className={bdsClass(
         'bds-form__fields',
-        `bds-form__fields--orientation-${layout}`,
+        `bds-form__fields--orientation-${resolvedOrientation}`,
         `bds-form__fields--gap-${gap}`,
       )}>
         {children}

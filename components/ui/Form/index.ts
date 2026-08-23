@@ -1,1 +1,1 @@
-export { Form, type FormProps, type FormLayout } from './Form';
+export { Form, type FormProps, type FormOrientation, type FormLayout } from './Form';
