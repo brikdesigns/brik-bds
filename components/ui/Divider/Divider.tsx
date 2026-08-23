@@ -35,7 +35,7 @@ export function Divider({
     <hr
       className={bdsClass(
         'bds-divider',
-        `bds-divider--${orientation}`,
+        `bds-divider--orientation-${orientation}`,
         spacing !== 'none' && `bds-divider--spacing-${spacing}`,
         className,
       )}

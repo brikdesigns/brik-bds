@@ -81,7 +81,7 @@ export function Stack({
     <Element
       className={bdsClass(
         'bds-stack',
-        `bds-stack--${resolvedOrientation}`,
+        `bds-stack--orientation-${resolvedOrientation}`,
         gap !== 'none' && `bds-stack--gap-${gap}`,
         align && `bds-stack--align-${align}`,
         justify && `bds-stack--justify-${justify}`,

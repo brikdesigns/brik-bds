@@ -85,7 +85,7 @@ export function Form({
       {/* Fields */}
       <div className={bdsClass(
         'bds-form__fields',
-        `bds-form__fields--${layout}`,
+        `bds-form__fields--orientation-${layout}`,
         `bds-form__fields--gap-${gap}`,
       )}>
         {children}

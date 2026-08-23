@@ -99,7 +99,7 @@ export function Field({
     <div
       className={bdsClass(
         'bds-field',
-        `bds-field--${resolvedOrientation}`,
+        `bds-field--orientation-${resolvedOrientation}`,
         // Only an explicit tier emits a class. No class = the container's
         // inherited default applies, which is how context adaptivity works.
         tier && `bds-field--${tier}`,
