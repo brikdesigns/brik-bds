@@ -13,6 +13,7 @@ import {
   Button,
   Tooltip,
   Accordion,
+  PageHeader,
 } from '@brikdesigns/bds';
 
 /**
@@ -63,6 +64,18 @@ export default function Page() {
         <span>t</span>
       </Tooltip>
       <Accordion items={[{ id: 'a', title: 'A', content: 'body' }]} />
+      {/* The server-safe read affordance (brik-bds#2026). This line is the
+          positive case: `editHref` is a string, so the header renders from a
+          server component with no 'use client' anywhere in the fixture.
+
+          The negative was confirmed by hand before this landed — swapping in
+          `onEdit={() => {}}` fails this same build with:
+            Error: Event handlers cannot be passed to Client Component props.
+              {title: ..., mode: "read", onEdit: function onEdit}
+          It is not committed as a gate because the fixture asserts by
+          building, so a case that must FAIL cannot live alongside one that
+          must pass. Re-run it by hand if you change the read-mode branch. */}
+      <PageHeader title="Server record" mode="read" editHref="/records/1/edit" />
     </main>
   );
 }

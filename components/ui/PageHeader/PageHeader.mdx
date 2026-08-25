@@ -26,6 +26,19 @@ The canonical URL pattern for bimodal pages is `/{table}/[slug]` (read) and `/{t
 
 <Canvas of={Stories.ReadMode} />
 
+### Read mode on a server page
+
+`onEdit` is a function, so it cannot cross the RSC boundary — a React Server Component would have to become a client component to pass it. `mode="read"` with `editHref` renders the same `[Edit]` button as a navigating `<a>`, keeping the page a server component.
+
+| Page kind | Prop | Renders |
+| --- | --- | --- |
+| Client (`'use client'`) | `onEdit` | `<button>` calling the handler |
+| Server (RSC) | `editHref` | `<a href>` navigating to the edit route |
+
+`editHref` wins if both are passed. Edit-mode `onSave` / `onCancel` are inherently client — a server page needing them wraps its own client component.
+
+Both paths render the same pixels, so `editHref` has no canvas of its own — the element is the difference, and it is asserted in `InteractionTestEditHref`.
+
 ### Edit mode
 
 `mode="edit"` with `onSave` / `onCancel` → `[Cancel] [Save]` `ButtonGroup`. Toggle `saveLoading` / `saveDisabled` via Controls.

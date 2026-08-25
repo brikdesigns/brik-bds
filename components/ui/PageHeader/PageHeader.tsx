@@ -15,7 +15,7 @@ export interface MetadataItem {
  * Bimodal page state, symmetric with {@link import('../Sheet').SheetMode `SheetMode`}.
  *
  * - `read` — the page renders read-only content; auto-renders `[Edit]`
- *   in `actions` when `onEdit` is provided.
+ *   in `actions` when `editHref` or `onEdit` is provided.
  * - `edit` — the page renders a form; auto-renders `[Cancel] [Save]`
  *   ButtonGroup in `actions` when `onSave` is provided.
  *
@@ -76,8 +76,25 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
    * `actions` slot is provided. See {@link PageHeaderMode}.
    */
   mode?: PageHeaderMode;
-  /** Navigation handler in read mode. Wires the auto-rendered `[Edit]` button. */
+  /**
+   * Navigation handler in read mode. Wires the auto-rendered `[Edit]` button.
+   *
+   * A function prop, so it cannot cross the RSC boundary — a React Server
+   * Component cannot pass this to `PageHeader` without becoming a client
+   * component. Server pages use {@link PageHeaderProps.editHref} instead.
+   */
   onEdit?: () => void;
+  /**
+   * Serializable equivalent of `onEdit` for **server** pages. Renders the same
+   * auto-rendered `[Edit]` button in read mode, as a navigating `<a>` pointing
+   * at this href, so a React Server Component gets the standardized read
+   * affordance without `'use client'` and without a function prop (#2026).
+   *
+   * Use `editHref` on server pages and `onEdit` on client pages. If both are
+   * passed, `editHref` wins — the navigation is the more specific intent, and a
+   * real `<a>` stays middle-clickable and keyboard-navigable.
+   */
+  editHref?: string;
   /** Submit handler in edit mode. Wires the auto-rendered `[Save]` button. */
   onSave?: () => void;
   /** Discard handler in edit mode. Wires the auto-rendered `[Cancel]` button. */
@@ -131,6 +148,7 @@ export function PageHeader({
   sticky = false,
   mode,
   onEdit,
+  editHref,
   onSave,
   onCancel,
   saveLoading,
@@ -146,12 +164,19 @@ export function PageHeader({
   const resolvedMedia: ReactNode = media ?? badge;
 
   // Explicit `actions` wins; otherwise compose mode-driven actions.
-  // `mode='read'` + `onEdit` → `[Edit]` (primary, pen icon).
+  // `mode='read'` + (editHref || onEdit) → `[Edit]` (primary, pen icon).
   // `mode='edit'` + (onSave || onCancel) → `[Cancel] [Save]` ButtonGroup.
   const resolvedActions: ReactNode = (() => {
     if (actions !== undefined) return actions;
-    if (mode === 'read' && onEdit) {
-      return (
+    if (mode === 'read' && (editHref || onEdit)) {
+      // Two `Button` calls rather than a spread: `href` discriminates Button's
+      // anchor/button prop union, so the element choice has to be static.
+      // `editHref` wins when both are passed — see the `editHref` JSDoc.
+      return editHref ? (
+        <Button variant="primary" href={editHref} iconBefore={<Icon icon={Pen} />}>
+          {editLabel}
+        </Button>
+      ) : (
         <Button variant="primary" onClick={onEdit} iconBefore={<Icon icon={Pen} />}>
           {editLabel}
         </Button>
