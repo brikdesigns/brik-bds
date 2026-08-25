@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/components/ui/**/*.{tsx,css}"
 retrieved-via: brik-rag query "component build standard"
-last-verified: 2026-07-03
+last-verified: 2026-08-25
 ---
 
 # Component build standard (BDS)

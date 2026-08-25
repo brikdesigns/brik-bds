@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/.storybook/preview.tsx, **/.storybook/main.ts"
 retrieved-via: brik-rag query "storybook toolbar globals"
-last-verified: 2026-05-13
+last-verified: 2026-08-25
 ---
 
 # Storybook toolbar globals (BDS)
@@ -29,7 +29,7 @@ A future viewport / density / locale / motion story export is **always wrong** �
 | **Theme** | `themeNumber` | `brik` (Brik Brand) · `brik-dark` (Brik Brand Dark) · `client-sim` (Font Audit) | `brik` | `.storybook/preview.tsx` |
 | **Base font** | `baseFont` | `14` · `16` · `18` · `20` (px) | `16` | `.storybook/preview.tsx` |
 | **Animations** | `animations` | `on` · `off` | `on` | `.storybook/preview.tsx` |
-| **Dev widgets** | `devWidgets` | `on` · `off` | `off` | `.storybook/preview.tsx` |
+| **Dev widgets** | `devWidgets` | `on` · `off` | `on` | `.storybook/preview.tsx` |
 | **Viewport** | `viewport` (Storybook core) | `mobile` (375 × 667) · `tablet` (768 × 1024) · `desktop` (1280 × 800) | responsive (toolbar default) | `.storybook/preview.tsx` `parameters.viewport.options` |
 
 ### Theme — bundled color + typography + spacing
@@ -58,7 +58,7 @@ This is a **partial density proxy** — scaling the root font scales every rem-b
 
 ### Viewport — responsive breakpoint testing
 
-Three breakpoints are wired, matching the existing responsive tokens (`--breakpoint-sm`, `--breakpoint-md`, `--breakpoint-lg` in [`dist/tokens.css`](../../dist/tokens.css)):
+Three breakpoints are wired, aligned with the responsive breakpoint tokens (`--breakpoint-mobile`, `--breakpoint-tablet`, `--breakpoint-desktop` in [`dist/tokens.css`](../../dist/tokens.css)):
 
 - **`mobile`** — 375 × 667 (iPhone-class)
 - **`tablet`** — 768 × 1024 (iPad-class)
