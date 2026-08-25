@@ -1,13 +1,19 @@
 import { useRef, useEffect } from 'react';
-import Lottie, { type LottieRefCurrentProps } from 'lottie-react';
+import { Lottie, type LottieHandle } from 'lottie-react';
 import { bdsClass } from '../../utils';
 import './AnimatedIcon.css';
 
 export type AnimatedIconTrigger = 'loop' | 'hover' | 'click' | 'once';
 
 export interface AnimatedIconProps {
-  /** Lottie JSON animation data — import from your app's src/animations/ */
-  animationData: object;
+  /**
+   * The animation: parsed Lottie JSON, or a path/URL to fetch it from.
+   * Import from your app's src/animations/.
+   *
+   * Named `src` to match `lottie-react` v3, which replaced `animationData`
+   * (brik-llm — brik-bds#2028).
+   */
+  src: string | object;
   /** Pixel size (width = height) */
   size?: number;
   /** Playback control */
@@ -24,25 +30,27 @@ export interface AnimatedIconProps {
  * AnimatedIcon — Lottie wrapper for animated UI icon states.
  *
  * Source Lottie JSON from useanimations.com and store in your app's
- * `src/animations/` directory. Pass the imported JSON as `animationData`.
+ * `src/animations/` directory. Pass the imported JSON as `src`.
  *
  * @example
  * ```tsx
  * import checkAnimation from '@/animations/checkbox.json';
- * <AnimatedIcon animationData={checkAnimation} trigger="once" size={32} label="Completed" />
+ * <AnimatedIcon src={checkAnimation} trigger="once" size={32} label="Completed" />
  * ```
  *
  * @summary Lottie wrapper for animated icon states
  */
 export function AnimatedIcon({
-  animationData,
+  src,
   size = 32,
   trigger = 'loop',
   loop,
   label,
   className,
 }: AnimatedIconProps) {
-  const lottieRef = useRef<LottieRefCurrentProps>(null);
+  // v3 narrowed the handle to commands only (no state/error/speed getters) and
+  // renamed the type; `play`/`stop` are unchanged, so the calls below still hold.
+  const lottieRef = useRef<LottieHandle>(null);
 
   const shouldLoop = loop !== undefined ? loop : trigger === 'loop';
 
@@ -79,7 +87,7 @@ export function AnimatedIcon({
     >
       <Lottie
         lottieRef={lottieRef}
-        animationData={animationData}
+        src={src}
         loop={shouldLoop}
         autoplay={trigger === 'loop' || trigger === 'once'}
         style={{ width: size, height: size }}

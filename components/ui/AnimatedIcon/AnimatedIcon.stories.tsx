@@ -12,10 +12,10 @@ const meta: Meta<typeof AnimatedIcon> = {
   tags: ['surface-shared', 'no-visual'],
   parameters: { layout: 'centered' },
   argTypes: {
-    animationData: {
+    src: {
       control: false,
       description:
-        'Lottie JSON object. Source from [useanimations.com](https://useanimations.com) or your app\'s `src/animations/` directory, then `import x from "@/animations/x.json"` and pass as `animationData={x}`. Stories ship a minimal fade-square example.',
+        'The animation: parsed Lottie JSON, or a path/URL to fetch it from. Source from [useanimations.com](https://useanimations.com) or your app\'s `src/animations/` directory, then `import x from "@/animations/x.json"` and pass as `src={x}`. Stories ship a minimal fade-square example.',
     },
     size: {
       control: { type: 'number', min: 16, max: 128, step: 4 },
@@ -51,7 +51,7 @@ type Story = StoryObj<typeof AnimatedIcon>;
 /** @summary Lottie wrapper — trigger, size, loop via Controls */
 export const Default: Story = {
   args: {
-    animationData: fadeSquare,
+    src: fadeSquare,
     size: 64,
     trigger: 'loop',
     label: 'Animated icon',
@@ -137,7 +137,7 @@ export const Setup: Story = {
 import { AnimatedIcon } from '@brikdesigns/bds';
 
 <AnimatedIcon
-  animationData={checkmark}
+  src={checkmark}
   trigger="once"
   size={32}
   label="Completed"
