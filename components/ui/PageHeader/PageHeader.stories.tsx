@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn, within } from 'storybook/test';
 import { PageHeader } from './PageHeader';
 import { PageHeaderActions } from './PageHeaderActions';
 import { Breadcrumb } from '../Breadcrumb';
@@ -68,6 +68,11 @@ const meta: Meta<typeof PageHeader> = {
     onEdit: {
       control: false,
       description: 'Navigation handler in read mode. Wires the auto-rendered `[Edit]` button.',
+    },
+    editHref: {
+      control: 'text',
+      description:
+        'Serializable equivalent of `onEdit` for server pages — renders the auto-rendered `[Edit]` button as a navigating `<a>`. Wins over `onEdit` when both are passed.',
     },
     onSave: {
       control: false,
@@ -284,5 +289,55 @@ export const DeprecatedBadgeAlias: Story = {
     title: 'Brik Designs',
     subtitle: 'Rendered through the deprecated `badge` prop — pass `media` in new code.',
     badge: <ServiceTag category="brand" variant="icon" serviceName="Brand Identity Bundle" size="lg" />,
+  },
+};
+
+/**
+ * `editHref` is a wiring prop, not a visual one — it renders pixel-identically
+ * to `ReadMode`, so it is an interaction assertion rather than a story
+ * (story-shape consolidation rule 3). What matters is the *element*: a real
+ * `<a href>`, which is what makes the affordance serializable across the RSC
+ * boundary. `onEdit` cannot be, so a server page has only this path.
+ *
+ * @summary Interaction test — editHref renders a link
+ */
+export const InteractionTestEditHref: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    title: 'Brand Identity Bundle',
+    mode: 'read',
+    editHref: '/services/brand-identity-bundle/edit',
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    const edit = await canvas.findByRole('link', { name: 'Edit' });
+    await expect(edit).toHaveAttribute('href', '/services/brand-identity-bundle/edit');
+    await expect(edit).toHaveClass('bds-button--primary');
+    // Same slot as the `onEdit` path — not a second affordance elsewhere.
+    await expect(edit.closest('.bds-page-header__actions')).not.toBeNull();
+  },
+};
+
+/**
+ * `editHref` wins when both are passed, so the rendered affordance is the
+ * navigating link and never a `<button>` carrying a handler that a server
+ * page could not have supplied in the first place.
+ *
+ * @summary Interaction test — editHref beats onEdit
+ */
+export const InteractionTestEditHrefPrecedence: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    title: 'Brand Identity Bundle',
+    mode: 'read',
+    editHref: '/services/brand-identity-bundle/edit',
+    onEdit: fn(),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await canvas.findByRole('link', { name: 'Edit' });
+    await expect(canvas.queryByRole('button', { name: 'Edit' })).toBeNull();
   },
 };
