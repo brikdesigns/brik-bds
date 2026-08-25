@@ -8,7 +8,7 @@ triggers:
   - About to add a callout or code block to a component MDX
   - User asks about MDX page structure, `<ComponentLinks>`, `## Variants` vs `export const Variants`, the recipe lint, or what sections are banned
   - User mentions ADR-007, component MDX, page recipe, `lint-storybook-recipe.js`, or the Storybook ↔ docs-site split
-last-verified: 2026-05-13
+last-verified: 2026-08-25
 ---
 
 # storybook-mdx-recipe — Retrieve the BDS MDX recipe standard via brik-rag
@@ -54,7 +54,7 @@ Parse the JSON output, apply the relevant rules to the edit. If the query return
 
 ## If you get a conflict between the standard and existing content
 
-The standard + the lint are canon. Existing MDX pages that violate them are legacy — flag the inconsistency in your PR description but do not refactor unrelated files in the same PR (surgical-changes rule). Phase 3 of ADR-007 already migrated 73 of 76 component MDX files; the remainder is tracked in issues [#442](https://github.com/brikdesigns/brik-bds/issues/442) and [#443](https://github.com/brikdesigns/brik-bds/issues/443).
+The standard + the lint are canon. Existing MDX pages that violate them are legacy — flag the inconsistency in your PR description but do not refactor unrelated files in the same PR (surgical-changes rule). ADR-007's migration is complete: every `components/ui/**/*.mdx` page now conforms (`scripts/lint-storybook-recipe.js --enforce` reports zero violations), so the lint guards against new drift rather than tracking a backlog.
 
 ## How to update the standard itself
 

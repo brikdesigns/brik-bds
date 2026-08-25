@@ -7,7 +7,7 @@ triggers:
   - User asks "how should this docs page be structured" / "fumadocs frontmatter" / "docs IA"
   - About to add a new Fumadocs component (Callout, Cards, etc.) to an MDX page
   - About to introduce a new top-level dir under content/docs/ (also needs meta.json update)
-last-verified: 2026-05-11
+last-verified: 2026-08-25
 ---
 
 # fumadocs-content-standard — Retrieve the docs-site writing standard via brik-rag
