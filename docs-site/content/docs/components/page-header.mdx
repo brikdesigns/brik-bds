@@ -140,6 +140,15 @@ PageHeader can drive a page-level read↔edit toggle. In `mode="read"` it render
 />
 ```
 
+The example above is a client component — `onEdit` is a function, so it cannot cross the RSC boundary. On a **server** page, pass `editHref` instead: it renders the same Edit button as a navigating `<a>`, so the page stays a React Server Component with no `'use client'` and no function prop.
+
+```tsx
+// Server component — no 'use client'
+<PageHeader title="Acme Corporation" mode="read" editHref={`/admin/contacts/${id}/edit`} />
+```
+
+`editHref` wins if both it and `onEdit` are passed. Edit-mode `onSave` / `onCancel` are inherently client; a server page that needs them wraps its own client component.
+
 ### Structured actions
 
 `actions` accepts any `ReactNode`, but a bare flex row lets each surface pick its own ordering and mix button sizes. `PageHeaderActions` fixes the hierarchy once:
@@ -228,6 +237,7 @@ The canonical layout — breadcrumb + identity mark + title + actions + metadata
 | `sticky` | `boolean` | `false` |
 | `mode` | `'read' \| 'edit'` | — |
 | `onEdit` | `() => void` | — |
+| `editHref` | `string` | — |
 | `onSave` | `() => void` | — |
 | `onCancel` | `() => void` | — |
 | `saveLoading` | `boolean` | — |
