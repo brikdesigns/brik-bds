@@ -1,13 +1,13 @@
 ---
 name: storybook-toolbar-globals
-description: Retrieve the canonical BDS storybook-toolbar-globals standard from brik-rag before editing .storybook/preview.tsx or .storybook/main.ts, or before authoring a story that reads context.globals. Covers wired globals today (theme `brik`/`brik-dark`/`client-sim` via themeNumber, baseFont `14`/`16`/`18`/`20`, animations on/off, devWidgets), the Phase 1 viewport addition (`@storybook/addon-viewport` per #587 PR-B), future axes (density, locale), and the ADR-010 Q1 rule that a prop reframing every story is always a toolbar global, never a story export. Source of truth at brik-bds/.claude/standards/storybook-toolbar-globals.md.
+description: Retrieve the canonical BDS storybook-toolbar-globals standard from brik-rag before editing .storybook/preview.tsx or .storybook/main.ts, or before authoring a story that reads context.globals. Covers wired globals today (theme `brik`/`brik-dark`/`client-sim` via themeNumber, baseFont `14`/`16`/`18`/`20`, animations on/off, devWidgets), the wired viewport axis (`storybook/viewport` core — mobile/tablet/desktop), future axes (density, locale), and the ADR-010 Q1 rule that a prop reframing every story is always a toolbar global, never a story export. Source of truth at brik-bds/.claude/standards/storybook-toolbar-globals.md.
 triggers:
   - About to edit `.storybook/preview.tsx` or `.storybook/main.ts`
   - About to add a new `globalTypes` entry or register a new Storybook addon
   - About to write a story that reads `context.globals.*`
   - User asks about toolbar globals, theme switching, viewport addon, density / locale / motion axes, or "where should this per-component `Dark` / `Mobile` story go"
   - User mentions ADR-010 Q1, `globalTypes`, `addon-viewport`, or `withTheme` decorator
-last-verified: 2026-05-13
+last-verified: 2026-08-25
 ---
 
 # storybook-toolbar-globals — Retrieve the BDS toolbar-globals standard via brik-rag

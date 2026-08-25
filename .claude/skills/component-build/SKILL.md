@@ -8,7 +8,7 @@ triggers:
   - About to compose a blueprint or page using BDS primitives (touching `content-system/blueprints/`)
   - User asks about component structure, file layout, class composition, danger variants, sizing rules, table-cell patterns, or accessibility minimums
   - User mentions BEM, `bdsClass`, slot allowlist, ADR-008, semantic splitting (Button vs LinkButton vs IconButton), or the 4-point grid
-last-verified: 2026-05-13
+last-verified: 2026-08-25
 ---
 
 # component-build — Retrieve the BDS component-build standard via brik-rag

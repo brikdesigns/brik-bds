@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/components/ui/**/*.mdx, **/stories/**/*.mdx, **/content-system/**/*.mdx"
 retrieved-via: brik-rag query "storybook mdx recipe standard"
-last-verified: 2026-07-22
+last-verified: 2026-08-25
 ---
 
 # Storybook MDX recipe (BDS)
@@ -241,11 +241,11 @@ A page conforms when:
 
 ## Migration disposition for non-component MDX
 
-Files outside `components/ui/` that exist as MDX in Storybook today are classified by ADR-007 into three buckets:
+Files outside `components/ui/` that exist as MDX in Storybook are classified by ADR-007 into three buckets:
 
 - **Keep** — `stories/Welcome.mdx` (already a docs-site router), dashboard tools (`HealthDashboard`, etc.), interactive playgrounds (`Atmospheres`, `NavigationArchetypes`)
-- **Stub** — `content-system/Overview.mdx`, all `content-system/industries/*.mdx`, `content-system/voices/Overview.mdx` (one-line redirects to docs-site)
-- **Defer** — `content-system/brand/Brik.mdx`, `content-system/compliance/Healthcare-ADA.mdx`, `content-system/vocabularies/ImageMood.mdx` (await docs-site equivalents; tracked in GitHub issues)
+- **Stub** — the `content-system/*` narrative pages (`Overview`, `industries/*`, `voices/Overview`). **Migration complete** — these moved to `docs-site/content/docs/content-system/`; no Storybook MDX remains under `content-system/`.
+- **Defer** — `content-system/brand/Brik`, `content-system/compliance/Healthcare-ADA`, `content-system/vocabularies/ImageMood`. **Migration complete** — docs-site equivalents now exist (`content-system/brand/brik.mdx`, `content-system/compliance/healthcare-ada.mdx`, `content-system/vocabularies/image-mood.mdx`).
 
 See [ADR-007 §Narrative MDX migration disposition](../../docs/adrs/ADR-007-storybook-page-recipe.md) for the full per-file table.
 

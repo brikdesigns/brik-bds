@@ -10,7 +10,7 @@ triggers:
   - User asks how to add a new variant / state / tone to a component
   - User mentions ADR-006, ADR-007, ADR-010, Storybook MCP, `@summary`, surface tags, or `!manifest`
   - User asks "where should this component live in the sidebar"
-last-verified: 2026-05-13
+last-verified: 2026-08-25
 ---
 
 # storybook-story-shape — Retrieve the BDS story-shape standard via brik-rag
