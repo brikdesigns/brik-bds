@@ -124,7 +124,7 @@
     "esbuild": "^0.28.1",
     "github-slugger": "^2.0.0",
     "husky": "^9.1.7",
-    "lottie-react": "^2.4.1",
+    "lottie-react": "^3.1.0",
     "playwright": "^1.59.1",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
@@ -136,7 +136,7 @@
   },
   "peerDependencies": {
     "@iconify/react": ">=5.0.0",
-    "lottie-react": ">=2.4.0",
+    "lottie-react": ">=3.0.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   },
