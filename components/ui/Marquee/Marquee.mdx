@@ -1,0 +1,77 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Marquee.stories';
+import { Marquee } from './Marquee';
+
+{/* Direction is a listed axis (ADR-010 Rule 5) — a Control on Default, with
+    the side-by-side comparison living here as a docs-local demo, never a
+    story export. */}
+export const DirectionRow = ({ children }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>{children}</div>
+);
+
+const items = ['Acme', 'Globex', 'Initech', 'Umbrella'];
+
+const LogoItems = () =>
+  items.map((name) => (
+    <span
+      key={name}
+      style={{
+        fontFamily: 'var(--font-family-label)',
+        fontSize: 'var(--label-lg)',
+        fontWeight: 'var(--font-weight-semibold)',
+        color: 'var(--text-muted)',
+        whiteSpace: 'nowrap',
+      }}
+    >
+      {name}
+    </span>
+  ));
+
+export const DirectionDemo = () => (
+  <DirectionRow>
+    <Marquee direction="ltr"><LogoItems /></Marquee>
+    <Marquee direction="rtl"><LogoItems /></Marquee>
+  </DirectionRow>
+);
+
+<Meta of={Stories} />
+
+# Marquee
+
+<ComponentLinks slug="marquee" />
+
+Seamless, accessible scrolling item ticker for logo bands and trust strips. Duplicates the item set once internally (the duplicate is `aria-hidden`) and animates a continuous `translateX` loop.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+`pauseOnHover`, `fade`, `gap`, and `logoHeight` are Controls on Default. `direction` is a listed axis — the side-by-side comparison reads better than toggling a Control:
+
+### Direction
+
+<Canvas>
+  <DirectionDemo />
+</Canvas>
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## CSS Override API
+
+| Variable | Default | Set by |
+|---|---|---|
+| `--bds-marquee-gap` | `var(--size-1000)` (40px) | `gap` prop |
+| `--bds-marquee-logo-height` | `var(--size-600)` (24px) | `logoHeight` prop |
+
+```tsx
+<Marquee gap={32} logoHeight={32}>…</Marquee>
+```
+
+## Notes
+
+> **Note** — Marquee does not apply a runtime `grayscale()` filter. Pre-monochrome logo SVGs before passing them in, and set real `alt` text + `loading="lazy"` on each `<img>` yourself.
