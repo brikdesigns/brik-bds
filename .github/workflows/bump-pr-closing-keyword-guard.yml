@@ -124,6 +124,24 @@ jobs:
               '  #N stays open     — explicit, and parser-proof',
             ];
 
+            // Markdown emphasis is invisible to patterns written for plain
+            // prose. In `does **not** close #N` the character after `not` is
+            // `*`, not whitespace, so NEGATION matched `not` and the following
+            // `\s+` failed — the keyword sailed through as un-negated prose.
+            // brik-client-portal#3550 carried exactly that sentence, the guard
+            // reported success, and GitHub closed #2942 two seconds after merge.
+            // Bold is the natural way to emphasise that word, so the guard
+            // missed precisely the phrasing an author reaches for when trying
+            // hardest to prevent the close (#2565).
+            //
+            // Delete the wrapper characters rather than encoding them into
+            // NEGATION: that keeps rules 2-4 reading plain text with no pattern
+            // change, and covers the next wrapper for free instead of
+            // multiplying an alternation that would miss it. The zero-width
+            // space the brik-bds neutralizer inserts is deliberately NOT
+            // stripped — rule 1 depends on it surviving.
+            const stripEmphasis = (line) => line.replace(/[*_`~]/g, '');
+
             // ── Pure scanner (exercised by FIXTURES below) ────────────────
             function scanBody(body) {
               const isBumpPR = BUMP_MARKERS.some((re) => re.test(body || ''));
@@ -148,19 +166,24 @@ jobs:
                   }
                   return;
                 }
+                // Rules 2-4 read the emphasis-stripped line. The fence check
+                // above must stay on the raw one — stripping backticks first
+                // would erase every ``` marker and flatten the whole body into
+                // prose.
+                const prose = stripEmphasis(line);
                 let m;
                 let negatedHere = false;
                 NEGATED_CLOSE.lastIndex = 0;
-                while ((m = NEGATED_CLOSE.exec(line)) !== null) {
+                while ((m = NEGATED_CLOSE.exec(prose)) !== null) {
                   negations.push({ num: m[1], line: i + 1, text: m[0].trim() });
                   negatedHere = true;
                 }
                 SAME_REPO_CLOSE.lastIndex = 0;
-                while ((m = SAME_REPO_CLOSE.exec(line)) !== null) {
+                while ((m = SAME_REPO_CLOSE.exec(prose)) !== null) {
                   proseRefs.add(m[1]);
                 }
                 // A negated line already fails; don't also warn about it.
-                const q = negatedHere ? null : QUALIFIED_CLOSE.exec(line);
+                const q = negatedHere ? null : QUALIFIED_CLOSE.exec(prose);
                 if (q) qualifiers.push({ num: q[1], line: i + 1, text: line.trim() });
               });
 
@@ -186,9 +209,21 @@ jobs:
               { name: 'shouting is not an escape', body: `does NOT CLOSE ${H}44`, expect: { negations: 1 } },
               { name: 'two negations on one line', body: `Does not close ${H}1 and will not fix ${H}2`, expect: { negations: 2 } },
               { name: 'negation inside inline code', body: `Body said \`does not close ${H}2436\``, expect: { negations: 1 } },
+              // Rule 2 — markdown emphasis must not be an escape hatch (#2565).
+              // The live miss was bold: brik-client-portal#3550 closed #2942.
+              { name: 'bold negation', body: `This does **not** close ${H}2942`, expect: { negations: 1 } },
+              { name: 'italic negation', body: `This does *not* close ${H}2942`, expect: { negations: 1 } },
+              { name: 'underscore-bold negation', body: `This does __not__ close ${H}2942`, expect: { negations: 1 } },
+              { name: 'underscore-italic negation', body: `This does _not_ close ${H}2942`, expect: { negations: 1 } },
+              { name: 'backtick negation', body: `This does \`not\` close ${H}2942`, expect: { negations: 1 } },
+              { name: 'strikethrough negation', body: `This does ~~not~~ close ${H}2942`, expect: { negations: 1 } },
+              { name: 'emphasised keyword too', body: `This does **not** **close** ${H}2942`, expect: { negations: 1 } },
               { name: 'negation outranks the qualifier warning', body: `Does NOT close ${H}2436 — final AC lands elsewhere`, expect: { negations: 1, qualifiers: 0 } },
               // Rule 2 negatives — MUST NOT fire.
               { name: 'plain Closes', body: `Closes ${H}1566`, expect: { negations: 0, qualifiers: 0, violations: 0, proseRefs: ['1566'] } },
+              // Rules 3-4 read the stripped line too, so an emphasised close is
+              // still a close — it was invisible to them before #2565.
+              { name: 'bold Closes is still a close', body: `**Closes** ${H}1566`, expect: { negations: 0, violations: 0, proseRefs: ['1566'] } },
               { name: 'plain Fixes', body: `Fixes ${H}1240`, expect: { negations: 0, violations: 0, proseRefs: ['1240'] } },
               { name: 'negation about something else', body: `This does not affect ${H}31`, expect: { negations: 0, proseRefs: [] } },
               { name: 'negation 4+ words from the keyword', body: `This does not, as far as we can tell, close ${H}31`, expect: { negations: 0 } },
