@@ -1,0 +1,61 @@
+---
+title: Marquee
+description: Seamless, accessible scrolling item ticker — logo bands, trust strips.
+---
+
+Marquee renders an item set on a continuously scrolling track — the "trusted by" logo band pattern. It duplicates the item set once internally (the duplicate is `aria-hidden`) so the loop reads as one unbroken pass, then animates `translateX(0 → -50%)` at a fixed, linear speed.
+
+It has one visual appearance — `direction`, `pauseOnHover`, and `fade` are behavior knobs, not distinct variants.
+
+## Use it for
+
+- A "trusted by" / partner-logo band on a marketing page
+- Any horizontally-scrolling strip of same-sized items (badges, wordmarks) that should read as continuous, not paginated
+
+Reach for a static [Cluster](/docs/components/cluster) layout when the item set doesn't need to scroll — Marquee's animation is the point, not a fallback for overflow.
+
+## Import
+
+```tsx
+import { Marquee } from '@brikdesigns/bds';
+```
+
+## Default
+
+<ComponentPreview code={`<Marquee>
+  <img src="/logos/acme.svg" alt="Acme Co." loading="lazy" />
+  <img src="/logos/globex.svg" alt="Globex" loading="lazy" />
+</Marquee>`}>
+  <BDS.Marquee>
+    <span style={{ fontFamily: 'var(--font-family-label)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--text-muted)' }}>Acme</span>
+    <span style={{ fontFamily: 'var(--font-family-label)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--text-muted)' }}>Globex</span>
+    <span style={{ fontFamily: 'var(--font-family-label)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--text-muted)' }}>Initech</span>
+  </BDS.Marquee>
+</ComponentPreview>
+
+Item images are the consumer's responsibility for `alt` text, `loading="lazy"`, and pre-monochroming — Marquee does not apply a runtime `grayscale()` filter.
+
+## Accessibility
+
+- The animation stops under `prefers-reduced-motion: reduce`. The track collapses to a single, centered, wrapped row instead of omitting motion handling.
+- The duplicate item copy that fills the scrolling track is `aria-hidden="true"` — assistive tech announces the item set once, not twice.
+- Marquee provides no accessible name of its own; wrap it with a heading (`<h2>Trusted by</h2>`) in the surrounding page, same as any other content band.
+
+## API
+
+{/* props-check: MarqueeProps @ components/ui/Marquee/Marquee.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `children` | `ReactNode` | — (required — the item set, rendered twice internally) |
+| `direction` | `'ltr' \| 'rtl'` | `'ltr'` |
+| `pauseOnHover` | `boolean` | `false` |
+| `fade` | `boolean` | `true` |
+| `gap` | `number \| string` | — (falls back to `--bds-marquee-gap`, 40px) |
+| `logoHeight` | `number \| string` | — (falls back to `--bds-marquee-logo-height`, 24px) |
+
+Inherits all native `<div>` attributes (`className`, `style`, `data-*`, …).
+
+## Related
+
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-marquee--overview)**
