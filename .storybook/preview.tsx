@@ -341,7 +341,7 @@ const preview: Preview = {
             'Atmospheres',
             'Navigation Archetypes',
             'Assets',
-            ['avatar', 'icon', 'icons', 'animated-icon', 'logo', 'image', '*'],
+            ['avatar', 'icon', 'icons', 'animated-icon', 'logo', 'image', 'background-pattern', '*'],
             '*',
           ],
           'Motion',

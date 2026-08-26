@@ -1,0 +1,64 @@
+---
+title: BackgroundPattern
+description: Decorative CSS-gradient texture layer for behind-content surfaces — dot grid or line grid, absolutely positioned behind real content.
+---
+
+BackgroundPattern renders a decorative dot-grid or line-grid CSS gradient, absolutely positioned (`inset: 0; z-index: 0`) and non-interactive (`pointer-events: none`). Place it as the first child of a `position: relative` container, with real content stacked above it.
+
+## Use it for
+
+- Section or card backgrounds that need subtle texture without a raster image
+- Hero / empty-state surfaces where a flat fill reads too plain
+
+Not for content that needs to be legible on its own — BackgroundPattern has no content slot; it is always a decorative layer behind other markup.
+
+## Import
+
+```tsx
+import { BackgroundPattern } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Dot grid
+
+Radial-gradient dots at a fixed pitch.
+
+```tsx
+<BackgroundPattern variant="dot-grid" />
+```
+
+### Line grid
+
+Linear-gradient grid lines at the same pitch.
+
+```tsx
+<BackgroundPattern variant="line-grid" />
+```
+
+## Fade
+
+`fade` applies a radial `mask-image`, so the pattern fades out toward the edges of its container instead of cutting off sharply.
+
+```tsx
+<BackgroundPattern variant="dot-grid" fade />
+```
+
+## Accessibility
+
+- Renders `aria-hidden="true"` — the pattern carries no content, so it is hidden from assistive tech by default.
+- Static by construction (CSS gradients only, no animation) — no `prefers-reduced-motion` handling is needed.
+
+## API
+
+{/* props-check: BackgroundPatternProps @ components/ui/BackgroundPattern/BackgroundPattern.tsx */}
+| Prop | Type | Default |
+|---|---|---|
+| `variant` | `'dot-grid' \| 'line-grid'` | `'dot-grid'` |
+| `fade` | `boolean` | `false` |
+
+Plus all standard HTML attributes for the rendered `<div>`.
+
+## Related
+
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/foundation-assets-background-pattern--overview)**
