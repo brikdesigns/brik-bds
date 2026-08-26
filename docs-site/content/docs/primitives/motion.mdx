@@ -20,8 +20,20 @@ The default choice. These carry the overwhelming majority of motion in BDS, and 
 | `--duration-fast` | `100ms` | Micro-interactions — hover, focus |
 | `--duration-normal` | `200ms` | Standard transitions — buttons, cards |
 | `--duration-slow` | `300ms` | Emphasis — modals, sheets, reveals |
+| `--duration-xl` | `500ms` | Cross-fades, long reveals — one rung past `--duration-slow` |
 
-Defined in `tokens/gap-fills.css` as aliases of the numeric primitives below.
+Defined in `tokens/gap-fills.css` as aliases of the numeric primitives below. The step words follow the t-shirt ramp per [ADR-033 § 3](/docs); the legacy `fast` / `normal` / `slow` are `sm` / `md` / `lg` grandfathered pending rename.
+
+## Periodic durations
+
+A separate class from the transition tier above. These are not tween lengths — they are the **period of a continuous loop** or the **dwell before a timed advance**, so they live in seconds and carry a role name rather than a step ([ADR-033 § Named exceptions](/docs), the same basis as `--shadow-overlay`). Reach for the semantic durations for any tween; only continuous or auto-advancing motion uses these.
+
+| Token | Value | Use case |
+|---|---|---|
+| `--duration-marquee` | `55s` | Full marquee loop period — logo tickers, continuous scroll |
+| `--duration-autoplay` | `10s` | Dwell before auto-advance — carousels, media tabs |
+
+Defined in `tokens/gap-fills.css`. Measured from inspiration teardowns; re-run the Playwright capture before treating a value as canon later — vendor sites drift.
 
 ## Numeric durations
 
@@ -48,8 +60,14 @@ Four curves, each with a distinct job. Pair `--ease-out` with most UI transition
 | `--ease-in` | `cubic-bezier(0.7, 0, 0.84, 0)` | Accelerate — exits, collapses |
 | `--ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | Symmetric — looping, continuous |
 | `--ease-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` | Overshoot bounce — pop-in, badge appear |
+| `--ease-spring-soft` | `cubic-bezier(0, 1.08, 0.77, 1.01)` | Gentle overshoot settle — media/panel entrance (softer than `--ease-spring`) |
+| `--ease-linear` | `linear` | Constant velocity — marquees, continuous loops |
 
 Defined alongside the semantic durations in `tokens/gap-fills.css`.
+
+<Callout type="info">
+  Reach for `--ease-out` / `--ease-in` for ordinary decelerate / accelerate needs — there is deliberately no separate `--ease-decel` / `--ease-accel`. `--ease-spring-soft` is the one exception the house curves did not already cover: a settle that overshoots just past its target without the visible bounce of `--ease-spring`.
+</Callout>
 
 ## Stagger
 

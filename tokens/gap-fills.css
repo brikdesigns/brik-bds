@@ -362,11 +362,22 @@
   --duration-fast:   var(--duration-100);   /* 100ms — micro-interactions: hover, focus */
   --duration-normal: var(--duration-200);   /* 200ms — standard transitions: buttons, cards */
   --duration-slow:   var(--duration-300);   /* 300ms — emphasis: modals, sheets, reveals */
+  --duration-xl:     var(--duration-400);   /* 500ms — cross-fades, long reveals (one rung past --duration-slow) */
 
-  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);    /* decelerate — most UI transitions */
-  --ease-in:     cubic-bezier(0.7, 0, 0.84, 0);    /* accelerate — exits, collapses */
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* symmetric — looping, continuous */
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — pop-in, badge appear */
+  /* Periodic / loop durations — role tokens, NOT steps on the transition ramp
+     above (ADR-033 § Named exceptions, same basis as --shadow-overlay). These
+     feed animation-duration on infinite loops and JS auto-advance intervals, so
+     they live in seconds. Reach for fast/normal/slow for any tween; only
+     continuous or timed-advance motion uses these. */
+  --duration-marquee:  55s;  /* full marquee loop period — logo tickers, continuous scroll */
+  --duration-autoplay: 10s;  /* dwell before auto-advance — carousels, media tabs */
+
+  --ease-out:         cubic-bezier(0.16, 1, 0.3, 1);     /* decelerate — most UI transitions */
+  --ease-in:          cubic-bezier(0.7, 0, 0.84, 0);     /* accelerate — exits, collapses */
+  --ease-in-out:      cubic-bezier(0.65, 0, 0.35, 1);    /* symmetric — looping, continuous */
+  --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — pop-in, badge appear */
+  --ease-spring-soft: cubic-bezier(0, 1.08, 0.77, 1.01); /* gentle overshoot settle — media/panel entrance */
+  --ease-linear:      linear;                            /* constant velocity — marquees, continuous loops */
 }
 
 /* ── Dark-mode corrections for generated tokens ──
