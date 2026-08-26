@@ -22,8 +22,11 @@ name: Chromatic
 # TurboSnap-scoped build costs, so the cadence stays daily rather than per-merge.
 
 on:
-  # Daily publish on main. This is the MCP-freshness cadence: `main--` can lag main
-  # by up to 24h (#1498 tracks whether that lag is acceptable).
+  # KEPT DAILY (not trimmed by #2694): this is a freshness gate, not idle burn.
+  # brik-bds is a public repo so Actions minutes are free, and TurboSnap
+  # (onlyChanged) captures ~0 snapshots on a no-change day — so a daily no-op
+  # costs ~$0. Daily publish on main is the MCP-freshness cadence: `main--` can
+  # lag main by up to 24h (#1498 tracks whether that lag is acceptable).
   schedule:
     - cron: '0 9 * * *' # 09:00 UTC daily
 
