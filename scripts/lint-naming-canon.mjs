@@ -234,6 +234,7 @@ const NAMED_EXCEPTIONS = new Set([
   '--iteration-infinite',
   '--content-width-full',
   '--shadow-overlay',
+  '--duration-marquee', '--duration-autoplay',
   '--web', '--tablet', '--mobile',
 ]);
 
