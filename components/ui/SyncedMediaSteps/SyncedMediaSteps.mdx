@@ -1,0 +1,73 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './SyncedMediaSteps.stories';
+import { SyncedMediaSteps } from './SyncedMediaSteps';
+
+{/* mediaPosition is a listed placement axis (ADR-010 Rule 5) — a Control on
+    Default, with the side-by-side comparison living here as a docs-local
+    demo, never a story export. */}
+
+export const DemoMedia = ({ label, hue }) => (
+  <div style={{ display: 'grid', placeItems: 'center', background: hue, fontFamily: 'var(--font-family-label)', color: 'var(--text-primary)' }}>
+    {label}
+  </div>
+);
+
+export const demoSteps = [
+  { id: 'scope', title: 'Scope the work', description: 'Map the surfaces and agree what ships first.', media: <DemoMedia label="Scope" hue="var(--surface-secondary)" /> },
+  { id: 'design', title: 'Design the system', description: 'Tokens, then components, then pages.', media: <DemoMedia label="Design" hue="var(--surface-muted)" /> },
+];
+
+export const MediaPositionDemo = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+    <SyncedMediaSteps steps={demoSteps} mediaPosition="end" autoplay={false} />
+    <SyncedMediaSteps steps={demoSteps} mediaPosition="start" autoplay={false} />
+  </div>
+);
+
+<Meta of={Stories} />
+
+# SyncedMediaSteps
+
+<ComponentLinks slug="synced-media-steps" />
+
+An ordered step sequence — a process, a how-it-works band — where the active step reveals its description and crossfades its media into a synced panel. Auto-advances while in view, pauses on hover and focus, and yields to a click.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+`autoplay`, `pauseOnHover`, `showStepNumbers`, `interval`, and `defaultActiveStep` are Controls on Default. `mediaPosition` is a listed placement axis — the side-by-side comparison reads better than toggling a Control:
+
+### Media position
+
+<Canvas>
+  <MediaPositionDemo />
+</Canvas>
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## CSS Override API
+
+| Variable | Default | Set by |
+|---|---|---|
+| `--bds-synced-media-steps-interval` | `var(--duration-autoplay)` (10s) | `interval` prop |
+| `--bds-synced-media-steps-media-aspect` | `4 / 3` | CSS only |
+
+```tsx
+<SyncedMediaSteps steps={steps} interval="6s" />
+```
+
+The interval is deliberately one value read by two consumers: the countdown bar animates over it in CSS, and the component reads the *resolved* property back to set its advance timer. Overriding it in either place moves both, so the bar cannot drift away from the advance.
+
+## Notes
+
+> **Keyboard contract is the accordion pattern, not tabs.** Every step trigger sits in the page Tab sequence, per the [WAI-ARIA APG accordion pattern](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/) — "all focusable elements in the accordion are included in the page Tab sequence". A roving tabindex belongs to the tabs pattern; use `MediaTabs` when the items are peer categories rather than an ordered sequence.
+
+> **Reduced motion.** Under `prefers-reduced-motion: reduce` autoplay is disabled in JS (a paused CSS animation cannot stop a timer), the countdown is hidden, and the media swap and description reveal are instant. The active step still reads correctly — statically.
+
+> **Media is the consumer's responsibility.** Set real `alt` text on images, `loading="lazy"` where appropriate, and a poster frame on video. Inactive media stays mounted so the crossfade has both frames, but is held out of the accessibility tree and the tab order via `visibility: hidden`.

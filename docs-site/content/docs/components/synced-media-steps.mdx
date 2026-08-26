@@ -1,0 +1,83 @@
+---
+title: SyncedMediaSteps
+description: Accordion-style step sequence driving a synced media panel — process and how-it-works bands.
+---
+
+SyncedMediaSteps renders an ordered sequence of steps as an `<ol>` of accordion rows. The active row reveals its description and crossfades its media into a panel beside the list. It auto-advances while in view, pauses on hover and focus, and yields to a click.
+
+It has one visual appearance — `mediaPosition`, `autoplay`, `pauseOnHover`, and `showStepNumbers` are behavior and placement knobs, not distinct variants.
+
+## Use it for
+
+- A "how it works" or process band where the steps are **ordered** and each one has its own visual
+- Any sequence where the reader should be able to sit still and watch it advance, or take over and click
+
+Reach for [MediaTabs](/docs/components/tab-bar) when the items are **peer categories** rather than an ordered sequence — the ARIA contract differs (tabs use a roving tabindex; an accordion keeps every trigger in the Tab sequence). Reach for a plain [Accordion](/docs/components/accordion) when there is no media to sync.
+
+## Import
+
+```tsx
+import { SyncedMediaSteps } from '@brikdesigns/bds';
+```
+
+## Default
+
+<ComponentPreview code={`<SyncedMediaSteps
+  steps={[
+    { id: 'scope', title: 'Scope the work', description: 'Map the surfaces and agree what ships first.', media: <img src="/scope.png" alt="" /> },
+    { id: 'design', title: 'Design the system', description: 'Tokens, then components, then pages.', media: <img src="/design.png" alt="" /> },
+  ]}
+/>`}>
+  <BDS.SyncedMediaSteps
+    autoplay={false}
+    steps={[
+      { id: 'scope', title: 'Scope the work', description: 'Map the surfaces and agree what ships first.', media: <div style={{ display: 'grid', placeItems: 'center', background: 'var(--surface-secondary)', fontFamily: 'var(--font-family-label)', color: 'var(--text-primary)' }}>Scope</div> },
+      { id: 'design', title: 'Design the system', description: 'Tokens, then components, then pages.', media: <div style={{ display: 'grid', placeItems: 'center', background: 'var(--surface-muted)', fontFamily: 'var(--font-family-label)', color: 'var(--text-primary)' }}>Design</div> },
+    ]}
+  />
+</ComponentPreview>
+
+Media is the consumer's responsibility for `alt` text, `loading="lazy"`, and video poster frames. Inactive media stays mounted so the crossfade has both frames to work with.
+
+## Timing
+
+`interval` sets the dwell time per step and defaults to the `--duration-autoplay` token (10s). It is deliberately one value read by two consumers: the countdown bar animates over it in CSS, and the component reads the *resolved* custom property back to set its advance timer — so the bar cannot drift away from the advance.
+
+```tsx
+<SyncedMediaSteps steps={steps} interval="6s" />
+```
+
+## Accessibility
+
+- **Keyboard contract is the accordion pattern, not tabs.** Every step trigger is a real `<button>` in the page Tab sequence, per the [WAI-ARIA APG accordion pattern](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/) — "all focusable elements in the accordion are included in the page Tab sequence". A roving tabindex belongs to the tabs pattern.
+- Each trigger carries `aria-expanded` and `aria-controls`; each panel is a `region` labelled by its trigger.
+- Collapsed descriptions and inactive media use `visibility: hidden`, so they leave both the accessibility tree and the tab order rather than staying readable while invisible.
+- The countdown bar is `aria-hidden` — it is a dwell cue, not a measurement, and carries no `progressbar` role.
+- Under `prefers-reduced-motion: reduce` autoplay is disabled in JS, the countdown is hidden, and the media swap and description reveal are instant. The active step still reads correctly, statically.
+- The component provides no accessible name of its own; wrap it with a heading in the surrounding page, same as any other content band.
+
+## API
+
+{/* props-check: SyncedMediaStepsProps @ components/ui/SyncedMediaSteps/SyncedMediaSteps.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `steps` | `SyncedMediaStepData[]` | — (required) |
+| `activeStep` | `string` | — (uncontrolled) |
+| `onActiveStepChange` | `(id: string) => void` | — |
+| `defaultActiveStep` | `string` | first step's `id` |
+| `autoplay` | `boolean` | `true` |
+| `interval` | `number \| string` | — (falls back to `--bds-synced-media-steps-interval`, 10s) |
+| `pauseOnHover` | `boolean` | `true` |
+| `mediaPosition` | `'start' \| 'end'` | `'end'` |
+| `showStepNumbers` | `boolean` | `true` |
+
+Inherits all native `<div>` attributes (`className`, `style`, `data-*`, …).
+
+Each entry in `steps` is a `SyncedMediaStepData`: `{ id: string; title: ReactNode; description?: ReactNode; media: ReactNode }`.
+
+## Related
+
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-synced-media-steps--overview)**
+- [Accordion](/docs/components/accordion) — collapsible sections with no synced media
+- [Motion tokens](/docs/primitives/motion) — `--duration-autoplay`, `--duration-xl`, `--ease-spring-soft`

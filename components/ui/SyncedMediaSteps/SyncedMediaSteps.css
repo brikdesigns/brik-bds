@@ -1,0 +1,247 @@
+@layer bds-components {
+/**
+ * BDS SyncedMediaSteps — accordion-style step sequence driving a synced media panel
+ *
+ * Naming: .bds-synced-media-steps, .bds-synced-media-steps__{slot}.
+ * `mediaPosition` and the paused / active flags are behavior knobs, not BEM
+ * modifiers — `start`/`end`, `paused`, `active` have no closed axis in
+ * ADR-033 § 4's MODIFIER_AXES, so they read as `[data-*]` attributes (same
+ * convention as Marquee's `data-direction`, Table's `data-rounded-top`).
+ *
+ * CSS Override API: --bds-synced-media-steps-interval,
+ * --bds-synced-media-steps-media-aspect (component-local runtime knobs; the
+ * interval is set via the `interval` prop and is read back by the component's
+ * advance timer, so the bar and the timer cannot drift apart).
+ */
+
+/* ─── Keyframes ───────────────────────────────────────────────── */
+
+@keyframes bds-synced-media-steps-countdown {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ─── Base ────────────────────────────────────────────────────── */
+
+.bds-synced-media-steps {
+  --bds-synced-media-steps-interval: var(--duration-autoplay);
+  --bds-synced-media-steps-media-aspect: 4 / 3;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gap-xl);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 768px is --breakpoint-tablet; CSS custom properties can't be used inside
+   @media rules (tokens/index.ts). Below it the media panel stacks under the
+   steps, so the sequence still reads top-to-bottom. */
+@media (min-width: 768px) {
+  .bds-synced-media-steps {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+
+  .bds-synced-media-steps[data-media-position='start'] .bds-synced-media-steps__media {
+    order: -1;
+  }
+}
+
+/* ─── Step list ───────────────────────────────────────────────── */
+
+.bds-synced-media-steps__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.bds-synced-media-steps__step {
+  border-bottom: var(--border-width-lg) solid var(--border-muted);
+}
+
+/* ─── Trigger ─────────────────────────────────────────────────── */
+
+.bds-synced-media-steps__trigger {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-lg);
+  width: 100%;
+  padding: var(--padding-lg) 0;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* No outline-offset: the trigger's own vertical padding is the clearance, and
+   an offset ring would land on the first line of the description revealed
+   directly beneath it. */
+.bds-synced-media-steps__trigger:focus-visible {
+  outline: var(--border-width-lg) solid var(--border-focus);
+  outline-offset: 0;
+  border-radius: var(--border-radius-sm);
+}
+
+.bds-synced-media-steps__index {
+  flex-shrink: 0;
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  transition: color var(--duration-normal) var(--ease-out);
+}
+
+/* --text-primary, not --text-brand-primary: brand text is gated AA-large
+   (3.78:1) and --label-sm is 14px, so the brand accent stays on the
+   non-text countdown fill instead (tokens/contrast-pairings.json #16). */
+.bds-synced-media-steps__step[data-active] .bds-synced-media-steps__index {
+  color: var(--text-primary);
+}
+
+.bds-synced-media-steps__title {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-tiny);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-secondary);
+  transition: color var(--duration-normal) var(--ease-out);
+}
+
+.bds-synced-media-steps__step[data-active] .bds-synced-media-steps__title {
+  color: var(--text-primary);
+}
+
+/* ─── Panel ───────────────────────────────────────────────────── */
+/* grid-template-rows 0fr → 1fr animates an auto-height reveal without
+   measuring anything in JS. The inner wrapper owns `visibility` so the
+   collapsed copy leaves the accessibility tree and the tab order too —
+   opacity alone would keep it readable to a screen reader while hidden. */
+
+.bds-synced-media-steps__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-slow) var(--ease-in-out);
+}
+
+.bds-synced-media-steps__step[data-active] .bds-synced-media-steps__panel {
+  grid-template-rows: 1fr;
+}
+
+.bds-synced-media-steps__panel-inner {
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 0s linear var(--duration-slow);
+}
+
+.bds-synced-media-steps__step[data-active] .bds-synced-media-steps__panel-inner {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.bds-synced-media-steps__description {
+  margin: 0;
+  padding-bottom: var(--padding-lg);
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+}
+
+/* ─── Countdown ───────────────────────────────────────────────── */
+/* A dwell cue, not a measurement — the component's JS timer is the real
+   clock, so this carries aria-hidden and no progressbar role. The track is
+   the step's own bottom border; only the active step's fill animates. */
+
+.bds-synced-media-steps__countdown {
+  position: relative;
+  height: var(--border-width-lg);
+  margin-bottom: calc(-1 * var(--border-width-lg));
+  overflow: hidden;
+}
+
+.bds-synced-media-steps__countdown-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background-brand-primary);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.bds-synced-media-steps__step[data-active] .bds-synced-media-steps__countdown-fill {
+  animation: bds-synced-media-steps-countdown var(--bds-synced-media-steps-interval)
+    var(--ease-linear) forwards;
+}
+
+.bds-synced-media-steps[data-paused] .bds-synced-media-steps__countdown-fill {
+  animation-play-state: paused;
+}
+
+/* ─── Media panel ─────────────────────────────────────────────── */
+/* Every step's media stays mounted and stacked so the crossfade has both
+   frames to work with; `visibility` (delayed on exit) keeps the inactive
+   frames out of the tab order and the accessibility tree. */
+
+.bds-synced-media-steps__media {
+  position: relative;
+  display: grid;
+  aspect-ratio: var(--bds-synced-media-steps-media-aspect);
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--border-radius-lg);
+}
+
+.bds-synced-media-steps__media-item {
+  grid-area: 1 / 1;
+  display: grid;
+  opacity: 0;
+  visibility: hidden;
+  /* Exit: quicker, accelerating away (measured 0.3s). */
+  transition:
+    opacity var(--duration-slow) var(--ease-in),
+    visibility 0s linear var(--duration-slow);
+}
+
+.bds-synced-media-steps__media-item[data-active] {
+  opacity: 1;
+  visibility: visible;
+  /* Enter: slower, settling in after the outgoing frame has cleared —
+     the staggered crossfade. `--duration-normal` stands in for the
+     measured 0.25s delay; the ramp has no 250ms rung. */
+  transition:
+    opacity var(--duration-xl) var(--ease-spring-soft) var(--duration-normal),
+    visibility 0s linear var(--duration-normal);
+}
+
+.bds-synced-media-steps__media-item > :is(img, video, canvas, svg) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ─── Reduced motion ──────────────────────────────────────────── */
+/* Autoplay is disabled in the component (a paused CSS animation cannot stop
+   a JS timer). What remains here is to make every transition instant and
+   drop the dwell cue, so the active step reads statically. */
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-synced-media-steps__countdown {
+    display: none;
+  }
+
+  .bds-synced-media-steps__panel,
+  .bds-synced-media-steps__panel-inner,
+  .bds-synced-media-steps__index,
+  .bds-synced-media-steps__title,
+  .bds-synced-media-steps__media-item,
+  .bds-synced-media-steps__media-item[data-active] {
+    transition-duration: 0s;
+    transition-delay: 0s;
+  }
+}
+}
