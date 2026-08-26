@@ -1,9 +1,12 @@
 name: Build Design Tokens
 
 on:
-  schedule:
-    # Run daily at 9 AM UTC
-    - cron: '0 9 * * *'
+  # Path-filtered, no schedule (#2694). build:all-tokens is
+  # build:sd-figma && build:sd-dark && build:modes — it rebuilds Style Dictionary
+  # output purely from committed sources (the live Figma sync is a separate manual
+  # script, scripts/sync-figma-mcp.js). Every real change lands via the push paths
+  # below, so a scheduled rebuild only ever no-ops. workflow_dispatch stays for an
+  # ad-hoc forced rebuild.
   push:
     paths:
       - 'design-tokens/**'
