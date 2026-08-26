@@ -1,0 +1,82 @@
+@layer bds-components {
+/**
+ * BDS Marquee — Seamless scrolling item ticker (logo band, trust strip)
+ *
+ * Naming: .bds-marquee, .bds-marquee__{element}. `direction` / `pauseOnHover`
+ * / `fade` are behavior knobs, not BEM modifiers — `rtl`/`pause-on-hover`/
+ * `fade` have no closed axis in ADR-033 § 4's MODIFIER_AXES, so they read as
+ * `[data-*]` attributes (same convention as Table's `data-rounded-top`,
+ * SheetSection's `data-level`) rather than bare `--modifier` classes.
+ *
+ * CSS Override API: --bds-marquee-gap, --bds-marquee-logo-height
+ * (component-local runtime knobs — set via the `gap` / `logoHeight` props,
+ * not part of the canonical token registry).
+ */
+
+/* ─── Keyframes ───────────────────────────────────────────────── */
+
+@keyframes bds-marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ─── Base ────────────────────────────────────────────────────── */
+
+.bds-marquee {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.bds-marquee[data-fade] {
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+.bds-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: bds-marquee-scroll var(--duration-marquee) var(--ease-linear) infinite;
+}
+
+.bds-marquee[data-direction='rtl'] .bds-marquee__track {
+  animation-direction: reverse;
+}
+
+.bds-marquee[data-pause-on-hover]:hover .bds-marquee__track {
+  animation-play-state: paused;
+}
+
+.bds-marquee__group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: var(--bds-marquee-gap, var(--size-1000));
+  padding-inline-end: var(--bds-marquee-gap, var(--size-1000));
+}
+
+.bds-marquee__group img,
+.bds-marquee__group svg {
+  height: var(--bds-marquee-logo-height, var(--size-600));
+  width: auto;
+  flex-shrink: 0;
+}
+
+/* ─── Reduced motion ──────────────────────────────────────────── */
+/* Stop the loop and render a single, centered, wrapped row instead of
+   omitting motion handling — the duplicate (aria-hidden) group is dropped
+   since it exists only to fill the scrolling track. */
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-marquee__track {
+    animation: none;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .bds-marquee__group[aria-hidden='true'] {
+    display: none;
+  }
+}
+}
