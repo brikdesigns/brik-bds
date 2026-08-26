@@ -108,6 +108,7 @@ export * from './Spinner';
 export * from './Stack';
 export * from './Stepper';
 export * from './SubNavigation';
+export * from './SyncedMediaSteps';
 export * from './ToggleSwitch';
 export * from './TabBar';
 export * from './Table';
