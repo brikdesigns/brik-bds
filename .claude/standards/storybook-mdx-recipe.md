@@ -237,7 +237,7 @@ A page conforms when:
 8. The page renders cleanly in **all three Storybook themes** (Brik Brand, Brik Brand Dark, Client Sim Font Audit) with no theme-specific visual breakage.
 9. `npm run lint-storybook-recipe` reports zero violations.
 
-[`scripts/lint-storybook-recipe.js --enforce`](../../scripts/lint-storybook-recipe.js) runs as part of `.husky/pre-commit` and `.github/workflows/storybook-recipe-check.yml`. A failing lint blocks merge.
+[`scripts/lint-storybook-recipe.js --enforce`](../../scripts/lint-storybook-recipe.js) runs as part of `.husky/pre-commit` and `.github/workflows/storybook-recipe-check.yml`. A failing lint fails the check on the PR; it is not yet a required status check, so enforcement rests on the pre-commit hook plus merge-wait discipline.
 
 ## Migration disposition for non-component MDX
 

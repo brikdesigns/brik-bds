@@ -4,7 +4,7 @@ Brik Design System — React component library + canonical token registry.
 
 Hosts:
 
-- React components (`src/components/`) published as `@brikdesigns/bds` and consumed by 6 downstream repos
+- React components (`components/ui/`) published as `@brikdesigns/bds` and consumed by 6 downstream repos
 - Canonical token registry — `dist/tokens.css` is the live allowlist for every `--text-*` / `--surface-*` / `--background-*` / `--border-*` / `--color-*` (primitives) name in any Brik repo
 - Style Dictionary build pipeline — Figma → `tokens-studio.json` → per-platform outputs
 - Brik Content System (`content-system/`) — vocabulary peer to the token system, published as `@brikdesigns/bds/content-system`
@@ -22,14 +22,14 @@ This CLAUDE.md is `@import`-ed by every consumer of `@brikdesigns/bds` — the B
 - **Pre-PR** — RUN `./scripts/pr-checklist.sh` before any PR touching tokens, themes, or component CSS. ONE concern per PR.
 - **Publish** — `git tag v0.X.Y && git push origin v0.X.Y` triggers [`Release` workflow](.github/workflows/release.yml). After publish, UPDATE the brik-llm submodule pointer.
 - **Chromatic = hosting, NOT a visual gate** — RUN `npm run chromatic` after any component CSS or story change; it only publishes the Storybook and is NOT an agent read path. NEVER treat a green Chromatic check as visual coverage — a quota-exhausted build still exits 0 → [`.claude/references/chromatic.md`](.claude/references/chromatic.md), `→ rag:chromatic`.
-- **Reading BDS from a consumer repo** (portal / `web/{slug}/` agents) — there is no hosted MCP/HTTP path that yields rendered docs; READ component docs/props from **source**: the sibling `~/Documents/GitHub/brik/brik-bds/` (`stories/*.mdx` + `components/ui/**/*.{tsx,css}`) or `node_modules/@brikdesigns/bds/components/`. NEVER hand-roll a primitive because the docs "weren't reachable" → `→ rag:bds-docs-access`.
-- **Visual regression** — a self-hosted Vitest `toMatchScreenshot` gate (`VISUAL_GATE=1`) blocks every PR to `main` via [`visual.yml`](.github/workflows/visual.yml). NEVER regenerate baselines locally; run the **Update Visual Baselines** workflow → [`tests/visual/README.md`](tests/visual/README.md).
+- **Reading BDS from a consumer repo** (portal / `web/{slug}/` agents) — there is no hosted MCP/HTTP path that yields rendered docs; READ component docs/props from **source**: the sibling `~/Documents/GitHub/brik/brik-bds/` (`components/ui/**/*.{mdx,tsx,css}`) or `node_modules/@brikdesigns/bds/components/`. NEVER hand-roll a primitive because the docs "weren't reachable" → `→ rag:bds-docs-access`.
+- **Visual regression** — a self-hosted Vitest `toMatchScreenshot` gate (`VISUAL_GATE=1`) runs on every PR to `main` via [`visual.yml`](.github/workflows/visual.yml); it is enforced by merge-wait discipline, NOT yet a required status check. NEVER regenerate baselines locally; run the **Update Visual Baselines** workflow → [`tests/visual/README.md`](tests/visual/README.md).
 
 ## Where deeper context lives
 
 - **Documentation system** (tier table, mental model, lifecycle, decision tree) → [`docs-site/content/docs/getting-started/documentation-system.mdx`](docs-site/content/docs/getting-started/documentation-system.mdx) — published at design.brikdesigns.com/docs/getting-started/documentation-system
 - **Token system vocabulary** (the six locked concepts: Anatomy / Tier / Library / Layer / Mode / Tenet) → [Token Anatomy](docs-site/content/docs/primitives/token-anatomy.mdx) → published at design.brikdesigns.com/docs/primitives/token-anatomy. Read first before referencing any token.
-- **Build standards** (six composition layers: Section→Layout→Container→Block/Control→Component; page structure + slot anatomy) → [Composition Layers](docs-site/content/docs/build-standards/composition-layers.mdx) + [Page Structure](docs-site/content/docs/build-standards/page-structure.mdx). Consult before composing any page/component; corpus: `brik-rag query "composition layers page structure" --types canon-build-standards`.
+- **Build standards** (six composition layers: Section→Layout→Container→Block/Control→Component; page structure + slot anatomy) → [Composition Layers](docs-site/content/docs/build-standards/composition-layers.mdx) + [Page Structure](docs-site/content/docs/build-standards/page-structure.mdx). Consult before composing any page/component; corpus: `brik-rag query "composition layers page structure" --source-types canon-build-standards`.
 - **Product page archetypes** (the four assembled product pages: record read, record edit, collection, profile — which one a surface gets, and per-archetype composition, state shell, and heading ramp) → [Page Archetypes](docs-site/content/docs/build-standards/page-archetypes/index.mdx). Consult before building any product page; the docs-site pages own the decision, Storybook's `Containers/read-mode-page` owns the live canvases + the two section-level edit conventions.
 - **Library Architecture** (Foundations Library vs Brand Kit Library + multi-Library Style Dictionary pull) → [Figma Library Architecture](docs-site/content/docs/getting-started/figma-library-architecture.mdx)
 - **Token discipline** (semantic categories, service-token isolation, drift patterns) → `brik-rag query "token discipline"`
