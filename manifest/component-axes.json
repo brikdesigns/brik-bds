@@ -55,6 +55,12 @@
       "away"
     ]
   },
+  "BackgroundPattern": {
+    "variant": [
+      "dot-grid",
+      "line-grid"
+    ]
+  },
   "Badge": {
     "size": [
       "xs",

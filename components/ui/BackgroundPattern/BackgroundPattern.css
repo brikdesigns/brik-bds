@@ -1,0 +1,62 @@
+@layer bds-components {
+/**
+ * BDS BackgroundPattern — decorative CSS-gradient background texture
+ *
+ * Naming: .bds-background-pattern, .bds-background-pattern--variant-{value}
+ *
+ * Component-local tokens (ADR-014 Tier 4, --bds-{component}-{prop} —
+ * defined here with defaults, overridable by a client theme or `style`):
+ *   --bds-bg-pattern-color      Dot / line color. Defaults to
+ *                               --border-secondary — a hairline-strength
+ *                               neutral border token that already flips
+ *                               per theme (light: grayscale-lighter, dark:
+ *                               grayscale-darker), so the pattern reads at
+ *                               the same low contrast in both themes.
+ *   --bds-bg-pattern-size       Grid pitch — distance between dots/lines.
+ *   --bds-bg-pattern-dot-size   Dot diameter / line thickness.
+ *   --bds-bg-pattern-opacity    Layer opacity.
+ *   --bds-bg-pattern-fade       mask-image value applied when `fade` is set.
+ *
+ * Static by construction (gradients only, no animation) — no
+ * reduced-motion handling needed.
+ */
+
+.bds-background-pattern {
+  --bds-bg-pattern-color: var(--border-secondary);
+  --bds-bg-pattern-size: 15px;
+  --bds-bg-pattern-dot-size: 1px;
+  --bds-bg-pattern-opacity: 0.3;
+  --bds-bg-pattern-fade: radial-gradient(ellipse at center, black 50%, transparent 100%);
+
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: var(--bds-bg-pattern-opacity);
+}
+
+/* ─── Variant (form axis, ADR-033 § 2) ───────────────────────── */
+
+.bds-background-pattern--variant-dot-grid {
+  background-image: radial-gradient(circle, var(--bds-bg-pattern-color) var(--bds-bg-pattern-dot-size), transparent var(--bds-bg-pattern-dot-size));
+  background-size: var(--bds-bg-pattern-size) var(--bds-bg-pattern-size);
+}
+
+.bds-background-pattern--variant-line-grid {
+  background-image:
+    linear-gradient(to right, var(--bds-bg-pattern-color) var(--bds-bg-pattern-dot-size), transparent var(--bds-bg-pattern-dot-size)),
+    linear-gradient(to bottom, var(--bds-bg-pattern-color) var(--bds-bg-pattern-dot-size), transparent var(--bds-bg-pattern-dot-size));
+  background-size: var(--bds-bg-pattern-size) var(--bds-bg-pattern-size);
+}
+
+/* ─── Fade (edge mask, gated by the `fade` prop) ─────────────── */
+/* A data attribute rather than a BEM modifier — `fade` is a boolean toggle
+   (ADR-010 matrix Q2), and ADR-033 § 4's closed BOOLEAN_MODIFIERS list does
+   not carry this word, so a `--fade` class would read as an unprefixed axis
+   value instead of a state. */
+
+.bds-background-pattern[data-fade='true'] {
+  mask-image: var(--bds-bg-pattern-fade);
+  -webkit-mask-image: var(--bds-bg-pattern-fade);
+}
+}

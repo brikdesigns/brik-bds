@@ -9,6 +9,7 @@ export * from './AddableTextList';
 export * from './AddressInput';
 export * from './AnimatedIcon';
 export * from './Avatar';
+export * from './BackgroundPattern';
 export * from './Badge';
 export * from './BadgeGroup';
 export * from './Board';

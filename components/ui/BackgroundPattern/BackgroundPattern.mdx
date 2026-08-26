@@ -1,0 +1,49 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './BackgroundPattern.stories';
+
+<Meta of={Stories} />
+
+# BackgroundPattern
+
+<ComponentLinks slug="background-pattern" />
+
+Decorative CSS-gradient texture layer for behind-content surfaces. Place it as the first child of a `position: relative` container, with real content stacked above it.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Line grid
+
+<Canvas of={Stories.LineGrid} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## CSS Override API
+
+Component-scoped CSS variables exposed on `.bds-background-pattern`. Set on a wrapping element to override without touching BDS internals.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--bds-bg-pattern-color` | `var(--border-secondary)` | Dot / line color |
+| `--bds-bg-pattern-size` | `15px` | Grid pitch — distance between dots or lines |
+| `--bds-bg-pattern-dot-size` | `1px` | Dot diameter / line thickness |
+| `--bds-bg-pattern-opacity` | `0.3` | Layer opacity |
+| `--bds-bg-pattern-fade` | `radial-gradient(ellipse at center, black 50%, transparent 100%)` | `mask-image` applied when `fade` is set |
+
+```css
+/* Example: a denser, higher-contrast grid in a hero section */
+.hero {
+  --bds-bg-pattern-color: var(--border-primary);
+  --bds-bg-pattern-size: 24px;
+}
+```
+
+## Notes
+
+> **Note** — Static by construction (CSS gradients, no animation or JS) — carries no `prefers-reduced-motion` concern.
