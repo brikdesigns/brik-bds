@@ -1,6 +1,6 @@
 ---
 name: Storybook story-shape standard (BDS)
-description: Canonical rules for *.stories.tsx files. Two-shape model, banned exports, MCP discipline, surface tags, @summary, Storybook 9 imports, mocking, play-function patterns.
+description: Canonical rules for *.stories.tsx files. Two-shape model, banned exports, MCP discipline, surface tags, @summary, Storybook 10 imports, mocking, play-function patterns.
 type: reference
 scope: brik-bds
 applies-to: "**/components/ui/**/*.stories.tsx, **/content-system/blueprints/**/*.stories.tsx, **/stories/**/*.stories.tsx"
@@ -399,7 +399,7 @@ export const LandingPage: Story = {
 
 Keeps blueprint stories from drifting from leaf truth. Slot props on composite components are typed as the leaf component's `args` shape — see [ADR-010 §Composite components](../../docs/adrs/ADR-010-storybook-axes-of-information.md).
 
-## Storybook 9 imports — framework package, `storybook/test`
+## Storybook 10 imports — framework package, `storybook/test`
 
 ```tsx
 // ✅ Right
@@ -411,7 +411,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { fn } from '@storybook/test';
 ```
 
-Other Storybook 9 changes:
+Other Storybook 10 changes:
 
 - `globals` annotation is now `initialGlobals` in `.storybook/preview.ts`
 - Autodocs config moves from `parameters.docs.autodocs` to `tags: ['autodocs']`
@@ -520,7 +520,7 @@ If you find yourself wanting to "clean up" an existing file's `export const Vari
 5. **Verify `meta.tags` has exactly one of** `surface-web` / `surface-product` / `surface-shared`.
 6. **If the component is deprecated**, verify `meta.tags` also includes `!manifest`.
 7. **Verify `title:` prefix matches existing sidebar** — if you're inventing a new top-level group, that needs an ADR amendment, not a freelance addition.
-8. **Verify Storybook 9 imports** — `from '@storybook/react-vite'` (not `@storybook/react`), `from 'storybook/test'` (not `@storybook/test`).
+8. **Verify Storybook 10 imports** — `from '@storybook/react-vite'` (not `@storybook/react`), `from 'storybook/test'` (not `@storybook/test`).
 9. **If you used `render`**, verify the case is irreducible. Documentation galleries via `render` are out.
 10. **For `play` functions** — use `canvas` directly, not `within(canvas)`. Assert callbacks fired when `fn()` is passed as an arg.
 
