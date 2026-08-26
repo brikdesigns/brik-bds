@@ -160,7 +160,7 @@ Validation comes from the same source: the [Contrast Compliance](https://storybo
 
 ## Enforcing it
 
-The gate runs in the `validate` script (pre-commit), the release workflow (pre-publish), and `pr-checklist.sh`:
+The gate runs on pre-push (`validate:full` → `scripts/validate-all.js`), in CI on every PR (`contrast-gate.yml`), at release (pre-publish), and in `pr-checklist.sh`. The CI check runs on every PR but is not yet a required status check — merge safety rests on merge-wait discipline:
 
 ```bash
 npm run contrast-gate          # node scripts/validate-themes.js — exits 1 below the AA floor

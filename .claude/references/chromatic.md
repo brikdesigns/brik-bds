@@ -1,14 +1,15 @@
 ---
 name: Chromatic — BDS Storybook hosting
-description: Stable URLs, app ID, publish command, and the publish-only role Chromatic keeps after ADR-026 moved visual regression to the self-hosted Vitest gate. The endpoint consumer-repo Claude sessions query for live MCP + manifest data.
+description: Stable URLs, app ID, publish command, and the publish-only role Chromatic keeps after ADR-026 moved visual regression to the self-hosted Vitest gate. Chromatic hosts the Storybook; it is NOT the canonical consumer-agent read path (see CLAUDE.md § Reading BDS from a consumer repo).
 type: reference
-last_updated: 2026-08-02
-last-verified: 2026-08-02
+last-verified: 2026-08-25
 ---
 
 # Chromatic — BDS Storybook hosting
 
-**Chromatic hosts Storybook. It is not a visual-regression gate.** [ADR-026](../../docs/adrs/ADR-026-regression-test-home-and-visual-gate.md) split its two roles: pixel diffing moved to the self-hosted Vitest `toMatchScreenshot` gate in `test.yml` (#1637), and what stays here is the half with no free replacement — publishing the Storybook that backs the `/mcp` endpoint consumer-repo Claude sessions query for live component specs.
+**Chromatic hosts Storybook. It is not a visual-regression gate.** [ADR-026](../../docs/adrs/ADR-026-regression-test-home-and-visual-gate.md) split its two roles: pixel diffing moved to the self-hosted Vitest `toMatchScreenshot` gate — implemented in `visual.yml` (#1637; ADR-026 named `test.yml` but the gate shipped as `visual.yml`) — and what stays here is the half with no free replacement — publishing the hosted Storybook.
+
+> **Not an agent read path.** The Chromatic build also exposes a `/mcp` endpoint, but per [CLAUDE.md § Reading BDS from a consumer repo](../../CLAUDE.md) and the `bds-docs-access` runbook (`brik-rag query "bds docs access"`), the canonical consumer-agent read path is `brik-rag` + in-repo `components/ui/**` source — not the hosted endpoint, which is off the agent egress allowlist. This page documents Chromatic's hosting role, not a read path.
 
 ## Stable references
 
@@ -22,11 +23,11 @@ last-verified: 2026-08-02
 
 ## What the stable URL serves
 
-- `/mcp` — live `addon-mcp` server (the endpoint consumer agents query)
+- `/mcp` — `addon-mcp` server exposed by the Chromatic build (not the canonical consumer-agent read path — see the note above)
 - `/index.json` — story index, including all `surface-*` tags
 - `/manifests/components.json` + `/manifests/components.html` — components manifest from `componentsManifest`
 
-The Netlify deploy at `storybook.brikdesigns.com` is browseable but does **not** serve `/mcp` (static build only). Agent MCP queries must use the Chromatic stable URL.
+The Netlify deploy at `storybook.brikdesigns.com` is browseable but does **not** serve `/mcp` (static build only). Neither hosted surface is the sanctioned agent read path: agents resolve BDS docs via `brik-rag` and in-repo `components/ui/**` source (CLAUDE.md § Reading BDS from a consumer repo).
 
 ## Publish
 
@@ -45,7 +46,7 @@ gh workflow run chromatic.yml --repo brikdesigns/brik-bds --ref main
 
 ### `main--` refreshes daily, not per-merge
 
-CI publishes on the 09:00 UTC schedule (plus `workflow_dispatch`). So `/mcp`, `/index.json`, and the manifests can lag `main` by up to 24h, and a consumer-repo agent may read a component API one day stale. Whether that lag is acceptable — and what a per-merge publish would cost — is tracked in [#1498](https://github.com/brikdesigns/brik-bds/issues/1498).
+CI publishes on the 09:00 UTC schedule (plus `workflow_dispatch`). So `/mcp`, `/index.json`, and the manifests can lag `main` by up to 24h — relevant to any tool consuming the hosted endpoint, though that is not the sanctioned agent read path (above). Whether that lag is acceptable — and what a per-merge publish would cost — is tracked in [#1498](https://github.com/brikdesigns/brik-bds/issues/1498).
 
 **There is no zero-cost publish mode.** `chromatic --skip` does not upload at all — it exits with `Skipped build for commit … due to --skip` and never builds Storybook (verified 2026-08-02, CLI v15.3.0). That refutes #1498's leading candidate; a publish costs whatever a TurboSnap-scoped build costs, which is why the cadence is daily rather than per-merge.
 
@@ -74,5 +75,5 @@ Under publish-only the standing line item is the daily build. Nothing else trigg
 
 ## Retired
 
-- **The `visual-review` label** no longer fires anything — the `pull_request` trigger was removed with ADR-026. Pixel drift is caught by `test.yml`.
+- **The `visual-review` label** no longer fires anything — the `pull_request` trigger was removed with ADR-026. Pixel drift is caught by `visual.yml`.
 - **`workflow_dispatch` `full_capture`** is gone with it: it existed to refresh visual baselines (#1472), and baselines now live with the self-hosted gate.

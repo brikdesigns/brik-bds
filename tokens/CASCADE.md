@@ -91,7 +91,7 @@ No consumer should toggle a `.dark` class — the attribute is the only switch.
 | Fix a value that came out of Figma wrong | Fix it in Figma and re-pull (`bun scripts/pull-variables.js … && node scripts/sync-figma-mcp.js …`). Add a manual `figma-corrections.css` only as a last resort when the Figma source genuinely can't be edited — and bundle it in `scripts/build-dist-tokens.js` after `figma-tokens-dark.css`. |
 | Add a semantic token Figma doesn't export | `gap-fills.css` |
 | Adjust Brik's brand colors / fonts | `theme-brand-brik.css` — consumers get these automatically when they apply `.theme-brand-brik` to `<body>` |
-| Wire a non-color mode pick (Thin/Bold/Compact/Round/etc.) into CSS overrides | `modes-{category}.css` (only `modes-borderwidth.css` exists today; add `modes-spacing.css`, `modes-radius.css`, etc. as each mode is wired) |
+| Wire a non-color mode pick (Thin/Bold/Compact/Round/etc.) into CSS overrides | `modes-{category}.css` (borderwidth, spacing, and typography modes are wired today — see the build order above; add `modes-radius.css`, etc. as each new mode is wired) |
 | Add a Webflow-facing alias | `bridge.css` (deprecated layer) |
 | Touch an auto-generated file | Don't. Fix in Figma and re-pull, or add an override in a manual file. |
 
