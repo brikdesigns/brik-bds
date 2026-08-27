@@ -4,6 +4,48 @@ Committed reference screenshots for every Storybook story, compared by the
 `visual` job in [`visual.yml`](../../.github/workflows/visual.yml) on every PR.
 Decision record: [ADR-026](../../docs/adrs/ADR-026-regression-test-home-and-visual-gate.md).
 
+**`visual` is a required status check on `main`** (since 2026-08-27, #2077). A red
+`visual` blocks merge through GitHub, not through convention — the merge-wait
+discipline it replaced is retired. Verify with:
+
+```bash
+gh api repos/brikdesigns/brik-bds/branches/main/protection \
+  --jq '.required_status_checks.contexts'
+# ["canonical-check","require-area-label","visual"]
+```
+
+The check is the **aggregate** job, deliberately named `visual` so a matrix
+expansion (`visual (1)`, `visual (2)`, …) can never orphan the protected context
+([`visual.yml:85-90`](../../.github/workflows/visual.yml)). It is `if: always()`
+and asserts `needs.shard.result == "success"` explicitly, so a skipped or failed
+shard cannot pass it.
+
+## The measurement that earned promotion
+
+#1778 set the bar at **ten consecutive green runs on one commit** and added the
+`workflow_dispatch` trigger to make it measurable. Measured 2026-08-27:
+
+| Commit | Runs | Result |
+| --- | --- | --- |
+| `4a7a1cd5` | 12 (11 dispatch + 1 push) | 12 success, 0 failure, 0 cancelled — every run 8/8 shards |
+| `8635b755` | 8 (dispatch) | 8 success, 0 failure |
+
+Per-run cost: 8 shards in parallel at 83–102 s each, aggregate job 2 s, ~2–3 min
+wall.
+
+**If you re-run this measurement, do not try to freeze `main`.** A ten-dispatch
+campaign takes ~35 minutes and a single session does not control who merges — two
+separate campaigns were invalidated mid-flight by PRs landing from elsewhere
+(#2078, then #2079 from another session). `workflow_dispatch` accepts only a
+branch or tag as `ref`, never a raw SHA, so the dispatch always follows `main`.
+Count by `headSha` after the fact instead:
+
+```bash
+gh run list --repo brikdesigns/brik-bds --workflow visual.yml --limit 40 \
+  --json databaseId,headSha,conclusion,event \
+  -q '.[] | select(.headSha=="<sha>") | "\(.databaseId) \(.event) \(.conclusion)"'
+```
+
 ## How it works
 
 - The existing `storybook` vitest project renders every story in headless
