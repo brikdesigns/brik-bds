@@ -270,6 +270,15 @@ if [ -n "$ISSUE_REF" ]; then
   if ! check_issue_claim "$ISSUE_REF" "$BRANCH_NAME"; then
     exit 1
   fi
+  # Comment digest (brik-llm#2755). The body is the brief as FILED; a comment is
+  # what happened since, and nothing in the pickup path read one. Free —
+  # check_issue_claim primed the cache with the same issues/N/comments read.
+  # Advisory: it prompts, never refuses. Zero comments prints nothing.
+  #
+  # Wired here and not left to brik-llm alone because a half-synced twin is the
+  # #2442 shape: brik-bds grew sibling detection that brik-llm lacked for 18
+  # days, and the lib-only sync is what let that sit unnoticed.
+  report_issue_comments "$ISSUE_REF"
 elif [ "$NO_ISSUE" = "1" ]; then
   echo -e "${YELLOW}⚠  --no-issue: no ticket to key the overlap gate on.${NC}"
   # The slug is the only statement of intent a ticketless branch has, so both
