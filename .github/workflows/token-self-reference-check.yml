@@ -27,9 +27,19 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'tokens/**'
+      - 'scripts/lint-token-self-reference.mjs'
+      - 'scripts/__tests__/lint-token-self-reference.test.mjs'
+      - '.github/workflows/token-self-reference-check.yml'
   push:
     branches:
       - main
+    paths:
+      - 'tokens/**'
+      - 'scripts/lint-token-self-reference.mjs'
+      - 'scripts/__tests__/lint-token-self-reference.test.mjs'
+      - '.github/workflows/token-self-reference-check.yml'
 
 concurrency:
   group: token-self-reference-check-${{ github.ref }}

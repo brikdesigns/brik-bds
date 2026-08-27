@@ -27,9 +27,29 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'tokens/contrast-pairings.json'
+      - 'tokens/figma-tokens.css'
+      - 'tokens/figma-tokens-dark.css'
+      - 'tokens/gap-fills.css'
+      - 'tokens/theme-brand-brik.css'
+      - 'docs-site/content/docs/primitives/color-pairings.mdx'
+      - 'scripts/validate-themes.js'
+      - 'scripts/validate-all.js'
+      - '.github/workflows/contrast-gate.yml'
   push:
     branches:
       - main
+    paths:
+      - 'tokens/contrast-pairings.json'
+      - 'tokens/figma-tokens.css'
+      - 'tokens/figma-tokens-dark.css'
+      - 'tokens/gap-fills.css'
+      - 'tokens/theme-brand-brik.css'
+      - 'docs-site/content/docs/primitives/color-pairings.mdx'
+      - 'scripts/validate-themes.js'
+      - 'scripts/validate-all.js'
+      - '.github/workflows/contrast-gate.yml'
 
 concurrency:
   group: contrast-gate-${{ github.ref }}
