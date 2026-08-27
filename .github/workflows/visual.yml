@@ -65,18 +65,37 @@ on:
 concurrency:
   # Manual runs get their own group so a campaign does not cancel itself.
   #
-  # `cancel-in-progress` is right for pull_request and push — a superseded
-  # commit's result is worthless, so grouping those on the ref is correct and is
-  # left exactly as it was. It is wrong for workflow_dispatch: sampling the same
-  # commit N times is the entire point, and under a ref-keyed group each
-  # dispatch would cancel the previous one. Ten dispatches would have yielded
-  # one result and nine cancellations, which reads as "the bar is unreachable"
-  # rather than "the trigger is misconfigured".
+  # run_id is unique per run, so every manual run is its own group of one. That
+  # carve-out is what makes the ten-dispatch sampling method in
+  # tests/visual/README.md work at all — under a plain ref-keyed group each
+  # dispatch would evict the previous one, and the trigger would read as "the
+  # bar is unreachable" rather than "the group is misconfigured".
   #
-  # run_id is unique per run, so every manual run is its own group. Adding the
-  # trigger without this is the whole change silently not working.
+  # `cancel-in-progress: false` + `queue: max` since #2090. `visual` became a
+  # REQUIRED context in #2077 and the two cancelling settings were left behind,
+  # which is the state the contract auditor's rules 6a/6b reject:
+  #
+  #   - A cancelled check-run is not an absent one. Protection goes on reporting
+  #     the context as `expected`, and a green re-run does not clear it — only a
+  #     new head SHA does (brik-llm#2094).
+  #   - `cancel-in-progress: false` alone does NOT cover it. The flag governs the
+  #     RUNNING job; the default `queue: single` still lets a newer run evict the
+  #     PENDING one, leaving a check-suite with zero check-runs and the same
+  #     stuck `expected` (brik-llm#2176, measured on #2174: seven runs on one
+  #     head SHA, five cancelled). The two lines are one change.
+  #
+  # Cost, stated rather than discovered: a superseded PR commit now runs the
+  # full eight-shard gate to completion instead of being cancelled. brik-bds is
+  # the org's Actions-runtime hot spot (#2069), so this is a real bill — it buys
+  # a required context that can actually reach a terminal state. The `classify
+  # diff` job below is what keeps it affordable: an inert diff instantiates zero
+  # shards, so the uncancellable run is seconds, not two minutes.
+  #
+  # `queue: max` and `cancel-in-progress: true` are a workflow validation error
+  # together, so the two lines change as a pair.
   group: visual-${{ github.ref }}-${{ github.event_name == 'workflow_dispatch' && github.run_id || 'auto' }}
-  cancel-in-progress: true
+  cancel-in-progress: false
+  queue: max
 
 jobs:
   # ─── #2713: skip the eight Playwright shards on a diff that cannot move a

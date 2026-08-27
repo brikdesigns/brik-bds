@@ -17,6 +17,16 @@
     "check `failure` and `mergeStateStatus=BLOCKED`; label re-added produced `success` and",
     "`CLEAN`.",
     "",
+    "`visual` (#2077) satisfies the no-`paths:` rule but not the way the others do. It",
+    "cannot be workflow-level filtered — that is the brik-llm#1937 arm B failure — so the",
+    "diff test moved INSIDE the workflow: a `classify diff` job emits an empty shard matrix",
+    "on an inert diff, and the aggregate job named `visual` runs `if: always()` and reports",
+    "green (visual.yml:320-350). Job-level, not trigger-level, is the only shape that gets",
+    "both a skip and a required context. Do not 'tidy' it into a `paths:` list.",
+    "",
+    "`naming-canon-check` and `canonical-class-check` (#2086) are plain unfiltered gates —",
+    "they were promotable as-is precisely because #2069/#2070 never filtered them.",
+    "",
     "Editing this file does NOT change protection. Apply it with:",
     "  brik-llm/scripts/audit/required-check-contract.py --root <this repo> --check-protection",
     "to see the drift, then PATCH .../branches/main/protection/required_status_checks.",
@@ -30,7 +40,10 @@
   "branch": "main",
   "contexts": [
     "canonical-check",
-    "require-area-label"
+    "canonical-class-check",
+    "naming-canon-check",
+    "require-area-label",
+    "visual"
   ],
   "accepted_collisions": {}
 }
