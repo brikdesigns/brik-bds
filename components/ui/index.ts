@@ -122,3 +122,4 @@ export * from './TextLink';
 export * from './TaskConsole';
 export * from './Toast';
 export * from './Tooltip';
+export * from './ZIndexMediaBand';
