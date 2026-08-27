@@ -66,6 +66,7 @@ export * from './Image';
 export * from './InteractiveListItem';
 export * from './Logo';
 export * from './Marquee';
+export * from './MediaTabs';
 export * from './Menu';
 export * from './Meter';
 export * from './Modal';
