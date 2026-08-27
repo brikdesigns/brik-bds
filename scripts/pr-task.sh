@@ -144,15 +144,25 @@ if [[ "${SKIP_STORY_CHECK:-}" != "1" ]]; then
       fi
     elif [ "${STORY_VERIFIED:-}" = "1" ]; then
       # Non-interactive (agent / headless): the prompt can't be answered. Accept
-      # an explicit assertion that the change was verified (e.g. via a headless
-      # `npm run chromatic` — now possible, #1058) rather than silently
-      # auto-confirming, which would rubber-stamp an unverified visual change.
-      echo -e "${YELLOW}   → STORY_VERIFIED=1 — proceeding (non-interactive).${NC}"
+      # an explicit assertion that the story was rendered and its assertions run
+      # (#1058) rather than silently auto-confirming, which would rubber-stamp an
+      # unverified visual change. Pixels are NOT what this flag attests to —
+      # visual.yml is the pixel gate, and it runs after the PR opens.
+      echo -e "${YELLOW}   → STORY_VERIFIED=1 — proceeding (non-interactive); visual.yml gates pixels on the PR.${NC}"
     else
       # Non-interactive with no assertion → fail closed with an actionable path,
       # never a silent EOF-block or a hang on an input-less stdin (#1110).
+      #
+      # Deliberately NOT `npm run chromatic`: ADR-026 scoped Chromatic to
+      # publishing, and a spent snapshot quota still exits 0 having captured
+      # nothing (#1967) — naming it here handed agents a green signal backed by
+      # zero coverage. There is also no local pixel check to offer instead:
+      # every baseline is `*-chromium-linux.png`, so a darwin run writes new
+      # files rather than comparing (tests/visual/README.md).
       echo -e "${RED}✗ Component diff in a non-interactive session — the Storybook gate can't be answered here.${NC}"
-      echo -e "${YELLOW}   Verify the change (headless: npm run chromatic), then re-run with STORY_VERIFIED=1.${NC}"
+      echo -e "${YELLOW}   Run the story's own assertions, then re-run with STORY_VERIFIED=1:${NC}"
+      echo -e "${YELLOW}     npx vitest run --project storybook <path/to/Component.stories.tsx>${NC}"
+      echo -e "${YELLOW}   Pixels are gated post-PR by visual.yml (VISUAL_GATE=1), not by this flag and not by Chromatic (#1967).${NC}"
       echo -e "${YELLOW}   For a genuinely non-visual diff, use SKIP_STORY_CHECK=1 instead.${NC}"
       exit 1
     fi

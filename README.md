@@ -96,7 +96,9 @@ brik-bds is a public repo — GitHub's server-side push protection is also enabl
 | Full validation | `npm run validate:full` (pre-push gate) |
 | Build library | `npm run build:lib` |
 | Build content-system | `npm run build:content-system` |
-| Visual review | `npm run chromatic` (resolves the Chromatic token via `op run --env-file=.env.op`; needs the 1Password CLI signed in) |
+| Story assertions (headless) | `npx vitest run --project storybook <path/to/Component.stories.tsx>` |
+| Visual regression | `visual.yml` on every PR to `main` (`VISUAL_GATE=1`). No local run: baselines are `*-chromium-linux.png`, so a darwin run writes new files instead of comparing — regenerate only via the **Update Visual Baselines** workflow ([`tests/visual/README.md`](tests/visual/README.md)) |
+| Publish Storybook | `npm run chromatic` — publish-only per [ADR-026](docs/adrs/ADR-026-regression-test-home-and-visual-gate.md), **not** a visual gate (resolves the Chromatic token via `op run --env-file=.env.op`; needs the 1Password CLI signed in) |
 
 ## Versioning
 
