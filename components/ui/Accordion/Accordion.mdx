@@ -30,3 +30,9 @@ Item `content` accepts any React node — ordered lists, multi-paragraph blocks 
 
 <ArgTypes of={Stories} />
 
+## Notes
+
+> **Accordion or tabs?** Ask what the *set* is, because both hide all but one panel and the rendered output does not tell you which was right. Steps the reader walks **through** ("Scope → Design → Build") are ordered, and an accordion keeps every label visible so the reader can see where they are — that is this component. Options the reader picks **between** ("Healthcare / Legal / Retail") are peer categories and get [`TabBar`](?path=/docs/navigation-tab-bar--docs) instead. Many items, or a panel tall enough that mobile has to stack it, breaks the tie back toward an accordion. The full rule, its tie-breaks, and the worked cases live in the [display-choice build standard](https://design.brikdesigns.com/docs/build-standards/display-choice).
+
+> **Each step driving a media panel** is [`SyncedMediaSteps`](?path=/docs/containers-synced-media-steps--docs), which composes this accordion with a synced media slot and per-step autoplay — reach for it before hand-rolling the sync.
+
