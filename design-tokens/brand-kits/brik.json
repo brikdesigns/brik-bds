@@ -1615,6 +1615,42 @@
         },
         "$type": "color",
         "$value": "{color.tan.lightest}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow-light}"
+      },
+      "accent-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.blue-light}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange-light}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.500}"
       }
     },
     "background": {
@@ -1697,7 +1733,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.red}"
+        "$value": "{color.poppy.500}"
       },
       "accent-orange": {
         "$extensions": {
@@ -2209,6 +2245,15 @@
         },
         "$type": "color",
         "$value": "{color.system.orange-light}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.500}"
       }
     },
     "text": {
@@ -2291,7 +2336,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.red}"
+        "$value": "{color.poppy.500}"
       },
       "accent-orange": {
         "$extensions": {
@@ -2629,6 +2674,60 @@
         },
         "$type": "color",
         "$value": "{color.tan.dark}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow}"
+      },
+      "accent-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.blue}"
+      },
+      "accent-green": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.purple}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.500}"
       }
     }
   },
@@ -2723,6 +2822,42 @@
         },
         "$type": "color",
         "$value": "{color.tan.darkest}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow-light}"
+      },
+      "accent-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.blue-light}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange-light}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.500}"
       }
     },
     "background": {
@@ -2805,7 +2940,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.red}"
+        "$value": "{color.poppy.500}"
       },
       "accent-orange": {
         "$extensions": {
@@ -3317,6 +3452,15 @@
         },
         "$type": "color",
         "$value": "{color.system.orange-light}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.500}"
       }
     },
     "text": {
@@ -3399,7 +3543,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.red}"
+        "$value": "{color.poppy.500}"
       },
       "accent-orange": {
         "$extensions": {
@@ -3737,6 +3881,60 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.light}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow}"
+      },
+      "accent-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.blue}"
+      },
+      "accent-green": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.purple}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.500}"
       }
     }
   },

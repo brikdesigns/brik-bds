@@ -112,7 +112,10 @@
   display: block;
 }
 
+/* Negative helper text uses the valence token, not accent-red: #2066 re-pointed
+   accent-red onto the brand poppy per the Figma Brand Kit, and an error message
+   must not render in the brand color. Same red family, correct semantics. */
 .bds-field__helper--tone-negative {
-  color: var(--text-accent-red);
+  color: var(--text-negative);
 }
 }

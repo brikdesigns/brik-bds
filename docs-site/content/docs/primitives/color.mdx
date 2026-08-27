@@ -173,15 +173,17 @@ It is distinct from two neighbours it is easy to confuse:
 
 ### The per-hue accent set
 
-Separate from the scope-stable accent above, `accent-{hue}` names a **category color** — five hues (`yellow`, `blue`, `green`, `purple`, `orange`, plus `red` on text and background only) for tagging things that have no valence. A calendar's event categories, a chart series, a tag palette.
+Separate from the scope-stable accent above, `accent-{hue}` names a **category color** — six hues for tagging things that have no valence. A calendar's event categories, a chart series, a tag palette.
 
-Every one of them is filled from the **system** palette, never a Brand Kit ramp — that is what keeps `accent-purple` the same purple whichever client theme is loaded. The purpose split is the same one the valence families use:
+The set is mirrored 1:1 from the **❖ Brik Brand Kit** Figma library, which is the source of truth for it. Five hues fill from the **system** palette — that is what keeps `accent-purple` the same purple whichever client theme is loaded — and the purpose split is the one the valence families use:
 
 | Purpose | Fills from | Use for |
 |---|---|---|
 | `--text-accent-{hue}` | `--color-system-{hue}` — the vivid step | Colored label or icon on a neutral surface |
 | `--background-accent-{hue}` | `--color-system-{hue}` — the vivid step | A saturated fill: a dot, a solid chip, a chart mark |
+| `--border-accent-{hue}` | `--color-system-{hue}` — the vivid step | A hairline or left-rule keyed to the category |
 | `--surface-accent-{hue}` | `--color-system-{hue}-light` — the pale tint | A wash behind content: a subtle chip, a callout, a row highlight |
+| `--page-accent-{hue}` | `--color-system-{hue}-light` — the pale tint | A full-page or section-wide wash |
 
 <ColorGrid
   colors={[
@@ -194,17 +196,20 @@ Every one of them is filled from the **system** palette, never a Brand Kit ramp 
   columns={5}
 />
 
+**The grid is deliberately not square, because canon isn't.** Two gaps are mirrored from Figma rather than filled in:
+
+- `--page-accent-{hue}` exists for `yellow`, `blue`, `orange` and `red` only — there is no page-level green or purple wash.
+- **`red` is the exception to the system-palette rule.** All five of its purposes alias the **brand poppy** (`#e35335`), not `--color-system-red`. So `--surface-accent-red` is a saturated *fill*, not a pale tint like the other five — it is gated AA rather than AAA in [the matrix](/docs/primitives/color-pairings#the-matrix), and small body copy does not belong on it. `Avatar`'s red initials fill is the shipped consumer.
+
 Two consequences worth knowing before you reach for one:
 
-- **Put dark ink on a `surface-accent-{hue}`, not `--text-primary`.** The tints hold the same pale value in both themes while `--text-primary` flips to near-white in dark, which lands at 1.2:1. `--text-on-color-light` is the theme-stable pairing and clears AAA on all five — the five `accent` rows in [the matrix](/docs/primitives/color-pairings#the-matrix) gate it.
+- **Put dark ink on a `surface-accent-{hue}`, not `--text-primary`.** The tints hold the same pale value in both themes while `--text-primary` flips to near-white in dark, which lands at 1.2:1. `--text-on-color-light` is the theme-stable pairing and clears AAA on all five tints (AA on the red fill) — the six `accent` rows in [the matrix](/docs/primitives/color-pairings#the-matrix) gate it.
 - **`--text-accent-{hue}` is not a foreground for `--surface-accent-{hue}`.** Same-hue vivid-on-pale only clears AA for `blue`; the other four fall below the 3:1 floor ([#2080](https://github.com/brikdesigns/brik-bds/issues/2080)).
-
-There is no `--border-accent-{hue}`. No consumer has needed one, and the family is deliberately not padded out to a full four-purpose grid — the same call `info` carries.
 
 {/* lint-mdx-tokens-ignore-start — the deprecated alias is the subject of this note */}
 
 <Callout type="info">
-  `--surface-accent-{hue}` shipped in [#2065](https://github.com/brikdesigns/brik-bds/issues/2065) pointing at the Brand Kit mid-tone ramp (`--color-{hue}-light`, itself a deprecated alias for the `-500` step). [#2066](https://github.com/brikdesigns/brik-bds/issues/2066) re-pointed it onto the system tint so one `accent-{hue}` name means one hue across all three purposes. Dark ink on the purple tint went from 5.68:1 to 12.87:1 in the process.
+  `--surface-accent-{hue}` shipped in [#2065](https://github.com/brikdesigns/brik-bds/issues/2065) pointing at the Brand Kit mid-tone ramp (`--color-{hue}-light`, itself a deprecated alias for the `-500` step). [#2066](https://github.com/brikdesigns/brik-bds/issues/2066) re-pointed it onto the system tint, then reconciled the whole family against the Figma Brand Kit — adding `--border-accent-{hue}`, `--page-accent-{hue}` and `--surface-accent-red`, and moving `accent-red` onto the brand poppy. Dark ink on the purple tint went from 5.68:1 to 12.87:1 in the process.
 </Callout>
 
 {/* lint-mdx-tokens-ignore-end */}
