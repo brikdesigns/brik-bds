@@ -103,9 +103,12 @@ CLAIM_SKEW_SECONDS="${CLAIM_SKEW_SECONDS:-300}"
 
 # 0 = stale (does not block).
 claim_is_stale() {
-  local stamp="${1:-}" now="${2:?}" window="${3:?}" then age
-  then="$(claim_stamp_to_epoch "$stamp")" || return 0
-  age=$(( now - then ))
+  # `then_epoch`, not `then`: shellcheck reads `then=` as the shell keyword and
+  # raises SC1010, and brik-llm's pre-commit runs at --severity=warning. Renamed
+  # here (canon) and re-synced to brik-bds in the same change — brik-llm#2676.
+  local stamp="${1:-}" now="${2:?}" window="${3:?}" then_epoch age
+  then_epoch="$(claim_stamp_to_epoch "$stamp")" || return 0
+  age=$(( now - then_epoch ))
   # Wildly future → unusable stamp → stale.
   [ "$age" -lt $(( -1 * CLAIM_SKEW_SECONDS )) ] && return 0
   # Within skew tolerance (age between -SKEW and 0) → fresh, so it still blocks.
