@@ -191,12 +191,15 @@ export default defineConfig({
         },
       },
       {
-        // Vanilla DevBar widgets (inspect/feedback) are browser-only IIFEs that
-        // attach to `window`; exercise them in a real DOM, not node/jsdom.
+        // Component tests that need a real DOM rather than node/jsdom. Two
+        // kinds live here: the vanilla DevBar widgets (browser-only IIFEs that
+        // attach to `window`), and components whose teardown can only be
+        // observed in a browser — AnimatedIcon drives lottie-web, which paints
+        // and keeps a global animation registry (#2029).
         extends: true,
         test: {
-          name: 'widgets',
-          include: ['components/ui/BrikDevBar/widgets/**/*.browser.test.ts'],
+          name: 'components-browser',
+          include: ['components/**/*.browser.test.ts'],
           browser: {
             enabled: true,
             headless: true,

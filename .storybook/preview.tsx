@@ -33,6 +33,11 @@ import '../css/animations.css';
 import '../css/premium-effects.css';
 import './storybook-overrides.css';
 
+// Hides one React 18 dev warning from lottie-react v3, and only that one.
+// Rationale, the no-leak measurement behind it, and the test that keeps it
+// honest: tests/suppress-lottie-callback-ref-warning.ts (brik-bds#2029).
+import '../tests/suppress-lottie-callback-ref-warning';
+
 /**
  * Build Storybook theme objects for the preview iframe.
  * This makes emotion-styled internal components (Canvas preview,
