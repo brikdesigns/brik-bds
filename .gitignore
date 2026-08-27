@@ -29,6 +29,13 @@ tools/
 # ─── Claude Code local state ─────────────────────────────────────
 .claude/settings.local.json
 .claude/workstreams.json
+# Claude Code writes timestamped backups beside its settings file
+# (settings.local.json.bak.20260823-210025). Untracked, they make
+# new-task.sh refuse the worktree AFTER it has already claimed the ticket
+# against the session budget, so the failed attempt spends budget. Glob rather
+# than the narrower settings.local.json.bak.* brik-llm carries, to cover any
+# sibling Claude Code starts backing up. (brik-bds#2030)
+.claude/*.bak.*
 
 # ─── Legacy Webflow Artifacts (removed 2026-03-22) ───────────────
 # Webflow is a secondary platform. Token source is Figma → Style Dictionary.
