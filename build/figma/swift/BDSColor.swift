@@ -25,7 +25,7 @@ public enum BDSColor {
     public static let colorSystemRed = Color(red: 0.9216, green: 0.3412, blue: 0.3412)
     public static let colorSystemGreen = Color(red: 0.1529, green: 0.6824, blue: 0.3765)
     public static let colorSystemYellow = Color(red: 0.9490, green: 0.7882, blue: 0.2980)
-    public static let colorSystemBlue = Color(red: 0.1843, green: 0.5020, blue: 0.9294)
+    public static let colorSystemBlue = Color(red: 0.1412, green: 0.3804, blue: 0.7059)
     public static let colorSystemPurple = Color(red: 0.6078, green: 0.3176, blue: 0.8784)
     public static let colorSystemOrange = Color(red: 0.9490, green: 0.6000, blue: 0.2902)
     public static let colorSystemNeutral = Color(red: 0.2118, green: 0.2118, blue: 0.2118)
