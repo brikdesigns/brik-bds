@@ -20,9 +20,24 @@
 # worktree, so anything inline there is untestable — the same reason
 # overlap-filters.sh exists.
 #
+# It also carries the COMMENT DIGEST (brik-llm#2755), because the two read the
+# same endpoint. Nothing in the pickup path read a queued issue's own comments:
+# /resume reads handoff comments on the UMBRELLA, and new-task.sh --issue read
+# the issue's state and size:* label and never its comments. So a session built
+# against the body — the brief as FILED — while the comments held what had
+# happened since. On 2026-08-27 that cost a full duplicate build of #2645, whose
+# 18-hour-old comment already held three completed AC runs and an explicit
+# refutation of the issue's own prediction. The claim gate closes the race; this
+# closes the half that made the duplication certain regardless of who won it.
+#
 # Usage (sourced):
 #   source scripts/lib/issue-claim.sh
 #   check_issue_claim "1541" "task/tooling-issue-claim-gate"   # refuses or claims
+#   report_issue_comments "1541"                               # digest + prompt
+#   report_issue_comments "1541" --report                      # digest, no prompt
+#
+# Call check_issue_claim FIRST when you want both: it primes the comment cache,
+# so the digest costs zero additional API calls.
 #
 # Exit / return codes (sourced mode):
 #   0  clear to proceed (no claim, my own claim, or a stale one)
@@ -123,6 +138,64 @@ claim_is_foreign() {
   return 0
 }
 
+# ── Comment digest, pure half (brik-llm#2755) ──────────────────────
+#
+# First meaningful line of a comment body, for a one-line digest. Skips HTML
+# markers and blank lines, strips leading markdown punctuation, collapses runs of
+# whitespace, truncates.
+#
+# sed-only on purpose. The obvious `grep -v '^[[:space:]]*$' | head -1` returns 1
+# on an all-blank body, and this lib is sourced into new-task.sh under
+# `set -euo pipefail`, so pipefail would turn a whitespace-only comment into an
+# aborted pickup — the #2423 class.
+COMMENT_HEADLINE_MAX="${COMMENT_HEADLINE_MAX:-88}"
+
+comment_headline() {
+  local body="${1:-}" line
+  line="$(printf '%s\n' "$body" \
+    | sed -e 's/<!--[^>]*-->//g' \
+    | sed -n '/[^[:space:]]/{
+        s/^[[:space:]]*[#>*_[:space:]-]*//
+        s/[[:space:]][[:space:]]*/ /g
+        s/[[:space:]]*$//
+        p
+        q
+      }')"
+  if [ "${#line}" -gt "$COMMENT_HEADLINE_MAX" ]; then
+    printf '%s…' "${line:0:$COMMENT_HEADLINE_MAX}"
+  else
+    printf '%s' "$line"
+  fi
+}
+
+# Reduce a comment stream to the one thing a builder has to know.
+#
+# Reads NDJSON on stdin — one {id, login, created_at, body} object per line, as
+# _ic_fetch_comments produces — and emits, on success:
+#
+#   <count><TAB><login><TAB><created_at><TAB><body-of-newest>
+#
+# The BODY is last because it carries newlines; the caller peels the first three
+# fields with parameter expansion rather than cut, same as parse_claim's caller.
+#
+# Claim markers are excluded from both the count and the "newest" pick. They are
+# this lib's own machine noise, and counting them would mean an issue is never
+# silent once claimed — every re-pickup would report "1 comment" about itself,
+# and AC "zero comments is silent" would be dead on arrival.
+#
+# rc 1 with no output when there is nothing a builder needs to read.
+comment_digest() {
+  local out
+  out="$(jq -rs --arg m "$CLAIM_MARKER" '
+    [ .[] | select(((.body // "") | contains($m)) | not) ] as $c
+    | if ($c | length) == 0 then empty
+      else ($c | last) as $n
+        | "\($c | length)\t\($n.login // "unknown")\t\($n.created_at // "")\t\($n.body // "")"
+      end' 2>/dev/null)" || out=""
+  [ -n "$out" ] || return 1
+  printf '%s' "$out"
+}
+
 # Human-readable age for the refusal message.
 claim_age_human() {
   local secs="${1:-0}"
@@ -192,12 +265,66 @@ _ic_resolve_ref() {
   printf '%s %s %s' "$owner" "$repo" "$num"
 }
 
-# Echo "id<TAB>body" for the existing marker comment. One API call.
+# ── The one comments read, shared by both gates (brik-llm#2755) ────
+#
+# The claim lookup and the comment digest want the same endpoint, so they make
+# ONE call between them. The fleet shares an hourly GitHub bucket
+# (rag:github-api-quota-is-shared-across-the-fleet) and this lib is on the hot
+# path — new-task.sh sources it on every task branch, /resume on every pickup.
+# #1754 went to the trouble of removing a single point from this path; adding one
+# straight back for a second read of the same comments would undo it.
+#
+# Cached in globals keyed by the resolved ref, so a second caller in the same
+# process is free. MUST be invoked OUTSIDE a command substitution to prime it —
+# a subshell's assignment is lost, which is the trap already documented at
+# _io_issue_state's $4 and cost that fix its first cut.
+_IC_COMMENTS_KEY=""
+_IC_COMMENTS_NDJSON=""
+
+# One JSON object per line. NDJSON rather than a single array because
+# `gh api --paginate` concatenates one array PER PAGE, which is not valid JSON as
+# a whole — the field selection also keeps a 200-comment thread out of memory.
+#
+# Needs the external `jq`, because `gh api --jq` takes one program per call and
+# both consumers want a different slice of the same payload. Eleven other libs in
+# scripts/lib already depend on it; this gate family did not, so a machine without
+# it must lose only the NEW surface — see _ic_find_claim's fallback. A missing jq
+# silently un-gating the claim check would be the #2422 fail-open all over again.
+_ic_fetch_comments() {
+  local owner="$1" repo="$2" num="$3"
+  # A second `local`, not a fourth assignment above: SC2318, and brik-llm's
+  # pre-commit lints shell at --severity=warning.
+  local key="$owner/$repo#$num"
+  [ "$_IC_COMMENTS_KEY" = "$key" ] && return 0
+  command -v jq >/dev/null 2>&1 || { _IC_COMMENTS_KEY=""; return 1; }
+  _IC_COMMENTS_NDJSON="$(gh api "repos/$owner/$repo/issues/$num/comments" --paginate \
+    --jq '.[] | {id, login: .user.login, created_at, body} | @json' 2>/dev/null || true)"
+  _IC_COMMENTS_KEY="$key"
+  return 0
+}
+
+# Echo "id<TAB>body" for the existing marker comment.
+#
+# Reads the shared cache; primes it first when it is cold, so a standalone caller
+# still works and a primed caller pays nothing. Safe inside a command
+# substitution either way — only the priming is subshell-sensitive.
+#
+# With no jq, falls back to the pre-#2755 form: same endpoint, same one call,
+# gh's internal jq. The claim gate keeps working exactly as it shipped; only the
+# comment digest goes quiet.
 _ic_find_claim() {
   local owner="$1" repo="$2" num="$3"
-  gh api "repos/$owner/$repo/issues/$num/comments" --paginate \
-    --jq "[.[] | select(.body | contains(\"$CLAIM_MARKER\"))] | last | select(.) | \"\(.id)\t\(.body)\"" \
-    2>/dev/null || true
+  if ! _ic_fetch_comments "$owner" "$repo" "$num"; then
+    gh api "repos/$owner/$repo/issues/$num/comments" --paginate \
+      --jq "[.[] | select(.body | contains(\"$CLAIM_MARKER\"))] | last | select(.) | \"\(.id)\t\(.body)\"" \
+      2>/dev/null || true
+    return 0
+  fi
+  [ -n "$_IC_COMMENTS_NDJSON" ] || return 0
+  printf '%s\n' "$_IC_COMMENTS_NDJSON" \
+    | jq -rs --arg m "$CLAIM_MARKER" \
+        '[ .[] | select((.body // "") | contains($m)) ] | last | select(.) | "\(.id)\t\(.body)"' \
+        2>/dev/null || true
 }
 
 # check_issue_claim <issue-ref> <branch> [--report]
@@ -223,6 +350,11 @@ check_issue_claim() {
   my_host="${ident%%$'\t'*}"; my_branch="${ident#*$'\t'}"
 
   local found id body parsed their_host their_branch stamp now age
+  # Primed HERE, not inside the substitution below: a subshell's assignment to
+  # _IC_COMMENTS_NDJSON is lost, and then report_issue_comments would pay for a
+  # second read of the same endpoint. `|| true` because a missing jq is handled
+  # by _ic_find_claim's fallback, not by aborting the claim check.
+  _ic_fetch_comments "$owner" "$repo" "$num" || true
   found="$(_ic_find_claim "$owner" "$repo" "$num")"
   id="${found%%$'\t'*}"
   body="${found#*$'\t'}"
@@ -277,5 +409,91 @@ check_issue_claim() {
 
   # Assignee is board visibility only — it cannot discriminate sessions.
   gh issue edit "$num" --repo "$owner/$repo" --add-assignee @me >/dev/null 2>&1 || true
+  return 0
+}
+
+# ── Comment digest, network half (brik-llm#2755) ───────────────────
+
+# Acknowledgement without ever aborting the caller. Same contract as
+# issue-overlap.sh's _io_confirm, and duplicated rather than reused for the same
+# reason _ic_resolve_ref is: /resume sources this lib ALONE, so a cross-lib call
+# would be an undefined function on that path.
+#
+# A bare `read -r` here would be the #1692 regression: read returns 1 on EOF,
+# new-task.sh calls into this under `set -euo pipefail`, and a closed stdin would
+# take the script down before the worktree was created.
+_ic_confirm() {
+  if [ "${NEW_TASK_YES:-0}" = "1" ] || [ ! -t 0 ]; then
+    echo -e "${_IC_YELLOW}   → non-interactive: proceeding automatically.${_IC_NC}" >&2
+    return 0
+  fi
+  echo -e "${_IC_YELLOW}   Press Enter to continue anyway, Ctrl+C to abort.${_IC_NC}" >&2
+  read -r || true
+}
+
+# report_issue_comments <issue-ref> [--report]
+#
+# Surfaces what the issue BODY does not say. The body is the brief as filed; a
+# comment is what has happened since, and nothing in the pickup path read one
+# until this existed (brik-llm#2755).
+#
+# Zero comments is silent — no line, no prompt. That is deliberate: 60 of the 100
+# newest open brik-llm issues had no comments when this shipped (measured
+# 2026-08-27), so a gate that announced itself on every pickup would spend its
+# credibility on the majority case where it has nothing to say.
+#
+# --report prints and returns 0 without prompting, for /resume — the same posture
+# as check_issue_claim's --report, so a pickup does not grow a second
+# differently-shaped warning block.
+#
+# Always returns 0. This is an advisory read, never a gate that can refuse: an
+# unreadable comment list means no advice, and the claim gate above is what
+# actually stops a second session.
+report_issue_comments() {
+  local ref="${1:-}" mode="${2:-prompt}"
+  [ -z "$ref" ] && return 0
+  command -v gh >/dev/null 2>&1 || return 0
+
+  local resolved owner repo num
+  resolved="$(_ic_resolve_ref "$ref")" || return 0
+  read -r owner repo num <<<"$resolved"
+
+  if ! _ic_fetch_comments "$owner" "$repo" "$num"; then
+    echo -e "${_IC_YELLOW}⚠  jq not on PATH — skipping the comment digest for ${owner}/${repo}#${num}.${_IC_NC}" >&2
+    return 0
+  fi
+
+  local digest rest count login stamp body head now then_epoch age_str
+  digest="$(printf '%s\n' "$_IC_COMMENTS_NDJSON" | comment_digest)" || return 0
+
+  # Peel the three metadata fields; the body is last because it carries newlines,
+  # so cut cannot be used on it.
+  count="${digest%%$'\t'*}"; rest="${digest#*$'\t'}"
+  login="${rest%%$'\t'*}";   rest="${rest#*$'\t'}"
+  stamp="${rest%%$'\t'*}";   body="${rest#*$'\t'}"
+  head="$(comment_headline "$body")"
+
+  age_str=""
+  now="$(date -u +%s)"
+  if then_epoch="$(claim_stamp_to_epoch "$stamp")"; then
+    age_str=" ($(claim_age_human "$(( now - then_epoch ))") ago)"
+  fi
+
+  echo "" >&2
+  if [ "$count" -eq 1 ]; then
+    echo -e "${_IC_YELLOW}⚠  ${owner}/${repo}#${num} has 1 comment the body does not include:${_IC_NC}" >&2
+  else
+    echo -e "${_IC_YELLOW}⚠  ${owner}/${repo}#${num} has ${count} comments the body does not include:${_IC_NC}" >&2
+  fi
+  echo "    newest — ${login}, ${stamp}${age_str}" >&2
+  echo "    \"${head}\"" >&2
+  echo "" >&2
+  echo -e "${_IC_YELLOW}   A comment postdates the brief, so treat it as SUPERSEDING the body.${_IC_NC}" >&2
+  echo -e "${_IC_YELLOW}   #2645 was built twice because an 18-hour-old comment holding three${_IC_NC}" >&2
+  echo -e "${_IC_YELLOW}   finished acceptance runs went unread (brik-llm#2755).${_IC_NC}" >&2
+  echo "     gh issue view ${num} --repo ${owner}/${repo} --comments" >&2
+
+  [ "$mode" = "--report" ] && return 0
+  _ic_confirm
   return 0
 }
