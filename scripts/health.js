@@ -15,7 +15,7 @@
  *   - File structure (index) → .husky/pre-commit
  *   - Type safety            → npm run typecheck
  *   - Storybook build        → npm run validate
- *   - Visual regression      → npm run chromatic
+ *   - Visual regression      → visual.yml (VISUAL_GATE=1, every PR to main)
  *
  * Usage:
  *   node scripts/health.js              # full report
