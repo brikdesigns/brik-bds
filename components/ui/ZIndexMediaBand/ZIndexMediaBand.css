@@ -1,0 +1,107 @@
+@layer bds-components {
+/**
+ * BDS ZIndexMediaBand — stacking-context band with a decorative graphic behind content
+ *
+ * Naming: .bds-z-index-media-band, .bds-z-index-media-band__{graphic,content,seam};
+ *         each seam carries [data-edge='top'|'bottom'] (see § Seam fade below)
+ *
+ * Stacking contract (the whole point of the primitive — consumers stop
+ * hand-rolling it):
+ *   parent   position: relative; z-index: 1; overflow: clip
+ *   __graphic  absolute; z-index: 0   decorative, aria-hidden, non-interactive
+ *   __content  relative; z-index: 2   real content
+ *   __seam     absolute; z-index: 4   edge blend into the neighbouring section
+ *
+ * Depth comes from gradients + token-driven scrims, never `mix-blend-mode` —
+ * blend modes resolve against whatever happens to sit underneath, so they read
+ * differently in the light and dark themes and cannot be themed per client.
+ *
+ * Component-local tokens (ADR-014 Tier 4, --bds-{component}-{prop} — defined
+ * here with defaults, overridable by a client theme or `style`):
+ *   --bds-media-band-surface      Band fill. Defaults to `transparent` so the
+ *                                 band inherits the page surface until a
+ *                                 consumer opts into its own.
+ *   --bds-media-band-graphic      `background-image` for the decorative layer
+ *                                 when the `graphic` slot is empty — the
+ *                                 per-client graphic-swap path. Default `none`.
+ *   --bds-media-band-seam-from    Seam gradient color at the inward end.
+ *   --bds-media-band-seam-to      Seam gradient color at the band edge —
+ *                                 set this to the NEIGHBOURING section's
+ *                                 surface so the two dissolve into each other.
+ *   --bds-media-band-seam-height  Depth of the seam fade.
+ *
+ * Static by construction (no animation, no JS-driven motion) — the band needs
+ * no reduced-motion handling and its graphic renders at rest. Anything animated
+ * that a consumer slots into `graphic` owns its own reduced-motion behaviour.
+ */
+
+.bds-z-index-media-band {
+  --bds-media-band-surface: transparent;
+  --bds-media-band-graphic: none;
+  --bds-media-band-seam-from: transparent;
+  --bds-media-band-seam-to: var(--surface-primary);
+  --bds-media-band-seam-height: 80px;
+
+  position: relative;
+  z-index: 1;
+  /* `clip` not `hidden`: clips decorative bleed without making the band a
+     scroll container (which would let a focused child scroll into view and
+     shift the layout). */
+  overflow: clip;
+  background: var(--bds-media-band-surface);
+}
+
+/* ─── Decorative layer (z:0) ─────────────────────────────────── */
+
+.bds-z-index-media-band__graphic {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--bds-media-band-graphic);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* ─── Content (z:2) ──────────────────────────────────────────── */
+
+.bds-z-index-media-band__content {
+  position: relative;
+  z-index: 2;
+}
+
+/* ─── Seam fade (z:4) ────────────────────────────────────────── */
+/* Both the `seam` prop and each seam's edge read as [data-*] attributes, not
+   BEM modifiers. ADR-033 § 2's closed axis list is tone · status · variant ·
+   emphasis · appearance · density · orientation — neither `seam` nor `edge` is
+   on it, and § 4 requires a modifier to carry a *closed* axis prefix, so an
+   edge-prefixed BEM modifier would need a § 6 ADR amendment to add an axis
+   word first. Same call as Marquee's [data-direction]. */
+
+.bds-z-index-media-band__seam {
+  position: absolute;
+  inset-inline: 0;
+  z-index: 4;
+  height: var(--bds-media-band-seam-height);
+  pointer-events: none;
+}
+
+.bds-z-index-media-band__seam[data-edge='top'] {
+  top: 0;
+  background-image: linear-gradient(
+    to bottom,
+    var(--bds-media-band-seam-to),
+    var(--bds-media-band-seam-from)
+  );
+}
+
+.bds-z-index-media-band__seam[data-edge='bottom'] {
+  bottom: 0;
+  background-image: linear-gradient(
+    to top,
+    var(--bds-media-band-seam-to),
+    var(--bds-media-band-seam-from)
+  );
+}
+}
