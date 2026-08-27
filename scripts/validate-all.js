@@ -119,6 +119,13 @@ const steps = [
   // `git diff base...HEAD --stat` fails here with an explanation rather than
   // shipping a gate that cannot fire. brik-bds#1546.
   { name: 'Base Freshness', cmd: 'bash scripts/__tests__/test-base-freshness.sh' },
+
+  // pr-task.sh --dry-run. Asserts the ABSENCE of side effects — no push (read off
+  // a bare remote's refs, not off stdout), no `gh pr create` (read off a stub's
+  // call log), local HEAD unmoved — plus that the guard precedes the push, the
+  // create and the base-sync merge in source order. A flag that parses and is
+  // then ignored reproduces brik-bds#2074 while reporting success. brik-bds#2076.
+  { name: 'PR Task Dry Run', cmd: 'bash scripts/__tests__/test-pr-task-dry-run.sh' },
 ];
 
 console.log('\n═══════════════════════════════════════════');

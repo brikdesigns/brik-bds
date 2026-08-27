@@ -8,6 +8,14 @@
 #   ./scripts/pr-task.sh "Custom PR title"   # override title
 #   ./scripts/pr-task.sh --no-issue "<reason>"  # feat/fix with no tracked issue
 #   ./scripts/pr-task.sh --area area:tooling    # set the area:* label explicitly
+#   ./scripts/pr-task.sh --dry-run    # run every gate, print the resolved PR, push nothing
+#
+# --dry-run (or PR_TASK_DRY_RUN=1) exists because this script's gates could not
+# be exercised without doing the thing they gate. The story gate only fires on a
+# components/** diff and, once satisfied, the script ran straight through to
+# `git push` + `gh pr create` — so probing its wording meant opening a real PR.
+# That is how #2074 was born, titled `tmp: probe` (#2076). The flag stops after
+# the last gate and prints the title, body and labels it resolved.
 #
 # Labels: GitHub does NOT copy a linked issue's labels onto its PR, so this
 # script inherits the area:* / size:* / theme:* labels of every issue the commit
@@ -52,11 +60,18 @@ source "${SCRIPT_DIR}/lib/pr-labels.sh"
 # ── Parse flags ──
 NO_ISSUE_REASON=""
 AREA_OVERRIDE=""
+# Env form so a caller that cannot edit the argv (a hook, a wrapper, a test
+# harness) can still ask for a no-op run. --dry-run sets the same variable.
+DRY_RUN="${PR_TASK_DRY_RUN:-}"
 POSITIONAL_ARGS=()
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --skip-story-check)
       SKIP_STORY_CHECK=1
+      shift
+      ;;
+    --dry-run)
+      DRY_RUN=1
       shift
       ;;
     --area)
@@ -315,6 +330,74 @@ if ! has_area_label "$(printf '%s\n' "${LABELS_TO_ADD[@]+"${LABELS_TO_ADD[@]}"}"
   exit 1
 fi
 
+# ── Build PR body from commit log ──
+# Baseline against origin/${BASE_BRANCH} (fetched above), not local ${BASE_BRANCH}:
+# a local-base log/count would list every commit the base-sync merge introduced
+# (plus the merge commit) as if they were this PR's work. --no-merges also drops
+# the merge commit itself. See #1001.
+#
+# Built HERE, above the base-sync and the push, rather than after them (#2076).
+# The range is `origin/BASE..HEAD` either side of that merge — merging origin/BASE
+# into HEAD adds nothing the range can see, since those commits are reachable from
+# origin/BASE and therefore excluded. So the body is identical, and resolving it
+# early is what lets --dry-run print the real thing instead of an approximation.
+COMMIT_LOG=$(git log --oneline --no-merges "origin/${BASE_BRANCH}..HEAD" --reverse)
+COMMIT_BULLETS=$(echo "$COMMIT_LOG" | sed 's/^[a-f0-9]* /- /')
+COMMITS_AHEAD=$(git rev-list --count --no-merges "origin/${BASE_BRANCH}..HEAD")
+
+PR_BODY=$(cat <<EOF
+## Summary
+${COMMIT_BULLETS}
+
+## Consumer sync plan
+- [ ] Portal: \`npm update @brikdesigns/bds\` after merge + version publish
+- [ ] brikdesigns: \`npm update @brikdesigns/bds\` after merge + version publish
+- [ ] brik-llm: submodule pointer bump
+
+## Test plan
+- [ ] Storybook: visual verification on affected stories
+- [ ] \`npm test -- --run\` passes
+- [ ] \`npm run lint-tokens\` passes
+- [ ] Dark mode checked (if applicable)
+
+## Knowledge capture
+- [ ] Non-obvious decisions / learnings captured: \`brik-rag remember "<key insight>"\`
+
+${ISSUE_LINKS}
+Generated with [Claude Code](https://claude.ai/code)
+EOF
+)
+
+# ── Dry run: every gate has now run; stop before anything mutates ──
+# Placed after the last gate and before the base-sync merge, deliberately. The
+# merge rewrites local HEAD, so running it would make --dry-run leave the branch
+# in a state the operator did not ask for — a dry run that mutates the worktree
+# is not a dry run. Everything below this point either changes local git state,
+# writes to origin, or calls the GitHub API for writes.
+if [ "$DRY_RUN" = "1" ]; then
+  UNIQUE_DRY=$(dedupe_labels "$(printf '%s\n' "${LABELS_TO_ADD[@]+"${LABELS_TO_ADD[@]}"}")")
+  echo ""
+  echo -e "${GREEN}=========================================${NC}"
+  echo -e "${GREEN}  Dry run — nothing pushed, no PR created${NC}"
+  echo -e "${GREEN}=========================================${NC}"
+  echo ""
+  echo "  Branch:  $BRANCH → ${BASE_BRANCH}"
+  echo "  Commits: $COMMITS_AHEAD ahead of ${BASE_BRANCH}"
+  echo "  Title:   $PR_TITLE"
+  echo "  Labels:  $(echo "$UNIQUE_DRY" | tr '\n' ' ')"
+  echo ""
+  echo "  ── Body ──"
+  printf '%s\n' "$PR_BODY" | sed 's/^/  /'
+  echo ""
+  BEHIND_DRY=$(git rev-list --count "HEAD..origin/${BASE_BRANCH}")
+  if [ "$BEHIND_DRY" -gt 0 ]; then
+    echo -e "  ${YELLOW}Not run in dry mode: base-sync merge (${BEHIND_DRY} commit(s) behind) + the${NC}"
+    echo -e "  ${YELLOW}post-merge test suite. A real run merges origin/${BASE_BRANCH} first.${NC}"
+    echo ""
+  fi
+  exit 0
+fi
+
 # ── Sync with base (catches semantic conflicts from parallel work) ──
 BEHIND=$(git rev-list --count "HEAD..origin/${BASE_BRANCH}")
 if [ "$BEHIND" -gt 0 ]; then
@@ -362,39 +445,6 @@ else
     git push
   fi
 fi
-
-# ── Build PR body from commit log ──
-# Baseline against origin/${BASE_BRANCH} (fetched above), not local ${BASE_BRANCH}:
-# the sync step's `git merge origin/${BASE_BRANCH}` at :115 makes every commit that
-# merge introduced reachable from HEAD but not from the lagging local ref, so a
-# local-base log/count would list them all (plus the merge commit) as if they were
-# this PR's work. --no-merges also drops the merge commit itself. See #1001.
-COMMIT_LOG=$(git log --oneline --no-merges "origin/${BASE_BRANCH}..HEAD" --reverse)
-COMMIT_BULLETS=$(echo "$COMMIT_LOG" | sed 's/^[a-f0-9]* /- /')
-COMMITS_AHEAD=$(git rev-list --count --no-merges "origin/${BASE_BRANCH}..HEAD")
-
-PR_BODY=$(cat <<EOF
-## Summary
-${COMMIT_BULLETS}
-
-## Consumer sync plan
-- [ ] Portal: \`npm update @brikdesigns/bds\` after merge + version publish
-- [ ] brikdesigns: \`npm update @brikdesigns/bds\` after merge + version publish
-- [ ] brik-llm: submodule pointer bump
-
-## Test plan
-- [ ] Storybook: visual verification on affected stories
-- [ ] \`npm test -- --run\` passes
-- [ ] \`npm run lint-tokens\` passes
-- [ ] Dark mode checked (if applicable)
-
-## Knowledge capture
-- [ ] Non-obvious decisions / learnings captured: \`brik-rag remember "<key insight>"\`
-
-${ISSUE_LINKS}
-Generated with [Claude Code](https://claude.ai/code)
-EOF
-)
 
 # ── Create PR ──
 echo -e "${YELLOW}~ Creating PR targeting ${BASE_BRANCH}...${NC}"
