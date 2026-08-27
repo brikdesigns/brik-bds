@@ -21,9 +21,23 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'tokens/**'
+      - 'design-tokens/**'
+      - 'scripts/lint-token-shadowing.mjs'
+      - 'scripts/__tests__/lint-token-shadowing.test.mjs'
+      - 'scripts/build-dist-tokens.js'
+      - '.github/workflows/token-shadow-check.yml'
   push:
     branches:
       - main
+    paths:
+      - 'tokens/**'
+      - 'design-tokens/**'
+      - 'scripts/lint-token-shadowing.mjs'
+      - 'scripts/__tests__/lint-token-shadowing.test.mjs'
+      - 'scripts/build-dist-tokens.js'
+      - '.github/workflows/token-shadow-check.yml'
 
 concurrency:
   group: token-shadow-check-${{ github.ref }}

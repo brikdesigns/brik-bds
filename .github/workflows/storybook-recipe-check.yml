@@ -19,9 +19,19 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'components/ui/**'
+      - 'scripts/lint-storybook-recipe.js'
+      - 'package.json'
+      - '.github/workflows/storybook-recipe-check.yml'
   push:
     branches:
       - main
+    paths:
+      - 'components/ui/**'
+      - 'scripts/lint-storybook-recipe.js'
+      - 'package.json'
+      - '.github/workflows/storybook-recipe-check.yml'
 
 concurrency:
   group: storybook-recipe-check-${{ github.ref }}

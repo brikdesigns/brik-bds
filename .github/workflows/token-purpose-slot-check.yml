@@ -22,9 +22,27 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'tokens/**'
+      - 'design-tokens/**'
+      - 'components/**'
+      - 'docs-site/content/docs/primitives/token-anatomy.mdx'
+      - 'scripts/lint-token-purpose-slots.mjs'
+      - 'scripts/__tests__/lint-token-purpose-slots.test.mjs'
+      - 'scripts/build-dist-tokens.js'
+      - '.github/workflows/token-purpose-slot-check.yml'
   push:
     branches:
       - main
+    paths:
+      - 'tokens/**'
+      - 'design-tokens/**'
+      - 'components/**'
+      - 'docs-site/content/docs/primitives/token-anatomy.mdx'
+      - 'scripts/lint-token-purpose-slots.mjs'
+      - 'scripts/__tests__/lint-token-purpose-slots.test.mjs'
+      - 'scripts/build-dist-tokens.js'
+      - '.github/workflows/token-purpose-slot-check.yml'
 
 concurrency:
   group: token-purpose-slot-check-${{ github.ref }}

@@ -16,9 +16,17 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'components/ui/**/*.css'
+      - 'scripts/wrap-component-layers.mjs'
+      - '.github/workflows/layer-wrap-check.yml'
   push:
     branches:
       - main
+    paths:
+      - 'components/ui/**/*.css'
+      - 'scripts/wrap-component-layers.mjs'
+      - '.github/workflows/layer-wrap-check.yml'
 
 concurrency:
   group: layer-wrap-check-${{ github.ref }}

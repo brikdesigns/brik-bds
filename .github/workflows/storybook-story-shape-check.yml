@@ -25,9 +25,21 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'components/ui/**'
+      - 'stories/**'
+      - 'scripts/lint-story-shape.js'
+      - 'package.json'
+      - '.github/workflows/storybook-story-shape-check.yml'
   push:
     branches:
       - main
+    paths:
+      - 'components/ui/**'
+      - 'stories/**'
+      - 'scripts/lint-story-shape.js'
+      - 'package.json'
+      - '.github/workflows/storybook-story-shape-check.yml'
 
 concurrency:
   group: storybook-story-shape-check-${{ github.ref }}
