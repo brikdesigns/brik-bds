@@ -537,11 +537,57 @@ check_phrase_overlap() {
 }
 
 # Standalone invocation: scripts/lib/issue-overlap.sh [--report] <issue-ref>
-if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+#
+# BOTH detectors run, and that is the point of #2765. This dispatch called only
+# check_issue_overlap, so `/resume` step 4 — which shells out to exactly this
+# path — never saw a sibling issue. #2717 and #2747 were filed 18 hours apart,
+# both p1/M, both children of the same umbrella #2472, both about the same lens
+# on the same Item, and `--report` on #2747 printed "No parallel branch or PR
+# found." It was telling the truth about branches and PRs and silent about the
+# duplicate sitting beside it.
+#
+# The title half is ADVISORY and returns 0 on anything it cannot read, so it
+# cannot change this script's exit status. The number half's rc is therefore
+# still the one that propagates — rc 4/5 ("the gate did NOT run") must keep
+# reaching new-task.sh's guard, which is what #2422/#2298 bought.
+# The dispatch is a FUNCTION, not inline under the guard, so a test can stub both
+# detectors and assert the calls. Inline it could not be reached: the guard only
+# fires when the file is run as a script, and by then the lib's own definitions
+# have overridden any stub a test could inject.
+#
+# That matters more than it sounds. The #2765 defect was a dispatch that omitted a
+# call — a class no unit test of the scorer can catch, and the only class this
+# file's history says actually happens. See scripts/test/test-overlap-standalone-dispatch.sh.
+_io_main() {
+  local mode="prompt" ref rc=0
   if [ "${1:-}" = "--report" ]; then
-    check_issue_overlap "${2:-}" --report
+    mode="--report"; ref="${2:-}"
   else
-    check_issue_overlap "${1:-}"
+    ref="${1:-}"
   fi
+
+  if [ "$mode" = "--report" ]; then
+    check_issue_overlap "$ref" --report || rc=$?
+  else
+    check_issue_overlap "$ref" || rc=$?
+  fi
+
+  # Only when the number half could actually read the issue. rc 4 (no such
+  # issue) and rc 5 (unreadable) mean the gate did NOT run, and a title lookup
+  # would fail the same way and print nothing — running it would only add noise
+  # to a failure the caller is about to refuse on (#2422 / #2298).
+  if [ "$rc" -eq 0 ]; then
+    if [ "$mode" = "--report" ]; then
+      check_title_overlap "$ref" --report
+    else
+      check_title_overlap "$ref"
+    fi
+  fi
+
+  return "$rc"
+}
+
+if [ "${BASH_SOURCE[0]}" = "${0}" ]; then
+  _io_main "$@"
   exit $?
 fi
