@@ -250,18 +250,53 @@ _ic_repo_slug() {
 # self-contained (issue-overlap.sh's resolver is not reused) so /resume can
 # source this lib alone; only the slug lookup is shared, via the leaf
 # gh-error-classify.sh sourced above.
+#
+# Matched with `case` + parameter expansion, NOT `[[ =~ ]]`: /resume step 4.2
+# tells the operator to `source` this lib, $SHELL is /bin/zsh on both machines,
+# and zsh fills $match rather than $BASH_REMATCH. The regex form therefore
+# assigned three empty strings and returned 0, so the caller guard below could
+# not fire, `gh api repos///issues//comments` failed into `|| true`, and
+# check_issue_claim reported a claimed ticket as clean (brik-llm#2798).
+#
+# `owner/repo#N` now REQUIRES the `#`. The old regex let `[0-9]+` backtrack into
+# the repo segment, so `a/b12` resolved as repo `b1` issue `2` — a silent
+# misroute to a ticket nobody asked about. Every caller passes the `#` form.
+_ic_is_digits() { case "${1-}" in ''|*[!0-9]*) return 1 ;; *) return 0 ;; esac; }
+_ic_is_slug()   { case "${1-}" in ''|*[!A-Za-z0-9._-]*) return 1 ;; *) return 0 ;; esac; }
+
 _ic_resolve_ref() {
-  local ref="$1" owner repo num nwo
-  if [[ "$ref" =~ ^([A-Za-z0-9._-]+)/([A-Za-z0-9._-]+)#?([0-9]+)$ ]]; then
-    owner="${BASH_REMATCH[1]}"; repo="${BASH_REMATCH[2]}"; num="${BASH_REMATCH[3]}"
-  elif [[ "$ref" =~ ^#?([0-9]+)$ ]]; then
-    num="${BASH_REMATCH[1]}"
-    nwo="$(_ic_repo_slug)" || return 2
-    [ -z "$nwo" ] && return 2
-    owner="${nwo%%/*}"; repo="${nwo##*/}"
-  else
-    return 2
-  fi
+  local ref="${1-}" owner repo num nwo left
+  case "$ref" in
+    *'#'*)
+      left="${ref%%'#'*}"
+      num="${ref#*'#'}"
+      _ic_is_digits "$num" || return 2
+      case "$left" in
+        */*)
+          owner="${left%%/*}"
+          repo="${left#*/}"
+          _ic_is_slug "$owner" || return 2
+          _ic_is_slug "$repo"  || return 2
+          ;;
+        '')
+          nwo="$(_ic_repo_slug)" || return 2
+          [ -z "$nwo" ] && return 2
+          owner="${nwo%%/*}"; repo="${nwo##*/}"
+          ;;
+        *) return 2 ;;
+      esac
+      ;;
+    *)
+      _ic_is_digits "$ref" || return 2
+      num="$ref"
+      nwo="$(_ic_repo_slug)" || return 2
+      [ -z "$nwo" ] && return 2
+      owner="${nwo%%/*}"; repo="${nwo##*/}"
+      ;;
+  esac
+  # Belt-and-braces: never emit a partial triple with rc 0. That combination is
+  # what made the zsh failure silent instead of loud.
+  [ -n "$owner" ] && [ -n "$repo" ] && [ -n "$num" ] || return 2
   printf '%s %s %s' "$owner" "$repo" "$num"
 }
 
@@ -344,6 +379,13 @@ check_issue_claim() {
     return 0
   }
   read -r owner repo num <<<"$resolved"
+  # A resolver that emits fewer than three fields must never reach the API call:
+  # `gh api repos///issues//comments` fails into _ic_find_claim's `|| true`, and
+  # the gate then reports clean on a claimed ticket (brik-llm#2798).
+  if [ -z "$owner" ] || [ -z "$repo" ] || [ -z "$num" ]; then
+    echo -e "${_IC_YELLOW}⚠  Could not resolve '${ref}' to owner/repo/number — claim check NOT run.${_IC_NC}" >&2
+    return 0
+  fi
 
   local ident my_host my_branch
   ident="$(claim_identity "$branch")"
@@ -457,6 +499,9 @@ report_issue_comments() {
   local resolved owner repo num
   resolved="$(_ic_resolve_ref "$ref")" || return 0
   read -r owner repo num <<<"$resolved"
+  # Same partial-triple guard as check_issue_claim (brik-llm#2798). Silent here —
+  # this half is advisory, and its own contract is never to abort a pickup.
+  { [ -n "$owner" ] && [ -n "$repo" ] && [ -n "$num" ]; } || return 0
 
   if ! _ic_fetch_comments "$owner" "$repo" "$num"; then
     echo -e "${_IC_YELLOW}⚠  jq not on PATH — skipping the comment digest for ${owner}/${repo}#${num}.${_IC_NC}" >&2
