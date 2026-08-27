@@ -117,3 +117,5 @@ BDS follows SemVer. Version bumps ship as `chore(release): vX.Y.Z` commits on `m
 ## License
 
 UNLICENSED — internal Brik use only.
+
+<!-- probe: brik-bds#2069 AC 1/2 — a README-only PR must not trigger the eight path-filtered guards. Reverted once the check list is recorded. -->
