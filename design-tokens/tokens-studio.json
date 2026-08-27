@@ -7762,6 +7762,51 @@
         },
         "$type": "color",
         "$value": "{color.tan.lightest}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.yellow.light}"
+      },
+      "accent-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.blue.light}"
+      },
+      "accent-green": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.green.light}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.purple.light}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.light}"
       }
     },
     "page": {
@@ -9060,6 +9105,51 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.yellow.light}"
+      },
+      "accent-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.blue.light}"
+      },
+      "accent-green": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.green.light}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.purple.light}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.light}"
       }
     },
     "page": {

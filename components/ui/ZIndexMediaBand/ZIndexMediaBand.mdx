@@ -1,0 +1,75 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './ZIndexMediaBand.stories';
+
+<Meta of={Stories} />
+
+# ZIndexMediaBand
+
+<ComponentLinks slug="z-index-media-band" />
+
+Stacking-context band for a decorative graphic behind content. Owns the clipped positioned parent, the z-ordering, and the seam fade that blends the band into its neighbouring sections — so consumers stop hand-rolling `position: relative` wrappers per page.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Graphic from a token
+
+Leave the `graphic` slot empty and set `--bds-media-band-graphic`. This is the per-client swap path: one theme declaration changes the graphic with no JSX change.
+
+<Canvas of={Stories.GraphicFromToken} />
+
+## Patterns
+
+### Seaming a band into its neighbours
+
+Set `--bds-media-band-seam-to` to the **neighbouring** section's surface — the gradient runs from that color at the band edge to `--bds-media-band-seam-from` inward, so the two dissolve into each other instead of butting against a hard line.
+
+<Canvas of={Stories.SeamBetweenSections} />
+
+### The stacking contract
+
+The whole reason the primitive exists:
+
+| Layer | Element | Position |
+|---|---|---|
+| Parent | `.bds-z-index-media-band` | `relative`, `z-index: 1`, `overflow: clip` |
+| Decorative | `.bds-z-index-media-band__graphic` | `absolute`, `z-index: 0`, `aria-hidden`, `pointer-events: none` |
+| Content | `.bds-z-index-media-band__content` | `relative`, `z-index: 2` |
+| Seam fade | `.bds-z-index-media-band__seam[data-edge]` | `absolute`, `z-index: 4`, `pointer-events: none` |
+
+`overflow: clip` (not `hidden`) clips decorative bleed without making the band a scroll container — a focused child inside a scroll container can scroll into view and shift the layout.
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## CSS Override API
+
+Component-scoped CSS variables on `.bds-z-index-media-band`. Set them on a wrapping element or a client theme to override without touching BDS internals.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--bds-media-band-surface` | `transparent` | Band fill — inherits the page surface until a consumer opts in |
+| `--bds-media-band-graphic` | `none` | `background-image` on the decorative layer when the `graphic` slot is empty |
+| `--bds-media-band-seam-from` | `transparent` | Seam gradient color at the inward end |
+| `--bds-media-band-seam-to` | `var(--surface-primary)` | Seam gradient color at the band edge — set to the neighbouring section's surface |
+| `--bds-media-band-seam-height` | `80px` | Depth of the seam fade |
+
+```css
+/* Example: a tinted workflow band seaming into a secondary-surface section */
+.workflow-band {
+  --bds-media-band-surface: var(--surface-secondary);
+  --bds-media-band-graphic: url('/acme/workflow.svg');
+  --bds-media-band-seam-to: var(--surface-primary);
+}
+```
+
+## Notes
+
+> **Note** — Depth comes from gradients and token-driven scrims, never `mix-blend-mode`. Blend modes resolve against whatever sits underneath, so they read differently in the light and dark themes and cannot be swapped per client.
+
+> **Note** — Static by construction (no animation, no JS-driven motion), so the band carries no `prefers-reduced-motion` concern and its graphic renders at rest. Anything animated a consumer slots into `graphic` owns its own reduced-motion behaviour.
