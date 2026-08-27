@@ -7,6 +7,7 @@ export * from './AddableFieldRowList';
 export * from './AddableTagList';
 export * from './AddableTextList';
 export * from './AddressInput';
+export * from './AmbientField';
 export * from './AnimatedIcon';
 export * from './Avatar';
 export * from './BackgroundPattern';

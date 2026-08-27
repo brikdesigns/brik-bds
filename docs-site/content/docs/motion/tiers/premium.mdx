@@ -35,6 +35,9 @@ Class tables, code, and live demos live on the effect pages. This page owns what
 | Clip-path reveals | `.clip-circle-reveal` and siblings | [Scroll reveals](/docs/motion/effects/scroll-reveals) |
 | Advanced typography | `.text-gradient`, `.text-stroke` and siblings | [Typography](/docs/motion/effects/typography) |
 | Video backgrounds, scroll-scrubbed video | `.video-bg` and modifiers | [Video](/docs/motion/effects/video) |
+| Ambient motion field | `<AmbientField>` (`.bds-ambient-field`) | [AmbientField](/docs/components/ambient-field) |
+
+`AmbientField` is the one entry here that is a React component rather than a class: the living-background effect needs to hold a Lottie playhead and cancel a `requestAnimationFrame` loop, which a stylesheet cannot do. It carries the tier's reduced-motion contract in the strictest form — it freezes to a static poster frame rather than disappearing, so the composition survives the preference.
 
 ## Section theming
 
