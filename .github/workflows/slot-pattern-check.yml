@@ -27,9 +27,19 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - 'components/**'
+      - 'content-system/blueprints/**'
+      - 'scripts/slot-pattern-check.mjs'
+      - '.github/workflows/slot-pattern-check.yml'
   push:
     branches:
       - main
+    paths:
+      - 'components/**'
+      - 'content-system/blueprints/**'
+      - 'scripts/slot-pattern-check.mjs'
+      - '.github/workflows/slot-pattern-check.yml'
 
 concurrency:
   group: slot-pattern-check-${{ github.ref }}
