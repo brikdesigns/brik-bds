@@ -53,7 +53,18 @@ const BandContent = ({ label = 'How we work' }: { label?: string }) => (
 const meta: Meta<typeof AmbientField> = {
   title: 'Containers/ambient-field',
   component: AmbientField,
-  tags: ['surface-shared'],
+  // no-visual: every story here is JS-driven motion — a looping Lottie or a
+  // rAF particle field — which is the exact case the visual gate carves out
+  // (.storybook/vitest.visual.setup.ts:75). Its freeze CSS sets
+  // `animation-play-state: paused`, which cannot stop lottie-web or a canvas
+  // loop, so `toMatchScreenshot`'s stable-frame detection chases moving pixels
+  // until it times out. Confirmed on PR #2085 before the tag: all four stories
+  // failed with "Matcher did not succeed in time".
+  //
+  // The behaviour that actually matters here is asserted instead of
+  // photographed — AmbientField.reduced-motion.browser.test.ts checks the
+  // poster frame on painted pixels, which is stronger than a baseline would be.
+  tags: ['surface-shared', 'no-visual'],
   parameters: {
     layout: 'fullscreen',
     docs: {
