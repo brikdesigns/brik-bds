@@ -1,0 +1,75 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './MediaTabs.stories';
+import { MediaTabs } from './MediaTabs';
+
+{/* orientation, mediaPosition, and variant are listed placement/appearance
+    axes (ADR-010 Rule 5) — Controls on Default, with the side-by-side
+    comparisons living here as docs-local demos, never story exports. */}
+
+export const DemoMedia = ({ label, hue }) => (
+  <div style={{ display: 'grid', placeItems: 'center', background: hue, fontFamily: 'var(--font-family-label)', color: 'var(--text-primary)' }}>
+    {label}
+  </div>
+);
+
+export const demoTabs = [
+  { id: 'marketing', label: 'Marketing', description: 'Campaigns, content, and the site that carries them.', media: <DemoMedia label="Marketing" hue="var(--surface-secondary)" /> },
+  { id: 'back-office', label: 'Back office', description: 'Intake, scheduling, billing — wired so the front of house can move.', media: <DemoMedia label="Back office" hue="var(--surface-muted)" /> },
+];
+
+export const OrientationDemo = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+    <MediaTabs tabs={demoTabs} orientation="vertical" autoplay={false} />
+    <MediaTabs tabs={demoTabs} orientation="horizontal" autoplay={false} />
+  </div>
+);
+
+<Meta of={Stories} />
+
+# MediaTabs
+
+<ComponentLinks slug="media-tabs" />
+
+The tab case of switching between peer categories — the home "Services" and "Industries" bands. A [`TabBar`](?path=/docs/navigation-tabbar--docs) rail of peer labels, each revealing its description and crossfading its media into a synced panel. Auto-advances while in view, pauses on hover and focus, and yields to a click or keypress.
+
+Reach for `SyncedMediaSteps` instead when the items are an **ordered sequence** (a process) rather than peer categories — that is the accordion pattern, this is the tabs pattern.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+`autoplay`, `pauseOnHover`, `interval`, and `defaultActiveTab` are Controls on Default. `orientation`, `mediaPosition`, and `variant` are listed axes — the side-by-side comparison reads better than toggling a Control:
+
+### Orientation
+
+<Canvas>
+  <OrientationDemo />
+</Canvas>
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## CSS Override API
+
+| Variable | Default | Set by |
+|---|---|---|
+| `--bds-media-tabs-interval` | `var(--duration-autoplay)` (10s) | `interval` prop |
+| `--bds-media-tabs-media-aspect` | `4 / 3` | CSS only |
+
+```tsx
+<MediaTabs tabs={tabs} interval="6s" />
+```
+
+The interval is deliberately one value read by two consumers: the progress cue animates over it in CSS, and the component reads the *resolved* property back to set its advance timer. Overriding it in either place moves both, so the cue cannot drift away from the advance.
+
+## Notes
+
+> **Keyboard contract is the WAI-ARIA tabs pattern**, delegated to `TabBar`. The rail exposes exactly one tab in the page Tab sequence (roving tabindex); [Arrow / Home / End](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) move focus and activate — Left/Right when horizontal, Up/Down when `orientation="vertical"`. `TabBar` gains this contract only when its items carry `controls`, so existing label-only tab bars are unchanged.
+
+> **Reduced motion.** Under `prefers-reduced-motion: reduce` autoplay is disabled in JS (a paused CSS animation cannot stop a timer), the progress cue is hidden, and the media swap and description reveal are instant. The active tab still reads correctly — statically.
+
+> **Media is the consumer's responsibility.** Set real `alt` text on images, `loading="lazy"` where appropriate, and a poster frame on video. Inactive media stays mounted so the crossfade has both frames, but is held out of the accessibility tree and the tab order via `visibility: hidden`.

@@ -154,6 +154,47 @@
   box-sizing: border-box;
 }
 
+/* ── Vertical orientation ──
+   Opt-in axis for the tabs-widget composition (MediaTabs): tabs stack and
+   stretch to the rail width so each is a full-width hit target, and the `tab`
+   variant's indicator moves to the inline-start edge. Left-to-right callers are
+   untouched — the modifier only applies under [data-orientation='vertical']. */
+.bds-tab-bar[data-orientation='vertical'] {
+  flex-direction: column;
+  align-items: stretch;
+  flex-wrap: nowrap;
+}
+
+.bds-tab-bar[data-orientation='vertical'] .bds-tab-bar-item {
+  text-align: start;
+  white-space: normal;
+}
+
+/* Move the `tab` variant's active indicator from the bottom edge to the
+   inline-start edge, and its baseline divider to the start border, so the
+   vertical rail reads as a column of tabs rather than a stack of underlines. */
+.bds-tab-bar--tab[data-orientation='vertical'] {
+  border-bottom: none;
+  border-inline-start: var(--border-width-md) solid var(--border-secondary);
+  align-items: stretch;
+}
+
+.bds-tab-bar--tab[data-orientation='vertical'] .bds-tab-bar-item {
+  border-bottom: none;
+  margin-bottom: 0;
+  border-inline-start: var(--border-width-lg) solid transparent;
+  margin-inline-start: calc(-1 * var(--border-width-lg));
+  padding: var(--padding-md) var(--padding-lg);
+}
+
+.bds-tab-bar--tab[data-orientation='vertical'] .bds-tab-bar-item[aria-selected='true'] {
+  border-inline-start-color: var(--border-brand-primary);
+}
+
+.bds-tab-bar--tab[data-orientation='vertical'] .bds-tab-bar-item:hover:not(:disabled):not([aria-selected='true']) {
+  border-inline-start-color: var(--border-primary);
+}
+
 /* `--text-underline` below is the BEM variant modifier, not a `--text-*` token —
    bds-lint-ignore on each such selector line keeps canonical-check from reading
    the class name as a token reference. */

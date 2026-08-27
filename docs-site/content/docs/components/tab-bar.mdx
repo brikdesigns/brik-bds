@@ -126,8 +126,13 @@ Set `disabled: true` on individual items.
 | `items` | `TabItem[]` *(required)* | — |
 | `variant` | `'text' \| 'text-underline' \| 'tab' \| 'box'` | `'text'` |
 | `onColor` | `boolean` | `false` |
+| `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` |
 
 Plus standard `<div>` HTML attributes.
+
+### Tabs keyboard contract
+
+This contract is opt-in. A plain `TabBar` is label navigation — every tab is tabbable, no arrow keys. When items carry `controls` (the id of the `tabpanel` each tab drives), the rail becomes a full [WAI-ARIA tabs widget](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/): exactly one tab in the page Tab sequence (roving tabindex), and Arrow / Home / End move focus and activate — Left/Right when horizontal, Up/Down when `orientation="vertical"`. Rails without `controls` are unchanged. [MediaTabs](/docs/components/media-tabs) is the primary consumer.
 
 ### TabItem
 
@@ -139,6 +144,10 @@ interface TabItem {
   onClick?: () => void;
   /** Decorative indicator dot after the label — `true` for the brand dot, or a DotStatus to color it. */
   dot?: boolean | DotStatus;
+  /** Stable id for the tab button — set alongside `controls` when wiring to tabpanels. */
+  id?: string;
+  /** id of the tabpanel this tab controls — emits aria-controls and enables the tabs keyboard contract. */
+  controls?: string;
 }
 ```
 

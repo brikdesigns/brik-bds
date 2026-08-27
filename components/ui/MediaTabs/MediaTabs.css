@@ -1,0 +1,188 @@
+@layer bds-components {
+/**
+ * BDS MediaTabs — peer tabs driving a synced media panel
+ *
+ * Naming: .bds-media-tabs, .bds-media-tabs__{slot}.
+ * `orientation`, `mediaPosition`, and the paused / active flags are behavior
+ * knobs, not BEM modifiers — `horizontal`/`vertical`, `start`/`end`, `paused`,
+ * `active` have no closed axis in ADR-033 § 4's MODIFIER_AXES, so they read as
+ * `[data-*]` attributes (same convention as SyncedMediaSteps' data-media-position,
+ * Marquee's data-direction).
+ *
+ * CSS Override API: --bds-media-tabs-interval, --bds-media-tabs-media-aspect
+ * (component-local runtime knobs; the interval is set via the `interval` prop
+ * and is read back by the component's advance timer, so the progress cue and
+ * the timer cannot drift apart).
+ */
+
+/* ─── Keyframes ───────────────────────────────────────────────── */
+
+@keyframes bds-media-tabs-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ─── Base ────────────────────────────────────────────────────── */
+
+.bds-media-tabs {
+  --bds-media-tabs-interval: var(--duration-autoplay);
+  --bds-media-tabs-media-aspect: 4 / 3;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gap-xl);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 768px is --breakpoint-tablet; CSS custom properties can't be used inside
+   @media rules (tokens/index.ts). Below it the media panel stacks under the
+   rail, so the sequence still reads top-to-bottom. */
+@media (min-width: 768px) {
+  .bds-media-tabs {
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+  }
+
+  .bds-media-tabs[data-media-position='start'] .bds-media-tabs__media {
+    order: -1;
+  }
+}
+
+/* ─── Rail (tabs + progress + panels) ─────────────────────────── */
+
+.bds-media-tabs__rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+  min-width: 0;
+}
+
+/* ─── Progress cue ────────────────────────────────────────────── */
+/* A dwell cue, not a measurement — the component's JS timer is the real
+   clock, so this carries aria-hidden and no progressbar role. */
+
+.bds-media-tabs__progress {
+  position: relative;
+  height: var(--border-width-lg);
+  border-radius: var(--border-radius-pill);
+  background-color: var(--surface-muted);
+  overflow: hidden;
+}
+
+.bds-media-tabs__progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-color: var(--background-brand-primary);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.bds-media-tabs:not([data-paused]) .bds-media-tabs__progress-fill {
+  animation: bds-media-tabs-progress var(--bds-media-tabs-interval) var(--ease-linear) forwards;
+}
+
+.bds-media-tabs[data-paused] .bds-media-tabs__progress-fill {
+  animation: bds-media-tabs-progress var(--bds-media-tabs-interval) var(--ease-linear) forwards;
+  animation-play-state: paused;
+}
+
+/* ─── Panel (description reveal) ──────────────────────────────── */
+/* grid-template-rows 0fr → 1fr animates an auto-height reveal without
+   measuring anything in JS. The inner wrapper owns `visibility` (delayed on
+   exit) so the collapsed copy leaves both the accessibility tree and the tab
+   order — a bare `hidden` attribute would remove the panel from the tree but
+   kill the reveal, since display:none can't animate. */
+
+.bds-media-tabs__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-slow) var(--ease-out);
+}
+
+.bds-media-tabs__panel[data-active] {
+  grid-template-rows: 1fr;
+}
+
+.bds-media-tabs__panel-inner {
+  overflow: hidden;
+  min-height: 0;
+  visibility: hidden;
+  transition: visibility 0s linear var(--duration-slow);
+}
+
+.bds-media-tabs__panel[data-active] .bds-media-tabs__panel-inner {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.bds-media-tabs__description {
+  margin: 0;
+  font-family: var(--font-family-body);
+  font-size: var(--body-md);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+}
+
+/* ─── Media panel ─────────────────────────────────────────────── */
+/* Every tab's media stays mounted and stacked so the crossfade has both
+   frames to work with; `visibility` (delayed on exit) keeps the inactive
+   frames out of the tab order and the accessibility tree. */
+
+.bds-media-tabs__media {
+  position: relative;
+  display: grid;
+  aspect-ratio: var(--bds-media-tabs-media-aspect);
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--border-radius-lg);
+}
+
+.bds-media-tabs__media-item {
+  grid-area: 1 / 1;
+  display: grid;
+  opacity: 0;
+  visibility: hidden;
+  /* Exit: quicker, accelerating away. */
+  transition:
+    opacity var(--duration-slow) var(--ease-in),
+    visibility 0s linear var(--duration-slow);
+}
+
+.bds-media-tabs__media-item[data-active] {
+  opacity: 1;
+  visibility: visible;
+  /* Enter: settle in after the outgoing frame has cleared — the staggered
+     crossfade. `--duration-normal` stands in for the measured entrance delay. */
+  transition:
+    opacity var(--duration-xl) var(--ease-spring-soft) var(--duration-normal),
+    visibility 0s linear var(--duration-normal);
+}
+
+.bds-media-tabs__media-item > :is(img, video, canvas, svg) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ─── Reduced motion ──────────────────────────────────────────── */
+/* Autoplay is disabled in the component (a paused CSS animation cannot stop a
+   JS timer). What remains here is to make every transition instant and drop the
+   progress cue, so the active tab reads statically. */
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-media-tabs__progress {
+    display: none;
+  }
+
+  .bds-media-tabs__panel,
+  .bds-media-tabs__panel-inner,
+  .bds-media-tabs__panel[data-active] .bds-media-tabs__panel-inner,
+  .bds-media-tabs__media-item,
+  .bds-media-tabs__media-item[data-active] {
+    transition-duration: 0s;
+    transition-delay: 0s;
+  }
+}
+}

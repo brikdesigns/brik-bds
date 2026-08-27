@@ -1,4 +1,4 @@
-import { type HTMLAttributes } from 'react';
+import { type HTMLAttributes, type KeyboardEvent, useRef } from 'react';
 import { bdsClass } from '../../utils';
 import { Dot, type DotStatus } from '../Dot';
 import './TabBar.css';
@@ -24,10 +24,27 @@ export interface TabItem {
    * (`'warning'`, `'positive'`, `'error'`, …) to color the cue by status.
    */
   dot?: boolean | DotStatus;
+  /**
+   * Stable id for the tab button — set it (alongside {@link TabItem.controls})
+   * when wiring the rail to `tabpanel`s so the panel can point back via
+   * `aria-labelledby`.
+   */
+  id?: string;
+  /**
+   * id of the `tabpanel` this tab controls. Setting it emits `aria-controls`
+   * **and upgrades the rail to the full WAI-ARIA tabs keyboard contract** —
+   * roving tabindex plus Arrow / Home / End navigation. Rails without any
+   * `controls` (the default) keep their current label-navigation behaviour
+   * untouched. Consumed by `MediaTabs`.
+   */
+  controls?: string;
 }
 
 /** Visual variant matching Figma spec */
 export type TabBarVariant = 'text' | 'text-underline' | 'tab' | 'box';
+
+/** Rail axis. Vertical stacks the tabs and sets `aria-orientation`. */
+export type TabBarOrientation = 'horizontal' | 'vertical';
 
 /**
  * TabBar component props
@@ -43,6 +60,12 @@ export interface TabBarProps extends HTMLAttributes<HTMLDivElement> {
    * for legibility against colored surfaces.
    */
   onColor?: boolean;
+  /**
+   * Rail axis. `'vertical'` stacks the tabs and sets `aria-orientation`, which
+   * also swaps the arrow-key axis (Up/Down instead of Left/Right) when the
+   * tabs keyboard contract is active. Default `'horizontal'`.
+   */
+  orientation?: TabBarOrientation;
 }
 
 /**
@@ -60,6 +83,14 @@ export interface TabBarProps extends HTMLAttributes<HTMLDivElement> {
  * variant class, `[aria-selected]`, and the `--on-color` modifier — so external
  * rules (e.g. PageHeader's tabs slot) can override via normal cascade rather
  * than fighting inline-style specificity.
+ *
+ * **Tabs keyboard contract (opt-in).** When items carry `controls` (the id of
+ * the `tabpanel` each tab drives), the rail becomes a full WAI-ARIA tabs
+ * widget: exactly one tab in the page Tab sequence (roving tabindex), and
+ * Arrow / Home / End move focus and activate — Left/Right when horizontal,
+ * Up/Down when `orientation="vertical"`. Rails without `controls` keep the
+ * plain label-navigation behaviour, so existing callers are unaffected.
+ * `MediaTabs` is the primary consumer.
  *
  * @example
  * ```tsx
@@ -79,6 +110,7 @@ export function TabBar({
   items,
   variant = 'text',
   onColor = false,
+  orientation = 'horizontal',
   className = '',
   style,
   ...props
@@ -86,19 +118,64 @@ export function TabBar({
   const variantClass = `bds-tab-bar--${variant}`;
   const onColorClass = onColor ? 'bds-tab-bar--on-color' : '';
 
+  // The tabs keyboard contract only engages once panels are wired, so existing
+  // label-only rails keep their current (all-tabbable, no arrow-key) behaviour.
+  const isTabsWidget = items.some((tab) => tab.controls != null);
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  // The one tab in the page Tab sequence: the active one, else the first
+  // enabled tab so the widget is never keyboard-unreachable.
+  const activeIndex = items.findIndex((tab) => tab.active);
+  const rovingIndex = activeIndex >= 0 ? activeIndex : items.findIndex((tab) => !tab.disabled);
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!isTabsWidget) return;
+    const enabled = items.reduce<number[]>((acc, tab, i) => {
+      if (!tab.disabled) acc.push(i);
+      return acc;
+    }, []);
+    if (enabled.length === 0) return;
+
+    const nextKey = orientation === 'vertical' ? 'ArrowDown' : 'ArrowRight';
+    const prevKey = orientation === 'vertical' ? 'ArrowUp' : 'ArrowLeft';
+    const here = enabled.indexOf(rovingIndex);
+
+    let target: number | undefined;
+    if (event.key === nextKey) target = enabled[(here + 1) % enabled.length];
+    else if (event.key === prevKey) target = enabled[(here - 1 + enabled.length) % enabled.length];
+    else if (event.key === 'Home') target = enabled[0];
+    else if (event.key === 'End') target = enabled[enabled.length - 1];
+    else return;
+
+    event.preventDefault();
+    // Automatic activation: moving focus selects, matching the reference and
+    // the auto-advance model where the visible panel always tracks focus.
+    itemRefs.current[target]?.focus();
+    items[target]?.onClick?.();
+  };
+
   return (
     <div
       className={bdsClass('bds-tab-bar', variantClass, onColorClass, className)}
       style={style}
       role="tablist"
+      aria-orientation={orientation === 'vertical' ? 'vertical' : undefined}
+      data-orientation={orientation === 'vertical' ? 'vertical' : undefined}
+      onKeyDown={isTabsWidget ? handleKeyDown : undefined}
       {...props}
     >
-      {items.map((tab) => (
+      {items.map((tab, index) => (
         <button
-          key={tab.label}
+          key={tab.id ?? tab.label}
+          ref={(el) => {
+            itemRefs.current[index] = el;
+          }}
           type="button"
           role="tab"
+          id={tab.id}
           aria-selected={tab.active || false}
+          aria-controls={tab.controls}
+          tabIndex={isTabsWidget ? (index === rovingIndex ? 0 : -1) : undefined}
           disabled={tab.disabled || false}
           className={bdsClass('bds-tab-bar-item', tab.dot && 'bds-tab-bar-item--has-dot')}
           onClick={tab.onClick}

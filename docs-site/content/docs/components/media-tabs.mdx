@@ -1,0 +1,85 @@
+---
+title: MediaTabs
+description: Peer tabs driving a synced media panel — the home Services and Industries bands.
+---
+
+MediaTabs renders a set of **peer categories** as a [`TabBar`](/docs/components/tab-bar) rail; the active tab reveals its description and crossfades its media into a synced panel. It auto-advances while in view, pauses on hover and focus, and yields to a click or keypress.
+
+It has one visual appearance — `orientation`, `mediaPosition`, `variant`, `autoplay`, and `pauseOnHover` are behavior and placement knobs, not distinct variants.
+
+## Use it for
+
+- The home "Services" (Marketing / Back-office) and "Industries" (Dental / Real Estate / Small Business) bands — switching between **peer categories**, each with its own media
+- Any tabbed band where the reader should be able to sit still and watch it advance, or take over with the mouse or keyboard
+
+Reach for [SyncedMediaSteps](/docs/components/synced-media-steps) when the items are an **ordered sequence** (a process) rather than peer categories — the ARIA contract differs (tabs use a roving tabindex; an accordion keeps every trigger in the Tab sequence). Reach for a plain [TabBar](/docs/components/tab-bar) when there is no media to sync.
+
+## Import
+
+```tsx
+import { MediaTabs } from '@brikdesigns/bds';
+```
+
+## Default
+
+<ComponentPreview code={`<MediaTabs
+  tabs={[
+    { id: 'marketing', label: 'Marketing', description: 'Campaigns, content, and the site that carries them.', media: <img src="/marketing.png" alt="" /> },
+    { id: 'back-office', label: 'Back office', description: 'Intake, scheduling, billing — wired so the front of house can move.', media: <img src="/back-office.png" alt="" /> },
+  ]}
+/>`}>
+  <BDS.MediaTabs
+    autoplay={false}
+    tabs={[
+      { id: 'marketing', label: 'Marketing', description: 'Campaigns, content, and the site that carries them.', media: <div style={{ display: 'grid', placeItems: 'center', background: 'var(--surface-secondary)', fontFamily: 'var(--font-family-label)', color: 'var(--text-primary)' }}>Marketing</div> },
+      { id: 'back-office', label: 'Back office', description: 'Intake, scheduling, billing — wired so the front of house can move.', media: <div style={{ display: 'grid', placeItems: 'center', background: 'var(--surface-muted)', fontFamily: 'var(--font-family-label)', color: 'var(--text-primary)' }}>Back office</div> },
+    ]}
+  />
+</ComponentPreview>
+
+Media is the consumer's responsibility for `alt` text, `loading="lazy"`, and video poster frames. Inactive media stays mounted so the crossfade has both frames to work with.
+
+## Timing
+
+`interval` sets the dwell time per tab and defaults to the `--duration-autoplay` token (10s). It is deliberately one value read by two consumers: the progress cue animates over it in CSS, and the component reads the *resolved* custom property back to set its advance timer — so the cue cannot drift away from the advance.
+
+```tsx
+<MediaTabs tabs={tabs} interval="6s" />
+```
+
+## Accessibility
+
+- **Keyboard contract is the WAI-ARIA tabs pattern**, delegated to `TabBar`. The rail exposes exactly one tab in the page Tab sequence (roving tabindex); [Arrow / Home / End](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) move focus and activate — Left/Right when horizontal, Up/Down when `orientation="vertical"`.
+- Each tab is a real `role="tab"` `<button>` carrying `aria-selected` and `aria-controls`; each panel is a `role="tabpanel"` labelled by its tab, hidden while inactive.
+- `TabBar` gains this contract only when its items carry `controls`, so existing label-only tab bars keep their current behaviour.
+- The progress cue is `aria-hidden` — it is a dwell cue, not a measurement, and carries no `progressbar` role.
+- Under `prefers-reduced-motion: reduce` autoplay is disabled in JS, the progress cue is hidden, and the media swap and description reveal are instant. The active tab still reads correctly, statically.
+- The component provides no accessible name of its own; wrap it with a heading in the surrounding page, same as any other content band.
+
+## API
+
+{/* props-check: MediaTabsProps @ components/ui/MediaTabs/MediaTabs.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `tabs` | `MediaTabData[]` | — (required) |
+| `activeTab` | `string` | — (uncontrolled) |
+| `onActiveTabChange` | `(id: string) => void` | — |
+| `defaultActiveTab` | `string` | first tab's `id` |
+| `autoplay` | `boolean` | `true` |
+| `interval` | `number \| string` | — (falls back to `--bds-media-tabs-interval`, 10s) |
+| `pauseOnHover` | `boolean` | `true` |
+| `orientation` | `'horizontal' \| 'vertical'` | `'vertical'` |
+| `mediaPosition` | `'start' \| 'end'` | `'end'` |
+| `variant` | `'text' \| 'text-underline' \| 'tab' \| 'box'` | `'tab'` |
+
+Inherits all native `<div>` attributes (`className`, `style`, `data-*`, …).
+
+Each entry in `tabs` is a `MediaTabData`: `{ id: string; label: string; description?: ReactNode; media: ReactNode; disabled?: boolean }`.
+
+## Related
+
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-media-tabs--overview)**
+- [SyncedMediaSteps](/docs/components/synced-media-steps) — the ordered-sequence (accordion) sibling
+- [TabBar](/docs/components/tab-bar) — the tab rail MediaTabs nests
+- [Motion tokens](/docs/primitives/motion) — `--duration-autoplay`, `--duration-xl`, `--ease-spring-soft`
