@@ -79,6 +79,87 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # ─── #2713: skip the eight Playwright shards on a diff that cannot move a
+  # screenshot ───────────────────────────────────────────────────────────────
+  #
+  # brik-bds's visual suites are 57% of the org's Actions runtime (brik-llm#2713)
+  # and a README-only PR paid for all eight shards. #2069 path-filtered the
+  # tree-specific guards but deliberately left this one alone: an INCLUDE
+  # `paths:` list can never be trusted for a suite whose input is ~all of source
+  # (a token, a story, a config change all move pixels), so filtering blind here
+  # would skip real regressions.
+  #
+  # The safe inverse is what this job computes: run the shards UNLESS the diff is
+  # EXCLUSIVELY provably-inert files (markdown, LICENSE, CODEOWNERS). Anything
+  # else — any .tsx/.ts/.css/.json/.mjs/config touch — runs all eight. The set
+  # can never miss a code change because the default is to run; only an
+  # all-inert diff opts out.
+  #
+  # `visual` cannot be workflow-level path-filtered the way #2070 filtered the
+  # eight guards: it is a REQUIRED context on `main`, and a restricted trigger
+  # that does not match produces NO check-run — protection then waits forever on
+  # a status that never reports (required-checks.json § _why, brik-llm#1937 arm
+  # B). So the gate is a job-level dynamic matrix instead: on an inert diff the
+  # matrix is empty and zero shard jobs instantiate (absent, not skipped-noise),
+  # while the aggregate `visual` job below still runs and reports green.
+  changes:
+    name: classify diff
+    runs-on: ubuntu-latest
+    outputs:
+      # '[1,2,3,4,5,6,7,8]' to run every shard, '[]' to run none.
+      shards: ${{ steps.classify.outputs.shards }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          # Need the base commit present to diff against it.
+          fetch-depth: 0
+      - name: Classify the diff
+        id: classify
+        env:
+          # On a PR these are the tips of base and head; empty on push/dispatch.
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+          ALL='[1,2,3,4,5,6,7,8]'
+          NONE='[]'
+
+          # push to main and workflow_dispatch always run the full gate — a
+          # post-merge or a deliberate sampling run is not a place to guess.
+          if [ -z "$BASE_SHA" ]; then
+            echo "event=${{ github.event_name }} → full visual gate"
+            echo "shards=$ALL" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # Capture git's OWN exit status before the pipe. Under pipefail a
+          # `git diff | grep` pipeline returns grep's status, and grep exits 1
+          # on "no match" — so a genuine git-diff failure (bad SHA, transient
+          # object-store error) is indistinguishable from "no changed files" and
+          # would be swallowed by `|| true`, making an unclassified diff look
+          # inert and merge green (QA, #2713). Fail the classifier CLOSED
+          # instead: the aggregate `visual` job treats a non-success classify as
+          # a block, never as an inert skip.
+          if ! FILES="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")"; then
+            echo "✗ git diff failed for $BASE_SHA..$HEAD_SHA — cannot classify; failing closed."
+            exit 1
+          fi
+
+          # Non-inert = anything that is NOT markdown / LICENSE / CODEOWNERS.
+          # If the diff has even one such file, run every shard.
+          NONINERT="$(printf '%s\n' "$FILES" | grep -vE '\.md$|^LICENSE$|(^|/)CODEOWNERS$' || true)"
+
+          if [ -z "$NONINERT" ]; then
+            echo "diff is exclusively inert (docs/markdown) → skipping all shards"
+            printf '%s\n' "$FILES" | sed 's/^/    inert: /'
+            echo "shards=$NONE" >> "$GITHUB_OUTPUT"
+          else
+            echo "diff touches non-inert files → full visual gate:"
+            printf '%s\n' "$NONINERT" | sed 's/^/    /'
+            echo "shards=$ALL" >> "$GITHUB_OUTPUT"
+          fi
+
   # Shards run the suite in slices. 146 suites in one browser session was the
   # exposure: reds completed as few as 20 suites before pages started dying, so
   # a slice of ~19 keeps each session inside the range that has never failed
@@ -91,12 +172,23 @@ jobs:
   shard:
     name: shard ${{ matrix.shard }}/8
     runs-on: ubuntu-latest
+    needs: changes
+    # Empty matrix on an inert diff means zero shard jobs are created at all —
+    # `shard 1/8`…`8/8` are ABSENT, not skipped-noise. A `fromJSON('[]')` matrix
+    # already expands to no jobs; the `if` makes it explicit.
+    #
+    # The `success()` half matters: an explicit `if` REPLACES the implicit
+    # needs-succeeded gate, so without it a FAILED `changes` job (outputs.shards
+    # == '') would still satisfy `!= '[]'` and hand `fromJSON('')` a matrix it
+    # cannot parse. Gating on success() skips the shards cleanly instead; the
+    # aggregate `visual` job below then fails closed on the non-success.
+    if: needs.changes.result == 'success' && needs.changes.outputs.shards != '[]'
     strategy:
       # One shard failing must not cancel the others — the whole point is to
       # see the per-shard drop counts in one run.
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6, 7, 8]
+        shard: ${{ fromJSON(needs.changes.outputs.shards) }}
     container:
       image: mcr.microsoft.com/playwright:v1.59.1-noble
       # Docker gives a container a 64 MB /dev/shm by default and Chromium
@@ -224,15 +316,31 @@ jobs:
   # The branch-protection check. Keeps the name `visual` stable while the work
   # above fans out, and fails if ANY shard failed — `needs` alone would let a
   # skipped/failed shard pass this job, so the result is asserted explicitly.
+  #
+  # This job ALWAYS runs and ALWAYS reports, on every PR — that is what keeps
+  # `visual` a valid required context (#2713). When the diff was inert the
+  # shards did not run; the required check still has to report, so it reports
+  # green. When they did run, it fails unless all eight passed.
   visual:
     name: visual
     runs-on: ubuntu-latest
-    needs: shard
+    needs: [changes, shard]
     if: always()
     steps:
-      - name: Assert every shard passed
+      - name: Assert the visual gate
         run: |
-          echo "shard job result: ${{ needs.shard.result }}"
+          echo "classify result:  ${{ needs.changes.result }}"
+          echo "shards requested:  ${{ needs.changes.outputs.shards }}"
+          echo "shard job result:  ${{ needs.shard.result }}"
+          if [ "${{ needs.changes.result }}" != "success" ]; then
+            echo "✗ the classify-diff job did not succeed — failing the gate closed rather than"
+            echo "  guessing whether the shards should have run (#2713)."
+            exit 1
+          fi
+          if [ "${{ needs.changes.outputs.shards }}" = "[]" ]; then
+            echo "✓ diff was inert (docs/markdown only) — visual gate not applicable, reporting green (#2713)."
+            exit 0
+          fi
           if [ "${{ needs.shard.result }}" != "success" ]; then
             echo "✗ at least one visual shard did not pass — open the shard jobs above."
             echo "  Each shard prints its own drop-vs-regression classification (#1778)."
