@@ -2468,6 +2468,26 @@
     "accent": {
       "$value": "{color.tan.lightest}",
       "$type": "color"
+    },
+    "accent-yellow": {
+      "$value": "{color.yellow.light}",
+      "$type": "color"
+    },
+    "accent-blue": {
+      "$value": "{color.blue.light}",
+      "$type": "color"
+    },
+    "accent-green": {
+      "$value": "{color.green.light}",
+      "$type": "color"
+    },
+    "accent-purple": {
+      "$value": "{color.purple.light}",
+      "$type": "color"
+    },
+    "accent-orange": {
+      "$value": "{color.orange.light}",
+      "$type": "color"
     }
   },
   "page": {
