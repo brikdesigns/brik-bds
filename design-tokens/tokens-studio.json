@@ -7770,7 +7770,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.light}"
+        "$value": "{color.system.yellow-light}"
       },
       "accent-blue": {
         "$extensions": {
@@ -7779,7 +7779,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.light}"
+        "$value": "{color.system.blue-light}"
       },
       "accent-green": {
         "$extensions": {
@@ -7788,7 +7788,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.light}"
+        "$value": "{color.system.green-light}"
       },
       "accent-purple": {
         "$extensions": {
@@ -7797,7 +7797,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.light}"
+        "$value": "{color.system.purple-light}"
       },
       "accent-orange": {
         "$extensions": {
@@ -7806,7 +7806,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.light}"
+        "$value": "{color.system.orange-light}"
       }
     },
     "page": {
@@ -9113,7 +9113,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.light}"
+        "$value": "{color.system.yellow-light}"
       },
       "accent-blue": {
         "$extensions": {
@@ -9122,7 +9122,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.light}"
+        "$value": "{color.system.blue-light}"
       },
       "accent-green": {
         "$extensions": {
@@ -9131,7 +9131,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.light}"
+        "$value": "{color.system.green-light}"
       },
       "accent-purple": {
         "$extensions": {
@@ -9140,7 +9140,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.light}"
+        "$value": "{color.system.purple-light}"
       },
       "accent-orange": {
         "$extensions": {
@@ -9149,7 +9149,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.light}"
+        "$value": "{color.system.orange-light}"
       }
     },
     "page": {

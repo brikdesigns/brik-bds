@@ -492,6 +492,11 @@
   --surface-service-back-office-inverse: var(--color-grayscale-white);
   --surface-service-information-inverse: var(--color-grayscale-white);
   --surface-service-brand-inverse: var(--color-grayscale-white);
+  --surface-accent-yellow: var(--color-system-yellow-light);
+  --surface-accent-blue: var(--color-system-blue-light);
+  --surface-accent-green: var(--color-system-green-light);
+  --surface-accent-purple: var(--color-system-purple-light);
+  --surface-accent-orange: var(--color-system-orange-light);
   --page-primary: var(--color-grayscale-white);
   --text-primary: var(--color-grayscale-darkest);
   --text-secondary: var(--color-grayscale-dark);
@@ -583,11 +588,6 @@
   --surface-service-brand-dark: var(--color-yellow-darkest);
   --surface-service-marketing-light: var(--color-green-lightest);
   --surface-accent: var(--color-tan-lightest);
-  --surface-accent-yellow: var(--color-yellow-light);
-  --surface-accent-blue: var(--color-blue-light);
-  --surface-accent-green: var(--color-green-light);
-  --surface-accent-purple: var(--color-purple-light);
-  --surface-accent-orange: var(--color-orange-light);
   --page-secondary: var(--color-grayscale-lightest);
   --page-inverse: var(--color-grayscale-darkest);
   --page-brand-primary: var(--color-poppy-light);

@@ -542,6 +542,42 @@
       "bg": "--background-negative",
       "thresholdType": "AA",
       "note": "Dark badge label on the saturated error fill (4.95:1 both modes). White label was 3.48:1 and failed AA (#995)."
+    },
+    {
+      "group": "accent",
+      "label": "Body text on the yellow accent tint",
+      "fg": "--text-on-color-light",
+      "bg": "--surface-accent-yellow",
+      "thresholdType": "AAA",
+      "note": "The five accent-{hue} tints are the pale system steps (--color-system-{hue}-light), so a dark label is the accessible pairing in BOTH themes. fg MUST be --text-on-color-light, not --text-primary: --text-primary flips to near-white in dark and measures 1.1–1.2:1 on these tints — the same swap-by-theme trap #1017 records for the inverse hero. Added with #2066, which re-pointed --surface-accent-{hue} off the Brand Kit mid-tone ramp (--color-{hue}-light, itself the deprecated -500 alias from #1739) onto the system tints that surface-positive/negative/warning already use; that lifted purple 5.68 -> 12.87 and orange 5.05 -> 12.80 against dark ink. These five rows are what stop a future re-point back onto a mid-tone ramp."
+    },
+    {
+      "group": "accent",
+      "label": "Body text on the blue accent tint",
+      "fg": "--text-on-color-light",
+      "bg": "--surface-accent-blue",
+      "thresholdType": "AAA"
+    },
+    {
+      "group": "accent",
+      "label": "Body text on the green accent tint",
+      "fg": "--text-on-color-light",
+      "bg": "--surface-accent-green",
+      "thresholdType": "AAA"
+    },
+    {
+      "group": "accent",
+      "label": "Body text on the purple accent tint",
+      "fg": "--text-on-color-light",
+      "bg": "--surface-accent-purple",
+      "thresholdType": "AAA"
+    },
+    {
+      "group": "accent",
+      "label": "Body text on the orange accent tint",
+      "fg": "--text-on-color-light",
+      "bg": "--surface-accent-orange",
+      "thresholdType": "AAA"
     }
   ]
 }
