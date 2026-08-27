@@ -113,9 +113,25 @@ build_repo() {
   echo "$primary"
 }
 
+# Runs pr-task.sh with NO gate flags set, whatever the caller's environment.
+#
+# `env -u` is the whole point (#2083). Case 3 asserts the story gate blocks when
+# STORY_VERIFIED is absent, but it can only assert that if it controls the
+# variable. Inheriting it from the caller made this suite fail for the one
+# workflow the flag exists to serve: an agent pushing a component diff has to
+# export STORY_VERIFIED=1 to clear pr-task.sh:160, and that export then flipped
+# Case 3's branch and failed the pre-push suite pr-task.sh itself runs. Neither
+# setting nor unsetting the flag could get a component diff pushed.
+#
+# CI never exports these, so the leak was invisible there — it only bit the
+# agent path. SKIP_STORY_CHECK and PR_TASK_DRY_RUN are cleared for the same
+# reason: each one leaking would silently rewrite the branch under test in
+# exactly the same way. The cases that WANT a flag set it inline on their own
+# invocation rather than going through this helper.
 run_dry() {
   local primary="$1"; shift
   ( cd "$primary" && PATH="$TMPROOT/bin:$PATH" \
+      env -u STORY_VERIFIED -u SKIP_STORY_CHECK -u PR_TASK_DRY_RUN \
       ./scripts/pr-task.sh "$@" 2>&1 </dev/null )
 }
 
@@ -183,6 +199,21 @@ assert_eq "prints the gate message"       "yes"  "$G"
 case "$OUT" in *"npm run chromatic"*) C=yes ;; *) C=no ;; esac
 assert_eq "gate does NOT name chromatic"  "no"   "$C"
 assert_eq "still nothing pushed"          "no"   "$(remote_has_branch "$PRIMARY")"
+
+# ══ Case 3b — the suite is insulated from the caller's own gate flags (#2083).
+#    Case 3 above passes trivially when nothing is exported, which is why the
+#    leak survived: CI never sets these. This repeats it with the flag set the
+#    way an agent pushing a component diff must set it, and asserts the SAME
+#    block. Without this, `env -u` can be dropped from run_dry and every run
+#    still looks green until an agent tries to push. ══
+echo "── the story gate blocks even when the CALLER exported STORY_VERIFIED ──"
+: > "$GH_LOG"
+PRIMARY="$(build_repo "$TMPROOT/gateleak" component)"
+OUT="$( STORY_VERIFIED=1 SKIP_STORY_CHECK=1 run_dry "$PRIMARY" --dry-run )"
+RC=$?
+assert_eq "still blocks with a leaked flag" "1"  "$RC"
+case "$OUT" in *"the Storybook gate can't be answered here"*) L=yes ;; *) L=no ;; esac
+assert_eq "still prints the gate message"   "yes" "$L"
 
 echo "── STORY_VERIFIED=1 clears the gate, dry run still pushes nothing ──"
 : > "$GH_LOG"
