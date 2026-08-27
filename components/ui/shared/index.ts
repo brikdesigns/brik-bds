@@ -5,3 +5,4 @@
 export { useSuggestionFilter } from './useSuggestionFilter';
 export type { UseSuggestionFilterOptions, UseSuggestionFilterReturn } from './useSuggestionFilter';
 export { useElementWidth } from './useElementWidth';
+export { usePrefersReducedMotion } from './usePrefersReducedMotion';

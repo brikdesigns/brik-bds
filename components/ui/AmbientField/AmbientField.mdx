@@ -1,0 +1,91 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './AmbientField.stories';
+
+<Meta of={Stories} />
+
+# AmbientField
+
+<ComponentLinks slug="ambient-field" />
+
+Living motion field behind content — **Premium tier**. The decorative layer only: absolutely positioned, `aria-hidden`, non-interactive. It does not own a stacking context, because [ZIndexMediaBand](?path=/docs/containers-z-index-media-band--docs) already does — slot an AmbientField into its `graphic` and the band handles the z-ordering, the clipping, and the seam.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Canvas particle field
+
+`mode="canvas"` swaps the Lottie for a drifting 2D-canvas particle field. Prefer the Lottie default: it is cheaper, already in the toolkit, and art-directable by whoever made the file. Reach for canvas only when the brief needs a physical feel a designed loop cannot fake.
+
+<Canvas of={Stories.Canvas} />
+
+### Source from a token
+
+Leave `src` off and set `--bds-bg-field-src`. This is the per-client swap path: one theme declaration changes the loop across every field on the page with no JSX change.
+
+<Canvas of={Stories.SrcFromToken} />
+
+## Patterns
+
+### Holding contrast for the content above
+
+`--bds-bg-field-tint` washes over the field and `--bds-bg-field-opacity` pulls the whole layer back. The field carries no contrast guarantee of its own, so a busy loop under body copy needs both.
+
+<Canvas of={Stories.Tinted} />
+
+### Reduced motion — the ship gate
+
+Under `prefers-reduced-motion: reduce` the field **freezes to a static poster frame**. It is never hidden: a reader who asked for less motion still gets the composition the designer intended, held still.
+
+| Mode | At rest |
+|---|---|
+| `lottie` | Loads and holds frame 0 via `stop()`, `autoplay` and `loop` both off |
+| `canvas` | Paints exactly one frame and never schedules `requestAnimationFrame` |
+| Either | CSS `animation` and `transition` are cut on the layer and its descendants |
+
+The CSS rule lands before any script runs, so the still state applies even if JS never arrives. The component holds the frame explicitly rather than leaning on `lottie-react` declining to autoplay on its own — that is vendor behaviour a future bump could change silently, and this is a ship gate.
+
+### Stacking
+
+AmbientField sits at `z-index: 1` inside a parent it does not create. Composed into ZIndexMediaBand, the full order is:
+
+| Layer | Position |
+|---|---|
+| `.bds-z-index-media-band` | `relative`, `z-index: 1`, `overflow: clip` |
+| `.bds-ambient-field` (in `graphic`) | `absolute`, `inset: 0`, `z-index: 1`, `pointer-events: none` |
+| `.bds-z-index-media-band__content` | `relative`, `z-index: 2` |
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## CSS Override API
+
+Component-scoped CSS variables on `.bds-ambient-field`. Set them on a wrapping element or a client theme to override without touching BDS internals.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--bds-bg-field-src` | `none` | Lottie source when no `src` prop is passed — the per-client swap path |
+| `--bds-bg-field-tint` | `transparent` | Flat wash over the field |
+| `--bds-bg-field-opacity` | `1` | Opacity of the whole layer |
+| `--bds-bg-field-particle` | `var(--text-muted)` | Particle colour for `mode="canvas"` |
+
+```css
+/* Example: a client's own loop, pulled back behind body copy */
+.theme-acme .bds-ambient-field {
+  --bds-bg-field-src: url('/acme/field.json');
+  --bds-bg-field-tint: var(--surface-primary);
+  --bds-bg-field-opacity: 0.7;
+}
+```
+
+## Notes
+
+> **Note** — Premium tier. The motion budget it spends is only justified on surfaces that have committed to that tier; on every other surface prefer a static [BackgroundPattern](?path=/docs/containers-background-pattern--docs).
+
+> **Note** — `--bds-bg-field-src` is read once on mount with `getComputedStyle`. A CSS custom property is not available to the server, so a token-sourced field paints from the first client render rather than from SSR output. Pass `src` when that matters.
+
+> **Note** — `--bds-bg-field-particle` reaches the canvas through the element's inherited `color`, because a 2D context cannot read a custom property. That indirection is deliberate — it keeps the one value that must cross from CSS into JS in the token layer instead of hardcoded in the paint loop.

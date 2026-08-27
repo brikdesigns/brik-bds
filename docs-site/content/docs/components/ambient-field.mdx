@@ -1,0 +1,105 @@
+---
+title: AmbientField
+description: Premium-tier ambient motion field behind content — Lottie by default or a 2D-canvas particle field, freezing to a static poster frame under reduced motion.
+---
+
+AmbientField is the living background layer: a slow, ambient motion field that sits behind content and never competes with it. It is the decorative layer **only** — absolutely positioned, `aria-hidden`, non-interactive. It does not create the stacking context it lives in, because [ZIndexMediaBand](/docs/components/z-index-media-band) already owns that recipe.
+
+## Use it for
+
+- A Premium-tier surface that has committed the motion budget for a living background
+- A hero or section band that should read as alive without animating anything the reader is trying to use
+- Per-client atmosphere, where the loop itself is swapped from a theme rather than from JSX
+
+Not for content-bearing media — the layer is `aria-hidden` and non-interactive, so nothing inside it reaches the accessibility tree. Not for non-Premium surfaces either: prefer the static [BackgroundPattern](/docs/components/background-pattern), which costs nothing and needs no reduced-motion handling.
+
+## Import
+
+```tsx
+import { AmbientField, ZIndexMediaBand } from '@brikdesigns/bds';
+```
+
+## Composition
+
+AmbientField expects a positioned parent. Compose it into ZIndexMediaBand's `graphic` slot rather than hand-rolling one:
+
+```tsx
+<ZIndexMediaBand as="section" graphic={<AmbientField src={fieldLoop} />}>
+  <SectionHeader title="How we work" />
+</ZIndexMediaBand>
+```
+
+| Layer | Position |
+|---|---|
+| `.bds-z-index-media-band` | `relative`, `z-index: 1`, `overflow: clip` |
+| `.bds-ambient-field` | `absolute`, `inset: 0`, `z-index: 1`, `pointer-events: none` |
+| `.bds-z-index-media-band__content` | `relative`, `z-index: 2` |
+
+## Two draw modes
+
+`mode="lottie"` is the default and the one to reach for: cheap, already in the toolkit, and art-directable by whoever made the file. `mode="canvas"` draws a drifting 2D particle field and is only worth its cost when the brief asks for a physical feel a designed loop cannot fake.
+
+```tsx
+<AmbientField src={fieldLoop} />                      // Lottie — default
+<AmbientField mode="canvas" particleCount={64} />     // physics feel
+```
+
+## Source: prop or token
+
+Pass `src`, or leave it off and set `--bds-bg-field-src`. The token is the per-client swap path — one theme declaration changes the loop across every field on the page.
+
+```css
+.theme-acme .bds-ambient-field {
+  --bds-bg-field-src: url('/acme/field.json');
+}
+```
+
+The token is read once on mount with `getComputedStyle`. A CSS custom property is not available to the server, so a token-sourced field paints from the first client render rather than from SSR output. Pass `src` when that matters.
+
+## Reduced motion
+
+**This is the ship gate, not a nicety.** Under `prefers-reduced-motion: reduce` the field freezes to a static poster frame. It is never hidden — a reader who asked for less motion still gets the composition the designer intended, held still.
+
+| Mode | At rest |
+|---|---|
+| `lottie` | Loads and holds frame 0 via `stop()`, with `autoplay` and `loop` both off |
+| `canvas` | Paints exactly one frame and never schedules `requestAnimationFrame` |
+| Either | CSS `animation` and `transition` are cut on the layer and its descendants |
+
+The CSS rule lands before any script runs, so the still state applies even if JS never arrives. The component holds the frame explicitly rather than relying on `lottie-react` declining to autoplay by itself — that is vendor behaviour a future bump could change silently.
+
+The canvas field uses a fixed seed, so the still frame is the same composition every time rather than a different random scatter per paint.
+
+## Accessibility
+
+- Renders `aria-hidden="true"` with `pointer-events: none` — out of the accessibility tree and out of the tab order.
+- The reduced-motion poster frame is the ship gate above; nothing about the layer moves once it is honoured.
+- The layer carries no contrast guarantee of its own. Use `--bds-bg-field-tint` and `--bds-bg-field-opacity` to hold contrast for the content stacked above it.
+
+## API
+
+{/* props-check: AmbientFieldProps @ components/ui/AmbientField/AmbientField.tsx */}
+| Prop | Type | Default |
+|---|---|---|
+| `src` | `string \| object` | — |
+| `mode` | `'lottie' \| 'canvas'` | `'lottie'` |
+| `particleCount` | `number` | `48` |
+
+Plus all standard HTML attributes for the rendered `div`.
+
+## CSS Override API
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--bds-bg-field-src` | `none` | Lottie source when no `src` prop is passed |
+| `--bds-bg-field-tint` | `transparent` | Flat wash over the field |
+| `--bds-bg-field-opacity` | `1` | Opacity of the whole layer |
+| `--bds-bg-field-particle` | `var(--text-muted)` | Particle colour for `mode="canvas"` |
+
+`--bds-bg-field-particle` reaches the canvas through the element's inherited `color`, because a 2D context cannot read a custom property. The indirection keeps the value in the token layer instead of hardcoded in the paint loop.
+
+## Related
+
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-ambient-field--overview)**
+- **[ZIndexMediaBand](/docs/components/z-index-media-band)** — the stacking context this slots into
+- **[BackgroundPattern](/docs/components/background-pattern)** — the static, non-Premium alternative
