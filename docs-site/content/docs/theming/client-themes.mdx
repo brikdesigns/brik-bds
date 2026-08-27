@@ -234,7 +234,7 @@ Not every token is meant to vary per brand. Use the table to decide what to put 
 | Fonts (`--font-family-heading`, `--font-family-body`, `--font-family-label`) | **Optional** | See "Typography-only client override" below. |
 | Canonical status (`--background/surface/text/border-positive/negative/warning`) | **Yes** | First-class Figma variables. Override if the brand red/green/yellow clashes with the default. |
 | The `info` signal (`--background-info`, `--surface-info`, `--text-info`) | **No** | Blue, universal semantic meaning. Gap-fills over the system blue primitive. |
-| Non-valence hues (`--background-accent-purple/orange`) | **No** | Figma-sourced from the system color primitives. The hue-source scope, not a valence — see [Accent](/docs/primitives/color#accent). |
+| The per-hue accent set (`--text/background/surface-accent-{hue}`) | **No** | All three purposes are Figma-sourced from the system color primitives, so `accent-purple` is the same purple in every theme. Category color, not a valence — see [The per-hue accent set](/docs/primitives/color#the-per-hue-accent-set). |
 | Presence (`--background-presence-online/away/busy/offline`) | **No — intentionally frozen** | Shared chat/status semantics across products. |
 | Shadows + overlay (`--shadow-sm`..`--shadow-xl`, `--background-overlay`) | **No** | Hardcoded `rgba()` values; not expected to vary per brand. |
 
