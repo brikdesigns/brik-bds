@@ -31,9 +31,18 @@ on:
     branches:
       - main
 
+# `naming-canon-check` is a REQUIRED context on `main`, so this block may not
+# cancel — same constraint and same rationale as `canonical-check.yml`, which
+# carries the long-form explanation: a cancelled check-run is not an absent one
+# (brik-llm#2094), and the default `queue: single` lets a newer run evict the
+# waiter and leave the same stuck `expected` (brik-llm#2176).
+#
+# `queue: max` and `cancel-in-progress: true` together are a workflow validation
+# error, so the two lines change as a pair.
 concurrency:
   group: naming-canon-check-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
+  queue: max
 
 jobs:
   naming-canon-check:
