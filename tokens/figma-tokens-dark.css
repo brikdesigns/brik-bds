@@ -137,6 +137,11 @@
   --surface-service-information-inverse: var(--color-blue-darkest);
   --surface-service-brand-inverse: var(--color-yellow-darkest);
   --surface-accent: var(--color-grayscale-darkest);
+  --surface-accent-yellow: var(--color-yellow-light);
+  --surface-accent-blue: var(--color-blue-light);
+  --surface-accent-green: var(--color-green-light);
+  --surface-accent-purple: var(--color-purple-light);
+  --surface-accent-orange: var(--color-orange-light);
   --page-inverse: var(--color-grayscale-lightest);
   --page-brand-primary: var(--color-poppy-light);
   --page-service-brand: var(--color-yellow-light);
