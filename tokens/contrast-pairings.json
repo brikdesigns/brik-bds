@@ -103,6 +103,22 @@
       "note": "Badge `appearance=\"solid\"`, Dot and Counter render the `neutral` tone on --background-neutral (#1957) \u2014 an indicator is a small element placed ON a surface, so its fill is a background token, never a surface one. The label MUST be --text-on-color-dark: --text-neutral resolves to the same --color-system-neutral as the fill and measures 1.00:1, which is exactly the trap the row above records."
     },
     {
+      "group": "info",
+      "label": "Info indicator label on subtle info fill",
+      "fg": "--text-info",
+      "bg": "--surface-info",
+      "thresholdType": "AA",
+      "note": "Badge `appearance=\"subtle\"` renders this pair for the `progress` tone (Badge.css:172-173). Unmeasured until #1959 freed the intent-form names \u2014 the pair was spelled --text-status-info / --surface-status-info and no pairing named either, the same unmeasurable shape as #1571. At the old --color-system-blue #2f80ed it was 2.86:1, failing even the AA-large 3:1 floor on a Badge label. Fixed at the primitive in #1972 by darkening --color-system-blue to #2461b4; lightening the tint cannot work, because --text-info on pure white is only 3.87:1."
+    },
+    {
+      "group": "info",
+      "label": "Solid info indicator label on fill",
+      "fg": "--text-on-color-dark",
+      "bg": "--background-info",
+      "thresholdType": "AA",
+      "note": "Badge `appearance=\"solid\"` and Counter both render the `progress` tone as white-on-fill (Badge.css:133, Counter.css:31) \u2014 two shipped consumers, one measurable token pair, the same shape as the two neutral indicator rows above. Was 3.87:1 (AA-large only) and fixed to 6.10:1 by the same #1972 primitive change. This row could not be measured at all before #1965: a comment above --background-info parsed as a declaration and swallowed it, so validate-themes resolved the bg to n/a while still printing PASS."
+    },
+    {
       "group": "neutral",
       "label": "Inverse label on inverse fill",
       "fg": "--text-inverse",
