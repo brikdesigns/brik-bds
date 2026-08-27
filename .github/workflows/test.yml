@@ -14,13 +14,33 @@ name: Test Suite
 #
 # Issue: brikdesigns/brik-bds#891
 
+# A README-only PR cannot break a component unit test, so it should not pay for
+# the suite (brik-llm#2713 — the visual + test suites are 57% of the org's
+# Actions runtime). `test` is NOT a required context on `main`
+# (.github/required-checks.json), so unlike `visual` it can be workflow-level
+# path-filtered: on an all-inert diff the trigger does not match and no `test`
+# check-run is produced at all. This is the #2070 house pattern, but expressed
+# as `paths-ignore` (skip ONLY provably-inert files) rather than an INCLUDE
+# `paths:` list — an include list can never be trusted for a suite whose input
+# is ~all of source, so the default here is to run and only an exclusively
+# docs/markdown diff opts out.
 on:
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - '**/*.md'
+      - 'LICENSE'
+      - 'CODEOWNERS'
+      - '.github/CODEOWNERS'
   push:
     branches:
       - main
+    paths-ignore:
+      - '**/*.md'
+      - 'LICENSE'
+      - 'CODEOWNERS'
+      - '.github/CODEOWNERS'
 
 concurrency:
   group: test-${{ github.ref }}
