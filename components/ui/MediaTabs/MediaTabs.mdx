@@ -68,6 +68,8 @@ The interval is deliberately one value read by two consumers: the progress cue a
 
 ## Notes
 
+> **Peer categories only.** This composite is for options the reader picks **between** — parallel, mutually exclusive, few. An ordered set the reader walks **through** is [`SyncedMediaSteps`](?path=/docs/containers-synced-media-steps--docs) instead, and past about five items or with a panel tall enough that mobile must stack it, that is the one that still works. The rule and its tie-breaks live in the [display-choice build standard](https://design.brikdesigns.com/docs/build-standards/display-choice).
+
 > **Keyboard contract is the WAI-ARIA tabs pattern**, delegated to `TabBar`. The rail exposes exactly one tab in the page Tab sequence (roving tabindex); [Arrow / Home / End](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/) move focus and activate — Left/Right when horizontal, Up/Down when `orientation="vertical"`. `TabBar` gains this contract only when its items carry `controls`, so existing label-only tab bars are unchanged.
 
 > **Reduced motion.** Under `prefers-reduced-motion: reduce` autoplay is disabled in JS (a paused CSS animation cannot stop a timer), the progress cue is hidden, and the media swap and description reveal are instant. The active tab still reads correctly — statically.

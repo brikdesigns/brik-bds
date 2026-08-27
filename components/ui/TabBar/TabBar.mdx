@@ -43,3 +43,9 @@ Real-world usage: settings page navigation where clicking a tab switches the act
 
 <ArgTypes of={Stories} />
 
+## Notes
+
+> **Tabs or accordion?** Ask what the *set* is, because both hide all but one panel and the rendered output does not tell you which was right. Options the reader picks **between** ("Healthcare / Legal / Retail") are peer categories — parallel, mutually exclusive, few — and get tabs. Steps the reader walks **through** ("Scope → Design → Build") are ordered, and an [`Accordion`](?path=/docs/containers-accordion--docs) keeps every label visible so the reader can see where they are. Past about five items, or when a panel is tall enough that mobile has to stack it, the accordion is the one that still works. The full rule, its tie-breaks, and the worked cases live in the [display-choice build standard](https://design.brikdesigns.com/docs/build-standards/display-choice).
+
+> **A rail driving a media panel** is [`MediaTabs`](?path=/docs/containers-media-tabs--docs), which composes this tab bar with a synced media slot, in-view-gated autoplay, and the WAI-ARIA tabs keyboard contract — reach for it before hand-rolling the sync.
+

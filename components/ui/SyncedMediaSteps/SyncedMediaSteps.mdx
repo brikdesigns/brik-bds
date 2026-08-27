@@ -66,6 +66,8 @@ The interval is deliberately one value read by two consumers: the countdown bar 
 
 ## Notes
 
+> **Ordered sequences only.** This composite is for steps the reader walks **through** — the labels stay visible so they can see where they are in the sequence. Peer categories the reader picks **between** are [`MediaTabs`](?path=/docs/containers-media-tabs--docs) instead. The rule and its tie-breaks live in the [display-choice build standard](https://design.brikdesigns.com/docs/build-standards/display-choice).
+
 > **Keyboard contract is the accordion pattern, not tabs.** Every step trigger sits in the page Tab sequence, per the [WAI-ARIA APG accordion pattern](https://www.w3.org/WAI/ARIA/apg/patterns/accordion/) — "all focusable elements in the accordion are included in the page Tab sequence". A roving tabindex belongs to the tabs pattern; use `MediaTabs` when the items are peer categories rather than an ordered sequence.
 
 > **Reduced motion.** Under `prefers-reduced-motion: reduce` autoplay is disabled in JS (a paused CSS animation cannot stop a timer), the countdown is hidden, and the media swap and description reveal are instant. The active step still reads correctly — statically.
