@@ -1940,7 +1940,7 @@
       "$type": "color"
     },
     "accent-red": {
-      "$value": "{color.system.red}",
+      "$value": "{color.poppy.500}",
       "$type": "color"
     },
     "primary": {
@@ -2146,6 +2146,30 @@
     "accent": {
       "$value": "{color.tan.dark}",
       "$type": "color"
+    },
+    "accent-yellow": {
+      "$value": "{color.system.yellow}",
+      "$type": "color"
+    },
+    "accent-blue": {
+      "$value": "{color.system.blue}",
+      "$type": "color"
+    },
+    "accent-green": {
+      "$value": "{color.system.green}",
+      "$type": "color"
+    },
+    "accent-purple": {
+      "$value": "{color.system.purple}",
+      "$type": "color"
+    },
+    "accent-orange": {
+      "$value": "{color.system.orange}",
+      "$type": "color"
+    },
+    "accent-red": {
+      "$value": "{color.poppy.500}",
+      "$type": "color"
     }
   },
   "background": {
@@ -2174,7 +2198,7 @@
       "$type": "color"
     },
     "accent-red": {
-      "$value": "{color.system.red}",
+      "$value": "{color.poppy.500}",
       "$type": "color"
     },
     "accent-purple": {
@@ -2488,6 +2512,10 @@
     "accent-orange": {
       "$value": "{color.system.orange-light}",
       "$type": "color"
+    },
+    "accent-red": {
+      "$value": "{color.poppy.500}",
+      "$type": "color"
     }
   },
   "page": {
@@ -2529,6 +2557,22 @@
     },
     "accent": {
       "$value": "{color.tan.lightest}",
+      "$type": "color"
+    },
+    "accent-yellow": {
+      "$value": "{color.system.yellow-light}",
+      "$type": "color"
+    },
+    "accent-blue": {
+      "$value": "{color.system.blue-light}",
+      "$type": "color"
+    },
+    "accent-orange": {
+      "$value": "{color.system.orange-light}",
+      "$type": "color"
+    },
+    "accent-red": {
+      "$value": "{color.poppy.500}",
       "$type": "color"
     }
   }

@@ -578,6 +578,14 @@
       "fg": "--text-on-color-light",
       "bg": "--surface-accent-orange",
       "thresholdType": "AAA"
+    },
+    {
+      "group": "accent",
+      "label": "Label on the red accent fill",
+      "fg": "--text-on-color-light",
+      "bg": "--surface-accent-red",
+      "thresholdType": "AA",
+      "note": "The odd one out, and gated AA rather than AAA for that reason. The other five accent surfaces are pale system tints; red has no system tint in canon — the Figma Brand Kit aliases every accent-red purpose to the brand poppy (color/poppy/light [base], #e35335), so --surface-accent-red is a saturated FILL, not a wash (#2066). Dark ink clears 4.56:1 on it, which is AA for a label but short of the AAA body aim the tints hold. Do not put small body copy on this one; Avatar's red initials fill is the shipped consumer (Avatar.css:30) and it pairs --text-on-color-light."
     }
   ]
 }
