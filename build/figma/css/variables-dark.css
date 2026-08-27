@@ -38,6 +38,11 @@
   --surface-warning: var(--color-system-yellow-light);
   --surface-overlay: var(--color-grayscale-black);
   --surface-neutral: var(--color-system-neutral-light);
+  --surface-accent-yellow: var(--color-system-yellow-light);
+  --surface-accent-blue: var(--color-system-blue-light);
+  --surface-accent-green: var(--color-system-green-light);
+  --surface-accent-purple: var(--color-system-purple-light);
+  --surface-accent-orange: var(--color-system-orange-light);
   --page-primary: var(--color-grayscale-black);
   --page-secondary: var(--color-grayscale-black);
   --text-primary: var(--color-grayscale-lightest);
@@ -137,11 +142,6 @@
   --surface-service-information-inverse: var(--color-blue-darkest);
   --surface-service-brand-inverse: var(--color-yellow-darkest);
   --surface-accent: var(--color-grayscale-darkest);
-  --surface-accent-yellow: var(--color-yellow-light);
-  --surface-accent-blue: var(--color-blue-light);
-  --surface-accent-green: var(--color-green-light);
-  --surface-accent-purple: var(--color-purple-light);
-  --surface-accent-orange: var(--color-orange-light);
   --page-inverse: var(--color-grayscale-lightest);
   --page-brand-primary: var(--color-poppy-light);
   --page-service-brand: var(--color-yellow-light);
