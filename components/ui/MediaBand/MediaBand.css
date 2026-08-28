@@ -1,8 +1,8 @@
 @layer bds-components {
 /**
- * BDS ZIndexMediaBand — stacking-context band with a decorative graphic behind content
+ * BDS MediaBand — stacking-context band with a decorative graphic behind content
  *
- * Naming: .bds-z-index-media-band, .bds-z-index-media-band__{graphic,content,seam};
+ * Naming: .bds-media-band, .bds-media-band__{graphic,content,seam};
  *         each seam carries [data-edge='top'|'bottom'] (see § Seam fade below)
  *
  * Stacking contract (the whole point of the primitive — consumers stop
@@ -35,7 +35,7 @@
  * that a consumer slots into `graphic` owns its own reduced-motion behaviour.
  */
 
-.bds-z-index-media-band {
+.bds-media-band {
   --bds-media-band-surface: transparent;
   --bds-media-band-graphic: none;
   --bds-media-band-seam-from: transparent;
@@ -53,7 +53,7 @@
 
 /* ─── Decorative layer (z:0) ─────────────────────────────────── */
 
-.bds-z-index-media-band__graphic {
+.bds-media-band__graphic {
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -66,7 +66,7 @@
 
 /* ─── Content (z:2) ──────────────────────────────────────────── */
 
-.bds-z-index-media-band__content {
+.bds-media-band__content {
   position: relative;
   z-index: 2;
 }
@@ -79,7 +79,7 @@
    edge-prefixed BEM modifier would need a § 6 ADR amendment to add an axis
    word first. Same call as Marquee's [data-direction]. */
 
-.bds-z-index-media-band__seam {
+.bds-media-band__seam {
   position: absolute;
   inset-inline: 0;
   z-index: 4;
@@ -87,7 +87,7 @@
   pointer-events: none;
 }
 
-.bds-z-index-media-band__seam[data-edge='top'] {
+.bds-media-band__seam[data-edge='top'] {
   top: 0;
   background-image: linear-gradient(
     to bottom,
@@ -96,7 +96,7 @@
   );
 }
 
-.bds-z-index-media-band__seam[data-edge='bottom'] {
+.bds-media-band__seam[data-edge='bottom'] {
   bottom: 0;
   background-image: linear-gradient(
     to top,

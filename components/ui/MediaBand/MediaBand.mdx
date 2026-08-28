@@ -1,12 +1,12 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
-import * as Stories from './ZIndexMediaBand.stories';
+import * as Stories from './MediaBand.stories';
 
 <Meta of={Stories} />
 
-# ZIndexMediaBand
+# MediaBand
 
-<ComponentLinks slug="z-index-media-band" />
+<ComponentLinks slug="media-band" />
 
 Stacking-context band for a decorative graphic behind content. Owns the clipped positioned parent, the z-ordering, and the seam fade that blends the band into its neighbouring sections — so consumers stop hand-rolling `position: relative` wrappers per page.
 
@@ -36,10 +36,10 @@ The whole reason the primitive exists:
 
 | Layer | Element | Position |
 |---|---|---|
-| Parent | `.bds-z-index-media-band` | `relative`, `z-index: 1`, `overflow: clip` |
-| Decorative | `.bds-z-index-media-band__graphic` | `absolute`, `z-index: 0`, `aria-hidden`, `pointer-events: none` |
-| Content | `.bds-z-index-media-band__content` | `relative`, `z-index: 2` |
-| Seam fade | `.bds-z-index-media-band__seam[data-edge]` | `absolute`, `z-index: 4`, `pointer-events: none` |
+| Parent | `.bds-media-band` | `relative`, `z-index: 1`, `overflow: clip` |
+| Decorative | `.bds-media-band__graphic` | `absolute`, `z-index: 0`, `aria-hidden`, `pointer-events: none` |
+| Content | `.bds-media-band__content` | `relative`, `z-index: 2` |
+| Seam fade | `.bds-media-band__seam[data-edge]` | `absolute`, `z-index: 4`, `pointer-events: none` |
 
 `overflow: clip` (not `hidden`) clips decorative bleed without making the band a scroll container — a focused child inside a scroll container can scroll into view and shift the layout.
 
@@ -49,7 +49,7 @@ The whole reason the primitive exists:
 
 ## CSS Override API
 
-Component-scoped CSS variables on `.bds-z-index-media-band`. Set them on a wrapping element or a client theme to override without touching BDS internals.
+Component-scoped CSS variables on `.bds-media-band`. Set them on a wrapping element or a client theme to override without touching BDS internals.
 
 | Variable | Default | Controls |
 |---|---|---|

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ZIndexMediaBand } from '../ZIndexMediaBand';
+import { MediaBand } from '../MediaBand';
 import { AmbientField } from './AmbientField';
 import driftField from './_examples/drift-field.json';
 
@@ -70,7 +70,7 @@ const meta: Meta<typeof AmbientField> = {
     docs: {
       description: {
         component:
-          'Premium-tier ambient motion field: the decorative layer only (`absolute; inset: 0; z-index: 1`, `aria-hidden`, non-interactive). Slots into `ZIndexMediaBand`’s `graphic`, which owns the stacking context. Under `prefers-reduced-motion: reduce` it freezes to a static poster frame rather than disappearing — Lottie holds frame 0, the canvas paints once and schedules no rAF.',
+          'Premium-tier ambient motion field: the decorative layer only (`absolute; inset: 0; z-index: 1`, `aria-hidden`, non-interactive). Slots into `MediaBand`’s `graphic`, which owns the stacking context. Under `prefers-reduced-motion: reduce` it freezes to a static poster frame rather than disappearing — Lottie holds frame 0, the canvas paints once and schedules no rAF.',
       },
     },
   },
@@ -115,9 +115,9 @@ export const Default: Story = {
   },
   render: (args) => (
     <FullWidth>
-      <ZIndexMediaBand as="section" graphic={<AmbientField {...args} />}>
+      <MediaBand as="section" graphic={<AmbientField {...args} />}>
         <BandContent />
-      </ZIndexMediaBand>
+      </MediaBand>
     </FullWidth>
   ),
 };
@@ -127,9 +127,9 @@ export const Canvas: Story = {
   args: { mode: 'canvas', particleCount: 64 },
   render: (args) => (
     <FullWidth>
-      <ZIndexMediaBand as="section" graphic={<AmbientField {...args} />}>
+      <MediaBand as="section" graphic={<AmbientField {...args} />}>
         <BandContent label="Particle field" />
-      </ZIndexMediaBand>
+      </MediaBand>
     </FullWidth>
   ),
 };
@@ -139,7 +139,7 @@ export const SrcFromToken: Story = {
   args: { mode: 'lottie' },
   render: (args) => (
     <FullWidth>
-      <ZIndexMediaBand
+      <MediaBand
         as="section"
         graphic={
           <AmbientField
@@ -159,7 +159,7 @@ export const SrcFromToken: Story = {
         }
       >
         <BandContent label="Themed field" />
-      </ZIndexMediaBand>
+      </MediaBand>
     </FullWidth>
   ),
 };
@@ -169,7 +169,7 @@ export const Tinted: Story = {
   args: { mode: 'lottie', src: driftField },
   render: (args) => (
     <FullWidth>
-      <ZIndexMediaBand
+      <MediaBand
         as="section"
         graphic={
           <AmbientField
@@ -188,7 +188,7 @@ export const Tinted: Story = {
         }
       >
         <BandContent label="Tinted field" />
-      </ZIndexMediaBand>
+      </MediaBand>
     </FullWidth>
   ),
 };

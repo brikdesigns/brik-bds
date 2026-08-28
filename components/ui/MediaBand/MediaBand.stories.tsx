@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { BackgroundPattern } from '../BackgroundPattern';
-import { ZIndexMediaBand } from './ZIndexMediaBand';
+import { MediaBand } from './MediaBand';
 
 /* ─── Fixtures ────────────────────────────────────────────────── */
 
@@ -90,9 +90,9 @@ const NeighbourBand = ({ label }: { label: string }) => (
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
-const meta: Meta<typeof ZIndexMediaBand> = {
-  title: 'Containers/z-index-media-band',
-  component: ZIndexMediaBand,
+const meta: Meta<typeof MediaBand> = {
+  title: 'Containers/media-band',
+  component: MediaBand,
   tags: ['surface-shared'],
   parameters: {
     layout: 'fullscreen',
@@ -120,7 +120,7 @@ const meta: Meta<typeof ZIndexMediaBand> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ZIndexMediaBand>;
+type Story = StoryObj<typeof MediaBand>;
 
 /* ═══════════════════════════════════════════════════════════════
    Default is the args-driven sandbox; `seam` is a listed axis so it
@@ -140,7 +140,7 @@ export const Default: Story = {
   },
   render: (args) => (
     <FullWidth>
-      <ZIndexMediaBand {...args} />
+      <MediaBand {...args} />
     </FullWidth>
   ),
 };
@@ -156,7 +156,7 @@ export const SeamBetweenSections: Story = {
   render: (args) => (
     <FullWidth>
       <NeighbourBand label="Preceding section" />
-      <ZIndexMediaBand
+      <MediaBand
         {...args}
         style={{ '--bds-media-band-surface': 'var(--surface-secondary)' } as React.CSSProperties}
       />
@@ -174,7 +174,7 @@ export const GraphicFromToken: Story = {
   },
   render: (args) => (
     <FullWidth>
-      <ZIndexMediaBand
+      <MediaBand
         {...args}
         style={
           {
