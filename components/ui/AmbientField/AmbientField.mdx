@@ -8,7 +8,7 @@ import * as Stories from './AmbientField.stories';
 
 <ComponentLinks slug="ambient-field" />
 
-Living motion field behind content — **Premium tier**. The decorative layer only: absolutely positioned, `aria-hidden`, non-interactive. It does not own a stacking context, because [ZIndexMediaBand](?path=/docs/containers-z-index-media-band--docs) already does — slot an AmbientField into its `graphic` and the band handles the z-ordering, the clipping, and the seam.
+Living motion field behind content — **Premium tier**. The decorative layer only: absolutely positioned, `aria-hidden`, non-interactive. It does not own a stacking context, because [MediaBand](?path=/docs/containers-media-band--docs) already does — slot an AmbientField into its `graphic` and the band handles the z-ordering, the clipping, and the seam.
 
 ## Default
 
@@ -50,13 +50,13 @@ The CSS rule lands before any script runs, so the still state applies even if JS
 
 ### Stacking
 
-AmbientField sits at `z-index: 1` inside a parent it does not create. Composed into ZIndexMediaBand, the full order is:
+AmbientField sits at `z-index: 1` inside a parent it does not create. Composed into MediaBand, the full order is:
 
 | Layer | Position |
 |---|---|
-| `.bds-z-index-media-band` | `relative`, `z-index: 1`, `overflow: clip` |
+| `.bds-media-band` | `relative`, `z-index: 1`, `overflow: clip` |
 | `.bds-ambient-field` (in `graphic`) | `absolute`, `inset: 0`, `z-index: 1`, `pointer-events: none` |
-| `.bds-z-index-media-band__content` | `relative`, `z-index: 2` |
+| `.bds-media-band__content` | `relative`, `z-index: 2` |
 
 ## Props
 

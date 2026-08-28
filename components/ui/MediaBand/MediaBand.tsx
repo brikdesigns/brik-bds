@@ -1,14 +1,14 @@
 import { type HTMLAttributes, type ReactNode, type ElementType } from 'react';
 import { bdsClass } from '../../utils';
-import './ZIndexMediaBand.css';
+import './MediaBand.css';
 
 /**
  * Which edges carry a seam-fade gradient — the blend between this band and the
  * section above / below it. `'none'` (default) renders no seam layer.
  */
-export type ZIndexMediaBandSeam = 'none' | 'top' | 'bottom' | 'both';
+export type MediaBandSeam = 'none' | 'top' | 'bottom' | 'both';
 
-export interface ZIndexMediaBandProps extends HTMLAttributes<HTMLElement> {
+export interface MediaBandProps extends HTMLAttributes<HTMLElement> {
   /**
    * Decorative layer content (`z-index: 0`) — an illustration, `<img>`, or a
    * `BackgroundPattern`. Rendered inside an `aria-hidden`, non-interactive
@@ -27,13 +27,13 @@ export interface ZIndexMediaBandProps extends HTMLAttributes<HTMLElement> {
    * `--bds-media-band-seam-height` inward, so the band dissolves into its
    * neighbour instead of butting against it.
    */
-  seam?: ZIndexMediaBandSeam;
+  seam?: MediaBandSeam;
   /** HTML element to render as. Default `div` — pass `section` for a page band. */
   as?: ElementType;
 }
 
 /**
- * ZIndexMediaBand — stacking-context band with a decorative layer behind content.
+ * MediaBand — stacking-context band with a decorative layer behind content.
  *
  * Owns the "decorative graphic behind content" recipe as one primitive instead
  * of a hand-rolled `position: relative` wrapper per consumer: a clipped,
@@ -53,18 +53,18 @@ export interface ZIndexMediaBandProps extends HTMLAttributes<HTMLElement> {
  *
  * @example
  * ```tsx
- * <ZIndexMediaBand as="section" seam="bottom" graphic={<BackgroundPattern fade />}>
+ * <MediaBand as="section" seam="bottom" graphic={<BackgroundPattern fade />}>
  *   <SectionHeader title="How we work" />
- * </ZIndexMediaBand>
+ * </MediaBand>
  *
  * // Graphic supplied by a client theme instead of a slot:
  * // .theme-acme { --bds-media-band-graphic: url('/acme/workflow.svg'); }
- * <ZIndexMediaBand as="section">…</ZIndexMediaBand>
+ * <MediaBand as="section">…</MediaBand>
  * ```
  *
  * @summary Stacking-context band — decorative graphic behind content
  */
-export function ZIndexMediaBand({
+export function MediaBand({
   graphic,
   children,
   seam = 'none',
@@ -72,29 +72,29 @@ export function ZIndexMediaBand({
   className,
   style,
   ...props
-}: ZIndexMediaBandProps) {
+}: MediaBandProps) {
   const hasTopSeam = seam === 'top' || seam === 'both';
   const hasBottomSeam = seam === 'bottom' || seam === 'both';
 
   return (
     <Element
-      className={bdsClass('bds-z-index-media-band', className)}
+      className={bdsClass('bds-media-band', className)}
       data-seam={seam === 'none' ? undefined : seam}
       style={style}
       {...props}
     >
-      <div className="bds-z-index-media-band__graphic" aria-hidden="true">
+      <div className="bds-media-band__graphic" aria-hidden="true">
         {graphic}
       </div>
-      <div className="bds-z-index-media-band__content">{children}</div>
+      <div className="bds-media-band__content">{children}</div>
       {hasTopSeam && (
-        <div className="bds-z-index-media-band__seam" data-edge="top" aria-hidden="true" />
+        <div className="bds-media-band__seam" data-edge="top" aria-hidden="true" />
       )}
       {hasBottomSeam && (
-        <div className="bds-z-index-media-band__seam" data-edge="bottom" aria-hidden="true" />
+        <div className="bds-media-band__seam" data-edge="bottom" aria-hidden="true" />
       )}
     </Element>
   );
 }
 
-export default ZIndexMediaBand;
+export default MediaBand;

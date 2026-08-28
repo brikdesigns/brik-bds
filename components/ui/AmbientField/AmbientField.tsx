@@ -22,7 +22,7 @@ import './AmbientField.css';
  * tone · status · variant · emphasis · appearance · density · orientation, and
  * § 4 requires a modifier to carry one of those prefixes. `mode` is on none of
  * them, so a `--mode-*` modifier would need a § 6 amendment first. Same call as
- * Marquee's `[data-direction]` and ZIndexMediaBand's `[data-seam]`.
+ * Marquee's `[data-direction]` and MediaBand's `[data-seam]`.
  */
 export type AmbientFieldMode = 'lottie' | 'canvas';
 
@@ -61,7 +61,7 @@ function unwrapCssUrl(raw: string): string | undefined {
  *
  * The decorative layer only: absolutely positioned (`inset: 0; z-index: 1`),
  * `aria-hidden`, and non-interactive. It does not own a stacking context or a
- * content slot, because `ZIndexMediaBand` already owns that recipe — slot an
+ * content slot, because `MediaBand` already owns that recipe — slot an
  * AmbientField into its `graphic` and the band handles the rest.
  *
  * **Reduced motion is the ship gate, not a nicety.** Under
@@ -75,13 +75,13 @@ function unwrapCssUrl(raw: string): string | undefined {
  * @example
  * ```tsx
  * // Inside the primitive that owns the stacking context:
- * <ZIndexMediaBand as="section" graphic={<AmbientField src={fieldLoop} />}>
+ * <MediaBand as="section" graphic={<AmbientField src={fieldLoop} />}>
  *   <SectionHeader title="How we work" />
- * </ZIndexMediaBand>
+ * </MediaBand>
  *
  * // Per-client loop, no prop:
  * // .theme-acme { --bds-bg-field-src: url('/acme/field.json'); }
- * <ZIndexMediaBand as="section" graphic={<AmbientField />}>…</ZIndexMediaBand>
+ * <MediaBand as="section" graphic={<AmbientField />}>…</MediaBand>
  *
  * // Physics feel instead of a designed loop:
  * <AmbientField mode="canvas" particleCount={64} />

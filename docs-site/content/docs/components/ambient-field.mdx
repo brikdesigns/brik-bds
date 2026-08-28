@@ -3,7 +3,7 @@ title: AmbientField
 description: Premium-tier ambient motion field behind content — Lottie by default or a 2D-canvas particle field, freezing to a static poster frame under reduced motion.
 ---
 
-AmbientField is the living background layer: a slow, ambient motion field that sits behind content and never competes with it. It is the decorative layer **only** — absolutely positioned, `aria-hidden`, non-interactive. It does not create the stacking context it lives in, because [ZIndexMediaBand](/docs/components/z-index-media-band) already owns that recipe.
+AmbientField is the living background layer: a slow, ambient motion field that sits behind content and never competes with it. It is the decorative layer **only** — absolutely positioned, `aria-hidden`, non-interactive. It does not create the stacking context it lives in, because [MediaBand](/docs/components/media-band) already owns that recipe.
 
 ## Use it for
 
@@ -16,24 +16,24 @@ Not for content-bearing media — the layer is `aria-hidden` and non-interactive
 ## Import
 
 ```tsx
-import { AmbientField, ZIndexMediaBand } from '@brikdesigns/bds';
+import { AmbientField, MediaBand } from '@brikdesigns/bds';
 ```
 
 ## Composition
 
-AmbientField expects a positioned parent. Compose it into ZIndexMediaBand's `graphic` slot rather than hand-rolling one:
+AmbientField expects a positioned parent. Compose it into MediaBand's `graphic` slot rather than hand-rolling one:
 
 ```tsx
-<ZIndexMediaBand as="section" graphic={<AmbientField src={fieldLoop} />}>
+<MediaBand as="section" graphic={<AmbientField src={fieldLoop} />}>
   <SectionHeader title="How we work" />
-</ZIndexMediaBand>
+</MediaBand>
 ```
 
 | Layer | Position |
 |---|---|
-| `.bds-z-index-media-band` | `relative`, `z-index: 1`, `overflow: clip` |
+| `.bds-media-band` | `relative`, `z-index: 1`, `overflow: clip` |
 | `.bds-ambient-field` | `absolute`, `inset: 0`, `z-index: 1`, `pointer-events: none` |
-| `.bds-z-index-media-band__content` | `relative`, `z-index: 2` |
+| `.bds-media-band__content` | `relative`, `z-index: 2` |
 
 ## Two draw modes
 
@@ -101,5 +101,5 @@ Plus all standard HTML attributes for the rendered `div`.
 ## Related
 
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-ambient-field--overview)**
-- **[ZIndexMediaBand](/docs/components/z-index-media-band)** — the stacking context this slots into
+- **[MediaBand](/docs/components/media-band)** — the stacking context this slots into
 - **[BackgroundPattern](/docs/components/background-pattern)** — the static, non-Premium alternative
