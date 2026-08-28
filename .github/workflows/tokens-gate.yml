@@ -111,7 +111,12 @@ jobs:
   # are in the list below. This is trigger plumbing, not a change to what any
   # gate asserts.
   changes:
-    name: classify diff
+    # Display name is group-qualified deliberately. `visual.yml`'s classifier is
+    # also named `classify diff`, and once #2098's remaining four groups land
+    # there would be six identically-named rows in the PR checks list with
+    # nothing to tell them apart. The required context is the aggregate job
+    # below, so this name is free to be legible.
+    name: classify diff (tokens)
     runs-on: ubuntu-latest
     outputs:
       # 'true' to run the lints, 'false' to skip them.
