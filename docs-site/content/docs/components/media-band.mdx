@@ -1,9 +1,9 @@
 ---
-title: ZIndexMediaBand
+title: MediaBand
 description: Stacking-context band with a decorative graphic behind content — clipped positioned parent, z-ordered layers, and an optional seam fade into the neighbouring sections.
 ---
 
-ZIndexMediaBand owns the "decorative graphic behind content" recipe as one primitive: a clipped positioned parent (`z-index: 1`), a decorative layer at `z-index: 0`, content at `z-index: 2`, and an optional seam-fade at `z-index: 4`. Consumers stop hand-rolling a `position: relative` wrapper per page.
+MediaBand owns the "decorative graphic behind content" recipe as one primitive: a clipped positioned parent (`z-index: 1`), a decorative layer at `z-index: 0`, content at `z-index: 2`, and an optional seam-fade at `z-index: 4`. Consumers stop hand-rolling a `position: relative` wrapper per page.
 
 ## Use it for
 
@@ -16,17 +16,17 @@ Not for content-bearing media — the decorative layer is `aria-hidden` and non-
 ## Import
 
 ```tsx
-import { ZIndexMediaBand } from '@brikdesigns/bds';
+import { MediaBand } from '@brikdesigns/bds';
 ```
 
 ## The stacking contract
 
 | Layer | Class | Position |
 |---|---|---|
-| Parent | `.bds-z-index-media-band` | `relative`, `z-index: 1`, `overflow: clip` |
-| Decorative | `.bds-z-index-media-band__graphic` | `absolute`, `z-index: 0`, `aria-hidden`, `pointer-events: none` |
-| Content | `.bds-z-index-media-band__content` | `relative`, `z-index: 2` |
-| Seam fade | `.bds-z-index-media-band__seam[data-edge]` | `absolute`, `z-index: 4`, `pointer-events: none` |
+| Parent | `.bds-media-band` | `relative`, `z-index: 1`, `overflow: clip` |
+| Decorative | `.bds-media-band__graphic` | `absolute`, `z-index: 0`, `aria-hidden`, `pointer-events: none` |
+| Content | `.bds-media-band__content` | `relative`, `z-index: 2` |
+| Seam fade | `.bds-media-band__seam[data-edge]` | `absolute`, `z-index: 4`, `pointer-events: none` |
 
 `overflow: clip` — not `hidden` — clips decorative bleed without making the band a scroll container. A focused child inside a scroll container can scroll into view and shift the layout.
 
@@ -36,9 +36,9 @@ The decorative layer renders either way. Fill the `graphic` slot with JSX, or le
 
 ```tsx
 // Slot
-<ZIndexMediaBand as="section" graphic={<BackgroundPattern fade />}>
+<MediaBand as="section" graphic={<BackgroundPattern fade />}>
   <SectionHeader title="How we work" />
-</ZIndexMediaBand>
+</MediaBand>
 ```
 
 ```css
@@ -53,7 +53,7 @@ The decorative layer renders either way. Fill the `graphic` slot with JSX, or le
 `seam` takes `'none'` (default), `'top'`, `'bottom'`, or `'both'`. Set `--bds-media-band-seam-to` to the **neighbouring** section's surface: the gradient runs from that color at the band edge to `--bds-media-band-seam-from` inward.
 
 ```tsx
-<ZIndexMediaBand as="section" seam="both">…</ZIndexMediaBand>
+<MediaBand as="section" seam="both">…</MediaBand>
 ```
 
 ## Depth without blend modes
@@ -67,7 +67,7 @@ Depth comes from gradients and token-driven scrims, never `mix-blend-mode`. A bl
 
 ## API
 
-{/* props-check: ZIndexMediaBandProps @ components/ui/ZIndexMediaBand/ZIndexMediaBand.tsx */}
+{/* props-check: MediaBandProps @ components/ui/MediaBand/MediaBand.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `graphic` | `ReactNode` | — |
@@ -89,5 +89,5 @@ Plus all standard HTML attributes for the rendered element.
 
 ## Related
 
-- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-z-index-media-band--overview)**
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-media-band--overview)**
 - **[BackgroundPattern](/docs/components/background-pattern)** — the usual occupant of the decorative slot

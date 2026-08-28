@@ -6,7 +6,7 @@
  *         the draw mode carries [data-mode='lottie'|'canvas'] (see below)
  *
  * Stacking contract — the decorative layer ONLY. It does not create the
- * stacking context it sits in; ZIndexMediaBand owns that recipe and this slots
+ * stacking context it sits in; MediaBand owns that recipe and this slots
  * into its `graphic`:
  *   .bds-ambient-field        absolute; inset: 0; z-index: 1; non-interactive
  *   __media / __canvas        the field itself, filling the layer
@@ -16,7 +16,7 @@
  * list is tone · status · variant · emphasis · appearance · density ·
  * orientation, and § 4 requires a modifier to carry one of those prefixes.
  * The draw-method axis is on none of them, so a modifier would need a § 6 ADR
- * amendment first. Same call as Marquee and ZIndexMediaBand.
+ * amendment first. Same call as Marquee and MediaBand.
  *
  * Component-local tokens (ADR-014 Tier 4, --bds-{component}-{prop} — defined
  * here with defaults, overridable by a client theme or `style`). Named to match
@@ -72,7 +72,7 @@
 /* ─── Tint wash ──────────────────────────────────────────────── */
 /* A flat wash, not a gradient scrim: the field is ambient and full-bleed, so
    there is no single edge for a gradient to run from. Consumers that need a
-   directional falloff compose ZIndexMediaBand's seam on top. */
+   directional falloff compose MediaBand's seam on top. */
 
 .bds-ambient-field__tint {
   position: absolute;
