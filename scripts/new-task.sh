@@ -430,8 +430,8 @@ npx playwright install chromium chromium-headless-shell 2>&1 | tail -1
 # `docs-site/` is a separate npm project with its own lockfile — the root
 # `npm ci` above does not reach it, so `next` is absent and
 # `cd docs-site && npm run build` dies on "sh: next: command not found".
-# That matters because `docs-site-build.yml` runs `next build` on every PR
-# touching `docs-site/**` while the root `npm run validate` does not, so
+# That matters because `docs-gate.yml`'s `docs-site build` job runs `next build`
+# on every PR touching `docs-site/**` while the root `npm run validate` does not, so
 # without this a worktree cannot pre-run the check that will gate its own PR
 # (#1980). Unconditional: measured at ~6s with a warm cache, which is cheaper
 # than the class of footgun it removes.
@@ -455,7 +455,7 @@ echo ""
 echo "  Before merge: sync both consumers (portal, brikdesigns)."
 echo ""
 echo "  Gates: 'npm run validate' does NOT cover docs-site. On a docs-site/** change also run:"
-echo "    (cd docs-site && npm run build)   # what docs-site-build.yml gates"
+echo "    (cd docs-site && npm run build)   # what docs-gate.yml's 'docs-site build' job gates"
 echo ""
 echo "  When done (REQUIRED — branches without PRs rot):"
 echo "    git diff ${BASE_BRANCH}..${BRANCH_NAME}   # review changes"
