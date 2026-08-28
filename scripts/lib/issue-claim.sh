@@ -15,6 +15,57 @@
 # needed releasing would wedge the ticket permanently. Ageing out is the failure
 # mode that self-heals.
 #
+# But a timer is not the only alternative to an explicit release (brik-llm#2204).
+# Two signals are authoritative for "that work is over" and neither needs the
+# dead session's cooperation: the ISSUE is closed, and every branch the claim
+# names has a PR that is MERGED or CLOSED. They are consulted only when the gate
+# is about to refuse — see _ic_claim_release_reason — so the common path (no
+# claim, my own claim, an already-timed-out claim) still costs exactly the one
+# comments read it always did. The 12h timer stays as the fallback for the case
+# it is genuinely good at: a session that died leaving no PR.
+#
+# BRANCH-GONE IS DELIBERATELY NOT A SIGNAL ON ITS OWN, and #2204 asked for it.
+# `git ls-remote` cannot tell "merged and reaped" from "created by new-task.sh
+# and never pushed" — and the never-pushed window is the entire reason this gate
+# exists. CLAUDE.md: the claim is "the ONLY gate that sees a session which has
+# not pushed", because the overlap gate keys on the issue number in a branch name
+# and new-task.sh names branches task/<slug> without it (#2514). On 2026-08-27
+# #2645 was built twice inside exactly that window — the winner's branch was not
+# pushed until its PR opened, 11 minutes after the loser's branch existed.
+# Releasing on an absent remote branch would have un-gated that collision.
+# The PR lookup covers every case #2204 actually evidenced: its brik-bds example
+# had the branch deleted AND PR #1784 merged. Branch gone with no PR at all reads
+# as UNKNOWN and keeps blocking, with the timer as the ceiling.
+#
+# Why this matters more than the lost time: `NEW_TASK_STEAL_CLAIM=1` is the
+# override for "the other session is genuinely gone", and a gate that cries wolf
+# teaches the reflex. One brik-bds session used it three times in an hour, every
+# refusal naming work that was already merged. A safety gate an agent learns to
+# bypass by reflex is worse than no gate.
+#
+# WHAT IDENTIFIES A CLAIMANT (the decision brik-llm#2792 asked to be recorded):
+# host + SESSION ID + a SET of branches, in that precedence.
+#
+#   1. Same session id → same session, whatever repo or branch it is standing in.
+#   2. Else same host AND the branch is in the claim's branch set → my own claim.
+#   3. Else foreign.
+#
+# Host+branch alone was wrong for a case that is routine, not exotic: this lib
+# and issue-overlap.sh are canon in brik-llm and twin-synced to consumers, so ONE
+# session working ONE ticket legitimately needs TWO branches in TWO repos, and
+# the gate read the second as a rival. The only exit was STEAL_CLAIM, which is
+# semantically wrong twice — nothing is being stolen, and the steal REWRITES the
+# marker onto the consumer branch, silently dropping the canon branch's claim
+# while it is still mid-build. Rule 1 removes that path entirely; the claim now
+# accumulates branches instead of replacing them.
+#
+# Session id is CLAUDE_CODE_SESSION_ID, the same variable session-cost.py keys
+# the spend ledger on (scripts/claude-tools/session-cost.py:115). It is absent
+# for a hand-run `new-task.sh` and in CI, so rule 1 is skipped when either side
+# is empty and the gate falls back to rule 2 — the pre-#2792 behaviour. Two
+# genuinely distinct sessions on one host carry distinct ids, so this never
+# widens into "same host always allowed".
+#
 # The pure decision functions live at the top so a test can exercise them
 # without touching the network. new-task.sh refuses to run outside the primary
 # worktree, so anything inline there is untestable — the same reason
@@ -59,8 +110,44 @@ claim_identity() {
   printf '%s\t%s' "$(hostname -s 2>/dev/null || echo unknown-host)" "${1:-unknown-branch}"
 }
 
+# The running session's id, or empty. CLAIM_SESSION_ID exists so the contract
+# test can drive both sides without a real Claude session in the environment.
+claim_session_id() {
+  printf '%s' "${CLAIM_SESSION_ID:-${CLAUDE_CODE_SESSION_ID:-}}"
+}
+
+# Strip leading and trailing spaces. Parameter expansion only — `read -a` and
+# `[[ =~ ]]` both behave differently under zsh, which is $SHELL on both machines
+# and the shell /resume sources this lib from (brik-llm#2798).
+_ic_trim() {
+  local s="${1:-}"
+  while [ "${s# }" != "$s" ]; do s="${s# }"; done
+  while [ "${s% }" != "$s" ]; do s="${s% }"; done
+  printf '%s' "$s"
+}
+
+# A branch entry is `owner/repo:branch`, or a bare `branch` for a marker written
+# before brik-llm#2792. Git refnames cannot contain a colon, so the split is
+# unambiguous. The repo qualifier is what lets the lifetime checks look the
+# branch up at all when the claimant was standing in a different repo.
+_ic_entry_branch() { printf '%s' "${1#*:}"; }
+_ic_entry_repo()   { case "${1:-}" in *:*) printf '%s' "${1%%:*}" ;; *) printf '' ;; esac; }
+
 claim_marker_body() {
-  local host="${1:?}" branch="${2:?}" stamp="${3:?}"
+  local host="${1:?}" branches="${2:?}" stamp="${3:?}" session="${4:-}"
+  local BT='`' cell="" rest="$branches" entry session_row=""
+  while [ -n "$rest" ]; do
+    case "$rest" in
+      *,*) entry="${rest%%,*}"; rest="${rest#*,}" ;;
+      *)   entry="$rest";       rest="" ;;
+    esac
+    entry="$(_ic_trim "$entry")"
+    [ -n "$entry" ] || continue
+    cell="${cell:+$cell, }${BT}${entry}${BT}"
+  done
+  # Omitted rather than rendered empty when there is no session id, so a
+  # hand-run pickup writes exactly the marker it wrote before brik-llm#2792.
+  [ -n "$session" ] && session_row="| Session | ${BT}${session}${BT} |"
   cat <<EOF
 ${CLAIM_MARKER}
 🤖 **Claimed** — a session is working this ticket.
@@ -68,17 +155,23 @@ ${CLAIM_MARKER}
 | | |
 | --- | --- |
 | Host | \`${host}\` |
-| Branch | \`${branch}\` |
-| Since | ${stamp} |
+| Branch | ${cell} |
+${session_row:+${session_row}
+}| Since | ${stamp} |
 
-Another session's \`new-task.sh\` will refuse this ticket until the claim goes stale (${CLAIM_STALE_SECONDS}s) or the issue closes. Rewritten in place on each pickup — never a second comment.
+Another session's \`new-task.sh\` will refuse this ticket until this issue closes, every branch above is gone, their PRs are merged or closed, or the claim ages out (${CLAIM_STALE_SECONDS}s). Rewritten in place on each pickup — never a second comment.
 
-Stale because that session is gone? \`NEW_TASK_STEAL_CLAIM=1\` overrides, loudly.
+One session working two repos (a canon lib plus its twin) adds its second branch to the row above; it is not a second claimant.
+
+Still refused by a session that is genuinely gone? \`NEW_TASK_STEAL_CLAIM=1\` overrides, loudly, and names the branches it displaces.
 EOF
 }
 
-# Echo "host<TAB>branch<TAB>stamp" from a marker comment body. Silent + non-zero
-# when the body is not a claim, so a caller can test the return.
+# Echo "host<TAB>branch-cell<TAB>stamp" from a marker comment body. Silent +
+# non-zero when the body is not a claim, so a caller can test the return.
+#
+# The branch cell may hold several comma-separated entries since brik-llm#2792;
+# backticks are stripped here so callers never have to know how it is rendered.
 parse_claim() {
   local body="${1:-}" host branch stamp
   case "$body" in
@@ -88,10 +181,21 @@ parse_claim() {
   # Pull the table cells. Anchored on the row label so column order changes in
   # the rendered table cannot silently shift what is parsed.
   host="$(printf '%s\n' "$body"   | sed -n 's/^| Host | `\(.*\)` |$/\1/p'   | head -1)"
-  branch="$(printf '%s\n' "$body" | sed -n 's/^| Branch | `\(.*\)` |$/\1/p' | head -1)"
+  branch="$(printf '%s\n' "$body" | sed -n 's/^| Branch | \(.*\) |$/\1/p'   | head -1 | tr -d '`')"
   stamp="$(printf '%s\n' "$body"  | sed -n 's/^| Since | \(.*\) |$/\1/p'    | head -1)"
   [ -n "$host" ] && [ -n "$branch" ] && [ -n "$stamp" ] || return 1
   printf '%s\t%s\t%s' "$host" "$branch" "$stamp"
+}
+
+# The claimant's session id, or empty for a pre-#2792 marker. Separate from
+# parse_claim so the three-field contract every caller already peels stays put.
+parse_claim_session() {
+  local body="${1:-}"
+  case "$body" in
+    *"$CLAIM_MARKER"*) : ;;
+    *) return 1 ;;
+  esac
+  printf '%s\n' "$body" | sed -n 's/^| Session | `\(.*\)` |$/\1/p' | head -1
 }
 
 # ISO-8601 Zulu → epoch seconds. BSD date (macOS, both operator machines) and
@@ -132,10 +236,84 @@ claim_is_stale() {
 }
 
 # 0 = this claim belongs to another session and should block.
+#
+# $2 is the claim's whole branch CELL — one entry, or several comma-separated
+# ones, each optionally `owner/repo:`-qualified (brik-llm#2792). Matching is on
+# the bare branch name, so a marker rewritten with repo qualifiers still reads as
+# my own claim on re-entry.
+#
+# The session-id arms are last-two so every existing four-argument call keeps its
+# exact pre-#2792 meaning. An empty id on either side skips rule 1 entirely — CI
+# and a hand-run pickup have none, and "" = "" must never mean "same session".
 claim_is_foreign() {
-  local their_host="${1:-}" their_branch="${2:-}" my_host="${3:-}" my_branch="${4:-}"
-  [ "$their_host" = "$my_host" ] && [ "$their_branch" = "$my_branch" ] && return 1
+  local their_host="${1:-}" their_branches="${2:-}" my_host="${3:-}" my_branch="${4:-}" \
+        their_session="${5:-}" my_session="${6:-}"
+
+  # 1. Same session, whatever repo or branch it is standing in.
+  if [ -n "$their_session" ] && [ -n "$my_session" ] && [ "$their_session" = "$my_session" ]; then
+    return 1
+  fi
+
+  # 2. Same host and my branch is in the claim's set.
+  [ "$their_host" = "$my_host" ] || return 0
+  local rest="$their_branches" entry
+  while [ -n "$rest" ]; do
+    case "$rest" in
+      *,*) entry="${rest%%,*}"; rest="${rest#*,}" ;;
+      *)   entry="$rest";       rest="" ;;
+    esac
+    entry="$(_ic_trim "$entry")"
+    [ -n "$entry" ] || continue
+    [ "$(_ic_entry_branch "$entry")" = "$my_branch" ] && return 1
+  done
   return 0
+}
+
+# Add my branch entry to a claim's branch cell, replacing any entry for the same
+# bare branch so a re-entry upgrades `task/x` to `owner/repo:task/x` in place
+# rather than listing it twice. Echoes the new cell.
+#
+# This is what makes the twin-sync case additive: the second repo's branch joins
+# the claim instead of overwriting it, which is the silent side effect
+# NEW_TASK_STEAL_CLAIM had (brik-llm#2792).
+claim_branch_union() {
+  local existing="${1:-}" mine="${2:-}" out="" rest="${1:-}" entry seen=0 mine_bare
+  [ -n "$mine" ] || { printf '%s' "$existing"; return 0; }
+  mine_bare="$(_ic_entry_branch "$mine")"
+  while [ -n "$rest" ]; do
+    case "$rest" in
+      *,*) entry="${rest%%,*}"; rest="${rest#*,}" ;;
+      *)   entry="$rest";       rest="" ;;
+    esac
+    entry="$(_ic_trim "$entry")"
+    [ -n "$entry" ] || continue
+    if [ "$(_ic_entry_branch "$entry")" = "$mine_bare" ]; then entry="$mine"; seen=1; fi
+    out="${out:+$out, }$entry"
+  done
+  [ "$seen" -eq 1 ] || out="${out:+$out, }$mine"
+  printf '%s' "$out"
+}
+
+# 0 = the claimant's work is demonstrably over, so the claim must not block
+# (brik-llm#2204). Pure: the signals are passed in as strings so the network half
+# can short-circuit, and so an UNKNOWN one can be stated rather than guessed.
+#
+#   issue_state : OPEN | CLOSED | unknown
+#   pr_state    : OPEN | MERGED | CLOSED | none | unknown
+#
+# Fail-CLOSED on every unknown. A probe that could not answer must leave the
+# claim standing — the expensive mistake is letting two sessions build one
+# ticket, not making one session wait out a timer.
+#
+# `none` (no PR for that branch) is deliberately not a release. It is the state
+# of every session between `new-task.sh` and `pr-task.sh` — the window #2645 was
+# lost in — and it is also what a deleted-but-never-pushed branch looks like. See
+# the header on why branch absence is not a signal in its own right.
+claim_is_released() {
+  local issue_state="${1:-unknown}" pr_state="${2:-unknown}"
+  [ "$issue_state" = "CLOSED" ] && return 0
+  case "$pr_state" in MERGED|CLOSED) return 0 ;; esac
+  return 1
 }
 
 # ── Comment digest, pure half (brik-llm#2755) ──────────────────────
@@ -362,6 +540,89 @@ _ic_find_claim() {
         2>/dev/null || true
 }
 
+# ── Lifetime probes (brik-llm#2204) ────────────────────────────────
+#
+# Every one of these runs ONLY on the refusal path — a foreign claim that the 12h
+# timer has not yet expired. The common path is untouched, so #1754's work to get
+# this lib off GraphQL and down to a single comments read still holds.
+#
+# REST throughout, never GraphQL: the fleet shares one hourly GraphQL bucket
+# (rag:github-api-quota-is-shared-across-the-fleet) and `gh pr list` spends from
+# it. `gh api repos/.../pulls` does not.
+
+# OPEN | CLOSED, or rc 1 when it could not be read.
+_ic_issue_state() {
+  local owner="${1:?}" repo="${2:?}" num="${3:?}" st
+  st="$(gh api "repos/${owner}/${repo}/issues/${num}" --jq '.state' 2>/dev/null)" || return 1
+  [ -n "$st" ] || return 1
+  printf '%s' "$st" | tr '[:lower:]' '[:upper:]'
+}
+
+# OPEN | MERGED | CLOSED | none, or rc 1 when it could not be read.
+#
+# The `?head=` query string is QUOTED and must stay that way: zsh glob-expands a
+# bare `?` in a gh api path, `no matches found` kills the first stage of a
+# pipeline, and the failure then looks like a valid empty answer.
+_ic_pr_state() {
+  local repo="${1:?}" br="${2:?}" out
+  # A second `local`, not a fourth assignment above: SC2318, same as
+  # _ic_fetch_comments' key.
+  local owner="${repo%%/*}"
+  out="$(gh api "repos/${repo}/pulls?head=${owner}:${br}&state=all" \
+    --jq '[.[] | if .merged_at then "MERGED" else (.state | ascii_upcase) end] | join(" ")' \
+    2>/dev/null)" || return 1
+  case " $out " in
+    *" OPEN "*)   printf 'OPEN' ;;
+    *" MERGED "*) printf 'MERGED' ;;
+    *" CLOSED "*) printf 'CLOSED' ;;
+    *)            printf 'none' ;;
+  esac
+}
+
+# Echo why the claim is over and return 0; silent rc 1 when it still stands.
+#
+# Issue state first: it is one call regardless of how many branches the claim
+# names, and it is the only signal that covers a ticket closed as `not planned`,
+# closed by a PR that closed rather than merged, or closed by hand.
+_ic_claim_release_reason() {
+  local owner="${1:?}" repo="${2:?}" num="${3:?}" branches="${4:-}"
+  local state=""
+  state="$(_ic_issue_state "$owner" "$repo" "$num")" || state="unknown"
+  if claim_is_released "$state" unknown; then
+    printf 'the issue is closed'
+    return 0
+  fi
+
+  # Then the PR behind every branch the claim names. ALL of them must be over —
+  # one live branch in a two-repo claim means that session is still building.
+  #
+  # Peeled with parameter expansion, not `for entry in $branches`: zsh does not
+  # word-split an unquoted expansion, so that form would treat a two-branch cell
+  # as one opaque entry. Same class as #2798, different construct.
+  local rest="$branches" entry brepo br pr n=0
+  while [ -n "$rest" ]; do
+    case "$rest" in
+      *,*) entry="${rest%%,*}"; rest="${rest#*,}" ;;
+      *)   entry="$rest";       rest="" ;;
+    esac
+    entry="$(_ic_trim "$entry")"
+    [ -n "$entry" ] || continue
+    brepo="$(_ic_entry_repo "$entry")"
+    br="$(_ic_entry_branch "$entry")"
+    # A pre-#2792 marker names no repo. Fall back to the issue's own repo, which
+    # is safe in this direction only: guessing wrong yields `none`, and `none`
+    # keeps the claim standing.
+    [ -n "$brepo" ] || brepo="${owner}/${repo}"
+    pr="$(_ic_pr_state "$brepo" "$br")" || return 1
+    claim_is_released unknown "$pr" || return 1
+    n=$(( n + 1 ))
+  done
+  [ "$n" -gt 0 ] || return 1
+
+  printf 'its PR is merged or closed'
+  return 0
+}
+
 # check_issue_claim <issue-ref> <branch> [--report]
 # --report prints and always returns 0 (for /resume, which must not abort).
 check_issue_claim() {
@@ -387,11 +648,17 @@ check_issue_claim() {
     return 0
   fi
 
-  local ident my_host my_branch
+  local ident my_host my_branch my_session my_repo my_entry
   ident="$(claim_identity "$branch")"
   my_host="${ident%%$'\t'*}"; my_branch="${ident#*$'\t'}"
+  my_session="$(claim_session_id)"
+  # Free — reads `origin` locally (#1754). Empty for a checkout with no usable
+  # remote, which just means my entry stays unqualified, exactly as before.
+  my_repo="$(_ic_repo_slug 2>/dev/null || true)"
+  my_entry="${my_repo:+${my_repo}:}${my_branch}"
 
-  local found id body parsed their_host their_branch stamp now age
+  local found id body parsed their_host their_branch their_session stamp now age
+  local mine=0 release_reason=""
   # Primed HERE, not inside the substitution below: a subshell's assignment to
   # _IC_COMMENTS_NDJSON is lost, and then report_issue_comments would pay for a
   # second read of the same endpoint. `|| true` because a missing jq is handled
@@ -405,30 +672,50 @@ check_issue_claim() {
     their_host="$(printf '%s' "$parsed" | cut -f1)"
     their_branch="$(printf '%s' "$parsed" | cut -f2)"
     stamp="$(printf '%s' "$parsed" | cut -f3)"
+    their_session="$(parse_claim_session "$body")"
     now="$(date -u +%s)"
 
     if claim_is_foreign "$their_host" "$their_branch" "$my_host" "$my_branch" \
-       && ! claim_is_stale "$stamp" "$now" "$CLAIM_STALE_SECONDS"; then
-      age=$(( now - $(claim_stamp_to_epoch "$stamp") ))
-      echo ""
-      echo -e "${_IC_RED}✗ ${owner}/${repo}#${num} is already claimed by another session.${_IC_NC}"
-      echo ""
-      echo "    Host:   ${their_host}"
-      echo "    Branch: ${their_branch}"
-      echo "    Age:    $(claim_age_human "$age")"
-      echo ""
-      echo -e "${_IC_RED}  Two sessions on one ticket is the failure this exists to stop —${_IC_NC}"
-      echo -e "${_IC_RED}  brik-llm#1485 is four collisions in 95 minutes, including two with${_IC_NC}"
-      echo -e "${_IC_RED}  no branch or PR for the overlap gate to catch.${_IC_NC}"
-      echo ""
-      echo "  Check that session first. If it is genuinely gone:"
-      echo "    NEW_TASK_STEAL_CLAIM=1 <your command>"
-      [ "$mode" = "--report" ] && return 0
-      if [ "${NEW_TASK_STEAL_CLAIM:-0}" = "1" ]; then
-        echo ""
-        echo -e "${_IC_YELLOW}⚠  NEW_TASK_STEAL_CLAIM=1 — taking the ticket anyway.${_IC_NC}"
+         "$their_session" "$my_session"; then
+      : # a rival until proven otherwise
+    else
+      mine=1
+    fi
+
+    if [ "$mine" -eq 0 ] && ! claim_is_stale "$stamp" "$now" "$CLAIM_STALE_SECONDS"; then
+      # Within the timer, so ask the three authoritative signals whether that
+      # work is actually still in flight (brik-llm#2204). Only reached here —
+      # a clear ticket, my own claim, or an already-expired one costs nothing.
+      if release_reason="$(_ic_claim_release_reason "$owner" "$repo" "$num" \
+                            "$their_branch")"; then
+        echo -e "${_IC_YELLOW}⚠  A claim by ${their_host} / ${their_branch} is no longer live — ${release_reason}.${_IC_NC}" >&2
+        echo -e "${_IC_YELLOW}   Taking the ticket; no NEW_TASK_STEAL_CLAIM needed.${_IC_NC}" >&2
       else
-        return 1
+        age=$(( now - $(claim_stamp_to_epoch "$stamp") ))
+        echo ""
+        echo -e "${_IC_RED}✗ ${owner}/${repo}#${num} is already claimed by another session.${_IC_NC}"
+        echo ""
+        echo "    Host:   ${their_host}"
+        echo "    Branch: ${their_branch}"
+        echo "    Age:    $(claim_age_human "$age")"
+        echo ""
+        echo -e "${_IC_RED}  This issue is open and its work is not merged — checked, not assumed.${_IC_NC}"
+        echo -e "${_IC_RED}  Two sessions on one ticket is the failure this exists to stop —${_IC_NC}"
+        echo -e "${_IC_RED}  brik-llm#1485 is four collisions in 95 minutes, including two with${_IC_NC}"
+        echo -e "${_IC_RED}  no branch or PR for the overlap gate to catch.${_IC_NC}"
+        echo ""
+        echo "  Check that session first. If it is genuinely gone:"
+        echo "    NEW_TASK_STEAL_CLAIM=1 <your command>"
+        [ "$mode" = "--report" ] && return 0
+        if [ "${NEW_TASK_STEAL_CLAIM:-0}" = "1" ]; then
+          echo ""
+          echo -e "${_IC_YELLOW}⚠  NEW_TASK_STEAL_CLAIM=1 — taking the ticket anyway.${_IC_NC}"
+          # Never silently: the steal replaces the branch set, and a displaced
+          # branch that is still mid-build is exactly what brik-llm#2792 lost.
+          echo -e "${_IC_YELLOW}   Displacing this claim's branches: ${their_branch}${_IC_NC}"
+        else
+          return 1
+        fi
       fi
     fi
   fi
@@ -437,15 +724,23 @@ check_issue_claim() {
 
   # Claim it. Rewrite the existing marker in place so a ticket never accretes
   # one comment per pickup.
-  local new_body
-  new_body="$(claim_marker_body "$my_host" "$my_branch" "$(date -u +%Y-%m-%dT%H:%M:%SZ)")"
+  #
+  # My own claim ADDS this branch to the set rather than replacing it, so one
+  # session working a canon lib and its twin holds one claim over two branches
+  # (brik-llm#2792). A steal or a released claim replaces, which is what those
+  # two mean.
+  local new_body new_branches="$my_entry"
+  if [ "$mine" -eq 1 ] && [ -n "${their_branch:-}" ]; then
+    new_branches="$(claim_branch_union "$their_branch" "$my_entry")"
+  fi
+  new_body="$(claim_marker_body "$my_host" "$new_branches" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$my_session")"
   if [ -n "$id" ] && [ "$id" != "$found" ]; then
     gh api -X PATCH "repos/$owner/$repo/issues/comments/$id" -f body="$new_body" >/dev/null 2>&1 \
-      && echo -e "${_IC_GREEN}✓ Claim refreshed on ${owner}/${repo}#${num} (${my_host} / ${my_branch}).${_IC_NC}" \
+      && echo -e "${_IC_GREEN}✓ Claim refreshed on ${owner}/${repo}#${num} (${my_host} / ${new_branches}).${_IC_NC}" \
       || echo -e "${_IC_YELLOW}⚠  Could not refresh the claim comment — proceeding unclaimed.${_IC_NC}" >&2
   else
     gh api -X POST "repos/$owner/$repo/issues/$num/comments" -f body="$new_body" >/dev/null 2>&1 \
-      && echo -e "${_IC_GREEN}✓ Claimed ${owner}/${repo}#${num} (${my_host} / ${my_branch}).${_IC_NC}" \
+      && echo -e "${_IC_GREEN}✓ Claimed ${owner}/${repo}#${num} (${my_host} / ${new_branches}).${_IC_NC}" \
       || echo -e "${_IC_YELLOW}⚠  Could not post the claim comment — proceeding unclaimed.${_IC_NC}" >&2
   fi
 
