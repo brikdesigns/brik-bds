@@ -49,9 +49,17 @@ permissions:
   contents: read
   issues: read       # resolve referenced issues' labels for the umbrella guard (brik-llm#1468)
 
+# `closing-keyword-guard` is a REQUIRED context on `main` since #2038, so this block may not
+# cancel. A cancelled check-run is not an absent one — protection goes on
+# reporting the context as `expected`, and a green re-run does not clear it;
+# only a new head SHA does (brik-llm#2094). `cancel-in-progress: false` alone
+# does NOT cover the PENDING run, which the default `queue: single` still
+# evicts (brik-llm#2176). The two lines are one change, and `queue: max` with
+# `cancel-in-progress: true` is a workflow validation error.
 concurrency:
   group: bump-pr-closing-keyword-guard-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  cancel-in-progress: false
+  queue: max
 
 jobs:
   closing-keyword-guard:
