@@ -166,7 +166,7 @@ Validation comes from the same source: the [Contrast Compliance](https://storybo
 
 ## Enforcing it
 
-The gate runs on pre-push (`validate:full` → `scripts/validate-all.js`), in CI on every PR (`tokens-gate.yml`, as one step of the `tokens-gate` job), at release (pre-publish), and in `pr-checklist.sh`. The CI check runs on every PR but is not yet a required status check — merge safety rests on merge-wait discipline:
+The gate runs on pre-push (`validate:full` → `scripts/validate-all.js`), in CI on every PR (`tokens-gate.yml`, as one step of the `tokens-gate` job), at release (pre-publish), and in `pr-checklist.sh`. **`tokens-gate` is a required status check on `main`** — a contrast regression cannot be merged, and no merge-wait discipline is needed (#2098):
 
 ```bash
 npm run contrast-gate          # node scripts/validate-themes.js — exits 1 below the AA floor
