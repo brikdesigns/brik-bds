@@ -1,0 +1,458 @@
+name: Tokens Gate
+
+# The `tokens-gate` required context — slice 1 of #2098's five thematic groups.
+#
+# ─── Why this file exists ────────────────────────────────────────────────────
+#
+# Seven token gates used to live in seven workflows, each with a trigger-scoped
+# `paths:` filter. That filter makes a gate PERMANENTLY INELIGIBLE to be a
+# required check, and the mechanism is vendor-documented, not inferred:
+#
+#   - A workflow skipped by `paths:` leaves its check *Pending*, and "a pull
+#     request that requires those checks to be successful will be blocked from
+#     merging".
+#     https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs
+#   - "Required status checks must have a `successful`, `skipped`, or `neutral`
+#     status before collaborators can make changes to a protected branch."
+#     https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
+#
+# So a JOB-level skip satisfies protection and a TRIGGER-level one never
+# reports. This workflow moves the diff test down a level: the `changes` job
+# below computes it once, the lint job skips on an irrelevant diff, and the
+# `tokens-gate` aggregate job always runs and always reports.
+#
+# The filters themselves were wanted — #2069/#2070 added them because brik-bds
+# is the org's Actions-runtime hot spot. The trigger was just the wrong place to
+# express them. Nothing here changes what any of the seven gates ASSERT.
+#
+# `visual.yml:105-135` + `:320-350` is the in-repo reference for this shape, and
+# `visual` is a required context today.
+#
+# Grouping decision (thematic groups, clustered by `paths:` filter, ratified by
+# the operator 2026-08-28): brikdesigns/brik-bds#2098#issuecomment-5454101540
+#
+# ─── The seven gates consolidated here ──────────────────────────────────────
+#
+#   color-ramps-check            → #1737
+#   contrast-gate                → #573 (parent #526)
+#   token-purpose-slot-check     → #1910 axis 3
+#   token-self-reference-check   → #1919
+#   token-shadow-check           → #1808
+#   tokens-studio-check          → Style Dictionary reproducibility
+#   widget-tokens-check          → inlined BrikDevBar widget tokens
+#
+# Each gate's own rationale is preserved above its step. The seven workflow
+# files are deleted in the same commit — leaving them would run every gate
+# twice.
+#
+# Issue: brikdesigns/brik-bds#2098 (parent #2038 — AC1 remainder)
+
+on:
+  # No trigger-scoped `paths:` — that is the entire point. The diff test lives
+  # in the `changes` job below.
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  # `cancel-in-progress: false` + `queue: max`, required as a pair on a required
+  # context. This is not a style choice — it is what the contract auditor's
+  # rules 6a/6b enforce, and the reason is #2094 / #2174 / #2176:
+  #
+  #   - A cancelled check-run is not an absent one. Protection goes on reporting
+  #     the context as `expected`, and a green re-run does not clear it — only a
+  #     new head SHA does.
+  #   - `cancel-in-progress: false` ALONE does not cover it. That flag governs
+  #     the RUNNING job; the default `queue: single` still lets a newer run evict
+  #     the PENDING one, leaving a check-suite with zero check-runs and the same
+  #     stuck `expected`. Measured on #2174: seven runs on one head SHA, five
+  #     cancelled. The two lines are one change.
+  #
+  # `queue: max` and `cancel-in-progress: true` are a workflow validation error
+  # together, so they always change as a pair.
+  #
+  # Cost, stated rather than discovered: a superseded PR commit now runs this
+  # gate to completion instead of being cancelled. The `changes` job keeps that
+  # affordable — an irrelevant diff instantiates zero lint jobs, so the
+  # uncancellable run is seconds.
+  group: tokens-gate-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  # ─── The job-level diff test ────────────────────────────────────────────────
+  #
+  # The UNION of all seven members' former `paths:` lists. Union, never
+  # intersection and never the group's "theme" — moving a filter down a level
+  # can silently SHRINK what a gate sees, which converts a required check into
+  # one that passes because it never ran on the relevant diff. Three members
+  # make that concrete:
+  #
+  #   - `token-purpose-slot-check` filtered on `components/**` as well as
+  #     `tokens/**`/`design-tokens/**`. `components/**` is broad and this is the
+  #     org's runtime hot spot, but dropping it would regress the gate, so it
+  #     stays.
+  #   - `contrast-gate` filtered on two `docs-site/.../primitives/*.mdx` files;
+  #     `token-purpose-slot-check` on a third. All three are listed exactly,
+  #     not widened to `primitives/**`, to keep the trigger cheap.
+  #   - `widget-tokens-check`'s `components/ui/BrikDevBar/widgets/**/*.js` is
+  #     subsumed by `components/**`.
+  #
+  # FIXED PRE-EXISTING GAP: `contrast-gate.yml`'s trigger listed
+  # `scripts/validate-themes.js` and `scripts/validate-all.js` but NOT
+  # `lint-theme-divergence.mjs`, `lint-brand-text-size.js`, or
+  # `lint-disabled-fade.mjs` — three scripts it actually executes. Editing
+  # `lint-disabled-fade.mjs` did not trigger its own gate. Likewise
+  # `tokens-studio-check.yml` omitted `flatten-tokens-studio.js` and
+  # `sd.config.tokens-studio.mjs`, both of which `build:sd-figma` runs. All five
+  # are in the list below. This is trigger plumbing, not a change to what any
+  # gate asserts.
+  changes:
+    name: classify diff
+    runs-on: ubuntu-latest
+    outputs:
+      # 'true' to run the lints, 'false' to skip them.
+      run: ${{ steps.classify.outputs.run }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          # Need the base commit present to diff against it.
+          fetch-depth: 0
+
+      - name: Classify the diff
+        id: classify
+        env:
+          # On a PR these are the tips of base and head; empty on push.
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          # push to main always runs the full gate — a post-merge run is not a
+          # place to guess. Same precedent as visual.yml's classifier.
+          if [ -z "$BASE_SHA" ]; then
+            echo "event=${{ github.event_name }} → full tokens gate"
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # git's pathspec globbing does the matching, so the list below reads
+          # the same way the seven `paths:` blocks did.
+          #
+          # `git diff --name-only` exits 0 whether or not it printed anything,
+          # so emptiness and failure are distinguishable here — unlike a
+          # `git diff | grep` pipeline, where pipefail returns grep's status and
+          # grep exits 1 on "no match", making a genuine diff failure look like
+          # an inert diff (the #2713 trap). Fail CLOSED on a git error: the
+          # aggregate job treats a non-success classify as a block, never as a
+          # skip.
+          if ! CHANGED="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- \
+            'tokens/**' \
+            'design-tokens/**' \
+            'components/**' \
+            'docs-site/content/docs/primitives/color-pairings.mdx' \
+            'docs-site/content/docs/primitives/token-anatomy.mdx' \
+            'sd.config.tokens-studio.mjs' \
+            'scripts/build-dist-tokens.js' \
+            'scripts/flatten-tokens-studio.js' \
+            'scripts/generate-color-ramps.mjs' \
+            'scripts/gen-widget-tokens.mjs' \
+            'scripts/lib/oklch.mjs' \
+            'scripts/lint-brand-text-size.js' \
+            'scripts/lint-disabled-fade.mjs' \
+            'scripts/lint-theme-divergence.mjs' \
+            'scripts/lint-token-purpose-slots.mjs' \
+            'scripts/lint-token-self-reference.mjs' \
+            'scripts/lint-token-shadowing.mjs' \
+            'scripts/lint-tokens.js' \
+            'scripts/merge-tokens-studio.js' \
+            'scripts/validate-all.js' \
+            'scripts/validate-themes.js' \
+            'scripts/__tests__/generate-color-ramps.test.mjs' \
+            'scripts/__tests__/lint-token-purpose-slots.test.mjs' \
+            'scripts/__tests__/lint-token-self-reference.test.mjs' \
+            'scripts/__tests__/lint-token-shadowing.test.mjs' \
+            'scripts/__tests__/lint-tokens-deprecated.test.mjs' \
+            '.github/workflows/tokens-gate.yml')"; then
+            echo "✗ git diff failed for $BASE_SHA..$HEAD_SHA — cannot classify; failing closed."
+            exit 1
+          fi
+
+          if [ -z "$CHANGED" ]; then
+            echo "diff touches no token-gate input → skipping the lints"
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "diff touches token-gate inputs → running the lints:"
+            printf '%s\n' "$CHANGED" | sed 's/^/    /'
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ─── The seven gates, one runner ────────────────────────────────────────────
+  #
+  # Deliberately ONE job with sequential steps rather than seven jobs. Jobs in a
+  # workflow do not share a runner, so seven jobs would still pay seven
+  # checkouts and seven `npm ci` — the repeated install is most of the 330s this
+  # group used to cost, and consolidating is the whole runtime argument for
+  # thematic grouping over per-gate shims (#2098).
+  #
+  # Every lint step carries `if: always()` so ONE failure does not hide the
+  # other six. A step that runs under `always()` and exits non-zero still fails
+  # the job, so the aggregate below stays correct.
+  #
+  # Verified locally on `main@e51dde83` before this workflow was written: all
+  # thirteen commands below exit 0 and NONE leaves the git tree dirty. That last
+  # part matters — `tokens-studio-check`'s assertion IS "the tree is clean after
+  # regenerating", which is not composable with a step that writes a tracked
+  # file. `build:dist-tokens` only writes `dist/`, which is gitignored
+  # (.gitignore:10); `build:sd-figma` writes tracked `build/figma/**` and
+  # asserts clean immediately, so it runs first.
+  #
+  # This job is deliberately NOT named `tokens-gate` — the aggregate job below
+  # carries that name so the branch-protection context stays stable no matter
+  # how the work above is reshaped.
+  lints:
+    name: token lints
+    runs-on: ubuntu-latest
+    needs: changes
+    permissions:
+      contents: read
+    # The `success()` half matters: an explicit `if` REPLACES the implicit
+    # needs-succeeded gate, so without it a FAILED `changes` job (outputs.run
+    # == '') would still satisfy `!= 'false'` and run the lints against an
+    # unclassified diff. Gating on success() skips cleanly instead; the
+    # aggregate job then fails closed on the non-success.
+    if: needs.changes.result == 'success' && needs.changes.outputs.run == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        id: install
+        run: npm ci
+
+      # ─── tokens-studio-check ────────────────────────────────────────────────
+      #
+      # Two assertions. First: tokens-studio.json is reproducible from its
+      # Libraries. Second, and why it cannot be dropped: the per-platform files
+      # under build/figma/ are COMMITTED, and they are what consumers and
+      # tokens/figma-tokens.css are copied from — so a reproducible merge is not
+      # enough on its own. Regenerate and require a clean tree.
+      #
+      # Runs FIRST because it is the only step here that writes a tracked file.
+      - name: Check tokens-studio.json is reproducible from its Libraries
+        if: always() && steps.install.outcome == 'success'
+        run: npm run merge:tokens-studio:check
+
+      - name: Check the Style Dictionary outputs match that merge
+        if: always() && steps.install.outcome == 'success'
+        run: |
+          npm run build:sd-figma
+          if ! git diff --quiet; then
+            echo "✗ Style Dictionary outputs are stale. Run:"
+            echo "    npm run merge:tokens-studio && npm run build:sd-figma"
+            git --no-pager diff --stat
+            exit 1
+          fi
+          echo "✓ Style Dictionary outputs match the committed sources."
+
+      # `dist/` is gitignored, so the two gates that read the built registry
+      # have nothing to read until it exists. Cheap concatenation, not the full
+      # `build:lib` — the same path canonical-check.yml uses.
+      - name: Build dist tokens
+        id: dist
+        if: always() && steps.install.outcome == 'success'
+        run: npm run build:dist-tokens
+
+      # ─── color-ramps-check (#1737) ──────────────────────────────────────────
+      #
+      # Keeps design-tokens/color-ramps.generated.json in sync with the Brand
+      # Kit anchors. The generated ramps feed the Figma sync (#1738), the alias
+      # layer (#1739) and the consumer migration (#1740), and NOTHING in the
+      # token build pipeline reads the file yet — so a stale or hand-edited copy
+      # fails no other check while silently feeding a superseded brand value
+      # into all three.
+      - name: Check generated color ramps are in sync
+        if: always() && steps.install.outcome == 'success'
+        run: npm run gen:color-ramps:check
+
+      # ─── contrast-gate (#573, parent #526) ──────────────────────────────────
+      #
+      # Resolves every pairing in tokens/contrast-pairings.json against its
+      # foreground + background token in the Brik LIGHT and DARK default themes
+      # and fails below its WCAG threshold (AAA 7:1 / AA 4.5:1 / AA-large 3:1).
+      # Tracked `darkException` pairings are reported, not failed.
+      #
+      # Reads committed source tokens directly — no dist build required (unlike
+      # canonical-check, which parses dist/).
+      #
+      # validate-themes.js already runs on local pre-push and at release;
+      # neither stops a regression from MERGING, cloud-agent commits bypass
+      # local hooks, and fork PRs may not have husky. This is what surfaces an
+      # AA regression on every PR — the gap that let #563 merge and ship (10
+      # service pairings, 1 passing AA).
+      - name: Contrast pairing gate
+        if: always() && steps.install.outcome == 'success'
+        run: npm run contrast-gate
+
+      # The published matrix in primitives/color-pairings.mdx must match the
+      # generator (measured ratios included) so it cannot drift as tokens change.
+      - name: Contrast matrix drift check
+        if: always() && steps.install.outcome == 'success'
+        run: npm run contrast-matrix:check
+
+      # Every Brand Kit override of a generated token must say why. Without
+      # this, a typo and a brand decision look identical in the diff — which is
+      # how --background-inverse shipped pinned to --text-inverse's own value
+      # and rendered two components at 1.00:1 for four months (#1686, found only
+      # because someone measured dark mode by hand). (#1689)
+      - name: Theme divergence lint
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-theme-divergence
+
+      # ADR-015 brand-text rule: --text-brand-primary (3.78:1) never on small
+      # body copy. Advisory in the pairing gate (which scores pairings, not
+      # sizes) — asserted here (#1064 AC1).
+      - name: Brand-text usage lint
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-brand-text
+
+      # ADR-028's disabled mechanisms: every disabled-scoped rule reads
+      # var(--state-disabled-opacity) or the --*-disabled trio. The pairing gate
+      # scores the token's VALUE (via the `alpha` field #1687 added); nothing
+      # scored whether components still READ it, and the visual gate cannot —
+      # ADR-010 Q2 makes `disabled` an argTypes control, so 27 of the 28
+      # disabled states have no baseline to move (#1697).
+      - name: Disabled-treatment lint
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-disabled-fade
+
+      # ─── token-purpose-slot-check (#1910 axis 3) ────────────────────────────
+      #
+      # Fails when a purpose slot ships in dist/tokens.css that is neither
+      # registered in the gate nor named in docs/primitives/token-anatomy.
+      # token-anatomy documented ONE formula — the colour intent form — while
+      # 325 of 701 shipping names sit outside it (--font-size-100, --gap-md,
+      # --ease-spring). The verdict is now written down (§ Non-color anatomy);
+      # this is what stops it rotting back.
+      #
+      # NOT #1910 AC#5's naming gate, which rejects a name whose SEGMENTS fall
+      # outside the ADR. This answers the narrower already-decided question:
+      # does the doc still name every slot that ships?
+      - name: Token purpose slot check
+        if: always() && steps.dist.outcome == 'success'
+        run: npm run lint-token-purpose-slots -- --census
+
+      # ─── token-self-reference-check (#1919) ─────────────────────────────────
+      #
+      # Fails when a custom property in tokens/*.css substitutes itself
+      # (--x: var(--x)), directly or through a cycle. A cycle is invalid at
+      # computed-value time (CSS Custom Properties §3.2), so the name resolves
+      # to the guaranteed-invalid value — it is UNSET, and an earlier correct
+      # declaration does NOT come back.
+      #
+      # Why nothing caught it: tokens/bridge.css carried fifteen. It ships as
+      # @brikdesigns/bds/bridge.css and is NOT concatenated into dist/tokens.css,
+      # so Token Shadow Check never reads it. Verified in Chromium against the
+      # real dist files.
+      - name: Token self-reference check
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-token-self-reference
+
+      # ─── token-shadow-check (#1808) ─────────────────────────────────────────
+      #
+      # Fails when a token is declared twice in the same scope of dist/tokens.css
+      # with different values, so the earlier declaration is dead. dist/tokens.css
+      # is eight source files concatenated (build-dist-tokens.js:7), several
+      # declaring :root — every source file is correct in isolation and the
+      # shadow exists only in the concatenation, which nothing else reads.
+      # Eleven tokens were shadowed when this gate landed, including
+      # --text-disabled, whose dead declaration carries a doc comment describing
+      # behaviour it never produced.
+      #
+      # A shadow is allowed only with a disposition (`bds-lint-ignore — <reason>`
+      # on the winning declaration, or a SHADOW_BACKLOG entry naming an issue);
+      # a bare one hard-fails. Class-5 rule, per #1468.
+      - name: Token shadow check
+        if: always() && steps.dist.outcome == 'success'
+        run: npm run lint-token-shadowing
+
+      # ─── widget-tokens-check ────────────────────────────────────────────────
+      #
+      # The BrikDevBar widgets inline their token values; this keeps the inlined
+      # copies in sync with tokens/figma-tokens.css.
+      - name: Check inlined widget tokens are in sync
+        if: always() && steps.install.outcome == 'success'
+        run: npm run gen:widget-tokens:check
+
+      # ─── The gates' own proofs ──────────────────────────────────────────────
+      #
+      # `assertions-must-be-proven-to-fail`: these suites plant the exact defect
+      # each gate exists to catch and require a non-zero exit, so a gate that
+      # silently stops detecting anything fails HERE rather than going quietly
+      # green. lint-token-self-reference's set includes the exact #1919 shape —
+      # good value upstream, poisoned by a later re-declaration.
+      #
+      # One vitest invocation for all five suites instead of five (161 tests,
+      # ~0.9s locally) — five separate `npx vitest run` calls each paid their own
+      # startup.
+      - name: Gate self-tests (prove the gates fail)
+        if: always() && steps.install.outcome == 'success'
+        run: |
+          npx vitest run \
+            scripts/__tests__/generate-color-ramps.test.mjs \
+            scripts/__tests__/lint-tokens-deprecated.test.mjs \
+            scripts/__tests__/lint-token-purpose-slots.test.mjs \
+            scripts/__tests__/lint-token-self-reference.test.mjs \
+            scripts/__tests__/lint-token-shadowing.test.mjs
+
+  # ─── The branch-protection check ────────────────────────────────────────────
+  #
+  # Keeps the name `tokens-gate` stable while the work above fans out, and fails
+  # if the lints failed — `needs` alone would let a skipped or failed `lints`
+  # job pass this one, so both results are asserted explicitly.
+  #
+  # This job ALWAYS runs and ALWAYS reports, on every PR. That is the whole
+  # property that makes `tokens-gate` a valid required context: when the diff
+  # touched no token input the lints did not run, and the required check still
+  # has to report, so it reports green.
+  tokens-gate:
+    name: tokens-gate
+    runs-on: ubuntu-latest
+    needs: [changes, lints]
+    if: always()
+    steps:
+      - name: Assert the tokens gate
+        run: |
+          echo "classify result:  ${{ needs.changes.result }}"
+          echo "lints requested:  ${{ needs.changes.outputs.run }}"
+          echo "lints result:     ${{ needs.lints.result }}"
+
+          if [ "${{ needs.changes.result }}" != "success" ]; then
+            echo "✗ the classify-diff job did not succeed — failing the gate closed rather"
+            echo "  than guessing whether the lints should have run."
+            exit 1
+          fi
+
+          if [ "${{ needs.changes.outputs.run }}" != "true" ]; then
+            echo "✓ diff touched no token-gate input — gate not applicable, reporting green."
+            exit 0
+          fi
+
+          if [ "${{ needs.lints.result }}" != "success" ]; then
+            echo "✗ the token lints did not pass. Every lint step runs under"
+            echo "  \`if: always()\`, so the job log lists EVERY failing gate, not just"
+            echo "  the first — read all of them before pushing a fix."
+            exit 1
+          fi
+
+          echo "✓ all seven token gates passed."
