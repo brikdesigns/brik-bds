@@ -36,7 +36,7 @@
  * Because the Storybook ID set comes from `storybook-static/index.json`, that
  * build artifact must exist. The pre-push suite (scripts/validate-all.js) runs
  * the Storybook build immediately before this check; the CI workflow
- * (.github/workflows/doc-links-check.yml) does the same. If the index is
+ * (.github/workflows/docs-gate.yml, the `doc links` job) does the same. If the index is
  * absent the check exits non-zero with an actionable message rather than
  * silently skipping Storybook validation.
  *

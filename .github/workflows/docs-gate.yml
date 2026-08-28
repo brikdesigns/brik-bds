@@ -1,0 +1,435 @@
+name: Docs Gate
+
+# The `docs-gate` required context — slice 2 of #2098's five thematic groups.
+#
+# ─── Why this file exists ────────────────────────────────────────────────────
+#
+# Nine documentation gates used to live in nine workflows, each with a
+# trigger-scoped `paths:` filter. That filter makes a gate PERMANENTLY
+# INELIGIBLE to be a required check, and the mechanism is vendor-documented:
+#
+#   - A workflow skipped by `paths:` leaves its check *Pending*, and "a pull
+#     request that requires those checks to be successful will be blocked from
+#     merging".
+#     https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs
+#   - "Required status checks must have a `successful`, `skipped`, or `neutral`
+#     status before collaborators can make changes to a protected branch."
+#     https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
+#
+# So a JOB-level skip satisfies protection and a TRIGGER-level one does not.
+# `tokens-gate.yml` (#2098 slice 1) is the in-repo template; `visual.yml` is the
+# original. Nothing here changes what any of the nine gates ASSERT.
+#
+# Grouping decision (thematic groups, ratified by the operator 2026-08-28):
+# brikdesigns/brik-bds#2098#issuecomment-5454101540
+#
+# ─── The nine gates consolidated here ───────────────────────────────────────
+#
+#   Cheap lints, one shared runner (the `lints` job):
+#     bcs-vocab-check            token-cascade-vocab-check
+#     mdx-coverage-check         mdx-deprecation-check
+#     mdx-heading-check          mdx-token-check
+#     component-props-check
+#
+#   Heavyweight, own runner + own sub-diff-test:
+#     doc-links-check     → needs `build-storybook` for the story-ID index
+#     docs-site-build     → needs `build:lib` + a second `npm ci` in docs-site/
+#
+# ─── Why THREE work jobs, where tokens-gate needed one ──────────────────────
+#
+# This is the one place slice 2 deliberately diverges from slice 1's template,
+# and the reason is cost, measured rather than assumed. tokens-gate's seven
+# members were all cheap lints reading the same tree, so one runner was strictly
+# better. Here two members are not:
+#
+#   build-storybook   13s      (doc-links-check needs storybook-static/index.json)
+#   build:lib          4s      (docs-site prebuild's ensure-bds-dist.mjs)
+#   docs-site build   16s      + a cold `npm ci` against docs-site's own lockfile
+#   the 7 cheap lints  ~2s     combined
+#
+# Timed locally on main@54ff687e. Folding all nine into one job would make a
+# `tokens/**`-only change — which `mdx-token-check` watches — pay a full
+# docs-site build and a Storybook build. `docs-site-build.yml`'s trigger was
+# `docs-site/**` ALONE, so that would be a straight cost regression in the
+# repo that is the org's Actions-runtime hot spot (#2069), which is the opposite
+# of what grouping is for.
+#
+# Three jobs also run the two heavy members in PARALLEL (13s ‖ 16s) instead of
+# serially, and each keeps its members' EXACT former paths rather than a union —
+# strictly better fidelity than one shared job, not worse. The union rule in
+# `required-checks.json` § _why exists to stop a group's diff test seeing LESS
+# than its members' triggers did; per-member sub-tests satisfy it exactly.
+#
+# Issue: brikdesigns/brik-bds#2098 (parent #2038 — AC1 remainder)
+
+on:
+  # No trigger-scoped `paths:` — that is the entire point. The diff tests live
+  # in the `changes` job below.
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  # `cancel-in-progress: false` + `queue: max`, required as a pair on a required
+  # context — auditor rules 6a/6b. All nine members shipped
+  # `cancel-in-progress: true`, which is the #2094 / #2174 / #2176 failure:
+  #
+  #   - A cancelled check-run is not an absent one. Protection goes on reporting
+  #     the context as `expected`, and a green re-run does not clear it — only a
+  #     new head SHA does.
+  #   - `cancel-in-progress: false` ALONE does not cover it. That flag governs
+  #     the RUNNING job; the default `queue: single` still lets a newer run evict
+  #     the PENDING one, leaving a check-suite with zero check-runs and the same
+  #     stuck `expected`. Measured on #2174: seven runs on one head SHA, five
+  #     cancelled.
+  #
+  # `queue: max` and `cancel-in-progress: true` are a workflow validation error
+  # together, so they always change as a pair.
+  group: docs-gate-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  # ─── The job-level diff tests ───────────────────────────────────────────────
+  #
+  # Three outputs, one per work job, each the exact union of only ITS members'
+  # former `paths:` lists. Widening any of them is a cost regression; narrowing
+  # any of them is the silent-pass bug the union rule exists to prevent.
+  changes:
+    # Group-qualified display name: `visual.yml` and `tokens-gate.yml` both have
+    # a classifier, and with #2098's remaining groups there would be several
+    # indistinguishable rows in the PR checks list.
+    name: classify diff (docs)
+    runs-on: ubuntu-latest
+    outputs:
+      lints: ${{ steps.classify.outputs.lints }}
+      doclinks: ${{ steps.classify.outputs.doclinks }}
+      docssite: ${{ steps.classify.outputs.docssite }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          # Need the base commit present to diff against it.
+          fetch-depth: 0
+
+      - name: Classify the diff
+        id: classify
+        env:
+          # On a PR these are the tips of base and head; empty on push.
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          # push to main runs everything — a post-merge run is not a place to
+          # guess. Same precedent as visual.yml and tokens-gate.yml.
+          if [ -z "$BASE_SHA" ]; then
+            echo "event=${{ github.event_name }} → full docs gate"
+            {
+              echo "lints=true"
+              echo "doclinks=true"
+              echo "docssite=true"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # `git diff --name-only` exits 0 whether or not it printed anything,
+          # so emptiness and failure stay distinguishable — unlike a
+          # `git diff | grep` pipeline, where pipefail returns grep's status and
+          # grep exits 1 on "no match", making a genuine diff failure look like
+          # an inert diff (the #2713 trap). Fail CLOSED on a git error; the
+          # aggregate job treats a non-success classify as a block.
+          diff_matches() {
+            local out
+            if ! out="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- "$@")"; then
+              echo "✗ git diff failed for $BASE_SHA..$HEAD_SHA — cannot classify; failing closed." >&2
+              return 2
+            fi
+            printf '%s' "$out"
+          }
+
+          # bcs-vocab, token-cascade-vocab, mdx-coverage, mdx-deprecation,
+          # mdx-heading, mdx-token, component-props.
+          LINTS="$(diff_matches \
+            'docs-site/content/docs/**' \
+            'content-system/vocabularies/**' \
+            'content-system/blueprints/vocabularies.ts' \
+            'components/ui/**' \
+            'tokens/**' \
+            'build/figma/css/**' \
+            'tsconfig.json' \
+            'package.json' \
+            'scripts/bcs-vocab-check.mjs' \
+            'scripts/token-cascade-vocab-check.mjs' \
+            'scripts/lint-mdx-coverage.mjs' \
+            'scripts/lint-mdx-deprecations.mjs' \
+            'scripts/lint-mdx-headings.mjs' \
+            'scripts/lint-mdx-tokens.mjs' \
+            'scripts/lint-component-props.mjs' \
+            'scripts/build-dist-tokens.js' \
+            '.github/workflows/docs-gate.yml')"
+
+          # doc-links-check's own former list, verbatim.
+          DOCLINKS="$(diff_matches \
+            'docs-site/content/docs/**' \
+            'components/ui/**' \
+            '.storybook/**' \
+            'package.json' \
+            'scripts/lint-doc-links.js' \
+            '.github/workflows/docs-gate.yml')"
+
+          # docs-site-build's own former list was `docs-site/**` ALONE. Preserved
+          # deliberately and NOT widened to the BDS source its prebuild consumes
+          # — widening would put a full Next build on every component PR. That is
+          # the pre-existing trigger's choice, carried forward unchanged rather
+          # than quietly revised inside a plumbing PR.
+          DOCSSITE="$(diff_matches \
+            'docs-site/**' \
+            '.github/workflows/docs-gate.yml')"
+
+          emit() {
+            if [ -z "$2" ]; then
+              echo "  $1: no matching change → skip"
+              echo "$1=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "  $1: matched →"
+              printf '%s\n' "$2" | sed 's/^/      /'
+              echo "$1=true" >> "$GITHUB_OUTPUT"
+            fi
+          }
+          emit lints "$LINTS"
+          emit doclinks "$DOCLINKS"
+          emit docssite "$DOCSSITE"
+
+  # ─── The seven cheap lints, one runner ──────────────────────────────────────
+  #
+  # Sequential steps, not seven jobs: jobs do not share a runner, so seven jobs
+  # would pay seven checkouts and seven `npm ci` for ~2s of actual work.
+  #
+  # Every step runs `if: always()` so ONE failure does not hide the other six,
+  # gated on `steps.install.outcome` so a failed `npm ci` does not produce eight
+  # misleading reds. Verified locally on main@54ff687e: all eight commands exit
+  # 0 and none leaves the git tree dirty.
+  lints:
+    name: docs lints
+    runs-on: ubuntu-latest
+    needs: changes
+    permissions:
+      contents: read
+    # The `success()` half matters: an explicit `if` REPLACES the implicit
+    # needs-succeeded gate, so without it a FAILED classify (output == '') would
+    # still satisfy `!= 'false'`. Gating on success() skips cleanly instead; the
+    # aggregate job then fails closed on the non-success.
+    if: needs.changes.result == 'success' && needs.changes.outputs.lints == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        id: install
+        run: npm ci
+
+      # dist/tokens.css is gitignored, so mdx-token-check has nothing to read
+      # until the registry is built. The checker self-builds it too; doing it
+      # explicitly keeps the failure mode obvious in the CI log.
+      - name: Build token registry
+        id: dist
+        if: always() && steps.install.outcome == 'success'
+        run: npm run build:dist-tokens
+
+      # ─── bcs-vocab-check ────────────────────────────────────────────────────
+      # The Brik Content System vocabulary is a peer to the token system; this
+      # keeps the docs and the shipped vocabularies from diverging.
+      - name: BCS vocabulary check
+        if: always() && steps.install.outcome == 'success'
+        run: npm run bcs-vocab-check
+
+      # ─── token-cascade-vocab-check ──────────────────────────────────────────
+      # The six locked token concepts (Anatomy / Tier / Library / Layer / Mode /
+      # Tenet) must keep meaning the same thing across every docs page.
+      - name: Token cascade vocabulary check
+        if: always() && steps.install.outcome == 'success'
+        run: npm run token-cascade-vocab-check
+
+      # ─── mdx-coverage-check ─────────────────────────────────────────────────
+      # Every component under components/ui/** has an MDX page. Catches a new
+      # component shipped with no docs.
+      - name: Check MDX coverage
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-mdx-coverage
+
+      # ─── mdx-deprecation-check ──────────────────────────────────────────────
+      # A deprecated component must carry its deprecation callout, so the docs
+      # cannot recommend something already on the way out.
+      - name: Check deprecation callouts
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-mdx-deprecations
+
+      # ─── mdx-heading-check ──────────────────────────────────────────────────
+      # Heading copy discipline per the storybook-mdx-recipe / ADR-007 shape.
+      - name: Check MDX heading copy
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-mdx-headings
+
+      # ─── mdx-token-check ────────────────────────────────────────────────────
+      # Every --token named in an MDX page must exist in the built registry.
+      # This is the gate that stops the docs documenting a phantom token, so it
+      # reads dist/, hence the build step above.
+      - name: Check MDX token names
+        if: always() && steps.dist.outcome == 'success'
+        run: npm run lint-mdx-tokens
+
+      # ─── component-props-check ──────────────────────────────────────────────
+      # The published prop tables must match the components' actual TS types.
+      - name: Check component prop tables
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-component-props
+
+  # ─── doc-links-check — own runner, needs the Storybook index ────────────────
+  #
+  # The storybook-link class validates story IDs against the build's own index
+  # (storybook-static/index.json) — the authoritative ID set, so no
+  # reimplementation of Storybook's toId derivation. The other three link
+  # classes (doc pages, anchors, ComponentLinks) do not need it, but they ship
+  # in the same checker.
+  #
+  # Separate from `lints` because `build-storybook` is 13s that the seven cheap
+  # lints should not pay, and because its former trigger included `.storybook/**`
+  # which theirs did not.
+  doclinks:
+    name: doc links
+    runs-on: ubuntu-latest
+    needs: changes
+    permissions:
+      contents: read
+    if: needs.changes.result == 'success' && needs.changes.outputs.doclinks == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Storybook (story-ID index)
+        run: npm run build-storybook
+
+      - name: Check doc links + anchors
+        run: npm run lint-doc-links
+
+  # ─── docs-site-build — own runner, second lockfile ──────────────────────────
+  #
+  # BDS lib must be built before the docs-site prebuild runs
+  # (ensure-bds-dist.mjs checks for dist/content-system/index.js). Building it
+  # here avoids a redundant check + subprocess spawn inside the prebuild hook.
+  #
+  # docs-site has its OWN lockfile, so this job pays a second cold `npm ci`.
+  # That is the single most expensive thing in this group and the main reason it
+  # keeps `docs-site/**`-only gating.
+  docssite:
+    name: docs-site build
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.result == 'success' && needs.changes.outputs.docssite == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install BDS root dependencies
+        run: npm ci
+
+      - name: Build BDS lib
+        run: npm run build:lib
+
+      - name: Install docs-site dependencies
+        working-directory: docs-site
+        run: npm ci
+
+      - name: Build docs-site
+        working-directory: docs-site
+        run: npm run build
+
+  # ─── The branch-protection check ────────────────────────────────────────────
+  #
+  # Keeps the name `docs-gate` stable while the work above fans out, and fails
+  # if any work job failed — `needs` alone would let a skipped or failed job
+  # pass this one, so each result is asserted explicitly against what the
+  # classifier actually requested.
+  #
+  # This job ALWAYS runs and ALWAYS reports, on every PR. That is the whole
+  # property that makes `docs-gate` a valid required context: when the diff
+  # touched nothing relevant the work jobs did not run, and the required check
+  # still has to report, so it reports green.
+  docs-gate:
+    name: docs-gate
+    runs-on: ubuntu-latest
+    needs: [changes, lints, doclinks, docssite]
+    if: always()
+    steps:
+      - name: Assert the docs gate
+        run: |
+          set -euo pipefail
+          echo "classify result:   ${{ needs.changes.result }}"
+          echo "lints:      requested=${{ needs.changes.outputs.lints }}     result=${{ needs.lints.result }}"
+          echo "doc-links:  requested=${{ needs.changes.outputs.doclinks }}  result=${{ needs.doclinks.result }}"
+          echo "docs-site:  requested=${{ needs.changes.outputs.docssite }}  result=${{ needs.docssite.result }}"
+
+          if [ "${{ needs.changes.result }}" != "success" ]; then
+            echo "✗ the classify-diff job did not succeed — failing the gate closed rather"
+            echo "  than guessing which work jobs should have run."
+            exit 1
+          fi
+
+          FAILED=0
+
+          # A work job that was REQUESTED must have succeeded. A work job that
+          # was NOT requested is legitimately absent, and its `result` is
+          # 'skipped' — that is the job-level skip protection accepts.
+          assert() {
+            local label="$1" requested="$2" result="$3"
+            if [ "$requested" != "true" ]; then
+              echo "  ✓ $label — not applicable to this diff"
+              return 0
+            fi
+            if [ "$result" != "success" ]; then
+              echo "  ✗ $label — ran and did not pass"
+              FAILED=1
+              return 0
+            fi
+            echo "  ✓ $label — passed"
+          }
+
+          assert "docs lints"      "${{ needs.changes.outputs.lints }}"    "${{ needs.lints.result }}"
+          assert "doc links"       "${{ needs.changes.outputs.doclinks }}" "${{ needs.doclinks.result }}"
+          assert "docs-site build" "${{ needs.changes.outputs.docssite }}" "${{ needs.docssite.result }}"
+
+          if [ "$FAILED" -ne 0 ]; then
+            echo ""
+            echo "✗ the docs gate failed. Every lint in the \`docs lints\` job runs under"
+            echo "  \`if: always()\`, so its log lists EVERY failing lint, not just the"
+            echo "  first — read all of them before pushing a fix."
+            exit 1
+          fi
+
+          echo ""
+          echo "✓ docs gate satisfied."
