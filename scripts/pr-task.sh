@@ -428,8 +428,8 @@ check_pr_path_overlap "$BASE_BRANCH" "$BRANCH"
 
 # ── Push if needed ──
 # SC1083: `@{u}` is git's upstream shorthand, not a brace expansion. Annotated
-# rather than rewritten because issue-link-resolver-check.yml shellchecks this
-# file at --severity=warning (#1882).
+# rather than rewritten because contracts-gate.yml shellchecks this file at
+# --severity=warning, in both its issue-link and pr-label blocks (#1882).
 # shellcheck disable=SC1083
 UPSTREAM=$(git rev-parse --abbrev-ref --symbolic-full-name @{u} 2>/dev/null || echo "")
 EXPECTED_UPSTREAM="origin/${BRANCH}"
