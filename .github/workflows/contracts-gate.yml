@@ -1,0 +1,466 @@
+name: Contracts Gate
+
+# The `contracts-gate` required context — slice 3 of #2098's five thematic
+# groups.
+#
+# ─── Why this file exists ────────────────────────────────────────────────────
+#
+# Twelve script-contract gates used to live in twelve workflows, each with a
+# trigger-scoped `paths:` filter. That filter makes a gate PERMANENTLY
+# INELIGIBLE to be a required check, and the mechanism is vendor-documented:
+#
+#   - A workflow skipped by `paths:` leaves its check *Pending*, and "a pull
+#     request that requires those checks to be successful will be blocked from
+#     merging".
+#     https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs
+#   - "Required status checks must have a `successful`, `skipped`, or `neutral`
+#     status before collaborators can make changes to a protected branch."
+#     https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
+#
+# So a JOB-level skip satisfies protection and a TRIGGER-level one does not.
+# Nothing here changes what any of the twelve gates ASSERT.
+#
+# Grouping decision (thematic groups, ratified by the operator 2026-08-28):
+# brikdesigns/brik-bds#2098#issuecomment-5454101540
+#
+# ─── ONE work job, the tokens-gate shape ────────────────────────────────────
+#
+# This group is COST-UNIFORM — every member is a fast bash suite plus a
+# shellcheck pass, so `required-checks.json` § _why's rule of thumb says one
+# shared job. (docs-gate needed three because two of its members carried a
+# Storybook build and a second cold `npm ci`; nothing here does.)
+#
+# The single biggest win is `shellcheck`. NINE of the twelve each ran
+# `sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck` in their
+# own runner. That is nine apt-get updates for one binary. Here it happens once.
+#
+# It is installed rather than assumed even though ubuntu-latest ships shellcheck
+# preinstalled (session-budget-contract.yml relied on exactly that and has been
+# green). The nine that installed it were tuned against the NEWER apt build —
+# gh-error-classify-check's own comment names "newer builds than the local
+# 0.11.0" as the reason for two of its exclusions — so dropping the install
+# would silently change which findings those nine see. One behaviour delta is
+# accepted and stated: session-budget-contract's three shellcheck invocations
+# now run against the apt build instead of the preinstalled one.
+#
+# ─── The twelve gates consolidated here ─────────────────────────────────────
+#
+#   bump-pr-guard-check        gh-error-classify-check    identity-guard-check
+#   issue-link-resolver-check  mirror-widgets-check       new-task-flag-order-check
+#   pr-label-resolver-check    pr-path-overlap-check      session-budget-contract
+#   shell-syntax-check         worktree-sweep-contract    standards-rag-drift-check
+#
+# Issue: brikdesigns/brik-bds#2098 (parent #2038 — AC1 remainder)
+
+on:
+  # No trigger-scoped `paths:` — that is the entire point. The diff test lives
+  # in the `changes` job below.
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  # `cancel-in-progress: false` + `queue: max`, required as a pair on a required
+  # context — auditor rules 6a/6b. A cancelled check-run is not an absent one:
+  # protection goes on reporting the context as `expected`, and only a new head
+  # SHA clears it. `cancel-in-progress: false` alone does NOT cover it, because
+  # the default `queue: single` still lets a newer run evict the PENDING one
+  # (#2094 / #2174 / #2176). The two lines are one change, and `queue: max` with
+  # `cancel-in-progress: true` is a workflow validation error.
+  group: contracts-gate-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  # ─── The job-level diff test ────────────────────────────────────────────────
+  #
+  # The UNION of all twelve members' former `paths:` lists. Union, never the
+  # group's theme — a job-level filter that sees less than the trigger did turns
+  # a required check into one that passes because it never ran.
+  #
+  # `scripts/**` rather than `scripts/**/*.sh`: shell-syntax-check used the
+  # narrow form, but standards-rag-drift-check watches `scripts/.standards-hashes`
+  # and `scripts/ingest-*-standard.sh`, and the union of the two is the broad
+  # form. Two members also watch OTHER workflow files — `pr-issue-link-gate.yml`
+  # and `pr-label-gate.yml`, both themselves required contexts — because they
+  # gate the resolvers those workflows consume.
+  changes:
+    # Group-qualified: visual.yml, tokens-gate.yml and docs-gate.yml all have a
+    # classifier, and undifferentiated rows in the PR checks list are useless.
+    name: classify diff (contracts)
+    runs-on: ubuntu-latest
+    outputs:
+      run: ${{ steps.classify.outputs.run }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          # Need the base commit present to diff against it.
+          fetch-depth: 0
+
+      - name: Classify the diff
+        id: classify
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          # push to main always runs the full gate — a post-merge run is not a
+          # place to guess. Same precedent as visual/tokens/docs.
+          if [ -z "$BASE_SHA" ]; then
+            echo "event=${{ github.event_name }} → full contracts gate"
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # `git diff --name-only` exits 0 whether or not it printed anything,
+          # so emptiness and failure stay distinguishable — unlike a
+          # `git diff | grep` pipeline, where pipefail returns grep's status and
+          # grep exits 1 on "no match", making a real diff failure look inert
+          # (the #2713 trap). Fail CLOSED on a git error.
+          if ! CHANGED="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- \
+            'scripts/**' \
+            '.claude/standards/**' \
+            '.claude/references/session-contract.md' \
+            '.husky/pre-commit' \
+            '.github/workflows/pr-issue-link-gate.yml' \
+            '.github/workflows/pr-label-gate.yml' \
+            '.github/workflows/contracts-gate.yml')"; then
+            echo "✗ git diff failed for $BASE_SHA..$HEAD_SHA — cannot classify; failing closed."
+            exit 1
+          fi
+
+          if [ -z "$CHANGED" ]; then
+            echo "diff touches no contracts-gate input → skipping the contracts"
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "diff touches contracts-gate inputs → running:"
+            printf '%s\n' "$CHANGED" | sed 's/^/    /'
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ─── The twelve contracts, one runner ───────────────────────────────────────
+  #
+  # Every step runs `if: always()` so ONE failure does not hide the other
+  # eleven, gated on the setup step that each needs. Verified locally on
+  # main@028f342b: all fourteen bash suites pass, the standards pairing audit and
+  # drift check exit 0, the widget list emits four bare filenames, and
+  # `bash -n` parses all 54 shell scripts.
+  #
+  # NOT named `contracts-gate` — the aggregate job below carries that name so
+  # the branch-protection context stays stable however this fans out.
+  contracts:
+    name: script contracts
+    runs-on: ubuntu-latest
+    needs: changes
+    permissions:
+      contents: read
+    # The `success()` half matters: an explicit `if` REPLACES the implicit
+    # needs-succeeded gate, so without it a FAILED classify (output == '') would
+    # still satisfy `!= 'false'`.
+    if: needs.changes.result == 'success' && needs.changes.outputs.run == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          # standards-rag-drift-check diffs base..head, so it needs history.
+          fetch-depth: 0
+
+      # Carried over verbatim from standards-rag-drift-check.yml.
+      - name: Resolve base + head SHAs
+        id: shas
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "base=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
+            echo "head=${{ github.event.pull_request.head.sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "base=${{ github.event.before }}" >> "$GITHUB_OUTPUT"
+            echo "head=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Once, instead of nine times. See the header for why it is installed
+      # rather than assumed.
+      - name: Install shellcheck
+        id: shellcheck
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+
+      # ─── bump-pr-guard-check ────────────────────────────────────────────────
+      - name: Duplicate-bump-PR contract
+        if: always()
+        run: bash scripts/lib/tests/test-bump-pr-guard.sh
+
+      # A green contract test proves nothing if propagate stops calling it. Both
+      # tracks open PRs, so both need the guard — the submodule track keyed on
+      # the BDS short SHA, the npm track on the version.
+      - name: propagate.sh still calls the guard on both tracks
+        if: always()
+        run: |
+          grep -q 'lib/bump-pr-guard.sh' scripts/propagate.sh \
+            || { echo "::error::propagate.sh no longer sources bump-pr-guard.sh"; exit 1; }
+          grep -q 'existing_bump_pr "-\$SHORT_HASH"' scripts/propagate.sh \
+            || { echo "::error::submodule track no longer guards on \$SHORT_HASH"; exit 1; }
+          grep -q 'existing_bump_pr "-v\$BDS_VERSION"' scripts/propagate.sh \
+            || { echo "::error::npm track no longer guards on \$BDS_VERSION"; exit 1; }
+
+      # The guard reads `<headRefName><TAB><url>` lines. If the gh query in
+      # open_prs_of drifts from that shape it silently matches nothing and the
+      # duplicate returns looking exactly like a pass.
+      - name: the PR query still emits the shape the guard parses
+        if: always()
+        run: |
+          grep -q 'json headRefName,url' scripts/propagate.sh \
+            || { echo "::error::open_prs_of no longer requests headRefName,url"; exit 1; }
+          grep -qF '\(.headRefName)\t\(.url)' scripts/propagate.sh \
+            || { echo "::error::open_prs_of no longer emits TAB-separated head/url"; exit 1; }
+
+      # ─── gh-error-classify-check ────────────────────────────────────────────
+      - name: Classification contract
+        if: always()
+        run: bash scripts/lib/tests/test-gh-error-classify.sh
+
+      # issue-claim.sh became a consumer of the helper in brikdesigns/brik-llm#1754
+      # (it resolves the repo slug via gh_repo_slug instead of spending a GraphQL
+      # point on `gh repo view`). Its own suite already covers _ic_resolve_ref, so
+      # gating it here is what stops the slug path regressing to the old shape.
+      - name: Issue-claim contract
+        if: always()
+        run: bash scripts/__tests__/test-issue-claim.sh < /dev/null
+
+      # slug-claim.sh sources issue-claim.sh for the staleness/identity half, so
+      # it is a second consumer of the same slug-resolution path. Gated here for
+      # the same reason: the per-slug marker keying is what stops one ticketless
+      # branch blocking every other, and it fails silently (#1663).
+      - name: Slug-claim contract
+        if: always()
+        run: bash scripts/__tests__/test-slug-claim.sh < /dev/null
+
+      # ─── identity-guard-check ───────────────────────────────────────────────
+      - name: Fixture identity cannot reach the live repo
+        if: always()
+        run: bash scripts/__tests__/test-identity-guard.sh < /dev/null
+
+      # The callers, so a dropped assert_throwaway_repo shows up as a red suite
+      # rather than a silently unguarded fixture.
+      - name: Guarded fixtures still pass
+        if: always()
+        run: |
+          bash scripts/__tests__/test-overlap-filters.sh < /dev/null
+          bash scripts/__tests__/test-base-freshness.sh < /dev/null
+
+      # ─── issue-link-resolver-check ──────────────────────────────────────────
+      - name: Issue-link resolver contract holds
+        if: always()
+        run: bash scripts/__tests__/test-issue-links.sh < /dev/null
+
+      # ─── mirror-widgets-check ───────────────────────────────────────────────
+      - name: Mirror re-sync contract
+        if: always()
+        run: bash scripts/lib/tests/test-mirror-widgets.sh
+
+      # The filename list has one home. If --list-portal-mirror stops emitting
+      # bare filenames, propagate silently mirrors nothing and the bug returns
+      # looking exactly like a pass.
+      - name: The widget list is still machine-readable
+        if: always()
+        run: |
+          out="$(bash scripts/sync-devbar-widgets.sh --list-portal-mirror)"
+          echo "$out"
+          [ -n "$out" ] || { echo "::error::--list-portal-mirror printed nothing"; exit 1; }
+          while IFS= read -r line; do
+            case "$line" in
+              *.js) : ;;
+              *) echo "::error::not a bare widget filename: $line"; exit 1 ;;
+            esac
+          done <<< "$out"
+
+      # ─── new-task-flag-order-check ──────────────────────────────────────────
+      - name: Flags are honoured on either side of the slug
+        if: always()
+        run: bash scripts/__tests__/test-new-task-flag-order.sh < /dev/null
+
+      # ─── pr-label-resolver-check ────────────────────────────────────────────
+      - name: PR-label resolver contract holds
+        if: always()
+        run: bash scripts/__tests__/test-pr-labels.sh < /dev/null
+
+      # ─── pr-path-overlap-check ──────────────────────────────────────────────
+      - name: Same-path overlap contract
+        if: always()
+        run: bash scripts/__tests__/test-pr-path-overlap.sh < /dev/null
+
+      # ─── session-budget-contract ────────────────────────────────────────────
+      - name: Budget arithmetic matches the canon, and exceeding it refuses
+        if: always()
+        run: bash scripts/test/test-session-budget.sh < /dev/null
+
+      # ─── worktree-sweep-contract ────────────────────────────────────────────
+      - name: Pass-1 verdict contract (dry-run only)
+        if: always()
+        run: bash scripts/__tests__/test-sweep-worktree-classification.sh
+
+      # ─── shell-syntax-check ─────────────────────────────────────────────────
+      - name: Parse-check every scripts/**/*.sh
+        if: always()
+        run: |
+          fail=0
+          while IFS= read -r -d '' f; do
+            if ! bash -n "$f"; then
+              echo "::error file=$f::bash -n found a syntax error"
+              fail=1
+            fi
+          done < <(find scripts -name '*.sh' -type f -print0)
+          if [ "$fail" -ne 0 ]; then
+            echo "Shell syntax check failed — fix the errors above." >&2
+            exit 1
+          fi
+
+      # ─── standards-rag-drift-check ──────────────────────────────────────────
+      #
+      # `--check` only verifies pairing on disk, so it does NOT need the brik-rag
+      # CLI (run-standards-ingest.sh:61-63 says so explicitly, and the workflow
+      # has been green on GitHub runners where the CLI is absent). That is what
+      # makes this member safe to put behind a required context.
+      - name: Pairing audit (every standard has a paired ingest script)
+        if: always()
+        run: scripts/run-standards-ingest.sh --check
+
+      - name: Standards/RAG drift check
+        if: always()
+        run: scripts/audit/standards-rag-drift.sh --ci --base "${{ steps.shas.outputs.base }}" --head "${{ steps.shas.outputs.head }}"
+
+      # ─── shellcheck, every member's invocation verbatim ─────────────────────
+      #
+      # Each block keeps its original flags, severities and exclusions. They are
+      # NOT merged into one call: the thresholds differ per file and deliberately
+      # so, and flattening them would quietly raise or lower a bar this PR has no
+      # mandate to touch.
+      - name: shellcheck — bump-pr-guard
+        if: always() && steps.shellcheck.outcome == 'success'
+        # SC2148: sourced library, no shebang contract. SC1091: sourced at runtime.
+        run: |
+          shellcheck -e SC2148 scripts/lib/bump-pr-guard.sh
+          shellcheck -e SC1091 scripts/lib/tests/test-bump-pr-guard.sh
+
+      - name: shellcheck — gh-error-classify + claim libs
+        if: always() && steps.shellcheck.outcome == 'success'
+        # SC2148: sourced library, no shebang contract. SC1091: sourced at
+        # runtime. SC2329 + SC2317: the tests define git()/gh() stubs that the
+        # function under test calls indirectly, which shellcheck cannot see.
+        # issue-claim.sh / slug-claim.sh predate their gate and carry
+        # pre-existing info-level SC2016 (literal `\(.*\)` in single-quoted sed),
+        # so they are held at `-S warning` rather than blanket-excluded; SC1010
+        # covers a `local` named `then`, which is legal and deliberate.
+        run: |
+          shellcheck -e SC2148 scripts/lib/gh-error-classify.sh
+          shellcheck -e SC1091,SC2329,SC2317 scripts/lib/tests/test-gh-error-classify.sh
+          shellcheck -e SC1091 scripts/sweep-board-claims.sh
+          shellcheck -S warning -e SC1091,SC1010 scripts/lib/issue-claim.sh
+          shellcheck -S warning -e SC1091 scripts/lib/slug-claim.sh
+          shellcheck -e SC1091 scripts/__tests__/test-slug-claim.sh
+
+      - name: shellcheck — identity guard + its callers
+        if: always() && steps.shellcheck.outcome == 'success'
+        # --severity=warning: the fixture suites predate their gate and carry
+        # SC1091 (unfollowed `source`) plus style notes.
+        run: |
+          shellcheck --severity=warning \
+                     scripts/lib/identity-guard.sh \
+                     scripts/__tests__/test-identity-guard.sh \
+                     scripts/__tests__/test-overlap-filters.sh \
+                     scripts/__tests__/test-base-freshness.sh
+
+      - name: shellcheck — issue-link resolver
+        if: always() && steps.shellcheck.outcome == 'success'
+        run: |
+          shellcheck --severity=warning \
+                     scripts/lib/issue-links.sh \
+                     scripts/__tests__/test-issue-links.sh \
+                     scripts/pr-task.sh
+
+      - name: shellcheck — mirror widgets
+        if: always() && steps.shellcheck.outcome == 'success'
+        run: |
+          shellcheck -e SC2148 scripts/lib/mirror-widgets.sh
+          shellcheck -e SC1091 scripts/lib/tests/test-mirror-widgets.sh
+
+      - name: shellcheck — new-task flag order
+        if: always() && steps.shellcheck.outcome == 'success'
+        run: |
+          shellcheck --severity=warning \
+                     scripts/new-task.sh \
+                     scripts/__tests__/test-new-task-flag-order.sh
+
+      - name: shellcheck — pr-label resolver
+        if: always() && steps.shellcheck.outcome == 'success'
+        run: |
+          shellcheck --severity=warning \
+                     scripts/lib/pr-labels.sh \
+                     scripts/__tests__/test-pr-labels.sh \
+                     scripts/pr-task.sh
+
+      - name: shellcheck — pr-path overlap
+        if: always() && steps.shellcheck.outcome == 'success'
+        run: |
+          shellcheck -S warning -e SC1091,SC2148 \
+            scripts/lib/pr-path-overlap.sh \
+            scripts/__tests__/test-pr-path-overlap.sh
+
+      - name: shellcheck — session budget
+        if: always() && steps.shellcheck.outcome == 'success'
+        run: |
+          shellcheck --severity=warning \
+                     scripts/lib/session-budget.sh \
+                     scripts/test/test-session-budget.sh \
+                     scripts/new-task.sh
+
+      - name: shellcheck — worktree sweeper
+        if: always() && steps.shellcheck.outcome == 'success'
+        run: |
+          shellcheck scripts/sweep-merged-worktrees.sh \
+                     scripts/__tests__/test-sweep-worktree-classification.sh
+
+  # ─── The branch-protection check ────────────────────────────────────────────
+  #
+  # Keeps the name `contracts-gate` stable while the work above fans out, and
+  # fails if the contracts failed — `needs` alone would let a skipped or failed
+  # job pass this one, so the result is asserted explicitly.
+  #
+  # This job ALWAYS runs and ALWAYS reports, on every PR. That is the whole
+  # property that makes `contracts-gate` a valid required context: when the diff
+  # touched no script the contracts did not run, and the required check still
+  # has to report, so it reports green.
+  contracts-gate:
+    name: contracts-gate
+    runs-on: ubuntu-latest
+    needs: [changes, contracts]
+    if: always()
+    steps:
+      - name: Assert the contracts gate
+        run: |
+          echo "classify result:     ${{ needs.changes.result }}"
+          echo "contracts requested: ${{ needs.changes.outputs.run }}"
+          echo "contracts result:    ${{ needs.contracts.result }}"
+
+          if [ "${{ needs.changes.result }}" != "success" ]; then
+            echo "✗ the classify-diff job did not succeed — failing the gate closed rather"
+            echo "  than guessing whether the contracts should have run."
+            exit 1
+          fi
+
+          if [ "${{ needs.changes.outputs.run }}" != "true" ]; then
+            echo "✓ diff touched no contracts-gate input — gate not applicable, reporting green."
+            exit 0
+          fi
+
+          if [ "${{ needs.contracts.result }}" != "success" ]; then
+            echo "✗ the script contracts did not pass. Every step runs under"
+            echo "  \`if: always()\`, so the job log lists EVERY failing contract, not just"
+            echo "  the first — read all of them before pushing a fix."
+            exit 1
+          fi
+
+          echo "✓ all twelve script contracts passed."
