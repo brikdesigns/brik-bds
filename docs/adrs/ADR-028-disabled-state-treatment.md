@@ -148,7 +148,7 @@ Picking that number and that token is a visible change to 26 components with its
 | Axis | Gate | What it catches |
 |---|---|---|
 | **Value** | `npm run contrast-gate` — the `alpha` field on `tokens/contrast-pairings.json` pairings composites the fade (#1687) | `--state-disabled-opacity` retuned below the measured **0.5** floor |
-| **Mechanism** | `npm run lint-disabled-fade` — [`scripts/lint-disabled-fade.mjs`](../../scripts/lint-disabled-fade.mjs), wired in [`contrast-gate.yml`](../../.github/workflows/contrast-gate.yml) | a component hardcoding a literal again, dropping the fade, or reintroducing the pt-4 muted-text swap |
+| **Mechanism** | `npm run lint-disabled-fade` — [`scripts/lint-disabled-fade.mjs`](../../scripts/lint-disabled-fade.mjs), wired in [`tokens-gate.yml`](../../.github/workflows/tokens-gate.yml) | a component hardcoding a literal again, dropping the fade, or reintroducing the pt-4 muted-text swap |
 | **Pixels** | — none, deliberately | *nothing* — see below |
 
 **Why the two-axis gate was incomplete without the second row.** #1687 pointed all 30 disabled-scoped `opacity` rules at the token and moved it 0.4 → 0.5. Nothing kept them there. `contrast-gate` scores the token's *value*, so it cannot see a component that stops *reading* it; the visual gate cannot see it either (below). Reverting `Checkbox.css:13` to `opacity: 0.4` was verified to leave `contrast-gate`, `lint-tokens`, `lint-theme-divergence`, and `lint-inline-var` all green, with no baseline to move — the new gate is the only thing that exits 1 on it. That is the same green-but-empty shape as the quota-exhausted Chromatic build (#1639) and the pre-`alpha` pairing set (#1687), and it is now the third instance closed rather than described.
