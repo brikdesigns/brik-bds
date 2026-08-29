@@ -1,0 +1,27 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './CheckboxGroup.stories';
+
+<Meta of={Stories} />
+
+# CheckboxGroup
+
+<ComponentLinks slug="checkbox-group" />
+
+Multi-select group of [`Checkbox`](/?path=/docs/components-checkbox--docs) options in a native `<fieldset>` + `<legend>`. The wrapper owns the selected-values array and orientation, and optionally renders a select-all parent that reflects `indeterminate` when the selection is partial. `Checkbox` stays the standalone item for a single binary choice.
+
+## Playground
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — Grouping is a native `<fieldset>` + `<legend>`; the legend names the group for assistive tech. The select-all parent uses the checkbox `indeterminate` DOM property (a "some, not all" dash) — set it via the `selectAllLabel` prop, never by hand.
+
+> **Note** — Supersedes the former "no CheckboxGroup wrapper" guidance on [`Checkbox`](/?path=/docs/components-checkbox--docs). Use CheckboxGroup for any multi-option selection; reach for a bare `Checkbox` only for a single binary choice.
+
+> **Note** — For single-select (choose one), use [`RadioGroup`](/?path=/docs/components-radio-group--docs). For task/item completion state, use [`ChecklistGroup`](/?path=/docs/components-checklist-group--docs).

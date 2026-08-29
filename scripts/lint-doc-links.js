@@ -239,10 +239,13 @@ const COMPONENT_LINKS = /<ComponentLinks\b[^>]*\bslug="([^"]+)"/g;
 // no owner and no issue — the exact drift #1466 exposed (checklist +
 // progress-circle hid here for months). See #1466 for the backlog these are.
 const DOCS_PAGE_BACKLOG = {
-  // Empty — the #1466 docs-page backlog is fully drained. Every ComponentLinks
-  // slug now resolves to a docs-site page or sits in DOCS_PAGE_EXEMPT below.
   // A new docless component must be added here (slug → tracking issue #) or to
   // DOCS_PAGE_EXEMPT (slug → reason); a bare entry hard-fails the gate.
+  // Group components (#2120) ship Storybook MDX now; narrative docs-site pages
+  // follow in #2152 (same component-then-docs split as service-tag-picker #1581).
+  'radio-group': 2152,
+  'checkbox-group': 2152,
+  'checklist-group': 2152,
 };
 const DOCS_PAGE_EXEMPT = {
   // slug: 'reason' — populated by #1466 triage as components are classified

@@ -1,0 +1,49 @@
+@layer bds-components {
+/* CheckboxGroup — multi-select group of Checkbox options in a native fieldset */
+
+.bds-checkbox-group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-inline-size: 0; /* reset the fieldset default so the group can shrink */
+}
+
+.bds-checkbox-group__legend {
+  padding: 0;
+  margin-bottom: var(--gap-sm);
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+}
+
+/* ─── Select-all parent ───────────────────────────────── */
+
+.bds-checkbox-group__select-all {
+  margin-bottom: var(--gap-md);
+  padding-bottom: var(--gap-md);
+  border-bottom: var(--border-width-sm) solid var(--border-secondary);
+}
+
+/* ─── Options layout ──────────────────────────────────── */
+
+.bds-checkbox-group__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.bds-checkbox-group__options--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: var(--gap-xl);
+}
+
+/* ─── Disabled group ──────────────────────────────────── */
+/* Each Checkbox self-fades via its own --disabled class; only the legend needs it. */
+
+.bds-checkbox-group--disabled .bds-checkbox-group__legend {
+  opacity: var(--state-disabled-opacity);
+}
+}

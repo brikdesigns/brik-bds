@@ -1,0 +1,27 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './RadioGroup.stories';
+
+<Meta of={Stories} />
+
+# RadioGroup
+
+<ComponentLinks slug="radio-group" />
+
+Single-select group of [`Radio`](/?path=/docs/components-radio--docs) options in a native `<fieldset>`. The wrapper owns the shared `name`, the controlled `value`, and the group's `orientation`; the browser owns single-select exclusivity and roving arrow-key focus, because the children are native radios sharing that `name` — no JavaScript keyboard handling. `Radio` stays the standalone item for the rare solo case.
+
+## Playground
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — Group exclusivity and roving arrow-key focus are HTML-native: the radios share the `name` this component supplies, so the browser enforces selection-of-one and moves focus/selection with the arrow keys inside one tab stop. No `role="radiogroup"` JavaScript state machine is needed (the role is set for explicitness only).
+
+> **Note** — Supersedes the former "no RadioGroup wrapper" guidance on [`Radio`](/?path=/docs/components-radio--docs). Use RadioGroup for any multi-option single-select; reach for a bare `Radio` only for the standalone item case.
+
+> **Note** — For multi-select, use [`CheckboxGroup`](/?path=/docs/components-checkbox-group--docs). For a single binary choice, use [`Checkbox`](/?path=/docs/components-checkbox--docs).

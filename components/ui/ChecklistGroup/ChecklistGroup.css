@@ -1,0 +1,40 @@
+@layer bds-components {
+/* ChecklistGroup — titled stack of Checklist rows with a completion counter */
+
+.bds-checklist-group {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Header (title + counter) ────────────────────────── */
+
+.bds-checklist-group__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  margin-bottom: var(--gap-lg);
+}
+
+.bds-checklist-group__title {
+  margin: 0;
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-tiny);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+}
+
+.bds-checklist-group__counter {
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  color: var(--text-secondary);
+}
+
+/* ─── Rows ────────────────────────────────────────────── */
+
+.bds-checklist-group__items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+}
