@@ -37,12 +37,6 @@ const serviceItems = [
   { title: 'Customer Journey Maps', description: 'Map the experience from first touch to repeat purchase.', href: '#', imageUrl: placeholderImage(480, 320, '#d6e4f5', '#1f3d70', 'Maps'), category: 'information' as const },
 ];
 
-const blogItems = [
-  { title: 'Why your CTAs disappear in dark mode', description: 'A short read on token-pairing discipline.', href: '#', imageUrl: placeholderImage(480, 320, '#eaf1fb', '#1f3d70', 'Post 1'), tagLabel: 'Design system' },
-  { title: 'How we ship 4 client sites a quarter', description: 'Process notes from the small Brik team.', href: '#', imageUrl: placeholderImage(480, 320, '#d6f1da', '#1f5b2e', 'Post 2'), tagLabel: 'Operations' },
-  { title: 'Brik content vocabulary at a glance', description: 'A field guide to BCS for new contributors.', href: '#', imageUrl: placeholderImage(480, 320, '#ead6f5', '#4a1f70', 'Post 3'), tagLabel: 'BCS' },
-];
-
 /**
  * The canonical "service grid" composition. Validates the brikdesigns#100
  * consumer shape: image + ServiceTag + title + description + primary CTA.
@@ -71,43 +65,6 @@ export const Default: Story = {
               tag={<ServiceTag category={item.category} variant="icon-text" size="sm" serviceName={item.title} />}
               badge={item.hasOptions ? <Badge status="positive" size="sm" appearance="solid">Has Options</Badge> : undefined}
               action={<Button variant="primary" size="sm">Learn more</Button>}
-            />
-          </li>
-        ))}
-      </Grid>
-    ),
-  },
-};
-
-/**
- * Proves content-agnosticism: identical `<CardGrid>` + `<Card preset="display">`
- * composition, only the child content shape differs (a `<Badge>` tag for
- * blog category instead of a `<ServiceTag>`). One primitive serves many
- * content types — the dogfood goal from brik-bds#580.
- *
- * @summary Blog posts — same primitive, different content type
- */
-export const BlogPostsGrid: Story = {
-  args: {
-    sectionKey: 'blog-grid',
-    title: 'Latest from the Brik blog',
-    subtitle: 'Field notes',
-    description: 'Short reads on design systems, content vocabulary, and how Brik ships client sites.',
-    children: (
-      <Grid as="ul" columns={3} gap="lg" role="list" style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-        {blogItems.map((item) => (
-          <li key={item.title} style={{ display: 'flex' }}>
-            <Card
-              preset="display"
-              title={item.title}
-              description={item.description}
-              image={
-                <Frame customRatio="3 / 2" fit="cover">
-                  <img src={item.imageUrl} alt="" loading="lazy" decoding="async" />
-                </Frame>
-              }
-              tag={<Badge>{item.tagLabel}</Badge>}
-              action={<Button variant="primary" size="sm">Read post</Button>}
             />
           </li>
         ))}

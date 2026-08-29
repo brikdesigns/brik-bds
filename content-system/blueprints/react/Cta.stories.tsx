@@ -97,11 +97,14 @@ export const Split: Story = {
 /**
  * Exercises the `BlueprintCta` action shape (brik-bds#941): the primitive
  * emits real button semantics so the CTA can open a modal or fire analytics
- * instead of navigating. Inspect the element — it is a button, not a link.
+ * instead of navigating. Renders identically to `Default` — the only
+ * difference is button-vs-link semantics, so this is a play-only assertion
+ * (matrix Rule 3 / Q5), not a browseable state.
  *
  * @summary Action CTA renders a button, not a link
  */
-export const ActionCta: Story = {
+export const InteractionTestActionCta: Story = {
+  tags: ['!manifest', 'interaction-test'],
   args: {
     ...Default.args,
     sectionKey: 'cta-action',
