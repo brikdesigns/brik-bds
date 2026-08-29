@@ -57,6 +57,9 @@ export type FrameRatio =
 
 export type FrameFit = 'cover' | 'contain' | 'fill' | 'none';
 
+/** Which axis a `Frame` fixes — see the `anchor` prop. */
+export type FrameAnchor = 'width' | 'height';
+
 export interface FrameProps extends HTMLAttributes<HTMLElement> {
   /**
    * Named aspect-ratio slug. Defaults to `4-3` (legacy landscape).
@@ -83,7 +86,7 @@ export interface FrameProps extends HTMLAttributes<HTMLElement> {
    * the caller sets, regardless of ratio). With `height`, the caller must
    * supply a height via `className` / `style`.
    */
-  anchor?: 'width' | 'height';
+  anchor?: FrameAnchor;
   /** HTML element to render as. Default `div`. */
   as?: ElementType;
   /** Slotted child content. */
