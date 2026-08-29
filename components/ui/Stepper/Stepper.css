@@ -19,13 +19,13 @@
   width: var(--size-700);
   height: var(--size-700);
   border-radius: var(--border-radius-sm);
-  font-size: 10px; /* bds-lint-ignore — 10px off the modular type scale; pending small-text rung (#2138) */
+  font-size: var(--body-tiny);
 }
 .bds-stepper--md .bds-stepper__button {
   width: var(--size-900);
   height: var(--size-900);
   border-radius: var(--border-radius-md);
-  font-size: 12px; /* bds-lint-ignore — 12px off the modular type scale; pending small-text rung (#2138) */
+  font-size: var(--body-xs);
 }
 .bds-stepper--lg .bds-stepper__button {
   width: var(--size-1100);
