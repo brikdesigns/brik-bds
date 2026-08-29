@@ -24,7 +24,7 @@
 .bds-service-tag-picker__option {
   display: inline-flex;
   align-items: center;
-  border-radius: var(--border-radius-md);
+  border-radius: var(--border-radius-sm);
   /* Transparent ring by default so selecting adds no layout shift. */
   box-shadow: 0 0 0 var(--border-width-lg) transparent;
   cursor: pointer;
@@ -40,7 +40,7 @@
 /* ── Focus (keyboard) — ring follows the focused radio ── */
 
 .bds-service-tag-picker__input:focus-visible + .bds-service-tag {
-  outline: var(--border-width-lg) solid var(--border-brand-primary);
+  outline: var(--border-width-lg) solid var(--border-focus);
   outline-offset: var(--border-width-sm);
 }
 
