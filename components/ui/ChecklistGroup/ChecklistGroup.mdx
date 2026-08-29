@@ -1,0 +1,25 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './ChecklistGroup.stories';
+
+<Meta of={Stories} />
+
+# ChecklistGroup
+
+<ComponentLinks slug="checklist-group" />
+
+A titled stack of [`Checklist`](/?path=/docs/components-checklist--docs) completion rows with a running `n of N completed` counter. The value of a checklist comes from the interaction *between* rows — the glanceable done-vs-not state and the count — so ChecklistGroup owns the title, counter, and row layout while each row stays an atomic `Checklist`.
+
+## Playground
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — Rows are controlled: pass `items` and handle `onItemChange(id, checked)` to update your own state. ChecklistGroup renders the counter from the `items` you pass — it holds no internal completion state.
+
+> **Note** — For form-style selection (choose one / choose many), use [`RadioGroup`](/?path=/docs/components-radio-group--docs) or [`CheckboxGroup`](/?path=/docs/components-checkbox-group--docs). ChecklistGroup is for *completion* of discrete units of work, not selection.

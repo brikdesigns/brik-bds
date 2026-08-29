@@ -1,0 +1,41 @@
+@layer bds-components {
+/* RadioGroup — single-select group of Radio options in a native fieldset */
+
+.bds-radio-group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-inline-size: 0; /* reset the fieldset default so the group can shrink */
+}
+
+.bds-radio-group__legend {
+  padding: 0;
+  margin-bottom: var(--gap-sm);
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+}
+
+/* ─── Options layout ──────────────────────────────────── */
+
+.bds-radio-group__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.bds-radio-group__options--orientation-horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: var(--gap-xl);
+}
+
+/* ─── Disabled group ──────────────────────────────────── */
+/* Each Radio self-fades via its own --disabled class; only the legend needs it. */
+
+.bds-radio-group--disabled .bds-radio-group__legend {
+  opacity: var(--state-disabled-opacity);
+}
+}

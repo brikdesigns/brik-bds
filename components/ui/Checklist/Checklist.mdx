@@ -22,12 +22,10 @@ For card chrome where the toggle stands alone (the rest of the card is a differe
 
 Every row state — empty, completed, locked, locked-and-completed — is reachable by toggling the `checked` and `disabled` Controls on this story.
 
-## Variants
-
-The completion value of a checklist comes from the interaction *between* rows, not any single row. The canonical clinical-PMS composition — an interactive list with a running `n of N completed` counter — is the irreducible case Controls can't express.
-
-<Canvas of={Stories.DailyMaintenanceChecklist} />
-
 ## Props
 
 <ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — For the titled, counted, multi-row checklist, use [`ChecklistGroup`](/?path=/docs/components-checklist-group--docs). Checklist stays the atomic row it composes.
