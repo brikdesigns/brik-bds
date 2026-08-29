@@ -94,6 +94,11 @@ const meta: Meta<typeof SyncedMediaSteps> = {
       control: 'boolean',
       description: 'Render the 1-based step number ahead of each title.',
     },
+    showCountdown: {
+      control: 'boolean',
+      description:
+        'Show the per-step countdown dwell cue on the active step. The advance timer is unaffected.',
+    },
   },
 };
 
@@ -105,8 +110,8 @@ type Story = StoryObj<typeof SyncedMediaSteps>;
 
    Single-appearance component (ADR-010 matrix): `mediaPosition` is a
    listed placement axis (Rule 5 — Control + MDX demo, never a story),
-   `autoplay` / `pauseOnHover` / `showStepNumbers` are boolean toggles
-   (Q2 — Controls only), `interval` and `defaultActiveStep` are tuning
+   `autoplay` / `pauseOnHover` / `showStepNumbers` / `showCountdown` are
+   boolean toggles (Q2 — Controls only), `interval` and `defaultActiveStep` are tuning
    values rather than semantic starting points, and reduced motion is a
    toolbar-global axis (Q1). No value clears the Q3 bar, so this file
    ships `Default` plus one Q5 interaction test.
@@ -120,6 +125,7 @@ export const Default: Story = {
     pauseOnHover: true,
     mediaPosition: 'end',
     showStepNumbers: true,
+    showCountdown: true,
   },
 };
 

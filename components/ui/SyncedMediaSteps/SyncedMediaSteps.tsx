@@ -46,6 +46,8 @@ export interface SyncedMediaStepsProps extends HTMLAttributes<HTMLDivElement> {
   mediaPosition?: SyncedMediaStepsMediaPosition;
   /** Render the 1-based step number ahead of each title. Default `true`. */
   showStepNumbers?: boolean;
+  /** Show the per-step countdown dwell cue on the active step. Default `true`. The advance timer is unaffected — this hides only the visual cue. */
+  showCountdown?: boolean;
 }
 
 /** Fraction of the component that must be visible before autoplay starts. */
@@ -140,6 +142,7 @@ export function SyncedMediaSteps({
   pauseOnHover = true,
   mediaPosition = 'end',
   showStepNumbers = true,
+  showCountdown = true,
   className,
   style,
   ...props
@@ -322,9 +325,11 @@ export function SyncedMediaSteps({
               </div>
 
               {/* Decorative dwell cue — the timer above is the real clock. */}
-              <div className="bds-synced-media-steps__countdown" aria-hidden="true">
-                <span className="bds-synced-media-steps__countdown-fill" />
-              </div>
+              {showCountdown && (
+                <div className="bds-synced-media-steps__countdown" aria-hidden="true">
+                  <span className="bds-synced-media-steps__countdown-fill" />
+                </div>
+              )}
             </li>
           );
         })}

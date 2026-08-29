@@ -55,6 +55,8 @@ export interface MediaTabsProps extends HTMLAttributes<HTMLDivElement> {
   mediaPosition?: MediaTabsMediaPosition;
   /** Visual variant passed through to the underlying `TabBar` rail. Default `'tab'`. */
   variant?: TabBarVariant;
+  /** Show the autoplay progress cue between the tab rail and the panels. Default `true`. The advance timer is unaffected — this hides only the visual dwell cue. */
+  showProgress?: boolean;
 }
 
 /** Fraction of the component that must be visible before autoplay starts. */
@@ -151,6 +153,7 @@ export function MediaTabs({
   orientation = 'vertical',
   mediaPosition = 'end',
   variant = 'tab',
+  showProgress = true,
   className,
   style,
   ...props
@@ -315,9 +318,11 @@ export function MediaTabs({
         {/* Progress cue — the JS timer above is the real clock, so this carries
             aria-hidden and no progressbar role. Re-keyed on the active id so the
             CSS animation restarts cleanly on every advance. */}
-        <div className="bds-media-tabs__progress" aria-hidden="true">
-          <span key={currentId} className="bds-media-tabs__progress-fill" />
-        </div>
+        {showProgress && (
+          <div className="bds-media-tabs__progress" aria-hidden="true">
+            <span key={currentId} className="bds-media-tabs__progress-fill" />
+          </div>
+        )}
 
         {tabs.map((tab) => {
           const isActive = tab.id === currentId;
