@@ -10,6 +10,7 @@
 /* Board loading skeleton — columns flex equally, mirroring `.bds-board-column`. */
 .bds-data-view__skeleton-column {
   flex: 1 0 0;
-  min-width: 240px;
+  --bds-data-view-column-min-width: 240px; /* component-local dimension; no shared registry rung (#2133) */
+  min-width: var(--bds-data-view-column-min-width);
 }
 }

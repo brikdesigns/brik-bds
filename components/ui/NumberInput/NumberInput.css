@@ -29,7 +29,7 @@
   background: none;
   cursor: pointer;
   color: var(--text-muted);
-  font-size: 10px;
+  font-size: 10px; /* bds-lint-ignore — 10px off the modular type scale; pending small-text rung (#2138) */
   line-height: 1;
   height: 50%;
 }

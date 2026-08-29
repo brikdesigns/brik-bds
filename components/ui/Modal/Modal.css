@@ -103,7 +103,8 @@
 
 /* bds-lint-ignore — design-spec max-width for confirmation dialogs */
 .bds-modal--preset-confirm {
-  max-width: 440px;
+  --bds-modal-confirm-max-width: 440px; /* component-local dimension; no shared registry rung (#2133) */
+  max-width: var(--bds-modal-confirm-max-width);
   padding: var(--padding-lg);
   gap: var(--gap-lg);
   overflow: visible;

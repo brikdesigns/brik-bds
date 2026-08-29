@@ -47,7 +47,8 @@
 .bds-text-area-field {
   display: block;
   width: 100%;
-  min-width: 200px;
+  --bds-text-area-min-width: 200px; /* component-local dimension; no shared registry rung (#2133) */
+  min-width: var(--bds-text-area-min-width);
   padding: var(--padding-xs);
   font-family: var(--font-family-body);
   font-weight: var(--font-weight-regular);

@@ -58,7 +58,7 @@
     border-left: var(--border-width-md) solid var(--text-on-color-dark);
     border-bottom: var(--border-width-md) solid var(--text-on-color-dark);
     transform: rotate(-45deg) translate(1px, -1px);
-    width: 10px;
+    width: 10px; /* bds-lint-ignore — 10px off every scale; pending --size-250 (#2138) */
     height: var(--size-150);
   }
 }

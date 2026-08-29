@@ -24,7 +24,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap-md);
-  min-width: 200px;
+  --bds-menu-min-width: 200px; /* component-local dimension; no shared registry rung (#2133) */
+  min-width: var(--bds-menu-min-width);
   max-height: min(60vh, 24rem); /* bds-lint-ignore — viewport-relative scroll cap so a long item list never grows past the viewport */
   overflow-y: auto;
   animation: bds-menu-enter var(--menu-enter-duration) var(--menu-enter-ease); /* bds-lint-ignore — component-scoped animation vars */

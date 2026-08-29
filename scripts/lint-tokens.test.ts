@@ -36,11 +36,18 @@ describe('checkCssRawValues', () => {
     expect(v[0].message).toContain('var(--body-sm)');
   });
 
-  it('warns (never errors) on an off-scale container width', () => {
+  it('errors on an off-scale container width (no token expresses it)', () => {
     const v = run('  min-width: 200px;');
     expect(v).toHaveLength(1);
     expect(v[0].rule).toBe('css-raw-value-offscale');
-    expect(v[0].severity).toBe('warning');
+    expect(v[0].severity).toBe('error');
+    expect(v[0].suggestion).toContain('--bds-');
+  });
+
+  it('does not flag a --bds-* knob definition holding a raw px', () => {
+    // Custom-property definitions are the sanctioned home for off-scale
+    // component-local dimensions (ADR-014) — the rule keys off real CSS props.
+    expect(run('  --bds-modal-confirm-max-width: 440px;')).toHaveLength(0);
   });
 
   it('passes a value already using a token', () => {
