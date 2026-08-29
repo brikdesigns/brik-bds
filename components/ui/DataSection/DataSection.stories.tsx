@@ -105,8 +105,8 @@ export const Default: Story = {
  * and the `actions` slot — the header lays out as a `1fr auto 1fr` grid so the
  * control stays optically centered regardless of title/action widths. The
  * canonical use is a month `<DatePicker>` on a section that browses a time
- * series (Reporting → Monthly). A future calendar-picker variant reuses the
- * same slot.
+ * series (Reporting → Monthly) — random access to any month. For stepping
+ * between adjacent periods instead, the slot takes a `<PeriodNav>` (#2147).
  *
  * @summary Centered header control — date picker in the section header
  */
