@@ -53,7 +53,8 @@ export const Default: Story = {
    docs-local demo (#1489). */
 
 /* ═══════════════════════════════════════════════════════════════
-   3. QUANTITY SELECTOR — real-world composition (default step)
+   2. QUANTITY SELECTOR — real-world composition (value + live readout).
+      Custom `step` is a Control on Default (#2145).
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Quantity selector with live item count */
@@ -71,33 +72,6 @@ export const QuantitySelector: Story = {
             color: 'var(--text-secondary)',
           }}>
             {qty} {qty === 1 ? 'item' : 'items'} in cart
-          </span>
-        </Stack>
-      );
-    }
-    return <Demo />;
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   4. BUDGET CONTROL — real-world composition (custom step)
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Budget control with a custom $10 step */
-export const BudgetControl: Story = {
-  args: { value: 1, onChange: () => {} },
-  render: () => {
-    function Demo() {
-      const [budget, setBudget] = useState(50);
-      return (
-        <Stack gap="var(--gap-md)">
-          <Stepper value={budget} onChange={setBudget} step={10} min={0} max={500} size="md" />
-          <span style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-sm)',
-            color: 'var(--text-secondary)',
-          }}>
-            ${budget}
           </span>
         </Stack>
       );
