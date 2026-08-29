@@ -108,8 +108,8 @@
 
 /* Icon font-size matches container so the glyph fills the box */
 .bds-chip--sm .bds-chip__icon {
-  width: 10px;
-  height: 10px;
+  width: 10px; /* bds-lint-ignore — 10px off every scale; pending --size-250 (#2138) */
+  height: 10px; /* bds-lint-ignore — 10px off every scale; pending --size-250 (#2138) */
   font-size: var(--label-tiny);
 }
 

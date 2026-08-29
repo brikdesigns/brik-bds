@@ -95,7 +95,8 @@
   background-color: var(--background-primary);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-lg);
-  max-height: 240px;
+  --bds-addable-tag-list-max-height: 240px; /* component-local dimension; no shared registry rung (#2133) */
+  max-height: var(--bds-addable-tag-list-max-height);
   overflow-y: auto;
   display: flex;
   flex-direction: column;

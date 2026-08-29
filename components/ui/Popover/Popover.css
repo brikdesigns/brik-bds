@@ -23,7 +23,8 @@
   padding: var(--padding-md);
   z-index: 100;
   box-sizing: border-box;
-  min-width: 200px;
+  --bds-popover-min-width: 200px; /* component-local dimension; no shared registry rung (#2133) */
+  min-width: var(--bds-popover-min-width);
 }
 
 /* ─── Placement modifiers ─────────────────────────────── */
