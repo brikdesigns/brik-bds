@@ -107,38 +107,3 @@ export const Default: Story = {
     await expect(within(child).getByRole('option', { name: 'Logo & identity' })).toBeInTheDocument();
   },
 };
-
-/* ═══════════════════════════════════════════════════════════════
-   SINGLE CHILD — single-select child (the multiple={false} axis).
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Cascading parent → single child select */
-export const SingleChild: Story = {
-  render: (args) => {
-    function Cascade() {
-      const [lineId, setLineId] = useState('');
-      const [serviceId, setServiceId] = useState('');
-      return (
-        <DependentSelect
-          {...args}
-          parent={{
-            label: 'Service line',
-            placeholder: 'All service lines',
-            options: serviceLines,
-            value: lineId,
-            onChange: setLineId,
-          }}
-          child={{
-            label: 'Service',
-            placeholder: 'Select a service...',
-            options: services,
-            parentKey: 'service_line_id',
-            value: serviceId,
-            onChange: setServiceId,
-          }}
-        />
-      );
-    }
-    return <Cascade />;
-  },
-};

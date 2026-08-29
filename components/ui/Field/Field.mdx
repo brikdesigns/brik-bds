@@ -49,9 +49,7 @@ When an entire section has no data (vs. one missing field), pass an `<EmptyState
 | --- | --- | --- |
 | `--bds-field-label-size` | `var(--label-md)` | Label type size. `.bds-sheet__body` sets `var(--label-sm)`, so a Field inside a Sheet is sheet-tier without the caller passing `tier`. Set it on any other container to make that container's fields a different tier. |
 
-`tier` is the per-instance form of the same knob: it declares the property on the Field root, and a declaration on the element beats one inherited from a container. That is what makes `tier="standard"` a working escape hatch for a page-tier field inside a Sheet body.
-
-<Canvas of={Stories.CompactTier} />
+`tier` is the per-instance form of the same knob: it declares the property on the Field root, and a declaration on the element beats one inherited from a container. That is what makes `tier="standard"` a working escape hatch for a page-tier field inside a Sheet body. Flip `tier` in the Playground Controls above to see `compact` type.
 
 ## Notes
 
