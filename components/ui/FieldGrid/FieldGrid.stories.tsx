@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FieldGrid } from './FieldGrid';
 import { Field } from '../Field';
-import { Card } from '../Card';
 
 /**
  * FieldGrid — equal-column grid for laying out Fields side by side.
@@ -40,25 +39,6 @@ export const Default: Story = {
         <Field label="Status">Active</Field>
         <Field label="Industry">Design & Engineering</Field>
         <Field label="Location">Thompson Station, TN</Field>
-      </FieldGrid>
-    </Frame>
-  ),
-};
-
-/** @summary Card-wrapped cells produce the stat-tile pattern */
-export const StatTiles: Story = {
-  render: () => (
-    <Frame>
-      <FieldGrid columns={3} gap="md">
-        <Card variant="outlined">
-          <Field label="Source">birdwelldentist.com</Field>
-        </Card>
-        <Card variant="outlined">
-          <Field label="Scraped">8</Field>
-        </Card>
-        <Card variant="outlined">
-          <Field label="Failed">12</Field>
-        </Card>
       </FieldGrid>
     </Frame>
   ),
