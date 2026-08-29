@@ -87,41 +87,6 @@ export const Default: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   ALWAYS-UNDERLINED — Q3 per ADR-010: `underline="always"` is a
-   semantic starting point an agent reaches for when placing a link
-   inline in running prose (color alone isn't a sufficient cue —
-   WCAG 1.4.1 Use of Color), so it earns its own dedicated story
-   rather than collapsing to Controls-only.
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Persistent underline at rest — for links inline in prose */
-export const AlwaysUnderlined: Story = {
-  args: {
-    href: '#',
-    size: 'default',
-    underline: 'always',
-    children: 'Learn more',
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   NEUTRAL — Q3 per ADR-010: `tone="neutral"` is a semantic starting
-   point an agent reaches for when the link names a row / identifier
-   rather than issuing a call-to-action (table name cell), so it earns
-   its own dedicated story. `--text-primary` at rest, brand on hover.
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Neutral tone — identifier link, not a call-to-action */
-export const Neutral: Story = {
-  args: {
-    href: '#',
-    size: 'default',
-    tone: 'neutral',
-    children: 'Acme Corporation',
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
    NO-UNDERLINE — Q3 per ADR-010: `underline="none"` is the color-only
    affordance for a table cell. Shown with a leading icon to prove the
    seamless box-shadow underline is suppressed too — an Avatar in a
