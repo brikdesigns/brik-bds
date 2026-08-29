@@ -10,9 +10,9 @@ export const DirectionRow = ({ children }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>{children}</div>
 );
 
-const items = ['Acme', 'Globex', 'Initech', 'Umbrella'];
+export const items = ['Acme', 'Globex', 'Initech', 'Umbrella'];
 
-const LogoItems = () =>
+export const LogoItems = () =>
   items.map((name) => (
     <span
       key={name}
