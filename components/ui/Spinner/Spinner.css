@@ -14,14 +14,14 @@
 /* bds-lint-ignore — Figma-driven spinner dimensions */
 
 .bds-spinner--sm {
-  width: 16px;
-  height: 16px;
+  width: var(--size-400);
+  height: var(--size-400);
   border-width: var(--border-width-lg);
 }
 
 .bds-spinner--lg {
-  width: 48px;
-  height: 48px;
+  width: var(--size-1200);
+  height: var(--size-1200);
   border-width: var(--border-width-huge);
 }
 }

@@ -59,8 +59,8 @@
 
 .bds-tag--xs {
   /* bds-lint-ignore — 24px icon-only tag matches shared indicator spec */
-  width: 24px;
-  height: 24px;
+  width: var(--size-600);
+  height: var(--size-600);
   padding: 0;
   border-radius: var(--border-radius-sm);
   justify-content: center;
@@ -71,7 +71,7 @@
   padding: var(--padding-tiny) var(--padding-sm);
   gap: var(--gap-xs);
   font-size: var(--label-tiny);
-  height: 28px;
+  height: var(--size-700);
   border-radius: var(--border-radius-sm);
 }
 
@@ -147,14 +147,14 @@
 }
 
 .bds-tag--sm .bds-tag__icon {
-  width: 16px;
-  height: 16px;
+  width: var(--size-400);
+  height: var(--size-400);
   font-size: var(--icon-sm);
 }
 
 .bds-tag--md .bds-tag__icon {
-  width: 16px;
-  height: 16px;
+  width: var(--size-400);
+  height: var(--size-400);
   font-size: var(--icon-sm);
 }
 

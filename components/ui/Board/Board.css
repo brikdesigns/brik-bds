@@ -22,7 +22,7 @@
 
 /* Hide scrollbar but keep functionality */
 .bds-board::-webkit-scrollbar {
-  height: 6px;
+  height: var(--size-150);
 }
 
 .bds-board::-webkit-scrollbar-track {
