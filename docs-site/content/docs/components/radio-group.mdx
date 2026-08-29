@@ -1,0 +1,80 @@
+---
+title: Radio group
+description: Single-select group of Radio options in a native fieldset with a legend.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+RadioGroup is a single-select control that renders a list of [Radio](/docs/components/radio) options inside a native `<fieldset>`. The wrapper owns the shared `name`, the controlled `value`, and the `orientation`; the browser owns exclusivity and roving arrow-key focus because the children are native radios sharing one `name`.
+
+## Use it for
+
+- Choosing exactly one option from a short, visible set (a plan, a delivery speed, a payment method)
+- Any single choice where all options should stay on screen rather than behind a menu
+
+## Import
+
+```tsx
+import { RadioGroup } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+import { useState } from 'react';
+
+const [plan, setPlan] = useState('basic');
+
+<RadioGroup
+  legend="Plan"
+  value={plan}
+  onChange={setPlan}
+  options={[
+    { label: 'Basic', value: 'basic' },
+    { label: 'Pro', value: 'pro' },
+    { label: 'Enterprise', value: 'enterprise' },
+  ]}
+/>
+```
+
+### Orientation
+
+Set `orientation="horizontal"` for a compact inline row; the default is a vertical stack.
+
+```tsx
+<RadioGroup orientation="horizontal" legend="Billing" value={cycle} onChange={setCycle} options={cycles} />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use RadioGroup for multi-select.** It is single-choice. To let the user pick more than one option, use [CheckboxGroup](/docs/components/checkbox-group).
+</Callout>
+
+- **Don't use it for two mutually exclusive views or modes.** A pair like grid-vs-list is a [SegmentedControl](/docs/components/segmented-control), not a radio group.
+- **Don't hide the options behind a trigger.** If the list is long or space is tight, use [Select](/docs/components/select) instead.
+
+## Accessibility
+
+- Renders a `<fieldset role="radiogroup">`; a `legend` prop is the group's visible label. Omit `legend` and pass `aria-label` to label the group without visible text.
+- Each option is a native `<input type="radio">` sharing one `name`, so the browser enforces single-selection and arrow-key roving focus with no custom key handling.
+- Tab reaches the group; arrow keys move selection within it.
+
+## API
+
+{/* props-check: RadioGroupProps @ components/ui/RadioGroup/RadioGroup.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `options` | `RadioGroupOption[]` | — |
+| `value` | `string` | — |
+| `defaultValue` | `string` | — |
+| `onChange` | `(value: string) => void` | — |
+| `name` | `string` | — |
+| `legend` | `ReactNode` | — |
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` |
+| `disabled` | `boolean` | `false` |
+| `className` | `string` | — |
+| `aria-label` | `string` | — |

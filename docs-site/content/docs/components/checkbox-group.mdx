@@ -1,0 +1,85 @@
+---
+title: Checkbox group
+description: Multi-select group of Checkbox options with an optional select-all parent.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+CheckboxGroup is a multi-select control that renders a list of [Checkbox](/docs/components/checkbox) options inside a native `<fieldset>` with a `<legend>`. It optionally renders a select-all parent that reflects an indeterminate state when the selection is partial.
+
+## Use it for
+
+- Choosing any number of options from a visible set (notification channels, feature flags, filters)
+- A "select all" affordance over a bounded list of items
+
+## Import
+
+```tsx
+import { CheckboxGroup } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+```tsx
+import { useState } from 'react';
+
+const [channels, setChannels] = useState<string[]>(['email']);
+
+<CheckboxGroup
+  legend="Notifications"
+  value={channels}
+  onChange={setChannels}
+  options={[
+    { label: 'Email', value: 'email' },
+    { label: 'Push', value: 'push' },
+    { label: 'SMS', value: 'sms' },
+  ]}
+/>
+```
+
+### Select all and indeterminate
+
+Pass `selectAllLabel` to render a parent checkbox above the options. It checks or clears every selectable option at once, and shows the `indeterminate` state when some but not all options are checked.
+
+```tsx
+<CheckboxGroup
+  legend="Notifications"
+  selectAllLabel="All notifications"
+  value={channels}
+  onChange={setChannels}
+  options={options}
+/>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use CheckboxGroup for single-select.** If exactly one option may be chosen, use [RadioGroup](/docs/components/radio-group).
+</Callout>
+
+- **Don't use it to track completion of work.** A list of tasks with a done count is a [ChecklistGroup](/docs/components/checklist-group), not a checkbox group.
+- **Don't use it for a large or searchable option set.** Reach for [MultiSelect](/docs/components/multi-select) when the list is long enough to need a menu or filtering.
+
+## Accessibility
+
+- Renders a `<fieldset>` with the `legend` prop as the group's visible label.
+- Each option is a native checkbox; selection is a controlled `string[]` passed through `value` / `onChange`.
+- The select-all parent uses the DOM `indeterminate` property when the selection is partial, so assistive tech announces the mixed state.
+
+## API
+
+{/* props-check: CheckboxGroupProps @ components/ui/CheckboxGroup/CheckboxGroup.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `options` | `CheckboxGroupOption[]` | — |
+| `value` | `string[]` | — |
+| `defaultValue` | `string[]` | — |
+| `onChange` | `(value: string[]) => void` | — |
+| `legend` | `ReactNode` | — |
+| `selectAllLabel` | `ReactNode` | — |
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` |
+| `disabled` | `boolean` | `false` |
+| `className` | `string` | — |

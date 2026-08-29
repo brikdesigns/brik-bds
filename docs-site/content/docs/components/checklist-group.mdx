@@ -1,0 +1,69 @@
+---
+title: Checklist group
+description: Titled stack of Checklist rows with a running completion counter.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+ChecklistGroup is a titled stack of [Checklist](/docs/components/checklist) completion rows with a running `n of N completed` counter. It owns the title, the counter, and the row layout; each row stays an atomic Checklist. The value of a checklist comes from the interaction *between* rows — the glanceable done-versus-not state and the count.
+
+## Use it for
+
+- Tracking completion of a bounded set of discrete tasks (onboarding steps, a daily maintenance list)
+- Any place a "3 of 7 completed" readout adds meaning over a bare list of checkboxes
+
+## Import
+
+```tsx
+import { ChecklistGroup } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+Rows are controlled: pass `items` and handle `onItemChange(id, checked)` to update your own state. ChecklistGroup renders the counter from the `items` you pass and holds no internal completion state.
+
+```tsx
+<ChecklistGroup
+  title="Daily maintenance"
+  items={[
+    { id: 'water', label: 'Water the plants', checked: true },
+    { id: 'mail', label: 'Sort the mail', checked: false },
+  ]}
+  onItemChange={(id, checked) => save(id, checked)}
+/>
+```
+
+### Without the counter
+
+Set `showCounter={false}` to hide the `n of N completed` readout while keeping the title and rows.
+
+```tsx
+<ChecklistGroup title="Setup" items={items} onItemChange={handleChange} showCounter={false} />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use ChecklistGroup for selection.** For choosing one option use [RadioGroup](/docs/components/radio-group); for choosing many use [CheckboxGroup](/docs/components/checkbox-group). ChecklistGroup is for *completion* of units of work, not selection.
+</Callout>
+
+- **Don't use it for a single standalone task.** One completion row is a [Checklist](/docs/components/checklist) on its own.
+
+## Accessibility
+
+- Renders a `<section>` with the `title` as a heading above the rows.
+- Each row is an atomic Checklist; completion state is controlled through `items` and `onItemChange`.
+
+## API
+
+{/* props-check: ChecklistGroupProps @ components/ui/ChecklistGroup/ChecklistGroup.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `ReactNode` | — |
+| `items` | `ChecklistGroupItem[]` | — |
+| `onItemChange` | `(id: string, checked: boolean) => void` | — |
+| `showCounter` | `boolean` | `true` |
+| `className` | `string` | — |
