@@ -18,11 +18,9 @@ Codifies the hand-wired "service line → services" cascade (two `Select`s + a `
 
 ## Variants
 
-The child defaults to multi-select. Pass `child.multiple = true` for a `MultiSelect` child (Playground above) or omit it for a single `Select` child.
+DependentSelect has no semantic-variant axis — the child's shape is a config choice set in code, not a story axis. Pass `child.multiple = true` for a `MultiSelect` child (shown in the Playground) or omit it for a single `Select` child.
 
-### Single child
-
-<Canvas of={Stories.SingleChild} />
+<Canvas of={Stories.Default} />
 
 ## Props
 

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { EmptyState } from './EmptyState';
 import { Image } from '../Image';
+import { FileUploader } from '../FileUploader';
 
 /**
  * Placeholder for screens with no data — title, optional description, and a slot.
@@ -53,24 +54,11 @@ export const WithMedia: Story = {
   },
 };
 
-/** @summary Custom children slot — e.g. a drop-zone affordance */
+/** @summary Custom children slot — a composed FileUploader affordance */
 export const WithCustomContent: Story = {
   args: {
     title: 'Upload your files',
     description: 'Drag and drop or click to browse.',
-    children: (
-      <div
-        style={{
-          padding: 'var(--padding-md)',
-          border: 'var(--border-width-sm) dashed var(--border-secondary)',
-          borderRadius: 'var(--border-radius-md)',
-          fontFamily: 'var(--font-family-body)',
-          fontSize: 'var(--body-sm)',
-          color: 'var(--text-muted)',
-        }}
-      >
-        Drop files here
-      </div>
-    ),
+    children: <FileUploader accept=".pdf,.png,.jpg" />,
   },
 };
