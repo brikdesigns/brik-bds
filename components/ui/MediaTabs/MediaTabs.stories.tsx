@@ -100,6 +100,11 @@ const meta: Meta<typeof MediaTabs> = {
       options: ['text', 'text-underline', 'tab', 'box'],
       description: 'Visual variant passed through to the underlying `TabBar` rail.',
     },
+    showProgress: {
+      control: 'boolean',
+      description:
+        'Show the autoplay progress cue between the rail and the panels. The advance timer is unaffected.',
+    },
   },
 };
 
@@ -112,7 +117,7 @@ type Story = StoryObj<typeof MediaTabs>;
    Single-appearance component (ADR-010 matrix): `orientation`,
    `mediaPosition`, and `variant` are listed placement/appearance axes
    (Rule 5 — Control + MDX demo, never a story), `autoplay` /
-   `pauseOnHover` are boolean toggles (Q2 — Controls only), `interval`
+   `pauseOnHover` / `showProgress` are boolean toggles (Q2 — Controls only), `interval`
    and `defaultActiveTab` are tuning values rather than semantic starting
    points, and reduced motion is a toolbar-global axis (Q1). No value
    clears the Q3 bar, so this file ships `Default` plus Q5 interaction
@@ -128,6 +133,7 @@ export const Default: Story = {
     orientation: 'vertical',
     mediaPosition: 'end',
     variant: 'tab',
+    showProgress: true,
   },
 };
 
