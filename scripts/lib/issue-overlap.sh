@@ -120,13 +120,49 @@ _io_resolve_ref() {
   printf '%s %s %s\n' "$owner" "$repo" "$num"
 }
 
+# Run a `gh` read that emits LINES, with the exit-status discipline
+# _io_issue_state established below — and the reason it has to exist twice.
+#
+# STDOUT IS NOT EVIDENCE OF SUCCESS. `gh api` writes the response BODY to stdout
+# whenever `--jq` cannot apply, and for GraphQL that includes a well-formed
+# `{"data":…,"errors":[…]}` where gh still exits 1. Measured 2026-08-29:
+#
+#   $ gh api graphql -f query='…issue(number:2858){state}' --jq '.data…state'
+#   rc=1
+#   stdout: {"data":{"repository":{"issue":null}},"errors":[{"type":"NOT_FOUND",…
+#   stderr: gh: Could not resolve to an Issue with the number of 2858
+#
+# So `… 2>/dev/null || true` hands back rc 0 with a JSON payload on stdout, and
+# the caller prints that payload under a ⚠ banner as if it were a finding. That
+# is #2298's defect verbatim, surviving in the two functions #2298 and #2422
+# never touched (brik-llm#2448).
+#
+# Echoes stdout ONLY on success. On failure it echoes NOTHING — a partial or
+# error body must never reach a caller that treats output as findings — and
+# returns gh's status, with gh's stderr in the caller-owned file $1.
+#
+# $1 is a caller-owned path, not a global, for the reason _io_issue_state's own
+# comment gives: this runs inside a command substitution, so a global assigned
+# here is set in a subshell and lost.
+_io_gh_lines() {
+  local errout="$1"; shift
+  local out rc=0
+  out="$("$@" 2>"$errout")" || rc=$?
+  [ "$rc" -eq 0 ] || return "$rc"
+  printf '%s' "$out"
+}
+
 # Print every PR that GitHub already associates with this issue, in any repo.
 # Uses the issue's own timeline, so a cross-repo PR (the #1525 case: a
 # brik-client-portal PR against a brik-llm issue) is caught — a same-repo
 # `gh pr list` search would miss it entirely.
+#
+# Returns non-zero and prints nothing when the read fails; $4 is a caller-owned
+# file for gh's diagnostic. The caller must report that as "could not read",
+# never as "no linked PRs" — that collapse is #2422.
 _io_linked_prs() {
-  local owner="$1" repo="$2" num="$3"
-  gh api graphql -f query="
+  local owner="$1" repo="$2" num="$3" errout="${4:-/dev/null}"
+  _io_gh_lines "$errout" gh api graphql -f query="
     query {
       repository(owner: \"$owner\", name: \"$repo\") {
         issue(number: $num) {
@@ -159,7 +195,7 @@ _io_linked_prs() {
       | unique_by(.number)
       | .[]
       | "\(.repository.nameWithOwner)#\(.number) [\(.state)] \(.title)"
-    ' 2>/dev/null || true
+    '
 }
 
 # Org-wide PR search on the bare issue number. Second signal, because the
@@ -187,8 +223,15 @@ _io_linked_prs() {
 # in its BODY and nothing in its title was discarded before the qualifier could
 # ever see it — which is the exact shape the org-wide leg was added for, since a
 # cross-repo closing keyword emits no CrossReferencedEvent either.
+#
+# Same exit-status discipline as _io_linked_prs, and #2448 AC 3 is specifically
+# that this function was audited rather than assumed clean: it carried the
+# identical `2>/dev/null || true`. The search endpoint fails differently from
+# GraphQL — 403 on secondary rate limit, 422 on a malformed query — but the leak
+# is the same shape, an error body arriving on stdout where the caller reads
+# lines. $4 is the caller-owned diagnostic file.
 _io_search_raw() {
-  local num="$1" org="$2" repo="$3"
+  local num="$1" org="$2" repo="$3" errout="${4:-/dev/null}"
   # `gh api --jq` takes only a program — it has no --arg — so the values are
   # inlined. Safe: _io_resolve_ref constrained num to [0-9]+ and org/repo to
   # [A-Za-z0-9._-]+. `.` is the only regex metachar that survives; BOTH are
@@ -196,7 +239,8 @@ _io_search_raw() {
   # distinguish them, so neither may rely on GitHub's own naming rules.
   local repo_re="${repo//./\\\\.}" org_re="${org//./\\\\.}"
   local qual_re="(^|[^A-Za-z0-9/_.-])(${org_re}/)?${repo_re}#${num}(\\\\D|\$)"
-  gh api -X GET search/issues \
+  _io_gh_lines "$errout" \
+    gh api -X GET search/issues \
     --raw-field q="${num} type:pr org:${org}" \
     --jq ".items[]
       | {repo: (.repository_url|split(\"/\")|last), number, title, state,
@@ -209,8 +253,7 @@ _io_search_raw() {
           (if .merged then \"MERGED\" else (.state|ascii_upcase) end),
           (.title | gsub(\"[\\\\t\\\\n\\\\r]\"; \" \")),
           (if .qualified then \"1\" else \"0\" end) ]
-      | @tsv" \
-    2>/dev/null || true
+      | @tsv"
 }
 
 # Qualify the org-wide hits. Pure: TSV on stdin, "<class><TAB><display>" out,
@@ -352,12 +395,21 @@ _io_minus_timeline() {
 # function is invoked inside a command substitution, so anything it assigns to a
 # global is set in a subshell and lost; the first cut of this fix did exactly
 # that and the diagnostic came out empty.
+#
+# Emits a THIRD field, `pr` or `issue`. `GET repos/{o}/{r}/issues/{n}` answers
+# for a pull request too — that is why the gate sailed past a PR number and only
+# fell over later, in the GraphQL leg, which has no `issue(number:)` to return
+# (brik-llm#2448). The discriminator is the `pull_request` key, present on a PR
+# and absent on an issue, and it is FREE: same endpoint, same call, same round
+# trip. Verified live 2026-08-29 — brik-llm#2858 (a PR) has it, #2448 does not.
 _io_issue_state() {
   local owner="$1" repo="$2" num="$3" errout="${4:-}"
   local out rc errfile attempt
   errfile="$(mktemp)"
   for attempt in 1 2; do
-    if out="$(gh api "repos/$owner/$repo/issues/$num" --jq '.state + "\t" + .title' 2>"$errfile")"; then
+    if out="$(gh api "repos/$owner/$repo/issues/$num" \
+                --jq '.state + "\t" + .title + "\t" + (if has("pull_request") then "pr" else "issue" end)' \
+                2>"$errfile")"; then
       rc=0
     else
       rc=$?
@@ -433,12 +485,40 @@ check_issue_overlap() {
     return 5
   fi
 
-  state="${state_line%%$'\t'*}"
-  title="${state_line#*$'\t'}"
+  # Three fields now, so the title is the MIDDLE one — `${x#*\t}` would carry the
+  # kind marker into it and put "issue" on the end of every printed title.
+  local kind
+  state="$(printf '%s' "$state_line" | cut -f1)"
+  title="$(printf '%s' "$state_line" | cut -f2)"
+  kind="$(printf '%s' "$state_line" | cut -f3)"
+
+  # A PR number is a caller mistake, and answering it as if it were an issue is
+  # what put a raw GraphQL error under the ⚠ banner: the REST read succeeds for a
+  # PR, so the gate proceeded, and only the GraphQL leg — which has no
+  # `issue(number:)` to resolve — failed, into a `|| true` (brik-llm#2448).
+  # Say so in one line instead, before any of that runs.
+  if [ "$kind" = "pr" ]; then
+    echo "" >&2
+    echo -e "${_IO_RED}✗ ${owner}/${repo}#${num} is a PULL REQUEST, not an issue — the overlap check did NOT run.${_IO_NC}" >&2
+    echo -e "   ${title}" >&2
+    echo -e "   Pass the issue number this PR is for. A bare number resolves against ${owner}/${repo}." >&2
+    return 6
+  fi
 
   local prs raw classified searched caveated dropped branches findings=0
-  prs="$(_io_linked_prs "$owner" "$repo" "$num")"
-  raw="$(_io_search_raw "$num" "$owner" "$repo")"
+  # "Could not read" must not wear the shape of "found nothing" — the #2422
+  # collapse, one function over. Both reads are SECOND signals (the hard gate is
+  # the issue read above), so a failure here warns and counts as a finding rather
+  # than aborting: an unreadable timeline is exactly when the operator should not
+  # be told the coast is clear.
+  local prs_err search_err prs_rc=0 raw_rc=0
+  prs_err="$(mktemp)"; search_err="$(mktemp)"
+  prs="$(_io_linked_prs "$owner" "$repo" "$num" "$prs_err")" || prs_rc=$?
+  raw="$(_io_search_raw "$num" "$owner" "$repo" "$search_err")" || raw_rc=$?
+  local prs_err_txt search_err_txt
+  prs_err_txt="$(tr '\n' ' ' < "$prs_err" 2>/dev/null)"
+  search_err_txt="$(tr '\n' ' ' < "$search_err" 2>/dev/null)"
+  rm -f "$prs_err" "$search_err"
   classified="$(printf '%s\n' "$raw" \
                  | awk 'NF' \
                  | _io_classify_search_hits "$repo" "$title")"
@@ -473,10 +553,22 @@ check_issue_overlap() {
     findings=1
   fi
 
-  if [ -n "$prs" ]; then
+  if [ "$prs_rc" -ne 0 ]; then
+    echo "" >&2
+    echo -e "${_IO_YELLOW}⚠  Could NOT read the linked-PR timeline — this is not 'no linked PRs'.${_IO_NC}" >&2
+    [ -n "$prs_err_txt" ] && echo "    gh: ${prs_err_txt}" >&2
+    findings=1
+  elif [ -n "$prs" ]; then
     echo "" >&2
     echo -e "${_IO_YELLOW}⚠  PRs already linked to this issue:${_IO_NC}" >&2
     echo "$prs" | sed 's/^/    /' >&2
+    findings=1
+  fi
+
+  if [ "$raw_rc" -ne 0 ]; then
+    echo "" >&2
+    echo -e "${_IO_YELLOW}⚠  Could NOT run the org-wide PR search — this is not 'nothing found'.${_IO_NC}" >&2
+    [ -n "$search_err_txt" ] && echo "    gh: ${search_err_txt}" >&2
     findings=1
   fi
 
@@ -647,7 +739,9 @@ check_title_overlap() {
   local state_line title siblings
   state_line="$(_io_issue_state "$owner" "$repo" "$num")" || return 0
   [ -z "$state_line" ] && return 0
-  title="${state_line#*$'\t'}"
+  # Field 2 of three. `${x#*\t}` took "title<TAB>kind" once the kind marker was
+  # added, which fed the marker into the similarity scorer as a title token.
+  title="$(printf '%s' "$state_line" | cut -f2)"
 
   siblings="$(MIN_TOKENS="$_IO_TITLE_MIN_TOKENS" MIN_SCORE="$_IO_TITLE_MIN_SCORE" \
               _io_similar_open_issues "$owner" "$repo" "$num" "$title")"
