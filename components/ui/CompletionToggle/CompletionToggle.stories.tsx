@@ -35,14 +35,14 @@ export default meta;
 type Story = StoryObj<typeof CompletionToggle>;
 
 /* ═══════════════════════════════════════════════════════════════
-   SINGLE — args-driven canonical instance. CompletionToggle is fully
+   DEFAULT — args-driven canonical instance. CompletionToggle is fully
    controlled (no internal state), so the render wraps it with a
    useState hook seeded from `args.checked`. Click the toggle in the
    canvas to flip; the `disabled` Control locks it.
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Circular completion toggle for task / item state */
-export const Single: Story = {
+export const Default: Story = {
   args: {
     checked: false,
     disabled: false,
@@ -70,56 +70,5 @@ export const Single: Story = {
 
     // Blur so the post-play canvas matches the canonical idle state.
     (canvas.getByRole('button', { name: 'Mark complete' }) as HTMLElement).blur();
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   ORIENTATION axis — Vertical / Horizontal group layouts per ADR-010
-   §components without a variant axis. CompletionToggle is icon-only
-   (no built-in label); consumers compose adjacent text via Checklist
-   for row-style use or wrap their own card chrome. The orientation
-   stories here show toggles in isolation so the spacing rhythm and
-   interactive behavior are clear without composition noise.
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Vertical group — toggles stacked top-to-bottom */
-export const Vertical: Story = {
-  parameters: { layout: 'padded' },
-  render: () => {
-    const [items, setItems] = useState<Record<string, boolean>>({
-      a: false,
-      b: true,
-      c: false,
-      d: false,
-    });
-    const toggle = (id: string) => setItems((prev) => ({ ...prev, [id]: !prev[id] }));
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
-        {(['a', 'b', 'c', 'd'] as const).map((id) => (
-          <CompletionToggle key={id} checked={items[id]} onCheckedChange={() => toggle(id)} />
-        ))}
-      </div>
-    );
-  },
-};
-
-/** @summary Horizontal group — toggles inline */
-export const Horizontal: Story = {
-  parameters: { layout: 'padded' },
-  render: () => {
-    const [items, setItems] = useState<Record<string, boolean>>({
-      a: true,
-      b: false,
-      c: false,
-      d: false,
-    });
-    const toggle = (id: string) => setItems((prev) => ({ ...prev, [id]: !prev[id] }));
-    return (
-      <div style={{ display: 'flex', flexDirection: 'row', gap: 'var(--gap-xl)', alignItems: 'center' }}>
-        {(['a', 'b', 'c', 'd'] as const).map((id) => (
-          <CompletionToggle key={id} checked={items[id]} onCheckedChange={() => toggle(id)} />
-        ))}
-      </div>
-    );
   },
 };

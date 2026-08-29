@@ -178,7 +178,7 @@ export const Grouped: Story = {
 /** Selected items render as line-colored `ServiceTag` chips (via `option.chip`)
  *  instead of the neutral default `Tag`, each with an owned remove control.
  *  @summary Custom ServiceTag chips for selections */
-export const CustomChips: Story = {
+export const Custom: Story = {
   args: {
     label: 'Services you’re interested in',
     placeholder: 'Select services...',
