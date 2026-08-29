@@ -117,29 +117,3 @@ export const Default: Story = {
     items,
   },
 };
-
-/**
- * Distinct meaningful state from `Default`: the row-wrap behavior at the
- * desktop breakpoint is the layout property worth verifying. Per-card content
- * variants (missing image, audience accent) are exercised by the leaf `Card`
- * / `ServiceTag` stories, not duplicated here.
- *
- * @summary Six cards force the grid to a second row
- */
-export const Wrapped: Story = {
-  args: {
-    sectionKey: 'features-wrapped',
-    title: 'Featured capabilities',
-    body: 'A short section subheading that frames the cards below — typically a cross-sell or capability roll-up.',
-    items: [
-      ...items,
-      {
-        title: 'Capability six',
-        description:
-          'A two-line card description that sets the type rhythm without competing with the title.',
-        href: '#',
-        serviceLine: 'brand' as const,
-      },
-    ],
-  },
-};
