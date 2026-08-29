@@ -58,6 +58,10 @@ A control is disabled when its target is absent — no `onPrev`/`hrefPrev` (firs
   **Don't use PeriodNav for page numbers.** For page-indexed navigation over a known page count, use [Pagination](/docs/components/pagination) — it renders page numbers with ellipsis. PeriodNav is for stepping one period at a time with a caller-supplied label.
 </Callout>
 
+<Callout type="warn">
+  **Don't use PeriodNav for random access to a distant period.** PeriodNav steps to the *adjacent* period only. To jump to an arbitrary month from a section header, use [DatePicker](/docs/components/date-picker) with `precision="month"` instead — that is the canonical header control for browsing a time series. Rule of thumb: sequential/adjacent stepping is PeriodNav; random access is a month DatePicker.
+</Callout>
+
 ## Accessibility
 
 - The bar is a `<nav>` with an `aria-label` (default `"Period navigation"`) — set it to describe the axis being navigated (e.g. `"Browse months"`).
@@ -88,4 +92,5 @@ Plus all standard `<nav>` HTML attributes.
 
 - [FilterBar](/docs/components/filter-bar) — the count-based sibling in the same family
 - [Pagination](/docs/components/pagination) — page-indexed navigation with page numbers
+- [DatePicker](/docs/components/date-picker) — random-access month or date selection for a header (`precision="month"`)
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-period-nav--overview)**
