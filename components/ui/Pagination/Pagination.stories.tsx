@@ -57,35 +57,3 @@ export const Default: Story = {
   },
 };
 
-/* ═══════════════════════════════════════════════════════════════
-   WITH RESULT COUNT — Q4 irreducible: the "Showing X–Y of Z"
-   label is derived from controlled page state that args can't express
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Paired with a derived "Showing X–Y of Z results" label */
-export const WithResultCount: Story = {
-  args: { currentPage: 1, totalPages: 12, onChange: () => {} },
-  render: () => {
-    function TablePagination() {
-      const [page, setPage] = useState(1);
-      const totalPages = 12;
-      const perPage = 10;
-
-      return (
-        <div>
-          <div style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-sm)',
-            color: 'var(--text-secondary)',
-            textAlign: 'center',
-            marginBottom: 'var(--gap-md)',
-          }}>
-            Showing {(page - 1) * perPage + 1}–{Math.min(page * perPage, 120)} of 120 results
-          </div>
-          <Pagination currentPage={page} totalPages={totalPages} onChange={setPage} position="center" />
-        </div>
-      );
-    }
-    return <TablePagination />;
-  },
-};

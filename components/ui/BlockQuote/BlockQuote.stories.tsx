@@ -3,7 +3,7 @@ import { expect, within } from 'storybook/test';
 import { BlockQuote } from './BlockQuote';
 
 const meta: Meta<typeof BlockQuote> = {
-  title: 'Components/block-quote',
+  title: 'Blocks/block-quote',
   component: BlockQuote,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
