@@ -52,6 +52,13 @@ source "${SCRIPT_DIR}/lib/overlap-filters.sh"
 # editing the same file.
 # shellcheck source=scripts/lib/pr-path-overlap.sh
 source "${SCRIPT_DIR}/lib/pr-path-overlap.sh"
+# Open-issue path gate (brik-llm#2314). The gates above all read PUBLISHED
+# GIT STATE — a branch, a PR, a worktree — so none of them reads the backlog.
+# An open issue describing a defect in the file you are about to rewrite is
+# invisible to every one of them. Sourced after pr-path-overlap.sh, whose
+# ticket_paths_from_text/intersect_paths it reuses rather than re-deriving.
+# shellcheck source=scripts/lib/issue-path-overlap.sh
+source "${SCRIPT_DIR}/lib/issue-path-overlap.sh"
 # Session size-budget gate (brik-llm#2045, mirrored per brik-llm#2052). Sourced
 # after issue-overlap.sh — _sb_resolve_ref reuses _io_resolve_ref when present.
 # shellcheck source=scripts/lib/session-budget.sh
@@ -261,6 +268,12 @@ if [ -n "$ISSUE_REF" ]; then
   # an unreadable title either (see the `|| return 0` in check_title_overlap).
   check_title_overlap "$ISSUE_REF"
   check_ticket_path_overlap "$ISSUE_REF"
+  # The issue-side half of the same question (brik-llm#2314). The line above
+  # asks "is anyone BUILDING on these files"; this asks "does anyone have an
+  # open ticket ABOUT them" — a corpus no other gate here reads. Advisory and
+  # unguarded for the same reason as the two above: it returns 0 on
+  # everything, including a read it could not make.
+  check_issue_path_overlap "$ISSUE_REF"
   # Guarded: check_session_budget returns 1 to refuse; an unguarded call under
   # set -e would exit before the refusal's remedy lines are read. brik-llm#2045.
   if ! check_session_budget "$ISSUE_REF" "$OVER_BUDGET"; then

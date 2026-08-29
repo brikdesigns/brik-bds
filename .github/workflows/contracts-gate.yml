@@ -48,6 +48,7 @@ name: Contracts Gate
 #   bump-pr-guard-check        gh-error-classify-check    identity-guard-check
 #   issue-link-resolver-check  mirror-widgets-check       new-task-flag-order-check
 #   pr-label-resolver-check    pr-path-overlap-check      session-budget-contract
+#   issue-path-overlap-check
 #   shell-syntax-check         worktree-sweep-contract    standards-rag-drift-check
 #
 # Issue: brikdesigns/brik-bds#2098 (parent #2038 — AC1 remainder)
@@ -292,6 +293,14 @@ jobs:
         if: always()
         run: bash scripts/__tests__/test-pr-path-overlap.sh < /dev/null
 
+      # ─── issue-path-overlap-check ───────────────────────────────────────────
+      # The synced twin of brik-llm's open-issue path gate (brik-llm#2314). The
+      # step above reads open PRs; this one reads open ISSUES, a corpus no gate
+      # in this file touched before it.
+      - name: Open-issue path overlap contract
+        if: always()
+        run: bash scripts/__tests__/test-issue-path-overlap.sh < /dev/null
+
       # ─── session-budget-contract ────────────────────────────────────────────
       - name: Budget arithmetic matches the canon, and exceeding it refuses
         if: always()
@@ -408,6 +417,13 @@ jobs:
           shellcheck -S warning -e SC1091,SC2148 \
             scripts/lib/pr-path-overlap.sh \
             scripts/__tests__/test-pr-path-overlap.sh
+
+      - name: shellcheck — issue-path overlap
+        if: always() && steps.shellcheck.outcome == 'success'
+        run: |
+          shellcheck -S warning -e SC1091,SC2148 \
+            scripts/lib/issue-path-overlap.sh \
+            scripts/__tests__/test-issue-path-overlap.sh
 
       - name: shellcheck — session budget
         if: always() && steps.shellcheck.outcome == 'success'
