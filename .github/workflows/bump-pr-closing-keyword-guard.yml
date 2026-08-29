@@ -38,8 +38,13 @@ name: bump-pr-closing-keyword-guard
 # verifies its own detection logic on every PR.
 #
 # Portable: this file is self-contained — no repo-specific paths, no checkout.
-# Installed in brik-llm, brik-bds, brik-client-portal. Keep the copies in sync:
-# edit the brik-llm copy first, then propagate.
+#
+# brik-llm holds the canonical copy; consumers carry copies of it. Edit the
+# brik-llm copy first, then propagate — a local edit in a consumer repo is drift,
+# not an improvement. Do NOT write the consumer list here: the registry in
+# brik-llm `scripts/audit/overlap-twin-drift.py` is the list, and a count or set
+# of repo names in this header is the stale prose every twin here has already
+# gone stale as (brik-llm#2272/#2447). `overlap-twin-drift` compares the copies.
 
 on:
   pull_request:
