@@ -15,8 +15,6 @@ const SAMPLE_IMAGE =
       '<path d="M0 300l120-140 90 100 70-70 120 110z" fill="#5f7a56"/>' +
       '</svg>',
   );
-const SAMPLE_SVG = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><path fill="%23333" d="M14 4l3 7h7l-5.5 4 2 7L14 18l-6.5 4 2-7L4 11h7z"/></svg>';
-
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof FileCard> = {
@@ -75,7 +73,13 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /* ═══════════════════════════════════════════════════════════════
-   DEFAULT — preview="image", all variation via Controls
+   DEFAULT — args-driven sandbox. Controls work.
+
+   `preview` (image / svg / icon) is a select Control, not a per-value story:
+   image and svg share one render path (both go through <Image>), and icon is a
+   boolean-ish placeholder toggle — neither clears the ADR-010 Q3 bar for a
+   dedicated story. `aspectRatio`, `href`, `disabled`, and the action handlers
+   are all Controls here too.
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Interactive playground for prop tweaking */
@@ -87,36 +91,6 @@ export const Default: Story = {
     name: 'hero.jpg',
     meta: '1600 × 900 • 248 KB',
     href: SAMPLE_IMAGE,
-    onReplace: fn(),
-    onDelete: fn(),
-  },
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   Q3 — dedicated stories per `preview` value
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary SVG preview — renders `src` directly, no aspect-ratio crop */
-export const Svg: Story = {
-  args: {
-    preview: 'svg',
-    src: SAMPLE_SVG,
-    name: 'industry-small-biz-primary.svg',
-    meta: '28 × 28 • 673 B',
-    onReplace: fn(),
-    onDelete: fn(),
-  },
-};
-
-/**
- * Generic placeholder icon for non-renderable file types.
- * @summary Icon preview for non-renderable file types
- */
-export const Icon: Story = {
-  args: {
-    preview: 'icon',
-    name: 'brand-guidelines.pdf',
-    meta: 'PDF • 2.4 MB',
     onReplace: fn(),
     onDelete: fn(),
   },

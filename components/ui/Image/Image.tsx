@@ -1,6 +1,6 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
-import { Frame, type FrameRatio, type FrameFit } from '../Frame';
+import { Frame, type FrameRatio, type FrameFit, type FrameAnchor } from '../Frame';
 import './Image.css';
 
 export interface ImageProps extends HTMLAttributes<HTMLElement> {
@@ -23,6 +23,13 @@ export interface ImageProps extends HTMLAttributes<HTMLElement> {
    * Default `cover`. Passed through to the wrapping `<Frame>`.
    */
   fit?: FrameFit;
+  /**
+   * Which axis the wrapping `<Frame>` fixes. Only meaningful together with
+   * `ratio`. Default `width` (fills container width, derives height). Set
+   * `height` for a fixed-height thumbnail whose width follows the ratio —
+   * supply the height via `className` / `style` on the image.
+   */
+  anchor?: FrameAnchor;
   /**
    * `object-position` for the image inside its frame (e.g. `"top"`,
    * `"50% 25%"`). Only meaningful together with `ratio` + a cropping `fit`.
@@ -79,6 +86,7 @@ export function Image({
   alt,
   ratio,
   fit = 'cover',
+  anchor = 'width',
   position,
   eager = false,
   srcSet,
@@ -109,7 +117,7 @@ export function Image({
   return (
     <figure className={bdsClass('bds-image', className)} style={style} {...props}>
       {ratio ? (
-        <Frame className="bds-image__media" ratio={ratio} fit={fit}>
+        <Frame className="bds-image__media" ratio={ratio} fit={fit} anchor={anchor}>
           {img}
         </Frame>
       ) : (

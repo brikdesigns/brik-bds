@@ -1,6 +1,37 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './FileCard.stories';
+import { FileCard } from './FileCard';
+
+{/* `preview` is a listed axis (ADR-010 Rule 5) — a Control on the Playground,
+    with the side-by-side comparison living here as a docs-local demo, never a
+    story export. */}
+export const SAMPLE_IMAGE =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">' +
+      '<rect width="400" height="300" fill="#d8e4d4"/>' +
+      '<circle cx="320" cy="60" r="28" fill="#f2e9c9"/>' +
+      '<path d="M0 300l120-140 90 100 70-70 120 110z" fill="#5f7a56"/>' +
+      '</svg>',
+  );
+
+export const SAMPLE_SVG =
+  'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28"><path fill="%23333" d="M14 4l3 7h7l-5.5 4 2 7L14 18l-6.5 4 2-7L4 11h7z"/></svg>';
+
+export const PreviewModesDemo = () => (
+  <div
+    style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+      gap: 'var(--gap-md)',
+    }}
+  >
+    <FileCard preview="image" src={SAMPLE_IMAGE} aspectRatio="1-1" name="hero.jpg" meta="Image • 248 KB" />
+    <FileCard preview="svg" src={SAMPLE_SVG} name="logo.svg" meta="SVG • 673 B" />
+    <FileCard preview="icon" name="brand-guidelines.pdf" meta="PDF • 2.4 MB" />
+  </div>
+);
 
 <Meta of={Stories} />
 
@@ -18,13 +49,13 @@ The `aspectRatio` slug consumes the `--aspect-*` token family so CMS uploaders c
 
 ## Variants
 
-### Svg
+`preview` (`image` · `svg` · `icon`) is a Control on the Playground — the three modes share one card surface, so they read better side by side here than as separate stories. `image` and `svg` render `src` through the BDS `Image` primitive; `icon` shows a generic placeholder for non-renderable types (PDF, ZIP).
 
-<Canvas of={Stories.Svg} />
+### Preview modes
 
-### Icon
-
-<Canvas of={Stories.Icon} />
+<Canvas>
+  <PreviewModesDemo />
+</Canvas>
 
 ## Patterns
 

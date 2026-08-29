@@ -1,5 +1,7 @@
-import { type HTMLAttributes } from 'react';
+import { type HTMLAttributes, type ReactNode } from 'react';
 import { Icon } from '../Icon';
+import { Button } from '../Button';
+import { Image } from '../Image';
 import { Frame, type FrameRatio } from '../Frame';
 import { ArrowSquareOut, CloudArrowUp, File as FileIcon, Trash } from '../../icons';
 import { bdsClass } from '../../utils';
@@ -93,28 +95,45 @@ export function FileCard({
   ...props
 }: FileCardProps) {
   const altText = previewAlt ?? name;
-  const previewBox = (
-    <Frame
-      as="span"
-      ratio={aspectRatio}
-      anchor="height"
-      fit="cover"
-      className={bdsClass('bds-file-card__preview', `bds-file-card__preview--${preview}`)}
-      aria-hidden={preview === 'icon' ? true : undefined}
-    >
-      {preview === 'image' && src && (
-        <img className="bds-file-card__preview-img" src={src} alt={altText} loading="lazy" decoding="async" />
-      )}
-      {preview === 'svg' && src && (
-        <img className="bds-file-card__preview-svg" src={src} alt={altText} loading="lazy" decoding="async" />
-      )}
-      {preview === 'icon' && (
-        <span className="bds-file-card__preview-icon">
-          <Icon icon={FileIcon} />
-        </span>
-      )}
-    </Frame>
+  const previewClassName = bdsClass(
+    'bds-file-card__preview',
+    `bds-file-card__preview--${preview}`,
   );
+
+  // Renderable previews (image / svg) route through the BDS Image primitive so
+  // FileCard doesn't hand-roll an <img> — Image owns the Frame, lazy loading,
+  // async decode, and object-fit. `icon` has no src, so it keeps a bare Frame
+  // holding the generic file placeholder.
+  let previewBox: ReactNode;
+  if ((preview === 'image' || preview === 'svg') && src) {
+    previewBox = (
+      <Image
+        src={src}
+        alt={altText}
+        ratio={aspectRatio}
+        anchor="height"
+        fit="cover"
+        className={previewClassName}
+      />
+    );
+  } else {
+    previewBox = (
+      <Frame
+        as="span"
+        ratio={aspectRatio}
+        anchor="height"
+        fit="cover"
+        className={previewClassName}
+        aria-hidden={preview === 'icon' ? true : undefined}
+      >
+        {preview === 'icon' && (
+          <span className="bds-file-card__preview-icon">
+            <Icon icon={FileIcon} />
+          </span>
+        )}
+      </Frame>
+    );
+  }
 
   return (
     <div
@@ -141,15 +160,16 @@ export function FileCard({
             {meta && <p className="bds-file-card__metadata">{meta}</p>}
           </div>
           {href && (
-            <a
+            <Button
               className="bds-file-card__open"
+              variant="secondary"
+              size="sm"
+              icon={<Icon icon={ArrowSquareOut} />}
+              label={`Open ${name} in new tab`}
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`Open ${name} in new tab`}
-            >
-              <Icon icon={ArrowSquareOut} />
-            </a>
+            />
           )}
         </div>
       </div>

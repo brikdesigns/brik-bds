@@ -112,6 +112,7 @@ For automatic candidate generation and format negotiation (WebP/AVIF), let `next
 | `alt` | `string` *(required)* | — |
 | `ratio` | `FrameRatio` | — |
 | `fit` | `FrameFit` | `'cover'` |
+| `anchor` | `FrameAnchor` | `'width'` |
 | `position` | `string` | — |
 | `eager` | `boolean` | `false` |
 | `srcSet` | `string` | — |
@@ -123,7 +124,10 @@ For automatic candidate generation and format negotiation (WebP/AVIF), let `next
 Plus standard `<figure>` HTML attributes. `position` takes a CSS `object-position`
 value (`"top"`, `"50% 25%"`) and only applies together with `ratio` and a cropping
 `fit`. `ratio` and `fit` are the same aliases [Frame](/docs/components/frame) uses —
-`FrameRatio` includes four deprecated mode-words listed there.
+`FrameRatio` includes four deprecated mode-words listed there. `anchor` is also
+passed through to `Frame`: the default `'width'` fills the container and derives
+height from the ratio; `'height'` fixes a caller-set height and derives the width
+(for fixed-height thumbnails).
 
 ## Related
 

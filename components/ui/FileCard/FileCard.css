@@ -11,10 +11,12 @@
  * - --padding-sm, --padding-md
  * - --gap-tiny, --gap-xs, --gap-sm, --gap-md
  * - --text-primary, --text-secondary
- * - --text-brand-primary (open-in-new-tab link)
  * - --size-1400 (fixed preview height)
  *
  * Preview aspect-ratio is owned by <Frame> (the `--aspect-*` family), not here.
+ * Image/svg previews render through <Image>, which wraps that Frame in a
+ * <figure>; the open-in-new-tab affordance is a <Button variant="secondary"
+ * size="sm">, which owns its own styling.
  */
 
 /* ─── Wrapper ─────────────────────────────────────────────────── */
@@ -57,7 +59,8 @@
   flex: 0 0 auto;
 }
 
-/* Scoped under __card so it wins over `.bds-frame`'s block/width base. */
+/* Scoped under __card so it wins over `.bds-frame`'s (icon preview) and
+   `.bds-image`'s (image/svg preview) block/width base. */
 .bds-file-card__card .bds-file-card__preview {
   height: var(--size-1400);
   flex: 0 0 auto;
@@ -65,6 +68,13 @@
   align-items: center;
   justify-content: center;
   background-color: var(--surface-muted);
+}
+
+/* Image/svg previews render as <figure class="bds-image"> wrapping the Frame.
+   The figure carries the fixed height above; hand it down to the inner Frame so
+   its `anchor="height"` derives the width from the aspect ratio. */
+.bds-file-card__card .bds-file-card__preview.bds-image .bds-image__media {
+  height: 100%;
 }
 
 .bds-file-card__preview-icon {
@@ -114,20 +124,10 @@
   margin: 0;
 }
 
+/* Layout only — the affordance is a <Button variant="secondary" size="sm">,
+   which owns its color, sizing, and interactive states. */
 .bds-file-card__open {
   flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-secondary);
-  font-size: var(--label-md);
-  text-decoration: none;
-  transition: color var(--duration-fast) var(--ease-out);
-}
-
-.bds-file-card__open:hover,
-.bds-file-card__open:focus-visible {
-  color: var(--text-brand-primary);
 }
 
 /* ─── Action row ──────────────────────────────────────────────── */
