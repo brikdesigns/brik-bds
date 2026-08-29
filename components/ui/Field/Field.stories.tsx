@@ -70,33 +70,6 @@ export const WithCompositeEmpty: Story = {
 };
 
 /**
- * Pinning `tier="compact"` outside a Sheet. Inside a Sheet body this prop is
- * unnecessary — the tier is inherited from the container (#1383) — so pass it
- * only to force sheet-tier type on a page, or `tier="standard"` to force
- * page-tier type inside a sheet.
- *
- * bds-lint-ignore — the repeat varies *field state* (plain / empty / helper /
- * error) at a fixed tier, not the `tier` axis itself (#1502).
- * @summary `tier="compact"` pinned outside a Sheet
- */
-export const CompactTier: Story = {
-  render: () => (
-    <Frame>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
-        <Field label="Status" tier="compact">Active</Field>
-        <Field label="Notes" tier="compact" empty="—">
-          Multi-line value that wraps across lines is preserved correctly.
-        </Field>
-        <Field label="Phone" tier="compact" helper="Primary contact number">
-          (555) 867-5309
-        </Field>
-        <Field label="Insurance" tier="compact" helper="Required field" helperTone="negative" />
-      </div>
-    </Frame>
-  ),
-};
-
-/**
  * bds-lint-ignore — the repeat varies the *content type* of `children` (text /
  * Tag / anchor / list), which is not a prop scale a Control can express (#1502).
  * @summary `children` accepts text, Tags, anchors, or lists
