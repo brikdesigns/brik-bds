@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent } from 'storybook/test';
 import { Collapsible } from './Collapsible';
 
 const meta: Meta<typeof Collapsible> = {
@@ -49,32 +50,32 @@ export const Default: Story = {
 };
 
 /**
- * Controlled mode — `isOpen` + `onOpenChange` wired via `useState`. Use when
- * parent state must drive the open/closed transition (e.g. "expand all" /
- * "collapse all" buttons, wizard steps, or accordion groups).
+ * Controlled mode — clicking the header fires `onOpenChange`, the parent's
+ * `useState` flows back through `isOpen`, and `aria-expanded` flips. Asserts
+ * the controlled loop rather than snapshotting a frame identical to `Default`.
  *
- * @summary Controlled open state via isOpen + onOpenChange
+ * @summary onOpenChange drives isOpen; aria-expanded flips
  */
-export const Controlled: Story = {
+export const InteractionTestControlled: Story = {
+  tags: ['!manifest', 'interaction-test'],
   render: () => {
     const [open, setOpen] = useState(false);
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
-        <div style={{ display: 'flex', gap: 'var(--gap-sm)' }}>
-          <button type="button" onClick={() => setOpen(true)} style={{ cursor: 'pointer' }}>Expand</button>
-          <button type="button" onClick={() => setOpen(false)} style={{ cursor: 'pointer' }}>Collapse</button>
-        </div>
-        <Collapsible
-          sectionLabel="Section 01"
-          title="Controlled by parent state"
-          isOpen={open}
-          onOpenChange={setOpen}
-        >
-          This section's open state is controlled externally. The parent's Expand / Collapse
-          buttons drive the transition — the trigger fires onOpenChange but does
-          not manage state internally.
-        </Collapsible>
-      </div>
+      <Collapsible
+        sectionLabel="Section 01"
+        title="Controlled by parent state"
+        isOpen={open}
+        onOpenChange={setOpen}
+      >
+        This section&apos;s open state is controlled externally by the parent&apos;s useState.
+      </Collapsible>
     );
+  },
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: /Controlled by parent state/i });
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await userEvent.click(trigger);
+    // onOpenChange → setOpen(true) → isOpen=true → aria-expanded flips: proves the controlled loop.
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
   },
 };
