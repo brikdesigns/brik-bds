@@ -147,7 +147,7 @@
 .bds-sheet__tab {
   background: none;
   border: none;
-  border-bottom: 2px solid transparent;
+  border-bottom: var(--border-width-md) solid transparent;
   padding: var(--padding-sm) 0;
   font-family: var(--font-family-label);
   font-size: var(--body-sm);

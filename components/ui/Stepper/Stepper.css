@@ -16,22 +16,22 @@
 .bds-stepper--lg { gap: var(--gap-md); }
 
 .bds-stepper--sm .bds-stepper__button {
-  width: 28px;
-  height: 28px;
+  width: var(--size-700);
+  height: var(--size-700);
   border-radius: var(--border-radius-sm);
   font-size: 10px;
 }
 .bds-stepper--md .bds-stepper__button {
-  width: 36px;
-  height: 36px;
+  width: var(--size-900);
+  height: var(--size-900);
   border-radius: var(--border-radius-md);
   font-size: 12px;
 }
 .bds-stepper--lg .bds-stepper__button {
-  width: 44px;
-  height: 44px;
+  width: var(--size-1100);
+  height: var(--size-1100);
   border-radius: var(--border-radius-md);
-  font-size: 14px;
+  font-size: var(--body-sm);
 }
 
 .bds-stepper--sm .bds-stepper__value { font-size: var(--label-sm); min-width: 28px; }

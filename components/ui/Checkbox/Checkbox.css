@@ -17,8 +17,8 @@
 /* ─── Input ──────────────────────────────────────────────────── */
 
 .bds-checkbox__input {
-  width: 16px;
-  height: 16px;
+  width: var(--size-400);
+  height: var(--size-400);
   margin: 0;
   cursor: pointer;
   flex-shrink: 0;

@@ -82,14 +82,14 @@
    Left padding clears the leading icon (icon inset + 24px glyph slot). */
 .bds-address-input--md .bds-address-input__input {
   font-size: var(--body-md);
-  height: 40px;
+  height: var(--size-1000);
   padding-right: var(--padding-sm);
   padding-left: calc(var(--padding-sm) + 24px);
 }
 
 .bds-address-input--sm .bds-address-input__input {
   font-size: var(--body-sm);
-  height: 32px;
+  height: var(--size-800);
   padding-right: var(--padding-xs);
   padding-left: calc(var(--padding-xs) + 24px);
 }
@@ -166,8 +166,8 @@
 
 /* Suggestion-row leading icon */
 .bds-address-input__option > .bds-address-input__icon {
-  width: 20px;
-  height: 24px;
+  width: var(--size-500);
+  height: var(--size-600);
   flex-shrink: 0;
 }
 

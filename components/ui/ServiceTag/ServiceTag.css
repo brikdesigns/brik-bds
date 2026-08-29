@@ -21,7 +21,7 @@
 /* ─── Sizes ──────────────────────────────────────────────────── */
 
 .bds-service-tag--sm {
-  height: 28px;
+  height: var(--size-700);
   padding-inline: var(--padding-sm);
   font-size: var(--label-tiny);
 }

@@ -10,8 +10,8 @@
   ───────────────────────────────────────────────────────────────── */
 
   .bds-completion-toggle {
-    width: 24px;
-    height: 24px;
+    width: var(--size-600);
+    height: var(--size-600);
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -55,10 +55,10 @@
   /* CSS-only checkmark — no icon font dependency */
   .bds-completion-toggle__icon {
     display: block;
-    border-left: 2px solid var(--text-on-color-dark);
-    border-bottom: 2px solid var(--text-on-color-dark);
+    border-left: var(--border-width-md) solid var(--text-on-color-dark);
+    border-bottom: var(--border-width-md) solid var(--text-on-color-dark);
     transform: rotate(-45deg) translate(1px, -1px);
     width: 10px;
-    height: 6px;
+    height: var(--size-150);
   }
 }

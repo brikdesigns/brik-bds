@@ -51,7 +51,7 @@
   padding: var(--padding-tiny) var(--padding-sm);
   font-size: var(--label-tiny);
   gap: var(--gap-xs);
-  height: 28px;
+  height: var(--size-700);
 }
 
 .bds-chip--md {
@@ -114,8 +114,8 @@
 }
 
 .bds-chip--md .bds-chip__icon {
-  width: 16px;
-  height: 16px;
+  width: var(--size-400);
+  height: var(--size-400);
   font-size: var(--icon-sm);
 }
 
