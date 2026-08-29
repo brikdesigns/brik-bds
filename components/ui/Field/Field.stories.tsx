@@ -19,7 +19,7 @@ const meta: Meta<typeof Field> = {
     tier: { control: 'select', options: ['standard', 'compact'] },
     empty: { control: 'text' },
     helper: { control: 'text' },
-    helperTone: { control: 'select', options: ['neutral', 'error'] },
+    helperTone: { control: 'select', options: ['neutral', 'negative'] },
   },
 };
 
