@@ -170,24 +170,154 @@ _io_linked_prs() {
 #
 # Searching the bare number is the only form that works — GitHub's tokenizer
 # drops `#`, so "#1551" and "brik-llm#1551" are no more precise (verified).
-# That makes the raw result set noisy, so it is filtered two ways:
-#   - any OPEN pr is kept: an open PR on this number is the actual concurrency
-#     risk this gate exists to catch, and a false positive there is cheap;
-#   - a CLOSED/MERGED pr is kept only when the number appears in its TITLE,
-#     which is where a real reference lands. Without this, every PR whose own
-#     number happens to sit near the issue number shows up as noise.
-_io_searched_prs() {
-  local num="$1" org="$2"
-  # `gh api --jq` takes only a program — it has no --arg — so the number is
-  # inlined. Safe: _io_resolve_ref already constrained it to [0-9]+.
+# That makes the raw result set noisy, so it is filtered twice: this coarse pass
+# keeps any OPEN pr, any CLOSED/MERGED one whose TITLE carries the number, and
+# any whose title or body carries a repo-qualified reference — and
+# _io_classify_search_hits below then qualifies what survives.
+#
+# Emits TSV, one row per surviving hit:
+#   repo <TAB> number <TAB> STATE-LABEL <TAB> title <TAB> qualified(0|1)
+#
+# `qualified` is 1 when a REPO-QUALIFIED reference to this issue — `brik-llm#N`
+# or `brikdesigns/brik-llm#N` — appears in the PR's title or body. That is the
+# only textual form that proves the PR meant *this* repo's #N.
+#
+# It is a `select` term and not only a column because the coarse pass used to
+# gate on the TITLE alone: a closed PR carrying `Closes brikdesigns/brik-llm#N`
+# in its BODY and nothing in its title was discarded before the qualifier could
+# ever see it — which is the exact shape the org-wide leg was added for, since a
+# cross-repo closing keyword emits no CrossReferencedEvent either.
+_io_search_raw() {
+  local num="$1" org="$2" repo="$3"
+  # `gh api --jq` takes only a program — it has no --arg — so the values are
+  # inlined. Safe: _io_resolve_ref constrained num to [0-9]+ and org/repo to
+  # [A-Za-z0-9._-]+. `.` is the only regex metachar that survives; BOTH are
+  # escaped, not just repo — the validator that lets a dot through does not
+  # distinguish them, so neither may rely on GitHub's own naming rules.
+  local repo_re="${repo//./\\\\.}" org_re="${org//./\\\\.}"
+  local qual_re="(^|[^A-Za-z0-9/_.-])(${org_re}/)?${repo_re}#${num}(\\\\D|\$)"
   gh api -X GET search/issues \
     --raw-field q="${num} type:pr org:${org}" \
     --jq ".items[]
       | {repo: (.repository_url|split(\"/\")|last), number, title, state,
-         merged: (.pull_request.merged_at != null)}
-      | select(.state == \"open\" or (.title | test(\"#${num}(\\\\D|\$)\")))
-      | \"\(.repo)#\(.number) [\(if .merged then \"MERGED\" else (.state|ascii_upcase) end)] \(.title)\"" \
-    2>/dev/null | head -8 || true
+         merged: (.pull_request.merged_at != null), body: (.body // \"\")}
+      | . + {qualified: ((.title + \" \" + .body) | test(\"${qual_re}\"))}
+      | select(.state == \"open\"
+               or (.title | test(\"#${num}(\\\\D|\$)\"))
+               or .qualified)
+      | [ .repo, (.number|tostring),
+          (if .merged then \"MERGED\" else (.state|ascii_upcase) end),
+          (.title | gsub(\"[\\\\t\\\\n\\\\r]\"; \" \")),
+          (if .qualified then \"1\" else \"0\" end) ]
+      | @tsv" \
+    2>/dev/null || true
+}
+
+# Qualify the org-wide hits. Pure: TSV on stdin, "<class><TAB><display>" out,
+# one of three classes — `keep`, `caveat`, `drop`. No network, no globals.
+#
+# Why a filter at all (#2331): every Brik repo numbers in the same range, so a
+# bare-number search returns other repos' *own* #N as a matter of course. The
+# gate labelled the whole block "may include unrelated" and made the operator
+# dismiss it by hand on the fleet's two hottest paths — and a gate whose hits
+# are usually noise is one that stops being read, which is the #1485 failure it
+# exists to prevent.
+#
+# Why NOT the rule #2331 proposed. That rule was "cross-repo + CLOSED/MERGED →
+# keep only if repo-qualified", flagged in the ticket as needing confirmation
+# against the data. Confirmed 2026-08-29, and it fails: the true positives the
+# org-wide leg was ADDED for are not repo-qualified anywhere.
+#
+#   brik-client-portal#2455  "…hybrid lexical dash negation + avg_score mode
+#                             split (#1551)"   ← the work for brik-llm#1551
+#   brik-client-portal#1555  "Retire dev_analytics; Launch phase owns GA4
+#                             (#1551)"         ← portal's OWN #1551
+#
+# Same repo, same state, same bare-number title shape — one real, one noise. No
+# text rule keyed on the reference can separate them, so the reference is not
+# the discriminator. The TITLE is: a cross-repo PR that is genuinely this
+# ticket's work describes the same problem, and one that merely shares a number
+# describes something else. Scored on shared significant tokens, ≥2 to keep,
+# which sorted all five live cases correctly (the two above, plus portal#2366 /
+# #2363 against brik-llm#2313 and portal#2525 against brik-llm#2333 — all noise,
+# all zero shared tokens).
+#
+# Deliberately cheaper than check_title_overlap's IDF scorer below: that one
+# needs the whole open-issue set as a document corpus and shells out to node.
+# Here the corpus is ~8 search hits, and this runs on new-task.sh's hot path.
+#
+# KNOWN LIMIT, and the reason nothing is ever dropped silently: a paraphrase
+# scores zero. "Reduce runtime of the overnight data dump" and "Speed up the
+# nightly export job" are the same ticket and share no token, and an issue whose
+# own title yields fewer than MINSHARED significant tokens ("Fix auth bug" → one)
+# can never reach the threshold at all. So `drop` means "not shown as a parallel
+# track", never "confirmed unrelated" — the caller prints the count and
+# _IO_SEARCH_SHOW_DROPPED=1 names them.
+_IO_SEARCH_MIN_SHARED="${_IO_SEARCH_MIN_SHARED:-2}"
+
+_io_classify_search_hits() {
+  local issue_repo="$1" issue_title="$2"
+  awk -F'\t' -v IREPO="$issue_repo" -v ITITLE="$issue_title" \
+             -v MINSHARED="$_IO_SEARCH_MIN_SHARED" '
+    function tok(str, out,   i, n, arr, w, c) {
+      delete out
+      str = tolower(str)
+      gsub(/[^a-z0-9]+/, " ", str)
+      n = split(str, arr, " ")
+      c = 0
+      for (i = 1; i <= n; i++) {
+        w = arr[i]
+        # <4 chars is almost always a preposition or a version marker, and the
+        # conventional-commit type ("feat", "chore", "refactor") is on every
+        # Brik PR title — counting it would make any two of them look alike.
+        if (length(w) < 4 || (w in STOP)) continue
+        if (!(w in out)) { out[w] = 1; c++ }
+      }
+      return c
+    }
+    BEGIN {
+      n = split("feat chore refactor docs test tests spec perf build style " \
+                "with without from this that these those which where when what " \
+                "have has had been being will would should could into onto over " \
+                "under than then such very more most less least each every some " \
+                "many much also only just even still both same other " \
+                "adds added make makes made using uses used fixes fixed " \
+                "issue issues", s, " ")
+      for (i = 1; i <= n; i++) STOP[s[i]] = 1
+      tok(ITITLE, TGT)
+    }
+    {
+      disp = $1 "#" $2 " [" $3 "] " $4
+      # Same repo: unchanged. A bare #N here means exactly what it says.
+      if ($1 == IREPO)   { print "keep\t" disp; next }
+      # Open, elsewhere: the live concurrency risk. Kept, and kept labelled —
+      # a false positive on an open PR is cheap, a miss is the #1525 double-build.
+      if ($3 == "OPEN")  { print "caveat\t" disp; next }
+      # Closed/merged, elsewhere: needs a reason.
+      if ($5 == "1")     { print "keep\t" disp; next }
+      shared = 0
+      tok($4, HIT)
+      for (w in TGT) if (w in HIT) shared++
+      if (shared >= MINSHARED) { print "keep\t" disp; next }
+      print "drop\t" disp
+    }
+  '
+}
+
+# Drop search hits the timeline already reported. The two sources key
+# differently (owner/repo#N vs repo#N), so normalise to repo#N before comparing.
+#
+# Two-file read, not awk -v: a -v value cannot carry literal newlines, and awk
+# fails outright on one — which would silently blank the search list.
+_io_minus_timeline() {
+  awk '
+    function key(s,   f, g, h, m) {
+      split(s, f, " "); split(f[1], g, "#"); m = split(g[1], h, "/")
+      return h[m] "#" g[2]
+    }
+    NR == FNR { if ($0 != "") seen[key($0)] = 1; next }
+    { if ($0 != "" && !(key($0) in seen)) print }
+  ' <(printf '%s\n' "$1") <(printf '%s\n' "$2")
 }
 
 # Read "<state>\t<title>". THREE outcomes, and collapsing them is what #2422 and
@@ -306,25 +436,31 @@ check_issue_overlap() {
   state="${state_line%%$'\t'*}"
   title="${state_line#*$'\t'}"
 
-  local prs searched branches findings=0
+  local prs raw classified searched caveated dropped branches findings=0
   prs="$(_io_linked_prs "$owner" "$repo" "$num")"
-  searched="$(_io_searched_prs "$num" "$owner")"
+  raw="$(_io_search_raw "$num" "$owner" "$repo")"
+  classified="$(printf '%s\n' "$raw" \
+                 | awk 'NF' \
+                 | _io_classify_search_hits "$repo" "$title")"
+  # head -8 per class, not over the raw set: a slot spent on a same-numbered PR
+  # from another repo is exactly what could crowd out the real hit.
+  #
+  # `|| true` on both, as the line they replaced had: `head` closing the pipe
+  # early kills awk with SIGPIPE, the pipeline reports 141, and new-task.sh runs
+  # this under `set -euo pipefail` — an aborted pickup with no worktree (#1692).
+  searched="$(printf '%s\n' "$classified" | awk -F'\t' '$1=="keep"{print $2}'   | head -8 || true)"
+  caveated="$(printf '%s\n' "$classified" | awk -F'\t' '$1=="caveat"{print $2}' | head -8 || true)"
+  # awk, not `grep -c`: grep exits 1 on a zero count, and new-task.sh calls this
+  # under `set -euo pipefail` — the exact shape of the #1692 abort.
+  dropped="$(printf '%s\n' "$classified" | awk -F'\t' '$1=="drop"{n++} END{print n+0}')"
   branches="$(_io_matching_branches "$num")"
 
   # Drop search hits the timeline already reported. The two sources key
   # differently (owner/repo#N vs repo#N), so normalise to repo#N before
   # comparing — and skip the whole ticket's own number in the current repo.
-  if [ -n "$prs" ] && [ -n "$searched" ]; then
-    # Two-file read, not awk -v: a -v value cannot carry literal newlines, and
-    # awk fails outright on one — which would silently blank the search list.
-    searched="$(awk '
-      function key(s,   f, g, h, m) {
-        split(s, f, " "); split(f[1], g, "#"); m = split(g[1], h, "/")
-        return h[m] "#" g[2]
-      }
-      NR == FNR { if ($0 != "") seen[key($0)] = 1; next }
-      { if ($0 != "" && !(key($0) in seen)) print }
-    ' <(printf '%s\n' "$prs") <(printf '%s\n' "$searched"))"
+  if [ -n "$prs" ]; then
+    [ -n "$searched" ] && searched="$(_io_minus_timeline "$prs" "$searched")"
+    [ -n "$caveated" ] && caveated="$(_io_minus_timeline "$prs" "$caveated")"
   fi
 
   echo "" >&2
@@ -346,9 +482,35 @@ check_issue_overlap() {
 
   if [ -n "$searched" ]; then
     echo "" >&2
-    echo -e "${_IO_YELLOW}⚠  PRs mentioning ${num} (org-wide search — may include unrelated):${_IO_NC}" >&2
+    echo -e "${_IO_YELLOW}⚠  PRs mentioning ${num} (org-wide search):${_IO_NC}" >&2
     echo "$searched" | sed 's/^/    /' >&2
     findings=1
+  fi
+
+  # Split out on purpose: an open PR elsewhere is kept on the bare number alone,
+  # so it is the one class that still needs the caveat (#2331).
+  if [ -n "$caveated" ]; then
+    echo "" >&2
+    echo -e "${_IO_YELLOW}⚠  OPEN PRs in another repo naming ${num} (may include unrelated):${_IO_NC}" >&2
+    echo "$caveated" | sed 's/^/    /' >&2
+    findings=1
+  fi
+
+  # Never silent, and never counted as an all-clear either. `drop` means "not
+  # shown as a parallel track", NOT "confirmed unrelated" — the scorer is
+  # lexical, so a paraphrase of this ticket in another repo lands here too. It
+  # deliberately does NOT set findings=1 (suppressing noise is the point), so the
+  # green line below is suppressed instead: a count and "no parallel work" on
+  # the same screen contradict each other, and the operator would believe the
+  # greener one.
+  if [ "${dropped:-0}" -gt 0 ]; then
+    echo "" >&2
+    echo -e "\033[2m    ${dropped} closed/merged PR(s) in other repos share the number ${num}" >&2
+    echo -e "    with no qualified reference and no title overlap — not shown (#2331)." >&2
+    echo -e "    _IO_SEARCH_SHOW_DROPPED=1 lists them.\033[0m" >&2
+    if [ "${_IO_SEARCH_SHOW_DROPPED:-0}" = "1" ]; then
+      printf '%s\n' "$classified" | awk -F'\t' '$1=="drop"{print "      " $2}' >&2
+    fi
   fi
 
   if [ -n "$branches" ]; then
@@ -359,7 +521,11 @@ check_issue_overlap() {
   fi
 
   if [ "$findings" -eq 0 ]; then
-    echo -e "    ${_IO_GREEN}No parallel branch or PR found.${_IO_NC}" >&2
+    if [ "${dropped:-0}" -gt 0 ]; then
+      echo -e "    ${_IO_GREEN}No qualified parallel branch or PR found.${_IO_NC}" >&2
+    else
+      echo -e "    ${_IO_GREEN}No parallel branch or PR found.${_IO_NC}" >&2
+    fi
     return 0
   fi
 
