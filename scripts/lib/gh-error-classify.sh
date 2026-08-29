@@ -27,10 +27,19 @@
 # calling `gh repo view` (1 point), and `rate_limit` is unmetered. A preflight
 # that spends quota to check quota is the wrong shape.
 #
-# An identical twin of this file lives in brik-llm/scripts/lib/ and
-# brik-client-portal/scripts/lib/. They are separate git repos, so this is a
-# deliberate copy, not an import — keep them in sync when any changes. Same
-# convention as scripts/lib/issue-overlap.sh.
+# ── This file is a byte-identical copy. brikdesigns/brik-llm is the SOURCE. ────
+#
+# Several repos ship it, and they are separate git repos, so these are deliberate
+# copies and not an import. The authoritative list of which repos carry it is the
+# `TWINS` registry in brik-llm's scripts/audit/overlap-twin-drift.py, NOT this
+# comment — a list written here rots the moment a repo is added, and did: the
+# previous wording named two sibling repos while four copies existed, and no two
+# copies agreed on which two (brik-llm#2447).
+#
+# NEVER edit this file anywhere but brik-llm. Fix it there and re-sync every copy
+# in the same change — brik-llm's `overlap-twin-drift` workflow compares each
+# copy's sha256 against brik-llm's and reads a local edit as DRIFT, not an
+# improvement. It fails on a missing copy too.
 #
 # Usage (sourced):
 #   source scripts/lib/gh-error-classify.sh
