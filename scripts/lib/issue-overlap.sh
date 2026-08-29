@@ -50,14 +50,22 @@
 # Usage (standalone, for /resume — reports without prompting):
 #   scripts/lib/issue-overlap.sh --report 1522
 #
+# Usage (standalone, BEFORE filing — no issue number exists yet, #2855):
+#   scripts/lib/issue-overlap.sh --title "<draft title>" --repo brikdesigns/brik-llm
+#
+#   Scores the draft against open issues AND open PRs. --repo defaults to the
+#   current repo. Always report-only; exits 3 when it printed hits.
+#
 # Exit / return codes:
 #   0  no overlap found, or the operator chose to continue
 #   1  operator aborted at the prompt (sourced mode only)
 #   2  bad usage / unresolvable issue reference
+#   3  pre-file mode only: open work matched the draft title (advisory, #2855)
 #   4  the issue does not exist in the resolved repo — check did NOT run (#2298)
 #   5  the issue could not be read (transport/auth) — check did NOT run (#2422)
+#   6  the number is a PULL REQUEST, not an issue — check did NOT run (#2448)
 #
-# 4 and 5 are NOT "no overlap". A caller that treats any non-zero as "proceed"
+# 4, 5 and 6 are NOT "no overlap". A caller that treats any non-zero as "proceed"
 # has reinstated the fail-open both of those tickets are about; see
 # new-task.sh's guarded call for the shape that refuses instead.
 
@@ -682,16 +690,19 @@ _io_confirm() {
 _IO_TITLE_MIN_TOKENS="${_IO_TITLE_MIN_TOKENS:-2}"
 _IO_TITLE_MIN_SCORE="${_IO_TITLE_MIN_SCORE:-0.5}"
 
-# Emits "number<TAB>score<TAB>shared<TAB>title" per candidate, best first.
-_io_similar_open_issues() {
-  local owner="$1" repo="$2" num="$3" title="$4" rows
-  command -v node >/dev/null 2>&1 || return 0
-
-  rows="$(gh issue list --repo "${owner}/${repo}" --state open --limit 200 \
-            --json number,title 2>/dev/null)" || return 0
-  [ -z "$rows" ] && return 0
-
-  SELF_NUM="$num" TITLE="$title" node --input-type=commonjs -e '
+# Score a corpus of open work against a title. Pure: rows JSON on stdin,
+# "number<TAB>score<TAB>shared<TAB>title<TAB>kind" out, best first. No network.
+#
+# Each row is {number, title} plus an optional "kind" ("issue" | "pr"), which
+# defaults to "issue" so the two callers that predate #2855 need no change. The
+# kind is the FIFTH column for the same reason: `check_title_overlap` and
+# `check_phrase_overlap` both awk on $1/$3/$4, and appending cannot disturb them.
+#
+# Self-exclusion is kind-aware. A PR and an issue can carry the same number in
+# the same repo, so excluding on the number alone would drop a genuine PR hit
+# whenever it happened to collide with the issue being scored.
+_io_score_titles() {
+  SELF_NUM="$1" TITLE="$2" node --input-type=commonjs -e '
     const fs = require("node:fs");
     const STOP = new Set(("a an the and or but if is are was were be been being of to in on for " +
       "from with without at by as it its this that these those not no never when where which who " +
@@ -711,13 +722,28 @@ _io_similar_open_issues() {
     rows.map((r) => {
       const have = new Set(sig(r.title));
       const shared = target.filter((w) => have.has(w));
-      return { r, shared, score: shared.reduce((a, w) => a + 1 / (df.get(w) ?? 1), 0) };
+      const kind = r.kind === "pr" ? "pr" : "issue";
+      return { r, kind, shared, score: shared.reduce((a, w) => a + 1 / (df.get(w) ?? 1), 0) };
     })
-      .filter((x) => x.r.number !== self && x.shared.length >= minTokens && x.score >= minScore)
+      .filter((x) => !(x.kind === "issue" && x.r.number === self))
+      .filter((x) => x.shared.length >= minTokens && x.score >= minScore)
       .sort((a, b) => b.score - a.score)
       .slice(0, 5)
-      .forEach((x) => console.log([x.r.number, x.score.toFixed(2), x.shared.join("+"), x.r.title].join("\t")));
-  ' <<<"$rows"
+      .forEach((x) => console.log(
+        [x.r.number, x.score.toFixed(2), x.shared.join("+"), x.r.title, x.kind].join("\t")));
+  '
+}
+
+# Emits "number<TAB>score<TAB>shared<TAB>title<TAB>kind" per candidate, best first.
+_io_similar_open_issues() {
+  local owner="$1" repo="$2" num="$3" title="$4" rows
+  command -v node >/dev/null 2>&1 || return 0
+
+  rows="$(gh issue list --repo "${owner}/${repo}" --state open --limit 200 \
+            --json number,title 2>/dev/null)" || return 0
+  [ -z "$rows" ] && return 0
+
+  _io_score_titles "$num" "$title" <<<"$rows"
 }
 
 # Warn (never block) when another OPEN issue looks like the same problem.
@@ -796,6 +822,106 @@ check_phrase_overlap() {
   return 0
 }
 
+# ── Pre-file detection (#2855) ─────────────────────────────────────────────────
+#
+# Both detectors above need an issue that already exists — one takes a number to
+# read a title off, the other a branch slug. Neither is reachable from the
+# FILING path, so the one tool in the fleet that can see an open PR only runs
+# after the duplicate ticket has been created.
+#
+# That is not theoretical. brik-client-portal#3670 was filed 8 minutes after
+# #3671 opened, for the same defect, and the pre-filing checklist's gate 1 was
+# satisfied the whole time — it names issue searches only, and `gh issue list`
+# does not return PRs. The evidence got worse after filing: #2860 and #2861 both
+# bumped the brik-bds submodule to v0.177.0 and BOTH merged, 2.5h apart on
+# 2026-08-29. The miss now produces duplicate merged work, not just duplicate
+# filings.
+#
+# So the corpus here is open issues AND open PRs, and the input is a draft title
+# rather than a number.
+#
+# Silence on no match is a requirement, not an accident (AC4). #1485's own
+# history is a merged-branch warning that fired on every task and was learned
+# past; a pre-file gate that speaks on every filing is the same failure.
+
+# Open issues + open PRs in one rows array, each tagged with its kind.
+#
+# Two calls, not one search: `gh issue list` excludes PRs by design, and the
+# search API's `type:` split is the same two round-trips against a rate-limit
+# bucket 25x smaller. Both are best-effort — an unreadable half degrades to the
+# other rather than aborting a filing, which is the advisory contract the rest
+# of this file keeps.
+#
+# Assembled with gh's OWN --jq (one compact object per line, joined here) rather
+# than the jq binary. jq is not currently a dependency of this lib or of
+# new-task.sh, and a gate that needs a tool the host may not have is a gate that
+# goes quiet on the machines that lack it — the #2765 shape, where the failure
+# is silence rather than an error.
+#
+# `awk NF` and `|| true` are the #2423 discipline: this lib is sourced under
+# `set -euo pipefail`, where a `grep` that filters everything exits 1 and takes
+# the caller down before it can print anything.
+_io_open_work_rows() {
+  local owner="$1" repo="$2" issues prs joined
+  issues="$(gh issue list --repo "${owner}/${repo}" --state open --limit 200 \
+              --json number,title \
+              --jq '.[] | {number, title, kind: "issue"}' 2>/dev/null)" || issues=""
+  prs="$(gh pr list --repo "${owner}/${repo}" --state open --limit 200 \
+           --json number,title \
+           --jq '.[] | {number, title, kind: "pr"}' 2>/dev/null)" || prs=""
+
+  joined="$(printf '%s\n%s\n' "$issues" "$prs" | awk 'NF' | paste -sd, - || true)"
+  [ -z "$joined" ] && return 0
+  printf '[%s]' "$joined"
+}
+
+# Warn (never block) when a DRAFT title looks like open work that already exists.
+#
+# Report-only by design, with no _io_confirm branch. The caller is an agent about
+# to run `gh issue create`, usually with no TTY — prompting there is the #2812
+# shape, where a bare `read` killed non-interactive pickups outright.
+#
+#   check_draft_overlap "<draft title>" [owner/repo]
+#
+# Returns 0 when nothing matched, 3 when it printed hits, so a wrapper can gate
+# on it. 3 is advisory: the scorer is lexical, so a hit is a thing to READ, never
+# a refusal to file.
+check_draft_overlap() {
+  local title="${1:-}" nwo="${2:-}"
+  [ -z "$title" ] && return 0
+  command -v gh >/dev/null 2>&1 || return 0
+  command -v node >/dev/null 2>&1 || return 0
+
+  local owner repo rows hits
+  if [ -z "$nwo" ]; then
+    nwo="$(_io_repo_slug)" || return 0
+    [ -z "$nwo" ] && return 0
+  fi
+  case "$nwo" in
+    */*) owner="${nwo%%/*}"; repo="${nwo##*/}" ;;
+    *)   return 2 ;;
+  esac
+
+  rows="$(_io_open_work_rows "$owner" "$repo")" || return 0
+  [ -z "$rows" ] && return 0
+
+  # Self-exclusion is 0: nothing has been filed yet, and issue numbering
+  # starts at 1.
+  hits="$(MIN_TOKENS="$_IO_TITLE_MIN_TOKENS" MIN_SCORE="$_IO_TITLE_MIN_SCORE" \
+          _io_score_titles 0 "$title" <<<"$rows")"
+  [ -z "$hits" ] && return 0
+
+  echo "" >&2
+  echo -e "${_IO_YELLOW}⚠  Open work in ${owner}/${repo} that looks like this draft:${_IO_NC}" >&2
+  printf '%s\n' "$hits" | awk -F'\t' \
+    '{ printf "    %s #%s  [%s]  %s\n", ($5 == "pr" ? "PR " : "issue"), $1, $3, $4 }' >&2
+  echo "" >&2
+  echo -e "${_IO_YELLOW}   An OPEN PR satisfies the issue-search gate and still duplicates the${_IO_NC}" >&2
+  echo -e "${_IO_YELLOW}   work — portal#3670 was filed 8 minutes after #3671 opened (#2855).${_IO_NC}" >&2
+  echo -e "${_IO_YELLOW}   Read each before filing; the scorer is lexical, so a hit is not a verdict.${_IO_NC}" >&2
+  return 3
+}
+
 # Standalone invocation: scripts/lib/issue-overlap.sh [--report] <issue-ref>
 #
 # BOTH detectors run, and that is the point of #2765. This dispatch called only
@@ -819,12 +945,27 @@ check_phrase_overlap() {
 # call — a class no unit test of the scorer can catch, and the only class this
 # file's history says actually happens. See scripts/test/test-overlap-standalone-dispatch.sh.
 _io_main() {
-  local mode="prompt" ref rc=0
-  if [ "${1:-}" = "--report" ]; then
-    mode="--report"; ref="${2:-}"
-  else
-    ref="${1:-}"
+  local mode="prompt" ref="" draft="" nwo="" rc=0
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --report) mode="--report" ;;
+      --title)  draft="${2:-}"; shift ;;
+      --repo)   nwo="${2:-}"; shift ;;
+      -*)       echo "issue-overlap: unknown flag $1" >&2; return 2 ;;
+      *)        ref="$1" ;;
+    esac
+    shift
+  done
+
+  # Pre-file mode (#2855): a draft title and no issue, so the number half has
+  # nothing to resolve. It is its own branch rather than an extra detector on
+  # the issue path, because there IS no issue yet — that is the whole gap.
+  if [ -n "$draft" ]; then
+    [ -n "$ref" ] && { echo "issue-overlap: --title takes no issue ref" >&2; return 2; }
+    check_draft_overlap "$draft" "$nwo"
+    return $?
   fi
+  [ -n "$nwo" ] && { echo "issue-overlap: --repo is only valid with --title" >&2; return 2; }
 
   if [ "$mode" = "--report" ]; then
     check_issue_overlap "$ref" --report || rc=$?
