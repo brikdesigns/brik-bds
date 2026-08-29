@@ -115,7 +115,7 @@
    Tight structural step; --gap-tiny is 0px outside default spacing mode. */
 .bds-filter-button__option--all {
   margin-bottom: var(--gap-sm);
-  border-bottom: 1px solid var(--border-muted);
+  border-bottom: var(--border-width-sm) solid var(--border-muted);
   border-radius: 0;
 }
 

@@ -6,7 +6,9 @@
  * Validates CSS variable usage in BDS components against Style Dictionary token outputs.
  * Catches six types of violations:
  *   1. Primitive token usage (use semantic tokens instead)
- *   2. Hardcoded CSS values (use tokens)
+ *   2. Hardcoded CSS values (use tokens) — .tsx style objects (checkHardcodedValues)
+ *      AND raw px in .css declarations (checkCssRawValues; error when the value
+ *      lands on a scale token, warn on a genuine off-scale gap)
  *   3. Unknown tokens (typos or non-existent variables)
  *   4. Spacing values not aligned to 4-point grid (see https://design.brikdesigns.com/docs/primitives/spacing)
  *   5. Token-family pairing mismatch — a token used in a property whose family
@@ -1119,6 +1121,175 @@ function checkBareLintIgnore(line, lineNum, file) {
     suggestion: BARE_IGNORE_FIX,
   }];
 }
+/**
+ * Rule 2-CSS: Hardcoded raw values in component .css — brik-bds (raw-value gate)
+ *
+ * The pre-existing Rule 2 (checkHardcodedValues) only ever ran on .tsx and only
+ * matched JS style-object syntax (`padding: '16px'`). Component appearance lives
+ * in .css, where a bare `font-size: 10px` / `height: 24px` / `border: 2px …`
+ * used a raw literal instead of a token and sailed through CI — the token rules
+ * police var() *references*, never raw *values*. This rule closes that gap: it
+ * scans .css declarations for raw px on tokenizable properties and maps each
+ * back to its scale token.
+ *
+ * ERROR when the value lands exactly on the property's scale (value-preserving
+ * swap: `height: 24px` → `var(--size-600)`). WARN when it lands off every scale
+ * — a genuine scale gap (container widths 200–600px with no --size-* rung; the
+ * 10/12px small-text sizes with no typography rung) — so the drift is surfaced
+ * without forcing an off-token snap this rule would be inventing.
+ *
+ * Skips: comments, bds-lint-ignore lines, responsive math (calc/clamp/min/max),
+ * and any px inside a var() fallback (policed by checkFallbackLiterals). Micro
+ * nudges (≤2px) are exempt for dimensional/spacing families (matches the
+ * 4-point grid rule's micro carve-out); border-width and font-size are not — 1/2/3px
+ * are real --border-width-* rungs and off-scale type is exactly the drift to catch.
+ */
+
+// property (kebab) → { fam, noMicro } — the scale a raw value on this property
+// should reference. margin shares the padding scale; per-side props inherit the
+// base property's family.
+const CSS_RAW_VALUE_PROPS = {
+  width: { fam: 'size' }, height: { fam: 'size' },
+  'min-width': { fam: 'size' }, 'min-height': { fam: 'size' },
+  'max-width': { fam: 'size' }, 'max-height': { fam: 'size' },
+  padding: { fam: 'padding' }, 'padding-top': { fam: 'padding' },
+  'padding-right': { fam: 'padding' }, 'padding-bottom': { fam: 'padding' },
+  'padding-left': { fam: 'padding' },
+  margin: { fam: 'padding' }, 'margin-top': { fam: 'padding' },
+  'margin-right': { fam: 'padding' }, 'margin-bottom': { fam: 'padding' },
+  'margin-left': { fam: 'padding' },
+  gap: { fam: 'gap' }, 'row-gap': { fam: 'gap' }, 'column-gap': { fam: 'gap' },
+  'border-radius': { fam: 'borderRadius' },
+  'font-size': { fam: 'fontSize', noMicro: true },
+  'border-width': { fam: 'borderWidth', noMicro: true },
+  'border-top-width': { fam: 'borderWidth', noMicro: true },
+  'border-right-width': { fam: 'borderWidth', noMicro: true },
+  'border-bottom-width': { fam: 'borderWidth', noMicro: true },
+  'border-left-width': { fam: 'borderWidth', noMicro: true },
+  // border shorthands — the leading width literal maps to --border-width-*
+  border: { fam: 'borderWidth', noMicro: true },
+  'border-top': { fam: 'borderWidth', noMicro: true },
+  'border-right': { fam: 'borderWidth', noMicro: true },
+  'border-bottom': { fam: 'borderWidth', noMicro: true },
+  'border-left': { fam: 'borderWidth', noMicro: true },
+};
+
+// Human-readable family labels for the off-scale WARN suggestion.
+const FAM_LABEL = {
+  size: '--size-*', padding: '--padding-*', gap: '--gap-*',
+  borderRadius: '--border-radius-*', fontSize: '--body-*/--label-*/--heading-*',
+  borderWidth: '--border-width-*',
+};
+
+/**
+ * Build px → token maps from the token CSS sources, resolving one level of
+ * var() aliasing (`--padding-md: var(--space-400)` → `--space-400: 16px` → 16).
+ * Read from the same files parseCssTokens() reads so the maps track the scale;
+ * returns empty maps in a checkout that has not built tokens (rule then no-ops).
+ */
+function buildValueMaps() {
+  const SOURCES = [
+    SD_CSS_PATH,
+    path.join(REPO_ROOT, 'tokens', 'figma-tokens.css'),
+    path.join(REPO_ROOT, 'tokens', 'gap-fills.css'),
+    path.join(REPO_ROOT, 'tokens', 'ratios.css'),
+    path.join(REPO_ROOT, 'tokens', 'bridge.css'),
+  ].filter(f => fs.existsSync(f));
+
+  const raw = new Map(); // token name → raw value string (first definition wins)
+  for (const f of SOURCES) {
+    const css = fs.readFileSync(f, 'utf8');
+    for (const m of css.matchAll(/^\s*(--[\w-]+)\s*:\s*([^;]+);/gm)) {
+      if (!raw.has(m[1])) raw.set(m[1], m[2].trim());
+    }
+  }
+
+  function toPx(name, depth = 0) {
+    if (depth > 5) return null;
+    const v = raw.get(name);
+    if (v === undefined) return null;
+    if (/^0$/.test(v)) return 0;
+    const px = v.match(/^(\d+(?:\.\d+)?)px$/);
+    if (px) return parseFloat(px[1]);
+    const alias = v.match(/^var\(\s*(--[\w-]+)\s*\)$/);
+    if (alias) return toPx(alias[1], depth + 1);
+    return null;
+  }
+
+  const FAMILIES = {
+    size: /^--size-\d+$/,
+    padding: /^--padding-[a-z]+$/,
+    gap: /^--gap-[a-z]+$/,
+    borderRadius: /^--border-radius-[a-z]+$/,
+    borderWidth: /^--border-width-[a-z]+$/,
+    fontSize: /^--(?:body|label|heading|display|subtitle)-[a-z]+$/,
+  };
+
+  const maps = {};
+  for (const [key, re] of Object.entries(FAMILIES)) {
+    const m = new Map();
+    for (const name of raw.keys()) {
+      if (!re.test(name)) continue;
+      const px = toPx(name);
+      if (px === null || px === 0) continue;
+      if (!m.has(px)) m.set(px, name); // first canonical token at this px wins
+    }
+    maps[key] = m;
+  }
+  return maps;
+}
+
+function checkCssRawValues(line, lineNum, file, valueMaps) {
+  const violations = [];
+  const trimmed = line.trim();
+  if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) return violations;
+  if (line.includes('bds-lint-ignore')) return violations;
+
+  // One declaration per line (BDS CSS house style). Grab `prop: value`.
+  const decl = line.match(/^\s*(-?[a-z][a-z-]*)\s*:\s*([^;{}]+);?/i);
+  if (!decl) return violations;
+  const prop = decl[1].toLowerCase();
+  const cfg = CSS_RAW_VALUE_PROPS[prop];
+  if (!cfg) return violations;
+
+  let value = decl[2];
+  // Responsive math anchors its own literals (vw/%); the fallback-literal and
+  // math rules cover token discipline there. Don't second-guess it.
+  if (/\b(?:calc|clamp|min|max|env)\s*\(/.test(value)) return violations;
+  // Strip var(...) spans — a px inside a var() fallback is checkFallbackLiterals'
+  // job; here we only want bare literals.
+  const bare = value.replace(/var\([^)]*\)/g, ' ');
+
+  const map = valueMaps[cfg.fam] || new Map();
+  const seen = new Set();
+  for (const pm of bare.matchAll(/(\d+(?:\.\d+)?)px/g)) {
+    const px = parseFloat(pm[1]);
+    if (px === 0 || seen.has(px)) continue;
+    seen.add(px);
+    if (!cfg.noMicro && px <= 2) continue; // micro nudge — exempt (4-pt grid carve-out)
+
+    const token = map.get(px);
+    const col = line.indexOf(pm[0]) + 1;
+    if (token) {
+      violations.push({
+        rule: 'css-raw-value',
+        severity: 'error',
+        file, line: lineNum, column: col,
+        message: `Hardcoded ${prop}: ${pm[0]} — maps exactly to var(${token})`,
+        suggestion: `Replace ${pm[0]} with var(${token}). Runtime-calculated value? Append a bds-lint-ignore with a reason.`,
+      });
+    } else {
+      violations.push({
+        rule: 'css-raw-value-offscale',
+        severity: 'warning',
+        file, line: lineNum, column: col,
+        message: `Hardcoded ${prop}: ${pm[0]} — no ${FAM_LABEL[cfg.fam]} rung for ${pm[0]} (scale gap)`,
+        suggestion: `No token expresses ${pm[0]} today. File the scale gap (e.g. container-width rungs) or bds-lint-ignore with a reason — do not snap to a near value.`,
+      });
+    }
+  }
+  return violations;
+}
 
 // ---------------------------------------------------------------------------
 // Reporter
@@ -1172,6 +1343,8 @@ function main() {
 
   // 1. Parse CSS tokens
   const tokens = parseCssTokens();
+  // px → scale-token maps for the CSS raw-value rule (css-raw-value).
+  const valueMaps = buildValueMaps();
   if (!jsonMode) console.log(`  Loaded ${tokens.allTokens.size} tokens (${tokens.semanticTokens.size} semantic, ${tokens.primitiveTokens.size} primitive)`);
   if (checkGrid && !jsonMode) {
     console.log('  📐 4-point grid check enabled');
@@ -1303,6 +1476,8 @@ function main() {
       allViolations.push(...checkBareLintIgnore(line, lineNum, file));
       // Rule 1: primitive token usage in CSS
       allViolations.push(...checkPrimitiveTokens(line, lineNum, file, true));
+      // Rule 2-CSS: hardcoded raw px values in CSS (the .tsx Rule 2's blind spot)
+      allViolations.push(...checkCssRawValues(line, lineNum, file, valueMaps));
       // Rule 3: unknown token references in CSS (catches stale var() after renames)
       allViolations.push(...checkUnknownTokens(line, lineNum, file, tokens, true));
       allViolations.push(...checkDeprecatedTokens(line, lineNum, file));
@@ -1428,4 +1603,12 @@ function main() {
   process.exit(errorCount > 0 ? 1 : 0);
 }
 
-main();
+/* Run only as a CLI, so unit tests can import the pure helpers below without
+   executing a full repo scan (mirrors lint-story-shape.js). */
+if (require.main === module) main();
+
+module.exports = {
+  buildValueMaps,
+  checkCssRawValues,
+  CSS_RAW_VALUE_PROPS,
+};

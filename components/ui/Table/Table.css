@@ -324,8 +324,8 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: var(--size-600);
+  height: var(--size-600);
   font-size: var(--label-lg);
 }
 
@@ -362,12 +362,12 @@
 
 /* bds-lint-ignore — Figma-driven thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
 .bds-table-image-cell--sm .bds-table-image-cell__media {
-  width: 32px;
+  width: var(--size-800);
 }
 
 /* bds-lint-ignore — Figma-driven thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
 .bds-table-image-cell--md .bds-table-image-cell__media {
-  width: 40px;
+  width: var(--size-1000);
 }
 
 /* ─── Service-tag cell (one or more ServiceTags) ─────────────── */
