@@ -101,6 +101,54 @@ function findComponentMdx() {
 }
 
 // ---------------------------------------------------------------------------
+// Story-reference coupling (brik-bds#2129)
+// ---------------------------------------------------------------------------
+
+/**
+ * Named story exports declared in a `*.stories.tsx` source. Capitalised only:
+ * `export const meta` is the CSF meta, not a story.
+ * @param {string} storiesContent
+ * @returns {Set<string>}
+ */
+function collectStoryExports(storiesContent) {
+  const names = new Set();
+  const re = /^export const ([A-Z][A-Za-z0-9_]*)\b/gm;
+  let m;
+  while ((m = re.exec(storiesContent)) !== null) names.add(m[1]);
+  return names;
+}
+
+/**
+ * Every `Stories.<Name>` member reference in MDX that resolves to no export in
+ * `exportNames`. Keyed on the member access itself, so it covers every form —
+ * `<Canvas of={Stories.X}>`, `<Story of={Stories.X}>`, `{Stories.X.args}` —
+ * not just Canvas, which is how the #2118 removal slipped past a Canvas-only
+ * check into #2126. `<Meta of={Stories} />` names the namespace (no `.member`)
+ * and never matches.
+ * @param {string} mdxContent
+ * @param {Set<string>} exportNames
+ * @param {string} componentName
+ * @returns {Array<{rule: string, message: string, line: number}>}
+ */
+function findStoryRefViolations(mdxContent, exportNames, componentName) {
+  const violations = [];
+  const refRe = /\bStories\.([A-Z][A-Za-z0-9_]*)/g;
+  let m;
+  while ((m = refRe.exec(mdxContent)) !== null) {
+    const ref = m[1];
+    if (exportNames.has(ref)) continue;
+    // Approximate the line by counting newlines up to the match index.
+    const line = mdxContent.slice(0, m.index).split('\n').length;
+    violations.push({
+      rule: 'story-ref-missing',
+      message: `\`Stories.${ref}\` references no matching export in ${componentName}.stories.tsx`,
+      line,
+    });
+  }
+  return violations;
+}
+
+// ---------------------------------------------------------------------------
 // Per-file lint
 // ---------------------------------------------------------------------------
 
@@ -322,35 +370,18 @@ function lintFile(filePath) {
     }
   }
 
-  // Rule: every `<Canvas of={Stories.X}>` must reference a real export in the
-  // matching `*.stories.tsx`. Catches stale renames (story exports renamed
-  // without updating MDX) and typos.
+  // Rule: every `Stories.<Name>` reference in the MDX must resolve to a real
+  // export in the sibling `*.stories.tsx`. Catches a story export removed or
+  // renamed while the doc still points at it — the #2118 → #2126 breakage,
+  // where dropping `Controlled` / `StatTiles` left dangling refs that turned
+  // this check red on main. See collectStoryExports / findStoryRefViolations
+  // for why it covers every reference form, not just `<Canvas of=…>`.
   const componentDir = path.dirname(filePath);
   const componentName = path.basename(componentDir);
   const storiesPath = path.join(componentDir, `${componentName}.stories.tsx`);
   if (fs.existsSync(storiesPath)) {
-    const storiesContent = fs.readFileSync(storiesPath, 'utf8');
-    const exportNames = new Set();
-    const exportRe = /^export const ([A-Z][A-Za-z0-9_]*)\b/gm;
-    let m;
-    while ((m = exportRe.exec(storiesContent)) !== null) {
-      exportNames.add(m[1]);
-    }
-
-    const canvasRefRe = /<Canvas\s+of=\{Stories\.([A-Z][A-Za-z0-9_]*)\}/g;
-    let cm;
-    while ((cm = canvasRefRe.exec(content)) !== null) {
-      const ref = cm[1];
-      if (!exportNames.has(ref)) {
-        // Approximate the line by counting newlines up to the match index.
-        const line = content.slice(0, cm.index).split('\n').length;
-        violations.push({
-          rule: 'canvas-story-missing',
-          message: `\`<Canvas of={Stories.${ref}}>\` references no matching export in ${componentName}.stories.tsx`,
-          line,
-        });
-      }
-    }
+    const exportNames = collectStoryExports(fs.readFileSync(storiesPath, 'utf8'));
+    violations.push(...findStoryRefViolations(content, exportNames, componentName));
   }
 
   return {
@@ -443,4 +474,7 @@ function main() {
   process.exit(0);
 }
 
-main();
+// Pure helpers are exported for the contract test; main() runs only as a CLI.
+module.exports = { collectStoryExports, findStoryRefViolations };
+
+if (require.main === module) main();

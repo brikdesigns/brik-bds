@@ -21,25 +21,17 @@ name: Storybook Story-Shape Check
 # Source of truth: docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md
 # Lint script: scripts/lint-story-shape.js
 
+# No `paths:` filter — this is a REQUIRED status check (brik-bds#2129). A
+# path-filtered required check never posts its context on a PR that touches no
+# matching path, which blocks that PR indefinitely; running the fast lint
+# unconditionally keeps the context reliable.
 on:
   pull_request:
     branches:
       - main
-    paths:
-      - 'components/ui/**'
-      - 'stories/**'
-      - 'scripts/lint-story-shape.js'
-      - 'package.json'
-      - '.github/workflows/storybook-story-shape-check.yml'
   push:
     branches:
       - main
-    paths:
-      - 'components/ui/**'
-      - 'stories/**'
-      - 'scripts/lint-story-shape.js'
-      - 'package.json'
-      - '.github/workflows/storybook-story-shape-check.yml'
 
 concurrency:
   group: storybook-story-shape-check-${{ github.ref }}
