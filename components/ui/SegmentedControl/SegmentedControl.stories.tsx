@@ -66,7 +66,8 @@ export default meta;
 type Story = StoryObj<typeof SegmentedControl>;
 
 /* ═══════════════════════════════════════════════════════════════
-   1. DEFAULT — args-driven sandbox. Controls work.
+   1. DEFAULT — args-driven sandbox. Controls work; the useState
+      render makes segments clickable (#2146).
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary Interactive playground for prop tweaking */
@@ -79,28 +80,14 @@ export const Default: Story = {
     value: 'grid',
     size: 'md',
   },
+  render: (args) => {
+    const [value, setValue] = useState(args.value);
+    return <SegmentedControl {...args} value={value} onChange={setValue} />;
+  },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. PATTERNS — Q4 irreducible: clicking a segment updates the
-      selected value, which args alone can't express
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Clicking a segment updates the selected view */
-export const WithControlledSelection: Story = {
-  render: () => (
-    <InteractiveSegmentedControl
-      items={[
-        { label: 'Grid', value: 'grid' },
-        { label: 'List', value: 'list' },
-      ]}
-      size="sm"
-    />
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. INTERACTION TESTS — play-only, hidden from MCP discovery
+   2. INTERACTION TESTS — play-only, hidden from MCP discovery
    ═══════════════════════════════════════════════════════════════ */
 
 /**
