@@ -124,7 +124,7 @@ export function CheckboxGroup({
       <div
         className={bdsClass(
           'bds-checkbox-group__options',
-          `bds-checkbox-group__options--${orientation}`,
+          `bds-checkbox-group__options--orientation-${orientation}`,
         )}
       >
         {options.map((option) => (

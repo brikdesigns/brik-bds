@@ -34,7 +34,7 @@
   gap: var(--gap-md);
 }
 
-.bds-checkbox-group__options--horizontal {
+.bds-checkbox-group__options--orientation-horizontal {
   flex-direction: row;
   flex-wrap: wrap;
   column-gap: var(--gap-xl);

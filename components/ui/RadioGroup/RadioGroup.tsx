@@ -94,7 +94,7 @@ export function RadioGroup({
       disabled={disabled}
     >
       {legend && <legend className="bds-radio-group__legend">{legend}</legend>}
-      <div className={bdsClass('bds-radio-group__options', `bds-radio-group__options--${orientation}`)}>
+      <div className={bdsClass('bds-radio-group__options', `bds-radio-group__options--orientation-${orientation}`)}>
         {options.map((option) => (
           <Radio
             key={option.value}
