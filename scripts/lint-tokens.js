@@ -1133,10 +1133,12 @@ function checkBareLintIgnore(line, lineNum, file) {
  * back to its scale token.
  *
  * ERROR when the value lands exactly on the property's scale (value-preserving
- * swap: `height: 24px` → `var(--size-600)`). WARN when it lands off every scale
- * — a genuine scale gap (container widths 200–600px with no --size-* rung; the
- * 10/12px small-text sizes with no typography rung) — so the drift is surfaced
- * without forcing an off-token snap this rule would be inventing.
+ * swap: `height: 24px` → `var(--size-600)`). ALSO ERROR when it lands off every
+ * scale (container widths, off-scale type) — the fix there is not a token snap
+ * (this rule never invents one) but a conscious choice: park the literal in a
+ * component-local --bds-{component}-{property} knob (ADR-014), or bds-lint-ignore
+ * it with a reason + a filed scale-gap issue. Warning-severity let raw values
+ * accrete silently, which is the drift this gate exists to stop (#2133).
  *
  * Skips: comments, bds-lint-ignore lines, responsive math (calc/clamp/min/max),
  * and any px inside a var() fallback (policed by checkFallbackLiterals). Micro
@@ -1281,10 +1283,10 @@ function checkCssRawValues(line, lineNum, file, valueMaps) {
     } else {
       violations.push({
         rule: 'css-raw-value-offscale',
-        severity: 'warning',
+        severity: 'error',
         file, line: lineNum, column: col,
-        message: `Hardcoded ${prop}: ${pm[0]} — no ${FAM_LABEL[cfg.fam]} rung for ${pm[0]} (scale gap)`,
-        suggestion: `No token expresses ${pm[0]} today. File the scale gap (e.g. container-width rungs) or bds-lint-ignore with a reason — do not snap to a near value.`,
+        message: `Hardcoded ${prop}: ${pm[0]} — no ${FAM_LABEL[cfg.fam]} rung for ${pm[0]} (off every scale)`,
+        suggestion: `No token expresses ${pm[0]}. Park it in a component-local --bds-{component}-{property} knob, or bds-lint-ignore with a reason (file the scale gap) — never snap to a near value.`,
       });
     }
   }
