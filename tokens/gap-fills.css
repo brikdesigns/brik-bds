@@ -156,7 +156,7 @@
      click). Categorically distinct from --background-info / --text-info,
      which since brik-bds#1959 are the BLUE informational signal (ADR-033 § 5).
      The gray family that used to hold those names is now --*-neutral. */
-  --text-link: var(--text-text-link);
+  --text-link: var(--text-text-link); /* bds-lint-ignore — pre-existing t3->t3, tracked in #2186 (retier to a color Primitive) */
 
   /* ── The `neutral` intent family — now Figma-sourced (brik-bds#1959) ──
      All four purposes come from figma-tokens.css since the Foundations rename
@@ -268,22 +268,37 @@
   --content-width-xl:      1280px;  /* hero bands, wide layouts */
   --content-width-full:     100%;   /* full-bleed (use sparingly — prefer explicit widths) */
 
-  /* ── Page gutter (ADR-025) ──
+  /* ── Page inset (ADR-025) ──
      The inline inset between the viewport edge and a page's content band —
      the third leg of the width-container recipe (max-width + margin-inline:
      auto + padding-inline). One canonical name so BDS containers (section
      shell, Footer) and consumer containers (nav, page shells) resolve to the
      SAME inset and stay flush-aligned at every breakpoint.
 
-     A fixed alias of --padding-lg, NOT a fluid clamp: brikdesigns tried a
-     clamp() gutter and had to abandon it because it misaligned the nav from
-     BDS section content (brikdesigns globals.css, --site-gutter). Mode
-     modulation comes free through --padding-lg. Minted here for the same
-     reason as the --border-width-* aliases above — consumers were already
-     inventing the name (--site-gutter). Gutters BETWEEN columns are not this
-     token: sibling↔sibling space is the layout primitive's gap, governed by
-     the ADR-024 rhythm map. */
-  --gutter-page: var(--padding-lg);
+     Renamed from --gutter-page (ADR-025): a "gutter" is conventionally the
+     space BETWEEN columns, but every consumer applies this to padding-inline —
+     the page-EDGE inset, never a grid gap. The old name survives as a
+     deprecated alias below until downstream consumers migrate.
+
+     Tier-clean (ADR-025 tier fix): references the Primitive --space-* directly
+     at every spacing mode, NOT the Semantic --padding-lg. A Semantic→Semantic
+     reference is off the tier model ("higher tiers reference lower tiers",
+     token-anatomy) and is now caught by lint-token-tiers. The mode ladder
+     below mirrors --padding-lg's density steps so the inset still modulates
+     under [data-mode-spacing]; if design retunes the density ladder, update
+     both. NOT a fluid clamp: brikdesigns tried a clamp() gutter and abandoned
+     it because it misaligned the nav from BDS section content (brikdesigns
+     globals.css, --site-gutter). Gutters BETWEEN columns are not this token:
+     sibling↔sibling space is the layout primitive's gap, governed by the
+     ADR-024 rhythm map. */
+  --page-inset: var(--space-600);
+
+  /* @deprecated — renamed to --page-inset (ADR-025). Retained as an alias so
+     downstream consumers (brikdesigns) keep resolving until they migrate;
+     removed in a follow-up once no consumer references it. The Semantic→
+     Semantic reference is intentional and temporary — exempted from
+     lint-token-tiers via the shared escape hatch. */
+  --gutter-page: var(--page-inset); /* bds-lint-ignore — deprecated rename alias of --page-inset, removed post-migration (ADR-025) */
 
   /* ── Content measure (ADR-032) ──
      The max inline width of a CENTERED text column INSIDE a band — distinct
@@ -379,6 +394,20 @@
   --ease-spring-soft: cubic-bezier(0, 1.08, 0.77, 1.01); /* gentle overshoot settle — media/panel entrance */
   --ease-linear:      linear;                            /* constant velocity — marquees, continuous loops */
 }
+
+/* ── Page inset — spacing-mode ladder (ADR-025) ──
+   --page-inset is minted here (not in Figma), so its density modes are
+   hand-authored rather than emitted by modes-spacing.css. Each value mirrors
+   --padding-lg's step for the mode but references the Primitive --space-*
+   directly, keeping the token tier-clean (Semantic→Primitive) instead of
+   aliasing the Semantic --padding-lg. gap-fills.css loads AFTER modes-spacing.css
+   (CASCADE.md #5 → #7), and these bare [data-mode-spacing] selectors share
+   :root's specificity, so source order lets them win. Keep in lockstep with
+   modes-spacing.css's --padding-lg steps (compact 16 / comfortable 32 /
+   spacious 48; default 24 is the :root base above). */
+[data-mode-spacing="compact"]     { --page-inset: var(--space-400); }  /* 16px */
+[data-mode-spacing="comfortable"] { --page-inset: var(--space-800); }  /* 32px */
+[data-mode-spacing="spacious"]    { --page-inset: var(--space-1200); } /* 48px */
 
 /* ── Dark-mode corrections for generated tokens ──
    Re-pins generated (figma-tokens-dark.css) values that are wrong in dark mode.

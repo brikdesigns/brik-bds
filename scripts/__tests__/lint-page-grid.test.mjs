@@ -46,7 +46,7 @@ describe('extractAstroStyles', () => {
 });
 
 describe('scanCssText — page-container detection', () => {
-  it('flags a content-width container whose padding-inline bypasses --gutter-page', () => {
+  it('flags a content-width container whose padding-inline bypasses --page-inset', () => {
     const v = scanCssText(
       '.c { max-width: var(--content-width-xl); margin-inline: auto; padding-inline: var(--padding-lg); }',
     );
@@ -70,21 +70,28 @@ describe('scanCssText — page-container detection', () => {
 
   it('allows the canonical recipe', () => {
     const v = scanCssText(
-      '.c { max-width: var(--content-width-xl); margin-inline: auto; padding-inline: var(--gutter-page); }',
+      '.c { max-width: var(--content-width-xl); margin-inline: auto; padding-inline: var(--page-inset); }',
     );
     expect(v).toHaveLength(0);
   });
 
   it('allows the ADR-014 hook fallback shape (section shell)', () => {
     const v = scanCssText(
-      '.c { max-width: var(--bds-blueprint-section-content-width, var(--content-width-xl)); margin-inline: auto; padding-inline: var(--bds-blueprint-section-padding-inline, var(--gutter-page)); }',
+      '.c { max-width: var(--bds-blueprint-section-content-width, var(--content-width-xl)); margin-inline: auto; padding-inline: var(--bds-blueprint-section-padding-inline, var(--page-inset)); }',
     );
     expect(v).toHaveLength(0);
   });
 
-  it('allows the max() centering inset built on --gutter-page', () => {
+  it('allows the max() centering inset built on --page-inset', () => {
     const v = scanCssText(
-      '.f { padding-inline: max(var(--gutter-page), calc((100% - var(--content-width-narrow)) / 2)); }',
+      '.f { padding-inline: max(var(--page-inset), calc((100% - var(--content-width-narrow)) / 2)); }',
+    );
+    expect(v).toHaveLength(0);
+  });
+
+  it('still allows the deprecated --gutter-page alias during the ADR-025 migration', () => {
+    const v = scanCssText(
+      '.c { max-width: var(--content-width-xl); margin-inline: auto; padding-inline: var(--gutter-page); }',
     );
     expect(v).toHaveLength(0);
   });

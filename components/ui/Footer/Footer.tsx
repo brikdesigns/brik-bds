@@ -94,7 +94,7 @@ export interface FooterProps extends HTMLAttributes<HTMLElement> {
    * Constrain the footer's inner content to a canonical content width while
    * the background stays full-bleed. Backed by the `--content-width-*` token
    * family (see design.brikdesigns.com/docs/primitives/size) — content centers
-   * with a `--gutter-page` inset at narrow viewports (ADR-025). Omit for the
+   * with a `--page-inset` at narrow viewports (ADR-025). Omit for the
    * default full-width behavior.
    */
   containerMaxWidth?: FooterContainerWidth;

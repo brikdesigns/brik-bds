@@ -45,8 +45,8 @@
  */
 
 :root {
-  --display-fluid-sm: clamp(var(--font-size-900), 6vw, var(--display-sm));
-  --display-fluid-md: clamp(var(--font-size-1000), 6.5vw, var(--display-md));
-  --display-fluid-lg: clamp(var(--font-size-1100), 7vw, var(--display-lg));
-  --display-fluid-xl: clamp(var(--font-size-1200), 8vw, var(--display-xl));
+  --display-fluid-sm: clamp(var(--font-size-900), 6vw, var(--display-sm)); /* bds-lint-ignore — pre-existing t3->t3, tracked in #2186 (retier fluid max bound to a Primitive) */
+  --display-fluid-md: clamp(var(--font-size-1000), 6.5vw, var(--display-md)); /* bds-lint-ignore — pre-existing t3->t3, tracked in #2186 */
+  --display-fluid-lg: clamp(var(--font-size-1100), 7vw, var(--display-lg)); /* bds-lint-ignore — pre-existing t3->t3, tracked in #2186 */
+  --display-fluid-xl: clamp(var(--font-size-1200), 8vw, var(--display-xl)); /* bds-lint-ignore — pre-existing t3->t3, tracked in #2186 */
 }
