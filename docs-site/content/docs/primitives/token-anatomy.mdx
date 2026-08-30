@@ -237,7 +237,7 @@ Every token sits at exactly one Tier. Higher tiers reference lower tiers via `va
 
 ### Derived tokens: a same-tier reference that carries mode modulation
 
-A token references a **lower tier** by default. One exception: a **derived** token may reference **another token at its own tier** when that reference is the mechanism by which it inherits the referenced token's [Mode](#mode) modulation — and only then.
+A token references a **lower tier** by default. One exception: a **derived** token may reference **another token at its own tier** when that reference is the mechanism by which it inherits the referenced token's [Mode](/docs/getting-started/cascade) modulation — and only then.
 
 `--gutter-page: var(--padding-lg)` (`tokens/gap-fills.css`) is a Semantic token referencing another Semantic token, and that is correct: `[data-mode-spacing]` modulates `--padding-lg` (16 / 32 / 48px), never the Primitive `--space-600` beneath it. Rewriting `--gutter-page` to reference `--space-600` to satisfy "reference a lower tier" would silently freeze the gutter at 24px in every density mode — killing the modulation the token exists to carry. Its siblings `--content-width-*` and `--measure-*` are the same layout/derived class.
 
@@ -323,7 +323,7 @@ If the gate is missing or the name isn't found, **stop**. Don't ship a `var()` c
 
 ## Related
 
-- [The Cascade](/docs/getting-started/cascade) — Layer ordering, modes, color foundations vocabulary
+- [The cascade](/docs/getting-started/cascade) — Layer ordering, modes, color foundations vocabulary
 - [Theming](/docs/theming) — how a client brand overrides these Semantic tokens per the four Theming Dimensions; the "How Content feeds Theming" section separates theming layers from content vocabularies
 - [Composition Layers](/docs/build-standards/composition-layers) — the pedagogical Section → Layout → Container → Block or Control → Component model that composes tokenized primitives
 - [Figma Library architecture](/docs/getting-started/figma-library-architecture) — Foundations Library vs Brand Kit Library
