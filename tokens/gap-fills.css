@@ -156,7 +156,7 @@
      click). Categorically distinct from --background-info / --text-info,
      which since brik-bds#1959 are the BLUE informational signal (ADR-033 § 5).
      The gray family that used to hold those names is now --*-neutral. */
-  --text-link: var(--text-text-link); /* bds-lint-ignore — pre-existing t3->t3, tracked in #2186 (retier to a color Primitive) */
+  --text-link: var(--text-text-link); /* color role-alias — sanctioned (ADR-035): both resolve to a --color-* Primitive, so it theme-tracks correctly */
 
   /* ── The `neutral` intent family — now Figma-sourced (brik-bds#1959) ──
      All four purposes come from figma-tokens.css since the Foundations rename
