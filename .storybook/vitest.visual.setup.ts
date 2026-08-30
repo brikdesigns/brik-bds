@@ -164,10 +164,14 @@ type MissingTypeApi = {
 };
 let missingTypeApi: MissingTypeApi | undefined;
 
-function loadMissingTypeGate() {
-  (window as unknown as { __BRIK_INSPECT_DEVBAR_HOST_MANAGED__?: boolean }).__BRIK_INSPECT_DEVBAR_HOST_MANAGED__ = true;
-  const win = window as unknown as { BrikDevBar?: { register: () => void; unregister: () => void } };
-  win.BrikDevBar = win.BrikDevBar || { register() {}, unregister() {} };
+async function loadMissingTypeGate() {
+  const w = window as unknown as {
+    __BRIK_INSPECT_DEVBAR_HOST_MANAGED__?: boolean;
+    BrikDevBar?: { register: () => void; unregister: () => void };
+  };
+  const hadDevBar = 'BrikDevBar' in w;
+  w.__BRIK_INSPECT_DEVBAR_HOST_MANAGED__ = true;
+  w.BrikDevBar = w.BrikDevBar || { register() {}, unregister() {} };
   if (!document.querySelector('link[href*="Poppins"]')) {
     const shim = document.createElement('link');
     shim.rel = 'stylesheet';
@@ -210,6 +214,23 @@ function loadMissingTypeGate() {
     { selector: '.bds-collapsible-card__content', property: 'font-family' },
     { selector: '.bds-collapsible__content', property: 'font-family' },
   ]);
+
+  // Drop the load-time globals so they do not leak into the DevBar-widget
+  // stories, which mount their OWN inspect/DevBar instances. Left set, the
+  // host-managed flag makes the InspectWidget story's widget skip its DevBar
+  // registration (a missing toolbar button → a real screenshot diff), and the
+  // stubbed BrikDevBar defeats the EventsWidget / DevFeedbackWidget "With Dev
+  // Bar" stories. The captured auditMissingType closure needs neither flag
+  // after load — it reads getComputedStyle + the lint-ignore Set only.
+  //
+  // Wait past the widget's own 80ms "no DevBar → build standalone toolbar"
+  // fallback (inspect-widget.js init) BEFORE removing the stub, so that check
+  // still sees a DevBar and never renders a stray toolbar into every baseline.
+  await new Promise((r) => setTimeout(r, 150));
+  delete w.__BRIK_INSPECT_DEVBAR_HOST_MANAGED__;
+  if (!hadDevBar) delete w.BrikDevBar;
+  document.querySelector('script[data-auto-enable]')?.remove();
+  document.querySelector('link[data-brik-poppins-shim]')?.remove();
 }
 
 beforeAll(async () => {
@@ -329,7 +350,7 @@ beforeAll(async () => {
   // constraint, and lowering it is a separate measurement.
 
   // #2119 — one-time widget load; see loadMissingTypeGate's own doc comment.
-  loadMissingTypeGate();
+  await loadMissingTypeGate();
 }, 120_000);
 
 afterEach(async (ctx) => {
