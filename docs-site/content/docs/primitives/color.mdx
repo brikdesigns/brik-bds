@@ -75,7 +75,7 @@ Click any swatch to copy `var(--token-name)` to your clipboard.
 
 ## Interaction states
 
-Hover, press, and disabled. These replace `filter: brightness()` and `opacity` hacks — the proper tokens compose with the rest of the cascade.
+Hover, press, and disabled. These replace `filter: brightness()` and `opacity` hacks — the proper tokens compose with the rest of the cascade. These are the swatches; for when to reach for a solid state-pair token versus a composable overlay, see [Interaction States](/docs/primitives/interaction-states).
 
 <ColorGrid
   colors={[
@@ -283,6 +283,8 @@ Raw color scales from the Figma Brand Kit, rendered from `color-ramps.generated.
 ## Related
 
 - [Color Pairings](/docs/primitives/color-pairings) — which text token is WCAG-safe on which surface (brand + service tiers, both themes), the contrast matrix, and the CI gate
+- [Interaction States](/docs/primitives/interaction-states) — the overlay-vs-solid model behind the hover/press/disabled swatches above
+- [Token Anatomy](/docs/primitives/token-anatomy) — the four-tier model and the color-modifier vocabulary (`on-color`, `-on-light`/`-on-dark`, `-inverse`, tone) these roles are named from
 - [Color primitive tier](/docs/content-system/vocabularies/color-primitive-tier) — the closed `tier` vocabulary, tonal-scale emission rules, and the deprecated suffix-alias migration
 - [Client Themes → Per-audience scope binding](/docs/theming/client-themes#per-audience-scope-binding) — multi-brand scope-based token re-binding for sites like Vale Partners and brikdesigns.com
 - [Cascade rules](/docs/getting-started/cascade) — the three-layer architecture every consumer follows
