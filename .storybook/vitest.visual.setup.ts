@@ -204,16 +204,13 @@ async function loadMissingTypeGate() {
   exposed.setActive?.(false);
   missingTypeApi = exposed as MissingTypeApi;
   // Shared exception baseline (same setLintIgnores/isLintIgnored primitives as
-  // #2170's bds-lint-ignore bridge, not a new mechanism). CollapsibleCard's
-  // `.bds-collapsible-card__content` is a known, tracked gap deliberately left
-  // unfixed here for its own cleanup issue (brik-bds#2178) rather than fixed
-  // in #2119's own PR. Collapsible's sibling `.bds-collapsible__content` is
-  // listed defensively too — #2118 already gave it real type tokens, but both
-  // selectors were named together in #2119's own scope split.
-  missingTypeApi.setLintIgnores([
-    { selector: '.bds-collapsible-card__content', property: 'font-family' },
-    { selector: '.bds-collapsible__content', property: 'font-family' },
-  ]);
+  // #2170's bds-lint-ignore bridge, not a new mechanism). Empty by design: the
+  // two selectors #2119 tracked here — `.bds-collapsible-card__content` (#2178)
+  // and `.bds-collapsible__content` (#2118) — now both carry real type tokens,
+  // so the gate flags nothing and needs no exception. Add an entry ONLY for a
+  // genuinely-tracked, deliberately-unfixed gap, with a comment pointing at its
+  // cleanup issue.
+  missingTypeApi.setLintIgnores([]);
 
   // Drop the load-time globals so they do not leak into the DevBar-widget
   // stories, which mount their OWN inspect/DevBar instances. Left set, the
