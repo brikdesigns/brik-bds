@@ -47,19 +47,17 @@ New code should pick from the documented 8 above. The aliases are TypeScript-val
 
 ## Modes
 
-Visual reference for the discriminated-union branches. The Playground exposes `icon` and `href` as Controls — these stories provide static at-a-glance galleries.
+The Playground covers most props via Controls. Icon-only mode is the exception: `icon` is a `ReactNode` (`control: false`), so it can't be reached from the panel and gets its own story below. Anchor mode *is* reachable — set the `href` Control on the Playground.
 
 ### IconOnly
 
 <Canvas of={Stories.IconOnly} />
 
-Icon-only mode requires `label` (announced by screen readers; the icon span is `aria-hidden`). Uses the same variant + size scale as text mode — only the content shape differs.
+Icon-only mode requires `label` (announced by screen readers; the icon span is `aria-hidden`). Uses the same variant + size scale as text mode — only the content shape differs. Switch `variant` / `size` from the Controls panel.
 
 ### AsLink
 
-<Canvas of={Stories.AsLink} />
-
-Setting `href` renders the component as `<a>` instead of `<button>`. Same visual styling, semantically a link.
+Setting `href` renders the component as `<a>` instead of `<button>` — same visual styling, semantically a link. It's identical to the Playground with an `href` set, so there's no separate visual story; the `InteractionTestAsLink` play test guards that the anchor branch actually renders an `<a href>`.
 
 ## Props
 

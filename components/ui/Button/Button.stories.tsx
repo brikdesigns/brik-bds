@@ -30,14 +30,11 @@ const meta: Meta<typeof Button> = {
         'on-color',
         'negative',
         'positive',
-        'danger',
-        'outline',
-        'ghost',
       ],
       description:
         'Brand hierarchy: `primary` → `outline` → `secondary` → `ghost`. ' +
         '`inverse` for inverse surfaces; `on-color` for brand-primary surfaces. ' +
-        'System: `destructive`, `positive`. Legacy aliases (`danger`, `danger-outline`, `danger-ghost`) are TS-valid but prefer `destructive`.',
+        'System valence: `negative` / `positive`.',
     },
     size: {
       control: 'select',
@@ -96,35 +93,15 @@ type Story = StoryObj<typeof Button>;
 
 /* ─── Inline SVG icons (story-only) ───────────────────────────── */
 
-const ArrowRight = () => (
-  <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-    <path d="M8.354 1.646a.5.5 0 0 0-.708.708L12.793 7.5H2a.5.5 0 0 0 0 1h10.793l-5.147 5.146a.5.5 0 0 0 .708.708l6-6a.5.5 0 0 0 0-.708l-6-6z" />
-  </svg>
-);
-
 const Plus = () => (
   <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
     <path d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2z" />
   </svg>
 );
 
-const Download = () => (
-  <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.1a1.5 1.5 0 0 0 1.5 1.5h11a1.5 1.5 0 0 0 1.5-1.5v-2.1a.5.5 0 0 1 1 0v2.1a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5v-2.1a.5.5 0 0 1 .5-.5z" />
-    <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
-  </svg>
-);
-
 const Close = () => (
   <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
     <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-  </svg>
-);
-
-const Trash = () => (
-  <svg width="1em" height="1em" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
-    <path fillRule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H5.5l1-1h3l1 1h2a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
   </svg>
 );
 
@@ -160,107 +137,78 @@ export const Default: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   MODES — discriminated-union showcase stories (Q4 irreducible)
-   Per ADR-010 framework: variant is a Control, not separate stories.
-   Button variants are pure hierarchy/color — no semantic role / icon /
-   context differences — so the Q-tree collapses to Controls. Mirrors
-   Carbon's Button (single `Default` with `kind` Control).
+   ICON-ONLY — Q4 irreducible. Icon-only mode can't be reached from the
+   Playground because `icon` is a ReactNode (`control: false`), so this
+   dedicated story is how you exercise it. It's a single args-driven
+   instance: switch variant / size / disabled / loading from Controls.
+   (variant, href, disabled etc. are Controls on Default per ADR-010 —
+   they don't earn their own stories.)
    ═══════════════════════════════════════════════════════════════ */
 
 /**
- * Icon-only mode. The discriminated union enforces `label` as required
- * (screen-reader announcement). Icon buttons share the same variant scale
- * and size scale as text buttons — only the content shape differs.
+ * Icon-only mode. The discriminated union enforces `label` (screen-reader
+ * announcement) and forbids `children`; the icon span is `aria-hidden`. Icon
+ * buttons share the same variant + size scale as text buttons — flip `variant`
+ * and `size` in the Controls panel.
  *
- * bds-lint-ignore — Q4 reference for the icon-only branch of the discriminated
- * union; the branch is a type-level shape, not a prop value (#1502).
- * @summary Icon-only Button — same variant + size scale as text mode
+ * @summary Icon-only Button — variant + size switchable via Controls
  */
 export const IconOnly: Story = {
-  name: 'IconOnly',
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Q4 irreducible — visual reference for the icon-only discriminated-union branch. `label` is required for screen-reader announcement; the icon span is `aria-hidden`.',
-      },
-    },
+  args: {
+    icon: <Plus />,
+    label: 'Add item',
+    variant: 'primary',
+    size: 'md',
   },
-  render: () => (
-    <Row>
-      <Button variant="primary" icon={<Plus />} label="Add item" />
-      <Button variant="outline" icon={<Download />} label="Download" />
-      <Button variant="secondary" icon={<Plus />} label="Add" />
-      <Button variant="ghost" icon={<Close />} label="Close" />
-      <Button variant="negative" icon={<Trash />} label="Delete" />
-      <Button variant="positive" icon={<Plus />} label="Approve" />
-    </Row>
-  ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   INTERACTION TESTS — play-only, off-sidebar + off-MCP (['!manifest']).
+   AsLink and Disabled render identically to Controls-reachable states
+   (anchor mode via `href`, disabled via `disabled`), so per the
+   story-shape standard (Rules 3 + 5 / Q5) they aren't visual stories —
+   they're assertions guarding branches a snapshot can't distinguish.
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Anchor branch of the discriminated union — setting `href` renders `<a href>`
+ * instead of `<button>`: visually identical, semantically a link. Reachable
+ * from the Playground via the `href` Control; this guards that the branch
+ * actually emits an anchor with the href.
+ *
+ * @summary Verifies the `href` branch renders an `<a>`
+ */
+export const InteractionTestAsLink: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: { variant: 'primary', href: '#', children: 'Get started' },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const link = canvas.getByRole('link', { name: 'Get started' });
+
+    await expect(link).toBeVisible();
+    await expect(link).toHaveAttribute('href', '#');
+    // Anchor branch renders <a>, not <button> — no Control snapshot can show this.
+    await expect(link.tagName).toBe('A');
+  },
 };
 
 /**
- * Anchor-mode rendering. When `href` is set, Button renders as `<a>` instead
- * of `<button>` — same visual styling, semantically a link.
+ * Disabled regression guards. `disabled` is a boolean Control on every variant,
+ * so this exists for the assertions, not as a gallery: (1) a disabled ghost
+ * icon-button stays transparent — a disabled fill would render a solid gray
+ * block (#1579); (2) a filled disabled button keeps its label legible against
+ * the disabled fill (≥3:1 — #1571).
  *
- * bds-lint-ignore — Q4 reference for the anchor branch of the discriminated
- * union; the rendered element differs, which no Control can show (#1502).
- * @summary Button as anchor — render as `<a href>` for navigation
+ * @summary Guards disabled ghost transparency + fill legibility
  */
-export const AsLink: Story = {
-  name: 'AsLink',
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Q4 irreducible — visual reference for the anchor discriminated-union branch. Use for actions that navigate to a URL; the rendered DOM is `<a href>`.',
-      },
-    },
-  },
-  render: () => (
-    <Row>
-      <Button variant="primary" href="#">
-        Get started
-      </Button>
-      <Button variant="outline" href="#">
-        Documentation
-      </Button>
-      <Button variant="ghost" href="#" iconBefore={<Download />}>
-        Download PDF
-      </Button>
-      <Button variant="primary" href="#" iconAfter={<ArrowRight />}>
-        Continue
-      </Button>
-    </Row>
-  ),
-};
-
-/**
- * Disabled state across variants. Filled variants take the disabled surface;
- * ghost variants stay transparent — a disabled fill would render them as a
- * solid gray block (regression guard for the disabled ghost icon-button).
- *
- * @summary Disabled Button — ghost variants stay transparent
- */
-export const Disabled: Story = {
-  name: 'Disabled',
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Disabled treatment per variant. The play function asserts a disabled ghost icon-button keeps a transparent background (regression guard).',
-      },
-    },
-  },
+export const InteractionTestDisabled: Story = {
+  tags: ['!manifest', 'interaction-test'],
   render: () => (
     <Row>
       <Button variant="primary" disabled>
         Primary
       </Button>
-      <Button variant="ghost" disabled>
-        Ghost
-      </Button>
       <Button variant="ghost" icon={<Close />} label="Close" disabled />
-      <Button variant="ghost" icon={<Trash />} label="Delete" disabled />
     </Row>
   ),
   play: async ({ canvasElement }) => {

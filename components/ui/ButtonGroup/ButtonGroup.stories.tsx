@@ -101,9 +101,9 @@ export const IconButtonGroup: Story = {
   },
   render: (args) => (
     <ButtonGroup {...args}>
-      <Button icon={<Edit />} label="Edit" variant="ghost" />
-      <Button icon={<Copy />} label="Copy" variant="ghost" />
-      <Button icon={<Share />} label="Share" variant="ghost" />
+      <Button icon={<Edit />} label="Edit" variant="secondary" />
+      <Button icon={<Copy />} label="Copy" variant="secondary" />
+      <Button icon={<Share />} label="Share" variant="secondary" />
       <Button icon={<Trash />} label="Delete" variant="negative" />
     </ButtonGroup>
   ),
