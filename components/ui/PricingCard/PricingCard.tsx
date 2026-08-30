@@ -21,6 +21,12 @@ export interface PricingCardProps extends HTMLAttributes<HTMLDivElement> {
   action?: ReactNode;
   /** Badge above the title (e.g., "Most popular") */
   badge?: ReactNode;
+  /**
+   * Top media slot. Pass an `<Image ratio="…">` (or any `<Frame>`-wrapped
+   * media / ReactNode) for an illustration above the header. When omitted,
+   * the card renders without media.
+   */
+  image?: ReactNode;
   /** Whether this is the highlighted/recommended plan */
   highlighted?: boolean;
 }
@@ -54,6 +60,7 @@ export function PricingCard({
   features,
   action,
   badge,
+  image,
   highlighted = false,
   className = '',
   style,
@@ -69,6 +76,9 @@ export function PricingCard({
       style={style}
       {...props}
     >
+      {/* Top media slot */}
+      {image && <div className="bds-pricing-card__image">{image}</div>}
+
       {/* Header: badge + title */}
       <div className="bds-pricing-card__header">
         {badge && <div className="bds-pricing-card__badge">{badge}</div>}
