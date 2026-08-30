@@ -277,6 +277,159 @@ function buildComponents() {
   return components;
 }
 
+// ── Lint-ignore exception set (#2170) ────────────────────────────────────
+//
+// The token linter (scripts/lint-tokens.js) suppresses any SOURCE line carrying
+// a `bds-lint-ignore` marker. That marker is a CSS comment and never survives
+// into the runtime CSSOM the inspector reads, so without this bridge the
+// inspector re-flags all ~178 sanctioned exceptions the linter passes and its
+// count can never reach zero on a clean tree. Here we extract the exception set
+// at build time — { selector, property } for every ignored declaration — and
+// emit it in the manifest; the inspector indexes it and drops any violation
+// whose declaring rule is listed, so its violation set equals the linter's
+// error set (green `lint-tokens --errors-only` == clean inspector scan).
+
+const LINT_IGNORE_MARKER = 'bds-lint-ignore';
+
+/**
+ * Normalize a selector for cross-context equality: strip spaces around child /
+ * sibling combinators and collapse remaining whitespace, so `.a > .b` (source)
+ * and `.a>.b` (CSSOM serialization) compare equal while a descendant space
+ * (`.a .b`) stays distinct from a compound (`.a.b`).
+ *
+ * MUST stay byte-identical to `normalizeSelector` in
+ * components/ui/BrikDevBar/widgets/inspect-widget.js — the manifest stores
+ * selectors normalized here and the inspector compares runtime origin selectors
+ * against them with its own copy.
+ */
+function normalizeSelector(sel) {
+  return sel.replace(/\s*([>+~])\s*/g, '$1').replace(/\s+/g, ' ').trim();
+}
+
+/** Split a selector group on top-level commas (commas inside () / [] are kept). */
+function splitSelectorGroup(group) {
+  const out = [];
+  let depth = 0;
+  let cur = '';
+  for (const c of group) {
+    if (c === '(' || c === '[') depth++;
+    else if (c === ')' || c === ']') depth--;
+    if (c === ',' && depth === 0) {
+      if (cur.trim()) out.push(cur.trim());
+      cur = '';
+      continue;
+    }
+    cur += c;
+  }
+  if (cur.trim()) out.push(cur.trim());
+  return out;
+}
+
+/**
+ * Parse a CSS string and return every `bds-lint-ignore`'d declaration as
+ * `{ selector, property }` pairs (one per selector in a comma group). Mirrors
+ * the linter's line granularity: the marker is a trailing comment on a
+ * one-declaration-per-line rule (BDS house style), so we find the enclosing
+ * selector with a comment/string-aware brace scan and read the property off the
+ * marker's own line. A marker on a line that is not a `prop: value` declaration
+ * (a standalone comment) has no property to key on and is skipped — the linter
+ * suppresses nothing there either.
+ */
+export function extractLintIgnores(css) {
+  const lines = css.split('\n');
+  const out = [];
+  const seen = new Set();
+
+  // Innermost non-at-rule selector group active at the marker's position.
+  const topSelector = (stack) => {
+    for (let i = stack.length - 1; i >= 0; i--) {
+      if (stack[i] && !stack[i].startsWith('@')) return stack[i];
+    }
+    return '';
+  };
+
+  const stack = [];
+  let prelude = '';
+  let line = 0;
+  let inComment = false;
+  let inString = '';
+  for (let i = 0; i < css.length; i++) {
+    const c = css[i];
+
+    if (c === '\n') { line++; }
+
+    if (inComment) {
+      if (c === '*' && css[i + 1] === '/') { inComment = false; i++; }
+      continue;
+    }
+    if (inString) {
+      if (c === '\\') { i++; continue; }
+      if (c === inString) inString = '';
+      continue;
+    }
+    if (c === '/' && css[i + 1] === '*') {
+      // The marker lives inside this comment. If this comment carries it,
+      // capture selector + line now; the property is read from the marker's
+      // source line below.
+      const end = css.indexOf('*/', i + 2);
+      const body = css.slice(i + 2, end === -1 ? css.length : end);
+      if (body.includes(LINT_IGNORE_MARKER)) {
+        const group = topSelector(stack);
+        if (group) {
+          const src = lines[line] || '';
+          const propMatch = src.match(/^\s*(-?[a-z][a-z-]*)\s*:/i);
+          if (propMatch) {
+            const property = propMatch[1].toLowerCase();
+            for (const sel of splitSelectorGroup(group)) {
+              const key = `${normalizeSelector(sel)} ${property}`;
+              if (!seen.has(key)) {
+                seen.add(key);
+                out.push({ selector: normalizeSelector(sel), property });
+              }
+            }
+          }
+        }
+      }
+      inComment = true;
+      i++;
+      continue;
+    }
+    if (c === '"' || c === "'") { inString = c; continue; }
+    if (c === '{') { stack.push(prelude.trim()); prelude = ''; continue; }
+    if (c === '}') { stack.pop(); prelude = ''; continue; }
+    if (c === ';') { prelude = ''; continue; }
+    prelude += c;
+  }
+  return out;
+}
+
+/** Walk components/ui/**\/*.css and collect the repo-wide lint-ignore set. */
+function buildLintIgnores() {
+  const out = [];
+  const walk = (dir) => {
+    if (!existsSync(dir)) return;
+    for (const entry of readdirSync(dir)) {
+      const p = join(dir, entry);
+      const st = statSync(p);
+      if (st.isDirectory()) walk(p);
+      else if (entry.endsWith('.css')) out.push(...extractLintIgnores(readFileSync(p, 'utf8')));
+    }
+  };
+  walk(COMPONENTS_DIR);
+  // Dedupe repo-wide (the same selector+prop can recur across files).
+  const seen = new Set();
+  const deduped = [];
+  for (const e of out) {
+    const key = `${e.selector} ${e.property}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    deduped.push(e);
+  }
+  deduped.sort((a, b) =>
+    a.selector === b.selector ? a.property.localeCompare(b.property) : a.selector.localeCompare(b.selector));
+  return deduped;
+}
+
 // ── Tokens ──────────────────────────────────────────────────────────────
 
 /**
@@ -334,6 +487,7 @@ function buildTokens() {
 function main() {
   const components = buildComponents();
   const tokens = buildTokens();
+  const lintIgnores = buildLintIgnores();
 
   const manifest = {
     $schema: 'https://brikdesigns.com/schemas/bds-inspector-manifest-v1.json',
@@ -343,6 +497,9 @@ function main() {
     token_count: Object.keys(tokens).length,
     components,
     tokens,
+    // { selector, property } for every bds-lint-ignore'd component declaration
+    // — the inspector's violation-set baseline (#2170). See extractLintIgnores.
+    lint_ignores: lintIgnores,
   };
 
   const distDir = dirname(OUTPUT_PATH);
@@ -351,8 +508,12 @@ function main() {
 
   const size = (JSON.stringify(manifest).length / 1024).toFixed(1);
   console.log(
-    `✓ bds-manifest.json — ${manifest.component_count} components, ${manifest.token_count} tokens, ${size} KB`,
+    `✓ bds-manifest.json — ${manifest.component_count} components, ${manifest.token_count} tokens, ${lintIgnores.length} lint-ignores, ${size} KB`,
   );
 }
 
-main();
+// Run only as a CLI so unit tests can import extractLintIgnores without
+// executing a full filesystem walk + manifest write (mirrors lint-tokens.js).
+if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
+  main();
+}

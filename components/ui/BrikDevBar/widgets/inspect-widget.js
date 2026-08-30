@@ -34,6 +34,22 @@
  *   - Scan   → page-wide JSON violation report copied to clipboard
  *
  * Keyboard:  Cmd/Ctrl + Shift + I  toggles inspect mode.  ESC closes.
+ *
+ * Violation-set contract (brik-bds#2170): the inspector's violation set is
+ * DEFINED to equal the token linter's error set (scripts/lint-tokens.js
+ * --errors-only), so a green CI implies a clean inspector scan. Two mechanisms
+ * hold that equality:
+ *   1. bds-lint-ignore parity — the linter suppresses any source line carrying
+ *      the marker, but the marker is a CSS comment stripped from the runtime
+ *      CSSOM the inspector reads. The BDS manifest's `lint_ignores` array
+ *      (built by scripts/build-inspector-manifest.mjs) carries the extracted
+ *      { selector, property } exception set; auditProp drops any violation
+ *      whose declaring rule is in it (see setLintIgnores / isLintIgnored).
+ *   2. Stale-build guard — a dev server mid-build (broken HMR: index.json 500,
+ *      empty story iframe) applies none of the stylesheets, so reads return
+ *      browser defaults the inspector would mis-flag. A violation is only
+ *      emitted once the document's stylesheets have resolved (auditReady /
+ *      stylesheetsResolved).
  */
 
 (function () {
@@ -189,6 +205,79 @@
   let hoveredEl = null;
   let lockedEl = null;
   let rulesIndex = null;
+  // Number of document.styleSheets present when rulesIndex was last built —
+  // rebuild when it changes so an index cached before the story's stylesheets
+  // loaded (broken/mid-build HMR) doesn't persist stale. See #2170.
+  let rulesIndexSheetCount = -1;
+
+  // ── Lint-ignore parity (#2170) ──────────────────────────────────────────
+  // The token linter (scripts/lint-tokens.js) suppresses any SOURCE line
+  // carrying a `bds-lint-ignore` marker. That marker is a CSS comment and never
+  // survives into the runtime CSSOM this inspector reads, so without a bridge
+  // the inspector re-flags all ~178 sanctioned exceptions the linter passes and
+  // its count can never reach zero on a clean tree. The BDS manifest carries the
+  // extracted exception set as `lint_ignores: [{ selector, property }]`
+  // (scripts/build-inspector-manifest.mjs extractLintIgnores); we index it by
+  // normalized-selector + property and drop any violation whose declaring rule
+  // is listed, so the inspector's violation set equals the linter's error set.
+  //   null  → manifest not yet loaded (never suppress on unknown)
+  //   Set   → the loaded exception keys
+  let lintIgnoreIndex = null;
+
+  // MUST stay byte-identical to `normalizeSelector` in
+  // scripts/build-inspector-manifest.mjs — the manifest stores selectors
+  // normalized by that copy and we compare runtime origin selectors against
+  // them here. Strip spaces around child/sibling combinators, collapse the
+  // rest, so `.a > .b` (source) and `.a>.b` (CSSOM) compare equal.
+  function normalizeSelector(sel) {
+    return sel.replace(/\s*([>+~])\s*/g, '$1').replace(/\s+/g, ' ').trim();
+  }
+
+  // Build the exception index from a manifest `lint_ignores` array. Exposed on
+  // window.BrikInspect for host/test injection (no manifest fetch in a test DOM).
+  function setLintIgnores(list) {
+    const set = new Set();
+    if (Array.isArray(list)) {
+      for (const e of list) {
+        if (!e || !e.selector || !e.property) continue;
+        set.add(`${normalizeSelector(e.selector)} ${e.property}`);
+      }
+    }
+    lintIgnoreIndex = set;
+  }
+
+  // True when `prop` on the rule identified by `originSelector` carries a
+  // `bds-lint-ignore` in source. Unknown baseline (manifest not loaded) → false:
+  // we only ever SUPPRESS a violation on a known exception, never invent one.
+  function isLintIgnored(originSelector, prop) {
+    if (!lintIgnoreIndex || !originSelector) return false;
+    return lintIgnoreIndex.has(`${normalizeSelector(originSelector)} ${prop}`);
+  }
+
+  // ── Stale/incomplete-build guard (#2170) ────────────────────────────────
+  // A dev server mid-build (broken HMR: index.json 500, empty story iframe, or
+  // a reload in flight) has not applied the component/token stylesheets, so
+  // declared/computed reads return browser defaults the inspector would mis-flag
+  // as raw-value violations (the phantom `font-size: 16px` on a correctly-
+  // tokenized notification title). A violation is only emitted once the
+  // document's stylesheets have resolved — the `load` event, i.e.
+  // `document.readyState === 'complete'`, fires only after every stylesheet has
+  // loaded and parsed, and drops back to 'loading'/'interactive' while an HMR
+  // reload is in flight. We deliberately do NOT probe individual <link>.sheet:
+  // a cross-origin or slow-but-benign link reads null and would suppress every
+  // real violation on an otherwise-ready page.
+  function stylesheetsResolved() {
+    return document.readyState === 'complete';
+  }
+  // A trustworthy violation verdict needs BOTH: (1) stylesheets resolved — else
+  // the read is a mid-build phantom (above); and (2) the lint-ignore baseline
+  // loaded — else the inspector cannot honor the linter's exceptions and would
+  // re-flag all ~178 of them. `lintIgnoreIndex === null` means the manifest
+  // fetch has not resolved yet (or 404'd on an older consumer); we withhold the
+  // verdict rather than emit those known-false positives (#2170).
+  function auditReady() {
+    return stylesheetsResolved() && lintIgnoreIndex !== null;
+  }
 
   // ── BDS inspector manifest ──────────────────────────────────────────────
   // Optional runtime manifest exported by BDS at build time. Lets the inspect
@@ -206,6 +295,11 @@
       const res = await fetch(MANIFEST_URL, { cache: 'no-cache' });
       if (!res.ok) return;
       manifest = await res.json();
+      // Load the lint-ignore exception baseline (#2170). Older manifests lack
+      // the field — leave the index null (never suppress) rather than empty.
+      if (manifest && Array.isArray(manifest.lint_ignores)) {
+        setLintIgnores(manifest.lint_ignores);
+      }
       // Expose for debugging + cross-widget reuse (e.g. the Events slot could
       // enrich its display with token/component context in a future iteration).
       if (typeof window !== 'undefined') window.__brikInspectManifest = manifest;
@@ -976,6 +1070,12 @@
     // Exposed for regression tests (cascade-keyword skip — #1615). Not part of
     // the public surface; consumers use detectContext / the report event.
     window.BrikInspect.getDeclaredValue = getDeclaredValue;
+    // Exposed for the lint-ignore parity + stale-build regression tests (#2170)
+    // and for a host to inject the exception set without a manifest fetch.
+    window.BrikInspect.auditProp = auditProp;
+    window.BrikInspect.setLintIgnores = setLintIgnores;
+    window.BrikInspect.isLintIgnored = isLintIgnored;
+    window.BrikInspect.stylesheetsResolved = stylesheetsResolved;
     // Drive inspect on/off from a host that owns the DevBar slot (host-managed
     // mode — see registerWithDevBar). Idempotent: no-op when already in the
     // requested state. Lets the BDS Storybook InspectWidget bind the slot's
@@ -986,7 +1086,10 @@
 
   // ── Stylesheet rule index ───────────────────────────────────────────────
   function buildRulesIndex() {
-    if (rulesIndex) return rulesIndex;
+    // Rebuild when the stylesheet count changes so a cache built before the
+    // story's stylesheets loaded (mid-build HMR) can't persist stale (#2170).
+    const count = document.styleSheets.length;
+    if (rulesIndex && rulesIndexSheetCount === count) return rulesIndex;
     const rules = [];
     for (const sheet of Array.from(document.styleSheets)) {
       let sheetRules;
@@ -995,6 +1098,7 @@
       walkRules(sheetRules, rules);
     }
     rulesIndex = rules;
+    rulesIndexSheetCount = count;
     return rules;
   }
 
@@ -1083,6 +1187,13 @@
     const raw = declared ? declared.value : '';
     const tokens = extractTokens(raw);
     const hardcoded = raw ? findHardcodedFragments(raw) : [];
+    // Source carries a bds-lint-ignore on this declaration → the linter passes
+    // it, so the inspector must too (#2170). Origin 'inline' is never a
+    // source-CSS rule and so is never in the exception set.
+    const lintIgnored =
+      declared && declared.origin && declared.origin !== 'inline'
+        ? isLintIgnored(declared.origin, prop)
+        : false;
     return {
       prop,
       declared: declared ? declared.value.trim() : null,
@@ -1091,7 +1202,12 @@
       tokens,
       unknownTokens: tokens.filter((t) => !isValidToken(t)),
       hardcoded,
-      isViolation: hardcoded.length > 0 && tokens.length === 0,
+      lintIgnored,
+      // Equal-to-the-linter's-error-set (#2170): a raw value is a violation only
+      // when it is NOT a sanctioned bds-lint-ignore exception AND the build is
+      // ready (stylesheets resolved — otherwise the read is a mid-build phantom).
+      isViolation:
+        hardcoded.length > 0 && tokens.length === 0 && !lintIgnored && auditReady(),
     };
   }
 
@@ -1357,8 +1473,12 @@
           : '';
         return `var(<span class="${cls}"${titleAttr}>${token}</span>`;
       });
-      for (const h of a.hardcoded) {
-        val = val.replace(h, `<span class="bi-hardcoded">${escapeHtml(h)}</span>`);
+      // A bds-lint-ignore'd raw value is a sanctioned exception, not a
+      // violation (#2170) — show it plainly rather than in violation red.
+      if (!a.lintIgnored) {
+        for (const h of a.hardcoded) {
+          val = val.replace(h, `<span class="bi-hardcoded">${escapeHtml(h)}</span>`);
+        }
       }
       parts.push(val);
     }
@@ -1497,9 +1617,20 @@
         });
       }
     }
+    // Readiness guard (#2170): auditProp withholds violations until the
+    // stylesheets resolve AND the lint-ignore baseline loads, so a scan run
+    // before either reports zero. Say which, rather than let "0 violations"
+    // read as a clean pass.
+    const sheetsReady = stylesheetsResolved();
+    const baselineReady = lintIgnoreIndex !== null;
+    const ready = sheetsReady && baselineReady;
+    const notReadyReason = !sheetsReady
+      ? 'stylesheets unresolved (build not ready)'
+      : 'lint-ignore baseline not loaded (manifest pending)';
     const report = {
       url: location.href,
       scannedAt: new Date().toISOString(),
+      buildReady: ready,
       totals: {
         scanned,
         bdsComponents: bdsCount,
@@ -1511,6 +1642,7 @@
     navigator.clipboard.writeText(JSON.stringify(report, null, 2));
     alert(
       `Brik Inspect — Page scan\n\n` +
+      (ready ? '' : `⚠ Not ready — ${notReadyReason}; violations withheld.\n\n`) +
       `${scanned} elements scanned\n` +
       `${bdsCount} BDS components found\n` +
       `${report.totals.totalViolations} violations across ${violations.length} elements\n\n` +
