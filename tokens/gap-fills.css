@@ -277,8 +277,8 @@
 
      Renamed from --gutter-page (ADR-025): a "gutter" is conventionally the
      space BETWEEN columns, but every consumer applies this to padding-inline —
-     the page-EDGE inset, never a grid gap. The old name survives as a
-     deprecated alias below until downstream consumers migrate.
+     the page-EDGE inset, never a grid gap. The old name's deprecated alias was
+     removed post-migration once no consumer referenced it.
 
      Tier-clean (ADR-025 tier fix): references the Primitive --space-* directly
      at every spacing mode, NOT the Semantic --padding-lg. A Semantic→Semantic
@@ -292,13 +292,6 @@
      sibling↔sibling space is the layout primitive's gap, governed by the
      ADR-024 rhythm map. */
   --page-inset: var(--space-600);
-
-  /* @deprecated — renamed to --page-inset (ADR-025). Retained as an alias so
-     downstream consumers (brikdesigns) keep resolving until they migrate;
-     removed in a follow-up once no consumer references it. The Semantic→
-     Semantic reference is intentional and temporary — exempted from
-     lint-token-tiers via the shared escape hatch. */
-  --gutter-page: var(--page-inset); /* bds-lint-ignore — deprecated rename alias of --page-inset, removed post-migration (ADR-025) */
 
   /* ── Content measure (ADR-032) ──
      The max inline width of a CENTERED text column INSIDE a band — distinct
