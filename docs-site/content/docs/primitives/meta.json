@@ -2,7 +2,6 @@
   "title": "Foundation",
   "pages": [
     "index",
-    "token-anatomy",
     "color",
     "color-pairings",
     "interaction-states",
@@ -13,6 +12,6 @@
     "border-radius",
     "border-width",
     "shadow",
-    "naming-conventions"
+    "token-anatomy"
   ]
 }
