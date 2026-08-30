@@ -40,7 +40,7 @@
 
 .bds-sheet--floating {
   border-radius: var(--border-radius-md);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12), 0 2px 12px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — custom multi-layer elevation shadow (see @token-exempt above); no composite box-shadow token exists */
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12), 0 2px 12px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — custom multi-layer elevation shadow; single-layer composites exist (--box-shadow-sm..xl) but none is multi-layer, so this stays raw until a multi-layer composite is proposed */
 }
 
 .bds-sheet--floating.bds-sheet--right {
