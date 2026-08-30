@@ -32,7 +32,7 @@ How a brand's third-and-beyond colours resolve:
 
 | The tier value is… | Resolves via | Brand slot? |
 |---|---|---|
-| **chromatic** (a colour) | the raw `--color-{name}` / `--color-{name}-{stop}` primitive — a canonical name already emitted into [tokens.css](/docs/primitives/color). Referenced ad hoc by generators and CSS. | none |
+| **chromatic** (a colour) | the raw `--color-{name}` / `--color-{name}-{stop}` primitive — a canonical name already emitted into [tokens.css](/docs/foundation/color). Referenced ad hoc by generators and CSS. | none |
 | **neutral** (a gray) | the existing neutral path — the `neutral`-tier gray ramp, and in the portal mockup generator the dark/light/mid role assignment. | none (a neutral accent never gets a chromatic slot) |
 
 Consuming raw `--color-{name}` is **not** inventing a parallel taxonomy — those are canonical primitive names. `secondary` is unaffected: it keeps its `--*-brand-secondary` slot, which both generators emit. A future client that genuinely needs a tertiary brand slot returns here for a definition step first.
@@ -48,7 +48,7 @@ Consuming raw `--color-{name}` is **not** inventing a parallel taxonomy — thos
 </Callout>
 
 <Callout type="error">
-  **Speculative tiers.** Adding a tier value because "the brand has 11 primitives and 3 already have tiers, so X needs one too." A tier exists only when its target token slot exists in canonical [tokens.css](/docs/primitives/color). If your brand has chromatic primitives that don't fit `primary` / `secondary` / `tertiary` / `accent` / `brand-fill`, leave them untagged — they emit as palette vars only. Tagging `tertiary` / `accent` is allowed, but it adds **no slot** — those tiers resolve via raw `--color-{name}` ([rule above](#tertiary-and-accent-resolution)), so do not expect a `--*-brand-tertiary` to appear.
+  **Speculative tiers.** Adding a tier value because "the brand has 11 primitives and 3 already have tiers, so X needs one too." A tier exists only when its target token slot exists in canonical [tokens.css](/docs/foundation/color). If your brand has chromatic primitives that don't fit `primary` / `secondary` / `tertiary` / `accent` / `brand-fill`, leave them untagged — they emit as palette vars only. Tagging `tertiary` / `accent` is allowed, but it adds **no slot** — those tiers resolve via raw `--color-{name}` ([rule above](#tertiary-and-accent-resolution)), so do not expect a `--*-brand-tertiary` to appear.
 </Callout>
 
 ## Decision tree
@@ -137,5 +137,5 @@ function tagPrimitive(tier: string) {
 
 ## Related
 
-- [Color](/docs/primitives/color) — the canonical token registry that tier values resolve into
+- [Color](/docs/foundation/color) — the canonical token registry that tier values resolve into
 - [Cascade rules](/docs/getting-started/cascade) — three-layer architecture (BDS foundations → gap-fills → client theme)

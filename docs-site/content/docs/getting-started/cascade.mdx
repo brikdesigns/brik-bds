@@ -5,7 +5,7 @@ description: How BDS tokens flow from Library → CSS Layer → consumer. Six di
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-BDS resolves tokens through a strict cascade: **Libraries** define values, **Tiers** stack abstractions, **Layers** order the CSS @layer at runtime, and **Modes** vary values on orthogonal axes. Every consumer (portal, brikdesigns, every client site) follows the same path. Six words for six independent concepts — see [Token Anatomy](/docs/primitives/token-anatomy) for the full disambiguation map.
+BDS resolves tokens through a strict cascade: **Libraries** define values, **Tiers** stack abstractions, **Layers** order the CSS @layer at runtime, and **Modes** vary values on orthogonal axes. Every consumer (portal, brikdesigns, every client site) follows the same path. Six words for six independent concepts — see [Token Anatomy](/docs/foundation/token-anatomy) for the full disambiguation map.
 
 ## The 30-second overview
 
@@ -139,10 +139,10 @@ Semantic color tokens — the names components reference, and the only names a B
 | `--text-*` | Type colors | `--text-primary`, `--text-brand-primary`, `--text-on-color-dark` |
 | `--border-*` | Edge colors | `--border-primary`, `--border-brand-primary`, `--border-input` |
 
-Full registry at [Color](/docs/primitives/color). Canonical bundle: `dist/tokens.css`.
+Full registry at [Color](/docs/foundation/color). Canonical bundle: `dist/tokens.css`.
 
 <Callout type="warn">
-  **Names not in the registry are not real.** Inventing a `--surface-paper`, `--text-on-ink`, `-soft` / `-warm` modifier, or a `--theme-brik-*` / `--brand-{tier}` namespace creates parallel taxonomy drift. If you need a new token, add it to a Library first via Figma → Tokens Studio → Style Dictionary. See [Token Anatomy](/docs/primitives/token-anatomy) for the closed forms.
+  **Names not in the registry are not real.** Inventing a `--surface-paper`, `--text-on-ink`, `-soft` / `-warm` modifier, or a `--theme-brik-*` / `--brand-{tier}` namespace creates parallel taxonomy drift. If you need a new token, add it to a Library first via Figma → Tokens Studio → Style Dictionary. See [Token Anatomy](/docs/foundation/token-anatomy) for the closed forms.
 </Callout>
 
 ## HTML attribute switchboard
@@ -185,10 +185,10 @@ The three rules split by what they can see. `canonical-check` answers "does this
 
 ## Related
 
-- [Token Anatomy](/docs/primitives/token-anatomy) — the six-concept disambiguation map + Tier abstraction stack
+- [Token Anatomy](/docs/foundation/token-anatomy) — the six-concept disambiguation map + Tier abstraction stack
 - [Library architecture](/docs/getting-started/figma-library-architecture) — Foundations vs Brand Kit Libraries + the Style Dictionary pipeline
 - [Theming](/docs/theming) — full Theming Tenet (Tokens / Atmospheres / Layout / Blueprints Dimensions)
 - [Client Themes](/docs/theming/client-themes) — per-client override matrix + minimal `theme-{client}.css` template
 - [Atmospheres](/docs/theming/atmospheres) — the Atmospheres Dimension
-- [Color](/docs/primitives/color) — full canonical color registry
+- [Color](/docs/foundation/color) — full canonical color registry
 - [`tokens/CASCADE.md`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/CASCADE.md) — file-level decision tree (cross-repo)

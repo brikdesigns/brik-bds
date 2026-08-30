@@ -10,7 +10,7 @@
  *      AND raw px in .css declarations (checkCssRawValues; error when the value
  *      lands on a scale token, warn on a genuine off-scale gap)
  *   3. Unknown tokens (typos or non-existent variables)
- *   4. Spacing values not aligned to 4-point grid (see https://design.brikdesigns.com/docs/primitives/spacing)
+ *   4. Spacing values not aligned to 4-point grid (see https://design.brikdesigns.com/docs/foundation/spacing)
  *   5. Token-family pairing mismatch — a token used in a property whose family
  *      it doesn't belong to (e.g. background-color: var(--text-*)). See
  *      docs/TOKEN-PR-CHECKLIST.md for the property↔family table.
@@ -132,7 +132,7 @@ const ALLOWED_PRIMITIVES = new Set([
 // Grid System Configuration (4-point base)
 // ---------------------------------------------------------------------------
 // Valid spacing values (in pixels). All must be multiples of 4.
-// See https://design.brikdesigns.com/docs/primitives/spacing for details.
+// See https://design.brikdesigns.com/docs/foundation/spacing for details.
 
 const VALID_SPACING_VALUES = {
   // Primitives: --space--[index]: [value]
@@ -659,7 +659,7 @@ function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
       line: lineNum,
       column: match.index + 1,
       message: `Unknown token "var(${tokenName})" — not found in token sources`,
-      suggestion: `Check the canonical registry at https://design.brikdesigns.com/docs/primitives or grep dist/tokens.css for the correct name`,
+      suggestion: `Check the canonical registry at https://design.brikdesigns.com/docs/foundation or grep dist/tokens.css for the correct name`,
     });
   }
 
@@ -1599,7 +1599,7 @@ function main() {
   const hasGridViolations = filtered.some(v => v.rule === 'grid-4pt');
   if (hasGridViolations) {
     console.log('  📐 Grid: BDS uses a 4-point grid. All spacing should be divisible by 4.');
-    console.log('     Exempt: 0, 1px, 2px (micro). See https://design.brikdesigns.com/docs/primitives/spacing\n');
+    console.log('     Exempt: 0, 1px, 2px (micro). See https://design.brikdesigns.com/docs/foundation/spacing\n');
   }
 
   process.exit(errorCount > 0 ? 1 : 0);
