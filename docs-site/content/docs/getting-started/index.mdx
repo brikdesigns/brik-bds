@@ -3,9 +3,22 @@ title: Getting Started
 description: How BDS is organized and where to find each tenet.
 ---
 
-BDS ships three things on a single npm package: **tokens** (the design language), **components** (React building blocks), and **theming + content vocabulary** (atmospheres, layout archetypes, blueprints, industry packs, voices).
+BDS ships four **Tenets** on a single npm package — **Foundation** (tokens), **Theming** (per-client brand), **Motion** (animation), and **Content** (voice + vocabulary) — plus the **components** that render them.
 
 Consumers import from `@brikdesigns/bds`. There is no submodule, no copy-paste — components and tokens stay in lockstep across products.
+
+## Start here
+
+Read these pages in order to wire a new consumer end to end:
+
+1. [Token Anatomy](/docs/primitives/token-anatomy) — the six-concept vocabulary (Anatomy, Tier, Library, Layer, Mode, Tenet) every other page builds on.
+2. [Installation](/docs/getting-started/installation) — install the package and render your first component.
+3. [Framework guides](/docs/getting-started/framework-guides) — the Next.js and Astro scaffolds with working code.
+4. [The cascade](/docs/getting-started/cascade) — the adoption contract every consumer wires the same way.
+5. [Library architecture](/docs/getting-started/figma-library-architecture) — where tokens come from (Foundations vs Brand Kit).
+6. [React composition layer](/docs/getting-started/react-composition) — referencing tokens from TSX without inline `var()` strings.
+
+Building or contributing to the docs themselves? See [Documentation system](/docs/getting-started/documentation-system) (where knowledge lives) and [Page templates](/docs/getting-started/page-templates) (the shape every page follows).
 
 ## How this site is organized
 
@@ -16,10 +29,6 @@ BDS has four **Tenets**: Foundation, Theming, Motion, Content. Each gets its own
 - **Motion** — animation tokens + behaviors (CSS reveals, GSAP, premium effects).
 - **Content System** — industry packs, voice definitions, the BCS vocabulary that selects theming defaults.
 - **Components** — React building blocks every product surface composes from.
-- **Documentation system** — how BDS is documented (read before contributing docs changes).
-- **Page templates** — the standard shape every docs page follows.
-
-New to the token system? Read [Token Anatomy](/docs/primitives/token-anatomy) and [Library Architecture](/docs/getting-started/figma-library-architecture) first — they lock the vocabulary every other section uses.
 
 ## How this site relates to Storybook
 

@@ -1,5 +1,5 @@
 ---
-title: Framework Guides
+title: Framework guides
 description: Wire BDS into a Next.js product app or an Astro marketing site. Same tokens, same components, different render targets.
 ---
 
@@ -10,7 +10,7 @@ BDS ships one set of tokens, components, and theming primitives consumed by two 
 
 | Target | Used for | Reference repo |
 |---|---|---|
-| **Next.js (App Router)** | Product apps — portal, renew-pms | [`brik-client-portal`](https://github.com/brikdesigns/brik-client-portal) |
+| **Next.js (App Router)** | Product apps — the client portal | [`brik-client-portal`](https://github.com/brikdesigns/brik-client-portal) |
 | **Astro** | Client marketing sites | [`vale-partners`](https://github.com/brikdesigns/vale-partners) |
 
 Webflow is supported as a legacy surface only — see the [last section](#webflow-legacy).
@@ -63,7 +63,7 @@ export const poppins = Poppins({
 
 For the override matrix and a minimal `theme-{client}.css` template, see [Client Themes](/docs/theming/client-themes).
 
-Don't reach for `var(--text-primary)` directly in TSX — wrap tokens in typed primitives (`src/lib/tokens.ts` + `src/lib/styles.ts`) so editor autocomplete catches typos at write-time. Full pattern: [React Composition Layer](/docs/getting-started/react-composition).
+Don't reach for `var(--text-primary)` directly in TSX — wrap tokens in typed primitives (`src/lib/tokens.ts` + `src/lib/styles.ts`) so editor autocomplete catches typos at write-time. Full pattern: [React composition layer](/docs/getting-started/react-composition).
 
 ### 4. Root layout
 
@@ -252,7 +252,7 @@ const { title, description } = Astro.props;
 
 ### 5. Theme and mode switches
 
-Astro is HTML — there's no `ThemeProvider`. Set switches as attributes on the `<html>` element directly. Full attribute table in [The Cascade → HTML attribute switchboard](/docs/getting-started/cascade#html-attribute-switchboard).
+Astro is HTML — there's no `ThemeProvider`. Set switches as attributes on the `<html>` element directly. Full attribute table in [The cascade → HTML attribute switchboard](/docs/getting-started/cascade#html-attribute-switchboard).
 
 ```html
 <html lang="en" data-theme="dark" data-mode-borderwidth="bold">
@@ -341,7 +341,7 @@ For the per-token rename log and migration cadence, see the BDS releases changel
 ## Related
 
 - [Installation](/docs/getting-started/installation) — bare-minimum setup before framework-specific concerns
-- [The Cascade](/docs/getting-started/cascade) — token cascade architecture and the full `<html>` switch table
+- [The cascade](/docs/getting-started/cascade) — token cascade architecture and the full `<html>` switch table
 - [Theming](/docs/theming) — the four Theming Dimensions (tokens, atmospheres, archetypes, blueprints)
 - [Client Themes](/docs/theming/client-themes) — override matrix, minimal `theme-{client}.css` template, multi-brand scope binding
 - [Motion](/docs/motion) — three-tier motion system and when to escalate

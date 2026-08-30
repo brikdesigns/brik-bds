@@ -1,11 +1,11 @@
 ---
-title: The Cascade
+title: The cascade
 description: How BDS tokens flow from Library → CSS Layer → consumer. Six disambiguated concepts (Anatomy, Tier, Library, Layer, Mode, Tenet) keep the system from drifting.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-BDS resolves tokens through a strict cascade: **Libraries** define values, **Tiers** stack abstractions, **Layers** order the CSS @layer at runtime, and **Modes** vary values on orthogonal axes. Every consumer (portal, renew-pms, brikdesigns, every client site) follows the same path. Six words for six independent concepts — see [Token Anatomy](/docs/primitives/token-anatomy) for the full disambiguation map.
+BDS resolves tokens through a strict cascade: **Libraries** define values, **Tiers** stack abstractions, **Layers** order the CSS @layer at runtime, and **Modes** vary values on orthogonal axes. Every consumer (portal, brikdesigns, every client site) follows the same path. Six words for six independent concepts — see [Token Anatomy](/docs/primitives/token-anatomy) for the full disambiguation map.
 
 ## The 30-second overview
 
@@ -158,11 +158,11 @@ Storybook's paintbrush toolbar sets `data-theme` automatically. React apps use `
 
 ## The adoption contract
 
-This page is the **canonical adoption contract**: every consumer (portal, renew-pms, brikdesigns, every client site) wires the cascade the same way, and [Installation](/docs/getting-started/installation) links here as the one setup path. A consumer is compliant when all four hold:
+This page is the **canonical adoption contract**: every consumer (portal, brikdesigns, every client site) wires the cascade the same way, and [Installation](/docs/getting-started/installation) links here as the one setup path. A consumer is compliant when all four hold:
 
 1. **Declare the layer order** — `@layer bds-tokens, bds-components, client-theme, client-overrides;` before any imports ([CSS layers](#css-layers)).
 2. **Set the mode switches on `<html>`** — `data-theme` and any `data-mode-*` the consumer opts into ([switchboard](#html-attribute-switchboard)); omit an attribute to take the default.
-3. **Import each BDS file into its layer** — `@import '@brikdesigns/bds/tokens.css' layer(bds-tokens);` and `styles.css layer(bds-components);`. `tokens.css` ships **unlayered**, so the `layer()` clause is what places it — without it the file wins as unlayered CSS and the client theme can never override. Never the internal bundle files directly, never a hand-rolled copy of a scale. A bare `layer` (no name) fails too: an anonymous layer can't be named in a `@layer` statement, so it can't be ordered against `client-theme`. Enforced by the `import-layer` rule in [`cascade-contract-check`](#where-the-cascade-is-enforced). (Astro/Vite JS `import`s can't carry `layer()`; those consumers cascade by source order instead — see [Framework Guides](/docs/getting-started/framework-guides) — and the rule skips them by construction.)
+3. **Import each BDS file into its layer** — `@import '@brikdesigns/bds/tokens.css' layer(bds-tokens);` and `styles.css layer(bds-components);`. `tokens.css` ships **unlayered**, so the `layer()` clause is what places it — without it the file wins as unlayered CSS and the client theme can never override. Never the internal bundle files directly, never a hand-rolled copy of a scale. A bare `layer` (no name) fails too: an anonymous layer can't be named in a `@layer` statement, so it can't be ordered against `client-theme`. Enforced by the `import-layer` rule in [`cascade-contract-check`](#where-the-cascade-is-enforced). (Astro/Vite JS `import`s can't carry `layer()`; those consumers cascade by source order instead — see [Framework guides](/docs/getting-started/framework-guides) — and the rule skips them by construction.)
 4. **Hold zero token redefinitions** — see the rule below.
 
 <Callout type="warn">
@@ -186,7 +186,7 @@ The three rules split by what they can see. `canonical-check` answers "does this
 ## Related
 
 - [Token Anatomy](/docs/primitives/token-anatomy) — the six-concept disambiguation map + Tier abstraction stack
-- [Library Architecture](/docs/getting-started/figma-library-architecture) — Foundations vs Brand Kit Libraries + the Style Dictionary pipeline
+- [Library architecture](/docs/getting-started/figma-library-architecture) — Foundations vs Brand Kit Libraries + the Style Dictionary pipeline
 - [Theming](/docs/theming) — full Theming Tenet (Tokens / Atmospheres / Layout / Blueprints Dimensions)
 - [Client Themes](/docs/theming/client-themes) — per-client override matrix + minimal `theme-{client}.css` template
 - [Atmospheres](/docs/theming/atmospheres) — the Atmospheres Dimension
