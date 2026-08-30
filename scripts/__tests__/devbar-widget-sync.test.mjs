@@ -66,17 +66,17 @@ describe('devbar widgets — Storybook mirror matches canonical', () => {
  * consumer files) to run in the same change. Fix on failure: run the sync and
  * commit the state + consumer files.
  *
- * DEFERRED consumers are excluded by prefix and tracked in brik-bds#2199:
- *  - product/brik-client-portal/* is version-locked to the INSTALLED
- *    @brikdesigns/bds package (refreshed by propagate.sh on a version bump),
- *    NOT a source-copy — gating it here would sit red whenever the portal lags
- *    a bds release.
- *  - brik/brik-llm/* is the mockup-pipeline cache, resynced with the portal in
- *    that same follow-up.
- * When #2199 lands, empty DEFERRED_PREFIXES so the gate covers them too.
+ * DEFERRED_PREFIXES is now empty (#2199): the two consumers once excluded —
+ * product/brik-client-portal/* (version-locked to the INSTALLED package, so it
+ * had to wait for a bds release + `npm update` + propagate before its copies
+ * could match canonical) and brik/brik-llm/* (the mockup-pipeline cache) — were
+ * resynced to bds 0.180.0 and now sit under the gate like every other consumer.
+ * A recorded hash for any of them that rots will fail this suite. Re-defer a
+ * consumer ONLY by adding its prefix back here with a tracking issue, never by
+ * hand-editing its recorded hash to pass.
  */
 const STATE_FILE = join(repoRoot, 'scripts/devbar-sync-state.txt');
-const DEFERRED_PREFIXES = ['product/brik-client-portal/', 'brik/brik-llm/'];
+const DEFERRED_PREFIXES = [];
 
 // consumer basename (either the bare canonical name or the brik-*.js public
 // name) → canonical source filename in CANONICAL_DIR.
