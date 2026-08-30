@@ -107,7 +107,8 @@ export const SLOT_REGISTRY = [
   // ── Tier 3 — semantic roles ─────────────────────────────────────────────
   { slot: 'gap', family: 'role', tier: 'semantic' },
   { slot: 'padding', family: 'role', tier: 'semantic' },
-  { slot: 'gutter', family: 'role', tier: 'semantic' },
+  // `gutter` retired: `--gutter-page` was renamed to `--page-inset` (ADR-025)
+  // and no `--gutter-*` ships. The slot matched nothing, so the entry was inert.
   { slot: 'heading', family: 'role', tier: 'semantic' },
   { slot: 'display', family: 'role', tier: 'semantic' },
   { slot: 'body', family: 'role', tier: 'semantic' },

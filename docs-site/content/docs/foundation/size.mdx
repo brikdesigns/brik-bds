@@ -30,6 +30,22 @@ Max-width values for content containers. Apply to wrapper elements with `max-wid
 }
 ```
 
+## Line length
+
+`--measure-*` caps a text column's width in `ch` units so a line stays readable as the type scales. Unlike `--content-width-*` — a `px` ceiling on a container — a measure tracks the font size, so the column holds the same *number of characters* at any size. Apply it to the text element itself, not its wrapper.
+
+| Token | CSS Variable | Value | Use for |
+|---|---|---|---|
+| Small | `--measure-sm` | 44ch | Captions, sidenotes, narrow columns |
+| Medium | `--measure-md` | 60ch | Body prose — the default reading measure |
+| Large | `--measure-lg` | 72ch | Long-form articles, wide reading columns |
+
+```css
+.article-body {
+  max-width: var(--measure-md);
+}
+```
+
 ## Screen breakpoints
 
 BDS defines five canonical breakpoints. The CSS custom properties (`--breakpoint-*`) are provided for Figma/documentation reference. **For CSS `@media` rules, import the `breakpoints` constant from `@bds-tokens`** — CSS custom properties cannot be used inside `@media()`.
@@ -102,6 +118,37 @@ Fixed element dimensions — icons, dots, indicators — use the numeric `--size
 | `--size-1000` | 40px |
 
 The scale runs `--size-0` (0) through `--size-2200` (100px).
+
+## Aspect ratio
+
+`--aspect-*` feeds the `aspect-ratio` property, so a media box holds its shape as it scales — no padding-hack. Nine ratio primitives cover the common orientations, and four semantic aliases name the cases you reach for most.
+
+| Token | CSS Variable | Ratio |
+|---|---|---|
+| Square | `--aspect-1-1` | 1 / 1 |
+| Landscape | `--aspect-4-3` | 4 / 3 |
+| Portrait | `--aspect-3-4` | 3 / 4 |
+| Landscape (photo) | `--aspect-3-2` | 3 / 2 |
+| Portrait (photo) | `--aspect-2-3` | 2 / 3 |
+| Portrait (social) | `--aspect-4-5` | 4 / 5 |
+| Widescreen | `--aspect-16-9` | 16 / 9 |
+| Vertical (stories) | `--aspect-9-16` | 9 / 16 |
+| Ultrawide | `--aspect-21-9` | 21 / 9 |
+
+Four aliases point at the primitive above so intent reads at the call site — prefer them where one fits.
+
+| Alias | Resolves to | Names |
+|---|---|---|
+| `--aspect-square` | `--aspect-1-1` | Avatars, thumbnails |
+| `--aspect-cinema` | `--aspect-16-9` | Video, hero media |
+| `--aspect-photo-landscape` | `--aspect-3-2` | Landscape photography |
+| `--aspect-photo-portrait` | `--aspect-2-3` | Portrait photography |
+
+```css
+.media-frame {
+  aspect-ratio: var(--aspect-cinema);
+}
+```
 
 ## Related
 
