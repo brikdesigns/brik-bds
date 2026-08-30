@@ -411,7 +411,7 @@ function parseCssTokens() {
   const FIGMA_TOKENS = path.join(__dirname, '..', 'tokens', 'figma-tokens.css');
   const GAP_FILLS = path.join(__dirname, '..', 'tokens', 'gap-fills.css');
   const RATIOS = path.join(__dirname, '..', 'tokens', 'ratios.css');
-  const BRIDGE = path.join(__dirname, '..', 'tokens', 'bridge.css');
+  const BRIDGE = path.join(__dirname, '..', 'tokens', 'compat', 'bridge.css');
   if (fs.existsSync(FIGMA_TOKENS)) loadFromCss(FIGMA_TOKENS);
   if (fs.existsSync(GAP_FILLS)) loadFromCss(GAP_FILLS);
   if (fs.existsSync(RATIOS)) loadFromCss(RATIOS);
@@ -1195,7 +1195,7 @@ function buildValueMaps() {
     path.join(REPO_ROOT, 'tokens', 'figma-tokens.css'),
     path.join(REPO_ROOT, 'tokens', 'gap-fills.css'),
     path.join(REPO_ROOT, 'tokens', 'ratios.css'),
-    path.join(REPO_ROOT, 'tokens', 'bridge.css'),
+    path.join(REPO_ROOT, 'tokens', 'compat', 'bridge.css'),
   ].filter(f => fs.existsSync(f));
 
   const raw = new Map(); // token name → raw value string (first definition wins)

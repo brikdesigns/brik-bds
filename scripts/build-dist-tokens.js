@@ -84,8 +84,9 @@ fs.writeFileSync(
 );
 console.log('  ✓ dist/tokens.css');
 
-// Copy bridge.css
-const bridge = fs.readFileSync(path.join(TOKENS_DIR, 'bridge.css'), 'utf8');
+// Copy bridge.css — sourced from tokens/compat/ (the alias-compat layer, held
+// out of the tier-direction scan set per ADR-035; still published as dist/bridge.css)
+const bridge = fs.readFileSync(path.join(TOKENS_DIR, 'compat', 'bridge.css'), 'utf8');
 fs.writeFileSync(path.join(DIST_DIR, 'bridge.css'), bridge);
 console.log('  ✓ dist/bridge.css');
 

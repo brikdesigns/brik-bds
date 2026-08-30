@@ -143,11 +143,20 @@ function collectTargets(args) {
   if (!fs.existsSync(DEFAULT_DIR)) {
     throw new Error(`default target directory ${DEFAULT_DIR}/ not found — run from the repo root`);
   }
-  return fs
+  const top = fs
     .readdirSync(DEFAULT_DIR)
     .filter((f) => f.endsWith('.css'))
-    .sort()
     .map((f) => path.join(DEFAULT_DIR, f));
+  // bridge.css lives in tokens/compat/ (held out of the tier-direction scan,
+  // ADR-035) but is STILL a self-reference blind spot (#1919), so scan it here.
+  const compatDir = path.join(DEFAULT_DIR, 'compat');
+  const compat = fs.existsSync(compatDir)
+    ? fs
+        .readdirSync(compatDir)
+        .filter((f) => f.endsWith('.css'))
+        .map((f) => path.join(compatDir, f))
+    : [];
+  return [...top, ...compat].sort();
 }
 
 function main() {
