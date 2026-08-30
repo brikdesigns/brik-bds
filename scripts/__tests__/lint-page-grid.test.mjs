@@ -89,11 +89,11 @@ describe('scanCssText — page-container detection', () => {
     expect(v).toHaveLength(0);
   });
 
-  it('still allows the deprecated --gutter-page alias during the ADR-025 migration', () => {
+  it('flags the removed --gutter-page alias — no longer a valid page inset (ADR-025)', () => {
     const v = scanCssText(
       '.c { max-width: var(--content-width-xl); margin-inline: auto; padding-inline: var(--gutter-page); }',
     );
-    expect(v).toHaveLength(0);
+    expect(v).toHaveLength(1);
   });
 
   it('allows a container with no padding-inline of its own', () => {
