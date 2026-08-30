@@ -5,7 +5,7 @@
 **Supersedes:** —
 **Superseded by:** —
 **Owner:** Nick Stanerson
-**Related:** [#2187](https://github.com/brikdesigns/brik-bds/issues/2187) (this ADR's issue — the broad tier-direction gate), [#2186](https://github.com/brikdesigns/brik-bds/issues/2186) (the pre-existing t3→t3 refs this rule resolves), [ADR-025](./ADR-025-page-grid-standard.md) (`--page-inset`, the `--gutter-page` bug that motivated the narrow gate), [token-anatomy.mdx](../../docs-site/content/docs/primitives/token-anatomy.mdx) (the Tier canon this amends), `scripts/lint-token-tiers.mjs` (the gate)
+**Related:** [#2187](https://github.com/brikdesigns/brik-bds/issues/2187) (this ADR's issue — the broad tier-direction gate), [#2186](https://github.com/brikdesigns/brik-bds/issues/2186) (the pre-existing t3→t3 refs this rule resolves), [ADR-025](./ADR-025-page-grid-standard.md) (`--page-inset`, the `--gutter-page` bug that motivated the narrow gate), [token-anatomy.mdx](../../docs-site/content/docs/foundation/token-anatomy.mdx) (the Tier canon this amends), `scripts/lint-token-tiers.mjs` (the gate)
 
 ## Context
 

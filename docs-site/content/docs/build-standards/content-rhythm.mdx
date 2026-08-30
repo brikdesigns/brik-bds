@@ -5,7 +5,7 @@ description: Space content by role, not by eye — one escalating scale from tig
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Every vertical gap between content — a heading and its subtitle, two paragraphs, one block and the next, one section and the next — comes from a single escalating scale keyed to the **relationship** between the two elements, not from a per-page judgment call. Pick the step by what the elements are to each other; the token re-modulates automatically under each [spacing mode](/docs/primitives/spacing#spacing-modes), so the rhythm holds across compact product UI and spacious marketing pages without re-tuning.
+Every vertical gap between content — a heading and its subtitle, two paragraphs, one block and the next, one section and the next — comes from a single escalating scale keyed to the **relationship** between the two elements, not from a per-page judgment call. Pick the step by what the elements are to each other; the token re-modulates automatically under each [spacing mode](/docs/foundation/spacing#spacing-modes), so the rhythm holds across compact product UI and spacious marketing pages without re-tuning.
 
 ## The rhythm scale
 
@@ -20,7 +20,7 @@ Tighter means more coupled. As the relationship loosens — words in a heading p
 | Section ↔ section | Page-level break | `padding-block: clamp(--padding-xl, 7vw, --padding-huge)` | 32–48px, fluid |
 
 <Callout type="warn">
-  Never use `--gap-xs` or `--gap-tiny` in any vertical rhythm position — content or component. Both collapse to `0px` outside the default [spacing mode](/docs/primitives/spacing#spacing-modes), which erases the step entirely. And never hardcode a px value: the scale re-modulates per mode, a literal does not. The `lint-content-rhythm` gate enforces both rules on component CSS.
+  Never use `--gap-xs` or `--gap-tiny` in any vertical rhythm position — content or component. Both collapse to `0px` outside the default [spacing mode](/docs/foundation/spacing#spacing-modes), which erases the step entirely. And never hardcode a px value: the scale re-modulates per mode, a literal does not. The `lint-content-rhythm` gate enforces both rules on component CSS.
 </Callout>
 
 ## Component rhythm
@@ -85,10 +85,10 @@ You rarely set these values by hand — the standard is baked into the layer tha
 ## Related
 
 - [Display Choice](/docs/build-standards/display-choice) — which display holds the content this page then spaces.
-- [Spacing](/docs/primitives/spacing) — the `--gap-*` / `--padding-*` token scales and the density modes that modulate them.
+- [Spacing](/docs/foundation/spacing) — the `--gap-*` / `--padding-*` token scales and the density modes that modulate them.
 - [Composition Layers](/docs/build-standards/composition-layers) — the Section → Layout → Container → Block or Control → Component model these adjacencies span.
 - [Headings](/docs/build-standards/headings) — the heading roles these steps sit above.
 - [Paragraphs](/docs/build-standards/paragraphs) — the body roles the paragraph steps space.
 - [Page Grid](/docs/build-standards/page-grid) — the horizontal axis: the width-container recipe and the page gutter.
 - [Page Structure](/docs/build-standards/page-structure) — the HTML skeleton the rhythm applies within.
-- [Typography](/docs/primitives/typography) — the type scale for the content being spaced.
+- [Typography](/docs/foundation/typography) — the type scale for the content being spaced.

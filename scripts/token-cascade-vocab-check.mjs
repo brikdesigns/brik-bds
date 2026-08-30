@@ -78,7 +78,7 @@ const RULES = [
   },
   {
     re: /\bTier [1-4]\b/g,
-    fix: 'retired CSS-cascade tier term → a named CSS `@layer` (`bds-tokens` · `bds-components` · `client-theme` · `client-overrides`). If you mean the abstraction stack, name the tier (Raw · Primitive · Semantic · Component). See primitives/token-anatomy.mdx.',
+    fix: 'retired CSS-cascade tier term → a named CSS `@layer` (`bds-tokens` · `bds-components` · `client-theme` · `client-overrides`). If you mean the abstraction stack, name the tier (Raw · Primitive · Semantic · Component). See foundation/token-anatomy.mdx.',
   },
   {
     re: /\bLayer [1-4]\b/g,
@@ -174,7 +174,7 @@ function renderViolations(allViolations, scannedCount, cwd) {
 
   const out = [
     `token-cascade-vocab-check: ${allViolations.length} retired token-cascade term(s) — parallel-taxonomy drift`,
-    `  Canonical vocabulary: docs-site/content/docs/primitives/token-anatomy.mdx (locked in PR #736)`,
+    `  Canonical vocabulary: docs-site/content/docs/foundation/token-anatomy.mdx (locked in PR #736)`,
     `  Scanned ${scannedCount} MDX files`,
     ``,
   ];
@@ -205,7 +205,7 @@ Exit codes:
   1  Violations found
   2  Bad invocation
 
-Canonical vocabulary: docs-site/content/docs/primitives/token-anatomy.mdx (PR #736)
+Canonical vocabulary: docs-site/content/docs/foundation/token-anatomy.mdx (PR #736)
 Issue: brik-bds#748
 `;
 

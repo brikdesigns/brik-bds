@@ -107,7 +107,7 @@ Carbon does the same split — `react.carbondesignsystem.com` (Storybook) vs `ca
 | `## Usage` code-only section | Duplicates what `<Canvas>` shows in source view; the chosen import path drifts (`@brik/bds` vs `@brikdesigns/bds`) |
 | `## When to use` / `## When NOT to use` | Belongs on docs-site (`/docs/components/{slug}`), not Storybook |
 | `## Source attribution`, deep design narrative | Same — docs-site |
-| `## Tokens` listing | Storybook is for demos, not token enumeration. Link to `/docs/primitives/color` if needed |
+| `## Tokens` listing | Storybook is for demos, not token enumeration. Link to `/docs/foundation/color` if needed |
 | Emoji in headings | Already in legacy CONTENT-GUIDE; reaffirmed |
 | Skipped heading levels (`# → ###`) | H1 → H2 → H3, never jump. H1 is the page title only; nothing else uses H1 |
 | Inline `<table>` HTML | Use markdown tables in MDX; use `docTable/docTh/docTd` helpers from `stories/foundation/_components/docTableStyles.ts` for TSX dashboards |

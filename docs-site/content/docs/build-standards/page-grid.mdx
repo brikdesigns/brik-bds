@@ -34,7 +34,7 @@ The `lint-page-grid` gate fails any container rule whose `padding-inline` bypass
 
 This is the gap-vs-padding rule from [Content Rhythm](/docs/build-standards/content-rhythm#gap-padding-or-margin) applied horizontally: gap is between siblings, padding is the edge.
 
-`--page-inset` (renamed from `--gutter-page`; the old name survives as a deprecated alias) carries its own `[data-mode-spacing]` ladder over Primitives — `--space-600` at default, `--space-400`/`--space-800`/`--space-1200` for compact/comfortable/spacious — so it re-modulates under [spacing modes](/docs/primitives/spacing#spacing-modes) but does not vary with viewport width. It references Primitives directly rather than aliasing the Semantic `--padding-lg` ([ADR-025](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-025-page-grid-standard.md) amendment; a Semantic→Semantic reference is off the tier model). The stepped-not-fluid choice is deliberate: a fluid `clamp()` inset misaligns consumer containers from BDS section content at intermediate widths — brikdesigns shipped one and had to walk it back. In TS, import `pageInset` from `@bds-tokens` rather than writing the `var()` string inline.
+`--page-inset` (renamed from `--gutter-page`; the old name survives as a deprecated alias) carries its own `[data-mode-spacing]` ladder over Primitives — `--space-600` at default, `--space-400`/`--space-800`/`--space-1200` for compact/comfortable/spacious — so it re-modulates under [spacing modes](/docs/foundation/spacing#spacing-modes) but does not vary with viewport width. It references Primitives directly rather than aliasing the Semantic `--padding-lg` ([ADR-025](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-025-page-grid-standard.md) amendment; a Semantic→Semantic reference is off the tier model). The stepped-not-fluid choice is deliberate: a fluid `clamp()` inset misaligns consumer containers from BDS section content at intermediate widths — brikdesigns shipped one and had to walk it back. In TS, import `pageInset` from `@bds-tokens` rather than writing the `var()` string inline.
 
 ## Content width roles
 
@@ -62,7 +62,7 @@ A band width is not a text width. `--content-width-xl` (1280px) sizes the *band*
 | `--measure-md` | 60ch | Section-header title + description — the default |
 | `--measure-lg` | 72ch | Long-form prose, rich-text body |
 
-`ch`, not px: a measure tracks the type size, so the line stays readable if the font scales. And unlike `--gap-*` and `--padding-*`, measures are **static across [spacing modes](/docs/primitives/spacing#spacing-modes)** — a readable line length is a typographic constant, not a density knob.
+`ch`, not px: a measure tracks the type size, so the line stays readable if the font scales. And unlike `--gap-*` and `--padding-*`, measures are **static across [spacing modes](/docs/foundation/spacing#spacing-modes)** — a readable line length is a typographic constant, not a density knob.
 
 Band and measure are two different jobs — keep them separate:
 
@@ -111,4 +111,4 @@ Like the rhythm scale, you rarely write the recipe by hand — it is baked into 
 - [Content Rhythm](/docs/build-standards/content-rhythm) — the vertical axis this page mirrors.
 - [Page Structure](/docs/build-standards/page-structure) — the HTML skeleton these containers live in.
 - [Composition Layers](/docs/build-standards/composition-layers) — the Section → Layout → Container → Block or Control → Component model.
-- [Spacing](/docs/primitives/spacing) — the `--padding-*` scale behind the gutter and the density modes that modulate it.
+- [Spacing](/docs/foundation/spacing) — the `--padding-*` scale behind the gutter and the density modes that modulate it.

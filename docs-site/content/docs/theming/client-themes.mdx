@@ -55,7 +55,7 @@ The full cascade order in a consuming project's `globals.css` (order matters):
 
 ## What each theme overrides
 
-Each `.body.theme-{name}` block overrides a fixed set of **semantic color tokens** — the same tokens documented in [Primitives → Color](/docs/primitives/color). These include:
+Each `.body.theme-{name}` block overrides a fixed set of **semantic color tokens** — the same tokens documented in [Primitives → Color](/docs/foundation/color). These include:
 
 - `--background-brand-primary`, `--background-brand-secondary`
 - `--text-primary`, `--text-secondary`, `--text-muted`, `--text-brand-primary`
@@ -116,7 +116,7 @@ Re-bind `--background-brand-primary`, `--text-brand-primary`, `--border-brand-pr
 :root {
   /* Brand primitives — one ramp per client hue, follows the Figma 6-stop rail
      (lightest, lighter, light, dark, darker, darkest). Documented in
-     /docs/primitives/color → "Tonal scale + interaction state". */
+     /docs/foundation/color → "Tonal scale + interaction state". */
   --vale-partners-olive:           #698339;
   --vale-partners-olive-lightest:  #e8edd9;
   --vale-partners-olive-lighter:   #c2d09a;
@@ -234,7 +234,7 @@ Not every token is meant to vary per brand. Use the table to decide what to put 
 | Fonts (`--font-family-heading`, `--font-family-body`, `--font-family-label`) | **Optional** | See "Typography-only client override" below. |
 | Canonical status (`--background/surface/text/border-positive/negative/warning`) | **Yes** | First-class Figma variables. Override if the brand red/green/yellow clashes with the default. |
 | The `info` signal (`--background-info`, `--surface-info`, `--text-info`) | **No** | Blue, universal semantic meaning. Gap-fills over the system blue primitive. |
-| The per-hue accent set (`--text/background/border/surface/page-accent-{hue}`) | **No** | Mirrored 1:1 from the ❖ Brik Brand Kit Figma library and Figma-sourced from the system color primitives, so `accent-purple` is the same purple in every theme. Category color, not a valence. `red` is the one exception — it aliases the brand poppy — see [The per-hue accent set](/docs/primitives/color#the-per-hue-accent-set). |
+| The per-hue accent set (`--text/background/border/surface/page-accent-{hue}`) | **No** | Mirrored 1:1 from the ❖ Brik Brand Kit Figma library and Figma-sourced from the system color primitives, so `accent-purple` is the same purple in every theme. Category color, not a valence. `red` is the one exception — it aliases the brand poppy — see [The per-hue accent set](/docs/foundation/color#the-per-hue-accent-set). |
 | Presence (`--background-presence-online/away/busy/offline`) | **No — intentionally frozen** | Shared chat/status semantics across products. |
 | Shadows + overlay (`--shadow-sm`..`--shadow-xl`, `--background-overlay`) | **No** | Hardcoded `rgba()` values; not expected to vary per brand. |
 
@@ -271,4 +271,4 @@ This is exactly what `.body.theme-client-sim` demonstrates in the toolbar.
 
 - [Theming Overview](/docs/theming) — the four Theming Dimensions in context
 - [Atmospheres](/docs/theming/atmospheres) — the Atmospheres Dimension (CSS decoration overlays)
-- [Primitives → Color](/docs/primitives/color) — the semantic tokens this layer overrides
+- [Primitives → Color](/docs/foundation/color) — the semantic tokens this layer overrides
