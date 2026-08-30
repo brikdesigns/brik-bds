@@ -460,6 +460,16 @@
   /* Aspect ratio + object-fit owned by the consumer's <Frame> wrapper. */
 }
 
+/* Standard media-slot image radius (also applied on the default `media` slot's
+ * wrapper, and on preset-display-row's media below) — the consumer's media
+ * sits nested inside its own <Frame>, so the radius targets the rendered
+ * element directly rather than a wrapper this component doesn't own. */
+.bds-card__preset-display-media img,
+.bds-card__preset-display-media video,
+.bds-card__preset-display-media svg {
+  border-radius: var(--border-radius-sm);
+}
+
 .bds-card__preset-display-badge {
   position: absolute;
   top: var(--gap-md);
@@ -555,6 +565,13 @@
   position: relative;
   display: block;
   /* Aspect ratio + object-fit owned by the consumer's <Frame> wrapper. */
+}
+
+/* Standard media-slot image radius — see the preset-display note above. */
+.bds-card__preset-display-row-media img,
+.bds-card__preset-display-row-media video,
+.bds-card__preset-display-row-media svg {
+  border-radius: var(--border-radius-sm);
 }
 
 .bds-card__preset-display-row-body {
