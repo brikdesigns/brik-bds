@@ -23,43 +23,43 @@ Triggers an event or action. A single unified component covering four render sha
 
 ## Variants
 
-`ButtonVariant` ships **11 values** — 8 actively documented + 3 legacy aliases. Per ADR-010 §components-without-a-variant-axis, Button variants are pure hierarchy/color (no `role` / icon / context semantic differences) — they collapse to a single `variant` Control on the Playground rather than per-variant stories. Mirrors Carbon's Button (single `Default` with `kind` Control).
+`ButtonVariant` ships **8 values**. Per ADR-010 §components-without-a-variant-axis, Button variants are pure hierarchy/color (no `role` / icon / context semantic differences) — they collapse to a single `variant` Control on the Playground rather than per-variant stories. Mirrors Carbon's Button (single `Default` with `kind` Control).
 
 <Canvas of={Stories.Default} />
 
 - **6 brand variants** — `primary` / `outline` / `secondary` / `ghost` / `inverse` / `on-color`. General action hierarchy.
-- **2 system variants** — `destructive` / `positive`. Semantic action meaning.
-- **3 legacy aliases** — `danger` / `danger-outline` / `danger-ghost`. Still supported, but prefer `destructive`. See [Legacy aliases](#legacy-aliases) below.
+- **2 system valence variants** — `negative` / `positive`. Semantic action meaning.
+
+Four earlier spellings (`destructive` / `danger` / `danger-outline` / `danger-ghost`) still resolve to `negative` — see [Retired spellings](#retired-spellings) below.
 
 State props (`disabled`, `loading`, `fullWidth`, `selected`) and composition slots (`iconBefore`, `iconAfter`) are also Controls in the Playground, not standalone stories — per ADR-010 Q2.
 
 > **Note** — `selected` was previously a member of `ButtonVariant`; it is now a boolean state prop that layers on top of any variant. See [#615](https://github.com/brikdesigns/brik-bds/issues/615) for context.
 
-### Legacy aliases
+### Retired spellings
 
-Three values in `ButtonVariant` ship without dedicated documentation because they're aliases of `destructive` retained for back-compat:
+Four spellings resolve to `negative` at runtime (`resolveRetiredValue`) for back-compat. Per ADR-033 §1 they're honoured for one minor then removed, and they are **not** members of the `ButtonVariant` type:
 
-- `danger` → use `destructive` (identical visual, system-red fill)
-- `danger-outline` → use `destructive` with `outline` if you need lower emphasis; the alias remains for code that hasn't migrated
-- `danger-ghost` → use a ghost button styled as destructive; the alias remains for inline-delete code
+- `destructive` → `negative`
+- `danger` → `negative`
+- `danger-outline` → `negative`
+- `danger-ghost` → `negative`
 
-New code should pick from the documented 8 above. The aliases are TypeScript-valid but won't render anything different from their canonical sibling.
+New code picks from the 8 above.
 
 ## Modes
 
-Visual reference for the discriminated-union branches. The Playground exposes `icon` and `href` as Controls — these stories provide static at-a-glance galleries.
+The Playground covers most props via Controls. Icon-only mode is the exception: `icon` is a `ReactNode` (`control: false`), so it can't be reached from the panel and gets its own story below. Anchor mode *is* reachable — set the `href` Control on the Playground.
 
 ### IconOnly
 
 <Canvas of={Stories.IconOnly} />
 
-Icon-only mode requires `label` (announced by screen readers; the icon span is `aria-hidden`). Uses the same variant + size scale as text mode — only the content shape differs.
+Icon-only mode requires `label` (announced by screen readers; the icon span is `aria-hidden`). Uses the same variant + size scale as text mode — only the content shape differs. Switch `variant` / `size` from the Controls panel.
 
 ### AsLink
 
-<Canvas of={Stories.AsLink} />
-
-Setting `href` renders the component as `<a>` instead of `<button>`. Same visual styling, semantically a link.
+Setting `href` renders the component as `<a>` instead of `<button>` — same visual styling, semantically a link. It's identical to the Playground with an `href` set, so there's no separate visual story; the `InteractionTestAsLink` play test guards that the anchor branch actually renders an `<a href>`.
 
 ## Props
 
