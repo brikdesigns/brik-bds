@@ -49,6 +49,29 @@ export const Default: Story = {
 };
 
 /**
+ * `image` slot — an illustration above the header. Aspect ratio + object-fit
+ * are owned by the consumer's media element; PricingCard only rounds it.
+ * @summary image slot — top illustration
+ */
+export const WithImage: Story = {
+  args: {
+    title: 'Marketing',
+    price: '$499',
+    period: '/month',
+    description: 'Full-funnel marketing support for growing teams.',
+    features: commonFeatures,
+    image: (
+      <svg viewBox="0 0 320 160" role="img" aria-label="Plan illustration" style={{ width: '100%', display: 'block' }}>
+        <rect width="320" height="160" fill="var(--surface-service-marketing-light)" />
+        <circle cx="160" cy="80" r="44" fill="var(--surface-brand-primary)" />
+      </svg>
+    ),
+    action: <Button variant="primary" style={{ width: '100%' }}>Learn more</Button>,
+  },
+  decorators: [(Story) => <div style={{ width: 320 }}><Story /></div>],
+};
+
+/**
  * `highlighted=true` — recommended tier treatment with brand surface.
  * @summary highlighted=true — recommended tier
  */

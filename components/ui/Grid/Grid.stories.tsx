@@ -22,7 +22,7 @@ const meta: Meta<typeof Grid> = {
     },
     gap: {
       control: 'select',
-      options: ['none', 'xs', 'sm', 'md', 'lg', 'xl'],
+      options: ['none', 'xs', 'sm', 'md', 'lg', 'xl', 'huge'],
       description: 'Spacing between cells — maps to BDS `--gap-*` tokens. Default `lg`.',
     },
     minColumnWidth: {
@@ -82,6 +82,24 @@ export const Default: Story = {
         <Tile key={i}>Item {i}</Tile>
       ))}
     </Grid>
+  ),
+};
+
+/** @summary Gap scale — xs through huge on a fixed 3-col grid */
+export const GapScale: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+      {(['xs', 'sm', 'md', 'lg', 'xl', 'huge'] as const).map((gap) => (
+        <div key={gap}>
+          <SectionLabel>gap={gap}</SectionLabel>
+          <Grid columns={3} gap={gap}>
+            {[1, 2, 3].map((i) => (
+              <Tile key={i}>{i}</Tile>
+            ))}
+          </Grid>
+        </div>
+      ))}
+    </div>
   ),
 };
 

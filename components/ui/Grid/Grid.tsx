@@ -2,7 +2,7 @@ import { type HTMLAttributes, type ReactNode, type ElementType, type CSSProperti
 import { bdsClass } from '../../utils';
 import './Grid.css';
 
-export type GridGap = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type GridGap = 'none' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'huge';
 /**
  * Grid columns:
  * - Number: fixed column count (1-6)

@@ -21,6 +21,19 @@
   box-shadow: var(--box-shadow-md);
 }
 
+/* ─── Top media slot ──────────────────────────────────── */
+/* Aspect ratio + object-fit are owned by the consumer's <Image>/<Frame>;
+ * this component only rounds the rendered media (mirrors Card's media slot). */
+
+.bds-pricing-card__image {
+  position: relative;
+  display: block;
+}
+
+.bds-pricing-card__image :is(img, video, svg) {
+  border-radius: var(--border-radius-sm);
+}
+
 /* ─── Header ──────────────────────────────────────────── */
 
 .bds-pricing-card__header {
