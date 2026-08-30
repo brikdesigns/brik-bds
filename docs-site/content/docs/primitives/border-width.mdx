@@ -22,13 +22,20 @@ Border width tokens control line thickness for borders, dividers, and outlines.
 
 ## Width modes
 
-Figma uses border-width modes for overall border density at a theme level.
+Border density is a theme-level mode. Set `data-mode-borderwidth` on `:root` (or any subtree) to shift every `--border-width-*` semantic token at once; the default (no attribute) keeps the standard values. Two override modes ship today — `thin` and `bold` — wired in [`tokens/modes-borderwidth.css`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/modes-borderwidth.css):
 
-| Mode | Effect |
-|---|---|
-| Thin | Minimal borders |
-| Default | Standard borders |
-| Thick | Prominent borders |
+| Token | `default` | `thin` | `bold` |
+|---|---|---|---|
+| `--border-width-sm` | 1px | 1px | 2px |
+| `--border-width-md` | 2px | 1px | 3px |
+| `--border-width-lg` | 4px | 2px | 4px |
+
+```html
+<html data-mode-borderwidth="bold">   <!-- whole document -->
+<section data-mode-borderwidth="thin">…</section>   <!-- one subtree -->
+```
+
+`thin` matches `default` at `sm` because sub-pixel borders below 1px render unreliably across browsers. Values verified against `dist/tokens.css`; re-pull after a Figma mode change (`npm run build:sd-figma`).
 
 ## Related
 

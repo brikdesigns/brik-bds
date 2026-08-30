@@ -85,7 +85,11 @@ const isDesktop = window.matchMedia(
 
 ## Element sizes
 
-Fixed element dimensions — icons, dots, indicators — use the numeric `--size-*` scale (the same primitive scale spacing draws from). Values step in 4px increments above 8px.
+Fixed element dimensions — icons, dots, indicators — use the numeric `--size-*` scale. Values step in 4px increments above 8px.
+
+<Callout type="warn">
+  **`--size-*` and `--space-*` are two scales, not one — don't treat `--size-400` and `--space-400` as interchangeable.** They share identical values on the low/mid steps (`0` through `2100`), but they diverge: `--space-*` adds half-steps (`--space-250` = 10px, `--space-350` = 14px, `--space-450` = 18px) and runs higher (to `--space-3000` = 176px), while `--size-*` tops out at `--size-2200` = 100px — and at that shared index the two disagree (`--space-2200` = 104px). Pick by intent: **`--size-*` for a fixed element dimension** (width/height of an icon, dot, indicator), **`--space-*` for layout spacing** (the primitive that `--padding-*` / `--gap-*` draw from). Verify the value in `dist/tokens.css` rather than assuming the same index matches.
+</Callout>
 
 | Token | Value |
 |---|---|
@@ -101,5 +105,5 @@ The scale runs `--size-0` (0) through `--size-2200` (100px).
 
 ## Related
 
-- [Spacing tokens](/docs/primitives/spacing) — same numeric primitives used for padding and gap
+- [Spacing tokens](/docs/primitives/spacing) — the sibling `--space-*` scale for layout padding and gap (overlaps `--size-*` on the low/mid steps, diverges above — see the note above)
 - [Typography → Icon sizes](/docs/primitives/typography#icon-sizes) — semantic icon-size tokens
