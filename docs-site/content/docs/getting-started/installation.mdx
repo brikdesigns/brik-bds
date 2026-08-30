@@ -1,13 +1,13 @@
 ---
 title: Installation
-description: Add BDS to a Next.js or Astro consumer — or a legacy Webflow surface.
+description: Install BDS, wire the token cascade, and render your first component in a Next.js or Astro consumer.
 ---
 
 import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
 import { Callout } from 'fumadocs-ui/components/callout';
 
 <Callout type="info">
-  **[The Cascade](/docs/getting-started/cascade) is the adoption contract of record.** This page is the quick setup path; the four binding requirements every consumer must satisfy — layer order, mode switches, importing `tokens.css`, and **zero token redefinitions** — live there. Read the [adoption contract](/docs/getting-started/cascade#the-adoption-contract) before wiring a new consumer.
+  **[The cascade](/docs/getting-started/cascade) is the adoption contract of record.** This page is the quick setup path; the four binding requirements every consumer must satisfy — layer order, mode switches, importing `tokens.css`, and **zero token redefinitions** — live there. Read the [adoption contract](/docs/getting-started/cascade#the-adoption-contract) before wiring a new consumer.
 </Callout>
 
 ## Install the package
@@ -52,9 +52,7 @@ In your global stylesheet (`globals.css`, `app.css`, etc.) declare the `@layer` 
 @import './styles/theme-{client}.css'  layer(client-theme); /* your client's brand overrides */
 ```
 
-The `layer()` on each `@import` is load-bearing: `tokens.css` ships **unlayered**, and unlayered CSS beats layered CSS — so without `layer(bds-tokens)` the client theme in `@layer client-theme` could never override it. Once every file is assigned a layer, the `@layer` declaration order (not the import order) governs the cascade.
-
-What each file contains, and the rule against redefining BDS tokens: [The Cascade](/docs/getting-started/cascade#the-adoption-contract).
+The `layer()` clause is load-bearing — `tokens.css` ships **unlayered**, so without it the file wins the cascade and the client theme can never override. The full reason, what each file contains, and the rule against redefining BDS tokens live in [The cascade](/docs/getting-started/cascade#the-adoption-contract).
 
 ## Theme + mode switches
 
@@ -74,18 +72,13 @@ Set switches on `<html>` (or use `<ThemeProvider>` in React apps which manages t
 | `<html data-theme>` | `light` (default) / `dark` | Color mode |
 | `<html data-mode-borderwidth>` | `thin` / `bold` (omit for Standard) | Borderwidth mode |
 
-See [The Cascade](/docs/getting-started/cascade) for the full switch table including audience scope binding for multi-brand sites.
+See [The cascade](/docs/getting-started/cascade) for the full switch table including audience scope binding for multi-brand sites.
 
 ## Optional atmosphere overlay
 
-Atmospheres add ambient decoration (vignettes, grain, orbs, spotlights) without overriding theme tokens. Add one to the same block — it ships unlayered on purpose, so it decorates on top without touching the token cascade:
+Atmospheres add ambient decoration (vignettes, grain, orbs, spotlights) without overriding theme tokens. Add one `@import` after the cascade block above — it ships unlayered on purpose, so it decorates on top without touching the token cascade:
 
 ```css
-@layer bds-tokens, bds-components, client-theme, client-overrides;
-
-@import '@brikdesigns/bds/tokens.css' layer(bds-tokens);
-@import '@brikdesigns/bds/styles.css'  layer(bds-components);
-@import './styles/theme-{client}.css'  layer(client-theme);
 @import '@brikdesigns/bds/atmospheres/minimal-clinical.css'; /* optional — decoration only, unlayered */
 ```
 
@@ -105,5 +98,5 @@ That's it. No provider required for components — they read tokens from the cas
 
 ## Next
 
-- [The Cascade](/docs/getting-started/cascade) — two-tier × four-layer × modes architecture and the full `<html>` switch table. {/* cascade-vocab-ok: four named CSS @layers, not the retired theming "layers" */}
-- [Framework Guides](/docs/getting-started/framework-guides) — Next.js + Astro scaffolds with real working code.
+- [The cascade](/docs/getting-started/cascade) — two-tier × four-layer × modes architecture and the full `<html>` switch table. {/* cascade-vocab-ok: four named CSS @layers, not the retired theming "layers" */}
+- [Framework guides](/docs/getting-started/framework-guides) — Next.js + Astro scaffolds with real working code.
