@@ -67,6 +67,8 @@
 /* ─── Content (z:2) ──────────────────────────────────────────── */
 
 .bds-media-band__content {
+  /* reviewed #2119: wraps arbitrary caller children — the consumer's own
+     content owns its type tokens, this slot only stacks it above the graphic */
   position: relative;
   z-index: 2;
 }
