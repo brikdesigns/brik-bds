@@ -13,9 +13,17 @@
  *
  * Baseline updates happen in CI via the `update-visual-baselines` workflow
  * (vitest --update in the same container), never from a dev machine.
+ *
+ * Also arms the #2119 missing-type gate (see the "Missing-type gate" section
+ * below) — a per-story computed-style sweep folded into this SAME afterEach
+ * rather than a new CI workflow. Budget: one eval + one widget init at
+ * beforeAll (a one-time cost), then one extra `querySelectorAll('*')` DOM
+ * walk per already-mounted story before its screenshot compare — no new job,
+ * no new trigger.
  */
 import { afterEach, beforeAll, expect } from 'vitest';
 import { page } from '@vitest/browser/context';
+import widgetSource from '../components/ui/BrikDevBar/widgets/inspect-widget.js?raw';
 
 // Every face the gate renders, bundled by Vite instead of fetched from
 // fonts.googleapis.com at run time (#1785). The gate used to hard-depend on a
@@ -116,6 +124,76 @@ const FONT_WARMUP: Array<[family: string, weights: number[]]> = [
   // beforeAll. A webfont is the ONLY mono the gate can await (#1785).
   ['IBM Plex Mono', [400, 600]],
 ];
+
+/**
+ * Missing-type gate (#2119) — loads the SAME vanilla inspector engine the
+ * `?inspect=1` runtime overlay uses (`components/ui/BrikDevBar/widgets/
+ * inspect-widget.js`), for its `auditMissingType` computed-value check only.
+ * See that file's own "Missing-type gate" doc comment for the detector design
+ * (why font-family is the sole `isViolation` signal, why a pure-layout
+ * wrapper is never flagged, and how it reuses `auditReady`/`isLintIgnored`
+ * rather than a third parallel baseline alongside `lint-tokens.js` /
+ * `auditProp`, #2170).
+ *
+ * The widget is a page-chrome IIFE (toolbar button, DevBar registration,
+ * Google Fonts `<link>`, global mouse/keyboard listeners) that this gate does
+ * NOT want mounted into a session that screenshots every story: a stray
+ * toolbar pill would shift every baseline, and a live Google Fonts fetch from
+ * inside the CI container is exactly the flaky live-network dependency #1785
+ * removed from this same file. So before evaluating the source, this stubs
+ * just enough state to short-circuit those side effects while still reaching
+ * the `window.BrikInspect` exposure block:
+ *   - `__BRIK_INSPECT_DEVBAR_HOST_MANAGED__` skips the widget's own DevBar
+ *     self-registration (mirrors how the real Storybook InspectWidget takes
+ *     over the slot).
+ *   - A stub `window.BrikDevBar` defeats the widget's "no DevBar found, fall
+ *     back to a standalone toolbar" `setTimeout` — `register`/`unregister`
+ *     are no-ops, so nothing renders.
+ *   - A `<link>` whose `href` already contains "Poppins" satisfies the
+ *     widget's own idempotency check (`if
+ *     (!document.querySelector('link[href*="Poppins"]'))`) with a
+ *     fragment-only href, so no network request ever fires; the real webfont
+ *     is already bundled by FONT_WARMUP above.
+ * Run ONCE here in beforeAll — a one-time setup cost, not a per-story one.
+ */
+type MissingTypeAudit = { prop: string; computed: string; isViolation: boolean } | null;
+type MissingTypeApi = {
+  auditMissingType: (el: Element) => MissingTypeAudit;
+  setLintIgnores: (list: Array<{ selector: string; property: string }>) => void;
+};
+let missingTypeApi: MissingTypeApi | undefined;
+
+function loadMissingTypeGate() {
+  history.replaceState(null, '', `${location.pathname}?inspect=1`); // pass the widget's own SHOULD_ENABLE gate
+  (window as unknown as { __BRIK_INSPECT_DEVBAR_HOST_MANAGED__?: boolean }).__BRIK_INSPECT_DEVBAR_HOST_MANAGED__ = true;
+  const win = window as unknown as { BrikDevBar?: { register: () => void; unregister: () => void } };
+  win.BrikDevBar = win.BrikDevBar || { register() {}, unregister() {} };
+  if (!document.querySelector('link[href*="Poppins"]')) {
+    const shim = document.createElement('link');
+    shim.rel = 'stylesheet';
+    shim.href = '#bds-visual-gate-poppins-shim'; // fragment-only — never fetched
+    shim.setAttribute('data-brik-poppins-shim', '');
+    document.head.appendChild(shim);
+  }
+  // eslint-disable-next-line no-eval
+  (0, eval)(widgetSource);
+  const exposed = (window as unknown as { BrikInspect?: Partial<MissingTypeApi> }).BrikInspect;
+  if (!exposed?.auditMissingType || !exposed.setLintIgnores) {
+    throw new Error('Missing-type gate (#2119): widget did not expose the expected hooks.');
+  }
+  missingTypeApi = exposed as MissingTypeApi;
+  // Shared exception baseline (same setLintIgnores/isLintIgnored primitives as
+  // #2170's bds-lint-ignore bridge, not a new mechanism). CollapsibleCard's
+  // `.bds-collapsible-card__content` is a known, tracked gap deliberately left
+  // unfixed here for its own cleanup issue (brik-bds#2178) rather than fixed
+  // in #2119's own PR. Collapsible's sibling `.bds-collapsible__content` is
+  // listed defensively too — #2118 already gave it real type tokens, but both
+  // selectors were named together in #2119's own scope split.
+  missingTypeApi.setLintIgnores([
+    { selector: '.bds-collapsible-card__content', property: 'font-family' },
+    { selector: '.bds-collapsible__content', property: 'font-family' },
+  ]);
+}
 
 beforeAll(async () => {
   // The vitest browser runner serves its own tester page — Storybook's
@@ -232,6 +310,9 @@ beforeAll(async () => {
   // ~30 faces still decode here, now off the Vite dev server rather than the
   // network. Kept generous rather than retuned: the timeout was never the
   // constraint, and lowering it is a separate measurement.
+
+  // #2119 — one-time widget load; see loadMissingTypeGate's own doc comment.
+  loadMissingTypeGate();
 }, 120_000);
 
 afterEach(async (ctx) => {
@@ -249,6 +330,55 @@ afterEach(async (ctx) => {
 
   // Webfonts load lazily per font-face use; don't screenshot mid-swap.
   await document.fonts.ready;
+
+  // #2119 — one extra DOM walk over the already-mounted story before the
+  // screenshot compare below. auditMissingType's own isTextLeaf check is the
+  // cheap filter (a childNodes scan); the expensive computed-style /
+  // rules-index work only runs for the (usually few) elements that pass it,
+  // so this stays proportional to the story's real text-leaf count, not its
+  // total node count.
+  //
+  // Scope is the FOUR NAMED BDS text slots the issue enumerates
+  // (`__content`/`__body`/`__description`/`__caption`), NOT every element. A
+  // BDS text slot owns its own font per the semantic-role rule (every
+  // ContentBlock text slot declares `font-family: var(--font-family-*)`), so a
+  // named slot that inherits instead is the exact bug class this gate exists
+  // for. Walking all elements would instead flag every generic `<p>`/`<span>`/
+  // `<a>`/`<button>` that legitimately inherits the ambient body font — which
+  // in the vitest browser render is Storybook's own default stack, not Poppins,
+  // so an unscoped walk reports the whole story as violations (measured).
+  if (missingTypeApi) {
+    const SLOT_SUFFIXES = ['content', 'body', 'description', 'caption'];
+    const isNamedSlot = (el: Element): boolean => {
+      for (const c of el.classList) {
+        const m = /^bds-[a-z0-9-]+__([a-z0-9]+(?:-[a-z0-9]+)*)/.exec(c);
+        if (m && SLOT_SUFFIXES.includes(m[1])) return true;
+      }
+      return false;
+    };
+    const violations: string[] = [];
+    for (const el of document.body.querySelectorAll(
+      '[class*="__content"],[class*="__body"],[class*="__description"],[class*="__caption"]',
+    )) {
+      if (!isNamedSlot(el)) continue;
+      const audit = missingTypeApi.auditMissingType(el);
+      if (audit?.isViolation) {
+        const label = (el as HTMLElement).className || el.tagName.toLowerCase();
+        violations.push(`${label} — computed font-family: "${audit.computed}"`);
+      }
+    }
+    expect(
+      violations,
+      `Missing-type gate (#2119): text-holding leaf slot(s) fell through to a ` +
+        `non-token font-family (UA default) in story "${storyId}":\n` +
+        violations.map((v) => `  - ${v}`).join('\n') +
+        `\nApply a body/type token, or mark reviewed-as-intentional with a ` +
+        `one-line CSS comment if children own the tokens. If this is a known, ` +
+        `tracked gap, add { selector, property: 'font-family' } to the ` +
+        `exception list in loadMissingTypeGate() with a comment pointing at ` +
+        `its cleanup issue — do not silence it here.`,
+    ).toEqual([]);
+  }
 
   await expect
     .element(page.elementLocator(document.body))

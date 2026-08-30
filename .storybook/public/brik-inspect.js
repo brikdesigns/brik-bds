@@ -1076,6 +1076,10 @@
     window.BrikInspect.setLintIgnores = setLintIgnores;
     window.BrikInspect.isLintIgnored = isLintIgnored;
     window.BrikInspect.stylesheetsResolved = stylesheetsResolved;
+    // Missing-type gate (#2119) — computed-value check for a text-holding
+    // leaf slot that never declared font-family/font-size and fell through to
+    // the UA default. See the function's own doc comment for the design.
+    window.BrikInspect.auditMissingType = auditMissingType;
     // Drive inspect on/off from a host that owns the DevBar slot (host-managed
     // mode — see registerWithDevBar). Idempotent: no-op when already in the
     // requested state. Lets the BDS Storybook InspectWidget bind the slot's
@@ -1245,6 +1249,156 @@
       }
     }
     return audits.filter((a) => !drop.has(a.prop));
+  }
+
+  // ── Missing-type gate (#2119) ────────────────────────────────────────────
+  //
+  // A text-holding leaf slot (`__content`/`__body`/`__description`/`__caption`,
+  // and equally any other leaf) that declares only `color` or only a margin/
+  // padding never trips `scripts/lint-tokens.js` or `auditProp` above — both
+  // flag a raw value that IS present in source, and this bug is the opposite
+  // shape: a declaration that is ABSENT. The root case (Collapsible, #2118)
+  // revealed content that inherited the browser's UA serif because no
+  // ancestor ever set a token font-family. The only way to catch an absence
+  // is to read the COMPUTED value after the whole cascade has run, so this
+  // gate is deliberately runtime, not source-static.
+  //
+  // Design:
+  //  - "text-holding leaf" = an element with at least one direct child TEXT
+  //    node carrying non-whitespace content (isTextLeaf). A pure-layout
+  //    wrapper that only holds ELEMENT children (its own text-bearing
+  //    children own their own tokens) is not a leaf and is skipped — this is
+  //    what quietly clears ActivityTimeline `__content`, FileCard `__body`,
+  //    Features `__content`, Cta `__message`, and the four "arbitrary caller
+  //    content" wrappers (SheetSection/DataSection/MediaBand `__content`,
+  //    Sheet `__body`) found by the #2119 audit without a single exception:
+  //    none of them hold a direct text node, so none is ever asked to carry
+  //    a font declaration in the first place.
+  //  - The "token value" a computed style must match is resolved AT RUNTIME
+  //    from `:root`'s own computed style, not hardcoded — so a per-theme
+  //    override (a client theme swapping the body/heading/label face) is
+  //    honored automatically instead of the gate silently going stale.
+  //  - font-family is the ONLY signal that decides `isViolation`. It is the
+  //    robust one: the UA fallback (serif) reads nothing like any BDS token
+  //    family, so there is no ambiguity. font-size is NOT reliable the same
+  //    way — `--body-md` resolves to the same 16px the UA default also
+  //    happens to use for body text, so a raw computed-size compare cannot
+  //    tell "tokenized at --body-md" from "never tokenized, sitting on the UA
+  //    16px default" without false-flagging every legitimately-tokenized
+  //    16px leaf. font-size is exposed on the result for a human/agent to
+  //    eyeball, but never flips `isViolation` on its own. This is a
+  //    deliberate, documented tradeoff, not an oversight.
+  //  - Gated behind the SAME two primitives #2170 introduced rather than a
+  //    third parallel baseline: `auditReady()` (withholds until the build is
+  //    fully resolved and the lint-ignore baseline has loaded) and
+  //    `isLintIgnored(selector, 'font-family')` (drops a known, tracked
+  //    exception — e.g. CollapsibleCard's `__content`, deliberately left
+  //    unfixed for its own cleanup issue per #2119's own scope split; see
+  //    the `setLintIgnores` call sites that register it).
+
+  // Only the three BODY/HEADING/LABEL font-family tokens per #2119's scope
+  // (display/subtitle families exist in tokens/figma-tokens.css too, but the
+  // ticket named exactly these three — today all five resolve to the same
+  // literal "Poppins", so this is not a gap in practice; broadening it is a
+  // one-line follow-up if a theme ever diverges display/subtitle from body).
+  const TYPE_FAMILY_VARS = [
+    '--font-family-body', '--font-family-heading', '--font-family-label',
+  ];
+
+  // Every body/heading/label/subtitle/display SIZE token in
+  // tokens/figma-tokens.css. Diagnostic only (see the design note above) —
+  // never gates `isViolation`.
+  const TYPE_SIZE_VARS = [
+    '--body-tiny', '--body-xs', '--body-sm', '--body-md', '--body-lg', '--body-xl', '--body-huge',
+    '--heading-tiny', '--heading-sm', '--heading-md', '--heading-lg', '--heading-xl', '--heading-xxl', '--heading-huge',
+    '--label-tiny', '--label-xs', '--label-sm', '--label-md', '--label-lg', '--label-xl',
+    '--subtitle-sm', '--subtitle-md', '--subtitle-lg',
+    '--display-sm', '--display-md', '--display-lg', '--display-xl',
+  ];
+
+  // Read a custom property's CASCADE-RESOLVED value off `:root` (chained
+  // `var()` references — e.g. `--body-md: var(--font-size-100)` — resolve
+  // through, so this returns the real px/family value, not the raw alias).
+  function rootTokenValue(varName) {
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  }
+
+  function resolveTokenFamilies() {
+    return TYPE_FAMILY_VARS.map(rootTokenValue).filter(Boolean);
+  }
+
+  function resolveTokenSizes() {
+    const set = new Set();
+    for (const v of TYPE_SIZE_VARS) {
+      const val = rootTokenValue(v);
+      if (val) set.add(val);
+    }
+    return set;
+  }
+
+  // True when the element's own font-family (a full stack, e.g.
+  // `Poppins, system-ui, sans-serif`) contains at least one of the resolved
+  // token families. Substring/case-insensitive: computed serialization may or
+  // may not quote a face name, and may carry the whole fallback stack.
+  function familyMatchesToken(computedFamily, tokenFamilies) {
+    if (!computedFamily) return false;
+    const lower = computedFamily.toLowerCase();
+    return tokenFamilies.some((f) => f && lower.includes(f.toLowerCase()));
+  }
+
+  // A text-holding leaf: at least one direct child TEXT node with
+  // non-whitespace content. A wrapper holding only ELEMENT children (its own
+  // text-bearing descendants own their own tokens) is NOT a leaf — skip it
+  // rather than mis-flag a pure layout/composition slot.
+  function isTextLeaf(el) {
+    if (!el || el.nodeType !== 1) return false;
+    for (const child of el.childNodes) {
+      if (child.nodeType === 3 && child.textContent && child.textContent.trim() !== '') {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Fallback attribution when there is no CSSOM declaration to point at at
+  // all — the exact "missing declaration" case this gate exists for.
+  // `getDeclaredValue` only matches rules whose selector matches `el`
+  // directly, so the common break (nothing, anywhere, ever set font-family)
+  // yields no origin. The element's own class list is how these leaf slots
+  // are named in source CSS (`.bds-collapsible-card__content { … }`), so it
+  // is the natural exception-baseline key for a missing rule.
+  function ownClassSelector(el) {
+    const classes = Array.from(el.classList || []);
+    return classes.length ? '.' + classes.join('.') : null;
+  }
+
+  function auditMissingType(el) {
+    if (!isTextLeaf(el)) return null;
+
+    const cs = getComputedStyle(el);
+    const computed = cs.getPropertyValue('font-family').trim();
+    const tokenFamilies = resolveTokenFamilies();
+    const matchesToken = familyMatchesToken(computed, tokenFamilies);
+
+    // Prefer the real declaring rule when one directly matches `el`; fall
+    // back to the element's own class selector only for the true "nothing
+    // ever declared this" case (see ownClassSelector above).
+    const declared = getDeclaredValue(el, 'font-family');
+    const winningSelector = declared ? declared.origin : ownClassSelector(el);
+    const lintIgnored =
+      winningSelector && winningSelector !== 'inline'
+        ? isLintIgnored(winningSelector, 'font-family')
+        : false;
+
+    return {
+      prop: 'font-family',
+      computed,
+      // Diagnostic only — see the design note above for why font-size never
+      // gates isViolation.
+      sizeComputed: cs.getPropertyValue('font-size').trim(),
+      tokenSizes: resolveTokenSizes(),
+      isViolation: !matchesToken && !lintIgnored && auditReady(),
+    };
   }
 
   // ── UI: toolbar + outline + pill + panel ────────────────────────────────

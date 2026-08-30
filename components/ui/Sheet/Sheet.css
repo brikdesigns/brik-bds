@@ -170,6 +170,9 @@
 /* ─── Body ───────────────────────────────────────────────────── */
 
 .bds-sheet__body {
+  /* reviewed #2119: wraps arbitrary caller children (form fields, sections,
+     tab content) — the consumer's own content owns its type tokens, this
+     slot only scrolls/pads it */
   flex: 1;
   padding: var(--padding-xl) var(--padding-lg);
   overflow-y: auto;
