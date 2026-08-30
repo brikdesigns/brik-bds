@@ -2,7 +2,7 @@
 /**
  * lint-page-grid — enforces the ADR-025 width-container recipe: a page
  * container's inline inset comes from the canonical `--page-inset` token
- * (renamed from `--gutter-page`, still accepted as a deprecated alias).
+ * (renamed from `--gutter-page`, ADR-025; the alias was removed post-migration).
  *
  * The page-grid standard (ADR-025, published at
  * design.brikdesigns.com/docs/build-standards/page-grid) locks the container
@@ -22,7 +22,7 @@
  *                 padding-inline: 24px;
  *
  *   Allowed   — the recipe (the whole point), directly or as an ADR-014 hook
- *               fallback (the deprecated `--gutter-page` alias also passes):
+ *               fallback:
  *                 padding-inline: var(--page-inset);
  *                 padding-inline: var(--bds-blueprint-section-padding-inline, var(--page-inset));
  *                 padding-inline: max(var(--page-inset), calc((100% - var(--content-width-xl)) / 2));
@@ -65,9 +65,8 @@ const DEFAULT_DIRS = ['components/ui', 'content-system'];
 const BAND_RE = /max-width\s*:\s*[^;}]*var\(\s*--content-width-/i;
 /** …or a Footer-style centering inset computed from one. */
 const CENTERING_INSET_RE = /100%\s*-\s*var\(\s*--content-width-/i;
-/** The canonical inset, direct or as a hook fallback. Accepts the deprecated
- *  `--gutter-page` alias during the ADR-025 rename migration. */
-const PAGE_INSET_RE = /var\(\s*--(?:page-inset|gutter-page)\b/i;
+/** The canonical inset, direct or as a hook fallback. */
+const PAGE_INSET_RE = /var\(\s*--page-inset\b/i;
 
 /**
  * Blank out `/* … *​/` comment content, preserving newlines so line numbers
