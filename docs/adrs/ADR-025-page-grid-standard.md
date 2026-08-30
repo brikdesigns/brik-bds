@@ -48,3 +48,20 @@ ADR-023 locked content rhythm, ADR-024 locked component rhythm — both vertical
 - `Page`'s `padding` prop scale (`none/sm/md/lg`) is untouched — product shells legitimately run tighter than the marketing gutter; `lg` is the one that equals `--gutter-page`.
 - A future fluid gutter (if the no-responsive-axis scope lock is ever lifted) is a one-line change to `--gutter-page`'s value — the consuming recipe doesn't move.
 - Docs: `build-standards/page-grid.mdx` (new) owns the standard; `page-structure.mdx` container section corrected and now defers to it.
+
+## Amendment — 2026-08-30 (#2173): renamed to `--page-inset` + tier fix
+
+Two problems with Decision 2 surfaced when #2173 revisited the token's tier classification:
+
+1. **Name.** "Gutter" conventionally means the space *between* columns (Decision 1's own first row), but every consumer applies this token to `padding-inline` — the page-*edge* inset, never a grid gap (verified: zero `--gap-*`-for-`padding-inline` uses across BDS + brikdesigns). The name contradicted the decision that minted it.
+
+2. **Tier.** `--gutter-page: var(--padding-lg)` is a Semantic token referencing another Semantic token (t3→t3). The tier model is "higher tiers reference lower tiers" (token-anatomy § Tier); a Semantic must resolve to a Primitive. Decision 2's "mode modulation comes free through `--padding-lg`" bought that convenience with an off-model reference that no gate caught.
+
+**Resolution:**
+
+- **Renamed `--gutter-page` → `--page-inset`.** The old name is retained as a `@deprecated` alias (`--gutter-page: var(--page-inset)`) until downstream consumers (brikdesigns) migrate, then removed. TS mirror renamed `pageGutter` → `pageInset` (old export kept, `@deprecated`).
+- **Made it tier-clean.** `--page-inset: var(--space-600)` at base, with its own `[data-mode-spacing]` ladder referencing Primitives directly (`--space-400`/`--space-800`/`--space-1200` for compact/comfortable/spacious) — mirroring `--padding-lg`'s density steps without aliasing it. `gap-fills.css` loads after `modes-spacing.css`, so the ladder wins by source order. This replaces "modulation comes free through `--padding-lg`" (Decision 2) — the modulation is now the token's own, over Primitives.
+- **`lint-page-grid` accepts `--page-inset`** (and the deprecated `--gutter-page` alias during migration).
+- **New gate: `lint-token-tiers`** (`scripts/lint-token-tiers.mjs`, wired into `validate` + `tokens-gate.yml`) fails a Semantic-named token referencing another Semantic (t3→t3) — the class of defect this token was, and enough to keep `--page-inset` (Semantic-named) from regressing. Five pre-existing t3→t3 hits it surfaced are tracked in #2186. The broader rule ("only a Component `--bds-*` may reference a Semantic") collides with BDS's sanctioned role-aliasing (`bridge.css`, `--border-focus`, `--tooltip-text`); designing that enforcement is deferred to #2187.
+
+Decision 2's fluid-clamp rejection still stands: `--page-inset` remains a stepped token, not a `clamp()`.

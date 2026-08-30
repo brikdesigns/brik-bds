@@ -137,7 +137,7 @@ Both components draw their slot and element rhythm from the same role→step sca
 
 ## Container widths
 
-Sections span full viewport width. Content is constrained by an inner container slot — this is CSS, not a wrapper element with a `.container` class. The recipe, default band (`--content-width-xl`), width roles, and the `--gutter-page` inset are locked in [Page Grid](/docs/build-standards/page-grid).
+Sections span full viewport width. Content is constrained by an inner container slot — this is CSS, not a wrapper element with a `.container` class. The recipe, default band (`--content-width-xl`), width roles, and the `--page-inset` are locked in [Page Grid](/docs/build-standards/page-grid).
 
 ```css
 .bds-features {
@@ -147,7 +147,7 @@ Sections span full viewport width. Content is constrained by an inner container 
 .bds-features__content {
   max-width: var(--content-width-xl);
   margin-inline: auto;
-  padding-inline: var(--gutter-page);
+  padding-inline: var(--page-inset);
 }
 ```
 

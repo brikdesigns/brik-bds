@@ -59,12 +59,12 @@
   }
 
   /* Centred content band. Both hooks fall back to Semantic tokens. The
-     inline inset falls back to the canonical page gutter (ADR-025) so BDS
+     inline inset falls back to the canonical page inset (ADR-025) so BDS
      sections and consumer containers resolve to the same edge inset. */
   .bds-blueprint-section__container {
     max-width: var(--bds-blueprint-section-content-width, var(--content-width-xl));
     margin-inline: auto;
-    padding-inline: var(--bds-blueprint-section-padding-inline, var(--gutter-page));
+    padding-inline: var(--bds-blueprint-section-padding-inline, var(--page-inset));
   }
 
   /* Visually-hidden utility — collapses the `__sr-heading` blocks that were

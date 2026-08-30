@@ -709,10 +709,19 @@ export const contentWidths = {
 export type ContentWidth = keyof typeof contentWidths;
 
 /**
- * Page gutter — the inline inset between the viewport edge and a page's
- * content band (ADR-025). A fixed alias of --padding-lg (mode-modulated),
- * so it is exposed as a var() reference, not a raw px value.
- * Maps to the --gutter-page CSS custom property in gap-fills.css.
+ * Page inset — the inline inset between the viewport edge and a page's
+ * content band (ADR-025). Mode-modulated (references the Primitive --space-*
+ * per spacing mode), so it is exposed as a var() reference, not a raw px value.
+ * Maps to the --page-inset CSS custom property in gap-fills.css.
+ */
+export const pageInset = 'var(--page-inset)' as const;
+
+/**
+ * @deprecated Renamed to {@link pageInset} (ADR-025) — a "gutter" is
+ * conventionally the space between columns; this is the page-edge inset.
+ * Retained as an alias until downstream consumers migrate; will be removed
+ * in a follow-up. Resolves to `--gutter-page`, itself now an alias of
+ * `--page-inset` in gap-fills.css.
  */
 export const pageGutter = 'var(--gutter-page)' as const;
 
