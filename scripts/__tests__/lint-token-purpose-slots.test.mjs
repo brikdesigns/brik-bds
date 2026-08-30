@@ -65,7 +65,6 @@ const CLEAN = `:root {
   --aspect-16-9: 16 / 9;
   --gap-md: var(--space-400);
   --padding-lg: var(--space-400);
-  --gutter-page: var(--padding-lg);
   --heading-xl: var(--font-size-100);
   --display-lg: var(--font-size-100);
   --body-md: var(--font-size-100);
