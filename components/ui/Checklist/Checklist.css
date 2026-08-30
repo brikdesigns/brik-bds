@@ -22,8 +22,15 @@
     transition: background-color var(--duration-normal) var(--ease-out);
   }
 
+  /* Hover + pressed mirror the ghost Button (--background-primary-hover /
+     --background-secondary-hover) so a clickable row and a ghost button feel
+     identical. No translateY nudge — a full-width list row shouldn't shift. */
   .bds-checklist:hover {
-    background-color: var(--surface-secondary-hover, var(--surface-secondary));
+    background-color: var(--background-primary-hover);
+  }
+
+  .bds-checklist:not(.bds-checklist--disabled):active {
+    background-color: var(--background-secondary-hover);
   }
 
   .bds-checklist--checked {
