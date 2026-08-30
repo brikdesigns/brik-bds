@@ -38,12 +38,15 @@ describe('fluid-type.css — fluid display tier', () => {
     }
   });
 
-  it('anchors max to the static --display-* token and min to a --font-size-* primitive (stays on-system)', () => {
-    // sm → display-sm, md → display-md, etc.; min references a raw font-size primitive.
+  it('anchors both bounds to --font-size-* primitives — no --display-* Semantic alias (ADR-035)', () => {
+    // Both min and max resolve to a raw --font-size-* primitive. The max bound
+    // used to alias the static --display-* Semantic, but a non-color Semantic
+    // may not alias another Semantic (it would parasitize the type scale) — the
+    // tier gate flags it (ADR-035, #2187), so both bounds are Primitives now.
     for (const step of STEPS) {
       const value = fluidCss.match(new RegExp(`--display-fluid-${step}\\s*:\\s*([^;]+);`))[1];
-      expect(value).toContain(`var(--display-${step})`); // max anchor
-      expect(value).toMatch(/var\(--font-size-\d+\)/); // min anchor — no raw px
+      expect(value).not.toContain(`var(--display-${step})`); // no Semantic alias
+      expect(value.match(/var\(--font-size-\d+\)/g)?.length).toBe(2); // min + max, both primitives
     }
   });
 
