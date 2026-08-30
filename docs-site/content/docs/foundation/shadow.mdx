@@ -43,6 +43,27 @@ Controls how far a shadow extends outward.
 
 <ShadowScale scale={shadowSpreadScale} prefix="--shadow-spread" label="spread" />
 
+## Filter blur
+
+`--blur-radius-*` feeds the CSS `filter: blur()` and `backdrop-filter` — the softening of an element or of whatever sits behind it. This is **distinct from `--shadow-blur-*`**, which is the blur *component of a `box-shadow`*; the two are not interchangeable.
+
+<Callout type="info">
+  **Shipped, but unconsumed today.** No component references `--blur-radius-*` (`grep -r "var(--blur-radius" components/` → 0). The family is available for frosted-glass / scrim treatments; until one ships, whether BDS keeps it is an open question for the naming ADR ([#1910](https://github.com/brikdesigns/brik-bds/issues/1910)).
+</Callout>
+
+| Token | CSS Variable | Value |
+|---|---|---|
+| Small | `--blur-radius-sm` | 8px |
+| Medium | `--blur-radius-md` | 12px |
+| Large | `--blur-radius-lg` | 14px |
+| Extra large | `--blur-radius-xl` | 16px |
+
+```css
+.frosted-panel {
+  backdrop-filter: blur(var(--blur-radius-md));
+}
+```
+
 ## Related
 
 - [Border radius](/docs/foundation/border-radius) — radius and elevation read together at the component edge
