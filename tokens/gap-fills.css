@@ -282,7 +282,11 @@
      reason as the --border-width-* aliases above — consumers were already
      inventing the name (--site-gutter). Gutters BETWEEN columns are not this
      token: sibling↔sibling space is the layout primitive's gap, governed by
-     the ADR-024 rhythm map. */
+     the ADR-024 rhythm map.
+
+     Tier: Semantic (derived). References another Semantic token on purpose —
+     [data-mode-spacing] modulates --padding-lg, never --space-600, so the alias
+     is the mechanism that inherits density modulation (ADR-034). */
   --gutter-page: var(--padding-lg);
 
   /* ── Content measure (ADR-032) ──
@@ -293,7 +297,12 @@
      70% / uncapped across brikdesigns) — the same invention pressure that
      minted --gutter-page. ch-based so the cap tracks the type size, not a px
      literal; static across spacing modes (a measure is a readability constant,
-     not a density knob). */
+     not a density knob).
+
+     Tier: Semantic (layout/derived), same class as --gutter-page and
+     --content-width-* (ADR-034). Static ch today, so it references no token; if
+     ever aliased to a mode-modulated Semantic token, the same-tier reference
+     rule applies. */
   --measure-sm:  44ch;  /* short intro / single-line eyebrow + title */
   --measure-md:  60ch;  /* section-header title + description — the default */
   --measure-lg:  72ch;  /* long-form prose / rich-text body */

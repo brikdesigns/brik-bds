@@ -235,6 +235,14 @@ Every token sits at exactly one Tier. Higher tiers reference lower tiers via `va
   **Components consume Semantic tokens, never Primitives directly.** A button's CSS references `--background-brand-primary`, not `--color-poppy-500`. Why: Semantic is the layer that varies per brand. Bypassing it locks the component to one brand.
 </Callout>
 
+### Derived tokens: a same-tier reference that carries mode modulation
+
+A token references a **lower tier** by default. One exception: a **derived** token may reference **another token at its own tier** when that reference is the mechanism by which it inherits the referenced token's [Mode](#mode) modulation — and only then.
+
+`--gutter-page: var(--padding-lg)` (`tokens/gap-fills.css`) is a Semantic token referencing another Semantic token, and that is correct: `[data-mode-spacing]` modulates `--padding-lg` (16 / 32 / 48px), never the Primitive `--space-600` beneath it. Rewriting `--gutter-page` to reference `--space-600` to satisfy "reference a lower tier" would silently freeze the gutter at 24px in every density mode — killing the modulation the token exists to carry. Its siblings `--content-width-*` and `--measure-*` are the same layout/derived class.
+
+The test is narrow: (a) the referenced token is mode-modulated at that tier, and (b) dropping to the lower tier would *lose* that modulation. A same-tier reference that fails both is a redundant alias — drift, still disallowed. See [ADR-034](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-034-token-tier-derived-tokens-and-consumer-namespace.md).
+
 {/* cascade-vocab-ok:start — the abstraction Tier stack (Raw · Primitive · Semantic · Component), not the CSS cascade */}
 
 ### About Tier 4
@@ -258,6 +266,10 @@ A Tier 4 token serves one of two roles, both under the same name:
 
 <Callout type="warn">
   **Tier 4 never terminates at a raw value.** A knob's fallback is a Semantic token; a runtime binding is computed from one. A literal inside a `var()` fallback on a tokenized property is Tier-1 leakage and is flagged by `scripts/lint-tokens.js`. The `--bds-` prefix is mandatory — `--bp-*` and bare `--{component}-*` are retired (see Drift patterns below).
+</Callout>
+
+<Callout type="info">
+  **`--bds-*` is for tokens BDS authors *and reads*.** A **consumer** can also declare component-tier tokens that BDS never reads — runtime handoff vars set in consumer TSX and consumed only by consumer CSS (e.g. brikdesigns' per-CTA fill hooks). These are a distinct class ADR-014 did not name, and wearing `--bds-` would falsely claim BDS ownership. Their namespace is governed by [ADR-034](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-034-token-tier-derived-tokens-and-consumer-namespace.md) — **pending owner ratification** (distinct consumer prefix vs. shared `--bds-*`). Until it ratifies, do not read the drift table's "migrate to `--bds-*`" remedy as covering consumer-owned tokens.
 </Callout>
 
 {/* cascade-vocab-ok:end */}
