@@ -162,7 +162,7 @@ const DRIFT_BACKLOG = {
  */
 const SLOTLESS_EXCEPTIONS = new Set(['web', 'tablet', 'mobile']);
 
-const DOC_PATH = path.join('docs-site', 'content', 'docs', 'primitives', 'token-anatomy.mdx');
+const DOC_PATH = path.join('docs-site', 'content', 'docs', 'foundation', 'token-anatomy.mdx');
 
 /** Strip comments but keep byte offsets stable so line numbers stay true. */
 function blankComments(src) {
