@@ -160,11 +160,11 @@ type MissingTypeAudit = { prop: string; computed: string; isViolation: boolean }
 type MissingTypeApi = {
   auditMissingType: (el: Element) => MissingTypeAudit;
   setLintIgnores: (list: Array<{ selector: string; property: string }>) => void;
+  setActive?: (next: boolean) => void;
 };
 let missingTypeApi: MissingTypeApi | undefined;
 
 function loadMissingTypeGate() {
-  history.replaceState(null, '', `${location.pathname}?inspect=1`); // pass the widget's own SHOULD_ENABLE gate
   (window as unknown as { __BRIK_INSPECT_DEVBAR_HOST_MANAGED__?: boolean }).__BRIK_INSPECT_DEVBAR_HOST_MANAGED__ = true;
   const win = window as unknown as { BrikDevBar?: { register: () => void; unregister: () => void } };
   win.BrikDevBar = win.BrikDevBar || { register() {}, unregister() {} };
@@ -175,12 +175,29 @@ function loadMissingTypeGate() {
     shim.setAttribute('data-brik-poppins-shim', '');
     document.head.appendChild(shim);
   }
-  // eslint-disable-next-line no-eval
-  (0, eval)(widgetSource);
+  // Enable via `data-auto-enable="1"` (the widget's AUTO_ENABLE path, read off
+  // document.currentScript at inspect-widget.js:60), NOT `?inspect=1`. Both set
+  // SHOULD_ENABLE so the widget runs and exposes auditMissingType — but
+  // `?inspect=1` ALSO auto-ACTIVATES the overlay on load (inspect-widget.js:1871),
+  // and an active inspector's capture-phase click handler (`onClick`, :1817)
+  // calls preventDefault/stopPropagation on every click, swallowing the
+  // userEvent interactions in every story's play function. That silently broke
+  // ~30 interaction-test suites the first time this shipped. AUTO_ENABLE leaves
+  // `active` false, so the (always-installed) handlers early-return and the
+  // overlay never intercepts. A real <script> element is required, not eval():
+  // the widget reads document.currentScript, which is null inside eval().
+  const loader = document.createElement('script');
+  loader.setAttribute('data-auto-enable', '1');
+  loader.textContent = widgetSource;
+  document.head.appendChild(loader);
   const exposed = (window as unknown as { BrikInspect?: Partial<MissingTypeApi> }).BrikInspect;
   if (!exposed?.auditMissingType || !exposed.setLintIgnores) {
     throw new Error('Missing-type gate (#2119): widget did not expose the expected hooks.');
   }
+  // Belt-and-suspenders: force the overlay inert even if a future change adds
+  // an on-load activation path — an active inspector intercepts play-function
+  // clicks (see above). No-op when already inactive (the AUTO_ENABLE case).
+  exposed.setActive?.(false);
   missingTypeApi = exposed as MissingTypeApi;
   // Shared exception baseline (same setLintIgnores/isLintIgnored primitives as
   // #2170's bds-lint-ignore bridge, not a new mechanism). CollapsibleCard's
