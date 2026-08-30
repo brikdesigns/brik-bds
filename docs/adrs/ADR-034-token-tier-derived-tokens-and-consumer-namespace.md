@@ -37,7 +37,7 @@ A consumer reaching into `.bds-button--primary` / `.bds-pricing-card__price` wit
 ## Consequences
 
 - **token-anatomy.mdx** Tier-4 section states the ruling: `--bds-*` is BDS-authored-and-read; a consumer override of a BDS component uses a BDS-defined hook/variant (never a consumer-invented name), and consumer-own element styling is local CSS outside the token system.
-- **BDS gap filed** (disposition 1): expose the sanctioned override path for the three component-override tokens — a service-themed CTA path on Button (`--service-cta-fill-dark`/`-ink-dark`) and a price-ink hook/service-surface awareness on PricingCard (`--service-price-ink`). Tracked as a new BDS issue; brikdesigns migrates onto it once it lands.
+- **BDS gap filed** (disposition 1): expose the sanctioned override path for the three component-override tokens — a service-themed CTA path on Button (`--service-cta-fill-dark`/`-ink-dark`) and a price-ink hook/service-surface awareness on PricingCard (`--service-price-ink`). Tracked as [#2181](https://github.com/brikdesigns/brik-bds/issues/2181); brikdesigns migrates onto it once it lands.
 - **No consumer lint rule, no `--brik-*` migration.** The two consumer-own tokens (`--related-band-*`, `--support-cta-image-size`) stay as the consumer's local CSS; BDS asserts nothing about them.
 - **No token values change anywhere.**
 
