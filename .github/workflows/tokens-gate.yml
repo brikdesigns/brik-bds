@@ -172,6 +172,7 @@ jobs:
             'scripts/lint-theme-divergence.mjs' \
             'scripts/lint-token-purpose-slots.mjs' \
             'scripts/lint-token-self-reference.mjs' \
+            'scripts/lint-token-tiers.mjs' \
             'scripts/lint-token-shadowing.mjs' \
             'scripts/lint-tokens.js' \
             'scripts/merge-tokens-studio.js' \
@@ -180,6 +181,7 @@ jobs:
             'scripts/__tests__/generate-color-ramps.test.mjs' \
             'scripts/__tests__/lint-token-purpose-slots.test.mjs' \
             'scripts/__tests__/lint-token-self-reference.test.mjs' \
+            'scripts/__tests__/lint-token-tiers.test.mjs' \
             'scripts/__tests__/lint-token-shadowing.test.mjs' \
             'scripts/__tests__/lint-tokens-deprecated.test.mjs' \
             '.github/workflows/tokens-gate.yml')"; then
@@ -373,6 +375,19 @@ jobs:
         if: always() && steps.install.outcome == 'success'
         run: npm run lint-token-self-reference
 
+      # ─── token-tier check (ADR-025, #2173) ──────────────────────────────────
+      #
+      # Fails when a Semantic token references another Semantic token (t3→t3).
+      # The tier model is "higher tiers reference lower tiers": a Semantic must
+      # resolve to a Primitive, only a Component --bds-* knob resolves to a
+      # Semantic. --gutter-page: var(--padding-lg) shipped silently because no
+      # gate read tier direction; --page-inset carries its own Primitive-backed
+      # mode ladder instead. Sibling of the self-reference check (reference
+      # DIRECTION vs reference CYCLES).
+      - name: Token tier check
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-token-tiers
+
       # ─── token-shadow-check (#1808) ─────────────────────────────────────────
       #
       # Fails when a token is declared twice in the same scope of dist/tokens.css
@@ -407,9 +422,8 @@ jobs:
       # green. lint-token-self-reference's set includes the exact #1919 shape —
       # good value upstream, poisoned by a later re-declaration.
       #
-      # One vitest invocation for all five suites instead of five (161 tests,
-      # ~0.9s locally) — five separate `npx vitest run` calls each paid their own
-      # startup.
+      # One vitest invocation for all six suites instead of six — separate
+      # `npx vitest run` calls each pay their own startup.
       - name: Gate self-tests (prove the gates fail)
         if: always() && steps.install.outcome == 'success'
         run: |
@@ -418,6 +432,7 @@ jobs:
             scripts/__tests__/lint-tokens-deprecated.test.mjs \
             scripts/__tests__/lint-token-purpose-slots.test.mjs \
             scripts/__tests__/lint-token-self-reference.test.mjs \
+            scripts/__tests__/lint-token-tiers.test.mjs \
             scripts/__tests__/lint-token-shadowing.test.mjs
 
   # ─── The branch-protection check ────────────────────────────────────────────

@@ -1,11 +1,11 @@
 ---
 title: Page Grid
-description: The horizontal frame around every Brik page — the width-container recipe, the canonical gutter token, which content width each band gets, and the measure that caps the readable text column inside it.
+description: The horizontal frame around every Brik page — the width-container recipe, the canonical page-inset token, which content width each band gets, and the measure that caps the readable text column inside it.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-[Content Rhythm](/docs/build-standards/content-rhythm) governs the vertical axis; this page governs the horizontal one. Every content band on a Brik page — a marketing section's container, a header, a footer, a consumer site's nav — is framed the same way: a `--content-width-*` band, centred, inset from the viewport edge by the canonical page gutter. One recipe, so BDS sections and consumer containers stay flush-aligned at every breakpoint ([ADR-025](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-025-page-grid-standard.md)).
+[Content Rhythm](/docs/build-standards/content-rhythm) governs the vertical axis; this page governs the horizontal one. Every content band on a Brik page — a marketing section's container, a header, a footer, a consumer site's nav — is framed the same way: a `--content-width-*` band, centred, inset from the viewport edge by the canonical page inset. One recipe, so BDS sections and consumer containers stay flush-aligned at every breakpoint ([ADR-025](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-025-page-grid-standard.md)).
 
 ## The width-container recipe
 
@@ -15,26 +15,26 @@ Three declarations, always together:
 .my-container {
   max-width: var(--content-width-xl);   /* the band */
   margin-inline: auto;                  /* centred */
-  padding-inline: var(--gutter-page);   /* the page gutter */
+  padding-inline: var(--page-inset);    /* the page-edge inset */
 }
 ```
 
 `--content-width-xl` (1280px) is the default band — the value the section shell, `SiteHeader`, `Footer`, and the brikdesigns nav all resolve to. Narrower bands are a per-role choice from the [width roles table](#content-width-roles), not a new number.
 
-The `lint-page-grid` gate fails any container rule whose `padding-inline` bypasses `--gutter-page` — a container on an ad-hoc inset drifts out of alignment with every other band on the page.
+The `lint-page-grid` gate fails any container rule whose `padding-inline` bypasses `--page-inset` — a container on an ad-hoc inset drifts out of alignment with every other band on the page.
 
-## Two kinds of gutter
+## Page inset vs column gutter
 
 "Gutter" names two different relationships. Only the page edge gets a dedicated token; space between columns is already governed by the [component rhythm map](/docs/build-standards/content-rhythm#component-rhythm).
 
 | Sense | Relationship | Mechanism |
 |---|---|---|
-| Page gutter | Viewport edge ↔ content band | `padding-inline: var(--gutter-page)` on the container |
+| Page inset | Viewport edge ↔ content band | `padding-inline: var(--page-inset)` on the container |
 | Column gutter | Sibling ↔ sibling in a `Grid` or `Cluster` | The primitive's `gap`, from the `--gap-*` scale |
 
 This is the gap-vs-padding rule from [Content Rhythm](/docs/build-standards/content-rhythm#gap-padding-or-margin) applied horizontally: gap is between siblings, padding is the edge.
 
-`--gutter-page` is a fixed alias of `--padding-lg`, so it re-modulates under [spacing modes](/docs/primitives/spacing#spacing-modes) but does not vary with viewport width. That is deliberate: a fluid `clamp()` gutter misaligns consumer containers from BDS section content at intermediate widths — brikdesigns shipped one and had to walk it back. In TS, import `pageGutter` from `@bds-tokens` rather than writing the `var()` string inline.
+`--page-inset` (renamed from `--gutter-page`; the old name survives as a deprecated alias) carries its own `[data-mode-spacing]` ladder over Primitives — `--space-600` at default, `--space-400`/`--space-800`/`--space-1200` for compact/comfortable/spacious — so it re-modulates under [spacing modes](/docs/primitives/spacing#spacing-modes) but does not vary with viewport width. It references Primitives directly rather than aliasing the Semantic `--padding-lg` ([ADR-025](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-025-page-grid-standard.md) amendment; a Semantic→Semantic reference is off the tier model). The stepped-not-fluid choice is deliberate: a fluid `clamp()` inset misaligns consumer containers from BDS section content at intermediate widths — brikdesigns shipped one and had to walk it back. In TS, import `pageInset` from `@bds-tokens` rather than writing the `var()` string inline.
 
 ## Content width roles
 
@@ -103,7 +103,7 @@ Like the rhythm scale, you rarely write the recipe by hand — it is baked into 
 ```
 
 - **Product apps** → the `Page` primitive; its `padding` prop sets the shell inset (`lg` is the page gutter).
-- **Full-bleed backgrounds with constrained content** → `Footer`'s `containerMaxWidth` shape: the background spans the viewport while `padding-inline: max(var(--gutter-page), calc((100% - var(--content-width-xl)) / 2))` centres the content band.
+- **Full-bleed backgrounds with constrained content** → `Footer`'s `containerMaxWidth` shape: the background spans the viewport while `padding-inline: max(var(--page-inset), calc((100% - var(--content-width-xl)) / 2))` centres the content band.
 - **Section vertical band** → unchanged from ADR-021: `padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge))`. A page is a stack of full-bleed sections; the vertical band is the clamp, the horizontal band is this recipe.
 
 ## Related

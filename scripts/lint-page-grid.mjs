@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 /**
  * lint-page-grid — enforces the ADR-025 width-container recipe: a page
- * container's inline inset comes from the canonical `--gutter-page` token.
+ * container's inline inset comes from the canonical `--page-inset` token
+ * (renamed from `--gutter-page`, still accepted as a deprecated alias).
  *
  * The page-grid standard (ADR-025, published at
  * design.brikdesigns.com/docs/build-standards/page-grid) locks the container
  * recipe to `max-width: var(--content-width-*)` + `margin-inline: auto` +
- * `padding-inline: var(--gutter-page)`. A container that swaps in some other
+ * `padding-inline: var(--page-inset)`. A container that swaps in some other
  * inset re-opens the misalignment the token exists to close: BDS sections and
  * consumer containers (nav, footer) stop lining up flush at the page edge.
  *
@@ -16,15 +17,15 @@
  *               `max-width: var(--content-width-*)`, or a Footer-style
  *               centering inset `…(100% - var(--content-width-*))…` — a
  *               `padding-inline` whose value never references
- *               `var(--gutter-page`:
+ *               `var(--page-inset`:
  *                 padding-inline: var(--padding-lg);
  *                 padding-inline: 24px;
  *
  *   Allowed   — the recipe (the whole point), directly or as an ADR-014 hook
- *               fallback:
- *                 padding-inline: var(--gutter-page);
- *                 padding-inline: var(--bds-blueprint-section-padding-inline, var(--gutter-page));
- *                 padding-inline: max(var(--gutter-page), calc((100% - var(--content-width-xl)) / 2));
+ *               fallback (the deprecated `--gutter-page` alias also passes):
+ *                 padding-inline: var(--page-inset);
+ *                 padding-inline: var(--bds-blueprint-section-padding-inline, var(--page-inset));
+ *                 padding-inline: max(var(--page-inset), calc((100% - var(--content-width-xl)) / 2));
  *             — a container rule with NO `padding-inline` of its own (the
  *               inset is inherited from a parent shell) or one that overrides
  *               via a `--bds-*` hook custom property (the sanctioned ADR-014
@@ -37,7 +38,7 @@
  * `.astro` files — the two places BDS declares page containers.
  *
  * ── Exit codes ───────────────────────────────────────────────────────────────
- *   0  Clean — every page container uses the canonical gutter
+ *   0  Clean — every page container uses the canonical page inset
  *   1  Violations found
  *   2  Bad invocation
  *
@@ -64,8 +65,9 @@ const DEFAULT_DIRS = ['components/ui', 'content-system'];
 const BAND_RE = /max-width\s*:\s*[^;}]*var\(\s*--content-width-/i;
 /** …or a Footer-style centering inset computed from one. */
 const CENTERING_INSET_RE = /100%\s*-\s*var\(\s*--content-width-/i;
-/** The canonical inset, direct or as a hook fallback. */
-const GUTTER_RE = /var\(\s*--gutter-page\b/i;
+/** The canonical inset, direct or as a hook fallback. Accepts the deprecated
+ *  `--gutter-page` alias during the ADR-025 rename migration. */
+const PAGE_INSET_RE = /var\(\s*--(?:page-inset|gutter-page)\b/i;
 
 /**
  * Blank out `/* … *​/` comment content, preserving newlines so line numbers
@@ -137,7 +139,7 @@ export function extractAstroStyles(text) {
 
 /**
  * Scan CSS text for page-container rules whose `padding-inline` bypasses
- * `--gutter-page`. Pure (no disk) so the rule is unit-testable.
+ * `--page-inset`. Pure (no disk) so the rule is unit-testable.
  */
 export function scanCssText(text, rel = '', lineOffset = 0, sourceLines = null) {
   const lines = sourceLines ?? text.split('\n');
@@ -151,7 +153,7 @@ export function scanCssText(text, rel = '', lineOffset = 0, sourceLines = null) 
     if (!isContainer) continue;
     for (const d of block.decls) {
       if (d.prop !== 'padding-inline') continue;
-      if (GUTTER_RE.test(d.value)) continue;
+      if (PAGE_INSET_RE.test(d.value)) continue;
       const lineText = lines[d.line - 1] ?? d.raw;
       const reason = lintIgnoreReason(lineText);
       // reason: null → no marker (flag); '' → bare marker (hard-fail, #1469);
@@ -192,8 +194,8 @@ function walk(dir, acc = []) {
 }
 
 const GUIDANCE =
-  'A page container insets with the canonical gutter: `padding-inline: ' +
-  'var(--gutter-page)` (directly, as an ADR-014 hook fallback, or inside a ' +
+  'A page container insets with the canonical page inset: `padding-inline: ' +
+  'var(--page-inset)` (directly, as an ADR-014 hook fallback, or inside a ' +
   '`max()` centering inset). See ADR-025 ' +
   '(design.brikdesigns.com/docs/build-standards/page-grid). A genuine ' +
   'exception needs a reasoned `bds-lint-ignore — <why>`; a bare marker is ' +
@@ -201,10 +203,10 @@ const GUIDANCE =
 
 function render(violations, scanned) {
   if (violations.length === 0) {
-    return `lint-page-grid: clean — ${scanned} file(s) scanned, every page container uses --gutter-page\n`;
+    return `lint-page-grid: clean — ${scanned} file(s) scanned, every page container uses --page-inset\n`;
   }
   const out = [
-    `lint-page-grid: ${violations.length} page container(s) bypassing --gutter-page (ADR-025)`,
+    `lint-page-grid: ${violations.length} page container(s) bypassing --page-inset (ADR-025)`,
     '',
   ];
   for (const v of violations) {
@@ -225,7 +227,7 @@ function main() {
       'lint-page-grid [dir] | --staged\n\n' +
         'Fails any page-container rule (max-width: var(--content-width-*) or a ' +
         'content-width centering inset) whose padding-inline bypasses ' +
-        '--gutter-page (ADR-025, brik-bds#1628).\n',
+        '--page-inset (ADR-025, brik-bds#1628).\n',
     );
     process.exit(0);
   }

@@ -190,7 +190,7 @@ See [Color](/docs/primitives/color) for the full registry.
 
 ## Tier
 
-Every token sits at exactly one Tier. Higher tiers reference lower tiers via `var()`. Components only consume the upper tiers.
+Every token sits at exactly one Tier. Higher tiers reference lower tiers via `var()` — a Semantic resolves to a Primitive, a Component `--bds-*` knob to a Semantic; a Semantic aliasing another Semantic is off-model (`scripts/lint-token-tiers.mjs` fails it, ADR-025). Components only consume the upper tiers.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
