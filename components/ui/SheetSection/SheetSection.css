@@ -54,6 +54,8 @@
 /* ─── Content ───────────────────────────────────────────────── */
 
 .bds-sheet-section__content {
+  /* reviewed #2119: wraps arbitrary caller children — the consumer's own
+     content owns its type tokens, this slot only lays it out */
   display: flex;
   flex-direction: column;
   gap: var(--gap-lg);

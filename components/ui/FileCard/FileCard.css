@@ -85,6 +85,9 @@
 /* ─── Card body — filename + meta + open link ─────────────────── */
 
 .bds-file-card__body {
+  /* reviewed #2119: layout wrapper — holds __meta (name/metadata) + the
+     open link, each of which carries its own type tokens; no direct text
+     child here */
   flex: 1 1 auto;
   display: flex;
   align-items: center;

@@ -35,6 +35,8 @@
 }
 
 .bds-cta__message {
+  /* reviewed #2119: layout wrapper — holds __title/__description, each of
+     which carries its own type tokens; no direct text child here */
   display: flex;
   flex-direction: column;
   align-items: center;

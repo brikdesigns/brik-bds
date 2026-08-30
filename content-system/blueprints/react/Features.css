@@ -177,6 +177,8 @@
 /* ── Card body ─────────────────────────────────────────────────── */
 
 .bds-features__content {
+  /* reviewed #2119: layout wrapper — holds __title/__description/__cta, each
+     of which carries its own type tokens; no direct text child here */
   padding: var(--padding-lg);
   display: flex;
   flex-direction: column;
