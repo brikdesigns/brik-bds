@@ -260,6 +260,10 @@ A Tier 4 token serves one of two roles, both under the same name:
   **Tier 4 never terminates at a raw value.** A knob's fallback is a Semantic token; a runtime binding is computed from one. A literal inside a `var()` fallback on a tokenized property is Tier-1 leakage and is flagged by `scripts/lint-tokens.js`. The `--bds-` prefix is mandatory — `--bp-*` and bare `--{component}-*` are retired (see Drift patterns below).
 </Callout>
 
+<Callout type="info">
+  **`--bds-*` is for tokens BDS authors *and reads* — there is no consumer-authored token namespace** ([ADR-034](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-034-token-tier-derived-tokens-and-consumer-namespace.md)). A consumer that needs to restyle a BDS component sets a **BDS-defined** `--bds-{component}-{property}` hook (or uses a BDS variant) — it never invents its own token name. A consumer styling *its own* markup writes plain local CSS, which is outside the token system and needs no `--bds-`/`--brik-` prefix and no BDS blessing. The drift table's "migrate to `--bds-*`" remedy (below) is for **BDS-authored** knobs that shipped without the prefix — a consumer override migrates by moving into a BDS hook/variant, not by prefixing an invented name.
+</Callout>
+
 {/* cascade-vocab-ok:end */}
 
 ## How the six concepts map to a real token
