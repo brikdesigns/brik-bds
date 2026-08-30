@@ -86,7 +86,7 @@ Headings (`##`/`###`) and page titles are scannable labels, not sentences. The *
 - **Component-variant headings** drop the parenthetical too — `### Horizontal` with "Horizontal is the default." as the first line, not `### Horizontal (default)`.
 - **One trailing inline badge component is allowed** — a status/tier tag such as `## Parallax <TierBadge tier="gsap" />` is functional metadata, not clutter. Prose-as-JSX and code in the heading text are not.
 
-Sentence case here means capitalize the first word and proper nouns only. This is the docs-site convention and is deliberately *not* the product/consumer-UI title-case rule at [Typography → Heading casing](/docs/primitives/typography#heading-casing) — that rule governs rendered UI heading copy (`Section` / `__title` strings), enforced in consumer repos, not docs prose.
+Sentence case here means capitalize the first word and proper nouns only. This is the docs-site convention and is deliberately *not* the product/consumer-UI title-case rule at [Typography → Heading casing](/docs/foundation/typography#heading-casing) — that rule governs rendered UI heading copy (`Section` / `__title` strings), enforced in consumer repos, not docs prose.
 
 Renaming a heading changes its anchor slug. Before renaming, grep for inbound `#fragment` links (`grep -rn "#<old-slug>" docs-site/`) and update them in the same PR — `lint-doc-links` fails on a broken anchor.
 
@@ -134,9 +134,9 @@ The docs-site prop tables are curated summaries — the full auto-extracted refe
 
 ## Cross-link pattern
 
-Internal links use absolute docs paths: `[Foundation](/docs/primitives)`. Never `./` or `../`. Storybook lives at `https://storybook.brikdesigns.com` — link out explicitly when referencing visual playground.
+Internal links use absolute docs paths: `[Foundation](/docs/foundation)`. Never `./` or `../`. Storybook lives at `https://storybook.brikdesigns.com` — link out explicitly when referencing visual playground.
 
-When referencing a token, component, or atmosphere, link to the canon page (`/docs/primitives/color`, `/docs/components/button`, `/docs/theming/atmospheres`) rather than restating it inline.
+When referencing a token, component, or atmosphere, link to the canon page (`/docs/foundation/color`, `/docs/components/button`, `/docs/theming/atmospheres`) rather than restating it inline.
 
 ## Allowed Fumadocs components
 

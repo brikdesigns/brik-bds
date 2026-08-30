@@ -25,7 +25,7 @@
  *     the blind spot ADR-028 § Consequences pt-2 documents (brik-bds#1687).
  *
  * Source of truth: tokens/contrast-pairings.json (also feeds the Storybook
- * ContrastCompliance dashboard and the primitives/color-pairings.mdx matrix).
+ * ContrastCompliance dashboard and the foundation/color-pairings.mdx matrix).
  *
  * Usage:
  *   node scripts/validate-themes.js               # human-readable report, exit 1 on failure
@@ -49,7 +49,7 @@ const jsonMode = process.argv.includes('--json');
 const matrixMode = process.argv.includes('--emit-matrix');
 const checkMatrixMode = process.argv.includes('--check-matrix');
 
-const PAIRINGS_MDX = path.join(ROOT, 'docs-site', 'content', 'docs', 'primitives', 'color-pairings.mdx');
+const PAIRINGS_MDX = path.join(ROOT, 'docs-site', 'content', 'docs', 'foundation', 'color-pairings.mdx');
 const MATRIX_START = '{/* matrix:start';
 const MATRIX_END = '{/* matrix:end */}';
 

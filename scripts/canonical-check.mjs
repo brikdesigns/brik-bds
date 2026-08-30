@@ -7,7 +7,7 @@
  * emitted at runtime by a generator) exist in the canonical BDS allowlist
  * parsed from `dist/tokens.css`.
  *
- * Source of truth: https://design.brikdesigns.com/docs/primitives/color
+ * Source of truth: https://design.brikdesigns.com/docs/foundation/color
  *
  * Why this lives in @brikdesigns/bds (not a separate package): the validator's
  * sole job is reading BDS's own `dist/tokens.css`. Coupling at the package
@@ -356,7 +356,7 @@ export function assertCanonicalCss(css, opts = {}) {
     throw new Error(
       `canonical-check: emitted CSS contains ${result.violations.length} non-canonical token name(s):\n  ` +
       result.violations.join('\n  ') +
-      `\n\nSource of truth: https://design.brikdesigns.com/docs/primitives/color`,
+      `\n\nSource of truth: https://design.brikdesigns.com/docs/foundation/color`,
     );
   }
 }
@@ -369,7 +369,7 @@ export const SARIF_SCHEMA =
 export const SARIF_RULE_ID = 'non-canonical-token-name';
 export const DEFAULT_SARIF_FILE = 'canonical-check.sarif';
 
-const INFO_URI = 'https://design.brikdesigns.com/docs/primitives/color';
+const INFO_URI = 'https://design.brikdesigns.com/docs/foundation/color';
 
 function escapeRegExp(s) {
   return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -514,7 +514,7 @@ Exit codes:
   1  Violations found
   2  Bad invocation (missing args, unreadable allowlist)
 
-Source of truth: https://design.brikdesigns.com/docs/primitives/color
+Source of truth: https://design.brikdesigns.com/docs/foundation/color
 `;
 
 function parseCliArgs(argv) {
@@ -561,7 +561,7 @@ function renderMarkdown(result, mode) {
   }
   const lines = [];
   lines.push(`canonical-check: ${result.violations.length} non-canonical token name(s) — parallel taxonomy drift`);
-  lines.push(`  Source of truth: https://design.brikdesigns.com/docs/primitives/color`);
+  lines.push(`  Source of truth: https://design.brikdesigns.com/docs/foundation/color`);
   if (mode === 'source') {
     lines.push(`  Scanned ${result.scannedFiles} files against ${result.canonicalCount} canonical tokens`);
     lines.push('');

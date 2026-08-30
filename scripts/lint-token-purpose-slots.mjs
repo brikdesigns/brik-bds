@@ -6,7 +6,7 @@
  *
  * ── Why this exists ────────────────────────────────────────────────────────
  *
- * docs/primitives/token-anatomy documents ONE formula — the colour intent form
+ * docs/foundation/token-anatomy documents ONE formula — the colour intent form
  * `--{purpose}-{role}`, whose `purpose` vocabulary is the closed list
  * page/surface/background/text/border/color. 325 of the 701 token names that
  * ship are outside that list (`--font-size-100`, `--gap-md`, `--ease-spring`).
@@ -162,7 +162,7 @@ const DRIFT_BACKLOG = {
  */
 const SLOTLESS_EXCEPTIONS = new Set(['web', 'tablet', 'mobile']);
 
-const DOC_PATH = path.join('docs-site', 'content', 'docs', 'primitives', 'token-anatomy.mdx');
+const DOC_PATH = path.join('docs-site', 'content', 'docs', 'foundation', 'token-anatomy.mdx');
 
 /** Strip comments but keep byte offsets stable so line numbers stay true. */
 function blankComments(src) {

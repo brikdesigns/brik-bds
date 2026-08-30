@@ -5,7 +5,7 @@ and how to decide where a change belongs.
 
 ## Vocabulary
 
-This doc uses the locked BDS token vocabulary (see [Token Anatomy](../docs-site/content/docs/primitives/token-anatomy.mdx) for the full disambiguation map):
+This doc uses the locked BDS token vocabulary (see [Token Anatomy](../docs-site/content/docs/foundation/token-anatomy.mdx) for the full disambiguation map):
 
 - **Library** — the logical source of token definitions (Foundations Library / [Client] Brand Kit Library). Today: Figma files managed via Tokens Studio.
 - **Layer** — a CSS `@layer` in the cascade (`bds-tokens` / `bds-components` / `client-theme` / `client-overrides`). Where a token's *value* lands at runtime.

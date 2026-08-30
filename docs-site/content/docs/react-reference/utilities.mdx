@@ -67,7 +67,7 @@ BDS sources tokens from two logical [Libraries](/docs/getting-started/figma-libr
   **Never call the Figma Variables REST API.** It's Enterprise-tier and not on Brik's plan. The relay + Tokens Studio dev plugin is the only sanctioned path from Figma → JSON.
 </Callout>
 
-See [Token Anatomy](/docs/primitives/token-anatomy) for the four-tier abstraction this pipeline emits, [Library architecture](/docs/getting-started/figma-library-architecture) for the per-Library detail, and [The cascade](/docs/getting-started/cascade) for how the CSS output composes at runtime.
+See [Token Anatomy](/docs/foundation/token-anatomy) for the four-tier abstraction this pipeline emits, [Library architecture](/docs/getting-started/figma-library-architecture) for the per-Library detail, and [The cascade](/docs/getting-started/cascade) for how the CSS output composes at runtime.
 
 ## bds-find
 
@@ -130,7 +130,7 @@ Utilities that don't clear all three bars stay in the consumer.
 ## Related
 
 - [React composition layer](/docs/getting-started/react-composition) — consumer-side `@/lib/tokens` + `@/lib/styles` + `Prose` pattern
-- [Primitives → Color](/docs/primitives/color) — canonical token registry the build pipeline emits
+- [Primitives → Color](/docs/foundation/color) — canonical token registry the build pipeline emits
 - [Theming → Atmospheres](/docs/theming/atmospheres) — the dark / atmosphere overlay system
 - [Components](/docs/components) — what `bds-find` searches against
 - [Hooks](/docs/react-reference/hooks) — the stateful counterpart to these stateless utilities

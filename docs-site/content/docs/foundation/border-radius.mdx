@@ -25,7 +25,7 @@ Border radius tokens control corner rounding across components — from sharp (0
 ## Radius modes
 
 <Callout type="warn">
-  **Radius modes are not wired yet — this is the planned design, not a shipped switch.** Unlike [border-width](/docs/primitives/border-width#width-modes) and [spacing](/docs/primitives/spacing#spacing-modes), there is no `modes-borderradius.css` and **no `data-mode-radius` selector ships in `dist/tokens.css`** today. Setting the attribute does nothing until [#340](https://github.com/brikdesigns/brik-bds/issues/340) (wire `data-mode` overrides for non-color tokens) lands. Change the radius feel per theme by overriding the `--border-radius-*` semantic values directly for now.
+  **Radius modes are not wired yet — this is the planned design, not a shipped switch.** Unlike [border-width](/docs/foundation/border-width#width-modes) and [spacing](/docs/foundation/spacing#spacing-modes), there is no `modes-borderradius.css` and **no `data-mode-radius` selector ships in `dist/tokens.css`** today. Setting the attribute does nothing until [#340](https://github.com/brikdesigns/brik-bds/issues/340) (wire `data-mode` overrides for non-color tokens) lands. Change the radius feel per theme by overriding the `--border-radius-*` semantic values directly for now.
 </Callout>
 
 Figma defines border-radius modes to drive the overall shape feel of a theme. Once #340 wires them, `data-mode-radius` will select one (default `soft`):
@@ -39,5 +39,5 @@ Figma defines border-radius modes to drive the overall shape feel of a theme. On
 
 ## Related
 
-- [Border width](/docs/primitives/border-width) — pairs with radius for component framing
-- [Shadow](/docs/primitives/shadow) — elevation that complements radius choices
+- [Border width](/docs/foundation/border-width) — pairs with radius for component framing
+- [Shadow](/docs/foundation/shadow) — elevation that complements radius choices

@@ -47,7 +47,7 @@ BDS defines five canonical breakpoints. The CSS custom properties (`--breakpoint
 </Callout>
 
 <Callout type="info">
-  **The `--breakpoint-*` CSS custom properties are unconsumed by design.** They exist only for Figma / documentation reference — CSS variables can't be read inside `@media()`, so real breakpoint logic goes through the `breakpoints` JS constant below. That's why [Token Anatomy → Named exceptions](/docs/primitives/token-anatomy#named-exceptions) records zero `var(--breakpoint-*)` references anywhere, and flags whether BDS should ship the CSS-var family at all as an open question for the naming ADR ([#1910](https://github.com/brikdesigns/brik-bds/issues/1910)). "Prefer the canonical names" above governs the JS constant and any Figma/doc reference — not a bet that the CSS vars survive that ADR.
+  **The `--breakpoint-*` CSS custom properties are unconsumed by design.** They exist only for Figma / documentation reference — CSS variables can't be read inside `@media()`, so real breakpoint logic goes through the `breakpoints` JS constant below. That's why [Token Anatomy → Named exceptions](/docs/foundation/token-anatomy#named-exceptions) records zero `var(--breakpoint-*)` references anywhere, and flags whether BDS should ship the CSS-var family at all as an open question for the naming ADR ([#1910](https://github.com/brikdesigns/brik-bds/issues/1910)). "Prefer the canonical names" above governs the JS constant and any Figma/doc reference — not a bet that the CSS vars survive that ADR.
 </Callout>
 
 ### Using breakpoints in CSS
@@ -105,5 +105,5 @@ The scale runs `--size-0` (0) through `--size-2200` (100px).
 
 ## Related
 
-- [Spacing tokens](/docs/primitives/spacing) — the sibling `--space-*` scale for layout padding and gap (overlaps `--size-*` on the low/mid steps, diverges above — see the note above)
-- [Typography → Icon sizes](/docs/primitives/typography#icon-sizes) — semantic icon-size tokens
+- [Spacing tokens](/docs/foundation/spacing) — the sibling `--space-*` scale for layout padding and gap (overlaps `--size-*` on the low/mid steps, diverges above — see the note above)
+- [Typography → Icon sizes](/docs/foundation/typography#icon-sizes) — semantic icon-size tokens

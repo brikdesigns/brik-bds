@@ -116,5 +116,5 @@ Figma occasionally reorganizes variable groups, renaming the emitted CSS variabl
 | Full BDS development workflow | [CLAUDE.md](CLAUDE.md) |
 | Token consumption implementation | [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition) |
 | Component build rules & Paper workflow | [.claude/standards/component-build.md](.claude/standards/component-build.md) |
-| Token reference | [Primitives](https://design.brikdesigns.com/docs/primitives) — interactive, pulls live from `dist/tokens.css` |
+| Token reference | [Primitives](https://design.brikdesigns.com/docs/foundation) — interactive, pulls live from `dist/tokens.css` |
 | PR checklist | [docs/TOKEN-PR-CHECKLIST.md](docs/TOKEN-PR-CHECKLIST.md) |

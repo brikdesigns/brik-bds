@@ -25,7 +25,7 @@ const steps = [
   { name: 'Grid Audit', cmd: 'node scripts/audit-grid.js --summary' },
   { name: 'Theme Compliance', cmd: 'node scripts/validate-themes.js' },
 
-  // The published matrix in primitives/color-pairings.mdx must match the
+  // The published matrix in foundation/color-pairings.mdx must match the
   // generator. Only CI ran this, so editing tokens/contrast-pairings.json
   // passed local validation and then failed the contrast-gate job on drift
   // (#1859/#1863 burned a round-trip that way). brik-bds#1864.

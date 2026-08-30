@@ -2,7 +2,7 @@
 
 **Status:** Accepted (2026-06-30; amended 2026-07-01) — shipped via BDS-22 ([#1053](https://github.com/brikdesigns/brik-bds/pull/1053)); see § Amendment (2026-07-01)
 **Date:** 2026-06-30
-**Related:** BDS-22 (Brand Color Update), BDS-18 (Color Pairings), BDS-20 (Expand Color Scale), [#710](https://github.com/brikdesigns/brik-bds/pull/710) + [#719](https://github.com/brikdesigns/brik-bds/pull/719) (the AA darkening this reverses), [ADR-011](./ADR-011-service-line-token-value-model.md) (Figma Brand Kit is SoT), [Color Pairings](../../docs-site/content/docs/primitives/color-pairings.mdx), `tokens/contrast-pairings.json` (rule in force)
+**Related:** BDS-22 (Brand Color Update), BDS-18 (Color Pairings), BDS-20 (Expand Color Scale), [#710](https://github.com/brikdesigns/brik-bds/pull/710) + [#719](https://github.com/brikdesigns/brik-bds/pull/719) (the AA darkening this reverses), [ADR-011](./ADR-011-service-line-token-value-model.md) (Figma Brand Kit is SoT), [Color Pairings](../../docs-site/content/docs/foundation/color-pairings.mdx), `tokens/contrast-pairings.json` (rule in force)
 **Owner:** Nick Stanerson
 
 ## Context

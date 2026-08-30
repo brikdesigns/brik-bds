@@ -139,7 +139,7 @@ All values come from **semantic** tokens. The canonical registry is `dist/tokens
 
 **Tokens in TS/TSX** — never write raw `var(--...)` strings in an inline `style={{…}}` object. In a BDS component the fix is **CSS-over-inline**: move the token into the component's CSS file, keyed on state via class / `[data-*]` / `[aria-*]` (see [§ Styles live in CSS](#styles-live-in-css--never-inline)). Enforced by `scripts/lint-inline-var.mjs` (brik-bds#892) — the gate fails the build on a new inline token consumer.
 
-The **one** inline use that is allowed: *defining* a `--bds-*` custom property as a runtime binding — a value the component computes at render and the CSS reads back. This is the sanctioned Component-tier pattern in [token-anatomy](../../docs-site/content/docs/primitives/token-anatomy.mdx), not a token *consumer*.
+The **one** inline use that is allowed: *defining* a `--bds-*` custom property as a runtime binding — a value the component computes at render and the CSS reads back. This is the sanctioned Component-tier pattern in [token-anatomy](../../docs-site/content/docs/foundation/token-anatomy.mdx), not a token *consumer*.
 
 ```tsx
 /* Wrong — consuming a token in an inline style value → move it to the component CSS */

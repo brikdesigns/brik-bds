@@ -21,7 +21,7 @@
  * the parallel surface/text alias taxonomy at the CSS-var layer.
  *
  * Source of truth:
- *   https://design.brikdesigns.com/docs/primitives/color
+ *   https://design.brikdesigns.com/docs/foundation/color
  *   node_modules/@brikdesigns/bds/dist/tokens.css
  *
  * Tier semantics:

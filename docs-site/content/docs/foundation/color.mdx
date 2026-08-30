@@ -75,7 +75,7 @@ Click any swatch to copy `var(--token-name)` to your clipboard.
 
 ## Interaction states
 
-Hover, press, and disabled. These replace `filter: brightness()` and `opacity` hacks — the proper tokens compose with the rest of the cascade. These are the swatches; for when to reach for a solid state-pair token versus a composable overlay, see [Interaction States](/docs/primitives/interaction-states).
+Hover, press, and disabled. These replace `filter: brightness()` and `opacity` hacks — the proper tokens compose with the rest of the cascade. These are the swatches; for when to reach for a solid state-pair token versus a composable overlay, see [Interaction States](/docs/foundation/interaction-states).
 
 <ColorGrid
   colors={[
@@ -199,11 +199,11 @@ The set is mirrored 1:1 from the **❖ Brik Brand Kit** Figma library, which is 
 **The grid is deliberately not square, because canon isn't.** Two gaps are mirrored from Figma rather than filled in:
 
 - `--page-accent-{hue}` exists for `yellow`, `blue`, `orange` and `red` only — there is no page-level green or purple wash.
-- **`red` is the exception to the system-palette rule.** All five of its purposes alias the **brand poppy** (`#e35335`), not `--color-system-red`. So `--surface-accent-red` is a saturated *fill*, not a pale tint like the other five — it is gated AA rather than AAA in [the matrix](/docs/primitives/color-pairings#the-matrix), and small body copy does not belong on it. `Avatar`'s red initials fill is the shipped consumer.
+- **`red` is the exception to the system-palette rule.** All five of its purposes alias the **brand poppy** (`#e35335`), not `--color-system-red`. So `--surface-accent-red` is a saturated *fill*, not a pale tint like the other five — it is gated AA rather than AAA in [the matrix](/docs/foundation/color-pairings#the-matrix), and small body copy does not belong on it. `Avatar`'s red initials fill is the shipped consumer.
 
 Two consequences worth knowing before you reach for one:
 
-- **Put dark ink on a `surface-accent-{hue}`, not `--text-primary`.** The tints hold the same pale value in both themes while `--text-primary` flips to near-white in dark, which lands at 1.2:1. `--text-on-color-light` is the theme-stable pairing and clears AAA on all five tints (AA on the red fill) — the six `accent` rows in [the matrix](/docs/primitives/color-pairings#the-matrix) gate it.
+- **Put dark ink on a `surface-accent-{hue}`, not `--text-primary`.** The tints hold the same pale value in both themes while `--text-primary` flips to near-white in dark, which lands at 1.2:1. `--text-on-color-light` is the theme-stable pairing and clears AAA on all five tints (AA on the red fill) — the six `accent` rows in [the matrix](/docs/foundation/color-pairings#the-matrix) gate it.
 - **`--text-accent-{hue}` is not a foreground for `--surface-accent-{hue}`.** Same-hue vivid-on-pale only clears AA for `blue`; the other four fall below the 3:1 floor ([#2080](https://github.com/brikdesigns/brik-bds/issues/2080)).
 
 {/* lint-mdx-tokens-ignore-start — the deprecated alias is the subject of this note */}
@@ -282,9 +282,9 @@ Raw color scales from the Figma Brand Kit, rendered from `color-ramps.generated.
 
 ## Related
 
-- [Color Pairings](/docs/primitives/color-pairings) — which text token is WCAG-safe on which surface (brand + service tiers, both themes), the contrast matrix, and the CI gate
-- [Interaction States](/docs/primitives/interaction-states) — the overlay-vs-solid model behind the hover/press/disabled swatches above
-- [Token Anatomy](/docs/primitives/token-anatomy) — the four-tier model and the color-modifier vocabulary (`on-color`, `-on-light`/`-on-dark`, `-inverse`, tone) these roles are named from
+- [Color Pairings](/docs/foundation/color-pairings) — which text token is WCAG-safe on which surface (brand + service tiers, both themes), the contrast matrix, and the CI gate
+- [Interaction States](/docs/foundation/interaction-states) — the overlay-vs-solid model behind the hover/press/disabled swatches above
+- [Token Anatomy](/docs/foundation/token-anatomy) — the four-tier model and the color-modifier vocabulary (`on-color`, `-on-light`/`-on-dark`, `-inverse`, tone) these roles are named from
 - [Color primitive tier](/docs/content-system/vocabularies/color-primitive-tier) — the closed `tier` vocabulary, tonal-scale emission rules, and the deprecated suffix-alias migration
 - [Client Themes → Per-audience scope binding](/docs/theming/client-themes#per-audience-scope-binding) — multi-brand scope-based token re-binding for sites like Vale Partners and brikdesigns.com
 - [Cascade rules](/docs/getting-started/cascade) — the three-layer architecture every consumer follows

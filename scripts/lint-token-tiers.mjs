@@ -257,7 +257,7 @@ function main() {
     console.error('must track a mode, give it its own [data-mode-*] ladder over Primitives (ADR-025,');
     console.error('--page-inset). A color role-alias (target resolves to --color-*) is allowed (ADR-035).');
     console.error('A deliberate, temporary alias takes a reasoned `bds-lint-ignore — <why>`.');
-    console.error('Tier model: design.brikdesigns.com/docs/primitives/token-anatomy#tier');
+    console.error('Tier model: design.brikdesigns.com/docs/foundation/token-anatomy#tier');
     process.exit(1);
   }
 
