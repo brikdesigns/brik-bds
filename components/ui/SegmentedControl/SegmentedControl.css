@@ -80,7 +80,7 @@
 .bds-segmented-control-item--active {
   background-color: var(--background-primary);
   color: var(--text-primary);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — subtle elevation for active pill */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — no composite --box-shadow-* matches this value (nearest is --shadow-sm 0px 2px 4px 0.06); a --box-shadow-xs is a separate proposal (#2171 out-of-scope) */
 }
 
 /* ── Disabled ── */
