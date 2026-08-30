@@ -27,7 +27,7 @@ const repoRoot = join(here, '..', '..');
 // a build artifact and not committed, so we read source.
 const TOKEN_SOURCES = [
   'tokens/figma-tokens.css',
-  'tokens/bridge.css',
+  'tokens/compat/bridge.css',
   'tokens/gap-fills.css',
 ];
 

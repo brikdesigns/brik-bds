@@ -45,8 +45,11 @@
  */
 
 :root {
-  --display-fluid-sm: clamp(var(--font-size-900), 6vw, var(--display-sm)); /* bds-lint-ignore — pre-existing t3->t3, tracked in #2186 (retier fluid max bound to a Primitive) */
-  --display-fluid-md: clamp(var(--font-size-1000), 6.5vw, var(--display-md)); /* bds-lint-ignore — pre-existing t3->t3, tracked in #2186 */
-  --display-fluid-lg: clamp(var(--font-size-1100), 7vw, var(--display-lg)); /* bds-lint-ignore — pre-existing t3->t3, tracked in #2186 */
-  --display-fluid-xl: clamp(var(--font-size-1200), 8vw, var(--display-xl)); /* bds-lint-ignore — pre-existing t3->t3, tracked in #2186 */
+  /* Max bound is the Primitive --font-size-* that the static --display-* role
+     resolves to (ADR-035): a non-color Semantic must not alias another Semantic
+     for its scale. Kept in sync with figma-tokens.css --display-{sm,md,lg,xl}. */
+  --display-fluid-sm: clamp(var(--font-size-900), 6vw, var(--font-size-1400));
+  --display-fluid-md: clamp(var(--font-size-1000), 6.5vw, var(--font-size-1500));
+  --display-fluid-lg: clamp(var(--font-size-1100), 7vw, var(--font-size-1600));
+  --display-fluid-xl: clamp(var(--font-size-1200), 8vw, var(--font-size-1800));
 }

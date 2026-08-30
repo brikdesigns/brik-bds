@@ -190,7 +190,7 @@ See [Color](/docs/primitives/color) for the full registry.
 
 ## Tier
 
-Every token sits at exactly one Tier. Higher tiers reference lower tiers via `var()` — a Semantic resolves to a Primitive, a Component `--bds-*` knob to a Semantic; a Semantic aliasing another Semantic is off-model (`scripts/lint-token-tiers.mjs` fails it, ADR-025). Components only consume the upper tiers.
+Every token sits at exactly one Tier. Higher tiers reference lower tiers via `var()` — a Semantic resolves to a Primitive, a Component `--bds-*` knob to a Semantic. A Semantic aliasing another Semantic is off-model **with one exception: a color role-alias**, where the target resolves to a `--color-*` Primitive (e.g. `--border-focus: var(--border-brand-primary)`). Color is the theme-varying axis, so the alias theme-tracks for free; a non-color Semantic alias (spacing/size/type) instead parasitizes a scale ladder and is banned. `scripts/lint-token-tiers.mjs` enforces this (ADR-035, broadening the ADR-025 narrow gate). Components only consume the upper tiers.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
