@@ -36,12 +36,16 @@ _IPO_YELLOW='\033[1;33m'
 _IPO_GREEN='\033[0;32m'
 _IPO_NC='\033[0m'
 
-# `ticket_paths_from_text` and `intersect_paths` live in pr-path-overlap.sh and
-# are reused verbatim rather than re-derived: their false-positive behaviour is
-# the thing #2313 spent a ticket tuning, and a second copy of that tuning is a
-# second place for it to rot (tooling-duplication-census.py measures exactly
-# this). Sourced only when absent, so new-task.sh's existing source order — which
-# already pulls pr-path-overlap.sh in first — costs nothing.
+# `ticket_paths_from_text` lives in pr-path-overlap.sh and is reused verbatim
+# rather than re-derived: its false-positive behaviour is the thing #2313 spent a
+# ticket tuning, and a second copy of that tuning is a second place for it to rot
+# (tooling-duplication-census.py measures exactly this). Sourced only when
+# absent, so new-task.sh's existing source order — which already pulls
+# pr-path-overlap.sh in first — costs nothing.
+#
+# The set intersection is NOT `intersect_paths`: since #2910 the match is scored
+# and ordered by how rare each shared path is in the corpus, which a boolean
+# intersection cannot express. See `issues_naming_paths`.
 if ! declare -F ticket_paths_from_text >/dev/null 2>&1; then
   # shellcheck source=scripts/lib/pr-path-overlap.sh
   . "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/pr-path-overlap.sh"
@@ -69,9 +73,58 @@ fi
 # reports the session's own ticket back at it on every single run — and a warning
 # that fires every time is the #1485 merged-branch warning, learned past within a
 # week.
+#
+# ── Ubiquity suppression (#2910) ────────────────────────────────────────────
+#
+# Anchoring against `git ls-files` rejects prose that merely looks path-shaped.
+# It does not reject a real tracked file that half the backlog mentions in
+# passing, and that is a different failure with the same #2101 ending. Measured
+# on brik-llm's 200 newest open issues, 2026-08-30 — 277 distinct paths resolved,
+# 190 of them named by exactly one issue:
+#
+#   path                              issues naming it   % of corpus
+#   ──────────────────────────────────────────────────────────────────
+#   CLAUDE.md                                36             18.0
+#   scripts/morning-check.sh                 23             11.5
+#   operations/security/secrets.yaml         22             11.0
+#   scripts/lib/issue-overlap.sh             13              6.5
+#
+# A single passing reference to `CLAUDE.md` in a body pulled in 35 unrelated
+# issues — 73% of #2906's 48-hit run. So ubiquity is keyed on DOCUMENT FREQUENCY
+# in the corpus, never on a denylist of filenames: frequency is a property of the
+# backlog and moves with it, whereas a denylist trades one wrong answer for
+# another and would silence a ticket that genuinely IS about `CLAUDE.md`.
+#
+# The 15% default is the midpoint of the largest gap in that distribution
+# (11.5% → 18.0%), not a guess. Swept across the same data, every threshold from
+# 8% to 15% produced the identical #2906 result (47 hits → 16); below 8% it began
+# eating `scripts/lib/issue-overlap.sh` at 6.5%, and at 18% nothing suppresses at
+# all. 15% therefore sits with ~3 points of headroom on both sides of the band.
+#
+# `IPO_UBIQUITY_MIN` is a floor, not a second threshold: on a repo with 12 open
+# issues, 15% is under two issues and every path would read as ubiquitous. A path
+# has to be named by at least this many issues before frequency means anything.
+#
+# And the suppression is a FALLBACK, never absolute: a ubiquitous path is dropped
+# only while some rarer path survives. A ticket whose only named file is
+# `CLAUDE.md` still gets all 36 hits, which is AC3 — the case a denylist gets
+# wrong by construction.
+#
+# Ordering (AC4) happens here rather than at display time, because the
+# `IPO_MAX_HITS` cap slices whatever it is handed. On the #2906 run the cap's 8
+# rows were in ISSUE-NUMBER order and therefore dominated by `CLAUDE.md`, while
+# the two genuinely relevant hits sat inside the `… and 40 more` remainder. Rows
+# come out rarest-shared-path first, ties broken by how many paths are shared,
+# and each row's own path list is ordered the same way.
 issues_naming_paths() {
-  local mine="${1:-}" exclude="${2:-}" tracked="${3:-}" num title text shared
+  local mine="${1:-}" exclude="${2:-}" tracked="${3:-}" num title text paths
   [ -n "$mine" ] && [ -n "$tracked" ] || return 0
+
+  # One pass over the corpus, extracting each issue's paths ONCE into an index of
+  # `number<TAB>title<TAB>path` triples. Document frequency needs the whole
+  # corpus in hand before any hit can be judged, and re-reading it would mean a
+  # second `ticket_paths_from_text` per row — the most expensive thing here.
+  local index="" corpus=0
   # `|| [ -n "$num" ]` so the LAST record survives an unterminated stream. The
   # rows reach here through a cache round-trip that does not preserve the
   # trailing newline `gh --jq` emits, and a plain `read` loop silently drops the
@@ -79,13 +132,75 @@ issues_naming_paths() {
   while IFS=$'\t' read -r num title text || [ -n "$num" ]; do
     [ -n "$num" ] || continue
     [ -n "$exclude" ] && [ "$num" = "$exclude" ] && continue
-    shared="$(intersect_paths "$mine" "$(ticket_paths_from_text "$text" "$tracked")")"
-    [ -n "$shared" ] || continue
-    printf '%s\t%s\t%s\n' "$num" "$title" "$(printf '%s\n' "$shared" | paste -sd, -)"
+    corpus=$((corpus + 1))
+    paths="$(ticket_paths_from_text "$text" "$tracked")"
+    [ -n "$paths" ] || continue
+    index="${index}$(printf '%s\n' "$paths" | sed "s|^|${num}	${title}	|")
+"
   done
-  # Explicit, for the same reason `_ipo_identical_paths` carries one: the loop's
-  # status is the last thing it evaluated, and a final row that matched nothing
-  # would otherwise return 1 into a caller running `set -e`.
+  [ -n "$index" ] || return 0
+
+  # Sort keys are emitted as leading columns and stripped again, because the awk
+  # here is POSIX awk — `asort` is a gawk extension and macOS ships BWK awk.
+  # Second key is negated so a plain ascending numeric sort puts the row sharing
+  # the MOST paths first.
+  # `mine` is space-joined for the handoff: an `awk -v` assignment cannot carry a
+  # raw newline — BWK awk, which macOS ships, rejects it outright with
+  # `newline in string` and leaves the variable empty, so every hit silently
+  # vanishes. No path can contain a space, per ticket_paths_from_text's regex.
+  printf '%s' "$index" | awk -F'\t' \
+      -v mine="$(printf '%s' "$mine" | tr '\n' ' ')" -v corpus="$corpus" \
+      -v pct="${IPO_UBIQUITY_PCT:-15}" -v floor="${IPO_UBIQUITY_MIN:-5}" '
+    BEGIN {
+      n = split(mine, m, " ")
+      for (i = 1; i <= n; i++) if (m[i] != "") want[m[i]] = 1
+    }
+    { df[$3]++; rows[NR] = $0 }
+    END {
+      cut = corpus * pct / 100
+      if (cut < floor) cut = floor
+
+      # Only paths that actually hit something can be suppressed — a path no open
+      # issue names is neither ubiquitous nor useful, and counting it would make
+      # the fallback below fire on a set that was never going to report anyway.
+      nspec = 0; nhit = 0
+      for (p in want) if (p in df) {
+        hitting[p] = 1; nhit++
+        if (df[p] <= cut) { keys[p] = 1; nspec++ }
+      }
+      if (nhit == 0) exit 0
+      if (nspec == 0) for (p in hitting) keys[p] = 1
+
+      for (i = 1; i <= NR; i++) {
+        split(rows[i], f, "\t")
+        if (!(f[3] in keys)) continue
+        if (!(f[1] in cnt)) { tit[f[1]] = f[2]; ord[++ni] = f[1] }
+        cnt[f[1]]++
+        plist[f[1]] = plist[f[1]] (cnt[f[1]] > 1 ? " " : "") f[3]
+        if (cnt[f[1]] == 1 || df[f[3]] < mind[f[1]]) mind[f[1]] = df[f[3]]
+      }
+
+      for (j = 1; j <= ni; j++) {
+        num = ord[j]
+        # Insertion sort — the list is one row of shared paths, single digits in
+        # practice. No path can contain a space: the extraction regex in
+        # ticket_paths_from_text cannot emit one.
+        k = split(plist[num], pp, " ")
+        for (a = 2; a <= k; a++) {
+          v = pp[a]; b = a - 1
+          while (b >= 1 && df[pp[b]] > df[v]) { pp[b + 1] = pp[b]; b-- }
+          pp[b + 1] = v
+        }
+        csv = pp[1]
+        for (a = 2; a <= k; a++) csv = csv "," pp[a]
+        printf "%d\t%d\t%s\t%s\t%s\n", mind[num], -cnt[num], num, tit[num], csv
+      }
+    }
+  ' | sort -t"$(printf '\t')" -k1,1n -k2,2n -k3,3n | cut -f3-
+
+  # Explicit, for the same reason `_ipo_identical_paths` carries one: the status
+  # of the pipeline above is the last thing it evaluated, and a `cut` that emits
+  # nothing would otherwise return into a caller running `set -e`.
   return 0
 }
 
