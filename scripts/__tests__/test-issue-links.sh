@@ -64,8 +64,20 @@ assert_eq "a bare # with no digits is not a ref" "" \
 echo "── issue_refs_closed_in_bodies ──"
 assert_eq "a closing keyword resolves" "#1836" \
   "$(issue_refs_closed_in_bodies 'Closes #1836' | flat)"
+# One keyword PER LINE (#2240). The scan is line-anchored, so nine keywords on
+# one line is no longer a valid fixture for "every conjugation" — only the first
+# opens its line, and a passing single-line case would have meant the anchor was
+# gone.
 assert_eq "every conjugation resolves" "#1,#2,#3,#4,#5,#6,#7,#8,#9" \
-  "$(issue_refs_closed_in_bodies 'close #1 closes #2 closed #3 fix #4 fixes #5 fixed #6 resolve #7 resolves #8 resolved #9' | flat)"
+  "$(issue_refs_closed_in_bodies 'close #1
+closes #2
+closed #3
+fix #4
+fixes #5
+fixed #6
+resolve #7
+resolves #8
+resolved #9' | flat)"
 assert_eq "the colon form resolves" "#123" "$(issue_refs_closed_in_bodies 'Closes: #123' | flat)"
 assert_eq "no space after the keyword still resolves" "#123" \
   "$(issue_refs_closed_in_bodies 'closes#123' | flat)"
@@ -223,6 +235,19 @@ echo "── the grammars agree on a shared corpus (brik-llm#2450) ──"
 # The failing direction is the one asserted: gate accepts, resolver resolves
 # nothing → a PR that cannot be opened by the sanctioned path.
 #
+# ONE CARVE-OUT, ratified in #2240: the corpus is CANONICAL-FORM bodies — the
+# keyword opens its line, which is what issue-style.md § `Closes #N` requires
+# and what git trailers are. The resolver is line-anchored and the gate is not,
+# so a body whose ONLY reference is mid-line ("see also: closes #123") is
+# accepted by the gate and refused here. That is a deliberate re-narrowing:
+#
+#   refused here, accepted there  → one `--no-issue` hatch, or move the ref to
+#                                   its own line, which the style rule wants
+#   accepted here, wrong issue    → brik-client-portal#2942, silently closed
+#
+# So do NOT add a mid-line-only body to GATE_ACCEPTS to "fix" a failure. That
+# assertion firing means the anchor is doing its job; the fix is the body.
+#
 # The gate's regex is EXTRACTED from the workflow, never restated here. A
 # restated copy is a third spelling of the same grammar, which is the drift this
 # test exists to prevent.
@@ -347,6 +372,34 @@ assert_eq "a non-closing form never becomes Closes" \
   "$(build_issue_links 'fix(x): thing' 'Part of brikdesigns/brik-llm#2442' | tr -d '\n')"
 assert_eq "the GH-N form resolves" "Closes GH-2442" \
   "$(build_issue_links 'fix(x): thing' 'Closes GH-2442' | tr -d '\n')"
+
+echo "── a QUOTED CLOSING keyword is not a directive (#2240) ──"
+# The over-CLOSING half. brik-client-portal#3550's body said "This does **not**
+# close #2942"; GitHub ignored the negation and shut the issue on merge. #3556 —
+# the PR documenting that — quoted the phrase and closed it a second time.
+assert_eq "a negated closing keyword resolves nothing" "" \
+  "$(build_issue_links 'fix: x' 'This does not close #2942' | flat)"
+# shellcheck disable=SC2016  # backticks are the fixture, not a substitution
+assert_eq "a closing keyword quoted mid-prose resolves nothing" "" \
+  "$(build_issue_links 'fix: x' 'The `Closes #123` trailer is what GitHub parses.' | flat)"
+assert_eq "a markdown bullet is not a trailer" "" \
+  "$(build_issue_links 'fix: x' '- Closes #123' | flat)"
+assert_eq "a mid-line keyword after a colon resolves nothing" "" \
+  "$(build_issue_links 'fix: x' 'See also: closes #123' | flat)"
+# The other direction — the anchor must not eat the real thing.
+assert_eq "a real Closes trailer still resolves" "Closes #1836" \
+  "$(build_issue_links 'fix: x' 'Closes #1836' | flat)"
+assert_eq "an indented Closes trailer still resolves" "Closes #1836" \
+  "$(build_issue_links 'fix: x' '    Closes #1836' | flat)"
+assert_eq "a Closes trailer after prose still resolves" "Closes #1836" \
+  "$(build_issue_links 'fix: x' 'Explanation first, on its own line.
+
+Closes #1836' | flat)"
+# UNDER-closing, never over-closing: this resolver may be stricter than the CI
+# gate, never looser. `#2942` here is a link the gate accepts and this refuses —
+# which costs a `--no-issue` hatch at worst, where the reverse silently closes.
+assert_eq "the conservative direction is the one taken" "" \
+  "$(build_issue_links 'fix: x' 'Prose that says closes #2942 mid-sentence.' | flat)"
 
 echo "── a QUOTED linking keyword is not a directive (brik-llm#2450) ──"
 # The commit that added the linking forms tripped this on itself: its body
