@@ -6,15 +6,28 @@
 #                              the diff, so they are exact but the work is done.
 #   check_ticket_path_overlap — new-task.sh, before the worktree exists. Paths
 #                              come from the TICKET, so they are approximate but
-#                              nothing has been written yet (#2313).
+#                              nothing has been written yet (brik-llm#2313).
 #
-# Sourced by pr-task.sh after the base-sync, before the PR is created. Closes
-# brik-bds#1545 (the same-path slice of brik-llm#1485).
+# Sourced by pr-task.sh after the base-sync, before the PR is created. Written
+# first in brik-bds (brik-bds#1545, the same-path slice of brik-llm#1485), ported
+# to brik-llm as canon per brik-llm#1697 and to brik-client-portal per
+# brik-llm#2323.
 #
-# Why this exists, and why the ticket-keyed gate cannot cover it: #1533 keys on
+# Every `#N` below is REPO-QUALIFIED, and that is load-bearing rather than
+# pedantic: this file is a byte-identical twin across repos, so an unqualified
+# number resolves against whatever repo is doing the reading, not against the one
+# that wrote it. Brik numbering runs in the same range everywhere, so the wrong
+# answer is usually a real ticket rather than a 404.
+# The warning at check_pr_path_overlap's tail cited brik-llm#1533 unqualified,
+# and in brik-client-portal that number is a merged CMS PR about content_pages —
+# an unrelated ticket named to the operator as the reason for the warning
+# (brik-llm#2916). Qualify every new one.
+#
+# Why this exists, and why the ticket-keyed gate cannot cover it: brik-llm#1533 keys
+# on
 # the ISSUE NUMBER. On 2026-07-29 two PRs from two sessions changed only
 # `scripts/propagate.sh`, 54 minutes apart, under two different tickets —
-# #1528 (14:27:06Z) and #1529 (15:21:41Z). No number-keyed predicate can see
+# brik-bds#1528 (14:27:06Z) and brik-bds#1529 (15:21:41Z). No number-keyed predicate can see
 # that; the overlap was in the paths. Same lines re-litigated three times.
 #
 # Why it warns rather than blocks: two sessions editing one file is often
@@ -32,12 +45,16 @@
 #   check_pr_path_overlap main "$BRANCH"     # PR-create time, paths from the diff
 #   check_ticket_path_overlap 2313           # task-start time, paths from the ticket
 #
-# An identical twin of this file lives in brik-llm/scripts/lib/. Separate git
-# repos, so it is a deliberate copy, not an import — keep both in sync when
-# either changes (brik-llm#2052). brik-client-portal carries issue-overlap.sh but NOT
-# this file (verified 2026-08-18: `ls scripts/lib/` there lists base-freshness,
-# gh-error-classify, git-transport, identity-guard, issue-overlap only), so the
-# third mirror is a port, not a sync — tracked separately.
+# This file is a WATCHED IDENTICAL TWIN: brik-llm holds canon and the consumer
+# repos ship byte-identical copies, gated by `overlap-twin-drift`. Fix it in
+# brik-llm and re-sync; a local edit in a consumer is read as drift, not as an
+# improvement (brik-llm#2916).
+#
+# WHICH repos carry it is deliberately not written here. The `TWINS` registry in
+# brik-llm's scripts/audit/overlap-twin-drift.py is the record, and a count in
+# prose is how every twin header in this family went stale — this one claimed
+# brik-client-portal did not carry the file for the 12 days after brik-llm#2323
+# put it there (brik-llm#2272/#2447).
 #
 # Return codes: always 0. This is a warning, not a gate.
 
@@ -57,7 +74,7 @@ _PPO_NC='\033[0m'
 # heuristic would report the whole of `components/ui/` as one overlap. That is
 # how new-task.sh's keyword variant (a single word from the slug, :285-307)
 # generates noise, and a gate that is usually wrong trains everyone to skip it —
-# measured in #1533, where 6 of 6 emittable warnings were false positives before
+# measured in brik-llm#1533, where 6 of 6 emittable warnings were false positives before
 # filtering.
 intersect_paths() {
   local mine="${1:-}" theirs="${2:-}"
@@ -126,11 +143,11 @@ check_pr_path_overlap() {
 
   # Two-dot against the fetched remote base: pr-task.sh merges origin/$base
   # before this runs, so a three-dot diff would re-list everything that merge
-  # brought in as if it were this branch's work (the #1001 class).
+  # brought in as if it were this branch's work (the brik-llm#1001 class).
   #
   # PPO_DIFF_CMD is the test injection point — without it, exercising this
   # function would mean running `git diff` against whatever repo the test happens
-  # to be standing in, which is the #1539 failure mode in read-only clothing.
+  # to be standing in, which is the brik-llm#1539 failure mode in read-only clothing.
   local mine
   mine="$(${PPO_DIFF_CMD:-_ppo_my_paths} "$base" 2>/dev/null || true)"
   if [ -z "$mine" ]; then
@@ -161,13 +178,13 @@ check_pr_path_overlap() {
   printf '%s\n' "$hits" | awk -F'\t' '{ printf "    PR #%s — %s\n        %s\n", $1, $2, $3 }'
   echo ""
   echo -e "${_PPO_YELLOW}   Different tickets, same file is invisible to the ticket-keyed gate${_PPO_NC}"
-  echo -e "${_PPO_YELLOW}   (#1533): brik-bds #1528 and #1529 rewrote the same 15 lines of${_PPO_NC}"
+  echo -e "${_PPO_YELLOW}   (brik-llm#1533): brik-bds#1528 and brik-bds#1529 rewrote the same 15${_PPO_NC}"
   echo -e "${_PPO_YELLOW}   scripts/propagate.sh 54 minutes apart. brik-llm#1485.${_PPO_NC}"
   echo ""
   echo -e "${_PPO_YELLOW}   Read those PRs before merging this one.${_PPO_NC}"
 
   # Never block and never hang: a closed stdin in an agent session must not sit
-  # on `read` (#1099, and the same defect still live in issue-overlap.sh's
+  # on `read` (brik-llm#1099, and the same defect still live in issue-overlap.sh's
   # prompt — brik-bds#1549).
   if [ -t 0 ]; then
     echo -e "${_PPO_YELLOW}   Press Enter to continue, Ctrl+C to abort.${_PPO_NC}"
@@ -178,7 +195,7 @@ check_pr_path_overlap() {
   return 0
 }
 
-# ── Task-start variant (#2313) ─────────────────────────────────────
+# ── Task-start variant (brik-llm#2313) ─────────────────────────────────────
 #
 # Same predicate, moved to where it is still actionable. Everything above runs
 # at PR-create, which makes it a collision REPORT: on 2026-08-18 a session
@@ -188,8 +205,7 @@ check_pr_path_overlap() {
 #
 # The hard part at task-start is that there is no diff to read. The paths have
 # to come from the ticket, which means text, which means false positives — and
-# brik-llm#2101 is the standing evidence that a gate which cries wolf gets
-# switched off.
+# brik-llm#2101 is the standing evidence that a gate which cries wolf gets switched off.
 # The defence is that a candidate only counts if it is a file that actually
 # exists in this repo. `brikdesigns/brik-llm`, `https://research.trychroma.com/
 # context-rot` and `e.g.` all match a path-shaped regex; none of them survives
@@ -213,8 +229,8 @@ check_pr_path_overlap() {
 # with `git ls-files | grep 'new-task.sh$'`), so brik-llm#2313's own bare mentions
 # resolve to nothing. Emitting both candidates instead would flag a PR touching
 # `scripts/shared/new-task.sh` for a ticket that meant `scripts/` — a warning
-# that is wrong, which is the brik-llm#2101 failure and worse than a warning
-# that is missing. An under-report is the safe direction for a warning; a full path
+# that is wrong, which is the brik-llm#2101 failure and worse than a warning that is
+# missing. An under-report is the safe direction for a warning; a full path
 # written anywhere in the body still matches exactly.
 ticket_paths_from_text() {
   local text="${1:-}" tracked="${2:-}"
@@ -246,8 +262,8 @@ ticket_paths_from_text() {
 # Split open-PR records by whether the TITLE references this ticket.
 #
 # A PR already open on this ticket is not a collision to report — issue-overlap.sh
-# (brik-llm#1533) has just named it by number, and repeating it as a path hit
-# is the duplicate-warning noise that trains the operator past both. Its changed paths
+# (brik-llm#1533) has just named it by number, and repeating it as a path hit is the
+# duplicate-warning noise that trains the operator past both. Its changed paths
 # are still the single best statement of what this ticket touches, so it moves
 # from the hit list to the path list. Costs no extra `gh` call: the records are
 # already in hand.
