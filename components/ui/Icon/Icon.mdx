@@ -10,7 +10,7 @@ import * as Stories from './Icon.stories';
 
 Offline-first Iconify wrapper. Phosphor (`ph:*`) icons render from a subset bundled into the BDS package, so first paint never waits on — or silently fails against — the Iconify CDN. Drop-in replacement for `@iconify/react`'s `Icon`.
 
-`ph:*` icons render at **`bold`** weight by default — BDS's standard line density. Set the `weight` prop (`regular` for Phosphor's thin default, or `thin`/`light`/`fill`/`duotone`) to change it; a name that already encodes a weight is left as-is. To flip the default for a whole app or one client theme without touching call sites, set `ThemeProvider`'s `defaultIconWeight` — an explicit `weight` prop still wins per-icon (see Patterns).
+`ph:*` icons render at **`bold`** weight by default — BDS's standard line density. Set the `weight` prop (`regular` for Phosphor's thin default, or `thin`/`light`/`fill`/`duotone`) to change it; a name that already encodes a weight is left as-is. To flip the default for a whole app or one client theme without touching call sites, set `ThemeProvider`'s `defaultIconWeight` — an explicit `weight` prop still wins per-icon (see Patterns). The offline guarantee covers only `regular`/`bold`; other weights fetch from the CDN (see Notes).
 
 ## Default
 
@@ -35,3 +35,7 @@ Every icon in the offline subset — each renders with the network blocked. The 
 ## Props
 
 <ArgTypes of={Stories} />
+
+## Notes
+
+**Offline weights.** The offline guarantee covers **`regular` and `bold` only**. The bundled subset (`npm run gen:icons`) ships each `ph:*` reference plus its `-bold` twin, so those two weights resolve with the network blocked; other weights (`thin`/`light`/`fill`/`duotone`) carry glyphs only where shipped source already uses them (today just `star-fill`). A `weight`/`defaultIconWeight` of one of those therefore renders most icons via a runtime Iconify CDN fetch — and fails closed with no network. `ThemeProvider` warns in dev when its `defaultIconWeight` has no matching bundled glyphs; to make a non-outline default fully offline, bundle its variants (extend `gen-icon-collection.mjs`) or register a per-client fill subset via `addBrikIcons()`.
