@@ -35,6 +35,8 @@ set -euo pipefail
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/mirror-widgets.sh"
 # shellcheck source=scripts/lib/bump-pr-guard.sh
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/bump-pr-guard.sh"
+# shellcheck source=scripts/lib/release-tag-guard.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/release-tag-guard.sh"
 
 # ─── Configuration ────────────────────────────────────────────────
 BDS_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -639,9 +641,26 @@ elif [ "$ANY_UPDATED" = true ]; then
     TAG="$BASE_TAG.$SUFFIX"
     SUFFIX=$((SUFFIX + 1))
   done
-  git_signed tag -a "$TAG" -m "BDS release $TAG — propagated to consumers"
+
+  # Tag $LOCAL_HEAD (= $BDS_REMOTE/$BDS_BRANCH), never implicit HEAD. This was the
+  # ONE step that still read the local checkout, against the preflight's whole
+  # design — the version, the commit, and every consumer bump come from
+  # origin/<branch> precisely because this agent never pulls brik-bds first
+  # (see the LOCAL_HEAD comment above). On 2026-08-31 the local checkout was two
+  # days stale, so `git tag -a` with no commit-ish named f491e78d — an ANCESTOR of
+  # the previous tag bds-2026-08-30.1, and the exact commit already carrying
+  # bds-2026-08-30. The tag was a duplicate under a new name. brik-llm#2948.
+  #
+  # Only the missing `workflows` permission on the App token stopped it landing.
+  if ! release_tag_target_advances "$LOCAL_HEAD"; then
+    err "Refusing to tag $TAG at $(echo "$LOCAL_HEAD" | cut -c1-7) — it is at or behind $(newest_release_tag)."
+    err "$BDS_REMOTE/$BDS_BRANCH has not moved past the newest release tag; the consumers were bumped but nothing new was released."
+    exit 1
+  fi
+
+  git_signed tag -a "$TAG" "$LOCAL_HEAD" -m "BDS release $TAG — propagated to consumers"
   git_signed push origin "$TAG" --quiet
-  ok "Tagged release: $TAG"
+  ok "Tagged release: $TAG at $(echo "$LOCAL_HEAD" | cut -c1-7)"
 fi
 
 echo ""

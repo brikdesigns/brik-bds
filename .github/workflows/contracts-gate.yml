@@ -207,6 +207,25 @@ jobs:
           grep -q 'existing_bump_pr "-v\$BDS_VERSION"' scripts/propagate.sh \
             || { echo "::error::npm track no longer guards on \$BDS_VERSION"; exit 1; }
 
+      # ─── release-tag-guard-check (brik-llm#2948) ────────────────────────────
+      - name: Release-tag-advances contract
+        if: always()
+        run: bash scripts/lib/tests/test-release-tag-guard.sh
+
+      # The contract test cannot see the call site, and the call site IS the bug:
+      # `git tag -a "$TAG"` with no commit-ish tagged the stale local HEAD while
+      # every other step reads origin/<branch>. A green guard proves nothing if
+      # propagate goes back to tagging HEAD implicitly.
+      - name: propagate.sh tags $LOCAL_HEAD, not implicit HEAD
+        if: always()
+        run: |
+          grep -q 'lib/release-tag-guard.sh' scripts/propagate.sh \
+            || { echo "::error::propagate.sh no longer sources release-tag-guard.sh"; exit 1; }
+          grep -q 'release_tag_target_advances "\$LOCAL_HEAD"' scripts/propagate.sh \
+            || { echo "::error::the release tag is no longer guarded on \$LOCAL_HEAD"; exit 1; }
+          grep -q 'git_signed tag -a "\$TAG" "\$LOCAL_HEAD"' scripts/propagate.sh \
+            || { echo "::error::the release tag no longer names \$LOCAL_HEAD — it is tagging implicit HEAD again (brik-llm#2948)"; exit 1; }
+
       # The guard reads `<headRefName><TAB><url>` lines. If the gh query in
       # open_prs_of drifts from that shape it silently matches nothing and the
       # duplicate returns looking exactly like a pass.
@@ -353,6 +372,14 @@ jobs:
         run: |
           shellcheck -e SC2148 scripts/lib/bump-pr-guard.sh
           shellcheck -e SC1091 scripts/lib/tests/test-bump-pr-guard.sh
+
+      - name: shellcheck — release-tag-guard
+        if: always() && steps.shellcheck.outcome == 'success'
+        # SC2148: sourced library, no shebang contract. SC1091: sourced at
+        # runtime. SC2329 + SC2317: the test's cleanup() runs via trap.
+        run: |
+          shellcheck -e SC2148 scripts/lib/release-tag-guard.sh
+          shellcheck -e SC1091,SC2329,SC2317 scripts/lib/tests/test-release-tag-guard.sh
 
       - name: shellcheck — gh-error-classify + claim libs
         if: always() && steps.shellcheck.outcome == 'success'
