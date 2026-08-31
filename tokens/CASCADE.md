@@ -28,11 +28,12 @@ renew-pms, brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
 4. `modes-borderwidth.css` — borderWidth mode overrides (`[data-mode-borderwidth="thin|bold"]`)
 5. `modes-spacing.css` — spacing density mode overrides (`[data-mode-spacing="compact|comfortable|spacious"]`) — auto-generated from `design-tokens/tokens-studio.json` via `npm run build:modes`
 6. `modes-typography.css` — typography heading-scale-variant overrides (`[data-mode-typography="compact|comfortable|spacious|expressive"]`) — auto-generated from `design-tokens/tokens-studio.json` via `npm run build:modes`
-7. `gap-fills.css` — manual tokens not yet in Figma
-8. `modes-elevation.css` — elevation depth mode overrides (`[data-mode-elevation="flat"]`) — auto-generated via `npm run build:modes`. **Concatenated after gap-fills.css, not with the other mode files**, because it overrides the `:root`-scoped `--shadow-*` tokens defined *in* gap-fills; its bare `[data-mode-elevation]` selector ties `:root` on specificity and must win by source order. Ships `flat` only — Figma source has no distinct `lifted`/`dramatic` values (see the mode-contracts table).
-9. `ratios.css` — `--aspect-*` tokens (dimensionless `<ratio>`, can't be a Figma Variable; BDS #486)
-10. `fluid-type.css` — `--display-fluid-*` clamp() tier (viewport-fluid marketing display type; can't be a Figma Variable; brik-bds#959)
-11. `animations.css` — shared keyframe library (`bds-spin`, `bds-pulse`, `bds-pop`, etc.) — required by any component CSS that references these names
+7. `modes-borderradius.css` — corner-radius mode overrides (`[data-mode-radius="sharp|round|pill"]`) — auto-generated via `npm run build:modes`. Note the attribute is `data-mode-radius` while the source collection is `border-radius`; overrides the semantic `--border-radius-{none,sm,md,lg}` (defined in figma-tokens.css above, so it lands with the other mode files).
+8. `gap-fills.css` — manual tokens not yet in Figma
+9. `modes-elevation.css` — elevation depth mode overrides (`[data-mode-elevation="flat"]`) — auto-generated via `npm run build:modes`. **Concatenated after gap-fills.css, not with the other mode files**, because it overrides the `:root`-scoped `--shadow-*` tokens defined *in* gap-fills; its bare `[data-mode-elevation]` selector ties `:root` on specificity and must win by source order. Ships `flat` only — Figma source has no distinct `lifted`/`dramatic` values (see the mode-contracts table).
+10. `ratios.css` — `--aspect-*` tokens (dimensionless `<ratio>`, can't be a Figma Variable; BDS #486)
+11. `fluid-type.css` — `--display-fluid-*` clamp() tier (viewport-fluid marketing display type; can't be a Figma Variable; brik-bds#959)
+12. `animations.css` — shared keyframe library (`bds-spin`, `bds-pulse`, `bds-pop`, etc.) — required by any component CSS that references these names
 
 **Not bundled:** `bridge.css` (opt-in via separate export), `font-audit.css`
 (Storybook-only), `motion-classes.css` (opt-in utility classes — consumers import
@@ -58,7 +59,7 @@ No consumer should toggle a `.dark` class — the attribute is the only switch.
 |---|---|---|---|---|
 | `borderwidth` | `data-mode-borderwidth` | `default` | `thin`, `bold` | ✅ `modes-borderwidth.css` |
 | `spacing` | `data-mode-spacing` | `default` | `compact`, `comfortable`, `spacious` | ✅ `modes-spacing.css` |
-| `border-radius` | `data-mode-radius` | `soft` | `sharp`, `round`, `pill` | ⏳ pending #340 |
+| `border-radius` | `data-mode-radius` | `soft` | `sharp`, `round`, `pill` | ✅ `modes-borderradius.css` (attr `data-mode-radius`; source collection `border-radius`) |
 | `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious`, `expressive` | ✅ `modes-typography.css` (heading-* only; display-* mode-invariant) |
 | `elevation` | `data-mode-elevation` | `subtle` | `flat` (wired), `lifted`/`dramatic` (pending Figma source) | 🟡 `modes-elevation.css` — `flat`→`--shadow-*: 0px 0px 0px 0px transparent` (a zeroed shorthand, not `none`: overriding a box-shadow token with the `none` keyword gives one name two value types, which ADR-033 § 5 rejects). Figma's `lifted`/`dramatic` slices are byte-identical to `subtle` and carry no spread/color, so they emit nothing until authored (see #2243) |
 | `breakpoint` | `data-mode-breakpoint` | `default` | `compact`, `comfortable` | ⏳ pending #340 |
