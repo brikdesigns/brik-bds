@@ -18,6 +18,7 @@ import {
   DEFAULT_ICON_WEIGHT,
   IconWeightContext,
 } from '../ui/Icon/icon-weight';
+import { offlineGapWarning } from '../ui/Icon/offline-coverage';
 
 /**
  * Theme context value interface
@@ -216,6 +217,17 @@ export function ThemeProvider({
       saveThemeToStorage(theme);
     }
   }, [theme, persist]);
+
+  // Dev-only offline-glyph gate (#2253). The bundled subset carries only
+  // `regular`/`bold` glyphs for the general icon set, so any other default
+  // weight sends its icons to the Iconify CDN at render — defeating <Icon>'s
+  // offline-first guarantee. Warn once at mount so a client catches it in dev,
+  // not in a production network trace. See Icon.mdx § Notes (Offline weights).
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') return;
+    const warning = offlineGapWarning(defaultIconWeight);
+    if (warning) console.warn(warning);
+  }, [defaultIconWeight]);
 
   // Theme setter
   const setThemeNumber = useCallback((num: ThemeNumber) => {
