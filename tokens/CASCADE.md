@@ -62,8 +62,16 @@ No consumer should toggle a `.dark` class — the attribute is the only switch.
 | `border-radius` | `data-mode-radius` | `soft` | `sharp`, `round`, `pill` | ✅ `modes-borderradius.css` (attr `data-mode-radius`; source collection `border-radius`) |
 | `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious`, `expressive` | ✅ `modes-typography.css` (heading-* only; display-* mode-invariant) |
 | `elevation` | `data-mode-elevation` | `subtle` | `flat` (wired), `lifted`/`dramatic` (pending Figma source) | 🟡 `modes-elevation.css` — `flat`→`--shadow-*: 0px 0px 0px 0px transparent` (a zeroed shorthand, not `none`: overriding a box-shadow token with the `none` keyword gives one name two value types, which ADR-033 § 5 rejects). Figma's `lifted`/`dramatic` slices are byte-identical to `subtle` and carry no spread/color, so they emit nothing until authored (see #2243) |
-| `breakpoint` | `data-mode-breakpoint` | `default` | `compact`, `comfortable` | ⏳ pending #340 |
+| `breakpoint` | `data-mode-breakpoint` | `default` | `compact`, `comfortable` | 🚫 excluded (#931) — never wired; `var()` can't parametrize `@media`/`@container` conditions (see § Breakpoint is intentionally excluded) |
 | `icon` | `data-mode-icon` | `solid` | `outline` | ⏳ pending #340 |
+
+### Breakpoint is intentionally excluded (#931)
+
+`breakpoint` (`default` / `compact` / `comfortable`) is the one multi-modal Figma collection that is **deliberately not wired** to `[data-mode-*]`, and never will be. The other axes work because a CSS custom property can be *consumed* anywhere a value is legal — but a responsive breakpoint's whole job is to drive a **condition** (`@media (min-width: …)` / `@container (…)`), and `var()` is **invalid inside a media/container query condition** (custom properties resolve only in declaration values). An emitted `[data-mode-breakpoint]` block of vars would therefore be inert for the responsive switching the collection is named for — a decorative "looks-wired-isn't" collection, exactly the gap #340 exists to close.
+
+Where breakpoint values *would* be usable — computed gutters, JS-driven layout reading `getComputedStyle`, `@container` **style** queries — is not what a breakpoint mode means, so the collection routes to none of them. Responsive behavior in BDS stays in authored `@media`/container rules and component logic, not a mode block.
+
+The exclusion is enforced: `breakpoint` is named in the `EXCLUDED` map in `scripts/lint-mode-emission-coverage.mjs` (the #932 source↔emitted guard), so it is neither flagged as dormant nor allowed to silently acquire an emission.
 
 ### Setting a mode
 
