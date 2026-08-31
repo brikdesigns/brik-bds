@@ -30,7 +30,7 @@ renew-pms, brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
 6. `modes-typography.css` — typography heading-scale-variant overrides (`[data-mode-typography="compact|comfortable|spacious|expressive"]`) — auto-generated from `design-tokens/tokens-studio.json` via `npm run build:modes`
 7. `modes-borderradius.css` — corner-radius mode overrides (`[data-mode-radius="sharp|round|pill"]`) — auto-generated via `npm run build:modes`. Note the attribute is `data-mode-radius` while the source collection is `border-radius`; overrides the semantic `--border-radius-{none,sm,md,lg}` (defined in figma-tokens.css above, so it lands with the other mode files).
 8. `gap-fills.css` — manual tokens not yet in Figma
-9. `modes-elevation.css` — elevation depth mode overrides (`[data-mode-elevation="flat"]`) — auto-generated via `npm run build:modes`. **Concatenated after gap-fills.css, not with the other mode files**, because it overrides the `:root`-scoped `--shadow-*` tokens defined *in* gap-fills; its bare `[data-mode-elevation]` selector ties `:root` on specificity and must win by source order. Ships `flat` only — Figma source has no distinct `lifted`/`dramatic` values (see the mode-contracts table).
+9. `modes-elevation.css` — elevation depth mode overrides (`[data-mode-elevation="flat"]`) — auto-generated via `npm run build:modes`. **Concatenated after gap-fills.css, not with the other mode files**, because it overrides the `:root`-scoped `--shadow-*` tokens defined *in* gap-fills; its bare `[data-mode-elevation]` selector ties `:root` on specificity and must win by source order. Ships `flat`, `lifted`, and `dramatic` (#2243; `subtle` is the default and needs no attribute — see the mode-contracts table).
 10. `ratios.css` — `--aspect-*` tokens (dimensionless `<ratio>`, can't be a Figma Variable; BDS #486)
 11. `fluid-type.css` — `--display-fluid-*` clamp() tier (viewport-fluid marketing display type; can't be a Figma Variable; brik-bds#959)
 12. `animations.css` — shared keyframe library (`bds-spin`, `bds-pulse`, `bds-pop`, etc.) — required by any component CSS that references these names
@@ -62,8 +62,16 @@ No consumer should toggle a `.dark` class — the attribute is the only switch.
 | `border-radius` | `data-mode-radius` | `soft` | `sharp`, `round`, `pill` | ✅ `modes-borderradius.css` (attr `data-mode-radius`; source collection `border-radius`) |
 | `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious`, `expressive` | ✅ `modes-typography.css` (heading-* only; display-* mode-invariant) |
 | `elevation` | `data-mode-elevation` | `subtle` | `flat`, `lifted`, `dramatic` | ✅ `modes-elevation.css` — `flat`→`--shadow-*: 0px 0px 0px 0px transparent` (a zeroed shorthand, not `none`: overriding a box-shadow token with the `none` keyword gives one name two value types, which ADR-033 § 5 rejects). `lifted`/`dramatic` compose the full `0px y blur spread rgba(0,0,0,α)` from the elevation collection's y-offset + blur-radius + spread + opacity sub-tokens (#2243; x is invariantly 0, color always black). `subtle` is the default — uses the hand-authored `--shadow-*` in gap-fills.css |
-| `breakpoint` | `data-mode-breakpoint` | `default` | `compact`, `comfortable` | ⏳ pending #340 |
+| `breakpoint` | `data-mode-breakpoint` | `default` | `compact`, `comfortable` | 🚫 excluded (#931) — never wired; `var()` can't parametrize `@media`/`@container` conditions (see § Breakpoint is intentionally excluded) |
 | `icon` | `data-mode-icon` | `solid` | `outline` | ⏳ pending #340 |
+
+### Breakpoint is intentionally excluded (#931)
+
+`breakpoint` (`default` / `compact` / `comfortable`) is the one multi-modal Figma collection that is **deliberately not wired** to `[data-mode-*]`, and never will be. The other axes work because a CSS custom property can be *consumed* anywhere a value is legal — but a responsive breakpoint's whole job is to drive a **condition** (`@media (min-width: …)` / `@container (…)`), and `var()` is **invalid inside a media/container query condition** (custom properties resolve only in declaration values). An emitted `[data-mode-breakpoint]` block of vars would therefore be inert for the responsive switching the collection is named for — a decorative "looks-wired-isn't" collection, exactly the gap #340 exists to close.
+
+Where breakpoint values *would* be usable — computed gutters, JS-driven layout reading `getComputedStyle`, `@container` **style** queries — is not what a breakpoint mode means, so the collection routes to none of them. Responsive behavior in BDS stays in authored `@media`/container rules and component logic, not a mode block.
+
+The exclusion is enforced: `breakpoint` is named in the `EXCLUDED` map in `scripts/lint-mode-emission-coverage.mjs` (the #932 source↔emitted guard), so it is neither flagged as dormant nor allowed to silently acquire an emission.
 
 ### Setting a mode
 

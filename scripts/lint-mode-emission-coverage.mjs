@@ -48,7 +48,7 @@ const WIRED_LEGACY = {
 
 // Intentionally-unwired multi-modal collections — named, never silent (AC bullet 2).
 const EXCLUDED = {
-  breakpoint: 'pending the #931 research spike — undecided whether breakpoint fits the data-mode paradigm',
+  breakpoint: 'excluded (#931): var() is invalid inside @media/@container conditions, so a [data-mode-breakpoint] var block would be inert for responsive switching — the "looks-wired-isn\'t" gap #340 exists to close. See tokens/CASCADE.md § Breakpoint is intentionally excluded',
   color: 'light/dark ships via the [data-theme="dark"] cascade (figma-tokens-dark.css), not a [data-mode-*] block',
 };
 
