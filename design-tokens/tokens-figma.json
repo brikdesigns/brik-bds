@@ -1778,6 +1778,42 @@
       "$type": "dimension"
     }
   },
+  "spread": {
+    "sm": {
+      "$value": 0,
+      "$type": "number"
+    },
+    "md": {
+      "$value": 0,
+      "$type": "number"
+    },
+    "lg": {
+      "$value": 0,
+      "$type": "number"
+    },
+    "xl": {
+      "$value": 0,
+      "$type": "number"
+    }
+  },
+  "opacity": {
+    "sm": {
+      "$value": 0.08,
+      "$type": "number"
+    },
+    "md": {
+      "$value": 0.1,
+      "$type": "number"
+    },
+    "lg": {
+      "$value": 0.1,
+      "$type": "number"
+    },
+    "xl": {
+      "$value": 0.12,
+      "$type": "number"
+    }
+  },
   "body": {
     "xs": {
       "$value": "{font-size.50}",

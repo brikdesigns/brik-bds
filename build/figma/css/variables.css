@@ -335,6 +335,14 @@
   --breakpoint-web: 1200px;
   --breakpoint-tablet: 768px;
   --breakpoint-mobile: 320px;
+  --spread-sm: 0;
+  --spread-md: 0;
+  --spread-lg: 0;
+  --spread-xl: 0;
+  --opacity-sm: 0.08;
+  --opacity-md: 0.1;
+  --opacity-lg: 0.1;
+  --opacity-xl: 0.12;
   --color-grayscale-darkest: var(--color-grayscale-950); /** DEPRECATED — use color.grayscale.950 (brik-bds#1739) */
   --color-grayscale-darker: var(--color-grayscale-800); /** DEPRECATED — use color.grayscale.800 (brik-bds#1739) */
   --color-grayscale-dark: var(--color-grayscale-700); /** DEPRECATED — use color.grayscale.700 (brik-bds#1739) */
