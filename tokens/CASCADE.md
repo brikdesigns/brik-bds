@@ -86,6 +86,8 @@ No consumer should toggle a `.dark` class — the attribute is the only switch.
 4. Update this table.
 5. Add a Storybook density story showing the mode in action.
 
+`npm run lint-mode-emission-coverage` (in the `tokens-gate` CI job, #932) fails the build if a multi-modal Figma collection has no emitted `[data-mode-*]` block — so a new dormant collection, or a dropped emission, can't slip through. Intentionally-unwired collections (e.g. `breakpoint`) must be named in that script's `EXCLUDED` map with a reason.
+
 ## Decision tree — where to put a change
 
 | You want to… | File |

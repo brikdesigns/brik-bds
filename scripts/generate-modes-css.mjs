@@ -47,7 +47,7 @@ const TOKENS_DIR = path.join(ROOT, 'tokens');
 // `tokenPrefix`: how to format the CSS variable name. '<group>-<name>' yields
 //   --padding-xl / --gap-md.
 
-const COLLECTIONS = {
+export const COLLECTIONS = {
   spacing: {
     groups: ['padding', 'gap'],
     defaultMode: 'default',
@@ -358,4 +358,8 @@ function main() {
   console.log('Done.');
 }
 
-main();
+// Only run when invoked directly (node scripts/generate-modes-css.mjs), NOT when
+// imported — the mode-emission coverage guard imports COLLECTIONS to know which
+// collections are wired without regenerating any files.
+const isCliEntry = path.resolve(fileURLToPath(import.meta.url)) === path.resolve(process.argv[1] ?? '');
+if (isCliEntry) main();

@@ -163,6 +163,9 @@ jobs:
             'docs-site/content/docs/primitives/token-anatomy.mdx' \
             'sd.config.tokens-studio.mjs' \
             'scripts/build-dist-tokens.js' \
+            'scripts/generate-modes-css.mjs' \
+            'scripts/lint-mode-emission-coverage.mjs' \
+            'scripts/__tests__/lint-mode-emission-coverage.test.mjs' \
             'scripts/flatten-tokens-studio.js' \
             'scripts/generate-color-ramps.mjs' \
             'scripts/gen-widget-tokens.mjs' \
@@ -406,6 +409,16 @@ jobs:
         if: always() && steps.dist.outcome == 'success'
         run: npm run lint-token-shadowing
 
+      # ─── mode-emission-coverage (#932, parent #340) ─────────────────────────
+      #
+      # Fails when a multi-modal Figma collection has no emitted [data-mode-*]
+      # block — the exact drift #340 hit, where spacing/typography/radius/elevation
+      # sat dormant at their default mode for months because nothing failed. Reads
+      # the built dist/tokens.css, so it needs the dist build above.
+      - name: Mode-emission coverage check
+        if: always() && steps.dist.outcome == 'success'
+        run: npm run lint-mode-emission-coverage
+
       # ─── widget-tokens-check ────────────────────────────────────────────────
       #
       # The BrikDevBar widgets inline their token values; this keeps the inlined
@@ -433,7 +446,8 @@ jobs:
             scripts/__tests__/lint-token-purpose-slots.test.mjs \
             scripts/__tests__/lint-token-self-reference.test.mjs \
             scripts/__tests__/lint-token-tiers.test.mjs \
-            scripts/__tests__/lint-token-shadowing.test.mjs
+            scripts/__tests__/lint-token-shadowing.test.mjs \
+            scripts/__tests__/lint-mode-emission-coverage.test.mjs
 
   # ─── The branch-protection check ────────────────────────────────────────────
   #
