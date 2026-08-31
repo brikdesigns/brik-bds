@@ -270,10 +270,9 @@ fi
 # scripts/__tests__/test-pr-labels.sh). This block only supplies it with live
 # data — the repo's label list and each referenced issue's labels.
 #
-# One deliberate divergence from the portal: `lib/issue-links.sh` resolves bare
-# `#N` only (`issue_refs_in_subjects` strips to digits), so there is no
-# cross-repo `owner/repo#N` form to split here. If that lib ever grows one, port
-# the portal's split too or cross-repo refs will silently inherit nothing.
+# That divergence from the portal is CLOSED (brik-llm#2450). `lib/issue-links.sh`
+# now carries the `owner/repo` prefix, so the split this comment used to defer
+# is ported below — the portal's own note is the one to read on why it matters.
 LABELS_TO_ADD=()
 
 # Fetched once, then grepped as a VARIABLE — never `gh … | grep -q`; see the
@@ -307,13 +306,26 @@ fi
 
 # Inherit from the issues this PR is for, read off the rendered $ISSUE_LINKS
 # block so the labels and the linkage can never disagree.
-for ref_num in $(refs_from_issue_links "$ISSUE_LINKS"); do
-  ISSUE_LABELS=$(gh issue view "$ref_num" --json labels --jq '.labels[].name' 2>/dev/null || true)
+#
+# A ref carries an optional `owner/repo` prefix, and `gh issue view` takes a
+# NUMBER plus `--repo`, not `owner/repo#N` — so a cross-repo ref is split here.
+# Handing it over whole fails, and the failure is swallowed by `2>/dev/null`:
+# no labels inherited, and the area gate below then blames the linked issue for
+# not carrying an area label it does have. Same split the portal does
+# (brik-client-portal/scripts/pr-task.sh § "A ref carries an optional prefix").
+for ref in $(refs_from_issue_links "$ISSUE_LINKS"); do
+  ref_num=$(issue_ref_number "$ref")
+  ref_repo=$(issue_ref_repo "$ref")
+  if [ -n "$ref_repo" ]; then
+    ISSUE_LABELS=$(gh issue view "$ref_num" --repo "$ref_repo" --json labels --jq '.labels[].name' 2>/dev/null || true)
+  else
+    ISSUE_LABELS=$(gh issue view "$ref_num" --json labels --jq '.labels[].name' 2>/dev/null || true)
+  fi
   for l in $(inheritable_labels "$ISSUE_LABELS"); do
     if label_known "$l" "$REPO_LABELS"; then
       LABELS_TO_ADD+=("$l")
     else
-      echo -e "${YELLOW}⚠  #${ref_num} carries '${l}', which does not exist in this repo — skipped.${NC}" >&2
+      echo -e "${YELLOW}⚠  ${ref} carries '${l}', which does not exist in this repo — skipped.${NC}" >&2
     fi
   done
 done

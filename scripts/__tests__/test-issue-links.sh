@@ -50,9 +50,9 @@ assert_not() { local label="$1"; shift; if "$@"; then FAIL=$((FAIL+1)); FAILED_C
 flat() { paste -sd, -; }
 
 echo "── issue_refs_in_subjects ──"
-assert_eq "a trailing (#N) is the linked issue" "1845" \
+assert_eq "a trailing (#N) is the linked issue" "#1845" \
   "$(issue_refs_in_subjects 'feat(tokens): mint --letter-spacing-wide (#1845)' | flat)"
-assert_eq "several subjects yield several refs" "1719,1808" \
+assert_eq "several subjects yield several refs" "#1719,#1808" \
   "$(issue_refs_in_subjects 'feat(tokens): reconcile foundations (#1719)
 feat(tokens): fail the build on shadowed declarations (#1808)' | flat)"
 assert_eq "a subject with no ref yields nothing" "" \
@@ -62,14 +62,14 @@ assert_eq "a bare # with no digits is not a ref" "" \
   "$(issue_refs_in_subjects 'docs: explain the #hashtag convention' | flat)"
 
 echo "── issue_refs_closed_in_bodies ──"
-assert_eq "a closing keyword resolves" "1836" \
+assert_eq "a closing keyword resolves" "#1836" \
   "$(issue_refs_closed_in_bodies 'Closes #1836' | flat)"
-assert_eq "every conjugation resolves" "1,2,3,4,5,6,7,8,9" \
+assert_eq "every conjugation resolves" "#1,#2,#3,#4,#5,#6,#7,#8,#9" \
   "$(issue_refs_closed_in_bodies 'close #1 closes #2 closed #3 fix #4 fixes #5 fixed #6 resolve #7 resolves #8 resolved #9' | flat)"
-assert_eq "the colon form resolves" "123" "$(issue_refs_closed_in_bodies 'Closes: #123' | flat)"
-assert_eq "no space after the keyword still resolves" "123" \
+assert_eq "the colon form resolves" "#123" "$(issue_refs_closed_in_bodies 'Closes: #123' | flat)"
+assert_eq "no space after the keyword still resolves" "#123" \
   "$(issue_refs_closed_in_bodies 'closes#123' | flat)"
-assert_eq "case is not an escape" "123" "$(issue_refs_closed_in_bodies 'CLOSES #123' | flat)"
+assert_eq "case is not an escape" "#123" "$(issue_refs_closed_in_bodies 'CLOSES #123' | flat)"
 # THE ASSERTION THAT MATTERS (2): an unbounded pattern matches `fixes` inside
 # `prefixes` and closes an issue the line never referred to.
 assert_eq "'prefixes #12' resolves NOTHING — the keyword is inside a word" "" \
@@ -206,6 +206,183 @@ GATE="$(cd "$(dirname "$0")/../.." && pwd)/.github/workflows/pr-issue-link-gate.
 assert_eq "MIN_REASON_CHARS in the gate matches ISSUE_LINK_MIN_REASON_CHARS here" \
   "$ISSUE_LINK_MIN_REASON_CHARS" \
   "$(grep -oE 'MIN_REASON_CHARS = [0-9]+' "$GATE" | grep -oE '[0-9]+' | head -1)"
+
+echo "── the grammars agree on a shared corpus (brik-llm#2450) ──"
+# THIS IS THE ACTUAL FIX; the grammar is the symptom.
+#
+# The defect was never one missing keyword. It was that two regexes read the
+# same PR bodies with nobody asserting they agreed, so the local resolver could
+# be STRICTER than the CI gate it exists to pre-empt — and the way that surfaced
+# was pr-task.sh refusing to open PRs the gate would have passed
+# (`Part of brikdesigns/brik-llm#2442`, hit three times landing #2442).
+#
+# One direction only, deliberately. The gate answers "is this PR linked at all";
+# the resolver additionally decides Closes vs Refs, and it is allowed to be
+# CONSERVATIVE about that — a body the gate accepts must resolve to SOMETHING,
+# but the resolver may still route it to `Refs` where the gate is indifferent.
+# The failing direction is the one asserted: gate accepts, resolver resolves
+# nothing → a PR that cannot be opened by the sanctioned path.
+#
+# The gate's regex is EXTRACTED from the workflow, never restated here. A
+# restated copy is a third spelling of the same grammar, which is the drift this
+# test exists to prevent.
+# ── Layer 1: the grammars are the SAME GRAMMAR, asserted without an interpreter.
+#
+# The contracts-gate job that runs this suite is deliberately "a fast bash suite
+# plus shellcheck" with no `setup-node` step (contracts-gate.yml § ONE work job),
+# so the corpus layer below must be allowed to skip. This layer never skips: it
+# extracts the gate's three literals and normalises JS regex spelling to ERE,
+# then asserts the result IS what the lib holds. If the gate grows a keyword,
+# this fails and prints the new spelling.
+#
+# The translation is mechanical and total for the constructs these three
+# literals use — no other JS regex feature appears in them, and a new one would
+# surface here as a mismatch rather than as a silent pass.
+js_to_ere() {
+  sed -e 's/(?:/(/g' \
+      -e 's/\[\\w\.-\]/[A-Za-z0-9._-]/g' \
+      -e 's|\\/|/|g' \
+      -e 's/\\d/[0-9]/g' \
+      -e 's/\\s/[[:space:]]/g'
+}
+grab_literal() {
+  grep -oE "const $1 = String\.raw\`[^\`]*\`" "$GATE" \
+    | sed -e "s/^const $1 = String\.raw\`//" -e 's/`$//'
+}
+assert_eq "the gate's CLOSING is this lib's _IL_CLOSING" \
+  "$_IL_CLOSING" "$(grab_literal CLOSING | js_to_ere)"
+assert_eq "the gate's LINKING is this lib's _IL_LINKING" \
+  "$_IL_LINKING" "$(grab_literal LINKING | js_to_ere)"
+assert_eq "the gate's REF is this lib's _IL_REF" \
+  "$_IL_REF" "$(grab_literal REF | js_to_ere)"
+
+# ── Layer 2: the two really do agree on real bodies. Skipped without node.
+if command -v node >/dev/null 2>&1 && [ -f "$GATE" ]; then
+  # A body the gate ACCEPTS. Each must resolve to at least one link line.
+  GATE_ACCEPTS=(
+    'Closes #1836'
+    'closes#123'
+    'Closes: #123'
+    'CLOSES #123'
+    'Fixes #7'
+    'resolved #9'
+    'Part of brikdesigns/brik-llm#2442'
+    'Closes brikdesigns/brik-llm#2442'
+    'Refs brikdesigns/brik-bds#1921'
+    'Refs #99'
+    'Related to #77'
+    'Partial for #55'
+    'Closes GH-2442'
+    'Part of GH-2442'
+    '#123 stays open'
+  )
+  # A body the gate REJECTS. Each must resolve to nothing, or the script opens a
+  # PR its own CI check then fails.
+  GATE_REJECTS=(
+    'Renames prefixes #12'
+    'Recurring pattern, see also #1434 and #1437.'
+    'The suffixed #12 form'
+    'See #123'
+    'No reference at all'
+  )
+
+  gate_accepts() {
+    # shellcheck disable=SC2016  # the JS must reach node unexpanded by bash
+    GATE_FILE="$GATE" BODY="$1" node -e '
+      const fs = require("fs");
+      const src = fs.readFileSync(process.env.GATE_FILE, "utf8");
+      // Pull the three String.raw literals the gate builds ISSUE_LINK from.
+      const grab = (name) => {
+        const m = src.match(new RegExp("const\\s+" + name + "\\s*=\\s*String\\.raw`([^`]*)`"));
+        if (!m) { console.error("could not extract " + name + " from the gate"); process.exit(2); }
+        return m[1];
+      };
+      const CLOSING = grab("CLOSING"), LINKING = grab("LINKING"), REF = grab("REF");
+      const ISSUE_LINK = new RegExp(
+        String.raw`\b(?:${CLOSING}|${LINKING})\b:?\s*(?:${REF})`, "i");
+      const STAYS_OPEN = /#\d+\s+stays\s+open\b/i;
+      const body = process.env.BODY;
+      process.stdout.write((ISSUE_LINK.test(body) || STAYS_OPEN.test(body)) ? "yes" : "no");
+    '
+  }
+
+  for body in "${GATE_ACCEPTS[@]}"; do
+    verdict=$(gate_accepts "$body") || verdict="EXTRACT-FAILED"
+    resolved=$(build_issue_links '' "$body")
+    if [ "$verdict" != "yes" ]; then
+      assert_eq "corpus is honest — the gate really accepts [$body]" "yes" "$verdict"
+    else
+      assert_ok "gate accepts, resolver resolves: [$body]" test -n "$resolved"
+    fi
+  done
+
+  for body in "${GATE_REJECTS[@]}"; do
+    verdict=$(gate_accepts "$body") || verdict="EXTRACT-FAILED"
+    resolved=$(build_issue_links '' "$body")
+    if [ "$verdict" != "no" ]; then
+      assert_eq "corpus is honest — the gate really rejects [$body]" "no" "$verdict"
+    else
+      assert_eq "gate rejects, resolver resolves nothing: [$body]" "" "$resolved"
+    fi
+  done
+else
+  # Not a failure: layer 1 above already pinned the grammar with no interpreter,
+  # and reddening a deliberately node-free job over a missing node would be the
+  # cry-wolf failure the gates in this repo keep having to un-learn.
+  echo "  ~ node unavailable — corpus layer skipped; layer 1 still asserted the grammar" >&2
+fi
+
+echo "── cross-repo refs keep their prefix (brik-llm#2450) ──"
+# Stripping the prefix emits a link to THIS repo's issue of that number — a
+# different issue, and the mistake stays invisible until the numbering reaches
+# it. `fix(x): thing (brikdesigns/brik-llm#2442)` used to render `Refs #2442`.
+assert_eq "a cross-repo subject ref is not collapsed to a local one" \
+  "Refs brikdesigns/brik-llm#2442" \
+  "$(build_issue_links 'fix(x): thing (brikdesigns/brik-llm#2442)' '' | tr -d '\n')"
+assert_eq "a cross-repo closing ref keeps its prefix" \
+  "Closes brikdesigns/brik-llm#2442" \
+  "$(build_issue_links 'fix(x): thing' 'Closes brikdesigns/brik-llm#2442' | tr -d '\n')"
+assert_eq "a non-closing form never becomes Closes" \
+  "Refs brikdesigns/brik-llm#2442" \
+  "$(build_issue_links 'fix(x): thing' 'Part of brikdesigns/brik-llm#2442' | tr -d '\n')"
+assert_eq "the GH-N form resolves" "Closes GH-2442" \
+  "$(build_issue_links 'fix(x): thing' 'Closes GH-2442' | tr -d '\n')"
+
+echo "── a QUOTED linking keyword is not a directive (brik-llm#2450) ──"
+# The commit that added the linking forms tripped this on itself: its body
+# quotes the form it fixes as an example, and an unanchored scan emitted a link
+# to an issue the PR had nothing to do with. Any commit writing ABOUT issue
+# linking — a postmortem, a doc fix, this lib's own changes — hits it.
+# shellcheck disable=SC2016  # backticks are the fixture, not a substitution
+assert_eq "a linking keyword quoted mid-prose resolves nothing" "" \
+  "$(build_issue_links 'fix: x' '`Part of brikdesigns/brik-llm#2442` is the canonical form.' | flat)"
+assert_eq "prose mentioning the form inline resolves nothing" "" \
+  "$(build_issue_links 'fix: x' 'Two PRs used Part of #2442 and took the hatch.' | flat)"
+assert_eq "a real trailer on its own line still resolves" \
+  "Refs brikdesigns/brik-llm#2442" \
+  "$(build_issue_links 'fix: x' 'Part of brikdesigns/brik-llm#2442' | flat)"
+assert_eq "an indented trailer still resolves" "Refs #42" \
+  "$(build_issue_links 'fix: x' '    Refs #42' | flat)"
+assert_eq "a trailer after prose lines still resolves" "Refs #42" \
+  "$(build_issue_links 'fix: x' 'Some explanation first.
+
+Refs #42' | flat)"
+
+echo "── the label block can split what the resolver emits ──"
+# pr-task.sh feeds these refs to `gh issue view`, which takes a NUMBER plus
+# `--repo` — never `owner/repo#N`. A split that mishandles a shape inherits no
+# labels, and the area gate then blames the issue for a label it does carry.
+# shellcheck source=/dev/null
+source "$(cd "$(dirname "$0")/.." && pwd)/lib/pr-labels.sh"
+assert_eq "refs_from_issue_links keeps whole refs" \
+  "#7,GH-9,brikdesigns/brik-llm#2442" \
+  "$(refs_from_issue_links "$(printf 'Closes brikdesigns/brik-llm#2442\nRefs #7\nRefs GH-9\n')" | flat)"
+assert_eq "number splits out of a cross-repo ref" "2442" "$(issue_ref_number 'brikdesigns/brik-llm#2442')"
+assert_eq "number splits out of a local ref"      "7"    "$(issue_ref_number '#7')"
+assert_eq "number splits out of the GH-N form"    "9"    "$(issue_ref_number 'GH-9')"
+assert_eq "repo splits out of a cross-repo ref" "brikdesigns/brik-llm" "$(issue_ref_repo 'brikdesigns/brik-llm#2442')"
+assert_eq "a local ref has no repo"    "" "$(issue_ref_repo '#7')"
+assert_eq "the GH-N form has no repo"  "" "$(issue_ref_repo 'GH-9')"
 
 echo ""
 if [ "$FAIL" -gt 0 ]; then
