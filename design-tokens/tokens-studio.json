@@ -4668,6 +4668,82 @@
         "$type": "dimension",
         "$value": 0
       }
+    },
+    "spread": {
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      },
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      }
+    },
+    "opacity": {
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      },
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      }
     }
   },
   "elevation/subtle": {
@@ -4746,6 +4822,82 @@
         "$type": "dimension",
         "$value": 12
       }
+    },
+    "spread": {
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      },
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      }
+    },
+    "opacity": {
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0.08
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0.1
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0.1
+      },
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0.12
+      }
     }
   },
   "elevation/lifted": {
@@ -4757,7 +4909,7 @@
           ]
         },
         "$type": "dimension",
-        "$value": 8
+        "$value": 6
       },
       "md": {
         "$extensions": {
@@ -4766,7 +4918,7 @@
           ]
         },
         "$type": "dimension",
-        "$value": 12
+        "$value": 16
       },
       "lg": {
         "$extensions": {
@@ -4775,7 +4927,7 @@
           ]
         },
         "$type": "dimension",
-        "$value": 14
+        "$value": 24
       },
       "xl": {
         "$extensions": {
@@ -4784,7 +4936,7 @@
           ]
         },
         "$type": "dimension",
-        "$value": 16
+        "$value": 32
       }
     },
     "box-shadow": {
@@ -4804,7 +4956,7 @@
           ]
         },
         "$type": "dimension",
-        "$value": 8
+        "$value": 6
       },
       "lg": {
         "$extensions": {
@@ -4813,7 +4965,7 @@
           ]
         },
         "$type": "dimension",
-        "$value": 10
+        "$value": 8
       },
       "xl": {
         "$extensions": {
@@ -4823,6 +4975,82 @@
         },
         "$type": "dimension",
         "$value": 12
+      }
+    },
+    "spread": {
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": -1
+      },
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 2
+      }
+    },
+    "opacity": {
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0.1
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0.16
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0.16
+      },
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0.24
       }
     }
   },
@@ -4835,7 +5063,7 @@
           ]
         },
         "$type": "dimension",
-        "$value": 8
+        "$value": 12
       },
       "md": {
         "$extensions": {
@@ -4844,7 +5072,7 @@
           ]
         },
         "$type": "dimension",
-        "$value": 12
+        "$value": 28
       },
       "lg": {
         "$extensions": {
@@ -4853,7 +5081,7 @@
           ]
         },
         "$type": "dimension",
-        "$value": 14
+        "$value": 40
       },
       "xl": {
         "$extensions": {
@@ -4862,7 +5090,7 @@
           ]
         },
         "$type": "dimension",
-        "$value": 16
+        "$value": 48
       }
     },
     "box-shadow": {
@@ -4873,7 +5101,7 @@
           ]
         },
         "$type": "dimension",
-        "$value": 2
+        "$value": 4
       },
       "md": {
         "$extensions": {
@@ -4882,7 +5110,7 @@
           ]
         },
         "$type": "dimension",
-        "$value": 8
+        "$value": 10
       },
       "lg": {
         "$extensions": {
@@ -4891,7 +5119,7 @@
           ]
         },
         "$type": "dimension",
-        "$value": 10
+        "$value": 16
       },
       "xl": {
         "$extensions": {
@@ -4900,7 +5128,83 @@
           ]
         },
         "$type": "dimension",
-        "$value": 12
+        "$value": 24
+      }
+    },
+    "spread": {
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": -2
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": -4
+      },
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0
+      }
+    },
+    "opacity": {
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0.16
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0.22
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0.24
+      },
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": 0.32
       }
     }
   },

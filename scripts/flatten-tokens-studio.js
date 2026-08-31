@@ -183,6 +183,18 @@ for (const [col, modes] of Object.entries(collections)) {
   }
 }
 
+// ─── Drop elevation-internal composite sub-tokens (#2243) ────────
+// The `spread` and `opacity` groups live in the elevation collection ONLY to be
+// composed into the --shadow-* shorthand by generate-modes-css.mjs, which reads
+// design-tokens/tokens-studio.json directly — never the flattened SD input. If
+// left in, Style Dictionary emits them to :root as bare --spread-* / --opacity-*
+// globals: a shadow alpha masquerading as a general --opacity-md token, which
+// the token-purpose slot lint rightly rejects. They are elevation-only (asserted
+// in tokens-studio.json), so deleting the top-level keys is safe.
+// (The older blur-radius / box-shadow groups still emit — grandfathered,
+// registered slots; excluding those is a separate cleanup.)
+for (const internal of ['spread', 'opacity']) delete merged[internal];
+
 // ─── Fix font-line-height: Tokens Studio exports % as px ─────
 // Figma stores line-height as percentages (110%, 125%, 150%) but
 // Tokens Studio exports them as "110px", "125px". Convert back.

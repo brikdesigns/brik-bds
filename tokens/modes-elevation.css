@@ -5,7 +5,7 @@
  * design-tokens/tokens-studio.json. Do not hand-edit — re-run
  * the generator after any Figma mode update.
  *
- * Elevation depth mode — overrides the composed --shadow-* box-shadow tokens. NOTE: Figma source (elevation/* in tokens-studio.json) carries only a y-offset + blur-radius per size — no x-offset, spread, or color — and the lifted/dramatic slices are byte-identical to the subtle default. So the only mode the source differentiates is `flat` (all-zero → a zeroed box-shadow shorthand). lifted/dramatic emit NOTHING until Figma authors distinct values incl. spread + color (tracked follow-up). See tokens/gap-fills.css for the hand-authored --shadow-* default composition this overrides.
+ * Elevation depth mode — overrides the composed --shadow-* box-shadow tokens. Figma source (elevation/* in tokens-studio.json) carries a y-offset (box-shadow group), blur-radius, spread, and opacity per size (#2243); x-offset is invariantly 0 and the color is always black, so only the alpha varies (rides the opacity sub-token). `flat` composes to a zeroed shorthand (no visible shadow); `lifted`/`dramatic` compose the full `0px y blur spread rgba(0,0,0,α)`. `subtle` is the default (no attribute) and uses the hand-authored --shadow-* in tokens/gap-fills.css, which this overrides.
  *
  * Selector contract: `[data-mode-elevation="flat|lifted|dramatic"]`
  * on :root (html). Default mode (subtle) requires no attribute (uses the
@@ -18,4 +18,20 @@
   --shadow-md: 0px 0px 0px 0px transparent;
   --shadow-lg: 0px 0px 0px 0px transparent;
   --shadow-xl: 0px 0px 0px 0px transparent;
+}
+
+/* ─── Lifted ────────────────────────────────────────── */
+[data-mode-elevation="lifted"] {
+  --shadow-sm: 0px 2px 6px 0px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0px 6px 16px 0px rgba(0, 0, 0, 0.16);
+  --shadow-lg: 0px 8px 24px -1px rgba(0, 0, 0, 0.16);
+  --shadow-xl: 0px 12px 32px 2px rgba(0, 0, 0, 0.24);
+}
+
+/* ─── Dramatic ────────────────────────────────────────── */
+[data-mode-elevation="dramatic"] {
+  --shadow-sm: 0px 4px 12px 0px rgba(0, 0, 0, 0.16);
+  --shadow-md: 0px 10px 28px -2px rgba(0, 0, 0, 0.22);
+  --shadow-lg: 0px 16px 40px -4px rgba(0, 0, 0, 0.24);
+  --shadow-xl: 0px 24px 48px 0px rgba(0, 0, 0, 0.32);
 }

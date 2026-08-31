@@ -120,13 +120,14 @@ export const COLLECTIONS = {
     tokenName: (size) => `--shadow-${size}`,
     description:
       'Elevation depth mode — overrides the composed --shadow-* box-shadow ' +
-      'tokens. NOTE: Figma source (elevation/* in tokens-studio.json) carries ' +
-      'only a y-offset + blur-radius per size — no x-offset, spread, or color — ' +
-      'and the lifted/dramatic slices are byte-identical to the subtle default. ' +
-      'So the only mode the source differentiates is `flat` (all-zero → a ' +
-      'zeroed box-shadow shorthand). lifted/dramatic emit NOTHING until Figma authors distinct values ' +
-      'incl. spread + color (tracked follow-up). See tokens/gap-fills.css for the ' +
-      'hand-authored --shadow-* default composition this overrides.',
+      'tokens. Figma source (elevation/* in tokens-studio.json) carries a ' +
+      'y-offset (box-shadow group), blur-radius, spread, and opacity per size ' +
+      '(#2243); x-offset is invariantly 0 and the color is always black, so only ' +
+      'the alpha varies (rides the opacity sub-token). `flat` composes to a ' +
+      'zeroed shorthand (no visible shadow); `lifted`/`dramatic` compose the ' +
+      'full `0px y blur spread rgba(0,0,0,α)`. `subtle` is the default (no ' +
+      'attribute) and uses the hand-authored --shadow-* in tokens/gap-fills.css, ' +
+      'which this overrides.',
   },
 };
 
@@ -253,21 +254,30 @@ function emitCollection(data, collectionKey) {
 // sub-tokens into a CSS box-shadow shorthand per size.
 
 function composeShadow(slice, size) {
-  // Figma elevation carries only a y-offset (`box-shadow` group) and a
-  // `blur-radius` per size — no x-offset, spread, or color. A shadow whose
-  // lengths are all 0 is absent → emit a fully-zeroed box-shadow SHORTHAND
-  // (`0px 0px 0px 0px transparent`), NOT the `none` keyword. The base
-  // --shadow-* in gap-fills.css is a box-shadow shorthand; overriding it with
-  // `none` gives one token name two value types, which ADR-033 § 5 rejects
-  // (naming-canon Rule 2 — a `bds-lint-ignore` does not rescue it). The
-  // all-zero shorthand renders identically (no visible shadow) while keeping
-  // one value type. Any non-zero mode can't be faithfully reproduced without
-  // the missing spread/color, so it returns null and is skipped — never
-  // fabricated.
-  const y = slice['box-shadow']?.[size]?.$value;
-  const blur = slice['blur-radius']?.[size]?.$value;
-  if (y === 0 && blur === 0) return '0px 0px 0px 0px transparent';
-  return null;
+  // Figma elevation carries a y-offset (`box-shadow` group), a `blur-radius`, a
+  // `spread`, and an `opacity` per size (#2243). The x-offset is invariantly 0
+  // and the shadow color is always black — matching the hand-authored --shadow-*
+  // in gap-fills.css, every one of which is `0px … rgba(0,0,0,α)` — so only the
+  // alpha varies and it rides the `opacity` sub-token.
+  const y = slice['box-shadow']?.[size]?.$value ?? 0;
+  const blur = slice['blur-radius']?.[size]?.$value ?? 0;
+  const spread = slice['spread']?.[size]?.$value ?? 0;
+  const opacity = slice['opacity']?.[size]?.$value ?? 0;
+
+  // A shadow with no length AND full transparency is absent → emit a
+  // fully-zeroed box-shadow SHORTHAND (`0px 0px 0px 0px transparent`), NOT the
+  // `none` keyword. The base --shadow-* in gap-fills.css is a box-shadow
+  // shorthand; overriding it with `none` gives one token name two value types,
+  // which ADR-033 § 5 rejects (naming-canon Rule 2 — a `bds-lint-ignore` does
+  // not rescue it). The all-zero shorthand renders identically (no visible
+  // shadow) while keeping one value type. This is the `flat` mode.
+  if (y === 0 && blur === 0 && spread === 0 && opacity === 0) {
+    return '0px 0px 0px 0px transparent';
+  }
+
+  // Round the alpha to kill Figma's float32 drift (0.08 → 0.0799999…).
+  const alpha = Math.round(opacity * 1000) / 1000;
+  return `0px ${y}px ${blur}px ${spread}px rgba(0, 0, 0, ${alpha})`;
 }
 
 function emitElevation(data, collectionKey) {
