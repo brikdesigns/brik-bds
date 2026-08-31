@@ -9,6 +9,29 @@ SectionHeader is the section intro that sits above a card grid, a CTA band, or a
 
 It exists so a section intro is one component with one measure, instead of a hand-rolled wrapper that caps text at 600px on one page and full-width on the next. Drop it inside the section's width-container ([Page Grid](/docs/build-standards/page-grid)) and it caps the text within — it never sets a band width itself.
 
+<ComparisonGrid
+  items={[
+    {
+      title: 'SectionHeader',
+      whenToUse: 'A centered (or start-anchored), measure-capped intro above a card grid, feature section, or CTA band.',
+      whenNotToUse: 'A card\'s or CTA\'s inner text with no measure (ContentBlock), or the page-top header (PageHeader).',
+      code: `<SectionHeader title="…" description="…" />`,
+    },
+    {
+      title: 'ContentBlock',
+      whenToUse: 'The inner title / subtitle / description / actions block, with no measure or centering of its own.',
+      whenNotToUse: 'You need the intro capped to a readable column and centered in its band — that\'s SectionHeader.',
+      code: `<ContentBlock title="…" description="…" />`,
+    },
+    {
+      title: 'PageHeader',
+      whenToUse: 'The page\'s own top-of-page header — title, badge, and page-level actions.',
+      whenNotToUse: 'A section intro inside the page body — that\'s SectionHeader.',
+      code: `<PageHeader title="…" />`,
+    },
+  ]}
+/>
+
 ## Use it for
 
 - The centered heading + supporting line above a card grid or feature section

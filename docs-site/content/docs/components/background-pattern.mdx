@@ -5,6 +5,29 @@ description: Decorative CSS-gradient texture layer for behind-content surfaces �
 
 BackgroundPattern renders a decorative dot-grid or line-grid CSS gradient, absolutely positioned (`inset: 0; z-index: 0`) and non-interactive (`pointer-events: none`). Place it as the first child of a `position: relative` container, with real content stacked above it.
 
+<ComparisonGrid
+  items={[
+    {
+      title: 'BackgroundPattern',
+      whenToUse: 'Subtle static texture behind content — no raster image, no motion, no reduced-motion handling.',
+      whenNotToUse: 'You want a living, moving background on a Premium surface — that\'s AmbientField.',
+      code: `<BackgroundPattern variant="dot-grid" />`,
+    },
+    {
+      title: 'AmbientField',
+      whenToUse: 'Premium-tier motion field (Lottie or canvas) that freezes to a poster frame under reduced motion.',
+      whenNotToUse: 'A non-Premium surface, or texture you want for free — that\'s BackgroundPattern.',
+      code: `<AmbientField src={fieldLoop} />`,
+    },
+    {
+      title: 'MediaBand',
+      whenToUse: 'The band container that hosts a decorative layer and owns the stacking + clip recipe.',
+      whenNotToUse: 'You just need the texture layer, not the surrounding band.',
+      code: `<MediaBand graphic={<BackgroundPattern fade />} />`,
+    },
+  ]}
+/>
+
 ## Use it for
 
 - Section or card backgrounds that need subtle texture without a raster image
