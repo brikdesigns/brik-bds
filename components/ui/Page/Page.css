@@ -29,7 +29,7 @@
 .bds-page--gap-md   { gap: var(--gap-md); }
 .bds-page--gap-lg   { gap: var(--gap-lg); }
 .bds-page--gap-xl   { gap: var(--gap-xl); }
-.bds-page--gap-huge { gap: var(--gap-huge); }
+.bds-page--gap-huge { gap: var(--gap-2xl); }
 
 /* ─── PageContent ──────────────────────────────────────────────── */
 
@@ -44,7 +44,7 @@
 .bds-page__content--gap-md   { gap: var(--gap-md); }
 .bds-page__content--gap-lg   { gap: var(--gap-lg); }
 .bds-page__content--gap-xl   { gap: var(--gap-xl); }
-.bds-page__content--gap-huge { gap: var(--gap-huge); }
+.bds-page__content--gap-huge { gap: var(--gap-2xl); }
 
 /* Per-region inset override. `none` breaks out of the page column to go
    full-bleed; sm/md/lg break out then re-apply an explicit inset. */

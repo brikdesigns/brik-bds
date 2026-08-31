@@ -558,23 +558,23 @@ body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
 .body {
   /* Padding tokens - Base mode */
   --padding-none: var(--space-0);
-  --padding-tiny: var(--space-200);
+  --padding-2xs: var(--space-200);
   --padding-xs: var(--space-250);
   --padding-sm: var(--space-300);
   --padding-md: var(--space-400);
   --padding-lg: var(--space-600);
   --padding-xl: var(--space-800);
-  --padding-huge: var(--space-1200);
+  --padding-2xl: var(--space-1200);
 
   /* Gap tokens - Base mode */
   --gap-none: var(--space-0);
-  --gap-tiny: var(--space-50);
+  --gap-2xs: var(--space-50);
   --gap-xs: var(--space-100);
   --gap-sm: var(--space-150);
   --gap-md: var(--space-200);
   --gap-lg: var(--space-400);
   --gap-xl: var(--space-600);
-  --gap-huge: var(--space-800);
+  --gap-2xl: var(--space-800);
 }
 
 /* ============================================

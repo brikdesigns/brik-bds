@@ -19,7 +19,7 @@
     background-color: transparent;
     cursor: pointer;
     user-select: none;
-    transition: background-color var(--duration-normal) var(--ease-out);
+    transition: background-color var(--duration-md) var(--ease-out);
   }
 
   /* Hover + pressed mirror the ghost Button (--background-primary-hover /
@@ -87,7 +87,7 @@
     font-weight: var(--font-weight-medium);
     color: var(--text-primary);
     line-height: var(--font-line-height-normal);
-    transition: color var(--duration-normal) var(--ease-out);
+    transition: color var(--duration-md) var(--ease-out);
   }
 
   .bds-checklist--checked .bds-checklist__label {

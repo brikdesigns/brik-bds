@@ -15,10 +15,10 @@
  *
  *   Flagged   — a rhythm-bearing property set to a non-zero px/rem/em literal:
  *                 gap: 8px;   margin-top: 12px;   margin: 0 0 1rem;
- *             — a mode-collapsing token (`--gap-xs` / `--gap-tiny`, both 0px in
+ *             — a mode-collapsing token (`--gap-xs` / `--gap-2xs`, both 0px in
  *               every non-default spacing mode) on an unambiguously VERTICAL
  *               property (`row-gap`, `margin`, `margin-top/-bottom/-block*`):
- *                 margin-top: var(--gap-xs);   row-gap: var(--gap-tiny);
+ *                 margin-top: var(--gap-xs);   row-gap: var(--gap-2xs);
  *               The `gap` shorthand is exempt from this rule — its direction
  *               depends on flex-direction, which a line-scanner can't see, and
  *               horizontal icon/label gaps legitimately use `--gap-xs`.
@@ -92,7 +92,7 @@ const VERTICAL_PROPS = new Set([
  * (tokens/modes-spacing.css) — banned from vertical rhythm positions
  * per ADR-023 §3 / ADR-024.
  */
-const MODE_COLLAPSING_RE = /var\(\s*--gap-(?:xs|tiny)\s*[,)]/;
+const MODE_COLLAPSING_RE = /var\(\s*--gap-(?:xs|2xs)\s*[,)]/;
 
 /** Files exempt wholesale — the sanctioned element-adjacency owners. */
 const FILE_ALLOWLIST = new Set(['components/ui/Prose/Prose.css']);
@@ -216,7 +216,7 @@ function render(violations, scanned) {
     const tag = v.bare
       ? '  ← bare bds-lint-ignore (needs a reason, brik-bds issue 1469)'
       : v.collapsing
-        ? '  ← --gap-xs/--gap-tiny is 0px outside default spacing mode (ADR-024)'
+        ? '  ← --gap-xs/--gap-2xs is 0px outside default spacing mode (ADR-024)'
         : '';
     out.push(`  ${v.file}:${v.line}  ${v.text}${tag}`);
   }

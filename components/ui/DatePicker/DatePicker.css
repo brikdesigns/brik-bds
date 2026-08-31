@@ -137,7 +137,7 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: var(--padding-tiny);
+  padding: var(--padding-2xs);
   border-radius: var(--border-radius-sm);
   color: var(--text-secondary);
   font-size: var(--body-md);

@@ -36,9 +36,9 @@
 }
 
 .bds-badge--sm {
-  padding: var(--padding-tiny) var(--padding-sm);
+  padding: var(--padding-2xs) var(--padding-sm);
   gap: var(--gap-xs);
-  font-size: var(--label-tiny);
+  font-size: var(--label-2xs);
   height: var(--size-700);
 }
 
@@ -186,7 +186,7 @@
 
 /* Pop-in: badge appears with a bounce scale */
 .bds-badge--animate-in {
-  animation: bds-pop var(--duration-slow) var(--ease-out);
+  animation: bds-pop var(--duration-lg) var(--ease-out);
 }
 
 /* Shake: bell icon / notification attention-getter */
@@ -196,7 +196,7 @@
 
 /* Pulse: persistent attention on unread notification badges */
 .bds-badge--pulse {
-  animation: bds-pop var(--duration-slow) var(--ease-out),
+  animation: bds-pop var(--duration-lg) var(--ease-out),
     bds-pulse 1.4s var(--ease-in-out) 0.3s infinite;
 }
 

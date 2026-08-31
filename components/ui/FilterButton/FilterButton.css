@@ -95,7 +95,7 @@
   display: flex;
   align-items: center;
   gap: var(--gap-md);
-  padding: var(--padding-tiny);
+  padding: var(--padding-2xs);
   background: none;
   border: none;
   border-radius: var(--border-radius-sm);
@@ -113,7 +113,7 @@
 }
 
 /* "All" / clear entry — separated from concrete options by a hairline.
-   Tight structural step; --gap-tiny is 0px outside default spacing mode. */
+   Tight structural step; --gap-2xs is 0px outside default spacing mode. */
 .bds-filter-button__option--all {
   margin-bottom: var(--gap-sm);
   border-bottom: var(--border-width-sm) solid var(--border-muted);

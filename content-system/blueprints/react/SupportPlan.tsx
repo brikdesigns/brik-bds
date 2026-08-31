@@ -25,7 +25,7 @@
  *
  * Token pairs (paired family ↔ size — never mix):
  *   subtitle    — --font-family-label + --label-lg (uppercase eyebrow)
- *   title (h2)  — --font-family-heading + clamp(--heading-lg, …, --heading-huge)
+ *   title (h2)  — --font-family-heading + clamp(--heading-lg, …, --heading-3xl)
  *   description — --font-family-body + --heading-sm (section lead)
  *
  * a11y: `<section>` with `aria-labelledby` → the h2; the plan title is an

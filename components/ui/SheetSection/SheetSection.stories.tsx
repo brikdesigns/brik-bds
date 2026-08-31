@@ -11,7 +11,7 @@ const meta: Meta<typeof SheetSection> = {
     titleAs: {
       control: 'select',
       options: ['h2', 'h3', 'h4'],
-      description: 'HTML element for the title. Defaults to `h3` to keep the Sheet’s own `<h2>` title as the outline root. Also drives the size ramp — `h2`/`h3`/`h4` → `--heading-md`/`--heading-sm`/`--heading-tiny`.',
+      description: 'HTML element for the title. Defaults to `h3` to keep the Sheet’s own `<h2>` title as the outline root. Also drives the size ramp — `h2`/`h3`/`h4` → `--heading-md`/`--heading-sm`/`--heading-xs`.',
     },
     description: { control: 'text', description: 'Optional lead paragraph rendered under the title.' },
     spacing: { control: 'select', options: ['md', 'lg'], description: 'Vertical rhythm between this section and the next.' },

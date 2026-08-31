@@ -38,7 +38,7 @@
  * to Semantic tokens (ADR-014). Set them on the container itself:
  *
  *   .bds-cta__container {
- *     --bds-blueprint-section-content-width: var(--content-width-wide);
+ *     --bds-blueprint-section-content-width: var(--content-width-lg);
  *     --bds-blueprint-section-padding-inline: var(--padding-xl);
  *   }
  *
@@ -55,7 +55,7 @@
 @layer bds-components {
   /* Section vertical rhythm. 7vw is the harmonised value (#1439 decision 1). */
   .bds-blueprint-section {
-    padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
+    padding-block: clamp(var(--padding-xl), 7vw, var(--padding-2xl));
   }
 
   /* Centred content band. Both hooks fall back to Semantic tokens. The

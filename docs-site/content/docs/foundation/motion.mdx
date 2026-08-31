@@ -8,7 +8,7 @@ import { Callout } from 'fumadocs-ui/components/callout';
 Motion tokens define how long a transition runs and how it accelerates. Three semantic duration aliases cover almost every case; the numeric primitives underneath them exist for the rare long-running animation.
 
 <Callout type="warn">
-  **The numeric suffix is a step index, not a millisecond value.** `--duration-400` is `500ms`, not `400ms`. The suffix tracks milliseconds up to `--duration-300` and then stops. Reach for `--duration-fast` / `--duration-normal` / `--duration-slow` instead — they name the intent and cannot be misread.
+  **The numeric suffix is a step index, not a millisecond value.** `--duration-400` is `500ms`, not `400ms`. The suffix tracks milliseconds up to `--duration-300` and then stops. Reach for `--duration-sm` / `--duration-md` / `--duration-lg` instead — they name the intent and cannot be misread.
 </Callout>
 
 ## Semantic durations
@@ -17,10 +17,10 @@ The default choice. These carry the overwhelming majority of motion in BDS, and 
 
 | Token | Resolves to | Use case |
 |---|---|---|
-| `--duration-fast` | `100ms` | Micro-interactions — hover, focus |
-| `--duration-normal` | `200ms` | Standard transitions — buttons, cards |
-| `--duration-slow` | `300ms` | Emphasis — modals, sheets, reveals |
-| `--duration-xl` | `500ms` | Cross-fades, long reveals — one rung past `--duration-slow` |
+| `--duration-sm` | `100ms` | Micro-interactions — hover, focus |
+| `--duration-md` | `200ms` | Standard transitions — buttons, cards |
+| `--duration-lg` | `300ms` | Emphasis — modals, sheets, reveals |
+| `--duration-xl` | `500ms` | Cross-fades, long reveals — one rung past `--duration-lg` |
 
 Defined in `tokens/gap-fills.css` as aliases of the numeric primitives below. The step words follow the t-shirt ramp per [ADR-033 § 3](/docs); the legacy `fast` / `normal` / `slow` are `sm` / `md` / `lg` grandfathered pending rename.
 
@@ -93,7 +93,7 @@ Motion tokens are authored in three different places, which matters when you nee
 | Token group | Source | Editable |
 |---|---|---|
 | `--duration-100` … `--duration-600` | Figma → `design-tokens/tokens-studio.json` → `tokens/figma-tokens.css` | Figma only — the CSS is auto-generated |
-| `--duration-fast` / `-normal` / `-slow`, all `--ease-*` | `tokens/gap-fills.css` | Hand-authored |
+| `--duration-sm` / `-normal` / `-slow`, all `--ease-*` | `tokens/gap-fills.css` | Hand-authored |
 | `--stagger-1` … `--stagger-6` | `tokens/bridge.css` | Hand-authored |
 
 Ready-made utility classes built on these tokens — `.bds-enter-*`, `.bds-anim-*` — live in `tokens/motion-classes.css` over the keyframes in `tokens/animations.css`. Prefer an existing class before writing a new animation.
