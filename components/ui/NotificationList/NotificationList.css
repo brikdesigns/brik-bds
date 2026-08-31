@@ -102,7 +102,7 @@
   background-color: var(--surface-primary);
   border: var(--border-width-md) solid var(--border-muted);
   border-radius: var(--border-radius-md);
-  box-shadow: var(--box-shadow-lg);
+  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   overflow: hidden;
