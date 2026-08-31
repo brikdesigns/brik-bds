@@ -228,6 +228,52 @@ Online/offline indicator tokens used by Avatar and Dot components.
   columns={4}
 />
 
+## Color modifiers
+
+Within the color `role`/`modifier` vocabulary, four concepts share light/dark wording but answer different questions. Pick the wrong one and it compiles — silently wrong.
+
+### on-color
+
+The legible foreground for content resting on a **colored, branded, or dark** surface. Grayscale, brand-agnostic, consumed by component variants (Button `on-color`, the Tab-bar `onColor` mode).
+
+```css
+--text-on-color-light   /* dark FG  — for a light colored fill */
+--text-on-color-dark    /* white FG — for a dark colored fill  */
+```
+
+`on-color` is the whole role; `light`/`dark` names the fill tone it targets. It never carries a hue.
+
+### -on-light and -on-dark
+
+For a token whose hue is already named (a service line, a brand scope), pins the value for a **known, fixed backdrop tone**.
+
+```css
+--background-service-brand-on-light   /* brand fill, on a light surface */
+--text-service-brand-on-dark          /* brand text, on a dark surface  */
+```
+
+The `-color-` infix is dropped because the scope (`service-brand`) already implies color. The leading `on-` marks context — distinct from tone.
+
+<Callout type="info">
+  **Two `on` forms, on purpose.** `on-color-*` is a complete *neutral role*; `-on-light`/`-on-dark` is a *context modifier on a colored scope*. Same word, different slot in the formula — not an inconsistency, and not a rename candidate.
+</Callout>
+
+### -inverse
+
+The hard reverse across light/dark mode (lightest ↔ darkest), mirroring the reverse of a `-primary` token. A theme-level concept — `--background-inverse`, `--text-inverse`. A service line normally adapts to a known backdrop through its `-on-light`/`-on-dark` context tokens, not a per-line inverse — **with one carve-out:** `--surface-service-{line}-inverse` (surface purpose only) flips white in light → `{hue}-darkest` in dark, for service-identified cards that must read as neutral chrome in light mode but carry the line's deep tint in dark. See [ADR-020](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-020-service-surface-inverse.md). No per-line inverse exists on `background`/`text`/`border`.
+
+### -light and -dark
+
+The pastel or deep shade of a **surface** (`--surface-service-brand-light` = pastel). Tone shifts the shade; context targets the backdrop. Tone is why scoped context had to be spelled `-on-light`/`-on-dark` — `-light`/`-dark` was already taken.
+
+| You want… | Token |
+|---|---|
+| Legible text/icon on any colored or dark fill | `--{purpose}-on-color-{light\|dark}` |
+| A service hue tuned for a known backdrop | `--{purpose}-service-{line}-on-{light\|dark}` |
+| An element that hard-flips with the theme | `--{purpose}-inverse` |
+| A pastel/deep variant of a service surface | `--surface-service-{line}-{light\|dark}` |
+| A service card surface: neutral white in light, deep tint in dark | `--surface-service-{line}-inverse` |
+
 ## The 11-step scale
 
 Every family is an **11-step numeric ramp** — `50, 100, 200, … 900, 950`, lightest to darkest. `50` and `950` bracket the ends; the middle nine carry the working values. The scale is **generated, not hand-tuned per family**: `scripts/generate-color-ramps.mjs` pins the six historical swatches as anchors and interpolates the other five stops as OKLCh midpoints, writing `design-tokens/color-ramps.generated.json` ([#1737](https://github.com/brikdesigns/brik-bds/issues/1737)). Shipped in v0.152.0.
@@ -284,7 +330,7 @@ Raw color scales from the Figma Brand Kit, rendered from `color-ramps.generated.
 
 - [Color Pairings](/docs/foundation/color-pairings) — which text token is WCAG-safe on which surface (brand + service tiers, both themes), the contrast matrix, and the CI gate
 - [Interaction States](/docs/foundation/interaction-states) — the overlay-vs-solid model behind the hover/press/disabled swatches above
-- [Token Anatomy](/docs/foundation/token-anatomy) — the four-tier model and the color-modifier vocabulary (`on-color`, `-on-light`/`-on-dark`, `-inverse`, tone) these roles are named from
+- [Token Anatomy](/docs/foundation/token-anatomy) — the four-tier model and the naming formula these roles are composed from (the color-modifier vocabulary — `on-color`, `-on-light`/`-on-dark`, `-inverse`, tone — is documented above under [Color modifiers](#color-modifiers))
 - [Color primitive tier](/docs/content-system/vocabularies/color-primitive-tier) — the closed `tier` vocabulary, tonal-scale emission rules, and the deprecated suffix-alias migration
 - [Client Themes → Per-audience scope binding](/docs/theming/client-themes#per-audience-scope-binding) — multi-brand scope-based token re-binding for sites like Vale Partners and brikdesigns.com
 - [Cascade rules](/docs/getting-started/cascade) — the three-layer architecture every consumer follows

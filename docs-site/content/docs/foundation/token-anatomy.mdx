@@ -15,178 +15,14 @@ Every BDS token answers six independent questions. Without distinct vocabulary f
 | Abstraction level | **Tier** | What *kind* of token is it? | Raw · Primitive · Semantic · Component |
 | Source of truth | **Library** | Where is it *defined*? | Foundations Library · [Client] Brand Kit Library |
 | CSS cascade origin | **Layer** | Which `@layer` *carries its value*? | `bds-tokens` · `bds-components` · `client-theme` · `client-overrides` |
-| Value axis | **Mode** | Which axis *varies its value*? | color light/dark · borderwidth thin/bold · spacing compact/spacious / etc. |
+| Value axis | **Mode** | Which axis *varies its value*? | color light/dark · borderwidth thin/bold · spacing compact/spacious · … |
 | System pillar | **Tenet** | Which *system pillar* governs it? | Foundation · Theming · Motion · Content |
 
 **These are orthogonal.** A token has one answer for each. Mixing them — calling `--brand-tertiary` a "tier" because it sits at the top level — is the failure mode the cleanup retired.
 
 <Callout type="warn">
-  **Before referencing a token name, you should be able to answer all six.** If you can't, you're guessing — verify against the canonical registry (`dist/tokens.css`) first.
+  **Before referencing a token name, you should be able to answer all six.** If you can't, you're guessing.
 </Callout>
-
-## Anatomy
-
-**Color** tokens follow one of two parallel formulas — an **intent** form and a **scoped-intent** form. Everything that is not a color follows a third: see [Non-color anatomy](#non-color-anatomy).
-
-```
-Intent:         --{purpose}-{role}[-{modifier}][-{state}]
-Scoped intent:  --{purpose}-{scope}-{scope-value}[-{modifier}][-{state}]
-```
-
-Each segment is fixed vocabulary:
-
-| Segment | Allowed values | Example |
-|---|---|---|
-| `purpose` | `page`, `surface`, `background`, `text`, `border`, `color` (primitives only) | `--background-…` |
-| `role` | Closed list — see [Color foundations vocabulary](/docs/getting-started/cascade#color-foundations-vocabulary) | `--background-brand-primary` |
-| `scope` / `scope-value` | A named context that carries its own hue — `service-{line}`, `presence-{state}` | `--background-service-marketing` |
-| `modifier` (optional) | Context / tone / hierarchy — see [Color modifiers](#color-modifiers) | `--background-service-brand-on-light` |
-| `state` (optional) | `hover`, `pressed`, `disabled` | `--background-brand-primary-hover` |
-
-Status, service-line, and presence semantic tokens use the **scoped-intent** form — the scope (`service-marketing`, `presence-online`) already names the hue, so they never also take a `-brand`/`-primary` role segment. Everything else uses the plain **intent** form.
-
-<Callout type="error">
-  **Token names without a `purpose` prefix are drift.** Examples retired by brik-bds#712: `--brand-primary` (missing purpose; legitimate form is `--{purpose}-brand-primary`), `--theme-brik-*` (entire namespace violates the anatomy). If you see something shaped `--brand-X` or `--theme-X-Y` in old code, it's drift and should not be referenced.
-</Callout>
-
-### When to add a hierarchy modifier
-
-Never preemptively. A role starts as a **single-level token set** — one token, no hierarchy modifier (`--text-service-marketing`, which ships with no `-primary` / `-secondary` sibling). Add a `-primary` / `-secondary` pair **only** when the design carries a genuine second emphasis level *within that role*, distinct from the generic `--text-secondary` / `--text-muted` that already exist for de-emphasis.
-
-{/* lint-mdx-tokens-ignore-start — the ❌ half is a deliberate counter-example (no such token exists) */}
-
-```css
-/* ✅ single-level — one emphasis, no hierarchy modifier (real token) */
---text-service-marketing
-
-/* ❌ preemptive — no --text-service-marketing-secondary exists to pair it,
-   so the -primary suffix is just a longer name for the single-level token */
---text-service-marketing-primary
-```
-
-{/* lint-mdx-tokens-ignore-end */}
-
-The pair earns its place only when a second emphasis tier actually ships alongside the first; until then, `--text-secondary` / `--text-muted` already cover generic de-emphasis. Scoped tokens never stack a hierarchy modifier under a context modifier either — the (text, surface) pairing carries emphasis implicitly, so `--text-service-brand-on-dark` is complete without a `-primary`.
-
-## Non-color anatomy
-
-Half the registry is not a color. 325 of the 701 token names in `dist/tokens.css` sit outside the color `purpose` list above — `--font-size-100`, `--gap-md`, `--ease-spring`. **They are a second legitimate formula, not drift.** The distinction the color form draws between *purpose* and *role* does not apply, because there is no hue to place: a length, a duration, or a weight is fully described by the property it feeds and the step on that property's scale.
-
-```
-Primitive:  --{property}-{step}      --font-size-100, --border-radius-400
-Semantic:   --{role}-{step}          --gap-md, --heading-xl, --ease-spring
-```
-
-The first slot is a **CSS property name** at the Primitive tier and a **semantic role** at the Semantic tier. Both may be hyphenated (`font-line-height`, `content-width`) — the slot is the whole property or role name, not the first segment.
-
-### Primitive tier property scales
-
-| Slot | Step vocabulary | Feeds |
-|---|---|---|
-| `--font-size-*` | numeric (`100` = 16px) | `font-size` |
-| `--font-weight-*` | word (`semibold`) | `font-weight` |
-| `--font-family-*` | role (`body`, `heading`) | `font-family` |
-| `--font-line-height-*` | word (`normal`, `snug`) | `line-height` |
-| `--font-casing-*` | word (`uppercase`) | `text-transform` |
-| `--letter-spacing-*` | word (`wide`) | `letter-spacing` |
-| `--space-*` | numeric (`400` = 16px) | any spacing property |
-| `--size-*` | numeric + `pill` / `circle` | width / height |
-| `--border-radius-*` | numeric + t-shirt | `border-radius` |
-| `--border-width-*` | numeric + t-shirt | `border-width` |
-| `--shadow-blur-*` · `--shadow-offset-*` · `--shadow-spread-*` | numeric | the parts of a `box-shadow` |
-| `--blur-radius-*` | t-shirt | `filter: blur()` |
-| `--duration-*` · `--delay-*` · `--iteration-*` | numeric | `transition` / `animation` |
-| `--breakpoint-*` | word (`desktop`) | media queries |
-| `--aspect-*` | ratio (`16-9`) | `aspect-ratio` |
-
-### Semantic tier roles
-
-| Slot | Step vocabulary | What it names |
-|---|---|---|
-| `--gap-*` · `--padding-*` | t-shirt | spacing by intent, not by pixel step |
-| `--heading-*` · `--display-*` · `--body-*` · `--label-*` · `--subtitle-*` | t-shirt | the type ramp per text role |
-| `--icon-*` | t-shirt | icon sizes, aligned to the type ramp |
-| `--shadow-*` · `--box-shadow-*` | t-shirt | elevation |
-| `--ease-*` | word (`spring`) | easing curves |
-| `--content-width-*` · `--measure-*` | t-shirt | layout and line-length ceilings |
-| `--state-*` | state (`hover`, `disabled`) | interaction overlays and opacities |
-
-The Component tier is unchanged — `--bds-{component}-{property}`, per [ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md).
-
-<Callout type="warn">
-  **Two first segments carry both formulas.** `--border-*` is 20 color tokens *and* 38 length tokens (`--border-radius-*`, `--border-width-*`); `--shadow-*` is elevation *and* the primitive parts (`--shadow-blur-*`, `--shadow-offset-*`, `--shadow-spread-*`). Match on the longest slot, never the first segment — `--border-radius-100` is a length, not a color.
-</Callout>
-
-### Named exceptions
-
-Two kinds of thing live outside the tables above. Both are in the registry today; neither should be referenced in new work.
-
-**Renames owed** — tracked on [#1910](https://github.com/brikdesigns/brik-bds/issues/1910), sequenced behind the naming ADR.
-
-{/* lint-mdx-tokens-ignore-start — this table is the retired/drift list by definition */}
-
-| Shipping name | Why it's drift | Use instead |
-|---|---|---|
-| `--tooltip-background`, `--tooltip-text` | Component tier without the mandatory `--bds-` prefix — the retired `--{component}-{prop}` pattern. | `--bds-tooltip-*` |
-| `--easing-ease-in`, `--easing-ease-out`, `--easing-ease-in-out` | Style Dictionary's primitive export. A second name for one concept, at *different* curve values, and the `easing-ease-` stutter is the tell. Zero references in `components/`; `--ease-*` carries all 70. | `--ease-in` / `--ease-out` / `--ease-in-out` |
-
-{/* lint-mdx-tokens-ignore-end */}
-
-**Slotless by exception** — `--web`, `--tablet`, `--mobile` ([tokens/figma-tokens.css:319-321](https://github.com/brikdesigns/brik-bds/blob/main/tokens/figma-tokens.css)) carry no purpose slot and are a deliberate carve-out, not a rename target: they are unitless Figma primitives, and the `--breakpoint-*` family that would receive a rename has no consumers either. Measured on 2026-08-20, both families are unconsumed — zero `var()` references to `--web`/`--tablet`/`--mobile` **or** `--breakpoint-*` anywhere in brik-bds, brik-client-portal, or brikdesigns. Whether BDS should ship breakpoint tokens at all is an open question for the naming ADR; until it answers, renaming one dead family into another buys nothing. Mirrored in `EXCEPTIONS` at `scripts/__tests__/inspect-widget-tokens.test.mjs`.
-
-<Callout type="info">
-  **Step vocabularies are not settled here.** Nine slots draw from more than one — `--border-width-*` carries numeric (`100`), t-shirt (`md`), *and* `thin`/`standard`/`bold`; `--duration-*` carries both `200` and `fast`. A second kind of split the census does **not** flag, because both halves are t-shirt: `--icon-*` spells the same step `tiny` in one place and `2xs` in another. Which scale is canonical per family is [#1910](https://github.com/brikdesigns/brik-bds/issues/1910) axis 5, decided in the naming ADR. Run `npm run lint-token-purpose-slots -- --census` for the current measurement.
-</Callout>
-
-This section is gated: `npm run lint-token-purpose-slots` fails when a slot ships in `dist/tokens.css` that is neither named above nor dispositioned as drift. That is the only thing keeping the tables from going stale — a color-only formula describing half a system is exactly how #1910 started.
-
-## Color modifiers
-
-Within the color `role`/`modifier` vocabulary, four concepts share light/dark wording but answer different questions. Pick the wrong one and it compiles — silently wrong.
-
-### on-color
-
-The legible foreground for content resting on a **colored, branded, or dark** surface. Grayscale, brand-agnostic, consumed by component variants (Button `on-color`, the Tab-bar `onColor` mode).
-
-```css
---text-on-color-light   /* dark FG  — for a light colored fill */
---text-on-color-dark    /* white FG — for a dark colored fill  */
-```
-
-`on-color` is the whole role; `light`/`dark` names the fill tone it targets. It never carries a hue.
-
-### -on-light and -on-dark
-
-For a token whose hue is already named (a service line, a brand scope), pins the value for a **known, fixed backdrop tone**.
-
-```css
---background-service-brand-on-light   /* brand fill, on a light surface */
---text-service-brand-on-dark          /* brand text, on a dark surface  */
-```
-
-The `-color-` infix is dropped because the scope (`service-brand`) already implies color. The leading `on-` marks context — distinct from tone.
-
-<Callout type="info">
-  **Two `on` forms, on purpose.** `on-color-*` is a complete *neutral role*; `-on-light`/`-on-dark` is a *context modifier on a colored scope*. Same word, different slot in the formula — not an inconsistency, and not a rename candidate.
-</Callout>
-
-### -inverse
-
-The hard reverse across light/dark mode (lightest ↔ darkest), mirroring the reverse of a `-primary` token. A theme-level concept — `--background-inverse`, `--text-inverse`. A service line normally adapts to a known backdrop through its `-on-light`/`-on-dark` context tokens, not a per-line inverse — **with one carve-out:** `--surface-service-{line}-inverse` (surface purpose only) flips white in light → `{hue}-darkest` in dark, for service-identified cards that must read as neutral chrome in light mode but carry the line's deep tint in dark. See [ADR-020](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-020-service-surface-inverse.md). No per-line inverse exists on `background`/`text`/`border`.
-
-### -light and -dark
-
-The pastel or deep shade of a **surface** (`--surface-service-brand-light` = pastel). Tone shifts the shade; context targets the backdrop. Tone is why scoped context had to be spelled `-on-light`/`-on-dark` — `-light`/`-dark` was already taken.
-
-| You want… | Token |
-|---|---|
-| Legible text/icon on any colored or dark fill | `--{purpose}-on-color-{light\|dark}` |
-| A service hue tuned for a known backdrop | `--{purpose}-service-{line}-on-{light\|dark}` |
-| An element that hard-flips with the theme | `--{purpose}-inverse` |
-| A pastel/deep variant of a service surface | `--surface-service-{line}-{light\|dark}` |
-| A service card surface: neutral white in light, deep tint in dark | `--surface-service-{line}-inverse` |
-
-See [Color](/docs/foundation/color) for the full registry.
 
 ## Tier
 
@@ -239,7 +75,7 @@ Every token sits at exactly one Tier. Higher tiers reference lower tiers via `va
 
 ### About Tier 4
 
-The Component tier is **`--bds-{component}-{property}`** — a component- or blueprint-scoped custom property, where `{component}` is the component/blueprint identifier and `{property}` is the styled aspect. Examples: `--bds-toast-shadow`, `--bds-slider-thumb-shadow`, `--bds-hero-img-card-bg`. This is the only sanctioned Component-tier namespace ([ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md)).
+The Component tier is **`--bds-{component}-{property}`** — a component- or blueprint-scoped custom property, where `{component}` is the component/blueprint identifier and `{property}` is the styled aspect (`--bds-toast-shadow`, `--bds-slider-thumb-shadow`, `--bds-hero-img-card-bg`). This is the only sanctioned Component-tier namespace ([ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md)).
 
 A Tier 4 token serves one of two roles, both under the same name:
 
@@ -257,7 +93,7 @@ A Tier 4 token serves one of two roles, both under the same name:
 2. **Runtime binding** — a value the component's JS/TSX sets at render (e.g. `--bds-slider-percent`), read by the CSS to position or size an element.
 
 <Callout type="warn">
-  **Tier 4 never terminates at a raw value.** A knob's fallback is a Semantic token; a runtime binding is computed from one. A literal inside a `var()` fallback on a tokenized property is Tier-1 leakage and is flagged by `scripts/lint-tokens.js`. The `--bds-` prefix is mandatory — `--bp-*` and bare `--{component}-*` are retired (see Drift patterns below).
+  **Tier 4 never terminates at a raw value.** A knob's fallback is a Semantic token; a runtime binding is computed from one. A literal inside a `var()` fallback on a tokenized property is Tier-1 leakage and is flagged by `scripts/lint-tokens.js`. The `--bds-` prefix is mandatory — `--bp-*` and bare `--{component}-*` are retired (see [Drift patterns](#drift-patterns-to-avoid) below).
 </Callout>
 
 <Callout type="info">
@@ -265,6 +101,139 @@ A Tier 4 token serves one of two roles, both under the same name:
 </Callout>
 
 {/* cascade-vocab-ok:end */}
+
+## Anatomy
+
+A token's name is read left to right, but **the first slot answers a different question at each Tier** — cross-applying one tier's formula to another is the single most common naming mistake.
+
+### Slot order by tier
+
+| Tier | Formula | First slot names | Example |
+|---|---|---|---|
+| Primitive | `--{property}-{step}` | a CSS **property** | `--font-size-100`, `--color-poppy-500` |
+| Semantic (color) | `--{purpose}-{role}` | a **purpose** (`text` / `surface` / `background` / `border`) | `--background-brand-primary` |
+| Semantic (non-color) | `--{role}-{step}` | a semantic **role** | `--gap-md`, `--heading-xl` |
+| Component | `--bds-{component}-{property}` | the **component** | `--bds-toast-shadow` |
+
+<Callout type="warn">
+  **The first slot differs by tier — don't borrow one tier's order for another.** At the Component tier the first slot is the *component*, not a purpose: `--bds-footer-surface` (component `footer`, property `surface`) is correct; `--bds-surface-footer` — "corrected" to a purpose-first order borrowed from the color Semantic form — is drift. The two Semantic formulas differ too: color leads with a `purpose`, non-color leads with a `role`.
+</Callout>
+
+### Color anatomy
+
+**Color** tokens follow one of two parallel formulas — an **intent** form and a **scoped-intent** form:
+
+```
+Intent:         --{purpose}-{role}[-{modifier}][-{state}]
+Scoped intent:  --{purpose}-{scope}-{scope-value}[-{modifier}][-{state}]
+```
+
+Each segment is fixed vocabulary:
+
+| Segment | Allowed values | Example |
+|---|---|---|
+| `purpose` | `page`, `surface`, `background`, `text`, `border`, `color` (primitives only) | `--background-…` |
+| `role` | Closed list — see [Color foundations vocabulary](/docs/getting-started/cascade#color-foundations-vocabulary) | `--background-brand-primary` |
+| `scope` / `scope-value` | A named context that carries its own hue — `service-{line}`, `presence-{state}` | `--background-service-marketing` |
+| `modifier` (optional) | Context / tone / hierarchy — see [Color modifiers](/docs/foundation/color#color-modifiers) | `--background-service-brand-on-light` |
+| `state` (optional) | `hover`, `pressed`, `disabled` | `--background-brand-primary-hover` |
+
+Status, service-line, and presence semantic tokens use the **scoped-intent** form — the scope (`service-marketing`, `presence-online`) already names the hue, so they never also take a `-brand`/`-primary` role segment. Everything else uses the plain **intent** form.
+
+<Callout type="error">
+  **Token names without a `purpose` prefix are drift.** Examples retired by brik-bds#712: `--brand-primary` (missing purpose; legitimate form is `--{purpose}-brand-primary`), `--theme-brik-*` (entire namespace violates the anatomy). If you see something shaped `--brand-X` or `--theme-X-Y` in old code, it's drift and should not be referenced.
+</Callout>
+
+#### When to add a hierarchy modifier
+
+Never preemptively. A role starts as a **single-level token set** — one token, no hierarchy modifier (`--text-service-marketing`, which ships with no `-primary` / `-secondary` sibling). Add a `-primary` / `-secondary` pair **only** when the design carries a genuine second emphasis level *within that role*, distinct from the generic `--text-secondary` / `--text-muted` that already exist for de-emphasis.
+
+{/* lint-mdx-tokens-ignore-start — the ❌ half is a deliberate counter-example (no such token exists) */}
+
+```css
+/* ✅ single-level — one emphasis, no hierarchy modifier (real token) */
+--text-service-marketing
+
+/* ❌ preemptive — no --text-service-marketing-secondary exists to pair it,
+   so the -primary suffix is just a longer name for the single-level token */
+--text-service-marketing-primary
+```
+
+{/* lint-mdx-tokens-ignore-end */}
+
+The pair earns its place only when a second emphasis tier actually ships alongside the first; until then, `--text-secondary` / `--text-muted` already cover generic de-emphasis. Scoped tokens never stack a hierarchy modifier under a context modifier either — the (text, surface) pairing carries emphasis implicitly, so `--text-service-brand-on-dark` is complete without a `-primary`.
+
+The `modifier` slot's light/dark vocabulary (`on-color`, `-on-light`/`-on-dark`, `-inverse`, tone `-light`/`-dark`) is where four look-alike concepts diverge — documented in full at [Color → Color modifiers](/docs/foundation/color#color-modifiers).
+
+### Non-color anatomy
+
+Half the registry is not a color. 325 of the 701 token names in `dist/tokens.css` sit outside the color `purpose` list above — `--font-size-100`, `--gap-md`, `--ease-spring`. **They are a second legitimate formula, not drift.** The distinction the color form draws between *purpose* and *role* does not apply, because there is no hue to place: a length, a duration, or a weight is fully described by the property it feeds and the step on that property's scale.
+
+```
+Primitive:  --{property}-{step}      --font-size-100, --border-radius-400
+Semantic:   --{role}-{step}          --gap-md, --heading-xl, --ease-spring
+```
+
+The first slot is a **CSS property name** at the Primitive tier and a **semantic role** at the Semantic tier. Both may be hyphenated (`font-line-height`, `content-width`) — the slot is the whole property or role name, not the first segment.
+
+#### Primitive tier property scales
+
+| Slot | Step vocabulary | Feeds |
+|---|---|---|
+| `--font-size-*` | numeric (`100` = 16px) | `font-size` |
+| `--font-weight-*` | word (`semibold`) | `font-weight` |
+| `--font-family-*` | role (`body`, `heading`) | `font-family` |
+| `--font-line-height-*` | word (`normal`, `snug`) | `line-height` |
+| `--font-casing-*` | word (`uppercase`) | `text-transform` |
+| `--letter-spacing-*` | word (`wide`) | `letter-spacing` |
+| `--space-*` | numeric (`400` = 16px) | any spacing property |
+| `--size-*` | numeric + `pill` / `circle` | width / height |
+| `--border-radius-*` | numeric + t-shirt | `border-radius` |
+| `--border-width-*` | numeric + t-shirt | `border-width` |
+| `--shadow-blur-*` · `--shadow-offset-*` · `--shadow-spread-*` | numeric | the parts of a `box-shadow` |
+| `--blur-radius-*` | t-shirt | `filter: blur()` |
+| `--duration-*` · `--delay-*` · `--iteration-*` | numeric | `transition` / `animation` |
+| `--breakpoint-*` | word (`desktop`) | media queries |
+| `--aspect-*` | ratio (`16-9`) | `aspect-ratio` |
+
+#### Semantic tier roles
+
+| Slot | Step vocabulary | What it names |
+|---|---|---|
+| `--gap-*` · `--padding-*` | t-shirt | spacing by intent, not by pixel step |
+| `--heading-*` · `--display-*` · `--body-*` · `--label-*` · `--subtitle-*` | t-shirt | the type ramp per text role |
+| `--icon-*` | t-shirt | icon sizes, aligned to the type ramp |
+| `--shadow-*` · `--box-shadow-*` | t-shirt | elevation |
+| `--ease-*` | word (`spring`) | easing curves |
+| `--content-width-*` · `--measure-*` | t-shirt | layout and line-length ceilings |
+| `--state-*` | state (`hover`, `disabled`) | interaction overlays and opacities |
+
+<Callout type="warn">
+  **Two first segments carry both formulas.** `--border-*` is 20 color tokens *and* 38 length tokens (`--border-radius-*`, `--border-width-*`); `--shadow-*` is elevation *and* the primitive parts (`--shadow-blur-*`, `--shadow-offset-*`, `--shadow-spread-*`). Match on the longest slot, never the first segment — `--border-radius-100` is a length, not a color.
+</Callout>
+
+#### Named exceptions
+
+Two kinds of thing live outside the tables above. Both are in the registry today; neither should be referenced in new work.
+
+**Renames owed** — tracked on [#1910](https://github.com/brikdesigns/brik-bds/issues/1910), sequenced behind the naming ADR.
+
+{/* lint-mdx-tokens-ignore-start — this table is the retired/drift list by definition */}
+
+| Shipping name | Why it's drift | Use instead |
+|---|---|---|
+| `--tooltip-background`, `--tooltip-text` | Component tier without the mandatory `--bds-` prefix — the retired `--{component}-{prop}` pattern. | `--bds-tooltip-*` |
+| `--easing-ease-in`, `--easing-ease-out`, `--easing-ease-in-out` | Style Dictionary's primitive export. A second name for one concept, at *different* curve values, and the `easing-ease-` stutter is the tell. Zero references in `components/`; `--ease-*` carries all 70. | `--ease-in` / `--ease-out` / `--ease-in-out` |
+
+{/* lint-mdx-tokens-ignore-end */}
+
+**Slotless by exception** — `--web`, `--tablet`, `--mobile` ([tokens/figma-tokens.css:319-321](https://github.com/brikdesigns/brik-bds/blob/main/tokens/figma-tokens.css)) carry no purpose slot and are a deliberate carve-out, not a rename target: they are unitless Figma primitives, and the `--breakpoint-*` family that would receive a rename has no consumers either. Measured on 2026-08-20, both families are unconsumed — zero `var()` references to `--web`/`--tablet`/`--mobile` **or** `--breakpoint-*` anywhere in brik-bds, brik-client-portal, or brikdesigns. Whether BDS should ship breakpoint tokens at all is an open question for the naming ADR; until it answers, renaming one dead family into another buys nothing. Mirrored in `EXCEPTIONS` at `scripts/__tests__/inspect-widget-tokens.test.mjs`.
+
+<Callout type="info">
+  **Step vocabularies are not settled here.** Nine slots draw from more than one — `--border-width-*` carries numeric (`100`), t-shirt (`md`), *and* `thin`/`standard`/`bold`; `--duration-*` carries both `200` and `fast`. A second kind of split the census does **not** flag, because both halves are t-shirt: `--icon-*` spells the same step `tiny` in one place and `2xs` in another. Which scale is canonical per family is [#1910](https://github.com/brikdesigns/brik-bds/issues/1910) axis 5, decided in the naming ADR. Run `npm run lint-token-purpose-slots -- --census` for the current measurement.
+</Callout>
+
+This section is gated: `npm run lint-token-purpose-slots` fails when a slot ships in `dist/tokens.css` that is neither named above nor dispositioned as drift. That is the only thing keeping the tables from going stale — a color-only formula describing half a system is exactly how #1910 started.
 
 ## How the six concepts map to a real token
 
@@ -298,7 +267,7 @@ Every legitimate token answers all six. If a token doesn't fit any one of them, 
 {/* lint-mdx-tokens-ignore-end */}
 
 <Callout type="error">
-  **Inventing parallel taxonomy is the failure mode this vocabulary exists to prevent.** Three rollbacks (portal #512, portal #553, brik-bds#712 cleanup) trace to agents inventing names that *almost* fit. When in doubt, verify in `dist/tokens.css` — if the name isn't there, it isn't real.
+  **Inventing parallel taxonomy is the failure mode this vocabulary exists to prevent.** Three rollbacks (portal #512, portal #553, brik-bds#712 cleanup) trace to agents inventing names that *almost* fit.
 </Callout>
 
 ## Verifying a token before referencing it
@@ -311,15 +280,15 @@ rg '\-\-{token-name}' node_modules/@brikdesigns/bds/dist/tokens.css
 ./scripts/token-audit.sh --canonical-only
 ```
 
-If the gate is missing or the name isn't found, **stop**. Don't ship a `var()` call against a name that doesn't exist.
+If the gate is missing or the name isn't found, **stop**. Don't ship a `var()` call against a name that doesn't exist — if it isn't in `dist/tokens.css`, it isn't real.
 
 ## Related
 
 - [The cascade](/docs/getting-started/cascade) — Layer ordering, modes, color foundations vocabulary
+- [Color](/docs/foundation/color) — the full color registry and the color-modifier vocabulary (`on-color`, `-on-light`/`-on-dark`, `-inverse`, tone) the `modifier` slot draws from
 - [Theming](/docs/theming) — how a client brand overrides these Semantic tokens per the four Theming Dimensions; the "How Content feeds Theming" section separates theming layers from content vocabularies
 - [Composition Layers](/docs/build-standards/composition-layers) — the pedagogical Section → Layout → Container → Block or Control → Component model that composes tokenized primitives
 - [Figma Library architecture](/docs/getting-started/figma-library-architecture) — Foundations Library vs Brand Kit Library
-- [Color](/docs/foundation/color) — full canonical color registry
 - [Color Pairings](/docs/foundation/color-pairings) — the accessible foreground/background pairing system the `on-color` and `-on-light`/`-on-dark` modifiers feed into, with the contrast matrix and CI gate
 - [Color primitive tiers](/docs/content-system/vocabularies/color-primitive-tier) — the closed `tier` vocabulary used by the portal theme generator
 - [Slot Vocabulary](/docs/build-standards/slot-vocabulary) — BEM slot vocabulary (different domain — component class names, not token names)
