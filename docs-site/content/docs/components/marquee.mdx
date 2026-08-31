@@ -7,6 +7,23 @@ Marquee renders an item set on a continuously scrolling track — the "trusted b
 
 It has one visual appearance — `direction`, `pauseOnHover`, and `fade` are behavior knobs, not distinct variants.
 
+<ComparisonGrid
+  items={[
+    {
+      title: 'Marquee',
+      whenToUse: 'A continuously scrolling strip of same-sized items — the "trusted by" logo band. The motion is the point.',
+      whenNotToUse: 'The set fits and does not need to move — that\'s a static Cluster.',
+      code: `<Marquee>{logos}</Marquee>`,
+    },
+    {
+      title: 'Cluster',
+      whenToUse: 'A wrapping horizontal row of peers with a shared gap — tag lists, action rows, logo grids that sit still.',
+      whenNotToUse: 'The strip should read as one unbroken, moving pass — that\'s Marquee.',
+      code: `<Cluster>{items}</Cluster>`,
+    },
+  ]}
+/>
+
 ## Use it for
 
 - A "trusted by" / partner-logo band on a marketing page

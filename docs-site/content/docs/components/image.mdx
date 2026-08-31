@@ -7,6 +7,29 @@ Image renders a semantic `<figure>` + `<img>` (+ optional `<figcaption>`). It la
 
 It owns the design-system constraints — shape, fit, and semantics. It is **not** an image-optimization layer: pair it with `next/image`, `@astrojs/image`, or a CDN for resizing and format negotiation.
 
+<ComparisonGrid
+  items={[
+    {
+      title: 'Image',
+      whenToUse: 'A content or editorial image needing SEO + <figure> semantics, alt text, and a locked shape.',
+      whenNotToUse: 'A bare aspect box with no <img> (Frame), or person identity with initials (Avatar).',
+      code: `<Image src="…" alt="…" ratio="16-9" />`,
+    },
+    {
+      title: 'Frame',
+      whenToUse: 'A raw aspect-ratio box for any media, with no <img>/SEO semantics of its own.',
+      whenNotToUse: 'The media is a real content image that needs alt text and <figure> — that\'s Image.',
+      code: `<Frame ratio="16-9">{media}</Frame>`,
+    },
+    {
+      title: 'Avatar',
+      whenToUse: 'A person\'s identity — headshot with an initials fallback.',
+      whenNotToUse: 'A general content or editorial image — that\'s Image.',
+      code: `<Avatar src="…" name="…" />`,
+    },
+  ]}
+/>
+
 ## Use it for
 
 - Content and editorial images that must hold a fixed shape ([Frame](/docs/components/frame) is the bare aspect-ratio box; Image adds SEO + `<figure>` semantics)

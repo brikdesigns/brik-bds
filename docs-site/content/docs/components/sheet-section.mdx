@@ -5,6 +5,29 @@ description: Named wrapper for a content block inside a Sheet. Pairs a section t
 
 SheetSection is the only structural wrapper you should need inside a [Sheet](/docs/components/sheet) body. Pairs a section title with content and locks the spacing between sections. Replaces the ad-hoc flex-column + raw `<h3>` + `detail.sectionHeading` patterns.
 
+<ComparisonGrid
+  items={[
+    {
+      title: 'SheetSection',
+      whenToUse: 'A titled grouping inside a Sheet body — an uppercase-label heading suited to the sheet context.',
+      whenNotToUse: 'A section on a read-mode page whose title is part of the page outline — that\'s DataSection.',
+      code: `<SheetSection title="…">{fields}</SheetSection>`,
+    },
+    {
+      title: 'DataSection',
+      whenToUse: 'The page analog — a read-mode page section whose real title sits in the page outline, often with a View/Edit toggle.',
+      whenNotToUse: 'The grouping lives inside a Sheet body — that\'s SheetSection.',
+      code: `<DataSection title="…">{fieldGrid}</DataSection>`,
+    },
+    {
+      title: 'Field',
+      whenToUse: 'A single label/value pair that composes inside either section wrapper.',
+      whenNotToUse: 'You are grouping several fields under one heading — that\'s a section wrapper.',
+      code: `<Field label="…">value</Field>`,
+    },
+  ]}
+/>
+
 ## Use it for
 
 - Each logical grouping of fields inside a [Sheet](/docs/components/sheet) body

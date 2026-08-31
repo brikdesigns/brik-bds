@@ -5,6 +5,29 @@ description: Premium-tier ambient motion field behind content — Lottie by defa
 
 AmbientField is the living background layer: a slow, ambient motion field that sits behind content and never competes with it. It is the decorative layer **only** — absolutely positioned, `aria-hidden`, non-interactive. It does not create the stacking context it lives in, because [MediaBand](/docs/components/media-band) already owns that recipe.
 
+<ComparisonGrid
+  items={[
+    {
+      title: 'AmbientField',
+      whenToUse: 'A Premium-tier surface that has spent the motion budget on a living, moving background.',
+      whenNotToUse: 'A non-Premium surface, or a layer that must paint from SSR — that\'s BackgroundPattern.',
+      code: `<AmbientField src={fieldLoop} />`,
+    },
+    {
+      title: 'BackgroundPattern',
+      whenToUse: 'Static dot- or line-grid texture — costs nothing and needs no reduced-motion handling.',
+      whenNotToUse: 'The brief asks for ambient motion on a Premium surface — that\'s AmbientField.',
+      code: `<BackgroundPattern variant="dot-grid" />`,
+    },
+    {
+      title: 'MediaBand',
+      whenToUse: 'The positioned band both layers slot into — it owns the z-order and clip recipe.',
+      whenNotToUse: 'You only need the decorative layer itself, not a band wrapper.',
+      code: `<MediaBand graphic={<AmbientField />} />`,
+    },
+  ]}
+/>
+
 ## Use it for
 
 - A Premium-tier surface that has committed the motion budget for a living background

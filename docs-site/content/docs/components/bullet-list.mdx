@@ -7,6 +7,29 @@ BulletList is a thin wrapper for short-item lists — anti-messages, proof point
 
 Pass `marker="decimal"` for numbered lists; the underlying element switches to `<ol>` automatically.
 
+<ComparisonGrid
+  items={[
+    {
+      title: 'BulletList',
+      whenToUse: 'Static, read-only short items — proof points, brand rules, anti-messages, approved CTAs.',
+      whenNotToUse: 'Items are editable, or run multi-paragraph — that\'s AddableEntryList or Prose.',
+      code: `<BulletList items={[...]} />`,
+    },
+    {
+      title: 'AddableEntryList',
+      whenToUse: 'An editable list the user adds to and removes from, each row a primary + description.',
+      whenNotToUse: 'A fixed, display-only list of short strings — that\'s BulletList.',
+      code: `<AddableEntryList entries={[...]} />`,
+    },
+    {
+      title: 'Prose',
+      whenToUse: 'Free-form, multi-paragraph rich text with no fixed list shape.',
+      whenNotToUse: 'A short catalogue of one-line items — that\'s BulletList.',
+      code: `<Prose html={sanitized} />`,
+    },
+  ]}
+/>
+
 ## Use it for
 
 - Short bullet items inside a [Field](/docs/components/field) value

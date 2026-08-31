@@ -11,6 +11,23 @@ Prose is the free-form CMS-HTML Block-layer unit. It formalizes brikdesigns' `.r
   Prose does not sanitize. Pass `html` that the caller already sanitized — never raw user or CMS input. brikdesigns' `RichContentBlock` sanitizes server-side at ISR time before handing markup to `.rich-content`; consume the same pattern before passing `html` to `Prose`.
 </Callout>
 
+<ComparisonGrid
+  items={[
+    {
+      title: 'Prose',
+      whenToUse: 'Open-ended, already-sanitized rich text (CMS HTML) — event descriptions, long-form copy with no fixed shape.',
+      whenNotToUse: 'The content has a known title / subtitle / description / actions shape — that\'s ContentBlock.',
+      code: `<Prose html={sanitized} />`,
+    },
+    {
+      title: 'ContentBlock',
+      whenToUse: 'Named content with fixed, independently-omittable slots that own their own rhythm.',
+      whenNotToUse: 'Free-flowing paragraphs of rich text with no slot shape — that\'s Prose.',
+      code: `<ContentBlock title="…" description="…" />`,
+    },
+  ]}
+/>
+
 ## Use it for
 
 - CMS-authored rich text with no fixed slot shape (event descriptions, long-form marketing copy)

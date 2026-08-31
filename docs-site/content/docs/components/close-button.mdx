@@ -7,6 +7,23 @@ CloseButton is the single dismiss control for anything that can be closed — Mo
 
 It has one appearance — no visual variants. `label` and `disabled` are the only knobs, and both are behavior, not style.
 
+<ComparisonGrid
+  items={[
+    {
+      title: 'CloseButton',
+      whenToUse: 'The glyph-only dismiss on an overlay or panel where "X" is the expected exit.',
+      whenNotToUse: 'The action needs a word ("Cancel", "Done") — that\'s a Button with a text label.',
+      code: `<CloseButton onClick={onClose} />`,
+    },
+    {
+      title: 'Button',
+      whenToUse: 'A dismiss (or any action) that reads better as a labelled control than a bare glyph.',
+      whenNotToUse: 'A compact corner "X" on a Modal / Sheet / Toast / Banner — that\'s CloseButton.',
+      code: `<Button variant="ghost">Cancel</Button>`,
+    },
+  ]}
+/>
+
 ## Use it for
 
 - The dismiss control in a [Modal](/docs/components/modal), [Sheet](/docs/components/sheet), or [Toast](/docs/components/toast) header

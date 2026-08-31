@@ -9,6 +9,29 @@ ContentBlock is a fixed-slot Block-layer unit for named content with a known sha
 
 ContentBlock never owns layout. Column count and orientation come from a Layout primitive ([Stack](/docs/components/stack), [Grid](/docs/components/grid)) or a Container ([Card](/docs/components/card)) wrapped around it.
 
+<ComparisonGrid
+  items={[
+    {
+      title: 'ContentBlock',
+      whenToUse: 'Named content with a known shape — title / subtitle / description / actions, each omittable.',
+      whenNotToUse: 'Free-form rich text with no slot shape (Prose), or a centered section intro (SectionHeader).',
+      code: `<ContentBlock title="…" description="…" />`,
+    },
+    {
+      title: 'Prose',
+      whenToUse: 'Open-ended, already-sanitized rich text (CMS HTML) with no fixed slots.',
+      whenNotToUse: 'The content splits cleanly into title / description / actions — that\'s ContentBlock.',
+      code: `<Prose html={sanitized} />`,
+    },
+    {
+      title: 'SectionHeader',
+      whenToUse: 'A centered, measure-capped section intro above a grid or band — composes ContentBlock.',
+      whenNotToUse: 'Inner card / CTA text with no measure or centering — use ContentBlock directly.',
+      code: `<SectionHeader title="…" description="…" />`,
+    },
+  ]}
+/>
+
 ## Use it for
 
 - A card's text content — feature copy, testimonial framing, pricing tile copy

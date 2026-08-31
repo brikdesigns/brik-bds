@@ -5,6 +5,29 @@ description: Colored indicator identifying a Brik service category or individual
 
 ServiceTag renders a Brik service category — or an individual service within it — as a colored pill or icon badge. Each of the five service lines has a dedicated color palette used across the Brik ecosystem so a category reads the same everywhere it appears.
 
+<ComparisonGrid
+  items={[
+    {
+      title: 'ServiceTag',
+      whenToUse: 'Classify a record by Brik service line — a fixed five-category palette that reads the same everywhere.',
+      whenNotToUse: 'A status (Badge) or a free-form neutral category label (Tag).',
+      code: `<ServiceTag category="marketing" />`,
+    },
+    {
+      title: 'Badge',
+      whenToUse: 'A status indicator — active / pending / error and the like.',
+      whenNotToUse: 'A service-line classification with its own palette — that\'s ServiceTag.',
+      code: `<Badge tone="positive">Active</Badge>`,
+    },
+    {
+      title: 'Tag',
+      whenToUse: 'A neutral, free-form categorization label with no fixed palette.',
+      whenNotToUse: 'The category is one of the five Brik service lines — that\'s ServiceTag.',
+      code: `<Tag>Retainer</Tag>`,
+    },
+  ]}
+/>
+
 ## Use it for
 
 - Classifying records by service line — company, project, or offering pages
