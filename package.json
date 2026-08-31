@@ -200,6 +200,7 @@
     "lint-token-shadowing": "node scripts/lint-token-shadowing.mjs",
     "lint-token-self-reference": "node scripts/lint-token-self-reference.mjs",
     "lint-token-tiers": "node scripts/lint-token-tiers.mjs",
+    "lint-mode-emission-coverage": "node scripts/lint-mode-emission-coverage.mjs",
     "lint-token-purpose-slots": "node scripts/lint-token-purpose-slots.mjs",
     "lint-naming-canon": "node scripts/lint-naming-canon.mjs",
     "lint-naming-canon:census": "node scripts/lint-naming-canon.mjs --census",
