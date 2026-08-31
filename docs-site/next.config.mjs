@@ -18,6 +18,20 @@ const nextConfig = {
         destination: '/docs/build-standards',
         permanent: true,
       },
+      // The Shadow page was renamed to Elevation to match the Figma collection
+      // name. MUST stay before the /docs/primitives/:slug* wildcard so the old
+      // primitives URL lands on the live page in one hop, not a dead
+      // /docs/foundation/shadow.
+      {
+        source: '/docs/primitives/shadow',
+        destination: '/docs/foundation/elevation',
+        permanent: true,
+      },
+      {
+        source: '/docs/foundation/shadow',
+        destination: '/docs/foundation/elevation',
+        permanent: true,
+      },
       // The Foundation section moved from /docs/primitives to /docs/foundation
       // (#2209) — the route named one Tier of the four the section documents.
       // Keep old URLs alive (CLAUDE.md, consumer docs, bookmarks).

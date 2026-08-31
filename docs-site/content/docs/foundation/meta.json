@@ -2,6 +2,7 @@
   "title": "Foundation",
   "pages": [
     "index",
+    "token-anatomy",
     "color",
     "color-pairings",
     "interaction-states",
@@ -10,7 +11,6 @@
     "size",
     "motion",
     "border",
-    "shadow",
-    "token-anatomy"
+    "elevation"
   ]
 }

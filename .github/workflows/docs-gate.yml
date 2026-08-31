@@ -168,6 +168,8 @@ jobs:
             'scripts/lint-mdx-deprecations.mjs' \
             'scripts/lint-mdx-headings.mjs' \
             'scripts/lint-mdx-tokens.mjs' \
+            'scripts/lint-foundation-figma-collections.mjs' \
+            'design-tokens/tokens-studio.json' \
             'scripts/lint-component-props.mjs' \
             'scripts/build-dist-tokens.js' \
             '.github/workflows/docs-gate.yml')"
@@ -287,6 +289,15 @@ jobs:
       - name: Check MDX token names
         if: always() && steps.dist.outcome == 'success'
         run: npm run lint-mdx-tokens
+
+      # ─── foundation-figma-collections ───────────────────────────────────────
+      # The Foundation docs must name the same collections Figma does. Ties the
+      # index.mdx collection table + page titles back to tokens-studio.json so a
+      # rename in Figma (or a doc synonym like "Shadow" for Elevation) fails CI
+      # instead of surviving three manual review passes.
+      - name: Check Foundation ⇄ Figma collection alignment
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-foundation-figma-collections
 
       # ─── component-props-check ──────────────────────────────────────────────
       # The published prop tables must match the components' actual TS types.
