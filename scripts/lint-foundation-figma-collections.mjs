@@ -18,6 +18,10 @@
  *   3. No Foundation page TITLE uses a retired synonym for a collection Figma
  *      names differently (e.g. a page titled "Shadow" when the collection is
  *      "elevation"). This is what makes the Elevation rename stick.
+ *   4. Every token named in the table's "What it generates" column actually
+ *      exists in dist/tokens.css (glob `--x-*`, compact `--base-a/b/c`, or exact
+ *      name). This is the column the #2231 bug lived in — elevation claimed
+ *      `--shadow-*` when Figma emits `--box-shadow-*` (#2234).
  *
  * Runs in the `docs lints` job of docs-gate.yml (one cheap step, no new
  * workflow, no build). Zero deps.
@@ -41,6 +45,51 @@ const META_ONLY = new Set(['global', '$metadata', '$themes']);
 const RETIRED_TITLE_ALIASES = { shadow: 'elevation' };
 
 const errors = [];
+
+// ── Source of truth: the built token registry ───────────────────────────────
+// dist/tokens.css is gitignored and self-built by the CI job before this runs.
+const DIST = join(ROOT, 'dist', 'tokens.css');
+const defined = new Set();
+for (const m of readFileSync(DIST, 'utf8').matchAll(/^\s*(--[a-z0-9-]+)\s*:/gim)) {
+  defined.add(m[1]);
+}
+const definedPrefix = (prefix) => {
+  for (const t of defined) if (t.startsWith(prefix)) return true;
+  return false;
+};
+
+// Validate one backtick-wrapped token claim from the "What it generates" column
+// against dist. Handles three shapes: glob `--x-*`, compact `--base-a/b/c`, and
+// an exact `--name`. Pushes a labelled error if the claim resolves to nothing.
+const checkGeneratedToken = (raw, collection) => {
+  if (!raw.startsWith('--')) return; // `gap-fills.css`, `value`, `light` … skip
+  if (raw.endsWith('-*')) {
+    const prefix = raw.slice(0, -1); // drop the `*`
+    if (!definedPrefix(prefix)) {
+      errors.push(
+        `index.mdx says collection \`${collection}\` generates \`${raw}\`, but no ` +
+          `token starting \`${prefix}\` exists in dist/tokens.css.`,
+      );
+    }
+  } else if (raw.includes('/')) {
+    const segs = raw.split('/'); // `--box-shadow-sm/md/lg/xl`
+    const base = segs[0].replace(/[^-]+$/, ''); // → `--box-shadow-`
+    const variants = [segs[0].slice(base.length), ...segs.slice(1)];
+    for (const v of variants) {
+      if (!defined.has(base + v)) {
+        errors.push(
+          `index.mdx says collection \`${collection}\` generates \`${raw}\`, but ` +
+            `\`${base + v}\` is not defined in dist/tokens.css.`,
+        );
+      }
+    }
+  } else if (!defined.has(raw)) {
+    errors.push(
+      `index.mdx says collection \`${collection}\` generates \`${raw}\`, but it is ` +
+        `not defined in dist/tokens.css.`,
+    );
+  }
+};
 
 // ── Source of truth: the Figma collections ──────────────────────────────────
 const studio = JSON.parse(readFileSync(STUDIO, 'utf8'));
@@ -68,8 +117,16 @@ if (tableStart === -1) {
 
   const documented = new Set();
   for (const row of tableBody) {
-    const m = row.match(/^\|\s*`([^`]+)`\s*\|/);
-    if (m) documented.add(m[1]);
+    const cols = row.split('|'); // ['', ' `coll` ', ' `mode` ', ' generates ', '']
+    const collMatch = (cols[1] || '').match(/`([^`]+)`/);
+    if (!collMatch) continue;
+    const collection = collMatch[1];
+    documented.add(collection);
+
+    // 2b: every token the "What it generates" column claims must exist in dist.
+    for (const tok of (cols[3] || '').matchAll(/`([^`]+)`/g)) {
+      checkGeneratedToken(tok[1], collection);
+    }
   }
 
   for (const c of documented) {
@@ -116,5 +173,6 @@ if (errors.length) {
 }
 console.log(
   `✓ Foundation docs aligned to ${figmaCollections.size} Figma collections ` +
-    `(design-tokens/tokens-studio.json).`,
+    `(design-tokens/tokens-studio.json), and every generated-token claim in the ` +
+    `index table resolves in dist/tokens.css.`,
 );
