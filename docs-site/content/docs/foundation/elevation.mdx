@@ -1,15 +1,29 @@
 ---
-title: Shadow
-description: Elevation through blur, spread, and composed semantic shadow tokens.
+title: Elevation
+description: The Figma Elevation collection — box-shadow and blur-radius primitives, and the composed semantic shadow tokens components consume.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 import { shadowBlurScale, shadowSpreadScale } from '@bds-tokens';
 
-Shadow tokens define elevation through blur, spread, and offset values. The granular primitives compose into ready-to-use semantic shadows.
+**Elevation** is the Figma collection that governs depth (modes `flat` / `subtle` / `lifted` / `dramatic`). It ships two Primitive groups — `box-shadow` and `blur-radius` — that compose into the ready-to-use semantic `--shadow-*` values components reference. The CSS variable prefix stays `--shadow-*` / `--box-shadow-*`; the *collection and this page* carry Figma's name, Elevation.
 
 <Callout type="warn">
   **Use composed semantic shadows in component CSS** — `--shadow-sm`, `--shadow-md`, `--shadow-lg`, `--shadow-xl`. Never compose raw blur and spread values yourself; the semantic tokens are tuned together for consistent perceived elevation.
+</Callout>
+
+## From Figma Elevation to shadow tokens
+
+A Figma variable holds a single dimension, so the Elevation collection's `box-shadow` group exports as `--box-shadow-sm/md/lg/xl` carrying only a **blur value** (e.g. `2px`) — not a usable `box-shadow` shorthand. [`tokens/gap-fills.css`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/gap-fills.css) closes the gap: it defines the real multi-part `--shadow-*` shorthands, then re-aliases `--box-shadow-* → var(--shadow-*)` so either name resolves to the correct value.
+
+| Layer | Names | Where |
+|---|---|---|
+| Figma collection | `Elevation` → groups `box-shadow`, `blur-radius` | `design-tokens/tokens-studio.json` |
+| Style Dictionary output | `--box-shadow-*` (single blur), `--blur-radius-*`, `--shadow-blur/offset/spread-*` | `tokens/figma-tokens.css` |
+| Composed semantic (what you use) | `--shadow-sm/md/lg/xl`, `--shadow-overlay` | `tokens/gap-fills.css` |
+
+<Callout type="info">
+  **Both `--shadow-*` and `--box-shadow-*` ship and resolve identically.** Component CSS uses each today. Prefer `--shadow-*` in new work; `--box-shadow-*` is the Figma-emitted alias kept alive by the bridge above (a load-bearing override, not drift).
 </Callout>
 
 ## Composed shadow tokens

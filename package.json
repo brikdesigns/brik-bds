@@ -171,6 +171,7 @@
     "lint-brand-text": "node scripts/lint-brand-text-size.js",
     "lint-doc-links": "node scripts/lint-doc-links.js",
     "lint-mdx-tokens": "node scripts/lint-mdx-tokens.mjs",
+    "lint-foundation-figma-collections": "node scripts/lint-foundation-figma-collections.mjs",
     "lint-mdx-headings": "node scripts/lint-mdx-headings.mjs",
     "lint-mdx-deprecations": "node scripts/lint-mdx-deprecations.mjs",
     "lint-mdx-coverage": "node scripts/lint-mdx-coverage.mjs",
