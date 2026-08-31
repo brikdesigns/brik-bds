@@ -93,36 +93,47 @@ _IL_CLOSING='close[sd]?|fix(e[sd])?|resolve[sd]?'
 # umbrella it is one slice of (cross-repo CLAUDE.md § closing keywords).
 _IL_LINKING='part[[:space:]]+of|refs?|related[[:space:]]+to|partial[[:space:]]+for'
 
-# `(^|[^[:alnum:]_])` is a portable word boundary. `\b` is a GNU extension that
-# BSD grep leaves undefined, and without one "Renames prefixes #12" matches the
-# `fixes` inside `prefixes` and silently resolves #12. The gate's regex uses
-# `\b` and rejects that line, so an unbounded pattern here would have the script
-# resolve a reference its own CI check does not recognise.
+# BOTH SCANS ARE LINE-ANCHORED (#2240). A keyword matched anywhere in a line
+# cannot tell a DIRECTIVE from a QUOTATION, and the two are indistinguishable in
+# review. Any commit that writes ABOUT issue linking — a postmortem, a doc fix,
+# a change to this lib — trips it:
+#
+#   1. brik-client-portal#3550's body said "This does **not** close #2942".
+#      GitHub parsed the `close #2942`, ignored the negation, and closed the
+#      issue on merge. `staging` is that repo's default branch, so it was live.
+#   2. #3556 — the PR that DOCUMENTED failure 1 — quoted the same phrase, and
+#      the resolver emitted `Closes #2942` while demoting the issue the PR
+#      actually completed to a `Refs`. Exactly backwards.
+#   3. brikdesigns/brik-bds#2238, which added the linking forms below, quoted
+#      "`Part of brikdesigns/brik-llm#2442`" as its own example and resolved the
+#      quotation. It anchored the linking half and filed this one (#2240).
+#
+# Failure 2 is the structural one: the class of commit most likely to quote a
+# keyword is the class fixing keyword handling.
+#
+# `^[[:space:]]*` — a trailer may be indented (git log's %b preserves it) but
+# must still OPEN its line. `Closes #N` and `Part of #N` canonically ARE
+# trailers on their own line (issue-style.md § `Closes #N`), so the anchor costs
+# nothing real. Same rule brik-client-portal/scripts/lib/issue-refs.sh adopted.
+#
+# DELIBERATELY NOT MATCHED, and the direction of that choice matters:
+#   - `- Closes #N` (markdown bullet)  — a list marker is not a trailer
+#   - `See also: closes #N` (mid-line) — the failure class above
+# Both UNDER-close rather than over-close. Under-closing is a one-click fix on
+# the issue; over-closing silently shut #2942 and nobody noticed for hours.
+# Widen it THEN, with the evidence — not pre-emptively.
+#
+# This makes the resolver more CONSERVATIVE than pr-issue-link-gate.yml, which
+# matches a keyword anywhere in the body. That is the sanctioned direction (see
+# THE INVARIANT above): the gate must never accept a body this refuses to open a
+# PR for, and it does not — an anchored `Closes #N` still satisfies the gate's
+# unanchored pattern. The reverse would be the #2450 defect.
 #
 # `:? *` (not ` +`): `closes#123` with no space is a live reference to
 # pr-issue-link-gate.yml and to bump-pr-closing-keyword-guard.yml alike. A
 # resolver that skipped it would refuse to open a PR whose body the gate would
 # have passed.
-_IL_CLOSING_RE="(^|[^[:alnum:]_])(${_IL_CLOSING}):? *(${_IL_REF})"
-
-# THE LINKING FORMS ARE LINE-ANCHORED, and the closing form deliberately is not.
-#
-# `Part of` / `Refs` / `Related to` appear in ordinary prose far more often than
-# `Closes` does — any commit that writes ABOUT issue linking quotes them. This
-# commit did: its body quotes "`Part of brikdesigns/brik-llm#2442`" as the
-# example of the form being fixed, and an unanchored scan resolved the QUOTATION
-# and emitted a link to an issue this PR has nothing to do with.
-#
-# `^[[:space:]]*` — a trailer may be indented (git log's %b preserves it) but
-# must still OPEN its line. `Part of #N` canonically IS a trailer on its own
-# line (issue-style.md § "To disclaim completion"), so the anchor costs nothing
-# real and makes prose inert. Same rule brik-client-portal/scripts/lib/
-# issue-refs.sh adopted for its closing scan after #3550 closed an issue off the
-# words "This does **not** close #2942".
-#
-# The closing scan above keeps its existing unanchored word-boundary rule: this
-# change does not touch it, and narrowing it is a separate behaviour change with
-# its own corpus to re-verify. Filed rather than smuggled in here.
+_IL_CLOSING_RE="^[[:space:]]*(${_IL_CLOSING}):? *(${_IL_REF})"
 _IL_LINKING_RE="^[[:space:]]*(${_IL_LINKING}):? *(${_IL_REF})"
 
 # The one canonical form where the keyword TRAILS the number, spelled as
