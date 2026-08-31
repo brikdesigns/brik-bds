@@ -45,15 +45,42 @@ type_label_for_title() {
   esac
 }
 
-# refs_from_issue_links <issue-links-block> — every issue number in the block
+# refs_from_issue_links <issue-links-block> — every issue REFERENCE in the block
 # built by lib/issue-links.sh, one per line, sorted and deduped.
 #
 # Reads the RENDERED block on purpose. The block is what GitHub will parse out
 # of the PR body, so inheriting off it means the labels and the linkage can
 # never disagree — a second regex over the commit range would eventually drift
 # from build_issue_links and inherit from an issue the PR does not reference.
+#
+# Emits the WHOLE reference — `#123`, `owner/repo#123`, `GH-123` — not the bare
+# number (brik-llm#2450). Stripping the `owner/repo` prefix here made the caller
+# read a cross-repo ref as local and inherit labels from whatever issue happens
+# to carry that number in THIS repo. Callers split it with
+# `issue_ref_number` / `issue_ref_repo`.
 refs_from_issue_links() {
-  printf '%s\n' "${1:-}" | grep -oE '#[0-9]+' | tr -d '#' | sort -un || true
+  printf '%s\n' "${1:-}" \
+    | grep -oE '([A-Za-z0-9._-]+/[A-Za-z0-9._-]+)?#[0-9]+|GH-[0-9]+' \
+    | sort -u || true
+}
+
+# issue_ref_number <ref> — the number, for any of the three reference shapes.
+# `GH-123` carries no `#`, so a bare `${ref##*#}` returns it whole and
+# `gh issue view GH-123` then fails.
+issue_ref_number() {
+  local ref="${1:-}"
+  ref="${ref##*#}"
+  printf '%s' "${ref#GH-}"
+}
+
+# issue_ref_repo <ref> — the `owner/repo` prefix, or empty for a same-repo ref.
+# Empty is the signal to omit `--repo` and let `gh` use the cwd's repo.
+issue_ref_repo() {
+  local ref="${1:-}"
+  case "$ref" in
+    */*\#*) printf '%s' "${ref%\#*}" ;;
+    *)      printf '' ;;
+  esac
 }
 
 # label_known <label> <repo-labels> — is this label real in this repo?

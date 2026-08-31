@@ -95,10 +95,12 @@ assert_eq "does not match an axis name mid-string" "" "$(inheritable_labels 'not
 echo ""
 echo "── refs_from_issue_links — read the rendered block, not the commits"
 echo "   (assertion 3)"
-assert_eq "one Closes ref" "1979" "$(refs_from_issue_links $'Closes #1979\n')"
+assert_eq "one Closes ref" "#1979" "$(refs_from_issue_links $'Closes #1979\n')"
+# Whole refs, not bare numbers (brik-llm#2450) — and the sort is lexical, which
+# is what the caller's split consumes; display order is issue-links.sh's job.
 assert_eq "Closes and Refs both counted, sorted, deduped" \
-  $'42\n1979' \
-  "$(refs_from_issue_links $'Closes #1979\nRefs #42\nRefs #1979\n')"
+  $'#1979\n#42\nbrikdesigns/brik-llm#2442' \
+  "$(refs_from_issue_links $'Closes #1979\nRefs #42\nRefs #1979\nRefs brikdesigns/brik-llm#2442\n')"
 assert_eq "the Issue-exempt line contributes no ref" "" \
   "$(refs_from_issue_links $'Issue-exempt: one-off script fix, nothing tracks it\n')"
 assert_eq "empty block yields nothing" "" "$(refs_from_issue_links '')"
@@ -126,7 +128,8 @@ resolved=()
 tl=$(type_label_for_title 'fix(tooling): apply label parity in pr-task.sh (#1979)')
 if [ -n "$tl" ] && label_known "$tl" "$BDS_LABELS"; then resolved+=("$tl"); fi
 for ref in $(refs_from_issue_links $'Closes #1979\n'); do
-  [ "$ref" = "1979" ] || continue
+  [ "$(issue_ref_number "$ref")" = "1979" ] || continue
+  [ -z "$(issue_ref_repo "$ref")" ] || continue
   for l in $(inheritable_labels "$ISSUE_1979"); do
     if label_known "$l" "$BDS_LABELS"; then resolved+=("$l"); fi
   done
