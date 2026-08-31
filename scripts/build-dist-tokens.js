@@ -4,7 +4,7 @@
  * Called by: npm run build:lib (as the final step)
  *
  * Produces:
- *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + theme-brand-brik.css + modes-*.css + gap-fills.css + ratios.css + fluid-type.css + animations.css concatenated
+ *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + theme-brand-brik.css + modes-*.css + gap-fills.css + modes-elevation.css + ratios.css + fluid-type.css + animations.css concatenated
  *   dist/bridge.css  — clean name ↔ Webflow internal name aliases
  */
 const fs = require('fs');
@@ -56,8 +56,9 @@ if (fs.existsSync(themeBrandBrikPath)) {
 }
 
 // Non-color mode overrides — one block per wired collection (BDS #340).
-// Each block targets a distinct `[data-mode-{collection}]` attribute, so
-// concat order is cosmetic. Listed deterministically to keep dist diffs clean.
+// Each block targets a distinct `[data-mode-{collection}]` attribute; these
+// override tokens defined earlier in figma-tokens.css, so concat order among
+// them is cosmetic. Listed deterministically to keep dist diffs clean.
 const MODE_FILES = ['modes-borderwidth.css', 'modes-spacing.css', 'modes-typography.css'];
 let modeOverrides = '';
 for (const file of MODE_FILES) {
@@ -66,6 +67,20 @@ for (const file of MODE_FILES) {
     modeOverrides += '\n\n' + fs.readFileSync(p, 'utf8');
     console.log(`  ✓ Including ${file}`);
   }
+}
+
+// Elevation mode overrides — MUST concat AFTER gap-fills.css, not with the
+// other modes above. The tokens it overrides (--shadow-*) are `:root`-scoped in
+// gap-fills.css, which is emitted after modeOverrides. The bare
+// `[data-mode-elevation="flat"]` selector matches `:root`'s specificity, so on
+// html it only wins by later source order — hence this must trail gap-fills.
+// (A `:root[data-mode-elevation]` selector would win on specificity but forfeit
+// subtree application, which every other mode supports. See CASCADE.md.)
+const elevationModePath = path.join(TOKENS_DIR, 'modes-elevation.css');
+let elevationMode = '';
+if (fs.existsSync(elevationModePath)) {
+  elevationMode = '\n\n' + fs.readFileSync(elevationModePath, 'utf8');
+  console.log('  ✓ Including modes-elevation.css (post gap-fills)');
 }
 
 // Aspect-ratio tokens — `--aspect-*` primitives + semantic aliases (BDS #486).
@@ -80,7 +95,7 @@ const animations = fs.readFileSync(path.join(TOKENS_DIR, 'animations.css'), 'utf
 
 fs.writeFileSync(
   path.join(DIST_DIR, 'tokens.css'),
-  header + figmaTokens + darkTokens + themeBrandBrik + modeOverrides + '\n\n' + gapFills + '\n\n' + ratios + '\n\n' + fluidType + '\n\n' + animations,
+  header + figmaTokens + darkTokens + themeBrandBrik + modeOverrides + '\n\n' + gapFills + elevationMode + '\n\n' + ratios + '\n\n' + fluidType + '\n\n' + animations,
 );
 console.log('  ✓ dist/tokens.css');
 
