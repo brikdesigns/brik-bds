@@ -38,7 +38,7 @@ const meta: Meta<typeof Button> = {
     },
     size: {
       control: 'select',
-      options: ['tiny', 'sm', 'md', 'lg', 'xl'],
+      options: ['xs', 'sm', 'md', 'lg', 'xl'],
       description: 'Size token on the 4-point grid. Default `md`.',
     },
     fullWidth: {

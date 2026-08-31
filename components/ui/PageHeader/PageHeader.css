@@ -66,7 +66,7 @@
   flex-shrink: 0;
 }
 
-/* The page's <h1> is a Section-headline step (`--heading-xl` … `--heading-huge`,
+/* The page's <h1> is a Section-headline step (`--heading-xl` … `--heading-3xl`,
    semibold), not a Container title. Build standards: headings § Role by layer,
    and the record-read archetype's heading ramp. This is the `size="lg"` default;
    `--md` / `--sm` below are the reduced scales. brik-bds#1971. */

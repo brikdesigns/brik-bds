@@ -77,11 +77,11 @@ describe('inspect widget — token allowlist coverage', () => {
     '--box-shadow-md',
     '--icon-md',
     '--size-1000',
-    '--content-width-wide',
+    '--content-width-lg',
     '--layout-md',
     '--stagger-3',
     '--page-primary',
-    '--duration-normal',
+    '--duration-md',
   ])('classifies %s as a known token', (token) => {
     expect(isKnown(token)).toBe(true);
   });

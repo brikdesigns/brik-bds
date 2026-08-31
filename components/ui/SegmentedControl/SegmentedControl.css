@@ -49,9 +49,9 @@
      AA on the track either way. See contrast-pairings.json. */
   color: var(--text-on-color-light);
   min-width: 0;
-  transition: background-color var(--duration-fast) var(--ease-out),
-    color var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out);
+  transition: background-color var(--duration-sm) var(--ease-out),
+    color var(--duration-sm) var(--ease-out),
+    box-shadow var(--duration-sm) var(--ease-out);
 }
 
 .bds-segmented-control--full-width .bds-segmented-control-item {

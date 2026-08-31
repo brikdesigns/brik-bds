@@ -61,7 +61,15 @@ function variantModifier(variant: ButtonVariant): string {
 }
 
 /** Button sizes — shared across text and icon-only modes. */
-export type ButtonSize = 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
+export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
+/**
+ * `tiny` is the retired spelling of the smallest rung (ADR-033 § 3, #1923) —
+ * the four other `*Size` unions (Avatar / Badge / Counter / Tag) already spell
+ * it `xs`. Honoured at runtime for one minor via `resolveRetiredValue` (which
+ * warns once), then removed; TS callers see the type reject `tiny` immediately.
+ */
+const RETIRED_SIZES: Record<string, ButtonSize> = { tiny: 'xs' };
 
 // ─── Shared styling props ──────────────────────────────────────────
 
@@ -168,7 +176,10 @@ export function composeButtonClasses({
     'bds-button',
     iconOnly && 'bds-icon-button',
     variantModifier(resolveRetiredValue('Button', 'variant', variant, RETIRED_VARIANTS) ?? 'primary'),
-    iconOnly ? `bds-icon-button--${size}` : `bds-button--${size}`,
+    (() => {
+      const s = resolveRetiredValue('Button', 'size', size, RETIRED_SIZES) ?? 'md';
+      return iconOnly ? `bds-icon-button--${s}` : `bds-button--${s}`;
+    })(),
     fullWidth && 'bds-button--full-width',
     loading && 'bds-button--loading',
     selected && 'bds-button--selected',

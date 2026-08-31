@@ -40,9 +40,9 @@ This is the gap-vs-padding rule from [Content Rhythm](/docs/build-standards/cont
 
 | Token | Width | Role |
 |---|---|---|
-| `--content-width-narrow` | 640px | Prose, reading columns, focused forms |
-| `--content-width-default` | 800px | Standard text-led body sections |
-| `--content-width-wide` | 1024px | Feature grids, CTA bands |
+| `--content-width-sm` | 640px | Prose, reading columns, focused forms |
+| `--content-width-md` | 800px | Standard text-led body sections |
+| `--content-width-lg` | 1024px | Feature grids, CTA bands |
 | `--content-width-xl` | 1280px | The page band — hero, header, footer, most sections |
 | `--content-width-full` | 100% | Full-bleed; prefer an explicit width |
 
@@ -83,7 +83,7 @@ Don't hand-roll the cap. A centered section intro — eyebrow / title / descript
 // centered · measure-md (60ch) · <h2> title at heading-lg — nothing to override
 ```
 
-`measure` (`sm` / `md` / `lg`, default `md`) picks the cap; `align` (`center` / `start`, default `center`) picks whether the column centers in the band or anchors to its start. `SectionHeader` never sets a band width — drop it inside the section's width-container and it caps the text within. This is the single replacement for the ad-hoc measures a section header used to be written with (`600px`, `700px`, `width: 70%`, `max-width: none`, a reused `--content-width-narrow`).
+`measure` (`sm` / `md` / `lg`, default `md`) picks the cap; `align` (`center` / `start`, default `center`) picks whether the column centers in the band or anchors to its start. `SectionHeader` never sets a band width — drop it inside the section's width-container and it caps the text within. This is the single replacement for the ad-hoc measures a section header used to be written with (`600px`, `700px`, `width: 70%`, `max-width: none`, a reused `--content-width-sm`).
 
 <Callout type="warn">
   A measure is not a band. Never cap a section intro with a `--content-width-*` token (that sizes the container) or with a raw px / percentage. Reach for `SectionHeader` — or `--measure-*` directly only when hand-rolling a text group `SectionHeader` doesn't cover.
@@ -97,14 +97,14 @@ Like the rhythm scale, you rarely write the recipe by hand — it is baked into 
 
 ```css
 .bds-cta__container {
-  --bds-blueprint-section-content-width: var(--content-width-wide);
+  --bds-blueprint-section-content-width: var(--content-width-lg);
   --bds-blueprint-section-padding-inline: var(--padding-xl);
 }
 ```
 
 - **Product apps** → the `Page` primitive; its `padding` prop sets the shell inset (`lg` is the page gutter).
 - **Full-bleed backgrounds with constrained content** → `Footer`'s `containerMaxWidth` shape: the background spans the viewport while `padding-inline: max(var(--page-inset), calc((100% - var(--content-width-xl)) / 2))` centres the content band.
-- **Section vertical band** → unchanged from ADR-021: `padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge))`. A page is a stack of full-bleed sections; the vertical band is the clamp, the horizontal band is this recipe.
+- **Section vertical band** → unchanged from ADR-021: `padding-block: clamp(var(--padding-xl), 7vw, var(--padding-2xl))`. A page is a stack of full-bleed sections; the vertical band is the clamp, the horizontal band is this recipe.
 
 ## Related
 

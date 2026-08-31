@@ -28,7 +28,7 @@
 /* Level → size ramp (keyed off `titleAs`/`data-level`, mirrors Table's
    `data-size` pattern). Every tier stays above Field's `--label-sm` floor
    (14px inside a Sheet body) so the label-above-heading inversion cannot
-   recur — `--heading-tiny` is 20px, the smallest tier here. */
+   recur — `--heading-xs` is 20px, the smallest tier here. */
 .bds-sheet-section__heading[data-level='h2'] {
   font-size: var(--heading-md);
 }
@@ -38,7 +38,7 @@
 }
 
 .bds-sheet-section__heading[data-level='h4'] {
-  font-size: var(--heading-tiny);
+  font-size: var(--heading-xs);
 }
 
 /* ─── Description ───────────────────────────────────────────── */

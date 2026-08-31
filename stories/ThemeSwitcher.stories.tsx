@@ -22,7 +22,7 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
       <h1
         style={{
           fontFamily: 'var(--font-family-heading)',
-          fontSize: 'var(--heading-xxl)',
+          fontSize: 'var(--heading-2xl)',
           marginBottom: 'var(--padding-md)',
         }}
       >

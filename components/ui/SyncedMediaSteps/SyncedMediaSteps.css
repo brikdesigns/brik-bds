@@ -91,7 +91,7 @@
   font-weight: var(--font-weight-semibold);
   font-variant-numeric: tabular-nums;
   color: var(--text-muted);
-  transition: color var(--duration-normal) var(--ease-out);
+  transition: color var(--duration-md) var(--ease-out);
 }
 
 /* --text-primary, not --text-brand-primary: brand text is gated AA-large
@@ -105,11 +105,11 @@
   flex: 1;
   min-width: 0;
   font-family: var(--font-family-heading);
-  font-size: var(--heading-tiny);
+  font-size: var(--heading-xs);
   font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-snug);
   color: var(--text-secondary);
-  transition: color var(--duration-normal) var(--ease-out);
+  transition: color var(--duration-md) var(--ease-out);
 }
 
 .bds-synced-media-steps__step[data-active] .bds-synced-media-steps__title {
@@ -125,7 +125,7 @@
 .bds-synced-media-steps__panel {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows var(--duration-slow) var(--ease-in-out);
+  transition: grid-template-rows var(--duration-lg) var(--ease-in-out);
 }
 
 .bds-synced-media-steps__step[data-active] .bds-synced-media-steps__panel {
@@ -135,7 +135,7 @@
 .bds-synced-media-steps__panel-inner {
   overflow: hidden;
   visibility: hidden;
-  transition: visibility 0s linear var(--duration-slow);
+  transition: visibility 0s linear var(--duration-lg);
 }
 
 .bds-synced-media-steps__step[data-active] .bds-synced-media-steps__panel-inner {
@@ -203,19 +203,19 @@
   visibility: hidden;
   /* Exit: quicker, accelerating away (measured 0.3s). */
   transition:
-    opacity var(--duration-slow) var(--ease-in),
-    visibility 0s linear var(--duration-slow);
+    opacity var(--duration-lg) var(--ease-in),
+    visibility 0s linear var(--duration-lg);
 }
 
 .bds-synced-media-steps__media-item[data-active] {
   opacity: 1;
   visibility: visible;
   /* Enter: slower, settling in after the outgoing frame has cleared —
-     the staggered crossfade. `--duration-normal` stands in for the
+     the staggered crossfade. `--duration-md` stands in for the
      measured 0.25s delay; the ramp has no 250ms rung. */
   transition:
-    opacity var(--duration-xl) var(--ease-spring-soft) var(--duration-normal),
-    visibility 0s linear var(--duration-normal);
+    opacity var(--duration-xl) var(--ease-spring-soft) var(--duration-md),
+    visibility 0s linear var(--duration-md);
 }
 
 .bds-synced-media-steps__media-item > :is(img, video, canvas, svg) {

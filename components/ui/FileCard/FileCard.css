@@ -9,7 +9,7 @@
  * - --border-secondary (card border)
  * - --border-radius-md
  * - --padding-sm, --padding-md
- * - --gap-tiny, --gap-xs, --gap-sm, --gap-md
+ * - --gap-2xs, --gap-xs, --gap-sm, --gap-md
  * - --text-primary, --text-secondary
  * - --size-1400 (fixed preview height)
  *
@@ -101,7 +101,7 @@
   display: flex;
   flex-direction: column;
   /* Name ↔ metadata is the tight step (ADR-023 content-rhythm map: --gap-sm);
-     --gap-tiny collapses to 0px outside default spacing mode. */
+     --gap-2xs collapses to 0px outside default spacing mode. */
   gap: var(--gap-sm);
   min-width: 0;
 }
@@ -153,8 +153,8 @@
   font-weight: var(--font-weight-regular);
   color: var(--text-primary);
   cursor: pointer;
-  transition: background-color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out);
+  transition: background-color var(--duration-sm) var(--ease-out),
+    border-color var(--duration-sm) var(--ease-out);
 }
 
 .bds-file-card__action:hover:not(:disabled),

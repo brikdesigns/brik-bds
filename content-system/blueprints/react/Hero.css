@@ -88,7 +88,7 @@
 @media (min-width: 768px) {
   .bds-hero--split .bds-hero__container {
     grid-template-columns: 3fr 2fr;
-    gap: var(--gap-huge);
+    gap: var(--gap-2xl);
   }
 
   .bds-hero--split .bds-hero__title::after {
@@ -143,7 +143,7 @@
   background: var(--bds-hero-bg, var(--page-secondary));
   padding-block: var(
     --bds-hero-padding-y,
-    clamp(var(--padding-xl), 6vw, var(--padding-huge))
+    clamp(var(--padding-xl), 6vw, var(--padding-2xl))
   );
 }
 
@@ -293,7 +293,7 @@
 @media (min-width: 768px) {
   .bds-hero--with-pricing-card .bds-hero__container {
     grid-template-columns: 58fr 42fr;
-    gap: var(--gap-huge);
+    gap: var(--gap-2xl);
   }
 }
 
@@ -333,7 +333,7 @@ img.bds-hero__icon {
 }
 
 .bds-hero--with-pricing-card .bds-hero__title {
-  font-size: clamp(var(--heading-xl), 5vw, var(--heading-xxl));
+  font-size: clamp(var(--heading-xl), 5vw, var(--heading-2xl));
   font-weight: var(--font-weight-bold);
   color: var(--bds-hero-headline-color, var(--text-primary));
 }

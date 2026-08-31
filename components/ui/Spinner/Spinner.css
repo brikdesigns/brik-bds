@@ -22,6 +22,6 @@
 .bds-spinner--lg {
   width: var(--size-1200);
   height: var(--size-1200);
-  border-width: var(--border-width-huge);
+  border-width: var(--border-width-2xl);
 }
 }

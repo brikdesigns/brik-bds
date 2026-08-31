@@ -25,7 +25,7 @@
   cursor: default;
   user-select: none;
   overflow: clip;
-  transition: background-color var(--duration-normal) var(--ease-out);
+  transition: background-color var(--duration-md) var(--ease-out);
   box-sizing: border-box;
 }
 
@@ -68,9 +68,9 @@
 }
 
 .bds-tag--sm {
-  padding: var(--padding-tiny) var(--padding-sm);
+  padding: var(--padding-2xs) var(--padding-sm);
   gap: var(--gap-xs);
-  font-size: var(--label-tiny);
+  font-size: var(--label-2xs);
   height: var(--size-700);
   border-radius: var(--border-radius-sm);
 }

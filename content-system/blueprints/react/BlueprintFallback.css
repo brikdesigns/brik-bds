@@ -8,7 +8,7 @@
  * NOT "sync" the fallbacks over.
  *
  * Everything else must stay identical. It drifted before (#1641): a raw
- * `max-width: 960px` here against `var(--content-width-wide)` (1024px) there,
+ * `max-width: 960px` here against `var(--content-width-lg)` (1024px) there,
  * plus `4px`/`2px` literals where the twin used tokens — all invisible to the
  * token lint, which reads var() fallbacks, not bare literals.
  */
@@ -21,7 +21,7 @@
 }
 
 .bp-fallback__container {
-  max-width: var(--content-width-wide);
+  max-width: var(--content-width-lg);
   margin-inline: auto;
   display: flex;
   flex-direction: column;
@@ -56,7 +56,7 @@
 .bp-fallback code {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: 0.9em;
-  padding: 0 var(--padding-tiny);
+  padding: 0 var(--padding-2xs);
   background: var(--surface-primary);
   border-radius: var(--border-radius-sm);
 }

@@ -36,7 +36,7 @@
 
 .bds-subnav__nav {
   flex: 1;
-  padding: var(--padding-md) var(--padding-tiny);
+  padding: var(--padding-md) var(--padding-2xs);
   display: flex;
   flex-direction: column;
   gap: var(--gap-xs);

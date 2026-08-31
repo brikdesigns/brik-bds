@@ -257,7 +257,7 @@ export const Placement: Story = {
         { id: '3', label: 'Archive', onClick: () => {} },
       ];
       return (
-        <div style={{ display: 'flex', gap: 'var(--gap-huge)', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 'var(--gap-2xl)', alignItems: 'center' }}>
           <div>
             <SectionLabel>placement=&quot;bottom&quot;</SectionLabel>
             <div style={{ position: 'relative', display: 'inline-block' }}>

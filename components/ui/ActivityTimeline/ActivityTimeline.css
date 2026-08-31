@@ -74,7 +74,7 @@
 .bds-activity-timeline__content {
   /* reviewed #2119: layout wrapper — holds label/detail/timestamp, each of
      which carries its own type tokens; no direct text child here */
-  padding-top: var(--padding-tiny);
+  padding-top: var(--padding-2xs);
   padding-bottom: var(--padding-lg);
 }
 

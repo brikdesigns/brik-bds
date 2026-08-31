@@ -23,7 +23,7 @@
 .bds-service-tag--sm {
   height: var(--size-700);
   padding-inline: var(--padding-sm);
-  font-size: var(--label-tiny);
+  font-size: var(--label-2xs);
 }
 
 .bds-service-tag--md {
@@ -54,7 +54,7 @@
    size rules above, including the lg + has-icon pair. */
 .bds-service-tag.bds-service-tag--has-trailing {
   gap: var(--gap-xs);
-  padding-inline-end: var(--padding-tiny);
+  padding-inline-end: var(--padding-2xs);
 }
 
 /* `color: inherit` is load-bearing: the slot picks up the tag's

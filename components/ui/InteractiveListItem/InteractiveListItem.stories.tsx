@@ -10,7 +10,7 @@ import { Icon } from '../Icon';
 
 const Stack = ({
   children,
-  gap = 'var(--gap-tiny)',
+  gap = 'var(--gap-2xs)',
 }: {
   children: React.ReactNode;
   gap?: string;
@@ -263,7 +263,7 @@ export const ReadOnly: Story = {
     ];
     return (
       <div style={{ minWidth: 360 }}>
-        <Stack gap="var(--gap-tiny)">
+        <Stack gap="var(--gap-2xs)">
           {rows.map((row) => (
             <InteractiveListItem
               key={row.title}

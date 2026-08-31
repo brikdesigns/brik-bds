@@ -28,7 +28,7 @@
 
 .bds-card-testimonial__quote-mark {
   font-family: var(--font-family-display);
-  font-size: var(--heading-huge);
+  font-size: var(--heading-3xl);
   font-weight: var(--font-weight-bold);
   line-height: var(--font-line-height-tight);
   margin: 0;

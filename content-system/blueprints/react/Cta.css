@@ -25,7 +25,7 @@
 .bds-cta__container {
   /* Narrower centred band than the shared --content-width-xl default, with a
    * wider inline inset to match. Deliberate, not drift. */
-  --bds-blueprint-section-content-width: var(--content-width-wide);
+  --bds-blueprint-section-content-width: var(--content-width-lg);
   --bds-blueprint-section-padding-inline: var(--padding-xl);
   display: flex;
   flex-direction: column;
@@ -91,7 +91,7 @@
 @media (min-width: 768px) {
   .bds-cta--split .bds-cta__container {
     grid-template-columns: 3fr 2fr;
-    gap: var(--gap-huge);
+    gap: var(--gap-2xl);
   }
 }
 
@@ -135,7 +135,7 @@
 .bds-cta__method {
   display: flex;
   flex-direction: column;
-  /* Label↔value is a tight text pairing: --gap-sm. Not --gap-tiny, which
+  /* Label↔value is a tight text pairing: --gap-sm. Not --gap-2xs, which
      resolves to 0px outside default spacing mode (ADR-023 §3). */
   gap: var(--gap-sm);
   color: var(--bds-cta-method-color, var(--text-primary));

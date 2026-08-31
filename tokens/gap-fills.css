@@ -95,23 +95,14 @@
   --bds-slider-thumb-size:   20px;
   --bds-slider-track-height: 4px;
 
-  /* ── Icon size aliases (gap-fill — deleted from figma-tokens.css in 2026-04-03 sync) ──
-     Components reference --icon-tiny/xs/xl/huge; restore the full set here.
-     The per-theme blocks already carry --icon-sm/md/lg — those are fine.
-     Remove once these are added back to Figma and regenerated via SD. */
-  --icon-tiny: var(--font-size-50);
-  --icon-xs:   var(--font-size-75);
-  --icon-sm:   var(--font-size-100);
-  --icon-md:   var(--font-size-200);
-  --icon-lg:   var(--font-size-300);
-  --icon-xl:   var(--font-size-400);
-  --icon-huge: var(--font-size-500);
-
   /* ── Icon size extensions (gap-fill — not yet in Figma; see #758) ──
-     Button tiny/xl icon sizes sit at 12px and 24px, which are not in the
-     font-size scale. These bridge to the size scale until promoted to Figma. */
-  --icon-2xs: var(--size-300);   /* 12px — Button tiny icon; between icon-tiny (~11.5px) and icon-xs (14px) */
-  --icon-2xl: var(--size-600);   /* 24px — Button xl icon; between icon-xl (~22.5px) and icon-huge (~25.3px) */
+     The base icon ramp (--icon-3xs/xs/sm/md/lg/xl/3xl) is Figma-sourced again
+     via figma-tokens.css, so the 2026-04-03 "restore the full set" block was
+     removed here to end the duplication (ADR-033 §3 rename retired its old
+     --icon-tiny/huge names, #1923). Only the two size-scale bridges stay:
+     12px / 24px are not on the font-size scale. */
+  --icon-2xs: var(--size-300);   /* 12px — Button xs icon; between icon-3xs (~11.5px) and icon-xs (14px) */
+  --icon-2xl: var(--size-600);   /* 24px — Button xl icon; between icon-xl (~22.5px) and icon-3xl (~25.3px) */
 
   /* ── Semantic Tokens Not Yet in Figma/SD ── */
   --surface-nav: var(--color-grayscale-white);
@@ -262,9 +253,9 @@
      These are NOT screen breakpoints; they constrain content within a viewport.
      For media queries, use the `breakpoints` constant from @bds-tokens (index.ts) —
      CSS custom properties cannot be used inside @media rules. */
-  --content-width-narrow:   640px;  /* prose, reading columns, focused forms */
-  --content-width-default:  800px;  /* standard body sections */
-  --content-width-wide:    1024px;  /* feature sections, grids */
+  --content-width-sm:       640px;  /* prose, reading columns, focused forms */
+  --content-width-md:       800px;  /* standard body sections */
+  --content-width-lg:      1024px;  /* feature sections, grids */
   --content-width-xl:      1280px;  /* hero bands, wide layouts */
   --content-width-full:     100%;   /* full-bleed (use sparingly — prefer explicit widths) */
 
@@ -313,22 +304,13 @@
   --breakpoint-wide:       1280px;
   --breakpoint-wider:      1440px;
 
-  /* ── Border-width semantic aliases (mode-catalog names) ──
-     The borderWidth mode catalog (websites/shared/MODE-ARCHITECTURE.md) names
-     picks "thin / standard / bold". Without aliases at these names, client
-     theme files invent --border-width-default and friends (see brik-bds#302
-     and brik-llm#52). Adding them as canonical removes that invention pressure.
-
-     Values mirror the standard mode's effective widths: thin=1px, standard=2px,
-     bold=3px. These are FIXED-VALUE aliases — when a client picks a different
-     borderWidth mode, the modulation should happen on --border-width-sm/md/lg,
-     not here. (borderWidth modes are documented but not yet implemented in BDS
-     CSS overrides — see MODE-ARCHITECTURE.md.)
-
-     Promote to Figma when borderWidth mode overrides are wired into theme CSS. */
-  --border-width-thin:     1px;
-  --border-width-standard: 2px;
-  --border-width-bold:     3px;
+  /* ── Border-width semantic aliases (mode-catalog names) — RETIRED (ADR-033 §3, #1923)
+     --border-width-thin/standard/bold (1/2/3px) were fixed-value duplicates of
+     --border-width-sm/md/lg that froze what the spacing modes vary, so §3
+     dispositions them as delete-not-rename. All three had zero in-repo consumers.
+     If borderWidth mode overrides land and a client theme needs mode-catalog
+     names, reintroduce them in Figma against --border-width-sm/md/lg, not as
+     fixed px here (the original invention-pressure note: brik-bds#302, brik-llm#52). */
 
   /* ── Interaction state overlays (gap-fill — add to Figma when interaction tokens land) */
   --state-hover-overlay: rgba(0, 0, 0, 0.04); /* bds-lint-ignore — rgba overlay, no token equivalent */
@@ -367,15 +349,15 @@
      Map to Figma primitive duration/easing tokens where available.
      Note: --easing-ease-* in figma-tokens.css export as "String value"
      (Figma limitation) so direct cubic-bezier values are used here. */
-  --duration-fast:   var(--duration-100);   /* 100ms — micro-interactions: hover, focus */
-  --duration-normal: var(--duration-200);   /* 200ms — standard transitions: buttons, cards */
-  --duration-slow:   var(--duration-300);   /* 300ms — emphasis: modals, sheets, reveals */
-  --duration-xl:     var(--duration-400);   /* 500ms — cross-fades, long reveals (one rung past --duration-slow) */
+  --duration-sm:   var(--duration-100);   /* 100ms — micro-interactions: hover, focus */
+  --duration-md:   var(--duration-200);   /* 200ms — standard transitions: buttons, cards */
+  --duration-lg:   var(--duration-300);   /* 300ms — emphasis: modals, sheets, reveals */
+  --duration-xl:   var(--duration-400);   /* 500ms — cross-fades, long reveals (one rung past --duration-lg) */
 
   /* Periodic / loop durations — role tokens, NOT steps on the transition ramp
      above (ADR-033 § Named exceptions, same basis as --shadow-overlay). These
      feed animation-duration on infinite loops and JS auto-advance intervals, so
-     they live in seconds. Reach for fast/normal/slow for any tween; only
+     they live in seconds. Reach for sm/md/lg for any tween; only
      continuous or timed-advance motion uses these. */
   --duration-marquee:  55s;  /* full marquee loop period — logo tickers, continuous scroll */
   --duration-autoplay: 10s;  /* dwell before auto-advance — carousels, media tabs */
@@ -386,6 +368,33 @@
   --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — pop-in, badge appear */
   --ease-spring-soft: cubic-bezier(0, 1.08, 0.77, 1.01); /* gentle overshoot settle — media/panel entrance */
   --ease-linear:      linear;                            /* constant velocity — marquees, continuous loops */
+
+  /* ── DEPRECATED step-word aliases (ADR-033 §3, #1923) — DROP NEXT MINOR ──
+     Positional, value-preserving renames of the retired step words. Each old
+     name aliases its NEW t-shirt rung (not a primitive) so mode-varying families
+     keep tracking their per-mode value. Shipped for one minor so the six BDS
+     consumer repos migrate; the follow-up drops this block and clears the
+     remaining #1923 rows from naming-canon-baseline.json. See CHANGELOG /
+     the PR's BREAKING CHANGE footer for the full old → new mapping. */
+  --gap-tiny:            var(--gap-2xs);            /* bds-lint-ignore — DEPRECATED, use --gap-2xs (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --gap-huge:            var(--gap-2xl);            /* bds-lint-ignore — DEPRECATED, use --gap-2xl (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --padding-tiny:        var(--padding-2xs);        /* bds-lint-ignore — DEPRECATED, use --padding-2xs (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --padding-huge:        var(--padding-2xl);        /* bds-lint-ignore — DEPRECATED, use --padding-2xl (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --icon-tiny:           var(--icon-3xs);           /* bds-lint-ignore — DEPRECATED, use --icon-3xs (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --icon-huge:           var(--icon-3xl);           /* bds-lint-ignore — DEPRECATED, use --icon-3xl (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --body-tiny:           var(--body-2xs);           /* bds-lint-ignore — DEPRECATED, use --body-2xs (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --body-huge:           var(--body-2xl);           /* bds-lint-ignore — DEPRECATED, use --body-2xl (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --heading-tiny:        var(--heading-xs);         /* bds-lint-ignore — DEPRECATED, use --heading-xs (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --heading-xxl:         var(--heading-2xl);        /* bds-lint-ignore — DEPRECATED, use --heading-2xl (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --heading-huge:        var(--heading-3xl);        /* bds-lint-ignore — DEPRECATED, use --heading-3xl (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --label-tiny:          var(--label-2xs);          /* bds-lint-ignore — DEPRECATED, use --label-2xs (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --border-width-huge:   var(--border-width-2xl);   /* bds-lint-ignore — DEPRECATED, use --border-width-2xl (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --duration-fast:       var(--duration-sm);        /* bds-lint-ignore — DEPRECATED, use --duration-sm (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --duration-normal:     var(--duration-md);        /* bds-lint-ignore — DEPRECATED, use --duration-md (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --duration-slow:       var(--duration-lg);        /* bds-lint-ignore — DEPRECATED, use --duration-lg (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --content-width-narrow:  var(--content-width-sm); /* bds-lint-ignore — DEPRECATED, use --content-width-sm (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --content-width-default: var(--content-width-md); /* bds-lint-ignore — DEPRECATED, use --content-width-md (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --content-width-wide:    var(--content-width-lg); /* bds-lint-ignore — DEPRECATED, use --content-width-lg (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
 }
 
 /* ── Page inset — spacing-mode ladder (ADR-025) ──

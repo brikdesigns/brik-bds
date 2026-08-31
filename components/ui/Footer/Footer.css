@@ -66,15 +66,15 @@
    from the `.bds-footer` shorthand is untouched — only `padding-inline` is
    overridden. */
 .bds-footer--constrain-narrow {
-  padding-inline: max(var(--page-inset), calc((100% - var(--content-width-narrow)) / 2));
+  padding-inline: max(var(--page-inset), calc((100% - var(--content-width-sm)) / 2));
 }
 
 .bds-footer--constrain-default {
-  padding-inline: max(var(--page-inset), calc((100% - var(--content-width-default)) / 2));
+  padding-inline: max(var(--page-inset), calc((100% - var(--content-width-md)) / 2));
 }
 
 .bds-footer--constrain-wide {
-  padding-inline: max(var(--page-inset), calc((100% - var(--content-width-wide)) / 2));
+  padding-inline: max(var(--page-inset), calc((100% - var(--content-width-lg)) / 2));
 }
 
 .bds-footer--constrain-xl {
@@ -146,7 +146,7 @@
   font-weight: var(--font-weight-regular);
   line-height: var(--font-line-height-normal);
   text-decoration: none;
-  transition: opacity var(--duration-fast) var(--ease-out);
+  transition: opacity var(--duration-sm) var(--ease-out);
   display: inline-flex;
   align-items: center;
   gap: var(--gap-sm);
@@ -213,7 +213,7 @@
   font-weight: var(--font-weight-regular);
   line-height: var(--font-line-height-tight);
   text-decoration: none;
-  transition: opacity var(--duration-fast) var(--ease-out);
+  transition: opacity var(--duration-sm) var(--ease-out);
 }
 
 .bds-footer__bottom-link:hover {

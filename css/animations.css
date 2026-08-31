@@ -28,8 +28,8 @@
   opacity: 0;
   transform: translateY(20px);
   transition:
-    opacity var(--duration-slow) var(--ease-out),
-    transform var(--duration-slow) var(--ease-out);
+    opacity var(--duration-lg) var(--ease-out),
+    transform var(--duration-lg) var(--ease-out);
 }
 .animate-fade-up.is-visible {
   opacity: 1;
@@ -41,8 +41,8 @@
   opacity: 0;
   transform: translateY(-20px);
   transition:
-    opacity var(--duration-slow) var(--ease-out),
-    transform var(--duration-slow) var(--ease-out);
+    opacity var(--duration-lg) var(--ease-out),
+    transform var(--duration-lg) var(--ease-out);
 }
 .animate-fade-down.is-visible {
   opacity: 1;
@@ -54,8 +54,8 @@
   opacity: 0;
   transform: translateX(-30px);
   transition:
-    opacity var(--duration-slow) var(--ease-out),
-    transform var(--duration-slow) var(--ease-out);
+    opacity var(--duration-lg) var(--ease-out),
+    transform var(--duration-lg) var(--ease-out);
 }
 .animate-slide-left.is-visible {
   opacity: 1;
@@ -67,8 +67,8 @@
   opacity: 0;
   transform: translateX(30px);
   transition:
-    opacity var(--duration-slow) var(--ease-out),
-    transform var(--duration-slow) var(--ease-out);
+    opacity var(--duration-lg) var(--ease-out),
+    transform var(--duration-lg) var(--ease-out);
 }
 .animate-slide-right.is-visible {
   opacity: 1;
@@ -80,8 +80,8 @@
   opacity: 0;
   transform: scale(0.95);
   transition:
-    opacity var(--duration-slow) var(--ease-out),
-    transform var(--duration-slow) var(--ease-out);
+    opacity var(--duration-lg) var(--ease-out),
+    transform var(--duration-lg) var(--ease-out);
 }
 .animate-scale-in.is-visible {
   opacity: 1;
@@ -91,7 +91,7 @@
 /* Fade Only */
 .animate-fade {
   opacity: 0;
-  transition: opacity var(--duration-slow) var(--ease-out);
+  transition: opacity var(--duration-lg) var(--ease-out);
 }
 .animate-fade.is-visible {
   opacity: 1;
@@ -125,8 +125,8 @@
 /* Button Lift */
 .hover-lift {
   transition:
-    transform var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out);
+    transform var(--duration-sm) var(--ease-out),
+    box-shadow var(--duration-sm) var(--ease-out);
 }
 .hover-lift:hover {
   transform: translateY(-2px);
@@ -135,7 +135,7 @@
 
 /* Button Scale */
 .hover-scale {
-  transition: transform var(--duration-fast) var(--ease-out);
+  transition: transform var(--duration-sm) var(--ease-out);
 }
 .hover-scale:hover {
   transform: scale(1.03);
@@ -144,8 +144,8 @@
 /* Card Glow */
 .hover-glow {
   transition:
-    box-shadow var(--duration-normal) var(--ease-out),
-    transform var(--duration-normal) var(--ease-out);
+    box-shadow var(--duration-md) var(--ease-out),
+    transform var(--duration-md) var(--ease-out);
 }
 .hover-glow:hover {
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
@@ -154,7 +154,7 @@
 
 /* Image Zoom (apply to image inside overflow:hidden container) */
 .hover-zoom {
-  transition: transform var(--duration-slow) var(--ease-out);
+  transition: transform var(--duration-lg) var(--ease-out);
 }
 .hover-zoom:hover,
 *:hover > .hover-zoom {
@@ -163,7 +163,7 @@
 
 /* Nav Link Dim */
 .hover-dim {
-  transition: opacity var(--duration-normal) var(--ease-out);
+  transition: opacity var(--duration-md) var(--ease-out);
 }
 .hover-dim:hover {
   opacity: 0.7;
@@ -181,7 +181,7 @@
   width: 0;
   height: 2px;
   background: currentColor;
-  transition: width var(--duration-normal) var(--ease-out);
+  transition: width var(--duration-md) var(--ease-out);
 }
 .hover-underline:hover::after {
   width: 100%;
@@ -238,7 +238,7 @@
 /* Fade Out */
 .animate-fade-out {
   opacity: 1;
-  transition: opacity var(--duration-normal) var(--ease-in);
+  transition: opacity var(--duration-md) var(--ease-in);
 }
 .animate-fade-out.is-hidden {
   opacity: 0;
@@ -248,7 +248,7 @@
 .collapse-container {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows var(--duration-slow) var(--ease-out);
+  transition: grid-template-rows var(--duration-lg) var(--ease-out);
 }
 .collapse-container.is-open {
   grid-template-rows: 1fr;
@@ -265,13 +265,13 @@
 /* Header Collapse (toggle .is-scrolled via JS) */
 .header-collapse {
   transition:
-    height var(--duration-normal) var(--ease-out),
-    padding var(--duration-normal) var(--ease-out);
+    height var(--duration-md) var(--ease-out),
+    padding var(--duration-md) var(--ease-out);
 }
 .header-collapse .logo {
   transition:
-    width var(--duration-normal) var(--ease-out),
-    height var(--duration-normal) var(--ease-out);
+    width var(--duration-md) var(--ease-out),
+    height var(--duration-md) var(--ease-out);
 }
 
 /* Scroll Progress Bar */
@@ -342,8 +342,8 @@
 /* Input Focus */
 .input-animate {
   transition:
-    border-color var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out);
+    border-color var(--duration-sm) var(--ease-out),
+    box-shadow var(--duration-sm) var(--ease-out);
 }
 .input-animate:focus {
   border-color: var(--_color---theme--primary, #0066ff);

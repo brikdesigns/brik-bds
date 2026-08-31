@@ -68,7 +68,7 @@
 /* Timestamp */
 .bds-notification-item__time {
   font-family: var(--font-family-label);
-  font-size: var(--body-tiny);
+  font-size: var(--body-2xs);
   color: var(--text-muted);
   /* Body → timestamp is the tight step (ADR-023 map: --gap-sm);
      --gap-xs collapses to 0px outside default spacing mode. */

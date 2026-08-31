@@ -84,7 +84,7 @@
 }
 
 /* ─── Rhythm between slots (ADR-023 §3) ────────────────────────────
-   Mode-tied `--gap-*` only — `--gap-xs`/`--gap-tiny` resolve to 0px outside
+   Mode-tied `--gap-*` only — `--gap-xs`/`--gap-2xs` resolve to 0px outside
    default mode and would collapse the tight gap. Margin-based (not flex
    `gap`) so each relationship is the exact token, not additive. */
 

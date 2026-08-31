@@ -240,7 +240,7 @@ const cta = section.cta;
     background: var(--bds-hero-bg, var(--page-secondary));
     padding-block: var(
       --bds-hero-padding-y,
-      clamp(var(--padding-xl), 6vw, var(--padding-huge))
+      clamp(var(--padding-xl), 6vw, var(--padding-2xl))
     );
   }
 
@@ -381,7 +381,7 @@ const cta = section.cta;
   @media (min-width: 768px) {
     .bds-hero__container {
       grid-template-columns: 58fr 42fr;
-      gap: var(--gap-huge);
+      gap: var(--gap-2xl);
     }
   }
 
@@ -432,7 +432,7 @@ const cta = section.cta;
   .bds-hero__title {
     margin: 0;
     font-family: var(--font-family-heading);
-    font-size: clamp(var(--heading-xl), 5vw, var(--heading-xxl));
+    font-size: clamp(var(--heading-xl), 5vw, var(--heading-2xl));
     font-weight: var(--font-weight-bold);
     line-height: var(--font-line-height-tight);
     color: var(--bds-hero-headline-color, var(--text-primary));

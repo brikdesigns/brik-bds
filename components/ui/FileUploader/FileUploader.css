@@ -34,8 +34,8 @@
   border: var(--border-width-lg) dashed var(--border-secondary);
   border-radius: var(--border-radius-lg);
   cursor: pointer;
-  transition: border-color var(--duration-fast) var(--ease-out),
-    background-color var(--duration-fast) var(--ease-out);
+  transition: border-color var(--duration-sm) var(--ease-out),
+    background-color var(--duration-sm) var(--ease-out);
   text-align: center;
   width: 100%;
   box-sizing: border-box;

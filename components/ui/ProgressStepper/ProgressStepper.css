@@ -63,7 +63,7 @@
 .bds-progress-stepper__circle--sm {
   width: 24px; /* bds-lint-ignore — Figma-driven step circle size */
   height: 24px; /* bds-lint-ignore — Figma-driven step circle size */
-  font-size: var(--body-tiny);
+  font-size: var(--body-2xs);
 }
 
 .bds-progress-stepper__circle--md {
@@ -128,7 +128,7 @@
 }
 
 .bds-progress-stepper__desc--sm {
-  font-size: var(--body-tiny);
+  font-size: var(--body-2xs);
 }
 
 .bds-progress-stepper__desc--md {
@@ -165,7 +165,7 @@
 .bds-progress-stepper__dot {
   border-radius: var(--border-radius-sm);
   border: none;
-  transition: all var(--duration-normal) var(--ease-out);
+  transition: all var(--duration-md) var(--ease-out);
   padding: 0;
   flex-shrink: 0;
 }

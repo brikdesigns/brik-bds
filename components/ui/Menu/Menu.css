@@ -12,7 +12,7 @@
 
 .bds-menu {
   /* ─── Component-scoped override surface ── */
-  --menu-enter-duration: var(--duration-normal); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --menu-enter-duration: var(--duration-md); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   --menu-enter-ease: var(--ease-out);            /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 
   position: absolute;
@@ -49,9 +49,9 @@
 .bds-menu__header {
   display: flex;
   flex-direction: column;
-  padding: var(--padding-tiny) var(--padding-tiny) var(--padding-md);
+  padding: var(--padding-2xs) var(--padding-2xs) var(--padding-md);
   border-bottom: var(--border-width-md) solid var(--border-muted);
-  /* Tight structural step below the divider; --gap-tiny is 0px outside
+  /* Tight structural step below the divider; --gap-2xs is 0px outside
      default spacing mode. */
   margin-bottom: var(--gap-sm);
   font-family: var(--font-family-label);
@@ -73,7 +73,7 @@
 }
 
 .bds-menu__title {
-  padding: var(--padding-tiny) var(--padding-tiny) 0;
+  padding: var(--padding-2xs) var(--padding-2xs) 0;
   font-family: var(--font-family-label);
   font-size: var(--body-xs);
   font-weight: var(--font-weight-semibold);
@@ -90,7 +90,7 @@
   display: flex;
   align-items: center;
   gap: var(--gap-md);
-  padding: var(--padding-tiny);
+  padding: var(--padding-2xs);
   background: none;
   border: none;
   border-radius: var(--border-radius-sm);
@@ -116,7 +116,7 @@
 /* ─── Item hover ─────────────────────────────────────── */
 
 .bds-menu__item:not(.bds-menu__item--disabled) {
-  transition: background-color var(--duration-fast) var(--ease-out);
+  transition: background-color var(--duration-sm) var(--ease-out);
 }
 
 .bds-menu__item:hover:not(.bds-menu__item--disabled) {
@@ -147,7 +147,7 @@
 .bds-menu__text {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-tiny);
+  gap: var(--gap-2xs);
   min-width: 0;
   flex: 1;
 }

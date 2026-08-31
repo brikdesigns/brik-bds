@@ -24,8 +24,8 @@
     font: inherit;
     box-shadow: inset 0 0 0 var(--border-width-md) var(--border-muted);
     transition:
-      box-shadow var(--duration-fast) var(--ease-out),
-      transform var(--duration-fast) var(--ease-out);
+      box-shadow var(--duration-sm) var(--ease-out),
+      transform var(--duration-sm) var(--ease-out);
   }
 
   .bds-selectable-media-tile:hover:not(:disabled) {
@@ -56,8 +56,8 @@
 
   .bds-selectable-media-tile__check {
     position: absolute;
-    top: var(--padding-tiny);
-    right: var(--padding-tiny);
+    top: var(--padding-2xs);
+    right: var(--padding-2xs);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -74,8 +74,8 @@
   .bds-selectable-media-tile__caption {
     display: flex;
     align-items: center;
-    gap: var(--gap-tiny);
-    padding: var(--padding-tiny) var(--padding-sm);
+    gap: var(--gap-2xs);
+    padding: var(--padding-2xs) var(--padding-sm);
     font-family: var(--font-family-label);
     font-size: var(--label-sm);
     font-weight: var(--font-weight-medium);

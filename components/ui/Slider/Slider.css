@@ -92,7 +92,7 @@
   box-shadow: var(--bds-slider-thumb-shadow);
   cursor: pointer;
   margin-top: calc((var(--bds-slider-track-height, var(--size-150)) - var(--bds-slider-thumb-size, var(--size-500))) / 2);
-  transition: box-shadow var(--duration-fast) var(--ease-out);
+  transition: box-shadow var(--duration-sm) var(--ease-out);
 }
 
 .bds-slider-input::-moz-range-thumb {
@@ -103,7 +103,7 @@
   border: var(--border-width-200) solid var(--background-brand-primary);
   box-shadow: var(--bds-slider-thumb-shadow);
   cursor: pointer;
-  transition: box-shadow var(--duration-fast) var(--ease-out);
+  transition: box-shadow var(--duration-sm) var(--ease-out);
 }
 
 /* Focus */

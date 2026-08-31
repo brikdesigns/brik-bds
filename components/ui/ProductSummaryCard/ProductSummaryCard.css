@@ -35,7 +35,7 @@
 .bds-product-summary-card__value {
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight-semibold);
-  font-size: var(--heading-tiny);
+  font-size: var(--heading-xs);
   color: var(--text-primary);
 }
 

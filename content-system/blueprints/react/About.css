@@ -29,7 +29,7 @@
 @media (min-width: 768px) {
   .bds-about__container:has(.bds-about__callout) {
     grid-template-columns: 3fr 2fr;
-    gap: var(--gap-huge);
+    gap: var(--gap-2xl);
     align-items: start;
   }
 }

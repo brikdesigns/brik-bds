@@ -36,4 +36,11 @@ regexes = [
   # Deliberately narrow: it matches this construct and nothing else. Widening
   # it to something like `\.key` would blind the scan to a real `apiKey = "..."`.
   '''[A-Za-z_$][\w$]*\.key,\s*[A-Za-z_$][\w$]*\s*=\s*[A-Za-z_$][\w$]*\.childrens''',
+  # health-data.json carries `"token": "--<design-token-name>"` entries — public
+  # CSS custom-property names from dist/tokens.css. The generic-api-key rule trips
+  # on the `token` keyword + a name whose entropy crosses the threshold (e.g.
+  # `--border-width-2xl`, renamed in brik-bds#1923); which name does so shifts as
+  # tokens are renamed. Deliberately narrow: only a `token` value that is a `--`
+  # kebab-case custom property — a real key is neither `--`-prefixed nor kebab-only.
+  '''token":\s*"--[a-z0-9]+(?:-[a-z0-9]+)*"''',
 ]

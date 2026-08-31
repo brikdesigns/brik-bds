@@ -28,7 +28,7 @@
      pill clusters. */
   border: var(--border-width-md) solid transparent;
   overflow: clip;
-  transition: filter var(--duration-fast) var(--ease-out);
+  transition: filter var(--duration-sm) var(--ease-out);
   box-sizing: border-box;
 }
 
@@ -48,8 +48,8 @@
 /* ─── Sizes ───────────────────────────────────────────────────── */
 
 .bds-chip--sm {
-  padding: var(--padding-tiny) var(--padding-sm);
-  font-size: var(--label-tiny);
+  padding: var(--padding-2xs) var(--padding-sm);
+  font-size: var(--label-2xs);
   gap: var(--gap-xs);
   height: var(--size-700);
 }
@@ -111,7 +111,7 @@
   --bds-chip-sm-icon-size: 10px; /* component-local micro-graphic size; no registry rung (#2138) */
   width: var(--bds-chip-sm-icon-size);
   height: var(--bds-chip-sm-icon-size);
-  font-size: var(--label-tiny);
+  font-size: var(--label-2xs);
 }
 
 .bds-chip--md .bds-chip__icon {

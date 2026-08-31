@@ -90,7 +90,10 @@ export type WiredBlueprintKey = (typeof WIRED_BLUEPRINT_KEYS)[number];
  * default is preserved (no visual change for existing consumers).
  * brikdesigns.com #453 passes `md`. (#869)
  */
-export type CtaSize = 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
+// Mirrors BDS `ButtonSize` — a Cta renders a `<Button size>`. `tiny` retired to
+// `xs` (ADR-033 §3, #1923); an old `size: 'tiny'` in blueprint data is still
+// honoured at runtime by Button's `resolveRetiredValue`, then removed next minor.
+export type CtaSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 /**
  * A blueprint CTA. Two shapes, both back-compatible with the original

@@ -104,7 +104,7 @@ export function BreadcrumbSwitcher({
           <Button
             ref={triggerRef}
             variant="ghost"
-            size="tiny"
+            size="xs"
             label={switchLabel}
             aria-haspopup="menu"
             aria-expanded={isOpen}
