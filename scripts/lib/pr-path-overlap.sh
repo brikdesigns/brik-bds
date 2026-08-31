@@ -64,6 +64,11 @@ _PPO_YELLOW='\033[1;33m'
 _PPO_GREEN='\033[0;32m'
 _PPO_NC='\033[0m'
 
+# Set by check_ticket_path_overlap; read by the sibling-worktree gate in
+# issue-overlap.sh (brik-llm#1932). Declared here so it is defined even when that
+# function never runs — new-task.sh reads it unconditionally under `set -u`.
+PTO_TICKET_PATHS="${PTO_TICKET_PATHS:-}"
+
 # ── Pure helpers (no network, no git) ──────────────────────────────
 
 # Exact-match intersection of two newline-separated path lists, order-preserving
@@ -305,6 +310,10 @@ _pto_issue_api_path() {
 # Always returns 0 — this warns, it never blocks branch creation.
 check_ticket_path_overlap() {
   local ref="${1:-}"
+  # Cleared FIRST, before any early return. A stale value from a previous call
+  # would hand the worktree gate (brik-llm#1932) the last ticket's paths and
+  # report a collision against work this one never named.
+  PTO_TICKET_PATHS=""
   [ -n "$ref" ] || return 0
 
   if ! command -v gh >/dev/null 2>&1; then
@@ -333,6 +342,18 @@ check_ticket_path_overlap() {
   own_paths="$(printf '%s\n' "$records" | _pto_partition_records "$num" mine \
                | cut -f4 | tr ',' '\n' | grep -v '^$' || true)"
   [ -n "$own_paths" ] && mine="$(printf '%s\n%s\n' "$mine" "$own_paths" | grep -v '^$' | awk '!seen[$0]++')"
+
+  # Published for the sibling-worktree gate (brik-llm#1932), which asks the same
+  # question of UNCOMMITTED local state and has no way to pay for this read
+  # itself. A global rather than a return value because this function's stdout is
+  # its human report, and because it is called directly from new-task.sh — not in
+  # a command substitution — so the assignment survives.
+  #
+  # It carries the paths the TICKET names, which is the caller's file set at
+  # task-start: new-task.sh:119-132 refuses to run when the primary worktree is
+  # dirty, so "the files I have changed" is empty there by construction and only
+  # "the files I am about to change" can collide with anything.
+  PTO_TICKET_PATHS="$mine"
 
   if [ -z "$mine" ]; then
     # AC: degrade to a no-op WITH A NOTE. Silence here is indistinguishable from

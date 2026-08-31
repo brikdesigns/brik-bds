@@ -37,6 +37,11 @@ BASE_BRANCH="main"
 ISSUE_REF=""
 NO_ISSUE=0
 OVER_BUDGET=0
+# Opt-out for the sibling-worktree gate (brik-llm#1932). Its own flag rather than
+# a NEW_TASK_YES/AUTO_YES branch on purpose: every agent session sets those, so
+# folding this into them would auto-proceed the one signal that means another
+# session is editing the file right now.
+ALLOW_WT_OVERLAP=0
 
 # Issue-number overlap gate. Worktrees isolate FILES, not INTENT: two sessions
 # can each create a correct worktree and build the same fix. brik-bds took four
@@ -141,6 +146,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --over-budget)
       OVER_BUDGET=1
+      shift
+      ;;
+    --allow-worktree-overlap)
+      ALLOW_WT_OVERLAP=1
       shift
       ;;
     --yes|-y)
@@ -268,6 +277,32 @@ if [ -n "$ISSUE_REF" ]; then
   # an unreadable title either (see the `|| return 0` in check_title_overlap).
   check_title_overlap "$ISSUE_REF"
   check_ticket_path_overlap "$ISSUE_REF"
+  # Sibling-worktree gate (brik-llm#1932). Every gate above reads state that
+  # reached GitHub; this one reads `git worktree list` + `git status` and sees the
+  # window none of them can — a session that has a worktree and edits but has not
+  # committed, pushed or opened a PR. On brik-bds#1662 two sessions held the same
+  # operations/security/secrets.yaml staged with zero commits between them.
+  #
+  # It runs immediately after check_ticket_path_overlap because it consumes that
+  # function's PTO_TICKET_PATHS — the paths this ticket names, already read and
+  # therefore free. Reordering these two degrades this gate to the ambient report.
+  #
+  # Guarded and REFUSING, unlike the advisory gates around it: rc 7 is a file
+  # being edited right now by another session. --allow-worktree-overlap is the
+  # documented opt-out.
+  worktree_rc=0
+  check_worktree_overlap "$PTO_TICKET_PATHS" || worktree_rc=$?
+  if [ "$worktree_rc" -eq 7 ] && [ "$ALLOW_WT_OVERLAP" != "1" ]; then
+    echo ""
+    echo -e "${RED}✗ Refusing to create a worktree — a sibling worktree is editing these files now.${NC}"
+    echo ""
+    echo -e "${YELLOW}  Those changes are uncommitted, so no branch, PR or claim reports them.${NC}"
+    echo -e "${YELLOW}  Read that worktree first. Never commit or push a branch you did not${NC}"
+    echo -e "${YELLOW}  create (brik-llm#2635) — the owning session is mid-edit.${NC}"
+    echo ""
+    echo -e "${YELLOW}  If the overlap is genuinely benign, re-run with --allow-worktree-overlap.${NC}"
+    exit 1
+  fi
   # The issue-side half of the same question (brik-llm#2314). The line above
   # asks "is anyone BUILDING on these files"; this asks "does anyone have an
   # open ticket ABOUT them" — a corpus no other gate here reads. Advisory and

@@ -14,15 +14,16 @@
 #
 # ── This file is a byte-identical copy. brikdesigns/brik-llm is the SOURCE. ────
 #
-# Four repos ship it, and they are separate git repos, so these are deliberate
-# copies and not an import:
+# Several repos ship it, and they are separate git repos, so these are deliberate
+# copies and not an import. brikdesigns/brik-llm is the SOURCE OF TRUTH; edit here.
 #
-#   brikdesigns/brik-llm                       ← SOURCE OF TRUTH, edit here
-#   brikdesigns/brik-bds                       ← copy
-#   brikdesigns/brik-client-portal             ← copy
-#   brikdesigns/treehouse-pediatric-dentistry  ← copy
-#
-# all at scripts/lib/issue-overlap.sh.
+# WHICH repos carry it is deliberately NOT written here. The `TWINS` registry in
+# brik-llm's scripts/audit/overlap-twin-drift.py is the record. The list that used
+# to sit on this line named four repos and was already wrong — tncld adopted the
+# gate in tncld#105 and never appeared in it. That is the exact defect
+# brik-llm#2272/#2447 are about, reproduced in the header warning against it, and
+# it is why the sibling twin pr-path-overlap.sh:53-57 refuses to keep a count in
+# prose.
 #
 # NEVER edit this file anywhere but brik-llm. Fix it there and re-sync every copy
 # in the same change — brik-llm's `overlap-twin-drift` workflow compares each
@@ -46,6 +47,10 @@
 #   source scripts/lib/issue-overlap.sh
 #   check_issue_overlap "1525"                       # issue in the current repo
 #   check_issue_overlap "brikdesigns/brik-llm#1525"  # cross-repo reference
+#
+# Usage (sourced, local git only — no GitHub call, brik-llm#1932):
+#   check_worktree_overlap "$PATHS"          # refuses on a live collision (rc 7)
+#   check_worktree_overlap "$PATHS" --report # same report, always returns 0
 #
 # Usage (standalone, for /resume — reports without prompting):
 #   scripts/lib/issue-overlap.sh --report 1522
@@ -661,6 +666,185 @@ _io_confirm() {
   read -r || true
 }
 
+# ── Sibling-worktree detection (#1932) ─────────────────────────────────────────
+#
+# Every other detector in this file reads PUBLISHED state — a branch name, a PR,
+# an issue title. A session that has created a worktree and started editing, but
+# has not committed, pushed or opened a PR, emits none of those. It is invisible
+# to all of them, and that is the commonest shape on a machine running eight
+# concurrent sessions.
+#
+# Measured on brikdesigns/brik-bds#1662: two sessions, two worktrees, both with
+# `operations/security/secrets.yaml` staged, both rewriting the same
+# `github-app-fleet-automation` block, zero commits and zero PRs between them.
+# The second session noticed because an unrelated `rg` happened to print the
+# first one's worktree path. Nothing but luck separated that from two conflicting
+# credential-registry PRs (brik-llm#1932).
+#
+# The signal is free and LOCAL — `git worktree list` plus a per-worktree
+# `git status`. No GitHub call, so this is safe on new-task.sh's hot path where
+# every other detector here spends quota (the `gh_repo_slug` precedent at :85).
+#
+# TWO severities, and keeping them apart is the whole point (AC2). A dirty
+# sibling is ambient — eight sessions on brik-mini means eight dirty worktrees on
+# a normal afternoon, and a gate that shouts about all of them is one that gets
+# read past. A dirty sibling holding a file THIS work is about is a live
+# collision, and it gets a distinct block and a non-zero return the caller can
+# refuse on.
+#
+# Why it does NOT depend on pr-path-overlap.sh's intersect_paths, which is the
+# same predicate: that file is a twin with a SMALLER consumer set (brik-bds and
+# brik-client-portal only — see the TWINS registry in
+# scripts/audit/overlap-twin-drift.py). treehouse-pediatric-dentistry and tncld
+# carry this file and not that one, so sourcing it would make this function
+# silently absent in exactly the two repos with no other overlap tooling at all.
+# The intersection is six lines of awk; the cross-twin dependency is permanent.
+#
+# Exit codes (check_worktree_overlap only — check_issue_overlap's contract at :59
+# is deliberately untouched, because new-task.sh's guard keys on it):
+#   0  no sibling worktree holds a file in the caller's set
+#   7  LIVE FILE COLLISION — a sibling worktree has uncommitted changes to a file
+#      the caller's set names. Advisory ONLY in --report mode.
+
+# Physical path of a directory, symlinks resolved on both sides of every
+# comparison below. `git worktree list` prints the path git recorded at creation
+# time, which on macOS routinely differs from the caller's `pwd` by /private —
+# and a string compare that misses makes the caller its own sibling, which is a
+# guaranteed self-collision on every dirty worktree.
+_io_physical() {
+  ( cd "${1:-}" 2>/dev/null && pwd -P ) || printf '%s' "${1:-}"
+}
+
+# Every worktree path except the caller's own, one per line.
+#
+# IO_WORKTREE_LIST_CMD / IO_WORKTREE_STATUS_CMD are the test injection points.
+# Without them, exercising this would mean running `git worktree list` against
+# whatever repo the test is standing in — the brik-llm#1539 failure mode that
+# pr-path-overlap.sh's PPO_DIFF_CMD seam exists to avoid.
+_io_worktree_list() {
+  git worktree list --porcelain 2>/dev/null | awk '/^worktree /{print $2}'
+}
+
+_io_worktree_status() {
+  # Porcelain v1, and `cut -c4-` rather than awk on $2: the status code occupies
+  # columns 1-2 and a path may contain spaces. Rename rows read `R  old -> new`;
+  # the arrow form is normalised to the destination, which is the file that is
+  # actually dirty on disk.
+  git -C "${1:-}" status --porcelain 2>/dev/null \
+    | cut -c4- \
+    | sed 's/.* -> //' \
+    | sed 's/^"\(.*\)"$/\1/' \
+    | awk 'NF'
+}
+
+_io_sibling_worktrees() {
+  local self here
+  self="$(_io_physical "$(git rev-parse --show-toplevel 2>/dev/null || printf '.')")"
+  while IFS= read -r wt; do
+    [ -n "$wt" ] || continue
+    here="$(_io_physical "$wt")"
+    [ "$here" = "$self" ] && continue
+    printf '%s\n' "$wt"
+  done < <(${IO_WORKTREE_LIST_CMD:-_io_worktree_list})
+}
+
+# Exact-match intersection of two newline-separated path lists.
+#
+# Two process substitutions rather than `awk -v`: an -v value cannot carry
+# literal newlines and awk fails outright on one, which would silently blank the
+# result — the same trap _io_minus_timeline at :363 documents.
+_io_intersect() {
+  local mine="${1:-}" theirs="${2:-}"
+  [ -n "$mine" ] && [ -n "$theirs" ] || return 0
+  awk '
+    NR == FNR { if ($0 != "") mine[$0] = 1; next }
+    { if ($0 != "" && ($0 in mine) && !seen[$0]++) print }
+  ' <(printf '%s\n' "$mine") <(printf '%s\n' "$theirs")
+}
+
+# check_worktree_overlap [<caller-path-set>] [--report]
+#
+# The caller's path set resolves in two steps, and BOTH are needed:
+#
+#   1. the argument, when given. new-task.sh passes the paths the TICKET names —
+#      already computed for check_ticket_path_overlap, so this costs no extra
+#      read. It has to be passed in, because at new-task.sh time the caller's own
+#      dirty set is guaranteed EMPTY: scripts/new-task.sh:119-132 refuses to run
+#      at all when the primary worktree has uncommitted changes. Reading "the
+#      caller's files" literally there would make this half of AC2 dead code on
+#      the one path it most needs to fire.
+#   2. otherwise the caller's own dirty files. That is the /resume case and the
+#      re-run-from-inside-a-worktree case — which is precisely the shape of the
+#      #1662 incident, where the session that noticed was mid-edit in its own
+#      worktree with the colliding file already staged.
+check_worktree_overlap() {
+  local mine="${1:-}" mode="${2:-prompt}"
+  case "$mine" in --report) mode="--report"; mine="" ;; esac
+
+  command -v git >/dev/null 2>&1 || return 0
+  git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 0
+
+  local siblings
+  siblings="$(_io_sibling_worktrees)"
+  [ -n "$siblings" ] || return 0
+
+  if [ -z "$mine" ]; then
+    mine="$(${IO_WORKTREE_STATUS_CMD:-_io_worktree_status} \
+              "$(git rev-parse --show-toplevel 2>/dev/null)")"
+  fi
+
+  local wt dirty shared dirty_report="" collisions=""
+  while IFS= read -r wt; do
+    [ -n "$wt" ] || continue
+    dirty="$(${IO_WORKTREE_STATUS_CMD:-_io_worktree_status} "$wt")"
+    [ -n "$dirty" ] || continue
+    dirty_report="${dirty_report}${wt}"$'\t'"$(printf '%s\n' "$dirty" | wc -l | tr -d ' ')"$'\n'
+    shared="$(_io_intersect "$mine" "$dirty")"
+    [ -n "$shared" ] || continue
+    collisions="${collisions}${wt}"$'\t'"$(printf '%s\n' "$shared" | paste -sd, -)"$'\n'
+  done < <(printf '%s\n' "$siblings")
+
+  # Ambient class. Named, never dressed as a finding: on a machine running eight
+  # sessions this is the normal state of the afternoon.
+  if [ -n "$dirty_report" ]; then
+    echo "" >&2
+    echo -e "\033[2m    Sibling worktrees with uncommitted changes (local git, no API):" >&2
+    printf '%s' "$dirty_report" \
+      | awk -F'\t' '{ printf "      %s — %s dirty file(s)\n", $1, $2 }' >&2
+    echo -e "      Not a finding on its own; report them, never commit or push one (#2635).\033[0m" >&2
+  fi
+
+  [ -n "$collisions" ] || return 0
+
+  # Collision class. A DISTINCT block, deliberately not sharing the ⚠ banner the
+  # branch/PR hits use: "someone published work on this ticket" and "someone is
+  # editing this file right now" are different facts and must not read alike.
+  echo "" >&2
+  echo -e "${_IO_RED}⛔ LIVE FILE COLLISION — a sibling worktree is editing a file this work names:${_IO_NC}" >&2
+  printf '%s' "$collisions" \
+    | awk -F'\t' '{ printf "    %s\n        %s\n", $1, $2 }' >&2
+  # BOTH sides named, not only the far one (AC6). "operations/security/secrets.yaml
+  # is contended" is not actionable until the operator can see which two checkouts
+  # hold it — and on a machine with eight worktrees the near side is not obvious
+  # from the cwd, because this also runs from the primary via new-task.sh.
+  echo -e "    ${_IO_YELLOW}yours:${_IO_NC} $(git rev-parse --show-toplevel 2>/dev/null)" >&2
+  echo "" >&2
+  echo -e "${_IO_YELLOW}   Those changes are UNCOMMITTED, so no branch, PR or claim can see them —${_IO_NC}" >&2
+  echo -e "${_IO_YELLOW}   this is the only check that can. brik-bds#1662: two sessions rewrote the${_IO_NC}" >&2
+  echo -e "${_IO_YELLOW}   same secrets.yaml block, and only an unrelated rg caught it (brik-llm#1932).${_IO_NC}" >&2
+  echo -e "${_IO_YELLOW}   Read that worktree before you start. Never commit or push it (#2635).${_IO_NC}" >&2
+
+  # AC4, decided: a non-zero return AND a distinctly-marked block, and NO
+  # _io_confirm. Every other warning here funnels through _io_confirm, which
+  # honours NEW_TASK_YES and a closed stdin — correct for a stale merged-PR hit,
+  # and wrong for this one, because NEW_TASK_YES=1 is how the entire fleet runs.
+  # Sharing that disposition would make the strongest signal in the file the one
+  # nobody ever sees. The caller decides instead; new-task.sh refuses on 7 and
+  # documents its own opt-out.
+  [ "$mode" = "--report" ] && return 0
+  return 7
+}
+
 # ── Sibling-issue detection (#1663) ────────────────────────────────────────────
 #
 # The number-keyed gate above is blind to the commonest duplicate shape: two
@@ -984,6 +1168,18 @@ _io_main() {
       check_title_overlap "$ref"
     fi
   fi
+
+  # Third detector, and the only one that reads UNPUBLISHED state (brik-llm#1932).
+  # Runs regardless of $rc, unlike the title half above: that one needs a title it
+  # could not read on rc 4/5, while this one reads local git and is just as true
+  # when the issue lookup failed. It is also the reason rc 4/5 is survivable —
+  # "the API gate did not run" is exactly when a local signal is worth the most.
+  #
+  # --report here even in prompt mode: the standalone script is /resume's step 4,
+  # which must never abort a pickup, and $rc must keep carrying the number half's
+  # 4/5/6 to new-task.sh's guard. new-task.sh calls the function directly for the
+  # refusing form.
+  check_worktree_overlap --report
 
   return "$rc"
 }
