@@ -295,8 +295,10 @@ jobs:
       # index.mdx collection table + page titles back to tokens-studio.json so a
       # rename in Figma (or a doc synonym like "Shadow" for Elevation) fails CI
       # instead of surviving three manual review passes.
+      # Reads dist/tokens.css to verify the generated-token column, so it gates
+      # on the build step like mdx-token-check does.
       - name: Check Foundation ⇄ Figma collection alignment
-        if: always() && steps.install.outcome == 'success'
+        if: always() && steps.dist.outcome == 'success'
         run: npm run lint-foundation-figma-collections
 
       # ─── component-props-check ──────────────────────────────────────────────
