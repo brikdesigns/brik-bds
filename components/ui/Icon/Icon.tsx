@@ -1,5 +1,6 @@
 import { Icon as IconifyIcon, addCollection, type IconProps, type IconifyJSON } from '@iconify/react';
 import phSubset from '../../icons.generated.json';
+import { type IconWeight, useIconWeight } from './icon-weight';
 
 // Register the curated Phosphor subset once, at module load, into Iconify's
 // global icon store. Any `@iconify/react` <Icon> in the app — this wrapper and
@@ -9,13 +10,7 @@ import phSubset from '../../icons.generated.json';
 addCollection(phSubset as IconifyJSON);
 
 export type { IconProps };
-
-/**
- * Phosphor stroke weight. Phosphor encodes weight in the icon *name* —
- * `ph:{name}` (regular), `ph:{name}-bold`, `ph:{name}-fill`, etc. BDS exposes it
- * as a prop and defaults to `bold` (§ Icon weight below).
- */
-export type IconWeight = 'thin' | 'light' | 'regular' | 'bold' | 'fill' | 'duotone';
+export { type IconWeight, DEFAULT_ICON_WEIGHT, useIconWeight } from './icon-weight';
 
 // Non-regular Phosphor weights carry a name suffix; regular carries none. An
 // icon whose name already ends in one of these is explicitly weighted and left
@@ -43,8 +38,10 @@ function applyWeight(icon: IconProps['icon'], weight: IconWeight): IconProps['ic
 
 export interface BdsIconProps extends IconProps {
   /**
-   * Phosphor stroke weight for `ph:*` icons. Defaults to `'bold'` — BDS's
-   * standard line density. Icons that already name a weight (e.g.
+   * Phosphor stroke weight for `ph:*` icons. When omitted, falls back to the
+   * ambient default from an enclosing provider (ThemeProvider's
+   * `defaultIconWeight`), and to `'bold'` — BDS's standard line density — when
+   * no provider is mounted. Icons that already name a weight (e.g.
    * `ph:{name}-fill`) keep it; pass `weight="regular"` to opt back to Phosphor's
    * thin default weight, and non-`ph:*` icons ignore this entirely.
    */
@@ -75,12 +72,22 @@ export interface BdsIconProps extends IconProps {
  * `fill`/`duotone`/`thin`/`light` for the other Phosphor weights). An icon whose
  * name already encodes a weight (`ph:{name}-fill`) is left as-is.
  *
+ * A whole app (or one client theme) can flip the default weight without
+ * touching call sites by setting ThemeProvider's `defaultIconWeight` — an
+ * explicit `weight` prop still wins per-icon. Weight travels on React context
+ * rather than a `[data-mode-*]` token because it selects a different SVG asset
+ * in JS, which the CSS cascade cannot carry (ADR-036).
+ *
  * @example
- * <Icon icon="ph:rocket" width={24} />            // bold (default)
- * <Icon icon="ph:rocket" weight="regular" />       // Phosphor regular
+ * <Icon icon="ph:rocket" width={24} />            // bold (default, or provider default)
+ * <Icon icon="ph:rocket" weight="regular" />       // Phosphor regular (prop wins)
  */
-export function Icon({ weight = 'bold', ...props }: BdsIconProps) {
-  return <IconifyIcon {...props} icon={applyWeight(props.icon, weight)} />;
+export function Icon({ weight, ...props }: BdsIconProps) {
+  // Explicit prop wins; otherwise take the ambient provider default, which
+  // itself falls back to DEFAULT_ICON_WEIGHT ('bold') with no provider mounted.
+  const ambientWeight = useIconWeight();
+  const resolved = weight ?? ambientWeight;
+  return <IconifyIcon {...props} icon={applyWeight(props.icon, resolved)} />;
 }
 
 /**
