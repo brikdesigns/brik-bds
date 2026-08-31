@@ -5,6 +5,29 @@ description: Stacking-context band with a decorative graphic behind content — 
 
 MediaBand owns the "decorative graphic behind content" recipe as one primitive: a clipped positioned parent (`z-index: 1`), a decorative layer at `z-index: 0`, content at `z-index: 2`, and an optional seam-fade at `z-index: 4`. Consumers stop hand-rolling a `position: relative` wrapper per page.
 
+<ComparisonGrid
+  items={[
+    {
+      title: 'MediaBand',
+      whenToUse: 'A whole section band with a decorative graphic behind real content — owns the stacking, clip, and seam-fade recipe.',
+      whenNotToUse: 'Content-bearing media the reader acts on (Frame), or just a texture layer with no band (BackgroundPattern).',
+      code: `<MediaBand graphic={<BackgroundPattern />}>…</MediaBand>`,
+    },
+    {
+      title: 'BackgroundPattern',
+      whenToUse: 'The bare decorative texture layer that usually fills MediaBand\'s graphic slot.',
+      whenNotToUse: 'You need the full band recipe — z-order, clip, seam fade — that\'s MediaBand.',
+      code: `<BackgroundPattern variant="dot-grid" />`,
+    },
+    {
+      title: 'Frame',
+      whenToUse: 'A single content-bearing media box the reader is meant to see and act on.',
+      whenNotToUse: 'The media is decorative and sits behind content — that\'s MediaBand.',
+      code: `<Frame ratio="16-9">{media}</Frame>`,
+    },
+  ]}
+/>
+
 ## Use it for
 
 - A page band whose background carries an illustration, pattern, or graphic that must sit behind real content
