@@ -103,7 +103,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--gap-xs);
-  animation: bds-combo-dropdown-enter var(--duration-fast) var(--ease-out);
+  animation: bds-combo-dropdown-enter var(--duration-sm) var(--ease-out);
   transform-origin: top center;
 }
 
@@ -116,14 +116,14 @@
 /* ─── Option ─────────────────────────────────────────────── */
 
 .bds-addable-combo-list__option {
-  padding: var(--padding-tiny) var(--padding-sm);
+  padding: var(--padding-2xs) var(--padding-sm);
   border-radius: var(--border-radius-sm);
   font-family: var(--font-family-body);
   font-size: var(--body-md);
   line-height: var(--font-line-height-normal);
   color: var(--text-primary);
   cursor: pointer;
-  transition: background-color var(--duration-fast) var(--ease-out);
+  transition: background-color var(--duration-sm) var(--ease-out);
 }
 
 .bds-addable-combo-list__option:hover,

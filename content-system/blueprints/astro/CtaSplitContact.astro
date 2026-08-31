@@ -107,7 +107,7 @@ const email = clientFacts.email;
   @media (min-width: 768px) {
     .bds-cta__container {
       grid-template-columns: 3fr 2fr;
-      gap: var(--gap-huge);
+      gap: var(--gap-2xl);
     }
   }
 
@@ -165,7 +165,7 @@ const email = clientFacts.email;
   .bds-cta__method {
     display: flex;
     flex-direction: column;
-    /* Label↔value is a tight text pairing: --gap-sm. Not --gap-tiny, which
+    /* Label↔value is a tight text pairing: --gap-sm. Not --gap-2xs, which
        resolves to 0px outside default spacing mode (ADR-023 §3). */
     gap: var(--gap-sm);
     color: var(--bds-cta-method-color, var(--text-primary));

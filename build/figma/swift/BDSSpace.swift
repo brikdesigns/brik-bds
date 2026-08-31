@@ -45,15 +45,15 @@ public enum BDSSpace {
     public static let paddingNone: CGFloat = 0
     public static let paddingMd: CGFloat = 16
     public static let paddingSm: CGFloat = 12
-    public static let paddingHuge: CGFloat = 48
+    public static let padding2xl: CGFloat = 48
     public static let paddingXs: CGFloat = 10
-    public static let paddingTiny: CGFloat = 8
+    public static let padding2xs: CGFloat = 8
     public static let gapNone: CGFloat = 0
     public static let gapMd: CGFloat = 8
     public static let gapLg: CGFloat = 16
     public static let gapXl: CGFloat = 24
     public static let gapSm: CGFloat = 6
-    public static let gapHuge: CGFloat = 32
+    public static let gap2xl: CGFloat = 32
     public static let gapXs: CGFloat = 4
-    public static let gapTiny: CGFloat = 2
+    public static let gap2xs: CGFloat = 2
 }

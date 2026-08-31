@@ -17,15 +17,15 @@ Max-width values for content containers. Apply to wrapper elements with `max-wid
 
 | Token | CSS Variable | Value | Use for |
 |---|---|---|---|
-| Narrow | `--content-width-narrow` | 640px | Prose, reading columns, focused forms |
-| Default | `--content-width-default` | 800px | Standard body sections |
-| Wide | `--content-width-wide` | 1024px | Feature sections, content grids |
+| Narrow | `--content-width-sm` | 640px | Prose, reading columns, focused forms |
+| Default | `--content-width-md` | 800px | Standard body sections |
+| Wide | `--content-width-lg` | 1024px | Feature sections, content grids |
 | XL | `--content-width-xl` | 1280px | Hero bands, wide layouts |
 | Full | `--content-width-full` | 100% | Full-bleed (use sparingly) |
 
 ```css
 .content-section {
-  max-width: var(--content-width-default);
+  max-width: var(--content-width-md);
   margin-inline: auto;
 }
 ```

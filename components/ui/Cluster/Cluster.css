@@ -9,7 +9,7 @@
 
 /* ─── Gap (BDS --gap-* tokens) ───────────────────────────────── */
 
-.bds-cluster--gap-tiny { gap: var(--gap-tiny); }
+.bds-cluster--gap-tiny { gap: var(--gap-2xs); }
 .bds-cluster--gap-xs   { gap: var(--gap-xs); }
 .bds-cluster--gap-sm   { gap: var(--gap-sm); }
 .bds-cluster--gap-md   { gap: var(--gap-md); }

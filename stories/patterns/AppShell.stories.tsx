@@ -82,7 +82,7 @@ export const Default: Story = {
         overflowY: 'auto',
       }}>
         <h1 style={{
-          fontSize: 'var(--heading-xxl)',
+          fontSize: 'var(--heading-2xl)',
           fontFamily: 'var(--font-family-heading)',
           marginBottom: 'var(--padding-lg)',
         }}>

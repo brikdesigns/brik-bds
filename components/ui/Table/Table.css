@@ -99,7 +99,7 @@
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding: var(--padding-tiny) var(--padding-md);
+  padding: var(--padding-2xs) var(--padding-md);
   border-bottom: var(--border-width-md) solid var(--border-muted);
 }
 

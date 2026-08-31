@@ -52,8 +52,8 @@
   border: var(--border-width-md) solid var(--border-input);
   border-radius: var(--border-radius-md);
   outline: none;
-  transition: border-color var(--duration-normal) var(--ease-out),
-    box-shadow var(--duration-normal) var(--ease-out);
+  transition: border-color var(--duration-md) var(--ease-out),
+    box-shadow var(--duration-md) var(--ease-out);
   box-sizing: border-box;
   cursor: pointer;
   text-align: left;

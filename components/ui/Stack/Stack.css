@@ -13,13 +13,13 @@
 
 /* ─── Gap (BDS --gap-* tokens) ───────────────────────────────── */
 
-.bds-stack--gap-tiny  { gap: var(--gap-tiny); }
+.bds-stack--gap-tiny  { gap: var(--gap-2xs); }
 .bds-stack--gap-xs    { gap: var(--gap-xs); }
 .bds-stack--gap-sm    { gap: var(--gap-sm); }
 .bds-stack--gap-md    { gap: var(--gap-md); }
 .bds-stack--gap-lg    { gap: var(--gap-lg); }
 .bds-stack--gap-xl    { gap: var(--gap-xl); }
-.bds-stack--gap-huge  { gap: var(--gap-huge); }
+.bds-stack--gap-huge  { gap: var(--gap-2xl); }
 
 /* ─── Cross-axis alignment ───────────────────────────────────── */
 

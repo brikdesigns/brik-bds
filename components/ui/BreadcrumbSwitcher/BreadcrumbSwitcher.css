@@ -32,7 +32,7 @@
 /* ─── Caret rotation ──────────────────────────────────── */
 
 .bds-breadcrumb-switcher__caret {
-  transition: transform var(--duration-fast) var(--ease-out);
+  transition: transform var(--duration-sm) var(--ease-out);
 }
 
 .bds-breadcrumb-switcher__trigger [aria-expanded='true'] .bds-breadcrumb-switcher__caret {

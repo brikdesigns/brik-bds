@@ -20,7 +20,7 @@ The named wrapper for a block of content inside a `<Sheet>` body. Pairs a sectio
 
 SheetSection has no semantic-variant axis — title-only, title + description, description-only (sheet lead), and empty shells are all presence/absence of `title` and `description`, exposed via Controls on the canvas above. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
-`titleAs` also drives the visual size on a `h2`/`h3`/`h4` → `--heading-md`/`--heading-sm`/`--heading-tiny` ramp — see the Level → Size Ramp story below.
+`titleAs` also drives the visual size on a `h2`/`h3`/`h4` → `--heading-md`/`--heading-sm`/`--heading-xs` ramp — see the Level → Size Ramp story below.
 
 <Canvas of={Stories.Default} />
 <Canvas of={Stories.LevelRamp} />

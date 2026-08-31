@@ -75,9 +75,9 @@ describe('scanCssText — rhythm-bearing properties', () => {
 describe('scanCssText — mode-collapsing tokens on vertical props (ADR-024)', () => {
   it.each([
     ['margin-top: var(--gap-xs)'],
-    ['margin-bottom: var(--gap-tiny)'],
+    ['margin-bottom: var(--gap-2xs)'],
     ['row-gap: var(--gap-xs)'],
-    ['margin-block-start: var(--gap-tiny)'],
+    ['margin-block-start: var(--gap-2xs)'],
     ['margin: var(--gap-xs) 0'],
   ])('flags %s', (decl) => {
     const v = scanCssText(`.x { ${decl}; }`);
@@ -90,7 +90,7 @@ describe('scanCssText — mode-collapsing tokens on vertical props (ADR-024)', (
   });
 
   it('does NOT flag column-gap (horizontal)', () => {
-    expect(scanCssText('.x { column-gap: var(--gap-tiny); }')).toHaveLength(0);
+    expect(scanCssText('.x { column-gap: var(--gap-2xs); }')).toHaveLength(0);
   });
 
   it('does NOT flag non-collapsing tokens on vertical props', () => {

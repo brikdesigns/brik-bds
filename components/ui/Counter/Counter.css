@@ -17,8 +17,8 @@
 
 /* ─── Sizes ──────────────────────────────────────────────────── */
 
-.bds-counter--xs { padding: var(--space-50) var(--padding-tiny); font-size: var(--label-tiny); }
-.bds-counter--sm { padding: var(--padding-tiny) var(--padding-sm); font-size: var(--label-tiny); }
+.bds-counter--xs { padding: var(--space-50) var(--padding-2xs); font-size: var(--label-2xs); }
+.bds-counter--sm { padding: var(--padding-2xs) var(--padding-sm); font-size: var(--label-2xs); }
 .bds-counter--md { padding: var(--padding-sm) var(--padding-md); font-size: var(--label-sm); }
 .bds-counter--lg { padding: var(--padding-sm) var(--padding-md); font-size: var(--label-md); }
 

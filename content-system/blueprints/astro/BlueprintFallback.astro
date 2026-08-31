@@ -62,12 +62,12 @@ const attrValue = unknownKey ?? '__null__';
   }
 
   .bp-fallback__container {
-    max-width: var(--content-width-wide);
+    max-width: var(--content-width-lg);
     margin-inline: auto;
     display: flex;
     flex-direction: column;
     /* --gap-md, matching the React twin in BlueprintFallback.css. Was
-       --gap-tiny, which resolves to 0px outside default spacing mode and
+       --gap-2xs, which resolves to 0px outside default spacing mode and
        collapsed these four lines into one block (ADR-023 §3). */
     gap: var(--gap-md);
   }
@@ -100,7 +100,7 @@ const attrValue = unknownKey ?? '__null__';
   .bp-fallback code {
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.9em;
-    padding: 0 var(--padding-tiny);
+    padding: 0 var(--padding-2xs);
     background: var(--surface-primary, #ffffff);
     border-radius: var(--border-radius-sm);
   }

@@ -21,8 +21,8 @@
     color: inherit;
     font: inherit;
     transition:
-      background-color var(--duration-fast) var(--ease-out),
-      transform var(--duration-fast) var(--ease-out);
+      background-color var(--duration-sm) var(--ease-out),
+      transform var(--duration-sm) var(--ease-out);
   }
 
   /* ─── Size variants ────────────────────────────────────────────
@@ -108,7 +108,7 @@
     display: flex;
     flex-direction: column;
     /* Title ↔ subtitle is the tight step (ADR-023 content-rhythm map: --gap-sm);
-       --gap-tiny collapses to 0px outside default spacing mode. */
+       --gap-2xs collapses to 0px outside default spacing mode. */
     gap: var(--gap-sm);
     min-width: 0;
     flex: 1;
@@ -132,7 +132,7 @@
        PriorityBadge, etc.) preserve their own styling within. */
     display: flex;
     flex-direction: column;
-    gap: var(--gap-sm); /* tight step — --gap-tiny is 0px outside default mode */
+    gap: var(--gap-sm); /* tight step — --gap-2xs is 0px outside default mode */
     font-family: var(--font-family-body);
     font-size: var(--body-xs);
     line-height: var(--font-line-height-normal);

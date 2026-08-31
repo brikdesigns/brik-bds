@@ -17,10 +17,10 @@ Tighter means more coupled. As the relationship loosens — words in a heading p
 | Heading / subtitle ↔ body | Readable separation | `--gap-md` | 8px |
 | Paragraph ↔ paragraph | Distinct thoughts | `--gap-lg` | 16px |
 | Block ↔ block | Separate content units | `--gap-xl` | 24px |
-| Section ↔ section | Page-level break | `padding-block: clamp(--padding-xl, 7vw, --padding-huge)` | 32–48px, fluid |
+| Section ↔ section | Page-level break | `padding-block: clamp(--padding-xl, 7vw, --padding-2xl)` | 32–48px, fluid |
 
 <Callout type="warn">
-  Never use `--gap-xs` or `--gap-tiny` in any vertical rhythm position — content or component. Both collapse to `0px` outside the default [spacing mode](/docs/foundation/spacing#spacing-modes), which erases the step entirely. And never hardcode a px value: the scale re-modulates per mode, a literal does not. The `lint-content-rhythm` gate enforces both rules on component CSS.
+  Never use `--gap-xs` or `--gap-2xs` in any vertical rhythm position — content or component. Both collapse to `0px` outside the default [spacing mode](/docs/foundation/spacing#spacing-modes), which erases the step entirely. And never hardcode a px value: the scale re-modulates per mode, a literal does not. The `lint-content-rhythm` gate enforces both rules on component CSS.
 </Callout>
 
 ## Component rhythm

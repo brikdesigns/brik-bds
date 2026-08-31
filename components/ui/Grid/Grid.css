@@ -35,7 +35,7 @@
 .bds-grid--gap-md  { gap: var(--gap-md); }
 .bds-grid--gap-lg  { gap: var(--gap-lg); }
 .bds-grid--gap-xl  { gap: var(--gap-xl); }
-.bds-grid--gap-huge { gap: var(--gap-huge); }
+.bds-grid--gap-huge { gap: var(--gap-2xl); }
 
 /* ─── Responsive collapse for fixed columns ──────────────────── */
 /* Fixed column counts collapse predictably at narrow widths.

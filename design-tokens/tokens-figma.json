@@ -1363,7 +1363,7 @@
       "$value": "{border-width.300}",
       "$type": "dimension"
     },
-    "huge": {
+    "2xl": {
       "$value": "{border-width.500}",
       "$type": "dimension"
     },
@@ -1717,7 +1717,7 @@
       "$value": "{space.300}",
       "$type": "number"
     },
-    "huge": {
+    "2xl": {
       "$value": "{space.1200}",
       "$type": "number"
     },
@@ -1725,7 +1725,7 @@
       "$value": "{space.250}",
       "$type": "number"
     },
-    "tiny": {
+    "2xs": {
       "$value": "{space.200}",
       "$type": "number"
     }
@@ -1751,7 +1751,7 @@
       "$value": "{space.150}",
       "$type": "number"
     },
-    "huge": {
+    "2xl": {
       "$value": "{space.800}",
       "$type": "number"
     },
@@ -1759,7 +1759,7 @@
       "$value": "{space.100}",
       "$type": "number"
     },
-    "tiny": {
+    "2xs": {
       "$value": "{space.50}",
       "$type": "number"
     }
@@ -1783,7 +1783,7 @@
       "$value": "{font-size.50}",
       "$type": "number"
     },
-    "tiny": {
+    "2xs": {
       "$value": "{font-size.25}",
       "$type": "number"
     },
@@ -1803,7 +1803,7 @@
       "$value": "{font-size.300}",
       "$type": "number"
     },
-    "huge": {
+    "2xl": {
       "$value": "{font-size.500}",
       "$type": "number"
     }
@@ -1835,7 +1835,7 @@
       "$value": "{font-size.700}",
       "$type": "number"
     },
-    "xxl": {
+    "2xl": {
       "$value": "{font-size.800}",
       "$type": "number"
     },
@@ -1843,7 +1843,7 @@
       "$value": "{font-size.500}",
       "$type": "number"
     },
-    "tiny": {
+    "xs": {
       "$value": "{font-size.300}",
       "$type": "number"
     },
@@ -1851,13 +1851,13 @@
       "$value": "{font-size.400}",
       "$type": "number"
     },
-    "huge": {
+    "3xl": {
       "$value": "{font-size.900}",
       "$type": "number"
     }
   },
   "icon": {
-    "tiny": {
+    "3xs": {
       "$value": "{font-size.50}",
       "$type": "number"
     },
@@ -1881,13 +1881,13 @@
       "$value": "{font-size.400}",
       "$type": "number"
     },
-    "huge": {
+    "3xl": {
       "$value": "{font-size.500}",
       "$type": "number"
     }
   },
   "label": {
-    "tiny": {
+    "2xs": {
       "$value": "{font-size.25}",
       "$type": "number"
     },

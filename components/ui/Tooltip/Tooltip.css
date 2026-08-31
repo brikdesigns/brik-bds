@@ -12,7 +12,7 @@
 
 .bds-tooltip__bubble {
   position: absolute;
-  padding: var(--padding-tiny) var(--padding-md);
+  padding: var(--padding-2xs) var(--padding-md);
   background-color: var(--tooltip-background);
   color: var(--tooltip-text);
   font-family: var(--font-family-label);
@@ -23,7 +23,7 @@
   z-index: 1000;
   pointer-events: none;
   opacity: 0;
-  transition: opacity var(--duration-normal) var(--ease-out);
+  transition: opacity var(--duration-md) var(--ease-out);
 }
 
 .bds-tooltip__bubble--visible {

@@ -17,7 +17,7 @@
  *
  * Token pairs — paired family ↔ size only:
  *   subtitle    : --font-family-subtitle + --subtitle-lg + --text-transform-subtitle
- *   title (h2)  : --font-family-heading  + clamp(--heading-lg, ..., --heading-huge)
+ *   title (h2)  : --font-family-heading  + clamp(--heading-lg, ..., --heading-3xl)
  *   description : --font-family-body     + --body-md
  *
  * No surface / text / border overrides — those stay theme-layer per the
@@ -33,9 +33,9 @@
  * `.bds-blueprint-section` shorthand regardless of bundle order (ADR-021 §2). */
 .bds-card-grid {
   padding-block-end: clamp(
-    var(--padding-huge),
+    var(--padding-2xl),
     9vw,
-    calc(var(--padding-huge) * 1.5)
+    calc(var(--padding-2xl) * 1.5)
   );
 }
 
@@ -71,7 +71,7 @@
 .bds-card-grid__title {
   margin: 0;
   font-family: var(--font-family-heading);
-  font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
+  font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-3xl));
   font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--text-primary);

@@ -87,7 +87,7 @@
 }
 
 .bds-progress-circle__center--md {
-  font-size: var(--heading-tiny);
+  font-size: var(--heading-xs);
 }
 
 .bds-progress-circle__center--lg {

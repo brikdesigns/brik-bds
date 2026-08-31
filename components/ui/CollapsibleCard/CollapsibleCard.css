@@ -40,7 +40,7 @@
 .bds-collapsible-card__section-label {
   font-family: var(--font-family-heading);
   font-weight: var(--font-weight--semi-bold);
-  font-size: var(--heading-tiny);
+  font-size: var(--heading-xs);
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: var(--letter-spacing-wide);
