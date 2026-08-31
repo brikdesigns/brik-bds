@@ -61,7 +61,7 @@ No consumer should toggle a `.dark` class — the attribute is the only switch.
 | `spacing` | `data-mode-spacing` | `default` | `compact`, `comfortable`, `spacious` | ✅ `modes-spacing.css` |
 | `border-radius` | `data-mode-radius` | `soft` | `sharp`, `round`, `pill` | ✅ `modes-borderradius.css` (attr `data-mode-radius`; source collection `border-radius`) |
 | `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious`, `expressive` | ✅ `modes-typography.css` (heading-* only; display-* mode-invariant) |
-| `elevation` | `data-mode-elevation` | `subtle` | `flat` (wired), `lifted`/`dramatic` (pending Figma source) | 🟡 `modes-elevation.css` — `flat`→`--shadow-*: 0px 0px 0px 0px transparent` (a zeroed shorthand, not `none`: overriding a box-shadow token with the `none` keyword gives one name two value types, which ADR-033 § 5 rejects). Figma's `lifted`/`dramatic` slices are byte-identical to `subtle` and carry no spread/color, so they emit nothing until authored (see #2243) |
+| `elevation` | `data-mode-elevation` | `subtle` | `flat`, `lifted`, `dramatic` | ✅ `modes-elevation.css` — `flat`→`--shadow-*: 0px 0px 0px 0px transparent` (a zeroed shorthand, not `none`: overriding a box-shadow token with the `none` keyword gives one name two value types, which ADR-033 § 5 rejects). `lifted`/`dramatic` compose the full `0px y blur spread rgba(0,0,0,α)` from the elevation collection's y-offset + blur-radius + spread + opacity sub-tokens (#2243; x is invariantly 0, color always black). `subtle` is the default — uses the hand-authored `--shadow-*` in gap-fills.css |
 | `breakpoint` | `data-mode-breakpoint` | `default` | `compact`, `comfortable` | ⏳ pending #340 |
 | `icon` | `data-mode-icon` | `solid` | `outline` | ⏳ pending #340 |
 
