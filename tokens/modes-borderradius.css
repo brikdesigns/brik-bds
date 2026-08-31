@@ -32,6 +32,5 @@
 [data-mode-radius="pill"] {
   --border-radius-lg: 999px;
   --border-radius-md: 999px;
-  --border-radius-none: 999px;
   --border-radius-sm: 999px;
 }

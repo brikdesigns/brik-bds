@@ -90,6 +90,12 @@ const COLLECTIONS = {
     attr: 'radius',
     fileName: 'borderradius',
     unitSuffix: 'px', // resolve returns the raw primitive value; suffix the unit (like spacing)
+    // `none` is the square-corner constant (0) every mode must preserve — a
+    // component that asks for --border-radius-none means "no rounding". Figma's
+    // pill slice authors none=999 (it maps every step to pill), which both
+    // contradicts the token's meaning and gives it two value types (naming-canon
+    // Rule 2 / ADR-033 § 5). Hold it out of the mode ladder.
+    skipTokens: ['none'],
     tokenName: (_group, name) => `--border-radius-${name}`,
     resolve: resolveRadiusRef,
     description:
@@ -214,6 +220,7 @@ function emitCollection(data, collectionKey) {
 
       const groupLines = [];
       for (const [tokenName, def] of entries) {
+        if (cfg.skipTokens?.includes(tokenName)) continue; // mode-invariant constant (e.g. radius `none`)
         const resolved = cfg.resolve(def.$value, primitives);
         // Skip emitting overrides equal to the default value — leaner CSS
         const defaultDef = groupOf(defaultSlice, groupName)[tokenName];
