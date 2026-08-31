@@ -83,10 +83,10 @@ assert_eq "a person whose name starts with Test" "allowed" \
   "$(identity_verdict "Testa Nguyen" "testa@brikdesigns.com")"
 
 echo "── check_commit_identity: escape hatches ──"
-assert_eq "BDS_ALLOW_TEST_IDENTITY=1 overrides" "allowed" \
+assert_eq "BRIK_ALLOW_TEST_IDENTITY=1 overrides" "allowed" \
   "$( cd "$OUTSIDE" || exit 9
       git config --local user.name Test; git config --local user.email t@example.com
-      if BDS_ALLOW_TEST_IDENTITY=1 check_commit_identity 2>/dev/null; then echo allowed; else echo refused; fi )"
+      if BRIK_ALLOW_TEST_IDENTITY=1 check_commit_identity 2>/dev/null; then echo allowed; else echo refused; fi )"
 assert_eq "quiet inside a throwaway repo" "allowed" \
   "$( cd "$SANDBOX" || exit 9
       git config --local user.name Test; git config --local user.email t@example.com
