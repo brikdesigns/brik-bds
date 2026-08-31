@@ -5,7 +5,7 @@
  * design-tokens/tokens-studio.json. Do not hand-edit — re-run
  * the generator after any Figma mode update.
  *
- * Elevation depth mode — overrides the composed --shadow-* box-shadow tokens. NOTE: Figma source (elevation/* in tokens-studio.json) carries only a y-offset + blur-radius per size — no x-offset, spread, or color — and the lifted/dramatic slices are byte-identical to the subtle default. So the only mode the source differentiates is `flat` (all-zero → shadow: none). lifted/dramatic emit NOTHING until Figma authors distinct values incl. spread + color (tracked follow-up). See tokens/gap-fills.css for the hand-authored --shadow-* default composition this overrides.
+ * Elevation depth mode — overrides the composed --shadow-* box-shadow tokens. NOTE: Figma source (elevation/* in tokens-studio.json) carries only a y-offset + blur-radius per size — no x-offset, spread, or color — and the lifted/dramatic slices are byte-identical to the subtle default. So the only mode the source differentiates is `flat` (all-zero → a zeroed box-shadow shorthand). lifted/dramatic emit NOTHING until Figma authors distinct values incl. spread + color (tracked follow-up). See tokens/gap-fills.css for the hand-authored --shadow-* default composition this overrides.
  *
  * Selector contract: `[data-mode-elevation="flat|lifted|dramatic"]`
  * on :root (html). Default mode (subtle) requires no attribute (uses the
@@ -14,8 +14,8 @@
 
 /* ─── Flat ────────────────────────────────────────── */
 [data-mode-elevation="flat"] {
-  --shadow-sm: none;
-  --shadow-md: none;
-  --shadow-lg: none;
-  --shadow-xl: none;
+  --shadow-sm: 0px 0px 0px 0px transparent;
+  --shadow-md: 0px 0px 0px 0px transparent;
+  --shadow-lg: 0px 0px 0px 0px transparent;
+  --shadow-xl: 0px 0px 0px 0px transparent;
 }

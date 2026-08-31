@@ -95,8 +95,8 @@ const COLLECTIONS = {
       'tokens. NOTE: Figma source (elevation/* in tokens-studio.json) carries ' +
       'only a y-offset + blur-radius per size — no x-offset, spread, or color — ' +
       'and the lifted/dramatic slices are byte-identical to the subtle default. ' +
-      'So the only mode the source differentiates is `flat` (all-zero → shadow: ' +
-      'none). lifted/dramatic emit NOTHING until Figma authors distinct values ' +
+      'So the only mode the source differentiates is `flat` (all-zero → a ' +
+      'zeroed box-shadow shorthand). lifted/dramatic emit NOTHING until Figma authors distinct values ' +
       'incl. spread + color (tracked follow-up). See tokens/gap-fills.css for the ' +
       'hand-authored --shadow-* default composition this overrides.',
   },
@@ -205,14 +205,18 @@ function emitCollection(data, collectionKey) {
 function composeShadow(slice, size) {
   // Figma elevation carries only a y-offset (`box-shadow` group) and a
   // `blur-radius` per size — no x-offset, spread, or color. A shadow whose
-  // lengths are all 0 is absent → emit `none` (a `0px 0px 0px` box-shadow
-  // still paints; `none` matches the --box-shadow-none rationale in
-  // gap-fills.css:114). Any non-zero mode can't be faithfully reproduced
-  // without the missing spread/color, so it returns null and is skipped —
-  // never fabricated.
+  // lengths are all 0 is absent → emit a fully-zeroed box-shadow SHORTHAND
+  // (`0px 0px 0px 0px transparent`), NOT the `none` keyword. The base
+  // --shadow-* in gap-fills.css is a box-shadow shorthand; overriding it with
+  // `none` gives one token name two value types, which ADR-033 § 5 rejects
+  // (naming-canon Rule 2 — a `bds-lint-ignore` does not rescue it). The
+  // all-zero shorthand renders identically (no visible shadow) while keeping
+  // one value type. Any non-zero mode can't be faithfully reproduced without
+  // the missing spread/color, so it returns null and is skipped — never
+  // fabricated.
   const y = slice['box-shadow']?.[size]?.$value;
   const blur = slice['blur-radius']?.[size]?.$value;
-  if (y === 0 && blur === 0) return 'none';
+  if (y === 0 && blur === 0) return '0px 0px 0px 0px transparent';
   return null;
 }
 

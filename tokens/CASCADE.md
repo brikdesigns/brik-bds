@@ -60,7 +60,7 @@ No consumer should toggle a `.dark` class — the attribute is the only switch.
 | `spacing` | `data-mode-spacing` | `default` | `compact`, `comfortable`, `spacious` | ✅ `modes-spacing.css` |
 | `border-radius` | `data-mode-radius` | `soft` | `sharp`, `round`, `pill` | ⏳ pending #340 |
 | `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious`, `expressive` | ✅ `modes-typography.css` (heading-* only; display-* mode-invariant) |
-| `elevation` | `data-mode-elevation` | `subtle` | `flat` (wired), `lifted`/`dramatic` (pending Figma source) | 🟡 `modes-elevation.css` — `flat`→`--shadow-*: none` only. Figma's `lifted`/`dramatic` slices are byte-identical to `subtle` and carry no spread/color, so they emit nothing until authored (see #930) |
+| `elevation` | `data-mode-elevation` | `subtle` | `flat` (wired), `lifted`/`dramatic` (pending Figma source) | 🟡 `modes-elevation.css` — `flat`→`--shadow-*: 0px 0px 0px 0px transparent` (a zeroed shorthand, not `none`: overriding a box-shadow token with the `none` keyword gives one name two value types, which ADR-033 § 5 rejects). Figma's `lifted`/`dramatic` slices are byte-identical to `subtle` and carry no spread/color, so they emit nothing until authored (see #2243) |
 | `breakpoint` | `data-mode-breakpoint` | `default` | `compact`, `comfortable` | ⏳ pending #340 |
 | `icon` | `data-mode-icon` | `solid` | `outline` | ⏳ pending #340 |
 
