@@ -1,16 +1,39 @@
 #!/usr/bin/env bash
-# identity-guard.sh — keep test-fixture git identity out of the live repo (#1634).
+# identity-guard.sh — keep test-fixture git identity out of the live repo.
 #
 # `git -C "" config user.name Test` is a silent no-op on the path argument, so it
 # writes to whatever repo is current. Worktrees share the primary's .git/config,
 # so one such call pollutes every checkout at once — and nothing notices until a
-# commit reaches main with the wrong author. `68ab0ac` on main is one.
+# commit reaches a base branch with the wrong author. Verified by probe on
+# 2026-08-02: exit 0, and `git config --local user.name` returned the fixture's
+# value.
+#
+# That is not hypothetical: brik-bds carried `user.name=Test /
+# user.email=t@example.com` in its local config from at least 2026-07-29, and
+# `68ab0ac` is on its main authored by it.
+#
+# CANONICAL in brik-llm (brik-llm#2938). This file is a byte-identical twin across
+# brik-llm, brik-bds, brik-client-portal, and brikdesigns — separate git repos, so
+# a copy, not an import. NEVER edit a consumer copy: fix it here and re-sync, or
+# `overlap-twin-drift` reads the local edit as drift. Repo-specific strings are
+# genericised so byte-identity is reachable at all.
 #
 # Two halves, because the leak has two ends:
 #   - check_commit_identity  — pre-commit: refuse to author as a fixture.
 #   - assert_throwaway_repo  — test fixtures: refuse to `git -C` a live repo.
 #
-# Sibling class: #1539 (a test inheriting GIT_DIR rewrote refs in the live repo).
+# Relation to two sibling guards in the canonical repo (brik-llm), neither of
+# which covers this:
+#   - lint-test-git-env.mjs (brik-llm#1672) requires every scripts/test/*.sh to
+#     unset GIT_DIR & co. That closes the ENV escape; an empty `-C` path is a
+#     separate one, and no unset helps against it.
+#   - the g() wrapper in test-sweep-worktree-classification.sh (brik-llm#1619)
+#     refuses an empty `-C` path, but by LITERAL prefix against $TMPROOT.
+#     assert_throwaway_repo checks the RESOLVED git-dir, so it also holds when a
+#     git env var survives.
+#
+# Sibling class: brikdesigns/brik-bds#1539 (a test inheriting GIT_DIR rewrote refs
+# in the live repo).
 #
 # Sourced, not executed. No side effects at source time.
 
@@ -41,9 +64,9 @@ _ig_in_tmpdir() {
 # it fires however the pollution got there. Quiet inside a throwaway repo: the
 # fixtures below are supposed to set a fake identity on themselves.
 #
-# Escape hatch: BDS_ALLOW_TEST_IDENTITY=1.
+# Escape hatch: BRIK_ALLOW_TEST_IDENTITY=1.
 check_commit_identity() {
-  [ "${BDS_ALLOW_TEST_IDENTITY:-}" = "1" ] && return 0
+  [ "${BRIK_ALLOW_TEST_IDENTITY:-}" = "1" ] && return 0
   _ig_in_tmpdir && return 0
 
   local name email bad=""
@@ -63,7 +86,8 @@ check_commit_identity() {
   echo "" >&2
   echo "  A test fixture leaked its identity into this repo's config. Worktrees" >&2
   echo "  share the primary's .git/config, so every checkout inherits it — that" >&2
-  echo "  is how 68ab0ac reached main authored by Test <t@example.com> (#1634)." >&2
+  echo "  is how 68ab0ac reached brik-bds' main authored by Test <t@example.com>" >&2
+  echo "  (brikdesigns/brik-bds#1634); every repo carrying this guard is at risk." >&2
   echo "" >&2
   echo "  Fix:" >&2
   echo "    git config --local --unset user.email" >&2
@@ -72,22 +96,26 @@ check_commit_identity() {
   echo "  Then confirm your real identity resolves:" >&2
   echo "    git config user.name && git config user.email" >&2
   echo "" >&2
-  echo "  Genuinely committing as a fixture? Re-run with BDS_ALLOW_TEST_IDENTITY=1." >&2
+  echo "  Genuinely committing as a fixture? Re-run with BRIK_ALLOW_TEST_IDENTITY=1." >&2
   return 1
 }
 
 # assert_throwaway_repo <path> [label] — abort unless <path> resolves to a git
 # repo whose git-dir lives under $TMPDIR.
 #
-# Call this in a test fixture BEFORE any `git -C "$path"` write. It closes two
-# escapes at once:
+# Call this in a test fixture BEFORE any `git -C "$path"` write, and before any
+# `cd "$path"` subshell that writes config — `cd ""` is a no-op too, so the
+# subshell form has the same blast radius as `git -C ""`. It closes two escapes
+# at once:
 #
 #   - Empty path. `git -C ""` is a no-op on the path argument, so the write lands
-#     in whatever repo is current — the #1634 leak.
+#     in whatever repo is current — the empty-path leak. Note `git -C "" init` on
+#     an existing repo REINITIALISES it rather than failing, so the `config` calls
+#     that follow reach the live config.
 #   - Leaked git env. GIT_DIR surviving the fixture's `unset` makes a correct
-#     `-C` argument resolve somewhere else entirely — the #1539 leak. Checking
-#     the RESOLVED git-dir rather than the path is what catches that one, so do
-#     not simplify this to a path prefix test.
+#     `-C` argument resolve somewhere else entirely — the brik-bds#1539 leak.
+#     Checking the RESOLVED git-dir rather than the path is what catches that
+#     one, so do not simplify this to a path prefix test.
 #
 # Physical paths on both sides: macOS `mktemp -d` hands back /var/folders/… while
 # `--absolute-git-dir` resolves the /var → /private/var symlink, and a literal
