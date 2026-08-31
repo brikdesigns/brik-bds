@@ -1,5 +1,7 @@
+import type { ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from './Icon';
+import { ThemeProvider } from '../../providers/ThemeProvider';
 import phSubset from '../../icons.generated.json';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
@@ -72,6 +74,52 @@ export const BundledSet: Story = {
             </div>
           ))}
         </div>
+      </div>
+    );
+  },
+};
+
+/**
+ * A `ThemeProvider` (or one client theme) flips the default icon weight for
+ * every descendant `<Icon>` via `defaultIconWeight` — no per-call-site change.
+ * An explicit `weight` prop still wins. Weight rides React context, not a
+ * `[data-mode-*]` token, because it selects a different SVG asset (ADR-036).
+ * @summary Provider defaultIconWeight flips descendant icon weight
+ */
+export const WeightFromProvider: Story = {
+  render: () => {
+    const labelStyle = { minWidth: 260, fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)' } as const;
+    const Row = ({ label, children }: { label: string; children: ReactNode }) => (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
+        <span style={labelStyle}>{label}</span>
+        {children}
+      </div>
+    );
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)', maxWidth: 480 }}>
+        {/* `ph:star` is bundled at bold/fill/regular, so all three render
+            offline. Only star-fill is in the subset today — see the note. */}
+        {/* No provider — the built-in default weight ('bold'). */}
+        <Row label="no provider — bold default">
+          <Icon icon="ph:star" width={40} />
+        </Row>
+        <ThemeProvider defaultIconWeight="fill" persist={false} applyToBody={false}>
+          {/* Provider default flows to the nested Icon with no per-icon prop. */}
+          <Row label="provider defaultIconWeight=fill">
+            <Icon icon="ph:star" width={40} />
+          </Row>
+          {/* Explicit prop overrides the provider default per-icon. */}
+          <Row label="…same provider, weight=&quot;regular&quot; prop wins">
+            <Icon icon="ph:star" width={40} weight="regular" />
+          </Row>
+        </ThemeProvider>
+        <p style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', margin: 0 }}>
+          Note: the bundled offline subset carries fill variants only where BDS
+          source uses them (today just <code>star-fill</code>). A consumer that
+          sets <code>defaultIconWeight=&quot;fill&quot;</code> must bring the fill
+          glyphs offline via <code>addBrikIcons()</code> or their own
+          <code> gen:icons</code>, else those icons fall through to the Iconify CDN.
+        </p>
       </div>
     );
   },

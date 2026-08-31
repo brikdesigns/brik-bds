@@ -13,6 +13,11 @@ import {
   getThemeClasses,
   themeMetadata,
 } from '../../tokens';
+import {
+  type IconWeight,
+  DEFAULT_ICON_WEIGHT,
+  IconWeightContext,
+} from '../ui/Icon/icon-weight';
 
 /**
  * Theme context value interface
@@ -30,6 +35,8 @@ export interface ThemeContextValue {
   themeName: string;
   themeDescription: string;
   isDark: boolean;
+  /** Ambient default Phosphor weight for `<Icon>` with no explicit `weight`. */
+  defaultIconWeight: IconWeight;
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
@@ -81,6 +88,13 @@ export interface ThemeProviderProps {
   persist?: boolean;
   /** Whether to apply theme classes to document body */
   applyToBody?: boolean;
+  /**
+   * Ambient default Phosphor icon weight for descendant `<Icon>` components that
+   * pass no `weight` prop — the per-client outline↔fill flip. Defaults to
+   * `'bold'`. A build-time brand choice, not a user toggle, so it is not
+   * persisted to localStorage.
+   */
+  defaultIconWeight?: IconWeight;
 }
 
 /**
@@ -116,6 +130,7 @@ export function ThemeProvider({
   initialTheme = {},
   persist = true,
   applyToBody = true,
+  defaultIconWeight = DEFAULT_ICON_WEIGHT,
 }: ThemeProviderProps) {
   // Load initial theme from storage or props
   const [theme, setTheme] = useState<BDSThemeConfig>(() => {
@@ -215,10 +230,15 @@ export function ThemeProvider({
     themeName: metadata.name,
     themeDescription: metadata.description,
     isDark: metadata.isDark,
+    defaultIconWeight,
   };
 
   return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>
+      <IconWeightContext.Provider value={defaultIconWeight}>
+        {children}
+      </IconWeightContext.Provider>
+    </ThemeContext.Provider>
   );
 }
 
