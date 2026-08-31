@@ -9,8 +9,7 @@
     "spacing",
     "size",
     "motion",
-    "border-radius",
-    "border-width",
+    "border",
     "shadow",
     "token-anatomy"
   ]

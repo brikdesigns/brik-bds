@@ -1,0 +1,81 @@
+---
+title: Border
+description: Corner rounding and line thickness — the two token families that frame a component's edge.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import { borderRadiusScale, borderWidthScale } from '@bds-tokens';
+
+Border tokens frame a component's edge in two axes: **radius** (corner rounding) and **width** (line thickness). Each carries a theme-level mode so a brand can shift the overall feel in one move.
+
+## Border radius
+
+Border radius tokens control corner rounding across components — from sharp (0px) to pill (999px), with `circle` reserved for fully circular elements (avatars, dots).
+
+### Radius scale
+
+<BorderRadiusPreview scale={borderRadiusScale} prefix="--border-radius" />
+
+### Semantic radius tokens
+
+| Token | CSS Variable | Description |
+|---|---|---|
+| None | `--border-radius-none` | No rounding (0px) |
+| Small | `--border-radius-sm` | Subtle rounding |
+| Medium | `--border-radius-md` | Default component radius |
+| Large | `--border-radius-lg` | Prominent rounding |
+| Pill | `--border-radius-pill` | Maximum rounding (999px) |
+
+### Radius modes
+
+<Callout type="warn">
+  **Radius modes are not wired yet — this is the planned design, not a shipped switch.** Unlike [width modes](#width-modes) and [spacing](/docs/foundation/spacing#spacing-modes), there is no `modes-borderradius.css` and **no `data-mode-radius` selector ships in `dist/tokens.css`** today. Setting the attribute does nothing until [#340](https://github.com/brikdesigns/brik-bds/issues/340) (wire `data-mode` overrides for non-color tokens) lands. Change the radius feel per theme by overriding the `--border-radius-*` semantic values directly for now.
+</Callout>
+
+Figma defines border-radius modes to drive the overall shape feel of a theme. Once #340 wires them, `data-mode-radius` will select one (default `soft`):
+
+| Mode | Effect | Use case |
+|---|---|---|
+| Sharp | All radii near 0 | Corporate, minimal |
+| Soft | Moderate radii | Default, balanced |
+| Round | Generous radii | Friendly, modern |
+| Pill | Maximum radii (999px) | Buttons, tags |
+
+## Border width
+
+Border width tokens control line thickness for borders, dividers, and outlines.
+
+### Width scale
+
+<BorderWidthPreview scale={borderWidthScale} prefix="--border-width" />
+
+### Semantic width tokens
+
+| Token | CSS Variable | Description |
+|---|---|---|
+| None | `--border-width-none` | No border (0px) |
+| Small | `--border-width-sm` | Subtle hairline |
+| Medium | `--border-width-md` | Default visible border |
+| Large | `--border-width-lg` | Prominent border (4px default; varies by border-width mode) |
+
+### Width modes
+
+Border density is a theme-level mode. Set `data-mode-borderwidth` on `:root` (or any subtree) to shift every `--border-width-*` semantic token at once; the default (no attribute) keeps the standard values. Two override modes ship today — `thin` and `bold` — wired in [`tokens/modes-borderwidth.css`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/modes-borderwidth.css):
+
+| Token | `default` | `thin` | `bold` |
+|---|---|---|---|
+| `--border-width-sm` | 1px | 1px | 2px |
+| `--border-width-md` | 2px | 1px | 3px |
+| `--border-width-lg` | 4px | 2px | 4px |
+
+```html
+<html data-mode-borderwidth="bold">   <!-- whole document -->
+<section data-mode-borderwidth="thin">…</section>   <!-- one subtree -->
+```
+
+`thin` matches `default` at `sm` because sub-pixel borders below 1px render unreliably across browsers. Values verified against `dist/tokens.css`; re-pull after a Figma mode change (`npm run build:sd-figma`).
+
+## Related
+
+- [Color → Border tokens](/docs/foundation/color#border) — semantic border-color tokens
+- [Shadow](/docs/foundation/shadow) — elevation that complements radius and width choices
