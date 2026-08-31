@@ -38,7 +38,7 @@
 .bds-card--raised {
   background-color: var(--surface-primary);
   border: none;
-  box-shadow: var(--box-shadow-md);
+  box-shadow: var(--shadow-md);
 }
 
 /* Borderless — transparent, no border, no shadow. For cards on a colored
@@ -410,7 +410,7 @@
 .bds-card--preset-display.bds-card--raised {
   background-color: var(--surface-primary);
   border: none;
-  box-shadow: var(--box-shadow-md);
+  box-shadow: var(--shadow-md);
 }
 
 /* Service-line surface tint — a pale wash keyed to a service line, shared by

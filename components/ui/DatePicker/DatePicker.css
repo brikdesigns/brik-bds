@@ -108,7 +108,7 @@
 .bds-date-picker__calendar {
   background-color: var(--surface-primary);
   border-radius: var(--border-radius-md);
-  box-shadow: var(--box-shadow-lg);
+  box-shadow: var(--shadow-lg);
   border: var(--border-width-md) solid var(--border-muted);
   padding: var(--padding-sm);
   width: 280px; /* bds-lint-ignore — fixed calendar width */

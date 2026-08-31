@@ -23,7 +23,7 @@ A Figma variable holds a single dimension, so the Elevation collection's `box-sh
 | Composed semantic (what you use) | `--shadow-sm/md/lg/xl`, `--shadow-overlay` | `tokens/gap-fills.css` |
 
 <Callout type="info">
-  **Both `--shadow-*` and `--box-shadow-*` ship and resolve identically.** Component CSS uses each today. Prefer `--shadow-*` in new work; `--box-shadow-*` is the Figma-emitted alias kept alive by the bridge above (a load-bearing override, not drift).
+  **`--shadow-*` is canonical for elevation; `--box-shadow-{sm,md,lg,xl}` is a deprecated alias** ([#2233](https://github.com/brikdesigns/brik-bds/issues/2233)). Both ship and resolve identically, but component CSS now references only `--shadow-*` — the safe composed base, defined once. The `--box-shadow-{sm..xl}` aliases survive only for existing consumers; don't reach for them in new work. Note `--box-shadow-none` (value `none`, for *suppressing* a shadow) is a separate token with no `--shadow-*` twin — it stays as-is.
 </Callout>
 
 ## Composed shadow tokens
