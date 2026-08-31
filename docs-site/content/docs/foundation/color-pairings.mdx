@@ -175,12 +175,17 @@ node scripts/validate-themes.js --emit-matrix   # regenerate the table above
 
 To add or change a pairing, edit `tokens/contrast-pairings.json` and regenerate the matrix. The gate, the dashboard, and this page stay in lockstep because they read the same file.
 
+## Decision records
+
+The policies this page enforces are ratified in ADRs — all current, all cited inline above:
+
+- [ADR-011](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-011-service-line-token-value-model.md) — the service-line value model the service pairings follow
+- [ADR-015](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-015-brand-primary-aa-large-contrast-policy.md) — brand-primary holds vibrant Poppy, gated AA-large
+- [ADR-016](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-016-small-primary-button-contrast.md) — small-primary-button contrast remedy (staged)
+
 ## Related
 
 - [Color](/docs/foundation/color) — the canonical token registry these pairings draw from
 - [Token Anatomy](/docs/foundation/token-anatomy) — the four color-modifier constructs (`on-color` vs `-on-light`/`-on-dark` vs `-inverse` vs tone)
 - [Client Themes](/docs/theming/client-themes) — scope binding + the theme registry the dashboard probes
-- [ADR-011](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-011-service-line-token-value-model.md) — the service-line value model the service pairings follow
-- [ADR-015](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-015-brand-primary-aa-large-contrast-policy.md) — brand-primary holds vibrant Poppy, gated AA-large
-- [ADR-016](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-016-small-primary-button-contrast.md) — small-primary-button contrast remedy (staged)
 - [`brand-fill` tier](/docs/content-system/vocabularies/color-primitive-tier) — the client-theme mechanism for brands that darken in-slot
