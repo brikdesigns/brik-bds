@@ -7,12 +7,35 @@ MediaTabs renders a set of **peer categories** as a [`TabBar`](/docs/components/
 
 It has one visual appearance — `orientation`, `mediaPosition`, `variant`, `autoplay`, and `pauseOnHover` are behavior and placement knobs, not distinct variants.
 
+<ComparisonGrid
+  items={[
+    {
+      title: 'MediaTabs',
+      whenToUse: 'Peer categories, each with its own media — the home Services / Industries bands.',
+      whenNotToUse: 'An ordered sequence (a process), or peers with no media to sync.',
+      code: `<MediaTabs tabs={...} />`,
+    },
+    {
+      title: 'SyncedMediaSteps',
+      whenToUse: 'An ordered sequence (a process) where each step drives its own media.',
+      whenNotToUse: 'Peer categories the reader picks between — that\'s MediaTabs.',
+      code: `<SyncedMediaSteps steps={...} />`,
+    },
+    {
+      title: 'TabBar',
+      whenToUse: 'Peer categories with no media panel to sync.',
+      whenNotToUse: 'Each tab needs a synced media panel — that\'s MediaTabs.',
+      code: `<TabBar items={...} />`,
+    },
+  ]}
+/>
+
 ## Use it for
 
 - The home "Services" (Marketing / Back-office) and "Industries" (Dental / Real Estate / Small Business) bands — switching between **peer categories**, each with its own media
 - Any tabbed band where the reader should be able to sit still and watch it advance, or take over with the mouse or keyboard
 
-Reach for [SyncedMediaSteps](/docs/components/synced-media-steps) when the items are an **ordered sequence** (a process) rather than peer categories — the ARIA contract differs (tabs use a roving tabindex; an accordion keeps every trigger in the Tab sequence). Reach for a plain [TabBar](/docs/components/tab-bar) when there is no media to sync.
+The peer-vs-sequence split is the load-bearing choice, and it drives a different ARIA contract (tabs use a roving tabindex; the accordion behind [SyncedMediaSteps](/docs/components/synced-media-steps) keeps every trigger in the Tab sequence) — see [Accessibility](#accessibility). Reach for a plain [TabBar](/docs/components/tab-bar) when there is no media to sync.
 
 ## Import
 
