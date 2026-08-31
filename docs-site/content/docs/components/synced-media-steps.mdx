@@ -7,12 +7,35 @@ SyncedMediaSteps renders an ordered sequence of steps as an `<ol>` of accordion 
 
 It has one visual appearance — `mediaPosition`, `autoplay`, `pauseOnHover`, and `showStepNumbers` are behavior and placement knobs, not distinct variants.
 
+<ComparisonGrid
+  items={[
+    {
+      title: 'SyncedMediaSteps',
+      whenToUse: 'An ordered sequence (a process), each step with its own media — how-it-works bands.',
+      whenNotToUse: 'Peer categories, or a sequence with no media to sync.',
+      code: `<SyncedMediaSteps steps={...} />`,
+    },
+    {
+      title: 'MediaTabs',
+      whenToUse: 'Peer categories the reader picks between, each with its own media.',
+      whenNotToUse: 'The items are an ordered sequence — that\'s SyncedMediaSteps.',
+      code: `<MediaTabs tabs={...} />`,
+    },
+    {
+      title: 'Accordion',
+      whenToUse: 'An ordered or choose-among sequence with no media to sync.',
+      whenNotToUse: 'Each step needs a synced media panel — that\'s SyncedMediaSteps.',
+      code: `<Accordion items={...} />`,
+    },
+  ]}
+/>
+
 ## Use it for
 
 - A "how it works" or process band where the steps are **ordered** and each one has its own visual
 - Any sequence where the reader should be able to sit still and watch it advance, or take over and click
 
-Reach for [MediaTabs](/docs/components/tab-bar) when the items are **peer categories** rather than an ordered sequence — the ARIA contract differs (tabs use a roving tabindex; an accordion keeps every trigger in the Tab sequence). Reach for a plain [Accordion](/docs/components/accordion) when there is no media to sync.
+The sequence-vs-peer split is the load-bearing choice, and it drives a different ARIA contract (the accordion here keeps every trigger in the Tab sequence; [MediaTabs](/docs/components/media-tabs) uses a roving tabindex) — see [Accessibility](#accessibility). Reach for a plain [Accordion](/docs/components/accordion) when there is no media to sync.
 
 ## Import
 
