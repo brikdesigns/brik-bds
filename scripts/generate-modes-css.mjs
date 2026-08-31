@@ -78,6 +78,28 @@ const COLLECTIONS = {
       'default scale), so each variant reuses the shared font-size primitives. ' +
       'display-* is mode-invariant in Figma today so only heading-* emits overrides.',
   },
+  'border-radius': {
+    // Flat slice: the border-radius/{mode} tokens (none/sm/md/lg) sit at the
+    // slice root, not under group keys like spacing's padding/gap — so `flat`
+    // treats the slice itself as one implicit group.
+    flat: true,
+    defaultMode: 'soft',
+    nonDefaultModes: ['sharp', 'round', 'pill'],
+    // Attribute reads `data-mode-radius`, not `data-mode-border-radius` (#340
+    // sketch + #929) — the shorter axis name. Output file is modes-borderradius.css.
+    attr: 'radius',
+    fileName: 'borderradius',
+    unitSuffix: 'px', // resolve returns the raw primitive value; suffix the unit (like spacing)
+    tokenName: (_group, name) => `--border-radius-${name}`,
+    resolve: resolveRadiusRef,
+    description:
+      'Corner-radius mode — overrides the semantic --border-radius-{none,sm,md,lg} ' +
+      'tokens. sharp / round tighten or loosen the ramp; pill maps every step to ' +
+      'the full 999px round for fully-rounded surfaces. Default (soft) is the ' +
+      'figma-tokens.css base and emits no attribute. Emitted as raw primitive px ' +
+      'values (like the spacing modes) rather than var() aliases — the pill/circle ' +
+      'primitives are Semantic-tier by name, so a var() alias would be off-model.',
+  },
   elevation: {
     // Elevation is the first COMPOSITE collection: each token is a multi-part
     // box-shadow, not a single value, so it uses the dedicated emitElevation
@@ -124,6 +146,17 @@ function resolveFontSizeRef(value) {
   return `var(--font-size-${m[1]})`;
 }
 
+function resolveRadiusRef(value, primitives) {
+  // {border-radius.NNN} → the primitive's RAW value (px via unitSuffix), same as
+  // resolveSpaceRef — NOT a var(--border-radius-NNN) alias. The named steps
+  // `pill`/`circle` are Semantic-tier by name (isSemantic in lint-token-tiers.mjs),
+  // so a var() alias to them is an off-model Semantic→Semantic reference; resolving
+  // the scale straight from the Primitive value is the tier-legal form (ADR-025).
+  const m = String(value).match(/^\{border-radius\.(\w+)\}$/);
+  if (!m) return value;
+  return primitives['border-radius']?.[m[1]]?.$value ?? value;
+}
+
 function readModeTokens(data, collectionKey, modeName) {
   const sliceKey = `${collectionKey}/${modeName}`;
   const slice = data[sliceKey];
@@ -139,6 +172,8 @@ function emitCollection(data, collectionKey) {
   const cfg = COLLECTIONS[collectionKey];
   const primitives = data['primitives/value'] ?? {};
   const defaultSlice = readModeTokens(data, collectionKey, cfg.defaultMode);
+  // Attribute may differ from the collection key (border-radius → data-mode-radius).
+  const attr = cfg.attr ?? collectionKey;
 
   const lines = [];
   lines.push('/**');
@@ -150,13 +185,20 @@ function emitCollection(data, collectionKey) {
   lines.push(' *');
   lines.push(` * ${cfg.description}`);
   lines.push(' *');
-  lines.push(` * Selector contract: \`[data-mode-${collectionKey}="${cfg.nonDefaultModes.join('|')}"]\``);
+  lines.push(` * Selector contract: \`[data-mode-${attr}="${cfg.nonDefaultModes.join('|')}"]\``);
   lines.push(' * on :root (html). Default mode requires no attribute (uses figma-tokens.css base).');
   lines.push(' *');
   lines.push(' * Companion to figma-tokens-dark.css and modes-borderwidth.css per the cascade');
   lines.push(' * documented in tokens/CASCADE.md.');
   lines.push(' */');
   lines.push('');
+
+  // A `flat` collection (border-radius) keeps its tokens at the slice root
+  // rather than under group keys — model it as a single unnamed group so the
+  // one emit loop covers both shapes. `groupOf(slice, name)` reads the right
+  // level, and the group comment is suppressed when the group is unnamed.
+  const groupNames = cfg.flat ? [null] : cfg.groups;
+  const groupOf = (slice, groupName) => (groupName === null ? slice : (slice[groupName] ?? {}));
 
   // Emit one selector block per non-default mode
   for (const modeName of cfg.nonDefaultModes) {
@@ -166,28 +208,29 @@ function emitCollection(data, collectionKey) {
     // typography's display-* group is mode-invariant in Figma today, so it
     // produces no overrides and shouldn't leave a dangling group comment.
     const body = [];
-    for (const groupName of cfg.groups) {
-      const entries = Object.entries(slice[groupName] ?? {}).sort(([a], [b]) => a.localeCompare(b));
+    for (const groupName of groupNames) {
+      const entries = Object.entries(groupOf(slice, groupName)).sort(([a], [b]) => a.localeCompare(b));
       if (entries.length === 0) continue;
 
       const groupLines = [];
       for (const [tokenName, def] of entries) {
         const resolved = cfg.resolve(def.$value, primitives);
         // Skip emitting overrides equal to the default value — leaner CSS
-        const defaultDef = defaultSlice[groupName]?.[tokenName];
+        const defaultDef = groupOf(defaultSlice, groupName)[tokenName];
         const defaultResolved = defaultDef ? cfg.resolve(defaultDef.$value, primitives) : null;
         if (resolved === defaultResolved) continue;
         groupLines.push(`  ${cfg.tokenName(groupName, tokenName)}: ${resolved}${cfg.unitSuffix};`);
       }
 
       if (groupLines.length === 0) continue;
-      body.push(`  /* ${groupName} */`, ...groupLines);
+      if (groupName !== null) body.push(`  /* ${groupName} */`);
+      body.push(...groupLines);
     }
 
     if (body.length === 0) continue; // mode identical to default — nothing to emit
 
     lines.push(`/* ─── ${modeName.charAt(0).toUpperCase() + modeName.slice(1)} ────────────────────────────────────────── */`);
-    lines.push(`[data-mode-${collectionKey}="${modeName}"] {`);
+    lines.push(`[data-mode-${attr}="${modeName}"] {`);
     lines.push(...body);
     lines.push('}');
     lines.push('');
@@ -286,12 +329,14 @@ function generate(collectionKey) {
     ? emitElevation(data, collectionKey)
     : emitCollection(data, collectionKey);
 
-  const outFile = path.join(TOKENS_DIR, `modes-${collectionKey}.css`);
+  // Output file may differ from the collection key (border-radius → modes-borderradius.css).
+  const fileName = cfg.fileName ?? collectionKey;
+  const outFile = path.join(TOKENS_DIR, `modes-${fileName}.css`);
   fs.writeFileSync(outFile, css);
 
   // Summary
   const overrideCount = (css.match(/^\s+--/gm) ?? []).length;
-  console.log(`  ✓ tokens/modes-${collectionKey}.css (${overrideCount} overrides across ${cfg.nonDefaultModes.length} modes)`);
+  console.log(`  ✓ tokens/modes-${fileName}.css (${overrideCount} overrides across ${cfg.nonDefaultModes.length} modes)`);
 }
 
 function main() {

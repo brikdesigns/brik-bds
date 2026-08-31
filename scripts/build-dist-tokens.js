@@ -59,7 +59,7 @@ if (fs.existsSync(themeBrandBrikPath)) {
 // Each block targets a distinct `[data-mode-{collection}]` attribute; these
 // override tokens defined earlier in figma-tokens.css, so concat order among
 // them is cosmetic. Listed deterministically to keep dist diffs clean.
-const MODE_FILES = ['modes-borderwidth.css', 'modes-spacing.css', 'modes-typography.css'];
+const MODE_FILES = ['modes-borderwidth.css', 'modes-spacing.css', 'modes-typography.css', 'modes-borderradius.css'];
 let modeOverrides = '';
 for (const file of MODE_FILES) {
   const p = path.join(TOKENS_DIR, file);
