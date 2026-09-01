@@ -21,7 +21,7 @@
  * walk per already-mounted story before its screenshot compare — no new job,
  * no new trigger.
  */
-import { afterEach, beforeAll, expect } from 'vitest';
+import { afterEach, beforeAll, expect, vi } from 'vitest';
 import { page } from '@vitest/browser/context';
 import widgetSource from '../components/ui/BrikDevBar/widgets/inspect-widget.js?raw';
 
@@ -231,6 +231,19 @@ async function loadMissingTypeGate() {
 }
 
 beforeAll(async () => {
+  // Pin the wall clock so any story that renders "today" is deterministic across
+  // run dates (#2260). The DatePicker Default story opens the calendar with no
+  // `value`, so DatePicker.tsx defaults `viewDate` to `new Date()` and highlights
+  // `isToday` — its baseline was captured in August and reds the required
+  // `visual` context on the first PR of every later month, because the day grid
+  // for the new month differs. Faking only `Date` (not the timers) keeps
+  // setTimeout/waitFor/userEvent in the play functions on the real clock, so
+  // only the rendered date is frozen. Left installed for the whole run — every
+  // screenshot must see the same "today". Mid-month, mid-week date chosen so no
+  // grid renders a partial leading/trailing week edge case.
+  vi.useFakeTimers({ toFake: ['Date'] });
+  vi.setSystemTime(new Date('2026-06-15T12:00:00'));
+
   // The vitest browser runner serves its own tester page — Storybook's
   // .storybook/preview-head.html (which loads the brand webfonts) never runs
   // here. The import block at the top of this file replaces it, so the faces
