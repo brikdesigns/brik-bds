@@ -302,6 +302,17 @@ jobs:
         if: always()
         run: bash scripts/__tests__/test-new-task-flag-order.sh < /dev/null
 
+      # ─── new-task-headless-check (brik-llm#2963, from #2812) ─────────────────
+      # new-task.sh's own warn-then-continue prompts must not block or abort when
+      # stdin is closed / NEW_TASK_YES=1 — the defect that reached tncld and
+      # treehouse. This drives THIS repo's copy headless to worktree creation and
+      # is the one part of new-task.sh's behaviour identical enough across the
+      # fleet to be a byte-identical twin; the rest is a per-repo fork ADR-028 §7
+      # keeps copied. Canonical in brik-llm, synced here — see the file header.
+      - name: new-task.sh's prompts are headless-safe
+        if: always()
+        run: bash scripts/test/test-new-task-headless.sh < /dev/null
+
       # ─── pr-label-resolver-check ────────────────────────────────────────────
       - name: PR-label resolver contract holds
         if: always()
@@ -428,7 +439,8 @@ jobs:
         run: |
           shellcheck --severity=warning \
                      scripts/new-task.sh \
-                     scripts/__tests__/test-new-task-flag-order.sh
+                     scripts/__tests__/test-new-task-flag-order.sh \
+                     scripts/test/test-new-task-headless.sh
 
       - name: shellcheck — pr-label resolver
         if: always() && steps.shellcheck.outcome == 'success'
