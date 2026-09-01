@@ -313,6 +313,16 @@ jobs:
         if: always()
         run: bash scripts/test/test-new-task-headless.sh < /dev/null
 
+      # ─── pr-task-preflight-contract ─────────────────────────────────────────
+      # pr-task.sh is an entrypoint and stays copied per ADR-028 §7; this TEST is
+      # the byte-identical fleet twin (brik-llm#3031, canonical in brik-llm). It
+      # drives THIS repo's pr-task.sh and asserts the two preflight refusals every
+      # copy shares — unknown-flag rejection, refuse-to-PR-from-main. NEVER fix it
+      # here; fix in brik-llm and re-sync (brik-llm#3033).
+      - name: pr-task.sh's preflight refusals hold
+        if: always()
+        run: bash scripts/test/test-pr-task-preflight-contract.sh < /dev/null
+
       # ─── pr-label-resolver-check ────────────────────────────────────────────
       - name: PR-label resolver contract holds
         if: always()
@@ -448,7 +458,8 @@ jobs:
           shellcheck --severity=warning \
                      scripts/lib/pr-labels.sh \
                      scripts/__tests__/test-pr-labels.sh \
-                     scripts/pr-task.sh
+                     scripts/pr-task.sh \
+                     scripts/test/test-pr-task-preflight-contract.sh
 
       - name: shellcheck — pr-path overlap
         if: always() && steps.shellcheck.outcome == 'success'
