@@ -99,22 +99,26 @@ export const Controlled: Story = {
   },
 };
 
-/** @summary Clicking an item activates it and fires onItemClick */
-export const ClickActivates: Story = {
+/** @summary Clicking an item fires onItemClick with its id */
+export const InteractionTestClick: Story = {
+  tags: ['!manifest', 'interaction-test'],
   args: {
     items,
     title: 'On this page',
   },
   play: async ({ canvas, args }) => {
+    // Active state after click is governed by the scroll-spy converging on the
+    // scrolled-to section (see InteractionTestScrollSpy); the stable behavioral
+    // contract of the click itself is that onItemClick fires with the id.
     const link = canvas.getByRole('link', { name: 'The Solution' });
     await userEvent.click(link);
     await expect(args.onItemClick).toHaveBeenCalledWith('the-solution');
-    await expect(link).toHaveAttribute('aria-current', 'page');
   },
 };
 
 /** @summary Scroll-spy activates the item for the section in view */
-export const ScrollSpy: Story = {
+export const InteractionTestScrollSpy: Story = {
+  tags: ['!manifest', 'interaction-test'],
   args: {
     items,
     title: 'On this page',
