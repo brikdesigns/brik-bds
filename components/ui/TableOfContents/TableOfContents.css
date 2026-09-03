@@ -43,4 +43,74 @@
 .bds-toc__item > * {
   flex: 1;
 }
+
+/* ─── Sticky opt-out (`sticky={false}`) ───────────────────────────
+ * For a consumer whose own wrapper is the sticky element — a rail that carries
+ * a metadata card up with the TOC, where two competing sticky boxes only lift
+ * the inner one. `align-self` goes back to `auto` in the same step: paired with
+ * `position: sticky` above it shrink-wraps the nav to its longest label, which
+ * leaves a tinted rail box ending mid-column (#2270). */
+
+.bds-toc--static {
+  position: static;
+  align-self: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+/* ─── Rail variant (`variant="rail"`) ─────────────────────────────
+ * Text-only in-page TOC: quiet resting label, brand-colored active label, and a
+ * hairline rule down the list's left edge with the item indent. The default
+ * treatment is NavItem's filled brand pill, which is right for a route rail and
+ * wrong for an in-page TOC inside a tinted sidebar — there the pill reads as a
+ * second navigation surface. First consumer: brikdesigns customer stories,
+ * which shipped ~30 lines of this as a `.story-toc` override (#2270).
+ *
+ * The tint, radius and outer padding of the surrounding box stay consumer-owned
+ * — that is page chrome, not TOC anatomy. */
+
+.bds-toc--rail {
+  gap: var(--space-500);
+}
+
+/* Rule + indent on the list, so the consumer does not re-declare them. */
+.bds-toc--rail .bds-toc__list {
+  gap: var(--space-500);
+  border-left: var(--border-width-sm) solid var(--border-muted);
+  padding-left: var(--space-500);
+}
+
+/* Flatten the NavItem pill to text. --text-secondary is the resting label:
+   11.29:1 light / 13.05:1 dark on --surface-secondary, the tinted-rail case
+   (`Secondary text on secondary surface`, tokens/contrast-pairings.json).
+   Figma specs `text/muted` (#828282) here, which measures 3.1:1 on that tint
+   and cannot be the default at label-sm. */
+.bds-toc--rail .bds-nav-item {
+  padding: 0;
+  border-radius: 0;
+  font-family: var(--font-family-label);
+  font-size: var(--label-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-secondary);
+  background-color: transparent;
+}
+
+/* Hover is distinct from BOTH resting and active: resting is quiet, active is
+   brand, hover steps the label up to full-strength neutral. */
+.bds-toc--rail .bds-nav-item:hover {
+  color: var(--text-primary);
+  background-color: transparent;
+}
+
+/* --text-brand-primary-strong, NOT --text-brand-primary: the label is 14px bold,
+   so WCAG large text (18.66px bold) does not apply and the bar is AA 4.5:1, not
+   the AA-large 3:1 the brand token carries in its heading/accent role.
+   poppy-500 measures 3.38:1 on --surface-secondary; the strong step is 5.56:1
+   light / 4.56:1 dark. Gated as `Rail TOC active label on secondary surface`. */
+.bds-toc--rail .bds-nav-item--active,
+.bds-toc--rail .bds-nav-item--active:hover {
+  color: var(--text-brand-primary-strong);
+  background-color: transparent;
+}
 }
