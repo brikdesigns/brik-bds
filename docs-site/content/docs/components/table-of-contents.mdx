@@ -1,0 +1,94 @@
+---
+title: Table of contents
+description: Sticky in-page section nav with scroll-spy. Links to on-page anchors, tracks the section in view via IntersectionObserver, and renders each entry as a NavItem.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+TableOfContents is a Navigation-family component for moving around a single long document — a sibling to [SubNavigation](/docs/components/sub-navigation). It takes an `items` array of `{ id, label }`, links each to an in-page `#{id}` anchor, and renders it as a [NavItem](/docs/components/nav-item) inside a `<nav>` landmark. It tracks the section currently in view with an `IntersectionObserver` and sticks within its column. Uncontrolled by default; pass `activeId` to own the active section yourself.
+
+## Use it for
+
+- An "On this page" rail beside a long article or case study
+- Jumping between the sections of one scrollable document, with the current section highlighted
+- Any vertical list of in-page anchor links that needs scroll-spy and sticky positioning
+
+## Import
+
+```tsx
+import { TableOfContents } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+`items` is an array of `{ id, label }`, where `id` is the target element's id. The component observes each section and highlights the one in view.
+
+```tsx
+<TableOfContents
+  title="On this page"
+  items={[
+    { id: 'the-challenge', label: 'The Challenge' },
+    { id: 'the-solution', label: 'The Solution' },
+    { id: 'results', label: 'Results' },
+  ]}
+/>
+```
+
+### Controlled
+
+Pass `activeId` to disable the internal scroll-spy and drive the active section from the consumer.
+
+```tsx
+<TableOfContents activeId="the-solution" items={items} />
+```
+
+### Sticky-header offset and routing
+
+`scrollOffset` shifts the scroll target down so a sticky page header doesn't cover the section top. `linkComponent` forwards a router-aware component to every NavItem. See [ADR-012](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-012-link-component-escape-hatch.md).
+
+```tsx
+<TableOfContents scrollOffset={72} items={items} />
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use TableOfContents for route navigation or ordered process.** It links to in-page anchors within one document — not between pages, and not through a sequence of steps.
+</Callout>
+
+- **Don't use it as a section-nav column between pages.** That's [SubNavigation](/docs/components/sub-navigation).
+- **Don't use it for an ordered, gated process.** A sequence with complete / active / upcoming states is [ProgressStepper](/docs/components/progress-stepper).
+- **Don't hand-build the rows.** Each item is a [NavItem](/docs/components/nav-item) — pass the `items` array rather than composing children.
+
+## Accessibility
+
+- Renders a `<nav>` landmark. Pass `ariaLabel` (defaults to `"Table of contents"`) — **required when more than one nav landmark is on the page**, so each is distinguishable.
+- Active state and keyboard/focus behavior come from the underlying [NavItem](/docs/components/nav-item) — the current item carries `aria-current="page"`.
+- Clicking an item moves focus to the target section (`preventScroll`) so keyboard and screen-reader users land where sighted users scroll.
+- Smooth scroll on click yields to `prefers-reduced-motion`.
+
+## API
+
+{/* props-check: TableOfContentsProps @ components/ui/TableOfContents/TableOfContents.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `TocItem[]` *(required)* | — |
+| `activeId` | `string` | — |
+| `title` | `ReactNode` | — |
+| `ariaLabel` | `string` | `'Table of contents'` |
+| `scrollOffset` | `number` | `0` |
+| `className` | `string` | — |
+| `linkComponent` | `BdsLinkComponent` | — |
+| `onItemClick` | `(id: string) => void` | — |
+
+Each `TocItem` is `{ id, label }`.
+
+## Related
+
+- [SubNavigation](/docs/components/sub-navigation) — the route-nav column this is a sibling to
+- [NavItem](/docs/components/nav-item) — the link primitive each row renders as
+- [ProgressStepper](/docs/components/progress-stepper) — for an ordered, gated sequence
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/navigation-table-of-contents--overview)**

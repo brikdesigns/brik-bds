@@ -1,0 +1,35 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './TableOfContents.stories';
+
+<Meta of={Stories} />
+
+# Table of contents
+
+<ComponentLinks slug="table-of-contents" />
+
+Sticky in-page section navigation with scroll-spy. A Navigation-family component (sibling to `SubNavigation`): it composes `NavItem` per entry, inheriting the nav item's hover / active / focus styling. Unlike `SubNavigation` — a route-nav shell column — it links to in-page `#{id}` anchors, tracks the section in view with an `IntersectionObserver`, and sticks within its column.
+
+Uncontrolled by default (self-managed scroll-spy); pass `activeId` to own the active section yourself. Smooth scroll on click yields to `prefers-reduced-motion`.
+
+## Playground
+
+Edit `activeId`, `title`, or `scrollOffset` in the Controls panel. Scroll the canvas to watch the active item track each section.
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Default
+
+<Canvas of={Stories.Default} />
+
+### Controlled
+
+The consumer sets `activeId`; the internal scroll-spy is disabled.
+
+<Canvas of={Stories.Controlled} />
+
+## Props
+
+<ArgTypes of={Stories} />

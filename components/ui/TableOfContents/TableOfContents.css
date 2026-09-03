@@ -1,0 +1,46 @@
+@layer bds-components {
+/* ─── TableOfContents ─────────────────────────────────────────── */
+
+.bds-toc {
+  position: sticky;
+  top: var(--padding-md);
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  max-height: calc(100vh - (var(--padding-md) * 2));
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* ─── Title ───────────────────────────────────────────────────── */
+
+.bds-toc__title {
+  font-family: var(--font-family-body);
+  font-size: var(--label-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: 0 var(--padding-md);
+}
+
+/* ─── List ────────────────────────────────────────────────────── */
+
+.bds-toc__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+}
+
+.bds-toc__item {
+  display: flex;
+}
+
+.bds-toc__item > * {
+  flex: 1;
+}
+}
