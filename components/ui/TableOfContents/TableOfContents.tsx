@@ -173,8 +173,8 @@ export function TableOfContents({
     <nav
       className={bdsClass(
         'bds-toc',
-        variant === 'rail' && 'bds-toc--rail',
-        !sticky && 'bds-toc--static',
+        variant === 'rail' && 'bds-toc--variant-rail',
+        sticky && 'bds-toc--sticky',
         className,
       )}
       aria-label={ariaLabel}
