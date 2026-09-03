@@ -117,6 +117,7 @@ export * from './SyncedMediaSteps';
 export * from './ToggleSwitch';
 export * from './TabBar';
 export * from './Table';
+export * from './TableOfContents';
 export * from './Tag';
 export * from './TagGroup';
 export * from './TextArea';
