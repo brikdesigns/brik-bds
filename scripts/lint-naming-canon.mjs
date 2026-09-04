@@ -149,7 +149,10 @@ const AXES = {
   tone: { concept: 'valence', values: VALENCE },
   status: { concept: 'presence/lifecycle', values: null },
   variant: { concept: 'form', values: null },
-  emphasis: { concept: 'hue source', values: new Set(['neutral', 'brand', 'accent']) },
+  // `inverse` admitted by § Amendments (#2279) — a near-black inverted palette,
+  // already BDS's word for it on Button and Footer, where it sits on `variant`
+  // and is part of the mixing #1983 owns.
+  emphasis: { concept: 'hue source', values: new Set(['neutral', 'brand', 'accent', 'inverse']) },
   appearance: { concept: 'fill treatment', values: new Set(['solid', 'subtle', 'muted']) },
   density: { concept: 'spacing compression', values: new Set(['comfortable', 'compact']) },
   orientation: { concept: 'layout direction', values: ORIENTATION_VALUES },

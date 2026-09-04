@@ -525,6 +525,50 @@ describe('rule 5 — default-deny (ADR-033 § 6)', () => {
   });
 });
 
+describe('rule 5 — `inverse` on the emphasis axis (§ Amendments, #2279)', () => {
+  it('admits `inverse` in a governed emphasis union', () => {
+    // #2274's real shape. Before the amendment this was the finding that
+    // blocked it: `inverse` is on no closed list for the emphasis axis.
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type SocialIconEmphasis = 'neutral' | 'brand' | 'accent' | 'inverse';\n`,
+    });
+    expect(out).not.toMatch(/SocialIconEmphasis/);
+    expect(code).toBe(0);
+  });
+
+  it('admits it behind the governed modifier prefix too', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-social-icon--emphasis-inverse { background-color: red; }\n`,
+    });
+    expect(out).not.toMatch(/emphasis-inverse/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies a neighbouring word the amendment did NOT admit', () => {
+    // `on-color` is the same axis by the same evidence (§ Amendments) and is
+    // deliberately left out until #1983 gives it a caller. Default-deny has to
+    // keep holding for it, or the amendment read as "open the axis".
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type ChipEmphasis = 'neutral' | 'on-color';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/ChipEmphasis\.on-color — `on-color` is on no closed list for the emphasis axis/);
+    expect(out).toMatch(/needs a § 6 amendment/);
+  });
+
+  it('makes ButtonVariant\'s three-axis mixing visible to rule 3', () => {
+    // The one live violation the amendment surfaces on untouched code, and the
+    // reason a baseline row keyed to #1983 exists. Before `inverse` was on a
+    // closed list, only `negative`/`positive` were claimed — one axis, so
+    // mixedAxes() returned null and the union read as clean.
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type ButtonVariant = 'primary' | 'ghost' | 'inverse' | 'negative';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/ButtonVariant#mixed — mixes 2 axes \(emphasis \+ tone\)/);
+  });
+});
+
 describe('rule 6 — the deleted --*-status-* family cannot come back (§ Token families)', () => {
   it('fails on a var() reference to a deleted name', () => {
     const { code, out } = run({ refs: '.x { background: var(--surface-status-warning); }' });
