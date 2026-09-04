@@ -83,6 +83,28 @@
      theme-responsive values and re-syncs. (#913) */
   --text-positive: var(--color-green-950);
 
+  /* Theme-responsive AA-safe brand TEXT step (light value here, dark in the
+     :root[data-theme="dark"] block below). --text-brand-primary serves a
+     heading/accent role and is gated AA-large (3:1) on the strength of that
+     size; a brand-colored label at SMALL size has had no token, so the usage
+     rule (BDS-18, restated in theme-brand-brik.css) sends small copy to
+     --text-primary, which drops the brand entirely.
+
+     TableOfContents `variant="rail"` is the first surface that needs both: a
+     14px bold active label, brand-colored, on --surface-secondary. 14px bold is
+     below WCAG's large-text floor (18.66px bold), so the bar is AA 4.5:1 — and
+     --text-brand-primary (poppy-500) measures 3.38:1 there. Darkening one step
+     to poppy-700 gives 5.56:1. Dark mode keeps poppy-500 (4.56:1 on the
+     near-black secondary surface); darkening there would sink it.
+
+     Gated as "Rail TOC active label on secondary surface" in
+     contrast-pairings.json. Declared here rather than in theme-brand-brik.css
+     because it is a new Semantic token, not a brand re-pin of a generated one
+     (CASCADE.md § "Add a semantic token Figma doesn't export"), and because
+     lint-tokens.js resolves the canonical registry from this file, not the
+     brand theme. RETIRE once the Figma source emits it. (#2270) */
+  --text-brand-primary-strong: var(--color-poppy-700);
+
   /* System color surface variants (used by TaskConsole status rows) */
   --color-system-red-surface:   var(--color-system-red-light);
   --color-system-green-surface: var(--color-system-green-light);
@@ -437,6 +459,14 @@
      the light/dark pair in lockstep and self-documenting. Figma source still
      emits mid-green for both — correct it and drop both lines. (#913) */
   --text-positive: var(--color-system-green);
+
+  /* Dark value for the --text-brand-primary-strong gap-fill (light value above,
+     in :root). On the near-black --surface-secondary, poppy-500 already clears
+     AA at 4.56:1; the light-mode darkening to poppy-700 would sink it, so this
+     step is light-mode-only in effect. Pinned explicitly rather than left to
+     inherit the :root value, to keep the light/dark pair in lockstep and
+     self-documenting — the same reason --text-positive is repeated here. (#2270) */
+  --text-brand-primary-strong: var(--color-poppy-500);
 
   /* Dark values for the disabled pair (light values above, in :root). The
      generated dark layer repeats the light-mode defect — figma-tokens-dark.css

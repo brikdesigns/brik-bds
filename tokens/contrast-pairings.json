@@ -158,6 +158,14 @@
     },
     {
       "group": "brand",
+      "label": "Rail TOC active label on secondary surface",
+      "fg": "--text-brand-primary-strong",
+      "bg": "--surface-secondary",
+      "thresholdType": "AA",
+      "note": "TableOfContents variant=\"rail\" active label \u2014 14px bold, so WCAG large text (18.66px bold) does not apply and the bar is AA 4.5:1, not the AA-large 3:1 that --text-brand-primary carries in its heading/accent role. --text-brand-primary (poppy-500) measures 3.38:1 on this tint and fails; --text-brand-primary-strong darkens to poppy-700 in light (5.56:1) and stays poppy-500 in dark (4.56:1), where darkening would sink it (#2270)."
+    },
+    {
+      "group": "brand",
       "label": "On-color label on brand fill",
       "fg": "--text-on-color-dark",
       "bg": "--background-brand-primary",
@@ -549,7 +557,7 @@
       "fg": "--text-on-color-light",
       "bg": "--surface-accent-yellow",
       "thresholdType": "AAA",
-      "note": "The five accent-{hue} tints are the pale system steps (--color-system-{hue}-light), so a dark label is the accessible pairing in BOTH themes. fg MUST be --text-on-color-light, not --text-primary: --text-primary flips to near-white in dark and measures 1.1–1.2:1 on these tints — the same swap-by-theme trap #1017 records for the inverse hero. Added with #2066, which re-pointed --surface-accent-{hue} off the Brand Kit mid-tone ramp (--color-{hue}-light, itself the deprecated -500 alias from #1739) onto the system tints that surface-positive/negative/warning already use; that lifted purple 5.68 -> 12.87 and orange 5.05 -> 12.80 against dark ink. These five rows are what stop a future re-point back onto a mid-tone ramp."
+      "note": "The five accent-{hue} tints are the pale system steps (--color-system-{hue}-light), so a dark label is the accessible pairing in BOTH themes. fg MUST be --text-on-color-light, not --text-primary: --text-primary flips to near-white in dark and measures 1.1\u20131.2:1 on these tints \u2014 the same swap-by-theme trap #1017 records for the inverse hero. Added with #2066, which re-pointed --surface-accent-{hue} off the Brand Kit mid-tone ramp (--color-{hue}-light, itself the deprecated -500 alias from #1739) onto the system tints that surface-positive/negative/warning already use; that lifted purple 5.68 -> 12.87 and orange 5.05 -> 12.80 against dark ink. These five rows are what stop a future re-point back onto a mid-tone ramp."
     },
     {
       "group": "accent",
@@ -585,7 +593,7 @@
       "fg": "--text-on-color-light",
       "bg": "--surface-accent-red",
       "thresholdType": "AA",
-      "note": "The odd one out, and gated AA rather than AAA for that reason. The other five accent surfaces are pale system tints; red has no system tint in canon — the Figma Brand Kit aliases every accent-red purpose to the brand poppy (color/poppy/light [base], #e35335), so --surface-accent-red is a saturated FILL, not a wash (#2066). Dark ink clears 4.56:1 on it, which is AA for a label but short of the AAA body aim the tints hold. Do not put small body copy on this one; Avatar's red initials fill is the shipped consumer (Avatar.css:30) and it pairs --text-on-color-light."
+      "note": "The odd one out, and gated AA rather than AAA for that reason. The other five accent surfaces are pale system tints; red has no system tint in canon \u2014 the Figma Brand Kit aliases every accent-red purpose to the brand poppy (color/poppy/light [base], #e35335), so --surface-accent-red is a saturated FILL, not a wash (#2066). Dark ink clears 4.56:1 on it, which is AA for a label but short of the AAA body aim the tints hold. Do not put small body copy on this one; Avatar's red initials fill is the shipped consumer (Avatar.css:30) and it pairs --text-on-color-light."
     }
   ]
 }
