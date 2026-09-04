@@ -25,7 +25,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { SOCIAL_ICON_SVGS, SOCIAL_ICON_PLATFORMS, type SocialIconPlatform } from './social-icons.generated';
-import { socialIconLabel } from './SocialIcon';
+import { socialIconLabel, type SocialIconTone } from './SocialIcon';
 
 const EXPECTED_PLATFORMS: SocialIconPlatform[] = [
   'youtube',
@@ -73,6 +73,38 @@ describe('SocialIcon — offline mark resolution (no 404)', () => {
     for (const platform of EXPECTED_PLATFORMS) {
       expect(SOCIAL_ICON_SVGS[platform]).toBeDefined();
     }
+  });
+});
+
+/**
+ * Tone coverage (brik-bds#2274). `tone` renders a `bds-social-icon--{tone}`
+ * class and nothing else forces a matching pair of CSS rules to exist, so
+ * widening `SocialIconTone` alone would ship a class that paints nothing.
+ *
+ * `Record<SocialIconTone, true>` makes that widening a COMPILE error here —
+ * deleting `inverse` below and running `npx tsc --noEmit` reports
+ * `TS2741: Property 'inverse' is missing` (measured 2026-09-04), the same
+ * shape the customer-story platform map uses.
+ *
+ * The paired CSS rules cannot be asserted from this project: the `components`
+ * vitest project runs with Vitest's default `css: false`, which stubs a CSS
+ * module to the empty string — `?raw` and `?inline` both measured length 0
+ * here — so a text assertion would pass vacuously rather than guard anything.
+ * The rules themselves are covered by the `AllMarks` story's tone × type grid
+ * (SocialIcon.stories.tsx) under the Storybook visual gate.
+ */
+const TONE_COVERAGE: Record<SocialIconTone, true> = {
+  grayscale: true,
+  brand: true,
+  accent: true,
+  inverse: true,
+};
+
+describe('SocialIcon — tone coverage', () => {
+  it('enumerates every tone the CSS must carry a badge + glyph rule for', () => {
+    expect(Object.keys(TONE_COVERAGE).sort()).toEqual(
+      ['accent', 'brand', 'grayscale', 'inverse'],
+    );
   });
 });
 

@@ -36,6 +36,14 @@
   fill: var(--text-brand-primary);
 }
 
+/* `--surface-inverse`, not `--background-inverse`: a consuming theme (the
+   brikdesigns marketing site) redefines `--background-*` in its dark root, so
+   the badge would flip polarity there; `--surface-*` is the theme-tracking
+   pair. The knocked-out white glyph reads 17.22:1 on it (brik-bds#2274). */
+.bds-social-icon--badge.bds-social-icon--inverse .bds-social-icon__bg {
+  fill: var(--surface-inverse);
+}
+
 /* `--bds-social-icon-brand` is bound per-platform below (via `[data-platform]`
    attribute selectors, brik-bds#1716) directly from the Foundations color
    system primitive for that platform — every bundled platform has one, so
@@ -56,6 +64,14 @@
 
 .bds-social-icon--glyph.bds-social-icon--accent {
   color: var(--text-brand-primary);
+}
+
+/* `--text-on-color-light`, not `--surface-inverse`: lint-tokens rejects a
+   surface-family token in a text slot, and this is the exact mirror of the
+   `--text-on-color-dark` knockout above — both are context-pinned to the same
+   primitive in either theme root, so the glyph matches the badge's fill. */
+.bds-social-icon--glyph.bds-social-icon--inverse {
+  color: var(--text-on-color-light);
 }
 
 .bds-social-icon--glyph.bds-social-icon--brand {
