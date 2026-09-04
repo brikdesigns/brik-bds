@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { resolveRetiredValue } from './retiredValue';
+import { resolveRetiredValue, resolveRetiredProp } from './retiredValue';
 
 /**
  * The runtime half of ADR-033's rename. The compiler already rejects a retired
@@ -46,5 +46,51 @@ describe('resolveRetiredValue', () => {
     resolveRetiredValue('Dot', 'tone', 'error', { error: 'negative' });
     resolveRetiredValue('Meter', 'tone', 'error', { error: 'negative' });
     expect(warn).toHaveBeenCalledTimes(2);
+  });
+});
+
+/**
+ * The prop-name half of the same migration (#1925). `resolveRetiredValue`
+ * cannot see it: `tone="brand"` carries a canonical VALUE on a retired PROP,
+ * so the value path stays silent and the caller never learns to move.
+ */
+describe('resolveRetiredProp', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('passes the retired prop through and names both spellings once', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    expect(resolveRetiredProp('TextLink', 'tone', 'emphasis', 'neutral', undefined)).toBe('neutral');
+    expect(warn).toHaveBeenCalledOnce();
+    expect(warn.mock.calls[0][0]).toContain('[BDS TextLink]');
+    expect(warn.mock.calls[0][0]).toContain('`tone`');
+    expect(warn.mock.calls[0][0]).toContain('`emphasis`');
+  });
+
+  it('is silent when only the canonical prop is passed', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    expect(resolveRetiredProp('SocialIcon', 'tone', 'emphasis', undefined, 'brand')).toBe('brand');
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it('lets the canonical prop win when both are passed, and still warns', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    expect(resolveRetiredProp('ContactIcon', 'tone', 'emphasis', 'accent', 'neutral')).toBe('neutral');
+    expect(warn).toHaveBeenCalledOnce();
+  });
+
+  it('passes undefined through so the caller default applies', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    expect(resolveRetiredProp('Foo', 'tone', 'emphasis', undefined, undefined)).toBeUndefined();
+    expect(warn).not.toHaveBeenCalled();
+  });
+
+  it('warns once per component + prop pair, not once per render', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    for (let i = 0; i < 200; i += 1) {
+      resolveRetiredProp('Bar', 'tone', 'emphasis', 'neutral', undefined);
+    }
+    expect(warn).toHaveBeenCalledOnce();
   });
 });

@@ -1,2 +1,2 @@
 export { bdsClass } from './bdsClass';
-export { resolveRetiredValue } from './retiredValue';
+export { resolveRetiredValue, resolveRetiredProp } from './retiredValue';

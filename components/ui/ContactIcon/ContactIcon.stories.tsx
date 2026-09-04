@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ContactIcon, CONTACT_ICON_PLATFORMS } from './ContactIcon';
-import type { ContactIconTone, ContactIconType } from './ContactIcon';
+import type { ContactIconEmphasis, ContactIconType } from './ContactIcon';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -21,14 +21,15 @@ const meta: Meta<typeof ContactIcon> = {
       control: 'select',
       options: ['badge', 'glyph'],
       description:
-        '`badge` fills the background with the tone color and knocks the glyph out white. `glyph` leaves the background neutral/transparent and colors the glyph.',
+        '`badge` fills the background with the emphasis color and knocks the glyph out white. `glyph` leaves the background neutral/transparent and colors the glyph.',
     },
-    tone: {
+    emphasis: {
       control: 'select',
-      options: ['grayscale', 'accent'],
+      options: ['neutral', 'accent'],
       description:
-        'Recolor scheme: `grayscale` (neutral `--text-muted`), `accent` (`--text-brand-primary`). Contact marks have no brand identity, so there is no `brand` tone (see `SocialIcon`).',
+        'Hue source: `neutral` (`--text-muted`), `accent` (`--text-brand-primary`). Contact marks have no brand identity, so there is no `brand` value (see `SocialIcon`).',
     },
+    tone: { table: { disable: true } },
     size: {
       control: 'select',
       options: ['sm', 'md', 'lg'],
@@ -56,24 +57,24 @@ export const Default: Story = {
   args: {
     platform: 'email',
     type: 'badge',
-    tone: 'grayscale',
+    emphasis: 'neutral',
     size: 'lg',
   },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   ALL MARKS — the full type × tone matrix, every bundled mark.
+   ALL MARKS — the full type × emphasis matrix, every bundled mark.
    Irreducible: a single args set can't show 20 combinations at once
    (mirrors SocialIcon's own coverage gallery — brik-bds#1716 split).
    ═══════════════════════════════════════════════════════════════ */
 
 const TYPES: ContactIconType[] = ['badge', 'glyph'];
-const TONES: ContactIconTone[] = ['grayscale', 'accent'];
+const EMPHASES: ContactIconEmphasis[] = ['neutral', 'accent'];
 
 /**
- * Every bundled mark across the full `type` × `tone` matrix — the coverage
+ * Every bundled mark across the full `type` × `emphasis` matrix — the coverage
  * grid brik-bds#1716 asked for.
- * @summary Full type × tone matrix, every bundled mark
+ * @summary Full type × emphasis matrix, every bundled mark
  */
 export const AllMarks: Story = {
   render: () => (
@@ -93,11 +94,11 @@ export const AllMarks: Story = {
           </span>
           <div style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap' }}>
             {TYPES.flatMap((type) =>
-              TONES.map((tone) => (
-                <div key={`${type}-${tone}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-2xs)' }}>
-                  <ContactIcon platform={platform} type={type} tone={tone} size="sm" />
+              EMPHASES.map((emphasis) => (
+                <div key={`${type}-${emphasis}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-2xs)' }}>
+                  <ContactIcon platform={platform} type={type} emphasis={emphasis} size="sm" />
                   <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)' }}>
-                    {type}/{tone}
+                    {type}/{emphasis}
                   </span>
                 </div>
               )),

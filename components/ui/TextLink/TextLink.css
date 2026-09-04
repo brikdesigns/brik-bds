@@ -41,7 +41,7 @@
   font-size: var(--body-sm);
 }
 
-/* ─── Neutral tone ───────────────────────────────────────────────
+/* ─── Neutral emphasis ───────────────────────────────────────────
    Lower-emphasis link: primary text color at rest so it reads as an
    identifier (e.g. a table name cell) rather than a call-to-action.
    The base `:hover` color transition to the brand color above is
@@ -49,7 +49,7 @@
    Ordered after the base so it overrides its rest color at equal
    specificity. */
 
-.bds-text-link--tone-neutral {
+.bds-text-link--emphasis-neutral {
   color: var(--text-primary);
 }
 
