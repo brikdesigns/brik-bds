@@ -34,13 +34,10 @@
       "BadgeTone#mixed": 1925,
       "BannerTone#axis": 1925,
       "BannerTone#mixed": 1925,
-      "ContactIconTone#axis": 1925,
-      "CounterTone#mixed": 1925,
-      "SocialIconTone#axis": 1925
+      "CounterTone#mixed": 1925
     },
     "4": {
       "--above": 1927,
-      "--accent": 1927,
       "--accent-blue": 1927,
       "--accent-brand": 1927,
       "--accent-green": 1927,
@@ -102,7 +99,6 @@
       "--full-width": 1927,
       "--ghost": 1927,
       "--glyph": 1927,
-      "--grayscale": 1927,
       "--has-dot": 1927,
       "--has-errors": 1927,
       "--has-icon": 1927,
@@ -217,12 +213,8 @@
       "--tone-brand": 1925,
       "--tone-default": 1925,
       "BadgeTone.brand": 1925,
-      "ContactIconTone.accent": 1925,
       "CounterTone.brand": 1925,
       "DotTone.default": 1925,
-      "SocialIconTone.accent": 1925,
-      "SocialIconTone.brand": 1925,
-      "TextLinkTone.brand": 1925,
       "ToastTone.default": 1925
     }
   }

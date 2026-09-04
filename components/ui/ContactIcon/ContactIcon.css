@@ -17,7 +17,7 @@
    scripts/gen-contact-icons.mjs) — it recolors via the `color` set below,
    never a direct fill rule here. */
 
-/* ─── type="badge" — background carries the tone, glyph knocked out white ── */
+/* ─── type="badge" — background carries the emphasis color, glyph knocked out white ── */
 
 /* Constant white regardless of theme (context-pinned, unlike --text-inverse
    which flips with theme polarity) — the glyph always reads as a white
@@ -26,25 +26,25 @@
   color: var(--text-on-color-dark);
 }
 
-.bds-contact-icon--badge.bds-contact-icon--grayscale .bds-contact-icon__bg {
+.bds-contact-icon--badge.bds-contact-icon--emphasis-neutral .bds-contact-icon__bg {
   fill: var(--text-muted);
 }
 
-.bds-contact-icon--badge.bds-contact-icon--accent .bds-contact-icon__bg {
+.bds-contact-icon--badge.bds-contact-icon--emphasis-accent .bds-contact-icon__bg {
   fill: var(--text-brand-primary);
 }
 
-/* ─── type="glyph" — background neutral/transparent, glyph carries the tone ── */
+/* ─── type="glyph" — background neutral/transparent, glyph carries the emphasis color ── */
 
 .bds-contact-icon--glyph .bds-contact-icon__bg {
   fill: none;
 }
 
-.bds-contact-icon--glyph.bds-contact-icon--grayscale {
+.bds-contact-icon--glyph.bds-contact-icon--emphasis-neutral {
   color: var(--text-muted);
 }
 
-.bds-contact-icon--glyph.bds-contact-icon--accent {
+.bds-contact-icon--glyph.bds-contact-icon--emphasis-accent {
   color: var(--text-brand-primary);
 }
 }

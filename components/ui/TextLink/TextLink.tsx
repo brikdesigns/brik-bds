@@ -1,5 +1,5 @@
 import { forwardRef, type AnchorHTMLAttributes, type ReactNode } from 'react';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredProp } from '../../utils';
 import './TextLink.css';
 
 /**
@@ -8,9 +8,13 @@ import './TextLink.css';
 export type TextLinkSize = 'default' | 'small';
 
 /**
- * TextLink color tone
+ * TextLink hue source — which palette the link colour is drawn from
+ * (ADR-033 § 2's `emphasis` axis).
  */
-export type TextLinkTone = 'brand' | 'neutral';
+export type TextLinkEmphasis = 'brand' | 'neutral';
+
+/** @deprecated Renamed `TextLinkEmphasis` (ADR-033 § 2). */
+export type TextLinkTone = TextLinkEmphasis;
 
 /**
  * TextLink underline visibility
@@ -24,14 +28,19 @@ export interface TextLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /** Size variant */
   size?: TextLinkSize;
   /**
-   * Color tone. `brand` (default) uses the brand link color at rest — the
+   * Hue source. `brand` (default) uses the brand link color at rest — the
    * right choice for a page-level link or CTA, where the link stands out from
    * body copy. `neutral` uses `--text-primary` at rest — for a lower-emphasis
    * link that reads as an identifier rather than a call-to-action (e.g. the
-   * name cell in a table). Both tones transition to `--text-brand-primary` on
+   * name cell in a table). Both values transition to `--text-brand-primary` on
    * hover, so color still signals interactivity.
    */
-  tone?: TextLinkTone;
+  emphasis?: TextLinkEmphasis;
+  /**
+   * @deprecated Use `emphasis` instead (ADR-033 § 2). Honoured for one minor
+   * version; `emphasis` wins when both are passed.
+   */
+  tone?: TextLinkEmphasis;
   /**
    * Underline visibility. `hover` (default) reveals the underline only on
    * hover — the right choice for a standalone link. `always` keeps the
@@ -63,7 +72,7 @@ export interface TextLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
  * <TextLink href="/about">Learn More</TextLink>
  * <TextLink href="/contact" size="small">Contact Us</TextLink>
  * <TextLink href="/pricing" underline="always">inline in a sentence</TextLink>
- * <TextLink href="/acme" tone="neutral" underline="none">Acme Co</TextLink>
+ * <TextLink href="/acme" emphasis="neutral" underline="none">Acme Co</TextLink>
  * ```
  *
  * @summary Themed inline link with size + variant options
@@ -72,7 +81,8 @@ export const TextLink = forwardRef<HTMLAnchorElement, TextLinkProps>(
   (
     {
       size = 'default',
-      tone = 'brand',
+      emphasis,
+      tone,
       underline = 'hover',
       children,
       iconBefore,
@@ -82,12 +92,15 @@ export const TextLink = forwardRef<HTMLAnchorElement, TextLinkProps>(
     },
     ref
   ) => {
+    const resolvedEmphasis =
+      resolveRetiredProp('TextLink', 'tone', 'emphasis', tone, emphasis) ?? 'brand';
+
     const combinedClassName = bdsClass(
       'text-link',
       'bds-text-link',
       size === 'small' && 'small',
       size === 'small' && 'bds-text-link-small',
-      tone === 'neutral' && 'bds-text-link--tone-neutral',
+      resolvedEmphasis === 'neutral' && 'bds-text-link--emphasis-neutral',
       underline === 'always' && 'bds-text-link--underline-always',
       underline === 'none' && 'bds-text-link--underline-none',
       className
