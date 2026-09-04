@@ -16,7 +16,10 @@ a consumer greps this file before bumping.
 > `#1186` will add the manifest + CI check that *enforces* this section. Until
 > it lands, the entry is a convention, not a gate.
 
-## Unreleased
+## v0.183.0 — 2026-09-04
+
+Breaking, in the minor slot: pre-1.0, npm's `^0.182.0` resolves `>=0.182.0 <0.183.0`,
+so no consumer auto-upgrades across it ([`docs/RELEASE.md`](docs/RELEASE.md) § Flow).
 
 ### Breaking (consumer CSS)
 
@@ -53,3 +56,17 @@ are the `type` axis and are **unchanged**.
 Passing the old prop or the old value still renders the new modifier and logs
 one `console.warn` per component + prop + value. `emphasis` wins when both
 props are passed.
+
+### Added
+
+- **`<SocialIcon emphasis="inverse">`** — near-black badge, the default treatment
+  for a monochrome social row on a light surface
+  ([#2274](https://github.com/brikdesigns/brik-bds/issues/2274)). `type="badge"`
+  fills `--surface-inverse`; `type="glyph"` takes the `--color-grayscale-950`
+  primitive that resolves to. Replaces reaching into `.bds-social-icon__bg`, a
+  BDS-internal part. New class hooks — nothing renamed:
+  `.bds-social-icon--emphasis-inverse` on both types.
+- **`inverse` admitted to ADR-033 § 2's `emphasis` axis**, whose closed value
+  list is now `neutral · brand · accent · inverse`
+  ([#2279](https://github.com/brikdesigns/brik-bds/issues/2279)). Affects any
+  consumer authoring an `emphasis`-named prop union against the naming canon.
