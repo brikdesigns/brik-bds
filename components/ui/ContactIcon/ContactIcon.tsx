@@ -1,5 +1,5 @@
 import { forwardRef, type SVGAttributes } from 'react';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredProp, resolveRetiredValue } from '../../utils';
 import { CONTACT_ICON_SVGS, CONTACT_ICON_PLATFORMS, type ContactIconPlatform } from './contact-icons.generated';
 import './ContactIcon.css';
 
@@ -8,23 +8,34 @@ export { CONTACT_ICON_PLATFORMS };
 
 /**
  * Which path carries the recolored fill:
- * - `badge` — background filled with the tone's color, glyph knocked out white
- *   (as authored).
- * - `glyph` — background neutral/transparent, glyph carries the tone's color.
+ * - `badge` — background filled with the emphasis color, glyph knocked out
+ *   white (as authored).
+ * - `glyph` — background neutral/transparent, glyph carries the emphasis color.
  */
 export type ContactIconType = 'badge' | 'glyph';
 
 /**
- * Recolor scheme, applied on top of `type`:
- * - `grayscale` — neutral `--text-muted` token (the authored look: a
+ * Hue source, applied on top of `type` (ADR-033 § 2's `emphasis` axis):
+ * - `neutral` — neutral `--text-muted` token (the authored look: a
  *   `#828282` mid-gray badge, white glyph).
  * - `accent` — Brik's brand color, `--text-brand-primary`.
  *
  * Contact marks (message, email, website, calendar, phone) have no brand
- * identity — unlike `SocialIcon`, there is no `tone="brand"` here
+ * identity — unlike `SocialIcon`, there is no `emphasis="brand"` here
  * (brik-bds#1716).
  */
-export type ContactIconTone = 'grayscale' | 'accent';
+export type ContactIconEmphasis = 'neutral' | 'accent';
+
+/** @deprecated Renamed `ContactIconEmphasis` (ADR-033 § 2). */
+export type ContactIconTone = ContactIconEmphasis;
+
+/**
+ * ADR-033 § Retired vocabulary → Axis words retires `grayscale` in favour of
+ * `neutral` on the emphasis axis. The resolved color is unchanged.
+ */
+const RETIRED_EMPHASIS: Record<string, ContactIconEmphasis> = {
+  grayscale: 'neutral',
+};
 
 export type ContactIconSize = 'sm' | 'md' | 'lg';
 
@@ -40,8 +51,14 @@ export interface ContactIconProps extends Omit<SVGAttributes<SVGSVGElement>, 'ch
   platform: ContactIconPlatform;
   /** Which path carries the recolored fill. Default: `'badge'` */
   type?: ContactIconType;
-  /** Recolor scheme. Default: `'grayscale'` */
-  tone?: ContactIconTone;
+  /** Hue source. Default: `'neutral'` */
+  emphasis?: ContactIconEmphasis;
+  /**
+   * @deprecated Use `emphasis` instead (ADR-033 § 2); `grayscale` is now
+   * `neutral`. Honoured for one minor version; `emphasis` wins when both are
+   * passed.
+   */
+  tone?: ContactIconEmphasis | 'grayscale';
   /** Size variant. Default: `'md'` */
   size?: ContactIconSize;
   /**
@@ -85,16 +102,16 @@ export function contactIconLabel(platform: ContactIconPlatform): string {
  * (`components/ui/ServiceTag/ServiceTag.tsx:159-177`). For the 6
  * social-platform marks (youtube, twitter, instagram, facebook, linkedin,
  * yelp), use `<SocialIcon>` instead — those carry a Foundations brand-color
- * token per platform (`tone="brand"`), which contact marks have no
+ * token per platform (`emphasis="brand"`), which contact marks have no
  * equivalent of.
  *
  * Unlike `Logo` (multi-fill brand art that renders exactly as authored and is
  * NEVER recolored), each ContactIcon master is a two-path badge — a
  * background path and a glyph path — independently targetable so `type`
- * picks which one carries the tone's color:
+ * picks which one carries the emphasis color:
  *
- * - `type="badge"` — background filled with the tone color, glyph knocked out
- *   white.
+ * - `type="badge"` — background filled with the emphasis color, glyph knocked
+ *   out white.
  * - `type="glyph"` — background neutral/transparent, glyph carries the color.
  *
  * Renders `role="img"` + `aria-label` (the mark's display name, or `label`)
@@ -105,19 +122,30 @@ export function contactIconLabel(platform: ContactIconPlatform): string {
  *
  * @example
  * <ContactIcon platform="email" />
- * <ContactIcon platform="calendar" type="glyph" tone="accent" />
+ * <ContactIcon platform="calendar" type="glyph" emphasis="accent" />
  * <ContactIcon platform="phone" size="lg" />
  * // decorative — a sibling label already names the mark
  * <ContactIcon platform="website" decorative /> <span>Visit our site</span>
  *
- * @summary Recolorable contact mark — badge or glyph, grayscale/accent tones
+ * @summary Recolorable contact mark — badge or glyph, neutral/accent emphasis
  */
 export const ContactIcon = forwardRef<SVGSVGElement, ContactIconProps>(function ContactIcon(
-  { platform, type = 'badge', tone = 'grayscale', size = 'md', label, decorative = false, className, style, ...props },
+  { platform, type = 'badge', emphasis, tone, size = 'md', label, decorative = false, className, style, ...props },
   ref,
 ) {
   const svg = CONTACT_ICON_SVGS[platform];
   if (!svg) return null;
+
+  // The prop rename and the `grayscale` → `neutral` value retirement are
+  // independent migrations, so both paths run: a caller may still be on
+  // `tone`, on `grayscale`, or on either one alone.
+  const resolvedEmphasis =
+    resolveRetiredValue(
+      'ContactIcon',
+      emphasis !== undefined ? 'emphasis' : 'tone',
+      resolveRetiredProp('ContactIcon', 'tone', 'emphasis', tone, emphasis),
+      RETIRED_EMPHASIS,
+    ) ?? 'neutral';
 
   const box = sizeMap[size];
   const accessibleName = label ?? contactIconLabel(platform);
@@ -126,7 +154,12 @@ export const ContactIcon = forwardRef<SVGSVGElement, ContactIconProps>(function 
     <svg
       ref={ref}
       focusable={false}
-      className={bdsClass('bds-contact-icon', `bds-contact-icon--${type}`, `bds-contact-icon--${tone}`, className)}
+      className={bdsClass(
+        'bds-contact-icon',
+        `bds-contact-icon--${type}`,
+        `bds-contact-icon--emphasis-${resolvedEmphasis}`,
+        className,
+      )}
       width={box}
       height={box}
       viewBox="0 0 36 36"

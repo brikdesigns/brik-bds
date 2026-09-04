@@ -16,7 +16,7 @@
  *   4. `contactIconLabel` (the default `aria-label` ContactIcon renders
  *      unless `decorative` is passed) resolves a real, non-empty display
  *      name for every mark.
- *   5. `ContactIconTone` has no `'brand'` member — contact marks have no
+ *   5. `ContactIconEmphasis` has no `'brand'` member — contact marks have no
  *      brand identity, unlike `SocialIcon`. This is a type-level guarantee
  *      (`@ts-expect-error`), checked by `tsc --noEmit`, not a runtime branch.
  * JSX is avoided to keep this a `.test.ts` file (include glob is `**\/*.test.ts`);
@@ -26,7 +26,7 @@
  */
 import { describe, it, expect } from 'vitest';
 import { CONTACT_ICON_SVGS, CONTACT_ICON_PLATFORMS, type ContactIconPlatform } from './contact-icons.generated';
-import { contactIconLabel, type ContactIconTone } from './ContactIcon';
+import { contactIconLabel, type ContactIconEmphasis } from './ContactIcon';
 
 const EXPECTED_PLATFORMS: ContactIconPlatform[] = ['message', 'email', 'website', 'calendar', 'phone'];
 
@@ -84,15 +84,15 @@ describe('ContactIcon — default accessible name (decorative vs labeled branch)
   });
 });
 
-describe('ContactIcon — no brand tone (brik-bds#1716)', () => {
-  it('ContactIconTone has no "brand" member — a type-level guarantee, not a runtime check', () => {
-    // Contact marks have no brand identity, so unlike SocialIconTone,
-    // ContactIconTone is intentionally narrower. This assignment must fail
+describe('ContactIcon — no brand emphasis (brik-bds#1716)', () => {
+  it('ContactIconEmphasis has no "brand" member — a type-level guarantee, not a runtime check', () => {
+    // Contact marks have no brand identity, so unlike SocialIconEmphasis,
+    // ContactIconEmphasis is intentionally narrower. This assignment must fail
     // `tsc --noEmit` — if `brand` is ever added back to the union, this line
     // stops erroring and the test itself fails (an unused `@ts-expect-error`
     // is a type error).
-    // @ts-expect-error — 'brand' is not assignable to ContactIconTone.
-    const invalidTone: ContactIconTone = 'brand';
-    expect(invalidTone).toBe('brand');
+    // @ts-expect-error — 'brand' is not assignable to ContactIconEmphasis.
+    const invalidEmphasis: ContactIconEmphasis = 'brand';
+    expect(invalidEmphasis).toBe('brand');
   });
 });

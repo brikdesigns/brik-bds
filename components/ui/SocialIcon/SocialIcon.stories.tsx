@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SocialIcon, SOCIAL_ICON_PLATFORMS } from './SocialIcon';
-import type { SocialIconTone, SocialIconType } from './SocialIcon';
+import type { SocialIconEmphasis, SocialIconType } from './SocialIcon';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -21,14 +21,15 @@ const meta: Meta<typeof SocialIcon> = {
       control: 'select',
       options: ['badge', 'glyph'],
       description:
-        '`badge` fills the background with the tone color and knocks the glyph out white. `glyph` leaves the background neutral/transparent and colors the glyph.',
+        '`badge` fills the background with the emphasis color and knocks the glyph out white. `glyph` leaves the background neutral/transparent and colors the glyph.',
     },
-    tone: {
+    emphasis: {
       control: 'select',
-      options: ['grayscale', 'brand', 'accent'],
+      options: ['neutral', 'brand', 'accent'],
       description:
-        'Recolor scheme: `grayscale` (neutral `--text-muted`), `brand` (the platform\'s Foundations brand-color token — every platform has one), `accent` (`--text-brand-primary`).',
+        'Hue source: `neutral` (`--text-muted`), `brand` (the platform\'s Foundations brand-color token — every platform has one), `accent` (`--text-brand-primary`).',
     },
+    tone: { table: { disable: true } },
     size: {
       control: 'select',
       options: ['sm', 'md', 'lg'],
@@ -56,26 +57,26 @@ export const Default: Story = {
   args: {
     platform: 'youtube',
     type: 'badge',
-    tone: 'grayscale',
+    emphasis: 'neutral',
     size: 'lg',
   },
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   ALL MARKS — the full type × tone matrix, every bundled platform.
+   ALL MARKS — the full type × emphasis matrix, every bundled platform.
    Irreducible: a single args set can't show 36 combinations at once
    (mirrors Icon's `BundledSet` / Logo's `CreditCard` coverage galleries).
    ═══════════════════════════════════════════════════════════════ */
 
 const TYPES: SocialIconType[] = ['badge', 'glyph'];
-const TONES: SocialIconTone[] = ['grayscale', 'brand', 'accent'];
+const EMPHASES: SocialIconEmphasis[] = ['neutral', 'brand', 'accent'];
 
 /**
- * Every bundled platform across the full `type` × `tone` matrix — the
+ * Every bundled platform across the full `type` × `emphasis` matrix — the
  * coverage grid brik-bds#1716 asked for. Every platform has a Foundations
  * brand-color token, so `brand` never falls back to a neutral here (contrast
  * the pre-split #1713 behavior).
- * @summary Full type × tone matrix, every bundled platform
+ * @summary Full type × emphasis matrix, every bundled platform
  */
 export const AllMarks: Story = {
   render: () => (
@@ -95,11 +96,11 @@ export const AllMarks: Story = {
           </span>
           <div style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap' }}>
             {TYPES.flatMap((type) =>
-              TONES.map((tone) => (
-                <div key={`${type}-${tone}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-2xs)' }}>
-                  <SocialIcon platform={platform} type={type} tone={tone} size="sm" />
+              EMPHASES.map((emphasis) => (
+                <div key={`${type}-${emphasis}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-2xs)' }}>
+                  <SocialIcon platform={platform} type={type} emphasis={emphasis} size="sm" />
                   <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)' }}>
-                    {type}/{tone}
+                    {type}/{emphasis}
                   </span>
                 </div>
               )),

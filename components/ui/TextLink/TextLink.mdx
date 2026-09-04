@@ -8,7 +8,7 @@ import * as Stories from './TextLink.stories';
 
 <ComponentLinks slug="text-link" />
 
-Themed inline anchor link styled to match BDS body typography. Color transitions to brand on hover. Two sizes (`default`, `small`); a color-tone axis (`brand`, `neutral`); an underline-visibility axis (`hover`, `always`, `none`); accepts standard `<a>` attributes (`href`, `target`, `rel`) and optional leading / trailing icon slots.
+Themed inline anchor link styled to match BDS body typography. Color transitions to brand on hover. Two sizes (`default`, `small`); an `emphasis` axis (`brand`, `neutral`); an underline-visibility axis (`hover`, `always`, `none`); accepts standard `<a>` attributes (`href`, `target`, `rel`) and optional leading / trailing icon slots.
 
 ## Playground
 
@@ -16,19 +16,19 @@ Themed inline anchor link styled to match BDS body typography. Color transitions
 
 ## Variants
 
-TextLink has no semantic *style* variant axis — size, tone, and underline-visibility are all exposed as Controls on Default (#2144). External-link behavior is set via standard anchor Controls (`target`, `rel`), not a separate story. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
+TextLink has no semantic *style* variant axis — size, emphasis, and underline-visibility are all exposed as Controls on Default (#2144). External-link behavior is set via standard anchor Controls (`target`, `rel`), not a separate story. See [ADR-010 §components without a variant axis](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) for the framework.
 
 <Canvas of={Stories.Default} />
 
 - **`default`** — body-md (16px)
 - **`small`** — body-sm (14px), for footnotes / captions
 
-### Color tone
+### Emphasis
 
 <Canvas of={Stories.Default} />
 
 - **`brand`** (default) — brand link color at rest. Use for a **page-level link or CTA** that should stand out from body copy.
-- **`neutral`** — `--text-primary` at rest. Use for a **lower-emphasis identifier link** — a name cell in a table, where a column of links should read as a column of identifiers, not calls-to-action. Both tones transition to `--text-brand-primary` on hover, so color still signals interactivity.
+- **`neutral`** — `--text-primary` at rest. Use for a **lower-emphasis identifier link** — a name cell in a table, where a column of links should read as a column of identifiers, not calls-to-action. Both values transition to `--text-brand-primary` on hover, so color still signals interactivity.
 
 ### Underline visibility
 

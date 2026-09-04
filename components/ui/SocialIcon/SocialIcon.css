@@ -17,7 +17,7 @@
    scripts/gen-social-icons.mjs) — it recolors via the `color` set below,
    never a direct fill rule here. */
 
-/* ─── type="badge" — background carries the tone, glyph knocked out white ── */
+/* ─── type="badge" — background carries the emphasis color, glyph knocked out white ── */
 
 /* Constant white regardless of theme (context-pinned, unlike --text-inverse
    which flips with theme polarity) — the glyph always reads as a white
@@ -28,11 +28,11 @@
   color: var(--text-on-color-dark);
 }
 
-.bds-social-icon--badge.bds-social-icon--grayscale .bds-social-icon__bg {
+.bds-social-icon--badge.bds-social-icon--emphasis-neutral .bds-social-icon__bg {
   fill: var(--text-muted);
 }
 
-.bds-social-icon--badge.bds-social-icon--accent .bds-social-icon__bg {
+.bds-social-icon--badge.bds-social-icon--emphasis-accent .bds-social-icon__bg {
   fill: var(--text-brand-primary);
 }
 
@@ -40,70 +40,70 @@
    attribute selectors, brik-bds#1716) directly from the Foundations color
    system primitive for that platform — every bundled platform has one, so
    there is no fallback. */
-.bds-social-icon--badge.bds-social-icon--brand .bds-social-icon__bg {
+.bds-social-icon--badge.bds-social-icon--emphasis-brand .bds-social-icon__bg {
   fill: var(--bds-social-icon-brand);
 }
 
-/* ─── type="glyph" — background neutral/transparent, glyph carries the tone ── */
+/* ─── type="glyph" — background neutral/transparent, glyph carries the emphasis color ── */
 
 .bds-social-icon--glyph .bds-social-icon__bg {
   fill: none;
 }
 
-.bds-social-icon--glyph.bds-social-icon--grayscale {
+.bds-social-icon--glyph.bds-social-icon--emphasis-neutral {
   color: var(--text-muted);
 }
 
-.bds-social-icon--glyph.bds-social-icon--accent {
+.bds-social-icon--glyph.bds-social-icon--emphasis-accent {
   color: var(--text-brand-primary);
 }
 
-.bds-social-icon--glyph.bds-social-icon--brand {
+.bds-social-icon--glyph.bds-social-icon--emphasis-brand {
   color: var(--bds-social-icon-brand);
 }
 
-/* ─── tone="brand" — per-platform Foundations token binding ─────────────── */
+/* ─── emphasis="brand" — per-platform Foundations token binding ─────────── */
 
 /* Each platform's brand color is a canonical Foundations primitive
    (design-tokens/foundations.json primitives/value/color/system,
    brik-bds#1716) — never a hardcoded hex or a component-local JS map. */
-.bds-social-icon--brand[data-platform='youtube'] {
+.bds-social-icon--emphasis-brand[data-platform='youtube'] {
   --bds-social-icon-brand: var(--color-system-youtube);
 }
 
-.bds-social-icon--brand[data-platform='twitter'] {
+.bds-social-icon--emphasis-brand[data-platform='twitter'] {
   --bds-social-icon-brand: var(--color-system-twitter);
 }
 
-.bds-social-icon--brand[data-platform='facebook'] {
+.bds-social-icon--emphasis-brand[data-platform='facebook'] {
   --bds-social-icon-brand: var(--color-system-facebook);
 }
 
-.bds-social-icon--brand[data-platform='instagram'] {
+.bds-social-icon--emphasis-brand[data-platform='instagram'] {
   --bds-social-icon-brand: var(--color-system-instagram);
 }
 
-.bds-social-icon--brand[data-platform='linkedin'] {
+.bds-social-icon--emphasis-brand[data-platform='linkedin'] {
   --bds-social-icon-brand: var(--color-system-linkedin);
 }
 
-.bds-social-icon--brand[data-platform='yelp'] {
+.bds-social-icon--emphasis-brand[data-platform='yelp'] {
   --bds-social-icon-brand: var(--color-system-yelp);
 }
 
-.bds-social-icon--brand[data-platform='google'] {
+.bds-social-icon--emphasis-brand[data-platform='google'] {
   --bds-social-icon-brand: var(--color-system-google);
 }
 
-.bds-social-icon--brand[data-platform='apple'] {
+.bds-social-icon--emphasis-brand[data-platform='apple'] {
   --bds-social-icon-brand: var(--color-system-apple);
 }
 
-.bds-social-icon--brand[data-platform='bing'] {
+.bds-social-icon--emphasis-brand[data-platform='bing'] {
   --bds-social-icon-brand: var(--color-system-bing);
 }
 
-.bds-social-icon--brand[data-platform='tiktok'] {
+.bds-social-icon--emphasis-brand[data-platform='tiktok'] {
   --bds-social-icon-brand: var(--color-system-tiktok);
 }
 }

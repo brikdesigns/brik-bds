@@ -1,5 +1,5 @@
 import { forwardRef, type SVGAttributes } from 'react';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredProp, resolveRetiredValue } from '../../utils';
 import { SOCIAL_ICON_SVGS, SOCIAL_ICON_PLATFORMS, type SocialIconPlatform } from './social-icons.generated';
 import './SocialIcon.css';
 
@@ -8,22 +8,33 @@ export { SOCIAL_ICON_PLATFORMS };
 
 /**
  * Which path carries the recolored fill:
- * - `badge` — background filled with the tone's color, glyph knocked out white
- *   (as authored).
- * - `glyph` — background neutral/transparent, glyph carries the tone's color.
+ * - `badge` — background filled with the emphasis color, glyph knocked out
+ *   white (as authored).
+ * - `glyph` — background neutral/transparent, glyph carries the emphasis color.
  */
 export type SocialIconType = 'badge' | 'glyph';
 
 /**
- * Recolor scheme, applied on top of `type`:
- * - `grayscale` — neutral `--text-muted` token (the authored look: a
+ * Hue source, applied on top of `type` (ADR-033 § 2's `emphasis` axis):
+ * - `neutral` — neutral `--text-muted` token (the authored look: a
  *   `#828282` mid-gray badge, white glyph).
  * - `brand` — the platform's Foundations brand-color token, e.g.
  *   `--color-system-youtube` (brik-bds#1716). See SocialIcon.css for the
  *   full per-platform mapping — every bundled platform has one, no fallback.
  * - `accent` — Brik's brand color, `--text-brand-primary`.
  */
-export type SocialIconTone = 'grayscale' | 'brand' | 'accent';
+export type SocialIconEmphasis = 'neutral' | 'brand' | 'accent';
+
+/** @deprecated Renamed `SocialIconEmphasis` (ADR-033 § 2). */
+export type SocialIconTone = SocialIconEmphasis;
+
+/**
+ * ADR-033 § Retired vocabulary → Axis words retires `grayscale` in favour of
+ * `neutral` on the emphasis axis. The resolved color is unchanged.
+ */
+const RETIRED_EMPHASIS: Record<string, SocialIconEmphasis> = {
+  grayscale: 'neutral',
+};
 
 export type SocialIconSize = 'sm' | 'md' | 'lg';
 
@@ -38,8 +49,14 @@ export interface SocialIconProps extends Omit<SVGAttributes<SVGSVGElement>, 'chi
   platform: SocialIconPlatform;
   /** Which path carries the recolored fill. Default: `'badge'` */
   type?: SocialIconType;
-  /** Recolor scheme. Default: `'grayscale'` */
-  tone?: SocialIconTone;
+  /** Hue source. Default: `'neutral'` */
+  emphasis?: SocialIconEmphasis;
+  /**
+   * @deprecated Use `emphasis` instead (ADR-033 § 2); `grayscale` is now
+   * `neutral`. Honoured for one minor version; `emphasis` wins when both are
+   * passed.
+   */
+  tone?: SocialIconEmphasis | 'grayscale';
   /** Size variant. Default: `'md'` */
   size?: SocialIconSize;
   /**
@@ -96,18 +113,18 @@ export function socialIconLabel(platform: SocialIconPlatform): string {
  * `ServiceTag` (`components/ui/ServiceTag/ServiceTag.tsx:159-177`). For the
  * non-platform contact marks (message, email, website, calendar, phone), use
  * `<ContactIcon>` instead — they have no brand identity, so that component
- * has no `tone="brand"`.
+ * has no `emphasis="brand"`.
  *
  * Unlike `Logo` (multi-fill brand art that renders exactly as authored and is
  * NEVER recolored), each SocialIcon master is a two-path badge — a background
  * path and a glyph path — independently targetable so `type` picks which one
- * carries the tone's color:
+ * carries the emphasis color:
  *
- * - `type="badge"` — background filled with the tone color, glyph knocked out
- *   white.
+ * - `type="badge"` — background filled with the emphasis color, glyph knocked
+ *   out white.
  * - `type="glyph"` — background neutral/transparent, glyph carries the color.
  *
- * `tone="brand"` uses the platform's Foundations brand-color token (YouTube
+ * `emphasis="brand"` uses the platform's Foundations brand-color token (YouTube
  * red, X black, Facebook blue, Instagram black, LinkedIn blue, Yelp red,
  * Google blue, Apple black, Bing blue, TikTok black); every bundled platform
  * has one — see SocialIcon.css.
@@ -120,19 +137,30 @@ export function socialIconLabel(platform: SocialIconPlatform): string {
  *
  * @example
  * <SocialIcon platform="youtube" />
- * <SocialIcon platform="linkedin" type="glyph" tone="brand" />
- * <SocialIcon platform="yelp" tone="accent" size="lg" />
+ * <SocialIcon platform="linkedin" type="glyph" emphasis="brand" />
+ * <SocialIcon platform="yelp" emphasis="accent" size="lg" />
  * // decorative — a sibling label already names the platform
  * <SocialIcon platform="twitter" decorative /> <span>Follow us on X</span>
  *
- * @summary Recolorable social-platform mark — badge or glyph, 3 tones
+ * @summary Recolorable social-platform mark — badge or glyph, 3 emphases
  */
 export const SocialIcon = forwardRef<SVGSVGElement, SocialIconProps>(function SocialIcon(
-  { platform, type = 'badge', tone = 'grayscale', size = 'md', label, decorative = false, className, style, ...props },
+  { platform, type = 'badge', emphasis, tone, size = 'md', label, decorative = false, className, style, ...props },
   ref,
 ) {
   const svg = SOCIAL_ICON_SVGS[platform];
   if (!svg) return null;
+
+  // The prop rename and the `grayscale` → `neutral` value retirement are
+  // independent migrations, so both paths run: a caller may still be on
+  // `tone`, on `grayscale`, or on either one alone.
+  const resolvedEmphasis =
+    resolveRetiredValue(
+      'SocialIcon',
+      emphasis !== undefined ? 'emphasis' : 'tone',
+      resolveRetiredProp('SocialIcon', 'tone', 'emphasis', tone, emphasis),
+      RETIRED_EMPHASIS,
+    ) ?? 'neutral';
 
   const box = sizeMap[size];
   const accessibleName = label ?? socialIconLabel(platform);
@@ -141,7 +169,12 @@ export const SocialIcon = forwardRef<SVGSVGElement, SocialIconProps>(function So
     <svg
       ref={ref}
       focusable={false}
-      className={bdsClass('bds-social-icon', `bds-social-icon--${type}`, `bds-social-icon--${tone}`, className)}
+      className={bdsClass(
+        'bds-social-icon',
+        `bds-social-icon--${type}`,
+        `bds-social-icon--emphasis-${resolvedEmphasis}`,
+        className,
+      )}
       width={box}
       height={box}
       viewBox="0 0 36 36"
@@ -150,7 +183,7 @@ export const SocialIcon = forwardRef<SVGSVGElement, SocialIconProps>(function So
       // a11y, the `data-platform` brand-token binding, and the trusted,
       // build-time-bundled markup (SocialIcon/icons/*.svg — never user input)
       // are placed after the `{...props}` spread so a caller can never
-      // silently contradict `decorative`, break the `tone="brand"` CSS binding,
+      // silently contradict `decorative`, break the `emphasis="brand"` CSS binding,
       // or inject markup via a raw role/aria-label/aria-hidden/data-platform/
       // dangerouslySetInnerHTML prop.
       data-platform={platform}

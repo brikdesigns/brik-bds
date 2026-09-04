@@ -22,12 +22,13 @@ const meta: Meta<typeof TextLink> = {
       options: ['default', 'small'],
       description: 'Size variant. `default` is body-md; `small` is body-sm for tight contexts (footnotes, captions).',
     },
-    tone: {
+    emphasis: {
       control: 'select',
       options: ['brand', 'neutral'],
       description:
-        'Color tone. `brand` (default) uses the brand link color at rest — for a page link or CTA. `neutral` uses `--text-primary` at rest — a lower-emphasis link that reads as an identifier (e.g. a table name cell). Both transition to `--text-brand-primary` on hover.',
+        'Hue source. `brand` (default) uses the brand link color at rest — for a page link or CTA. `neutral` uses `--text-primary` at rest — a lower-emphasis link that reads as an identifier (e.g. a table name cell). Both transition to `--text-brand-primary` on hover.',
     },
+    tone: { table: { disable: true } },
     underline: {
       control: 'select',
       options: ['hover', 'always', 'none'],
@@ -90,14 +91,14 @@ export const Default: Story = {
    NO-UNDERLINE — Q3 per ADR-010: `underline="none"` is the color-only
    affordance for a table cell. Shown with a leading icon to prove the
    seamless box-shadow underline is suppressed too — an Avatar in a
-   cell must never underline. Paired with `tone="neutral"`, the exact
+   cell must never underline. Paired with `emphasis="neutral"`, the exact
    table-cell composition.
    ═══════════════════════════════════════════════════════════════ */
 
 /** @summary No underline — color-only affordance (table cell) */
 export const NoUnderline: Story = {
   render: () => (
-    <TextLink href="#" tone="neutral" underline="none" iconBefore={<ArrowLeft />}>
+    <TextLink href="#" emphasis="neutral" underline="none" iconBefore={<ArrowLeft />}>
       Acme Corporation
     </TextLink>
   ),
