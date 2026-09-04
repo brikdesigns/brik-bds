@@ -22,8 +22,16 @@ export type SocialIconType = 'badge' | 'glyph';
  *   `--color-system-youtube` (brik-bds#1716). See SocialIcon.css for the
  *   full per-platform mapping — every bundled platform has one, no fallback.
  * - `accent` — Brik's brand color, `--text-brand-primary`.
+ * - `inverse` — near-black, the default treatment for a monochrome social row
+ *   on a light surface (brik-bds#2274). `badge` fills `--surface-inverse`;
+ *   `glyph` takes the `--color-grayscale-950` primitive that resolves to,
+ *   because `lint-tokens` bars a surface-family token from a text slot and the
+ *   nearest semantic — `--text-on-color-light` — is NOT equivalent: it goes to
+ *   `--color-grayscale-black` (#000) under the Brik dark theme while
+ *   `--surface-inverse` stays #1b1b1b, which would paint the two halves
+ *   different blacks. See SocialIcon.css for the measurement.
  */
-export type SocialIconEmphasis = 'neutral' | 'brand' | 'accent';
+export type SocialIconEmphasis = 'neutral' | 'brand' | 'accent' | 'inverse';
 
 /** @deprecated Renamed `SocialIconEmphasis` (ADR-033 § 2). */
 export type SocialIconTone = SocialIconEmphasis;
@@ -142,7 +150,7 @@ export function socialIconLabel(platform: SocialIconPlatform): string {
  * // decorative — a sibling label already names the platform
  * <SocialIcon platform="twitter" decorative /> <span>Follow us on X</span>
  *
- * @summary Recolorable social-platform mark — badge or glyph, 3 emphases
+ * @summary Recolorable social-platform mark — badge or glyph, 4 emphases
  */
 export const SocialIcon = forwardRef<SVGSVGElement, SocialIconProps>(function SocialIcon(
   { platform, type = 'badge', emphasis, tone, size = 'md', label, decorative = false, className, style, ...props },

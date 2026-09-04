@@ -25,9 +25,9 @@ const meta: Meta<typeof SocialIcon> = {
     },
     emphasis: {
       control: 'select',
-      options: ['neutral', 'brand', 'accent'],
+      options: ['neutral', 'brand', 'accent', 'inverse'],
       description:
-        'Hue source: `neutral` (`--text-muted`), `brand` (the platform\'s Foundations brand-color token — every platform has one), `accent` (`--text-brand-primary`).',
+        'Hue source: `neutral` (`--text-muted`), `brand` (the platform\'s Foundations brand-color token — every platform has one), `accent` (`--text-brand-primary`), `inverse` (near-black `--surface-inverse`).',
     },
     tone: { table: { disable: true } },
     size: {
@@ -69,13 +69,14 @@ export const Default: Story = {
    ═══════════════════════════════════════════════════════════════ */
 
 const TYPES: SocialIconType[] = ['badge', 'glyph'];
-const EMPHASES: SocialIconEmphasis[] = ['neutral', 'brand', 'accent'];
+const EMPHASES: SocialIconEmphasis[] = ['neutral', 'brand', 'accent', 'inverse'];
 
 /**
  * Every bundled platform across the full `type` × `emphasis` matrix — the
- * coverage grid brik-bds#1716 asked for. Every platform has a Foundations
- * brand-color token, so `brand` never falls back to a neutral here (contrast
- * the pre-split #1713 behavior).
+ * coverage grid brik-bds#1716 asked for, extended to the `inverse` value in
+ * brik-bds#2274. Every platform has a Foundations brand-color token, so
+ * `brand` never falls back to a neutral here (contrast the pre-split #1713
+ * behavior).
  * @summary Full type × emphasis matrix, every bundled platform
  */
 export const AllMarks: Story = {

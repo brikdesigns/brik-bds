@@ -36,6 +36,14 @@
   fill: var(--text-brand-primary);
 }
 
+/* `--surface-inverse`, not `--background-inverse`: a consuming theme (the
+   brikdesigns marketing site) redefines `--background-*` in its dark root, so
+   the badge would flip polarity there; `--surface-*` is the theme-tracking
+   pair. The knocked-out white glyph above reads 17.22:1 on it (brik-bds#2274). */
+.bds-social-icon--badge.bds-social-icon--emphasis-inverse .bds-social-icon__bg {
+  fill: var(--surface-inverse);
+}
+
 /* `--bds-social-icon-brand` is bound per-platform below (via `[data-platform]`
    attribute selectors, brik-bds#1716) directly from the Foundations color
    system primitive for that platform — every bundled platform has one, so
@@ -56,6 +64,21 @@
 
 .bds-social-icon--glyph.bds-social-icon--emphasis-accent {
   color: var(--text-brand-primary);
+}
+
+/* The Foundations primitive, not a `--text-*` semantic. `lint-tokens` rejects a
+   surface-family token in a text slot, so the badge's own `--surface-inverse`
+   is unavailable here — and its nearest semantic counterpart is NOT equivalent:
+   `--text-on-color-light` resolves to `--color-grayscale-black` (#000) under
+   `:root[data-theme="dark"] .theme-brand-brik` (dist/tokens.css:909) while
+   `--surface-inverse` stays `--color-grayscale-950` (#1b1b1b), so the glyph and
+   badge halves would paint different blacks in exactly the root Storybook's
+   `brik-dark` renders (.storybook/preview.tsx:95-97). `--color-grayscale-950`
+   is declared once, unthemed, and is what `--surface-inverse` resolves to in
+   all four roots — same reason the per-platform brand bindings below consume a
+   primitive directly (brik-bds#2274). */
+.bds-social-icon--glyph.bds-social-icon--emphasis-inverse {
+  color: var(--color-grayscale-950);
 }
 
 .bds-social-icon--glyph.bds-social-icon--emphasis-brand {
