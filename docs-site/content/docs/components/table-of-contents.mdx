@@ -44,6 +44,23 @@ Pass `activeId` to disable the internal scroll-spy and drive the active section 
 <TableOfContents activeId="the-solution" items={items} />
 ```
 
+### Rail
+
+`variant="rail"` renders items as text instead of NavItem's filled brand pill: quiet resting label, brand-colored active label, and a hairline rule down the list's left edge with the item indent. Use it for an in-page TOC sitting in a tinted sidebar, where the pill reads as a second navigation surface. The default stays right for a route rail.
+
+The variant owns the rule and the indent, so a consumer never re-declares `border-left` + `padding-left` on `.bds-toc__list`. The tint, radius and outer padding of the surrounding box remain page chrome and stay consumer-owned.
+
+Pair it with `sticky={false}` when the consumer's own wrapper is the sticky element — a rail that carries a metadata card up with the TOC. That drops `position: sticky`, `align-self` and the scroll container together; leaving `align-self: flex-start` in place shrink-wraps the nav below its column width.
+
+```tsx
+<div className="my-rail">        {/* consumer owns stickiness + the tint */}
+  <TableOfContents variant="rail" sticky={false} items={items} />
+  <MetadataCard />
+</div>
+```
+
+The active label uses `--text-brand-primary-strong`, not `--text-brand-primary`: at 14px bold the label is below WCAG's large-text floor, so it is gated AA 4.5:1 rather than AA-large 3:1. See [Color pairings](/docs/foundation/color-pairings).
+
 ### Sticky-header offset and routing
 
 `scrollOffset` shifts the scroll target down so a sticky page header doesn't cover the section top. `linkComponent` forwards a router-aware component to every NavItem. See [ADR-012](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-012-link-component-escape-hatch.md).
@@ -80,6 +97,8 @@ Pass `activeId` to disable the internal scroll-spy and drive the active section 
 | `title` | `ReactNode` | — |
 | `ariaLabel` | `string` | `'Table of contents'` |
 | `scrollOffset` | `number` | `0` |
+| `variant` | `'default' \| 'rail'` | `'default'` |
+| `sticky` | `boolean` | `true` |
 | `className` | `string` | — |
 | `linkComponent` | `BdsLinkComponent` | — |
 | `onItemClick` | `(id: string) => void` | — |

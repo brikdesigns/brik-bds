@@ -30,6 +30,16 @@ The consumer sets `activeId`; the internal scroll-spy is disabled.
 
 <Canvas of={Stories.Controlled} />
 
+### Rail
+
+`variant="rail"` renders items as text instead of `NavItem`'s filled brand pill: quiet resting label, brand-colored active label, and a hairline rule down the list's left edge with the item indent. Use it for an in-page TOC sitting in a tinted sidebar, where the pill reads as a second navigation surface. The default stays right for a route rail.
+
+The variant owns the rule and the indent, so a consumer never re-declares `border-left` + `padding-left` on `.bds-toc__list`. The tint, radius and outer padding of the surrounding box remain page chrome and stay consumer-owned.
+
+Pair it with `sticky={false}` when the consumer's own wrapper is the sticky element — a rail that carries a metadata card up with the TOC. That drops `position: sticky`, `align-self` and the scroll container together; leaving `align-self: flex-start` in place shrink-wraps the nav below its column width.
+
+<Canvas of={Stories.Rail} />
+
 ## Props
 
 <ArgTypes of={Stories} />

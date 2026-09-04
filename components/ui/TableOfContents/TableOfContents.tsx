@@ -36,6 +36,30 @@ export interface TableOfContentsProps {
    * otherwise cover the section top. Default 0.
    */
   scrollOffset?: number;
+  /**
+   * Visual treatment.
+   *
+   * - `default` — `NavItem`'s own chrome: the active entry is a filled brand
+   *   pill. Right for a route rail.
+   * - `rail` — text-only. Quiet resting label, brand-colored active label,
+   *   hairline rule down the list's left edge with the item indent. Right for
+   *   an in-page TOC sitting in a tinted sidebar, where a filled pill reads as
+   *   a second navigation surface.
+   *
+   * The `rail` variant owns the rule and the indent, so a consumer does not
+   * re-declare `border-left` + `padding-left` on `.bds-toc__list`.
+   */
+  variant?: 'default' | 'rail';
+  /**
+   * Whether the nav sticks within its own column. Default `true`.
+   *
+   * Pass `false` when the consumer's own wrapper is the sticky element — e.g. a
+   * rail that must carry a metadata card up with the TOC. This drops
+   * `position: sticky`, `align-self`, and the scroll container in one prop;
+   * leaving `align-self: flex-start` in place shrink-wraps the nav below its
+   * column width, which is the shape consumers were overriding by hand.
+   */
+  sticky?: boolean;
   /** Optional className passthrough for layout-slot integration. */
   className?: string;
   /**
@@ -61,6 +85,10 @@ export interface TableOfContentsProps {
  * the active section yourself. Smooth scroll on click yields to
  * `prefers-reduced-motion`.
  *
+ * `variant="rail"` swaps the filled active pill for a text-only treatment with
+ * a hairline rule; `sticky={false}` hands stickiness back to the consumer's own
+ * wrapper.
+ *
  * @summary Sticky in-page table of contents with scroll-spy
  */
 export function TableOfContents({
@@ -69,6 +97,8 @@ export function TableOfContents({
   title,
   ariaLabel = 'Table of contents',
   scrollOffset = 0,
+  variant = 'default',
+  sticky = true,
   className,
   linkComponent,
   onItemClick,
@@ -140,7 +170,15 @@ export function TableOfContents({
   }
 
   return (
-    <nav className={bdsClass('bds-toc', className)} aria-label={ariaLabel}>
+    <nav
+      className={bdsClass(
+        'bds-toc',
+        variant === 'rail' && 'bds-toc--variant-rail',
+        sticky && 'bds-toc--sticky',
+        className,
+      )}
+      aria-label={ariaLabel}
+    >
       {title && <div className="bds-toc__title">{title}</div>}
       <ul className="bds-toc__list">
         {items.map((item) => (
