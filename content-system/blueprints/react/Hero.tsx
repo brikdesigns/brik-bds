@@ -130,7 +130,7 @@ export function Hero({
     >
       <div className="bds-blueprint-section__container bds-hero__container">
         <div className="bds-hero__content">
-          {breadcrumb}
+          {breadcrumb && <div className="bds-hero__breadcrumb">{breadcrumb}</div>}
           {eyebrow}
           {subtitle && <p className="bds-hero__subtitle">{subtitle}</p>}
           <h1 id={titleId} className="bds-hero__title">

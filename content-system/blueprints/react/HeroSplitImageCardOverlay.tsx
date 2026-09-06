@@ -29,12 +29,14 @@ import type { MouseEvent, ReactNode } from 'react';
 
 import { Breadcrumb } from '../../../components/ui/Breadcrumb/Breadcrumb';
 import { Button } from '../../../components/ui/Button';
-import { Frame } from '../../../components/ui/Frame/Frame';
 import type { FrameRatio } from '../../../components/ui/Frame/Frame';
 import { ServiceTag } from '../../../components/ui/ServiceTag/ServiceTag';
 import type { BlueprintProps } from '../astro/types';
 import { isActionCta } from '../astro/types';
 import { Hero } from './Hero';
+import { HeroMediaCard } from './HeroMediaCard';
+import { HeroMediaCardImage } from './HeroMediaCardImage';
+import { HeroMediaCardPrice } from './HeroMediaCardPrice';
 
 interface Props extends BlueprintProps {
   imageRatio?: FrameRatio;
@@ -78,7 +80,6 @@ export function HeroSplitImageCardOverlay({
   const breadcrumbNode =
     breadcrumb.length > 0 ? (
       <Breadcrumb
-        className="bds-hero__breadcrumb"
         items={breadcrumb.map((item) => ({ label: item.label, href: item.href }))}
       />
     ) : undefined;
@@ -123,71 +124,52 @@ export function HeroSplitImageCardOverlay({
     : undefined;
 
   const media = priceCard ? (
-    <aside className="bds-hero__media-card">
-      <Frame ratio={imageRatio} className="bds-hero__image-frame">
-        <img
-          src={priceCard.imageUrl}
-          alt={priceCard.imageAlt ?? ''}
-          loading="eager"
-          decoding="async"
-          className="bds-hero__image"
-        />
-      </Frame>
-      {(priceCard.priceLabel || priceCard.price || priceCard.cta) && (
-        <div className="bds-hero__price">
-          {priceCard.priceLabel && priceCard.price && (
-            <p className="bds-hero__price-label">{priceCard.priceLabel}</p>
-          )}
-          {priceCard.price && (
-            <p className="bds-hero__price-value">{priceCard.price}</p>
-          )}
-          {priceCard.cta &&
-            (isActionCta(priceCard.cta) ? (
-              // Action CTA (#941): the config carries its own handler, so
-              // render a real <button> — no href, no fallback navigation.
-              <Button
-                onClick={priceCard.cta.onClick}
-                variant="primary"
-                size={priceCard.cta.size ?? 'sm'}
-              >
-                {priceCard.cta.label}
-              </Button>
-            ) : (
-              <Button
-                href={priceCard.cta.url}
-                variant="primary"
-                size={priceCard.cta.size ?? 'sm'}
-                onClick={
-                  onPriceCtaClick
-                    ? (event) => {
-                        // Progressive enhancement: with JS, suppress the
-                        // anchor navigation and hand off to the consumer's
-                        // handler (e.g. open a modal). Without JS, the
-                        // `href` still navigates. (brik-bds#843)
-                        event.preventDefault();
-                        onPriceCtaClick(event);
-                      }
-                    : undefined
-                }
-              >
-                {priceCard.cta.label}
-              </Button>
-            ))}
-        </div>
-      )}
-    </aside>
+    <HeroMediaCard>
+      <HeroMediaCardImage
+        src={priceCard.imageUrl}
+        alt={priceCard.imageAlt ?? ''}
+        ratio={imageRatio}
+      />
+      <HeroMediaCardPrice label={priceCard.priceLabel} value={priceCard.price}>
+        {priceCard.cta &&
+          (isActionCta(priceCard.cta) ? (
+            // Action CTA (#941): the config carries its own handler, so
+            // render a real <button> — no href, no fallback navigation.
+            <Button
+              onClick={priceCard.cta.onClick}
+              variant="primary"
+              size={priceCard.cta.size ?? 'sm'}
+            >
+              {priceCard.cta.label}
+            </Button>
+          ) : (
+            <Button
+              href={priceCard.cta.url}
+              variant="primary"
+              size={priceCard.cta.size ?? 'sm'}
+              onClick={
+                onPriceCtaClick
+                  ? (event) => {
+                      // Progressive enhancement: with JS, suppress the
+                      // anchor navigation and hand off to the consumer's
+                      // handler (e.g. open a modal). Without JS, the
+                      // `href` still navigates. (brik-bds#843)
+                      event.preventDefault();
+                      onPriceCtaClick(event);
+                    }
+                  : undefined
+              }
+            >
+              {priceCard.cta.label}
+            </Button>
+          ))}
+      </HeroMediaCardPrice>
+    </HeroMediaCard>
   ) : (
-    <Frame
+    <HeroMediaCard
       ratio={imageRatio}
-      as="aside"
-      className="bds-blueprint-section__missing bds-hero__missing"
-      data-content-needed="hero_image_url"
-      role="presentation"
-    >
-      <p className="bds-blueprint-section__missing-label">
-        Hero image card missing for this page.
-      </p>
-    </Frame>
+      missing={{ label: 'Hero image card missing for this page.' }}
+    />
   );
 
   return (
