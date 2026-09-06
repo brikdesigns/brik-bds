@@ -13,6 +13,10 @@ export interface AccordionItemData {
   id: string;
   title: ReactNode;
   content: ReactNode;
+  /** Optional secondary line rendered under the title in the trigger. Omitted entirely when absent. */
+  subtitle?: ReactNode;
+  /** Optional trailing slot in the trigger row (e.g. a numbered index or control), placed before the open/close icon. */
+  action?: ReactNode;
 }
 
 export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
@@ -26,15 +30,19 @@ export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
   onOpenChange?: (openItems: string[]) => void;
   /** Initial open ids when uncontrolled. Default `[]` (all closed). */
   defaultOpenItems?: string[];
+  /** When `true`, an item's `subtitle` is hidden while that item is open (subtitle reads as a collapsed-state teaser). Default `false` (subtitle always shows when present). */
+  hideSubtitleWhenOpen?: boolean;
 }
 
 interface AccordionItemProps {
   item: AccordionItemData;
   isOpen: boolean;
   onToggle: () => void;
+  hideSubtitleWhenOpen: boolean;
 }
 
-function AccordionItem({ item, isOpen, onToggle }: AccordionItemProps) {
+function AccordionItem({ item, isOpen, onToggle, hideSubtitleWhenOpen }: AccordionItemProps) {
+  const showSubtitle = item.subtitle != null && !(hideSubtitleWhenOpen && isOpen);
   return (
     <div className="bds-accordion-item">
       <button
@@ -44,7 +52,15 @@ function AccordionItem({ item, isOpen, onToggle }: AccordionItemProps) {
         aria-expanded={isOpen}
         aria-controls={`accordion-content-${item.id}`}
       >
-        <span className="bds-accordion-trigger__title">{item.title}</span>
+        <span className="bds-accordion-trigger__text">
+          <span className="bds-accordion-trigger__title">{item.title}</span>
+          {showSubtitle && (
+            <span className="bds-accordion-trigger__subtitle">{item.subtitle}</span>
+          )}
+        </span>
+        {item.action != null && (
+          <span className="bds-accordion-trigger__action">{item.action}</span>
+        )}
         <span className="bds-accordion-trigger__icon">
           <Icon icon={isOpen ? Minus : Plus} />
         </span>
@@ -73,6 +89,7 @@ export function Accordion({
   openItems,
   onOpenChange,
   defaultOpenItems = [],
+  hideSubtitleWhenOpen = false,
   className,
   style,
   ...props
@@ -110,6 +127,7 @@ export function Accordion({
           item={item}
           isOpen={currentOpen.includes(item.id)}
           onToggle={() => handleToggle(item.id)}
+          hideSubtitleWhenOpen={hideSubtitleWhenOpen}
         />
       ))}
     </div>

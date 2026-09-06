@@ -34,6 +34,10 @@ const meta: Meta<typeof Accordion> = {
       description: 'Called with the next array of open ids whenever a section toggles. Required for controlled use.',
     },
     defaultOpenItems: { control: 'object', description: 'IDs of items expanded on mount' },
+    hideSubtitleWhenOpen: {
+      control: 'boolean',
+      description: "Hide an item's subtitle while it is open (subtitle reads as a collapsed-state teaser). Default `false`.",
+    },
   },
 };
 
@@ -54,6 +58,7 @@ export const Default: Story = {
     items: faqItems,
     allowMultiple: false,
     defaultOpenItems: [],
+    hideSubtitleWhenOpen: false,
   },
 };
 
@@ -95,6 +100,46 @@ export const WithRichContent: Story = {
             <p style={{ margin: 0 }}>Payments are due within 15 days of invoice date.</p>
           </div>
         ),
+      },
+    ],
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   3. WITH SUBTITLE + ACTION — Q4 irreducible: `subtitle` and `action`
+      are ReactNode slots the Controls panel can't author. One canvas
+      exercises title-only, title+subtitle, and title+subtitle+action.
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Items may carry an optional `subtitle` (rendered under the title) and a
+ * trailing `action` slot (e.g. a numbered index), both `ReactNode`. Toggle
+ * `hideSubtitleWhenOpen` in Controls to collapse the subtitle on open.
+ * @summary Optional subtitle and trailing action slot
+ */
+export const WithTriggerSlots: Story = {
+  args: {
+    defaultOpenItems: [],
+    hideSubtitleWhenOpen: false,
+    items: [
+      {
+        id: 'belief-1',
+        title: 'Design is a business decision',
+        subtitle: 'Why every pixel earns its place',
+        action: <span style={{ fontSize: 'var(--label-lg)', fontWeight: 'var(--font-weight-bold)', color: 'var(--text-muted)' }}>01</span>,
+        content: 'We treat design as leverage on outcomes, not decoration — every choice ties back to what the business needs to move.',
+      },
+      {
+        id: 'belief-2',
+        title: 'Systems outlast screens',
+        subtitle: 'Tokens and primitives over one-off layouts',
+        action: <span style={{ fontSize: 'var(--label-lg)', fontWeight: 'var(--font-weight-bold)', color: 'var(--text-muted)' }}>02</span>,
+        content: 'A design system compounds: the second page is cheaper than the first, and the tenth is nearly free.',
+      },
+      {
+        id: 'plain',
+        title: 'No subtitle, no action',
+        content: 'This item renders exactly as it always has — the subtitle and action slots are additive and omitted when absent.',
       },
     ],
   },

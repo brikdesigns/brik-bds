@@ -27,6 +27,18 @@
   gap: var(--gap-lg);
 }
 
+/* ─── Text block (title + optional subtitle) ─────────────────── */
+
+.bds-accordion-trigger__text {
+  display: flex;
+  flex-direction: column;
+  /* Title ↔ subtitle is the tight step (ADR-023 content-rhythm map: --gap-sm),
+     matching InteractiveListItem's title/subtitle block. */
+  gap: var(--gap-sm);
+  flex: 1;
+  min-width: 0;
+}
+
 /* ─── Title ──────────────────────────────────────────────────── */
 
 .bds-accordion-trigger__title {
@@ -36,8 +48,24 @@
   line-height: var(--font-line-height-snug);
   color: var(--text-primary);
   margin: 0;
-  flex: 1;
-  min-width: 0;
+}
+
+/* ─── Subtitle ───────────────────────────────────────────────── */
+
+.bds-accordion-trigger__subtitle {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-secondary);
+}
+
+/* ─── Action (trailing slot, before the icon) ────────────────── */
+
+.bds-accordion-trigger__action {
+  display: flex;
+  align-items: center;
+  color: var(--text-secondary);
+  flex-shrink: 0;
 }
 
 /* ─── Icon ───────────────────────────────────────────────────── */
