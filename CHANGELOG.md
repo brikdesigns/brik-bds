@@ -16,6 +16,18 @@ a consumer greps this file before bumping.
 > `#1186` will add the manifest + CI check that *enforces* this section. Until
 > it lands, the entry is a convention, not a gate.
 
+## v0.184.0 — 2026-09-06
+
+Additive only — **no breaking class-hook changes**. Three new presentational,
+non-interactive hero media-card exports (`HeroMediaCard`, `HeroMediaCardImage`,
+`HeroMediaCardPrice`) extracted from the `@deprecated` `HeroSplitImageCardOverlay`
+adapter, so a consumer can render `.bds-hero__media-card` markup inside an
+interactive `<Card href>` / `<a>` without hand-copying the class strings or
+nesting an interactive BDS component. `Hero` now owns the `.bds-hero__breadcrumb`
+wrapper on its `breadcrumb` slot — consumers no longer inject that magic class
+string themselves ([#2284](https://github.com/brikdesigns/brik-bds/issues/2284)).
+Every class name is pre-existing; the adapter's output is unchanged.
+
 ## v0.183.0 — 2026-09-04
 
 Breaking, in the minor slot: pre-1.0, npm's `^0.182.0` resolves `>=0.182.0 <0.183.0`,
