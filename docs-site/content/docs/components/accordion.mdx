@@ -119,6 +119,7 @@ When `openItems` is provided, internal state is ignored — `onOpenChange` is th
 | `openItems` | `string[]` (controlled) | — |
 | `onOpenChange` | `(openItems: string[]) => void` | — |
 | `defaultOpenItems` | `string[]` | `[]` |
+| `hideSubtitleWhenOpen` | `boolean` | `false` |
 
 Plus all standard `<div>` HTML attributes.
 
@@ -129,6 +130,8 @@ interface AccordionItemData {
   id: string;
   title: ReactNode;
   content: ReactNode;
+  subtitle?: ReactNode;
+  action?: ReactNode;
 }
 ```
 

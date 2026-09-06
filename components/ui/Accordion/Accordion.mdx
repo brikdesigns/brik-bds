@@ -26,6 +26,10 @@ Item `content` accepts any React node — ordered lists, multi-paragraph blocks 
 
 <Canvas of={Stories.WithRichContent} />
 
+Each item may also carry an optional `subtitle` (a secondary line under the title) and a trailing `action` slot (e.g. a numbered index or control), both additive and omitted when absent. Set `hideSubtitleWhenOpen` to collapse the subtitle while an item is open.
+
+<Canvas of={Stories.WithTriggerSlots} />
+
 ## Props
 
 <ArgTypes of={Stories} />
