@@ -8,8 +8,9 @@ import './BackgroundPattern.css';
  * ServiceTag.
  * - `dot-grid`  — radial-gradient dot lattice.
  * - `line-grid` — linear-gradient grid lines.
+ * - `diagonal`  — repeating-linear-gradient 45° slash hatch.
  */
-export type BackgroundPatternVariant = 'dot-grid' | 'line-grid';
+export type BackgroundPatternVariant = 'dot-grid' | 'line-grid' | 'diagonal';
 
 export interface BackgroundPatternProps extends HTMLAttributes<HTMLDivElement> {
   /** Pattern shape. Default `dot-grid`. */

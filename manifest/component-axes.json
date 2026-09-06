@@ -58,7 +58,8 @@
   "BackgroundPattern": {
     "variant": [
       "dot-grid",
-      "line-grid"
+      "line-grid",
+      "diagonal"
     ]
   },
   "Badge": {

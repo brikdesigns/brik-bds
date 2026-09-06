@@ -59,6 +59,14 @@ Linear-gradient grid lines at the same pitch.
 <BackgroundPattern variant="line-grid" />
 ```
 
+### Diagonal
+
+Repeating 45° slash-hatch, same line color and pitch as line grid.
+
+```tsx
+<BackgroundPattern variant="diagonal" />
+```
+
 ## Fade
 
 `fade` applies a radial `mask-image`, so the pattern fades out toward the edges of its container instead of cutting off sharply.
@@ -77,7 +85,7 @@ Linear-gradient grid lines at the same pitch.
 {/* props-check: BackgroundPatternProps @ components/ui/BackgroundPattern/BackgroundPattern.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `variant` | `'dot-grid' \| 'line-grid'` | `'dot-grid'` |
+| `variant` | `'dot-grid' \| 'line-grid' \| 'diagonal'` | `'dot-grid'` |
 | `fade` | `boolean` | `false` |
 
 Plus all standard HTML attributes for the rendered `<div>`.

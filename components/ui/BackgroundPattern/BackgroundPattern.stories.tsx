@@ -15,7 +15,7 @@ const meta: Meta<typeof BackgroundPattern> = {
     },
   },
   argTypes: {
-    variant: { control: 'select', options: ['dot-grid', 'line-grid'] },
+    variant: { control: 'select', options: ['dot-grid', 'line-grid', 'diagonal'] },
     fade: { control: 'boolean' },
   },
 };
@@ -64,5 +64,11 @@ export const Default: Story = {
 /** @summary Repeating grid-line texture */
 export const LineGrid: Story = {
   args: { variant: 'line-grid', fade: false },
+  render: (args) => <Demo {...args} />,
+};
+
+/** @summary Repeating 45° diagonal slash-hatch texture */
+export const Diagonal: Story = {
+  args: { variant: 'diagonal', fade: false },
   render: (args) => <Demo {...args} />,
 };
