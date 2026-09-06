@@ -49,6 +49,19 @@
   background-size: var(--bds-bg-pattern-size) var(--bds-bg-pattern-size);
 }
 
+/* Same line-color and dot-size tokens as line-grid, at 45° and as one
+   repeating gradient (a slash hatch has no independent row/column axis to
+   split into two layers the way line-grid's cross-hatch does). */
+.bds-background-pattern--variant-diagonal {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--bds-bg-pattern-color) 0,
+    var(--bds-bg-pattern-color) var(--bds-bg-pattern-dot-size),
+    transparent var(--bds-bg-pattern-dot-size),
+    transparent var(--bds-bg-pattern-size)
+  );
+}
+
 /* ─── Fade (edge mask, gated by the `fade` prop) ─────────────── */
 /* A data attribute rather than a BEM modifier — `fade` is a boolean toggle
    (ADR-010 matrix Q2), and ADR-033 § 4's closed BOOLEAN_MODIFIERS list does

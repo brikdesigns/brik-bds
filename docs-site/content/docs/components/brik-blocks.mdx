@@ -1,0 +1,53 @@
+---
+title: BrikBlocks
+description: Decorative square-motif primitive — the "brik" mark from the /about redesign. A run of 24×24px squares, 8px gap, tinted light/dark/poppy in order.
+---
+
+BrikBlocks renders a run of 24×24px squares with an 8px gap between them, each tinted `light`, `dark`, or `poppy` in the order given. It is absolutely non-interactive (`aria-hidden="true"`, `pointer-events: none`) — a pure decorative mark, not a data visualization or a layout primitive.
+
+## Use it for
+
+- The "brik" square motif accent from the /about page redesign
+- Any decorative square run that needs the same 24px/8px geometry and light/dark/poppy palette
+
+Not for anything that needs to convey information — it carries no text slot and is hidden from assistive tech by default.
+
+## Import
+
+```tsx
+import { BrikBlocks } from '@brikdesigns/bds';
+```
+
+## Orientation
+
+```tsx
+<BrikBlocks orientation="vertical" cells={['light', 'dark', 'light']} />
+<BrikBlocks orientation="horizontal" cells={['dark', 'poppy', 'light']} />
+```
+
+## Cells
+
+`cells` is an ordered array of any length — each entry is one square's fill.
+
+```tsx
+<BrikBlocks cells={['poppy']} />
+```
+
+## Accessibility
+
+- Renders `aria-hidden="true"` — decorative only, carries no content.
+- `pointer-events: none` — never intercepts interaction.
+
+## API
+
+{/* props-check: BrikBlocksProps @ components/ui/BrikBlocks/BrikBlocks.tsx */}
+| Prop | Type | Default |
+|---|---|---|
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` |
+| `cells` | `BrikBlocksCell[]` | — |
+
+Plus all standard HTML attributes for the rendered `<div>`.
+
+## Related
+
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/foundation-assets-brik-blocks--overview)**
