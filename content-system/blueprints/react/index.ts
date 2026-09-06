@@ -69,6 +69,20 @@ export type { CtaProps, CtaLayout } from './Cta';
 export { Hero } from './Hero';
 export type { HeroProps, HeroLayout } from './Hero';
 
+// `<HeroMediaCard>` / `<HeroMediaCardImage>` / `<HeroMediaCardPrice>` —
+// presentational, non-interactive hero media-card parts (brik-bds#2284).
+// Extracted from the `@deprecated` `HeroSplitImageCardOverlay` adapter, which
+// hard-codes its own `<Button>` inside a plain `<aside>` — nesting that
+// `<button>` inside an outer interactive `<a>` / `<Card interactive>` is
+// invalid. These parts own no interactivity; a consumer wanting the whole
+// card clickable composes `<Card href>` / `as="a"` around `<HeroMediaCard>`.
+export { HeroMediaCard } from './HeroMediaCard';
+export type { HeroMediaCardProps, HeroMediaCardMissing } from './HeroMediaCard';
+export { HeroMediaCardImage } from './HeroMediaCardImage';
+export type { HeroMediaCardImageProps } from './HeroMediaCardImage';
+export { HeroMediaCardPrice } from './HeroMediaCardPrice';
+export type { HeroMediaCardPriceProps } from './HeroMediaCardPrice';
+
 // `<About>` — the `bds-about` narrative section primitive
 // (post-brik-bds#1198 consolidation, the last Phase D family). Props-based:
 // eyebrow + `h2` + lead, with an optional `testimonial` pull-quote composed
