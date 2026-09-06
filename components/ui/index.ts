@@ -17,6 +17,7 @@ export * from './Board';
 export * from './Banner';
 export * from './BannerGroup';
 export * from './BlockQuote';
+export * from './BrikBlocks';
 export * from './BrikDevBar';
 export * from './Breadcrumb';
 export * from './BreadcrumbSwitcher';
