@@ -34,11 +34,22 @@
  *    nor a silently-dropped one can ship. It is a static check: that a
  *    banner-free module still works under SSR is proven by `npm run test:rsc`.
  *
+ * 4. A `require` condition target that does not load at all.
+ *    Mirror of class 1 on the other side of `exports`. v0.177.0–0.186.0 shipped
+ *    a CJS entry that threw `SyntaxError` on the first `require()`: vite's
+ *    pure-CSS-chunk replacer destroyed an unrelated specifier whose basename
+ *    happened to end in a component name (brik-bds#2255, fixed by
+ *    `entryFileNamesFor` in vite.config.lib.ts). Every gate here was ESM-only,
+ *    so six releases published a package no CJS consumer could load — and the
+ *    error pointed at `AmbientField` rather than at the build. Loading the
+ *    `require` targets is the check that would have caught it.
+ *
  * Run after `build:lib`, before publish (wired into `prepublishOnly`).
  */
 import { readFileSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, dirname, extname, join, relative } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import { SERVER_SAFE_MODULES } from './server-safe-modules.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -73,6 +84,19 @@ for (const [subpath, val] of Object.entries(pkg.exports ?? {})) {
 }
 if (pkg.module) importTargets.set('(module field)', pkg.module);
 
+/* ── The same walk on the `require` side (brik-bds#2255) ───────────────────
+ * Only conditions that name `require` explicitly, plus the `main` field. A
+ * bare-string export is reachable under both conditions and is already
+ * smoke-loaded above, so it is not re-collected here. */
+const requireTargets = new Map(); // subpath label -> relative file path
+for (const [subpath, val] of Object.entries(pkg.exports ?? {})) {
+  if (subpath.includes('*')) continue; // wildcard subpaths can't be smoke-loaded
+  if (val && typeof val === 'object' && typeof val.require === 'string') {
+    requireTargets.set(subpath, val.require);
+  }
+}
+if (pkg.main) requireTargets.set('(main field)', pkg.main);
+
 const isJs = (p) => ['.js', '.mjs', '.cjs'].includes(extname(p));
 
 /* ── Static rule: no CJS extension under an `import` condition ─────────────
@@ -103,6 +127,31 @@ for (const [label, rel] of importTargets) {
     console.log(`✅ ESM import OK — ${label} (${rel})`);
   } catch (err) {
     fail(`❌ ESM import FAILED — \`${label}\` (${rel}): ${err.message.split('\n')[0]}`);
+  }
+}
+
+/* ── Runtime smoke: actually require() each CJS target ────────────────────
+ * brik-bds#2255. `require` resolves a different file than `import` for every
+ * dual-condition subpath, so an ESM-only smoke pass proves nothing about it.
+ * A broken emit anywhere in the CJS graph throws here, because CJS resolution
+ * is eager and the entry re-exports the whole barrel. */
+const requireFromPkg = createRequire(pathToFileURL(join(pkgRoot, 'package.json')).href);
+for (const [label, rel] of requireTargets) {
+  if (!isJs(rel)) continue;
+  const abs = resolve(pkgRoot, rel);
+  if (!existsSync(abs)) {
+    fail(`❌ CJS export check — \`${label}\` target \`${rel}\` does not exist (run \`npm run build:lib\`).`);
+    continue;
+  }
+  try {
+    requireFromPkg(abs);
+    console.log(`✅ CJS require OK — ${label} (${rel})`);
+  } catch (err) {
+    fail(
+      `❌ CJS require FAILED — \`${label}\` (${rel}): ${err.message.split('\n')[0]}\n` +
+        `   Every CJS consumer (node scripts, jest configs, codemods) is hard-broken at import time.\n` +
+        `   If the message points at a component file, suspect the build, not the component — see brik-bds#2255.`,
+    );
   }
 }
 

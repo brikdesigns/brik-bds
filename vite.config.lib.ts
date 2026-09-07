@@ -26,6 +26,37 @@ const assetFileNames = (assetInfo: { name?: string }) => {
   return assetInfo.name ?? 'assets/[name][extname]';
 };
 
+// Keep `.css` in the filename of a pure-CSS chunk (brik-bds#2255).
+//
+// Under preserveModules a bare `import './X.css'` becomes its own chunk, named
+// after the CSS module with the extension stripped — so `components/ui/Field/
+// Field.css` emits as `Field.cjs`, colliding with the component's own chunk and
+// forcing the `Field2.cjs` / `AmbientField2.cjs` dedupe suffixes. Vite then
+// deletes those empty chunks and rewrites their importers via
+// `getEmptyChunkReplacer`, whose regex alternates the chunk BASENAMES with no
+// leading anchor:
+//
+//   (\b|,\s*)require\(\s*["'`][^"'`]*(?:Field\.cjs|Card\.cjs|…)["'`]\)(;|,)
+//
+// `[^"'`]*` happily eats a path prefix, so a sibling require of
+// `particleField.cjs` — an ordinary import that has nothing to do with CSS —
+// ends in `Field.cjs`, matches, and has its specifier deleted:
+//
+//   const require_particleField = ;/* empty css                */
+//
+// which is a SyntaxError, so `require('@brikdesigns/bds')` fails for every CJS
+// consumer. Naming the chunk `Field.css.cjs` puts `.css` inside the alternation
+// entry, and no real module specifier ends in `.css.cjs` — the whole class of
+// suffix collisions goes away rather than this one filename. It also removes
+// the collision that produced the `2` suffixes in the first place.
+//
+// The emitted file is deleted by vite either way; only the name the replacer
+// sees changes. ESM escapes the bug by accident (its regex requires a bare
+// `import "…";` statement, which a named import is not) and is renamed too, so
+// the two outputs stay symmetrical.
+const entryFileNamesFor = (ext: 'mjs' | 'cjs') => (chunk: { facadeModuleId?: string | null }) =>
+  chunk.facadeModuleId?.endsWith('.css') ? `[name].css.${ext}` : `[name].${ext}`;
+
 const globals = {
   react: 'React',
   'react/jsx-runtime': 'ReactJSXRuntime',
@@ -64,7 +95,7 @@ export default defineConfig({
           format: 'es',
           preserveModules: true,
           preserveModulesRoot: '.',
-          entryFileNames: '[name].mjs',
+          entryFileNames: entryFileNamesFor('mjs'),
           banner: bannerFor,
           globals,
           assetFileNames,
@@ -73,7 +104,7 @@ export default defineConfig({
           format: 'cjs',
           preserveModules: true,
           preserveModulesRoot: '.',
-          entryFileNames: '[name].cjs',
+          entryFileNames: entryFileNamesFor('cjs'),
           exports: 'named',
           banner: bannerFor,
           globals,
