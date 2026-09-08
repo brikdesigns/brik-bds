@@ -1,6 +1,6 @@
 ---
 /**
- * ServicesDetailTwoColumn — Phase D adapter (deprecated direct path).
+ * ServicesDetailTwoColumn — blueprint-key renderer (supported: ADR-037 §2).
  *
  * After brik-bds#580, the canonical primitive is `<CardGrid>` composed
  * with consumer-supplied list content. This file remains as an adapter
@@ -12,8 +12,7 @@
  *   title (h3)  — --font-family-heading + --heading-md
  *   description — --font-family-body + --body-md
  *
- * @deprecated Use `<CardGrid>` directly with composed slot content.
- * @summary Legacy adapter — `<CardGrid>` + 2-col title/desc list.
+ * @summary Key renderer — `<CardGrid>` + 2-col title/desc list.
  */
 import type { BlueprintProps } from './types';
 import CardGrid from './CardGrid.astro';

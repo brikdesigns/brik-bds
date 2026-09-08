@@ -1,6 +1,6 @@
 ---
 /**
- * Services3ColCardGrid — Phase D adapter (deprecated direct path).
+ * Services3ColCardGrid — blueprint-key renderer (supported: ADR-037 §2).
  *
  * After brik-bds#580, the canonical primitive is `<CardGrid>` composed
  * with consumer-supplied card markup. This file remains as an adapter
@@ -15,8 +15,7 @@
  *   card title (h3)   — --font-family-heading + --heading-md
  *   card description  — --font-family-body + --body-md
  *
- * @deprecated Use `<CardGrid>` directly with composed slot content.
- * @summary Legacy adapter — `<CardGrid>` wrapping hand-rolled card HTML.
+ * @summary Key renderer — `<CardGrid>` wrapping hand-rolled card HTML.
  */
 import type { BlueprintProps } from './types';
 import CardGrid from './CardGrid.astro';

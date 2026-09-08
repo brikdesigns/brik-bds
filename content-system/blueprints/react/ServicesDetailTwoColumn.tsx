@@ -1,5 +1,5 @@
 /**
- * ServicesDetailTwoColumn — Phase D adapter (deprecated direct path).
+ * ServicesDetailTwoColumn — blueprint-key adapter (supported: ADR-037 §2).
  *
  * After brik-bds#580, the canonical primitive is `<CardGrid>` composed
  * with consumer-supplied list content. This file remains as an adapter
@@ -13,8 +13,7 @@
  *   title (h3)  — --font-family-heading + --heading-md
  *   description — --font-family-body + --body-md
  *
- * @deprecated Use `<CardGrid>` directly with composed list children.
- * @summary Legacy adapter — `<CardGrid>` + 2-col title/desc list.
+ * @summary Key adapter — `<CardGrid>` + 2-col title/desc list.
  */
 import { type CSSProperties } from 'react';
 

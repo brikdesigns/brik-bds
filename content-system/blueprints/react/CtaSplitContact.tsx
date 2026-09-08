@@ -1,18 +1,18 @@
 /**
- * CtaSplitContact — Phase D adapter (deprecated direct path).
+ * CtaSplitContact — blueprint-key adapter (supported: ADR-037 §2).
  *
  * Adds the React twin the Astro-only `cta_split_contact` blueprint lacked
  * (brik-bds#582). Maps section data + `clientFacts.{phone,email}` onto
  * `<Cta layout="split">`, building the contact-method aside. New consumers
- * compose `<Cta layout="split">` directly. Retires alongside Phase E.
+ * compose `<Cta layout="split">` directly. Supported dispatch path for its
+ * blueprint key; not deprecated (ADR-037 §2).
  *
  * required_facts: ['phone', 'email'] — the scaffold preflight gates this
  * blueprint before those are populated. If a fact arrives null at runtime the
  * method renders a `data-content-needed` stub in place of the link, matching
  * the Astro twin — CI grep on `dist/` blocks publish on the stub.
  *
- * @deprecated Use `<Cta layout="split">` directly.
- * @summary Legacy adapter — section + contact facts → `<Cta layout="split">`.
+ * @summary Key adapter — section + contact facts → `<Cta layout="split">`.
  */
 import type { BlueprintProps } from '../astro/types';
 import { Cta } from './Cta';
