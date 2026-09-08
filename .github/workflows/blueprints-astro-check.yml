@@ -12,8 +12,10 @@ name: Blueprints Astro Check
 # nothing reported it (brik-bds#2313).
 #
 # Budget: path-gated to blueprint sources + the script itself, so it does not
-# fire on component, token, or docs work. Script runtime measured at ~18s
-# locally; the job cost is dominated by `npm ci` + the scratch `npm install`.
+# fire on component, token, or docs work. Script runtime measured at 17.7s
+# locally; job cost is dominated by `npm ci`, `playwright install --with-deps
+# chromium`, and the scratch project's own `npm install` — the first CI run
+# reached the axe step at 55s, so budget ~2 min per firing.
 # It replaces no existing gate — `validate:blueprints` checks declarations
 # against each other and never builds, and `esm-bundle-check` covers the React
 # bundle, not the Astro subpath.
@@ -53,6 +55,15 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # The script's axe-core pass drives Chromium via Playwright. Local runs
+      # reuse a cached browser; a bare runner has none and the scan fails with
+      # "Executable doesn't exist at …/chrome-headless-shell". Same idiom as
+      # test.yml:69. Not the pinned `visual.yml` container — that image is
+      # load-bearing for screenshot baseline naming, which this gate does not
+      # produce.
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
 
       - name: Blueprints Astro export + render check
         run: npm run verify:blueprints-astro
