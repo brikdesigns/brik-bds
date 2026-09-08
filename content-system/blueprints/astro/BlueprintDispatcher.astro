@@ -55,10 +55,13 @@
  *   cta_split_contact             → CtaSplitContact.astro
  *   cta_dark_centered             → CtaDarkCentered.astro
  *
- * The remaining active keys in blueprint-library.json without a
- * component here (hero_centered_gradient, hero_fullbleed_photo, etc.)
- * fall through to BlueprintFallback — expected during the incremental
- * v0.1 → v1.0 ramp. Each new component PR removes one fallback case.
+ * Since #2308 the registry IS blueprint-library.json's active set — every
+ * `is_active: true` key dispatches here, so no active key falls through.
+ * The designed-but-unbuilt layouts live in blueprints/blueprint-roadmap.json
+ * and are deliberately absent from KnownBlueprintKey, so a consumer cannot
+ * spell one. BlueprintFallback still handles a key that reaches the
+ * dispatcher from stored page data written before its blueprint moved to the
+ * roadmap — a real runtime case, no longer the expected steady state.
  */
 import type { BlueprintSection, ClientFacts, ResolvedTheme } from './types';
 
