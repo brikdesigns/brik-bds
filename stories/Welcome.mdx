@@ -4,31 +4,63 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Brik Design System
 
-The live component playground. Every story renders the actual component with interactive controls, theme switching, and Chromatic baselines.
+The live component playground. Every story renders the actual component with interactive controls, theme switching, and visual-regression baselines.
 
 Narrative docs, usage guides, and API reference live at **[design.brikdesigns.com](https://design.brikdesigns.com)**.
 
 ---
 
+## Two vocabularies — check which one you need
+
+BDS has two structural vocabularies. They are **different axes**, not synonyms, and confusing them is the single most common source of wrong component choices.
+
+| Axis | Question it answers | Vocabulary | Authority |
+|---|---|---|---|
+| **Composition layer** | How do I reason about this piece of structure? | Blueprint → Layout → Container → Block → Component | [composition-layers](https://design.brikdesigns.com/docs/build-standards/composition-layers) (ADR-030 §36-38) |
+| **Storybook taxonomy** | Where does this story file? | the sidebar sections below | ADR-006 Part A, as amended |
+
+The two do not line up one-to-one:
+
+- **`Block` is a composition layer, not a sidebar section.** ADR-006 retired the `Blocks/` bucket on 2026-07-29 and re-titled its members into `Components/`.
+- **`Cards` is a sidebar section, not a composition layer.** A Card *is* a Container; the bucket exists on the 2026-07-22 name-family precedent (#1330) because the card family is large and cohesive enough that discoverability beats taxonomic purity.
+- **`Blueprint` is the page-section layer** — the only thing that composes a page. `composition-layers` formerly called this layer "Section"; ADR-037 §5 renamed it so the layer and the sidebar section share one word.
+
+One sentence, if you only remember one thing:
+
+> **Blueprints compose the page. Containers hold collections. Blocks fill containers. Layouts arrange. Components are atoms.**
+
+---
+
 ## Sidebar
 
-| Section | What's inside |
-|---|---|
-| **Components** | Atomic UI — buttons, inputs, badges, indicators, overlays |
-| **Containers** | Bounded compositions — cards, sheets, tables, dialogs, forms |
-| **Blocks** | Slot + atom combos — field, field-grid, date/time pickers, lists |
-| **Layouts** | Arrangement primitives — stack, cluster, grid, frame |
-| **Sections** | Page regions — nav, footer, breadcrumb, blueprints |
-| **Foundation** | Tokens + atmospheres |
-| **Content System** | Industries, voices, vocabularies |
-| **Tools** | Theme switcher, health dashboard, contrast audit, token coverage |
+In sidebar order. Counts are story titles, measured 2026-09-08.
+
+| Section | Count | What's inside |
+|---|---|---|
+| **Overview** | 4 | This page, the theme switcher, and the health dashboards |
+| **Foundation** | 15 | Design tokens, spacing, typography, atmospheres, navigation archetypes, and `Assets/*` (icon, image, logo, avatar, background-pattern) |
+| **Components** | 63 | Single primitive atoms — buttons, inputs, badges, indicators, overlays. Also the former `Blocks/` members: `field`, `field-grid`, `checklist`, `interactive-list-item`, `selectable-media-tile` |
+| **Containers** | 24 | Styled bounded holders — sheets, tables, dialogs, accordions, boards, data sections |
+| **Cards** | 3 | The card family — `card`, `card-list`, `product-summary-card`. Containers by layer, grouped by name |
+| **Forms** | 6 | The form family — the base `Form` container plus five composed form demos (#1565) |
+| **Layouts** | 6 | Pure arrangement primitives — `stack`, `cluster`, `grid`, `frame`, `page`, `app-shell`. No styling beyond structure |
+| **Navigation** | 10 | Nav and wayfinding — top-navigation, sidebar-navigation, tab-bar, breadcrumb, footer, page-header, table-of-contents |
+| **Blueprints** | 19 | **Full-width page sections** — the Section layer. Hero, Cta, Features, About, CardGrid, SupportPlan and their layout variants. This is what composes a marketing page |
+| **Tools** | 5 | Dev instrumentation — brik-dev-bar, inspect widget, feedback widgets |
+| **Deprecated** | 4 | Migration reference only, sorted last, tagged `!manifest` so MCP discovery skips them. Per ADR-037 §3 a component may only land here once a recorded consumer search comes back empty |
+
+Two caveats, so this page does not overstate what exists:
+
+- `Motion` and `Content System` are pinned in `storySort.order` ([`.storybook/preview.tsx`](https://github.com/brikdesigns/brik-bds/blob/main/.storybook/preview.tsx)) but currently hold **zero** stories. Their docs live on the docs site, not here.
+- Five stories still sit under a `Blocks/` title despite ADR-006 retiring that bucket — `block-quote`, `bullet-list`, `content-block`, `prose`, `section-header`. They sort under the `*` catch-all. Tracked in [#2306](https://github.com/brikdesigns/brik-bds/issues/2306); file new work in `Components/`, never `Blocks/`.
 
 ---
 
 ## Docs site
 
+- [Build standards](https://design.brikdesigns.com/docs/build-standards) — composition layers, page structure, headings, naming
 - [Primitives](https://design.brikdesigns.com/docs/foundation) — tokens: color, type, spacing, shadow, motion
-- [Theming](https://design.brikdesigns.com/docs/theming) — client themes, atmospheres, cascade
+- [Theming](https://design.brikdesigns.com/docs/theming) — client themes, atmospheres, cascade, blueprints
 - [Motion](https://design.brikdesigns.com/docs/motion) — animation tiers and per-effect guides
 - [Content System](https://design.brikdesigns.com/docs/content-system) — industries, voices, vocabularies
 - [Components](https://design.brikdesigns.com/docs/components) — anatomy, props, usage
@@ -45,3 +77,11 @@ import { Button, Card, Sheet } from '@brikdesigns/bds';
 @import '@brikdesigns/bds/tokens.css';
 @import '@brikdesigns/bds/styles.css';
 ```
+
+Client sites are **Astro**; sites with a CMS or database are **Next.js** (ADR-037 §1). Astro consumers import blueprints from the `blueprints-astro` subpath:
+
+```ts
+import { CardGrid, CtaDarkCentered, HeroInteriorMinimal } from '@brikdesigns/bds/blueprints-astro';
+```
+
+Astro blueprint export names are still **block + layout** (`CtaDarkCentered`, `HeroSplit6040`), while the React side names by **block** with layout as a prop (`<Cta layout="default">`). ADR-037 § Amendments ratified unifying these onto the React shape; until [#2302](https://github.com/brikdesigns/brik-bds/issues/2302) lands, use the names above — `Hero` and `Cta` are not Astro exports.
