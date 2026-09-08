@@ -1,5 +1,5 @@
 /**
- * HeroInteriorMinimal — Phase D adapter (deprecated direct path).
+ * HeroInteriorMinimal — blueprint-key adapter (supported: ADR-037 §2).
  *
  * After brik-bds#583 the canonical primitive is `<Hero>` (the `bds-hero`
  * section block, `interior-minimal` layout). This file remains as an adapter
@@ -8,10 +8,10 @@
  * AI-generated pages expect — it maps `section.*` → `<Hero>` props.
  *
  * New consumers should compose `<Hero layout="interior-minimal">` directly.
- * This adapter retires alongside Phase E.
+ * It is the supported dispatch path for its blueprint key, which three
+ * published client sites resolve; it is not deprecated (ADR-037 §2).
  *
- * @deprecated Use `<Hero layout="interior-minimal">` directly.
- * @summary Legacy adapter — section data → `<Hero layout="interior-minimal">`.
+ * @summary Key adapter — section data → `<Hero layout="interior-minimal">`.
  */
 import type { BlueprintProps } from '../astro/types';
 import { Hero } from './Hero';

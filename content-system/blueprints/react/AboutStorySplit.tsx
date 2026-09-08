@@ -1,5 +1,5 @@
 /**
- * AboutStorySplit — Phase D adapter (deprecated direct path).
+ * AboutStorySplit — blueprint-key adapter (supported: ADR-037 §2).
  *
  * After brik-bds#1198 the canonical primitive is `<About>` (the `bds-about`
  * narrative section block). This file remains as an adapter so the legacy
@@ -9,11 +9,10 @@
  * `section.items[0]` pull-quote (`{ title: attribution, description: quote }`)
  * maps to the `testimonial` prop.
  *
- * New consumers should compose `<About>` directly. This adapter retires
- * alongside Phase E.
+ * New consumers should compose `<About>` directly. It is the supported dispatch
+ * path for its blueprint key; not deprecated (ADR-037 §2).
  *
- * @deprecated Use `<About>` directly.
- * @summary Legacy adapter — maps section data onto `<About>`.
+ * @summary Key adapter — maps section data onto `<About>`.
  */
 import type { BlueprintProps } from '../astro/types';
 import { About } from './About';

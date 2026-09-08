@@ -1,5 +1,5 @@
 /**
- * Services3ColCardGrid — Phase D adapter (deprecated direct path).
+ * Services3ColCardGrid — blueprint-key adapter (supported: ADR-037 §2).
  *
  * After brik-bds#580, the canonical primitives are `<CardGrid>`
  * (section wrapper) and `<Card preset="display">` (the malleable item
@@ -10,10 +10,10 @@
  * → composed-children translation internally.
  *
  * New consumers should compose `<CardGrid>` + `<Card preset="display">`
- * directly. This adapter retires alongside Phase E.
+ * directly. It is the supported dispatch path for its blueprint key, which three
+ * published client sites resolve; it is not deprecated (ADR-037 §2).
  *
- * @deprecated Use `<CardGrid>` + `<Card preset="display">` directly.
- * @summary Legacy adapter — composes `<CardGrid>` + `<Grid>` + `<Card>` items.
+ * @summary Key adapter — composes `<CardGrid>` + `<Grid>` + `<Card>` items.
  */
 import {
   Badge,

@@ -105,9 +105,9 @@ const withAudienceCascade = (Story: () => JSX.Element) => (
 /* ─── Meta ─────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Features3ColBrandedDark> = {
-  title: 'Deprecated/features-3col-branded-dark',
+  title: 'Blueprints/features-3col-branded-dark',
   component: Features3ColBrandedDark,
-  tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
+  tags: ['surface-web'],
   decorators: [withAudienceCascade],
   argTypes: {
     section: { control: false, description: 'Section content shape — sectionKey, heading, subheading, body, cta, items, visualNotes. Set in code.' },

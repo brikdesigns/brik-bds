@@ -1,5 +1,5 @@
 /**
- * HeroSplit6040 — Phase D adapter (deprecated direct path).
+ * HeroSplit6040 — blueprint-key adapter (supported: ADR-037 §2).
  *
  * After brik-bds#583 the canonical primitive is `<Hero>` (the `bds-hero`
  * section block, `split` layout). This file remains as an adapter so the
@@ -10,10 +10,10 @@
  * client has no hero image; CI grep on `dist/` blocks publish on the stub).
  *
  * New consumers should compose `<Hero layout="split" media={…}>` directly.
- * This adapter retires alongside Phase E.
+ * It is the supported dispatch path for its blueprint key, which three
+ * published client sites resolve; it is not deprecated (ADR-037 §2).
  *
- * @deprecated Use `<Hero layout="split">` directly.
- * @summary Legacy adapter — section + hero image → `<Hero layout="split">`.
+ * @summary Key adapter — section + hero image → `<Hero layout="split">`.
  */
 import type { BlueprintProps } from '../astro/types';
 import { Hero } from './Hero';

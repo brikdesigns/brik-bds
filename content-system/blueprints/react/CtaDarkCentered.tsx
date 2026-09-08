@@ -1,5 +1,5 @@
 /**
- * CtaDarkCentered — Phase D adapter (deprecated direct path).
+ * CtaDarkCentered — blueprint-key adapter (supported: ADR-037 §2).
  *
  * After brik-bds#582 the canonical primitive is `<Cta>` (the `bds-cta`
  * section block, default single-column layout). This file remains as an
@@ -7,11 +7,10 @@
  * through `BlueprintDispatcher` with the same section-data contract that
  * AI-generated pages expect — it maps `section.*` → `<Cta>` props.
  *
- * New consumers should compose `<Cta>` directly. This adapter retires
- * alongside Phase E.
+ * New consumers should compose `<Cta>` directly. It is the supported dispatch
+ * path for its blueprint key; not deprecated (ADR-037 §2).
  *
- * @deprecated Use `<Cta>` directly.
- * @summary Legacy adapter — maps section data onto `<Cta>` (default layout).
+ * @summary Key adapter — maps section data onto `<Cta>` (default layout).
  */
 import type { BlueprintProps } from '../astro/types';
 import { Cta } from './Cta';
