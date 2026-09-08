@@ -120,11 +120,40 @@ interface Blueprint {
   // metadata
   source?: string;
   tier: 'internal' | 'template';
-  is_active: boolean;
+  is_active: boolean;               // renderable, NOT catalogued — see below
   version: string;                  // semver
   last_reviewed: string;            // YYYY-MM-DD
 }
 ```
+
+### `is_active` means renderable
+
+`is_active: true` asserts the key dispatches on at least one rail. It is not a
+catalogue flag, because no consumer reads it as one: the portal builds the
+content generator's whole key vocabulary from it
+(`ACTIVE_BLUEPRINTS` → `KNOWN_BLUEPRINT_KEYS` → the `blueprintKeySchema` Zod
+enum), so an `is_active` key with no component is a key the model is offered
+and cannot render.
+
+That is the drift #2308 closed: the library held 29 active keys of which 18
+dispatched on neither rail — 62% of what the generator could emit rendered
+`<BlueprintFallback>`. Those layouts moved to
+[`blueprint-roadmap.json`](./blueprint-roadmap.json), which is deliberately
+schema-distinct — the array is `candidates`, not `blueprints`, and **there is
+no `is_active` field to misread**. `validate:blueprints` enforces the shape.
+
+A roadmap candidate graduates by being built on the canonical Astro rail
+(ADR-037), entered in both `BLUEPRINT_REGISTRY` twins and
+`WIRED_BLUEPRINT_KEYS`, then moved into `blueprint-library.json` — moved, not
+copied; the validator rejects a key present in both files.
+
+### `review_cadence` is a trigger, not a note
+
+`review_cadence` + `last_reviewed` are enforced: `validate:blueprints` fails
+once the declared window lapses. The five-month lapse that let the 18 phantom
+keys accumulate was possible because nothing read the cadence it declared.
+Drop the field if the review genuinely is not on a schedule — the gate treats
+its absence as a decision and its staleness as a defect.
 
 After `normalizeBlueprint()`, consumers see the same shape plus derived fields: `personality`, `visual_style`, `industry_slugs`, `is_universal`.
 

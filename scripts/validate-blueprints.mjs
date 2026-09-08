@@ -3,10 +3,12 @@
 /**
  * Blueprint Library Validator
  *
- * Loads `blueprints/blueprint-library.json` and validates it against the
- * locked vocabularies declared in `content-system/blueprints/vocabularies.ts`.
- * Exits non-zero on any issue so the pre-commit and CI gates can catch
- * drift before a bad package ships to consumers.
+ * Loads `blueprints/blueprint-library.json` (the shipped inventory) and
+ * `blueprints/blueprint-roadmap.json` (designed-but-unbuilt candidates) and
+ * validates both against the locked vocabularies declared in
+ * `content-system/blueprints/vocabularies.ts`. Exits non-zero on any issue so
+ * the pre-commit and CI gates can catch drift before a bad package ships to
+ * consumers.
  *
  * The inline vocabularies below mirror the TypeScript exports — duplicated
  * deliberately so this script has zero build dependencies and runs before
@@ -23,6 +25,7 @@ import { dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const libraryPath = resolve(__dirname, '..', 'blueprints', 'blueprint-library.json');
+const roadmapPath = resolve(__dirname, '..', 'blueprints', 'blueprint-roadmap.json');
 const astroDir = resolve(__dirname, '..', 'content-system', 'blueprints', 'astro');
 const reactDir = resolve(__dirname, '..', 'content-system', 'blueprints', 'react');
 const dispatcherPath = resolve(astroDir, 'BlueprintDispatcher.astro');
@@ -277,6 +280,133 @@ function validateRuntimeParity(astroDispatcherSrc, reactDispatcherSrc) {
   return issues;
 }
 
+/**
+ * Cadence in days. `review_cadence` is prose in the JSON, so the mapping
+ * lives here rather than in the data.
+ */
+const CADENCE_DAYS = new Map([
+  ['quarterly', 92],
+  ['biannual', 183],
+  ['annual', 366],
+]);
+
+/**
+ * Gate: `review_cadence` must be a trigger, not a decoration (#2308 AC 6).
+ *
+ * `blueprint-library.json` declared `review_cadence: "quarterly"` and
+ * `last_reviewed: "2026-04-18"` and then went five months unreviewed, during
+ * which 18 of its 29 active keys silently became phantom. A cadence nothing
+ * enforces is what produced that backlog, so the declaration now fails the
+ * build once it lapses. Fix by doing the review and updating `last_reviewed`
+ * — or by dropping `review_cadence`, which this gate treats as an explicit
+ * choice rather than an omission.
+ *
+ * Budget: folded into the existing `validate:blueprints` step (already in
+ * `npm run validate` and the pre-commit hook). No new workflow, no new
+ * trigger, no added CI runtime.
+ */
+function validateReviewCadence(doc, label, today) {
+  const issues = [];
+  const push = (field, message) => issues.push({ key: `<${label}>`, field, message });
+
+  if (doc.review_cadence === undefined) return issues; // dropped on purpose
+  const window = CADENCE_DAYS.get(doc.review_cadence);
+  if (window === undefined) {
+    push(
+      'review_cadence',
+      `Unknown cadence "${doc.review_cadence}" — expected one of ${[...CADENCE_DAYS.keys()].join(', ')}, ` +
+        'or drop the field if the review is not on a schedule.',
+    );
+    return issues;
+  }
+
+  if (!ISO_DATE_PATTERN.test(doc.last_reviewed ?? '')) {
+    push('last_reviewed', `Expected an ISO date (YYYY-MM-DD), got "${doc.last_reviewed}".`);
+    return issues;
+  }
+
+  const elapsed = Math.floor((today - Date.parse(doc.last_reviewed)) / 86_400_000);
+  if (elapsed > window) {
+    push(
+      'last_reviewed',
+      `Review is ${elapsed - window} day(s) overdue — last reviewed ${doc.last_reviewed}, ` +
+        `cadence "${doc.review_cadence}" allows ${window} days. Re-triage the keys, then bump ` +
+        '`last_reviewed`. See docs/adrs/ADR-037 and brik-bds#2308.',
+    );
+  }
+
+  return issues;
+}
+
+/**
+ * Gate: the roadmap must stay schema-distinct from the inventory (#2308 AC 1).
+ *
+ * `blueprint-roadmap.json` holds designed-but-unbuilt layouts. The whole point
+ * of a separate file is that no consumer can read it as an available-key set,
+ * so the shape is checked, not just the contents: `candidates` rather than
+ * `blueprints`, and **no `is_active` field on any entry**. Re-introducing
+ * `is_active` here would recreate the exact confusion #2308 removed — the flag
+ * every consumer reads as "renderable" sitting on a key that renders nothing.
+ *
+ * A roadmap key must also never appear in the library, either registry, or
+ * `WIRED_BLUEPRINT_KEYS`; a graduating candidate moves, it does not get copied.
+ */
+function validateRoadmap(roadmap, library, registryKeys, wiredKeys) {
+  const issues = [];
+  const push = (key, field, message) => issues.push({ key, field, message });
+
+  if (roadmap.kind !== 'blueprint-roadmap') {
+    push('<roadmap>', 'kind', `Expected kind "blueprint-roadmap", got "${roadmap.kind}".`);
+  }
+  if ('blueprints' in roadmap) {
+    push('<roadmap>', 'blueprints', 'Roadmap entries live under `candidates`, never `blueprints` — the key name is the schema distinction.');
+  }
+  if (!Array.isArray(roadmap.candidates)) {
+    push('<roadmap>', 'candidates', 'Expected an array of candidates.');
+    return issues;
+  }
+
+  const libraryKeys = new Set((library.blueprints ?? []).map((b) => b.key));
+  const dispatching = new Set([...(registryKeys ?? []), ...(wiredKeys ?? [])]);
+  const seen = new Set();
+
+  for (const c of roadmap.candidates) {
+    const key = c.key ?? '<unknown>';
+
+    if (!c.key || !KEY_PATTERN.test(c.key)) {
+      push(key, 'key', `Invalid key "${c.key}" — must be snake_case lowercase.`);
+    }
+    if (seen.has(c.key)) push(key, 'key', 'Duplicate candidate key.');
+    seen.add(c.key);
+
+    if ('is_active' in c) {
+      push(key, 'is_active', 'A roadmap candidate must not carry `is_active` — consumers read that flag as "renderable", and nothing here renders.');
+    }
+    if ('tier' in c) {
+      push(key, 'tier', '`tier` is an inventory field; a candidate has no tier until it ships.');
+    }
+    if (c.disposition !== 'roadmap') {
+      push(key, 'disposition', `Expected disposition "roadmap", got "${c.disposition}" — a built key belongs in blueprint-library.json, a retired one in neither file.`);
+    }
+    if (!c.name || !c.name.trim()) push(key, 'name', 'Name is required.');
+    if (!SECTION_TYPE_VALUES.has(c.section_type)) {
+      push(key, 'section_type', `Unknown section_type "${c.section_type}".`);
+    }
+    if (!c.layout_spec?.trim() && !c.pattern_spec?.trim()) {
+      push(key, 'layout_spec', 'Must have either layout_spec or pattern_spec — a candidate with neither describes nothing.');
+    }
+
+    if (libraryKeys.has(c.key)) {
+      push(key, 'key', 'Also present in blueprint-library.json — a graduating candidate moves, it is not copied.');
+    }
+    if (dispatching.has(c.key)) {
+      push(key, 'key', 'Dispatches on a rail — it has shipped, so it belongs in blueprint-library.json, not the roadmap.');
+    }
+  }
+
+  return issues;
+}
+
 const RED = '\x1b[31m';
 const GREEN = '\x1b[32m';
 const DIM = '\x1b[2m';
@@ -285,18 +415,29 @@ const NC = '\x1b[0m';
 try {
   const raw = await readFile(libraryPath, 'utf8');
   const library = JSON.parse(raw);
+  const roadmap = JSON.parse(await readFile(roadmapPath, 'utf8'));
   const dispatcherSrc = await readFile(dispatcherPath, 'utf8');
   const reactDispatcherSrc = await readFile(reactDispatcherPath, 'utf8');
   const typesSrc = await readFile(typesPath, 'utf8');
+  const today = Date.now();
   const issues = [
     ...validateLibrary(library),
     ...validateRegistrySync(library, dispatcherSrc, typesSrc),
     ...validateRuntimeParity(dispatcherSrc, reactDispatcherSrc),
+    ...validateRoadmap(
+      roadmap,
+      library,
+      extractRegistryKeys(dispatcherSrc),
+      extractWiredKeys(typesSrc),
+    ),
+    ...validateReviewCadence(library, 'library-cadence', today),
+    ...validateReviewCadence(roadmap, 'roadmap-cadence', today),
   ];
 
   if (issues.length === 0) {
     const wiredCount = (extractWiredKeys(typesSrc) ?? []).length;
     console.log(`${GREEN}✓${NC} blueprint-library.json valid ${DIM}(${library.blueprints.length} blueprints, ${wiredCount} wired, v${library.version})${NC}`);
+    console.log(`${GREEN}✓${NC} blueprint-roadmap.json valid ${DIM}(${roadmap.candidates.length} candidates, v${roadmap.version})${NC}`);
     process.exit(0);
   }
 
