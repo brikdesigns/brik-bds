@@ -1,0 +1,58 @@
+name: Blueprints Astro Check
+
+# Packs the BDS tarball, installs it into a scratch Astro 5 project, and proves
+# the `blueprints-astro` subpath resolves and renders — `astro check` for the
+# type + import resolver, then `astro build` plus HTML assertions on the built
+# output (exports, section shell, dispatcher key resolution, fallback path).
+#
+# Why this exists as a gate: the script already existed but ran nowhere.
+# `rg "verify:blueprints-astro" .github/ scripts/git-hooks/ package.json`
+# matched only `package.json:255`, so when #2010 de-wired `stats_dark_bar` and
+# left the dispatcher assertion expecting it, the script went red on `main` and
+# nothing reported it (brik-bds#2313).
+#
+# Budget: path-gated to blueprint sources + the script itself, so it does not
+# fire on component, token, or docs work. Script runtime measured at ~18s
+# locally; the job cost is dominated by `npm ci` + the scratch `npm install`.
+# It replaces no existing gate — `validate:blueprints` checks declarations
+# against each other and never builds, and `esm-bundle-check` covers the React
+# bundle, not the Astro subpath.
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'content-system/blueprints/**'
+      - 'scripts/verify-blueprints-astro-exports.mjs'
+      - 'package.json'
+  push:
+    branches:
+      - main
+    paths:
+      - 'content-system/blueprints/**'
+      - 'scripts/verify-blueprints-astro-exports.mjs'
+      - 'package.json'
+
+concurrency:
+  group: blueprints-astro-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  blueprints-astro-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Blueprints Astro export + render check
+        run: npm run verify:blueprints-astro
