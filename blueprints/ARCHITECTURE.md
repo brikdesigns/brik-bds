@@ -128,7 +128,9 @@ interface Blueprint {
 
 ### `is_active` means renderable
 
-`is_active: true` asserts the key dispatches on at least one rail. It is not a
+`is_active: true` asserts the key dispatches on at least one rail, and since
+#2313 `validate:blueprints` **enforces** that — an active key absent from both
+`BLUEPRINT_REGISTRY` and `WIRED_BLUEPRINT_KEYS` fails the build. It is not a
 catalogue flag, because no consumer reads it as one: the portal builds the
 content generator's whole key vocabulary from it
 (`ACTIVE_BLUEPRINTS` → `KNOWN_BLUEPRINT_KEYS` → the `blueprintKeySchema` Zod
