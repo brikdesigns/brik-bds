@@ -16,37 +16,30 @@
  * literal union for consumer type-safety. When adding a new blueprint to
  * the library, append its key here in the same PR — the v0.1 policy is
  * hand-maintained; a build-time generator replaces this in a future pass.
+ *
+ * Since #2308 this union is exactly the *shipped* set, not the catalogue.
+ * It held 29 keys, 18 of which dispatched on neither rail — so a consumer
+ * that read the type as "renderable" (the portal's `blueprintKeySchema`
+ * does, via `is_active`) was offered 18 keys that render
+ * `<BlueprintFallback>`. The designed-but-unbuilt layouts moved to
+ * `blueprints/blueprint-roadmap.json`, which is schema-distinct and has no
+ * key type by design: a roadmap entry must not be spellable in a consumer's
+ * type system. A candidate graduates into this union in the PR that wires
+ * it (`validate:blueprints` enforces the three-way agreement).
  */
 export type KnownBlueprintKey =
   | 'hero_split_60_40'
   | 'hero_split_image_card_overlay'
-  | 'hero_centered_gradient'
-  | 'hero_fullbleed_photo'
-  | 'hero_dark_minimal'
   | 'hero_interior_minimal'
-  | 'services_numbered_rows'
   | 'services_detail_two_column'
   | 'services_3col_card_grid'
   | 'support_plan_callout_split'
-  | 'features_3col_icon_grid'
   | 'features_3col_branded_dark'
-  | 'features_alternating_split'
-  | 'features_bento_asymmetric'
   | 'about_story_split'
   | 'stats_dark_bar'
-  | 'stats_centered_light'
-  | 'testimonials_3col_cards'
   | 'testimonials_featured_large'
   | 'cta_dark_centered'
-  | 'cta_split_contact'
-  | 'contact_form_split'
-  | 'faq_accordion_grouped'
-  | 'team_cards_centered'
-  | 'team_bio_grid'
-  | 'gallery_masonry_3col'
-  | 'nav_sticky_blur'
-  | 'nav_light_clean'
-  | 'content_legal_centered';
+  | 'cta_split_contact';
 
 /**
  * Blueprint keys that have a shipped Astro component wired into the

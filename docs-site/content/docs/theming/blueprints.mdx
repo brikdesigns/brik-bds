@@ -63,6 +63,8 @@ Derived by `MOOD_TO_VISUAL_STYLE` in `content-system/blueprints/bridges.ts`. Moo
 
 The full enumerated library — every blueprint with moods, industries, layout spec, CSS hints, version, last-reviewed dates — rendered live from `@brikdesigns/bds/blueprints/library.json`. Coverage matrix shows section type × mood density at a glance; cells with `·` are gaps to author.
 
+Every entry below is **renderable**: `is_active: true` asserts the key dispatches on at least one rail, and `validate:blueprints` enforces it. Designed-but-unbuilt layouts are not here — they live in `blueprints/blueprint-roadmap.json`, which carries no `is_active` flag so nothing can read it as an available-key set. A `·` in the coverage matrix is therefore a shipped-coverage gap, which the roadmap may already have a spec for.
+
 <BlueprintLibrary />
 
 ## Implementation
@@ -178,11 +180,18 @@ Any failure blocks the PR.
 
 Blueprint edits flow **through BDS**. Portal admin edits (if kept) are drafts — landed changes flow back through a BDS PR. Full rules in [Architecture](https://github.com/brikdesigns/brik-bds/blob/main/blueprints/ARCHITECTURE.md).
 
-1. Edit `blueprints/blueprint-library.json` on a task branch.
-2. Run `npm run validate:blueprints` (also runs as part of `npm run validate`).
-3. Bump `version` on the affected blueprint(s) and the library envelope if the set changes. Update `last_reviewed` on confirmed-accurate passes.
+Pick the file first — a layout with no component belongs in the roadmap, never the library:
+
+| You are adding | File |
+|---|---|
+| A blueprint you are shipping in this PR (component wired on a rail) | `blueprints/blueprint-library.json` |
+| A layout spec with nothing built yet | `blueprints/blueprint-roadmap.json` |
+
+1. Edit the file the table names, on a task branch. Graduating a roadmap candidate **moves** it into the library — the validator rejects a key present in both.
+2. Run `npm run validate:blueprints` (also runs as part of `npm run validate`). A library entry must dispatch on a rail; a roadmap candidate must not, and must not carry `is_active`.
+3. Bump `version` on the affected blueprint(s) and the library envelope if the set changes. Update `last_reviewed` on confirmed-accurate passes — `review_cadence` is enforced, so a lapsed window fails the build.
 4. Open a PR. Bridge edits, schema changes, and data additions stay separate.
-5. After merge: publish the new BDS version and regenerate the portal seed migration via `npx tsx scripts/generate-blueprint-seed.mts` in `brik-client-portal`.
+5. After merge: publish the new BDS version and regenerate the portal seed migration via `npx tsx scripts/generate-blueprint-seed.mts` in `brik-client-portal`. If keys were **removed** from the library, the regenerated `00114` seed does not delete their rows — an already-applied migration is not re-run, so a removal needs its own `DELETE` migration.
 
 ## Related
 

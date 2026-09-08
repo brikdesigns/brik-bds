@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
 import libraryJson from '../../blueprints/blueprint-library.json';
+import { WIRED_BLUEPRINT_KEYS } from './astro/types';
 import {
   normalizeBlueprintLibrary,
   validateBlueprintLibrary,
@@ -36,13 +37,36 @@ describe('resolveBlueprintShortlist', () => {
     const ranked = resolveBlueprintShortlist(profile, normalized);
     const topThreeKeys = ranked.slice(0, 3).map((bp) => bp.key);
 
+    // Was `about_story_split` / `team_bio_grid` / `contact_form_split` until
+    // #2308. Two of those three dispatched on neither rail, so the shortlist
+    // was recommending a dental client blueprints that render
+    // `<BlueprintFallback>` — they are roadmap candidates now, not inventory.
+    // Do NOT "restore" the old expectation by re-adding them to the library:
+    // that is the bug. A candidate re-enters this shortlist by being built.
     expect(topThreeKeys).toEqual(
       expect.arrayContaining([
         'about_story_split',
-        'team_bio_grid',
-        'contact_form_split',
+        'hero_interior_minimal',
+        'services_detail_two_column',
       ]),
     );
+  });
+
+  it('never shortlists a blueprint that dispatches on neither rail', () => {
+    // The invariant #2308 bought: `is_active` means shippable, so every
+    // blueprint the resolver can offer has a component. Guards the whole
+    // shortlist surface rather than the one dental profile above.
+    const profile: BlueprintShortlistProfile = {
+      brand_personality: ['Trustworthy', 'Warm', 'Professional'],
+      industry_slug: 'dental',
+    };
+
+    const ranked = resolveBlueprintShortlist(profile, normalized);
+
+    expect(ranked.length).toBeGreaterThan(0);
+    for (const bp of ranked) {
+      expect(WIRED_BLUEPRINT_KEYS).toContain(bp.key);
+    }
   });
 
   it('awards universal + industry + personality weighting per SHORTLIST_WEIGHTS', () => {
