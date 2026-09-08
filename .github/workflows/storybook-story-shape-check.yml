@@ -34,8 +34,16 @@ on:
       - main
 
 concurrency:
+  # `cancel-in-progress: false` + `queue: max`, required as a pair because
+  # `storybook-story-shape-check` is a REQUIRED context on `main` (#2142
+  # promoted it; #2322 is the miss this fixes). See
+  # storybook-recipe-check.yml's block for the full reasoning — same rules
+  # 6a/6b, same #2094 / #2174 / #2176 evidence: a cancelled or evicted-pending
+  # run posts zero check-runs, protection reads the context as `expected`
+  # forever, and `main` refuses the merge with every check green.
   group: storybook-story-shape-check-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
+  queue: max
 
 jobs:
   storybook-story-shape-check:

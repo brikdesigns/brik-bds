@@ -30,8 +30,25 @@ on:
       - main
 
 concurrency:
+  # `cancel-in-progress: false` + `queue: max`, required as a pair because
+  # `storybook-recipe-check` is a REQUIRED context on `main` (#2142 promoted it;
+  # #2322 is the miss this fixes). Rules 6a/6b of
+  # brik-llm/scripts/audit/required-check-contract.py:
+  #
+  #   - A cancelled check-run is not an absent one. Protection goes on reporting
+  #     the context as `expected`, and a green re-run does not clear it — only a
+  #     new head SHA does (#2094).
+  #   - `cancel-in-progress: false` ALONE does not cover it. That flag governs
+  #     the RUNNING job; the default `queue: single` still lets a newer run evict
+  #     the PENDING one, leaving a check-suite with zero check-runs and the same
+  #     stuck `expected` (#2176; measured on #2174 — seven runs on one head SHA,
+  #     five cancelled). That is why #2094's fix did not hold.
+  #
+  # `queue: max` and `cancel-in-progress: true` are a workflow validation error
+  # together, so the two lines always change as a pair.
   group: storybook-recipe-check-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
+  queue: max
 
 jobs:
   storybook-recipe-check:
