@@ -501,6 +501,63 @@ const sections: BlueprintSection[] = [
 `,
 );
 
+// ── 5b. Derive the dispatcher's expected markers ──────────────────
+//
+// This used to be a hard-coded list of seven `data-blueprint-key` values
+// ("all 7 known sections rendered"). #2010 de-wired `stats_dark_bar` from
+// BLUEPRINT_REGISTRY and the literal was never updated, so the assertion
+// became unpassable and this script has been red on `main` ever since —
+// unnoticed, because it runs nowhere (brik-bds#2313).
+//
+// Derived instead: read WIRED_BLUEPRINT_KEYS, and for each fixture section
+// expect either its rendered marker (wired) or the fallback's
+// data-blueprint-unknown-key (not wired). A future de-wiring then flips this
+// assertion by itself rather than rotting.
+
+/** Keys the dispatcher fixture feeds, in `sections` order. Guarded below. */
+const DISPATCH_FIXTURE_KEYS = [
+  'hero_interior_minimal',
+  'stats_dark_bar',
+  'services_detail_two_column',
+  'about_story_split',
+  'testimonials_featured_large',
+  'cta_split_contact',
+  'hero_centered_gradient',
+  'cta_dark_centered',
+];
+
+/**
+ * Keys whose rendered marker is not the key itself. The CardGrid adapters
+ * (#580) dispatch to `<CardGrid>`, which emits its own `card_grid` marker.
+ */
+const MARKER_OVERRIDES = {
+  services_detail_two_column: 'card_grid',
+  services_3col_card_grid: 'card_grid',
+};
+
+const wiredKeysSrc = readFileSync(
+  join(BDS_ROOT, 'content-system/blueprints/astro/types.ts'),
+  'utf8',
+);
+const wiredMatch = wiredKeysSrc.match(
+  /export const WIRED_BLUEPRINT_KEYS\s*=\s*\[([\s\S]*?)\]\s*as const/,
+);
+if (!wiredMatch) {
+  log.fail('Could not parse WIRED_BLUEPRINT_KEYS from astro/types.ts');
+  process.exit(1);
+}
+const WIRED = new Set([...wiredMatch[1].matchAll(/'([a-z0-9_]+)'/g)].map((m) => m[1]));
+
+const dispatchedPageSrc = readFileSync(
+  join(scratch, 'src/pages/dispatched.astro'),
+  'utf8',
+);
+
+const expectedMarkers = DISPATCH_FIXTURE_KEYS.filter((k) => WIRED.has(k)).map(
+  (k) => MARKER_OVERRIDES[k] ?? k,
+);
+const expectedUnknowns = DISPATCH_FIXTURE_KEYS.filter((k) => !WIRED.has(k));
+
 // ── 6. Install ────────────────────────────────────────────────────
 log.step('Installing scratch deps (astro@5 + packed BDS tarball)');
 run('npm install --no-audit --no-fund --prefer-offline', { cwd: scratch });
@@ -574,19 +631,18 @@ const assertions = [
   { name: 'SiteHeader hamburger button',            pass: homeHtml.includes('aria-expanded="false"') && homeHtml.includes('aria-controls="bp-site-header-drawer"') },
 
   // Dispatcher assertions (dispatched page)
-  { name: 'dispatcher: all 7 known sections rendered', pass:
-      dispatchedHtml.includes('data-blueprint-key="hero_interior_minimal"') &&
-      dispatchedHtml.includes('data-blueprint-key="stats_dark_bar"') &&
-      // services_detail_two_column dispatches to the CardGrid adapter (#580) → card_grid marker
-      dispatchedHtml.includes('data-blueprint-key="card_grid"') &&
-      dispatchedHtml.includes('data-blueprint-key="about_story_split"') &&
-      dispatchedHtml.includes('data-blueprint-key="testimonials_featured_large"') &&
-      dispatchedHtml.includes('data-blueprint-key="cta_split_contact"') &&
-      dispatchedHtml.includes('data-blueprint-key="cta_dark_centered"')
+  // Guard: the JS-side fixture key list must match the template it describes,
+  // or the derived assertions below silently stop covering a section.
+  { name: `dispatcher: fixture key list matches the template (${DISPATCH_FIXTURE_KEYS.length} keys)`, pass:
+      DISPATCH_FIXTURE_KEYS.every((k) => dispatchedPageSrc.includes(`sec('${k}'`)) &&
+      [...dispatchedPageSrc.matchAll(/sec\('([a-z0-9_]+)'/g)].length === DISPATCH_FIXTURE_KEYS.length
   },
-  { name: 'dispatcher: unknown key falls through to fallback', pass:
+  { name: `dispatcher: every wired fixture section rendered (${expectedMarkers.length} of ${DISPATCH_FIXTURE_KEYS.length})`, pass:
+      expectedMarkers.every((m) => dispatchedHtml.includes(`data-blueprint-key="${m}"`))
+  },
+  { name: `dispatcher: unwired fixture keys fall through to fallback (${expectedUnknowns.join(', ') || 'none'})`, pass:
       dispatchedHtml.includes('data-blueprint-key="__fallback__"') &&
-      dispatchedHtml.includes('data-blueprint-unknown-key="hero_centered_gradient"')
+      expectedUnknowns.every((k) => dispatchedHtml.includes(`data-blueprint-unknown-key="${k}"`))
   },
   { name: 'dispatcher: fallback stub text visible', pass:
       dispatchedHtml.includes('Blueprint not yet shipped')
