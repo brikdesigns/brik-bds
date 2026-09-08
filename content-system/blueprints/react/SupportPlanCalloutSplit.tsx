@@ -1,5 +1,5 @@
 /**
- * SupportPlanCalloutSplit — Phase D adapter (deprecated direct path).
+ * SupportPlanCalloutSplit — blueprint-key adapter (supported: ADR-037 §2).
  *
  * After brik-bds#581, the canonical primitive is `<SupportPlan>` (the
  * `bds-support-plan` section block). This file remains as an adapter so
@@ -8,11 +8,10 @@
  * contract that AI-generated pages expect — it maps `section.*` →
  * `<SupportPlan>` props.
  *
- * New consumers should compose `<SupportPlan>` directly. This adapter
- * retires alongside Phase E.
+ * New consumers should compose `<SupportPlan>` directly. It is the supported
+ * dispatch path for its blueprint key; not deprecated (ADR-037 §2).
  *
- * @deprecated Use `<SupportPlan>` directly.
- * @summary Legacy adapter — maps section data onto `<SupportPlan>`.
+ * @summary Key adapter — maps section data onto `<SupportPlan>`.
  */
 import type { BlueprintProps } from '../astro/types';
 import { SupportPlan } from './SupportPlan';

@@ -90,9 +90,9 @@ const baseProps: BlueprintProps = {
 /* ─── Meta ─────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Services3ColCardGrid> = {
-  title: 'Deprecated/services-3col-card-grid',
+  title: 'Blueprints/services-3col-card-grid',
   component: Services3ColCardGrid,
-  tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
+  tags: ['surface-web'],
   argTypes: {
     section: { control: false, description: 'Section content shape — sectionKey, heading, subheading, body, cta, items, visualNotes. Set in code.' },
     clientFacts: { control: false, description: 'Site-wide client facts (brand, contact, services). Set in code.' },

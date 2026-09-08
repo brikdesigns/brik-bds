@@ -1,5 +1,5 @@
 /**
- * HeroSplitImageCardOverlay — Phase D adapter (deprecated direct path).
+ * HeroSplitImageCardOverlay — blueprint-key adapter (supported: ADR-037 §2).
  *
  * After brik-bds#1165 the canonical primitive is `<Hero>` (the `bds-hero`
  * section block, `with-pricing-card` layout). This file remains as an adapter
@@ -20,10 +20,10 @@
  * `data-audience` is forwarded to `<Hero>` to drive the service-token cascade.
  *
  * New consumers should compose `<Hero layout="with-pricing-card" …>` directly.
- * This adapter retires alongside Phase E.
+ * It is the supported dispatch path for its blueprint key, which three
+ * published client sites resolve; it is not deprecated (ADR-037 §2).
  *
- * @deprecated Use `<Hero layout="with-pricing-card">` directly.
- * @summary Legacy adapter — section + priceCard → `<Hero layout="with-pricing-card">`.
+ * @summary Key adapter — section + priceCard → `<Hero layout="with-pricing-card">`.
  */
 import type { MouseEvent, ReactNode } from 'react';
 

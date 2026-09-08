@@ -47,9 +47,9 @@ const baseProps: BlueprintProps = {
 /* ─── Meta ─────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof SupportPlanCalloutSplit> = {
-  title: 'Deprecated/support-plan-callout-split',
+  title: 'Blueprints/support-plan-callout-split',
   component: SupportPlanCalloutSplit,
-  tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
+  tags: ['surface-web'],
   argTypes: {
     section: { control: false, description: 'Section content shape — sectionKey, heading, subheading, body, cta, items, visualNotes. Set in code.' },
     clientFacts: { control: false, description: 'Site-wide client facts (brand, contact, services). Set in code.' },

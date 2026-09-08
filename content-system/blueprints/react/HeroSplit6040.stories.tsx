@@ -44,9 +44,9 @@ const section: BlueprintProps['section'] = {
 };
 
 const meta: Meta<typeof HeroSplit6040> = {
-  title: 'Deprecated/hero-split-60-40',
+  title: 'Blueprints/hero-split-60-40',
   component: HeroSplit6040,
-  tags: ['surface-web', '!manifest'], // deprecated adapter — hide from MCP discovery (#1308)
+  tags: ['surface-web'],
   argTypes: {
     section: { control: false, description: 'Section content shape — sectionKey, heading, subheading, body, cta, items, visualNotes. Set in code.' },
     clientFacts: { control: false, description: 'Site-wide client facts (brand, contact, services). Set in code.' },
