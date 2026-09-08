@@ -57,6 +57,7 @@ import { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
 import { HeroInteriorMinimal } from './HeroInteriorMinimal';
 import { ServicesDetailTwoColumn } from './ServicesDetailTwoColumn';
 import { AboutStorySplit } from './AboutStorySplit';
+import { StatsDarkBar } from './StatsDarkBar';
 import { TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge';
 import { CtaDarkCentered } from './CtaDarkCentered';
 import { CtaSplitContact } from './CtaSplitContact';
@@ -73,6 +74,7 @@ const BLUEPRINT_REGISTRY: Partial<
   support_plan_callout_split: SupportPlanCalloutSplit,
   features_3col_branded_dark: Features3ColBrandedDark,
   about_story_split: AboutStorySplit,
+  stats_dark_bar: StatsDarkBar,
   testimonials_featured_large: TestimonialsFeaturedLarge,
   cta_dark_centered: CtaDarkCentered,
   cta_split_contact: CtaSplitContact,
