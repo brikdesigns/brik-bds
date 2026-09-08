@@ -17,6 +17,12 @@
  * Usage:
  *   node scripts/validate-blueprints.mjs
  *   npm run validate:blueprints
+ *   node scripts/validate-blueprints.mjs --root <dir>   # tests only
+ *
+ * `--root` repoints every input at a throwaway tree so the gate's own tests can
+ * plant a violation and assert the exit code, without touching real blueprint
+ * data. Same seam as `scripts/lint-disabled-fade.mjs` (#1697), and what lets
+ * #2313 AC 2 be a committed test rather than a one-off manual demonstration.
  */
 
 import { readFile } from 'node:fs/promises';
@@ -24,10 +30,18 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const libraryPath = resolve(__dirname, '..', 'blueprints', 'blueprint-library.json');
-const roadmapPath = resolve(__dirname, '..', 'blueprints', 'blueprint-roadmap.json');
-const astroDir = resolve(__dirname, '..', 'content-system', 'blueprints', 'astro');
-const reactDir = resolve(__dirname, '..', 'content-system', 'blueprints', 'react');
+
+const rootFlag = process.argv.indexOf('--root');
+if (rootFlag !== -1 && !process.argv[rootFlag + 1]) {
+  console.error('validate-blueprints: --root needs a directory argument.');
+  process.exit(2);
+}
+const ROOT = rootFlag === -1 ? resolve(__dirname, '..') : resolve(process.argv[rootFlag + 1]);
+
+const libraryPath = resolve(ROOT, 'blueprints', 'blueprint-library.json');
+const roadmapPath = resolve(ROOT, 'blueprints', 'blueprint-roadmap.json');
+const astroDir = resolve(ROOT, 'content-system', 'blueprints', 'astro');
+const reactDir = resolve(ROOT, 'content-system', 'blueprints', 'react');
 const dispatcherPath = resolve(astroDir, 'BlueprintDispatcher.astro');
 const reactDispatcherPath = resolve(reactDir, 'BlueprintDispatcher.tsx');
 const typesPath = resolve(astroDir, 'types.ts');
@@ -238,6 +252,30 @@ function validateRegistrySync(library, dispatcherSrc, typesSrc) {
   for (const k of wiredSet) {
     if (!registrySet.has(k)) push('BLUEPRINT_REGISTRY', `WIRED_BLUEPRINT_KEYS key "${k}" has no registry entry.`);
     if (!activeSet.has(k)) push('is_active', `Wired key "${k}" is not an active blueprint in library.json.`);
+  }
+
+  // The third direction (#2313). The two loops above walk registry → wired and
+  // wired → {registry, active}; nothing walked `activeSet`, so a key that was
+  // `is_active: true` and absent from BOTH runtime sets was invisible to this
+  // gate. `npm run validate` was green with 18 keys in exactly that state, and
+  // `is_active` is the seed filter for the portal's content-generator
+  // vocabulary — so the generator was offered blueprints that render
+  // `<BlueprintFallback>` and nothing objected (#2308).
+  //
+  // Landable only because #2308 emptied the violation set to 0 and #2317
+  // re-wired the last straggler (`stats_dark_bar`, #2012). The rule ships
+  // without an allowlist on purpose: ADR-006 §157 is the precedent against
+  // shipping a rule alongside the exemptions that make it pass.
+  for (const k of activeSet) {
+    if (!registrySet.has(k) && !wiredSet.has(k)) {
+      push(
+        'is_active',
+        `Active key "${k}" dispatches on neither rail — no BLUEPRINT_REGISTRY entry and not in ` +
+          'WIRED_BLUEPRINT_KEYS. `is_active: true` means renderable, and consumers read it that way ' +
+          '(the portal builds `blueprintKeySchema` from it). Either wire it on the canonical Astro ' +
+          'rail (ADR-037) or move it to blueprints/blueprint-roadmap.json.',
+      );
+    }
   }
 
   return issues;
