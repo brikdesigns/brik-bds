@@ -36,7 +36,7 @@ The portal's scaffold generator emits these keys too: `src/lib/tasks/scaffold-te
 
 All ten story files carry `tags: ['!manifest']`. [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) §53 defines that category as "retained only for migration reference… Tagged `['!manifest']` so MCP discovery skips them."
 
-So `bds-find` and the component manifest cannot see the blueprints that build every client site. An agent asked to build a client page queries BDS, finds only the React generics — which have **no Astro implementation** — and hand-rolls markup and CSS.
+So `bds-find` and the component manifest cannot see the blueprints that build every client site. An agent asked to build a client page queries BDS, finds only the React generics under names that match no Astro file, and hand-rolls markup and CSS. (The original text here said the React generics have "no Astro implementation" — corrected by § Amendments 2026-09-08; they do, under layout-specific filenames.)
 
 That cost is measurable in the Next.js consumer, where the same discovery failure applies: `brikdesigns` carries 2,915 lines of per-page bespoke CSS across `src/app/(marketing)/*/`, plus a 1,432-line `homepage.css`, and 12 of its last 25 merged PRs touched `.css` or `styles.ts`. Its homepage was built one section per PR across roughly ten PRs.
 
@@ -44,8 +44,10 @@ That cost is measurable in the Next.js consumer, where the same discovery failur
 
 `comm` over the two blueprint directories:
 
-- **React only:** `About`, `Cta`, `Features`, `Hero`, `HeroMediaCard`, `HeroMediaCardImage`, `HeroMediaCardPrice` — precisely the "canonical" generation.
-- **Astro only:** `SiteHeader`, `StatsDarkBar`.
+- **React only by filename:** `About`, `Cta`, `Features`, `Hero`, `HeroMediaCard`, `HeroMediaCardImage`, `HeroMediaCardPrice`.
+- **Astro only by filename:** `SiteHeader`, `StatsDarkBar`.
+
+> **Corrected by § Amendments 2026-09-08.** That `comm` is not a like-for-like comparison and this ADR's first version over-read it. The rails name files by different units — React by *block*, Astro by *block+layout* — so only `HeroMediaCard`×3 is genuinely absent from Astro. See the amendment for the measured block-level mapping.
 
 A parity gate does exist, and it is green. [`scripts/validate-blueprints.mjs`](../../scripts/validate-blueprints.mjs) runs in the `validate` chain and asserts three declaration sets against each other — the Astro dispatcher's `BLUEPRINT_REGISTRY` (`:206-237`), `WIRED_BLUEPRINT_KEYS` in `astro/types.ts`, and the `is_active: true` keys in `blueprint-library.json` — plus `validateRuntimeParity()` (`:251`) comparing the Astro and React dispatcher registries. It passed in this ADR's own PR run.
 
@@ -104,7 +106,7 @@ Astro is canonical because it carries every published client site. Next.js is a 
 
 `HeroSplit6040`, `HeroInteriorMinimal`, `HeroSplitImageCardOverlay`, `CtaDarkCentered`, `CtaSplitContact`, `Features3ColBrandedDark`, `AboutStorySplit`, `Services3ColCardGrid`, `ServicesDetailTwoColumn`, `SupportPlanCalloutSplit` return to `Blueprints/*`, lose `tags: ['!manifest']`, and lose their `@deprecated` markers. Executed in #2301.
 
-The seven React-only generics are reclassified as the **unshipped** generation: real components, not yet on the canonical rail. They are not deprecated — #2302 brings them to Astro, after which both generations coexist as layout choices.
+> **Superseded by § Amendments 2026-09-08.** The paragraph that stood here called the seven React-only generics "the **unshipped** generation… #2302 brings them to Astro". That was wrong: the blocks are already implemented on Astro under layout-specific filenames. There is no unshipped generation and nothing to port. The amendment replaces this with the API-unification decision.
 
 ### 3. `Deprecated/` + `!manifest` requires a proven-empty consumer set
 
@@ -178,3 +180,52 @@ Two gates, both extending scripts that already run:
 **Leave both rails canonical and let each consumer choose.** Rejected. That is the current state, and it produced four disagreeing inventories, a production vocabulary hidden from agent discovery, and a rail with zero Storybook coverage — all while `validate-blueprints.mjs` reported clean. A gate that judges only what the code declares about itself cannot arbitrate between two rails; something has to be canonical for "divergence" to have a direction.
 
 **Write no ADR and just remove the `@deprecated` markers.** Rejected. The markers are a symptom; the cause is that a canonicity decision was made without an ADR, a consumer check, or a gate. Removing the markers without §3 and §Enforcement leaves the same failure available.
+
+## Amendments
+
+### 2026-09-08 — The rails share one block set; Astro adopts React's layout-as-prop API (#2299)
+
+**What the first version got wrong.** § Context read a `comm` over the two blueprint directories as an inventory gap and concluded the React generics had "no Astro implementation". The filenames differ; the implementations do not. Measured at the block level — the `bds-*` class each Astro file emits:
+
+| Astro file | Block emitted | React equivalent |
+|---|---|---|
+| `CtaDarkCentered.astro` | `bds-cta` | `<Cta layout="default">` |
+| `CtaSplitContact.astro` | `bds-cta--split` | `<Cta layout="split">` |
+| `HeroSplit6040.astro` | `bds-hero--split` | `<Hero layout="split">` |
+| `HeroInteriorMinimal.astro` | `bds-hero--interior-minimal` | `<Hero layout="interior-minimal">` |
+| `HeroSplitImageCardOverlay.astro` | `bds-hero--with-pricing-card` | `<Hero layout="with-pricing-card">` |
+| `AboutStorySplit.astro` | `bds-about` | `<About>` |
+| `Features3ColBrandedDark.astro` | `bds-features` | `<Features>` |
+| `Services3ColCardGrid.astro`, `ServicesDetailTwoColumn.astro` | `bds-card-grid` | `<CardGrid>` |
+| `SupportPlanCalloutSplit.astro` | `bds-support-plan` | `<SupportPlan>` |
+
+`HeroSplit6040.astro:4` states it directly: *"Twin of the React `<Hero layout="split">`"*. Only `HeroMediaCard` / `HeroMediaCardImage` / `HeroMediaCardPrice` are genuinely absent from Astro.
+
+**The real divergence is the composition model, not the inventory.**
+
+| | React | Astro |
+|---|---|---|
+| Unit of a file | the **block** — layout is a prop (`HeroLayout = 'split' \| 'interior-minimal' \| 'with-pricing-card'`, `Hero.tsx:60`; `CtaLayout = 'default' \| 'split'`, `Cta.tsx:48`) | the **block + layout** — one file each, and `interface Props extends BlueprintProps {}` on 12 of them, i.e. no layout prop exists (`grep -n layout` over `astro/*.astro` matches comments only) |
+| Markup | the primitive itself | **hand-rolled per file** — `CtaDarkCentered.astro` emits `bds-cta__container` / `__message` / `__title` itself and imports only `./types` and `../section-shell.css` |
+
+So the same block is implemented twice and kept in sync by hand. ADR-021 already recorded a symptom of exactly this: *"proof of drift: React and Astro twins of one family disagreed"* on the rhythm clamp, which is what forced the 7vw harmonisation.
+
+**Decision.** Astro adopts React's API: **one Astro component per block, layout as a prop.**
+
+OPERATOR SAID 2026-09-08 (session chat): "Let's proceed with your recommendations" — on the choice between Astro adopting layout-as-prop and keeping the two models.
+
+- `CtaDarkCentered.astro` + `CtaSplitContact.astro` → one `Cta.astro` with `layout?: CtaLayout`.
+- `HeroSplit6040.astro` + `HeroInteriorMinimal.astro` + `HeroSplitImageCardOverlay.astro` → one `Hero.astro` with `layout?: HeroLayout`.
+- `AboutStorySplit.astro` → `About.astro`; `Features3ColBrandedDark.astro` → `Features.astro`; `Services3ColCardGrid.astro` + `ServicesDetailTwoColumn.astro` → `CardGrid.astro` (already exists — absorb both); `SupportPlanCalloutSplit.astro` → the `SupportPlan.astro` that already exists.
+- The layout union is shared, not duplicated: Astro imports the React-side type from `astro/types.ts` re-exports so a new layout cannot be added to one rail only.
+
+**Rationale.** The block is the thing BDS versions, documents, and gates. Naming files by block+layout makes the layout axis invisible to every gate that compares the rails by name, which is precisely how §Context's `comm` misled this ADR's own author. It also makes §4's naming rule unreachable: `cta_dark_centered` cannot become `cta_centered` while `dark` and `centered` are load-bearing parts of a *filename*. One file per block, layout as a prop, is the shape that lets both the key rename (#2303) and the parity axes (#2304) work by construction.
+
+**Consequences.**
+
+- **#2302 is re-scoped** from "implement the seven React-only generics on Astro" (`size:l`) to "consolidate Astro's layout-per-file blueprints into props-based components matching the React API". A refactor of 10 existing files, not 7 new implementations. `HeroMediaCard`×3 remains genuine net-new Astro work and splits out.
+- 88 blueprint-key references across three published client sites are affected. Keys are the dispatch surface, so the consolidation must keep every existing key resolving — the dispatcher maps key → component + layout props, and no site edit is required by this amendment alone. Site-side changes belong to #2303's rename.
+- #2304's on-disk axis becomes meaningful: after consolidation, one file per block means a stray file is unambiguously an orphan.
+- § Decision 2's "unshipped generation" framing is withdrawn. Both rails ship the same blocks; neither generation is ahead.
+
+**What this amendment does not do.** It does not change which rail is canonical (§1 stands — Astro), does not re-open deletion (§ What this ADR refuses stands), and does not rename any blueprint key. Keys are #2303.
