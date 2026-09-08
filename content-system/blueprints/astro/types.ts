@@ -76,6 +76,7 @@ export const WIRED_BLUEPRINT_KEYS = [
   'support_plan_callout_split',
   'features_3col_branded_dark',
   'about_story_split',
+  'stats_dark_bar',
   'testimonials_featured_large',
   'cta_split_contact',
   'cta_dark_centered',

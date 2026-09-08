@@ -1,0 +1,77 @@
+/*
+ * StatsDarkBar — `bds-stats-dark-bar` section styles. React twin of the
+ * Astro `stats_dark_bar` blueprint (brik-bds#2012, the deferred half of
+ * the #2010 parity reconcile).
+ *
+ * Section rhythm + the centred container come from `../section-shell.css`
+ * (ADR-021): `bds-blueprint-section` and `bds-blueprint-section__container`
+ * are composed onto the same elements in StatsDarkBar.tsx, not redeclared
+ * here. The Astro twin still carries its own pre-ADR-021 `bp-*` rhythm
+ * (5vw vs the harmonised 7vw) — that divergence retires with #2302's
+ * consolidation, not here, because lint-blueprint-naming.mjs rejects a bare
+ * `padding-block` re-declaration.
+ *
+ * Tier-4 `--bds-stats-dark-bar-*` hooks let a consumer retheme the bar
+ * without forking the block. Names and fallbacks mirror the Astro twin's
+ * scoped <style> so the two render identically.
+ */
+
+.bds-stats-dark-bar {
+  background: var(--bds-stats-dark-bar-bg, var(--surface-inverse));
+}
+
+.bds-stats-dark-bar__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gap-xl);
+}
+
+@media (min-width: 640px) {
+  .bds-stats-dark-bar__list {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  }
+}
+
+.bds-stats-dark-bar__item {
+  display: flex;
+  flex-direction: column;
+  /* Value↔label is a tight text pairing: --gap-sm. Not --gap-2xs, which
+     resolves to 0px outside default spacing mode (ADR-023 §3). */
+  gap: var(--gap-sm);
+  padding-block: var(--padding-sm);
+  border-left: 1px solid var(--bds-stats-dark-bar-divider, var(--border-secondary));
+  padding-left: var(--padding-md);
+}
+
+@media (max-width: 639px) {
+  .bds-stats-dark-bar__item {
+    border-left: none;
+    border-top: 1px solid var(--bds-stats-dark-bar-divider, var(--border-secondary));
+    padding-top: var(--padding-md);
+    padding-left: 0;
+  }
+
+  .bds-stats-dark-bar__item:first-child {
+    border-top: none;
+    padding-top: 0;
+  }
+}
+
+.bds-stats-dark-bar__value {
+  font-family: var(--font-family-display);
+  font-size: clamp(var(--heading-xl), 4vw, var(--heading-3xl));
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--font-line-height-tight);
+  color: var(--bds-stats-dark-bar-value-color, var(--text-inverse));
+}
+
+.bds-stats-dark-bar__label {
+  font-family: var(--font-family-label);
+  font-size: var(--label-lg);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--bds-stats-dark-bar-label-color, var(--text-inverse));
+}
