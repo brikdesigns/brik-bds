@@ -6,12 +6,13 @@
 **Superseded by:** —
 **Owner:** Nick Stanerson
 **Related:** [#2299](https://github.com/brikdesigns/brik-bds/issues/2299) (this ADR), [#2300](https://github.com/brikdesigns/brik-bds/issues/2300) (Welcome.mdx), [#2301](https://github.com/brikdesigns/brik-bds/issues/2301) (un-deprecation sweep), [#2302](https://github.com/brikdesigns/brik-bds/issues/2302) (Astro parity), [#2303](https://github.com/brikdesigns/brik-bds/issues/2303) (context-free keys + the gate), [#2304](https://github.com/brikdesigns/brik-bds/issues/2304) (parity lint), [#2305](https://github.com/brikdesigns/brik-bds/issues/2305) (`SupportPlan` → `CalloutPanel`), [#2306](https://github.com/brikdesigns/brik-bds/issues/2306) (ADR-006 `Blocks/` sweep), [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) (`Deprecated/` + `!manifest` semantics; the eight sanctioned top-levels), [ADR-021](./ADR-021-blueprint-section-shell.md) (blueprint section shell), [ADR-030](./ADR-030-naming-framework-not-adopted-migrate-consumers-onto-bds.md) §36-38 (the 5-layer composition model as accepted canon), [ADR-033](./ADR-033-naming-canon-one-word-per-concept.md) (one word per concept), [composition-layers.mdx](../../docs-site/content/docs/build-standards/composition-layers.mdx) (the 5-layer model)
+**Pre-existing backlog this ADR governs** (found by a cross-repo duplicate scan, 2026-09-08 — not re-filed): [#2010](https://github.com/brikdesigns/brik-bds/issues/2010) (the Astro↔React parity restoration whose gate this ADR extends), [#2012](https://github.com/brikdesigns/brik-bds/issues/2012) (`stats_dark_bar` de-wired — §Enforcement's on-disk axis is its general case), [#2037](https://github.com/brikdesigns/brik-bds/issues/2037) (build `Split`/`Row`/`Stat`/`MediaBlock` — operator decided 2026-08-25 to make `composition-layers.mdx` true by building them, so §5's layer vocabulary is not to be edited to match what exists), [#872](https://github.com/brikdesigns/brik-bds/issues/872) (collection-index/article/FAQ Astro blueprints — net-new on the canonical rail, sequenced behind #2302), [#1583](https://github.com/brikdesigns/brik-bds/issues/1583) (Blocks-layer `ContentBlock`/`Prose`), [#974](https://github.com/brikdesigns/brik-bds/issues/974) (Astro sites off `bridge.css`), [brikdesigns#802](https://github.com/brikdesigns/brikdesigns/issues/802) (premise re-triaged by §2 — `HeroSplitImageCardOverlay` is no longer deprecated), [brik-client-portal#3063](https://github.com/brikdesigns/brik-client-portal/issues/3063) (Astro site-token bridge ownership), [brik-client-portal#2982](https://github.com/brikdesigns/brik-client-portal/issues/2982) (sibling gate: fail CI when a block type has no renderer arm)
 
 ## Context
 
 BDS ships blueprints on two rails — `content-system/blueprints/react/` and `content-system/blueprints/astro/`. A consolidation program declared a set of React primitives canonical (`Hero`, `Cta`, `Features`, `About`, `HeroMediaCard`, `CardGrid`, `SupportPlan`) and marked the prior generation `@deprecated`, moving its Storybook stories to `Deprecated/` with `tags: ['!manifest']`.
 
-That program ran on issues alone. `rg -l -e "580|582|583|1197|1198" docs/adrs/` returns no ADR establishing it — only ADR-023, ADR-030, ADR-033 and the index, none of which decide blueprint canonicity. No consumer check ran, and no gate was added to detect rail divergence.
+That program ran on issues alone. `rg -l -e "580|582|583|1197|1198" docs/adrs/` returns no ADR establishing it — only ADR-023, ADR-030, ADR-033 and the index, none of which decide blueprint canonicity. No consumer check ran, and the parity gate that does exist cannot see the divergence it created (§ below).
 
 ### The deprecated rail is the rail carrying production
 
@@ -39,14 +40,18 @@ So `bds-find` and the component manifest cannot see the blueprints that build ev
 
 That cost is measurable in the Next.js consumer, where the same discovery failure applies: `brikdesigns` carries 2,915 lines of per-page bespoke CSS across `src/app/(marketing)/*/`, plus a 1,432-line `homepage.css`, and 12 of its last 25 merged PRs touched `.css` or `styles.ts`. Its homepage was built one section per PR across roughly ten PRs.
 
-### The two rails have diverged, and nothing detects it
+### The two rails have diverged, and the existing gate cannot see it
 
 `comm` over the two blueprint directories:
 
 - **React only:** `About`, `Cta`, `Features`, `Hero`, `HeroMediaCard`, `HeroMediaCardImage`, `HeroMediaCardPrice` — precisely the "canonical" generation.
 - **Astro only:** `SiteHeader`, `StatsDarkBar`.
 
-Four inventories disagree, and no gate compares them:
+A parity gate does exist, and it is green. [`scripts/validate-blueprints.mjs`](../../scripts/validate-blueprints.mjs) runs in the `validate` chain and asserts three declaration sets against each other — the Astro dispatcher's `BLUEPRINT_REGISTRY` (`:206-237`), `WIRED_BLUEPRINT_KEYS` in `astro/types.ts`, and the `is_active: true` keys in `blueprint-library.json` — plus `validateRuntimeParity()` (`:251`) comparing the Astro and React dispatcher registries. It passed in this ADR's own PR run.
+
+Its blind spot is the whole of this ADR's evidence: **it compares declarations to declarations, and never reads the filesystem or Storybook.** So a blueprint can sit on disk, be exported from `index.ts`, be `is_active: true`, and dispatch through neither runtime — and the gate stays green. [#2012](https://github.com/brikdesigns/brik-bds/issues/2012) is exactly that state for `stats_dark_bar`, filed `p3-someday`. Neither validator calls `readdir`, and no gate asserts that a wired blueprint has a story at all.
+
+Which is why four *file-and-story* inventories can disagree while the declaration gate reports clean:
 
 | Inventory | Count |
 |---|---|
@@ -141,9 +146,13 @@ The one-sentence form, for agent prompts and for `Welcome.mdx` (#2300): *Bluepri
 Two gates, both extending scripts that already run:
 
 1. **Context-word rule** in [`scripts/lint-blueprint-naming.mjs`](../../scripts/lint-blueprint-naming.mjs) — rejects a domain word in a blueprint name, manifest key, or slot. Ships in #2303. **Budget:** a new rule inside an existing pre-commit + CI script; no new workflow, no new trigger, no added CI job. Per the ADR-006 §157 precedent it ships with its violation set already emptied and no allowlist.
-2. **Parity lint** — `scripts/lint-blueprint-parity.mjs`, asserting React ≡ Astro ≡ manifest ≡ story titles, with intentional divergence declared per-key rather than left silent. Ships in #2304, which carries its own budget statement. This is the gate whose absence let the rails diverge for months.
+2. **Two new axes inside the existing [`validate-blueprints.mjs`](../../scripts/validate-blueprints.mjs)** — not a new script. That validator already asserts registry ≡ `WIRED_BLUEPRINT_KEYS` ≡ `is_active`, plus Astro↔React runtime parity; it is green today. The axes it lacks, and that this ADR's evidence needed, are:
+   - **on-disk ≡ declared** — enumerate `content-system/blueprints/{react,astro}/` and fail on a component that no registry dispatches (the [#2012](https://github.com/brikdesigns/brik-bds/issues/2012) `stats_dark_bar` state);
+   - **story coverage** — fail on a wired blueprint with no `Blueprints/*` story, which is what let the Astro rail reach zero coverage and let ten production blueprints sit `!manifest`.
 
-`lint-naming-canon.mjs` (ADR-033) and `slot-pattern-check.mjs` (ADR-017) are unchanged; they judge prop/token words and slot shape, neither of which this ADR touches.
+   Ships in #2304. **Budget:** two rules added to a script already in pre-commit + `validate`; no new workflow, no new CI job, no new npm script.
+
+`lint-naming-canon.mjs` (ADR-033), `slot-pattern-check.mjs` (ADR-017) and `verify-blueprints-astro-exports.mjs` are unchanged; they judge prop/token words, slot shape, and package export surface respectively — none of which this ADR touches.
 
 ## Consequences
 
@@ -166,6 +175,6 @@ Two gates, both extending scripts that already run:
 
 **React wins; Astro is migrated onto the generics.** Rejected — see § What this ADR refuses. It also inverts the volume: Astro carries five client sites, React carries one marketing site.
 
-**Leave both rails canonical and let each consumer choose.** Rejected. That is the current state, and it produced four disagreeing inventories, a production vocabulary hidden from agent discovery, and a rail with zero Storybook coverage. "Both are fine" is what no gate looks like.
+**Leave both rails canonical and let each consumer choose.** Rejected. That is the current state, and it produced four disagreeing inventories, a production vocabulary hidden from agent discovery, and a rail with zero Storybook coverage — all while `validate-blueprints.mjs` reported clean. A gate that judges only what the code declares about itself cannot arbitrate between two rails; something has to be canonical for "divergence" to have a direction.
 
 **Write no ADR and just remove the `@deprecated` markers.** Rejected. The markers are a symptom; the cause is that a canonicity decision was made without an ADR, a consumer check, or a gate. Removing the markers without §3 and §Enforcement leaves the same failure available.
