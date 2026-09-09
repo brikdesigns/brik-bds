@@ -272,3 +272,19 @@ if [ -x "$ANTI_SLOP_CHECK" ]; then
     fi
   fi
 fi
+
+# ── Markdown-creation net (brik-llm#3271) ──
+# Blocks a .md ARRIVING at a path — added, or a rename's destination — when it
+# carries a retired prefix (feedback_*/lessons-*) or lands outside a sanctioned
+# documentation home. Modifying a file in place is never blocked, so this repo's
+# standing loose markdown is grandfathered.
+#
+# scripts/audit/md-creation-gate.sh is a TWIN of brik-llm's canonical copy under
+# `shared+deltas` — ALLOWED_DIRS is the only authorised difference, and it is
+# declared in that repo's overlap-twin-drift.py TWINS registry. Fix the script in
+# brik-llm and re-sync; a local edit here reads as drift, not an improvement.
+if [ -x scripts/audit/md-creation-gate.sh ]; then
+  if ! scripts/audit/md-creation-gate.sh; then
+    exit 1
+  fi
+fi
