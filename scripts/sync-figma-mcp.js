@@ -2,10 +2,22 @@
 /**
  * Sync Figma variables into a per-Library token file.
  *
- * Reads the JSON dump produced by `bun scripts/pull-variables.js <channel-id>`
- * (the dev plugin + WebSocket relay pipeline — the only reliable path on a
- * Pro plan) and patches the appropriate Library JSON so the next merge +
- * Style Dictionary build emits the new values.
+ * Reads a variables dump and patches the appropriate Library JSON so the next
+ * merge + Style Dictionary build emits the new values. Two producers emit that
+ * dump, and this script does not care which one ran:
+ *
+ *   • `bun scripts/pull-variables.js <channel-id>` — the dev plugin + WebSocket
+ *     relay. Needs Figma Desktop and a listener on localhost:3055, so it cannot
+ *     run on a headless host.
+ *   • `node scripts/pull-variables-headless.mjs` — the Figma MCP `use_figma`
+ *     tool, by fileKey, with no Desktop app and no local port.
+ *
+ * An earlier version of this header called the relay "the only reliable path on
+ * a Pro plan". That is true for batch WRITES, and false for reads: `use_figma`
+ * reaches the same Plugin API surface headlessly (brik-bds#2337, and the same
+ * over-scoped claim corrected in brikdesigns/brik-llm#3247). What IS Pro-gated
+ * is the REST Variables API — GET /v1/files/:key/variables/local requires a Full
+ * seat in an Enterprise org (developers.figma.com/docs/rest-api/variables).
  *
  * Target file is controlled by --library:
  *   --library=foundations          → design-tokens/foundations.json
@@ -133,7 +145,8 @@ const TOKENS_FILE = targetArg
 
 if (!inputFile) {
   console.error('Usage: node scripts/sync-figma-mcp.js <pull-output.json> [--library=<lib>] [--dry-run] [--build]');
-  console.error('  <pull-output.json>  JSON file produced by `bun scripts/pull-variables.js`');
+  console.error('  <pull-output.json>  JSON from `bun scripts/pull-variables.js` (relay)');
+  console.error('                      or `node scripts/pull-variables-headless.mjs` (use_figma)');
   process.exit(1);
 }
 

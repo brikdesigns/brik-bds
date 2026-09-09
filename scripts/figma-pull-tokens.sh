@@ -27,6 +27,13 @@
 #   3. bun is installed
 #
 # The script will auto-start the WebSocket relay if needed.
+#
+# ON A HEADLESS HOST, USE scripts/pull-variables-headless.mjs INSTEAD.
+# The relay binds localhost and needs Figma Desktop, so prerequisite 1 can
+# never be met on brik-mini — `lsof -nP -iTCP:3055` returns nothing there and
+# this script cannot work. The headless pull reaches the same Plugin API via
+# the Figma MCP `use_figma` tool, by fileKey, and emits a dump this same
+# pipeline consumes (brik-bds#2337).
 # ──────────────────────────────────────────────────────────────
 
 set -euo pipefail
