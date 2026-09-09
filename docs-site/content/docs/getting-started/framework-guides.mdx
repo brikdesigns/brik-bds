@@ -301,13 +301,11 @@ See [Atmospheres](/docs/theming/atmospheres).
 
 ```astro
 ---
-import Features3ColBrandedDark from '@brikdesigns/bds/blueprints-astro/Features3ColBrandedDark.astro';
+import Hero from '@brikdesigns/bds/blueprints-astro/Hero.astro';
 ---
 
-<Features3ColBrandedDark
-  heading="Three things we do well"
-  features={[/* ... */]}
-/>
+{/* A block is one file; the layout it renders in is a prop. */}
+<Hero layout="interior-minimal" section={section} clientFacts={clientFacts} theme={theme} />
 ```
 
 See [Blueprints](/docs/theming/blueprints) for the catalog and authoring rules.

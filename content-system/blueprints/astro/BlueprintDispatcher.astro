@@ -12,9 +12,9 @@
  *                        clientFacts={...}
  *                        theme={...} />
  *
- * BLUEPRINT_REGISTRY is a static object — adding a new blueprint =
- * one import + one registry entry here + one export in index.ts.
- * The dispatcher's shape never changes.
+ * BLUEPRINT_REGISTRY is a static object — adding a new blueprint = one
+ * import + one registry entry here + one export in index.ts. The
+ * dispatcher's shape never changes.
  *
  * ## Contract
  *
@@ -25,35 +25,47 @@
  *
  *   Behavior:
  *     - section.visualNotes.blueprintKey ∈ BLUEPRINT_REGISTRY →
- *         renders the matching component with full BlueprintProps
+ *         renders the matching component with full BlueprintProps plus the
+ *         key's own `layout` / `blueprintKey` props
  *     - section.visualNotes.blueprintKey ∉ BLUEPRINT_REGISTRY →
  *         renders BlueprintFallback (which emits a
  *         data-blueprint-unknown-key attribute for CI grep)
  *     - section.visualNotes is null →
  *         same as unknown — falls back
  *
- * ## Registry (11 blueprints)
+ * ## Registry — key → block + layout (#2302)
  *
- * Every key in BLUEPRINT_REGISTRY has a corresponding component file in
- * this folder and a re-export in index.ts. The registry key set is
- * mirrored as the runtime export `WIRED_BLUEPRINT_KEYS` in `./types`
- * (the "is this blueprint implemented?" surface consumers import) —
- * `scripts/validate-blueprints.mjs` fails the build if the two drift.
- * When a new component ships, update BLUEPRINT_REGISTRY here AND
- * `WIRED_BLUEPRINT_KEYS` in the same PR.
+ * Since #2302 the Astro rail is one component per BLOCK, with the layout
+ * carried as a prop, matching the React API. The registry is therefore what
+ * turns a blueprint key into a (block, layout) pair — the key is no longer a
+ * filename. Six blocks cover the twelve wired keys:
  *
- *   hero_split_60_40              → HeroSplit6040.astro
- *   hero_split_image_card_overlay → HeroSplitImageCardOverlay.astro
- *   hero_interior_minimal         → HeroInteriorMinimal.astro
- *   services_detail_two_column    → ServicesDetailTwoColumn.astro
- *   services_3col_card_grid       → Services3ColCardGrid.astro
- *   support_plan_callout_split    → SupportPlanCalloutSplit.astro
- *   features_3col_branded_dark    → Features3ColBrandedDark.astro
- *   about_story_split             → AboutStorySplit.astro
- *   stats_dark_bar                → StatsDarkBar.astro
- *   testimonials_featured_large   → TestimonialsFeaturedLarge.astro
- *   cta_split_contact             → CtaSplitContact.astro
- *   cta_dark_centered             → CtaDarkCentered.astro
+ *   hero_split_60_40              → Hero            layout="split"
+ *   hero_split_image_card_overlay → Hero            layout="with-pricing-card"
+ *   hero_interior_minimal         → Hero            layout="interior-minimal"
+ *   services_detail_two_column    → CardGrid        layout="two-column-list"
+ *   services_3col_card_grid       → CardGrid        layout="card-grid"
+ *   support_plan_callout_split    → CalloutPanel
+ *   features_3col_branded_dark    → Features
+ *   about_story_split             → About
+ *   stats_dark_bar                → StatsDarkBar
+ *   testimonials_featured_large   → TestimonialsFeaturedLarge
+ *   cta_split_contact             → Cta             layout="split"
+ *   cta_dark_centered             → Cta             layout="default"
+ *
+ * `blueprintKey` is passed to the blocks that emit a per-key
+ * `data-blueprint-key` marker (Hero, Cta, About, Features), so one file keeps
+ * emitting the distinct markers the scaffold contract asserts on. CardGrid and
+ * CalloutPanel emit their own block-level marker instead (`card_grid` /
+ * `support_plan_callout_split`) — unchanged from the adapters they absorbed,
+ * which emitted nothing of their own. `scripts/verify-blueprints-astro-
+ * exports.mjs` encodes that in `MARKER_OVERRIDES`.
+ *
+ * The registry key set is mirrored as the runtime export
+ * `WIRED_BLUEPRINT_KEYS` in `./types` (the "is this blueprint implemented?"
+ * surface consumers import) — `scripts/validate-blueprints.mjs` fails the
+ * build if the two drift. When a new key ships, update BLUEPRINT_REGISTRY here
+ * AND `WIRED_BLUEPRINT_KEYS` in the same PR.
  *
  * Since #2308 the registry IS blueprint-library.json's active set — every
  * `is_active: true` key dispatches here, so no active key falls through.
@@ -65,36 +77,32 @@
  */
 import type { BlueprintSection, ClientFacts, ResolvedTheme } from './types';
 
-import HeroSplit6040 from './HeroSplit6040.astro';
-import HeroSplitImageCardOverlay from './HeroSplitImageCardOverlay.astro';
-import HeroInteriorMinimal from './HeroInteriorMinimal.astro';
-import ServicesDetailTwoColumn from './ServicesDetailTwoColumn.astro';
-import Services3ColCardGrid from './Services3ColCardGrid.astro';
-import SupportPlanCalloutSplit from './SupportPlanCalloutSplit.astro';
-import Features3ColBrandedDark from './Features3ColBrandedDark.astro';
-import AboutStorySplit from './AboutStorySplit.astro';
+import Hero from './Hero.astro';
+import Cta from './Cta.astro';
+import About from './About.astro';
+import Features from './Features.astro';
+import CardGrid from './CardGrid.astro';
+import CalloutPanel from './CalloutPanel.astro';
 import StatsDarkBar from './StatsDarkBar.astro';
 import TestimonialsFeaturedLarge from './TestimonialsFeaturedLarge.astro';
-import CtaSplitContact from './CtaSplitContact.astro';
-import CtaDarkCentered from './CtaDarkCentered.astro';
 import BlueprintFallback from './BlueprintFallback.astro';
 
-// The registry. Key order doesn't matter; lookup is by key. Every
-// entry's component accepts `BlueprintProps` — enforced by the
-// barrel's re-export types.
+// The registry. Key order doesn't matter; lookup is by key. Every entry's
+// component accepts `BlueprintProps`; `props` carries the per-key extras
+// (`layout`, and `blueprintKey` for the blocks that render the marker).
 const BLUEPRINT_REGISTRY = {
-  hero_split_60_40: HeroSplit6040,
-  hero_split_image_card_overlay: HeroSplitImageCardOverlay,
-  hero_interior_minimal: HeroInteriorMinimal,
-  services_detail_two_column: ServicesDetailTwoColumn,
-  services_3col_card_grid: Services3ColCardGrid,
-  support_plan_callout_split: SupportPlanCalloutSplit,
-  features_3col_branded_dark: Features3ColBrandedDark,
-  about_story_split: AboutStorySplit,
-  stats_dark_bar: StatsDarkBar,
-  testimonials_featured_large: TestimonialsFeaturedLarge,
-  cta_split_contact: CtaSplitContact,
-  cta_dark_centered: CtaDarkCentered,
+  hero_split_60_40: { component: Hero, props: { layout: 'split', blueprintKey: 'hero_split_60_40' } },
+  hero_split_image_card_overlay: { component: Hero, props: { layout: 'with-pricing-card', blueprintKey: 'hero_split_image_card_overlay' } },
+  hero_interior_minimal: { component: Hero, props: { layout: 'interior-minimal', blueprintKey: 'hero_interior_minimal' } },
+  services_detail_two_column: { component: CardGrid, props: { layout: 'two-column-list' } },
+  services_3col_card_grid: { component: CardGrid, props: { layout: 'card-grid' } },
+  support_plan_callout_split: { component: CalloutPanel, props: {} },
+  features_3col_branded_dark: { component: Features, props: { blueprintKey: 'features_3col_branded_dark' } },
+  about_story_split: { component: About, props: { blueprintKey: 'about_story_split' } },
+  stats_dark_bar: { component: StatsDarkBar, props: {} },
+  testimonials_featured_large: { component: TestimonialsFeaturedLarge, props: {} },
+  cta_split_contact: { component: Cta, props: { layout: 'split', blueprintKey: 'cta_split_contact' } },
+  cta_dark_centered: { component: Cta, props: { layout: 'default', blueprintKey: 'cta_dark_centered' } },
 } as const;
 
 interface Props {
@@ -108,9 +116,15 @@ const { sections, clientFacts, theme } = Astro.props;
 
 {sections.map((section) => {
   const key = section.visualNotes?.blueprintKey;
-  const Component =
+  const entry =
     key && key in BLUEPRINT_REGISTRY
       ? BLUEPRINT_REGISTRY[key as keyof typeof BLUEPRINT_REGISTRY]
-      : BlueprintFallback;
-  return <Component section={section} clientFacts={clientFacts} theme={theme} />;
+      : null;
+  if (!entry) {
+    return <BlueprintFallback section={section} clientFacts={clientFacts} theme={theme} />;
+  }
+  const Component = entry.component;
+  return (
+    <Component section={section} clientFacts={clientFacts} theme={theme} {...entry.props} />
+  );
 })}

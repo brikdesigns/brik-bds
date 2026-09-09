@@ -1,7 +1,12 @@
 ---
 /**
- * features_3col_branded_dark — Phase D Astro renderer for the `bds-features`
- * family (brik-bds#1197). Twin of the React `<Features>` primitive. The former
+ * Features — canonical `bds-features` feature-grid block for the Astro rail.
+ * Twin of the React `<Features>` primitive (brik-bds#1197). Renamed from
+ * `Features3ColBrandedDark.astro` in #2302: the file is the block, and
+ * `features` is a single-member family, so there is no layout modifier and no
+ * layout prop (ADR-008 §3). `blueprintKey` is supplied by
+ * `BlueprintDispatcher.astro` and rendered as `data-blueprint-key`; composing
+ * this block directly emits no key marker. The former
  * `bp-features-branded-dark` class is retired for the structural `bds-features`
  * block; `--branded-dark` is banned by ADR-008 §3 (theme + appearance), and the
  * `3col` count lives in the responsive grid CSS, not the name. The dark surface
@@ -59,20 +64,26 @@
  * 3.78:1 at 14px regular per BDS contrast burndown #40 — bold weight + size
  * promotion gets it into compliant range).
  */
-import type { BlueprintProps } from './types';
+import type { BlueprintProps, KnownBlueprintKey } from './types';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
 
-interface Props extends BlueprintProps {}
+interface Props extends BlueprintProps {
+  /**
+   * Blueprint key to emit as `data-blueprint-key`. Supplied by
+   * `BlueprintDispatcher.astro`; omitted when the block is composed directly.
+   */
+  blueprintKey?: KnownBlueprintKey;
+}
 
-const { section } = Astro.props;
+const { section, blueprintKey } = Astro.props;
 const titleId = `${section.sectionKey}-title`;
 ---
 
 <section
   class="bds-blueprint-section bds-features"
-  data-blueprint-key="features_3col_branded_dark"
+  data-blueprint-key={blueprintKey}
   aria-labelledby={section.heading ? titleId : undefined}
 >
   <div class="bds-blueprint-section__container">

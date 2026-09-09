@@ -1,14 +1,27 @@
 ---
 /**
- * CalloutPanel — `bds-callout-panel` section primitive. Astro twin of
- * `../react/CalloutPanel.tsx` (Phase D, brik-bds#581). Section header
- * (subtitle + title + lead) above a plan-callout card, with an optional
- * `media` slot rendered beside the card.
+ * CalloutPanel — canonical `bds-callout-panel` section block for the Astro
+ * rail. Astro twin of `../react/CalloutPanel.tsx` (Phase D, brik-bds#581).
+ * Section header (subtitle + title + lead) above a plan-callout card, with an
+ * optional `media` slot rendered beside the card.
  *
  * Per brik-bds#589 the default shape is the simple single-column callout
  * (eyebrow + heading + body + one CTA); fill the `media` slot only when a
- * decorative node is supplied. The `support_plan_callout_split` blueprint
- * key dispatches through `SupportPlanCalloutSplit.astro`.
+ * decorative node is supplied. `callout-panel` is a single-member family, so
+ * there is no layout modifier and no layout prop (ADR-008 §3).
+ *
+ * #2302 absorbed the former `SupportPlanCalloutSplit.astro`, a pass-through
+ * that mapped `section.*` onto this block's bespoke props; the block now takes
+ * the universal `BlueprintProps` shape directly, so it is dispatchable without
+ * a wrapper file. The rendered marker is unchanged.
+ *
+ * ── Contract ─────────────────────────────────────────────────────
+ * Props: BlueprintProps.
+ *   - section.heading    — section heading (h2)
+ *   - section.subheading — optional eyebrow (uppercase)
+ *   - section.body       — optional one-line lead under the heading
+ *   - section.items[0]   — { title: plan name, description: plan description }
+ *   - section.cta        — { label, url } for the plan CTA
  *
  * Slots used (all on docs/SLOT-ALLOWLIST.md):
  *   bds-callout-panel, __container, __header, __subtitle, __title,
@@ -18,31 +31,24 @@
  * under the section h2. CTA passes AA at the canonical `md` button size
  * (16px label) — DO NOT downgrade to `sm` on this surface.
  */
-import type { BlueprintCta } from './types';
+import type { BlueprintProps } from './types';
 
-export interface Props {
-  sectionKey: string;
-  title: string;
-  subtitle?: string;
-  description?: string;
-  panelTitle: string;
-  panelDescription?: string;
-  cta?: BlueprintCta;
-}
+export interface Props extends BlueprintProps {}
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
 
-const {
-  sectionKey,
-  title,
-  subtitle,
-  description,
-  panelTitle,
-  panelDescription,
-  cta,
-} = Astro.props;
-const titleId = `${sectionKey}-title`;
+const { section } = Astro.props;
+
+const plan = section.items?.[0];
+const title = section.heading ?? '';
+const subtitle = section.subheading ?? undefined;
+const description = section.body ?? undefined;
+const panelTitle = plan?.title ?? '';
+const panelDescription = plan?.description ?? undefined;
+const cta = section.cta ?? undefined;
+
+const titleId = `${section.sectionKey}-title`;
 const hasMedia = Astro.slots.has('media');
 // Astro blueprints are static — only the link CTA form is renderable.
 const ctaUrl = cta && 'url' in cta ? cta.url : undefined;

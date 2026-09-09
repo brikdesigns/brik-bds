@@ -7,13 +7,12 @@
  * from tsconfig.content-system.json's include path. See
  * docs/BLUEPRINTS-ASTRO-PACKAGE.md §2.7 for the packaging rationale.
  *
- * v0.1 scope (see spec §2.1):
- *   Contract types (shipped PR #2).
- *   HeroSplit6040 (shipped PR #5).
- *   HeroInteriorMinimal, StatsDarkBar, ServicesDetailTwoColumn,
- *     AboutStorySplit, TestimonialsFeaturedLarge, CtaSplitContact,
- *     CtaDarkCentered (shipped PR #6).
- *   SiteHeader, BlueprintDispatcher, BlueprintFallback (this PR).
+ * Surface: contract types, the eight blueprint BLOCKS, and the three
+ * dispatch/shell components. Since #2302 a block is one file and the layout it
+ * renders in is a prop, so the export list is per-block, not per-layout — the
+ * ten former per-layout exports were removed there. `<BlueprintDispatcher>`
+ * maps every wired blueprint key onto a (block, layout) pair, so no key lost
+ * its render path.
  *
  * Consumer-side type resolution: Astro projects inherit
  * `declare module '*.astro'` from Astro's tsconfig presets — no
@@ -34,6 +33,11 @@ export type {
   ResolvedFooterArchetype,
   ResolvedTheme,
   BlueprintProps,
+  // Layout unions (#2302) — shared with the React rail, which re-exports
+  // HeroLayout / CtaLayout from the same declarations.
+  HeroLayout,
+  CtaLayout,
+  CardGridLayout,
 } from './types';
 
 // ── Implemented-set (runtime) ───────────────────────────────────
@@ -42,29 +46,26 @@ export type {
 // to tell "renders" from "falls back to <BlueprintFallback>".
 export { WIRED_BLUEPRINT_KEYS } from './types';
 
-// ── Blueprint components ───────────────────────────────────────
-// Each blueprint key in `blueprints/blueprint-library.json` that has
-// a shipped Astro component is re-exported here.
+// ── Blueprint blocks ───────────────────────────────────────────
+// One export per BLOCK since #2302 — the layout a block renders in is a
+// prop, never a filename, matching the React rail's API. The ten former
+// per-layout exports (HeroSplit6040, HeroInteriorMinimal,
+// HeroSplitImageCardOverlay, CtaDarkCentered, CtaSplitContact,
+// Services3ColCardGrid, ServicesDetailTwoColumn, SupportPlanCalloutSplit,
+// Features3ColBrandedDark, AboutStorySplit) are gone; every blueprint key
+// they served still resolves, because `<BlueprintDispatcher>` now maps
+// key → (block, layout). No client site imported them by name.
 //
-// Canonical primitives (post-brik-bds#580 — generic, content-agnostic)
-// come first; legacy section-data adapters that wrap them follow.
-// Direct Astro consumers should reach for `<CardGrid>` with composed
-// slot content; the legacy adapters retire in Phase E.
+// Direct consumers compose a block and pass `layout`:
+//   <Hero layout="interior-minimal" section={…} clientFacts={…} theme={…} />
+export { default as Hero }                      from './Hero.astro';
+export { default as Cta }                       from './Cta.astro';
+export { default as About }                     from './About.astro';
+export { default as Features }                  from './Features.astro';
 export { default as CardGrid }                  from './CardGrid.astro';
-export { default as CalloutPanel }               from './CalloutPanel.astro';
-
-export { default as HeroSplit6040 }             from './HeroSplit6040.astro';
-export { default as HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay.astro';
-export { default as HeroInteriorMinimal }       from './HeroInteriorMinimal.astro';
+export { default as CalloutPanel }              from './CalloutPanel.astro';
 export { default as StatsDarkBar }              from './StatsDarkBar.astro';
-export { default as ServicesDetailTwoColumn }   from './ServicesDetailTwoColumn.astro';
-export { default as Services3ColCardGrid }      from './Services3ColCardGrid.astro';
-export { default as SupportPlanCalloutSplit }   from './SupportPlanCalloutSplit.astro';
-export { default as Features3ColBrandedDark }   from './Features3ColBrandedDark.astro';
-export { default as AboutStorySplit }           from './AboutStorySplit.astro';
 export { default as TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge.astro';
-export { default as CtaSplitContact }           from './CtaSplitContact.astro';
-export { default as CtaDarkCentered }           from './CtaDarkCentered.astro';
 
 // ── Dispatch surface ────────────────────────────────────────────
 // <BlueprintDispatcher> is the primary consumer entrypoint — client

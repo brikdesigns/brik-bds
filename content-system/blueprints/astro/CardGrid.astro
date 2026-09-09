@@ -1,14 +1,39 @@
 ---
 /**
- * CardGrid — generic section wrapper for any "header + grid of cards"
+ * CardGrid — generic section wrapper for any "header + grid of items"
  * layout. Astro twin of `../react/CardGrid.tsx`. Content-agnostic by
  * design: serves services, blog posts, customer stories, property
  * listings, team bios, support plans, etc.
  *
  * Per the alignment ritual on brik-bds#580, the original `Services`
- * framing was content-coupled. `bds-card-grid` is the structural
- * primitive; Astro consumers fill the default `<slot />` with whatever
- * items belong in the grid.
+ * framing was content-coupled. `bds-card-grid` is the structural primitive.
+ *
+ * Two call paths (#2302):
+ *
+ *   - **Composed** — fill the default `<slot />` with whatever items belong
+ *     in the grid. The block renders the header and gets out of the way.
+ *   - **Dispatched** — pass `section.items` and a `layout`, and the block
+ *     renders the items itself. This absorbs the two former per-layout files,
+ *     `Services3ColCardGrid.astro` and `ServicesDetailTwoColumn.astro`, which
+ *     wrapped this same primitive with hand-rolled item markup:
+ *
+ *       card-grid       — `bds-card-grid--card-grid`        3-up bordered cards
+ *                         with media, category pill, optional CTA
+ *       two-column-list — `bds-card-grid--two-column-list`  2-up plain
+ *                         title/description rows, no card surface
+ *
+ * Slot content wins when present, so a composed consumer is unaffected by the
+ * `layout` default.
+ *
+ * `CardGridLayout` is imported from `./types`, the contract module both rails
+ * share. The React rail expresses the same two layouts through composed
+ * children (its `Services3ColCardGrid` / `ServicesDetailTwoColumn` adapters),
+ * because React blueprints can pass nodes and Astro dispatch cannot.
+ *
+ * The rendered marker is this block's own `card_grid`, not the dispatching
+ * key — unchanged from the pre-consolidation adapters, which emitted nothing
+ * of their own and inherited it from here. `scripts/verify-blueprints-astro-
+ * exports.mjs` encodes that in `MARKER_OVERRIDES`.
  *
  * Slots used (all on docs/SLOT-ALLOWLIST.md):
  *   bds-card-grid, __container, __header, __subtitle, __title, __description
@@ -17,23 +42,45 @@
  *   subtitle    : --font-family-subtitle + --subtitle-lg + --text-transform-subtitle
  *   title (h2)  : --font-family-heading  + clamp(--heading-lg, ..., --heading-xl)
  *   description : --font-family-body     + --body-md
+ *   item title  : --font-family-heading  + --heading-md
+ *   item desc   : --font-family-body     + --body-md
  */
-export interface Props {
-  sectionKey: string;
-  title: string;
-  subtitle?: string;
-  description?: string;
+import type { BlueprintProps, CardGridLayout } from './types';
+
+export interface Props extends BlueprintProps {
+  /**
+   * Item layout used when `section.items` drives the grid. Ignored when the
+   * default slot carries composed content. Defaults to `card-grid`.
+   */
+  layout?: CardGridLayout;
 }
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
 
-const { sectionKey, title, subtitle, description } = Astro.props;
-const titleId = `${sectionKey}-title`;
+const { section, layout = 'card-grid' } = Astro.props;
+
+const titleId = `${section.sectionKey}-title`;
+const title = section.heading ?? '';
+const subtitle = section.subheading ?? undefined;
+const description = section.body ?? undefined;
+
+// Composed children take precedence over the section-driven item layouts, so
+// a direct `<CardGrid><ul>…</ul></CardGrid>` consumer is unaffected.
+const hasComposedItems = Astro.slots.has('default');
+
+const categoryLabels: Record<NonNullable<typeof section.items[number]['category']>, string> = {
+  brand: 'Brand',
+  marketing: 'Marketing',
+  information: 'Information',
+  product: 'Product',
+  'back-office': 'Back Office',
+  service: 'Back Office',
+};
 ---
 
 <section
-  class="bds-blueprint-section bds-card-grid"
+  class={`bds-blueprint-section bds-card-grid${hasComposedItems ? '' : ` bds-card-grid--${layout}`}`}
   aria-labelledby={titleId}
   data-blueprint-key="card_grid"
 >
@@ -47,7 +94,76 @@ const titleId = `${sectionKey}-title`;
         <p class="bds-card-grid__description">{description}</p>
       )}
     </header>
-    <slot />
+
+    {hasComposedItems ? (
+      <slot />
+    ) : layout === 'two-column-list' ? (
+      <ul class="bp-services-two-col__list" role="list">
+        {section.items.map((item) => (
+          <li class="bp-services-two-col__item">
+            <h3 class="bp-services-two-col__item-title">{item.title}</h3>
+            <p class="bp-services-two-col__item-desc">{item.description}</p>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <ul class="bp-services-grid__list" role="list">
+        {section.items.map((item) => {
+          const category = item.category ?? null;
+          const categoryLabel = category ? categoryLabels[category] : null;
+          return (
+            <li class="bp-services-grid__item">
+              <article
+                class="bp-services-grid__card"
+                data-category={category ?? undefined}
+              >
+                <div class="bp-services-grid__media">
+                  {item.imageUrl ? (
+                    <img
+                      src={item.imageUrl}
+                      alt={item.imageAlt ?? ''}
+                      class="bp-services-grid__image"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    categoryLabel && (
+                      <span class="bp-services-grid__media-fallback" aria-hidden="true">
+                        {categoryLabel}
+                      </span>
+                    )
+                  )}
+                  {item.hasOptions && (
+                    <span class="bp-services-grid__has-options">Has Options</span>
+                  )}
+                </div>
+
+                <div class="bp-services-grid__card-body">
+                  {categoryLabel && (
+                    <p class="bp-services-grid__category-row">
+                      <span class="bp-services-grid__category-pill">
+                        {categoryLabel}
+                      </span>
+                    </p>
+                  )}
+                  <h3 class="bp-services-grid__card-title">{item.title}</h3>
+                  {item.description && (
+                    <p class="bp-services-grid__card-desc">{item.description}</p>
+                  )}
+                  {item.href && (
+                    <p class="bp-services-grid__cta-row">
+                      <a class="bp-services-grid__cta" href={item.href}>
+                        Learn more
+                      </a>
+                    </p>
+                  )}
+                </div>
+              </article>
+            </li>
+          );
+        })}
+      </ul>
+    )}
   </div>
 </section>
 
@@ -110,5 +226,240 @@ const titleId = `${sectionKey}-title`;
     font-size: var(--body-md);
     line-height: var(--font-line-height-normal);
     color: var(--text-primary);
+  }
+
+  /* ── --two-column-list item layout ──────────────────────────────
+     Absorbed from ServicesDetailTwoColumn.astro (#2302). Not part of the
+     bds-card-grid canon vocabulary — these `bp-` classes stay blueprint-local.
+     Token pairs respect the family↔size discipline. */
+
+  .bp-services-two-col__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-xl);
+  }
+
+  @media (min-width: 768px) {
+    .bp-services-two-col__list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--gap-xl) var(--gap-2xl);
+    }
+  }
+
+  .bp-services-two-col__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  .bp-services-two-col__item-title {
+    margin: 0;
+    /* Pair: heading family + heading size. */
+    font-family: var(--font-family-heading);
+    font-size: var(--heading-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-primary);
+  }
+
+  .bp-services-two-col__item-desc {
+    margin: 0;
+    /* Pair: body family + body size. */
+    font-family: var(--font-family-body);
+    font-size: var(--body-md);
+    line-height: var(--font-line-height-normal);
+    color: var(--text-primary);
+  }
+
+  /* ── --card-grid item layout ────────────────────────────────────
+     Absorbed from Services3ColCardGrid.astro (#2302). Astro consumers can't
+     import the React `<Card preset="display">` primitive, so the card markup
+     stays hand-rolled HTML+CSS scoped to this block. */
+
+  .bp-services-grid__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-lg);
+  }
+
+  @media (min-width: 768px) {
+    .bp-services-grid__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 992px) {
+    .bp-services-grid__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .bp-services-grid__item {
+    display: flex;
+  }
+
+  .bp-services-grid__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: var(--surface-primary);
+    border: var(--border-width-md) solid var(--border-secondary);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+  }
+
+  .bp-services-grid__media {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    background: var(--surface-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .bp-services-grid__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .bp-services-grid__media-fallback {
+    /* Pair: heading family + heading size. */
+    font-family: var(--font-family-heading);
+    font-size: var(--heading-md);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    opacity: 0.55;
+    letter-spacing: 0.02em;
+  }
+
+  .bp-services-grid__has-options {
+    position: absolute;
+    top: var(--gap-md);
+    right: var(--gap-md);
+    padding: 4px 10px;
+    background: var(--background-positive);
+    color: var(--text-on-color-dark);
+    /* Pair: label family + label size. */
+    font-family: var(--font-family-label);
+    font-size: var(--label-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.02em;
+    border-radius: 999px;
+    line-height: 1.2;
+    z-index: 1;
+  }
+
+  .bp-services-grid__card-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    padding: var(--padding-lg);
+    flex: 1 1 auto;
+  }
+
+  .bp-services-grid__category-row {
+    margin: 0;
+    display: flex;
+  }
+
+  .bp-services-grid__category-pill {
+    /* Tag — does not stretch; sits at natural width. */
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    padding: 4px 10px;
+    background: var(--surface-secondary);
+    color: var(--text-primary);
+    /* Pair: label family + label size. */
+    font-family: var(--font-family-label);
+    font-size: var(--label-md);
+    font-weight: var(--font-weight-semibold);
+    border-radius: 999px;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+  }
+
+  .bp-services-grid__card[data-category='brand'] .bp-services-grid__category-pill {
+    background: var(--color-yellow-300);
+    color: var(--color-yellow-950);
+  }
+  .bp-services-grid__card[data-category='marketing'] .bp-services-grid__category-pill {
+    background: var(--color-green-300);
+    color: var(--color-green-950);
+  }
+  .bp-services-grid__card[data-category='information'] .bp-services-grid__category-pill {
+    background: var(--color-blue-300);
+    color: var(--color-blue-950);
+  }
+  .bp-services-grid__card[data-category='product'] .bp-services-grid__category-pill {
+    background: var(--color-purple-300);
+    color: var(--color-purple-950);
+  }
+  .bp-services-grid__card[data-category='back-office'] .bp-services-grid__category-pill,
+  .bp-services-grid__card[data-category='service'] .bp-services-grid__category-pill {
+    background: var(--color-orange-300);
+    color: var(--color-orange-950);
+  }
+
+  .bp-services-grid__card-title {
+    margin: 0;
+    /* Pair: heading family + heading size. */
+    font-family: var(--font-family-heading);
+    font-size: var(--heading-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-primary);
+  }
+
+  .bp-services-grid__card-desc {
+    margin: 0;
+    /* Pair: body family + body size. */
+    font-family: var(--font-family-body);
+    font-size: var(--body-md);
+    line-height: var(--font-line-height-normal);
+    color: var(--text-primary);
+  }
+
+  .bp-services-grid__cta-row {
+    margin: 0;
+    margin-top: auto;
+  }
+
+  .bp-services-grid__cta {
+    /* Astro "Learn more" — primary-button styling without the React
+       `<LinkButton variant="primary">` the React rail uses.
+       --text-on-color-dark = white (text on a dark/saturated background fill). */
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-sm);
+    padding: var(--padding-sm) var(--padding-lg);
+    background: var(--background-brand-primary);
+    color: var(--text-on-color-dark);
+    text-decoration: none;
+    border-radius: var(--border-radius-sm);
+    /* Pair: label family + label size. */
+    font-family: var(--font-family-label);
+    font-size: var(--label-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.4;
+  }
+
+  .bp-services-grid__cta:hover {
+    filter: brightness(0.95);
+  }
+
+  .bp-services-grid__cta:focus-visible {
+    outline: 2px solid var(--border-focus, var(--text-brand-primary));
+    outline-offset: 2px;
   }
 </style>
