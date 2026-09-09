@@ -1,7 +1,7 @@
 {
   "name": "@brikdesigns/bds",
   "version": "0.187.0",
-  "description": "Brik Design System — React components, Figma-synced tokens, and Content System (BCS) vocabulary",
+  "description": "Brik Design System \u2014 React components, Figma-synced tokens, and Content System (BCS) vocabulary",
   "private": false,
   "main": "dist/lib-entry.cjs",
   "module": "dist/lib-entry.mjs",
@@ -252,7 +252,8 @@
     "sync:devbar-widgets": "bash scripts/sync-devbar-widgets.sh",
     "prepare": "husky || true",
     "prepublishOnly": "rm -rf dist && npm run build:lib && npm run check:esm",
-    "verify:blueprints-astro": "node scripts/verify-blueprints-astro-exports.mjs"
+    "verify:blueprints-astro": "node scripts/verify-blueprints-astro-exports.mjs",
+    "lint-gate-pathspecs": "node scripts/lint-gate-pathspecs.mjs"
   },
   "keywords": [
     "brik",

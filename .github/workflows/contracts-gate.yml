@@ -88,6 +88,13 @@ jobs:
   # form. Two members also watch OTHER workflow files — `pr-issue-link-gate.yml`
   # and `pr-label-gate.yml`, both themselves required contexts — because they
   # gate the resolvers those workflows consume.
+  #
+  # DROPPED in #2326: `.claude/references/session-contract.md`. It came from
+  # session-budget-contract.yml's trigger and could never match — that doc lives
+  # in brik-llm, not here (`git ls-files | grep session-contract.md` → 0).
+  # scripts/lib/session-budget.sh:7 cites it in prose only. The consolidation
+  # preserved it verbatim, which was the right instinct on a plumbing PR and the
+  # wrong outcome; `npm run lint-gate-pathspecs` now catches this class.
   changes:
     # Group-qualified: visual.yml, tokens-gate.yml and docs-gate.yml all have a
     # classifier, and undifferentiated rows in the PR checks list are useless.
@@ -126,10 +133,12 @@ jobs:
           if ! CHANGED="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- \
             'scripts/**' \
             '.claude/standards/**' \
-            '.claude/references/session-contract.md' \
             '.husky/pre-commit' \
+            'package.json' \
             '.github/workflows/pr-issue-link-gate.yml' \
             '.github/workflows/pr-label-gate.yml' \
+            '.github/workflows/tokens-gate.yml' \
+            '.github/workflows/docs-gate.yml' \
             '.github/workflows/contracts-gate.yml')"; then
             echo "✗ git diff failed for $BASE_SHA..$HEAD_SHA — cannot classify; failing closed."
             exit 1
@@ -188,6 +197,17 @@ jobs:
       - name: Install shellcheck
         id: shellcheck
         run: sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+
+      # Only the gate-pathspec lint needs Node in this job. Pinned rather than
+      # taken from the runner image for the same reason shellcheck is installed
+      # rather than assumed (§ _why rule 5) — "whatever the image ships" is not
+      # a version. No `cache: 'npm'` and no `npm ci`: the linter imports node
+      # builtins only, so there are no dependencies to restore.
+      - name: Setup Node.js
+        id: node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
 
       # ─── bump-pr-guard-check ────────────────────────────────────────────────
       - name: Duplicate-bump-PR contract
@@ -380,6 +400,24 @@ jobs:
       - name: Standards/RAG drift check
         if: always()
         run: scripts/audit/standards-rag-drift.sh --ci --base "${{ steps.shas.outputs.base }}" --head "${{ steps.shas.outputs.head }}"
+
+      # ─── gate-pathspec lint (#2326) ─────────────────────────────────────────
+      #
+      # The group gates moved their diff tests INSIDE a run block, where no lint
+      # could see them. A pathspec naming a moved file stops matching and the
+      # aggregate job still reports green, so the arm dies silently — it had
+      # already happened twice on `main` (tokens-gate's two
+      # docs-site/.../primitives/*.mdx paths after the tree moved to
+      # foundation/, and this workflow's own .claude/references/session-contract.md,
+      # which was never tracked here at all).
+      #
+      # Lives in contracts-gate because this IS a repo contract, and because the
+      # group gates' wiring is exactly the kind of thing this job already
+      # asserts. Costs one step in an existing job — no new workflow, no new
+      # runner, no new required context.
+      - name: Gate classifier pathspecs all resolve
+        if: always() && steps.node.outcome == 'success'
+        run: npm run lint-gate-pathspecs
 
       # ─── shellcheck, every member's invocation verbatim ─────────────────────
       #
