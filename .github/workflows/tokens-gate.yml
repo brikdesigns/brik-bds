@@ -179,6 +179,7 @@ jobs:
             'scripts/lint-token-purpose-slots.mjs' \
             'scripts/lint-token-self-reference.mjs' \
             'scripts/lint-token-tiers.mjs' \
+            'scripts/lint-deleted-token-consumers.mjs' \
             'scripts/lint-token-shadowing.mjs' \
             'scripts/lint-tokens.js' \
             'scripts/merge-tokens-studio.js' \
@@ -188,6 +189,7 @@ jobs:
             'scripts/__tests__/lint-token-purpose-slots.test.mjs' \
             'scripts/__tests__/lint-token-self-reference.test.mjs' \
             'scripts/__tests__/lint-token-tiers.test.mjs' \
+            'scripts/__tests__/lint-deleted-token-consumers.test.mjs' \
             'scripts/__tests__/lint-token-shadowing.test.mjs' \
             'scripts/__tests__/lint-tokens-deprecated.test.mjs' \
             '.github/workflows/tokens-gate.yml')"; then
@@ -462,10 +464,73 @@ jobs:
   # property that makes `tokens-gate` a valid required context: when the diff
   # touched no token input the lints did not run, and the required check still
   # has to report, so it reports green.
+  # ─── deleted-token consumer sweep (#2271) ───────────────────────────────────
+  #
+  # A SEPARATE job from `lints` above, for three reasons that do not apply to
+  # any of the seven:
+  #
+  #   1. It needs full history. `git diff <base>..<head>` cannot run on the
+  #     depth-1 checkout the lints job uses, and raising fetch-depth there
+  #     would pay a full-history fetch on every tokens-gate run in the org's
+  #     Actions hot spot — for a check that fires on token DELETIONS only.
+  #   2. It needs a cross-repo PAT. Keeping `CONSUMER_DRIFT_TOKEN` out of the
+  #     job that runs thirteen other commands narrows what can read it.
+  #   3. It needs no `npm ci`. Both scripts it runs are dependency-free
+  #     (build-dist-tokens.js is fs+path; the linter is node builtins), so this
+  #     job is a checkout and two node invocations — seconds, not the ~90s the
+  #     lints job spends installing.
+  #
+  # Cost, stated rather than discovered: one extra runner on any PR touching
+  # tokens/**, doing a full-history checkout. It exits before cloning anything
+  # unless the diff actually removed a token declaration, so the expensive path
+  # — five shallow consumer clones — is reached only by a deletion PR.
+  #
+  # PR-only on purpose. A push to main has no base to diff against, and by then
+  # the deletion has already merged; blocking it pre-merge is the entire job.
+  # The aggregate below therefore treats `skipped` as fine on a push and only on
+  # a push.
+  deleted-token-sweep:
+    name: deleted-token consumer sweep
+    runs-on: ubuntu-latest
+    needs: changes
+    permissions:
+      contents: read
+    if: >-
+      github.event_name == 'pull_request' &&
+      needs.changes.result == 'success' &&
+      needs.changes.outputs.run == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          # The base commit must be present to diff against it.
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      # dist/ is gitignored, so the registry has to be built before it can be
+      # read. Dependency-free concatenation — the same path canonical-check.yml
+      # uses, and the reason this job needs no install.
+      - name: Build dist tokens
+        run: node scripts/build-dist-tokens.js
+
+      - name: Sweep consumers for deleted token names
+        env:
+          # Same PAT drift-alarm.yml uses — the default GITHUB_TOKEN cannot read
+          # another repo. Absent, the script exits 2 and this gate reds; that is
+          # deliberate. A sweep that reached no consumer must never be reported
+          # as "no consumers affected", which is the #2271 defect one level up.
+          GH_TOKEN: ${{ secrets.CONSUMER_DRIFT_TOKEN }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: node scripts/lint-deleted-token-consumers.mjs --base "$BASE_SHA"
+
   tokens-gate:
     name: tokens-gate
     runs-on: ubuntu-latest
-    needs: [changes, lints]
+    needs: [changes, lints, deleted-token-sweep]
     if: always()
     steps:
       - name: Assert the tokens gate
@@ -473,6 +538,7 @@ jobs:
           echo "classify result:  ${{ needs.changes.result }}"
           echo "lints requested:  ${{ needs.changes.outputs.run }}"
           echo "lints result:     ${{ needs.lints.result }}"
+          echo "sweep result:     ${{ needs['deleted-token-sweep'].result }}"
 
           if [ "${{ needs.changes.result }}" != "success" ]; then
             echo "✗ the classify-diff job did not succeed — failing the gate closed rather"
@@ -492,4 +558,16 @@ jobs:
             exit 1
           fi
 
-          echo "✓ all seven token gates passed."
+          # `skipped` is legitimate on a push to main (no base to diff) and
+          # nowhere else. Enumerating the one allowed case beats accepting
+          # `skipped` generally, which would let a mis-wired `if:` silently
+          # retire the gate — the #2326 failure shape.
+          SWEEP="${{ needs['deleted-token-sweep'].result }}"
+          if [ "${{ github.event_name }}" = "pull_request" ] && [ "$SWEEP" != "success" ]; then
+            echo "✗ the deleted-token consumer sweep did not pass (result: $SWEEP)."
+            echo "  A token name leaving dist/tokens.css while a consumer still references"
+            echo "  it removes that declaration entirely downstream — see #2271."
+            exit 1
+          fi
+
+          echo "✓ all token gates passed."

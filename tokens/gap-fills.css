@@ -328,8 +328,28 @@
 
   /* ── Border-width semantic aliases (mode-catalog names) — RETIRED (ADR-033 §3, #1923)
      --border-width-thin/standard/bold (1/2/3px) were fixed-value duplicates of
-     --border-width-sm/md/lg that froze what the spacing modes vary, so §3
-     dispositions them as delete-not-rename. All three had zero in-repo consumers.
+     --border-width-sm/md that froze what the spacing modes vary, so §3
+     dispositions them as delete-not-rename.
+
+     MIGRATION — value-preserving targets, not the t-shirt rung above (#2271):
+       --border-width-thin     1px → --border-width-50   (--border-width-sm)
+       --border-width-standard 2px → --border-width-100  (--border-width-md)
+       --border-width-bold     3px → --border-width-200
+
+     `bold` has NO t-shirt equivalent. This note used to name --border-width-lg,
+     which aliases --border-width-300 (4px) — following it verbatim silently
+     widened every `bold` border by 1px. The two surviving mappings are also
+     only value-preserving at the DEFAULT spacing mode: sm/md/lg are re-pointed
+     under [data-mode-borderwidth] (see modes-borderwidth.css), where the
+     deleted trio were fixed. A consumer that needs a fixed width wants the
+     numeric Primitive; a consumer that wants to track the mode wants the
+     t-shirt name. They are different intents and the note now says so.
+
+     "All three had zero in-repo consumers" was true and beside the point —
+     two of the three had five call-sites in brikdesigns, and v0.181.0 dropped
+     the border shorthand on three marketing routes. That is now measured by
+     `npm run lint-deleted-token-consumers` in CI, not asserted by hand.
+
      If borderWidth mode overrides land and a client theme needs mode-catalog
      names, reintroduce them in Figma against --border-width-sm/md/lg, not as
      fixed px here (the original invention-pressure note: brik-bds#302, brik-llm#52). */
