@@ -9,7 +9,7 @@ import { baseTheme, baseClientFacts } from './_fixtures';
 /**
  * Canonical fixture — section header + plan callout card. Consumer sites
  * supply their own service offering and CTA content; the adapter maps the
- * section data onto `<SupportPlan>`.
+ * section data onto `<CalloutPanel>`.
  */
 const supportSection: BlueprintProps['section'] = {
   sectionKey: 'support-plan-default',
@@ -60,7 +60,7 @@ const meta: Meta<typeof SupportPlanCalloutSplit> = {
     docs: {
       description: {
         component:
-          'Legacy adapter for the `support_plan_callout_split` blueprint key — maps `section.*` onto the canonical `<SupportPlan>` primitive. Section header above a plan callout card. Plan card text uses `--text-primary` to clear AA on `--surface-secondary`; CTA uses `Button size="md"` to clear AA at the brand-poppy fill.',
+          'Legacy adapter for the `support_plan_callout_split` blueprint key — maps `section.*` onto the canonical `<CalloutPanel>` primitive. Section header above a plan callout card. Plan card text uses `--text-primary` to clear AA on `--surface-secondary`; CTA uses `Button size="md"` to clear AA at the brand-poppy fill.',
       },
     },
   },

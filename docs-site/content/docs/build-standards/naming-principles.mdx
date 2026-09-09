@@ -40,7 +40,7 @@ The gate is [`scripts/slot-pattern-check.mjs`](https://github.com/brikdesigns/br
 Blueprints (`content-system/blueprints/*`) are page-level layouts — the Section layer of the [Composition Layers](/docs/build-standards/composition-layers) model. Their naming follows the same pattern canon.
 
 1. **Single namespace.** Every class uses `bds-`. The `bp-` prefix is deprecated — no new `bp-*` classes after ADR-008.
-2. **One block per family.** `bds-hero`, `bds-cta`, `bds-services`, `bds-features`, `bds-about`, `bds-support-plan`. Each family is one block with structural modifiers, not N separate blueprints.
+2. **One block per family.** `bds-hero`, `bds-cta`, `bds-services`, `bds-features`, `bds-about`, `bds-callout-panel`. Each family is one block with structural modifiers, not N separate blueprints.
 3. **Well-formed slots.** Every `bds-{block}__{slot}` must match the kebab-case BEM pattern above. The slot-pattern gate fails on malformed shapes, not on new well-formed words.
 4. **Structural-only modifiers.** Modifier names describe structure (`--split-image`, `--two-column`) — never appearance (`--dark`, `--centered`) or theme (`--inverse`). A "dark centered" CTA themed light makes the name a lie.
 5. **Compose, don't reimplement.** A blueprint `.tsx` that imports nothing from `components/ui/*` is almost always drift.
