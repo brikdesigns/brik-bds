@@ -33,9 +33,9 @@ const section: BlueprintProps['section'] = {
   body: 'One or two sentences of supporting copy — long enough to set the rhythm of body type next to the headline without overwhelming it.',
   cta: { label: 'Learn more', url: '#' },
   visualNotes: {
-    blueprintKey: 'hero_split_60_40',
+    blueprintKey: 'hero_split',
     moodKeywords: ['professional', 'modern'],
-    layoutBlueprint: 'hero_split_60_40',
+    layoutBlueprint: 'hero_split',
     imageOpportunity: 'studio photography',
     animationSuggestion: null,
     illustrationOpportunity: null,

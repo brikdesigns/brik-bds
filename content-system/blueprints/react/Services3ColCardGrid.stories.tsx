@@ -20,9 +20,9 @@ const servicesGridSection: BlueprintProps['section'] = {
   body: 'A one-line section subheading that frames the service catalog below.',
   cta: null,
   visualNotes: {
-    blueprintKey: 'services_3col_card_grid',
+    blueprintKey: 'card_grid',
     moodKeywords: ['approachable', 'modern'],
-    layoutBlueprint: 'services_3col_card_grid',
+    layoutBlueprint: 'card_grid',
     imageOpportunity: 'illustration per card',
     animationSuggestion: null,
     illustrationOpportunity: 'scene per service',

@@ -3,7 +3,7 @@
  *
  * After brik-bds#1198 the canonical primitive is `<About>` (the `bds-about`
  * narrative section block). This file remains as an adapter so the legacy
- * `about_story_split` blueprint key keeps dispatching through
+ * `story_split` blueprint key keeps dispatching through
  * `BlueprintDispatcher` with the same section-data contract that AI-generated
  * pages expect — it maps `section.*` → `<About>` props. The optional
  * `section.items[0]` pull-quote (`{ title: attribution, description: quote }`)
@@ -33,7 +33,7 @@ export function AboutStorySplit({ section }: Props) {
           ? { quote: callout.description, author: callout.title }
           : undefined
       }
-      data-blueprint-key="about_story_split"
+      data-blueprint-key="story_split"
     />
   );
 }

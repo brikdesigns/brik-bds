@@ -1,12 +1,12 @@
 {
-  "version": "2.0.0",
-  "last_reviewed": "2026-09-08",
+  "version": "3.0.0",
+  "last_reviewed": "2026-09-09",
   "review_cadence": "quarterly",
   "_comment": "Shipped blueprint inventory — every entry dispatches on both rails (#2308). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
   "blueprints": [
     {
-      "key": "hero_split_60_40",
-      "name": "Split Hero 60/40",
+      "key": "hero_split",
+      "name": "Split Hero",
       "section_type": "hero",
       "industries": [
         "universal",
@@ -27,8 +27,8 @@
       "source": "Framer - Buildaxa / Vale demo",
       "tier": "internal",
       "is_active": true,
-      "version": "1.0.0",
-      "last_reviewed": "2026-09-08",
+      "version": "2.0.0",
+      "last_reviewed": "2026-09-09",
       "required_facts": [
         "hero_image_url"
       ]
@@ -56,8 +56,8 @@
       "required_facts": []
     },
     {
-      "key": "features_3col_branded_dark",
-      "name": "3-Column Brand-Colored Card Grid on Dark",
+      "key": "feature_grid",
+      "name": "3-Column Feature Card Grid",
       "section_type": "features",
       "industries": [
         "universal",
@@ -76,13 +76,13 @@
       "source": "brikdesigns.com /services/{slug} 'Other Service Lines' cross-sell module (PR #477 spec)",
       "tier": "internal",
       "is_active": true,
-      "version": "1.0.0",
-      "last_reviewed": "2026-09-08",
+      "version": "2.0.0",
+      "last_reviewed": "2026-09-09",
       "required_facts": []
     },
     {
-      "key": "stats_dark_bar",
-      "name": "Dark Stats Bar",
+      "key": "stats_bar",
+      "name": "Stats Bar",
       "section_type": "stats",
       "industries": [
         "universal",
@@ -102,8 +102,8 @@
       "source": "Vale demo / Buildaxa",
       "tier": "internal",
       "is_active": true,
-      "version": "1.0.0",
-      "last_reviewed": "2026-09-08",
+      "version": "2.0.0",
+      "last_reviewed": "2026-09-09",
       "required_facts": []
     },
     {
@@ -132,8 +132,8 @@
       "required_facts": []
     },
     {
-      "key": "cta_dark_centered",
-      "name": "Dark Centered CTA",
+      "key": "cta_centered",
+      "name": "Centered CTA",
       "section_type": "cta",
       "industries": [
         "universal"
@@ -150,13 +150,13 @@
       "source": "Vale demo",
       "tier": "internal",
       "is_active": true,
-      "version": "1.0.0",
-      "last_reviewed": "2026-09-08",
+      "version": "2.0.0",
+      "last_reviewed": "2026-09-09",
       "required_facts": []
     },
     {
-      "key": "support_plan_callout_split",
-      "name": "Support Plan Callout — Illustration + Plan Card Split",
+      "key": "callout_split",
+      "name": "Callout Panel — Illustration + Card Split",
       "section_type": "cta",
       "industries": [
         "universal",
@@ -175,8 +175,8 @@
       "source": "brikdesigns.com /services/{slug} 'Monthly support services' cross-sell section (PR #477 spec)",
       "tier": "internal",
       "is_active": true,
-      "version": "1.0.0",
-      "last_reviewed": "2026-09-08",
+      "version": "2.0.0",
+      "last_reviewed": "2026-09-09",
       "required_facts": []
     },
     {
@@ -238,8 +238,8 @@
       "required_facts": []
     },
     {
-      "key": "about_story_split",
-      "name": "About — Story Split",
+      "key": "story_split",
+      "name": "Story Split",
       "section_type": "features",
       "industries": [
         "universal",
@@ -261,13 +261,13 @@
       "source": "Original research",
       "tier": "internal",
       "is_active": true,
-      "version": "1.0.0",
-      "last_reviewed": "2026-09-08",
+      "version": "2.0.0",
+      "last_reviewed": "2026-09-09",
       "required_facts": []
     },
     {
-      "key": "services_detail_two_column",
-      "name": "Services Detail — Two Column Grid",
+      "key": "two_column_detail",
+      "name": "Two-Column Detail Grid",
       "section_type": "services",
       "industries": [
         "universal",
@@ -290,13 +290,13 @@
       "source": "Original research",
       "tier": "internal",
       "is_active": true,
-      "version": "1.0.0",
-      "last_reviewed": "2026-09-08",
+      "version": "2.0.0",
+      "last_reviewed": "2026-09-09",
       "required_facts": []
     },
     {
-      "key": "services_3col_card_grid",
-      "name": "3-Column Service Card Grid",
+      "key": "card_grid",
+      "name": "3-Column Card Grid",
       "section_type": "services",
       "industries": [
         "universal",
@@ -315,8 +315,8 @@
       "source": "brikdesigns.com /services/{slug} index pages — service-line card grid pattern (PR #477 spec)",
       "tier": "internal",
       "is_active": true,
-      "version": "1.0.0",
-      "last_reviewed": "2026-09-08",
+      "version": "2.0.0",
+      "last_reviewed": "2026-09-09",
       "required_facts": []
     }
   ]

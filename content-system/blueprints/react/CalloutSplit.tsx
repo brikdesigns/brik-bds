@@ -1,9 +1,9 @@
 /**
- * SupportPlanCalloutSplit — blueprint-key adapter (supported: ADR-037 §2).
+ * CalloutSplit — blueprint-key adapter (supported: ADR-037 §2).
  *
  * After brik-bds#581, the canonical primitive is `<CalloutPanel>` (the
  * `bds-callout-panel` section block). This file remains as an adapter so
- * the legacy `support_plan_callout_split` blueprint key continues to
+ * the legacy `callout_split` blueprint key continues to
  * dispatch through `BlueprintDispatcher` with the same section-data
  * contract that AI-generated pages expect — it maps `section.*` →
  * `<CalloutPanel>` props.
@@ -18,7 +18,7 @@ import { CalloutPanel } from './CalloutPanel';
 
 interface Props extends BlueprintProps {}
 
-export function SupportPlanCalloutSplit({ section }: Props) {
+export function CalloutSplit({ section }: Props) {
   const plan = section.items?.[0];
 
   return (
@@ -34,4 +34,4 @@ export function SupportPlanCalloutSplit({ section }: Props) {
   );
 }
 
-export default SupportPlanCalloutSplit;
+export default CalloutSplit;

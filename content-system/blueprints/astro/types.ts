@@ -28,17 +28,17 @@
  * it (`validate:blueprints` enforces the three-way agreement).
  */
 export type KnownBlueprintKey =
-  | 'hero_split_60_40'
+  | 'hero_split'
   | 'hero_split_image_card_overlay'
   | 'hero_interior_minimal'
-  | 'services_detail_two_column'
-  | 'services_3col_card_grid'
-  | 'support_plan_callout_split'
-  | 'features_3col_branded_dark'
-  | 'about_story_split'
-  | 'stats_dark_bar'
+  | 'two_column_detail'
+  | 'card_grid'
+  | 'callout_split'
+  | 'feature_grid'
+  | 'story_split'
+  | 'stats_bar'
   | 'testimonials_featured_large'
-  | 'cta_dark_centered'
+  | 'cta_centered'
   | 'cta_split_contact';
 
 /**
@@ -61,18 +61,18 @@ export type KnownBlueprintKey =
  * its key here in the same PR.
  */
 export const WIRED_BLUEPRINT_KEYS = [
-  'hero_split_60_40',
+  'hero_split',
   'hero_split_image_card_overlay',
   'hero_interior_minimal',
-  'services_detail_two_column',
-  'services_3col_card_grid',
-  'support_plan_callout_split',
-  'features_3col_branded_dark',
-  'about_story_split',
-  'stats_dark_bar',
+  'two_column_detail',
+  'card_grid',
+  'callout_split',
+  'feature_grid',
+  'story_split',
+  'stats_bar',
   'testimonials_featured_large',
   'cta_split_contact',
-  'cta_dark_centered',
+  'cta_centered',
 ] as const satisfies readonly KnownBlueprintKey[];
 
 /** A `KnownBlueprintKey` with a shipped component (∈ `WIRED_BLUEPRINT_KEYS`). */
@@ -184,7 +184,7 @@ export interface BlueprintSection {
     readonly description: string;
     /**
      * Optional per-item fields used by richer blueprints (e.g.
-     * `services_3col_card_grid`). Additive — existing blueprints that
+     * `card_grid`). Additive — existing blueprints that
      * only consume `title` + `description` are unaffected. New
      * blueprints requiring additional structured per-item data should
      * add their fields here as `readonly ...?` rather than introducing
@@ -201,7 +201,7 @@ export interface BlueprintSection {
      * canonical brand tokens (`--brand-primary`, `--background-brand-primary`,
      * `--text-brand-primary`, `--border-brand-primary`) within the rendered
      * card so each card can carry its own service-line color. Used by
-     * `features_3col_branded_dark`. The consumer site MUST define the
+     * `feature_grid`. The consumer site MUST define the
      * `[data-service-line='X'] { … }` cascade rules per the BDS scope-binding
      * docs (`docs/theming/client-themes`); BDS ships the pattern, not the
      * service-line-specific values.

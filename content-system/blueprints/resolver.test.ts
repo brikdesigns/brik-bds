@@ -37,7 +37,7 @@ describe('resolveBlueprintShortlist', () => {
     const ranked = resolveBlueprintShortlist(profile, normalized);
     const topThreeKeys = ranked.slice(0, 3).map((bp) => bp.key);
 
-    // Was `about_story_split` / `team_bio_grid` / `contact_form_split` until
+    // Was `story_split` / `team_bio_grid` / `contact_form_split` until
     // #2308. Two of those three dispatched on neither rail, so the shortlist
     // was recommending a dental client blueprints that render
     // `<BlueprintFallback>` — they are roadmap candidates now, not inventory.
@@ -45,9 +45,9 @@ describe('resolveBlueprintShortlist', () => {
     // that is the bug. A candidate re-enters this shortlist by being built.
     expect(topThreeKeys).toEqual(
       expect.arrayContaining([
-        'about_story_split',
+        'story_split',
         'hero_interior_minimal',
-        'services_detail_two_column',
+        'two_column_detail',
       ]),
     );
   });
@@ -78,7 +78,7 @@ describe('resolveBlueprintShortlist', () => {
     const entries = resolveBlueprintShortlistWithScores(profile, normalized);
     const byKey = new Map(entries.map((e) => [e.blueprint.key, e]));
 
-    const about = byKey.get('about_story_split');
+    const about = byKey.get('story_split');
     expect(about).toBeDefined();
     expect(about!.industry_match).toBe(true);
     expect(about!.is_universal).toBe(true);

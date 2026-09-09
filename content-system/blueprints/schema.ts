@@ -34,7 +34,7 @@ import {
  * portal. BDS is upstream.
  */
 export interface Blueprint {
-  /** Unique slug, e.g. "hero_split_60_40". Stable — external references rely on it. */
+  /** Unique slug, e.g. "hero_split". Stable — external references rely on it. */
   key: string;
   /** Human label, e.g. "Split Hero 60/40". */
   name: string;

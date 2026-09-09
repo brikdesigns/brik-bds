@@ -35,9 +35,9 @@ const section: BlueprintProps['section'] = {
   body: 'A closing prompt that earns the click — short, action-oriented, and specific to what the visitor gets after they tap the CTA.',
   cta: { label: 'Get in touch', url: '#contact' },
   visualNotes: {
-    blueprintKey: 'cta_dark_centered',
+    blueprintKey: 'cta_centered',
     moodKeywords: ['bold'],
-    layoutBlueprint: 'cta_dark_centered',
+    layoutBlueprint: 'cta_centered',
     imageOpportunity: null,
     animationSuggestion: null,
     illustrationOpportunity: null,

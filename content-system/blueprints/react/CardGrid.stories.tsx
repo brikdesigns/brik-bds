@@ -75,7 +75,7 @@ export const Default: Story = {
 
 /**
  * `<CardGrid>` doesn't require `<Card>` inside — any content composition
- * works. This story matches the legacy `services_detail_two_column` shape:
+ * works. This story matches the legacy `two_column_detail` shape:
  * 2-col layout, just title/description rows, no card chrome.
  *
  * Kept deliberately (#1490): a blueprint story is AI-mockup grounding, not

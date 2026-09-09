@@ -32,9 +32,9 @@ const section: BlueprintProps['section'] = {
   body: 'A short paragraph of about-copy that sets context for the visitor — who you are, what you do, and the posture you bring to the work. Long enough to set the type rhythm but short enough that a visitor will actually read it.',
   cta: null,
   visualNotes: {
-    blueprintKey: 'about_story_split',
+    blueprintKey: 'story_split',
     moodKeywords: ['warm', 'professional'],
-    layoutBlueprint: 'about_story_split',
+    layoutBlueprint: 'story_split',
     imageOpportunity: null,
     animationSuggestion: null,
     illustrationOpportunity: null,

@@ -36,7 +36,7 @@ export const realEstateRvMhc: IndustryPack = {
       required: true,
       // Stats intentionally absent — render only when content generation
       // emits a sectionType: 'stats' section. See issue #217.
-      blueprintDefaults: ['hero_fullbleed_photo', 'services_detail_two_column', 'cta_split_contact'],
+      blueprintDefaults: ['hero_fullbleed_photo', 'two_column_detail', 'cta_split_contact'],
       description: 'Lead with a hero photo of the property — drone/aerial or amenity-forward. Trust signals (years in operation, number of sites, rating) pair well here when the client has real numbers to show.',
     },
     {
@@ -499,7 +499,7 @@ export const realEstateRvMhc: IndustryPack = {
       pageArchetype: 'home',
       sections: [
         'hero_fullbleed_photo',
-        'services_detail_two_column',
+        'two_column_detail',
         'testimonials_3col_cards',
         'cta_split_contact',
       ],
@@ -518,7 +518,7 @@ export const realEstateRvMhc: IndustryPack = {
         'hero_interior_minimal',
         'features_3col_icon_grid',
         'gallery_masonry_3col',
-        'cta_dark_centered',
+        'cta_centered',
       ],
     },
     'rules-policies': {
@@ -526,7 +526,7 @@ export const realEstateRvMhc: IndustryPack = {
       sections: [
         'hero_interior_minimal',
         'content_legal_centered',
-        'cta_dark_centered',
+        'cta_centered',
       ],
     },
     reservations: {
@@ -558,8 +558,8 @@ export const realEstateRvMhc: IndustryPack = {
       sections: [
         'hero_interior_minimal',
         'gallery_masonry_3col',
-        'about_story_split',
-        'cta_dark_centered',
+        'story_split',
+        'cta_centered',
       ],
     },
     contact: {

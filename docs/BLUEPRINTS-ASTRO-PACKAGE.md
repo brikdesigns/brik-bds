@@ -128,13 +128,13 @@ import HeroSplit6040 from './blueprints/HeroSplit6040.astro';
 // ... 7 more imports ...
 import BlueprintFallback from './blueprints/BlueprintFallback.astro';
 const BLUEPRINT_REGISTRY = {
-  hero_split_60_40: HeroSplit6040,
-  stats_dark_bar: StatsDarkBar,
-  services_detail_two_column: ServicesDetailTwoColumn,
-  about_story_split: AboutStorySplit,
+  hero_split: HeroSplit6040,
+  stats_bar: StatsDarkBar,
+  two_column_detail: ServicesDetailTwoColumn,
+  story_split: AboutStorySplit,
   testimonials_featured_large: TestimonialsFeaturedLarge,
   cta_split_contact: CtaSplitContact,
-  cta_dark_centered: CtaDarkCentered,
+  cta_centered: CtaDarkCentered,
   hero_interior_minimal: HeroInteriorMinimal,
 } as const;
 export type KnownBlueprintKey = keyof typeof BLUEPRINT_REGISTRY;
@@ -158,14 +158,14 @@ Birdwell intel entry #18 documented automated content gen inventing plausible-bu
 
 ```jsonc
 {
-  "key": "hero_split_60_40",
+  "key": "hero_split",
   "section_type": "hero",
   "required_facts": ["hero_image_url", "primary_cta_label", "primary_cta_url"],
   // ... existing fields (moods, industries, layout_spec, css_hints) ...
 }
 ```
 
-The portal's `dev_scaffold_site` task preflights the content bundle against this registry **before** generating the client repo. If `clientFacts.hero_image_url` is missing for a page that uses `hero_split_60_40`, the task fails with a structured error naming the missing field + linking to the portal edit URL. The client repo is never generated in a broken state.
+The portal's `dev_scaffold_site` task preflights the content bundle against this registry **before** generating the client repo. If `clientFacts.hero_image_url` is missing for a page that uses `hero_split`, the task fails with a structured error naming the missing field + linking to the portal edit URL. The client repo is never generated in a broken state.
 
 **Defense-in-depth:** every blueprint ALSO renders a `data-content-needed="{field}"` stub if a required fact somehow arrives null at render time. CI greps built `dist/` for `data-content-needed=` and blocks publish. This is a belt + suspenders — preflight should catch everything, grep catches regressions.
 
@@ -369,25 +369,25 @@ export const smallBusiness: IndustryPack = {
     home: {
       pageArchetype: 'home',
       sections: [
-        'hero_split_60_40',
-        'stats_dark_bar',
-        'services_detail_two_column',
-        'about_story_split',
+        'hero_split',
+        'stats_bar',
+        'two_column_detail',
+        'story_split',
         'testimonials_featured_large',
         'cta_split_contact',
       ],
     },
     services_overview: {
       pageArchetype: 'services',
-      sections: ['hero_interior_minimal', 'services_detail_two_column', 'cta_dark_centered'],
+      sections: ['hero_interior_minimal', 'two_column_detail', 'cta_centered'],
     },
     service_detail: {
       pageArchetype: 'service-detail',
-      sections: ['hero_interior_minimal', 'about_story_split', 'cta_dark_centered'],
+      sections: ['hero_interior_minimal', 'story_split', 'cta_centered'],
     },
     about: {
       pageArchetype: 'about',
-      sections: ['hero_interior_minimal', 'about_story_split', 'stats_dark_bar', 'cta_dark_centered'],
+      sections: ['hero_interior_minimal', 'story_split', 'stats_bar', 'cta_centered'],
     },
     contact: {
       pageArchetype: 'contact',
@@ -406,7 +406,7 @@ For rare clients whose composition must diverge from pack default:
 ```sql
 ALTER TABLE company_profiles
   ADD COLUMN page_compositions jsonb NULL;
--- Shape: { "home": { "sections": ["hero_split_60_40", "..."] }, ... }
+-- Shape: { "home": { "sections": ["hero_split", "..."] }, ... }
 -- Zod-validated at PATCH time against BlueprintKey + NavArchetype + FooterArchetype enums.
 ```
 
@@ -420,7 +420,7 @@ ALTER TABLE company_profiles
 - `pack.pageCompositions[pageType].sections[i]` (the authoritative key)
 - vs. `content[pageType].sections[i].visualNotes.blueprintKey` (the content gen's hint)
 
-For any mismatch, it writes a row to `enrichment_log` with `source='composition_drift'` so the team can see when content gen's picks diverge from pack. Drift is information, not a failure — but it surfaces trends ("the content generator keeps suggesting `features_3col_icon_grid` where the pack declares `services_detail_two_column`") that inform pack edits.
+For any mismatch, it writes a row to `enrichment_log` with `source='composition_drift'` so the team can see when content gen's picks diverge from pack. Drift is information, not a failure — but it surfaces trends ("the content generator keeps suggesting `features_3col_icon_grid` where the pack declares `two_column_detail`") that inform pack edits.
 
 ---
 

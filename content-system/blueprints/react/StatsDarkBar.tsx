@@ -1,8 +1,8 @@
 /**
- * StatsDarkBar — React twin of the Astro `stats_dark_bar` blueprint
+ * StatsDarkBar — React twin of the Astro `stats_bar` blueprint
  * (brik-bds#2012, the deferred half of the #2010 parity reconcile).
  *
- * #2010 de-wired `stats_dark_bar` from the Astro `BLUEPRINT_REGISTRY` to
+ * #2010 de-wired `stats_bar` from the Astro `BLUEPRINT_REGISTRY` to
  * restore Astro↔React parity, because the key had no React twin. The
  * component file and its barrel export stayed on disk, so the blueprint
  * dispatched through neither runtime while remaining `is_active: true` in
@@ -43,7 +43,7 @@ export function StatsDarkBar({ section }: Props) {
       className={bdsClass('bds-blueprint-section', 'bds-stats-dark-bar')}
       aria-labelledby={hasHeading ? titleId : undefined}
       aria-label={hasHeading ? undefined : 'Key stats'}
-      data-blueprint-key="stats_dark_bar"
+      data-blueprint-key="stats_bar"
     >
       {/* No family `__container` — the shell's centred band (ADR-021) is all
           this bar needs; the Astro twin's `bp-*__container` only re-declared

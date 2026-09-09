@@ -121,17 +121,17 @@ Eight components. A component is a **block**; the layout it renders in is a **pr
 
 | Component | `layout` | Library key | Section type |
 |---|---|---|---|
-| `<Hero>` | `split` | `hero_split_60_40` | `hero` |
+| `<Hero>` | `split` | `hero_split` | `hero` |
 | `<Hero>` | `interior-minimal` | `hero_interior_minimal` | `hero` |
 | `<Hero>` | `with-pricing-card` | `hero_split_image_card_overlay` | `hero` |
-| `<CardGrid>` | `card-grid` | `services_3col_card_grid` | `services` |
-| `<CardGrid>` | `two-column-list` | `services_detail_two_column` | `services` |
+| `<CardGrid>` | `card-grid` | `card_grid` | `services` |
+| `<CardGrid>` | `two-column-list` | `two_column_detail` | `services` |
 | `<Cta>` | `split` | `cta_split_contact` | `cta` |
-| `<Cta>` | `default` | `cta_dark_centered` | `cta` |
-| `<About>` | — | `about_story_split` | `about` |
-| `<Features>` | — | `features_3col_branded_dark` | `features` |
-| `<CalloutPanel>` | — | `support_plan_callout_split` | `support_plan` |
-| `<StatsDarkBar>` | — | `stats_dark_bar` | `stats` |
+| `<Cta>` | `default` | `cta_centered` | `cta` |
+| `<About>` | — | `story_split` | `about` |
+| `<Features>` | — | `feature_grid` | `features` |
+| `<CalloutPanel>` | — | `callout_split` | `support_plan` |
+| `<StatsDarkBar>` | — | `stats_bar` | `stats` |
 | `<TestimonialsFeaturedLarge>` | — | `testimonials_featured_large` | `testimonials` |
 
 The `HeroLayout` / `CtaLayout` / `CardGridLayout` unions are exported from the package and shared with the React rail, so a layout cannot be added to one rail only.

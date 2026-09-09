@@ -206,7 +206,7 @@ const heroSplitProps: BlueprintProps = {
   section: makeSection({
     sectionKey: 'home_hero',
     sectionType: 'hero',
-    blueprintKey: 'hero_split_60_40',
+    blueprintKey: 'hero_split',
     heading: 'Built to excel, driven to exceed',
     subheading: 'Proving ground',
     body: 'A single-paragraph lead that fits inside 55ch and validates the lead rendering path.',
@@ -219,7 +219,7 @@ const statsProps: BlueprintProps = {
   section: makeSection({
     sectionKey: 'home_stats',
     sectionType: 'stats',
-    blueprintKey: 'stats_dark_bar',
+    blueprintKey: 'stats_bar',
     heading: 'By the numbers',
     items: [
       { title: '22+ years', description: 'Experience' },
@@ -234,7 +234,7 @@ const servicesProps: BlueprintProps = {
   section: makeSection({
     sectionKey: 'home_services',
     sectionType: 'services',
-    blueprintKey: 'services_detail_two_column',
+    blueprintKey: 'two_column_detail',
     heading: 'How we work with you',
     subheading: 'Three specialties',
     body: 'Purpose-built teams for each line of business.',
@@ -252,7 +252,7 @@ const aboutProps: BlueprintProps = {
   section: makeSection({
     sectionKey: 'home_about',
     sectionType: 'features',
-    blueprintKey: 'about_story_split',
+    blueprintKey: 'story_split',
     heading: 'Boutique by design',
     subheading: 'Our approach',
     body: 'Partner-direct from day one — we built the firm so clients never get handed off to a junior agent mid-transaction.',
@@ -304,7 +304,7 @@ const ctaDarkProps: BlueprintProps = {
   section: makeSection({
     sectionKey: 'services_cta',
     sectionType: 'cta',
-    blueprintKey: 'cta_dark_centered',
+    blueprintKey: 'cta_centered',
     heading: 'Find your fit',
     body: 'Schedule a consultation with a partner.',
     cta: { label: 'Book a call', url: '/contact' },
@@ -331,10 +331,10 @@ const ctaDarkProps: BlueprintProps = {
       currentPath="/services"
     />
     <main>
-      <Hero layout={splitHero} blueprintKey="hero_split_60_40" {...heroSplitProps} />
+      <Hero layout={splitHero} blueprintKey="hero_split" {...heroSplitProps} />
       <StatsDarkBar {...statsProps} />
       <CardGrid layout={twoColList} {...servicesProps} />
-      <About blueprintKey="about_story_split" {...aboutProps} />
+      <About blueprintKey="story_split" {...aboutProps} />
       <TestimonialsFeaturedLarge {...testimonialsProps} />
       <Cta layout={splitCta} blueprintKey="cta_split_contact" {...ctaSplitProps} />
     </main>
@@ -388,7 +388,7 @@ const heroInteriorProps: BlueprintProps = {
 
 const ctaDarkProps: BlueprintProps = {
   theme, clientFacts,
-  section: mk('cta', 'cta_dark_centered', {
+  section: mk('cta', 'cta_centered', {
     sectionKey: 'services_cta',
     heading: 'Find your fit',
     body: 'Schedule a consultation with a partner.',
@@ -405,7 +405,7 @@ const ctaDarkProps: BlueprintProps = {
   <body>
     <main>
       <Hero layout="interior-minimal" blueprintKey="hero_interior_minimal" {...heroInteriorProps} />
-      <Cta layout="default" blueprintKey="cta_dark_centered" {...ctaDarkProps} />
+      <Cta layout="default" blueprintKey="cta_centered" {...ctaDarkProps} />
     </main>
   </body>
 </html>
@@ -474,22 +474,22 @@ function sec(blueprintKey: string, overrides: Partial<BlueprintSection> & { sect
 
 const sections: BlueprintSection[] = [
   sec('hero_interior_minimal', { sectionKey: 'd_hero', sectionType: 'hero', heading: 'Dispatcher proving', body: 'Reads visualNotes.blueprintKey per section.' }),
-  sec('stats_dark_bar', { sectionKey: 'd_stats', sectionType: 'stats', items: [
+  sec('stats_bar', { sectionKey: 'd_stats', sectionType: 'stats', items: [
     { title: '8', description: 'Blueprints shipped' },
     { title: '25', description: 'Library total' },
   ] }),
-  sec('services_detail_two_column', { sectionKey: 'd_services', sectionType: 'services', heading: 'What\\'s in v0.1', items: [
+  sec('two_column_detail', { sectionKey: 'd_services', sectionType: 'services', heading: 'What\\'s in v0.1', items: [
     { title: 'Hero split 60/40', description: 'Text left, image right.' },
     { title: 'Stats dark bar', description: 'Proof points on dark.' },
   ] }),
-  sec('about_story_split', { sectionKey: 'd_about', sectionType: 'features', heading: 'How it works', body: 'Single prop shape; registry-driven dispatch.', items: [] }),
+  sec('story_split', { sectionKey: 'd_about', sectionType: 'features', heading: 'How it works', body: 'Single prop shape; registry-driven dispatch.', items: [] }),
   sec('testimonials_featured_large', { sectionKey: 'd_test', sectionType: 'testimonials', items: [
     { title: 'Scaffold task · soon', description: 'When the portal scaffold runs, it emits <BlueprintDispatcher sections={...} /> on every page.' },
   ] }),
   sec('cta_split_contact', { sectionKey: 'd_cta_split', sectionType: 'cta', heading: 'Reach out', body: 'Split CTA exercising phone + email.', cta: { label: 'Contact', url: '/contact' } }),
   // Unknown key — falls through to BlueprintFallback.
   sec('hero_centered_gradient' as KnownBlueprintKey, { sectionKey: 'd_unknown', sectionType: 'hero', heading: 'Not shipped yet' }),
-  sec('cta_dark_centered', { sectionKey: 'd_cta_dark', sectionType: 'cta', heading: 'End of proof', cta: { label: 'Home', url: '/' } }),
+  sec('cta_centered', { sectionKey: 'd_cta_dark', sectionType: 'cta', heading: 'End of proof', cta: { label: 'Home', url: '/' } }),
 ];
 ---
 <html lang="en">
@@ -510,7 +510,7 @@ const sections: BlueprintSection[] = [
 // ── 5b. Derive the dispatcher's expected markers ──────────────────
 //
 // This used to be a hard-coded list of seven `data-blueprint-key` values
-// ("all 7 known sections rendered"). #2010 de-wired `stats_dark_bar` from
+// ("all 7 known sections rendered"). #2010 de-wired `stats_bar` from
 // BLUEPRINT_REGISTRY and the literal was never updated, so the assertion
 // became unpassable and this script has been red on `main` ever since —
 // unnoticed, because it runs nowhere (brik-bds#2313).
@@ -523,22 +523,27 @@ const sections: BlueprintSection[] = [
 /** Keys the dispatcher fixture feeds, in `sections` order. Guarded below. */
 const DISPATCH_FIXTURE_KEYS = [
   'hero_interior_minimal',
-  'stats_dark_bar',
-  'services_detail_two_column',
-  'about_story_split',
+  'stats_bar',
+  'two_column_detail',
+  'story_split',
   'testimonials_featured_large',
   'cta_split_contact',
   'hero_centered_gradient',
-  'cta_dark_centered',
+  'cta_centered',
 ];
 
 /**
- * Keys whose rendered marker is not the key itself. The CardGrid adapters
- * (#580) dispatch to `<CardGrid>`, which emits its own `card_grid` marker.
+ * Keys whose rendered marker is not the key itself. `<CardGrid>` emits one
+ * block-level `card_grid` marker for both the layouts it serves, so the
+ * two-column key resolves to the grid's marker.
+ *
+ * Shrank to one entry in #2303: `services_3col_card_grid` → `card_grid` and
+ * `support_plan_callout_split` → `callout_split` were overrides only because
+ * the key and the block disagreed. Renaming the keys to the block they render
+ * made both identities, so they are no longer mapped here.
  */
 const MARKER_OVERRIDES = {
-  services_detail_two_column: 'card_grid',
-  services_3col_card_grid: 'card_grid',
+  two_column_detail: 'card_grid',
 };
 
 const wiredKeysSrc = readFileSync(
@@ -603,18 +608,18 @@ const dispatchedHtml = readFileSync(dispatchedHtmlPath, 'utf8');
 
 const assertions = [
   // Every shipped blueprint's marker present across direct-import pages
-  { name: 'hero_split_60_40 marker (home)',         pass: homeHtml.includes('data-blueprint-key="hero_split_60_40"') },
-  { name: 'stats_dark_bar marker (home)',           pass: homeHtml.includes('data-blueprint-key="stats_dark_bar"') },
-  // `services_detail_two_column` dispatches through the @deprecated
+  { name: 'hero_split marker (home)',         pass: homeHtml.includes('data-blueprint-key="hero_split"') },
+  { name: 'stats_bar marker (home)',           pass: homeHtml.includes('data-blueprint-key="stats_bar"') },
+  // `two_column_detail` dispatches through the @deprecated
   // ServicesDetailTwoColumn adapter, which delegates to <CardGrid> (brik-bds#580).
   // The rendered marker is therefore CardGrid's `card_grid`, not the legacy key;
   // the section content itself is covered by the 'services items rendered' probe.
-  { name: 'services_detail_two_column → card_grid marker (home)',pass: homeHtml.includes('data-blueprint-key="card_grid"') },
-  { name: 'about_story_split marker (home)',        pass: homeHtml.includes('data-blueprint-key="about_story_split"') },
+  { name: 'two_column_detail → card_grid marker (home)',pass: homeHtml.includes('data-blueprint-key="card_grid"') },
+  { name: 'story_split marker (home)',        pass: homeHtml.includes('data-blueprint-key="story_split"') },
   { name: 'testimonials_featured_large marker (home)',pass: homeHtml.includes('data-blueprint-key="testimonials_featured_large"') },
   { name: 'cta_split_contact marker (home)',        pass: homeHtml.includes('data-blueprint-key="cta_split_contact"') },
   { name: 'hero_interior_minimal marker (interior)',pass: interiorHtml.includes('data-blueprint-key="hero_interior_minimal"') },
-  { name: 'cta_dark_centered marker (interior)',    pass: interiorHtml.includes('data-blueprint-key="cta_dark_centered"') },
+  { name: 'cta_centered marker (interior)',    pass: interiorHtml.includes('data-blueprint-key="cta_centered"') },
 
   // Content probes per blueprint
   { name: 'hero headline rendered',                 pass: homeHtml.includes('Built to excel, driven to exceed') },
@@ -626,7 +631,7 @@ const assertions = [
   { name: 'cta_split_contact phone tel:',           pass: homeHtml.includes('href="tel:+16155550100"') },
   { name: 'cta_split_contact mailto:',              pass: homeHtml.includes('href="mailto:hello@example.com"') },
   { name: 'interior hero heading rendered',         pass: interiorHtml.includes('What we do') },
-  { name: 'cta_dark_centered CTA rendered',         pass: interiorHtml.includes('Book a call') },
+  { name: 'cta_centered CTA rendered',         pass: interiorHtml.includes('Book a call') },
 
   // SiteHeader assertions (home)
   { name: 'SiteHeader archetype marker',            pass: homeHtml.includes('data-nav-archetype="editorial-transparent"') },

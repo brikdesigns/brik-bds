@@ -3,7 +3,7 @@
  *
  * After brik-bds#1197 the canonical primitive is `<Features>` (the
  * `bds-features` feature-grid section block). This file remains as an adapter
- * so the legacy `features_3col_branded_dark` blueprint key keeps dispatching
+ * so the legacy `feature_grid` blueprint key keeps dispatching
  * through `BlueprintDispatcher` with the same section-data contract that
  * AI-generated pages expect — it maps `section.*` → `<Features>` props.
  *

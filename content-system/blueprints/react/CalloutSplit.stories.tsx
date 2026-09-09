@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { SupportPlanCalloutSplit } from './SupportPlanCalloutSplit';
+import { CalloutSplit } from './CalloutSplit';
 import type { BlueprintProps } from '../astro/types';
 import { baseTheme, baseClientFacts } from './_fixtures';
 
@@ -22,9 +22,9 @@ const supportSection: BlueprintProps['section'] = {
     url: '#',
   },
   visualNotes: {
-    blueprintKey: 'support_plan_callout_split',
+    blueprintKey: 'callout_split',
     moodKeywords: ['approachable', 'warm'],
-    layoutBlueprint: 'support_plan_callout_split',
+    layoutBlueprint: 'callout_split',
     imageOpportunity: 'persona avatars + photo tile',
     animationSuggestion: null,
     illustrationOpportunity: 'persona-cluster scene',
@@ -46,9 +46,9 @@ const baseProps: BlueprintProps = {
 
 /* ─── Meta ─────────────────────────────────────────────────────── */
 
-const meta: Meta<typeof SupportPlanCalloutSplit> = {
-  title: 'Blueprints/support-plan-callout-split',
-  component: SupportPlanCalloutSplit,
+const meta: Meta<typeof CalloutSplit> = {
+  title: 'Blueprints/callout-split',
+  component: CalloutSplit,
   tags: ['surface-web'],
   argTypes: {
     section: { control: false, description: 'Section content shape — sectionKey, heading, subheading, body, cta, items, visualNotes. Set in code.' },
@@ -60,14 +60,14 @@ const meta: Meta<typeof SupportPlanCalloutSplit> = {
     docs: {
       description: {
         component:
-          'Legacy adapter for the `support_plan_callout_split` blueprint key — maps `section.*` onto the canonical `<CalloutPanel>` primitive. Section header above a plan callout card. Plan card text uses `--text-primary` to clear AA on `--surface-secondary`; CTA uses `Button size="md"` to clear AA at the brand-poppy fill.',
+          'Legacy adapter for the `callout_split` blueprint key — maps `section.*` onto the canonical `<CalloutPanel>` primitive. Section header above a plan callout card. Plan card text uses `--text-primary` to clear AA on `--surface-secondary`; CTA uses `Button size="md"` to clear AA at the brand-poppy fill.',
       },
     },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof SupportPlanCalloutSplit>;
+type Story = StoryObj<typeof CalloutSplit>;
 
 /* ─── Stories ──────────────────────────────────────────────────── */
 

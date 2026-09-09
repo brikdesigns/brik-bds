@@ -7,7 +7,7 @@ name: Blueprints Astro Check
 #
 # Why this exists as a gate: the script already existed but ran nowhere.
 # `rg "verify:blueprints-astro" .github/ scripts/git-hooks/ package.json`
-# matched only `package.json:255`, so when #2010 de-wired `stats_dark_bar` and
+# matched only `package.json:255`, so when #2010 de-wired `stats_bar` and
 # left the dispatcher assertion expecting it, the script went red on `main` and
 # nothing reported it (brik-bds#2313).
 #

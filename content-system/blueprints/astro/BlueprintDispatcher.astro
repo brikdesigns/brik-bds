@@ -40,24 +40,24 @@
  * turns a blueprint key into a (block, layout) pair — the key is no longer a
  * filename. Six blocks cover the twelve wired keys:
  *
- *   hero_split_60_40              → Hero            layout="split"
+ *   hero_split                    → Hero            layout="split"
  *   hero_split_image_card_overlay → Hero            layout="with-pricing-card"
  *   hero_interior_minimal         → Hero            layout="interior-minimal"
- *   services_detail_two_column    → CardGrid        layout="two-column-list"
- *   services_3col_card_grid       → CardGrid        layout="card-grid"
- *   support_plan_callout_split    → CalloutPanel
- *   features_3col_branded_dark    → Features
- *   about_story_split             → About
- *   stats_dark_bar                → StatsDarkBar
+ *   two_column_detail             → CardGrid        layout="two-column-list"
+ *   card_grid                     → CardGrid        layout="card-grid"
+ *   callout_split                 → CalloutPanel
+ *   feature_grid                  → Features
+ *   story_split                   → About
+ *   stats_bar                     → StatsDarkBar
  *   testimonials_featured_large   → TestimonialsFeaturedLarge
  *   cta_split_contact             → Cta             layout="split"
- *   cta_dark_centered             → Cta             layout="default"
+ *   cta_centered                  → Cta             layout="default"
  *
  * `blueprintKey` is passed to the blocks that emit a per-key
  * `data-blueprint-key` marker (Hero, Cta, About, Features), so one file keeps
  * emitting the distinct markers the scaffold contract asserts on. CardGrid and
  * CalloutPanel emit their own block-level marker instead (`card_grid` /
- * `support_plan_callout_split`) — unchanged from the adapters they absorbed,
+ * `callout_split`) — unchanged from the adapters they absorbed,
  * which emitted nothing of their own. `scripts/verify-blueprints-astro-
  * exports.mjs` encodes that in `MARKER_OVERRIDES`.
  *
@@ -91,18 +91,18 @@ import BlueprintFallback from './BlueprintFallback.astro';
 // component accepts `BlueprintProps`; `props` carries the per-key extras
 // (`layout`, and `blueprintKey` for the blocks that render the marker).
 const BLUEPRINT_REGISTRY = {
-  hero_split_60_40: { component: Hero, props: { layout: 'split', blueprintKey: 'hero_split_60_40' } },
+  hero_split: { component: Hero, props: { layout: 'split', blueprintKey: 'hero_split' } },
   hero_split_image_card_overlay: { component: Hero, props: { layout: 'with-pricing-card', blueprintKey: 'hero_split_image_card_overlay' } },
   hero_interior_minimal: { component: Hero, props: { layout: 'interior-minimal', blueprintKey: 'hero_interior_minimal' } },
-  services_detail_two_column: { component: CardGrid, props: { layout: 'two-column-list' } },
-  services_3col_card_grid: { component: CardGrid, props: { layout: 'card-grid' } },
-  support_plan_callout_split: { component: CalloutPanel, props: {} },
-  features_3col_branded_dark: { component: Features, props: { blueprintKey: 'features_3col_branded_dark' } },
-  about_story_split: { component: About, props: { blueprintKey: 'about_story_split' } },
-  stats_dark_bar: { component: StatsDarkBar, props: {} },
+  two_column_detail: { component: CardGrid, props: { layout: 'two-column-list' } },
+  card_grid: { component: CardGrid, props: { layout: 'card-grid' } },
+  callout_split: { component: CalloutPanel, props: {} },
+  feature_grid: { component: Features, props: { blueprintKey: 'feature_grid' } },
+  story_split: { component: About, props: { blueprintKey: 'story_split' } },
+  stats_bar: { component: StatsDarkBar, props: {} },
   testimonials_featured_large: { component: TestimonialsFeaturedLarge, props: {} },
   cta_split_contact: { component: Cta, props: { layout: 'split', blueprintKey: 'cta_split_contact' } },
-  cta_dark_centered: { component: Cta, props: { layout: 'default', blueprintKey: 'cta_dark_centered' } },
+  cta_centered: { component: Cta, props: { layout: 'default', blueprintKey: 'cta_centered' } },
 } as const;
 
 interface Props {

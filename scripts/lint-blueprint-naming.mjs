@@ -44,8 +44,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const REPO_ROOT = path.resolve(__dirname, '..');
-const BLUEPRINTS_DIR = path.join(REPO_ROOT, 'content-system', 'blueprints');
 
 // ── CLI args ──────────────────────────────────────────────────────────────
 const args = process.argv.slice(2);
@@ -53,6 +51,18 @@ const errorsOnly = args.includes('--errors-only');
 const fileFlagIdx = args.indexOf('--files');
 const explicitFiles =
   fileFlagIdx >= 0 ? args.slice(fileFlagIdx + 1).filter((a) => !a.startsWith('--')) : null;
+
+// `--root` repoints every input at a throwaway tree so this gate's own tests
+// can plant a violation and assert the exit code, without touching real
+// blueprint data. Same seam as `scripts/validate-blueprints.mjs` (#2313).
+const rootFlagIdx = args.indexOf('--root');
+if (rootFlagIdx !== -1 && !args[rootFlagIdx + 1]) {
+  console.error('lint-blueprint-naming: --root needs a directory argument.');
+  process.exit(2);
+}
+const REPO_ROOT =
+  rootFlagIdx === -1 ? path.resolve(__dirname, '..') : path.resolve(args[rootFlagIdx + 1]);
+const BLUEPRINTS_DIR = path.join(REPO_ROOT, 'content-system', 'blueprints');
 
 // ── Rules ─────────────────────────────────────────────────────────────────
 
@@ -357,6 +367,103 @@ function checkSectionShellRedeclaration(file, errors) {
   }
 }
 
+// ── Context-word rule (#2303 / ADR-037 §4) ────────────────────────────────
+//
+// A blueprint key describes LAYOUT SHAPE only. Content domain, brand and
+// atmosphere are expressed as manifest metadata (`industries`, `moods`), as
+// the site content passed in, or as tokens — never as part of the key.
+//
+//   services_3col_card_grid  ✗ `services` is a content domain; the same grid
+//                              renders team, blog and product collections
+//   cta_dark_centered        ✗ `dark` is an atmosphere token
+//   card_grid                ✓ layout words only
+//   two_column_detail        ✓ `two_column` is a layout word, not a prop leak
+//
+// Ships with no allowlist (ADR-037 §Enforcement, on the ADR-006 §157
+// precedent) — every key in the shipped manifest already passes.
+//
+// SCOPE — the two places a key is DECLARED:
+//   1. `blueprints/blueprint-library.json` — the shipped inventory, and the
+//      table the portal seeds `design_blueprints` from.
+//   2. `content-system/blueprints/astro/types.ts` — `KnownBlueprintKey` and
+//      `WIRED_BLUEPRINT_KEYS`, the consumer-facing type surface.
+// The two dispatcher registries are deliberately not scanned: they are not
+// declaration sites, and `validate-blueprints.mjs` already fails when they
+// disagree with these two, so a bad key cannot reach a registry alone.
+//
+// `blueprints/blueprint-roadmap.json` is also out of scope. Its entries are
+// design candidates, not contracts — a candidate becomes a contract when it
+// graduates into the library, which is exactly when this rule bites.
+
+const DOMAIN_WORDS = new Set([
+  'services', 'service', 'support', 'plan', 'plans',
+  'about', 'team', 'staff', 'blog', 'careers', 'pricing',
+]);
+
+const ATMOSPHERE_WORDS = new Set(['dark', 'light', 'brand', 'branded']);
+
+/** `3col`, `60`, `40` — a column count or ratio is a prop, not a name. */
+const NUMERIC_SEGMENT = /\d/;
+
+function checkKeyContextWords(key, file, line, errors) {
+  for (const segment of key.split('_')) {
+    let reason = null;
+    if (DOMAIN_WORDS.has(segment)) {
+      reason = `\`${segment}\` is a content domain — express it via the entry's \`industries\`/\`moods\` metadata or the site content, not the key`;
+    } else if (ATMOSPHERE_WORDS.has(segment)) {
+      reason = `\`${segment}\` is an atmosphere/brand word — express it via tokens and the resolved atmosphere, not the key`;
+    } else if (NUMERIC_SEGMENT.test(segment)) {
+      reason = `\`${segment}\` bakes a column count or ratio into the name — that is a prop`;
+    }
+    if (!reason) continue;
+    errors.push({
+      file,
+      line,
+      severity: 'error',
+      rule: 'blueprint-key-context-word',
+      message:
+        `Blueprint key \`${key}\` carries a context word: ${reason}. ` +
+        `A key describes layout shape only (ADR-037 §4).`,
+      snippet: key,
+    });
+  }
+}
+
+function checkManifestKeys(errors) {
+  const manifest = path.join(REPO_ROOT, 'blueprints', 'blueprint-library.json');
+  if (!fs.existsSync(manifest)) return;
+  const lines = readLines(manifest);
+  let library;
+  try {
+    library = JSON.parse(lines.join('\n'));
+  } catch {
+    return; // validate-blueprints.mjs owns the parse error.
+  }
+  for (const bp of library.blueprints ?? []) {
+    if (typeof bp.key !== 'string') continue;
+    const idx = lines.findIndex((l) => l.includes(`"key": "${bp.key}"`));
+    checkKeyContextWords(bp.key, manifest, idx === -1 ? 1 : idx + 1, errors);
+  }
+}
+
+/** `'hero_split'` inside the union or the WIRED array — one per line. */
+const TYPES_KEY_RE = /^\s*(?:\|\s*)?'([a-z][a-z0-9_]*)'\s*,?\s*$/;
+
+function checkTypeSurfaceKeys(errors) {
+  const typesFile = path.join(BLUEPRINTS_DIR, 'astro', 'types.ts');
+  if (!fs.existsSync(typesFile)) return;
+  const lines = readLines(typesFile);
+  const seen = new Set();
+  for (let i = 0; i < lines.length; i++) {
+    const match = TYPES_KEY_RE.exec(lines[i]);
+    if (!match) continue;
+    const key = match[1];
+    if (seen.has(key)) continue; // union + WIRED list the same key twice.
+    seen.add(key);
+    checkKeyContextWords(key, typesFile, i + 1, errors);
+  }
+}
+
 // ── Run ───────────────────────────────────────────────────────────────────
 
 const files = explicitFiles
@@ -375,6 +482,14 @@ for (const file of files) {
   checkInventedVariants(file, findings);
   checkSectionShellRedeclaration(file, findings);
 }
+
+// Key-declaration rules read two fixed files rather than the per-component
+// list above, so they run once and unconditionally — including under
+// `--files`, the pre-commit path. That is safe here in a way it is not for
+// the component rules: `--files` exists so pre-existing whole-repo component
+// violations don't block unrelated commits, and the key set has none.
+checkManifestKeys(findings);
+checkTypeSurfaceKeys(findings);
 
 const errors = findings.filter((f) => f.severity === 'error');
 const warnings = findings.filter((f) => f.severity === 'warn');

@@ -3,7 +3,7 @@
  *
  * After brik-bds#580, the canonical primitive is `<CardGrid>` composed
  * with consumer-supplied list content. This file remains as an adapter
- * so the legacy `services_detail_two_column` blueprint key continues to
+ * so the legacy `two_column_detail` blueprint key continues to
  * dispatch through `BlueprintDispatcher` with the same section-data
  * contract.
  *

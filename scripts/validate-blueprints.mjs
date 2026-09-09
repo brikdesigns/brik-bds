@@ -263,7 +263,7 @@ function validateRegistrySync(library, dispatcherSrc, typesSrc) {
   // `<BlueprintFallback>` and nothing objected (#2308).
   //
   // Landable only because #2308 emptied the violation set to 0 and #2317
-  // re-wired the last straggler (`stats_dark_bar`, #2012). The rule ships
+  // re-wired the last straggler (`stats_bar`, #2012). The rule ships
   // without an allowlist on purpose: ADR-006 §157 is the precedent against
   // shipping a rule alongside the exemptions that make it pass.
   for (const k of activeSet) {
@@ -286,7 +286,7 @@ function validateRegistrySync(library, dispatcherSrc, typesSrc) {
  * SAME key set. The two dispatchers are hand-maintained twins (brik-bds#2010);
  * a key wired in one runtime but not the other renders a real section in one
  * consumer and silently falls through to `<BlueprintFallback>` in the other —
- * the exact drift that shipped `stats_dark_bar` + `testimonials_featured_large`
+ * the exact drift that shipped `stats_bar` + `testimonials_featured_large`
  * to Astro only. This gate fails the build the moment the sets diverge.
  */
 function validateRuntimeParity(astroDispatcherSrc, reactDispatcherSrc) {

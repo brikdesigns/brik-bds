@@ -31,7 +31,7 @@ type Story = StoryObj<typeof About>;
 
 /**
  * The full about section: eyebrow + heading + narrative alongside a
- * `CardTestimonial` pull-quote. Replaces the legacy `about_story_split`.
+ * `CardTestimonial` pull-quote. Replaces the legacy `story_split`.
  *
  * @summary Narrative column + pull-quote callout aside
  */

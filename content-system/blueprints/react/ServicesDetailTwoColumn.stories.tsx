@@ -32,9 +32,9 @@ const section: BlueprintProps['section'] = {
   body: 'A one-line section subheading that frames the service catalog below — short enough to scan, specific enough to set expectations.',
   cta: null,
   visualNotes: {
-    blueprintKey: 'services_detail_two_column',
+    blueprintKey: 'two_column_detail',
     moodKeywords: ['professional'],
-    layoutBlueprint: 'services_detail_two_column',
+    layoutBlueprint: 'two_column_detail',
     imageOpportunity: null,
     animationSuggestion: null,
     illustrationOpportunity: null,
