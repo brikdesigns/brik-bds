@@ -1,0 +1,47 @@
+name: md-creation-gate
+
+# CI gate — fails any PR that ADDS a .md file (or renames one into place)
+# carrying a retired prefix (`feedback_*.md` / `lessons-*.md`) or landing
+# outside a sanctioned documentation home. Belt-and-suspenders to the Husky
+# pre-commit step: catches a commit pushed with hooks skipped.
+#
+# The script is a TWIN of brik-llm's canonical scripts/audit/md-creation-gate.sh
+# under `shared+deltas` (brik-llm#3271). ALLOWED_DIRS is the only authorised
+# difference and is declared in brik-llm's overlap-twin-drift.py TWINS registry.
+# Fix the script THERE and re-sync — a local edit here reads as drift.
+#
+# This workflow is deliberately NOT twinned. brik-llm's copy carries an extra
+# allowlist-parity step against md-routing-guard.sh, which does not exist in this
+# repo, so the two files cannot be byte-identical and pretending otherwise would
+# put a permanent false delta in the registry.
+
+on:
+  pull_request:
+    paths:
+      - '**/*.md'
+      - 'scripts/audit/md-creation-gate.sh'
+      - '.github/workflows/md-creation-gate.yml'
+
+concurrency:
+  group: md-creation-gate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  md-creation-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run md-creation-gate against PR diff
+        run: |
+          chmod +x scripts/audit/md-creation-gate.sh
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+          echo "Base: $BASE_SHA"
+          echo "Head: $HEAD_SHA"
+          scripts/audit/md-creation-gate.sh --ci --base "$BASE_SHA" --head "$HEAD_SHA"
