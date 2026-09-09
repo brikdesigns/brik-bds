@@ -160,6 +160,92 @@ describe('pull-variables-headless merge', () => {
     expect(r.status).toBe(0);
     expect(r.stderr).toMatch(/subscribed library/);
   });
+});
+
+// An alias into a subscribed library resolves by NAME, not by id — and the name
+// is the only thing sync-figma-mcp.js needs. Without it the token is skipped and
+// its previous value fossilizes silently (brik-bds#2342).
+describe('pull-variables-headless external map', () => {
+  const EXT_ID = 'VariableID:abc123/26883:90';
+  const extAlias = { ...VARS[2], valuesByMode: {
+    m1: { type: 'VARIABLE_ALIAS', id: EXT_ID },
+    m2: { type: 'VARIABLE_ALIAS', id: EXT_ID },
+  } };
+  const withExtAlias = [...VARS.slice(0, 2), extAlias];
+
+  const externalMap = (entries) => {
+    const dir = tmp();
+    const p = join(dir, 'external.json');
+    writeFileSync(p, JSON.stringify({ externalVariables: entries }));
+    return p;
+  };
+
+  it('--emit-external-code emits an id→name extraction', () => {
+    const r = run(['--emit-external-code']);
+    expect(r.status).toBe(0);
+    expect(r.stdout).toContain('getVariableByIdAsync');
+    expect(r.stdout).toContain('externalVariables');
+    // It must resolve targets the LOCAL list does not contain — that is the
+    // entire point; filtering to local ids would emit an empty map.
+    expect(r.stdout).toContain('!local.has(val.id)');
+  });
+
+  it('names cross-library aliases and carries them into the dump', () => {
+    const files = chunkFiles(chunk(0, 3, withExtAlias));
+    const ext = externalMap([{ id: EXT_ID, name: 'color/system/red' }]);
+    const out = join(tmp(), 'dump.json');
+    const r = run([...files, ext, '-o', out]);
+
+    expect(r.status).toBe(0);
+    // Counted per alias REFERENCE, not per variable — this fixture aliases the
+    // same external id in both modes, so one variable contributes two.
+    expect(r.stderr).toMatch(/2 cross-library alias\(es\) named/);
+    // Not reported as unresolved any more.
+    expect(r.stderr).not.toMatch(/subscribed library/);
+
+    const dump = JSON.parse(readFileSync(out, 'utf8'));
+    expect(dump.externalVariables).toEqual([{ id: EXT_ID, name: 'color/system/red' }]);
+    // The external entry must NOT become a variable — sync-figma-mcp.js patches
+    // and prunes from `variables`, so a subscribed token appearing there would
+    // be written into the consuming library's file.
+    expect(dump.variables.map((v) => v.id)).not.toContain(EXT_ID);
+    expect(dump.totalVariables).toBe(3);
+  });
+
+  it('does not count the external map toward slice coverage', () => {
+    // Passing the map must not make a short chunk set look complete.
+    const files = chunkFiles(chunk(0, 2, withExtAlias.slice(0, 2)));
+    const ext = externalMap([{ id: EXT_ID, name: 'color/system/red' }]);
+    const r = run([...files, ext]);
+    expect(r.status).toBe(1);
+    expect(r.stderr).toMatch(/cover 2 of 3/);
+  });
+
+  it('accepts the external map in any argument position', () => {
+    const files = chunkFiles(chunk(0, 3, withExtAlias));
+    const ext = externalMap([{ id: EXT_ID, name: 'color/system/red' }]);
+    const r = run([ext, ...files]);
+    expect(r.status).toBe(0);
+    expect(JSON.parse(r.stdout).externalVariables).toHaveLength(1);
+  });
+
+  it('drops an unresolved (null-name) entry rather than guessing', () => {
+    // A null name means the Plugin API could not resolve the remote variable.
+    // Keeping it would let sync resolve an alias to `undefined`; dropping it
+    // sends the alias back down the visible dangling path.
+    const files = chunkFiles(chunk(0, 3, withExtAlias));
+    const ext = externalMap([{ id: EXT_ID, name: null }]);
+    const r = run([...files, ext]);
+    expect(r.status).toBe(0);
+    expect(r.stderr).toMatch(/subscribed library/);
+    expect(JSON.parse(r.stdout).externalVariables).toHaveLength(0);
+  });
+
+  it('REFUSES an external map with no chunks', () => {
+    const r = run([externalMap([{ id: EXT_ID, name: 'color/system/red' }])]);
+    expect(r.status).toBe(1);
+    expect(r.stderr).toMatch(/no variable chunks/);
+  });
 
   it('WARNS but succeeds on an alias to a deleted local variable', () => {
     // A local id with no slash that the pull did not return is a variable
