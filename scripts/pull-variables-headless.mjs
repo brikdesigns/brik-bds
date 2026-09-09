@@ -24,12 +24,19 @@
  *   2. Repeat step 1 with --start=<the previous chunk's `sliceEnd`> until a
  *        chunk reports `sliceEnd === totalVariables`.
  *
- *   3. node scripts/pull-variables-headless.mjs <chunk...>.json -o dump.json
- *        → checks the chunks tile the variable list with no gap or overlap,
- *          then emits a pull-variables.js-shaped dump.
+ *   3. node scripts/pull-variables-headless.mjs --emit-external-code
+ *        → one more extraction, run once per file. It names every alias target
+ *          that lives in a SUBSCRIBED LIBRARY. Without it those aliases cannot
+ *          be resolved by id and the tokens keep stale values (brik-bds#2342).
  *
- *   4. node scripts/sync-figma-mcp.js dump.json --library=brand-kit
- *        → unchanged. Step 3's output is the only thing this script promises;
+ *   4. node scripts/pull-variables-headless.mjs <chunk...>.json <external>.json -o dump.json
+ *        → checks the chunks tile the variable list with no gap or overlap,
+ *          folds in the external names, and emits a pull-variables.js-shaped
+ *          dump. The external capture is recognised by shape, so argument order
+ *          does not matter.
+ *
+ *   5. node scripts/sync-figma-mcp.js dump.json --library=brand-kit
+ *        → unchanged. Step 4's output is the only thing this script promises;
  *          nothing downstream knows which transport produced the dump.
  *
  * ── Why chunks, and why the tiling check is load-bearing ───────────────────
@@ -51,10 +58,13 @@
  *
  * Usage:
  *   node scripts/pull-variables-headless.mjs --emit-code [--start=N] [--budget=N]
- *   node scripts/pull-variables-headless.mjs <chunk.json>... [-o <out.json>]
+ *   node scripts/pull-variables-headless.mjs --emit-external-code
+ *   node scripts/pull-variables-headless.mjs <chunk.json>... [<external.json>] [-o <out.json>]
  *
  * Flags:
  *   --emit-code       Print the `use_figma` extraction JS and exit
+ *   --emit-external-code
+ *                     Print the subscribed-library id→name extraction and exit
  *   --start=N         Variable index the emitted extraction begins at (default 0)
  *   --budget=N        Serialized-byte budget per chunk (default 14000, under the
  *                     20 KB MCP result cap with room for the envelope)
@@ -143,6 +153,40 @@ return JSON.stringify({
 });`;
 }
 
+// ─── The external-name extraction ────────────────────────────────
+//
+// A variable that aliases a SUBSCRIBED LIBRARY's variable carries an id of the
+// form `VariableID:<library-key>/<node-id>`, which `getLocalVariablesAsync()`
+// never returns. sync-figma-mcp.js resolves aliases by id, so without a name for
+// those targets the token is skipped and its previous value fossilizes
+// (brik-bds#2342). `getVariableByIdAsync` DOES resolve a remote variable, so one
+// call recovers the whole map.
+//
+// This is file-scoped rather than per-slice on purpose: the set of remote
+// targets is a property of the file, not of any one chunk, and fetching it once
+// keeps the per-chunk extraction free of an unbounded await loop.
+const EXTERNAL_CODE = `const vars = await figma.variables.getLocalVariablesAsync();
+const local = new Set(vars.map(v => v.id));
+const wanted = new Set();
+for (const v of vars) {
+  for (const val of Object.values(v.valuesByMode || {})) {
+    if (val && typeof val === 'object' && val.type === 'VARIABLE_ALIAS' && !local.has(val.id)) {
+      wanted.add(val.id);
+    }
+  }
+}
+const externalVariables = [];
+for (const id of [...wanted].sort()) {
+  const v = await figma.variables.getVariableByIdAsync(id);
+  externalVariables.push({ id, name: v ? v.name : null });
+}
+return JSON.stringify({ externalVariables });`;
+
+if (args.includes('--emit-external-code')) {
+  process.stdout.write(EXTERNAL_CODE + '\n');
+  process.exit(0);
+}
+
 if (args.includes('--emit-code')) {
   const start = Number(flag('start', '0'));
   const budget = Number(flag('budget', '14000'));
@@ -197,8 +241,37 @@ function readChunk(file) {
   return parsed;
 }
 
-const chunks = inputFiles.map((f) => ({ file: f, data: readChunk(f) }));
+const captures = inputFiles.map((f) => ({ file: f, data: readChunk(f) }));
 const errors = [];
+
+// A capture carrying `externalVariables` but no slice bounds is the
+// `--emit-external-code` map, not a chunk. Split it out before the tiling check
+// so it neither counts toward coverage nor trips the gap detector.
+const externalCaptures = captures.filter(
+  (c) => Array.isArray(c.data?.externalVariables) && !Number.isInteger(c.data?.sliceStart)
+);
+const chunks = captures.filter((c) => !externalCaptures.includes(c));
+
+const externalById = new Map();
+for (const { file, data } of externalCaptures) {
+  for (const ext of data.externalVariables) {
+    if (typeof ext?.id !== 'string') {
+      errors.push(`${file}: an externalVariables entry is missing \`id\``);
+      continue;
+    }
+    // A null name means the Plugin API could not resolve the remote variable —
+    // usually a library the file no longer subscribes to. Dropping it here keeps
+    // the map honest; sync-figma-mcp.js then reports the alias as dangling
+    // rather than resolving it to a guess.
+    if (typeof ext.name !== 'string' || ext.name.length === 0) continue;
+    externalById.set(ext.id, ext.name);
+  }
+}
+
+if (chunks.length === 0) {
+  console.error('ERROR: no variable chunks given — only an externalVariables map');
+  process.exit(1);
+}
 
 // ─── Check the chunks tile the variable list exactly ─────────────
 
@@ -318,14 +391,23 @@ for (const v of variables) {
 // id has no slash. The split matters: an external ref is a subscription to
 // resolve in the OTHER library's pull, while a local one is a variable that was
 // deleted out from under the alias.
-const dangling = aliasRefs.filter((a) => !seenIds.has(a.id));
+const dangling = aliasRefs.filter((a) => !seenIds.has(a.id) && !externalById.has(a.id));
+const resolvedExternally = aliasRefs.filter((a) => !seenIds.has(a.id) && externalById.has(a.id));
 const external = dangling.filter((d) => d.id.includes('/'));
 const localDangling = dangling.filter((d) => !d.id.includes('/'));
+
+if (resolvedExternally.length > 0) {
+  console.error(
+    `✓ ${resolvedExternally.length} cross-library alias(es) named from the externalVariables map`
+  );
+}
 if (external.length > 0) {
+  // Unnamed remote targets stay loud. Resolving them to a guess is how a wrong
+  // colour ships silently; sync-figma-mcp.js will report these as dangling.
   const names = [...new Set(external.map((d) => d.from))];
   console.error(
-    `NOTE: ${external.length} alias(es) across ${names.length} variable(s) point at a subscribed library; ` +
-      `they resolve when that library is pulled into its own --library target.`
+    `NOTE: ${external.length} alias(es) across ${names.length} variable(s) point at a subscribed library ` +
+      `with no name in the externalVariables map — run --emit-external-code and pass its capture too.`
   );
 }
 if (localDangling.length > 0) {
@@ -358,6 +440,10 @@ for (const col of collections) {
 const dump = {
   totalCollections: collections.length,
   totalVariables: variables.length,
+  // Alias-resolution input only. sync-figma-mcp.js seeds its id→name map from
+  // this before the local variables and never patches or prunes from it, so a
+  // subscribed library's token can never be written into this Library's file.
+  externalVariables: [...externalById].map(([id, name]) => ({ id, name })),
   collections: collections.map((c) => ({ name: c.name, modes: c.modes })),
   variables: variables.map((v) => ({
     id: v.id,

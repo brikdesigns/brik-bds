@@ -563,7 +563,32 @@ function canonicalVarName(name) {
 
 if (isPullShape) {
   // ─── Shape 1: pull-variables.js dump ─────────────────────────
-  const idToName = new Map(rawData.variables.map(v => [v.id, canonicalVarName(v.name)]));
+  //
+  // Seed the alias lookup with SUBSCRIBED-LIBRARY variables before the local
+  // ones. A variable that aliases another Figma library's variable carries an
+  // id of the form `VariableID:<library-key>/<node-id>`, and neither
+  // `getLocalVariablesAsync()` nor the relay plugin's `get_variables` returns
+  // those targets — so before brik-bds#2342 the id missed this map, the value
+  // resolved to null, and the token was skipped. Skipping is silent and
+  // non-destructive (markSeen runs first, below), which is exactly why it went
+  // unnoticed: the leaf KEEPS ITS PREVIOUS VALUE and that value fossilizes.
+  // `text/text-link` still read `{color.poppy.light}` from a pull predating its
+  // re-pointing in Figma to `color/system/blue`, and only broke once the named
+  // ramp was pruned (#2337).
+  //
+  // The map is used for alias RESOLUTION ONLY. External entries never enter
+  // `rawData.variables`, so they are never patched into this Library file and
+  // never marked seen — the prune pass cannot touch them either way. Local
+  // variables are seeded last so a local name always wins a key collision.
+  const idToName = new Map();
+  for (const ext of rawData.externalVariables ?? []) {
+    if (ext && typeof ext.id === 'string' && typeof ext.name === 'string') {
+      idToName.set(ext.id, canonicalVarName(ext.name));
+    }
+  }
+  for (const v of rawData.variables) {
+    idToName.set(v.id, canonicalVarName(v.name));
+  }
 
   for (const v of rawData.variables) {
     const name = canonicalVarName(v.name);
@@ -581,8 +606,21 @@ if (isPullShape) {
       const $value = resolveValue(modeValue, idToName);
 
       if ($value === null) {
-        if (modeValue && typeof modeValue === 'object' && typeof modeValue.alias === 'string') {
-          changes.danglingAliases.push({ varName: name, mode: modeName, aliasId: modeValue.alias });
+        // Record BOTH alias shapes. This used to test only the legacy
+        // `{ alias }` form, so an unresolvable current-plugin alias
+        // (`{ type: 'VARIABLE_ALIAS', id }`) was skipped without ever reaching
+        // the dangling-alias warning at the end of the run — the silence that
+        // let the #2342 fossil sit undetected across every pull.
+        const aliasId =
+          modeValue && typeof modeValue === 'object'
+            ? (modeValue.type === 'VARIABLE_ALIAS' && typeof modeValue.id === 'string'
+                ? modeValue.id
+                : typeof modeValue.alias === 'string'
+                  ? modeValue.alias
+                  : null)
+            : null;
+        if (aliasId) {
+          changes.danglingAliases.push({ varName: name, mode: modeName, aliasId });
         }
         bucket(setKey).skipped.push({ path: name, reason: 'unresolvable-value' });
         changes.totalSkipped += 1;
