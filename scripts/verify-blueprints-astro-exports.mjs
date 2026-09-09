@@ -135,17 +135,23 @@ import type {
   ResolvedTheme,
   BlueprintProps,
 } from '@brikdesigns/bds/blueprints-astro';
+import type { HeroLayout, CtaLayout, CardGridLayout } from '@brikdesigns/bds/blueprints-astro';
 import {
-  HeroSplit6040,
-  HeroInteriorMinimal,
+  Hero,
+  Cta,
+  About,
+  CardGrid,
   StatsDarkBar,
-  ServicesDetailTwoColumn,
-  AboutStorySplit,
   TestimonialsFeaturedLarge,
-  CtaSplitContact,
-  CtaDarkCentered,
   SiteHeader,
 } from '@brikdesigns/bds/blueprints-astro';
+
+// The layout unions are part of the published surface since #2302 — a
+// consumer types its own layout choice against them, so a broken export
+// must fail this scratch build rather than surface at the client site.
+const splitHero: HeroLayout = 'split';
+const twoColList: CardGridLayout = 'two-column-list';
+const splitCta: CtaLayout = 'split';
 
 const mode: ResolvedThemeMode = 'dark';
 const atm: ResolvedAtmosphere = 'editorial-luxury';
@@ -325,12 +331,12 @@ const ctaDarkProps: BlueprintProps = {
       currentPath="/services"
     />
     <main>
-      <HeroSplit6040 {...heroSplitProps} />
+      <Hero layout={splitHero} blueprintKey="hero_split_60_40" {...heroSplitProps} />
       <StatsDarkBar {...statsProps} />
-      <ServicesDetailTwoColumn {...servicesProps} />
-      <AboutStorySplit {...aboutProps} />
+      <CardGrid layout={twoColList} {...servicesProps} />
+      <About blueprintKey="about_story_split" {...aboutProps} />
       <TestimonialsFeaturedLarge {...testimonialsProps} />
-      <CtaSplitContact {...ctaSplitProps} />
+      <Cta layout={splitCta} blueprintKey="cta_split_contact" {...ctaSplitProps} />
     </main>
   </body>
 </html>
@@ -344,7 +350,7 @@ writeFileSync(
   join(scratch, 'src/pages/interior.astro'),
   `---
 import type { BlueprintSection, BlueprintProps, ClientFacts, ResolvedTheme, KnownBlueprintKey } from '@brikdesigns/bds/blueprints-astro';
-import { HeroInteriorMinimal, CtaDarkCentered } from '@brikdesigns/bds/blueprints-astro';
+import { Hero, Cta } from '@brikdesigns/bds/blueprints-astro';
 
 const theme: ResolvedTheme = {
   themeMode: 'dark',
@@ -398,8 +404,8 @@ const ctaDarkProps: BlueprintProps = {
   </head>
   <body>
     <main>
-      <HeroInteriorMinimal {...heroInteriorProps} />
-      <CtaDarkCentered {...ctaDarkProps} />
+      <Hero layout="interior-minimal" blueprintKey="hero_interior_minimal" {...heroInteriorProps} />
+      <Cta layout="default" blueprintKey="cta_dark_centered" {...ctaDarkProps} />
     </main>
   </body>
 </html>
@@ -796,18 +802,16 @@ const expectedFiles = [
   // import" and silently drops section rhythm + container width (#1439,
   // ADR-021).
   'content-system/blueprints/section-shell.css',
-  // Components (source, .astro) — v0.1 shipped blueprints + later additions
-  'content-system/blueprints/astro/HeroSplit6040.astro',
-  'content-system/blueprints/astro/HeroInteriorMinimal.astro',
+  // Blocks (source, .astro) — one file per block since #2302; the layout a
+  // block renders in is a prop, so there is no per-layout file to ship.
+  'content-system/blueprints/astro/Hero.astro',
+  'content-system/blueprints/astro/Cta.astro',
+  'content-system/blueprints/astro/About.astro',
+  'content-system/blueprints/astro/Features.astro',
+  'content-system/blueprints/astro/CardGrid.astro',
+  'content-system/blueprints/astro/CalloutPanel.astro',
   'content-system/blueprints/astro/StatsDarkBar.astro',
-  'content-system/blueprints/astro/ServicesDetailTwoColumn.astro',
-  'content-system/blueprints/astro/Services3ColCardGrid.astro',
-  'content-system/blueprints/astro/SupportPlanCalloutSplit.astro',
-  'content-system/blueprints/astro/Features3ColBrandedDark.astro',
-  'content-system/blueprints/astro/AboutStorySplit.astro',
   'content-system/blueprints/astro/TestimonialsFeaturedLarge.astro',
-  'content-system/blueprints/astro/CtaSplitContact.astro',
-  'content-system/blueprints/astro/CtaDarkCentered.astro',
   // Dispatch surface (PR #7)
   'content-system/blueprints/astro/BlueprintDispatcher.astro',
   'content-system/blueprints/astro/BlueprintFallback.astro',

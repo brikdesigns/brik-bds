@@ -67,6 +67,8 @@ A small-business home page composed of 6 section blueprints, plus 2 generally-re
 | Per-blueprint Astro components | **8** | `HeroSplit6040`, `StatsDarkBar`, `ServicesDetailTwoColumn`, `AboutStorySplit`, `TestimonialsFeaturedLarge`, `CtaSplitContact`, `CtaDarkCentered`, `HeroInteriorMinimal` |
 | Type exports | 5 | `BlueprintKey`, `BlueprintSection`, `ClientFacts`, `ResolvedTheme`, `KnownBlueprintKey` |
 
+> **Amended 2026-09-09 (#2302).** The row above records the v0.1 shape, where a component was a blueprint *key*. Since #2302 a component is a **block** and the layout it renders in is a prop, so those eight per-key files are gone: `HeroSplit6040` / `HeroInteriorMinimal` / `HeroSplitImageCardOverlay` → `<Hero layout>`, `CtaDarkCentered` / `CtaSplitContact` → `<Cta layout>`, `Services3ColCardGrid` / `ServicesDetailTwoColumn` → `<CardGrid layout>`, `SupportPlanCalloutSplit` → `<CalloutPanel>`, `AboutStorySplit` → `<About>`, `Features3ColBrandedDark` → `<Features>`. Every key still resolves — `<BlueprintDispatcher>` maps key → (block, layout). Current surface: [Blueprints](../docs-site/content/docs/theming/blueprints.mdx).
+
 **Why these 8 blueprints:** they cover Vale's home composition completely (hero → stats → services → about → testimonials → CTA) using moods that match Vale's resolved brand (professional, trustworthy, luxury where relevant). `HeroInteriorMinimal` + `CtaDarkCentered` cover every other page Vale needs in the first shippable slice (services, services detail, about, contact).
 
 **Success criterion for v0.1:** Vale's site renders with zero `<BlueprintFallback>` activations and zero `<!-- bp-unknown:` comments in `dist/`. If v0.1 ships and Vale's first render shows fallbacks, v0.1 is incomplete.
