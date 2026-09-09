@@ -46,7 +46,7 @@ const demoImage = (
 
 /**
  * `layout="split"` renders the two-column grid with a composed `media` node.
- * Replaces the legacy `hero_split_60_40`.
+ * Replaces the legacy `hero_split`.
  *
  * @summary Split — content + media column (60/40 flagship)
  */

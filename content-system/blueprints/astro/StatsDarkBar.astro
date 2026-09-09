@@ -1,6 +1,6 @@
 ---
 /**
- * stats_dark_bar — horizontal row of proof-point stats on a dark
+ * stats_bar — horizontal row of proof-point stats on a dark
  * surface. Each item renders as { value, label } — item.title carries
  * the large number/string, item.description the caption underneath.
  *
@@ -45,7 +45,7 @@ const items = section.items;
   class="bp-stats-dark-bar"
   aria-labelledby={hasHeading ? titleId : undefined}
   aria-label={!hasHeading ? 'Key stats' : undefined}
-  data-blueprint-key="stats_dark_bar"
+  data-blueprint-key="stats_bar"
 >
   <div class="bp-stats-dark-bar__container">
     {hasHeading && (

@@ -1,6 +1,6 @@
 /*
  * StatsDarkBar — `bds-stats-dark-bar` section styles. React twin of the
- * Astro `stats_dark_bar` blueprint (brik-bds#2012, the deferred half of
+ * Astro `stats_bar` blueprint (brik-bds#2012, the deferred half of
  * the #2010 parity reconcile).
  *
  * Section rhythm + the centred container come from `../section-shell.css`

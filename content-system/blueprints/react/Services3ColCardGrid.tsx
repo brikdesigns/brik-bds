@@ -4,7 +4,7 @@
  * After brik-bds#580, the canonical primitives are `<CardGrid>`
  * (section wrapper) and `<Card preset="display">` (the malleable item
  * card). This file remains as an adapter so the legacy
- * `services_3col_card_grid` blueprint key continues to dispatch through
+ * `card_grid` blueprint key continues to dispatch through
  * `BlueprintDispatcher` with the same section-data contract that
  * AI-generated pages expect — the adapter performs the section.items[]
  * → composed-children translation internally.
