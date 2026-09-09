@@ -3,7 +3,7 @@ import { BulletList } from './BulletList';
 import { Field } from '../Field';
 
 const meta: Meta<typeof BulletList> = {
-  title: 'Blocks/bullet-list',
+  title: 'Components/bullet-list',
   component: BulletList,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

@@ -10,7 +10,7 @@ import { Button } from '../Button';
  * @summary Centered, measure-capped section intro — composes ContentBlock
  */
 const meta: Meta<typeof SectionHeader> = {
-  title: 'Blocks/section-header',
+  title: 'Components/section-header',
   component: SectionHeader,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
