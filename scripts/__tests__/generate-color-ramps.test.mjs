@@ -205,3 +205,88 @@ describe('generate-color-ramps — CLI', () => {
     }
   });
 });
+
+describe('generate-color-ramps — a numeric-only Brand Kit (#2337)', () => {
+  // Figma reads 0 named / 99 numeric as of 2026-09-09, so a sync's prune pass
+  // deletes all 54 named entries from the kit (sync-figma-mcp.js:618-628). The
+  // generator has to survive that and put them back — the #1797 reference guard
+  // covers only 1 of the 54, so nothing else stands between the sync and a
+  // dist/tokens.css that has silently lost the alias layer.
+  const NAMED = Object.keys(ANCHOR_STOPS);
+
+  const stripNamed = (json) => {
+    const kit = JSON.parse(json);
+    const families = kit['primitives/value'].color;
+    let removed = 0;
+    for (const entries of Object.values(families)) {
+      for (const name of NAMED) {
+        if (name in entries) {
+          delete entries[name];
+          removed += 1;
+        }
+      }
+    }
+    return { text: `${JSON.stringify(kit, null, 2)}\n`, removed };
+  };
+
+  const apply = () =>
+    spawnSync('node', [GENERATOR, '--apply'], { cwd: REPO_ROOT, encoding: 'utf8' });
+
+  it('--apply is idempotent against its own output', () => {
+    // Regression: --apply carried the alias's own `$description` onto the numeric
+    // stop, stamping "DEPRECATED — use color.blue.100" onto stop 100 and changing
+    // the kit on every run. The header has always claimed this is a no-op.
+    const original = readFileSync(BRAND_KIT, 'utf8');
+    try {
+      expect(apply().status).toBe(0);
+      expect(readFileSync(BRAND_KIT, 'utf8')).toBe(original);
+    } finally {
+      writeFileSync(BRAND_KIT, original);
+    }
+  });
+
+  it('restores all 54 aliases from numeric stops, byte-identical', () => {
+    const original = readFileSync(BRAND_KIT, 'utf8');
+    try {
+      const { text, removed } = stripNamed(original);
+      expect(removed).toBe(54);
+      writeFileSync(BRAND_KIT, text);
+
+      expect(apply().status).toBe(0);
+      expect(readFileSync(BRAND_KIT, 'utf8')).toBe(original);
+    } finally {
+      writeFileSync(BRAND_KIT, original);
+    }
+  });
+
+  it('builds the ramp without throwing when no named step exists', () => {
+    const original = readFileSync(BRAND_KIT, 'utf8');
+    try {
+      writeFileSync(BRAND_KIT, stripNamed(original).text);
+      const result = spawnSync('node', [GENERATOR], { cwd: REPO_ROOT, encoding: 'utf8' });
+      expect(result.stderr).not.toContain('missing anchor');
+      expect(result.status).toBe(0);
+    } finally {
+      writeFileSync(BRAND_KIT, original);
+      spawnSync('node', [GENERATOR], { cwd: REPO_ROOT, encoding: 'utf8' });
+    }
+  });
+
+  it('still refuses a family missing BOTH the name and its numeric stop', () => {
+    // The backfill must not turn a genuinely broken kit into a silent pass.
+    const original = readFileSync(BRAND_KIT, 'utf8');
+    try {
+      const kit = JSON.parse(stripNamed(original).text);
+      delete kit['primitives/value'].color.blue['500'];
+      writeFileSync(BRAND_KIT, `${JSON.stringify(kit, null, 2)}\n`);
+
+      const result = spawnSync('node', [GENERATOR], { cwd: REPO_ROOT, encoding: 'utf8' });
+      expect(result.status).toBe(1);
+      expect(result.stderr).toContain('missing anchor');
+      expect(result.stderr).toContain('light');
+    } finally {
+      writeFileSync(BRAND_KIT, original);
+      spawnSync('node', [GENERATOR], { cwd: REPO_ROOT, encoding: 'utf8' });
+    }
+  });
+});
