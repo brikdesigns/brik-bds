@@ -16,7 +16,7 @@
  * "do the thing" + "hedge / talk first" pair common on marketing closing
  * sections, which the single-`cta` legacy contract couldn't express).
  *
- * This is the props-based primitive (mirrors `<SupportPlan>` / `<CardGrid>`).
+ * This is the props-based primitive (mirrors `<CalloutPanel>` / `<CardGrid>`).
  * New consumers compose it directly; the `cta_dark_centered` and
  * `cta_split_contact` blueprint keys dispatch through their adapters, which
  * map `section.*` → these props. The adapters retire in Phase E.

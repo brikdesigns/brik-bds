@@ -41,13 +41,13 @@ export type {
 export { CardGrid } from './CardGrid';
 export type { CardGridProps } from './CardGrid';
 
-// `<SupportPlan>` — the `bds-support-plan` section primitive
+// `<CalloutPanel>` — the `bds-callout-panel` section primitive
 // (post-brik-bds#581 consolidation). Props-based: section header + a
 // plan-callout card, with an optional `media` slot. New consumers
 // compose this directly; the `support_plan_callout_split` blueprint key
 // dispatches through the `SupportPlanCalloutSplit` adapter below.
-export { SupportPlan } from './SupportPlan';
-export type { SupportPlanProps } from './SupportPlan';
+export { CalloutPanel } from './CalloutPanel';
+export type { CalloutPanelProps } from './CalloutPanel';
 
 // `<Cta>` — the `bds-cta` closing-CTA section primitive
 // (post-brik-bds#582 consolidation). Props-based: heading + optional body +

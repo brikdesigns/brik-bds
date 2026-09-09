@@ -1,5 +1,5 @@
 /*
- * SupportPlan — `bds-support-plan` section primitive styles (Phase D,
+ * CalloutPanel — `bds-callout-panel` section primitive styles (Phase D,
  * brik-bds#581). Renamed from the legacy `bp-support-plan-callout__*`
  * slots to ADR-008 allowlist vocabulary; visual output is unchanged.
  *
@@ -15,26 +15,26 @@
  * theme-layer tokens only.
  *
  * CSS custom properties — variation API:
- *   --bds-support-plan-bg          (default: var(--page-primary))
- *   --bds-support-plan-card-bg     (default: var(--surface-secondary))
- *   --bds-support-plan-card-radius (default: var(--border-radius-lg))
- *   --bds-support-plan-gap         (default: var(--gap-xl))
- *   --bds-support-plan-card-pad    (default: var(--padding-xl))
+ *   --bds-callout-panel-bg          (default: var(--page-primary))
+ *   --bds-callout-panel-card-bg     (default: var(--surface-secondary))
+ *   --bds-callout-panel-card-radius (default: var(--border-radius-lg))
+ *   --bds-callout-panel-gap         (default: var(--gap-xl))
+ *   --bds-callout-panel-card-pad    (default: var(--padding-xl))
  *
  * Section rhythm + the centred container live in `../section-shell.css`
  * (ADR-021): `bds-blueprint-section` and `bds-blueprint-section__container`
- * are composed onto the same elements in SupportPlan.tsx, not redeclared
+ * are composed onto the same elements in CalloutPanel.tsx, not redeclared
  * here. This family's rhythm moved from 9vw to the harmonised 7vw with that
  * extraction.
  */
 
-.bds-support-plan {
-  background: var(--bds-support-plan-bg, var(--page-primary));
+.bds-callout-panel {
+  background: var(--bds-callout-panel-bg, var(--page-primary));
 }
 
 /* ── Section header ────────────────────────────────────────────── */
 
-.bds-support-plan__header {
+.bds-callout-panel__header {
   text-align: center;
   max-width: var(--measure-lg);
   margin-inline: auto;
@@ -46,15 +46,15 @@
    carry: subtitle→title is tight (--gap-sm), title→description is medium
    (--gap-md), and one gap renders both identically. */
 
-.bds-support-plan__header > * + * {
+.bds-callout-panel__header > * + * {
   margin-top: var(--gap-md);
 }
 
-.bds-support-plan__subtitle + .bds-support-plan__title {
+.bds-callout-panel__subtitle + .bds-callout-panel__title {
   margin-top: var(--gap-sm);
 }
 
-.bds-support-plan__subtitle {
+.bds-callout-panel__subtitle {
   margin: 0;
   font-family: var(--font-family-label);
   font-size: var(--label-lg);
@@ -64,7 +64,7 @@
   color: var(--text-brand-primary);
 }
 
-.bds-support-plan__header .bds-support-plan__title {
+.bds-callout-panel__header .bds-callout-panel__title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-3xl));
@@ -73,7 +73,7 @@
   color: var(--text-primary);
 }
 
-.bds-support-plan__header .bds-support-plan__description {
+.bds-callout-panel__header .bds-callout-panel__description {
   margin: 0;
   font-family: var(--font-family-body);
   font-size: var(--heading-sm);
@@ -83,45 +83,45 @@
 
 /* ── Two-column split ──────────────────────────────────────────── */
 
-.bds-support-plan__columns {
+.bds-callout-panel__columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--bds-support-plan-gap, var(--gap-xl));
+  gap: var(--bds-callout-panel-gap, var(--gap-xl));
   align-items: center;
 }
 
-.bds-support-plan[data-has-media='false'] .bds-support-plan__columns {
+.bds-callout-panel[data-has-media='false'] .bds-callout-panel__columns {
   grid-template-columns: 1fr;
   max-width: 720px;
   margin-inline: auto;
 }
 
 @media (max-width: 991.98px) {
-  .bds-support-plan__columns {
+  .bds-callout-panel__columns {
     grid-template-columns: 1fr;
   }
 }
 
 /* Illustration first on mobile (matches Webflow source order). */
-.bds-support-plan__illustration {
+.bds-callout-panel__illustration {
   order: 1;
 }
-.bds-support-plan__main {
+.bds-callout-panel__main {
   order: 2;
 }
 
 /* ── Plan callout card ─────────────────────────────────────────── */
 
-.bds-support-plan__main {
+.bds-callout-panel__main {
   /* Repaint the composed outlined Card as a filled callout panel —
    * same visual the Webflow source ships. */
-  background: var(--bds-support-plan-card-bg, var(--surface-secondary));
+  background: var(--bds-callout-panel-card-bg, var(--surface-secondary));
   border: none;
-  border-radius: var(--bds-support-plan-card-radius, var(--border-radius-lg));
-  padding: var(--bds-support-plan-card-pad, var(--padding-xl));
+  border-radius: var(--bds-callout-panel-card-radius, var(--border-radius-lg));
+  padding: var(--bds-callout-panel-card-pad, var(--padding-xl));
 }
 
-.bds-support-plan__main .bds-support-plan__title {
+.bds-callout-panel__main .bds-callout-panel__title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: var(--heading-md);
@@ -130,7 +130,7 @@
   color: var(--text-primary);
 }
 
-.bds-support-plan__main .bds-support-plan__description {
+.bds-callout-panel__main .bds-callout-panel__description {
   margin: 0;
   font-family: var(--font-family-body);
   font-size: var(--body-xl);
@@ -138,6 +138,6 @@
   color: var(--text-primary);
 }
 
-.bds-support-plan__cta {
+.bds-callout-panel__cta {
   margin-top: var(--gap-md);
 }

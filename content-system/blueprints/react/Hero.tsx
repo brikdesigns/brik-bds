@@ -3,7 +3,7 @@
  * brik-bds#583). Consolidates the hero blueprint family into one block
  * with structural-modifier layouts, retiring the per-blueprint
  * `bp-hero-*` classes. See the #583 architecture decision: one props-based
- * primitive + optional composed media slot (the <SupportPlan>/<Cta>
+ * primitive + optional composed media slot (the <CalloutPanel>/<Cta>
  * pattern), NOT a Split-primitive inversion.
  *
  * The shared spine is a content column: (breadcrumb) → (eyebrow icon) →

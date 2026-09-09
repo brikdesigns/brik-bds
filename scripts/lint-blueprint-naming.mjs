@@ -305,7 +305,7 @@ const SHELL_FAMILIES = [
   'bds-features',
   'bds-cta',
   'bds-card-grid',
-  'bds-support-plan',
+  'bds-callout-panel',
 ];
 
 // `.bds-hero {` — bare block, no modifier, no descendant, no compound.
