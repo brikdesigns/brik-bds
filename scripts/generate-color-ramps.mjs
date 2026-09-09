@@ -194,13 +194,28 @@ export function buildRamp(familyName, entries) {
     stops[stop] = { hex, source: 'anchor', legacyName: name };
   }
 
+  // A Brand Kit pulled from a numeric-only Figma has no named steps at all
+  // (brik-bds#2337: the Brik kit reads 0 named / 99 numeric as of 2026-09-09).
+  // The pinned position IS the anchor's definition, so when the name is gone but
+  // its stop is present as a literal, read the anchor from the stop. This is the
+  // direction the pipeline now runs — numeric is authored, the six names are
+  // derived — and it is what lets `applyToKits` below re-emit the 54 aliases the
+  // sync's prune pass removed, instead of throwing before it can (#1949).
+  for (const [name, stop] of Object.entries(ANCHOR_STOPS)) {
+    if (stops[stop]) continue;
+    const raw = entries[stop]?.$value;
+    if (typeof raw !== 'string' || !raw.startsWith('#')) continue;
+    stops[stop] = { hex: raw.toLowerCase(), source: 'anchor', legacyName: name, fromStop: true };
+  }
+
   const missing = Object.entries(ANCHOR_STOPS)
     .filter(([, stop]) => !stops[stop])
     .map(([name]) => name);
   if (missing.length > 0) {
     throw new Error(
       `family "${familyName}": missing anchor(s) ${missing.join(', ')} — ` +
-        `an 11-step ramp needs all six named steps to interpolate between`,
+        `an 11-step ramp needs all six named steps, or the numeric stops they ` +
+        `pin to (${missing.map((n) => ANCHOR_STOPS[n]).join(', ')}), to interpolate between`,
     );
   }
 
@@ -218,6 +233,10 @@ export function buildRamp(familyName, entries) {
   // a subset". If this ever fires, the anchors were not preserved byte for byte
   // and every consumer of the 6-step names would shift on the alias swap.
   for (const [name, stop] of Object.entries(ANCHOR_STOPS)) {
+    // Vacuous for a backfilled anchor: the numeric stop IS its source, so there
+    // is no second copy to disagree. Asserting here would read `entries[name]`,
+    // which a numeric-only kit does not have, and fail with `null → #hex`.
+    if (stops[stop].fromStop) continue;
     const source = resolveAnchor(familyName, entries, name);
     if (stops[stop].hex !== source) {
       throw new Error(
@@ -340,13 +359,22 @@ export function applyToKits() {
       for (const stop of STOPS) {
         const { hex, source, legacyName } = stops[stop];
         const carried = source === 'anchor' ? entries[legacyName] : undefined;
+        // The numeric stop keeps its OWN annotation and never inherits the legacy
+        // alias's. Carrying `entries[legacyName].$description` here stamped
+        // "DEPRECATED — use color.blue.100" onto stop 100 itself — a stop telling
+        // you to use itself — and made `--apply` non-idempotent against its own
+        // output, contradicting the header's "re-running is a no-op". It also
+        // dropped the real curation notes ("Brand primary base", "Hover state")
+        // that live on the stops. The alias's DEPRECATED line is regenerated
+        // below, so nothing is lost by not carrying it up.
+        const description = entries[stop]?.$description;
         next[stop] = {
           $extensions: carried?.$extensions ?? entries[stop]?.$extensions ?? {
             'com.figma.scopes': ['ALL_SCOPES'],
           },
           $type: 'color',
           $value: hex,
-          ...(carried?.$description ? { $description: carried.$description } : {}),
+          ...(description ? { $description: description } : {}),
         };
       }
 
