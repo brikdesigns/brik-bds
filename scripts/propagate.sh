@@ -534,9 +534,20 @@ propagate_npm() {
   info "Worktree: $worktree_path"
   cd "$worktree_path"
 
-  # npm install the explicit new version
+  # npm install the explicit new version.
+  #
+  # `--save-exact` is load-bearing, not tidiness (#2335). Without it npm writes
+  # `^<version>`, and brikdesigns' `lint:bds-pin` fails the build on exactly
+  # that — so the propagator opened a PR its own consumer's CI rejected, every
+  # bump. brikdesigns#1286 and #1302 each needed the byte-identical manual
+  # follow-up commit; in both, package-lock.json already resolved the exact
+  # version and only the manifest disagreed with the lock.
+  #
+  # It also fixes the skip below: with a caret, an in-range release can leave
+  # package.json unchanged, and the consumer is silently skipped as "already
+  # satisfies the range". An exact pin makes every bump a real diff.
   info "Running npm install $BDS_PACKAGE_NAME@$BDS_VERSION..."
-  if ! npm install --save "$BDS_PACKAGE_NAME@$BDS_VERSION" --silent 2>&1 | tail -5; then
+  if ! npm install --save --save-exact "$BDS_PACKAGE_NAME@$BDS_VERSION" --silent 2>&1 | tail -5; then
     err "npm install failed in $name — check registry auth (PACKAGES_READ_TOKEN)"
     err "Worktree left for diagnosis: $worktree_path"
     DEGRADED=true

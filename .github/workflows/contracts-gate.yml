@@ -227,6 +227,16 @@ jobs:
           grep -q 'existing_bump_pr "-v\$BDS_VERSION"' scripts/propagate.sh \
             || { echo "::error::npm track no longer guards on \$BDS_VERSION"; exit 1; }
 
+      # ─── propagate-save-exact (#2335) ───────────────────────────────────────
+      # Without --save-exact npm writes `^<version>`, and brikdesigns'
+      # lint:bds-pin fails the build on a range spec — so the propagator opened
+      # a PR its own consumer's CI rejected, every bump (brikdesigns#1286,
+      # #1302). Keyed on every manifest-writing install, not one hard-coded
+      # line, so a second install site added later cannot reintroduce it.
+      - name: Propagated pin is exact, not a range
+        if: always()
+        run: bash scripts/lib/tests/test-propagate-save-exact.sh
+
       # ─── release-tag-guard-check (brik-llm#2948) ────────────────────────────
       - name: Release-tag-advances contract
         if: always()
