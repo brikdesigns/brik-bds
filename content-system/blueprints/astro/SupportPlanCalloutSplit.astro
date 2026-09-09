@@ -2,13 +2,13 @@
 /**
  * support_plan_callout_split — blueprint-key renderer (supported: ADR-037 §2).
  *
- * After brik-bds#581 the canonical primitive is `<SupportPlan>` (the
- * `bds-support-plan` section block). This file remains as the adapter
+ * After brik-bds#581 the canonical primitive is `<CalloutPanel>` (the
+ * `bds-callout-panel` section block). This file remains as the adapter
  * the `BlueprintDispatcher` dispatches to for the
- * `support_plan_callout_split` key: it maps `section.*` → `<SupportPlan>`
+ * `support_plan_callout_split` key: it maps `section.*` → `<CalloutPanel>`
  * props.
  *
- * New consumers should compose `<SupportPlan>` directly. Retires in Phase E.
+ * New consumers should compose `<CalloutPanel>` directly. Retires in Phase E.
  *
  * Contract: BlueprintProps.
  *   - section.heading      — section heading (h2)
@@ -18,7 +18,7 @@
  *   - section.cta          — { label, url } for the plan CTA
  */
 import type { BlueprintProps } from './types';
-import SupportPlan from './SupportPlan.astro';
+import CalloutPanel from './CalloutPanel.astro';
 
 interface Props extends BlueprintProps {}
 
@@ -26,12 +26,12 @@ const { section } = Astro.props;
 const plan = section.items?.[0];
 ---
 
-<SupportPlan
+<CalloutPanel
   sectionKey={section.sectionKey}
   title={section.heading ?? ''}
   subtitle={section.subheading ?? undefined}
   description={section.body ?? undefined}
-  planTitle={plan?.title ?? ''}
-  planDescription={plan?.description ?? undefined}
+  panelTitle={plan?.title ?? ''}
+  panelDescription={plan?.description ?? undefined}
   cta={section.cta ?? undefined}
 />

@@ -1,5 +1,5 @@
 /**
- * SupportPlan — canonical `bds-support-plan` section primitive (Phase D,
+ * CalloutPanel — canonical `bds-callout-panel` section primitive (Phase D,
  * brik-bds#581). A section header (subtitle + title + lead) above a
  * plan-callout `Card`, with an OPTIONAL media region composed alongside
  * the card.
@@ -17,7 +17,7 @@
  * props. The adapter retires in Phase E.
  *
  * Slots used (all on docs/SLOT-ALLOWLIST.md):
- *   bds-support-plan, __container, __header, __subtitle, __title,
+ *   bds-callout-panel, __container, __header, __subtitle, __title,
  *   __description, __columns, __illustration, __main, __cta
  *
  * Composed with the shared shell (ADR-021): `bds-blueprint-section` on the root,
@@ -42,9 +42,9 @@ import { bdsClass } from '../../../components/utils';
 import type { BlueprintCta } from '../astro/types';
 import { isActionCta } from '../astro/types';
 import '../section-shell.css';
-import './SupportPlan.css';
+import './CalloutPanel.css';
 
-export interface SupportPlanProps extends HTMLAttributes<HTMLElement> {
+export interface CalloutPanelProps extends HTMLAttributes<HTMLElement> {
   /**
    * Stable section identifier. Drives the `aria-labelledby` id — keep it
    * stable across renders for a given section.
@@ -57,9 +57,9 @@ export interface SupportPlanProps extends HTMLAttributes<HTMLElement> {
   /** Optional one-line lead paragraph under the title. */
   description?: string;
   /** Plan callout heading. Renders as `<h3>` inside the card. */
-  planTitle: string;
+  panelTitle: string;
   /** Plan callout body copy. */
-  planDescription?: string;
+  panelDescription?: string;
   /** Plan CTA — link (`url`) or action (`onClick`). */
   cta?: BlueprintCta;
   /**
@@ -70,24 +70,24 @@ export interface SupportPlanProps extends HTMLAttributes<HTMLElement> {
   media?: ReactNode;
 }
 
-export function SupportPlan({
+export function CalloutPanel({
   sectionKey,
   title,
   subtitle,
   description,
-  planTitle,
-  planDescription,
+  panelTitle,
+  panelDescription,
   cta,
   media,
   className,
   ...rest
-}: SupportPlanProps) {
+}: CalloutPanelProps) {
   const titleId = `${sectionKey}-title`;
   const hasMedia = media != null;
 
   return (
     <section
-      className={bdsClass('bds-blueprint-section', 'bds-support-plan', className)}
+      className={bdsClass('bds-blueprint-section', 'bds-callout-panel', className)}
       data-blueprint-key="support_plan_callout_split"
       data-has-media={hasMedia ? 'true' : 'false'}
       aria-labelledby={titleId}
@@ -96,36 +96,36 @@ export function SupportPlan({
       <div className="bds-blueprint-section__container">
         {/* gap="none": the header's three text roles step at two different
             sizes (ADR-023 §3), which a uniform Stack gap cannot express.
-            SupportPlan.css owns the adjacency margins instead. */}
+            CalloutPanel.css owns the adjacency margins instead. */}
         {(subtitle || title || description) && (
-          <Stack as="header" gap="none" className="bds-support-plan__header">
+          <Stack as="header" gap="none" className="bds-callout-panel__header">
             {subtitle && (
-              <p className="bds-support-plan__subtitle">{subtitle}</p>
+              <p className="bds-callout-panel__subtitle">{subtitle}</p>
             )}
-            <h2 id={titleId} className="bds-support-plan__title">
+            <h2 id={titleId} className="bds-callout-panel__title">
               {title}
             </h2>
             {description && (
-              <p className="bds-support-plan__description">{description}</p>
+              <p className="bds-callout-panel__description">{description}</p>
             )}
           </Stack>
         )}
 
-        <div className="bds-support-plan__columns">
+        <div className="bds-callout-panel__columns">
           {hasMedia && (
-            <div className="bds-support-plan__illustration">{media}</div>
+            <div className="bds-callout-panel__illustration">{media}</div>
           )}
 
           <Card
             variant="outlined"
             padding="none"
-            className="bds-support-plan__main"
+            className="bds-callout-panel__main"
           >
             <Stack gap="md" style={{ alignItems: 'flex-start' }}>
-              <h3 className="bds-support-plan__title">{planTitle}</h3>
-              {planDescription && (
-                <p className="bds-support-plan__description">
-                  {planDescription}
+              <h3 className="bds-callout-panel__title">{panelTitle}</h3>
+              {panelDescription && (
+                <p className="bds-callout-panel__description">
+                  {panelDescription}
                 </p>
               )}
               {cta && (
@@ -135,7 +135,7 @@ export function SupportPlan({
                     : { href: cta.url })}
                   variant="primary"
                   size="md"
-                  className="bds-support-plan__cta"
+                  className="bds-callout-panel__cta"
                 >
                   {cta.label}
                 </Button>
@@ -148,4 +148,4 @@ export function SupportPlan({
   );
 }
 
-export default SupportPlan;
+export default CalloutPanel;
