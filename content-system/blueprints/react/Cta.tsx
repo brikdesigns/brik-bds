@@ -40,12 +40,15 @@ import { type HTMLAttributes, type ReactNode } from 'react';
 
 import { Button } from '../../../components';
 import { bdsClass } from '../../../components/utils';
-import type { BlueprintCta } from '../astro/types';
+import type { BlueprintCta, CtaLayout } from '../astro/types';
 import { isActionCta } from '../astro/types';
 import '../section-shell.css';
 import './Cta.css';
 
-export type CtaLayout = 'default' | 'split';
+// Declared once in the rails' shared contract module so a layout cannot be
+// added to one rail only (#2302); re-exported here so the public
+// `import type { CtaLayout } from './Cta'` path is unchanged.
+export type { CtaLayout };
 
 export interface CtaProps extends HTMLAttributes<HTMLElement> {
   /**

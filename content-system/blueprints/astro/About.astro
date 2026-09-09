@@ -1,10 +1,15 @@
 ---
 /**
- * about_story_split — Phase D Astro renderer for the `bds-about` family
- * (brik-bds#1198). Twin of the React `<About>` primitive. The former
- * `bp-about-story-split` class is retired for the structural `bds-about`
- * block; `about` is a single-member family so there is no layout modifier
- * (ADR-008 §3). Label + heading + narrative, with an optional pull-quote.
+ * About — canonical `bds-about` narrative block for the Astro rail.
+ * Twin of the React `<About>` primitive (brik-bds#1198). Renamed from
+ * `AboutStorySplit.astro` in #2302: the file is the block, and `about` is a
+ * single-member family, so there is no layout modifier and no layout prop
+ * (ADR-008 §3). The former `bp-about-story-split` class was already retired
+ * for the structural `bds-about` block. Label + heading + narrative, with an
+ * optional pull-quote.
+ *
+ * `blueprintKey` is supplied by `BlueprintDispatcher.astro` and rendered as
+ * `data-blueprint-key`; composing this block directly emits no key marker.
  *
  * The pull-quote is a blueprint-owned `bds-about__callout` figure styled to
  * mirror the React path's outlined `<CardTestimonial>`. Astro has no
@@ -36,14 +41,20 @@
  * Reading order: narrative first (left column), supporting callout second
  * (right) — matches DOM order on every viewport.
  */
-import type { BlueprintProps } from './types';
+import type { BlueprintProps, KnownBlueprintKey } from './types';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
 
-interface Props extends BlueprintProps {}
+interface Props extends BlueprintProps {
+  /**
+   * Blueprint key to emit as `data-blueprint-key`. Supplied by
+   * `BlueprintDispatcher.astro`; omitted when the block is composed directly.
+   */
+  blueprintKey?: KnownBlueprintKey;
+}
 
-const { section } = Astro.props;
+const { section, blueprintKey } = Astro.props;
 const titleId = `${section.sectionKey}-title`;
 const callout = section.items[0];
 ---
@@ -51,7 +62,7 @@ const callout = section.items[0];
 <section
   class="bds-blueprint-section bds-about"
   aria-labelledby={titleId}
-  data-blueprint-key="about_story_split"
+  data-blueprint-key={blueprintKey}
 >
   <div class="bds-blueprint-section__container bds-about__container">
     <div class="bds-about__narrative">

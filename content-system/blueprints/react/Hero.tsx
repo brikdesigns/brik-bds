@@ -52,12 +52,15 @@ import { type HTMLAttributes, type ReactNode } from 'react';
 import { Button } from '../../../components';
 import type { ButtonVariant } from '../../../components/ui/Button';
 import { bdsClass } from '../../../components/utils';
-import type { BlueprintCta } from '../astro/types';
+import type { BlueprintCta, HeroLayout } from '../astro/types';
 import { isActionCta } from '../astro/types';
 import '../section-shell.css';
 import './Hero.css';
 
-export type HeroLayout = 'split' | 'interior-minimal' | 'with-pricing-card';
+// Declared once in the rails' shared contract module so a layout cannot be
+// added to one rail only (#2302); re-exported here so the public
+// `import type { HeroLayout } from './Hero'` path is unchanged.
+export type { HeroLayout };
 
 export interface HeroProps extends HTMLAttributes<HTMLElement> {
   /**

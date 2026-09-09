@@ -81,12 +81,13 @@ See [BLUEPRINTS-ASTRO-PACKAGE.md](https://github.com/brikdesigns/brik-bds/blob/m
 import {
   SiteHeader,
   BlueprintDispatcher,
-  // Individual blueprints if you want direct imports:
-  HeroSplit6040,
+  // Individual blocks if you want direct imports:
+  Hero,
   // Types:
   type BlueprintProps,
   type ClientFacts,
   type ResolvedTheme,
+  type HeroLayout,
 } from '@brikdesigns/bds/blueprints-astro';
 ---
 <SiteHeader archetype={...} brandName={...} navItems={[...]} />
@@ -112,20 +113,28 @@ import type { BlueprintSection, KnownBlueprintKey }
 | `<BlueprintFallback>` | Loud visible stub for unknown blueprint keys. Emits `data-blueprint-unknown-key` — CI greps client-repo builds for this attribute. | `BlueprintProps` |
 | `<SiteHeader>` | Site-shell nav. Dispatches on the navigation archetype prop. v0.1 fully implements `editorial-transparent`; other archetypes render with a `data-unimplemented-archetype` attribute. | `{ archetype, brandName, navItems, phone?, primaryCta?, currentPath? }` |
 
-### Shipped blueprints
+### Shipped blocks
 
-Eight components — the set needed for Vale's first scaffold run via the small-business pack. Each follows the same `BlueprintProps` contract (`section` + `clientFacts` + `theme`).
+Eight components. A component is a **block**; the layout it renders in is a **prop**, never a filename — so twelve blueprint keys resolve onto eight files. Each follows the same `BlueprintProps` contract (`section` + `clientFacts` + `theme`), plus `layout` where the block has more than one.
 
-| Component | Library key | Section type |
-|---|---|---|
-| `<HeroSplit6040>` | `hero_split_60_40` | `hero` |
-| `<HeroInteriorMinimal>` | `hero_interior_minimal` | `hero` |
-| `<StatsDarkBar>` | `stats_dark_bar` | `stats` |
-| `<ServicesDetailTwoColumn>` | `services_detail_two_column` | `services` |
-| `<AboutStorySplit>` | `about_story_split` | `about` |
-| `<TestimonialsFeaturedLarge>` | `testimonials_featured_large` | `testimonials` |
-| `<CtaSplitContact>` | `cta_split_contact` | `cta` |
-| `<CtaDarkCentered>` | `cta_dark_centered` | `cta` |
+`<BlueprintDispatcher>` owns the key → (block, layout) mapping, so a consumer that dispatches never picks a layout by hand.
+
+| Component | `layout` | Library key | Section type |
+|---|---|---|---|
+| `<Hero>` | `split` | `hero_split_60_40` | `hero` |
+| `<Hero>` | `interior-minimal` | `hero_interior_minimal` | `hero` |
+| `<Hero>` | `with-pricing-card` | `hero_split_image_card_overlay` | `hero` |
+| `<CardGrid>` | `card-grid` | `services_3col_card_grid` | `services` |
+| `<CardGrid>` | `two-column-list` | `services_detail_two_column` | `services` |
+| `<Cta>` | `split` | `cta_split_contact` | `cta` |
+| `<Cta>` | `default` | `cta_dark_centered` | `cta` |
+| `<About>` | — | `about_story_split` | `about` |
+| `<Features>` | — | `features_3col_branded_dark` | `features` |
+| `<CalloutPanel>` | — | `support_plan_callout_split` | `support_plan` |
+| `<StatsDarkBar>` | — | `stats_dark_bar` | `stats` |
+| `<TestimonialsFeaturedLarge>` | — | `testimonials_featured_large` | `testimonials` |
+
+The `HeroLayout` / `CtaLayout` / `CardGridLayout` unions are exported from the package and shared with the React rail, so a layout cannot be added to one rail only.
 
 Unshipped keys render `<BlueprintFallback>` when the dispatcher encounters them — expected during the v0.1 → v1.0 incremental ramp. Each follow-up PR adds one or more components and removes its key from the fallback case.
 

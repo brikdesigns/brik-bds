@@ -1,60 +1,71 @@
 ---
 /**
- * hero_split_image_card_overlay — Phase D Astro renderer for the `bds-hero`
- * family, `--with-pricing-card` layout (brik-bds#1165). Twin of the React
- * `<Hero layout="with-pricing-card">` adapter. Interior-page hero with a split
- * 58/42 layout. Left column carries the page's content trail (breadcrumb,
- * eyebrow, h1, optional body, single inverse CTA) on a soft audience-tinted
- * background. Right column shows a white card with the page image and an
- * optional price overlay (price label + price value + secondary CTA).
+ * Hero — canonical `bds-hero` page-hero block for the Astro rail (#2302).
+ * Astro twin of `../react/Hero.tsx`: one file per block, layout as a prop.
+ * Consolidates the three former per-layout files — `HeroSplit6040.astro`
+ * (#583), `HeroInteriorMinimal.astro` (#583) and
+ * `HeroSplitImageCardOverlay.astro` (#1165) — which implemented the same
+ * block three times and were kept in sync by hand.
  *
- * Drives `/services/{cat}/{slug}` style pages.
+ * The shared spine is a content column: (breadcrumb) → (eyebrow icon) →
+ * eyebrow text → `h1` → lead → CTA. Layouts are structural modifiers
+ * (ADR-008 §3), selected by the `layout` prop:
  *
- * Composes BDS canonical classes per docs/COMPONENT-PATTERNS.md
- * §"Compose primitives — never reimplement them":
- *   - Breadcrumb trail → `bds-breadcrumb` markup pattern
- *   - Left CTA → `bds-button bds-button--inverse bds-button--md` pattern
- *   - Price-card CTA → `bds-button bds-button--primary bds-button--sm` pattern
+ *   split             — `bds-hero--split`              content + media column (60/40)
+ *   interior-minimal  — `bds-hero--interior-minimal`   narrow content column, no media
+ *   with-pricing-card — `bds-hero--with-pricing-card`  content trail + image/price card
  *
- * The Astro twin can't import the React Breadcrumb / LinkButton
- * components directly, but it MUST emit the same canonical class
- * structure so `dist/styles.css` styles the markup identically. The scoped
- * `<style>` below mirrors the `.bds-hero--with-pricing-card` rules shipped in
- * the React `Hero.css`, keeping Astro consumers self-contained.
+ * `HeroLayout` is imported from `./types`, the contract module both rails
+ * share, so a layout cannot be added to one rail only.
+ *
+ * Hero blueprints own the page's singular `h1`.
  *
  * ── Contract ─────────────────────────────────────────────────────
- * Props: BlueprintProps (universal across every blueprint).
- *   - section.heading              — h1 text (REQUIRED)
+ * Props: BlueprintProps + `layout` (+ two `--with-pricing-card` options).
+ *   - section.heading              — h1 (REQUIRED)
  *   - section.subheading           — eyebrow above h1 (optional)
  *   - section.body                 — lead paragraph (optional)
- *   - section.cta                  — primary CTA (label + url) (optional)
- *   - section.breadcrumb           — ordered trail (optional, 0-5 items typical)
- *   - section.serviceLine          — service-line slug for data-service-line binding (optional; `audience` is the @deprecated alias — #788)
- *   - section.priceCard            — right-column image + optional price overlay (REQUIRED for canonical render)
- *   - section.visualNotes.blueprintKey === 'hero_split_image_card_overlay'
+ *   - section.cta                  — primary CTA (optional)
+ *   - clientFacts.heroImageUrl     — `--split` media column; emits a
+ *     `data-content-needed="hero_image_url"` stub when missing (CI greppable)
+ *   - section.breadcrumb           — `--with-pricing-card` trail (optional)
+ *   - section.serviceLine          — `--with-pricing-card` service-line slug
+ *                                    (`audience` is the @deprecated alias — #788)
+ *   - section.iconUrl / iconAlt    — `--with-pricing-card` eyebrow icon (optional)
+ *   - section.priceCard            — `--with-pricing-card` right column; emits the
+ *                                    `data-content-needed` stub when absent
+ *
+ * `blueprintKey` is supplied by `BlueprintDispatcher.astro` and rendered as
+ * `data-blueprint-key`, so one block keeps emitting the three distinct
+ * markers the scaffold contract asserts on. Composing this block directly
+ * (outside dispatch) emits no key marker — the same split the React rail
+ * draws between `<Hero>` and its key adapters.
  *
  * ── required_facts ───────────────────────────────────────────────
- * None at the clientFacts level. If `priceCard` is omitted, the right
- * column renders the non-hallucinatable `data-content-needed` stub.
+ * `--split`: heroImageUrl (falls back to the stub). Other layouts: none.
  *
- * ── CSS custom properties (per-client override surface) ──────────
- *   --bds-hero-bg              (default: var(--page-secondary))
- *   --bds-hero-padding-y       (default: clamp block)
+ * ── CSS custom properties (Tier-4 hooks) ─────────────────────────
+ *   --bds-hero-bg              (--split / --interior-minimal: var(--page-primary);
+ *                               --with-pricing-card: var(--page-secondary))
+ *   --bds-hero-padding-y       (--with-pricing-card only; default: clamp block)
  *   --bds-hero-headline-color  (default: var(--text-primary))
- *   --bds-hero-eyebrow-color   (default: var(--text-primary))
- *   --bds-hero-lead-color      (default: var(--text-primary))
+ *   --bds-hero-eyebrow-color   (default: var(--text-brand-primary))
+ *   --bds-hero-lead-color      (default: var(--text-secondary))
+ *   --bds-hero-accent-line     (default: var(--border-brand-primary))
+ *   --bds-hero-image-radius    (default: var(--border-radius-lg))
  *   --bds-hero-media-bg        (default: var(--surface-primary))
  *   --bds-hero-radius          (default: var(--border-radius-lg))
  *
  * ── a11y (WCAG 2.1 AA) ───────────────────────────────────────────
  * - Heading is h1 (hero blueprints own the page's singular h1).
  * - aria-labelledby wires the section landmark to the h1 id.
+ * - Eyebrow is prose, not a heading.
  * - Breadcrumb uses the `bds-breadcrumb` pattern (nav + aria-label,
  *   aria-current="page" on the final crumb).
- * - Image alt: empty string (decorative) when omitted; consumer can
- *   provide informational alt via section.priceCard.imageAlt.
+ * - Image alt: the decorative-default empty string (the h1 conveys meaning);
+ *   the price-card image takes `section.priceCard.imageAlt` when informational.
  */
-import type { BlueprintProps } from './types';
+import type { BlueprintProps, HeroLayout, KnownBlueprintKey } from './types';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
@@ -93,6 +104,14 @@ const aspectToken = (ratio: FrameRatio): string =>
   `var(--aspect-${DEPRECATED_RATIO_ALIAS[ratio] ?? ratio})`;
 
 interface Props extends BlueprintProps {
+  /** Structural layout. Defaults to `split`, matching the React twin. */
+  layout?: HeroLayout;
+  /**
+   * Blueprint key to emit as `data-blueprint-key`. Supplied by
+   * `BlueprintDispatcher.astro`; omitted when the block is composed directly.
+   */
+  blueprintKey?: KnownBlueprintKey;
+  /** `--with-pricing-card` image ratio. Ignored by the other layouts. */
   imageRatio?: FrameRatio;
   /**
    * When false, suppresses the eyebrow icon slot (raw `iconUrl` image or the
@@ -102,28 +121,53 @@ interface Props extends BlueprintProps {
   showServiceTag?: boolean;
 }
 
-const { section, imageRatio = 'square', showServiceTag = true } = Astro.props;
+const {
+  section,
+  clientFacts,
+  layout = 'split',
+  blueprintKey,
+  imageRatio = 'square',
+  showServiceTag = true,
+} = Astro.props;
 
 const { breadcrumb = [], serviceLine, audience, iconUrl, iconAlt, priceCard } = section;
 // `serviceLine` is canonical; `audience` is the deprecated alias (#788).
 const resolvedServiceLine = serviceLine ?? audience;
+
 const titleId = `${section.sectionKey}-title`;
 const eyebrow = section.subheading;
 const headline = section.heading ?? '';
 const lead = section.body;
 const cta = section.cta;
+
+const isSplit = layout === 'split';
+const isPricingCard = layout === 'with-pricing-card';
+const heroImage = clientFacts.heroImageUrl;
+
+// The pricing-card layout sits on an audience-tinted surface, so its single
+// action is the inverse button; the other layouts use the primary fill.
+const ctaClass = isPricingCard
+  ? 'bds-button bds-button--inverse bds-button--md'
+  : 'bds-button bds-button--primary bds-button--md';
+
+// Non-square ratios drive the frame + stub through one custom property; the
+// `--aspect-1-1` default lives in the stylesheet.
+const ratioStyle =
+  isPricingCard && imageRatio !== 'square'
+    ? `--bds-hero-image-ratio: ${aspectToken(imageRatio)}`
+    : undefined;
 ---
 
 <section
-  class="bds-blueprint-section bds-hero bds-hero--with-pricing-card"
+  class={`bds-blueprint-section bds-hero bds-hero--${layout}`}
   aria-labelledby={titleId}
-  data-blueprint-key="hero_split_image_card_overlay"
-  data-service-line={resolvedServiceLine}
-  data-audience={resolvedServiceLine}
+  data-blueprint-key={blueprintKey}
+  data-service-line={isPricingCard ? resolvedServiceLine : undefined}
+  data-audience={isPricingCard ? resolvedServiceLine : undefined}
 >
   <div class="bds-blueprint-section__container bds-hero__container">
     <div class="bds-hero__content">
-      {breadcrumb.length > 0 && (
+      {isPricingCard && breadcrumb.length > 0 && (
         <nav class="bds-breadcrumb bds-hero__breadcrumb" aria-label="Breadcrumb">
           {breadcrumb.map((item, idx) => {
             const isLast = idx === breadcrumb.length - 1;
@@ -147,7 +191,7 @@ const cta = section.cta;
       )}
 
       {/*
-        Eyebrow icon precedence (brik-bds#546):
+        Eyebrow icon precedence (brik-bds#546) — `--with-pricing-card` only:
           1. iconUrl set → render raw <img> (legacy/decorative escape hatch)
           2. serviceLine set, no iconUrl → render canonical <ServiceTag variant="icon">
              markup inline (Astro can't import the React component; it emits
@@ -158,7 +202,7 @@ const cta = section.cta;
         `showServiceTag={false}` suppresses this whole slot while leaving
         `data-service-line` theming intact (brik-bds#871).
       */}
-      {showServiceTag && (iconUrl ? (
+      {isPricingCard && showServiceTag && (iconUrl ? (
         <img
           src={iconUrl}
           alt={iconAlt ?? ''}
@@ -181,18 +225,39 @@ const cta = section.cta;
       {lead && <p class="bds-hero__lead">{lead}</p>}
 
       {cta && 'url' in cta && (
-        <a href={cta.url} class="bds-button bds-button--inverse bds-button--md">
+        <a href={cta.url} class={ctaClass}>
           <span class="bds-button__content">{cta.label}</span>
         </a>
       )}
     </div>
 
-    {priceCard ? (
+    {isSplit && (heroImage ? (
+      <div class="bds-hero__media">
+        <img
+          src={heroImage}
+          alt=""
+          width="960"
+          height="1200"
+          loading="eager"
+          decoding="async"
+          class="bds-hero__image"
+        />
+      </div>
+    ) : (
+      <div
+        class="bds-blueprint-section__missing bds-hero__missing"
+        data-content-needed="hero_image_url"
+        role="presentation"
+      >
+        <p class="bds-blueprint-section__missing-label">
+          Hero image missing for this client.
+        </p>
+      </div>
+    ))}
+
+    {isPricingCard && (priceCard ? (
       <aside class="bds-hero__media-card">
-        <div
-          class="bds-hero__image-frame"
-          style={imageRatio !== 'square' ? `--bds-hero-image-ratio: ${aspectToken(imageRatio)}` : undefined}
-        >
+        <div class="bds-hero__image-frame" style={ratioStyle}>
           <img
             src={priceCard.imageUrl}
             alt={priceCard.imageAlt ?? ''}
@@ -222,20 +287,163 @@ const cta = section.cta;
         class="bds-blueprint-section__missing bds-hero__missing"
         data-content-needed="hero_image_url"
         role="presentation"
-        style={imageRatio !== 'square' ? `--bds-hero-image-ratio: ${aspectToken(imageRatio)}` : undefined}
+        style={ratioStyle}
       >
         <p class="bds-blueprint-section__missing-label">
           Hero image card missing for this page.
         </p>
       </aside>
-    )}
+    ))}
   </div>
 </section>
 
 <style>
-  /* Centred container: ../section-shell.css (ADR-021). The tighter interior
-     rhythm below is a documented modifier-level exception — twin-consistent
-     with React `Hero.css`, and unlayered so it outranks `.bds-blueprint-section`. */
+  /* Mirrors ../react/Hero.css — keep in sync until a unified CSS distribution
+     lands across the React + Astro twins. Every layout-specific rule is
+     modifier-scoped, which is what lets the three former per-layout files
+     share one stylesheet without colliding (#2302).
+
+     Section rhythm + centred container: ../section-shell.css (ADR-021). */
+
+  /* ── Shared spine ─────────────────────────────────────────────── */
+
+  .bds-hero {
+    background: var(--bds-hero-bg, var(--page-primary));
+  }
+
+  .bds-hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* Content rhythm (ADR-023 §3), mirroring the React twin in Hero.css:
+     eyebrow→title is tight (--gap-sm), title→lead is medium (--gap-md).
+     Composed slots (breadcrumb, eyebrow icon, CTA) take the medium default. */
+
+  .bds-hero__content > * + * {
+    margin-top: var(--gap-md);
+  }
+
+  .bds-hero__subtitle + .bds-hero__title {
+    margin-top: var(--gap-sm);
+  }
+
+  .bds-hero__subtitle {
+    margin: 0;
+    font-family: var(--font-family-label);
+    font-size: var(--label-lg);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bds-hero-eyebrow-color, var(--text-brand-primary));
+  }
+
+  .bds-hero__title {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: clamp(var(--heading-xl), 4vw, var(--display-sm));
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-tight);
+    color: var(--bds-hero-headline-color, var(--text-primary));
+  }
+
+  .bds-hero__lead {
+    /* Rhythm comes from the `> * + *` adjacency above — a margin here would
+       stack on top of it (the additive case ADR-023 §3 rules out). */
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--heading-sm);
+    line-height: var(--font-line-height-relaxed);
+    color: var(--bds-hero-lead-color, var(--text-secondary));
+  }
+
+  /* `--interior-minimal` deliberately omits the measure cap: its container is
+     already clamped to --measure-lg, and the pre-consolidation file carried no
+     max-width here. Scoped rather than shared so consolidating changed no
+     layout's rendering (#2302). */
+  .bds-hero--split .bds-hero__lead,
+  .bds-hero--with-pricing-card .bds-hero__lead {
+    max-width: 55ch;
+  }
+
+  .bds-hero__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Non-hallucinatable content stub — CI grep on data-content-needed. The
+     aspect-ratio is layout-scoped below; only the corner radius is shared. */
+  .bds-hero__missing {
+    border-radius: var(--bds-hero-image-radius, var(--border-radius-lg));
+  }
+
+  /* ── --interior-minimal: single narrow content column, no media ── */
+
+  /* Narrow reading column + wider inline inset — a deliberate modifier-scoped
+     exception to the shared container (ADR-021 §3), matching the React twin's
+     `.bds-hero--interior-minimal .bds-hero__container` rule. */
+  .bds-hero--interior-minimal .bds-hero__container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    max-width: var(--measure-lg);
+    --bds-blueprint-section-padding-inline: var(--padding-xl);
+  }
+
+  /* ── --split: content column + media column (60/40) ─────────────── */
+
+  .bds-hero--split .bds-hero__container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-xl);
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .bds-hero--split .bds-hero__container {
+      grid-template-columns: 3fr 2fr;
+      gap: var(--gap-2xl);
+    }
+
+    .bds-hero--split .bds-hero__title::after {
+      content: '';
+      display: block;
+      width: 3rem;
+      height: 2px;
+      margin-top: var(--gap-lg);
+      background: var(--bds-hero-accent-line, var(--border-brand-primary));
+    }
+  }
+
+  .bds-hero--split .bds-hero__title {
+    font-size: clamp(var(--heading-2xl), 5vw, var(--display-sm));
+    position: relative;
+  }
+
+  .bds-hero--split .bds-hero__media {
+    aspect-ratio: var(--aspect-4-5);
+    overflow: hidden;
+    border-radius: var(--bds-hero-image-radius, var(--border-radius-lg));
+  }
+
+  .bds-hero--split .bds-hero__missing {
+    aspect-ratio: var(--aspect-4-5);
+  }
+
+  /* ── --with-pricing-card: interior split (content trail + image/price card) ──
+   *
+   * Consolidates the former bp-hero-img-card blueprint (brik-bds#1165). Left
+   * column: breadcrumb + eyebrow icon + eyebrow text + h1 + lead + inverse CTA on
+   * a soft audience-tinted surface. Right column: an `aside` white card with the
+   * page image + optional price overlay + price CTA.
+   *
+   * The tighter interior rhythm is a documented modifier-level exception —
+   * twin-consistent with React `Hero.css`, and unlayered so it outranks
+   * `.bds-blueprint-section`. */
+
   .bds-hero--with-pricing-card {
     background: var(--bds-hero-bg, var(--page-secondary));
     padding-block: var(
@@ -371,7 +579,7 @@ const cta = section.cta;
     --text-brand-primary: var(--text-service-back-office-on-dark);
   }
 
-  .bds-hero__container {
+  .bds-hero--with-pricing-card .bds-hero__container {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--gap-xl);
@@ -379,29 +587,10 @@ const cta = section.cta;
   }
 
   @media (min-width: 768px) {
-    .bds-hero__container {
+    .bds-hero--with-pricing-card .bds-hero__container {
       grid-template-columns: 58fr 42fr;
       gap: var(--gap-2xl);
     }
-  }
-
-  .bds-hero__content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  /* Content rhythm (ADR-023 §3), mirroring the React twin in Hero.css:
-     eyebrow→title is tight (--gap-sm), title→lead is medium (--gap-md).
-     One uniform `gap` renders both identically. Breadcrumb and the eyebrow
-     icon take the medium default through `> * + *`. */
-
-  .bds-hero__content > * + * {
-    margin-top: var(--gap-md);
-  }
-
-  .bds-hero__subtitle + .bds-hero__title {
-    margin-top: var(--gap-sm);
   }
 
   .bds-hero__breadcrumb {
@@ -419,32 +608,22 @@ const cta = section.cta;
     object-fit: contain;
   }
 
-  .bds-hero__subtitle {
-    margin: 0;
-    font-family: var(--font-family-label);
-    font-size: var(--label-lg);
+  /* Pricing-card content column: bolder headline + service-token-driven color
+     hooks (default to --text-primary when no service-line cascade is active). */
+  .bds-hero--with-pricing-card .bds-hero__subtitle {
     font-weight: var(--font-weight-semibold);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     color: var(--bds-hero-eyebrow-color, var(--text-primary));
   }
 
-  .bds-hero__title {
-    margin: 0;
-    font-family: var(--font-family-heading);
+  .bds-hero--with-pricing-card .bds-hero__title {
     font-size: clamp(var(--heading-xl), 5vw, var(--heading-2xl));
     font-weight: var(--font-weight-bold);
-    line-height: var(--font-line-height-tight);
     color: var(--bds-hero-headline-color, var(--text-primary));
   }
 
-  .bds-hero__lead {
-    margin: 0;
-    font-family: var(--font-family-body);
+  .bds-hero--with-pricing-card .bds-hero__lead {
     font-size: var(--body-xl);
-    line-height: var(--font-line-height-relaxed);
     color: var(--bds-hero-lead-color, var(--text-primary));
-    max-width: 55ch;
   }
 
   .bds-hero__media-card {
@@ -462,13 +641,6 @@ const cta = section.cta;
     overflow: hidden;
     border-radius: var(--border-radius-md);
     background: var(--surface-secondary);
-  }
-
-  .bds-hero__image {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
 
   .bds-hero__price {
@@ -498,9 +670,7 @@ const cta = section.cta;
     line-height: 1;
   }
 
-  /* Stub treatment: ../section-shell.css `.bds-blueprint-section__missing`. Only the
-     ratio + corner radius vary per renderer. */
-  .bds-hero__missing {
+  .bds-hero--with-pricing-card .bds-hero__missing {
     aspect-ratio: var(--bds-hero-image-ratio, var(--aspect-1-1));
     border-radius: var(--bds-hero-radius, var(--border-radius-lg));
   }

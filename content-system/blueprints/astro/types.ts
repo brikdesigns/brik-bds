@@ -79,6 +79,52 @@ export const WIRED_BLUEPRINT_KEYS = [
 export type WiredBlueprintKey = (typeof WIRED_BLUEPRINT_KEYS)[number];
 
 /**
+ * Layout unions — the shared `layout`-as-prop axis for both rails (#2302).
+ *
+ * A block is one component; the layout it renders in is a prop, never a
+ * filename. Both rails read these unions from this module so a layout
+ * cannot be added to one rail only:
+ *
+ *   - Astro — `Hero.astro`, `Cta.astro`, `CardGrid.astro` take `layout`
+ *     directly; `BlueprintDispatcher.astro` supplies it per blueprint key.
+ *   - React — `Hero.tsx` / `Cta.tsx` re-export `HeroLayout` / `CtaLayout`
+ *     from here, so `import type { HeroLayout } from './Hero'` is unchanged.
+ *
+ * This module is the framework-agnostic contract both rails already share
+ * (`Hero.tsx` imports `BlueprintCta` + `isActionCta` from it), so the unions
+ * are declared here rather than in a rail-specific file — a React-side
+ * declaration would make the Astro package depend on a `.tsx` module.
+ */
+
+/**
+ * `bds-hero` layouts.
+ *   `split`             — content column + media column (the 60/40 hero).
+ *   `interior-minimal`  — narrow content column only, no media.
+ *   `with-pricing-card` — interior split; content trail + image/price card.
+ */
+export type HeroLayout = 'split' | 'interior-minimal' | 'with-pricing-card';
+
+/**
+ * `bds-cta` layouts.
+ *   `default` — single centred column on the inverse surface.
+ *   `split`   — message column + contact-method aside.
+ */
+export type CtaLayout = 'default' | 'split';
+
+/**
+ * `bds-card-grid` layouts — the item shape the section wrapper renders when
+ * it is driven by `section.items` rather than composed children.
+ *   `card-grid`       — 3-up bordered cards with media, category, CTA.
+ *   `two-column-list` — 2-up plain title/description rows, no card surface.
+ *
+ * The React rail expresses the same two layouts through its composed-children
+ * adapters (`Services3ColCardGrid` / `ServicesDetailTwoColumn`) rather than a
+ * prop, because React blueprints can pass nodes and Astro dispatch cannot.
+ * Adding a third layout still means adding it here first.
+ */
+export type CardGridLayout = 'card-grid' | 'two-column-list';
+
+/**
  * Optional CTA button size. Mirrors the `Button` `size` union (inlined so
  * this contract stays framework-agnostic). Omitted → the blueprint's own
  * default is preserved (no visual change for existing consumers).
