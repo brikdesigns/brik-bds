@@ -1,0 +1,223 @@
+{
+  "_why": "Frozen resolved values for the 54 named colour-ramp aliases. brik-bds#1949. The existing #1739 suite checks that figma-tokens.css and color-ramps.generated.json AGREE — but both regenerate together from the Brand Kit, so a re-sync that moves a value keeps them agreeing and passes. This file is the independent constant that a re-sync cannot move.",
+  "_updating": "A diff here means a shipped colour CHANGED. That is a visual change, never a merge conflict to resolve away. Re-baseline only with the value move stated in the PR body: UPDATE_COLOR_ALIAS_BASELINE=1 npx vitest run scripts/__tests__/lint-tokens-deprecated.test.mjs",
+  "_source": "tokens/figma-tokens.css, resolved through each alias. Captured on main @ 9f0fea6a, 2026-09-09.",
+  "aliases": {
+    "--color-grayscale-darkest": {
+      "alias": "--color-grayscale-950",
+      "hex": "#1b1b1b"
+    },
+    "--color-grayscale-darker": {
+      "alias": "--color-grayscale-800",
+      "hex": "#333333"
+    },
+    "--color-grayscale-dark": {
+      "alias": "--color-grayscale-700",
+      "hex": "#5a5a5a"
+    },
+    "--color-grayscale-light": {
+      "alias": "--color-grayscale-500",
+      "hex": "#828282"
+    },
+    "--color-grayscale-lighter": {
+      "alias": "--color-grayscale-300",
+      "hex": "#e0e0e0"
+    },
+    "--color-grayscale-lightest": {
+      "alias": "--color-grayscale-100",
+      "hex": "#f2f2f2"
+    },
+    "--color-blue-lightest": {
+      "alias": "--color-blue-100",
+      "hex": "#f8fdff"
+    },
+    "--color-blue-lighter": {
+      "alias": "--color-blue-300",
+      "hex": "#b2e3f5"
+    },
+    "--color-blue-light": {
+      "alias": "--color-blue-500",
+      "hex": "#8ebbcc"
+    },
+    "--color-blue-dark": {
+      "alias": "--color-blue-700",
+      "hex": "#6c95a3"
+    },
+    "--color-blue-darker": {
+      "alias": "--color-blue-800",
+      "hex": "#4d6e7b"
+    },
+    "--color-blue-darkest": {
+      "alias": "--color-blue-950",
+      "hex": "#314952"
+    },
+    "--color-green-lightest": {
+      "alias": "--color-green-100",
+      "hex": "#f8fff3"
+    },
+    "--color-green-lighter": {
+      "alias": "--color-green-300",
+      "hex": "#daffc0"
+    },
+    "--color-green-light": {
+      "alias": "--color-green-500",
+      "hex": "#bcff8c"
+    },
+    "--color-green-dark": {
+      "alias": "--color-green-700",
+      "hex": "#9ada6c"
+    },
+    "--color-green-darker": {
+      "alias": "--color-green-800",
+      "hex": "#71a74a"
+    },
+    "--color-green-darkest": {
+      "alias": "--color-green-950",
+      "hex": "#2a5542"
+    },
+    "--color-orange-lightest": {
+      "alias": "--color-orange-100",
+      "hex": "#ffe8dc"
+    },
+    "--color-orange-lighter": {
+      "alias": "--color-orange-300",
+      "hex": "#ffad92"
+    },
+    "--color-orange-light": {
+      "alias": "--color-orange-500",
+      "hex": "#e76134"
+    },
+    "--color-orange-dark": {
+      "alias": "--color-orange-700",
+      "hex": "#b4411a"
+    },
+    "--color-orange-darker": {
+      "alias": "--color-orange-800",
+      "hex": "#812608"
+    },
+    "--color-orange-darkest": {
+      "alias": "--color-orange-950",
+      "hex": "#3f1000"
+    },
+    "--color-pink-lightest": {
+      "alias": "--color-pink-100",
+      "hex": "#ffe9f6"
+    },
+    "--color-pink-lighter": {
+      "alias": "--color-pink-300",
+      "hex": "#ffa8dd"
+    },
+    "--color-pink-light": {
+      "alias": "--color-pink-500",
+      "hex": "#ff67c3"
+    },
+    "--color-pink-dark": {
+      "alias": "--color-pink-700",
+      "hex": "#ff25aa"
+    },
+    "--color-pink-darker": {
+      "alias": "--color-pink-800",
+      "hex": "#d20080"
+    },
+    "--color-pink-darkest": {
+      "alias": "--color-pink-950",
+      "hex": "#8e0057"
+    },
+    "--color-poppy-lightest": {
+      "alias": "--color-poppy-100",
+      "hex": "#ffefeb"
+    },
+    "--color-poppy-lighter": {
+      "alias": "--color-poppy-300",
+      "hex": "#ffa693"
+    },
+    "--color-poppy-light": {
+      "alias": "--color-poppy-500",
+      "hex": "#e35335"
+    },
+    "--color-poppy-dark": {
+      "alias": "--color-poppy-700",
+      "hex": "#b0351b"
+    },
+    "--color-poppy-darker": {
+      "alias": "--color-poppy-800",
+      "hex": "#7d1d09"
+    },
+    "--color-poppy-darkest": {
+      "alias": "--color-poppy-950",
+      "hex": "#4a0d00"
+    },
+    "--color-purple-lightest": {
+      "alias": "--color-purple-100",
+      "hex": "#f2f0f7"
+    },
+    "--color-purple-lighter": {
+      "alias": "--color-purple-300",
+      "hex": "#c4b0eb"
+    },
+    "--color-purple-light": {
+      "alias": "--color-purple-500",
+      "hex": "#9e8bc2"
+    },
+    "--color-purple-dark": {
+      "alias": "--color-purple-700",
+      "hex": "#796999"
+    },
+    "--color-purple-darker": {
+      "alias": "--color-purple-800",
+      "hex": "#574a71"
+    },
+    "--color-purple-darkest": {
+      "alias": "--color-purple-950",
+      "hex": "#2b2440"
+    },
+    "--color-tan-lightest": {
+      "alias": "--color-tan-100",
+      "hex": "#f1f0ec"
+    },
+    "--color-tan-lighter": {
+      "alias": "--color-tan-300",
+      "hex": "#cfcdc5"
+    },
+    "--color-tan-light": {
+      "alias": "--color-tan-500",
+      "hex": "#adaaa0"
+    },
+    "--color-tan-dark": {
+      "alias": "--color-tan-700",
+      "hex": "#8b887d"
+    },
+    "--color-tan-darker": {
+      "alias": "--color-tan-800",
+      "hex": "#69665c"
+    },
+    "--color-tan-darkest": {
+      "alias": "--color-tan-950",
+      "hex": "#47453c"
+    },
+    "--color-yellow-lightest": {
+      "alias": "--color-yellow-100",
+      "hex": "#fffee1"
+    },
+    "--color-yellow-lighter": {
+      "alias": "--color-yellow-300",
+      "hex": "#ffecac"
+    },
+    "--color-yellow-light": {
+      "alias": "--color-yellow-500",
+      "hex": "#f4d364"
+    },
+    "--color-yellow-dark": {
+      "alias": "--color-yellow-700",
+      "hex": "#c1a443"
+    },
+    "--color-yellow-darker": {
+      "alias": "--color-yellow-800",
+      "hex": "#8e7729"
+    },
+    "--color-yellow-darkest": {
+      "alias": "--color-yellow-950",
+      "hex": "#634716"
+    }
+  }
+}

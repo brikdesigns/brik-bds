@@ -12,6 +12,7 @@ const REPO_ROOT = resolve(import.meta.dirname, '..', '..');
 const LINTER = resolve(REPO_ROOT, 'scripts', 'lint-tokens.js');
 const FIGMA_TOKENS = resolve(REPO_ROOT, 'tokens', 'figma-tokens.css');
 const RAMPS = resolve(REPO_ROOT, 'design-tokens', 'color-ramps.generated.json');
+const ALIAS_BASELINE = resolve(REPO_ROOT, 'tokens', 'color-alias-baseline.json');
 
 function lint(css) {
   const dir = mkdtempSync(join(tmpdir(), 'bds-deprecated-'));
@@ -99,4 +100,51 @@ describe('the alias layer preserves every legacy value (#1739 AC 1)', () => {
     expect(decls.get(legacy), `${legacy} must still be emitted`).toBe(`var(${numeric})`);
     expect(decls.get(numeric)).toBe(hex);
   });
+});
+
+describe('the named aliases still paint their FROZEN values (#1949)', () => {
+  // The suite above compares figma-tokens.css against color-ramps.generated.json.
+  // Both regenerate from the Brand Kit on every sync, so they move together and
+  // keep agreeing — proven on 2026-09-09 by setting grayscale-700 to #ff0000 in
+  // both and watching all 61 tests pass. It is a consistency check; nothing in
+  // the repo was a stability check, and #2337 re-syncs the whole Brand Kit.
+  //
+  // tokens/color-alias-baseline.json is the constant a re-sync cannot move.
+  // A failure here is a shipped color changing — read it as a visual diff to
+  // approve or revert, never as a stale file to regenerate away.
+  const baseline = JSON.parse(readFileSync(ALIAS_BASELINE, 'utf8')).aliases;
+
+  const css = readFileSync(FIGMA_TOKENS, 'utf8');
+  const decls = new Map();
+  for (const m of css.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
+    if (!decls.has(m[1])) decls.set(m[1], m[2].trim());
+  }
+
+  const resolved = {};
+  for (const [name, value] of decls) {
+    if (!/^--color-[a-z]+-(lightest|lighter|light|darkest|darker|dark)$/.test(name)) continue;
+    const alias = value.match(/^var\((--color-[a-z]+-\d+)\)$/);
+    if (!alias) continue;
+    resolved[name] = { alias: alias[1], hex: decls.get(alias[1]) };
+  }
+
+  if (process.env.UPDATE_COLOR_ALIAS_BASELINE) {
+    const doc = JSON.parse(readFileSync(ALIAS_BASELINE, 'utf8'));
+    doc.aliases = resolved;
+    writeFileSync(ALIAS_BASELINE, `${JSON.stringify(doc, null, 2)}\n`);
+  }
+
+  it('covers every named alias the CSS emits — no silent shrinkage', () => {
+    // Guards the denominator. Deleting an alias would otherwise pass by simply
+    // never being compared, which is the exact deletion #1949 defers.
+    expect(Object.keys(resolved).sort()).toEqual(Object.keys(baseline).sort());
+  });
+
+  it.each(Object.entries(baseline).map(([token, e]) => ({ token, ...e })))(
+    '$token still paints $hex',
+    ({ token, alias, hex }) => {
+      expect(resolved[token]?.alias, `${token} must still alias ${alias}`).toBe(alias);
+      expect(resolved[token]?.hex, `${token} changed color — approve or revert`).toBe(hex);
+    },
+  );
 });
