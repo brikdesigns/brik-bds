@@ -36,7 +36,7 @@ type Story = StoryObj<typeof Cta>;
 
 /**
  * The workhorse shape: heading + body + one primary action, centered.
- * Replaces the legacy `cta_dark_centered`.
+ * Replaces the legacy `cta_centered`.
  *
  * @summary Single-column closing CTA on the inverse surface
  */

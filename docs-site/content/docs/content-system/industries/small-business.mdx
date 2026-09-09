@@ -159,13 +159,13 @@ Every required page archetype maps to a specific sequence of section blueprints 
 
 | Page | Blueprint sequence |
 |---|---|
-| **Home** | `hero_split_60_40` → `services_detail_two_column` → `about_story_split` → `testimonials_featured_large` → `cta_split_contact` |
-| **About** | `hero_interior_minimal` → `about_story_split` → `cta_dark_centered` |
-| **Services** | `hero_interior_minimal` → `services_detail_two_column` → `cta_dark_centered` |
+| **Home** | `hero_split` → `two_column_detail` → `story_split` → `testimonials_featured_large` → `cta_split_contact` |
+| **About** | `hero_interior_minimal` → `story_split` → `cta_centered` |
+| **Services** | `hero_interior_minimal` → `two_column_detail` → `cta_centered` |
 | **Contact** | `hero_interior_minimal` → `cta_split_contact` |
-| **Testimonials** | `hero_interior_minimal` → `testimonials_featured_large` → `cta_dark_centered` |
-| **Pricing** | `hero_interior_minimal` → `services_detail_two_column` → `cta_dark_centered` |
-| **Service Areas** | `hero_interior_minimal` → `about_story_split` → `cta_dark_centered` |
+| **Testimonials** | `hero_interior_minimal` → `testimonials_featured_large` → `cta_centered` |
+| **Pricing** | `hero_interior_minimal` → `two_column_detail` → `cta_centered` |
+| **Service Areas** | `hero_interior_minimal` → `story_split` → `cta_centered` |
 
 `Stats` sections are intentionally NOT in any composition by default — they render only when content generation emits a `sectionType: 'stats'` section explicitly. (See [PR #217](https://github.com/brikdesigns/brik-bds/issues/217) for the rationale.)
 

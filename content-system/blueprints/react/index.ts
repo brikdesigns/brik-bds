@@ -44,8 +44,8 @@ export type { CardGridProps } from './CardGrid';
 // `<CalloutPanel>` — the `bds-callout-panel` section primitive
 // (post-brik-bds#581 consolidation). Props-based: section header + a
 // plan-callout card, with an optional `media` slot. New consumers
-// compose this directly; the `support_plan_callout_split` blueprint key
-// dispatches through the `SupportPlanCalloutSplit` adapter below.
+// compose this directly; the `callout_split` blueprint key
+// dispatches through the `CalloutSplit` adapter below.
 export { CalloutPanel } from './CalloutPanel';
 export type { CalloutPanelProps } from './CalloutPanel';
 
@@ -54,7 +54,7 @@ export type { CalloutPanelProps } from './CalloutPanel';
 // a primary and optional secondary action (brik-bds#590), in a single-column
 // default or two-column `--split` layout. Replaces the ADR-008-banned
 // `bp-cta-dark-centered`. New consumers compose this directly; the
-// `cta_dark_centered` and `cta_split_contact` keys dispatch through the
+// `cta_centered` and `cta_split_contact` keys dispatch through the
 // adapters below.
 export { Cta } from './Cta';
 export type { CtaProps, CtaLayout } from './Cta';
@@ -89,7 +89,7 @@ export type { HeroMediaCardPriceProps } from './HeroMediaCardPrice';
 // as a `<CardTestimonial>` aside. Single-member family → no layout modifier;
 // the split is a `:has()`-driven state, not a named modifier. Replaces the
 // ADR-008-banned `bp-about-story-split`. New consumers compose this directly;
-// the `about_story_split` key dispatches through the adapter below.
+// the `story_split` key dispatches through the adapter below.
 export { About } from './About';
 export type { AboutProps, AboutTestimonial } from './About';
 
@@ -98,7 +98,7 @@ export type { AboutProps, AboutTestimonial } from './About';
 // responsive grid of brand-colored, audience-scoped feature cards on a dark
 // default surface. Replaces the ADR-008-banned `bp-features-branded-dark`
 // (`--dark` = theme, `--branded` = appearance, `3col` = count). New consumers
-// compose this directly; the `features_3col_branded_dark` key dispatches
+// compose this directly; the `feature_grid` key dispatches
 // through the adapter below.
 export { Features } from './Features';
 export type { FeaturesProps, FeatureItem } from './Features';
@@ -112,7 +112,7 @@ export { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
 export { HeroInteriorMinimal } from './HeroInteriorMinimal';
 export { ServicesDetailTwoColumn } from './ServicesDetailTwoColumn';
 export { Services3ColCardGrid } from './Services3ColCardGrid';
-export { SupportPlanCalloutSplit } from './SupportPlanCalloutSplit';
+export { CalloutSplit } from './CalloutSplit';
 export { Features3ColBrandedDark } from './Features3ColBrandedDark';
 export { AboutStorySplit } from './AboutStorySplit';
 export { StatsDarkBar } from './StatsDarkBar';

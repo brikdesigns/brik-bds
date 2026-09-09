@@ -50,21 +50,21 @@ export const realEstateCommercial: IndustryPack = {
       required: true,
       // Stats intentionally absent — render only when content generation
       // emits a sectionType: 'stats' section. See issue #217.
-      blueprintDefaults: ['hero_split_60_40', 'services_numbered_accordion', 'testimonials_featured_large', 'cta_dark_centered'],
+      blueprintDefaults: ['hero_split', 'services_numbered_accordion', 'testimonials_featured_large', 'cta_centered'],
       description: 'Lead with authority and segmentation. The homepage must orient three different audiences (Healthcare / Land / Commercial) without making any feel secondary. The hero introduces the broker; the navigation is the segmentation mechanism.',
     },
     {
       slug: 'healthcare',
       displayName: 'Healthcare Real Estate',
       required: true,
-      blueprintDefaults: ['hero_interior_minimal', 'services_detail_two_column', 'process_grid_4step_numbered', 'testimonials_featured_large', 'cta_split_contact'],
+      blueprintDefaults: ['hero_interior_minimal', 'two_column_detail', 'process_grid_4step_numbered', 'testimonials_featured_large', 'cta_split_contact'],
       description: 'Dedicated audience pathway for healthcare professionals (dental, veterinary, optometry). Tone is clinically precise — these are educated professionals who expect competence. Lead with specialized knowledge, not generic real-estate-speak.',
     },
     {
       slug: 'land',
       displayName: 'Land Sales',
       required: true,
-      blueprintDefaults: ['hero_fullbleed_photo', 'about_story_split', 'services_detail_two_column', 'cta_split_contact'],
+      blueprintDefaults: ['hero_fullbleed_photo', 'story_split', 'two_column_detail', 'cta_split_contact'],
       description: 'Middle Tennessee land: residential, agricultural, hunting. Local-knowledge-forward. Place-specific photography is essential — buyers want to feel the land before they call.',
     },
     {
@@ -74,21 +74,21 @@ export const realEstateCommercial: IndustryPack = {
       // Commercial pages benefit from stats only when the broker has
       // representative deal volume / square-footage placed numbers.
       // Content generation decides.
-      blueprintDefaults: ['hero_interior_minimal', 'services_detail_two_column', 'process_grid_4step_numbered', 'cta_dark_centered'],
+      blueprintDefaults: ['hero_interior_minimal', 'two_column_detail', 'process_grid_4step_numbered', 'cta_centered'],
       description: 'Businesses looking for the right space, market, and lease terms — retail, food service, professional services, fitness, banks, car washes, and other owner-occupant or tenant categories outside healthcare. Tone is operationally fluent: foot traffic, co-tenancy, build-out, and lease structure (CAM, exclusivity, escalation) are the levers, not cap rates. Page leans on process + a relevant proof point. NEVER frame this audience as "investors" or center capital-markets language — that is a different audience this pack does not serve.',
     },
     {
       slug: 'about',
       displayName: 'About',
       required: true,
-      blueprintDefaults: ['hero_interior_minimal', 'about_story_split', 'testimonials_featured_large', 'cta_split_contact'],
+      blueprintDefaults: ['hero_interior_minimal', 'story_split', 'testimonials_featured_large', 'cta_split_contact'],
       description: "Broker credibility is the moat for a boutique. This page should answer: who is the broker, what markets do they actually know, and why does boutique beat big-box for this client's deal.",
     },
     {
       slug: 'listings',
       displayName: 'Current Listings',
       required: false,
-      blueprintDefaults: ['hero_interior_minimal', 'services_detail_two_column', 'cta_split_contact'],
+      blueprintDefaults: ['hero_interior_minimal', 'two_column_detail', 'cta_split_contact'],
       description: 'Active inventory. Segment by audience where possible (healthcare spaces / land / commercial). IDX or manual listing cards.',
     },
     {
@@ -544,17 +544,17 @@ export const realEstateCommercial: IndustryPack = {
     home: {
       pageArchetype: 'home',
       sections: [
-        'hero_split_60_40',
+        'hero_split',
         'services_numbered_accordion',
         'testimonials_featured_large',
-        'cta_dark_centered',
+        'cta_centered',
       ],
     },
     healthcare: {
       pageArchetype: 'healthcare',
       sections: [
         'hero_interior_minimal',
-        'services_detail_two_column',
+        'two_column_detail',
         'process_grid_4step_numbered',
         'testimonials_featured_large',
         'cta_split_contact',
@@ -564,8 +564,8 @@ export const realEstateCommercial: IndustryPack = {
       pageArchetype: 'land',
       sections: [
         'hero_fullbleed_photo',
-        'about_story_split',
-        'services_detail_two_column',
+        'story_split',
+        'two_column_detail',
         'cta_split_contact',
       ],
     },
@@ -573,16 +573,16 @@ export const realEstateCommercial: IndustryPack = {
       pageArchetype: 'commercial',
       sections: [
         'hero_interior_minimal',
-        'services_detail_two_column',
+        'two_column_detail',
         'process_grid_4step_numbered',
-        'cta_dark_centered',
+        'cta_centered',
       ],
     },
     about: {
       pageArchetype: 'about',
       sections: [
         'hero_interior_minimal',
-        'about_story_split',
+        'story_split',
         'testimonials_featured_large',
         'cta_split_contact',
       ],
@@ -591,7 +591,7 @@ export const realEstateCommercial: IndustryPack = {
       pageArchetype: 'listings',
       sections: [
         'hero_interior_minimal',
-        'services_detail_two_column',
+        'two_column_detail',
         'cta_split_contact',
       ],
     },

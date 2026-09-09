@@ -33,7 +33,7 @@
  *
  * ## v0.1 React registry (1 blueprint)
  *
- * The React renderer surface starts with `services_3col_card_grid`,
+ * The React renderer surface starts with `card_grid`,
  * the blueprint that drives brikdesigns.com service-line index pages.
  * Subsequent React renderers (HeroSplit6040, HeroInteriorMinimal,
  * etc. — Workstream A in the gap audit) ship in their own PRs and
@@ -50,7 +50,7 @@ import type {
 } from '../astro/types';
 
 import { Services3ColCardGrid } from './Services3ColCardGrid';
-import { SupportPlanCalloutSplit } from './SupportPlanCalloutSplit';
+import { CalloutSplit } from './CalloutSplit';
 import { Features3ColBrandedDark } from './Features3ColBrandedDark';
 import { HeroSplit6040 } from './HeroSplit6040';
 import { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
@@ -66,17 +66,17 @@ import { BlueprintFallback } from './BlueprintFallback';
 const BLUEPRINT_REGISTRY: Partial<
   Record<KnownBlueprintKey, ComponentType<BlueprintProps>>
 > = {
-  hero_split_60_40: HeroSplit6040,
+  hero_split: HeroSplit6040,
   hero_split_image_card_overlay: HeroSplitImageCardOverlay,
   hero_interior_minimal: HeroInteriorMinimal,
-  services_detail_two_column: ServicesDetailTwoColumn,
-  services_3col_card_grid: Services3ColCardGrid,
-  support_plan_callout_split: SupportPlanCalloutSplit,
-  features_3col_branded_dark: Features3ColBrandedDark,
-  about_story_split: AboutStorySplit,
-  stats_dark_bar: StatsDarkBar,
+  two_column_detail: ServicesDetailTwoColumn,
+  card_grid: Services3ColCardGrid,
+  callout_split: CalloutSplit,
+  feature_grid: Features3ColBrandedDark,
+  story_split: AboutStorySplit,
+  stats_bar: StatsDarkBar,
   testimonials_featured_large: TestimonialsFeaturedLarge,
-  cta_dark_centered: CtaDarkCentered,
+  cta_centered: CtaDarkCentered,
   cta_split_contact: CtaSplitContact,
 };
 

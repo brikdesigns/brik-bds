@@ -98,7 +98,7 @@ When Brik promotes a new industry pack (3+ active clients, or meaningful seasona
 ```typescript
 interface Blueprint {
   // identity
-  key: string;                      // "hero_split_60_40"
+  key: string;                      // "hero_split"
   name: string;                     // "Split Hero 60/40"
   section_type: SectionType;        // hero | nav | services | …
 

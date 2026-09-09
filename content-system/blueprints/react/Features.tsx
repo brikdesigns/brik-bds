@@ -110,7 +110,7 @@ export function Features({
   return (
     <section
       className={bdsClass('bds-blueprint-section', 'bds-features', className)}
-      data-blueprint-key="features_3col_branded_dark"
+      data-blueprint-key="feature_grid"
       aria-labelledby={title ? titleId : undefined}
       {...rest}
     >

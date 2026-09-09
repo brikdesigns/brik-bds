@@ -3,7 +3,7 @@
  *
  * After brik-bds#582 the canonical primitive is `<Cta>` (the `bds-cta`
  * section block, default single-column layout). This file remains as an
- * adapter so the legacy `cta_dark_centered` blueprint key keeps dispatching
+ * adapter so the legacy `cta_centered` blueprint key keeps dispatching
  * through `BlueprintDispatcher` with the same section-data contract that
  * AI-generated pages expect — it maps `section.*` → `<Cta>` props.
  *
@@ -24,7 +24,7 @@ export function CtaDarkCentered({ section }: Props) {
       title={section.heading ?? ''}
       body={section.body ?? undefined}
       primaryCta={section.cta ?? undefined}
-      data-blueprint-key="cta_dark_centered"
+      data-blueprint-key="cta_centered"
     />
   );
 }

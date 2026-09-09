@@ -12,8 +12,8 @@
  *
  * This is the props-based primitive (mirrors the `<CardGrid>` precedent
  * from brik-bds#585). New consumers compose it directly; the
- * `support_plan_callout_split` blueprint key dispatches through the
- * `SupportPlanCalloutSplit` adapter, which maps `section.*` → these
+ * `callout_split` blueprint key dispatches through the
+ * `CalloutSplit` adapter, which maps `section.*` → these
  * props. The adapter retires in Phase E.
  *
  * Slots used (all on docs/SLOT-ALLOWLIST.md):
@@ -88,7 +88,7 @@ export function CalloutPanel({
   return (
     <section
       className={bdsClass('bds-blueprint-section', 'bds-callout-panel', className)}
-      data-blueprint-key="support_plan_callout_split"
+      data-blueprint-key="callout_split"
       data-has-media={hasMedia ? 'true' : 'false'}
       aria-labelledby={titleId}
       {...rest}

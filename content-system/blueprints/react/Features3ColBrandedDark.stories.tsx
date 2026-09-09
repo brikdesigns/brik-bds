@@ -58,9 +58,9 @@ const featuresSection: BlueprintProps['section'] = {
   body: 'A short section subheading that frames the cards below — typically a cross-sell or capability roll-up.',
   cta: null,
   visualNotes: {
-    blueprintKey: 'features_3col_branded_dark',
+    blueprintKey: 'feature_grid',
     moodKeywords: ['bold', 'modern'],
-    layoutBlueprint: 'features_3col_branded_dark',
+    layoutBlueprint: 'feature_grid',
     imageOpportunity: 'illustration per card',
     animationSuggestion: null,
     illustrationOpportunity: 'scene per card',

@@ -3,7 +3,7 @@
  *
  * After brik-bds#583 the canonical primitive is `<Hero>` (the `bds-hero`
  * section block, `split` layout). This file remains as an adapter so the
- * legacy `hero_split_60_40` blueprint key keeps dispatching through
+ * legacy `hero_split` blueprint key keeps dispatching through
  * `BlueprintDispatcher` with the same section-data contract — it maps
  * `section.*` + `clientFacts.heroImageUrl` → `<Hero>` props, building the
  * media column (the 60/40 image, or a `data-content-needed` stub when the
@@ -56,7 +56,7 @@ export function HeroSplit6040({ section, clientFacts }: Props) {
       lead={section.body ?? undefined}
       cta={section.cta ?? undefined}
       media={media}
-      data-blueprint-key="hero_split_60_40"
+      data-blueprint-key="hero_split"
     />
   );
 }

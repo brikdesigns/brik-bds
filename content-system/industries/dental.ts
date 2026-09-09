@@ -33,20 +33,20 @@ export const dental: IndustryPack = {
       // Stats intentionally absent — render only when content generation
       // emits a sectionType: 'stats' section (i.e. the practice has real
       // numbers worth leading with). See issue #217.
-      blueprintDefaults: ['hero_split_60_40', 'services_detail_two_column', 'testimonials_3col_cards', 'cta_split_contact'],
+      blueprintDefaults: ['hero_split', 'two_column_detail', 'testimonials_3col_cards', 'cta_split_contact'],
     },
     {
       slug: 'meet-the-doctor',
       displayName: 'Meet the Doctor',
       required: true,
-      blueprintDefaults: ['hero_interior_minimal', 'about_story_split', 'team_bio_grid'],
+      blueprintDefaults: ['hero_interior_minimal', 'story_split', 'team_bio_grid'],
       description: 'Owner-dentist visibility is a structural moat vs DSOs. Lead with the doctor\'s face, story, and community tie-in.',
     },
     {
       slug: 'services-overview',
       displayName: 'Services',
       required: true,
-      blueprintDefaults: ['hero_interior_minimal', 'services_detail_two_column', 'faq_accordion_grouped'],
+      blueprintDefaults: ['hero_interior_minimal', 'two_column_detail', 'faq_accordion_grouped'],
     },
     {
       slug: 'insurance-accepted',
@@ -545,10 +545,10 @@ export const dental: IndustryPack = {
       pageArchetype: 'home',
       sections: [
         'hero_fullbleed_photo',
-        'services_detail_two_column',
-        'about_story_split',
+        'two_column_detail',
+        'story_split',
         'testimonials_featured_large',
-        'cta_dark_centered',
+        'cta_centered',
       ],
     },
     'meet-the-doctor': {
@@ -556,7 +556,7 @@ export const dental: IndustryPack = {
       sections: [
         'hero_interior_minimal',
         'team_bio_grid',
-        'about_story_split',
+        'story_split',
         'cta_split_contact',
       ],
     },
@@ -564,9 +564,9 @@ export const dental: IndustryPack = {
       pageArchetype: 'services-overview',
       sections: [
         'hero_interior_minimal',
-        'services_detail_two_column',
+        'two_column_detail',
         'faq_accordion_grouped',
-        'cta_dark_centered',
+        'cta_centered',
       ],
     },
     'insurance-accepted': {
@@ -583,7 +583,7 @@ export const dental: IndustryPack = {
       sections: [
         'hero_interior_minimal',
         'features_alternating_split',
-        'cta_dark_centered',
+        'cta_centered',
       ],
     },
     'new-patient': {

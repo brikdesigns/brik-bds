@@ -30,19 +30,19 @@ export const smallBusiness: IndustryPack = {
       slug: 'home',
       displayName: 'Home',
       required: true,
-      blueprintDefaults: ['hero_split_60_40', 'services_detail_two_column', 'testimonials_3col_cards', 'cta_split_contact'],
+      blueprintDefaults: ['hero_split', 'two_column_detail', 'testimonials_3col_cards', 'cta_split_contact'],
     },
     {
       slug: 'about',
       displayName: 'About',
       required: true,
-      blueprintDefaults: ['hero_interior_minimal', 'about_story_split'],
+      blueprintDefaults: ['hero_interior_minimal', 'story_split'],
     },
     {
       slug: 'services',
       displayName: 'Services',
       required: true,
-      blueprintDefaults: ['hero_interior_minimal', 'services_detail_two_column', 'faq_accordion_grouped'],
+      blueprintDefaults: ['hero_interior_minimal', 'two_column_detail', 'faq_accordion_grouped'],
     },
     {
       slug: 'contact',
@@ -323,9 +323,9 @@ export const smallBusiness: IndustryPack = {
   // Page compositions — every page archetype this pack ships pairs
   // with a sequence of section blueprints. Small-business is the
   // fallback pack, so compositions stick to the blueprint set that
-  // ships in `@brikdesigns/bds/blueprints-astro@0.1.x` (hero_split_60_40,
-  // services_detail_two_column, about_story_split, testimonials_featured_large,
-  // cta_split_contact, cta_dark_centered, hero_interior_minimal). This
+  // ships in `@brikdesigns/bds/blueprints-astro@0.1.x` (hero_split,
+  // two_column_detail, story_split, testimonials_featured_large,
+  // cta_split_contact, cta_centered, hero_interior_minimal). This
   // guarantees a zero-fallback render for any v0.1 client using this pack.
   //
   // Stats are intentionally NOT in any composition — render only when
@@ -339,9 +339,9 @@ export const smallBusiness: IndustryPack = {
     home: {
       pageArchetype: 'home',
       sections: [
-        'hero_split_60_40',
-        'services_detail_two_column',
-        'about_story_split',
+        'hero_split',
+        'two_column_detail',
+        'story_split',
         'testimonials_featured_large',
         'cta_split_contact',
       ],
@@ -350,16 +350,16 @@ export const smallBusiness: IndustryPack = {
       pageArchetype: 'about',
       sections: [
         'hero_interior_minimal',
-        'about_story_split',
-        'cta_dark_centered',
+        'story_split',
+        'cta_centered',
       ],
     },
     services: {
       pageArchetype: 'services',
       sections: [
         'hero_interior_minimal',
-        'services_detail_two_column',
-        'cta_dark_centered',
+        'two_column_detail',
+        'cta_centered',
       ],
     },
     contact: {
@@ -371,23 +371,23 @@ export const smallBusiness: IndustryPack = {
       sections: [
         'hero_interior_minimal',
         'testimonials_featured_large',
-        'cta_dark_centered',
+        'cta_centered',
       ],
     },
     pricing: {
       pageArchetype: 'pricing',
       sections: [
         'hero_interior_minimal',
-        'services_detail_two_column',
-        'cta_dark_centered',
+        'two_column_detail',
+        'cta_centered',
       ],
     },
     'service-areas': {
       pageArchetype: 'service-areas',
       sections: [
         'hero_interior_minimal',
-        'about_story_split',
-        'cta_dark_centered',
+        'story_split',
+        'cta_centered',
       ],
     },
   },
