@@ -1,11 +1,4 @@
 {
-  "AddableComboList": {
-    "size": [
-      "sm",
-      "md",
-      "lg"
-    ]
-  },
   "AddableEntryList": {
     "size": [
       "sm",
@@ -21,13 +14,6 @@
     ]
   },
   "AddableTagList": {
-    "size": [
-      "sm",
-      "md",
-      "lg"
-    ]
-  },
-  "AddableTextList": {
     "size": [
       "sm",
       "md",
