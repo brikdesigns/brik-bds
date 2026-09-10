@@ -1,0 +1,87 @@
+name: Update Health Baseline
+
+# Re-seeds tokens/health-baseline.json (#2366) from the current measured values
+# of the three ratcheted Health-Dashboard metrics — completeness, grid
+# compliance, token coverage — and commits it to the dispatched branch.
+#
+# This is the ONLY sanctioned way to move the floors (mirrors the visual-baseline
+# discipline in update-visual-baselines.yml). A local edit to health-baseline.json
+# is a hand-forged floor with no measurement behind it; the reviewer cannot tell a
+# real improvement from a lowered bar. Running it here proves the floor equals what
+# the same reporters CI runs actually measured on this branch.
+#
+# The commit is pushed with a brik-ci-bot App installation token, not the default
+# GITHUB_TOKEN — GitHub refuses to let a GITHUB_TOKEN-authored push trigger CI, so
+# the baseline commit would otherwise park every check at action_required (#1662).
+#
+# Usage: Actions → Update Health Baseline → Run workflow → pick the branch.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: health-baseline-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  update-baseline:
+    runs-on: ubuntu-latest
+    steps:
+      # App-token push so the commit triggers CI — same reason as
+      # update-visual-baselines.yml (#1662). Scoped to contents:write alone.
+      - name: Mint push token (brik-ci-bot App)
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.BRIK_CI_BOT_APP_ID }}
+          private-key: ${{ secrets.BRIK_CI_BOT_PRIVATE_KEY }}
+          permission-contents: write
+
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # --write re-seeds every floor from the current measured value, and aborts
+      # rather than writing a gap if any reporter fails to produce a number.
+      - name: Re-seed health floors
+        run: npm run health-gate -- --write
+
+      - name: Commit and push the baseline
+        id: commit
+        run: |
+          git config user.name "brik-ci-bot[bot]"
+          git config user.email "290376200+brik-ci-bot[bot]@users.noreply.github.com"
+          git add tokens/health-baseline.json
+          if git diff --cached --quiet; then
+            echo "Floors unchanged — nothing to commit."
+            {
+              echo "## No baseline change"
+              echo
+              echo 'Every metric already matched its committed floor, so there is'
+              echo 'nothing to release.'
+            } >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "Floors changed:"
+          git --no-pager diff --cached tokens/health-baseline.json
+          git commit -m "chore(health): re-seed ratchet floors ($(git rev-parse --short HEAD))"
+          git push
+          {
+            echo "## Health floors pushed to \`${{ github.ref_name }}\`"
+            echo
+            echo 'Pushed as `brik-ci-bot[bot]`, so `tokens-gate` re-ran on the new commit'
+            echo 'automatically. Review the floor diff — it is the whole change.'
+          } >> "$GITHUB_STEP_SUMMARY"

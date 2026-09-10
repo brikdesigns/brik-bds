@@ -1,0 +1,20 @@
+{
+  "$comment": "Ratchet floors for the health gate (#2366). Each metric may hold or improve, never drop below. Regenerated ONLY by the maintainer workflow, never locally — mirrors the visual-baseline discipline. Seeded 2026-09-10 from live values.",
+  "metrics": {
+    "completeness": {
+      "floor": 96,
+      "source": "health.js --json → completeness.pct",
+      "label": "Component completeness (story + MDX + CSS)"
+    },
+    "grid": {
+      "floor": 86,
+      "source": "audit-grid.js --json → spatialPct",
+      "label": "Spatial grid compliance"
+    },
+    "coverage": {
+      "floor": 35,
+      "source": "token-coverage.js --json → usagePct",
+      "label": "Token usage coverage"
+    }
+  }
+}
