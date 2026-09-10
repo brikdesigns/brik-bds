@@ -27,7 +27,7 @@ const LogoItems = () => (
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof Marquee> = {
-  title: 'Components/marquee',
+  title: 'Content/marquee',
   component: Marquee,
   tags: ['surface-shared'],
   parameters: {

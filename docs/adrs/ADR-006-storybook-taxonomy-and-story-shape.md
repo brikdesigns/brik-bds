@@ -167,6 +167,24 @@ Two overlay-family corrections, both forward-only `title:` re-titles; no compone
 - `Containers/dialog` → **`Deprecated/dialog`**. `Dialog` is `@deprecated` — superseded by `Modal preset="confirm"` ([Dialog.tsx:38](../../components/ui/Dialog/Dialog.tsx#L38)) — and already `!manifest`-tagged. Per Part A's `Deprecated/` rule, `!manifest`-tagged stories sort there; leaving it in `Containers/` alongside live holders was a straggler.
 
 **Net effect:** the live overlay (Modal) sits in `Containers/` beside `sheet`, `dialog`'s deprecated stub sorts last under `Deprecated/`. Two docs-site Storybook-slug refs re-pointed ([modal.mdx](../../docs-site/content/docs/components/modal.mdx) → `containers-modal--overview`; [dialog.mdx](../../docs-site/content/docs/components/dialog.mdx) → `deprecated-dialog--overview`). The frozen Part A table is not rewritten (amendment convention); this entry is the source of truth.
+### 2026-09-10 — Part A: `Content/` top-level added for content-rendering components (#2371)
+
+A new `Content/` top-level bucket, sequenced after `Forms/`, groups the four content-rendering components that lack a bounded surface and were scattered under `Components/`:
+
+- `Components/prose` → **`Content/prose`**
+- `Components/content-block` → **`Content/content-block`**
+- `Components/section-header` → **`Content/section-header`**
+- `Components/marquee` → **`Content/marquee`**
+
+Forward-only `title:` re-titles plus a `'Content'` entry after `'Forms'` in the `storySort.order` in [`.storybook/preview.tsx`](../../.storybook/preview.tsx); no component code changes. One docs-site Storybook-slug ref re-pointed ([marquee.mdx](../../docs-site/content/docs/components/marquee.mdx) → `content-marquee--overview`).
+
+**Rationale.** Same name-family precedent as [`Cards/` (#1330)](#2026-07-22--part-a-cards-top-level-navigation-rename-blueprints-promoted-foundationassets-displays-dissolved-1330) and [`Forms/` (#1565)](#2026-07-29--part-a-forms-top-level-added-form-family-pulled-out-of-containers-1565): these four render page *content* (rich text, a titled band, a section heading ramp, a scrolling ticker) and read as one family, but scattered among ~48 `Components/` atoms they were hard to find. They are **not `Containers/`** — none owns a border/padding/elevation surface (`Prose.css` / `ContentBlock.css` / `SectionHeader.css` are near-empty), so the composition-role rule keeps them out of Containers; a `Content/` bucket names the family without misfiling them as holders.
+
+**Distinct from `Content System`.** The pinned curated `Content System` section (Overview / Industries / Voices / Vocabularies / Compliance) is the **BCS vocabulary docs** — content *authoring* guidance, not components. `Content/` holds the content-rendering *components*. Two names, two layers; the storySort comment notes the distinction.
+
+**Out of scope.** `block-quote` and `bullet-list` (other former-`Blocks/` members now in `Components/`) were not part of this move — revisit if the family grows.
+
+Per the amendment convention this file follows, the frozen Part A table is not rewritten; this entry is the source of truth for the current bucket set.
 
 ### 2026-07-29 — Part A: `Forms/` top-level added; form family pulled out of `Containers/` (#1565)
 

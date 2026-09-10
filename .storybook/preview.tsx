@@ -368,6 +368,8 @@ const preview: Preview = {
           ],
           // Flat taxonomy per ADR-006 Part A. Cards / Navigation / Blueprints added 2026-07-22 (#1330);
           // Forms added 2026-07-29 (#1565, form family pulled out of Containers).
+          // Content added 2026-09-10 (#2371, content-rendering components — prose, content-block,
+          // section-header, marquee — grouped by role; distinct from the curated `Content System` BCS docs above).
           // Foundation/Assets absorbs icon-family + logo + avatar + image; Displays dissolved into Containers.
           // Component-bearing categories omit child lists — sorted
           // alphabetically by `method` above. `read-mode-page` is the one
@@ -376,6 +378,7 @@ const preview: Preview = {
           'Containers',
           'Cards',
           'Forms',
+          'Content',
           'Layouts',
           'Navigation',
           'Blueprints',

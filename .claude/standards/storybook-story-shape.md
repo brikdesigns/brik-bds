@@ -328,7 +328,7 @@ Never combine two prop axes in one story. Write `Sizes` and `Variants` as separa
 
 ```text
 Overview → Foundation → Theming → Motion → Content System →
-Components → Containers → Cards → Forms → Layouts → Navigation → Blueprints → Tools → * (catch-all) → Deprecated
+Components → Containers → Cards → Forms → Content → Layouts → Navigation → Blueprints → Tools → * (catch-all) → Deprecated
 ```
 
 **No subcategory layer.** Stories sit at `<Bucket>/<component>` — not `<Bucket>/<Subcategory>/<component>`.
@@ -340,6 +340,7 @@ Components → Containers → Cards → Forms → Layouts → Navigation → Blu
 | `Components/` | Atomic UI control — including composite input controls operated as one form field (`select`, `date-picker`) and slot-shaped fillers filled with atoms (`field`, `checklist`) | button, badge, checkbox, text-input, select, date-picker, progress-stepper, field, field-grid, bullet-list, checklist, interactive-list-item, selectable-media-tile |
 | `Cards/` | Card-family holder — bounded surface with the "card" affordance | card, card-list, pricing-card, product-summary-card |
 | `Forms/` | Form-family holder — the base form container + composed form demos | form, contact-form, feedback-form, login-form, sign-up-form, search-form |
+| `Content/` | Content-rendering component — renders page content, no bounded surface (distinct from the `Content System/` BCS docs) | prose, content-block, section-header, marquee |
 | `Containers/` | Bounded holder with own border/padding/elevation (non-card, non-form) | accordion, sheet, table, data-view |
 | `Layouts/` | Pure arrangement — no styling beyond structure | stack, cluster, grid, frame, page |
 | `Navigation/` | Navigation + page-level chrome region | nav-bar, breadcrumb, sidebar-navigation, sub-navigation, tab-bar, page-header |
@@ -355,6 +356,7 @@ Components → Containers → Cards → Forms → Layouts → Navigation → Blu
 | `components/ui/<Component>` (atomic primitive) | `Components/<component>` (e.g. `Components/button`) |
 | `components/ui/<Component>` (card-family holder) | `Cards/<component>` (e.g. `Cards/card`) |
 | `components/ui/Form` + `stories/patterns/forms/<Form>` (form-family holder) | `Forms/<component>` (e.g. `Forms/form`, `Forms/login-form`) |
+| `components/ui/<Component>` (content-rendering, no surface) | `Content/<component>` (e.g. `Content/prose`, `Content/section-header`) |
 | `components/ui/<Component>` (bounded holder, non-card, non-form) | `Containers/<component>` (e.g. `Containers/table`) |
 | `components/ui/<Component>` (slot + atoms) | `Components/<component>` (e.g. `Components/field`) |
 | `components/ui/<Component>` (arrangement only) | `Layouts/<component>` (e.g. `Layouts/stack`) |
