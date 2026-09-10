@@ -5,6 +5,7 @@ import { Button, type ButtonSize } from '../Button';
 import { Tag, type TagSize } from '../Tag';
 import { TextInput, type TextInputSize } from '../TextInput';
 import { useSuggestionFilter } from '../shared/useSuggestionFilter';
+import { useAddableList } from '../shared/useAddableList';
 import './AddableTagList.css';
 
 export type AddableTagListSize = 'sm' | 'md' | 'lg';
@@ -98,7 +99,6 @@ export function AddableTagList({
   allowDuplicates = false,
   className,
 }: AddableTagListProps) {
-  const [isEditing, setIsEditing] = useState(false);
   const [flashDupe, setFlashDupe] = useState(false);
   const isComboMode = suggestions !== undefined;
 
@@ -106,16 +106,15 @@ export function AddableTagList({
   const listboxRef = useRef<HTMLUListElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const atLimit = typeof maxItems === 'number' && values.length >= maxItems;
+  // Combobox add/dedupe stays in useSuggestionFilter below; the hook owns the
+  // list lifecycle — reveal state, atLimit, and per-tag remove.
+  const list = useAddableList<string>({ values, onChange, maxItems });
+  const { atLimit, isEditing, remove } = list;
 
   const triggerDupeFlash = useCallback(() => {
     setFlashDupe(true);
     setTimeout(() => setFlashDupe(false), 600);
   }, []);
-
-  const remove = (index: number) => {
-    onChange(values.filter((_, i) => i !== index));
-  };
 
   // Always call the hook — plain mode gets suggestions=[] so filtered is always
   // empty and the dropdown never renders, giving plain Enter-to-commit UX.
@@ -129,7 +128,7 @@ export function AddableTagList({
       requestAnimationFrame(() => inputRef.current?.focus());
     },
     onCancel: () => {
-      setIsEditing(false);
+      list.close();
     },
     onDuplicate: isComboMode ? triggerDupeFlash : undefined,
     onBackspaceEmpty: () => {
@@ -139,7 +138,7 @@ export function AddableTagList({
 
   const reveal = () => {
     combo.reset();
-    setIsEditing(true);
+    list.reveal();
     requestAnimationFrame(() => inputRef.current?.focus());
   };
 
@@ -147,7 +146,7 @@ export function AddableTagList({
     if (!containerRef.current?.contains(e.relatedTarget as Node)) {
       combo.closeList();
       if (!combo.query.trim()) {
-        setIsEditing(false);
+        list.close();
         combo.reset();
       }
     }
@@ -159,7 +158,7 @@ export function AddableTagList({
       combo.commitValue(combo.query);
     } else if (e.key === 'Escape') {
       e.preventDefault();
-      setIsEditing(false);
+      list.close();
       combo.reset();
     } else if (e.key === 'Backspace' && combo.query.length === 0) {
       if (values.length > 0) onChange(values.slice(0, -1));
@@ -228,7 +227,7 @@ export function AddableTagList({
                 onKeyDown={isComboMode ? combo.handleKeyDown : handlePlainKeyDown}
                 onBlur={!isComboMode ? () => {
                   if (!combo.query.trim()) {
-                    setIsEditing(false);
+                    list.close();
                     combo.reset();
                   }
                 } : undefined}
@@ -287,7 +286,7 @@ export function AddableTagList({
               variant="ghost"
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
-                setIsEditing(false);
+                list.close();
                 combo.reset();
               }}
             >
