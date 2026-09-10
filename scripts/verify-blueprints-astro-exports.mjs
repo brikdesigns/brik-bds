@@ -85,6 +85,18 @@ writeFileSync(
         astro: '^5.0.0',
         '@astrojs/check': '^0.9.0',
         typescript: '^5.5.0',
+        // Pinned on purpose — do NOT delete as redundant (#2381). The tarball's
+        // React peers are `>=18.0.0` (unbounded), so without these npm floats
+        // them to whatever is newest at run time. On 2026-09-10 that resolved
+        // react-dom@19.3.0 → scheduler@^0.28.0, which the step-6 install cannot
+        // satisfy from a cached packument predating that release, and the gate
+        // failed ETARGET on a two-line CSS change. Range matches this repo's own
+        // devDependencies (package.json react/react-dom ^18.3.0), so the scratch
+        // project resolves the same tree BDS builds against. No scratch page
+        // imports a React blueprint — this gate renders the Astro rail — so
+        // pinning removes a resolution axis it never meant to test.
+        react: '^18.3.0',
+        'react-dom': '^18.3.0',
         '@brikdesigns/bds': `file:${tarballPath}`,
       },
       scripts: { check: 'astro check', build: 'astro build' },
