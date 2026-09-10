@@ -64,6 +64,10 @@ The `logo` slot accepts any ReactNode — a `<Logo>` for an integration / third-
 
 <Canvas of={Stories.Display} />
 
+The `mediaTreatment` prop controls how the `image` slot relates to the card edge. `flush` (default) bleeds the media to the edge and pads only the text body (`--padding-lg`) — the blog/story/product-grid look. `inset` frames the media and body together in a single `--padding-huge` inset — the service-card "card-vertical" look. One primitive serves both; `inset` replaces the former site-local `.service-card--inset` CSS override.
+
+<Canvas of={Stories.DisplayInset} />
+
 ### Display-row preset
 
 `preset="display-row"` — horizontal sibling of `preset="display"`. Image on the left, content (tag, title, description, optional `extras`, action) on the right. Use for single-card sections where a vertical layout wastes horizontal space: Related Customer Story, Recommended Add-On, featured plan, company-segment overview cards. Toggle `imageWidth` between `narrow` (25%), `standard` (35%, default), and `wide` (50%) — or pass a CSS length / percentage string for a custom column width. The `extras` slot accepts any ReactNode (bullet list, pill row, supporting meta) and renders between `description` and `action`; use it when the single-paragraph `description` is too narrow for the content shape. Collapses to a vertical stack at ≤ 640px so the card stays readable on narrow viewports.
