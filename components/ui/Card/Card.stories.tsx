@@ -34,7 +34,7 @@ const landscapeThumb =
   );
 
 const meta: Meta<typeof Card> = {
-  title: 'Cards/card',
+  title: 'Containers/card',
   component: Card,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
