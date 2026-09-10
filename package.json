@@ -161,6 +161,7 @@
     "audit:grid": "node scripts/audit-grid.js",
     "health": "node scripts/health.js",
     "health:json": "node scripts/health.js --json",
+    "health-gate": "node scripts/health-gate.js",
     "typecheck": "tsc --noEmit",
     "check:esm": "node scripts/check-esm-bundle.mjs",
     "test:rsc": "bash scripts/test-rsc-smoke.sh",

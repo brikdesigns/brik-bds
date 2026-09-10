@@ -437,6 +437,18 @@ jobs:
         if: always() && steps.install.outcome == 'success'
         run: npm run gen:widget-tokens:check
 
+      # ─── health gate (#2366) ────────────────────────────────────────────────
+      #
+      # Ratchets the three Health-Dashboard metrics that gated nothing before —
+      # completeness, grid compliance, token coverage — against the committed
+      # floors in tokens/health-baseline.json. Fires on this job's components/**
+      # and tokens/** filter, the exact surface those metrics move on. Lint is
+      # already gated by lint-tokens above, so it is not repeated. Floors are
+      # raised only by the Update Health Baseline workflow, never a local edit.
+      - name: Health metrics ratchet
+        if: always() && steps.install.outcome == 'success'
+        run: npm run health-gate
+
       # ─── The gates' own proofs ──────────────────────────────────────────────
       #
       # `assertions-must-be-proven-to-fail`: these suites plant the exact defect
@@ -457,7 +469,8 @@ jobs:
             scripts/__tests__/lint-token-self-reference.test.mjs \
             scripts/__tests__/lint-token-tiers.test.mjs \
             scripts/__tests__/lint-token-shadowing.test.mjs \
-            scripts/__tests__/lint-mode-emission-coverage.test.mjs
+            scripts/__tests__/lint-mode-emission-coverage.test.mjs \
+            scripts/__tests__/health-gate.test.mjs
 
   # ─── The branch-protection check ────────────────────────────────────────────
   #
