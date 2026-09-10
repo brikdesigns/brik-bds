@@ -4,5 +4,7 @@
 // The barrel export satisfies the component-completeness pre-commit check.
 export { useSuggestionFilter } from './useSuggestionFilter';
 export type { UseSuggestionFilterOptions, UseSuggestionFilterReturn } from './useSuggestionFilter';
+export { useAddableList, isAddableDuplicate } from './useAddableList';
+export type { UseAddableListOptions, UseAddableListReturn } from './useAddableList';
 export { useElementWidth } from './useElementWidth';
 export { usePrefersReducedMotion } from './usePrefersReducedMotion';
