@@ -25,9 +25,9 @@
  * #2313 AC 2 be a committed test rather than a one-off manual demonstration.
  */
 
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
+import { dirname, resolve, basename, extname } from 'node:path';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -68,6 +68,27 @@ const PATTERN_TYPE_VALUES = new Set([
 ]);
 
 const BLUEPRINT_TIER_VALUES = new Set(['internal', 'template']);
+
+// Mirrors BLUEPRINT_RAIL_VALUES in content-system/blueprints/vocabularies.ts.
+const BLUEPRINT_RAIL_VALUES = new Set(['astro', 'react']);
+
+/**
+ * Files in the two blueprint directories that are structurally not blueprints,
+ * so the on-disk axis below must not read them as unreachable components.
+ *
+ * This is a category exclusion, not an allowlist: three roles the axis has no
+ * opinion about (the two dispatchers, the two fallbacks, and the Astro site
+ * shell), named once. It is NOT a place to park a blueprint that fails the
+ * rule — that is the exemption ADR-006 §157 rules out, and the reason #2304
+ * shipped with its violation set already empty. `validateOnDiskParity` fails if
+ * a name here no longer exists on disk, so the list cannot rot into cover.
+ */
+const NON_BLUEPRINT_COMPONENTS = new Set([
+  'BlueprintDispatcher',
+  'BlueprintFallback',
+  // Site-shell nav, not a blueprint — see content-system/blueprints/astro/index.ts.
+  'SiteHeader',
+]);
 
 const PROJECTION_FIELDS = ['personality', 'visual_style', 'industry_slugs', 'is_universal'];
 
@@ -118,6 +139,29 @@ function validateBlueprint(bp, issues) {
 
   if (typeof bp.is_active !== 'boolean') {
     push('is_active', `Expected boolean, got ${typeof bp.is_active}.`);
+  }
+
+  // `rails` is optional and means "this divergence is deliberate" (#2304 AC 3).
+  // Absent = both rails required, which is what every shipped blueprint is —
+  // so the field exists to be declared rarely, and is checked strictly when it
+  // is. An empty array is rejected on purpose: a blueprint that renders on no
+  // rail belongs in blueprint-roadmap.json, not the inventory.
+  if (bp.rails !== undefined) {
+    if (!Array.isArray(bp.rails) || bp.rails.length === 0) {
+      push('rails', 'Expected a non-empty array of rails — omit the field entirely to require both.');
+    } else {
+      const seenRails = new Set();
+      for (const r of bp.rails) {
+        if (!BLUEPRINT_RAIL_VALUES.has(r)) {
+          push('rails', `Unknown rail "${r}" — expected ${[...BLUEPRINT_RAIL_VALUES].join(' or ')}.`);
+        }
+        if (seenRails.has(r)) push('rails', `Duplicate rail "${r}".`);
+        seenRails.add(r);
+      }
+      if (seenRails.size === BLUEPRINT_RAIL_VALUES.size) {
+        push('rails', 'Lists every rail — omit the field; "both rails" is the default, and stating it invites the list to rot.');
+      }
+    }
   }
 
   if (!SEMVER_PATTERN.test(bp.version ?? '')) {
@@ -224,6 +268,17 @@ function extractWiredKeys(source) {
  * list, and library.json's active keys must agree. Prevents the
  * implemented-set from drifting across the three places it's encoded.
  */
+/**
+ * The declared rail set for a key. Absent `rails` means both — the default is
+ * the strict one, so a blueprint only escapes a parity check by saying so.
+ */
+function railsFor(library, key) {
+  const bp = (library.blueprints ?? []).find((b) => b.key === key);
+  const declared = bp?.rails;
+  if (!Array.isArray(declared) || declared.length === 0) return BLUEPRINT_RAIL_VALUES;
+  return new Set(declared);
+}
+
 function validateRegistrySync(library, dispatcherSrc, typesSrc) {
   const issues = [];
   const push = (field, message) => issues.push({ key: '<registry-sync>', field, message });
@@ -267,6 +322,17 @@ function validateRegistrySync(library, dispatcherSrc, typesSrc) {
   // without an allowlist on purpose: ADR-006 §157 is the precedent against
   // shipping a rule alongside the exemptions that make it pass.
   for (const k of activeSet) {
+    // A declared React-only key (#2304 AC 3) is *expected* to be absent from
+    // the Astro registry and WIRED_BLUEPRINT_KEYS. It is not unrendered — the
+    // runtime-parity gate below still requires its React entry — so the
+    // neither-rail error would be a false positive. The declaration is checked
+    // rather than trusted: it must be absent from BOTH Astro sets, or it is
+    // drift wearing a `rails` field.
+    if (!railsFor(library, k).has('astro')) {
+      if (registrySet.has(k)) push('rails', `Key "${k}" declares rails without "astro" but has a BLUEPRINT_REGISTRY entry — drop the declaration or the entry.`);
+      if (wiredSet.has(k)) push('rails', `Key "${k}" declares rails without "astro" but is in WIRED_BLUEPRINT_KEYS — drop the declaration or the entry.`);
+      continue;
+    }
     if (!registrySet.has(k) && !wiredSet.has(k)) {
       push(
         'is_active',
@@ -289,7 +355,7 @@ function validateRegistrySync(library, dispatcherSrc, typesSrc) {
  * the exact drift that shipped `stats_bar` + `testimonials_featured_large`
  * to Astro only. This gate fails the build the moment the sets diverge.
  */
-function validateRuntimeParity(astroDispatcherSrc, reactDispatcherSrc) {
+function validateRuntimeParity(library, astroDispatcherSrc, reactDispatcherSrc) {
   const issues = [];
   const push = (field, message) => issues.push({ key: '<runtime-parity>', field, message });
 
@@ -308,11 +374,217 @@ function validateRuntimeParity(astroDispatcherSrc, reactDispatcherSrc) {
   const astroSet = new Set(astroKeys);
   const reactSet = new Set(reactKeys);
 
+  // Since #2304 the parity requirement is per-key rather than set-equality:
+  // a blueprint may declare `rails` in blueprint-library.json to say the
+  // divergence is deliberate. Everything without that field — every shipped
+  // blueprint today — is held to the original both-rails rule.
   for (const k of astroSet) {
-    if (!reactSet.has(k)) push('react/BlueprintDispatcher.tsx', `Astro key "${k}" has no React registry entry — it renders in Astro but falls back in React.`);
+    if (!reactSet.has(k) && railsFor(library, k).has('react')) {
+      push('react/BlueprintDispatcher.tsx', `Astro key "${k}" has no React registry entry — it renders in Astro but falls back in React. Wire it, or declare \`rails: ["astro"]\` on the key in blueprint-library.json.`);
+    }
   }
   for (const k of reactSet) {
-    if (!astroSet.has(k)) push('astro/BlueprintDispatcher.astro', `React key "${k}" has no Astro registry entry — it renders in React but falls back in Astro.`);
+    if (!astroSet.has(k) && railsFor(library, k).has('astro')) {
+      push('astro/BlueprintDispatcher.astro', `React key "${k}" has no Astro registry entry — it renders in React but falls back in Astro. Wire it, or declare \`rails: ["react"]\` on the key in blueprint-library.json.`);
+    }
+  }
+
+  // The declaration is a claim about a key that exists on the rail it names.
+  // `rails: ["astro"]` on a key absent from the Astro registry declares nothing
+  // — it exempts the key from React parity while rendering nowhere.
+  for (const bp of library.blueprints ?? []) {
+    if (!Array.isArray(bp.rails) || bp.rails.length === 0) continue;
+    if (bp.rails.includes('astro') && !astroSet.has(bp.key)) {
+      push('rails', `Key "${bp.key}" declares the "astro" rail but has no BLUEPRINT_REGISTRY entry.`);
+    }
+    if (bp.rails.includes('react') && !reactSet.has(bp.key)) {
+      push('rails', `Key "${bp.key}" declares the "react" rail but has no React BLUEPRINT_REGISTRY entry.`);
+    }
+  }
+
+  return issues;
+}
+
+// ── The two filesystem axes (#2304) ───────────────────────────────────────
+//
+// Everything above compares a declaration to another declaration. The gate
+// never read a directory and never looked at Storybook, so two states were
+// invisible to it: a component sitting on disk that no registry dispatches,
+// and a wired blueprint with no story. #2012 is the first shape (`stats_bar`
+// exported, `is_active`, dispatching nowhere); the Astro rail reaching zero
+// Storybook coverage under `tags: ['!manifest']` is the second (#2301).
+
+/** Strip the extension, and the `.stories` / `.test` / `.a11y.test` suffix. */
+function componentNameOf(file) {
+  return basename(file, extname(file)).replace(/\.(stories|a11y\.test|test)$/, '');
+}
+
+/** Component-ish source files in a blueprint directory, `.css` and siblings out. */
+async function componentFiles(dir, exts) {
+  let entries;
+  try {
+    entries = await readdir(dir);
+  } catch {
+    return null; // directory absent — reported by the caller, not swallowed
+  }
+  return entries.filter(
+    (f) =>
+      exts.includes(extname(f)) &&
+      !/\.(stories|test|a11y\.test)\.[jt]sx?$/.test(f) &&
+      !f.startsWith('_') &&
+      !['index.ts', 'types.ts'].includes(f),
+  );
+}
+
+/** `import X from './X.astro'` / `import { X } from './X'` → identifier → file. */
+function localImportMap(source) {
+  const map = new Map();
+  const pattern = /import\s+(?:type\s+)?(?:(\{[^}]*\})|([A-Za-z_$][\w$]*))\s+from\s+'\.\/([^']+)'/g;
+  for (const m of source.matchAll(pattern)) {
+    const target = m[3];
+    const names = m[1]
+      ? m[1].replace(/[{}]/g, '').split(',').map((s) => s.trim().split(/\s+as\s+/).pop().trim()).filter(Boolean)
+      : [m[2]];
+    for (const n of names) map.set(n, target);
+  }
+  return map;
+}
+
+/** Every relative-import target in a source file, extension-stripped. */
+function localImportTargets(source) {
+  return [...source.matchAll(/from\s+'\.\/([^']+)'/g)].map((m) => componentNameOf(m[1]));
+}
+
+/** Capitalised identifiers inside a registry block — its component values. */
+function extractRegistryComponents(source, extractor) {
+  const block =
+    extractor === 'astro'
+      ? source.match(/const BLUEPRINT_REGISTRY\s*=\s*\{([\s\S]*?)\}\s*as const/)
+      : source.match(/const BLUEPRINT_REGISTRY\b[\s\S]*?=\s*\{([\s\S]*?)\n\}/);
+  if (!block) return [];
+  // Quoted values (`layout: 'split'`, `blueprintKey: 'hero_split'`) can't match:
+  // the pattern requires a bare identifier starting with a capital.
+  return [...new Set([...block[1].matchAll(/(?<!['"\w])([A-Z][A-Za-z0-9_]*)/g)].map((m) => m[1]))];
+}
+
+/**
+ * Gate: every component file on disk must be reachable from a dispatcher
+ * registry (#2304 AC 1).
+ *
+ * Reachability is TRANSITIVE, not direct, because the rails are two layers
+ * deep since #2302: the registry dispatches `HeroSplit6040`, which composes
+ * `Hero`, which composes `HeroMediaCard`. A direct-dispatch rule would call
+ * eleven correctly-wired files orphans on the first run, and the only way to
+ * green it would be the allowlist ADR-006 §157 rules out.
+ *
+ * What it catches is the file nothing reaches at all: exported from `index.ts`,
+ * possibly `is_active` in library.json, and dispatched by neither rail. #2012
+ * is that exact state.
+ */
+async function validateOnDiskParity(astroDispatcherSrc, reactDispatcherSrc, readSource) {
+  const issues = [];
+  const push = (key, field, message) => issues.push({ key, field, message });
+
+  const rails = [
+    { label: 'astro', dir: astroDir, exts: ['.astro'], src: astroDispatcherSrc, kind: 'astro' },
+    { label: 'react', dir: reactDir, exts: ['.tsx'], src: reactDispatcherSrc, kind: 'react' },
+  ];
+
+  const onDisk = new Set();
+
+  for (const rail of rails) {
+    const files = await componentFiles(rail.dir, rail.exts);
+    if (files === null) {
+      push('<on-disk>', rail.label, `Blueprint directory is missing: ${rail.dir}`);
+      continue;
+    }
+    for (const f of files) onDisk.add(componentNameOf(f));
+
+    const imports = localImportMap(rail.src);
+    const roots = extractRegistryComponents(rail.src, rail.kind)
+      .map((id) => imports.get(id))
+      .filter(Boolean)
+      .map(componentNameOf);
+
+    // BFS the import graph from the dispatched components.
+    const reachable = new Set();
+    const queue = [...roots];
+    while (queue.length) {
+      const name = queue.pop();
+      if (reachable.has(name)) continue;
+      reachable.add(name);
+      const src = await readSource(rail.dir, name, rail.exts);
+      if (src === null) continue;
+      for (const t of localImportTargets(src)) if (!reachable.has(t)) queue.push(t);
+    }
+
+    for (const f of files) {
+      const name = componentNameOf(f);
+      if (NON_BLUEPRINT_COMPONENTS.has(name)) continue;
+      if (reachable.has(name)) continue;
+      push(
+        name,
+        `${rail.label}/${f}`,
+        'On disk but reachable from no BLUEPRINT_REGISTRY entry, directly or through another blueprint. ' +
+          'Wire it into the dispatcher, or delete it — an unreachable component still ships in the package ' +
+          'and still reads as available to anyone browsing the directory (#2012).',
+      );
+    }
+  }
+
+  // The exclusion list is a category, not cover: if a name in it stops existing,
+  // say so rather than letting a dead entry quietly widen the rule later.
+  for (const name of NON_BLUEPRINT_COMPONENTS) {
+    if (!onDisk.has(name)) {
+      push(name, '<non-blueprint>', 'Listed in NON_BLUEPRINT_COMPONENTS but no longer on disk — drop it from the list.');
+    }
+  }
+
+  return issues;
+}
+
+/**
+ * Gate: every blueprint the React dispatcher renders must have a Storybook
+ * story (#2304 AC 2).
+ *
+ * **React rail only, by construction.** Storybook here is
+ * `@storybook/react-vite` (`.storybook/main.ts:22-25`) and its globs match
+ * `.stories.{js,jsx,mjs,ts,tsx}` only, so an Astro block cannot have a story
+ * until #2339 gives the rail a framework integration. Asserting story coverage
+ * against the Astro registry today would fail every key by construction — a
+ * rule that can only be satisfied by work in another ticket is not a gate, it
+ * is a blocked build.
+ *
+ * The key → story mapping goes through the registry and the component file, not
+ * through the story's own title string. Story slugs still carry the retired
+ * pre-ADR-037 spellings (`Blueprints/hero-split-60-40`); renaming them is #2352,
+ * and a gate keyed on the spelling would either fail today or freeze it.
+ */
+async function validateStoryCoverage(reactDispatcherSrc, readSource) {
+  const issues = [];
+  const push = (key, field, message) => issues.push({ key, field, message });
+
+  const registryBlock = reactDispatcherSrc.match(/const BLUEPRINT_REGISTRY\b[\s\S]*?=\s*\{([\s\S]*?)\n\}/);
+  if (!registryBlock) return issues; // already reported by validateRuntimeParity
+
+  const imports = localImportMap(reactDispatcherSrc);
+  const entries = [...registryBlock[1].matchAll(/^\s*([a-z][a-z0-9_]*)\s*:\s*([A-Za-z_$][\w$]*)/gm)];
+
+  for (const [, key, identifier] of entries) {
+    const target = imports.get(identifier);
+    if (!target) {
+      push(key, 'react/BlueprintDispatcher.tsx', `Registry entry "${identifier}" has no local import — cannot locate its component file.`);
+      continue;
+    }
+    const name = componentNameOf(target);
+    const story = await readSource(reactDir, `${name}.stories`, ['.tsx']);
+    if (story === null) {
+      push(key, `react/${name}.stories.tsx`, `Wired blueprint has no Storybook story. Every renderable blueprint needs a canvas — without one it is invisible to Storybook, to \`bds-find\`, and to the MCP surface (#2301).`);
+      continue;
+    }
+    if (!/title:\s*'Blueprints\//.test(story)) {
+      push(key, `react/${name}.stories.tsx`, "Story exists but its `title` is not under `Blueprints/` — it will not appear in the Blueprints bucket (ADR-006).");
+    }
   }
 
   return issues;
@@ -458,10 +730,25 @@ try {
   const reactDispatcherSrc = await readFile(reactDispatcherPath, 'utf8');
   const typesSrc = await readFile(typesPath, 'utf8');
   const today = Date.now();
+
+  /** Read `<dir>/<name><ext>` for the first ext that resolves; null if none. */
+  const readSource = async (dir, name, exts) => {
+    for (const ext of exts) {
+      try {
+        return await readFile(resolve(dir, `${name}${ext}`), 'utf8');
+      } catch {
+        /* try the next extension */
+      }
+    }
+    return null;
+  };
+
   const issues = [
     ...validateLibrary(library),
     ...validateRegistrySync(library, dispatcherSrc, typesSrc),
-    ...validateRuntimeParity(dispatcherSrc, reactDispatcherSrc),
+    ...validateRuntimeParity(library, dispatcherSrc, reactDispatcherSrc),
+    ...(await validateOnDiskParity(dispatcherSrc, reactDispatcherSrc, readSource)),
+    ...(await validateStoryCoverage(reactDispatcherSrc, readSource)),
     ...validateRoadmap(
       roadmap,
       library,

@@ -128,3 +128,24 @@ export type BlueprintTier = (typeof BLUEPRINT_TIER_VALUES)[number];
 
 export const isBlueprintTier = (value: string): value is BlueprintTier =>
   (BLUEPRINT_TIER_VALUES as readonly string[]).includes(value);
+
+/**
+ * Rails — the runtimes a blueprint is expected to render on.
+ *
+ * ADR-037 makes Astro canonical and React the second rail; every shipped
+ * blueprint dispatches on both. A single-rail blueprint is possible — an
+ * Astro-only block, or a React-only one that needs client interactivity a
+ * static Astro page cannot express — but it must be *declared*, because
+ * `scripts/validate-blueprints.mjs` otherwise reads a missing registry entry
+ * as drift, which is what it is 99% of the time.
+ *
+ * Omitting `rails` on a blueprint means "both rails required". There is no
+ * `rails: []` — a blueprint that renders on no rail is a roadmap candidate
+ * (`blueprints/blueprint-roadmap.json`), not an inventory entry.
+ */
+export const BLUEPRINT_RAIL_VALUES = ['astro', 'react'] as const;
+
+export type BlueprintRail = (typeof BLUEPRINT_RAIL_VALUES)[number];
+
+export const isBlueprintRail = (value: string): value is BlueprintRail =>
+  (BLUEPRINT_RAIL_VALUES as readonly string[]).includes(value);
