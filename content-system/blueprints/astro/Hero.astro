@@ -356,14 +356,12 @@ const ratioStyle =
     font-size: var(--heading-sm);
     line-height: var(--font-line-height-relaxed);
     color: var(--bds-hero-lead-color, var(--text-secondary));
-  }
-
-  /* `--interior-minimal` deliberately omits the measure cap: its container is
-     already clamped to --measure-lg, and the pre-consolidation file carried no
-     max-width here. Scoped rather than shared so consolidating changed no
-     layout's rendering (#2302). */
-  .bds-hero--split .bds-hero__lead,
-  .bds-hero--with-pricing-card .bds-hero__lead {
+    /* Shared across all three layouts, matching the React twin (#2344). 55ch is
+       a prose readability measure; `--interior-minimal`'s container cap of
+       `--measure-lg` (72ch) is a container bound that was doing this job by
+       accident. #2302 scoped the cap to `--split` + `--with-pricing-card` only
+       so the consolidation changed no layout's rendering — that was a refactor
+       constraint, never a decision that interior leads should wrap wider. */
     max-width: 55ch;
   }
 
