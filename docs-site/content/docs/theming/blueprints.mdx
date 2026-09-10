@@ -67,6 +67,21 @@ Every entry below is **renderable**: `is_active: true` asserts the key dispatche
 
 <BlueprintLibrary />
 
+## Two rails, one canonical
+
+Blueprints ship on **two** renderers, and they are not peers. [ADR-037](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-037-astro-is-the-canonical-blueprint-rail.md) §1 makes **Astro canonical**: it carries every published client site, so where the rails disagree, Astro's implementation is the reference and React is brought to it.
+
+| Site class | Rail | Content source | Entry point |
+|---|---|---|---|
+| Standard client site | **Astro** (canonical) | in-repo content | `@brikdesigns/bds/blueprints-astro` → `<BlueprintDispatcher>` |
+| Client site with a CMS or database; `brikdesigns.com` | React / Next.js | portal Supabase | `@brikdesigns/bds/blueprints-react` → `<BlueprintDispatcher>` |
+
+React is a **supported** rail, not a lesser one — and it is the source of the composition *API* both rails now share. React named files by block with the layout as a prop first; ADR-037's 2026-09-08 amendment brought Astro onto that shape, so today a component is a **block** on either rail and `layout` is a prop. The `HeroLayout` / `CtaLayout` / `CardGridLayout` unions live in one framework-agnostic module (`astro/types.ts`) that both rails read, so a layout cannot be added to one rail only.
+
+<Callout type="info">
+  **Names carry layout, never content domain.** ADR-037 §4: a blueprint key describes layout shape only. `card_grid` is a key; a domain prefix naming the content it happens to hold is not, because the same grid renders team, blog and product collections. Industry and mood are metadata on the library entry; brand and atmosphere are tokens. Column counts and ratios are props. `scripts/lint-blueprint-naming.mjs` enforces this as `blueprint-key-context-word`, with no allowlist.
+</Callout>
+
 ## Implementation
 
 The Astro render surface the Theming tenet has always pointed at. Each blueprint key with a shipped Astro component is exported from this package; consumer Astro sites import the components directly or dispatch by key via `<BlueprintDispatcher>`.
@@ -200,7 +215,7 @@ Pick the file first — a layout with no component belongs in the roadmap, never
 2. Run `npm run validate:blueprints` (also runs as part of `npm run validate`). A library entry must dispatch on a rail; a roadmap candidate must not, and must not carry `is_active`.
 3. Bump `version` on the affected blueprint(s) and the library envelope if the set changes. Update `last_reviewed` on confirmed-accurate passes — `review_cadence` is enforced, so a lapsed window fails the build.
 4. Open a PR. Bridge edits, schema changes, and data additions stay separate.
-5. After merge: publish the new BDS version and regenerate the portal seed migration via `npx tsx scripts/generate-blueprint-seed.mts` in `brik-client-portal`. If keys were **removed** from the library, the regenerated `00114` seed does not delete their rows — an already-applied migration is not re-run, so a removal needs its own `DELETE` migration.
+5. After merge: publish the new BDS version, then bring the portal's `design_blueprints` across in **a new numbered migration**. `npx tsx scripts/generate-blueprint-seed.mts` regenerates `00114` in place, and Supabase does not re-run an applied migration — so regenerating alone changes the repo and never the database. A rename or a removal needs its own migration (`brik-client-portal/supabase/migrations/00390_rename_blueprint_keys_context_free.sql` is the worked example, from #2303). Tracked at [brik-client-portal#3952](https://github.com/brikdesigns/brik-client-portal/issues/3952).
 
 ## Related
 
