@@ -119,7 +119,7 @@ function useSheetConfig(): SheetConfig;
 
 ## useSuggestionFilter
 
-Encapsulates the filter logic shared across `AddableTagList`, `AddableComboList`, `AddableEntryList`, and any custom typeahead. Handles input state, suggestion filtering, keyboard navigation, strict-mode rejection, duplicate detection, primary-vs-secondary commit semantics, and backspace-on-empty deletion.
+Encapsulates the filter logic shared across `AddableTagList`, `AddableEntryList`, and any custom typeahead. Handles input state, suggestion filtering, keyboard navigation, strict-mode rejection, duplicate detection, primary-vs-secondary commit semantics, and backspace-on-empty deletion.
 
 ```ts
 function useSuggestionFilter(options: {
@@ -138,6 +138,27 @@ function useSuggestionFilter(options: {
 **When to use:** building any combobox, typeahead, or tag-input that needs the same filter + commit + delete semantics the Addable family uses. Saves authoring ~150 lines of custom state per consumer.
 
 The full prop / return shape is documented in source — see [`components/ui/shared/useSuggestionFilter.ts`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/shared/useSuggestionFilter.ts).
+
+## useAddableList
+
+The list-mutation sibling of `useSuggestionFilter`, shared across `AddableTagList` and `AddableEntryList` (ADR-003). Owns the reveal-form open state, the `atLimit` computation, duplicate detection, and the add / remove / patch handlers — the combobox dropdown logic stays in `useSuggestionFilter`.
+
+```ts
+function useAddableList<T>(options: {
+  values: T[];
+  onChange: (next: T[]) => void;
+  maxItems?: number;
+  allowDuplicates?: boolean;
+  getKey?: (item: T) => string;       // omit to disable dedupe (plain blank-row append)
+  onDuplicate?: () => void;
+}): UseAddableListReturn<T>;            // { atLimit, isEditing, reveal, close, add, remove, update, isDuplicate }
+```
+
+State ownership: the hook holds only `isEditing`. `values` stays controlled by the caller — every mutation flows out through `onChange`.
+
+**When to use:** any "user manages a list of items" control that needs limit-gating, duplicate rejection, and a reveal-form, but whose row shape differs from the existing Addable components.
+
+The full prop / return shape is documented in source — see [`components/ui/shared/useAddableList.ts`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/shared/useAddableList.ts).
 
 ## useDevBarSlot
 

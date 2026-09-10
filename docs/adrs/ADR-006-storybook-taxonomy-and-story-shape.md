@@ -159,6 +159,53 @@ Pre-existing `*.stories.tsx` files keep whatever shape ADR-007's page-recipe pas
 
 ## Amendments
 
+### 2026-09-10 — Part A: Modal → `Containers/`, Dialog → `Deprecated/` (#2365)
+
+Two overlay-family corrections, both forward-only `title:` re-titles; no component code changes.
+
+- `Components/modal` → **`Containers/modal`**. Modal owns a bounded surface — `--surface-primary` fill + `--border-radius-lg` + `--shadow-overlay` ([Modal.css:22-24](../../components/ui/Modal/Modal.css#L22)) — so by the Part A composition-role rule ("styled holder with own border/padding/elevation") it is a Container, not an atomic Component. This applies the same reasoning as the [2026-05-18 `dialog` relocation](#2026-05-18--part-a-table-top-up-for-net-new-members) (Components → Containers, "own border/padding/elevation surface").
+- `Containers/dialog` → **`Deprecated/dialog`**. `Dialog` is `@deprecated` — superseded by `Modal preset="confirm"` ([Dialog.tsx:38](../../components/ui/Dialog/Dialog.tsx#L38)) — and already `!manifest`-tagged. Per Part A's `Deprecated/` rule, `!manifest`-tagged stories sort there; leaving it in `Containers/` alongside live holders was a straggler.
+
+**Net effect:** the live overlay (Modal) sits in `Containers/` beside `sheet`, `dialog`'s deprecated stub sorts last under `Deprecated/`. Two docs-site Storybook-slug refs re-pointed ([modal.mdx](../../docs-site/content/docs/components/modal.mdx) → `containers-modal--overview`; [dialog.mdx](../../docs-site/content/docs/components/dialog.mdx) → `deprecated-dialog--overview`). The frozen Part A table is not rewritten (amendment convention); this entry is the source of truth.
+### 2026-09-10 — Part A: `Content/` top-level added for content-rendering components (#2371)
+
+A new `Content/` top-level bucket, sequenced after `Forms/`, groups the four content-rendering components that lack a bounded surface and were scattered under `Components/`:
+
+- `Components/prose` → **`Content/prose`**
+- `Components/content-block` → **`Content/content-block`**
+- `Components/section-header` → **`Content/section-header`**
+- `Components/marquee` → **`Content/marquee`**
+
+Forward-only `title:` re-titles plus a `'Content'` entry after `'Forms'` in the `storySort.order` in [`.storybook/preview.tsx`](../../.storybook/preview.tsx); no component code changes. One docs-site Storybook-slug ref re-pointed ([marquee.mdx](../../docs-site/content/docs/components/marquee.mdx) → `content-marquee--overview`).
+
+**Rationale.** Same name-family precedent as [`Cards/` (#1330)](#2026-07-22--part-a-cards-top-level-navigation-rename-blueprints-promoted-foundationassets-displays-dissolved-1330) and [`Forms/` (#1565)](#2026-07-29--part-a-forms-top-level-added-form-family-pulled-out-of-containers-1565): these four render page *content* (rich text, a titled band, a section heading ramp, a scrolling ticker) and read as one family, but scattered among ~48 `Components/` atoms they were hard to find. They are **not `Containers/`** — none owns a border/padding/elevation surface (`Prose.css` / `ContentBlock.css` / `SectionHeader.css` are near-empty), so the composition-role rule keeps them out of Containers; a `Content/` bucket names the family without misfiling them as holders.
+
+**Distinct from `Content System`.** The pinned curated `Content System` section (Overview / Industries / Voices / Vocabularies / Compliance) is the **BCS vocabulary docs** — content *authoring* guidance, not components. `Content/` holds the content-rendering *components*. Two names, two layers; the storySort comment notes the distinction.
+
+**Out of scope.** `block-quote` and `bullet-list` (other former-`Blocks/` members now in `Components/`) were not part of this move — revisit if the family grows.
+
+Per the amendment convention this file follows, the frozen Part A table is not rewritten; this entry is the source of truth for the current bucket set.
+### 2026-09-10 — Part A: `Cards/` folded back into `Containers/`; Collapsible → `Containers/` (#2386)
+
+**This overrides the [2026-07-22 `Cards/` top-level (#1330)](#2026-07-22--part-a-cards-top-level-navigation-rename-blueprints-promoted-foundationassets-displays-dissolved-1330).** The card family returns to `Containers/`, and Collapsible joins it:
+
+- `Cards/card` → **`Containers/card`**
+- `Cards/card-list` → **`Containers/card-list`**
+- `Cards/product-summary-card` → **`Containers/product-summary-card`**
+- `Components/collapsible` → **`Containers/collapsible`**
+
+(`pricing-card` is already `Deprecated/` and does not move; the `Cards/` top-level empties completely and its `storySort.order` entry is removed.)
+
+**Operator ratification.** #1330 traded composition-role purity for name-family discoverability. This amendment reverses that trade — cards are bounded holders (own border/padding/elevation) and belong with the other holders. This is an explicit operator decision, not an agent-originated taxonomy change:
+
+> OPERATOR SAID 2026-09-10 (chat): "Yes to 2 above" — ratifying "Cards + Collapsible → Containers ... reverses ADR-006 #1330. Proceed as an explicit ADR override."
+
+Collapsible carries its own surface (`Collapsible.css` — `--surface-primary` fill + `--padding-lg` + `--border-radius-md`), so `Containers/` is the composition-role-correct home; the earlier `Components/` placement (2026-05-18, "split out ... no card surface") is superseded by the component's current shape.
+
+Forward-only `title:` re-titles + `storySort.order` edit (`'Cards'` removed) + 8 Storybook-slug refs re-pointed (7 docs-site: card / card-list / product-summary-card / collapsible / collapsible-card ×3; 1 in-repo: [PricingCard.mdx](../../components/ui/PricingCard/PricingCard.mdx)). No component code changes. The living taxonomy tables in [`.claude/standards/storybook-story-shape.md`](../../.claude/standards/storybook-story-shape.md) are updated to match; the frozen Part A table is not rewritten (amendment convention).
+
+**Note on the `Forms/` precedent.** #1565 cited #1330's name-family reasoning when creating `Forms/`. `Forms/` stands on its own merits (a large, cohesive card-less family) and is unaffected; this amendment narrows the name-family-wins principle to *not* apply where a composition-role home already fits cleanly, as it does for the card holders.
+
 ### 2026-07-29 — Part A: `Forms/` top-level added; form family pulled out of `Containers/` (#1565)
 
 A new `Forms/` top-level bucket, sequenced right after `Cards/`, groups the six form-family stories that previously lived in `Containers/`:

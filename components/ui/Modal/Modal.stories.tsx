@@ -8,7 +8,7 @@ import { Button } from '../Button';
 type ModalConfirmArgs = Extract<ModalProps, { preset: 'confirm' }>;
 
 const meta: Meta<typeof Modal> = {
-  title: 'Components/modal',
+  title: 'Containers/modal',
   component: Modal,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },

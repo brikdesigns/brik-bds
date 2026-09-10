@@ -46,7 +46,7 @@
 
 .bds-filter-button__trigger--sm {
   height: var(--size-800);
-  padding-inline: var(--padding-md);
+  padding-inline: var(--padding-sm);
   font-size: var(--label-sm);
   gap: var(--gap-sm);
 }

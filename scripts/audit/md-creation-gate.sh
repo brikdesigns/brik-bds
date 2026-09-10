@@ -50,8 +50,8 @@ set -euo pipefail
 # Repo-relative dir prefixes where a new .md is sanctioned. THIS REPO'S LIST —
 # the declared delta from brik-llm's canonical copy (brik-llm#3271). It is the
 # rows RATIFIED_HOMES (scripts/audit/markdown-census.py, in brik-llm) ratifies
-# for brik-bds — `docs/runbooks`, `software/docs/adr`, `docs/adrs` — plus the
-# always-sanctioned agent-canon and GitHub-template trees.
+# for brik-bds — `docs/runbooks`, `software/docs/adr`, `docs/adrs`, `blueprints`,
+# `tokens` — plus the always-sanctioned agent-canon and GitHub-template trees.
 #
 # It is NOT a longer list of this repo's established doc dirs, and that is
 # deliberate. md-routing-guard.sh — the write-time half — is a single global
@@ -69,6 +69,8 @@ ALLOWED_DIRS=(
   "software/docs/"
   "docs/runbooks/"
   "docs/adrs/"
+  "blueprints/"
+  "tokens/"
 )
 
 # Basenames sanctioned at any path (repo canon + package conventions).

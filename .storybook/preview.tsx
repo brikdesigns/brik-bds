@@ -366,16 +366,20 @@ const preview: Preview = {
             'Compliance',
             '*',
           ],
-          // Flat taxonomy per ADR-006 Part A. Cards / Navigation / Blueprints added 2026-07-22 (#1330);
+          // Flat taxonomy per ADR-006 Part A. Navigation / Blueprints added 2026-07-22 (#1330);
           // Forms added 2026-07-29 (#1565, form family pulled out of Containers).
+          // Content added 2026-09-10 (#2371, content-rendering components — prose, content-block,
+          // section-header, marquee — grouped by role; distinct from the curated `Content System` BCS docs above).
+          // Cards folded back into Containers 2026-09-10 (#2386, overrides the #1330 Cards/ split);
+          // the card family + collapsible are bounded holders → Containers.
           // Foundation/Assets absorbs icon-family + logo + avatar + image; Displays dissolved into Containers.
           // Component-bearing categories omit child lists — sorted
           // alphabetically by `method` above. `read-mode-page` is the one
           // Containers entry still curated elsewhere (docs consolidation, #1453).
           'Components',
           'Containers',
-          'Cards',
           'Forms',
+          'Content',
           'Layouts',
           'Navigation',
           'Blueprints',

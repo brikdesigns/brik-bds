@@ -169,7 +169,7 @@ export interface IndustryPack {
    * The two shapes split along validation posture:
    *
    * - `services` and `paymentTypes` remain **suggestion seeds** — flat string
-   *   arrays rendered in AddableComboList comboboxes, free-text-extendable.
+   *   arrays rendered in AddableTagList comboboxes, free-text-extendable.
    * - `insuranceProviders`, `insurancePlans`, and `financing` are **locked
    *   vocabularies** — rendered in MultiSelect dropdowns with zero free-text.
    *   The portal filters any legacy non-matching values on first read

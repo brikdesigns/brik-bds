@@ -5,6 +5,7 @@ import { Button, type ButtonSize } from '../Button';
 import { TextInput, type TextInputSize } from '../TextInput';
 import { TextArea, type TextAreaSize } from '../TextArea';
 import { useSuggestionFilter } from '../shared/useSuggestionFilter';
+import { useAddableList } from '../shared/useAddableList';
 import './AddableEntryList.css';
 
 export type AddableEntryListSize = 'sm' | 'md' | 'lg';
@@ -93,7 +94,7 @@ const INPUT_SIZE: Record<AddableEntryListSize, TextInputSize> = { sm: 'sm', md: 
 const TEXTAREA_SIZE: Record<AddableEntryListSize, TextAreaSize> = { sm: 'sm', md: 'md', lg: 'lg' };
 
 /**
- * AddableEntryList — the text + textarea sibling of `AddableTextList`.
+ * AddableEntryList — the text + textarea sibling of `AddableTagList`.
  *
  * Two modes of operation:
  *
@@ -169,7 +170,12 @@ export function AddableEntryList({
   primaryStrict = false,
 }: AddableEntryListProps) {
   const hasSuggestions = Array.isArray(primarySuggestions) && primarySuggestions.length > 0;
-  const atLimit = typeof maxItems === 'number' && entries.length >= maxItems;
+  // Called before the read/suggestion early returns to keep hook order stable.
+  // Plain inline-edit mode uses it below; read/suggestion modes ignore it
+  // (suggestion mode has its own instance in SuggestionModeEdit). No getKey ⇒
+  // `add` never dedupes, matching plain mode's "append a blank row" behavior.
+  const list = useAddableList<AddableEntry>({ values: entries, onChange, maxItems });
+  const atLimit = list.atLimit;
 
   // ── Read mode ───────────────────────────────────────────────────────────────
   // Token-backed typography, no inputs, no remove, no add. URL primary renders
@@ -256,17 +262,8 @@ export function AddableEntryList({
   // Each entry is a numbered row: TextInput (primary) + TextArea (secondary)
   // + text "Remove" button. Add button appends an empty row.
 
-  const update = (index: number, patch: Partial<AddableEntry>) => {
-    onChange(entries.map((e, i) => (i === index ? { ...e, ...patch } : e)));
-  };
-
-  const remove = (index: number) => {
-    onChange(entries.filter((_, i) => i !== index));
-  };
-
-  const append = () => {
-    onChange([...entries, { primary: '', secondary: '' }]);
-  };
+  const { update, remove } = list;
+  const append = () => list.add({ primary: '', secondary: '' });
 
   const showEmpty = entries.length === 0 && emptyLabel;
 
@@ -378,7 +375,13 @@ function SuggestionModeEdit({
   primarySuggestions,
   primaryStrict,
 }: SuggestionModeEditProps) {
-  const [isEditing, setIsEditing] = useState(false);
+  const list = useAddableList<AddableEntry>({
+    values: entries,
+    onChange,
+    allowDuplicates,
+    getKey: (e) => e.primary,
+  });
+  const { isEditing, remove } = list;
   const [primaryDraft, setPrimaryDraft] = useState('');
   const [secondaryDraft, setSecondaryDraft] = useState('');
 
@@ -396,7 +399,7 @@ function SuggestionModeEdit({
   const cancel = () => {
     setPrimaryDraft('');
     setSecondaryDraft('');
-    setIsEditing(false);
+    list.close();
     combo.reset();
   };
 
@@ -416,11 +419,12 @@ function SuggestionModeEdit({
         return;
       }
     }
-    if (!allowDuplicates && entries.some((e) => e.primary.toLowerCase() === trimmedPrimary.toLowerCase())) {
+    const added = list.add({ primary: trimmedPrimary, secondary: trimmedSecondary });
+    if (!added) {
+      // Duplicate primary — mirror the pre-hook behavior of discarding the draft.
       cancel();
       return;
     }
-    onChange([...entries, { primary: trimmedPrimary, secondary: trimmedSecondary }]);
     setPrimaryDraft('');
     setSecondaryDraft('');
     combo.reset();
@@ -430,12 +434,8 @@ function SuggestionModeEdit({
   const reveal = () => {
     setPrimaryDraft('');
     setSecondaryDraft('');
-    setIsEditing(true);
+    list.reveal();
     requestAnimationFrame(() => primaryInputRef.current?.focus());
-  };
-
-  const remove = (index: number) => {
-    onChange(entries.filter((_, i) => i !== index));
   };
 
   const combo = useSuggestionFilter({
