@@ -6,9 +6,8 @@
  * a CMS field, or a `as string` cast is invisible to it. So the retired
  * spellings keep working for one minor, and say so once per value.
  *
- * Warns once per component + prop + value, matching AddableTextList's
- * `warnedValues` pattern — a list rendering 200 rows should log once, not 200
- * times.
+ * Warns once per component + prop + value — a list rendering 200 rows should
+ * log once, not 200 times.
  */
 
 const warned = new Set<string>();

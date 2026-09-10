@@ -77,9 +77,9 @@ const BUTTON_SIZE: Record<AddableFieldRowListSize, ButtonSize> = {
  * handlers, grid layout, and the per-row remove IconButton.
  *
  * Per ADR-005, this is the canonical primitive for the multi-field row
- * shape — distinct from `AddableTextList` (single-string tag list),
- * `AddableComboList` (suggestion-driven tag list), and `AddableEntryList`
- * (title + description card).
+ * shape — distinct from `AddableTagList` (single-string tag list, with an
+ * optional suggestion combobox) and `AddableEntryList` (title + description
+ * card).
  *
  * @example Phone System / Other Tools (3-text + Select)
  * ```tsx

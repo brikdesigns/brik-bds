@@ -26,9 +26,6 @@
     "AddableEntryList": {
       "introduced_in": "0.5.0"
     },
-    "AddableTextList": {
-      "introduced_in": "0.1.6"
-    },
     "AddressInput": {
       "introduced_in": "0.1.3"
     },

@@ -180,7 +180,7 @@ Per-row remove uses `IconButton variant="ghost"` with `ph:dash-circle`. The icon
 ## When *not* to use
 
 <Callout type="warn">
-  **Don't use AddableFieldRowList for single-string-per-item.** Use [AddableTextList](/docs/components/addable-text-list) (free-form) or [AddableComboList](/docs/components/addable-combo-list) (vocabulary). The render-prop overhead is wasted on a single field.
+  **Don't use AddableFieldRowList for single-string-per-item.** Use [AddableTagList](/docs/components/addable-tag-list) (with or without a `suggestions` vocabulary). The render-prop overhead is wasted on a single field.
 </Callout>
 
 - **Don't use for title + description.** Use [AddableEntryList](/docs/components/addable-entry-list).
@@ -223,8 +223,7 @@ interface AddableFieldRowContext<T> {
 
 ## Related
 
-- [AddableTextList](/docs/components/addable-text-list) — single string per row
-- [AddableComboList](/docs/components/addable-combo-list) — vocabulary single string
+- [AddableTagList](/docs/components/addable-tag-list) — single string per row, with optional suggestion vocabulary
 - [AddableEntryList](/docs/components/addable-entry-list) — primary + secondary
 - [MultiSelect](/docs/components/multi-select) — locked enum, Tag chip output
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-addable-field-row-list--overview)**

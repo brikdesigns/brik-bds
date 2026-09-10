@@ -13,7 +13,7 @@ CatalogPicker is the right primitive when an industry pack seeds defaults that t
 - Fields where **provenance matters** — the difference between "this came from our industry default" and "this is client-specific" changes downstream behavior (copy generation, mockup content, competitive analysis framing)
 - Multi-pick controls where each entry needs a description alongside the name
 
-For locked vocabularies (no custom escape), use [MultiSelect](/docs/components/multi-select). For flat string picks without descriptions, use AddableComboList. For structured entries with fields other than description (URL + notes, name + role), use AddableEntryList directly.
+For locked vocabularies (no custom escape), use [MultiSelect](/docs/components/multi-select). For flat string picks without descriptions, use AddableTagList. For structured entries with fields other than description (URL + notes, name + role), use AddableEntryList directly.
 
 ## Import
 
@@ -101,7 +101,7 @@ Consumers persist the full array as a single JSONB column (e.g. `company_profile
   **Don't use CatalogPicker for locked vocabularies with no custom escape.** That's [MultiSelect](/docs/components/multi-select)'s job — pass the catalog as `options`. CatalogPicker's value is the *escape hatch* for free-text additions; if you don't want one, use the simpler component.
 </Callout>
 
-- **Don't use for flat string picks** with no description. The description textarea adds vertical weight that's wasted on tag-only inputs — use AddableComboList.
+- **Don't use for flat string picks** with no description. The description textarea adds vertical weight that's wasted on tag-only inputs — use AddableTagList.
 - **Don't use for structured entries** with fields other than description (URL + notes, name + role). Use AddableEntryList directly; you don't need catalog wiring.
 
 ## Accessibility

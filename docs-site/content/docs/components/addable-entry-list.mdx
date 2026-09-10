@@ -5,7 +5,7 @@ description: Title + description sibling. Each row carries a primary value and a
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-AddableEntryList is the text + textarea sibling of [AddableTextList](/docs/components/addable-text-list). Use for lists where each row needs a headline value plus context — competitor URL + notes, reference site + why, line item + description, team member + role.
+AddableEntryList is the text + textarea sibling of [AddableTagList](/docs/components/addable-tag-list). Use for lists where each row needs a headline value plus context — competitor URL + notes, reference site + why, line item + description, team member + role.
 
 The entry shape is intentionally generic (`{ primary, secondary }`) so a single component serves all of these. Map your domain shape at the boundary.
 
@@ -17,7 +17,7 @@ The entry shape is intentionally generic (`{ primary, secondary }`) so a single 
 - Line items (label + amount/description)
 - Team member rosters (name + role)
 
-For free-form one-string-per-row, use [AddableTextList](/docs/components/addable-text-list). For ≥3 structured fields, use [AddableFieldRowList](/docs/components/addable-field-row-list).
+For free-form one-string-per-row, use [AddableTagList](/docs/components/addable-tag-list). For ≥3 structured fields, use [AddableFieldRowList](/docs/components/addable-field-row-list).
 
 ## Import
 
@@ -124,7 +124,7 @@ When `emptyDescriptionLabel` is set, read-mode rows with empty `secondary` show 
 ## When *not* to use
 
 <Callout type="warn">
-  **For free-form one-string-per-row, use AddableTextList.** AddableEntryList's textarea is wasted vertical space when there's no description to enter. AddableTextList console-warns when values contain `—`, `–`, `:`, newline, or tab to catch mis-pickings at the source.
+  **For free-form one-string-per-row, use AddableTagList.** AddableEntryList's textarea is wasted vertical space when there's no description to enter.
 </Callout>
 
 - **Don't use for ≥3 structured fields.** Use [AddableFieldRowList](/docs/components/addable-field-row-list).
@@ -174,8 +174,7 @@ interface AddableEntry {
 
 ## Related
 
-- [AddableTextList](/docs/components/addable-text-list) — free-form one-string sibling
-- [AddableComboList](/docs/components/addable-combo-list) — vocabulary one-string sibling
+- [AddableTagList](/docs/components/addable-tag-list) — single-string sibling, with optional suggestion vocabulary
 - [AddableFieldRowList](/docs/components/addable-field-row-list) — multi-field sibling
 - [CatalogPicker](/docs/components/catalog-picker) — wraps AddableEntryList with source attribution
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-addable-entry-list--overview)**

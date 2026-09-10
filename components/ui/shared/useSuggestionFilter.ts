@@ -26,12 +26,12 @@ export interface UseSuggestionFilterOptions {
   /**
    * When provided, Enter in "primary committed, now navigate to secondary"
    * mode moves focus to the secondary element. If omitted, Enter commits
-   * free-form and stays in primary (AddableComboList style).
+   * free-form and stays in primary (AddableTagList style).
    */
   onPrimaryCommitted?: () => void;
   /**
    * Called when Backspace is pressed while the query is empty — consumers
-   * wire this to "remove the last selected tag" (see AddableComboList).
+   * wire this to "remove the last selected tag" (see AddableTagList).
    */
   onBackspaceEmpty?: () => void;
 }
@@ -67,7 +67,7 @@ export interface UseSuggestionFilterReturn {
 
 /**
  * useSuggestionFilter — shared combobox dropdown logic for suggestion-backed
- * inputs in AddableComboList and AddableEntryList.
+ * inputs in AddableTagList and AddableEntryList.
  *
  * Behaviour:
  * - Case-insensitive contains filter

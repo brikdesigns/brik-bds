@@ -93,7 +93,7 @@ const INPUT_SIZE: Record<AddableEntryListSize, TextInputSize> = { sm: 'sm', md: 
 const TEXTAREA_SIZE: Record<AddableEntryListSize, TextAreaSize> = { sm: 'sm', md: 'md', lg: 'lg' };
 
 /**
- * AddableEntryList — the text + textarea sibling of `AddableTextList`.
+ * AddableEntryList — the text + textarea sibling of `AddableTagList`.
  *
  * Two modes of operation:
  *
