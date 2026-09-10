@@ -1,0 +1,314 @@
+name: Assets Gate
+
+# The `assets-gate` required context — slice 4 of #2098's five thematic groups.
+#
+# ─── Why this file exists ────────────────────────────────────────────────────
+#
+# Four registry gates used to live in four workflows, each with a trigger-scoped
+# `paths:` filter. That filter makes a gate PERMANENTLY INELIGIBLE to be a
+# required check, and the mechanism is vendor-documented, not inferred:
+#
+#   - A workflow skipped by `paths:` leaves its check *Pending*, and "a pull
+#     request that requires those checks to be successful will be blocked from
+#     merging".
+#     https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs
+#   - "Required status checks must have a `successful`, `skipped`, or `neutral`
+#     status before collaborators can make changes to a protected branch."
+#     https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
+#
+# So a JOB-level skip satisfies protection and a TRIGGER-level one never
+# reports. This workflow moves the diff test down a level: the `changes` job
+# below computes it once, the work job skips on an irrelevant diff, and the
+# `assets-gate` aggregate job always runs and always reports.
+#
+# Nothing here changes what any of the four gates ASSERT. Each still runs its
+# own `gen:*:check`, verbatim (§ `_why` rule 4).
+#
+# `tokens-gate.yml` is the template — this group is COST-UNIFORM (four
+# identical checkout + `npm ci` + one dependency-free `gen:*:check` shapes), so
+# it takes tokens-gate's ONE work job and not docs-gate.yml's per-cost-tier
+# split. Consolidating is the runtime argument: four runners each paying their
+# own checkout and `npm ci` collapse to one.
+#
+# Grouping decision (thematic groups, clustered by `paths:` filter, ratified by
+# the operator 2026-08-28): brikdesigns/brik-bds#2098#issuecomment-5454101540
+#
+# ─── The four gates consolidated here ───────────────────────────────────────
+#
+#   contact-icons-check   → components/ui/ContactIcon/contact-icons.generated.ts
+#   service-icons-check   → components/ui/ServiceTag/service-icons.generated.ts
+#   social-icons-check    → components/ui/SocialIcon/social-icons.generated.ts
+#   logo-registry-check   → components/ui/Logo/logos.generated.ts
+#
+# Each asserts a COMMITTED registry is still reproducible from its SVG source.
+# The shared rationale, preserved from all four files: these are CI gates and
+# not only the husky pre-commit mirror because cloud-agent commits bypass local
+# hooks entirely, PRs from fresh clones may not have husky installed, and the
+# offline-glyph guarantee is only as good as the committed registry.
+#
+# The four workflow files are deleted in the same commit — leaving them would
+# run every gate twice.
+#
+# Issue: brikdesigns/brik-bds#2328 (parent #2098, grandparent #2038 — AC1)
+
+on:
+  # No trigger-scoped `paths:` — that is the entire point. The diff test lives
+  # in the `changes` job below.
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+concurrency:
+  # `cancel-in-progress: false` + `queue: max`, required as a pair on a required
+  # context. This is not a style choice — it is what the contract auditor's
+  # rules 6a/6b enforce, and the reason is #2094 / #2174 / #2176:
+  #
+  #   - A cancelled check-run is not an absent one. Protection goes on reporting
+  #     the context as `expected`, and a green re-run does not clear it — only a
+  #     new head SHA does.
+  #   - `cancel-in-progress: false` ALONE does not cover it. That flag governs
+  #     the RUNNING job; the default `queue: single` still lets a newer run evict
+  #     the PENDING one, leaving a check-suite with zero check-runs and the same
+  #     stuck `expected`.
+  #
+  # `queue: max` and `cancel-in-progress: true` are a workflow validation error
+  # together, so they always change as a pair.
+  #
+  # Cost, stated rather than discovered: a superseded PR commit now runs this
+  # gate to completion instead of being cancelled. The `changes` job keeps that
+  # affordable — an irrelevant diff instantiates zero work jobs, so the
+  # uncancellable run is seconds.
+  group: assets-gate-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  # ─── The job-level diff test ────────────────────────────────────────────────
+  #
+  # The UNION of all four members' former `paths:` lists (§ `_why` rule 1).
+  # Union, never intersection and never the group's "theme" — moving a filter
+  # down a level can silently SHRINK what a gate sees, which converts a required
+  # check into one that passes because it never ran on the relevant diff.
+  #
+  # Deliberately NOT collapsed to `components/ui/*/icons/**/*.svg` or to
+  # `components/**`: the first is a narrowing dressed as a tidy-up (it drops
+  # `assets/logo-*.svg` entirely), the second is a widening that would make
+  # every component PR in the org's Actions hot spot pay this gate. All twelve
+  # entries are listed exactly as the four triggers listed them.
+  #
+  # `assets/logo-*.svg` is a glob that may legitimately match nothing — that is
+  # an allowed state and `npm run lint-gate-pathspecs` permits it by design
+  # (lint-gate-pathspecs.mjs:36-38); the twelve currently-tracked
+  # `assets/logo-cc-*.svg` marks mean it matches today.
+  changes:
+    # Display name is group-qualified deliberately. `visual.yml`'s classifier is
+    # also named `classify diff`, and there would otherwise be five
+    # identically-named rows in the PR checks list with nothing to tell them
+    # apart. The required context is the aggregate job below, so this name is
+    # free to be legible.
+    name: classify diff (assets)
+    runs-on: ubuntu-latest
+    outputs:
+      # 'true' to run the registry checks, 'false' to skip them.
+      run: ${{ steps.classify.outputs.run }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          # Need the base commit present to diff against it.
+          fetch-depth: 0
+
+      - name: Classify the diff
+        id: classify
+        env:
+          # On a PR these are the tips of base and head; empty on push.
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          # push to main always runs the full gate — a post-merge run is not a
+          # place to guess. Same precedent as visual.yml's classifier.
+          if [ -z "$BASE_SHA" ]; then
+            echo "event=${{ github.event_name }} → full assets gate"
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # git's pathspec globbing does the matching, so the list below reads
+          # the same way the four `paths:` blocks did.
+          #
+          # `git diff --name-only` exits 0 whether or not it printed anything,
+          # so emptiness and failure are distinguishable here — unlike a
+          # `git diff | grep` pipeline, where pipefail returns grep's status and
+          # grep exits 1 on "no match", making a genuine diff failure look like
+          # an inert diff (the #2713 trap). Fail CLOSED on a git error: the
+          # aggregate job treats a non-success classify as a block, never as a
+          # skip.
+          if ! CHANGED="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- \
+            'components/ui/ContactIcon/icons/**/*.svg' \
+            'components/ui/ContactIcon/contact-icons.generated.ts' \
+            'scripts/gen-contact-icons.mjs' \
+            'components/ui/ServiceTag/icons/**/*.svg' \
+            'components/ui/ServiceTag/service-icons.generated.ts' \
+            'scripts/gen-service-icons.mjs' \
+            'components/ui/SocialIcon/icons/**/*.svg' \
+            'components/ui/SocialIcon/social-icons.generated.ts' \
+            'scripts/gen-social-icons.mjs' \
+            'assets/logo-*.svg' \
+            'components/ui/Logo/logos.generated.ts' \
+            'scripts/gen-logos.mjs' \
+            '.github/workflows/assets-gate.yml')"; then
+            echo "✗ git diff failed for $BASE_SHA..$HEAD_SHA — cannot classify; failing closed."
+            exit 1
+          fi
+
+          if [ -z "$CHANGED" ]; then
+            echo "diff touches no assets-gate input → skipping the registry checks"
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "diff touches assets-gate inputs → running the registry checks:"
+            printf '%s\n' "$CHANGED" | sed 's/^/    /'
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ─── The four gates, one runner ─────────────────────────────────────────────
+  #
+  # Deliberately ONE job with sequential steps rather than four jobs. Jobs in a
+  # workflow do not share a runner, so four jobs would still pay four checkouts
+  # and four `npm ci` — the repeated install is essentially all of what this
+  # group used to cost (each member's own work is a single dependency-free node
+  # invocation), and consolidating is the whole runtime argument for thematic
+  # grouping over per-gate shims (#2098).
+  #
+  # Every check step carries `if: always()` so ONE failure does not hide the
+  # other three. A step that runs under `always()` and exits non-zero still
+  # fails the job, so the aggregate below stays correct. Each is gated on
+  # `steps.install.outcome` so a failed `npm ci` does not fake four failures
+  # (§ `_why` rule 2).
+  #
+  # Verified locally on `main@29891e26` before this workflow was written: all
+  # four commands exit 0 and none leaves the git tree dirty. That last part
+  # matters — each gate's assertion IS "the committed registry matches its
+  # source", asserted by `--check`, which reads and compares rather than
+  # writing. Order between them is therefore free; they are listed in the
+  # members table's order.
+  #
+  # This job is deliberately NOT named `assets-gate` — the aggregate job below
+  # carries that name so the branch-protection context stays stable no matter
+  # how the work above is reshaped.
+  registries:
+    name: registry checks
+    runs-on: ubuntu-latest
+    needs: changes
+    permissions:
+      contents: read
+    # The `success()` half matters: an explicit `if` REPLACES the implicit
+    # needs-succeeded gate, so without it a FAILED `changes` job (outputs.run
+    # == '') would still satisfy `!= 'false'` and run the checks against an
+    # unclassified diff. Gating on success() skips cleanly instead; the
+    # aggregate job then fails closed on the non-success.
+    if: needs.changes.result == 'success' && needs.changes.outputs.run == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        id: install
+        run: npm ci
+
+      # ─── contact-icons-check ────────────────────────────────────────────────
+      #
+      # Keeps components/ui/ContactIcon/contact-icons.generated.ts in sync with
+      # the source marks in components/ui/ContactIcon/icons/*.svg, so a contact
+      # glyph cannot silently go missing or stale in the bundled offline set and
+      # the no-404 guarantee stays true.
+      #
+      # Source: scripts/gen-contact-icons.mjs
+      - name: Check bundled contact-icon registry is in sync
+        if: always() && steps.install.outcome == 'success'
+        run: npm run gen:contact-icons:check
+
+      # ─── service-icons-check (#1242) ────────────────────────────────────────
+      #
+      # Keeps components/ui/ServiceTag/service-icons.generated.ts in sync with
+      # the source marks in components/ui/ServiceTag/icons/*/*.svg — the same
+      # no-404 guarantee, for the service glyph set.
+      #
+      # Source: scripts/gen-service-icons.mjs
+      - name: Check bundled service-icon registry is in sync
+        if: always() && steps.install.outcome == 'success'
+        run: npm run gen:service-icons:check
+
+      # ─── social-icons-check ─────────────────────────────────────────────────
+      #
+      # Keeps components/ui/SocialIcon/social-icons.generated.ts in sync with
+      # the source marks in components/ui/SocialIcon/icons/*.svg.
+      #
+      # Source: scripts/gen-social-icons.mjs
+      - name: Check bundled social-icon registry is in sync
+        if: always() && steps.install.outcome == 'success'
+        run: npm run gen:social-icons:check
+
+      # ─── logo-registry-check ────────────────────────────────────────────────
+      #
+      # Keeps components/ui/Logo/logos.generated.ts in sync with the source
+      # marks in assets/logo-*.svg, so a logo cannot silently go missing or
+      # stale in the bundled offline set.
+      #
+      # Source: scripts/gen-logos.mjs
+      - name: Check bundled logo registry is in sync
+        if: always() && steps.install.outcome == 'success'
+        run: npm run gen:logos:check
+
+  # ─── The branch-protection check ────────────────────────────────────────────
+  #
+  # Keeps the name `assets-gate` stable while the work above fans out, and fails
+  # if the registry checks failed — `needs` alone would let a skipped or failed
+  # `registries` job pass this one, so both results are asserted explicitly.
+  #
+  # This job ALWAYS runs and ALWAYS reports, on every PR. That is the whole
+  # property that makes `assets-gate` a valid required context: when the diff
+  # touched no registry input the checks did not run, and the required check
+  # still has to report, so it reports green.
+  assets-gate:
+    name: assets-gate
+    runs-on: ubuntu-latest
+    needs: [changes, registries]
+    if: always()
+    steps:
+      - name: Assert the assets gate
+        run: |
+          echo "classify result:  ${{ needs.changes.result }}"
+          echo "checks requested: ${{ needs.changes.outputs.run }}"
+          echo "checks result:    ${{ needs.registries.result }}"
+
+          if [ "${{ needs.changes.result }}" != "success" ]; then
+            echo "✗ the classify-diff job did not succeed — failing the gate closed rather"
+            echo "  than guessing whether the registry checks should have run."
+            exit 1
+          fi
+
+          if [ "${{ needs.changes.outputs.run }}" != "true" ]; then
+            echo "✓ diff touched no assets-gate input — gate not applicable, reporting green."
+            exit 0
+          fi
+
+          if [ "${{ needs.registries.result }}" != "success" ]; then
+            echo "✗ the registry checks did not pass. Every check step runs under"
+            echo "  \`if: always()\`, so the job log lists EVERY failing gate, not just"
+            echo "  the first — read all of them before pushing a fix. Regenerate with"
+            echo "  the matching \`npm run gen:<set>\` and commit the result."
+            exit 1
+          fi
+
+          echo "✓ all asset registry gates passed."
