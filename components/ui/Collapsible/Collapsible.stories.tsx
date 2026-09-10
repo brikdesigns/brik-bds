@@ -4,7 +4,7 @@ import { expect, userEvent } from 'storybook/test';
 import { Collapsible } from './Collapsible';
 
 const meta: Meta<typeof Collapsible> = {
-  title: 'Components/collapsible',
+  title: 'Containers/collapsible',
   component: Collapsible,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

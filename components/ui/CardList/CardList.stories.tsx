@@ -4,7 +4,7 @@ import { Card, CardTitle, CardDescription, CardFooter } from '../Card/Card';
 import { Button } from '../Button';
 
 const meta: Meta<typeof CardList> = {
-  title: 'Cards/card-list',
+  title: 'Containers/card-list',
   component: CardList,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

@@ -185,6 +185,26 @@ Forward-only `title:` re-titles plus a `'Content'` entry after `'Forms'` in the 
 **Out of scope.** `block-quote` and `bullet-list` (other former-`Blocks/` members now in `Components/`) were not part of this move — revisit if the family grows.
 
 Per the amendment convention this file follows, the frozen Part A table is not rewritten; this entry is the source of truth for the current bucket set.
+### 2026-09-10 — Part A: `Cards/` folded back into `Containers/`; Collapsible → `Containers/` (#2386)
+
+**This overrides the [2026-07-22 `Cards/` top-level (#1330)](#2026-07-22--part-a-cards-top-level-navigation-rename-blueprints-promoted-foundationassets-displays-dissolved-1330).** The card family returns to `Containers/`, and Collapsible joins it:
+
+- `Cards/card` → **`Containers/card`**
+- `Cards/card-list` → **`Containers/card-list`**
+- `Cards/product-summary-card` → **`Containers/product-summary-card`**
+- `Components/collapsible` → **`Containers/collapsible`**
+
+(`pricing-card` is already `Deprecated/` and does not move; the `Cards/` top-level empties completely and its `storySort.order` entry is removed.)
+
+**Operator ratification.** #1330 traded composition-role purity for name-family discoverability. This amendment reverses that trade — cards are bounded holders (own border/padding/elevation) and belong with the other holders. This is an explicit operator decision, not an agent-originated taxonomy change:
+
+> OPERATOR SAID 2026-09-10 (chat): "Yes to 2 above" — ratifying "Cards + Collapsible → Containers ... reverses ADR-006 #1330. Proceed as an explicit ADR override."
+
+Collapsible carries its own surface (`Collapsible.css` — `--surface-primary` fill + `--padding-lg` + `--border-radius-md`), so `Containers/` is the composition-role-correct home; the earlier `Components/` placement (2026-05-18, "split out ... no card surface") is superseded by the component's current shape.
+
+Forward-only `title:` re-titles + `storySort.order` edit (`'Cards'` removed) + 8 Storybook-slug refs re-pointed (7 docs-site: card / card-list / product-summary-card / collapsible / collapsible-card ×3; 1 in-repo: [PricingCard.mdx](../../components/ui/PricingCard/PricingCard.mdx)). No component code changes. The living taxonomy tables in [`.claude/standards/storybook-story-shape.md`](../../.claude/standards/storybook-story-shape.md) are updated to match; the frozen Part A table is not rewritten (amendment convention).
+
+**Note on the `Forms/` precedent.** #1565 cited #1330's name-family reasoning when creating `Forms/`. `Forms/` stands on its own merits (a large, cohesive card-less family) and is unaffected; this amendment narrows the name-family-wins principle to *not* apply where a composition-role home already fits cleanly, as it does for the card holders.
 
 ### 2026-07-29 — Part A: `Forms/` top-level added; form family pulled out of `Containers/` (#1565)
 
