@@ -21,6 +21,12 @@ name: Secret scan
 
 on:
   pull_request:
+  # Merge-queue readiness (#2415): a required context must report on the merge
+  # group or the queue wedges. Scans the merge group's base..head range (see the
+  # scan step). NOTE: this file is edited in place like its #2038 concurrency
+  # block — brik-bds carries a required-context divergence from the canonical
+  # security template (brik-llm scripts/shared/security/templates/gitleaks.yml).
+  merge_group:
 
 # `gitleaks` is a REQUIRED context on `main` since #2038, so this block may not
 # cancel. A cancelled check-run is not an absent one — protection goes on
@@ -50,10 +56,21 @@ jobs:
             | sudo tar -xz -C /usr/local/bin gitleaks
           gitleaks version
 
+      # On a merge group there is no PR ref; scan the merge-group base..head
+      # range instead. Both SHAs are present from the full-history checkout.
+      - name: Resolve scan range
+        id: range
+        run: |
+          if [ "${{ github.event_name }}" = "merge_group" ]; then
+            echo "range=${{ github.event.merge_group.base_sha }}..${{ github.event.merge_group.head_sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "range=origin/${{ github.base_ref }}..${{ github.event.pull_request.head.sha }}" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Scan PR diff
         run: |
           set -e
           config_arg=""
           [ -f .gitleaks.toml ] && config_arg="--config .gitleaks.toml"
           gitleaks detect --redact --no-banner --verbose --exit-code 1 $config_arg \
-            --log-opts="--no-merges origin/${{ github.base_ref }}..${{ github.event.pull_request.head.sha }}"
+            --log-opts="--no-merges ${{ steps.range.outputs.range }}"
