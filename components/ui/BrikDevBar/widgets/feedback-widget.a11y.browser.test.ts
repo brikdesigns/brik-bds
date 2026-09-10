@@ -11,11 +11,11 @@
  * pin, because each inherits half its foreground/background pair from a
  * different rule. Only resolving the real cascade catches them.
  *
- * Why it is not covered by contrast-gate.yml: that gate resolves token pairings
- * from `tokens/contrast-pairings.json`. This widget inlines raw hexes on purpose
- * — it ships to Supabase Storage and runs inside self-contained client mockups
- * where the BDS token sheet is absent — so it is invisible to the token gate and
- * needs its own.
+ * Why it is not covered by tokens-gate.yml's contrast job: that job resolves
+ * token pairings from `tokens/contrast-pairings.json`. This widget inlines raw
+ * hexes on purpose — it ships to Supabase Storage and runs inside self-contained
+ * client mockups where the BDS token sheet is absent — so it is invisible to the
+ * token gate and needs its own.
  *
  * Runs under the `widgets` browser vitest project (see vitest.config.ts).
  */
