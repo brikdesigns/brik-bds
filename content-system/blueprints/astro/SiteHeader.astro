@@ -30,17 +30,33 @@
  *   currentPath     — optional — when set, the matching navItem gets
  *                     `aria-current="page"` for AT
  *
+ * ## Behavior (in-component runtime)
+ *
+ *   The component ships its own client `<script>` — the vocabularies
+ *   (`scroll-behavior.ts`, `drawer-pattern.ts`) name `<SiteHeader>` as the
+ *   consumer of these values, so the scroll + mobile-drawer behavior lives
+ *   here rather than in each consumer's scaffold. `scrollBehavior` and
+ *   `mobileDrawer` are emitted as `data-scroll-behavior` / `data-drawer-
+ *   pattern` on the header; the script reads them to drive the runtime.
+ *
  * ## editorial-transparent archetype
  *
  *   Layout at ≥768px: [logo] [primary nav links, centered] [phone + CTA]
  *   Layout at  <768px: [logo] [hamburger button + mobile drawer markup]
- *   Scroll:  transparent over hero at top, frosted glass past 80px
- *            (behavior added by scaffold layout JS; this component
- *            emits the markup + CSS custom properties the JS hooks
- *            into).
- *   Drawer:  fullscreen-overlay (mobile) — expressed via data-
- *            attributes + CSS; the actual open/close toggle ships
- *            with the scaffold layout JS.
+ *   Scroll:  transparent over hero at top, frosted glass past 80px — the
+ *            transparent→frost transition is DEFERRED (tracked on #2373
+ *            AC "scroll behaviors"); the component ships the `is-scrolled`
+ *            state hook the CSS keys off, not the transparency itself yet.
+ *   Drawer:  fullscreen-overlay (mobile).
+ *
+ * ## utility-first archetype
+ *
+ *   Task-surface header for real-estate / directory / multi-practice packs
+ *   (5 primary links + mega-menu + task-led CTA). Always-solid background,
+ *   never transparent, never hides on scroll — the top bar is a task
+ *   surface, not a branding one. Gains a subtle elevation shadow once
+ *   scrolled (`data-scrolled`). Mobile drawer: `slide-left-panel` — slides
+ *   in from the left over a translucent scrim, leaving the page visible.
  *
  * ## a11y
  *
@@ -54,6 +70,7 @@
  */
 import type { ResolvedNavArchetype } from './types';
 import type { ServicesMegaMenu } from '../../schema/industry-pack';
+import type { ScrollBehavior, DrawerPattern } from '../../vocabularies';
 
 interface NavItem {
   label: string;
@@ -77,6 +94,17 @@ interface Props {
    * plain link.
    */
   servicesMegaMenu?: ServicesMegaMenu | null;
+  /**
+   * Scroll behavior — emitted as `data-scroll-behavior`; the runtime
+   * script reads it to decide the on-scroll state. Defaults to the
+   * archetype's documented behavior when omitted.
+   */
+  scrollBehavior?: ScrollBehavior | null;
+  /**
+   * Mobile drawer pattern — emitted as `data-drawer-pattern`; drives the
+   * drawer's slide direction + scrim in CSS and the open/close script.
+   */
+  mobileDrawer?: DrawerPattern | null;
 }
 
 const {
@@ -88,9 +116,11 @@ const {
   primaryCta = null,
   currentPath = null,
   servicesMegaMenu = null,
+  scrollBehavior = null,
+  mobileDrawer = null,
 } = Astro.props;
 
-const IMPLEMENTED_ARCHETYPES = ['editorial-transparent'] as const;
+const IMPLEMENTED_ARCHETYPES = ['editorial-transparent', 'utility-first'] as const;
 const isImplemented = (IMPLEMENTED_ARCHETYPES as readonly string[]).includes(archetype);
 
 const phoneHref = phone ? `tel:${phone.replace(/[^+\d]/g, '')}` : null;
@@ -115,6 +145,8 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
   ]}
   data-nav-archetype={archetype}
   data-unimplemented-archetype={isImplemented ? undefined : archetype}
+  data-scroll-behavior={scrollBehavior ?? undefined}
+  data-drawer-pattern={mobileDrawer ?? undefined}
 >
   <div class="bp-site-header__container">
     <a class="bp-site-header__brand" href="/" aria-label={`${brandName} home`}>
@@ -252,18 +284,37 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
     </button>
   </div>
 
-  <!-- Drawer is `inert` when closed — the hamburger's click handler
-       (shipped with the scaffold layout JS) removes `inert` and sets
-       aria-expanded="true" on the hamburger. `inert` is preferred over
-       aria-hidden here because it subsumes both the accessibility tree
-       hiding AND focus removal in one attribute — axe flags drawers
-       that are aria-hidden with focusable children. -->
+  <!-- Scrim — only visible for slide-* drawer patterns (CSS gates it on
+       [data-drawer-pattern]); a tap closes the drawer. Inert/hidden when
+       the drawer is closed. -->
+  <div
+    class="bp-site-header__scrim"
+    data-bp-site-header-scrim
+    hidden
+  ></div>
+
+  <!-- Drawer is `inert` when closed — the runtime script removes `inert`,
+       sets aria-expanded="true" on the hamburger, and locks body scroll.
+       `inert` is preferred over aria-hidden here because it subsumes both
+       the accessibility-tree hiding AND focus removal in one attribute —
+       axe flags drawers that are aria-hidden with focusable children. -->
   <div
     id="bp-site-header-drawer"
     class="bp-site-header__drawer"
     inert
     data-bp-site-header-drawer
   >
+    <div class="bp-site-header__drawer-head">
+      <button
+        type="button"
+        class="bp-site-header__drawer-close"
+        aria-label="Close menu"
+        data-bp-site-header-toggle="close"
+      >
+        <span class="bp-site-header__drawer-close-bar" aria-hidden="true"></span>
+        <span class="bp-site-header__drawer-close-bar" aria-hidden="true"></span>
+      </button>
+    </div>
     <nav class="bp-site-header__drawer-nav" aria-label="Primary mobile">
       <ul class="bp-site-header__drawer-list" role="list">
         {navItems.map((item) => (
@@ -285,10 +336,9 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
 </header>
 
 <style>
-  /* editorial-transparent — v0.1's single implemented archetype. When
-   * new archetypes ship, they add sibling `.bp-site-header--<archetype>`
-   * blocks below. The base `.bp-site-header` shape stays archetype-
-   * neutral; each archetype block tweaks layout + scroll behavior. */
+  /* The base `.bp-site-header` shape stays archetype-neutral; each
+   * `.bp-site-header--<archetype>` block below tweaks background, scroll,
+   * and drawer behavior. Implemented: editorial-transparent, utility-first. */
 
   .bp-site-header {
     /* Per-client tuning */
@@ -302,6 +352,18 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
     z-index: 100;
     background: var(--bds-site-header-bg);
     padding-block: var(--padding-md);
+    transition: box-shadow 160ms ease-out;
+  }
+
+  /* utility-first — always-solid task surface: never transparent, never
+   * hides. Gains a subtle elevation shadow once the page is scrolled,
+   * set by the runtime script via [data-scrolled]. */
+  .bp-site-header--utility-first {
+    --bds-site-header-bg: var(--surface-navigation);
+  }
+
+  .bp-site-header--utility-first[data-scrolled] {
+    box-shadow: var(--shadow-sm);
   }
 
   .bp-site-header__container {
@@ -671,4 +733,162 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
     flex-direction: column;
     gap: var(--gap-md);
   }
+
+  /* Drawer header — holds the close affordance. */
+  .bp-site-header__drawer-head {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--gap-lg);
+  }
+
+  .bp-site-header__drawer-close {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  .bp-site-header__drawer-close:focus-visible {
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
+    outline-offset: 2px;
+  }
+
+  .bp-site-header__drawer-close-bar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 2px;
+    background: var(--bds-site-header-text-color);
+  }
+
+  .bp-site-header__drawer-close-bar:first-child {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .bp-site-header__drawer-close-bar:last-child {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  /* Scrim — the translucent backdrop behind a slide-* drawer. The base
+   * fullscreen-overlay drawer covers the whole viewport, so no scrim
+   * shows there; the runtime script only un-hides it for slide patterns. */
+  .bp-site-header__scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: var(--background-overlay);
+    border: none;
+  }
+
+  .bp-site-header__scrim[hidden] {
+    display: none;
+  }
+
+  /* slide-left-panel — the drawer becomes a bounded panel that slides in
+   * from the left over the scrim, leaving the page visible (task-mode
+   * nav). Overrides the base full-bleed drawer only for this pattern. */
+  .bp-site-header[data-drawer-pattern='slide-left-panel'] .bp-site-header__drawer {
+    /* Kept laid out (not display:none) so the slide transition fires;
+     * `inert` still holds it out of the a11y tree + tab order when closed,
+     * and translateX(-100%) parks it off-screen. */
+    display: block;
+    inset: 0 auto 0 0;
+    width: min(88vw, 360px);
+    z-index: 160;
+    transform: translateX(-100%);
+    transition: transform 200ms ease-out;
+  }
+
+  .bp-site-header[data-drawer-pattern='slide-left-panel'] .bp-site-header__drawer:not([inert]) {
+    transform: translateX(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bp-site-header[data-drawer-pattern='slide-left-panel'] .bp-site-header__drawer {
+      transition: none;
+    }
+  }
 </style>
+
+<script>
+  // SiteHeader runtime — owns the mobile-drawer toggle and the on-scroll
+  // state hook. The vocabularies (scroll-behavior.ts, drawer-pattern.ts)
+  // name <SiteHeader> as the consumer of these values, so the behavior
+  // lives here rather than in each consumer's scaffold layout.
+  const DESKTOP_QUERY = '(min-width: 768px)';
+
+  function initSiteHeader(header: HTMLElement): void {
+    const drawer = header.querySelector<HTMLElement>('[data-bp-site-header-drawer]');
+    const scrim = header.querySelector<HTMLElement>('[data-bp-site-header-scrim]');
+    const openBtn = header.querySelector<HTMLElement>('[data-bp-site-header-toggle="open"]');
+    const closeBtn = header.querySelector<HTMLElement>('[data-bp-site-header-toggle="close"]');
+    if (!drawer || !openBtn) return;
+
+    const pattern = header.getAttribute('data-drawer-pattern') ?? '';
+    const usesScrim = pattern.startsWith('slide-');
+    let scrollY = 0;
+
+    const isOpen = () => !drawer.hasAttribute('inert');
+
+    function open(): void {
+      if (isOpen()) return;
+      drawer.removeAttribute('inert');
+      openBtn!.setAttribute('aria-expanded', 'true');
+      if (usesScrim && scrim) scrim.hidden = false;
+      // Scroll-lock via position-fixing — body{overflow:hidden} does not
+      // hold on iOS Safari; the documentElement still rubber-bands.
+      scrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.body.classList.add('nav-menu-open');
+      (closeBtn ?? drawer).focus?.();
+    }
+
+    function close(): void {
+      if (!isOpen()) return;
+      drawer.setAttribute('inert', '');
+      openBtn!.setAttribute('aria-expanded', 'false');
+      if (scrim) scrim.hidden = true;
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.body.classList.remove('nav-menu-open');
+      window.scrollTo(0, scrollY);
+      openBtn!.focus?.();
+    }
+
+    openBtn.addEventListener('click', open);
+    closeBtn?.addEventListener('click', close);
+    scrim?.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen()) close();
+    });
+
+    // Viewport guard — if the viewport crosses into desktop while the menu
+    // is open (tablet rotation), auto-close so the body isn't left locked
+    // while the desktop nav is in use.
+    const mq = window.matchMedia(DESKTOP_QUERY);
+    mq.addEventListener('change', (e) => {
+      if (e.matches && isOpen()) close();
+    });
+
+    // On-scroll state hook — utility-first keys its elevation shadow off
+    // [data-scrolled]. Always-solid archetypes never hide; this only
+    // toggles the state attribute, never the layout.
+    const onScroll = () => {
+      if (window.scrollY > 8) header.setAttribute('data-scrolled', '');
+      else header.removeAttribute('data-scrolled');
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  document
+    .querySelectorAll<HTMLElement>('.bp-site-header')
+    .forEach(initSiteHeader);
+</script>
