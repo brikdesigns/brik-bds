@@ -17,7 +17,7 @@ const SAMPLE_HTML = `
  * @summary Sanitized rich-text Block — owns heading/paragraph rhythm
  */
 const meta: Meta<typeof Prose> = {
-  title: 'Components/prose',
+  title: 'Content/prose',
   component: Prose,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },

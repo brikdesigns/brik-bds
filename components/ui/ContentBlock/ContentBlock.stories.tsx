@@ -13,7 +13,7 @@ import '../../../tokens/modes-spacing.css';
  * @summary Fixed-slot content unit — title, subtitle, description, actions
  */
 const meta: Meta<typeof ContentBlock> = {
-  title: 'Components/content-block',
+  title: 'Content/content-block',
   component: ContentBlock,
   tags: ['surface-shared'],
   parameters: { layout: 'padded' },
