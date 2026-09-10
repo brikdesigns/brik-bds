@@ -191,6 +191,7 @@
     "bcs-vocab-check": "node scripts/bcs-vocab-check.mjs",
     "token-cascade-vocab-check": "node scripts/token-cascade-vocab-check.mjs",
     "lint-inline-var": "node scripts/lint-inline-var.mjs",
+    "lint-merge-queue-readiness": "node scripts/lint-merge-queue-readiness.mjs",
     "lint-content-rhythm": "node scripts/lint-content-rhythm.mjs",
     "lint-page-grid": "node scripts/lint-page-grid.mjs",
     "canonical-check": "node scripts/canonical-check.mjs --allowlist dist/tokens.css components content-system/blueprints content-system/atmospheres content-system/industries",
