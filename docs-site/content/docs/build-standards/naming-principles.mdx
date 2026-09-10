@@ -39,6 +39,50 @@ The gate is [`scripts/slot-pattern-check.mjs`](https://github.com/brikdesigns/br
 
 Blueprints (`content-system/blueprints/*`) are page-level layouts — the Section layer of the [Composition Layers](/docs/build-standards/composition-layers) model. Their naming follows the same pattern canon.
 
+### A blueprint key names layout, never content domain
+
+A blueprint has two names, and this rule governs both: its **manifest key** in `blueprints/blueprint-library.json`, and the **component** that renders it.
+
+A name describes **layout shape only**. The same three-up grid renders services, team, blog and product collections — so a name that says *services* is a lie the first time it is reused, and a name that says *dark* is a lie the first time the atmosphere changes.
+
+| A name may carry | Because | Examples |
+|---|---|---|
+| Layout words | The shape is what the blueprint *is* | `split`, `grid`, `centered`, `two_column`, `bar`, `overlay` |
+| Section type | Which slot on the page it fills | `hero_*`, `cta_*`, `stats_*` |
+
+| A name must NOT carry | Where it belongs instead |
+|---|---|
+| Content domain — *services*, *team*, *about*, *support plan* | The library entry's `industries` / `moods`, and the site content passed in |
+| Brand or atmosphere — *dark*, *branded*, *light* | Tokens and the resolved atmosphere |
+| Column counts and ratios — *3col*, *60_40* | A prop |
+
+So `card_grid`, `hero_split`, `cta_centered`, `story_split`, `two_column_detail` — a vocabulary a client site can adopt without inheriting another client's content model.
+
+Enforced by `scripts/lint-blueprint-naming.mjs` as `blueprint-key-context-word`, on both pre-commit and the `validate` chain. It reads the two places a key is declared — `blueprints/blueprint-library.json` and `content-system/blueprints/astro/types.ts` — and ships with **no allowlist**. `blueprints/blueprint-roadmap.json` is out of scope by design: its entries are design candidates, not contracts, and a candidate becomes a contract when it graduates into the library — which is exactly when the rule bites.
+
+Source: [ADR-037](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-037-astro-is-the-canonical-blueprint-rail.md) §4.
+
+### Two structural vocabularies, not one
+
+BDS names structure along **two orthogonal axes**, and they are not interchangeable ([ADR-037](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-037-astro-is-the-canonical-blueprint-rail.md) §5):
+
+| Axis | Question it answers | Vocabulary |
+|---|---|---|
+| **Composition layer** | How do I reason about this piece of structure? | Blueprint → Layout → Container → Block → Component |
+| **Storybook taxonomy** | Where does this story file? | Components / Cards / Forms / Containers / Layouts / Navigation / Blueprints / Tools |
+
+`Block` is a composition layer and **not** a Storybook bucket — ADR-006 retired that bucket on 2026-07-29. `Cards` is a Storybook bucket and **not** a composition layer — a Card is a Container.
+
+The one-sentence form, for agent prompts and orientation:
+
+> **Blueprints compose the page. Containers hold collections. Blocks fill containers. Layouts arrange. Components are atoms.**
+
+### The rails
+
+Blueprints ship on two renderers. **Astro is canonical** (ADR-037 §1) — it carries every published client site, so where the rails disagree Astro is the reference. React is a supported rail for CMS-backed sites and `brikdesigns.com`, and is the source of the layout-as-prop API both rails share: a component is a **block**, and the layout it renders in is a **prop**, never a filename. See [Blueprints](/docs/theming/blueprints).
+
+### Class naming
+
 1. **Single namespace.** Every class uses `bds-`. The `bp-` prefix is deprecated — no new `bp-*` classes after ADR-008.
 2. **One block per family.** `bds-hero`, `bds-cta`, `bds-services`, `bds-features`, `bds-about`, `bds-callout-panel`. Each family is one block with structural modifiers, not N separate blueprints.
 3. **Well-formed slots.** Every `bds-{block}__{slot}` must match the kebab-case BEM pattern above. The slot-pattern gate fails on malformed shapes, not on new well-formed words.
@@ -49,6 +93,22 @@ Blueprints (`content-system/blueprints/*`) are page-level layouts — the Sectio
 <Callout type="info">
   The `bp-*` prefix is being migrated to `bds-*` across existing blueprints — Phase D, one family per PR. Until Phase F, both prefixes coexist.
 </Callout>
+
+### Retired blueprint names
+
+Kept so a search for the old name finds the current one. These are **history, not alternatives** — no code, doc, or manifest should reintroduce them.
+
+| Retired | Current | Why |
+|---|---|---|
+| `SupportPlan`, `bds-support-plan` | `CalloutPanel`, `bds-callout-panel` | Content domain in a component name; the layout is a section header above a callout panel, and nothing about it is plan-specific ([#2305](https://github.com/brikdesigns/brik-bds/issues/2305)) |
+| `support_plan_callout_split` | `callout_split` | Same rule, applied to the manifest key ([#2303](https://github.com/brikdesigns/brik-bds/issues/2303)) |
+| `services_3col_card_grid` | `card_grid` | Content domain + a column count that is a prop |
+| `services_detail_two_column` | `two_column_detail` | Content domain |
+| `about_story_split` | `story_split` | Content domain |
+| `cta_dark_centered` | `cta_centered` | `dark` is an atmosphere token |
+| `features_3col_branded_dark` | `feature_grid` | Brand + atmosphere + a column count |
+| `hero_split_60_40` | `hero_split` | The ratio is a prop |
+| `stats_dark_bar` | `stats_bar` | `dark` is an atmosphere token |
 
 ## Related
 
