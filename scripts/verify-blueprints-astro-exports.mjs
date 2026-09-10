@@ -341,6 +341,38 @@ const ctaDarkProps: BlueprintProps = {
       ]}
       primaryCta={{ label: 'Book a call', href: '/contact' }}
       currentPath="/services"
+      servicesMegaMenu={{
+        triggerLabel: 'Services',
+        columns: 4,
+        categories: [
+          {
+            heading: 'Cosmetic',
+            items: [
+              { label: 'Veneers', href: '/services/veneers', note: 'Custom-crafted' },
+              { label: 'Whitening', href: '/services/whitening', note: 'In-office + take-home' },
+            ],
+          },
+          {
+            heading: 'Restorative',
+            items: [
+              { label: 'Crowns', href: '/services/crowns', note: 'Full-mouth rehab' },
+            ],
+          },
+          {
+            heading: 'Comfort',
+            items: [
+              { label: 'Sedation', href: '/services/sedation', note: 'Nitrous available' },
+            ],
+          },
+        ],
+        featured: {
+          eyebrow: 'New patient?',
+          heading: 'Meet the doctor you choose',
+          body: 'Both doctors are accepting new patients.',
+          ctaLabel: 'Request your first visit',
+          ctaHref: '/contact',
+        },
+      }}
     />
     <main>
       <Hero layout={splitHero} blueprintKey="hero_split" {...heroSplitProps} />
@@ -652,6 +684,10 @@ const assertions = [
   { name: 'SiteHeader aria-current on active link', pass: homeHtml.includes('aria-current="page"') && homeHtml.includes('href="/services"') },
   { name: 'SiteHeader phone tel: link',             pass: homeHtml.includes('class="bp-site-header__phone"') && homeHtml.includes('tel:+16155550100') },
   { name: 'SiteHeader hamburger button',            pass: homeHtml.includes('aria-expanded="false"') && homeHtml.includes('aria-controls="bp-site-header-drawer"') },
+  { name: 'SiteHeader mega-menu trigger disclosure', pass: /class="[^"]*bp-site-header__mega-trigger[^"]*"[^>]*aria-controls="bp-site-header-mega-services"[^>]*aria-haspopup="true"/.test(homeHtml) || (homeHtml.includes('bp-site-header__mega-trigger') && homeHtml.includes('aria-controls="bp-site-header-mega-services"') && homeHtml.includes('aria-haspopup="true"')) },
+  { name: 'SiteHeader mega-menu 4-col grid',         pass: homeHtml.includes('--bds-site-header-mega-columns: 4') && homeHtml.includes('bp-site-header__mega-columns') },
+  { name: 'SiteHeader mega-menu category + note',    pass: homeHtml.includes('bp-site-header__mega-heading') && homeHtml.includes('bp-site-header__mega-item-note') && homeHtml.includes('href="/services/veneers"') },
+  { name: 'SiteHeader mega-menu featured card',      pass: homeHtml.includes('bp-site-header__mega-featured') && homeHtml.includes('Request your first visit') },
 
   // Dispatcher assertions (dispatched page)
   // Guard: the JS-side fixture key list must match the template it describes,
