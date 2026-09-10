@@ -85,6 +85,18 @@ writeFileSync(
         astro: '^5.0.0',
         '@astrojs/check': '^0.9.0',
         typescript: '^5.5.0',
+        // Pinned on purpose — do NOT delete as redundant (#2381). The tarball's
+        // React peers are `>=18.0.0` (unbounded), so without these npm floats
+        // them to whatever is newest at run time. On 2026-09-10 that resolved
+        // react-dom@19.3.0 → scheduler@^0.28.0, which the step-6 install cannot
+        // satisfy from a cached packument predating that release, and the gate
+        // failed ETARGET on a two-line CSS change. Range matches this repo's own
+        // devDependencies (package.json react/react-dom ^18.3.0), so the scratch
+        // project resolves the same tree BDS builds against. No scratch page
+        // imports a React blueprint — this gate renders the Astro rail — so
+        // pinning removes a resolution axis it never meant to test.
+        react: '^18.3.0',
+        'react-dom': '^18.3.0',
         '@brikdesigns/bds': `file:${tarballPath}`,
       },
       scripts: { check: 'astro check', build: 'astro build' },
@@ -329,6 +341,38 @@ const ctaDarkProps: BlueprintProps = {
       ]}
       primaryCta={{ label: 'Book a call', href: '/contact' }}
       currentPath="/services"
+      servicesMegaMenu={{
+        triggerLabel: 'Services',
+        columns: 4,
+        categories: [
+          {
+            heading: 'Cosmetic',
+            items: [
+              { label: 'Veneers', href: '/services/veneers', note: 'Custom-crafted' },
+              { label: 'Whitening', href: '/services/whitening', note: 'In-office + take-home' },
+            ],
+          },
+          {
+            heading: 'Restorative',
+            items: [
+              { label: 'Crowns', href: '/services/crowns', note: 'Full-mouth rehab' },
+            ],
+          },
+          {
+            heading: 'Comfort',
+            items: [
+              { label: 'Sedation', href: '/services/sedation', note: 'Nitrous available' },
+            ],
+          },
+        ],
+        featured: {
+          eyebrow: 'New patient?',
+          heading: 'Meet the doctor you choose',
+          body: 'Both doctors are accepting new patients.',
+          ctaLabel: 'Request your first visit',
+          ctaHref: '/contact',
+        },
+      }}
     />
     <main>
       <Hero layout={splitHero} blueprintKey="hero_split" {...heroSplitProps} />
@@ -350,7 +394,7 @@ writeFileSync(
   join(scratch, 'src/pages/interior.astro'),
   `---
 import type { BlueprintSection, BlueprintProps, ClientFacts, ResolvedTheme, KnownBlueprintKey } from '@brikdesigns/bds/blueprints-astro';
-import { Hero, Cta } from '@brikdesigns/bds/blueprints-astro';
+import { Hero, Cta, SiteHeader } from '@brikdesigns/bds/blueprints-astro';
 
 const theme: ResolvedTheme = {
   themeMode: 'dark',
@@ -403,6 +447,46 @@ const ctaDarkProps: BlueprintProps = {
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
+    <SiteHeader
+      archetype="utility-first"
+      brandName="Verify Scratch"
+      phone="+1 (615) 555-0100"
+      navItems={[
+        { label: 'Communities', href: '/communities' },
+        { label: 'Amenities', href: '/amenities' },
+        { label: 'Rates', href: '/rates' },
+        { label: 'About', href: '/about' },
+        { label: 'Contact', href: '/contact' },
+      ]}
+      primaryCta={{ label: 'Find a Site', href: '/find-a-site' }}
+      currentPath="/communities"
+      scrollBehavior="sticky-solid"
+      mobileDrawer="slide-left-panel"
+      servicesMegaMenu={{
+        triggerLabel: 'Communities',
+        columns: 3,
+        categories: [
+          { heading: 'RV Parks', items: [
+            { label: 'All RV parks', href: '/rv-parks' },
+            { label: 'Seasonal sites', href: '/rv-parks/seasonal', note: 'Weekly + monthly' },
+          ] },
+          { heading: 'Mobile Home', items: [
+            { label: 'All communities', href: '/mhc' },
+            { label: 'Homes for sale', href: '/mhc/homes-for-sale' },
+          ] },
+          { heading: 'Vacation Rentals', items: [
+            { label: 'Cabins', href: '/vacation-rentals/cabins' },
+          ] },
+        ],
+        featured: {
+          eyebrow: 'New here?',
+          heading: 'Find your site in under a minute',
+          body: "Tell us the dates + site type.",
+          ctaLabel: 'Check availability',
+          ctaHref: '/find-a-site',
+        },
+      }}
+    />
     <main>
       <Hero layout="interior-minimal" blueprintKey="hero_interior_minimal" {...heroInteriorProps} />
       <Cta layout="default" blueprintKey="cta_centered" {...ctaDarkProps} />
@@ -640,6 +724,16 @@ const assertions = [
   { name: 'SiteHeader aria-current on active link', pass: homeHtml.includes('aria-current="page"') && homeHtml.includes('href="/services"') },
   { name: 'SiteHeader phone tel: link',             pass: homeHtml.includes('class="bp-site-header__phone"') && homeHtml.includes('tel:+16155550100') },
   { name: 'SiteHeader hamburger button',            pass: homeHtml.includes('aria-expanded="false"') && homeHtml.includes('aria-controls="bp-site-header-drawer"') },
+  { name: 'SiteHeader mega-menu trigger disclosure', pass: /class="[^"]*bp-site-header__mega-trigger[^"]*"[^>]*aria-controls="bp-site-header-mega-services"[^>]*aria-haspopup="true"/.test(homeHtml) || (homeHtml.includes('bp-site-header__mega-trigger') && homeHtml.includes('aria-controls="bp-site-header-mega-services"') && homeHtml.includes('aria-haspopup="true"')) },
+  { name: 'SiteHeader mega-menu 4-col grid',         pass: homeHtml.includes('--bds-site-header-mega-columns: 4') && homeHtml.includes('bp-site-header__mega-columns') },
+  { name: 'SiteHeader mega-menu category + note',    pass: homeHtml.includes('bp-site-header__mega-heading') && homeHtml.includes('bp-site-header__mega-item-note') && homeHtml.includes('href="/services/veneers"') },
+  { name: 'SiteHeader mega-menu featured card',      pass: homeHtml.includes('bp-site-header__mega-featured') && homeHtml.includes('Request your first visit') },
+
+  // SiteHeader utility-first archetype (interior page)
+  { name: 'SiteHeader utility-first implemented',    pass: interiorHtml.includes('data-nav-archetype="utility-first"') && !interiorHtml.includes('data-unimplemented-archetype="utility-first"') },
+  { name: 'SiteHeader utility-first behavior hooks',  pass: interiorHtml.includes('data-scroll-behavior="sticky-solid"') && interiorHtml.includes('data-drawer-pattern="slide-left-panel"') },
+  { name: 'SiteHeader utility-first 3-col mega',      pass: interiorHtml.includes('--bds-site-header-mega-columns: 3') && interiorHtml.includes('href="/rv-parks/seasonal"') },
+  { name: 'SiteHeader slide-left drawer + scrim',     pass: interiorHtml.includes('bp-site-header__scrim') && interiorHtml.includes('bp-site-header__drawer-close') },
 
   // Dispatcher assertions (dispatched page)
   // Guard: the JS-side fixture key list must match the template it describes,

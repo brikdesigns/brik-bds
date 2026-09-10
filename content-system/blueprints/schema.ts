@@ -5,6 +5,7 @@ import type {
   SectionType,
   PatternType,
   BlueprintTier,
+  BlueprintRail,
 } from './vocabularies';
 import {
   isMood,
@@ -100,6 +101,14 @@ export interface Blueprint {
   source?: string;
   tier: BlueprintTier;
   is_active: boolean;
+  /**
+   * Which runtimes this blueprint is expected to dispatch on. Omit for the
+   * normal case — a blueprint that renders on both rails. Declare it only to
+   * make a deliberate single-rail divergence visible to
+   * `scripts/validate-blueprints.mjs`, which otherwise reads the missing
+   * registry entry as drift (#2304 AC 3).
+   */
+  rails?: readonly BlueprintRail[];
   /** Semver. Bump on content change. */
   version: string;
   /** ISO date YYYY-MM-DD. */

@@ -78,6 +78,15 @@
 
 /* ── --split: content column + media column (60/40) ──────────────────────── */
 
+/* One step larger than the base title. The Astro twin has carried this since
+   before #2302 and the three published Astro client sites render it; ADR-037
+   makes that rail canonical, so React adopts the value rather than the other
+   way round (#2344). The base `clamp(--heading-xl, 4vw, …)` was never a
+   decision about the 60/40 hero — React simply had no `--split` override. */
+.bds-hero--split .bds-hero__title {
+  font-size: clamp(var(--heading-2xl), 5vw, var(--display-sm));
+}
+
 .bds-hero--split .bds-hero__container {
   display: grid;
   grid-template-columns: 1fr;

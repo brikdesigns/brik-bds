@@ -230,7 +230,7 @@ export const Pricing: Story = {
 | `Display` | Content card for `bds-card-grid` | `Card preset="display"` |
 | `Pricing` | Web-only pricing tier with feature list | `PricingCard` (story consolidated; component file stays for `surface-web` CSS isolation) |
 
-**Wrong-layer check:** before classifying a component as `Containers/`, ask: does it carry its own visual surface (`border` / `background` / `padding` / `elevation`)? If not, it is a **`Layouts/`** component (pure arrangement, no surface) — a bare `<ul>` spacing wrapper belongs in `Layouts/`, not `Containers/`. **Card-family exception:** the `Cards/` bucket groups every card-named primitive by family, so `card-list` sits in `Cards/` alongside `card` even though it is arrangement-only — name-family wins over layer for the card set (ADR-006 amendment 2026-07-22).
+**Wrong-layer check:** before classifying a component as `Containers/`, ask: does it carry its own visual surface (`border` / `background` / `padding` / `elevation`)? If not, it is a **`Layouts/`** component (pure arrangement, no surface) — a bare `<ul>` spacing wrapper belongs in `Layouts/`, not `Containers/`. **Card-family exception:** `card-list` sits in `Containers/` alongside `card` even though it is arrangement-only (no surface) — kept with its card family rather than split off to `Layouts/` (ADR-006 amendment 2026-09-10, #2386, which folded the card family back into `Containers/`).
 
 **Name-layer check:** "Card" in a component name implies Container-layer ancestry. If the component is actually an interaction primitive (`Collapsible` — renamed from `CollapsibleCard`, #701) or a semantic quotation block (`Testimonial` — renamed from `CardTestimonial`, #702), the "Card" prefix is wrong. Do not propagate the misnomer in new story files.
 
@@ -320,7 +320,7 @@ Never combine two prop axes in one story. Write `Sizes` and `Variants` as separa
 
 ## Sidebar taxonomy
 
-**[ADR-006](../../docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md) (last amended 2026-07-29) defines the flat sidebar taxonomy.** Current component top-levels: `Components/`, `Cards/`, `Forms/`, `Containers/`, `Layouts/`, `Navigation/`, `Blueprints/`, `Tools/` — plus the structural top-levels below. `Blocks/` was dissolved into `Components/` on 2026-07-29; its former members (`field`, `field-grid`, `bullet-list`, `checklist`, `interactive-list-item`, `selectable-media-tile`) now sit under `Components/`. `Forms/` was added on 2026-07-29 (#1565); the form family (`form`, `contact-form`, `feedback-form`, `login-form`, `sign-up-form`, `search-form`) moved there out of `Containers/`. [`.storybook/preview.tsx`](../../.storybook/preview.tsx) `storySort.order` is the live source of truth and matches this table.
+**[ADR-006](../../docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md) (last amended 2026-09-10) defines the flat sidebar taxonomy.** Current component top-levels: `Components/`, `Containers/`, `Forms/`, `Content/`, `Layouts/`, `Navigation/`, `Blueprints/`, `Tools/` — plus the structural top-levels below. The `Cards/` top-level was folded back into `Containers/` on 2026-09-10 (#2386, overriding the 2026-07-22 #1330 split); the card family (`card`, `card-list`, `product-summary-card`) and `collapsible` now sit under `Containers/`. `Blocks/` was dissolved into `Components/` on 2026-07-29; its former members (`field`, `field-grid`, `bullet-list`, `checklist`, `interactive-list-item`, `selectable-media-tile`) now sit under `Components/`. `Forms/` was added on 2026-07-29 (#1565); the form family (`form`, `contact-form`, `feedback-form`, `login-form`, `sign-up-form`, `search-form`) moved there out of `Containers/`. [`.storybook/preview.tsx`](../../.storybook/preview.tsx) `storySort.order` is the live source of truth and matches this table.
 
 **Migration window rule:** existing stories keep their current `title:` strings until the rename sweep touches their file. New stories use the flat bucket path from 2026-05-16 forward.
 
@@ -328,7 +328,7 @@ Never combine two prop axes in one story. Write `Sizes` and `Variants` as separa
 
 ```text
 Overview → Foundation → Theming → Motion → Content System →
-Components → Containers → Cards → Forms → Layouts → Navigation → Blueprints → Tools → * (catch-all) → Deprecated
+Components → Containers → Forms → Content → Layouts → Navigation → Blueprints → Tools → * (catch-all) → Deprecated
 ```
 
 **No subcategory layer.** Stories sit at `<Bucket>/<component>` — not `<Bucket>/<Subcategory>/<component>`.
@@ -338,9 +338,9 @@ Components → Containers → Cards → Forms → Layouts → Navigation → Blu
 | Bucket | Role | Example members |
 | --- | --- | --- |
 | `Components/` | Atomic UI control — including composite input controls operated as one form field (`select`, `date-picker`) and slot-shaped fillers filled with atoms (`field`, `checklist`) | button, badge, checkbox, text-input, select, date-picker, progress-stepper, field, field-grid, bullet-list, checklist, interactive-list-item, selectable-media-tile |
-| `Cards/` | Card-family holder — bounded surface with the "card" affordance | card, card-list, pricing-card, product-summary-card |
 | `Forms/` | Form-family holder — the base form container + composed form demos | form, contact-form, feedback-form, login-form, sign-up-form, search-form |
-| `Containers/` | Bounded holder with own border/padding/elevation (non-card, non-form) | accordion, sheet, table, data-view |
+| `Content/` | Content-rendering component — renders page content, no bounded surface (distinct from the `Content System/` BCS docs) | prose, content-block, section-header, marquee |
+| `Containers/` | Bounded holder with own border/padding/elevation (non-form) — includes the card family | card, card-list, product-summary-card, collapsible, accordion, sheet, table, data-view |
 | `Layouts/` | Pure arrangement — no styling beyond structure | stack, cluster, grid, frame, page |
 | `Navigation/` | Navigation + page-level chrome region | nav-bar, breadcrumb, sidebar-navigation, sub-navigation, tab-bar, page-header |
 | `Blueprints/` | Full-page composed section template | hero, cta, features, footer |
@@ -353,8 +353,8 @@ Components → Containers → Cards → Forms → Layouts → Navigation → Blu
 | Folder / file | Title prefix |
 | --- | --- |
 | `components/ui/<Component>` (atomic primitive) | `Components/<component>` (e.g. `Components/button`) |
-| `components/ui/<Component>` (card-family holder) | `Cards/<component>` (e.g. `Cards/card`) |
 | `components/ui/Form` + `stories/patterns/forms/<Form>` (form-family holder) | `Forms/<component>` (e.g. `Forms/form`, `Forms/login-form`) |
+| `components/ui/<Component>` (content-rendering, no surface) | `Content/<component>` (e.g. `Content/prose`, `Content/section-header`) |
 | `components/ui/<Component>` (bounded holder, non-card, non-form) | `Containers/<component>` (e.g. `Containers/table`) |
 | `components/ui/<Component>` (slot + atoms) | `Components/<component>` (e.g. `Components/field`) |
 | `components/ui/<Component>` (arrangement only) | `Layouts/<component>` (e.g. `Layouts/stack`) |
@@ -366,7 +366,7 @@ Components → Containers → Cards → Forms → Layouts → Navigation → Blu
 ```tsx
 /* Right — flat bucket path, no subcategory layer */
 title: 'Components/button'
-title: 'Cards/card'
+title: 'Containers/card'
 title: 'Components/field'
 title: 'Navigation/nav-bar'
 title: 'Blueprints/hero_split_image_card_overlay'

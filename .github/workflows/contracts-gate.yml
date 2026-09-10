@@ -62,6 +62,11 @@ on:
   push:
     branches:
       - main
+  # Merge-queue readiness (#2415): a required context must report on the merge
+  # group or the queue wedges. The `changes` job classifies the merge-group
+  # base..head diff exactly as it does a PR's (see its env), and the `contracts`
+  # job resolves the same SHAs for standards-rag-drift.
+  merge_group:
 
 concurrency:
   # `cancel-in-progress: false` + `queue: max`, required as a pair on a required
@@ -112,8 +117,10 @@ jobs:
       - name: Classify the diff
         id: classify
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          # PR tips; merge-group base/head on a merge group; empty on push
+          # (→ full gate below). (#2415)
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha }}
         run: |
           set -euo pipefail
 
@@ -187,6 +194,9 @@ jobs:
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             echo "base=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
             echo "head=${{ github.event.pull_request.head.sha }}" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event_name }}" = "merge_group" ]; then
+            echo "base=${{ github.event.merge_group.base_sha }}" >> "$GITHUB_OUTPUT"
+            echo "head=${{ github.event.merge_group.head_sha }}" >> "$GITHUB_OUTPUT"
           else
             echo "base=${{ github.event.before }}" >> "$GITHUB_OUTPUT"
             echo "head=${{ github.sha }}" >> "$GITHUB_OUTPUT"
