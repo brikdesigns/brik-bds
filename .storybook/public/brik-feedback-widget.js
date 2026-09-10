@@ -51,7 +51,7 @@
   // `brandText` (poppy-dark, 6.23:1). `brand` stays poppy-light for borders,
   // focus rings and pulse shadows, where the 3:1 non-text threshold applies and
   // 3.78:1 clears it. Both are canonical poppy-ramp values; the brand reads the
-  // same. This widget inlines hexes so it cannot be covered by tokens-gate.yml
+  // same. This widget inlines hexes so it cannot be covered by contrast-gate.yml
   // — the pairings below are asserted by the a11y test instead.
   const C = {
     brand: '#e35335', // poppy-light — borders, focus rings, non-text fills
