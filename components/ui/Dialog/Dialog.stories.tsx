@@ -4,7 +4,7 @@ import { Dialog } from './Dialog';
 import { Button } from '../Button';
 
 const meta: Meta<typeof Dialog> = {
-  title: 'Containers/dialog',
+  title: 'Deprecated/dialog',
   component: Dialog,
   tags: ['!manifest', 'surface-shared'], // deprecated — hide from MCP discovery (use Modal preset="confirm")
   parameters: { layout: 'centered' },

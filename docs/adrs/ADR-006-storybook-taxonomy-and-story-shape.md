@@ -159,6 +159,15 @@ Pre-existing `*.stories.tsx` files keep whatever shape ADR-007's page-recipe pas
 
 ## Amendments
 
+### 2026-09-10 — Part A: Modal → `Containers/`, Dialog → `Deprecated/` (#2365)
+
+Two overlay-family corrections, both forward-only `title:` re-titles; no component code changes.
+
+- `Components/modal` → **`Containers/modal`**. Modal owns a bounded surface — `--surface-primary` fill + `--border-radius-lg` + `--shadow-overlay` ([Modal.css:22-24](../../components/ui/Modal/Modal.css#L22)) — so by the Part A composition-role rule ("styled holder with own border/padding/elevation") it is a Container, not an atomic Component. This applies the same reasoning as the [2026-05-18 `dialog` relocation](#2026-05-18--part-a-table-top-up-for-net-new-members) (Components → Containers, "own border/padding/elevation surface").
+- `Containers/dialog` → **`Deprecated/dialog`**. `Dialog` is `@deprecated` — superseded by `Modal preset="confirm"` ([Dialog.tsx:38](../../components/ui/Dialog/Dialog.tsx#L38)) — and already `!manifest`-tagged. Per Part A's `Deprecated/` rule, `!manifest`-tagged stories sort there; leaving it in `Containers/` alongside live holders was a straggler.
+
+**Net effect:** the live overlay (Modal) sits in `Containers/` beside `sheet`, `dialog`'s deprecated stub sorts last under `Deprecated/`. Two docs-site Storybook-slug refs re-pointed ([modal.mdx](../../docs-site/content/docs/components/modal.mdx) → `containers-modal--overview`; [dialog.mdx](../../docs-site/content/docs/components/dialog.mdx) → `deprecated-dialog--overview`). The frozen Part A table is not rewritten (amendment convention); this entry is the source of truth.
+
 ### 2026-07-29 — Part A: `Forms/` top-level added; form family pulled out of `Containers/` (#1565)
 
 A new `Forms/` top-level bucket, sequenced right after `Cards/`, groups the six form-family stories that previously lived in `Containers/`:
