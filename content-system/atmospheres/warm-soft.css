@@ -17,9 +17,9 @@
  * whatever surface color the theme layer resolves.
  */
 
-:root {
-  --ambient-rose: rgba(210, 140, 130, 0.05);
-}
+/* The rose vignette is the atmosphere's wellness-coded identity, not the
+   client's brand — it consumes the canonical --background-accent-red role
+   via color-mix() rather than an invented ad-hoc token family. (brik-bds#2372) */
 
 /* Single quiet top-left vignette. Warm without being cinematic. */
 body::before {
@@ -29,7 +29,7 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 10% 0%, var(--ambient-rose), transparent 60%);
+    radial-gradient(ellipse 70% 50% at 10% 0%, color-mix(in srgb, var(--background-accent-red) 5%, transparent), transparent 60%);
 }
 body > * { position: relative; z-index: 1; }
 

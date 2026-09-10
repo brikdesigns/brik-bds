@@ -19,9 +19,9 @@
  * rather than flat digital.
  */
 
-:root {
-  --ambient-terracotta: rgba(180, 120, 90, 0.04);
-}
+/* The terracotta tint is the atmosphere's artisan/earth identity, not the
+   client's brand — it consumes the canonical --background-accent-orange role
+   via color-mix() rather than an invented ad-hoc token family. (brik-bds#2372) */
 
 /* Subtle earth-tone radial in the bottom-right — warms the lower
    viewport without announcing itself. */
@@ -32,7 +32,7 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(ellipse 60% 40% at 90% 100%, var(--ambient-terracotta), transparent 60%);
+    radial-gradient(ellipse 60% 40% at 90% 100%, color-mix(in srgb, var(--background-accent-orange) 4%, transparent), transparent 60%);
 }
 body > * { position: relative; z-index: 1; }
 

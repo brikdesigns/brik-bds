@@ -25,8 +25,8 @@
  * elements with `data-spotlight`.
  *
  * Import order: goes AFTER the per-client theme CSS (so it inherits
- * the client's --color-gold) and AFTER the consumer site's local
- * stylesheet (so its surface tokens win over gray fallbacks).
+ * the client's --background-brand-primary) and AFTER the consumer site's
+ * local stylesheet (so its surface tokens win over gray fallbacks).
  *
  * Consumer integration: the portal's generate-theme-css.ts appends an
  * @import referencing this file into the stored theme artifact. The
@@ -34,14 +34,11 @@
  * with no per-client CSS.
  */
 
-:root {
-  /* Ambient gold values used by the atmospheric utility classes. Pulls
-     from the client's --color-gold / --background-brand-primary so the
-     atmosphere takes on each client's brand hue without edits here. */
-  --ambient-gold:        rgba(196, 154, 47, 0.09);
-  --ambient-gold-strong: rgba(196, 154, 47, 0.14);
-  --ambient-cool:        rgba(60, 80, 120, 0.08);
-}
+/* Orb / vignette / spotlight colors derive from the client's brand hue
+   via color-mix() over the canonical --background-brand-primary role — no
+   invented token family, no hardcoded palette. The atmosphere takes on
+   each client's brand without edits here. The cool depth accent uses the
+   canonical --background-accent-blue role. (brik-bds#2372) */
 
 /* ───────────────────────────────────────────────────────────────────
  * Base atmosphere — dual-axis radial vignette on <body>.
@@ -54,8 +51,8 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 15% 0%,   rgba(196, 154, 47, 0.07), transparent 55%),
-    radial-gradient(ellipse 100% 80% at 85% 100%, rgba(140, 90, 50, 0.04), transparent 60%);
+    radial-gradient(ellipse 80% 60% at 15% 0%,   color-mix(in srgb, var(--background-brand-primary) 7%, transparent), transparent 55%),
+    radial-gradient(ellipse 100% 80% at 85% 100%, color-mix(in srgb, var(--background-brand-primary) 4%, transparent), transparent 60%);
 }
 body > * { position: relative; z-index: 1; }
 
@@ -106,28 +103,28 @@ section[data-ambient="top-right"]::before {
   right: -10%;
   width: 560px;
   height: 560px;
-  background: radial-gradient(circle, var(--ambient-gold-strong) 0%, transparent 60%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--background-brand-primary) 14%, transparent) 0%, transparent 60%);
 }
 section[data-ambient="top-left"]::before {
   top: -15%;
   left: -10%;
   width: 560px;
   height: 560px;
-  background: radial-gradient(circle, var(--ambient-gold-strong) 0%, transparent 60%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--background-brand-primary) 14%, transparent) 0%, transparent 60%);
 }
 section[data-ambient="split"]::before {
   top: 20%;
   left: -15%;
   width: 480px;
   height: 480px;
-  background: radial-gradient(circle, var(--ambient-gold) 0%, transparent 60%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--background-brand-primary) 9%, transparent) 0%, transparent 60%);
 }
 section[data-ambient="split"]::after {
   bottom: 20%;
   right: -15%;
   width: 480px;
   height: 480px;
-  background: radial-gradient(circle, var(--ambient-gold) 0%, transparent 60%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--background-brand-primary) 9%, transparent) 0%, transparent 60%);
 }
 section[data-ambient="center"]::before {
   top: 50%;
@@ -135,7 +132,7 @@ section[data-ambient="center"]::before {
   width: 720px;
   height: 720px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, var(--ambient-gold) 0%, transparent 70%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--background-brand-primary) 9%, transparent) 0%, transparent 70%);
 }
 section[data-ambient="bottom"]::before {
   bottom: -30%;
@@ -143,7 +140,7 @@ section[data-ambient="bottom"]::before {
   transform: translateX(-50%);
   width: 900px;
   height: 600px;
-  background: radial-gradient(ellipse, var(--ambient-gold) 0%, transparent 60%);
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--background-brand-primary) 9%, transparent) 0%, transparent 60%);
   border-radius: 50%;
 }
 section[data-ambient="depth"]::before {
@@ -152,7 +149,7 @@ section[data-ambient="depth"]::before {
   width: 60vw;
   height: 60vw;
   border-radius: 50%;
-  background: radial-gradient(closest-side, var(--ambient-cool), transparent 70%);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--background-accent-blue) 8%, transparent), transparent 70%);
 }
 section[data-ambient="depth"]::after {
   bottom: -10%;
@@ -161,7 +158,7 @@ section[data-ambient="depth"]::after {
   height: 40vw;
   border-radius: 50%;
   filter: blur(60px);
-  background: radial-gradient(closest-side, var(--ambient-gold-strong), transparent 70%);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--background-brand-primary) 14%, transparent), transparent 70%);
 }
 
 /* ───────────────────────────────────────────────────────────────────
@@ -206,7 +203,7 @@ section[data-edge]::after {
   z-index: 0;
   background: radial-gradient(
     500px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(196, 154, 47, 0.10),
+    color-mix(in srgb, var(--background-brand-primary) 10%, transparent),
     transparent 40%
   );
   opacity: 0;
