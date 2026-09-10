@@ -1,28 +1,39 @@
 ---
 title: Composition Layers
-description: Six conceptual layers — Section, Layout, Container, Block, Control, Component — and the decision rules for assembling them.
+description: Six conceptual layers — Blueprint, Layout, Container, Block, Control, Component — and the decision rules for assembling them.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 A page in BDS is composed in six layers. Each has a single responsibility, a single vocabulary, and only knows about the layer below it. Block and Control sit at the same depth — both are fixed-slot shapes one step above Component; one holds content, the other holds controls. This model is **pedagogical** — it explains how to think about a page — and is intentionally non-binding on the BEM canon ([ADR-008](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-008-naming-canon-closed-allowlist.md)).
 
+The one-sentence form: *Blueprints compose the page. Containers hold collections. Blocks fill containers. Layouts arrange. Components are atoms.*
+
 ## The layers
 
 | Layer | Responsibility | Vocabulary | Examples |
 |---|---|---|---|
-| **Section** | Page role with surrounding structure (vertical rhythm, container, background surface) | Page-level semantic | `Hero`, `Content`, `CTA` |
+| **Blueprint** | Page role with surrounding structure (vertical rhythm, container, background surface) | Page-level semantic | `Hero`, `Content`, `CTA` |
 | **Layout** | Pure composition primitive — arranges children. No styling beyond structure. | Composition | `Stack`, `Cluster`, `Grid`, `Split`, `Row` |
 | **Container** | Styled holder that composes blocks into a self-contained unit. Carries border / padding / elevation / radius. | Bounded unit | `Card`, `List`, `Form`, `Accordion`, `Tabs` |
 | **Block** | Composed content unit — fixed slot shape filled with atoms. | Slot + atoms | `ContentBlock`, `MediaBlock`, `ListItem`, `FormField`, `Stat` |
 | **Control** | Interactive bar that operates on an adjacent display or heads a page. Fixed slot shape filled with controls, not content. | Slot + controls | `FilterBar`, `PageHeader`, `TabBar`, `SubNavigation`, `Pagination` |
 | **Component** | Single primitive atom. | One primitive | `Button`, `Input`, `Image`, `Badge`, `Icon` |
 
+<Callout type="info">
+  **"Blueprint" is the layer; "section" is not.** Three different things shared the word `Section` before [ADR-037](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-037-astro-is-the-canonical-blueprint-rail.md) §5 renamed this layer, and the other two are unchanged:
+
+  - `section_type` — a field on every `blueprints/blueprint-library.json` entry (`hero`, `services`, `cta`, …). It says which page slot a blueprint fills, not which layer it is.
+  - `bds-blueprint-section` / `bds-blueprint-section__container` — the shared section-shell class ([ADR-021](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-021-blueprint-section-shell.md)), and the `<section>` element it renders.
+
+  Renaming either would break the manifest or the BEM canon. Only the composition layer moved.
+</Callout>
+
 ## Where each layer lives
 
 | Layer | Directory | Notes |
 |---|---|---|
-| Section | `content-system/blueprints/{react,astro}/` | Blueprint families per ADR-008 play the Section role |
+| Blueprint | `content-system/blueprints/{react,astro}/` | Blueprint families per ADR-008 play this layer |
 | Layout | `components/ui/` | `Stack`, `Cluster`, `Grid`, `Split`, `Row` |
 | Container | `components/ui/` | `Card`, `Accordion`, `List` |
 | Block | `components/ui/` | `Field`, `Card preset="summary"` |
@@ -150,12 +161,12 @@ Don't reach for a `Card` when a `DataSection` is right. Cards are self-contained
 
 ## Identify the layer before you target it
 
-When a change names an element ("the card", "the section", "the button"), find the target by its **layer**, reading the DOM top-down (Section → Layout → Container → Block or Control → Component) — **never by selector-name resemblance.**
+When a change names an element ("the card", "the section", "the button"), find the target by its **layer**, reading the DOM top-down (Blueprint → Layout → Container → Block or Control → Component) — **never by selector-name resemblance.**
 
-A BEM **block name** identifies the blueprint family; it does **not** define the element's layer. A block whose name contains "card" can still be a **Section**. The Card is whichever nested element plays the **Container** role.
+A BEM **block name** identifies the blueprint family; it does **not** define the element's layer. A block whose name contains "card" can still be a **Blueprint**. The Card is whichever nested element plays the **Container** role.
 
 <Callout type="warn">
-  `bp-hero-img-card` is a **Section** (`<section>`). The **Card** is its nested Container, `aside.bp-hero-img-card__media-card`. They own different surfaces: the **Section** carries the page-role/band surface; the **Container (Card)** carries its own bounded surface (its `--bds-hero-img-card-media-bg` hook). A surface meant for a service-identified card — e.g. ADR-020's `--surface-service-{line}-inverse` — is a **Container** surface; applying it to the Section repaints the whole band, not the card. (Regression caught in brikdesigns#637.)
+  `bp-hero-img-card` is a **Blueprint** (rendered as a `<section>`). The **Card** is its nested Container, `aside.bp-hero-img-card__media-card`. They own different surfaces: the **Blueprint** carries the page-role/band surface; the **Container (Card)** carries its own bounded surface (its `--bds-hero-img-card-media-bg` hook). A surface meant for a service-identified card — e.g. ADR-020's `--surface-service-{line}-inverse` — is a **Container** surface; applying it to the Blueprint repaints the whole band, not the card. (Regression caught in brikdesigns#637.)
 </Callout>
 
 The block-vs-container decision rule above answers "what layer is this?"; apply it to the element you're about to change, not to the name that looks closest.
@@ -167,4 +178,4 @@ The block-vs-container decision rule above answers "what layer is this?"; apply 
 - [Content Rhythm](/docs/build-standards/content-rhythm) — the spacing scale between these layers, from text pairings to section breaks, and which layer owns the separator between sections
 - [Display Choice](/docs/build-standards/display-choice) — which display a Control layer bar heads
 - [Page Archetypes](/docs/build-standards/page-archetypes) — the four assembled product pages these layers compose into
-- [Theming — Blueprints](/docs/theming/blueprints) — blueprint families that play the Section role
+- [Theming — Blueprints](/docs/theming/blueprints) — the blueprint families that make up this layer
