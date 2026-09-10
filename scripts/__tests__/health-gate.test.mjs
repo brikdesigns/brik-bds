@@ -68,15 +68,22 @@ function runCli(floors) {
 }
 
 describe('health-gate CLI — end to end against the real reporters', () => {
+  // Each case spawns the CLI, which runs every real reporter to completion.
+  // Locally that's ~2.5s, but cold CI runners are 2–3× slower and the 0% case
+  // (which cannot short-circuit — every metric clears its floor) blew past
+  // vitest's 5s default at 6081ms. 60s clears the CI tail without masking a
+  // genuinely-hung reporter.
+  const CLI_TIMEOUT = 60_000;
+
   it('exits 0 when floors are trivially satisfiable (0%)', () => {
     const { code, json } = runCli(0);
     expect(code).toBe(0);
     expect(json.pass).toBe(true);
-  });
+  }, CLI_TIMEOUT);
 
   it('exits 1 when floors are impossible (101%)', () => {
     const { code, json } = runCli(101);
     expect(code).toBe(1);
     expect(json.pass).toBe(false);
-  });
+  }, CLI_TIMEOUT);
 });
