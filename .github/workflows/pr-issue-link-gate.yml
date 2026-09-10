@@ -65,6 +65,11 @@ name: pr-issue-link-gate
 on:
   pull_request:
     types: [opened, edited, synchronize, reopened, labeled, unlabeled, ready_for_review]
+  # Merge-queue readiness (#2415): a required context must report on the merge
+  # group or the queue wedges. This gate reads PR title/body/labels, which the
+  # `merge_group` event has no payload for — and the queued PR already passed it
+  # — so the script short-circuits green on `merge_group` (see its first lines).
+  merge_group:
 
 # `require-issue-link` is a REQUIRED context on `main` since #2038, so this block may not
 # cancel. A cancelled check-run is not an absent one — protection goes on
@@ -89,6 +94,12 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            // On a merge group there is no PR payload, and the queued PR was
+            // already required to pass this gate — report green (#2415).
+            if (context.eventName === 'merge_group') {
+              core.info('require-issue-link already reported on the PR before it was queued; reporting green on the merge group.');
+              return;
+            }
             // ── Patterns ─────────────────────────────────────────────────
             // In-scope conventional-commit types. `feat(scope):`, `fix!:` and
             // `FEAT:` all count; `fixup:` and `feature:` must not.

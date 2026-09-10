@@ -99,6 +99,9 @@ name: bump-pr-closing-keyword-guard
 on:
   pull_request:
     types: [opened, edited, synchronize, reopened]
+  # Merge-queue readiness (#2415) — brik-bds-only delta (declared in brik-llm
+  # overlap-twin-drift.py GUARD_DELTAS); brik-bds is the only twin with a merge queue.
+  merge_group:
 
 permissions:
   contents: read
@@ -125,6 +128,12 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
+            // On a merge group there is no PR payload, and the queued PR was
+            // already required to pass this gate — report green (#2415).
+            if (context.eventName === 'merge_group') {
+              core.info('closing-keyword-guard already ran on the PR before it was queued; reporting green on the merge group.');
+              return;
+            }
             // ── Patterns ─────────────────────────────────────────────────
             // GitHub's keyword grammar, shared by every rule so the
             // conjugations can never drift apart between them.

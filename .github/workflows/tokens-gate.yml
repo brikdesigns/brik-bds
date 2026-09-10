@@ -56,6 +56,10 @@ on:
   push:
     branches:
       - main
+  # Merge-queue readiness (#2415): a required context must report on the merge
+  # group or the queue wedges. The `changes` job classifies the merge-group
+  # base..head diff exactly as it does a PR's (see its env).
+  merge_group:
 
 concurrency:
   # `cancel-in-progress: false` + `queue: max`, required as a pair on a required
@@ -134,9 +138,10 @@ jobs:
       - name: Classify the diff
         id: classify
         env:
-          # On a PR these are the tips of base and head; empty on push.
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          # On a PR these are the tips of base and head; on a merge group the
+          # merge-group base/head; empty on push (→ full gate below). (#2415)
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha }}
         run: |
           set -euo pipefail
 
@@ -485,10 +490,11 @@ jobs:
   # unless the diff actually removed a token declaration, so the expensive path
   # — five shallow consumer clones — is reached only by a deletion PR.
   #
-  # PR-only on purpose. A push to main has no base to diff against, and by then
-  # the deletion has already merged; blocking it pre-merge is the entire job.
-  # The aggregate below therefore treats `skipped` as fine on a push and only on
-  # a push.
+  # Pre-merge on purpose: on a PR AND on a merge group (the last pre-land gate),
+  # both of which carry a base to diff against. A push to main has none, and by
+  # then the deletion has already merged; blocking it pre-merge is the entire
+  # job. The aggregate below therefore treats `skipped` as fine on a push and
+  # only on a push (#2415).
   deleted-token-sweep:
     name: deleted-token consumer sweep
     runs-on: ubuntu-latest
@@ -496,7 +502,7 @@ jobs:
     permissions:
       contents: read
     if: >-
-      github.event_name == 'pull_request' &&
+      github.event_name != 'push' &&
       needs.changes.result == 'success' &&
       needs.changes.outputs.run == 'true'
     steps:
@@ -524,7 +530,7 @@ jobs:
           # deliberate. A sweep that reached no consumer must never be reported
           # as "no consumers affected", which is the #2271 defect one level up.
           GH_TOKEN: ${{ secrets.CONSUMER_DRIFT_TOKEN }}
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
         run: node scripts/lint-deleted-token-consumers.mjs --base "$BASE_SHA"
 
   tokens-gate:
@@ -559,11 +565,12 @@ jobs:
           fi
 
           # `skipped` is legitimate on a push to main (no base to diff) and
-          # nowhere else. Enumerating the one allowed case beats accepting
-          # `skipped` generally, which would let a mis-wired `if:` silently
-          # retire the gate — the #2326 failure shape.
+          # nowhere else — the sweep runs on both pull_request and merge_group.
+          # Enumerating the one allowed case beats accepting `skipped` generally,
+          # which would let a mis-wired `if:` silently retire the gate — the
+          # #2326 failure shape.
           SWEEP="${{ needs['deleted-token-sweep'].result }}"
-          if [ "${{ github.event_name }}" = "pull_request" ] && [ "$SWEEP" != "success" ]; then
+          if [ "${{ github.event_name }}" != "push" ] && [ "$SWEEP" != "success" ]; then
             echo "✗ the deleted-token consumer sweep did not pass (result: $SWEEP)."
             echo "  A token name leaving dist/tokens.css while a consumer still references"
             echo "  it removes that declaration entirely downstream — see #2271."

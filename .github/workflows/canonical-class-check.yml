@@ -31,6 +31,11 @@ on:
   push:
     branches:
       - main
+  # Merge-queue readiness (#2415): GitHub re-runs branch-protection required
+  # checks against the merge group, so a required context must also trigger on
+  # `merge_group` or the queue wedges. This gate operates on the checked-out
+  # tree, so it runs unchanged on the rebased merge-group ref.
+  merge_group:
 
 # `canonical-class-check` is a REQUIRED context on `main`, so this block may not
 # cancel — same constraint and same rationale as `canonical-check.yml`, which
