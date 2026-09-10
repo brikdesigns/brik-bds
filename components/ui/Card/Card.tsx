@@ -48,6 +48,20 @@ const RETIRED_CONNECTION_STATUS: Record<string, CardControlConnectionStatus> = {
 export type CardDisplayRowImageWidth = 'narrow' | 'standard' | 'wide' | (string & {});
 
 /**
+ * Media treatment for `preset="display"` — how the top `image` slot relates to
+ * the card edge.
+ *
+ * - `flush` (default) — the media bleeds to the card edge and only the text
+ *   body carries the `--padding-lg` inset. The blog/story/product-grid look.
+ * - `inset` — the media AND the text body are framed together inside a single
+ *   `--padding-huge` inset, with `--gap-xl` separating image from text. The
+ *   service-card "card-vertical" look. Replaces the site-local
+ *   `.service-card--inset` override so the treatment lives on the primitive,
+ *   not per-consumer CSS.
+ */
+export type CardMediaTreatment = 'flush' | 'inset';
+
+/**
  * Size for the default Card's leading `media` slot — a square on the shared
  * media scale (`sm` 32px, `md` 40px, `lg` 48px, `xl` 64px) so an avatar, a 1:1
  * image, and a bundled `Logo` all read at the same footprint. Default `md`.
@@ -282,6 +296,13 @@ interface CardDisplayPresetProps extends CardBaseProps {
    * omitted, the card renders without media.
    */
   image?: ReactNode;
+  /**
+   * How the `image` slot relates to the card edge. `flush` (default) bleeds the
+   * media to the edge and pads only the text body (`--padding-lg`); `inset`
+   * frames the media and body together in a `--padding-huge` inset. Default
+   * `flush`. See {@link CardMediaTreatment}.
+   */
+  mediaTreatment?: CardMediaTreatment;
   /**
    * Inline category indicator rendered above the title. Pass a
    * `<ServiceTag>` for services, a `<Tag>` for blog categories, a date
@@ -716,6 +737,7 @@ function renderDisplayPreset({
   titleAs: Heading = 'h3',
   description,
   image,
+  mediaTreatment = 'flush',
   tag,
   badge,
   action,
@@ -730,6 +752,7 @@ function renderDisplayPreset({
   const classes = bdsClass(
     'bds-card',
     'bds-card--preset-display',
+    mediaTreatment === 'inset' && 'bds-card--preset-display-inset',
     variant && `bds-card--${variant}`,
     tint && `bds-card--tint-${tint}`,
     href && 'bds-card--link',
