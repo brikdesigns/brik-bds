@@ -53,6 +53,7 @@
  *   - Focus-visible ring on every interactive surface.
  */
 import type { ResolvedNavArchetype } from './types';
+import type { ServicesMegaMenu } from '../../schema/industry-pack';
 
 interface NavItem {
   label: string;
@@ -67,6 +68,15 @@ interface Props {
   navItems: readonly NavItem[];
   primaryCta?: { label: string; href: string } | null;
   currentPath?: string | null;
+  /**
+   * Optional Services / Practice Areas mega-menu. When set, the primary
+   * nav item whose label matches `servicesMegaMenu.triggerLabel` renders
+   * a disclosure trigger + flyout panel (hover + `:focus-within` in CSS;
+   * the click toggle + `aria-expanded` sync ship with the scaffold layout
+   * JS, matching the mobile-drawer pattern). Every other nav item stays a
+   * plain link.
+   */
+  servicesMegaMenu?: ServicesMegaMenu | null;
 }
 
 const {
@@ -77,6 +87,7 @@ const {
   navItems,
   primaryCta = null,
   currentPath = null,
+  servicesMegaMenu = null,
 } = Astro.props;
 
 const IMPLEMENTED_ARCHETYPES = ['editorial-transparent'] as const;
@@ -91,6 +102,10 @@ function isCurrent(href: string): boolean {
   if (href !== '/' && currentPath.startsWith(href + '/')) return true;
   return false;
 }
+
+// The nav item that owns the Services mega-menu — matched by label so the
+// pack's `primaryLinks` order drives placement, not a hardcoded slot.
+const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
 ---
 
 <header
@@ -114,6 +129,88 @@ function isCurrent(href: string): boolean {
       <ul class="bp-site-header__nav-list" role="list">
         {navItems.map((item) => {
           const current = isCurrent(item.href);
+          const isMegaTrigger =
+            servicesMegaMenu !== null && item.label === megaMenuTriggerLabel;
+
+          if (isMegaTrigger && servicesMegaMenu) {
+            const panelId = 'bp-site-header-mega-services';
+            return (
+              <li class="bp-site-header__nav-item bp-site-header__nav-item--mega">
+                {/* Disclosure trigger. CSS reveals the panel on :hover /
+                    :focus-within; the scaffold layout JS drives the click
+                    toggle + aria-expanded sync (deferred, matching the
+                    mobile drawer). The `href` keeps the trigger a working
+                    link to the section index when JS is absent. */}
+                <a
+                  href={item.href}
+                  class="bp-site-header__nav-link bp-site-header__mega-trigger"
+                  aria-current={current ? 'page' : undefined}
+                  aria-expanded="false"
+                  aria-controls={panelId}
+                  aria-haspopup="true"
+                  data-bp-site-header-mega-toggle
+                >
+                  {item.label}
+                  <span class="bp-site-header__mega-chevron" aria-hidden="true"></span>
+                </a>
+
+                <div
+                  id={panelId}
+                  class="bp-site-header__mega"
+                  data-bp-site-header-mega-panel
+                >
+                  <div class="bp-site-header__mega-inner">
+                    <div
+                      class="bp-site-header__mega-columns"
+                      style={`--bds-site-header-mega-columns: ${servicesMegaMenu.columns}`}
+                    >
+                      {servicesMegaMenu.categories.map((category) => (
+                        <div
+                          class="bp-site-header__mega-column"
+                          data-audience={category.audienceId ?? undefined}
+                        >
+                          <p class="bp-site-header__mega-heading">{category.heading}</p>
+                          <ul class="bp-site-header__mega-list" role="list">
+                            {category.items.map((entry) => (
+                              <li>
+                                <a href={entry.href} class="bp-site-header__mega-item">
+                                  <span class="bp-site-header__mega-item-label">{entry.label}</span>
+                                  {entry.note && (
+                                    <span class="bp-site-header__mega-item-note">{entry.note}</span>
+                                  )}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+
+                      {servicesMegaMenu.featured && (
+                        <a
+                          href={servicesMegaMenu.featured.ctaHref}
+                          class="bp-site-header__mega-featured"
+                        >
+                          <span class="bp-site-header__mega-featured-eyebrow">
+                            {servicesMegaMenu.featured.eyebrow}
+                          </span>
+                          <span class="bp-site-header__mega-featured-heading">
+                            {servicesMegaMenu.featured.heading}
+                          </span>
+                          <span class="bp-site-header__mega-featured-body">
+                            {servicesMegaMenu.featured.body}
+                          </span>
+                          <span class="bp-site-header__mega-featured-cta">
+                            {servicesMegaMenu.featured.ctaLabel}
+                          </span>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </li>
+            );
+          }
+
           return (
             <li class="bp-site-header__nav-item">
               <a
@@ -275,6 +372,178 @@ function isCurrent(href: string): boolean {
   .bp-site-header__nav-link:focus-visible {
     outline: 2px solid var(--border-focus, var(--background-brand-primary));
     outline-offset: 4px;
+  }
+
+  /* Services mega-menu — editorial-transparent's flyout. Disclosure is
+   * CSS-only (hover + focus-within) so it works before the scaffold JS
+   * loads; the JS then drives the click toggle + aria-expanded. Panel is
+   * ≥768px only — on mobile the drawer carries the same links as flat
+   * items (no nested mega-menu in the overlay). */
+  .bp-site-header__nav-item--mega {
+    position: relative;
+  }
+
+  .bp-site-header__mega-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-sm);
+    cursor: pointer;
+  }
+
+  .bp-site-header__mega-chevron {
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform 120ms ease-out;
+  }
+
+  .bp-site-header__mega {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .bp-site-header__mega {
+      display: block;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding-top: var(--padding-md);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 120ms ease-out, visibility 0s linear 120ms;
+      z-index: 200;
+    }
+
+    .bp-site-header__nav-item--mega:hover .bp-site-header__mega,
+    .bp-site-header__nav-item--mega:focus-within .bp-site-header__mega {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition-delay: 0s;
+    }
+
+    .bp-site-header__nav-item--mega:hover .bp-site-header__mega-chevron,
+    .bp-site-header__nav-item--mega:focus-within .bp-site-header__mega-chevron {
+      transform: translateY(1px) rotate(225deg);
+    }
+  }
+
+  .bp-site-header__mega-inner {
+    background: var(--surface-primary);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--padding-xl);
+    min-width: min(90vw, 720px);
+  }
+
+  .bp-site-header__mega-columns {
+    display: grid;
+    /* Column count is data-driven, set inline from servicesMegaMenu.columns
+     * (always present — required field), so no fallback is needed. */
+    grid-template-columns: repeat(var(--bds-site-header-mega-columns), minmax(0, 1fr));
+    gap: var(--gap-xl);
+  }
+
+  .bp-site-header__mega-heading {
+    margin: 0 0 var(--gap-md);
+    color: var(--text-muted);
+    font-family: var(--font-family-label);
+    font-size: var(--label-sm);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .bp-site-header__mega-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  .bp-site-header__mega-item {
+    display: block;
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+
+  .bp-site-header__mega-item:hover .bp-site-header__mega-item-label {
+    color: var(--text-brand-primary);
+  }
+
+  .bp-site-header__mega-item:focus-visible {
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
+    outline-offset: 2px;
+    border-radius: var(--border-radius-md);
+  }
+
+  .bp-site-header__mega-item-label {
+    display: block;
+    font-family: var(--font-family-label);
+    font-size: var(--label-lg);
+    font-weight: var(--font-weight-medium);
+    transition: color 120ms ease-out;
+  }
+
+  .bp-site-header__mega-item-note {
+    display: block;
+    margin-top: 2px;
+    color: var(--text-secondary);
+    font-family: var(--font-family-body);
+    font-size: var(--body-sm);
+  }
+
+  .bp-site-header__mega-featured {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    padding: var(--padding-lg);
+    background: var(--surface-secondary);
+    border-radius: var(--border-radius-md);
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+
+  .bp-site-header__mega-featured:focus-visible {
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
+    outline-offset: 2px;
+  }
+
+  .bp-site-header__mega-featured-eyebrow {
+    color: var(--text-brand-primary);
+    font-family: var(--font-family-label);
+    font-size: var(--label-sm);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .bp-site-header__mega-featured-heading {
+    font-family: var(--font-family-heading);
+    font-size: var(--heading-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.2;
+  }
+
+  .bp-site-header__mega-featured-body {
+    color: var(--text-secondary);
+    font-family: var(--font-family-body);
+    font-size: var(--body-sm);
+  }
+
+  .bp-site-header__mega-featured-cta {
+    margin-top: var(--gap-sm);
+    color: var(--text-brand-primary);
+    font-family: var(--font-family-label);
+    font-size: var(--label-lg);
+    font-weight: var(--font-weight-semibold);
   }
 
   .bp-site-header__actions {
