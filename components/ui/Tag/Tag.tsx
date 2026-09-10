@@ -62,9 +62,8 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
  *
  * **Indicator, not action.** Tag is non-interactive by design — use it
  * to label categories, classifications, or metadata. For interactive
- * pills (filter selections, removable chips) use `Chip`. See the
- * "Indicators vs Actions" section of Tag.mdx for the full decision
- * tree.
+ * pills (filter selections, removable chips) use `Chip`. See
+ * build-standards/indicators for the full decision tree.
  *
  * @example
  * ```tsx
