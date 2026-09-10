@@ -454,6 +454,22 @@
   gap: var(--gap-none);
 }
 
+/* Inset media treatment (`mediaTreatment="inset"`) — the "card-vertical" look.
+ * Where the default `flush` treatment bleeds the media to the card edge and
+ * pads only the text body, `inset` frames the media AND the body together in a
+ * single --padding-huge inset, with --gap-xl separating image from text. The
+ * body's own --padding-lg is zeroed so the frame isn't doubled. Ported from the
+ * brikdesigns-local `.service-card--inset` override so the treatment lives on
+ * the primitive, not per-consumer CSS. */
+.bds-card--preset-display-inset {
+  padding: var(--padding-huge);
+  gap: var(--gap-xl);
+}
+
+.bds-card--preset-display-inset .bds-card__preset-display-body {
+  padding: var(--padding-none);
+}
+
 .bds-card__preset-display-media {
   position: relative;
   display: block;
