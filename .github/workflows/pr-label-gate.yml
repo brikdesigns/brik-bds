@@ -43,6 +43,11 @@ name: pr-label-gate
 on:
   pull_request_target:
     types: [opened, edited, labeled, unlabeled, synchronize, reopened, ready_for_review]
+  # Merge-queue readiness (#2415): a required context must report on the merge
+  # group or the queue wedges. This gate reads PR metadata that the `merge_group`
+  # event has no payload for — and the queued PR already passed it — so on
+  # `merge_group` the job short-circuits green (see the job's first step).
+  merge_group:
 
 # `require-area-label` became a REQUIRED context in #1993, which changes what this
 # block is allowed to do. A cancelled check-run is not an absent one: protection can
@@ -70,11 +75,18 @@ jobs:
   require-area-label:
     runs-on: ubuntu-latest
     steps:
+      # On a merge group there is no PR payload to inspect, and the PR was
+      # already required to pass this gate before it could be queued. Report
+      # green and skip the metadata steps below (#2415).
+      - name: Merge-group short-circuit (queued PR already passed this gate)
+        if: github.event_name == 'merge_group'
+        run: echo "require-area-label already reported on the PR before it was queued; reporting green on the merge group."
+
       # continue-on-error: a labeling failure must not mask the gate itself.
       # If this step fails, the check below still runs and emits the actionable
       # "add area:<x>" error rather than an opaque token failure.
       - name: Auto-apply area:tooling to dependabot PRs
-        if: github.actor == 'dependabot[bot]'
+        if: github.event_name != 'merge_group' && github.actor == 'dependabot[bot]'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
@@ -92,6 +104,7 @@ jobs:
           fi
 
       - name: Require at least one area:* label
+        if: github.event_name != 'merge_group'
         env:
           GH_TOKEN: ${{ github.token }}
           PR: ${{ github.event.pull_request.number }}

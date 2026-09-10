@@ -24,6 +24,11 @@ on:
     branches:
       - main
       - staging
+  # Merge-queue readiness (#2415): a required context must report on the merge
+  # group or the queue wedges. Empty-diff detection is meaningful on the rebased
+  # head, so this gate RUNS on `merge_group` against the merge-group base/head
+  # SHAs (see the check step).
+  merge_group:
 
 # `base-freshness` is a REQUIRED context on `main` since #2038, so this block may not
 # cancel. A cancelled check-run is not an absent one — protection goes on
@@ -56,10 +61,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      # On a merge group `github.base_ref` is empty; the base commit is already
+      # present from the full-history checkout of the rebased head, so no fetch.
       - name: Fetch base branch
+        if: github.event_name == 'pull_request'
         run: git fetch origin "${{ github.base_ref }}" --quiet
 
       - name: Check the diff still applies to the base
         run: |
-          bash scripts/lib/base-freshness.sh --local \
-            "origin/${{ github.base_ref }}" "${{ github.event.pull_request.head.sha }}"
+          if [ "${{ github.event_name }}" = "merge_group" ]; then
+            # The merge group is the PR rebased onto base — base..head is the
+            # squash that would land, exactly what this gate measures (#2415).
+            bash scripts/lib/base-freshness.sh --local \
+              "${{ github.event.merge_group.base_sha }}" "${{ github.event.merge_group.head_sha }}"
+          else
+            bash scripts/lib/base-freshness.sh --local \
+              "origin/${{ github.base_ref }}" "${{ github.event.pull_request.head.sha }}"
+          fi
