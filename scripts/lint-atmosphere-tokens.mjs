@@ -15,15 +15,20 @@
  *   3. (effect atmospheres) use a `color-mix()` whose source colour is
  *      anything other than a canonical `--background-brand-primary` /
  *      `--background-accent-*` role.
+ *   4. Declare a color-foundation token (`--page/surface/background/text/
+ *      border-*`) — surface colours come from the brand theme layer.
+ *   5. Set a top-level `body { }` rule (attach via `body::before` etc.).
+ *   6. Reference a retired `--atmosphere-paper/cream-paper/ink` var.
  *
- * This is the regression gate for #2372: it fails on the pre-fix CSS and
- * passes on the brand/accent-derived version. Runs in `npm run validate`.
+ * Rules 4–6 were the brik-bds#369 architecture gate. It lived in a vitest
+ * block that read CSS via `import.meta.glob(…?raw)`, which returns EMPTY
+ * strings under Vite 8 + Vitest — so those assertions passed vacuously on
+ * `''` (brik-bds#2378). That block is deleted; the checks live here, where
+ * `fs` reads real file content and a planted violation actually fails CI.
  *
- * Note: the vitest block in content-system/atmospheres/index.test.ts reads
- * CSS via `import.meta.glob(…?raw)`, which returns EMPTY strings under
- * Vite 8 + Vitest — so those content assertions are vacuous. This script
- * reads the files directly with `fs` and is the real gate. (tracked: the
- * glob-vacuity finding is filed separately.)
+ * This is the regression gate for #2372 (rules 1–3) and #369 (rules 4–6):
+ * it fails on the pre-fix CSS and passes on the compliant version. Runs in
+ * `npm run validate`.
  *
  * Usage:
  *   node scripts/lint-atmosphere-tokens.mjs
@@ -75,11 +80,32 @@ for (const file of cssFiles) {
     if (EFFECT_FILES.has(file) && line.includes('color-mix(in ') && !/var\(--background-(brand-primary|accent-[a-z]+)\)/.test(line)) {
       errors.push(`${file}:${n}  color-mix() does not source a canonical --background-brand-primary / --background-accent-* role\n    ${line.trim()}`);
     }
+
+    // Rule 4 — atmospheres must never DECLARE a color-foundation token;
+    // surface colours come from the brand theme layer (brik-bds#369). This
+    // matches a property declaration whose name is a banned semantic
+    // category — `var(--background-…)` USAGE as a value is fine.
+    const decl = line.match(/^\s*(--[a-z][a-zA-Z0-9-]*)\s*:/);
+    if (decl != null && /^--(page|surface|background|text|border)-[a-z]/.test(decl[1])) {
+      errors.push(`${file}:${n}  declares a color-foundation token — surface colour comes from the brand theme layer (brik-bds#369)\n    ${line.trim()}`);
+    }
   });
 
   // Rule 3b — effect atmospheres must actually derive via color-mix().
   if (EFFECT_FILES.has(file) && !content.includes('color-mix(in ')) {
     errors.push(`${file}  effect atmosphere declares no color-mix() decoration — expected brand/accent-derived colour`);
+  }
+
+  // Rule 5 — no top-level `body { }` rule; atmospheres attach via
+  // body::before / body::after / body > * only (brik-bds#369).
+  if (/^\s*body\s*\{/m.test(content)) {
+    errors.push(`${file}  sets a top-level body{} rule — attach via body::before / ::after / > * instead (brik-bds#369)`);
+  }
+
+  // Rule 6 — retired --atmosphere-paper/cream-paper/ink local vars are gone
+  // for good; no declaration or usage (brik-bds#369).
+  if (/--atmosphere-(paper|cream-paper|ink)\b/.test(content)) {
+    errors.push(`${file}  references a retired --atmosphere-paper/cream-paper/ink var (brik-bds#369)`);
   }
 }
 
