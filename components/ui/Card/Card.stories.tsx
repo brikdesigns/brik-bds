@@ -438,6 +438,50 @@ export const Display: Story = {
       description:
         'Heading element for the title (default `h3`). Set to keep the document outline correct for the card context; visual size is token-driven and does not change.',
     },
+    mediaTreatment: {
+      control: 'inline-radio',
+      options: ['flush', 'inset'],
+      description:
+        'How the `image` slot relates to the card edge. `flush` (default) bleeds the media to the edge and pads only the text body; `inset` frames media + body together in a `--padding-huge` inset (the service-card "card-vertical" look).',
+    },
+    padding: { table: { disable: true } },
+    interactive: { table: { disable: true } },
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 320, display: 'flex' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
+ * `preset="display"` with `mediaTreatment="inset"` — the service-card
+ * "card-vertical" look. The media and text body are framed together inside a
+ * single `--padding-huge` inset (vs the default `flush`, where the media bleeds
+ * to the card edge and only the body is padded). One primitive, treatment by
+ * prop — this replaces the former site-local `.service-card--inset` CSS
+ * override.
+ *
+ * @summary preset="display" — inset media treatment
+ */
+export const DisplayInset: Story = {
+  args: {
+    preset: 'display',
+    mediaTreatment: 'inset',
+    title: 'Service one',
+    description:
+      'A two-line card description that sets the type rhythm without trying to tell the whole story.',
+    image: <Image src={landscapeThumb} alt="Marketing service" ratio="3-2" />,
+    tag: <Badge>Marketing</Badge>,
+    action: (
+      <Button variant="primary" size="sm">
+        Learn more
+      </Button>
+    ),
+  },
+  argTypes: {
     padding: { table: { disable: true } },
     interactive: { table: { disable: true } },
   },
