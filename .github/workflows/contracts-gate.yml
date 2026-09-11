@@ -141,13 +141,6 @@ jobs:
           # `git diff | grep` pipeline, where pipefail returns grep's status and
           # grep exits 1 on "no match", making a real diff failure look inert
           # (the #2713 trap). Fail CLOSED on a git error.
-          #
-          # Both arms are written as INLINE `git diff --name-only ... --` calls
-          # rather than factored into a shared helper, because that inline shape
-          # is the one `lint-gate-pathspecs.mjs` parses (it keys on a line
-          # containing `git diff`, lint-gate-pathspecs.mjs:99). A helper taking
-          # `"$@"` moves the pathspecs out of the linter's view and drops them
-          # silently from its count — which is how the rot in #2326 got in.
           if ! CHANGED="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- \
             'scripts/**' \
             '.claude/standards/**' \
