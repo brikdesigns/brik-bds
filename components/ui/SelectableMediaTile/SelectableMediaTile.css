@@ -42,12 +42,16 @@
   }
 
   /* ─── Media box ─────────────────────────────────────────────────
-     Renders through <Frame customRatio={aspectRatio} fit="cover">, which
-     owns the aspect-ratio, sizing, clipping, and the image object-fit.
-     This rule adds only the placeholder backdrop shown before the image
-     loads (and behind `object-fit` letterboxing). */
+     A positioning wrapper around <Image customRatio={aspectRatio} fit="cover">.
+     Image owns the aspect-ratio, sizing, clipping, and object-fit (via its
+     internal <Frame>); this wrapper only establishes the containing block for
+     the absolutely-positioned check overlay (a sibling of the Image, since
+     Image owns its Frame and exposes no overlay slot) and paints the
+     placeholder backdrop shown before the image loads. */
 
   .bds-selectable-media-tile__media {
+    position: relative;
+    display: block;
     background-color: var(--surface-secondary);
   }
 
