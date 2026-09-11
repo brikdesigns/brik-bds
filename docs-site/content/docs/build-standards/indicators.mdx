@@ -1,0 +1,45 @@
+---
+title: Indicators
+description: Which small pill a label gets — Tag, Badge, Dot, Counter, ServiceTag — and the one discriminator that separates all five from Chip.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+[Display choice](/docs/build-standards/display-choice) answers which display a *set* of data gets. This answers the question one layer down: a surface needs a small pill next to something — **which pill?**
+
+Six components are pill-shaped and roughly the same size, so they look interchangeable in a mockup and in a screenshot. They are not. Five of them are **indicators** — they report a fact the reader cannot change. One of them, [`Chip`](/docs/components/chip), is an **action**.
+
+## The discriminator
+
+> **Does clicking it change anything?** If no, it is an indicator. If yes, it is a `Chip`.
+
+That is the whole boundary, and it is enforced in the source rather than left to taste: `Chip` renders only when `onChipClick`, `onRemove`, or `showDropdown` is wired up ([`Chip.tsx:39-44`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/Chip/Chip.tsx#L39-L44)), and `Tag` is non-interactive by design — its `onRemove` is deprecated precisely because it crossed this line ([`Tag.tsx:50-56`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/Tag/Tag.tsx#L50-L56)).
+
+The same boundary is why the two families take different prop axes: interactive components carry `variant` (they have hierarchy to express), read-only indicators carry `appearance` (fill form is the only lever). [Prop axes](/docs/build-standards/prop-axes) states the rule; this page decides which side of it you are on.
+
+<Callout type="warn">
+  **"Chip" is not a generic word for a small pill.** In Brik it names one interactive component. A read-only category label called `.something__chip` claims a family it is not in, and the wrong word travels from spec to comment to classname — which is what the `lint:indicator-vocabulary` gate in consumer repos exists to stop.
+</Callout>
+
+## The decision
+
+| Component | Selected by | Ruled out by | Axis |
+|---|---|---|---|
+| **[`Tag`](/docs/components/tag)** | A **categorization** the reader did not choose — industry, segment, owner, content type. The label is a class the record belongs to | The label is a *value judgment* about state (that is `Badge`); or clicking it filters or removes something (that is `Chip`) | `appearance` `solid` · `subtle` · `muted` |
+| **[`Badge`](/docs/components/badge)** | A **semantic status** — a value judgment the system makes about one record ("Paid", "Overdue", "In progress") | The label classifies rather than judges (that is `Tag`); or the status is about the whole surface, not one record (that is a [`Banner`](/docs/components/banner)) | `status` `positive` · `warning` · `negative` · `info` · `brand` · `neutral` |
+| **[`Dot`](/docs/components/dot)** | The **same status as a Badge, with no room for words** — a leading marker in a dense row or list where the colour alone carries it | The status needs a word to be unambiguous; a colour-only indicator has no accessible name of its own | `status` (Badge's set, plus `default`) |
+| **[`Counter`](/docs/components/counter)** | A **number** — unread count, item quantity, step position | The content is a word, not a quantity | `status`, `size` |
+| **[`ServiceTag`](/docs/components/service-tag)** | A **Brik service line** specifically — brand, marketing, information, product, back-office. It owns that fixed colour vocabulary | Any category that is not a service line — a generic category is a `Tag` | `category` + `variant` `text` · `icon-text` · `icon` · `dot` |
+| **[`Chip`](/docs/components/chip)** | The reader **acts on it** — a filter toggle, a selection, a removable token, a dropdown trigger | Nothing happens on click. Then it is one of the five above, and `Chip` is the wrong component | `variant` `primary` · `secondary` |
+
+## The tie-breaks
+
+- **Classify vs judge separates `Tag` from `Badge`.** "Healthcare", "Enterprise", "Blog post" are classes the record belongs to → `Tag`. "Paid", "Overdue", "Draft" are the system's assessment of it → `Badge`. The test: could two records legitimately carry *both* labels at once and mean different things? Category and status are orthogonal, which is why `Badge` has `status` and `Tag` does not.
+- **A `Dot` is a `Badge` that ran out of space, not a quieter one.** Reach for it only when the row genuinely cannot hold a word — and give it an accessible name, because colour is not one.
+- **`ServiceTag` is not "`Tag`, themed."** It is bound to the five Brik service lines and their fixed colours. A category outside that set is a `Tag`; adding a sixth colour to `ServiceTag` is a system change, not a callsite one.
+- **A hand-rolled pill is a missing component, not a local style.** Writing `<span className="my-section__chip">` for a read-only label means the CSS carries chrome the indicator components already own, and the element is invisible to every gate that measures indicators. Use the component; if none of the six fits, that is a gap in this page — file it.
+- **Interactivity is decided by the design, not by whether a handler happens to exist yet.** A pill that *will* filter is a `Chip` from the start. A pill that will never be clicked stays an indicator even if a stray `onClick` gets attached to it — remove the handler rather than reclassifying the pill.
+
+## Groups
+
+Indicators that repeat in a row have group wrappers that own the spacing and wrapping so callsites do not: [`TagGroup`](/docs/components/tag-group) and [`BadgeGroup`](/docs/components/badge-group). `Tag` and `Badge` also share one size scale (`xs` · `sm` · `md` · `lg`) so the two align side by side — see the *Badge + Tag alignment* pattern in either component's doc.
