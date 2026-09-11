@@ -38,9 +38,22 @@ jobs:
         with:
           node-version: '20'
 
+      # Cross-repo read via the brik-ci-bot App (App 3951278), not a PAT. The
+      # App is installed org-wide (repository_selection=all), so its installation
+      # token can read every consumer repo, minted fresh each run — nothing to
+      # expire. Retires CONSUMER_DRIFT_TOKEN, whose silent expiry made this alarm
+      # fall back to github.token (which can't cross repos) and report every
+      # consumer 401/unreachable while still passing green (#2421). Same pattern
+      # as tokens-gate.yml's deleted-token sweep (#2419).
+      - name: Mint brik-ci-bot token (cross-repo read)
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.BRIK_CI_BOT_APP_ID }}
+          private-key: ${{ secrets.BRIK_CI_BOT_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
       - name: Check consumer drift
         env:
-          # Requires a PAT with read access to the consumer repos.
-          # Default GITHUB_TOKEN can't cross repos; see README for setup.
-          GH_TOKEN: ${{ secrets.CONSUMER_DRIFT_TOKEN || github.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: node scripts/check-drift.mjs
