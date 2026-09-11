@@ -67,7 +67,7 @@ No discriminated union. `layout` selects arrangement; the slots are the same acr
 | `preset="display"` (grid cell) | `layout="stack"` + `media` + `overline` + `title` + `children` + `action` | it *is* a stack card; composed inside `CardGrid` |
 | `preset="display-row"` | `layout="row"` | media left, body right |
 | `preset="summary"` | `layout="metric"` | `overline`=label, `title`=value; context-neutral (not finance-scoped) |
-| `preset="control"` | `layout="row"` + a `status` slot | the connection-status dot is a slot, not a baked preset |
+| `preset="control"` | `layout="control"` (own value) | its centred logo-left / status-right shape is structurally distinct from `row`'s media-left — folding into `row` would overload one value with two shapes. OPERATOR SAID 2026-09-11 (chat): "Own layout value". Phase 2 delegates to the proven control renderer for exact parity. |
 | `ProductSummaryCard` | `layout="metric"` + `overline`=`<ServiceTag>` | component deprecated; see §4 |
 
 ### 3. `CardGrid` is unchanged — and there is no overlap
