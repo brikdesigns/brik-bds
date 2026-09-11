@@ -1,9 +1,9 @@
 # ADR-018 — Card preset boundary: presets are generic card-shaped layouts; content-typed / parent-arranged shapes are Blocks or Sections
 
-**Status:** Proposed (2026-07-05)
+**Status:** Superseded (2026-09-11) by [ADR-038](./ADR-038-card-anatomy-over-preset-union.md) — never Accepted; its keep-the-presets path is replaced by flattening the preset union into a `layout` axis
 **Date:** 2026-07-05
 **Supersedes:** — (refines [ADR-004](./ADR-004-component-bloat-guardrails.md) — see § Relationship to ADR-004)
-**Superseded by:** —
+**Superseded by:** [ADR-038](./ADR-038-card-anatomy-over-preset-union.md)
 **Related:** [ADR-004](./ADR-004-component-bloat-guardrails.md) (component-bloat guardrails — the preset-over-component principle), [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) (sidebar taxonomy: Components / Containers / Blocks / Layouts / Sections), [ADR-010](./ADR-010-storybook-axes-of-information.md) (story-vs-control matrix), the 2026-05-17 Card-family review (preset consolidation, `CardControl`/`CardSummary` deprecation, `CardTestimonial`→`Testimonial`)
 **Owner:** Nick Stanerson
 
