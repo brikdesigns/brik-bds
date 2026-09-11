@@ -6,7 +6,7 @@ description: DEPRECATED — use Card layout="metric" instead.
 import { Callout } from 'fumadocs-ui/components/callout';
 
 <Callout type="warn">
-  **ProductSummaryCard is deprecated.** Migrate to [`Card layout="metric"`](/docs/components/card) ([ADR-038](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md)) — the `media` slot takes the leading `<ServiceTag>`, `overline` the label, `title` the value, and `detail` the `price • frequency` line. It is kept as a thin unchanged shim during the migration window and removed once the last consumer migrates.
+  **ProductSummaryCard is deprecated.** Migrate to [`Card layout="metric"`](/docs/components/card#metric-layout) ([ADR-038](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md)) — the `media` slot takes the leading `<ServiceTag>`, `overline` the label, `title` the value, and `detail` the `price • frequency` line. It is kept as a thin unchanged shim during the migration window and removed once the last consumer migrates.
 </Callout>
 
 ProductSummaryCard is a compact read-only summary of a chosen offering — a leading [ServiceTag](/docs/components/service-tag) coloured by `serviceLine`, a caption `label`, the offering `value`, and an optional `price • frequency` line. Use it to confirm back to a visitor what they selected.

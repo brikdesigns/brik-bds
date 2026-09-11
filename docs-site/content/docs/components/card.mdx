@@ -1,23 +1,29 @@
 ---
 title: Card
-description: Flexible content container with composable subcomponents and four locked-down presets (control, summary, display, display-row).
+description: Flexible content container with composable subcomponents and a layout axis for four anatomy-driven arrangements.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Card is the canonical content-grouping container. Five rendering modes:
+Card is the canonical content-grouping container. A default flexible mode, plus four arrangements selected by the `layout` prop:
 
 - **Default** — flexible container, compose with `CardTitle` / `CardDescription` / `CardFooter` subcomponents.
-- **`preset="control"`** — locked-down settings/control layout (badge + title + description + action). Replaces the legacy `CardControl` component per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md).
-- **`preset="summary"`** — compact metric/stat layout (label + large value + optional link).
-- **`preset="display"`** — the malleable vertical cell of a card-grid Section, per [ADR-018](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-018-card-preset-boundary.md).
-- **`preset="display-row"`** — the horizontal card-grid cell / section row (image left, content right).
+- **`layout="stack"`** — vertical content card and the malleable cell of a card-grid Section.
+- **`layout="row"`** — horizontal content card, media left and text right.
+- **`layout="metric"`** — compact stat tile, label above a large value.
+- **`layout="control"`** — settings/integration row, media + text left, status + action right.
+
+One flat slot set (`media` / `overline` / `title` / `children` / `action` / `badge`) serves all four, per [ADR-038](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md).
+
+<Callout type="warn">
+  **The `preset` prop is deprecated.** `preset="control" | "summary" | "display" | "display-row"` is superseded by `layout` (ADR-038). It still renders unchanged for existing consumers, so migration is opt-in — but new code uses `layout`. See [Deprecated preset API](#deprecated-preset-api) for the mapping.
+</Callout>
 
 ## Use it for
 
-- Service grids, feature cards, and content blocks (default mode)
-- Settings panels with title + description + toggle/action (`preset="control"`)
-- Dashboard stat tiles ($48K Q1 revenue, 142 active users) (`preset="summary"`)
+- Service grids, feature cards, and content blocks (`layout="stack"`)
+- Settings panels with title + description + toggle/action (`layout="control"`)
+- Dashboard stat tiles ($48K Q1 revenue, 142 active users) (`layout="metric"`)
 - Any grouped-content surface where consistent border/padding/shadow matter
 
 For a horizontal stack of card-like rows, use [FieldGrid](/docs/components/field-grid) wrapping Cards. For loading-state placeholders, use [Skeleton](/docs/components/skeleton) `variant="rectangular"`.
@@ -30,7 +36,7 @@ import { Card, CardTitle, CardDescription, CardFooter } from '@brikdesigns/bds';
 
 ## Default mode
 
-Compose freely with the Title / Description / Footer subcomponents.
+Compose freely with the Title / Description / Footer subcomponents. Omit `layout` entirely.
 
 ```tsx
 <Card variant="outlined" padding="md">
@@ -49,6 +55,8 @@ Compose freely with the Title / Description / Footer subcomponents.
 - **`elevated`** — Surface-primary fill, no border, no shadow (flat since brik-bds#1146; for a shadow use `raised`).
 - **`raised`** — Surface-primary fill, no border, with a cast `--box-shadow-md` drop shadow. The shadow-casting counterpart to the now-flat `elevated`; use for a focal/lone card or a grid cell that needs a lifted, contained read.
 - **`borderless`** — Transparent fill, no border, no shadow. Use for cards sitting on a colored surface, where the border ring reads as visual noise.
+
+The `layout` arrangements take the grid-cell subset — `borderless`, `elevated`, `raised` — so one option set covers every surface treatment.
 
 ### Padding
 
@@ -70,7 +78,7 @@ Compose freely with the Title / Description / Footer subcomponents.
 
 ### Leading media
 
-The `media` prop turns the default card into a horizontal "media object" — an `Avatar` or a square 1:1 `Image` on the left, with `children` stacked to the right. Pass exactly one of `avatar` / `image`. Both size to the shared Avatar scale (`sm` 32px, `md` 40px, `lg` 48px, `xl` 64px). The avatar falls back to initials from `name` and can carry a presence `status`; the image takes `fit` (`contain` for logos, `cover` for photos).
+In default mode the `media` prop takes a `CardMedia` object and turns the card into a horizontal "media object" — an `Avatar`, a square 1:1 `Image`, or a bundled `Logo` on the left, with `children` stacked to the right. Pass exactly one of `avatar` / `image` / `logo`. All size to the shared Avatar scale (`sm` 32px, `md` 40px, `lg` 48px, `xl` 64px). The avatar falls back to initials from `name` and can carry a presence `status`; the image takes `fit` (`contain` for logos, `cover` for photos).
 
 ```tsx
 <Card media={{ avatar: { name: 'Jordan Lee', status: 'online', size: 'lg' } }}>
@@ -84,93 +92,123 @@ The `media` prop turns the default card into a horizontal "media object" — an 
 </Card>
 ```
 
-## Control preset
+Under a `layout`, `media` is a plain `ReactNode` instead — pass the `<Frame>`, `<Avatar>`, `<Logo>`, or `<ServiceTag>` you want rendered.
 
-`preset="control"` is the canonical settings-row card. Locked layout: leading badge + (title + description) on the left, action slot on the right.
+## Stack layout
+
+`layout="stack"` is the vertical content card and the malleable **cell of a card-grid Section**. Every slot is optional and independently toggled, so one arrangement serves any content type — service, blog post, customer story, property listing, team bio, support plan.
 
 ```tsx
 <Card
-  preset="control"
-  badge={<Badge status="positive">On</Badge>}
+  layout="stack"
+  overline={<ServiceTag line="brand" />}
+  media={<Frame ratio="16-9"><img src="/service.jpg" alt="" /></Frame>}
+  badge={<Badge>Featured</Badge>}
+  title="Brand identity"
+  action={<Button href="/services/branding" variant="outline" size="sm">Learn more</Button>}
+>
+  Logo, type, and color systems built to scale.
+</Card>
+```
+
+`title` renders as `titleAs` (default `h3`) — set it to keep the document outline correct under a grid-section heading; the visual size is token-driven and unchanged by the level. For a cell on a colored (service-tinted) grid, `variant="borderless"` (transparent), `variant="elevated"` (fill + shadow), or `variant="raised"` (fill + cast `--box-shadow-md` shadow) swaps the surface treatment, and `tint` applies a pale service-line wash. `badge` renders only when `media` is also set.
+
+`mediaTreatment` controls how the media slot meets the card edge. `flush` (default) bleeds the media to the edge and pads only the body — the blog/story/product-grid look. `inset` frames media and body together in a single inset — the service-card look.
+
+## Row layout
+
+`layout="row"` is the **horizontal** content card and card-grid section row — media on the left, the text column (`overline`, `title`, body, `action`) on the right. Use for single-row sections where a vertical layout wastes horizontal space: Related Customer Story, Recommended Add-On, featured plan. Collapses to a vertical stack at ≤ 640px.
+
+```tsx
+<Card
+  layout="row"
+  overline={<Tag>Case study</Tag>}
+  media={<Frame ratio="4-3"><img src="/story.jpg" alt="" /></Frame>}
+  imageWidth="standard"
+  title="How Northwind tripled conversions"
+  action={<Button href="/stories/northwind" variant="outline" size="sm">Read the story</Button>}
+>
+  A ground-up rebrand and site rebuild.
+</Card>
+```
+
+`imageWidth` sets the left column: `narrow` (25%), `standard` (35%, default), or `wide` (50%) — or pass any CSS length/percentage string (`"40%"`, `"320px"`).
+
+## Metric layout
+
+`layout="metric"` is the compact stat tile — an `overline` label above a large `title` value, with an optional trailing `action`. Context-neutral: a revenue figure, an active-user count, a storage total. Pre-format the value; the card applies no numeric formatting.
+
+```tsx
+<Card
+  layout="metric"
+  overline="Q1 revenue"
+  title="$48,250.75"
+  action={<TextLink href="/revenue">Details</TextLink>}
+/>
+```
+
+Two optional slots extend `metric` for a labelled selection — the shape the deprecated [ProductSummaryCard](/docs/components/product-summary-card) covered. `media` renders a leading glyph beside the stat, and `detail` renders a secondary line below the value. Both are additive, so a plain stat omits them.
+
+```tsx
+<Card
+  layout="metric"
+  media={<ServiceTag category="brand" variant="icon" size="lg" serviceName="Logo Design" />}
+  overline="Interested in"
+  title="Standard Logo Design"
+  detail="$650 • one time"
+/>
+```
+
+## Control layout
+
+`layout="control"` is the canonical settings and integration row. Leading `media` (logo) plus `title` and `description` on the left; `connectionStatus` indicator and `action` on the right.
+
+```tsx
+<Card
+  layout="control"
+  media={<Logo set="integration" name="notion" />}
   title="Email notifications"
   description="Send a weekly digest to your inbox."
   action={<Button variant="outline" size="sm">Configure</Button>}
 />
 ```
 
-`actionAlign` controls vertical alignment of the action slot — `center` (default) or `top` (anchors to the upper-right when descriptions are tall).
+`actionAlign` controls vertical alignment of the trailing block — `center` (default) or `top`, which anchors to the upper-right when descriptions are tall. `connectionStatus` accepts `not-configured`, `connected`, `syncing`, `synced`, or `failed` and renders a status indicator alongside the action; pass `lastSynced` for a timestamp beneath it.
 
 <Callout type="info">
-  **`preset="control"` replaces the standalone `<CardControl>` component**, which is deprecated per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md) ([#657](https://github.com/brikdesigns/brik-bds/issues/657)). New code should use the preset; see the [CardControl migration guide](/docs/components/card-control#migration).
+  **`layout="control"` replaces the standalone `<CardControl>` component**, which is deprecated per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md) ([#657](https://github.com/brikdesigns/brik-bds/issues/657)). New code should use the layout; see the [CardControl migration guide](/docs/components/card-control#migration).
 </Callout>
 
-## Summary preset
+## Deprecated preset API
 
-`preset="summary"` is the compact stat tile. Label on top, large numeric value below, optional text link.
+The `preset` discriminator predates ADR-038. It renders unchanged and is not removed until every consumer migrates, so existing code keeps working — but it is closed to new use.
 
-```tsx
-<Card
-  preset="summary"
-  label="Q1 revenue"
-  value={48250.75}
-  type="price"
-  textLink={{ label: 'Details', href: '/revenue' }}
-/>
-```
+| Deprecated | Replacement | Slot mapping |
+|---|---|---|
+| `preset="display"` | `layout="stack"` | `image` → `media`, `tag` → `overline`, `description` → `children` |
+| `preset="display-row"` | `layout="row"` | same as `stack`, laid out horizontally |
+| `preset="summary"` | `layout="metric"` | `label` → `overline`, `value` → `title`; pre-format the value |
+| `preset="control"` | `layout="control"` | `badge` → `media`, other slots unchanged |
+| `<ProductSummaryCard>` | `layout="metric"` | `media` = `<ServiceTag>`, `overline` = label, `title` = value, `detail` = `price • frequency` |
 
-### Number formatting
+Two behavior notes on the way across:
 
-- **`type="numeric"`** (default) — locale-formatted integer (`1,234`).
-- **`type="price"`** — USD currency (`$1,234.50`).
-- String values render verbatim regardless of `type`.
+- **`preset="summary"` formatted numbers for you** via `type="numeric" | "price"`. `layout="metric"` does not — pass an already-formatted string.
+- **`variant` had two option sets** under the union (the default shape's five, the display presets' three). Under `layout` there is one set; the arrangements accept `borderless`, `elevated`, and `raised`.
 
-## Display preset
-
-`preset="display"` is the malleable **cell of a card-grid Section**, not a standalone card — per [ADR-018](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-018-card-preset-boundary.md), a display card only exists inside a grid that owns the columns. Every affordance is optional and prop-toggled so one cell serves any content type — service, blog post, customer story, property listing, team bio, support plan.
-
-```tsx
-<Card
-  preset="display"
-  tag={<ServiceTag line="brand" />}
-  image={<Frame ratio="16-9"><img src="/service.jpg" alt="" /></Frame>}
-  badge={<Badge>Featured</Badge>}
-  title="Brand identity"
-  description="Logo, type, and color systems built to scale."
-  action={<Button href="/services/branding" variant="outline" size="sm">Learn more</Button>}
-/>
-```
-
-`title` renders as `titleAs` (default `h3`) — set it to keep the document outline correct under a grid-section heading; the visual size is token-driven and unchanged by the level. For a cell on a colored (service-tinted) grid, `variant="borderless"` (transparent), `variant="elevated"` (fill + shadow), or `variant="raised"` (fill + cast `--box-shadow-md` shadow) swaps the surface treatment, and `tint` applies a pale service-line wash. `badge` renders only when `image` is also set.
-
-## Display-row preset
-
-`preset="display-row"` is the **horizontal** card-grid cell / section row — image on the left, content (tag, title, description, action) on the right. Use for single-row sections where a vertical layout wastes horizontal space (Related Customer Story, Recommended Add-On, featured plan). Collapses to a vertical stack at ≤ 640px.
-
-```tsx
-<Card
-  preset="display-row"
-  tag={<Tag>Case study</Tag>}
-  image={<Frame ratio="4-3"><img src="/story.jpg" alt="" /></Frame>}
-  imageWidth="standard"
-  title="How Northwind tripled conversions"
-  description="A ground-up rebrand and site rebuild."
-  action={<Button href="/stories/northwind" variant="outline" size="sm">Read the story</Button>}
-/>
-```
-
-`imageWidth` sets the left column: `narrow` (25%), `standard` (35%, default), or `wide` (50%) — or pass any CSS length/percentage string (`"40%"`, `"320px"`). The optional `extras` slot renders structured content (bullet lists, feature pills) between `description` and `action`.
+Never combine `preset` and `layout` on the same Card — the types make them mutually exclusive.
 
 ## When *not* to use
 
 - **Don't use Card for inline content blocks.** Cards imply discrete grouping; for paragraphs and section dividers, use prose + [Divider](/docs/components/divider).
 - **Don't use Card for tables.** Use a table component when rows share columns. Cards are for self-contained groupings.
-- **Don't reach for the default mode when `preset="control"` or `preset="summary"` fits.** The presets carry locked-down semantics that propagate consistently across screens.
+- **Don't reach for the default mode when a `layout` fits.** The layouts carry locked-down anatomy that propagates consistently across screens.
 
 ## Accessibility
 
 - Default Card renders a `<div>`; with `href`, it renders an `<a>` with full anchor semantics (right-click, keyboard, screen-reader link role).
 - `interactive` without `href` adds `role="button"` only when `onClick` is also passed; otherwise it's a non-interactive hover affordance.
-- Title becomes an `<h3>` semantic by default in the Title subcomponent — adjust the surrounding heading hierarchy accordingly.
+- `title` renders as `titleAs` (default `h3`) under a `layout`, and as an `<h3>` in the `CardTitle` subcomponent — adjust the surrounding heading hierarchy accordingly.
 
 ## API
 
@@ -186,68 +224,49 @@ The `media` prop turns the default card into a horizontal "media object" — an 
 | `media` | `CardMedia` (exactly one of avatar / image / logo) | — |
 | `children` | `ReactNode` *(required)* | — |
 
-### Control preset
+### Layout modes
+
+One flat slot set serves all four arrangements. A slot that a layout does not render is ignored rather than type-rejected — the per-layout notes below the table say which is which.
 
 {/* props-check: CardProps @ components/ui/Card/Card.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `preset` | `'control'` *(required)* | — |
-| `title` | `string` *(required)* | — |
-| `description` | `string` | — |
-| `badge` | `ReactNode` | — |
-| `action` | `ReactNode` | — |
-| `actionAlign` | `'center' \| 'top'` | `'center'` |
-
-### Summary preset
-
-{/* props-check: CardProps @ components/ui/Card/Card.tsx */}
-| Prop | Type | Default |
-|---|---|---|
-| `preset` | `'summary'` *(required)* | — |
-| `label` | `string` *(required)* | — |
-| `value` | `string \| number` *(required)* | — |
-| `type` | `'numeric' \| 'price'` | `'numeric'` |
-| `textLink` | `CardSummaryTextLink` | — |
-
-### Display preset
-
-{/* props-check: CardProps @ components/ui/Card/Card.tsx */}
-| Prop | Type | Default |
-|---|---|---|
-| `preset` | `'display'` *(required)* | — |
-| `title` | `string` *(required)* | — |
+| `layout` | `'stack' \| 'row' \| 'metric' \| 'control'` *(required)* | — |
+| `media` | `ReactNode` | — |
+| `overline` | `ReactNode` | — |
+| `title` | `ReactNode` | — |
 | `titleAs` | `'h2' \| 'h3' \| 'h4'` | `'h3'` |
-| `description` | `string` | — |
+| `children` | `ReactNode` | — |
+| `action` | `ReactNode` | — |
+| `badge` | `ReactNode` | — |
 | `variant` | `'borderless' \| 'elevated' \| 'raised'` | — |
 | `tint` | `CardTint` (service line) | — |
-| `image` | `ReactNode` | — |
-| `tag` | `ReactNode` | — |
-| `badge` | `ReactNode` (needs `image`) | — |
-| `action` | `ReactNode` | — |
 | `href` | `string` | — |
-
-### Display-row preset
-
-{/* props-check: CardProps @ components/ui/Card/Card.tsx */}
-| Prop | Type | Default |
-|---|---|---|
-| `preset` | `'display-row'` *(required)* | — |
-| `title` | `string` *(required)* | — |
-| `titleAs` | `'h2' \| 'h3' \| 'h4'` | `'h3'` |
-| `description` | `string` | — |
-| `tint` | `CardTint` (service line) | — |
-| `image` | `ReactNode` | — |
 | `imageWidth` | `CardDisplayRowImageWidth` (narrow / standard / wide, or any CSS length) | `'standard'` |
-| `tag` | `ReactNode` | — |
-| `extras` | `ReactNode` | — |
-| `action` | `ReactNode` | — |
-| `href` | `string` | — |
+| `mediaTreatment` | `'flush' \| 'inset'` | `'flush'` |
+| `description` | `ReactNode` | — |
+| `actionAlign` | `'center' \| 'top'` | `'center'` |
+| `connectionStatus` | `'not-configured' \| 'connected' \| 'syncing' \| 'synced' \| 'failed'` | — |
+| `lastSynced` | `string` | — |
+| `detail` | `ReactNode` | — |
 
-All modes accept standard `<div>` HTML attributes (excluding `title`, which is repurposed in the control preset).
+Slots by layout:
+
+| Layout | Renders |
+|---|---|
+| `stack` | `media`, `overline`, `title`, `children`, `action`, `badge`, `tint`, `variant`, `mediaTreatment`, `href` |
+| `row` | the `stack` set plus `imageWidth`, minus `mediaTreatment` |
+| `metric` | `media`, `overline`, `title`, `detail`, `action` |
+| `control` | `media`, `title`, `description`, `action`, `actionAlign`, `connectionStatus`, `lastSynced` |
+
+All modes accept standard `<div>` HTML attributes (excluding `title`, which is repurposed by the layouts and the control preset).
+
+The deprecated `preset` props are documented in the Storybook [Card playground](https://storybook.brikdesigns.com/?path=/docs/containers-card--overview) for the migration window.
 
 ## Related
 
-- [CardControl](/docs/components/card-control) — deprecated; see Card presets
+- [CardControl](/docs/components/card-control) — deprecated; see `layout="control"`
+- [ProductSummaryCard](/docs/components/product-summary-card) — deprecated; see [Metric layout](#metric-layout)
 - [CardList](/docs/components/card-list) — list-of-cards layout
 - [Testimonial](https://storybook.brikdesigns.com/?path=/docs/components-testimonial--overview) — testimonial component (Storybook; renamed from CardTestimonial)
 - [CollapsibleCard](/docs/components/collapsible-card) — Card + Accordion mash-up
