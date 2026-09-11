@@ -543,6 +543,15 @@
   color: var(--text-primary);
 }
 
+/* ADR-038 parity: under `layout="stack"` the body arrives as `children`, so a
+ * `<CardDescription>` lands here carrying the default-mode `.bds-card-description`
+ * (--text-secondary) instead of the preset's --text-primary. Re-assert the body
+ * color so `preset="display"` → `layout="stack"` stays a prop swap, not a
+ * re-style. Remove with the preset CSS once the union is deleted (#2438 item 5). */
+.bds-card__preset-display-body > .bds-card-description {
+  color: var(--text-primary);
+}
+
 .bds-card__preset-display-action {
   /* Anchor to bottom so multiple cards in a grid align actions
    * regardless of description length. */
@@ -635,6 +644,11 @@
   font-family: var(--font-family-body);
   font-size: var(--body-md);
   line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+}
+
+/* ADR-038 parity — see the `stack` note above. */
+.bds-card__preset-display-row-body > .bds-card-description {
   color: var(--text-primary);
 }
 
