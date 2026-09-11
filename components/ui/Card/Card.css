@@ -137,13 +137,12 @@
   padding-top: var(--padding-sm);
 }
 
-/* ─── Preset: control ─────────────────────────────────────────── */
-/* Settings/control card layout — replaces the legacy CardControl
- * component. Badge + (title + description) on the left, action on the
- * right. Surface uses primary background + muted border (no shadow)
- * regardless of `variant` (variant is ignored for this preset). */
+/* ─── Layout: control ─────────────────────────────────────────── */
+/* Settings/control card layout (ADR-038). Logo + badge + (title +
+ * description) on the left, connection-status + action on the right.
+ * Surface uses primary background + muted border (no shadow). */
 
-.bds-card--preset-control {
+.bds-card--control {
   flex-direction: row;
   align-items: center;
   gap: var(--padding-xl);
@@ -159,10 +158,10 @@
   flex-wrap: wrap;
 }
 
-.bds-card--preset-control-action-center { align-items: center; }
-.bds-card--preset-control-action-top    { align-items: flex-start; }
+.bds-card--control-action-center { align-items: center; }
+.bds-card--control-action-top    { align-items: flex-start; }
 
-.bds-card__preset-control-content {
+.bds-card__control-content {
   display: flex;
   /* Top-align the logo + badge with the title (not the vertical midline of the
      whole text block), so the leading mark reads against the first line. */
@@ -172,18 +171,18 @@
   min-width: 0;
 }
 
-.bds-card__preset-control-text {
+.bds-card__control-text {
   display: flex;
   flex-direction: column;
   /* Title → description is the readable-separation step (ADR-023
      content-rhythm map: heading/subtitle ↔ body = `--gap-md`), matching the
-     display-preset card bodies so the same relationship reads consistently
+     stack-layout card bodies so the same relationship reads consistently
      across variants. */
   gap: var(--gap-md);
   min-width: 0;
 }
 
-.bds-card__preset-control-title {
+.bds-card__control-title {
   font-family: var(--font-family-label);
   font-size: var(--label-lg);
   font-weight: var(--font-weight-semibold);
@@ -192,7 +191,7 @@
   margin: 0;
 }
 
-.bds-card__preset-control-description {
+.bds-card__control-description {
   font-family: var(--font-family-body);
   font-size: var(--body-md);
   line-height: var(--font-line-height-normal);
@@ -200,29 +199,29 @@
   margin: 0;
 }
 
-.bds-card__preset-control-action {
+.bds-card__control-action {
   flex-shrink: 0;
 }
 
-/* ─── Preset control — logo slot ─────────────────────────────── */
+/* ─── Control — logo slot ─────────────────────────────── */
 /* Leading avatar / logomark slot for integration cards.
  * Renders before any `badge` in the content row.
  * The slot applies no intrinsic size — the consumer controls
  * image dimensions via the Avatar or img element inside. */
 
-.bds-card__preset-control-logo {
+.bds-card__control-logo {
   display: flex;
   flex-shrink: 0;
   align-items: center;
 }
 
-/* ─── Preset control — trailing block ────────────────────────────
+/* ─── Control — trailing block ────────────────────────────
  * Wraps `connectionStatus` indicator + `action` as a flex column
  * so both can coexist. When only `action` is set (no status),
  * the trailing block collapses to a single-item column and
  * preserves the original action-only alignment behaviour. */
 
-.bds-card__preset-control-trailing {
+.bds-card__control-trailing {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -230,7 +229,7 @@
   flex-shrink: 0;
 }
 
-/* ─── Preset control — connection-status indicator ─────────────
+/* ─── Control — connection-status indicator ─────────────
  * A compact dot + label status affordance.
  * Composed from canonical semantic tokens — no invented names.
  *
@@ -242,7 +241,7 @@
  *   error          → --background-negative / --text-negative
  */
 
-.bds-card__preset-control-status {
+.bds-card__control-status {
   display: inline-flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -252,10 +251,10 @@
 }
 
 /* The status dot is the shared `<Dot>` primitive (owns its size + per-status
-   semantic-token color); this preset only positions the label beside it. */
+   semantic-token color); this layout only positions the label beside it. */
 
 /* Label text */
-.bds-card__preset-control-status-label {
+.bds-card__control-status-label {
   font-family: var(--font-family-label);
   font-size: var(--label-sm);
   font-weight: var(--font-weight-medium);
@@ -263,7 +262,7 @@
 }
 
 /* Last-synced line — drops below the dot+label row */
-.bds-card__preset-control-status-synced {
+.bds-card__control-status-synced {
   width: 100%;
   text-align: right;
   font-family: var(--font-family-body);
@@ -274,33 +273,32 @@
 
 /* ── Per-state label color (the dot's color comes from `<Dot status>`) ── */
 
-.bds-card__preset-control-status--not-configured .bds-card__preset-control-status-label {
+.bds-card__control-status--not-configured .bds-card__control-status-label {
   color: var(--text-muted);
 }
 
-.bds-card__preset-control-status--connected .bds-card__preset-control-status-label {
+.bds-card__control-status--connected .bds-card__control-status-label {
   color: var(--text-positive);
 }
 
-.bds-card__preset-control-status--syncing .bds-card__preset-control-status-label {
+.bds-card__control-status--syncing .bds-card__control-status-label {
   color: var(--text-info);
 }
 
-.bds-card__preset-control-status--synced .bds-card__preset-control-status-label {
+.bds-card__control-status--synced .bds-card__control-status-label {
   color: var(--text-positive);
 }
 
-.bds-card__preset-control-status--failed .bds-card__preset-control-status-label {
+.bds-card__control-status--failed .bds-card__control-status-label {
   color: var(--text-negative);
 }
 
-/* ─── Preset: summary ─────────────────────────────────────────── */
-/* Compact metric/stat card layout — replaces the legacy CardSummary
- * component. Label (top) + large value (bottom) + optional secondary
- * link to the right. Surface uses primary background + muted border;
- * `variant` is ignored for this preset. */
+/* ─── Layout: metric ─────────────────────────────────────────── */
+/* Compact metric/stat card layout (ADR-038). Label (top) + large value
+ * (bottom) + optional leading glyph, detail line, and trailing action.
+ * Surface uses primary background + muted border. */
 
-.bds-card--preset-summary {
+.bds-card--metric {
   background-color: var(--surface-primary);
   border: var(--border-width-md) solid var(--border-muted);
   display: flex;
@@ -309,14 +307,14 @@
   justify-content: center;
 }
 
-.bds-card__preset-summary-inner {
+.bds-card__metric-inner {
   display: flex;
   gap: var(--gap-md);
   align-items: flex-start;
   padding: var(--padding-lg);
 }
 
-.bds-card__preset-summary-content {
+.bds-card__metric-content {
   flex: 1 0 0;
   display: flex;
   flex-direction: column;
@@ -324,7 +322,7 @@
   min-width: 0;
 }
 
-.bds-card__preset-summary-label {
+.bds-card__metric-label {
   font-family: var(--font-family-body);
   font-size: var(--body-lg);
   color: var(--text-secondary);
@@ -333,7 +331,7 @@
   text-transform: capitalize;
 }
 
-.bds-card__preset-summary-value {
+.bds-card__metric-value {
   font-family: var(--font-family-heading);
   font-size: var(--heading-xl);
   font-weight: var(--font-weight-bold);
@@ -344,15 +342,15 @@
 
 /* Leading glyph slot for `layout="metric"` (e.g. a `<ServiceTag>`) — sits beside
  * the stacked content in the flex `-inner`. Only emitted by the flat anatomy
- * metric layout; the legacy summary preset never renders it. */
-.bds-card__preset-summary-media {
+ * metric layout; a plain metric never renders it. */
+.bds-card__metric-media {
   flex-shrink: 0;
   display: flex;
 }
 
 /* Secondary detail line under the value (`layout="metric"`) — e.g. price •
  * frequency. Muted body text; additive, only emitted by the metric layout. */
-.bds-card__preset-summary-detail {
+.bds-card__metric-detail {
   font-family: var(--font-family-body);
   font-size: var(--body-sm);
   color: var(--text-muted);
@@ -360,7 +358,7 @@
   margin: 0;
 }
 
-.bds-card__preset-summary-link-area {
+.bds-card__metric-action {
   flex: 1 0 0;
   display: flex;
   flex-direction: column;
@@ -368,100 +366,55 @@
   min-width: 0;
 }
 
-.bds-card__preset-summary-link {
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-brand-primary);
-  line-height: var(--font-line-height-tight);
-  text-decoration: none;
-  white-space: nowrap;
-  cursor: pointer;
-  background: none;
-  border: none;
-  padding: 0;
-  text-align: center;
-}
-
-.bds-card__preset-summary-link:hover {
-  text-decoration: underline;
-}
-
-/* ─── Preset: display ─────────────────────────────────────────── */
+/* ─── Layout: stack ───────────────────────────────────────────── */
 /* Generic content card for any item rendered in a card grid (service,
  * blog post, customer story, property listing, team bio, support plan).
  * All affordances optional + prop-toggled so a single primitive serves
  * every content type. Drives the `bds-card-grid` blueprint.
  *
+ * Surface: the render path emits the `outlined` variant class as the default
+ * fill + border, so `.bds-card--stack` owns only structure. `borderless` /
+ * `elevated` / `raised` therefore compose directly — no per-variant specificity
+ * override is needed (the ADR-038 cleanup of the old preset's self-declared
+ * surface).
+ *
  * Token pairs (paired family ↔ size only — never mix):
  *   title       — --font-family-heading + --heading-md
  *   description — --font-family-body + --body-md
- *   tag/badge   — own their own typography (component-internal)
+ *   overline/badge — own their own typography (component-internal)
  */
 
-/* Borderless override for display preset — same semantics as the default-shape
- * .bds-card--borderless, but higher specificity is needed because
- * .bds-card--preset-display declares its own background + border after
- * .bds-card--borderless in source order. */
-.bds-card--preset-display.bds-card--borderless {
-  background-color: transparent;
-  border: none;
-  box-shadow: var(--box-shadow-none);
-}
-
-/* Elevated override for display preset — same specificity rationale as the
- * borderless override above: .bds-card--preset-display redeclares border after
- * .bds-card--elevated in source order, so the ring needs explicit removal here.
- * surface-primary fill, no border, no shadow. */
-.bds-card--preset-display.bds-card--elevated {
-  background-color: var(--surface-primary);
-  border: none;
-  /* Drop shadow removed (brik-bds#1146 / BACKLOG-493) — matches the base
-     --elevated variant, which no longer casts a shadow. */
-  box-shadow: var(--box-shadow-none);
-}
-
-/* Raised override for display preset — same specificity rationale as the
- * elevated/borderless overrides above: .bds-card--preset-display redeclares
- * border after .bds-card--raised in source order, so the ring needs explicit
- * removal here. surface-primary fill, no border, --box-shadow-md drop shadow. */
-.bds-card--preset-display.bds-card--raised {
-  background-color: var(--surface-primary);
-  border: none;
-  box-shadow: var(--shadow-md);
-}
-
 /* Service-line surface tint — a pale wash keyed to a service line, shared by
- * both display presets. Sets only the surface (border / shadow unchanged), so
- * it composes with the default outlined shape. Two-class selectors clear the
+ * stack + row. Sets only the surface (border / shadow unchanged), so it
+ * composes with the default outlined shape. Two-class selectors clear the
  * single-class base fill regardless of source order. Uses the canonical
  * `--surface-service-{line}-light` pastel step; dark mode is handled by the
  * token cascade. Not for combining with `borderless` (transparent by design).
  */
-.bds-card--preset-display.bds-card--tint-brand,
-.bds-card--preset-display-row.bds-card--tint-brand {
+.bds-card--stack.bds-card--tint-brand,
+.bds-card--row.bds-card--tint-brand {
   background-color: var(--surface-service-brand-light);
 }
-.bds-card--preset-display.bds-card--tint-marketing,
-.bds-card--preset-display-row.bds-card--tint-marketing {
+.bds-card--stack.bds-card--tint-marketing,
+.bds-card--row.bds-card--tint-marketing {
   background-color: var(--surface-service-marketing-light);
 }
-.bds-card--preset-display.bds-card--tint-information,
-.bds-card--preset-display-row.bds-card--tint-information {
+.bds-card--stack.bds-card--tint-information,
+.bds-card--row.bds-card--tint-information {
   background-color: var(--surface-service-information-light);
 }
-.bds-card--preset-display.bds-card--tint-product,
-.bds-card--preset-display-row.bds-card--tint-product {
+.bds-card--stack.bds-card--tint-product,
+.bds-card--row.bds-card--tint-product {
   background-color: var(--surface-service-product-light);
 }
-.bds-card--preset-display.bds-card--tint-back-office,
-.bds-card--preset-display-row.bds-card--tint-back-office {
+.bds-card--stack.bds-card--tint-back-office,
+.bds-card--row.bds-card--tint-back-office {
   background-color: var(--surface-service-back-office-light);
 }
 
-.bds-card--preset-display {
-  background-color: var(--surface-primary);
-  border: var(--border-width-md) solid var(--border-secondary);
+.bds-card--stack {
+  /* Fill + border come from the `outlined`/`borderless`/`elevated`/`raised`
+     variant class the render path emits; this block owns only structure. */
   border-radius: var(--border-radius-md);
   overflow: hidden;
   display: flex;
@@ -479,32 +432,32 @@
  * body's own --padding-lg is zeroed so the frame isn't doubled. Ported from the
  * brikdesigns-local `.service-card--inset` override so the treatment lives on
  * the primitive, not per-consumer CSS. */
-.bds-card--preset-display-inset {
+.bds-card--stack-inset {
   padding: var(--padding-huge);
   gap: var(--gap-xl);
 }
 
-.bds-card--preset-display-inset .bds-card__preset-display-body {
+.bds-card--stack-inset .bds-card__stack-body {
   padding: var(--padding-none);
 }
 
-.bds-card__preset-display-media {
+.bds-card__stack-media {
   position: relative;
   display: block;
   /* Aspect ratio + object-fit owned by the consumer's <Frame> wrapper. */
 }
 
 /* Standard media-slot image radius (also applied on the default `media` slot's
- * wrapper, and on preset-display-row's media below) — the consumer's media
+ * wrapper, and on row's media below) — the consumer's media
  * sits nested inside its own <Frame>, so the radius targets the rendered
  * element directly rather than a wrapper this component doesn't own. */
-.bds-card__preset-display-media img,
-.bds-card__preset-display-media video,
-.bds-card__preset-display-media svg {
+.bds-card__stack-media img,
+.bds-card__stack-media video,
+.bds-card__stack-media svg {
   border-radius: var(--border-radius-sm);
 }
 
-.bds-card__preset-display-badge {
+.bds-card__stack-badge {
   position: absolute;
   top: var(--gap-md);
   right: var(--gap-md);
@@ -512,7 +465,7 @@
   z-index: 1;
 }
 
-.bds-card__preset-display-body {
+.bds-card__stack-body {
   display: flex;
   flex-direction: column;
   gap: var(--gap-md);
@@ -520,13 +473,13 @@
   flex: 1 1 auto;
 }
 
-.bds-card__preset-display-tag {
+.bds-card__stack-overline {
   /* Anchor at natural width; do NOT stretch in the column flex. */
   display: inline-flex;
   align-self: flex-start;
 }
 
-.bds-card__preset-display-title {
+.bds-card__stack-title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: var(--heading-md);
@@ -535,39 +488,30 @@
   color: var(--text-primary);
 }
 
-.bds-card__preset-display-description {
-  margin: 0;
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
+/* Under `layout="stack"` the body arrives as `children`, so a `<CardDescription>`
+ * lands here carrying `.bds-card-description` (--text-secondary). A card-grid
+ * cell body reads at --text-primary, so re-assert it here — this is the
+ * permanent home for the stack body-copy color (ADR-038). */
+.bds-card__stack-body > .bds-card-description {
   color: var(--text-primary);
 }
 
-/* ADR-038 parity: under `layout="stack"` the body arrives as `children`, so a
- * `<CardDescription>` lands here carrying the default-mode `.bds-card-description`
- * (--text-secondary) instead of the preset's --text-primary. Re-assert the body
- * color so `preset="display"` → `layout="stack"` stays a prop swap, not a
- * re-style. Remove with the preset CSS once the union is deleted (#2438 item 5). */
-.bds-card__preset-display-body > .bds-card-description {
-  color: var(--text-primary);
-}
-
-.bds-card__preset-display-action {
+.bds-card__stack-action {
   /* Anchor to bottom so multiple cards in a grid align actions
    * regardless of description length. */
   margin-top: auto;
 }
 
 /* Prevent a direct Badge child from stretching to card width.
- * preset-display uses absolute-positioned .bds-card__preset-display-badge
- * and inline-flex .bds-card__preset-display-tag — both already sized correctly.
+ * stack uses absolute-positioned .bds-card__stack-badge
+ * and inline-flex .bds-card__stack-overline — both already sized correctly.
  * This rule covers Badge placed directly inside a default or outlined Card. */
 .bds-card > .bds-badge {
   align-self: flex-start;
 }
 
-/* ─── Preset: display-row ─────────────────────────────────────── */
-/* Horizontal sibling of `preset="display"`. Image on the left, content
+/* ─── Layout: row ─────────────────────────────────────── */
+/* Horizontal sibling of `layout="stack"`. Image on the left, content
  * (tag, title, description, action) on the right. Use for single-card
  * sections where vertical layout wastes horizontal space — Related
  * Customer Story, Recommended Add-On, featured plan.
@@ -584,7 +528,7 @@
  *   tag         — own typography (component-internal)
  */
 
-.bds-card--preset-display-row {
+.bds-card--row {
   /* Default column width — overridden by named modifier class or inline
    * style. `auto` fallback keeps the card sensible if neither is set. */
   --bds-card-image-width: 35%;
@@ -600,37 +544,37 @@
   box-sizing: border-box;
 }
 
-.bds-card--preset-display-row-narrow   { --bds-card-image-width: 25%; }
-.bds-card--preset-display-row-standard { --bds-card-image-width: 35%; }
-.bds-card--preset-display-row-wide     { --bds-card-image-width: 50%; }
+.bds-card--row-narrow   { --bds-card-image-width: 25%; }
+.bds-card--row-standard { --bds-card-image-width: 35%; }
+.bds-card--row-wide     { --bds-card-image-width: 50%; }
 
-.bds-card__preset-display-row-media {
+.bds-card__row-media {
   position: relative;
   display: block;
   /* Aspect ratio + object-fit owned by the consumer's <Frame> wrapper. */
 }
 
-/* Standard media-slot image radius — see the preset-display note above. */
-.bds-card__preset-display-row-media img,
-.bds-card__preset-display-row-media video,
-.bds-card__preset-display-row-media svg {
+/* Standard media-slot image radius — see the stack note above. */
+.bds-card__row-media img,
+.bds-card__row-media video,
+.bds-card__row-media svg {
   border-radius: var(--border-radius-sm);
 }
 
-.bds-card__preset-display-row-body {
+.bds-card__row-body {
   display: flex;
   flex-direction: column;
   gap: var(--gap-md);
   min-width: 0;
 }
 
-.bds-card__preset-display-row-tag {
+.bds-card__row-overline {
   /* Anchor at natural width; do NOT stretch in the column flex. */
   display: inline-flex;
   align-self: flex-start;
 }
 
-.bds-card__preset-display-row-title {
+.bds-card__row-title {
   margin: 0;
   font-family: var(--font-family-heading);
   font-size: var(--heading-md);
@@ -639,37 +583,19 @@
   color: var(--text-primary);
 }
 
-.bds-card__preset-display-row-description {
-  margin: 0;
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
-}
-
 /* ADR-038 parity — see the `stack` note above. */
-.bds-card__preset-display-row-body > .bds-card-description {
+.bds-card__row-body > .bds-card-description {
   color: var(--text-primary);
 }
 
-.bds-card__preset-display-row-extras {
-  /* Generic supporting-content slot rendered between description and
-   * action. The consumer owns the rendered markup (bullet list, pill
-   * row, gallery, etc.); this wrapper exists only to give the slot a
-   * stable position in the column flex and to preserve gap rhythm. */
-  display: flex;
-  flex-direction: column;
-  gap: var(--gap-sm);
-}
-
-.bds-card__preset-display-row-action {
+.bds-card__row-action {
   /* Anchor to bottom so the action sits at the card footer regardless of
    * description length. */
   margin-top: auto;
 }
 
 @media (max-width: 640px) {
-  .bds-card--preset-display-row {
+  .bds-card--row {
     grid-template-columns: 1fr;
   }
 }

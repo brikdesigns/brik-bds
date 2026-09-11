@@ -9,44 +9,35 @@ import './Card.css';
 
 export type CardVariant = 'outlined' | 'brand' | 'elevated' | 'raised' | 'borderless';
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
-export type CardPreset = 'control' | 'summary' | 'display' | 'display-row';
 /**
- * Card layout arrangement (ADR-038) — the flat, anatomy-driven successor to the
- * `preset` discriminated union. One `Card` interface, one slot set, three
- * arrangements:
+ * Card layout arrangement (ADR-038) — the flat, anatomy-driven interface. One
+ * `Card`, one slot set, four arrangements:
  *
  * - `stack` — vertical: optional top `media`, then `overline` / `title` /
- *   `children` (body) / `action`. The successor to `preset="display"`.
+ *   `children` (body) / `action`. The malleable `CardGrid` cell.
  * - `row` — horizontal: `media` on the left, the same text column on the right.
- *   The successor to `preset="display-row"`.
  * - `metric` — compact stat: `overline` as the label above a large `title`
- *   value, optional `action`. The context-neutral successor to
- *   `preset="summary"` (finance is only one use).
+ *   value, optional `media` glyph, `detail` line, and `action`.
  * - `control` — horizontal settings/integration row: leading `media` (logo) +
  *   `title` / `description` on the left, `connectionStatus` + `action` on the
- *   right, vertically centred. Its own arrangement (ADR-038) — structurally
- *   distinct from `row`'s media-left content shape. The successor to
- *   `preset="control"`.
+ *   right, vertically centred.
  *
- * The `preset` union keeps working unchanged (deprecated, ADR-038 Phase 2).
- * This path renders with the SAME CSS classes as the matching preset, so a
- * `layout` Card is pixel-identical to its `preset` twin — migration is a prop
- * swap, not a re-style.
+ * A Card with no `layout` is the default flexible content card (compose
+ * `<CardTitle>` / `<CardDescription>` / `<CardFooter>` in `children`).
  */
 export type CardLayout = 'stack' | 'row' | 'metric' | 'control';
 /** Heading level for a card's title — decouples document outline from the token-driven visual size. */
 export type CardHeadingLevel = 'h2' | 'h3' | 'h4';
 /**
- * Service-line surface tint for the display presets. Maps to the canonical
- * `--surface-service-{line}-light` pastel surface token — never an invented
- * name. Excludes the deprecated `service` alias of `ServiceLine`; pass
- * `back-office`.
+ * Service-line surface tint for the `stack`/`row` layouts. Maps to the
+ * canonical `--surface-service-{line}-light` pastel surface token — never an
+ * invented name. Excludes the deprecated `service` alias of `ServiceLine`;
+ * pass `back-office`.
  */
 export type CardTint = Exclude<ServiceLine, 'service'>;
 export type CardControlActionAlign = 'center' | 'top';
-export type CardSummaryType = 'numeric' | 'price';
 /**
- * Connection-status state for the `preset="control"` integration card.
+ * Connection-status state for the `control` layout integration card.
  * Maps to canonical semantic token pairs:
  * - `not-configured` → `--text-muted` / `--background-status-neutral` (neutral/unconfigured)
  * - `connected`      → `--text-positive` / `--background-positive`
@@ -65,14 +56,14 @@ const RETIRED_CONNECTION_STATUS: Record<string, CardControlConnectionStatus> = {
   error: 'failed',
 };
 /**
- * Image-column width for `preset="display-row"`. Named values resolve to
- * fixed percentages (`narrow` 25%, `standard` 35%, `wide` 50%); pass a CSS
- * length / percentage string to override (e.g. `"40%"`, `"320px"`).
+ * Image-column width for the `row` layout. Named values resolve to fixed
+ * percentages (`narrow` 25%, `standard` 35%, `wide` 50%); pass a CSS length /
+ * percentage string to override (e.g. `"40%"`, `"320px"`).
  */
 export type CardDisplayRowImageWidth = 'narrow' | 'standard' | 'wide' | (string & {});
 
 /**
- * Media treatment for `preset="display"` — how the top `image` slot relates to
+ * Media treatment for the `stack` layout — how the top `media` slot relates to
  * the card edge.
  *
  * - `flush` (default) — the media bleeds to the card edge and only the text
@@ -150,12 +141,6 @@ export type CardMedia =
   | { image: CardImageMedia; avatar?: never; logo?: never }
   | { logo: CardLogoMedia; avatar?: never; image?: never };
 
-export interface CardSummaryTextLink {
-  label: string;
-  href?: string;
-  onClick?: () => void;
-}
-
 interface CardBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   /**
    * Optional class name applied to the root element.
@@ -164,9 +149,7 @@ interface CardBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
 }
 
 interface CardDefaultProps extends CardBaseProps {
-  /** No preset — default flexible Card with `children` content slot. */
-  preset?: undefined;
-  /** Discriminant guard — the flat anatomy API uses `layout`; never combine it with the preset union (ADR-038). */
+  /** Discriminant guard — the flat anatomy API uses `layout`; the default card omits it. */
   layout?: never;
   /**
    * Visual variant — outlined / brand / elevated / raised / borderless
@@ -194,260 +177,11 @@ interface CardDefaultProps extends CardBaseProps {
   children: ReactNode;
 }
 
-interface CardControlPresetProps extends CardBaseProps {
-  /**
-   * Control preset — locked-down settings/control card layout. Replaces the
-   * legacy `CardControl` component (per ADR-004 §"Resolve the existing
-   * instances"). Renders: logo + badge + (title + description) on the left,
-   * (connection-status + action) on the right.
-   *
-   * @deprecated Use `layout="control"` instead (ADR-038 Phase 2). The `preset`
-   * union is retired once consumers migrate; the render path is unchanged.
-   */
-  preset: 'control';
-  /** Discriminant guard — use `layout` instead for the flat anatomy API (ADR-038). */
-  layout?: never;
-  /** Bold control label */
-  title: string;
-  /** Helper text under the title */
-  description?: string;
-  /** Optional leading badge (e.g. status icon, ServiceTag) */
-  badge?: ReactNode;
-  /**
-   * Optional leading logo / avatar slot — for integration logomarks or brand
-   * icons. Renders before the `badge` in the content row. Pass any ReactNode
-   * (e.g. `<Avatar>`, `<img>`, or an `<Icon>`). The slot does not apply its
-   * own size; the consumer controls the image dimensions.
-   */
-  logo?: ReactNode;
-  /** Optional trailing action element (Button, Switch, Link) */
-  action?: ReactNode;
-  /**
-   * Vertical alignment of the action slot. `top` anchors the action to the
-   * upper-right corner; `center` (default) aligns to the vertical midline.
-   */
-  actionAlign?: CardControlActionAlign;
-  /**
-   * Connection-status state for integration / third-party service cards.
-   * Renders a labelled status indicator in the trailing block, coexisting
-   * with the `action` slot.
-   *
-   * - `not-configured` — not yet set up (muted/gray)
-   * - `connected`      — OAuth/API key accepted, not yet synced
-   * - `syncing`        — sync in progress (blue/info)
-   * - `synced`         — last sync completed successfully (green)
-   * - `failed`         — last sync failed (red)
-   */
-  connectionStatus?: CardControlConnectionStatus;
-  /**
-   * Human-readable "last synced" timestamp or label rendered below the
-   * connection-status indicator. Only displayed when `connectionStatus` is
-   * provided and has a value other than `not-configured`. Example:
-   * `"Last synced 3 min ago"`.
-   */
-  lastSynced?: string;
-}
-
-interface CardSummaryPresetProps extends CardBaseProps {
-  /**
-   * Summary preset — compact metric/stat card with label, large value, and
-   * optional text link. Replaces the legacy `CardSummary` component (per
-   * ADR-004 §"Resolve the existing instances").
-   *
-   * @deprecated Use `layout="metric"` instead (ADR-038 Phase 2). The `preset`
-   * union is retired once consumers migrate; the render path is unchanged.
-   */
-  preset: 'summary';
-  /** Discriminant guard — use `layout="metric"` for the flat anatomy API (ADR-038). */
-  layout?: never;
-  /** Stat label rendered above the value */
-  label: string;
-  /**
-   * Stat value. Numbers are formatted via `Intl.NumberFormat` based on
-   * `type`; strings render verbatim.
-   */
-  value: string | number;
-  /**
-   * Number formatting:
-   * - `numeric` (default): locale-formatted integer (e.g. 1,234)
-   * - `price`: USD currency (e.g. $1,234.50)
-   * Ignored when `value` is a string.
-   */
-  type?: CardSummaryType;
-  /** Optional secondary action rendered to the right of the value */
-  textLink?: CardSummaryTextLink;
-}
-
-interface CardDisplayPresetProps extends CardBaseProps {
-  /**
-   * Display preset — the **cell of a `CardGrid`**, not a standalone card. Per
-   * [ADR-018](../../../docs/adrs/ADR-018-card-preset-boundary.md) a display card
-   * only exists inside a `CardGrid` Section (which owns the columns); this
-   * preset is the malleable, content-agnostic cell it repeats. All affordances
-   * are optional + prop-toggled so one cell serves any content type — service,
-   * blog post, customer story, property listing, team bio, support plan.
-   * Compose `<CardGrid>` + `<Card preset="display">`.
-   *
-   * @deprecated Use `layout="stack"` instead (ADR-038 Phase 2). The `preset`
-   * union is retired once consumers migrate; the render path is unchanged.
-   */
-  preset: 'display';
-  /** Discriminant guard — use `layout="stack"` for the flat anatomy API (ADR-038). */
-  layout?: never;
-  /**
-   * `borderless` — transparent fill, no border, no shadow. Use when the
-   * card grid sits on a colored surface (service-tier tint) where the
-   * default white fill + border ring reads as visual noise.
-   *
-   * `elevated` — surface-primary fill, no border, no shadow. Use when
-   * a card grid on a colored surface still needs a contained "card" read but
-   * the border ring is unwanted (the restored-fill counterpart to
-   * `borderless`).
-   *
-   * `raised` — surface-primary fill, no border, with a `--box-shadow-md`
-   * drop shadow. Use for a lifted, contained cell (the shadow-casting
-   * counterpart to the now-flat `elevated`).
-   */
-  variant?: 'borderless' | 'elevated' | 'raised';
-  /**
-   * Optional service-line surface tint — a pale wash keyed to a service line
-   * (`--surface-service-{line}-light`). Use for a service-identified cell in a
-   * `CardGrid`. The visual size / border are unchanged; this only sets the
-   * surface. Orthogonal to `variant` (don't combine with `borderless`, which is
-   * transparent by design).
-   */
-  tint?: CardTint;
-  /** Card heading. Renders with `--font-family-heading` + `--heading-md`; the element is `titleAs` (default `h3`). */
-  title: string;
-  /**
-   * Heading element for `title` — `h2` / `h3` / `h4`. Default `h3`. Set to keep
-   * the document outline correct for the card's context (e.g. `h3` under an
-   * `<h2>` grid-section heading). Visual size is token-driven and does not
-   * change with the level.
-   */
-  titleAs?: CardHeadingLevel;
-  /**
-   * Body copy under the title. Renders as `<p>` with `--font-family-body` +
-   * `--body-md` (matched pair — never reach across families for size).
-   */
-  description?: string;
-  /**
-   * Top media slot. Pass an `<Image ratio="…">` (or any `<Frame>`-wrapped
-   * media / ReactNode) for the aspect-ratio-controlled top region. When
-   * omitted, the card renders without media.
-   */
-  image?: ReactNode;
-  /**
-   * How the `image` slot relates to the card edge. `flush` (default) bleeds the
-   * media to the edge and pads only the text body (`--padding-lg`); `inset`
-   * frames the media and body together in a `--padding-huge` inset. Default
-   * `flush`. See {@link CardMediaTreatment}.
-   */
-  mediaTreatment?: CardMediaTreatment;
-  /**
-   * Inline category indicator rendered above the title. Pass a
-   * `<ServiceTag>` for services, a `<Tag>` for blog categories, a date
-   * pill for stories, etc. Justified `flex-start` (does not stretch).
-   */
-  tag?: ReactNode;
-  /**
-   * Overlay badge anchored top-right of the image. Pass a `<Badge>` for
-   * status-style indicators ("Has Options", "Featured", "Sold").
-   * Renders only when `image` is also provided.
-   */
-  badge?: ReactNode;
-  /**
-   * Trailing action — typically a `<LinkButton>` or `<Button>`. Anchored
-   * to the bottom of the card body via `margin-top: auto` so multiple
-   * cards in a grid align their actions regardless of description length.
-   */
-  action?: ReactNode;
-  /**
-   * Render the card itself as an `<a>` when set — turns the whole card
-   * into a single clickable target. Use when `action` is not set and the
-   * card itself is the navigation affordance.
-   */
-  href?: string;
-}
-
-interface CardDisplayRowPresetProps extends CardBaseProps {
-  /**
-   * Display-row preset — the horizontal `CardGrid` cell / section row (per
-   * [ADR-018](../../../docs/adrs/ADR-018-card-preset-boundary.md)), not a
-   * standalone card. Image on the left, content (tag, title, description,
-   * action) on the right. Use for single-row sections where a vertical layout
-   * wastes horizontal space: Related Customer Story, Recommended Add-On,
-   * featured plan. Collapses to a vertical stack at ≤ 640px.
-   *
-   * @deprecated Use `layout="row"` instead (ADR-038 Phase 2). The `preset`
-   * union is retired once consumers migrate; the render path is unchanged.
-   */
-  preset: 'display-row';
-  /** Discriminant guard — use `layout="row"` for the flat anatomy API (ADR-038). */
-  layout?: never;
-  /** Card heading. Renders with `--font-family-heading` + `--heading-md`; the element is `titleAs` (default `h3`). */
-  title: string;
-  /**
-   * Heading element for `title` — `h2` / `h3` / `h4`. Default `h3`. Set to keep
-   * the document outline correct for the card's context. Visual size is
-   * token-driven and does not change with the level.
-   */
-  titleAs?: CardHeadingLevel;
-  /**
-   * Optional service-line surface tint — a pale wash keyed to a service line
-   * (`--surface-service-{line}-light`). The visual size / border are unchanged;
-   * this only sets the surface. Orthogonal to layout props.
-   */
-  tint?: CardTint;
-  /** Body copy under the title. Renders as `<p>` with `--font-family-body` + `--body-md`. */
-  description?: string;
-  /**
-   * Left media slot. Pass an `<Image ratio="…">` (or any `<Frame>`-wrapped
-   * media / ReactNode). The media owns its own aspect ratio; the column
-   * width is controlled by `imageWidth`.
-   */
-  image?: ReactNode;
-  /**
-   * Inline category indicator rendered above the title. Pass a
-   * `<ServiceTag>` for services, a `<Tag>` for blog categories, a date
-   * pill for stories, etc. Justified `flex-start` (does not stretch).
-   */
-  tag?: ReactNode;
-  /**
-   * Optional content block rendered between `description` and `action`.
-   * Use for structured supporting content that doesn't fit the single-
-   * paragraph `description` slot — bullet lists ("Great fit for: …"),
-   * feature pills, supporting meta, or a small inline gallery. Receives
-   * no internal styling beyond a flex-column wrapper; the consumer owns
-   * the rendered markup.
-   */
-  extras?: ReactNode;
-  /**
-   * Trailing action — typically a `<LinkButton>` or `<Button>`. Anchored
-   * to the bottom of the body column via `margin-top: auto` so the title
-   * + description stay top-aligned while the action sits at the card
-   * footer.
-   */
-  action?: ReactNode;
-  /**
-   * Image column width. Named values: `narrow` (25%), `standard` (35%,
-   * default), `wide` (50%). Any other string passes through as the CSS
-   * column-width value (e.g. `"40%"`, `"320px"`).
-   */
-  imageWidth?: CardDisplayRowImageWidth;
-  /**
-   * Render the card itself as an `<a>` when set — turns the whole card
-   * into a single clickable target. Use when `action` is not set and the
-   * card itself is the navigation affordance.
-   */
-  href?: string;
-}
-
 /**
- * Flat, anatomy-driven Card (ADR-038) — the successor to the `preset` union.
- * Selected by passing `layout`; every slot is optional and the same slot set
- * serves all four arrangements. Additive: the `preset` members above keep
- * working (deprecated), so this ships with zero consumer churn.
+ * Flat, anatomy-driven Card (ADR-038). Selected by passing `layout`; every slot
+ * is optional and the same slot set serves all four arrangements. Storybook
+ * infers one flat, honest prop set and an argless `<Card layout="stack" />` is a
+ * valid empty card, not the empty-outlined-box the old `preset` union produced.
  */
 interface CardAnatomyProps extends CardBaseProps {
   /** Arrangement — `stack` / `row` / `metric` / `control`. Selects this flat API. */
@@ -455,7 +189,8 @@ interface CardAnatomyProps extends CardBaseProps {
   /**
    * Leading media — a `<Frame>`-wrapped `<Image>`, `<Avatar>`, `<Logo>`, or any
    * ReactNode. Top of the card in `stack`, left column in `row`, a leading glyph
-   * (e.g. `<ServiceTag>`) beside the stat in `metric`. Omit for a text-only card.
+   * (e.g. `<ServiceTag>`) beside the stat in `metric`, the logo in `control`.
+   * Omit for a text-only card.
    */
   media?: ReactNode;
   /**
@@ -465,21 +200,21 @@ interface CardAnatomyProps extends CardBaseProps {
   overline?: ReactNode;
   /**
    * Title. A heading (`titleAs`, default `h3`) in `stack`/`row`; the large stat
-   * value in `metric`. Any ReactNode — no numeric formatting is applied (unlike
-   * `preset="summary"`); format the value before passing it.
+   * value in `metric`; the control label in `control`. Any ReactNode — no
+   * numeric formatting is applied, so format the value before passing it.
    */
   title?: ReactNode;
-  /** Heading element for `title` in `stack`/`row` — `h2` / `h3` / `h4`. Default `h3`. Ignored by `metric`. */
+  /** Heading element for `title` in `stack`/`row` — `h2` / `h3` / `h4`. Default `h3`. Ignored by `metric`/`control`. */
   titleAs?: CardHeadingLevel;
   /** Body content under the title (`stack`/`row`). Arbitrary ReactNode; the card owns only the column rhythm. */
   children?: ReactNode;
-  /** Trailing action — bottom-anchored in `stack`/`row`, inline-right in `metric`. */
+  /** Trailing action — bottom-anchored in `stack`/`row`, inline-right in `metric`/`control`. */
   action?: ReactNode;
-  /** Overlay badge anchored to the media corner. Renders only when `media` is present (`stack`/`row`). */
+  /** Overlay badge anchored to the media corner (`stack`); the leading badge in `control`. */
   badge?: ReactNode;
   /** Service-line surface tint (`stack`/`row`) — pale wash keyed to a service line. Border/size unchanged. */
   tint?: CardTint;
-  /** Surface treatment for a cell on a colored grid — `borderless` / `elevated` / `raised` (`stack`/`row`). */
+  /** Surface treatment for a cell on a colored grid — `borderless` / `elevated` / `raised` (`stack`). */
   variant?: 'borderless' | 'elevated' | 'raised';
   /** Image column width for `row` — `narrow` (25%) / `standard` (35%, default) / `wide` (50%) / any CSS length. */
   imageWidth?: CardDisplayRowImageWidth;
@@ -499,38 +234,22 @@ interface CardAnatomyProps extends CardBaseProps {
   detail?: ReactNode;
 }
 
-export type CardProps =
-  | CardDefaultProps
-  | CardControlPresetProps
-  | CardSummaryPresetProps
-  | CardDisplayPresetProps
-  | CardDisplayRowPresetProps
-  | CardAnatomyProps;
-
-function formatSummaryValue(value: string | number, type: CardSummaryType): string {
-  if (typeof value === 'string') return value;
-  if (type === 'price') {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
-  }
-  return value.toLocaleString();
-}
+export type CardProps = CardDefaultProps | CardAnatomyProps;
 
 /**
- * Card — flexible content container.
+ * Card — flexible content container (ADR-038 flat anatomy API).
  *
- * Two shapes share the same primitive:
- *
- * - **Default** (no `preset`) — flexible content slot. Compose with
+ * - **Default** (no `layout`) — flexible content slot. Compose with
  *   `<CardTitle>`, `<CardDescription>`, `<CardFooter>` subcomponents.
- *   Visual variants: `outlined` (default) / `brand` / `elevated` / `borderless`.
- *   Use `borderless` (transparent, no border, no shadow) for cards placed on
- *   a colored surface where the border ring would read as visual noise.
- * - **`preset="control"`** — settings/control card with locked-down
- *   badge + title + description + action layout. Replaces the legacy
- *   `CardControl` component.
- * - **`preset="summary"`** — compact metric/stat card with label,
- *   large value, and optional text link. Replaces the legacy
- *   `CardSummary` component.
+ *   Visual variants: `outlined` (default) / `brand` / `elevated` / `raised` /
+ *   `borderless`.
+ * - **`layout="stack"`** — vertical grid cell: top `media`, `overline`,
+ *   `title`, body `children`, bottom-anchored `action`.
+ * - **`layout="row"`** — horizontal cell: `media` left, text column right.
+ * - **`layout="metric"`** — compact stat: `overline` label, large `title`
+ *   value, optional `media` glyph + `detail` line + `action`.
+ * - **`layout="control"`** — settings/integration row: leading `media` (logo)
+ *   + `title` / `description`, trailing `connectionStatus` + `action`.
  *
  * @example Default
  * ```tsx
@@ -547,71 +266,34 @@ function formatSummaryValue(value: string | number, type: CardSummaryType): stri
  *   <CardTitle as="h4">{u.name}</CardTitle>
  *   <CardDescription>{u.email}</CardDescription>
  * </Card>
- *
- * <Card media={{ image: { src: org.logo, alt: `${org.name} logo`, fit: 'contain' } }}>
- *   <CardTitle as="h4">{org.name}</CardTitle>
- *   <CardDescription>{org.plan}</CardDescription>
- * </Card>
- *
- * <Card media={{ logo: { set: 'integration', name: 'notion' } }}>
- *   <CardTitle as="h4">Notion</CardTitle>
- *   <CardDescription>Connected</CardDescription>
- * </Card>
  * ```
  *
- * @example Control preset
+ * @example Control layout — integration card with logo + connection status
  * ```tsx
  * <Card
- *   preset="control"
- *   title="Email notifications"
- *   description="Send weekly digest to your inbox."
- *   action={<Switch checked={enabled} onChange={setEnabled} />}
- * />
- * ```
- *
- * @example Control preset — integration card with logo + connection status
- * ```tsx
- * <Card
- *   preset="control"
+ *   layout="control"
  *   title="Google Analytics"
  *   description="Pull session and conversion data into your dashboard."
- *   logo={<Avatar src="/logos/google-analytics.png" alt="Google Analytics" size="sm" />}
+ *   media={<Avatar src="/logos/google-analytics.png" alt="Google Analytics" size="sm" />}
  *   connectionStatus="synced"
  *   lastSynced="Last synced 3 min ago"
  *   action={<Button variant="outline" size="sm">Configure</Button>}
  * />
  * ```
  *
- * @example Summary preset
+ * @example Metric layout
  * ```tsx
- * <Card
- *   preset="summary"
- *   label="Total revenue"
- *   value={48250.75}
- *   type="price"
- *   textLink={{ label: 'Details', href: '/revenue' }}
- * />
+ * <Card layout="metric" overline="Total revenue" title="$48,250.75"
+ *   action={<LinkButton href="/revenue">Details</LinkButton>} />
  * ```
  *
- * @summary Flexible content container with presets
+ * @summary Flexible content container with a layout axis
  */
 export function Card(props: CardProps) {
-  // ADR-038 flat anatomy API — dispatched first; the `preset` union below is
-  // untouched. `layout?: never` on every preset member makes this narrow cleanly.
+  // ADR-038 flat anatomy API — `layout` selects an arrangement; its absence is
+  // the default flexible content card.
   if (props.layout != null) {
     return renderAnatomy(props);
-  }
-  if (props.preset === 'control') {
-    return renderControlPreset(props);
-  }
-  if (props.preset === 'summary') {
-    return renderSummaryPreset(props);
-  }
-  if (props.preset === 'display') {
-    return renderDisplayPreset(props);
-  }
-  if (props.preset === 'display-row') {
-    return renderDisplayRowPreset(props);
   }
   return renderDefault(props);
 }
@@ -661,7 +343,6 @@ function renderDefault({
   padding = 'md',
   className,
   style,
-  preset: _preset,
   ...rest
 }: CardDefaultProps) {
   const classes = bdsClass(
@@ -722,278 +403,10 @@ const CONNECTION_STATUS_DOT: Record<CardControlConnectionStatus, DotTone> = {
   failed:           'negative',
 };
 
-function renderControlPreset({
-  title,
-  description,
-  badge,
-  logo,
-  action,
-  actionAlign = 'center',
-  connectionStatus,
-  lastSynced,
-  className,
-  style,
-  preset: _preset,
-  ...rest
-}: CardControlPresetProps) {
-  const resolvedConnectionStatus = resolveRetiredValue(
-    'Card',
-    'connectionStatus',
-    connectionStatus,
-    RETIRED_CONNECTION_STATUS,
-  );
-  const hasTrailing = action || resolvedConnectionStatus;
-  return (
-    <div
-      className={bdsClass(
-        'bds-card',
-        'bds-card--preset-control',
-        `bds-card--preset-control-action-${actionAlign}`,
-        className,
-      )}
-      style={style}
-      {...rest}
-    >
-      <div className="bds-card__preset-control-content">
-        {logo && <div className="bds-card__preset-control-logo">{logo}</div>}
-        {badge}
-        <div className="bds-card__preset-control-text">
-          <p className="bds-card__preset-control-title">{title}</p>
-          {description && <p className="bds-card__preset-control-description">{description}</p>}
-        </div>
-      </div>
-      {hasTrailing && (
-        <div className="bds-card__preset-control-trailing">
-          {resolvedConnectionStatus && (
-            <div
-              className={bdsClass(
-                'bds-card__preset-control-status',
-                `bds-card__preset-control-status--${resolvedConnectionStatus}`,
-              )}
-              role="status"
-              aria-label={`Connection status: ${CONNECTION_STATUS_LABELS[resolvedConnectionStatus]}`}
-            >
-              {/* Decorative — the wrapper's role="status" + aria-label is the
-                  single announcement; Dot is the visual mark only. */}
-              <Dot tone={CONNECTION_STATUS_DOT[resolvedConnectionStatus]} aria-hidden />
-              <span className="bds-card__preset-control-status-label">
-                {CONNECTION_STATUS_LABELS[resolvedConnectionStatus]}
-              </span>
-              {lastSynced && resolvedConnectionStatus !== 'not-configured' && (
-                <span className="bds-card__preset-control-status-synced">{lastSynced}</span>
-              )}
-            </div>
-          )}
-          {action && <div className="bds-card__preset-control-action">{action}</div>}
-        </div>
-      )}
-    </div>
-  );
-}
-
-function renderSummaryPreset({
-  label,
-  value,
-  type = 'numeric',
-  textLink,
-  className,
-  style,
-  preset: _preset,
-  ...rest
-}: CardSummaryPresetProps) {
-  const formatted = formatSummaryValue(value, type);
-
-  return (
-    <div
-      className={bdsClass('bds-card', 'bds-card--preset-summary', className)}
-      style={style}
-      {...rest}
-    >
-      <div className="bds-card__preset-summary-inner">
-        <div className="bds-card__preset-summary-content">
-          <p className="bds-card__preset-summary-label">{label}</p>
-          <p className="bds-card__preset-summary-value">{formatted}</p>
-        </div>
-        {textLink && (
-          <div className="bds-card__preset-summary-link-area">
-            {textLink.href ? (
-              <a
-                href={textLink.href}
-                className="bds-card__preset-summary-link"
-                onClick={textLink.onClick}
-              >
-                {textLink.label}
-              </a>
-            ) : (
-              <button
-                type="button"
-                className="bds-card__preset-summary-link"
-                onClick={textLink.onClick}
-              >
-                {textLink.label}
-              </button>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function renderDisplayPreset({
-  title,
-  titleAs: Heading = 'h3',
-  description,
-  image,
-  mediaTreatment = 'flush',
-  tag,
-  badge,
-  action,
-  href,
-  variant,
-  tint,
-  className,
-  style,
-  preset: _preset,
-  ...rest
-}: CardDisplayPresetProps) {
-  const classes = bdsClass(
-    'bds-card',
-    'bds-card--preset-display',
-    mediaTreatment === 'inset' && 'bds-card--preset-display-inset',
-    variant && `bds-card--${variant}`,
-    tint && `bds-card--tint-${tint}`,
-    href && 'bds-card--link',
-    className,
-  );
-
-  const body = (
-    <>
-      {image && (
-        <div className="bds-card__preset-display-media">
-          {image}
-          {badge && (
-            <span className="bds-card__preset-display-badge">{badge}</span>
-          )}
-        </div>
-      )}
-      <div className="bds-card__preset-display-body">
-        {tag && (
-          <span className="bds-card__preset-display-tag">{tag}</span>
-        )}
-        <Heading className="bds-card__preset-display-title">{title}</Heading>
-        {description && (
-          <p className="bds-card__preset-display-description">{description}</p>
-        )}
-        {action && (
-          <div className="bds-card__preset-display-action">{action}</div>
-        )}
-      </div>
-    </>
-  );
-
-  if (href) {
-    return (
-      <a
-        href={href}
-        className={classes}
-        style={style}
-        {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
-      >
-        {body}
-      </a>
-    );
-  }
-
-  return (
-    <div className={classes} style={style} {...rest}>
-      {body}
-    </div>
-  );
-}
-
-function renderDisplayRowPreset({
-  title,
-  titleAs: Heading = 'h3',
-  description,
-  image,
-  tag,
-  extras,
-  action,
-  imageWidth = 'standard',
-  href,
-  tint,
-  className,
-  style,
-  preset: _preset,
-  ...rest
-}: CardDisplayRowPresetProps) {
-  const isNamed = NAMED_IMAGE_WIDTHS.has(imageWidth);
-  const classes = bdsClass(
-    'bds-card',
-    'bds-card--preset-display-row',
-    isNamed && `bds-card--preset-display-row-${imageWidth}`,
-    tint && `bds-card--tint-${tint}`,
-    href && 'bds-card--link',
-    className,
-  );
-
-  // Custom (non-named) imageWidth string drives the CSS variable directly;
-  // named widths are class-based so they compose cleanly with theming. The
-  // `as React.CSSProperties` cast accommodates the CSS-variable property
-  // name (TS doesn't model arbitrary `--*` keys on CSSProperties).
-  const inlineStyle = isNamed
-    ? style
-    : { ...(style ?? {}), ['--bds-card-image-width' as string]: imageWidth };
-
-  const body = (
-    <>
-      {image && (
-        <div className="bds-card__preset-display-row-media">{image}</div>
-      )}
-      <div className="bds-card__preset-display-row-body">
-        {tag && (
-          <span className="bds-card__preset-display-row-tag">{tag}</span>
-        )}
-        <Heading className="bds-card__preset-display-row-title">{title}</Heading>
-        {description && (
-          <p className="bds-card__preset-display-row-description">{description}</p>
-        )}
-        {extras && (
-          <div className="bds-card__preset-display-row-extras">{extras}</div>
-        )}
-        {action && (
-          <div className="bds-card__preset-display-row-action">{action}</div>
-        )}
-      </div>
-    </>
-  );
-
-  if (href) {
-    return (
-      <a
-        href={href}
-        className={classes}
-        style={inlineStyle as React.CSSProperties}
-        {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
-      >
-        {body}
-      </a>
-    );
-  }
-
-  return (
-    <div className={classes} style={inlineStyle as React.CSSProperties} {...rest}>
-      {body}
-    </div>
-  );
-}
-
 /**
- * Render the flat anatomy Card (ADR-038). Emits the SAME BEM classes as the
- * matching `preset` renderer for each layout (and `control` delegates to
- * `renderControlPreset` outright), so a `layout` Card is pixel-identical to its
- * `preset` twin. No new CSS — the migration is a prop swap, not a re-style.
+ * Render the flat anatomy Card (ADR-038). Each `layout` owns a dedicated BEM
+ * block (`bds-card--{stack,row,metric,control}`); the slots are the same set
+ * across all four.
  */
 function renderAnatomy({
   layout,
@@ -1010,7 +423,7 @@ function renderAnatomy({
   mediaTreatment = 'flush',
   href,
   description,
-  actionAlign,
+  actionAlign = 'center',
   connectionStatus,
   lastSynced,
   detail,
@@ -1019,37 +432,72 @@ function renderAnatomy({
   ...rest
 }: CardAnatomyProps) {
   if (layout === 'control') {
-    // Delegate to the proven control renderer for exact parity — `media` is the
-    // logo slot, `description` the helper text. `title`/`description` are typed
-    // wider here (ReactNode) than the control preset's `string`; both render any
-    // node at runtime, so the cast is sound.
-    return renderControlPreset({
-      preset: 'control',
-      title: title as string,
-      description: description as string | undefined,
-      logo: media,
-      badge,
-      action,
-      actionAlign,
+    const resolvedConnectionStatus = resolveRetiredValue(
+      'Card',
+      'connectionStatus',
       connectionStatus,
-      lastSynced,
-      className,
-      style,
-      ...rest,
-    });
+      RETIRED_CONNECTION_STATUS,
+    );
+    const hasTrailing = action || resolvedConnectionStatus;
+    return (
+      <div
+        className={bdsClass(
+          'bds-card',
+          'bds-card--control',
+          `bds-card--control-action-${actionAlign}`,
+          className,
+        )}
+        style={style}
+        {...rest}
+      >
+        <div className="bds-card__control-content">
+          {media && <div className="bds-card__control-logo">{media}</div>}
+          {badge}
+          <div className="bds-card__control-text">
+            <p className="bds-card__control-title">{title}</p>
+            {description && <p className="bds-card__control-description">{description}</p>}
+          </div>
+        </div>
+        {hasTrailing && (
+          <div className="bds-card__control-trailing">
+            {resolvedConnectionStatus && (
+              <div
+                className={bdsClass(
+                  'bds-card__control-status',
+                  `bds-card__control-status--${resolvedConnectionStatus}`,
+                )}
+                role="status"
+                aria-label={`Connection status: ${CONNECTION_STATUS_LABELS[resolvedConnectionStatus]}`}
+              >
+                {/* Decorative — the wrapper's role="status" + aria-label is the
+                    single announcement; Dot is the visual mark only. */}
+                <Dot tone={CONNECTION_STATUS_DOT[resolvedConnectionStatus]} aria-hidden />
+                <span className="bds-card__control-status-label">
+                  {CONNECTION_STATUS_LABELS[resolvedConnectionStatus]}
+                </span>
+                {lastSynced && resolvedConnectionStatus !== 'not-configured' && (
+                  <span className="bds-card__control-status-synced">{lastSynced}</span>
+                )}
+              </div>
+            )}
+            {action && <div className="bds-card__control-action">{action}</div>}
+          </div>
+        )}
+      </div>
+    );
   }
 
   if (layout === 'metric') {
     return (
-      <div className={bdsClass('bds-card', 'bds-card--preset-summary', className)} style={style} {...rest}>
-        <div className="bds-card__preset-summary-inner">
-          {media && <div className="bds-card__preset-summary-media">{media}</div>}
-          <div className="bds-card__preset-summary-content">
-            {overline != null && <p className="bds-card__preset-summary-label">{overline}</p>}
-            {title != null && <p className="bds-card__preset-summary-value">{title}</p>}
-            {detail != null && <p className="bds-card__preset-summary-detail">{detail}</p>}
+      <div className={bdsClass('bds-card', 'bds-card--metric', className)} style={style} {...rest}>
+        <div className="bds-card__metric-inner">
+          {media && <div className="bds-card__metric-media">{media}</div>}
+          <div className="bds-card__metric-content">
+            {overline != null && <p className="bds-card__metric-label">{overline}</p>}
+            {title != null && <p className="bds-card__metric-value">{title}</p>}
+            {detail != null && <p className="bds-card__metric-detail">{detail}</p>}
           </div>
-          {action && <div className="bds-card__preset-summary-link-area">{action}</div>}
+          {action && <div className="bds-card__metric-action">{action}</div>}
         </div>
       </div>
     );
@@ -1059,8 +507,8 @@ function renderAnatomy({
     const isNamed = NAMED_IMAGE_WIDTHS.has(imageWidth);
     const classes = bdsClass(
       'bds-card',
-      'bds-card--preset-display-row',
-      isNamed && `bds-card--preset-display-row-${imageWidth}`,
+      'bds-card--row',
+      isNamed && `bds-card--row-${imageWidth}`,
       tint && `bds-card--tint-${tint}`,
       href && 'bds-card--link',
       className,
@@ -1070,12 +518,12 @@ function renderAnatomy({
       : { ...(style ?? {}), ['--bds-card-image-width' as string]: imageWidth };
     const body = (
       <>
-        {media && <div className="bds-card__preset-display-row-media">{media}</div>}
-        <div className="bds-card__preset-display-row-body">
-          {overline != null && <span className="bds-card__preset-display-row-tag">{overline}</span>}
-          {title != null && <Heading className="bds-card__preset-display-row-title">{title}</Heading>}
+        {media && <div className="bds-card__row-media">{media}</div>}
+        <div className="bds-card__row-body">
+          {overline != null && <span className="bds-card__row-overline">{overline}</span>}
+          {title != null && <Heading className="bds-card__row-title">{title}</Heading>}
           {children}
-          {action && <div className="bds-card__preset-display-row-action">{action}</div>}
+          {action && <div className="bds-card__row-action">{action}</div>}
         </div>
       </>
     );
@@ -1096,9 +544,12 @@ function renderAnatomy({
   // layout === 'stack'
   const classes = bdsClass(
     'bds-card',
-    'bds-card--preset-display',
-    mediaTreatment === 'inset' && 'bds-card--preset-display-inset',
-    variant && `bds-card--${variant}`,
+    // Default surface is `outlined` (fill + border); the `-stack` block owns
+    // only the structural bits, so borderless/elevated/raised compose without
+    // the specificity overrides the old preset needed (ADR-038).
+    `bds-card--${variant ?? 'outlined'}`,
+    'bds-card--stack',
+    mediaTreatment === 'inset' && 'bds-card--stack-inset',
     tint && `bds-card--tint-${tint}`,
     href && 'bds-card--link',
     className,
@@ -1106,16 +557,16 @@ function renderAnatomy({
   const body = (
     <>
       {media && (
-        <div className="bds-card__preset-display-media">
+        <div className="bds-card__stack-media">
           {media}
-          {badge && <span className="bds-card__preset-display-badge">{badge}</span>}
+          {badge && <span className="bds-card__stack-badge">{badge}</span>}
         </div>
       )}
-      <div className="bds-card__preset-display-body">
-        {overline != null && <span className="bds-card__preset-display-tag">{overline}</span>}
-        {title != null && <Heading className="bds-card__preset-display-title">{title}</Heading>}
+      <div className="bds-card__stack-body">
+        {overline != null && <span className="bds-card__stack-overline">{overline}</span>}
+        {title != null && <Heading className="bds-card__stack-title">{title}</Heading>}
         {children}
-        {action && <div className="bds-card__preset-display-action">{action}</div>}
+        {action && <div className="bds-card__stack-action">{action}</div>}
       </div>
     </>
   );

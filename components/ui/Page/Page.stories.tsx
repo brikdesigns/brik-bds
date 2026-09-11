@@ -46,9 +46,9 @@ const Shell = ({ children, height = 540 }: { children: React.ReactNode; height?:
 
 const StatRow = () => (
   <Grid columns="auto-fit" minColumnWidth="180px" gap="md">
-    <Card preset="summary" label="Total" value={49} />
-    <Card preset="summary" label="Public" value={33} />
-    <Card preset="summary" label="Active" value={49} />
+    <Card layout="metric" overline="Total" title={49} />
+    <Card layout="metric" overline="Public" title={33} />
+    <Card layout="metric" overline="Active" title={49} />
   </Grid>
 );
 
@@ -112,7 +112,7 @@ export const Default: Story = {
 
 /**
  * The canonical index-page shape: summary stats live in `<PageContent>` as a
- * `Grid` of `Card preset="summary"` above the `FilterBar` and display — not
+ * `Grid` of `Card layout="metric"` above the `FilterBar` and display — not
  * in the header (brik-bds#404, 2026-06-03 decision).
  *
  * @summary Stats render in the body, above the FilterBar + display

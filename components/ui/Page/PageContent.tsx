@@ -33,14 +33,14 @@ export interface PageContentProps extends HTMLAttributes<HTMLDivElement> {
  * scroll. A sibling of `<PageHeader>` inside `<Page>`.
  *
  * Summary stats live here (not in `<PageHeader>`) as a `Grid` of
- * `Card preset="summary"`, above the `FilterBar` and display:
+ * `Card layout="metric"`, above the `FilterBar` and display:
  *
  * @example
  * ```tsx
  * <PageContent>
  *   <Grid columns="auto-fit" minColumnWidth="180px" gap="md">
- *     <Card preset="summary" label="Total" value={49} />
- *     <Card preset="summary" label="Public" value={33} />
+ *     <Card layout="metric" overline="Total" title={49} />
+ *     <Card layout="metric" overline="Public" title={33} />
  *   </Grid>
  *   <FilterBar total={49} filtered={49} label="services" />
  *   <Table>…</Table>

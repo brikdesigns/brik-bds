@@ -4,13 +4,11 @@ import { createRoot, type Root } from 'react-dom/client';
 import { Card, CardDescription } from './Card';
 
 /**
- * ADR-038 Phase 1 gate — the flat anatomy API (`layout`) ships alongside the
- * `preset` union with zero downstream breakage. These assert two contracts:
- *  1. Each `layout` renders the SAME BEM class chain as its matching `preset`
- *     (pixel parity → migration is a prop swap, not a re-style).
- *  2. The union defect that motivated ADR-038 does not recur on the new path:
- *     a Card given a `layout` never falls through to the empty-outlined-box
- *     default render.
+ * Card flat anatomy API (ADR-038, post preset-union removal). Two contracts:
+ *  1. Each `layout` renders its dedicated BEM block with the passed slots.
+ *  2. The union defect that motivated ADR-038 does not recur: a Card given a
+ *     `layout` renders its surface with content, never the empty-outlined-box
+ *     the argless union used to fall through to.
  */
 
 let host: HTMLDivElement;
@@ -36,91 +34,67 @@ afterEach(async () => {
 const h = React.createElement;
 
 describe('Card anatomy API (ADR-038)', () => {
-  it('layout="row" emits the same class chain as preset="display-row"', async () => {
-    const presetEl = await mount(h(Card as never, { preset: 'display-row', title: 'T', description: 'D' }));
-    const presetClass = presetEl.querySelector('.bds-card--preset-display-row')?.className;
-    await act(async () => { root.unmount(); });
-    host.remove();
-
-    const anatEl = await mount(h(Card as never, { layout: 'row', title: 'T', children: h('p', null, 'D') }));
-    const anatClass = anatEl.querySelector('.bds-card--preset-display-row')?.className;
-
-    expect(anatClass).toBeDefined();
-    expect(anatClass).toBe(presetClass);
+  it('layout="row" renders the row block with title + overline', async () => {
+    const el = await mount(h(Card as never, { layout: 'row', overline: 'Add-on', title: 'Web Design Retainer' }));
+    expect(el.querySelector('.bds-card--row')).not.toBeNull();
+    expect(el.querySelector('.bds-card__row-title')?.textContent).toBe('Web Design Retainer');
+    expect(el.querySelector('.bds-card__row-overline')?.textContent).toBe('Add-on');
   });
 
-  it('layout="stack" renders the display surface with title + overline', async () => {
+  it('layout="stack" renders the stack surface with title + overline', async () => {
     const el = await mount(h(Card as never, { layout: 'stack', overline: 'Marketing', title: 'Service one' }));
-    expect(el.querySelector('.bds-card--preset-display')).not.toBeNull();
-    expect(el.querySelector('.bds-card__preset-display-title')?.textContent).toBe('Service one');
-    expect(el.querySelector('.bds-card__preset-display-tag')?.textContent).toBe('Marketing');
+    expect(el.querySelector('.bds-card--stack')).not.toBeNull();
+    expect(el.querySelector('.bds-card__stack-title')?.textContent).toBe('Service one');
+    const overline = el.querySelector('.bds-card__stack-overline');
+    expect(overline?.textContent).toBe('Marketing');
+    // Binds the emitted class to its CSS rule: the overline must anchor at its
+    // natural width, not stretch in the column flex. Guards the class-name ↔
+    // stylesheet rename (a `-tag`→`-overline` mismatch silently regressed this).
+    expect(getComputedStyle(overline!).alignSelf).toBe('flex-start');
   });
 
-  it('layout="stack"/"row" body copy resolves the same color as the preset description', async () => {
-    // The class chain assertions above stop at the root; the body slot is where
-    // the `description` → `children` mapping actually lands. A `<CardDescription>`
-    // there carries `.bds-card-description` (--text-secondary), not the preset's
-    // `.bds-card__preset-display-description` (--text-primary) — so without the
-    // parity rule in Card.css the migration silently re-styles every body line.
+  it('layout="stack"/"row" body copy resolves --text-primary via the parity rule', async () => {
+    // Body arrives as `children`, so a `<CardDescription>` there carries
+    // `.bds-card-description` (--text-secondary). The `.bds-card__{stack,row}-body >
+    // .bds-card-description` parity rule re-asserts --text-primary; without it every
+    // card-grid body line silently re-styles to the lighter secondary color.
     //
     // Sentinel token values rather than `dist/tokens.css`: that file is a build
     // artifact and is absent in CI, and an undefined custom property makes every
-    // `var(--text-*)` invalid at computed-value time — both sides then fall back
-    // to the same inherited color and the assertion passes vacuously.
+    // `var(--text-*)` invalid at computed-value time — the assertion would then
+    // pass vacuously on a shared inherited fallback.
     const tokens = document.createElement('style');
     tokens.textContent = ':root{--text-primary:rgb(11,11,11);--text-secondary:rgb(99,99,99)}';
     document.head.appendChild(tokens);
 
-    for (const [preset, layout, bodyClass] of [
-      ['display', 'stack', 'bds-card__preset-display-description'],
-      ['display-row', 'row', 'bds-card__preset-display-row-description'],
-    ] as const) {
-      const presetEl = await mount(h(Card as never, { preset, title: 'T', description: 'D' }));
-      const presetColor = getComputedStyle(presetEl.querySelector(`.${bodyClass}`)!).color;
-      await act(async () => { root.unmount(); });
-      host.remove();
-
-      const anatEl = await mount(
+    for (const layout of ['stack', 'row'] as const) {
+      const el = await mount(
         h(Card as never, { layout, title: 'T', children: h(CardDescription, null, 'D') }),
       );
-      const anatColor = getComputedStyle(anatEl.querySelector('.bds-card-description')!).color;
-
-      // Anchor the baseline — if the sentinels ever stop applying, both sides
-      // read the same inherited color and the equality below means nothing.
-      expect(presetColor).toBe('rgb(11, 11, 11)');
-      expect(anatColor).toBe(presetColor);
+      const color = getComputedStyle(el.querySelector('.bds-card-description')!).color;
+      expect(color).toBe('rgb(11, 11, 11)');
+      await act(async () => { root.unmount(); });
+      host.remove();
     }
 
     tokens.remove();
   });
 
-  it('layout="metric" renders the summary surface with label + value', async () => {
+  it('layout="metric" renders the metric surface with label + value (no numeric formatting)', async () => {
     const el = await mount(h(Card as never, { layout: 'metric', overline: 'Revenue', title: '$48,250' }));
-    expect(el.querySelector('.bds-card--preset-summary')).not.toBeNull();
-    expect(el.querySelector('.bds-card__preset-summary-label')?.textContent).toBe('Revenue');
-    expect(el.querySelector('.bds-card__preset-summary-value')?.textContent).toBe('$48,250');
+    expect(el.querySelector('.bds-card--metric')).not.toBeNull();
+    expect(el.querySelector('.bds-card__metric-label')?.textContent).toBe('Revenue');
+    expect(el.querySelector('.bds-card__metric-value')?.textContent).toBe('$48,250');
   });
 
-  it('layout="control" delegates to the control renderer (same class chain as preset="control")', async () => {
-    const presetEl = await mount(h(Card as never, { preset: 'control', title: 'Notion', description: 'D' }));
-    const presetClass = presetEl.querySelector('.bds-card--preset-control')?.className;
-    await act(async () => { root.unmount(); });
-    host.remove();
-
-    const anatEl = await mount(h(Card as never, { layout: 'control', title: 'Notion', description: 'D' }));
-    const anatClass = anatEl.querySelector('.bds-card--preset-control')?.className;
-
-    expect(anatClass).toBeDefined();
-    expect(anatClass).toBe(presetClass);
-    expect(anatEl.querySelector('.bds-card__preset-control-title')?.textContent).toBe('Notion');
+  it('layout="control" renders the control block with title', async () => {
+    const el = await mount(h(Card as never, { layout: 'control', title: 'Notion', description: 'D' }));
+    expect(el.querySelector('.bds-card--control')).not.toBeNull();
+    expect(el.querySelector('.bds-card__control-title')?.textContent).toBe('Notion');
+    expect(el.querySelector('.bds-card__control-description')?.textContent).toBe('D');
   });
 
-  it('layout="metric" renders a raw action node in the link area (no summary numeric formatting)', async () => {
-    const el = await mount(h(Card as never, { layout: 'metric', overline: 'Active users', title: '12,481' }));
-    expect(el.querySelector('.bds-card__preset-summary-value')?.textContent).toBe('12,481');
-  });
-
-  it('layout="metric" renders the media + detail slots (the ProductSummaryCard fold, ADR-038 Phase 3)', async () => {
+  it('layout="metric" renders the media + detail slots (the ProductSummaryCard fold)', async () => {
     const el = await mount(h(Card as never, {
       layout: 'metric',
       media: h('span', { 'data-testid': 'glyph' }, '★'),
@@ -128,22 +102,21 @@ describe('Card anatomy API (ADR-038)', () => {
       title: 'Standard Logo Design',
       detail: '$650 • one time',
     }));
-    expect(el.querySelector('.bds-card__preset-summary-media')?.textContent).toBe('★');
-    expect(el.querySelector('.bds-card__preset-summary-detail')?.textContent).toBe('$650 • one time');
+    expect(el.querySelector('.bds-card__metric-media')?.textContent).toBe('★');
+    expect(el.querySelector('.bds-card__metric-detail')?.textContent).toBe('$650 • one time');
     // media/detail are additive — a plain metric still omits both.
     const plain = await mount(h(Card as never, { layout: 'metric', overline: 'X', title: '1' }));
-    expect(plain.querySelector('.bds-card__preset-summary-media')).toBeNull();
-    expect(plain.querySelector('.bds-card__preset-summary-detail')).toBeNull();
+    expect(plain.querySelector('.bds-card__metric-media')).toBeNull();
+    expect(plain.querySelector('.bds-card__metric-detail')).toBeNull();
   });
 
   it('a layout Card never falls through to the empty default box', async () => {
     const el = await mount(h(Card as never, { layout: 'stack', title: 'Only a title' }));
-    const root = el.firstElementChild as HTMLElement;
+    const rootEl = el.firstElementChild as HTMLElement;
     // The ADR-038 defect: an argless union Card rendered <div class="bds-card
-    // bds-card--outlined bds-card--padding-md"></div> — empty. The layout path
-    // must render the display surface with content instead.
-    expect(root.className).toContain('bds-card--preset-display');
-    expect(root.className).not.toContain('bds-card--outlined');
-    expect(root.textContent).toContain('Only a title');
+    // bds-card--outlined bds-card--padding-md"></div> — empty. The stack layout
+    // renders its surface WITH content instead.
+    expect(rootEl.className).toContain('bds-card--stack');
+    expect(rootEl.textContent).toContain('Only a title');
   });
 });
