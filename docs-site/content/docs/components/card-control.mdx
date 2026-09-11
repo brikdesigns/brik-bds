@@ -6,7 +6,7 @@ description: DEPRECATED — use Card preset="control" instead.
 import { Callout } from 'fumadocs-ui/components/callout';
 
 <Callout type="warn">
-  **CardControl is deprecated.** Migrate to [`Card preset="control"`](/docs/components/card#control-preset) ([#657](https://github.com/brikdesigns/brik-bds/issues/657)) — the preset carries the same layout, Badge slot, and action-alignment behavior. Per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md), CardControl is kept during the migration window and removed in a future major version once the last consumer migrates.
+  **CardControl is deprecated.** Migrate to [`Card layout="control"`](/docs/components/card#control-layout) ([#657](https://github.com/brikdesigns/brik-bds/issues/657)) — the layout carries the same layout, Badge slot, and action-alignment behavior. Per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md), CardControl is kept during the migration window and removed in a future major version once the last consumer migrates.
 </Callout>
 
 ## Migration
@@ -44,11 +44,11 @@ import { Card } from '@brikdesigns/bds';
 | `action` | `action` |
 | `actionAlign` | `actionAlign` |
 
-The preset adds slots CardControl never had — `logo` (integration logomark), `connectionStatus`, and `lastSynced` for third-party service cards. See [Card → Control preset](/docs/components/card#control-preset).
+The layout adds slots CardControl never had — `media` (integration logomark), `connectionStatus`, and `lastSynced` for third-party service cards. See [Card control layout](/docs/components/card#control-layout).
 
 ---
 
-The reference below documents the frozen CardControl API for migration. New code should use [Card preset="control"](/docs/components/card#control-preset).
+The reference below documents the frozen CardControl API for migration. New code should use [Card layout="control"](/docs/components/card#control-layout).
 
 CardControl is a locked-down settings-row card. Leading badge or icon, title + description in the middle, action (Switch / Button / link) on the right. Use for notification toggles, feature flags, and any settings panel where each row's affordance matters.
 
@@ -59,7 +59,7 @@ CardControl is a locked-down settings-row card. Leading badge or icon, title + d
 - Status/state displays where a badge + name + value+action layout fits
 - Stacks of these in a [CardList](/docs/components/card-list) for full settings panels
 
-For a flexible-content card, use [Card](/docs/components/card) default mode. For stat tiles, use [Card preset="summary"](/docs/components/card#summary-preset).
+For a flexible-content card, use [Card](/docs/components/card) default mode. For stat tiles, use [Card layout="metric"](/docs/components/card#metric-layout).
 
 ## Import
 
