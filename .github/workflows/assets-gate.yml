@@ -60,6 +60,10 @@ on:
   push:
     branches:
       - main
+  # Merge-queue readiness (#2415): a required context must report on the merge
+  # group or the queue wedges. The `changes` job classifies the merge-group
+  # base..head diff exactly as it does a PR's (see its env).
+  merge_group:
 
 concurrency:
   # `cancel-in-progress: false` + `queue: max`, required as a pair on a required
@@ -124,9 +128,10 @@ jobs:
       - name: Classify the diff
         id: classify
         env:
-          # On a PR these are the tips of base and head; empty on push.
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          # On a PR these are the tips of base and head; on a merge group the
+          # merge-group base/head; empty on push (→ full gate below). (#2415)
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha }}
         run: |
           set -euo pipefail
 
