@@ -42,7 +42,7 @@
   }
 
   /* ─── Media box ─────────────────────────────────────────────────
-     A positioning wrapper around <Image customRatio={aspectRatio} fit="cover">.
+     A positioning wrapper around <Image ratio={aspectRatio} fit="cover">.
      Image owns the aspect-ratio, sizing, clipping, and object-fit (via its
      internal <Frame>); this wrapper only establishes the containing block for
      the absolutely-positioned check overlay (a sibling of the Image, since

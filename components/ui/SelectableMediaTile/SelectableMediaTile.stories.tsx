@@ -49,8 +49,9 @@ const meta: Meta<typeof SelectableMediaTile> = {
     },
     disabled: { control: 'boolean', description: 'Mutes styling and blocks the click.' },
     aspectRatio: {
-      control: 'text',
-      description: 'CSS aspect-ratio for the image box. Default `4 / 3`.',
+      control: 'select',
+      options: ['1-1', '3-2', '2-3', '4-3', '3-4', '16-9', '9-16', '21-9', 'square', 'photo-landscape', 'photo-portrait', 'cinema'],
+      description: 'Aspect-ratio slug for the image box. Default `4-3`. Maps to the `--aspect-*` token family.',
     },
     onClick: {
       control: false,
