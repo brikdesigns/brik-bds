@@ -82,6 +82,22 @@ describe('Card anatomy API (ADR-038)', () => {
     expect(el.querySelector('.bds-card__preset-summary-value')?.textContent).toBe('12,481');
   });
 
+  it('layout="metric" renders the media + detail slots (the ProductSummaryCard fold, ADR-038 Phase 3)', async () => {
+    const el = await mount(h(Card as never, {
+      layout: 'metric',
+      media: h('span', { 'data-testid': 'glyph' }, '★'),
+      overline: 'Interested in',
+      title: 'Standard Logo Design',
+      detail: '$650 • one time',
+    }));
+    expect(el.querySelector('.bds-card__preset-summary-media')?.textContent).toBe('★');
+    expect(el.querySelector('.bds-card__preset-summary-detail')?.textContent).toBe('$650 • one time');
+    // media/detail are additive — a plain metric still omits both.
+    const plain = await mount(h(Card as never, { layout: 'metric', overline: 'X', title: '1' }));
+    expect(plain.querySelector('.bds-card__preset-summary-media')).toBeNull();
+    expect(plain.querySelector('.bds-card__preset-summary-detail')).toBeNull();
+  });
+
   it('a layout Card never falls through to the empty default box', async () => {
     const el = await mount(h(Card as never, { layout: 'stack', title: 'Only a title' }));
     const root = el.firstElementChild as HTMLElement;

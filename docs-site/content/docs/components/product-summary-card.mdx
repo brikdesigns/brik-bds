@@ -1,11 +1,44 @@
 ---
 title: Product summary card
-description: Compact summary of a selected product or service. Echoes back the offering a visitor chose, with a service-line tag and price.
+description: DEPRECATED — use Card layout="metric" instead.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
+<Callout type="warn">
+  **ProductSummaryCard is deprecated.** Migrate to [`Card layout="metric"`](/docs/components/card) ([ADR-038](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md)) — the `media` slot takes the leading `<ServiceTag>`, `overline` the label, `title` the value, and `detail` the `price • frequency` line. It is kept as a thin unchanged shim during the migration window and removed once the last consumer migrates.
+</Callout>
+
 ProductSummaryCard is a compact read-only summary of a chosen offering — a leading [ServiceTag](/docs/components/service-tag) coloured by `serviceLine`, a caption `label`, the offering `value`, and an optional `price • frequency` line. Use it to confirm back to a visitor what they selected.
+
+## Migration
+
+Move the props onto `Card` with `layout="metric"`: `serviceLine`/`serviceName` compose into a `<ServiceTag>` in the `media` slot; `label` → `overline`; `value` → `title`; `price` + `frequency` → the `detail` line.
+
+```tsx
+// Before
+import { ProductSummaryCard } from '@brikdesigns/bds';
+
+<ProductSummaryCard
+  serviceLine="brand"
+  serviceName="Logo Design"
+  label="Interested in"
+  value="Standard Logo Design"
+  price="$650"
+  frequency="one time"
+/>
+
+// After
+import { Card, ServiceTag } from '@brikdesigns/bds';
+
+<Card
+  layout="metric"
+  media={<ServiceTag category="brand" variant="icon" size="lg" serviceName="Logo Design" />}
+  overline="Interested in"
+  title="Standard Logo Design"
+  detail="$650 • one time"
+/>
+```
 
 ## Use it for
 

@@ -454,8 +454,8 @@ interface CardAnatomyProps extends CardBaseProps {
   layout: CardLayout;
   /**
    * Leading media — a `<Frame>`-wrapped `<Image>`, `<Avatar>`, `<Logo>`, or any
-   * ReactNode. Top of the card in `stack`, left column in `row`. Omit for a
-   * text-only card. (Not used by `metric`.)
+   * ReactNode. Top of the card in `stack`, left column in `row`, a leading glyph
+   * (e.g. `<ServiceTag>`) beside the stat in `metric`. Omit for a text-only card.
    */
   media?: ReactNode;
   /**
@@ -495,6 +495,8 @@ interface CardAnatomyProps extends CardBaseProps {
   connectionStatus?: CardControlConnectionStatus;
   /** "Last synced" label below the status indicator (`control` only). */
   lastSynced?: string;
+  /** Secondary detail line below the value (`metric` only) — e.g. a price • frequency, a delta, a unit. */
+  detail?: ReactNode;
 }
 
 export type CardProps =
@@ -1011,6 +1013,7 @@ function renderAnatomy({
   actionAlign,
   connectionStatus,
   lastSynced,
+  detail,
   className,
   style,
   ...rest
@@ -1040,9 +1043,11 @@ function renderAnatomy({
     return (
       <div className={bdsClass('bds-card', 'bds-card--preset-summary', className)} style={style} {...rest}>
         <div className="bds-card__preset-summary-inner">
+          {media && <div className="bds-card__preset-summary-media">{media}</div>}
           <div className="bds-card__preset-summary-content">
             {overline != null && <p className="bds-card__preset-summary-label">{overline}</p>}
             {title != null && <p className="bds-card__preset-summary-value">{title}</p>}
+            {detail != null && <p className="bds-card__preset-summary-detail">{detail}</p>}
           </div>
           {action && <div className="bds-card__preset-summary-link-area">{action}</div>}
         </div>
