@@ -2,14 +2,14 @@
  * Services3ColCardGrid — blueprint-key adapter (supported: ADR-037 §2).
  *
  * After brik-bds#580, the canonical primitives are `<CardGrid>`
- * (section wrapper) and `<Card preset="display">` (the malleable item
+ * (section wrapper) and `<Card layout="stack">` (the malleable item
  * card). This file remains as an adapter so the legacy
  * `card_grid` blueprint key continues to dispatch through
  * `BlueprintDispatcher` with the same section-data contract that
  * AI-generated pages expect — the adapter performs the section.items[]
  * → composed-children translation internally.
  *
- * New consumers should compose `<CardGrid>` + `<Card preset="display">`
+ * New consumers should compose `<CardGrid>` + `<Card layout="stack">`
  * directly. It is the supported dispatch path for its blueprint key, which three
  * published client sites resolve; it is not deprecated (ADR-037 §2).
  *
@@ -19,6 +19,7 @@ import {
   Badge,
   Button,
   Card,
+  CardDescription,
   Frame,
   Grid,
   ServiceTag,
@@ -53,10 +54,9 @@ export function Services3ColCardGrid({ section }: Props) {
               style={{ display: 'flex' }}
             >
               <Card
-                preset="display"
+                layout="stack"
                 title={item.title}
-                description={item.description}
-                image={
+                media={
                   item.imageUrl ? (
                     <Frame customRatio="3 / 2" fit="cover">
                       <img
@@ -77,7 +77,7 @@ export function Services3ColCardGrid({ section }: Props) {
                     </Frame>
                   ) : undefined
                 }
-                tag={
+                overline={
                   category ? (
                     <ServiceTag
                       category={category}
@@ -101,7 +101,11 @@ export function Services3ColCardGrid({ section }: Props) {
                     </Button>
                   ) : undefined
                 }
-              />
+              >
+                {item.description ? (
+                  <CardDescription>{item.description}</CardDescription>
+                ) : undefined}
+              </Card>
             </li>
           );
         })}

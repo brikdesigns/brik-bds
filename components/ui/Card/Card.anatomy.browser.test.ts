@@ -1,7 +1,11 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import React, { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { Card } from './Card';
+import { Card, CardDescription } from './Card';
+// Token definitions — without `:root`'s custom properties every `var(--text-*)`
+// is invalid at computed-value time and falls back to the same inherited color,
+// which silently makes the color-parity assertion below vacuous.
+import '../../../dist/tokens.css';
 
 /**
  * ADR-038 Phase 1 gate — the flat anatomy API (`layout`) ships alongside the
@@ -54,6 +58,30 @@ describe('Card anatomy API (ADR-038)', () => {
     expect(el.querySelector('.bds-card--preset-display')).not.toBeNull();
     expect(el.querySelector('.bds-card__preset-display-title')?.textContent).toBe('Service one');
     expect(el.querySelector('.bds-card__preset-display-tag')?.textContent).toBe('Marketing');
+  });
+
+  it('layout="stack"/"row" body copy resolves the same color as the preset description', async () => {
+    // The class chain assertions above stop at the root; the body slot is where
+    // the `description` → `children` mapping actually lands. A `<CardDescription>`
+    // there carries `.bds-card-description` (--text-secondary), not the preset's
+    // `.bds-card__preset-display-description` (--text-primary) — so without the
+    // parity rule in Card.css the migration silently re-styles every body line.
+    for (const [preset, layout, bodyClass] of [
+      ['display', 'stack', 'bds-card__preset-display-description'],
+      ['display-row', 'row', 'bds-card__preset-display-row-description'],
+    ] as const) {
+      const presetEl = await mount(h(Card as never, { preset, title: 'T', description: 'D' }));
+      const presetColor = getComputedStyle(presetEl.querySelector(`.${bodyClass}`)!).color;
+      await act(async () => { root.unmount(); });
+      host.remove();
+
+      const anatEl = await mount(
+        h(Card as never, { layout, title: 'T', children: h(CardDescription, null, 'D') }),
+      );
+      const anatColor = getComputedStyle(anatEl.querySelector('.bds-card-description')!).color;
+
+      expect(anatColor).toBe(presetColor);
+    }
   });
 
   it('layout="metric" renders the summary surface with label + value', async () => {
