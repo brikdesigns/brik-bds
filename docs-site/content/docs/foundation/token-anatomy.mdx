@@ -235,6 +235,16 @@ Two kinds of thing live outside the tables above. Both are in the registry today
 
 This section is gated: `npm run lint-token-purpose-slots` fails when a slot ships in `dist/tokens.css` that is neither named above nor dispositioned as drift. That is the only thing keeping the tables from going stale — a color-only formula describing half a system is exactly how #1910 started.
 
+## Role discipline
+
+A token names a **role**, and two roles can resolve to the same value today without being the same role. `--subtitle-md` and `--body-xs` both alias `--font-size-50`; `--subtitle-lg` and `--body-md` both alias `--font-size-100`. That coincidence is a fact about this theme's current type ramp, not a licence to substitute one for the other.
+
+**Pick the token whose role matches the content, even when the values coincide.** A subtitle uses `--subtitle-*`; reading copy uses `--body-*`. Values converge and diverge as the ramp is retuned — reference the role and you track every retune for free; reference the same-valued alias and you silently desync the moment those two steps split. `Board.css` and `Table.css` already hold this line (*"Uses `--subtitle-md` for correct semantic sizing"*), and it is why `InteractiveListItem` reaching for `--body-xs` on its subtitle slot is drift, not an equivalent ([#2384](https://github.com/brikdesigns/brik-bds/issues/2384)).
+
+<Callout type="warn">
+  A same-valued alias is invisible until the values split — nothing renders differently the day you pick the wrong role, so the miss ships clean and surfaces only on the next ramp change. The role name is the only thing that carries the intent forward; the pixel value does not.
+</Callout>
+
 ## How the six concepts map to a real token
 
 Take `--background-brand-primary` (the hot path):
