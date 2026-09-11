@@ -128,13 +128,13 @@
 
   .bds-interactive-list-item__subtitle {
     /* ReactNode — consumer controls structure (string / multi-line / inline badges).
-       Default styling is muted body text; consumer's own elements (StatusBadge,
+       Default styling is muted subtitle text; consumer's own elements (StatusBadge,
        PriorityBadge, etc.) preserve their own styling within. */
     display: flex;
     flex-direction: column;
     gap: var(--gap-sm); /* tight step — --gap-2xs is 0px outside default mode */
     font-family: var(--font-family-body);
-    font-size: var(--body-xs);
+    font-size: var(--subtitle-md); /* subtitle-role slot — not --body-xs (a body-role token); both = --font-size-50 today, but --body-xs re-points under ADR-033 (#2384) */
     line-height: var(--font-line-height-normal);
     color: var(--text-secondary);
   }
