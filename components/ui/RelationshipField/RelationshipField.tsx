@@ -103,7 +103,7 @@ const defaultMoveDownLabel = (item: RelationshipItem) => `Move ${item.label} dow
  * Reach for `RelationshipField` when list **order is part of the saved
  * value** (e.g. `sort_order`). When order is incidental — the set of
  * selections matters but not their sequence — use `MultiSelect` or
- * `CatalogPicker` instead. See ADR-031.
+ * `AddableCatalogList` instead. See ADR-031.
  *
  * @example
  * ```tsx

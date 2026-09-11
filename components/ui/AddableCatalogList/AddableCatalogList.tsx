@@ -3,7 +3,7 @@
 import { useCallback, useMemo } from 'react';
 import { bdsClass } from '../../utils';
 import { AddableEntryList, type AddableEntry, type AddableEntryListSize } from '../AddableEntryList';
-import './CatalogPicker.css';
+import './AddableCatalogList.css';
 
 /**
  * A single entry in a reference catalog (e.g. industry services, pain points,
@@ -32,9 +32,9 @@ export interface PickedCatalogEntry {
   source: 'catalog' | 'custom';
 }
 
-export type CatalogPickerSize = AddableEntryListSize;
+export type AddableCatalogListSize = AddableEntryListSize;
 
-export interface CatalogPickerProps {
+export interface AddableCatalogListProps {
   /** Reference catalog (e.g. dental servicesCatalog). */
   catalog: readonly CatalogEntry[];
   /** Currently picked entries. */
@@ -60,7 +60,7 @@ export interface CatalogPickerProps {
   emptyDescriptionLabel?: string;
 
   /** Size of the control (input + textarea + buttons). */
-  size?: CatalogPickerSize;
+  size?: AddableCatalogListSize;
   /** Hide all controls. */
   disabled?: boolean;
   /**
@@ -118,7 +118,7 @@ function matchCatalogEntry(
 }
 
 /**
- * CatalogPicker — industry-aware multi-pick input with custom escape.
+ * AddableCatalogList — industry-aware multi-pick input with custom escape.
  *
  * Renders a reference catalog (e.g. the industry pack's `servicesCatalog`)
  * as suggestion-backed entry list. Users can pick from the catalog or
@@ -135,12 +135,12 @@ function matchCatalogEntry(
  *
  * @example
  * ```tsx
- * import { CatalogPicker } from '@brikdesigns/bds';
+ * import { AddableCatalogList } from '@brikdesigns/bds';
  * import { industryPacks } from '@brikdesigns/bds/content-system';
  *
  * const pack = industryPacks.dental;
  *
- * <CatalogPicker
+ * <AddableCatalogList
  *   label="Services Offered"
  *   catalog={pack.servicesCatalog}
  *   value={services}
@@ -154,7 +154,7 @@ function matchCatalogEntry(
  *
  * @summary Industry-aware multi-pick input with custom escape
  */
-export function CatalogPicker({
+export function AddableCatalogList({
   catalog,
   value,
   onChange,
@@ -172,7 +172,7 @@ export function CatalogPicker({
   maxItems,
   descriptionRows = 2,
   className,
-}: CatalogPickerProps) {
+}: AddableCatalogListProps) {
   // AddableEntryList sees only primary/secondary. Map current value → that shape.
   const entries = useMemo<AddableEntry[]>(
     () => value.map((v) => ({ primary: v.displayName, secondary: v.description ?? '' })),
@@ -236,7 +236,7 @@ export function CatalogPicker({
   );
 
   return (
-    <div className={bdsClass('bds-catalog-picker', className)}>
+    <div className={bdsClass('bds-addable-catalog-list', className)}>
       <AddableEntryList
         label={label}
         helperText={helperText}
@@ -259,4 +259,4 @@ export function CatalogPicker({
   );
 }
 
-export default CatalogPicker;
+export default AddableCatalogList;
