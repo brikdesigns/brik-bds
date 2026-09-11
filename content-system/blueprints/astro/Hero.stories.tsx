@@ -2,9 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { AstroFrame } from './_AstroFrame';
 import './__generated__/Hero.css';
-import split from './__generated__/Hero.split.html?raw';
-import interiorMinimal from './__generated__/Hero.interior-minimal.html?raw';
-import withPricingCard from './__generated__/Hero.with-pricing-card.html?raw';
+import split from './__generated__/Hero--split.html?raw';
+import interiorMinimal from './__generated__/Hero--interior-minimal.html?raw';
+import withPricingCard from './__generated__/Hero--with-pricing-card.html?raw';
 
 /**
  * `Hero.astro` on the canonical rail (ADR-037), pre-rendered by

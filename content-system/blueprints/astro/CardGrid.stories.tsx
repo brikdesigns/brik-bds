@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { AstroFrame } from './_AstroFrame';
 import './__generated__/CardGrid.css';
-import cardGrid from './__generated__/CardGrid.card-grid.html?raw';
-import twoColumnList from './__generated__/CardGrid.two-column-list.html?raw';
+import cardGrid from './__generated__/CardGrid--card-grid.html?raw';
+import twoColumnList from './__generated__/CardGrid--two-column-list.html?raw';
 
 /**
  * `CardGrid.astro` on the canonical rail (ADR-037), pre-rendered by

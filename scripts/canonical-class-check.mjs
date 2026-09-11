@@ -112,6 +112,15 @@ export const DEFAULT_SCAN_EXTENSIONS = Object.freeze([
 
 export const DEFAULT_EXCLUDE_PATH_PATTERNS = Object.freeze([
   /(^|\/)__tests__(\/|$)/,
+  // Derived output (ADR-039): `render-astro-blueprints.mjs` pre-renders the
+  // Astro rail so Storybook can display it. Scanning the render re-judges its
+  // `.astro` source under a rule the source escapes by construction — the
+  // modifier is built dynamically (`CardGrid.astro:83`,
+  // `` `bds-card-grid--${layout}` ``), so the static scanner never sees the
+  // literal there, while the pre-render spells it out. The classes are real and
+  // declared in the block's own `<style>`; they are absent from the allowlist
+  // only because the Astro rail has no compiled CSS distribution. See #2457.
+  /(^|\/)__generated__(\/|$)/,
   /\.test\.(ts|tsx|mjs|js)$/,
   /(^|\/)node_modules(\/|$)/,
   /(^|\/)dist(\/|$)/,

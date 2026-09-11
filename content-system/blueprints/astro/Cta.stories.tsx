@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { AstroFrame } from './_AstroFrame';
 import './__generated__/Cta.css';
-import defaultLayout from './__generated__/Cta.default.html?raw';
-import splitLayout from './__generated__/Cta.split.html?raw';
+import defaultLayout from './__generated__/Cta--default.html?raw';
+import splitLayout from './__generated__/Cta--split.html?raw';
 
 /**
  * `Cta.astro` on the canonical rail (ADR-037), pre-rendered by

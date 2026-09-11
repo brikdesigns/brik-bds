@@ -44,6 +44,17 @@ const BLOCKS = [
   { name: 'TestimonialsFeaturedLarge', layouts: [null] },
 ];
 
+/**
+ * Output basename for a (block, layout) pair.
+ *
+ * The separator is `--`, not `.`, on purpose: `canonical-class-check`'s CSS
+ * selector regex reads a dotted path segment as a class, so importing
+ * `CardGrid.card-grid.html` made the story file look like it referenced a bare
+ * `.card-grid` shadowing canonical `bds-card-grid`. `--` also matches the BEM
+ * modifier the layout actually is.
+ */
+const slugFor = (name, layout) => (layout ? `${name}--${layout}` : name);
+
 /** Lifts the body of the single `<style>` block out of an `.astro` source. */
 function extractStyle(astroSource, name) {
   const match = astroSource.match(/<style>([\s\S]*?)<\/style>/);
@@ -84,7 +95,7 @@ async function main() {
         },
       });
 
-      const slug = layout ? `${name}.${layout}` : name;
+      const slug = slugFor(name, layout);
       // `data-astro-source-*` are dev annotations carrying absolute paths — they
       // would make the emitted HTML machine-specific and churn every diff.
       const clean = html.replace(/\sdata-astro-source-(file|loc)="[^"]*"/g, '').trim();
@@ -113,7 +124,7 @@ async function main() {
 function assertStylesheetCoverage() {
   const shell = readFileSync(join(astroDir, '_AstroFrame.tsx'), 'utf8');
   const html = BLOCKS.flatMap(({ name, layouts }) =>
-    layouts.map((l) => readFileSync(join(outDir, `${l ? `${name}.${l}` : name}.html`), 'utf8')),
+    layouts.map((l) => readFileSync(join(outDir, `${slugFor(name, l)}.html`), 'utf8')),
   ).join('\n');
 
   // Root class only — `bds-hero__title` and `bds-button--primary` are covered by
