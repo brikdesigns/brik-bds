@@ -1,6 +1,7 @@
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
 import { Image } from '../Image';
+import { type FrameRatio } from '../Frame';
 import './SelectableMediaTile.css';
 
 export interface SelectableMediaTileProps
@@ -23,11 +24,11 @@ export interface SelectableMediaTileProps
   /** Disable the tile. Applies muted styling and blocks click. */
   disabled?: boolean;
   /**
-   * CSS `aspect-ratio` for the image box. Default `4 / 3`. Pass `1 / 1`
-   * for avatar / square grids. Forwarded to the underlying `<Image>` as
-   * `customRatio`, so any valid CSS `aspect-ratio` value works.
+   * Aspect-ratio slug for the image box. Default `4-3`. Pass `1-1` for
+   * avatar / square grids. A `FrameRatio` — backed by the `--aspect-*`
+   * token family — forwarded to the underlying `<Image>` as `ratio`.
    */
-  aspectRatio?: string;
+  aspectRatio?: FrameRatio;
 }
 
 /**
@@ -65,7 +66,7 @@ export const SelectableMediaTile = forwardRef<HTMLButtonElement, SelectableMedia
       caption,
       selected,
       disabled = false,
-      aspectRatio = '4 / 3',
+      aspectRatio = '4-3',
       className,
       onClick,
       ...props
@@ -88,7 +89,7 @@ export const SelectableMediaTile = forwardRef<HTMLButtonElement, SelectableMedia
         {...props}
       >
         <span className="bds-selectable-media-tile__media">
-          <Image src={src} alt={alt} customRatio={aspectRatio} fit="cover" />
+          <Image src={src} alt={alt} ratio={aspectRatio} fit="cover" />
           {selected && (
             <span className="bds-selectable-media-tile__check" aria-hidden="true">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none">
