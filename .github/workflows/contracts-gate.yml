@@ -107,6 +107,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       run: ${{ steps.classify.outputs.run }}
+      readiness: ${{ steps.classify.outputs.readiness }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
@@ -128,7 +129,10 @@ jobs:
           # place to guess. Same precedent as visual/tokens/docs.
           if [ -z "$BASE_SHA" ]; then
             echo "event=${{ github.event_name }} → full contracts gate"
-            echo "run=true" >> "$GITHUB_OUTPUT"
+            {
+              echo "run=true"
+              echo "readiness=true"
+            } >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -137,6 +141,13 @@ jobs:
           # `git diff | grep` pipeline, where pipefail returns grep's status and
           # grep exits 1 on "no match", making a real diff failure look inert
           # (the #2713 trap). Fail CLOSED on a git error.
+          #
+          # Both arms are written as INLINE `git diff --name-only ... --` calls
+          # rather than factored into a shared helper, because that inline shape
+          # is the one `lint-gate-pathspecs.mjs` parses (it keys on a line
+          # containing `git diff`, lint-gate-pathspecs.mjs:99). A helper taking
+          # `"$@"` moves the pathspecs out of the linter's view and drops them
+          # silently from its count — which is how the rot in #2326 got in.
           if ! CHANGED="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- \
             'scripts/**' \
             '.claude/standards/**' \
@@ -151,14 +162,35 @@ jobs:
             exit 1
           fi
 
-          if [ -z "$CHANGED" ]; then
-            echo "diff touches no contracts-gate input → skipping the contracts"
-            echo "run=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "diff touches contracts-gate inputs → running:"
-            printf '%s\n' "$CHANGED" | sed 's/^/    /'
-            echo "run=true" >> "$GITHUB_OUTPUT"
+          # The readiness auditor's OWN inputs, which are not the contracts'
+          # (#2447). It reads `.github/required-checks.json` for the required set
+          # and every file in `.github/workflows/` for the triggers, so a PR that
+          # touches only those two — exactly the shape of a promotion PR — is
+          # invisible to the list above. #2444, the promotion that wedged the
+          # queue, changed `required-checks.json` + `assets-gate.yml` and nothing
+          # else: run the list above against `aa84ba4f^..aa84ba4f` and it is
+          # empty. Sharing the contracts' `run` output would have gated the
+          # incident PR on a job that skipped.
+          if ! READINESS="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- \
+            '.github/required-checks.json' \
+            '.github/workflows/**' \
+            'scripts/lint-merge-queue-readiness.mjs')"; then
+            echo "✗ git diff failed for $BASE_SHA..$HEAD_SHA — cannot classify; failing closed."
+            exit 1
           fi
+
+          emit() {
+            if [ -z "$2" ]; then
+              echo "  $1: no matching change → skip"
+              echo "$1=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "  $1: matched →"
+              printf '%s\n' "$2" | sed 's/^/      /'
+              echo "$1=true" >> "$GITHUB_OUTPUT"
+            fi
+          }
+          emit run "$CHANGED"
+          emit readiness "$READINESS"
 
   # ─── The twelve contracts, one runner ───────────────────────────────────────
   #
@@ -547,6 +579,47 @@ jobs:
           shellcheck scripts/sweep-merged-worktrees.sh \
                      scripts/__tests__/test-sweep-worktree-classification.sh
 
+  # ─── Merge-queue readiness (#2447) ──────────────────────────────────────────
+  #
+  # A merge queue is LIVE on `main`. A required context whose workflow lacks
+  # `on: merge_group` produces no check-run for the merge group, the context
+  # reads `expected` forever, and the queue wedges — the failure #2444 caused
+  # for an unrelated session's PR (#2446 sat AWAITING_CHECKS at position 1 and
+  # blocked #2444 behind it). `lint-merge-queue-readiness.mjs --enforce` detects
+  # exactly that, and until this job existed nothing called it:
+  # `grep -rn lint-merge-queue-readiness .github/` matched only prose in
+  # `required-checks.json`.
+  #
+  # Its OWN job, not a step in `contracts`, because its inputs are not the
+  # contracts' inputs. Gating it on the contracts' classifier would skip it on
+  # the promotion-PR shape it exists to catch (see the classifier's comment);
+  # widening the contracts' classifier to reach that shape instead would put
+  # apt-get + sixty contract steps on every workflow-file PR. This job is one
+  # `node` invocation with no `npm ci` — the linter imports node builtins only,
+  # the same reason the gate-pathspec lint needs no install.
+  readiness:
+    name: merge-queue readiness
+    runs-on: ubuntu-latest
+    needs: changes
+    permissions:
+      contents: read
+    # The `success()` half matters: an explicit `if` REPLACES the implicit
+    # needs-succeeded gate, so without it a FAILED classify (output == '') would
+    # still satisfy `!= 'false'`.
+    if: needs.changes.result == 'success' && needs.changes.outputs.readiness == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      # Pinned rather than taken from the runner image, § _why rule 5.
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Every required context triggers on merge_group
+        run: node scripts/lint-merge-queue-readiness.mjs --enforce
+
   # ─── The branch-protection check ────────────────────────────────────────────
   #
   # Keeps the name `contracts-gate` stable while the work above fans out, and
@@ -560,7 +633,7 @@ jobs:
   contracts-gate:
     name: contracts-gate
     runs-on: ubuntu-latest
-    needs: [changes, contracts]
+    needs: [changes, contracts, readiness]
     if: always()
     steps:
       - name: Assert the contracts gate
@@ -568,6 +641,10 @@ jobs:
           echo "classify result:     ${{ needs.changes.result }}"
           echo "contracts requested: ${{ needs.changes.outputs.run }}"
           echo "contracts result:    ${{ needs.contracts.result }}"
+          echo "readiness requested: ${{ needs.changes.outputs.readiness }}"
+          echo "readiness result:    ${{ needs.readiness.result }}"
+
+          failed=0
 
           if [ "${{ needs.changes.result }}" != "success" ]; then
             echo "✗ the classify-diff job did not succeed — failing the gate closed rather"
@@ -575,16 +652,29 @@ jobs:
             exit 1
           fi
 
+          # Each arm is asserted independently: the two jobs have separate
+          # classifiers, so "contracts skipped" says nothing about readiness.
           if [ "${{ needs.changes.outputs.run }}" != "true" ]; then
-            echo "✓ diff touched no contracts-gate input — gate not applicable, reporting green."
-            exit 0
-          fi
-
-          if [ "${{ needs.contracts.result }}" != "success" ]; then
+            echo "✓ diff touched no contracts-gate input — contracts not applicable."
+          elif [ "${{ needs.contracts.result }}" != "success" ]; then
             echo "✗ the script contracts did not pass. Every step runs under"
             echo "  \`if: always()\`, so the job log lists EVERY failing contract, not just"
             echo "  the first — read all of them before pushing a fix."
-            exit 1
+            failed=1
+          else
+            echo "✓ all twelve script contracts passed."
           fi
 
-          echo "✓ all twelve script contracts passed."
+          if [ "${{ needs.changes.outputs.readiness }}" != "true" ]; then
+            echo "✓ diff touched no workflow trigger or required-context declaration —"
+            echo "  merge-queue readiness not applicable."
+          elif [ "${{ needs.readiness.result }}" != "success" ]; then
+            echo "✗ merge-queue readiness failed: a declared required context's workflow"
+            echo "  lacks \`on: merge_group\`. Promoting it would wedge the live queue on"
+            echo "  \`main\` — land the trigger on \`main\` FIRST, then declare + POST (#2447)."
+            failed=1
+          else
+            echo "✓ every required context triggers on merge_group."
+          fi
+
+          exit "$failed"
