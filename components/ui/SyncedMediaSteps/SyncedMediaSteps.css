@@ -25,7 +25,7 @@
 
 .bds-synced-media-steps {
   --bds-synced-media-steps-interval: var(--duration-autoplay);
-  --bds-synced-media-steps-media-aspect: 4 / 3;
+  --bds-synced-media-steps-media-aspect: var(--aspect-4-3);
 
   display: grid;
   grid-template-columns: 1fr;
