@@ -39,9 +39,8 @@ export interface ChipProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childre
  * state: filter toggles, selection chips, removable tokens, dropdown
  * triggers. Render a Chip only when `onChipClick`, `onRemove`, or
  * `showDropdown` is wired up. For static status / metadata labels use
- * `Badge` (semantic status) or `Tag` (categorization). See the
- * "Indicators vs Actions" section of Chip.mdx for the full decision
- * tree.
+ * `Badge` (semantic status) or `Tag` (categorization). See
+ * build-standards/indicators for the full decision tree.
  *
  * @example
  * ```tsx
