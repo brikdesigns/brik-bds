@@ -1,0 +1,48 @@
+.bp-testimonials-featured {
+    background: var(--bds-testimonials-featured-bg, var(--surface-primary));
+    padding-block: var(
+      --bds-testimonials-featured-padding-y,
+      clamp(var(--padding-xl), 7vw, var(--padding-2xl))
+    );
+  }
+
+  .bp-testimonials-featured__container {
+    max-width: var(--content-width-lg);
+    margin-inline: auto;
+    padding-inline: var(--padding-xl); /* bds-lint-ignore — legacy bp-* inset predates --gutter-page; realigning 32→24px is a visual change gated on Chromatic quota (#771), same deferral as #1630 */
+    text-align: center;
+  }
+
+  .bp-testimonials-featured__quote {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-lg);
+  }
+
+  .bp-testimonials-featured__mark {
+    font-family: var(--font-family-display, var(--font-family-heading));
+    font-size: clamp(var(--display-sm), 8vw, var(--display-md));
+    line-height: 1;
+    color: var(--bds-testimonials-featured-mark-color, var(--text-brand-primary));
+  }
+
+  .bp-testimonials-featured__quote-text {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: clamp(var(--heading-md), 2.5vw, var(--heading-xl));
+    font-weight: var(--font-weight-medium);
+    line-height: var(--font-line-height-relaxed);
+    color: var(--bds-testimonials-featured-quote-color, var(--text-primary));
+    max-width: var(--measure-md);
+  }
+
+  .bp-testimonials-featured__cite {
+    font-family: var(--font-family-label);
+    font-size: var(--label-xl);
+    font-style: normal;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--bds-testimonials-featured-cite-color, var(--text-secondary));
+  }

@@ -49,8 +49,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const args = process.argv.slice(2);
 const errorsOnly = args.includes('--errors-only');
 const fileFlagIdx = args.indexOf('--files');
+// `__generated__/` is derived output (ADR-039) — `render-astro-blueprints.mjs`
+// lifts each block's `<style>` body into a `.css` file so the story shell can
+// load it. Linting that copy re-judges its `.astro` source under a different
+// rule set: `hardcoded-aspect-ratio` reads `.css` only, so `CardGrid.astro:320`
+// is exempt while a byte-identical `__generated__/CardGrid.css` is not. The
+// whole-repo scan never sees these (`listBlueprintFiles` is non-recursive);
+// only the pre-commit `--files` path can reach them.
+const isDerived = (p) => p.includes(`${path.sep}__generated__${path.sep}`);
 const explicitFiles =
-  fileFlagIdx >= 0 ? args.slice(fileFlagIdx + 1).filter((a) => !a.startsWith('--')) : null;
+  fileFlagIdx >= 0
+    ? args.slice(fileFlagIdx + 1).filter((a) => !a.startsWith('--') && !isDerived(a))
+    : null;
 
 // `--root` repoints every input at a throwaway tree so this gate's own tests
 // can plant a violation and assert the exit code, without touching real

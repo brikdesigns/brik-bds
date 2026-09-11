@@ -1,0 +1,294 @@
+/* Mirrors ../react/CardGrid.css — keep in sync until a unified CSS
+     distribution lands across the React + Astro twins. */
+
+  /* Section rhythm + centred container: ../section-shell.css (ADR-021).
+     The heavier bottom inset is a documented exception — unlayered here, so
+     it outranks the layered `.bds-blueprint-section` shorthand. */
+  .bds-card-grid {
+    padding-block-end: clamp(
+      var(--padding-2xl),
+      9vw,
+      calc(var(--padding-2xl) * 1.5)
+    );
+  }
+
+  .bds-card-grid__header {
+    max-width: var(--measure-lg);
+    margin-bottom: var(--padding-xl);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Content rhythm (ADR-023 §3), mirroring the React twin in CardGrid.css:
+     subtitle→title is tight (--gap-sm), title→description is medium
+     (--gap-md). */
+
+  .bds-card-grid__header > * + * {
+    margin-top: var(--gap-md);
+  }
+
+  .bds-card-grid__subtitle + .bds-card-grid__title {
+    margin-top: var(--gap-sm);
+  }
+
+  .bds-card-grid__subtitle {
+    margin: 0;
+    font-family: var(--font-family-subtitle);
+    font-size: var(--subtitle-lg);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: var(--text-transform-subtitle, uppercase);
+    color: var(--text-brand-primary);
+  }
+
+  .bds-card-grid__title {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-xl));
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-primary);
+  }
+
+  .bds-card-grid__description {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--body-md);
+    line-height: var(--font-line-height-normal);
+    color: var(--text-primary);
+  }
+
+  /* ── --two-column-list item layout ──────────────────────────────
+     Absorbed from ServicesDetailTwoColumn.astro (#2302). Not part of the
+     bds-card-grid canon vocabulary — these `bp-` classes stay blueprint-local.
+     Token pairs respect the family↔size discipline. */
+
+  .bp-services-two-col__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-xl);
+  }
+
+  @media (min-width: 768px) {
+    .bp-services-two-col__list {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--gap-xl) var(--gap-2xl);
+    }
+  }
+
+  .bp-services-two-col__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  .bp-services-two-col__item-title {
+    margin: 0;
+    /* Pair: heading family + heading size. */
+    font-family: var(--font-family-heading);
+    font-size: var(--heading-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-primary);
+  }
+
+  .bp-services-two-col__item-desc {
+    margin: 0;
+    /* Pair: body family + body size. */
+    font-family: var(--font-family-body);
+    font-size: var(--body-md);
+    line-height: var(--font-line-height-normal);
+    color: var(--text-primary);
+  }
+
+  /* ── --card-grid item layout ────────────────────────────────────
+     Absorbed from Services3ColCardGrid.astro (#2302). Astro consumers can't
+     import the React `<Card preset="display">` primitive, so the card markup
+     stays hand-rolled HTML+CSS scoped to this block. */
+
+  .bp-services-grid__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-lg);
+  }
+
+  @media (min-width: 768px) {
+    .bp-services-grid__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 992px) {
+    .bp-services-grid__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .bp-services-grid__item {
+    display: flex;
+  }
+
+  .bp-services-grid__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: var(--surface-primary);
+    border: var(--border-width-md) solid var(--border-secondary);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+  }
+
+  .bp-services-grid__media {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    background: var(--surface-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .bp-services-grid__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .bp-services-grid__media-fallback {
+    /* Pair: heading family + heading size. */
+    font-family: var(--font-family-heading);
+    font-size: var(--heading-md);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    opacity: 0.55;
+    letter-spacing: 0.02em;
+  }
+
+  .bp-services-grid__has-options {
+    position: absolute;
+    top: var(--gap-md);
+    right: var(--gap-md);
+    padding: 4px 10px;
+    background: var(--background-positive);
+    color: var(--text-on-color-dark);
+    /* Pair: label family + label size. */
+    font-family: var(--font-family-label);
+    font-size: var(--label-sm);
+    font-weight: var(--font-weight-semibold);
+    letter-spacing: 0.02em;
+    border-radius: 999px;
+    line-height: 1.2;
+    z-index: 1;
+  }
+
+  .bp-services-grid__card-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    padding: var(--padding-lg);
+    flex: 1 1 auto;
+  }
+
+  .bp-services-grid__category-row {
+    margin: 0;
+    display: flex;
+  }
+
+  .bp-services-grid__category-pill {
+    /* Tag — does not stretch; sits at natural width. */
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    padding: 4px 10px;
+    background: var(--surface-secondary);
+    color: var(--text-primary);
+    /* Pair: label family + label size. */
+    font-family: var(--font-family-label);
+    font-size: var(--label-md);
+    font-weight: var(--font-weight-semibold);
+    border-radius: 999px;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+  }
+
+  .bp-services-grid__card[data-category='brand'] .bp-services-grid__category-pill {
+    background: var(--color-yellow-300);
+    color: var(--color-yellow-950);
+  }
+  .bp-services-grid__card[data-category='marketing'] .bp-services-grid__category-pill {
+    background: var(--color-green-300);
+    color: var(--color-green-950);
+  }
+  .bp-services-grid__card[data-category='information'] .bp-services-grid__category-pill {
+    background: var(--color-blue-300);
+    color: var(--color-blue-950);
+  }
+  .bp-services-grid__card[data-category='product'] .bp-services-grid__category-pill {
+    background: var(--color-purple-300);
+    color: var(--color-purple-950);
+  }
+  .bp-services-grid__card[data-category='back-office'] .bp-services-grid__category-pill,
+  .bp-services-grid__card[data-category='service'] .bp-services-grid__category-pill {
+    background: var(--color-orange-300);
+    color: var(--color-orange-950);
+  }
+
+  .bp-services-grid__card-title {
+    margin: 0;
+    /* Pair: heading family + heading size. */
+    font-family: var(--font-family-heading);
+    font-size: var(--heading-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-primary);
+  }
+
+  .bp-services-grid__card-desc {
+    margin: 0;
+    /* Pair: body family + body size. */
+    font-family: var(--font-family-body);
+    font-size: var(--body-md);
+    line-height: var(--font-line-height-normal);
+    color: var(--text-primary);
+  }
+
+  .bp-services-grid__cta-row {
+    margin: 0;
+    margin-top: auto;
+  }
+
+  .bp-services-grid__cta {
+    /* Astro "Learn more" — primary-button styling without the React
+       `<LinkButton variant="primary">` the React rail uses.
+       --text-on-color-dark = white (text on a dark/saturated background fill). */
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-sm);
+    padding: var(--padding-sm) var(--padding-lg);
+    background: var(--background-brand-primary);
+    color: var(--text-on-color-dark);
+    text-decoration: none;
+    border-radius: var(--border-radius-sm);
+    /* Pair: label family + label size. */
+    font-family: var(--font-family-label);
+    font-size: var(--label-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.4;
+  }
+
+  .bp-services-grid__cta:hover {
+    filter: brightness(0.95);
+  }
+
+  .bp-services-grid__cta:focus-visible {
+    outline: 2px solid var(--border-focus, var(--text-brand-primary));
+    outline-offset: 2px;
+  }

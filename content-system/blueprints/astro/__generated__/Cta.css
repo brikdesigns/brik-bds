@@ -1,0 +1,153 @@
+/* Mirrors ../react/Cta.css — keep in sync until a unified CSS distribution
+     lands across the React + Astro twins. Layout-specific rules are
+     modifier-scoped, which is what lets both former per-layout files share
+     one stylesheet without colliding (#2302).
+
+     Section rhythm + centred container: ../section-shell.css (ADR-021). */
+
+  /* ── Shared spine ─────────────────────────────────────────────── */
+
+  .bds-cta {
+    background: var(--bds-cta-bg, var(--surface-inverse, var(--color-grayscale-black)));
+  }
+
+  .bds-cta__container {
+    /* Narrower centred band than the shared default, with a wider inline
+       inset to match. Deliberate, not drift (ADR-021 §3). */
+    --bds-blueprint-section-content-width: var(--content-width-lg);
+    --bds-blueprint-section-padding-inline: var(--padding-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-md);
+    text-align: center;
+  }
+
+  .bds-cta__message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-md);
+  }
+
+  .bds-cta__title {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: clamp(var(--heading-xl), 4vw, var(--display-sm));
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-tight);
+    color: var(--bds-cta-heading-color, var(--text-inverse, var(--color-grayscale-white)));
+  }
+
+  .bds-cta__description {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--heading-sm);
+    line-height: var(--font-line-height-relaxed);
+    color: var(--bds-cta-body-color, var(--text-inverse, var(--color-grayscale-100)));
+    max-width: 55ch;
+  }
+
+  .bds-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    /* Horizontal step between buttons. The step DOWN from the message block is
+       the container's own gap — a margin-top here would stack on top of it
+       (the additive case ADR-023 §3 rules out). */
+    gap: var(--gap-md);
+  }
+
+  /* ── --split: message column + contact-method aside ─────────────── */
+
+  .bds-cta--split {
+    background: var(--bds-cta-bg, var(--surface-primary));
+  }
+
+  .bds-cta--split .bds-cta__container {
+    /* The two-column CTA uses the shared full-width band, restored explicitly
+       over the family's narrower default, with the cta family's wider inline
+       inset (ADR-021 §3). */
+    --bds-blueprint-section-content-width: var(--content-width-xl);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-xl);
+    align-items: center;
+    text-align: start;
+  }
+
+  @media (min-width: 768px) {
+    .bds-cta--split .bds-cta__container {
+      grid-template-columns: 3fr 2fr;
+      gap: var(--gap-2xl);
+    }
+  }
+
+  .bds-cta--split .bds-cta__message {
+    align-items: flex-start;
+    text-align: start;
+  }
+
+  .bds-cta--split .bds-cta__title {
+    font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-xl));
+    color: var(--bds-cta-heading-color, var(--text-primary));
+  }
+
+  .bds-cta--split .bds-cta__description {
+    color: var(--bds-cta-body-color, var(--text-secondary));
+  }
+
+  .bds-cta--split .bds-cta__actions {
+    justify-content: flex-start;
+  }
+
+  .bds-cta__aside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+    border-left: 1px solid var(--bds-cta-divider, var(--border-secondary));
+    padding-inline-start: var(--padding-lg);
+  }
+
+  @media (max-width: 767px) {
+    .bds-cta__aside {
+      border-left: none;
+      border-top: 1px solid var(--bds-cta-divider, var(--border-secondary));
+      padding-top: var(--padding-lg);
+      padding-inline-start: 0;
+    }
+  }
+
+  .bds-cta__method {
+    display: flex;
+    flex-direction: column;
+    /* Label↔value is a tight text pairing: --gap-sm. Not --gap-2xs, which
+       resolves to 0px outside default spacing mode (ADR-023 §3). */
+    gap: var(--gap-sm);
+    color: var(--bds-cta-method-color, var(--text-primary));
+    text-decoration: none;
+    transition: color 120ms ease-out;
+  }
+
+  a.bds-cta__method:hover {
+    color: var(--text-brand-primary);
+  }
+
+  a.bds-cta__method:focus-visible {
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
+    outline-offset: 2px;
+  }
+
+  .bds-cta__method-label {
+    font-family: var(--font-family-label);
+    font-size: var(--label-lg);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+  }
+
+  .bds-cta__method-value {
+    font-family: var(--font-family-body);
+    font-size: var(--heading-sm);
+  }
