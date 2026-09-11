@@ -119,7 +119,7 @@ describe('getIndustryServicesCatalog', () => {
 // ── getIndustryPainPoints ────────────────────────────────────────────────────
 
 describe('getIndustryPainPoints', () => {
-  it('returns CatalogPicker-shaped entries for dental', () => {
+  it('returns AddableCatalogList-shaped entries for dental', () => {
     const painPoints = getIndustryPainPoints('dental');
     expect(painPoints.length).toBeGreaterThanOrEqual(5);
     painPoints.forEach((pp) => {
@@ -179,7 +179,7 @@ describe('getIndustryKeywords', () => {
     expect(serviceLevel.length).toBeGreaterThan(0);
   });
 
-  it('every entry is CatalogPicker-shaped (slug + displayName + tier)', () => {
+  it('every entry is AddableCatalogList-shaped (slug + displayName + tier)', () => {
     const keywords = getIndustryKeywords('dental');
     keywords.forEach((kw) => {
       expect(kw.slug).toBeTruthy();
@@ -216,7 +216,7 @@ describe('getIndustryKeywords', () => {
 // ── getIndustryCtaApproved ───────────────────────────────────────────────────
 
 describe('getIndustryCtaApproved', () => {
-  it('returns CatalogPicker-shaped approved CTA defaults for dental', () => {
+  it('returns AddableCatalogList-shaped approved CTA defaults for dental', () => {
     const entries = getIndustryCtaApproved('dental');
     expect(entries.length).toBeGreaterThan(0);
     entries.forEach((e) => {
@@ -247,7 +247,7 @@ describe('getIndustryCtaApproved', () => {
 // ── getIndustryCtaRejected ───────────────────────────────────────────────────
 
 describe('getIndustryCtaRejected', () => {
-  it('returns CatalogPicker-shaped rejected CTA defaults', () => {
+  it('returns AddableCatalogList-shaped rejected CTA defaults', () => {
     const entries = getIndustryCtaRejected('dental');
     expect(entries.length).toBeGreaterThan(0);
     entries.forEach((e) => {

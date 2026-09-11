@@ -2,10 +2,10 @@ import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent } from 'storybook/test';
 import {
-  CatalogPicker,
+  AddableCatalogList,
   type CatalogEntry,
   type PickedCatalogEntry,
-} from './CatalogPicker';
+} from './AddableCatalogList';
 
 // ── Catalog fixtures ─────────────────────────────────────────────────────────
 // Mirrors a subset of dental.servicesCatalog from
@@ -57,9 +57,9 @@ const DENTAL_SERVICES_CATALOG: readonly CatalogEntry[] = [
 
 // ── Storybook meta ───────────────────────────────────────────────────────────
 
-const meta: Meta<typeof CatalogPicker> = {
-  title: 'Containers/catalog-picker',
-  component: CatalogPicker,
+const meta: Meta<typeof AddableCatalogList> = {
+  title: 'Containers/addable-catalog-list',
+  component: AddableCatalogList,
   tags: ['surface-product'],
   parameters: { layout: 'centered' },
   argTypes: {
@@ -96,15 +96,15 @@ const meta: Meta<typeof CatalogPicker> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof CatalogPicker>;
+type Story = StoryObj<typeof AddableCatalogList>;
 
 // ── Controlled wrapper ───────────────────────────────────────────────────────
 
-const Controlled = (args: React.ComponentProps<typeof CatalogPicker>) => {
+const Controlled = (args: React.ComponentProps<typeof AddableCatalogList>) => {
   const [value, setValue] = useState<PickedCatalogEntry[]>([...args.value]);
   return (
     <div style={{ width: 520 }}>
-      <CatalogPicker
+      <AddableCatalogList
         {...args}
         value={value}
         onChange={(next) => {

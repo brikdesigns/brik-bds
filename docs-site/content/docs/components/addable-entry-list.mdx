@@ -67,7 +67,7 @@ const services = getIndustryServices(company.industry_slug);
 />
 ```
 
-With `primaryStrict`, free-form entries outside the suggestion list are rejected. For full BCS-aware multi-pick with `source: 'catalog' | 'custom'` attribution, use [CatalogPicker](/docs/components/catalog-picker) — it wraps AddableEntryList with extra metadata.
+With `primaryStrict`, free-form entries outside the suggestion list are rejected. For full BCS-aware multi-pick with `source: 'catalog' | 'custom'` attribution, use [AddableCatalogList](/docs/components/addable-catalog-list) — it wraps AddableEntryList with extra metadata.
 
 ### Read mode
 
@@ -128,7 +128,7 @@ When `emptyDescriptionLabel` is set, read-mode rows with empty `secondary` show 
 </Callout>
 
 - **Don't use for ≥3 structured fields.** Use [AddableFieldRowList](/docs/components/addable-field-row-list).
-- **Don't use for locked vocabularies with provenance tracking.** Use [CatalogPicker](/docs/components/catalog-picker) — it wraps this component with `source: 'catalog' | 'custom'` and stable slug derivation.
+- **Don't use for locked vocabularies with provenance tracking.** Use [AddableCatalogList](/docs/components/addable-catalog-list) — it wraps this component with `source: 'catalog' | 'custom'` and stable slug derivation.
 
 ## Accessibility
 
@@ -176,5 +176,5 @@ interface AddableEntry {
 
 - [AddableTagList](/docs/components/addable-tag-list) — single-string sibling, with optional suggestion vocabulary
 - [AddableFieldRowList](/docs/components/addable-field-row-list) — multi-field sibling
-- [CatalogPicker](/docs/components/catalog-picker) — wraps AddableEntryList with source attribution
+- [AddableCatalogList](/docs/components/addable-catalog-list) — wraps AddableEntryList with source attribution
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-addable-entry-list--overview)**

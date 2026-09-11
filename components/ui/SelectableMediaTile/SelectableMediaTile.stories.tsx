@@ -88,17 +88,17 @@ export const Default: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   PICKER — single-select image grid (the photo-pinner pattern)
+   SINGLE-SELECT GRID — one pinned tile at a time (the photo-pinner pattern)
    ═══════════════════════════════════════════════════════════════ */
 
 /**
- * A hero-photo picker: an image grid where one tile is pinned at a
- * time. Clicking the pinned tile clears it. Selection is a brand ring
- * + check overlay + emphasised caption; `aria-pressed` tracks state.
+ * A single-select image grid: one tile is pinned at a time. Clicking
+ * the pinned tile clears it. Selection is a brand ring + check overlay
+ * + emphasised caption; `aria-pressed` tracks state.
  *
  * @summary Single-select photo grid — one pinned tile at a time
  */
-export const Picker: Story = {
+export const SingleSelectGrid: Story = {
   render: () => {
     const [pinned, setPinned] = React.useState<string | null>('lobby');
     return (

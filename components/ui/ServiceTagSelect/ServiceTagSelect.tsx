@@ -2,9 +2,9 @@ import { type HTMLAttributes, useId } from 'react';
 import { bdsClass } from '../../utils';
 import { ServiceTag } from '../ServiceTag';
 import { SERVICE_LINES, type ServiceLine, type ServiceTagSize } from '../ServiceTag/service-config';
-import './ServiceTagPicker.css';
+import './ServiceTagSelect.css';
 
-export interface ServiceTagPickerProps
+export interface ServiceTagSelectProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
   /** Currently selected service category. */
   value?: ServiceLine;
@@ -28,7 +28,7 @@ export interface ServiceTagPickerProps
 }
 
 /**
- * ServiceTagPicker — a single-select radiogroup of {@link ServiceTag} pills for
+ * ServiceTagSelect — a single-select radiogroup of {@link ServiceTag} pills for
  * choosing a Brik service category. Colors and labels come from the shared
  * `categoryConfig`, so consumers stop maintaining a parallel category/color
  * taxonomy.
@@ -42,12 +42,12 @@ export interface ServiceTagPickerProps
  * ```tsx
  * const [category, setCategory] = useState<ServiceLine>('brand');
  *
- * <ServiceTagPicker value={category} onChange={setCategory} />
+ * <ServiceTagSelect value={category} onChange={setCategory} />
  * ```
  *
  * @summary Single-select radiogroup of ServiceTag pills
  */
-export function ServiceTagPicker({
+export function ServiceTagSelect({
   value,
   onChange,
   categories = SERVICE_LINES,
@@ -56,14 +56,14 @@ export function ServiceTagPicker({
   ariaLabel = 'Service category',
   className,
   ...props
-}: ServiceTagPickerProps) {
+}: ServiceTagSelectProps) {
   const groupName = useId();
 
   return (
     <div
       role="radiogroup"
       aria-label={ariaLabel}
-      className={bdsClass('bds-service-tag-picker', disabled && 'bds-service-tag-picker--disabled', className)}
+      className={bdsClass('bds-service-tag-select', disabled && 'bds-service-tag-select--disabled', className)}
       {...props}
     >
       {categories.map((category) => {
@@ -75,8 +75,8 @@ export function ServiceTagPicker({
             key={category}
             htmlFor={id}
             className={bdsClass(
-              'bds-service-tag-picker__option',
-              checked && 'bds-service-tag-picker__option--selected',
+              'bds-service-tag-select__option',
+              checked && 'bds-service-tag-select__option--selected',
             )}
           >
             <input
@@ -87,7 +87,7 @@ export function ServiceTagPicker({
               checked={checked}
               disabled={disabled}
               onChange={() => onChange?.(category)}
-              className="bds-service-tag-picker__input"
+              className="bds-service-tag-select__input"
             />
             <ServiceTag category={category} size={size} />
           </label>
@@ -97,4 +97,4 @@ export function ServiceTagPicker({
   );
 }
 
-export default ServiceTagPicker;
+export default ServiceTagSelect;

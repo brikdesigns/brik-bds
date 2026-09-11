@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
-import { ServiceTagPicker } from './ServiceTagPicker';
+import { ServiceTagSelect } from './ServiceTagSelect';
 import type { ServiceLine } from '../ServiceTag/service-config';
 
 /** Interactive wrapper — manages the selected category. */
-function InteractiveServiceTagPicker({
+function InteractiveServiceTagSelect({
   defaultValue = 'brand',
   size,
   disabled,
@@ -18,7 +18,7 @@ function InteractiveServiceTagPicker({
 }) {
   const [value, setValue] = useState<ServiceLine>(defaultValue);
   return (
-    <ServiceTagPicker
+    <ServiceTagSelect
       value={value}
       onChange={setValue}
       size={size}
@@ -30,9 +30,9 @@ function InteractiveServiceTagPicker({
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
-const meta: Meta<typeof ServiceTagPicker> = {
-  title: 'Components/service-tag-picker',
-  component: ServiceTagPicker,
+const meta: Meta<typeof ServiceTagSelect> = {
+  title: 'Components/service-tag-select',
+  component: ServiceTagSelect,
   tags: ['surface-shared'],
   parameters: { layout: 'centered' },
   argTypes: {
@@ -63,7 +63,7 @@ const meta: Meta<typeof ServiceTagPicker> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ServiceTagPicker>;
+type Story = StoryObj<typeof ServiceTagSelect>;
 
 /* ═══════════════════════════════════════════════════════════════
    1. DEFAULT — args-driven sandbox. Controls work.
@@ -84,7 +84,7 @@ export const Default: Story = {
 
 /** @summary Clicking a pill updates the selected category */
 export const WithControlledSelection: Story = {
-  render: () => <InteractiveServiceTagPicker defaultValue="marketing" />,
+  render: () => <InteractiveServiceTagSelect defaultValue="marketing" />,
 };
 
 /* ═══════════════════════════════════════════════════════════════
@@ -98,7 +98,7 @@ export const WithControlledSelection: Story = {
  */
 export const InteractionTestSelection: Story = {
   tags: ['!manifest', 'interaction-test'],
-  render: () => <InteractiveServiceTagPicker defaultValue="brand" />,
+  render: () => <InteractiveServiceTagSelect defaultValue="brand" />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const brand = canvas.getByRole('radio', { name: 'Brand' });

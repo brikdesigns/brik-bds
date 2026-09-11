@@ -15,15 +15,15 @@ This distinction is load-bearing for titles and headings — get it wrong and yo
 
 A word earns **one** meaning in the vocabulary. When the same word names two unrelated shapes, every reader has to disambiguate by context, and the second use was a lie the moment it shipped — the same failure the blueprint rules below catch for layout words.
 
-`Picker` is the live case. It currently names three unrelated things:
+`Picker` was the live case. It had drifted onto three unrelated things:
 
-| Use | What it is | Examples |
+| Use | What it is | Reserved / resolved to |
 |---|---|---|
-| **Input control** | Resolves to **one value** from a constrained domain — a form control | `DatePicker`, `TimePicker` |
-| **Selection composition** | A set of selectable children the reader multi-selects — a composition, not a control | `ServiceTagPicker`, the `SelectableMediaTile` grid |
-| **Addable** | A member of the addable-list family that matches and adds from a catalog | `CatalogPicker` (`CatalogPickerSize = AddableEntryListSize`, [`CatalogPicker.tsx:35`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/CatalogPicker/CatalogPicker.tsx)) |
+| **Input control** | Resolves to **one value** from a constrained domain — a form control | `DatePicker`, `TimePicker` — **the one reserved use** |
+| **Selection composition** | A set of selectable children the reader selects — a composition, not a control | `ServiceTagSelect` (was `ServiceTagPicker`); the `SelectableMediaTile` grid story (was `Picker`) |
+| **Addable** | A member of the addable-list family that matches and adds from a catalog | `AddableCatalogList` (was `CatalogPicker`); `AddableCatalogListSize = AddableEntryListSize`, [`AddableCatalogList.tsx:35`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/AddableCatalogList/AddableCatalogList.tsx) |
 
-**The definition: `Picker` is reserved for the input control** — a component that resolves to a single value from a constrained domain (`DatePicker`, `TimePicker`). The other two uses are drift. `CatalogPicker` is an addable and is named for the wrong family; its rename is owed and tracked separately. `ServiceTagPicker` and the `SelectableMediaTile` grid are selection compositions ([Selectable](/docs/foundation/interaction-states#selectable)) and should be named for what they compose, not "picked".
+**The definition: `Picker` is reserved for the input control** — a component that resolves to a single value from a constrained domain (`DatePicker`, `TimePicker`). The other two uses were drift and have been renamed ([#2427](https://github.com/brikdesigns/brik-bds/issues/2427)): an addable is named for its family (`AddableCatalogList`), and a selection composition is named for what it composes (`ServiceTagSelect`, and the media-tile grid), not "picked".
 
 ## Slot pattern
 

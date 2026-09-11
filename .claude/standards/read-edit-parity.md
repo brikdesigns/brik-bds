@@ -26,7 +26,7 @@ The read view presents the same fields, in the same sections, in the same order 
 // ✅ #3085 — edit page groups the taxonomy field under "Color & Tag"
 <Section title="Color & Tag">
   <FormField label="Service tag category">
-    <ServiceTagPicker value={...} onChange={...} />
+    <ServiceTagSelect value={...} onChange={...} />
   </FormField>
 </Section>
 
@@ -43,7 +43,7 @@ The read view presents the same fields, in the same sections, in the same order 
 
 ## 2. Component-mapping parity
 
-A value rendered with a semantic/colored component in edit renders with the **same component family** in read. A value chosen via a colored `ServiceTagPicker` displays as a colored `ServiceTag` in read — never downgraded to a neutral `Tag`.
+A value rendered with a semantic/colored component in edit renders with the **same component family** in read. A value chosen via a colored `ServiceTagSelect` displays as a colored `ServiceTag` in read — never downgraded to a neutral `Tag`.
 
 **Why:** downgrading the component silently drops the signal (color, icon, semantics) the edit surface already committed to — the read view under-informs relative to what was actually saved.
 

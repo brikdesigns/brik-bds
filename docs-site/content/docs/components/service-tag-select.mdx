@@ -1,11 +1,11 @@
 ---
-title: Service tag picker
+title: Service tag select
 description: Single-select radiogroup of ServiceTag pills for choosing a Brik service category.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-ServiceTagPicker is a single-select control for picking a **Brik service category** — Brand, Marketing, Information, Product, Back Office. It renders each category as a selectable [ServiceTag](/docs/components/service-tag) pill, drawing colors and labels from the shared `categoryConfig` so callers never restate the taxonomy.
+ServiceTagSelect is a single-select control for picking a **Brik service category** — Brand, Marketing, Information, Product, Back Office. It renders each category as a selectable [ServiceTag](/docs/components/service-tag) pill, drawing colors and labels from the shared `categoryConfig` so callers never restate the taxonomy.
 
 ## Use it for
 
@@ -15,7 +15,7 @@ ServiceTagPicker is a single-select control for picking a **Brik service categor
 ## Import
 
 ```tsx
-import { ServiceTagPicker } from '@brikdesigns/bds';
+import { ServiceTagSelect } from '@brikdesigns/bds';
 ```
 
 ## Variants
@@ -28,7 +28,7 @@ import type { ServiceLine } from '@brikdesigns/bds';
 
 const [category, setCategory] = useState<ServiceLine>('brand');
 
-<ServiceTagPicker value={category} onChange={setCategory} />
+<ServiceTagSelect value={category} onChange={setCategory} />
 ```
 
 ### Sizes
@@ -44,7 +44,7 @@ The `size` prop is forwarded to the underlying ServiceTag pills.
 Pass `categories` to offer a subset, in your own order. Omit it to render all canonical service lines.
 
 ```tsx
-<ServiceTagPicker
+<ServiceTagSelect
   value={category}
   onChange={setCategory}
   categories={['brand', 'marketing', 'product']}
@@ -54,7 +54,7 @@ Pass `categories` to offer a subset, in your own order. Omit it to render all ca
 ## When *not* to use
 
 <Callout type="warn">
-  **Don't use ServiceTagPicker for non-service categories.** It is bound to the Brik service lines. For a generic single choice, use [SegmentedControl](/docs/components/segmented-control) or [Select](/docs/components/select).
+  **Don't use ServiceTagSelect for non-service categories.** It is bound to the Brik service lines. For a generic single choice, use [SegmentedControl](/docs/components/segmented-control) or [Select](/docs/components/select).
 </Callout>
 
 - **Don't use it for multi-select.** It is single-select; for multiple categories use a Checkbox group or [MultiSelect](/docs/components/multi-select).
@@ -68,7 +68,7 @@ Pass `categories` to offer a subset, in your own order. Omit it to render all ca
 
 ## API
 
-{/* props-check: ServiceTagPickerProps @ components/ui/ServiceTagPicker/ServiceTagPicker.tsx */}
+{/* props-check: ServiceTagSelectProps @ components/ui/ServiceTagSelect/ServiceTagSelect.tsx */}
 
 | Prop | Type | Default |
 |---|---|---|

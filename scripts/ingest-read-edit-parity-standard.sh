@@ -39,7 +39,7 @@ echo "▸ Ingesting read-edit-parity-standard ($(echo "$BODY" | wc -l | tr -d ' 
 
 rag_ingest_standard \
   "read-edit-parity-standard" \
-  "Canonical BDS read/edit parity standard — a read (view) surface and its edit surface for the same entity must mirror: order + grouping parity (matching Section/DataSection position), component-mapping parity (same component family, e.g. ServiceTagPicker -> ServiceTag, never downgraded to a neutral Tag), color semantics (Dot reserved for status, never repurposed for taxonomy/identity data), no redundant capture (one field per taxonomy). Worked example: brik-client-portal#3085 service-line color_token drop. Advisory — skill trigger + lint gate tracked in brik-client-portal#3084. Source: brik-bds/.claude/standards/read-edit-parity.md" \
+  "Canonical BDS read/edit parity standard — a read (view) surface and its edit surface for the same entity must mirror: order + grouping parity (matching Section/DataSection position), component-mapping parity (same component family, e.g. ServiceTagSelect -> ServiceTag, never downgraded to a neutral Tag), color semantics (Dot reserved for status, never repurposed for taxonomy/identity data), no redundant capture (one field per taxonomy). Worked example: brik-client-portal#3085 service-line color_token drop. Advisory — skill trigger + lint gate tracked in brik-client-portal#3084. Source: brik-bds/.claude/standards/read-edit-parity.md" \
   reference \
   brik-bds \
   "$BODY"

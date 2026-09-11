@@ -1,11 +1,11 @@
 ---
-title: Catalog picker
+title: Addable catalog list
 description: Industry-aware multi-pick with source attribution. Catalog picks + free-text additions, all stably slugged.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-CatalogPicker is the right primitive when an industry pack seeds defaults that the client can extend. It renders a reference catalog (e.g. the BCS dental industry pack's `servicesCatalog`) as suggestions, accepts free-text additions, and stamps every entry with a stable slug + `source: 'catalog' | 'custom'` attribution.
+AddableCatalogList is the right primitive when an industry pack seeds defaults that the client can extend. It renders a reference catalog (e.g. the BCS dental industry pack's `servicesCatalog`) as suggestions, accepts free-text additions, and stamps every entry with a stable slug + `source: 'catalog' | 'custom'` attribution.
 
 ## Use it for
 
@@ -18,7 +18,7 @@ For locked vocabularies (no custom escape), use [MultiSelect](/docs/components/m
 ## Import
 
 ```tsx
-import { CatalogPicker } from '@brikdesigns/bds';
+import { AddableCatalogList } from '@brikdesigns/bds';
 import { getIndustryServicesCatalog } from '@brikdesigns/bds/content-system';
 ```
 
@@ -29,7 +29,7 @@ import { getIndustryServicesCatalog } from '@brikdesigns/bds/content-system';
 ```tsx
 const catalog = getIndustryServicesCatalog(company.industry_slug);
 
-<CatalogPicker
+<AddableCatalogList
   label="Services Offered"
   catalog={catalog}
   value={services}
@@ -46,7 +46,7 @@ const catalog = getIndustryServicesCatalog(company.industry_slug);
 `strict` rejects free-text names that don't match a catalog `displayName` or alias. Use for locked vocabularies that still benefit from the catalog's metadata + description-per-entry shape.
 
 ```tsx
-<CatalogPicker
+<AddableCatalogList
   label="Insurance accepted"
   catalog={insuranceCatalog}
   value={insurances}
@@ -60,7 +60,7 @@ const catalog = getIndustryServicesCatalog(company.industry_slug);
 The picker is vocabulary-agnostic — pass any catalog matching the `CatalogEntry` shape. Real estate, dental, commercial — same picker, different `catalog` prop.
 
 ```tsx
-<CatalogPicker
+<AddableCatalogList
   label="Property types"
   catalog={getIndustryPropertyTypesCatalog('real-estate-rv-mhc')}
   value={propertyTypes}
@@ -75,7 +75,7 @@ The picker is vocabulary-agnostic — pass any catalog matching the `CatalogEntr
 ### Disabled
 
 ```tsx
-<CatalogPicker disabled value={services} onChange={() => {}} catalog={catalog} />
+<AddableCatalogList disabled value={services} onChange={() => {}} catalog={catalog} />
 ```
 
 ## Source attribution
@@ -98,7 +98,7 @@ Consumers persist the full array as a single JSONB column (e.g. `company_profile
 ## When *not* to use
 
 <Callout type="warn">
-  **Don't use CatalogPicker for locked vocabularies with no custom escape.** That's [MultiSelect](/docs/components/multi-select)'s job — pass the catalog as `options`. CatalogPicker's value is the *escape hatch* for free-text additions; if you don't want one, use the simpler component.
+  **Don't use AddableCatalogList for locked vocabularies with no custom escape.** That's [MultiSelect](/docs/components/multi-select)'s job — pass the catalog as `options`. AddableCatalogList's value is the *escape hatch* for free-text additions; if you don't want one, use the simpler component.
 </Callout>
 
 - **Don't use for flat string picks** with no description. The description textarea adds vertical weight that's wasted on tag-only inputs — use AddableTagList.
@@ -112,7 +112,7 @@ Consumers persist the full array as a single JSONB column (e.g. `company_profile
 
 ## API
 
-{/* props-check: CatalogPickerProps @ components/ui/CatalogPicker/CatalogPicker.tsx */}
+{/* props-check: AddableCatalogListProps @ components/ui/AddableCatalogList/AddableCatalogList.tsx */}
 | Prop | Type | Default |
 |---|---|---|
 | `catalog` | `readonly CatalogEntry[]` *(required)* | — |
@@ -134,7 +134,7 @@ Consumers persist the full array as a single JSONB column (e.g. `company_profile
 | `className` | `string` | — |
 
 `AddableEntryListSize` is shared with the rest of the addable-list family and is
-re-exported from this module as `CatalogPickerSize`.
+re-exported from this module as `AddableCatalogListSize`.
 
 ### Entry shapes
 
@@ -158,4 +158,4 @@ interface PickedCatalogEntry {
 
 - [MultiSelect](/docs/components/multi-select) — locked-vocabulary alternative
 - [Industries](/docs/content-system/industries) — where the catalogs come from
-- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-catalog-picker--overview)**
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-addable-catalog-list--overview)**
