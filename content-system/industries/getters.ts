@@ -36,7 +36,7 @@ export function getIndustryServices(slug: IndustrySlug | null | undefined): stri
  *
  * Distinct from `getIndustryServices` (flat string array of suggestion seeds).
  * Consumers that need slug-level attribution or alias matching (e.g. the
- * portal's `<CatalogPicker>` wiring for `services_offered`) read from this
+ * portal's `<AddableCatalogList>` wiring for `services_offered`) read from this
  * getter; UIs that only need a suggestion dropdown keep using the flat one.
  */
 export function getIndustryServicesCatalog(
@@ -46,11 +46,11 @@ export function getIndustryServicesCatalog(
 }
 
 /**
- * One pain-point entry shaped for the portal's `<CatalogPicker>`.
+ * One pain-point entry shaped for the portal's `<AddableCatalogList>`.
  *
  * The pack's `customerPainPoints[]` has a richer shape (`summary`,
  * optional `segment`, optional `detail`) — this getter flattens it to
- * the minimal `{ slug, displayName }` that CatalogPicker expects so
+ * the minimal `{ slug, displayName }` that AddableCatalogList expects so
  * consumers can pass the result directly without writing an adapter.
  * Call the pack's `customerPainPoints` member directly when you need
  * segment + detail.
@@ -81,7 +81,7 @@ function toSlug(raw: string): string {
 
 /**
  * Returns the customer-pain-point catalog for the given industry, shaped
- * for the portal's `<CatalogPicker>`. Each entry carries a stable slug
+ * for the portal's `<AddableCatalogList>`. Each entry carries a stable slug
  * derived from the pack's `summary` field plus the `summary` itself as
  * `displayName`. Falls back to the `small-business` pack when slug is
  * unknown.
@@ -103,10 +103,10 @@ export function getIndustryPainPoints(
 }
 
 /**
- * One keyword entry shaped for the portal's `<CatalogPicker>`. Same
+ * One keyword entry shaped for the portal's `<AddableCatalogList>`. Same
  * structural shape as IndustryPainPointEntry / ServiceEntry — every
  * Stream C getter normalizes to `{ slug, displayName, aliases? }` so
- * consumers wire through CatalogPicker uniformly.
+ * consumers wire through AddableCatalogList uniformly.
  *
  * `tier` flags whether the entry came from `keywordBank.primary`
  * (brand/category-level) or `keywordBank.serviceLevel` (service- or
@@ -154,7 +154,7 @@ export function getIndustryKeywords(
 }
 
 /**
- * One CTA-defaults entry shaped for `<CatalogPicker>`. Same structural
+ * One CTA-defaults entry shaped for `<AddableCatalogList>`. Same structural
  * shape as every other Stream C getter's output — `{ slug, displayName,
  * aliases? }` — so consumers wire uniformly.
  */

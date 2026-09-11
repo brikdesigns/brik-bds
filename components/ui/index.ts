@@ -25,7 +25,7 @@ export * from './Calendar';
 export * from './ButtonGroup';
 export * from './Card';
 export * from './CardControl';
-export * from './CatalogPicker';
+export * from './AddableCatalogList';
 export * from './CardList';
 export * from './CardTestimonial';
 export * from './Testimonial';
@@ -98,7 +98,7 @@ export * from './SegmentedControl';
 export * from './Select';
 export * from './SelectableMediaTile';
 export * from './ServiceTag';
-export * from './ServiceTagPicker';
+export * from './ServiceTagSelect';
 // Internal shared hooks (not part of the public package surface — barrel
 // export required by the component-completeness pre-commit check)
 export * from './shared';

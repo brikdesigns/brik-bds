@@ -13,7 +13,7 @@ RelationshipField is the right primitive when a picked list's **order is part of
 - Replacing hand-rolled "list + ↑/↓/× buttons + Select-to-add" UI (the pattern this component generalizes out of `settings-plan-edit-page.tsx`'s Supported Services list)
 - Fields where a read surface needs to show the same relationship as an icon-text `ServiceTag` list, matching the edit picker's component family (see [read/edit parity](/docs/components/service-tag))
 
-For selections where order is incidental — the set matters, not the sequence — use [MultiSelect](/docs/components/multi-select) (locked vocabulary) or [CatalogPicker](/docs/components/catalog-picker) (vocabulary + free-text escape) instead.
+For selections where order is incidental — the set matters, not the sequence — use [MultiSelect](/docs/components/multi-select) (locked vocabulary) or [AddableCatalogList](/docs/components/addable-catalog-list) (vocabulary + free-text escape) instead.
 
 ## Import
 
@@ -59,7 +59,7 @@ Once `value.length >= maxItems`, the add row (dropdown + button) hides.
 
 ### Sizes
 
-`sm`, `md` (default), `lg` — matching the AddableEntryList / CatalogPicker scale.
+`sm`, `md` (default), `lg` — matching the AddableEntryList / AddableCatalogList scale.
 
 ## Item + option shape
 
@@ -79,10 +79,10 @@ type RelationshipOption = RelationshipItem;
 ## When *not* to use
 
 <Callout type="warn">
-  **Don't use RelationshipField when order is incidental.** If the set of picks is all that's saved, `MultiSelect`/`CatalogPicker` are the simpler controls — adding reorder machinery to a set-shaped relationship is unnecessary surface area.
+  **Don't use RelationshipField when order is incidental.** If the set of picks is all that's saved, `MultiSelect`/`AddableCatalogList` are the simpler controls — adding reorder machinery to a set-shaped relationship is unnecessary surface area.
 </Callout>
 
-- **Don't use for free-text additions.** RelationshipField is catalog-only, like `MultiSelect`. Use `CatalogPicker` if users need to add entries outside the catalog.
+- **Don't use for free-text additions.** RelationshipField is catalog-only, like `MultiSelect`. Use `AddableCatalogList` if users need to add entries outside the catalog.
 - **Don't use for drag-and-drop reorder.** v1 ships arrow-button reorder only; drag-and-drop is a tracked follow-up, not a current capability.
 
 ## Accessibility
@@ -116,6 +116,6 @@ type RelationshipOption = RelationshipItem;
 ## Related
 
 - [MultiSelect](/docs/components/multi-select) — set-shaped alternative, no reorder
-- [CatalogPicker](/docs/components/catalog-picker) — set-shaped alternative with free-text escape
+- [AddableCatalogList](/docs/components/addable-catalog-list) — set-shaped alternative with free-text escape
 - [ServiceTag](/docs/components/service-tag) — read-mode rendering for service-categorized items
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-relationship-field--overview)**

@@ -17,7 +17,7 @@
  */
 
 interface ComponentLinksProps {
-  /** docs-site slug in kebab-case. Required. e.g. "button", "catalog-picker". */
+  /** docs-site slug in kebab-case. Required. e.g. "button", "addable-catalog-list". */
   slug: string;
   /** PascalCase directory name under components/ui/. Defaults to slug-derived. */
   name?: string;

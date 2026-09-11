@@ -1,6 +1,6 @@
 @layer bds-components {
 /**
- * BDS ServiceTagPicker
+ * BDS ServiceTagSelect
  *
  * Single-select radiogroup of ServiceTag pills. The pill fill carries the
  * category color (from ServiceTag); this file adds only the selection affordance
@@ -13,7 +13,7 @@
 
 /* ── Group ── */
 
-.bds-service-tag-picker {
+.bds-service-tag-select {
   display: flex;
   flex-wrap: wrap;
   gap: var(--gap-sm);
@@ -21,7 +21,7 @@
 
 /* ── Option (label wrapping a hidden radio + ServiceTag) ── */
 
-.bds-service-tag-picker__option {
+.bds-service-tag-select__option {
   display: inline-flex;
   align-items: center;
   border-radius: var(--border-radius-sm);
@@ -33,27 +33,27 @@
 
 /* ── Selected ── */
 
-.bds-service-tag-picker__option--selected {
+.bds-service-tag-select__option--selected {
   box-shadow: 0 0 0 var(--border-width-lg) var(--border-primary);
 }
 
 /* ── Focus (keyboard) — ring follows the focused radio ── */
 
-.bds-service-tag-picker__input:focus-visible + .bds-service-tag {
+.bds-service-tag-select__input:focus-visible + .bds-service-tag {
   outline: var(--border-width-lg) solid var(--border-focus);
   outline-offset: var(--border-width-sm);
 }
 
 /* ── Disabled ── */
 
-.bds-service-tag-picker--disabled .bds-service-tag-picker__option {
+.bds-service-tag-select--disabled .bds-service-tag-select__option {
   cursor: not-allowed;
   opacity: var(--state-disabled-opacity);
 }
 
 /* ── Visually-hidden native radio (stays focusable for keyboard + SR) ── */
 
-.bds-service-tag-picker__input {
+.bds-service-tag-select__input {
   position: absolute;
   width: 1px;
   height: 1px;
