@@ -66,6 +66,18 @@ The `mediaTreatment` prop controls how the `media` slot relates to the card edge
 
 <Canvas of={Stories.Metric} />
 
+Two optional slots extend `metric` for a labelled selection (the shape the deprecated `ProductSummaryCard` covered): `media` renders a leading glyph (e.g. a `<ServiceTag>`) beside the stat, and `detail` renders a secondary line below the value (e.g. `price • frequency`). Both are additive — a plain stat omits them.
+
+```tsx
+<Card
+  layout="metric"
+  media={<ServiceTag category="brand" variant="icon" size="lg" serviceName="Logo Design" />}
+  overline="Interested in"
+  title="Standard Logo Design"
+  detail="$650 • one time"
+/>
+```
+
 ### Control layout
 
 `layout="control"` — settings / integration row. Leading `media` (logo) + `title` / `description` on the left, (`connectionStatus` indicator + `action`) on the right. Use `actionAlign="top"` for long descriptions where the action should anchor to the upper-right corner.

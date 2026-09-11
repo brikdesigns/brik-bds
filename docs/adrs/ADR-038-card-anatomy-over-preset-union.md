@@ -76,7 +76,7 @@ No discriminated union. `layout` selects arrangement; the slots are the same acr
 
 ### 4. `ProductSummaryCard` is deprecated into `layout="metric"`
 
-Same playbook as `CardControl`→`preset="control"`: `@deprecated` JSDoc, `!manifest` on the meta, story consolidated into `Card.stories.tsx`, standalone sidebar entry removed. The service-line glyph moves to the `overline` slot (`<ServiceTag>`); the service tint uses Card's existing `tint`. `service` is dropped from the tint options on migration (Card's `tint` already excludes it, `Card.tsx:21`).
+Same playbook as `CardControl`→`preset="control"`: `@deprecated` JSDoc + `!manifest` on the meta (Phase 3), `Deprecated/` title, removed once no consumer imports it. **Correction to the original sketch:** PSC does not fold into a bare `metric` — its leading `<ServiceTag>` and its `price • frequency` line have no home in `overline`/`title`/`action` alone. Phase 3 therefore extends `metric` with two additive slots — `media` (leading glyph) and `detail` (secondary line under the value) — and the mapping is `media`=`<ServiceTag>`, `overline`=label, `title`=value, `detail`=`price • frequency`. The extension is additive: a plain `metric` emits neither slot, so existing metric cards are unchanged. PSC stays a thin unchanged shim until brik-client-portal (its only consumer) migrates, because that migration needs a published BDS release (Phase 3-publish, deferred).
 
 ### 5. Guardrail (refines ADR-004)
 
