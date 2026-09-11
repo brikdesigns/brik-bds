@@ -13,13 +13,6 @@
  * lists all 5, so the silent-fallback CI grep only fires on a value
  * outside the vocabulary.
  *
- * Known gap: `portfolio-minimal`'s documented serif face is NOT rendered
- * — canon ships no serif `--font-family` token (all four families are
- * Poppins). The archetype ships its other distinctions (no dropdowns,
- * wide tracking, hide-on-scroll/reveal-up); the serif treatment lands
- * when a `--font-family-serif` token exists (tracked, needs operator
- * ratification — do NOT invent the token).
- *
  * This is NOT a blueprint — SiteHeader takes direct site-shell props,
  * not BlueprintProps. It lives in `@brikdesigns/bds/blueprints-astro`
  * alongside the blueprints because that package is the package every
@@ -449,9 +442,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
 
   /* portfolio-minimal — text-only, chrome-out-of-the-way. Transparent over
    * the hero, solid on scroll, wide letter tracking. Hide-on-scroll /
-   * reveal-up is driven by the runtime (reveal-on-scroll behavior). The
-   * documented serif face is NOT applied — canon has no serif font-family
-   * token; tracked as a gap (see the component docblock). */
+   * reveal-up is driven by the runtime (reveal-on-scroll behavior). */
   .bp-site-header--portfolio-minimal {
     --bds-site-header-bg: transparent;
     box-shadow: none;

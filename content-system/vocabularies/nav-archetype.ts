@@ -34,8 +34,8 @@
  *     Fit: multi-practice legal, specialty medical groups, agencies.
  *
  *   portfolio-minimal
- *     3-4 primary links, no dropdowns, text-only serif treatment with
- *     wide tracking. Hide-on-scroll-down + reveal-on-scroll-up. Utility
+ *     3-4 primary links, no dropdowns, text-only treatment with wide
+ *     tracking. Hide-on-scroll-down + reveal-on-scroll-up. Utility
  *     cluster is minimal — often just an IG icon and a ghost "Inquire".
  *     Fit: MUA, creative portfolios, photographers, wedding.
  *
