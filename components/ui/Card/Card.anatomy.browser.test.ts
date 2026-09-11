@@ -2,10 +2,6 @@ import { afterEach, describe, expect, it } from 'vitest';
 import React, { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { Card, CardDescription } from './Card';
-// Token definitions — without `:root`'s custom properties every `var(--text-*)`
-// is invalid at computed-value time and falls back to the same inherited color,
-// which silently makes the color-parity assertion below vacuous.
-import '../../../dist/tokens.css';
 
 /**
  * ADR-038 Phase 1 gate — the flat anatomy API (`layout`) ships alongside the
@@ -66,6 +62,15 @@ describe('Card anatomy API (ADR-038)', () => {
     // there carries `.bds-card-description` (--text-secondary), not the preset's
     // `.bds-card__preset-display-description` (--text-primary) — so without the
     // parity rule in Card.css the migration silently re-styles every body line.
+    //
+    // Sentinel token values rather than `dist/tokens.css`: that file is a build
+    // artifact and is absent in CI, and an undefined custom property makes every
+    // `var(--text-*)` invalid at computed-value time — both sides then fall back
+    // to the same inherited color and the assertion passes vacuously.
+    const tokens = document.createElement('style');
+    tokens.textContent = ':root{--text-primary:rgb(11,11,11);--text-secondary:rgb(99,99,99)}';
+    document.head.appendChild(tokens);
+
     for (const [preset, layout, bodyClass] of [
       ['display', 'stack', 'bds-card__preset-display-description'],
       ['display-row', 'row', 'bds-card__preset-display-row-description'],
@@ -80,8 +85,13 @@ describe('Card anatomy API (ADR-038)', () => {
       );
       const anatColor = getComputedStyle(anatEl.querySelector('.bds-card-description')!).color;
 
+      // Anchor the baseline — if the sentinels ever stop applying, both sides
+      // read the same inherited color and the equality below means nothing.
+      expect(presetColor).toBe('rgb(11, 11, 11)');
       expect(anatColor).toBe(presetColor);
     }
+
+    tokens.remove();
   });
 
   it('layout="metric" renders the summary surface with label + value', async () => {
