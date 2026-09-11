@@ -1,0 +1,117 @@
+/* Section rhythm + centred container: ../section-shell.css (ADR-021). */
+  .bds-about {
+    background: var(--bds-about-bg, var(--page-primary));
+  }
+
+  .bds-about__container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--gap-xl);
+  }
+
+  @media (min-width: 768px) {
+    .bds-about__container:has(.bds-about__callout) {
+      grid-template-columns: 3fr 2fr;
+      gap: var(--gap-2xl);
+      align-items: start;
+    }
+  }
+
+  .bds-about__narrative {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Content rhythm (ADR-023 §3), mirroring the React twin in About.css:
+     eyebrow→title is tight (--gap-sm), title→lead is medium (--gap-md). */
+
+  .bds-about__narrative > * + * {
+    margin-top: var(--gap-md);
+  }
+
+  .bds-about__subtitle + .bds-about__title {
+    margin-top: var(--gap-sm);
+  }
+
+  .bds-about__subtitle {
+    margin: 0;
+    font-family: var(--font-family-label);
+    font-size: var(--label-lg);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bds-about-eyebrow-color, var(--text-brand-primary));
+  }
+
+  .bds-about__title {
+    margin: 0;
+    font-family: var(--font-family-heading);
+    font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-xl));
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-tight);
+    color: var(--bds-about-heading-color, var(--text-primary));
+  }
+
+  .bds-about__lead {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--heading-sm);
+    line-height: var(--font-line-height-relaxed);
+    color: var(--bds-about-body-color, var(--text-secondary));
+    max-width: 65ch;
+  }
+
+  /* Pull-quote — mirrors the React path's outlined <CardTestimonial>
+     (components/ui/CardTestimonial), kept in visual sync via shared tokens.
+     Astro has no CardTestimonial twin, and the blueprint gates forbid both a
+     component's internal `__body` slot (banned-suffix) and Astro-only `bds-*`
+     slots absent from the published allowlist (canonical-class-check). So the
+     only bds- class is the published `__callout`; its children are styled by
+     element selectors, and the quote mark is a decorative `::before`. */
+  .bds-about__callout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-lg);
+    margin: 0;
+    padding: var(--padding-lg);
+    border-radius: var(--border-radius-md);
+    background-color: var(--surface-primary);
+    border: var(--border-width-md) solid var(--border-secondary);
+  }
+
+  .bds-about__callout::before {
+    content: '“';
+    font-family: var(--font-family-display);
+    font-size: var(--heading-3xl);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--font-line-height-tight);
+    color: var(--text-brand-primary);
+    user-select: none;
+  }
+
+  .bds-about__callout blockquote {
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--body-md);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--font-line-height-normal);
+    color: var(--text-primary);
+  }
+
+  .bds-about__callout figcaption {
+    display: flex;
+    flex-direction: column;
+    /* Tight text pairing: --gap-sm. Not --gap-xs, which resolves to 0px
+       outside default spacing mode (ADR-023 §3). */
+    gap: var(--gap-sm);
+  }
+
+  .bds-about__callout cite {
+    margin: 0;
+    font-family: var(--font-family-label);
+    font-size: var(--label-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--font-line-height-snug);
+    font-style: normal;
+    color: var(--text-primary);
+  }

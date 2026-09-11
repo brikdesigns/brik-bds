@@ -134,22 +134,24 @@ Eight components. A component is a **block**; the layout it renders in is a **pr
 
 `<BlueprintDispatcher>` owns the key → (block, layout) mapping, so a consumer that dispatches never picks a layout by hand.
 
-| Component | `layout` | Library key | Section type |
-|---|---|---|---|
-| `<Hero>` | `split` | `hero_split` | `hero` |
-| `<Hero>` | `interior-minimal` | `hero_interior_minimal` | `hero` |
-| `<Hero>` | `with-pricing-card` | `hero_split_image_card_overlay` | `hero` |
-| `<CardGrid>` | `card-grid` | `card_grid` | `services` |
-| `<CardGrid>` | `two-column-list` | `two_column_detail` | `services` |
-| `<Cta>` | `split` | `cta_split_contact` | `cta` |
-| `<Cta>` | `default` | `cta_centered` | `cta` |
-| `<About>` | — | `story_split` | `about` |
-| `<Features>` | — | `feature_grid` | `features` |
-| `<CalloutPanel>` | — | `callout_split` | `support_plan` |
-| `<StatsDarkBar>` | — | `stats_bar` | `stats` |
-| `<TestimonialsFeaturedLarge>` | — | `testimonials_featured_large` | `testimonials` |
+| Component | `layout` | Library key | Section type | Storybook |
+|---|---|---|---|---|
+| `<Hero>` | `split` | `hero_split` | `hero` | [astro-hero — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-hero--default) |
+| `<Hero>` | `interior-minimal` | `hero_interior_minimal` | `hero` | [astro-hero — Interior Minimal](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-hero--interior-minimal) |
+| `<Hero>` | `with-pricing-card` | `hero_split_image_card_overlay` | `hero` | [astro-hero — With Pricing Card](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-hero--with-pricing-card) |
+| `<CardGrid>` | `card-grid` | `card_grid` | `services` | [astro-card-grid — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-card-grid--default) |
+| `<CardGrid>` | `two-column-list` | `two_column_detail` | `services` | [astro-card-grid — Two Column List](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-card-grid--two-column-list) |
+| `<Cta>` | `split` | `cta_split_contact` | `cta` | [astro-cta — Split](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-cta--split) |
+| `<Cta>` | `default` | `cta_centered` | `cta` | [astro-cta — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-cta--default) |
+| `<About>` | — | `story_split` | `about` | [astro-about — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-about--default) |
+| `<Features>` | — | `feature_grid` | `features` | [astro-features — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-features--default) |
+| `<CalloutPanel>` | — | `callout_split` | `support_plan` | [astro-callout-panel — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-callout-panel--default) |
+| `<StatsDarkBar>` | — | `stats_bar` | `stats` | [astro-stats-dark-bar — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-stats-dark-bar--default) |
+| `<TestimonialsFeaturedLarge>` | — | `testimonials_featured_large` | `testimonials` | [astro-testimonials-featured-large — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-testimonials-featured-large--default) |
 
 The `HeroLayout` / `CtaLayout` / `CardGridLayout` unions are exported from the package and shared with the React rail, so a layout cannot be added to one rail only.
+
+The `Blueprints/astro-*` entries render this rail's own output, pre-rendered by `scripts/render-astro-blueprints.mjs` rather than by the React twin ([ADR-039](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-039-astro-blueprints-are-pre-rendered-into-the-react-storybook.md)). Their `Blueprints/*` neighbours without the `astro-` prefix are the React twins — same fixtures, different rail, which is what makes the two comparable side by side.
 
 Unshipped keys render `<BlueprintFallback>` when the dispatcher encounters them — expected during the v0.1 → v1.0 incremental ramp. Each follow-up PR adds one or more components and removes its key from the fallback case.
 
