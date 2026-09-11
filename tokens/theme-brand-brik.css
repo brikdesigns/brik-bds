@@ -53,6 +53,12 @@
      the correct bar for a UI-component fill + CTA label (gated as such in
      contrast-pairings.json). Restored from the poppy-dark AA divergence (BDS-22). */
   --surface-brand-primary: var(--color-poppy-500);
+  /* --surface-brand-primary-hover and --surface-brand-primary-pressed hold one
+   * interaction step each above
+   * the 500 base. The #2337 Brand Kit re-author moved the generated pair to
+   * poppy-800 / poppy-950 (10.24:1 / 15.57:1 under a white label) — a jump of two
+   * and three steps off the base, which reads as a state change to a different
+   * fill rather than a hover. Keeping 700 / 800 preserves the BDS-22 ladder. */
   --surface-brand-primary-hover: var(--color-poppy-700);
   --surface-brand-primary-pressed: var(--color-poppy-800);
   --surface-brand-secondary: var(--color-tan-100);
@@ -79,6 +85,10 @@
   --background-image-brand: var(--color-poppy-500);
   /* Border */
   --border-primary: var(--color-grayscale-950);
+  /* --border-secondary / --border-muted stay at 300 (#e0e0e0, 1.32:1 on the white
+   * page). The #2337 Brand Kit re-author moved the generated pair to grayscale-100
+   * (#f2f2f2, 1.12:1) — a divider that faint effectively disappears on white, and
+   * these two carry every card and table rule in the Brik theme. */
   --border-secondary: var(--color-grayscale-300);
   --border-muted: var(--color-grayscale-300);
   --border-brand-primary: var(--color-poppy-500);
@@ -115,6 +125,11 @@
   /* Text */
   --text-primary: var(--color-grayscale-100);
   --text-secondary: var(--color-grayscale-300);
+  /* --text-muted holds 700 (#5a5a5a, 3.04:1 on the true-black page) — the tracked
+   * AA-large exception in contrast-pairings.json. The #2337 Brand Kit re-author
+   * moved the generated value to grayscale-600 (#6e6e6e, 4.12:1), which would
+   * clear plain AA and retire that exception. Adopting it changes a shipped brand
+   * value, so it is deferred to its own a11y change, not folded into the sync. */
   --text-muted: var(--color-grayscale-700);
   --text-inverse: var(--color-grayscale-black);
   --text-brand-primary: var(--color-poppy-500);
@@ -216,6 +231,10 @@
   --background-secondary-hover: var(--color-grayscale-800);
   --background-secondary-pressed: var(--color-grayscale-950);
   /* Border */
+  /* --border-primary holds 800 (#333333, 1.66:1 on the true-black page). The
+   * #2337 Brand Kit re-author moved the generated value to grayscale-900
+   * (#272727, 1.41:1), which pushes the primary rule further toward invisible on
+   * black — the wrong direction for the token that outlines cards and inputs. */
   --border-primary: var(--color-grayscale-800);
   /* One step LIGHTER than the generated 800 (#333333): a secondary divider has
    * to stay visible on the true-black page, and 800 measures 1.66:1 against it
