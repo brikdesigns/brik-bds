@@ -10,6 +10,25 @@ import './Card.css';
 export type CardVariant = 'outlined' | 'brand' | 'elevated' | 'raised' | 'borderless';
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 export type CardPreset = 'control' | 'summary' | 'display' | 'display-row';
+/**
+ * Card layout arrangement (ADR-038) — the flat, anatomy-driven successor to the
+ * `preset` discriminated union. One `Card` interface, one slot set, three
+ * arrangements:
+ *
+ * - `stack` — vertical: optional top `media`, then `overline` / `title` /
+ *   `children` (body) / `action`. The successor to `preset="display"`.
+ * - `row` — horizontal: `media` on the left, the same text column on the right.
+ *   The successor to `preset="display-row"`.
+ * - `metric` — compact stat: `overline` as the label above a large `title`
+ *   value, optional `action`. The context-neutral successor to
+ *   `preset="summary"` (finance is only one use).
+ *
+ * Additive in Phase 1: the `preset` union keeps working unchanged. This path
+ * renders with the SAME CSS classes as the matching preset, so `layout="stack"`
+ * and `preset="display"` are pixel-identical — the eventual migration is a
+ * prop swap, not a re-style.
+ */
+export type CardLayout = 'stack' | 'row' | 'metric';
 /** Heading level for a card's title — decouples document outline from the token-driven visual size. */
 export type CardHeadingLevel = 'h2' | 'h3' | 'h4';
 /**
@@ -142,6 +161,8 @@ interface CardBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
 interface CardDefaultProps extends CardBaseProps {
   /** No preset — default flexible Card with `children` content slot. */
   preset?: undefined;
+  /** Discriminant guard — the flat anatomy API uses `layout`; never combine it with the preset union (ADR-038). */
+  layout?: never;
   /**
    * Visual variant — outlined / brand / elevated / raised / borderless
    * (default `outlined`). Use `borderless` for cards sitting on a colored
@@ -176,6 +197,8 @@ interface CardControlPresetProps extends CardBaseProps {
    * (connection-status + action) on the right.
    */
   preset: 'control';
+  /** Discriminant guard — use `layout` instead for the flat anatomy API (ADR-038). */
+  layout?: never;
   /** Bold control label */
   title: string;
   /** Helper text under the title */
@@ -224,6 +247,8 @@ interface CardSummaryPresetProps extends CardBaseProps {
    * ADR-004 §"Resolve the existing instances").
    */
   preset: 'summary';
+  /** Discriminant guard — use `layout="metric"` for the flat anatomy API (ADR-038). */
+  layout?: never;
   /** Stat label rendered above the value */
   label: string;
   /**
@@ -253,6 +278,8 @@ interface CardDisplayPresetProps extends CardBaseProps {
    * Compose `<CardGrid>` + `<Card preset="display">`.
    */
   preset: 'display';
+  /** Discriminant guard — use `layout="stack"` for the flat anatomy API (ADR-038). */
+  layout?: never;
   /**
    * `borderless` — transparent fill, no border, no shadow. Use when the
    * card grid sits on a colored surface (service-tier tint) where the
@@ -339,6 +366,8 @@ interface CardDisplayRowPresetProps extends CardBaseProps {
    * featured plan. Collapses to a vertical stack at ≤ 640px.
    */
   preset: 'display-row';
+  /** Discriminant guard — use `layout="row"` for the flat anatomy API (ADR-038). */
+  layout?: never;
   /** Card heading. Renders with `--font-family-heading` + `--heading-md`; the element is `titleAs` (default `h3`). */
   title: string;
   /**
@@ -397,12 +426,59 @@ interface CardDisplayRowPresetProps extends CardBaseProps {
   href?: string;
 }
 
+/**
+ * Flat, anatomy-driven Card (ADR-038) — the successor to the `preset` union.
+ * Selected by passing `layout`; every slot is optional and the same slot set
+ * serves all three arrangements. Additive: the `preset` members above keep
+ * working unchanged, so this ships with zero consumer churn.
+ */
+interface CardAnatomyProps extends CardBaseProps {
+  /** Arrangement — `stack` (vertical) / `row` (horizontal) / `metric` (stat). Selects this flat API. */
+  layout: CardLayout;
+  /**
+   * Leading media — a `<Frame>`-wrapped `<Image>`, `<Avatar>`, `<Logo>`, or any
+   * ReactNode. Top of the card in `stack`, left column in `row`. Omit for a
+   * text-only card. (Not used by `metric`.)
+   */
+  media?: ReactNode;
+  /**
+   * Eyebrow above the title — a `<ServiceTag>`, `<Tag>`, category, or date pill
+   * in `stack`/`row`; the stat label in `metric`. Justified flex-start.
+   */
+  overline?: ReactNode;
+  /**
+   * Title. A heading (`titleAs`, default `h3`) in `stack`/`row`; the large stat
+   * value in `metric`. Any ReactNode — no numeric formatting is applied (unlike
+   * `preset="summary"`); format the value before passing it.
+   */
+  title?: ReactNode;
+  /** Heading element for `title` in `stack`/`row` — `h2` / `h3` / `h4`. Default `h3`. Ignored by `metric`. */
+  titleAs?: CardHeadingLevel;
+  /** Body content under the title (`stack`/`row`). Arbitrary ReactNode; the card owns only the column rhythm. */
+  children?: ReactNode;
+  /** Trailing action — bottom-anchored in `stack`/`row`, inline-right in `metric`. */
+  action?: ReactNode;
+  /** Overlay badge anchored to the media corner. Renders only when `media` is present (`stack`/`row`). */
+  badge?: ReactNode;
+  /** Service-line surface tint (`stack`/`row`) — pale wash keyed to a service line. Border/size unchanged. */
+  tint?: CardTint;
+  /** Surface treatment for a cell on a colored grid — `borderless` / `elevated` / `raised` (`stack`/`row`). */
+  variant?: 'borderless' | 'elevated' | 'raised';
+  /** Image column width for `row` — `narrow` (25%) / `standard` (35%, default) / `wide` (50%) / any CSS length. */
+  imageWidth?: CardDisplayRowImageWidth;
+  /** Media treatment for `stack` — `flush` (default, bleeds to edge) / `inset` (framed with the body). */
+  mediaTreatment?: CardMediaTreatment;
+  /** Render the whole card as an `<a>` navigation target (`stack`/`row`). */
+  href?: string;
+}
+
 export type CardProps =
   | CardDefaultProps
   | CardControlPresetProps
   | CardSummaryPresetProps
   | CardDisplayPresetProps
-  | CardDisplayRowPresetProps;
+  | CardDisplayRowPresetProps
+  | CardAnatomyProps;
 
 function formatSummaryValue(value: string | number, type: CardSummaryType): string {
   if (typeof value === 'string') return value;
@@ -493,6 +569,11 @@ function formatSummaryValue(value: string | number, type: CardSummaryType): stri
  * @summary Flexible content container with presets
  */
 export function Card(props: CardProps) {
+  // ADR-038 flat anatomy API — dispatched first; the `preset` union below is
+  // untouched. `layout?: never` on every preset member makes this narrow cleanly.
+  if (props.layout != null) {
+    return renderAnatomy(props);
+  }
   if (props.preset === 'control') {
     return renderControlPreset(props);
   }
@@ -876,6 +957,122 @@ function renderDisplayRowPreset({
 
   return (
     <div className={classes} style={inlineStyle as React.CSSProperties} {...rest}>
+      {body}
+    </div>
+  );
+}
+
+/**
+ * Render the flat anatomy Card (ADR-038). Emits the SAME BEM classes as the
+ * matching `preset` renderer for each layout, so `layout="stack"` /`"row"`
+ * /`"metric"` are pixel-identical to `preset="display"` /`"display-row"`
+ * /`"summary"`. No new CSS — the migration is a prop swap, not a re-style.
+ */
+function renderAnatomy({
+  layout,
+  media,
+  overline,
+  title,
+  titleAs: Heading = 'h3',
+  children,
+  action,
+  badge,
+  tint,
+  variant,
+  imageWidth = 'standard',
+  mediaTreatment = 'flush',
+  href,
+  className,
+  style,
+  ...rest
+}: CardAnatomyProps) {
+  if (layout === 'metric') {
+    return (
+      <div className={bdsClass('bds-card', 'bds-card--preset-summary', className)} style={style} {...rest}>
+        <div className="bds-card__preset-summary-inner">
+          <div className="bds-card__preset-summary-content">
+            {overline != null && <p className="bds-card__preset-summary-label">{overline}</p>}
+            {title != null && <p className="bds-card__preset-summary-value">{title}</p>}
+          </div>
+          {action && <div className="bds-card__preset-summary-link-area">{action}</div>}
+        </div>
+      </div>
+    );
+  }
+
+  if (layout === 'row') {
+    const isNamed = NAMED_IMAGE_WIDTHS.has(imageWidth);
+    const classes = bdsClass(
+      'bds-card',
+      'bds-card--preset-display-row',
+      isNamed && `bds-card--preset-display-row-${imageWidth}`,
+      tint && `bds-card--tint-${tint}`,
+      href && 'bds-card--link',
+      className,
+    );
+    const inlineStyle = isNamed
+      ? style
+      : { ...(style ?? {}), ['--bds-card-image-width' as string]: imageWidth };
+    const body = (
+      <>
+        {media && <div className="bds-card__preset-display-row-media">{media}</div>}
+        <div className="bds-card__preset-display-row-body">
+          {overline != null && <span className="bds-card__preset-display-row-tag">{overline}</span>}
+          {title != null && <Heading className="bds-card__preset-display-row-title">{title}</Heading>}
+          {children}
+          {action && <div className="bds-card__preset-display-row-action">{action}</div>}
+        </div>
+      </>
+    );
+    if (href) {
+      return (
+        <a href={href} className={classes} style={inlineStyle as React.CSSProperties} {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
+          {body}
+        </a>
+      );
+    }
+    return (
+      <div className={classes} style={inlineStyle as React.CSSProperties} {...rest}>
+        {body}
+      </div>
+    );
+  }
+
+  // layout === 'stack'
+  const classes = bdsClass(
+    'bds-card',
+    'bds-card--preset-display',
+    mediaTreatment === 'inset' && 'bds-card--preset-display-inset',
+    variant && `bds-card--${variant}`,
+    tint && `bds-card--tint-${tint}`,
+    href && 'bds-card--link',
+    className,
+  );
+  const body = (
+    <>
+      {media && (
+        <div className="bds-card__preset-display-media">
+          {media}
+          {badge && <span className="bds-card__preset-display-badge">{badge}</span>}
+        </div>
+      )}
+      <div className="bds-card__preset-display-body">
+        {overline != null && <span className="bds-card__preset-display-tag">{overline}</span>}
+        {title != null && <Heading className="bds-card__preset-display-title">{title}</Heading>}
+        {children}
+        {action && <div className="bds-card__preset-display-action">{action}</div>}
+      </div>
+    </>
+  );
+  if (href) {
+    return (
+      <a href={href} className={classes} style={style} {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
+        {body}
+      </a>
+    );
+  }
+  return (
+    <div className={classes} style={style} {...rest}>
       {body}
     </div>
   );
