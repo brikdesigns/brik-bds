@@ -342,6 +342,24 @@
   margin: 0;
 }
 
+/* Leading glyph slot for `layout="metric"` (e.g. a `<ServiceTag>`) — sits beside
+ * the stacked content in the flex `-inner`. Only emitted by the flat anatomy
+ * metric layout; the legacy summary preset never renders it. */
+.bds-card__preset-summary-media {
+  flex-shrink: 0;
+  display: flex;
+}
+
+/* Secondary detail line under the value (`layout="metric"`) — e.g. price •
+ * frequency. Muted body text; additive, only emitted by the metric layout. */
+.bds-card__preset-summary-detail {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  color: var(--text-muted);
+  line-height: var(--font-line-height-normal);
+  margin: 0;
+}
+
 .bds-card__preset-summary-link-area {
   flex: 1 0 0;
   display: flex;

@@ -4,7 +4,11 @@ import { ProductSummaryCard } from './ProductSummaryCard';
 const meta: Meta<typeof ProductSummaryCard> = {
   title: 'Containers/product-summary-card',
   component: ProductSummaryCard,
-  tags: ['surface-shared'],
+  // Deprecated (ADR-038 Phase 3) — superseded by `<Card layout="metric">`.
+  // `!manifest` hides it from MCP discovery so agents reach for the Card layout.
+  // Title stays under Containers/ for now to keep visual baselines stable; the
+  // Deprecated/ sidebar move rides with its removal once the portal migrates.
+  tags: ['surface-shared', '!manifest'],
   parameters: { layout: 'centered' },
   argTypes: {
     serviceLine: {

@@ -27,7 +27,12 @@ export interface ProductSummaryCardProps extends HTMLAttributes<HTMLDivElement> 
  * through on. The label/value pair carries the selection; price + frequency are
  * secondary supporting detail.
  *
- * @summary Selected product/service summary — ServiceTag + label/value + price
+ * @deprecated Use `<Card layout="metric">` (ADR-038 Phase 3) — `media` takes the
+ * leading `<ServiceTag>`, `overline` the label, `title` the value, `detail` the
+ * `price • frequency` line. This component is kept as a thin, unchanged shim for
+ * its current consumer (brik-client-portal) until that repo migrates; remove it
+ * once no consumer imports it.
+ * @summary Deprecated: use Card layout="metric"
  */
 export function ProductSummaryCard({
   serviceLine,
