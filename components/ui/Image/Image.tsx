@@ -19,20 +19,28 @@ export interface ImageProps extends HTMLAttributes<HTMLElement> {
    */
   ratio?: FrameRatio;
   /**
-   * How the image fills its frame. Only meaningful together with `ratio`.
-   * Default `cover`. Passed through to the wrapping `<Frame>`.
+   * Custom aspect-ratio string (CSS `aspect-ratio` syntax) for one-offs that
+   * don't fit a `FrameRatio` slug — e.g. `"5 / 4"`, `"1.618"`. Overrides
+   * `ratio` when set; like `ratio`, it wraps the image in a `<Frame>`. Prefer
+   * a `ratio` slug so the shape stays on the `--aspect-*` token family.
+   */
+  customRatio?: string;
+  /**
+   * How the image fills its frame. Only meaningful together with `ratio` /
+   * `customRatio`. Default `cover`. Passed through to the wrapping `<Frame>`.
    */
   fit?: FrameFit;
   /**
    * Which axis the wrapping `<Frame>` fixes. Only meaningful together with
-   * `ratio`. Default `width` (fills container width, derives height). Set
-   * `height` for a fixed-height thumbnail whose width follows the ratio —
-   * supply the height via `className` / `style` on the image.
+   * `ratio` / `customRatio`. Default `width` (fills container width, derives
+   * height). Set `height` for a fixed-height thumbnail whose width follows the
+   * ratio — supply the height via `className` / `style` on the image.
    */
   anchor?: FrameAnchor;
   /**
    * `object-position` for the image inside its frame (e.g. `"top"`,
-   * `"50% 25%"`). Only meaningful together with `ratio` + a cropping `fit`.
+   * `"50% 25%"`). Only meaningful together with `ratio` / `customRatio` + a
+   * cropping `fit`.
    */
   position?: string;
   /**
@@ -85,6 +93,7 @@ export function Image({
   src,
   alt,
   ratio,
+  customRatio,
   fit = 'cover',
   anchor = 'width',
   position,
@@ -116,8 +125,14 @@ export function Image({
 
   return (
     <figure className={bdsClass('bds-image', className)} style={style} {...props}>
-      {ratio ? (
-        <Frame className="bds-image__media" ratio={ratio} fit={fit} anchor={anchor}>
+      {ratio || customRatio ? (
+        <Frame
+          className="bds-image__media"
+          ratio={ratio}
+          customRatio={customRatio}
+          fit={fit}
+          anchor={anchor}
+        >
           {img}
         </Frame>
       ) : (
