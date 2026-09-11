@@ -4,14 +4,21 @@
  * `archetype` prop to render one of the locked navigation archetypes
  * from the vocabulary (`NAV_ARCHETYPE_VALUES`).
  *
- * v0.1 implements ONE archetype in full: `editorial-transparent`.
- * This is the default for both the `small-business` pack (which Vale
- * resolves to) and the `dental` pack. Every other archetype value
- * currently renders the editorial-transparent markup with a
- * `data-unimplemented-archetype="<value>"` attribute on the header,
- * which CI can grep for in client repos whose pack picks a not-yet-
- * implemented archetype. Future PRs fill in the render paths for
- * `utility-first`, `service-centric`, `portfolio-minimal`, `calm-flat`.
+ * All 5 archetypes in `NAV_ARCHETYPE_VALUES` now render distinctly
+ * (#2373). Each `.bp-site-header--<archetype>` CSS block below tunes the
+ * background, scroll behavior, and typographic treatment per the
+ * semantics in `content-system/vocabularies/nav-archetype.ts`; the shared
+ * markup + runtime carry the rest. `data-unimplemented-archetype` is no
+ * longer emitted for any vocabulary value — `IMPLEMENTED_ARCHETYPES`
+ * lists all 5, so the silent-fallback CI grep only fires on a value
+ * outside the vocabulary.
+ *
+ * Known gap: `portfolio-minimal`'s documented serif face is NOT rendered
+ * — canon ships no serif `--font-family` token (all four families are
+ * Poppins). The archetype ships its other distinctions (no dropdowns,
+ * wide tracking, hide-on-scroll/reveal-up); the serif treatment lands
+ * when a `--font-family-serif` token exists (tracked, needs operator
+ * ratification — do NOT invent the token).
  *
  * This is NOT a blueprint — SiteHeader takes direct site-shell props,
  * not BlueprintProps. It lives in `@brikdesigns/bds/blueprints-astro`
@@ -43,10 +50,13 @@
  *
  *   Layout at ≥768px: [logo] [primary nav links, centered] [phone + CTA]
  *   Layout at  <768px: [logo] [hamburger button + mobile drawer markup]
- *   Scroll:  transparent over hero at top, frosted glass past 80px — the
- *            transparent→frost transition is DEFERRED (tracked on #2373
- *            AC "scroll behaviors"); the component ships the `is-scrolled`
- *            state hook the CSS keys off, not the transparency itself yet.
+ *   Scroll:  transparent over hero at top; past the scroll threshold the
+ *            bar gains its `--surface-navigation` background + a
+ *            `backdrop-filter` blur (frosted glass) and hides on
+ *            scroll-down / reveals on scroll-up (`data-scroll-hidden`,
+ *            driven by the runtime for `transparent-top-frosted-past-80`).
+ *            The client sets the over-hero text color via
+ *            `--bds-site-header-text-color`.
  *   Drawer:  fullscreen-overlay (mobile).
  *
  * ## utility-first archetype
@@ -57,6 +67,29 @@
  *   surface, not a branding one. Gains a subtle elevation shadow once
  *   scrolled (`data-scrolled`). Mobile drawer: `slide-left-panel` — slides
  *   in from the left over a translucent scrim, leaving the page visible.
+ *
+ * ## service-centric archetype
+ *
+ *   The mega-menu is the product — always-solid header for multi-practice
+ *   legal / specialty medical / agency packs where Services / Practice
+ *   Areas is the primary journey. Solid `--surface-navigation` background,
+ *   elevation shadow on scroll, never hides. Reuses the shared mega-menu
+ *   markup (column count is data-driven from `servicesMegaMenu.columns`).
+ *
+ * ## portfolio-minimal archetype
+ *
+ *   Text-only, chrome-out-of-the-way header for MUA / creative / wedding
+ *   packs. No dropdowns (packs don't pass `servicesMegaMenu`), wide letter
+ *   tracking, transparent at top → solid on scroll, hide-on-scroll-down +
+ *   reveal-on-scroll-up (`reveal-on-scroll`). Serif face is the one
+ *   documented trait not yet rendered — see the "Known gap" note above.
+ *
+ * ## calm-flat archetype
+ *
+ *   Low-stimulation header for wellness / mental-health / recovery packs.
+ *   Always solid at low contrast (`--surface-muted`), no dropdowns, never
+ *   hides, single warm CTA. Predictable and still — nothing moves on
+ *   scroll beyond the elevation shadow.
  *
  * ## a11y
  *
@@ -120,7 +153,13 @@ const {
   mobileDrawer = null,
 } = Astro.props;
 
-const IMPLEMENTED_ARCHETYPES = ['editorial-transparent', 'utility-first'] as const;
+const IMPLEMENTED_ARCHETYPES = [
+  'editorial-transparent',
+  'utility-first',
+  'service-centric',
+  'portfolio-minimal',
+  'calm-flat',
+] as const;
 const isImplemented = (IMPLEMENTED_ARCHETYPES as readonly string[]).includes(archetype);
 
 const phoneHref = phone ? `tel:${phone.replace(/[^+\d]/g, '')}` : null;
@@ -352,7 +391,22 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
     z-index: 100;
     background: var(--bds-site-header-bg);
     padding-block: var(--padding-md);
-    transition: box-shadow 160ms ease-out;
+    transition: box-shadow 160ms ease-out, background 160ms ease-out,
+      transform 200ms ease-out;
+  }
+
+  /* Hide-on-scroll — the runtime sets [data-scroll-hidden] on scroll-down
+   * for behaviors that hide (transparent-top-frosted-past-80,
+   * reveal-on-scroll, hide-on-scroll) and removes it on scroll-up / at the
+   * top. Sticky positioning means translateY(-100%) slides the bar out. */
+  .bp-site-header[data-scroll-hidden] {
+    transform: translateY(-100%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bp-site-header {
+      transition: box-shadow 160ms ease-out, background 160ms ease-out;
+    }
   }
 
   /* utility-first — always-solid task surface: never transparent, never
@@ -363,6 +417,64 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
   }
 
   .bp-site-header--utility-first[data-scrolled] {
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* editorial-transparent — transparent over the hero at the top of the
+   * page; past the scroll threshold it gains its solid navigation surface
+   * plus a backdrop blur (frosted glass) and a subtle shadow. The runtime
+   * additionally drives hide-on-scroll / reveal-on-scroll-up. The client
+   * sets the over-hero text color via --bds-site-header-text-color. */
+  .bp-site-header--editorial-transparent {
+    --bds-site-header-bg: transparent;
+    box-shadow: none;
+  }
+
+  .bp-site-header--editorial-transparent[data-scrolled] {
+    --bds-site-header-bg: var(--surface-navigation);
+    backdrop-filter: blur(var(--blur-radius-md));
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* service-centric — the mega-menu is the product. Always-solid nav
+   * surface (like utility-first) with an elevation shadow on scroll; the
+   * shared mega-menu markup carries the multi-column flyout. */
+  .bp-site-header--service-centric {
+    --bds-site-header-bg: var(--surface-navigation);
+  }
+
+  .bp-site-header--service-centric[data-scrolled] {
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* portfolio-minimal — text-only, chrome-out-of-the-way. Transparent over
+   * the hero, solid on scroll, wide letter tracking. Hide-on-scroll /
+   * reveal-up is driven by the runtime (reveal-on-scroll behavior). The
+   * documented serif face is NOT applied — canon has no serif font-family
+   * token; tracked as a gap (see the component docblock). */
+  .bp-site-header--portfolio-minimal {
+    --bds-site-header-bg: transparent;
+    box-shadow: none;
+  }
+
+  .bp-site-header--portfolio-minimal[data-scrolled] {
+    --bds-site-header-bg: var(--surface-navigation);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .bp-site-header--portfolio-minimal .bp-site-header__brand,
+  .bp-site-header--portfolio-minimal .bp-site-header__nav-link {
+    letter-spacing: 0.12em;
+  }
+
+  /* calm-flat — low-stimulation, anxiety-sensitive audiences. Always solid
+   * at low contrast (muted surface), no dropdowns, never hides. Nothing
+   * moves on scroll beyond the elevation shadow. */
+  .bp-site-header--calm-flat {
+    --bds-site-header-bg: var(--surface-muted);
+  }
+
+  .bp-site-header--calm-flat[data-scrolled] {
     box-shadow: var(--shadow-sm);
   }
 
@@ -877,12 +989,42 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
       if (e.matches && isOpen()) close();
     });
 
-    // On-scroll state hook — utility-first keys its elevation shadow off
-    // [data-scrolled]. Always-solid archetypes never hide; this only
-    // toggles the state attribute, never the layout.
+    // On-scroll runtime — two independent signals off the same listener:
+    //   [data-scrolled]      elevation shadow + editorial's frost, past 8px.
+    //   [data-scroll-hidden] hide-on-scroll for behaviors that hide. The
+    //                        vocabulary (scroll-behavior.ts) names three:
+    //                        transparent-top-frosted-past-80 and
+    //                        reveal-on-scroll hide on scroll-down past 120px
+    //                        and reveal on scroll-up; hide-on-scroll hides
+    //                        past 80px and only reveals back at the top.
+    //   sticky-solid (utility-first, service-centric, calm-flat) never hides.
+    const behavior = header.getAttribute('data-scroll-behavior') ?? '';
+    const hides =
+      behavior === 'transparent-top-frosted-past-80' ||
+      behavior === 'reveal-on-scroll' ||
+      behavior === 'hide-on-scroll';
+    const revealsOnScrollUp = behavior !== 'hide-on-scroll';
+    const hideThreshold = behavior === 'hide-on-scroll' ? 80 : 120;
+    let lastScrollY = window.scrollY;
+
     const onScroll = () => {
-      if (window.scrollY > 8) header.setAttribute('data-scrolled', '');
+      const y = window.scrollY;
+      if (y > 8) header.setAttribute('data-scrolled', '');
       else header.removeAttribute('data-scrolled');
+
+      // Never hide while the mobile drawer is open (scroll is locked, but
+      // guard anyway so the header stays put behind the overlay).
+      if (hides && !isOpen()) {
+        const scrollingDown = y > lastScrollY;
+        if (scrollingDown && y > hideThreshold) {
+          header.setAttribute('data-scroll-hidden', '');
+        } else if (!scrollingDown && revealsOnScrollUp) {
+          header.removeAttribute('data-scroll-hidden');
+        } else if (y <= 8) {
+          header.removeAttribute('data-scroll-hidden');
+        }
+      }
+      lastScrollY = y;
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });

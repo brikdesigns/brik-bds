@@ -496,6 +496,111 @@ const ctaDarkProps: BlueprintProps = {
 `,
 );
 
+// Archetype fixtures — one page per remaining nav archetype implemented in
+// #2373 (service-centric / portfolio-minimal / calm-flat). One header per
+// page because <SiteHeader> emits hardcoded element ids (drawer, mega
+// panel); two on a page would trip axe's duplicate-id rule. Each page adds
+// a <main><h1> so the doc has a landmark + heading for the axe scan.
+const ARCHETYPE_FIXTURES = [
+  {
+    slug: 'service-centric',
+    // The mega-menu is the product — 2-column flyout + featured
+    // practitioner card, always-solid surface.
+    props: `archetype="service-centric"
+      brandName="Verify Scratch"
+      phone="+1 (615) 555-0100"
+      navItems={[
+        { label: 'Practice Areas', href: '/practice-areas' },
+        { label: 'Attorneys', href: '/attorneys' },
+        { label: 'Results', href: '/results' },
+        { label: 'About', href: '/about' },
+        { label: 'Contact', href: '/contact' },
+      ]}
+      primaryCta={{ label: 'Free Consultation', href: '/contact' }}
+      currentPath="/practice-areas"
+      scrollBehavior="sticky-solid"
+      mobileDrawer="fullscreen-overlay"
+      servicesMegaMenu={{
+        triggerLabel: 'Practice Areas',
+        columns: 2,
+        categories: [
+          { heading: 'Litigation', items: [
+            { label: 'Personal Injury', href: '/practice-areas/personal-injury' },
+            { label: 'Medical Malpractice', href: '/practice-areas/med-mal', note: 'Trial-ready' },
+          ] },
+          { heading: 'Advisory', items: [
+            { label: 'Estate Planning', href: '/practice-areas/estate' },
+            { label: 'Business Law', href: '/practice-areas/business' },
+          ] },
+        ],
+        featured: {
+          eyebrow: 'Meet the team',
+          heading: 'Speak with a partner today',
+          body: 'Every matter is led by a named attorney.',
+          ctaLabel: 'Our attorneys',
+          ctaHref: '/attorneys',
+        },
+      }}`,
+  },
+  {
+    slug: 'portfolio-minimal',
+    // No dropdowns (no servicesMegaMenu), wide tracking, transparent at
+    // top, reveal-on-scroll. Minimal utility cluster (ghost CTA).
+    props: `archetype="portfolio-minimal"
+      brandName="Verify Scratch"
+      navItems={[
+        { label: 'Work', href: '/work' },
+        { label: 'About', href: '/about' },
+        { label: 'Journal', href: '/journal' },
+        { label: 'Contact', href: '/contact' },
+      ]}
+      primaryCta={{ label: 'Inquire', href: '/contact' }}
+      currentPath="/work"
+      scrollBehavior="reveal-on-scroll"
+      mobileDrawer="fullscreen-overlay"`,
+  },
+  {
+    slug: 'calm-flat',
+    // No dropdowns, low-contrast muted surface, always solid, single CTA.
+    props: `archetype="calm-flat"
+      brandName="Verify Scratch"
+      navItems={[
+        { label: 'Services', href: '/services' },
+        { label: 'Approach', href: '/approach' },
+        { label: 'Contact', href: '/contact' },
+      ]}
+      primaryCta={{ label: 'Book Session', href: '/book' }}
+      currentPath="/services"
+      scrollBehavior="sticky-solid"
+      mobileDrawer="fullscreen-overlay"`,
+  },
+];
+
+for (const fixture of ARCHETYPE_FIXTURES) {
+  writeFileSync(
+    join(scratch, `src/pages/${fixture.slug}.astro`),
+    `---
+import { SiteHeader } from '@brikdesigns/bds/blueprints-astro';
+---
+<html lang="en">
+  <head>
+    <title>BDS ${fixture.slug} verify</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <SiteHeader
+      ${fixture.props}
+    />
+    <main>
+      <h1>${fixture.slug}</h1>
+    </main>
+  </body>
+</html>
+`,
+  );
+}
+
 // Dispatcher page fixture — exercises <BlueprintDispatcher> end-to-end.
 // Includes 8 known sections (covering every v0.1 component) + 1
 // UNKNOWN section with blueprintKey='hero_centered_gradient' (valid
@@ -682,13 +787,24 @@ try {
 }
 
 // ── 9. Rendered-HTML assertions ──────────────────────────────────
-log.step('Asserting rendered HTML markers (home + interior + dispatched)');
+log.step('Asserting rendered HTML markers (home + interior + dispatched + archetypes)');
 const homeHtmlPath = resolve(scratch, 'dist/index.html');
 const interiorHtmlPath = resolve(scratch, 'dist/interior/index.html');
 const dispatchedHtmlPath = resolve(scratch, 'dist/dispatched/index.html');
 const homeHtml = readFileSync(homeHtmlPath, 'utf8');
 const interiorHtml = readFileSync(interiorHtmlPath, 'utf8');
 const dispatchedHtml = readFileSync(dispatchedHtmlPath, 'utf8');
+
+// Per-archetype rendered HTML (#2373) — one page each.
+const archetypeHtmlPaths = Object.fromEntries(
+  ARCHETYPE_FIXTURES.map((f) => [
+    f.slug,
+    resolve(scratch, `dist/${f.slug}/index.html`),
+  ]),
+);
+const scHtml = readFileSync(archetypeHtmlPaths['service-centric'], 'utf8');
+const pmHtml = readFileSync(archetypeHtmlPaths['portfolio-minimal'], 'utf8');
+const cfHtml = readFileSync(archetypeHtmlPaths['calm-flat'], 'utf8');
 
 const assertions = [
   // Every shipped blueprint's marker present across direct-import pages
@@ -734,6 +850,16 @@ const assertions = [
   { name: 'SiteHeader utility-first behavior hooks',  pass: interiorHtml.includes('data-scroll-behavior="sticky-solid"') && interiorHtml.includes('data-drawer-pattern="slide-left-panel"') },
   { name: 'SiteHeader utility-first 3-col mega',      pass: interiorHtml.includes('--bds-site-header-mega-columns: 3') && interiorHtml.includes('href="/rv-parks/seasonal"') },
   { name: 'SiteHeader slide-left drawer + scrim',     pass: interiorHtml.includes('bp-site-header__scrim') && interiorHtml.includes('bp-site-header__drawer-close') },
+
+  // SiteHeader remaining archetypes implemented distinctly (#2373) — each
+  // renders its own marker and drops the data-unimplemented-archetype fallback.
+  { name: 'SiteHeader editorial-transparent not unimplemented', pass: homeHtml.includes('data-nav-archetype="editorial-transparent"') && !homeHtml.includes('data-unimplemented-archetype') },
+  { name: 'SiteHeader service-centric implemented',   pass: scHtml.includes('data-nav-archetype="service-centric"') && !scHtml.includes('data-unimplemented-archetype') },
+  { name: 'SiteHeader service-centric 2-col mega + featured', pass: scHtml.includes('--bds-site-header-mega-columns: 2') && scHtml.includes('bp-site-header__mega-featured') && scHtml.includes('href="/practice-areas/med-mal"') },
+  { name: 'SiteHeader portfolio-minimal implemented', pass: pmHtml.includes('data-nav-archetype="portfolio-minimal"') && !pmHtml.includes('data-unimplemented-archetype') },
+  { name: 'SiteHeader portfolio-minimal reveal-on-scroll + no dropdowns', pass: pmHtml.includes('data-scroll-behavior="reveal-on-scroll"') && !pmHtml.includes('bp-site-header__mega-trigger') },
+  { name: 'SiteHeader calm-flat implemented',         pass: cfHtml.includes('data-nav-archetype="calm-flat"') && !cfHtml.includes('data-unimplemented-archetype') },
+  { name: 'SiteHeader calm-flat sticky-solid + no dropdowns', pass: cfHtml.includes('data-scroll-behavior="sticky-solid"') && !cfHtml.includes('bp-site-header__mega-trigger') && cfHtml.includes('bp-site-header__cta') },
 
   // Dispatcher assertions (dispatched page)
   // Guard: the JS-side fixture key list must match the template it describes,
@@ -841,6 +967,10 @@ try {
     { label: 'home',       path: homeHtmlPath },
     { label: 'interior',   path: interiorHtmlPath },
     { label: 'dispatched', path: dispatchedHtmlPath },
+    ...ARCHETYPE_FIXTURES.map((f) => ({
+      label: f.slug,
+      path: archetypeHtmlPaths[f.slug],
+    })),
   ];
   let totalPasses = 0;
   const allViolations = [];
