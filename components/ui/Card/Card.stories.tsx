@@ -283,22 +283,20 @@ export const WithLogo: Story = {
 };
 
 /**
- * `preset="control"` — locked-down settings / integration-row layout (replaces
- * the legacy `CardControl` component, ADR-004). A leading `logo` + `badge` +
- * (title + description) on the left; a trailing `connectionStatus` indicator +
- * `action` on the right. Shown here as the canonical integration card.
+ * `layout="control"` — settings / integration-row layout (ADR-038; replaces
+ * `preset="control"`). Leading `media` (logo) + `title` / `description` on the
+ * left; a trailing `connectionStatus` indicator + `action` on the right.
  *
  * `connectionStatus`, `lastSynced`, and `actionAlign` are **Controls** — the
- * status is a *state of one card*, not a set of card variants, so cycle it in
- * the Controls panel (`not-configured` → `connected` → `syncing` → `synced` →
- * `error`) rather than reaching for separate stories.
+ * status is a *state of one card*, not a set of variants, so cycle it in the
+ * panel rather than adding stories.
  *
- * @summary preset="control" — integration card (status = Control)
+ * @summary layout="control" — settings / integration row
  */
 export const Control: Story = {
   args: {
-    preset: 'control',
-    logo: <Logo set="integration" name="notion" size="sm" />,
+    layout: 'control',
+    media: <Logo set="integration" name="notion" size="sm" />,
     title: 'Notion Meetings Database',
     description: 'Discovery-call meeting notes for proposal generation.',
     connectionStatus: 'synced',
@@ -321,7 +319,7 @@ export const Control: Story = {
       description:
         'Vertical alignment of the trailing block. `top` anchors it to the upper-right corner; `center` aligns to the vertical midline.',
     },
-    logo: {
+    media: {
       control: false,
       description:
         'Leading logo slot — a `<Logo>` for an integration / third-party service, or an `<Avatar>` for an account. Renders before `badge` in the content row.',
@@ -348,32 +346,29 @@ export const Control: Story = {
 };
 
 /**
- * `preset="summary"` — compact metric/stat card with label, large value,
- * and optional text link. Replaces the legacy `CardSummary` component
- * (ADR-004). Numeric `value` formats via `Intl.NumberFormat`; pass
- * `type="price"` for USD currency. String values render verbatim.
+ * `layout="metric"` — compact stat card: `overline` label above a large
+ * `title` value, optional `action` (ADR-038; replaces `preset="summary"`).
+ * Context-neutral — finance is only one use. Pre-format the value; no numeric
+ * formatting is applied by the card.
  *
- * @summary preset="summary" — compact metric card
+ * @summary layout="metric" — compact stat card
  */
-export const Summary: Story = {
+export const Metric: Story = {
   args: {
-    preset: 'summary',
-    label: 'Q1 revenue',
-    value: 48250.75,
-    type: 'price',
-    textLink: { label: 'Details', href: '#' },
+    layout: 'metric',
+    overline: 'Q1 revenue',
+    title: '$48,250.75',
+    action: (
+      <Button variant="outline" size="sm">
+        Details
+      </Button>
+    ),
   },
   argTypes: {
     variant: { table: { disable: true } },
     padding: { table: { disable: true } },
     interactive: { table: { disable: true } },
     href: { table: { disable: true } },
-    type: {
-      control: 'radio',
-      options: ['numeric', 'price'],
-      description:
-        'Number formatting. `numeric` (default) = locale integer (e.g. 1,234); `price` = USD currency (e.g. $1,234.50). Ignored when `value` is a string.',
-    },
   },
   decorators: [
     (Story) => (
@@ -385,26 +380,26 @@ export const Summary: Story = {
 };
 
 /**
- * `preset="display"` — the **cell of a `CardGrid`**, not a standalone card
- * (see [ADR-018](../../../docs/adrs/ADR-018-card-preset-boundary.md)): a display
- * card only exists inside a `CardGrid` Section, which owns the columns. One
- * malleable cell serves any content type — service, blog post, customer story,
- * property listing, team bio, support plan — via optional slot props (`image`,
- * `tag`, `badge`, `action`, `href`). The `variant` Control switches the surface
- * treatment for cells on a colored (service-tinted) grid: `borderless`
- * (transparent), `elevated` (fill, no shadow), or `raised` (fill + cast
- * `--box-shadow-md` shadow).
+ * `layout="stack"` — vertical content card: optional top `media`, `overline`,
+ * `title`, `children` (body), bottom-anchored `action` (ADR-038; replaces
+ * `preset="display"`). The malleable `CardGrid` cell — compose inside
+ * `<CardGrid>`. `variant` / `tint` set the surface for a cell on a colored grid;
+ * `mediaTreatment="inset"` frames media + body together (the former
+ * `DisplayInset` story, now a Control).
  *
- * @summary preset="display" — CardGrid cell
+ * @summary layout="stack" — vertical content card
  */
-export const Display: Story = {
+export const Stack: Story = {
   args: {
-    preset: 'display',
+    layout: 'stack',
+    media: <Image src={landscapeThumb} alt="Marketing service" ratio="3-2" />,
+    overline: <Badge>Marketing</Badge>,
     title: 'Service one',
-    description:
-      'A two-line card description that sets the type rhythm without trying to tell the whole story.',
-    image: <Image src={landscapeThumb} alt="Marketing service" ratio="3-2" />,
-    tag: <Badge>Marketing</Badge>,
+    children: (
+      <CardDescription>
+        A two-line card description that sets the type rhythm without trying to tell the whole story.
+      </CardDescription>
+    ),
     badge: <Badge status="positive">Has Options</Badge>,
     action: (
       <Button variant="primary" size="sm">
@@ -423,26 +418,26 @@ export const Display: Story = {
         raised: 'raised',
       },
       description:
-        'Surface treatment for a cell on a colored (service-tinted) grid. `borderless` = transparent, no border/shadow; `elevated` = fill + shadow, no border; `raised` = fill, no border, `--box-shadow-md` shadow. Default = outlined white fill.',
+        'Surface treatment for a cell on a colored (service-tinted) grid. `borderless` = transparent, no border/shadow; `elevated` = fill, no border; `raised` = fill, no border, `--box-shadow-md` shadow. Default = outlined white fill.',
     },
     tint: {
       control: 'select',
       options: ['none', 'brand', 'marketing', 'information', 'product', 'back-office'],
       mapping: { none: undefined },
       description:
-        'Service-line surface tint — a pale wash keyed to a service line, mapping to the canonical service-line pastel surface token. Sets only the surface; border/size unchanged. Default = no tint.',
+        'Service-line surface tint — a pale wash keyed to a service line. Sets only the surface; border/size unchanged. Default = no tint.',
     },
     titleAs: {
       control: 'inline-radio',
       options: ['h2', 'h3', 'h4'],
       description:
-        'Heading element for the title (default `h3`). Set to keep the document outline correct for the card context; visual size is token-driven and does not change.',
+        'Heading element for the title (default `h3`). Keeps the document outline correct; visual size is token-driven.',
     },
     mediaTreatment: {
       control: 'inline-radio',
       options: ['flush', 'inset'],
       description:
-        'How the `image` slot relates to the card edge. `flush` (default) bleeds the media to the edge and pads only the text body; `inset` frames media + body together in a `--padding-huge` inset (the service-card "card-vertical" look).',
+        'How the `media` slot relates to the card edge. `flush` (default) bleeds to the edge and pads only the body; `inset` frames media + body together in a `--padding-huge` inset.',
     },
     padding: { table: { disable: true } },
     interactive: { table: { disable: true } },
@@ -457,73 +452,32 @@ export const Display: Story = {
 };
 
 /**
- * `preset="display"` with `mediaTreatment="inset"` — the service-card
- * "card-vertical" look. The media and text body are framed together inside a
- * single `--padding-huge` inset (vs the default `flush`, where the media bleeds
- * to the card edge and only the body is padded). One primitive, treatment by
- * prop — this replaces the former site-local `.service-card--inset` CSS
- * override.
+ * `layout="row"` — horizontal content card: `media` left, text column right
+ * (ADR-038; replaces `preset="display-row"`). For single-row sections where a
+ * vertical layout wastes width. `imageWidth` sizes the media column; the body is
+ * the flexible `children` slot; collapses to a stack at ≤ 640px.
  *
- * @summary preset="display" — inset media treatment
+ * @summary layout="row" — horizontal content card
  */
-export const DisplayInset: Story = {
+export const Row: Story = {
   args: {
-    preset: 'display',
-    mediaTreatment: 'inset',
-    title: 'Service one',
-    description:
-      'A two-line card description that sets the type rhythm without trying to tell the whole story.',
-    image: <Image src={landscapeThumb} alt="Marketing service" ratio="3-2" />,
-    tag: <Badge>Marketing</Badge>,
-    action: (
-      <Button variant="primary" size="sm">
-        Learn more
-      </Button>
-    ),
-  },
-  argTypes: {
-    padding: { table: { disable: true } },
-    interactive: { table: { disable: true } },
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ width: 320, display: 'flex' }}>
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-/**
- * `preset="display-row"` — the **horizontal `CardGrid` cell / section row**
- * (see [ADR-018](../../../docs/adrs/ADR-018-card-preset-boundary.md)), not a
- * standalone card. Image on the left, content (tag, title, description,
- * optional `extras`, action) on the right. Use for single-row sections where a
- * vertical layout wastes horizontal space: Related Customer Story, Recommended
- * Add-On, featured plan, company-segment overview. Toggle `imageWidth` between
- * `narrow` / `standard` / `wide` (or pass a custom CSS length / percentage) to
- * size the media column. The `extras` slot drops in any supporting content
- * (bullet list, pill row, gallery) between description and action. Collapses to
- * vertical stacking at ≤ 640px.
- *
- * @summary preset="display-row" — horizontal CardGrid cell
- */
-export const DisplayRow: Story = {
-  args: {
-    preset: 'display-row',
+    layout: 'row',
+    media: <Image src={landscapeThumb} alt="Web design retainer" ratio="3-2" />,
+    overline: <Badge>Marketing</Badge>,
     title: 'Web Design Retainer',
-    description:
-      'Ongoing design partnership for teams shipping a steady stream of marketing pages, lifecycle assets, and product UI.',
-    image: <Image src={landscapeThumb} alt="Web design retainer" ratio="3-2" />,
-    tag: <Badge>Marketing</Badge>,
-    extras: (
+    children: (
       <>
-        <p style={{ margin: 0, fontWeight: 600 }}>Great fit for:</p>
-        <ul style={{ margin: 0, paddingInlineStart: '1.25rem' }}>
-          <li>Marketing leads shipping multiple campaigns a month</li>
-          <li>Founders who need brand + landing pages in lockstep</li>
-          <li>Teams without a full-time designer</li>
-        </ul>
+        <CardDescription>
+          Ongoing design partnership for teams shipping a steady stream of marketing pages, lifecycle assets, and product UI.
+        </CardDescription>
+        <div>
+          <p style={{ margin: 0, fontWeight: 600 }}>Great fit for:</p>
+          <ul style={{ margin: 0, paddingInlineStart: '1.25rem' }}>
+            <li>Marketing leads shipping multiple campaigns a month</li>
+            <li>Founders who need brand + landing pages in lockstep</li>
+            <li>Teams without a full-time designer</li>
+          </ul>
+        </div>
       </>
     ),
     action: (
@@ -541,20 +495,20 @@ export const DisplayRow: Story = {
       control: 'select',
       options: ['narrow', 'standard', 'wide'],
       description:
-        'Image column width. Named: `narrow` 25%, `standard` 35%, `wide` 50%. Pass a CSS length / percentage string (e.g. `"40%"`) to override.',
+        'Image column width. Named: `narrow` 25%, `standard` 35%, `wide` 50%. Pass a CSS length / percentage to override.',
     },
     tint: {
       control: 'select',
       options: ['none', 'brand', 'marketing', 'information', 'product', 'back-office'],
       mapping: { none: undefined },
       description:
-        'Service-line surface tint — a pale wash keyed to a service line, mapping to the canonical service-line pastel surface token. Sets only the surface; border/size unchanged. Default = no tint.',
+        'Service-line surface tint — a pale wash keyed to a service line. Sets only the surface. Default = no tint.',
     },
     titleAs: {
       control: 'inline-radio',
       options: ['h2', 'h3', 'h4'],
       description:
-        'Heading element for the title (default `h3`). Set to keep the document outline correct for the card context; visual size is token-driven and does not change.',
+        'Heading element for the title (default `h3`). Keeps the document outline correct; visual size is token-driven.',
     },
   },
   decorators: [

@@ -22,13 +22,18 @@ export type CardPreset = 'control' | 'summary' | 'display' | 'display-row';
  * - `metric` — compact stat: `overline` as the label above a large `title`
  *   value, optional `action`. The context-neutral successor to
  *   `preset="summary"` (finance is only one use).
+ * - `control` — horizontal settings/integration row: leading `media` (logo) +
+ *   `title` / `description` on the left, `connectionStatus` + `action` on the
+ *   right, vertically centred. Its own arrangement (ADR-038) — structurally
+ *   distinct from `row`'s media-left content shape. The successor to
+ *   `preset="control"`.
  *
- * Additive in Phase 1: the `preset` union keeps working unchanged. This path
- * renders with the SAME CSS classes as the matching preset, so `layout="stack"`
- * and `preset="display"` are pixel-identical — the eventual migration is a
- * prop swap, not a re-style.
+ * The `preset` union keeps working unchanged (deprecated, ADR-038 Phase 2).
+ * This path renders with the SAME CSS classes as the matching preset, so a
+ * `layout` Card is pixel-identical to its `preset` twin — migration is a prop
+ * swap, not a re-style.
  */
-export type CardLayout = 'stack' | 'row' | 'metric';
+export type CardLayout = 'stack' | 'row' | 'metric' | 'control';
 /** Heading level for a card's title — decouples document outline from the token-driven visual size. */
 export type CardHeadingLevel = 'h2' | 'h3' | 'h4';
 /**
@@ -195,6 +200,9 @@ interface CardControlPresetProps extends CardBaseProps {
    * legacy `CardControl` component (per ADR-004 §"Resolve the existing
    * instances"). Renders: logo + badge + (title + description) on the left,
    * (connection-status + action) on the right.
+   *
+   * @deprecated Use `layout="control"` instead (ADR-038 Phase 2). The `preset`
+   * union is retired once consumers migrate; the render path is unchanged.
    */
   preset: 'control';
   /** Discriminant guard — use `layout` instead for the flat anatomy API (ADR-038). */
@@ -245,6 +253,9 @@ interface CardSummaryPresetProps extends CardBaseProps {
    * Summary preset — compact metric/stat card with label, large value, and
    * optional text link. Replaces the legacy `CardSummary` component (per
    * ADR-004 §"Resolve the existing instances").
+   *
+   * @deprecated Use `layout="metric"` instead (ADR-038 Phase 2). The `preset`
+   * union is retired once consumers migrate; the render path is unchanged.
    */
   preset: 'summary';
   /** Discriminant guard — use `layout="metric"` for the flat anatomy API (ADR-038). */
@@ -276,6 +287,9 @@ interface CardDisplayPresetProps extends CardBaseProps {
    * are optional + prop-toggled so one cell serves any content type — service,
    * blog post, customer story, property listing, team bio, support plan.
    * Compose `<CardGrid>` + `<Card preset="display">`.
+   *
+   * @deprecated Use `layout="stack"` instead (ADR-038 Phase 2). The `preset`
+   * union is retired once consumers migrate; the render path is unchanged.
    */
   preset: 'display';
   /** Discriminant guard — use `layout="stack"` for the flat anatomy API (ADR-038). */
@@ -364,6 +378,9 @@ interface CardDisplayRowPresetProps extends CardBaseProps {
    * action) on the right. Use for single-row sections where a vertical layout
    * wastes horizontal space: Related Customer Story, Recommended Add-On,
    * featured plan. Collapses to a vertical stack at ≤ 640px.
+   *
+   * @deprecated Use `layout="row"` instead (ADR-038 Phase 2). The `preset`
+   * union is retired once consumers migrate; the render path is unchanged.
    */
   preset: 'display-row';
   /** Discriminant guard — use `layout="row"` for the flat anatomy API (ADR-038). */
@@ -429,11 +446,11 @@ interface CardDisplayRowPresetProps extends CardBaseProps {
 /**
  * Flat, anatomy-driven Card (ADR-038) — the successor to the `preset` union.
  * Selected by passing `layout`; every slot is optional and the same slot set
- * serves all three arrangements. Additive: the `preset` members above keep
- * working unchanged, so this ships with zero consumer churn.
+ * serves all four arrangements. Additive: the `preset` members above keep
+ * working (deprecated), so this ships with zero consumer churn.
  */
 interface CardAnatomyProps extends CardBaseProps {
-  /** Arrangement — `stack` (vertical) / `row` (horizontal) / `metric` (stat). Selects this flat API. */
+  /** Arrangement — `stack` / `row` / `metric` / `control`. Selects this flat API. */
   layout: CardLayout;
   /**
    * Leading media — a `<Frame>`-wrapped `<Image>`, `<Avatar>`, `<Logo>`, or any
@@ -470,6 +487,14 @@ interface CardAnatomyProps extends CardBaseProps {
   mediaTreatment?: CardMediaTreatment;
   /** Render the whole card as an `<a>` navigation target (`stack`/`row`). */
   href?: string;
+  /** Helper text under the title (`control` only — the settings-row description). */
+  description?: ReactNode;
+  /** Trailing-block vertical alignment (`control` only) — `center` (default) / `top`. */
+  actionAlign?: CardControlActionAlign;
+  /** Connection-status indicator (`control` only) — `not-configured` / `connected` / `syncing` / `synced` / `failed`. */
+  connectionStatus?: CardControlConnectionStatus;
+  /** "Last synced" label below the status indicator (`control` only). */
+  lastSynced?: string;
 }
 
 export type CardProps =
@@ -964,9 +989,9 @@ function renderDisplayRowPreset({
 
 /**
  * Render the flat anatomy Card (ADR-038). Emits the SAME BEM classes as the
- * matching `preset` renderer for each layout, so `layout="stack"` /`"row"`
- * /`"metric"` are pixel-identical to `preset="display"` /`"display-row"`
- * /`"summary"`. No new CSS — the migration is a prop swap, not a re-style.
+ * matching `preset` renderer for each layout (and `control` delegates to
+ * `renderControlPreset` outright), so a `layout` Card is pixel-identical to its
+ * `preset` twin. No new CSS — the migration is a prop swap, not a re-style.
  */
 function renderAnatomy({
   layout,
@@ -982,10 +1007,35 @@ function renderAnatomy({
   imageWidth = 'standard',
   mediaTreatment = 'flush',
   href,
+  description,
+  actionAlign,
+  connectionStatus,
+  lastSynced,
   className,
   style,
   ...rest
 }: CardAnatomyProps) {
+  if (layout === 'control') {
+    // Delegate to the proven control renderer for exact parity — `media` is the
+    // logo slot, `description` the helper text. `title`/`description` are typed
+    // wider here (ReactNode) than the control preset's `string`; both render any
+    // node at runtime, so the cast is sound.
+    return renderControlPreset({
+      preset: 'control',
+      title: title as string,
+      description: description as string | undefined,
+      logo: media,
+      badge,
+      action,
+      actionAlign,
+      connectionStatus,
+      lastSynced,
+      className,
+      style,
+      ...rest,
+    });
+  }
+
   if (layout === 'metric') {
     return (
       <div className={bdsClass('bds-card', 'bds-card--preset-summary', className)} style={style} {...rest}>
