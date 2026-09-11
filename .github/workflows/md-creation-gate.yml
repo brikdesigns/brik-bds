@@ -15,16 +15,53 @@ name: md-creation-gate
 # repo, so the two files cannot be byte-identical and pretending otherwise would
 # put a permanent false delta in the registry.
 
+# ─── Trigger shape (#2379) ───────────────────────────────────────────────────
+#
+# The `paths:` filter is DROPPED rather than moved to a job-level classifier,
+# which is the opposite of what #2098's five group gates did. Three reasons, and
+# they are specific to this gate rather than a revision of that pattern:
+#
+#   1. THE SCRIPT IS ALREADY THE CLASSIFIER. `md-creation-gate.sh --ci --base
+#      --head` diffs base..head itself and exits 0 when the diff adds no `.md`.
+#      A `classify diff` job would re-run the same `git diff` to decide whether
+#      to run a script whose first act is that same `git diff`.
+#   2. THE FILTER BOUGHT ALMOST NOTHING. `**/*.md` is near-universal — it matches
+#      any PR touching a doc, an MDX-adjacent README, or an ADR — so the skip it
+#      produced was rare.
+#   3. THE WHOLE GATE IS 10–12s. Measured over the six most recent runs on
+#      `main` (all `success`): 12, 11, 12, 12, 10, 12 seconds. That is checkout
+#      plus one bash script; a classifier job would add a second runner and a
+#      second checkout to save a third of a minute.
+#
+# `branches: [main]` is ADDED, which this workflow did not have. Every one of the
+# 18 required contexts carries it, and a required context is evaluated against
+# `main`'s protection — a run on a PR targeting anything else cannot satisfy a
+# gate that is not required there. The narrowing is nominal in practice:
+# 200 of the 200 most recent PRs in this repo target `main` (`gh pr list --state
+# all --limit 200 --json baseRefName`), which is a bound on the sample, not a
+# claim about every PR ever opened.
+#
+# `merge_group:` is REQUIRED here, not optional, and it is why this PR must land
+# BEFORE the declare + POST (#2447, and the #2444 incident it came from): GitHub
+# reads the trigger from the merge-group ref, so a context declared before its
+# trigger is on `main` wedges every group built on the older `main`.
+# `node scripts/lint-merge-queue-readiness.mjs --enforce` now gates that.
 on:
   pull_request:
-    paths:
-      - '**/*.md'
-      - 'scripts/audit/md-creation-gate.sh'
-      - '.github/workflows/md-creation-gate.yml'
+    branches:
+      - main
+  merge_group:
 
 concurrency:
-  group: md-creation-gate-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  # `cancel-in-progress: false` + `queue: max`, required as a pair on anything
+  # destined to be a required context — auditor rules 6a/6b. A cancelled
+  # check-run is not an absent one: protection goes on reporting the context as
+  # `expected`, and only a new head SHA clears it. `cancel-in-progress: false`
+  # alone does NOT cover it, because the default `queue: single` still lets a
+  # newer run evict the PENDING one (#2094 / #2174 / #2176).
+  group: md-creation-gate-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
 
 permissions:
   contents: read
@@ -38,10 +75,23 @@ jobs:
           fetch-depth: 0
 
       - name: Run md-creation-gate against PR diff
+        env:
+          # PR tips; merge-group base/head on a merge group (#2415 / #2379). The
+          # script takes an explicit base..head, so the merge-group case needs
+          # the fallback rather than inheriting a PR-only expression that
+          # resolves to the empty string there.
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha }}
         run: |
+          set -euo pipefail
+
+          if [ -z "$BASE_SHA" ] || [ -z "$HEAD_SHA" ]; then
+            echo "::error::could not resolve base/head for event=${{ github.event_name }} —"
+            echo "  failing closed rather than diffing against an empty revision."
+            exit 1
+          fi
+
           chmod +x scripts/audit/md-creation-gate.sh
-          BASE_SHA="${{ github.event.pull_request.base.sha }}"
-          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
           echo "Base: $BASE_SHA"
           echo "Head: $HEAD_SHA"
           scripts/audit/md-creation-gate.sh --ci --base "$BASE_SHA" --head "$HEAD_SHA"
