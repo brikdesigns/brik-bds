@@ -205,6 +205,8 @@ Why the MDX layer rather than deleting the comparison: side-by-side genuinely re
 
 ## Multi-preset Container pattern
 
+> **Card is no longer the exemplar for this pattern (ADR-038, 2026-09).** Card's `preset` union flattened into a `layout` axis on one anatomy interface; `preset` is deprecated. The one-story-per-value rule below still holds — but for Card, the values are `layout="stack" | "row" | "metric" | "control"` (stories `Stack` / `Row` / `Metric` / `Control`), not `preset`. The pattern itself stands for genuine locked-down preset discriminators elsewhere.
+
 A Container built with a `preset` discriminator (a string union that selects between locked-down layouts) gets **one story per preset value** in the **base component's stories file**. Each preset is a Q3 story — a semantic starting template agents and developers reach for directly.
 
 **Where stories live:** all preset stories live in `ComponentA.stories.tsx`. If a preset was originally shipped as a standalone component (e.g. `CardControl` → `Card preset="control"`), its story consolidates into the base component's file when the standalone is deprecated.

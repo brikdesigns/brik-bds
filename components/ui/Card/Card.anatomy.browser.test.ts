@@ -63,6 +63,25 @@ describe('Card anatomy API (ADR-038)', () => {
     expect(el.querySelector('.bds-card__preset-summary-value')?.textContent).toBe('$48,250');
   });
 
+  it('layout="control" delegates to the control renderer (same class chain as preset="control")', async () => {
+    const presetEl = await mount(h(Card as never, { preset: 'control', title: 'Notion', description: 'D' }));
+    const presetClass = presetEl.querySelector('.bds-card--preset-control')?.className;
+    await act(async () => { root.unmount(); });
+    host.remove();
+
+    const anatEl = await mount(h(Card as never, { layout: 'control', title: 'Notion', description: 'D' }));
+    const anatClass = anatEl.querySelector('.bds-card--preset-control')?.className;
+
+    expect(anatClass).toBeDefined();
+    expect(anatClass).toBe(presetClass);
+    expect(anatEl.querySelector('.bds-card__preset-control-title')?.textContent).toBe('Notion');
+  });
+
+  it('layout="metric" renders a raw action node in the link area (no summary numeric formatting)', async () => {
+    const el = await mount(h(Card as never, { layout: 'metric', overline: 'Active users', title: '12,481' }));
+    expect(el.querySelector('.bds-card__preset-summary-value')?.textContent).toBe('12,481');
+  });
+
   it('a layout Card never falls through to the empty default box', async () => {
     const el = await mount(h(Card as never, { layout: 'stack', title: 'Only a title' }));
     const root = el.firstElementChild as HTMLElement;

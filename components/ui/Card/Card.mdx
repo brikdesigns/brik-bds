@@ -8,7 +8,9 @@ import * as Stories from './Card.stories';
 
 <ComponentLinks slug="card" />
 
-Flexible content container. A default flexible content slot (no `preset`), plus preset layouts via the `preset` discriminator: `control` (settings / integration row) and `summary` (metric) subsume the legacy `CardControl` / `CardSummary` components (per ADR-004); `display` and `display-row` are the **cells of a `CardGrid`**, not standalone cards ([ADR-018](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-018-card-preset-boundary.md)). The web-only `PricingCard` component is documented alongside these presets as part of the Card family.
+Flexible content container. A default flexible content slot (no `layout`), plus four anatomy-driven arrangements via the `layout` prop: `stack` (vertical content card / `CardGrid` cell), `row` (horizontal content card), `metric` (compact stat), and `control` (settings / integration row). One flat slot set (`media` / `overline` / `title` / `children` / `action` / `badge`) serves all four ([ADR-038](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md)). The web-only `PricingCard` component is documented alongside as part of the Card family.
+
+> **Deprecated** — the `preset` discriminator (`control` / `summary` / `display` / `display-row`) is superseded by `layout` (ADR-038). It still renders unchanged for existing consumers; new code uses `layout`.
 
 > **Note** — Multi-card compositions (service grids, feature grids, blog rolls) live in the [`Card Grid`](?path=/docs/theming-blueprints-card-grid--docs) blueprint, not on this page. This page documents the Card primitive itself.
 
@@ -18,7 +20,7 @@ Flexible content container. A default flexible content slot (no `preset`), plus 
 
 ## Variants
 
-The `preset` prop selects the shape. Default (no `preset`) gives a flexible `children` slot composable with `CardTitle`, `CardDescription`, and `CardFooter`. Each preset locks the layout in exchange for a typed API.
+The `layout` prop selects the arrangement. Default (no `layout`) gives a flexible `children` slot composable with `CardTitle`, `CardDescription`, and `CardFooter`. Each `layout` arranges the same optional slot set into a distinct shape.
 
 The default shape also takes a `variant`: `outlined` (default, secondary border), `brand` (primary-color border), `elevated` (surface fill, no border, no shadow), `raised` (surface fill, no border, `--box-shadow-md` drop shadow), and `borderless`.
 
@@ -44,35 +46,33 @@ The default shape takes an optional `media` prop that turns the card into a hori
 
 <Canvas of={Stories.WithLogo} />
 
-### Control preset
+### Stack layout
 
-`preset="control"` — settings/control row. Leading `logo` + `badge` + (title + description) on the left, (`connectionStatus` indicator + `action`) on the right. Use `actionAlign="top"` for long descriptions where the action should anchor to the upper-right corner.
+`layout="stack"` — vertical content card and the malleable `CardGrid` cell. Optional top `media`, an `overline` eyebrow, `title`, a `children` body, and a bottom-anchored `action`. All slots are optional so one arrangement serves any content type — service, blog post, customer story, property listing, team bio. `variant` / `tint` set the surface for a cell on a colored grid.
 
-The `logo` slot accepts any ReactNode — a `<Logo>` for an integration / third-party service card, or an `<Avatar>` for an account — and renders as a leading logomark before the `badge`. The `connectionStatus` prop accepts `not-configured | connected | syncing | synced | error` and renders a status indicator in the trailing block, coexisting with the `action` slot; pass `lastSynced` for a timestamp beneath it. `connectionStatus` is a **state of one card, not a set of variants** — cycle it in the Controls panel on the story below rather than reaching for separate stories.
+<Canvas of={Stories.Stack} />
+
+The `mediaTreatment` prop controls how the `media` slot relates to the card edge. `flush` (default) bleeds the media to the edge and pads only the body (`--padding-lg`) — the blog/story/product-grid look. `inset` frames the media and body together in a single `--padding-huge` inset — the service-card "card-vertical" look. Cycle it in the Controls panel on the story above.
+
+### Row layout
+
+`layout="row"` — horizontal content card: `media` on the left, the text column (`overline`, `title`, `children` body, `action`) on the right. Use for single-row sections where a vertical layout wastes horizontal space: Related Customer Story, Recommended Add-On, featured plan. Toggle `imageWidth` between `narrow` (25%), `standard` (35%, default), and `wide` (50%) — or pass a CSS length / percentage. Collapses to a vertical stack at ≤ 640px.
+
+<Canvas of={Stories.Row} />
+
+### Metric layout
+
+`layout="metric"` — compact stat card: an `overline` label above a large `title` value, with an optional trailing `action`. Context-neutral — a revenue figure, an active-user count, a storage total. Pre-format the value; the card applies no numeric formatting.
+
+<Canvas of={Stories.Metric} />
+
+### Control layout
+
+`layout="control"` — settings / integration row. Leading `media` (logo) + `title` / `description` on the left, (`connectionStatus` indicator + `action`) on the right. Use `actionAlign="top"` for long descriptions where the action should anchor to the upper-right corner.
+
+The `connectionStatus` prop accepts `not-configured | connected | syncing | synced | error` and renders a status indicator in the trailing block, coexisting with the `action` slot; pass `lastSynced` for a timestamp beneath it. `connectionStatus` is a **state of one card, not a set of variants** — cycle it in the Controls panel on the story below rather than reaching for separate stories.
 
 <Canvas of={Stories.Control} />
-
-### Summary preset
-
-`preset="summary"` — compact metric with label, large value, and optional text link. Numeric `value` formats via `Intl.NumberFormat`; pass `type="price"` for USD currency. String values render verbatim.
-
-<Canvas of={Stories.Summary} />
-
-### Display preset
-
-`preset="display"` — generic content-grid card for `bds-card-grid`. All affordances (`image`, `tag`, `badge`, `action`, `href`) are optional slots so one primitive serves any content type — service, blog post, customer story, property listing, team bio.
-
-<Canvas of={Stories.Display} />
-
-The `mediaTreatment` prop controls how the `image` slot relates to the card edge. `flush` (default) bleeds the media to the edge and pads only the text body (`--padding-lg`) — the blog/story/product-grid look. `inset` frames the media and body together in a single `--padding-huge` inset — the service-card "card-vertical" look. One primitive serves both; `inset` replaces the former site-local `.service-card--inset` CSS override.
-
-<Canvas of={Stories.DisplayInset} />
-
-### Display-row preset
-
-`preset="display-row"` — horizontal sibling of `preset="display"`. Image on the left, content (tag, title, description, optional `extras`, action) on the right. Use for single-card sections where a vertical layout wastes horizontal space: Related Customer Story, Recommended Add-On, featured plan, company-segment overview cards. Toggle `imageWidth` between `narrow` (25%), `standard` (35%, default), and `wide` (50%) — or pass a CSS length / percentage string for a custom column width. The `extras` slot accepts any ReactNode (bullet list, pill row, supporting meta) and renders between `description` and `action`; use it when the single-paragraph `description` is too narrow for the content shape. Collapses to a vertical stack at ≤ 640px so the card stays readable on narrow viewports.
-
-<Canvas of={Stories.DisplayRow} />
 
 ### Pricing (web)
 
