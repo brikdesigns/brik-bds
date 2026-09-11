@@ -11,6 +11,20 @@ Every word in BDS describes a **role** or a **slot**. It does not dictate visual
 
 This distinction is load-bearing for titles and headings — get it wrong and you ship outline-invisible content that looks correct visually. See [HTML Semantics](/docs/build-standards/html-semantics) for the element-selection rules.
 
+## One word, one meaning
+
+A word earns **one** meaning in the vocabulary. When the same word names two unrelated shapes, every reader has to disambiguate by context, and the second use was a lie the moment it shipped — the same failure the blueprint rules below catch for layout words.
+
+`Picker` is the live case. It currently names three unrelated things:
+
+| Use | What it is | Examples |
+|---|---|---|
+| **Input control** | Resolves to **one value** from a constrained domain — a form control | `DatePicker`, `TimePicker` |
+| **Selection composition** | A set of selectable children the reader multi-selects — a composition, not a control | `ServiceTagPicker`, the `SelectableMediaTile` grid |
+| **Addable** | A member of the addable-list family that matches and adds from a catalog | `CatalogPicker` (`CatalogPickerSize = AddableEntryListSize`, [`CatalogPicker.tsx:35`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/CatalogPicker/CatalogPicker.tsx)) |
+
+**The definition: `Picker` is reserved for the input control** — a component that resolves to a single value from a constrained domain (`DatePicker`, `TimePicker`). The other two uses are drift. `CatalogPicker` is an addable and is named for the wrong family; its rename is owed and tracked separately. `ServiceTagPicker` and the `SelectableMediaTile` grid are selection compositions ([Selectable](/docs/foundation/interaction-states#selectable)) and should be named for what they compose, not "picked".
+
 ## Slot pattern
 
 Per [ADR-017](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md), slot names are governed by a **structural pattern**, not an enumerated list. A `bds-*` class is canonical if and only if it matches the ADR-008 §4 BEM grammar:

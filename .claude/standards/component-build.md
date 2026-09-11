@@ -294,6 +294,8 @@ For any component with hover, focus, or active behavior:
 .bds-component:disabled { }
 ```
 
+**Selection is not a per-component invention.** A persistent `aria-pressed` toggle whose chosen state reads as brand emphasis is **one** interaction with one canonical source — consume it, don't re-copy the `aria-pressed` wiring and re-paint the tint and ring in your own CSS. Four components hand-roll it today (`CompletionToggle`, `InteractiveListItem`, `FilterToggle`, `SelectableMediaTile`); that duplication is the drift, not the pattern. And a selected **row** (list) and a selected **tile** (grid) share the semantics but not the CSS — never port one layout's selected styling onto the other. Canon: [Selectable](https://design.brikdesigns.com/docs/foundation/interaction-states#selectable).
+
 ## Semantic splitting
 
 Split a component when different props render different HTML elements, require different prop sets, or carry different a11y contracts:

@@ -14,9 +14,9 @@ Body copy is sized with `--body-*` and paired with a line-height that matches it
 | Lead / intro | `--body-lg` … `--body-xl` | `--font-line-height-normal` | A section's opening sentence |
 | Default reading copy | `--body-md` | `--font-line-height-relaxed` | Descriptions, prose, card body |
 | Secondary / caption | `--body-sm` … `--body-xs` | `--font-line-height-normal` | Metadata, captions, helper text |
-| Subtitle line under a title | `--body-md` | `--font-line-height-normal` | The `subtitle` slot paired with a title |
+| Subtitle line under a title | `--subtitle-lg` … `--subtitle-md` | `--font-line-height-normal` | The `subtitle` slot paired with a title |
 
-`--font-line-height-relaxed` (175%) is the reading default for multi-line copy — `ContentBlock`'s description slot and `Prose`'s base both use it. `--font-line-height-tight` (110%) is headings-only; don't put it on body text. The `subtitle` line is a `--body-md` role, [not a heading](/docs/build-standards/headings).
+`--font-line-height-relaxed` (175%) is the reading default for multi-line copy — `ContentBlock`'s description slot and `Prose`'s base both use it. `--font-line-height-tight` (110%) is headings-only; don't put it on body text. The `subtitle` line is [not a heading](/docs/build-standards/headings), and it is not body copy either — it has its **own** `--subtitle-*` role. Use it even though `--subtitle-lg` resolves to the same value as `--body-md` today: [role discipline](/docs/foundation/token-anatomy#role-discipline) picks the token whose role matches the content, not the same-valued alias.
 
 <Callout type="warn">
   Body copy uses `--font-family-body`; never a `--heading-*` size or `--font-family-heading` on a paragraph. See the [font-family role rule](/docs/foundation/typography).

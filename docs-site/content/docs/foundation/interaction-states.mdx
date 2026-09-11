@@ -100,6 +100,24 @@ Read the *direction*, not a fixed step count:
   **State-pair siblings are required when a Brand Kit overrides `--background-brand-primary` or `--surface-brand-primary`.** Override the base color without pairing the `-hover` / `-pressed` siblings, and the canonical default leaks through on interaction. The cleanup in brik-bds#710 retired exactly this pattern of bug.
 </Callout>
 
+## Selectable
+
+Hover and press are **transient** — they exist only while the pointer is down. Selection is **persistent**: a control stays chosen until the reader unchooses it, carried in the DOM by `aria-pressed`. It is an interaction like the others on this page, not a per-component invention.
+
+### Selectable is one interaction
+
+There is one selectable pattern — an `aria-pressed` toggle whose chosen state reads as brand emphasis, a tint plus a ring — and it has **one canonical source**. A component *consumes* that source; it does not re-copy the `aria-pressed` wiring and re-paint the selected treatment in its own CSS.
+
+Today four components hand-roll it with no shared source — `CompletionToggle`, `InteractiveListItem`, `FilterToggle`, `SelectableMediaTile` (grep `aria-pressed` in `components/ui`). Each re-invents the tint and ring, and the CSS comments admit it (`InteractiveListItem.css`: *Mirrors `Button --selected`*). That duplication is the drift this rule names: selectability is a cross-cutting interaction the system should express once, not re-derive per component.
+
+<Callout type="info">
+  There is no `--state-selected-*` Semantic token today — the selected treatment is composed from existing brand tokens (`--surface-brand-primary`, `--border-brand-primary`) inside a `--selected` BEM modifier. "One source" means one place that composes those tokens into the pattern, which components reuse — not a new token.
+</Callout>
+
+### A tile is not a row
+
+Layout is the primary classifier, and there are two: a **list** is vertical, a row; a **grid** is two-dimensional, a tile. A selected row and a selected tile share the *interaction semantics* — `aria-pressed`, brand emphasis — but not the *CSS*. The row draws an inset box that leaves its metrics unchanged; the tile draws a ring with `box-shadow` so the grid doesn't reflow. Never port one layout's selected styling onto the other — they are the same interaction expressed for two different shapes, and conflating them is how a tile inherits a row's inset box and reflows the grid.
+
 ## Focus ring rules
 
 - **Width** uses `--border-width-lg` — no new dimension token. Mode picks (`data-mode-borderwidth`) propagate automatically.
