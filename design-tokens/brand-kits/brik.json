@@ -1542,7 +1542,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.lightest}"
+        "$value": "{color.grayscale.100}"
       },
       "brand-primary": {
         "$extensions": {
@@ -1551,7 +1551,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.poppy.500}"
       },
       "inverse": {
         "$extensions": {
@@ -1560,7 +1560,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "service-brand": {
         "$extensions": {
@@ -1569,7 +1569,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.light}"
+        "$value": "{color.yellow.600}"
       },
       "service-marketing": {
         "$extensions": {
@@ -1578,7 +1578,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.light}"
+        "$value": "{color.green.600}"
       },
       "service-product": {
         "$extensions": {
@@ -1587,7 +1587,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.light}"
+        "$value": "{color.purple.600}"
       },
       "service-back-office": {
         "$extensions": {
@@ -1596,7 +1596,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.light}"
+        "$value": "{color.orange.500}"
       },
       "service-information": {
         "$extensions": {
@@ -1605,7 +1605,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.light}"
+        "$value": "{color.blue.500}"
       },
       "accent": {
         "$extensions": {
@@ -1614,7 +1614,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.tan.lightest}"
+        "$value": "{color.tan.100}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -1623,16 +1623,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.yellow-light}"
-      },
-      "accent-blue": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.system.blue-light}"
+        "$value": "{color.yellow.500}"
       },
       "accent-orange": {
         "$extensions": {
@@ -1641,7 +1632,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.orange-light}"
+        "$value": "{color.orange.500}"
       },
       "accent-red": {
         "$extensions": {
@@ -1651,6 +1642,33 @@
         },
         "$type": "color",
         "$value": "{color.poppy.500}"
+      },
+      "service-green": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.green.500}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.purple.500}"
+      },
+      "service-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.blue.200}"
       }
     },
     "background": {
@@ -1670,7 +1688,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.lightest}"
+        "$value": "{color.grayscale.100}"
       },
       "brand-primary": {
         "$extensions": {
@@ -1679,7 +1697,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.poppy.500}"
       },
       "inverse": {
         "$extensions": {
@@ -1688,7 +1706,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -1697,7 +1715,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.yellow}"
+        "$value": "{color.yellow.500}"
       },
       "accent-blue": {
         "$extensions": {
@@ -1706,7 +1724,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.blue}"
+        "$value": "{color.blue.500}"
       },
       "accent-green": {
         "$extensions": {
@@ -1715,7 +1733,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.green}"
+        "$value": "{color.green.500}"
       },
       "accent-purple": {
         "$extensions": {
@@ -1724,7 +1742,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.purple}"
+        "$value": "{color.purple.500}"
       },
       "accent-red": {
         "$extensions": {
@@ -1742,7 +1760,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.orange}"
+        "$value": "{color.orange.400}"
       },
       "input": {
         "$extensions": {
@@ -1769,7 +1787,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.lighter}"
+        "$value": "{color.grayscale.300}"
       },
       "on-color-light": {
         "$extensions": {
@@ -1778,7 +1796,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "brand-primary-hover": {
         "$extensions": {
@@ -1787,7 +1805,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.dark}",
+        "$value": "{color.poppy.700}",
         "$description": "Primary button hover background"
       },
       "brand-primary-pressed": {
@@ -1797,7 +1815,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.darker}",
+        "$value": "{color.poppy.800}",
         "$description": "Primary button pressed background"
       },
       "disabled": {
@@ -1807,7 +1825,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.light}",
+        "$value": "{color.grayscale.500}",
         "$description": "Disabled button background (all variants)"
       },
       "service-brand": {
@@ -1817,7 +1835,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.light}"
+        "$value": "{color.yellow.500}"
       },
       "service-brand-on-light": {
         "$extensions": {
@@ -1826,7 +1844,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.darkest}"
+        "$value": "{color.yellow.950}"
       },
       "service-marketing": {
         "$extensions": {
@@ -1835,7 +1853,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.light}"
+        "$value": "{color.green.400}"
       },
       "service-marketing-on-light": {
         "$extensions": {
@@ -1844,7 +1862,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.darkest}"
+        "$value": "{color.green.950}"
       },
       "service-back-office": {
         "$extensions": {
@@ -1853,7 +1871,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.light}"
+        "$value": "{color.orange.500}"
       },
       "service-back-office-on-light": {
         "$extensions": {
@@ -1862,7 +1880,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.darkest}"
+        "$value": "{color.orange.950}"
       },
       "service-product": {
         "$extensions": {
@@ -1871,7 +1889,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.light}"
+        "$value": "{color.purple.500}"
       },
       "service-product-on-light": {
         "$extensions": {
@@ -1880,7 +1898,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.darkest}"
+        "$value": "{color.purple.950}"
       },
       "service-information": {
         "$extensions": {
@@ -1889,7 +1907,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.light}"
+        "$value": "{color.blue.500}"
       },
       "service-information-on-light": {
         "$extensions": {
@@ -1898,7 +1916,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.darkest}"
+        "$value": "{color.blue.950}"
       },
       "service-brand-on-dark": {
         "$extensions": {
@@ -1907,7 +1925,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.lightest}"
+        "$value": "{color.yellow.100}"
       },
       "service-marketing-on-dark": {
         "$extensions": {
@@ -1916,7 +1934,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.lightest}"
+        "$value": "{color.green.100}"
       },
       "service-back-office-on-dark": {
         "$extensions": {
@@ -1925,7 +1943,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.lightest}"
+        "$value": "{color.orange.100}"
       },
       "service-product-on-dark": {
         "$extensions": {
@@ -1934,7 +1952,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.lightest}"
+        "$value": "{color.purple.100}"
       },
       "service-information-on-dark": {
         "$extensions": {
@@ -1943,7 +1961,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.lightest}"
+        "$value": "{color.blue.200}"
       },
       "accent": {
         "$extensions": {
@@ -1952,7 +1970,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.tan.light}"
+        "$value": "{color.tan.400}"
       }
     },
     "surface": {
@@ -1972,7 +1990,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.lightest}"
+        "$value": "{color.grayscale.100}"
       },
       "brand-primary": {
         "$extensions": {
@@ -1981,7 +1999,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.poppy.500}"
       },
       "inverse": {
         "$extensions": {
@@ -1990,7 +2008,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "brand-primary-hover": {
         "$extensions": {
@@ -1999,7 +2017,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.dark}",
+        "$value": "{color.poppy.800}",
         "$description": "Primary surface hover"
       },
       "brand-primary-pressed": {
@@ -2009,7 +2027,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.darker}",
+        "$value": "{color.poppy.950}",
         "$description": "Primary surface pressed"
       },
       "service-brand": {
@@ -2019,7 +2037,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.light}"
+        "$value": "{color.yellow.500}"
       },
       "service-marketing": {
         "$extensions": {
@@ -2028,7 +2046,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.light}"
+        "$value": "{color.green.500}"
       },
       "service-product": {
         "$extensions": {
@@ -2037,7 +2055,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.light}"
+        "$value": "{color.purple.400}"
       },
       "service-back-office": {
         "$extensions": {
@@ -2046,7 +2064,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.light}"
+        "$value": "{color.orange.500}"
       },
       "service-information": {
         "$extensions": {
@@ -2055,7 +2073,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.light}"
+        "$value": "{color.blue.500}"
       },
       "service-marketing-dark": {
         "$extensions": {
@@ -2064,7 +2082,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.darkest}"
+        "$value": "{color.green.950}"
       },
       "service-back-office-light": {
         "$extensions": {
@@ -2073,7 +2091,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.lightest}"
+        "$value": "{color.orange.100}"
       },
       "service-back-office-dark": {
         "$extensions": {
@@ -2082,7 +2100,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.darkest}"
+        "$value": "{color.orange.950}"
       },
       "service-product-light": {
         "$extensions": {
@@ -2091,7 +2109,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.lightest}"
+        "$value": "{color.purple.100}"
       },
       "service-product-dark": {
         "$extensions": {
@@ -2100,7 +2118,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.darkest}"
+        "$value": "{color.purple.950}"
       },
       "service-information-light": {
         "$extensions": {
@@ -2109,7 +2127,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.lightest}"
+        "$value": "{color.blue.100}"
       },
       "service-information-dark": {
         "$extensions": {
@@ -2118,7 +2136,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.darkest}"
+        "$value": "{color.blue.950}"
       },
       "service-brand-light": {
         "$extensions": {
@@ -2127,7 +2145,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.lightest}"
+        "$value": "{color.yellow.100}"
       },
       "service-brand-dark": {
         "$extensions": {
@@ -2136,7 +2154,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.darkest}"
+        "$value": "{color.yellow.950}"
       },
       "service-marketing-light": {
         "$extensions": {
@@ -2145,7 +2163,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.lightest}"
+        "$value": "{color.green.100}"
       },
       "service-marketing-inverse": {
         "$extensions": {
@@ -2199,7 +2217,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.tan.lightest}"
+        "$value": "{color.tan.100}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -2208,7 +2226,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.yellow-light}"
+        "$value": "{color.yellow.200}"
       },
       "accent-blue": {
         "$extensions": {
@@ -2217,7 +2235,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.blue-light}"
+        "$value": "{color.blue.300}"
       },
       "accent-green": {
         "$extensions": {
@@ -2226,7 +2244,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.green-light}"
+        "$value": "{color.green.200}"
       },
       "accent-purple": {
         "$extensions": {
@@ -2235,7 +2253,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.purple-light}"
+        "$value": "{color.purple.200}"
       },
       "accent-orange": {
         "$extensions": {
@@ -2244,7 +2262,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.orange-light}"
+        "$value": "{color.orange.200}"
       },
       "accent-red": {
         "$extensions": {
@@ -2264,7 +2282,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "secondary": {
         "$extensions": {
@@ -2273,7 +2291,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.dark}"
+        "$value": "{color.grayscale.700}"
       },
       "brand-primary": {
         "$extensions": {
@@ -2282,7 +2300,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.poppy.500}"
       },
       "inverse": {
         "$extensions": {
@@ -2300,7 +2318,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.yellow}"
+        "$value": "{color.yellow.500}"
       },
       "accent-blue": {
         "$extensions": {
@@ -2309,7 +2327,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.blue}"
+        "$value": "{color.blue.300}"
       },
       "accent-green": {
         "$extensions": {
@@ -2318,7 +2336,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.green}"
+        "$value": "{color.green.300}"
       },
       "accent-purple": {
         "$extensions": {
@@ -2327,7 +2345,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.purple}"
+        "$value": "{color.purple.500}"
       },
       "accent-red": {
         "$extensions": {
@@ -2345,7 +2363,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.orange}"
+        "$value": "{color.orange.500}"
       },
       "muted": {
         "$extensions": {
@@ -2354,7 +2372,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.light}"
+        "$value": "{color.grayscale.500}"
       },
       "on-color-dark": {
         "$extensions": {
@@ -2372,7 +2390,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.system.blue}"
       },
       "on-color-light": {
         "$extensions": {
@@ -2381,7 +2399,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "disabled": {
         "$extensions": {
@@ -2390,7 +2408,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.light}",
+        "$value": "{color.grayscale.500}",
         "$description": "Disabled button text (all variants)"
       },
       "warning": {
@@ -2409,7 +2427,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.light}"
+        "$value": "{color.yellow.600}"
       },
       "service-information": {
         "$extensions": {
@@ -2418,7 +2436,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.light}"
+        "$value": "{color.blue.200}"
       },
       "service-back-office": {
         "$extensions": {
@@ -2427,7 +2445,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.light}"
+        "$value": "{color.orange.500}"
       },
       "service-product": {
         "$extensions": {
@@ -2436,7 +2454,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.light}"
+        "$value": "{color.purple.300}"
       },
       "service-marketing": {
         "$extensions": {
@@ -2445,7 +2463,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.light}"
+        "$value": "{color.green.500}"
       },
       "service-marketing-on-light": {
         "$extensions": {
@@ -2454,7 +2472,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.darkest}"
+        "$value": "{color.green.950}"
       },
       "service-back-office-on-dark": {
         "$extensions": {
@@ -2463,7 +2481,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.lightest}"
+        "$value": "{color.orange.100}"
       },
       "service-back-office-on-light": {
         "$extensions": {
@@ -2472,7 +2490,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.darkest}"
+        "$value": "{color.orange.950}"
       },
       "service-product-on-dark": {
         "$extensions": {
@@ -2481,7 +2499,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.lightest}"
+        "$value": "{color.purple.100}"
       },
       "service-product-on-light": {
         "$extensions": {
@@ -2490,7 +2508,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.darkest}"
+        "$value": "{color.purple.950}"
       },
       "service-information-on-dark": {
         "$extensions": {
@@ -2499,7 +2517,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.lightest}"
+        "$value": "{color.blue.100}"
       },
       "service-information-on-light": {
         "$extensions": {
@@ -2508,7 +2526,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.darkest}"
+        "$value": "{color.blue.950}"
       },
       "service-brand-on-dark": {
         "$extensions": {
@@ -2517,7 +2535,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.lightest}"
+        "$value": "{color.yellow.100}"
       },
       "service-brand-on-light": {
         "$extensions": {
@@ -2526,7 +2544,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.darkest}"
+        "$value": "{color.yellow.950}"
       },
       "service-marketing-on-dark": {
         "$extensions": {
@@ -2535,7 +2553,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.lightest}"
+        "$value": "{color.green.200}"
       },
       "accent": {
         "$extensions": {
@@ -2544,7 +2562,25 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.tan.dark}"
+        "$value": "{color.tan.700}"
+      },
+      "error": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.red}"
+      },
+      "success": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green}"
       }
     },
     "border": {
@@ -2555,7 +2591,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "brand-primary": {
         "$extensions": {
@@ -2564,7 +2600,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.poppy.500}"
       },
       "on-color-dark": {
         "$extensions": {
@@ -2582,7 +2618,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.lighter}"
+        "$value": "{color.grayscale.100}"
       },
       "muted": {
         "$extensions": {
@@ -2591,7 +2627,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.lighter}"
+        "$value": "{color.grayscale.100}"
       },
       "inverse": {
         "$extensions": {
@@ -2609,7 +2645,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "disabled": {
         "$extensions": {
@@ -2618,7 +2654,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.light}",
+        "$value": "{color.grayscale.500}",
         "$description": "Disabled button border (all variants)"
       },
       "service-brand": {
@@ -2628,7 +2664,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.light}"
+        "$value": "{color.yellow.500}"
       },
       "service-information": {
         "$extensions": {
@@ -2637,7 +2673,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.light}"
+        "$value": "{color.blue.500}"
       },
       "service-back-office": {
         "$extensions": {
@@ -2646,7 +2682,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.light}"
+        "$value": "{color.orange.500}"
       },
       "service-product": {
         "$extensions": {
@@ -2655,7 +2691,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.light}"
+        "$value": "{color.purple.500}"
       },
       "service-marketing": {
         "$extensions": {
@@ -2664,7 +2700,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.light}"
+        "$value": "{color.green.500}"
       },
       "accent": {
         "$extensions": {
@@ -2673,7 +2709,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.tan.dark}"
+        "$value": "{color.tan.700}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -2727,7 +2763,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.500}"
+        "$value": "{color.system.red}"
       }
     }
   },
@@ -2758,7 +2794,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.poppy.500}"
       },
       "inverse": {
         "$extensions": {
@@ -2767,7 +2803,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.lightest}"
+        "$value": "{color.grayscale.100}"
       },
       "service-brand": {
         "$extensions": {
@@ -2776,7 +2812,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.light}"
+        "$value": "{color.yellow.600}"
       },
       "service-marketing": {
         "$extensions": {
@@ -2785,7 +2821,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.light}"
+        "$value": "{color.green.600}"
       },
       "service-product": {
         "$extensions": {
@@ -2794,7 +2830,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.light}"
+        "$value": "{color.purple.600}"
       },
       "service-back-office": {
         "$extensions": {
@@ -2803,7 +2839,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.light}"
+        "$value": "{color.orange.500}"
       },
       "service-information": {
         "$extensions": {
@@ -2812,7 +2848,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.light}"
+        "$value": "{color.blue.500}"
       },
       "accent": {
         "$extensions": {
@@ -2821,7 +2857,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.tan.darkest}"
+        "$value": "{color.tan.950}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -2830,16 +2866,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.yellow-light}"
-      },
-      "accent-blue": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.system.blue-light}"
+        "$value": "{color.yellow.500}"
       },
       "accent-orange": {
         "$extensions": {
@@ -2848,7 +2875,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.orange-light}"
+        "$value": "{color.orange.500}"
       },
       "accent-red": {
         "$extensions": {
@@ -2858,6 +2885,33 @@
         },
         "$type": "color",
         "$value": "{color.poppy.500}"
+      },
+      "service-green": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.green.500}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.purple.500}"
+      },
+      "service-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.blue.200}"
       }
     },
     "background": {
@@ -2868,7 +2922,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "secondary": {
         "$extensions": {
@@ -2886,7 +2940,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.poppy.500}"
       },
       "inverse": {
         "$extensions": {
@@ -2895,7 +2949,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.lightest}"
+        "$value": "{color.grayscale.200}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -2904,7 +2958,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.yellow}"
+        "$value": "{color.yellow.500}"
       },
       "accent-blue": {
         "$extensions": {
@@ -2913,7 +2967,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.blue}"
+        "$value": "{color.blue.500}"
       },
       "accent-green": {
         "$extensions": {
@@ -2922,7 +2976,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.green}"
+        "$value": "{color.green.500}"
       },
       "accent-purple": {
         "$extensions": {
@@ -2931,7 +2985,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.purple}"
+        "$value": "{color.purple.500}"
       },
       "accent-red": {
         "$extensions": {
@@ -2949,7 +3003,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.orange}"
+        "$value": "{color.orange.400}"
       },
       "input": {
         "$extensions": {
@@ -2976,7 +3030,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darker}"
+        "$value": "{color.grayscale.800}"
       },
       "on-color-light": {
         "$extensions": {
@@ -2985,7 +3039,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "brand-primary-hover": {
         "$extensions": {
@@ -2994,7 +3048,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.dark}",
+        "$value": "{color.poppy.700}",
         "$description": "Primary button hover background (dark mode)"
       },
       "brand-primary-pressed": {
@@ -3004,7 +3058,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.darker}",
+        "$value": "{color.poppy.800}",
         "$description": "Primary button pressed background (dark mode)"
       },
       "disabled": {
@@ -3014,7 +3068,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.dark}",
+        "$value": "{color.grayscale.500}",
         "$description": "Disabled background (dark mode)"
       },
       "service-brand": {
@@ -3024,7 +3078,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.light}"
+        "$value": "{color.yellow.500}"
       },
       "service-brand-on-light": {
         "$extensions": {
@@ -3033,7 +3087,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.darkest}"
+        "$value": "{color.yellow.950}"
       },
       "service-marketing": {
         "$extensions": {
@@ -3042,7 +3096,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.light}"
+        "$value": "{color.green.400}"
       },
       "service-marketing-on-light": {
         "$extensions": {
@@ -3051,7 +3105,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.darkest}"
+        "$value": "{color.green.950}"
       },
       "service-back-office": {
         "$extensions": {
@@ -3060,7 +3114,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.light}"
+        "$value": "{color.orange.500}"
       },
       "service-back-office-on-light": {
         "$extensions": {
@@ -3069,7 +3123,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.darkest}"
+        "$value": "{color.orange.950}"
       },
       "service-product": {
         "$extensions": {
@@ -3078,7 +3132,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.light}"
+        "$value": "{color.purple.500}"
       },
       "service-product-on-light": {
         "$extensions": {
@@ -3087,7 +3141,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.darkest}"
+        "$value": "{color.purple.950}"
       },
       "service-information": {
         "$extensions": {
@@ -3096,7 +3150,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.light}"
+        "$value": "{color.blue.500}"
       },
       "service-information-on-light": {
         "$extensions": {
@@ -3105,7 +3159,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.darkest}"
+        "$value": "{color.blue.950}"
       },
       "service-brand-on-dark": {
         "$extensions": {
@@ -3114,7 +3168,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.lighter}"
+        "$value": "{color.yellow.300}"
       },
       "service-marketing-on-dark": {
         "$extensions": {
@@ -3123,7 +3177,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.lighter}"
+        "$value": "{color.green.300}"
       },
       "service-back-office-on-dark": {
         "$extensions": {
@@ -3132,7 +3186,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.lighter}"
+        "$value": "{color.orange.300}"
       },
       "service-product-on-dark": {
         "$extensions": {
@@ -3141,7 +3195,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.lighter}"
+        "$value": "{color.purple.300}"
       },
       "service-information-on-dark": {
         "$extensions": {
@@ -3150,7 +3204,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.lighter}"
+        "$value": "{color.blue.300}"
       },
       "accent": {
         "$extensions": {
@@ -3159,7 +3213,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.tan.light}"
+        "$value": "{color.tan.500}"
       }
     },
     "surface": {
@@ -3170,7 +3224,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "secondary": {
         "$extensions": {
@@ -3179,7 +3233,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "brand-primary": {
         "$extensions": {
@@ -3188,7 +3242,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.500}"
       },
       "inverse": {
         "$extensions": {
@@ -3197,7 +3251,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "brand-primary-hover": {
         "$extensions": {
@@ -3206,7 +3260,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darker}",
+        "$value": "{color.grayscale.800}",
         "$description": "Primary surface hover (dark mode)"
       },
       "brand-primary-pressed": {
@@ -3216,7 +3270,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.dark}",
+        "$value": "{color.grayscale.600}",
         "$description": "Primary surface pressed (dark mode)"
       },
       "service-brand": {
@@ -3226,7 +3280,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.light}"
+        "$value": "{color.yellow.500}"
       },
       "service-marketing": {
         "$extensions": {
@@ -3235,7 +3289,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.light}"
+        "$value": "{color.green.500}"
       },
       "service-product": {
         "$extensions": {
@@ -3244,7 +3298,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.light}"
+        "$value": "{color.purple.400}"
       },
       "service-back-office": {
         "$extensions": {
@@ -3253,7 +3307,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.light}"
+        "$value": "{color.orange.500}"
       },
       "service-information": {
         "$extensions": {
@@ -3262,7 +3316,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.light}"
+        "$value": "{color.blue.500}"
       },
       "service-marketing-dark": {
         "$extensions": {
@@ -3271,7 +3325,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.darkest}"
+        "$value": "{color.green.950}"
       },
       "service-back-office-light": {
         "$extensions": {
@@ -3280,7 +3334,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.lighter}"
+        "$value": "{color.orange.300}"
       },
       "service-back-office-dark": {
         "$extensions": {
@@ -3289,7 +3343,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.darkest}"
+        "$value": "{color.orange.950}"
       },
       "service-product-light": {
         "$extensions": {
@@ -3298,7 +3352,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.lighter}"
+        "$value": "{color.purple.300}"
       },
       "service-product-dark": {
         "$extensions": {
@@ -3307,7 +3361,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.darkest}"
+        "$value": "{color.purple.950}"
       },
       "service-information-light": {
         "$extensions": {
@@ -3316,7 +3370,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.lighter}"
+        "$value": "{color.blue.300}"
       },
       "service-information-dark": {
         "$extensions": {
@@ -3325,7 +3379,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.darkest}"
+        "$value": "{color.blue.950}"
       },
       "service-brand-light": {
         "$extensions": {
@@ -3334,7 +3388,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.lighter}"
+        "$value": "{color.yellow.200}"
       },
       "service-brand-dark": {
         "$extensions": {
@@ -3343,7 +3397,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.darkest}"
+        "$value": "{color.yellow.950}"
       },
       "service-marketing-light": {
         "$extensions": {
@@ -3352,7 +3406,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.lighter}"
+        "$value": "{color.green.300}"
       },
       "service-marketing-inverse": {
         "$extensions": {
@@ -3361,7 +3415,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.darkest}"
+        "$value": "{color.green.950}"
       },
       "service-product-inverse": {
         "$extensions": {
@@ -3370,7 +3424,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.darkest}"
+        "$value": "{color.purple.950}"
       },
       "service-back-office-inverse": {
         "$extensions": {
@@ -3379,7 +3433,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.darkest}"
+        "$value": "{color.orange.950}"
       },
       "service-information-inverse": {
         "$extensions": {
@@ -3388,7 +3442,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.darkest}"
+        "$value": "{color.blue.950}"
       },
       "service-brand-inverse": {
         "$extensions": {
@@ -3397,7 +3451,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.darkest}"
+        "$value": "{color.yellow.950}"
       },
       "accent": {
         "$extensions": {
@@ -3406,7 +3460,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -3415,7 +3469,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.yellow-light}"
+        "$value": "{color.yellow.200}"
       },
       "accent-blue": {
         "$extensions": {
@@ -3424,7 +3478,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.blue-light}"
+        "$value": "{color.blue.200}"
       },
       "accent-green": {
         "$extensions": {
@@ -3433,7 +3487,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.green-light}"
+        "$value": "{color.green.100}"
       },
       "accent-purple": {
         "$extensions": {
@@ -3442,7 +3496,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.purple-light}"
+        "$value": "{color.purple.200}"
       },
       "accent-orange": {
         "$extensions": {
@@ -3451,7 +3505,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.orange-light}"
+        "$value": "{color.orange.100}"
       },
       "accent-red": {
         "$extensions": {
@@ -3471,7 +3525,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.lightest}"
+        "$value": "{color.grayscale.100}"
       },
       "secondary": {
         "$extensions": {
@@ -3480,7 +3534,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.lighter}"
+        "$value": "{color.grayscale.100}"
       },
       "brand-primary": {
         "$extensions": {
@@ -3489,7 +3543,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.poppy.500}"
       },
       "inverse": {
         "$extensions": {
@@ -3507,7 +3561,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.yellow}"
+        "$value": "{color.yellow.500}"
       },
       "accent-blue": {
         "$extensions": {
@@ -3516,7 +3570,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.blue}"
+        "$value": "{color.blue.300}"
       },
       "accent-green": {
         "$extensions": {
@@ -3525,7 +3579,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.green}"
+        "$value": "{color.green.300}"
       },
       "accent-purple": {
         "$extensions": {
@@ -3534,7 +3588,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.purple}"
+        "$value": "{color.purple.500}"
       },
       "accent-red": {
         "$extensions": {
@@ -3552,7 +3606,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.orange}"
+        "$value": "{color.orange.500}"
       },
       "muted": {
         "$extensions": {
@@ -3561,7 +3615,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.dark}"
+        "$value": "{color.grayscale.600}"
       },
       "on-color-dark": {
         "$extensions": {
@@ -3579,7 +3633,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.system.blue}"
       },
       "on-color-light": {
         "$extensions": {
@@ -3588,7 +3642,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "disabled": {
         "$extensions": {
@@ -3597,7 +3651,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.dark}",
+        "$value": "{color.grayscale.600}",
         "$description": "Disabled text (dark mode)"
       },
       "warning": {
@@ -3616,7 +3670,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.light}"
+        "$value": "{color.yellow.600}"
       },
       "service-information": {
         "$extensions": {
@@ -3625,7 +3679,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.light}"
+        "$value": "{color.blue.300}"
       },
       "service-back-office": {
         "$extensions": {
@@ -3634,7 +3688,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.light}"
+        "$value": "{color.orange.500}"
       },
       "service-product": {
         "$extensions": {
@@ -3643,7 +3697,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.light}"
+        "$value": "{color.purple.400}"
       },
       "service-marketing": {
         "$extensions": {
@@ -3652,7 +3706,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.light}"
+        "$value": "{color.green.500}"
       },
       "service-marketing-on-light": {
         "$extensions": {
@@ -3661,7 +3715,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.darkest}"
+        "$value": "{color.green.950}"
       },
       "service-back-office-on-dark": {
         "$extensions": {
@@ -3670,7 +3724,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.lighter}"
+        "$value": "{color.orange.300}"
       },
       "service-back-office-on-light": {
         "$extensions": {
@@ -3679,7 +3733,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.darkest}"
+        "$value": "{color.orange.950}"
       },
       "service-product-on-dark": {
         "$extensions": {
@@ -3688,7 +3742,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.lighter}"
+        "$value": "{color.purple.300}"
       },
       "service-product-on-light": {
         "$extensions": {
@@ -3697,7 +3751,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.darkest}"
+        "$value": "{color.purple.950}"
       },
       "service-information-on-dark": {
         "$extensions": {
@@ -3706,7 +3760,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.lighter}"
+        "$value": "{color.blue.100}"
       },
       "service-information-on-light": {
         "$extensions": {
@@ -3715,7 +3769,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.darkest}"
+        "$value": "{color.blue.950}"
       },
       "service-brand-on-dark": {
         "$extensions": {
@@ -3724,7 +3778,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.lighter}"
+        "$value": "{color.yellow.300}"
       },
       "service-brand-on-light": {
         "$extensions": {
@@ -3733,7 +3787,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.darkest}"
+        "$value": "{color.yellow.950}"
       },
       "service-marketing-on-dark": {
         "$extensions": {
@@ -3742,7 +3796,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.lighter}"
+        "$value": "{color.green.300}"
       },
       "accent": {
         "$extensions": {
@@ -3751,7 +3805,25 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.tan.light}"
+        "$value": "{color.tan.400}"
+      },
+      "error": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.red}"
+      },
+      "success": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green}"
       }
     },
     "border": {
@@ -3762,7 +3834,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darker}"
+        "$value": "{color.grayscale.900}"
       },
       "brand-primary": {
         "$extensions": {
@@ -3771,7 +3843,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.light}"
+        "$value": "{color.poppy.500}"
       },
       "on-color-dark": {
         "$extensions": {
@@ -3789,7 +3861,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darker}"
+        "$value": "{color.grayscale.800}"
       },
       "muted": {
         "$extensions": {
@@ -3798,7 +3870,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darker}"
+        "$value": "{color.grayscale.800}"
       },
       "inverse": {
         "$extensions": {
@@ -3807,7 +3879,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "on-color-light": {
         "$extensions": {
@@ -3816,7 +3888,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darkest}"
+        "$value": "{color.grayscale.950}"
       },
       "disabled": {
         "$extensions": {
@@ -3825,7 +3897,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.dark}",
+        "$value": "{color.grayscale.500}",
         "$description": "Disabled border (dark mode)"
       },
       "service-brand": {
@@ -3835,7 +3907,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.yellow.light}"
+        "$value": "{color.yellow.500}"
       },
       "service-information": {
         "$extensions": {
@@ -3844,7 +3916,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.blue.light}"
+        "$value": "{color.blue.500}"
       },
       "service-back-office": {
         "$extensions": {
@@ -3853,7 +3925,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.orange.light}"
+        "$value": "{color.orange.500}"
       },
       "service-product": {
         "$extensions": {
@@ -3862,7 +3934,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.purple.light}"
+        "$value": "{color.purple.500}"
       },
       "service-marketing": {
         "$extensions": {
@@ -3871,7 +3943,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.green.light}"
+        "$value": "{color.green.500}"
       },
       "accent": {
         "$extensions": {
@@ -3880,7 +3952,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.light}"
+        "$value": "{color.tan.700}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -3934,7 +4006,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.500}"
+        "$value": "{color.system.red}"
       }
     }
   },
