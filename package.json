@@ -118,6 +118,7 @@
     "@vitejs/plugin-react": "^6.0.2",
     "@vitest/browser": "^4.1.10",
     "@vitest/browser-playwright": "^4.1.4",
+    "astro": "^5.18.2",
     "axe-core": "^4.10.0",
     "chromatic": "^15.3.0",
     "dotenv": "^16.6.1",
@@ -178,7 +179,7 @@
     "lint-mdx-deprecations": "node scripts/lint-mdx-deprecations.mjs",
     "lint-mdx-coverage": "node scripts/lint-mdx-coverage.mjs",
     "lint-component-props": "node scripts/lint-component-props.mjs",
-    "validate": "node scripts/lint-tokens.js --errors-only && npm run lint-token-self-reference && npm run lint-token-tiers && npm run cascade-contract-check && npm run contrast-gate && npm run contrast-matrix:check && npm run lint-jsdoc && npm run validate:blueprints && npm run lint-blueprints:naming && npm run lint-atmosphere-tokens && npm run typecheck && npm run build-storybook && npm run lint-doc-links && npm run lint-mdx-tokens && npm run lint-mdx-headings && npm run lint-mdx-deprecations && npm run lint-mdx-coverage && npm run lint-component-props",
+    "validate": "node scripts/lint-tokens.js --errors-only && npm run lint-token-self-reference && npm run lint-token-tiers && npm run cascade-contract-check && npm run contrast-gate && npm run contrast-matrix:check && npm run lint-jsdoc && npm run validate:blueprints && npm run verify:astro-stories && npm run lint-blueprints:naming && npm run lint-atmosphere-tokens && npm run typecheck && npm run build-storybook && npm run lint-doc-links && npm run lint-mdx-tokens && npm run lint-mdx-headings && npm run lint-mdx-deprecations && npm run lint-mdx-coverage && npm run lint-component-props",
     "validate:full": "node scripts/validate-all.js",
     "precommit": "npm run validate",
     "build:sd-figma": "node scripts/flatten-tokens-studio.js && npx style-dictionary build --config sd.config.tokens-studio.mjs",
@@ -257,7 +258,9 @@
     "prepare": "husky || true",
     "prepublishOnly": "rm -rf dist && npm run build:lib && npm run check:esm",
     "verify:blueprints-astro": "node scripts/verify-blueprints-astro-exports.mjs",
-    "lint-gate-pathspecs": "node scripts/lint-gate-pathspecs.mjs"
+    "lint-gate-pathspecs": "node scripts/lint-gate-pathspecs.mjs",
+    "render:astro-stories": "node scripts/render-astro-blueprints.mjs",
+    "verify:astro-stories": "node scripts/render-astro-blueprints.mjs --check"
   },
   "keywords": [
     "brik",
