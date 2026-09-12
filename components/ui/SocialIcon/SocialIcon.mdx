@@ -27,10 +27,12 @@ Recolorable platform mark — social (youtube, twitter, instagram, facebook, lin
 
 ## Notes
 
+> **Badge is the brand mark, not a tile** — a social platform's rounded-square badge (YouTube's red button, X's black square) *is* its authored brand asset, so `type="badge"` here is brand fidelity — distinct from a synthesized icon-on-tile (that role belongs to [`Tag`](?path=/docs/components-tag--docs) / [`ServiceTag`](?path=/docs/components-service-tag--docs)). Use `type="glyph"` for the bare mark.
+
 > **Accessible name by default** — unlike `ServiceTag` (always paired with visible sibling text), `SocialIcon` is frequently the *only* content of an icon-only link (e.g. a portal Social card). It renders `role="img"` + `aria-label` (the platform's display name, or `label`) unless you pass `decorative` — use `decorative` only when a sibling text label already announces the platform.
 
-> **Never recolored?** Use [`Logo`](?path=/docs/foundation-assets-logo--docs) instead — it renders full-color, multi-fill brand art exactly as authored (brand guidelines own the color). `SocialIcon` is for the opposite case: a single-color mark that recolors to a BDS token.
+> **Never recolored?** Use [`Logo`](?path=/docs/assets-logo--docs) instead — it renders full-color, multi-fill brand art exactly as authored (brand guidelines own the color). `SocialIcon` is for the opposite case: a single-color mark that recolors to a BDS token.
 
-> **Contact marks live elsewhere** — `message`, `email`, `website`, `calendar`, and `phone` moved to [`ContactIcon`](?path=/docs/foundation-assets-contact-icon--docs) in brik-bds#1716, since they have no brand identity and therefore no `emphasis="brand"`.
+> **Contact marks live elsewhere** — `message`, `email`, `website`, `calendar`, and `phone` moved to [`ContactIcon`](?path=/docs/assets-contact-icon--docs) in brik-bds#1716, since they have no brand identity and therefore no `emphasis="brand"`.
 
 > **Adding a platform** — drop a two-path (`.bds-social-icon__bg` + `.bds-social-icon__glyph`, `fill="currentColor"`) master into `components/ui/SocialIcon/icons/{platform}.svg`, add its Foundations brand-color token (`design-tokens/foundations.json` `primitives/value/color/system`) and a matching `[data-platform]` rule in `SocialIcon.css`, run `npm run gen:social-icons`, and commit the regenerated `social-icons.generated.ts`.

@@ -5,7 +5,7 @@ import type { SocialIconEmphasis, SocialIconType } from './SocialIcon';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof SocialIcon> = {
-  title: 'Foundation/Assets/social-icon',
+  title: 'Assets/social-icon',
   component: SocialIcon,
   tags: ['surface-shared'],
   parameters: {

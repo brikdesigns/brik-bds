@@ -4,7 +4,7 @@ import { Frame } from '../../components/ui/Frame/Frame';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta = {
-  title: 'Foundation/Design Tokens/Aspect Ratios',
+  title: 'Foundation/Aspect Ratios',
   tags: ['surface-shared'],
   parameters: {
     layout: 'fullscreen',

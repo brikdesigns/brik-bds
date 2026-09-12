@@ -5,7 +5,7 @@ import type { ContactIconEmphasis, ContactIconType } from './ContactIcon';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof ContactIcon> = {
-  title: 'Foundation/Assets/contact-icon',
+  title: 'Assets/contact-icon',
   component: ContactIcon,
   tags: ['surface-shared'],
   parameters: {
@@ -56,7 +56,7 @@ type Story = StoryObj<typeof ContactIcon>;
 export const Default: Story = {
   args: {
     platform: 'email',
-    type: 'badge',
+    type: 'glyph',
     emphasis: 'neutral',
     size: 'lg',
   },

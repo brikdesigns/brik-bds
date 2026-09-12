@@ -5,7 +5,7 @@ import { Card, CardTitle, CardDescription } from '../Card';
 import { Table, TableBody, TableRow, TableLogoCell, TableCell } from '../Table';
 
 const meta: Meta<typeof Logo> = {
-  title: 'Foundation/Assets/logo',
+  title: 'Assets/logo',
   component: Logo,
   tags: ['surface-shared'],
   parameters: {
