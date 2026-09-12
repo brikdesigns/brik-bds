@@ -1034,6 +1034,14 @@ const expectedFiles = [
   // Blocks (source, .astro) — one file per block since #2302; the layout a
   // block renders in is a prop, so there is no per-layout file to ship.
   'content-system/blueprints/astro/Hero.astro',
+  // HeroMediaCard / -Image / -Price (brik-bds#2312) — presentational
+  // sub-parts `Hero.astro`'s `with-pricing-card` layout composes. Not
+  // dispatched blueprints (no `blueprintKey`), but still shipped and
+  // directly composable, so their tarball presence is asserted alongside
+  // the blocks.
+  'content-system/blueprints/astro/HeroMediaCard.astro',
+  'content-system/blueprints/astro/HeroMediaCardImage.astro',
+  'content-system/blueprints/astro/HeroMediaCardPrice.astro',
   'content-system/blueprints/astro/Cta.astro',
   'content-system/blueprints/astro/About.astro',
   'content-system/blueprints/astro/Features.astro',

@@ -71,9 +71,17 @@ const slugFor = (name, layout) => (layout ? `${name}--${layout}` : name);
 
 /** Lifts the body of the single `<style>` block out of an `.astro` source. */
 function extractStyle(astroSource, name) {
-  const match = astroSource.match(/<style>([\s\S]*?)<\/style>/);
-  if (!match) throw new Error(`${name}.astro has no <style> block — codegen assumption broken`);
-  return match[1].trim();
+  // Matches every `<style>` tag regardless of attributes, so a file that also
+  // carries a `<style is:global>` companion block (brik-bds#2312 — Astro's
+  // per-block escape hatch for a rule that must not be scoped, e.g. one that
+  // now targets a sub-component's descendant rather than this file's own
+  // literal markup) has both blocks concatenated into the one committed CSS
+  // file a story imports. Most blocks still carry exactly one plain `<style>`
+  // tag, so this is a superset of the old single-block match, not a behavior
+  // change for them.
+  const matches = [...astroSource.matchAll(/<style(?:\s[^>]*)?>([\s\S]*?)<\/style>/g)];
+  if (matches.length === 0) throw new Error(`${name}.astro has no <style> block — codegen assumption broken`);
+  return matches.map((m) => m[1].trim()).join('\n\n');
 }
 
 async function main() {
@@ -151,6 +159,57 @@ async function main() {
     }
   }
 
+  // HeroMediaCard / HeroMediaCardImage / HeroMediaCardPrice — presentational
+  // hero media-card partials `Hero.astro`'s `with-pricing-card` layout
+  // composes for its right-hand column (brik-bds#2312). Not a dispatched
+  // blueprint (no `blueprintKey`, no `BlueprintDispatcher` entry), so they
+  // render off a dedicated fixture rather than `sections.ts`, following the
+  // `SiteHeader` precedent above. Their classes (`bds-hero__*`) are already
+  // covered by `Hero.css` (ADR-040 mirror) — no new stylesheet is emitted;
+  // the stories import the same `__generated__/Hero.css` the `Hero` stories do.
+  {
+    const {
+      HERO_MEDIA_CARD_IMAGE_FIXTURE,
+      HERO_MEDIA_CARD_PRICE_FIXTURE,
+      HERO_MEDIA_CARD_CTA_HTML,
+      HERO_MEDIA_CARD_MISSING_FIXTURE,
+    } = await server.ssrLoadModule(join(astroDir, '__fixtures__/hero-media-card.ts'));
+
+    const imageMod = await server.ssrLoadModule(join(astroDir, 'HeroMediaCardImage.astro'));
+    const priceMod = await server.ssrLoadModule(join(astroDir, 'HeroMediaCardPrice.astro'));
+    const cardMod = await server.ssrLoadModule(join(astroDir, 'HeroMediaCard.astro'));
+
+    const renderOne = async (mod, opts) => {
+      const container = await experimental_AstroContainer.create();
+      const html = await container.renderToString(mod.default, opts);
+      return html.replace(/\sdata-astro-source-(file|loc)="[^"]*"/g, '').trim();
+    };
+
+    const imageHtml = await renderOne(imageMod, { props: HERO_MEDIA_CARD_IMAGE_FIXTURE });
+    writeFile(join(outDir, 'HeroMediaCardImage.html'), `${imageHtml}\n`);
+    emitted.push('HeroMediaCardImage.html');
+
+    const priceHtml = await renderOne(priceMod, {
+      props: HERO_MEDIA_CARD_PRICE_FIXTURE,
+      slots: { default: HERO_MEDIA_CARD_CTA_HTML },
+    });
+    writeFile(join(outDir, 'HeroMediaCardPrice.html'), `${priceHtml}\n`);
+    emitted.push('HeroMediaCardPrice.html');
+
+    // The populated card composes the two partials above as its slotted
+    // content — the same shape `Hero.astro` composes them in.
+    const cardHtml = await renderOne(cardMod, {
+      props: {},
+      slots: { default: `${imageHtml}${priceHtml}` },
+    });
+    writeFile(join(outDir, 'HeroMediaCard.html'), `${cardHtml}\n`);
+    emitted.push('HeroMediaCard.html');
+
+    const cardMissingHtml = await renderOne(cardMod, { props: HERO_MEDIA_CARD_MISSING_FIXTURE });
+    writeFile(join(outDir, 'HeroMediaCard--missing.html'), `${cardMissingHtml}\n`);
+    emitted.push('HeroMediaCard--missing.html');
+  }
+
   await server.close();
   assertStylesheetCoverage();
   return emitted;
@@ -179,7 +238,11 @@ function assertStylesheetCoverage() {
   const shellHtml = readdirSync(outDir)
     .filter((f) => f.startsWith('SiteHeader--') && f.endsWith('.html'))
     .map((f) => readFileSync(join(outDir, f), 'utf8'));
-  const html = [...blockHtml, ...shellHtml].join('\n');
+  // HeroMediaCard / -Image / -Price (brik-bds#2312) — not a BLOCKS entry (no
+  // `blueprintKey`), so scanned explicitly here alongside SiteHeader.
+  const heroMediaCardHtml = ['HeroMediaCardImage.html', 'HeroMediaCardPrice.html', 'HeroMediaCard.html', 'HeroMediaCard--missing.html']
+    .map((f) => readFileSync(join(outDir, f), 'utf8'));
+  const html = [...blockHtml, ...shellHtml, ...heroMediaCardHtml].join('\n');
 
   // Root class only — `bds-hero__title` and `bds-button--primary` are covered by
   // whatever stylesheet owns `bds-hero` / `bds-button`.

@@ -38,6 +38,10 @@ export type {
   HeroLayout,
   CtaLayout,
   CardGridLayout,
+  // `<HeroMediaCard missing>` payload (#2312) — shared with the React rail's
+  // `HeroMediaCardMissing` (declared inline on `HeroMediaCard.tsx` there;
+  // centralized here so a consumer can type it without the Astro runtime).
+  HeroMediaCardMissing,
 } from './types';
 
 // ── Implemented-set (runtime) ───────────────────────────────────
@@ -59,6 +63,17 @@ export { WIRED_BLUEPRINT_KEYS } from './types';
 // Direct consumers compose a block and pass `layout`:
 //   <Hero layout="interior-minimal" section={…} clientFacts={…} theme={…} />
 export { default as Hero }                      from './Hero.astro';
+
+// `<HeroMediaCard>` / `<HeroMediaCardImage>` / `<HeroMediaCardPrice>` —
+// presentational, non-interactive hero media-card sub-parts (brik-bds#2312).
+// NOT dispatched blueprints — no `blueprintKey`, no `BlueprintDispatcher`
+// entry. `Hero.astro`'s `with-pricing-card` layout composes them for its
+// right-hand column; a direct consumer composes them the same way. React
+// twins: `../react/HeroMediaCard{,Image,Price}.tsx`.
+export { default as HeroMediaCard }             from './HeroMediaCard.astro';
+export { default as HeroMediaCardImage }        from './HeroMediaCardImage.astro';
+export { default as HeroMediaCardPrice }        from './HeroMediaCardPrice.astro';
+
 export { default as Cta }                       from './Cta.astro';
 export { default as About }                     from './About.astro';
 export { default as Features }                  from './Features.astro';
