@@ -7,7 +7,7 @@
  * dispatch through `BlueprintDispatcher` with the same section-data
  * contract.
  *
- * The 2-column list shape here doesn't use `<Card preset="display">` —
+ * The 2-column list shape here doesn't use `<Card layout="stack">` —
  * these are plain title/description rows with no card surface. The
  * typography pairs respect the family↔size rule:
  *   title (h3)  — --font-family-heading + --heading-md

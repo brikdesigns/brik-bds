@@ -10,7 +10,7 @@ import * as Stories from './Card.stories';
 
 Flexible content container. A default flexible content slot (no `layout`), plus four anatomy-driven arrangements via the `layout` prop: `stack` (vertical content card / `CardGrid` cell), `row` (horizontal content card), `metric` (compact stat), and `control` (settings / integration row). One flat slot set (`media` / `overline` / `title` / `children` / `action` / `badge`) serves all four ([ADR-038](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md)). The web-only `PricingCard` component is documented alongside as part of the Card family.
 
-> **Deprecated** — the `preset` discriminator (`control` / `summary` / `display` / `display-row`) is superseded by `layout` (ADR-038). It still renders unchanged for existing consumers; new code uses `layout`.
+> **Removed** — the `preset` discriminator (`control` / `summary` / `display` / `display-row`) has been replaced by `layout` (ADR-038 §5). Old→new mapping: `display`→`stack`, `display-row`→`row`, `summary`→`metric`, `control`→`control`.
 
 > **Note** — Multi-card compositions (service grids, feature grids, blog rolls) live in the [`Card Grid`](?path=/docs/theming-blueprints-card-grid--docs) blueprint, not on this page. This page documents the Card primitive itself.
 
@@ -66,7 +66,7 @@ The `mediaTreatment` prop controls how the `media` slot relates to the card edge
 
 <Canvas of={Stories.Metric} />
 
-Two optional slots extend `metric` for a labelled selection (the shape the deprecated `ProductSummaryCard` covered): `media` renders a leading glyph (e.g. a `<ServiceTag>`) beside the stat, and `detail` renders a secondary line below the value (e.g. `price • frequency`). Both are additive — a plain stat omits them.
+Two optional slots extend `metric` for a labelled selection (the shape the removed `ProductSummaryCard` component folded into, ADR-038 §4): `media` renders a leading glyph (e.g. a `<ServiceTag>`) beside the stat, and `detail` renders a secondary line below the value (e.g. `price • frequency`). Both are additive — a plain stat omits them.
 
 ```tsx
 <Card

@@ -5,7 +5,7 @@
  * Owns ONLY section-level styling: container, header rhythm, typography.
  * Item layout (grid columns, gap, card shape) is consumer-composed via
  * children — column count belongs to `<Grid>`, card shape belongs to
- * `<Card preset="display">` (or whatever the consumer composes).
+ * `<Card layout="stack">` (or whatever the consumer composes).
  *
  * Slots used (all on docs/SLOT-ALLOWLIST.md):
  *   bds-card-grid

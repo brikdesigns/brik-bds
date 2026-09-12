@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Badge, Button, Card, Frame, Grid, ServiceTag, Stack } from '../../../components';
+import { Badge, Button, Card, CardDescription, Frame, Grid, ServiceTag, Stack } from '../../../components';
 import { CardGrid } from './CardGrid';
 import { placeholderImage } from './_fixtures';
 
@@ -20,7 +20,7 @@ const meta: Meta<typeof CardGrid> = {
     docs: {
       description: {
         component:
-          'Generic section wrapper for any "header + grid of cards" layout. Content-agnostic by design — serves services, blog posts, customer stories, property listings, team bios, support plans. Consumers compose `<Grid>` + `<Card preset="display">` (or any item shape) inside. Token pairs: subtitle uses `--font-family-subtitle` + `--subtitle-lg` + `--text-transform-subtitle`; title uses `--font-family-heading` + clamp heading scale; description uses `--font-family-body` + `--body-md`.',
+          'Generic section wrapper for any "header + grid of cards" layout. Content-agnostic by design — serves services, blog posts, customer stories, property listings, team bios, support plans. Consumers compose `<Grid>` + `<Card layout="stack">` (or any item shape) inside. Token pairs: subtitle uses `--font-family-subtitle` + `--subtitle-lg` + `--text-transform-subtitle`; title uses `--font-family-heading` + clamp heading scale; description uses `--font-family-body` + `--body-md`.',
       },
     },
   },
@@ -41,7 +41,7 @@ const serviceItems = [
  * The canonical "service grid" composition. Validates the brikdesigns#100
  * consumer shape: image + ServiceTag + title + description + primary CTA.
  *
- * @summary Services — 3-col card grid of Card preset="display"
+ * @summary Services — 3-col card grid of Card layout="stack"
  */
 export const Default: Story = {
   args: {
@@ -54,18 +54,19 @@ export const Default: Story = {
         {serviceItems.map((item) => (
           <li key={item.title} style={{ display: 'flex' }}>
             <Card
-              preset="display"
+              layout="stack"
               title={item.title}
-              description={item.description}
-              image={
+              media={
                 <Frame customRatio="3 / 2" fit="cover">
                   <img src={item.imageUrl} alt="" loading="lazy" decoding="async" />
                 </Frame>
               }
-              tag={<ServiceTag category={item.category} variant="icon-text" size="sm" serviceName={item.title} />}
+              overline={<ServiceTag category={item.category} variant="icon-text" size="sm" serviceName={item.title} />}
               badge={item.hasOptions ? <Badge status="positive" size="sm" appearance="solid">Has Options</Badge> : undefined}
               action={<Button variant="primary" size="sm">Learn more</Button>}
-            />
+            >
+              <CardDescription>{item.description}</CardDescription>
+            </Card>
           </li>
         ))}
       </Grid>

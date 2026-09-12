@@ -2,10 +2,10 @@ import { type HTMLAttributes, type ReactNode } from 'react';
 import { bdsClass } from '../../utils';
 import './CardControl.css';
 
-/** @deprecated Use `Card preset="control"` instead — see #657. */
+/** @deprecated Use `Card layout="control"` instead — see #657. */
 export type CardControlActionAlign = 'center' | 'top';
 
-/** @deprecated Use `Card preset="control"` instead — see #657. */
+/** @deprecated Use `Card layout="control"` instead — see #657. */
 export interface CardControlProps extends HTMLAttributes<HTMLDivElement> {
   /** Setting / control name shown as the primary text. */
   title: string;
@@ -20,7 +20,7 @@ export interface CardControlProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * @deprecated Use `<Card preset="control">` instead. `CardControl` is kept
+ * @deprecated Use `<Card layout="control">` instead. `CardControl` is kept
  * during the migration window and will be removed in a future major version
  * once the one consumer (brik-client-portal) migrates (see #657).
  *

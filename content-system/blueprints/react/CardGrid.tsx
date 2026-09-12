@@ -9,7 +9,7 @@
  * same failure mode ADR-008 addressed at the blueprint layer applied
  * to the family layer. `bds-card-grid` is the structural primitive;
  * the consumer composes whatever items belong in the grid (typically
- * `<Card preset="display">`, but any ReactNode works).
+ * `<Card layout="stack">`, but any ReactNode works).
  *
  * @example Direct composition (preferred):
  * ```tsx
@@ -22,13 +22,14 @@
  *     {items.map(item => (
  *       <Card
  *         key={item.slug}
- *         preset="display"
- *         image={<Frame customRatio="3 / 2" fit="cover"><img src={item.imageUrl} alt=""/></Frame>}
- *         tag={<ServiceTag category={item.category} variant="icon-text" size="sm" serviceName={item.title}/>}
+ *         layout="stack"
+ *         media={<Frame customRatio="3 / 2" fit="cover"><img src={item.imageUrl} alt=""/></Frame>}
+ *         overline={<ServiceTag category={item.category} variant="icon-text" size="sm" serviceName={item.title}/>}
  *         title={item.title}
- *         description={item.description}
  *         action={<LinkButton href={item.href} variant="primary" size="sm">Learn more</LinkButton>}
- *       />
+ *       >
+ *         <CardDescription>{item.description}</CardDescription>
+ *       </Card>
  *     ))}
  *   </Grid>
  * </CardGrid>

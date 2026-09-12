@@ -156,6 +156,15 @@ const AXES = {
   appearance: { concept: 'fill treatment', values: new Set(['solid', 'subtle', 'muted']) },
   density: { concept: 'spacing compression', values: new Set(['comfortable', 'compact']) },
   orientation: { concept: 'layout direction', values: ORIENTATION_VALUES },
+  // `layout` (ADR-038, #2459) — a component's arrangement of one shared slot set
+  // (Card: stack / row / metric / control). Per-subject like `variant`/`status`
+  // (`values: null`), so rule 5 does not default-deny its members and compound
+  // sub-modifiers (`--layout-stack-inset`, `--layout-control-action-center`) pass.
+  // Distinct from `orientation`: that is horizontal/vertical DIRECTION; this is
+  // WHICH arrangement. The § 2 `layout → orientation` retirement stays scoped to
+  // horizontal/vertical unions by its value-corroboration guard, so a stack/row
+  // union named `layout` does not collide.
+  layout: { concept: 'component arrangement', values: null },
 };
 
 /**

@@ -4,7 +4,7 @@ import { ListView } from './ListView';
 import { ProfileView } from './ProfileView';
 import { BoardView } from './BoardView';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../Table';
-import { Card } from '../Card';
+import { Card, CardDescription } from '../Card';
 import { CardList } from '../CardList';
 import { DataSection } from '../DataSection';
 import { Field } from '../Field';
@@ -111,8 +111,8 @@ const DemoTable = () => (
 
 const DemoList = () => (
   <CardList>
-    <Card preset="display" title="Website Design" description="Marketing Design" />
-    <Card preset="display" title="Brand Identity" description="Brand Design" />
+    <Card layout="stack" title="Website Design"><CardDescription>Marketing Design</CardDescription></Card>
+    <Card layout="stack" title="Brand Identity"><CardDescription>Brand Design</CardDescription></Card>
   </CardList>
 );
 

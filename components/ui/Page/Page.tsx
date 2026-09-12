@@ -48,7 +48,7 @@ export interface PageProps extends HTMLAttributes<HTMLDivElement> {
  *   <PageHeader title="Services" subtitle="…" actions={<Button>Add</Button>} />
  *   <PageContent>
  *     <Grid columns="auto-fit" minColumnWidth="180px" gap="md">
- *       <Card preset="summary" label="Total" value={49} />
+ *       <Card layout="metric" overline="Total" title={49} />
  *     </Grid>
  *     <FilterBar total={49} filtered={49} label="services" />
  *     <Table>…</Table>
