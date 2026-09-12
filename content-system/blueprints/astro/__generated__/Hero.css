@@ -112,7 +112,12 @@
       width: 3rem;
       height: 2px;
       margin-top: var(--gap-lg);
-      background: var(--bds-hero-accent-line, var(--border-brand-primary));
+      /* Off by default (#2465). The `::after` bar defaulted to
+         --border-brand-primary (poppy), which surfaced unwanted on
+         brikdesigns /services/* heroes. The --bds-hero-accent-line hook is
+         preserved, so a consumer can opt the bar back in by setting it to a
+         visible value. */
+      background: var(--bds-hero-accent-line, transparent);
     }
   }
 

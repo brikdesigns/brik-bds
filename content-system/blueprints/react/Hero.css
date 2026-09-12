@@ -106,7 +106,10 @@
     width: 3rem;
     height: 2px;
     margin-top: var(--gap-lg);
-    background: var(--bds-hero-accent-line, var(--border-brand-primary));
+    /* Off by default (#2465) — poppy bar surfaced unwanted on brikdesigns
+       /services/* heroes. Hook preserved: set --bds-hero-accent-line to a
+       visible value to opt the bar back in. */
+    background: var(--bds-hero-accent-line, transparent);
   }
 }
 
