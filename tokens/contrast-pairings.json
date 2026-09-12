@@ -158,11 +158,19 @@
     },
     {
       "group": "brand",
-      "label": "Rail TOC active label on secondary surface",
+      "label": "Rail TOC active label on surface",
       "fg": "--text-brand-primary-strong",
-      "bg": "--surface-secondary",
+      "bg": "--surface-primary",
       "thresholdType": "AA",
-      "note": "TableOfContents variant=\"rail\" active label \u2014 14px bold, so WCAG large text (18.66px bold) does not apply and the bar is AA 4.5:1, not the AA-large 3:1 that --text-brand-primary carries in its heading/accent role. --text-brand-primary (poppy-500) measures 3.38:1 on this tint and fails; --text-brand-primary-strong darkens to poppy-700 in light (5.56:1) and stays poppy-500 in dark (4.56:1), where darkening would sink it (#2270)."
+      "note": "TableOfContents variant=\"rail\" active label \u2014 14px bold, so WCAG large text (18.66px bold) does not apply and the bar is AA 4.5:1, not the AA-large 3:1 that --text-brand-primary carries in its heading/accent role. The rail is now transparent (col_toc dropped its tint, brikdesigns#1458), so the label renders on the band (--surface-primary), not the old --surface-secondary box. --text-brand-primary (poppy-500) is too light; --text-brand-primary-strong darkens to poppy-700 in light and stays poppy-500 in dark, where darkening would sink it (#2270, #2470)."
+    },
+    {
+      "group": "neutral",
+      "label": "Rail TOC resting label on surface",
+      "fg": "--text-secondary",
+      "bg": "--surface-primary",
+      "thresholdType": "AA",
+      "note": "TableOfContents variant=\"rail\" resting label on the transparent rail's band (--surface-primary). Figma specs --text-muted (#828282) here, which fails AA at label-sm; --text-secondary is the resting label the variant ships (#2270, #2470)."
     },
     {
       "group": "brand",
