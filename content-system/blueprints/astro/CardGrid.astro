@@ -17,10 +17,16 @@
  *     `Services3ColCardGrid.astro` and `ServicesDetailTwoColumn.astro`, which
  *     wrapped this same primitive with hand-rolled item markup:
  *
- *       card-grid       — `bds-card-grid--card-grid`        3-up bordered cards
- *                         with media, category pill, optional CTA
- *       two-column-list — `bds-card-grid--two-column-list`  2-up plain
- *                         title/description rows, no card surface
+ *       card-grid       — 3-up bordered cards with media, category pill,
+ *                         optional CTA (styled by `.bp-services-grid__*`)
+ *       two-column-list — 2-up plain title/description rows, no card
+ *                         surface (styled by `.bp-services-two-col__*`)
+ *
+ * The `layout` prop selects the item markup below; it does not emit a
+ * `bds-card-grid--<layout>` modifier class. That modifier carried no CSS
+ * rule in either rail (the layouts are styled by the `bp-*` classes above),
+ * so it was a dead `bds-*` hook the canonical gate correctly flagged once the
+ * pre-rendered stories spelled it out — dropped per ADR-040.
  *
  * Slot content wins when present, so a composed consumer is unaffected by the
  * `layout` default.
@@ -80,7 +86,7 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
 ---
 
 <section
-  class={`bds-blueprint-section bds-card-grid${hasComposedItems ? '' : ` bds-card-grid--${layout}`}`}
+  class="bds-blueprint-section bds-card-grid"
   aria-labelledby={titleId}
   data-blueprint-key="card_grid"
 >
@@ -168,8 +174,10 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
 </section>
 
 <style>
-  /* Mirrors ../react/CardGrid.css — keep in sync until a unified CSS
-     distribution lands across the React + Astro twins. */
+  /* Mirrors ../react/CardGrid.css — the shared `bds-*` selectors are
+     single-sourced by this mirror and covered by canonical-class-check
+     against dist/styles.css (ADR-040). Values may differ where Astro
+     hand-rolls what React composes; keep the `bds-*` vocabulary in sync. */
 
   /* Section rhythm + centred container: ../section-shell.css (ADR-021).
      The heavier bottom inset is a documented exception — unlayered here, so
