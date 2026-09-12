@@ -36,14 +36,14 @@ const h = React.createElement;
 describe('Card anatomy API (ADR-038)', () => {
   it('layout="row" renders the row block with title + overline', async () => {
     const el = await mount(h(Card as never, { layout: 'row', overline: 'Add-on', title: 'Web Design Retainer' }));
-    expect(el.querySelector('.bds-card--row')).not.toBeNull();
+    expect(el.querySelector('.bds-card--layout-row')).not.toBeNull();
     expect(el.querySelector('.bds-card__row-title')?.textContent).toBe('Web Design Retainer');
     expect(el.querySelector('.bds-card__row-overline')?.textContent).toBe('Add-on');
   });
 
   it('layout="stack" renders the stack surface with title + overline', async () => {
     const el = await mount(h(Card as never, { layout: 'stack', overline: 'Marketing', title: 'Service one' }));
-    expect(el.querySelector('.bds-card--stack')).not.toBeNull();
+    expect(el.querySelector('.bds-card--layout-stack')).not.toBeNull();
     expect(el.querySelector('.bds-card__stack-title')?.textContent).toBe('Service one');
     const overline = el.querySelector('.bds-card__stack-overline');
     expect(overline?.textContent).toBe('Marketing');
@@ -82,14 +82,14 @@ describe('Card anatomy API (ADR-038)', () => {
 
   it('layout="metric" renders the metric surface with label + value (no numeric formatting)', async () => {
     const el = await mount(h(Card as never, { layout: 'metric', overline: 'Revenue', title: '$48,250' }));
-    expect(el.querySelector('.bds-card--metric')).not.toBeNull();
+    expect(el.querySelector('.bds-card--layout-metric')).not.toBeNull();
     expect(el.querySelector('.bds-card__metric-label')?.textContent).toBe('Revenue');
     expect(el.querySelector('.bds-card__metric-value')?.textContent).toBe('$48,250');
   });
 
   it('layout="control" renders the control block with title', async () => {
     const el = await mount(h(Card as never, { layout: 'control', title: 'Notion', description: 'D' }));
-    expect(el.querySelector('.bds-card--control')).not.toBeNull();
+    expect(el.querySelector('.bds-card--layout-control')).not.toBeNull();
     expect(el.querySelector('.bds-card__control-title')?.textContent).toBe('Notion');
     expect(el.querySelector('.bds-card__control-description')?.textContent).toBe('D');
   });
@@ -116,7 +116,7 @@ describe('Card anatomy API (ADR-038)', () => {
     // The ADR-038 defect: an argless union Card rendered <div class="bds-card
     // bds-card--outlined bds-card--padding-md"></div> — empty. The stack layout
     // renders its surface WITH content instead.
-    expect(rootEl.className).toContain('bds-card--stack');
+    expect(rootEl.className).toContain('bds-card--layout-stack');
     expect(rootEl.textContent).toContain('Only a title');
   });
 });

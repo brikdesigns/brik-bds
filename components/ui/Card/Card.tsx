@@ -443,8 +443,8 @@ function renderAnatomy({
       <div
         className={bdsClass(
           'bds-card',
-          'bds-card--control',
-          `bds-card--control-action-${actionAlign}`,
+          'bds-card--layout-control',
+          `bds-card--layout-control-action-${actionAlign}`,
           className,
         )}
         style={style}
@@ -489,7 +489,7 @@ function renderAnatomy({
 
   if (layout === 'metric') {
     return (
-      <div className={bdsClass('bds-card', 'bds-card--metric', className)} style={style} {...rest}>
+      <div className={bdsClass('bds-card', 'bds-card--layout-metric', className)} style={style} {...rest}>
         <div className="bds-card__metric-inner">
           {media && <div className="bds-card__metric-media">{media}</div>}
           <div className="bds-card__metric-content">
@@ -507,8 +507,8 @@ function renderAnatomy({
     const isNamed = NAMED_IMAGE_WIDTHS.has(imageWidth);
     const classes = bdsClass(
       'bds-card',
-      'bds-card--row',
-      isNamed && `bds-card--row-${imageWidth}`,
+      'bds-card--layout-row',
+      isNamed && `bds-card--layout-row-${imageWidth}`,
       tint && `bds-card--tint-${tint}`,
       href && 'bds-card--link',
       className,
@@ -548,8 +548,8 @@ function renderAnatomy({
     // only the structural bits, so borderless/elevated/raised compose without
     // the specificity overrides the old preset needed (ADR-038).
     `bds-card--${variant ?? 'outlined'}`,
-    'bds-card--stack',
-    mediaTreatment === 'inset' && 'bds-card--stack-inset',
+    'bds-card--layout-stack',
+    mediaTreatment === 'inset' && 'bds-card--layout-stack-inset',
     tint && `bds-card--tint-${tint}`,
     href && 'bds-card--link',
     className,

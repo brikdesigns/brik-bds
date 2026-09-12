@@ -142,7 +142,7 @@
  * description) on the left, connection-status + action on the right.
  * Surface uses primary background + muted border (no shadow). */
 
-.bds-card--control {
+.bds-card--layout-control {
   flex-direction: row;
   align-items: center;
   gap: var(--padding-xl);
@@ -158,8 +158,8 @@
   flex-wrap: wrap;
 }
 
-.bds-card--control-action-center { align-items: center; }
-.bds-card--control-action-top    { align-items: flex-start; }
+.bds-card--layout-control-action-center { align-items: center; }
+.bds-card--layout-control-action-top    { align-items: flex-start; }
 
 .bds-card__control-content {
   display: flex;
@@ -298,7 +298,7 @@
  * (bottom) + optional leading glyph, detail line, and trailing action.
  * Surface uses primary background + muted border. */
 
-.bds-card--metric {
+.bds-card--layout-metric {
   background-color: var(--surface-primary);
   border: var(--border-width-md) solid var(--border-muted);
   display: flex;
@@ -373,7 +373,7 @@
  * every content type. Drives the `bds-card-grid` blueprint.
  *
  * Surface: the render path emits the `outlined` variant class as the default
- * fill + border, so `.bds-card--stack` owns only structure. `borderless` /
+ * fill + border, so `.bds-card--layout-stack` owns only structure. `borderless` /
  * `elevated` / `raised` therefore compose directly — no per-variant specificity
  * override is needed (the ADR-038 cleanup of the old preset's self-declared
  * surface).
@@ -391,28 +391,28 @@
  * `--surface-service-{line}-light` pastel step; dark mode is handled by the
  * token cascade. Not for combining with `borderless` (transparent by design).
  */
-.bds-card--stack.bds-card--tint-brand,
-.bds-card--row.bds-card--tint-brand {
+.bds-card--layout-stack.bds-card--tint-brand,
+.bds-card--layout-row.bds-card--tint-brand {
   background-color: var(--surface-service-brand-light);
 }
-.bds-card--stack.bds-card--tint-marketing,
-.bds-card--row.bds-card--tint-marketing {
+.bds-card--layout-stack.bds-card--tint-marketing,
+.bds-card--layout-row.bds-card--tint-marketing {
   background-color: var(--surface-service-marketing-light);
 }
-.bds-card--stack.bds-card--tint-information,
-.bds-card--row.bds-card--tint-information {
+.bds-card--layout-stack.bds-card--tint-information,
+.bds-card--layout-row.bds-card--tint-information {
   background-color: var(--surface-service-information-light);
 }
-.bds-card--stack.bds-card--tint-product,
-.bds-card--row.bds-card--tint-product {
+.bds-card--layout-stack.bds-card--tint-product,
+.bds-card--layout-row.bds-card--tint-product {
   background-color: var(--surface-service-product-light);
 }
-.bds-card--stack.bds-card--tint-back-office,
-.bds-card--row.bds-card--tint-back-office {
+.bds-card--layout-stack.bds-card--tint-back-office,
+.bds-card--layout-row.bds-card--tint-back-office {
   background-color: var(--surface-service-back-office-light);
 }
 
-.bds-card--stack {
+.bds-card--layout-stack {
   /* Fill + border come from the `outlined`/`borderless`/`elevated`/`raised`
      variant class the render path emits; this block owns only structure. */
   border-radius: var(--border-radius-md);
@@ -432,12 +432,12 @@
  * body's own --padding-lg is zeroed so the frame isn't doubled. Ported from the
  * brikdesigns-local `.service-card--inset` override so the treatment lives on
  * the primitive, not per-consumer CSS. */
-.bds-card--stack-inset {
+.bds-card--layout-stack-inset {
   padding: var(--padding-huge);
   gap: var(--gap-xl);
 }
 
-.bds-card--stack-inset .bds-card__stack-body {
+.bds-card--layout-stack-inset .bds-card__stack-body {
   padding: var(--padding-none);
 }
 
@@ -528,7 +528,7 @@
  *   tag         — own typography (component-internal)
  */
 
-.bds-card--row {
+.bds-card--layout-row {
   /* Default column width — overridden by named modifier class or inline
    * style. `auto` fallback keeps the card sensible if neither is set. */
   --bds-card-image-width: 35%;
@@ -544,9 +544,9 @@
   box-sizing: border-box;
 }
 
-.bds-card--row-narrow   { --bds-card-image-width: 25%; }
-.bds-card--row-standard { --bds-card-image-width: 35%; }
-.bds-card--row-wide     { --bds-card-image-width: 50%; }
+.bds-card--layout-row-narrow   { --bds-card-image-width: 25%; }
+.bds-card--layout-row-standard { --bds-card-image-width: 35%; }
+.bds-card--layout-row-wide     { --bds-card-image-width: 50%; }
 
 .bds-card__row-media {
   position: relative;
@@ -595,7 +595,7 @@
 }
 
 @media (max-width: 640px) {
-  .bds-card--row {
+  .bds-card--layout-row {
     grid-template-columns: 1fr;
   }
 }
