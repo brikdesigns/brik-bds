@@ -1,0 +1,547 @@
+/* The base `.bp-site-header` shape stays archetype-neutral; each
+   * `.bp-site-header--<archetype>` block below tweaks background, scroll,
+   * and drawer behavior. Implemented: editorial-transparent, utility-first. */
+
+  .bp-site-header {
+    /* Per-client tuning */
+    --bds-site-header-bg: var(--surface-navigation, transparent);
+    --bds-site-header-text-color: var(--text-primary);
+    --bds-site-header-cta-bg: var(--background-brand-primary);
+    --bds-site-header-cta-color: var(--text-on-color-dark, var(--text-inverse));
+
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--bds-site-header-bg);
+    padding-block: var(--padding-md);
+    transition: box-shadow 160ms ease-out, background 160ms ease-out,
+      transform 200ms ease-out;
+  }
+
+  /* Hide-on-scroll — the runtime sets [data-scroll-hidden] on scroll-down
+   * for behaviors that hide (transparent-top-frosted-past-80,
+   * reveal-on-scroll, hide-on-scroll) and removes it on scroll-up / at the
+   * top. Sticky positioning means translateY(-100%) slides the bar out. */
+  .bp-site-header[data-scroll-hidden] {
+    transform: translateY(-100%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bp-site-header {
+      transition: box-shadow 160ms ease-out, background 160ms ease-out;
+    }
+  }
+
+  /* utility-first — always-solid task surface: never transparent, never
+   * hides. Gains a subtle elevation shadow once the page is scrolled,
+   * set by the runtime script via [data-scrolled]. */
+  .bp-site-header--utility-first {
+    --bds-site-header-bg: var(--surface-navigation);
+  }
+
+  .bp-site-header--utility-first[data-scrolled] {
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* editorial-transparent — transparent over the hero at the top of the
+   * page; past the scroll threshold it gains its solid navigation surface
+   * plus a backdrop blur (frosted glass) and a subtle shadow. The runtime
+   * additionally drives hide-on-scroll / reveal-on-scroll-up. The client
+   * sets the over-hero text color via --bds-site-header-text-color. */
+  .bp-site-header--editorial-transparent {
+    --bds-site-header-bg: transparent;
+    box-shadow: none;
+  }
+
+  .bp-site-header--editorial-transparent[data-scrolled] {
+    --bds-site-header-bg: var(--surface-navigation);
+    backdrop-filter: blur(var(--blur-radius-md));
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* service-centric — the mega-menu is the product. Always-solid nav
+   * surface (like utility-first) with an elevation shadow on scroll; the
+   * shared mega-menu markup carries the multi-column flyout. */
+  .bp-site-header--service-centric {
+    --bds-site-header-bg: var(--surface-navigation);
+  }
+
+  .bp-site-header--service-centric[data-scrolled] {
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* portfolio-minimal — text-only, chrome-out-of-the-way. Transparent over
+   * the hero, solid on scroll, wide letter tracking. Hide-on-scroll /
+   * reveal-up is driven by the runtime (reveal-on-scroll behavior). */
+  .bp-site-header--portfolio-minimal {
+    --bds-site-header-bg: transparent;
+    box-shadow: none;
+  }
+
+  .bp-site-header--portfolio-minimal[data-scrolled] {
+    --bds-site-header-bg: var(--surface-navigation);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .bp-site-header--portfolio-minimal .bp-site-header__brand,
+  .bp-site-header--portfolio-minimal .bp-site-header__nav-link {
+    letter-spacing: 0.12em;
+  }
+
+  /* calm-flat — low-stimulation, anxiety-sensitive audiences. Always solid
+   * at low contrast (muted surface), no dropdowns, never hides. Nothing
+   * moves on scroll beyond the elevation shadow. */
+  .bp-site-header--calm-flat {
+    --bds-site-header-bg: var(--surface-muted);
+  }
+
+  .bp-site-header--calm-flat[data-scrolled] {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .bp-site-header__container {
+    max-width: var(--content-width-xl);
+    margin-inline: auto;
+    padding-inline: var(--padding-xl); /* bds-lint-ignore — legacy bp-* inset predates --gutter-page; realigning 32→24px is a visual change gated on Chromatic quota (#771), same deferral as #1630 */
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: var(--gap-lg);
+  }
+
+  .bp-site-header__brand {
+    color: var(--bds-site-header-text-color);
+    text-decoration: none;
+    font-family: var(--font-family-heading);
+    font-size: var(--heading-md);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1;
+  }
+
+  .bp-site-header__brand:focus-visible {
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
+    outline-offset: 4px;
+  }
+
+  .bp-site-header__logo-image {
+    display: block;
+    height: 32px;
+    width: auto;
+  }
+
+  .bp-site-header__nav {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .bp-site-header__nav {
+      display: block;
+      justify-self: center;
+    }
+  }
+
+  .bp-site-header__nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: var(--gap-lg);
+  }
+
+  .bp-site-header__nav-link {
+    color: var(--bds-site-header-text-color);
+    text-decoration: none;
+    font-family: var(--font-family-label);
+    font-size: var(--label-xl);
+    font-weight: var(--font-weight-medium);
+    padding: var(--padding-xs) 0;
+    border-bottom: 2px solid transparent;
+    transition: border-color 120ms ease-out;
+  }
+
+  .bp-site-header__nav-link:hover,
+  .bp-site-header__nav-link[aria-current='page'] {
+    border-bottom-color: var(--border-brand-primary);
+  }
+
+  .bp-site-header__nav-link:focus-visible {
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
+    outline-offset: 4px;
+  }
+
+  /* Services mega-menu — editorial-transparent's flyout. Disclosure is
+   * CSS-only (hover + focus-within) so it works before the scaffold JS
+   * loads; the JS then drives the click toggle + aria-expanded. Panel is
+   * ≥768px only — on mobile the drawer carries the same links as flat
+   * items (no nested mega-menu in the overlay). */
+  .bp-site-header__nav-item--mega {
+    position: relative;
+  }
+
+  .bp-site-header__mega-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--gap-sm);
+    cursor: pointer;
+  }
+
+  .bp-site-header__mega-chevron {
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform 120ms ease-out;
+  }
+
+  .bp-site-header__mega {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .bp-site-header__mega {
+      display: block;
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding-top: var(--padding-md);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 120ms ease-out, visibility 0s linear 120ms;
+      z-index: 200;
+    }
+
+    .bp-site-header__nav-item--mega:hover .bp-site-header__mega,
+    .bp-site-header__nav-item--mega:focus-within .bp-site-header__mega {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transition-delay: 0s;
+    }
+
+    .bp-site-header__nav-item--mega:hover .bp-site-header__mega-chevron,
+    .bp-site-header__nav-item--mega:focus-within .bp-site-header__mega-chevron {
+      transform: translateY(1px) rotate(225deg);
+    }
+  }
+
+  .bp-site-header__mega-inner {
+    background: var(--surface-primary);
+    border: 1px solid var(--border-secondary);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--padding-xl);
+    min-width: min(90vw, 720px);
+  }
+
+  .bp-site-header__mega-columns {
+    display: grid;
+    /* Column count is data-driven, set inline from servicesMegaMenu.columns
+     * (always present — required field), so no fallback is needed. */
+    grid-template-columns: repeat(var(--bds-site-header-mega-columns), minmax(0, 1fr));
+    gap: var(--gap-xl);
+  }
+
+  .bp-site-header__mega-heading {
+    margin: 0 0 var(--gap-md);
+    color: var(--text-muted);
+    font-family: var(--font-family-label);
+    font-size: var(--label-sm);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .bp-site-header__mega-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  .bp-site-header__mega-item {
+    display: block;
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+
+  .bp-site-header__mega-item:hover .bp-site-header__mega-item-label {
+    color: var(--text-brand-primary);
+  }
+
+  .bp-site-header__mega-item:focus-visible {
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
+    outline-offset: 2px;
+    border-radius: var(--border-radius-md);
+  }
+
+  .bp-site-header__mega-item-label {
+    display: block;
+    font-family: var(--font-family-label);
+    font-size: var(--label-lg);
+    font-weight: var(--font-weight-medium);
+    transition: color 120ms ease-out;
+  }
+
+  .bp-site-header__mega-item-note {
+    display: block;
+    margin-top: 2px;
+    color: var(--text-secondary);
+    font-family: var(--font-family-body);
+    font-size: var(--body-sm);
+  }
+
+  .bp-site-header__mega-featured {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-sm);
+    padding: var(--padding-lg);
+    background: var(--surface-secondary);
+    border-radius: var(--border-radius-md);
+    text-decoration: none;
+    color: var(--text-primary);
+  }
+
+  .bp-site-header__mega-featured:focus-visible {
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
+    outline-offset: 2px;
+  }
+
+  .bp-site-header__mega-featured-eyebrow {
+    color: var(--text-brand-primary);
+    font-family: var(--font-family-label);
+    font-size: var(--label-sm);
+    font-weight: var(--font-weight-semibold);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .bp-site-header__mega-featured-heading {
+    font-family: var(--font-family-heading);
+    font-size: var(--heading-sm);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.2;
+  }
+
+  .bp-site-header__mega-featured-body {
+    color: var(--text-secondary);
+    font-family: var(--font-family-body);
+    font-size: var(--body-sm);
+  }
+
+  .bp-site-header__mega-featured-cta {
+    margin-top: var(--gap-sm);
+    color: var(--text-brand-primary);
+    font-family: var(--font-family-label);
+    font-size: var(--label-lg);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .bp-site-header__actions {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .bp-site-header__actions {
+      display: flex;
+      align-items: center;
+      gap: var(--gap-md);
+    }
+  }
+
+  .bp-site-header__phone {
+    color: var(--bds-site-header-text-color);
+    text-decoration: none;
+    font-family: var(--font-family-label);
+    font-size: var(--label-xl);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .bp-site-header__phone-label {
+    display: none;
+  }
+
+  .bp-site-header__phone:focus-visible {
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
+    outline-offset: 2px;
+  }
+
+  .bp-site-header__cta {
+    padding: var(--padding-sm) var(--padding-md);
+    background: var(--bds-site-header-cta-bg);
+    color: var(--bds-site-header-cta-color);
+    font-family: var(--font-family-label);
+    font-size: var(--label-xl);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    transition: background 120ms ease-out;
+  }
+
+  .bp-site-header__cta:hover {
+    background: var(--background-brand-primary-hover, var(--background-brand-primary));
+  }
+
+  .bp-site-header__cta:focus-visible {
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
+    outline-offset: 2px;
+  }
+
+  .bp-site-header__hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    justify-self: end;
+  }
+
+  @media (min-width: 768px) {
+    .bp-site-header__hamburger {
+      display: none;
+    }
+  }
+
+  .bp-site-header__hamburger:focus-visible {
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
+    outline-offset: 2px;
+  }
+
+  .bp-site-header__hamburger-bar {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--bds-site-header-text-color);
+    margin-inline: auto;
+  }
+
+  /* Drawer: hidden by default on all viewports. The scaffold layout's
+   * header JS removes the `inert` attribute + flips aria-expanded on
+   * the hamburger when the drawer opens. Using `inert` (not
+   * aria-hidden) keeps the drawer out of the accessibility tree AND
+   * removes its links from the tab order while closed. */
+  .bp-site-header__drawer {
+    position: fixed;
+    inset: 0;
+    background: var(--bds-site-header-bg);
+    padding: var(--padding-xl);
+    display: none;
+  }
+
+  .bp-site-header__drawer:not([inert]) {
+    display: block;
+  }
+
+  .bp-site-header__drawer-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  .bp-site-header__drawer-link,
+  .bp-site-header__drawer-phone,
+  .bp-site-header__drawer-cta {
+    color: var(--bds-site-header-text-color);
+    text-decoration: none;
+    font-family: var(--font-family-heading);
+    font-size: var(--heading-lg);
+    display: block;
+  }
+
+  .bp-site-header__drawer-actions {
+    margin-top: var(--gap-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-md);
+  }
+
+  /* Drawer header — holds the close affordance. */
+  .bp-site-header__drawer-head {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: var(--gap-lg);
+  }
+
+  .bp-site-header__drawer-close {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+
+  .bp-site-header__drawer-close:focus-visible {
+    outline: 2px solid var(--border-focus, var(--background-brand-primary));
+    outline-offset: 2px;
+  }
+
+  .bp-site-header__drawer-close-bar {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 24px;
+    height: 2px;
+    background: var(--bds-site-header-text-color);
+  }
+
+  .bp-site-header__drawer-close-bar:first-child {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .bp-site-header__drawer-close-bar:last-child {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  /* Scrim — the translucent backdrop behind a slide-* drawer. The base
+   * fullscreen-overlay drawer covers the whole viewport, so no scrim
+   * shows there; the runtime script only un-hides it for slide patterns. */
+  .bp-site-header__scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background: var(--background-overlay);
+    border: none;
+  }
+
+  .bp-site-header__scrim[hidden] {
+    display: none;
+  }
+
+  /* slide-left-panel — the drawer becomes a bounded panel that slides in
+   * from the left over the scrim, leaving the page visible (task-mode
+   * nav). Overrides the base full-bleed drawer only for this pattern. */
+  .bp-site-header[data-drawer-pattern='slide-left-panel'] .bp-site-header__drawer {
+    /* Kept laid out (not display:none) so the slide transition fires;
+     * `inert` still holds it out of the a11y tree + tab order when closed,
+     * and translateX(-100%) parks it off-screen. */
+    display: block;
+    inset: 0 auto 0 0;
+    width: min(88vw, 360px);
+    z-index: 160;
+    transform: translateX(-100%);
+    transition: transform 200ms ease-out;
+  }
+
+  .bp-site-header[data-drawer-pattern='slide-left-panel'] .bp-site-header__drawer:not([inert]) {
+    transform: translateX(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bp-site-header[data-drawer-pattern='slide-left-panel'] .bp-site-header__drawer {
+      transition: none;
+    }
+  }
