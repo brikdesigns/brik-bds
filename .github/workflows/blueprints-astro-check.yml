@@ -27,6 +27,7 @@ on:
     paths:
       - 'content-system/blueprints/**'
       - 'scripts/verify-blueprints-astro-exports.mjs'
+      - 'scripts/render-astro-blueprints.mjs'
       - 'package.json'
   push:
     branches:
@@ -34,6 +35,7 @@ on:
     paths:
       - 'content-system/blueprints/**'
       - 'scripts/verify-blueprints-astro-exports.mjs'
+      - 'scripts/render-astro-blueprints.mjs'
       - 'package.json'
 
 concurrency:
@@ -64,6 +66,20 @@ jobs:
       # produce.
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
+
+      # `verify:astro-stories` (ADR-039) ran in NO workflow before this. It was
+      # wired only into `npm run validate`, which nothing in .github/ invokes —
+      # `release.yml` runs an explicit subset that excludes it. So a stale
+      # pre-render could reach `main` with every check green, and one did: the
+      # Astro 5 -> 7 bump (#2462) invalidated all 12 committed files 22 minutes
+      # after #2455 merged, and no check went red (#2474).
+      #
+      # Rides this job rather than a new workflow: the trigger it needs
+      # (`content-system/blueprints/**`, `package.json`) is already here and the
+      # runner is already warm. ~2s on a job that runs ~1m35s. No new required
+      # context, no new trigger.
+      - name: Astro story render is current
+        run: npm run verify:astro-stories
 
       - name: Blueprints Astro export + render check
         run: npm run verify:blueprints-astro

@@ -15,7 +15,21 @@
  * a story renders one block in isolation.
  *
  * Output is committed. `npm run verify:astro-stories` re-runs this and fails on
- * a diff, so a `.astro` edit that skips regeneration cannot land.
+ * a diff, so a `.astro` edit that skips regeneration cannot land. It runs in CI
+ * on `blueprints-astro-check.yml` — for its first weeks it was wired only into
+ * `npm run validate`, which no workflow invokes, so it gated nothing (#2474).
+ *
+ * The emitted markup is Astro-version-specific: 5 and 7 differ in inter-element
+ * whitespace AND in the `data-astro-cid-*` scope hash, so an astro bump
+ * invalidates all 12 committed files at once. #2462 did exactly that 22 minutes
+ * after this pipeline landed, and nothing went red because the gate ran nowhere.
+ *
+ * The CI step above is what catches that. `astro` is also pinned exactly in
+ * package.json, but that is the lesser guard and worth stating precisely: a
+ * caret never auto-takes a major (`^5.18.2` does not resolve 7.x), and `npm ci`
+ * honours the lockfile either way — Dependabot rewrote the range itself. The pin
+ * only stops silent in-range drift when the lockfile is regenerated. Bumping
+ * astro stays fine; it just has to regenerate this output in the same PR.
  *
  *   node scripts/render-astro-blueprints.mjs [--check]
  */
