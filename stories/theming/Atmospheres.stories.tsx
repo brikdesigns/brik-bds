@@ -78,7 +78,7 @@ const meta: Meta<AtmosphereStoryArgs> = {
 export default meta;
 type Story = StoryObj<AtmosphereStoryArgs>;
 
-/** @summary Editorial-luxury atmosphere — serif display, generous space */
+/** @summary Editorial-luxury atmosphere — gold orbs, film grain, dark */
 export const EditorialLuxury: Story = {
   args: { atmosphere: 'editorial-luxury' },
 };
