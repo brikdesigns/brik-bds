@@ -15,7 +15,13 @@
  * a story renders one block in isolation.
  *
  * Output is committed. `npm run verify:astro-stories` re-runs this and fails on
- * a diff, so a `.astro` edit that skips regeneration cannot land.
+ * a diff, so a `.astro` edit that skips regeneration cannot land. It runs in CI
+ * on `blueprints-astro-check.yml`, not only in `npm run validate` — the gate
+ * lived solely in `validate` at first, which no workflow invokes (#2474).
+ *
+ * `astro` is pinned to an exact version in package.json, deliberately: Astro 5
+ * and Astro 7 emit different inter-element whitespace, so a Dependabot major
+ * silently invalidates every committed file (#2462 did exactly that).
  *
  *   node scripts/render-astro-blueprints.mjs [--check]
  */
@@ -96,9 +102,22 @@ async function main() {
       });
 
       const slug = slugFor(name, layout);
-      // `data-astro-source-*` are dev annotations carrying absolute paths — they
-      // would make the emitted HTML machine-specific and churn every diff.
-      const clean = html.replace(/\sdata-astro-source-(file|loc)="[^"]*"/g, '').trim();
+      // Strip every path-derived attribute, or the committed output only
+      // reproduces in the checkout that produced it (#2474).
+      //
+      //   data-astro-source-file / -loc  dev annotations holding absolute paths
+      //   data-astro-cid-<hash>          Astro's scoped-style hash, derived from
+      //                                  the component's path — the same source
+      //                                  renders a different hash per worktree
+      //
+      // The cid is inert here: codegen extracts each block's `<style>` body
+      // UNSCOPED, so no emitted rule selects on it (`grep -c data-astro-cid
+      // __generated__/*.css` → 0 for all eight). It would stop being inert if
+      // the extraction ever preserved Astro's scoping, so keep the two together.
+      const clean = html
+        .replace(/\sdata-astro-source-(file|loc)="[^"]*"/g, '')
+        .replace(/\sdata-astro-cid-[a-z0-9]+/g, '')
+        .trim();
       writeFile(join(outDir, `${slug}.html`), `${clean}\n`);
       emitted.push(`${slug}.html`);
     }

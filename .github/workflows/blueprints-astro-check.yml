@@ -27,6 +27,7 @@ on:
     paths:
       - 'content-system/blueprints/**'
       - 'scripts/verify-blueprints-astro-exports.mjs'
+      - 'scripts/render-astro-blueprints.mjs'
       - 'package.json'
   push:
     branches:
@@ -34,6 +35,7 @@ on:
     paths:
       - 'content-system/blueprints/**'
       - 'scripts/verify-blueprints-astro-exports.mjs'
+      - 'scripts/render-astro-blueprints.mjs'
       - 'package.json'
 
 concurrency:
@@ -64,6 +66,18 @@ jobs:
       # produce.
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
+
+      # Rides this job rather than a new workflow: the trigger it needs is
+      # already here (`content-system/blueprints/**` + `package.json`), and the
+      # runner is already warm. Adds ~2s to a job that runs 1m35s. No new
+      # trigger, no new required context.
+      #
+      # It ran nowhere before (#2474). `verify:astro-stories` was wired into
+      # `npm run validate`, which no workflow invokes — `release.yml` runs an
+      # explicit subset that excludes it — so a stale render reached `main`
+      # with every check green.
+      - name: Astro story render is current
+        run: npm run verify:astro-stories
 
       - name: Blueprints Astro export + render check
         run: npm run verify:blueprints-astro
