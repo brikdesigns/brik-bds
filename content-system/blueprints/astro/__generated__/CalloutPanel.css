@@ -1,5 +1,7 @@
-/* Mirrors ../react/CalloutPanel.css — keep in sync until a unified CSS
-     distribution lands across the React + Astro twins. */
+/* Mirrors ../react/CalloutPanel.css — the shared `bds-*` selectors are
+     single-sourced by this mirror and covered by canonical-class-check
+     against dist/styles.css (ADR-040). Values may differ where Astro
+     hand-rolls what React composes; keep the `bds-*` vocabulary in sync. */
 
   /* Section rhythm + centred container: ../section-shell.css (ADR-021).
      This family's rhythm moved from 9vw to the harmonised 7vw. */

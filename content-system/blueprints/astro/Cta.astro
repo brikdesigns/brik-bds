@@ -138,10 +138,11 @@ const methods = isSplit
 </section>
 
 <style>
-  /* Mirrors ../react/Cta.css — keep in sync until a unified CSS distribution
-     lands across the React + Astro twins. Layout-specific rules are
-     modifier-scoped, which is what lets both former per-layout files share
-     one stylesheet without colliding (#2302).
+  /* Mirrors ../react/Cta.css — the shared `bds-*` selectors are single-sourced
+     by this mirror and covered by canonical-class-check against dist/styles.css
+     (ADR-040); values may differ where Astro hand-rolls what React composes.
+     Layout-specific rules are modifier-scoped, which is what lets both former
+     per-layout files share one stylesheet without colliding (#2302).
 
      Section rhythm + centred container: ../section-shell.css (ADR-021). */
 
