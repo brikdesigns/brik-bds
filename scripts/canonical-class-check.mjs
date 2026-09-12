@@ -112,15 +112,16 @@ export const DEFAULT_SCAN_EXTENSIONS = Object.freeze([
 
 export const DEFAULT_EXCLUDE_PATH_PATTERNS = Object.freeze([
   /(^|\/)__tests__(\/|$)/,
-  // Derived output (ADR-039): `render-astro-blueprints.mjs` pre-renders the
-  // Astro rail so Storybook can display it. Scanning the render re-judges its
-  // `.astro` source under a rule the source escapes by construction — the
-  // modifier is built dynamically (`CardGrid.astro:83`,
-  // `` `bds-card-grid--${layout}` ``), so the static scanner never sees the
-  // literal there, while the pre-render spells it out. The classes are real and
-  // declared in the block's own `<style>`; they are absent from the allowlist
-  // only because the Astro rail has no compiled CSS distribution. See #2457.
-  /(^|\/)__generated__(\/|$)/,
+  // NOTE: `__generated__/` is deliberately NOT excluded (ADR-040). The Astro
+  // pre-render (`render-astro-blueprints.mjs`, ADR-039) spells out modifier
+  // classes the static scanner can't see in `.astro` source (they are built
+  // dynamically), so scanning the render is exactly how a genuinely invented
+  // `bds-*` class on the rail is caught. The Astro rail's canonical `bds-*`
+  // classes are single-sourced by mirror to the React twins, which the lib
+  // build bundles into the `dist/styles.css` allowlist — so the rail is
+  // covered without a separate Astro CSS distribution. The one former gap, the
+  // `bds-card-grid--<layout>` modifier that no CSS rule backed, was dropped at
+  // source (ADR-040) rather than excluded here. See #2457 / #2455.
   /\.test\.(ts|tsx|mjs|js)$/,
   /(^|\/)node_modules(\/|$)/,
   /(^|\/)dist(\/|$)/,
