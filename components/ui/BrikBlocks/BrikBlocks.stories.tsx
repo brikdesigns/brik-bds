@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { BrikBlocks } from './BrikBlocks';
 
 const meta: Meta<typeof BrikBlocks> = {
-  title: 'Foundation/Assets/brik-blocks',
+  title: 'Assets/brik-blocks',
   component: BrikBlocks,
   tags: ['surface-shared'],
   parameters: {

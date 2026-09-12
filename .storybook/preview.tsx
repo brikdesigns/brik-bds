@@ -341,12 +341,27 @@ const preview: Preview = {
           ],
           'Foundation',
           [
-            'Design Tokens',
-            ['Overview', 'Color', 'Typography', 'Spacing', 'Border Radius', 'Border Width', 'Shadow', 'Size', 'Motion', 'Aspect Ratios'],
+            'Aspect Ratios',
             'Atmospheres',
             'Navigation Archetypes',
-            'Assets',
-            ['avatar', 'icon', 'icons', 'animated-icon', 'logo', 'image', 'background-pattern', '*'],
+            '*',
+          ],
+          // Assets promoted from Foundation/Assets to a top-level section
+          // (2026-09-12) — the icon family, logo, avatar, image, and pattern
+          // art are consumable primitives, not token/theming references, so
+          // they read better as their own root section. Icon-family first.
+          'Assets',
+          [
+            'icon',
+            'icons',
+            'animated-icon',
+            'social-icon',
+            'contact-icon',
+            'logo',
+            'avatar',
+            'image',
+            'background-pattern',
+            'brik-blocks',
             '*',
           ],
           'Motion',
@@ -372,7 +387,7 @@ const preview: Preview = {
           // section-header, marquee — grouped by role; distinct from the curated `Content System` BCS docs above).
           // Cards folded back into Containers 2026-09-10 (#2386, overrides the #1330 Cards/ split);
           // the card family + collapsible are bounded holders → Containers.
-          // Foundation/Assets absorbs icon-family + logo + avatar + image; Displays dissolved into Containers.
+          // Assets (top-level, 2026-09-12) holds icon-family + logo + avatar + image + pattern art; Displays dissolved into Containers.
           // Component-bearing categories omit child lists — sorted
           // alphabetically by `method` above. `read-mode-page` is the one
           // Containers entry still curated elsewhere (docs consolidation, #1453).

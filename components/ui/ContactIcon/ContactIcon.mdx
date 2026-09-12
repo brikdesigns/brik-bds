@@ -9,7 +9,7 @@ import { ContactIcon } from './ContactIcon';
 
 <ComponentLinks slug="contact-icon" />
 
-Recolorable contact mark (message, email, website, calendar, phone). Resolves offline like `Icon`, but recolors via `type` and `emphasis` instead of a single `currentColor` fill — split out of `SocialIcon` in brik-bds#1716 because contact marks have no brand identity.
+Recolorable contact mark (message, email, website, calendar, phone). The standalone icon is `type="glyph"` — the glyph carries an `emphasis` color on a transparent background. `type="badge"` sets that same glyph on a filled, rounded-square tile. Resolves offline like `Icon`; split out of `SocialIcon` in brik-bds#1716 because contact marks have no brand identity.
 
 ## Default
 
@@ -27,8 +27,10 @@ Recolorable contact mark (message, email, website, calendar, phone). Resolves of
 
 ## Notes
 
+> **Standalone mark vs. tile** — `type="glyph"` is the standalone contact icon (the Assets-section concern). `type="badge"` puts that glyph on a colored, rounded-square tile — a treatment that overlaps the pill/tile role owned by [`Tag`](?path=/docs/components-tag--docs) and [`ServiceTag`](?path=/docs/components-service-tag--docs). Reach for those in running UI when the mark needs a labeled or bounded container; keep `ContactIcon` for the bare glyph. (Ownership of the badge/tile treatment is under review — brik-bds#2481.)
+
 > **Accessible name by default** — `ContactIcon` is frequently the *only* content of an icon-only link (e.g. a portal contact card). It renders `role="img"` + `aria-label` (the mark's display name, or `label`) unless you pass `decorative` — use `decorative` only when a sibling text label already announces the mark.
 
-> **No `brand` emphasis** — contact marks (message/email/website/calendar/phone) have no brand identity, so `ContactIconEmphasis` is `'neutral' | 'accent'` only. For platforms with a brand color (youtube, twitter, instagram, facebook, linkedin, yelp), use [`SocialIcon`](?path=/docs/foundation-assets-social-icon--docs) instead, which adds `emphasis="brand"`.
+> **No `brand` emphasis** — contact marks (message/email/website/calendar/phone) have no brand identity, so `ContactIconEmphasis` is `'neutral' | 'accent'` only. For platforms with a brand color (youtube, twitter, instagram, facebook, linkedin, yelp), use [`SocialIcon`](?path=/docs/assets-social-icon--docs) instead, which adds `emphasis="brand"`.
 
 > **Adding a mark** — drop a two-path (`.bds-contact-icon__bg` + `.bds-contact-icon__glyph`, `fill="currentColor"`) master into `components/ui/ContactIcon/icons/{mark}.svg`, run `npm run gen:contact-icons`, and commit the regenerated `contact-icons.generated.ts`.

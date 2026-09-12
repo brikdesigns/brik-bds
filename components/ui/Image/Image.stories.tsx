@@ -16,7 +16,7 @@ const portrait =
   );
 
 const meta: Meta<typeof Image> = {
-  title: 'Foundation/Assets/image',
+  title: 'Assets/image',
   component: Image,
   tags: ['surface-shared'],
   parameters: {

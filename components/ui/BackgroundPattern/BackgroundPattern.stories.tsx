@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { BackgroundPattern } from './BackgroundPattern';
 
 const meta: Meta<typeof BackgroundPattern> = {
-  title: 'Foundation/Assets/background-pattern',
+  title: 'Assets/background-pattern',
   component: BackgroundPattern,
   tags: ['surface-shared'],
   parameters: {
