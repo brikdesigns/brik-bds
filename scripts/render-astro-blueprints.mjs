@@ -22,7 +22,7 @@
 import { createServer } from 'vite';
 import { getViteConfig } from 'astro/config';
 import { experimental_AstroContainer } from 'astro/container';
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -104,6 +104,39 @@ async function main() {
     }
   }
 
+  // SiteHeader — the site-shell nav component. Not a blueprint (it takes direct
+  // shell props, not BlueprintProps), but shipped in this package and browsable
+  // as the real Astro output per #2431. ADR-039's pre-render mechanism governs
+  // it too: #2339 decided the path once, and the shell component reuses it
+  // rather than re-mocking — this is what retires `NavigationIASpec`. One entry
+  // per `NAV_ARCHETYPE_VALUES`, so the whole vocabulary is browsable.
+  {
+    const { SITE_HEADER_FIXTURES } = await server.ssrLoadModule(
+      join(astroDir, '__fixtures__/site-header.ts'),
+    );
+    const mod = await server.ssrLoadModule(join(astroDir, 'SiteHeader.astro'));
+    const source = readFileSync(join(astroDir, 'SiteHeader.astro'), 'utf8');
+
+    writeFile(join(outDir, 'SiteHeader.css'), `${extractStyle(source, 'SiteHeader')}\n`);
+    emitted.push('SiteHeader.css');
+
+    for (const props of SITE_HEADER_FIXTURES) {
+      const container = await experimental_AstroContainer.create();
+      const html = await container.renderToString(mod.default, { props });
+      const clean = html
+        .replace(/\sdata-astro-source-(file|loc)="[^"]*"/g, '')
+        // SiteHeader ships a client `<script>` (scroll + drawer runtime); the
+        // container emits it as a `<script src="…SiteHeader.astro?astro&type=
+        // script…">` reference carrying the absolute on-disk path. That path is
+        // machine-specific (churns `--check` across boxes) and dead in a static
+        // story anyway — the preview is the top/rest state, not the runtime.
+        .replace(/<script type="module" src="[^"]*\?astro&type=script[^"]*"><\/script>/g, '')
+        .trim();
+      writeFile(join(outDir, `SiteHeader--${props.archetype}.html`), `${clean}\n`);
+      emitted.push(`SiteHeader--${props.archetype}.html`);
+    }
+  }
+
   await server.close();
   assertStylesheetCoverage();
   return emitted;
@@ -123,9 +156,16 @@ async function main() {
  */
 function assertStylesheetCoverage() {
   const shell = readFileSync(join(astroDir, '_AstroFrame.tsx'), 'utf8');
-  const html = BLOCKS.flatMap(({ name, layouts }) =>
+  const blockHtml = BLOCKS.flatMap(({ name, layouts }) =>
     layouts.map((l) => readFileSync(join(outDir, `${slugFor(name, l)}.html`), 'utf8')),
-  ).join('\n');
+  );
+  // SiteHeader's generated markup is checked too, so a future edit that reaches
+  // for a BDS component class (`bds-button`, …) is caught even though today it
+  // emits only its own `bp-site-header__*` classes.
+  const shellHtml = readdirSync(outDir)
+    .filter((f) => f.startsWith('SiteHeader--') && f.endsWith('.html'))
+    .map((f) => readFileSync(join(outDir, f), 'utf8'));
+  const html = [...blockHtml, ...shellHtml].join('\n');
 
   // Root class only — `bds-hero__title` and `bds-button--primary` are covered by
   // whatever stylesheet owns `bds-hero` / `bds-button`.
