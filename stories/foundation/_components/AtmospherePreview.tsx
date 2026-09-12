@@ -180,7 +180,7 @@ function buildPreviewHTML(atmosphere: Atmosphere, cssHref: string, themeNumber: 
     margin-bottom: var(--gap-xs, 8px);
   }
   .preview-h1 {
-    font-family: var(--font-family-heading, Georgia, serif);
+    font-family: var(--font-family-heading, system-ui, sans-serif);
     font-size: 22px;
     line-height: 1.15;
     font-weight: 400;
@@ -222,7 +222,7 @@ function buildPreviewHTML(atmosphere: Atmosphere, cssHref: string, themeNumber: 
     margin-bottom: var(--gap-xs, 8px);
   }
   .preview-card h3 {
-    font-family: var(--font-family-heading, Georgia, serif);
+    font-family: var(--font-family-heading, system-ui, sans-serif);
     font-size: 12px;
     font-weight: 500;
     color: var(--text-primary);
