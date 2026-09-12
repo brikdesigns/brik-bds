@@ -125,6 +125,20 @@ export type CtaLayout = 'default' | 'split';
 export type CardGridLayout = 'card-grid' | 'two-column-list';
 
 /**
+ * Fallback stub payload for `<HeroMediaCard missing>` (brik-bds#2312) —
+ * renders the same `data-content-needed` stub `Hero.astro`'s
+ * `with-pricing-card` layout renders inline when `priceCard` data is absent.
+ * Declared here — rather than only in `HeroMediaCard.astro`'s frontmatter —
+ * so a consumer typing a `missing` payload doesn't need the Astro runtime,
+ * the same rationale as the `HeroLayout` / `CardGridLayout` unions above.
+ * Mirrors the React twin's `HeroMediaCardMissing` (`../react/HeroMediaCard.tsx`).
+ */
+export interface HeroMediaCardMissing {
+  /** Fallback message rendered in place of the card content. */
+  readonly label: string;
+}
+
+/**
  * Optional CTA button size. Mirrors the `Button` `size` union (inlined so
  * this contract stays framework-agnostic). Omitted → the blueprint's own
  * default is preserved (no visual change for existing consumers).

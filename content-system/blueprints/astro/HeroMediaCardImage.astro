@@ -1,0 +1,58 @@
+---
+/**
+ * HeroMediaCardImage — presentational hero media-card image (brik-bds#2312).
+ * Astro twin of `../react/HeroMediaCardImage.tsx` — emits the same
+ * `.bds-hero__image-frame` / `.bds-hero__image` markup, class-identical to
+ * what `Hero.astro`'s `with-pricing-card` layout used to inline directly
+ * (#2302). Both classes are already bundled into `dist/styles.css` via the
+ * React twin (ADR-040 mirror coverage).
+ *
+ * Composes as `<HeroMediaCard>`'s first child.
+ *
+ * @summary Hero media-card image — a `bds-hero__image-frame`-wrapped `<img>`, class-identical to the React twin.
+ */
+
+/**
+ * Aspect-ratio slug — mirrors the BDS `FrameRatio` vocabulary backed by the
+ * `--aspect-*` token family (#486). Duplicated locally rather than imported
+ * from `Hero.astro` / the React `Frame` component so this shipped blueprint
+ * stays self-contained for consumer Astro builds (matches `Hero.astro`'s own
+ * documented rationale).
+ */
+type FrameRatio =
+  | '1-1' | '3-2' | '2-3' | '4-3' | '3-4' | '4-5' | '16-9' | '9-16' | '21-9'
+  | 'square' | 'photo-landscape' | 'photo-portrait' | 'cinema'
+  /** @deprecated Use `3-4`. */ | 'portrait'
+  /** @deprecated Use `4-3`. */ | 'landscape'
+  /** @deprecated Use `16-9` or `cinema`. */ | 'wide'
+  /** @deprecated Use `21-9`. */ | 'ultrawide';
+
+const DEPRECATED_RATIO_ALIAS: Partial<Record<FrameRatio, string>> = {
+  portrait: '3-4',
+  landscape: '4-3',
+  wide: '16-9',
+  ultrawide: '21-9',
+};
+
+const aspectToken = (ratio: FrameRatio): string =>
+  `var(--aspect-${DEPRECATED_RATIO_ALIAS[ratio] ?? ratio})`;
+
+interface Props {
+  /** Image URL. */
+  src: string;
+  /** Accessible alt text. Defaults to empty (decorative), matching the React twin. */
+  alt?: string;
+  /** Aspect ratio for the frame. Default `"square"`, matching the React twin. */
+  ratio?: FrameRatio;
+  /** Extra class names, appended after the canonical `bds-hero__image-frame` class. */
+  class?: string;
+}
+
+const { src, alt = '', ratio = 'square', class: className, ...rest } = Astro.props;
+
+const ratioStyle = ratio !== 'square' ? `--bds-hero-image-ratio: ${aspectToken(ratio)}` : undefined;
+---
+
+<div class={['bds-hero__image-frame', className].filter(Boolean).join(' ')} style={ratioStyle} {...rest}>
+  <img src={src} alt={alt} loading="eager" decoding="async" class="bds-hero__image" />
+</div>

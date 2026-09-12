@@ -1,0 +1,93 @@
+---
+/**
+ * HeroMediaCard — presentational, non-interactive `bds-hero__media-card` root
+ * (brik-bds#2312). Astro twin of `../react/HeroMediaCard.tsx` — mirrors its
+ * prop contract and class names exactly (ADR-040's mirror-enforced coverage;
+ * `bds-hero__media-card` / `bds-hero__missing` are already bundled into
+ * `dist/styles.css` via the React twin, so this component adds no uncovered
+ * class).
+ *
+ * NOT a dispatched blueprint — no `blueprintKey`, no `BlueprintDispatcher`
+ * entry. It is a sub-component `Hero.astro`'s `with-pricing-card` layout
+ * composes for its right-hand column, replacing what used to be markup
+ * inlined directly in `Hero.astro` (#2302's `--with-pricing-card` `<aside>`).
+ *
+ * Renders NO interactivity of its own — compose `<HeroMediaCardImage>` +
+ * `<HeroMediaCardPrice>` (with a caller-composed CTA link) as the default
+ * slot, or set `missing` for the same `data-content-needed` fallback stub
+ * `Hero.astro` used to render inline.
+ *
+ * Polymorphic root via `as` (default `"aside"`), matching the React twin.
+ *
+ * @summary Non-interactive hero media-card root — composes an image + optional price, or a `missing` fallback stub.
+ */
+import type { HeroMediaCardMissing } from './types';
+
+/**
+ * Aspect-ratio slug — mirrors the BDS `FrameRatio` vocabulary backed by the
+ * `--aspect-*` token family (#486). Duplicated locally rather than imported
+ * from `Hero.astro` / the React `Frame` component so this shipped blueprint
+ * stays self-contained for consumer Astro builds (matches `Hero.astro`'s own
+ * documented rationale).
+ */
+type FrameRatio =
+  | '1-1' | '3-2' | '2-3' | '4-3' | '3-4' | '4-5' | '16-9' | '9-16' | '21-9'
+  | 'square' | 'photo-landscape' | 'photo-portrait' | 'cinema'
+  /** @deprecated Use `3-4`. */ | 'portrait'
+  /** @deprecated Use `4-3`. */ | 'landscape'
+  /** @deprecated Use `16-9` or `cinema`. */ | 'wide'
+  /** @deprecated Use `21-9`. */ | 'ultrawide';
+
+const DEPRECATED_RATIO_ALIAS: Partial<Record<FrameRatio, string>> = {
+  portrait: '3-4',
+  landscape: '4-3',
+  wide: '16-9',
+  ultrawide: '21-9',
+};
+
+const aspectToken = (ratio: FrameRatio): string =>
+  `var(--aspect-${DEPRECATED_RATIO_ALIAS[ratio] ?? ratio})`;
+
+interface Props {
+  /**
+   * Root element tag name. Default `"aside"`, matching the React twin's
+   * hard-coded root.
+   */
+  as?: string;
+  /**
+   * When set, renders the `data-content-needed` fallback stub instead of the
+   * default slot — the same shape `Hero.astro` used to render inline when
+   * `priceCard` data is absent.
+   */
+  missing?: HeroMediaCardMissing;
+  /**
+   * Aspect ratio for the `missing` fallback only. Ignored when `missing` is
+   * unset — `<HeroMediaCardImage>` owns its own `ratio` for the populated
+   * case. Default `"square"`, matching the React twin.
+   */
+  ratio?: FrameRatio;
+  /** Extra class names, appended after the canonical `bds-hero__*` class. */
+  class?: string;
+}
+
+const { as: tag = 'aside', missing, ratio = 'square', class: className, ...rest } = Astro.props;
+const Element = tag;
+
+const ratioStyle = ratio !== 'square' ? `--bds-hero-image-ratio: ${aspectToken(ratio)}` : undefined;
+---
+
+{missing ? (
+  <Element
+    class={['bds-blueprint-section__missing', 'bds-hero__missing', className].filter(Boolean).join(' ')}
+    data-content-needed="hero_image_url"
+    role="presentation"
+    style={ratioStyle}
+    {...rest}
+  >
+    <p class="bds-blueprint-section__missing-label">{missing.label}</p>
+  </Element>
+) : (
+  <Element class={['bds-hero__media-card', className].filter(Boolean).join(' ')} {...rest}>
+    <slot />
+  </Element>
+)}

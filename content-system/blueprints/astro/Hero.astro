@@ -66,6 +66,9 @@
  *   the price-card image takes `section.priceCard.imageAlt` when informational.
  */
 import type { BlueprintProps, HeroLayout, KnownBlueprintKey } from './types';
+import HeroMediaCard from './HeroMediaCard.astro';
+import HeroMediaCardImage from './HeroMediaCardImage.astro';
+import HeroMediaCardPrice from './HeroMediaCardPrice.astro';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
@@ -74,34 +77,21 @@ import '../section-shell.css';
  * Aspect-ratio slug — mirrors the BDS `FrameRatio` vocabulary backed by the
  * `--aspect-*` token family (#486). Defined locally rather than imported from
  * the Frame component so this shipped blueprint stays self-contained for
- * consumer Astro builds.
+ * consumer Astro builds. Used here only for the `imageRatio` prop's type —
+ * the `--with-pricing-card` media column's own ratio-to-style resolution now
+ * lives in `<HeroMediaCard>` / `<HeroMediaCardImage>` (brik-bds#2312), which
+ * this block composes rather than inlining.
  */
 type FrameRatio =
   // Primitives
   | '1-1' | '3-2' | '2-3' | '4-3' | '3-4' | '4-5' | '16-9' | '9-16' | '21-9'
   // Semantic aliases
   | 'square' | 'photo-landscape' | 'photo-portrait' | 'cinema'
-  // Deprecated mode-words (resolved via DEPRECATED_RATIO_ALIAS for one minor version)
+  // Deprecated mode-words (resolved via `<HeroMediaCard>`'s own alias map)
   /** @deprecated Use `3-4`. */ | 'portrait'
   /** @deprecated Use `4-3`. */ | 'landscape'
   /** @deprecated Use `16-9` or `cinema`. */ | 'wide'
   /** @deprecated Use `21-9`. */ | 'ultrawide';
-
-/**
- * Deprecated mode-words → canonical aspect primitive. Canonical slugs
- * (primitives + semantic aliases) resolve to `--aspect-{slug}` directly and
- * need no entry here. Delete this map when the mode-words are removed.
- */
-const DEPRECATED_RATIO_ALIAS: Partial<Record<FrameRatio, string>> = {
-  portrait: '3-4',
-  landscape: '4-3',
-  wide: '16-9',
-  ultrawide: '21-9',
-};
-
-/** Resolves a FrameRatio slug to its `--aspect-*` token reference. */
-const aspectToken = (ratio: FrameRatio): string =>
-  `var(--aspect-${DEPRECATED_RATIO_ALIAS[ratio] ?? ratio})`;
 
 interface Props extends BlueprintProps {
   /** Structural layout. Defaults to `split`, matching the React twin. */
@@ -150,12 +140,6 @@ const ctaClass = isPricingCard
   ? 'bds-button bds-button--inverse bds-button--md'
   : 'bds-button bds-button--primary bds-button--md';
 
-// Non-square ratios drive the frame + stub through one custom property; the
-// `--aspect-1-1` default lives in the stylesheet.
-const ratioStyle =
-  isPricingCard && imageRatio !== 'square'
-    ? `--bds-hero-image-ratio: ${aspectToken(imageRatio)}`
-    : undefined;
 ---
 
 <section
@@ -256,43 +240,27 @@ const ratioStyle =
     ))}
 
     {isPricingCard && (priceCard ? (
-      <aside class="bds-hero__media-card">
-        <div class="bds-hero__image-frame" style={ratioStyle}>
-          <img
-            src={priceCard.imageUrl}
-            alt={priceCard.imageAlt ?? ''}
-            loading="eager"
-            decoding="async"
-            class="bds-hero__image"
-          />
-        </div>
+      <HeroMediaCard>
+        <HeroMediaCardImage
+          src={priceCard.imageUrl}
+          alt={priceCard.imageAlt ?? ''}
+          ratio={imageRatio}
+        />
         {(priceCard.priceLabel || priceCard.price || priceCard.cta) && (
-          <div class="bds-hero__price">
-            {priceCard.priceLabel && priceCard.price && (
-              <p class="bds-hero__price-label">{priceCard.priceLabel}</p>
-            )}
-            {priceCard.price && (
-              <p class="bds-hero__price-value">{priceCard.price}</p>
-            )}
+          <HeroMediaCardPrice label={priceCard.priceLabel} value={priceCard.price}>
             {priceCard.cta && 'url' in priceCard.cta && (
               <a href={priceCard.cta.url} class={`bds-button bds-button--primary bds-button--${priceCard.cta.size ?? 'sm'}`}>
                 <span class="bds-button__content">{priceCard.cta.label}</span>
               </a>
             )}
-          </div>
+          </HeroMediaCardPrice>
         )}
-      </aside>
+      </HeroMediaCard>
     ) : (
-      <aside
-        class="bds-blueprint-section__missing bds-hero__missing"
-        data-content-needed="hero_image_url"
-        role="presentation"
-        style={ratioStyle}
-      >
-        <p class="bds-blueprint-section__missing-label">
-          Hero image card missing for this page.
-        </p>
-      </aside>
+      <HeroMediaCard
+        ratio={imageRatio}
+        missing={{ label: 'Hero image card missing for this page.' }}
+      />
     ))}
   </div>
 </section>
@@ -364,13 +332,6 @@ const ratioStyle =
        so the consolidation changed no layout's rendering — that was a refactor
        constraint, never a decision that interior leads should wrap wider. */
     max-width: 55ch;
-  }
-
-  .bds-hero__image {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
   }
 
   /* Non-hallucinatable content stub — CI grep on data-content-needed. The
@@ -657,6 +618,33 @@ const ratioStyle =
     align-items: flex-start;
   }
 
+  .bds-hero--with-pricing-card .bds-hero__missing {
+    aspect-ratio: var(--bds-hero-image-ratio, var(--aspect-1-1));
+    border-radius: var(--bds-hero-radius, var(--border-radius-lg));
+  }
+</style>
+
+<style is:global>
+  /* brik-bds#2312 — these three selectors used to target elements this file
+     rendered inline; `--with-pricing-card` now renders them via `<HeroMediaCardImage>`
+     / `<HeroMediaCardPrice>`, two components deep from this file's own scope.
+     Astro's scoped-style compiler only forwards this file's `data-astro-cid-*`
+     onto the ROOT element of a directly invoked child component, not that
+     child's own descendants — so a still-scoped rule here silently stops
+     matching in a real `astro build` (confirmed against a real build, not just
+     the pre-render — the Storybook pipeline strips all scoping and would not
+     have caught this). `is:global` is Astro's actual per-block escape hatch
+     (there is no Vue/CSS-Modules-style `:global()` selector wrapper); the
+     whole tag opts out, so these three rules live here rather than mixed into
+     the scoped block above. `--split`'s own inline `<img class="bds-hero__image">`
+     is unaffected by this rule being unscoped. */
+  .bds-hero__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
   .bds-hero__price-label {
     margin: 0;
     font-family: var(--font-family-label);
@@ -672,10 +660,5 @@ const ratioStyle =
     font-weight: var(--font-weight-bold);
     color: var(--text-primary);
     line-height: 1;
-  }
-
-  .bds-hero--with-pricing-card .bds-hero__missing {
-    aspect-ratio: var(--bds-hero-image-ratio, var(--aspect-1-1));
-    border-radius: var(--bds-hero-radius, var(--border-radius-lg));
   }
 </style>
