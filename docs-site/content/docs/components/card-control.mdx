@@ -1,6 +1,6 @@
 ---
 title: Card control
-description: DEPRECATED — use Card preset="control" instead.
+description: DEPRECATED — use Card layout="control" instead.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -11,7 +11,7 @@ import { Callout } from 'fumadocs-ui/components/callout';
 
 ## Migration
 
-Same props, same defaults — move them onto `Card` and add `preset="control"`.
+Same props, same defaults — move them onto `Card` and add `layout="control"`.
 
 ```tsx
 // Before
@@ -28,7 +28,7 @@ import { CardControl } from '@brikdesigns/bds';
 import { Card } from '@brikdesigns/bds';
 
 <Card
-  preset="control"
+  layout="control"
   title="Email notifications"
   description="Receive a weekly digest"
   badge={<Badge status="positive">On</Badge>}
@@ -36,7 +36,7 @@ import { Card } from '@brikdesigns/bds';
 />
 ```
 
-| CardControl prop | `Card preset="control"` prop |
+| CardControl prop | `Card layout="control"` prop |
 |---|---|
 | `title` | `title` |
 | `description` | `description` |
@@ -161,7 +161,7 @@ Plus standard `<div>` HTML attributes.
 
 ## Related
 
-- [Card](/docs/components/card) — flexible-content sibling. `Card preset="control"` is API-equivalent to CardControl.
+- [Card](/docs/components/card) — flexible-content sibling. `Card layout="control"` is API-equivalent to CardControl.
 - [CardList](/docs/components/card-list) — wrapper for stacking multiple CardControls
 - [Toggle Switch](/docs/components/toggle-switch) — most common `action` content
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/deprecated-card-control--overview)**

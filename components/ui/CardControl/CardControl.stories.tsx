@@ -6,7 +6,7 @@ import { Badge } from '../Badge';
 import { ToggleSwitch } from '../ToggleSwitch';
 
 /**
- * @deprecated Use `Card preset="control"` instead. See the
+ * @deprecated Use `Card layout="control"` instead. See the
  * [Card](?path=/docs/containers-card--docs) page for the canonical reference.
  * CardControl is kept during the migration window (see #657).
  */
@@ -26,8 +26,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * @deprecated Use `Card preset="control"` — see Card stories for the canonical reference.
- * @summary Deprecated: use Card preset="control"
+ * @deprecated Use `Card layout="control"` — see Card stories for the canonical reference.
+ * @summary Deprecated: use Card layout="control"
  */
 export const Default: Story = {
   render: (args) => {

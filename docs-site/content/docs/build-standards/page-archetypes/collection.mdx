@@ -22,8 +22,8 @@ Reach for it when the page is about a set rather than a record. Which display th
   />
   <PageContent>
     <Grid columns="auto-fit" minColumnWidth="180px" gap="md">
-      <Card preset="summary" label="Total" value={49} />
-      <Card preset="summary" label="Public" value={33} />
+      <Card layout="metric" overline="Total" title={49} />
+      <Card layout="metric" overline="Public" title={33} />
     </Grid>
 
     <FilterBar
@@ -109,7 +109,7 @@ The shell wraps the **display only**. `FilterBar` stays outside it, above, and k
 
 Both belong in `PageContent`, not in `PageHeader`.
 
-- **Stats** go above the bar as a `Grid` of `Card preset="summary"`. They summarise the whole collection, so they do not move when a filter narrows the display.
+- **Stats** go above the bar as a `Grid` of `Card layout="metric"`. They summarise the whole collection, so they do not move when a filter narrows the display.
 - **Pagination** goes below the display as `Pagination`, wired to `currentPage`, `totalPages`, and `onChange`. It is a Control that pages a list it does not contain, so it is a sibling of the display, never a child.
 
 A full-bleed display — an edge-to-edge board or table — takes `PageContent padding="none"`, and `scroll` when the body should own its own vertical scroll rather than the page frame.
