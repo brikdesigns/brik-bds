@@ -289,7 +289,7 @@
   border: var(--border-width-md) solid var(--border-primary);
 }
 .bds-tab-bar--box .bds-tab-bar-item[aria-selected="true"] {
-  color: var(--text-inverse);
+  color: var(--text-on-color-dark);
   background-color: var(--background-brand-primary);
   border-color: transparent;
 }
@@ -299,7 +299,7 @@
   opacity: 0.6;
 }
 .bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] {
-  color: var(--text-inverse);
+  color: var(--text-on-color-dark);
   background-color: var(--background-brand-primary);
   border-color: transparent;
   opacity: 1;

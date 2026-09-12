@@ -8,7 +8,7 @@
   justify-content: center;
   border-radius: var(--border-radius-circle);
   background-color: var(--background-brand-primary);
-  color: var(--text-inverse);
+  color: var(--text-on-color-dark);
   font-family: var(--font-family-label);
   font-weight: var(--font-weight-semibold);
   flex-shrink: 0;

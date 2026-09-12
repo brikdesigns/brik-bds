@@ -173,7 +173,7 @@
 
 .bds-time-picker__cell--selected {
   background-color: var(--surface-brand-primary);
-  color: var(--text-inverse);
+  color: var(--text-on-color-dark);
   font-weight: var(--font-weight-semibold);
 }
 

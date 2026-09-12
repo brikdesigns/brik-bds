@@ -76,7 +76,7 @@
 .bds-progress-stepper__circle--active,
 .bds-progress-stepper__circle--complete {
   background-color: var(--background-brand-primary);
-  color: var(--text-inverse);
+  color: var(--text-on-color-dark);
 }
 
 .bds-progress-stepper__circle--upcoming {
