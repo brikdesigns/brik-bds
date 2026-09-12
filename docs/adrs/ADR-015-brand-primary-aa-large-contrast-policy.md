@@ -96,9 +96,12 @@ The 2026-07-01 amendment framed the white-on-Poppy CTA *label* as accepted debt.
 **Scope.** This governs the WHITE-on-Poppy-*fill* case only (on-color text). It does **not** touch the separate `--text-brand-primary` rule (Poppy-*colored* text on a neutral surface still never sizes to small body copy — use `--text-primary`; enforced by `lint-brand-text`, #1064). The owner may revisit the Poppy color rail later; until then this exception stands.
 
 **Where recorded (SoT + consumers):**
+
 - `tokens/contrast-pairings.json` — policy string + the "On-color content block on brand band" note (this file; no threshold/token change, gate math unchanged).
 - `docs-site/content/docs/foundation/color-pairings.mdx` — brand section.
 - Root Brik Agent Operating Manual (`GitHub/CLAUDE.md`) invariant + brik-rag, so every agent in every repo inherits it.
 - Consumer enforcement lives where rendered contrast is measured: `brikdesigns.com` `tests/a11y/public-routes.spec.ts` accepts white-on-`#e35335` for any on-color text (not just button labels). The portal gate is token-pairing-based and already grades this AA-large.
 
-No BDS code/token values change in this amendment; it is docs + the JSON `note`/`policy` prose.
+**Enforcement (closes the § Advisory claim gap for this case).** The original ADR flagged its usage rule as "advisory — not CI-asserted." The on-brand-fill-text half is now **CI-asserted**: `scripts/lint-brand-fill-text.js` (`npm run lint-brand-fill-text`, wired in `tokens-gate.yml`, #2488) fails when text on a `--surface-`/`--background-brand-primary` fill resolves to anything but `--text-on-color-dark` — catching both `--text-primary` darkening and the theme-flipping `--text-inverse` (black-in-dark) that this can't otherwise see, since the contrast gate accepts dark-on-Poppy (5.55:1). The `--text-brand-primary` small-body-copy half stays asserted by `lint-brand-text-size.js` (#1064).
+
+No BDS token *values* change in this amendment; it is docs + the JSON `note`/`policy` prose. The component sweep + lint land in #2488.
