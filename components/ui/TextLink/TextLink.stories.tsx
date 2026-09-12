@@ -88,53 +88,6 @@ export const Default: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   NO-UNDERLINE — Q3 per ADR-010: `underline="none"` is the color-only
-   affordance for a table cell. Shown with a leading icon to prove the
-   seamless box-shadow underline is suppressed too — an Avatar in a
-   cell must never underline. Paired with `emphasis="neutral"`, the exact
-   table-cell composition.
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary No underline — color-only affordance (table cell) */
-export const NoUnderline: Story = {
-  render: () => (
-    <TextLink href="#" emphasis="neutral" underline="none" iconBefore={<ArrowLeft />}>
-      Acme Corporation
-    </TextLink>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   IN-PARAGRAPH — Q4 irreducible per ADR-010. Demonstrates how the
-   link visually integrates with flowing paragraph text (baseline
-   alignment, color contrast against body text, underline behavior).
-   Surrounding text is structural, not a component prop, so this
-   case can't be expressed via args alone. Uses `underline="always"`
-   — an inline link in running prose is exactly the case that needs
-   a persistent underline (WCAG 1.4.1 Use of Color).
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Link integrated with flowing paragraph text */
-export const InParagraph: Story = {
-  parameters: { layout: 'padded' },
-  render: () => (
-    <p
-      style={{
-        fontFamily: 'var(--font-family-body)',
-        fontSize: 'var(--body-md)',
-        color: 'var(--text-primary)',
-        maxWidth: 480,
-        lineHeight: 'var(--font-line-height-normal)',
-      }}
-    >
-      Our team specializes in web design and development.{' '}
-      <TextLink href="#" underline="always">Learn more about our services</TextLink> or{' '}
-      <TextLink href="#" underline="always">contact us</TextLink> to get started.
-    </p>
-  ),
-};
-
-/* ═══════════════════════════════════════════════════════════════
    WITH-ICON — Q4 irreducible per ADR-010. `iconBefore` / `iconAfter`
    are ReactNode slots (control:false), so the icon case can't be
    expressed through Controls — it needs a render story. Demonstrates
