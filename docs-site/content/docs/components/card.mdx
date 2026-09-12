@@ -16,7 +16,7 @@ Card is the canonical content-grouping container. A default flexible mode, plus 
 One flat slot set (`media` / `overline` / `title` / `children` / `action` / `badge`) serves all four, per [ADR-038](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md).
 
 <Callout type="warn">
-  **The `preset` prop is deprecated.** `preset="control" | "summary" | "display" | "display-row"` is superseded by `layout` (ADR-038). It still renders unchanged for existing consumers, so migration is opt-in — but new code uses `layout`. See [Deprecated preset API](#deprecated-preset-api) for the mapping.
+  **The `preset` prop has been removed.** `preset="control" | "summary" | "display" | "display-row"` is replaced by `layout` (ADR-038 §5). See [Migrating off `preset`](#migrating-off-preset) for the mapping.
 </Callout>
 
 ## Use it for
@@ -147,7 +147,7 @@ Under a `layout`, `media` is a plain `ReactNode` instead — pass the `<Frame>`,
 />
 ```
 
-Two optional slots extend `metric` for a labelled selection — the shape the deprecated [ProductSummaryCard](/docs/components/product-summary-card) covered. `media` renders a leading glyph beside the stat, and `detail` renders a secondary line below the value. Both are additive, so a plain stat omits them.
+Two optional slots extend `metric` for a labelled selection — the shape the removed `ProductSummaryCard` component covered before it folded into this layout (ADR-038 §4). `media` renders a leading glyph beside the stat, and `detail` renders a secondary line below the value. Both are additive, so a plain stat omits them.
 
 ```tsx
 <Card
@@ -179,24 +179,22 @@ Two optional slots extend `metric` for a labelled selection — the shape the de
   **`layout="control"` replaces the standalone `<CardControl>` component**, which is deprecated per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md) ([#657](https://github.com/brikdesigns/brik-bds/issues/657)). New code should use the layout; see the [CardControl migration guide](/docs/components/card-control#migration).
 </Callout>
 
-## Deprecated preset API
+## Migrating off preset
 
-The `preset` discriminator predates ADR-038. It renders unchanged and is not removed until every consumer migrates, so existing code keeps working — but it is closed to new use.
+The `preset` discriminator predated ADR-038 and has been **removed** (ADR-038 §5). Use `layout`; the mapping below is for updating any code still on the old union.
 
-| Deprecated | Replacement | Slot mapping |
+| Removed | Replacement | Slot mapping |
 |---|---|---|
 | `preset="display"` | `layout="stack"` | `image` → `media`, `tag` → `overline`, `description` → `children` |
 | `preset="display-row"` | `layout="row"` | same as `stack`, laid out horizontally |
 | `preset="summary"` | `layout="metric"` | `label` → `overline`, `value` → `title`; pre-format the value |
-| `preset="control"` | `layout="control"` | `badge` → `media`, other slots unchanged |
+| `preset="control"` | `layout="control"` | `logo` → `media`, other slots unchanged |
 | `<ProductSummaryCard>` | `layout="metric"` | `media` = `<ServiceTag>`, `overline` = label, `title` = value, `detail` = `price • frequency` |
 
 Two behavior notes on the way across:
 
 - **`preset="summary"` formatted numbers for you** via `type="numeric" | "price"`. `layout="metric"` does not — pass an already-formatted string.
 - **`variant` had two option sets** under the union (the default shape's five, the display presets' three). Under `layout` there is one set; the arrangements accept `borderless`, `elevated`, and `raised`.
-
-Never combine `preset` and `layout` on the same Card — the types make them mutually exclusive.
 
 ## When *not* to use
 
@@ -259,14 +257,11 @@ Slots by layout:
 | `metric` | `media`, `overline`, `title`, `detail`, `action` |
 | `control` | `media`, `title`, `description`, `action`, `actionAlign`, `connectionStatus`, `lastSynced` |
 
-All modes accept standard `<div>` HTML attributes (excluding `title`, which is repurposed by the layouts and the control preset).
-
-The deprecated `preset` props are documented in the Storybook [Card playground](https://storybook.brikdesigns.com/?path=/docs/containers-card--overview) for the migration window.
+All modes accept standard `<div>` HTML attributes (excluding `title`, which is repurposed by the layouts and the control layout).
 
 ## Related
 
 - [CardControl](/docs/components/card-control) — deprecated; see `layout="control"`
-- [ProductSummaryCard](/docs/components/product-summary-card) — deprecated; see [Metric layout](#metric-layout)
 - [CardList](/docs/components/card-list) — list-of-cards layout
 - [Testimonial](https://storybook.brikdesigns.com/?path=/docs/components-testimonial--overview) — testimonial component (Storybook; renamed from CardTestimonial)
 - [CollapsibleCard](/docs/components/collapsible-card) — Card + Accordion mash-up

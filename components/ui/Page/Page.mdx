@@ -15,8 +15,8 @@ The compound page shell — the connective tissue every product page shares. A `
   <PageHeader title="Services" subtitle="…" actions={<Button>Add</Button>} />
   <PageContent>
     <Grid columns="auto-fit" minColumnWidth="180px" gap="md">
-      <Card preset="summary" label="Total" value={49} />
-      <Card preset="summary" label="Public" value={33} />
+      <Card layout="metric" overline="Total" title={49} />
+      <Card layout="metric" overline="Public" title={33} />
     </Grid>
     <FilterBar total={49} filtered={49} label="services" />
     <Table>…</Table>
@@ -46,7 +46,7 @@ A page-level sub-nav (`SubNavigation`) is a **full-height sibling column of `Pag
 
 ### Stats in the body
 
-Summary stat cards are a **body** concern, not a header slot — they summarize the display below them. Render them in `<PageContent>` as a `Grid` of `Card preset="summary"` above the `FilterBar` (brik-bds#404, 2026-06-03). The `PageHeader.stats` slot is deprecated.
+Summary stat cards are a **body** concern, not a header slot — they summarize the display below them. Render them in `<PageContent>` as a `Grid` of `Card layout="metric"` above the `FilterBar` (brik-bds#404, 2026-06-03). The `PageHeader.stats` slot is deprecated.
 
 <Canvas of={Stories.StatsInBody} />
 
