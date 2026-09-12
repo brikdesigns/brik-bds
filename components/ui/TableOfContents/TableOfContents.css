@@ -56,12 +56,14 @@
  * Text-only in-page TOC: quiet resting label, brand-colored active label, and a
  * hairline rule down the list's left edge with the item indent. The default
  * treatment is NavItem's filled brand pill, which is right for a route rail and
- * wrong for an in-page TOC inside a tinted sidebar — there the pill reads as a
- * second navigation surface. First consumer: brikdesigns customer stories,
- * which shipped ~30 lines of this as a `.story-toc` override (#2270).
+ * wrong for an in-page TOC rail — the pill reads as a second navigation surface.
+ * First consumer: brikdesigns customer stories, which shipped ~30 lines of this
+ * as a `.story-toc` override (#2270).
  *
- * The tint, radius and outer padding of the surrounding box stay consumer-owned
- * — that is page chrome, not TOC anatomy. */
+ * The rail's surrounding box — whether it has a fill/radius/padding at all —
+ * stays consumer-owned page chrome, not TOC anatomy. The first consumer began
+ * with a tinted box and later went transparent (brikdesigns#1458), so the label
+ * contrast below is pinned to the band the rail renders on, not to a box. */
 
 .bds-toc--variant-rail {
   gap: var(--space-500);
@@ -75,10 +77,10 @@
 }
 
 /* Flatten the NavItem pill to text. --text-secondary is the resting label:
-   11.29:1 light / 13.05:1 dark on --surface-secondary, the tinted-rail case
-   (`Secondary text on secondary surface`, tokens/contrast-pairings.json).
-   Figma specs `text/muted` (#828282) here, which measures 3.1:1 on that tint
-   and cannot be the default at label-sm. */
+   12.63:1 light / 15.91:1 dark on --surface-primary, the transparent-rail case
+   (`Rail TOC resting label on surface`, tokens/contrast-pairings.json).
+   Figma specs `text/muted` (#828282) here, which fails AA at label-sm and
+   cannot be the default. */
 .bds-toc--variant-rail .bds-nav-item {
   padding: 0;
   border-radius: 0;
@@ -100,8 +102,9 @@
 /* --text-brand-primary-strong, NOT --text-brand-primary: the label is 14px bold,
    so WCAG large text (18.66px bold) does not apply and the bar is AA 4.5:1, not
    the AA-large 3:1 the brand token carries in its heading/accent role.
-   poppy-500 measures 3.38:1 on --surface-secondary; the strong step is 5.56:1
-   light / 4.56:1 dark. Gated as `Rail TOC active label on secondary surface`. */
+   --text-brand-primary (poppy-500) is too light; the strong step is 6.23:1 light
+   / 5.55:1 dark on --surface-primary (the transparent-rail band), where
+   darkening in dark would sink it. Gated as `Rail TOC active label on surface`. */
 .bds-toc--variant-rail .bds-nav-item--active,
 .bds-toc--variant-rail .bds-nav-item--active:hover {
   color: var(--text-brand-primary-strong);
