@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { BulletList } from './BulletList';
-import { Field } from '../Field';
 
 const meta: Meta<typeof BulletList> = {
   title: 'Components/bullet-list',
@@ -47,23 +46,5 @@ export const Default: Story = {
 };
 
 /* `marker` is a Control on Default — the marker comparison lives in
-   BulletList.mdx as a docs-local demo (#1489). */
-
-/* ─── 3. Inside a Field ──────────────────────────────────────── */
-
-/** @summary BulletList nested inside a Field value */
-export const InsideField: Story = {
-  render: () => (
-    <Frame>
-      <Field label="Anti-messages">
-        <BulletList
-          items={[
-            'No price-first positioning',
-            'No corporate-clinic language',
-            'Avoid dental-industry jargon',
-          ]}
-        />
-      </Field>
-    </Frame>
-  ),
-};
+   BulletList.mdx as a docs-local demo (#1489). The `InsideField` usage
+   composition also lives there as a docs-local demo (#2499). */
