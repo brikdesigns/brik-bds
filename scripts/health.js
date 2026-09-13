@@ -63,6 +63,7 @@ const DOCS_ONLY = new Set([
   'Calendar',  // placeholder — calendar is a sub-component of DatePicker
   'Icons',     // reference page — icon grid stories only, no styled component
   'BreadcrumbSwitcher',  // deprecated shim — renders Breadcrumb; styles live in Breadcrumb.css (#2521)
+  'ReadModePage',  // page-archetype pattern doc — composes DataSection/FieldGrid/Field, no CSS of its own (#2525)
 ]);
 
 // ─── CLI args ────────────────────────────────────────────────────────
@@ -130,7 +131,11 @@ function checkCompleteness() {
   for (const name of components) {
     const dir = path.join(COMPONENTS_DIR, name);
     const hasStory = fs.existsSync(path.join(dir, `${name}.stories.tsx`));
-    const hasMdx = fs.existsSync(path.join(dir, `${name}.mdx`));
+    // A DOCS_ONLY pattern dir documents itself via an attached `Overview.mdx`
+    // (its `<dir>.mdx` name is reserved by the component-recipe lint), so any
+    // `.mdx` in the dir counts as its docs page (#2525).
+    const hasMdx = fs.existsSync(path.join(dir, `${name}.mdx`))
+      || (DOCS_ONLY.has(name) && fs.readdirSync(dir).some((f) => f.endsWith('.mdx')));
     const hasCss = fs.existsSync(path.join(dir, `${name}.css`));
     const hasIndex = fs.existsSync(path.join(dir, 'index.ts'));
 

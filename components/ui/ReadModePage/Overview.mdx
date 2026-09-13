@@ -1,7 +1,7 @@
 import { Meta, Canvas } from '@storybook/addon-docs/blocks';
-import * as DataSectionStories from '../DataSection/DataSection.stories';
+import * as Stories from './ReadModePage.stories';
 
-<Meta title="Containers/read-mode-page" />
+<Meta of={Stories} />
 
 # Read-Mode Page
 
@@ -20,7 +20,7 @@ This page pattern composes four BDS components:
 
 ## Canonical composition
 
-<Canvas of={DataSectionStories.ReadModePage} />
+<Canvas of={Stories.Default} />
 
 ---
 
@@ -28,7 +28,7 @@ This page pattern composes four BDS components:
 
 Before data resolves — first navigation to a detail page, SSR still in flight — pass `loading` to each `DataSection` instead of inventing a page-local skeleton. It swaps the body for `Skeleton` field rows shaped to match the `FieldGrid` the section would otherwise render (same `columns`, same cell count), keeps the section `title` real, and suppresses `actions`.
 
-<Canvas of={DataSectionStories.Loading} />
+<Canvas of={Stories.Loading} />
 
 ```tsx
 <DataSection title="Identity" actions={<ViewEditToggle />} loading={isLoading}>

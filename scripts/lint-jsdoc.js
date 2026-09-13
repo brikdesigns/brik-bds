@@ -78,6 +78,7 @@ const componentDirs = fs
 const EXEMPT_COMPONENTS = new Set([
   'Calendar', // index.ts: "Calendar — placeholder, component not yet implemented"
   'Icons', // index.ts: "Icons — reference page only, no exported component"
+  'ReadModePage', // page-archetype pattern doc — composes DataSection/FieldGrid/Field, no component of its own
 ]);
 
 // Directories whose `index.ts` re-exports several named sub-components.
