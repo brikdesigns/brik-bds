@@ -70,20 +70,6 @@ export const Default: Story = {
   ),
 };
 
-/** @summary Tag list — most common Cluster use case */
-export const TagList: Story = {
-  render: () => (
-    <Cluster gap="xs">
-      <Pill>brand</Pill>
-      <Pill>marketing</Pill>
-      <Pill>information</Pill>
-      <Pill>product</Pill>
-      <Pill>back-office</Pill>
-      <Pill>+ 3 more</Pill>
-    </Cluster>
-  ),
-};
-
 /**
  * Narrow width forces multiple rows with consistent gap.
  * @summary Wrapping behavior across multiple rows
@@ -104,18 +90,6 @@ export const Wrapping: Story = {
   ),
 };
 
-/** @summary Action button row — Cluster + justify="end" */
-export const ActionRow: Story = {
-  render: () => (
-    <div style={{ padding: 'var(--padding-md)', borderTop: '1px solid var(--border-secondary)', maxWidth: 480 }}>
-      <Cluster gap="sm" justify="end">
-        <Pill>Cancel</Pill>
-        <Pill>Save draft</Pill>
-        <Pill>Publish</Pill>
-      </Cluster>
-    </div>
-  ),
-};
-
 /* `gap` is a Control on Default — the side-by-side scale lives in Cluster.mdx
-   as a docs-local demo (rule 5, #1489 / #1502). */
+   as a docs-local demo (rule 5, #1489 / #1502). TagList + ActionRow usage
+   compositions also live there as docs-local demos (#2501). */
