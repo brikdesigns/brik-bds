@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import React, { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { Card, CardDescription } from './Card';
@@ -108,6 +108,61 @@ describe('Card anatomy API (ADR-038)', () => {
     const plain = await mount(h(Card as never, { layout: 'metric', overline: 'X', title: '1' }));
     expect(plain.querySelector('.bds-card__metric-media')).toBeNull();
     expect(plain.querySelector('.bds-card__metric-detail')).toBeNull();
+  });
+
+  // #2508 — `insetPadding` picks the inset frame's --padding-* step. The
+  // contract: the default (and explicit `huge`) is byte-identical to the
+  // pre-prop inset (ServiceCard / ServiceLineCard consumers), and `lg` is
+  // purely additive.
+  describe('inset padding scale (#2508)', () => {
+    // Token values live in dist/tokens.css — a build artifact absent in CI —
+    // so inject sentinels; Card.css is loaded via Card.tsx's import, so the
+    // .bds-card--layout-stack-inset{,-lg} rules resolve against these.
+    let tokens: HTMLStyleElement;
+    beforeEach(() => {
+      tokens = document.createElement('style');
+      tokens.textContent =
+        ':root{--padding-huge:48px;--padding-lg:24px;--gap-xl:40px;--gap-lg:16px}';
+      document.head.appendChild(tokens);
+    });
+    afterEach(() => tokens.remove());
+
+    const insetArgs = { layout: 'stack', mediaTreatment: 'inset', title: 'T' } as const;
+
+    it('default inset is 48px (--padding-huge) with no -lg class — consumers byte-identical', async () => {
+      const el = await mount(h(Card as never, insetArgs));
+      const rootEl = el.firstElementChild as HTMLElement;
+      expect(rootEl.className).toContain('bds-card--layout-stack-inset');
+      expect(rootEl.className).not.toContain('bds-card--layout-stack-inset-lg');
+      const cs = getComputedStyle(rootEl);
+      expect(cs.paddingTop).toBe('48px');
+      expect(cs.rowGap).toBe('40px');
+    });
+
+    it('insetPadding="huge" matches the default exactly (no -lg class, still 48px)', async () => {
+      const el = await mount(h(Card as never, { ...insetArgs, insetPadding: 'huge' }));
+      const rootEl = el.firstElementChild as HTMLElement;
+      expect(rootEl.className).not.toContain('bds-card--layout-stack-inset-lg');
+      expect(getComputedStyle(rootEl).paddingTop).toBe('48px');
+    });
+
+    it('insetPadding="lg" tightens the frame to 24px (--padding-lg) + --gap-lg', async () => {
+      const el = await mount(h(Card as never, { ...insetArgs, insetPadding: 'lg' }));
+      const rootEl = el.firstElementChild as HTMLElement;
+      expect(rootEl.className).toContain('bds-card--layout-stack-inset');
+      expect(rootEl.className).toContain('bds-card--layout-stack-inset-lg');
+      const cs = getComputedStyle(rootEl);
+      expect(cs.paddingTop).toBe('24px');
+      expect(cs.rowGap).toBe('16px');
+    });
+
+    it('insetPadding is ignored for flush media (neither inset class emitted)', async () => {
+      const el = await mount(
+        h(Card as never, { layout: 'stack', mediaTreatment: 'flush', insetPadding: 'lg', title: 'T' }),
+      );
+      const rootEl = el.firstElementChild as HTMLElement;
+      expect(rootEl.className).not.toContain('bds-card--layout-stack-inset');
+    });
   });
 
   it('a layout Card never falls through to the empty default box', async () => {
