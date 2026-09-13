@@ -162,6 +162,26 @@ jobs:
             );
             core.info(`Tracked files: ${tracked.size}`);
 
+            // Case-folded index, so a citation that differs from a tracked path
+            // ONLY by letter case is reported as the case fix it is rather than
+            // as a missing file (#2541). macOS is case-insensitive, so the
+            // author's rg, editor and `open` all resolve the wrong-case path
+            // fine — the miss appears only here, and only as "does not exist".
+            // #2451 cited `components/ui/card/Card.tsx` for the tracked
+            // `components/ui/Card/Card.tsx` and was told a builder following it
+            // "would be sent nowhere".
+            //
+            // A value of `null` marks an AMBIGUOUS key: git can track two paths
+            // differing only by case, and there is no correct spelling to
+            // suggest for one. Those fall through to the dead-path report
+            // instead of the sweep inventing an answer.
+            const trackedLower = new Map();
+            for (const p of tracked) {
+              const k = p.toLowerCase();
+              if (trackedLower.has(k) && trackedLower.get(k) !== p) trackedLower.set(k, null);
+              else if (!trackedLower.has(k)) trackedLower.set(k, p);
+            }
+
             // Top-level dirs come from the repo itself, so a cited path only
             // counts when it is plausibly repo-relative. This is also what
             // makes cross-repo citations (`brik-client-portal/src/...`) exempt
@@ -169,6 +189,10 @@ jobs:
             const topDirs = new Set(
               [...tracked].map(p => p.split('/')[0]).filter(p => p.includes('.') === false)
             );
+            // Case-folded too, or a citation whose FIRST segment carries the
+            // wrong case exits at the repo-relative test and is never reported
+            // at all — neither as dead nor as a case fix (#2541).
+            const topDirsLower = new Set([...topDirs].map(d => d.toLowerCase()));
 
             // Token names declared in the registry, plus the set of their first
             // segments. The prefix set is what separates a real token citation
@@ -230,19 +254,33 @@ jobs:
 
             function deadCitations(body) {
               const paths = new Set();
+              const cases = new Map();   // cited spelling → the tracked spelling
               const tokens = new Set();
-              if (!body || body.includes(OPT_OUT)) return { paths, tokens };
+              if (!body || body.includes(OPT_OUT)) return { paths, cases, tokens };
 
               for (const m of body.matchAll(PATH_RE)) {
                 // Strip a markdown line anchor: `Card.tsx#L197` → `Card.tsx`.
                 const p = m[1].replace(/#L\d+(-L\d+)?$/, '');
-                if (!topDirs.has(p.split('/')[0])) continue;   // not repo-relative
+                const seg = p.split('/')[0];
+                // not repo-relative — case-folded, so a wrong-case first
+                // segment still reaches the checks below (#2541)
+                if (!topDirs.has(seg) && !topDirsLower.has(seg.toLowerCase())) continue;
                 if (tracked.has(p)) continue;
                 // Docs pages are habitually cited by their route rather than
                 // their path — `content-system/index.mdx` for the file at
                 // `docs-site/content/docs/content-system/index.mdx`. Shorthand,
                 // not rot, so resolve it before calling the citation dead.
                 if (tracked.has(`${DOCS_ROOT}/${p}`)) continue;
+                // Case-only mismatch: the file IS there, the spelling is not.
+                // A different finding with a different fix, so it gets its own
+                // bucket and its own message (#2541). Both the direct and the
+                // docs-route form are checked, mirroring the two exact tests
+                // above. An ambiguous key (null) is deliberately skipped — see
+                // the trackedLower construction.
+                const direct = trackedLower.get(p.toLowerCase());
+                const viaDocs = trackedLower.get(`${DOCS_ROOT}/${p}`.toLowerCase());
+                const real = direct || viaDocs;
+                if (real) { cases.set(p, real); continue; }
                 paths.add(p);
               }
 
@@ -254,7 +292,7 @@ jobs:
                   if (!declaredTokens.has(name)) tokens.add(name);
                 }
               }
-              return { paths, tokens };
+              return { paths, cases, tokens };
             }
 
             // ── Label plumbing ──
@@ -324,8 +362,8 @@ jobs:
 
             const hits = [];
             for (const i of issues) {
-              const { paths, tokens } = deadCitations(i.body);
-              if (paths.size || tokens.size) hits.push({ n: i.number, paths, tokens, labels: labelNames(i) });
+              const { paths, cases, tokens } = deadCitations(i.body);
+              if (paths.size || cases.size || tokens.size) hits.push({ n: i.number, paths, cases, tokens, labels: labelNames(i) });
             }
 
             const exempt = SINGLE
@@ -337,11 +375,30 @@ jobs:
             if (flagged.length) await ensureLabel();
 
             for (const h of flagged) {
+              // The headline has to match what was actually found. A case-only
+              // mismatch is NOT a file that no longer exists, and saying so
+              // about a file sitting right there teaches readers to distrust
+              // the whole check — which is how the real hits get ignored
+              // (#2541).
+              const deadCount = h.paths.size + h.tokens.size;
               const lines = [
                 `${MARKER}`,
-                `**This issue cites files or tokens that no longer exist.** A builder following them would be sent nowhere.`,
+                deadCount
+                  ? `**This issue cites files or tokens that no longer exist.** A builder following them would be sent nowhere.`
+                  : `**This issue cites a path whose letter case does not match the repo.** The file exists; the spelling does not.`,
                 ``,
               ];
+              if (h.cases.size) {
+                lines.push(`Wrong case — the file is tracked under a different spelling:`, ``);
+                for (const [cited, real] of [...h.cases].sort((a, b) => a[0].localeCompare(b[0]))) {
+                  lines.push(`- \`${cited}\` → \`${real}\``);
+                }
+                lines.push(
+                  ``,
+                  `macOS is case-insensitive, so this resolves fine in an editor and on \`rg\` — it only breaks for anything reading \`git ls-files\`, and on a case-sensitive checkout.`,
+                  ``,
+                );
+              }
               if (h.paths.size) {
                 lines.push(`Not in \`git ls-files\`:`, ``);
                 for (const p of [...h.paths].sort()) lines.push(`- \`${p}\``);
@@ -374,7 +431,7 @@ jobs:
               const existing = comments.find(c => c.body && c.body.includes(MARKER));
               if (!existing) {
                 await github.rest.issues.createComment({ owner, repo, issue_number: h.n, body });
-                core.info(`Flagged #${h.n} (${h.paths.size} paths, ${h.tokens.size} tokens)`);
+                core.info(`Flagged #${h.n} (${h.paths.size} paths, ${h.cases.size} case, ${h.tokens.size} tokens)`);
               } else if (existing.body.trim() !== body.trim()) {
                 await github.rest.issues.updateComment({ owner, repo, comment_id: existing.id, body });
                 core.info(`Updated #${h.n} (findings changed)`);
