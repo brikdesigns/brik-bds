@@ -1,0 +1,120 @@
+---
+/**
+ * logo_wall — logo / partner / trust strip. Astro twin of
+ * `../react/LogoWall.tsx`.
+ *
+ * The first block to adopt the content-motion axis (ADR-039 §Decision 2,
+ * brik-bds#2529): its logo strip renders either static (a centered wrapped row)
+ * or, when `section.contentMotion === 'marquee'`, through the shared `_Marquee`
+ * partial (the Astro twin of the React `Marquee` primitive; emits `bds-marquee*`
+ * from `dist/styles.css`, reduced-motion-gated by that CSS).
+ *
+ * Content-agnostic — each `section.items[]` entry is one logo:
+ *   - item.imageUrl — the logo asset (consumer supplies a pre-monochromed asset)
+ *   - item.imageAlt — accessible name; falls back to item.title (brand name)
+ *   - item.href     — optional link wrapping the logo
+ *
+ * required_facts: []. Section-driven.
+ *
+ * a11y: a labelled region — aria-labelledby when section.heading is present
+ * (rendered as a visible eyebrow), aria-label fallback when it is not. The
+ * marquee's duplicate track group is aria-hidden by `_Marquee`.
+ *
+ * The `bp-logo-wall*` layout classes are project-local (scoped style block
+ * below, lifted into `__generated__/LogoWall.css` for the Astro story by
+ * `render-astro-blueprints.mjs`); the scrolling `bds-marquee*` classes are
+ * canonical and come from the primitive's own stylesheet — this file defines no
+ * `bds-*` class.
+ */
+import type { BlueprintProps } from './types';
+// The file is underscore-prefixed (a partial excluded from the reachability
+// gate), but the imported identifier must be Capitalized for Astro to render it
+// as a component rather than a literal tag — same as `_Media.astro` → `Media`.
+import Marquee from './_Marquee.astro';
+
+// Shared section shell (ADR-021) — global, unscoped; provides bds-visually-hidden.
+import '../section-shell.css';
+
+interface Props extends BlueprintProps {}
+
+const { section } = Astro.props;
+
+const titleId = `${section.sectionKey}-title`;
+const hasHeading = Boolean(section.heading);
+const motion = section.contentMotion ?? 'none';
+const items = section.items;
+---
+
+<section
+  class="bp-logo-wall"
+  aria-labelledby={hasHeading ? titleId : undefined}
+  aria-label={!hasHeading ? 'Trusted by' : undefined}
+  data-blueprint-key="logo_wall"
+>
+  <div class="bp-logo-wall__container">
+    {hasHeading && (
+      <h2 id={titleId} class="bp-logo-wall__title">{section.heading}</h2>
+    )}
+
+    <div class="bp-logo-wall__strip" data-motion={motion}>
+      {motion === 'marquee' ? (
+        <Marquee items={items} />
+      ) : (
+        items.map((item) =>
+          item.href ? (
+            <a href={item.href}><img src={item.imageUrl} alt={item.imageAlt ?? item.title} loading="lazy" /></a>
+          ) : (
+            <img src={item.imageUrl} alt={item.imageAlt ?? item.title} loading="lazy" />
+          ),
+        )
+      )}
+    </div>
+  </div>
+</section>
+
+<style>
+  .bp-logo-wall {
+    padding-block: var(--bds-logo-wall-padding-y, clamp(var(--padding-lg), 5vw, var(--padding-xl)));
+  }
+
+  .bp-logo-wall__container {
+    max-width: var(--content-width-xl);
+    margin-inline: auto;
+    padding-inline: var(--page-inset);
+  }
+
+  .bp-logo-wall__title {
+    margin: 0 0 var(--gap-lg);
+    font-family: var(--font-family-label);
+    font-size: var(--label-lg);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--text-secondary);
+  }
+
+  /* Static (non-marquee) strip — a centered wrapped row. The marquee treatment
+     hands layout to the `bds-marquee` primitive, so the flex row is disabled
+     there and the single `.bds-marquee` child fills the row. */
+  .bp-logo-wall__strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--bds-logo-wall-gap, var(--size-1000));
+  }
+
+  .bp-logo-wall__strip[data-motion='marquee'] {
+    display: block;
+  }
+
+  /* Size the static logos only — the marquee treatment's logos are sized by the
+     `Marquee` primitive (`.bds-marquee__group img`). */
+  .bp-logo-wall__strip:not([data-motion='marquee']) img,
+  .bp-logo-wall__strip:not([data-motion='marquee']) svg {
+    height: var(--bds-logo-wall-logo-height, var(--size-600));
+    width: auto;
+    flex-shrink: 0;
+  }
+</style>

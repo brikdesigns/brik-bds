@@ -56,6 +56,9 @@ const BLOCKS = [
   { name: 'CalloutPanel', layouts: [null] },
   { name: 'StatsDarkBar', layouts: [null] },
   { name: 'TestimonialsFeaturedLarge', layouts: [null] },
+  // LogoWall's variant axis is the content-motion axis, not a layout — the two
+  // slugs render the static strip and the marquee treatment (#2529).
+  { name: 'LogoWall', layouts: ['static', 'marquee'] },
 ];
 
 /**
