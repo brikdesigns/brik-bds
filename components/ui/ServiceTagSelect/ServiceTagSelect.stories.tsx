@@ -78,17 +78,10 @@ export const Default: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   2. PATTERNS — Q4 irreducible: clicking a pill updates the
-      selected category, which args alone can't express
-   ═══════════════════════════════════════════════════════════════ */
-
-/** @summary Clicking a pill updates the selected category */
-export const WithControlledSelection: Story = {
-  render: () => <InteractiveServiceTagSelect defaultValue="marketing" />,
-};
-
-/* ═══════════════════════════════════════════════════════════════
-   3. INTERACTION TESTS — play-only, hidden from MCP discovery
+   2. INTERACTION TESTS — play-only, hidden from MCP discovery.
+      Clicking a pill to update the selection is behavior, not a
+      distinct visual state (Default already shows a selected pill),
+      so it's asserted here rather than in a render-mode story.
    ═══════════════════════════════════════════════════════════════ */
 
 /**

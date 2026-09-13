@@ -23,7 +23,6 @@ const testimonialSection: BlueprintProps['section'] = {
     moodKeywords: ['trustworthy', 'warm'],
     layoutBlueprint: 'testimonials_featured_large',
     imageOpportunity: null,
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [

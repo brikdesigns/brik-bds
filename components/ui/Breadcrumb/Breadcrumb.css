@@ -31,7 +31,11 @@
   font-family: var(--font-family-label);
   font-size: var(--label-sm);
   font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
+  /* `snug`, not `tight`: the ellipsis below needs `overflow: hidden`, and a
+     `tight` (110%) line box is shorter than the glyph extent, so it clips
+     descenders (g/y/p/q). `snug` (125%) is the shortest line box that still
+     contains them (#2519). */
+  line-height: var(--font-line-height-snug);
   color: var(--text-brand-primary);
   text-decoration: none;
   text-transform: capitalize;
@@ -54,7 +58,8 @@
      surface, including the [data-audience] tints below where --text-secondary
      collapses onto the link colour and contrast can't carry the distinction. */
   font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-tight);
+  /* `snug` for the same descender-clip reason as `__link` above (#2519). */
+  line-height: var(--font-line-height-snug);
   color: var(--text-secondary);
   text-transform: capitalize;
   cursor: default;

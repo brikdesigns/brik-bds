@@ -39,7 +39,6 @@ const section: BlueprintProps['section'] = {
     moodKeywords: ['bold'],
     layoutBlueprint: 'cta_centered',
     imageOpportunity: null,
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [],

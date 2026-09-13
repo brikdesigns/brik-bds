@@ -1,0 +1,52 @@
+@layer bds-components {
+/* ─── BlockReveal — the blueprint motion-axis entrance primitive (ADR-039, #2494)
+ *
+ * The Astro rail applies the same `bds-block-reveal--*` class directly to a
+ * block's element (a modifier needs no wrapper partial); they are single-sourced
+ * here so they reach
+ * `dist/styles.css` for `canonical-class-check`. The keyframes referenced
+ * (`bds-fade-in`, `bds-slide-up`) and the `--duration-*` / `--ease-*` /
+ * `--stagger-*` tokens ship via `dist/tokens.css` (`tokens/animations.css` +
+ * `tokens/modes-*`), so no `@keyframes` and no raw duration is written here —
+ * matching the "compose, never reimplement" rule.
+ *
+ * This is a behaviour modifier applied to a block's existing element (e.g.
+ * `bds-hero__content`), so it carries NO base `bds-block-reveal` class and sets
+ * NO `display` — the host element keeps its own layout, and `reveal: none` emits
+ * no class at all (identical markup to before the axis).
+ */
+
+.bds-block-reveal--fade {
+  animation: bds-fade-in var(--duration-normal) var(--ease-out) both;
+}
+
+.bds-block-reveal--rise {
+  animation: bds-slide-up var(--duration-normal) var(--ease-out) both;
+}
+
+/* stagger — the element's DIRECT children fade in sequentially, offset by the
+   `--stagger-*` scale (six steps; a seventh+ child settles at the last delay —
+   acceptable, the tail of a long list is below the fold). Uses the same
+   `bds-fade-in` keyframe as `fade`. */
+.bds-block-reveal--stagger > * {
+  animation: bds-fade-in var(--duration-normal) var(--ease-out) both;
+}
+.bds-block-reveal--stagger > *:nth-child(1) { animation-delay: var(--stagger-1); }
+.bds-block-reveal--stagger > *:nth-child(2) { animation-delay: var(--stagger-2); }
+.bds-block-reveal--stagger > *:nth-child(3) { animation-delay: var(--stagger-3); }
+.bds-block-reveal--stagger > *:nth-child(4) { animation-delay: var(--stagger-4); }
+.bds-block-reveal--stagger > *:nth-child(5) { animation-delay: var(--stagger-5); }
+.bds-block-reveal--stagger > *:nth-child(n + 6) { animation-delay: var(--stagger-6); }
+
+/* Reduced-motion gate — BY CONSTRUCTION (AC3). Every preset is neutralised with
+   no JS, so an agent selecting a reveal value cannot ship un-gated motion. The
+   `both` fill-mode means the settled (end) state shows, so content is fully
+   visible, never stuck at opacity 0. */
+@media (prefers-reduced-motion: reduce) {
+  .bds-block-reveal--fade,
+  .bds-block-reveal--rise,
+  .bds-block-reveal--stagger > * {
+    animation: none;
+  }
+}
+}

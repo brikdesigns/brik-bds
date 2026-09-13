@@ -23,7 +23,6 @@ const statsSection: BlueprintProps['section'] = {
     moodKeywords: ['bold', 'professional'],
     layoutBlueprint: 'stats_bar',
     imageOpportunity: null,
-    animationSuggestion: 'count-up on scroll into view',
     illustrationOpportunity: null,
   },
   items: [
