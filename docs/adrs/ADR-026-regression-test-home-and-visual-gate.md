@@ -24,7 +24,7 @@ The Storybook test-runner is **already wired and already green**, which the fram
 
 - `@storybook/addon-vitest` 10.3.6 is a registered addon ([`.storybook/main.ts:16`](../../.storybook/main.ts)), and [`vitest.config.ts`](../../vitest.config.ts) declares a `storybook` project that runs `storybookTest` in real Chromium via `@vitest/browser-playwright`.
 - Measured 2026-08-01: `npx vitest run --project storybook` → **144 test files / 404 tests passed in 70.12s** (73s wall). Every story is a test; all 41 `InteractionTest…` play functions across 19 story files execute there.
-- [`.github/workflows/test.yml`](../../.github/workflows/test.yml) runs the full `npm test` (all five vitest projects) on every PR to `main` and every push to `main`.
+- The `test suite` job in [`components-gate.yml`](../../.github/workflows/components-gate.yml) runs the full `npm test` (all five vitest projects) on every PR to `main` and every push to `main`. It lived in its own `test.yml` until #2329 folded it into the group gate.
 
 So the premise "behavioral tests sit in the sidebar rather than a test file" is half wrong. They *run* in a test runner. What is real is **sidebar noise**: `storybook-static/index.json` carries 41 `Interaction Test …` story entries, none tagged `manifest` (so MCP discovery is already clean) but all still listed in the sidebar.
 
@@ -80,14 +80,14 @@ Storybook 10.3.6's `TagOptions` supports `excludeFromSidebar`, `excludeFromDocsS
 
 ### 3. Arm B — split Chromatic's two roles. Self-host the visual gate; keep Chromatic for hosting + MCP. Do not buy Starter.
 
-- **Visual regression moves to `toMatchScreenshot()`** inside the existing `storybook` vitest project, running always-on in `test.yml` — free, unlimited, and blocking for real.
+- **Visual regression moves to `toMatchScreenshot()`** inside the existing `storybook` vitest project, running always-on in CI — free, unlimited, and blocking for real.
 - **Chromatic stays** for the hosted Storybook + MCP endpoint that every consumer-repo agent reads. That function never hit the quota and has no free replacement.
 - **Starter ($179/mo) is not bought.** It would buy 35,000 billed snapshots to solve a problem the repo's own free CI can solve at $0, and #771's premise for spending — a clean gated cycle exceeding 5,000 — is unmeasurable while the pre-#1497 burn is still inside the current cycle.
 - **Baselines are generated in CI only**, in a pinned container image. A baseline committed from a Mac is a guaranteed false positive on `ubuntu-latest` (Vitest names snapshots per browser *and* platform).
 
 ### 4. A and B converge on one tool — record the consolidation.
 
-Both arms land on Vitest browser mode + Playwright Chromium, already installed and already in CI. After implementation there is **one test command (`npm test`), one gate ([`test.yml`](../../.github/workflows/test.yml)), covering behavioral and visual regression** — no second runner, no second review surface, no third-party quota in the merge path.
+Both arms land on Vitest browser mode + Playwright Chromium, already installed and already in CI. After implementation there is **one test command (`npm test`), one gate (the `test suite` job in [`components-gate.yml`](../../.github/workflows/components-gate.yml)), covering behavioral and visual regression** — no second runner, no second review surface, no third-party quota in the merge path.
 
 ## Alternatives considered
 

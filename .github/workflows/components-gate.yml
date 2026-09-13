@@ -1,0 +1,572 @@
+name: Components Gate
+
+# The `components-gate` required context — the LAST of #2098's thematic groups.
+#
+# ─── Why this file exists ────────────────────────────────────────────────────
+#
+# Ten component/story gates used to live in ten workflows, each with a
+# trigger-scoped filter. That filter makes a gate PERMANENTLY INELIGIBLE to be a
+# required check, and the mechanism is vendor-documented, not inferred:
+#
+#   - A workflow skipped by `paths:` leaves its check *Pending*, and "a pull
+#     request that requires those checks to be successful will be blocked from
+#     merging".
+#     https://docs.github.com/en/actions/how-tos/manage-workflow-runs/skip-workflow-runs
+#   - "Required status checks must have a `successful`, `skipped`, or `neutral`
+#     status before collaborators can make changes to a protected branch."
+#     https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
+#
+# So a JOB-level skip satisfies protection and a TRIGGER-level one never
+# reports. Nothing here changes what any of the ten gates ASSERT.
+#
+# `docs-gate.yml` is the in-repo template for the multi-job case and
+# `tokens-gate.yml` (`c42dd09d`, #2416) for the merge_group classifier.
+#
+# ─── The ten gates consolidated here ────────────────────────────────────────
+#
+#   Cheap lints, one shared runner (the `lints` job):
+#     component-axes-check      content-rhythm-check
+#     icon-collection-check     inline-var-check
+#     layer-wrap-check          page-grid-check
+#     slot-pattern-check
+#
+#   Heavyweight, own runner + own sub-diff-test:
+#     storybook-bundle-scan  → builds Storybook, then gitleaks over the output
+#     blueprints-astro-check → Playwright Chromium + a scratch Astro project
+#     test                   → Vitest suite, Playwright Chromium
+#
+# ─── Why FOUR work jobs ─────────────────────────────────────────────────────
+#
+# Same reasoning docs-gate.yml records, with a wider cost spread. The seven
+# cheap lints are dependency-free source scans that share one `npm ci`; the
+# other three each pay a build or a browser install, and each kept a materially
+# different former trigger:
+#
+#   storybook-bundle-scan  build-storybook + gitleaks download; watched
+#                          `stories/**` + `.storybook/**`, which no lint did
+#   blueprints-astro-check `playwright install --with-deps chromium` + a scratch
+#                          Astro project's own `npm install` (~2 min/firing)
+#   test                   `playwright install --with-deps chromium` + the full
+#                          Vitest suite
+#
+# Folding those into `lints` would make a one-line CSS change pay a Storybook
+# build, a Chromium download and the Vitest suite, in the repo that is the org's
+# Actions-runtime hot spot (#2069) — the opposite of what grouping is for. Four
+# jobs also run the three heavy members in PARALLEL, and each keeps its members'
+# EXACT former paths rather than a union across the group.
+#
+# ─── `test` is the exception, and the reason it needed its own conversion ────
+#
+# `test.yml` filtered with `paths-ignore`, NOT `paths` — it SKIPPED on
+# `**/*.md`, which is exactly the docs-only PR this group's acceptance test
+# uses. An include-list shim would therefore have wedged `main`. Its arm below
+# is the INVERSE classifier `visual.yml:105-135` already implements: run UNLESS
+# the diff is exclusively provably-inert files. The default is to run, so the
+# set can never miss a code change. That trap was named in advance in
+# `.github/required-checks.json` § `_why`.
+#
+# ─── One dead pathspec dropped, deliberately ────────────────────────────────
+#
+# `storybook-bundle-scan.yml` watched `src/**`. That directory does not exist
+# and is not tracked (`git ls-files -- src` → 0 files, measured on
+# main@6eaf58fa), so the arm matched nothing and moving it down a level would
+# fail `lint-gate-pathspecs.mjs` rule 2. This is the rot class #2327 repaired
+# and #2450 re-gated; it is removed here rather than carried forward as a
+# pathspec that cannot match. Not a narrowing under § `_why` rule 1 — a
+# pathspec with no possible member sees nothing either way.
+#
+# Issue: brikdesigns/brik-bds#2329 (parent #2098, grandparent #2038)
+
+on:
+  # No trigger-scoped `paths:` / `paths-ignore:` — that is the entire point. The
+  # diff tests live in the `changes` job below.
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  # Merge-queue readiness (#2415), and it must land in the SAME PR as the
+  # consolidation rather than as a follow-up. GitHub reads this trigger from the
+  # MERGE-GROUP ref, not from `main`: a context declared before its trigger is on
+  # `main` self-satisfies its own group while every group built on the older
+  # `main` reports `expected` forever. #2444 did exactly that and wedged an
+  # unrelated session's #2446 at queue position 1 for ~9 minutes.
+  merge_group:
+
+concurrency:
+  # `cancel-in-progress: false` + `queue: max`, required as a pair on a required
+  # context — auditor rules 6a/6b. All ten members shipped
+  # `cancel-in-progress: true`, which is the #2094 / #2174 / #2176 failure:
+  #
+  #   - A cancelled check-run is not an absent one. Protection goes on reporting
+  #     the context as `expected`, and a green re-run does not clear it — only a
+  #     new head SHA does.
+  #   - `cancel-in-progress: false` ALONE does not cover it. That flag governs
+  #     the RUNNING job; the default `queue: single` still lets a newer run evict
+  #     the PENDING one, leaving a check-suite with zero check-runs and the same
+  #     stuck `expected`. Measured on #2174: seven runs on one head SHA, five
+  #     cancelled.
+  #
+  # `queue: max` and `cancel-in-progress: true` are a workflow validation error
+  # together, so they always change as a pair.
+  group: components-gate-${{ github.ref }}
+  cancel-in-progress: false
+  queue: max
+
+jobs:
+  # ─── The job-level diff tests ───────────────────────────────────────────────
+  #
+  # Four outputs, one per work job. The first three are the exact union of only
+  # THEIR members' former `paths:` lists; the fourth is `test`'s inverse. § `_why`
+  # rule 1: widening any of them is a cost regression, narrowing any of them is
+  # the silent-pass bug the union rule exists to prevent.
+  changes:
+    # Group-qualified display name: visual.yml, tokens-gate.yml and
+    # docs-gate.yml all have a classifier, so an unqualified `classify diff`
+    # would be one of several indistinguishable rows in the PR checks list.
+    name: classify diff (components)
+    runs-on: ubuntu-latest
+    outputs:
+      lints: ${{ steps.classify.outputs.lints }}
+      bundlescan: ${{ steps.classify.outputs.bundlescan }}
+      astro: ${{ steps.classify.outputs.astro }}
+      test: ${{ steps.classify.outputs.test }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          # Need the base commit present to diff against it.
+          fetch-depth: 0
+
+      - name: Classify the diff
+        id: classify
+        env:
+          # On a PR these are the tips of base and head; on a merge group the
+          # merge-group base/head; empty on push (→ full gate below). (#2415)
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.event.merge_group.head_sha }}
+        run: |
+          set -euo pipefail
+
+          # push to main runs everything — a post-merge run is not a place to
+          # guess. Same precedent as visual.yml, tokens-gate.yml, docs-gate.yml.
+          if [ -z "$BASE_SHA" ]; then
+            echo "event=${{ github.event_name }} → full components gate"
+            {
+              echo "lints=true"
+              echo "bundlescan=true"
+              echo "astro=true"
+              echo "test=true"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          # `git diff --name-only` exits 0 whether or not it printed anything,
+          # so emptiness and failure stay distinguishable — unlike a
+          # `git diff | grep` pipeline, where pipefail returns grep's status and
+          # grep exits 1 on "no match", making a genuine diff failure look like
+          # an inert diff (the #2713 trap). Fail CLOSED on a git error; the
+          # aggregate job treats a non-success classify as a block.
+          diff_matches() {
+            local out
+            if ! out="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- "$@")"; then
+              echo "✗ git diff failed for $BASE_SHA..$HEAD_SHA — cannot classify; failing closed." >&2
+              return 2
+            fi
+            printf '%s' "$out"
+          }
+
+          # component-axes, content-rhythm, icon-collection, inline-var,
+          # layer-wrap, page-grid, slot-pattern.
+          #
+          # `components/**` is the UNION, not a widening: slot-pattern-check
+          # already watched it bare, and it subsumes the six narrower
+          # `components/**/*.{ts,tsx,css}` arms plus components/icons.generated.json.
+          # The content-system arms stay listed exactly as their three members
+          # listed them rather than collapsing to `content-system/**` — that WOULD
+          # be a widening, and blueprints alone is 146 tracked files.
+          LINTS="$(diff_matches \
+            'components/**' \
+            'content-system/**/*.ts' \
+            'content-system/**/*.tsx' \
+            'content-system/**/*.css' \
+            'content-system/**/*.astro' \
+            'content-system/blueprints/**' \
+            'tokens/**/*.ts' \
+            'manifest/component-axes.json' \
+            'scripts/generate-component-axes.mjs' \
+            'scripts/lint-content-rhythm.mjs' \
+            'scripts/gen-icon-collection.mjs' \
+            'scripts/lint-inline-var.mjs' \
+            'scripts/wrap-component-layers.mjs' \
+            'scripts/lint-page-grid.mjs' \
+            'scripts/slot-pattern-check.mjs' \
+            '.github/workflows/components-gate.yml')"
+
+          # storybook-bundle-scan's own former list, minus the dead `src/**`
+          # (see the header). `stories/**` and `.storybook/**` appear in no other
+          # arm — this is the only member that watches the Storybook tree.
+          BUNDLESCAN="$(diff_matches \
+            'stories/**' \
+            '.storybook/**' \
+            'package.json' \
+            'package-lock.json' \
+            'vite.config.*' \
+            '.gitleaks-bundle.toml' \
+            '.brik-gitleaks-rules.toml' \
+            '.github/workflows/components-gate.yml')"
+
+          # blueprints-astro-check's own former list, verbatim. It also runs
+          # `verify:astro-stories` (ADR-039, wired here by #2483), which shares
+          # the same inputs.
+          ASTRO="$(diff_matches \
+            'content-system/blueprints/**' \
+            'scripts/verify-blueprints-astro-exports.mjs' \
+            'scripts/render-astro-blueprints.mjs' \
+            'package.json' \
+            '.github/workflows/components-gate.yml')"
+
+          emit() {
+            if [ -z "$2" ]; then
+              echo "  $1: no matching change → skip"
+              echo "$1=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "  $1: matched →"
+              printf '%s\n' "$2" | sed 's/^/      /'
+              echo "$1=true" >> "$GITHUB_OUTPUT"
+            fi
+          }
+          emit lints "$LINTS"
+          emit bundlescan "$BUNDLESCAN"
+          emit astro "$ASTRO"
+
+          # ─── `test` is the INVERSE, never an include list ──────────────────
+          #
+          # test.yml used `paths-ignore`, so its semantics are "run unless the
+          # diff is exclusively inert". An include list can never be trusted for
+          # a suite whose input is ~all of source, and reproducing its behaviour
+          # is the point — this arm must not be quietly tightened into one.
+          # Same predicate and same inert set as visual.yml:174.
+          if ! FILES="$(git diff --name-only "$BASE_SHA" "$HEAD_SHA")"; then
+            echo "✗ git diff failed for $BASE_SHA..$HEAD_SHA — cannot classify; failing closed."
+            exit 1
+          fi
+          NONINERT="$(printf '%s\n' "$FILES" | grep -vE '\.md$|^LICENSE$|(^|/)CODEOWNERS$' || true)"
+          if [ -z "$NONINERT" ]; then
+            echo "  test: diff is exclusively inert (docs/markdown) → skip"
+            printf '%s\n' "$FILES" | sed 's/^/      inert: /'
+            echo "test=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "  test: diff touches non-inert files →"
+            printf '%s\n' "$NONINERT" | sed 's/^/      /'
+            echo "test=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ─── The seven cheap lints, one runner ──────────────────────────────────────
+  #
+  # Sequential steps, not seven jobs: jobs do not share a runner, so seven jobs
+  # would pay seven checkouts and seven `npm ci` for a few seconds of actual
+  # work. layer-wrap-check and slot-pattern-check ran with NO `npm ci` at all
+  # (both are dependency-free node scripts); they now ride an install the other
+  # five already pay, which is still five installs cheaper than the status quo.
+  #
+  # Every step runs `if: always()` so ONE failure does not hide the other six,
+  # gated on `steps.install.outcome` so a failed `npm ci` does not produce seven
+  # misleading reds.
+  lints:
+    name: component lints
+    runs-on: ubuntu-latest
+    needs: changes
+    permissions:
+      contents: read
+    # The `success()` half matters: an explicit `if` REPLACES the implicit
+    # needs-succeeded gate, so without it a FAILED classify (output == '') would
+    # still satisfy `!= 'false'`. Gating on success() skips cleanly instead; the
+    # aggregate job then fails closed on the non-success.
+    if: needs.changes.result == 'success' && needs.changes.outputs.lints == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        id: install
+        run: npm ci
+
+      # ─── component-axes-check ───────────────────────────────────────────────
+      # manifest/component-axes.json must stay in sync with the component type
+      # unions. TypeScript guards per-call-site values; this guards the canon
+      # manifest, which cloud-agent commits bypassing local hooks can desync.
+      # (#561, ADR-009)
+      - name: Check component axes manifest is in sync
+        if: always() && steps.install.outcome == 'success'
+        run: npm run typegen:axes:check
+
+      # ─── content-rhythm-check ───────────────────────────────────────────────
+      # A rhythm-bearing property (vertical margin / gap) between text-role
+      # elements must come from the mode-tied `--gap-*` scale — a px/rem literal
+      # does not re-modulate per spacing mode. (ADR-023 §3, #1608)
+      - name: Content rhythm check
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-content-rhythm
+
+      # ─── icon-collection-check ──────────────────────────────────────────────
+      # components/icons.generated.json must cover every shipped `ph:*` usage,
+      # or the icon silently falls through to the Iconify CDN and the
+      # offline-icon guarantee is gone. Also catches a typo'd icon name. (#1002)
+      - name: Check offline icon collection is in sync
+        if: always() && steps.install.outcome == 'success'
+        run: npm run gen:icons:check
+
+      # ─── inline-var-check ───────────────────────────────────────────────────
+      # No NEW raw inline `var(--…)` token consumption in component TSX —
+      # CLAUDE.md and the component-build standard mandate CSS-over-inline.
+      # Existing offenders are baselined in the script and burned down
+      # separately. (#892)
+      - name: Inline var() check
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-inline-var
+
+      # ─── layer-wrap-check ───────────────────────────────────────────────────
+      # Every components/ui/**/*.css must be wrapped in `@layer bds-components`.
+      # An unlayered stylesheet loses the cascade in consumers that layer BDS,
+      # so the component renders unstyled while looking fine in Storybook — the
+      # invisible-Logo bug in brik-client-portal#1808.
+      - name: Check component CSS is layered
+        if: always() && steps.install.outcome == 'success'
+        run: node scripts/wrap-component-layers.mjs --check
+
+      # ─── page-grid-check ────────────────────────────────────────────────────
+      # A page-container rule must not declare a padding-inline that bypasses
+      # the canonical `--gutter-page`. One gutter name is what keeps BDS sections
+      # and consumer containers flush at the page edge. (ADR-025, #1628)
+      - name: Page grid check
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-page-grid
+
+      # ─── slot-pattern-check ─────────────────────────────────────────────────
+      # The BEM slot grammar `bds-<block>__<slot>--<modifier>`, governed by
+      # shape rather than by an enumerated allowlist. Sibling of
+      # canonical-class-check, which checks dist/styles.css membership; this one
+      # checks authored shape and needs no build. (ADR-008 §4)
+      - name: Slot pattern check
+        if: always() && steps.install.outcome == 'success'
+        run: node scripts/slot-pattern-check.mjs --format md components content-system/blueprints
+
+  # ─── storybook-bundle-scan — own runner, builds the bundle ──────────────────
+  #
+  # Scans the BUILT Storybook artifact for secrets. Sibling to gitleaks.yml, not
+  # a duplicate: that workflow scans the PR diff (source), this one scans
+  # storybook-static/ (build output). Vite inlines `import.meta.env.*` at build
+  # time, so a secret can be absent from every diff and present in the shipped
+  # JS — CVE-2025-68429. netlify.toml publishes `storybook-static`, so this
+  # scans exactly the bytes that go live. It is the control that replaced the
+  # password wall removed by operator decision on 2026-08-11 (brik-llm#2167).
+  # (#1776)
+  #
+  # Known limit, verified 2026-08-11: gitleaks' default ruleset allowlists the
+  # canonical vendor example credentials, so inlining one of those documented
+  # placeholder keys does NOT fail this gate, while a realistic `ghp_…` token
+  # does.
+  bundlescan:
+    name: storybook bundle scan
+    runs-on: ubuntu-latest
+    needs: changes
+    permissions:
+      contents: read
+    if: needs.changes.result == 'success' && needs.changes.outputs.bundlescan == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      # Same pinned CLI + version as gitleaks.yml. The gitleaks GitHub Action
+      # requires a paid GITLEAKS_LICENSE for org repos; the CLI is MIT.
+      - name: Install gitleaks
+        run: |
+          set -e
+          VERSION=8.30.1
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${VERSION}/gitleaks_${VERSION}_linux_x64.tar.gz" \
+            | sudo tar -xz -C /usr/local/bin gitleaks
+          gitleaks version
+
+      # Scans the whole tree, not a sample. --redact keeps a real finding out of
+      # the public job log: the log says which file and rule, never the value.
+      - name: Scan the built bundle
+        run: |
+          set -e
+          gitleaks detect --no-git --source storybook-static \
+            --config .gitleaks-bundle.toml \
+            --redact --no-banner --verbose --exit-code 1
+
+  # ─── blueprints-astro-check — own runner, Chromium + a scratch Astro app ────
+  #
+  # Packs the BDS tarball, installs it into a scratch Astro 5 project, and proves
+  # the `blueprints-astro` subpath resolves and renders — `astro check` for the
+  # type + import resolver, then `astro build` plus HTML assertions on the built
+  # output. The script already existed but ran nowhere, so when #2010 de-wired
+  # `stats_bar` the assertion went red on `main` and nothing reported it (#2313).
+  astro:
+    name: blueprints astro
+    runs-on: ubuntu-latest
+    needs: changes
+    permissions:
+      contents: read
+    if: needs.changes.result == 'success' && needs.changes.outputs.astro == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The script's axe-core pass drives Chromium via Playwright. A bare runner
+      # has none and the scan fails with "Executable doesn't exist at
+      # …/chrome-headless-shell". Not the pinned visual.yml container — that
+      # image is load-bearing for screenshot baseline naming, which this gate
+      # does not produce.
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      # `verify:astro-stories` (ADR-039) ran in NO workflow before #2483. It was
+      # wired only into `npm run validate`, which nothing in .github/ invokes, so
+      # a stale pre-render could reach `main` with every check green — and one
+      # did, when the Astro 5 → 7 bump (#2462) invalidated all 12 committed files
+      # 22 minutes after #2455 merged (#2474). ~2s on a job that runs ~1m35s.
+      - name: Astro story render is current
+        run: npm run verify:astro-stories
+
+      - name: Blueprints Astro export + render check
+        run: npm run verify:blueprints-astro
+
+  # ─── test — own runner, the Vitest suite ────────────────────────────────────
+  #
+  # Pre-commit runs token + JSDoc + recipe + typecheck, and pre-push runs
+  # `validate:full` — the suite is absent from both, and cloud-agent commits and
+  # fork PRs bypass local hooks entirely. This job is the pre-merge guarantee
+  # that a component regression cannot land green. (#891)
+  #
+  # Its gate is the INVERSE classifier above, not an include list — see the
+  # header. The suite plus the visual suites are 57% of the org's Actions
+  # runtime (brik-llm#2713), which is why an all-inert diff still opts out.
+  test:
+    name: test suite
+    runs-on: ubuntu-latest
+    needs: changes
+    permissions:
+      contents: read
+    if: needs.changes.result == 'success' && needs.changes.outputs.test == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The `widgets` vitest project runs in browser mode via
+      # @vitest/browser-playwright → Chromium. CI has no cached browser, so
+      # install it (with OS deps) before the suite.
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      # Full suite, all projects. The `storybook` browser project is back in the
+      # gate since vitest.config.ts pre-bundles the story deps via
+      # optimizeDeps.include (#571).
+      - name: Run Vitest suite
+        run: npm test
+
+  # ─── The branch-protection check ────────────────────────────────────────────
+  #
+  # Keeps the name `components-gate` stable while the work above fans out, and
+  # fails if any work job failed — `needs` alone would let a skipped or failed
+  # job pass this one, so each result is asserted explicitly against what the
+  # classifier actually requested.
+  #
+  # This job ALWAYS runs and ALWAYS reports, on every PR and every merge group.
+  # That is the whole property that makes `components-gate` a valid required
+  # context: when the diff touched nothing relevant the work jobs did not run,
+  # and the required check still has to report, so it reports green.
+  components-gate:
+    name: components-gate
+    runs-on: ubuntu-latest
+    needs: [changes, lints, bundlescan, astro, test]
+    if: always()
+    steps:
+      - name: Assert the components gate
+        run: |
+          set -euo pipefail
+          echo "classify result:  ${{ needs.changes.result }}"
+          echo "lints:       requested=${{ needs.changes.outputs.lints }}       result=${{ needs.lints.result }}"
+          echo "bundle scan: requested=${{ needs.changes.outputs.bundlescan }}  result=${{ needs.bundlescan.result }}"
+          echo "astro:       requested=${{ needs.changes.outputs.astro }}       result=${{ needs.astro.result }}"
+          echo "test:        requested=${{ needs.changes.outputs.test }}        result=${{ needs.test.result }}"
+
+          if [ "${{ needs.changes.result }}" != "success" ]; then
+            echo "✗ the classify-diff job did not succeed — failing the gate closed rather"
+            echo "  than guessing which work jobs should have run."
+            exit 1
+          fi
+
+          FAILED=0
+
+          # A work job that was REQUESTED must have succeeded. A work job that
+          # was NOT requested is legitimately absent, and its `result` is
+          # 'skipped' — that is the job-level skip protection accepts.
+          assert() {
+            local label="$1" requested="$2" result="$3"
+            if [ "$requested" != "true" ]; then
+              echo "  ✓ $label — not applicable to this diff"
+              return 0
+            fi
+            if [ "$result" != "success" ]; then
+              echo "  ✗ $label — ran and did not pass"
+              FAILED=1
+              return 0
+            fi
+            echo "  ✓ $label — passed"
+          }
+
+          assert "component lints"      "${{ needs.changes.outputs.lints }}"      "${{ needs.lints.result }}"
+          assert "storybook bundle scan" "${{ needs.changes.outputs.bundlescan }}" "${{ needs.bundlescan.result }}"
+          assert "blueprints astro"     "${{ needs.changes.outputs.astro }}"      "${{ needs.astro.result }}"
+          assert "test suite"           "${{ needs.changes.outputs.test }}"       "${{ needs.test.result }}"
+
+          if [ "$FAILED" -ne 0 ]; then
+            echo ""
+            echo "✗ the components gate failed. Every lint in the \`component lints\` job"
+            echo "  runs under \`if: always()\`, so its log lists EVERY failing lint, not"
+            echo "  just the first — read all of them before pushing a fix."
+            exit 1
+          fi
+
+          echo ""
+          echo "✓ components gate satisfied."

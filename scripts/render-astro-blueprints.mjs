@@ -16,7 +16,8 @@
  *
  * Output is committed. `npm run verify:astro-stories` re-runs this and fails on
  * a diff, so a `.astro` edit that skips regeneration cannot land. It runs in CI
- * on `blueprints-astro-check.yml` — for its first weeks it was wired only into
+ * in the `blueprints astro` job of `components-gate.yml` (its own
+ * `blueprints-astro-check.yml` until #2329) — for its first weeks it was wired only into
  * `npm run validate`, which no workflow invokes, so it gated nothing (#2474).
  *
  * The emitted markup is Astro-version-specific: 5 and 7 differ in inter-element

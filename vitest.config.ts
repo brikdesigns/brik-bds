@@ -24,7 +24,7 @@ const pkg = JSON.parse(
 );
 // Visual gate (ADR-026 Arm B, #1637). VISUAL_GATE=1 arms a toMatchScreenshot
 // afterEach on the `storybook` project (.storybook/vitest.visual.setup.ts).
-// CI-only: the `visual` job in test.yml sets it inside a pinned Playwright
+// CI-only: the shard jobs in visual.yml set it inside a pinned Playwright
 // container; baselines are platform-suffixed, so local (darwin) runs can never
 // match the committed linux references — leave it unset on dev machines.
 const visualGate = process.env.VISUAL_GATE === '1';
