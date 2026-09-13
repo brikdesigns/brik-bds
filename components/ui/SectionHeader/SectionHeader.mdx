@@ -1,8 +1,35 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './SectionHeader.stories';
+import { SectionHeader } from './SectionHeader';
 
 <Meta of={Stories} />
+
+export const MeasureScale = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+    {[
+      { measure: 'sm', label: 'measure="sm" (44ch)', title: 'Simple, transparent pricing', description: 'No hidden fees. Cancel anytime.' },
+      { measure: 'md', label: 'measure="md" (60ch, default)', title: 'Everything your practice needs', description: 'One platform for client intake, billing, and communication — built for teams that outgrew spreadsheets.' },
+      { measure: 'lg', label: 'measure="lg" (72ch)', title: 'Why practices switch to Brik', description: 'Most teams patch together a CRM, a billing tool, and a shared inbox — and still lose track of who said what to which client. Brik replaces the patchwork with one system built specifically for service businesses, so nothing falls through the cracks between tools.' },
+    ].map(({ measure, label, title, description }) => (
+      <div key={measure}>
+        <div
+          style={{
+            fontFamily: 'var(--font-family-label)',
+            fontSize: 'var(--body-xs)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            color: 'var(--text-muted)',
+            marginBottom: 'var(--gap-sm)',
+          }}
+        >
+          {label}
+        </div>
+        <SectionHeader measure={measure} title={title} description={description} />
+      </div>
+    ))}
+  </div>
+);
 
 # SectionHeader
 
@@ -24,18 +51,15 @@ Centered, `measure="md"` (60ch) — the default shape for a section intro. `titl
 
 ## Variants
 
-`align` — `'center'` (default) centers the column with auto margins and centers text/actions; `'start'` left-anchors the column with no auto margins.
-
-<Canvas of={Stories.StartAligned} />
+`align` — `'center'` (default) centers the column with auto margins and centers text/actions; `'start'` left-anchors the column with no auto margins. Exercise it on the `Default` canvas via the `align` Control.
 
 `measure` — the inline cap on the centered text column (`--measure-sm` 44ch / `--measure-md` 60ch / `--measure-lg` 72ch). Pick by content length, not by band width — a `measure-sm` intro can sit in an `xl` band.
 
-<Canvas of={Stories.MeasureSm} />
-<Canvas of={Stories.MeasureLg} />
+<Canvas>
+  <MeasureScale />
+</Canvas>
 
-`subtitle` pairs with `title` at the tight ADR-023 rhythm step.
-
-<Canvas of={Stories.WithSubtitle} />
+`subtitle` pairs with `title` at the tight ADR-023 rhythm step — set it via the `subtitle` Control on `Default`.
 
 `actions` centers with the rest of the column.
 
