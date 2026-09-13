@@ -179,6 +179,7 @@ jobs:
             'scripts/gen-widget-tokens.mjs' \
             'scripts/lib/oklch.mjs' \
             'scripts/lint-brand-text-size.js' \
+            'scripts/lint-brand-fill-text.js' \
             'scripts/lint-disabled-fade.mjs' \
             'scripts/lint-theme-divergence.mjs' \
             'scripts/lint-token-purpose-slots.mjs' \
@@ -345,6 +346,15 @@ jobs:
       - name: Brand-text usage lint
         if: always() && steps.install.outcome == 'success'
         run: npm run lint-brand-text
+
+      # ADR-015 § Amendment 2026-09-12: text ON the Poppy brand fill must be
+      # --text-on-color-dark (white). The contrast gate accepts white-on-Poppy
+      # but ALSO accepts dark-on-Poppy (5.55:1), so it can't catch a component
+      # darkening on-brand text or using theme-flipping --text-inverse (black in
+      # dark). This positive lint does (#2488).
+      - name: Brand-fill text lint
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-brand-fill-text
 
       # ADR-028's disabled mechanisms: every disabled-scoped rule reads
       # var(--state-disabled-opacity) or the --*-disabled trio. The pairing gate

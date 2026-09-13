@@ -246,14 +246,18 @@
 .bds-footer--default .bds-footer__bottom-sep { color: var(--text-muted); }
 .bds-footer--default .bds-footer__social { color: var(--text-muted); }
 
-.bds-footer--brand .bds-footer__heading { color: var(--text-inverse); }
-.bds-footer--brand .bds-footer__link { color: var(--text-inverse); }
-.bds-footer--brand .bds-footer__tagline { color: var(--text-inverse); }
-.bds-footer--brand .bds-footer__brand-extra { color: var(--text-inverse); }
-.bds-footer--brand .bds-footer__copyright { color: var(--text-inverse); }
-.bds-footer--brand .bds-footer__bottom-link { color: var(--text-inverse); }
-.bds-footer--brand .bds-footer__bottom-sep { color: var(--text-inverse); }
-.bds-footer--brand .bds-footer__social { color: var(--text-inverse); }
+/* On-color text on the mode-invariant Poppy fill must be white at all times.
+   --text-inverse flips BLACK in dark (theme-brand-brik.css:134), so it painted
+   black-on-Poppy in dark; --text-on-color-dark is mode-invariant white
+   (ADR-015 § Amendment 2026-09-12, #2488). */
+.bds-footer--brand .bds-footer__heading { color: var(--text-on-color-dark); }
+.bds-footer--brand .bds-footer__link { color: var(--text-on-color-dark); }
+.bds-footer--brand .bds-footer__tagline { color: var(--text-on-color-dark); }
+.bds-footer--brand .bds-footer__brand-extra { color: var(--text-on-color-dark); }
+.bds-footer--brand .bds-footer__copyright { color: var(--text-on-color-dark); }
+.bds-footer--brand .bds-footer__bottom-link { color: var(--text-on-color-dark); }
+.bds-footer--brand .bds-footer__bottom-sep { color: var(--text-on-color-dark); }
+.bds-footer--brand .bds-footer__social { color: var(--text-on-color-dark); }
 
 .bds-footer--inverse .bds-footer__heading { color: var(--text-on-color-dark); }
 .bds-footer--inverse .bds-footer__link { color: var(--text-on-color-dark); }
