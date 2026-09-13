@@ -77,6 +77,22 @@ export type CardDisplayRowImageWidth = 'narrow' | 'standard' | 'wide' | (string 
 export type CardMediaTreatment = 'flush' | 'inset';
 
 /**
+ * Inset padding scale for the `stack` layout when `mediaTreatment="inset"` — a
+ * step of the semantic `--padding-*` scale, not a new token. Picks how thick the
+ * shared media+body frame is; the matching `--gap-*` step separates image from
+ * text.
+ *
+ * - `huge` (default) — `--padding-huge` (48px) + `--gap-xl`. The service-card
+ *   "card-vertical" look. Unchanged from before this prop existed.
+ * - `lg` — `--padding-lg` (24px) + `--gap-lg`. The tighter image-top card.
+ *
+ * Orthogonal to per-brand density: a client that wants everything tighter sets
+ * the `data-mode-spacing` mode, which re-values these tokens globally — this
+ * prop is a per-instance choice, not a per-brand one. Ignored for `flush`.
+ */
+export type CardInsetPadding = 'lg' | 'huge';
+
+/**
  * Size for the default Card's leading `media` slot — a square on the shared
  * media scale (`sm` 32px, `md` 40px, `lg` 48px, `xl` 64px) so an avatar, a 1:1
  * image, and a bundled `Logo` all read at the same footprint. Default `md`.
@@ -220,6 +236,8 @@ interface CardAnatomyProps extends CardBaseProps {
   imageWidth?: CardDisplayRowImageWidth;
   /** Media treatment for `stack` — `flush` (default, bleeds to edge) / `inset` (framed with the body). */
   mediaTreatment?: CardMediaTreatment;
+  /** Inset padding scale when `mediaTreatment="inset"` (`stack`) — `huge` (default, 48px) / `lg` (24px). Ignored for `flush`. */
+  insetPadding?: CardInsetPadding;
   /** Render the whole card as an `<a>` navigation target (`stack`/`row`). */
   href?: string;
   /** Helper text under the title (`control` only — the settings-row description). */
@@ -421,6 +439,7 @@ function renderAnatomy({
   variant,
   imageWidth = 'standard',
   mediaTreatment = 'flush',
+  insetPadding = 'huge',
   href,
   description,
   actionAlign = 'center',
@@ -550,6 +569,9 @@ function renderAnatomy({
     `bds-card--${variant ?? 'outlined'}`,
     'bds-card--layout-stack',
     mediaTreatment === 'inset' && 'bds-card--layout-stack-inset',
+    mediaTreatment === 'inset' &&
+      insetPadding === 'lg' &&
+      'bds-card--layout-stack-inset-lg',
     tint && `bds-card--tint-${tint}`,
     href && 'bds-card--link',
     className,
