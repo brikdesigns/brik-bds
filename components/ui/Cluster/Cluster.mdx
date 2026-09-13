@@ -49,6 +49,27 @@ export const GapScale = () => (
   </div>
 );
 
+export const TagList = () => (
+  <Cluster gap="xs">
+    <Pill>brand</Pill>
+    <Pill>marketing</Pill>
+    <Pill>information</Pill>
+    <Pill>product</Pill>
+    <Pill>back-office</Pill>
+    <Pill>+ 3 more</Pill>
+  </Cluster>
+);
+
+export const ActionRow = () => (
+  <div style={{ padding: 'var(--padding-md)', borderTop: '1px solid var(--border-secondary)', maxWidth: 480 }}>
+    <Cluster gap="sm" justify="end">
+      <Pill>Cancel</Pill>
+      <Pill>Save draft</Pill>
+      <Pill>Publish</Pill>
+    </Cluster>
+  </div>
+);
+
 # Cluster
 
 <ComponentLinks slug="cluster" />
@@ -79,11 +100,15 @@ Real-world compositions Cluster's args can't express on their own — a wrapping
 
 ### Tag list
 
-<Canvas of={Stories.TagList} />
+<Canvas>
+  <TagList />
+</Canvas>
 
 ### Action row
 
-<Canvas of={Stories.ActionRow} />
+<Canvas>
+  <ActionRow />
+</Canvas>
 
 ## Props
 
