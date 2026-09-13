@@ -441,6 +441,17 @@
   padding: var(--padding-none);
 }
 
+/* Inset padding scale (`insetPadding="lg"`) — tightens the shared inset frame
+ * from --padding-huge/--gap-xl down to --padding-lg/--gap-lg for a 24px
+ * image-top card. Additive over `.bds-card--layout-stack-inset` (which still
+ * supplies the frame and zeroes the body's own padding); the default
+ * `huge` omits this class, so existing inset consumers are byte-identical.
+ * Both selectors are single-class, so this must follow the base rule to win. */
+.bds-card--layout-stack-inset-lg {
+  padding: var(--padding-lg);
+  gap: var(--gap-lg);
+}
+
 .bds-card__stack-media {
   position: relative;
   display: block;

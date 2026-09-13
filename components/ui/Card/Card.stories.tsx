@@ -438,8 +438,50 @@ export const Stack: Story = {
       description:
         'How the `media` slot relates to the card edge. `flush` (default) bleeds to the edge and pads only the body; `inset` frames media + body together in a `--padding-huge` inset.',
     },
+    insetPadding: {
+      control: 'inline-radio',
+      options: ['huge', 'lg'],
+      description:
+        'Inset padding scale when `mediaTreatment="inset"`. `huge` (default) = `--padding-huge` (48px) + `--gap-xl`; `lg` = `--padding-lg` (24px) + `--gap-lg` for the tighter image-top card. Ignored for `flush`.',
+    },
     padding: { table: { disable: true } },
     interactive: { table: { disable: true } },
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 320, display: 'flex' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
+ * `layout="stack"` inset at the tighter `insetPadding="lg"` scale — media + body
+ * framed together in a `--padding-lg` (24px) inset with `--gap-lg`, instead of
+ * the default `huge` (48px). The image-top card the industry grid reaches for
+ * (#2508); per-brand density still rides `data-mode-spacing`, not this prop.
+ *
+ * @summary layout="stack" inset at insetPadding="lg" (24px)
+ */
+export const StackInsetLg: Story = {
+  args: {
+    layout: 'stack',
+    mediaTreatment: 'inset',
+    insetPadding: 'lg',
+    media: <Image src={landscapeThumb} alt="Industry illustration" ratio="3-2" />,
+    overline: <Badge>Industry</Badge>,
+    title: 'Service one',
+    children: (
+      <CardDescription>
+        A two-line card description that sets the type rhythm without trying to tell the whole story.
+      </CardDescription>
+    ),
+    action: (
+      <Button variant="primary" size="sm">
+        Learn more
+      </Button>
+    ),
   },
   decorators: [
     (Story) => (

@@ -109,3 +109,13 @@ Added to the component-build standard: **when two or more `preset` values on a C
 **B. Extract `display`/`display-row` into a dedicated grid-cell component** (ADR-018 Alternative A). *Rejected:* pays ~15 rewrites for a taxonomy gain the `layout` axis delivers by collapsing, not extracting — and leaves the union (control/summary/default) intact.
 
 **C. Reverse ADR-004 and re-split `control`/`summary` into components.** *Rejected, same as ADR-018 §C:* they are generic same-surface layouts; the fix is a flat `layout` axis, not more components.
+
+## Amendments
+
+### 2026-09-13 — `insetPadding` scale on `mediaTreatment="inset"` (#2508)
+
+`layout="stack"` inset was fixed at `--padding-huge` (48px) + `--gap-xl`. `brikdesigns/industries` needed a 24px inset image-top card, so Card gains **`insetPadding?: 'lg' | 'huge'`** (default `huge`), applied only when `mediaTreatment="inset"`.
+
+- **Additive, not a mutation.** Default/`huge` emits the unchanged `.bds-card--layout-stack-inset` and nothing else, so `ServiceCard` / `ServiceLineCard` stay byte-identical (48px). `lg` layers `.bds-card--layout-stack-inset-lg` over it → `--padding-lg` (24px) + `--gap-lg`. Regression-tested in `Card.anatomy.browser.test.ts`.
+- **A scale step, not a new token or a new `mediaTreatment` value.** The prop names a step of the existing semantic `--padding-*` scale — no `--inset-*` family, no enum proliferation to migrate under the [#2438](https://github.com/brikdesigns/brik-bds/issues/2438) `preset`→`layout` cleanup. Extends cleanly to `'sm' | 'none' | …` because those tokens already exist.
+- **Per-brand density stays orthogonal.** A tighter client rides the `data-mode-spacing` mode (which re-values `--padding-*` globally), not a per-brand card variant. `insetPadding` is a per-instance choice ([cascade → Modes](https://design.brikdesigns.com/docs/getting-started/cascade#modes)).
