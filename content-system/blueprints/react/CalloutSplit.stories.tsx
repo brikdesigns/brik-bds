@@ -26,7 +26,6 @@ const supportSection: BlueprintProps['section'] = {
     moodKeywords: ['approachable', 'warm'],
     layoutBlueprint: 'callout_split',
     imageOpportunity: 'persona avatars + photo tile',
-    animationSuggestion: null,
     illustrationOpportunity: 'persona-cluster scene',
   },
   items: [

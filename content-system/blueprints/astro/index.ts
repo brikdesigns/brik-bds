@@ -38,6 +38,10 @@ export type {
   HeroLayout,
   CtaLayout,
   CardGridLayout,
+  // Motion axis unions (ADR-039 §Decision 2, #2494) — shared with the React rail;
+  // the portal generator (#4004) validates section data against them.
+  BlueprintReveal,
+  BlueprintContentMotion,
   // `<HeroMediaCard missing>` payload (#2312) — shared with the React rail's
   // `HeroMediaCardMissing` (declared inline on `HeroMediaCard.tsx` there;
   // centralized here so a consumer can type it without the Astro runtime).

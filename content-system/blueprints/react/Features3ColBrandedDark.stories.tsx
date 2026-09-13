@@ -62,7 +62,6 @@ const featuresSection: BlueprintProps['section'] = {
     moodKeywords: ['bold', 'modern'],
     layoutBlueprint: 'feature_grid',
     imageOpportunity: 'illustration per card',
-    animationSuggestion: null,
     illustrationOpportunity: 'scene per card',
   },
   items: [

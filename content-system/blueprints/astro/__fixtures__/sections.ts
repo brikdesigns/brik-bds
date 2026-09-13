@@ -28,7 +28,6 @@ const heroSplit: Section = {
     moodKeywords: ['professional', 'modern'],
     layoutBlueprint: 'hero_split',
     imageOpportunity: 'studio photography',
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [],
@@ -46,7 +45,6 @@ const heroInteriorMinimal: Section = {
     moodKeywords: ['professional'],
     layoutBlueprint: 'hero_interior_minimal',
     imageOpportunity: null,
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [],
@@ -77,7 +75,6 @@ const heroWithPricingCard: Section = {
     moodKeywords: ['approachable', 'modern'],
     layoutBlueprint: 'hero_split_image_card_overlay',
     imageOpportunity: 'service-deliverable photo',
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [],
@@ -95,7 +92,6 @@ const ctaDefault: Section = {
     moodKeywords: ['bold'],
     layoutBlueprint: 'cta_centered',
     imageOpportunity: null,
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [],
@@ -113,7 +109,6 @@ const ctaSplit: Section = {
     moodKeywords: ['approachable'],
     layoutBlueprint: 'cta_split_contact',
     imageOpportunity: null,
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [],
@@ -131,7 +126,6 @@ const cardGrid: Section = {
     moodKeywords: ['approachable', 'modern'],
     layoutBlueprint: 'card_grid',
     imageOpportunity: 'illustration per card',
-    animationSuggestion: null,
     illustrationOpportunity: 'scene per service',
   },
   items: [
@@ -172,7 +166,6 @@ const cardGridTwoColumnList: Section = {
     moodKeywords: ['professional'],
     layoutBlueprint: 'two_column_detail',
     imageOpportunity: null,
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [
@@ -197,7 +190,6 @@ const about: Section = {
     moodKeywords: ['warm', 'professional'],
     layoutBlueprint: 'story_split',
     imageOpportunity: null,
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [
@@ -221,7 +213,6 @@ const features: Section = {
     moodKeywords: ['bold', 'modern'],
     layoutBlueprint: 'feature_grid',
     imageOpportunity: 'illustration per card',
-    animationSuggestion: null,
     illustrationOpportunity: 'scene per card',
   },
   items: [
@@ -258,7 +249,6 @@ const calloutPanel: Section = {
     moodKeywords: ['approachable', 'warm'],
     layoutBlueprint: 'callout_split',
     imageOpportunity: 'persona avatars + photo tile',
-    animationSuggestion: null,
     illustrationOpportunity: 'persona-cluster scene',
   },
   items: [
@@ -282,7 +272,6 @@ const statsDarkBar: Section = {
     moodKeywords: ['bold', 'professional'],
     layoutBlueprint: 'stats_bar',
     imageOpportunity: null,
-    animationSuggestion: 'count-up on scroll into view',
     illustrationOpportunity: null,
   },
   items: [
@@ -305,7 +294,6 @@ const testimonialsFeaturedLarge: Section = {
     moodKeywords: ['trustworthy', 'warm'],
     layoutBlueprint: 'testimonials_featured_large',
     imageOpportunity: null,
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [

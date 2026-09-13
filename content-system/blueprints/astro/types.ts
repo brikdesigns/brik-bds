@@ -186,6 +186,62 @@ export type BlueprintColumns = 2 | 3 | 4;
 export type BlueprintMedia = 'image' | 'video' | 'bg-video' | 'none';
 
 /**
+ * Motion axis — block entrance reveal (ADR-039 §Decision 2, #2494).
+ *
+ * A curated closed union that replaces the free-text `visualNotes.animationSuggestion`
+ * prose nothing rendered. An agent picks a value and the shared `bds-block-reveal--*`
+ * modifier (the React `BlockReveal` primitive, or the class applied directly on the
+ * Astro rail) drives the matching entrance via the existing `bds-fade-in` /
+ * `bds-slide-up` keyframes and
+ * `--stagger-*` delays (`tokens/animations.css` + `tokens/motion-classes.css`), all
+ * backed by `--duration-*` / `--ease-*` — so a consumer never writes a `@keyframes`
+ * or an inline `animation:`.
+ *
+ * **Reduced-motion-gated by construction**: `BlockReveal.css` disables every preset
+ * under `@media (prefers-reduced-motion: reduce)`, so an agent selecting a reveal
+ * value cannot ship un-gated motion (mirrors #2493's `bg-video` gate).
+ *
+ *   `none`    — no entrance animation (the default; existing rendering unchanged).
+ *   `fade`    — the block fades + scales in as one unit (`bds-fade-in`).
+ *   `rise`    — the block slides up from below as one unit (`bds-slide-up`).
+ *   `stagger` — the block's direct children fade in sequentially (`--stagger-*`),
+ *               for content stacks (hero copy) and item grids.
+ *
+ * Declared here — the framework-agnostic contract both rails share (#2302) — so
+ * the axis cannot be added to one rail only.
+ */
+export type BlueprintReveal = 'none' | 'fade' | 'rise' | 'stagger';
+
+/**
+ * Motion axis — content-specific motion treatment (ADR-039 §Decision 2, #2494).
+ *
+ * A curated closed union, the content half of the motion axis (`reveal` is the
+ * block-entrance half). An agent picks a value and a shared content-motion
+ * dispatcher renders it through the matching motion primitive — never hand-rolled
+ * motion.
+ *
+ *   `none`         — no content motion (the default; content renders as-is).
+ *   `marquee`      — a seamless scrolling ticker via the `Marquee` primitive
+ *                    (`bds-marquee*`), reduced-motion-gated by that component.
+ *   `count-up`     — a number that increments into view (net-new primitive, no
+ *                    existing foundation, no static Astro-rail form).
+ *   `animated-svg` — a Lottie icon via the `AnimatedIcon` primitive (React/Lottie
+ *                    -only, no static Astro-rail partial).
+ *
+ * **This union is declared on the contract now — the vocabulary + the portal
+ * generator's validation surface (#4004) — but no value renders yet.** The
+ * dispatcher ships with the block that first adopts it, because a component
+ * unreachable from the blueprint dispatcher cannot ship (#2012); `count-up` +
+ * `animated-svg` additionally need net-new / React-only primitives with no Astro
+ * parity, which would break the one-block-two-rails discipline (#2302). All of it
+ * is tracked in the motion follow-up under #2309. `reveal` is the fully-rendered
+ * half of the axis this pass.
+ *
+ * Declared here — the framework-agnostic contract both rails share (#2302).
+ */
+export type BlueprintContentMotion = 'none' | 'marquee' | 'count-up' | 'animated-svg';
+
+/**
  * Fallback stub payload for `<HeroMediaCard missing>` (brik-bds#2312) —
  * renders the same `data-content-needed` stub `Hero.astro`'s
  * `with-pricing-card` layout renders inline when `priceCard` data is absent.
@@ -365,12 +421,31 @@ export interface BlueprintSection {
     readonly price?: string;
     readonly cta?: BlueprintCta;
   };
+  /**
+   * Motion axis — block entrance reveal (ADR-039 §Decision 2, #2494). A curated
+   * closed union the block renders through the shared `BlockReveal` primitive,
+   * reduced-motion-gated by construction. Replaces the free-text
+   * `visualNotes.animationSuggestion` that nothing rendered — an agent can drive
+   * an enum, not prose. Omitted → `none` (no entrance animation), so the axis is
+   * additive and changes no existing rendering.
+   *
+   * Additive, optional — blueprints that don't read it are unaffected.
+   */
+  readonly reveal?: BlueprintReveal;
+  /**
+   * Motion axis — content-specific motion treatment (ADR-039 §Decision 2, #2494).
+   * A curated closed union reserved on the contract now (vocabulary + portal
+   * validation surface, #4004); its render dispatcher ships with the first
+   * adopting block (motion follow-up under #2309). Omitted → `none`.
+   *
+   * Additive, optional — blueprints that don't read it are unaffected.
+   */
+  readonly contentMotion?: BlueprintContentMotion;
   readonly visualNotes: {
     readonly blueprintKey: KnownBlueprintKey | null;
     readonly moodKeywords: readonly string[];
     readonly layoutBlueprint: string;
     readonly imageOpportunity: string | null;
-    readonly animationSuggestion: string | null;
     readonly illustrationOpportunity: string | null;
   } | null;
 }
