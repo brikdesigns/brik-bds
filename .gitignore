@@ -11,6 +11,15 @@ dist/
 build/
 storybook-static/
 build-storybook.log
+# Storybook writes both of these to process.cwd() alongside build-storybook.log
+# — debug-storybook.log on any run with logging enabled, storybook.log as
+# createLogStream's default name. Untracked, they dirty the PRIMARY worktree and
+# new-task.sh then refuses; a session that finds an artifact it did not write is
+# correctly forbidden from deleting or stashing it (#2635), so it stalls. Named
+# rather than a blanket *.log so a log someone deliberately commits stays
+# visible. (#2460)
+debug-storybook.log
+storybook.log
 canonical-check.sarif
 .netlify/
 .storybook/public/health-data.json
