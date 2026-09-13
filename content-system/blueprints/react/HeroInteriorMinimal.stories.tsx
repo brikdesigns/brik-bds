@@ -36,7 +36,6 @@ const interiorSection: BlueprintProps['section'] = {
     moodKeywords: ['professional'],
     layoutBlueprint: 'hero_interior_minimal',
     imageOpportunity: null,
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [],

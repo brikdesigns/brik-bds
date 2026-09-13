@@ -37,7 +37,6 @@ const section: BlueprintProps['section'] = {
     moodKeywords: ['professional', 'modern'],
     layoutBlueprint: 'hero_split',
     imageOpportunity: 'studio photography',
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [],

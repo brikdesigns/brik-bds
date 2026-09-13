@@ -150,6 +150,16 @@ const eyebrow = section.subheading;
 const headline = section.heading ?? '';
 const lead = section.body;
 const cta = section.cta;
+// Content-column entrance (motion axis, ADR-039 §Decision 2). `reveal` is a
+// MODIFIER, so it is appended to `bds-hero__content` directly rather than through
+// a wrapper partial — a wrapper would move the element out of this block's Astro
+// style scope. The `bds-block-reveal--*` classes are single-sourced in the React
+// twin's `BlockReveal.css` (→ dist/styles.css), so the class is canonical on both
+// rails. `none` (default) emits exactly `bds-hero__content` — no markup change.
+const reveal = section.reveal ?? 'none';
+const contentClass = ['bds-hero__content', reveal !== 'none' && `bds-block-reveal--${reveal}`]
+  .filter(Boolean)
+  .join(' ');
 
 const isSplit = layout === 'split';
 const isPricingCard = layout === 'with-pricing-card';
@@ -180,7 +190,7 @@ const ctaClass = isPricingCard
   data-audience={isPricingCard ? resolvedServiceLine : undefined}
 >
   <div class="bds-blueprint-section__container bds-hero__container">
-    <div class="bds-hero__content">
+    <div class={contentClass}>
       {isPricingCard && breadcrumb.length > 0 && (
         <nav class="bds-breadcrumb bds-hero__breadcrumb" aria-label="Breadcrumb">
           {breadcrumb.map((item, idx) => {

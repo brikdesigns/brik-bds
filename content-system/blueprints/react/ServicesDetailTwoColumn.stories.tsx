@@ -36,7 +36,6 @@ const section: BlueprintProps['section'] = {
     moodKeywords: ['professional'],
     layoutBlueprint: 'two_column_detail',
     imageOpportunity: null,
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [

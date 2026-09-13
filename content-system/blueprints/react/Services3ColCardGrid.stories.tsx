@@ -24,7 +24,6 @@ const servicesGridSection: BlueprintProps['section'] = {
     moodKeywords: ['approachable', 'modern'],
     layoutBlueprint: 'card_grid',
     imageOpportunity: 'illustration per card',
-    animationSuggestion: null,
     illustrationOpportunity: 'scene per service',
   },
   items: [

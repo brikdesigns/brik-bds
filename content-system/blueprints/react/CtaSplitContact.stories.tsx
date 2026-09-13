@@ -36,7 +36,6 @@ const section: BlueprintProps['section'] = {
     moodKeywords: ['approachable'],
     layoutBlueprint: 'cta_split_contact',
     imageOpportunity: null,
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [],
