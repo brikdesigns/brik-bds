@@ -1,8 +1,45 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import { Breadcrumb } from './Breadcrumb';
 import * as Stories from './Breadcrumb.stories';
 
 <Meta of={Stories} />
+
+export const SERVICE_LINES = [
+  { id: 'brand', label: 'Brand (yellow)' },
+  { id: 'marketing', label: 'Marketing (green)' },
+  { id: 'information', label: 'Information (blue)' },
+  { id: 'product', label: 'Product (purple)' },
+  { id: 'back-office', label: 'Back Office (orange)' },
+];
+
+export const ServiceLineCascade = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+    {SERVICE_LINES.map(({ id, label }) => (
+      <div key={id} data-service-line={id}>
+        <p
+          style={{
+            fontFamily: 'var(--font-family-label)',
+            fontSize: 'var(--body-xs)',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            marginBottom: 'var(--gap-md)',
+            color: 'var(--text-muted)',
+          }}
+        >
+          {`[data-service-line='${id}'] — ${label}`}
+        </p>
+        <Breadcrumb
+          items={[
+            { label: 'Home', href: '#' },
+            { label: 'Services', href: '#' },
+            { label: 'Detail page' },
+          ]}
+        />
+      </div>
+    ))}
+  </div>
+);
 
 # Breadcrumb
 
@@ -30,10 +67,25 @@ full trail. Switch the **Viewport** toolbar global to Mobile (375px) and Tablet
 
 ## Patterns
 
+### Sibling-record switcher
+
+Pass two or more `options` (plus a `switchLabel`) to render a caret after the
+trail. It opens a menu of sibling records — another service in the same line,
+another project on the same client — so users jump between them without
+navigating back to an index. Fewer than two options renders no caret, and the
+trail stays a plain breadcrumb. `onNavigate` routes the selection client-side;
+without it BDS does a full-page navigation.
+
+<Canvas of={Stories.WithSwitcher} />
+
+### Service-line cascade
+
 Inside a `[data-service-line='X']` subtree, the current-page label and
 separators rebind to the matching service color.
 
-<Canvas of={Stories.ServiceLineCascade} />
+<Canvas>
+  <ServiceLineCascade />
+</Canvas>
 
 ## Props
 

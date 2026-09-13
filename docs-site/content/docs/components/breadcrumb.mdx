@@ -63,6 +63,29 @@ For 5+ level hierarchies, consider truncating with an ellipsis or root-only fall
 />
 ```
 
+## Switcher
+
+Pass two or more `options` (plus a `switchLabel`) to render a caret after the trail. It opens a menu of sibling records — another service in the same line, another project on the same client — so users jump between them without navigating back to an index page. Fewer than two options renders no caret and the trail stays a plain breadcrumb. The trailing crumb keeps `aria-current="page"`; the caret is a separate `aria-haspopup="menu"` control alongside it.
+
+`onNavigate` routes the selection client-side; without it BDS falls back to a full-page navigation (`window.location.href`).
+
+```tsx
+<Breadcrumb
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Services', href: '/services' },
+    { label: 'Brand strategy' },
+  ]}
+  options={[
+    { label: 'Brand strategy', href: '/services/brand-strategy', current: true },
+    { label: 'Brand identity', href: '/services/brand-identity' },
+    { label: 'Brand guidelines', href: '/services/brand-guidelines' },
+  ]}
+  switchLabel="Switch service"
+  onNavigate={(href) => router.push(href)}
+/>
+```
+
 ## Service-line cascade
 
 When a breadcrumb sits inside a `[data-service-line='X']` subtree, the current-page label and separators rebind canonical `--text-secondary` and `--text-muted` to the matching `--text-service-{name}` value (`brand`, `marketing`, `information`, `product`, and `service` → back-office).
@@ -100,6 +123,9 @@ The component itself stays scope-blind — only the cascade block in `Breadcrumb
 | `items` | `BreadcrumbItem[]` *(required)* | — |
 | `separator` | `'slash' \| 'chevron'` | `'slash'` |
 | `linkComponent` | `BdsLinkComponent` | — |
+| `options` | `BreadcrumbSwitchOption[]` | — (two or more render the switcher caret) |
+| `switchLabel` | `string` | — (required when `options` is passed) |
+| `onNavigate` | `(href: string, option: BreadcrumbSwitchOption) => void` | `undefined` (`window.location.href = href`) |
 
 Plus standard `<nav>` HTML attributes.
 
@@ -109,6 +135,17 @@ Plus standard `<nav>` HTML attributes.
 interface BreadcrumbItem {
   label: ReactNode;
   href?: string;
+}
+```
+
+### BreadcrumbSwitchOption
+
+```ts
+interface BreadcrumbSwitchOption {
+  label: string;
+  href: string;
+  /** The record currently being viewed — highlighted and non-navigating. */
+  current?: boolean;
 }
 ```
 

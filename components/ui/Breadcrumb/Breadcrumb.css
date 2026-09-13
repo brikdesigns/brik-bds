@@ -209,4 +209,36 @@
   --text-secondary: var(--text-service-back-office-on-dark);
   --text-muted: var(--text-service-back-office-on-dark);
 }
+
+/* ─── Switcher — sibling-record caret + menu ─────────────────────
+ * Rendered as the last child of the trail (`nav.bds-breadcrumb`) only when
+ * two or more `options` are passed. The trail already `flex-wrap`s and the
+ * caret never shrinks, so it rides the end of the last crumb. Folded in from
+ * the former standalone BreadcrumbSwitcher component (#2521). */
+
+.bds-breadcrumb__switch {
+  position: relative;
+  display: inline-flex;
+  /* The trail absorbs the shrinking, never the caret. */
+  flex-shrink: 0;
+}
+
+.bds-breadcrumb__switch-menu {
+  top: calc(100% + var(--gap-xs));
+  left: 0;
+}
+
+.bds-breadcrumb__switch-caret {
+  transition: transform var(--duration-sm) var(--ease-out);
+}
+
+.bds-breadcrumb__switch [aria-expanded='true'] .bds-breadcrumb__switch-caret {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-breadcrumb__switch-caret {
+    transition: none;
+  }
+}
 }
