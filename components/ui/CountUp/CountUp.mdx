@@ -1,0 +1,75 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './CountUp.stories';
+import { CountUp } from './CountUp';
+
+{/* The value shapes are one component reading different strings (ADR-010 Rule 5),
+    not distinct stories — the side-by-side row lives here as a docs-local demo. */}
+export const ValueRow = ({ children }) => (
+  <div
+    style={{
+      display: 'flex',
+      gap: 'var(--gap-2xl)',
+      flexWrap: 'wrap',
+      fontFamily: 'var(--font-family-display)',
+      fontSize: 'var(--heading-2xl)',
+      fontWeight: 'var(--font-weight-semibold)',
+      color: 'var(--text-primary)',
+    }}
+  >
+    {children}
+  </div>
+);
+
+export const ValueShapes = () => (
+  <ValueRow>
+    <CountUp>12</CountUp>
+    <CountUp>4,800+</CountUp>
+    <CountUp>98%</CountUp>
+    <CountUp>24h</CountUp>
+    <CountUp>$2M</CountUp>
+  </ValueRow>
+);
+
+<Meta of={Stories} />
+
+# CountUp
+
+<ComponentLinks slug="count-up" />
+
+A number that counts up to its final value when it scrolls into view. The final value is the element's real text, so with JavaScript off, under `prefers-reduced-motion: reduce`, or for a value with no number it renders as a plain static number — the sweep is a pure enhancement on top. Duration and easing are token-backed (`--duration-xl` / `--ease-out`); `tabular-nums` holds the width steady so the layout does not jitter.
+
+This is the motion primitive behind the blueprint `contentMotion: count-up` axis value (dispatched by `BlockContentMotion`, adopted by [`StatsDarkBar`](?path=/docs/blueprints-stats-dark-bar--docs)). It is distinct from [`Counter`](?path=/docs/components-counter--docs), the static numeric-count indicator.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+`CountUp` has no variants — the value it counts to is its only input. It parses the number out of whatever string it wraps and re-appends any prefix, suffix, or thousands grouping while counting:
+
+<Canvas>
+  <ValueShapes />
+</Canvas>
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## CSS Override API
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `--bds-count-up-duration` | `var(--duration-xl)` (500ms) | Length of the count sweep |
+| `--bds-count-up-ease` | `var(--ease-out)` | Easing curve the sweep follows |
+
+```css
+.my-fast-stat {
+  --bds-count-up-duration: var(--duration-lg);
+}
+```
+
+## Notes
+
+> **Note** — The count fires once, when at least half the number is in view. The number is content, not decoration: assistive tech announces the final value (the sweep only transiently changes the text). Reduced motion and no-JS both resolve to the static final number by construction — there is no un-gated path.

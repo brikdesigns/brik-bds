@@ -14,20 +14,25 @@
  *                  a seamless scrolling ticker, reduced-motion-gated by that
  *                  component (the track stops and wraps under
  *                  `prefers-reduced-motion: reduce`).
- *   count-up     — NOT rendered here yet (net-new primitive, #2532).
+ *   count-up     — wraps its child number in the `CountUp` primitive
+ *                  (`bds-count-up`), which counts up to the final value when
+ *                  scrolled into view. The final number IS the DOM text, so with
+ *                  JS off / under reduced motion it renders static (#2532).
  *   animated-svg — NOT rendered here yet (AnimatedIcon rail decision, #2533).
  *
- * The two unbuilt values fall through to passthrough by design: this dispatcher
- * ships with the block that first adopts `marquee` (a component unreachable from
- * `BlueprintDispatcher` cannot ship, #2012), and each remaining value lands with
- * its own adopting block in its sub-issue. A block adopting the axis today sets
- * only `none` / `marquee`, so passthrough is never reached for an unbuilt value
- * in practice.
+ * The one remaining unbuilt value falls through to passthrough by design: this
+ * dispatcher shipped with the block that first adopts `marquee` (a component
+ * unreachable from `BlueprintDispatcher` cannot ship, #2012), and each value
+ * lands with its own adopting block in its sub-issue (`count-up` → StatsDarkBar,
+ * #2532). A block adopting the axis sets only values it renders, so passthrough
+ * is never reached for `animated-svg` in practice.
  *
  * **Reduced-motion-gated by construction** (AC): `marquee` inherits the
  * `Marquee` primitive's pure-CSS `@media (prefers-reduced-motion: reduce)` gate
- * (`components/ui/Marquee/Marquee.css`) — no JS, so an agent selecting a motion
- * value cannot ship un-gated motion. This mirrors `BlockReveal`'s CSS gate.
+ * (`components/ui/Marquee/Marquee.css`); `count-up`'s final value is its real
+ * text and the sweep is a pure JS enhancement over it — no JS / reduced motion
+ * leaves the static number. So an agent selecting a motion value cannot ship
+ * un-gated motion. This mirrors `BlockReveal`'s CSS gate.
  *
  * The `bds-marquee*` classes are single-sourced in `Marquee.css` (→
  * `dist/styles.css`) so `canonical-class-check` sees them and the Astro rail can
@@ -38,13 +43,14 @@
  */
 import { type ReactNode } from 'react';
 
+import { CountUp } from '../../../components/ui/CountUp/CountUp';
 import { Marquee, type MarqueeProps } from '../../../components/ui/Marquee/Marquee';
 import type { BlueprintContentMotion } from '../astro/types';
 
 export interface BlockContentMotionProps {
   /** Which content-motion treatment the block renders with. See `BlueprintContentMotion`. Default `none`. */
   contentMotion?: BlueprintContentMotion;
-  /** The content the motion treatment wraps — for `marquee`, the item strip the ticker scrolls. */
+  /** The content the motion treatment wraps — for `marquee`, the item strip the ticker scrolls; for `count-up`, the number to count to. */
   children: ReactNode;
   /**
    * Marquee tuning, forwarded only when `contentMotion === 'marquee'`. Omitted
@@ -57,8 +63,11 @@ export function BlockContentMotion({ contentMotion = 'none', children, marquee }
   if (contentMotion === 'marquee') {
     return <Marquee {...marquee}>{children}</Marquee>;
   }
-  // none / count-up / animated-svg — passthrough (the latter two render through
-  // their own primitives once their sub-issues wire an adopting block, #2532/#2533).
+  if (contentMotion === 'count-up') {
+    return <CountUp>{children}</CountUp>;
+  }
+  // none / animated-svg — passthrough (animated-svg renders through its own
+  // primitive once its sub-issue wires an adopting block, #2533).
   return <>{children}</>;
 }
 

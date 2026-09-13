@@ -21,14 +21,21 @@
  *
  * required_facts: []. Section-driven.
  *
+ * content-motion axis (ADR-039 §Decision 2, #2529): `section.contentMotion:
+ * count-up` makes each stat number count up into view via the shared
+ * `BlockContentMotion` dispatcher; omitted → `none` (static). The first block to
+ * adopt `count-up`, as `LogoWall` was for `marquee`.
+ *
  * a11y: semantic list (ul/li). `aria-labelledby` when `section.heading` is
  * present, `aria-label` fallback when it is not. The numbers are content,
- * not decoration — screen readers read them.
+ * not decoration — screen readers read them (the count-up sweep only transiently
+ * changes the text, so the final value is what assistive tech announces).
  *
  * @summary Proof-point stat row on an inverse surface.
  */
 import { bdsClass } from '../../../components/utils';
 import type { BlueprintProps } from '../astro/types';
+import { BlockContentMotion } from './BlockContentMotion';
 import '../section-shell.css';
 import './StatsDarkBar.css';
 
@@ -37,6 +44,11 @@ interface Props extends BlueprintProps {}
 export function StatsDarkBar({ section }: Props) {
   const titleId = `${section.sectionKey}-title`;
   const hasHeading = Boolean(section.heading);
+  // The content-motion axis (ADR-039 §Decision 2, #2529). `count-up` is the
+  // value this block is built for — each stat number counts up into view via the
+  // shared `BlockContentMotion` dispatcher, reduced-motion-gated by construction.
+  // Omitted → `none` (static), so the axis is additive and changes no rendering.
+  const motion = section.contentMotion ?? 'none';
 
   return (
     <section
@@ -58,7 +70,9 @@ export function StatsDarkBar({ section }: Props) {
         <ul className="bds-stats-dark-bar__list" role="list">
           {section.items.map((item) => (
             <li key={item.title} className="bds-stats-dark-bar__item">
-              <span className="bds-stats-dark-bar__value">{item.title}</span>
+              <span className="bds-stats-dark-bar__value">
+                <BlockContentMotion contentMotion={motion}>{item.title}</BlockContentMotion>
+              </span>
               <span className="bds-stats-dark-bar__label">{item.description}</span>
             </li>
           ))}

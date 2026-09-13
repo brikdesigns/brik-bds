@@ -13,6 +13,9 @@
  *     for the stats region to give assistive tech a name)
  *   - section.items[] — REQUIRED shape, each: { title, description }
  *     title = the number/string, description = the caption
+ *   - section.contentMotion (optional) — `count-up` sweeps each number into view
+ *     via the shared `_CountUp` partial (ADR-039 §Decision 2, #2529);
+ *     omitted → `none` (static). The first block to adopt `count-up`.
  *
  * required_facts: []. Section-driven.
  *
@@ -28,6 +31,10 @@
  * content, not decoration — readable by screen readers.
  */
 import type { BlueprintProps } from './types';
+// The file is underscore-prefixed (a partial excluded from the reachability
+// gate), but the imported identifier must be Capitalized for Astro to render it
+// as a component rather than a literal tag — same as `_Media.astro` → `Media`.
+import CountUp from './_CountUp.astro';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
@@ -39,6 +46,10 @@ const { section } = Astro.props;
 const titleId = `${section.sectionKey}-title`;
 const hasHeading = Boolean(section.heading);
 const items = section.items;
+// Content-motion axis (#2529): `count-up` sweeps each stat number into view via
+// the shared `_CountUp` partial; the `bds-count-up` classes are canonical (from
+// the primitive's own stylesheet). Omitted → `none` (static, unchanged).
+const motion = section.contentMotion ?? 'none';
 ---
 
 <section
@@ -54,7 +65,9 @@ const items = section.items;
     <ul class="bp-stats-dark-bar__list" role="list">
       {items.map((item) => (
         <li class="bp-stats-dark-bar__item">
-          <span class="bp-stats-dark-bar__value">{item.title}</span>
+          <span class="bp-stats-dark-bar__value">
+            {motion === 'count-up' ? <CountUp value={item.title} /> : item.title}
+          </span>
           <span class="bp-stats-dark-bar__label">{item.description}</span>
         </li>
       ))}
