@@ -11,14 +11,15 @@
  *   - `count-up` wraps its child number in the `CountUp` primitive's
  *     `bds-count-up` element — the final number is the DOM text, so SSR emits the
  *     static value and the sweep is a client-only enhancement over it (#2532).
- *   - `animated-svg` falls through to passthrough here — it renders through its
- *     own primitive once its sub-issue wires an adopting block (#2533); a block
- *     adopting the axis today sets only values it renders, so this is never
- *     reached in practice.
+ *   - `animated-svg` renders the `AnimatedIcon` primitive's `bds-animated-icon`
+ *     element when a Lottie `src` is supplied, else falls back to the static
+ *     `children` (the by-construction reduced-motion state, also what the
+ *     React-rail-only axis renders on the Astro rail, #2533).
  *
  * The reduced-motion gate is BY CONSTRUCTION — `Marquee.css` neutralises the
- * scroll under `@media (prefers-reduced-motion: reduce)` — a pure-CSS fact with
- * no SSR-observable form, guarded by the CSS file itself and covered by the story.
+ * scroll under `@media (prefers-reduced-motion: reduce)`, and `AnimatedIcon`
+ * reads `prefers-reduced-motion` synchronously so it never autoplays under it —
+ * facts with no SSR-observable form, guarded by the primitives and the stories.
  *
  * JSX is avoided to keep this a `.test.ts` file (the `content-system` vitest
  * project's include glob is `**\/*.test.ts`), matching `BlockReveal.test.ts`.
@@ -61,9 +62,22 @@ describe('BlockContentMotion content-motion axis (#2529)', () => {
     expect(html).not.toContain('bds-marquee');
   });
 
-  it('animated-svg falls through to passthrough until its sub-issue wires a block', () => {
-    const html = markup({ contentMotion: 'animated-svg', children: 'x' });
+  it('animated-svg with no src falls back to the static children (reduced-motion state)', () => {
+    const html = markup({ contentMotion: 'animated-svg', children: createElement('img', { src: 'i.svg', alt: 'Fast' }) });
     expect(html).not.toContain('bds-marquee');
     expect(html).not.toContain('bds-count-up');
+    expect(html).not.toContain('bds-animated-icon');
+    expect(html).toBe('<img src="i.svg" alt="Fast"/>');
+  });
+
+  it('animated-svg with a Lottie src renders through the AnimatedIcon primitive', () => {
+    const html = markup({
+      contentMotion: 'animated-svg',
+      animatedIcon: { src: { v: '5.7.4', layers: [] }, label: 'Fast' },
+      children: createElement('img', { src: 'i.svg', alt: 'Fast' }),
+    });
+    expect(html).toContain('bds-animated-icon');
+    // The static children fallback is not emitted when the animation renders.
+    expect(html).not.toContain('i.svg');
   });
 });

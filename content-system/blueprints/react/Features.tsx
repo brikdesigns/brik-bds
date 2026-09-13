@@ -49,7 +49,8 @@ import { type HTMLAttributes } from 'react';
 
 import { Card, ServiceTag, Stack, type ServiceLine } from '../../../components';
 import { bdsClass } from '../../../components/utils';
-import type { BlueprintAlign, BlueprintColumns } from '../astro/types';
+import type { BlueprintAlign, BlueprintColumns, BlueprintContentMotion } from '../astro/types';
+import { BlockContentMotion } from './BlockContentMotion';
 import '../section-shell.css';
 import './Features.css';
 
@@ -67,6 +68,15 @@ export interface FeatureItem {
   imageUrl?: string;
   /** Alt text for `imageUrl`. Empty (decorative) when omitted. */
   imageAlt?: string;
+  /**
+   * Lottie source for the `contentMotion: animated-svg` axis (#2533) — a URL to
+   * fetch, or parsed Lottie JSON (mirrors `AnimatedIcon`'s `src`). When the
+   * section sets `animated-svg` and this is present, the card's icon animates via
+   * `AnimatedIcon` (React rail only); the static `imageUrl`/fallback is the
+   * reduced-motion / no-JS / Astro-rail state. The portal-driven section contract
+   * (`astro/types.ts`) narrows this to a URL string.
+   */
+  animationUrl?: string | object;
   /**
    * Service-line slug emitted as `data-service-line` for per-card brand-color
    * scope binding, and used for the `ServiceTag` icon fallback when no `imageUrl`.
@@ -107,6 +117,15 @@ export interface FeaturesProps extends HTMLAttributes<HTMLElement> {
    * mobile/tablet ramp is preserved.
    */
   columns?: BlueprintColumns;
+  /**
+   * Content-motion axis (ADR-039 §Decision 2, #2533). `animated-svg` upgrades
+   * each card's icon to an animated Lottie via `AnimatedIcon` (from
+   * `items[].animationUrl`) through the shared `BlockContentMotion` dispatch,
+   * reduced-motion-gated by construction. This is the **React rail only** — the
+   * Astro twin renders the static `imageUrl` poster. Omitted → `none` (static),
+   * so the axis is additive and changes no existing rendering.
+   */
+  contentMotion?: BlueprintContentMotion;
 }
 
 export function Features({
@@ -117,6 +136,7 @@ export function Features({
   items,
   align = 'center',
   columns,
+  contentMotion = 'none',
   className,
   ...rest
 }: FeaturesProps) {
@@ -156,6 +176,32 @@ export function Features({
           {items.map((item, idx) => {
             // `serviceLine` is canonical; `audience` is the deprecated alias (#788).
             const serviceLine = item.serviceLine ?? item.audience ?? null;
+            // The static icon: image → ServiceTag → blank. It is ALSO the
+            // `animated-svg` fallback — the reduced-motion / no-src / Astro-rail
+            // state (#2533), so it is authored once and reused by the dispatch.
+            const staticMedia = item.imageUrl ? (
+              <img
+                src={item.imageUrl}
+                alt={item.imageAlt ?? ''}
+                className="bds-features__image"
+                loading="lazy"
+                decoding="async"
+              />
+            ) : serviceLine ? (
+              <span className="bds-features__image-fallback" aria-hidden="true">
+                <ServiceTag
+                  category={serviceLine}
+                  variant="icon"
+                  size="lg"
+                  serviceName={item.title}
+                />
+              </span>
+            ) : (
+              <span
+                className="bds-features__image-fallback bds-features__image-fallback--blank"
+                aria-hidden="true"
+              />
+            );
             return (
               <li key={`${sectionKey}-${idx}`} className="bds-features__item">
                 <Card
@@ -170,31 +216,27 @@ export function Features({
                     href={item.href ?? '#'}
                   >
                     <div className="bds-features__media">
-                      {item.imageUrl ? (
-                        <img
-                          src={item.imageUrl}
-                          alt={item.imageAlt ?? ''}
-                          className="bds-features__image"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                      ) : serviceLine ? (
-                        <span
-                          className="bds-features__image-fallback"
-                          aria-hidden="true"
+                      {/* content-motion axis (#2533): `animated-svg` upgrades the
+                          icon to a Lottie via the shared dispatch when the item
+                          carries an `animationUrl`; else the static icon renders
+                          (also the reduced-motion / no-JS / Astro-rail state). */}
+                      {contentMotion === 'animated-svg' ? (
+                        <BlockContentMotion
+                          contentMotion="animated-svg"
+                          animatedIcon={
+                            item.animationUrl
+                              ? {
+                                  src: item.animationUrl,
+                                  size: 96,
+                                  label: item.imageAlt || item.title,
+                                }
+                              : undefined
+                          }
                         >
-                          <ServiceTag
-                            category={serviceLine}
-                            variant="icon"
-                            size="lg"
-                            serviceName={item.title}
-                          />
-                        </span>
+                          {staticMedia}
+                        </BlockContentMotion>
                       ) : (
-                        <span
-                          className="bds-features__image-fallback bds-features__image-fallback--blank"
-                          aria-hidden="true"
-                        />
+                        staticMedia
                       )}
                     </div>
 

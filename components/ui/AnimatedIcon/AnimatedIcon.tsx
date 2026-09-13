@@ -27,10 +27,33 @@ export interface AnimatedIconProps {
 }
 
 /**
+ * Reads `prefers-reduced-motion: reduce` synchronously. Deliberately NOT the
+ * `usePrefersReducedMotion` hook: that starts `false` and corrects a commit
+ * later, leaving an above-the-fold icon a stale window in which the loop has
+ * already autoplayed before the gate engages (brik-bds#2533). A synchronous
+ * read at render decides `autoplay` on the first paint, so the gate is
+ * by-construction — a Lottie with `autoplay={false}` renders its first frame
+ * static, which IS the reduced-motion state. SSR-safe: no `window` → `false`
+ * (Lottie is client-only, so the browser read is the one that governs motion).
+ */
+function prefersReducedMotion(): boolean {
+  return (
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
+}
+
+/**
  * AnimatedIcon — Lottie wrapper for animated UI icon states.
  *
  * Source Lottie JSON from useanimations.com and store in your app's
  * `src/animations/` directory. Pass the imported JSON as `src`.
+ *
+ * **Reduced-motion-gated by construction**: under `prefers-reduced-motion:
+ * reduce` the icon never autoplays, loops, or responds to hover/click — it
+ * renders its first frame as a static icon. This is what makes it safe to
+ * dispatch through the blueprint `contentMotion: animated-svg` axis (#2533).
  *
  * @example
  * ```tsx
@@ -38,7 +61,7 @@ export interface AnimatedIconProps {
  * <AnimatedIcon src={checkAnimation} trigger="once" size={32} label="Completed" />
  * ```
  *
- * @summary Lottie wrapper for animated icon states
+ * @summary Lottie wrapper for animated icon states, reduced-motion-gated by construction
  */
 export function AnimatedIcon({
   src,
@@ -52,24 +75,25 @@ export function AnimatedIcon({
   // renamed the type; `play`/`stop` are unchanged, so the calls below still hold.
   const lottieRef = useRef<LottieHandle>(null);
 
-  const shouldLoop = loop !== undefined ? loop : trigger === 'loop';
+  const reduced = prefersReducedMotion();
+  const shouldLoop = reduced ? false : loop !== undefined ? loop : trigger === 'loop';
 
   useEffect(() => {
-    if (trigger === 'once') {
+    if (!reduced && trigger === 'once') {
       lottieRef.current?.play();
     }
-  }, [trigger]);
+  }, [trigger, reduced]);
 
   const handleMouseEnter = () => {
-    if (trigger === 'hover') lottieRef.current?.play();
+    if (!reduced && trigger === 'hover') lottieRef.current?.play();
   };
 
   const handleMouseLeave = () => {
-    if (trigger === 'hover') lottieRef.current?.stop();
+    if (!reduced && trigger === 'hover') lottieRef.current?.stop();
   };
 
   const handleClick = () => {
-    if (trigger === 'click') {
+    if (!reduced && trigger === 'click') {
       lottieRef.current?.stop();
       lottieRef.current?.play();
     }
@@ -89,7 +113,7 @@ export function AnimatedIcon({
         lottieRef={lottieRef}
         src={src}
         loop={shouldLoop}
-        autoplay={trigger === 'loop' || trigger === 'once'}
+        autoplay={!reduced && (trigger === 'loop' || trigger === 'once')}
         style={{ width: size, height: size }}
         aria-hidden
       />

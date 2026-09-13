@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { JSX } from 'react';
 
 import { Features } from './Features';
+import fadeSquare from '../../../components/ui/AnimatedIcon/_examples/fade-square.json';
 
 /* ─── Demo data-service-line cascade ────────────────────────────────────
  *
@@ -91,6 +92,7 @@ const meta: Meta<typeof Features> = {
     items: { control: false, description: 'Feature cards `{ title, description, href, serviceLine }[]`; each emits `data-service-line` for brand-color re-binding.' },
     align: { control: 'inline-radio', options: ['center', 'left'], description: 'Section-header placement (structure axis, ADR-039). `center` default; `left` emits `bds-features--align-left`. Header only — the grid is unaffected.' },
     columns: { control: 'inline-radio', options: [undefined, 2, 3, 4], description: 'Widest-breakpoint column count (structure axis, ADR-039). Omitted → the default 1 → 2 → 3 ramp; set → `bds-features--cols-*`.' },
+    contentMotion: { control: 'inline-radio', options: ['none', 'animated-svg'], description: 'Content-motion axis (ADR-039 §Decision 2, #2533). `animated-svg` animates each card icon via the Lottie `AnimatedIcon` primitive (from `items[].animationUrl`), React rail only; the Astro twin renders the static `imageUrl` poster. `none` (default) is static.' },
   },
   parameters: {
     layout: 'fullscreen',
@@ -146,5 +148,27 @@ export const ColumnsFour: Story = {
     ...Default.args,
     sectionKey: 'features-cols-4',
     columns: 4,
+  },
+};
+
+/**
+ * Distinct meaningful state: `contentMotion="animated-svg"` upgrades each card's
+ * icon to an animated Lottie via the shared `BlockContentMotion` dispatch, from
+ * `items[].animationUrl` (ADR-039 §Decision 2, #2533). React rail only — the
+ * Astro twin renders each item's static `imageUrl` poster (the by-construction
+ * reduced-motion state). `no-visual`: Lottie canvases animate via JS, which the
+ * visual gate's CSS freeze can't pause into a stable screenshot (ADR-026, same
+ * as the `AnimatedIcon` stories).
+ *
+ * @summary Animated-svg — each card icon animates via AnimatedIcon
+ */
+export const AnimatedSvg: Story = {
+  tags: ['no-visual'],
+  args: {
+    sectionKey: 'features-animated-svg',
+    title: 'Animated capabilities',
+    body: 'Each card icon animates via the Lottie AnimatedIcon primitive — the content-motion axis value animated-svg.',
+    contentMotion: 'animated-svg',
+    items: items.map((item) => ({ ...item, animationUrl: fadeSquare })),
   },
 };
