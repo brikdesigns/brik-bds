@@ -52,7 +52,7 @@
  * - Contact methods use semantic tel:/mailto: anchors.
  * - :focus-visible ring with high contrast on every interactive surface.
  */
-import type { BlueprintProps, CtaLayout, KnownBlueprintKey } from './types';
+import type { BlueprintAlign, BlueprintProps, CtaLayout, KnownBlueprintKey } from './types';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
@@ -61,16 +61,24 @@ interface Props extends BlueprintProps {
   /** Structural layout. Defaults to `default`, matching the React twin. */
   layout?: CtaLayout;
   /**
+   * Content placement for the `default` layout (structure axis, ADR-039).
+   * `center` (default) or `left`; emits `bds-cta--align-left`. Moot for
+   * `split`. Matches the React twin.
+   */
+  align?: BlueprintAlign;
+  /**
    * Blueprint key to emit as `data-blueprint-key`. Supplied by
    * `BlueprintDispatcher.astro`; omitted when the block is composed directly.
    */
   blueprintKey?: KnownBlueprintKey;
 }
 
-const { section, clientFacts, layout = 'default', blueprintKey } = Astro.props;
+const { section, clientFacts, layout = 'default', align = 'center', blueprintKey } = Astro.props;
 
 const titleId = `${section.sectionKey}-title`;
 const isSplit = layout === 'split';
+// Alignment is a choice only for the default single-column layout.
+const alignLeft = !isSplit && align === 'left';
 const phone = clientFacts.phone;
 const email = clientFacts.email;
 
@@ -100,7 +108,7 @@ const methods = isSplit
 ---
 
 <section
-  class={`bds-blueprint-section bds-cta${isSplit ? ' bds-cta--split' : ''}`}
+  class={`bds-blueprint-section bds-cta${isSplit ? ' bds-cta--split' : ''}${alignLeft ? ' bds-cta--align-left' : ''}`}
   aria-labelledby={titleId}
   data-blueprint-key={blueprintKey}
 >
@@ -198,6 +206,23 @@ const methods = isSplit
        the container's own gap — a margin-top here would stack on top of it
        (the additive case ADR-023 §3 rules out). */
     gap: var(--gap-md);
+  }
+
+  /* ── --align-left: structure axis (ADR-039 §1) ──────────────────── */
+  /* Mirrors ../react/Cta.css. Flushes the default single-column CTA to the
+     start; `center` is the default and emits no modifier. */
+  .bds-cta--align-left .bds-cta__container {
+    align-items: flex-start;
+    text-align: start;
+  }
+
+  .bds-cta--align-left .bds-cta__message {
+    align-items: flex-start;
+    text-align: start;
+  }
+
+  .bds-cta--align-left .bds-cta__actions {
+    justify-content: flex-start;
   }
 
   /* ── --split: message column + contact-method aside ─────────────── */

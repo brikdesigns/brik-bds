@@ -72,6 +72,14 @@
     border-radius: var(--bds-hero-image-radius, var(--border-radius-lg));
   }
 
+  /* ── --align-center: structure axis (ADR-039 §1) ───────────────── */
+  /* Mirrors ../react/Hero.css. Centres the content stack; `left` is the
+     default and emits no modifier, so existing heroes render unchanged. */
+  .bds-hero--align-center .bds-hero__content {
+    align-items: center;
+    text-align: center;
+  }
+
   /* ── --interior-minimal: single narrow content column, no media ── */
 
   /* Narrow reading column + wider inline inset — a deliberate modifier-scoped

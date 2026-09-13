@@ -65,7 +65,7 @@
  * - Image alt: the decorative-default empty string (the h1 conveys meaning);
  *   the price-card image takes `section.priceCard.imageAlt` when informational.
  */
-import type { BlueprintProps, HeroLayout, KnownBlueprintKey } from './types';
+import type { BlueprintAlign, BlueprintProps, HeroLayout, KnownBlueprintKey } from './types';
 import HeroMediaCard from './HeroMediaCard.astro';
 import HeroMediaCardImage from './HeroMediaCardImage.astro';
 import HeroMediaCardPrice from './HeroMediaCardPrice.astro';
@@ -97,6 +97,12 @@ interface Props extends BlueprintProps {
   /** Structural layout. Defaults to `split`, matching the React twin. */
   layout?: HeroLayout;
   /**
+   * Content-column placement (structure axis, ADR-039). `left` (default) keeps
+   * the content flush-start; `center` centres the stack. Emits the enum-bound
+   * `bds-hero--align-center` modifier; matches the React twin.
+   */
+  align?: BlueprintAlign;
+  /**
    * Blueprint key to emit as `data-blueprint-key`. Supplied by
    * `BlueprintDispatcher.astro`; omitted when the block is composed directly.
    */
@@ -115,6 +121,7 @@ const {
   section,
   clientFacts,
   layout = 'split',
+  align = 'left',
   blueprintKey,
   imageRatio = 'square',
   showServiceTag = true,
@@ -143,7 +150,7 @@ const ctaClass = isPricingCard
 ---
 
 <section
-  class={`bds-blueprint-section bds-hero bds-hero--${layout}`}
+  class={`bds-blueprint-section bds-hero bds-hero--${layout}${align === 'center' ? ' bds-hero--align-center' : ''}`}
   aria-labelledby={titleId}
   data-blueprint-key={blueprintKey}
   data-service-line={isPricingCard ? resolvedServiceLine : undefined}
@@ -338,6 +345,14 @@ const ctaClass = isPricingCard
      aspect-ratio is layout-scoped below; only the corner radius is shared. */
   .bds-hero__missing {
     border-radius: var(--bds-hero-image-radius, var(--border-radius-lg));
+  }
+
+  /* ── --align-center: structure axis (ADR-039 §1) ───────────────── */
+  /* Mirrors ../react/Hero.css. Centres the content stack; `left` is the
+     default and emits no modifier, so existing heroes render unchanged. */
+  .bds-hero--align-center .bds-hero__content {
+    align-items: center;
+    text-align: center;
   }
 
   /* ── --interior-minimal: single narrow content column, no media ── */

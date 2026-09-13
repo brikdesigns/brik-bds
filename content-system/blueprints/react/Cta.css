@@ -72,6 +72,24 @@
   gap: var(--gap-md);
 }
 
+/* ── --align-left: structure axis (ADR-039 §1) ───────────────────────────── */
+/* Flushes the default single-column CTA to the start. `center` is the default
+   and emits no modifier, so existing CTAs render unchanged. Structural
+   placement, not appearance (see BlueprintAlign in astro/types.ts). */
+.bds-cta--align-left .bds-cta__container {
+  align-items: flex-start;
+  text-align: start;
+}
+
+.bds-cta--align-left .bds-cta__message {
+  align-items: flex-start;
+  text-align: start;
+}
+
+.bds-cta--align-left .bds-cta__actions {
+  justify-content: flex-start;
+}
+
 /* ── --split: two-column copy + aside, on the primary surface ────────────── */
 
 .bds-cta--split {
