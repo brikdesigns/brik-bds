@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { useEffect } from 'react';
+import { expect, waitFor } from 'storybook/test';
 import { BrikDevBar } from '../BrikDevBar';
+// Raw IIFE source so the interaction test can load the widget exactly as a
+// `?inspect=1` page would — currentScript is null under eval, so activation
+// comes solely from the URL flag (the path under assertion). Mirrors the
+// widget's own browser tests (inspect-widget.detect.browser.test.ts).
+import inspectWidgetSource from './inspect-widget.js?raw';
 
 /**
  * Brik Inspect — token & component auditor.
@@ -98,17 +103,63 @@ export const LiveDemo: Story = {
   render: () => <InspectDemo />,
 };
 
-/** @summary URL auto-activation */
-export const AutoActivated: Story = {
-  name: 'Auto-activated via ?inspect=1',
-  render: () => {
-    useEffect(() => {
-      const url = new URL(window.location.href);
-      if (url.searchParams.get('inspect') !== '1') {
-        url.searchParams.set('inspect', '1');
-        window.history.replaceState({}, '', url.toString());
-      }
-    }, []);
-    return <InspectDemo />;
+/**
+ * Asserts the `?inspect=1` activation path (audit #2491): the widget must
+ * auto-activate hover on load when the flag is present, not just render the
+ * toolbar. A visual story here duplicated `LiveDemo` frame-for-frame, so the
+ * value is behavioral — this is a `play`-only assertion, not a snapshot.
+ *
+ * @summary InteractionTest — ?inspect=1 auto-activates inspect on load
+ */
+export const InteractionTestUrlActivation: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  render: () => (
+    <div style={{ padding: 'var(--padding-lg)', fontFamily: 'var(--font-family-body)', color: 'var(--text-secondary)' }}>
+      Behavioral assertion only — the play function loads the inspect widget with
+      <code> ?inspect=1</code> and asserts it auto-activates. No visual surface.
+    </div>
+  ),
+  play: async () => {
+    // The URL-activation branch (`if (URL_ENABLED) toggleActive()`) runs once,
+    // at the widget's init — a shared-page play cannot re-trigger a widget a
+    // prior story already loaded. So drive a fresh IIFE here, exactly as a
+    // page load with `?inspect=1` would, and assert it self-activates.
+    const original = window.location.href;
+    const w = window as unknown as {
+      BrikDevBar?: { register(): void; unregister(): void };
+      __BRIK_INSPECT_DEVBAR_HOST_MANAGED__?: boolean;
+      BrikInspect?: { isActive?(): boolean; setActive?(next: boolean): void };
+    };
+    // Suppress the widget's page-chrome side effects so this test never leaks
+    // into another story's render: the host-managed flag skips DevBar
+    // self-registration, and a stub `window.BrikDevBar` defeats the "no DevBar
+    // → build a standalone toolbar" 80ms fallback whose lingering toolbar would
+    // shift every later baseline (mirrors .storybook/vitest.visual.setup.ts).
+    const hadDevBar = 'BrikDevBar' in w;
+    w.__BRIK_INSPECT_DEVBAR_HOST_MANAGED__ = true;
+    w.BrikDevBar = w.BrikDevBar ?? { register() {}, unregister() {} };
+    try {
+      const url = new URL(original);
+      url.searchParams.set('inspect', '1');
+      window.history.replaceState({}, '', url.toString());
+      // currentScript is null under eval → AUTO_ENABLE false, so activation is
+      // attributable solely to the ?inspect=1 flag.
+      // eslint-disable-next-line no-eval
+      (0, eval)(inspectWidgetSource);
+      await waitFor(() => {
+        expect(w.BrikInspect?.isActive?.()).toBe(true);
+      });
+    } finally {
+      // Leave no live inspector: an active capture-phase click handler swallows
+      // other stories' userEvent clicks. Deactivating makes the (unremovable)
+      // document listeners early-return.
+      w.BrikInspect?.setActive?.(false);
+      window.history.replaceState({}, '', original);
+      // Wait past the widget's 80ms standalone-toolbar fallback before dropping
+      // the stub, so the fallback still sees a DevBar and renders nothing.
+      await new Promise((r) => setTimeout(r, 150));
+      delete w.__BRIK_INSPECT_DEVBAR_HOST_MANAGED__;
+      if (!hadDevBar) delete w.BrikDevBar;
+    }
   },
 };
