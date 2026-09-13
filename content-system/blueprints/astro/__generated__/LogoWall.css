@@ -1,0 +1,44 @@
+.bp-logo-wall {
+    padding-block: var(--bds-logo-wall-padding-y, clamp(var(--padding-lg), 5vw, var(--padding-xl)));
+  }
+
+  .bp-logo-wall__container {
+    max-width: var(--content-width-xl);
+    margin-inline: auto;
+    padding-inline: var(--page-inset);
+  }
+
+  .bp-logo-wall__title {
+    margin: 0 0 var(--gap-lg);
+    font-family: var(--font-family-label);
+    font-size: var(--label-lg);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-align: center;
+    color: var(--text-secondary);
+  }
+
+  /* Static (non-marquee) strip — a centered wrapped row. The marquee treatment
+     hands layout to the `bds-marquee` primitive, so the flex row is disabled
+     there and the single `.bds-marquee` child fills the row. */
+  .bp-logo-wall__strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--bds-logo-wall-gap, var(--size-1000));
+  }
+
+  .bp-logo-wall__strip[data-motion='marquee'] {
+    display: block;
+  }
+
+  /* Size the static logos only — the marquee treatment's logos are sized by the
+     `Marquee` primitive (`.bds-marquee__group img`). */
+  .bp-logo-wall__strip:not([data-motion='marquee']) img,
+  .bp-logo-wall__strip:not([data-motion='marquee']) svg {
+    height: var(--bds-logo-wall-logo-height, var(--size-600));
+    width: auto;
+    flex-shrink: 0;
+  }

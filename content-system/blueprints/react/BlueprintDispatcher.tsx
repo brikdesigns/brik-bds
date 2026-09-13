@@ -61,6 +61,7 @@ import { StatsDarkBar } from './StatsDarkBar';
 import { TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge';
 import { CtaDarkCentered } from './CtaDarkCentered';
 import { CtaSplitContact } from './CtaSplitContact';
+import { LogoWall } from './LogoWall';
 import { BlueprintFallback } from './BlueprintFallback';
 
 const BLUEPRINT_REGISTRY: Partial<
@@ -78,6 +79,7 @@ const BLUEPRINT_REGISTRY: Partial<
   testimonials_featured_large: TestimonialsFeaturedLarge,
   cta_centered: CtaDarkCentered,
   cta_split_contact: CtaSplitContact,
+  logo_wall: LogoWall,
 };
 
 interface Props {

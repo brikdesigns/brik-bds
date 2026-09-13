@@ -1,0 +1,48 @@
+/* ─── LogoWall — logo / partner / trust strip (ADR-039 §Decision 2, #2529) ───
+ *
+ * The block's own layout. The `bds-logo-wall*` classes are single-sourced here
+ * (→ dist/styles.css), so both rails emit them and `canonical-class-check` sees
+ * them. The scrolling treatment is NOT styled here — `contentMotion: marquee`
+ * dispatches through the `Marquee` primitive (`bds-marquee*`, its own CSS); this
+ * block only owns the static strip and the heading.
+ *
+ * CSS custom properties:
+ *   --bds-logo-wall-logo-height   (default: var(--size-600))
+ *   --bds-logo-wall-gap           (default: var(--size-1000))
+ */
+
+.bds-logo-wall__title {
+  margin: 0 0 var(--gap-lg);
+  font-family: var(--font-family-label);
+  font-size: var(--label-lg);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+/* Static (non-marquee) strip — a centered wrapped row. The marquee treatment
+   (data-motion='marquee') hands layout to the `Marquee` primitive, so the
+   flex row is disabled there and the single `.bds-marquee` child fills the row. */
+.bds-logo-wall__strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--bds-logo-wall-gap, var(--size-1000));
+}
+
+.bds-logo-wall__strip[data-motion='marquee'] {
+  display: block;
+}
+
+/* Size the static logos only — the marquee treatment's logos are sized by the
+   `Marquee` primitive (`.bds-marquee__group img`), so scope this off it to avoid
+   an equal-specificity override race. */
+.bds-logo-wall__strip:not([data-motion='marquee']) img,
+.bds-logo-wall__strip:not([data-motion='marquee']) svg {
+  height: var(--bds-logo-wall-logo-height, var(--size-600));
+  width: auto;
+  flex-shrink: 0;
+}

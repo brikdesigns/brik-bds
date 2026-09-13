@@ -305,6 +305,41 @@ const testimonialsFeaturedLarge: Section = {
   ],
 };
 
+// LogoWall carries no layout axis — its variant axis is the content-motion axis
+// (ADR-039 §Decision 2, #2529). The two fixtures differ only by `contentMotion`,
+// so the Astro rail renders both the static strip and the marquee treatment; the
+// `layout` token the renderer threads through is ignored by `LogoWall.astro`.
+const logoItems = ['Northwind', 'Acme Co.', 'Globex', 'Initech', 'Umbra'].map((name) => ({
+  title: name,
+  description: '',
+  imageUrl: placeholderImage(160, 48, '#eef2f7', '#33415a', name),
+  imageAlt: name,
+}));
+
+const logoWallStatic: Section = {
+  sectionKey: 'logo-wall-static',
+  sectionType: 'content_block',
+  heading: 'Trusted by teams everywhere',
+  subheading: null,
+  body: null,
+  cta: null,
+  contentMotion: 'none',
+  visualNotes: {
+    blueprintKey: 'logo_wall',
+    moodKeywords: ['trustworthy', 'professional'],
+    layoutBlueprint: 'logo_wall',
+    imageOpportunity: null,
+    illustrationOpportunity: null,
+  },
+  items: logoItems,
+};
+
+const logoWallMarquee: Section = {
+  ...logoWallStatic,
+  sectionKey: 'logo-wall-marquee',
+  contentMotion: 'marquee',
+};
+
 /** Keyed `Block` or `Block:layout` — the renderer resolves the layout axis first. */
 const SECTIONS: Record<string, Section> = {
   'Hero:split': heroSplit,
@@ -319,6 +354,8 @@ const SECTIONS: Record<string, Section> = {
   CalloutPanel: calloutPanel,
   StatsDarkBar: statsDarkBar,
   TestimonialsFeaturedLarge: testimonialsFeaturedLarge,
+  'LogoWall:static': logoWallStatic,
+  'LogoWall:marquee': logoWallMarquee,
 };
 
 /** Resolves the fixture for a block, optionally narrowed to one layout. */

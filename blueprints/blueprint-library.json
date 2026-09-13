@@ -318,6 +318,32 @@
       "version": "2.0.0",
       "last_reviewed": "2026-09-09",
       "required_facts": []
+    },
+    {
+      "key": "logo_wall",
+      "name": "Logo Wall",
+      "section_type": "content_block",
+      "industries": [
+        "universal",
+        "real_estate",
+        "saas",
+        "corporate",
+        "legal"
+      ],
+      "moods": [
+        "trustworthy",
+        "professional",
+        "corporate",
+        "modern"
+      ],
+      "layout_spec": "Logo / partner / trust strip. Optional centered uppercase eyebrow heading (label/lg, muted) above a row of client/partner logos. Each item is one logo image (consumer supplies a pre-monochromed SVG/PNG), optionally linked. Two motion modes via the content-motion axis (ADR-039): default `none` renders a centered wrapped flex row; `contentMotion: marquee` scrolls the strip through the Marquee primitive (seamless loop, reduced-motion-gated by construction — the track stops and wraps under prefers-reduced-motion). Logo height ~24px, generous gap (~40px). Section-driven; no required client facts.",
+      "css_hints": ".bp-logo-wall__strip { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--size-1000); } .bp-logo-wall__strip[data-motion='marquee'] { display: block; } /* marquee scroll owned by the bds-marquee primitive */",
+      "source": "ADR-039 §Decision 2 — content-motion axis, first marquee adopter (brik-bds#2529)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-09-13",
+      "required_facts": []
     }
   ]
 }

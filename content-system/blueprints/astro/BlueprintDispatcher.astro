@@ -52,6 +52,7 @@
  *   testimonials_featured_large   → TestimonialsFeaturedLarge
  *   cta_split_contact             → Cta             layout="split"
  *   cta_centered                  → Cta             layout="default"
+ *   logo_wall                     → LogoWall
  *
  * `blueprintKey` is passed to the blocks that emit a per-key
  * `data-blueprint-key` marker (Hero, Cta, About, Features), so one file keeps
@@ -85,6 +86,7 @@ import CardGrid from './CardGrid.astro';
 import CalloutPanel from './CalloutPanel.astro';
 import StatsDarkBar from './StatsDarkBar.astro';
 import TestimonialsFeaturedLarge from './TestimonialsFeaturedLarge.astro';
+import LogoWall from './LogoWall.astro';
 import BlueprintFallback from './BlueprintFallback.astro';
 
 // The registry. Key order doesn't matter; lookup is by key. Every entry's
@@ -103,6 +105,7 @@ const BLUEPRINT_REGISTRY = {
   testimonials_featured_large: { component: TestimonialsFeaturedLarge, props: {} },
   cta_split_contact: { component: Cta, props: { layout: 'split', blueprintKey: 'cta_split_contact' } },
   cta_centered: { component: Cta, props: { layout: 'default', blueprintKey: 'cta_centered' } },
+  logo_wall: { component: LogoWall, props: {} },
 } as const;
 
 interface Props {

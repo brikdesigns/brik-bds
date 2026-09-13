@@ -33,6 +33,12 @@ import '../../../components/ui/ServiceTag/ServiceTag.css';
 // (which asserts every `bds-*` root class resolves) fails.
 import '../../../components/ui/Frame/Frame.css';
 import '../react/BlockMedia.css';
+// Content-motion axis (#2529): `LogoWall.astro`'s `marquee` treatment renders
+// through `_Marquee.astro`, whose `bds-marquee*` markup resolves to this
+// stylesheet. Layer 3 of the assembly (see the docstring) — without it the
+// marquee renders unstyled in the Astro story and `verify:astro-stories`
+// (which asserts every `bds-*` root class resolves) fails.
+import '../../../components/ui/Marquee/Marquee.css';
 
 export function AstroFrame({ html }: { html: string }) {
   return <div dangerouslySetInnerHTML={{ __html: html }} />;

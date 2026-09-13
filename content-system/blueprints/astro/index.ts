@@ -86,6 +86,12 @@ export { default as CalloutPanel }              from './CalloutPanel.astro';
 export { default as StatsDarkBar }              from './StatsDarkBar.astro';
 export { default as TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge.astro';
 
+// `<LogoWall>` — logo / partner / trust strip; the first block to adopt the
+// content-motion axis (ADR-039 §Decision 2, #2529). Its logo strip renders
+// static or, with `contentMotion: marquee`, through the shared `_Marquee`
+// partial.
+export { default as LogoWall }                  from './LogoWall.astro';
+
 // ── Dispatch surface ────────────────────────────────────────────
 // <BlueprintDispatcher> is the primary consumer entrypoint — client
 // pages render a whole page body with a single component call, reading
