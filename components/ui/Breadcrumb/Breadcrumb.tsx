@@ -1,5 +1,8 @@
-import { Fragment, type HTMLAttributes, type ReactNode } from 'react';
+import { Fragment, useEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { type BdsLinkComponent } from '../NavItem';
+import { Menu } from '../Menu/Menu';
+import { Button } from '../Button/Button';
+import { Icon } from '../Icon/Icon';
 import { bdsClass } from '../../utils';
 import './Breadcrumb.css';
 
@@ -9,6 +12,21 @@ export interface BreadcrumbItem {
 }
 
 export type BreadcrumbSeparator = 'slash' | 'chevron';
+
+/**
+ * A sibling record the trail can switch to — e.g. another service page in the
+ * same service line, or another project on the same client. Passing two or
+ * more of these to {@link Breadcrumb} renders a caret + switcher menu after
+ * the trail.
+ */
+export interface BreadcrumbSwitchOption {
+  /** Display label for the sibling record. */
+  label: string;
+  /** Destination href. */
+  href: string;
+  /** The record currently being viewed — highlighted and non-navigating. */
+  current?: boolean;
+}
 
 export interface BreadcrumbProps extends HTMLAttributes<HTMLElement> {
   /** Crumb trail in order. The last item is rendered as plain text with `aria-current="page"`; earlier items render as `<a>` when `href` is set. */
@@ -21,6 +39,23 @@ export interface BreadcrumbProps extends HTMLAttributes<HTMLElement> {
    * The current (last) crumb is always plain text. See ADR-012.
    */
   linkComponent?: BdsLinkComponent;
+  /**
+   * Sibling records to switch between, including the current one. When two or
+   * more are passed, a caret after the trail opens a menu of them so consumers
+   * can jump between siblings without navigating back to an index page. Fewer
+   * than two renders no caret (nothing to switch to), and the trail stays a
+   * pure, stateless breadcrumb.
+   */
+  options?: BreadcrumbSwitchOption[];
+  /** Accessible label for the switch trigger, e.g. `Switch service`. Required when `options` is passed. */
+  switchLabel?: string;
+  /**
+   * Called when a non-current option is selected, with its `href`. BDS owns
+   * no router, so the default is a full-page navigation
+   * (`window.location.href = href`) — pass a router-aware handler (e.g.
+   * `(href) => router.push(href)`) for client-side routing.
+   */
+  onNavigate?: (href: string, option: BreadcrumbSwitchOption) => void;
 }
 
 const SEPARATOR_CHARS: Record<BreadcrumbSeparator, string> = {
@@ -58,17 +93,29 @@ function BreadcrumbLink({
 /**
  * Breadcrumb — navigation breadcrumb trail with separator variants.
  *
- * @summary Navigation breadcrumb trail with separator variants
+ * Pass two or more `options` (plus a `switchLabel`) to render a sibling-record
+ * switcher: a caret after the trail opens a menu of siblings. Without them the
+ * trail is a pure, stateless breadcrumb.
+ *
+ * @summary Navigation breadcrumb trail, optional sibling-record switcher
  */
 export function Breadcrumb({
   items,
   separator = 'slash',
   linkComponent,
+  options,
+  switchLabel,
+  onNavigate,
   className,
   style,
   ...props
 }: BreadcrumbProps) {
   const separatorChar = SEPARATOR_CHARS[separator];
+
+  // The caret only renders when there's more than one option (nothing to
+  // switch to otherwise). The switch state lives in BreadcrumbSwitch, which
+  // only mounts here — so a plain breadcrumb carries no menu state.
+  const hasSwitcher = !!options && options.length > 1;
 
   /* Below the tablet breakpoint the intermediate crumbs collapse behind a
    * single `…` (Breadcrumb.css). Only worth doing with two or more of them —
@@ -125,7 +172,87 @@ export function Breadcrumb({
           </Fragment>
         );
       })}
+      {hasSwitcher && (
+        <BreadcrumbSwitch options={options!} switchLabel={switchLabel} onNavigate={onNavigate} />
+      )}
     </nav>
+  );
+}
+
+/**
+ * BreadcrumbSwitch — the caret trigger + sibling-record menu rendered after the
+ * trail when {@link Breadcrumb} gets two or more `options`. Kept internal (not
+ * exported) so it only mounts when needed and a plain breadcrumb stays
+ * stateless. The trailing crumb keeps `aria-current="page"`; this caret is a
+ * separate `aria-haspopup="menu"` control alongside it, never folded into the
+ * trail.
+ */
+function BreadcrumbSwitch({
+  options,
+  switchLabel,
+  onNavigate,
+}: {
+  options: BreadcrumbSwitchOption[];
+  switchLabel?: string;
+  onNavigate?: (href: string, option: BreadcrumbSwitchOption) => void;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const wasOpen = useRef(false);
+
+  const activeHref = options.find((option) => option.current)?.href;
+
+  useEffect(() => {
+    // Return focus to the trigger when the menu closes via Escape or an
+    // outside click. A click on the trigger itself already keeps native
+    // button focus, so this only fires for the other two close paths.
+    if (wasOpen.current && !isOpen) {
+      triggerRef.current?.focus();
+    }
+    wasOpen.current = isOpen;
+  }, [isOpen]);
+
+  return (
+    <span className="bds-breadcrumb__switch">
+      <Button
+        ref={triggerRef}
+        variant="ghost"
+        size="xs"
+        // `switchLabel` is the accessible name; fall back to a generic label so
+        // the caret is never unlabelled if a consumer omits it (it's typed
+        // required on the deprecated BreadcrumbSwitcher shim).
+        label={switchLabel ?? 'Switch record'}
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
+        // Stop the mousedown reaching the Menu's document outside-click
+        // listener, so toggling closed on the trigger doesn't immediately
+        // reopen.
+        onMouseDown={(e) => e.stopPropagation()}
+        onClick={() => setIsOpen((open) => !open)}
+        icon={<Icon icon="ph:caret-down" className="bds-breadcrumb__switch-caret" />}
+      />
+
+      {/* Menu positions itself off this relatively positioned trigger span. */}
+      <Menu
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        activeId={activeHref}
+        className="bds-breadcrumb__switch-menu"
+        items={options.map((option) => ({
+          id: option.href,
+          label: option.label,
+          onClick: () => {
+            setIsOpen(false);
+            if (option.current) return;
+            if (onNavigate) {
+              onNavigate(option.href, option);
+            } else {
+              window.location.href = option.href;
+            }
+          },
+        }))}
+      />
+    </span>
   );
 }
 
