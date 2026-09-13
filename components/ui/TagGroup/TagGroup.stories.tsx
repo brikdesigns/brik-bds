@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { TagGroup } from './TagGroup';
 import { Tag } from '../Tag';
-import { Field } from '../Field';
 
 const meta: Meta<typeof TagGroup> = {
   title: 'Components/tag-group',
@@ -55,23 +54,5 @@ export const Default: Story = {
 };
 
 /* `gap` is a Control on Default — the gap-scale comparison lives in
-   TagGroup.mdx as a docs-local demo (#1489). */
-
-/* ─── 3. Inside a Field ──────────────────────────────────────── */
-
-/** @summary Inside field */
-export const InsideField: Story = {
-  render: () => (
-    <Frame>
-      <Field label="Services offered">
-        <TagGroup>
-          <Tag size="sm">Cosmetic</Tag>
-          <Tag size="sm">General</Tag>
-          <Tag size="sm">Implants</Tag>
-          <Tag size="sm">Invisalign</Tag>
-          <Tag size="sm">Whitening</Tag>
-        </TagGroup>
-      </Field>
-    </Frame>
-  ),
-};
+   TagGroup.mdx as a docs-local demo (#1489). The `InsideField` usage
+   composition also lives there as a docs-local demo (#2499). */

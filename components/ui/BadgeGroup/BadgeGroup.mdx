@@ -59,6 +59,19 @@ export const AppearanceMix = () => (
   </Frame>
 );
 
+export const InsideFieldDemo = () => (
+  <Frame>
+    <Field label="Integrations health">
+      <BadgeGroup>
+        <Badge tone="positive" size="sm">Helicone</Badge>
+        <Badge tone="positive" size="sm">Supabase</Badge>
+        <Badge tone="warning" size="sm">Stripe</Badge>
+        <Badge tone="negative" size="sm">Twilio</Badge>
+      </BadgeGroup>
+    </Field>
+  </Frame>
+);
+
 <Meta of={Stories} />
 
 # BadgeGroup
@@ -95,7 +108,9 @@ Three locked gap sizes — `xs` for tight clusters, `sm` for standard lists, `md
 
 The canonical use: a `Field` value expressed as multiple status badges.
 
-<Canvas of={Stories.InsideField} />
+<Canvas>
+  <InsideFieldDemo />
+</Canvas>
 
 ## Props
 

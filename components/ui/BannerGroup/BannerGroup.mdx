@@ -3,6 +3,7 @@ import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './BannerGroup.stories';
 import { BannerGroup } from './BannerGroup';
 import { Banner } from '../Banner';
+import { Button } from '../Button';
 
 {/* Gap comparison — docs-local, not a story export: `gap` is a Control on
     Default, and side-by-side galleries are an MDX concern (#1489). */}
@@ -21,6 +22,57 @@ export const GapScale = () => (
       <Banner title="Unrelated announcement" />
     </BannerGroup>
   </div>
+);
+
+{/* Usage compositions — caller conventions (severity order, per-entity alert
+    lists), not BannerGroup API exercises. Docs-local per #2499 / Rule 4. */}
+export const SeverityOrderDemo = () => (
+  <BannerGroup>
+    <Banner
+      tone="negative"
+      title="Card on file declined"
+      description="Update the payment method to keep services active."
+      action={<Button variant="secondary" size="sm">Update</Button>}
+    />
+    <Banner
+      tone="warning"
+      title="Brand assets are incomplete"
+      description="Three logo orientations are missing."
+    />
+    <Banner
+      tone="info"
+      title="Reporting now covers paid search"
+      description="New metrics appear from this month forward."
+    />
+    <Banner
+      title="Refer a client, get a credit"
+      description="Both accounts receive one month of managed hosting."
+      action={<Button variant="on-color" size="sm">Learn more</Button>}
+    />
+  </BannerGroup>
+);
+
+export const RepeatedToneDemo = () => (
+  <BannerGroup>
+    <Banner
+      tone="warning"
+      title="Proposal in process — Northline Dental"
+      description="This prospect has a proposal sent and awaiting signature."
+      action={<Button variant="secondary" size="sm">View</Button>}
+    />
+    <Banner
+      tone="warning"
+      title="Proposal in process — Harbor Wealth"
+      description="This prospect has a draft proposal ready to send."
+      action={<Button variant="secondary" size="sm">View</Button>}
+    />
+    <Banner
+      tone="warning"
+      title="Proposal in process — Cedar Vet"
+      description="This prospect has a proposal viewed and awaiting signature."
+      action={<Button variant="secondary" size="sm">View</Button>}
+    />
+  </BannerGroup>
 );
 
 <Meta of={Stories} />
@@ -53,11 +105,15 @@ Three locked gaps — `md` (default) so banners read as one notice block, `sm` f
 
 ### Severity order
 
-<Canvas of={Stories.SeverityOrder} />
+<Canvas>
+  <SeverityOrderDemo />
+</Canvas>
 
 ### Repeated tone
 
-<Canvas of={Stories.RepeatedTone} />
+<Canvas>
+  <RepeatedToneDemo />
+</Canvas>
 
 ## Props
 

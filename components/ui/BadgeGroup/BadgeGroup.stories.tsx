@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { BadgeGroup } from './BadgeGroup';
 import { Badge } from '../Badge';
-import { Field } from '../Field';
 
 const meta: Meta<typeof BadgeGroup> = {
   title: 'Components/badge-group',
@@ -55,25 +54,6 @@ export const Default: Story = {
 };
 
 /* `gap` is a Control on Default — the gap-scale comparison lives in
-   BadgeGroup.mdx as a docs-local demo (#1489). */
-
-/* ─── 3. Inside a Field ──────────────────────────────────────── */
-
-/** @summary Inside field */
-export const InsideField: Story = {
-  render: () => (
-    <Frame>
-      <Field label="Integrations health">
-        <BadgeGroup>
-          <Badge tone="positive" size="sm">Helicone</Badge>
-          <Badge tone="positive" size="sm">Supabase</Badge>
-          <Badge tone="warning" size="sm">Stripe</Badge>
-          <Badge tone="negative" size="sm">Twilio</Badge>
-        </BadgeGroup>
-      </Field>
-    </Frame>
-  ),
-};
-
-/* Badge `appearance` composed in a group — the solid-vs-subtle comparison
-   lives in BadgeGroup.mdx as a docs-local demo (#1489). */
+   BadgeGroup.mdx as a docs-local demo (#1489). The `InsideField` usage
+   composition + the Badge appearance mix also live there as docs-local
+   demos (#2499). */
