@@ -8,7 +8,7 @@ import * as Stories from './Card.stories';
 
 <ComponentLinks slug="card" />
 
-Flexible content container. A default flexible content slot (no `layout`), plus four anatomy-driven arrangements via the `layout` prop: `stack` (vertical content card / `CardGrid` cell), `row` (horizontal content card), `metric` (compact stat), and `control` (settings / integration row). One flat slot set (`media` / `overline` / `title` / `children` / `action` / `badge`) serves all four ([ADR-038](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md)). The web-only `PricingCard` component is documented alongside as part of the Card family.
+Flexible content container. A default flexible content slot (no `layout`), plus four anatomy-driven arrangements via the `layout` prop: `stack` (vertical content card / `CardGrid` cell), `row` (horizontal content card), `metric` (compact stat), and `control` (settings / integration row). One flat slot set (`media` / `overline` / `title` / `children` / `action` / `badge`) serves all four ([ADR-038](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md)). The web-only `PricingCard` component is part of the Card family and has its own page.
 
 > **Removed** — the `preset` discriminator (`control` / `summary` / `display` / `display-row`) has been replaced by `layout` (ADR-038 §5). Old→new mapping: `display`→`stack`, `display-row`→`row`, `summary`→`metric`, `control`→`control`.
 
@@ -85,14 +85,6 @@ Two optional slots extend `metric` for a labelled selection (the shape the remov
 The `connectionStatus` prop accepts `not-configured | connected | syncing | synced | error` and renders a status indicator in the trailing block, coexisting with the `action` slot; pass `lastSynced` for a timestamp beneath it. `connectionStatus` is a **state of one card, not a set of variants** — cycle it in the Controls panel on the story below rather than reaching for separate stories.
 
 <Canvas of={Stories.Control} />
-
-### Pricing (web)
-
-`PricingCard` — pricing tier with title, price block, feature checklist, and call-to-action. The `highlighted` prop marks the recommended tier with brand surface treatment. Web surface only (`surface-web`).
-
-> **Note** — `PricingCard` is a standalone component (`import { PricingCard } from '@brikdesigns/bds'`), not a `preset` on `Card`. It is documented here because it is part of the Card family. Its CSS is isolated to `surface-web` pages.
-
-<Canvas of={Stories.Pricing} />
 
 ## Props
 
