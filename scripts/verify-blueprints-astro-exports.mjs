@@ -206,7 +206,6 @@ function makeSection(overrides: Partial<BlueprintSection> & { sectionKey: string
       moodKeywords: ['professional'],
       layoutBlueprint: 'test',
       imageOpportunity: null,
-      animationSuggestion: null,
       illustrationOpportunity: null,
     },
     ...rest,
@@ -415,7 +414,7 @@ function mk(kind: 'hero' | 'cta', blueprintKey: KnownBlueprintKey, over: Partial
     sectionType: kind,
     heading: null, subheading: null, body: null, items: [], cta: null,
     visualNotes: { blueprintKey, moodKeywords: [], layoutBlueprint: 'test',
-      imageOpportunity: null, animationSuggestion: null, illustrationOpportunity: null },
+      imageOpportunity: null, illustrationOpportunity: null },
     ...over,
   };
 }
@@ -655,7 +654,6 @@ function sec(blueprintKey: string, overrides: Partial<BlueprintSection> & { sect
       moodKeywords: [],
       layoutBlueprint: 'test',
       imageOpportunity: null,
-      animationSuggestion: null,
       illustrationOpportunity: null,
     },
   };
