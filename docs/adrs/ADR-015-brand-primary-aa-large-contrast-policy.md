@@ -1,6 +1,6 @@
 # ADR-015 — Brand-primary holds the vibrant brand color; its fills + accent text are gated AA-large (3:1)
 
-**Status:** Accepted (2026-06-30; amended 2026-07-01) — shipped via BDS-22 ([#1053](https://github.com/brikdesigns/brik-bds/pull/1053)); see § Amendment (2026-07-01)
+**Status:** Accepted (2026-06-30; amended 2026-07-01, 2026-09-12) — shipped via BDS-22 ([#1053](https://github.com/brikdesigns/brik-bds/pull/1053)); see § Amendment (2026-07-01) and § Amendment (2026-09-12)
 **Date:** 2026-06-30
 **Related:** BDS-22 (Brand Color Update), BDS-18 (Color Pairings), BDS-20 (Expand Color Scale), [#710](https://github.com/brikdesigns/brik-bds/pull/710) + [#719](https://github.com/brikdesigns/brik-bds/pull/719) (the AA darkening this reverses), [ADR-011](./ADR-011-service-line-token-value-model.md) (Figma Brand Kit is SoT), [Color Pairings](../../docs-site/content/docs/foundation/color-pairings.mdx), `tokens/contrast-pairings.json` (rule in force)
 **Owner:** Nick Stanerson
@@ -81,3 +81,27 @@ The owner (Nick Stanerson) **knowingly accepts** the white-on-vibrant-Poppy CTA-
 - The advisory usage rule ("small body copy never uses `--text-brand-primary`") and its deferred enforcement (**BDS-18**) are unchanged by this amendment.
 
 This amendment adds no code change; it corrects the record so the accepted debt is visible rather than mislabeled as compliant.
+
+## Amendment (2026-09-12) — white on the brand fill is the standard for ALL on-color text; the dark/bold workarounds are banned
+
+The 2026-07-01 amendment framed the white-on-Poppy CTA *label* as accepted debt. In practice agents kept "fixing" the debt on the *description* slot of brand CTA bands — repainting the on-color text to `--text-primary` (dark), or bolding body copy to `--body-xl`/700 so it qualifies as WCAG large text and clears the 3:1 bar. Both re-introduce exactly what BDS-22/ADR-015 exist to prevent: a not-brand-color treatment on the brand surface. This amendment settles it.
+
+**Decision (owner, Nick Stanerson):** on the brand-primary fill/surface, on-color text is **white (`--text-on-color-dark`) at normal weight, at every size including body copy.** The 3.78:1 result is owner-accepted debt (unchanged from the 2026-07-01 stance, now extended past the CTA label to the whole on-color text set). Two workarounds are **explicitly DISALLOWED** because they are aesthetically wrong for the brand — "too dark for text and too heavy for body text":
+
+- **darkening on-color text to `--text-primary`** on the brand fill, and
+- **bolding body copy to reach WCAG large-text** (`≥18.66px/700`) as an AA workaround on the brand fill.
+
+> OPERATOR SAID 2026-09-12 (chat): "we need to have white text on our brand color even if it doesn't pass a11y … We can't have text-primary (or bold text) on our brand color since it aesthetically looks off (too dark for text and too heavy for body text) … Please make this exception known for ALL agents going forward."
+
+**Scope.** This governs the WHITE-on-Poppy-*fill* case only (on-color text). It does **not** touch the separate `--text-brand-primary` rule (Poppy-*colored* text on a neutral surface still never sizes to small body copy — use `--text-primary`; enforced by `lint-brand-text`, #1064). The owner may revisit the Poppy color rail later; until then this exception stands.
+
+**Where recorded (SoT + consumers):**
+
+- `tokens/contrast-pairings.json` — policy string + the "On-color content block on brand band" note (this file; no threshold/token change, gate math unchanged).
+- `docs-site/content/docs/foundation/color-pairings.mdx` — brand section.
+- Root Brik Agent Operating Manual (`GitHub/CLAUDE.md`) invariant + brik-rag, so every agent in every repo inherits it.
+- Consumer enforcement lives where rendered contrast is measured: `brikdesigns.com` `tests/a11y/public-routes.spec.ts` accepts white-on-`#e35335` for any on-color text (not just button labels). The portal gate is token-pairing-based and already grades this AA-large.
+
+**Enforcement (closes the § Advisory claim gap for this case).** The original ADR flagged its usage rule as "advisory — not CI-asserted." The on-brand-fill-text half is now **CI-asserted**: `scripts/lint-brand-fill-text.js` (`npm run lint-brand-fill-text`, wired in `tokens-gate.yml`, #2488) fails when text on a `--surface-`/`--background-brand-primary` fill resolves to anything but `--text-on-color-dark` — catching both `--text-primary` darkening and the theme-flipping `--text-inverse` (black-in-dark) that this can't otherwise see, since the contrast gate accepts dark-on-Poppy (5.55:1). The `--text-brand-primary` small-body-copy half stays asserted by `lint-brand-text-size.js` (#1064).
+
+No BDS token *values* change in this amendment; it is docs + the JSON `note`/`policy` prose. The component sweep + lint land in #2488.
