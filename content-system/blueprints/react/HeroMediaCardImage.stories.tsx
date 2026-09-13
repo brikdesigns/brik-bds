@@ -10,7 +10,14 @@ const meta: Meta<typeof HeroMediaCardImage> = {
   argTypes: {
     src: { control: 'text' },
     alt: { control: 'text' },
-    ratio: { control: false, description: 'A `FrameRatio` slug — see `components/ui/Frame/Frame.tsx`.' },
+    ratio: {
+      control: 'select',
+      options: [
+        '1-1', '3-2', '2-3', '4-3', '3-4', '4-5', '16-9', '9-16', '21-9',
+        'square', 'photo-landscape', 'photo-portrait', 'cinema',
+      ],
+      description: 'A `FrameRatio` slug — see `components/ui/Frame/Frame.tsx`.',
+    },
   },
   parameters: {
     layout: 'padded',
@@ -26,28 +33,16 @@ const meta: Meta<typeof HeroMediaCardImage> = {
 export default meta;
 type Story = StoryObj<typeof HeroMediaCardImage>;
 
-/** @summary Default square image frame */
+/** @summary Frame-wrapped hero image — switch `ratio` via Controls */
 export const Default: Story = {
-  render: () => (
+  args: {
+    src: placeholderImage(320, 320, '#eaf1fb', '#1f3d70', 'Hero'),
+    alt: '',
+    ratio: 'square',
+  },
+  render: (args) => (
     <div style={{ width: 320 }}>
-      <HeroMediaCardImage
-        src={placeholderImage(320, 320, '#eaf1fb', '#1f3d70', 'Hero')}
-        alt=""
-        ratio="square"
-      />
-    </div>
-  ),
-};
-
-/** @summary Alternate ratio — 4:5 portrait */
-export const PortraitRatio: Story = {
-  render: () => (
-    <div style={{ width: 320 }}>
-      <HeroMediaCardImage
-        src={placeholderImage(320, 400, '#eaf1fb', '#1f3d70', 'Hero')}
-        alt=""
-        ratio="4-5"
-      />
+      <HeroMediaCardImage {...args} />
     </div>
   ),
 };
