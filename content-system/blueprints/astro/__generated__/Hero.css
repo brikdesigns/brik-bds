@@ -129,7 +129,10 @@
   }
 
   .bds-hero--split .bds-hero__media {
-    aspect-ratio: var(--aspect-4-5);
+    /* No `aspect-ratio` here (media axis, ADR-039 #2493): the composed
+       `<Media>` primitive locks the shape via `<Frame>` (`splitMediaRatio`,
+       default `4-5`), so the ratio is token-backed and hand-rolling it is
+       banned (`hardcoded-aspect-ratio`). This wrapper only clips + rounds. */
     overflow: hidden;
     border-radius: var(--bds-hero-image-radius, var(--border-radius-lg));
   }
@@ -374,8 +377,9 @@
      have caught this). `is:global` is Astro's actual per-block escape hatch
      (there is no Vue/CSS-Modules-style `:global()` selector wrapper); the
      whole tag opts out, so these three rules live here rather than mixed into
-     the scoped block above. `--split`'s own inline `<img class="bds-hero__image">`
-     is unaffected by this rule being unscoped. */
+     the scoped block above. (Since #2493 `--split` renders its media via the
+     `<Media>` primitive's `bds-block-media__img`, not `bds-hero__image`, so this
+     rule now serves only the pricing-card `<HeroMediaCardImage>`.) */
   .bds-hero__image {
     display: block;
     width: 100%;

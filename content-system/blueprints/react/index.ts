@@ -83,6 +83,13 @@ export type { HeroMediaCardImageProps } from './HeroMediaCardImage';
 export { HeroMediaCardPrice } from './HeroMediaCardPrice';
 export type { HeroMediaCardPriceProps } from './HeroMediaCardPrice';
 
+// `<BlockMedia>` — the shared media-axis primitive (ADR-039 §Media axis, #2493).
+// Renders `image` / `video` / `bg-video` / `none` through `<Frame>` so a block
+// never hand-rolls a `<video>` tag or an `aspect-ratio`. Twin of the Astro
+// rail's `_Media.astro`. `bg-video` is reduced-motion-gated by construction.
+export { BlockMedia } from './BlockMedia';
+export type { BlockMediaProps } from './BlockMedia';
+
 // `<About>` — the `bds-about` narrative section primitive
 // (post-brik-bds#1198 consolidation, the last Phase D family). Props-based:
 // eyebrow + `h2` + lead, with an optional `testimonial` pull-quote composed
