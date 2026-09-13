@@ -51,7 +51,7 @@
  *   item title  : --font-family-heading  + --heading-md
  *   item desc   : --font-family-body     + --body-md
  */
-import type { BlueprintProps, CardGridLayout } from './types';
+import type { BlueprintColumns, BlueprintProps, CardGridLayout } from './types';
 
 export interface Props extends BlueprintProps {
   /**
@@ -59,12 +59,21 @@ export interface Props extends BlueprintProps {
    * default slot carries composed content. Defaults to `card-grid`.
    */
   layout?: CardGridLayout;
+  /**
+   * Column count at the widest breakpoint for the DISPATCHED `card-grid` item
+   * layout (structure axis, ADR-039). Omitted → the responsive default ramp
+   * (1 → 2 → 3). Emits the enum-bound `bds-card-grid--cols-*` modifier. No
+   * effect on composed children (the consumer owns their own grid) or on the
+   * `two-column-list` layout. The React rail delegates column count to the
+   * consumer's `<Grid columns>` instead, so this prop is Astro-only (#2492).
+   */
+  columns?: BlueprintColumns;
 }
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
 
-const { section, layout = 'card-grid' } = Astro.props;
+const { section, layout = 'card-grid', columns } = Astro.props;
 
 const titleId = `${section.sectionKey}-title`;
 const title = section.heading ?? '';
@@ -74,6 +83,14 @@ const description = section.body ?? undefined;
 // Composed children take precedence over the section-driven item layouts, so
 // a direct `<CardGrid><ul>…</ul></CardGrid>` consumer is unaffected.
 const hasComposedItems = Astro.slots.has('default');
+
+// The column-count modifier binds only to the dispatched `card-grid` item grid.
+const showsDispatchedGrid = !hasComposedItems && layout === 'card-grid';
+const sectionClass = [
+  'bds-blueprint-section',
+  'bds-card-grid',
+  columns && showsDispatchedGrid ? `bds-card-grid--cols-${columns}` : null,
+].filter(Boolean).join(' ');
 
 const categoryLabels: Record<NonNullable<typeof section.items[number]['category']>, string> = {
   brand: 'Brand',
@@ -86,7 +103,7 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
 ---
 
 <section
-  class="bds-blueprint-section bds-card-grid"
+  class={sectionClass}
   aria-labelledby={titleId}
   data-blueprint-key="card_grid"
 >
@@ -305,6 +322,25 @@ const categoryLabels: Record<NonNullable<typeof section.items[number]['category'
   @media (min-width: 992px) {
     .bp-services-grid__list {
       grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* ── --cols-*: column-count axis (ADR-039 §1, #2492) ─────────────
+     Caps the widest-breakpoint count on the dispatched card grid; the
+     mobile/tablet ramp is preserved. Omitted → the default ramp above. The
+     `bds-card-grid--cols-*` vocabulary is single-sourced in ../react/CardGrid.css
+     so the class reaches dist/styles.css for canonical-class-check. */
+  @media (min-width: 992px) {
+    .bds-card-grid--cols-2 .bp-services-grid__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bds-card-grid--cols-3 .bp-services-grid__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .bds-card-grid--cols-4 .bp-services-grid__list {
+      grid-template-columns: repeat(4, 1fr);
     }
   }
 

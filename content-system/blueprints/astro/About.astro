@@ -41,7 +41,7 @@
  * Reading order: narrative first (left column), supporting callout second
  * (right) — matches DOM order on every viewport.
  */
-import type { BlueprintProps, KnownBlueprintKey } from './types';
+import type { BlueprintAlign, BlueprintProps, KnownBlueprintKey } from './types';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
@@ -52,15 +52,20 @@ interface Props extends BlueprintProps {
    * `BlueprintDispatcher.astro`; omitted when the block is composed directly.
    */
   blueprintKey?: KnownBlueprintKey;
+  /**
+   * Narrative-column placement (structure axis, ADR-039). `left` (default) or
+   * `center`; emits `bds-about--align-center`. Matches the React twin.
+   */
+  align?: BlueprintAlign;
 }
 
-const { section, blueprintKey } = Astro.props;
+const { section, blueprintKey, align = 'left' } = Astro.props;
 const titleId = `${section.sectionKey}-title`;
 const callout = section.items[0];
 ---
 
 <section
-  class="bds-blueprint-section bds-about"
+  class={`bds-blueprint-section bds-about${align === 'center' ? ' bds-about--align-center' : ''}`}
   aria-labelledby={titleId}
   data-blueprint-key={blueprintKey}
 >
@@ -109,6 +114,14 @@ const callout = section.items[0];
   .bds-about__narrative {
     display: flex;
     flex-direction: column;
+  }
+
+  /* ── --align-center: structure axis (ADR-039 §1) ──────────────
+     Mirrors ../react/About.css. Centres the narrative column; `left` is the
+     default and emits no modifier. */
+  .bds-about--align-center .bds-about__narrative {
+    align-items: center;
+    text-align: center;
   }
 
   /* Content rhythm (ADR-023 §3), mirroring the React twin in About.css:

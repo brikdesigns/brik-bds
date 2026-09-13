@@ -56,6 +56,15 @@
     opacity: 0.85;
   }
 
+  /* ── --align-left: structure axis (ADR-039 §1) ──────────────── */
+  /* Mirrors ../react/Features.css. Flushes the section header to the start;
+     `center` is the default and emits no modifier. Header only. */
+  .bds-features--align-left .bds-features__header {
+    text-align: start;
+    align-items: flex-start;
+    margin-inline: 0;
+  }
+
   /* ── Card grid ──────────────────────────────────────────────── */
 
   .bds-features__grid {
@@ -76,6 +85,23 @@
   @media (min-width: 992px) {
     .bds-features__grid {
       grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* ── --cols-*: column-count axis (ADR-039 §1) ────────────────
+     Mirrors ../react/Features.css. Caps the widest-breakpoint count; the
+     mobile/tablet ramp is preserved. Omitted → the default ramp above. */
+  @media (min-width: 992px) {
+    .bds-features--cols-2 .bds-features__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bds-features--cols-3 .bds-features__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .bds-features--cols-4 .bds-features__grid {
+      grid-template-columns: repeat(4, 1fr);
     }
   }
 

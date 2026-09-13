@@ -22,6 +22,14 @@
     flex-direction: column;
   }
 
+  /* ── --align-center: structure axis (ADR-039 §1) ──────────────
+     Mirrors ../react/About.css. Centres the narrative column; `left` is the
+     default and emits no modifier. */
+  .bds-about--align-center .bds-about__narrative {
+    align-items: center;
+    text-align: center;
+  }
+
   /* Content rhythm (ADR-023 §3), mirroring the React twin in About.css:
      eyebrow→title is tight (--gap-sm), title→lead is medium (--gap-md). */
 

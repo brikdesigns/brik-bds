@@ -64,7 +64,7 @@
  * 3.78:1 at 14px regular per BDS contrast burndown #40 — bold weight + size
  * promotion gets it into compliant range).
  */
-import type { BlueprintProps, KnownBlueprintKey } from './types';
+import type { BlueprintAlign, BlueprintColumns, BlueprintProps, KnownBlueprintKey } from './types';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
@@ -75,14 +75,31 @@ interface Props extends BlueprintProps {
    * `BlueprintDispatcher.astro`; omitted when the block is composed directly.
    */
   blueprintKey?: KnownBlueprintKey;
+  /**
+   * Section-header placement (structure axis, ADR-039). `center` (default) or
+   * `left`; emits `bds-features--align-left`. Matches the React twin.
+   */
+  align?: BlueprintAlign;
+  /**
+   * Grid column count at the widest breakpoint (structure axis, ADR-039).
+   * Omitted → the responsive default ramp (1 → 2 → 3). Emits
+   * `bds-features--cols-*`. Matches the React twin.
+   */
+  columns?: BlueprintColumns;
 }
 
-const { section, blueprintKey } = Astro.props;
+const { section, blueprintKey, align = 'center', columns } = Astro.props;
 const titleId = `${section.sectionKey}-title`;
+const sectionClass = [
+  'bds-blueprint-section',
+  'bds-features',
+  align === 'left' ? 'bds-features--align-left' : null,
+  columns ? `bds-features--cols-${columns}` : null,
+].filter(Boolean).join(' ');
 ---
 
 <section
-  class="bds-blueprint-section bds-features"
+  class={sectionClass}
   data-blueprint-key={blueprintKey}
   aria-labelledby={section.heading ? titleId : undefined}
 >
@@ -207,6 +224,15 @@ const titleId = `${section.sectionKey}-title`;
     opacity: 0.85;
   }
 
+  /* ── --align-left: structure axis (ADR-039 §1) ──────────────── */
+  /* Mirrors ../react/Features.css. Flushes the section header to the start;
+     `center` is the default and emits no modifier. Header only. */
+  .bds-features--align-left .bds-features__header {
+    text-align: start;
+    align-items: flex-start;
+    margin-inline: 0;
+  }
+
   /* ── Card grid ──────────────────────────────────────────────── */
 
   .bds-features__grid {
@@ -227,6 +253,23 @@ const titleId = `${section.sectionKey}-title`;
   @media (min-width: 992px) {
     .bds-features__grid {
       grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* ── --cols-*: column-count axis (ADR-039 §1) ────────────────
+     Mirrors ../react/Features.css. Caps the widest-breakpoint count; the
+     mobile/tablet ramp is preserved. Omitted → the default ramp above. */
+  @media (min-width: 992px) {
+    .bds-features--cols-2 .bds-features__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bds-features--cols-3 .bds-features__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .bds-features--cols-4 .bds-features__grid {
+      grid-template-columns: repeat(4, 1fr);
     }
   }
 

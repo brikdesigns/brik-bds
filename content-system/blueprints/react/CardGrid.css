@@ -84,3 +84,29 @@
   line-height: var(--font-line-height-normal);
   color: var(--text-primary);
 }
+
+/* ── --cols-*: column-count axis (ADR-039 §1, #2492) ─────────────────────────
+ * The `columns` structure axis binds to the ASTRO-dispatched item grid only.
+ * The React rail is content-agnostic — it composes children and delegates
+ * column count to the consumer's `<Grid columns>` (see this file's header and
+ * the CardGrid docstring), so it does not read `columns` and emits no modifier.
+ *
+ * These rules exist here so the `bds-card-grid--cols-*` vocabulary is published
+ * to `dist/styles.css` — the allowlist canonical-class-check reads — even though
+ * the class is only rendered by the Astro rail (ADR-040: a `bds-*` class used in
+ * a blueprint must exist in the allowlist). The descendant `bp-services-grid__list`
+ * is the Astro dispatched grid; it never appears in React DOM, so this rule is
+ * inert in React and active only in Astro's own scoped copy in CardGrid.astro. */
+@media (min-width: 992px) {
+  .bds-card-grid--cols-2 .bp-services-grid__list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bds-card-grid--cols-3 .bp-services-grid__list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .bds-card-grid--cols-4 .bp-services-grid__list {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

@@ -49,6 +49,7 @@ import { type HTMLAttributes } from 'react';
 
 import { Card, ServiceTag, Stack, type ServiceLine } from '../../../components';
 import { bdsClass } from '../../../components/utils';
+import type { BlueprintAlign, BlueprintColumns } from '../astro/types';
 import '../section-shell.css';
 import './Features.css';
 
@@ -93,6 +94,19 @@ export interface FeaturesProps extends HTMLAttributes<HTMLElement> {
   body?: string;
   /** The feature cards. Typically 3; the grid wraps to a second row beyond. */
   items: FeatureItem[];
+  /**
+   * Section-header placement (structure axis, ADR-039). `center` (default) or
+   * `left`; emits the enum-bound `bds-features--align-left` modifier. The card
+   * grid is unaffected — this aligns the eyebrow/title/lead header only.
+   */
+  align?: BlueprintAlign;
+  /**
+   * Grid column count at the widest breakpoint (structure axis, ADR-039).
+   * Omitted → the responsive default ramp (1 → 2 → 3). Set → the enum-bound
+   * `bds-features--cols-*` modifier caps the large-screen column count; the
+   * mobile/tablet ramp is preserved.
+   */
+  columns?: BlueprintColumns;
 }
 
 export function Features({
@@ -101,6 +115,8 @@ export function Features({
   subtitle,
   body,
   items,
+  align = 'center',
+  columns,
   className,
   ...rest
 }: FeaturesProps) {
@@ -109,7 +125,13 @@ export function Features({
 
   return (
     <section
-      className={bdsClass('bds-blueprint-section', 'bds-features', className)}
+      className={bdsClass(
+        'bds-blueprint-section',
+        'bds-features',
+        align === 'left' && 'bds-features--align-left',
+        columns && `bds-features--cols-${columns}`,
+        className,
+      )}
       data-blueprint-key="feature_grid"
       aria-labelledby={title ? titleId : undefined}
       {...rest}
