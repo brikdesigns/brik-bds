@@ -36,13 +36,17 @@ Title and section-title **copy** uses title case: capitalize the first, last, an
 
 ## Subtitle
 
-The secondary line paired with a title. Always `subtitle`. Never `eyebrow`.
+The secondary line paired with a title. In a section-heading context it is always `subtitle`. Never `eyebrow`.
 
 - BEM: `.bds-*__subtitle`
 - Rendered as: `<p>` by default
 - Used in: `PageHeader`, `Sheet`, `SheetSection`, `BoardCard`, `DataSection`
 
-`eyebrow`, `kicker`, `overline`, and `pre-title` are common marketing terms. They are not BDS terms. Translate to `subtitle` before writing code.
+`eyebrow`, `kicker`, and `pre-title` are common marketing terms. They are not BDS terms. Translate to `subtitle` before writing code.
+
+<Callout type="info">
+  `overline` is the one exception, and it is not a synonym for `subtitle`. It is a canonical Card anatomy slot — the short label *above* the title, carrying a `Tag` / `ServiceTag` / category mark, or the label above a `layout="metric"` value. See [ADR-038](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md) and [Card](/docs/components/card). BEM: `.bds-card__stack-overline`, `.bds-card__row-overline`. Outside Card anatomy, `overline` remains banned — use `subtitle`.
+</Callout>
 
 ## Description
 
