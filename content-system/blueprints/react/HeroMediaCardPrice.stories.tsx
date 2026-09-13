@@ -49,15 +49,3 @@ export const WithCallerComposedCta: Story = {
     </HeroMediaCardPrice>
   ),
 };
-
-/**
- * Value only — the label is suppressed unless both label and value are set,
- * matching the legacy adapter's original condition.
- *
- * @summary Value only, no label
- */
-export const ValueOnly: Story = {
-  args: {
-    value: '$99/mo',
-  },
-};
