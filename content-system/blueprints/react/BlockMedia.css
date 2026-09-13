@@ -1,0 +1,36 @@
+@layer bds-components {
+/* ─── BlockMedia — the blueprint media-axis primitive (ADR-039, #2493) ───────
+ *
+ * Mirrored verbatim into the Astro rail's generated CSS via `_Media.astro`'s
+ * `<style>` (ADR-040); the `bds-block-media*` classes are single-sourced here
+ * so they reach `dist/styles.css` for `canonical-class-check`. Aspect-lock is
+ * the composed `<Frame>`'s job (`bds-frame--ratio-*`, token-backed) — there is
+ * deliberately no `aspect-ratio` in this file (`hardcoded-aspect-ratio` lint).
+ */
+
+/* The root IS the `<Frame>` (BlockMedia passes its classes to Frame), so the
+   box, overflow, and ratio all come from `.bds-frame`. These rules only style
+   the media element inside it; `.bds-frame--fit-cover > img|video` already sets
+   the fill + object-fit, so the media fills the locked frame. */
+
+/* The root also carries `.bds-frame` (BlockMedia passes its classes to Frame),
+   so the box + ratio come from there; this bare-root rule exists so the class
+   resolves in `dist/styles.css` for `canonical-class-check`. */
+.bds-block-media {
+  display: block;
+}
+
+.bds-block-media__img,
+.bds-block-media__video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* `bg-video` is decorative and sits behind/beside content; it must never
+   capture pointer events meant for the section. */
+.bds-block-media--bg-video .bds-block-media__video {
+  pointer-events: none;
+}
+}

@@ -160,6 +160,32 @@ export type BlueprintAlign = 'center' | 'left';
 export type BlueprintColumns = 2 | 3 | 4;
 
 /**
+ * Media axis — the media a block carries (ADR-039 §Media axis, #2493).
+ *
+ * A curated closed union, NOT hand-rolled `<video>` markup: an agent picks a
+ * value and the shared `BlockMedia` primitive (`react/BlockMedia.tsx` +
+ * `astro/_Media.astro`) renders the matching element wrapped in `<Frame>` for
+ * aspect-lock — so a consumer never hand-writes `aspect-ratio`, an autoplay
+ * attribute, or a `<video>` tag. Reference sites (fuel, connecteam) lead with
+ * hero video; blueprints were image-only before this axis.
+ *
+ *   `image`    — a still `<img>` (lazy-loaded).
+ *   `video`    — a foreground, user-controlled player (`controls`, no autoplay).
+ *   `bg-video` — an ambient autoplay/muted/loop video. Reduced-motion-gated by
+ *                construction (React: `autoPlay={!reduced}`; Astro: no static
+ *                `autoplay` attribute — an inline guard enables it only when
+ *                motion is allowed, so the poster shows with JS off or under
+ *                `prefers-reduced-motion`) and lazy (`preload="none"`).
+ *   `none`     — no media (the primitive renders nothing).
+ *
+ * Declared here — the framework-agnostic contract both rails share (#2302) — so
+ * the axis cannot be added to one rail only. The `Frame` aspect ratio the
+ * primitive locks to is the `ratio` half of the axis (`FrameRatio`), deferred
+ * here from #2492.
+ */
+export type BlueprintMedia = 'image' | 'video' | 'bg-video' | 'none';
+
+/**
  * Fallback stub payload for `<HeroMediaCard missing>` (brik-bds#2312) —
  * renders the same `data-content-needed` stub `Hero.astro`'s
  * `with-pricing-card` layout renders inline when `priceCard` data is absent.
@@ -389,6 +415,23 @@ export interface ClientFacts {
   }[];
 
   readonly heroImageUrl: string | null;
+  /**
+   * Hero video source for the media axis (`media: 'video' | 'bg-video'`,
+   * #2493). Absent/null when the client ships no hero video — the block falls
+   * back to `media: 'image'` (or the `data-content-needed` stub). Consumed by
+   * the shared `BlockMedia` primitive via `Hero.astro`'s `split` layout.
+   *
+   * Optional (not `heroImageUrl`'s required-`| null` shape) because it is
+   * additive: existing `ClientFacts` literals across the story fixtures predate
+   * the media axis and must keep compiling unchanged.
+   */
+  readonly heroVideoUrl?: string | null;
+  /**
+   * Poster frame for `heroVideoUrl` — the still shown before playback, with JS
+   * off, and under `prefers-reduced-motion` for `bg-video`. Falls back to
+   * `heroImageUrl` when absent, so a video always has a still to rest on.
+   */
+  readonly heroVideoPoster?: string | null;
   readonly logoUrl: string | null;
   readonly logoVariants: Readonly<Record<string, string>>;
 

@@ -16,6 +16,7 @@
  * @summary Key adapter — section + hero image → `<Hero layout="split">`.
  */
 import type { BlueprintProps } from '../astro/types';
+import { BlockMedia } from './BlockMedia';
 import { Hero } from './Hero';
 
 interface Props extends BlueprintProps {}
@@ -23,19 +24,17 @@ interface Props extends BlueprintProps {}
 export function HeroSplit6040({ section, clientFacts }: Props) {
   const heroImage = clientFacts.heroImageUrl;
 
+  // Media axis (ADR-039, #2493): the media column renders through the shared
+  // `<BlockMedia>` primitive, class-identical to the Astro rail's `<Media>`.
+  // This key adapter is image-only (the `hero_split` blueprint key); the
+  // `video`/`bg-video` values are selected by composing `<Hero media={…}>`
+  // directly, which the portal generator will drive (portal#4004).
+  //
   // Decorative-default alt: the h1 conveys meaning; the hero image is
   // atmospheric. Assistive tech skips it and reads the headline instead.
   const media = heroImage ? (
     <div className="bds-hero__media">
-      <img
-        src={heroImage}
-        alt=""
-        width={960}
-        height={1200}
-        loading="eager"
-        decoding="async"
-        className="bds-hero__image"
-      />
+      <BlockMedia media="image" src={heroImage} alt="" ratio="4-5" loading="eager" />
     </div>
   ) : (
     <div

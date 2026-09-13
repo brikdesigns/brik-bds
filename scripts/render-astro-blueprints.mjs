@@ -255,9 +255,13 @@ function assertStylesheetCoverage() {
     `bds-${name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()}`));
 
   // Components whose CSS the shell imports, as bare lowercase names: Button, …
-  const shellComponents = new Set(
-    [...shell.matchAll(/components\/ui\/(\w+)\/\w+\.css/g)].map((m) => m[1].toLowerCase()),
-  );
+  // Two import shapes: BDS components (`components/ui/<Name>/<file>.css`) and
+  // blueprint-local primitives whose CSS is single-sourced on the React rail
+  // (`../react/<Name>.css`, e.g. `BlockMedia.css` for the media axis, #2493).
+  const shellComponents = new Set([
+    ...[...shell.matchAll(/components\/ui\/(\w+)\/\w+\.css/g)].map((m) => m[1].toLowerCase()),
+    ...[...shell.matchAll(/\.\.\/react\/(\w+)\.css/g)].map((m) => m[1].toLowerCase()),
+  ]);
   const shellHasSectionShell = shell.includes('section-shell.css');
 
   const uncovered = [...roots].filter((cls) => {

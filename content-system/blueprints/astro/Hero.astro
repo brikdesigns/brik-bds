@@ -65,10 +65,11 @@
  * - Image alt: the decorative-default empty string (the h1 conveys meaning);
  *   the price-card image takes `section.priceCard.imageAlt` when informational.
  */
-import type { BlueprintAlign, BlueprintProps, HeroLayout, KnownBlueprintKey } from './types';
+import type { BlueprintAlign, BlueprintMedia, BlueprintProps, HeroLayout, KnownBlueprintKey } from './types';
 import HeroMediaCard from './HeroMediaCard.astro';
 import HeroMediaCardImage from './HeroMediaCardImage.astro';
 import HeroMediaCardPrice from './HeroMediaCardPrice.astro';
+import Media from './_Media.astro';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
@@ -103,11 +104,23 @@ interface Props extends BlueprintProps {
    */
   align?: BlueprintAlign;
   /**
+   * Media the `--split` layout's media column carries (media axis, ADR-039).
+   * `image` (default) renders the hero image; `video` a controllable player;
+   * `bg-video` an ambient reduced-motion-gated loop; `none` no media column.
+   * `video`/`bg-video` read `clientFacts.heroVideoUrl`. Rendered through the
+   * shared `<Media>` primitive; ignored by the other layouts.
+   */
+  media?: BlueprintMedia;
+  /**
    * Blueprint key to emit as `data-blueprint-key`. Supplied by
    * `BlueprintDispatcher.astro`; omitted when the block is composed directly.
    */
   blueprintKey?: KnownBlueprintKey;
-  /** `--with-pricing-card` image ratio. Ignored by the other layouts. */
+  /**
+   * `Frame` aspect ratio for the media. `--with-pricing-card` defaults to
+   * `square`; the `--split` media column defaults to `4-5`. This is the `ratio`
+   * half of the media axis (folded in here from #2492).
+   */
   imageRatio?: FrameRatio;
   /**
    * When false, suppresses the eyebrow icon slot (raw `iconUrl` image or the
@@ -122,8 +135,9 @@ const {
   clientFacts,
   layout = 'split',
   align = 'left',
+  media = 'image',
   blueprintKey,
-  imageRatio = 'square',
+  imageRatio,
   showServiceTag = true,
 } = Astro.props;
 
@@ -140,6 +154,15 @@ const cta = section.cta;
 const isSplit = layout === 'split';
 const isPricingCard = layout === 'with-pricing-card';
 const heroImage = clientFacts.heroImageUrl;
+
+// Split media column (media axis, ADR-039). `image` reads the hero image;
+// `video`/`bg-video` read the hero video, resting on a poster (video poster →
+// hero image). `none` renders no media column. The shared `<Media>` primitive
+// owns the aspect-lock via `<Frame>`, so no `aspect-ratio` is written here.
+const splitMediaSrc = media === 'image' ? heroImage : (clientFacts.heroVideoUrl ?? null);
+const splitMediaPoster = clientFacts.heroVideoPoster ?? heroImage ?? undefined;
+const splitMediaRatio = imageRatio ?? '4-5';
+const priceCardRatio = imageRatio ?? 'square';
 
 // The pricing-card layout sits on an audience-tinted surface, so its single
 // action is the inverse button; the other layouts use the primary fill.
@@ -222,26 +245,25 @@ const ctaClass = isPricingCard
       )}
     </div>
 
-    {isSplit && (heroImage ? (
+    {isSplit && media !== 'none' && (splitMediaSrc ? (
       <div class="bds-hero__media">
-        <img
-          src={heroImage}
+        <Media
+          media={media}
+          src={splitMediaSrc}
+          poster={splitMediaPoster}
           alt=""
-          width="960"
-          height="1200"
+          ratio={splitMediaRatio}
           loading="eager"
-          decoding="async"
-          class="bds-hero__image"
         />
       </div>
     ) : (
       <div
         class="bds-blueprint-section__missing bds-hero__missing"
-        data-content-needed="hero_image_url"
+        data-content-needed={media === 'image' ? 'hero_image_url' : 'hero_video_url'}
         role="presentation"
       >
         <p class="bds-blueprint-section__missing-label">
-          Hero image missing for this client.
+          Hero {media === 'image' ? 'image' : 'video'} missing for this client.
         </p>
       </div>
     ))}
@@ -251,7 +273,7 @@ const ctaClass = isPricingCard
         <HeroMediaCardImage
           src={priceCard.imageUrl}
           alt={priceCard.imageAlt ?? ''}
-          ratio={imageRatio}
+          ratio={priceCardRatio}
         />
         {(priceCard.priceLabel || priceCard.price || priceCard.cta) && (
           <HeroMediaCardPrice label={priceCard.priceLabel} value={priceCard.price}>
@@ -265,7 +287,7 @@ const ctaClass = isPricingCard
       </HeroMediaCard>
     ) : (
       <HeroMediaCard
-        ratio={imageRatio}
+        ratio={priceCardRatio}
         missing={{ label: 'Hero image card missing for this page.' }}
       />
     ))}
@@ -404,7 +426,10 @@ const ctaClass = isPricingCard
   }
 
   .bds-hero--split .bds-hero__media {
-    aspect-ratio: var(--aspect-4-5);
+    /* No `aspect-ratio` here (media axis, ADR-039 #2493): the composed
+       `<Media>` primitive locks the shape via `<Frame>` (`splitMediaRatio`,
+       default `4-5`), so the ratio is token-backed and hand-rolling it is
+       banned (`hardcoded-aspect-ratio`). This wrapper only clips + rounds. */
     overflow: hidden;
     border-radius: var(--bds-hero-image-radius, var(--border-radius-lg));
   }
@@ -651,8 +676,9 @@ const ctaClass = isPricingCard
      have caught this). `is:global` is Astro's actual per-block escape hatch
      (there is no Vue/CSS-Modules-style `:global()` selector wrapper); the
      whole tag opts out, so these three rules live here rather than mixed into
-     the scoped block above. `--split`'s own inline `<img class="bds-hero__image">`
-     is unaffected by this rule being unscoped. */
+     the scoped block above. (Since #2493 `--split` renders its media via the
+     `<Media>` primitive's `bds-block-media__img`, not `bds-hero__image`, so this
+     rule now serves only the pricing-card `<HeroMediaCardImage>`.) */
   .bds-hero__image {
     display: block;
     width: 100%;
