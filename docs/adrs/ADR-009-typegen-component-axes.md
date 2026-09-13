@@ -34,7 +34,7 @@ The manifest lives in `manifest/` (alongside `blueprints/blueprint-library.json`
 
 ### 3. CI gate: regenerate + diff on every relevant PR
 
-`.github/workflows/component-axes-check.yml` runs `npm run typegen:axes:check` on any PR touching:
+The `component lints` job in `.github/workflows/components-gate.yml` runs `npm run typegen:axes:check` (its own `component-axes-check.yml` until #2329) on any PR touching:
 - `components/ui/**/*.tsx` — type unions may have changed
 - `manifest/component-axes.json` — should only change via the generator
 - `scripts/generate-component-axes.mjs` — generator itself changed

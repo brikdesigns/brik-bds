@@ -33,7 +33,7 @@ bds-<block>__<slot>--<modifier>
 
 where `<block>`, `<slot>`, `<modifier>` are each kebab-case (`[a-z][a-z0-9]*(-[a-z0-9]+)*` for the block; `[a-z0-9]+(-[a-z0-9]+)*` for slot/modifier). No single underscores, no other separators, no doubled `__`/`--`.
 
-- The gate is `scripts/slot-pattern-check.mjs` — a pure source scan (no build step), wired into `.husky/pre-commit` (staged) and `.github/workflows/slot-pattern-check.yml` (full-tree on PR + push to main).
+- The gate is `scripts/slot-pattern-check.mjs` — a pure source scan (no build step), wired into `.husky/pre-commit` (staged) and the `component lints` job in `.github/workflows/components-gate.yml` (full-tree on PR + push to main; its own `slot-pattern-check.yml` until #2329).
 - **New vocabulary requires no canon edit** — a well-formed new slot (`__preset-display-row-tag`) passes because it *is* well-formed. Only malformed names fail.
 - Dynamic class construction (`` `bds-badge--${tone}` ``, `'bds-tag__' + slot`) is not judged — interpolation normalizes to a valid segment and trailing-separator prefixes are skipped, since the runtime tail is unknowable statically.
 
