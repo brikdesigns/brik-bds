@@ -230,16 +230,19 @@ export type BlueprintReveal = 'none' | 'fade' | 'rise' | 'stagger';
  *                    text, so both rails ship it static and the JS sweep is a
  *                    pure enhancement (React effect / Astro `<script>` twin),
  *                    reduced-motion-gated by construction.
- *   `animated-svg` — a Lottie icon via the `AnimatedIcon` primitive (React/Lottie
- *                    -only, no static Astro-rail partial).
+ *   `animated-svg` — a Lottie icon via the `AnimatedIcon` primitive. **React-rail
+ *                    -only** for the live animation (#2533): `AnimatedIcon` is
+ *                    Lottie/React-only with no pure-CSS or trivial-vanilla-JS
+ *                    twin, so the Astro rail renders the item's static `imageUrl`
+ *                    poster (which IS the reduced-motion / no-JS state), documented
+ *                    in the adopting block rather than left a silent divergence.
  *
- * **`marquee` (#2531) and `count-up` (#2532) render on both rails; `animated-svg`
- * does not render yet.** Each value's dispatcher ships with the block that first
- * adopts it, because a component unreachable from the blueprint dispatcher cannot
- * ship (#2012) — `marquee` → LogoWall, `count-up` → StatsDarkBar. `animated-svg`
- * still needs a React-only Lottie primitive with an explicit Astro-rail decision
- * (#2533); it remains reserved on the contract (vocabulary + the portal
- * generator's validation surface, #4004) until then.
+ * **All three values render (#2531/#2532/#2533).** Each value's dispatcher ships
+ * with the block that first adopts it, because a component unreachable from the
+ * blueprint dispatcher cannot ship (#2012) — `marquee` → LogoWall, `count-up` →
+ * StatsDarkBar, `animated-svg` → Features (each card's icon, from `items[].animationUrl`).
+ * `marquee` and `count-up` render identically on both rails; `animated-svg`
+ * animates on the React rail and shows its static poster on the Astro rail.
  *
  * Declared here — the framework-agnostic contract both rails share (#2302).
  */
@@ -350,6 +353,15 @@ export interface BlueprintSection {
     readonly audience?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
     /** Alt text for `imageUrl`. Defaults to empty (decorative) when omitted. */
     readonly imageAlt?: string;
+    /**
+     * Lottie animation URL for the `contentMotion: animated-svg` axis value
+     * (ADR-039 §Decision 2, #2533). When the section sets `animated-svg` and an
+     * item carries this, the item's icon animates via the `AnimatedIcon`
+     * primitive on the **React rail only**; `imageUrl` is the static poster the
+     * Astro rail renders and the by-construction reduced-motion / no-JS state.
+     * Additive, optional — blueprints that don't read it are unaffected.
+     */
+    readonly animationUrl?: string;
   }[];
   readonly cta: BlueprintCta | null;
   /**

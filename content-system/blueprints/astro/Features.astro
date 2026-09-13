@@ -27,9 +27,21 @@
  *       - href                  — Learn more target
  *       - imageUrl?             — top illustration src (omitted → blank brand block)
  *       - imageAlt?             — alt text for the illustration
+ *       - animationUrl?         — Lottie URL for `contentMotion: animated-svg`. React-rail-only (see below).
  *       - serviceLine           — REQUIRED — drives `data-service-line` re-binding (`audience` is the @deprecated alias — #788)
  *
  * required_facts: []. Section-driven.
+ *
+ * ## content-motion axis — `animated-svg` is React-rail-only (#2533, ADR-039)
+ *
+ * `section.contentMotion: animated-svg` animates each card's icon via the
+ * `AnimatedIcon` (Lottie) primitive on the **React rail only**. `AnimatedIcon` is
+ * Lottie/React-only with no pure-CSS or trivial-vanilla-JS twin (unlike `marquee`
+ * / `count-up`), and an Astro island would ship React + the Lottie runtime into
+ * every consumer Astro build for a decorative icon. So this Astro twin renders the
+ * item's static `imageUrl` poster unchanged — which IS the reduced-motion / no-JS
+ * state — a documented rail boundary, not a silent divergence (#2344). The
+ * `animationUrl` field is intentionally ignored here.
  *
  * ## Service-line scope binding (consumer responsibility)
  *
