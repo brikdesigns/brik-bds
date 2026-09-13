@@ -70,60 +70,6 @@ export const Default: Story = {
 };
 
 /**
- * `align="start"` drops the auto-margin centering and left-anchors the
- * column — the shape for a section intro that sits beside other content.
- * @summary Left-anchored section intro
- */
-export const StartAligned: Story = {
-  args: {
-    title: 'Built for how you already work',
-    description:
-      'Import your existing client list in minutes — no migration project required.',
-    align: 'start',
-  },
-  render: (args) => (
-    <Band>
-      <SectionHeader {...args} />
-    </Band>
-  ),
-};
-
-/**
- * `measure="sm"` (44ch) — a short intro or single-line eyebrow + title.
- * @summary Narrow 44ch measure
- */
-export const MeasureSm: Story = {
-  args: {
-    title: 'Simple, transparent pricing',
-    description: 'No hidden fees. Cancel anytime.',
-    measure: 'sm',
-  },
-  render: (args) => (
-    <Band>
-      <SectionHeader {...args} />
-    </Band>
-  ),
-};
-
-/**
- * `measure="lg"` (72ch) — long-form prose or a richer description.
- * @summary Wide 72ch measure
- */
-export const MeasureLg: Story = {
-  args: {
-    title: 'Why practices switch to Brik',
-    description:
-      'Most teams patch together a CRM, a billing tool, and a shared inbox — and still lose track of who said what to which client. Brik replaces the patchwork with one system built specifically for service businesses, so nothing falls through the cracks between tools.',
-    measure: 'lg',
-  },
-  render: (args) => (
-    <Band>
-      <SectionHeader {...args} />
-    </Band>
-  ),
-};
-
-/**
  * `onColor` on a filled brand band — the CTA-band shape. Forwarded to
  * `ContentBlock`, which owns the swap to `--text-on-color-dark`; SectionHeader
  * still owns only measure + centering. This is what replaces a hand-rolled
@@ -205,24 +151,6 @@ export const InteractionTestOnColorForwarding: Story = {
     const title = canvasElement.querySelector('.bds-content-block__title');
     await expect(title).not.toHaveAttribute('style');
   },
-};
-
-/**
- * `subtitle` paired with `title` — the tight ADR-023 rhythm step, centered
- * like every other slot.
- * @summary Title with a paired subtitle
- */
-export const WithSubtitle: Story = {
-  args: {
-    title: 'Membership Plans',
-    subtitle: 'Choose the plan that fits your practice',
-    description: 'Every plan includes unlimited support and quarterly reviews.',
-  },
-  render: (args) => (
-    <Band>
-      <SectionHeader {...args} />
-    </Band>
-  ),
 };
 
 /**
