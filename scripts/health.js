@@ -56,11 +56,13 @@ const WEBSITE_ONLY = new Set([
   'CardDisplay',
 ]);
 
-// Documentation-only or placeholder directories — no exported component,
-// so a CSS file is not expected. Excluded from CSS completeness check.
+// Directories with no CSS of their own — documentation-only / placeholder
+// dirs, or pure shims that render another component (no styled markup of their
+// own). A CSS file is not expected. Excluded from CSS completeness check.
 const DOCS_ONLY = new Set([
   'Calendar',  // placeholder — calendar is a sub-component of DatePicker
   'Icons',     // reference page — icon grid stories only, no styled component
+  'BreadcrumbSwitcher',  // deprecated shim — renders Breadcrumb; styles live in Breadcrumb.css (#2521)
 ]);
 
 // ─── CLI args ────────────────────────────────────────────────────────

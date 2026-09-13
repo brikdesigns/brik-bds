@@ -1,0 +1,29 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './BreadcrumbSwitcher.stories';
+
+<Meta of={Stories} />
+
+# Breadcrumb switcher
+
+<ComponentLinks slug="breadcrumb-switcher" />
+
+Breadcrumb trail plus a caret that opens a menu of sibling records — jump between other services in the same line, or other projects on the same client, without navigating back to an index page.
+
+> **Note** — Deprecated. Use `<Breadcrumb options={…} switchLabel="…" onNavigate={…} />` instead ([#2521](https://github.com/brikdesigns/brik-bds/issues/2521)) — the switcher folded into `Breadcrumb` as optional props. The `BreadcrumbSwitcher` export is a thin shim with identical props, unchanged until removal in a future major.
+
+## Playground
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Single option
+
+A single option means there is nothing to switch to — the caret is omitted and the trail renders as a plain `Breadcrumb`.
+
+<Canvas of={Stories.SingleOption} />
+
+## Props
+
+<ArgTypes of={Stories} />
