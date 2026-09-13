@@ -1,0 +1,83 @@
+---
+/**
+ * _Marquee — the shared content-motion partial for the blueprint motion axis
+ * (ADR-039 §Decision 2, brik-bds#2529). Astro twin of the React `Marquee`
+ * primitive (`components/ui/Marquee/Marquee.tsx`), which is React-only but
+ * pure-CSS — so this partial emits the same `bds-marquee*` DOM and the shared
+ * `Marquee.css` (→ `dist/styles.css`) drives both rails identically.
+ *
+ * A blueprint never hand-rolls a `@keyframes` or an inline `animation:` — a
+ * block selects `contentMotion: marquee` and dispatches its item strip through
+ * this partial. Underscore-prefixed: a presentational partial composed by blocks
+ * (e.g. `LogoWall.astro`), not a dispatched blueprint — so it is excluded from
+ * the on-disk reachability gate (`validate-blueprints.mjs`), the same as
+ * `_Media.astro`.
+ *
+ * No `<style>` block: `bds-marquee*` is single-sourced in
+ * `components/ui/Marquee/Marquee.css`, which the consumer site's BDS stylesheet
+ * ships and the Storybook shell imports via `_AstroFrame.tsx` (ADR-040 mirror
+ * coverage) — the same self-contained pattern as `_Media.astro`.
+ *
+ * **Reduced-motion-gated by construction** (AC): the track's scroll animation is
+ * disabled and the loop collapses to a single wrapped row under
+ * `@media (prefers-reduced-motion: reduce)` in `Marquee.css` — pure CSS, no JS,
+ * so an agent selecting `marquee` cannot ship un-gated motion.
+ *
+ * Renders `items` twice on the track (the second group `aria-hidden`, matching
+ * the React primitive) so the loop reads as continuous and assistive tech
+ * announces the set once. `direction` / `pauseOnHover` / `fade` are `[data-*]`
+ * behavior knobs, not BEM modifiers (ADR-033 §4) — mirrors the React contract.
+ *
+ * @summary Blueprint content-motion partial — a seamless scrolling ticker (`Marquee`) selected by the `contentMotion` axis, reduced-motion-gated by construction.
+ */
+type LogoItem = {
+  readonly imageUrl?: string;
+  readonly imageAlt?: string;
+  readonly title: string;
+  readonly href?: string;
+};
+
+interface Props {
+  /** The logo/item set to scroll. Rendered twice for a seamless loop. */
+  items: readonly LogoItem[];
+  /** Scroll direction. Default `'ltr'`. */
+  direction?: 'ltr' | 'rtl';
+  /** Pause the scroll on hover. Default `false`. */
+  pauseOnHover?: boolean;
+  /** Edge fade mask. Default `true`. */
+  fade?: boolean;
+}
+
+const { items, direction = 'ltr', pauseOnHover = false, fade = true } = Astro.props;
+---
+
+<div
+  class="bds-marquee"
+  data-direction={direction}
+  data-pause-on-hover={pauseOnHover || undefined}
+  data-fade={fade || undefined}
+>
+  <div class="bds-marquee__track">
+    {/* The set is rendered twice on the track; the second group is aria-hidden
+        so assistive tech announces the items once (matches the React primitive,
+        which renders `children` verbatim in both groups). */}
+    <div class="bds-marquee__group">
+      {items.map((item) =>
+        item.href ? (
+          <a href={item.href}><img src={item.imageUrl} alt={item.imageAlt ?? item.title} loading="lazy" /></a>
+        ) : (
+          <img src={item.imageUrl} alt={item.imageAlt ?? item.title} loading="lazy" />
+        ),
+      )}
+    </div>
+    <div class="bds-marquee__group" aria-hidden="true">
+      {items.map((item) =>
+        item.href ? (
+          <a href={item.href}><img src={item.imageUrl} alt={item.imageAlt ?? item.title} loading="lazy" /></a>
+        ) : (
+          <img src={item.imageUrl} alt={item.imageAlt ?? item.title} loading="lazy" />
+        ),
+      )}
+    </div>
+  </div>
+</div>

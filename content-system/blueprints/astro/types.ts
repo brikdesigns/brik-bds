@@ -39,7 +39,8 @@ export type KnownBlueprintKey =
   | 'stats_bar'
   | 'testimonials_featured_large'
   | 'cta_centered'
-  | 'cta_split_contact';
+  | 'cta_split_contact'
+  | 'logo_wall';
 
 /**
  * Blueprint keys that have a shipped Astro component wired into the
@@ -73,6 +74,7 @@ export const WIRED_BLUEPRINT_KEYS = [
   'testimonials_featured_large',
   'cta_split_contact',
   'cta_centered',
+  'logo_wall',
 ] as const satisfies readonly KnownBlueprintKey[];
 
 /** A `KnownBlueprintKey` with a shipped component (∈ `WIRED_BLUEPRINT_KEYS`). */

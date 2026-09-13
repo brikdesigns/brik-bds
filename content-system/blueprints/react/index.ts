@@ -101,10 +101,14 @@ export type { BlockMediaProps } from './BlockMedia';
 export { BlockReveal } from './BlockReveal';
 export type { BlockRevealProps } from './BlockReveal';
 
-// The `contentMotion` axis half (`marquee` / `count-up` / `animated-svg`) is
-// declared on the contract via `BlueprintContentMotion` above; its render
-// dispatcher ships with the block that first adopts it (a component unreachable
-// from the dispatcher cannot ship, #2012) — tracked in the motion follow-up (#2309).
+// `<BlockContentMotion>` — the shared content-motion dispatcher (ADR-039
+// §Decision 2, #2529), the content half of the motion axis. Renders `marquee`
+// through the `Marquee` primitive selected by the `contentMotion` axis,
+// reduced-motion-gated by construction; `count-up` / `animated-svg` land with
+// their own adopting blocks (#2532 / #2533). Ships with `LogoWall`, its first
+// adopter (a component unreachable from the dispatcher cannot ship, #2012).
+export { BlockContentMotion } from './BlockContentMotion';
+export type { BlockContentMotionProps } from './BlockContentMotion';
 
 // `<About>` — the `bds-about` narrative section primitive
 // (post-brik-bds#1198 consolidation, the last Phase D family). Props-based:
@@ -142,6 +146,11 @@ export { StatsDarkBar } from './StatsDarkBar';
 export { TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge';
 export { CtaDarkCentered } from './CtaDarkCentered';
 export { CtaSplitContact } from './CtaSplitContact';
+
+// `<LogoWall>` — logo / partner / trust strip; the first block to adopt the
+// content-motion axis (#2529). Named per block (not block+layout), matching the
+// newer StatsDarkBar / TestimonialsFeaturedLarge rail-parity convention.
+export { LogoWall } from './LogoWall';
 
 // ── Dispatch surface ────────────────────────────────────────────
 export { BlueprintDispatcher } from './BlueprintDispatcher';
