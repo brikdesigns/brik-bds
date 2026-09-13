@@ -29,6 +29,10 @@ export type {
   ResolvedFooterArchetype,
   ResolvedTheme,
   BlueprintProps,
+  // Motion axis unions (ADR-039 §Decision 2, #2494) — shared with the Astro rail;
+  // the portal generator (#4004) validates section data against them.
+  BlueprintReveal,
+  BlueprintContentMotion,
 } from '../astro/types';
 
 // ── Blueprint renderers ─────────────────────────────────────────
@@ -89,6 +93,18 @@ export type { HeroMediaCardPriceProps } from './HeroMediaCardPrice';
 // rail's `_Media.astro`. `bg-video` is reduced-motion-gated by construction.
 export { BlockMedia } from './BlockMedia';
 export type { BlockMediaProps } from './BlockMedia';
+
+// `<BlockReveal>` — the shared motion-axis entrance primitive (ADR-039 §Decision 2,
+// #2494). Applies a `fade` / `rise` / `stagger` entrance selected by the `reveal`
+// axis, reduced-motion-gated by construction. The Astro rail applies the same
+// `bds-block-reveal--*` modifier class directly (a modifier needs no wrapper).
+export { BlockReveal } from './BlockReveal';
+export type { BlockRevealProps } from './BlockReveal';
+
+// The `contentMotion` axis half (`marquee` / `count-up` / `animated-svg`) is
+// declared on the contract via `BlueprintContentMotion` above; its render
+// dispatcher ships with the block that first adopts it (a component unreachable
+// from the dispatcher cannot ship, #2012) — tracked in the motion follow-up (#2309).
 
 // `<About>` — the `bds-about` narrative section primitive
 // (post-brik-bds#1198 consolidation, the last Phase D family). Props-based:

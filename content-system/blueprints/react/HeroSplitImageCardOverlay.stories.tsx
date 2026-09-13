@@ -70,7 +70,6 @@ const interiorHeroSection: BlueprintProps['section'] = {
     moodKeywords: ['approachable', 'modern'],
     layoutBlueprint: 'hero_split_image_card_overlay',
     imageOpportunity: 'service-deliverable photo',
-    animationSuggestion: null,
     illustrationOpportunity: null,
   },
   items: [],

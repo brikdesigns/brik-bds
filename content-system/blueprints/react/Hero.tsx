@@ -52,8 +52,9 @@ import { type HTMLAttributes, type ReactNode } from 'react';
 import { Button } from '../../../components';
 import type { ButtonVariant } from '../../../components/ui/Button';
 import { bdsClass } from '../../../components/utils';
-import type { BlueprintAlign, BlueprintCta, HeroLayout } from '../astro/types';
+import type { BlueprintAlign, BlueprintCta, BlueprintReveal, HeroLayout } from '../astro/types';
 import { isActionCta } from '../astro/types';
+import { BlockReveal } from './BlockReveal';
 import '../section-shell.css';
 import './Hero.css';
 
@@ -90,6 +91,14 @@ export interface HeroProps extends HTMLAttributes<HTMLElement> {
    */
   align?: BlueprintAlign;
   /**
+   * Content-column entrance (motion axis, ADR-039 §Decision 2). `none` (default)
+   * keeps the current rendering; `fade` / `rise` reveal the content column as a
+   * unit; `stagger` reveals its children (eyebrow → h1 → lead → CTA) in turn.
+   * Applied via the shared `BlockReveal` primitive — reduced-motion-gated by
+   * construction, so a consumer never writes a `@keyframes`.
+   */
+  reveal?: BlueprintReveal;
+  /**
    * The split / pricing-card layout's media column (e.g. an image node, a
    * `data-content-needed` stub, or the composed price-card `aside`). Ignored
    * when `layout` is `interior-minimal`.
@@ -123,6 +132,7 @@ export function Hero({
   cta,
   layout = 'split',
   align = 'left',
+  reveal = 'none',
   media,
   breadcrumb,
   eyebrow,
@@ -146,7 +156,7 @@ export function Hero({
       {...rest}
     >
       <div className="bds-blueprint-section__container bds-hero__container">
-        <div className="bds-hero__content">
+        <BlockReveal reveal={reveal} className="bds-hero__content">
           {breadcrumb && <div className="bds-hero__breadcrumb">{breadcrumb}</div>}
           {eyebrow}
           {subtitle && <p className="bds-hero__subtitle">{subtitle}</p>}
@@ -163,7 +173,7 @@ export function Hero({
               {cta.label}
             </Button>
           )}
-        </div>
+        </BlockReveal>
 
         {hasMedia && media}
       </div>
