@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from 'storybook/test';
 import { Image } from './Image';
 
 /* ─── Story-only placeholders (data URI, no network) ─── */
@@ -7,12 +8,6 @@ const landscape =
   'data:image/svg+xml;utf8,' +
   encodeURIComponent(
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450"><rect width="800" height="450" fill="#e4b596"/><text x="400" y="235" text-anchor="middle" font-family="sans-serif" font-size="32" fill="#5a3a28">800 × 450</text></svg>',
-  );
-
-const portrait =
-  'data:image/svg+xml;utf8,' +
-  encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 800"><rect width="450" height="800" fill="#a8c8b8"/><text x="225" y="410" text-anchor="middle" font-family="sans-serif" font-size="32" fill="#2e4d3f">450 × 800</text></svg>',
   );
 
 const meta: Meta<typeof Image> = {
@@ -66,32 +61,25 @@ export const Default: Story = {
 /* `fit` is a Control on Default — the mode gallery lives in Image.mdx
    as a docs-local demo (rule 5, #1489 / #1502). */
 
-/** @summary Figure with a figcaption */
-export const WithCaption: Story = {
-  args: {
-    src: portrait,
-    alt: 'Dr. Alice Chen in the clinic',
-    ratio: '3-4',
-    caption: 'Dr. Alice Chen, Lead Orthodontist',
-  },
-  render: (args) => (
-    <div style={{ maxWidth: 320 }}>
-      <Image {...args} />
-    </div>
-  ),
-};
-
-/** @summary Eager-loaded LCP hero (fetchpriority high) */
-export const Eager: Story = {
+/**
+ * `eager` is non-visual (Rule 3) — it renders identically to `Default`,
+ * differing only in the `<img>` loading hints. Assert the wiring instead of
+ * snapshotting an identical frame: `eager` must set `loading="eager"` +
+ * `fetchpriority="high"` (Image.tsx), the LCP-image contract.
+ *
+ * @summary InteractionTest — eager sets loading + fetchpriority hints
+ */
+export const InteractionTestEagerHints: Story = {
+  tags: ['!manifest', 'interaction-test'],
   args: {
     src: landscape,
     alt: 'Above-the-fold hero image',
     ratio: '21-9',
     eager: true,
   },
-  render: (args) => (
-    <div style={{ maxWidth: 640 }}>
-      <Image {...args} />
-    </div>
-  ),
+  play: async ({ canvasElement }) => {
+    const img = within(canvasElement).getByRole('img');
+    await expect(img).toHaveAttribute('loading', 'eager');
+    await expect(img).toHaveAttribute('fetchpriority', 'high');
+  },
 };
