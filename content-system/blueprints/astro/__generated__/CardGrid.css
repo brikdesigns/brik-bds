@@ -132,6 +132,25 @@
     }
   }
 
+  /* ── --cols-*: column-count axis (ADR-039 §1, #2492) ─────────────
+     Caps the widest-breakpoint count on the dispatched card grid; the
+     mobile/tablet ramp is preserved. Omitted → the default ramp above. The
+     `bds-card-grid--cols-*` vocabulary is single-sourced in ../react/CardGrid.css
+     so the class reaches dist/styles.css for canonical-class-check. */
+  @media (min-width: 992px) {
+    .bds-card-grid--cols-2 .bp-services-grid__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bds-card-grid--cols-3 .bp-services-grid__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .bds-card-grid--cols-4 .bp-services-grid__list {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
   .bp-services-grid__item {
     display: flex;
   }

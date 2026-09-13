@@ -89,6 +89,8 @@ const meta: Meta<typeof Features> = {
     title: { control: 'text', description: 'Section heading.' },
     body: { control: 'text', description: 'One-line section subheading.' },
     items: { control: false, description: 'Feature cards `{ title, description, href, serviceLine }[]`; each emits `data-service-line` for brand-color re-binding.' },
+    align: { control: 'inline-radio', options: ['center', 'left'], description: 'Section-header placement (structure axis, ADR-039). `center` default; `left` emits `bds-features--align-left`. Header only — the grid is unaffected.' },
+    columns: { control: 'inline-radio', options: [undefined, 2, 3, 4], description: 'Widest-breakpoint column count (structure axis, ADR-039). Omitted → the default 1 → 2 → 3 ramp; set → `bds-features--cols-*`.' },
   },
   parameters: {
     layout: 'fullscreen',
@@ -115,5 +117,34 @@ export const Default: Story = {
     title: 'Featured capabilities',
     body: 'A short section subheading that frames the cards below — typically a cross-sell or capability roll-up.',
     items,
+  },
+};
+
+/**
+ * Distinct meaningful state: `align="left"` flushes the section header to the
+ * start (structure axis, ADR-039). The card grid is unaffected.
+ *
+ * @summary Align-left — flush-start section header
+ */
+export const AlignLeft: Story = {
+  args: {
+    ...Default.args,
+    sectionKey: 'features-align-left',
+    align: 'left',
+  },
+};
+
+/**
+ * Distinct meaningful state: `columns={4}` widens the grid to four columns at
+ * the widest breakpoint (structure axis, ADR-039); the mobile/tablet ramp is
+ * preserved. The five cards wrap 4 + 1.
+ *
+ * @summary Columns-4 — four-up grid at the widest breakpoint
+ */
+export const ColumnsFour: Story = {
+  args: {
+    ...Default.args,
+    sectionKey: 'features-cols-4',
+    columns: 4,
   },
 };

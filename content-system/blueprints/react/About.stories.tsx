@@ -11,6 +11,7 @@ const meta: Meta<typeof About> = {
     subtitle: { control: 'text', description: 'Eyebrow above the heading.' },
     title: { control: 'text', description: 'Section heading (the narrative h2).' },
     body: { control: 'text', description: 'Narrative body copy.' },
+    align: { control: 'inline-radio', options: ['left', 'center'], description: 'Narrative-column placement (structure axis, ADR-039). `left` default; `center` emits `bds-about--align-center`.' },
     testimonial: { control: false, description: 'Optional pull-quote `{ quote, author, authorRole }` — renders a composed CardTestimonial aside and flips to two columns.' },
   },
   parameters: {
@@ -62,5 +63,19 @@ export const NarrativeOnly: Story = {
     subtitle: 'Who we are',
     title: 'A story-led section that introduces the brand.',
     body: 'A short paragraph of about-copy that sets context for the visitor — who you are, what you do, and the posture you bring to the work.',
+  },
+};
+
+/**
+ * Distinct meaningful state: `align="center"` centres the narrative column
+ * (structure axis, ADR-039) — reads most naturally on the single-column form.
+ *
+ * @summary Align-center — centred narrative column
+ */
+export const AlignCenter: Story = {
+  args: {
+    ...NarrativeOnly.args,
+    sectionKey: 'about-align-center',
+    align: 'center',
   },
 };

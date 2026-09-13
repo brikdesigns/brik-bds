@@ -37,6 +37,7 @@ import { type HTMLAttributes } from 'react';
 
 import { CardTestimonial } from '../../../components';
 import { bdsClass } from '../../../components/utils';
+import type { BlueprintAlign } from '../astro/types';
 import '../section-shell.css';
 import './About.css';
 
@@ -68,6 +69,12 @@ export interface AboutProps extends HTMLAttributes<HTMLElement> {
    * column. Rendered as an `outlined` `<CardTestimonial>`.
    */
   testimonial?: AboutTestimonial;
+  /**
+   * Narrative-column placement (structure axis, ADR-039). `left` (default) or
+   * `center`; emits the enum-bound `bds-about--align-center` modifier. Reads
+   * most naturally on the single-column (no-testimonial) narrative.
+   */
+  align?: BlueprintAlign;
 }
 
 export function About({
@@ -76,6 +83,7 @@ export function About({
   subtitle,
   body,
   testimonial,
+  align = 'left',
   className,
   ...rest
 }: AboutProps) {
@@ -83,7 +91,12 @@ export function About({
 
   return (
     <section
-      className={bdsClass('bds-blueprint-section', 'bds-about', className)}
+      className={bdsClass(
+        'bds-blueprint-section',
+        'bds-about',
+        align === 'center' && 'bds-about--align-center',
+        className,
+      )}
       aria-labelledby={titleId}
       {...rest}
     >

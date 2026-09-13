@@ -10,6 +10,7 @@ const meta: Meta<typeof Hero> = {
   argTypes: {
     sectionKey: { control: 'text', description: 'Unique section key — drives element ids.' },
     layout: { control: 'inline-radio', options: ['split', 'interior-minimal', 'with-pricing-card'], description: 'Structural layout modifier per ADR-008 §3.' },
+    align: { control: 'inline-radio', options: ['left', 'center'], description: 'Content-column placement (structure axis, ADR-039). `left` default; `center` emits `bds-hero--align-center`.' },
     subtitle: { control: 'text', description: 'Eyebrow above the h1.' },
     title: { control: 'text', description: 'Page h1 — Hero blueprints own the page heading.' },
     lead: { control: 'text', description: 'Supporting lead paragraph.' },
@@ -77,6 +78,20 @@ export const InteriorMinimal: Story = {
     title: 'Web design & development',
     lead: 'An interior-page hero: eyebrow, headline, and an optional lead — no image, tighter measure.',
     cta: { label: 'See our work', url: '#work' },
+  },
+};
+
+/**
+ * Distinct meaningful state: `align="center"` centres the content stack
+ * (structure axis, ADR-039). The default `left` is the flush-start hero.
+ *
+ * @summary Align-center — centred content column
+ */
+export const AlignCenter: Story = {
+  args: {
+    ...Default.args,
+    sectionKey: 'hero-align-center',
+    align: 'center',
   },
 };
 

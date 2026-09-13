@@ -14,6 +14,7 @@ const meta: Meta<typeof Cta> = {
     title: { control: 'text', description: 'Closing-CTA heading.' },
     body: { control: 'text', description: 'Supporting prompt copy.' },
     layout: { control: 'inline-radio', options: ['default', 'split'], description: '`default` single-column inverse surface; `split` two-column copy + aside.' },
+    align: { control: 'inline-radio', options: ['center', 'left'], description: 'Default-layout placement (structure axis, ADR-039). `center` default; `left` emits `bds-cta--align-left`. Moot for `split`.' },
     primaryCta: { control: false, description: 'Primary action `{ label, url }` or `{ label, onClick }` (onClick renders a button).' },
     secondaryCta: { control: false, description: 'Optional lower-emphasis secondary action.' },
     aside: { control: false, description: 'Aside node for `layout="split"` (e.g. contact methods).' },
@@ -62,6 +63,21 @@ export const WithSecondaryAction: Story = {
     sectionKey: 'cta-two-actions',
     primaryCta: { label: 'Get started', url: '#start' },
     secondaryCta: { label: "Let's talk", url: '#contact' },
+  },
+};
+
+/**
+ * Distinct meaningful state: `align="left"` flushes the default single-column
+ * CTA to the start (structure axis, ADR-039), for closing sections that read
+ * better left-aligned than centred.
+ *
+ * @summary Align-left — flush-start single-column CTA
+ */
+export const AlignLeft: Story = {
+  args: {
+    ...Default.args,
+    sectionKey: 'cta-align-left',
+    align: 'left',
   },
 };
 

@@ -125,6 +125,41 @@ export type CtaLayout = 'default' | 'split';
 export type CardGridLayout = 'card-grid' | 'two-column-list';
 
 /**
+ * Structure axis — content placement (ADR-039 §Decision 1, #2492).
+ *
+ * A curated closed union, NOT free config: an agent picks a value, the block
+ * writes the enum-bound `bds-{block}--align-*` modifier, and a consumer never
+ * hand-writes alignment CSS. This narrows ADR-008 §3 — which banned
+ * `--centered` — for *placement only*: appearance (`--dark`) and theme
+ * (`--inverse`) words stay banned, because a re-theme falsifies them, while
+ * alignment is a composition choice a re-theme preserves. Each block keeps its
+ * established default (Hero/About content is `left`; Cta/Features headers are
+ * `center`) and the modifier is emitted only for the non-default value, so the
+ * axis adds variants without changing any existing rendering.
+ *
+ * Declared here — the framework-agnostic contract both rails share (#2302) — so
+ * the axis cannot be added to one rail only.
+ */
+export type BlueprintAlign = 'center' | 'left';
+
+/**
+ * Structure axis — column count for the block's own item grid (ADR-039
+ * §Decision 1, #2492). A curated closed union backing the enum-bound
+ * `bds-{block}--cols-*` modifier; the block writes it, never the consumer.
+ *
+ * Applies to blocks that render their OWN grid: `Features` (both rails) and
+ * `CardGrid`'s Astro dispatched item grid. `CardGrid`'s React rail composes
+ * children and delegates column count to the consumer's `<Grid columns>` (its
+ * own contract), so it does not read this prop — the `bds-card-grid--cols-*`
+ * vocabulary is still single-sourced in `react/CardGrid.css` so the class is
+ * published to `dist/styles.css` for canonical-class-check (ADR-040).
+ *
+ * Omitted → the block keeps its responsive default ramp (1 → 2 → 3), so the
+ * axis is additive and changes no existing rendering.
+ */
+export type BlueprintColumns = 2 | 3 | 4;
+
+/**
  * Fallback stub payload for `<HeroMediaCard missing>` (brik-bds#2312) —
  * renders the same `data-content-needed` stub `Hero.astro`'s
  * `with-pricing-card` layout renders inline when `priceCard` data is absent.

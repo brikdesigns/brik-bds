@@ -40,7 +40,7 @@ import { type HTMLAttributes, type ReactNode } from 'react';
 
 import { Button } from '../../../components';
 import { bdsClass } from '../../../components/utils';
-import type { BlueprintCta, CtaLayout } from '../astro/types';
+import type { BlueprintAlign, BlueprintCta, CtaLayout } from '../astro/types';
 import { isActionCta } from '../astro/types';
 import '../section-shell.css';
 import './Cta.css';
@@ -72,6 +72,14 @@ export interface CtaProps extends HTMLAttributes<HTMLElement> {
    * `split` = two-column layout with `aside` on the right.
    */
   layout?: CtaLayout;
+  /**
+   * Content placement for the `default` layout (structure axis, ADR-039).
+   * `center` (default) is the centred closing prompt; `left` flushes the
+   * heading → body → actions to the start. Emits the enum-bound
+   * `bds-cta--align-left` modifier. Moot for `split`, which is inherently
+   * two-column left-aligned.
+   */
+  align?: BlueprintAlign;
   /**
    * Right-column content for the `split` layout (e.g. contact methods).
    * Ignored when `layout` is `default`.
@@ -106,6 +114,7 @@ export function Cta({
   primaryCta,
   secondaryCta,
   layout = 'default',
+  align = 'center',
   aside,
   className,
   ...rest
@@ -118,7 +127,15 @@ export function Cta({
 
   return (
     <section
-      className={bdsClass('bds-blueprint-section', 'bds-cta', isSplit && 'bds-cta--split', className)}
+      className={bdsClass(
+        'bds-blueprint-section',
+        'bds-cta',
+        isSplit && 'bds-cta--split',
+        // Alignment is a choice only for the default single-column layout;
+        // split is inherently left-aligned two-column.
+        !isSplit && align === 'left' && 'bds-cta--align-left',
+        className,
+      )}
       aria-labelledby={titleId}
       {...rest}
     >

@@ -52,7 +52,7 @@ import { type HTMLAttributes, type ReactNode } from 'react';
 import { Button } from '../../../components';
 import type { ButtonVariant } from '../../../components/ui/Button';
 import { bdsClass } from '../../../components/utils';
-import type { BlueprintCta, HeroLayout } from '../astro/types';
+import type { BlueprintAlign, BlueprintCta, HeroLayout } from '../astro/types';
 import { isActionCta } from '../astro/types';
 import '../section-shell.css';
 import './Hero.css';
@@ -82,6 +82,13 @@ export interface HeroProps extends HTMLAttributes<HTMLElement> {
    * `with-pricing-card` = interior split; content trail + an `aside` image/price card.
    */
   layout?: HeroLayout;
+  /**
+   * Content-column placement (structure axis, ADR-039). `left` (default) keeps
+   * the content flush-start; `center` centres the eyebrow → h1 → lead → CTA
+   * stack. The block writes the enum-bound `bds-hero--align-center` modifier;
+   * a consumer never sets alignment CSS.
+   */
+  align?: BlueprintAlign;
   /**
    * The split / pricing-card layout's media column (e.g. an image node, a
    * `data-content-needed` stub, or the composed price-card `aside`). Ignored
@@ -115,6 +122,7 @@ export function Hero({
   lead,
   cta,
   layout = 'split',
+  align = 'left',
   media,
   breadcrumb,
   eyebrow,
@@ -127,7 +135,13 @@ export function Hero({
 
   return (
     <section
-      className={bdsClass('bds-blueprint-section', 'bds-hero', `bds-hero--${layout}`, className)}
+      className={bdsClass(
+        'bds-blueprint-section',
+        'bds-hero',
+        `bds-hero--${layout}`,
+        align === 'center' && 'bds-hero--align-center',
+        className,
+      )}
       aria-labelledby={titleId}
       {...rest}
     >

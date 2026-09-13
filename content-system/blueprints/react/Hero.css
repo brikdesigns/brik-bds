@@ -67,6 +67,16 @@
   max-width: 55ch;
 }
 
+/* ── --align-center: structure axis (ADR-039 §1) ─────────────────────────── */
+/* Centres the content column stack. `left` (flush-start) is the default and
+   needs no modifier; only the non-default value is emitted, so existing heroes
+   render unchanged. Structural placement, not appearance — ADR-008 §3's ban is
+   narrowed to appearance/theme words only (see BlueprintAlign in astro/types.ts). */
+.bds-hero--align-center .bds-hero__content {
+  align-items: center;
+  text-align: center;
+}
+
 /* ── --interior-minimal: single narrow content column, no media ──────────── */
 
 .bds-hero--interior-minimal .bds-hero__container {
