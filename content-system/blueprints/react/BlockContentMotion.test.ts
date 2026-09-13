@@ -8,10 +8,13 @@
  *   - `marquee` wraps its children in the `Marquee` primitive's `bds-marquee`
  *     DOM (track + two groups, the second aria-hidden), so the shared
  *     `Marquee.css` drives it on both rails.
- *   - `count-up` / `animated-svg` fall through to passthrough here — they render
- *     through their own primitives once their sub-issues wire an adopting block
- *     (#2532 / #2533); a block adopting the axis today sets only `none` /
- *     `marquee`, so this is never reached in practice.
+ *   - `count-up` wraps its child number in the `CountUp` primitive's
+ *     `bds-count-up` element — the final number is the DOM text, so SSR emits the
+ *     static value and the sweep is a client-only enhancement over it (#2532).
+ *   - `animated-svg` falls through to passthrough here — it renders through its
+ *     own primitive once its sub-issue wires an adopting block (#2533); a block
+ *     adopting the axis today sets only values it renders, so this is never
+ *     reached in practice.
  *
  * The reduced-motion gate is BY CONSTRUCTION — `Marquee.css` neutralises the
  * scroll under `@media (prefers-reduced-motion: reduce)` — a pure-CSS fact with
@@ -49,8 +52,18 @@ describe('BlockContentMotion content-motion axis (#2529)', () => {
     expect(html).toContain('aria-hidden="true"');
   });
 
-  it('count-up / animated-svg fall through to passthrough until their sub-issues wire a block', () => {
-    expect(markup({ contentMotion: 'count-up', children: 'x' })).not.toContain('bds-marquee');
-    expect(markup({ contentMotion: 'animated-svg', children: 'x' })).not.toContain('bds-marquee');
+  it('count-up wraps its child number in the CountUp primitive, SSR-ing the static value', () => {
+    const html = markup({ contentMotion: 'count-up', children: '4,800+' });
+    expect(html).toContain('class="bds-count-up"');
+    // The final number is the DOM text — SSR emits it verbatim, no `0` flash and
+    // no marquee wrapper. The sweep is a client-only enhancement.
+    expect(html).toContain('4,800+');
+    expect(html).not.toContain('bds-marquee');
+  });
+
+  it('animated-svg falls through to passthrough until its sub-issue wires a block', () => {
+    const html = markup({ contentMotion: 'animated-svg', children: 'x' });
+    expect(html).not.toContain('bds-marquee');
+    expect(html).not.toContain('bds-count-up');
   });
 });

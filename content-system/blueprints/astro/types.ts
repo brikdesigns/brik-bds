@@ -225,19 +225,21 @@ export type BlueprintReveal = 'none' | 'fade' | 'rise' | 'stagger';
  *   `none`         — no content motion (the default; content renders as-is).
  *   `marquee`      — a seamless scrolling ticker via the `Marquee` primitive
  *                    (`bds-marquee*`), reduced-motion-gated by that component.
- *   `count-up`     — a number that increments into view (net-new primitive, no
- *                    existing foundation, no static Astro-rail form).
+ *   `count-up`     — a number that counts up into view via the `CountUp`
+ *                    primitive (`bds-count-up`); the final number is the DOM
+ *                    text, so both rails ship it static and the JS sweep is a
+ *                    pure enhancement (React effect / Astro `<script>` twin),
+ *                    reduced-motion-gated by construction.
  *   `animated-svg` — a Lottie icon via the `AnimatedIcon` primitive (React/Lottie
  *                    -only, no static Astro-rail partial).
  *
- * **This union is declared on the contract now — the vocabulary + the portal
- * generator's validation surface (#4004) — but no value renders yet.** The
- * dispatcher ships with the block that first adopts it, because a component
- * unreachable from the blueprint dispatcher cannot ship (#2012); `count-up` +
- * `animated-svg` additionally need net-new / React-only primitives with no Astro
- * parity, which would break the one-block-two-rails discipline (#2302). All of it
- * is tracked in the motion follow-up under #2309. `reveal` is the fully-rendered
- * half of the axis this pass.
+ * **`marquee` (#2531) and `count-up` (#2532) render on both rails; `animated-svg`
+ * does not render yet.** Each value's dispatcher ships with the block that first
+ * adopts it, because a component unreachable from the blueprint dispatcher cannot
+ * ship (#2012) — `marquee` → LogoWall, `count-up` → StatsDarkBar. `animated-svg`
+ * still needs a React-only Lottie primitive with an explicit Astro-rail decision
+ * (#2533); it remains reserved on the contract (vocabulary + the portal
+ * generator's validation surface, #4004) until then.
  *
  * Declared here — the framework-agnostic contract both rails share (#2302).
  */
@@ -436,9 +438,10 @@ export interface BlueprintSection {
   readonly reveal?: BlueprintReveal;
   /**
    * Motion axis — content-specific motion treatment (ADR-039 §Decision 2, #2494).
-   * A curated closed union reserved on the contract now (vocabulary + portal
-   * validation surface, #4004); its render dispatcher ships with the first
-   * adopting block (motion follow-up under #2309). Omitted → `none`.
+   * A curated closed union rendered through the shared `BlockContentMotion`
+   * dispatcher: `marquee` (LogoWall, #2531) and `count-up` (StatsDarkBar, #2532)
+   * render on both rails; `animated-svg` is reserved until #2533. Omitted →
+   * `none`.
    *
    * Additive, optional — blueprints that don't read it are unaffected.
    */

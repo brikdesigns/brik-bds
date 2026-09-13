@@ -282,6 +282,17 @@ const statsDarkBar: Section = {
   ],
 };
 
+// The count-up treatment of the stat bar — the content-motion axis value this
+// block adopts (ADR-039 §Decision 2, #2529). Identical content to the static
+// fixture; only `contentMotion` differs, so the rail renders each number through
+// `_CountUp`. The generated story shows the static final numbers (the count is a
+// client-only enhancement, so the pre-rendered HTML rests on the final value).
+const statsDarkBarCountUp: Section = {
+  ...statsDarkBar,
+  sectionKey: 'stats-bar-count-up',
+  contentMotion: 'count-up',
+};
+
 const testimonialsFeaturedLarge: Section = {
   sectionKey: 'testimonials-featured-default',
   sectionType: 'testimonials',
@@ -353,6 +364,7 @@ const SECTIONS: Record<string, Section> = {
   Features: features,
   CalloutPanel: calloutPanel,
   StatsDarkBar: statsDarkBar,
+  'StatsDarkBar:count-up': statsDarkBarCountUp,
   TestimonialsFeaturedLarge: testimonialsFeaturedLarge,
   'LogoWall:static': logoWallStatic,
   'LogoWall:marquee': logoWallMarquee,

@@ -1,0 +1,89 @@
+---
+title: CountUp
+description: A number that counts up to its final value when it scrolls into view.
+---
+
+CountUp renders a number that counts up to its final value the first time it scrolls into view. The final value is the element's real text, so with JavaScript off, under `prefers-reduced-motion: reduce`, or for a value with no number it renders as a plain static number — the sweep is a pure enhancement, never a gate. Duration and easing are token-backed (`--duration-xl` / `--ease-out`), and `tabular-nums` holds the width steady so the surrounding layout does not jitter as the digits change.
+
+It has one visual appearance — the only input is the value it counts to, and it parses the number out of whatever string it wraps (`4,800+`, `98%`, `$2M`), re-appending the prefix, suffix, and thousands grouping while counting.
+
+<ComparisonGrid
+  items={[
+    {
+      title: 'CountUp',
+      whenToUse: 'A proof-point number that should animate up as the reader reaches it — a stat bar, a metric callout. The motion draws the eye to the figure.',
+      whenNotToUse: 'A static count badge or a live-updating tally — that\'s Counter.',
+      code: `<CountUp>4,800+</CountUp>`,
+    },
+    {
+      title: 'Counter',
+      whenToUse: 'A small static numeric indicator with tone colors — an unread count, a quantity chip. No animation.',
+      whenNotToUse: 'The number should sweep up into view — that\'s CountUp.',
+      code: `<Counter value={12} />`,
+    },
+  ]}
+/>
+
+## Use it for
+
+- A proof-point stat bar (the first adopter is the `stats_bar` blueprint via `contentMotion: count-up`)
+- A single metric callout where the count-up motion reinforces the figure
+
+Blueprints never place CountUp directly — a block sets `contentMotion: count-up` on its section and the shared `BlockContentMotion` dispatcher wraps each number.
+
+## Import
+
+```tsx
+import { CountUp } from '@brikdesigns/bds';
+```
+
+## Default
+
+<ComponentPreview code={`<CountUp>4,800+</CountUp>`}>
+  <div style={{ fontFamily: 'var(--font-family-display)', fontSize: 'var(--heading-3xl)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--text-primary)' }}>
+    <BDS.CountUp>4,800+</BDS.CountUp>
+  </div>
+</ComponentPreview>
+
+The value shapes it handles — bare integer, grouped thousands, percentage, unit suffix, currency prefix — are all the same component reading a different string:
+
+<ComponentPreview code={`<CountUp>12</CountUp>
+<CountUp>4,800+</CountUp>
+<CountUp>98%</CountUp>
+<CountUp>24h</CountUp>
+<CountUp>$2M</CountUp>`}>
+  <div style={{ display: 'flex', gap: 'var(--gap-2xl)', flexWrap: 'wrap', fontFamily: 'var(--font-family-display)', fontSize: 'var(--heading-2xl)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--text-primary)' }}>
+    <BDS.CountUp>12</BDS.CountUp>
+    <BDS.CountUp>4,800+</BDS.CountUp>
+    <BDS.CountUp>98%</BDS.CountUp>
+    <BDS.CountUp>24h</BDS.CountUp>
+    <BDS.CountUp>$2M</BDS.CountUp>
+  </div>
+</ComponentPreview>
+
+## Accessibility
+
+- The count fires once, when at least half the number is in view. Under `prefers-reduced-motion: reduce` it never runs — the static final number is already the DOM text, so there is no un-gated motion path.
+- The number is content, not decoration. The sweep only transiently changes the text, so assistive tech announces the final value.
+- CountUp provides no accessible name of its own; it is a number inside surrounding content (a stat's caption, a section heading) that names it.
+
+## CSS Override API
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `--bds-count-up-duration` | `var(--duration-xl)` (500ms) | Length of the count sweep |
+| `--bds-count-up-ease` | `var(--ease-out)` | Easing curve the sweep follows |
+
+## API
+
+{/* props-check: CountUpProps @ components/ui/CountUp/CountUp.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `children` | `ReactNode` | — (required — the final value; the number counts up to it) |
+
+Inherits all native `<span>` attributes (`className`, `style`, `data-*`, …).
+
+## Related
+
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/content-count-up--overview)**
