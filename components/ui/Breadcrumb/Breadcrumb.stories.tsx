@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect } from 'storybook/test';
+import { expect, fn, userEvent, waitFor } from 'storybook/test';
 import { Breadcrumb } from './Breadcrumb';
 import { type BdsLinkComponent } from '../NavItem';
 
@@ -33,6 +33,20 @@ const meta: Meta<typeof Breadcrumb> = {
       description:
         'Render each linked crumb with a router-aware component (Next.js `Link`, Remix `Link`) for client-side routing instead of the default `<a>`. See ADR-012.',
       control: false,
+    },
+    options: {
+      control: 'object',
+      description:
+        'Sibling records to switch between, including the current one. Two or more render a caret + menu after the trail; fewer render nothing.',
+    },
+    switchLabel: {
+      control: 'text',
+      description: 'Accessible label for the switch trigger, e.g. `Switch service`. Required when `options` is passed.',
+    },
+    onNavigate: {
+      control: false,
+      description:
+        'Called with the selected href when a non-current option is chosen. Defaults to a full-page navigation — pass a router-aware handler for client-side routing.',
     },
   },
 };
@@ -106,53 +120,88 @@ export const InteractionTestLinkComponent: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   3. PATTERNS — Q4 irreducible: driven by an ancestor DOM attribute
-      ([data-service-line]), not a component prop. Args can't express it.
+   3. SWITCHER — Q4: two or more `options` render a caret + sibling menu
+      after the trail. Hook-driven open/close state args can't express.
    ═══════════════════════════════════════════════════════════════ */
 
-// The breadcrumb stays scope-blind — __current reads --text-secondary
-// and __separator reads --text-muted as always. When the breadcrumb
-// sits inside a [data-service-line='X'] subtree, Breadcrumb.css rebinds
-// those two canonical tokens to --text-service-{name} so the current
-// page label + separators pick up the service-line hue. The 'service'
-// slug maps to the back-office token set per the #563 rename.
-// (The deprecated `[data-audience='X']` attribute still resolves — #788.)
-const SERVICE_LINES = [
-  { id: 'brand', label: 'Brand (yellow)' },
-  { id: 'marketing', label: 'Marketing (green)' },
-  { id: 'information', label: 'Information (blue)' },
-  { id: 'product', label: 'Product (purple)' },
-  { id: 'back-office', label: 'Back Office (orange)' },
-  { id: 'service', label: 'Service — @deprecated alias of back-office (orange)' },
-] as const;
+const SIBLING_SERVICES = [
+  { label: 'Brand strategy', href: '#brand-strategy', current: true },
+  { label: 'Brand identity', href: '#brand-identity' },
+  { label: 'Brand guidelines', href: '#brand-guidelines' },
+];
 
-/** @summary Service-line tinting via [data-service-line] cascade */
-export const ServiceLineCascade: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
-      {SERVICE_LINES.map(({ id, label }) => (
-        <div key={id} data-service-line={id}>
-          <p
-            style={{
-              fontFamily: 'var(--font-family-label)',
-              fontSize: 'var(--body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
-              textTransform: 'uppercase' as const,
-              letterSpacing: '0.05em',
-              marginBottom: 'var(--gap-md)',
-              color: 'var(--text-muted)',
-            }}
-          >
-            {`[data-service-line='${id}'] — ${label}`}
-          </p>
-          <Breadcrumb
-            items={[
-              { label: 'Home', href: '#' },
-              { label: 'Services', href: '#' },
-              { label: 'Detail page' },
-            ]}
-          />
-        </div>
-      ))}
-    </div>
-  ),
+/**
+ * Passing two or more `options` renders a caret after the trail that opens a
+ * menu of sibling records — jump between them without navigating back to an
+ * index page. Fewer than two renders no caret.
+ * @summary Trail with a sibling-record switcher menu
+ */
+export const WithSwitcher: Story = {
+  args: {
+    items: [
+      { label: 'Home', href: '#' },
+      { label: 'Services', href: '#' },
+      { label: 'Brand strategy' },
+    ],
+    options: SIBLING_SERVICES,
+    switchLabel: 'Switch service',
+    onNavigate: fn(),
+  },
+};
+
+/**
+ * The caret opens the menu on click, closes on Escape, and returns focus to
+ * the trigger — the keyboard open/close + focus-management contract.
+ * @summary Asserts switch keyboard open/close and focus return
+ */
+export const InteractionTestSwitchKeyboard: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: [
+      { label: 'Home', href: '#' },
+      { label: 'Services', href: '#' },
+      { label: 'Brand strategy' },
+    ],
+    options: SIBLING_SERVICES,
+    switchLabel: 'Switch service',
+    onNavigate: fn(),
+  },
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: 'Switch service' });
+    await userEvent.click(trigger);
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'));
+    await expect(canvas.getByRole('menu')).toBeInTheDocument();
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
+    await expect(canvas.queryByRole('menu')).not.toBeInTheDocument();
+    await expect(trigger).toHaveFocus();
+  },
+};
+
+/**
+ * Selecting a non-current option calls `onNavigate` with its href instead of
+ * performing the default full-page navigation.
+ * @summary Asserts onNavigate wiring on switch option select
+ */
+export const InteractionTestSwitchNavigate: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: [
+      { label: 'Home', href: '#' },
+      { label: 'Services', href: '#' },
+      { label: 'Brand strategy' },
+    ],
+    options: SIBLING_SERVICES,
+    switchLabel: 'Switch service',
+    onNavigate: fn(),
+  },
+  play: async ({ canvas, args }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Switch service' }));
+    await userEvent.click(await canvas.findByRole('menuitem', { name: 'Brand identity' }));
+    await expect(args.onNavigate).toHaveBeenCalledWith('#brand-identity', {
+      label: 'Brand identity',
+      href: '#brand-identity',
+    });
+  },
 };

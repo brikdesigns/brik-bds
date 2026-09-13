@@ -4,15 +4,15 @@ import * as Stories from './BreadcrumbSwitcher.stories';
 
 <Meta of={Stories} />
 
-# BreadcrumbSwitcher
+# Breadcrumb switcher
 
 <ComponentLinks slug="breadcrumb-switcher" />
 
-A `Breadcrumb` trail plus a caret that opens a menu of sibling records — switch between other services in the same line, or other projects on the same client, without navigating back to an index page.
+Breadcrumb trail plus a caret that opens a menu of sibling records — jump between other services in the same line, or other projects on the same client, without navigating back to an index page.
 
-Pass `linkComponent` (e.g. `next/link`) so linked crumbs route client-side, and `onNavigate` so selecting a sibling option routes client-side too — BDS owns no router, so the default is a full-page navigation (`window.location.href`). See [framework guides → client-side routing](/docs/getting-started/framework-guides).
+> **Note** — Deprecated. Use `<Breadcrumb options={…} switchLabel="…" onNavigate={…} />` instead ([#2521](https://github.com/brikdesigns/brik-bds/issues/2521)) — the switcher folded into `Breadcrumb` as optional props. The `BreadcrumbSwitcher` export is a thin shim with identical props, unchanged until removal in a future major.
 
-## Default
+## Playground
 
 <Canvas of={Stories.Default} />
 
@@ -20,22 +20,10 @@ Pass `linkComponent` (e.g. `next/link`) so linked crumbs route client-side, and 
 
 ### Single option
 
-A single option means there is nothing to switch to — the caret is omitted entirely, and the trail renders as a plain `Breadcrumb`.
+A single option means there is nothing to switch to — the caret is omitted and the trail renders as a plain `Breadcrumb`.
 
 <Canvas of={Stories.SingleOption} />
-
-### Chevron separator
-
-`separator` is forwarded to the internal `Breadcrumb`, so a switcher trail can
-match the chevron breadcrumbs elsewhere on the same page. `Breadcrumb` owns the
-`slash` default.
-
-<Canvas of={Stories.ChevronSeparator} />
 
 ## Props
 
 <ArgTypes of={Stories} />
-
-## Notes
-
-> **Note** — The trailing crumb keeps `aria-current="page"` unchanged; the caret is a separate `aria-haspopup="menu"` control alongside the trail, never folded into the current crumb.
