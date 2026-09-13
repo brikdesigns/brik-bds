@@ -99,3 +99,7 @@ Number sequentially. Don't reuse numbers, even for superseded ADRs — the file 
 Required sections: `## Context`, `## Decision`. Recommended: `## Rationale`, `## Alternatives considered`, `## Consequences`, `## Migration`, `## Enforcement`. Add an `## Amendments` section at the bottom if the decision evolves *without* full supersession (see ADR-006 for an example).
 
 Open the ADR in a PR like any other change. Once merged, the status starts as Proposed; bump to Accepted when the enforcement artifacts ship.
+
+<!-- #2098 acceptance probe: markdown-only diff, opened to observe that every
+     required context reports green/skipped and mergeStateStatus reaches CLEAN.
+     This PR is NOT for merge. -->
