@@ -1,0 +1,150 @@
+---
+/**
+ * _CountUp — the content-motion partial for the `count-up` axis value
+ * (ADR-039 §Decision 2, brik-bds#2529). Astro twin of the React `CountUp`
+ * primitive (`components/ui/CountUp/CountUp.tsx`): emits the same `bds-count-up`
+ * DOM and the shared `CountUp.css` (→ `dist/styles.css`) drives both rails.
+ *
+ * A blueprint never hand-rolls a count animation — a block selects
+ * `contentMotion: count-up` and dispatches its number through this partial.
+ * Underscore-prefixed: a presentational partial composed by blocks (e.g.
+ * `StatsDarkBar.astro`), not a dispatched blueprint — so it is excluded from the
+ * on-disk reachability gate (`validate-blueprints.mjs`), the same as
+ * `_Media.astro` / `_Marquee.astro`.
+ *
+ * No `<style>` block: `bds-count-up` is single-sourced in
+ * `components/ui/CountUp/CountUp.css`, which the consumer site's BDS stylesheet
+ * ships and the Storybook shell imports via `_AstroFrame.tsx` (ADR-040 mirror
+ * coverage) — the same self-contained pattern as `_Marquee.astro`.
+ *
+ * **Reduced-motion + no-JS gate BY CONSTRUCTION (AC).** The final number IS the
+ * element's rendered text, so with JS off — or under `prefers-reduced-motion` —
+ * it shows the static value and never animates (the safe default, matching
+ * `_Media.astro`'s "still state applies even if JS never arrives"). The inline
+ * guard below only ever *transiently* steps it from 0 up to that value, and only
+ * when motion is allowed. A consumer cannot ship un-gated motion through this axis.
+ *
+ * The `<script>` below is a processed (bundled) Astro script, so Astro emits it
+ * ONCE per page and dedupes across every `_CountUp` instance — one document-wide
+ * initializer drives all `[data-bds-count-up]` numbers (a per-instance
+ * `is:inline` script would duplicate the whole runtime N times in the markup).
+ * It carries no imports, so the shipped partial stays self-contained for
+ * consumer Astro builds. Its logic duplicates the parse + sweep from
+ * `components/ui/CountUp/countUpDriver.ts` — `countUpDriver.test.ts` is the unit-tested
+ * source of truth for the parse contract both copies mirror.
+ *
+ * @summary Blueprint content-motion partial — a number that counts up into view (`CountUp`), reduced-motion-gated by construction.
+ */
+interface Props {
+  /** The final stat to render and count up to (e.g. `4,800+`, `98%`). */
+  value: string;
+  /** Extra classes appended after the canonical `bds-count-up` class. */
+  class?: string;
+}
+
+const { value, class: className } = Astro.props;
+const rootClass = ['bds-count-up', className].filter(Boolean).join(' ');
+---
+
+<span class={rootClass} data-bds-count-up>{value}</span>
+
+<script>
+  // Mirrors components/ui/CountUp/countUpDriver.ts — keep the parse/format/easing
+  // contract in sync (countUpDriver.test.ts covers it). Runs once per page (Astro
+  // dedupes this processed script), scanning every [data-bds-count-up] number.
+  const NUMERIC_RUN = /-?[\d,]*\.?\d+/;
+
+  function parse(raw) {
+    const m = NUMERIC_RUN.exec(raw);
+    if (!m) return null;
+    const numStr = m[0];
+    const target = parseFloat(numStr.replace(/,/g, ''));
+    if (Number.isNaN(target)) return null;
+    const dot = numStr.indexOf('.');
+    return {
+      prefix: raw.slice(0, m.index),
+      suffix: raw.slice(m.index + numStr.length),
+      target,
+      decimals: dot === -1 ? 0 : numStr.length - dot - 1,
+      useGrouping: numStr.indexOf(',') !== -1,
+    };
+  }
+
+  function format(value, p) {
+    const body = value.toLocaleString('en-US', {
+      minimumFractionDigits: p.decimals,
+      maximumFractionDigits: p.decimals,
+      useGrouping: p.useGrouping,
+    });
+    return p.prefix + body + p.suffix;
+  }
+
+  function cubicBezier(x1, y1, x2, y2) {
+    const cx = 3 * x1, bx = 3 * (x2 - x1) - cx, ax = 1 - cx - bx;
+    const cy = 3 * y1, by = 3 * (y2 - y1) - cy, ay = 1 - cy - by;
+    const sampleX = (t) => ((ax * t + bx) * t + cx) * t;
+    const sampleY = (t) => ((ay * t + by) * t + cy) * t;
+    const slopeX = (t) => (3 * ax * t + 2 * bx) * t + cx;
+    return (x) => {
+      let t = x;
+      for (let i = 0; i < 5; i++) {
+        const err = sampleX(t) - x;
+        const d = slopeX(t);
+        if (Math.abs(err) < 1e-4 || d === 0) break;
+        t -= err / d;
+      }
+      return sampleY(t);
+    };
+  }
+
+  function parseDurationMs(v) {
+    v = (v || '').trim();
+    const n = parseFloat(v);
+    if (Number.isNaN(n)) return 500;
+    return v.endsWith('ms') ? n : v.endsWith('s') ? n * 1000 : n;
+  }
+
+  function parseEase(v) {
+    const m = /cubic-bezier\(\s*([\d.-]+)\s*,\s*([\d.-]+)\s*,\s*([\d.-]+)\s*,\s*([\d.-]+)\s*\)/.exec(v || '');
+    if (m) return cubicBezier(parseFloat(m[1]), parseFloat(m[2]), parseFloat(m[3]), parseFloat(m[4]));
+    return (t) => t;
+  }
+
+  function animate(el) {
+    const raw = el.textContent || '';
+    const parsed = parse(raw);
+    if (!parsed) return;
+    const cs = getComputedStyle(el);
+    const durationMs = parseDurationMs(cs.getPropertyValue('--bds-count-up-duration'));
+    const ease = parseEase(cs.getPropertyValue('--bds-count-up-ease'));
+    let startTs = 0;
+    el.textContent = format(0, parsed);
+    function step(ts) {
+      if (!startTs) startTs = ts;
+      const progress = durationMs <= 0 ? 1 : Math.min(1, (ts - startTs) / durationMs);
+      if (progress < 1) {
+        el.textContent = format(parsed.target * ease(progress), parsed);
+        requestAnimationFrame(step);
+      } else {
+        el.textContent = raw; // restore the exact source string
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Reduced motion / no IntersectionObserver → leave the final value (the safe
+  // static default, already the DOM text). Otherwise count once, when at least
+  // half the number is in view.
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduced && typeof IntersectionObserver !== 'undefined') {
+    const io = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          obs.unobserve(entry.target);
+          animate(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('[data-bds-count-up]').forEach((el) => io.observe(el));
+  }
+</script>

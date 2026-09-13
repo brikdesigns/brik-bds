@@ -39,6 +39,12 @@ import '../react/BlockMedia.css';
 // marquee renders unstyled in the Astro story and `verify:astro-stories`
 // (which asserts every `bds-*` root class resolves) fails.
 import '../../../components/ui/Marquee/Marquee.css';
+// Content-motion axis (#2529): `StatsDarkBar.astro`'s `count-up` treatment
+// renders through `_CountUp.astro`, whose `bds-count-up` markup resolves to this
+// stylesheet. Layer 3 of the assembly (see the docstring) — without it the
+// count-up renders unstyled in the Astro story and `verify:astro-stories`
+// (which asserts every `bds-*` root class resolves) fails.
+import '../../../components/ui/CountUp/CountUp.css';
 
 export function AstroFrame({ html }: { html: string }) {
   return <div dangerouslySetInnerHTML={{ __html: html }} />;

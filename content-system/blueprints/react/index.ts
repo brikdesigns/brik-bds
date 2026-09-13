@@ -103,10 +103,11 @@ export type { BlockRevealProps } from './BlockReveal';
 
 // `<BlockContentMotion>` — the shared content-motion dispatcher (ADR-039
 // §Decision 2, #2529), the content half of the motion axis. Renders `marquee`
-// through the `Marquee` primitive selected by the `contentMotion` axis,
-// reduced-motion-gated by construction; `count-up` / `animated-svg` land with
-// their own adopting blocks (#2532 / #2533). Ships with `LogoWall`, its first
-// adopter (a component unreachable from the dispatcher cannot ship, #2012).
+// through the `Marquee` primitive and `count-up` through the `CountUp` primitive
+// selected by the `contentMotion` axis, reduced-motion-gated by construction;
+// `animated-svg` lands with its own adopting block (#2533). Each value ships
+// with its first adopter (a component unreachable from the dispatcher cannot
+// ship, #2012) — `marquee` → LogoWall, `count-up` → StatsDarkBar (#2532).
 export { BlockContentMotion } from './BlockContentMotion';
 export type { BlockContentMotionProps } from './BlockContentMotion';
 

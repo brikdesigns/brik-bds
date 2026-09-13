@@ -33,11 +33,22 @@ const statsSection: BlueprintProps['section'] = {
   ],
 };
 
-const baseProps: BlueprintProps = {
-  section: statsSection,
+/** The same stats with `contentMotion: count-up` — each number counts up into
+ *  view via the shared `BlockContentMotion` dispatcher (#2529). At rest it is
+ *  the same final numbers; the sweep is a client-only enhancement. */
+const countUpSection: BlueprintProps['section'] = {
+  ...statsSection,
+  sectionKey: 'stats-bar-count-up',
+  contentMotion: 'count-up',
+};
+
+const propsFor = (section: BlueprintProps['section']): BlueprintProps => ({
+  section,
   clientFacts: baseClientFacts,
   theme: baseTheme,
-};
+});
+
+const baseProps = propsFor(statsSection);
 
 /* ─── Meta ─────────────────────────────────────────────────────── */
 
@@ -55,7 +66,7 @@ const meta: Meta<typeof StatsDarkBar> = {
     docs: {
       description: {
         component:
-          'Renderer for the `stats_bar` blueprint key — a horizontal row of proof-point stats on an inverse surface, deliberately dark so the bar reads as a weighty proof moment against the surrounding page. Semantic `ul`/`li`; the numbers are content, not decoration.',
+          'Renderer for the `stats_bar` blueprint key — a horizontal row of proof-point stats on an inverse surface, deliberately dark so the bar reads as a weighty proof moment against the surrounding page. Semantic `ul`/`li`; the numbers are content, not decoration. The first block to adopt the content-motion axis `count-up` (ADR-039 §Decision 2): `contentMotion: count-up` counts each number into view via the `CountUp` primitive, reduced-motion-gated by construction.',
       },
     },
   },
@@ -71,4 +82,11 @@ type Story = StoryObj<typeof StatsDarkBar>;
  */
 export const Default: Story = {
   args: baseProps,
+};
+
+/**
+ * @summary Count-up — each stat counts up into view.
+ */
+export const CountUp: Story = {
+  args: propsFor(countUpSection),
 };

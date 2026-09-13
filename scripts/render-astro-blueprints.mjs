@@ -54,7 +54,9 @@ const BLOCKS = [
   { name: 'About', layouts: [null] },
   { name: 'Features', layouts: [null] },
   { name: 'CalloutPanel', layouts: [null] },
-  { name: 'StatsDarkBar', layouts: [null] },
+  // StatsDarkBar's second slug is the content-motion axis (count-up), not a
+  // layout — it renders the static bar and the count-up treatment (#2529).
+  { name: 'StatsDarkBar', layouts: [null, 'count-up'] },
   { name: 'TestimonialsFeaturedLarge', layouts: [null] },
   // LogoWall's variant axis is the content-motion axis, not a layout — the two
   // slugs render the static strip and the marquee treatment (#2529).
@@ -123,7 +125,15 @@ async function main() {
       const slug = slugFor(name, layout);
       // `data-astro-source-*` are dev annotations carrying absolute paths — they
       // would make the emitted HTML machine-specific and churn every diff.
-      const clean = html.replace(/\sdata-astro-source-(file|loc)="[^"]*"/g, '').trim();
+      const clean = html
+        .replace(/\sdata-astro-source-(file|loc)="[^"]*"/g, '')
+        // A processed `<script>` (e.g. `_CountUp.astro`'s count-up runtime,
+        // #2529) renders as a `?astro&type=script` module reference carrying the
+        // absolute on-disk path — machine-specific (churns `--check` across
+        // boxes) and dead in a static story anyway (the preview is the static
+        // state). Same strip the SiteHeader block applies to its client script.
+        .replace(/<script type="module" src="[^"]*\?astro&type=script[^"]*"><\/script>/g, '')
+        .trim();
       writeFile(join(outDir, `${slug}.html`), `${clean}\n`);
       emitted.push(`${slug}.html`);
     }

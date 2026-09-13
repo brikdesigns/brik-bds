@@ -1,0 +1,32 @@
+@layer bds-components {
+/**
+ * BDS CountUp — a number that counts up to its final value when scrolled into
+ * view (the blueprint `contentMotion: count-up` axis value, brik-bds#2529).
+ *
+ * Naming: .bds-count-up (single element, no BEM parts). Distinct from `Counter`,
+ * the static numeric-count indicator.
+ *
+ * The sweep is JS-driven (`countUpDriver.ts` on the React rail, a mirrored
+ * `<script>` twin in `_CountUp.astro`) — there is no CSS `@keyframes`, because the animated value is
+ * text, not a style. The reduced-motion / no-JS gate is therefore BY
+ * CONSTRUCTION, not a `@media` rule here: the final number is the element's real
+ * text content, and the driver only ever transiently steps it from 0. If the
+ * driver never runs, the final number is already shown.
+ *
+ * CSS Override API: --bds-count-up-duration, --bds-count-up-ease
+ * (component-local runtime knobs the driver reads via getComputedStyle; not part
+ * of the canonical token registry — token-backed defaults, overridable).
+ */
+
+.bds-count-up {
+  /* Hold the width steady as digits change so the layout does not jitter
+     through the sweep — the count runs over many intermediate values. */
+  font-variant-numeric: tabular-nums;
+
+  /* Duration + easing the driver reads at animation time. Backed by the
+     semantic motion tokens: --duration-xl is the "long reveal" rung, --ease-out
+     decelerates so the number rushes then settles. */
+  --bds-count-up-duration: var(--duration-xl);
+  --bds-count-up-ease: var(--ease-out);
+}
+}

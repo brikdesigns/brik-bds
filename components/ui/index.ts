@@ -42,6 +42,7 @@ export * from './CompletionToggle';
 export * from './ContactIcon';
 export * from './ContentBlock';
 export * from './Counter';
+export * from './CountUp';
 export * from './DataSection';
 export * from './DataView';
 export * from './DatePicker';
