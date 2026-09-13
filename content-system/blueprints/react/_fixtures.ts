@@ -35,6 +35,8 @@ export const baseClientFacts: BlueprintProps['clientFacts'] = {
   address: null,
   hours: [],
   heroImageUrl: null,
+  heroVideoUrl: null,
+  heroVideoPoster: null,
   logoUrl: null,
   logoVariants: {},
 };

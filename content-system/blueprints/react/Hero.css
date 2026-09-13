@@ -124,7 +124,10 @@
 }
 
 .bds-hero__media {
-  aspect-ratio: var(--aspect-4-5);
+  /* No `aspect-ratio` here (media axis, ADR-039 #2493): the composed
+     `<BlockMedia>` primitive locks the shape via `<Frame>` (`ratio`, default
+     `4-5`), so the ratio is token-backed. This wrapper only clips + rounds.
+     Mirrors ../astro/Hero.astro. */
   overflow: hidden;
   border-radius: var(--bds-hero-image-radius, var(--border-radius-lg));
 }

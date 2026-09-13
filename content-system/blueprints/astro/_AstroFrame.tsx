@@ -26,6 +26,13 @@ import '../section-shell.css';
 import '../../../components/ui/Button/Button.css';
 import '../../../components/ui/Breadcrumb/Breadcrumb.css';
 import '../../../components/ui/ServiceTag/ServiceTag.css';
+// Media axis (#2493): `Hero.astro`'s `split` layout renders its media through
+// `_Media.astro`, whose `bds-block-media` / `bds-frame` markup resolves to these
+// two stylesheets. Layer 3 of the assembly (see the docstring) — without them
+// the media renders unstyled in the Astro stories and `verify:astro-stories`
+// (which asserts every `bds-*` root class resolves) fails.
+import '../../../components/ui/Frame/Frame.css';
+import '../react/BlockMedia.css';
 
 export function AstroFrame({ html }: { html: string }) {
   return <div dangerouslySetInnerHTML={{ __html: html }} />;
