@@ -25,12 +25,6 @@ AnimatedIcon has no semantic-variant axis — every prop (`trigger`, `size`, `lo
 - **`click`** — feedback on activation
 - **`once`** — entrance moment on mount
 
-## Patterns
-
-The Setup walkthrough below is the canonical first read — Lottie sourcing isn't visible from the prop API alone, and consumers need to know the useanimations.com → `src/animations/` → `import` flow before they can use the component.
-
-<Canvas of={Stories.Setup} />
-
 ## Props
 
 <ArgTypes of={Stories} />
@@ -39,6 +33,13 @@ The Setup walkthrough below is the canonical first read — Lottie sourcing isn'
 
 > **Note** — `lottie-react` respects `prefers-reduced-motion` when `autoplay` is `false`. AnimatedIcon sets `autoplay` only for the `loop` and `once` triggers; `hover` and `click` are user-initiated, so motion-sensitive users hit them deliberately.
 
-> **Note** — BDS does not ship a curated Lottie catalog. Each consumer brings its own animation JSON files. If you need a system-wide catalog (similar to the iconify-backed `Icons` reference), file a separate issue.
+> **Note** — Sourcing. BDS does not ship a curated Lottie catalog — each consumer brings its own animation JSON. Download a Lottie JSON file (not the player widget) from [useanimations.com](https://useanimations.com), [lottiefiles.com](https://lottiefiles.com), or an After Effects → Bodymovin export; save it under your app's `src/animations/`, then import and pass it as `src` (Vite + TypeScript resolve JSON imports natively). If you need a system-wide catalog (like the iconify-backed `Icons` reference), file a separate issue.
+
+```tsx
+import checkmark from '@/animations/checkmark.json';
+import { AnimatedIcon } from '@brikdesigns/bds';
+
+<AnimatedIcon src={checkmark} trigger="once" size={32} label="Completed" />
+```
 
 > **Note** — BDS supports React 18 and 19 for this component (`peerDependencies.react` is `>=18.0.0`). On **React 18 in development only**, `lottie-react` v3 makes React log `Unexpected return value from a callback ref` once per rendered animation: v3's internal `mergeRefs` returns a cleanup function from a ref callback, which is the React 19 contract, and React 18 discards it. Nothing leaks — `item.destroy()` runs from a `useEffect` cleanup, not the ref cleanup, and effect cleanups fire on unmount under both majors. Measured on React 18.3.1: lottie-web's registered-animation count goes 1 → 0 across unmount, asserted by `AnimatedIcon.unmount.browser.test.ts`. BDS silences that one warning in Storybook and its test runs; if you see it in your own React 18 app it is safe to ignore or filter the same way. Tracked as brik-bds#2029, filed upstream as [Gamote/lottie-react#140](https://github.com/Gamote/lottie-react/issues/140).
