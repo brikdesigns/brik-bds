@@ -1,8 +1,15 @@
+import { useState } from 'react';
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import { ServiceTagSelect } from './ServiceTagSelect';
 import * as Stories from './ServiceTagSelect.stories';
 
 <Meta of={Stories} />
+
+export const ControlledDemo = () => {
+  const [value, setValue] = useState('marketing');
+  return <ServiceTagSelect value={value} onChange={setValue} />;
+};
 
 # ServiceTagSelect
 
@@ -20,7 +27,9 @@ Use the Controls panel to switch `value`, `size`, and `disabled`.
 
 Clicking a pill (or arrowing within the group) updates the selected category. Keyboard behavior is the browser's native radiogroup — Tab to the group, arrows to move selection — so there is no custom key handling.
 
-<Canvas of={Stories.WithControlledSelection} />
+<Canvas>
+  <ControlledDemo />
+</Canvas>
 
 ## Props
 
