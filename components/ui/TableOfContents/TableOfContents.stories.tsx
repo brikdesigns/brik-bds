@@ -209,15 +209,49 @@ export const InteractionTestScrollSpy: Story = {
     title: 'On this page',
   },
   play: async ({ canvas, canvasElement }) => {
-    // Bring the "Results" section to the top of the viewport, then wait for the
-    // IntersectionObserver to promote its nav item to active.
-    canvasElement.ownerDocument.getElementById('results')?.scrollIntoView();
+    const doc = canvasElement.ownerDocument;
+
+    // #2297. This test fails intermittently in CI and has never reproduced
+    // locally, so the mechanism is NOT known — do not read the shape below as a
+    // diagnosed root cause. What it does is remove the ways a correct component
+    // can still fail this test, and make the next CI failure readable:
+    //
+    // 1. Fonts first. Nine families load over the network with `display=swap`
+    //    (.storybook/preview-head.html:11); the @fontsource bundle is only wired
+    //    under VISUAL_GATE=1 (vitest.config.ts), so the plain `test` project
+    //    renders against whatever has arrived.
+    // 2. Re-assert the scroll on every poll instead of scrolling once up front.
+    //    The observer's active band is only the top 30% of the viewport
+    //    (`rootMargin: '0px 0px -70% 0px'`, TableOfContents.tsx:139); anything
+    //    that moves #results out of it after a one-shot scroll fails the
+    //    assertion permanently, because nothing scrolls again. Re-scrolling
+    //    costs nothing when the position is already right.
+    // 3. Assert on the active item's LABEL, so the failure output names the
+    //    section the spy actually chose (see the message below).
+    //
+    // Measured and ruled out as the mechanism: a layout shift landing after the
+    // scroll. Chrome's scroll anchoring compensates — growing an earlier section
+    // by 60vh moved scrollTop 2018 → 2558 and left #results at top 0, still
+    // active. Evidence on the issue.
+    await doc.fonts?.ready;
+
+    const target = doc.getElementById('results');
+    if (!target) throw new Error('Story DOM is missing the #results section');
+
     await waitFor(
       async () => {
-        const active = canvas.getByRole('link', { name: 'Results' });
-        await expect(active).toHaveAttribute('aria-current', 'page');
+        target.scrollIntoView();
+        const active = canvas
+          .getAllByRole('link')
+          .find((el) => el.getAttribute('aria-current') === 'page');
+        // Compare labels, not the attribute, so a failure names the section the
+        // spy actually chose — the CI log alone is enough to diagnose it.
+        await expect(
+          active?.textContent?.trim() ?? '(no item is aria-current)',
+          'scroll-spy should mark the section scrolled to the top of the viewport as current',
+        ).toBe('Results');
       },
-      { timeout: 2000 },
+      { timeout: 5000 },
     );
   },
 };
