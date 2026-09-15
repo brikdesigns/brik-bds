@@ -411,6 +411,16 @@ jobs:
         if: always()
         run: bash scripts/test/test-session-budget.sh < /dev/null
 
+      # ─── automerge-eligibility-contract (brik-llm#3396) ────────────────────
+      # Auto-merge removes the reviewer, so the exclusion table is the last
+      # thing standing between an agent-authored PR and the merge queue. This
+      # suite asserts every pattern against a real repo path PLUS a near-miss —
+      # a pattern that silently matches nothing is indistinguishable from a
+      # comment — and executes automerge.yml's own disarm block under bash -e.
+      - name: Auto-merge policy contract (exclusions, qa freshness, disarm tolerance)
+        if: always()
+        run: python3 scripts/audit/tests/test_automerge_eligibility.py
+
       # ─── worktree-sweep-contract ────────────────────────────────────────────
       - name: Pass-1 verdict contract (dry-run only)
         if: always()

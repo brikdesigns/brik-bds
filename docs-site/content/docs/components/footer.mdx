@@ -32,14 +32,14 @@ Primary background with a top border. The standard treatment for most sites.
   tagline="Building better products."
   columns={[
     {
-      heading: 'Product',
+      title: 'Product',
       links: [
         { label: 'Features', href: '/features' },
         { label: 'Pricing', href: '/pricing' },
       ],
     },
     {
-      heading: 'Company',
+      title: 'Company',
       links: [
         { label: 'About', href: '/about' },
         { label: 'Contact', href: '/contact' },
@@ -103,7 +103,7 @@ The canonical 4-column layout — Product, Resources, Company, Legal.
   tagline="Design + content systems for healthcare practices."
   columns={[
     {
-      heading: 'Services',
+      title: 'Services',
       links: [
         { label: 'Brand Design', href: '/services/brand' },
         { label: 'Marketing', href: '/services/marketing' },
@@ -111,7 +111,7 @@ The canonical 4-column layout — Product, Resources, Company, Legal.
       ],
     },
     {
-      heading: 'Resources',
+      title: 'Resources',
       links: [
         { label: 'Blog', href: '/blog' },
         { label: 'Case studies', href: '/case-studies' },
@@ -119,7 +119,7 @@ The canonical 4-column layout — Product, Resources, Company, Legal.
       ],
     },
     {
-      heading: 'Company',
+      title: 'Company',
       links: [
         { label: 'About', href: '/about' },
         { label: 'Contact', href: '/contact' },
@@ -127,7 +127,7 @@ The canonical 4-column layout — Product, Resources, Company, Legal.
       ],
     },
     {
-      heading: 'Legal',
+      title: 'Legal',
       links: [
         { label: 'Privacy', href: '/privacy' },
         { label: 'Terms', href: '/terms' },
@@ -174,11 +174,21 @@ Plus standard `<footer>` HTML attributes.
 ### FooterColumn
 
 ```ts
-interface FooterColumn {
-  heading: string;
-  links: { label: string; href: string }[];
-}
+// Takes `title` (canonical) or `heading` (deprecated), never both.
+type FooterColumn = { links: { label: string; href: string }[] } & (
+  | { title: string; heading?: never }
+  /** @deprecated Renamed to `title`; removed in the next major. */
+  | { heading: string; title?: never }
+);
 ```
+
+`heading` is a banned slot word under the content-group taxonomy — the canonical
+name for a primary text slot is `title`, matching `ContentBlock`. Existing callers
+passing `heading` keep working and render identically; migrate at your convenience.
+
+It is a union rather than two optional fields so a column still *must* be labelled:
+`{ links: [...] }` with neither key would typecheck against a both-optional
+interface and render a blank heading.
 
 ## Related
 

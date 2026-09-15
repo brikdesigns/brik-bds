@@ -316,6 +316,28 @@ const testimonialsFeaturedLarge: Section = {
   ],
 };
 
+// The video treatment of the featured testimonial — the media axis value this
+// block adopts (ADR-039 §Media axis, #2518). Same quote content as the default
+// fixture; `items[0].videoUrl` adds a foreground `media="video"` player above
+// the quote through the shared `<Media>` primitive. The poster is a data-URI
+// placeholder so the pre-rendered story rests on a deterministic still (no
+// autoplay, no network). The `layout` token the renderer threads through is
+// ignored by `TestimonialsFeaturedLarge.astro` — the video comes from the
+// fixture, mirroring the LogoWall/StatsDarkBar content-axis precedent below.
+const testimonialsFeaturedLargeVideo: Section = {
+  ...testimonialsFeaturedLarge,
+  sectionKey: 'testimonials-featured-video',
+  items: [
+    {
+      ...testimonialsFeaturedLarge.items[0],
+      // Empty data URI: the element rests on its poster with no network fetch,
+      // so the pre-rendered screenshot is deterministic offline and in CI.
+      videoUrl: 'data:video/mp4,',
+      videoPoster: placeholderImage(1280, 720, '#eaf1fb', '#1f3d70', 'Client video'),
+    },
+  ],
+};
+
 // LogoWall carries no layout axis — its variant axis is the content-motion axis
 // (ADR-039 §Decision 2, #2529). The two fixtures differ only by `contentMotion`,
 // so the Astro rail renders both the static strip and the marquee treatment; the
@@ -366,6 +388,7 @@ const SECTIONS: Record<string, Section> = {
   StatsDarkBar: statsDarkBar,
   'StatsDarkBar:count-up': statsDarkBarCountUp,
   TestimonialsFeaturedLarge: testimonialsFeaturedLarge,
+  'TestimonialsFeaturedLarge:video': testimonialsFeaturedLargeVideo,
   'LogoWall:static': logoWallStatic,
   'LogoWall:marquee': logoWallMarquee,
 };

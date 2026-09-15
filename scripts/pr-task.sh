@@ -514,6 +514,33 @@ echo ""
 echo "  Branch:  $BRANCH → ${BASE_BRANCH}"
 echo "  Commits: $COMMITS_AHEAD ahead of ${BASE_BRANCH}"
 echo ""
+
+# ── Auto-merge / enqueue verdict (brik-llm#3396 AC-3) ──
+# States the verdict at open time so an ineligible PR names the manual enqueue
+# command instead of silently sitting. Advisory: every call is guarded — a
+# failure to evaluate must not fail the PR open that already succeeded.
+if [ -n "$PR_NUMBER" ]; then
+  if VERDICT=$(python3 scripts/audit/automerge-eligibility.py --pr "$PR_NUMBER" --json 2>/dev/null); then
+    if [ "$(printf '%s' "$VERDICT" | python3 -c 'import json,sys; print(json.load(sys.stdin)["eligible"])' 2>/dev/null)" = "True" ]; then
+      echo -e "  ${GREEN}Auto-merge: QUALIFIES${NC} — automerge.yml arms the enqueue; the queue"
+      echo "  merges when the required checks pass. No manual step."
+    else
+      echo -e "  ${YELLOW}Auto-merge: does not qualify${NC} — blockers:"
+      printf '%s' "$VERDICT" | python3 -c 'import json,sys; [print(f"    - {b}") for b in json.load(sys.stdin)["blockers"]]' 2>/dev/null
+      echo "  When the required checks are green, enqueue by hand (no strategy flag"
+      echo "  — main is queue-managed and --squash is rejected there):"
+      echo "    gh pr merge $PR_NUMBER --auto"
+    fi
+  else
+    echo -e "  ${YELLOW}Auto-merge: could not evaluate${NC} — enqueue by hand when green:"
+    echo "    gh pr merge $PR_NUMBER --auto"
+  fi
+  echo ""
+  echo -e "  ${YELLOW}Advisory checks:${NC} ac-close-gate and shape-lint are NOT required —"
+  echo "  a red ✗ on either does not block the queue. Required checks alone decide."
+  echo ""
+fi
+
 echo -e "  ${YELLOW}Knowledge capture:${NC} did anything non-obvious come up?"
 echo "    brik-rag remember \"<key insight from this task>\""
 echo ""
