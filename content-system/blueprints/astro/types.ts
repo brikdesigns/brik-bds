@@ -354,6 +354,22 @@ export interface BlueprintSection {
     /** Alt text for `imageUrl`. Defaults to empty (decorative) when omitted. */
     readonly imageAlt?: string;
     /**
+     * Per-item video source for the media axis (`media: 'video'`, ADR-039
+     * #2493/#2518). Consumed by `testimonials_featured_large`, which renders a
+     * foreground, user-controlled player through the shared `BlockMedia`
+     * primitive when the featured item carries it — else the quote-only
+     * treatment. Scoped per-item (not `ClientFacts`) because a testimonial video
+     * is per-story content, not a site-wide fact. Additive, optional —
+     * blueprints that don't read it are unaffected.
+     */
+    readonly videoUrl?: string;
+    /**
+     * Poster still for `videoUrl` — the frame shown before playback and with JS
+     * off. Falls back to `imageUrl` when absent, so a video always has a still to
+     * rest on. Additive, optional.
+     */
+    readonly videoPoster?: string;
+    /**
      * Lottie animation URL for the `contentMotion: animated-svg` axis value
      * (ADR-039 §Decision 2, #2533). When the section sets `animated-svg` and an
      * item carries this, the item's icon animates via the `AnimatedIcon`

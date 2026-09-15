@@ -59,7 +59,10 @@ const BLOCKS = [
   // StatsDarkBar's second slug is the content-motion axis (count-up), not a
   // layout — it renders the static bar and the count-up treatment (#2529).
   { name: 'StatsDarkBar', layouts: [null, 'count-up'] },
-  { name: 'TestimonialsFeaturedLarge', layouts: [null] },
+  // Second slug is the media axis (video), not a layout — the block renders the
+  // quote-only default and the video treatment (#2518). Threaded `layout` token
+  // is ignored; the video comes from the fixture's `items[0].videoUrl`.
+  { name: 'TestimonialsFeaturedLarge', layouts: [null, 'video'] },
   // LogoWall's variant axis is the content-motion axis, not a layout — the two
   // slugs render the static strip and the marquee treatment (#2529).
   { name: 'LogoWall', layouts: ['static', 'marquee'] },

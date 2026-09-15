@@ -176,12 +176,11 @@
     overflow: hidden;
   }
 
-  .bp-services-grid__image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
+  /* Image media renders through the shared `<Media>` primitive (media axis,
+     ADR-039 #2518) — the `<Frame>` root (`.bds-frame--ratio-3-2`) fills this
+     3/2 box (width:100%) and its `.bds-block-media__img` sets object-fit:cover,
+     so no `.bp-services-grid__image` rule is needed. The box + fallback framing
+     below stay for the no-image path. */
 
   .bp-services-grid__media-fallback {
     /* Pair: heading family + heading size. */

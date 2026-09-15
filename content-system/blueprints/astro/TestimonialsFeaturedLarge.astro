@@ -11,6 +11,18 @@
  *                            item.title       = attribution line
  *                                               (name · role · company)
  *                            item.description = the quote
+ *                            item.videoUrl?   = optional testimonial video —
+ *                                               rendered above the quote through
+ *                                               the shared `<Media>` primitive
+ *                                               (media axis, ADR-039 #2518)
+ *                            item.videoPoster? = poster still (falls back to
+ *                                                item.imageUrl)
+ *
+ * Media axis (ADR-039 #2518): when `items[0].videoUrl` is present the block
+ * renders a foreground, user-controlled `media="video"` player (curated — not
+ * free config) above the quote; reduced-motion-safe by construction (no
+ * autoplay, `preload="metadata"`). Absent → the quote-only treatment,
+ * unchanged.
  *
  * required_facts: []. Section-driven.
  *
@@ -25,6 +37,7 @@
  * quote mark uses aria-hidden so AT doesn't announce it.
  */
 import type { BlueprintProps } from './types';
+import Media from './_Media.astro';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
@@ -45,6 +58,18 @@ const featured = section.items[0];
     <h2 id={titleId} class="bds-visually-hidden">
       {section.heading ?? 'Featured testimonial'}
     </h2>
+
+    {featured && featured.videoUrl && (
+      <div class="bp-testimonials-featured__media">
+        <Media
+          media="video"
+          src={featured.videoUrl}
+          poster={featured.videoPoster ?? featured.imageUrl ?? undefined}
+          ratio="16-9"
+          fit="cover"
+        />
+      </div>
+    )}
 
     {featured && (
       <blockquote class="bp-testimonials-featured__quote">
@@ -70,6 +95,15 @@ const featured = section.items[0];
     margin-inline: auto;
     padding-inline: var(--padding-xl); /* bds-lint-ignore — legacy bp-* inset predates --gutter-page; realigning 32→24px is a visual change gated on Chromatic quota (#771), same deferral as #1630 */
     text-align: center;
+  }
+
+  /* Media axis (ADR-039 #2518): the optional testimonial video sits above the
+     quote, constrained to the quote's own measure and centred. The `<Media>`
+     `<Frame>` root (`.bds-frame--ratio-16-9`) owns the aspect box. */
+  .bp-testimonials-featured__media {
+    max-width: var(--measure-md);
+    margin-inline: auto;
+    margin-bottom: var(--gap-xl);
   }
 
   .bp-testimonials-featured__quote {

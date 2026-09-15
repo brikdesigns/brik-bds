@@ -13,6 +13,15 @@
     text-align: center;
   }
 
+  /* Media axis (ADR-039 #2518): the optional testimonial video sits above the
+     quote, constrained to the quote's own measure and centred. The `<Media>`
+     `<Frame>` root (`.bds-frame--ratio-16-9`) owns the aspect box. */
+  .bp-testimonials-featured__media {
+    max-width: var(--measure-md);
+    margin-inline: auto;
+    margin-bottom: var(--gap-xl);
+  }
+
   .bp-testimonials-featured__quote {
     margin: 0;
     display: flex;

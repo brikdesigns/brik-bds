@@ -15,6 +15,15 @@
  *                          item.title       = attribution
  *                                             (name · role · company)
  *                          item.description = the quote
+ *                          item.videoUrl?   = optional testimonial video, rendered
+ *                                             above the quote via the shared
+ *                                             `BlockMedia` primitive (media axis,
+ *                                             ADR-039 #2518)
+ *                          item.videoPoster? = poster still (falls back to imageUrl)
+ *
+ * Media axis (ADR-039 #2518): a foreground `media="video"` player (curated, not
+ * free config) renders above the quote when `items[0].videoUrl` is present;
+ * reduced-motion-safe by construction (no autoplay). Absent → quote-only.
  *
  * required_facts: []. Section-driven.
  *
@@ -28,7 +37,17 @@
 import { bdsClass } from '../../../components/utils';
 import { Testimonial } from '../../../components/ui/Testimonial';
 import type { BlueprintProps } from '../astro/types';
+import { BlockMedia } from './BlockMedia';
 import '../section-shell.css';
+
+// Media axis (ADR-039 #2518): the optional testimonial video sits above the
+// quote, centred and constrained to the quote's measure. Inline var() token
+// styles follow the local blueprint-adapter precedent (ServicesDetailTwoColumn).
+const mediaStyle = {
+  maxWidth: 'var(--measure-md)',
+  marginInline: 'auto',
+  marginBottom: 'var(--gap-xl)',
+} as const;
 
 interface Props extends BlueprintProps {}
 
@@ -46,6 +65,18 @@ export function TestimonialsFeaturedLarge({ section }: Props) {
         <h2 id={titleId} className="bds-visually-hidden">
           {section.heading ?? 'Featured testimonial'}
         </h2>
+
+        {featured && featured.videoUrl && (
+          <div style={mediaStyle}>
+            <BlockMedia
+              media="video"
+              src={featured.videoUrl}
+              poster={featured.videoPoster ?? featured.imageUrl}
+              ratio="16-9"
+              fit="cover"
+            />
+          </div>
+        )}
 
         {featured && (
           <Testimonial quote={featured.description} authorName={featured.title} />

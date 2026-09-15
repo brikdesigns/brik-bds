@@ -27,6 +27,7 @@ import {
 } from '../../../components';
 
 import type { BlueprintProps } from '../astro/types';
+import { BlockMedia } from './BlockMedia';
 import { CardGrid } from './CardGrid';
 
 interface Props extends BlueprintProps {}
@@ -58,14 +59,13 @@ export function Services3ColCardGrid({ section }: Props) {
                 title={item.title}
                 media={
                   item.imageUrl ? (
-                    <Frame customRatio="3 / 2" fit="cover">
-                      <img
-                        src={item.imageUrl}
-                        alt={item.imageAlt ?? ''}
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    </Frame>
+                    <BlockMedia
+                      media="image"
+                      src={item.imageUrl}
+                      alt={item.imageAlt ?? ''}
+                      ratio="3-2"
+                      fit="cover"
+                    />
                   ) : category ? (
                     <Frame customRatio="3 / 2" fit="cover">
                       <ServiceTag

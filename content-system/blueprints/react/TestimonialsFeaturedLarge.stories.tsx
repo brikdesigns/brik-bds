@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge';
 import type { BlueprintProps } from '../astro/types';
-import { baseTheme, baseClientFacts } from './_fixtures';
+import { baseTheme, baseClientFacts, placeholderImage } from './_fixtures';
 
 /* ─── Fixtures ─────────────────────────────────────────────────── */
 
@@ -72,4 +72,29 @@ type Story = StoryObj<typeof TestimonialsFeaturedLarge>;
  */
 export const Default: Story = {
   args: baseProps,
+};
+
+/**
+ * The featured item carries a `videoUrl` — a foreground, user-controlled player
+ * (media axis, ADR-039 #2518) renders above the quote via `BlockMedia`. The
+ * poster is a data-URI placeholder; the empty `videoUrl` rests on it (no
+ * autoplay, no network) for a deterministic screenshot.
+ *
+ * @summary Featured testimonial with a video above the quote.
+ */
+export const WithVideo: Story = {
+  args: {
+    ...baseProps,
+    section: {
+      ...testimonialSection,
+      sectionKey: 'testimonials-featured-video',
+      items: [
+        {
+          ...testimonialSection.items[0],
+          videoUrl: 'data:video/mp4,',
+          videoPoster: placeholderImage(1280, 720, '#eaf1fb', '#1f3d70', 'Client video'),
+        },
+      ],
+    },
+  },
 };
