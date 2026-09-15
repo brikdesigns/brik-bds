@@ -9,6 +9,10 @@ Named layout + interaction patterns that ground AI mockup generation with concre
 
 See [`blueprints/ARCHITECTURE.md`](https://github.com/brikdesigns/brik-bds/blob/main/blueprints/ARCHITECTURE.md) for the two-taxonomy model, bridge rules, and v1 / v2 coexistence.
 
+<Callout type="info">
+  Beyond match tags, a blueprint is parameterized along curated closed-enum **prop axes** — structure (`layout`, `align`, `columns`, `ratio`), `media`, and motion (`reveal`, `contentMotion`). Motion is an axis an agent selects, not the free-text `animationSuggestion` prose the section contract used to carry (retired). The Theming Dimensions on this page are the *style* axis; the rest are structure, media, and motion. See [ADR-039](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-039-blueprint-parameterization-axes.md).
+</Callout>
+
 ## Two taxonomies
 
 Authors hand-write match tags (`moods`, `industries`). Client-axis projections (`personality`, `visual_style`, `industry_slugs`) are derived at load time via the bridges — never stored in source JSON, never authored by hand.
