@@ -1,11 +1,11 @@
 ---
 title: Icons
-description: The BDS Icon wrapper — Phosphor icons from a bundled offline subset, bold by default.
+description: The BDS Icon wrapper — Phosphor icons from a bundled offline subset, outline-bold by default.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-BDS ships its own `Icon` component — an offline-first wrapper around [`@iconify/react`](https://iconify.design/docs/icon-components/react/) that renders [Phosphor](https://phosphoricons.com/) (`ph:*`) icons from a bundled subset. Icons render as inline SVGs with no runtime CDN fetch, no flash-of-unstyled-icon, and no bundle bloat from importing the full set. It is API-compatible with `@iconify/react`'s `<Icon>`, and defaults `ph:*` icons to `bold` weight (BDS's standard line density).
+BDS ships its own `Icon` component — an offline-first wrapper around [`@iconify/react`](https://iconify.design/docs/icon-components/react/) that renders [Phosphor](https://phosphoricons.com/) (`ph:*`) icons from a bundled subset. Icons render as inline SVGs with no runtime CDN fetch, no flash-of-unstyled-icon, and no bundle bloat from importing the full set. It is API-compatible with `@iconify/react`'s `<Icon>`, and defaults `ph:*` icons to `outline-bold` weight (BDS's standard line density).
 
 ## Setup
 
@@ -18,7 +18,24 @@ No consumer setup is required — importing `Icon` from `@brikdesigns/bds` auto-
 - Status / state markers paired with text
 - Anywhere a small (≤ 32px) glyph carries meaning
 
-For larger illustrations and brand marks, use a static SVG asset directly. For non-icon visual primitives ([ServiceTag](/docs/components/service-tag), avatar fallbacks), use the dedicated component.
+`Icon` is the UI-glyph atom. Brand marks, contact marks, animated states, and service-line glyphs each route to a **different** component — see the table below.
+
+## Choosing an icon component
+
+BDS has five icon-family components. `Icon` is only one of them; picking the right one is the first decision, before any `ph:*` name:
+
+| Need | Component | Notes |
+|---|---|---|
+| UI glyph | [`Icon`](/docs/components/icons) | `ph:*`, `outline-bold` by default |
+| Platform / brand mark (google, yelp, linkedin…) | [`SocialIcon`](https://storybook.brikdesigns.com/?path=/docs/assets-social-icon--overview) | Real brand marks, brand-colored — **never `ph:*-logo`** |
+| Contact mark (phone, email, website…) | [`ContactIcon`](https://storybook.brikdesigns.com/?path=/docs/assets-contact-icon--overview) | Contact marks with no brand identity |
+| Animated state | [`AnimatedIcon`](https://storybook.brikdesigns.com/?path=/docs/assets-animated-icon--overview) | Lottie wrapper |
+| Per-service glyph | [`ServiceTag`](/docs/components/service-tag) | Custom SVGs via `mask-image`, not Phosphor |
+| Browse the vocabulary | [icon catalog](https://storybook.brikdesigns.com/?path=/docs/assets-icon-catalog--overview) | Reference page — exports nothing |
+
+<Callout type="warn">
+  **Brand and platform marks use `SocialIcon`, never `ph:*-logo`.** Phosphor ships `ph:google-logo`, but `<SocialIcon platform="google">` is the correct answer — a real brand mark, brand-colored via `--color-system-google`, across every supported platform. Reaching for `ph:*-logo` ships the wrong glyph at the wrong color.
+</Callout>
 
 ## Import
 
@@ -79,26 +96,41 @@ For inline icons inside text, use `1em` sizing so the icon scales with the surro
 
 ## Icon weight
 
-BDS renders `ph:*` icons at **`bold`** weight by default — BDS's standard line density (Phosphor's own regular weight reads as a hairline at small UI sizes). Set the `weight` prop to change it. An icon whose name already encodes a weight (`ph:star-fill`) keeps it; the `weight` prop only rewrites otherwise-unweighted `ph:*` names, and non-`ph:*` icons ignore it.
+BDS renders `ph:*` icons at **`outline-bold`** weight by default — BDS's standard line density (Phosphor's own regular outline reads as a hairline at small UI sizes). Set the `weight` prop to change it. An icon whose name already encodes a weight (`ph:star-fill`) keeps it; the `weight` prop only rewrites otherwise-unweighted `ph:*` names, and non-`ph:*` icons ignore it.
 
-**Canonical convention:** bold is the BDS UI icon weight on **every** surface — navigation, form controls, and general glyphs alike. There is no per-surface split; `fill` is reserved for active/selected states and status. Because the atom applies bold by default, routing a glyph through `<Icon>` is enough to inherit the canonical weight — only reach for the `weight` prop to opt a specific icon back to `regular` (or another Phosphor weight) for a deliberate reason.
+**Canonical convention:** `outline-bold` is the BDS UI icon weight on **every** surface — navigation, form controls, and general glyphs alike. There is no per-surface split; `fill` is reserved for active/selected states and status. Because the atom applies `outline-bold` by default, routing a glyph through `<Icon>` is enough to inherit the canonical weight — only reach for the `weight` prop to opt a specific icon back to `outline` (or another weight) for a deliberate reason.
 
 ```tsx
-<Icon icon="ph:star" />                    {/* bold (default) */}
-<Icon icon="ph:star" weight="regular" />   {/* Phosphor's thin default stroke */}
-<Icon icon="ph:star-fill" />               {/* solid — explicit weight, left as-is */}
+<Icon icon="ph:star" />                       {/* outline-bold (default) */}
+<Icon icon="ph:star" weight="outline" />      {/* Phosphor's thin regular outline */}
+<Icon icon="ph:star-fill" />                  {/* solid — explicit weight, left as-is */}
 ```
 
-`weight` accepts the six Phosphor weights:
+### The form × stroke axis
+
+Icon weight is a two-part axis, and the names say which part they move — this is why the vocabulary is Brik's, not Phosphor's flat list (ADR-036):
+
+- **form** — `outline*` is hollow (an enclosed glyph keeps its counter-path); `fill` drops the counter for a solid silhouette; `duotone` sits outside the axis. `outline-bold` is a *heavier outline*, still hollow — Phosphor's old `bold` name hid that next to `fill`.
+- **stroke** — `outline-thin` → `outline-light` → `outline` → `outline-bold` order the outline from lightest to heaviest.
+
+You can read the form straight off the SVG path data: `ph:chat-circle` (regular) and `ph:chat-circle-bold` both carry 4 subpaths (outer shape + counter → hollow), while `ph:chat-circle-fill` carries 3 (counter dropped → solid).
+
+`weight` accepts six semantic names:
 
 | `weight` | Renders | Use |
 |---|---|---|
-| `bold` | `ph:name-bold` | Default. Most contexts. |
-| `regular` | `ph:name` | Phosphor's thin default stroke |
+| `outline-bold` | `ph:name-bold` | **Default.** BDS standard — most contexts. |
+| `outline` | `ph:name` | Phosphor's thin regular outline |
+| `outline-light` | `ph:name-light` | Decorative or quiet contexts |
+| `outline-thin` | `ph:name-thin` | Rare; very specific design intent |
 | `fill` | `ph:name-fill` | Active/selected states, status badges |
-| `light` | `ph:name-light` | Decorative or quiet contexts |
-| `thin` | `ph:name-thin` | Rare; very specific design intent |
 | `duotone` | `ph:name-duotone` | Empty states, illustrations |
+
+The former Phosphor-flavored names `regular` (→ `outline`) and `bold` (→ `outline-bold`) still work as `@deprecated` aliases through one minor, so consumers migrate on their own cadence.
+
+<Callout type="warn">
+  **Linear-glyph carve-out.** On a glyph with no enclosed area (`ph:arrows-clockwise`, `ph:minus`), `fill` is a visual no-op — the `-fill` variant is identical geometry. Reach for `outline-bold`, not `fill`, on linear glyphs; detect the carve-out with the subpath test, never by eye.
+</Callout>
 
 ## Color and theming
 
@@ -169,5 +201,5 @@ export const HeartFill = 'ph:heart-fill';
 - [IconButton](/docs/components/button#iconbutton) — accessible wrapper for icon-only buttons
 - [Avatar](/docs/components/avatar) — for person identity
 - [ServiceTag](/docs/components/service-tag) — for Brik service-line icons (use `variant="icon"`)
-- **[Storybook icon catalog](https://storybook.brikdesigns.com/?path=/story/assets-icons--setup)**
+- **[Storybook icon catalog](https://storybook.brikdesigns.com/?path=/docs/assets-icon-catalog--overview)**
 - **External**: [phosphoricons.com](https://phosphoricons.com/) — find icon names
