@@ -70,11 +70,11 @@ export const FixedWidthAlignment = () => (
   </div>
 );
 
-# Icons
+# Icon catalog
 
 <ComponentLinks slug="icons" />
 
-The BDS icon set — Phosphor glyphs re-exported from `components/icons` and rendered with Iconify's `<Icon>`. Import the name, not the string: `import { House } from '@brikdesigns/bds/icons'` gives you a tree-shakeable reference the bundler can drop when unused.
+A browsable **catalog** of the BDS icon vocabulary, not a component — this page exports nothing (`components/ui/Icons/index.ts` is `export {}`). It renders the Phosphor glyphs named in `components/icons.ts` so contributors can find a glyph; the atom that renders them is [`Icon`](/docs/components/icons). Import the name, not the string: `import { House } from '@brikdesigns/bds/icons'` gives you a tree-shakeable reference the bundler can drop when unused.
 
 Icons are sized by `fontSize` (they inherit `currentColor` and the text cursor), so an icon beside text matches that text without a hard-coded pixel value.
 

@@ -60,9 +60,11 @@ const IconsReference = () => <div />;
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof IconsReference> = {
-  title: 'Assets/icons',
+  title: 'Assets/icon-catalog',
   component: IconsReference,
-  // Browsable icon catalog, not a component — hidden from MCP discovery so
+  // Browsable catalog of `components/icons.ts`, NOT a component — `index.ts` is
+  // `export {}`. Retitled off `Assets/icons` so it no longer reads as a second
+  // Icon component next to `Assets/icon` (#2407). Hidden from MCP discovery so
   // consumer-repo agents don't pick it as a primitive (#1314).
   tags: ['surface-shared', '!manifest'],
   parameters: {
