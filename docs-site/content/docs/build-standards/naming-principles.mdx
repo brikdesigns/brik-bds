@@ -100,7 +100,7 @@ Blueprints ship on two renderers. **Astro is canonical** (ADR-037 §1) — it ca
 1. **Single namespace.** Every class uses `bds-`. The `bp-` prefix is deprecated — no new `bp-*` classes after ADR-008.
 2. **One block per family.** `bds-hero`, `bds-cta`, `bds-services`, `bds-features`, `bds-about`, `bds-callout-panel`. Each family is one block with structural modifiers, not N separate blueprints.
 3. **Well-formed slots.** Every `bds-{block}__{slot}` must match the kebab-case BEM pattern above. The slot-pattern gate fails on malformed shapes, not on new well-formed words.
-4. **Structural-only modifiers.** Modifier names describe structure (`--split-image`, `--two-column`) — never appearance (`--dark`, `--centered`) or theme (`--inverse`). A "dark centered" CTA themed light makes the name a lie.
+4. **Structural-only modifiers.** Modifier names describe structure (`--split-image`, `--two-column`) — never appearance (`--dark`) or theme (`--inverse`). A "dark" CTA themed light makes the name a lie. Placement is the exception: alignment is a curated closed-enum axis the component writes (`--align-center`, `--align-left`), because a re-theme preserves placement even as it changes appearance — [ADR-039](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-039-blueprint-parameterization-axes.md) narrows [ADR-008](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-008-naming-canon-closed-allowlist.md) §3 to exempt it.
 5. **Compose, don't reimplement.** A blueprint `.tsx` that imports nothing from `components/ui/*` is almost always drift.
 6. **Use `Frame` for aspect-locked images.** Never hardcode `aspect-ratio` in blueprint CSS.
 
@@ -129,4 +129,5 @@ Kept so a search for the old name finds the current one. These are **history, no
 - [`docs/SLOT-ALLOWLIST.md`](https://github.com/brikdesigns/brik-bds/blob/main/docs/SLOT-ALLOWLIST.md) — the pattern spec (grammar + examples); enforced by `scripts/slot-pattern-check.mjs`
 - [ADR-017](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md) — why the pattern gate superseded the closed allowlist
 - [ADR-008](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-008-naming-canon-closed-allowlist.md) — the naming canon (§1 namespace, §3 structural-only modifiers, §4 grammar); §2's closed allowlist is superseded by ADR-017
+- [ADR-039](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-039-blueprint-parameterization-axes.md) — narrows ADR-008 §3 to exempt placement (alignment as a curated prop axis) and adds the motion axis
 - [Slot Vocabulary](/docs/build-standards/slot-vocabulary) — what each canonical slot means and when to use it
