@@ -14,6 +14,9 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, it, expect, vi } from 'vitest';
 import type { IconWeight } from './icon-weight';
+// Vite raw-import of the type module's source (see types/raw.d.ts), so the
+// carve-out doc assertion reads the TSDoc without a node:fs dependency.
+import iconWeightSource from './icon-weight.ts?raw';
 
 vi.mock('@iconify/react', async () => {
   const { createElement: h } = await import('react');
@@ -42,7 +45,9 @@ const render = (
 };
 
 describe('Icon — weight resolution', () => {
-  it('falls back to bold with no provider and no prop', () => {
+  it('falls back to outline-bold (ph:star-bold) with no provider and no prop', () => {
+    // The #2405 vocabulary rename must NOT move the rendered glyph: the default
+    // resolves to the same `ph:star-bold` it did when named `bold`.
     expect(render(undefined, {})).toBe('ph:star-bold');
   });
 
@@ -51,10 +56,31 @@ describe('Icon — weight resolution', () => {
   });
 
   it('lets an explicit weight prop win over the provider default', () => {
-    expect(render('fill', { weight: 'bold' })).toBe('ph:star-bold');
+    expect(render('fill', { weight: 'outline-bold' })).toBe('ph:star-bold');
   });
 
-  it('regular resolves to the unsuffixed Phosphor name (no rewrite)', () => {
-    expect(render('bold', { weight: 'regular' })).toBe('ph:star');
+  it('outline resolves to the unsuffixed Phosphor name (no rewrite)', () => {
+    expect(render('outline-bold', { weight: 'outline' })).toBe('ph:star');
+  });
+
+  it('deprecated aliases resolve identically to their renamed weights', () => {
+    // `bold` ≡ `outline-bold`, `regular` ≡ `outline` — the aliases exist only so
+    // consumers migrate on their own cadence; they must render the same glyph.
+    expect(render(undefined, { weight: 'bold' })).toBe(render(undefined, { weight: 'outline-bold' }));
+    expect(render(undefined, { weight: 'regular' })).toBe(render(undefined, { weight: 'outline' }));
+    expect(render(undefined, { weight: 'bold' })).toBe('ph:star-bold');
+    expect(render(undefined, { weight: 'regular' })).toBe('ph:star');
+  });
+
+  it('rewrites fill on a linear glyph (visual no-op — the documented carve-out)', () => {
+    // `fill` on a glyph with no enclosed area (ph:arrows-clockwise) still
+    // rewrites the name, but is a visual no-op. The carve-out is documented on
+    // the IconWeight type so authors reach for outline-bold, not fill; here we
+    // assert both the rewrite and that the type's TSDoc names the carve-out.
+    const markup = renderToStaticMarkup(createElement(Icon, { icon: 'ph:arrows-clockwise', weight: 'fill' }));
+    expect(nameOf(markup)).toBe('ph:arrows-clockwise-fill');
+
+    expect(iconWeightSource).toMatch(/linear-glyph carve-out/i);
+    expect(iconWeightSource).toContain('arrows-clockwise');
   });
 });
