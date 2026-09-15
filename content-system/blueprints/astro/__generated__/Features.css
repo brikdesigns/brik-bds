@@ -118,8 +118,8 @@
     overflow: hidden;
     transform: translateY(0) scale(1);
     transition:
-      transform 200ms var(--easing-ease-out),
-      box-shadow 200ms var(--easing-ease-out);
+      transform var(--duration-md) var(--ease-out),
+      box-shadow var(--duration-md) var(--ease-out);
   }
 
   .bds-features__card:hover {
@@ -212,7 +212,7 @@
 
   .bds-features__cta-arrow {
     display: inline-block;
-    transition: transform 200ms var(--easing-ease-out);
+    transition: transform var(--duration-md) var(--ease-out);
   }
 
   .bds-features__card-link:hover .bds-features__cta-arrow,
