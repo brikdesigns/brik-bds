@@ -16,7 +16,7 @@ const MockLink: BdsLinkComponent = ({ href, children, ...props }) => (
 
 const sampleColumns = [
   {
-    heading: 'Product',
+    title: 'Product',
     links: [
       { label: 'Features', href: '#' },
       { label: 'Pricing', href: '#' },
@@ -24,7 +24,7 @@ const sampleColumns = [
     ],
   },
   {
-    heading: 'Company',
+    title: 'Company',
     links: [
       { label: 'About', href: '#' },
       { label: 'Blog', href: '#' },
@@ -32,7 +32,7 @@ const sampleColumns = [
     ],
   },
   {
-    heading: 'Support',
+    title: 'Support',
     links: [
       { label: 'Help Center', href: '#' },
       { label: 'Contact', href: '#' },
@@ -67,7 +67,7 @@ const meta: Meta<typeof Footer> = {
       description:
         'Optional content rendered inside the logo area, below the tagline — typically a contact block (phone / email / address).',
     },
-    columns: { control: false, description: 'Link columns — each a `{ heading, links }` group.' },
+    columns: { control: false, description: 'Link columns — each a `{ title, links }` group. `heading` is the deprecated spelling, still accepted.' },
     columnHeadingLevel: {
       control: 'select',
       options: ['h2', 'h3', 'h4', 'h5', 'h6'],
@@ -174,7 +174,7 @@ export const ExternalLinks: Story = {
     logo: <LogoPlaceholder />,
     columns: [
       {
-        heading: 'Follow',
+        title: 'Follow',
         links: [
           { label: 'Home', href: '/home' },
           { label: 'LinkedIn', href: 'https://linkedin.com/company/brik', external: true },
@@ -292,7 +292,7 @@ export const Marketing: Story = {
     brandExtra: <ContactBlock />,
     columns: [
       {
-        heading: 'Services',
+        title: 'Services',
         links: [
           { label: 'Brand Design', href: '#', adornment: <ServiceDot color="var(--surface-service-brand)" /> },
           { label: 'Marketing Design', href: '#', adornment: <ServiceDot color="var(--surface-service-marketing)" /> },
@@ -301,6 +301,11 @@ export const Marketing: Story = {
           { label: 'Back Office Design', href: '#', adornment: <ServiceDot color="var(--surface-service-back-office)" /> },
         ],
       },
+      // These two deliberately keep the DEPRECATED `heading` spelling while the
+      // column above uses canonical `title` — a mixed-shape story is the cheapest
+      // standing proof that the back-compat arm of the FooterColumn union still
+      // renders (brikdesigns/brik-bds#2528). Do not "tidy" them to `title`; the
+      // InteractionTestDeprecatedHeading story below asserts against this mix.
       {
         heading: 'About',
         links: [
@@ -347,5 +352,43 @@ export const SurfaceOverride: Story = {
       // bds-lint-ignore — component-scoped CSS variable override, not a design token
       ['--bds-footer-surface' as string]: 'var(--color-grayscale-950)',
     } as CSSProperties,
+  },
+};
+
+/**
+ * Asserts the deprecated `heading` spelling still renders identically to the
+ * canonical `title`. `FooterColumn` is a union that accepts either — never both
+ * — so the back-compat arm has to stay exercised until it is removed at the
+ * next major (brikdesigns/brik-bds#2528).
+ *
+ * Without this, the deprecation is invisible: nothing else in the suite would
+ * fail if the `col.title ?? col.heading` resolve were dropped, and every
+ * existing consumer passing `heading` would render a blank column heading with
+ * no error.
+ *
+ * @summary Interaction test — `heading` renders same as `title`
+ */
+export const InteractionTestDeprecatedHeading: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    columns: [
+      { title: 'Canonical', links: [{ label: 'One', href: '#one' }] },
+      { heading: 'Deprecated', links: [{ label: 'Two', href: '#two' }] },
+    ],
+    copyright: '© 2026 Brik Designs.',
+  },
+  play: async ({ canvasElement }) => {
+    const headings = [...canvasElement.querySelectorAll('.bds-footer__heading')];
+    await expect(headings).toHaveLength(2);
+
+    // Both spellings reach the same slot, in authored order.
+    await expect(headings[0]).toHaveTextContent('Canonical');
+    await expect(headings[1]).toHaveTextContent('Deprecated');
+
+    // Same element and same computed type — `heading` is a spelling, not a mode.
+    await expect(headings[1].tagName).toBe(headings[0].tagName);
+    await expect(getComputedStyle(headings[1]).fontSize).toBe(
+      getComputedStyle(headings[0]).fontSize,
+    );
   },
 };
