@@ -1,11 +1,23 @@
 # ADR-036 — Non-CSS-expressible theming axes resolve via React context, not `[data-mode-*]`: icon weight is the first
 
-**Status:** Proposed
-**Date:** 2026-08-31
+**Status:** Accepted
+**Date:** 2026-08-31 (ratified 2026-09-10, #2405)
 **Supersedes:** —
 **Superseded by:** —
 **Owner:** Nick Stanerson
-**Related:** [#1050](https://github.com/brikdesigns/brik-bds/issues/1050) (this ADR's issue — wire icon style into per-client theming), [#340](https://github.com/brikdesigns/brik-bds/issues/340) (data-mode overrides for non-color tokens — the paradigm this axis was expected to join), [brik-client-portal#1606](https://github.com/brikdesigns/brik-client-portal/issues/1606) (portal fill→outline migration — the brand-default anchor), [token-anatomy.mdx](../../docs-site/content/docs/foundation/token-anatomy.mdx) (Mode / Tier canon)
+**Related:** [#1050](https://github.com/brikdesigns/brik-bds/issues/1050) (this ADR's issue — wire icon style into per-client theming), [#2404](https://github.com/brikdesigns/brik-bds/issues/2404) / [#2405](https://github.com/brikdesigns/brik-bds/issues/2405) (icon-weight standard — the form×stroke vocabulary rename this ADR was ratified alongside), [#340](https://github.com/brikdesigns/brik-bds/issues/340) (data-mode overrides for non-color tokens — the paradigm this axis was expected to join), [brik-client-portal#1606](https://github.com/brikdesigns/brik-client-portal/issues/1606) (portal fill→outline migration — the brand-default anchor), [token-anatomy.mdx](../../docs-site/content/docs/foundation/token-anatomy.mdx) (Mode / Tier canon)
+
+## Ratification
+
+OPERATOR SAID 2026-09-10 (chat, /plans CMS rebuild session):
+
+> "Outline-bold should be our icon standard - this needs to be a sweeping foundational decision for brand themes not decisions we make at the component level. […] icon-fills will need to be used selectively for our brand and may present overrides at the component level to support varying interaction states (i.e. select)"
+
+Asked to ratify (1) the vocabulary rename, (2) ADR-036 Proposed → Accepted, (3) the brikdesigns approach:
+
+> "1 - approved (thanks); 2 - accepted; 3 - keep local + twin expansion."
+
+The default weight is renamed `bold` → `outline-bold` (#2405); the **rendered glyph is unchanged** (both resolve to the Phosphor `-bold` token). References to `'bold'` below predate the rename and denote the same weight.
 
 ## Context
 

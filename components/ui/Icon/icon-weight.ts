@@ -1,21 +1,67 @@
 import { createContext, useContext } from 'react';
 
 /**
- * Phosphor stroke weight. Phosphor encodes weight in the icon *name* —
- * `ph:{name}` (regular), `ph:{name}-bold`, `ph:{name}-fill`, etc. BDS exposes it
- * as an `<Icon weight>` prop and as a per-app default carried on context.
+ * BDS icon weight — a **form × stroke** axis, named in Brik's own vocabulary
+ * (ADR-036), not Phosphor's flat suffix list.
+ *
+ * - **form** — `outline*` is hollow (an enclosed glyph keeps its counter-path);
+ *   `fill` drops the counter for a solid silhouette; `duotone` sits outside the
+ *   axis. The names say which: `outline-bold` is a *heavier outline*, still
+ *   hollow — the old `bold` name hid that next to `fill`.
+ * - **stroke** — `-thin`/`-light`/(none)/`-bold` order the outline by weight.
+ *
+ * `outline-bold` is BDS's standard line density. Phosphor still encodes weight
+ * in the icon *name* (`ph:{name}-bold`), so each semantic name maps to a
+ * Phosphor token via {@link PHOSPHOR_WEIGHT_TOKEN}; `<Icon>` and ThemeProvider
+ * expose the axis as an `<Icon weight>` prop and a per-app context default.
+ *
+ * **Linear-glyph carve-out.** Where a glyph has no enclosed area, `fill` is a
+ * visual no-op — `ph:arrows-clockwise` vs `-fill` is identical geometry (2→2
+ * subpaths). Reach for `outline-bold`, not `fill`, on linear glyphs; detect the
+ * carve-out with the subpath test, never by eye.
  *
  * Lives in its own module (not Icon.tsx) so both `<Icon>` and ThemeProvider can
  * import the context without an Icon↔ThemeProvider import cycle.
  */
-export type IconWeight = 'thin' | 'light' | 'regular' | 'bold' | 'fill' | 'duotone';
+export type IconWeight =
+  | 'outline-thin'
+  | 'outline-light'
+  | 'outline'
+  | 'outline-bold'
+  | 'fill'
+  | 'duotone'
+  /** @deprecated Renamed to `'outline'` (Phosphor regular). Kept for one minor; remove next minor. */
+  | 'regular'
+  /** @deprecated Renamed to `'outline-bold'` — the BDS standard. Kept for one minor; remove next minor. */
+  | 'bold';
 
 /**
- * BDS's standard line density. The weight `<Icon>` renders when neither a
- * `weight` prop nor an enclosing provider says otherwise — unchanged from the
- * pre-provider default (`bold`).
+ * Each semantic weight → its Phosphor icon-name token (`''` = no suffix, the
+ * Phosphor-regular glyph). Single source of truth shared by `applyWeight`
+ * (Icon.tsx) and `offlineGapAt` (offline-coverage.ts) so the form×stroke
+ * vocabulary and the on-disk Phosphor names can never drift apart.
+ *
+ * `outline-bold`/`bold` both map to `bold`; `outline`/`regular` both map to
+ * `''` — so a deprecated alias resolves to the exact same glyph as its rename.
  */
-export const DEFAULT_ICON_WEIGHT: IconWeight = 'bold';
+export const PHOSPHOR_WEIGHT_TOKEN = {
+  'outline-thin': 'thin',
+  'outline-light': 'light',
+  outline: '',
+  'outline-bold': 'bold',
+  fill: 'fill',
+  duotone: 'duotone',
+  regular: '',
+  bold: 'bold',
+} as const satisfies Record<IconWeight, string>;
+
+/**
+ * BDS's standard line density: `outline-bold` — a heavier *outline*, still
+ * hollow. The weight `<Icon>` renders when neither a `weight` prop nor an
+ * enclosing provider says otherwise. Renamed from `bold`; the **rendered glyph
+ * is unchanged** (both resolve to the Phosphor `-bold` token).
+ */
+export const DEFAULT_ICON_WEIGHT: IconWeight = 'outline-bold';
 
 /**
  * Per-app default Phosphor weight, set by a provider (ThemeProvider's
