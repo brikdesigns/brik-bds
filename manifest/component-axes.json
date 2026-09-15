@@ -129,7 +129,10 @@
     "size": [
       "sm",
       "md",
-      "lg"
+      "lg",
+      "xl",
+      "2xl",
+      "3xl"
     ]
   },
   "Counter": {

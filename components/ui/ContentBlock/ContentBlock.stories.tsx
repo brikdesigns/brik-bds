@@ -22,7 +22,7 @@ const meta: Meta<typeof ContentBlock> = {
     subtitle: { control: 'text' },
     description: { control: 'text' },
     titleAs: { control: 'select', options: ['h1', 'h2', 'h3', 'h4', 'div', 'p'] },
-    size: { control: 'select', options: ['sm', 'md', 'lg'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg', 'xl', '2xl', '3xl'] },
     onColor: {
       control: { type: 'boolean' },
       description:

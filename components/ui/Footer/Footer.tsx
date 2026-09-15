@@ -24,14 +24,31 @@ export interface FooterColumnLink {
 }
 
 /**
- * Footer link column
+ * Footer link column.
+ *
+ * Takes `title` (canonical) or `heading` (deprecated), never both. `heading` is
+ * a banned slot word under the content-group taxonomy (brikdesigns#1494) — the
+ * canonical name for a primary text slot is `title`, matching `ContentBlock`.
+ *
+ * Deliberately a union rather than two optional fields: a column must be
+ * labelled, and `{ links: [...] }` with neither key would typecheck against a
+ * both-optional interface and render a blank heading. The union keeps that
+ * guarantee while accepting either spelling, which is also what lets the
+ * deprecation end — delete the second arm at the next major and every stale
+ * caller fails at compile time instead of rendering nothing.
  */
-export interface FooterColumn {
-  /** Column heading */
-  heading: string;
-  /** Links in this column */
-  links: FooterColumnLink[];
-}
+export type FooterColumn = { links: FooterColumnLink[] } & (
+  | {
+      /** Column title. */
+      title: string;
+      heading?: never;
+    }
+  | {
+      /** @deprecated Renamed to `title` (brikdesigns/brik-bds#2528); removed in the next major. */
+      heading: string;
+      title?: never;
+    }
+);
 
 /**
  * Inline link rendered next to the copyright in the bottom bar
@@ -247,9 +264,14 @@ export function Footer({
         )}
         {columns.length > 0 && (
           <div className="bds-footer__columns">
-            {columns.map((col) => (
-              <div key={col.heading} className="bds-footer__column">
-                <HeadingTag className="bds-footer__heading">{col.heading}</HeadingTag>
+            {columns.map((col) => {
+              // `title` is canonical; `heading` is the deprecated spelling the
+              // union still accepts. Resolved once, here, so no other site in
+              // this file has to know both exist.
+              const columnTitle = col.title ?? col.heading;
+              return (
+              <div key={columnTitle} className="bds-footer__column">
+                <HeadingTag className="bds-footer__heading">{columnTitle}</HeadingTag>
                 {col.links.map((link) => (
                   <FooterLink
                     key={link.href + link.label}
@@ -267,7 +289,8 @@ export function Footer({
                   </FooterLink>
                 ))}
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
