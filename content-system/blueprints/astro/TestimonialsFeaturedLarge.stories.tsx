@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AstroFrame } from './_AstroFrame';
 import './__generated__/TestimonialsFeaturedLarge.css';
 import html from './__generated__/TestimonialsFeaturedLarge.html?raw';
+import videoHtml from './__generated__/TestimonialsFeaturedLarge--video.html?raw';
 
 /**
  * `TestimonialsFeaturedLarge.astro` on the canonical rail (ADR-037), pre-rendered by
@@ -23,3 +24,6 @@ type Story = StoryObj<typeof AstroFrame>;
 
 /** @summary Default — single featured testimonial at large scale. */
 export const Default: Story = { render: () => <AstroFrame html={html} /> };
+
+/** @summary Featured testimonial with a video above the quote. */
+export const WithVideo: Story = { render: () => <AstroFrame html={videoHtml} /> };

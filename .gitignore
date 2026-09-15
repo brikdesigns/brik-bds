@@ -105,3 +105,4 @@ tests/visual/__screenshots__/*-win32.png
 # (#1778) — a per-run artifact, uploaded on failure, never committed.
 visual-report.json
 dropped.txt
+__pycache__/

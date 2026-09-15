@@ -19,9 +19,18 @@
 /* ─── Title size (structural modifier, ADR-008 §3) ─────────────────
    `subtitle`/`description` stay body-md at every size — only `title` scales. */
 
-.bds-content-block--sm .bds-content-block__title { font-size: var(--heading-sm); }
-.bds-content-block--md .bds-content-block__title { font-size: var(--heading-md); }
-.bds-content-block--lg .bds-content-block__title { font-size: var(--heading-lg); }
+/* Axis-prefixed per ADR-033 § 4 (`bds-{block}--{axis}-{value}`). The bare
+   `--sm`/`--md`/`--lg` spelling these replace was rule-4 debt on the baseline;
+   migrating the whole ramp at once keeps it derivable from the `size` prop and
+   avoids a set that is half bare and half prefixed. No consumer targeted the
+   old classes — `grep -rn "bds-content-block--" ` across this repo, brikdesigns
+   and the portal found only this file and ContentBlock.tsx. */
+.bds-content-block--size-sm .bds-content-block__title { font-size: var(--heading-sm); }
+.bds-content-block--size-md .bds-content-block__title { font-size: var(--heading-md); }
+.bds-content-block--size-lg .bds-content-block__title { font-size: var(--heading-lg); }
+.bds-content-block--size-xl .bds-content-block__title { font-size: var(--heading-xl); }
+.bds-content-block--size-2xl .bds-content-block__title { font-size: var(--heading-2xl); }
+.bds-content-block--size-3xl .bds-content-block__title { font-size: var(--heading-3xl); }
 
 /* ─── Subtitle ─────────────────────────────────────────────────── */
 

@@ -4,8 +4,17 @@ import './ContentBlock.css';
 
 export type ContentBlockTitleAs = 'h1' | 'h2' | 'h3' | 'h4' | 'div' | 'p';
 
-/** Title scale — sm/md/lg map to `--heading-sm/md/lg`. `subtitle`/`description` stay body-md at every size. */
-export type ContentBlockSize = 'sm' | 'md' | 'lg';
+/**
+ * Title scale — each step maps to the `--heading-{size}` token of the same name.
+ * `subtitle`/`description` stay body-md at every size.
+ *
+ * `xl`/`2xl`/`3xl` were added for page-region titles that sit at display scale
+ * (brikdesigns#1512 kept a raw `.bds-content-block__title` font-size override
+ * because the union stopped at `lg`, three steps below what it needed). A
+ * consumer reaching past the public API dies silently on any refactor, so the
+ * scale covers the token ramp rather than a subset of it.
+ */
+export type ContentBlockSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
 export interface ContentBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Primary text slot. Omit for a description/actions-only block. */
@@ -65,7 +74,7 @@ export function ContentBlock({
     <div
       className={bdsClass(
         'bds-content-block',
-        `bds-content-block--${size}`,
+        `bds-content-block--size-${size}`,
         onColor ? 'bds-content-block--on-color' : '',
         className,
       )}

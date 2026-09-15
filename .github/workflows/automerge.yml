@@ -1,0 +1,182 @@
+name: automerge
+
+# Arms `gh pr merge --auto` on PRs that satisfy the low-risk policy in
+# .claude/references/session-contract.md § Auto-merge policy (brik-llm#2046).
+#
+# What this workflow does NOT do, deliberately:
+#
+#   * It does not merge. It arms. GitHub merges when branch protection's
+#     required checks pass. Re-implementing "is CI green?" here would be a
+#     second, weaker copy of protection that drifts from it silently.
+#   * It does not decide policy. scripts/audit/automerge-eligibility.py holds
+#     every rule, and its unittest suite is the CI assertion of the exclusion
+#     table required by this ticket's AC-2.
+#
+# It runs on every event that can change the verdict — a new commit, a label
+# flip, a qa comment — and DISARMS a PR that stops qualifying. A PR that was
+# eligible at open and then pushes a commit touching operations/security/ must
+# lose auto-merge, not keep it; arming once at open would be a hole large
+# enough to drive the whole exclusion table through.
+#
+# brik-bds port of brik-llm's automerge.yml (brik-llm#3396; origin #2046). One
+# deliberate difference: `main` here is queue-managed (merge-queue-main ruleset,
+# bds#2412), so the arm step passes NO strategy flag — `--squash` is rejected on
+# a queue-managed branch, and `gh pr merge --auto` ENQUEUES when requirements
+# are met; the queue's own merge_method decides the strategy. Without this
+# workflow a green PR sat open until a human ran `gh pr merge` (brik-llm#3396's
+# repro, measured on #2487/#2490).
+#
+# This job is intentionally NOT a required context: a PR that simply does not
+# qualify is the normal case, not a failure, and NOTHING on that path may redden
+# the check. Both steps a non-qualifying PR reaches — evaluate and disarm — hold
+# that line explicitly: each guards its own subprocess and exits 0 when the call
+# fails, because an advisory check that fails on every PR is a check everyone
+# learns to ignore (#2055, #2284).
+#
+# Stated as a bound rather than "always exits 0", which was not true: the arm
+# step runs only on a PR that DOES qualify, and it is unguarded on purpose. A
+# `gh pr merge --auto` that fails there means the PR was never armed, and that
+# is a real failure with no other signal.
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, labeled, unlabeled, ready_for_review, converted_to_draft]
+  issue_comment:
+    types: [created, edited, deleted]
+
+concurrency:
+  # Keyed on the PR, not the ref: issue_comment carries no ref, and two events
+  # racing on one PR would otherwise arm and disarm in an undefined order.
+  group: automerge-${{ github.event.pull_request.number || github.event.issue.number }}
+  # QUEUE, don't cancel (#2278). This group previously ran `cancel-in-progress:
+  # true`, and 41 of 100 runs came back `cancelled` — including the LAST run on
+  # a PR, so nothing was left to arm or disarm and `gh pr checks` showed a red
+  # `fail` on every affected PR. That is the outcome the "not `set -e`" comment
+  # below exists to prevent.
+  #
+  # Dropping `cancel-in-progress` alone would NOT have fixed it. Per the
+  # workflow-syntax reference, `queue` defaults to `single`: "At most one job or
+  # workflow run can be `pending` in the concurrency group. When a new job or
+  # workflow run is queued, any existing `pending` job or workflow run in the
+  # same group is canceled and replaced." A burst of events — `opened` plus one
+  # `labeled` per label, which a single multi-label `gh` call emits within the
+  # same second — keeps replacing the pending run, and the survivor is whichever
+  # one loses the race.
+  #
+  # `queue: max` is the documented opposite: "Up to 100 jobs or workflow runs
+  # can be `pending` in the concurrency group." FIFO, nothing cancelled. It also
+  # serves the group's original intent better than cancelling did — arm/disarm
+  # now apply in arrival order rather than in an undefined one.
+  #
+  # `queue: max` with `cancel-in-progress: true` is a workflow validation error,
+  # so the two cannot both be set.
+  queue: max
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  arm-automerge:
+    # issue_comment fires for issues too; only PR comments are relevant.
+    if: github.event_name != 'issue_comment' || github.event.issue.pull_request
+    runs-on: ubuntu-latest
+    steps:
+      # pull_request_target checks out the BASE by default, which is what we
+      # want: the eligibility script and its policy table must come from the
+      # merge target, never from the PR under evaluation. A PR that could edit
+      # the rules it is judged by is not a gate.
+      - uses: actions/checkout@v4
+
+      - name: Evaluate the auto-merge policy
+        id: eligibility
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number || github.event.issue.number }}
+        run: |
+          set -uo pipefail
+          # Invoked through python3, not as a bare command. The bare form died
+          # with exit 126 on the first PR after this workflow landed (#2055):
+          # a newly added file is committed 100644, and 130 shebang-carrying
+          # files in this repo are the same, so relying on the bit here would
+          # be relying on the exception. The sibling contract workflow already
+          # does it this way.
+          #
+          # Not `set -e`: a failure to EVALUATE must read as "not eligible", not
+          # as a red check. This job is advisory and not a required context, so
+          # a red X here blocks nothing — it just trains everyone to ignore a
+          # failing check on every PR, which is how a real signal gets lost.
+          # #2055 was two minutes of exactly that.
+          if ! verdict="$(python3 scripts/audit/automerge-eligibility.py --pr "$PR" \
+                            --repo "$GITHUB_REPOSITORY" --json)"; then
+            echo "could not evaluate the policy — treating as not eligible" >&2
+            verdict='{"eligible": false, "blockers": ["policy evaluation failed — see the job log"]}'
+          fi
+          echo "$verdict"
+          eligible="$(printf '%s' "$verdict" | python3 -c \
+            'import json,sys; print(str(json.load(sys.stdin)["eligible"]).lower())')"
+          echo "eligible=${eligible}" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Auto-merge policy"
+            echo ""
+            if [ "$eligible" = "true" ]; then
+              echo "Qualifies — auto-merge armed. GitHub merges when required checks pass."
+            else
+              echo "Does not qualify. Blockers:"
+              echo ""
+              printf '%s' "$verdict" | python3 -c \
+                'import json,sys; [print(f"- {b}") for b in json.load(sys.stdin)["blockers"]]'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Arm auto-merge
+        if: steps.eligibility.outputs.eligible == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number || github.event.issue.number }}
+        # NO strategy flag: `main` is queue-managed and `--squash` is rejected
+        # there — `--auto` alone arms the enqueue and the merge-queue-main
+        # ruleset's merge_method (SQUASH) decides the strategy.
+        run: gh pr merge "$PR" --auto --repo "$GITHUB_REPOSITORY"
+
+      # The half that makes re-evaluation meaningful. Without it, "eligible at
+      # open" is permanent.
+      - name: Disarm auto-merge
+        if: steps.eligibility.outputs.eligible != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.number || github.event.issue.number }}
+        run: |
+          set -uo pipefail
+          # Every `gh` call here is guarded, for the same reason the evaluate
+          # step guards its own (#2055, #2284). `gh pr view --json
+          # autoMergeRequest` is a GraphQL call, and GitHub's GraphQL endpoint
+          # returned 503 repeatedly across 2026-08-17: unguarded, the runner's
+          # `bash -e` aborted the step and reddened arm-automerge on a PR whose
+          # only sin was not qualifying — the common case, on every non-eligible
+          # PR. `set -uo pipefail` does NOT clear the `-e` the runner's default
+          # shell (`bash -e {0}`) sets, so the `if !` and `||` guards below are
+          # what keeps the step green, not the `set` line.
+          #
+          # A failed read SKIPS the disarm, which is deliberately the permissive
+          # side: an armed PR stays armed for one more event. Safe because the
+          # arming is not the merge — branch protection's required checks still
+          # gate that — and because this job re-runs on every event that can
+          # change the verdict, so the skip is one event long, not permanent.
+          #
+          # The other direction is the one that must not regress: when the API
+          # IS reachable and the PR is armed, the disarm still runs. A fix that
+          # skipped unconditionally would make "eligible at open" permanent
+          # again, which is the hole this step exists to close.
+          if ! armed="$(gh pr view "$PR" --repo "$GITHUB_REPOSITORY" \
+                          --json autoMergeRequest --jq '.autoMergeRequest != null')"; then
+            echo "could not read the auto-merge state — skipping the disarm." >&2
+            echo "This job re-runs on every event that can change the verdict," >&2
+            echo "so the next one disarms if the PR is still armed." >&2
+            exit 0
+          fi
+          if [ "$armed" = "true" ]; then
+            echo "PR no longer qualifies — disarming auto-merge."
+            gh pr merge "$PR" --disable-auto --repo "$GITHUB_REPOSITORY" \
+              || echo "the disarm call failed — auto-merge is still armed." >&2
+          fi
