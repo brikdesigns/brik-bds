@@ -1,0 +1,31 @@
+---
+/**
+ * Example generated page — the exact shape the portal scaffold emits (ADR-037
+ * §5, ADR-039). One import, one `<BlueprintDispatcher>`, zero hand-rolled CSS:
+ * every section is a blueprint keyed by `section.visualNotes.blueprintKey` and
+ * rendered by lookup, no per-section `<style>`.
+ *
+ * This is the corpus `lint-hand-rolled-sections.mjs` gates inside brik-bds; a
+ * client site points the same lint at its own `src/pages/`. A look no blueprint
+ * offers is a MISSING AXIS to add to the blueprint (ADR-039 §The four axes),
+ * never a `<style>` block bolted on here.
+ */
+import { BlueprintDispatcher } from '@brikdesigns/bds/blueprints-astro';
+import type {
+  BlueprintSection,
+  ClientFacts,
+  ResolvedTheme,
+} from '@brikdesigns/bds/blueprints-astro';
+
+interface Props {
+  sections: readonly BlueprintSection[];
+  clientFacts: ClientFacts;
+  theme: ResolvedTheme;
+}
+
+const { sections, clientFacts, theme } = Astro.props;
+---
+
+<main>
+  <BlueprintDispatcher sections={sections} clientFacts={clientFacts} theme={theme} />
+</main>
