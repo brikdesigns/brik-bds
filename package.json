@@ -181,7 +181,7 @@
     "lint-mdx-deprecations": "node scripts/lint-mdx-deprecations.mjs",
     "lint-mdx-coverage": "node scripts/lint-mdx-coverage.mjs",
     "lint-component-props": "node scripts/lint-component-props.mjs",
-    "validate": "npm run test:citation-sweep && node scripts/lint-tokens.js --errors-only &&npm run lint-token-self-reference && npm run lint-token-tiers && npm run cascade-contract-check && npm run contrast-gate && npm run contrast-matrix:check && npm run lint-jsdoc && npm run validate:blueprints && npm run verify:astro-stories && npm run lint-blueprints:naming && npm run lint-atmosphere-tokens && npm run typecheck && npm run build-storybook && npm run lint-doc-links && npm run lint-mdx-tokens && npm run lint-mdx-headings && npm run lint-mdx-deprecations && npm run lint-mdx-coverage && npm run lint-component-props",
+    "validate": "npm run test:citation-sweep && node scripts/lint-tokens.js --errors-only &&npm run lint-token-self-reference && npm run lint-token-tiers && npm run cascade-contract-check && npm run contrast-gate && npm run contrast-matrix:check && npm run lint-jsdoc && npm run validate:blueprints && npm run verify:astro-stories && npm run lint-blueprints:naming && npm run lint-hand-rolled-sections && npm run lint-atmosphere-tokens && npm run typecheck && npm run build-storybook && npm run lint-doc-links && npm run lint-mdx-tokens && npm run lint-mdx-headings && npm run lint-mdx-deprecations && npm run lint-mdx-coverage && npm run lint-component-props",
     "validate:full": "node scripts/validate-all.js",
     "precommit": "npm run validate",
     "build:sd-figma": "node scripts/flatten-tokens-studio.js && npx style-dictionary build --config sd.config.tokens-studio.mjs",
@@ -262,7 +262,8 @@
     "verify:blueprints-astro": "node scripts/verify-blueprints-astro-exports.mjs",
     "lint-gate-pathspecs": "node scripts/lint-gate-pathspecs.mjs",
     "render:astro-stories": "node scripts/render-astro-blueprints.mjs",
-    "verify:astro-stories": "node scripts/render-astro-blueprints.mjs --check"
+    "verify:astro-stories": "node scripts/render-astro-blueprints.mjs --check",
+    "lint-hand-rolled-sections": "node scripts/lint-hand-rolled-sections.mjs"
   },
   "keywords": [
     "brik",

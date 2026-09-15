@@ -191,6 +191,18 @@ if [ -n "$STAGED_BLUEPRINTS" ]; then
   node scripts/lint-tokens.js --errors-only --files $STAGED_BLUEPRINTS
 fi
 
+# ── No-hand-rolled-sections gate (ADR-039 §Enforcement guardrail 2 / #2495) ──
+# A generated site section is a blueprint composed through props, never bespoke
+# CSS. Fails a staged example page carrying a <style> block, @keyframes, an
+# inline transition:/animation:, or a raw hex/px/duration literal. Scans the full
+# __examples__ corpus (2 files, instant); the CI validate run does the same. A
+# client site points this same lint at its own src/pages/.
+STAGED_SECTION_EXAMPLES=$(git diff --cached --name-only --diff-filter=ACM -- 'content-system/blueprints/astro/__examples__/**/*.astro')
+if [ -n "$STAGED_SECTION_EXAMPLES" ]; then
+  echo "Linting generated sections for hand-rolled style/motion (ADR-039)..."
+  npm run --silent lint-hand-rolled-sections
+fi
+
 # ── Slot pattern gate (ADR-008 §4 / ADR-017 / #1137) ──
 # Enforces the BEM slot grammar (bds-<block>__<slot>--<modifier>, each segment
 # kebab-case) by *shape*, not by an enumerated allowlist — the pattern gate that

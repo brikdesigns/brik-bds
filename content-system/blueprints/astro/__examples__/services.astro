@@ -1,0 +1,37 @@
+---
+/**
+ * Example generated page composing a blueprint DIRECTLY with its curated axes
+ * (ADR-039 §The four axes). Placement and media are closed-union PROPS an agent
+ * picks (`align`, `media`); entrance motion rides on `section.reveal`, read by
+ * the block. None of it is a `<style>` block or a raw literal — that is the
+ * whole point of the axes.
+ *
+ * Both this and `home.astro` are the same rule expressed two ways: a generated
+ * section is a blueprint parameterised through props, never bespoke CSS.
+ */
+import { Hero } from '@brikdesigns/bds/blueprints-astro';
+import type {
+  BlueprintSection,
+  ClientFacts,
+  ResolvedTheme,
+} from '@brikdesigns/bds/blueprints-astro';
+
+interface Props {
+  section: BlueprintSection;
+  clientFacts: ClientFacts;
+  theme: ResolvedTheme;
+}
+
+const { section, clientFacts, theme } = Astro.props;
+---
+
+<main>
+  <Hero
+    section={section}
+    clientFacts={clientFacts}
+    theme={theme}
+    layout="interior-minimal"
+    align="center"
+    media="none"
+  />
+</main>
