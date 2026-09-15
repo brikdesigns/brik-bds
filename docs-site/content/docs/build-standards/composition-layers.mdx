@@ -40,6 +40,10 @@ The one-sentence form: *Blueprints compose the page. Containers hold collections
 | Control | `components/ui/` | `FilterBar`, `PageHeader`, `TabBar`, `SubNavigation`, `Pagination` |
 | Component | `components/ui/` | Atomic primitives |
 
+<Callout type="info">
+  The Blueprint layer is parameterized along four curated axes — structure (`layout`, `align`, `columns`, `ratio`), `media`, motion (`reveal`, `contentMotion`), and style (the Theming Dimensions) — so one blueprint spans many client looks without hand-rolled CSS. Every value is a closed enum an agent selects, never free config. See [ADR-039](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-039-blueprint-parameterization-axes.md).
+</Callout>
+
 ## Block vs container
 
 > If the thing is described primarily by **how its children are styled and bounded** (border, elevation, padding, max-width) → it's a **container**. If it's described by **what slots it offers and which atoms fill them** (heading, body, kicker, action) → it's a **block**.
