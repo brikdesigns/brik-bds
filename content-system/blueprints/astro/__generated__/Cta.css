@@ -145,7 +145,7 @@
     gap: var(--gap-sm);
     color: var(--bds-cta-method-color, var(--text-primary));
     text-decoration: none;
-    transition: color 120ms ease-out;
+    transition: color var(--duration-sm) var(--ease-out);
   }
 
   a.bds-cta__method:hover {
