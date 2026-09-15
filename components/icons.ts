@@ -10,11 +10,13 @@ export const CaretDown = 'ph:caret-down';
 export const CaretUp = 'ph:caret-up';
 export const CaretLeft = 'ph:caret-left';
 export const CaretRight = 'ph:caret-right';
-// Explicit-bold caret constants. Bold is the canonical BDS UI icon weight on
-// every surface (navigation included) — the `<Icon>` atom applies it by default
-// (`weight="bold"`), rewriting bare `ph:*` names to their `-bold` twin at
-// render; `fill` stays reserved for active/selected + status. See the Icon
-// weight section of docs-site components/icons.mdx.
+// Explicit-`-bold` caret constants, for the rare call site that names the twin
+// directly rather than letting the atom apply the default. The `<Icon>` atom
+// renders `outline-bold` by default (rewriting bare `ph:*` to their `-bold`
+// twin), so most call sites need only the bare constant. For the canonical
+// weight vocabulary (form × stroke) and when to reach for each weight, see the
+// single source of truth — the Icon weight section of
+// docs-site/content/docs/components/icons.mdx — not a restatement here.
 export const CaretDownBold = 'ph:caret-down-bold';
 export const CaretUpBold = 'ph:caret-up-bold';
 export const MagnifyingGlass = 'ph:magnifying-glass';
