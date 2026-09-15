@@ -40,6 +40,7 @@ import { experimental_AstroContainer } from 'astro/container';
 import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { UNKNOWN_KEY_ATTR, containsUnknownKey } from './check-unknown-blueprint-keys.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const astroDir = join(root, 'content-system/blueprints/astro');
@@ -224,9 +225,49 @@ async function main() {
     emitted.push('HeroMediaCard--missing.html');
   }
 
+  await assertDispatcherRendersEveryKey(server, {
+    theme: baseTheme,
+    clientFacts: baseClientFacts,
+    placeholderImage,
+    sectionFor,
+  });
+
   await server.close();
   assertStylesheetCoverage();
   return emitted;
+}
+
+/**
+ * Coverage gate (#2496, ADR-039 §Enforcement guardrail 3). Renders every
+ * canonical section fixture through `BlueprintDispatcher` — the one component a
+ * client page imports — and fails if any section falls back to
+ * `<BlueprintFallback>` (it stamps `data-blueprint-unknown-key`).
+ *
+ * The block loop above renders each block component directly, so it can never
+ * exercise the dispatcher's registry lookup. This does: a fixture key drifting
+ * out of `BLUEPRINT_REGISTRY`, or a registry entry removed while a fixture still
+ * references it, turns the marker up here rather than in a shipped client
+ * `dist/` (where `check-unknown-blueprint-keys.mjs --root dist` is the same gate
+ * on the client side). Runs in `verify:astro-stories`, so no new CI job.
+ */
+async function assertDispatcherRendersEveryKey(server, { theme, clientFacts, placeholderImage, sectionFor }) {
+  const mod = await server.ssrLoadModule(join(astroDir, 'BlueprintDispatcher.astro'));
+  const sections = BLOCKS.flatMap(({ name, layouts }) => layouts.map((l) => sectionFor(name, l)));
+  const container = await experimental_AstroContainer.create();
+  const html = await container.renderToString(mod.default, {
+    props: {
+      sections,
+      clientFacts: { ...clientFacts, heroImageUrl: placeholderImage(960, 1200, '#eaf1fb', '#1f3d70', 'dispatch') },
+      theme,
+    },
+  });
+
+  if (containsUnknownKey(html)) {
+    console.error(`✗ BlueprintDispatcher fell back on a canonical fixture — ${UNKNOWN_KEY_ATTR} rendered.`);
+    console.error('  A section fixture references a blueprintKey not in BLUEPRINT_REGISTRY (content-system/blueprints/astro/BlueprintDispatcher.astro).');
+    console.error('  Wire the key (registry + WIRED_BLUEPRINT_KEYS) or fix the fixture.');
+    process.exit(1);
+  }
 }
 
 /**
