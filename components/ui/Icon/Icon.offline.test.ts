@@ -34,28 +34,31 @@ describe('Icon — offline resolution', () => {
     expect(iconLoaded('ph:atom')).toBe(false);
   });
 
-  it('reports zero offline gap for the bundled weights (regular + bold twin)', () => {
+  it('reports zero offline gap for the bundled weights (outline + outline-bold twin)', () => {
     // The gen script bundles each base icon plus its `-bold` twin (#2253), so
-    // both weights the general set ships resolve with no CDN fetch.
-    expect(offlineGapAt('regular')).toBe(0);
-    expect(offlineGapAt('bold')).toBe(0);
+    // both weights the general set ships resolve with no CDN fetch. The
+    // deprecated aliases resolve to the same glyphs, so their gap is 0 too.
+    expect(offlineGapAt('outline')).toBe(0);
+    expect(offlineGapAt('outline-bold')).toBe(0);
+    expect(offlineGapAt('regular')).toBe(0); // deprecated alias of outline
+    expect(offlineGapAt('bold')).toBe(0); // deprecated alias of outline-bold
     expect(BUNDLED_BASE_COUNT).toBeGreaterThan(0);
   });
 
   it('reports a non-zero offline gap for weights with no bundled glyphs', () => {
-    // fill/duotone/thin/light carry glyphs only where source uses them (today
-    // just star-fill), so most bundled icons would fetch from the CDN — this is
-    // the gap ThemeProvider warns on when set as a default weight.
+    // fill/duotone/outline-thin/outline-light carry glyphs only where source
+    // uses them (today just star-fill), so most bundled icons would fetch from
+    // the CDN — this is the gap ThemeProvider warns on as a default weight.
     expect(offlineGapAt('fill')).toBeGreaterThan(0);
     expect(offlineGapAt('duotone')).toBe(BUNDLED_BASE_COUNT);
-    expect(offlineGapAt('thin')).toBe(BUNDLED_BASE_COUNT);
+    expect(offlineGapAt('outline-thin')).toBe(BUNDLED_BASE_COUNT);
   });
 
   it('emits the dev warning only for under-covered default weights (ThemeProvider gate)', () => {
     // ThemeProvider console.warns this message (dev only) at mount — the pure
     // function is what verifies the mechanism without a DOM.
-    expect(offlineGapWarning('regular')).toBeNull();
-    expect(offlineGapWarning('bold')).toBeNull();
+    expect(offlineGapWarning('outline')).toBeNull();
+    expect(offlineGapWarning('outline-bold')).toBeNull();
     const warning = offlineGapWarning('fill');
     expect(warning).toContain('defaultIconWeight="fill"');
     expect(warning).toContain('Iconify');
