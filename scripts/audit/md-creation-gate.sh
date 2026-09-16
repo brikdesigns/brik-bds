@@ -76,7 +76,7 @@ ALLOWED_DIRS=(
 # Basenames sanctioned at any path (repo canon + package conventions).
 ALLOWED_NAMES=(
   "CLAUDE.md" "CLAUDE-CROSS-REPO.md" "README.md" "CODING-STANDARDS.md"
-  "CHANGELOG.md" "BDS-CONSUMER.md"
+  "CHANGELOG.md" "BDS-CONSUMER.md" "CONTENT.md"
 )
 # ── End per-repo block. ───────────────────────────────────────────────────────
 
