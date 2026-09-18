@@ -8,7 +8,7 @@ import * as Stories from './Card.stories';
 
 <ComponentLinks slug="card" />
 
-Flexible content container. A default flexible content slot (no `layout`), plus four anatomy-driven arrangements via the `layout` prop: `stack` (vertical content card / `CardGrid` cell), `row` (horizontal content card), `metric` (compact stat), and `control` (settings / integration row). One flat slot set (`media` / `overline` / `title` / `children` / `action` / `badge`) serves all four ([ADR-038](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md)). The web-only `PricingCard` component is part of the Card family and has its own page — **deprecated as a standalone surface, but still the component to use for a pricing tier**: `Card` carries no `price` / `period` / `features` anatomy and `layout` has no `pricing` member, so there is nothing here to migrate to yet ([#2571](https://github.com/brikdesigns/brik-bds/issues/2571)).
+Flexible content container. A default flexible content slot (no `layout`), plus five anatomy-driven arrangements via the `layout` prop: `stack` (vertical content card / `CardGrid` cell), `row` (horizontal content card), `metric` (compact stat), `control` (settings / integration row), and `pricing` (pricing tier). One flat slot set (`media` / `overline` / `title` / `children` / `action` / `badge`) serves all five, plus the per-layout extras each arrangement needs ([ADR-038](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md)). The web-only `PricingCard` component is **deprecated as a standalone surface** — `layout="pricing"` below is its successor ([#2571](https://github.com/brikdesigns/brik-bds/issues/2571)).
 
 > **Removed** — the `preset` discriminator (`control` / `summary` / `display` / `display-row`) has been replaced by `layout` (ADR-038 §5). Old→new mapping: `display`→`stack`, `display-row`→`row`, `summary`→`metric`, `control`→`control`.
 
@@ -42,6 +42,14 @@ Which of the three renders is content, not a semantic axis — set `media` in th
 <Canvas of={Stories.Stack} />
 
 The `mediaTreatment` prop controls how the `media` slot relates to the card edge. `flush` (default) bleeds the media to the edge and pads only the body (`--padding-lg`) — the blog/story/product-grid look. `inset` frames the media and body together in a single `--padding-huge` inset — the service-card "card-vertical" look. Cycle it in the Controls panel on the story above.
+
+### Pricing layout
+
+`layout="pricing"` — a vertical pricing tier: optional top `media`, a `badge` + `title` header, the `price` / `period` block, a `children` body, a divider, the `features` checklist, and a bottom-anchored `action`. Supersedes the standalone [`PricingCard`](?path=/docs/deprecated-pricing-card--docs); see [ADR-038 § Amendment 2026-09-18](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md) for why the pricing anatomy earns a layout rather than a `stack` recipe.
+
+`price`, `period` and `features` are this layout's own slots — the same shape as `control`'s `connectionStatus` / `lastSynced` / `actionAlign`. The recommended tier is **not** a `highlighted` prop: set `variant="raised"` (or a `tint`) so it composes from the one shared surface set like every other layout.
+
+<Canvas of={Stories.Pricing} />
 
 ### Row layout
 

@@ -610,4 +610,105 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ─── Layout: pricing ─────────────────────────────────────────── */
+/* Ported from the deprecated standalone `PricingCard` (#2571). Structural
+ * rules only — the fill / border / shadow come from `.bds-card--{variant}`
+ * above, and the recommended tier is `variant="raised"` (or a `tint`) rather
+ * than the bespoke `--highlighted` modifier the old block owned. */
+
+.bds-card--layout-pricing {
+  gap: var(--gap-lg);
+  padding: var(--padding-lg);
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Aspect ratio + object-fit stay with the consumer's <Image>/<Frame>; the
+ * card only rounds the rendered media, mirroring the stack media slot. */
+.bds-card__pricing-media {
+  position: relative;
+  display: block;
+}
+
+.bds-card__pricing-media :is(img, video, svg) {
+  border-radius: var(--border-radius-sm);
+}
+
+.bds-card__pricing-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+}
+
+.bds-card__pricing-badge {
+  align-self: flex-start;
+}
+
+.bds-card__pricing-title {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-snug);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.bds-card__pricing-price-block {
+  display: flex;
+  align-items: baseline;
+  gap: var(--gap-xs);
+}
+
+.bds-card__pricing-price {
+  font-family: var(--font-family-heading);
+  font-size: var(--heading-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--font-line-height-tight);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.bds-card__pricing-period {
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--text-secondary);
+}
+
+.bds-card__pricing-divider {
+  border: none;
+  border-top: var(--border-width-md) solid var(--border-muted);
+  margin: 0;
+}
+
+.bds-card__pricing-features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bds-card__pricing-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-md);
+  font-family: var(--font-family-body);
+  font-size: var(--body-sm);
+  line-height: var(--font-line-height-normal);
+  color: var(--text-primary);
+}
+
+.bds-card__pricing-check {
+  color: var(--text-brand-primary);
+  flex-shrink: 0;
+}
+
+.bds-card__pricing-action {
+  margin-top: auto;
+  padding-top: var(--padding-sm);
+}
 }

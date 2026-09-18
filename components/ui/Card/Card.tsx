@@ -4,6 +4,7 @@ import { Avatar, type AvatarStatus } from '../Avatar';
 import { Image } from '../Image';
 import { Logo, type LogoProps } from '../Logo';
 import { Dot, type DotTone } from '../Dot';
+import { Icon } from '../Icon';
 import type { ServiceLine } from '../ServiceTag/service-config';
 import './Card.css';
 
@@ -11,7 +12,7 @@ export type CardVariant = 'outlined' | 'brand' | 'elevated' | 'raised' | 'border
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 /**
  * Card layout arrangement (ADR-038) — the flat, anatomy-driven interface. One
- * `Card`, one slot set, four arrangements:
+ * `Card`, one slot set, five arrangements:
  *
  * - `stack` — vertical: optional top `media`, then `overline` / `title` /
  *   `children` (body) / `action`. The malleable `CardGrid` cell.
@@ -21,11 +22,16 @@ export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
  * - `control` — horizontal settings/integration row: leading `media` (logo) +
  *   `title` / `description` on the left, `connectionStatus` + `action` on the
  *   right, vertically centred.
+ * - `pricing` — vertical pricing tier: optional top `media`, `badge` + `title`
+ *   header, a `price` / `period` block, `children` body, a divider, the
+ *   `features` checklist, and a bottom `action`. `price`, `period` and
+ *   `features` are the layout's own slots — the pricing anatomy is the reason
+ *   it is a layout rather than a `stack` recipe (ADR-038 § Amendment 2026-09-18).
  *
  * A Card with no `layout` is the default flexible content card (compose
  * `<CardTitle>` / `<CardDescription>` / `<CardFooter>` in `children`).
  */
-export type CardLayout = 'stack' | 'row' | 'metric' | 'control';
+export type CardLayout = 'stack' | 'row' | 'metric' | 'control' | 'pricing';
 /** Heading level for a card's title — decouples document outline from the token-driven visual size. */
 export type CardHeadingLevel = 'h2' | 'h3' | 'h4';
 /**
@@ -250,6 +256,12 @@ interface CardAnatomyProps extends CardBaseProps {
   lastSynced?: string;
   /** Secondary detail line below the value (`metric` only) — e.g. a price • frequency, a delta, a unit. */
   detail?: ReactNode;
+  /** Price display (`pricing` only) — e.g. `"$49"`, `"Free"`. Pre-formatted; the card applies no numeric formatting. */
+  price?: ReactNode;
+  /** Billing period rendered beside the price (`pricing` only) — e.g. `"/month"`, `"one-time"`. */
+  period?: ReactNode;
+  /** Included-feature checklist (`pricing` only). Each entry renders with a `ph:check` mark; omit or pass `[]` to drop the list and its divider. */
+  features?: string[];
 }
 
 export type CardProps = CardDefaultProps | CardAnatomyProps;
@@ -423,8 +435,8 @@ const CONNECTION_STATUS_DOT: Record<CardControlConnectionStatus, DotTone> = {
 
 /**
  * Render the flat anatomy Card (ADR-038). Each `layout` owns a dedicated BEM
- * block (`bds-card--{stack,row,metric,control}`); the slots are the same set
- * across all four.
+ * block (`bds-card--{stack,row,metric,control,pricing}`); the slots are the
+ * same set across all five, plus the per-layout extras each arrangement needs.
  */
 function renderAnatomy({
   layout,
@@ -446,6 +458,9 @@ function renderAnatomy({
   connectionStatus,
   lastSynced,
   detail,
+  price,
+  period,
+  features,
   className,
   style,
   ...rest
@@ -518,6 +533,53 @@ function renderAnatomy({
           </div>
           {action && <div className="bds-card__metric-action">{action}</div>}
         </div>
+      </div>
+    );
+  }
+
+  if (layout === 'pricing') {
+    // `highlighted` is not a prop: the recommended tier is a surface choice, so
+    // it composes from the shared surface set (`variant="raised"` / `tint`)
+    // exactly as every other layout does. That is the one behaviour that did
+    // NOT carry over from `PricingCard`, which owned a bespoke
+    // `--highlighted` modifier.
+    const hasFeatures = Array.isArray(features) && features.length > 0;
+    return (
+      <div
+        className={bdsClass(
+          'bds-card',
+          `bds-card--${variant ?? 'outlined'}`,
+          'bds-card--layout-pricing',
+          tint && `bds-card--tint-${tint}`,
+          className,
+        )}
+        style={style}
+        {...rest}
+      >
+        {media && <div className="bds-card__pricing-media">{media}</div>}
+        <div className="bds-card__pricing-header">
+          {badge && <div className="bds-card__pricing-badge">{badge}</div>}
+          {title != null && <Heading className="bds-card__pricing-title">{title}</Heading>}
+        </div>
+        {price != null && (
+          <div className="bds-card__pricing-price-block">
+            <span className="bds-card__pricing-price">{price}</span>
+            {period != null && <span className="bds-card__pricing-period">{period}</span>}
+          </div>
+        )}
+        {children}
+        {hasFeatures && <hr className="bds-card__pricing-divider" />}
+        {hasFeatures && (
+          <ul className="bds-card__pricing-features">
+            {features.map((feature) => (
+              <li key={feature} className="bds-card__pricing-feature">
+                <Icon icon="ph:check" className="bds-card__pricing-check" aria-hidden="true" />
+                {feature}
+              </li>
+            ))}
+          </ul>
+        )}
+        {action && <div className="bds-card__pricing-action">{action}</div>}
       </div>
     );
   }

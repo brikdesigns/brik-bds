@@ -93,6 +93,69 @@ export const Default: Story = {
 };
 
 /**
+ * `layout="pricing"` — vertical pricing tier (ADR-038 § Amendment 2026-09-18;
+ * supersedes the standalone `PricingCard`). Optional top `media`, a `badge` +
+ * `title` header, the `price` / `period` block, a `children` body, a divider,
+ * the `features` checklist, and a bottom-anchored `action`.
+ *
+ * The recommended tier is **not** a `highlighted` prop — it composes from the
+ * shared surface set like every other layout, so set `variant="raised"` (or a
+ * `tint`) in Controls to mark it.
+ *
+ * @summary layout="pricing" — tier with price + feature list
+ */
+export const Pricing: Story = {
+  args: {
+    layout: 'pricing',
+    title: 'Professional',
+    price: '$49',
+    period: '/month',
+    badge: <Badge status="positive">Most popular</Badge>,
+    children: (
+      <CardDescription>For growing businesses that need more room to run.</CardDescription>
+    ),
+    features: ['Unlimited projects', 'Priority support', 'Custom domain'],
+    action: (
+      <Button variant="primary" size="sm">
+        Get started
+      </Button>
+    ),
+  },
+  argTypes: {
+    padding: { table: { disable: true } },
+    interactive: { table: { disable: true } },
+    href: { table: { disable: true } },
+    price: {
+      control: 'text',
+      description:
+        'Price display — pre-formatted (`"$49"`, `"Free"`). The card applies no numeric formatting.',
+    },
+    period: {
+      control: 'text',
+      description: 'Billing period rendered beside the price (`"/month"`, `"one-time"`).',
+    },
+    features: {
+      control: 'object',
+      description:
+        'Included-feature checklist. Each entry renders with a `ph:check` mark; omit or pass `[]` to drop the list and its divider.',
+    },
+    variant: {
+      control: 'select',
+      options: ['outlined', 'brand', 'elevated', 'raised', 'borderless'],
+      description:
+        'Surface treatment. `raised` marks the recommended tier — the pricing layout has no bespoke `highlighted` prop.',
+    },
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 320 }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
  * `layout="control"` — settings / integration-row layout (ADR-038; replaces
  * `preset="control"`). Leading `media` (logo) + `title` / `description` on the
  * left; a trailing `connectionStatus` indicator + `action` on the right.
