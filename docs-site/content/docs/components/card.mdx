@@ -12,6 +12,7 @@ Card is the canonical content-grouping container. A default flexible mode, plus 
 - **`layout="row"`** — horizontal content card, media left and text right.
 - **`layout="metric"`** — compact stat tile, label above a large value.
 - **`layout="control"`** — settings/integration row, media + text left, status + action right.
+- **`layout="pricing"`** — vertical pricing tier, price + period block above a feature checklist.
 
 One flat slot set (`media` / `overline` / `title` / `children` / `action` / `badge`) serves all four, per [ADR-038](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md).
 
@@ -24,6 +25,7 @@ One flat slot set (`media` / `overline` / `title` / `children` / `action` / `bad
 - Service grids, feature cards, and content blocks (`layout="stack"`)
 - Settings panels with title + description + toggle/action (`layout="control"`)
 - Dashboard stat tiles ($48K Q1 revenue, 142 active users) (`layout="metric"`)
+- Pricing tiers and plan comparison grids (`layout="pricing"`)
 - Any grouped-content surface where consistent border/padding/shadow matter
 
 For a horizontal stack of card-like rows, use [FieldGrid](/docs/components/field-grid) wrapping Cards. For loading-state placeholders, use [Skeleton](/docs/components/skeleton) `variant="rectangular"`.
@@ -179,6 +181,32 @@ Two optional slots extend `metric` for a labelled selection — the shape the re
   **`layout="control"` replaces the standalone `<CardControl>` component**, which is deprecated per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md) ([#657](https://github.com/brikdesigns/brik-bds/issues/657)). New code should use the layout; see the [CardControl migration guide](/docs/components/card-control#migration).
 </Callout>
 
+## Pricing layout
+
+`layout="pricing"` is the vertical pricing tier — optional top `media`, a `badge` + `title` header, the `price` / `period` block, a `children` body, a divider, the `features` checklist, and a bottom-anchored `action`.
+
+```tsx
+<Card
+  layout="pricing"
+  title="Professional"
+  price="$49"
+  period="/month"
+  badge={<Badge status="positive">Most popular</Badge>}
+  features={['Unlimited projects', 'Priority support', 'Custom domain']}
+  action={<Button variant="primary" size="sm">Get started</Button>}
+>
+  <CardDescription>For growing businesses.</CardDescription>
+</Card>
+```
+
+`price`, `period` and `features` are this layout's own slots, the same shape as `control`'s `connectionStatus` / `lastSynced` / `actionAlign`. Pre-format the price — the card applies no numeric formatting. Omit `features` (or pass `[]`) to drop the checklist and its divider.
+
+Mark the recommended tier with `variant="raised"` or a `tint`. There is deliberately **no `highlighted` prop**: the surface set is shared across every layout, so a per-layout highlight modifier would re-declare what `variant` already owns.
+
+<Callout type="info">
+  **`layout="pricing"` supersedes the standalone `<PricingCard>`**, which is deprecated as a standalone surface ([#2571](https://github.com/brikdesigns/brik-bds/issues/2571)). See [ADR-038 § Amendment 2026-09-18](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md) for why the pricing anatomy earns a layout rather than a `stack` recipe.
+</Callout>
+
 ## Migrating off preset
 
 The `preset` discriminator predated ADR-038 and has been **removed** (ADR-038 §5). Use `layout`; the mapping below is for updating any code still on the old union.
@@ -189,6 +217,7 @@ The `preset` discriminator predated ADR-038 and has been **removed** (ADR-038 §
 | `preset="display-row"` | `layout="row"` | same as `stack`, laid out horizontally |
 | `preset="summary"` | `layout="metric"` | `label` → `overline`, `value` → `title`; pre-format the value |
 | `preset="control"` | `layout="control"` | `logo` → `media`, other slots unchanged |
+| `<PricingCard>` | `layout="pricing"` | `image` → `media`, `description` → `children`; `highlighted` → `variant="raised"` |
 | `<ProductSummaryCard>` | `layout="metric"` | `media` = `<ServiceTag>`, `overline` = label, `title` = value, `detail` = `price • frequency` |
 
 Two behavior notes on the way across:
@@ -229,7 +258,7 @@ One flat slot set serves all four arrangements. A slot that a layout does not re
 {/* props-check: CardProps @ components/ui/Card/Card.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `layout` | `'stack' \| 'row' \| 'metric' \| 'control'` *(required)* | — |
+| `layout` | `'stack' \| 'row' \| 'metric' \| 'control' \| 'pricing'` *(required)* | — |
 | `media` | `ReactNode` | — |
 | `overline` | `ReactNode` | — |
 | `title` | `ReactNode` | — |

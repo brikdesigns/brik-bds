@@ -43,6 +43,14 @@ Which of the three renders is content, not a semantic axis — set `media` in th
 
 The `mediaTreatment` prop controls how the `media` slot relates to the card edge. `flush` (default) bleeds the media to the edge and pads only the body (`--padding-lg`) — the blog/story/product-grid look. `inset` frames the media and body together in a single `--padding-huge` inset — the service-card "card-vertical" look. Cycle it in the Controls panel on the story above.
 
+### Pricing layout
+
+`layout="pricing"` — a vertical pricing tier: optional top `media`, a `badge` + `title` header, the `price` / `period` block, a `children` body, a divider, the `features` checklist, and a bottom-anchored `action`. Supersedes the standalone [`PricingCard`](?path=/docs/deprecated-pricing-card--docs); see [ADR-038 § Amendment 2026-09-18](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md) for why the pricing anatomy earns a layout rather than a `stack` recipe.
+
+`price`, `period` and `features` are this layout's own slots — the same shape as `control`'s `connectionStatus` / `lastSynced` / `actionAlign`. The recommended tier is **not** a `highlighted` prop: set `variant="raised"` (or a `tint`) so it composes from the one shared surface set like every other layout.
+
+<Canvas of={Stories.Pricing} />
+
 ### Row layout
 
 `layout="row"` — horizontal content card: `media` on the left, the text column (`overline`, `title`, `children` body, `action`) on the right. Use for single-row sections where a vertical layout wastes horizontal space: Related Customer Story, Recommended Add-On, featured plan. Toggle `imageWidth` between `narrow` (25%), `standard` (35%, default), and `wide` (50%) — or pass a CSS length / percentage. Collapses to a vertical stack at ≤ 640px.
