@@ -8,7 +8,9 @@ import * as Stories from './PricingCard.stories';
 
 <ComponentLinks slug="pricing-card" />
 
-> **Deprecated** — This standalone page is superseded by [Card → Pricing preset](?path=/docs/containers-card--overview). See [design.brikdesigns.com/docs/components/pricing-card](https://design.brikdesigns.com/docs/components/pricing-card) for the canonical guidance.
+> **Deprecated as a standalone surface.** `PricingCard` still ships and is still the component to use for a pricing tier — the stories below are live, not archived. Canonical guidance: [design.brikdesigns.com/docs/components/pricing-card](https://design.brikdesigns.com/docs/components/pricing-card).
+>
+> **There is no successor API yet.** [`Card`](?path=/docs/containers-card--overview) is the intended long-term home, but its flat slot set is `media` / `overline` / `title` / `children` / `action` / `badge` ([ADR-038](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md)) — it carries no `price`, `period` or `features` anatomy, and `CardLayout` is `'stack' | 'row' | 'metric' | 'control'` with no `pricing` member. Keep using `PricingCard` until that lands; tracked in [#2571](https://github.com/brikdesigns/brik-bds/issues/2571).
 
 A pricing tier display card with title, price, features list, and call-to-action. Supports a highlighted state for the recommended plan.
 

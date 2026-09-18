@@ -4,9 +4,12 @@ import { Badge } from '../Badge';
 import { Button } from '../Button';
 
 /**
- * @deprecated Stories for PricingCard now live in Card.stories.tsx
- * (`Containers/card` sidebar entry). This file is kept during the migration
- * window and will be removed in a future release.
+ * @deprecated `PricingCard` is deprecated as a standalone surface and sits under
+ * `Deprecated/` in the sidebar. These stories are still the LIVE ones — they have
+ * not moved to `Card.stories.tsx`, which carries no pricing story, and `Card` has
+ * no price/period/features anatomy to host one (ADR-038; `CardLayout` is
+ * `'stack' | 'row' | 'metric' | 'control'`). Keep using `PricingCard` until a
+ * successor lands. Tracked in #2571.
  */
 const meta: Meta<typeof PricingCard> = {
   title: 'Deprecated/pricing-card',
