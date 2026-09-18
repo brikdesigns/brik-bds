@@ -6,7 +6,7 @@ description: Pricing tier display — title, price, features list, action. Optio
 import { Callout } from 'fumadocs-ui/components/callout';
 
 <Callout type="warn">
-  **PricingCard is deprecated as a standalone surface** — but it is still the component to use for a pricing tier, and this page is its canonical guidance. [`Card`](/docs/components/card) is the intended long-term home; it has **no pricing story and no price/period/features anatomy** today (its flat slot set is `media` / `overline` / `title` / `children` / `action` / `badge`, and `CardLayout` is `'stack' | 'row' | 'metric' | 'control'`). Keep using `PricingCard` until a successor lands — tracked in [#2571](https://github.com/brikdesigns/brik-bds/issues/2571).
+  **PricingCard is deprecated as a standalone surface.** Its successor is [`Card` with `layout="pricing"`](/docs/components/card#pricing-layout), added in [#2571](https://github.com/brikdesigns/brik-bds/issues/2571) (ADR-038 § Amendment 2026-09-18) — same anatomy: `price`, `period`, `features`, plus the shared slots. Map `image`→`media`, `description`→`children`, `highlighted`→`variant="raised"`. The component file stays during the migration window for `surface-web` CSS isolation and is removed in a future major version.
 </Callout>
 
 PricingCard renders a single pricing tier — title, price + period, description, feature bullets, and call-to-action. Pair multiple in a [CardList](/docs/components/card-list) for the canonical 2-3-tier pricing grid.

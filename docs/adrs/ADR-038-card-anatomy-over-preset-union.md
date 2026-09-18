@@ -4,7 +4,7 @@
 **Date:** 2026-09-11
 **Supersedes:** [ADR-018](./ADR-018-card-preset-boundary.md) — its keep-the-presets path is replaced by flattening the union into a `layout` axis
 **Refines:** [ADR-004](./ADR-004-component-bloat-guardrails.md) (preset-over-component principle — this adds the *anatomy-over-preset-union* rule on the other side)
-**Related:** [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) (sidebar taxonomy), [ADR-010](./ADR-010-storybook-axes-of-information.md) (story-vs-control matrix), the 2026-05-17 Card-family review (preset consolidation), memory `project-card-family-architecture-2026-05`
+**Related:** [ADR-006](./ADR-006-storybook-taxonomy-and-story-shape.md) (sidebar taxonomy), [ADR-010](./ADR-010-storybook-axes-of-information.md) (story-vs-control matrix), [#2571](https://github.com/brikdesigns/brik-bds/issues/2571) (the `PricingCard` deprecation this ADR’s Amendment 2026-09-18 resolves), the 2026-05-17 Card-family review (preset consolidation), memory `project-card-family-architecture-2026-05`
 **Owner:** Nick Stanerson
 
 ## Context
@@ -119,3 +119,15 @@ Added to the component-build standard: **when two or more `preset` values on a C
 - **Additive, not a mutation.** Default/`huge` emits the unchanged `.bds-card--layout-stack-inset` and nothing else, so `ServiceCard` / `ServiceLineCard` stay byte-identical (48px). `lg` layers `.bds-card--layout-stack-inset-lg` over it → `--padding-lg` (24px) + `--gap-lg`. Regression-tested in `Card.anatomy.browser.test.ts`.
 - **A scale step, not a new token or a new `mediaTreatment` value.** The prop names a step of the existing semantic `--padding-*` scale — no `--inset-*` family, no enum proliferation to migrate under the [#2438](https://github.com/brikdesigns/brik-bds/issues/2438) `preset`→`layout` cleanup. Extends cleanly to `'sm' | 'none' | …` because those tokens already exist.
 - **Per-brand density stays orthogonal.** A tighter client rides the `data-mode-spacing` mode (which re-values `--padding-*` globally), not a per-brand card variant. `insetPadding` is a per-instance choice ([cascade → Modes](https://design.brikdesigns.com/docs/getting-started/cascade#modes)).
+
+### 2026-09-18 — `layout="pricing"` absorbs the deprecated `PricingCard` (#2571)
+
+`PricingCard` was deprecated as a standalone surface, but its notices named a successor — "Card → Pricing preset" — that never existed: ADR-038 removed the `preset` word itself, and `CardLayout` had no `pricing` member. Consumers who followed the notice stalled; `brikdesigns` still ships it on three marketing routes (brikdesigns/brikdesigns#1690). Card gains a fifth arrangement, **`layout="pricing"`**, so the deprecation resolves to something real.
+
+- **The pricing anatomy is a Layout split, not a `stack` recipe.** `stack`'s slot set (`media` / `overline` / `title` / `children` / `action` / `badge`) cannot express a price. Expressing one means stuffing `price` + `period` into `children` as freeform markup, which loses the `__price` / `__period` sub-elements consumers key on — `brikdesigns`' `offering-period-suffix.spec.ts` exists precisely because TypeScript could not catch a missing period span. A recipe that discards the anatomy is not a migration target.
+- **Layout-specific slots are the established shape, not a new concession.** `price` / `period` / `features` sit beside `control`'s `connectionStatus` / `lastSynced` / `actionAlign`, `row`'s `imageWidth`, and `stack`'s `mediaTreatment` / `insetPadding`. § Decision 1's "the slots are the same across all three" describes the *shared* set; every layout since has added the extras its arrangement needs. This amendment states that explicitly so it stops reading as a violation.
+- **`highlighted` does not carry over.** `PricingCard` owned a bespoke `--highlighted` modifier that re-declared a border and shadow the surface set already owns. The recommended tier is `variant="raised"` (or a `tint`) — one shared surface set, no per-layout redefinition, which is § Decision 1's whole point.
+- **Structural CSS only.** `.bds-card--layout-pricing` carries geometry; fill / border / shadow come from `.bds-card--{variant}`, so `borderless` / `elevated` / `raised` compose without the specificity overrides the old standalone block needed.
+- **`PricingCard` is not deleted here.** It still ships and still works; this amendment only gives the deprecation a destination. The consumer migration is brikdesigns/brikdesigns#1690, which was blocked on exactly this.
+
+OPERATOR SAID 2026-09-18 (chat): "Option A (thanks)" — chosen over composing the tier from existing slots, on the ground that Option B leaves #1690 with no successor.
