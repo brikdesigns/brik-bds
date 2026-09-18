@@ -24,27 +24,16 @@ The `layout` prop selects the arrangement. Default (no `layout`) gives a flexibl
 
 The default shape also takes a `variant`: `outlined` (default, secondary border), `brand` (primary-color border), `elevated` (surface fill, no border, no shadow), `raised` (surface fill, no border, `--box-shadow-md` drop shadow), and `borderless`.
 
-### Raised variant
+Cycle `variant` in the Controls panel on the story above — it is a fill/border treatment, not a distinct semantic variant, so it is a control rather than a story per [ADR-010](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-010-storybook-axes-of-information.md).
 
-`variant="raised"` — surface-primary fill, no border, with a cast `--box-shadow-md` drop shadow. The shadow-casting counterpart to the now-flat `elevated` (brik-bds#1146 / BACKLOG-493 removed `elevated`'s shadow so portal cards read flat). Use for a focal/lone card or a grid cell that needs a lifted, contained read.
-
-<Canvas of={Stories.Raised} />
-
-### Borderless variant
-
-`variant="borderless"` — transparent fill, no border, no shadow. Use for cards placed on a colored surface (service-tier or brand-image background) where the `outlined` border ring reads as visual noise. The card inherits the parent surface rather than forcing its own.
-
-<Canvas of={Stories.Borderless} />
+- `raised` — surface-primary fill, no border, with a cast `--box-shadow-md` drop shadow. The shadow-casting counterpart to the now-flat `elevated` (brik-bds#1146 / BACKLOG-493 removed `elevated`'s shadow so portal cards read flat). Use for a focal/lone card or a grid cell that needs a lifted, contained read.
+- `borderless` — transparent fill, no border, no shadow. Use for cards placed on a colored surface (service-tier or brand-image background) where the `outlined` border ring reads as visual noise. The card inherits the parent surface rather than forcing its own.
 
 ### Leading media (avatar / image / logo)
 
 The default shape takes an optional `media` prop that turns the card into a horizontal "media object" — an `Avatar`, a square 1:1 `Image`, or a bundled `Logo` on the left, with `children` stacked to the right. Pass exactly one of `media={{ avatar: {…} }}`, `media={{ image: {…} }}`, or `media={{ logo: { set, name } }}`. All size to the shared Avatar scale (`sm` 32px, `md` 40px, `lg` 48px, `xl` 64px) so they read at the same footprint. The avatar falls back to initials from `name` and can carry a presence `status`; the image takes `fit` (`contain` for artwork, `cover` for photos); the logo renders a full-color third-party / client brand mark. Mirrors the `TableAvatarCell` / `TableImageCell` / `TableLogoCell` media cells.
 
-<Canvas of={Stories.WithAvatar} />
-
-<Canvas of={Stories.WithImage} />
-
-<Canvas of={Stories.WithLogo} />
+Which of the three renders is content, not a semantic axis — set `media` in the Controls panel on the story above rather than reaching for a per-media story.
 
 ### Stack layout
 

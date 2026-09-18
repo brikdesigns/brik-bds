@@ -5,20 +5,6 @@ import { Logo } from '../Logo';
 import { Button } from '../Button';
 import { Badge } from '../Badge';
 
-/* Story-only 1:1 product thumbnail (data URI, no network) — a schematic
-   iPhone standing in for a real product photo in the media-image demo. */
-const iphoneThumb =
-  'data:image/svg+xml;utf8,' +
-  encodeURIComponent(
-    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">' +
-      '<rect width="200" height="200" fill="#eef1f4"/>' +
-      '<rect x="72" y="24" width="56" height="152" rx="15" fill="#1c1c1e"/>' +
-      '<rect x="77" y="32" width="46" height="136" rx="8" fill="#3a7bd5"/>' +
-      '<rect x="90" y="28" width="20" height="5" rx="2.5" fill="#0d0d0f"/>' +
-      '<rect x="88" y="170" width="24" height="3" rx="1.5" fill="#48484a"/>' +
-      '</svg>',
-  );
-
 /* Story-only 3:2 landscape thumbnail (data URI, no network) — a schematic
    photo standing in for real display-card media in the image-slot demos. */
 const landscapeThumb =
@@ -62,7 +48,7 @@ const meta: Meta<typeof Card> = {
     media: {
       control: false,
       description:
-        'Leading 1:1 media (Default shape only) — `{ avatar: {…} }`, `{ image: {…} }`, or `{ logo: { set, name } }`. Renders an `Avatar`, a square `Image`, or a bundled `Logo` on the left, with `children` stacked to the right. See `WithAvatar` / `WithImage` / `WithLogo`.',
+        'Leading 1:1 media (Default shape only) — `{ avatar: {…} }`, `{ image: {…} }`, or `{ logo: { set, name } }`. Renders an `Avatar`, a square `Image`, or a bundled `Logo` on the left, with `children` stacked to the right. Which of the three is content, not a semantic axis — set it here rather than in a per-media story (ADR-010 Q2).',
     },
   },
 };
@@ -100,181 +86,6 @@ export const Default: Story = {
   decorators: [
     (Story) => (
       <div style={{ width: 320 }}>
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-/**
- * `variant="borderless"` — transparent fill, no border, no shadow. For cards
- * placed on a colored surface (service-tier / brand-image background) where
- * the `outlined` ring reads as visual noise. The card inherits the parent
- * surface; shown here on a brand-primary background.
- *
- * @summary variant="borderless" — for cards on a colored surface
- */
-export const Borderless: Story = {
-  args: {
-    variant: 'borderless',
-    padding: 'md',
-    children: (
-      <>
-        <CardTitle>Card title</CardTitle>
-        <CardDescription>
-          Sits directly on the colored surface — no border ring, no shadow.
-        </CardDescription>
-        <CardFooter>
-          <Button variant="on-color" size="sm">
-            Action
-          </Button>
-        </CardFooter>
-      </>
-    ),
-  },
-  decorators: [
-    (Story) => (
-      <div
-        style={{
-          width: 320,
-          padding: 'var(--padding-xl)',
-          backgroundColor: 'var(--background-brand-primary)',
-          borderRadius: 'var(--border-radius-md)',
-        }}
-      >
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-/**
- * `variant="raised"` — surface-primary fill, no border, with a
- * `--box-shadow-md` drop shadow. The shadow-casting counterpart to the
- * now-flat `elevated` (brik-bds#1146 / BACKLOG-493 removed its shadow so
- * portal cards read flat). Use for a focal/lone card or a grid cell that
- * needs a lifted, contained read. Shown here on a secondary surface so the
- * cast shadow reads clearly.
- *
- * @summary variant="raised" — surface fill + cast shadow
- */
-export const Raised: Story = {
-  args: {
-    variant: 'raised',
-    padding: 'md',
-    children: (
-      <>
-        <CardTitle>Card title</CardTitle>
-        <CardDescription>
-          Surface-primary fill, no border, with a cast drop shadow.
-        </CardDescription>
-        <CardFooter>
-          <Button variant="primary" size="sm">
-            Action
-          </Button>
-        </CardFooter>
-      </>
-    ),
-  },
-  decorators: [
-    (Story) => (
-      <div
-        style={{
-          width: 320,
-          padding: 'var(--padding-xl)',
-          backgroundColor: 'var(--surface-secondary)',
-          borderRadius: 'var(--border-radius-md)',
-        }}
-      >
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-/**
- * Default Card with a leading `Avatar` — the "media object" layout. Pass
- * `media={{ avatar: {…} }}`; the avatar renders on the left and `children`
- * (`<CardTitle>` / `<CardDescription>`) stack to the right. The avatar falls
- * back to initials from `name` when no `src` loads, and can carry a presence
- * `status` dot. Size keys to the Avatar scale (`sm`/`md`/`lg`/`xl`).
- *
- * @summary media avatar — identity card (name + detail)
- */
-export const WithAvatar: Story = {
-  args: {
-    variant: 'outlined',
-    padding: 'md',
-    media: { avatar: { name: 'Jordan Lee', status: 'online', size: 'lg' } },
-    children: (
-      <>
-        <CardTitle as="h4">Jordan Lee</CardTitle>
-        <CardDescription>jordan.lee@brikdesigns.com</CardDescription>
-      </>
-    ),
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ width: 360 }}>
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-/**
- * Default Card with a leading square 1:1 `Image` — an arbitrary thumbnail
- * counterpart to `WithAvatar`. Pass `media={{ image: {…} }}` with `fit`
- * (`cover` for photos, `contain` for artwork). Size keys to the same scale as
- * the avatar so the two read at an identical footprint. For a bundled brand
- * mark, prefer `media={{ logo }}` (see `WithLogo`) over a raw image `src`.
- *
- * @summary media image — square 1:1 thumbnail card
- */
-export const WithImage: Story = {
-  args: {
-    variant: 'outlined',
-    padding: 'md',
-    media: { image: { src: iphoneThumb, alt: 'iPhone 15 Pro', fit: 'cover', size: 'lg' } },
-    children: (
-      <>
-        <CardTitle as="h4">iPhone 15 Pro</CardTitle>
-        <CardDescription>Device · In stock</CardDescription>
-      </>
-    ),
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ width: 360 }}>
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-/**
- * Default Card with a leading square 1:1 bundled `Logo` — the third-party /
- * integration counterpart to `WithAvatar`. Pass `media={{ logo: { set, name } }}`;
- * the full-color brand mark renders contained in the square at the shared media
- * scale. Use this for integration and payment rows instead of a raw image `src`.
- *
- * @summary media logo — integration / brand card
- */
-export const WithLogo: Story = {
-  args: {
-    variant: 'outlined',
-    padding: 'md',
-    media: { logo: { set: 'integration', name: 'notion', size: 'lg' } },
-    children: (
-      <>
-        <CardTitle as="h4">Notion</CardTitle>
-        <CardDescription>Meetings database · Connected</CardDescription>
-      </>
-    ),
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ width: 360 }}>
         <Story />
       </div>
     ),
@@ -446,42 +257,6 @@ export const Stack: Story = {
     },
     padding: { table: { disable: true } },
     interactive: { table: { disable: true } },
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ width: 320, display: 'flex' }}>
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-/**
- * `layout="stack"` inset at the tighter `insetPadding="lg"` scale — media + body
- * framed together in a `--padding-lg` (24px) inset with `--gap-lg`, instead of
- * the default `huge` (48px). The image-top card the industry grid reaches for
- * (#2508); per-brand density still rides `data-mode-spacing`, not this prop.
- *
- * @summary layout="stack" inset at insetPadding="lg" (24px)
- */
-export const StackInsetLg: Story = {
-  args: {
-    layout: 'stack',
-    mediaTreatment: 'inset',
-    insetPadding: 'lg',
-    media: <Image src={landscapeThumb} alt="Industry illustration" ratio="3-2" />,
-    overline: <Badge>Industry</Badge>,
-    title: 'Service one',
-    children: (
-      <CardDescription>
-        A two-line card description that sets the type rhythm without trying to tell the whole story.
-      </CardDescription>
-    ),
-    action: (
-      <Button variant="primary" size="sm">
-        Learn more
-      </Button>
-    ),
   },
   decorators: [
     (Story) => (
