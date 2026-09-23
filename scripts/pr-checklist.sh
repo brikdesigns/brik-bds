@@ -98,7 +98,7 @@ if [ ${#THEME_FILES[@]} -gt 0 ]; then
     # Look for hex values that appear after the TIER 2 comment marker
     if awk '/TIER 2/,EOF' "$theme" 2>/dev/null | grep -qE ':\s*#[0-9a-fA-F]{3,8}\s*;'; then
       HEX_VIOLATIONS=$((HEX_VIOLATIONS + 1))
-      OFFENDERS=$(awk '/TIER 2/,EOF' "$theme" | grep -nE ':\s*#[0-9a-fA-F]{3,8}\s*;' | sed 's/^/    /')
+      OFFENDERS=$(awk '/TIER 2/,EOF' "$theme" | grep -nE ':\s*#[0-9a-fA-F]{3,8}\s*;' | sed 's/^/    /' || true)
       echo -e "$FAIL"
       echo ""
       echo -e "    ${RED}Raw hex in Tier 2 of $theme:${RESET}"
