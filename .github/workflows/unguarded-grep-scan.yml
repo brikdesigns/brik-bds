@@ -1,0 +1,47 @@
+name: unguarded-grep-scan
+
+# Repo-wide gate on the `X=$(… grep …)` shape under `set -e` (#2423):
+# grep exits 1 on NO MATCH — normally the healthy case — so the assignment
+# aborts the script on the healthy path and any empty-case guard written on
+# the next line is dead code. brik-llm hit this as a real outage (#2168) and
+# fixed + gated the class there (brik-llm#3712); this is the same detector,
+# copied verbatim (brikdesigns/brik-bds#2582) and run against this repo's own
+# layout instead of brik-llm's `scripts/`+`operations/` default.
+#
+# `scripts/` and `.claude/hooks/` are named explicitly rather than relying on
+# the script's no-arg default, which only makes sense for brik-llm's tree —
+# those are this repo's only two directories carrying tracked `*.sh` files
+# (`git ls-files '*.sh'`).
+#
+# Advisory by construction, same as brik-llm's grep-count-shape-contract.yml:
+# a `paths:`-filtered trigger cannot be a required context (a PR that touches
+# no `*.sh` would produce no check-run at all and protection would wait on it
+# forever — .github/required-checks.json § _why). Not declared there.
+on:
+  pull_request:
+    paths:
+      - '**/*.sh'
+      - 'scripts/audit/unguarded-grep-scan.py'
+      - '.github/workflows/unguarded-grep-scan.yml'
+
+concurrency:
+  group: unguarded-grep-scan-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unguarded-grep-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Negative control — the detector must catch the bad shape
+        run: python3 scripts/audit/unguarded-grep-scan.py --negative-control
+
+      - name: No unguarded grep substitutions under set -e
+        run: python3 scripts/audit/unguarded-grep-scan.py scripts/ .claude/hooks/ --ci
