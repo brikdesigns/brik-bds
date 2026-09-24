@@ -52,7 +52,7 @@ Parse the JSON output, apply the relevant rules to the edit. If the query return
 
 ## If you get a conflict between the standard and existing content
 
-The standard is canon, and the canon-CSS sources it references ([SLOT-ALLOWLIST.md](../../docs/SLOT-ALLOWLIST.md), [naming-conventions.mdx](../../docs-site/content/docs/primitives/naming-conventions.mdx), `dist/tokens.css`) are *meta-canon* — the standard defers to them when they disagree. Open a PR to align this file when needed.
+The standard is canon, and the canon-CSS sources it references ([SLOT-ALLOWLIST.md](../../../docs/SLOT-ALLOWLIST.md), [naming-principles.mdx](../../../docs-site/content/docs/build-standards/naming-principles.mdx), `dist/tokens.css`) are *meta-canon* — the standard defers to them when they disagree. Open a PR to align this file when needed.
 
 ## How to update the standard itself
 

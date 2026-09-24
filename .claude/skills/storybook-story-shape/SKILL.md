@@ -53,7 +53,7 @@ Parse the JSON output, apply the relevant rules to the edit. If the query return
 
 ## If you get a conflict between the standard and existing content
 
-The standard is canon. Existing `*.stories.tsx` files that violate it are legacy (73 grandfathered by [ADR-006 §Migration](../../docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md)) — flag the inconsistency in your PR description but do not refactor unrelated files in the same PR. Opportunistic migration of a file you're already touching is fine.
+The standard is canon. Existing `*.stories.tsx` files that violate it are legacy (73 grandfathered by [ADR-006 §Migration](../../../docs/adrs/ADR-006-storybook-taxonomy-and-story-shape.md)) — flag the inconsistency in your PR description but do not refactor unrelated files in the same PR. Opportunistic migration of a file you're already touching is fine.
 
 ## How to update the standard itself
 
