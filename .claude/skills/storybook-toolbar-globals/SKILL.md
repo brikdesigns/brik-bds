@@ -50,7 +50,7 @@ Parse the JSON output, apply the relevant rules to the edit. If the query return
 
 ## The first-yes rule
 
-If you find yourself about to add `export const Dark`, `Mobile`, `Spacious`, or `Spanish` to a `*.stories.tsx` file, stop. Per [ADR-010 Q1](../../docs/adrs/ADR-010-storybook-axes-of-information.md), those are toolbar-global axes by construction — even if they aren't wired yet. Use the toolbar (existing or future); don't create per-component stories for global axes.
+If you find yourself about to add `export const Dark`, `Mobile`, `Spacious`, or `Spanish` to a `*.stories.tsx` file, stop. Per [ADR-010 Q1](../../../docs/adrs/ADR-010-storybook-axes-of-information.md), those are toolbar-global axes by construction — even if they aren't wired yet. Use the toolbar (existing or future); don't create per-component stories for global axes.
 
 ## If you get a conflict between the standard and existing content
 
