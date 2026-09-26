@@ -203,8 +203,22 @@ const RETIRED_AXIS_VALUES = {
   announcement: { to: 'brand', axis: 'emphasis' },
 };
 
-/** § 3. The t-shirt step vocabulary — nine rungs, closed. */
-const T_SHIRT = new Set(['3xs', '2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', '3xl']);
+/**
+ * § 3 as amended by #2594. The t-shirt step vocabulary — twelve rungs, closed.
+ *
+ * `tiny`, `xxl` and `huge` are rungs, not retired step words. ❖ Brik Foundations
+ * is the source of truth for the Foundations families
+ * (`docs-site/content/docs/foundation/index.mdx:12`) and every one of its
+ * ladders is worded — `tiny · xs · sm · md · lg · xl · (xxl) · huge`, no numeric
+ * rung anywhere. `3xs`/`2xs`/`2xl`/`3xl` stay in the set: `--icon-2xs` and
+ * `--icon-2xl` are real gap-fill rungs (`tokens/gap-fills.css`), and the 13
+ * names #2229 minted ship one more minor as deprecated aliases.
+ *
+ * Ordering, low to high: tiny · 3xs · 2xs · xs · sm · md · lg · xl · 2xl · xxl · 3xl · huge.
+ */
+const T_SHIRT = new Set([
+  'tiny', '3xs', '2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', 'xxl', '3xl', 'huge',
+]);
 
 /**
  * A null/reset step is orthogonal to the scale beside it — every scale needs
@@ -221,8 +235,6 @@ const RESET_STEPS = new Set(['none', '0']);
  * (§ 3's prose retires the words generally; its table is the measured mapping).
  */
 const RETIRED_STEPS = {
-  tiny: { '--gap-': '2xs', '--icon-': '3xs', default: 'xs' },
-  huge: { '--gap-': '2xl', '--icon-': '3xl', '--border-width-': '2xl', default: 'xl' },
   standard: { '--border-width-': 'deleted, not renamed', default: 'md' },
   thin: { '--border-width-': 'deleted, not renamed', default: 'sm' },
   bold: { '--border-width-': 'deleted, not renamed', default: 'lg' },
@@ -232,8 +244,23 @@ const RETIRED_STEPS = {
   narrow: { '--content-width-': 'sm', default: 'sm' },
   default: { '--content-width-': 'md', default: 'md' },
   wide: { '--content-width-': 'lg', default: 'lg' },
-  xxl: { default: '2xl' },
 };
+
+/**
+ * NOT retired: `tiny`, `huge`, `xxl` (#2594).
+ *
+ * ADR-033 § 3 retired all three and this table carried their migration targets.
+ * The rename landed in the repo only (#2229, `20c5d83f`); the paired write to
+ * ❖ Brik Foundations (#2227) never landed, so the gate spent 26 days enforcing
+ * a vocabulary the design source does not use. Figma is the source of truth for
+ * Foundations (`docs-site/content/docs/foundation/index.mdx:12`) and its ladder
+ * is `tiny · xs · sm · md · lg · xl · (xxl) · huge` — no numeric rungs in any
+ * Foundations family. § 3 is superseded for those 13 variables; the words are
+ * canon again and the numeric names ship as deprecated aliases until next minor.
+ *
+ * `standard`/`thin`/`bold` (deleted outright) and the `duration` /
+ * `content-width` word ladders are NOT Figma-backed, so they stay retired.
+ */
 
 /**
  * § Named exceptions — not retired. A shape constant, a CSS keyword, or a role

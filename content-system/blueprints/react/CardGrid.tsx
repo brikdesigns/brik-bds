@@ -37,7 +37,7 @@
  *
  * Token pairs (paired family ↔ size — never mix):
  *   subtitle    — --font-family-subtitle + --subtitle-lg + --text-transform-subtitle
- *   title (h2)  — --font-family-heading + clamp(--heading-lg, ..., --heading-3xl)
+ *   title (h2)  — --font-family-heading + clamp(--heading-lg, ..., --heading-huge)
  *   description — --font-family-body + --body-md
  *
  * Composed with the shared shell (ADR-021): `bds-blueprint-section` on the root,

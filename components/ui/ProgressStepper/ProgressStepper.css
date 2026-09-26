@@ -63,7 +63,7 @@
 .bds-progress-stepper__circle--sm {
   width: 24px; /* bds-lint-ignore — Figma-driven step circle size */
   height: 24px; /* bds-lint-ignore — Figma-driven step circle size */
-  font-size: var(--body-2xs);
+  font-size: var(--body-tiny);
 }
 
 .bds-progress-stepper__circle--md {
@@ -128,7 +128,7 @@
 }
 
 .bds-progress-stepper__desc--sm {
-  font-size: var(--body-2xs);
+  font-size: var(--body-tiny);
 }
 
 .bds-progress-stepper__desc--md {

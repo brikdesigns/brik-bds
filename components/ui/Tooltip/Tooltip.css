@@ -12,7 +12,7 @@
 
 .bds-tooltip__bubble {
   position: absolute;
-  padding: var(--padding-2xs) var(--padding-md);
+  padding: var(--padding-tiny) var(--padding-md);
   background-color: var(--tooltip-background);
   color: var(--tooltip-text);
   font-family: var(--font-family-label);

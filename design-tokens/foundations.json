@@ -2390,7 +2390,7 @@
         "$type": "number",
         "$value": "{space.200}"
       },
-      "2xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2408,7 +2408,7 @@
         "$type": "number",
         "$value": "{space.100}"
       },
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2464,7 +2464,7 @@
         "$type": "number",
         "$value": "{space.50}"
       },
-      "2xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2482,7 +2482,7 @@
         "$type": "number",
         "$value": "{space.0}"
       },
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2540,7 +2540,7 @@
         "$type": "number",
         "$value": "{space.300}"
       },
-      "2xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2558,7 +2558,7 @@
         "$type": "number",
         "$value": "{space.250}"
       },
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2614,7 +2614,7 @@
         "$type": "number",
         "$value": "{space.150}"
       },
-      "2xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2632,7 +2632,7 @@
         "$type": "number",
         "$value": "{space.100}"
       },
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2690,7 +2690,7 @@
         "$type": "number",
         "$value": "{space.400}"
       },
-      "2xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2708,7 +2708,7 @@
         "$type": "number",
         "$value": "{space.300}"
       },
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2764,7 +2764,7 @@
         "$type": "number",
         "$value": "{space.200}"
       },
-      "2xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2782,7 +2782,7 @@
         "$type": "number",
         "$value": "{space.0}"
       },
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2840,7 +2840,7 @@
         "$type": "number",
         "$value": "{space.600}"
       },
-      "2xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2858,7 +2858,7 @@
         "$type": "number",
         "$value": "{space.400}"
       },
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2914,7 +2914,7 @@
         "$type": "number",
         "$value": "{space.400}"
       },
-      "2xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2932,7 +2932,7 @@
         "$type": "number",
         "$value": "{space.0}"
       },
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -3067,7 +3067,7 @@
       "$type": "dimension",
       "$value": "{border-width.300}"
     },
-    "2xl": {
+    "huge": {
       "$extensions": {
         "com.figma.scopes": [
           "ALL_SCOPES"
@@ -3123,7 +3123,7 @@
       "$type": "dimension",
       "$value": 6
     },
-    "2xl": {
+    "huge": {
       "$extensions": {
         "com.figma.scopes": [
           "ALL_SCOPES"
@@ -3179,7 +3179,7 @@
       "$type": "dimension",
       "$value": 2
     },
-    "2xl": {
+    "huge": {
       "$extensions": {
         "com.figma.scopes": [
           "ALL_SCOPES"
@@ -3825,7 +3825,7 @@
         "$type": "number",
         "$value": "{font-size.50}"
       },
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -3870,7 +3870,7 @@
         "$type": "number",
         "$value": "{font-size.300}"
       },
-      "2xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -3937,7 +3937,7 @@
         "$type": "number",
         "$value": "{font-size.700}"
       },
-      "2xl": {
+      "xxl": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -3955,7 +3955,7 @@
         "$type": "number",
         "$value": "{font-size.500}"
       },
-      "xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -3973,7 +3973,7 @@
         "$type": "number",
         "$value": "{font-size.400}"
       },
-      "3xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -3984,7 +3984,7 @@
       }
     },
     "icon": {
-      "3xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4038,7 +4038,7 @@
         "$type": "number",
         "$value": "{font-size.400}"
       },
-      "3xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4049,7 +4049,7 @@
       }
     },
     "label": {
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4156,7 +4156,7 @@
         "$type": "number",
         "$value": "{font-size.50}"
       },
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4201,7 +4201,7 @@
         "$type": "number",
         "$value": "{font-size.300}"
       },
-      "2xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4268,7 +4268,7 @@
         "$type": "number",
         "$value": "{font-size.600}"
       },
-      "2xl": {
+      "xxl": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4286,7 +4286,7 @@
         "$type": "number",
         "$value": "{font-size.400}"
       },
-      "xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4304,7 +4304,7 @@
         "$type": "number",
         "$value": "{font-size.300}"
       },
-      "3xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4315,7 +4315,7 @@
       }
     },
     "icon": {
-      "3xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4369,7 +4369,7 @@
         "$type": "number",
         "$value": "{font-size.400}"
       },
-      "3xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4380,7 +4380,7 @@
       }
     },
     "label": {
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4487,7 +4487,7 @@
         "$type": "number",
         "$value": "{font-size.50}"
       },
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4532,7 +4532,7 @@
         "$type": "number",
         "$value": "{font-size.300}"
       },
-      "2xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4599,7 +4599,7 @@
         "$type": "number",
         "$value": "{font-size.800}"
       },
-      "2xl": {
+      "xxl": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4617,7 +4617,7 @@
         "$type": "number",
         "$value": "{font-size.600}"
       },
-      "xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4635,7 +4635,7 @@
         "$type": "number",
         "$value": "{font-size.500}"
       },
-      "3xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4646,7 +4646,7 @@
       }
     },
     "icon": {
-      "3xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4700,7 +4700,7 @@
         "$type": "number",
         "$value": "{font-size.400}"
       },
-      "3xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4711,7 +4711,7 @@
       }
     },
     "label": {
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4818,7 +4818,7 @@
         "$type": "number",
         "$value": "{font-size.50}"
       },
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4863,7 +4863,7 @@
         "$type": "number",
         "$value": "{font-size.300}"
       },
-      "2xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4930,7 +4930,7 @@
         "$type": "number",
         "$value": "{font-size.900}"
       },
-      "2xl": {
+      "xxl": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4948,7 +4948,7 @@
         "$type": "number",
         "$value": "{font-size.700}"
       },
-      "xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4966,7 +4966,7 @@
         "$type": "number",
         "$value": "{font-size.600}"
       },
-      "3xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -4977,7 +4977,7 @@
       }
     },
     "icon": {
-      "3xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5031,7 +5031,7 @@
         "$type": "number",
         "$value": "{font-size.400}"
       },
-      "3xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5042,7 +5042,7 @@
       }
     },
     "label": {
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5179,7 +5179,7 @@
         "$type": "number",
         "$value": "{font-size.50}"
       },
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5224,7 +5224,7 @@
         "$type": "number",
         "$value": "{font-size.300}"
       },
-      "2xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5291,7 +5291,7 @@
         "$type": "number",
         "$value": "{font-size.900}"
       },
-      "2xl": {
+      "xxl": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5309,7 +5309,7 @@
         "$type": "number",
         "$value": "{font-size.500}"
       },
-      "xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5327,7 +5327,7 @@
         "$type": "number",
         "$value": "{font-size.300}"
       },
-      "3xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5338,7 +5338,7 @@
       }
     },
     "icon": {
-      "3xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5392,7 +5392,7 @@
         "$type": "number",
         "$value": "{font-size.400}"
       },
-      "3xl": {
+      "huge": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5403,7 +5403,7 @@
       }
     },
     "label": {
-      "2xs": {
+      "tiny": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"

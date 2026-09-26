@@ -49,9 +49,9 @@
 .bds-menu__header {
   display: flex;
   flex-direction: column;
-  padding: var(--padding-2xs) var(--padding-2xs) var(--padding-md);
+  padding: var(--padding-tiny) var(--padding-tiny) var(--padding-md);
   border-bottom: var(--border-width-md) solid var(--border-muted);
-  /* Tight structural step below the divider; --gap-2xs is 0px outside
+  /* Tight structural step below the divider; --gap-tiny is 0px outside
      default spacing mode. */
   margin-bottom: var(--gap-sm);
   font-family: var(--font-family-label);
@@ -73,7 +73,7 @@
 }
 
 .bds-menu__title {
-  padding: var(--padding-2xs) var(--padding-2xs) 0;
+  padding: var(--padding-tiny) var(--padding-tiny) 0;
   font-family: var(--font-family-label);
   font-size: var(--body-xs);
   font-weight: var(--font-weight-semibold);
@@ -90,7 +90,7 @@
   display: flex;
   align-items: center;
   gap: var(--gap-md);
-  padding: var(--padding-2xs);
+  padding: var(--padding-tiny);
   background: none;
   border: none;
   border-radius: var(--border-radius-sm);
@@ -147,7 +147,7 @@
 .bds-menu__text {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-2xs);
+  gap: var(--gap-tiny);
   min-width: 0;
   flex: 1;
 }
