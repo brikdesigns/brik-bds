@@ -1765,10 +1765,6 @@
     }
   },
   "breakpoint": {
-    "web": {
-      "$value": 1200,
-      "$type": "dimension"
-    },
     "tablet": {
       "$value": 768,
       "$type": "dimension"

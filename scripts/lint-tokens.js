@@ -1614,7 +1614,7 @@ function main() {
       }
 
       for (const name of cssBreakpoints.keys()) {
-        if (name === 'web' || tsBreakpoints.has(name)) continue;
+        if (tsBreakpoints.has(name)) continue;
         allViolations.push({
           rule: 'breakpoint-ts-drift',
           severity: 'error',

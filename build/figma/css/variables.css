@@ -332,7 +332,6 @@
   --font-casing-uppercase: uppercase;
   --font-casing-capitalize: capitalize;
   --font-casing-smallcaps: small-caps;
-  --breakpoint-web: 1200px;
   --breakpoint-tablet: 768px;
   --breakpoint-mobile: 320px;
   --breakpoint-desktop: 1024px;
