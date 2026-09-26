@@ -7,7 +7,7 @@ and how to decide where a change belongs.
 
 This doc uses the locked BDS token vocabulary (see [Token Anatomy](../docs-site/content/docs/foundation/token-anatomy.mdx) for the full disambiguation map):
 
-- **Library** — the logical source of token definitions (Foundations Library / [Client] Brand Kit Library). Today: Figma files managed via Tokens Studio.
+- **Library** — the logical source of token definitions (Foundations Library / [Client] Brand Kit Library). Today: Figma files managed via Tokens Studio. Exactly two Figma libraries feed this pipeline — see below.
 - **Layer** — a CSS `@layer` in the cascade (`bds-tokens` / `bds-components` / `client-theme` / `client-overrides`). Where a token's *value* lands at runtime.
 - **Tier** — a token's abstraction level (Raw / Primitive / Semantic / Component). Independent from Layer.
 - **Mode** — an orthogonal axis varying token values (color light/dark, borderwidth thin/standard/bold, etc.).
@@ -15,6 +15,21 @@ This doc uses the locked BDS token vocabulary (see [Token Anatomy](../docs-site/
 - **Tenet** — system pillar (Foundation / Theming / Motion / Content).
 
 **Older docs called the BDS-bundle vs client-theme split "Tier 1 / Tier 2".** That nomenclature is retired — "Tier" now refers exclusively to token abstraction (Raw/Primitive/Semantic/Component). The runtime cascade is described as CSS Layers.
+
+### Which Figma libraries feed Style Dictionary (#2603)
+
+Brik's Figma workspace subscribes to four team libraries. **Only two of them are token sources.** The other two are design surfaces that *consume* tokens; they have no repo mirror, no sync route, and are not missing one.
+
+| Figma library | Repo target | Status |
+|---|---|---|
+| ❖ Brik Foundations | `design-tokens/foundations.json` | **Source of truth** for Style Dictionary consumption |
+| ❖ Brik Brand Kit | `design-tokens/brand-kits/*.json` | **In scope** — carries client-specific decisions |
+| ❖ Modern Theme Web Toolkit | none | **Out of scope** — templates effort, paused / deprioritized |
+| ❖ Expressive Theme Web Toolkit | none | **Out of scope** — same |
+
+> OPERATOR SAID 2026-09-26 (chat): "expressive and modern toolkits tie into our templates, which is currently a paused effort (deprioritized), so let's ensure we don't have agents getting hung up on these figma libraries. Foundations is our source of truth for style dictionary consumption and our brand kits, which include client-specific decisions."
+
+`scripts/sync-figma-mcp.js` accepting only `--library=foundations` and `--library=brand-kit[s]/<slug>` is therefore **correct as built**. The absence of a toolkit mirror is the intended state — do not file it as a gap, and do not add a toolkit target without a fresh operator decision that unpauses the templates effort.
 
 ## What ships to consumers
 
@@ -84,7 +99,7 @@ The paragraphs above are about the **runtime** `[data-mode-*]` layer, and they s
 
 A media query is resolved when the stylesheet is authored, not when an attribute is set, so the build-time surface is where a breakpoint can do work at all. `scripts/flatten-tokens-studio.js` pins `breakpoint: 'default'` for the same reason — see the comment on `DEFAULT_MODES`.
 
-`web` is the only rung that differs across the three modes (1200 / 800 / 1400), which is what keeps the collection multi-modal and the `EXCLUDED` entry applicable. It is a legacy layout-width rung, not a screen breakpoint, so it ships as `--breakpoint-web` but is deliberately absent from the TS exports.
+**No rung varies by mode.** A sixth rung, `web` (1200 / 800 / 1400), used to — it was a legacy layout-width value rather than a screen breakpoint, bound to no Figma node and called by no consumer, and #2604 retired it from the Foundations library. The collection is still *detected* as multi-modal, because `multiModalCollections` counts mode **groups** (`breakpoint/default|compact|comfortable`), not value variation — so the `EXCLUDED` entry stays load-bearing, and `flatten-tokens-studio.js`'s `breakpoint: 'default'` pin stays value-neutral but keeps the emitted sheet single-valued if a mode-varying rung ever returns.
 
 ### Setting a mode
 
