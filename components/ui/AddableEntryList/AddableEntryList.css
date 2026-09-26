@@ -221,7 +221,7 @@
 /* ─── Option ─────────────────────────────────────────────────── */
 
 .bds-addable-entry-list__option {
-  padding: var(--padding-2xs) var(--padding-sm);
+  padding: var(--padding-tiny) var(--padding-sm);
   border-radius: var(--border-radius-sm);
   font-family: var(--font-family-body);
   font-size: var(--body-md);

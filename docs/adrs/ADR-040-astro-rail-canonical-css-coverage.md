@@ -36,7 +36,7 @@ Mechanics:
 - The `__generated__/` exclusion in `canonical-class-check.mjs` is **removed**. Scanning the pre-render is how a dynamically-composed modifier (which the static `.astro` scan cannot see) is checked against canon. The gate now scans 100 files where it scanned 74.
 - The two dead `bds-card-grid--<layout>` hooks are **dropped at source** ([`CardGrid.astro`](../../content-system/blueprints/astro/CardGrid.astro)) rather than excluded — they carried no CSS and no consumer referenced them (`grep` clean outside comments).
 - `bp-*` blueprint-local classes stay Astro-only and non-canonical; the gate ignores non-`bds-*` classes by design.
-- Declaration divergence between twins is **not** gated. Where it is real drift (e.g. `--heading-3xl` vs `--heading-xl` on section titles) it is a separate, appearance-affecting concern, out of scope for #2457.
+- Declaration divergence between twins is **not** gated. Where it is real drift (e.g. `--heading-huge` vs `--heading-xl` on section titles) it is a separate, appearance-affecting concern, out of scope for #2457.
 
 ## Consequences
 

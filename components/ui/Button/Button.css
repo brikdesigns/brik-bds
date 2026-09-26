@@ -54,7 +54,7 @@
 
 .bds-button--xs {
   height: var(--size-600);
-  padding-inline: var(--padding-2xs);
+  padding-inline: var(--padding-tiny);
   font-size: var(--label-xs);
   gap: var(--gap-xs);
   border-radius: var(--border-radius-sm);

@@ -62,8 +62,8 @@ const CLEAN_TOKENS = `:root {
   --gap-none: 0;
   --gap-xs: var(--space-400);
   --gap-md: var(--space-400);
-  --gap-2xl: var(--space-400);
-  --icon-3xs: var(--font-size-100);
+  --gap-huge: var(--space-400);
+  --icon-tiny: var(--font-size-100);
   --shadow-md: 0px 4px 12px rgba(0, 0, 0, 0.12);
 
   /* § Named exceptions — a shape constant, a role, a CSS keyword. */
@@ -196,9 +196,9 @@ describe('lint-naming-canon — fixture', () => {
 
 describe('rule 1 — step vocabulary (ADR-033 § 3)', () => {
   it('fails on a retired step word, and names the migration target', () => {
-    const { code, out } = run({ tokens: withTokens('--gap-tiny: 2px;') });
+    const { code, out } = run({ tokens: withTokens('--content-width-narrow: 640px;') });
     expect(code).toBe(1);
-    expect(out).toMatch(/--gap-tiny — step `tiny` is retired for --gap-\* → `2xs`/);
+    expect(out).toMatch(/--content-width-narrow — step `narrow` is retired for --content-width-\* → `sm`/);
   });
 
   it('fails on a step word with no retirement entry — § 3 is default-deny', () => {
@@ -207,10 +207,13 @@ describe('rule 1 — step vocabulary (ADR-033 § 3)', () => {
     expect(out).toMatch(/--gap-gigantic — step `gigantic` is outside --gap-\*'s vocabulary/);
   });
 
-  it('per-family migration target — `tiny` is 2xs for --gap-* but 3xs for --icon-*', () => {
-    const out = run({ tokens: withTokens('--gap-tiny: 2px;', '--icon-tiny: 8px;') }).out;
-    expect(out).toMatch(/--gap-tiny .*→ `2xs`/);
-    expect(out).toMatch(/--icon-tiny .*→ `3xs`/);
+  // `tiny`/`huge`/`xxl` were this test's exemplars until #2594 un-retired them
+  // (§ Amendments — ❖ Brik Foundations names those rungs). `standard` carries the
+  // same per-family shape: deleted outright for --border-width-*, renamed elsewhere.
+  it('per-family migration target — `standard` is deleted for --border-width-* but `md` elsewhere', () => {
+    const out = run({ tokens: withTokens('--gap-standard: 2px;', '--border-width-standard: 2px;') }).out;
+    expect(out).toMatch(/--gap-standard .*→ `md`/);
+    expect(out).toMatch(/--border-width-standard .*deleted, not renamed/);
   });
 
   it('a § Named exception is not a step violation', () => {
@@ -619,12 +622,12 @@ describe('rule 6 — the deleted --*-status-* family cannot come back (§ Token 
 });
 
 describe('the baseline can only shrink', () => {
-  const planted = { tokens: withTokens('--gap-tiny: 2px;') };
+  const planted = { tokens: withTokens('--content-width-narrow: 640px;') };
 
   it('a baselined violation is green', () => {
     const { code, out } = run({
       ...planted,
-      baseline: { rules: { 1: { '--gap-tiny': 1923 } } },
+      baseline: { rules: { 1: { '--content-width-narrow': 1923 } } },
     });
     expect(out).toMatch(/clean — 0 live violation\(s\), 1 baselined/);
     expect(code).toBe(0);
@@ -634,29 +637,29 @@ describe('the baseline can only shrink', () => {
     // This is what makes the baseline a countdown rather than a carve-out. Drop
     // it and the file becomes a permanent suppression list with no owner.
     const { code, out } = run({
-      baseline: { rules: { 1: { '--gap-tiny': 1923 } } },
+      baseline: { rules: { 1: { '--content-width-narrow': 1923 } } },
     });
     expect(code).toBe(1);
     expect(out).toMatch(/1 STALE baseline entr\(ies\)/);
-    expect(out).toMatch(/rule 1: --gap-tiny/);
+    expect(out).toMatch(/rule 1: --content-width-narrow/);
   });
 
   it('an entry with no issue number is not a disposition', () => {
     const { code, out } = run({
       ...planted,
-      baseline: { rules: { 1: { '--gap-tiny': true } } },
+      baseline: { rules: { 1: { '--content-width-narrow': true } } },
     });
     expect(code).toBe(1);
-    expect(out).toMatch(/--gap-tiny — baseline entry is `true`, not an issue number/);
+    expect(out).toMatch(/--content-width-narrow — baseline entry is `true`, not an issue number/);
   });
 
   it('--census shows baselined findings with their issue', () => {
     const { out } = run({
       ...planted,
-      baseline: { rules: { 1: { '--gap-tiny': 1923 } } },
+      baseline: { rules: { 1: { '--content-width-narrow': 1923 } } },
       args: ['--census'],
     });
-    expect(out).toMatch(/· --gap-tiny —.*\(baselined, #1923\)/);
+    expect(out).toMatch(/· --content-width-narrow —.*\(baselined, #1923\)/);
   });
 });
 

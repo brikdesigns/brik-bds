@@ -126,7 +126,7 @@ const Card = ({
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 'var(--gap-2xs)',
+        gap: 'var(--gap-tiny)',
         fontFamily: 'var(--font-family-body)',
         fontSize: 'var(--body-sm)',
       }}

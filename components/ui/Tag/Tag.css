@@ -68,9 +68,9 @@
 }
 
 .bds-tag--sm {
-  padding: var(--padding-2xs) var(--padding-sm);
+  padding: var(--padding-tiny) var(--padding-sm);
   gap: var(--gap-xs);
-  font-size: var(--label-2xs);
+  font-size: var(--label-tiny);
   height: var(--size-700);
   border-radius: var(--border-radius-sm);
 }
