@@ -18,7 +18,7 @@
 
 .bds-pricing-card--highlighted {
   border-color: var(--border-brand-primary);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--box-shadow-md);
 }
 
 /* ─── Top media slot ──────────────────────────────────── */
