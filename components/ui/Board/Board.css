@@ -199,7 +199,7 @@
 
 .bds-board-card:hover {
   box-shadow: inset 0 0 0 999px var(--state-hover-overlay),
-    var(--shadow-md);
+    var(--box-shadow-md);
   transform: translateY(var(--board-card-hover-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 

@@ -38,7 +38,7 @@
 .bds-card--raised {
   background-color: var(--surface-primary);
   border: none;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--box-shadow-md);
 }
 
 /* Borderless — transparent, no border, no shadow. For cards on a colored
