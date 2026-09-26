@@ -1776,6 +1776,18 @@
     "mobile": {
       "$value": 320,
       "$type": "dimension"
+    },
+    "desktop": {
+      "$value": 1024,
+      "$type": "dimension"
+    },
+    "wide": {
+      "$value": 1280,
+      "$type": "dimension"
+    },
+    "wider": {
+      "$value": 1440,
+      "$type": "dimension"
     }
   },
   "body": {

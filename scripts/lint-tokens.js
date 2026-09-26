@@ -1550,6 +1550,84 @@ function main() {
     }
   }
 
+  // 4b. Breakpoint TS↔CSS drift — the `breakpoints` export in tokens/index.ts is
+  // hand-maintained (that file is not emitted by Style Dictionary), but its values
+  // must equal the generated --breakpoint-* in figma-tokens.css. CSS custom props
+  // can't be read inside @media (ADR-025 §4), so the TS literal is the only thing
+  // a real media query sees: a silent drift there is a layout defect no CSS lint
+  // can catch. Extends this script rather than adding a gate (#2591).
+  //
+  // `web` is exempt by design — it resolves per spacing mode (1200/800/1400), so
+  // it has no single build-time literal and is not a screen breakpoint.
+  const TOKENS_INDEX_PATH = path.join(__dirname, '..', 'tokens', 'index.ts');
+  if (fs.existsSync(FIGMA_TOKENS_PATH) && fs.existsSync(TOKENS_INDEX_PATH)) {
+    const figmaCSS = fs.readFileSync(FIGMA_TOKENS_PATH, 'utf8');
+    const cssBreakpoints = new Map();
+    for (const m of figmaCSS.matchAll(/^\s*--breakpoint-([\w-]+)\s*:\s*([^;]+);/gm)) {
+      cssBreakpoints.set(m[1], m[2].trim());
+    }
+
+    const indexTS = fs.readFileSync(TOKENS_INDEX_PATH, 'utf8');
+    const indexLines = indexTS.split('\n');
+    const blockStart = indexLines.findIndex(l => /^export const breakpoints = \{/.test(l));
+    if (blockStart === -1) {
+      allViolations.push({
+        rule: 'breakpoint-ts-drift',
+        severity: 'error',
+        file: TOKENS_INDEX_PATH,
+        line: 1,
+        column: 1,
+        message: '`export const breakpoints = {` not found — the drift check cannot run',
+        suggestion: 'Restore the export, or update this rule if it was renamed (brik-bds#2591)',
+      });
+    } else {
+      const tsBreakpoints = new Map();
+      for (let i = blockStart + 1; i < indexLines.length; i++) {
+        if (/^\}/.test(indexLines[i])) break;
+        const entry = indexLines[i].match(/^\s*([\w-]+)\s*:\s*'([^']+)'\s*,/);
+        if (entry) tsBreakpoints.set(entry[1], { value: entry[2], line: i + 1 });
+      }
+
+      for (const [name, { value, line }] of tsBreakpoints) {
+        const cssValue = cssBreakpoints.get(name);
+        if (cssValue === undefined) {
+          allViolations.push({
+            rule: 'breakpoint-ts-drift',
+            severity: 'error',
+            file: TOKENS_INDEX_PATH,
+            line,
+            column: 1,
+            message: `breakpoints.${name} has no --breakpoint-${name} in figma-tokens.css`,
+            suggestion: `Add "${name}" to the ❖ Brik Foundations \`breakpoint\` collection and re-run npm run build:all-tokens, or drop it here`,
+          });
+        } else if (cssValue !== value) {
+          allViolations.push({
+            rule: 'breakpoint-ts-drift',
+            severity: 'error',
+            file: TOKENS_INDEX_PATH,
+            line,
+            column: 1,
+            message: `breakpoints.${name} is ${value} but --breakpoint-${name} is ${cssValue}`,
+            suggestion: 'Fix the value in Figma, re-run npm run build:all-tokens, then match it here — never edit the TS literal alone',
+          });
+        }
+      }
+
+      for (const name of cssBreakpoints.keys()) {
+        if (name === 'web' || tsBreakpoints.has(name)) continue;
+        allViolations.push({
+          rule: 'breakpoint-ts-drift',
+          severity: 'error',
+          file: TOKENS_INDEX_PATH,
+          line: blockStart + 1,
+          column: 1,
+          message: `--breakpoint-${name} is generated but missing from the \`breakpoints\` export`,
+          suggestion: `Add ${name}: '${cssBreakpoints.get(name)}' — a rung CSS ships but TS omits is unreachable from @media`,
+        });
+      }
+    }
+  }
+
   // 5. If --check-grid, also scan the token CSS source for off-grid token values
   if (checkGrid) {
     const FIGMA_CSS = path.join(__dirname, '..', 'tokens', 'figma-tokens.css');

@@ -65,3 +65,15 @@ Two problems with Decision 2 surfaced when #2173 revisited the token's tier clas
 - **New gate: `lint-token-tiers`** (`scripts/lint-token-tiers.mjs`, wired into `validate` + `tokens-gate.yml`) fails a Semantic-named token referencing another Semantic (t3→t3) — the class of defect this token was, and enough to keep `--page-inset` (Semantic-named) from regressing. Five pre-existing t3→t3 hits it surfaced are tracked in #2186. The broader rule ("only a Component `--bds-*` may reference a Semantic") collides with BDS's sanctioned role-aliasing (`bridge.css`, `--border-focus`, `--tooltip-text`); designing that enforcement is deferred to #2187.
 
 Decision 2's fluid-clamp rejection still stands: `--page-inset` remains a stepped token, not a `clamp()`.
+
+## Amendment — 2026-09-26 (#2591): §4 holds; `mediaQueries` joins `breakpoints`
+
+Decision 4 is **unchanged**: breakpoints stay out of CSS custom properties, `--breakpoint-*` stays reference-only, and `--content-width-*` values remain content constraints rather than breakpoints. #2591 considered shipping the CSS half of a media-query wiring (`@custom-media` + a PostCSS step) and rejected it — it would contradict this decision and add a build-time governance surface the cost-cut freeze (brik-client-portal#3537) bars.
+
+What changed is on the TS side only:
+
+- **`mediaQueries` added** to `tokens/index.ts` — `up.<rung>` / `down.<rung>` condition strings **derived from** `breakpoints`, not a second literal ladder. `breakpoints` stays exported for raw widths. "Media queries use the `breakpoints` TS export" (Decision 4) now reads as "use `mediaQueries`, which is `breakpoints`".
+- **The ladder became Figma-backed.** `desktop` / `wide` / `wider` were hand-authored in `tokens/gap-fills.css` when Decision 4 was written; they are now variables in the ❖ Brik Foundations `breakpoint` collection, so Style Dictionary generates all five `--breakpoint-*` rungs. The gap-fill block is gone.
+- **The TS mirror is pinned.** `lint-tokens.js` § 4b fails the build when `breakpoints` and the generated `--breakpoint-*` disagree — the drift that Decision 4's split (CSS for reference, TS for conditions) otherwise leaves unguarded. No new gate: the rule extends the existing linter.
+
+`--breakpoint-web` is excluded from both TS exports. It is the one rung whose value varies by spacing mode (1200 / 800 / 1400), and a media query is a build-time literal with no mode to resolve against.

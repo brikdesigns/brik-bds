@@ -62,7 +62,7 @@ No consumer should toggle a `.dark` class — the attribute is the only switch.
 | `border-radius` | `data-mode-radius` | `soft` | `sharp`, `round`, `pill` | ✅ `modes-borderradius.css` (attr `data-mode-radius`; source collection `border-radius`) |
 | `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious`, `expressive` | ✅ `modes-typography.css` (heading-* only; display-* mode-invariant) |
 | `elevation` | `data-mode-elevation` | `subtle` | `flat`, `lifted`, `dramatic` | ✅ `modes-elevation.css` — `flat`→`--shadow-*: 0px 0px 0px 0px transparent` (a zeroed shorthand, not `none`: overriding a box-shadow token with the `none` keyword gives one name two value types, which ADR-033 § 5 rejects). `lifted`/`dramatic` compose the full `0px y blur spread rgba(0,0,0,α)` from the elevation collection's y-offset + blur-radius + spread + opacity sub-tokens (#2243; x is invariantly 0, color always black). `subtle` is the default — uses the hand-authored `--shadow-*` in gap-fills.css |
-| `breakpoint` | `data-mode-breakpoint` | `default` | `compact`, `comfortable` | 🚫 excluded (#931) — never wired; `var()` can't parametrize `@media`/`@container` conditions (see § Breakpoint is intentionally excluded) |
+| `breakpoint` | `data-mode-breakpoint` | `default` | `compact`, `comfortable` | 🚫 excluded (#931) — no `[data-mode-*]` block; `var()` can't parametrize `@media`/`@container` conditions. Not unwired: it ships as **build-time** tokens instead (see § Breakpoint is intentionally excluded) |
 | `icon` | `data-mode-icon` | `solid` | `outline` | ⏳ pending #340 |
 
 ### Breakpoint is intentionally excluded (#931)
@@ -72,6 +72,19 @@ No consumer should toggle a `.dark` class — the attribute is the only switch.
 Where breakpoint values *would* be usable — computed gutters, JS-driven layout reading `getComputedStyle`, `@container` **style** queries — is not what a breakpoint mode means, so the collection routes to none of them. Responsive behavior in BDS stays in authored `@media`/container rules and component logic, not a mode block.
 
 The exclusion is enforced: `breakpoint` is named in the `EXCLUDED` map in `scripts/lint-mode-emission-coverage.mjs` (the #932 source↔emitted guard), so it is neither flagged as dormant nor allowed to silently acquire an emission.
+
+#### Excluded from mode emission ≠ unwired (#2591)
+
+The paragraphs above are about the **runtime** `[data-mode-*]` layer, and they still hold. They are not a statement that the collection has no consumer. Since #2591 `breakpoint` is wired as **build-time** tokens on two surfaces:
+
+| Surface | What it carries | Generated from |
+|---|---|---|
+| `--breakpoint-*` in `tokens/figma-tokens.css` | the six rungs as px, reference-only (ADR-025 §4) | Style Dictionary, via `npm run build:all-tokens` |
+| `breakpoints` + `mediaQueries` in `tokens/index.ts` | the five mode-invariant rungs as TS literals + ready-made `up`/`down` conditions | hand-mirrored, pinned to the CSS by `lint-tokens.js` § 4b |
+
+A media query is resolved when the stylesheet is authored, not when an attribute is set, so the build-time surface is where a breakpoint can do work at all. `scripts/flatten-tokens-studio.js` pins `breakpoint: 'default'` for the same reason — see the comment on `DEFAULT_MODES`.
+
+`web` is the only rung that differs across the three modes (1200 / 800 / 1400), which is what keeps the collection multi-modal and the `EXCLUDED` entry applicable. It is a legacy layout-width rung, not a screen breakpoint, so it ships as `--breakpoint-web` but is deliberately absent from the TS exports.
 
 ### Setting a mode
 

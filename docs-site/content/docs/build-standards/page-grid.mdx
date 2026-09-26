@@ -46,7 +46,7 @@ This is the gap-vs-padding rule from [Content Rhythm](/docs/build-standards/cont
 | `--content-width-xl` | 1280px | The page band — hero, header, footer, most sections |
 | `--content-width-full` | 100% | Full-bleed; prefer an explicit width |
 
-These are content constraints, **not** breakpoints — even where the pixel values coincide. For media queries use the `breakpoints` TS export from `@bds-tokens`; CSS custom properties cannot appear inside `@media` conditions, so the `--breakpoint-*` CSS variables are reference-only.
+These are content constraints, **not** breakpoints — even where the pixel values coincide. For media queries use the `mediaQueries` export from `@bds-tokens` (or `breakpoints` for a raw width); CSS custom properties cannot appear inside `@media` conditions, so the `--breakpoint-*` CSS variables are reference-only.
 
 <Callout type="warn">
   There is no responsive-spacing axis: density modes are the only spacing modulation in BDS. Do not introduce breakpoint-varying gutters or gaps.

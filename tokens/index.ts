@@ -2,7 +2,14 @@
  * BDS Design Token Types
  *
  * Primitive scales and type exports for Storybook docs and ThemeProvider.
- * Source of truth: design-tokens/tokens-studio.json → Style Dictionary → figma-tokens.css
+ *
+ * This file is HAND-MAINTAINED — it is not emitted by Style Dictionary. The
+ * token pipeline (design-tokens/foundations.json → tokens-studio.json →
+ * Style Dictionary → tokens/figma-tokens.css) produces CSS custom properties
+ * only; the constants below mirror those values for the places CSS can't
+ * reach (@media conditions, matchMedia, Storybook docs). A mirror drifts, so
+ * each one names the generated line it must agree with, and `breakpoints` is
+ * pinned to figma-tokens.css by lint-tokens.js § 4b.
  *
  * Primitive values (spaceScale, sizeScale, etc.) are used in Storybook foundation docs.
  * ThemeNumber and BDSThemeConfig drive the ThemeProvider component.
@@ -672,7 +679,19 @@ export const semanticSpace = {
 /**
  * Breakpoint values for use in CSS @media queries.
  * CSS custom properties (--breakpoint-*) cannot be used inside @media rules —
- * use these TS constants instead.
+ * use these TS constants instead (ADR-025 §4).
+ *
+ * Mirrors the ❖ Brik Foundations `breakpoint` collection, emitted as
+ * `--breakpoint-*` in tokens/figma-tokens.css. `lint-tokens.js` § 4b fails the
+ * build if the two disagree, so edit the Figma collection and re-run
+ * `npm run build:all-tokens` — never this literal alone.
+ *
+ * `web` is deliberately absent. It is the one rung whose value varies by
+ * spacing mode (default 1200 / compact 800 / comfortable 1400), and a media
+ * query is a build-time literal with no mode to resolve against — the same
+ * reason scripts/flatten-tokens-studio.js pins `breakpoint: 'default'`. It
+ * stays in Figma as the legacy layout-width rung and ships as
+ * `--breakpoint-web` for reference; it is not a screen breakpoint (#2591).
  *
  * @example
  * import { breakpoints } from '@bds-tokens';
@@ -692,6 +711,52 @@ export const breakpoints = {
 } as const;
 
 export type Breakpoint = keyof typeof breakpoints;
+
+/**
+ * Ready-made media-query conditions, derived from `breakpoints` above.
+ *
+ * Derived, never re-typed: a second literal ladder is a second thing to drift,
+ * and § 4b only pins `breakpoints`. Every entry is a bare condition string, so
+ * it composes with `@media`, `matchMedia`, and `window.matchMedia` alike.
+ *
+ * - `up.<rung>`   — mobile-first: at or above that width (`min-width`).
+ * - `down.<rung>` — below that width, so `up` and `down` never both match at
+ *   the boundary. The 0.02px step-down is the standard exclusive-max idiom
+ *   (fractional viewport widths exist on fractional-DPR displays, where a
+ *   plain `max-width: 767px` leaves a dead band).
+ *
+ * `mobile` (320px) has no useful `down` — nothing is narrower — so `down`
+ * omits it and the type reflects that.
+ *
+ * @example
+ * import { mediaQueries } from '@bds-tokens';
+ * const styles = css`
+ *   @media ${mediaQueries.up.desktop} { ... }
+ * `;
+ *
+ * @example
+ * const isCompact = window.matchMedia(mediaQueries.down.tablet).matches;
+ */
+const stepDown = (px: string) => `${parseFloat(px) - 0.02}px`;
+
+export const mediaQueries = {
+  up: {
+    mobile:  `(min-width: ${breakpoints.mobile})`,
+    tablet:  `(min-width: ${breakpoints.tablet})`,
+    desktop: `(min-width: ${breakpoints.desktop})`,
+    wide:    `(min-width: ${breakpoints.wide})`,
+    wider:   `(min-width: ${breakpoints.wider})`,
+  },
+  down: {
+    tablet:  `(max-width: ${stepDown(breakpoints.tablet)})`,
+    desktop: `(max-width: ${stepDown(breakpoints.desktop)})`,
+    wide:    `(max-width: ${stepDown(breakpoints.wide)})`,
+    wider:   `(max-width: ${stepDown(breakpoints.wider)})`,
+  },
+} as const;
+
+export type MediaQueryUp = keyof typeof mediaQueries.up;
+export type MediaQueryDown = keyof typeof mediaQueries.down;
 
 /**
  * Content column max-widths.

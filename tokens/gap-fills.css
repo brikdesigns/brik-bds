@@ -319,12 +319,15 @@
   --measure-md:  60ch;  /* section-header title + description — the default */
   --measure-lg:  72ch;  /* long-form prose / rich-text body */
 
-  /* Breakpoint reference values — supplement figma-tokens.css --breakpoint-mobile/tablet/web.
-     These CSS vars are for Figma/documentation reference only.
-     Use `breakpoints` TS export from @bds-tokens for actual @media query values. */
-  --breakpoint-desktop:    1024px;
-  --breakpoint-wide:       1280px;
-  --breakpoint-wider:      1440px;
+  /* Breakpoint reference values — PROMOTED to Figma (#2591).
+     --breakpoint-desktop/wide/wider were hand-authored here because the ❖ Brik
+     Foundations `breakpoint` collection only carried mobile/tablet/web. Those
+     three rungs now exist as Figma variables (same value in all three modes),
+     so Style Dictionary emits them in figma-tokens.css and the hand-authored
+     copies are gone — a gap-fill that duplicates figma-tokens.css is stale by
+     lint-tokens.js § "Gap-fill drift detection".
+     Still reference-only in CSS: ADR-025 §4 stands, @media queries take the
+     `mediaQueries` TS export from @bds-tokens, never var(--breakpoint-*). */
 
   /* ── Border-width semantic aliases (mode-catalog names) — RETIRED (ADR-033 §3, #1923)
      --border-width-thin/standard/bold (1/2/3px) were fixed-value duplicates of
