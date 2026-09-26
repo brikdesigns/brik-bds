@@ -38,7 +38,7 @@
 .bds-stats-dark-bar__item {
   display: flex;
   flex-direction: column;
-  /* Value↔label is a tight text pairing: --gap-sm. Not --gap-2xs, which
+  /* Value↔label is a tight text pairing: --gap-sm. Not --gap-tiny, which
      resolves to 0px outside default spacing mode (ADR-023 §3). */
   gap: var(--gap-sm);
   padding-block: var(--padding-sm);
@@ -62,7 +62,7 @@
 
 .bds-stats-dark-bar__value {
   font-family: var(--font-family-display);
-  font-size: clamp(var(--heading-xl), 4vw, var(--heading-3xl));
+  font-size: clamp(var(--heading-xl), 4vw, var(--heading-huge));
   font-weight: var(--font-weight-semibold);
   line-height: var(--font-line-height-tight);
   color: var(--bds-stats-dark-bar-value-color, var(--text-inverse));

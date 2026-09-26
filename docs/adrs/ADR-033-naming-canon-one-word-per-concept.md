@@ -242,16 +242,18 @@ The explicit retired-synonym list. Every row is rejected in new work; the Migrat
 
 ### Step words
 
+> **SUPERSEDED for the Foundations token rows — see § Amendments, "`tiny` · `xxl` · `huge` are rungs, not retired step words" (2026-09-26, [#2594](https://github.com/brikdesigns/brik-bds/issues/2594)).** The five struck rows below reverted; `ButtonSize` and the three non-Foundations ladders stand.
+
 Every mapping below is positional and measured; values do not change.
 
 | Retired | Family | Migrates to | Measured basis |
 |---|---|---|---|
-| `tiny` | `--gap-*` | `2xs` | `--gap-tiny` = `--space-50`, one rung below `--gap-xs` = `--space-100` (`:419-420`); family ships no `2xs` |
-| `huge` | `--gap-*` | `2xl` | `--gap-huge` = `--space-800`, one rung above `--gap-xl` = `--space-600` (`:416-418`) |
-| `tiny` | `--icon-*` | `3xs` | Nine-rung ramp; `2xs` is already taken by a distinct 12px rung (`:1306-1318`) |
-| `huge` | `--icon-*` | `3xl` | Same ramp; `2xl` already taken by a distinct 24px rung |
-| `huge` | `--border-width-*` | `2xl` | `--border-width-huge` = `--border-width-500`, above `xl` = `--border-width-400` (`:401-403`) |
-| `tiny` | `ButtonSize` | `xs` | The smallest rung, which `AvatarSize` / `BadgeSize` / `CounterSize` / `TagSize` already call `xs` |
+| ~~`tiny`~~ | ~~`--gap-*`~~ | ~~`2xs`~~ | **Reverted #2594** — ❖ Brik Foundations names this rung `gap/tiny` |
+| ~~`huge`~~ | ~~`--gap-*`~~ | ~~`2xl`~~ | **Reverted #2594** — ❖ Brik Foundations names this rung `gap/huge` |
+| ~~`tiny`~~ | ~~`--icon-*`~~ | ~~`3xs`~~ | **Reverted #2594** — the "`2xs` already taken" basis was `tokens/gap-fills.css`, a repo gap-fill, not a Figma rung |
+| ~~`huge`~~ | ~~`--icon-*`~~ | ~~`3xl`~~ | **Reverted #2594** — same basis |
+| ~~`huge`~~ | ~~`--border-width-*`~~ | ~~`2xl`~~ | **Reverted #2594** — ❖ Brik Foundations names this rung `border-width/huge` |
+| `tiny` | `ButtonSize` | `xs` | The smallest rung, which `AvatarSize` / `BadgeSize` / `CounterSize` / `TagSize` already call `xs`. **Stands** — a component size union is not a Foundations variable; Storybook is its source of truth, not Figma. |
 | `thin` · `standard` · `bold` | `--border-width-*` | *deleted, not renamed* | `:1480-1482` — 1px/2px/3px duplicates of `sm`/`md`/`lg` that freeze what the spacing modes vary (`:1042-1052`) |
 | `fast` · `normal` · `slow` | `--duration-*` | `sm` · `md` · `lg` | 100/200/300ms (`:1521-1523`) — three contiguous rungs |
 | `narrow` · `default` · `wide` | `--content-width-*` | `sm` · `md` · `lg` | 640/800/1024px (`:1424-1426`), with `xl` = 1280px already correct |
@@ -289,7 +291,7 @@ Every mapping below is positional and measured; values do not change.
 - **The migration is large and is not this ADR.** Deliverable 5 of #1910 files it, sized, one issue per axis, sequenced behind this document: valence prop unions (7 components + the Button/Toast union splits), extracting the brand-hued members into `emphasis` (Banner `announcement`, Badge + Counter `brand`), the `tone`→`emphasis` rename (3 components), the step-word retirements (5 token families + `ButtonSize`), the `--box-shadow-*` retirement (§ 5), the `info`/`neutral` fold (§ 5, mints 3 tokens), and the 173 bare BEM modifiers.
 - **Every rename in the list is a breaking change for consumers.** Six repos consume `@brikdesigns/bds`. Each remediation issue ships the deprecation alias alongside the new name, per the pattern already in `dist/tokens.css:1333`, and the alias removal is a separate later issue — not folded into the rename.
 - **Component props are typed, so the compiler finds every prop use; token names are strings, so it finds none.** The token half of the migration needs the gate in § Enforcement to be sound, not a grep.
-- **[ADR-024](./ADR-024-layout-rhythm-map.md)'s lint rule 2 names a retiring token.** It bans mode-collapsing `--gap-xs` / `--gap-tiny` on vertical props, and § 3 renames `--gap-tiny` to `--gap-2xs`. `lint-content-rhythm` must be updated in the same PR as the rename, or the ban silently stops matching — both tokens collapse to `0px` in the compact spacing mode (`:1096-1098`), which is the behaviour ADR-024 exists to prevent.
+- **[ADR-024](./ADR-024-layout-rhythm-map.md)'s lint rule 2 names a retiring token.** It bans mode-collapsing `--gap-xs` / `--gap-tiny` on vertical props, and § 3 renames `--gap-tiny` to `--gap-tiny`. `lint-content-rhythm` must be updated in the same PR as the rename, or the ban silently stops matching — both tokens collapse to `0px` in the compact spacing mode (`:1096-1098`), which is the behaviour ADR-024 exists to prevent.
 - **`--display-{modifier}-{step}`** (`--display-fluid-lg`, `:1666-1669`) shows a slot-internal modifier the non-color Anatomy does not yet document. Not drift under any rule here; noted so the next Anatomy edit covers it.
 
 ## Enforcement
@@ -372,3 +374,27 @@ New words admitted or retired after acceptance, per § 6. Each entry names the w
 **Coexistence with the orientation retirement.** § Amendments (#2001) retires the prop *name* `layout` **for the orientation axis** (`FieldLayout`, `FormLayout` — unions whose values are `horizontal`/`vertical`). That retirement is value-corroborated (§ Enforcement rule 3): it fires only when the union's members are the orientation vocabulary. `CardLayout = 'stack' | 'row' | 'metric' | 'control'` shares none of those values, so the two never collide — `layout` names DIRECTION when the values are h/v, and ARRANGEMENT otherwise. The word is one concept per *value set*, which is what the ADR governs.
 
 **Enforcement.** `lint-naming-canon` gains `AXES.layout` (`values: null`) in this PR, which flows into `MODIFIER_AXES` via `Object.keys(AXES)`; the ten bare `bds-card--{stack,row,metric,control}*` modifiers #2459 introduced then carry a blessed prefix. No new rule or mechanism. **Baseline:** none — the amendment lands with the code that needs it, so there is no pre-existing live violation to key.
+
+### `tiny` · `xxl` · `huge` are rungs, not retired step words (2026-09-26, [#2594](https://github.com/brikdesigns/brik-bds/issues/2594))
+
+**Does an existing § 3 word name these rungs?** For the Foundations families, no — and that is the defect. § 3 retired `tiny`/`xxl`/`huge` and [#2229](https://github.com/brikdesigns/brik-bds/issues/2229) (`20c5d83f`) renamed 13 variables to `2xs`/`xs`/`2xl`/`3xs`/`3xl` in the repo. The paired write to ❖ Brik Foundations was split to [#2227](https://github.com/brikdesigns/brik-bds/issues/2227) and never landed, so for 26 days the repo and the design source named the same variables differently, and this gate enforced the side that had no source behind it.
+
+**Negative search** (live pull of ❖ Brik Foundations `Rkdc3SIWJUdgoAkeadgZZe`, 381 variables, 2026-09-26, diffed against `design-tokens/foundations.json`): **no Foundations family ships a numeric rung.** The ladders are
+
+| Family | ❖ Brik Foundations rungs |
+|---|---|
+| `gap` · `padding` | `none · tiny · xs · sm · md · lg · xl · huge` |
+| `body` · `icon` | `tiny · xs · sm · md · lg · xl · huge` |
+| `heading` | `tiny · sm · md · lg · xl · xxl · huge` |
+| `label` | `tiny · xs · sm · md · lg · xl` |
+| `border-width` | `none · sm · md · lg · xl · huge` |
+
+**The measured basis for two rows was a repo artifact, not a design rung.** § 3 sent `icon/tiny` to `3xs` and `icon/huge` to `3xl` because "`2xs` is already taken by a distinct 12px rung". That 12px rung is `--icon-2xs` in [`tokens/gap-fills.css`](../../tokens/gap-fills.css) — a hand-authored gap-fill with no Figma variable behind it ("not yet in Figma; see #758"). The ADR read the repo's own fill-ins as evidence about the ladder and renamed the Figma-backed rungs around them.
+
+- **Rungs:** `tiny` (below `3xs`) and `huge` (above `3xl`) join the t-shirt set; `xxl` sits between `2xl` and `3xl`. Full order: `tiny · 3xs · 2xs · xs · sm · md · lg · xl · 2xl · xxl · 3xl · huge`.
+- **Scope:** Foundations *tokens* only. `ButtonSize`'s `tiny → xs` stands — a component size union is governed by Storybook and the coded component, not by a Figma variable. The `duration` and `content-width` word ladders and the deleted `--border-width-{thin,standard,bold}` also stand: none is Figma-backed, so "Figma is the source" does not reach them.
+- **Values:** unchanged in every mode. The revert is positional, exactly as the rename was.
+
+**Enforcement.** `lint-naming-canon` drops `tiny`/`huge`/`xxl` from `RETIRED_STEPS` and adds all three to `T_SHIRT` in this PR; the 13 rule-1 rows keyed to #2226 leave `tokens/naming-canon-baseline.json` in the same change, because a name that no longer violates would fail the gate as a stale entry. **Baseline:** net −13. No new rule, script, or workflow.
+
+**Standing rule this leaves behind.** A step word is retired only when the ❖ Brik Foundations ladder that owns it has stopped using it. A repo-side rename of a Figma-backed variable is not complete until the Figma write lands — see the assessment in [`docs/reports/2026-09-26-foundations-disconnect-assessment.html`](../reports/2026-09-26-foundations-disconnect-assessment.html) for why nothing caught this (every "Figma" gate reads the repo mirror).

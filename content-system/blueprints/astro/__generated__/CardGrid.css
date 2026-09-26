@@ -8,9 +8,9 @@
      it outranks the layered `.bds-blueprint-section` shorthand. */
   .bds-card-grid {
     padding-block-end: clamp(
-      var(--padding-2xl),
+      var(--padding-huge),
       9vw,
-      calc(var(--padding-2xl) * 1.5)
+      calc(var(--padding-huge) * 1.5)
     );
   }
 
@@ -77,7 +77,7 @@
   @media (min-width: 768px) {
     .bp-services-two-col__list {
       grid-template-columns: repeat(2, 1fr);
-      gap: var(--gap-xl) var(--gap-2xl);
+      gap: var(--gap-xl) var(--gap-huge);
     }
   }
 

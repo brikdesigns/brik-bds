@@ -23,27 +23,27 @@ type Story = StoryObj;
 /* ─── Live token maps (var refs — mode-aware, no hardcoded px) ─── */
 
 const HEADING = {
-  tiny: 'var(--heading-xs)',
+  tiny: 'var(--heading-tiny)',
   sm: 'var(--heading-sm)',
   md: 'var(--heading-md)',
   lg: 'var(--heading-lg)',
   xl: 'var(--heading-xl)',
-  xxl: 'var(--heading-2xl)',
-  huge: 'var(--heading-3xl)',
+  xxl: 'var(--heading-xxl)',
+  huge: 'var(--heading-huge)',
 };
 
 const BODY = {
-  tiny: 'var(--body-2xs)',
+  tiny: 'var(--body-tiny)',
   xs: 'var(--body-xs)',
   sm: 'var(--body-sm)',
   md: 'var(--body-md)',
   lg: 'var(--body-lg)',
   xl: 'var(--body-xl)',
-  huge: 'var(--body-2xl)',
+  huge: 'var(--body-huge)',
 };
 
 const LABEL = {
-  tiny: 'var(--label-2xs)',
+  tiny: 'var(--label-tiny)',
   xs: 'var(--label-xs)',
   sm: 'var(--label-sm)',
   md: 'var(--label-md)',

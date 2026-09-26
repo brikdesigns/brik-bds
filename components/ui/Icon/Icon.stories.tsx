@@ -64,7 +64,7 @@ export const BundledSet: Story = {
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(96px, 1fr))', gap: 'var(--gap-md)' }}>
           {names.map((name) => (
-            <div key={name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-2xs)', textAlign: 'center' }}>
+            <div key={name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-tiny)', textAlign: 'center' }}>
               {/* weight="regular" so each entry renders at its own bundled
                   weight — a `*-bold` name still reads bold, a plain name reads
                   regular — rather than the component's bold default rewriting

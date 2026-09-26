@@ -95,7 +95,7 @@ export const AllMarks: Story = {
           <div style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap' }}>
             {TYPES.flatMap((type) =>
               EMPHASES.map((emphasis) => (
-                <div key={`${type}-${emphasis}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-2xs)' }}>
+                <div key={`${type}-${emphasis}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-tiny)' }}>
                   <ContactIcon platform={platform} type={type} emphasis={emphasis} size="sm" />
                   <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)' }}>
                     {type}/{emphasis}

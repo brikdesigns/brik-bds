@@ -19,7 +19,7 @@ const meta: Meta<typeof CountUp> = {
   },
   decorators: [
     (Story) => (
-      <div style={{ fontFamily: 'var(--font-family-display)', fontSize: 'var(--heading-3xl)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--text-primary)' }}>
+      <div style={{ fontFamily: 'var(--font-family-display)', fontSize: 'var(--heading-huge)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--text-primary)' }}>
         <Story />
       </div>
     ),

@@ -76,7 +76,7 @@
   font-size: var(--label-md);
   color: var(--text-muted);
   line-height: var(--font-line-height-tight);
-  padding: 0 var(--padding-2xs);
+  padding: 0 var(--padding-tiny);
   flex-shrink: 0;
 }
 

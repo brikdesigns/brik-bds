@@ -29,7 +29,7 @@
   background: none;
   cursor: pointer;
   color: var(--text-muted);
-  font-size: var(--body-2xs);
+  font-size: var(--body-tiny);
   line-height: 1;
   height: 50%;
 }

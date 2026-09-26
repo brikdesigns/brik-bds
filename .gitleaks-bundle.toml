@@ -39,7 +39,7 @@ regexes = [
   # health-data.json carries `"token": "--<design-token-name>"` entries — public
   # CSS custom-property names from dist/tokens.css. The generic-api-key rule trips
   # on the `token` keyword + a name whose entropy crosses the threshold (e.g.
-  # `--border-width-2xl`, renamed in brik-bds#1923); which name does so shifts as
+  # `--border-width-huge`, renamed in brik-bds#1923 and reverted in #2594); which name does so shifts as
   # tokens are renamed. Deliberately narrow: only a `token` value that is a `--`
   # kebab-case custom property — a real key is neither `--`-prefixed nor kebab-only.
   '''token":\s*"--[a-z0-9]+(?:-[a-z0-9]+)*"''',

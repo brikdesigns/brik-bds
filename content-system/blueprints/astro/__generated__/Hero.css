@@ -105,7 +105,7 @@
   @media (min-width: 768px) {
     .bds-hero--split .bds-hero__container {
       grid-template-columns: 3fr 2fr;
-      gap: var(--gap-2xl);
+      gap: var(--gap-huge);
     }
 
     .bds-hero--split .bds-hero__title::after {
@@ -124,7 +124,7 @@
   }
 
   .bds-hero--split .bds-hero__title {
-    font-size: clamp(var(--heading-2xl), 5vw, var(--display-sm));
+    font-size: clamp(var(--heading-xxl), 5vw, var(--display-sm));
     position: relative;
   }
 
@@ -156,7 +156,7 @@
     background: var(--bds-hero-bg, var(--page-secondary));
     padding-block: var(
       --bds-hero-padding-y,
-      clamp(var(--padding-xl), 6vw, var(--padding-2xl))
+      clamp(var(--padding-xl), 6vw, var(--padding-huge))
     );
   }
 
@@ -297,7 +297,7 @@
   @media (min-width: 768px) {
     .bds-hero--with-pricing-card .bds-hero__container {
       grid-template-columns: 58fr 42fr;
-      gap: var(--gap-2xl);
+      gap: var(--gap-huge);
     }
   }
 
@@ -324,7 +324,7 @@
   }
 
   .bds-hero--with-pricing-card .bds-hero__title {
-    font-size: clamp(var(--heading-xl), 5vw, var(--heading-2xl));
+    font-size: clamp(var(--heading-xl), 5vw, var(--heading-xxl));
     font-weight: var(--font-weight-bold);
     color: var(--bds-hero-headline-color, var(--text-primary));
   }

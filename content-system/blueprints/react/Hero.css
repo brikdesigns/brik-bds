@@ -94,7 +94,7 @@
    way round (#2344). The base `clamp(--heading-xl, 4vw, …)` was never a
    decision about the 60/40 hero — React simply had no `--split` override. */
 .bds-hero--split .bds-hero__title {
-  font-size: clamp(var(--heading-2xl), 5vw, var(--display-sm));
+  font-size: clamp(var(--heading-xxl), 5vw, var(--display-sm));
 }
 
 .bds-hero--split .bds-hero__container {
@@ -107,7 +107,7 @@
 @media (min-width: 768px) {
   .bds-hero--split .bds-hero__container {
     grid-template-columns: 3fr 2fr;
-    gap: var(--gap-2xl);
+    gap: var(--gap-huge);
   }
 
   .bds-hero--split .bds-hero__title::after {
@@ -168,7 +168,7 @@
   background: var(--bds-hero-bg, var(--page-secondary));
   padding-block: var(
     --bds-hero-padding-y,
-    clamp(var(--padding-xl), 6vw, var(--padding-2xl))
+    clamp(var(--padding-xl), 6vw, var(--padding-huge))
   );
 }
 
@@ -318,7 +318,7 @@
 @media (min-width: 768px) {
   .bds-hero--with-pricing-card .bds-hero__container {
     grid-template-columns: 58fr 42fr;
-    gap: var(--gap-2xl);
+    gap: var(--gap-huge);
   }
 }
 
@@ -358,7 +358,7 @@ img.bds-hero__icon {
 }
 
 .bds-hero--with-pricing-card .bds-hero__title {
-  font-size: clamp(var(--heading-xl), 5vw, var(--heading-2xl));
+  font-size: clamp(var(--heading-xl), 5vw, var(--heading-xxl));
   font-weight: var(--font-weight-bold);
   color: var(--bds-hero-headline-color, var(--text-primary));
 }

@@ -19,7 +19,7 @@
   width: var(--size-700);
   height: var(--size-700);
   border-radius: var(--border-radius-sm);
-  font-size: var(--body-2xs);
+  font-size: var(--body-tiny);
 }
 .bds-stepper--md .bds-stepper__button {
   width: var(--size-900);
