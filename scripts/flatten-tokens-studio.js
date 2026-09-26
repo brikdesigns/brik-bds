@@ -35,6 +35,16 @@ const DEFAULT_MODES = {
   icon: 'solid',
   'border-radius': 'soft',
   spacing: 'default',
+  // `breakpoint` is pinned to `default` on purpose, and unlike its neighbours it
+  // is NOT overridable in practice (#2591). Every other collection here names a
+  // starting mode that generate-modes-css.mjs then re-emits under [data-mode-*];
+  // breakpoint has no runtime mode layer, because a breakpoint's only consumer
+  // is an @media condition and that is a build-time literal — there is no
+  // element to carry a data attribute and no cascade to re-resolve against.
+  // Alternate modes would mean shipping a parallel sheet of duplicated @media
+  // blocks. Of the six rungs, only `web` varies by mode (1200/800/1400); the
+  // other five are identical across all three, so `default` loses nothing.
+  // See tokens/CASCADE.md § Breakpoint.
   breakpoint: 'default',
   'border-width': 'default',
   elevation: 'subtle',

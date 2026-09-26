@@ -2970,6 +2970,33 @@
       },
       "$type": "dimension",
       "$value": 320
+    },
+    "desktop": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "dimension",
+      "$value": 1024
+    },
+    "wide": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "dimension",
+      "$value": 1280
+    },
+    "wider": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "dimension",
+      "$value": 1440
     }
   },
   "breakpoint/compact": {
@@ -2999,6 +3026,33 @@
       },
       "$type": "dimension",
       "$value": 320
+    },
+    "desktop": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "dimension",
+      "$value": 1024
+    },
+    "wide": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "dimension",
+      "$value": 1280
+    },
+    "wider": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "dimension",
+      "$value": 1440
     }
   },
   "breakpoint/comfortable": {
@@ -3028,6 +3082,33 @@
       },
       "$type": "dimension",
       "$value": 320
+    },
+    "desktop": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "dimension",
+      "$value": 1024
+    },
+    "wide": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "dimension",
+      "$value": 1280
+    },
+    "wider": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "dimension",
+      "$value": 1440
     }
   },
   "border-width/default": {

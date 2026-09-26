@@ -335,6 +335,9 @@
   --breakpoint-web: 1200px;
   --breakpoint-tablet: 768px;
   --breakpoint-mobile: 320px;
+  --breakpoint-desktop: 1024px;
+  --breakpoint-wide: 1280px;
+  --breakpoint-wider: 1440px;
   --color-grayscale-darkest: var(--color-grayscale-950); /** DEPRECATED — use color.grayscale.950 (brik-bds#1739) */
   --color-grayscale-darker: var(--color-grayscale-800); /** DEPRECATED — use color.grayscale.800 (brik-bds#1739) */
   --color-grayscale-dark: var(--color-grayscale-700); /** DEPRECATED — use color.grayscale.700 (brik-bds#1739) */

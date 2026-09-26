@@ -48,7 +48,7 @@ Max-width values for content containers. Apply to wrapper elements with `max-wid
 
 ## Screen breakpoints
 
-BDS defines five canonical breakpoints. The CSS custom properties (`--breakpoint-*`) are provided for Figma/documentation reference. **For CSS `@media` rules, import the `breakpoints` constant from `@bds-tokens`** — CSS custom properties cannot be used inside `@media()`.
+BDS defines five canonical breakpoints. All five are Figma variables in the ❖ Brik Foundations `breakpoint` collection, and the CSS custom properties (`--breakpoint-*`) are generated from them. **For CSS `@media` rules, import `mediaQueries` (or `breakpoints`) from `@bds-tokens`** — CSS custom properties cannot be used inside `@media()`.
 
 | Name | CSS Variable | Value |
 |---|---|---|
@@ -59,21 +59,23 @@ BDS defines five canonical breakpoints. The CSS custom properties (`--breakpoint
 | Wider | `--breakpoint-wider` | 1440px |
 
 <Callout type="warn">
-`--breakpoint-web` (1200px) is a legacy Figma-sourced value kept for backward compatibility. Prefer the canonical names above in new work.
+`--breakpoint-web` is a legacy layout-width rung, not a screen breakpoint, and it is the one rung whose value changes with the spacing mode (default 1200px / compact 800px / comfortable 1400px). A media query is a build-time literal with no mode to resolve against, so `web` is deliberately absent from `breakpoints` and `mediaQueries`. Prefer the canonical names above in new work.
 </Callout>
 
 <Callout type="info">
-  **The `--breakpoint-*` CSS custom properties are unconsumed by design.** They exist only for Figma / documentation reference — CSS variables can't be read inside `@media()`, so real breakpoint logic goes through the `breakpoints` JS constant below. That's why [Token Anatomy → Named exceptions](/docs/foundation/token-anatomy#named-exceptions) records zero `var(--breakpoint-*)` references anywhere, and flags whether BDS should ship the CSS-var family at all as an open question for the naming ADR ([#1910](https://github.com/brikdesigns/brik-bds/issues/1910)). "Prefer the canonical names" above governs the JS constant and any Figma/doc reference — not a bet that the CSS vars survive that ADR.
+  **The `--breakpoint-*` CSS custom properties are reference-only by design** (ADR-025 §4). CSS variables can't be read inside `@media()`, so real breakpoint logic goes through the TS exports below — which is why [Token Anatomy → Named exceptions](/docs/foundation/token-anatomy#named-exceptions) records zero `var(--breakpoint-*)` references anywhere. That is an intentional split, not dead weight: the CSS vars carry the values into Figma and the docs, the TS exports carry them into conditions.
 </Callout>
 
 ### Using breakpoints in CSS
 
+`mediaQueries` gives ready-made conditions, so a call site never re-derives one. `up.<rung>` is mobile-first (`min-width`); `down.<rung>` is the exclusive complement, stepped down 0.02px so `up` and `down` never both match at the boundary.
+
 ```tsx
-import { breakpoints } from '@bds-tokens';
+import { mediaQueries } from '@bds-tokens';
 
 // In a CSS-in-JS context
 const styles = {
-  [`@media (min-width: ${breakpoints.desktop})`]: {
+  [`@media ${mediaQueries.up.desktop}`]: {
     display: 'grid',
     gridTemplateColumns: '1fr 2fr',
   },
@@ -92,11 +94,17 @@ const styles = {
 ### Using breakpoints in JavaScript
 
 ```ts
+import { mediaQueries } from '@bds-tokens';
+
+const isDesktop = window.matchMedia(mediaQueries.up.desktop).matches;
+```
+
+`breakpoints` remains exported for the cases where you need the raw width — a `sizes` attribute, a layout calculation, a chart threshold:
+
+```ts
 import { breakpoints } from '@bds-tokens';
 
-const isDesktop = window.matchMedia(
-  `(min-width: ${breakpoints.desktop})`
-).matches;
+const px = parseInt(breakpoints.desktop, 10); // 1024
 ```
 
 ## Element sizes
