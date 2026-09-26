@@ -412,7 +412,6 @@ export const gapSm = "6px";
 export const gapHuge = "32px";
 export const gapXs = "4px";
 export const gapTiny = "2px";
-export const breakpointWeb = "1200px";
 export const breakpointTablet = "768px";
 export const breakpointMobile = "320px";
 export const breakpointDesktop = "1024px";

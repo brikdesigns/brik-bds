@@ -473,7 +473,6 @@ export const gapSm: string;
 export const gapHuge: string;
 export const gapXs: string;
 export const gapTiny: string;
-export const breakpointWeb: string;
 export const breakpointTablet: string;
 export const breakpointMobile: string;
 export const breakpointDesktop: string;

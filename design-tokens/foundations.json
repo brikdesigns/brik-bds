@@ -2944,15 +2944,6 @@
     }
   },
   "breakpoint/default": {
-    "web": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "dimension",
-      "$value": 1200
-    },
     "tablet": {
       "$extensions": {
         "com.figma.scopes": [
@@ -3000,15 +2991,6 @@
     }
   },
   "breakpoint/compact": {
-    "web": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "dimension",
-      "$value": 800
-    },
     "tablet": {
       "$extensions": {
         "com.figma.scopes": [
@@ -3056,15 +3038,6 @@
     }
   },
   "breakpoint/comfortable": {
-    "web": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "dimension",
-      "$value": 1400
-    },
     "tablet": {
       "$extensions": {
         "com.figma.scopes": [

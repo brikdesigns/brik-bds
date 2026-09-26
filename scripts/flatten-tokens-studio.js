@@ -42,8 +42,11 @@ const DEFAULT_MODES = {
   // is an @media condition and that is a build-time literal — there is no
   // element to carry a data attribute and no cascade to re-resolve against.
   // Alternate modes would mean shipping a parallel sheet of duplicated @media
-  // blocks. Of the six rungs, only `web` varies by mode (1200/800/1400); the
-  // other five are identical across all three, so `default` loses nothing.
+  // blocks. Since #2604 retired the `web` rung — the only one that ever varied
+  // (1200/800/1400) — all five remaining rungs are identical across all three
+  // modes, so the pin is value-neutral today. It stays because the collection
+  // still HAS three modes: re-introduce a mode-varying rung and this line is
+  // what keeps the emitted sheet single-valued instead of silently picking one.
   // See tokens/CASCADE.md § Breakpoint.
   breakpoint: 'default',
   'border-width': 'default',

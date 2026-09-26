@@ -686,12 +686,11 @@ export const semanticSpace = {
  * build if the two disagree, so edit the Figma collection and re-run
  * `npm run build:all-tokens` — never this literal alone.
  *
- * `web` is deliberately absent. It is the one rung whose value varies by
- * spacing mode (default 1200 / compact 800 / comfortable 1400), and a media
- * query is a build-time literal with no mode to resolve against — the same
- * reason scripts/flatten-tokens-studio.js pins `breakpoint: 'default'`. It
- * stays in Figma as the legacy layout-width rung and ships as
- * `--breakpoint-web` for reference; it is not a screen breakpoint (#2591).
+ * These five are the whole collection. A sixth rung, `web`, was a legacy
+ * layout-width value (1200 default / 800 compact / 1400 comfortable) and the
+ * only one that ever varied by mode; it was never a screen breakpoint, bound
+ * to nothing in Figma and called by nothing in code, and was retired from the
+ * Foundations library in #2604. There is no `--breakpoint-web` any more.
  *
  * @example
  * import { breakpoints } from '@bds-tokens';

@@ -59,7 +59,7 @@ BDS defines five canonical breakpoints. All five are Figma variables in the ❖ 
 | Wider | `--breakpoint-wider` | 1440px |
 
 <Callout type="warn">
-`--breakpoint-web` is a legacy layout-width rung, not a screen breakpoint, and it is the one rung whose value changes with the spacing mode (default 1200px / compact 800px / comfortable 1400px). A media query is a build-time literal with no mode to resolve against, so `web` is deliberately absent from `breakpoints` and `mediaQueries`. Prefer the canonical names above in new work.
+**`--breakpoint-web` no longer exists.** A sixth rung named `web` (1200px default / 800px compact / 1400px comfortable) was a legacy layout-width value, never a screen breakpoint, and was retired from the ❖ Brik Foundations library in #2604. Five is the whole ladder.
 </Callout>
 
 <Callout type="info">

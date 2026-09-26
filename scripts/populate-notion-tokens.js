@@ -203,9 +203,11 @@ const primitiveTokens = [
   // -------------------------------------------------------------------------
   // BREAKPOINT TOKENS
   // -------------------------------------------------------------------------
-  { name: 'breakpoint-web', type: 'primitive', foundation: 'size', collection: 'breakpoint', figmaVar: 'breakpoint/web', value: '1200' },
-  { name: 'breakpoint-tablet', type: 'primitive', foundation: 'size', collection: 'breakpoint', figmaVar: 'breakpoint/tablet', value: '768' },
   { name: 'breakpoint-mobile', type: 'primitive', foundation: 'size', collection: 'breakpoint', figmaVar: 'breakpoint/mobile', value: '320' },
+  { name: 'breakpoint-tablet', type: 'primitive', foundation: 'size', collection: 'breakpoint', figmaVar: 'breakpoint/tablet', value: '768' },
+  { name: 'breakpoint-desktop', type: 'primitive', foundation: 'size', collection: 'breakpoint', figmaVar: 'breakpoint/desktop', value: '1024' },
+  { name: 'breakpoint-wide', type: 'primitive', foundation: 'size', collection: 'breakpoint', figmaVar: 'breakpoint/wide', value: '1280' },
+  { name: 'breakpoint-wider', type: 'primitive', foundation: 'size', collection: 'breakpoint', figmaVar: 'breakpoint/wider', value: '1440' },
 ];
 
 // ============================================================================

@@ -69,7 +69,7 @@ Figma organises variables into named collections. Each collection has modes. Sty
 | `border-radius` | `soft` | `--border-radius-sm/md/lg` |
 | `border-width` | `default` | `--border-width-sm/md/lg` |
 | `elevation` | `subtle` | `--box-shadow-sm/md/lg/xl` (single-blur; bridged to composed `--shadow-*` in `gap-fills.css`), `--blur-radius-*` |
-| `breakpoint` | `default` | `--breakpoint-web/tablet/mobile` |
+| `breakpoint` | `default` | `--breakpoint-mobile/tablet/desktop/wide/wider` |
 
 **Light vs dark mode:** `figma-tokens.css` uses the `light` mode of the `color` collection. `figma-tokens-dark.css` uses the `dark` mode. Both files use identical variable names — consuming projects import dark after light, and the browser applies whichever matches `[data-theme="dark"]`.
 
