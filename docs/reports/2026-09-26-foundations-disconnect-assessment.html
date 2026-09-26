@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Foundations Disconnect Assessment — 2026-09-26</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font: 15px/1.5 -apple-system, "Segoe UI", sans-serif; max-width: 62rem; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; font-size: 14px; }
+  th, td { border: 1px solid #ccc; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+  th { background: #f4f4f4; }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: .92em; background: #f3f3f3; padding: 0 .2em; }
+  .verdict { background: #fff4e5; border-left: 4px solid #e58a00; padding: .75rem 1rem; }
+  .ok { color: #1a7f37; } .bad { color: #b42318; font-weight: 600; }
+  blockquote { border-left: 3px solid #bbb; margin: .5rem 0; padding: .25rem .75rem; color: #444; }
+</style>
+</head>
+<body>
+
+<h1>Foundations Disconnect Assessment</h1>
+<p><strong>Date:</strong> 2026-09-26 · <strong>Repo:</strong> brik-bds @ <code>39ed0bca</code> (main) · <strong>Figma:</strong> ❖ Brik Foundations <code>Rkdc3SIWJUdgoAkeadgZZe</code>, 381 variables, headless <code>use_figma</code> read · <strong>Docs:</strong> design.brikdesigns.com/docs/foundation (rendered from <code>docs-site/content/docs/foundation/*.mdx</code> at the same commit) · <strong>Umbrella:</strong> brik-bds#2595</p>
+
+<div class="verdict">
+<p><strong>Verdict.</strong> Figma and the docs site agree with each other. The <em>repo</em> is the surface that moved: on 2026-08-31 commit <code>20c5d83f</code> (#2229) hand-renamed 13 Foundations variables in the repo mirror (<code>tiny→2xs</code>, <code>huge→2xl</code>, <code>heading/xxl→2xl</code>, <code>icon/tiny→3xs</code>…), deferred the Figma write to #2227, and #2227 is still open 26 days later. The docs page and <code>tokens/index.ts</code> were never updated, so they still match Figma by accident, not by process.</p>
+<p><strong>Root cause (systemic, not one ticket):</strong> the pipeline is documented as <em>Figma → sync → repo</em> (<code>foundation/index.mdx:12,122</code>) but operated as <em>hand-edit the repo mirror, defer Figma</em>. Four of the last five <code>foundations.json</code> commits are hand edits; the last true reconcile against Figma was <code>0091e519</code> on 2026-08-13 (44 days). No gate reads Figma — every "Figma alignment" lint reads the repo's own mirror — so drift is undetectable by CI at Brik's Figma plan tier.</p>
+</div>
+
+<h2>1. Live Figma vs repo mirror — name diff, all 10 collections</h2>
+<p>Method: <code>scratchpad/pull/diff-names.mjs</code> over the 2026-09-26 pull vs <code>design-tokens/foundations.json</code>. Values were compared separately for spacing, breakpoint and border-width and are <strong>identical rung-for-rung in every mode</strong> — every spacing/typography/border-width difference below is a rename, not a value change.</p>
+<table>
+<tr><th>Collection</th><th>Figma</th><th>Repo</th><th>Only in Figma (re-pull ADDS)</th><th>Only in repo (re-pull DELETES — #754 pruning)</th></tr>
+<tr><td><code>primitives</code></td><td>227 [value]</td><td>236 [value]</td><td><code>font-family/icon</code>, <code>font-family/logo</code></td><td><code>web</code>, <code>tablet</code>, <code>mobile</code>, <code>blur-radius/sm…xl</code>, <code>box-shadow/sm…xl</code> (11 stale leaves)</td></tr>
+<tr><td><code>color</code></td><td>72 [light, dark]</td><td>62 [light, dark]</td><td>10: <code>page|background|surface|text|border/brand-primary*</code>, <code>text/text-link</code> — external aliases into the brand kit, expected</td><td>—</td></tr>
+<tr><td><code>border-radius</code></td><td>4 [sharp, soft, round, pill]</td><td>4 (same)</td><td class="ok">identical</td><td class="ok">identical</td></tr>
+<tr><td><code>spacing</code></td><td>16 [default, compact, comfortable, spacious]</td><td>16 (same)</td><td class="bad"><code>gap/tiny</code>, <code>gap/huge</code>, <code>padding/tiny</code>, <code>padding/huge</code></td><td class="bad"><code>gap/2xs</code>, <code>gap/2xl</code>, <code>padding/2xs</code>, <code>padding/2xl</code></td></tr>
+<tr><td><code>icon</code></td><td>2 [solid, outline]</td><td class="bad">0 — no mirror</td><td><code>icon</code>, <code>logo</code></td><td>—</td></tr>
+<tr><td><code>breakpoint</code></td><td>3 [default, compact, comfortable]</td><td>3 (same)</td><td class="ok">identical</td><td class="ok">identical</td></tr>
+<tr><td><code>elevation</code></td><td>16 [flat, subtle, lifted, dramatic]</td><td>16 (same)</td><td class="ok">identical</td><td class="ok">identical</td></tr>
+<tr><td><code>typography</code></td><td>35 [default, compact, comfortable, spacious, expressive]</td><td>35 (same)</td><td class="bad"><code>body/tiny</code>, <code>body/huge</code>, <code>heading/tiny</code>, <code>heading/xxl</code>, <code>heading/huge</code>, <code>icon/tiny</code>, <code>icon/huge</code>, <code>label/tiny</code></td><td class="bad"><code>body/2xs</code>, <code>body/2xl</code>, <code>heading/xs</code>, <code>heading/2xl</code>, <code>heading/3xl</code>, <code>icon/3xs</code>, <code>icon/3xl</code>, <code>label/2xs</code></td></tr>
+<tr><td><code>border-width</code></td><td>6 [default, thin, thick]</td><td>6 [default, thick, thin]</td><td class="bad"><code>huge</code></td><td class="bad"><code>2xl</code></td></tr>
+<tr><td><code>motion</code></td><td>0 vars [Mode 1]</td><td>0</td><td colspan="2">Empty collection in Figma. The motion primitives (<code>duration/100…600</code>, <code>delay/*</code>, <code>easing/*</code>, <code>iteration/*</code>) live in <code>primitives</code> as STRING type; <code>easing/ease-in|out</code> hold the literal placeholder <code>"String value"</code>.</td></tr>
+</table>
+<p>Net: <strong>13 pure renames</strong> (4 spacing + 8 typography + 1 border-width) exactly matching #2229's deferred set; <strong>2 structural gaps</strong> (<code>icon</code> collection, <code>font-family/icon|logo</code>) and <strong>11 stale repo primitives</strong>. Running <code>sync-figma-mcp.js --library=foundations</code> on this pull today would silently revert #2229 and delete the 11 stale leaves.</p>
+
+<h2>2. Where each surface stands, per family</h2>
+<table>
+<tr><th>Family</th><th>Figma (live)</th><th>Docs page</th><th>Repo JSON / dist</th><th>Scripts / gates</th><th>Assessment</th></tr>
+<tr><td>Spacing rungs</td><td><code>none·tiny·xs·sm·md·lg·xl·huge</code></td><td><code>spacing.mdx:23,29,42,48</code> — <code>tiny</code>/<code>huge</code> via <code>semanticSpace['tiny']</code>, <code>['gap--tiny']</code></td><td><code>2xs</code>/<code>2xl</code> live at <code>dist/tokens.css:418,420</code>; <code>tiny</code>/<code>huge</code> DEPRECATED at <code>:1722-1723</code></td><td><code>lint-mdx-tokens.mjs</code> (docs-gate.yml:296) checks only fenced blocks + tables, so JS lookups in MDX pass</td><td class="bad">Split. Operator decision A/B in #2594.</td></tr>
+<tr><td>Spacing mode values</td><td><code>gap/tiny</code>, <code>gap/xs</code> = <code>space/0</code> in compact/comfortable/spacious (gap only; padding intact)</td><td>Page documents only the default track</td><td>Same aliases in <code>foundations.json</code>; <code>dist/tokens.css:1152-1196</code></td><td><code>lint-tokens.js:1554-1562</code> never opens <code>modes-spacing.css</code>; <code>:918</code> regex matches nonexistent <code>--space--NNN</code></td><td class="bad">Design-side value defect. #2588, Figma edit.</td></tr>
+<tr><td>Typography rungs</td><td><code>heading/tiny·xxl·huge</code>, <code>body/tiny·huge</code>, <code>icon/tiny·huge</code>, <code>label/tiny</code></td><td><code>typography.mdx:41,46,47,77,83,92,120,126</code> list the Figma names; <code>:62-63</code> table lists <code>--heading-2xl/3xl</code> — <strong>the same page uses both</strong></td><td>numeric (<code>20c5d83f</code>)</td><td>same gap as spacing</td><td class="bad">Split + page internally inconsistent.</td></tr>
+<tr><td>Border-width</td><td>rungs <code>none·sm·md·lg·xl·huge</code>; modes <code>default·thin·thick</code>; thin/thick hold raw numbers, not aliases</td><td><code>border.mdx:63-73</code> says modes are <code>thin</code> / <strong><code>bold</code></strong></td><td><code>2xl</code>; sets <code>border-width/{default,thick,thin}</code></td><td>—</td><td class="bad">Rung split (<code>huge</code>/<code>2xl</code>) + docs mode name drift (<code>bold</code> vs <code>thick</code>).</td></tr>
+<tr><td>Breakpoints</td><td><code>breakpoint</code> collection: <code>web/tablet/mobile</code>, modes <code>default·compact·comfortable</code> (spacing-mode names, not viewports); web = 1200/800/1400</td><td><code>size.mdx:58</code> cites <code>--breakpoint-wide</code></td><td>Three sources in dist: <code>:321-323</code> unitless <code>--web/--tablet/--mobile</code>; <code>:337-339</code> px; <code>:1626-1628</code> hand-authored <code>desktop/wide/wider</code> "for reference only"; consumers use <code>tokens/index.ts:686</code></td><td>—</td><td class="bad">Figma models 3 rungs; repo/docs model 5 (<code>mobile 320 / tablet 768 / desktop 1024 / wide 1280 / wider 1440</code>, ratified by operator 2026-09-26). Figma is behind the ratified ladder. #2591.</td></tr>
+<tr><td>Color primitives</td><td>word rungs <code>grayscale/{black,darkest,darker,dark,light,lighter,lightest,white}</code></td><td>—</td><td>Same word rungs in <code>foundations.json</code>; numeric ramp <code>--color-grayscale-950</code> generated repo-side by <code>scripts/generate-color-ramps.mjs</code> (#1737); word rungs deprecated at <code>dist/tokens.css:340-393</code> (#1739)</td><td>—</td><td class="bad">Same pattern as spacing: repo invented a vocabulary Figma never adopted.</td></tr>
+<tr><td>Motion</td><td>empty <code>motion</code> collection; durations are STRINGs in primitives; easing placeholders</td><td><code>motion.mdx:25</code> "fast/normal/slow grandfathered"; <code>:96</code> mixes <code>--duration-sm</code> with <code>-normal/-slow</code></td><td><code>fast/normal/slow → sm/md/lg</code> aliases at <code>dist/tokens.css:1736-1738</code></td><td>—</td><td class="bad">Figma has no semantic motion layer at all; repo semantic names have no Figma source.</td></tr>
+<tr><td><code>tokens/index.ts</code></td><td>—</td><td>Docs import it as <code>@bds-tokens</code> (<code>docs-site/tsconfig.json:32-36</code>)</td><td>Header <code>:1-14</code> claims Style Dictionary provenance; no generator found; last edits are hand commits; still exports <code>tiny/huge/gap--tiny/gap--huge</code> at <code>:651-667</code></td><td>—</td><td class="bad">Hand-authored file presenting as generated. Third vocabulary carrier.</td></tr>
+</table>
+
+<h2>3. Why nothing caught it — the gate landscape</h2>
+<table>
+<tr><th>Gate</th><th>What it actually reads</th><th>Can it see Figma drift?</th></tr>
+<tr><td><code>lint-foundation-figma-collections.mjs</code> (docs-gate.yml:307)</td><td><code>design-tokens/tokens-studio.json</code> — the repo mirror</td><td>No</td></tr>
+<tr><td><code>lint-naming-canon.mjs</code> rule 1</td><td><code>dist/tokens.css</code>; deprecated aliases carry <code>bds-lint-ignore</code></td><td>No — it enforces the repo's vocabulary, which is the drifted side</td></tr>
+<tr><td><code>lint-mdx-tokens.mjs</code> (docs-gate.yml:296)</td><td>Token names in fenced blocks + markdown tables of <code>docs-site/content</code> vs dist</td><td>No — and misses <code>semanticSpace['tiny']</code> JS lookups, which is how <code>spacing.mdx</code> passes</td></tr>
+<tr><td><code>sync-figma-variables.yml</code></td><td>Triggers on a <em>push</em> of <code>figma-export.json</code> / <code>tokens-studio.json</code></td><td>No — it consumes a mirror somebody already committed</td></tr>
+<tr><td><code>build-tokens.yml</code></td><td>Comment at <code>:7</code>: every real change lands via the push paths; sync script is manual</td><td>No</td></tr>
+<tr><td>Figma Variables REST API</td><td>Enterprise-only (developers.figma.com/docs/rest-api/variables, fetched 2026-09-26); Brik is on <strong>pro</strong> (<code>mcp__figma__whoami</code>)</td><td>Cannot be wired into CI</td></tr>
+<tr><td><code>scripts/pull-variables.js</code> / <code>pull-variables-headless.mjs</code></td><td>Relay needs Figma Desktop + plugin on port 3055; headless needs a human-driven <code>use_figma</code> session, 14 KB chunks (MCP result cap), and <code>sync-figma-mcp.js</code> <strong>prunes</strong> leaves missing from a truncated dump (#754)</td><td>Only when a person runs it — and a partial dump is destructive</td></tr>
+</table>
+<p>The scanners are not stale in the sense of being wrong about the repo — they are faithful to <code>dist/tokens.css</code>. They are stale in the sense that <strong>nothing in the toolchain has read Figma since 2026-08-13</strong>, and every "Figma" in a script name means "the JSON we last committed".</p>
+
+<h2>4. The one decision that unblocks the rest — OPERATOR CALL</h2>
+<p>Two internally consistent end states. An agent must not choose; both are priced here.</p>
+<table>
+<tr><th></th><th>(A) Finish ADR-033 — rename in Figma</th><th>(B) Revert to Figma's vocabulary</th></tr>
+<tr><td>Figma</td><td>Rename 13 variables (#2227). Aliases are by id, so nothing rebinds. Operator go required (outward-facing write).</td><td>No change.</td></tr>
+<tr><td>Repo</td><td>None for names. Re-pull + reconcile (adds <code>icon</code> collection, <code>font-family/icon|logo</code>; deletes 11 stale primitives — reviewed via <code>--dry-run</code>).</td><td>Revert name changes from <code>20c5d83f</code> across <code>foundations.json</code>, <code>tokens-studio.json</code>, <code>gap-fills.css</code>, <code>modes-spacing.css</code>, <code>modes-typography.css</code>, <code>naming-canon-baseline.json</code>; ADR-033 §3 marked superseded; <code>--gap-2xs</code>/<code>2xl</code> become the deprecated aliases instead.</td></tr>
+<tr><td>Docs</td><td>Fix <code>spacing.mdx</code>, <code>typography.mdx:41-126</code>, <code>tokens/index.ts:651-667</code> to numeric.</td><td>Fix <code>typography.mdx:62-63</code>, <code>motion.mdx</code>, <code>size.mdx</code> back to word rungs; ADR-033 note.</td></tr>
+<tr><td>Consumers</td><td>Already on <code>2xs/2xl</code> where migrated; brikdesigns still uses <code>--gap-huge</code> in 3 responsive pairs (#2592) — becomes a second-class alias.</td><td>Every consumer that adopted <code>2xs/2xl</code> since 08-31 churns again.</td></tr>
+<tr><td>Operator's words</td><td colspan="2">
+<blockquote>OPERATOR SAID 2026-09-26 (chat): "2xs is not a name in our sizing system. We should be using tiny (sm, xs, tiny) - see our docs or Figma"</blockquote>
+<blockquote>OPERATOR SAID 2026-09-26 (chat): "figma is our source of truth and our documentation matches which proves that our scanners and scripts are likely stale"</blockquote>
+These lean (B) but were said before the operator saw that ADR-033 (merged by the operator on 2026-08-31 in #2229) is the source of <code>2xs</code>. <strong>Recommendation: (A), medium confidence</strong> — the numeric vocabulary is already in <code>dist</code>, in consumers and in a ratified ADR; the missing step is one Figma write that was always planned. (B) is right only if the operator now rejects ADR-033 §3 itself.</td></tr>
+</table>
+
+<h2>5. Process fixes that stop this recurring (proposed, sized, not started)</h2>
+<ol>
+<li><strong>Make the mirror hand-edit rule explicit and gated:</strong> any PR touching <code>design-tokens/foundations.json</code> without a paired pull manifest (the <code>collections</code>/<code>totalVariables</code> header of a fresh dump) fails <code>tokens-gate</code>. Budget: an added step in the existing <code>tokens-gate.yml</code>, no new workflow. Replaces the dead <code>--check-grid</code> step (#2592's slot). <em>S.</em></li>
+<li><strong>Make <code>tokens/index.ts</code> generated or delete its provenance header:</strong> it is a third vocabulary carrier that the docs site imports. <em>M.</em></li>
+<li><strong>Extend <code>lint-mdx-tokens.mjs</code> to JS lookups in MDX</strong> (<code>semanticSpace['…']</code>, <code>var(--…)</code> in JSX props). Edit to an existing script. <em>S.</em> (in #2594's AC)</li>
+<li><strong>Retire the ambiguous names:</strong> the Figma <code>breakpoint</code> collection's modes are called <code>default/compact/comfortable</code> — spacing-mode names on a viewport family — and dist carries three breakpoint ladders. Consolidate on the operator's ratified 5-rung ladder in one place (#2591). <em>M, already filed.</em></li>
+<li><strong>Schedule the Figma pull:</strong> a monthly operator-run <code>pull-variables-headless.mjs</code> + <code>sync-figma-mcp.js --dry-run</code>, with the dry-run diff pasted into a tracking issue. Cannot be automated at the pro tier; can be made routine. <em>XS recurring.</em></li>
+</ol>
+
+<h2>6. Repro</h2>
+<pre><code># 1. Pull (needs a use_figma session; see scripts/pull-variables-headless.mjs --emit-code)
+# 2. Name diff vs repo:
+node scratchpad/pull/diff-names.mjs design-tokens/foundations.json
+# 3. Repo values per spacing mode:
+node -e 'const j=require("./design-tokens/foundations.json");const m=["spacing/default","spacing/compact","spacing/comfortable","spacing/spacious"];for(const f of["gap","padding"])for(const r of Object.keys(j["spacing/default"][f]))console.log(f+"/"+r,m.map(x=>j[x][f][r].$value).join(" "))'
+# 4. Last true reconcile:
+git log --format='%h %ad %s' --date=short -- design-tokens/foundations.json | sed -n 5p   # 0091e519 2026-08-13</code></pre>
+
+<h2>7. Issues touched by this assessment</h2>
+<ul>
+<li>#2595 umbrella — constraint row on rung vocabulary rewritten as UNSETTLED.</li>
+<li>#2594 — retitled and rewritten; the first draft had the drift direction inverted (claimed the docs were stale; the repo is). Carries the A/B decision.</li>
+<li>#2227 — commented with the 13-variable diff; still the Figma write, blocked on the A/B call.</li>
+<li>#2588 — commented with live-Figma confirmation of the <code>space/0</code> collapse (gap only) and the name mapping.</li>
+<li>To file: <code>icon</code> collection + <code>font-family/icon|logo</code> unmirrored; 11 stale repo primitives; <code>border.mdx</code> <code>bold</code>→<code>thick</code>; <code>typography.mdx</code> self-inconsistency; <code>tokens/index.ts</code> provenance; ❖ Modern / ❖ Expressive Web Toolkits with no repo mirror.</li>
+</ul>
+
+</body>
+</html>
