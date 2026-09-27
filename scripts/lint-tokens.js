@@ -929,7 +929,9 @@ function checkGridCompliance(line, lineNum, file) {
     // (150/250/350/450 = 6/10/14/18px) for optical adjustments finer than a full
     // step; above 500 the ramp stops half-stepping. They are Figma-backed and
     // permanent, so flagging them was four-fifths of grid-4pt's output (#2613).
-    if (/^--space-\d?50$/.test(declMatch[1])) continue;
+    // Enumerated, not `\d?50` — that pattern also carved out --space-50, which
+    // is not a half-step, and would silently absorb a future --space-050.
+    if (/^--space-(?:150|250|350|450)$/.test(declMatch[1])) continue;
     if (px % 4 !== 0) {
       const lower = Math.floor(px / 4) * 4;
       const upper = lower + 4;
