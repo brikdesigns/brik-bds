@@ -26,12 +26,11 @@
   --padding-xs: 4px;
   /* gap */
   --gap-huge: 24px;
-  --gap-lg: 8px;
-  --gap-md: 4px;
-  --gap-sm: 2px;
-  --gap-tiny: 0px;
+  --gap-lg: 12px;
+  --gap-sm: 4px;
+  --gap-tiny: 1px;
   --gap-xl: 16px;
-  --gap-xs: 0px;
+  --gap-xs: 2px;
 }
 
 /* ─── Comfortable ────────────────────────────────────────── */
@@ -48,9 +47,7 @@
   --gap-lg: 40px;
   --gap-md: 32px;
   --gap-sm: 8px;
-  --gap-tiny: 0px;
   --gap-xl: 48px;
-  --gap-xs: 0px;
 }
 
 /* ─── Spacious ────────────────────────────────────────── */
@@ -68,7 +65,7 @@
   --gap-lg: 56px;
   --gap-md: 48px;
   --gap-sm: 16px;
-  --gap-tiny: 0px;
+  --gap-tiny: 4px;
   --gap-xl: 104px;
-  --gap-xs: 0px;
+  --gap-xs: 8px;
 }
