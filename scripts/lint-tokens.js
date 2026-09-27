@@ -924,6 +924,12 @@ function checkGridCompliance(line, lineNum, file) {
   while ((declMatch = declRegex.exec(line)) !== null) {
     const px = parseFloat(declMatch[2]);
     if (px <= 2) continue; // micro exempt (0, 1px, 2px)
+    // Half-step rungs are deliberately off-grid. The ramp carries one 2px-offset
+    // step between each pair of 4pt rungs from --space-100 to --space-500
+    // (150/250/350/450 = 6/10/14/18px) for optical adjustments finer than a full
+    // step; above 500 the ramp stops half-stepping. They are Figma-backed and
+    // permanent, so flagging them was four-fifths of grid-4pt's output (#2613).
+    if (/^--space-\d?50$/.test(declMatch[1])) continue;
     if (px % 4 !== 0) {
       const lower = Math.floor(px / 4) * 4;
       const upper = lower + 4;
@@ -1560,9 +1566,6 @@ function main() {
   // can't be read inside @media (ADR-025 §4), so the TS literal is the only thing
   // a real media query sees: a silent drift there is a layout defect no CSS lint
   // can catch. Extends this script rather than adding a gate (#2591).
-  //
-  // `web` is exempt by design — it resolves per spacing mode (1200/800/1400), so
-  // it has no single build-time literal and is not a screen breakpoint.
   const TOKENS_INDEX_PATH = path.join(__dirname, '..', 'tokens', 'index.ts');
   if (fs.existsSync(FIGMA_TOKENS_PATH) && fs.existsSync(TOKENS_INDEX_PATH)) {
     const figmaCSS = fs.readFileSync(FIGMA_TOKENS_PATH, 'utf8');
@@ -1633,7 +1636,7 @@ function main() {
   }
 
   // 4c. Spacing mode-track integrity — every `[data-mode-spacing]` track must stay a
-  // strictly increasing 7-rung gap scale, on the 4-point grid, with no rung at 0px.
+  // strictly increasing 7-rung scale, on the 4-point grid, with no rung at 0px.
   // A mode block only emits the rungs that DIFFER from the base, so the track a
   // consumer renders is base ∪ override: reading modes-spacing.css on its own cannot
   // see the scale, which is why the collapsed rungs in #2588 were invisible.
@@ -1643,69 +1646,81 @@ function main() {
   // warning-only by design — a rule reachable only via `lint-tokens:grid` gates
   // nothing. Extends this script rather than adding a gate (#2588).
   //
-  // Scoped to `--gap-*`. The `--padding-*` mode tracks are a separate audit (#2588
-  // § Out of scope) and stay at grid-4pt's warning level, which now reaches them.
+  // Covers both spacing families. `--gap-*` landed in #2588; `--padding-*` was held
+  // back there only because `compact` would have failed the rule on day one
+  // (tiny == xs == 4px, md off-grid at 10px). #2613 fixed those two rungs in Figma,
+  // so the family joins the gate here.
   const MODES_SPACING_PATH = path.join(__dirname, '..', 'tokens', 'modes-spacing.css');
   if (fs.existsSync(FIGMA_TOKENS_PATH) && fs.existsSync(MODES_SPACING_PATH)) {
-    const GAP_RUNGS = ['tiny', 'xs', 'sm', 'md', 'lg', 'xl', 'huge'];
+    const RUNGS = ['tiny', 'xs', 'sm', 'md', 'lg', 'xl', 'huge'];
+    const FAMILIES = ['gap', 'padding'];
     const figmaCSS = fs.readFileSync(FIGMA_TOKENS_PATH, 'utf8');
+    const modeLines = fs.readFileSync(MODES_SPACING_PATH, 'utf8').split('\n');
 
-    // Base track: `--gap-x: var(--space-NNN)` — one deref hop to the primitive.
+    // Primitives, for the one deref hop a base declaration makes:
+    // `--gap-x: var(--space-NNN)`.
     const primitives = new Map();
     for (const m of figmaCSS.matchAll(/^\s*(--space-[\w-]+)\s*:\s*(-?[\d.]+)px\s*;/gm)) {
       primitives.set(m[1], parseFloat(m[2]));
     }
-    const baseTrack = new Map();
-    for (const m of figmaCSS.matchAll(/^\s*--gap-([\w-]+)\s*:\s*([^;]+);/gm)) {
-      const raw = m[2].trim();
-      const alias = raw.match(/^var\((--[\w-]+)\)$/);
-      const px = alias ? primitives.get(alias[1])
-        : (/^-?[\d.]+px$/.test(raw) ? parseFloat(raw) : undefined);
-      if (px !== undefined && !baseTrack.has(m[1])) baseTrack.set(m[1], px);
-    }
 
-    // Mode overrides, with the line each one is declared on.
-    const modeLines = fs.readFileSync(MODES_SPACING_PATH, 'utf8').split('\n');
-    const tracks = [];
-    let openTrack = null;
-    for (let i = 0; i < modeLines.length; i++) {
-      const open = modeLines[i].match(/^\s*\[data-mode-spacing="([\w-]+)"\]\s*\{/);
-      if (open) {
-        openTrack = { mode: open[1], line: i + 1, overrides: new Map() };
-        tracks.push(openTrack);
+    for (const family of FAMILIES) {
+      const baseTrack = new Map();
+      const baseRegex = new RegExp(`^\\s*--${family}-([\\w-]+)\\s*:\\s*([^;]+);`, 'gm');
+      for (const m of figmaCSS.matchAll(baseRegex)) {
+        const raw = m[2].trim();
+        const alias = raw.match(/^var\((--[\w-]+)\)$/);
+        const px = alias ? primitives.get(alias[1])
+          : (/^-?[\d.]+px$/.test(raw) ? parseFloat(raw) : undefined);
+        if (px !== undefined && !baseTrack.has(m[1])) baseTrack.set(m[1], px);
+      }
+
+      // Mode overrides, with the line each one is declared on.
+      const declRegex = new RegExp(`^\\s*--${family}-([\\w-]+)\\s*:\\s*(-?[\\d.]+)px\\s*;`);
+      const tracks = [];
+      let openTrack = null;
+      for (let i = 0; i < modeLines.length; i++) {
+        const open = modeLines[i].match(/^\s*\[data-mode-spacing="([\w-]+)"\]\s*\{/);
+        if (open) {
+          openTrack = { mode: open[1], line: i + 1, overrides: new Map() };
+          tracks.push(openTrack);
+          continue;
+        }
+        if (!openTrack) continue;
+        if (/^\s*\}/.test(modeLines[i])) { openTrack = null; continue; }
+        const decl = modeLines[i].match(declRegex);
+        if (decl) openTrack.overrides.set(decl[1], { px: parseFloat(decl[2]), line: i + 1 });
+      }
+
+      const missingBase = RUNGS.filter(r => !baseTrack.has(r));
+      if (missingBase.length > 0) {
+        allViolations.push({
+          rule: 'spacing-mode-track',
+          severity: 'error',
+          file: FIGMA_TOKENS_PATH,
+          line: 1,
+          column: 1,
+          message: `Base ${family} scale is missing ${missingBase.map(r => `--${family}-${r}`).join(', ')} — the mode-track check cannot resolve a full track`,
+          suggestion: `Restore the rung in the ❖ Brik Foundations \`spacing\` collection and re-run npm run build:all-tokens, or update RUNGS if the scale was renamed (brik-bds#2588)`,
+        });
         continue;
       }
-      if (!openTrack) continue;
-      if (/^\s*\}/.test(modeLines[i])) { openTrack = null; continue; }
-      const decl = modeLines[i].match(/^\s*--gap-([\w-]+)\s*:\s*(-?[\d.]+)px\s*;/);
-      if (decl) openTrack.overrides.set(decl[1], { px: parseFloat(decl[2]), line: i + 1 });
-    }
+      if (tracks.length === 0) {
+        allViolations.push({
+          rule: 'spacing-mode-track',
+          severity: 'error',
+          file: MODES_SPACING_PATH,
+          line: 1,
+          column: 1,
+          message: 'No [data-mode-spacing] blocks found — the mode-track check cannot run',
+          suggestion: 'Re-run scripts/generate-modes-css.mjs, or update this rule if the selector contract changed (brik-bds#2588)',
+        });
+        continue;
+      }
 
-    const missingBase = GAP_RUNGS.filter(r => !baseTrack.has(r));
-    if (missingBase.length > 0) {
-      allViolations.push({
-        rule: 'spacing-mode-track',
-        severity: 'error',
-        file: FIGMA_TOKENS_PATH,
-        line: 1,
-        column: 1,
-        message: `Base gap scale is missing ${missingBase.map(r => `--gap-${r}`).join(', ')} — the mode-track check cannot resolve a full track`,
-        suggestion: 'Restore the rung in the ❖ Brik Foundations `spacing` collection and re-run npm run build:all-tokens, or update GAP_RUNGS if the scale was renamed (brik-bds#2588)',
-      });
-    } else if (tracks.length === 0) {
-      allViolations.push({
-        rule: 'spacing-mode-track',
-        severity: 'error',
-        file: MODES_SPACING_PATH,
-        line: 1,
-        column: 1,
-        message: 'No [data-mode-spacing] blocks found — the mode-track check cannot run',
-        suggestion: 'Re-run scripts/generate-modes-css.mjs, or update this rule if the selector contract changed (brik-bds#2588)',
-      });
-    } else {
       for (const { mode, line: trackLine, overrides } of tracks) {
         // Resolved track = the override where one exists, the base rung otherwise.
-        const resolved = GAP_RUNGS.map(rung => {
+        const resolved = RUNGS.map(rung => {
           const o = overrides.get(rung);
           return { rung, px: o ? o.px : baseTrack.get(rung), line: o ? o.line : trackLine, overridden: Boolean(o) };
         });
@@ -1718,8 +1733,8 @@ function main() {
               file: MODES_SPACING_PATH,
               line,
               column: 1,
-              message: `[${mode}] --gap-${rung} is 0px — a named rung collapsed onto --gap-none`,
-              suggestion: `Give spacing/gap/${rung} a non-zero value in the "${mode}" mode of the ❖ Brik Foundations \`spacing\` collection, then re-pull and re-run npm run build:all-tokens`,
+              message: `[${mode}] --${family}-${rung} is 0px — a named rung collapsed onto --${family}-none`,
+              suggestion: `Give spacing/${family}/${rung} a non-zero value in the "${mode}" mode of the ❖ Brik Foundations \`spacing\` collection, then re-pull and re-run npm run build:all-tokens`,
             });
           }
           // Off-grid is an error only for a value this file declares; the base
@@ -1731,8 +1746,8 @@ function main() {
               file: MODES_SPACING_PATH,
               line,
               column: 1,
-              message: `[${mode}] --gap-${rung} is ${px}px — off the 4-point grid`,
-              suggestion: `Point spacing/gap/${rung} at a space primitive divisible by 4 (nearest: ${Math.floor(px / 4) * 4}px or ${Math.floor(px / 4) * 4 + 4}px)`,
+              message: `[${mode}] --${family}-${rung} is ${px}px — off the 4-point grid`,
+              suggestion: `Point spacing/${family}/${rung} at a space primitive divisible by 4 (nearest: ${Math.floor(px / 4) * 4}px or ${Math.floor(px / 4) * 4 + 4}px)`,
             });
           }
         }
@@ -1747,8 +1762,8 @@ function main() {
             file: MODES_SPACING_PATH,
             line: cur.line,
             column: 1,
-            message: `[${mode}] gap scale is not strictly increasing: --gap-${cur.rung} (${cur.px}px) is not greater than --gap-${prev.rung} (${prev.px}px)`,
-            suggestion: `Re-space the "${mode}" track in Figma so ${GAP_RUNGS.map(r => r).join(' < ')} holds, then re-pull and re-run npm run build:all-tokens — never hand-edit tokens/modes-spacing.css`,
+            message: `[${mode}] ${family} scale is not strictly increasing: --${family}-${cur.rung} (${cur.px}px) is not greater than --${family}-${prev.rung} (${prev.px}px)`,
+            suggestion: `Re-space the "${mode}" track in Figma so ${RUNGS.join(' < ')} holds, then re-pull and re-run npm run build:all-tokens — never hand-edit tokens/modes-spacing.css`,
           });
         }
       }

@@ -11,6 +11,11 @@ import { spawnSync } from 'node:child_process';
  * `tokens/figma-tokens.css`, and `grid-4pt` is warning-only by design. These
  * tests pin the three failure classes the new rule must block on, and the fact
  * that it blocks without `--check-grid` (the `validate` path never passes it).
+ *
+ * The `--padding-*` family joined the rule in #2613, once its own broken
+ * `compact` rungs were fixed in Figma. Each family gets the same four cases:
+ * the two families resolve separate base tracks and separate overrides, so a
+ * regex or a track-resolution bug can reach one and miss the other.
  */
 
 const REPO_ROOT = resolve(import.meta.dirname, '..', '..');
@@ -28,6 +33,12 @@ function errorScan() {
     cwd: REPO_ROOT,
     encoding: 'utf8',
   });
+  if (res.error || typeof res.stdout !== 'string' || res.stdout.trim() === '') {
+    throw new Error(
+      `lint-tokens produced no JSON — status=${res.status} signal=${res.signal} ` +
+      `error=${res.error && res.error.code} stderr=${JSON.stringify((res.stderr || '').slice(-600))}`,
+    );
+  }
   return { status: res.status, violations: JSON.parse(res.stdout).violations };
 }
 
@@ -42,6 +53,50 @@ function withModesCss(mutate) {
 
 const trackErrors = (violations) =>
   violations.filter((v) => v.rule === 'spacing-mode-track');
+
+describe('spacing-mode-track — --padding-*', () => {
+  it('fails when a named padding rung collapses to 0px', () => {
+    const { status, violations } = withModesCss((css) =>
+      css.replace('--padding-tiny: 2px;', '--padding-tiny: 0px;'),
+    );
+    expect(status).toBe(1);
+    expect(trackErrors(violations).map((v) => v.message)).toContainEqual(
+      expect.stringContaining('[compact] --padding-tiny is 0px'),
+    );
+  });
+
+  it('fails when a padding track stops being strictly increasing', () => {
+    const { status, violations } = withModesCss((css) =>
+      css.replace('--padding-xl: 40px;', '--padding-xl: 16px;'),
+    );
+    expect(status).toBe(1);
+    expect(trackErrors(violations).map((v) => v.message)).toContainEqual(
+      expect.stringContaining('[comfortable] padding scale is not strictly increasing'),
+    );
+  });
+
+  it('fails on an off-grid padding override', () => {
+    const { status, violations } = withModesCss((css) =>
+      css.replace('--padding-lg: 48px;', '--padding-lg: 49px;'),
+    );
+    expect(status).toBe(1);
+    expect(trackErrors(violations).map((v) => v.message)).toContainEqual(
+      expect.stringContaining('[spacious] --padding-lg is 49px — off the 4-point grid'),
+    );
+  });
+
+  it('resolves un-overridden padding rungs from the base track', () => {
+    // `comfortable` emits no --padding-tiny (it equals the base 8px), so pulling
+    // --padding-xs down to 8px breaks monotonicity only if the base rung is
+    // resolved — modes-spacing.css alone shows a lone 8px and nothing wrong.
+    const { violations } = withModesCss((css) =>
+      css.replace('--padding-xs: 12px;', '--padding-xs: 8px;'),
+    );
+    expect(trackErrors(violations).map((v) => v.message)).toContainEqual(
+      expect.stringContaining('[comfortable] padding scale is not strictly increasing'),
+    );
+  });
+});
 
 describe('spacing-mode-track', () => {
   it('passes on the committed mode tracks', () => {

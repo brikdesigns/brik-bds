@@ -3773,7 +3773,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{space.250}"
+        "$value": "{space.300}"
       },
       "sm": {
         "$extensions": {
@@ -3809,7 +3809,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{space.100}"
+        "$value": "{space.50}"
       }
     },
     "gap": {
