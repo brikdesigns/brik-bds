@@ -9,7 +9,11 @@ import { spaceScale, semanticSpace } from '@bds-tokens';
 Spacing tokens control padding, margins, and gaps. BDS modulates `--padding-*` and `--gap-*` via three named density modes (`compact`, `comfortable`, `spacious`) plus the unmodified default — components react automatically once `[data-mode-spacing]` is set on `:root`.
 
 <Callout type="warn">
-  **All spacing values must be multiples of 4px.** The 4-point grid is enforced by `npm run lint-tokens:grid`, which blocks PRs that introduce off-grid values. This holds across every consuming project.
+  **Spacing values are multiples of 4px, with two named exceptions.** `npm run lint-tokens:grid` reports off-grid values as warnings — it is a review aid, not a merge gate. What *does* block is `spacing-mode-track` (part of `npm run validate`): every `[data-mode-spacing]` track must stay a strictly increasing seven-rung scale with no rung at 0px, and any override it declares must be on-grid.
+</Callout>
+
+<Callout>
+  **The two exceptions.** *Micro* values — `0`, `1px`, `2px` — sit below the grid's resolution. *Half-steps* — `--space-150` / `-250` / `-350` / `-450` (6 / 10 / 14 / 18px) — are one deliberate 2px-offset rung between each pair of 4pt rungs up to `--space-500`, for optical adjustments finer than a full step. Above 500 the ramp stops half-stepping. Both are Figma-backed and exempt from the grid check; a new off-grid value is not.
 </Callout>
 
 ## Semantic padding tokens

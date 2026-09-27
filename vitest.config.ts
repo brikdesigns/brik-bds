@@ -214,6 +214,30 @@ export default defineConfig({
           name: 'scripts',
           environment: 'node',
           include: ['scripts/**/*.test.{ts,mjs,js}'],
+          // These suites prove a gate by planting its defect in the REAL repo
+          // file the gate reads, then restoring it — there is no fixture tree,
+          // because each script resolves its own inputs from __dirname. So two
+          // files running at once share one mutable state:
+          // generate-color-ramps.test.mjs strips 54 aliases from
+          // design-tokens/brand-kits/brik.json (a merge source, read at
+          // merge-tokens-studio.js:46) and rewrites
+          // design-tokens/color-ramps.generated.json (JSON.parse'd un-guarded
+          // at lint-tokens.js:688), while merge-tokens-studio-check.test.mjs,
+          // lint-tokens-deprecated.test.mjs and the lint-tokens-* suites spawn
+          // readers of exactly those files. Measured on this tree: 2 failures
+          // in 6 parallel runs of the project, in two different files, both
+          // green on a re-run — and the same pair already runs concurrently in
+          // tokens-gate.yml's "Gate self-tests" step.
+          //
+          // Atomic writes would only close the torn-read half; a stripped kit
+          // is a valid file that makes `--check` correctly report out-of-sync,
+          // so the mutators need mutual exclusion, not durability. Almost every
+          // file here is on one side of that or the other, which is why this is
+          // a project-level setting rather than a lock around three of them.
+          // Budget: the project goes 15s → 41s locally (930 tests); under
+          // `npm test` it runs beside the storybook browser project, so the
+          // wall-clock cost is bounded by that (#2613).
+          fileParallelism: false,
         },
       },
     ],
