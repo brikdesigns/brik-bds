@@ -3829,7 +3829,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{space.100}"
+        "$value": "{space.200}"
       },
       "lg": {
         "$extensions": {
@@ -3838,7 +3838,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{space.200}"
+        "$value": "{space.300}"
       },
       "xl": {
         "$extensions": {
@@ -3856,7 +3856,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{space.50}"
+        "$value": "{space.100}"
       },
       "huge": {
         "$extensions": {
@@ -3874,7 +3874,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{space.0}"
+        "$value": "{space.50}"
       },
       "tiny": {
         "$extensions": {
@@ -3883,7 +3883,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{space.0}"
+        "$value": "{space.25}"
       }
     }
   },
@@ -4174,7 +4174,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{space.0}"
+        "$value": "{space.100}"
       },
       "tiny": {
         "$extensions": {
@@ -4183,7 +4183,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{space.0}"
+        "$value": "{space.50}"
       }
     }
   },
@@ -4324,7 +4324,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{space.0}"
+        "$value": "{space.200}"
       },
       "tiny": {
         "$extensions": {
@@ -4333,7 +4333,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{space.0}"
+        "$value": "{space.100}"
       }
     }
   },
