@@ -3,6 +3,7 @@ title: Size
 description: Dimensional constraints for containers, breakpoints, and elements.
 ---
 
+import { Callout } from 'fumadocs-ui/components/callout';
 import { sizeScale } from '@bds-tokens';
 
 Size tokens define dimensional constraints — how big things can be, where the layout breaks, and how wide content columns sit within a viewport.
@@ -13,38 +14,39 @@ Size tokens define dimensional constraints — how big things can be, where the 
 
 ## Content widths
 
-Max-width values for content containers. Apply to wrapper elements with `max-width` to prevent lines from growing too wide at large viewport sizes.
+**One ladder caps every horizontal width on a page** — text column and band alike — and each rung carries exactly one role, stated in its name. A `-text-` rung caps a **text column**; a bare rung sizes a **band** ([ADR-041](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-041-one-content-width-ladder.md)). Apply with `max-width` on the element that owns the column.
 
-| Token | CSS Variable | Value | Use for |
-|---|---|---|---|
-| Narrow | `--content-width-sm` | 640px | Prose, reading columns, focused forms |
-| Default | `--content-width-md` | 800px | Standard body sections |
-| Wide | `--content-width-lg` | 1024px | Feature sections, content grids |
-| XL | `--content-width-xl` | 1280px | Hero bands, wide layouts |
-| Full | `--content-width-full` | 100% | Full-bleed (use sparingly) |
+| Token | CSS Variable | Value | Caps | Use for |
+|---|---|---|---|---|
+| Text XS | `--content-width-text-xs` | 448px | text | Short intro — eyebrow + one-line title |
+| Text SM | `--content-width-text-sm` | 600px | text | Section intro — title + description (the default) |
+| Text MD | `--content-width-text-md` | 720px | text | Long-form prose, rich-text body |
+| Narrow | `--content-width-sm` | 640px | band | Narrow band, focused forms |
+| Default | `--content-width-md` | 800px | band | Standard body sections |
+| Wide | `--content-width-lg` | 1024px | band | Feature sections, content grids |
+| XL | `--content-width-xl` | 1280px | band | Hero bands, wide layouts |
+| Full | `--content-width-full` | 100% | band | Full-bleed (use sparingly) |
+
+The text rungs interleave numerically with the band rungs (600 < 640 < 720 < 800). Pick a rung by its **role**, which the name states — never by sorting the ladder.
 
 ```css
+/* a band */
 .content-section {
   max-width: var(--content-width-md);
   margin-inline: auto;
 }
-```
 
-## Line length
-
-`--measure-*` caps a text column's width in `ch` units so a line stays readable as the type scales. Unlike `--content-width-*` — a `px` ceiling on a container — a measure tracks the font size, so the column holds the same *number of characters* at any size. Apply it to the text element itself, not its wrapper.
-
-| Token | CSS Variable | Value | Use for |
-|---|---|---|---|
-| Small | `--measure-sm` | 44ch | Captions, sidenotes, narrow columns |
-| Medium | `--measure-md` | 60ch | Body prose — the default reading measure |
-| Large | `--measure-lg` | 72ch | Long-form articles, wide reading columns |
-
-```css
+/* the text column inside it */
 .article-body {
-  max-width: var(--measure-md);
+  max-width: var(--content-width-text-sm);
 }
 ```
+
+A column has one content width and one left edge: the element that owns the column sets the width, and blocks nested inside it never re-cap themselves. See [Page Grid → The column rule](/docs/build-standards/page-grid#the-column-rule), which is where the horizontal-axis standard lives — this page is the token catalog.
+
+<Callout type="info">
+  There used to be a second `--measure-sm/md/lg` ladder in `ch` for the text column. ADR-041 retired it into the `-text-` rungs above at the px widths it already rendered; the old names ship one more minor as deprecated aliases, then drop — don't reach for them in new code. Nothing in BDS scales body type — `--body-md` is a fixed 16px, only `--display-fluid-*` clamps, and `[data-mode-spacing]` never touches `font-size` — so `ch` never tracked anything, while two siblings sharing one `ch` cap at different type sizes resolved to two different pixel widths.
+</Callout>
 
 ## Screen breakpoints
 
@@ -162,3 +164,4 @@ Four aliases point at the primitive above so intent reads at the call site — p
 
 - [Spacing tokens](/docs/foundation/spacing) — the sibling `--space-*` scale for layout padding and gap (overlaps `--size-*` on the low/mid steps, diverges above — see the note above)
 - [Typography → Icon sizes](/docs/foundation/typography#icon-sizes) — semantic icon-size tokens
+- [Page Grid](/docs/build-standards/page-grid) — the horizontal-axis standard these `--content-width-*` tokens serve: the width-container recipe, the page inset, and the column rule

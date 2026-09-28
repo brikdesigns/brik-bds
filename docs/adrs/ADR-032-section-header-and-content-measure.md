@@ -2,7 +2,9 @@
 
 ## Status
 
-Accepted.
+Accepted, **partially superseded by [ADR-041](./ADR-041-one-content-width-ladder.md)** (2026-09-28).
+
+§1 (mint `--measure-sm/md/lg` in `ch`) and §2 (a separate token family expresses measure-vs-band) are superseded: the `--measure-*` ladder is retired into `--content-width-text-xs/-sm/-md` (px), and the measure-vs-band distinction now lives in the token *name* rather than in a second family. §3 (`SectionHeader` composes `ContentBlock`, owning measure + alignment) and §4 (consumers stop hand-rolling section headers) stand unchanged — the `measure` prop keeps its `sm`/`md`/`lg` vocabulary, only its CSS target moved.
 
 ## Context
 

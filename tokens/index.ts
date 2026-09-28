@@ -758,16 +758,30 @@ export type MediaQueryUp = keyof typeof mediaQueries.up;
 export type MediaQueryDown = keyof typeof mediaQueries.down;
 
 /**
- * Content column max-widths.
- * Use with `max-width` on container elements to constrain readable content width.
- * Maps to the --content-width-* CSS custom properties in gap-fills.css.
+ * Content column max-widths — the ONE horizontal-cap ladder (ADR-041).
+ *
+ * Every rung carries exactly one role, and the role is in the name: a `text*`
+ * rung caps a TEXT column, a bare rung sizes a BAND. Band-vs-measure is a role,
+ * not a second token family — the `--measure-*` ladder ADR-032 §1 minted is
+ * retired into the `text*` rungs here.
+ *
+ * Use with `max-width` on the element that OWNS the column. A column has one
+ * content width and one left edge: blocks nested inside it never re-cap
+ * themselves (brikdesigns#1827).
+ *
+ * Keys match the CSS custom properties exactly (`textSm` →
+ * `--content-width-text-sm`); the old `narrow`/`default`/`wide` keys are gone,
+ * as their CSS aliases are already deprecated in gap-fills.css.
  */
 export const contentWidths = {
-  narrow:  '640px',
-  default: '800px',
-  wide:    '1024px',
-  xl:      '1280px',
-  full:    '100%',
+  textXs: '448px',  // text — short intro: eyebrow + one-line title
+  textSm: '600px',  // text — section intro: title + description (the default)
+  textMd: '720px',  // text — long-form prose, rich-text body
+  sm:     '640px',  // band — narrow band, focused forms
+  md:     '800px',  // band — standard text-led body section
+  lg:    '1024px',  // band — feature grids, CTA bands
+  xl:    '1280px',  // band — the page band: hero, header, footer
+  full:   '100%',   // band — full-bleed
 } as const;
 
 export type ContentWidth = keyof typeof contentWidths;
@@ -781,15 +795,17 @@ export type ContentWidth = keyof typeof contentWidths;
 export const pageInset = 'var(--page-inset)' as const;
 
 /**
- * Content measure — the max inline width of a CENTERED text column inside a
- * band (ADR-032). Distinct from `contentWidths` (the band itself, ADR-025):
- * a section header sits in an `xl` band but reads best capped to a measure.
- * Maps to the --measure-* CSS custom properties in gap-fills.css.
+ * Measure — the max inline width of a CENTERED text column inside a band.
+ *
+ * Named roles over the low rungs of {@link contentWidths}; there is no separate
+ * `--measure-*` ladder any more (ADR-041, superseding ADR-032 §1). This is the
+ * vocabulary `SectionHeader`'s `measure` prop speaks, mapped onto the one ladder
+ * so a text column and the band around it are always comparable numbers.
  */
 export const measures = {
-  sm: '44ch',
-  md: '60ch',
-  lg: '72ch',
+  sm: contentWidths.textXs,  // 448px — short intro
+  md: contentWidths.textSm,  // 600px — section intro (the default)
+  lg: contentWidths.textMd,  // 720px — long-form prose
 } as const;
 
 export type Measure = keyof typeof measures;

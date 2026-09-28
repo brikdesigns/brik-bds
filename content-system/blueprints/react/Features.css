@@ -28,7 +28,7 @@
 
 .bds-features__header {
   text-align: center;
-  max-width: var(--measure-lg);
+  max-width: var(--content-width-text-md);
   margin-inline: auto;
   margin-bottom: var(--padding-xl);
   align-items: center;

@@ -1,6 +1,6 @@
 ---
 title: Page Grid
-description: The horizontal frame around every Brik page — the width-container recipe, the canonical page-inset token, which content width each band gets, and the measure that caps the readable text column inside it.
+description: The horizontal frame around every Brik page — the width-container recipe, the canonical page-inset token, the one content-width ladder that caps both bands and text columns, and the rule that a column has one width and one left edge.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -38,13 +38,22 @@ This is the gap-vs-padding rule from [Content Rhythm](/docs/build-standards/cont
 
 ## Content width roles
 
-| Token | Width | Role |
-|---|---|---|
-| `--content-width-sm` | 640px | Prose, reading columns, focused forms |
-| `--content-width-md` | 800px | Standard text-led body sections |
-| `--content-width-lg` | 1024px | Feature grids, CTA bands |
-| `--content-width-xl` | 1280px | The page band — hero, header, footer, most sections |
-| `--content-width-full` | 100% | Full-bleed; prefer an explicit width |
+**One ladder caps everything horizontal**, and each rung carries exactly one role — stated in its name. A `-text-` rung caps a **text column**; a bare rung sizes a **band** ([ADR-041](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-041-one-content-width-ladder.md)).
+
+| Token | Width | Caps | Role |
+|---|---|---|---|
+| `--content-width-text-xs` | 448px | text | Short intro — a single-line eyebrow + title |
+| `--content-width-text-sm` | 600px | text | Section intro — title + description (the default) |
+| `--content-width-text-md` | 720px | text | Long-form prose, rich-text body |
+| `--content-width-sm` | 640px | band | Narrow band, focused forms |
+| `--content-width-md` | 800px | band | Standard text-led body sections |
+| `--content-width-lg` | 1024px | band | Feature grids, CTA bands |
+| `--content-width-xl` | 1280px | band | The page band — hero, header, footer, most sections |
+| `--content-width-full` | 100% | band | Full-bleed; prefer an explicit width |
+
+The text rungs interleave numerically with the band rungs (600 < 640 < 720 < 800). That is expected and harmless: **pick a rung by its role, which the name states — never by sorting the ladder.**
+
+There was a second `--measure-*` family in `ch` for the text column; ADR-041 retired it into the `-text-` rungs above, at the px widths it already rendered (the old names ship one more minor as deprecated aliases, then drop). Nothing in BDS scales body type (`--body-md` is a fixed 16px, only `--display-fluid-*` clamps, and `[data-mode-spacing]` never touches `font-size`), so `ch` never tracked anything — while two siblings sharing one `ch` cap at different type sizes resolved to two different pixel widths. Widths are **static across [spacing modes](/docs/foundation/spacing#spacing-modes)** either way: a readable line length is a typographic constant, not a density knob.
 
 These are content constraints, **not** breakpoints — even where the pixel values coincide. For media queries use the `mediaQueries` export from `@bds-tokens` (or `breakpoints` for a raw width); CSS custom properties cannot appear inside `@media` conditions, so the `--breakpoint-*` CSS variables are reference-only.
 
@@ -52,24 +61,35 @@ These are content constraints, **not** breakpoints — even where the pixel valu
   There is no responsive-spacing axis: density modes are the only spacing modulation in BDS. Do not introduce breakpoint-varying gutters or gaps.
 </Callout>
 
-## Content measure
+## The column rule
 
-A band width is not a text width. `--content-width-xl` (1280px) sizes the *band*; a title or description spanning the full 1280px is unreadable. The **measure** is the max width of the readable text column *inside* the band — a separate, narrower cap applied to the text group, not to the container ([ADR-032](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-032-section-header-and-content-measure.md)).
+> **A column has one content width and one left edge.** The element that OWNS the column sets the width; blocks nested inside it never re-cap themselves. Two caps in one column is the defect, not the fix.
 
-| Token | Width | Role |
-|---|---|---|
-| `--measure-sm` | 44ch | Short intro — a single-line eyebrow + title |
-| `--measure-md` | 60ch | Section-header title + description — the default |
-| `--measure-lg` | 72ch | Long-form prose, rich-text body |
+This is the rule most often missed. A section's content container picks one rung and every block inside it inherits that column — a nested prose block, a hero block, a media block do **not** each declare their own `max-width`. Two caps in one column give the eye two different left edges and read as broken alignment, whichever tokens they use.
 
-`ch`, not px: a measure tracks the type size, so the line stays readable if the font scales. And unlike `--gap-*` and `--padding-*`, measures are **static across [spacing modes](/docs/foundation/spacing#spacing-modes)** — a readable line length is a typographic constant, not a density knob.
+```css
+/* ✅ one owner, one cap */
+.split__content { max-width: var(--content-width-text-sm); }
+.split__content > .prose { /* no max-width — inherits the column */ }
 
-Band and measure are two different jobs — keep them separate:
+/* ❌ two caps, two left edges */
+.split__content { max-width: var(--content-width-text-sm); }
+.split__content > .hero  { max-width: var(--content-width-sm); }
+.split__content > .prose { max-width: var(--content-width-text-md); }
+```
 
-| | Sizes | Token family | Mechanism |
+If a block genuinely needs a different width from its siblings, it is not in that column — give it its own column, or restructure. Don't re-cap inside one.
+
+## Text column vs band
+
+A band width is not a text width. `--content-width-xl` (1280px) sizes the *band*; a title or description spanning the full 1280px is unreadable. The **text column** is the readable column *inside* the band — a narrower cap applied to the text group, not to the container.
+
+Same ladder, two jobs — keep the jobs separate:
+
+| | Sizes | Rung | Mechanism |
 |---|---|---|---|
-| **Band** | The container / section width | `--content-width-*` | `max-width` + `margin-inline: auto` on the container |
-| **Measure** | The text column inside it | `--measure-*` | `max-width` on the text group — usually via `SectionHeader` |
+| **Band** | The container / section width | `--content-width-sm…full` | `max-width` + `margin-inline: auto` on the container |
+| **Text column** | The text column inside it | `--content-width-text-*` | `max-width` on the text group — usually via `SectionHeader` |
 
 ### SectionHeader
 
@@ -80,13 +100,13 @@ Don't hand-roll the cap. A centered section intro — eyebrow / title / descript
   title="What we do"
   description="From branding to websites to behind-the-scenes systems…"
 />
-// centered · measure-md (60ch) · <h2> title at heading-lg — nothing to override
+// centered · measure-md (--content-width-text-sm, 600px) · <h2> title at heading-lg — nothing to override
 ```
 
-`measure` (`sm` / `md` / `lg`, default `md`) picks the cap; `align` (`center` / `start`, default `center`) picks whether the column centers in the band or anchors to its start. `SectionHeader` never sets a band width — drop it inside the section's width-container and it caps the text within. This is the single replacement for the ad-hoc measures a section header used to be written with (`600px`, `700px`, `width: 70%`, `max-width: none`, a reused `--content-width-sm`).
+`measure` (`sm` / `md` / `lg`, default `md`) picks the cap; `align` (`center` / `start`, default `center`) picks whether the column centers in the band or anchors to its start. `SectionHeader` never sets a band width — drop it inside the section's width-container and it caps the text within. This is the single replacement for the ad-hoc measures a section header used to be written with (`600px`, `700px`, `width: 70%`, `max-width: none`, a reused band rung).
 
 <Callout type="warn">
-  A measure is not a band. Never cap a section intro with a `--content-width-*` token (that sizes the container) or with a raw px / percentage. Reach for `SectionHeader` — or `--measure-*` directly only when hand-rolling a text group `SectionHeader` doesn't cover.
+  A text column is not a band. Never cap a section intro with a **band** rung (`--content-width-sm…full` — those size the container) or with a raw px / percentage. Reach for `SectionHeader` — or a `--content-width-text-*` rung directly only when hand-rolling a text group `SectionHeader` doesn't cover. Reading a band rung's role as "prose" is what shipped [brikdesigns#1827](https://github.com/brikdesigns/brikdesigns/issues/1827); ADR-041 put the role in the name so the table can only be read one way.
 </Callout>
 
 ## Where the recipe is set
@@ -112,3 +132,4 @@ Like the rhythm scale, you rarely write the recipe by hand — it is baked into 
 - [Page Structure](/docs/build-standards/page-structure) — the HTML skeleton these containers live in.
 - [Composition Layers](/docs/build-standards/composition-layers) — the Blueprint → Layout → Container → Block or Control → Component model.
 - [Spacing](/docs/foundation/spacing) — the `--padding-*` scale behind the gutter and the density modes that modulate it.
+- [Size](/docs/foundation/size) — the `--content-width-*` ladder's token catalog.
