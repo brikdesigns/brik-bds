@@ -20,9 +20,19 @@ const artifacts = [
 // already built by `build:inspector-manifest` and already published on the
 // Storybook host (root package.json `prestorybook`); this mirrors that copy for
 // the docs host, so an agent can read the component surface as data.
+//
+// It lands in lib/ and not public/ because public/ never reaches the deploy:
+// netlify.toml publishes `.next`, and `next build` does not stage public/ into
+// it. Measured — the published deploy carries 32 files, exactly the contents of
+// `.next/static`, and nothing served from public/ in the site's history. Local
+// `next start` reads public/ off disk, which is what hid it. The route handler
+// at app/bds-manifest.json/ imports this copy, so the bundler carries it.
 function publishManifest() {
-  mkdirSync(resolve(docsRoot, 'public'), { recursive: true });
-  copyFileSync(artifacts[1], resolve(docsRoot, 'public', 'bds-manifest.json'));
+  mkdirSync(resolve(docsRoot, 'lib', 'generated'), { recursive: true });
+  copyFileSync(
+    artifacts[1],
+    resolve(docsRoot, 'lib', 'generated', 'bds-manifest.json'),
+  );
 }
 
 if (!artifacts.every(existsSync)) {
