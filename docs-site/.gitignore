@@ -1,8 +1,9 @@
 node_modules
 .next
 .source
-# Copied from the parent dist/ by scripts/ensure-bds-dist.mjs on every build.
-public/bds-manifest.json
+# Copied from the parent dist/ by scripts/ensure-bds-dist.mjs on every build,
+# and imported by app/bds-manifest.json/route.ts.
+lib/generated/
 out
 *.tsbuildinfo
 next-env.d.ts
