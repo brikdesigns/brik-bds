@@ -31,10 +31,12 @@ const nextConfig = {
       // MUST stay before the /docs/primitives/:slug* rule below — Next uses
       // first-match, and the wildcard would otherwise send it to a dead
       // /docs/foundation/naming-conventions.
-      // Every rule here needs a `.md` twin declared beside it (#2616). Redirects
-      // are matched before the Markdown rewrite, and the wildcard at the bottom
-      // matches a `.md` suffix, so without the twins these old URLs 308 the
-      // Markdown surface to destinations that have no page.
+      // Every RENAME here needs a `.md` twin declared beside it (#2616).
+      // Redirects are matched before the Markdown rewrite, and the wildcard at
+      // the bottom matches a `.md` suffix, so without the twins these old URLs
+      // 308 the Markdown surface to destinations that have no page. The
+      // wildcard itself needs no twin — it is a 1:1 passthrough, so
+      // path-to-regexp carries the `.md` through to a real page.
       {
         source: '/docs/primitives/naming-conventions',
         destination: '/docs/build-standards',

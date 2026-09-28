@@ -11,7 +11,15 @@ export async function GET(
   props: { params: Promise<{ slug?: string[] }> },
 ) {
   const { slug } = await props.params;
-  const slugs = slug?.slice(0, -1) ?? [];
+
+  // `llms.mdx` is a literal segment, so this route is also reachable directly,
+  // without the rewrite that appends `content.md`. Dropping the last segment
+  // unconditionally then answered `/llms.mdx/docs/foundation/anything` with a
+  // 200 carrying the Foundation page — a wrong page under a success status,
+  // for a URL that names no page at all. Only the rewritten shape is served.
+  if (slug?.at(-1) !== 'content.md') notFound();
+
+  const slugs = slug.slice(0, -1);
   if (slugs.at(-1) === 'index') slugs.pop();
 
   const page = source.getPage(slugs);

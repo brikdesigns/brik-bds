@@ -30,10 +30,15 @@ type DocsPage = NonNullable<ReturnType<typeof source.getPage>>;
  * description only), so the rewrite happens here.
  */
 function toMarkdownLinks(index: string): string {
-  return index.replace(
-    /\]\((\/docs(?:\/[^)]*)?)\)/g,
-    (_match, url: string) => `](${url === '/docs' ? '/docs/index' : url}.md)`,
-  );
+  return index.replace(/\]\((\/docs(?:\/[^)]*)?)\)/g, (_match, url: string) => {
+    // Split at a fragment or query so the suffix lands on the path. `llms()`
+    // emits bare page urls today, so neither appears — but appending to
+    // `/docs/foo#bar` would silently produce a link to nothing.
+    const cut = url.search(/[#?]/);
+    const path = cut === -1 ? url : url.slice(0, cut);
+    const rest = cut === -1 ? '' : url.slice(cut);
+    return `](${path === '/docs' ? '/docs/index' : path}.md${rest})`;
+  });
 }
 
 /** The `/llms.txt` body — the section index, linked to Markdown. */

@@ -6,5 +6,11 @@ public/bds-manifest.json
 out
 *.tsbuildinfo
 next-env.d.ts
+# Written by `next dev` on every run (node_modules/next/dist/server/lib/
+# generate-agent-files.js). Next means them to be committed, but AGENTS.md is
+# not a sanctioned markdown home in this repo — scripts/audit/md-creation-gate.sh
+# rejects it — and their content is regenerated, so they are ignored instead.
+AGENTS.md
+CLAUDE.md
 .env*.local
 .DS_Store
