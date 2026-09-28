@@ -486,6 +486,19 @@
   --content-width-narrow:  var(--content-width-sm); /* bds-lint-ignore — DEPRECATED, use --content-width-sm (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
   --content-width-default: var(--content-width-md); /* bds-lint-ignore — DEPRECATED, use --content-width-md (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
   --content-width-wide:    var(--content-width-lg); /* bds-lint-ignore — DEPRECATED, use --content-width-lg (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+
+  /* ── DEPRECATED measure aliases (ADR-041, #2615) — DROP NEXT MINOR ──
+     The `--measure-*` family folded into the one ladder's `-text-` rungs. The
+     aliases ship for one minor because `lint-deleted-token-consumers` blocks a
+     bare deletion: brikdesigns still has five live `var(--measure-*)` call
+     sites, and a var() at a deleted name invalidates the whole declaration —
+     the max-width would silently become `none`, not fall back. Each alias
+     resolves to the px width its `ch` value already rendered at the fixed 16px
+     body size (44ch→448, 60ch→600, 72ch→720), so this is a ≤3px move, not a
+     retune. The follow-up drops this block once brikdesigns#1856 has migrated. */
+  --measure-sm: var(--content-width-text-xs); /* bds-lint-ignore — DEPRECATED, use --content-width-text-xs (ADR-041, #2615); drop next minor */
+  --measure-md: var(--content-width-text-sm); /* bds-lint-ignore — DEPRECATED, use --content-width-text-sm (ADR-041, #2615); drop next minor */
+  --measure-lg: var(--content-width-text-md); /* bds-lint-ignore — DEPRECATED, use --content-width-text-md (ADR-041, #2615); drop next minor */
 }
 
 /* ── Page inset — spacing-mode ladder (ADR-025) ──

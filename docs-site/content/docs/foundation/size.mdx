@@ -45,7 +45,7 @@ The text rungs interleave numerically with the band rungs (600 < 640 < 720 < 800
 A column has one content width and one left edge: the element that owns the column sets the width, and blocks nested inside it never re-cap themselves. See [Page Grid → The column rule](/docs/build-standards/page-grid#the-column-rule), which is where the horizontal-axis standard lives — this page is the token catalog.
 
 <Callout type="info">
-  There used to be a second `--measure-sm/md/lg` ladder in `ch` for the text column. ADR-041 retired it into the `-text-` rungs above at the px widths it already rendered. Nothing in BDS scales body type — `--body-md` is a fixed 16px, only `--display-fluid-*` clamps, and `[data-mode-spacing]` never touches `font-size` — so `ch` never tracked anything, while two siblings sharing one `ch` cap at different type sizes resolved to two different pixel widths.
+  There used to be a second `--measure-sm/md/lg` ladder in `ch` for the text column. ADR-041 retired it into the `-text-` rungs above at the px widths it already rendered; the old names ship one more minor as deprecated aliases, then drop — don't reach for them in new code. Nothing in BDS scales body type — `--body-md` is a fixed 16px, only `--display-fluid-*` clamps, and `[data-mode-spacing]` never touches `font-size` — so `ch` never tracked anything, while two siblings sharing one `ch` cap at different type sizes resolved to two different pixel widths.
 </Callout>
 
 ## Screen breakpoints
