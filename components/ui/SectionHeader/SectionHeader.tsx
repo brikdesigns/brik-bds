@@ -18,7 +18,7 @@ export interface SectionHeaderProps extends Omit<HTMLAttributes<HTMLDivElement>,
   actions?: ReactNode;
   /** Text-column alignment within the band. Default `'center'`. */
   align?: SectionHeaderAlign;
-  /** Inline measure cap (`--measure-*`). Default `'md'`. */
+  /** Inline text-column cap (`--content-width-text-*`). Default `'md'`. */
   measure?: Measure;
   /**
    * Heading level for the section `<h2>`. Default `'h2'` — section headers

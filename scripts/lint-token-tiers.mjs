@@ -83,7 +83,7 @@ const SD_SEMANTIC_PREFIXES = [
   '--border-input', '--border-inverse', '--border-on-color', '--border-focus',
   '--border-width-', '--border-radius-', '--page-', '--body-', '--label-',
   '--heading-', '--display-', '--subtitle-', '--icon-', '--font-family-',
-  '--box-shadow-', '--blur-radius-', '--size-', '--tooltip-', '--measure-',
+  '--box-shadow-', '--blur-radius-', '--size-', '--tooltip-',
 ];
 
 /** True when `name` is a Component-tier (t4) token — the only tier permitted

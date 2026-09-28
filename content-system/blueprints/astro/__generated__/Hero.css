@@ -59,7 +59,7 @@
     color: var(--bds-hero-lead-color, var(--text-secondary));
     /* Shared across all three layouts, matching the React twin (#2344). 55ch is
        a prose readability measure; `--interior-minimal`'s container cap of
-       `--measure-lg` (72ch) is a container bound that was doing this job by
+       `--content-width-text-md` (720px, ex `--measure-lg`) is a container bound that was doing this job by
        accident. #2302 scoped the cap to `--split` + `--with-pricing-card` only
        so the consolidation changed no layout's rendering — that was a refactor
        constraint, never a decision that interior leads should wrap wider. */
@@ -89,7 +89,7 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap-md);
-    max-width: var(--measure-lg);
+    max-width: var(--content-width-text-md);
     --bds-blueprint-section-padding-inline: var(--padding-xl);
   }
 

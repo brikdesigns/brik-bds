@@ -277,15 +277,36 @@
   --tooltip-text: var(--text-inverse);
 
   /* ── Layout width tokens ──
-     Content column max-widths — use with `max-width` on container elements.
+     ONE ladder for every horizontal cap on a page — text column and band alike
+     (ADR-041, superseding ADR-032 §1). Use with `max-width` on the element that
+     OWNS the column; blocks inside it never set their own (see the rule below).
      These are NOT screen breakpoints; they constrain content within a viewport.
      For media queries, use the `breakpoints` constant from @bds-tokens (index.ts) —
-     CSS custom properties cannot be used inside @media rules. */
-  --content-width-sm:       640px;  /* prose, reading columns, focused forms */
-  --content-width-md:       800px;  /* standard body sections */
-  --content-width-lg:      1024px;  /* feature sections, grids */
-  --content-width-xl:      1280px;  /* hero bands, wide layouts */
-  --content-width-full:     100%;   /* full-bleed (use sparingly — prefer explicit widths) */
+     CSS custom properties cannot be used inside @media rules.
+
+     Every rung is px and carries exactly ONE role, and the role is legible in
+     the NAME: a `-text-` rung caps a TEXT column, a bare rung sizes a BAND.
+     Band-vs-measure is a real distinction (ADR-032 §2 was right about it) but it
+     is a role, not a second token family. The parallel `--measure-*` ladder that
+     ADR-032 §1 minted handed "reading column" to two tokens at once — the role
+     sat on BOTH --measure-md and --content-width-sm — and brikdesigns#1827
+     shipped a layout defect by reading that role table correctly.
+
+     The text rungs interleave numerically with the band rungs (600 < 640 < 720 <
+     800). That is expected and harmless: you pick a rung by its role, which the
+     name states, never by sorting the ladder.
+
+     THE COLUMN RULE: a column has one content width and one left edge. The
+     element that OWNS the column sets the width; blocks nested inside it never
+     re-cap themselves. Two caps in one column is the defect, not the fix. */
+  --content-width-text-xs:   448px;  /* text — short intro: eyebrow + one-line title */
+  --content-width-text-sm:   600px;  /* text — section intro: title + description (the default) */
+  --content-width-text-md:   720px;  /* text — long-form prose, rich-text body */
+  --content-width-sm:        640px;  /* band — narrow band, focused forms */
+  --content-width-md:        800px;  /* band — standard text-led body section */
+  --content-width-lg:       1024px;  /* band — feature grids, CTA bands */
+  --content-width-xl:       1280px;  /* band — the page band: hero, header, footer */
+  --content-width-full:      100%;   /* band — full-bleed (use sparingly — prefer explicit widths) */
 
   /* ── Page inset (ADR-025) ──
      The inline inset between the viewport edge and a page's content band —
@@ -312,18 +333,22 @@
      ADR-024 rhythm map. */
   --page-inset: var(--space-600);
 
-  /* ── Content measure (ADR-032) ──
-     The max inline width of a CENTERED text column INSIDE a band — distinct
-     from --content-width-* (the band itself, ADR-025). A section header sits in
-     a 1280px xl band but its title + description read best capped to a measure
-     and centered. Consumers were hand-rolling this (600px / 700px / 640px /
-     70% / uncapped across brikdesigns) — the same invention pressure that
-     minted --gutter-page. ch-based so the cap tracks the type size, not a px
-     literal; static across spacing modes (a measure is a readability constant,
-     not a density knob). */
-  --measure-sm:  44ch;  /* short intro / single-line eyebrow + title */
-  --measure-md:  60ch;  /* section-header title + description — the default */
-  --measure-lg:  72ch;  /* long-form prose / rich-text body */
+  /* ── Content measure — RETIRED (ADR-041, superseding ADR-032 §1) ──
+     --measure-sm/md/lg (44ch/60ch/72ch) were a second width ladder for the text
+     column inside a band. The job is real; the separate family was not. They are
+     now the --content-width-text-* rungs above, at the px widths they already
+     rendered: sm 44ch→text-xs 448px, md 60ch→text-sm 600px, lg 72ch→text-md
+     720px (≤3px of movement at the 16px body size, all on the 4-point grid). No
+     alias is left behind — the whole point is that a reading column has ONE
+     name. lint-deleted-token-consumers reports any consumer still referencing
+     the old names.
+
+     Why px and not ch: ADR-032 §1 justified `ch` because "a measure tracks the
+     type size". Nothing in BDS scales body type — --body-md is a fixed 16px, only
+     the four --display-fluid-* heading tokens clamp, and [data-mode-spacing]
+     never touches font-size. So `ch` bought no tracking and cost real alignment:
+     two siblings sharing one cap resolved to two different pixel widths, which is
+     exactly the two-left-edges defect brikdesigns#1827 shipped. */
 
   /* Breakpoint reference values — PROMOTED to Figma (#2591).
      --breakpoint-desktop/wide/wider were hand-authored here because the ❖ Brik
