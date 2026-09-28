@@ -45,7 +45,8 @@ const CONSUMERS = [
   },
 ];
 
-// Components designed for Webflow sites, not portal apps.
+// Components designed for marketing/website sites (brikdesigns.com,
+// web/{slug} — Next.js since the #371 cutover, not Webflow), not portal apps.
 // Excluded from adoption tracking to avoid false negatives.
 const WEBSITE_ONLY = new Set([
   'Footer',
