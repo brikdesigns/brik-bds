@@ -48,3 +48,60 @@ existing_bump_pr() {
 
   return 1
 }
+
+# diff_pins_package <package> <version>
+#
+# Reads a unified diff on stdin. Returns 0 when an added line pins <package> to
+# <version> (exact, `^` or `~`) — i.e. the PR bumps the dependency to the very
+# release propagate is about to open. This catches the bump an agent opened by
+# hand on a `task/*` branch, which existing_bump_pr's branch-name match cannot
+# see: brikdesigns#1734 (agent) and #1738 (propagate) were the same 0.192.0
+# bump (#2633).
+diff_pins_package() {
+  local package="$1" version="$2"
+  [ -n "$package" ] && [ -n "$version" ] || return 1
+  grep -Eq "^\+[[:space:]]*\"${package}\":[[:space:]]*\"[~^]?${version//./\\.}\"[[:space:]]*,?[[:space:]]*$"
+}
+
+# superseded_bump_prs <version> <pr_list_cmd...>
+#
+# <pr_list_cmd> prints `<headRefName><TAB><url>` per OPEN PR, as for
+# existing_bump_pr. Echoes the URL of every open npm-track propagate PR
+# (bds-update/*-v<x.y.z>) whose version is OLDER than <version>. Once a newer
+# bump is open, an older one is an obsolete diff against the same lockfile
+# lines; left open it reads as a conflict (#2633). Never echoes <version>
+# itself or a newer one. A failing query echoes nothing.
+superseded_bump_prs() {
+  local version="$1"
+  shift
+  [ -n "$version" ] || return 0
+  local head url old
+  while IFS=$'\t' read -r head url; do
+    case "$head" in
+      bds-update/*-v*)
+        old="${head##*-v}"
+        [[ "$old" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || continue
+        [ "$old" = "$version" ] && continue
+        if [ "$(printf '%s\n%s\n' "$old" "$version" | sort -V | tail -n1)" = "$version" ]; then
+          echo "$url"
+        fi
+        ;;
+    esac
+  done < <("$@" 2>/dev/null)
+  return 0
+}
+
+# is_patch_bump <from> <to>
+#
+# Returns 0 when <to> is a newer patch of the same major.minor as <from>
+# (0.192.1 → 0.192.2). Minor, major, downgrade, equal, and any prerelease or
+# malformed version return 1. propagate uses it to decide whether a consumer's
+# version-freeze label may be applied without a human (#2633, option a).
+is_patch_bump() {
+  local from="$1" to="$2" fmaj fmin fpat
+  [[ "$from" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)$ ]] || return 1
+  fmaj="${BASH_REMATCH[1]}"; fmin="${BASH_REMATCH[2]}"; fpat="${BASH_REMATCH[3]}"
+  [[ "$to" =~ ^([0-9]+)\.([0-9]+)\.([0-9]+)$ ]] || return 1
+  [ "${BASH_REMATCH[1]}" = "$fmaj" ] && [ "${BASH_REMATCH[2]}" = "$fmin" ] \
+    && [ "$((10#${BASH_REMATCH[3]}))" -gt "$((10#$fpat))" ]
+}

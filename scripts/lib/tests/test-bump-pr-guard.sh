@@ -94,6 +94,63 @@ OUT="$(existing_bump_pr "" list_yesterdays_bump)"; RC=$?
 check "returns 1" "1" "$RC"
 check "echoes nothing" "" "$OUT"
 
+# ── #2633: an agent's hand-bump on a task/* branch ──
+# Stubs stand in for `gh pr diff` output.
+diff_agent_bump() {
+  printf '%s\n' '--- a/package.json' '+++ b/package.json' \
+    '-    "@brikdesigns/bds": "0.192.0",' '+    "@brikdesigns/bds": "0.192.1",'
+}
+diff_caret_bump() { printf '%s\n' '+    "@brikdesigns/bds": "^0.192.1"'; }
+diff_removed_only() { printf '%s\n' '-    "@brikdesigns/bds": "0.192.1",'; }
+diff_other_dep() { printf '%s\n' '+    "@brikdesigns/bds-extra": "0.192.1",'; }
+diff_longer_version() { printf '%s\n' '+    "@brikdesigns/bds": "0.192.10",'; }
+
+echo "── an agent PR pinning the same release is detected ──"
+diff_agent_bump | diff_pins_package "@brikdesigns/bds" "0.192.1"; check "exact pin returns 0" "0" "$?"
+diff_caret_bump | diff_pins_package "@brikdesigns/bds" "0.192.1"; check "caret pin returns 0" "0" "$?"
+
+echo "── diffs that do not pin that release are ignored ──"
+diff_agent_bump | diff_pins_package "@brikdesigns/bds" "0.192.2"; check "different version returns 1" "1" "$?"
+diff_removed_only | diff_pins_package "@brikdesigns/bds" "0.192.1"; check "removed line returns 1" "1" "$?"
+diff_other_dep | diff_pins_package "@brikdesigns/bds" "0.192.1"; check "other package returns 1" "1" "$?"
+diff_longer_version | diff_pins_package "@brikdesigns/bds" "0.192.1"; check "0.192.10 is not 0.192.1" "1" "$?"
+diff_agent_bump | diff_pins_package "@brikdesigns/bds" ""; check "empty version returns 1" "1" "$?"
+
+# ── #2633: a newer bump supersedes an older open one ──
+list_stale_bumps() {
+  printf 'bds-update/2026-09-20-v0.192.0\thttps://github.com/brikdesigns/brikdesigns/pull/1738\n'
+  printf 'task/some-feature\thttps://github.com/brikdesigns/brikdesigns/pull/900\n'
+  printf 'bds-update/2026-09-29-v0.192.2\thttps://github.com/brikdesigns/brikdesigns/pull/1876\n'
+  printf 'bds-update/2026-09-30-v0.193.0\thttps://github.com/brikdesigns/brikdesigns/pull/1900\n'
+  printf 'bds-update/2026-08-19-5e8a13b\thttps://github.com/brikdesigns/brik-llm/pull/1540\n'
+}
+
+echo "── only OLDER npm-track bump PRs are superseded ──"
+OUT="$(superseded_bump_prs "0.192.2" list_stale_bumps)"; RC=$?
+check "returns 0" "0" "$RC"
+check "echoes only the older bump" "https://github.com/brikdesigns/brikdesigns/pull/1738" "$OUT"
+
+echo "── sort is by version, not string (0.9.0 < 0.10.0) ──"
+list_string_trap() { printf 'bds-update/2026-01-01-v0.9.0\thttps://x/pull/1\n'; }
+OUT="$(superseded_bump_prs "0.10.0" list_string_trap)"
+check "0.9.0 superseded by 0.10.0" "https://x/pull/1" "$OUT"
+
+echo "── a failed query or empty version supersedes nothing ──"
+OUT="$(superseded_bump_prs "0.192.2" list_fails 2>/dev/null)"; check "failed query echoes nothing" "" "$OUT"
+OUT="$(superseded_bump_prs "" list_stale_bumps)"; check "empty version echoes nothing" "" "$OUT"
+
+# ── #2633 option a: only a patch bump auto-clears a consumer's version freeze ──
+echo "── is_patch_bump ──"
+is_patch_bump "0.192.1" "0.192.2";  check "0.192.1 → 0.192.2 is a patch" "0" "$?"
+is_patch_bump "0.192.9" "0.192.10"; check "0.192.9 → 0.192.10 is a patch" "0" "$?"
+is_patch_bump "0.192.2" "0.193.0";  check "minor bump is not" "1" "$?"
+is_patch_bump "0.192.2" "1.192.3";  check "major bump is not" "1" "$?"
+is_patch_bump "0.192.2" "0.192.1";  check "downgrade is not" "1" "$?"
+is_patch_bump "0.192.2" "0.192.2";  check "equal is not" "1" "$?"
+is_patch_bump "0.192.2" "0.192.3-beta.1"; check "prerelease is not" "1" "$?"
+is_patch_bump "" "0.192.3";         check "empty from is not" "1" "$?"
+is_patch_bump "0.192.08" "0.192.09"; check "leading zeros compare as decimal" "0" "$?"
+
 echo ""
 echo "  $PASS passed, $FAIL failed"
 if [ "$FAIL" -gt 0 ]; then
