@@ -2,7 +2,9 @@
  * Brik Design Review — Feedback Widget (pin mode)
  *
  * Click-anywhere pin-drop overlay for external clients reviewing pre-launch
- * mockups. Anonymous via review-token. Pins POST to portal.brikdesigns.com.
+ * mockups. Anonymous via review-token. Pins POST to the portal origin the
+ * embedding site supplies via `data-api-url` — there is no default, because a
+ * default names a tier (#2625).
  * Served from Supabase Storage and injected at serve time
  * (src/lib/design/feedback-widget-inject.ts); also used by static
  * vale-partners-mockups via inject-widgets.sh.
@@ -15,13 +17,16 @@
  * #1385 once brikdesigns DevTools migrated to the React DevFeedbackWidget
  * (brikdesigns#479) — no live consumer remained.
  *
- * Configuration via data attributes on the script tag:
+ * Configuration via data attributes on the script tag. `data-review-token` and
+ * `data-api-url` are BOTH required — the widget disables itself if either is
+ * absent. Point `data-api-url` at the portal tier that issued the review token;
+ * the example below is the test tier.
  *
  *   <script src="feedback-widget.js"
  *     data-review-token="abc123"
- *     data-api-url="https://portal.brikdesigns.com"
+ *     data-api-url="https://staging--brik-client-portal.netlify.app"
  *     data-variant-key="a"
- *     data-directory-url="https://portal.brikdesigns.com/review/abc123">
+ *     data-directory-url="https://staging--brik-client-portal.netlify.app/review/abc123">
  *   </script>
  */
 
@@ -31,7 +36,12 @@
   // ── Config ──────────────────────────────────────────────────────────────
   const script = document.currentScript;
   const REVIEW_TOKEN = script?.getAttribute('data-review-token') || '';
-  const API_URL = script?.getAttribute('data-api-url') || 'https://portal.brikdesigns.com';
+  // No fallback origin (#2625). An absent data-api-url means the embedding site
+  // was built without its feedback-origin env var, and any guessed origin names
+  // a tier — the prod guess that used to sit here posted client feedback into
+  // live data from unconfigured staging and preview surfaces. Fail closed; the
+  // guard below disables the widget.
+  const API_URL = script?.getAttribute('data-api-url') || '';
   const VARIANT_KEY = script?.getAttribute('data-variant-key') || '';
   // Where the "All styles" button returns to. The portal serve-time inject
   // (feedback-widget-inject.ts) passes the absolute review-directory URL; legacy
@@ -75,6 +85,17 @@
   // ── Pin mode (existing path — review-token required) ────────────────────
   if (!REVIEW_TOKEN) {
     console.warn('[Brik Feedback] No review token configured. Widget disabled.');
+    return;
+  }
+
+  // Fail closed on an unset submit target (#2625) — error, not warn: an absent
+  // token is a normal pre-configuration state, an absent origin on a site that
+  // HAS a token is a deploy misconfiguration someone needs to fix.
+  if (!API_URL) {
+    console.error(
+      '[Brik Feedback] No data-api-url configured on the widget script tag. ' +
+        'Widget disabled — feedback has no destination.',
+    );
     return;
   }
 
