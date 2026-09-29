@@ -205,6 +205,10 @@ fi
 # the failure being swallowed by a warn-and-return.
 DEGRADED=false
 
+# A failure between `worktree add` and PR creation exits under set -e; this
+# removes the worktree + local branch it leaves (#1676). See bump-pr-guard.sh.
+trap cleanup_claimed_worktree EXIT
+
 # ─── Preflight ────────────────────────────────────────────────────
 info "Running preflight checks..."
 
@@ -404,6 +408,7 @@ propagate_submodule() {
   # Create an isolated worktree from origin/$base — primary checkout is never touched
   git -C "$path" worktree add "$worktree_path" -b "$pr_branch" "origin/${base}"
   info "Worktree: $worktree_path"
+  claim_worktree "$path" "$worktree_path" "$pr_branch"
   cd "$worktree_path"
 
   # Update submodule
@@ -418,6 +423,7 @@ propagate_submodule() {
     cd "$BDS_DIR"
     git -C "$path" worktree remove --force "$worktree_path"
     git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
+    release_worktree
     echo ""
     return
   fi
@@ -456,6 +462,7 @@ EOF
   cd "$BDS_DIR"
   git -C "$path" worktree remove --force "$worktree_path"
   git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
+  release_worktree
   echo ""
 }
 
@@ -564,6 +571,7 @@ propagate_npm() {
   # Create an isolated worktree from origin/$base — primary checkout is never touched
   git -C "$path" worktree add "$worktree_path" -b "$pr_branch" "origin/${base}"
   info "Worktree: $worktree_path"
+  claim_worktree "$path" "$worktree_path" "$pr_branch"
   cd "$worktree_path"
 
   # npm install the explicit new version.
@@ -582,6 +590,7 @@ propagate_npm() {
   if ! npm install --save --save-exact "$BDS_PACKAGE_NAME@$BDS_VERSION" --silent 2>&1 | tail -5; then
     err "npm install failed in $name — check registry auth (PACKAGES_READ_TOKEN)"
     err "Worktree left for diagnosis: $worktree_path"
+    release_worktree
     DEGRADED=true
     cd "$BDS_DIR"
     echo ""
@@ -593,6 +602,7 @@ propagate_npm() {
     cd "$BDS_DIR"
     git -C "$path" worktree remove --force "$worktree_path"
     git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
+    release_worktree
     echo ""
     return
   fi
@@ -671,6 +681,7 @@ EOF
   cd "$BDS_DIR"
   git -C "$path" worktree remove --force "$worktree_path"
   git -C "$path" branch -D "$pr_branch" 2>/dev/null || true
+  release_worktree
   echo ""
 }
 

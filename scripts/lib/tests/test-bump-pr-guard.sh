@@ -151,6 +151,48 @@ is_patch_bump "0.192.2" "0.192.3-beta.1"; check "prerelease is not" "1" "$?"
 is_patch_bump "" "0.192.3";         check "empty from is not" "1" "$?"
 is_patch_bump "0.192.08" "0.192.09"; check "leading zeros compare as decimal" "0" "$?"
 
+# ─── claim_worktree / cleanup_claimed_worktree (#1676) ─────────────
+# Forces a real `git push` failure (pre-receive hook rejects) under set -e, the
+# exact shape of the four 403 nights, and checks the EXIT trap removes the
+# worktree + branch without masking the failure.
+echo "cleanup_claimed_worktree"
+WT_TMP="$(mktemp -d)"
+git init -q --bare "$WT_TMP/remote.git"
+printf '#!/bin/sh\necho "remote: Write access to repository not granted." >&2\nexit 1\n' > "$WT_TMP/remote.git/hooks/pre-receive"
+chmod +x "$WT_TMP/remote.git/hooks/pre-receive"
+git init -q -b main "$WT_TMP/consumer"
+git -C "$WT_TMP/consumer" -c user.email=t@t -c user.name=t commit -q --allow-empty -m init
+git -C "$WT_TMP/consumer" remote add origin "$WT_TMP/remote.git"
+
+# $1 = shell snippet run after the claim, inside the worktree
+run_claimed() {
+  bash -c '
+    set -euo pipefail
+    source "$1"; trap cleanup_claimed_worktree EXIT
+    repo="$2"; wt="$2-wt"; br="bds-update/test"
+    git -C "$repo" worktree add -q "$wt" -b "$br" main
+    claim_worktree "$repo" "$wt" "$br"
+    cd "$wt"
+    eval "$3"
+  ' _ "$LIB" "$WT_TMP/consumer" "$1" >/dev/null 2>&1
+}
+
+if run_claimed 'git push -q -u origin bds-update/test'; then rc=0; else rc=1; fi
+check "push failure exits non-zero" "1" "$rc"
+check "push failure removes the worktree" "0" "$([ -d "$WT_TMP/consumer-wt" ] && echo 1 || echo 0)"
+check "push failure deletes the local branch" "" \
+  "$(git -C "$WT_TMP/consumer" branch --list 'bds-update/test')"
+
+run_claimed 'false'
+check "any failure after the claim is cleaned up" "0" "$([ -d "$WT_TMP/consumer-wt" ] && echo 1 || echo 0)"
+
+# A deliberate keep (npm install failure → "left for diagnosis") releases the
+# claim first, so the trap leaves it alone and the run still exits 0.
+run_claimed 'release_worktree'
+check "released claim exits 0" "0" "$?"
+check "released claim keeps the worktree" "1" "$([ -d "$WT_TMP/consumer-wt" ] && echo 1 || echo 0)"
+rm -rf "$WT_TMP"
+
 echo ""
 echo "  $PASS passed, $FAIL failed"
 if [ "$FAIL" -gt 0 ]; then
