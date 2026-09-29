@@ -736,7 +736,16 @@ if [ "$n" -gt 0 ]; then
       #   ✗ task/customer-story-save-500 — 'git worktree remove' failed; skipped
       #     error: failed to delete '…/customer-story-save-500': Directory not empty
       # Ignored output is exactly what this fallback is for, and the safety
-      # argument below covers it unchanged: the verdict is already REMOVE, which
+      # argument below covers it unchanged.
+      #
+      # The "submodule fallback" wording below is now WIDER than its name and must
+      # stay anyway. #3936 renamed it to "cleanup fallback" and broke brik-bds and
+      # brikdesigns, whose OWN copies of the classification test assert the old
+      # string — the TEST is a second twin, and reaper-twin-drift.py watches only
+      # CANONICAL_PATH (:93), so nothing reports drift on it. Until that gate covers
+      # the test too, this string is a cross-repo contract: do not rename it. #3939
+      #
+      # The safety argument below covers it unchanged: the verdict is already REMOVE, which
       # requires clean AND landed, and `dirty_count` counts real work only.
       #
       # Safe because the verdict for $p is already REMOVE, which requires clean
@@ -754,7 +763,7 @@ if [ "$n" -gt 0 ]; then
       case "${p_phys:-/nonexistent}" in
         "${wt_root_phys:-/nonexistent-root}"/?*)
           if rm -rf "$p_phys"; then
-            echo -e "  ${GREEN}✓${NC} ${b} (${REMOVE_LABELS[$i]}; cleanup fallback: rm + prune)"
+            echo -e "  ${GREEN}✓${NC} ${b} (${REMOVE_LABELS[$i]}; submodule fallback: rm + prune)"
             removed=$((removed+1))
             $DELETE_BRANCHES && delete_landed_branch "$b"
           else
