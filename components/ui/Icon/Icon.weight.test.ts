@@ -13,6 +13,7 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, it, expect, vi } from 'vitest';
+import { PHOSPHOR_WEIGHT_TOKEN, DEFAULT_ICON_WEIGHT } from './icon-weight';
 import type { IconWeight } from './icon-weight';
 // Vite raw-import of the type module's source (see types/raw.d.ts), so the
 // carve-out doc assertion reads the TSDoc without a node:fs dependency.
@@ -30,6 +31,9 @@ vi.mock('@iconify/react', async () => {
 // Imported after the mock so Icon.tsx binds to the stubbed Iconify Icon.
 const { Icon } = await import('./Icon');
 const { ThemeProvider } = await import('../../providers/ThemeProvider');
+// The story meta itself is the unit under test below — imported after the mock
+// because Icon.stories.tsx pulls in ./Icon.
+const meta = (await import('./Icon.stories')).default;
 
 const nameOf = (markup: string) => markup.match(/data-icon="([^"]*)"/)?.[1];
 
@@ -82,5 +86,41 @@ describe('Icon — weight resolution', () => {
 
     expect(iconWeightSource).toMatch(/linear-glyph carve-out/i);
     expect(iconWeightSource).toContain('arrows-clockwise');
+  });
+});
+
+/**
+ * The `<Icon weight>` Storybook control drifted off the type for two renames
+ * (#2627): it advertised Phosphor's flat list, so `thin`/`light` silently
+ * no-opped through `applyWeight` and the ratified `outline-*` names could not be
+ * selected at all. These assertions derive both sides from source — the
+ * deprecated set is parsed out of `icon-weight.ts`, never hard-coded — so the
+ * next rename fails here instead of stranding the control again.
+ */
+describe('Icon — story weight control tracks IconWeight (#2627)', () => {
+  const storyOptions = meta.argTypes?.weight?.options as string[] | undefined;
+  const deprecated = [...iconWeightSource.matchAll(/@deprecated[\s\S]*?\*\/\s*\|\s*'([^']+)'/g)].map((m) => m[1]);
+
+  it('parses the @deprecated aliases out of icon-weight.ts', () => {
+    // Guards the two assertions below: an empty parse would pass them vacuously.
+    expect(deprecated).toEqual(['regular', 'bold']);
+    expect(storyOptions).toBeDefined();
+  });
+
+  it('offers only weights applyWeight can resolve', () => {
+    // An option missing from PHOSPHOR_WEIGHT_TOKEN falls through to the bare
+    // Phosphor name — a silent no-op, not an error. See Icon.tsx applyWeight.
+    for (const option of storyOptions ?? []) {
+      expect(Object.keys(PHOSPHOR_WEIGHT_TOKEN)).toContain(option);
+    }
+  });
+
+  it('offers every canonical weight and no deprecated alias', () => {
+    const canonical = Object.keys(PHOSPHOR_WEIGHT_TOKEN).filter((w) => !deprecated.includes(w));
+    expect([...(storyOptions ?? [])].sort()).toEqual([...canonical].sort());
+  });
+
+  it('names outline-bold as the default in the control description', () => {
+    expect(meta.argTypes?.weight?.description).toContain(DEFAULT_ICON_WEIGHT);
   });
 });

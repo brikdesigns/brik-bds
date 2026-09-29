@@ -35,8 +35,12 @@ const meta: Meta<typeof Icon> = {
     width: { control: 'number' },
     weight: {
       control: 'select',
-      options: ['thin', 'light', 'regular', 'bold', 'fill', 'duotone'],
-      description: 'Phosphor stroke weight for `ph:*` icons. Default `bold`.',
+      // The `IconWeight` union minus its two `@deprecated` aliases — the panel
+      // advertises the ratified form × stroke vocabulary only (ADR-036).
+      // Icon.weight.test.ts holds this list to that rule.
+      options: ['outline-thin', 'outline-light', 'outline', 'outline-bold', 'fill', 'duotone'],
+      description:
+        'BDS form × stroke weight for `ph:*` icons (ADR-036). Default `outline-bold`. Only `outline` and `outline-bold` are covered by the offline guarantee — the bundled subset carries the other weights only where BDS source already uses them, so the rest may fall through to the Iconify CDN.',
     },
   },
 };
@@ -99,8 +103,8 @@ export const WeightFromProvider: Story = {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)', maxWidth: 480 }}>
         {/* `ph:star` is bundled at bold/fill/regular, so all three render
             offline. Only star-fill is in the subset today — see the note. */}
-        {/* No provider — the built-in default weight ('bold'). */}
-        <Row label="no provider — bold default">
+        {/* No provider — the built-in default weight ('outline-bold'). */}
+        <Row label="no provider — outline-bold default">
           <Icon icon="ph:star" width={40} />
         </Row>
         <ThemeProvider defaultIconWeight="fill" persist={false} applyToBody={false}>
@@ -109,8 +113,8 @@ export const WeightFromProvider: Story = {
             <Icon icon="ph:star" width={40} />
           </Row>
           {/* Explicit prop overrides the provider default per-icon. */}
-          <Row label="…same provider, weight=&quot;regular&quot; prop wins">
-            <Icon icon="ph:star" width={40} weight="regular" />
+          <Row label="…same provider, weight=&quot;outline&quot; prop wins">
+            <Icon icon="ph:star" width={40} weight="outline" />
           </Row>
         </ThemeProvider>
         <p style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', margin: 0 }}>
