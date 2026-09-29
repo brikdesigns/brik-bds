@@ -1,7 +1,7 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Icons.stories';
-import { Icon } from '@iconify/react';
+import { Icon } from '../Icon';
 import * as Icons from '../../icons';
 
 <Meta of={Stories} />
@@ -74,7 +74,11 @@ export const FixedWidthAlignment = () => (
 
 <ComponentLinks slug="icons" />
 
-A browsable **catalog** of the BDS icon vocabulary, not a component — this page exports nothing (`components/ui/Icons/index.ts` is `export {}`). It renders the Phosphor glyphs named in `components/icons.ts` so contributors can find a glyph; the atom that renders them is [`Icon`](/docs/components/icons). Import the name, not the string: `import { House } from '@brikdesigns/bds/icons'` gives you a tree-shakeable reference the bundler can drop when unused.
+A browsable **catalog** of the BDS icon vocabulary, not a component — this page exports nothing (`components/ui/Icons/index.ts` is `export {}`). Every grid below is *derived* from the exports of `components/icons.ts` and rendered through the [`Icon`](/docs/components/icons) atom, so it shows the default `outline-bold` weight a consumer actually gets and cannot drift out of date (#2628).
+
+**Which import you reach for depends on where you are.** The flat name constants are internal to BDS source — `components/index.ts` re-exports only the semantic `ACTION_ICONS` set, deliberately ([#1127](https://github.com/brikdesigns/brik-bds/issues/1127)). Inside this repo, `import { House } from '../../icons'`; from a consuming app, pass the `ph:*` string to `<Icon>` or import `ACTION_ICONS` from `@brikdesigns/bds`. There is no `@brikdesigns/bds/icons` subpath.
+
+Each card names the constant, the `ph:*` string behind it, and whether the glyph resolves **offline** — present in the bundled subset (`npm run gen:icons`) at the weight the atom paints — or falls through to a runtime Iconify **CDN** fetch.
 
 Icons are sized by `fontSize` (they inherit `currentColor` and the text cursor), so an icon beside text matches that text without a hard-coded pixel value.
 
@@ -107,6 +111,12 @@ The set is grouped by intent so a consumer can find a glyph without scanning all
 ### Domain
 
 <Canvas of={Stories.Domain} />
+
+### Ungrouped
+
+The drift bucket. A constant in `icons.ts` with no home in `ICON_SECTIONS` renders here rather than vanishing from the catalog — the failure mode that left 8 of 75 constants unlisted before derivation. Empty is the healthy state, and `icon-catalog.test.ts` reds when it is not.
+
+<Canvas of={Stories.Ungrouped} />
 
 ### Sizing
 
