@@ -53,13 +53,18 @@ SUBMODULE_CONSUMERS=(
   "brik-llm|/Users/nickstanerson/Documents/GitHub/brik/brik-llm|foundations/brik-bds|main|area:ops"
 )
 
-# npm consumers: name|path|base_branch|area_label
+# npm consumers: name|path|base_branch|area_label|freeze_label
 # brikdesigns migrated submodule → npm (@brikdesigns/bds in package.json; no
 # .gitmodules). It is pre-launch, so PRs target staging.
+# freeze_label (optional) is the label that consumer's CI requires before the
+# BDS version may change — brikdesigns' verify.yml "BDS version-freeze guard"
+# fails any bump without `bds-unfreeze`. propagate applies it itself on a PATCH
+# bump only; minor/major bumps open without it and wait for a human.
+# OPERATOR SAID 2026-09-29 (chat, brik-bds#2633): "option a"
 NPM_CONSUMERS=(
-  "brik-client-portal|/Users/nickstanerson/Documents/GitHub/product/brik-client-portal|staging|area:infra"
-  "renew-pms|/Users/nickstanerson/Documents/GitHub/product/renew-pms|staging|area:infra"
-  "brikdesigns|/Users/nickstanerson/Documents/GitHub/brik/brikdesigns|staging|area:infra"
+  "brik-client-portal|/Users/nickstanerson/Documents/GitHub/product/brik-client-portal|staging|area:infra|"
+  "renew-pms|/Users/nickstanerson/Documents/GitHub/product/renew-pms|staging|area:infra|"
+  "brikdesigns|/Users/nickstanerson/Documents/GitHub/brik/brikdesigns|staging|area:infra|bds-unfreeze"
 )
 
 # Frozen consumers: name|reason
@@ -145,6 +150,28 @@ open_prs_of() {
   local path="$1"
   (cd "$path" && gh pr list --state open --limit 100 \
      --json headRefName,url --jq '.[] | "\(.headRefName)\t\(.url)"')
+}
+
+# Echoes the URL of an open NON-propagate PR in the consumer whose diff pins
+# $BDS_PACKAGE_NAME to <version> — an agent's hand-bump on a task/* branch,
+# which existing_bump_pr's branch-name match cannot see (brikdesigns#1734 vs
+# #1738, #2633). Only PRs touching package.json are diffed, so this is one
+# `gh pr diff` per such PR. A failing query echoes nothing and returns 1:
+# propagate then opens its PR, same fail-open rule as existing_bump_pr.
+open_hand_bump_pr_of() {
+  local path="$1" version="$2" number url
+  while IFS=$'\t' read -r number url; do
+    [ -n "$number" ] || continue
+    if (cd "$path" && gh pr diff "$number" 2>/dev/null) | diff_pins_package "$BDS_PACKAGE_NAME" "$version"; then
+      echo "$url"
+      return 0
+    fi
+  done < <(cd "$path" && gh pr list --state open --limit 100 \
+             --json number,url,headRefName,files \
+             --jq '.[] | select(.headRefName | startswith("bds-update/") | not)
+                       | select(any(.files[]; .path == "package.json"))
+                       | "\(.number)\t\(.url)"' 2>/dev/null)
+  return 1
 }
 
 GIT_SIGN_HEADLESS="/Users/nickstanerson/Documents/GitHub/brik/brik-llm/operations/security/bin/git-sign-headless"
@@ -434,7 +461,7 @@ EOF
 
 # ─── npm Track ────────────────────────────────────────────────────
 propagate_npm() {
-  local name="$1" path="$2" base="$3" area_label="$4"
+  local name="$1" path="$2" base="$3" area_label="$4" freeze_label="${5:-}"
 
   echo -e "${BOLD}━━━ npm :: $name ━━━${NC}"
 
@@ -500,6 +527,11 @@ propagate_npm() {
   local open_pr
   if open_pr=$(existing_bump_pr "-v$BDS_VERSION" open_prs_of "$path"); then
     ok "$name already has an open PR for $BDS_VERSION — $open_pr"
+    echo ""
+    return
+  fi
+  if open_pr=$(open_hand_bump_pr_of "$path" "$BDS_VERSION"); then
+    ok "$name already has a hand-opened PR pinning $BDS_VERSION — $open_pr"
     echo ""
     return
   fi
@@ -581,6 +613,19 @@ propagate_npm() {
   git_signed push -u origin "$pr_branch" --quiet
   ok "Pushed $pr_branch"
 
+  # A consumer with a version freeze (freeze_label set) gets the label only on
+  # a patch bump — every bot bump used to land red on brikdesigns' freeze guard
+  # until a human labelled it (#1286, #1302, #1741, #1876; #2633).
+  local labels=(--label "$area_label") freeze_note=""
+  if [ -n "$freeze_label" ]; then
+    if is_patch_bump "$current_version" "$BDS_VERSION"; then
+      labels+=(--label "$freeze_label")
+      freeze_note="**\`$freeze_label\` applied automatically:** \`$current_version\` → \`$BDS_VERSION\` is a patch bump (brik-bds#2633)."
+    else
+      freeze_note="**Needs \`$freeze_label\` from a human:** \`$current_version\` → \`$BDS_VERSION\` is not a patch bump, so the version freeze holds it (brik-bds#2633)."
+    fi
+  fi
+
   local pr_body
   pr_body=$(cat <<EOF
 ## BDS Update — $DATE_STAMP
@@ -590,6 +635,8 @@ Bumps \`$BDS_PACKAGE_NAME\`: \`$current_version\` → \`$BDS_VERSION\`.
 See [brik-bds](https://github.com/brikdesigns/brik-bds) for release details. CHANGELOG.md coming soon.
 
 **Before merge:** run \`npm install\` locally and verify typecheck + build pass.
+
+$freeze_note
 
 ---
 
@@ -603,9 +650,22 @@ EOF
     --body "$pr_body" \
     --base "$base" \
     --head "$pr_branch" \
-    --label "$area_label")
+    "${labels[@]}")
   ok "PR: $pr_url"
   ANY_UPDATED=true
+
+  # Close older propagate bumps this one supersedes — left open they are
+  # obsolete diffs on the same lockfile lines and read as conflicts (#2633).
+  # The branch is kept so a human follow-up commit stays recoverable.
+  local stale
+  while IFS= read -r stale; do
+    [ -n "$stale" ] || continue
+    if gh pr close "$stale" --comment "Superseded by $pr_url (\`$BDS_PACKAGE_NAME\` $BDS_VERSION). Closed by \`brik-bds/scripts/propagate.sh\` (brik-bds#2633)." >/dev/null 2>&1; then
+      ok "Closed superseded PR: $stale"
+    else
+      warn "Couldn't close superseded PR $stale — close it by hand"
+    fi
+  done < <(superseded_bump_prs "$BDS_VERSION" open_prs_of "$path")
 
   # Remove worktree + local branch — PR is on the remote; local ref no longer needed
   cd "$BDS_DIR"
@@ -630,14 +690,14 @@ for entry in "${SUBMODULE_CONSUMERS[@]}"; do
 done
 
 for entry in "${NPM_CONSUMERS[@]}"; do
-  IFS='|' read -r name path base area_label <<< "$entry"
+  IFS='|' read -r name path base area_label freeze_label <<< "$entry"
   [ -n "$ONLY" ] && [ "$ONLY" != "$name" ] && continue
   if reason=$(frozen_reason "$name"); then
     warn "$name skipped — $reason"
     echo ""
     continue
   fi
-  propagate_npm "$name" "$path" "$base" "$area_label"
+  propagate_npm "$name" "$path" "$base" "$area_label" "$freeze_label"
 done
 
 # ─── Tag Release ──────────────────────────────────────────────────
