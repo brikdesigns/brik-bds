@@ -105,3 +105,30 @@ is_patch_bump() {
   [ "${BASH_REMATCH[1]}" = "$fmaj" ] && [ "${BASH_REMATCH[2]}" = "$fmin" ] \
     && [ "$((10#${BASH_REMATCH[3]}))" -gt "$((10#$fpat))" ]
 }
+
+# ─── Worktree cleanup on failure (#1676) ──────────────────────────
+# propagate removes its worktree + local branch only on the success and
+# no-change paths. Under `set -e`, a failed `git push` or `gh pr create` exits
+# the script mid-function and both leak — four nights of 403s left ~30 MB each
+# in brik-llm, rated FLAG (not REMOVE) by sweep-merged-worktrees.sh.
+#
+# claim_worktree records the one worktree a run has open; release_worktree
+# clears the claim once the function has cleaned up (or deliberately kept it);
+# cleanup_claimed_worktree is the EXIT trap. It preserves the exit status, so
+# the failure still surfaces to launchd rather than being swallowed.
+_BPG_WT_REPO="" _BPG_WT_PATH="" _BPG_WT_BRANCH=""
+
+claim_worktree() { _BPG_WT_REPO="$1" _BPG_WT_PATH="$2" _BPG_WT_BRANCH="$3"; }
+release_worktree() { _BPG_WT_REPO="" _BPG_WT_PATH="" _BPG_WT_BRANCH=""; }
+
+cleanup_claimed_worktree() {
+  local status=$?
+  if [ -n "$_BPG_WT_PATH" ]; then
+    cd "$_BPG_WT_REPO" 2>/dev/null || cd / || true
+    git -C "$_BPG_WT_REPO" worktree remove --force "$_BPG_WT_PATH" 2>/dev/null || true
+    git -C "$_BPG_WT_REPO" branch -D "$_BPG_WT_BRANCH" >/dev/null 2>&1 || true
+    echo "✗ run aborted — removed worktree $_BPG_WT_PATH and branch $_BPG_WT_BRANCH (#1676)" >&2
+    release_worktree
+  fi
+  return "$status"
+}
