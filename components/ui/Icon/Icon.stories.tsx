@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from './Icon';
 import { ThemeProvider } from '../../providers/ThemeProvider';
-import phSubset from '../../icons.generated.json';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -51,36 +50,6 @@ type Story = StoryObj<typeof Icon>;
 /** @summary Interactive playground — try any `ph:*` name */
 export const Default: Story = {
   args: { icon: 'ph:rocket', width: 48 },
-};
-
-/**
- * The full set bundled for offline use — every icon here renders
- * with the network blocked.
- * @summary Bundled icon set, renders with network blocked
- */
-export const BundledSet: Story = {
-  render: () => {
-    const names = Object.keys((phSubset as { icons: Record<string, unknown> }).icons).sort();
-    return (
-      <div style={{ maxWidth: 720 }}>
-        <p style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', marginBottom: 'var(--gap-md)' }}>
-          {names.length} Phosphor icons bundled offline (zero CDN requests)
-        </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(96px, 1fr))', gap: 'var(--gap-md)' }}>
-          {names.map((name) => (
-            <div key={name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-tiny)', textAlign: 'center' }}>
-              {/* weight="regular" so each entry renders at its own bundled
-                  weight — a `*-bold` name still reads bold, a plain name reads
-                  regular — rather than the component's bold default rewriting
-                  every plain name. */}
-              <Icon icon={`ph:${name}`} width={28} weight="regular" />
-              <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)', wordBreak: 'break-all' }}>{name}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  },
 };
 
 /**

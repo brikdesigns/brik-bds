@@ -16,14 +16,6 @@ Offline-first Iconify wrapper. Phosphor (`ph:*`) icons render from a subset bund
 
 <Canvas of={Stories.Default} />
 
-## Variants
-
-### Bundled set
-
-Every icon in the offline subset — each renders with the network blocked. The subset is generated from the `ph:*` icons used across shipped BDS source (`npm run gen:icons`, CI-gated).
-
-<Canvas of={Stories.BundledSet} />
-
 ## Patterns
 
 ### Weight from provider
@@ -39,5 +31,7 @@ Every icon in the offline subset — each renders with the network blocked. The 
 ## Notes
 
 > **Standalone glyph, not a tile** — `Icon` renders the bare mark. For an icon set inside a colored, bounded tile (Atlassian's *icon-tile*), that is a pill/tile concern owned by [`Tag`](?path=/docs/components-tag--docs) and [`ServiceTag`](?path=/docs/components-service-tag--docs) — do not wrap `Icon` in a shape to fake one.
+
+**What is bundled.** The subset is generated from the `ph:*` icons used across shipped BDS source (`npm run gen:icons`, CI-gated). To see which glyphs it covers, read the [icon catalog](?path=/docs/assets-icon-catalog--docs) — each card flags its glyph `offline` or `CDN`, which is where the standalone `Bundled set` gallery went (#2628).
 
 **Offline weights.** The offline guarantee covers **`outline` and `outline-bold` only**. The bundled subset (`npm run gen:icons`) ships each `ph:*` reference plus its `-bold` twin, so those two weights resolve with the network blocked; other weights (`outline-thin`/`outline-light`/`fill`/`duotone`) carry glyphs only where shipped source already uses them (today just `star-fill`). A `weight`/`defaultIconWeight` of one of those therefore renders most icons via a runtime Iconify CDN fetch — and fails closed with no network. `ThemeProvider` warns in dev when its `defaultIconWeight` has no matching bundled glyphs; to make a non-outline default fully offline, bundle its variants (extend `gen-icon-collection.mjs`) or register a per-client fill subset via `addBrikIcons()`.

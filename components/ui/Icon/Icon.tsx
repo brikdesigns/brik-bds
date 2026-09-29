@@ -25,8 +25,12 @@ const PH_WEIGHT_SUFFIXES = ['thin', 'light', 'bold', 'fill', 'duotone'] as const
  * non-string icons (IconifyJSON objects), names that already carry an explicit
  * weight suffix, and the no-suffix weights (`outline`/`regular`) pass through
  * unchanged.
+ *
+ * Exported for the icon catalog's offline indicator (#2628), which must ask
+ * about the name that actually paints rather than restate this rule. Not
+ * re-exported by `./index.ts`, so it stays off the package's public surface.
  */
-function applyWeight(icon: IconProps['icon'], weight: IconWeight): IconProps['icon'] {
+export function applyWeight(icon: IconProps['icon'], weight: IconWeight): IconProps['icon'] {
   if (typeof icon !== 'string' || !icon.startsWith('ph:')) return icon;
   const name = icon.slice('ph:'.length);
   if (PH_WEIGHT_SUFFIXES.some((w) => name.endsWith(`-${w}`))) return icon;

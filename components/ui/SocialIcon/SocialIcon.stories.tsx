@@ -65,7 +65,8 @@ export const Default: Story = {
 /* ═══════════════════════════════════════════════════════════════
    ALL MARKS — the full type × emphasis matrix, every bundled platform.
    Irreducible: a single args set can't show 36 combinations at once
-   (mirrors Icon's `BundledSet` / Logo's `CreditCard` coverage galleries).
+   (mirrors `Assets/icon-catalog` / Logo's `CreditCard` coverage galleries;
+   Icon's `BundledSet` was folded into that catalog's offline flag, #2628).
    ═══════════════════════════════════════════════════════════════ */
 
 const TYPES: SocialIconType[] = ['badge', 'glyph'];
