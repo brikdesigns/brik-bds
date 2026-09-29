@@ -55,10 +55,15 @@
 #    via --sweep-remote-refs: it is the only outward-facing mutation here, and
 #    three of the four repos adopting this script have never done it.
 #
-# CANONICAL COPY — this file is byte-identical in brik-llm, brik-bds,
-# brik-client-portal and brikdesigns (#1634). brik-llm holds the source of truth;
-# scripts/audit/reaper-twin-drift.py fails CI when a copy diverges. Fix it HERE and
+# CANONICAL COPY — this file is byte-identical across every repo in
+# scripts/audit/reaper-twin-drift.py's CONSUMERS list (#1634). brik-llm holds the
+# source of truth; that gate fails CI when a copy diverges. Fix it HERE and
 # re-sync; a local edit in a consumer repo will be reported as drift, not adopted.
+#
+# READ THE ROSTER FROM THE GATE, not from this comment. It named four repos from
+# #1634 until 2026-09-29, when CONSUMERS held ten — and an agent sizing a one-line
+# fix off the stale number costed the propagation at 2 PRs instead of 11.
+# `python3 scripts/audit/reaper-twin-drift.py --roster` prints the live set.
 # It needs no per-repo edits: the primary worktree, worktree root and repo slug are
 # all derived at runtime from git and gh.
 #
@@ -105,7 +110,7 @@ while [ $# -gt 0 ]; do
       [ $# -ge 2 ] || { echo -e "${RED}--keep needs a worktree or slug name${NC}" >&2; exit 2; }
       KEEP_LIST+=("$2"); shift ;;
     --json) JSON=true ;;
-    -h|--help) sed -n '2,85p' "$0"; exit 0 ;;   # header ends at the Requires: note
+    -h|--help) sed -n '2,91p' "$0"; exit 0 ;;   # header ends at the Requires: note
     *) echo -e "${RED}Unknown flag: $1${NC}" >&2; exit 2 ;;
   esac
   shift
@@ -199,6 +204,66 @@ p = m[0]
 print("#%s|%s" % (p["number"], p["state"]))'
 }
 
+# Did the PR lookup ANSWER for this branch? `pr_for_branch` already returns two
+# different "none" shapes — the em-dash when PR_JSON is empty (the call failed, so
+# nothing was read), the ASCII hyphen when the map was read and held no PR for this
+# branch. Every verdict below used to collapse both into "no merged PR", which is an
+# absence claim a degraded run never established: on 2026-09-21, with the GraphQL
+# bucket exhausted, three branches whose PRs WERE merged (#3579, #3597, #3601) each
+# printed "KEEP — no merged PR", and the one warning saying so was already off the
+# top of the screen (#3603). The reaping behaviour was right; only the wording lied.
+pr_unknown() { [ "$1" = "—" ]; }
+UNKNOWN_PR=0
+
+# Uncommitted work in a worktree, counted as WORK rather than as lines of
+# `git status --porcelain` (#2782). Two shapes reach porcelain as a line while
+# carrying nothing recoverable, and because the verdict for any dirt is KEEP they
+# pinned merged worktrees forever — three of them on brik-mini dated back to
+# 2026-05-29 with their PRs long merged, and had to be removed by hand:
+#
+#   - a MODE-ONLY change (100755 -> 100644): ` M path` in porcelain, `0 0` in
+#     --numstat, and a `mode change` line in --summary. One worktree carried 8.
+#   - an untracked SYMLINK: `.gitignore`'s `node_modules/` has a trailing slash,
+#     which matches a directory but never a symlink, so it reports `?? node_modules`.
+#     git cannot be asked to adjudicate this one — `check-ignore` refuses any path
+#     "beyond a symbolic link" (verified 2026-09-29, with and without --no-index and
+#     --stdin), so the test is direct: a symlink stores no content, and removing the
+#     worktree leaves whatever it pointed at untouched.
+#
+# This NARROWS what counts as dirt; it does not weaken the guard. Anything else
+# still counts, still yields KEEP, and DIRTY_WHY carries the reason into the verdict
+# so an operator can adjudicate without re-running git by hand.
+#
+# Sets DIRTY_N + DIRTY_WHY as globals and returns nothing on stdout. Call it bare,
+# NEVER as `n=$(dirty_count …)` — a command substitution runs it in a subshell and
+# the caller sees neither global, which is how the reason silently went missing.
+DIRTY_N=0
+DIRTY_WHY=""
+dirty_count() {  # $1=worktree path -> sets DIRTY_N (real changes) + DIRTY_WHY (what they are)
+  local wt="$1" line st p real=0 why="" numstat
+  DIRTY_N=0; DIRTY_WHY=""
+  while IFS= read -r line; do
+    [ -n "$line" ] || continue
+    st="${line:0:2}"; p="${line:3}"
+    # porcelain quotes a path containing odd bytes; the tests below need it bare.
+    case "$p" in '"'*'"') p="${p#\"}"; p="${p%\"}" ;; esac
+    case "$st" in
+      '??')
+        [ -L "$wt/$p" ] && continue ;;
+      ' M'|'M '|'MM')
+        numstat="$(git -C "$wt" diff --numstat HEAD -- "$p" 2>/dev/null | awk 'NR==1{print $1"/"$2}')"
+        if [ "$numstat" = "0/0" ] \
+           && git -C "$wt" diff --summary HEAD -- "$p" 2>/dev/null | grep -q '^ mode change '; then
+          continue
+        fi ;;
+    esac
+    real=$((real+1))
+    [ ${#why} -lt 90 ] && why="${why}${why:+, }${st} ${p}"
+  done < <(git -C "$wt" status --porcelain 2>/dev/null)
+  DIRTY_N="$real"
+  DIRTY_WHY="$why"
+}
+
 # Worktree root swept for orphan directories (pass 2). Overridable for tests.
 WORKTREE_ROOT="${BRIK_WORKTREE_ROOT:-$(dirname "$PRIMARY")/$(basename "$PRIMARY")-worktrees}"
 
@@ -262,9 +327,9 @@ while IFS=$'\t' read -r path ref; do
     # Dirty first, matching the branch path below: uncommitted work outranks every
     # other signal. Redundant while the verdict is FLAG-only, and kept anyway so a
     # future loosening of that verdict cannot skip the guard.
-    dirty=$(git -C "$path" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
+    dirty_count "$path"; dirty="$DIRTY_N"
     if [ "$dirty" != "0" ]; then
-      verdict="KEEP — ${dirty} uncommitted change(s), detached HEAD"; KEPT=$((KEPT+1))
+      verdict="KEEP — ${dirty} uncommitted change(s), detached HEAD: ${DIRTY_WHY}"; KEPT=$((KEPT+1))
     else
       verdict="REVIEW — detached HEAD, no branch ref to prove it landed"; REVIEW=$((REVIEW+1))
     fi
@@ -279,7 +344,7 @@ while IFS=$'\t' read -r path ref; do
     json_row worktree "$branch" "-" "-" "KEEP — --keep"
     KEPT=$((KEPT+1)); continue
   fi
-  dirty=$(git -C "$path" status --porcelain 2>/dev/null | wc -l | tr -d ' ')
+  dirty_count "$path"; dirty="$DIRTY_N"
   tip=$(git -C "$path" rev-parse "$branch" 2>/dev/null)
   anc="no"; git merge-base --is-ancestor "$tip" origin/main 2>/dev/null && anc="yes"
   pr=$(pr_for_branch "$branch"); prnum="${pr%%|*}"; prstate="${pr##*|}"
@@ -320,7 +385,7 @@ while IFS=$'\t' read -r path ref; do
   fi
 
   if [ "$dirty" != "0" ]; then
-    verdict="KEEP — ${dirty} uncommitted change(s)"; KEPT=$((KEPT+1))
+    verdict="KEEP — ${dirty} uncommitted change(s): ${DIRTY_WHY}"; KEPT=$((KEPT+1))
   elif $landed; then
     reason=$([ "$prstate" = "MERGED" ] && echo "PR $prnum merged" || echo "merged into main")
     verdict="REMOVE — $reason"
@@ -329,6 +394,9 @@ while IFS=$'\t' read -r path ref; do
     verdict="KEEP — PR $prnum open"; KEPT=$((KEPT+1))
   elif [ "$started" = "no" ]; then
     verdict="REVIEW — no commits yet (session may be mid-setup)"; REVIEW=$((REVIEW+1))
+  elif pr_unknown "$prstate"; then
+    verdict="REVIEW — clean, unlanded, PR state UNREADABLE (gh call failed)"
+    REVIEW=$((REVIEW+1)); UNKNOWN_PR=$((UNKNOWN_PR+1))
   else
     verdict="REVIEW — clean, unlanded, no merged PR"; REVIEW=$((REVIEW+1))
   fi
@@ -404,14 +472,31 @@ if [ -d "$WORKTREE_ROOT" ]; then
     branch="task/$slug"
     pr=$(pr_for_branch "$branch"); prnum="${pr%%|*}"; prstate="${pr##*|}"
 
-    if branch_exists_local "$branch"; then
+    # A live local branch normally FLAGs the orphan: the branch is the last handle
+    # on that work, and the severed directory cannot be status-checked to prove
+    # otherwise. But pass 3 — classified twenty lines below — is about to delete
+    # that same branch on a STRICTER predicate (remote gone AND PR MERGED), and
+    # this pass cannot see it, because DELETE_BRANCH_NAMES does not exist yet. So
+    # one orphan cost THREE --apply runs on nicks-MacBook-Pro-M1 (2026-09-29):
+    # run 1 FLAGged the 1.9 GB dir, run 2 --delete-branches took the branch, run 3
+    # finally reaped. Apply pass 3's own predicate here rather than flagging on
+    # local-branch-exists alone; the branch is still deleted by pass 3, in this run.
+    branch_is_landed=false
+    if $DELETE_BRANCHES && branch_absent_remote "$branch" && [ "$prstate" = "MERGED" ]; then
+      branch_is_landed=true
+    fi
+
+    if branch_exists_local "$branch" && ! $branch_is_landed; then
       verdict="FLAG — local branch $branch still exists"; ORPHAN_FLAG=$((ORPHAN_FLAG+1))
     elif ! branch_absent_remote "$branch"; then
       verdict="FLAG — $($REMOTE_OK && echo "remote branch still exists" || echo "origin unreachable, can't confirm")"; ORPHAN_FLAG=$((ORPHAN_FLAG+1))
     elif [ "$prstate" = "MERGED" ]; then
-      verdict="REAP — PR $prnum merged, branch gone"
+      verdict="REAP — PR $prnum merged, branch $(branch_exists_local "$branch" && echo "deleted by pass 3 this run" || echo "gone")"
       REAP_PATHS+=("$abs"); REAP_LABELS+=("PR $prnum merged"); REAP_KB+=("$kb")
       ORPHAN_REAP_KB=$((ORPHAN_REAP_KB+kb))
+    elif pr_unknown "$prstate"; then
+      verdict="FLAG — PR state UNREADABLE for $branch (gh call failed)"
+      ORPHAN_FLAG=$((ORPHAN_FLAG+1)); UNKNOWN_PR=$((UNKNOWN_PR+1))
     else
       verdict="FLAG — no merged PR for $branch"; ORPHAN_FLAG=$((ORPHAN_FLAG+1))
     fi
@@ -445,6 +530,9 @@ while IFS= read -r branch; do
     DELETE_BRANCH_NAMES+=("$branch"); DELETE_BRANCH_LABELS+=("PR $prnum merged")
   elif [ "$prstate" = "OPEN" ]; then
     verdict="KEEP — PR $prnum open"; BRANCH_KEPT=$((BRANCH_KEPT+1))
+  elif pr_unknown "$prstate"; then
+    verdict="KEEP — PR state UNREADABLE for $branch (gh call failed)"
+    BRANCH_KEPT=$((BRANCH_KEPT+1)); UNKNOWN_PR=$((UNKNOWN_PR+1))
   else
     # No PR at all is the one shape that may be unpushed work. Keep it.
     verdict="KEEP — no merged PR for $branch"; BRANCH_KEPT=$((BRANCH_KEPT+1))
@@ -489,6 +577,8 @@ if $SWEEP_REMOTE_REFS; then
       CLOSED) verdict="DELETE — PR $prnum closed (rejected)"
               DELETE_REF_NAMES+=("$branch"); DELETE_REF_LABELS+=("PR $prnum closed") ;;
       OPEN)   verdict="KEEP — PR $prnum open"; REF_KEPT=$((REF_KEPT+1)) ;;
+      "—")    verdict="KEEP — PR state UNREADABLE for $branch (gh call failed)"
+              REF_KEPT=$((REF_KEPT+1)); UNKNOWN_PR=$((UNKNOWN_PR+1)) ;;
       *)      verdict="KEEP — no PR for $branch"; REF_KEPT=$((REF_KEPT+1)) ;;
     esac
     $JSON || { [ "$REF_HEADER_SHOWN" = "no" ] && { echo; printf '%-50s %-9s %s\n' "ORPHAN REMOTE REF" "PR" "VERDICT"; printf '%.0s─' {1..110}; echo; REF_HEADER_SHOWN=yes; }
@@ -508,7 +598,7 @@ if $JSON; then
   ROWS="$JSON_ROWS" \
   N="$n" KEPT="$KEPT" REVIEW="$REVIEW" NR="$nr" ORPHAN_KB="$ORPHAN_REAP_KB" \
   ORPHAN_FLAG="$ORPHAN_FLAG" NB="$nb" BRANCH_KEPT="$BRANCH_KEPT" NRF="$nrf" \
-  REF_KEPT="$REF_KEPT" \
+  REF_KEPT="$REF_KEPT" UNKNOWN_PR="$UNKNOWN_PR" \
   DELETE_BRANCHES="$($DELETE_BRANCHES && echo true || echo false)" \
   SWEEP_REFS="$($SWEEP_REMOTE_REFS && echo true || echo false)" \
   REPO="$(basename "$PRIMARY")" \
@@ -550,6 +640,11 @@ print(json.dumps({
         "branches_kept": int(os.environ["BRANCH_KEPT"]),
         "remote_refs_deletable": int(os.environ["NRF"]),
         "remote_refs_kept": int(os.environ["REF_KEPT"]),
+        # Non-zero means the gh pr list call failed and the verdicts above could
+        # not read PR state — a machine caller must not read those KEEPs as
+        # "unlanded" (#3603). No backticks in here: shellcheck reads this whole
+        # python body as one single-quoted shell string and SC2016 fires on them.
+        "pr_state_unreadable": int(os.environ["UNKNOWN_PR"]),
     },
 }, indent=2))
 '
@@ -559,6 +654,14 @@ fi
 
 echo
 echo -e "${CYAN}Summary:${NC} ${n} worktree(s) removable · ${KEPT} kept · ${REVIEW} need review · ${nr} orphan(s) reapable ($(human_size "$ORPHAN_REAP_KB")) · ${ORPHAN_FLAG} orphan(s) flagged · ${nb} worktree-less branch(es) deletable · ${BRANCH_KEPT} kept · ${nrf} remote ref(s) deletable · ${REF_KEPT} kept"
+
+# "kept because unlanded" and "kept because we could not tell" are different
+# answers, and a fully-degraded run used to summarise as a clean one (#3603). The
+# warning that `gh pr list` failed is printed hundreds of lines above this, so it
+# has scrolled off in any real run; repeat the consequence where the counts are.
+if [ "$UNKNOWN_PR" -gt 0 ]; then
+  echo -e "${YELLOW}  ⚠  ${UNKNOWN_PR} of those verdicts could not read PR state — 'gh pr list' failed, so nothing above is evidence a branch did NOT land.${NC}" >&2
+fi
 
 if [ "$n" -eq 0 ] && [ "$nr" -eq 0 ] && [ "$nb" -eq 0 ] && [ "$nrf" -eq 0 ]; then
   echo -e "${GREEN}Nothing to remove.${NC}"
@@ -575,6 +678,35 @@ if ! $APPLY; then
   exit 0
 fi
 
+# Delete the branch a just-removed worktree was on — LOUDLY (#2719).
+#
+# Both call sites below used `git branch -D "$b" >/dev/null 2>&1 && echo "↳ branch
+# deleted"`, whose only failure signal is the ABSENCE of a success line in a list
+# where absence is easy to miss. On the fallback path that absence was the NORMAL
+# case: `rm -rf` does not deregister the worktree, so git still believes the branch
+# is checked out and refuses to delete it — the run's own `git worktree prune` at
+# the very bottom comes far too late. Two branches survived a sweep that reported
+# "removed 4/4" and said nothing. Prune FIRST so the refusal cannot happen, then
+# report git's own reason if it happens anyway.
+#
+# `git worktree prune` here is a no-op on the normal path (`git worktree remove`
+# already deregistered) and cannot touch a worktree still on disk, so it is safe to
+# run per-iteration while other REMOVE targets are still pending.
+wt_branch_deleted=0
+wt_branch_failed=0
+delete_landed_branch() {  # $1=branch
+  local b="$1" err
+  git worktree prune 2>/dev/null || true
+  if err="$(git branch -D "$b" 2>&1)"; then
+    echo -e "      ${GREEN}↳${NC} branch deleted"
+    wt_branch_deleted=$((wt_branch_deleted+1))
+  else
+    echo -e "      ${RED}↳${NC} branch NOT deleted — ${b}"
+    printf '%s\n' "$err" | sed 's/^/        /' >&2
+    wt_branch_failed=$((wt_branch_failed+1))
+  fi
+}
+
 # Remove tracked worktrees (pass 1).
 removed=0
 if [ "$n" -gt 0 ]; then
@@ -587,16 +719,25 @@ if [ "$n" -gt 0 ]; then
     if err="$(git worktree remove "$p" 2>&1)"; then
       echo -e "  ${GREEN}✓${NC} ${b} (${REMOVE_LABELS[$i]})"
       removed=$((removed+1))
-      if $DELETE_BRANCHES; then
-        git branch -D "$b" >/dev/null 2>&1 && echo -e "      ${GREEN}↳${NC} branch deleted"
-      fi
-    elif printf '%s' "$err" | grep -q 'containing submodules'; then
+      $DELETE_BRANCHES && delete_landed_branch "$b"
+    elif printf '%s' "$err" | grep -qE 'containing submodules|[Dd]irectory not empty'; then
       # `git worktree remove` refuses outright on a populated submodule — this
       # repo has foundations/brik-bds, so ANY worktree whose submodule got
       # checked out was unreapable, and the sweeper silently no-op'd on it. That
       # defeats the accumulation this script exists to prevent (#1078: 46
       # worktrees / 930 MB). Fall back to the same rm + prune the orphan pass
       # already uses, under the same $WORKTREE_ROOT guard.
+      #
+      # `Directory not empty` is the SECOND shape that needs this same fallback,
+      # and until 2026-09-29 only the submodule wording was matched, so it fell
+      # through to the bare "skipped" below. git's teardown ends in rmdir(2),
+      # which fails on any IGNORED build output the checkout left behind —
+      # `.next`, `.source`, `test-results`, `node_modules`. Observed live:
+      #   ✗ task/customer-story-save-500 — 'git worktree remove' failed; skipped
+      #     error: failed to delete '…/customer-story-save-500': Directory not empty
+      # Ignored output is exactly what this fallback is for, and the safety
+      # argument below covers it unchanged: the verdict is already REMOVE, which
+      # requires clean AND landed, and `dirty_count` counts real work only.
       #
       # Safe because the verdict for $p is already REMOVE, which requires clean
       # AND landed; a dirty or unlanded worktree never reaches this loop. The
@@ -613,11 +754,9 @@ if [ "$n" -gt 0 ]; then
       case "${p_phys:-/nonexistent}" in
         "${wt_root_phys:-/nonexistent-root}"/?*)
           if rm -rf "$p_phys"; then
-            echo -e "  ${GREEN}✓${NC} ${b} (${REMOVE_LABELS[$i]}; submodule fallback: rm + prune)"
+            echo -e "  ${GREEN}✓${NC} ${b} (${REMOVE_LABELS[$i]}; cleanup fallback: rm + prune)"
             removed=$((removed+1))
-            if $DELETE_BRANCHES; then
-              git branch -D "$b" >/dev/null 2>&1 && echo -e "      ${GREEN}↳${NC} branch deleted"
-            fi
+            $DELETE_BRANCHES && delete_landed_branch "$b"
           else
             echo -e "  ${RED}✗${NC} ${b} — submodule fallback rm failed; skipped"
           fi ;;
@@ -734,7 +873,15 @@ if $SWEEP_REMOTE_REFS && [ "$nrf" -gt 0 ]; then
 fi
 
 git worktree prune 2>/dev/null || true
-echo -e "${GREEN}Done — removed ${removed}/${n} worktree(s), reaped ${reaped}/${nr} orphan(s), deleted ${deleted}/${nb} branch(es), ${ref_deleted}/${nrf} remote ref(s).${NC}"
+# The branch count used to track pass 3 ONLY, so a run that printed "↳ branch
+# deleted" twice still summarised as "deleted 0/0 branch(es)" — the item list and
+# the summary described the same run differently (#2719). Landed branches removed
+# alongside their worktree in pass 1 are counted here too, named separately so the
+# number keeps saying which pass it came from.
+echo -e "${GREEN}Done — removed ${removed}/${n} worktree(s), reaped ${reaped}/${nr} orphan(s), deleted ${deleted}/${nb} worktree-less branch(es) + ${wt_branch_deleted} landed branch(es), ${ref_deleted}/${nrf} remote ref(s).${NC}"
+if [ "$wt_branch_failed" -gt 0 ]; then
+  echo -e "${RED}✗ ${wt_branch_failed} landed branch(es) could not be deleted — see the reasons above.${NC}" >&2
+fi
 
 # A pass that was asked to run and could not do its work must not report success.
 # The old script printed "nothing removed" and exited 0, so a scheduled caller
