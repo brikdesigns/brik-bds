@@ -61,10 +61,38 @@ SUBMODULE_CONSUMERS=(
 # fails any bump without `bds-unfreeze`. propagate applies it itself on a PATCH
 # bump only; minor/major bumps open without it and wait for a human.
 # OPERATOR SAID 2026-09-29 (chat, brik-bds#2633): "option a"
+#
+# web/* client sites (brik-bds#2638): each pins @brikdesigns/bds via npm like
+# the product consumers above, and each got an area:infra label created to
+# match (none of the three carried ANY area:* label before this — birdwell-
+# mutlak, vale-partners, tncld all had a full priority/size/theme taxonomy but
+# no area axis at all).
+#
+# Full web/* audit for AC1 (every web/* consumer covered, here or frozen):
+#   birdwell-mutlak, vale-partners, tncld  → registered below, real npm deps.
+#   seniorhomeessentials                   → registered below AND in
+#     FROZEN_CONSUMERS (documented non-consumer) — the freeze check runs
+#     before path/npm access, so a frozen entry with no real dependency is
+#     safe; it is registered only so the freeze short-circuit has a name to
+#     match, same shape as renew-pms.
+#   memphis-dental, treehouse-pediatric-dentistry
+#                                           → no package.json entry, no .gitmodules;
+#     not a BDS consumer by any wiring found, so no entry either track. Their
+#     own CLAUDE.md cites BDS compliance docs as canon with no matching
+#     dependency — a doc/code discrepancy, routed to brik-llm#3906 (digest),
+#     not fixed here (out of scope for a propagation script).
+#   nickstanerson.com                      → static HTML/CSS/JS, no package.json,
+#     no npm tooling at all; not an npm consumer candidate.
+#   rebel-cfo, _newclient                  → not real git repos yet (scaffold/
+#     placeholder only); no entry until they exist.
 NPM_CONSUMERS=(
   "brik-client-portal|/Users/nickstanerson/Documents/GitHub/product/brik-client-portal|staging|area:infra|"
   "renew-pms|/Users/nickstanerson/Documents/GitHub/product/renew-pms|staging|area:infra|"
   "brikdesigns|/Users/nickstanerson/Documents/GitHub/brik/brikdesigns|staging|area:infra|bds-unfreeze"
+  "birdwell-mutlak|/Users/nickstanerson/Documents/GitHub/web/birdwell-mutlak|staging|area:infra|"
+  "vale-partners|/Users/nickstanerson/Documents/GitHub/web/vale-partners|staging|area:infra|"
+  "tncld|/Users/nickstanerson/Documents/GitHub/web/tncld|staging|area:infra|"
+  "seniorhomeessentials|/Users/nickstanerson/Documents/GitHub/web/seniorhomeessentials|staging|area:infra|"
 )
 
 # Frozen consumers: name|reason
@@ -87,6 +115,7 @@ NPM_CONSUMERS=(
 #     so the push would fail anyway.
 FROZEN_CONSUMERS=(
   "renew-pms|RETIRED 2026-07-29 (frozen since 2026-07-05) — dead and unsupported, permanently; not a liftable freeze. See brik-llm/operations/retired-repos.txt"
+  "seniorhomeessentials|Deliberate non-consumer, not a bug. Its own CLAUDE.md documents a self-contained theme in src/styles/global.css so the 1-page build needs no @brikdesigns/bds private-package token; token names follow BDS convention by hand. Liftable if that decision changes."
 )
 
 # ─── Argument Parsing ─────────────────────────────────────────────
