@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Foundations Modes Audit — 2026-09-30</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font: 15px/1.5 -apple-system, "Segoe UI", sans-serif; max-width: 62rem; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; font-size: 14px; }
+  th, td { border: 1px solid #ccc; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+  th { background: #f4f4f4; }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: .92em; background: #f3f3f3; padding: 0 .2em; }
+  .verdict { background: #fff4e5; border-left: 4px solid #e58a00; padding: .75rem 1rem; }
+  .decide { background: #eef4ff; border-left: 4px solid #2f6fdb; padding: .75rem 1rem; }
+  .ok { color: #1a7f37; } .bad { color: #b42318; font-weight: 600; } .unv { color: #8a5a00; font-style: italic; }
+  blockquote { border-left: 3px solid #bbb; margin: .5rem 0; padding: .25rem .75rem; color: #444; }
+  .wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<h1>Foundations Modes Audit: spacing by device, clamp vs mode</h1>
+<p><strong>Date:</strong> 2026-09-30 · <strong>Repo:</strong> brik-bds @ <code>519ed053</code> (main) · <strong>Figma:</strong> ❖ Brik Foundations <code>Rkdc3SIWJUdgoAkeadgZZe</code> and brikdesigns.com <code>yhLkzLUnG71UFTgURDvgnv</code>, read-only headless <code>use_figma</code> + <code>get_variable_defs</code> · <strong>Issue:</strong> brik-bds#2641 · <strong>Umbrella:</strong> brik-bds#2595 · <strong>Extends:</strong> the 2026-09-26 assessment (PR #2596) · <strong>Blocks:</strong> brikdesigns#1890</p>
+<p><strong>Status:</strong> PROPOSED — needs operator ratification. Every recommendation below is a proposal. The decisions in §9 are the operator's.</p>
+
+<div class="verdict">
+<p><strong>Verdict.</strong> Two defects are mixed together. One is in the model, and the bigger one is in adoption.</p>
+<ol>
+<li><strong>No token in BDS varies by device through a mode.</strong> Every mode axis is a brand or density choice. Spacing has <code>compact · comfortable · spacious</code>. Typography has the same names plus <code>expressive</code>, and changes headings only. Breakpoint has 3 modes that carry identical values. Only <code>--display-fluid-*</code> and the section-shell padding react to screen width, and both use hand-written <code>vw</code> clamps.</li>
+<li><strong>The same three mode names mean three different things</strong> in three collections. The portal adds a fourth vocabulary (<code>base</code>, <code>expansive</code>). This is the confusion an agent trips on. brikdesigns#1890 read density modes as device modes.</li>
+<li><strong>Adoption is near zero.</strong> Across brikdesigns, brik-client-portal and 9 <code>web/*</code> repos:
+  <ul>
+    <li>no code sets <code>data-mode-spacing</code>;</li>
+    <li>nothing imports <code>breakpoints</code>, <code>mediaQueries</code> or <code>--breakpoint-*</code>;</li>
+    <li>about 300 <code>@media</code> lines hard-code px values such as 767, 991, 860 and 901;</li>
+    <li>the portal keeps its own spacing and type tables, and their values differ from BDS.</li>
+  </ul></li>
+</ol>
+<p><strong>Recommendation (confidence: medium-high).</strong></p>
+<ul>
+  <li>Keep the component spacing scale (<code>--gap-*</code>, <code>--padding-*</code>) the same at every screen width. Its modes stay a brand density choice. Every mature system we fetched does this.</li>
+  <li>Add one small <strong>layout tier</strong> that varies by device: section padding, page margin and grid gutter. In Figma it holds device modes (<code>mobile · tablet · desktop</code>) as endpoint values. The build emits <code>clamp()</code> between them, so values scale smoothly.</li>
+  <li>Keep the breakpoint collection, but collapse its dead modes.</li>
+</ul>
+<p>This gives you smooth device scaling without crossing every spacing mode with every breakpoint.</p>
+</div>
+
+<h2>1. Operator direction this audit answers</h2>
+<blockquote>OPERATOR SAID 2026-09-30 (Claude Code session): "Spacing would be its own token collection for controlling padding and gap spacing throughout a brand - this would leverage modes to control fluctuating padding and gaps by breakpoint similar to typography."</blockquote>
+<blockquote>OPERATOR SAID 2026-09-30 (Claude Code session): "that spacing scales smoothly between breakpoints - we need to determine clamp vs mode. … it does concern us to see that typrography tokens aren't referencing modes. … The mode naming suggestion for spacing makes sense - by device - we still think there's value in a breakpoint collection as these tokens can be referenced in our code vs a hard-coded valuel. … For mobile and tablet values we should be referencing industry standards - that's been asked before."</blockquote>
+<p>One premise needs correcting. Typography does <em>not</em> vary by breakpoint today, so "similar to typography" has no device-mode precedent to copy (§3). It does reference modes, but for brand expression, not device.</p>
+
+<h2>2. Every moded collection, across the four layers</h2>
+<div class="wrap"><table>
+<tr><th>Collection</th><th>Figma modes (live)</th><th>CSS output</th><th>Docs / canon</th><th>Consumers</th><th>Varies by device?</th></tr>
+<tr><td><code>spacing</code> (16 vars)</td><td>default, compact, comfortable, spacious</td><td><code>[data-mode-spacing]</code>, <code>tokens/modes-spacing.css:17-71</code>, default at <code>figma-tokens.css:405-420</code></td><td>Density: <code>spacing.mdx:57-64</code>, <code>ADR-021:39</code></td><td class="bad">0 set the attribute (§5)</td><td class="bad">No</td></tr>
+<tr><td><code>typography</code> (35 vars)</td><td>default, compact, comfortable, spacious, expressive</td><td><code>[data-mode-typography]</code> over <code>--heading-*</code> only, <code>tokens/modes-typography.css:17-62</code></td><td>Heading-scale variant, "not strictly density": <code>ADR-013:50-65</code> (ADR still <code>Status: Proposed</code>, <code>:3</code>); <code>typography.mdx:53-70</code></td><td>1: <code>brikdesigns/src/app/layout.tsx:70</code> sets <code>expressive</code></td><td class="bad">No (headings by brand). <code>--display-fluid-*</code> scales by <code>vw</code> only, <code>fluid-type.css:47-54</code></td></tr>
+<tr><td><code>breakpoint</code> (5 vars)</td><td>default, compact, comfortable. <strong>All 5 values identical in all 3 modes</strong> (320/768/1024/1280/1440).</td><td>No <code>[data-mode-*]</code>, by design; <code>--breakpoint-*</code> + TS <code>breakpoints</code>/<code>mediaQueries</code>, <code>tokens/index.ts:704-710,741-755</code></td><td>Build-time only; the <code>web</code> rung that varied by mode is retired, <code>CASCADE.md:80-102</code></td><td class="bad">0 imports (§5)</td><td>The values are device rungs, but <span class="bad">the modes are dead</span></td></tr>
+<tr><td><code>border-radius</code></td><td>sharp, soft, round, pill</td><td><code>[data-mode-radius]</code> sharp/round/pill</td><td>Brand</td><td>0 (same <code>data-mode</code> grep as §5)</td><td>No (correct)</td></tr>
+<tr><td><code>elevation</code></td><td>flat, subtle, lifted, dramatic</td><td><code>[data-mode-elevation]</code> flat/lifted/dramatic</td><td>Brand</td><td>0 (same <code>data-mode</code> grep as §5)</td><td>No (correct)</td></tr>
+<tr><td><code>border-width</code></td><td>default, thin, thick</td><td><code>[data-mode-borderwidth]</code> thin/bold</td><td>Name split thick/bold, tracked in #2601</td><td>0 (same <code>data-mode</code> grep as §5)</td><td>No (correct)</td></tr>
+<tr><td><code>icon</code></td><td>solid, outline</td><td>Not emitted (pending #340)</td><td>—</td><td>0 (same <code>data-mode</code> grep as §5)</td><td>No (correct)</td></tr>
+</table></div>
+<p>Source chain, verified: the Figma pull writes <code>design-tokens/foundations.json</code> and <code>brand-kits/*</code>. <code>scripts/merge-tokens-studio.js:45</code> merges them into <code>tokens-studio.json</code>. <code>scripts/generate-modes-css.mjs:34</code> (<code>npm run build:modes</code>) reads the merged file and emits <code>tokens/modes-*.css</code>. <code>build-dist-tokens.js</code> concatenates the result into <code>dist/tokens.css</code>. No script can generate <code>clamp()</code> from two Figma values: a search of <code>scripts/</code> for <code>fluid|clamp|utopia</code> finds only lint validators.</p>
+
+<h2>3. Typography: what "references modes" means today</h2>
+<table>
+<tr><th>Token (Figma, px)</th><th>compact</th><th>default</th><th>comfortable</th><th>spacious</th><th>expressive</th></tr>
+<tr><td><code>display/lg</code></td><td>92.2</td><td>92.2</td><td>92.2</td><td>92.2</td><td>92.2</td></tr>
+<tr><td><code>heading/xl</code></td><td>28.5</td><td>32</td><td>36</td><td>40.5</td><td>40.5</td></tr>
+<tr><td><code>heading/md</code></td><td>22.5</td><td>25.3</td><td>28.5</td><td>32</td><td>25.3</td></tr>
+<tr><td><code>body/md</code></td><td>16</td><td>16</td><td>16</td><td>16</td><td>16</td></tr>
+<tr><td><code>label/md</code></td><td>16</td><td>16</td><td>16</td><td>16</td><td>16</td></tr>
+</table>
+<ul>
+<li><strong>Headings</strong> change by mode, as a brand choice.</li>
+<li><strong>Display, body and label</strong> stay flat across modes. Display is mode-invariant by the ADR-013 amendment (#928).</li>
+<li><strong>By screen width:</strong> only the hand-authored <code>--display-fluid-*</code> tier scales (PR #961). Headings do not.</li>
+</ul>
+<p>So the concern is valid in one sense. Nothing in typography varies by device except display, and display does it outside the mode system.</p>
+
+<h2>4. Spacing values: Figma and repo agree</h2>
+<p>Figma and <code>modes-spacing.css</code> match rung-for-rung. The 0px collapse the 09-26 audit found is fixed: #2588 is CLOSED, and live Figma has <code>gap/xs</code> at 2 / 4 / 4 / 8.</p>
+<table>
+<tr><th>Semantic (px)</th><th>compact</th><th>default</th><th>comfortable</th><th>spacious</th></tr>
+<tr><td><code>gap-sm</code></td><td>4</td><td>6</td><td>8</td><td>16</td></tr>
+<tr><td><code>gap-md</code></td><td>8</td><td>8</td><td class="bad">32</td><td>48</td></tr>
+<tr><td><code>gap-lg</code></td><td>12</td><td>16</td><td>40</td><td>56</td></tr>
+<tr><td><code>gap-xl</code></td><td>16</td><td>24</td><td>48</td><td>104</td></tr>
+<tr><td><code>padding-md</code></td><td>12</td><td>16</td><td>20</td><td>28</td></tr>
+<tr><td><code>padding-lg</code></td><td>16</td><td>24</td><td>32</td><td>48</td></tr>
+<tr><td><code>padding-xl</code></td><td>24</td><td>32</td><td>40</td><td>80</td></tr>
+<tr><td><code>padding-huge</code></td><td>32</td><td>48</td><td>80</td><td>128</td></tr>
+</table>
+<p class="bad">The steps between modes are uneven.</p>
+<ul>
+<li>Going from default to comfortable, <code>gap-md</code> jumps 4× (8 → 32) while <code>gap-sm</code> moves by only 2px (6 → 8).</li>
+<li><code>gap-xl</code> jumps from 48 to 104 going to spacious.</li>
+<li>A density axis should scale more or less evenly, and this one doesn't. Nothing consumes these modes today, so the values have never been tested in a real layout.</li>
+</ul>
+
+<h2>5. Consumers bypass the tokens</h2>
+<table>
+<tr><th>Signal</th><th>Evidence</th></tr>
+<tr><td><code>data-mode-spacing</code> set in code</td><td class="bad">0. Searched <code>data-mode|setAttribute\(.data-mode|dataset\.mode</code> across brikdesigns, portal, and all 9 <code>web/*</code> repos; the only hits are in comments (<code>brikdesigns/src/app/globals.css:292</code>, <code>web/tncld/.../page-sections.css:415</code>)</td></tr>
+<tr><td>BDS <code>ThemeProvider</code> mode props</td><td>None exist. Props are <code>initialTheme, persist, applyToBody, defaultIconWeight</code> (<code>components/providers/ThemeProvider.tsx:83-99</code>); it sets only <code>data-theme</code></td></tr>
+<tr><td>Portal re-implements the scales</td><td class="bad"><code>brik-client-portal/src/lib/theming/generate-theme-css.ts:259-263</code> <code>SPACING_SCALES</code> and <code>:290-307</code> <code>TYPE_SCALES</code> write fixed px into <code>--padding-*</code>/<code>--gap-*</code> (<code>:1022-1027</code>). Its <code>base</code> has <code>padding-md</code> 24 and <code>gap-md</code> 16; BDS default is 16 / 8. The vocabulary is <code>compact|base|comfortable|spacious</code> (<code>:143</code>) and <code>…|expansive</code> for type (<code>:160</code>)</td></tr>
+<tr><td>Breakpoint token imports</td><td class="bad">0 imports of <code>breakpoints</code>, <code>mediaQueries</code> or <code>--breakpoint-*</code>; the only mentions are a comment (<code>brikdesigns/src/lib/tokens.ts:367</code>) and token allowlists</td></tr>
+<tr><td>Hard-coded <code>@media</code> px</td><td>About 300 lines match <code>@media[^{]*[0-9]px</code>. Examples: brikdesigns 38 (991 ×12, 767 ×12), treehouse 96 (900 ×65), birdwell-mutlak 35, tncld 38. BDS itself has 8 (<code>components/ui/Grid/Grid.css:44</code> <code>991px</code>)</td></tr>
+<tr><td>AI prompts hard-code breakpoints</td><td><code>brik-client-portal/src/lib/design/prompt-context.ts:228,239,493</code> and <code>generate-mockups-worker.ts:1648,2339</code> say "Responsive @media (max-width: 768px)"</td></tr>
+<tr><td>Hand-rolled spacing <code>clamp()</code></td><td>treehouse 28, portal 28, vale-partners 10 (<code>src/styles/global.css:118</code> <code>--section-pad-y: clamp(96px, 14vw, 180px)</code>), seniorhomeessentials 5. Four sites independently invented the layout tier §8 proposes.</td></tr>
+<tr><td>Figma bindings on Industry nodes</td><td>Semantic (<code>gap/xl</code>) mixed with raw primitives (<code>space/600</code>), legacy <code>_gap/*</code>, and both <code>border-radius-lg</code> and <code>border-radius/lg</code> in the same nodes. The 3 section frames are 1440px wide; <strong>no mobile or tablet frames exist</strong> for the Industries page (scan of 1,888 nodes)</td></tr>
+<tr><td>Stale installs</td><td>brikdesigns pins <code>0.192.2</code> and has <code>0.192.0</code> installed; portal pins <code>^0.192.2</code> and has <code>0.192.1</code>; vale-partners pins <code>^0.129.0</code> and has <code>0.58.0</code> in <code>node_modules</code></td></tr>
+</table>
+
+<h2>6. What the industry does (fetched 2026-09-30)</h2>
+<div class="wrap"><table>
+<tr><th>Source</th><th>Approach</th><th>Key numbers</th><th>Evidence</th></tr>
+<tr><td>IBM Carbon</td><td>Fixed spacing scale; grid margins change by breakpoint</td><td>Margins: sm 0 / md 16px / lg 16px / max 24px; gutter 32px</td><td>carbondesignsystem.com/elements/spacing/overview: "No, the tokens themselves do not change values based on the screen size." / "it is acceptable at page breakpoints to jump a step(s) on the spacing scale"</td></tr>
+<tr><td>GitHub Primer</td><td>Fixed scale; breakpoint-keyed utilities</td><td>Breakpoints 320/544/768/1012/1280/1400; content padding 16px up to <code>large</code>, 24px at <code>xlarge</code>+</td><td>primer.style/product/getting-started/foundations/layout</td></tr>
+<tr><td>USWDS</td><td>Fixed 8px scale; named breakpoint tokens</td><td><code>mobile</code> 320 / <code>tablet</code> 640 / <code>desktop</code> 1024</td><td>designsystem.digital.gov/design-tokens/spacing-units: "spacing unit tokens are based on multiples of 8px…"</td></tr>
+<tr><td>Material 3</td><td>Discrete window size classes</td><td>Compact &lt;600dp · Medium 600–839 · Expanded 840–1199 · Large 1200–1599 · XL 1600+. <span class="unv">Medium margin 24dp: search summary, not quoted from a fetched page (unverified)</span></td><td>m3.material.io/foundations/layout/applying-layout/window-size-classes</td></tr>
+<tr><td>Utopia</td><td>Fluid <code>clamp()</code> between two viewport endpoints</td><td>Example endpoints 360 → 1240px</td><td>utopia.fyi/space/calculator: "<code>--space-s: clamp(1.125rem, 1.0739rem + 0.2273vw, 1.25rem);</code>"; utopia.fyi/blog/clamp warns to test zoom behaviour before production</td></tr>
+<tr><td>Figma variables</td><td>Modes switch by hand or by parent inheritance, never by frame width; no <code>clamp()</code> value type</td><td>—</td><td>help.figma.com, "Modes for variables"</td></tr>
+<tr><td>WCAG 2.1</td><td>Hard floors on any fluid value</td><td>1.4.10: reflow at 320 CSS px. 1.4.4: text resizes to 200% without loss</td><td>w3.org/WAI/WCAG21/Understanding/reflow.html · resize-text.html</td></tr>
+<tr><td>Apple HIG, Adobe Spectrum, Shopify Polaris</td><td colspan="3" class="unv">Not independently fetched (the HIG page returned no body). Excluded from the evidence.</td></tr>
+</table></div>
+<p><strong>What the fetched sources agree on:</strong></p>
+<ul>
+<li>No fetched system scales its core spacing tokens by screen width. Carbon, Primer and USWDS all keep the scale fixed and change only <strong>margins, gutters and the grid</strong> at breakpoints.</li>
+<li>Utopia is the fluid-<code>clamp()</code> reference, and it interpolates between two values set by the designer.</li>
+<li>Figma can store those two values but can't do the interpolation.</li>
+</ul>
+
+<h2>7. Clamp vs mode</h2>
+<table>
+<tr><th>Option</th><th>Smooth?</th><th>Figma can hold it?</th><th>Axes an agent must reason about</th><th>Verdict</th></tr>
+<tr><td>(a) Discrete device modes, switched by <code>@media</code></td><td class="bad">No: steps at each breakpoint</td><td>Yes</td><td>density × device (the cross-product #2595 forbids)</td><td>Reject</td></tr>
+<tr><td>(b) Hand-written <code>clamp()</code> in CSS</td><td>Yes</td><td class="bad">No: design and code drift (§5 hand-rolled clamps, ADR-021's five drifted N values)</td><td>1</td><td>Reject. This is today's failure mode.</td></tr>
+<tr><td>(c) Figma device modes hold the endpoints; the build emits <code>clamp()</code></td><td>Yes</td><td>Yes</td><td>1 (device), and only on the layout tier</td><td class="ok">Recommend</td></tr>
+</table>
+<p>Option (c) generalises two existing precedents instead of inventing one:</p>
+<ul>
+<li><code>fluid-type.css</code> anchors a <code>vw</code> clamp to on-scale min and max tokens.</li>
+<li><code>ADR-021:35</code> gives every blueprint section <code>padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge))</code>.</li>
+</ul>
+<p>What's new is where the endpoints come from (Figma device modes) and that a build step writes the slope. Today both are hand-picked in CSS.</p>
+
+<h2>8. Proposed model (PROPOSED — needs operator ratification)</h2>
+<table>
+<tr><th>Layer</th><th>What it owns</th><th>Varies by</th><th>Change from today</th></tr>
+<tr><td>Foundations primitives</td><td><code>--space-*</code>, <code>--font-size-*</code></td><td>Nothing</td><td>None</td></tr>
+<tr><td>Spacing collection</td><td>Component scale: <code>--gap-*</code>, <code>--padding-*</code></td><td>Brand density (a Brand Kit mode pick, <code>figma-library-architecture.mdx:11</code>)</td><td>None to the mechanism. Re-space the uneven mode values (§4) as a design task.</td></tr>
+<tr><td><strong>Layout tier (new, small)</strong></td><td>Section block padding, page inline margin, grid gutter (3–4 tokens; names must pass <code>validate-token-names</code> and brik-rag naming)</td><td><strong>Device</strong>: Figma modes <code>mobile · tablet · desktop</code>; the build emits a smooth <code>clamp()</code> between them</td><td>Replaces the hand-written ADR-021 clamp and the 4 client-site clamps</td></tr>
+<tr><td>Typography collection</td><td><code>--heading-*</code> brand variant</td><td>Brand expression</td><td>Accept ADR-013. Device-fluid headings would reuse the same generator later (out of scope).</td></tr>
+<tr><td>Breakpoint collection</td><td>5 rungs, 320 / 768 / 1024 / 1280 / 1440</td><td>Nothing</td><td>Collapse the 3 dead modes to 1 in Figma. The layout generator reads these rungs as its interpolation endpoints, so code references a token, not a px value.</td></tr>
+</table>
+<p><strong>Why no cross-product:</strong> the layout tier varies by device only, and the component scale varies by brand only. No single token takes both axes.</p>
+<p><strong>Endpoint values grounded in fetched sources.</strong> Only page margin has an industry anchor; the other numbers must come from the designer.</p>
+<table>
+<tr><th>Layout token</th><th>mobile (320)</th><th>tablet (768)</th><th>desktop (1440)</th><th>Basis</th></tr>
+<tr><td>Page inline margin</td><td>16px</td><td>24px</td><td>from Figma</td><td>Carbon md 16px; Primer 16px → 24px (fetched). M3 medium 24dp (<span class="unv">unverified</span>)</td></tr>
+<tr><td>Section block padding</td><td colspan="3">No industry standard exists for vertical section rhythm; none of the fetched sources gives one. The endpoints must come from the designer's Figma frames. Today's bounds are <code>--padding-xl</code> 32 → <code>--padding-huge</code> 48 at default density.</td><td class="bad">Blocked: the Industries page has no mobile or tablet frames (§5)</td></tr>
+<tr><td>Grid gutter</td><td colspan="3">Carbon uses a fixed 32px gutter at every breakpoint (fetched), so a device mode is optional here</td><td>Fetched</td></tr>
+</table>
+<p>Any generated <code>clamp()</code> must pass WCAG 1.4.10 (320px reflow) and 1.4.4 (200% zoom). Mixing <code>rem</code> and <code>vw</code> in the preferred value, as Utopia does, keeps zoom working.</p>
+
+<h2>9. Operator decisions</h2>
+<div class="decide">
+<ol>
+<li><strong>D1: Amend the #2595 constraint.</strong> Its body line 42 reads "Tokens stay viewport-invariant … no cross-product of spacing × breakpoint modes" and carries no operator quote. Its line 43 is quoted and allows a semantic alias to vary "per client and per breakpoint".<br><strong>Recommend:</strong> amend it to "component spacing stays viewport-invariant; a layout tier varies by device; no token takes both axes." Confidence: high.</li>
+<li><strong>D2: Spacing modes stay density; device modes go on a new layout tier.</strong> Your direction was "spacing modes by device". The industry evidence (§6) says to change only margins, gutters and section padding by device.<br><strong>Recommend:</strong> the layout-tier split. Confidence: medium-high.</li>
+<li><strong>D3: Clamp vs mode.</strong><br><strong>Recommend:</strong> option (c). Figma device modes hold the endpoints, and a build step emits <code>clamp()</code>. Confidence: medium-high.</li>
+<li><strong>D4: Mobile and tablet design values.</strong> Page margin has an industry anchor (16 / 24px). Section padding doesn't, so it needs mobile and tablet frames from design.<br><strong>Recommend:</strong> design adds mobile (375 or 390) and tablet (768) frames for one page before the build.</li>
+</ol>
+</div>
+
+<h2>10. What happens to existing canon</h2>
+<table>
+<tr><th>Canon</th><th>Under the proposal</th></tr>
+<tr><td><code>spacing.mdx:57-64</code> (density)</td><td>Stays true. Add a pointer to the layout tier.</td></tr>
+<tr><td><code>ADR-021:35,39</code> (section clamp; padding tokens are density tokens)</td><td>Stays true for <code>--padding-*</code>. The section shell's clamp moves to the layout tier, and ADR-021 is amended.</td></tr>
+<tr><td><code>CASCADE.md:69-102</code> (mode contract; breakpoint build-time only)</td><td>Add a layout row: device modes, emitted as <code>clamp()</code>, no <code>[data-mode-*]</code> switch (same reason as breakpoints: a media query can't read <code>var()</code>).</td></tr>
+<tr><td><code>theme-brand-brik.css:10</code> ("spacing uses Base mode defaults")</td><td>Unchanged</td></tr>
+<tr><td>#2595 line 42</td><td>Amended per D1, quoting the operator</td></tr>
+<tr><td>brikdesigns#1890 AC1 (compact on mobile, comfortable on tablet, spacious on desktop)</td><td>Replaced: #1890 consumes the layout tier instead of switching density by viewport</td></tr>
+</table>
+
+<h2>11. Fixed since the 09-26 audit</h2>
+<ul>
+<li class="ok">#2588 CLOSED: the spacing mode tracks no longer collapse to 0px (confirmed live in Figma).</li>
+<li class="ok">#2591 CLOSED: the breakpoint collection now has 5 device-named rungs in Figma and emits build-time tokens.</li>
+<li class="ok">#2594 CLOSED: rung vocabulary settled on <code>tiny</code>/<code>huge</code>; <code>2xs</code>/<code>2xl</code> are deprecated aliases (<code>tokens/gap-fills.css:460-463</code>).</li>
+<li>Still open under #2595: #2589, #2592, #2593, #2599, #2600, #2601, #2602.</li>
+</ul>
+
+<h2>12. Follow-up work this audit surfaces</h2>
+<table>
+<tr><th>Work</th><th>Repo</th><th>Size</th></tr>
+<tr><td>ADR: layout tier + endpoint-to-clamp generator (after D1–D4)</td><td>brik-bds</td><td>M</td></tr>
+<tr><td>Portal consumes BDS spacing and type modes instead of <code>generate-theme-css.ts</code> tables</td><td>brik-client-portal</td><td>M</td></tr>
+<tr><td>Consumers reference breakpoint tokens, not px; AI prompts reference tokens</td><td>portal + brikdesigns + BDS</td><td>M</td></tr>
+<tr><td>Collapse the 3 dead breakpoint modes in Figma</td><td>brik-bds (Figma)</td><td>XS</td></tr>
+<tr><td>Re-space the uneven spacing mode values (§4)</td><td>brik-bds (Figma)</td><td>S</td></tr>
+<tr><td>Clean mixed and legacy bindings on the brikdesigns Industry nodes</td><td>brikdesigns (Figma)</td><td>S</td></tr>
+<tr><td>Ingest industry-standard device values into brik-rag (the query <code>industry standard mobile tablet spacing values</code> returned no canon)</td><td>brik-llm</td><td>XS</td></tr>
+</table>
+
+</body>
+</html>
