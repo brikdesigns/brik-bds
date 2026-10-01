@@ -12,14 +12,14 @@ export function BorderRadiusPreview({ title, scale }: BorderRadiusPreviewProps) 
   });
 
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 32px)' }}>
       {title && (
         <h3
           style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--heading-sm, 20px)',
-            marginBottom: 'var(--gap-md, 8px)',
-            color: 'var(--text-primary)',
+            fontFamily: 'var(--bds-font-family-heading)',
+            fontSize: 'var(--bds-heading-sm, 20px)',
+            marginBottom: 'var(--bds-gap-md, 8px)',
+            color: 'var(--bds-text-primary)',
           }}
         >
           {title}
@@ -29,7 +29,7 @@ export function BorderRadiusPreview({ title, scale }: BorderRadiusPreviewProps) 
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
-          gap: 'var(--gap-lg, 16px)',
+          gap: 'var(--bds-gap-lg, 16px)',
         }}
       >
         {entries.map(([step, value]) => (
@@ -38,7 +38,7 @@ export function BorderRadiusPreview({ title, scale }: BorderRadiusPreviewProps) 
               style={{
                 width: '72px',
                 height: '72px',
-                backgroundColor: 'var(--background-brand-primary)',
+                backgroundColor: 'var(--bds-background-brand-primary)',
                 borderRadius: value,
                 margin: '0 auto 8px',
                 opacity: 0.8,
@@ -48,7 +48,7 @@ export function BorderRadiusPreview({ title, scale }: BorderRadiusPreviewProps) 
               style={{
                 fontSize: '12px',
                 fontWeight: 600,
-                color: 'var(--text-primary)',
+                color: 'var(--bds-text-primary)',
               }}
             >
               {step}
@@ -56,7 +56,7 @@ export function BorderRadiusPreview({ title, scale }: BorderRadiusPreviewProps) 
             <code
               style={{
                 fontSize: '11px',
-                color: 'var(--text-muted)',
+                color: 'var(--bds-text-muted)',
                 fontFamily: 'ui-monospace, SFMono-Regular, monospace',
               }}
             >
@@ -81,14 +81,14 @@ export function BorderWidthPreview({ title, scale, prefix }: BorderWidthPreviewP
   );
 
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 32px)' }}>
       {title && (
         <h3
           style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--heading-sm, 20px)',
-            marginBottom: 'var(--gap-md, 8px)',
-            color: 'var(--text-primary)',
+            fontFamily: 'var(--bds-font-family-heading)',
+            fontSize: 'var(--bds-heading-sm, 20px)',
+            marginBottom: 'var(--bds-gap-md, 8px)',
+            color: 'var(--bds-text-primary)',
           }}
         >
           {title}
@@ -111,7 +111,7 @@ export function BorderWidthPreview({ title, scale, prefix }: BorderWidthPreviewP
                 fontSize: '12px',
                 width: '180px',
                 flexShrink: 0,
-                color: 'var(--text-muted)',
+                color: 'var(--bds-text-muted)',
               }}
             >
               {prefix}--{step}
@@ -120,14 +120,14 @@ export function BorderWidthPreview({ title, scale, prefix }: BorderWidthPreviewP
               style={{
                 width: '200px',
                 height: '0',
-                borderTop: `${value} solid var(--border-brand-primary)`,
+                borderTop: `${value} solid var(--bds-border-brand-primary)`,
                 flexShrink: 0,
               }}
             />
             <span
               style={{
                 fontSize: '12px',
-                color: 'var(--text-secondary)',
+                color: 'var(--bds-text-secondary)',
                 fontFamily: 'ui-monospace, SFMono-Regular, monospace',
               }}
             >

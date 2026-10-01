@@ -20,7 +20,7 @@ export interface CloseButtonProps
  * CloseButton — the canonical dismiss affordance for overlays (Modal, Sheet,
  * Toast, Banner) and any panel that can be closed.
  *
- * Renders a bold Phosphor "X" at `--icon-lg` (20px) inside a compact,
+ * Renders a bold Phosphor "X" at `--bds-icon-lg` (20px) inside a compact,
  * glyph-dominant ghost box — so the mark reads as the dominant element of its
  * container rather than a small icon floating in empty space. Centralizing the
  * close glyph here means weight/size/state tweaks land once and every overlay

@@ -9,9 +9,9 @@ const Frame = ({ children }: { children: React.ReactNode }) => (
   <div
     style={{
       minHeight: 360,
-      padding: 'var(--padding-xl)',
-      fontFamily: 'var(--font-family-body)',
-      color: 'var(--text-primary)',
+      padding: 'var(--bds-padding-xl)',
+      fontFamily: 'var(--bds-font-family-body)',
+      color: 'var(--bds-text-primary)',
     }}
   >
     {children}
@@ -74,7 +74,7 @@ export const Default: Story = {
   },
   render: (args) => (
     <Frame>
-      <p style={{ marginBottom: 'var(--gap-md)' }}>
+      <p style={{ marginBottom: 'var(--bds-gap-md)' }}>
         No DevBar present. <code>fab</code> renders the floating button; <code>auto</code> falls back to
         the FAB after its detection window.
       </p>
@@ -100,7 +100,7 @@ export const WithDevBar: Story = {
   },
   render: (args) => (
     <Frame>
-      <p style={{ marginBottom: 'var(--gap-md)' }}>
+      <p style={{ marginBottom: 'var(--bds-gap-md)' }}>
         With the DevBar shell mounted, the widget registers as a slot instead of a FAB.
       </p>
       <BrikDevBar />

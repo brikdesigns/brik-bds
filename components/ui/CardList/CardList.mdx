@@ -7,17 +7,17 @@ import { Card, CardTitle } from '../Card';
 <Meta of={Stories} />
 
 export const GapScale = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', maxWidth: 720 }}>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xl)', maxWidth: 720 }}>
     {['sm', 'md', 'lg', 'xl'].map((g) => (
       <div key={g}>
         <p
           style={{
-            fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--label-sm)',
-            color: 'var(--text-muted)',
+            fontFamily: 'var(--bds-font-family-label)',
+            fontSize: 'var(--bds-label-sm)',
+            color: 'var(--bds-text-muted)',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
-            marginBottom: 'var(--gap-sm)',
+            marginBottom: 'var(--bds-gap-sm)',
           }}
         >{`gap = ${g}`}</p>
         <CardList orientation="horizontal" gap={g}>

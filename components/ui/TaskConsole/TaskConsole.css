@@ -8,24 +8,24 @@
   max-height: 80vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--surface-primary);
-  border: var(--border-width-md) solid var(--border-primary);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-xl);
+  background-color: var(--bds-surface-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-primary);
+  border-radius: var(--bds-border-radius-lg);
+  box-shadow: var(--bds-shadow-xl);
   overflow: hidden;
-  font-family: var(--font-family-body);
+  font-family: var(--bds-font-family-body);
 }
 
 /* ─── Position modifiers ─────────────────────────────────────── */
 
 .bds-task-console--bottom-right {
-  bottom: var(--padding-lg);
-  right: var(--padding-lg);
+  bottom: var(--bds-padding-lg);
+  right: var(--bds-padding-lg);
 }
 
 .bds-task-console--bottom-left {
-  bottom: var(--padding-lg);
-  left: var(--padding-lg);
+  bottom: var(--bds-padding-lg);
+  left: var(--bds-padding-lg);
 }
 
 /* ─── Header ─────────────────────────────────────────────────── */
@@ -34,9 +34,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-md);
-  padding: var(--padding-sm) var(--padding-md) var(--padding-sm) var(--padding-lg);
-  background-color: var(--surface-secondary);
+  gap: var(--bds-gap-md);
+  padding: var(--bds-padding-sm) var(--bds-padding-md) var(--bds-padding-sm) var(--bds-padding-lg);
+  background-color: var(--bds-surface-secondary);
   cursor: pointer;
   user-select: none;
   min-height: 48px; /* bds-lint-ignore — touch target */
@@ -44,43 +44,43 @@
 }
 
 .bds-task-console--tone-positive .bds-task-console__header {
-  background-color: var(--surface-positive);
+  background-color: var(--bds-surface-positive);
 }
 
 .bds-task-console--has-errors .bds-task-console__header {
-  background-color: var(--surface-negative);
+  background-color: var(--bds-surface-negative);
 }
 
 .bds-task-console__header-text {
   display: flex;
   flex-direction: column;
-  /* Title ↔ subtitle is the tight step (ADR-023 content-rhythm map: --gap-sm). */
-  gap: var(--gap-sm);
+  /* Title ↔ subtitle is the tight step (ADR-023 content-rhythm map: --bds-gap-sm). */
+  gap: var(--bds-gap-sm);
   min-width: 0;
   flex: 1;
 }
 
 .bds-task-console__title {
-  font-family: var(--font-family-label);
-  font-size: var(--label-md);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-md);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .bds-task-console__subtitle {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-muted);
 }
 
 .bds-task-console__header-actions {
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
   flex-shrink: 0;
   flex-wrap: nowrap;
 }
@@ -90,7 +90,7 @@
 .bds-task-console .bds-task-console__progress {
   border-radius: 0;
   flex-shrink: 0;
-  height: var(--space-100);
+  height: var(--bds-space-100);
 }
 
 .bds-task-console .bds-task-console__progress .bds-progress-bar__fill {
@@ -98,7 +98,7 @@
 }
 
 .bds-task-console__progress--tone-negative .bds-progress-bar__fill {
-  background-color: var(--background-negative);
+  background-color: var(--bds-background-negative);
 }
 
 /* ─── Item list ──────────────────────────────────────────────── */
@@ -115,10 +115,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--padding-md) var(--padding-lg);
-  gap: var(--gap-md);
-  border-bottom: var(--border-width-md) solid var(--border-primary);
-  transition: background-color var(--duration-sm) var(--ease-out);
+  padding: var(--bds-padding-md) var(--bds-padding-lg);
+  gap: var(--bds-gap-md);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-primary);
+  transition: background-color var(--bds-duration-sm) var(--bds-ease-out);
 }
 
 .bds-task-console__item:last-child {
@@ -126,7 +126,7 @@
 }
 
 .bds-task-console__item--failed {
-  background-color: var(--surface-negative);
+  background-color: var(--bds-surface-negative);
 }
 
 /* ─── Item content ───────────────────────────────────────────── */
@@ -134,17 +134,17 @@
 .bds-task-console__item-content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
   min-width: 0;
   flex: 1;
 }
 
 .bds-task-console__item-label {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -152,20 +152,20 @@
 
 .bds-task-console__item--completed .bds-task-console__item-label,
 .bds-task-console__item--pending .bds-task-console__item-label {
-  color: var(--text-muted);
+  color: var(--bds-text-muted);
 }
 
 .bds-task-console__item--in-progress .bds-task-console__item-label {
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
+  font-weight: var(--bds-font-weight-semibold);
+  color: var(--bds-text-primary);
 }
 
 .bds-task-console__item-link {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary); /* AA-safe on white at body-sm (#1103); brand affordance returns via the #1065 near-Poppy AA step */
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary); /* AA-safe on white at body-sm (#1103); brand affordance returns via the #1065 near-Poppy AA step */
   text-decoration: none;
   cursor: pointer;
 }
@@ -175,11 +175,11 @@
 }
 
 .bds-task-console__item-detail {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-muted);
   font-style: italic;
 }
 
@@ -187,30 +187,30 @@
 
 .bds-task-console__icon {
   flex-shrink: 0;
-  width: var(--icon-lg);
-  height: var(--icon-lg);
-  font-size: var(--icon-lg);
+  width: var(--bds-icon-lg);
+  height: var(--bds-icon-lg);
+  font-size: var(--bds-icon-lg);
 }
 
 .bds-task-console__icon--completed {
-  color: var(--text-positive);
+  color: var(--bds-text-positive);
 }
 
 .bds-task-console__icon--failed {
-  color: var(--text-negative);
+  color: var(--bds-text-negative);
 }
 
 /* Spinner overrides — size up to match the other 20px icons and lighten the
-   3/4 track (default --border-primary reads dark on white surfaces). The
+   3/4 track (default --bds-border-primary reads dark on white surfaces). The
    leading quadrant keeps the brand accent. */
 .bds-task-console .bds-task-console__icon--in-progress {
-  width: var(--icon-lg);
-  height: var(--icon-lg);
-  border-color: var(--surface-muted); /* bds-lint-ignore token-family — intentional alias: spinner track needs surface-tracking lightness (no border token stays subtle in both light brand-theme + dark mode); see docs/TOKEN-PR-CHECKLIST.md */
-  border-top-color: var(--border-brand-primary);
+  width: var(--bds-icon-lg);
+  height: var(--bds-icon-lg);
+  border-color: var(--bds-surface-muted); /* bds-lint-ignore token-family — intentional alias: spinner track needs surface-tracking lightness (no border token stays subtle in both light brand-theme + dark mode); see docs/TOKEN-PR-CHECKLIST.md */
+  border-top-color: var(--bds-border-brand-primary);
 }
 
 .bds-task-console__icon--pending {
-  color: var(--text-muted);
+  color: var(--bds-text-muted);
 }
 }

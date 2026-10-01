@@ -6,9 +6,9 @@
 
 /* The `measure` prop names a ROLE over the low rungs of the one width ladder —
    there is no separate --measure-* family (ADR-041, superseding ADR-032 §1). */
-.bds-section-header--measure-sm { max-width: var(--content-width-text-xs); }
-.bds-section-header--measure-md { max-width: var(--content-width-text-sm); }
-.bds-section-header--measure-lg { max-width: var(--content-width-text-md); }
+.bds-section-header--measure-sm { max-width: var(--bds-content-width-text-xs); }
+.bds-section-header--measure-md { max-width: var(--bds-content-width-text-sm); }
+.bds-section-header--measure-lg { max-width: var(--bds-content-width-text-md); }
 
 /* Centered: cap + auto margins center the column in the band; text-align
    centers the lines; actions row centers too. */

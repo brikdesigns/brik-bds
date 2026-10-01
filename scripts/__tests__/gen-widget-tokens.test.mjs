@@ -22,12 +22,12 @@ const repoRoot = join(here, '..', '..');
 
 const FIXTURE_CSS = `
 :root {
-  --color-grayscale-100: #f2f2f2;
-  --color-grayscale-500: #828282;
-  --color-grayscale-950: #1b1b1b;
-  --color-grayscale-light: var(--color-grayscale-500);
-  --text-primary: var(--color-grayscale-950);
-  --border-radius-300: 10px;
+  --bds-color-grayscale-100: #f2f2f2;
+  --bds-color-grayscale-500: #828282;
+  --bds-color-grayscale-950: #1b1b1b;
+  --bds-text-secondary: var(--bds-color-grayscale-500);
+  --bds-text-primary: var(--bds-color-grayscale-950);
+  --bds-border-radius-300: 10px;
 }
 `;
 
@@ -35,13 +35,13 @@ const declared = parseTokenCss(FIXTURE_CSS);
 
 describe('resolveToken', () => {
   it('returns a literal declaration as-is', () => {
-    expect(resolveToken(declared, '--color-grayscale-100')).toBe('#f2f2f2');
+    expect(resolveToken(declared, '--bds-color-grayscale-100')).toBe('#f2f2f2');
   });
 
   it('follows a var() alias to the stop it points at', () => {
     // The 6-step names are DEPRECATED aliases (#1739). Both spellings must
     // resolve so #1740 AC 6 can delete the alias layer without breaking this.
-    expect(resolveToken(declared, '--color-grayscale-light')).toBe('#828282');
+    expect(resolveToken(declared, '--bds-text-secondary')).toBe('#828282');
   });
 
   it('returns null for a token that is not declared', () => {
@@ -58,26 +58,26 @@ describe('resolveToken', () => {
 
 describe('reconcile', () => {
   it('rewrites a drifted literal and reports it', () => {
-    const src = `    colorGrayscaleDarkest: '#333333', // --color-grayscale-950\n`;
+    const src = `    colorGrayscaleDarkest: '#333333', // --bds-color-grayscale-950\n`;
     const { next, drifted } = reconcile(src, declared);
     expect(drifted).toEqual([
-      { token: '--color-grayscale-950', was: '#333333', now: '#1b1b1b' },
+      { token: '--bds-color-grayscale-950', was: '#333333', now: '#1b1b1b' },
     ]);
-    expect(next).toContain("'#1b1b1b', // --color-grayscale-950");
+    expect(next).toContain("'#1b1b1b', // --bds-color-grayscale-950");
   });
 
   it('leaves an in-sync entry byte-identical', () => {
-    const src = `    colorGrayscaleLightest:'#f2f2f2', // --color-grayscale-100\n`;
+    const src = `    colorGrayscaleLightest:'#f2f2f2', // --bds-color-grayscale-100\n`;
     const { next, drifted } = reconcile(src, declared);
     expect(drifted).toEqual([]);
     expect(next).toBe(src);
   });
 
   it('preserves the hand-aligned column when rewriting', () => {
-    const src = `    colorGrayscaleLight:   '#bdbdbd', // --color-grayscale-500\n`;
+    const src = `    colorGrayscaleLight:   '#bdbdbd', // --bds-color-grayscale-500\n`;
     const { next } = reconcile(src, declared);
     expect(next).toBe(
-      `    colorGrayscaleLight:   '#828282', // --color-grayscale-500\n`,
+      `    colorGrayscaleLight:   '#828282', // --bds-color-grayscale-500\n`,
     );
   });
 
@@ -85,19 +85,31 @@ describe('reconcile', () => {
     // --text-* / --border-radius-* are redeclared per theme and per mode, so
     // they have no single value a generator may pick. Explicitly out of scope.
     const src =
-      `    textPrimary: '#333333', // --text-primary\n` +
-      `    radius300:   '12px',    // --border-radius-300\n`;
+      `    textPrimary: '#333333', // --bds-text-primary\n` +
+      `    radius300:   '12px',    // --bds-border-radius-300\n`;
     const { next, drifted, unresolved } = reconcile(src, declared);
     expect(drifted).toEqual([]);
     expect(unresolved).toEqual([]);
     expect(next).toBe(src);
   });
 
+  it('resolves a pre-prefix --color-* annotation against the --bds- source (#2670)', () => {
+    // Widgets ship to consumers still on un-prefixed BDS, so they keep the old
+    // spelling. The gate must still see their drift.
+    const src = `    colorGrayscaleDarkest: '#333333', // --color-grayscale-950\n`;
+    const { next, drifted, unresolved } = reconcile(src, declared);
+    expect(unresolved).toEqual([]);
+    expect(drifted).toEqual([
+      { token: '--color-grayscale-950', was: '#333333', now: '#1b1b1b' },
+    ]);
+    expect(next).toContain("'#1b1b1b', // --color-grayscale-950");
+  });
+
   it('reports a --color-* annotation that names no declared token', () => {
-    const src = `    colorGhost: '#abcdef', // --color-grayscale-404\n`;
+    const src = `    colorGhost: '#abcdef', // --bds-color-grayscale-404\n`;
     const { next, unresolved } = reconcile(src, declared);
     expect(unresolved).toEqual([
-      { token: '--color-grayscale-404', literal: '#abcdef' },
+      { token: '--bds-color-grayscale-404', literal: '#abcdef' },
     ]);
     expect(next).toBe(src); // never guesses — leaves the file alone
   });

@@ -7,7 +7,7 @@
  *
  * Bold + 18px card title, 16px regular description — the AA-clearing posture
  * for white-on-saturated-brand backgrounds (BDS contrast burndown #40). Card
- * backgrounds resolve via `--background-brand-primary`, re-bound per-card by
+ * backgrounds resolve via `--bds-background-brand-primary`, re-bound per-card by
  * the consumer's `[data-audience='X']` cascade. BDS ships the pattern; the
  * consumer ships the audience-specific values. Tier-4 `--bds-features-*` hooks
  * let a consumer retheme without forking the block.
@@ -20,59 +20,59 @@
  */
 
 .bds-features {
-  background: var(--bds-features-bg, var(--page-inverse));
-  color: var(--text-on-color-dark);
+  background: var(--bds-features-bg, var(--bds-page-inverse));
+  color: var(--bds-text-on-color-dark);
 }
 
 /* ── Section header ────────────────────────────────────────────── */
 
 .bds-features__header {
   text-align: center;
-  max-width: var(--content-width-text-md);
+  max-width: var(--bds-content-width-text-md);
   margin-inline: auto;
-  margin-bottom: var(--padding-xl);
+  margin-bottom: var(--bds-padding-xl);
   align-items: center;
 }
 
 /* ── Content rhythm (ADR-023 §3) ──────────────────────────────────────────
    Adjacency margins, not the uniform `Stack gap="md"` this header used to
-   carry: subtitle→title is tight (--gap-sm), title→lead is medium
-   (--gap-md), and one gap renders both identically. */
+   carry: subtitle→title is tight (--bds-gap-sm), title→lead is medium
+   (--bds-gap-md), and one gap renders both identically. */
 
 .bds-features__header > * + * {
-  margin-top: var(--gap-md);
+  margin-top: var(--bds-gap-md);
 }
 
 .bds-features__subtitle + .bds-features__title {
-  margin-top: var(--gap-sm);
+  margin-top: var(--bds-gap-sm);
 }
 
 .bds-features__subtitle {
   margin: 0;
-  font-family: var(--font-family-label);
-  font-size: var(--label-lg);
-  font-weight: var(--font-weight-medium);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-lg);
+  font-weight: var(--bds-font-weight-medium);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--text-on-color-dark);
+  color: var(--bds-text-on-color-dark);
   opacity: 0.85;
 }
 
 .bds-features__header .bds-features__title {
   margin: 0;
-  font-family: var(--font-family-heading);
-  font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-huge));
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-on-color-dark);
+  font-family: var(--bds-font-family-heading);
+  font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-huge));
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-on-color-dark);
 }
 
 .bds-features__lead {
   margin: 0;
-  font-family: var(--font-family-body);
-  font-size: var(--heading-sm);
-  line-height: var(--font-line-height-relaxed);
-  color: var(--text-on-color-dark);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-heading-sm);
+  line-height: var(--bds-font-line-height-relaxed);
+  color: var(--bds-text-on-color-dark);
   opacity: 0.85;
 }
 
@@ -94,7 +94,7 @@
   padding: 0;
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--bds-features-gap, var(--gap-lg));
+  gap: var(--bds-features-gap, var(--bds-gap-lg));
 }
 
 @media (min-width: 768px) {
@@ -136,16 +136,16 @@
 .bds-features__card {
   width: 100%;
   /* Override the BDS Card outlined variant — branded cards read as
-   * filled panels. Background resolves via --background-brand-primary,
+   * filled panels. Background resolves via --bds-background-brand-primary,
    * re-bound per-card by the consumer's [data-audience='X'] cascade. */
-  background: var(--background-brand-primary);
+  background: var(--bds-background-brand-primary);
   border: none;
-  border-radius: var(--bds-features-card-radius, var(--border-radius-lg));
+  border-radius: var(--bds-features-card-radius, var(--bds-border-radius-lg));
   overflow: hidden;
   transform: translateY(0) scale(1);
   transition:
-    transform 200ms var(--easing-ease-out),
-    box-shadow 200ms var(--easing-ease-out);
+    transform 200ms var(--bds-easing-ease-out),
+    box-shadow 200ms var(--bds-easing-ease-out);
 }
 
 .bds-features__card:hover {
@@ -162,15 +162,15 @@
 }
 
 .bds-features__card-link:focus-visible {
-  outline: 3px solid var(--text-on-color-dark);
+  outline: 3px solid var(--bds-text-on-color-dark);
   outline-offset: -3px;
 }
 
 /* ── Media (top illustration area) ─────────────────────────────── */
 
 .bds-features__media {
-  aspect-ratio: var(--aspect-1-1);
-  padding: var(--bds-features-image-pad, var(--padding-xl));
+  aspect-ratio: var(--bds-aspect-1-1);
+  padding: var(--bds-features-image-pad, var(--bds-padding-xl));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -195,9 +195,9 @@
 
 .bds-features__image-fallback--blank {
   width: 60%;
-  aspect-ratio: var(--aspect-1-1);
+  aspect-ratio: var(--bds-aspect-1-1);
   border-radius: 50%;
-  background: var(--text-on-color-dark);
+  background: var(--bds-text-on-color-dark);
   opacity: 0.15;
   transform: none;
 }
@@ -207,47 +207,47 @@
 .bds-features__content {
   /* reviewed #2119: layout wrapper — holds __title/__description/__cta, each
      of which carries its own type tokens; no direct text child here */
-  padding: var(--padding-lg);
+  padding: var(--bds-padding-lg);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   flex: 1 1 auto;
 }
 
 /* Bold + 18px — AA-clearing posture for white-on-saturated-brand. */
 .bds-features__card .bds-features__title {
   margin: 0;
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-md);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-on-color-dark);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-md);
+  font-weight: var(--bds-font-weight-bold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-on-color-dark);
 }
 
 /* 16px regular — clears 3:1 at the large-text threshold. */
 .bds-features__description {
   margin: 0;
-  font-family: var(--font-family-body);
-  font-size: var(--heading-sm);
-  line-height: var(--font-line-height-relaxed);
-  color: var(--text-on-color-dark);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-heading-sm);
+  line-height: var(--bds-font-line-height-relaxed);
+  color: var(--bds-text-on-color-dark);
 }
 
 .bds-features__cta {
   margin-top: auto;
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-md);
-  color: var(--text-on-color-dark);
-  font-family: var(--font-family-body);
-  font-size: var(--body-xl);
-  font-weight: var(--font-weight-bold);
+  gap: var(--bds-gap-md);
+  color: var(--bds-text-on-color-dark);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-xl);
+  font-weight: var(--bds-font-weight-bold);
   line-height: 1.4;
 }
 
 .bds-features__cta-arrow {
   display: inline-block;
-  transition: transform 200ms var(--easing-ease-out);
+  transition: transform 200ms var(--bds-easing-ease-out);
 }
 
 .bds-features__card-link:hover .bds-features__cta-arrow,

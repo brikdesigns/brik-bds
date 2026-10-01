@@ -9,14 +9,14 @@ import { Field } from '../Field';
     `gap` is a Control on Default, and side-by-side galleries are an MDX
     concern (#1489). */}
 export const Frame = ({ width = '360px', children }) => (
-  <div style={{ width, padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+  <div style={{ width, padding: 'var(--bds-padding-lg)', background: 'var(--bds-surface-primary)' }}>
     {children}
   </div>
 );
 
 export const GapScale = () => (
   <Frame>
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xl)' }}>
       <BadgeGroup gap="xs">
         <Badge tone="positive" size="sm">xs gap</Badge>
         <Badge tone="info" size="sm">tight</Badge>
@@ -38,7 +38,7 @@ export const GapScale = () => (
 
 export const AppearanceMix = () => (
   <Frame width="480px">
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)' }}>
       <Field label="Solid appearance">
         <BadgeGroup>
           <Badge tone="positive" size="sm" appearance="solid">Paid</Badge>

@@ -6,8 +6,8 @@
  * -horizontal, .bds-brik-blocks__cell, [data-cell="light|dark|poppy"]
  *
  * Geometry is Figma-exact and not on the t-shirt scale, so it is expressed in
- * the nearest Primitive rungs rather than invented: 24px = --size-600 (cell),
- * 8px = --gap-md (gap) — same idiom as Badge's --size-600 dot (Badge.css:30-31).
+ * the nearest Primitive rungs rather than invented: 24px = --bds-size-600 (cell),
+ * 8px = --bds-gap-md (gap) — same idiom as Badge's --bds-size-600 dot (Badge.css:30-31).
  *
  * The per-cell fill is a data attribute, not a BEM modifier — mirroring
  * BackgroundPattern's `data-fade` — because `light`/`dark`/`poppy` is not a
@@ -17,7 +17,7 @@
 
 .bds-brik-blocks {
   display: flex;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   pointer-events: none;
 }
 
@@ -34,28 +34,28 @@
 /* ─── Cell ─────────────────────────────────────────────────────────────── */
 
 .bds-brik-blocks__cell {
-  width: var(--size-600);
-  height: var(--size-600);
+  width: var(--bds-size-600);
+  height: var(--bds-size-600);
   flex-shrink: 0;
 }
 
-/* Figma spec'd #d9d9d9 — one step darker than --color-grayscale-200 (#e9e9e9),
+/* Figma spec'd #d9d9d9 — one step darker than --bds-color-grayscale-200 (#e9e9e9),
    the nearest canonical rung. No semantic background/surface token resolves
    to this exact grayscale value, so the primitive is used directly (same
-   escape hatch as SocialIcon.css:81's --color-grayscale-950 glyph). */
+   escape hatch as SocialIcon.css:81's --bds-color-grayscale-950 glyph). */
 .bds-brik-blocks__cell[data-cell='light'] {
-  background-color: var(--color-grayscale-200); /* bds-lint-ignore token-family — decorative swatch, no semantic wrapper at this exact grayscale rung; see docs/TOKEN-PR-CHECKLIST.md */
+  background-color: var(--bds-color-grayscale-200); /* bds-lint-ignore token-family — decorative swatch, no semantic wrapper at this exact grayscale rung; see docs/TOKEN-PR-CHECKLIST.md */
 }
 
 .bds-brik-blocks__cell[data-cell='dark'] {
-  background-color: var(--color-grayscale-950); /* bds-lint-ignore token-family — decorative swatch, no semantic wrapper at this exact grayscale rung; see docs/TOKEN-PR-CHECKLIST.md */
+  background-color: var(--bds-color-grayscale-950); /* bds-lint-ignore token-family — decorative swatch, no semantic wrapper at this exact grayscale rung; see docs/TOKEN-PR-CHECKLIST.md */
 }
 
-/* --surface-brand-primary (not --color-poppy-500 directly) — the Semantic
+/* --bds-surface-brand-primary (not --bds-color-poppy-500 directly) — the Semantic
    tier already carries this exact fill on Banner/Footer/CardTestimonial/etc.,
    and token-anatomy.mdx names a component reading --color-{family}-{step}
    directly as drift when a Semantic wrapper exists. */
 .bds-brik-blocks__cell[data-cell='poppy'] {
-  background-color: var(--surface-brand-primary);
+  background-color: var(--bds-surface-brand-primary);
 }
 }

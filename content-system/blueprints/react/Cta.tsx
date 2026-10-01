@@ -28,8 +28,8 @@
  * `bds-blueprint-section__container` on the container.
  *
  * Token pairs (paired family ↔ size — never mix):
- *   title (h2)  — --font-family-heading + clamp(--heading-xl … --display-sm)
- *   description — --font-family-body + --heading-sm
+ *   title (h2)  — --bds-font-family-heading + clamp(--bds-heading-xl … --bds-display-sm)
+ *   description — --bds-font-family-body + --bds-heading-sm
  *
  * a11y: `<section>` with `aria-labelledby` → the h2. The default layout is
  * center-aligned but reading order stays natural (heading → body → actions).

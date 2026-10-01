@@ -27,7 +27,7 @@ const meta: Meta<typeof ContactIcon> = {
       control: 'select',
       options: ['neutral', 'accent'],
       description:
-        'Hue source: `neutral` (`--text-muted`), `accent` (`--text-brand-primary`). Contact marks have no brand identity, so there is no `brand` value (see `SocialIcon`).',
+        'Hue source: `neutral` (`--bds-text-muted`), `accent` (`--bds-text-brand-primary`). Contact marks have no brand identity, so there is no `brand` value (see `SocialIcon`).',
     },
     tone: { table: { disable: true } },
     size: {
@@ -78,26 +78,26 @@ const EMPHASES: ContactIconEmphasis[] = ['neutral', 'accent'];
  */
 export const AllMarks: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-md)' }}>
       {CONTACT_ICON_PLATFORMS.map((platform) => (
-        <div key={platform} style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
+        <div key={platform} style={{ display: 'flex', alignItems: 'center', gap: 'var(--bds-gap-md)' }}>
           <span
             style={{
               width: '80px',
               flexShrink: 0,
-              fontFamily: 'var(--font-family-label)',
-              fontSize: 'var(--label-sm)',
-              color: 'var(--text-secondary)',
+              fontFamily: 'var(--bds-font-family-label)',
+              fontSize: 'var(--bds-label-sm)',
+              color: 'var(--bds-text-secondary)',
             }}
           >
             {platform}
           </span>
-          <div style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 'var(--bds-gap-md)', flexWrap: 'wrap' }}>
             {TYPES.flatMap((type) =>
               EMPHASES.map((emphasis) => (
-                <div key={`${type}-${emphasis}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-tiny)' }}>
+                <div key={`${type}-${emphasis}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--bds-gap-tiny)' }}>
                   <ContactIcon platform={platform} type={type} emphasis={emphasis} size="sm" />
-                  <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)' }}>
+                  <span style={{ fontSize: '0.625rem', color: 'var(--bds-text-muted)' }}>
                     {type}/{emphasis}
                   </span>
                 </div>

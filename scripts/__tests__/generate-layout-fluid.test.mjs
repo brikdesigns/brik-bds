@@ -75,8 +75,8 @@ describe('generate-modes-css — buildFluidValue (ADR-042 D3)', () => {
   });
 
   it.each([
-    ['--page-inset', PAGE_INSET],
-    ['--section-padding-block', SECTION_PADDING_BLOCK],
+    ['--bds-page-inset', PAGE_INSET],
+    ['--bds-section-padding-block', SECTION_PADDING_BLOCK],
   ])('%s hits its mobile/tablet/desktop endpoints exactly', (_name, endpoints) => {
     const css = buildFluidValue(endpoints);
     expect(evalFluidCss(css, endpoints.w0)).toBeCloseTo(endpoints.v0, 2);
@@ -85,28 +85,28 @@ describe('generate-modes-css — buildFluidValue (ADR-042 D3)', () => {
   });
 
   it.each([
-    ['--page-inset', PAGE_INSET],
-    ['--section-padding-block', SECTION_PADDING_BLOCK],
+    ['--bds-page-inset', PAGE_INSET],
+    ['--bds-section-padding-block', SECTION_PADDING_BLOCK],
   ])('%s is flat above the desktop rung (1920 === 1440 value)', (_name, endpoints) => {
     const css = buildFluidValue(endpoints);
     expect(evalFluidCss(css, 1920)).toBeCloseTo(endpoints.v2, 2);
   });
 
   it.each([
-    ['--page-inset', PAGE_INSET],
-    ['--section-padding-block', SECTION_PADDING_BLOCK],
+    ['--bds-page-inset', PAGE_INSET],
+    ['--bds-section-padding-block', SECTION_PADDING_BLOCK],
   ])('%s never breaches the mobile floor below 320 (280 === 320 value)', (_name, endpoints) => {
     const css = buildFluidValue(endpoints);
     expect(evalFluidCss(css, 280)).toBeCloseTo(endpoints.v0, 2);
   });
 
-  it('--page-inset emits the exact committed ADR-042 CSS string', () => {
+  it('--bds-page-inset emits the exact committed ADR-042 CSS string', () => {
     expect(buildFluidValue(PAGE_INSET)).toBe(
       'calc(clamp(1rem, 0.2857rem + 3.5714vw, 2rem) + clamp(0rem, -4.5714rem + 9.5238vw, 4rem))',
     );
   });
 
-  it('--section-padding-block emits the exact committed ADR-042 CSS string', () => {
+  it('--bds-section-padding-block emits the exact committed ADR-042 CSS string', () => {
     expect(buildFluidValue(SECTION_PADDING_BLOCK)).toBe(
       'calc(clamp(4rem, 3.2857rem + 3.5714vw, 5rem) + clamp(0rem, -1.7143rem + 3.5714vw, 1.5rem))',
     );
@@ -116,15 +116,15 @@ describe('generate-modes-css — buildFluidValue (ADR-042 D3)', () => {
 describe('generate-modes-css — tokens/layout-fluid.css (committed output)', () => {
   const committed = readFileSync(LAYOUT_FLUID_CSS, 'utf8');
 
-  it('ships --page-inset at the exact ADR-042 value', () => {
+  it('ships --bds-page-inset at the exact ADR-042 value', () => {
     expect(committed).toContain(
-      '--page-inset: calc(clamp(1rem, 0.2857rem + 3.5714vw, 2rem) + clamp(0rem, -4.5714rem + 9.5238vw, 4rem));',
+      '--bds-page-inset: calc(clamp(1rem, 0.2857rem + 3.5714vw, 2rem) + clamp(0rem, -4.5714rem + 9.5238vw, 4rem));',
     );
   });
 
-  it('ships --section-padding-block at the exact ADR-042 value', () => {
+  it('ships --bds-section-padding-block at the exact ADR-042 value', () => {
     expect(committed).toContain(
-      '--section-padding-block: calc(clamp(4rem, 3.2857rem + 3.5714vw, 5rem) + clamp(0rem, -1.7143rem + 3.5714vw, 1.5rem));',
+      '--bds-section-padding-block: calc(clamp(4rem, 3.2857rem + 3.5714vw, 5rem) + clamp(0rem, -1.7143rem + 3.5714vw, 1.5rem));',
     );
   });
 

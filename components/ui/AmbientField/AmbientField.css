@@ -43,7 +43,7 @@
   --bds-bg-field-src: none;
   --bds-bg-field-tint: transparent;
   --bds-bg-field-opacity: 1;
-  --bds-bg-field-particle: var(--text-muted);
+  --bds-bg-field-particle: var(--bds-text-muted);
 
   position: absolute;
   inset: 0;

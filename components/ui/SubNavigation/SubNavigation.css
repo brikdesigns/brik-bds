@@ -2,8 +2,8 @@
 /* ─── SubNavigation ──────────────────────────────────────────── */
 
 .bds-subnav {
-  background-color: var(--surface-primary);
-  border-right: var(--border-width-md) solid var(--border-secondary);
+  background-color: var(--bds-surface-primary);
+  border-right: var(--bds-border-width-md) solid var(--bds-border-secondary);
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -24,28 +24,28 @@
      centered within the bar; horizontal padding is retained, vertical padding
      is governed by the fixed height. box-sizing keeps the border-bottom inside
      the 80px. */
-  height: var(--size-1800);
+  height: var(--bds-size-1800);
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  padding: 0 var(--padding-md);
-  border-bottom: var(--border-width-md) solid var(--border-secondary);
+  padding: 0 var(--bds-padding-md);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-secondary);
 }
 
 /* ─── Nav section ────────────────────────────────────────────── */
 
 .bds-subnav__nav {
   flex: 1;
-  padding: var(--padding-md) var(--padding-tiny);
+  padding: var(--bds-padding-md) var(--bds-padding-tiny);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
 }
 
 /* ─── Footer ─────────────────────────────────────────────────── */
 
 .bds-subnav__footer {
-  padding: var(--padding-md);
-  border-top: var(--border-width-md) solid var(--border-secondary);
+  padding: var(--bds-padding-md);
+  border-top: var(--bds-border-width-md) solid var(--bds-border-secondary);
 }
 }

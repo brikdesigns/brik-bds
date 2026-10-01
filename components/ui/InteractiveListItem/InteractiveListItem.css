@@ -15,14 +15,14 @@
     width: 100%;
     background: none;
     border: none;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--bds-border-radius-md);
     cursor: pointer;
     text-align: left;
     color: inherit;
     font: inherit;
     transition:
-      background-color var(--duration-sm) var(--ease-out),
-      transform var(--duration-sm) var(--ease-out);
+      background-color var(--bds-duration-sm) var(--bds-ease-out),
+      transform var(--bds-duration-sm) var(--bds-ease-out);
   }
 
   /* ─── Size variants ────────────────────────────────────────────
@@ -33,23 +33,23 @@
        default padding crowds the text column. */
 
   .bds-interactive-list-item--md {
-    gap: var(--gap-md);
-    padding: var(--padding-md) var(--padding-lg);
+    gap: var(--bds-gap-md);
+    padding: var(--bds-padding-md) var(--bds-padding-lg);
   }
 
   .bds-interactive-list-item--sm {
-    gap: var(--gap-sm);
-    padding: var(--padding-sm);
+    gap: var(--bds-gap-sm);
+    padding: var(--bds-padding-sm);
   }
 
   /* `sm` is for narrow contexts (DevBar slot panels, popovers) — the
-     default `--label-md` title crowds these layouts and reads as oversized. */
+     default `--bds-label-md` title crowds these layouts and reads as oversized. */
   .bds-interactive-list-item--sm .bds-interactive-list-item__title {
-    font-size: var(--label-sm);
+    font-size: var(--bds-label-sm);
   }
 
   .bds-interactive-list-item:not(.bds-interactive-list-item--readonly):hover:not(:disabled) {
-    background-color: var(--surface-secondary);
+    background-color: var(--bds-surface-secondary);
   }
 
   .bds-interactive-list-item:not(.bds-interactive-list-item--readonly):active:not(:disabled) {
@@ -68,7 +68,7 @@
   }
 
   .bds-interactive-list-item:focus-visible {
-    outline: var(--border-width-lg) solid var(--state-focus, currentColor);
+    outline: var(--bds-border-width-lg) solid var(--bds-state-focus, currentColor);
     outline-offset: 2px;
   }
 
@@ -79,16 +79,16 @@
      metrics, no shift on toggle. Mirrors `Button --selected`. */
 
   .bds-interactive-list-item--selected {
-    background-color: var(--surface-brand-secondary);
-    box-shadow: inset 0 0 0 var(--border-width-md) var(--border-brand-primary);
+    background-color: var(--bds-surface-brand-secondary);
+    box-shadow: inset 0 0 0 var(--bds-border-width-md) var(--bds-border-brand-primary);
   }
 
   .bds-interactive-list-item--selected:hover:not(:disabled) {
-    background-color: var(--surface-brand-secondary);
+    background-color: var(--bds-surface-brand-secondary);
   }
 
   .bds-interactive-list-item--disabled {
-    opacity: var(--state-disabled-opacity);
+    opacity: var(--bds-state-disabled-opacity);
     cursor: not-allowed;
   }
 
@@ -107,19 +107,19 @@
   .bds-interactive-list-item__text {
     display: flex;
     flex-direction: column;
-    /* Title ↔ subtitle is the tight step (ADR-023 content-rhythm map: --gap-sm);
-       --gap-tiny collapses to 0px outside default spacing mode. */
-    gap: var(--gap-sm);
+    /* Title ↔ subtitle is the tight step (ADR-023 content-rhythm map: --bds-gap-sm);
+       --bds-gap-tiny collapses to 0px outside default spacing mode. */
+    gap: var(--bds-gap-sm);
     min-width: 0;
     flex: 1;
   }
 
   .bds-interactive-list-item__title {
-    font-family: var(--font-family-label);
-    font-size: var(--label-md);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--font-line-height-tight);
-    color: var(--text-primary);
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-md);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
     /* Truncate single-line titles — but allow wrap if consumer needs it */
     overflow: hidden;
     text-overflow: ellipsis;
@@ -132,11 +132,11 @@
        PriorityBadge, etc.) preserve their own styling within. */
     display: flex;
     flex-direction: column;
-    gap: var(--gap-sm); /* tight step — --gap-tiny is 0px outside default mode */
-    font-family: var(--font-family-body);
-    font-size: var(--subtitle-md); /* subtitle-role slot — not --body-xs (a body-role token); both = --font-size-50 today, but --body-xs re-points under ADR-033 (#2384) */
-    line-height: var(--font-line-height-normal);
-    color: var(--text-secondary);
+    gap: var(--bds-gap-sm); /* tight step — --bds-gap-tiny is 0px outside default mode */
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-subtitle-md); /* subtitle-role slot — not --bds-body-xs (a body-role token); both = --bds-font-size-50 today, but --bds-body-xs re-points under ADR-033 (#2384) */
+    line-height: var(--bds-font-line-height-normal);
+    color: var(--bds-text-secondary);
   }
 
   /* ─── Trailing slot ─────────────────────────────────────────────
@@ -145,8 +145,8 @@
   .bds-interactive-list-item__trailing {
     display: flex;
     align-items: center;
-    gap: var(--gap-sm);
+    gap: var(--bds-gap-sm);
     flex-shrink: 0;
-    color: var(--text-secondary);
+    color: var(--bds-text-secondary);
   }
 }

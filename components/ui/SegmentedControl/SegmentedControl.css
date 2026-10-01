@@ -7,9 +7,9 @@
  * modifier, disabled is the native :disabled state.
  *
  * Token reference:
- * - --background-secondary (track fill)    - --background-primary (active pill)
- * - --background-tertiary (hover/press)    - --text-on-color-light (inactive label)
- * - --text-primary (active/hover label)    - --border-brand-primary (focus ring)
+ * - --bds-background-secondary (track fill)    - --bds-background-primary (active pill)
+ * - --bds-background-tertiary (hover/press)    - --bds-text-on-color-light (inactive label)
+ * - --bds-text-primary (active/hover label)    - --bds-border-brand-primary (focus ring)
  */
 
 /* ── Container / track ── */
@@ -17,10 +17,10 @@
 .bds-segmented-control {
   display: inline-flex;
   align-items: center;
-  gap: var(--border-width-lg);
-  padding: var(--border-width-lg);
-  background-color: var(--background-secondary);
-  border-radius: var(--border-radius-md);
+  gap: var(--bds-border-width-lg);
+  padding: var(--bds-border-width-lg);
+  background-color: var(--bds-background-secondary);
+  border-radius: var(--bds-border-radius-md);
   box-sizing: border-box;
 }
 
@@ -32,9 +32,9 @@
 /* ── Segment ── */
 
 .bds-segmented-control-item {
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
   text-align: center;
   white-space: nowrap;
   cursor: pointer;
@@ -43,15 +43,15 @@
      "conflicting style property" warning when these were inline. See #993. */
   background-color: transparent;
   border: none;
-  border-radius: var(--border-radius-sm);
-  /* Inactive label sits on the --background-secondary track, a light-ish neutral
-     surface in BOTH themes. --text-on-color-light is fixed dark in both themes →
+  border-radius: var(--bds-border-radius-sm);
+  /* Inactive label sits on the --bds-background-secondary track, a light-ish neutral
+     surface in BOTH themes. --bds-text-on-color-light is fixed dark in both themes →
      AA on the track either way. See contrast-pairings.json. */
-  color: var(--text-on-color-light);
+  color: var(--bds-text-on-color-light);
   min-width: 0;
-  transition: background-color var(--duration-sm) var(--ease-out),
-    color var(--duration-sm) var(--ease-out),
-    box-shadow var(--duration-sm) var(--ease-out);
+  transition: background-color var(--bds-duration-sm) var(--bds-ease-out),
+    color var(--bds-duration-sm) var(--bds-ease-out),
+    box-shadow var(--bds-duration-sm) var(--bds-ease-out);
 }
 
 .bds-segmented-control--full-width .bds-segmented-control-item {
@@ -61,47 +61,47 @@
 /* ── Size ── */
 
 .bds-segmented-control--sm .bds-segmented-control-item {
-  padding: var(--gap-xs) var(--padding-md);
-  font-size: var(--label-sm);
+  padding: var(--bds-gap-xs) var(--bds-padding-md);
+  font-size: var(--bds-label-sm);
 }
 
 .bds-segmented-control--md .bds-segmented-control-item {
-  padding: var(--gap-sm) var(--padding-lg);
-  font-size: var(--label-md);
+  padding: var(--bds-gap-sm) var(--bds-padding-lg);
+  font-size: var(--bds-label-md);
 }
 
 .bds-segmented-control--lg .bds-segmented-control-item {
-  padding: var(--gap-md) var(--padding-xl);
-  font-size: var(--label-md);
+  padding: var(--bds-gap-md) var(--bds-padding-xl);
+  font-size: var(--bds-label-md);
 }
 
 /* ── Active ── */
 
 .bds-segmented-control-item--active {
-  background-color: var(--background-primary);
-  color: var(--text-primary);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — no composite --box-shadow-* matches this value (nearest is --shadow-sm 0px 2px 4px 0.06); a --box-shadow-xs is a separate proposal (#2171 out-of-scope) */
+  background-color: var(--bds-background-primary);
+  color: var(--bds-text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — no composite --box-shadow-* matches this value (nearest is --bds-shadow-sm 0px 2px 4px 0.06); a --box-shadow-xs is a separate proposal (#2171 out-of-scope) */
 }
 
 /* ── Disabled ── */
 
 .bds-segmented-control-item:disabled {
   cursor: not-allowed;
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
   pointer-events: none;
 }
 
 /* ── Inactive hover ── */
 
 .bds-segmented-control-item:hover:not(:disabled):not(.bds-segmented-control-item--active) {
-  background-color: var(--background-tertiary);
-  color: var(--text-primary);
+  background-color: var(--bds-background-tertiary);
+  color: var(--bds-text-primary);
 }
 
 /* ── Inactive press ── */
 
 .bds-segmented-control-item:active:not(:disabled):not(.bds-segmented-control-item--active) {
-  background-color: var(--background-tertiary);
+  background-color: var(--bds-background-tertiary);
   opacity: 0.7;
 }
 
@@ -114,7 +114,7 @@
 /* ── Focus visible (keyboard navigation) ── */
 
 .bds-segmented-control-item:focus-visible {
-  outline: 2px solid var(--border-brand-primary);
+  outline: 2px solid var(--bds-border-brand-primary);
   outline-offset: 1px;
 }
 }

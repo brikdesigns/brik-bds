@@ -11,7 +11,7 @@
  * first.
  *
  * Tier values are scoped to BRAND-TIER decisions only — they never
- * override canonical neutral slots (`--text-primary` / `--surface-primary` /
+ * override canonical neutral slots (`--bds-text-primary` / `--bds-surface-primary` /
  * etc.). Per the BDS canonical token registry, neutral slots resolve from
  * the white / black / gray primitives exclusively. To shift a brand's body
  * surface or body text to a warm-tinted neutral (e.g. Vale's cream +
@@ -25,8 +25,8 @@
  *   node_modules/@brikdesigns/bds/dist/tokens.css
  *
  * Tier semantics:
- *   - primary    — chromatic brand identity. Drives `--text-brand-primary`,
- *                  accents, `--text-link`.
+ *   - primary    — chromatic brand identity. Drives `--bds-text-brand-primary`,
+ *                  accents, `--bds-text-link`.
  *   - secondary  — supporting brand color. Tag-only today; no automatic
  *                  mapping.
  *   - tertiary   — third-tier brand color. Tag-only by contract (ADR-012).
@@ -35,8 +35,8 @@
  *                  Tag-only by contract (ADR-012).
  *   - neutral    — gray ramp source. Drives gray-ramp neutral resolution.
  *   - brand-fill — AA-safe variant of primary used for filled brand
- *                  surfaces (`--background-brand-primary`) and brand-
- *                  colored text (`--text-brand-primary`). Specify when
+ *                  surfaces (`--bds-background-brand-primary`) and brand-
+ *                  colored text (`--bds-text-brand-primary`). Specify when
  *                  primary fails AA contrast against the paper/white
  *                  surface (Vale's olive #698339 is 3.4:1 on white;
  *                  olive-deep #3d4c23 is 9.0:1).

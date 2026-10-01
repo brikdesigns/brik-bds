@@ -113,7 +113,7 @@ export const InteractionTestDisabledLabelLegible: Story = {
     await expect(trigger).toBeDisabled();
 
     // The disabled trigger must not paint its label in its own background
-    // colour. It reads --text-disabled / --background-disabled, which the Figma
+    // colour. It reads --bds-text-disabled / --bds-background-disabled, which the Figma
     // source emitted as the same grayscale step — 1:1, an empty-looking pill
     // (#1503, root-caused and fixed in #1571). 3:1 rather than 4.5:1 because
     // WCAG 1.4.3 exempts inactive components; the bar is legibility.

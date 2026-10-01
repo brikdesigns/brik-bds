@@ -31,7 +31,7 @@ function CopyButton({ text }: { text: string }) {
         cursor: 'pointer',
         padding: '2px 6px',
         fontSize: '11px',
-        color: copied ? 'var(--text-brand-primary)' : 'var(--text-muted)',
+        color: copied ? 'var(--bds-text-brand-primary)' : 'var(--bds-text-muted)',
         opacity: copied ? 1 : 0.6,
         transition: 'opacity 150ms',
       }}
@@ -54,14 +54,14 @@ export function TokenTable({ tokens, title, showSearch = true }: TokenTableProps
     : tokens;
 
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 32px)' }}>
       {title && (
         <h3
           style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--heading-sm, 20px)',
-            marginBottom: 'var(--gap-md, 8px)',
-            color: 'var(--text-primary)',
+            fontFamily: 'var(--bds-font-family-heading)',
+            fontSize: 'var(--bds-heading-sm, 20px)',
+            marginBottom: 'var(--bds-gap-md, 8px)',
+            color: 'var(--bds-text-primary)',
           }}
         >
           {title}
@@ -78,12 +78,12 @@ export function TokenTable({ tokens, title, showSearch = true }: TokenTableProps
             width: '100%',
             maxWidth: '320px',
             padding: '6px 12px',
-            marginBottom: 'var(--gap-md, 8px)',
-            border: '1px solid var(--border-secondary)',
-            borderRadius: 'var(--border-radius-sm, 2px)',
-            background: 'var(--background-primary)',
-            color: 'var(--text-primary)',
-            fontFamily: 'var(--font-family-body)',
+            marginBottom: 'var(--bds-gap-md, 8px)',
+            border: '1px solid var(--bds-border-secondary)',
+            borderRadius: 'var(--bds-border-radius-sm, 2px)',
+            background: 'var(--bds-background-primary)',
+            color: 'var(--bds-text-primary)',
+            fontFamily: 'var(--bds-font-family-body)',
             fontSize: '14px',
             boxSizing: 'border-box' as const,
           }}
@@ -94,7 +94,7 @@ export function TokenTable({ tokens, title, showSearch = true }: TokenTableProps
         style={{
           width: '100%',
           borderCollapse: 'collapse',
-          fontFamily: 'var(--font-family-body)',
+          fontFamily: 'var(--bds-font-family-body)',
           fontSize: '14px',
         }}
       >
@@ -124,7 +124,7 @@ export function TokenTable({ tokens, title, showSearch = true }: TokenTableProps
           ))}
           {filtered.length === 0 && (
             <tr>
-              <td colSpan={4} style={{ ...tdStyle, textAlign: 'center', color: 'var(--text-muted)' }}>
+              <td colSpan={4} style={{ ...tdStyle, textAlign: 'center', color: 'var(--bds-text-muted)' }}>
                 No tokens match "{filter}"
               </td>
             </tr>
@@ -137,8 +137,8 @@ export function TokenTable({ tokens, title, showSearch = true }: TokenTableProps
 
 const thStyle: React.CSSProperties = {
   padding: '8px 12px',
-  borderBottom: '2px solid var(--border-secondary)',
-  color: 'var(--text-muted)',
+  borderBottom: '2px solid var(--bds-border-secondary)',
+  color: 'var(--bds-text-muted)',
   fontSize: '12px',
   fontWeight: 600,
   textTransform: 'uppercase' as const,
@@ -147,14 +147,14 @@ const thStyle: React.CSSProperties = {
 
 const tdStyle: React.CSSProperties = {
   padding: '8px 12px',
-  borderBottom: '1px solid var(--border-muted)',
+  borderBottom: '1px solid var(--bds-border-muted)',
   verticalAlign: 'middle',
 };
 
 const codeStyle: React.CSSProperties = {
   fontFamily: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace',
   fontSize: '12px',
-  background: 'var(--surface-secondary)',
+  background: 'var(--bds-surface-secondary)',
   padding: '2px 6px',
   borderRadius: '3px',
   color: 'inherit',

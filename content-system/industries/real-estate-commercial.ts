@@ -466,7 +466,7 @@ export const realEstateCommercial: IndustryPack = {
   // Each column represents one audience. The `audienceId` on each category
   // is the semantic role; consumer themes bind it to brand-color tokens via
   // `[data-audience=X]` (or equivalent) scoped re-binding of canonical
-  // `--background-brand-primary` / `--text-brand-primary` / `--border-brand-primary`.
+  // `--bds-background-brand-primary` / `--bds-text-brand-primary` / `--bds-border-brand-primary`.
   // BCS pack data carries no color decisions — visual binding is the client
   // theme's responsibility.
   //

@@ -20,34 +20,34 @@
 /* ─── Track ───────────────────────────────────────────── */
 
 .bds-progress-circle__track {
-  stroke: var(--background-muted);
+  stroke: var(--bds-background-muted);
 }
 
 /* ─── Fill ────────────────────────────────────────────── */
 
 .bds-progress-circle__fill {
-  stroke: var(--background-brand-primary);
+  stroke: var(--bds-background-brand-primary);
   transition:
-    stroke-dashoffset var(--duration-500) var(--ease-out),
-    stroke var(--duration-200) var(--ease-out);
+    stroke-dashoffset var(--bds-duration-500) var(--bds-ease-out),
+    stroke var(--bds-duration-200) var(--bds-ease-out);
 }
 
 .bds-progress-circle--tone-positive .bds-progress-circle__fill {
-  stroke: var(--background-positive);
+  stroke: var(--bds-background-positive);
 }
 
 .bds-progress-circle--tone-warning .bds-progress-circle__fill {
-  stroke: var(--background-warning);
+  stroke: var(--bds-background-warning);
 }
 
 .bds-progress-circle--tone-negative .bds-progress-circle__fill {
-  stroke: var(--background-negative);
+  stroke: var(--bds-background-negative);
 }
 
 /* ─── Indeterminate spin ──────────────────────────────── */
 
 .bds-progress-circle--indeterminate .bds-progress-circle__svg {
-  animation: bds-progress-circle-spin var(--duration-600) linear infinite;
+  animation: bds-progress-circle-spin var(--bds-duration-600) linear infinite;
 }
 
 .bds-progress-circle--indeterminate .bds-progress-circle__fill {
@@ -76,21 +76,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-family-heading);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-weight: var(--bds-font-weight-semibold);
+  color: var(--bds-text-primary);
   pointer-events: none;
 }
 
 .bds-progress-circle__center--sm {
-  font-size: var(--body-md);
+  font-size: var(--bds-body-md);
 }
 
 .bds-progress-circle__center--md {
-  font-size: var(--heading-tiny);
+  font-size: var(--bds-heading-tiny);
 }
 
 .bds-progress-circle__center--lg {
-  font-size: var(--heading-sm);
+  font-size: var(--bds-heading-sm);
 }
 }

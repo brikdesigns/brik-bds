@@ -30,9 +30,9 @@ export interface TextLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /**
    * Hue source. `brand` (default) uses the brand link color at rest — the
    * right choice for a page-level link or CTA, where the link stands out from
-   * body copy. `neutral` uses `--text-primary` at rest — for a lower-emphasis
+   * body copy. `neutral` uses `--bds-text-primary` at rest — for a lower-emphasis
    * link that reads as an identifier rather than a call-to-action (e.g. the
-   * name cell in a table). Both values transition to `--text-brand-primary` on
+   * name cell in a table). Both values transition to `--bds-text-brand-primary` on
    * hover, so color still signals interactivity.
    */
   emphasis?: TextLinkEmphasis;

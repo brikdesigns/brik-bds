@@ -109,7 +109,7 @@ const TEXTAREA_SIZE: Record<AddableEntryListSize, TextAreaSize> = { sm: 'sm', md
  * Use for vocabulary-locked lists (services from a catalog, etc.).
  *
  * **Read mode** (`disabled`). Both modes collapse to token-backed typography
- * (primary: `--label-md`; secondary: `--body-md`). If `primaryInputType` is
+ * (primary: `--bds-label-md`; secondary: `--bds-body-md`). If `primaryInputType` is
  * `'url'`, the primary renders as a clickable anchor.
  *
  * The entry shape is deliberately generic (`{ primary, secondary }`) so a

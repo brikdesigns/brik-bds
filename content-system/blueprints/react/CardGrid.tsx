@@ -36,9 +36,9 @@
  * ```
  *
  * Token pairs (paired family ↔ size — never mix):
- *   subtitle    — --font-family-subtitle + --subtitle-lg + --text-transform-subtitle
- *   title (h2)  — --font-family-heading + clamp(--heading-lg, ..., --heading-huge)
- *   description — --font-family-body + --body-md
+ *   subtitle    — --bds-font-family-subtitle + --bds-subtitle-lg + --bds-text-transform-subtitle
+ *   title (h2)  — --bds-font-family-heading + clamp(--bds-heading-lg, ..., --bds-heading-huge)
+ *   description — --bds-font-family-body + --bds-body-md
  *
  * Composed with the shared shell (ADR-021): `bds-blueprint-section` on the root,
  * `bds-blueprint-section__container` on the container. This family keeps its heavier
@@ -62,13 +62,13 @@ export interface CardGridProps extends HTMLAttributes<HTMLElement> {
   title: string;
   /**
    * Optional eyebrow text rendered above the title. Uses
-   * `--font-family-subtitle` with `--text-transform-subtitle: uppercase`
+   * `--bds-font-family-subtitle` with `--bds-text-transform-subtitle: uppercase`
    * for the canonical eyebrow treatment.
    */
   subtitle?: string;
   /**
    * Optional one-line lead paragraph under the title. Pairs
-   * `--font-family-body` with `--body-md` (a matched body family/size
+   * `--bds-font-family-body` with `--bds-body-md` (a matched body family/size
    * pair — never reach across families for size).
    */
   description?: string;

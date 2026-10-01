@@ -4,42 +4,42 @@
 .bds-nav-item {
   display: flex;
   align-items: center;
-  gap: var(--gap-md); /* bds-lint-ignore — Figma nav item gap */
+  gap: var(--bds-gap-md); /* bds-lint-ignore — Figma nav item gap */
   padding: 14px 12px; /* bds-lint-ignore — Figma nav item padding */
-  border-radius: var(--border-radius-md); /* bds-lint-ignore — Figma nav item radius */
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-regular);
-  color: var(--text-primary);
+  border-radius: var(--bds-border-radius-md); /* bds-lint-ignore — Figma nav item radius */
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-regular);
+  color: var(--bds-text-primary);
   background-color: transparent;
   text-decoration: none;
   cursor: pointer;
   box-sizing: border-box;
-  transition: background-color var(--duration-sm) var(--ease-out),
-    color var(--duration-sm) var(--ease-out);
+  transition: background-color var(--bds-duration-sm) var(--bds-ease-out),
+    color var(--bds-duration-sm) var(--bds-ease-out);
 }
 
 .bds-nav-item:hover {
-  background-color: var(--page-secondary);
+  background-color: var(--bds-page-secondary);
 }
 
 .bds-nav-item--active {
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-on-color-dark);
-  background-color: var(--background-brand-primary);
+  font-weight: var(--bds-font-weight-semibold);
+  color: var(--bds-text-on-color-dark);
+  background-color: var(--bds-background-brand-primary);
 }
 
 .bds-nav-item--active:hover {
-  background-color: var(--background-brand-primary-hover);
+  background-color: var(--bds-background-brand-primary-hover);
 }
 
 /* Fill-less (transparent background), so ADR-028 pt-2 applies: fade, do not
-   swap the label to --text-muted. The muted swap darkened the label toward the
+   swap the label to --bds-text-muted. The muted swap darkened the label toward the
    page while the page stayed put — 1.88:1 light / 1.35:1 dark against a 3:1
-   floor, and no alpha rescues --text-muted in dark (#1687). */
+   floor, and no alpha rescues --bds-text-muted in dark (#1687). */
 .bds-nav-item--disabled {
   cursor: not-allowed;
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
   pointer-events: none;
 }
 
@@ -56,7 +56,7 @@
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
-  font-size: var(--body-md);
+  font-size: var(--bds-body-md);
 }
 
 .bds-nav-item__label {

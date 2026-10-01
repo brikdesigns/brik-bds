@@ -15,14 +15,14 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--background-overlay);
+  background-color: var(--bds-background-overlay);
   z-index: 900;
 }
 
 .bds-sheet {
   position: fixed;
-  background-color: var(--surface-primary);
-  box-shadow: var(--shadow-overlay);
+  background-color: var(--bds-surface-primary);
+  box-shadow: var(--bds-shadow-overlay);
   display: flex;
   flex-direction: column;
   z-index: 901;
@@ -39,20 +39,20 @@
 /* ─── Floating variant — no backdrop, rounded, elevated ─────── */
 
 .bds-sheet--floating {
-  border-radius: var(--border-radius-md);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12), 0 2px 12px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — custom multi-layer elevation shadow; single-layer composites exist (--box-shadow-sm..xl) but none is multi-layer, so this stays raw until a multi-layer composite is proposed */
+  border-radius: var(--bds-border-radius-md);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12), 0 2px 12px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — custom multi-layer elevation shadow; single-layer composites exist (--bds-box-shadow-sm..xl) but none is multi-layer, so this stays raw until a multi-layer composite is proposed */
 }
 
 .bds-sheet--floating.bds-sheet--right {
-  top: var(--padding-lg);
-  right: var(--padding-lg);
-  bottom: var(--padding-lg);
+  top: var(--bds-padding-lg);
+  right: var(--bds-padding-lg);
+  bottom: var(--bds-padding-lg);
 }
 
 .bds-sheet--floating.bds-sheet--left {
-  top: var(--padding-lg);
-  left: var(--padding-lg);
-  bottom: var(--padding-lg);
+  top: var(--bds-padding-lg);
+  left: var(--bds-padding-lg);
+  bottom: var(--bds-padding-lg);
 }
 
 /* ─── Header (matches Modal) ────────────────────────────────── */
@@ -61,8 +61,8 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  padding: var(--padding-lg);
-  border-bottom: var(--border-width-md) solid var(--border-muted);
+  padding: var(--bds-padding-lg);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-muted);
   flex-shrink: 0;
 }
 
@@ -79,13 +79,13 @@
   align-items: flex-start;
   justify-content: space-between;
   width: 100%;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
 }
 
 .bds-sheet__header-lead {
   display: flex;
   align-items: flex-start;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   min-width: 0;
   flex: 1;
 }
@@ -93,39 +93,39 @@
 .bds-sheet__titles {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
   min-width: 0;
 }
 
 /* ─── Title (matches Modal) ─────────────────────────────────── */
 
 .bds-sheet__title {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-md);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-snug);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-md);
+  font-weight: var(--bds-font-weight-bold);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-primary);
   margin: 0;
 }
 
 /* Subtitle eyebrow — short categorical context rendered above the title. */
 .bds-sheet__subtitle {
-  font-family: var(--font-family-label);
-  font-size: var(--label-xs);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-xs);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-muted);
   text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wide);
+  letter-spacing: var(--bds-letter-spacing-wide);
   margin: 0;
 }
 
 /* Description — long-form secondary text rendered under the title. */
 .bds-sheet__description {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
   margin: 0;
 }
 
@@ -133,38 +133,38 @@
 /* Layout only — visual contract lives in CloseButton. Negative margin pulls the
  * padded hit-target so the glyph sits flush with the header edges. */
 .bds-sheet__close {
-  margin: calc(-1 * var(--padding-xs));
+  margin: calc(-1 * var(--bds-padding-xs));
 }
 
 /* ─── Tabs (optional, renders below title row) ──────────────── */
 
 .bds-sheet__tabs {
   display: flex;
-  gap: var(--gap-lg);
+  gap: var(--bds-gap-lg);
   width: 100%;
 }
 
 .bds-sheet__tab {
   background: none;
   border: none;
-  border-bottom: var(--border-width-md) solid transparent;
-  padding: var(--padding-sm) 0;
-  font-family: var(--font-family-label);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-muted);
+  border-bottom: var(--bds-border-width-md) solid transparent;
+  padding: var(--bds-padding-sm) 0;
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  color: var(--bds-text-muted);
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s;
   white-space: nowrap;
 }
 
 .bds-sheet__tab:hover {
-  color: var(--text-primary);
+  color: var(--bds-text-primary);
 }
 
 .bds-sheet__tab--active {
-  color: var(--text-primary);
-  border-bottom-color: var(--border-brand-primary);
+  color: var(--bds-text-primary);
+  border-bottom-color: var(--bds-border-brand-primary);
 }
 
 /* ─── Body ───────────────────────────────────────────────────── */
@@ -174,7 +174,7 @@
      tab content) — the consumer's own content owns its type tokens, this
      slot only scrolls/pads it */
   flex: 1;
-  padding: var(--padding-xl) var(--padding-lg);
+  padding: var(--bds-padding-xl) var(--bds-padding-lg);
   overflow-y: auto;
   min-height: 0;
 
@@ -186,7 +186,7 @@
    * knowable at render time. An explicit `tier` on the Field still wins, since
    * a declaration on the element beats an inherited one.
    */
-  --bds-field-label-size: var(--label-sm);
+  --bds-field-label-size: var(--bds-label-sm);
 }
 
 /* ─── Footer (pinned to bottom, matches Modal footer) ────────── */
@@ -195,19 +195,19 @@
 /* sit right. A custom `footer` bypasses this — consumers compose free.*/
 
 .bds-sheet__footer {
-  padding: var(--padding-lg);
+  padding: var(--bds-padding-lg);
   display: flex;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   flex-shrink: 0;
-  border-top: var(--border-width-md) solid var(--border-muted);
+  border-top: var(--bds-border-width-md) solid var(--bds-border-muted);
 }
 
 .bds-sheet__footer-secondary {
   display: flex;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   align-items: center;
   flex-wrap: wrap;
 }
@@ -218,7 +218,7 @@
 
 .bds-sheet__footer-primary {
   display: flex;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   align-items: center;
   flex-wrap: wrap;
   margin-left: auto;
@@ -231,11 +231,11 @@
    padding is unchanged, so the body/footer stay aligned with the header. */
 
 .bds-sheet--compact .bds-sheet__body {
-  padding-block: var(--padding-lg);
+  padding-block: var(--bds-padding-lg);
 }
 
 .bds-sheet--compact .bds-sheet__footer {
-  padding-block: var(--padding-md);
+  padding-block: var(--bds-padding-md);
 }
 
 /* ─── Stack frame transitions ──────────────────────────────────── */
@@ -273,15 +273,15 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: var(--padding-xs);
-  margin: calc(-1 * var(--padding-xs));
+  padding: var(--bds-padding-xs);
+  margin: calc(-1 * var(--bds-padding-xs));
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-primary);
-  font-size: var(--icon-lg);
+  color: var(--bds-text-primary);
+  font-size: var(--bds-icon-lg);
   line-height: 1;
-  border-radius: var(--border-radius-md);
+  border-radius: var(--bds-border-radius-md);
   opacity: 0.6;
   transition: opacity 0.2s;
   flex-shrink: 0;
@@ -292,7 +292,7 @@
 }
 
 .bds-sheet__back-btn:focus-visible {
-  outline: var(--border-width-lg) solid var(--state-focus, currentColor);
+  outline: var(--bds-border-width-lg) solid var(--bds-state-focus, currentColor);
   outline-offset: 2px;
   opacity: 1;
 }
@@ -302,13 +302,13 @@
 .bds-sheet__skeleton-fields {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
+  gap: var(--bds-gap-lg);
 }
 
 .bds-sheet__skeleton-field {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
 }
 
 /* ─── Nav link (clickable entity reference inside sheets) ──────── */
@@ -318,7 +318,7 @@
   border: none;
   padding: 0;
   cursor: pointer;
-  color: var(--text-brand-primary);
+  color: var(--bds-text-brand-primary);
   font: inherit;
   text-decoration: none;
   transition: color 0.15s;

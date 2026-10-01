@@ -20,7 +20,7 @@ const meta: Meta<typeof CardGrid> = {
     docs: {
       description: {
         component:
-          'Generic section wrapper for any "header + grid of cards" layout. Content-agnostic by design — serves services, blog posts, customer stories, property listings, team bios, support plans. Consumers compose `<Grid>` + `<Card layout="stack">` (or any item shape) inside. Token pairs: subtitle uses `--font-family-subtitle` + `--subtitle-lg` + `--text-transform-subtitle`; title uses `--font-family-heading` + clamp heading scale; description uses `--font-family-body` + `--body-md`.',
+          'Generic section wrapper for any "header + grid of cards" layout. Content-agnostic by design — serves services, blog posts, customer stories, property listings, team bios, support plans. Consumers compose `<Grid>` + `<Card layout="stack">` (or any item shape) inside. Token pairs: subtitle uses `--bds-font-family-subtitle` + `--bds-subtitle-lg` + `--bds-text-transform-subtitle`; title uses `--bds-font-family-heading` + clamp heading scale; description uses `--bds-font-family-body` + `--bds-body-md`.',
       },
     },
   },
@@ -98,10 +98,10 @@ export const TwoColumnList: Story = {
         {['Web design', 'Brand identity', 'Content strategy', 'Customer journey maps'].map((item) => (
           <li key={item}>
             <Stack gap="sm">
-              <h3 style={{ margin: 0, fontFamily: 'var(--font-family-heading)', fontSize: 'var(--heading-md)', fontWeight: 'var(--font-weight-semibold)', color: 'var(--text-primary)', lineHeight: 'var(--font-line-height-tight)' }}>
+              <h3 style={{ margin: 0, fontFamily: 'var(--bds-font-family-heading)', fontSize: 'var(--bds-heading-md)', fontWeight: 'var(--bds-font-weight-semibold)', color: 'var(--bds-text-primary)', lineHeight: 'var(--bds-font-line-height-tight)' }}>
                 {item}
               </h3>
-              <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', lineHeight: 'var(--font-line-height-normal)', color: 'var(--text-primary)' }}>
+              <p style={{ margin: 0, fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-md)', lineHeight: 'var(--bds-font-line-height-normal)', color: 'var(--bds-text-primary)' }}>
                 A one-line description that pairs body family with body size — never reach across families for the size token.
               </p>
             </Stack>

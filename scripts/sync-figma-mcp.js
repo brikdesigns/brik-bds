@@ -101,6 +101,8 @@ const { execSync } = require('child_process');
 // ─── Parse CLI args ──────────────────────────────────────────────
 
 const args = process.argv.slice(2);
+// ADR-043 System ID — every emitted CSS name leads with it.
+const SYSTEM_ID = require('../tokens/naming-grammar.json').ids.componentId;
 const dryRun = args.includes('--dry-run');
 const runBuild = args.includes('--build');
 const noMerge = args.includes('--no-merge');
@@ -111,12 +113,13 @@ const sourceRootArg = args.find((a) => a.startsWith('--source-root='));
 const inputFile = args.find((a) => !a.startsWith('--'));
 
 // Tokens the operator has explicitly cleared for deletion despite still being
-// referenced in source. Accepts `--font-weight-heading` or `font-weight-heading`.
+// referenced in source. Accepts `--bds-font-weight-heading`, `font-weight-heading`
+// or the pre-ADR-043 `--font-weight-heading`.
 const allowPrune = new Set(
   args
     .filter((a) => a.startsWith('--allow-prune='))
     .flatMap((a) => a.replace(/^--allow-prune=/, '').split(','))
-    .map((n) => n.trim().replace(/^--/, ''))
+    .map((n) => n.trim().replace(/^--/, '').replace(new RegExp(`^${SYSTEM_ID}-`), ''))
     .filter(Boolean)
 );
 
@@ -345,8 +348,10 @@ function deleteLeaf(set, varName) {
 // A leaf path maps 1:1 onto its CSS custom-property name by swapping `/` for
 // `-`: `font-weight/heading` → `--font-weight-heading`, `color/system/youtube`
 // → `--color-system-youtube`. Verified against tokens/figma-tokens.css.
+// ADR-043: every emitted CSS name leads with the System ID, so the guard must
+// search source for `--bds-…` — the Figma path itself stays un-prefixed.
 function leafPathToVarName(leafPath) {
-  return `--${leafPath.replace(/\//g, '-')}`;
+  return `--${SYSTEM_ID}-${leafPath.replace(/\//g, '-')}`;
 }
 
 // Directories the guard walks, relative to the source root, each with the
@@ -698,7 +703,7 @@ if (isPullShape && !noPrune) {
       if (seen.has(leafPath) || seenAnywhere.has(leafPath)) continue;
       const varName = leafPathToVarName(leafPath);
       const refs = referenceIndex.get(varName);
-      if (refs && !allowPrune.has(varName.replace(/^--/, ''))) {
+      if (refs && !allowPrune.has(varName.replace(new RegExp(`^--${SYSTEM_ID}-`), ''))) {
         blocked.push({ setKey, leafPath, varName, refs: Array.from(refs).sort() });
         continue;
       }

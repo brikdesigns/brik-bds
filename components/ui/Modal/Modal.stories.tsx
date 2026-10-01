@@ -206,18 +206,18 @@ export const ConfirmDestructive: Story = {
    ═══════════════════════════════════════════════════════════════ */
 
 const fieldInput = {
-  padding: 'var(--padding-md)',
-  border: 'var(--border-width-md) solid var(--border-input)',
-  borderRadius: 'var(--border-radius-50)',
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-md)',
+  padding: 'var(--bds-padding-md)',
+  border: 'var(--bds-border-width-md) solid var(--bds-border-input)',
+  borderRadius: 'var(--bds-border-radius-50)',
+  fontFamily: 'var(--bds-font-family-body)',
+  fontSize: 'var(--bds-body-md)',
 } as const;
 
 const Field = ({ label: text, children }: { label: string; children: React.ReactNode }) => (
   // Label wraps the control so it's implicitly associated (accessible name +
   // `getByLabelText` in the play test) without threading ids through.
-  <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)', flex: '1 1 0', minWidth: 0 }}>
-    <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-md)' }}>{text}</span>
+  <label style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-sm)', flex: '1 1 0', minWidth: 0 }}>
+    <span style={{ fontFamily: 'var(--bds-font-family-label)', fontSize: 'var(--bds-label-md)' }}>{text}</span>
     {children}
   </label>
 );
@@ -253,40 +253,40 @@ export const TwoColumnForm: Story = {
             </>
           }
         >
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-xl)', alignItems: 'stretch' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--bds-gap-xl)', alignItems: 'stretch' }}>
             <aside
               style={{
                 flex: '1 1 260px',
                 maxWidth: 360,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 'var(--gap-md)',
-                padding: 'var(--padding-md)',
-                backgroundColor: 'var(--surface-primary)',
-                border: 'var(--border-width-sm) solid var(--border-muted)',
-                borderRadius: 'var(--border-radius-lg)',
+                gap: 'var(--bds-gap-md)',
+                padding: 'var(--bds-padding-md)',
+                backgroundColor: 'var(--bds-surface-primary)',
+                border: 'var(--bds-border-width-sm) solid var(--bds-border-muted)',
+                borderRadius: 'var(--bds-border-radius-lg)',
                 boxSizing: 'border-box',
               }}
             >
               <div
                 style={{
                   aspectRatio: '3 / 2',
-                  backgroundColor: 'var(--surface-secondary)',
-                  borderRadius: 'var(--border-radius-md)',
+                  backgroundColor: 'var(--bds-surface-secondary)',
+                  borderRadius: 'var(--bds-border-radius-md)',
                 }}
               />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xs)' }}>
-                <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-secondary)' }}>Interested in</span>
-                <span style={{ fontFamily: 'var(--font-family-heading)', fontSize: 'var(--heading-sm)', color: 'var(--text-primary)' }}>Brand Identity System</span>
-                <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-secondary)' }}>$650 · one-time</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xs)' }}>
+                <span style={{ fontFamily: 'var(--bds-font-family-label)', fontSize: 'var(--bds-label-sm)', color: 'var(--bds-text-secondary)' }}>Interested in</span>
+                <span style={{ fontFamily: 'var(--bds-font-family-heading)', fontSize: 'var(--bds-heading-sm)', color: 'var(--bds-text-primary)' }}>Brand Identity System</span>
+                <span style={{ fontFamily: 'var(--bds-font-family-label)', fontSize: 'var(--bds-label-sm)', color: 'var(--bds-text-secondary)' }}>$650 · one-time</span>
               </div>
             </aside>
 
-            <div style={{ flex: '1.6 1 340px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+            <div style={{ flex: '1.6 1 340px', minWidth: 0, display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)' }}>
               <Field label="Name">
                 <input type="text" placeholder="Your name" style={fieldInput} />
               </Field>
-              <div style={{ display: 'flex', gap: 'var(--gap-lg)', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: 'var(--bds-gap-lg)', flexWrap: 'wrap' }}>
                 <Field label="Email">
                   <input type="email" placeholder="your@email.com" style={fieldInput} />
                 </Field>

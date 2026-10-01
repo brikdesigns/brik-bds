@@ -26,7 +26,7 @@ const meta: Meta<typeof TextLink> = {
       control: 'select',
       options: ['brand', 'neutral'],
       description:
-        'Hue source. `brand` (default) uses the brand link color at rest — for a page link or CTA. `neutral` uses `--text-primary` at rest — a lower-emphasis link that reads as an identifier (e.g. a table name cell). Both transition to `--text-brand-primary` on hover.',
+        'Hue source. `brand` (default) uses the brand link color at rest — for a page link or CTA. `neutral` uses `--bds-text-primary` at rest — a lower-emphasis link that reads as an identifier (e.g. a table name cell). Both transition to `--bds-text-brand-primary` on hover.',
     },
     tone: { table: { disable: true } },
     underline: {

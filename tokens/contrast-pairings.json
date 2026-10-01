@@ -1,6 +1,6 @@
 {
   "_comment": "Canonical accessible foreground/background token pairings for BDS. SINGLE SOURCE OF TRUTH consumed by: scripts/validate-themes.js (the CI contrast gate), stories/ContrastCompliance.stories.tsx (the Storybook dashboard), and the published foundation doc primitives/color-pairings.mdx (its matrix is generated via `node scripts/validate-themes.js --emit-matrix`). Each pairing is evaluated in BOTH the Brik light and dark default themes. thresholdType assignment follows the locked policy below. A pairing with `darkException` whose DARK result falls below threshold is REPORTED (not failed) and linked to its tracking issue \u2014 the known systemic dark-mode service-tier gap. Add a pairing here; never hardcode a pair list in a consumer.",
-  "policy": "AAA (7:1) for primary body/small text where the surface affords it; AA (4.5:1) for colored brand/service text and on-color neutrals; AA-large (3:1) for large/heading and intentionally-muted/decorative text. Brand-primary fills (CTA buttons/surfaces) and brand accent text hold the vibrant poppy-light brand color (brand-kit canon) and are gated AA-large (3:1) \u2014 UI-component fills + large/bold CTA labels and heading/accent text. Text ON the brand fill is ALWAYS white (--text-on-color-dark) at normal weight, ALL sizes incl. body copy (owner-accepted debt at 3.78:1, ADR-015 + its 2026-09-12 amendment); darkening on-color text to --text-primary or bolding body copy to reach large-text are BOTH DISALLOWED on the brand fill. (Distinct rule: --text-brand-primary \u2014 Poppy-COLORED text on a neutral surface \u2014 still never sizes to small body copy, use --text-primary there; enforced by lint-brand-text, #1064.) Service text-bearing regions use the pale `-lightest` surface step (AAA in light); the mid-tone base step is decorative and gated at AA only.",
+  "policy": "AAA (7:1) for primary body/small text where the surface affords it; AA (4.5:1) for colored brand/service text and on-color neutrals; AA-large (3:1) for large/heading and intentionally-muted/decorative text. Brand-primary fills (CTA buttons/surfaces) and brand accent text hold the vibrant poppy-light brand color (brand-kit canon) and are gated AA-large (3:1) \u2014 UI-component fills + large/bold CTA labels and heading/accent text. Text ON the brand fill is ALWAYS white (--bds-text-on-color-dark) at normal weight, ALL sizes incl. body copy (owner-accepted debt at 3.78:1, ADR-015 + its 2026-09-12 amendment); darkening on-color text to --bds-text-primary or bolding body copy to reach large-text are BOTH DISALLOWED on the brand fill. (Distinct rule: --bds-text-brand-primary \u2014 Poppy-COLORED text on a neutral surface \u2014 still never sizes to small body copy, use --bds-text-primary there; enforced by lint-brand-text, #1064.) Service text-bearing regions use the pale `-lightest` surface step (AAA in light); the mid-tone base step is decorative and gated at AA only.",
   "thresholds": {
     "AAA": 7,
     "AA": 4.5,
@@ -10,220 +10,220 @@
     {
       "group": "neutral",
       "label": "Body text on page",
-      "fg": "--text-primary",
-      "bg": "--page-primary",
+      "fg": "--bds-text-primary",
+      "bg": "--bds-page-primary",
       "thresholdType": "AAA"
     },
     {
       "group": "neutral",
       "label": "Body text on surface",
-      "fg": "--text-primary",
-      "bg": "--surface-primary",
+      "fg": "--bds-text-primary",
+      "bg": "--bds-surface-primary",
       "thresholdType": "AAA"
     },
     {
       "group": "neutral",
       "label": "Body text on background",
-      "fg": "--text-primary",
-      "bg": "--background-primary",
+      "fg": "--bds-text-primary",
+      "bg": "--bds-background-primary",
       "thresholdType": "AAA"
     },
     {
       "group": "neutral",
       "label": "Secondary text on page",
-      "fg": "--text-secondary",
-      "bg": "--page-primary",
+      "fg": "--bds-text-secondary",
+      "bg": "--bds-page-primary",
       "thresholdType": "AA"
     },
     {
       "group": "neutral",
       "label": "Secondary text on secondary surface",
-      "fg": "--text-secondary",
-      "bg": "--surface-secondary",
+      "fg": "--bds-text-secondary",
+      "bg": "--bds-surface-secondary",
       "thresholdType": "AA"
     },
     {
       "group": "neutral",
       "label": "Muted text on page",
-      "fg": "--text-muted",
-      "bg": "--page-primary",
+      "fg": "--bds-text-muted",
+      "bg": "--bds-page-primary",
       "thresholdType": "AA-large"
     },
     {
       "group": "neutral",
       "label": "SegmentedControl inactive label on track",
-      "fg": "--text-on-color-light",
-      "bg": "--background-secondary",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-secondary",
       "thresholdType": "AA"
     },
     {
       "group": "neutral",
       "label": "Solid Tag / MultiSelect chip label on fill",
-      "fg": "--text-on-color-light",
-      "bg": "--background-secondary",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-secondary",
       "thresholdType": "AA"
     },
     {
       "group": "neutral",
       "label": "Secondary control label on secondary fill",
-      "fg": "--text-primary",
-      "bg": "--background-secondary",
+      "fg": "--bds-text-primary",
+      "bg": "--bds-background-secondary",
       "thresholdType": "AA-large",
-      "note": "Button --secondary and Chip --secondary labels. Absent from this dataset until #1689, which is why dark --background-secondary could sit at 3.43:1 against --text-primary unnoticed while the two --text-on-color-light pairings above kept it looking gated. Gated AA-large (3:1), not AA: the token carries two OPPOSITE foregrounds \u2014 this light one and the black --text-on-color-light \u2014 and no grayscale step clears 4.5:1 for both (-light: 3.43 / 5.46; -dark: 6.16 / 3.04). Both consumers are control labels, the case ADR-015 and #1571 already hold at AA-large. Body copy must NOT use this fill; the reasoning is recorded on the declaration in tokens/theme-brand-brik.css."
+      "note": "Button --secondary and Chip --secondary labels. Absent from this dataset until #1689, which is why dark --bds-background-secondary could sit at 3.43:1 against --bds-text-primary unnoticed while the two --bds-text-on-color-light pairings above kept it looking gated. Gated AA-large (3:1), not AA: the token carries two OPPOSITE foregrounds \u2014 this light one and the black --bds-text-on-color-light \u2014 and no grayscale step clears 4.5:1 for both (-light: 3.43 / 5.46; -dark: 6.16 / 3.04). Both consumers are control labels, the case ADR-015 and #1571 already hold at AA-large. Body copy must NOT use this fill; the reasoning is recorded on the declaration in tokens/theme-brand-brik.css."
     },
     {
       "group": "neutral",
       "label": "SegmentedControl inactive hover label on tertiary fill",
-      "fg": "--text-primary",
-      "bg": "--background-tertiary",
+      "fg": "--bds-text-primary",
+      "bg": "--bds-background-tertiary",
       "thresholdType": "AA"
     },
     {
       "group": "neutral",
       "label": "Disabled control label on disabled fill",
-      "fg": "--text-disabled",
-      "bg": "--background-disabled",
+      "fg": "--bds-text-disabled",
+      "bg": "--bds-background-disabled",
       "thresholdType": "AA-large",
-      "note": "WCAG 1.4.3 exempts inactive components, so this pairing is gated at AA-large (3:1) as intentionally-muted text rather than AA \u2014 the point is legibility, not conformance. It is in the dataset because the Figma source emitted fg and bg as the same --color-grayscale-light, painting a disabled Button's label in its own background at 1.00:1 (#1571). A 1:1 pairing can never pass this gate again."
+      "note": "WCAG 1.4.3 exempts inactive components, so this pairing is gated at AA-large (3:1) as intentionally-muted text rather than AA \u2014 the point is legibility, not conformance. It is in the dataset because the Figma source emitted fg and bg as the same --bds-color-grayscale-500, painting a disabled Button's label in its own background at 1.00:1 (#1571). A 1:1 pairing can never pass this gate again."
     },
     {
       "group": "neutral",
       "label": "Neutral indicator label on subtle neutral fill",
-      "fg": "--text-neutral",
-      "bg": "--surface-neutral",
+      "fg": "--bds-text-neutral",
+      "bg": "--bds-surface-neutral",
       "thresholdType": "AA",
-      "note": "Badge `appearance=\"subtle\"` and Tag render this pair for the `neutral` tone (Badge.css, Tag.css:54). Unmeasured until #1955 because the tokens were spelled --text-status-neutral / --background-status-neutral and no pairing named either; the intent-form family made the pair expressible. #1959 moved bg --background-neutral -> --surface-neutral after the Foundations rename brought Figma's saturated --color-system-neutral under --background-neutral \u2014 formula-correct, but the same value --text-neutral already holds, so the pairing measured 1.00:1 (a third #1571 shape, caught before it shipped). #1957 then split the two: the SOLID indicator fill moved to --background-neutral with a --text-on-color-dark label (the row below), while subtle and Tag keep this one."
+      "note": "Badge `appearance=\"subtle\"` and Tag render this pair for the `neutral` tone (Badge.css, Tag.css:54). Unmeasured until #1955 because the tokens were spelled --text-status-neutral / --background-status-neutral and no pairing named either; the intent-form family made the pair expressible. #1959 moved bg --bds-background-neutral -> --bds-surface-neutral after the Foundations rename brought Figma's saturated --bds-color-system-neutral under --bds-background-neutral \u2014 formula-correct, but the same value --bds-text-neutral already holds, so the pairing measured 1.00:1 (a third #1571 shape, caught before it shipped). #1957 then split the two: the SOLID indicator fill moved to --bds-background-neutral with a --bds-text-on-color-dark label (the row below), while subtle and Tag keep this one."
     },
     {
       "group": "neutral",
       "label": "Solid neutral indicator label on fill",
-      "fg": "--text-on-color-dark",
-      "bg": "--background-neutral",
+      "fg": "--bds-text-on-color-dark",
+      "bg": "--bds-background-neutral",
       "thresholdType": "AA",
-      "note": "Badge `appearance=\"solid\"`, Dot and Counter render the `neutral` tone on --background-neutral (#1957) \u2014 an indicator is a small element placed ON a surface, so its fill is a background token, never a surface one. The label MUST be --text-on-color-dark: --text-neutral resolves to the same --color-system-neutral as the fill and measures 1.00:1, which is exactly the trap the row above records."
+      "note": "Badge `appearance=\"solid\"`, Dot and Counter render the `neutral` tone on --bds-background-neutral (#1957) \u2014 an indicator is a small element placed ON a surface, so its fill is a background token, never a surface one. The label MUST be --bds-text-on-color-dark: --bds-text-neutral resolves to the same --bds-color-system-neutral as the fill and measures 1.00:1, which is exactly the trap the row above records."
     },
     {
       "group": "info",
       "label": "Info indicator label on subtle info fill",
-      "fg": "--text-info",
-      "bg": "--surface-info",
+      "fg": "--bds-text-info",
+      "bg": "--bds-surface-info",
       "thresholdType": "AA",
-      "note": "Badge `appearance=\"subtle\"` renders this pair for the `progress` tone (Badge.css:172-173). Unmeasured until #1959 freed the intent-form names \u2014 the pair was spelled --text-status-info / --surface-status-info and no pairing named either, the same unmeasurable shape as #1571. At the old --color-system-blue #2f80ed it was 2.86:1, failing even the AA-large 3:1 floor on a Badge label. Fixed at the primitive in #1972 by darkening --color-system-blue to #2461b4; lightening the tint cannot work, because --text-info on pure white is only 3.87:1."
+      "note": "Badge `appearance=\"subtle\"` renders this pair for the `progress` tone (Badge.css:172-173). Unmeasured until #1959 freed the intent-form names \u2014 the pair was spelled --text-status-info / --surface-status-info and no pairing named either, the same unmeasurable shape as #1571. At the old --bds-color-system-blue #2f80ed it was 2.86:1, failing even the AA-large 3:1 floor on a Badge label. Fixed at the primitive in #1972 by darkening --bds-color-system-blue to #2461b4; lightening the tint cannot work, because --bds-text-info on pure white is only 3.87:1."
     },
     {
       "group": "info",
       "label": "Solid info indicator label on fill",
-      "fg": "--text-on-color-dark",
-      "bg": "--background-info",
+      "fg": "--bds-text-on-color-dark",
+      "bg": "--bds-background-info",
       "thresholdType": "AA",
-      "note": "Badge `appearance=\"solid\"` and Counter both render the `progress` tone as white-on-fill (Badge.css:133, Counter.css:31) \u2014 two shipped consumers, one measurable token pair, the same shape as the two neutral indicator rows above. Was 3.87:1 (AA-large only) and fixed to 6.10:1 by the same #1972 primitive change. This row could not be measured at all before #1965: a comment above --background-info parsed as a declaration and swallowed it, so validate-themes resolved the bg to n/a while still printing PASS."
+      "note": "Badge `appearance=\"solid\"` and Counter both render the `progress` tone as white-on-fill (Badge.css:133, Counter.css:31) \u2014 two shipped consumers, one measurable token pair, the same shape as the two neutral indicator rows above. Was 3.87:1 (AA-large only) and fixed to 6.10:1 by the same #1972 primitive change. This row could not be measured at all before #1965: a comment above --bds-background-info parsed as a declaration and swallowed it, so validate-themes resolved the bg to n/a while still printing PASS."
     },
     {
       "group": "neutral",
       "label": "Inverse label on inverse fill",
-      "fg": "--text-inverse",
-      "bg": "--background-inverse",
+      "fg": "--bds-text-inverse",
+      "bg": "--bds-background-inverse",
       "thresholdType": "AA",
-      "note": "The inverse block \u2014 a dark strip on a light page, a light strip on a dark page (Chip --primary, Button --inverse; BDS publishes this pair as safe for both tone families in content-system/atmospheres/index.ts:154,168). Second instance of the #1571 shape: the dark brand theme pinned --background-inverse to -black, the same value --text-inverse already held, so the label painted in its own fill at 1.00:1 while ENABLED. Gated AA (4.5:1) not AA-large \u2014 an inverse block carries body copy, not just a control label (#1686)."
+      "note": "The inverse block \u2014 a dark strip on a light page, a light strip on a dark page (Chip --primary, Button --inverse; BDS publishes this pair as safe for both tone families in content-system/atmospheres/index.ts:154,168). Second instance of the #1571 shape: the dark brand theme pinned --bds-background-inverse to -black, the same value --bds-text-inverse already held, so the label painted in its own fill at 1.00:1 while ENABLED. Gated AA (4.5:1) not AA-large \u2014 an inverse block carries body copy, not just a control label (#1686)."
     },
     {
       "group": "faded",
       "label": "Faded fill-less control label",
-      "fg": "--text-primary",
-      "bg": "--background-primary",
-      "alpha": "--state-disabled-opacity",
+      "fg": "--bds-text-primary",
+      "bg": "--bds-background-primary",
+      "alpha": "--bds-state-disabled-opacity",
       "thresholdType": "AA-large",
-      "note": "ADR-028 pt-2: a control with no fill of its own (inputs, checkboxes, radios, switches, ghost/outline labels, menu items) fades on --state-disabled-opacity. `alpha` is the mechanism this dataset lacked until #1687 \u2014 opacity composites the label AND the fill toward the same backdrop, producing a pair of computed colours that appear in no token file, so the 26-component fade cohort was unmeasured by construction. This pairing is what pins the token's value: 3.32:1 light / 4.82:1 dark at 0.5, and 2.88:1 light at 0.45. Reading the token name rather than a literal means a retune re-scores here automatically. There is deliberately NO --text-muted counterpart: it is only 3.04:1 against the dark page while ENABLED, so no alpha up to 0.80 rescues it faded (2.30:1 peak), which is why ADR-028 pt-4's muted-text swap was retired rather than retuned (#1687). `scripts/measure-disabled-contrast.mjs` keeps those numbers visible as a report; a pairing here would assert BDS paints it, and nothing does."
+      "note": "ADR-028 pt-2: a control with no fill of its own (inputs, checkboxes, radios, switches, ghost/outline labels, menu items) fades on --bds-state-disabled-opacity. `alpha` is the mechanism this dataset lacked until #1687 \u2014 opacity composites the label AND the fill toward the same backdrop, producing a pair of computed colours that appear in no token file, so the 26-component fade cohort was unmeasured by construction. This pairing is what pins the token's value: 3.32:1 light / 4.82:1 dark at 0.5, and 2.88:1 light at 0.45. Reading the token name rather than a literal means a retune re-scores here automatically. There is deliberately NO --bds-text-muted counterpart: it is only 3.04:1 against the dark page while ENABLED, so no alpha up to 0.80 rescues it faded (2.30:1 peak), which is why ADR-028 pt-4's muted-text swap was retired rather than retuned (#1687). `scripts/measure-disabled-contrast.mjs` keeps those numbers visible as a report; a pairing here would assert BDS paints it, and nothing does."
     },
     {
       "group": "faded",
       "label": "Faded SegmentedControl segment label on track",
-      "fg": "--text-on-color-light",
-      "bg": "--background-secondary",
-      "over": "--background-secondary",
-      "alpha": "--state-disabled-opacity",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-secondary",
+      "over": "--bds-background-secondary",
+      "alpha": "--bds-state-disabled-opacity",
       "thresholdType": "AA-large",
       "darkException": {
         "issue": 1741,
-        "reason": "3.21:1 light passes; dark is 2.66:1 at 0.5. Only the ITEM carries :disabled \u2014 the track never does \u2014 and the item is background-color: transparent (SegmentedControl.css:42), so it is correctly on ADR-028 pt-2's fade and `over` points at the track it fades toward rather than the page. That makes this a FOREGROUND problem, not a mechanism one: the label is --text-on-color-light (black) and the dark track is a mid-grey #828282, so fading black toward it collapses the ratio while the enabled pair is a healthy 5.46:1. It is the 'fade plus a foreground that is not the enabled one' class ADR-028 \u00a7 Consequences pt-2 names. Converting it to the pt-1 swap would repaint a track that nothing disables. Surfaced by #1701; it was invisible before only because no pairing named it."
+        "reason": "3.21:1 light passes; dark is 2.66:1 at 0.5. Only the ITEM carries :disabled \u2014 the track never does \u2014 and the item is background-color: transparent (SegmentedControl.css:42), so it is correctly on ADR-028 pt-2's fade and `over` points at the track it fades toward rather than the page. That makes this a FOREGROUND problem, not a mechanism one: the label is --bds-text-on-color-light (black) and the dark track is a mid-grey #828282, so fading black toward it collapses the ratio while the enabled pair is a healthy 5.46:1. It is the 'fade plus a foreground that is not the enabled one' class ADR-028 \u00a7 Consequences pt-2 names. Converting it to the pt-1 swap would repaint a track that nothing disables. Surfaced by #1701; it was invisible before only because no pairing named it."
       }
     },
     {
       "group": "brand",
       "label": "Brand text on page",
-      "fg": "--text-brand-primary",
-      "bg": "--page-primary",
+      "fg": "--bds-text-brand-primary",
+      "bg": "--bds-page-primary",
       "thresholdType": "AA-large",
-      "note": "Brand-primary text is vibrant poppy-light (brand-kit canon) in its heading/accent role \u2014 3.78:1 on white, gated AA-large (3:1). Small body copy uses --text-primary; usage rule tracked in BDS-18 (BDS-22)."
+      "note": "Brand-primary text is vibrant poppy-light (brand-kit canon) in its heading/accent role \u2014 3.78:1 on white, gated AA-large (3:1). Small body copy uses --bds-text-primary; usage rule tracked in BDS-18 (BDS-22)."
     },
     {
       "group": "brand",
       "label": "Rail TOC active label on surface",
-      "fg": "--text-brand-primary-strong",
-      "bg": "--surface-primary",
+      "fg": "--bds-text-brand-primary-strong",
+      "bg": "--bds-surface-primary",
       "thresholdType": "AA",
-      "note": "TableOfContents variant=\"rail\" active label \u2014 14px bold, so WCAG large text (18.66px bold) does not apply and the bar is AA 4.5:1, not the AA-large 3:1 that --text-brand-primary carries in its heading/accent role. The rail is now transparent (col_toc dropped its tint, brikdesigns#1458), so the label renders on the band (--surface-primary), not the old --surface-secondary box. --text-brand-primary (poppy-500) is too light; --text-brand-primary-strong darkens to poppy-700 in light and stays poppy-500 in dark, where darkening would sink it (#2270, #2470)."
+      "note": "TableOfContents variant=\"rail\" active label \u2014 14px bold, so WCAG large text (18.66px bold) does not apply and the bar is AA 4.5:1, not the AA-large 3:1 that --bds-text-brand-primary carries in its heading/accent role. The rail is now transparent (col_toc dropped its tint, brikdesigns#1458), so the label renders on the band (--bds-surface-primary), not the old --bds-surface-secondary box. --bds-text-brand-primary (poppy-500) is too light; --bds-text-brand-primary-strong darkens to poppy-700 in light and stays poppy-500 in dark, where darkening would sink it (#2270, #2470)."
     },
     {
       "group": "neutral",
       "label": "Rail TOC resting label on surface",
-      "fg": "--text-secondary",
-      "bg": "--surface-primary",
+      "fg": "--bds-text-secondary",
+      "bg": "--bds-surface-primary",
       "thresholdType": "AA",
-      "note": "TableOfContents variant=\"rail\" resting label on the transparent rail's band (--surface-primary). Figma specs --text-muted (#828282) here, which fails AA at label-sm; --text-secondary is the resting label the variant ships (#2270, #2470)."
+      "note": "TableOfContents variant=\"rail\" resting label on the transparent rail's band (--bds-surface-primary). Figma specs --bds-text-muted (#828282) here, which fails AA at label-sm; --bds-text-secondary is the resting label the variant ships (#2270, #2470)."
     },
     {
       "group": "brand",
       "label": "On-color label on brand fill",
-      "fg": "--text-on-color-dark",
-      "bg": "--background-brand-primary",
+      "fg": "--bds-text-on-color-dark",
+      "bg": "--bds-background-brand-primary",
       "thresholdType": "AA-large",
       "note": "White CTA label on the vibrant poppy-light brand fill (3.78:1) \u2014 a UI-component fill with a large/bold label, gated AA-large (3:1), same basis as the service inverse-card fills (BDS-22)."
     },
     {
       "group": "brand",
       "label": "On-color content block on brand band",
-      "fg": "--text-on-color-dark",
-      "bg": "--surface-brand-primary",
+      "fg": "--bds-text-on-color-dark",
+      "bg": "--bds-surface-brand-primary",
       "thresholdType": "AA-large",
-      "note": "ContentBlock --on-color (and SectionHeader forwarding it) on a filled brand band \u2014 the CTA-band shape. 3.78:1 in BOTH modes: --surface-brand-primary is --color-poppy-500 under .theme-brand-brik in light AND dark, so this is mode-invariant, unlike the hover/pressed steps below. The surface-side twin of the --background-brand-primary label pairing above, added when the block got its inverse story (#1859) so the pair is measured where the block actually renders. Gated AA-large (3:1), NOT AA, and this one carries BODY COPY (the description slot), not just a large/bold label \u2014 the exception the policy's brand-fill clause covers and the 'inverse block carries body copy' reasoning (#1686) does not override, because raising it means darkening the brand fill itself (BDS-22 / ADR-015), not repainting the text. Consumers: keep a band description SHORT; long body copy belongs on a neutral surface. On the brand fill the on-color text is ALWAYS white (--text-on-color-dark) at normal weight: darkening it to --text-primary, or bolding body copy to reach WCAG large-text, are BOTH DISALLOWED — too dark / too heavy for the brand (operator decision 2026-09-12, ADR-015 amendment). Banner --tone-announcement (Banner.css:67-69) already ships this pair."
+      "note": "ContentBlock --on-color (and SectionHeader forwarding it) on a filled brand band \u2014 the CTA-band shape. 3.78:1 in BOTH modes: --bds-surface-brand-primary is --bds-color-poppy-500 under .theme-brand-brik in light AND dark, so this is mode-invariant, unlike the hover/pressed steps below. The surface-side twin of the --bds-background-brand-primary label pairing above, added when the block got its inverse story (#1859) so the pair is measured where the block actually renders. Gated AA-large (3:1), NOT AA, and this one carries BODY COPY (the description slot), not just a large/bold label \u2014 the exception the policy's brand-fill clause covers and the 'inverse block carries body copy' reasoning (#1686) does not override, because raising it means darkening the brand fill itself (BDS-22 / ADR-015), not repainting the text. Consumers: keep a band description SHORT; long body copy belongs on a neutral surface. On the brand fill the on-color text is ALWAYS white (--bds-text-on-color-dark) at normal weight: darkening it to --bds-text-primary, or bolding body copy to reach WCAG large-text, are BOTH DISALLOWED — too dark / too heavy for the brand (operator decision 2026-09-12, ADR-015 amendment). Banner --tone-announcement (Banner.css:67-69) already ships this pair."
     },
     {
       "group": "brand",
       "label": "On-color label on brand fill (hover)",
-      "fg": "--text-on-color-dark",
-      "bg": "--background-brand-primary-hover",
+      "fg": "--bds-text-on-color-dark",
+      "bg": "--bds-background-brand-primary-hover",
       "thresholdType": "AA",
-      "note": "White label on the darkened hover fill (poppy-dark, ~6.2:1 both modes). Fills darken on interaction in light AND dark mode so the white label stays legible; dark mode formerly brightened to poppy-lighter and failed at 1.89:1. --surface-brand-primary-hover resolves to the same value (#1055)."
+      "note": "White label on the darkened hover fill (poppy-dark, ~6.2:1 both modes). Fills darken on interaction in light AND dark mode so the white label stays legible; dark mode formerly brightened to poppy-lighter and failed at 1.89:1. --bds-surface-brand-primary-hover resolves to the same value (#1055)."
     },
     {
       "group": "brand",
       "label": "On-color label on brand fill (pressed)",
-      "fg": "--text-on-color-dark",
-      "bg": "--background-brand-primary-pressed",
+      "fg": "--bds-text-on-color-dark",
+      "bg": "--bds-background-brand-primary-pressed",
       "thresholdType": "AA",
-      "note": "White label on the darkened pressed fill (poppy-darker, ~10.2:1 both modes); dark mode formerly brightened to poppy-lightest and failed at 1.12:1. --surface-brand-primary-pressed resolves to the same value (#1055)."
+      "note": "White label on the darkened pressed fill (poppy-darker, ~10.2:1 both modes); dark mode formerly brightened to poppy-lightest and failed at 1.12:1. --bds-surface-brand-primary-pressed resolves to the same value (#1055)."
     },
     {
       "group": "brand",
       "label": "Secondary Button label on hover/press fill",
-      "fg": "--text-primary",
-      "bg": "--background-secondary-hover",
+      "fg": "--bds-text-primary",
+      "bg": "--bds-background-secondary-hover",
       "thresholdType": "AA"
     },
     {
       "group": "brand",
       "label": "Outline Button label on hover/press fill",
-      "fg": "--text-brand-primary",
-      "bg": "--background-primary-hover",
+      "fg": "--bds-text-brand-primary",
+      "bg": "--bds-background-primary-hover",
       "thresholdType": "AA-large",
       "note": "Vibrant brand label on the neutral hover fill (3.38:1 light) \u2014 large/semibold button label, gated AA-large (3:1) (BDS-22)."
     },
     {
       "group": "service",
       "label": "Service brand \u2014 text on pale surface",
-      "fg": "--text-service-brand-on-light",
-      "bg": "--surface-service-brand-light",
+      "fg": "--bds-text-service-brand-on-light",
+      "bg": "--bds-surface-service-brand-light",
       "thresholdType": "AAA",
       "darkException": {
         "issue": 823,
@@ -233,8 +233,8 @@
     {
       "group": "service",
       "label": "Service brand \u2014 text on mid-tone surface",
-      "fg": "--text-service-brand-on-light",
-      "bg": "--surface-service-brand",
+      "fg": "--bds-text-service-brand-on-light",
+      "bg": "--bds-surface-service-brand",
       "thresholdType": "AA",
       "darkException": {
         "issue": 823,
@@ -244,8 +244,8 @@
     {
       "group": "service",
       "label": "Service marketing \u2014 text on pale surface",
-      "fg": "--text-service-marketing-on-light",
-      "bg": "--surface-service-marketing-light",
+      "fg": "--bds-text-service-marketing-on-light",
+      "bg": "--bds-surface-service-marketing-light",
       "thresholdType": "AAA",
       "darkException": {
         "issue": 823,
@@ -255,8 +255,8 @@
     {
       "group": "service",
       "label": "Service marketing \u2014 text on mid-tone surface",
-      "fg": "--text-service-marketing-on-light",
-      "bg": "--surface-service-marketing",
+      "fg": "--bds-text-service-marketing-on-light",
+      "bg": "--bds-surface-service-marketing",
       "thresholdType": "AA",
       "darkException": {
         "issue": 823,
@@ -266,8 +266,8 @@
     {
       "group": "service",
       "label": "Service information \u2014 text on pale surface",
-      "fg": "--text-service-information-on-light",
-      "bg": "--surface-service-information-light",
+      "fg": "--bds-text-service-information-on-light",
+      "bg": "--bds-surface-service-information-light",
       "thresholdType": "AAA",
       "darkException": {
         "issue": 823,
@@ -277,8 +277,8 @@
     {
       "group": "service",
       "label": "Service information \u2014 text on mid-tone surface",
-      "fg": "--text-service-information-on-light",
-      "bg": "--surface-service-information",
+      "fg": "--bds-text-service-information-on-light",
+      "bg": "--bds-surface-service-information",
       "thresholdType": "AA",
       "darkException": {
         "issue": 823,
@@ -288,8 +288,8 @@
     {
       "group": "service",
       "label": "Service product \u2014 text on pale surface",
-      "fg": "--text-service-product-on-light",
-      "bg": "--surface-service-product-light",
+      "fg": "--bds-text-service-product-on-light",
+      "bg": "--bds-surface-service-product-light",
       "thresholdType": "AAA",
       "darkException": {
         "issue": 823,
@@ -299,8 +299,8 @@
     {
       "group": "service",
       "label": "Service product \u2014 text on mid-tone surface",
-      "fg": "--text-service-product-on-light",
-      "bg": "--surface-service-product",
+      "fg": "--bds-text-service-product-on-light",
+      "bg": "--bds-surface-service-product",
       "thresholdType": "AA",
       "darkException": {
         "issue": 823,
@@ -310,8 +310,8 @@
     {
       "group": "service",
       "label": "Service back-office \u2014 text on pale surface",
-      "fg": "--text-service-back-office-on-light",
-      "bg": "--surface-service-back-office-light",
+      "fg": "--bds-text-service-back-office-on-light",
+      "bg": "--bds-surface-service-back-office-light",
       "thresholdType": "AAA",
       "darkException": {
         "issue": 823,
@@ -321,8 +321,8 @@
     {
       "group": "service",
       "label": "Service back-office \u2014 text on mid-tone surface",
-      "fg": "--text-service-back-office-on-light",
-      "bg": "--surface-service-back-office",
+      "fg": "--bds-text-service-back-office-on-light",
+      "bg": "--bds-surface-service-back-office",
       "thresholdType": "AA",
       "darkException": {
         "issue": 823,
@@ -332,8 +332,8 @@
     {
       "group": "service",
       "label": "Service brand \u2014 inverse card text (light)",
-      "fg": "--text-service-brand-on-light",
-      "bg": "--surface-service-brand-inverse",
+      "fg": "--bds-text-service-brand-on-light",
+      "bg": "--bds-surface-service-brand-inverse",
       "thresholdType": "AA",
       "appliesTo": [
         "light"
@@ -342,8 +342,8 @@
     {
       "group": "service",
       "label": "Service brand \u2014 inverse card text (dark)",
-      "fg": "--text-service-brand-on-dark",
-      "bg": "--surface-service-brand-inverse",
+      "fg": "--bds-text-service-brand-on-dark",
+      "bg": "--bds-surface-service-brand-inverse",
       "thresholdType": "AA",
       "appliesTo": [
         "dark"
@@ -352,8 +352,8 @@
     {
       "group": "service",
       "label": "Service marketing \u2014 inverse card text (light)",
-      "fg": "--text-service-marketing-on-light",
-      "bg": "--surface-service-marketing-inverse",
+      "fg": "--bds-text-service-marketing-on-light",
+      "bg": "--bds-surface-service-marketing-inverse",
       "thresholdType": "AA",
       "appliesTo": [
         "light"
@@ -362,8 +362,8 @@
     {
       "group": "service",
       "label": "Service marketing \u2014 inverse card text (dark)",
-      "fg": "--text-service-marketing-on-dark",
-      "bg": "--surface-service-marketing-inverse",
+      "fg": "--bds-text-service-marketing-on-dark",
+      "bg": "--bds-surface-service-marketing-inverse",
       "thresholdType": "AA",
       "appliesTo": [
         "dark"
@@ -372,8 +372,8 @@
     {
       "group": "service",
       "label": "Service information \u2014 inverse card text (light)",
-      "fg": "--text-service-information-on-light",
-      "bg": "--surface-service-information-inverse",
+      "fg": "--bds-text-service-information-on-light",
+      "bg": "--bds-surface-service-information-inverse",
       "thresholdType": "AA",
       "appliesTo": [
         "light"
@@ -382,8 +382,8 @@
     {
       "group": "service",
       "label": "Service information \u2014 inverse card text (dark)",
-      "fg": "--text-service-information-on-dark",
-      "bg": "--surface-service-information-inverse",
+      "fg": "--bds-text-service-information-on-dark",
+      "bg": "--bds-surface-service-information-inverse",
       "thresholdType": "AA",
       "appliesTo": [
         "dark"
@@ -392,8 +392,8 @@
     {
       "group": "service",
       "label": "Service product \u2014 inverse card text (light)",
-      "fg": "--text-service-product-on-light",
-      "bg": "--surface-service-product-inverse",
+      "fg": "--bds-text-service-product-on-light",
+      "bg": "--bds-surface-service-product-inverse",
       "thresholdType": "AA",
       "appliesTo": [
         "light"
@@ -402,8 +402,8 @@
     {
       "group": "service",
       "label": "Service product \u2014 inverse card text (dark)",
-      "fg": "--text-service-product-on-dark",
-      "bg": "--surface-service-product-inverse",
+      "fg": "--bds-text-service-product-on-dark",
+      "bg": "--bds-surface-service-product-inverse",
       "thresholdType": "AA",
       "appliesTo": [
         "dark"
@@ -412,8 +412,8 @@
     {
       "group": "service",
       "label": "Service back-office \u2014 inverse card text (light)",
-      "fg": "--text-service-back-office-on-light",
-      "bg": "--surface-service-back-office-inverse",
+      "fg": "--bds-text-service-back-office-on-light",
+      "bg": "--bds-surface-service-back-office-inverse",
       "thresholdType": "AA",
       "appliesTo": [
         "light"
@@ -422,8 +422,8 @@
     {
       "group": "service",
       "label": "Service back-office \u2014 inverse card text (dark)",
-      "fg": "--text-service-back-office-on-dark",
-      "bg": "--surface-service-back-office-inverse",
+      "fg": "--bds-text-service-back-office-on-dark",
+      "bg": "--bds-surface-service-back-office-inverse",
       "thresholdType": "AA",
       "appliesTo": [
         "dark"
@@ -432,8 +432,8 @@
     {
       "group": "service",
       "label": "Service brand \u2014 inverse card fill (light)",
-      "fg": "--background-service-brand-on-light",
-      "bg": "--surface-service-brand-inverse",
+      "fg": "--bds-background-service-brand-on-light",
+      "bg": "--bds-surface-service-brand-inverse",
       "thresholdType": "AA-large",
       "appliesTo": [
         "light"
@@ -442,8 +442,8 @@
     {
       "group": "service",
       "label": "Service brand \u2014 inverse card fill (dark)",
-      "fg": "--background-service-brand-on-dark",
-      "bg": "--surface-service-brand-inverse",
+      "fg": "--bds-background-service-brand-on-dark",
+      "bg": "--bds-surface-service-brand-inverse",
       "thresholdType": "AA-large",
       "appliesTo": [
         "dark"
@@ -452,8 +452,8 @@
     {
       "group": "service",
       "label": "Service marketing \u2014 inverse card fill (light)",
-      "fg": "--background-service-marketing-on-light",
-      "bg": "--surface-service-marketing-inverse",
+      "fg": "--bds-background-service-marketing-on-light",
+      "bg": "--bds-surface-service-marketing-inverse",
       "thresholdType": "AA-large",
       "appliesTo": [
         "light"
@@ -462,8 +462,8 @@
     {
       "group": "service",
       "label": "Service marketing \u2014 inverse card fill (dark)",
-      "fg": "--background-service-marketing-on-dark",
-      "bg": "--surface-service-marketing-inverse",
+      "fg": "--bds-background-service-marketing-on-dark",
+      "bg": "--bds-surface-service-marketing-inverse",
       "thresholdType": "AA-large",
       "appliesTo": [
         "dark"
@@ -472,8 +472,8 @@
     {
       "group": "service",
       "label": "Service information \u2014 inverse card fill (light)",
-      "fg": "--background-service-information-on-light",
-      "bg": "--surface-service-information-inverse",
+      "fg": "--bds-background-service-information-on-light",
+      "bg": "--bds-surface-service-information-inverse",
       "thresholdType": "AA-large",
       "appliesTo": [
         "light"
@@ -482,8 +482,8 @@
     {
       "group": "service",
       "label": "Service information \u2014 inverse card fill (dark)",
-      "fg": "--background-service-information-on-dark",
-      "bg": "--surface-service-information-inverse",
+      "fg": "--bds-background-service-information-on-dark",
+      "bg": "--bds-surface-service-information-inverse",
       "thresholdType": "AA-large",
       "appliesTo": [
         "dark"
@@ -492,8 +492,8 @@
     {
       "group": "service",
       "label": "Service product \u2014 inverse card fill (light)",
-      "fg": "--background-service-product-on-light",
-      "bg": "--surface-service-product-inverse",
+      "fg": "--bds-background-service-product-on-light",
+      "bg": "--bds-surface-service-product-inverse",
       "thresholdType": "AA-large",
       "appliesTo": [
         "light"
@@ -502,8 +502,8 @@
     {
       "group": "service",
       "label": "Service product \u2014 inverse card fill (dark)",
-      "fg": "--background-service-product-on-dark",
-      "bg": "--surface-service-product-inverse",
+      "fg": "--bds-background-service-product-on-dark",
+      "bg": "--bds-surface-service-product-inverse",
       "thresholdType": "AA-large",
       "appliesTo": [
         "dark"
@@ -512,8 +512,8 @@
     {
       "group": "service",
       "label": "Service back-office \u2014 inverse card fill (light)",
-      "fg": "--background-service-back-office-on-light",
-      "bg": "--surface-service-back-office-inverse",
+      "fg": "--bds-background-service-back-office-on-light",
+      "bg": "--bds-surface-service-back-office-inverse",
       "thresholdType": "AA-large",
       "appliesTo": [
         "light"
@@ -522,8 +522,8 @@
     {
       "group": "service",
       "label": "Service back-office \u2014 inverse card fill (dark)",
-      "fg": "--background-service-back-office-on-dark",
-      "bg": "--surface-service-back-office-inverse",
+      "fg": "--bds-background-service-back-office-on-dark",
+      "bg": "--bds-surface-service-back-office-inverse",
       "thresholdType": "AA-large",
       "appliesTo": [
         "dark"
@@ -532,76 +532,76 @@
     {
       "group": "positive",
       "label": "Positive/success text on surface",
-      "fg": "--text-positive",
-      "bg": "--surface-primary",
+      "fg": "--bds-text-positive",
+      "bg": "--bds-surface-primary",
       "thresholdType": "AA"
     },
     {
       "group": "positive",
       "label": "Positive/success text on page",
-      "fg": "--text-positive",
-      "bg": "--page-primary",
+      "fg": "--bds-text-positive",
+      "bg": "--bds-page-primary",
       "thresholdType": "AA"
     },
     {
       "group": "positive",
       "label": "Solid positive Badge label on fill",
-      "fg": "--text-on-color-light",
-      "bg": "--background-positive",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-positive",
       "thresholdType": "AA",
       "note": "Dark badge label on the saturated success fill (6.00:1 both modes). White label was 2.87:1 and failed AA (#995); the fill is light enough that dark text is the accessible pairing."
     },
     {
       "group": "negative",
       "label": "Solid error Badge label on fill",
-      "fg": "--text-on-color-light",
-      "bg": "--background-negative",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-negative",
       "thresholdType": "AA",
       "note": "Dark badge label on the saturated error fill (4.95:1 both modes). White label was 3.48:1 and failed AA (#995)."
     },
     {
       "group": "accent",
       "label": "Body text on the yellow accent tint",
-      "fg": "--text-on-color-light",
-      "bg": "--surface-accent-yellow",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-surface-accent-yellow",
       "thresholdType": "AAA",
-      "note": "The five accent-{hue} tints are the pale system steps (--color-system-{hue}-light), so a dark label is the accessible pairing in BOTH themes. fg MUST be --text-on-color-light, not --text-primary: --text-primary flips to near-white in dark and measures 1.1\u20131.2:1 on these tints \u2014 the same swap-by-theme trap #1017 records for the inverse hero. Added with #2066, which re-pointed --surface-accent-{hue} off the Brand Kit mid-tone ramp (--color-{hue}-light, itself the deprecated -500 alias from #1739) onto the system tints that surface-positive/negative/warning already use; that lifted purple 5.68 -> 12.87 and orange 5.05 -> 12.80 against dark ink. These five rows are what stop a future re-point back onto a mid-tone ramp."
+      "note": "The five accent-{hue} tints are the pale system steps (--color-system-{hue}-light), so a dark label is the accessible pairing in BOTH themes. fg MUST be --bds-text-on-color-light, not --bds-text-primary: --bds-text-primary flips to near-white in dark and measures 1.1\u20131.2:1 on these tints \u2014 the same swap-by-theme trap #1017 records for the inverse hero. Added with #2066, which re-pointed --surface-accent-{hue} off the Brand Kit mid-tone ramp (--color-{hue}-light, itself the deprecated -500 alias from #1739) onto the system tints that surface-positive/negative/warning already use; that lifted purple 5.68 -> 12.87 and orange 5.05 -> 12.80 against dark ink. These five rows are what stop a future re-point back onto a mid-tone ramp."
     },
     {
       "group": "accent",
       "label": "Body text on the blue accent tint",
-      "fg": "--text-on-color-light",
-      "bg": "--surface-accent-blue",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-surface-accent-blue",
       "thresholdType": "AAA"
     },
     {
       "group": "accent",
       "label": "Body text on the green accent tint",
-      "fg": "--text-on-color-light",
-      "bg": "--surface-accent-green",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-surface-accent-green",
       "thresholdType": "AAA"
     },
     {
       "group": "accent",
       "label": "Body text on the purple accent tint",
-      "fg": "--text-on-color-light",
-      "bg": "--surface-accent-purple",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-surface-accent-purple",
       "thresholdType": "AAA"
     },
     {
       "group": "accent",
       "label": "Body text on the orange accent tint",
-      "fg": "--text-on-color-light",
-      "bg": "--surface-accent-orange",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-surface-accent-orange",
       "thresholdType": "AAA"
     },
     {
       "group": "accent",
       "label": "Label on the red accent fill",
-      "fg": "--text-on-color-light",
-      "bg": "--surface-accent-red",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-surface-accent-red",
       "thresholdType": "AA",
-      "note": "The odd one out, and gated AA rather than AAA for that reason. The other five accent surfaces are pale system tints; red has no system tint in canon \u2014 the Figma Brand Kit aliases every accent-red purpose to the brand poppy (color/poppy/light [base], #e35335), so --surface-accent-red is a saturated FILL, not a wash (#2066). Dark ink clears 4.56:1 on it, which is AA for a label but short of the AAA body aim the tints hold. Do not put small body copy on this one; Avatar's red initials fill is the shipped consumer (Avatar.css:30) and it pairs --text-on-color-light."
+      "note": "The odd one out, and gated AA rather than AAA for that reason. The other five accent surfaces are pale system tints; red has no system tint in canon \u2014 the Figma Brand Kit aliases every accent-red purpose to the brand poppy (color/poppy/light [base], #e35335), so --bds-surface-accent-red is a saturated FILL, not a wash (#2066). Dark ink clears 4.56:1 on it, which is AA for a label but short of the AAA body aim the tints hold. Do not put small body copy on this one; Avatar's red initials fill is the shipped consumer (Avatar.css:30) and it pairs --bds-text-on-color-light."
     }
   ]
 }

@@ -28,18 +28,18 @@
   border: none;
   background: none;
   cursor: pointer;
-  color: var(--text-muted);
-  font-size: var(--body-tiny);
+  color: var(--bds-text-muted);
+  font-size: var(--bds-body-tiny);
   line-height: 1;
   height: 50%;
 }
 
 .bds-number-input__step:hover {
-  color: var(--text-primary);
+  color: var(--bds-text-primary);
 }
 
 .bds-number-input__step:disabled {
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
   cursor: not-allowed;
 }
 }

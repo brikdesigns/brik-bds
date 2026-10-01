@@ -23,39 +23,39 @@ type Story = StoryObj;
 /* ─── Live token maps (var refs — mode-aware, no hardcoded px) ─── */
 
 const HEADING = {
-  tiny: 'var(--heading-tiny)',
-  sm: 'var(--heading-sm)',
-  md: 'var(--heading-md)',
-  lg: 'var(--heading-lg)',
-  xl: 'var(--heading-xl)',
-  xxl: 'var(--heading-xxl)',
-  huge: 'var(--heading-huge)',
+  tiny: 'var(--bds-heading-tiny)',
+  sm: 'var(--bds-heading-sm)',
+  md: 'var(--bds-heading-md)',
+  lg: 'var(--bds-heading-lg)',
+  xl: 'var(--bds-heading-xl)',
+  xxl: 'var(--bds-heading-xxl)',
+  huge: 'var(--bds-heading-huge)',
 };
 
 const BODY = {
-  tiny: 'var(--body-tiny)',
-  xs: 'var(--body-xs)',
-  sm: 'var(--body-sm)',
-  md: 'var(--body-md)',
-  lg: 'var(--body-lg)',
-  xl: 'var(--body-xl)',
-  huge: 'var(--body-huge)',
+  tiny: 'var(--bds-body-tiny)',
+  xs: 'var(--bds-body-xs)',
+  sm: 'var(--bds-body-sm)',
+  md: 'var(--bds-body-md)',
+  lg: 'var(--bds-body-lg)',
+  xl: 'var(--bds-body-xl)',
+  huge: 'var(--bds-body-huge)',
 };
 
 const LABEL = {
-  tiny: 'var(--label-tiny)',
-  xs: 'var(--label-xs)',
-  sm: 'var(--label-sm)',
-  md: 'var(--label-md)',
-  lg: 'var(--label-lg)',
-  xl: 'var(--label-xl)',
+  tiny: 'var(--bds-label-tiny)',
+  xs: 'var(--bds-label-xs)',
+  sm: 'var(--bds-label-sm)',
+  md: 'var(--bds-label-md)',
+  lg: 'var(--bds-label-lg)',
+  xl: 'var(--bds-label-xl)',
 };
 
 const DISPLAY = {
-  sm: 'var(--display-sm)',
-  md: 'var(--display-md)',
-  lg: 'var(--display-lg)',
-  xl: 'var(--display-xl)',
+  sm: 'var(--bds-display-sm)',
+  md: 'var(--bds-display-md)',
+  lg: 'var(--bds-display-lg)',
+  xl: 'var(--bds-display-xl)',
 };
 
 // Weight token suffixes match the real --font-weight-* names; the numeric
@@ -75,7 +75,7 @@ const LINE_HEIGHTS = ['tight', 'snug', 'moderate', 'normal', 'relaxed', 'loose']
 /* ─── Helpers ─────────────────────────────────────────────────── */
 
 const Page = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ padding: 'var(--padding-xl)', fontFamily: 'var(--font-family-body)' }}>{children}</div>
+  <div style={{ padding: 'var(--bds-padding-xl)', fontFamily: 'var(--bds-font-family-body)' }}>{children}</div>
 );
 
 /* ─── Roles ───────────────────────────────────────────────────── */
@@ -91,24 +91,24 @@ export const Roles: Story = {
 
       <h3
         style={{
-          fontFamily: 'var(--font-family-heading)',
-          fontSize: 'var(--heading-sm)',
-          marginBottom: 'var(--gap-md)',
-          color: 'var(--text-primary)',
+          fontFamily: 'var(--bds-font-family-heading)',
+          fontSize: 'var(--bds-heading-sm)',
+          marginBottom: 'var(--bds-gap-md)',
+          color: 'var(--bds-text-primary)',
         }}
       >
         Line heights
       </h3>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)' }}>
         {LINE_HEIGHTS.map((name) => (
-          <div key={name} style={{ display: 'flex', gap: 'var(--gap-lg)', alignItems: 'flex-start' }}>
+          <div key={name} style={{ display: 'flex', gap: 'var(--bds-gap-lg)', alignItems: 'flex-start' }}>
             <code
               style={{
                 fontFamily: 'ui-monospace, monospace',
-                fontSize: 'var(--body-xs)',
+                fontSize: 'var(--bds-body-xs)',
                 width: '200px',
                 flexShrink: 0,
-                color: 'var(--text-muted)',
+                color: 'var(--bds-text-muted)',
                 paddingTop: '2px',
               }}
             >
@@ -118,9 +118,9 @@ export const Roles: Story = {
               style={{
                 margin: 0,
                 maxWidth: '360px',
-                fontSize: 'var(--body-md)',
+                fontSize: 'var(--bds-body-md)',
                 lineHeight: `var(--font-line-height-${name})`,
-                color: 'var(--text-primary)',
+                color: 'var(--bds-text-primary)',
               }}
             >
               The quick brown fox jumps over the lazy dog and keeps on running past the second line.

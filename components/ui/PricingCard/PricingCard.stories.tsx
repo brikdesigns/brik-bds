@@ -65,8 +65,8 @@ export const WithImage: Story = {
     features: commonFeatures,
     image: (
       <svg viewBox="0 0 320 160" role="img" aria-label="Plan illustration" style={{ width: '100%', display: 'block' }}>
-        <rect width="320" height="160" fill="var(--surface-service-marketing-light)" />
-        <circle cx="160" cy="80" r="44" fill="var(--surface-brand-primary)" />
+        <rect width="320" height="160" fill="var(--bds-surface-service-marketing-light)" />
+        <circle cx="160" cy="80" r="44" fill="var(--bds-surface-brand-primary)" />
       </svg>
     ),
     action: <Button variant="primary" style={{ width: '100%' }}>Learn more</Button>,

@@ -17,11 +17,11 @@
  */
 
 .bds-block-reveal--fade {
-  animation: bds-fade-in var(--duration-normal) var(--ease-out) both;
+  animation: bds-fade-in var(--bds-duration-normal) var(--bds-ease-out) both;
 }
 
 .bds-block-reveal--rise {
-  animation: bds-slide-up var(--duration-normal) var(--ease-out) both;
+  animation: bds-slide-up var(--bds-duration-normal) var(--bds-ease-out) both;
 }
 
 /* stagger — the element's DIRECT children fade in sequentially, offset by the
@@ -29,7 +29,7 @@
    acceptable, the tail of a long list is below the fold). Uses the same
    `bds-fade-in` keyframe as `fade`. */
 .bds-block-reveal--stagger > * {
-  animation: bds-fade-in var(--duration-normal) var(--ease-out) both;
+  animation: bds-fade-in var(--bds-duration-normal) var(--bds-ease-out) both;
 }
 .bds-block-reveal--stagger > *:nth-child(1) { animation-delay: var(--stagger-1); }
 .bds-block-reveal--stagger > *:nth-child(2) { animation-delay: var(--stagger-2); }

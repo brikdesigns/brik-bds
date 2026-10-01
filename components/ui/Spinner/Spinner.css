@@ -5,8 +5,8 @@
   display: inline-block;
   border-radius: 50%;
   border-style: solid;
-  border-color: var(--border-primary);
-  border-top-color: var(--border-brand-primary);
+  border-color: var(--bds-border-primary);
+  border-top-color: var(--bds-border-brand-primary);
   animation: bds-spin 0.8s linear infinite;
 }
 
@@ -14,14 +14,14 @@
 /* bds-lint-ignore — Figma-driven spinner dimensions */
 
 .bds-spinner--sm {
-  width: var(--size-400);
-  height: var(--size-400);
-  border-width: var(--border-width-lg);
+  width: var(--bds-size-400);
+  height: var(--bds-size-400);
+  border-width: var(--bds-border-width-lg);
 }
 
 .bds-spinner--lg {
-  width: var(--size-1200);
-  height: var(--size-1200);
-  border-width: var(--border-width-huge);
+  width: var(--bds-size-1200);
+  height: var(--bds-size-1200);
+  border-width: var(--bds-border-width-huge);
 }
 }

@@ -37,7 +37,7 @@ const { execSync } = require('child_process');
 const ROOT = path.join(__dirname, '..');
 const COMPONENTS = path.join(ROOT, 'components');
 const BRAND_FILL = /background(-color)?:\s*var\(--(surface|background)-brand-primary\)/;
-const SANCTIONED_FG = '--text-on-color-dark';
+const SANCTIONED_FG = '--bds-text-on-color-dark';
 // `color:` as its own property — NOT `background-color:` (which ends in "color:").
 const COLOR_TOKEN = /(?:^|[;{\s])color:\s*var\((--[a-z0-9-]+)\)/i;
 
@@ -104,14 +104,14 @@ function main() {
   }
 
   if (violations.length) {
-    console.error('✗ brand-fill-text: text on the Poppy brand fill must be --text-on-color-dark (white).\n');
+    console.error('✗ brand-fill-text: text on the Poppy brand fill must be --bds-text-on-color-dark (white).\n');
     for (const v of violations) {
-      console.error(`  ${v.file}\n    ${v.selector}\n    → color: var(${v.token})  (use var(--text-on-color-dark), or bds-lint-ignore a genuine nested surface)\n`);
+      console.error(`  ${v.file}\n    ${v.selector}\n    → color: var(${v.token})  (use var(--bds-text-on-color-dark), or bds-lint-ignore a genuine nested surface)\n`);
     }
-    console.error('ADR-015 § Amendment 2026-09-12 / tokens/contrast-pairings.json. --text-inverse flips BLACK in dark on the mode-invariant Poppy fill.');
+    console.error('ADR-015 § Amendment 2026-09-12 / tokens/contrast-pairings.json. --bds-text-inverse flips BLACK in dark on the mode-invariant Poppy fill.');
     process.exit(1);
   }
-  console.log('✓ brand-fill-text: on-brand text is --text-on-color-dark.');
+  console.log('✓ brand-fill-text: on-brand text is --bds-text-on-color-dark.');
 }
 
 main();

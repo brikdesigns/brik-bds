@@ -24,9 +24,9 @@
   font-variant-numeric: tabular-nums;
 
   /* Duration + easing the driver reads at animation time. Backed by the
-     semantic motion tokens: --duration-xl is the "long reveal" rung, --ease-out
+     semantic motion tokens: --bds-duration-xl is the "long reveal" rung, --bds-ease-out
      decelerates so the number rushes then settles. */
-  --bds-count-up-duration: var(--duration-xl);
-  --bds-count-up-ease: var(--ease-out);
+  --bds-count-up-duration: var(--bds-duration-xl);
+  --bds-count-up-ease: var(--bds-ease-out);
 }
 }

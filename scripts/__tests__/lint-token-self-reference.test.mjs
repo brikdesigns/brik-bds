@@ -36,23 +36,23 @@ function run(css) {
 
 describe('lint-token-self-reference', () => {
   it('passes an alias that points at a different primitive', () => {
-    const { code, json } = run(':root { --border-radius-md: var(--border-radius-400); }');
+    const { code, json } = run(':root { --bds-border-radius-md: var(--bds-border-radius-400); }');
     expect(code).toBe(0);
     expect(json.cycles).toBe(0);
   });
 
   it('passes a literal value', () => {
-    const { code, json } = run(':root { --box-shadow-none: none; --blur-radius-sm: 8px; }');
+    const { code, json } = run(':root { --bds-box-shadow-none: none; --bds-blur-radius-sm: 8px; }');
     expect(code).toBe(0);
     expect(json.cycles).toBe(0);
   });
 
   // The AC: plant a self-reference and require a non-zero exit.
   it('FAILS on a direct self-reference', () => {
-    const { code, json } = run(':root { --box-shadow-md: var(--box-shadow-md); }');
+    const { code, json } = run(':root { --bds-box-shadow-md: var(--bds-box-shadow-md); }');
     expect(code).toBe(1);
     expect(json.cycles).toBe(1);
-    expect(json.findings[0].token).toBe('--box-shadow-md');
+    expect(json.findings[0].token).toBe('--bds-box-shadow-md');
     expect(json.findings[0].direct).toBe(true);
   });
 
@@ -68,10 +68,10 @@ describe('lint-token-self-reference', () => {
     // The reason this shipped: read in isolation the second block looks like
     // harmless re-aliasing. The cascade picks it, then the cycle unsets it.
     const { code, json } = run(
-      ':root { --border-width-md: 3px; }\n:root { --border-width-md: var(--border-width-md); }\n',
+      ':root { --bds-border-width-md: 3px; }\n:root { --bds-border-width-md: var(--bds-border-width-md); }\n',
     );
     expect(code).toBe(1);
-    expect(json.findings[0].token).toBe('--border-width-md');
+    expect(json.findings[0].token).toBe('--bds-border-width-md');
   });
 
   it('reports the line number of the poisoned declaration', () => {

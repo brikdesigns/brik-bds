@@ -14,24 +14,24 @@ const tableStyle: CSSProperties = {
 const thStyle: CSSProperties = {
   textAlign: 'left',
   padding: '8px 12px',
-  borderBottom: '2px solid var(--border-muted)',
+  borderBottom: '2px solid var(--bds-border-muted)',
   fontWeight: 600,
-  color: 'var(--text-primary)',
+  color: 'var(--bds-text-primary)',
 };
 
 const tdStyle: CSSProperties = {
   padding: '10px 12px',
-  borderBottom: '1px solid var(--border-muted)',
+  borderBottom: '1px solid var(--bds-border-muted)',
   verticalAlign: 'top',
 };
 
 const codeStyle: CSSProperties = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
   fontSize: 12,
-  backgroundColor: 'var(--surface-secondary)',
+  backgroundColor: 'var(--bds-surface-secondary)',
   padding: '2px 6px',
-  borderRadius: 'var(--border-radius-sm)',
-  border: '1px solid var(--border-muted)',
+  borderRadius: 'var(--bds-border-radius-sm)',
+  border: '1px solid var(--bds-border-muted)',
 };
 
 export interface VocabRow {

@@ -10,7 +10,7 @@
  * (ADR-008 §3 — a modifier needs a sibling layout to contrast against): the
  * block *is* the feature grid. Column count is a responsive CSS concern
  * (1 → 2 → 3), not a class token. The dark surface is a themeable default
- * via the `--bds-features-bg` Tier-4 hook (fallback `--page-inverse`), not a
+ * via the `--bds-features-bg` Tier-4 hook (fallback `--bds-page-inverse`), not a
  * name — the same "surface is a default, not a class" move ADR-008 applied to
  * `bds-cta`.
  *
@@ -22,7 +22,7 @@
  * ## Audience scope binding
  *
  * Each card emits `data-audience={item.audience}` to re-bind
- * `--background-brand-primary` for that subtree. BDS ships the pattern, not
+ * `--bds-background-brand-primary` for that subtree. BDS ships the pattern, not
  * the values: the consumer defines the `[data-audience='X']` cascade rules in
  * its own globals.css. Without them, every card resolves to the global brand
  * color (three identical cards — a missing-cascade bug on the consumer side,
@@ -38,7 +38,7 @@
  * `bds-blueprint-section__container` on the container.
  *
  * a11y: section uses `h2` + aria-labelledby; cards are a `<ul role="list">`;
- * card title is an `h3`. Card title uses `--font-weight-bold` + 18px and the
+ * card title is an `h3`. Card title uses `--bds-font-weight-bold` + 18px and the
  * description 16px regular to clear AA on saturated brand backgrounds (BDS
  * contrast burndown #40 — full resolution requires brand-color adjustment,
  * tracked separately).

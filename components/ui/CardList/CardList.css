@@ -25,10 +25,10 @@
 
 /* ─── Gap ────────────────────────────────────────────────────── */
 
-.bds-card-list--gap-sm { gap: var(--gap-sm); }
-.bds-card-list--gap-md { gap: var(--gap-md); }
-.bds-card-list--gap-lg { gap: var(--gap-lg); }
-.bds-card-list--gap-xl { gap: var(--gap-xl); }
+.bds-card-list--gap-sm { gap: var(--bds-gap-sm); }
+.bds-card-list--gap-md { gap: var(--bds-gap-md); }
+.bds-card-list--gap-lg { gap: var(--bds-gap-lg); }
+.bds-card-list--gap-xl { gap: var(--bds-gap-xl); }
 
 /* ─── Items ──────────────────────────────────────────────────── */
 

@@ -3,17 +3,17 @@
  * BDS Footer
  *
  * Token reference:
- * - --surface-primary (default bg)
- * - --surface-brand-primary (brand bg)
- * - --surface-inverse (inverse bg — default value of --bds-footer-surface)
- * - --border-secondary (borders)
- * - --padding-xl, --padding-lg, --padding-md
- * - --gap-xl, --gap-lg, --gap-md, --gap-sm
+ * - --bds-surface-primary (default bg)
+ * - --bds-surface-brand-primary (brand bg)
+ * - --bds-surface-inverse (inverse bg — default value of --bds-footer-surface)
+ * - --bds-border-secondary (borders)
+ * - --bds-padding-xl, --bds-padding-lg, --bds-padding-md
+ * - --bds-gap-xl, --bds-gap-lg, --bds-gap-md, --bds-gap-sm
  *
  * Component-local custom property (per BDS lint convention: --bds-* slots
  * are component-owned, not canonical tokens):
  * - --bds-footer-surface — bg for variant="inverse". Defaults to
- *   var(--surface-inverse). Override from a parent (e.g. :root) to pin
+ *   var(--bds-surface-inverse). Override from a parent (e.g. :root) to pin
  *   the inverse footer to a fixed color across light + dark themes.
  */
 
@@ -22,8 +22,8 @@
 .bds-footer {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xl);
-  padding: var(--padding-xl) var(--padding-lg);
+  gap: var(--bds-gap-xl);
+  padding: var(--bds-padding-xl) var(--bds-padding-lg);
   width: 100%;
   box-sizing: border-box;
 }
@@ -32,53 +32,53 @@
 
 .bds-footer__above-top {
   width: 100%;
-  padding-bottom: var(--padding-lg);
-  border-bottom: var(--border-width-md) solid var(--border-secondary);
+  padding-bottom: var(--bds-padding-lg);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-secondary);
 }
 
 /* ─── Variants ────────────────────────────────────────────────── */
 
 .bds-footer--default {
-  background-color: var(--surface-primary);
-  border-top: var(--border-width-lg) solid var(--border-secondary);
+  background-color: var(--bds-surface-primary);
+  border-top: var(--bds-border-width-lg) solid var(--bds-border-secondary);
 }
 
 .bds-footer--brand {
-  background-color: var(--surface-brand-primary);
+  background-color: var(--bds-surface-brand-primary);
 }
 
-/* The fallback chain `var(--bds-footer-surface, var(--surface-inverse))` is
-   deliberate — declaring `--bds-footer-surface: var(--surface-inverse)` on
+/* The fallback chain `var(--bds-footer-surface, var(--bds-surface-inverse))` is
+   deliberate — declaring `--bds-footer-surface: var(--bds-surface-inverse)` on
    `.bds-footer` would create a local re-declaration that blocks any
    :root-level override from inheriting (the local default wins over the
    inherited value). Using the fallback syntax means a consumer override
    set on `:root` (or any parent) cascades into the footer cleanly, and
    absent any override the existing inverse behavior is preserved. */
 .bds-footer--inverse {
-  background-color: var(--bds-footer-surface, var(--surface-inverse));
+  background-color: var(--bds-footer-surface, var(--bds-surface-inverse));
 }
 
 /* ─── Content-width constraint ────────────────────────────────────
    Center the footer's inner content at a canonical `--content-width-*`
    while the background stays full-bleed. The `max()` keeps the canonical
-   `--page-inset` (ADR-025) at narrow viewports and switches to
+   `--bds-page-inset` (ADR-025) at narrow viewports and switches to
    auto-centering once the viewport exceeds the target width. Vertical padding
    from the `.bds-footer` shorthand is untouched — only `padding-inline` is
    overridden. */
 .bds-footer--constrain-narrow {
-  padding-inline: max(var(--page-inset), calc((100% - var(--content-width-sm)) / 2));
+  padding-inline: max(var(--bds-page-inset), calc((100% - var(--bds-content-width-sm)) / 2));
 }
 
 .bds-footer--constrain-default {
-  padding-inline: max(var(--page-inset), calc((100% - var(--content-width-md)) / 2));
+  padding-inline: max(var(--bds-page-inset), calc((100% - var(--bds-content-width-md)) / 2));
 }
 
 .bds-footer--constrain-wide {
-  padding-inline: max(var(--page-inset), calc((100% - var(--content-width-lg)) / 2));
+  padding-inline: max(var(--bds-page-inset), calc((100% - var(--bds-content-width-lg)) / 2));
 }
 
 .bds-footer--constrain-xl {
-  padding-inline: max(var(--page-inset), calc((100% - var(--content-width-xl)) / 2));
+  padding-inline: max(var(--bds-page-inset), calc((100% - var(--bds-content-width-xl)) / 2));
 }
 
 /* ─── Top section: logo + columns ─────────────────────────────── */
@@ -86,24 +86,24 @@
 .bds-footer__top {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gap-xl);
+  gap: var(--bds-gap-xl);
   width: 100%;
 }
 
 .bds-footer__logo-area {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   --bds-footer-column-min-width: 200px; /* component-local dimension; no shared registry rung (#2133) */
   min-width: var(--bds-footer-column-min-width);
   flex: 1 1 200px;
 }
 
 .bds-footer__tagline {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
   margin: 0;
   --bds-footer-text-max-width: 280px; /* component-local dimension; no shared registry rung (#2133) */
   max-width: var(--bds-footer-text-max-width);
@@ -112,7 +112,7 @@
 .bds-footer__brand-extra {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 
 /* ─── Columns ─────────────────────────────────────────────────── */
@@ -120,36 +120,36 @@
 .bds-footer__columns {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gap-xl);
+  gap: var(--bds-gap-xl);
   flex: 2 1 400px;
 }
 
 .bds-footer__column {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   flex: 1 1 140px;
   min-width: 0;
 }
 
 .bds-footer__heading {
-  font-family: var(--font-family-label);
-  font-size: var(--label-md);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-snug);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-md);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-snug);
   margin: 0;
 }
 
 .bds-footer__link {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
   text-decoration: none;
-  transition: opacity var(--duration-sm) var(--ease-out);
+  transition: opacity var(--bds-duration-sm) var(--bds-ease-out);
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 
 .bds-footer__link:hover {
@@ -169,29 +169,29 @@
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: var(--gap-lg);
-  padding-top: var(--padding-md);
-  border-top: var(--border-width-md) solid var(--border-secondary);
+  gap: var(--bds-gap-lg);
+  padding-top: var(--bds-padding-md);
+  border-top: var(--bds-border-width-md) solid var(--bds-border-secondary);
 }
 
 .bds-footer__bottom-left {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 
 .bds-footer__copyright {
-  font-family: var(--font-family-body);
-  font-size: var(--body-xs);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-xs);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-tight);
   margin: 0;
 }
 
 /* font-size + line-height pinned on the UL itself so its line-box matches
  * .bds-footer__copyright. Without this, the UL inherits body's 16px and
- * gets a 24px line-box while its <li> children (--body-xs ≈ 11.54px) sit
+ * gets a 24px line-box while its <li> children (--bds-body-xs ≈ 11.54px) sit
  * in a 17.31px box. align-items: center on the parent keeps the bounding
  * boxes centered, but the asymmetric line-boxes drift the text baselines
  * — copyright ends up visibly higher than the link row. */
@@ -200,20 +200,20 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   padding: 0;
   margin: 0;
-  font-size: var(--body-xs);
-  line-height: var(--font-line-height-tight);
+  font-size: var(--bds-body-xs);
+  line-height: var(--bds-font-line-height-tight);
 }
 
 .bds-footer__bottom-link {
-  font-family: var(--font-family-body);
-  font-size: var(--body-xs);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-xs);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-tight);
   text-decoration: none;
-  transition: opacity var(--duration-sm) var(--ease-out);
+  transition: opacity var(--bds-duration-sm) var(--bds-ease-out);
 }
 
 .bds-footer__bottom-link:hover {
@@ -221,50 +221,50 @@
 }
 
 .bds-footer__bottom-sep {
-  font-family: var(--font-family-body);
-  font-size: var(--body-xs);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-xs);
+  line-height: var(--bds-font-line-height-tight);
   user-select: none;
 }
 
 .bds-footer__social {
   display: flex;
   align-items: center;
-  gap: var(--gap-md);
-  font-family: var(--font-family-body);
-  font-size: var(--body-xs);
+  gap: var(--bds-gap-md);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-xs);
 }
 
 /* ─── Variant color overrides ─────────────────────────────────── */
 
-.bds-footer--default .bds-footer__heading { color: var(--text-primary); }
-.bds-footer--default .bds-footer__link { color: var(--text-secondary); }
-.bds-footer--default .bds-footer__tagline { color: var(--text-secondary); }
-.bds-footer--default .bds-footer__brand-extra { color: var(--text-secondary); }
-.bds-footer--default .bds-footer__copyright { color: var(--text-muted); }
-.bds-footer--default .bds-footer__bottom-link { color: var(--text-muted); }
-.bds-footer--default .bds-footer__bottom-sep { color: var(--text-muted); }
-.bds-footer--default .bds-footer__social { color: var(--text-muted); }
+.bds-footer--default .bds-footer__heading { color: var(--bds-text-primary); }
+.bds-footer--default .bds-footer__link { color: var(--bds-text-secondary); }
+.bds-footer--default .bds-footer__tagline { color: var(--bds-text-secondary); }
+.bds-footer--default .bds-footer__brand-extra { color: var(--bds-text-secondary); }
+.bds-footer--default .bds-footer__copyright { color: var(--bds-text-muted); }
+.bds-footer--default .bds-footer__bottom-link { color: var(--bds-text-muted); }
+.bds-footer--default .bds-footer__bottom-sep { color: var(--bds-text-muted); }
+.bds-footer--default .bds-footer__social { color: var(--bds-text-muted); }
 
 /* On-color text on the mode-invariant Poppy fill must be white at all times.
-   --text-inverse flips BLACK in dark (theme-brand-brik.css:134), so it painted
-   black-on-Poppy in dark; --text-on-color-dark is mode-invariant white
+   --bds-text-inverse flips BLACK in dark (theme-brand-brik.css:134), so it painted
+   black-on-Poppy in dark; --bds-text-on-color-dark is mode-invariant white
    (ADR-015 § Amendment 2026-09-12, #2488). */
-.bds-footer--brand .bds-footer__heading { color: var(--text-on-color-dark); }
-.bds-footer--brand .bds-footer__link { color: var(--text-on-color-dark); }
-.bds-footer--brand .bds-footer__tagline { color: var(--text-on-color-dark); }
-.bds-footer--brand .bds-footer__brand-extra { color: var(--text-on-color-dark); }
-.bds-footer--brand .bds-footer__copyright { color: var(--text-on-color-dark); }
-.bds-footer--brand .bds-footer__bottom-link { color: var(--text-on-color-dark); }
-.bds-footer--brand .bds-footer__bottom-sep { color: var(--text-on-color-dark); }
-.bds-footer--brand .bds-footer__social { color: var(--text-on-color-dark); }
+.bds-footer--brand .bds-footer__heading { color: var(--bds-text-on-color-dark); }
+.bds-footer--brand .bds-footer__link { color: var(--bds-text-on-color-dark); }
+.bds-footer--brand .bds-footer__tagline { color: var(--bds-text-on-color-dark); }
+.bds-footer--brand .bds-footer__brand-extra { color: var(--bds-text-on-color-dark); }
+.bds-footer--brand .bds-footer__copyright { color: var(--bds-text-on-color-dark); }
+.bds-footer--brand .bds-footer__bottom-link { color: var(--bds-text-on-color-dark); }
+.bds-footer--brand .bds-footer__bottom-sep { color: var(--bds-text-on-color-dark); }
+.bds-footer--brand .bds-footer__social { color: var(--bds-text-on-color-dark); }
 
-.bds-footer--inverse .bds-footer__heading { color: var(--text-on-color-dark); }
-.bds-footer--inverse .bds-footer__link { color: var(--text-on-color-dark); }
-.bds-footer--inverse .bds-footer__tagline { color: var(--text-on-color-dark); }
-.bds-footer--inverse .bds-footer__brand-extra { color: var(--text-on-color-dark); }
-.bds-footer--inverse .bds-footer__copyright { color: var(--text-on-color-dark); }
-.bds-footer--inverse .bds-footer__bottom-link { color: var(--text-on-color-dark); }
-.bds-footer--inverse .bds-footer__bottom-sep { color: var(--text-on-color-dark); }
-.bds-footer--inverse .bds-footer__social { color: var(--text-on-color-dark); }
+.bds-footer--inverse .bds-footer__heading { color: var(--bds-text-on-color-dark); }
+.bds-footer--inverse .bds-footer__link { color: var(--bds-text-on-color-dark); }
+.bds-footer--inverse .bds-footer__tagline { color: var(--bds-text-on-color-dark); }
+.bds-footer--inverse .bds-footer__brand-extra { color: var(--bds-text-on-color-dark); }
+.bds-footer--inverse .bds-footer__copyright { color: var(--bds-text-on-color-dark); }
+.bds-footer--inverse .bds-footer__bottom-link { color: var(--bds-text-on-color-dark); }
+.bds-footer--inverse .bds-footer__bottom-sep { color: var(--bds-text-on-color-dark); }
+.bds-footer--inverse .bds-footer__social { color: var(--bds-text-on-color-dark); }
 }

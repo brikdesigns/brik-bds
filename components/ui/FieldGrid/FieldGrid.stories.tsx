@@ -21,7 +21,7 @@ export default meta;
 type Story = StoryObj<typeof FieldGrid>;
 
 const Frame = ({ width = '540px', children }: { width?: string; children: React.ReactNode }) => (
-  <div style={{ width, padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+  <div style={{ width, padding: 'var(--bds-padding-lg)', background: 'var(--bds-surface-primary)' }}>
     {children}
   </div>
 );

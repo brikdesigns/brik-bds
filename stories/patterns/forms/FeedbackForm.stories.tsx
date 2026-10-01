@@ -49,7 +49,7 @@ function FeedbackForm({ onSubmit }: { onSubmit: (e: React.FormEvent) => void }) 
           }
         }}
         footer={
-          <div style={{ display: 'flex', gap: 'var(--gap-md)' }}>
+          <div style={{ display: 'flex', gap: 'var(--bds-gap-md)' }}>
             <Button type="submit">Submit</Button>
             <Button
               variant="ghost"

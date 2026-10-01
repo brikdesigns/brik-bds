@@ -27,71 +27,71 @@ const TOKENS_CSS_FIXTURE = `
  */
 :root {
   /* Text family */
-  --text-primary: #111;
-  --text-on-color-dark: #fff;
-  --text-on-color-light: #111;
-  --text-link: var(--background-brand-primary);
+  --bds-text-primary: #111;
+  --bds-text-on-color-dark: #fff;
+  --bds-text-on-color-light: #111;
+  --bds-text-link: var(--bds-background-brand-primary);
 
   /* Surface family */
-  --surface-primary: #fff;
-  --surface-secondary: #f8f8f8;
-  --surface-brand-primary: var(--background-brand-primary);
+  --bds-surface-primary: #fff;
+  --bds-surface-secondary: #f8f8f8;
+  --bds-surface-brand-primary: var(--bds-background-brand-primary);
 
   /* Background family */
-  --background-primary: #fff;
-  --background-brand-primary: #2a55b4;
-  --background-brand-primary-hover: #1f3f8a;
+  --bds-background-primary: #fff;
+  --bds-background-brand-primary: #2a55b4;
+  --bds-background-brand-primary-hover: #1f3f8a;
 
   /* Border family — semantic + sizing tiers */
-  --border-primary: #e0e0e0;
-  --border-radius-100: 4px;
-  --border-width-100: 1px;
+  --bds-border-primary: #e0e0e0;
+  --bds-border-radius-100: 4px;
+  --bds-border-width-100: 1px;
 
   /* Color primitives */
-  --color-grayscale-100: #f5f5f5;
-  --color-blue-500: #2a55b4;
+  --bds-color-grayscale-100: #f5f5f5;
+  --bds-color-blue-500: #2a55b4;
 
   /* Sentinel non-prefix token — must NOT appear in allowlist */
-  --space-100: 4px;
+  --bds-space-100: 4px;
   --font-size-md: 16px;
 
   /* extra padding to clear the 20-token sanity floor in the CLI */
-  --text-secondary: #555;
-  --text-muted: #888;
-  --text-inverse: #fff;
-  --text-disabled: #aaa;
-  --surface-muted: #f0f0f0;
-  --surface-inverse: #111;
-  --background-secondary: #f5f5f5;
-  --background-muted: #f0f0f0;
-  --background-disabled: #eee;
-  --border-secondary: #ccc;
-  --border-disabled: #ddd;
-  --color-grayscale-200: #eee;
-  --color-grayscale-300: #ddd;
-  --color-blue-400: #4a75d4;
+  --bds-text-secondary: #555;
+  --bds-text-muted: #888;
+  --bds-text-inverse: #fff;
+  --bds-text-disabled: #aaa;
+  --bds-surface-muted: #f0f0f0;
+  --bds-surface-inverse: #111;
+  --bds-background-secondary: #f5f5f5;
+  --bds-background-muted: #f0f0f0;
+  --bds-background-disabled: #eee;
+  --bds-border-secondary: #ccc;
+  --bds-border-disabled: #ddd;
+  --bds-color-grayscale-200: #eee;
+  --bds-color-grayscale-300: #ddd;
+  --bds-color-blue-400: #4a75d4;
 }
 `;
 
 describe('parseAllowlist', () => {
   it('captures every --token-name declaration', () => {
     const allowlist = parseAllowlist(TOKENS_CSS_FIXTURE);
-    expect(allowlist.has('--text-primary')).toBe(true);
-    expect(allowlist.has('--surface-primary')).toBe(true);
-    expect(allowlist.has('--background-brand-primary')).toBe(true);
-    expect(allowlist.has('--border-primary')).toBe(true);
-    expect(allowlist.has('--color-grayscale-100')).toBe(true);
+    expect(allowlist.has('--bds-text-primary')).toBe(true);
+    expect(allowlist.has('--bds-surface-primary')).toBe(true);
+    expect(allowlist.has('--bds-background-brand-primary')).toBe(true);
+    expect(allowlist.has('--bds-border-primary')).toBe(true);
+    expect(allowlist.has('--bds-color-grayscale-100')).toBe(true);
   });
 
   it('captures sizing-tier border tokens (separate semantic, still canonical)', () => {
     const allowlist = parseAllowlist(TOKENS_CSS_FIXTURE);
-    expect(allowlist.has('--border-radius-100')).toBe(true);
-    expect(allowlist.has('--border-width-100')).toBe(true);
+    expect(allowlist.has('--bds-border-radius-100')).toBe(true);
+    expect(allowlist.has('--bds-border-width-100')).toBe(true);
   });
 
   it('captures non-prefix tokens too (the parser is prefix-agnostic; filtering happens in the scanner)', () => {
     const allowlist = parseAllowlist(TOKENS_CSS_FIXTURE);
-    expect(allowlist.has('--space-100')).toBe(true);
+    expect(allowlist.has('--bds-space-100')).toBe(true);
     expect(allowlist.has('--font-size-md')).toBe(true);
   });
 
@@ -122,17 +122,17 @@ describe('stripCssComments', () => {
       '/* note: --color-grayscale-* primitives are referenced',
       '   directly in BDS components — that is intentional and',
       '   should not surface as a violation */',
-      '--surface-primary: #fff;',
+      '--bds-surface-primary: #fff;',
     ].join('\n');
     const out = stripCssComments(input);
     expect(out).not.toContain('--color-grayscale-');
-    expect(out).toContain('--surface-primary');
+    expect(out).toContain('--bds-surface-primary');
   });
 
   it('removes leading-line // comments (TS / JS)', () => {
-    const out = stripCssComments(['// banned token: --surface-paper', '--surface-primary: #fff;'].join('\n'));
+    const out = stripCssComments(['// banned token: --surface-paper', '--bds-surface-primary: #fff;'].join('\n'));
     expect(out).not.toContain('--surface-paper');
-    expect(out).toContain('--surface-primary');
+    expect(out).toContain('--bds-surface-primary');
   });
 
   it('preserves URLs that contain `//`', () => {
@@ -145,27 +145,27 @@ describe('stripCssComments', () => {
 describe('extractTokenReferences', () => {
   it('finds every reference in the configured prefix family', () => {
     const css = `
-      .foo { color: var(--text-primary); background: var(--background-primary); }
-      .bar { border-color: var(--border-primary); }
+      .foo { color: var(--bds-text-primary); background: var(--bds-background-primary); }
+      .bar { border-color: var(--bds-border-primary); }
     `;
     const refs = extractTokenReferences(css);
-    expect(refs).toContain('--text-primary');
-    expect(refs).toContain('--background-primary');
-    expect(refs).toContain('--border-primary');
+    expect(refs).toContain('--bds-text-primary');
+    expect(refs).toContain('--bds-background-primary');
+    expect(refs).toContain('--bds-border-primary');
   });
 
   it('skips tokens outside the configured prefixes', () => {
-    const css = `.foo { padding: var(--space-100); font-size: var(--font-size-md); }`;
+    const css = `.foo { padding: var(--bds-space-100); font-size: var(--font-size-md); }`;
     const refs = extractTokenReferences(css);
-    expect(refs.has('--space-100')).toBe(false);
+    expect(refs.has('--bds-space-100')).toBe(false);
     expect(refs.has('--font-size-md')).toBe(false);
   });
 
   it('honors a custom prefix list', () => {
-    const css = `.foo { color: var(--text-primary); padding: var(--space-100); }`;
+    const css = `.foo { color: var(--bds-text-primary); padding: var(--bds-space-100); }`;
     const refs = extractTokenReferences(css, ['space']);
-    expect(refs.has('--space-100')).toBe(true);
-    expect(refs.has('--text-primary')).toBe(false);
+    expect(refs.has('--bds-space-100')).toBe(true);
+    expect(refs.has('--bds-text-primary')).toBe(false);
   });
 
   it('skips lines annotated with `bds-lint-ignore` (consistent with other BDS lint scripts)', () => {
@@ -182,26 +182,26 @@ describe('extractTokenReferences', () => {
     // Regression: the block-comment stripper must remove the entire comment
     // BEFORE token extraction. Otherwise the regex grabs `--color-grayscale`
     // from "--color-grayscale-*" and emits a false positive.
-    const input = '/* references --color-grayscale-* primitives */\n--surface-primary: #fff;';
+    const input = '/* references --color-grayscale-* primitives */\n--bds-surface-primary: #fff;';
     const refs = extractTokenReferences(input);
     expect(refs.has('--color-grayscale')).toBe(false);
-    expect(refs.has('--surface-primary')).toBe(true);
+    expect(refs.has('--bds-surface-primary')).toBe(true);
   });
 });
 
 describe('extractTokenDefinitions', () => {
   it('finds LHS declarations only — not var() references', () => {
-    const css = `.foo { --surface-primary: #fff; color: var(--text-primary); }`;
+    const css = `.foo { --bds-surface-primary: #fff; color: var(--bds-text-primary); }`;
     const defs = extractTokenDefinitions(css);
-    expect(defs.has('--surface-primary')).toBe(true);
-    expect(defs.has('--text-primary')).toBe(false);
+    expect(defs.has('--bds-surface-primary')).toBe(true);
+    expect(defs.has('--bds-text-primary')).toBe(false);
   });
 
   it('honors prefix filtering', () => {
-    const css = `:root { --surface-primary: #fff; --space-100: 4px; }`;
+    const css = `:root { --bds-surface-primary: #fff; --bds-space-100: 4px; }`;
     const defs = extractTokenDefinitions(css, ['surface']);
-    expect(defs.has('--surface-primary')).toBe(true);
-    expect(defs.has('--space-100')).toBe(false);
+    expect(defs.has('--bds-surface-primary')).toBe(true);
+    expect(defs.has('--bds-space-100')).toBe(false);
   });
 });
 
@@ -218,8 +218,8 @@ describe('sourceScan', () => {
   it('reports zero violations for a canonical fixture', () => {
     const allowlist = parseAllowlist(TOKENS_CSS_FIXTURE);
     withTempDir((dir) => {
-      writeFileSync(join(dir, 'a.css'), '.foo { color: var(--text-primary); }');
-      writeFileSync(join(dir, 'b.tsx'), `const x = 'var(--background-primary)';`);
+      writeFileSync(join(dir, 'a.css'), '.foo { color: var(--bds-text-primary); }');
+      writeFileSync(join(dir, 'b.tsx'), `const x = 'var(--bds-background-primary)';`);
       const result = sourceScan({ paths: [dir], allowlist });
       expect(result.violations).toEqual([]);
       expect(result.scannedFiles).toBe(2);
@@ -239,7 +239,7 @@ describe('sourceScan', () => {
   });
 
   it('exempts --border-(radius|width)-* by default', () => {
-    const allowlist = parseAllowlist('--surface-primary: #fff;');
+    const allowlist = parseAllowlist('--bds-surface-primary: #fff;');
     withTempDir((dir) => {
       writeFileSync(join(dir, 'a.css'), '.foo { border-radius: var(--border-radius-99); }');
       const result = sourceScan({ paths: [dir], allowlist });
@@ -259,7 +259,7 @@ describe('sourceScan', () => {
   });
 
   it('honors custom exemptTokens (string match + regex)', () => {
-    const allowlist = parseAllowlist('--surface-primary: #fff;');
+    const allowlist = parseAllowlist('--bds-surface-primary: #fff;');
     withTempDir((dir) => {
       writeFileSync(
         join(dir, 'a.css'),
@@ -285,16 +285,16 @@ describe('runtimeScan', () => {
   it('flags non-canonical generator output', () => {
     const allowlist = parseAllowlist(TOKENS_CSS_FIXTURE);
     const css = `:root {
-      --text-primary: #111;
+      --bds-text-primary: #111;
       --text-on-brand: #fff;          /* non-canonical */
       --surface-paper: #faf7f2;       /* non-canonical */
-      --border-radius-200: 8px;       /* exempt — sizing tier */
+      --bds-border-radius-200: 8px;       /* exempt — sizing tier */
     }`;
     const result = runtimeScan({ css, allowlist });
     expect(result.violations).toContain('--text-on-brand');
     expect(result.violations).toContain('--surface-paper');
-    expect(result.violations).not.toContain('--text-primary');
-    expect(result.violations).not.toContain('--border-radius-200');
+    expect(result.violations).not.toContain('--bds-text-primary');
+    expect(result.violations).not.toContain('--bds-border-radius-200');
   });
 
   it('omits --color-* from default prefixes (those are primitives, not semantic)', () => {
@@ -306,7 +306,7 @@ describe('runtimeScan', () => {
 
   it('counts emitted definitions accurately', () => {
     const allowlist = parseAllowlist(TOKENS_CSS_FIXTURE);
-    const css = `:root { --text-primary: #111; --surface-primary: #fff; }`;
+    const css = `:root { --bds-text-primary: #111; --bds-surface-primary: #fff; }`;
     const result = runtimeScan({ css, allowlist });
     expect(result.emittedCount).toBe(2);
   });
@@ -316,7 +316,7 @@ describe('assertCanonicalCss', () => {
   it('returns silently for canonical CSS', () => {
     const allowlist = parseAllowlist(TOKENS_CSS_FIXTURE);
     expect(() =>
-      assertCanonicalCss(`:root { --text-primary: #111; }`, { allowlist }),
+      assertCanonicalCss(`:root { --bds-text-primary: #111; }`, { allowlist }),
     ).not.toThrow();
   });
 
@@ -351,7 +351,7 @@ describe('parseAllowlistFromFile', () => {
       const path = join(dir, 'tokens.css');
       writeFileSync(path, TOKENS_CSS_FIXTURE);
       const allowlist = parseAllowlistFromFile(path);
-      expect(allowlist.has('--text-primary')).toBe(true);
+      expect(allowlist.has('--bds-text-primary')).toBe(true);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
@@ -421,7 +421,7 @@ describe('buildSarif', () => {
 
   it('produces an empty results array for a clean scan', () => {
     withTempDir((dir) => {
-      writeFileSync(join(dir, 'ok.css'), '.foo { color: var(--text-primary); }');
+      writeFileSync(join(dir, 'ok.css'), '.foo { color: var(--bds-text-primary); }');
       const result = sourceScan({ paths: [dir], allowlist });
       const sarif = buildSarif({ result, mode: 'source', cwd: dir });
       expect(sarif.runs[0].results).toEqual([]);
@@ -441,5 +441,53 @@ describe('buildSarif', () => {
       expect(r.locations[0].physicalLocation.artifactLocation.uri).toBe('theme.css');
       expect(r.locations[0].physicalLocation.region.startLine).toBe(2);
     });
+  });
+});
+
+describe('ADR-043 prefix + compat bridge (brik-bds#2670)', () => {
+  const css = [
+    ':root { --bds-text-primary: #111; }',
+    '/* ===== BEGIN BDS PREFIX BRIDGE (generated) ===== */',
+    ':root { --text-primary: var(--bds-text-primary); }',
+    '/* ===== END BDS PREFIX BRIDGE ===== */',
+  ].join('\n');
+
+  it('reads a bare name as canonical while the bridge is in the allowlist', () => {
+    expect(parseAllowlist(css).has('--text-primary')).toBe(true);
+  });
+
+  it('drops the bridge with includeBridge:false, so a bare name is a violation', () => {
+    const allowlist = parseAllowlist(css, { includeBridge: false });
+    expect(allowlist.has('--text-primary')).toBe(false);
+    expect(allowlist.has('--bds-text-primary')).toBe(true);
+  });
+
+  it('scans the prefixed spelling instead of silently skipping it', () => {
+    const refs = extractTokenReferences('.x { color: var(--bds-text-nope); }');
+    expect(refs.has('--bds-text-nope')).toBe(true);
+  });
+
+  it('lets only bridgePaths files read bridge names, and still flags their phantoms', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'cc-bridge-'));
+    try {
+      mkdirSync(join(dir, 'widgets'));
+      writeFileSync(join(dir, 'widgets', 'w.js'), 'a = "var(--text-primary) var(--text-ghost)";');
+      writeFileSync(join(dir, 'c.css'), '.x { color: var(--text-primary); }');
+      const result = sourceScan({
+        paths: [dir],
+        allowlist: parseAllowlist(css, { includeBridge: false }),
+        bridgePaths: [/widgets\//],
+        bridgeAllowlist: parseAllowlist(css),
+      });
+      const byToken = Object.fromEntries(
+        result.violations.map((v) => [v.token, v.files.map((f) => f.slice(dir.length + 1))]),
+      );
+      expect(byToken).toEqual({
+        '--text-primary': ['c.css'],
+        '--text-ghost': ['widgets/w.js'],
+      });
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 });

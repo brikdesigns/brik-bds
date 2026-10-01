@@ -94,7 +94,7 @@ const VERTICAL_PROPS = new Set([
  */
 // `2xs` is the deprecated alias of `tiny` (#2594) and collapses identically, so
 // both spellings stay matched until the alias block drops next minor.
-const MODE_COLLAPSING_RE = /var\(\s*--gap-(?:xs|tiny|2xs)\s*[,)]/;
+const MODE_COLLAPSING_RE = /var\(\s*--bds-gap-(?:xs|tiny|2xs)\s*[,)]/;
 
 /** Files exempt wholesale — the sanctioned element-adjacency owners. */
 const FILE_ALLOWLIST = new Set(['components/ui/Prose/Prose.css']);
@@ -200,7 +200,7 @@ function scanFile(filePath) {
 }
 
 const GUIDANCE =
-  'Space text roles with the mode-tied `--gap-*` scale, not a px/rem literal — ' +
+  'Space text roles with the mode-tied `--bds-gap-*` scale, not a px/rem literal — ' +
   'the scale re-modulates per spacing mode, a literal does not. See ADR-023 §3 ' +
   '(design.brikdesigns.com/docs/build-standards/content-rhythm). A genuine ' +
   'non-rhythm case (optical nudge, negative border-overlap) needs a reasoned ' +
@@ -218,7 +218,7 @@ function render(violations, scanned) {
     const tag = v.bare
       ? '  ← bare bds-lint-ignore (needs a reason, brik-bds issue 1469)'
       : v.collapsing
-        ? '  ← --gap-xs/--gap-tiny is 0px outside default spacing mode (ADR-024)'
+        ? '  ← --bds-gap-xs/--bds-gap-tiny is 0px outside default spacing mode (ADR-024)'
         : '';
     out.push(`  ${v.file}:${v.line}  ${v.text}${tag}`);
   }

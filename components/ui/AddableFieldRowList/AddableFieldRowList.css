@@ -14,17 +14,17 @@
 .bds-addable-field-row-list {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   width: 100%;
 }
 
 /* ─── Label ───────────────────────────────────────────────── */
 
 .bds-addable-field-row-list__label {
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
   text-transform: capitalize;
 }
 
@@ -33,7 +33,7 @@
 .bds-addable-field-row-list__rows {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -46,24 +46,24 @@
 
 .bds-addable-field-row-list__row {
   display: grid;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   align-items: end;
 }
 
 /* ─── Empty state ─────────────────────────────────────────── */
 
 .bds-addable-field-row-list__empty {
-  font-family: var(--font-family-body);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-body);
+  color: var(--bds-text-muted);
   font-style: italic;
 }
 
 /* ─── Helper text ─────────────────────────────────────────── */
 
 .bds-addable-field-row-list__helper {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-muted);
 }
 }

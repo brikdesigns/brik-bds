@@ -3,10 +3,10 @@
  * BDS TopNavigation
  *
  * Token reference:
- * - --surface-nav (navbar background)
- * - --padding-md, --padding-lg
- * - --gap-xl, --gap-lg, --gap-md
- * - --text-secondary, --text-primary
+ * - --bds-surface-nav (navbar background)
+ * - --bds-padding-md, --bds-padding-lg
+ * - --bds-gap-xl, --bds-gap-lg, --bds-gap-md
+ * - --bds-text-secondary, --bds-text-primary
  */
 
 /* ─── Container ───────────────────────────────────────────────── */
@@ -16,8 +16,8 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: var(--padding-md) var(--padding-lg);
-  background-color: var(--surface-nav);
+  padding: var(--bds-padding-md) var(--bds-padding-lg);
+  background-color: var(--bds-surface-nav);
   box-sizing: border-box;
   z-index: 100;
 }
@@ -32,7 +32,7 @@
 .bds-top-navigation__left {
   display: flex;
   align-items: center;
-  gap: var(--gap-xl);
+  gap: var(--bds-gap-xl);
   flex-wrap: wrap;
   min-width: 0;
 }
@@ -44,30 +44,30 @@
 .bds-top-navigation__links {
   display: flex;
   align-items: center;
-  gap: var(--gap-lg);
+  gap: var(--bds-gap-lg);
   flex-wrap: wrap;
 }
 
 /* ─── Link styles ─────────────────────────────────────────────── */
 
 .bds-top-navigation__link {
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-snug);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-secondary);
   text-decoration: none;
-  transition: color var(--duration-sm) var(--ease-out);
+  transition: color var(--bds-duration-sm) var(--bds-ease-out);
   cursor: pointer;
 }
 
 .bds-top-navigation__link:hover {
-  color: var(--text-primary);
+  color: var(--bds-text-primary);
 }
 
 .bds-top-navigation__link--active {
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
+  font-weight: var(--bds-font-weight-semibold);
+  color: var(--bds-text-primary);
 }
 
 /* ─── Actions ─────────────────────────────────────────────────── */
@@ -75,7 +75,7 @@
 .bds-top-navigation__actions {
   display: flex;
   align-items: center;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   flex-shrink: 0;
 }
 }

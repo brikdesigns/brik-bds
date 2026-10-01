@@ -25,17 +25,17 @@
 /* ─── Base ────────────────────────────────────────────────────── */
 
 .bds-media-tabs {
-  --bds-media-tabs-interval: var(--duration-autoplay);
-  --bds-media-tabs-media-aspect: var(--aspect-4-3);
+  --bds-media-tabs-interval: var(--bds-duration-autoplay);
+  --bds-media-tabs-media-aspect: var(--bds-aspect-4-3);
 
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--gap-xl);
+  gap: var(--bds-gap-xl);
   width: 100%;
   box-sizing: border-box;
 }
 
-/* 768px is --breakpoint-tablet; CSS custom properties can't be used inside
+/* 768px is --bds-breakpoint-tablet; CSS custom properties can't be used inside
    @media rules (tokens/index.ts). Below it the media panel stacks under the
    rail, so the sequence still reads top-to-bottom. */
 @media (min-width: 768px) {
@@ -54,7 +54,7 @@
 .bds-media-tabs__rail {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
+  gap: var(--bds-gap-lg);
   min-width: 0;
 }
 
@@ -64,9 +64,9 @@
 
 .bds-media-tabs__progress {
   position: relative;
-  height: var(--border-width-lg);
-  border-radius: var(--border-radius-pill);
-  background-color: var(--surface-muted);
+  height: var(--bds-border-width-lg);
+  border-radius: var(--bds-border-radius-pill);
+  background-color: var(--bds-surface-muted);
   overflow: hidden;
 }
 
@@ -74,17 +74,17 @@
   display: block;
   width: 100%;
   height: 100%;
-  background-color: var(--background-brand-primary);
+  background-color: var(--bds-background-brand-primary);
   transform: scaleX(0);
   transform-origin: left center;
 }
 
 .bds-media-tabs:not([data-paused]) .bds-media-tabs__progress-fill {
-  animation: bds-media-tabs-progress var(--bds-media-tabs-interval) var(--ease-linear) forwards;
+  animation: bds-media-tabs-progress var(--bds-media-tabs-interval) var(--bds-ease-linear) forwards;
 }
 
 .bds-media-tabs[data-paused] .bds-media-tabs__progress-fill {
-  animation: bds-media-tabs-progress var(--bds-media-tabs-interval) var(--ease-linear) forwards;
+  animation: bds-media-tabs-progress var(--bds-media-tabs-interval) var(--bds-ease-linear) forwards;
   animation-play-state: paused;
 }
 
@@ -98,7 +98,7 @@
 .bds-media-tabs__panel {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows var(--duration-lg) var(--ease-out);
+  transition: grid-template-rows var(--bds-duration-lg) var(--bds-ease-out);
 }
 
 .bds-media-tabs__panel[data-active] {
@@ -109,7 +109,7 @@
   overflow: hidden;
   min-height: 0;
   visibility: hidden;
-  transition: visibility 0s linear var(--duration-lg);
+  transition: visibility 0s linear var(--bds-duration-lg);
 }
 
 .bds-media-tabs__panel[data-active] .bds-media-tabs__panel-inner {
@@ -119,10 +119,10 @@
 
 .bds-media-tabs__description {
   margin: 0;
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
 }
 
 /* ─── Media panel ─────────────────────────────────────────────── */
@@ -136,7 +136,7 @@
   aspect-ratio: var(--bds-media-tabs-media-aspect);
   min-width: 0;
   overflow: hidden;
-  border-radius: var(--border-radius-lg);
+  border-radius: var(--bds-border-radius-lg);
 }
 
 .bds-media-tabs__media-item {
@@ -146,18 +146,18 @@
   visibility: hidden;
   /* Exit: quicker, accelerating away. */
   transition:
-    opacity var(--duration-lg) var(--ease-in),
-    visibility 0s linear var(--duration-lg);
+    opacity var(--bds-duration-lg) var(--bds-ease-in),
+    visibility 0s linear var(--bds-duration-lg);
 }
 
 .bds-media-tabs__media-item[data-active] {
   opacity: 1;
   visibility: visible;
   /* Enter: settle in after the outgoing frame has cleared — the staggered
-     crossfade. `--duration-md` stands in for the measured entrance delay. */
+     crossfade. `--bds-duration-md` stands in for the measured entrance delay. */
   transition:
-    opacity var(--duration-xl) var(--ease-spring-soft) var(--duration-md),
-    visibility 0s linear var(--duration-md);
+    opacity var(--bds-duration-xl) var(--bds-ease-spring-soft) var(--bds-duration-md),
+    visibility 0s linear var(--bds-duration-md);
 }
 
 .bds-media-tabs__media-item > :is(img, video, canvas, svg) {

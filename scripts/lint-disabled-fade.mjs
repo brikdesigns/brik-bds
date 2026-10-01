@@ -75,12 +75,12 @@ const DIM = '\x1b[2m';
 const NC = '\x1b[0m';
 
 /** The one token the fade is allowed to read (ADR-028 pt-2). */
-const FADE_TOKEN = '--state-disabled-opacity';
+const FADE_TOKEN = '--bds-state-disabled-opacity';
 /** The token-swap trio (ADR-028 pt-1). */
 const SWAP_TOKENS = [
-  '--background-disabled',
-  '--text-disabled',
-  '--border-disabled',
+  '--bds-background-disabled',
+  '--bds-text-disabled',
+  '--bds-border-disabled',
 ];
 
 /**
@@ -102,12 +102,12 @@ const NO_FILL = /^(transparent|none|inherit|initial|unset|revert|revert-layer)$/
  * instead of the rule.
  */
 const SURFACE_TOKENS = [
-  '--background-primary',
-  '--background-input',
+  '--bds-background-primary',
+  '--bds-background-input',
   '--text-input-bg',
 ];
 const isSurfaceFill = (value) =>
-  SURFACE_TOKENS.some((t) => value.includes(`var(${t})`)) || /var\(--surface-/.test(value);
+  SURFACE_TOKENS.some((t) => value.includes(`var(${t})`)) || /var\(--bds-surface-/.test(value);
 
 /**
  * Selector tokens that make a rule a *state* fill rather than a resting one.
@@ -304,7 +304,7 @@ function classify(body) {
   if (SWAP_TOKENS.some((t) => body.includes(`var(${t})`))) {
     return { kind: 'swap' };
   }
-  if (/color\s*:\s*var\(--text-muted\)/.test(body)) {
+  if (/color\s*:\s*var\(--bds-text-muted\)/.test(body)) {
     return { kind: 'muted' };
   }
   return { kind: 'supporting' };
@@ -360,7 +360,7 @@ for (const { component, path } of files) {
         detail:
           verdict.kind === 'literal'
             ? `opacity: ${verdict.value}`
-            : 'color: var(--text-muted) with no fill change',
+            : 'color: var(--bds-text-muted) with no fill change',
         bareIgnore: Boolean(ignore?.bare),
       });
     }

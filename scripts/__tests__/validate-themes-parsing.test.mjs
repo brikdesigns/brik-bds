@@ -76,35 +76,35 @@ describe('#1965 hazard 2 — prose naming a token must not parse as a declaratio
     const file = fixture(`:root {
   /* There is no --border-info: the gray one retired with the rename and blue
      has no border counterpart. */
-  --background-info: var(--color-system-blue);
+  --bds-background-info: var(--bds-color-system-blue);
 }
 `);
     const vars = extractBlock(file, /:root/);
     expect(vars['--border-info']).toBeUndefined();
-    expect(vars['--background-info']).toBe('var(--color-system-blue)');
+    expect(vars['--bds-background-info']).toBe('var(--bds-color-system-blue)');
   });
 
   it('the phantom used to swallow the real declaration', () => {
     const body = `
   /* There is no --border-info: the gray one retired. */
-  --background-info: var(--color-system-blue);
+  --bds-background-info: var(--bds-color-system-blue);
 `;
     // Unblanked, the prose wins and the real token vanishes.
     expect(parseDecls(body)['--border-info']).toBeDefined();
-    expect(parseDecls(body)['--background-info']).toBeUndefined();
+    expect(parseDecls(body)['--bds-background-info']).toBeUndefined();
     // Blanked, only the real declaration survives.
     expect(parseDecls(blankComments(body))['--border-info']).toBeUndefined();
-    expect(parseDecls(blankComments(body))['--background-info']).toBe('var(--color-system-blue)');
+    expect(parseDecls(blankComments(body))['--bds-background-info']).toBe('var(--bds-color-system-blue)');
   });
 });
 
 describe('the shipped registry', () => {
-  it('--background-info resolves in the real gap-fills.css', () => {
+  it('--bds-background-info resolves in the real gap-fills.css', () => {
     // The regression that motivated the fix, asserted against the live file
     // rather than a fixture — a fixture cannot catch the next comment someone
     // writes above this declaration.
     const vars = extractBlock(path.join(HERE, '..', '..', 'tokens', 'gap-fills.css'), /:root/);
-    expect(vars['--background-info']).toBe('var(--color-system-blue)');
+    expect(vars['--bds-background-info']).toBe('var(--bds-color-system-blue)');
     expect(vars['--border-info']).toBeUndefined();
   });
 });

@@ -9,12 +9,12 @@
 
 /* ─── Gap (BDS --gap-* tokens) ───────────────────────────────── */
 
-.bds-cluster--gap-tiny { gap: var(--gap-tiny); }
-.bds-cluster--gap-xs   { gap: var(--gap-xs); }
-.bds-cluster--gap-sm   { gap: var(--gap-sm); }
-.bds-cluster--gap-md   { gap: var(--gap-md); }
-.bds-cluster--gap-lg   { gap: var(--gap-lg); }
-.bds-cluster--gap-xl   { gap: var(--gap-xl); }
+.bds-cluster--gap-tiny { gap: var(--bds-gap-tiny); }
+.bds-cluster--gap-xs   { gap: var(--bds-gap-xs); }
+.bds-cluster--gap-sm   { gap: var(--bds-gap-sm); }
+.bds-cluster--gap-md   { gap: var(--bds-gap-md); }
+.bds-cluster--gap-lg   { gap: var(--bds-gap-lg); }
+.bds-cluster--gap-xl   { gap: var(--bds-gap-xl); }
 
 /* ─── Cross-axis alignment ───────────────────────────────────── */
 

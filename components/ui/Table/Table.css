@@ -8,8 +8,8 @@
      move onto the cells (below) because `tr` borders don't paint here. */
   border-collapse: separate;
   border-spacing: 0;
-  font-family: var(--font-family-body);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-body);
+  color: var(--bds-text-primary);
 }
 
 /* ─── Rounded outer corners + boundary ───────────────────────── */
@@ -19,69 +19,69 @@
    background and corner cells to the radius. */
 .bds-table[data-rounded-top="true"],
 .bds-table[data-rounded-bottom="true"] {
-  border: var(--border-width-md) solid var(--border-muted);
+  border: var(--bds-border-width-md) solid var(--bds-border-muted);
   overflow: hidden;
 }
 
 .bds-table[data-rounded-top="true"] {
-  border-top-left-radius: var(--border-radius-md);
-  border-top-right-radius: var(--border-radius-md);
+  border-top-left-radius: var(--bds-border-radius-md);
+  border-top-right-radius: var(--bds-border-radius-md);
 }
 
 .bds-table[data-rounded-bottom="true"] {
-  border-bottom-left-radius: var(--border-radius-md);
-  border-bottom-right-radius: var(--border-radius-md);
+  border-bottom-left-radius: var(--bds-border-radius-md);
+  border-bottom-right-radius: var(--bds-border-radius-md);
 }
 
 /* ─── Row ────────────────────────────────────────────────────── */
 
 .bds-table-row--selected {
-  background-color: var(--background-secondary);
+  background-color: var(--bds-background-secondary);
 }
 
 /* Striped rows */
 .bds-table[data-striped="true"] .bds-table-body .bds-table-row:nth-child(even) {
-  background-color: var(--background-secondary);
+  background-color: var(--bds-background-secondary);
 }
 
 /* ─── Header cell ────────────────────────────────────────────── */
 
 .bds-table-head {
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  color: var(--bds-text-muted);
   text-align: left;
   white-space: nowrap;
 }
 
 /* Header background — default `secondary`, opt into `primary` to match body. */
 .bds-table[data-header-bg="secondary"] .bds-table-head {
-  background-color: var(--background-secondary);
+  background-color: var(--bds-background-secondary);
 }
 
 .bds-table[data-header-bg="primary"] .bds-table-head {
-  background-color: var(--background-primary);
+  background-color: var(--bds-background-primary);
 }
 
 /* Header bottom border — opt-in (off by default). Default weight `md`. */
 .bds-table[data-header-border="true"] .bds-table-head {
-  border-bottom: var(--border-width-md) solid var(--border-muted);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-muted);
 }
 
 /* Opt into `sm` weight to match the data-row divider (uniform border weight). */
 .bds-table[data-header-border="true"][data-header-border-weight="sm"] .bds-table-head {
-  border-bottom-width: var(--border-width-sm);
+  border-bottom-width: var(--bds-border-width-sm);
 }
 
 /* Size: default */
 .bds-table[data-size="default"] .bds-table-head {
-  padding: var(--padding-sm) var(--padding-md);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
 }
 
 /* Size: comfortable */
 .bds-table[data-size="comfortable"] .bds-table-head {
-  padding: var(--padding-xl) var(--padding-md);
+  padding: var(--bds-padding-xl) var(--bds-padding-md);
 }
 
 .bds-table-head--sortable {
@@ -92,15 +92,15 @@
 /* ─── Subheader row (section / phase divider) ───────────────── */
 
 .bds-table-subheader {
-  background-color: var(--surface-secondary);
-  color: var(--text-muted);
-  font-family: var(--font-family-subtitle);
-  font-size: var(--subtitle-sm);
-  font-weight: var(--font-weight-semibold);
+  background-color: var(--bds-surface-secondary);
+  color: var(--bds-text-muted);
+  font-family: var(--bds-font-family-subtitle);
+  font-size: var(--bds-subtitle-sm);
+  font-weight: var(--bds-font-weight-semibold);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  padding: var(--padding-tiny) var(--padding-md);
-  border-bottom: var(--border-width-md) solid var(--border-muted);
+  padding: var(--bds-padding-tiny) var(--bds-padding-md);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-muted);
 }
 
 /* Suppress striped background on subheader rows */
@@ -123,36 +123,36 @@
 /* ─── Body cell ──────────────────────────────────────────────── */
 
 .bds-table-cell {
-  font-size: var(--body-md);
-  color: var(--text-primary);
+  font-size: var(--bds-body-md);
+  color: var(--bds-text-primary);
   vertical-align: middle;
   overflow-wrap: anywhere;
   /* Row divider lives on the cell — `tr` borders don't paint under
      `border-collapse: separate`. */
-  border-bottom: var(--border-width-md) solid var(--border-muted);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-muted);
 }
 
 /* Size: default */
 .bds-table[data-size="default"] .bds-table-cell {
-  padding: var(--padding-sm) var(--padding-md);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
 }
 
 /* Size: comfortable */
 .bds-table[data-size="comfortable"] .bds-table-cell {
-  padding: var(--padding-xl) var(--padding-md);
+  padding: var(--bds-padding-xl) var(--bds-padding-md);
 }
 
 /* ─── Actions cell (right-aligned [View][Edit][⋯] cluster) ──── */
 
 .bds-table-actions-cell {
-  font-size: var(--body-md);
-  color: var(--text-primary);
+  font-size: var(--bds-body-md);
+  color: var(--bds-text-primary);
   vertical-align: middle;
   /* Shrink-to-content so action column never competes with content cells */
   width: 1%;
   white-space: nowrap;
   /* Match the body-cell row divider (borders don't paint on `tr`). */
-  border-bottom: var(--border-width-md) solid var(--border-muted);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-muted);
 }
 
 /* When an outer border is present (any rounded edge), the last body row
@@ -170,11 +170,11 @@
 
 /* Match TableCell padding rhythm */
 .bds-table[data-size="default"] .bds-table-actions-cell {
-  padding: var(--padding-sm) var(--padding-md);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
 }
 
 .bds-table[data-size="comfortable"] .bds-table-actions-cell {
-  padding: var(--padding-xl) var(--padding-md);
+  padding: var(--bds-padding-xl) var(--bds-padding-md);
 }
 
 /* Honor the table's flush mode like other cells */
@@ -188,7 +188,7 @@
 
 .bds-table-actions-cell__group {
   display: flex;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   align-items: center;
 }
 
@@ -204,15 +204,15 @@
 
 .bds-table-avatar-cell {
   vertical-align: middle;
-  border-bottom: var(--border-width-md) solid var(--border-muted);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-muted);
 }
 
 .bds-table[data-size="default"] .bds-table-avatar-cell {
-  padding: var(--padding-sm) var(--padding-md);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
 }
 
 .bds-table[data-size="comfortable"] .bds-table-avatar-cell {
-  padding: var(--padding-xl) var(--padding-md);
+  padding: var(--bds-padding-xl) var(--bds-padding-md);
 }
 
 .bds-table[data-flush="true"] .bds-table-avatar-cell:first-child {
@@ -226,7 +226,7 @@
 .bds-table-avatar-cell__group {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 
 .bds-table-avatar-cell__content {
@@ -241,34 +241,34 @@
    drifting apart (ADR-027). */
 .bds-table-avatar-cell__name,
 .bds-table-text-cell__primary {
-  font-family: var(--font-family-heading);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-medium);
+  color: var(--bds-text-primary);
 }
 
 .bds-table-avatar-cell__subtitle,
 .bds-table-text-cell__secondary {
-  font-family: var(--font-family-body);
-  font-size: var(--body-xs);
-  /* --text-secondary (6.9:1 on white), not --text-muted (3.84:1 — fails WCAG AA
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-xs);
+  /* --bds-text-secondary (6.9:1 on white), not --bds-text-muted (3.84:1 — fails WCAG AA
      at this size). See #526 contrast contract. */
-  color: var(--text-secondary);
+  color: var(--bds-text-secondary);
 }
 
 /* ─── Text cell (two-line identity stack, no avatar) ─────────── */
 
 .bds-table-text-cell {
   vertical-align: middle;
-  border-bottom: var(--border-width-md) solid var(--border-muted);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-muted);
 }
 
 .bds-table[data-size="default"] .bds-table-text-cell {
-  padding: var(--padding-sm) var(--padding-md);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
 }
 
 .bds-table[data-size="comfortable"] .bds-table-text-cell {
-  padding: var(--padding-xl) var(--padding-md);
+  padding: var(--bds-padding-xl) var(--bds-padding-md);
 }
 
 .bds-table[data-flush="true"] .bds-table-text-cell:first-child {
@@ -289,18 +289,18 @@
 /* ─── Icon cell (fixed-box leading icon + label) ─────────────── */
 
 .bds-table-icon-cell {
-  font-size: var(--body-md);
-  color: var(--text-primary);
+  font-size: var(--bds-body-md);
+  color: var(--bds-text-primary);
   vertical-align: middle;
-  border-bottom: var(--border-width-md) solid var(--border-muted);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-muted);
 }
 
 .bds-table[data-size="default"] .bds-table-icon-cell {
-  padding: var(--padding-sm) var(--padding-md);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
 }
 
 .bds-table[data-size="comfortable"] .bds-table-icon-cell {
-  padding: var(--padding-xl) var(--padding-md);
+  padding: var(--bds-padding-xl) var(--bds-padding-md);
 }
 
 .bds-table[data-flush="true"] .bds-table-icon-cell:first-child {
@@ -314,7 +314,7 @@
 .bds-table-icon-cell__group {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
   min-width: 0;
 }
 
@@ -324,9 +324,9 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: var(--size-600);
-  height: var(--size-600);
-  font-size: var(--label-lg);
+  width: var(--bds-size-600);
+  height: var(--bds-size-600);
+  font-size: var(--bds-label-lg);
 }
 
 /* ─── Image cell (square 1:1 logo / product thumbnail) ───────── */
@@ -336,15 +336,15 @@
   /* Shrink-to-content so the thumbnail column never competes with content cells */
   width: 1%;
   white-space: nowrap;
-  border-bottom: var(--border-width-md) solid var(--border-muted);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-muted);
 }
 
 .bds-table[data-size="default"] .bds-table-image-cell {
-  padding: var(--padding-sm) var(--padding-md);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
 }
 
 .bds-table[data-size="comfortable"] .bds-table-image-cell {
-  padding: var(--padding-xl) var(--padding-md);
+  padding: var(--bds-padding-xl) var(--bds-padding-md);
 }
 
 .bds-table[data-flush="true"] .bds-table-image-cell:first-child {
@@ -357,32 +357,32 @@
 
 .bds-table-image-cell__media {
   overflow: hidden;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--bds-border-radius-sm);
 }
 
 /* bds-lint-ignore — Figma-driven thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
 .bds-table-image-cell--sm .bds-table-image-cell__media {
-  width: var(--size-800);
+  width: var(--bds-size-800);
 }
 
 /* bds-lint-ignore — Figma-driven thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
 .bds-table-image-cell--md .bds-table-image-cell__media {
-  width: var(--size-1000);
+  width: var(--bds-size-1000);
 }
 
 /* ─── Service-tag cell (one or more ServiceTags) ─────────────── */
 
 .bds-table-service-tag-cell {
   vertical-align: middle;
-  border-bottom: var(--border-width-md) solid var(--border-muted);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-muted);
 }
 
 .bds-table[data-size="default"] .bds-table-service-tag-cell {
-  padding: var(--padding-sm) var(--padding-md);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
 }
 
 .bds-table[data-size="comfortable"] .bds-table-service-tag-cell {
-  padding: var(--padding-xl) var(--padding-md);
+  padding: var(--bds-padding-xl) var(--bds-padding-md);
 }
 
 .bds-table[data-flush="true"] .bds-table-service-tag-cell:first-child {
@@ -397,6 +397,6 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
 }
 }

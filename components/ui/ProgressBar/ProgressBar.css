@@ -6,9 +6,9 @@
 .bds-progress-bar {
   position: relative;
   width: 100%;
-  height: var(--space-200);
-  background-color: var(--background-muted);
-  border-radius: var(--border-radius-sm);
+  height: var(--bds-space-200);
+  background-color: var(--bds-background-muted);
+  border-radius: var(--bds-border-radius-sm);
   overflow: hidden;
 }
 
@@ -19,8 +19,8 @@
   top: 0;
   left: 0;
   bottom: 0;
-  background-color: var(--background-brand-primary);
-  border-radius: var(--border-radius-sm);
-  transition: width var(--duration-500) var(--ease-in-out);
+  background-color: var(--bds-background-brand-primary);
+  border-radius: var(--bds-border-radius-sm);
+  transition: width var(--bds-duration-500) var(--bds-ease-in-out);
 }
 }

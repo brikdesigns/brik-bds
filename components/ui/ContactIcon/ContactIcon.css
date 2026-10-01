@@ -19,19 +19,19 @@
 
 /* ─── type="badge" — background carries the emphasis color, glyph knocked out white ── */
 
-/* Constant white regardless of theme (context-pinned, unlike --text-inverse
+/* Constant white regardless of theme (context-pinned, unlike --bds-text-inverse
    which flips with theme polarity) — the glyph always reads as a white
    knockout on a colored badge regardless of the app's light/dark mode. */
 .bds-contact-icon--badge {
-  color: var(--text-on-color-dark);
+  color: var(--bds-text-on-color-dark);
 }
 
 .bds-contact-icon--badge.bds-contact-icon--emphasis-neutral .bds-contact-icon__bg {
-  fill: var(--text-muted);
+  fill: var(--bds-text-muted);
 }
 
 .bds-contact-icon--badge.bds-contact-icon--emphasis-accent .bds-contact-icon__bg {
-  fill: var(--text-brand-primary);
+  fill: var(--bds-text-brand-primary);
 }
 
 /* ─── type="glyph" — background neutral/transparent, glyph carries the emphasis color ── */
@@ -41,10 +41,10 @@
 }
 
 .bds-contact-icon--glyph.bds-contact-icon--emphasis-neutral {
-  color: var(--text-muted);
+  color: var(--bds-text-muted);
 }
 
 .bds-contact-icon--glyph.bds-contact-icon--emphasis-accent {
-  color: var(--text-brand-primary);
+  color: var(--bds-text-brand-primary);
 }
 }

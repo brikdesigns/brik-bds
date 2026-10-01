@@ -9,12 +9,12 @@ export const ValueRow = ({ children }) => (
   <div
     style={{
       display: 'flex',
-      gap: 'var(--gap-huge)',
+      gap: 'var(--bds-gap-huge)',
       flexWrap: 'wrap',
-      fontFamily: 'var(--font-family-display)',
-      fontSize: 'var(--heading-xxl)',
-      fontWeight: 'var(--font-weight-semibold)',
-      color: 'var(--text-primary)',
+      fontFamily: 'var(--bds-font-family-display)',
+      fontSize: 'var(--bds-heading-xxl)',
+      fontWeight: 'var(--bds-font-weight-semibold)',
+      color: 'var(--bds-text-primary)',
     }}
   >
     {children}
@@ -37,7 +37,7 @@ export const ValueShapes = () => (
 
 <ComponentLinks slug="count-up" />
 
-A number that counts up to its final value when it scrolls into view. The final value is the element's real text, so with JavaScript off, under `prefers-reduced-motion: reduce`, or for a value with no number it renders as a plain static number — the sweep is a pure enhancement on top. Duration and easing are token-backed (`--duration-xl` / `--ease-out`); `tabular-nums` holds the width steady so the layout does not jitter.
+A number that counts up to its final value when it scrolls into view. The final value is the element's real text, so with JavaScript off, under `prefers-reduced-motion: reduce`, or for a value with no number it renders as a plain static number — the sweep is a pure enhancement on top. Duration and easing are token-backed (`--bds-duration-xl` / `--bds-ease-out`); `tabular-nums` holds the width steady so the layout does not jitter.
 
 This is the motion primitive behind the blueprint `contentMotion: count-up` axis value (dispatched by `BlockContentMotion`, adopted by [`StatsDarkBar`](?path=/docs/blueprints-stats-dark-bar--docs)). It is distinct from [`Counter`](?path=/docs/components-counter--docs), the static numeric-count indicator.
 
@@ -61,12 +61,12 @@ This is the motion primitive behind the blueprint `contentMotion: count-up` axis
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `--bds-count-up-duration` | `var(--duration-xl)` (500ms) | Length of the count sweep |
-| `--bds-count-up-ease` | `var(--ease-out)` | Easing curve the sweep follows |
+| `--bds-count-up-duration` | `var(--bds-duration-xl)` (500ms) | Length of the count sweep |
+| `--bds-count-up-ease` | `var(--bds-ease-out)` | Easing curve the sweep follows |
 
 ```css
 .my-fast-stat {
-  --bds-count-up-duration: var(--duration-lg);
+  --bds-count-up-duration: var(--bds-duration-lg);
 }
 ```
 

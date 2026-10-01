@@ -127,7 +127,7 @@
 
 .morph-light-to-brand {
   --bg-from: #ffffff;
-  --bg-to: var(--background-brand-primary, #0a0a0a);
+  --bg-to: var(--bds-background-brand-primary, #0a0a0a);
   --text-from: #111111;
   --text-to: #ffffff;
 }
@@ -195,11 +195,11 @@
 }
 
 .gradient-orb--brand {
-  background: var(--background-brand-primary, #4665f5);
+  background: var(--bds-background-brand-primary, #4665f5);
 }
 
 .gradient-orb--accent {
-  background: var(--background-brand-secondary, #79d799);
+  background: var(--bds-background-brand-secondary, #79d799);
 }
 
 /* ==========================================================================
@@ -334,8 +334,8 @@
 .text-gradient {
   background: linear-gradient(
     135deg,
-    var(--text-gradient-from, var(--text-primary, #111)) 0%,
-    var(--text-gradient-to, var(--background-brand-primary, #4665f5)) 100%
+    var(--text-gradient-from, var(--bds-text-primary, #111)) 0%,
+    var(--text-gradient-to, var(--bds-background-brand-primary, #4665f5)) 100%
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -344,8 +344,8 @@
 
 /* Gradient text presets */
 .text-gradient--brand {
-  --text-gradient-from: var(--background-brand-primary, #4665f5);
-  --text-gradient-to: var(--background-brand-secondary, #79d799);
+  --text-gradient-from: var(--bds-background-brand-primary, #4665f5);
+  --text-gradient-to: var(--bds-background-brand-secondary, #79d799);
 }
 
 /* Stroke / outline text */
@@ -366,8 +366,8 @@
 /* Highlight span — animated background reveal */
 .text-highlight {
   background-image: linear-gradient(
-    var(--highlight-color, var(--background-brand-primary, #4665f5)) 0%,
-    var(--highlight-color, var(--background-brand-primary, #4665f5)) 100%
+    var(--highlight-color, var(--bds-background-brand-primary, #4665f5)) 0%,
+    var(--highlight-color, var(--bds-background-brand-primary, #4665f5)) 100%
   );
   background-repeat: no-repeat;
   background-size: 0% 100%;
@@ -535,7 +535,7 @@
 
 /* Brand section */
 .section-brand {
-  background-color: var(--background-brand-primary, #0a0a0a);
+  background-color: var(--bds-background-brand-primary, #0a0a0a);
   color: #ffffff;
 }
 

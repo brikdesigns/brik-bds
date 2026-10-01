@@ -44,8 +44,8 @@ function run(root) {
   }
 }
 
-const FADE = `.bds-thing--disabled {\n  opacity: var(--state-disabled-opacity);\n  cursor: not-allowed;\n}\n`;
-const SWAP = `.bds-thing:disabled {\n  background-color: var(--background-disabled);\n  color: var(--text-disabled);\n}\n`;
+const FADE = `.bds-thing--disabled {\n  opacity: var(--bds-state-disabled-opacity);\n  cursor: not-allowed;\n}\n`;
+const SWAP = `.bds-thing:disabled {\n  background-color: var(--bds-background-disabled);\n  color: var(--bds-text-disabled);\n}\n`;
 
 describe('lint-disabled-fade', () => {
   it('passes the two ADR-028 mechanisms', () => {
@@ -71,7 +71,7 @@ describe('lint-disabled-fade', () => {
 
   it('fails a var() fallback, which survives the token being renamed away', () => {
     const { code, out } = run(
-      tree({ Thing: `.bds-thing--disabled {\n  opacity: var(--state-disabled-opacity, 0.4);\n}\n` }),
+      tree({ Thing: `.bds-thing--disabled {\n  opacity: var(--bds-state-disabled-opacity, 0.4);\n}\n` }),
     );
     expect(code).toBe(1);
     expect(JSON.parse(out).violations[0].rule).toBe('hardcoded-disabled-opacity');
@@ -79,7 +79,7 @@ describe('lint-disabled-fade', () => {
 
   it('fails the muted-text swap ADR-028 pt-4 retired', () => {
     const { code, out } = run(
-      tree({ Nav: `.bds-nav-item--disabled {\n  color: var(--text-muted);\n}\n` }),
+      tree({ Nav: `.bds-nav-item--disabled {\n  color: var(--bds-text-muted);\n}\n` }),
     );
     expect(code).toBe(1);
     expect(JSON.parse(out).violations[0]).toMatchObject({
@@ -131,7 +131,7 @@ describe('lint-disabled-fade', () => {
   it('fails a fader that paints its own fill at the root', () => {
     const { code, out } = run(
       tree({
-        Chip: `.bds-chip--secondary {\n  background-color: var(--background-secondary);\n}\n` + FADE.replace(/thing/g, 'chip'),
+        Chip: `.bds-chip--secondary {\n  background-color: var(--bds-background-secondary);\n}\n` + FADE.replace(/thing/g, 'chip'),
       }),
     );
     expect(code).toBe(1);
@@ -145,8 +145,8 @@ describe('lint-disabled-fade', () => {
     const { code } = run(
       tree({
         Chip:
-          `.bds-chip--secondary {\n  background-color: var(--background-secondary);\n}\n` +
-          `.bds-chip--disabled {\n  background-color: var(--background-disabled);\n  color: var(--text-disabled);\n}\n`,
+          `.bds-chip--secondary {\n  background-color: var(--bds-background-secondary);\n}\n` +
+          `.bds-chip--disabled {\n  background-color: var(--bds-background-disabled);\n  color: var(--bds-text-disabled);\n}\n`,
       }),
     );
     expect(code).toBe(0);
@@ -157,7 +157,7 @@ describe('lint-disabled-fade', () => {
     // Gating these would flag 13 components the ADR explicitly covers.
     const { code, out } = run(
       tree({
-        TextInput: `.bds-text-input {\n  background-color: var(--background-input);\n}\n` + FADE.replace(/thing/g, 'text-input'),
+        TextInput: `.bds-text-input {\n  background-color: var(--bds-background-input);\n}\n` + FADE.replace(/thing/g, 'text-input'),
       }),
     );
     expect(code).toBe(0);
@@ -171,9 +171,9 @@ describe('lint-disabled-fade', () => {
     const { code, out } = run(
       tree({
         SegmentedControl:
-          `.bds-segmented-control {\n  background-color: var(--background-secondary);\n}\n` +
+          `.bds-segmented-control {\n  background-color: var(--bds-background-secondary);\n}\n` +
           `.bds-segmented-control-item {\n  background-color: transparent;\n}\n` +
-          `.bds-segmented-control-item:disabled {\n  opacity: var(--state-disabled-opacity);\n}\n`,
+          `.bds-segmented-control-item:disabled {\n  opacity: var(--bds-state-disabled-opacity);\n}\n`,
       }),
     );
     expect(code).toBe(0);
@@ -187,10 +187,10 @@ describe('lint-disabled-fade', () => {
     const { code, out } = run(
       tree({
         Tag:
-          `.bds-tag--solid {\n  background-color: var(--background-secondary);\n}\n` +
-          `.bds-tag--solid.bds-tag--disabled {\n  background-color: var(--background-disabled);\n  color: var(--text-disabled);\n}\n` +
+          `.bds-tag--solid {\n  background-color: var(--bds-background-secondary);\n}\n` +
+          `.bds-tag--solid.bds-tag--disabled {\n  background-color: var(--bds-background-disabled);\n  color: var(--bds-text-disabled);\n}\n` +
           `.bds-tag--subtle {\n  background-color: transparent;\n}\n` +
-          `.bds-tag--subtle.bds-tag--disabled {\n  opacity: var(--state-disabled-opacity);\n}\n`,
+          `.bds-tag--subtle.bds-tag--disabled {\n  opacity: var(--bds-state-disabled-opacity);\n}\n`,
       }),
     );
     expect(code).toBe(0);

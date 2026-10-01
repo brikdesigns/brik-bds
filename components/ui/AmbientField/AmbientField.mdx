@@ -71,13 +71,13 @@ Component-scoped CSS variables on `.bds-ambient-field`. Set them on a wrapping e
 | `--bds-bg-field-src` | `none` | Lottie source when no `src` prop is passed — the per-client swap path |
 | `--bds-bg-field-tint` | `transparent` | Flat wash over the field |
 | `--bds-bg-field-opacity` | `1` | Opacity of the whole layer |
-| `--bds-bg-field-particle` | `var(--text-muted)` | Particle colour for `mode="canvas"` |
+| `--bds-bg-field-particle` | `var(--bds-text-muted)` | Particle colour for `mode="canvas"` |
 
 ```css
 /* Example: a client's own loop, pulled back behind body copy */
 .theme-acme .bds-ambient-field {
   --bds-bg-field-src: url('/acme/field.json');
-  --bds-bg-field-tint: var(--surface-primary);
+  --bds-bg-field-tint: var(--bds-surface-primary);
   --bds-bg-field-opacity: 0.7;
 }
 ```

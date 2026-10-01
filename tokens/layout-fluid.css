@@ -5,7 +5,7 @@
  * design-tokens/tokens-studio.json. Do not hand-edit — re-run
  * `npm run build:modes` after any Figma mode update.
  *
- * Layout tier — device-fluid --page-inset / --section-padding-block.
+ * Layout tier — device-fluid --bds-page-inset / --bds-section-padding-block.
  * Interpolates continuously between the mobile/tablet/desktop endpoints via
  * one piecewise calc(clamp(…) + clamp(…)) per token (ADR-042), rather than a
  * [data-mode-*] override block.
@@ -30,6 +30,6 @@
  */
 
 :root {
-  --page-inset: calc(clamp(1rem, 0.2857rem + 3.5714vw, 2rem) + clamp(0rem, -4.5714rem + 9.5238vw, 4rem)); /* 16 → 32 → 96px at 320 / 768 / 1440 */
-  --section-padding-block: calc(clamp(4rem, 3.2857rem + 3.5714vw, 5rem) + clamp(0rem, -1.7143rem + 3.5714vw, 1.5rem)); /* 64 → 80 → 104px at 320 / 768 / 1440 */
+  --bds-page-inset: calc(clamp(1rem, 0.2857rem + 3.5714vw, 2rem) + clamp(0rem, -4.5714rem + 9.5238vw, 4rem)); /* 16 → 32 → 96px at 320 / 768 / 1440 */
+  --bds-section-padding-block: calc(clamp(4rem, 3.2857rem + 3.5714vw, 5rem) + clamp(0rem, -1.7143rem + 3.5714vw, 1.5rem)); /* 64 → 80 → 104px at 320 / 768 / 1440 */
 }

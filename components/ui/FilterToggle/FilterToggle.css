@@ -7,14 +7,14 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--background-secondary);
-  border-radius: var(--border-radius-md);
+  background-color: var(--bds-background-secondary);
+  border-radius: var(--bds-border-radius-md);
   border: none;
   cursor: pointer;
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
   white-space: nowrap;
   box-sizing: border-box;
   transition: background-color 0.15s ease, color 0.15s ease;
@@ -23,16 +23,16 @@
 /* ─── Active state ────────────────────────────────────── */
 
 .bds-filter-toggle--active {
-  background-color: var(--background-brand-primary);
-  color: var(--text-on-color-dark);
+  background-color: var(--bds-background-brand-primary);
+  color: var(--bds-text-on-color-dark);
 }
 
 /* ─── Disabled state (overrides active) ───────────────── */
 
 .bds-filter-toggle:disabled,
 .bds-filter-toggle--disabled {
-  background-color: var(--background-disabled);
-  color: var(--text-disabled);
+  background-color: var(--bds-background-disabled);
+  color: var(--bds-text-disabled);
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -40,20 +40,20 @@
 /* ─── Size variants — matches FilterButton/Button height scale (4px grid, 8px steps) ─── */
 
 .bds-filter-toggle--sm {
-  height: var(--size-800);
-  padding-inline: var(--padding-md);
-  font-size: var(--label-sm);
+  height: var(--bds-size-800);
+  padding-inline: var(--bds-padding-md);
+  font-size: var(--bds-label-sm);
 }
 
 .bds-filter-toggle--md {
-  height: var(--size-1000);
-  padding-inline: var(--padding-lg);
-  font-size: var(--label-md);
+  height: var(--bds-size-1000);
+  padding-inline: var(--bds-padding-lg);
+  font-size: var(--bds-label-md);
 }
 
 .bds-filter-toggle--lg {
-  height: var(--size-1200);
-  padding-inline: var(--padding-xl);
-  font-size: var(--label-lg);
+  height: var(--bds-size-1200);
+  padding-inline: var(--bds-padding-xl);
+  font-size: var(--bds-label-lg);
 }
 }

@@ -13,8 +13,8 @@
 .bds-date-picker {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
-  color: var(--text-primary);
+  gap: var(--bds-gap-md);
+  color: var(--bds-text-primary);
 }
 
 .bds-date-picker--full-width {
@@ -24,33 +24,33 @@
 /* ─── Label ──────────────────────────────────────────────────── */
 
 .bds-date-picker__label {
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
   text-transform: capitalize;
 }
 
 .bds-date-picker__label--tone-negative {
-  color: var(--color-system-red);
+  color: var(--bds-color-system-red);
 }
 
 /* Label sizes */
-.bds-date-picker--sm .bds-date-picker__label { font-size: var(--label-sm); }
-.bds-date-picker--md .bds-date-picker__label { font-size: var(--label-md); }
-.bds-date-picker--lg .bds-date-picker__label { font-size: var(--label-lg); }
+.bds-date-picker--sm .bds-date-picker__label { font-size: var(--bds-label-sm); }
+.bds-date-picker--md .bds-date-picker__label { font-size: var(--bds-label-md); }
+.bds-date-picker--lg .bds-date-picker__label { font-size: var(--bds-label-lg); }
 
 /* ─── Trigger ────────────────────────────────────────────────── */
 
 .bds-date-picker__trigger {
   width: 100%;
-  padding: 0 var(--padding-xs);
-  font-family: var(--font-family-body);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
-  background-color: var(--background-input);
-  border: var(--border-width-md) solid var(--border-input);
-  border-radius: var(--border-radius-md);
+  padding: 0 var(--bds-padding-xs);
+  font-family: var(--bds-font-family-body);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
+  background-color: var(--bds-background-input);
+  border: var(--bds-border-width-md) solid var(--bds-border-input);
+  border-radius: var(--bds-border-radius-md);
   outline: none;
   transition: border-color 0.2s;
   box-sizing: border-box;
@@ -62,55 +62,55 @@
 }
 
 .bds-date-picker__trigger--tone-negative {
-  border-color: var(--border-negative);
+  border-color: var(--bds-border-negative);
 }
 
 .bds-date-picker__trigger--disabled {
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
   cursor: not-allowed;
 }
 
 .bds-date-picker__trigger--open {
-  border-color: var(--border-brand-primary);
+  border-color: var(--bds-border-brand-primary);
 }
 
 /* Trigger sizes — heights match Button scale (8px steps, 4px grid) */
-.bds-date-picker--sm .bds-date-picker__trigger { font-size: var(--body-sm); height: 32px; }
-.bds-date-picker--md .bds-date-picker__trigger { font-size: var(--body-md); height: 40px; }
-.bds-date-picker--lg .bds-date-picker__trigger { font-size: var(--body-lg); height: 48px; }
+.bds-date-picker--sm .bds-date-picker__trigger { font-size: var(--bds-body-sm); height: 32px; }
+.bds-date-picker--md .bds-date-picker__trigger { font-size: var(--bds-body-md); height: 40px; }
+.bds-date-picker--lg .bds-date-picker__trigger { font-size: var(--bds-body-lg); height: 48px; }
 
 /* ─── Trigger placeholder & caret ────────────────────────────── */
 
 .bds-date-picker__placeholder {
-  color: var(--text-muted);
+  color: var(--bds-text-muted);
 }
 
 .bds-date-picker__caret {
-  color: var(--text-muted);
-  font-size: var(--body-sm);
+  color: var(--bds-text-muted);
+  font-size: var(--bds-body-sm);
 }
 
 /* ─── Helper / Error text ────────────────────────────────────── */
 
 .bds-date-picker__helper {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-muted);
 }
 
 .bds-date-picker__helper--tone-negative {
-  color: var(--color-system-red);
+  color: var(--bds-color-system-red);
 }
 
 /* ─── Calendar popover ───────────────────────────────────────── */
 
 .bds-date-picker__calendar {
-  background-color: var(--surface-primary);
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-lg);
-  border: var(--border-width-md) solid var(--border-muted);
-  padding: var(--padding-sm);
+  background-color: var(--bds-surface-primary);
+  border-radius: var(--bds-border-radius-md);
+  box-shadow: var(--bds-shadow-lg);
+  border: var(--bds-border-width-md) solid var(--bds-border-muted);
+  padding: var(--bds-padding-sm);
   width: 280px; /* bds-lint-ignore — fixed calendar width */
   z-index: 50; /* bds-lint-ignore — popover stacking */
 }
@@ -121,14 +121,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: var(--padding-xs);
+  padding-bottom: var(--bds-padding-xs);
 }
 
 .bds-date-picker__month-label {
-  font-family: var(--font-family-label);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  color: var(--bds-text-primary);
 }
 
 /* ─── Nav buttons ────────────────────────────────────────────── */
@@ -137,10 +137,10 @@
   background: none;
   border: none;
   cursor: pointer;
-  padding: var(--padding-tiny);
-  border-radius: var(--border-radius-sm);
-  color: var(--text-secondary);
-  font-size: var(--body-md);
+  padding: var(--bds-padding-tiny);
+  border-radius: var(--bds-border-radius-sm);
+  color: var(--bds-text-secondary);
+  font-size: var(--bds-body-md);
   line-height: 1;
   display: flex;
   align-items: center;
@@ -151,7 +151,7 @@
 }
 
 .bds-date-picker__nav-button:hover {
-  background-color: var(--surface-secondary);
+  background-color: var(--bds-surface-secondary);
 }
 
 /* ─── Day grid ───────────────────────────────────────────────── */
@@ -168,12 +168,12 @@
 }
 
 .bds-date-picker__day-label {
-  font-family: var(--font-family-label);
-  font-size: var(--body-xs);
-  font-weight: var(--font-weight-medium);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-body-xs);
+  font-weight: var(--bds-font-weight-medium);
+  color: var(--bds-text-muted);
   text-align: center;
-  padding: var(--gap-xs) 0;
+  padding: var(--bds-gap-xs) 0;
 }
 
 /* ─── Day button ─────────────────────────────────────────────── */
@@ -182,9 +182,9 @@
   background: none;
   border: none;
   cursor: pointer;
-  border-radius: var(--border-radius-sm);
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
+  border-radius: var(--bds-border-radius-sm);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
   line-height: 1;
   width: 32px; /* bds-lint-ignore — fixed day cell size */
   height: 32px; /* bds-lint-ignore — fixed day cell size */
@@ -192,30 +192,30 @@
   align-items: center;
   justify-content: center;
   transition: background-color 0.15s, color 0.15s;
-  color: var(--text-primary);
+  color: var(--bds-text-primary);
 }
 
 .bds-date-picker__day:hover:not(:disabled):not(.bds-date-picker__day--selected) {
-  background-color: var(--surface-secondary);
+  background-color: var(--bds-surface-secondary);
 }
 
 .bds-date-picker__day--selected {
-  background-color: var(--surface-brand-primary);
-  color: var(--text-on-color-dark);
-  font-weight: var(--font-weight-semibold);
+  background-color: var(--bds-surface-brand-primary);
+  color: var(--bds-text-on-color-dark);
+  font-weight: var(--bds-font-weight-semibold);
 }
 
 .bds-date-picker__day--today:not(.bds-date-picker__day--selected) {
-  border: var(--border-width-md) solid var(--border-brand-primary);
-  font-weight: var(--font-weight-semibold);
+  border: var(--bds-border-width-md) solid var(--bds-border-brand-primary);
+  font-weight: var(--bds-font-weight-semibold);
 }
 
-/* ADR-028 pt-2: the fade alone. Stacking --text-muted under it compounded —
+/* ADR-028 pt-2: the fade alone. Stacking --bds-text-muted under it compounded —
    the label composited from an already-low 3.04:1 (dark, enabled), landing at
-   1.35:1 (#1687). Inherits --text-primary from the day cell. */
+   1.35:1 (#1687). Inherits --bds-text-primary from the day cell. */
 .bds-date-picker__day:disabled {
   cursor: not-allowed;
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
 }
 
 /* ─── Month grid (precision="month") ─────────────────────────── */
@@ -230,31 +230,31 @@
   background: none;
   border: none;
   cursor: pointer;
-  border-radius: var(--border-radius-sm);
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
+  border-radius: var(--bds-border-radius-sm);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
   line-height: 1;
   height: 40px; /* bds-lint-ignore — fixed month cell height */
   display: flex;
   align-items: center;
   justify-content: center;
   transition: background-color 0.15s, color 0.15s;
-  color: var(--text-primary);
+  color: var(--bds-text-primary);
 }
 
 .bds-date-picker__month-cell:hover:not(:disabled):not(.bds-date-picker__month-cell--selected) {
-  background-color: var(--surface-secondary);
+  background-color: var(--bds-surface-secondary);
 }
 
 .bds-date-picker__month-cell--selected {
-  background-color: var(--surface-brand-primary);
-  color: var(--text-on-color-dark);
-  font-weight: var(--font-weight-semibold);
+  background-color: var(--bds-surface-brand-primary);
+  color: var(--bds-text-on-color-dark);
+  font-weight: var(--bds-font-weight-semibold);
 }
 
 .bds-date-picker__month-cell:disabled {
   cursor: not-allowed;
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
 }
 
 } /* end @layer bds-components */

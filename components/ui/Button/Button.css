@@ -19,11 +19,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--gap-sm);
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-normal);
-  border-radius: var(--border-radius-md);
+  gap: var(--bds-gap-sm);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-normal);
+  border-radius: var(--bds-border-radius-md);
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
@@ -32,13 +32,13 @@
    * Bordered variants (secondary, outline) override border-color only.
    * Without this, sub-pixel border widths cause 1–2px height differences
    * between bordered and non-bordered variants at the same size. */
-  border: var(--border-width-md) solid transparent;
+  border: var(--bds-border-width-md) solid transparent;
   background: none;
   color: inherit;
-  transition: background-color var(--duration-md) var(--ease-out),
-    border-color var(--duration-md) var(--ease-out),
-    color var(--duration-md) var(--ease-out),
-    opacity var(--duration-md) var(--ease-out);
+  transition: background-color var(--bds-duration-md) var(--bds-ease-out),
+    border-color var(--bds-duration-md) var(--bds-ease-out),
+    color var(--bds-duration-md) var(--bds-ease-out),
+    opacity var(--bds-duration-md) var(--bds-ease-out);
   box-sizing: border-box;
 }
 
@@ -53,85 +53,85 @@
  */
 
 .bds-button--xs {
-  height: var(--size-600);
-  padding-inline: var(--padding-tiny);
-  font-size: var(--label-xs);
-  gap: var(--gap-xs);
-  border-radius: var(--border-radius-sm);
+  height: var(--bds-size-600);
+  padding-inline: var(--bds-padding-tiny);
+  font-size: var(--bds-label-xs);
+  gap: var(--bds-gap-xs);
+  border-radius: var(--bds-border-radius-sm);
 }
 
 .bds-button--sm {
-  height: var(--size-800);
-  padding-inline: var(--padding-sm);
-  font-size: var(--label-sm);
+  height: var(--bds-size-800);
+  padding-inline: var(--bds-padding-sm);
+  font-size: var(--bds-label-sm);
 }
 
 .bds-button--md {
-  height: var(--size-1000);
-  padding-inline: var(--padding-md);
-  font-size: var(--label-md);
+  height: var(--bds-size-1000);
+  padding-inline: var(--bds-padding-md);
+  font-size: var(--bds-label-md);
 }
 
 .bds-button--lg {
-  height: var(--size-1200);
-  padding-inline: var(--padding-md);
-  font-size: var(--label-lg);
+  height: var(--bds-size-1200);
+  padding-inline: var(--bds-padding-md);
+  font-size: var(--bds-label-lg);
 }
 
 .bds-button--xl {
-  height: var(--size-1400);
-  padding-inline: var(--padding-lg);
-  font-size: var(--label-xl);
+  height: var(--bds-size-1400);
+  padding-inline: var(--bds-padding-lg);
+  font-size: var(--bds-label-xl);
 }
 
 /* ─── Variants ────────────────────────────────────────────────── */
 
 .bds-button--primary {
-  background-color: var(--background-brand-primary);
-  color: var(--text-on-color-dark);
+  background-color: var(--bds-background-brand-primary);
+  color: var(--bds-text-on-color-dark);
 }
 
 .bds-button--outline {
   background-color: transparent;
-  color: var(--text-brand-primary);
-  border-color: var(--border-brand-primary);
+  color: var(--bds-text-brand-primary);
+  border-color: var(--bds-border-brand-primary);
 }
 
 .bds-button--secondary {
-  background-color: var(--background-secondary);
-  color: var(--text-primary);
+  background-color: var(--bds-background-secondary);
+  color: var(--bds-text-primary);
 }
 
 .bds-button--ghost {
   background-color: transparent;
-  color: var(--text-primary);
+  color: var(--bds-text-primary);
 }
 
 .bds-button--inverse {
-  background-color: var(--background-inverse);
-  color: var(--text-inverse);
+  background-color: var(--bds-background-inverse);
+  color: var(--bds-text-inverse);
 }
 
 .bds-button--on-color {
-  background-color: var(--background-on-color-dark);
-  color: var(--text-on-color-light);
+  background-color: var(--bds-background-on-color-dark);
+  color: var(--bds-text-on-color-light);
 }
 
 /* ─── System Variants (semantic actions) ─────────────────────── */
 
 .bds-button--tone-negative {
-  background-color: var(--background-negative);
-  color: var(--text-on-color-dark);
+  background-color: var(--bds-background-negative);
+  color: var(--bds-text-on-color-dark);
 }
 
 .bds-button--tone-positive {
-  background-color: var(--background-positive);
-  color: var(--text-on-color-dark);
+  background-color: var(--bds-background-positive);
+  color: var(--bds-text-on-color-dark);
 }
 
 .bds-button--selected {
-  background-color: var(--background-brand-primary);
-  color: var(--text-on-color-dark);
+  background-color: var(--bds-background-brand-primary);
+  color: var(--bds-text-on-color-dark);
 }
 
 /* ─── Modifiers ───────────────────────────────────────────────── */
@@ -147,58 +147,58 @@
 
 /* ── Primary ── */
 .bds-button--primary:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-brand-primary-hover);
+  background-color: var(--bds-background-brand-primary-hover);
 }
 
 .bds-button--primary:active:not(:disabled) {
-  background-color: var(--background-brand-primary-pressed);
+  background-color: var(--bds-background-brand-primary-pressed);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ── Secondary ── */
 .bds-button--secondary:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-secondary-hover);
+  background-color: var(--bds-background-secondary-hover);
 }
 
 .bds-button--secondary:active:not(:disabled) {
   /* Hold the hover fill on press — text color stays put (no white flip).
    * Press feedback is the translateY nudge; a distinct darker grayscale step
-   * fails AA against --text-primary, so we don't introduce one. */
-  background-color: var(--background-secondary-hover);
+   * fails AA against --bds-text-primary, so we don't introduce one. */
+  background-color: var(--bds-background-secondary-hover);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ── Outline ── */
 .bds-button--outline:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-primary-hover);
+  background-color: var(--bds-background-primary-hover);
 }
 
 .bds-button--outline:active:not(:disabled) {
   /* Hold the hover fill on press — keep the brand text + brand border from the
    * base variant rather than flipping to a solid brand fill with white text. */
-  background-color: var(--background-primary-hover);
+  background-color: var(--bds-background-primary-hover);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ── Ghost ── */
 .bds-button--ghost:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-primary-hover);
+  background-color: var(--bds-background-primary-hover);
 }
 
 .bds-button--ghost:active:not(:disabled) {
-  background-color: var(--background-secondary-hover);
+  background-color: var(--bds-background-secondary-hover);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ── Inverse ── */
 .bds-button--inverse:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-secondary-pressed);
-  color: var(--text-inverse);
+  background-color: var(--bds-background-secondary-pressed);
+  color: var(--bds-text-inverse);
 }
 
 .bds-button--inverse:active:not(:disabled) {
-  background-color: var(--background-brand-primary-pressed);
-  color: var(--text-inverse);
+  background-color: var(--bds-background-brand-primary-pressed);
+  color: var(--bds-text-inverse);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
@@ -214,29 +214,29 @@
 
 /* ── Destructive ── */
 .bds-button--tone-negative:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-negative-hover);
+  background-color: var(--bds-background-negative-hover);
 }
 
 .bds-button--tone-negative:active:not(:disabled) {
-  background-color: var(--background-negative-pressed);
+  background-color: var(--bds-background-negative-pressed);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ── Positive ── */
 .bds-button--tone-positive:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--background-positive-hover);
+  background-color: var(--bds-background-positive-hover);
 }
 
 .bds-button--tone-positive:active:not(:disabled) {
-  background-color: var(--background-positive-pressed);
+  background-color: var(--bds-background-positive-pressed);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ── Disabled (all variants, except loading) ── */
 .bds-button:disabled:not(.bds-button--loading) {
-  background-color: var(--background-disabled);
-  color: var(--text-disabled);
-  border-color: var(--border-disabled);
+  background-color: var(--bds-background-disabled);
+  color: var(--bds-text-disabled);
+  border-color: var(--bds-border-disabled);
   cursor: not-allowed;
 }
 
@@ -250,18 +250,18 @@
 
 /* ── Focus (all variants) ── */
 .bds-button:focus-visible {
-  outline: var(--button-focus-outline-width) solid var(--border-focus); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  outline: var(--button-focus-outline-width) solid var(--bds-border-focus); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   outline-offset: var(--button-focus-outline-offset); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* Negative: red focus ring */
 .bds-button--tone-negative:focus-visible {
-  outline-color: var(--border-negative);
+  outline-color: var(--bds-border-negative);
 }
 
 /* Positive: green focus ring */
 .bds-button--tone-positive:focus-visible {
-  outline-color: var(--border-positive);
+  outline-color: var(--bds-border-positive);
 }
 
 /* ─── Loading State ───────────────────────────────────────────── */
@@ -274,11 +274,11 @@
 .bds-button__content {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 
 .bds-button--xs .bds-button__content {
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
 }
 
 .bds-button__content--hidden {
@@ -295,10 +295,10 @@
 
 .bds-button__spinner-icon {
   display: inline-block;
-  width: var(--icon-sm);  /* md default (16px) — scaled per size below */
-  height: var(--icon-sm);
+  width: var(--bds-icon-sm);  /* md default (16px) — scaled per size below */
+  height: var(--bds-icon-sm);
   border-radius: 50%;
-  border-width: var(--border-width-lg);
+  border-width: var(--bds-border-width-lg);
   border-style: solid;
   border-color: currentColor;
   border-top-color: transparent;
@@ -308,23 +308,23 @@
 
 /* Size-specific spinner scale — mirrors IconButton icon scale (tiny=12, sm=14, md=16, lg=20, xl=24) */
 .bds-button--xs .bds-button__spinner-icon {
-  width: var(--icon-2xs);   /* 12px */
-  height: var(--icon-2xs);
+  width: var(--bds-icon-2xs);   /* 12px */
+  height: var(--bds-icon-2xs);
 }
 
 .bds-button--sm .bds-button__spinner-icon {
-  width: var(--icon-xs);    /* 14px */
-  height: var(--icon-xs);
+  width: var(--bds-icon-xs);    /* 14px */
+  height: var(--bds-icon-xs);
 }
 
 .bds-button--lg .bds-button__spinner-icon {
-  width: var(--icon-lg);
-  height: var(--icon-lg);
+  width: var(--bds-icon-lg);
+  height: var(--bds-icon-lg);
 }
 
 .bds-button--xl .bds-button__spinner-icon {
-  width: var(--icon-2xl);   /* 24px */
-  height: var(--icon-2xl);
+  width: var(--bds-icon-2xl);   /* 24px */
+  height: var(--bds-icon-2xl);
 }
 
 /* Icon buttons: spinner scales with the button's font-size (matches icon 1em × 1em) */
@@ -346,34 +346,34 @@
 .bds-icon-button {
   padding: 0;
   gap: 0;
-  width: var(--size-1000);   /* md default (40px) */
-  height: var(--size-1000);
+  width: var(--bds-size-1000);   /* md default (40px) */
+  height: var(--bds-size-1000);
   flex-shrink: 0;
 }
 
 .bds-icon-button--xs {
-  width: var(--size-600);    /* 24px */
-  height: var(--size-600);
+  width: var(--bds-size-600);    /* 24px */
+  height: var(--bds-size-600);
 }
 
 .bds-icon-button--sm {
-  width: var(--size-800);    /* 32px */
-  height: var(--size-800);
+  width: var(--bds-size-800);    /* 32px */
+  height: var(--bds-size-800);
 }
 
 .bds-icon-button--md {
-  width: var(--size-1000);   /* 40px */
-  height: var(--size-1000);
+  width: var(--bds-size-1000);   /* 40px */
+  height: var(--bds-size-1000);
 }
 
 .bds-icon-button--lg {
-  width: var(--size-1200);   /* 48px */
-  height: var(--size-1200);
+  width: var(--bds-size-1200);   /* 48px */
+  height: var(--bds-size-1200);
 }
 
 .bds-icon-button--xl {
-  width: var(--size-1400);   /* 56px */
-  height: var(--size-1400);
+  width: var(--bds-size-1400);   /* 56px */
+  height: var(--bds-size-1400);
 }
 
 .bds-icon-button__icon {
@@ -382,23 +382,23 @@
   justify-content: center;
   width: 1em;
   height: 1em;
-  font-size: var(--icon-sm);   /* md default (16px) */
+  font-size: var(--bds-icon-sm);   /* md default (16px) */
 }
 
 .bds-icon-button--xs .bds-icon-button__icon {
-  font-size: var(--icon-2xs);  /* 12px */
+  font-size: var(--bds-icon-2xs);  /* 12px */
 }
 
 .bds-icon-button--sm .bds-icon-button__icon {
-  font-size: var(--icon-sm);   /* 16px */
+  font-size: var(--bds-icon-sm);   /* 16px */
 }
 
 .bds-icon-button--lg .bds-icon-button__icon {
-  font-size: var(--icon-lg);
+  font-size: var(--bds-icon-lg);
 }
 
 .bds-icon-button--xl .bds-icon-button__icon {
-  font-size: var(--icon-2xl);  /* 24px */
+  font-size: var(--bds-icon-2xl);  /* 24px */
 }
 
 }

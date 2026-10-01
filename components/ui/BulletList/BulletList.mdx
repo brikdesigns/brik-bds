@@ -7,7 +7,7 @@ import { Field } from '../Field';
 {/* Marker-axis comparison — docs-local, not a story export: `marker` is a
     Control on Default, and a side-by-side gallery is an MDX concern (#1489). */}
 export const MarkerScale = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xl)' }}>
     <BulletList marker="disc" items={['First disc item', 'Second disc item', 'Third disc item']} />
     <BulletList marker="decimal" items={['First numbered item', 'Second numbered item', 'Third numbered item']} />
     <BulletList marker="none" items={['No marker row one', 'No marker row two', 'No marker row three']} />
@@ -17,7 +17,7 @@ export const MarkerScale = () => (
 {/* Cross-component composition (BulletList as a Field value) — docs-local per
     #2499 / Rule 4, not a BulletList API exercise. */}
 export const InsideFieldDemo = () => (
-  <div style={{ width: '360px', padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+  <div style={{ width: '360px', padding: 'var(--bds-padding-lg)', background: 'var(--bds-surface-primary)' }}>
     <Field label="Anti-messages">
       <BulletList
         items={[

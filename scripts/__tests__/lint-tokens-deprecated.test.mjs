@@ -11,6 +11,10 @@ import { spawnSync } from 'node:child_process';
 const REPO_ROOT = resolve(import.meta.dirname, '..', '..');
 const LINTER = resolve(REPO_ROOT, 'scripts', 'lint-tokens.js');
 const FIGMA_TOKENS = resolve(REPO_ROOT, 'tokens', 'figma-tokens.css');
+// ADR-043 / #2670: the 54 word steps are retired from canonical CSS and live
+// only in the generated bridge, as `--color-poppy-light: var(--bds-color-poppy-500)`.
+const BRIDGE = resolve(REPO_ROOT, 'tokens', 'compat', 'prefix-bridge.css');
+const unprefix = (v) => v.replace(/--bds-/g, '--');
 const RAMPS = resolve(REPO_ROOT, 'design-tokens', 'color-ramps.generated.json');
 const ALIAS_BASELINE = resolve(REPO_ROOT, 'tokens', 'color-alias-baseline.json');
 
@@ -31,28 +35,28 @@ function lint(css) {
 
 describe('lint-tokens Rule 12 (deprecated-token)', () => {
   it('flags a 6-step name and names its numeric replacement', () => {
-    const violations = lint('.x { color: var(--color-poppy-light); }');
+    const violations = lint('.x { color: var(--bds-color-poppy-light); }');
     expect(violations).toHaveLength(1);
-    expect(violations[0].message).toContain('--color-poppy-light');
-    expect(violations[0].message).toContain('--color-poppy-500');
+    expect(violations[0].message).toContain('--bds-color-poppy-light');
+    expect(violations[0].message).toContain('--bds-color-poppy-500');
   });
 
   it('warns rather than errors — the aliases are live and correct today', () => {
     // Erroring would fail the build on the 411 in-repo call sites this change
     // deliberately did not touch, turning a deprecation into a breaking change.
-    expect(lint('.x { color: var(--color-poppy-light); }')[0].severity).toBe('warning');
+    expect(lint('.x { color: var(--bds-color-poppy-light); }')[0].severity).toBe('warning');
   });
 
   it('does not flag a numeric stop', () => {
-    expect(lint('.x { color: var(--color-poppy-500); }')).toHaveLength(0);
+    expect(lint('.x { color: var(--bds-color-poppy-500); }')).toHaveLength(0);
   });
 
   it('does not flag a semantic token that happens to resolve through one', () => {
-    expect(lint('.x { color: var(--text-brand-primary); }')).toHaveLength(0);
+    expect(lint('.x { color: var(--bds-text-brand-primary); }')).toHaveLength(0);
   });
 
   it('respects bds-lint-ignore', () => {
-    expect(lint('.x { color: var(--color-poppy-light); /* bds-lint-ignore */ }')).toHaveLength(0);
+    expect(lint('.x { color: var(--bds-color-poppy-light); /* bds-lint-ignore */ }')).toHaveLength(0);
   });
 
   it('covers every family, from the generated file rather than a hand-list', () => {
@@ -63,18 +67,22 @@ describe('lint-tokens Rule 12 (deprecated-token)', () => {
     const families = Object.keys(ramps.brik['primitives/value'].color);
     expect(families.length).toBeGreaterThan(1);
 
-    const css = families.map((f, i) => `.f${i} { color: var(--color-${f}-light); }`).join('\n');
+    const css = families.map((f, i) => `.f${i} { color: var(--bds-color-${f}-light); }`).join('\n');
     expect(lint(css)).toHaveLength(families.length);
   });
 });
 
 describe('the alias layer preserves every legacy value (#1739 AC 1)', () => {
   // The contract the 606 existing call sites depend on: each `--color-*-<name>`
-  // still exists, and still paints the exact color it painted before.
-  const css = readFileSync(FIGMA_TOKENS, 'utf8');
-  const decls = new Map();
-  for (const m of css.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
-    if (!decls.has(m[1])) decls.set(m[1], m[2].trim());
+  // still resolves, through the bridge, and still paints the exact color it
+  // painted before. The canonical CSS no longer declares the word steps.
+  const canonical = new Map();
+  for (const m of readFileSync(FIGMA_TOKENS, 'utf8').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
+    if (!canonical.has(m[1])) canonical.set(m[1], m[2].trim());
+  }
+  const bridge = new Map();
+  for (const m of readFileSync(BRIDGE, 'utf8').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
+    if (!bridge.has(m[1])) bridge.set(m[1], m[2].trim());
   }
 
   const ramps = JSON.parse(readFileSync(RAMPS, 'utf8'));
@@ -86,7 +94,7 @@ describe('the alias layer preserves every legacy value (#1739 AC 1)', () => {
       cases.push({
         label: `--color-${family}-${ramp.legacyName}`,
         legacy: `--color-${family}-${ramp.legacyName}`,
-        numeric: `--color-${family}-${stop}`,
+        numeric: `--bds-color-${family}-${stop}`,
         hex: entry.$value,
       });
     }
@@ -97,44 +105,40 @@ describe('the alias layer preserves every legacy value (#1739 AC 1)', () => {
   });
 
   it.each(cases)('$label still resolves to its original value', ({ legacy, numeric, hex }) => {
-    expect(decls.get(legacy), `${legacy} must still be emitted`).toBe(`var(${numeric})`);
-    expect(decls.get(numeric)).toBe(hex);
+    expect(bridge.get(legacy), `${legacy} must still be bridged`).toBe(`var(${numeric})`);
+    expect(canonical.get(numeric)).toBe(hex);
+  });
+
+  it.each(cases)('$label is gone from canonical CSS (ADR-043 section 4)', ({ legacy }) => {
+    expect(canonical.has(legacy)).toBe(false);
+    expect(canonical.has(legacy.replace('--', '--bds-'))).toBe(false);
   });
 });
 
 describe('the named aliases still paint their FROZEN values (#1949)', () => {
-  // The suite above compares figma-tokens.css against color-ramps.generated.json.
-  // Both regenerate from the Brand Kit on every sync, so they move together and
-  // keep agreeing — proven on 2026-09-09 by setting grayscale-700 to #ff0000 in
-  // both and watching all 61 tests pass. It is a consistency check; nothing in
-  // the repo was a stability check, and #2337 re-syncs the whole Brand Kit.
-  //
   // tokens/color-alias-baseline.json is the constant a re-sync cannot move.
-  // A failure here is a shipped color changing — read it as a visual diff to
-  // approve or revert, never as a stale file to regenerate away.
+  // It stays keyed by the ORIGINAL (un-prefixed) names on purpose: the migration
+  // must not move a shipped color, so the bridge is compared against the same
+  // frozen file. A failure here is a shipped color changing — read it as a
+  // visual diff to approve or revert, never as a stale file to regenerate away.
   const baseline = JSON.parse(readFileSync(ALIAS_BASELINE, 'utf8')).aliases;
 
-  const css = readFileSync(FIGMA_TOKENS, 'utf8');
   const decls = new Map();
-  for (const m of css.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
-    if (!decls.has(m[1])) decls.set(m[1], m[2].trim());
+  for (const f of [FIGMA_TOKENS, BRIDGE]) {
+    for (const m of readFileSync(f, 'utf8').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
+      if (!decls.has(m[1])) decls.set(m[1], m[2].trim());
+    }
   }
 
   const resolved = {};
   for (const [name, value] of decls) {
     if (!/^--color-[a-z]+-(lightest|lighter|light|darkest|darker|dark)$/.test(name)) continue;
-    const alias = value.match(/^var\((--color-[a-z]+-\d+)\)$/);
+    const alias = unprefix(value).match(/^var\((--color-[a-z]+-\d+)\)$/);
     if (!alias) continue;
-    resolved[name] = { alias: alias[1], hex: decls.get(alias[1]) };
+    resolved[name] = { alias: alias[1], hex: decls.get(`--bds-${alias[1].slice(2)}`) };
   }
 
-  if (process.env.UPDATE_COLOR_ALIAS_BASELINE) {
-    const doc = JSON.parse(readFileSync(ALIAS_BASELINE, 'utf8'));
-    doc.aliases = resolved;
-    writeFileSync(ALIAS_BASELINE, `${JSON.stringify(doc, null, 2)}\n`);
-  }
-
-  it('covers every named alias the CSS emits — no silent shrinkage', () => {
+  it('covers every named alias the bridge emits — no silent shrinkage', () => {
     // Guards the denominator. Deleting an alias would otherwise pass by simply
     // never being compared, which is the exact deletion #1949 defers.
     expect(Object.keys(resolved).sort()).toEqual(Object.keys(baseline).sort());

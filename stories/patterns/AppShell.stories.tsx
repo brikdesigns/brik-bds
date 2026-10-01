@@ -13,14 +13,14 @@ const BrikLogomark = () => (
   <div style={{
     width: 40,
     height: 40,
-    borderRadius: 'var(--border-radius-md)',
-    background: 'var(--background-brand-primary)',
-    color: 'var(--text-inverse)',
+    borderRadius: 'var(--bds-border-radius-md)',
+    background: 'var(--bds-background-brand-primary)',
+    color: 'var(--bds-text-inverse)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontFamily: 'var(--font-family-heading)',
-    fontWeight: 'var(--font-weight-bold)' as unknown as number,
+    fontFamily: 'var(--bds-font-family-heading)',
+    fontWeight: 'var(--bds-font-weight-bold)' as unknown as number,
   }}>
     B
   </div>
@@ -77,20 +77,20 @@ export const Default: Story = {
       <SubNavigation items={subNavItems} />
       <main style={{
         flex: 1,
-        padding: 'var(--padding-xl)',
-        backgroundColor: 'var(--page-primary)',
+        padding: 'var(--bds-padding-xl)',
+        backgroundColor: 'var(--bds-page-primary)',
         overflowY: 'auto',
       }}>
         <h1 style={{
-          fontSize: 'var(--heading-xxl)',
-          fontFamily: 'var(--font-family-heading)',
-          marginBottom: 'var(--padding-lg)',
+          fontSize: 'var(--bds-heading-xxl)',
+          fontFamily: 'var(--bds-font-family-heading)',
+          marginBottom: 'var(--bds-padding-lg)',
         }}>
           Services
         </h1>
         <p style={{
-          fontSize: 'var(--body-md)',
-          color: 'var(--text-secondary)',
+          fontSize: 'var(--bds-body-md)',
+          color: 'var(--bds-text-secondary)',
         }}>
           Collapsed primary nav (80px) on the left, sub-nav (194px) in the
           middle, main content on the right. The active primary item
@@ -137,8 +137,8 @@ export const WithPage: Story = {
         minWidth: 0,
         display: 'flex',
         flexDirection: 'column',
-        padding: 'var(--padding-xl)',
-        backgroundColor: 'var(--page-primary)',
+        padding: 'var(--bds-padding-xl)',
+        backgroundColor: 'var(--bds-page-primary)',
       }}>
         <Page padding="none">
           <PageHeader
@@ -147,7 +147,7 @@ export const WithPage: Story = {
             tabs={<TabBar items={[{ label: 'Active', active: true }, { label: 'Archived' }]} />}
           />
           <PageContent>
-            <p style={{ fontSize: 'var(--body-md)', color: 'var(--text-secondary)' }}>
+            <p style={{ fontSize: 'var(--bds-body-md)', color: 'var(--bds-text-secondary)' }}>
               The rail on the left is a sibling of this `Page`, not a child of
               `PageContent`. The header + this body render to its right, past the
               divider — the arrangement every product page copies.

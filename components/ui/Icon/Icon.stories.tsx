@@ -61,15 +61,15 @@ export const Default: Story = {
  */
 export const WeightFromProvider: Story = {
   render: () => {
-    const labelStyle = { minWidth: 260, fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)' } as const;
+    const labelStyle = { minWidth: 260, fontFamily: 'var(--bds-font-family-label)', fontSize: 'var(--bds-body-xs)', color: 'var(--bds-text-muted)' } as const;
     const Row = ({ label, children }: { label: string; children: ReactNode }) => (
-      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--bds-gap-md)' }}>
         <span style={labelStyle}>{label}</span>
         {children}
       </div>
     );
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)', maxWidth: 480 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)', maxWidth: 480 }}>
         {/* `ph:star` is bundled at bold/fill/regular, so all three render
             offline. Only star-fill is in the subset today — see the note. */}
         {/* No provider — the built-in default weight ('outline-bold'). */}
@@ -86,7 +86,7 @@ export const WeightFromProvider: Story = {
             <Icon icon="ph:star" width={40} weight="outline" />
           </Row>
         </ThemeProvider>
-        <p style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', margin: 0 }}>
+        <p style={{ fontFamily: 'var(--bds-font-family-label)', fontSize: 'var(--bds-body-xs)', color: 'var(--bds-text-muted)', margin: 0 }}>
           Note: the bundled offline subset carries fill variants only where BDS
           source uses them (today just <code>star-fill</code>). A consumer that
           sets <code>defaultIconWeight=&quot;fill&quot;</code> must bring the fill

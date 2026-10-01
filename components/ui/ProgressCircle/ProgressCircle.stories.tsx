@@ -75,10 +75,10 @@ export const CustomCenter: Story = {
     label: 'Tasks complete',
     showValue: (
       <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: 'var(--heading-md)', fontWeight: 'var(--font-weight-bold)', color: 'var(--text-primary)' }}>
+        <div style={{ fontSize: 'var(--bds-heading-md)', fontWeight: 'var(--bds-font-weight-bold)', color: 'var(--bds-text-primary)' }}>
           70%
         </div>
-        <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
+        <div style={{ fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-secondary)' }}>
           of 200
         </div>
       </div>

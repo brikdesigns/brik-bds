@@ -13,17 +13,17 @@
 .bds-addable-tag-list {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   width: 100%;
 }
 
 /* ─── Label ───────────────────────────────────────────────── */
 
 .bds-addable-tag-list__label {
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
   text-transform: capitalize;
 }
 
@@ -32,27 +32,27 @@
 .bds-addable-tag-list__tags {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   align-items: center;
 }
 
 @keyframes bds-tag-list-flash {
   0%   { outline: 2px solid transparent; }
-  25%  { outline: 2px solid var(--border-brand-primary); }
-  75%  { outline: 2px solid var(--border-brand-primary); }
+  25%  { outline: 2px solid var(--bds-border-brand-primary); }
+  75%  { outline: 2px solid var(--bds-border-brand-primary); }
   100% { outline: 2px solid transparent; }
 }
 
 .bds-addable-tag-list__tags--flash {
-  border-radius: var(--border-radius-sm);
-  animation: bds-tag-list-flash 0.6s var(--ease-out);
+  border-radius: var(--bds-border-radius-sm);
+  animation: bds-tag-list-flash 0.6s var(--bds-ease-out);
 }
 
 /* ─── Empty state ─────────────────────────────────────────── */
 
 .bds-addable-tag-list__empty {
-  font-family: var(--font-family-body);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-body);
+  color: var(--bds-text-muted);
   font-style: italic;
 }
 
@@ -61,12 +61,12 @@
 .bds-addable-tag-list__combobox {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
 }
 
 .bds-addable-tag-list__input-row {
   display: flex;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   align-items: flex-start;
   width: 100%;
 }
@@ -85,23 +85,23 @@
 
 .bds-addable-tag-list__dropdown {
   position: absolute;
-  top: calc(100% + var(--gap-xs));
+  top: calc(100% + var(--bds-gap-xs));
   left: 0;
   right: 0;
   z-index: 200;
   list-style: none;
   margin: 0;
-  padding: var(--padding-sm);
-  background-color: var(--background-primary);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-lg);
+  padding: var(--bds-padding-sm);
+  background-color: var(--bds-background-primary);
+  border-radius: var(--bds-border-radius-lg);
+  box-shadow: var(--bds-shadow-lg);
   --bds-addable-tag-list-max-height: 240px; /* component-local dimension; no shared registry rung (#2133) */
   max-height: var(--bds-addable-tag-list-max-height);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
-  animation: bds-tag-list-dropdown-enter var(--duration-sm) var(--ease-out);
+  gap: var(--bds-gap-xs);
+  animation: bds-tag-list-dropdown-enter var(--bds-duration-sm) var(--bds-ease-out);
   transform-origin: top center;
 }
 
@@ -114,35 +114,35 @@
 /* ─── Option ─────────────────────────────────────────────── */
 
 .bds-addable-tag-list__option {
-  padding: var(--padding-tiny) var(--padding-sm);
-  border-radius: var(--border-radius-sm);
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
+  padding: var(--bds-padding-tiny) var(--bds-padding-sm);
+  border-radius: var(--bds-border-radius-sm);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
   cursor: pointer;
-  transition: background-color var(--duration-sm) var(--ease-out);
+  transition: background-color var(--bds-duration-sm) var(--bds-ease-out);
 }
 
 .bds-addable-tag-list__option:hover,
 .bds-addable-tag-list__option--active {
-  background-color: var(--surface-secondary);
+  background-color: var(--bds-surface-secondary);
 }
 
 /* ─── Strict hint ────────────────────────────────────────── */
 
 .bds-addable-tag-list__strict-hint {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  color: var(--bds-text-muted);
 }
 
 /* ─── Helper text ────────────────────────────────────────── */
 
 .bds-addable-tag-list__helper {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-muted);
 }
 }

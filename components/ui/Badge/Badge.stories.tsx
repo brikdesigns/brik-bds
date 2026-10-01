@@ -49,14 +49,14 @@ type Story = StoryObj<typeof Badge>;
 
 /* ─── Layout helpers (story-only) ─────────────────────────────── */
 
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+const Stack = ({ children, gap = 'var(--bds-gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
 );
 
 const StatusRow = ({ children, label }: { children: React.ReactNode; label: string }) => (
-  <div style={{ display: 'flex', gap: 'var(--gap-md)', alignItems: 'center' }}>
+  <div style={{ display: 'flex', gap: 'var(--bds-gap-md)', alignItems: 'center' }}>
     {children}
-    <span style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
+    <span style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-secondary)' }}>
       {label}
     </span>
   </div>
@@ -108,7 +108,7 @@ export const Neutral: Story = {
  */
 export const ContentStatusSolid: Story = {
   render: () => (
-    <Stack gap="var(--gap-lg)">
+    <Stack gap="var(--bds-gap-lg)">
       <StatusRow label="Article is live and visible">
         <Badge tone="positive">Published</Badge>
       </StatusRow>

@@ -13,14 +13,14 @@
 .bds-meter {
   display: flex;
   flex-direction: column;
-  gap: var(--padding-xs);
+  gap: var(--bds-padding-xs);
 }
 
 /* ─── Track ──────────────────────────────────────────────────── */
 
 .bds-meter__track {
   width: 100%;
-  background-color: var(--background-secondary);
+  background-color: var(--bds-background-secondary);
   overflow: hidden;
 }
 
@@ -60,53 +60,53 @@
 
 /* Tone colors */
 .bds-meter__fill--tone-positive {
-  background-color: var(--background-positive);
+  background-color: var(--bds-background-positive);
 }
 
 .bds-meter__fill--tone-warning {
-  background-color: var(--background-warning);
+  background-color: var(--bds-background-warning);
 }
 
 .bds-meter__fill--tone-negative {
-  background-color: var(--background-negative);
+  background-color: var(--bds-background-negative);
 }
 
 .bds-meter__fill--tone-neutral {
-  background-color: var(--background-secondary);
+  background-color: var(--bds-background-secondary);
 }
 
 /* ─── Label ──────────────────────────────────────────────────── */
 
 .bds-meter__label {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  color: var(--bds-text-secondary);
   text-transform: capitalize;
 }
 
-/* Label ↔ bar is the tight step (--gap-sm); --gap-xs collapses to 0px
+/* Label ↔ bar is the tight step (--bds-gap-sm); --bds-gap-xs collapses to 0px
    outside default spacing mode. */
 .bds-meter__label--above {
-  margin-bottom: var(--gap-sm);
+  margin-bottom: var(--bds-gap-sm);
 }
 
 .bds-meter__label--below {
-  margin-top: var(--gap-sm);
+  margin-top: var(--bds-gap-sm);
 }
 
 /* ─── Value ──────────────────────────────────────────────────── */
 
 .bds-meter__value {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-lg);
-  font-weight: var(--font-weight-bold);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-lg);
+  font-weight: var(--bds-font-weight-bold);
+  color: var(--bds-text-primary);
 }
 
 .bds-meter__value-suffix {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  color: var(--bds-text-secondary);
 }
 
 } /* end @layer bds-components */

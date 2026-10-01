@@ -195,10 +195,10 @@ export const CellTypes: Story = {
             <TableHead>Owner</TableHead>
             <TableHead>Category</TableHead>
             <TableHead>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-xs)' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 'var(--bds-gap-xs)' }}>
                 Status
                 <Tooltip content="Lifecycle state — synced nightly" placement="top">
-                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, fontSize: 'var(--label-md)', color: 'var(--text-muted)', cursor: 'help' }}>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 20, height: 20, fontSize: 'var(--bds-label-md)', color: 'var(--bds-text-muted)', cursor: 'help' }}>
                     <Icon icon="ph:info" />
                   </span>
                 </Tooltip>
@@ -267,7 +267,7 @@ export const Loading: Story = {
 
 /**
  * Right-aligned `[View][Edit][⋯]` cluster using `<TableActionsCell>`.
- * Owns alignment, shrink-to-content width, and the `--gap-sm` rhythm —
+ * Owns alignment, shrink-to-content width, and the `--bds-gap-sm` rhythm —
  * consumers stop hand-rolling `style={{ textAlign: 'right' }}` on
  * `<TableCell>`.
  *

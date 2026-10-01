@@ -6,37 +6,37 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--border-radius-circle);
-  background-color: var(--background-brand-primary);
-  color: var(--text-on-color-dark);
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
+  border-radius: var(--bds-border-radius-circle);
+  background-color: var(--bds-background-brand-primary);
+  color: var(--bds-text-on-color-dark);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
   flex-shrink: 0;
   user-select: none;
 }
 
 /* ─── Accent colors (initials fallback) ──────────────────────── */
 /* Categorical fills for initials avatars — consumers hash a stable key to
-   one of six accent hues. Foreground is `--text-on-color-light` (black),
+   one of six accent hues. Foreground is `--bds-text-on-color-light` (black),
    the documented AA-safe pairing on colored fills (same as Tag's solid
    appearance); black holds AA across all six mid-saturated system hues,
-   where `--text-inverse` (white) would fail on yellow/orange. */
+   where `--bds-text-inverse` (white) would fail on yellow/orange. */
 
-.bds-avatar--accent-green  { background-color: var(--background-accent-green);  color: var(--text-on-color-light); }
-.bds-avatar--accent-purple { background-color: var(--background-accent-purple); color: var(--text-on-color-light); }
-.bds-avatar--accent-blue   { background-color: var(--background-accent-blue);   color: var(--text-on-color-light); }
-.bds-avatar--accent-orange { background-color: var(--background-accent-orange); color: var(--text-on-color-light); }
-.bds-avatar--accent-yellow { background-color: var(--background-accent-yellow); color: var(--text-on-color-light); }
-.bds-avatar--accent-red    { background-color: var(--background-accent-red);    color: var(--text-on-color-light); }
+.bds-avatar--accent-green  { background-color: var(--bds-background-accent-green);  color: var(--bds-text-on-color-light); }
+.bds-avatar--accent-purple { background-color: var(--bds-background-accent-purple); color: var(--bds-text-on-color-light); }
+.bds-avatar--accent-blue   { background-color: var(--bds-background-accent-blue);   color: var(--bds-text-on-color-light); }
+.bds-avatar--accent-orange { background-color: var(--bds-background-accent-orange); color: var(--bds-text-on-color-light); }
+.bds-avatar--accent-yellow { background-color: var(--bds-background-accent-yellow); color: var(--bds-text-on-color-light); }
+.bds-avatar--accent-red    { background-color: var(--bds-background-accent-red);    color: var(--bds-text-on-color-light); }
 
 /* ─── Sizes ──────────────────────────────────────────────────── */
 /* bds-lint-ignore — Figma-driven avatar dimensions, no semantic size token */
 
-.bds-avatar--xs { width: 24px; height: 24px; font-size: var(--body-xs); }
-.bds-avatar--sm { width: 32px; height: 32px; font-size: var(--body-xs); }
-.bds-avatar--md { width: 40px; height: 40px; font-size: var(--body-sm); }
-.bds-avatar--lg { width: 48px; height: 48px; font-size: var(--body-md); }
-.bds-avatar--xl { width: 64px; height: 64px; font-size: var(--heading-sm); }
+.bds-avatar--xs { width: 24px; height: 24px; font-size: var(--bds-body-xs); }
+.bds-avatar--sm { width: 32px; height: 32px; font-size: var(--bds-body-xs); }
+.bds-avatar--md { width: 40px; height: 40px; font-size: var(--bds-body-sm); }
+.bds-avatar--lg { width: 48px; height: 48px; font-size: var(--bds-body-md); }
+.bds-avatar--xl { width: 64px; height: 64px; font-size: var(--bds-heading-sm); }
 
 /* ─── Image ──────────────────────────────────────────────────── */
 
@@ -55,7 +55,7 @@
   bottom: 0;
   right: 0;
   border-radius: 50%;
-  border: var(--border-width-lg) solid var(--background-input);
+  border: var(--bds-border-width-lg) solid var(--bds-background-input);
 }
 
 .bds-avatar--xs .bds-avatar__status,
@@ -64,8 +64,8 @@
 .bds-avatar--lg .bds-avatar__status,
 .bds-avatar--xl .bds-avatar__status { width: 12px; height: 12px; }
 
-.bds-avatar__status--online  { background-color: var(--background-presence-online); }
-.bds-avatar__status--offline { background-color: var(--background-presence-offline); }
-.bds-avatar__status--busy    { background-color: var(--background-presence-busy); }
-.bds-avatar__status--away    { background-color: var(--background-presence-away); }
+.bds-avatar__status--online  { background-color: var(--bds-background-presence-online); }
+.bds-avatar__status--offline { background-color: var(--bds-background-presence-offline); }
+.bds-avatar__status--busy    { background-color: var(--bds-background-presence-busy); }
+.bds-avatar__status--away    { background-color: var(--bds-background-presence-away); }
 }

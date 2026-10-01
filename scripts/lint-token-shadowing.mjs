@@ -49,6 +49,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
+import { canonicalPart } from './lib/bds-prefix.mjs';
 
 /**
  * token name → tracking issue number. The shadow is owed a fix; the entry keeps
@@ -67,9 +68,9 @@ const SHADOW_BACKLOG = {
   // `npm run build:sd-figma` would restore them. Removing the shadow means
   // correcting the Figma variables first (Plugin-API-only, laptop-bound), which
   // is brik-bds#1812. These entries retire with it, not before.
-  '--text-positive': 1812,
-  '--text-disabled': 1812,
-  '--background-disabled': 1812,
+  '--bds-text-positive': 1812,
+  '--bds-text-disabled': 1812,
+  '--bds-background-disabled': 1812,
 };
 
 const IGNORE_MARKER = 'bds-lint-ignore';
@@ -107,7 +108,8 @@ function topLevelBlocks(src) {
 }
 
 function collect(cssPath) {
-  const raw = fs.readFileSync(cssPath, 'utf8');
+  // Canonical registry only; the compat bridge re-declares names by design.
+  const raw = canonicalPart(fs.readFileSync(cssPath, 'utf8'));
   const clean = blankComments(raw);
   const byScope = new Map();
   let declarations = 0;

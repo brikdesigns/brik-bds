@@ -24,9 +24,9 @@
  * `bds-blueprint-section__container` on the container.
  *
  * Token pairs (paired family ↔ size — never mix):
- *   subtitle    — --font-family-label + --label-lg (uppercase eyebrow)
- *   title (h2)  — --font-family-heading + clamp(--heading-lg … --heading-xl)
- *   lead        — --font-family-body + --heading-sm
+ *   subtitle    — --bds-font-family-label + --bds-label-lg (uppercase eyebrow)
+ *   title (h2)  — --bds-font-family-heading + clamp(--bds-heading-lg … --bds-heading-xl)
+ *   lead        — --bds-font-family-body + --bds-heading-sm
  *
  * a11y: `<section>` with `aria-labelledby` → the h2. Reading order is natural
  * (narrative first, supporting callout second) on every viewport.

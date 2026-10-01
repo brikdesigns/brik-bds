@@ -338,7 +338,7 @@ export interface TableActionsCellProps extends TdHTMLAttributes<HTMLTableCellEle
  *    tables) — applied via class, never inline style.
  * 2. Width that shrinks to its content (`width: 1%`) so content columns
  *    keep their natural sizing.
- * 3. Consistent `--gap-sm` between buttons via an inner flex row.
+ * 3. Consistent `--bds-gap-sm` between buttons via an inner flex row.
  *
  * Carries `aria-label="Actions"` for screen-reader context. Pair with
  * an `<TableHead>` carrying the same `align` so column headers line up

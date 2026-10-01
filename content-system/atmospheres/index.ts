@@ -111,11 +111,11 @@ export interface AtmosphereManifestEntry {
 // is the saturated brand color in every theme, but the canonical text token
 // that contrasts against it depends on theme dominance:
 //
-//   - Light-themed atmospheres pair brand fill with `--text-on-color-dark`
+//   - Light-themed atmospheres pair brand fill with `--bds-text-on-color-dark`
 //     (the canonical "light text designed for dark colored fills"). The
 //     portal theme generator's light-dominant branch overrides this token to
 //     a brand-resolved light neutral.
-//   - Dark-themed atmospheres pair brand fill with `--text-on-color-light`
+//   - Dark-themed atmospheres pair brand fill with `--bds-text-on-color-light`
 //     (the canonical "dark text designed for light colored fills"). The
 //     portal theme generator's dark-dominant branch overrides this token to
 //     a brand-resolved dark neutral.
@@ -126,46 +126,46 @@ export interface AtmosphereManifestEntry {
 
 /** Brand-fill pairings for light-themed atmospheres. */
 const BASELINE_BRAND_PAIRINGS_LIGHT_THEME: SafePairing[] = [
-  { fg: '--text-on-color-dark', bg: '--background-brand-primary',
+  { fg: '--bds-text-on-color-dark', bg: '--bds-background-brand-primary',
     context: 'Brand-filled buttons / pills (default state) on a light page.' },
-  { fg: '--text-on-color-dark', bg: '--background-brand-primary-hover',
+  { fg: '--bds-text-on-color-dark', bg: '--bds-background-brand-primary-hover',
     context: 'Brand-filled buttons / pills (hover state) on a light page.' },
-  { fg: '--text-on-color-dark', bg: '--background-brand-primary-pressed',
+  { fg: '--bds-text-on-color-dark', bg: '--bds-background-brand-primary-pressed',
     context: 'Brand-filled buttons / pills (pressed state) on a light page.' },
 ];
 
 /** Brand-fill pairings for dark-themed atmospheres. */
 const BASELINE_BRAND_PAIRINGS_DARK_THEME: SafePairing[] = [
-  { fg: '--text-on-color-light', bg: '--background-brand-primary',
+  { fg: '--bds-text-on-color-light', bg: '--bds-background-brand-primary',
     context: 'Brand-filled buttons / pills (default state) on a dark page.' },
-  { fg: '--text-on-color-light', bg: '--background-brand-primary-hover',
+  { fg: '--bds-text-on-color-light', bg: '--bds-background-brand-primary-hover',
     context: 'Brand-filled buttons / pills (hover state) on a dark page.' },
-  { fg: '--text-on-color-light', bg: '--background-brand-primary-pressed',
+  { fg: '--bds-text-on-color-light', bg: '--bds-background-brand-primary-pressed',
     context: 'Brand-filled buttons / pills (pressed state) on a dark page.' },
 ];
 
 /** Pairings for light-dominant atmospheres. */
 const LIGHT_TONE_PAIRINGS: SafePairing[] = [
-  { fg: '--text-primary', bg: '--background-primary', context: 'Body copy on the dominant light surface.' },
-  { fg: '--text-primary', bg: '--background-secondary', context: 'Body copy on alternating elevated surface.' },
-  { fg: '--text-secondary', bg: '--background-primary', context: 'Secondary copy on light surface.' },
-  { fg: '--text-muted', bg: '--background-primary', context: 'Captions / metadata on light surface.' },
-  { fg: '--text-brand-primary', bg: '--background-primary', context: 'Brand-tinted heading or accent on light surface.' },
-  { fg: '--text-inverse', bg: '--background-inverse', context: 'Inverse block (dark CTA strip on a light page).' },
+  { fg: '--bds-text-primary', bg: '--bds-background-primary', context: 'Body copy on the dominant light surface.' },
+  { fg: '--bds-text-primary', bg: '--bds-background-secondary', context: 'Body copy on alternating elevated surface.' },
+  { fg: '--bds-text-secondary', bg: '--bds-background-primary', context: 'Secondary copy on light surface.' },
+  { fg: '--bds-text-muted', bg: '--bds-background-primary', context: 'Captions / metadata on light surface.' },
+  { fg: '--bds-text-brand-primary', bg: '--bds-background-primary', context: 'Brand-tinted heading or accent on light surface.' },
+  { fg: '--bds-text-inverse', bg: '--bds-background-inverse', context: 'Inverse block (dark CTA strip on a light page).' },
 ];
 
 /** Pairings for dark-dominant atmospheres. */
 const DARK_TONE_PAIRINGS: SafePairing[] = [
-  { fg: '--text-primary', bg: '--background-primary', context: 'Body copy on the dominant dark surface.' },
-  { fg: '--text-primary', bg: '--background-secondary', context: 'Body copy on the next-lightest dark surface.' },
-  { fg: '--text-primary', bg: '--background-tertiary', context: 'Body copy on the elevated dark surface.' },
-  { fg: '--text-secondary', bg: '--background-primary', context: 'Secondary copy on dark surface.' },
+  { fg: '--bds-text-primary', bg: '--bds-background-primary', context: 'Body copy on the dominant dark surface.' },
+  { fg: '--bds-text-primary', bg: '--bds-background-secondary', context: 'Body copy on the next-lightest dark surface.' },
+  { fg: '--bds-text-primary', bg: '--bds-background-tertiary', context: 'Body copy on the elevated dark surface.' },
+  { fg: '--bds-text-secondary', bg: '--bds-background-primary', context: 'Secondary copy on dark surface.' },
   // text-muted on dark is intentionally NOT in the safe set — gray-400
   // on near-black sits at ~4.06:1 by the generator's default emission,
   // and the portal preflight catches that. Atmospheres that fix it
   // override the muted token themselves; until then, omit from safe.
-  { fg: '--text-brand-primary', bg: '--background-primary', context: 'Brand accent text on dark surface.' },
-  { fg: '--text-inverse', bg: '--background-inverse', context: 'Inverse block (light strip inside the dark page).' },
+  { fg: '--bds-text-brand-primary', bg: '--bds-background-primary', context: 'Brand accent text on dark surface.' },
+  { fg: '--bds-text-inverse', bg: '--bds-background-inverse', context: 'Inverse block (light strip inside the dark page).' },
 ];
 
 // ── Manifest ────────────────────────────────────────────────────────

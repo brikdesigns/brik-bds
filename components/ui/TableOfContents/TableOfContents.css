@@ -4,7 +4,7 @@
 .bds-toc {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
   box-sizing: border-box;
 }
 
@@ -15,22 +15,22 @@
    longest label, which leaves a rail box ending mid-column (#2270). */
 .bds-toc--sticky {
   position: sticky;
-  top: var(--padding-md);
+  top: var(--bds-padding-md);
   align-self: flex-start;
-  max-height: calc(100vh - (var(--padding-md) * 2));
+  max-height: calc(100vh - (var(--bds-padding-md) * 2));
   overflow-y: auto;
 }
 
 /* ─── Title ───────────────────────────────────────────────────── */
 
 .bds-toc__title {
-  font-family: var(--font-family-body);
-  font-size: var(--label-xs);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: var(--letter-spacing-wide);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-label-xs);
+  font-weight: var(--bds-font-weight-medium);
+  letter-spacing: var(--bds-letter-spacing-wide);
   text-transform: uppercase;
-  color: var(--text-secondary);
-  padding: 0 var(--padding-md);
+  color: var(--bds-text-secondary);
+  padding: 0 var(--bds-padding-md);
 }
 
 /* ─── List ────────────────────────────────────────────────────── */
@@ -41,7 +41,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
 }
 
 .bds-toc__item {
@@ -66,48 +66,48 @@
  * contrast below is pinned to the band the rail renders on, not to a box. */
 
 .bds-toc--variant-rail {
-  gap: var(--space-500);
+  gap: var(--bds-space-500);
 }
 
 /* Rule + indent on the list, so the consumer does not re-declare them. */
 .bds-toc--variant-rail .bds-toc__list {
-  gap: var(--space-500);
-  border-left: var(--border-width-sm) solid var(--border-muted);
-  padding-left: var(--space-500);
+  gap: var(--bds-space-500);
+  border-left: var(--bds-border-width-sm) solid var(--bds-border-muted);
+  padding-left: var(--bds-space-500);
 }
 
-/* Flatten the NavItem pill to text. --text-secondary is the resting label:
-   12.63:1 light / 15.91:1 dark on --surface-primary, the transparent-rail case
+/* Flatten the NavItem pill to text. --bds-text-secondary is the resting label:
+   12.63:1 light / 15.91:1 dark on --bds-surface-primary, the transparent-rail case
    (`Rail TOC resting label on surface`, tokens/contrast-pairings.json).
    Figma specs `text/muted` (#828282) here, which fails AA at label-sm and
    cannot be the default. */
 .bds-toc--variant-rail .bds-nav-item {
   padding: 0;
   border-radius: 0;
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-snug);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-bold);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-secondary);
   background-color: transparent;
 }
 
 /* Hover is distinct from BOTH resting and active: resting is quiet, active is
    brand, hover steps the label up to full-strength neutral. */
 .bds-toc--variant-rail .bds-nav-item:hover {
-  color: var(--text-primary);
+  color: var(--bds-text-primary);
   background-color: transparent;
 }
 
-/* --text-brand-primary-strong, NOT --text-brand-primary: the label is 14px bold,
+/* --bds-text-brand-primary-strong, NOT --bds-text-brand-primary: the label is 14px bold,
    so WCAG large text (18.66px bold) does not apply and the bar is AA 4.5:1, not
    the AA-large 3:1 the brand token carries in its heading/accent role.
-   --text-brand-primary (poppy-500) is too light; the strong step is 6.23:1 light
-   / 5.55:1 dark on --surface-primary (the transparent-rail band), where
+   --bds-text-brand-primary (poppy-500) is too light; the strong step is 6.23:1 light
+   / 5.55:1 dark on --bds-surface-primary (the transparent-rail band), where
    darkening in dark would sink it. Gated as `Rail TOC active label on surface`. */
 .bds-toc--variant-rail .bds-nav-item--active,
 .bds-toc--variant-rail .bds-nav-item--active:hover {
-  color: var(--text-brand-primary-strong);
+  color: var(--bds-text-brand-primary-strong);
   background-color: transparent;
 }
 }

@@ -14,11 +14,11 @@ export const ArrowLeft = () => (
 export const InParagraphDemo = () => (
   <p
     style={{
-      fontFamily: 'var(--font-family-body)',
-      fontSize: 'var(--body-md)',
-      color: 'var(--text-primary)',
+      fontFamily: 'var(--bds-font-family-body)',
+      fontSize: 'var(--bds-body-md)',
+      color: 'var(--bds-text-primary)',
       maxWidth: 480,
-      lineHeight: 'var(--font-line-height-normal)',
+      lineHeight: 'var(--bds-font-line-height-normal)',
     }}
   >
     Our team specializes in web design and development.{' '}
@@ -57,7 +57,7 @@ TextLink has no semantic *style* variant axis — size, emphasis, and underline-
 <Canvas of={Stories.Default} />
 
 - **`brand`** (default) — brand link color at rest. Use for a **page-level link or CTA** that should stand out from body copy.
-- **`neutral`** — `--text-primary` at rest. Use for a **lower-emphasis identifier link** — a name cell in a table, where a column of links should read as a column of identifiers, not calls-to-action. Both values transition to `--text-brand-primary` on hover, so color still signals interactivity.
+- **`neutral`** — `--bds-text-primary` at rest. Use for a **lower-emphasis identifier link** — a name cell in a table, where a column of links should read as a column of identifiers, not calls-to-action. Both values transition to `--bds-text-brand-primary` on hover, so color still signals interactivity.
 
 ### Underline visibility
 

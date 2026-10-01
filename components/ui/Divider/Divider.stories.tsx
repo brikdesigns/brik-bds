@@ -27,9 +27,9 @@ export default meta;
 type Story = StoryObj<typeof Divider>;
 
 const bodyText: React.CSSProperties = {
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-md)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
-  color: 'var(--text-primary)',
+  fontFamily: 'var(--bds-font-family-body)',
+  fontSize: 'var(--bds-body-md)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
+  color: 'var(--bds-text-primary)',
   margin: 0,
 };
 

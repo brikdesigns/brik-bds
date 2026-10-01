@@ -20,17 +20,17 @@ const BandContent = ({ label = 'How we work' }: { label?: string }) => (
     style={{
       display: 'flex',
       flexDirection: 'column',
-      gap: 'var(--gap-md)',
-      padding: 'var(--space-2400) var(--space-800)',
+      gap: 'var(--bds-gap-md)',
+      padding: 'var(--bds-space-2400) var(--bds-space-800)',
       textAlign: 'center',
     }}
   >
     <h2
       style={{
         margin: 0,
-        fontFamily: 'var(--font-family-heading)',
-        fontSize: 'var(--heading-lg)',
-        color: 'var(--text-primary)',
+        fontFamily: 'var(--bds-font-family-heading)',
+        fontSize: 'var(--bds-heading-lg)',
+        color: 'var(--bds-text-primary)',
       }}
     >
       {label}
@@ -38,9 +38,9 @@ const BandContent = ({ label = 'How we work' }: { label?: string }) => (
     <p
       style={{
         margin: 0,
-        fontFamily: 'var(--font-family-body)',
-        fontSize: 'var(--body-md)',
-        color: 'var(--text-secondary)',
+        fontFamily: 'var(--bds-font-family-body)',
+        fontSize: 'var(--bds-body-md)',
+        color: 'var(--bds-text-secondary)',
       }}
     >
       The field drifts behind this text and never competes with it.
@@ -180,7 +180,7 @@ export const Tinted: Story = {
                 // An OPAQUE tint would hide the field completely rather than
                 // hold contrast over it — the value has to carry alpha.
                 '--bds-bg-field-tint':
-                  'color-mix(in srgb, var(--surface-primary) 65%, transparent)',
+                  'color-mix(in srgb, var(--bds-surface-primary) 65%, transparent)',
                 '--bds-bg-field-opacity': '0.85',
               } as React.CSSProperties
             }

@@ -23,7 +23,7 @@ const meta: Meta<typeof CalloutPanel> = {
     docs: {
       description: {
         component:
-          'The `bds-callout-panel` section primitive (brik-bds#581). Section header (subtitle + title + lead) above a plan-callout card, with an optional `media` slot. The default shape is the simple single-column callout — eyebrow + heading + body + one CTA — which is the real consumer content shape (brik-bds#589); a decorative scene is optional composition via `media`. Plan card text uses `--text-primary` to clear AA on `--surface-secondary`; CTA uses `Button size="md"` to clear AA on the brand-poppy fill.',
+          'The `bds-callout-panel` section primitive (brik-bds#581). Section header (subtitle + title + lead) above a plan-callout card, with an optional `media` slot. The default shape is the simple single-column callout — eyebrow + heading + body + one CTA — which is the real consumer content shape (brik-bds#589); a decorative scene is optional composition via `media`. Plan card text uses `--bds-text-primary` to clear AA on `--bds-surface-secondary`; CTA uses `Button size="md"` to clear AA on the brand-poppy fill.',
       },
     },
   },

@@ -13,9 +13,11 @@
 
 import { register } from '@tokens-studio/sd-transforms';
 import StyleDictionary from 'style-dictionary';
+import { registerBdsHooks, isCanonicalCssToken, SD_PREFIX } from './scripts/lib/sd-bds.mjs';
 
 // Register Tokens Studio transforms (math resolution, dimension px, etc.)
 register(StyleDictionary);
+registerBdsHooks(StyleDictionary);
 
 // ─── SwiftUI Format ─────────────────────────────────────────────
 // Generates namespaced Swift enums with SwiftUI types.
@@ -194,9 +196,12 @@ StyleDictionary.registerTransform({
 
 export default {
   source: ['design-tokens/tokens-figma.json'],
-  preprocessors: ['tokens-studio'],
+  preprocessors: ['tokens-studio', 'bds/retire-word-steps'],
   platforms: {
     css: {
+      // System ID (ADR-043): every CSS custom property leads with `--bds-`.
+      // CSS only — js/swift keep their names, Figma + tokens-studio JSON untouched.
+      prefix: SD_PREFIX,
       transformGroup: 'tokens-studio',
       transforms: ['name/kebab', 'bds/lineHeight/percent'],
       buildPath: 'build/figma/css/',
@@ -204,6 +209,8 @@ export default {
         {
           destination: 'variables.css',
           format: 'css/variables',
+          // The 54 word-step colour primitives retire from the canonical CSS (ADR-043 section 4).
+          filter: isCanonicalCssToken,
           options: {
             outputReferences: true,
             selector: ':root',

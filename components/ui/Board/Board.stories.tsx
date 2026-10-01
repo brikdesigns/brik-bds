@@ -192,7 +192,7 @@ export const Density: Story = {
         <BoardCard
           title="Check and refill hand sanitizer stations"
           subtitle="Due today"
-          accentColor="var(--background-accent-blue)"
+          accentColor="var(--bds-background-accent-blue)"
           checked={false}
           onCheckedChange={() => {}}
           tags={<Tag size="sm">Engineering</Tag>}
@@ -201,7 +201,7 @@ export const Density: Story = {
         <BoardCard
           title="Clean countertops and surfaces"
           subtitle="Due today"
-          accentColor="var(--background-accent-blue)"
+          accentColor="var(--bds-background-accent-blue)"
           tags={<Tag size="sm">Cleaning</Tag>}
         />
       </BoardColumn>
@@ -211,7 +211,7 @@ export const Density: Story = {
           checkAccent="brand"
           title="Check and refill hand sanitizer stations"
           subtitle="Due today"
-          accentColor="var(--background-accent-blue)"
+          accentColor="var(--bds-background-accent-blue)"
           checked={false}
           onCheckedChange={() => {}}
           tags={<Tag size="sm">Engineering</Tag>}
@@ -222,7 +222,7 @@ export const Density: Story = {
           checkAccent="brand"
           title="Clean countertops and surfaces"
           subtitle="Due today"
-          accentColor="var(--background-accent-blue)"
+          accentColor="var(--bds-background-accent-blue)"
           tags={<Tag size="sm">Cleaning</Tag>}
         />
       </BoardColumn>
@@ -241,8 +241,8 @@ export const Density: Story = {
       '.bds-board-card--compact .bds-board-card__subtitle',
     ) as HTMLElement;
 
-    await expect(getComputedStyle(defaultTitle).fontSize).toBe('18px'); // --label-lg
-    await expect(getComputedStyle(compactTitle).fontSize).toBe('16px'); // --label-md
+    await expect(getComputedStyle(defaultTitle).fontSize).toBe('18px'); // --bds-label-lg
+    await expect(getComputedStyle(compactTitle).fontSize).toBe('16px'); // --bds-label-md
     // Compact subtitle reads as label-family metadata (capitalize).
     await expect(getComputedStyle(compactSubtitle).textTransform).toBe('capitalize');
   },
@@ -297,7 +297,7 @@ function FullBoardViewExample() {
   };
 
   const columnStyle: React.CSSProperties = {
-    backgroundColor: 'var(--surface-secondary)',
+    backgroundColor: 'var(--bds-surface-secondary)',
   };
 
   const headerStyle: React.CSSProperties = {
@@ -310,7 +310,7 @@ function FullBoardViewExample() {
         key={task.id}
         title={task.title}
         subtitle={task.due}
-        accentColor="var(--background-brand-primary)"
+        accentColor="var(--bds-background-brand-primary)"
         checked={task.checked}
         onCheckedChange={() => toggle(column, task.id)}
         tags={
@@ -325,9 +325,9 @@ function FullBoardViewExample() {
 
   return (
     <div style={{
-      background: 'var(--page-primary)',
-      padding: 'var(--padding-xl)',
-      borderRadius: 'var(--border-radius-200)',
+      background: 'var(--bds-page-primary)',
+      padding: 'var(--bds-padding-xl)',
+      borderRadius: 'var(--bds-border-radius-200)',
     }}>
       <Board style={{ height: '800px' }}>
         <BoardColumn style={columnStyle}>

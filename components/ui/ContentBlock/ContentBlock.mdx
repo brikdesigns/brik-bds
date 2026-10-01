@@ -6,9 +6,9 @@ import { ContentBlock } from './ContentBlock';
 {/* Size-axis comparison — docs-local, not a story export: `size` is a Control
     on Default, and a side-by-side gallery is an MDX concern (#1489). */}
 export const SizeScale = () => (
-  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-xl)' }}>
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--bds-gap-xl)' }}>
     {['sm', 'md', 'lg', 'xl', '2xl', '3xl'].map((size) => (
-      <div key={size} style={{ width: '300px', padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+      <div key={size} style={{ width: '300px', padding: 'var(--bds-padding-lg)', background: 'var(--bds-surface-primary)' }}>
         <ContentBlock
           size={size}
           title="Membership Plans"
@@ -56,11 +56,11 @@ The tight title→subtitle gap and the medium gap into `description`/`actions` s
 
 ### On a filled brand band
 
-`onColor` swaps `title`/`subtitle`/`description` to `--text-on-color-dark` for a block sitting on a filled brand or dark surface. The block owns this — never push a per-instance `color` from the consumer into a slot the block renders. `--text-on-color-dark` is mode-invariant white, so one prop covers light and dark.
+`onColor` swaps `title`/`subtitle`/`description` to `--bds-text-on-color-dark` for a block sitting on a filled brand or dark surface. The block owns this — never push a per-instance `color` from the consumer into a slot the block renders. `--bds-text-on-color-dark` is mode-invariant white, so one prop covers light and dark.
 
 <Canvas of={Stories.OnColor} />
 
-White on `--surface-brand-primary` is **3.78:1 — AA-large (3:1), not AA (4.5:1)**. Brand-primary fills are gated AA-large by policy (`tokens/contrast-pairings.json`, BDS-22 / ADR-015). The `title` is large text and unaffected; keep a band `description` short rather than running body copy long on the fill. For a *centered, measure-capped* section intro on a band, reach for [SectionHeader](/docs/components/section-header), which forwards `onColor`.
+White on `--bds-surface-brand-primary` is **3.78:1 — AA-large (3:1), not AA (4.5:1)**. Brand-primary fills are gated AA-large by policy (`tokens/contrast-pairings.json`, BDS-22 / ADR-015). The `title` is large text and unaffected; keep a band `description` short rather than running body copy long on the fill. For a *centered, measure-capped* section intro on a band, reach for [SectionHeader](/docs/components/section-header), which forwards `onColor`.
 
 ## Props
 

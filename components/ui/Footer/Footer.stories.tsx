@@ -43,9 +43,9 @@ const sampleColumns = [
 
 const LogoPlaceholder = () => (
   <div style={{
-    fontFamily: 'var(--font-family-heading)',
-    fontSize: 'var(--label-lg)',
-    fontWeight: 'var(--font-weight-bold)' as unknown as number,
+    fontFamily: 'var(--bds-font-family-heading)',
+    fontSize: 'var(--bds-label-lg)',
+    fontWeight: 'var(--bds-font-weight-bold)' as unknown as number,
     color: 'inherit',
   }}>
     BrandName
@@ -206,22 +206,22 @@ const NewsletterSection = () => (
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: 'var(--gap-md)',
+    gap: 'var(--bds-gap-md)',
     textAlign: 'center',
-    padding: 'var(--padding-md) 0',
+    padding: 'var(--bds-padding-md) 0',
   }}>
     <h3 style={{
-      fontFamily: 'var(--font-family-heading)',
-      fontSize: 'var(--heading-md)',
-      fontWeight: 'var(--font-weight-bold)' as unknown as number,
+      fontFamily: 'var(--bds-font-family-heading)',
+      fontSize: 'var(--bds-heading-md)',
+      fontWeight: 'var(--bds-font-weight-bold)' as unknown as number,
       margin: 0,
       color: 'inherit',
     }}>
       Join our newsletter
     </h3>
     <p style={{
-      fontFamily: 'var(--font-family-body)',
-      fontSize: 'var(--body-sm)',
+      fontFamily: 'var(--bds-font-family-body)',
+      fontSize: 'var(--bds-body-sm)',
       margin: 0,
       opacity: 0.8,
     }}>
@@ -233,11 +233,11 @@ const NewsletterSection = () => (
       style={{
         width: '320px',
         maxWidth: '100%',
-        padding: 'var(--padding-sm)',
-        fontFamily: 'var(--font-family-body)',
-        fontSize: 'var(--body-sm)',
-        border: 'var(--border-width-sm) solid var(--border-secondary)',
-        borderRadius: 'var(--border-radius-sm)',
+        padding: 'var(--bds-padding-sm)',
+        fontFamily: 'var(--bds-font-family-body)',
+        fontSize: 'var(--bds-body-sm)',
+        border: 'var(--bds-border-width-sm) solid var(--bds-border-secondary)',
+        borderRadius: 'var(--bds-border-radius-sm)',
       }}
     />
   </div>
@@ -245,7 +245,7 @@ const NewsletterSection = () => (
 
 const ContactBlock = () => (
   <>
-    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-sm)', fontSize: 'var(--body-sm)' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--bds-gap-sm)', fontSize: 'var(--bds-body-sm)' }}>
       <span style={{ opacity: 0.6 }}>{'☎'}</span>
       <span>(555) 123-4567</span>
     </div>
@@ -254,8 +254,8 @@ const ContactBlock = () => (
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: 'var(--gap-sm)',
-        fontSize: 'var(--body-sm)',
+        gap: 'var(--bds-gap-sm)',
+        fontSize: 'var(--bds-body-sm)',
         color: 'inherit',
         textDecoration: 'none',
       }}
@@ -294,11 +294,11 @@ export const Marketing: Story = {
       {
         title: 'Services',
         links: [
-          { label: 'Brand Design', href: '#', adornment: <ServiceDot color="var(--surface-service-brand)" /> },
-          { label: 'Marketing Design', href: '#', adornment: <ServiceDot color="var(--surface-service-marketing)" /> },
-          { label: 'Information Design', href: '#', adornment: <ServiceDot color="var(--surface-service-information)" /> },
-          { label: 'Product Design', href: '#', adornment: <ServiceDot color="var(--surface-service-product)" /> },
-          { label: 'Back Office Design', href: '#', adornment: <ServiceDot color="var(--surface-service-back-office)" /> },
+          { label: 'Brand Design', href: '#', adornment: <ServiceDot color="var(--bds-surface-service-brand)" /> },
+          { label: 'Marketing Design', href: '#', adornment: <ServiceDot color="var(--bds-surface-service-marketing)" /> },
+          { label: 'Information Design', href: '#', adornment: <ServiceDot color="var(--bds-surface-service-information)" /> },
+          { label: 'Product Design', href: '#', adornment: <ServiceDot color="var(--bds-surface-service-product)" /> },
+          { label: 'Back Office Design', href: '#', adornment: <ServiceDot color="var(--bds-surface-service-back-office)" /> },
         ],
       },
       // These two deliberately keep the DEPRECATED `heading` spelling while the
@@ -350,7 +350,7 @@ export const SurfaceOverride: Story = {
     variant: 'inverse',
     style: {
       // bds-lint-ignore — component-scoped CSS variable override, not a design token
-      ['--bds-footer-surface' as string]: 'var(--color-grayscale-950)',
+      ['--bds-footer-surface' as string]: 'var(--bds-color-grayscale-950)',
     } as CSSProperties,
   },
 };

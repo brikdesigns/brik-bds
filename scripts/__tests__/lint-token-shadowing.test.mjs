@@ -44,7 +44,7 @@ function run(css, { trailingNewline = true } = {}) {
 }
 
 const CLEAN = `:root {
-  --text-primary: #111;
+  --bds-text-primary: #111;
   --spacing-md: 16px;
 }
 `;
@@ -56,36 +56,36 @@ describe('lint-token-shadowing', () => {
   });
 
   it('FAILS when a token is redeclared in the same scope with a different value', () => {
-    const { code, out } = run(`${CLEAN}:root {\n  --text-primary: #222;\n}\n`);
+    const { code, out } = run(`${CLEAN}:root {\n  --bds-text-primary: #222;\n}\n`);
     expect(code).toBe(1);
-    expect(out).toContain('--text-primary');
+    expect(out).toContain('--bds-text-primary');
     expect(out).toContain('UNDISPOSED');
   });
 
   it('passes when the winning declaration carries a bds-lint-ignore reason', () => {
-    const { code } = run(`${CLEAN}:root {\n  --text-primary: #222; /* bds-lint-ignore — deliberate */\n}\n`);
+    const { code } = run(`${CLEAN}:root {\n  --bds-text-primary: #222; /* bds-lint-ignore — deliberate */\n}\n`);
     expect(code).toBe(0);
   });
 
   it('still FAILS when the file has no trailing newline', () => {
     // Regression: the block regex once keyed this second block as `}:root`,
     // a phantom scope, so the shadow was never compared against `:root`.
-    const { code } = run(`${CLEAN}:root {\n  --text-primary: #222;\n}\n`, { trailingNewline: false });
+    const { code } = run(`${CLEAN}:root {\n  --bds-text-primary: #222;\n}\n`, { trailingNewline: false });
     expect(code).toBe(1);
   });
 
   it('does NOT flag the same value declared twice', () => {
-    const { code } = run(`${CLEAN}:root {\n  --text-primary: #111;\n}\n`);
+    const { code } = run(`${CLEAN}:root {\n  --bds-text-primary: #111;\n}\n`);
     expect(code).toBe(0);
   });
 
   it('does NOT flag a declaration inside @media, which is conditional', () => {
-    const { code } = run(`${CLEAN}@media (prefers-reduced-motion: reduce) {\n  :root {\n    --text-primary: #333;\n  }\n}\n`);
+    const { code } = run(`${CLEAN}@media (prefers-reduced-motion: reduce) {\n  :root {\n    --bds-text-primary: #333;\n  }\n}\n`);
     expect(code).toBe(0);
   });
 
   it('does NOT flag the same token in two DIFFERENT scopes', () => {
-    const { code } = run(`${CLEAN}:root[data-theme="dark"] {\n  --text-primary: #eee;\n}\n`);
+    const { code } = run(`${CLEAN}:root[data-theme="dark"] {\n  --bds-text-primary: #eee;\n}\n`);
     expect(code).toBe(0);
   });
 

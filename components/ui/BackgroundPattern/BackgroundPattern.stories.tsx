@@ -29,9 +29,9 @@ const Demo = (args: React.ComponentProps<typeof BackgroundPattern>) => (
       position: 'relative',
       height: 240,
       overflow: 'hidden',
-      background: 'var(--surface-primary)',
-      border: `var(--border-width-sm) solid var(--border-secondary)`,
-      borderRadius: 'var(--border-radius-md)',
+      background: 'var(--bds-surface-primary)',
+      border: `var(--bds-border-width-sm) solid var(--bds-border-secondary)`,
+      borderRadius: 'var(--bds-border-radius-md)',
     }}
   >
     <BackgroundPattern {...args} />
@@ -43,9 +43,9 @@ const Demo = (args: React.ComponentProps<typeof BackgroundPattern>) => (
         alignItems: 'center',
         justifyContent: 'center',
         height: '100%',
-        fontFamily: 'var(--font-family-heading)',
-        fontSize: 'var(--heading-sm)',
-        color: 'var(--text-primary)',
+        fontFamily: 'var(--bds-font-family-heading)',
+        fontSize: 'var(--bds-heading-sm)',
+        color: 'var(--bds-text-primary)',
       }}
     >
       Content sits above the pattern

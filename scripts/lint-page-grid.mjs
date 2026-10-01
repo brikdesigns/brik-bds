@@ -62,11 +62,11 @@ const BDS_ROOT = resolve(__dirname, '..');
 const DEFAULT_DIRS = ['components/ui', 'content-system'];
 
 /** A page container announces itself with a content-width band… */
-const BAND_RE = /max-width\s*:\s*[^;}]*var\(\s*--content-width-/i;
+const BAND_RE = /max-width\s*:\s*[^;}]*var\(\s*--bds-content-width-/i;
 /** …or a Footer-style centering inset computed from one. */
-const CENTERING_INSET_RE = /100%\s*-\s*var\(\s*--content-width-/i;
+const CENTERING_INSET_RE = /100%\s*-\s*var\(\s*--bds-content-width-/i;
 /** The canonical inset, direct or as a hook fallback. */
-const PAGE_INSET_RE = /var\(\s*--page-inset\b/i;
+const PAGE_INSET_RE = /var\(\s*--bds-page-inset\b/i;
 
 /**
  * Blank out `/* … *​/` comment content, preserving newlines so line numbers
@@ -194,7 +194,7 @@ function walk(dir, acc = []) {
 
 const GUIDANCE =
   'A page container insets with the canonical page inset: `padding-inline: ' +
-  'var(--page-inset)` (directly, as an ADR-014 hook fallback, or inside a ' +
+  'var(--bds-page-inset)` (directly, as an ADR-014 hook fallback, or inside a ' +
   '`max()` centering inset). See ADR-025 ' +
   '(design.brikdesigns.com/docs/build-standards/page-grid). A genuine ' +
   'exception needs a reasoned `bds-lint-ignore — <why>`; a bare marker is ' +
@@ -202,10 +202,10 @@ const GUIDANCE =
 
 function render(violations, scanned) {
   if (violations.length === 0) {
-    return `lint-page-grid: clean — ${scanned} file(s) scanned, every page container uses --page-inset\n`;
+    return `lint-page-grid: clean — ${scanned} file(s) scanned, every page container uses --bds-page-inset\n`;
   }
   const out = [
-    `lint-page-grid: ${violations.length} page container(s) bypassing --page-inset (ADR-025)`,
+    `lint-page-grid: ${violations.length} page container(s) bypassing --bds-page-inset (ADR-025)`,
     '',
   ];
   for (const v of violations) {
@@ -224,9 +224,9 @@ function main() {
   if (args.includes('--help') || args.includes('-h')) {
     process.stdout.write(
       'lint-page-grid [dir] | --staged\n\n' +
-        'Fails any page-container rule (max-width: var(--content-width-*) or a ' +
+        'Fails any page-container rule (max-width: var(--bds-content-width-*) or a ' +
         'content-width centering inset) whose padding-inline bypasses ' +
-        '--page-inset (ADR-025, brik-bds#1628).\n',
+        '--bds-page-inset (ADR-025, brik-bds#1628).\n',
     );
     process.exit(0);
   }

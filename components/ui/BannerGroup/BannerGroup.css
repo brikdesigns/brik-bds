@@ -10,14 +10,14 @@
 /* ─── Gap ───────────────────────────────────────────────────── */
 
 .bds-banner-group--gap-sm {
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 
 .bds-banner-group--gap-md {
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
 }
 
 .bds-banner-group--gap-lg {
-  gap: var(--gap-lg);
+  gap: var(--bds-gap-lg);
 }
 }

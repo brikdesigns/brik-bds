@@ -36,8 +36,8 @@ const Shell = ({ children, height = 540 }: { children: React.ReactNode; height?:
       display: 'flex',
       flexDirection: 'column',
       height,
-      background: 'var(--surface-primary)',
-      border: 'var(--border-width-sm) solid var(--border-secondary)',
+      background: 'var(--bds-surface-primary)',
+      border: 'var(--bds-border-width-sm) solid var(--bds-border-secondary)',
     }}
   >
     {children}

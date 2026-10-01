@@ -11,32 +11,32 @@
 
 /* ─── Size ────────────────────────────────────────────── */
 
-.bds-stepper--sm { gap: var(--gap-sm); }
-.bds-stepper--md { gap: var(--gap-md); }
-.bds-stepper--lg { gap: var(--gap-md); }
+.bds-stepper--sm { gap: var(--bds-gap-sm); }
+.bds-stepper--md { gap: var(--bds-gap-md); }
+.bds-stepper--lg { gap: var(--bds-gap-md); }
 
 .bds-stepper--sm .bds-stepper__button {
-  width: var(--size-700);
-  height: var(--size-700);
-  border-radius: var(--border-radius-sm);
-  font-size: var(--body-tiny);
+  width: var(--bds-size-700);
+  height: var(--bds-size-700);
+  border-radius: var(--bds-border-radius-sm);
+  font-size: var(--bds-body-tiny);
 }
 .bds-stepper--md .bds-stepper__button {
-  width: var(--size-900);
-  height: var(--size-900);
-  border-radius: var(--border-radius-md);
-  font-size: var(--body-xs);
+  width: var(--bds-size-900);
+  height: var(--bds-size-900);
+  border-radius: var(--bds-border-radius-md);
+  font-size: var(--bds-body-xs);
 }
 .bds-stepper--lg .bds-stepper__button {
-  width: var(--size-1100);
-  height: var(--size-1100);
-  border-radius: var(--border-radius-md);
-  font-size: var(--body-sm);
+  width: var(--bds-size-1100);
+  height: var(--bds-size-1100);
+  border-radius: var(--bds-border-radius-md);
+  font-size: var(--bds-body-sm);
 }
 
-.bds-stepper--sm .bds-stepper__value { font-size: var(--label-sm); min-width: 28px; }
-.bds-stepper--md .bds-stepper__value { font-size: var(--label-md); min-width: 36px; }
-.bds-stepper--lg .bds-stepper__value { font-size: var(--label-lg); min-width: 44px; }
+.bds-stepper--sm .bds-stepper__value { font-size: var(--bds-label-sm); min-width: 28px; }
+.bds-stepper--md .bds-stepper__value { font-size: var(--bds-label-md); min-width: 36px; }
+.bds-stepper--lg .bds-stepper__value { font-size: var(--bds-label-lg); min-width: 44px; }
 
 /* ─── Buttons ─────────────────────────────────────────── */
 
@@ -44,35 +44,35 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: var(--border-width-md) solid var(--border-secondary);
-  background-color: var(--surface-secondary);
-  color: var(--text-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-secondary);
+  background-color: var(--bds-surface-secondary);
+  color: var(--bds-text-primary);
   cursor: pointer;
   padding: 0;
-  transition: filter var(--duration-sm) var(--ease-out);
+  transition: filter var(--bds-duration-sm) var(--bds-ease-out);
   flex-shrink: 0;
 }
 
-/* ADR-028 pt-2: fade only — the --text-muted swap under the fade compounded
-   two reductions on the same label (#1687). Inherits --text-primary. */
+/* ADR-028 pt-2: fade only — the --bds-text-muted swap under the fade compounded
+   two reductions on the same label (#1687). Inherits --bds-text-primary. */
 .bds-stepper__button--disabled {
   cursor: not-allowed;
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
 }
 
 /* ─── Value display ───────────────────────────────────── */
 
 .bds-stepper__value {
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
   text-align: center;
   user-select: none;
 }
 
 /* Fill-less value display — ADR-028 pt-2, same reason as the button above. */
 .bds-stepper__value--disabled {
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
 }
 }

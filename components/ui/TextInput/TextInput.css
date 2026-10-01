@@ -7,10 +7,10 @@
  * (search cancel-button, number spin-buttons). Do not rename it.
  *
  * Token reference:
- * - --background-input (field fill)          - --border-input (default border)
- * - --border-primary (hover border)          - --border-brand-primary (focus)
- * - --border-negative (error border)         - --text-primary / --text-muted
- * - --text-negative (error/helper-error text)
+ * - --bds-background-input (field fill)          - --bds-border-input (default border)
+ * - --bds-border-primary (hover border)          - --bds-border-brand-primary (focus)
+ * - --bds-border-negative (error border)         - --bds-text-primary / --bds-text-muted
+ * - --bds-text-negative (error/helper-error text)
  */
 
 /* ─── Wrapper ────────────────────────────────────────────────── */
@@ -18,8 +18,8 @@
 .bds-text-input {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
-  color: var(--text-primary);
+  gap: var(--bds-gap-md);
+  color: var(--bds-text-primary);
   width: auto;
 }
 
@@ -30,18 +30,18 @@
 /* ─── Label ──────────────────────────────────────────────────── */
 
 .bds-text-input__label {
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
   text-transform: capitalize;
 }
 
-.bds-text-input__label--sm { font-size: var(--label-sm); }
-.bds-text-input__label--md { font-size: var(--label-md); }
-.bds-text-input__label--lg { font-size: var(--label-lg); }
+.bds-text-input__label--sm { font-size: var(--bds-label-sm); }
+.bds-text-input__label--md { font-size: var(--bds-label-md); }
+.bds-text-input__label--lg { font-size: var(--bds-label-lg); }
 
 .bds-text-input__label--tone-negative {
-  color: var(--text-negative);
+  color: var(--bds-text-negative);
 }
 
 /* ─── Field region (positions icons relative to the input) ───── */
@@ -57,57 +57,57 @@
 .bds-text-input-field {
   /* ─── Component-scoped override surface ── */
   --text-input-focus-ring-width: 1px; /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-  --text-input-bg: var(--background-input); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --text-input-bg: var(--bds-background-input); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   width: 100%;
-  padding: 0 var(--padding-xs);
-  font-family: var(--font-family-body);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
-  background-color: var(--text-input-bg); /* bds-lint-ignore — component-scoped CSS variable, not a design token; defaults to --background-input */
+  padding: 0 var(--bds-padding-xs);
+  font-family: var(--bds-font-family-body);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
+  background-color: var(--text-input-bg); /* bds-lint-ignore — component-scoped CSS variable, not a design token; defaults to --bds-background-input */
   /* Theme native date/time/number controls (calendar popup, spin buttons) to
      the brand instead of the browser default blue. Mirrors Checkbox.css. */
-  accent-color: var(--background-brand-primary);
-  border: var(--border-width-md) solid var(--border-input);
-  border-radius: var(--border-radius-md);
+  accent-color: var(--bds-background-brand-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-input);
+  border-radius: var(--bds-border-radius-md);
   outline: none;
   transition: border-color 0.2s;
   box-sizing: border-box;
 }
 
 /* Size — heights match the Button scale (8px steps on the 4px grid) */
-.bds-text-input--sm .bds-text-input-field { font-size: var(--body-sm); height: 32px; }
-.bds-text-input--md .bds-text-input-field { font-size: var(--body-md); height: 40px; }
-.bds-text-input--lg .bds-text-input-field { font-size: var(--body-lg); height: 48px; }
+.bds-text-input--sm .bds-text-input-field { font-size: var(--bds-body-sm); height: 32px; }
+.bds-text-input--md .bds-text-input-field { font-size: var(--bds-body-md); height: 40px; }
+.bds-text-input--lg .bds-text-input-field { font-size: var(--bds-body-lg); height: 48px; }
 
 /* Icon clearance — pad the side that carries an icon */
-.bds-text-input-field--has-icon-before { padding-left: calc(var(--padding-xs) * 4); }
-.bds-text-input-field--has-icon-after  { padding-right: calc(var(--padding-xs) * 4); }
+.bds-text-input-field--has-icon-before { padding-left: calc(var(--bds-padding-xs) * 4); }
+.bds-text-input-field--has-icon-after  { padding-right: calc(var(--bds-padding-xs) * 4); }
 
 /* Borderless — for dark/inverse surfaces where the fill carries contrast */
 .bds-text-input-field--no-border { border: none; }
 
 .bds-text-input-field::placeholder {
-  color: var(--text-muted);
+  color: var(--bds-text-muted);
 }
 
 .bds-text-input-field:hover:not(:disabled) {
-  border-color: var(--border-primary);
+  border-color: var(--bds-border-primary);
 }
 
 .bds-text-input-field:focus {
-  border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  border-color: var(--bds-border-brand-primary);
+  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--bds-border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 .bds-text-input-field:focus-visible {
-  border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  border-color: var(--bds-border-brand-primary);
+  box-shadow: 0 0 0 var(--text-input-focus-ring-width) var(--bds-border-brand-primary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   outline: none;
 }
 
 .bds-text-input-field:disabled {
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
   cursor: not-allowed;
 }
 
@@ -117,7 +117,7 @@
 .bds-text-input-field--tone-negative:hover:not(:disabled),
 .bds-text-input-field--tone-negative:focus,
 .bds-text-input-field--tone-negative:focus-visible {
-  border-color: var(--border-negative);
+  border-color: var(--bds-border-negative);
 }
 
 /* ─── Icons ──────────────────────────────────────────────────── */
@@ -127,24 +127,24 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-muted);
+  color: var(--bds-text-muted);
 }
 
-.bds-text-input__icon--before { left: var(--padding-xs); }
-.bds-text-input__icon--after  { right: var(--padding-xs); }
+.bds-text-input__icon--before { left: var(--bds-padding-xs); }
+.bds-text-input__icon--after  { right: var(--bds-padding-xs); }
 
 /* ─── Helper / error text ────────────────────────────────────── */
 
 .bds-text-input__helper,
 .bds-text-input__error {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-muted);
 }
 
 .bds-text-input__error {
-  color: var(--text-negative);
+  color: var(--bds-text-negative);
 }
 
 }

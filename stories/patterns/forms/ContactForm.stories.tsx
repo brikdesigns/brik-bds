@@ -35,12 +35,12 @@ export const Default: Story = {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 'var(--gap-lg)',
+        gap: 'var(--bds-gap-lg)',
         width: 480,
-        padding: 'var(--padding-xl)',
-        background: 'var(--surface-primary)',
-        border: 'var(--border-width-sm) solid var(--border-secondary)',
-        borderRadius: 'var(--border-radius-lg)',
+        padding: 'var(--bds-padding-xl)',
+        background: 'var(--bds-surface-primary)',
+        border: 'var(--bds-border-width-sm) solid var(--bds-border-secondary)',
+        borderRadius: 'var(--bds-border-radius-lg)',
       }}
     >
       <TextInput label="Full name" placeholder="Jane Doe" fullWidth />
@@ -58,7 +58,7 @@ export const Default: Story = {
         rows={4}
         fullWidth
       />
-      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--gap-md)' }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 'var(--bds-gap-md)' }}>
         <Button type="submit" variant="primary">Send message</Button>
       </div>
     </form>

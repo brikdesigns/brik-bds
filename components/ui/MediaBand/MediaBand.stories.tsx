@@ -20,17 +20,17 @@ const BandContent = ({
     style={{
       display: 'flex',
       flexDirection: 'column',
-      gap: 'var(--gap-md)',
-      padding: `${block === 'tall' ? 'var(--space-2400)' : 'var(--space-1600)'} var(--space-800)`,
+      gap: 'var(--bds-gap-md)',
+      padding: `${block === 'tall' ? 'var(--bds-space-2400)' : 'var(--bds-space-1600)'} var(--bds-space-800)`,
       textAlign: 'center',
     }}
   >
     <h2
       style={{
         margin: 0,
-        fontFamily: 'var(--font-family-heading)',
-        fontSize: 'var(--heading-lg)',
-        color: 'var(--text-primary)',
+        fontFamily: 'var(--bds-font-family-heading)',
+        fontSize: 'var(--bds-heading-lg)',
+        color: 'var(--bds-text-primary)',
       }}
     >
       {label}
@@ -38,9 +38,9 @@ const BandContent = ({
     <p
       style={{
         margin: 0,
-        fontFamily: 'var(--font-family-body)',
-        fontSize: 'var(--body-md)',
-        color: 'var(--text-secondary)',
+        fontFamily: 'var(--bds-font-family-body)',
+        fontSize: 'var(--bds-body-md)',
+        color: 'var(--bds-text-secondary)',
       }}
     >
       Content sits at z-index 2, above the decorative layer.
@@ -58,8 +58,8 @@ const BleedingGraphic = () => (
     preserveAspectRatio="xMidYMid slice"
     style={{ position: 'absolute', inset: '-20%', width: '140%', height: '140%' }}
   >
-    <circle cx="80" cy="60" r="110" fill="var(--surface-brand-secondary)" />
-    <circle cx="320" cy="150" r="90" fill="var(--surface-secondary)" />
+    <circle cx="80" cy="60" r="110" fill="var(--bds-surface-brand-secondary)" />
+    <circle cx="320" cy="150" r="90" fill="var(--bds-surface-secondary)" />
   </svg>
 );
 
@@ -76,12 +76,12 @@ const FullWidth = ({ children }: { children: React.ReactNode }) => (
 const NeighbourBand = ({ label }: { label: string }) => (
   <div
     style={{
-      background: 'var(--surface-primary)',
-      padding: 'var(--space-1200) var(--space-800)',
+      background: 'var(--bds-surface-primary)',
+      padding: 'var(--bds-space-1200) var(--bds-space-800)',
       textAlign: 'center',
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--label-md)',
-      color: 'var(--text-muted)',
+      fontFamily: 'var(--bds-font-family-label)',
+      fontSize: 'var(--bds-label-md)',
+      color: 'var(--bds-text-muted)',
     }}
   >
     {label}
@@ -158,7 +158,7 @@ export const SeamBetweenSections: Story = {
       <NeighbourBand label="Preceding section" />
       <MediaBand
         {...args}
-        style={{ '--bds-media-band-surface': 'var(--surface-secondary)' } as React.CSSProperties}
+        style={{ '--bds-media-band-surface': 'var(--bds-surface-secondary)' } as React.CSSProperties}
       />
       <NeighbourBand label="Following section" />
     </FullWidth>
@@ -183,8 +183,8 @@ export const GraphicFromToken: Story = {
             // Kept clear of the centered heading — a decorative layer must not
             // eat the contrast of the content sitting above it.
             '--bds-media-band-graphic':
-              'radial-gradient(circle at 12% 50%, var(--surface-brand-primary) 0%, transparent 45%)',
-            '--bds-media-band-surface': 'var(--surface-secondary)',
+              'radial-gradient(circle at 12% 50%, var(--bds-surface-brand-primary) 0%, transparent 45%)',
+            '--bds-media-band-surface': 'var(--bds-surface-secondary)',
           } as React.CSSProperties
         }
       />

@@ -16,7 +16,7 @@
  *   - Section-edge vignettes kept for "page-turn" continuity
  *
  * Surface colors are set by the brand theme layer (dist/tokens.css +
- * the client's theme CSS). Section-edge fades reference var(--page-primary)
+ * the client's theme CSS). Section-edge fades reference var(--bds-page-primary)
  * so they self-relativize with no hardcoded values here.
  *
  * Performance: aurora drift is a single animated @property gradient
@@ -47,9 +47,9 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(ellipse 70% 50% at var(--aurora-x) 20%, color-mix(in srgb, var(--background-accent-blue) 10%, transparent), transparent 60%),
-    radial-gradient(ellipse 60% 40% at calc(100% - var(--aurora-x)) 80%, color-mix(in srgb, var(--background-accent-yellow) 8%, transparent), transparent 60%),
-    radial-gradient(ellipse 40% 30% at 50% 100%, color-mix(in srgb, var(--background-accent-purple) 6%, transparent), transparent 70%);
+    radial-gradient(ellipse 70% 50% at var(--aurora-x) 20%, color-mix(in srgb, var(--bds-background-accent-blue) 10%, transparent), transparent 60%),
+    radial-gradient(ellipse 60% 40% at calc(100% - var(--aurora-x)) 80%, color-mix(in srgb, var(--bds-background-accent-yellow) 8%, transparent), transparent 60%),
+    radial-gradient(ellipse 40% 30% at 50% 100%, color-mix(in srgb, var(--bds-background-accent-purple) 6%, transparent), transparent 70%);
   animation: cinematic-aurora-drift 42s ease-in-out infinite alternate;
 }
 body > * { position: relative; z-index: 1; }
@@ -82,8 +82,8 @@ section[data-ambient="spotlight"]::before {
   background: conic-gradient(
     from 180deg at 50% 0%,
     transparent 0deg,
-    color-mix(in srgb, var(--background-accent-blue) 10%, transparent) 90deg,
-    color-mix(in srgb, var(--background-accent-yellow) 8%, transparent) 180deg,
+    color-mix(in srgb, var(--bds-background-accent-blue) 10%, transparent) 90deg,
+    color-mix(in srgb, var(--bds-background-accent-yellow) 8%, transparent) 180deg,
     transparent 270deg
   );
   mask-image: radial-gradient(ellipse 70% 50% at 50% 0%, #000 30%, transparent 75%);
@@ -109,7 +109,7 @@ section[data-ambient="center"]::before {
   filter: blur(120px);
   pointer-events: none;
   z-index: 0;
-  background: radial-gradient(circle, color-mix(in srgb, var(--background-accent-blue) 10%, transparent) 0%, transparent 70%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--bds-background-accent-blue) 10%, transparent) 0%, transparent 70%);
 }
 
 /* Section-edge vignettes — fade into the theme-resolved page color. */
@@ -124,11 +124,11 @@ section[data-edge]::after {
 }
 section[data-edge]::before {
   top: 0;
-  background: linear-gradient(to bottom, var(--page-primary), transparent);
+  background: linear-gradient(to bottom, var(--bds-page-primary), transparent);
 }
 section[data-edge]::after {
   bottom: 0;
-  background: linear-gradient(to top, var(--page-primary), transparent);
+  background: linear-gradient(to top, var(--bds-page-primary), transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {

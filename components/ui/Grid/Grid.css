@@ -30,12 +30,12 @@
 
 /* ─── Gap (BDS --gap-* tokens) ───────────────────────────────── */
 
-.bds-grid--gap-xs  { gap: var(--gap-xs); }
-.bds-grid--gap-sm  { gap: var(--gap-sm); }
-.bds-grid--gap-md  { gap: var(--gap-md); }
-.bds-grid--gap-lg  { gap: var(--gap-lg); }
-.bds-grid--gap-xl  { gap: var(--gap-xl); }
-.bds-grid--gap-huge { gap: var(--gap-huge); }
+.bds-grid--gap-xs  { gap: var(--bds-gap-xs); }
+.bds-grid--gap-sm  { gap: var(--bds-gap-sm); }
+.bds-grid--gap-md  { gap: var(--bds-gap-md); }
+.bds-grid--gap-lg  { gap: var(--bds-gap-lg); }
+.bds-grid--gap-xl  { gap: var(--bds-gap-xl); }
+.bds-grid--gap-huge { gap: var(--bds-gap-huge); }
 
 /* ─── Responsive collapse for fixed columns ──────────────────── */
 /* Fixed column counts collapse predictably at narrow widths.

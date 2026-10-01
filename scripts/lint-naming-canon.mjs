@@ -122,6 +122,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { SLOT_REGISTRY } from './lint-token-purpose-slots.mjs';
+import { ID, canonicalPart } from './lib/bds-prefix.mjs';
 
 // Every closed vocabulary below is DATA in tokens/naming-grammar.json (#2669),
 // so the lint, the docs check and the hook read one list. The rationale for
@@ -311,8 +312,13 @@ const SLOTS_BY_LENGTH = [...SLOT_REGISTRY].sort((a, b) => b.slot.length - a.slot
  * explicitly disappeared from a passing run mid-build.
  */
 function slotFor(name) {
-  const bare = name.replace(/^--/, '');
+  const bare = bodyOf(name);
   return SLOTS_BY_LENGTH.find((e) => bare === e.slot || bare.startsWith(`${e.slot}-`)) ?? null;
+}
+
+/** `--bds-gap-md` -> `gap-md`. The grammar's slots and steps are keyed by the body (ADR-043). */
+function bodyOf(name) {
+  return name.replace(/^--/, '').replace(new RegExp(`^${ID}-`), '');
 }
 
 function isColorToken(name) {
@@ -341,7 +347,8 @@ function lineOf(src, index) {
  * on the name.
  */
 function collectDeclarations(cssPath) {
-  const raw = fs.readFileSync(cssPath, 'utf8');
+  // The canonical registry only — the compat bridge re-declares retired bare names.
+  const raw = canonicalPart(fs.readFileSync(cssPath, 'utf8'));
   const clean = blankComments(raw);
   const byName = new Map();
   let declarations = 0;
@@ -430,16 +437,19 @@ function stepVocabulary(tail) {
  * of those properties, and neither family ships a single numeric or t-shirt
  * step, so neither takes steps and § 3 does not reach them.
  */
+/** Body-keyed family -> the System-ID-led spelling a reader sees. */
+const shown = (family) => `--${ID}-${family.slice(2)}`;
+
 function stepFindings(byName) {
   const families = new Map();
   for (const name of byName.keys()) {
-    const segments = name.replace(/^--/, '').split('-');
+    const segments = bodyOf(name).split('-');
     if (segments.length < 2) continue;
     // § 3 governs the two non-colour formulas only — a colour token's tail is a
     // role, not a step. See isColorToken.
     if (isColorToken(name)) continue;
     const tail = segments[segments.length - 1];
-    const family = `--${segments.slice(0, -1).join('-')}-`;
+    const family = `--${segments.slice(0, -1).join('-')}-`; // body-keyed, as the grammar is
     if (!families.has(family)) families.set(family, []);
     families.get(family).push({ name, tail, vocab: stepVocabulary(tail) });
   }
@@ -450,15 +460,15 @@ function stepFindings(byName) {
     if (!takesSteps) continue;
     for (const m of members) {
       if (m.vocab !== 'word') continue;
-      if (NAMED_EXCEPTIONS.has(m.name)) continue;
+      if (NAMED_EXCEPTIONS.has(`--${bodyOf(m.name)}`)) continue;
       const retired = RETIRED_STEPS[m.tail];
       const to = retired ? (retired[family] ?? retired.default) : null;
       findings.push({
         rule: 1,
         id: m.name,
         detail: retired
-          ? `step \`${m.tail}\` is retired for ${family}* → \`${to}\``
-          : `step \`${m.tail}\` is outside ${family}*'s vocabulary (numeric | t-shirt | none)`,
+          ? `step \`${m.tail}\` is retired for ${shown(family)}* → \`${to}\``
+          : `step \`${m.tail}\` is outside ${shown(family)}*'s vocabulary (numeric | t-shirt | none)`,
       });
     }
   }
@@ -968,26 +978,26 @@ function collectReferences(dirs) {
  * `--background-negative`, never `--background-error`, which does not exist.
  */
 const REFERENCE_TARGETS = {
-  '--background-status-error': '--background-negative',
-  '--background-status-error-subtle': '--surface-negative',
-  '--background-status-success': '--background-positive',
-  '--background-status-success-subtle': '--surface-positive',
-  '--background-status-warning': '--background-warning',
-  '--background-status-warning-subtle': '--surface-warning',
-  '--text-status-error': '--text-negative',
-  '--text-status-success': '--text-positive',
-  '--text-status-warning': '--text-warning',
-  '--surface-status-error': '--surface-negative',
-  '--surface-status-success': '--surface-positive',
-  '--surface-status-warning': '--surface-warning',
-  '--background-status-info': '--background-info',
-  '--background-status-info-subtle': '--surface-info',
-  '--text-status-info': '--text-info',
-  '--surface-status-info': '--surface-info',
-  '--background-status-neutral': '--surface-neutral',
-  '--text-status-neutral': '--text-neutral',
-  '--background-status-purple': '--background-accent-purple',
-  '--background-status-orange': '--background-accent-orange',
+  '--background-status-error': '--bds-background-negative',
+  '--background-status-error-subtle': '--bds-surface-negative',
+  '--background-status-success': '--bds-background-positive',
+  '--background-status-success-subtle': '--bds-surface-positive',
+  '--background-status-warning': '--bds-background-warning',
+  '--background-status-warning-subtle': '--bds-surface-warning',
+  '--text-status-error': '--bds-text-negative',
+  '--text-status-success': '--bds-text-positive',
+  '--text-status-warning': '--bds-text-warning',
+  '--surface-status-error': '--bds-surface-negative',
+  '--surface-status-success': '--bds-surface-positive',
+  '--surface-status-warning': '--bds-surface-warning',
+  '--background-status-info': '--bds-background-info',
+  '--background-status-info-subtle': '--bds-surface-info',
+  '--text-status-info': '--bds-text-info',
+  '--surface-status-info': '--bds-surface-info',
+  '--background-status-neutral': '--bds-surface-neutral',
+  '--text-status-neutral': '--bds-text-neutral',
+  '--background-status-purple': '--bds-background-accent-purple',
+  '--background-status-orange': '--bds-background-accent-orange',
 };
 
 /**
@@ -1036,8 +1046,9 @@ const RETIRED_WORD_STEPS = new Set(COLOR_GRAMMAR.retiredWordSteps);
 function colorBodyFindings(byName) {
   const findings = [];
   for (const name of byName.keys()) {
-    if (!name.startsWith('--color-')) continue;
-    const parts = name.slice('--color-'.length).split('-');
+    const body = bodyOf(name); // `--bds-color-*` and a bare `--color-*` both parse (#2670)
+    if (!body.startsWith('color-')) continue;
+    const parts = body.slice('color-'.length).split('-');
     const step = parts[parts.length - 1];
     const family = parts.slice(0, -1).join('-');
     if (parts.length === 2 && COLOR_FAMILIES.has(family) && COLOR_STEPS.has(step)) continue;

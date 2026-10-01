@@ -38,12 +38,12 @@
  * to Semantic tokens (ADR-014). Set them on the container itself:
  *
  *   .bds-cta__container {
- *     --bds-blueprint-section-content-width: var(--content-width-lg);
- *     --bds-blueprint-section-padding-inline: var(--padding-xl);
+ *     --bds-blueprint-section-content-width: var(--bds-content-width-lg);
+ *     --bds-blueprint-section-padding-inline: var(--bds-padding-xl);
  *   }
  *
  * Vertical rhythm is deliberately NOT hooked: it reads the layout-tier token
- * `--section-padding-block` (ADR-042) as a direct declaration, not a Tier-4
+ * `--bds-section-padding-block` (ADR-042) as a direct declaration, not a Tier-4
  * fallback target (the same reasoning already documented in `react/Hero.css`,
  * written when this was still ADR-014's forbidden raw `clamp()` literal). A
  * family that genuinely needs different rhythm re-declares `padding-block`
@@ -56,18 +56,18 @@
 @layer bds-components {
   /* Section vertical rhythm. Device-fluid layout tier (ADR-042), superseding
      the hand-written 7vw clamp (#1439 decision 1, ADR-021) with the Figma-
-     sourced --section-padding-block (64 → 80 → 104px at 320/768/1440). */
+     sourced --bds-section-padding-block (64 → 80 → 104px at 320/768/1440). */
   .bds-blueprint-section {
-    padding-block: var(--section-padding-block);
+    padding-block: var(--bds-section-padding-block);
   }
 
   /* Centred content band. Both hooks fall back to Semantic tokens. The
      inline inset falls back to the canonical page inset (ADR-025) so BDS
      sections and consumer containers resolve to the same edge inset. */
   .bds-blueprint-section__container {
-    max-width: var(--bds-blueprint-section-content-width, var(--content-width-xl));
+    max-width: var(--bds-blueprint-section-content-width, var(--bds-content-width-xl));
     margin-inline: auto;
-    padding-inline: var(--bds-blueprint-section-padding-inline, var(--page-inset));
+    padding-inline: var(--bds-blueprint-section-padding-inline, var(--bds-page-inset));
   }
 
   /* Visually-hidden utility — collapses the `__sr-heading` blocks that were
@@ -95,16 +95,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--padding-xl);
-    background: var(--surface-secondary);
-    border: 2px dashed var(--border-secondary);
+    padding: var(--bds-padding-xl);
+    background: var(--bds-surface-secondary);
+    border: 2px dashed var(--bds-border-secondary);
   }
 
   .bds-blueprint-section__missing-label {
     margin: 0;
-    font-family: var(--font-family-body);
-    font-size: var(--body-xl);
-    color: var(--text-secondary);
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-xl);
+    color: var(--bds-text-secondary);
     text-align: center;
   }
 }

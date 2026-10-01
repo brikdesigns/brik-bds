@@ -19,34 +19,34 @@
    Apply once on mount — element animates into view                           */
 
 .bds-enter-fade {
-  animation: bds-fade-in var(--duration-normal) var(--ease-out) both;
+  animation: bds-fade-in var(--bds-duration-normal) var(--bds-ease-out) both;
 }
 
 .bds-enter-slide-up {
-  animation: bds-slide-up var(--duration-normal) var(--ease-out) both;
+  animation: bds-slide-up var(--bds-duration-normal) var(--bds-ease-out) both;
 }
 
 .bds-enter-slide-down {
-  animation: bds-slide-down var(--duration-normal) var(--ease-out) both;
+  animation: bds-slide-down var(--bds-duration-normal) var(--bds-ease-out) both;
 }
 
 .bds-enter-pop {
-  animation: bds-pop var(--duration-slow) var(--ease-spring) both;
+  animation: bds-pop var(--bds-duration-slow) var(--bds-ease-spring) both;
 }
 
 /* ─── Attention animations ──────────────────────────────────────────────────
    Draw the eye to a changed state — persistent or one-shot                   */
 
 .bds-anim-pulse {
-  animation: bds-pulse 1.4s var(--ease-in-out) infinite;
+  animation: bds-pulse 1.4s var(--bds-ease-in-out) infinite;
 }
 
 .bds-anim-shake {
-  animation: bds-shake 0.5s var(--ease-out);
+  animation: bds-shake 0.5s var(--bds-ease-out);
 }
 
 .bds-anim-bounce {
-  animation: bds-pop var(--duration-slow) var(--ease-spring);
+  animation: bds-pop var(--bds-duration-slow) var(--bds-ease-spring);
 }
 
 /* ─── State animations ──────────────────────────────────────────────────────

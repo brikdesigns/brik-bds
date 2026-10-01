@@ -28,8 +28,8 @@
  *   are an ADDITIVE, opt-in tier for viewport-responsive marketing display
  *   type (heroes, editorial headers). Consume them where the static scale was
  *   previously hand-clamped inline, e.g.
- *     font-size: var(--display-fluid-lg);
- *   instead of the ad-hoc `clamp(var(--heading-xl), 4vw, var(--display-sm))`
+ *     font-size: var(--bds-display-fluid-lg);
+ *   instead of the ad-hoc `clamp(var(--bds-heading-xl), 4vw, var(--bds-display-sm))`
  *   pattern blueprints compose today.
  *
  * Resolved range (max = static --display-* via --font-size-*):
@@ -48,8 +48,8 @@
   /* Max bound is the Primitive --font-size-* that the static --display-* role
      resolves to (ADR-035): a non-color Semantic must not alias another Semantic
      for its scale. Kept in sync with figma-tokens.css --display-{sm,md,lg,xl}. */
-  --display-fluid-sm: clamp(var(--font-size-900), 6vw, var(--font-size-1400));
-  --display-fluid-md: clamp(var(--font-size-1000), 6.5vw, var(--font-size-1500));
-  --display-fluid-lg: clamp(var(--font-size-1100), 7vw, var(--font-size-1600));
-  --display-fluid-xl: clamp(var(--font-size-1200), 8vw, var(--font-size-1800));
+  --bds-display-fluid-sm: clamp(var(--bds-font-size-900), 6vw, var(--bds-font-size-1400));
+  --bds-display-fluid-md: clamp(var(--bds-font-size-1000), 6.5vw, var(--bds-font-size-1500));
+  --bds-display-fluid-lg: clamp(var(--bds-font-size-1100), 7vw, var(--bds-font-size-1600));
+  --bds-display-fluid-xl: clamp(var(--bds-font-size-1200), 8vw, var(--bds-font-size-1800));
 }

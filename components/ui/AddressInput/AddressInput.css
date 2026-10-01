@@ -6,16 +6,16 @@
  * Border, radius, and background tokens match TextInput / SearchInput.
  *
  * Token reference:
- * - --background-input (field fill)         - --border-input (default border)
- * - --border-primary (hover/dropdown border) - --border-brand-primary (focus)
- * - --surface-primary (dropdown panel)       - --text-primary / --text-muted
+ * - --bds-background-input (field fill)         - --bds-border-input (default border)
+ * - --bds-border-primary (hover/dropdown border) - --bds-border-brand-primary (focus)
+ * - --bds-surface-primary (dropdown panel)       - --bds-text-primary / --bds-text-muted
  */
 
 /* Wrapper — vertical stack: label above field */
 .bds-address-input {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   width: auto;
 }
 
@@ -25,19 +25,19 @@
 
 /* Label */
 .bds-address-input__label {
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
   text-transform: capitalize;
 }
 
 .bds-address-input--sm .bds-address-input__label {
-  font-size: var(--label-sm);
+  font-size: var(--bds-label-sm);
 }
 
 .bds-address-input--md .bds-address-input__label {
-  font-size: var(--label-md);
+  font-size: var(--bds-label-md);
 }
 
 /* Field region — positions icon + dropdown relative to the input */
@@ -52,13 +52,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-muted);
+  color: var(--bds-text-muted);
 }
 
 /* Leading map-pin icon, inset inside the field */
 .bds-address-input__field > .bds-address-input__icon {
   position: absolute;
-  left: var(--padding-sm);
+  left: var(--bds-padding-sm);
   pointer-events: none;
   z-index: 1;
 }
@@ -66,13 +66,13 @@
 /* Input — base appearance (size-specific metrics below) */
 .bds-address-input__input {
   width: 100%;
-  font-family: var(--font-family-body);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
-  background-color: var(--background-input);
-  border: var(--border-width-md) solid var(--border-input);
-  border-radius: var(--border-radius-md);
+  font-family: var(--bds-font-family-body);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
+  background-color: var(--bds-background-input);
+  border: var(--bds-border-width-md) solid var(--bds-border-input);
+  border-radius: var(--bds-border-radius-md);
   outline: none;
   transition: border-color 0.2s;
   box-sizing: border-box;
@@ -81,41 +81,41 @@
 /* Size — heights match the Button scale (8px steps on the 4px grid).
    Left padding clears the leading icon (icon inset + 24px glyph slot). */
 .bds-address-input--md .bds-address-input__input {
-  font-size: var(--body-md);
-  height: var(--size-1000);
-  padding-right: var(--padding-sm);
-  padding-left: calc(var(--padding-sm) + 24px);
+  font-size: var(--bds-body-md);
+  height: var(--bds-size-1000);
+  padding-right: var(--bds-padding-sm);
+  padding-left: calc(var(--bds-padding-sm) + 24px);
 }
 
 .bds-address-input--sm .bds-address-input__input {
-  font-size: var(--body-sm);
-  height: var(--size-800);
-  padding-right: var(--padding-xs);
-  padding-left: calc(var(--padding-xs) + 24px);
+  font-size: var(--bds-body-sm);
+  height: var(--bds-size-800);
+  padding-right: var(--bds-padding-xs);
+  padding-left: calc(var(--bds-padding-xs) + 24px);
 }
 
 /* Interactive states */
 .bds-address-input__input::placeholder {
-  color: var(--text-muted);
+  color: var(--bds-text-muted);
 }
 
 .bds-address-input__input:hover:not(:disabled) {
-  border-color: var(--border-primary);
+  border-color: var(--bds-border-primary);
 }
 
 .bds-address-input__input:focus {
-  border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 1px var(--border-brand-primary);
+  border-color: var(--bds-border-brand-primary);
+  box-shadow: 0 0 0 1px var(--bds-border-brand-primary);
 }
 
 .bds-address-input__input:focus-visible {
-  border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 1px var(--border-brand-primary);
+  border-color: var(--bds-border-brand-primary);
+  box-shadow: 0 0 0 1px var(--bds-border-brand-primary);
   outline: none;
 }
 
 .bds-address-input__input:disabled {
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
   cursor: not-allowed;
 }
 
@@ -126,15 +126,15 @@
   left: 0;
   right: 0;
   z-index: 100;
-  margin-top: var(--gap-sm);
-  background-color: var(--surface-primary);
-  border-radius: var(--border-radius-lg);
-  border: var(--border-width-lg) solid var(--border-primary);
-  padding: var(--padding-sm);
-  box-shadow: var(--shadow-lg);
+  margin-top: var(--bds-gap-sm);
+  background-color: var(--bds-surface-primary);
+  border-radius: var(--bds-border-radius-lg);
+  border: var(--bds-border-width-lg) solid var(--bds-border-primary);
+  padding: var(--bds-padding-sm);
+  box-shadow: var(--bds-shadow-lg);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   --bds-address-input-suggestions-max-height: 240px; /* component-local dimension; no shared registry rung (#2133) */
   max-height: var(--bds-address-input-suggestions-max-height);
   overflow-y: auto;
@@ -145,30 +145,30 @@
 .bds-address-input__option {
   display: flex;
   align-items: flex-start;
-  gap: var(--gap-md);
-  padding: var(--padding-xs);
+  gap: var(--bds-gap-md);
+  padding: var(--bds-padding-xs);
   background: none;
   border: none;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--bds-border-radius-sm);
   cursor: pointer;
   width: 100%;
   text-align: left;
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
   box-sizing: border-box;
   min-width: 0;
 }
 
 .bds-address-input__option:hover {
-  background-color: var(--surface-secondary);
+  background-color: var(--bds-surface-secondary);
 }
 
 /* Suggestion-row leading icon */
 .bds-address-input__option > .bds-address-input__icon {
-  width: var(--size-500);
-  height: var(--size-600);
+  width: var(--bds-size-500);
+  height: var(--bds-size-600);
   flex-shrink: 0;
 }
 
@@ -180,7 +180,7 @@
 }
 
 .bds-address-input__description {
-  font-size: var(--body-sm);
-  color: var(--text-muted);
+  font-size: var(--bds-body-sm);
+  color: var(--bds-text-muted);
 }
 }

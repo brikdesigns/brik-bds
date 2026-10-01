@@ -17,7 +17,7 @@
 
 .bds-activity-timeline__event {
   display: flex;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
 }
 
 /* ─── Rail (dot + line) ──────────────────────────────────────── */
@@ -34,8 +34,8 @@
 .bds-activity-timeline__dot {
   width: 28px; /* bds-lint-ignore — fixed dot size */
   height: 28px; /* bds-lint-ignore — fixed 28px timeline marker size, not a spacing-grid token */
-  border-radius: var(--border-radius-pill);
-  background-color: var(--surface-secondary);
+  border-radius: var(--bds-border-radius-pill);
+  background-color: var(--bds-surface-secondary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,7 +44,7 @@
 
 /* Origin dot — brand colored */
 .bds-activity-timeline__dot--origin {
-  background-color: var(--background-brand-primary);
+  background-color: var(--bds-background-brand-primary);
 }
 
 /* Icon inside dot */
@@ -52,13 +52,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: var(--body-sm);
-  color: var(--text-secondary);
+  font-size: var(--bds-body-sm);
+  color: var(--bds-text-secondary);
   line-height: 1;
 }
 
 .bds-activity-timeline__dot--origin .bds-activity-timeline__icon {
-  color: var(--text-on-color-dark);
+  color: var(--bds-text-on-color-dark);
 }
 
 /* Connector line */
@@ -66,7 +66,7 @@
   width: 2px; /* bds-lint-ignore — hairline connector */
   flex: 1;
   min-height: 20px; /* bds-lint-ignore — minimum connector height */
-  background-color: var(--border-muted); /* bds-lint-ignore token-family — intentional alias: hairline connector (border semantics, fill mechanics); see docs/TOKEN-PR-CHECKLIST.md */
+  background-color: var(--bds-border-muted); /* bds-lint-ignore token-family — intentional alias: hairline connector (border semantics, fill mechanics); see docs/TOKEN-PR-CHECKLIST.md */
 }
 
 /* ─── Content ────────────────────────────────────────────────── */
@@ -74,8 +74,8 @@
 .bds-activity-timeline__content {
   /* reviewed #2119: layout wrapper — holds label/detail/timestamp, each of
      which carries its own type tokens; no direct text child here */
-  padding-top: var(--padding-tiny);
-  padding-bottom: var(--padding-lg);
+  padding-top: var(--bds-padding-tiny);
+  padding-bottom: var(--bds-padding-lg);
 }
 
 .bds-activity-timeline__content--last {
@@ -84,26 +84,26 @@
 
 /* Label — primary event text */
 .bds-activity-timeline__label {
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  color: var(--bds-text-primary);
+  line-height: var(--bds-font-line-height-tight);
 }
 
 /* Detail — secondary info */
 .bds-activity-timeline__detail {
-  font-family: var(--font-family-body);
-  font-size: var(--body-xs);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-xs);
+  color: var(--bds-text-secondary);
   margin-top: 2px; /* bds-lint-ignore — tight detail spacing */
 }
 
 /* Timestamp */
 .bds-activity-timeline__timestamp {
-  font-family: var(--font-family-body);
-  font-size: var(--body-xs);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-xs);
+  color: var(--bds-text-muted);
   margin-top: 2px; /* bds-lint-ignore — tight timestamp spacing */
 }
 

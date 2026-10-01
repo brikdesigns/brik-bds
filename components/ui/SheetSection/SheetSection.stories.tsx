@@ -11,7 +11,7 @@ const meta: Meta<typeof SheetSection> = {
     titleAs: {
       control: 'select',
       options: ['h2', 'h3', 'h4'],
-      description: 'HTML element for the title. Defaults to `h3` to keep the Sheet’s own `<h2>` title as the outline root. Also drives the size ramp — `h2`/`h3`/`h4` → `--heading-md`/`--heading-sm`/`--heading-tiny`.',
+      description: 'HTML element for the title. Defaults to `h3` to keep the Sheet’s own `<h2>` title as the outline root. Also drives the size ramp — `h2`/`h3`/`h4` → `--bds-heading-md`/`--bds-heading-sm`/`--bds-heading-tiny`.',
     },
     description: { control: 'text', description: 'Optional lead paragraph rendered under the title.' },
     spacing: { control: 'select', options: ['md', 'lg'], description: 'Vertical rhythm between this section and the next.' },
@@ -25,14 +25,14 @@ type Story = StoryObj<typeof SheetSection>;
 /* ─── Story helpers ──────────────────────────────────────────── */
 
 const bodyText: React.CSSProperties = {
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-md)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
-  color: 'var(--text-primary)',
+  fontFamily: 'var(--bds-font-family-body)',
+  fontSize: 'var(--bds-body-md)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
+  color: 'var(--bds-text-primary)',
   margin: 0,
 };
 
 const Frame = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ width: '480px', padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+  <div style={{ width: '480px', padding: 'var(--bds-padding-lg)', background: 'var(--bds-surface-primary)' }}>
     {children}
   </div>
 );

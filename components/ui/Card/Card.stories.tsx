@@ -28,7 +28,7 @@ const meta: Meta<typeof Card> = {
       control: 'select',
       options: ['outlined', 'brand', 'elevated', 'raised', 'borderless'],
       description:
-        'Visual variant (Default shape only). `outlined` = secondary border; `brand` = primary-color border; `elevated` = surface fill, no border, no shadow; `raised` = surface fill, no border, `--box-shadow-md` drop shadow; `borderless` = transparent, no border, no shadow (for cards on a colored surface).',
+        'Visual variant (Default shape only). `outlined` = secondary border; `brand` = primary-color border; `elevated` = surface fill, no border, no shadow; `raised` = surface fill, no border, `--bds-box-shadow-md` drop shadow; `borderless` = transparent, no border, no shadow (for cards on a colored surface).',
     },
     padding: {
       control: 'select',
@@ -291,7 +291,7 @@ export const Stack: Story = {
         raised: 'raised',
       },
       description:
-        'Surface treatment for a cell on a colored (service-tinted) grid. `borderless` = transparent, no border/shadow; `elevated` = fill, no border; `raised` = fill, no border, `--box-shadow-md` shadow. Default = outlined white fill.',
+        'Surface treatment for a cell on a colored (service-tinted) grid. `borderless` = transparent, no border/shadow; `elevated` = fill, no border; `raised` = fill, no border, `--bds-box-shadow-md` shadow. Default = outlined white fill.',
     },
     tint: {
       control: 'select',
@@ -310,13 +310,13 @@ export const Stack: Story = {
       control: 'inline-radio',
       options: ['flush', 'inset'],
       description:
-        'How the `media` slot relates to the card edge. `flush` (default) bleeds to the edge and pads only the body; `inset` frames media + body together in a `--padding-huge` inset.',
+        'How the `media` slot relates to the card edge. `flush` (default) bleeds to the edge and pads only the body; `inset` frames media + body together in a `--bds-padding-huge` inset.',
     },
     insetPadding: {
       control: 'inline-radio',
       options: ['huge', 'lg'],
       description:
-        'Inset padding scale when `mediaTreatment="inset"`. `huge` (default) = `--padding-huge` (48px) + `--gap-xl`; `lg` = `--padding-lg` (24px) + `--gap-lg` for the tighter image-top card. Ignored for `flush`.',
+        'Inset padding scale when `mediaTreatment="inset"`. `huge` (default) = `--bds-padding-huge` (48px) + `--bds-gap-xl`; `lg` = `--bds-padding-lg` (24px) + `--bds-gap-lg` for the tighter image-top card. Ignored for `flush`.',
     },
     padding: { table: { disable: true } },
     interactive: { table: { disable: true } },
