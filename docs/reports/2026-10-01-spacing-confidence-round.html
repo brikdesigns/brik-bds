@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Spacing Confidence Round — 2026-10-01</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font: 15px/1.5 -apple-system, "Segoe UI", sans-serif; max-width: 62rem; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+  h3 { font-size: 1.02rem; margin-top: 1.25rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; font-size: 14px; }
+  th, td { border: 1px solid #ccc; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+  th { background: #f4f4f4; }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: .92em; background: #f3f3f3; padding: 0 .2em; }
+  pre { background: #f6f6f6; padding: .5rem .75rem; overflow-x: auto; font-size: 13px; }
+  .verdict { background: #fff4e5; border-left: 4px solid #e58a00; padding: .75rem 1rem; }
+  .decide { background: #eef4ff; border-left: 4px solid #2f6fdb; padding: .75rem 1rem; }
+  .ok { color: #1a7f37; } .bad { color: #b42318; font-weight: 600; } .unv { color: #8a5a00; font-style: italic; }
+  blockquote { border-left: 3px solid #bbb; margin: .5rem 0; padding: .25rem .75rem; color: #444; }
+  .wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<h1>Spacing Confidence Round: D2, D3, D4</h1>
+<p><strong>Date:</strong> 2026-10-01 · <strong>Repo:</strong> brik-bds @ <code>71cb9541</code> (main) · <strong>Figma:</strong> brikdesigns.com <code>yhLkzLUnG71UFTgURDvgnv</code>, read-only <code>get_metadata</code> · <strong>Issue:</strong> brik-bds#2643 (ADR) · <strong>Follows:</strong> <code>docs/reports/2026-09-30-foundations-modes-viewport-audit.html</code> (#2641, PR #2642) · <strong>Blocks:</strong> brikdesigns#1890</p>
+<p><strong>Status:</strong> PROPOSED — needs operator ratification. The recommendations are proposals. §6 lists the decisions, and they are the operator's to make.</p>
+
+<blockquote>OPERATOR SAID 2026-09-30 (Claude Code session): "Let's further investigate D2, D3 and D4 - we need 100% high confidence on these topics"</blockquote>
+
+<div class="verdict">
+<p><strong>Verdict.</strong> D2, D3 and D4 are now high confidence. One design input is still open: which Figma frame sets the desktop value.</p>
+<table>
+<tr><th>Decision</th><th>Recommendation</th><th>Confidence</th><th>Was (09-30)</th></tr>
+<tr><td>D2: what varies by device</td><td>No spacing <em>token</em> varies by device, except the layout tier. A component may <em>jump a step</em> at a breakpoint. It does that by picking a different fixed token, not by using a device-moded one. This is Carbon's published rule.</td><td class="ok">High</td><td>Medium-high</td></tr>
+<tr><td>D3: clamp vs mode</td><td>Figma device modes hold 3 endpoints. The build emits one piecewise <code>calc(clamp() + clamp())</code>, which hits all 3 exactly with no <code>@media</code>. The fluid value lives only on the BDS token, never a site copy.</td><td class="ok">High</td><td>Medium-high</td></tr>
+<tr><td>D4: page margin</td><td>16 mobile / <strong>32</strong> tablet / desktop from Figma</td><td class="ok">High</td><td>16 / 24 (wrong)</td></tr>
+<tr><td>D4: grid gutter</td><td>No device mode. Keep it fixed.</td><td class="ok">High</td><td>Optional</td></tr>
+<tr><td>D4: section padding</td><td>Figma desktop × industry ratios (0.62 mobile, 0.80 tablet): <strong>64 / 80 / 104</strong></td><td class="ok">High on the ratios</td><td>Blocked on frames</td></tr>
+</table>
+<p><strong>Still open:</strong> the Figma desktop value. Two frames say 104 / 96. One says 88 / 64. The ratios and the mechanism hold either way.</p>
+</div>
+
+<h2>1. D2: component scale stays viewport-invariant</h2>
+<h3>Evidence for</h3>
+<table>
+<tr><th>Source</th><th>What it shows</th><th>Read how</th></tr>
+<tr><td>IBM Carbon spacing</td><td>"No, the tokens themselves do not change values based on the screen size. However, it is acceptable at page breakpoints to jump a step(s) on the spacing scale to fit spacing needs"</td><td>Fetched <code>carbondesignsystem.com/elements/spacing/overview/</code></td></tr>
+<tr><td>Adobe Spectrum</td><td>Its <code>desktop</code> / <code>mobile</code> sets compile to <code>.spectrum--medium</code> / <code>.spectrum--large</code> class selectors. That is a mode the page opts into, like BDS density. It is not a width switch. No <code>@media</code> is in the build config.</td><td><code>spectrum-css/tokens/style-dictionary.config.js:73-104</code>; <code>spectrum-design-data/packages/tokens/src/layout.json</code></td></tr>
+<tr><td>Shopify Polaris</td><td>18 fixed space steps. Named component aliases (<code>card-padding</code>, <code>table-cell-padding</code>) draw from the same fixed scale. Breakpoints size containers only.</td><td><code>polaris-tokens/src/themes/base/space.ts</code>, <code>breakpoints.ts</code></td></tr>
+<tr><td>BDS components</td><td>0 component-internal declarations vary spacing by viewport</td><td>Classifier over every <code>@media</code> spacing declaration</td></tr>
+<tr><td>brikdesigns</td><td>6 of 185 declarations vary a component's internal spacing by viewport</td><td>Same classifier, each case checked by hand</td></tr>
+<tr><td>7 non-empty <code>web/*</code> repos</td><td>19 of 4,932 declarations do the same. They cluster in nav, modal, CTA and list items. Webflow-exported CSS is excluded as generated.</td><td>Same classifier, extended to <code>.astro</code> / <code>.html</code> <code>&lt;style&gt;</code></td></tr>
+</table>
+
+<h3>Strongest counter-evidence: GOV.UK</h3>
+<p>GOV.UK does vary some spacing inside a component by viewport. I checked each case against source this session:</p>
+<ul>
+<li><code>components/button/_mixin.scss:218-229</code>: <code>.govuk-button__start-icon</code> uses <code>margin-left: govuk-spacing(1)</code>, then <code>govuk-spacing(2)</code> from desktop.</li>
+<li><code>components/accordion/_mixin.scss:58-59</code>: <code>govuk-responsive-padding(3, "top")</code> / <code>(8, "bottom")</code>.</li>
+<li><code>components/footer/_mixin.scss:15-16</code>: <code>govuk-responsive-padding(7, "top")</code> / <code>(5, "bottom")</code>.</li>
+</ul>
+<p><strong>Why this doesn't change D2.</strong> The button case is a step jump between two fixed tokens. That is exactly the case Carbon allows. The accordion and footer cases use GOV.UK's responsive scale, a mixin that picks a value per breakpoint. BDS can express the same thing, a component choosing a different fixed token at a breakpoint, without any token becoming device-moded. So the remaining question is not "do we allow it?" It is "where does the breakpoint come from?" The answer is the breakpoint collection, which the operator asked to keep.</p>
+<blockquote>OPERATOR SAID 2026-09-30 (Claude Code session): "we still think there's value in a breakpoint collection as these tokens can be referenced in our code vs a hard-coded valuel."</blockquote>
+<p><strong>Not verified:</strong> Apple HIG publishes size classes as prose only, with no numeric margin table (<code>developer.apple.com/tutorials/data/design/human-interface-guidelines/layout.json</code>, fetched). Material 3 has no code- or token-level source for margins per window class, and its prose pages wouldn't fetch. Neither one changes the verdict.</p>
+<p class="unv">Correction to the D2 scratch evidence: it cited <code>button/_mixin.scss:200-209</code>. On the current source the rule is at <code>:218-229</code>. The content matches.</p>
+
+<h2>2. D3: how the build emits three endpoints</h2>
+<table>
+<tr><th>Variant</th><th>Hits tablet?</th><th><code>@media</code>?</th><th>Measured</th><th>Verdict</th></tr>
+<tr><td>(i) One clamp, mobile → desktop</td><td class="bad">No: +14.7% on a 16/24/48 margin</td><td>No</td><td>Chromium, 320–1920</td><td>Reject</td></tr>
+<tr><td>(ii) Two clamps behind a build-time <code>@media</code> with a literal px value</td><td>Yes</td><td>Yes. A media query can't read <code>var()</code>.</td><td>Same as (iii) at every width</td><td>Fallback</td></tr>
+<tr><td>(iii) <code>calc(clamp(seg1) + clamp(0, delta, y2−y1))</code></td><td>Yes</td><td>No</td><td>Matches the arithmetic within 0.001px</td><td class="ok">Recommend</td></tr>
+</table>
+<p>(iii) stays one flat custom property, so it composes like <code>fluid-type.css</code> already does (<code>scripts/build-dist-tokens.js:89-91</code>). The hook is <code>scripts/generate-modes-css.mjs:345-347</code>, which today picks <code>emitElevation</code> or <code>emitCollection</code>. A third branch would emit the piecewise clamp.</p>
+<p><strong>Generated for the recommended values</strong> (endpoints at the breakpoint rungs 320 / 768 / 1440):</p>
+<pre>/* page margin 16 / 32 / 96 */
+calc(clamp(16px, 4.5714px + 3.5714vw, 32px) + clamp(0px, -73.1429px + 9.5238vw, 64px))
+/* page margin 16 / 32 / 64 */
+calc(clamp(16px, 4.5714px + 3.5714vw, 32px) + clamp(0px, -36.5714px + 4.7619vw, 32px))
+/* section padding 64 / 80 / 104 */
+calc(clamp(64px, 52.5714px + 3.5714vw, 80px) + clamp(0px, -27.4286px + 3.5714vw, 24px))
+/* section padding 56 / 72 / 88 */
+calc(clamp(56px, 44.5714px + 3.5714vw, 72px) + clamp(0px, -18.2857px + 2.381vw, 16px))</pre>
+<p>These evaluate to the exact endpoint at 320, 768 and 1440, and hold flat above 1440.</p>
+
+<h3>Rules the ADR must carry</h3>
+<table>
+<tr><th>Rule</th><th>Why</th></tr>
+<tr><td>The fluid value lives on the BDS layout token only. A site never re-declares its own clamp.</td><td>brikdesigns once had <code>--site-gutter: clamp(1rem, 5vw, 2rem)</code> (commit <code>dd518e12</code>, 2026-05-17). It misaligned the nav, but the cause was two tokens disagreeing, not clamp: "8px wider than BDS sections, which misaligned the nav logo from page content" (brikdesigns <code>src/app/globals.css:333-335</code>). One token, read by nav and sections alike, can't drift. Correct the "NOT a fluid clamp" comment at <code>tokens/gap-fills.css:329-330</code> to say so.</td></tr>
+<tr><td><code>vw</code> on full-bleed page tokens. <code>cqi</code> if the tier is ever used inside a narrower container.</td><td>Measured: at a 1440 viewport, a <code>vw</code> margin inside a 400px container stays at 48. A <code>cqi</code> margin drops to 16.3.</td></tr>
+<tr><td>Bounds in <code>rem</code></td><td>Measured: at a 32px root, rem bounds rise to 32 and px bounds stay at 27.52. WCAG 1.4.10 (reflow, 320 CSS px) governs spacing, and all variants floor at the mobile value. 1.4.4 covers text only (W3C Understanding docs, fetched).</td></tr>
+<tr><td>The breakpoint px is written into the output at build time</td><td>A media query can't read <code>var()</code>. Variant (iii) avoids media queries entirely.</td></tr>
+</table>
+<p>Tooling, fetched this session: Figma variables hold static numbers only, and modes switch by hand. The Figma Sites breakpoint feature swaps component variants, not variable values. <code>tokens-studio/sd-transforms</code> ships no clamp transform. <code>clamp()</code> has been Baseline since July 2020 (MDN). Utopia interpolates between 2 points only. So the generator has to be ours, which matches how <code>generate-modes-css.mjs</code> already works.</p>
+<p class="unv">Not verified: the Tokens Studio Graph Engine "CSS Accessible Clamp" node (seen only in a search snippet). It doesn't affect the choice.</p>
+
+<h2>3. D4: endpoint values</h2>
+<h3>Page inline margin: 16 / 32 / desktop from Figma</h3>
+<table>
+<tr><th>Source</th><th>390</th><th>768</th></tr>
+<tr><td>Carbon source: <code>packages/grid/scss/_config.scss</code> margin <code>md: 16px</code> + <code>_css-grid.scss</code> half-gutter 16px</td><td>16</td><td><strong>32</strong></td></tr>
+<tr><td>carbondesignsystem.com, measured</td><td>16</td><td>32</td></tr>
+<tr><td>Industry median, measured (brikdesigns excluded; n=10 at 390, n=9 at 768)</td><td>16, IQR 16–23.75</td><td><strong>32</strong>, IQR 30–34</td></tr>
+<tr><td>Primer / USWDS docs, read literally at 768</td><td>16</td><td>16</td></tr>
+</table>
+<p>At 768, 24 falls below the industry IQR, so the 09-30 report's 16 / 24 is withdrawn. 32 is the median, and Carbon's own source code produces it.</p>
+
+<h3>Grid gutter: fixed</h3>
+<p>Carbon uses a fixed 32px (<code>_config.scss</code> <code>$grid-gutter: 32px</code>), and Bootstrap a fixed 24px (fetched docs). Only USWDS varies its gutter. No device mode.</p>
+
+<h3>Section block padding: Figma desktop × industry ratio</h3>
+<p>No vendor publishes a section-padding value, so the industry evidence is a <em>ratio</em> measured on real sites. Two independent methods agree:</p>
+<table>
+<tr><th>Method</th><th>Sites</th><th>Mobile ÷ desktop</th><th>Tablet ÷ desktop</th></tr>
+<tr><td>Gap between sections (h2 top − previous content bottom), 390 / 768 / 1440</td><td>22 (brikdesigns and Carbon excluded)</td><td>0.62 (117 / 188.6)</td><td>0.80 (151 / 188.6)</td></tr>
+<tr><td>Computed <code>&lt;section&gt;</code> padding</td><td>6</td><td>0.67</td><td>0.80</td></tr>
+</table>
+<p>As a check, 2× each proposed padding sits near the measured gap: 128 vs 117, 160 vs 151, 208 vs 189.</p>
+<table>
+<tr><th>Figma desktop</th><th>Tablet (×0.77–0.80)</th><th>Mobile (×0.62)</th><th>Primitives</th></tr>
+<tr><td><strong>104</strong> (2 frames)</td><td>80</td><td>64</td><td><code>--space-1600</code> / <code>-1800</code> / <code>-2200</code> (<code>tokens/figma-tokens.css:218,220,224</code>)</td></tr>
+<tr><td>88 (1 frame)</td><td>72</td><td>56</td><td><code>--space-1400</code> / <code>-1700</code> / <code>-2000</code> (<code>:216,219,222</code>)</td></tr>
+</table>
+<p>A ladder of 104 / 48 / 32 (desktop / tablet / mobile) would put tablet at 0.46× desktop, against a measured 0.80. Every vendor row above rules that out.</p>
+
+<h3>The Figma desktop frames (measured with <code>get_metadata</code>)</h3>
+<table>
+<tr><th>Node</th><th>Frame</th><th>Vertical padding</th><th>Inline inset</th><th>Content width</th></tr>
+<tr><td><code>26225:5613</code></td><td>section-intro</td><td>104</td><td>96</td><td>1248</td></tr>
+<tr><td><code>26358:6946</code></td><td>section-stages</td><td>104</td><td>96</td><td>1248</td></tr>
+<tr><td><code>26251:8306</code></td><td>section-full-stack</td><td>88</td><td>64</td><td>1312</td></tr>
+</table>
+<p>All three frames are 1440 wide. There are no mobile or tablet frames, and the ratio method doesn't need them.</p>
+
+<h2>4. New conflict found: <code>--page-inset</code> already has density modes</h2>
+<p><code>tokens/gap-fills.css:514-516</code> gives <code>--page-inset</code> compact 16, comfortable 32 and spacious 48. If it also became the device-moded margin, one token would take both axes, which breaks the rule D1 proposes.</p>
+<p><strong>Recommend (high):</strong> the layout tier owns <code>--page-inset</code>, and its density ladder is removed. Today no consumer sets <code>data-mode-spacing</code> (09-30 report, §5), so removing the ladder changes no rendered page. The ADR records this.</p>
+
+<h2>5. Corrections to the 09-30 report</h2>
+<table>
+<tr><th>09-30 said</th><th>Now</th><th>Why</th></tr>
+<tr><td>§8: tablet page margin 24px</td><td>32px</td><td>24 was read from Carbon's Max and Primer's xlarge rows, which are desktop. At 768 the median is 32, and Carbon's source gives 32.</td></tr>
+<tr><td>§8 / §9 D4: section padding is blocked until design adds frames</td><td>Derived: Figma desktop × measured ratios</td><td>Two methods agree on the ratios. The desktop value already exists in Figma.</td></tr>
+<tr><td>§9 D2: "Every mature system we fetched does this"</td><td>GOV.UK is a partial exception (§1)</td><td>Its component mixins, read this session</td></tr>
+<tr><td>§9 D3: option (c), shape not specified</td><td>Variant (iii), piecewise clamp</td><td>Browser-measured (§2)</td></tr>
+</table>
+
+<h2>6. Operator decisions</h2>
+<div class="decide">
+<ol>
+<li><strong>Canonical Figma desktop frame.</strong> section-intro and section-stages give 104 vertical / 96 inline. section-full-stack gives 88 / 64.<br><strong>Recommend: 104 / 96</strong>, since 2 of 3 frames use it. The ladders become padding 64 / 80 / 104 and margin 16 / 32 / 96. Confidence: medium. This is a design call, and the evidence can't settle it.</li>
+<li><strong>Ratify D2 as worded in the verdict.</strong> Tokens stay invariant except the layout tier. A component that needs a different step at a breakpoint picks another fixed token, and the breakpoint comes from the breakpoint collection. Confidence: high.</li>
+<li><strong>Ratify D3:</strong> variant (iii), generated, on BDS tokens only. Confidence: high.</li>
+<li><strong>Ratify the <code>--page-inset</code> move</strong> (§4): it joins the layout tier and loses its density ladder. Confidence: high.</li>
+</ol>
+<p>After ratification, the order is: the ADR (#2643), then the BDS generator and tokens, then resume brikdesigns#1890.</p>
+</div>
+
+<h2>7. Method notes</h2>
+<ul>
+<li>Browser measurements used Playwright Chromium at deviceScaleFactor 1, 320–1920 CSS px. That setting doesn't emulate zoom, so zoom was modelled as a narrower CSS viewport.</li>
+<li>The site samples are marketing homepages. The gap method adds two bands' padding together with any media margin, so only its ratios are used, never its absolute values.</li>
+<li>Vendor quotes come from pages or source files fetched in this session. Anything else is marked as not verified.</li>
+</ul>
+
+</body>
+</html>
