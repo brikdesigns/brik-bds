@@ -56,6 +56,9 @@ const BARE_IGNORE_ONLY_DIRS = [
   path.join(__dirname, '..', '.storybook'),
 ];
 const BLUEPRINTS_DIR = path.join(__dirname, '..', 'content-system', 'blueprints');
+// Canonical gap/padding rung order (Figma's own ladder, not the retired numeric
+// aliases) — shared by spacing-mode-track (4c) and responsive-token-swap (13).
+const SPACING_RUNGS = ['tiny', 'xs', 'sm', 'md', 'lg', 'xl', 'huge'];
 
 // Repo-relative POSIX path, stable regardless of cwd or how the file was passed
 // (absolute from findFiles, or resolved from a relative --files arg).
@@ -900,6 +903,228 @@ function checkRetiredBpNamespace(line, lineNum, file) {
 }
 
 /**
+ * Deprecated gap/padding rung aliases — read from tokens/gap-fills.css's own
+ * "DEPRECATED numeric-rung aliases (#2594)" block rather than hand-listing
+ * `2xs`/`2xl`. ADR-033 §3's numeric rename was superseded by #2594 in the
+ * OPPOSITE direction (Figma's tiny/xs/sm/md/lg/xl/huge ladder is canonical;
+ * 2xs/2xl are the retired aliases) — hardcoding either set here would drift
+ * the next time Figma's ladder changes. Mirrors loadDeprecatedPrimitives()
+ * (Rule 12) for --color-*, keyed off the same DEPRECATED marker instead of a
+ * generated JSON's $extensions metadata.
+ *
+ * Returns an empty map if gap-fills.css is absent, so the linter still runs
+ * in a checkout that has not built tokens.
+ */
+let deprecatedGapPaddingCache = null;
+function loadDeprecatedGapPadding() {
+  if (deprecatedGapPaddingCache) return deprecatedGapPaddingCache;
+
+  const GAP_FILLS = path.join(__dirname, '..', 'tokens', 'gap-fills.css');
+  const map = new Map();
+  if (fs.existsSync(GAP_FILLS)) {
+    const content = fs.readFileSync(GAP_FILLS, 'utf8');
+    const regex = /^\s*(--(?:gap|padding)-[\w-]+)\s*:\s*var\((--(?:gap|padding)-[\w-]+)\)\s*;.*DEPRECATED/gm;
+    for (const m of content.matchAll(regex)) {
+      map.set(m[1], m[2]);
+    }
+  }
+  deprecatedGapPaddingCache = map;
+  return map;
+}
+
+/**
+ * Resolves a --gap-* or --padding-* token to its rung name on SPACING_RUNGS,
+ * following a deprecated alias (e.g. --gap-2xs) to its canonical rung
+ * (tiny) first. Returns null for anything else (a raw --space-* primitive,
+ * an unrecognized rung like the brikdesigns-only --gap-comfortable hack).
+ */
+function resolveSpacingRung(token, deprecatedMap) {
+  const canonical = deprecatedMap.get(token) || token;
+  const m = canonical.match(/^--(?:gap|padding)-([\w-]+)$/);
+  return m ? m[1] : null;
+}
+
+/**
+ * Rule 13: responsive token-family swap — brik-bds#2592
+ *
+ * A base declaration and its @media override for the same selector + property
+ * must draw from the same semantic family (gap vs padding vs a raw --space-*
+ * primitive are never mixed across the break) and must not invert direction:
+ * a `max-width` override (narrower viewports) stepping to a LARGER rung than
+ * the base, or a `min-width` override (wider viewports) stepping to a
+ * SMALLER one, is backwards — spacing should ease, not fight, the viewport.
+ * Either side using a deprecated rung (2xs/2xl today, loadDeprecatedGapPadding)
+ * is flagged too. `bds-lint-ignore` on the override's own line is the escape
+ * hatch, same as every other rule in this file.
+ *
+ * CSS custom properties cannot appear inside an `@media` condition (ADR-025
+ * §4 / brik-bds#2591), so detection reads literal min-width/max-width px from
+ * the condition text — never a --breakpoint-* name — and keys purely on the
+ * declared values inside each block.
+ *
+ * Operates on a whole file at once (unlike every other rule here, which is
+ * per-line): correlating a base declaration against its @media override needs
+ * to track selector/property state across non-adjacent lines. The brace
+ * tracker below is deliberately simple — flat `@media { selector { ... } }`
+ * nesting only, matching every .css file in components/ui and blueprints
+ * today; it does not need to handle selector-nested @media since this
+ * codebase's build pipeline doesn't emit that shape.
+ */
+function checkResponsiveTokenSwap(content, file) {
+  const violations = [];
+  const deprecatedMap = loadDeprecatedGapPadding();
+  const lines = content.split('\n');
+
+  const declRegex = /^\s*([\w-]+)\s*:\s*var\((--[\w-]+)\)\s*;?\s*/;
+  const stack = [];
+  // key `${selector}::${property}` -> { base: {token,line}|null, overrides: [{condition,token,line}] }
+  const tracks = new Map();
+  let selectorBuffer = '';
+  let inComment = false;
+
+  for (let i = 0; i < lines.length; i++) {
+    const rawLine = lines[i];
+    const lineNum = i + 1;
+    const trimmed = rawLine.trim();
+
+    if (inComment) {
+      if (trimmed.includes('*/')) inComment = false;
+      continue;
+    }
+    if (trimmed === '') continue;
+    if (trimmed.startsWith('/*')) {
+      if (!trimmed.includes('*/')) inComment = true;
+      continue;
+    }
+
+    if (/^\}/.test(trimmed)) {
+      stack.pop();
+      continue;
+    }
+
+    const atMediaMatch = trimmed.match(/^@media\s*\(([^)]+)\)\s*\{/);
+    if (atMediaMatch) {
+      stack.push({ type: 'media', condition: atMediaMatch[1].trim() });
+      selectorBuffer = '';
+      continue;
+    }
+    if (trimmed.startsWith('@') && trimmed.endsWith('{')) {
+      stack.push({ type: 'other' });
+      selectorBuffer = '';
+      continue;
+    }
+
+    if (trimmed.endsWith('{')) {
+      const selectorText = `${selectorBuffer} ${trimmed.slice(0, -1)}`.trim();
+      const selectors = selectorText.split(',').map(s => s.trim()).filter(Boolean);
+      stack.push({ type: 'selector', selectors });
+      selectorBuffer = '';
+      continue;
+    }
+
+    const decl = rawLine.match(declRegex);
+    if (decl && (decl[1] === 'gap' || decl[1].startsWith('padding'))) {
+      const selectorFrame = [...stack].reverse().find(f => f.type === 'selector');
+      if (selectorFrame) {
+        const mediaFrame = [...stack].reverse().find(f => f.type === 'media');
+        const property = decl[1];
+        const token = decl[2];
+        for (const selector of selectorFrame.selectors) {
+          const key = `${selector}::${property}`;
+          if (!tracks.has(key)) tracks.set(key, { base: null, overrides: [] });
+          const track = tracks.get(key);
+          if (mediaFrame) {
+            track.overrides.push({ condition: mediaFrame.condition, token, line: lineNum });
+          } else if (!track.base) {
+            track.base = { token, line: lineNum };
+          }
+        }
+      }
+      continue;
+    }
+
+    // Not a close-brace, open-brace, or recognized declaration — a fragment
+    // of a multi-line comma-separated selector list (e.g. Grid.css's
+    // `.bds-grid--cols-3,\n  .bds-grid--cols-4 {`).
+    selectorBuffer = `${selectorBuffer} ${trimmed}`.trim();
+  }
+
+  for (const [key, { base, overrides }] of tracks) {
+    if (!base || overrides.length === 0) continue;
+    const [selector, property] = key.split('::');
+    if (lines[base.line - 1].includes('bds-lint-ignore')) continue;
+
+    for (const override of overrides) {
+      if (lines[override.line - 1].includes('bds-lint-ignore')) continue;
+
+      const baseFamily = base.token.match(/^--(gap|padding)-/);
+      const overrideFamily = override.token.match(/^--(gap|padding)-/);
+      if (!baseFamily || !overrideFamily || baseFamily[1] !== overrideFamily[1]) {
+        violations.push({
+          rule: 'responsive-token-swap',
+          severity: 'error',
+          file,
+          line: override.line,
+          column: 1,
+          message: `${selector} { ${property} } swaps families at @media (${override.condition}): ${base.token} (line ${base.line}) → ${override.token}`,
+          suggestion: `Keep both sides of a responsive ${property} swap in the same --gap-*/--padding-* family — never a raw --space-* primitive on one side. Annotate with bds-lint-ignore if this is intentional.`,
+        });
+        continue;
+      }
+
+      for (const side of [base, override]) {
+        if (!deprecatedMap.has(side.token)) continue;
+        violations.push({
+          rule: 'responsive-token-swap',
+          severity: 'error',
+          file,
+          line: side.line,
+          column: 1,
+          message: `${selector} { ${property} } uses deprecated ${side.token} in a responsive swap`,
+          suggestion: `Replace ${side.token} with ${deprecatedMap.get(side.token)} (#2594), or annotate with bds-lint-ignore.`,
+        });
+      }
+
+      const widthMatch = override.condition.match(/(min|max)-width:\s*(\d+(?:\.\d+)?)px/);
+      if (!widthMatch) continue;
+
+      const baseRung = resolveSpacingRung(base.token, deprecatedMap);
+      const overrideRung = resolveSpacingRung(override.token, deprecatedMap);
+      const baseRank = SPACING_RUNGS.indexOf(baseRung);
+      const overrideRank = SPACING_RUNGS.indexOf(overrideRung);
+      if (baseRank === -1 || overrideRank === -1) {
+        violations.push({
+          rule: 'responsive-token-swap',
+          severity: 'error',
+          file,
+          line: override.line,
+          column: 1,
+          message: `${selector} { ${property} } swaps to an unrecognized rung — cannot verify responsive direction (${base.token} → ${override.token})`,
+          suggestion: `Use a canonical --${property}-* rung (${SPACING_RUNGS.join('/')}) so this guard can check direction, or annotate with bds-lint-ignore.`,
+        });
+        continue;
+      }
+
+      const direction = widthMatch[1];
+      const inverted = direction === 'max' ? overrideRank > baseRank : overrideRank < baseRank;
+      if (inverted) {
+        violations.push({
+          rule: 'responsive-token-swap',
+          severity: 'error',
+          file,
+          line: override.line,
+          column: 1,
+          message: `${selector} { ${property} } inverts at @media (${override.condition}): ${direction === 'max' ? 'narrower' : 'wider'} viewport gets ${base.token} → ${override.token} (a ${direction === 'max' ? 'larger' : 'smaller'} rung)`,
+          suggestion: `${direction === 'max' ? 'A max-width override should step to the same or a smaller rung than the base' : 'A min-width override should step to the same or a larger rung than the base'} — fix the rung, or annotate with bds-lint-ignore if intentional.`,
+        });
+      }
+    }
+  }
+
+  return violations;
+}
+
+/**
  * Rule 4: 4-point grid compliance
  * Checks hardcoded px values in component style objects for 4px divisibility.
  * Also audits CSS token declaration files for off-grid primitive values.
@@ -1505,6 +1730,11 @@ function main() {
         allViolations.push(...checkGridCompliance(line, lineNum, file));
       }
     }
+
+    // Rule 13: responsive token-family swap (#2592) — always-on/error, same
+    // reasoning as spacing-mode-track (4c): a rule reachable only via
+    // --check-grid gates nothing, since npm run validate never passes it.
+    allViolations.push(...checkResponsiveTokenSwap(content, file));
   }
 
   // Blueprint files: Tier 4 hook discipline (fallback-literal + retired-bp) PLUS
@@ -1527,6 +1757,12 @@ function main() {
       allViolations.push(...checkDeprecatedTokens(line, lineNum, file));
       allViolations.push(...checkFallbackLiterals(line, lineNum, file, true, lines));
       allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));
+    }
+
+    // Rule 13 (#2592): .css only — the brace/selector tracker assumes plain
+    // CSS syntax and would misparse .astro frontmatter or .tsx JSX.
+    if (/\.css$/.test(file)) {
+      allViolations.push(...checkResponsiveTokenSwap(content, file));
     }
   }
 
@@ -1654,7 +1890,7 @@ function main() {
   // so the family joins the gate here.
   const MODES_SPACING_PATH = path.join(__dirname, '..', 'tokens', 'modes-spacing.css');
   if (fs.existsSync(FIGMA_TOKENS_PATH) && fs.existsSync(MODES_SPACING_PATH)) {
-    const RUNGS = ['tiny', 'xs', 'sm', 'md', 'lg', 'xl', 'huge'];
+    const RUNGS = SPACING_RUNGS;
     const FAMILIES = ['gap', 'padding'];
     const figmaCSS = fs.readFileSync(FIGMA_TOKENS_PATH, 'utf8');
     const modeLines = fs.readFileSync(MODES_SPACING_PATH, 'utf8').split('\n');
