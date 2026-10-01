@@ -69,6 +69,16 @@ describe('token-anatomy.mdx docs check', () => {
     const drifted = structuredClone(grammar);
     drifted.tiers.semantic.formula = '{purpose}-{role}-{state}';
     expect(missingFormulas(drifted, mdx)).toEqual(['--{purpose}-{role}-{state}']);
-    expect(expectedFormulas(grammar)).toHaveLength(3);
+    expect(expectedFormulas(grammar)).toHaveLength(5);
+  });
+
+  it('fails when the page does not print the --{id}-{body} shape', () => {
+    const noShape = mdx.replaceAll(grammar.shape, '--{body}');
+    expect(missingFormulas(grammar, noShape)).toEqual([grammar.shape]);
+  });
+
+  it('fails when the page does not print the scale body --{scale}-{step}', () => {
+    const noScale = mdx.replaceAll(`--${grammar.tiers.primitive.scale.body}`, '--{property}-{step}');
+    expect(missingFormulas(grammar, noScale)).toEqual([`--${grammar.tiers.primitive.scale.body}`]);
   });
 });

@@ -19,8 +19,10 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 /** The formula strings the docs page must contain. */
 export function expectedFormulas(grammar) {
   return [
+    grammar.shape,
     `--${grammar.tiers.semantic.formula}`,
     `--${grammar.tiers.primitive.color.body}`,
+    `--${grammar.tiers.primitive.scale.body}`,
     `--${grammar.ids.componentId}-${grammar.tiers.component.body}`,
   ];
 }

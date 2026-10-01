@@ -152,7 +152,7 @@
     "layout": { "concept": "component arrangement", "values": null }
   },
   "docs": {
-    "$comment": "token-anatomy.mdx must contain, verbatim, the formula strings derived from tiers above: --{semantic.formula}, --{primitive.color.body}, --{ids.componentId}-{component.body} (scripts/lint-naming-grammar-docs.mjs). #2666 rewrites the page and will add the --{id}-{body} shape.",
+    "$comment": "token-anatomy.mdx must contain, verbatim, the formula strings derived from tiers above: --{semantic.formula}, --{primitive.color.body}, --{ids.componentId}-{component.body}, plus the shape (--{id}-{body}) and the scale body (--{primitive.scale.body}) (scripts/lint-naming-grammar-docs.mjs). #2666 rewrote the page around them.",
     "page": "docs-site/content/docs/foundation/token-anatomy.mdx"
   }
 }

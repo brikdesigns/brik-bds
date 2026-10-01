@@ -67,7 +67,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # `dist/` is gitignored, so rules 1 and 2 have nothing to read until the
+      # `dist/` is gitignored, so rules 1, 2 and 7 have nothing to read until the
       # registry is built. Same cheap path token-purpose-slot-check.yml uses — a
       # concatenation, not the full `build:lib`.
       - name: Build dist tokens
@@ -79,11 +79,11 @@ jobs:
         run: npm run lint-naming-canon:census
 
       # The gate's own proof. `assertions-must-be-proven-to-fail`: ADR-033
-      # § Enforcement requires each of the five rules to be demonstrated failing
+      # § Enforcement requires each of the seven rules to be demonstrated failing
       # on a planted violation, so a rule that silently stops detecting anything
       # fails here rather than going quietly green. Also covers the baseline's
       # stale-entry check, which is what keeps it a countdown and not a carve-out.
-      - name: Gate self-test (proves all five rules fail)
+      - name: Gate self-test (proves all seven rules fail)
         run: npx vitest run scripts/__tests__/lint-naming-canon.test.mjs
 
       # SLOT_REGISTRY is now imported by lint-naming-canon, which required a
