@@ -44,6 +44,7 @@
     "./tokens.css": "./dist/tokens.css",
     "./bridge.css": "./dist/bridge.css",
     "./page-base.css": "./dist/page-base.css",
+    "./bds-manifest.json": "./dist/bds-manifest.json",
     "./canonical-check": {
       "types": "./scripts/canonical-check.d.ts",
       "import": "./scripts/canonical-check.mjs",

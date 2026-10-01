@@ -1,11 +1,10 @@
 #!/usr/bin/env node
-import { copyFileSync, existsSync, mkdirSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const docsRoot = resolve(here, '..');
 const bdsRoot = resolve(here, '..', '..');
 
 // Both artifacts come out of the parent's `build:lib`. A dist/ built before
@@ -16,15 +15,10 @@ const artifacts = [
   resolve(bdsRoot, 'dist', 'bds-manifest.json'),
 ];
 
-// Serve the component + token manifest at /bds-manifest.json (#2616). It is
-// already built by `build:inspector-manifest` and already published on the
-// Storybook host (root package.json `prestorybook`); this mirrors that copy for
-// the docs host, so an agent can read the component surface as data.
-function publishManifest() {
-  mkdirSync(resolve(docsRoot, 'public'), { recursive: true });
-  copyFileSync(artifacts[1], resolve(docsRoot, 'public', 'bds-manifest.json'));
-}
-
+// app/bds-manifest.json/route.ts imports dist/bds-manifest.json through the
+// package's `./bds-manifest.json` export (#2632). Nothing is copied into
+// public/: that copy never reached the Netlify deploy, which publishes `.next`
+// only.
 if (!artifacts.every(existsSync)) {
   const missing = artifacts.filter((path) => !existsSync(path));
   console.log(
@@ -49,5 +43,3 @@ if (!artifacts.every(existsSync)) {
     process.exit(1);
   }
 }
-
-publishManifest();
