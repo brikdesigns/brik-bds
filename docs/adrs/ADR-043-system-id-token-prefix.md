@@ -1,6 +1,6 @@
 # ADR-043 — System ID: every token tier leads with the ID of the system that owns it
 
-**Status:** Proposed — needs operator ratification
+**Status:** Ratified 2026-10-01 — moves to Accepted when the grammar file (#2669) ships (§ Enforcement)
 **Date:** 2026-10-01
 **Supersedes:** — (supersedes *in part*: the "same names, brand values" theming contract, listed under § Consequences)
 **Superseded by:** —
@@ -18,6 +18,16 @@ OPERATOR SAID 2026-10-01 (chat, #2655 session): "A. prefix needed, we can't shoe
 OPERATOR SAID 2026-10-01 (chat, #2655 session): "B. Yes - we were under the impression this was already addressed and signed off on? Going from a color naming system of lightest to darkest to a numeric system to compliment our color rail system we trigger in brik-llm for branding work."
 
 OPERATOR SAID 2026-10-01 (chat, #2655 session): "C. [...] It stands for system identifier to help us understand what system (repo) the design decision is tied to. Our tiers currently show tier 4 as including id (i.e. bds-), but tier 3 - semantic tokens - would also require as would tier 2 - primitives since these are all decisions tied to a brand system that belongs to a repo. [...] (i.e. bds-background-brand-primary, vale-partners-background-brand-primary, etc."
+
+## Ratification
+
+The operator answered in a structured prompt (chat, `/resume 2668 brikdesigns/brik-bds` session). Each answer below is the option they selected, quoted verbatim:
+
+- OPERATOR SAID 2026-10-01 (chat, /resume 2668 session), on "Ratify ADR-043 (PR #2671) as written?": "Ratify as written (Recommended)"
+- OPERATOR SAID 2026-10-01 (chat, /resume 2668 session), on open question 1, tenant handles: "vale-partners, birdwell (Recommended)"
+- OPERATOR SAID 2026-10-01 (chat, /resume 2668 session), on open question 2, Brik's own brand: "bds (Recommended)"
+
+Both open questions are resolved in § Resolved questions. Per § Enforcement, the ADR is **Accepted** once #2669 ships with `lint-naming-canon` reading the grammar file.
 
 ## Context
 
@@ -91,7 +101,7 @@ The ID is always the first segment. The body is what the tier already defines, u
 
 The ID is a **registered handle** mapped to the repo that owns the system. It is not derived from the repo slug. The operator's own example `bds` is not the slug `brik-bds`, and a mechanical slug rule would yield `--brik-client-portal-*`.
 
-The registry lives in the grammar file (#2669). Proposed entries:
+The registry lives in the grammar file (#2669). Its initial entries (`vale-partners` and `birdwell` ratified, § Resolved questions):
 
 | ID | System (repo) | Library |
 |---|---|---|
@@ -197,7 +207,7 @@ Budget: no new workflow. #2669 extends the existing required `naming-canon-check
 - **Keep the same-name override, and add the ID only where a tenant mints a new name.** Rejected: an override would still not say who decided it, which is the problem the ID exists to solve.
 - **Derive the ID from the repo slug.** Rejected: it contradicts the operator's own `bds` example, and gives `--brik-client-portal-*`.
 
-## Open questions for ratification
+## Resolved questions
 
-1. **Tenant handles.** The operator wrote both `vale-` and `vale-partners-`, and `birdwell-` for the `birdwell-mutlak` repo. The table above proposes `vale-partners`, `birdwell`, `tncld` and `portal`. Recommendation: `vale-partners` and `birdwell` as written in the latest quote (medium confidence).
-2. **Brik's own brand.** Proposed: Brik's Brand Kit ships as BDS's default under `bds`, matching the operator's `bds-background-brand-primary` example. A separate `brik` ID would split the default brand from Foundations. Recommendation: `bds` (medium confidence).
+1. **Tenant handles.** Resolved 2026-10-01: `vale-partners` (not `vale`) and `birdwell` (not `birdwell-mutlak`), as registered in § 3. Operator quote in § Ratification.
+2. **Brik's own brand.** Resolved 2026-10-01: Brik's Brand Kit ships as BDS's default under `bds`. There is no separate `brik` ID. Operator quote in § Ratification.
