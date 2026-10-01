@@ -552,6 +552,44 @@
       "note": "Dark badge label on the saturated success fill (6.00:1 both modes). White label was 2.87:1 and failed AA (#995); the fill is light enough that dark text is the accessible pairing."
     },
     {
+      "group": "positive",
+      "label": "Subtle positive Badge label on tint fill",
+      "fg": "--color-green-950",
+      "bg": "--surface-positive",
+      "thresholdType": "AA",
+      "note": "Badge `appearance=\"subtle\" tone=\"positive\"` (Badge.css). --surface-positive carries a FIXED light value in both themes (#bef4d4, no dark variant), but --text-positive is theme-responsive: it keeps the --color-system-green #27ae60 gap-fill pinned for --surface-primary (black-in-dark, 7.31:1 there, see the row above), which is 2.33:1 on this fixed-light tint in dark mode — unmeasured until now because --surface-positive was not a `bg` anywhere in this dataset (#2402, same shape as #2096 for --text-negative). Badge.css pins the label to the primitive --color-green-950 instead of --text-positive, the same dark-green value --text-positive's own light-mode gap-fill already resolves to, holding 6.9:1 in BOTH themes without touching the --surface-primary pairing above."
+    },
+    {
+      "group": "warning",
+      "label": "Subtle warning Badge label on tint fill",
+      "fg": "--text-neutral",
+      "bg": "--surface-warning",
+      "thresholdType": "AA",
+      "note": "Badge `appearance=\"subtle\" tone=\"warning\"` and Tag render this pair (Badge.css, Tag.css). Added as part of the #2402 subtle-tone family audit — --text-neutral and --surface-warning are both fixed values in every theme, so the pair already clears AA (9.28:1); gating it here closes the same \"never a `bg` in this dataset\" gap #2402 found for positive."
+    },
+    {
+      "group": "brand",
+      "label": "Subtle brand Badge label on tint fill (light)",
+      "fg": "--color-poppy-700",
+      "bg": "--background-brand-secondary",
+      "thresholdType": "AA",
+      "appliesTo": [
+        "light"
+      ],
+      "note": "Badge `appearance=\"subtle\" tone=\"brand\"` (Badge.css). --background-brand-secondary resolves per theme (theme-brand-brik.css): --color-tan-100 in light, --color-grayscale-950 in dark — found during the #2402 subtle-tone family audit. The original --text-brand-primary (--color-poppy-500) measured 3.32:1 on tan-100 (fails) but 4.56:1 on grayscale-950 (already passed), so a single static color can't fix both: Badge.css pins light to --color-poppy-700 (5.46:1 on tan-100) via a `:root[data-theme=\"dark\"]` override, split into two `appliesTo`-scoped rows here (mirroring the `service` group's light/dark pairs above) since the component swaps `fg` by theme, which a single row can't express."
+    },
+    {
+      "group": "brand",
+      "label": "Subtle brand Badge label on tint fill (dark)",
+      "fg": "--text-brand-primary",
+      "bg": "--background-brand-secondary",
+      "thresholdType": "AA",
+      "appliesTo": [
+        "dark"
+      ],
+      "note": "Dark half of the row above — Badge.css reverts to the original --text-brand-primary in dark mode (4.56:1 on --color-grayscale-950), which needed no change; only light required a fix."
+    },
+    {
       "group": "negative",
       "label": "Solid error Badge label on fill",
       "fg": "--text-on-color-light",

@@ -150,9 +150,18 @@
 
 /* ─── Tone × Subtle (pastel bg, saturated text) ──────────────── */
 
+/* --text-positive is a gap-fill (tokens/gap-fills.css#913) tuned for
+   --surface-primary: it keeps the generated mid-green (#27ae60, 7.31:1 on
+   black) in dark mode, since that pairing is correct there. But
+   --surface-positive is a fixed-light pastel fill in BOTH themes (no dark
+   variant — #2402), so dark mode ends up painting the --surface-primary
+   dark-step text onto a light-step surface: 2.33:1, failing AA. Pin to the
+   primitive --text-positive's light value already resolves to
+   (--color-green-950) so this one pairing holds 6.9:1 in both themes,
+   without touching the --surface-primary pairing elsewhere. */
 .bds-badge--subtle.bds-badge--tone-positive {
   background-color: var(--surface-positive);
-  color: var(--text-positive);
+  color: var(--color-green-950);
 }
 
 .bds-badge--subtle.bds-badge--tone-warning {
@@ -160,6 +169,13 @@
   color: var(--text-neutral);
 }
 
+/* --text-negative on --surface-negative measures 2.43:1 — an AA failure the
+   red family carries library-wide (#eb5757 has no darker sibling in the
+   token system to pin to, unlike positive's --color-green-950). #2096
+   already tracks darkening the --color-system-red primitive itself
+   (precedent: #1972/#2056 for blue); this pairing is a fresh consumer of
+   that same gap, not introduced here, and not fixed here since the correct
+   fix is at the primitive, not this rule. */
 .bds-badge--subtle.bds-badge--tone-negative {
   background-color: var(--surface-negative);
   color: var(--text-negative);
@@ -172,8 +188,19 @@
   color: var(--text-info);
 }
 
+/* --background-brand-secondary resolves per theme (theme-brand-brik.css):
+   --color-tan-100 in light, --color-grayscale-950 (near-black) in dark — the
+   opposite direction fix each theme needs, so one static color can't clear
+   both. --text-brand-primary (--color-poppy-500) measured 3.32:1 on
+   tan-100 (fails) but 4.56:1 on grayscale-950 (already passes). Light gets a
+   darker poppy step (--color-poppy-700, 5.46:1 on tan-100); dark keeps the
+   existing token, which was already correct. */
 .bds-badge--subtle.bds-badge--tone-brand {
   background-color: var(--background-brand-secondary);
+  color: var(--color-poppy-700);
+}
+
+:root[data-theme="dark"] .bds-badge--subtle.bds-badge--tone-brand {
   color: var(--text-brand-primary);
 }
 
