@@ -261,7 +261,7 @@ jobs:
         run: npm run bcs-vocab-check
 
       # ─── token-cascade-vocab-check ──────────────────────────────────────────
-      # The six locked token concepts (Anatomy / Tier / Library / Layer / Mode /
+      # The seven locked token concepts (Anatomy / ID / Tier / Library / Layer / Mode /
       # Tenet) must keep meaning the same thing across every docs page.
       - name: Token cascade vocabulary check
         if: always() && steps.install.outcome == 'success'

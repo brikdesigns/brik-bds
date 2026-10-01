@@ -36,7 +36,7 @@ Every token name has one shape, declared once in [`tokens/naming-grammar.json`](
 The **ID** is always the first segment. It names the *system* that owns the decision. The **body** is what the Tier defines (below). **ID** is the term, not "Layer": **Layer** already names the CSS `@layer` that carries a value, and one word for two meanings is the drift this page exists to stop.
 
 <Callout type="warn">
-  **Today, only the Component tier carries an ID in `dist/tokens.css`.** The ID rename for Primitive and Semantic names ships in [#2670](https://github.com/brikdesigns/brik-bds/issues/2670). Until it does, those names are the ID-less body: `--background-brand-primary`, `--color-poppy-500`. Reference only names that exist in `dist/tokens.css`. A name with the ID in front of a Primitive or Semantic body is the target, not a usable name yet.
+  **Today, only the Component tier carries an ID.** Three Component names are declared in `dist/tokens.css` (`--bds-slider-*`); the rest are declared in each component's CSS (`--bds-toast-shadow` in `Toast.css`). The ID rename for Primitive and Semantic names ships in [#2670](https://github.com/brikdesigns/brik-bds/issues/2670). Until it does, those names are the ID-less body: `--background-brand-primary`, `--color-poppy-500`. Reference only names that exist in `dist/tokens.css`. A name with the ID in front of a Primitive or Semantic body is the target, not a usable name yet.
 </Callout>
 
 {/* lint-mdx-tokens-ignore-start — the "After #2670" column is the target naming, not yet in dist/tokens.css */}
@@ -46,7 +46,7 @@ The **ID** is always the first segment. It names the *system* that owns the deci
 | Primitive (colour) | `color-{family}-{step}` | `--color-poppy-500` | `--bds-color-poppy-500` |
 | Primitive (scale) | `{scale}-{step}` | `--space-400` | `--bds-space-400` |
 | Semantic | `{purpose}-{role}[-{state}]` | `--background-brand-primary` | `--bds-background-brand-primary` |
-| Component | `{component}-{property}` | `--bds-toast-shadow` | `--bds-toast-shadow` |
+| Component | `{component}-{property}` | `--bds-slider-thumb-size` | `--bds-slider-thumb-size` |
 
 {/* lint-mdx-tokens-ignore-end */}
 
@@ -118,7 +118,7 @@ Every token sits at exactly one Tier. Higher tiers reference lower tiers via `va
 └─────────────────────────────────────────────────────────┘
 ```
 
-Tiers 2 and 3 show their **body**; the target name is `--{id}-{body}`. The examples are the names in `dist/tokens.css` today (see [ID and the token shape](#id-and-the-token-shape)).
+Tiers 2 and 3 show their **body**; the target name is `--{id}-{body}`. The examples are names in use today (see [ID and the token shape](#id-and-the-token-shape)).
 
 ### What lives at each Tier
 
