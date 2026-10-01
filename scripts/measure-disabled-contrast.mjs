@@ -4,7 +4,7 @@
  *
  * BDS disables a control one of two ways (ADR-028):
  *
- *   token swap — repaint the control with --background-disabled / --text-disabled
+ *   token swap — repaint the control with --bds-background-disabled / --bds-text-disabled
  *   opacity fade — keep the enabled colours and fade the whole control
  *
  * The token swap is measurable by the normal contrast gate, because both sides
@@ -148,35 +148,35 @@ const composite = (over, under, alpha) =>
  */
 const CASES = [
   // ── fill-bearing (the three token-swap components) ──
-  { group: 'fill-bearing', label: 'Button primary', fill: '--background-brand-primary', text: '--text-on-color-dark' },
-  { group: 'fill-bearing', label: 'Button secondary', fill: '--background-secondary', text: '--text-primary' },
-  { group: 'fill-bearing', label: 'Button destructive', fill: '--background-negative', text: '--text-on-color-dark' },
-  { group: 'fill-bearing', label: 'FilterButton active', fill: '--background-brand-primary', text: '--text-on-color-dark' },
-  { group: 'fill-bearing', label: 'FilterToggle active', fill: '--background-brand-primary', text: '--text-on-color-dark' },
+  { group: 'fill-bearing', label: 'Button primary', fill: '--bds-background-brand-primary', text: '--bds-text-on-color-dark' },
+  { group: 'fill-bearing', label: 'Button secondary', fill: '--bds-background-secondary', text: '--bds-text-primary' },
+  { group: 'fill-bearing', label: 'Button destructive', fill: '--bds-background-negative', text: '--bds-text-on-color-dark' },
+  { group: 'fill-bearing', label: 'FilterButton active', fill: '--bds-background-brand-primary', text: '--bds-text-on-color-dark' },
+  { group: 'fill-bearing', label: 'FilterToggle active', fill: '--bds-background-brand-primary', text: '--bds-text-on-color-dark' },
   // ── fill-bearing, already faded (the precedent the fade route relies on) ──
-  { group: 'fill-bearing (already fades)', label: 'Chip primary', fill: '--background-inverse', text: '--text-inverse' },
-  { group: 'fill-bearing (already fades)', label: 'Chip secondary', fill: '--background-secondary', text: '--text-primary' },
+  { group: 'fill-bearing (already fades)', label: 'Chip primary', fill: '--bds-background-inverse', text: '--bds-text-inverse' },
+  { group: 'fill-bearing (already fades)', label: 'Chip secondary', fill: '--bds-background-secondary', text: '--bds-text-primary' },
   // The same fill with the on-color foreground its two siblings already moved
   // to. Tag.css:34-43 and SegmentedControl.css:10-13 both pair
-  // `--background-secondary` with `--text-on-color-light` precisely because
-  // `--text-primary` fails dark AA on it; Chip is the last holdout (#1701).
-  { group: 'fill-bearing (already fades)', label: 'Chip secondary → on-color', fill: '--background-secondary', text: '--text-on-color-light' },
-  { group: 'fill-bearing (already fades)', label: 'Tag solid', fill: '--background-secondary', text: '--text-on-color-light' },
-  { group: 'fill-bearing (already fades)', label: 'Tag muted', fill: '--background-status-neutral', text: '--text-status-neutral' },
+  // `--bds-background-secondary` with `--bds-text-on-color-light` precisely because
+  // `--bds-text-primary` fails dark AA on it; Chip is the last holdout (#1701).
+  { group: 'fill-bearing (already fades)', label: 'Chip secondary → on-color', fill: '--bds-background-secondary', text: '--bds-text-on-color-light' },
+  { group: 'fill-bearing (already fades)', label: 'Tag solid', fill: '--bds-background-secondary', text: '--bds-text-on-color-light' },
+  { group: 'fill-bearing (already fades)', label: 'Tag muted', fill: '--bds-background-status-neutral', text: '--bds-text-status-neutral' },
   // Only the ITEM carries :disabled here, never the track — so these fade
   // toward the track, not the page. An inactive item is transparent (fill-less
-  // against the track); an active one paints the `--background-primary` pill.
-  { group: 'fill-bearing (already fades)', label: 'SegmentedControl item, inactive', fill: null, backdrop: '--background-secondary', text: '--text-on-color-light' },
-  { group: 'fill-bearing (already fades)', label: 'SegmentedControl item, active', fill: '--background-primary', backdrop: '--background-secondary', text: '--text-primary' },
+  // against the track); an active one paints the `--bds-background-primary` pill.
+  { group: 'fill-bearing (already fades)', label: 'SegmentedControl item, inactive', fill: null, backdrop: '--bds-background-secondary', text: '--bds-text-on-color-light' },
+  { group: 'fill-bearing (already fades)', label: 'SegmentedControl item, active', fill: '--bds-background-primary', backdrop: '--bds-background-secondary', text: '--bds-text-primary' },
   // ── fill-less (the cohort the fade suits) ──
-  { group: 'fill-less', label: 'Button outline / ghost label', fill: null, text: '--text-primary' },
-  { group: 'fill-less', label: 'TextInput value', fill: null, text: '--text-primary' },
-  { group: 'fill-less', label: 'TextInput placeholder', fill: null, text: '--text-muted' },
-  { group: 'fill-less', label: 'DatePicker day (muted swap)', fill: null, text: '--text-muted' },
-  { group: 'fill-less', label: 'Select value', fill: null, text: '--text-primary' },
+  { group: 'fill-less', label: 'Button outline / ghost label', fill: null, text: '--bds-text-primary' },
+  { group: 'fill-less', label: 'TextInput value', fill: null, text: '--bds-text-primary' },
+  { group: 'fill-less', label: 'TextInput placeholder', fill: null, text: '--bds-text-muted' },
+  { group: 'fill-less', label: 'DatePicker day (muted swap)', fill: null, text: '--bds-text-muted' },
+  { group: 'fill-less', label: 'Select value', fill: null, text: '--bds-text-primary' },
 ];
 
-const PAGE = '--background-primary';
+const PAGE = '--bds-background-primary';
 
 /**
  * `backdrop` overrides what the fade composites toward. It defaults to the page,
@@ -268,8 +268,8 @@ if (argv.includes('--sweep')) {
   // this is the number `npm run contrast-gate` already reports.
   console.log('  ── token swap (what the 3 fill-bearing components do today) ──');
   for (const [theme, vars] of THEMES) {
-    const r = contrastRatio(hexOf('--text-disabled', vars), hexOf('--background-disabled', vars));
-    console.log(`      ${mark(r)} ${r.toFixed(2).padStart(5)}:1   ${theme}  --text-disabled on --background-disabled`);
+    const r = contrastRatio(hexOf('--bds-text-disabled', vars), hexOf('--bds-background-disabled', vars));
+    console.log(`      ${mark(r)} ${r.toFixed(2).padStart(5)}:1   ${theme}  --bds-text-disabled on --bds-background-disabled`);
   }
   console.log('');
 }

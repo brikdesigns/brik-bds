@@ -10,7 +10,7 @@
  *      away (#1955).
  *   2. Prose of the form "There is no --border-info: …" parsed AS a declaration
  *      whose value ran to the next real semicolon, eating the real
- *      `--background-info` declaration. It was invisible from #1959 to #1972,
+ *      `--bds-background-info` declaration. It was invisible from #1959 to #1972,
  *      and no gate could fail on it because no gate could see it.
  *
  * Both are asserted here on the exact shapes that shipped, not on synthetic
@@ -51,7 +51,7 @@ describe('#1965 hazard 1 — a brace inside a comment must not end the block', (
     // The tempting case: brace-expansion shorthand for a token pair.
     const file = fixture(`:root {
   --before: #111111;
-  /* --color-system-neutral{,-light} are theme-invariant */
+  /* --bds-color-system-neutral{,-light} are theme-invariant */
   --after: #222222;
 }
 `);
@@ -71,40 +71,40 @@ describe('#1965 hazard 1 — a brace inside a comment must not end the block', (
 
 describe('#1965 hazard 2 — prose naming a token must not parse as a declaration', () => {
   it('does not mint a phantom declaration from "There is no --x: …" prose', () => {
-    // Verbatim shape from gap-fills.css, which is why --background-info was
+    // Verbatim shape from gap-fills.css, which is why --bds-background-info was
     // undefined: `[^;]+` ran from the comment to the next real semicolon.
     const file = fixture(`:root {
   /* There is no --border-info: the gray one retired with the rename and blue
      has no border counterpart. */
-  --background-info: var(--color-system-blue);
+  --bds-background-info: var(--bds-color-system-blue);
 }
 `);
     const vars = extractBlock(file, /:root/);
     expect(vars['--border-info']).toBeUndefined();
-    expect(vars['--background-info']).toBe('var(--color-system-blue)');
+    expect(vars['--bds-background-info']).toBe('var(--bds-color-system-blue)');
   });
 
   it('the phantom used to swallow the real declaration', () => {
     const body = `
   /* There is no --border-info: the gray one retired. */
-  --background-info: var(--color-system-blue);
+  --bds-background-info: var(--bds-color-system-blue);
 `;
     // Unblanked, the prose wins and the real token vanishes.
     expect(parseDecls(body)['--border-info']).toBeDefined();
-    expect(parseDecls(body)['--background-info']).toBeUndefined();
+    expect(parseDecls(body)['--bds-background-info']).toBeUndefined();
     // Blanked, only the real declaration survives.
     expect(parseDecls(blankComments(body))['--border-info']).toBeUndefined();
-    expect(parseDecls(blankComments(body))['--background-info']).toBe('var(--color-system-blue)');
+    expect(parseDecls(blankComments(body))['--bds-background-info']).toBe('var(--bds-color-system-blue)');
   });
 });
 
 describe('the shipped registry', () => {
-  it('--background-info resolves in the real gap-fills.css', () => {
+  it('--bds-background-info resolves in the real gap-fills.css', () => {
     // The regression that motivated the fix, asserted against the live file
     // rather than a fixture — a fixture cannot catch the next comment someone
     // writes above this declaration.
     const vars = extractBlock(path.join(HERE, '..', '..', 'tokens', 'gap-fills.css'), /:root/);
-    expect(vars['--background-info']).toBe('var(--color-system-blue)');
+    expect(vars['--bds-background-info']).toBe('var(--bds-color-system-blue)');
     expect(vars['--border-info']).toBeUndefined();
   });
 });

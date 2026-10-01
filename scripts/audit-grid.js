@@ -27,18 +27,18 @@ const GRID_BASE = 4;
 
 // Token categories to audit, with their primitive prefix (SD single-dash naming)
 const CATEGORIES = [
-  { name: 'Spacing (--space-)', prefix: '--space-', spatial: true },
-  { name: 'Sizing (--size-)', prefix: '--size-', spatial: true },
-  { name: 'Border Radius (--border-radius-)', prefix: '--border-radius-', spatial: true },
-  { name: 'Border Width (--border-width-)', prefix: '--border-width-', spatial: false }, // 1-4px, too small for grid
-  { name: 'Font Size (--font-size-)', prefix: '--font-size-', spatial: false }, // type scale, not spatial grid
+  { name: 'Spacing (--bds-space-)', prefix: '--bds-space-', spatial: true },
+  { name: 'Sizing (--bds-size-)', prefix: '--bds-size-', spatial: true },
+  { name: 'Border Radius (--bds-border-radius-)', prefix: '--bds-border-radius-', spatial: true },
+  { name: 'Border Width (--bds-border-width-)', prefix: '--bds-border-width-', spatial: false }, // 1-4px, too small for grid
+  { name: 'Font Size (--bds-font-size-)', prefix: '--bds-font-size-', spatial: false }, // type scale, not spatial grid
 ];
 
 // Semantic token categories (resolved to primitives via var() references)
 const SEMANTIC_CATEGORIES = [
-  { name: 'Semantic Spacing (--padding-/--gap-)', prefix: '--padding-' },
-  { name: 'Semantic Gap (--gap-)', prefix: '--gap-' },
-  { name: 'Semantic Size (--size-icon-)', prefix: '--size-icon-' },
+  { name: 'Semantic Spacing (--bds-padding-/--bds-gap-)', prefix: '--bds-padding-' },
+  { name: 'Semantic Gap (--bds-gap-)', prefix: '--bds-gap-' },
+  { name: 'Semantic Size (--bds-size-icon-)', prefix: '--bds-size-icon-' },
 ];
 
 function parseCssFile(filePath) {

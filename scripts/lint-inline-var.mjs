@@ -11,7 +11,7 @@
  * ── What's flagged vs allowed ──────────────────────────────────────────────
  *
  *   Flagged   — CONSUMING a token in an inline style value:
- *                 style={{ color: 'var(--text-primary)' }}
+ *                 style={{ color: 'var(--bds-text-primary)' }}
  *
  *   Allowed   — DEFINING a `--bds-*` custom property inline (a runtime binding —
  *               the sanctioned Component-tier pattern in token-anatomy.mdx):

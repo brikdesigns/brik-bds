@@ -15,16 +15,16 @@
  *
  *   Flagged   — a rhythm-bearing property set to a non-zero px/rem/em literal:
  *                 gap: 8px;   margin-top: 12px;   margin: 0 0 1rem;
- *             — a mode-collapsing token (`--gap-xs` / `--gap-tiny`, both 0px in
+ *             — a mode-collapsing token (`--bds-gap-xs` / `--bds-gap-tiny`, both 0px in
  *               every non-default spacing mode) on an unambiguously VERTICAL
  *               property (`row-gap`, `margin`, `margin-top/-bottom/-block*`):
- *                 margin-top: var(--gap-xs);   row-gap: var(--gap-tiny);
+ *                 margin-top: var(--bds-gap-xs);   row-gap: var(--bds-gap-tiny);
  *               The `gap` shorthand is exempt from this rule — its direction
  *               depends on flex-direction, which a line-scanner can't see, and
- *               horizontal icon/label gaps legitimately use `--gap-xs`.
+ *               horizontal icon/label gaps legitimately use `--bds-gap-xs`.
  *
  *   Allowed   — the same property driven by a token (the whole point):
- *                 gap: var(--gap-md);   margin-top: var(--gap-sm);
+ *                 gap: var(--bds-gap-md);   margin-top: var(--bds-gap-sm);
  *             — literals that live only inside a `var(--x, <fallback>)` default
  *               or a `--bds-*` runtime binding (a sanctioned Component-tier
  *               pattern): `margin-top: calc(var(--bds-thumb, 20px) / 2)`. The
@@ -75,7 +75,7 @@ const LITERAL_RE = /(-?\d*\.?\d+)(px|rem|em)\b/g;
 /**
  * Properties that are vertical no matter the layout context. The `gap`
  * shorthand is deliberately absent: its axis depends on flex-direction,
- * and horizontal icon/label gaps legitimately use `--gap-xs`.
+ * and horizontal icon/label gaps legitimately use `--bds-gap-xs`.
  */
 const VERTICAL_PROPS = new Set([
   'row-gap',
@@ -94,7 +94,7 @@ const VERTICAL_PROPS = new Set([
  */
 // `2xs` is the deprecated alias of `tiny` (#2594) and collapses identically, so
 // both spellings stay matched until the alias block drops next minor.
-const MODE_COLLAPSING_RE = /var\(\s*--gap-(?:xs|tiny|2xs)\s*[,)]/;
+const MODE_COLLAPSING_RE = /var\(\s*--bds-gap-(?:xs|tiny|2xs)\s*[,)]/;
 
 /** Files exempt wholesale — the sanctioned element-adjacency owners. */
 const FILE_ALLOWLIST = new Set(['components/ui/Prose/Prose.css']);
@@ -200,7 +200,7 @@ function scanFile(filePath) {
 }
 
 const GUIDANCE =
-  'Space text roles with the mode-tied `--gap-*` scale, not a px/rem literal — ' +
+  'Space text roles with the mode-tied `--bds-gap-*` scale, not a px/rem literal — ' +
   'the scale re-modulates per spacing mode, a literal does not. See ADR-023 §3 ' +
   '(design.brikdesigns.com/docs/build-standards/content-rhythm). A genuine ' +
   'non-rhythm case (optical nudge, negative border-overlap) needs a reasoned ' +
@@ -218,7 +218,7 @@ function render(violations, scanned) {
     const tag = v.bare
       ? '  ← bare bds-lint-ignore (needs a reason, brik-bds issue 1469)'
       : v.collapsing
-        ? '  ← --gap-xs/--gap-tiny is 0px outside default spacing mode (ADR-024)'
+        ? '  ← --bds-gap-xs/--bds-gap-tiny is 0px outside default spacing mode (ADR-024)'
         : '';
     out.push(`  ${v.file}:${v.line}  ${v.text}${tag}`);
   }

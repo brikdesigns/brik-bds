@@ -10,12 +10,12 @@
  * Four cases are regression guards for over-reach found while building the gate,
  * and they matter as much as the sabotage cases — a gate that flags correct code
  * gets suppressed, and a suppressed gate enforces nothing:
- *   • `--color-blue-light`   rule 1 does not judge a colour tail (§ 3); rule 7 does
- *   • `--font-weight-bold`   `bold` is font-weight's CSS keyword, not a step
+ *   • `--bds-color-blue-light`   rule 1 does not judge a colour tail (§ 3); rule 7 does
+ *   • `--bds-font-weight-bold`   `bold` is font-weight's CSS keyword, not a step
  *   • `--border-width-thin`  longest-match: a property slot, NOT the `border`
  *                            colour purpose — this one silently vanished from a
  *                            passing run mid-build
- *   • `--font-family-body`   `Poppins` vs `Poppins, sans-serif` is one type
+ *   • `--bds-font-family-body`   `Poppins` vs `Poppins, sans-serif` is one type
  */
 
 import { describe, it, expect } from 'vitest';
@@ -36,49 +36,49 @@ const REPO = path.join(HERE, '..', '..');
  */
 const CLEAN_TOKENS = `:root {
   /* Colour Primitive — color-{family}-{step}, numeric steps (ADR-043 § 4). */
-  --color-blue-500: #2f6fed;
-  --color-blue-300: #9dbcf7;
-  --color-blue-800: #17408f;
-  --background-brand-primary: var(--color-blue-500);
-  --text-negative: #b3261e;
-  --border-neutral: #d8d8d8;
+  --bds-color-blue-500: #2f6fed;
+  --bds-color-blue-300: #9dbcf7;
+  --bds-color-blue-800: #17408f;
+  --bds-background-brand-primary: var(--bds-color-blue-500);
+  --bds-text-negative: #b3261e;
+  --bds-border-neutral: #d8d8d8;
 
   /* Property scales — numeric at Primitive. */
-  --font-size-100: 16px;
-  --space-400: 16px;
-  --border-width-100: 1px;
-  --border-width-md: 2px;
-  --duration-200: 200ms;
+  --bds-font-size-100: 16px;
+  --bds-space-400: 16px;
+  --bds-border-width-100: 1px;
+  --bds-border-width-md: 2px;
+  --bds-duration-200: 200ms;
 
   /* CSS keyword families — no numeric or t-shirt step, so § 3 does not reach
      them and \`bold\` / \`wide\` / \`normal\` stay legal. */
-  --font-weight-bold: 700;
-  --font-weight-thin: 100;
-  --font-line-height-normal: 1.5;
-  --letter-spacing-wide: 0.05em;
-  --breakpoint-wide: 1440px;
+  --bds-font-weight-bold: 700;
+  --bds-font-weight-thin: 100;
+  --bds-font-line-height-normal: 1.5;
+  --bds-letter-spacing-wide: 0.05em;
+  --bds-breakpoint-wide: 1440px;
 
   /* Semantic roles — t-shirt at Semantic, plus a reset. */
-  --gap-none: 0;
-  --gap-xs: var(--space-400);
-  --gap-md: var(--space-400);
-  --gap-huge: var(--space-400);
-  --icon-tiny: var(--font-size-100);
-  --shadow-md: 0px 4px 12px rgba(0, 0, 0, 0.12);
+  --bds-gap-none: 0;
+  --bds-gap-xs: var(--bds-space-400);
+  --bds-gap-md: var(--bds-space-400);
+  --bds-gap-huge: var(--bds-space-400);
+  --bds-icon-tiny: var(--bds-font-size-100);
+  --bds-shadow-md: 0px 4px 12px rgba(0, 0, 0, 0.12);
 
   /* § Named exceptions — a shape constant, a role, a CSS keyword. */
-  --border-radius-100: 4px;
-  --border-radius-pill: 999px;
-  --content-width-md: 800px;
-  --content-width-full: 100%;
-  --shadow-overlay: 0px 4px 32px rgba(0, 0, 0, 0.24);
-  --iteration-infinite: infinite;
-  --aspect-16-9: 16 / 9;
-  --aspect-square: 1 / 1;
+  --bds-border-radius-100: 4px;
+  --bds-border-radius-pill: 999px;
+  --bds-content-width-md: 800px;
+  --bds-content-width-full: 100%;
+  --bds-shadow-overlay: 0px 4px 32px rgba(0, 0, 0, 0.24);
+  --bds-iteration-infinite: infinite;
+  --bds-aspect-16-9: 16 / 9;
+  --bds-aspect-square: 1 / 1;
 
   /* One name, two spellings of ONE type — not a rule-2 collision. */
-  --font-family-body: Poppins;
-  --font-family-body: Poppins, sans-serif;
+  --bds-font-family-body: Poppins;
+  --bds-font-family-body: Poppins, sans-serif;
 }
 `;
 
@@ -91,13 +91,13 @@ export type CardVariant = 'outlined' | 'elevated' | 'borderless';
 export type AvatarStatus = 'online' | 'offline' | 'busy' | 'away';
 `;
 
-const CLEAN_CSS = `.bds-badge--tone-negative { color: var(--text-negative); }
-.bds-badge--tone-positive { color: var(--text-negative); }
-.bds-badge--emphasis-brand { color: var(--text-negative); }
-.bds-badge--appearance-solid { color: var(--text-negative); }
-.bds-badge--density-compact { color: var(--text-negative); }
-.bds-card--variant-outlined { color: var(--text-negative); }
-.bds-card__body--gap-md { gap: var(--gap-md); }
+const CLEAN_CSS = `.bds-badge--tone-negative { color: var(--bds-text-negative); }
+.bds-badge--tone-positive { color: var(--bds-text-negative); }
+.bds-badge--emphasis-brand { color: var(--bds-text-negative); }
+.bds-badge--appearance-solid { color: var(--bds-text-negative); }
+.bds-badge--density-compact { color: var(--bds-text-negative); }
+.bds-card--variant-outlined { color: var(--bds-text-negative); }
+.bds-card__body--gap-md { gap: var(--bds-gap-md); }
 .bds-card--disabled { opacity: 0.5; }
 .bds-card--loading { opacity: 0.5; }
 `;
@@ -109,8 +109,8 @@ const CLEAN_CSS = `.bds-badge--tone-negative { color: var(--text-negative); }
  * notes both have to be able to do.
  */
 const CLEAN_REFS = `/* The --*-status-* family was deleted in #1958; do not re-add one. */
-.bds-badge--tone-negative { background: var(--background-negative); }
-.bds-badge--tone-info { background: var(--surface-info); }
+.bds-badge--tone-negative { background: var(--bds-background-negative); }
+.bds-badge--tone-info { background: var(--bds-surface-info); }
 `;
 
 /**
@@ -127,9 +127,9 @@ export function ServiceTag({ category }: ServiceTagProps) {
   return <span className={\`bds-service-tag--\${category}\`} />;
 }
 `;
-const CLEAN_SERVICE_CSS = `.bds-service-tag--information { background: var(--background-service-information); }
-.bds-service-tag--marketing { background: var(--background-service-marketing); }
-.bds-service-tag--brand { background: var(--background-service-brand); }
+const CLEAN_SERVICE_CSS = `.bds-service-tag--information { background: var(--bds-background-service-information); }
+.bds-service-tag--marketing { background: var(--bds-background-service-marketing); }
+.bds-service-tag--brand { background: var(--bds-background-service-brand); }
 `;
 
 /**
@@ -196,15 +196,15 @@ describe('lint-naming-canon — fixture', () => {
 
 describe('rule 1 — step vocabulary (ADR-033 § 3)', () => {
   it('fails on a retired step word, and names the migration target', () => {
-    const { code, out } = run({ tokens: withTokens('--content-width-narrow: 640px;') });
+    const { code, out } = run({ tokens: withTokens('--bds-content-width-narrow: 640px;') });
     expect(code).toBe(1);
-    expect(out).toMatch(/--content-width-narrow — step `narrow` is retired for --content-width-\* → `sm`/);
+    expect(out).toMatch(/--bds-content-width-narrow — step `narrow` is retired for --bds-content-width-\* → `sm`/);
   });
 
   it('fails on a step word with no retirement entry — § 3 is default-deny', () => {
-    const { code, out } = run({ tokens: withTokens('--gap-gigantic: 99px;') });
+    const { code, out } = run({ tokens: withTokens('--bds-gap-gigantic: 99px;') });
     expect(code).toBe(1);
-    expect(out).toMatch(/--gap-gigantic — step `gigantic` is outside --gap-\*'s vocabulary/);
+    expect(out).toMatch(/--bds-gap-gigantic — step `gigantic` is outside --bds-gap-\*'s vocabulary/);
   });
 
   // `tiny`/`huge`/`xxl` were this test's exemplars until #2594 un-retired them
@@ -217,7 +217,7 @@ describe('rule 1 — step vocabulary (ADR-033 § 3)', () => {
   });
 
   it('a § Named exception is not a step violation', () => {
-    // `--content-width-full` and `--border-radius-pill` are in the clean fixture
+    // `--bds-content-width-full` and `--bds-border-radius-pill` are in the clean fixture
     // inside families that DO take steps, so only the exception list keeps them green.
     const { code, out } = run();
     expect(out).not.toMatch(/content-width-full/);
@@ -226,18 +226,18 @@ describe('rule 1 — step vocabulary (ADR-033 § 3)', () => {
   });
 
   it('rule 1 does NOT judge a colour ramp rung — rule 7 does', () => {
-    // Regression guard. Grouping by family puts `--color-blue-500` (numeric)
-    // beside `--color-blue-light` (word), so without the colour carve-out ramp
+    // Regression guard. Grouping by family puts `--bds-color-blue-500` (numeric)
+    // beside `--bds-color-blue-light` (word), so without the colour carve-out ramp
     // rungs read as step-word violations under rule 1. The word step is still
     // red, but as rule 7 (ADR-043 § 4), never as a rule 1 step finding.
-    const { code, out } = run({ tokens: withTokens('--color-blue-light: #9dbcf7;') });
+    const { code, out } = run({ tokens: withTokens('--bds-color-blue-light: #9dbcf7;') });
     expect(out).not.toMatch(/Rule 1/);
     expect(out).toMatch(/Rule 7/);
     expect(code).toBe(1);
   });
 
   it('does NOT flag a CSS keyword in a family that takes no steps', () => {
-    // `--font-weight-bold` / `--letter-spacing-wide` / `--font-line-height-normal`
+    // `--bds-font-weight-bold` / `--bds-letter-spacing-wide` / `--bds-font-line-height-normal`
     // use words § 3 retires as STEP words, but none of those families ships a
     // single numeric or t-shirt step, so § 3 does not reach them.
     const { code, out } = run();
@@ -258,23 +258,23 @@ describe('rule 1 — step vocabulary (ADR-033 § 3)', () => {
 });
 
 describe('rule 2 — one name, two value types (ADR-033 § 5)', () => {
-  it('fails on the --box-shadow-md class: a length and a shadow list', () => {
+  it('fails on the --bds-box-shadow-md class: a length and a shadow list', () => {
     const { code, out } = run({
-      tokens: withTokens('--box-shadow-md: 8px;', '--box-shadow-md: var(--shadow-md);'),
+      tokens: withTokens('--bds-box-shadow-md: 8px;', '--bds-box-shadow-md: var(--bds-shadow-md);'),
     });
     expect(code).toBe(1);
-    expect(out).toMatch(/--box-shadow-md — defined with 2 value types — length at :\d+, list at :\d+/);
+    expect(out).toMatch(/--bds-box-shadow-md — defined with 2 value types — length at :\d+, list at :\d+/);
   });
 
   it('resolves var() to classify — skipping the ref hides the collision entirely', () => {
-    // `var(--shadow-md)` is a shadow LIST, not a reference. A gate that treats a
+    // `var(--bds-shadow-md)` is a shadow LIST, not a reference. A gate that treats a
     // ref as its own type sees one type and reports clean, which is exactly why
     // lint-token-shadowing cannot substitute for this rule.
     const json = JSON.parse(run({
-      tokens: withTokens('--box-shadow-md: 8px;', '--box-shadow-md: var(--shadow-md);'),
+      tokens: withTokens('--bds-box-shadow-md: 8px;', '--bds-box-shadow-md: var(--bds-shadow-md);'),
       args: ['--json'],
     }).out);
-    const f = json.live.find((x) => x.rule === 2 && x.id === '--box-shadow-md');
+    const f = json.live.find((x) => x.rule === 2 && x.id === '--bds-box-shadow-md');
     expect(f).toBeDefined();
     expect(f.detail).toContain('list');
   });
@@ -285,21 +285,21 @@ describe('rule 2 — one name, two value types (ADR-033 § 5)', () => {
     // TYPE is one name carrying two concepts, and the marker cannot license it.
     const { code, out } = run({
       tokens: withTokens(
-        '--box-shadow-md: 8px;',
-        '--box-shadow-md: var(--shadow-md); /* bds-lint-ignore — load-bearing override */',
+        '--bds-box-shadow-md: 8px;',
+        '--bds-box-shadow-md: var(--bds-shadow-md); /* bds-lint-ignore — load-bearing override */',
       ),
     });
     expect(code).toBe(1);
-    expect(out).toMatch(/--box-shadow-md — defined with 2 value types/);
+    expect(out).toMatch(/--bds-box-shadow-md — defined with 2 value types/);
   });
 
   it('same type twice is not a collision', () => {
-    const { code } = run({ tokens: withTokens('--gap-md: 12px;') });
+    const { code } = run({ tokens: withTokens('--bds-gap-md: 12px;') });
     expect(code).toBe(0);
   });
 
   it('does NOT manufacture a collision from a bare keyword', () => {
-    // Regression guard: the clean fixture declares `--font-family-body` as
+    // Regression guard: the clean fixture declares `--bds-font-family-body` as
     // `Poppins` and as `Poppins, sans-serif`. One font stack, one with a
     // fallback — counting `keyword` as a distinct type made this a finding.
     const { code, out } = run();
@@ -584,7 +584,7 @@ describe('rule 6 — the deleted --*-status-* family cannot come back (§ Token 
 
   it('routes a retired valence word through § 1 — negative, never `error`', () => {
     const { out } = run({ refs: '.x { background: var(--background-status-error); }' });
-    expect(out).toMatch(/→ `--background-negative`/);
+    expect(out).toMatch(/→ `--bds-background-negative`/);
     // The derived target is the dangerous one: dropping the `status-` segment
     // yields `--background-error`, which is not a token. #1982 is the same
     // failure one rule over — a gate printing a migration that breaks the build.
@@ -597,13 +597,13 @@ describe('rule 6 — the deleted --*-status-* family cannot come back (§ Token 
     });
     expect(code).toBe(1);
     expect(out).toMatch(/reference is a cssVar/);
-    expect(out).toMatch(/→ `--background-accent-purple`/);
+    expect(out).toMatch(/→ `--bds-background-accent-purple`/);
   });
 
   it('does NOT flag prose that names the retired family — the ADR has to be writable', () => {
     const { code, out } = run({
-      refs: `/* --background-status-error was deleted; use --background-negative. */
-.x { background: var(--background-negative); }`,
+      refs: `/* --background-status-error was deleted; use --bds-background-negative. */
+.x { background: var(--bds-background-negative); }`,
     });
     expect(out).toMatch(/clean — 0 live violation/);
     expect(code).toBe(0);
@@ -643,6 +643,12 @@ describe('rule 7 — a colour Primitive is color-{family}-{step} (ADR-043 § 2, 
     expect(out).toMatch(/--color-poppy-550 — .*does not parse/);
   });
 
+  it('parses the --bds- spelling too: --bds-color-poppy-lightest (#2670)', () => {
+    const { code, out } = run({ tokens: withTokens('--bds-color-poppy-lightest: #fde;') });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--bds-color-poppy-lightest — word step `lightest` is retired/);
+  });
+
   it('passes on --color-poppy-500', () => {
     const { code, out } = run({ tokens: withTokens('--color-poppy-500: #e35335;') });
     expect(out).not.toMatch(/Rule 7/);
@@ -651,12 +657,12 @@ describe('rule 7 — a colour Primitive is color-{family}-{step} (ADR-043 § 2, 
 });
 
 describe('the baseline can only shrink', () => {
-  const planted = { tokens: withTokens('--content-width-narrow: 640px;') };
+  const planted = { tokens: withTokens('--bds-content-width-narrow: 640px;') };
 
   it('a baselined violation is green', () => {
     const { code, out } = run({
       ...planted,
-      baseline: { rules: { 1: { '--content-width-narrow': 1923 } } },
+      baseline: { rules: { 1: { '--bds-content-width-narrow': 1923 } } },
     });
     expect(out).toMatch(/clean — 0 live violation\(s\), 1 baselined/);
     expect(code).toBe(0);
@@ -666,29 +672,29 @@ describe('the baseline can only shrink', () => {
     // This is what makes the baseline a countdown rather than a carve-out. Drop
     // it and the file becomes a permanent suppression list with no owner.
     const { code, out } = run({
-      baseline: { rules: { 1: { '--content-width-narrow': 1923 } } },
+      baseline: { rules: { 1: { '--bds-content-width-narrow': 1923 } } },
     });
     expect(code).toBe(1);
     expect(out).toMatch(/1 STALE baseline entr\(ies\)/);
-    expect(out).toMatch(/rule 1: --content-width-narrow/);
+    expect(out).toMatch(/rule 1: --bds-content-width-narrow/);
   });
 
   it('an entry with no issue number is not a disposition', () => {
     const { code, out } = run({
       ...planted,
-      baseline: { rules: { 1: { '--content-width-narrow': true } } },
+      baseline: { rules: { 1: { '--bds-content-width-narrow': true } } },
     });
     expect(code).toBe(1);
-    expect(out).toMatch(/--content-width-narrow — baseline entry is `true`, not an issue number/);
+    expect(out).toMatch(/--bds-content-width-narrow — baseline entry is `true`, not an issue number/);
   });
 
   it('--census shows baselined findings with their issue', () => {
     const { out } = run({
       ...planted,
-      baseline: { rules: { 1: { '--content-width-narrow': 1923 } } },
+      baseline: { rules: { 1: { '--bds-content-width-narrow': 1923 } } },
       args: ['--census'],
     });
-    expect(out).toMatch(/· --content-width-narrow —.*\(baselined, #1923\)/);
+    expect(out).toMatch(/· --bds-content-width-narrow —.*\(baselined, #1923\)/);
   });
 });
 

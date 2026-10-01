@@ -5,10 +5,10 @@
  * ADR-028's two mechanisms, and the fade always reads the token.
  *
  * ADR-028 chose the disabled treatment by one structural property: a control
- * that paints its own fill uses the **token swap** (`--background-disabled` /
- * `--text-disabled` / `--border-disabled`, pt-1); a control with no fill of its
- * own uses the **opacity fade** standardised on `var(--state-disabled-opacity)`
- * (pt-2). `color: var(--text-muted)` with no fill change is explicitly NOT a
+ * that paints its own fill uses the **token swap** (`--bds-background-disabled` /
+ * `--bds-text-disabled` / `--bds-border-disabled`, pt-1); a control with no fill of its
+ * own uses the **opacity fade** standardised on `var(--bds-state-disabled-opacity)`
+ * (pt-2). `color: var(--bds-text-muted)` with no fill change is explicitly NOT a
  * third mechanism (pt-4) — it darkens the label toward a backdrop that stays
  * put, which is the fade's failure mode written by hand.
  *
@@ -75,12 +75,12 @@ const DIM = '\x1b[2m';
 const NC = '\x1b[0m';
 
 /** The one token the fade is allowed to read (ADR-028 pt-2). */
-const FADE_TOKEN = '--state-disabled-opacity';
+const FADE_TOKEN = '--bds-state-disabled-opacity';
 /** The token-swap trio (ADR-028 pt-1). */
 const SWAP_TOKENS = [
-  '--background-disabled',
-  '--text-disabled',
-  '--border-disabled',
+  '--bds-background-disabled',
+  '--bds-text-disabled',
+  '--bds-border-disabled',
 ];
 
 /**
@@ -94,7 +94,7 @@ const NO_FILL = /^(transparent|none|inherit|initial|unset|revert|revert-layer)$/
  * surface it sits on, not painting a fill of its own, so it stays on the fade.
  * ADR-028 pt-2 already says this in prose ("the page or an ancestor surface
  * shows through — inputs, checkboxes, radios, switches"); a `TextInput` reading
- * `--background-input` IS that sentence expressed as a token.
+ * `--bds-background-input` IS that sentence expressed as a token.
  *
  * Ratified in ADR-028 § Amendment 2026-08-07. This list is the ADR's, not the
  * gate's — extend it there first. Without it RULE C reports 13 components that
@@ -102,12 +102,12 @@ const NO_FILL = /^(transparent|none|inherit|initial|unset|revert|revert-layer)$/
  * instead of the rule.
  */
 const SURFACE_TOKENS = [
-  '--background-primary',
-  '--background-input',
-  '--text-input-bg',
+  '--bds-background-primary',
+  '--bds-background-input',
+  '--bds-text-input-bg',
 ];
 const isSurfaceFill = (value) =>
-  SURFACE_TOKENS.some((t) => value.includes(`var(${t})`)) || /var\(--surface-/.test(value);
+  SURFACE_TOKENS.some((t) => value.includes(`var(${t})`)) || /var\(--bds-surface-/.test(value);
 
 /**
  * Selector tokens that make a rule a *state* fill rather than a resting one.
@@ -175,7 +175,7 @@ function disabledRules(css) {
  *
  * pt-1 asks whether the control paints ITS OWN fill, which means the fill and
  * the disabled state have to land on the same element. SegmentedControl is why:
- * its track paints `--background-secondary` but only the ITEM ever goes
+ * its track paints `--bds-background-secondary` but only the ITEM ever goes
  * disabled, and that item is transparent. Matching on the file alone called it
  * a violation; it is a correctly-faded fill-less control sitting on a filled
  * parent, and converting it would have repainted a track nothing disabled.
@@ -222,7 +222,7 @@ function sameVariant(fillSel, fadeSel) {
  * the mechanism components already had rather than by the property the decision
  * rule names (#1701).
  *
- * Disabled-scoped rules are skipped: a `--background-disabled` repaint IS the
+ * Disabled-scoped rules are skipped: a `--bds-background-disabled` repaint IS the
  * swap, and counting it as evidence of a fill would make every swapped
  * component its own violation.
  *
@@ -278,7 +278,7 @@ function fillRules(css) {
  *   `fade`       — reads the fade token, ADR-028 pt-2 ✓
  *   `literal`    — an opacity the token does not own (RULE A violation)
  *   `swap`       — repaints with the disabled trio, ADR-028 pt-1 ✓
- *   `muted`      — `color: var(--text-muted)` and no fill change (pt-4 drift)
+ *   `muted`      — `color: var(--bds-text-muted)` and no fill change (pt-4 drift)
  *   `supporting` — cursor / hover suppression / thumb paint; no mechanism owed
  * Order matters: a block that reads the token is a fade even if it also sets
  * `cursor`, and a literal is a violation even alongside a swap.
@@ -304,7 +304,7 @@ function classify(body) {
   if (SWAP_TOKENS.some((t) => body.includes(`var(${t})`))) {
     return { kind: 'swap' };
   }
-  if (/color\s*:\s*var\(--text-muted\)/.test(body)) {
+  if (/color\s*:\s*var\(--bds-text-muted\)/.test(body)) {
     return { kind: 'muted' };
   }
   return { kind: 'supporting' };
@@ -360,7 +360,7 @@ for (const { component, path } of files) {
         detail:
           verdict.kind === 'literal'
             ? `opacity: ${verdict.value}`
-            : 'color: var(--text-muted) with no fill change',
+            : 'color: var(--bds-text-muted) with no fill change',
         bareIgnore: Boolean(ignore?.bare),
       });
     }

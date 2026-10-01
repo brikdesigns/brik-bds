@@ -13,7 +13,7 @@
  * Nothing caught this because each source file is correct in isolation. The
  * shadowing exists only in the concatenation, which no per-file lint reads.
  * Eleven tokens were shadowed when this gate was written (#1808), including
- * `--text-disabled` at dist/tokens.css:500, whose dead declaration carries a
+ * `--bds-text-disabled` at dist/tokens.css:500, whose dead declaration carries a
  * doc comment describing behaviour it does not produce. That is the class named
  * in brikdesigns/brik-llm#2206: an artifact that reads as in-effect and has
  * never applied — #1785 one layer up, in a font-family stack.
@@ -49,6 +49,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
+import { canonicalPart } from './lib/bds-prefix.mjs';
 
 /**
  * token name → tracking issue number. The shadow is owed a fix; the entry keeps
@@ -67,9 +68,9 @@ const SHADOW_BACKLOG = {
   // `npm run build:sd-figma` would restore them. Removing the shadow means
   // correcting the Figma variables first (Plugin-API-only, laptop-bound), which
   // is brik-bds#1812. These entries retire with it, not before.
-  '--text-positive': 1812,
-  '--text-disabled': 1812,
-  '--background-disabled': 1812,
+  '--bds-text-positive': 1812,
+  '--bds-text-disabled': 1812,
+  '--bds-background-disabled': 1812,
 };
 
 const IGNORE_MARKER = 'bds-lint-ignore';
@@ -107,7 +108,8 @@ function topLevelBlocks(src) {
 }
 
 function collect(cssPath) {
-  const raw = fs.readFileSync(cssPath, 'utf8');
+  // Canonical registry only; the compat bridge re-declares names by design.
+  const raw = canonicalPart(fs.readFileSync(cssPath, 'utf8'));
   const clean = blankComments(raw);
   const byScope = new Map();
   let declarations = 0;

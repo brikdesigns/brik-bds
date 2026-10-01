@@ -45,29 +45,29 @@ describe('lint-tokens Rule 13 (responsive-token-swap)', () => {
     const file = join(tmpDir, 'Inverted.css');
     writeFileSync(file, `
       .hero-text {
-        gap: var(--gap-sm);
+        gap: var(--bds-gap-sm);
       }
       @media (max-width: 991px) {
         .hero-text {
-          gap: var(--gap-xl);
+          gap: var(--bds-gap-xl);
         }
       }
     `);
     const violations = runLinter([file]);
     expect(violations).toHaveLength(1);
     expect(violations[0].message).toMatch(/inverts at @media \(max-width: 991px\)/);
-    expect(violations[0].message).toMatch(/narrower viewport gets --gap-sm → --gap-xl/);
+    expect(violations[0].message).toMatch(/narrower viewport gets --bds-gap-sm → --bds-gap-xl/);
   });
 
   it('passes a max-width override that steps to the same or a smaller rung', () => {
     const file = join(tmpDir, 'ValidMax.css');
     writeFileSync(file, `
       .panel {
-        padding: var(--padding-lg);
+        padding: var(--bds-padding-lg);
       }
       @media (max-width: 639px) {
         .panel {
-          padding: var(--padding-sm);
+          padding: var(--bds-padding-sm);
         }
       }
     `);
@@ -78,11 +78,11 @@ describe('lint-tokens Rule 13 (responsive-token-swap)', () => {
     const file = join(tmpDir, 'ValidMin.css');
     writeFileSync(file, `
       .rail {
-        gap: var(--gap-xs);
+        gap: var(--bds-gap-xs);
       }
       @media (min-width: 768px) {
         .rail {
-          gap: var(--gap-lg);
+          gap: var(--bds-gap-lg);
         }
       }
     `);
@@ -93,28 +93,28 @@ describe('lint-tokens Rule 13 (responsive-token-swap)', () => {
     const file = join(tmpDir, 'InvertedMin.css');
     writeFileSync(file, `
       .rail {
-        gap: var(--gap-lg);
+        gap: var(--bds-gap-lg);
       }
       @media (min-width: 768px) {
         .rail {
-          gap: var(--gap-xs);
+          gap: var(--bds-gap-xs);
         }
       }
     `);
     const violations = runLinter([file]);
     expect(violations).toHaveLength(1);
-    expect(violations[0].message).toMatch(/wider viewport gets --gap-lg → --gap-xs/);
+    expect(violations[0].message).toMatch(/wider viewport gets --bds-gap-lg → --bds-gap-xs/);
   });
 
-  it('fails when a semantic base swaps to a raw --space-* primitive (one of the #2592 cross-family cases)', () => {
+  it('fails when a semantic base swaps to a raw --bds-space-* primitive (one of the #2592 cross-family cases)', () => {
     const file = join(tmpDir, 'CrossFamily.css');
     writeFileSync(file, `
       .card {
-        gap: var(--gap-md);
+        gap: var(--bds-gap-md);
       }
       @media (max-width: 991px) {
         .card {
-          gap: var(--space-1600);
+          gap: var(--bds-space-1600);
         }
       }
     `);
@@ -127,17 +127,17 @@ describe('lint-tokens Rule 13 (responsive-token-swap)', () => {
     const file = join(tmpDir, 'Deprecated.css');
     writeFileSync(file, `
       .tile {
-        padding: var(--padding-2xs);
+        padding: var(--bds-padding-2xs);
       }
       @media (min-width: 768px) {
         .tile {
-          padding: var(--padding-md);
+          padding: var(--bds-padding-md);
         }
       }
     `);
     const violations = runLinter([file]);
     expect(violations.map((v) => v.message)).toContainEqual(
-      expect.stringContaining('uses deprecated --padding-2xs'),
+      expect.stringContaining('uses deprecated --bds-padding-2xs'),
     );
   });
 
@@ -145,11 +145,11 @@ describe('lint-tokens Rule 13 (responsive-token-swap)', () => {
     const file = join(tmpDir, 'Ignored.css');
     writeFileSync(file, `
       .hero-text {
-        gap: var(--gap-sm);
+        gap: var(--bds-gap-sm);
       }
       @media (max-width: 991px) {
         .hero-text {
-          gap: var(--gap-xl); /* bds-lint-ignore responsive-token-swap — intentional, see #1234 */
+          gap: var(--bds-gap-xl); /* bds-lint-ignore responsive-token-swap — intentional, see #1234 */
         }
       }
     `);
@@ -160,11 +160,11 @@ describe('lint-tokens Rule 13 (responsive-token-swap)', () => {
     const file = join(tmpDir, 'Unrelated.css');
     writeFileSync(file, `
       .a {
-        gap: var(--gap-sm);
+        gap: var(--bds-gap-sm);
       }
       @media (max-width: 991px) {
         .b {
-          gap: var(--gap-xl);
+          gap: var(--bds-gap-xl);
         }
       }
     `);
@@ -175,11 +175,11 @@ describe('lint-tokens Rule 13 (responsive-token-swap)', () => {
     const file = join(tmpDir, 'ReducedMotion.css');
     writeFileSync(file, `
       .thing {
-        gap: var(--gap-sm);
+        gap: var(--bds-gap-sm);
       }
       @media (prefers-reduced-motion: reduce) {
         .thing {
-          gap: var(--gap-none);
+          gap: var(--bds-gap-none);
         }
       }
     `);
@@ -191,12 +191,12 @@ describe('lint-tokens Rule 13 (responsive-token-swap)', () => {
     writeFileSync(file, `
       .bds-grid--cols-3,
       .bds-grid--cols-4 {
-        gap: var(--gap-sm);
+        gap: var(--bds-gap-sm);
       }
       @media (max-width: 991px) {
         .bds-grid--cols-3,
         .bds-grid--cols-4 {
-          gap: var(--gap-xl);
+          gap: var(--bds-gap-xl);
         }
       }
     `);

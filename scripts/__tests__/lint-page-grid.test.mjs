@@ -46,9 +46,9 @@ describe('extractAstroStyles', () => {
 });
 
 describe('scanCssText — page-container detection', () => {
-  it('flags a content-width container whose padding-inline bypasses --page-inset', () => {
+  it('flags a content-width container whose padding-inline bypasses --bds-page-inset', () => {
     const v = scanCssText(
-      '.c { max-width: var(--content-width-xl); margin-inline: auto; padding-inline: var(--padding-lg); }',
+      '.c { max-width: var(--bds-content-width-xl); margin-inline: auto; padding-inline: var(--bds-padding-lg); }',
     );
     expect(v).toHaveLength(1);
     expect(v[0].selector).toBe('.c');
@@ -56,64 +56,64 @@ describe('scanCssText — page-container detection', () => {
 
   it('flags a hardcoded gutter in a container', () => {
     const v = scanCssText(
-      '.c { max-width: var(--content-width-wide); padding-inline: 24px; }',
+      '.c { max-width: var(--bds-content-width-wide); padding-inline: 24px; }',
     );
     expect(v).toHaveLength(1);
   });
 
   it('flags a Footer-style centering inset built on another token', () => {
     const v = scanCssText(
-      '.f { padding-inline: max(var(--padding-lg), calc((100% - var(--content-width-xl)) / 2)); }',
+      '.f { padding-inline: max(var(--bds-padding-lg), calc((100% - var(--bds-content-width-xl)) / 2)); }',
     );
     expect(v).toHaveLength(1);
   });
 
   it('allows the canonical recipe', () => {
     const v = scanCssText(
-      '.c { max-width: var(--content-width-xl); margin-inline: auto; padding-inline: var(--page-inset); }',
+      '.c { max-width: var(--bds-content-width-xl); margin-inline: auto; padding-inline: var(--bds-page-inset); }',
     );
     expect(v).toHaveLength(0);
   });
 
   it('allows the ADR-014 hook fallback shape (section shell)', () => {
     const v = scanCssText(
-      '.c { max-width: var(--bds-blueprint-section-content-width, var(--content-width-xl)); margin-inline: auto; padding-inline: var(--bds-blueprint-section-padding-inline, var(--page-inset)); }',
+      '.c { max-width: var(--bds-blueprint-section-content-width, var(--bds-content-width-xl)); margin-inline: auto; padding-inline: var(--bds-blueprint-section-padding-inline, var(--bds-page-inset)); }',
     );
     expect(v).toHaveLength(0);
   });
 
-  it('allows the max() centering inset built on --page-inset', () => {
+  it('allows the max() centering inset built on --bds-page-inset', () => {
     const v = scanCssText(
-      '.f { padding-inline: max(var(--page-inset), calc((100% - var(--content-width-narrow)) / 2)); }',
+      '.f { padding-inline: max(var(--bds-page-inset), calc((100% - var(--bds-content-width-narrow)) / 2)); }',
     );
     expect(v).toHaveLength(0);
   });
 
   it('flags the removed --gutter-page alias — no longer a valid page inset (ADR-025)', () => {
     const v = scanCssText(
-      '.c { max-width: var(--content-width-xl); margin-inline: auto; padding-inline: var(--gutter-page); }',
+      '.c { max-width: var(--bds-content-width-xl); margin-inline: auto; padding-inline: var(--gutter-page); }',
     );
     expect(v).toHaveLength(1);
   });
 
   it('allows a container with no padding-inline of its own', () => {
-    const v = scanCssText('.c { max-width: var(--content-width-xl); margin-inline: auto; }');
+    const v = scanCssText('.c { max-width: var(--bds-content-width-xl); margin-inline: auto; }');
     expect(v).toHaveLength(0);
   });
 
   it('ignores padding-inline outside a container rule (buttons, chips)', () => {
-    const v = scanCssText('.btn { padding-inline: var(--padding-md); }');
+    const v = scanCssText('.btn { padding-inline: var(--bds-padding-md); }');
     expect(v).toHaveLength(0);
   });
 
   it('honors a reasoned bds-lint-ignore, hard-fails a bare one', () => {
     const reasoned = scanCssText(
-      '.c {\n  max-width: var(--content-width-xl);\n  padding-inline: var(--padding-xl); /* bds-lint-ignore — legacy inset, visual change gated on #771 */\n}',
+      '.c {\n  max-width: var(--bds-content-width-xl);\n  padding-inline: var(--bds-padding-xl); /* bds-lint-ignore — legacy inset, visual change gated on #771 */\n}',
     );
     expect(reasoned).toHaveLength(0);
 
     const bare = scanCssText(
-      '.c {\n  max-width: var(--content-width-xl);\n  padding-inline: var(--padding-xl); /* bds-lint-ignore */\n}',
+      '.c {\n  max-width: var(--bds-content-width-xl);\n  padding-inline: var(--bds-padding-xl); /* bds-lint-ignore */\n}',
     );
     expect(bare).toHaveLength(1);
     expect(bare[0].bare).toBe(true);

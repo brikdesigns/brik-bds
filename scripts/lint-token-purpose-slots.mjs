@@ -9,7 +9,7 @@
  * docs/foundation/token-anatomy documents ONE formula — the colour intent form
  * `--{purpose}-{role}`, whose `purpose` vocabulary is the closed list
  * page/surface/background/text/border/color. 325 of the 701 token names that
- * ship are outside that list (`--font-size-100`, `--gap-md`, `--ease-spring`).
+ * ship are outside that list (`--bds-font-size-100`, `--bds-gap-md`, `--bds-ease-spring`).
  * Nothing said whether those were drift or a second legitimate formula, so
  * brik-bds#1910 axis 3 could not be answered and the naming ADR could not be
  * written. The verdict, recorded in token-anatomy § Non-color anatomy: they are
@@ -56,13 +56,14 @@
  */
 
 import fs from 'node:fs';
+import { ID, canonicalPart } from './lib/bds-prefix.mjs';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 /**
  * Every purpose slot that ships, longest-match-first at lookup time so
- * `--border-radius-100` keys to `border-radius` (a property scale) and not to
+ * `--bds-border-radius-100` keys to `border-radius` (a property scale) and not to
  * `border` (a colour purpose). That collision is not cosmetic: `--border-*` is
  * 45 colour tokens AND 44 length tokens under one first segment.
  *
@@ -79,6 +80,9 @@ const GRAMMAR = JSON.parse(
 );
 export const SLOT_REGISTRY = GRAMMAR.slots;
 
+/** `--bds-gap-md` -> `gap-md`: slots are keyed by the body; the System ID leads every name (ADR-043). */
+const bodyOf = (name) => name.replace(/^--/, '').replace(new RegExp(`^${ID}-`), '');
+
 /**
  * slot → tracking issue. Drift that ships today. Registered so the census is
  * complete and the gate stays green, NOT so it is condoned — each entry is a
@@ -93,7 +97,7 @@ const DRIFT_BACKLOG = {
   tooltip: 1910,
 
   // Style Dictionary's primitive easing export. Two names for one concept
-  // (`--easing-ease-in` vs `--ease-in`) at DIFFERENT values, and the stutter
+  // (`--bds-easing-ease-in` vs `--bds-ease-in`) at DIFFERENT values, and the stutter
   // in `easing-ease-` is the tell. Zero `var()` references in components/;
   // `--ease-*` carries all 70.
   easing: 1910,
@@ -104,7 +108,7 @@ const DRIFT_BACKLOG = {
  * owed — a deliberate carve-out, mirrored in `EXCEPTIONS` at
  * scripts/__tests__/inspect-widget-tokens.test.mjs.
  *
- * `--web` / `--tablet` / `--mobile` are unitless Figma primitives with zero
+ * `--bds-web` / `--bds-tablet` / `--bds-mobile` are unitless Figma primitives with zero
  * `var()` consumers, and `--breakpoint-*` — the family a rename would move them
  * to — has none either (measured 2026-08-20 across brik-bds, brik-client-portal,
  * brikdesigns). Renaming one dead family into another buys nothing. Whether BDS
@@ -114,6 +118,9 @@ const DRIFT_BACKLOG = {
  * different claims: drift is owed a rename, an exception is not, and a gate that
  * prints "drift" for a decided carve-out re-opens a settled question every run.
  */
+/** Component-tier stems dist/tokens.css declares (Slider variables). */
+const COMPONENT_KNOB_STEMS = new Set(['slider']);
+
 const SLOTLESS_EXCEPTIONS = new Set(['web', 'tablet', 'mobile']);
 
 const DOC_PATH = path.join('docs-site', 'content', 'docs', 'foundation', 'token-anatomy.mdx');
@@ -134,7 +141,7 @@ const T_SHIRT = new Set(GRAMMAR.steps.slotAuditTShirt);
 
 /**
  * A null/reset step is orthogonal to the scale it sits beside — every scale
- * needs one, so `--gap-none` next to `--gap-md` is not two vocabularies.
+ * needs one, so `--bds-gap-none` next to `--bds-gap-md` is not two vocabularies.
  * Classified separately and excluded from the MIXED test for that reason.
  */
 const RESET_STEPS = new Set(GRAMMAR.steps.reset);
@@ -145,7 +152,7 @@ const RESET_STEPS = new Set(GRAMMAR.steps.reset);
  * brik-bds#1910 axis 5's input, measured here instead of eyeballed.
  */
 function stepVocabulary(name, slot) {
-  const tail = name.replace(/^--/, '').slice(slot.length).replace(/^-/, '');
+  const tail = bodyOf(name).slice(slot.length).replace(/^-/, '');
   if (tail === '') return 'bare';
   if (RESET_STEPS.has(tail)) return 'reset';
   if (/^\d+$/.test(tail)) return 'numeric';
@@ -155,9 +162,15 @@ function stepVocabulary(name, slot) {
 }
 
 function slotFor(name) {
-  const bare = name.replace(/^--/, '');
+  const bare = bodyOf(name);
   for (const entry of SLOTS_BY_LENGTH) {
     if (bare === entry.slot || bare.startsWith(`${entry.slot}-`)) return entry;
+  }
+  // Tier 4 component knobs that dist/tokens.css declares (ADR-014) are registered
+  // under the System ID itself (slot `bds`). Listed by stem, so a new unregistered
+  // Primitive/Semantic stem under `--bds-` is still caught.
+  if (name.startsWith(`--${ID}-`) && COMPONENT_KNOB_STEMS.has(bodyOf(name).split('-')[0])) {
+    return SLOT_REGISTRY.find((e) => e.slot === ID) ?? null;
   }
   return null;
 }
@@ -167,7 +180,8 @@ function slotFor(name) {
  * Definitions only — a `var()` reference is a consumption, not a slot claim.
  */
 function collect(cssPath) {
-  const raw = fs.readFileSync(cssPath, 'utf8');
+  // The canonical registry only — the compat bridge re-declares retired bare names.
+  const raw = canonicalPart(fs.readFileSync(cssPath, 'utf8'));
   const clean = blankComments(raw);
   const defs = new Map();
   const declRe = /(^|[{;\s])(--[A-Za-z0-9_-]+)\s*:/g;
@@ -190,7 +204,7 @@ function analyse(cssPath) {
   for (const [name, line] of defs) {
     const entry = slotFor(name);
     if (!entry) {
-      const bare = name.replace(/^--/, '');
+      const bare = bodyOf(name);
       const drifted = bare.split('-')[0];
       const excepted = SLOTLESS_EXCEPTIONS.has(drifted);
       const backlogged = Object.prototype.hasOwnProperty.call(DRIFT_BACKLOG, drifted)
@@ -311,12 +325,12 @@ function main() {
   }
 
   for (const s of slots.filter((x) => x.family === 'exception')) {
-    console.error(`  · --${s.slot} — slotless by exception, ${s.names.length} token(s), line ${s.firstLine}`);
+    console.error(`  · --${ID}-${s.slot} — slotless by exception, ${s.names.length} token(s), line ${s.firstLine}`);
   }
 
   for (const s of slots.filter((x) => x.family === 'drift')) {
     const tag = s.disposition ? `drift, rename owed (${s.disposition})` : 'UNREGISTERED';
-    console.error(`  ${s.disposition ? '·' : '✗'} --${s.slot}-* — ${tag}, ${s.names.length} token(s), first at line ${s.firstLine}`);
+    console.error(`  ${s.disposition ? '·' : '✗'} --${ID}-${s.slot}-* — ${tag}, ${s.names.length} token(s), first at line ${s.firstLine}`);
   }
 
   for (const slot of doc.missing) {

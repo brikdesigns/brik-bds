@@ -7,8 +7,8 @@
  * The docs-site audit (#1358) found the systemic accuracy failure: wherever a
  * page renders from live data it stayed correct; wherever a human transcribed a
  * token name into a code block or a reference table, it drifted. A doc that
- * presents `--text-info` (real name `--text-status-info`) or `--surface-success`
- * (real name `--surface-positive`) as a usable token silently misleads every
+ * presents `--bds-text-info` (real name `--text-status-info`) or `--surface-success`
+ * (real name `--bds-surface-positive`) as a usable token silently misleads every
  * consumer who copies it — the same phantom-token class that produced portal
  * #512 / #553 (rolled back). `scripts/lint-tokens.js` guards component source but
  * never reads MDX; this gate closes that gap (Wave 4 drift gate, #1362).
@@ -25,7 +25,7 @@
  *      as the usable name teaches the vocabulary consumers are migrating off.
  *      This is the #1753 drift: the 11-step numeric color scale shipped in
  *      v0.152.0 (#1737/#1739) while the primitives docs went on teaching the
- *      6-step ladder (`--color-poppy-darker`) as the system.
+ *      6-step ladder (`--bds-color-poppy-800`) as the system.
  *
  * The deprecated set is read from the registry, not hardcoded — any token whose
  * declaration carries `DEPRECATED` is gated in docs automatically.
@@ -37,7 +37,7 @@
  * ── What is NOT flagged ────────────────────────────────────────────────────────
  *   • Naming-pattern placeholders — anything with a glob/interpolation/range:
  *     `--text-*`, `--surface-{role}`, `--text-service-{line}-on-light`,
- *     `--size-0…2200`, `--background-<role>`. (Detected by trailing/adjacent
+ *     `--bds-size-0…2200`, `--background-<role>`. (Detected by trailing/adjacent
  *     `* { } < [ … ...` or a dangling hyphen.)
  *   • Component-scoped knobs declared in component CSS (`--page-header-section-gap`,
  *     `--text-input-bg`) — real, just not registry tokens.
@@ -75,6 +75,7 @@ import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { resolve, join, dirname, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
+import { canonicalPart } from './lib/bds-prefix.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '..');
@@ -86,11 +87,11 @@ const COMPONENTS_DIR = join(REPO_ROOT, 'components', 'ui');
 // one of these families that resolves nowhere is a phantom. Ordered longest-first
 // so `--border-radius-` / `--border-width-` classify before `--border-`.
 const FAMILIES = [
-  '--border-radius-', '--border-width-', '--border-',
-  '--background-', '--surface-', '--text-', '--color-',
-  '--padding-', '--gap-', '--size-',
-  '--body-', '--heading-', '--label-', '--display-', '--subtitle-',
-  '--page-', '--icon-',
+  '--bds-border-radius-', '--bds-border-width-', '--bds-border-',
+  '--bds-background-', '--bds-surface-', '--bds-text-', '--bds-color-',
+  '--bds-padding-', '--bds-gap-', '--bds-size-',
+  '--bds-body-', '--bds-heading-', '--bds-label-', '--bds-display-', '--bds-subtitle-',
+  '--bds-page-', '--bds-icon-',
 ];
 const inFamily = (t) => FAMILIES.some((p) => t.startsWith(p));
 
@@ -140,8 +141,8 @@ function deprecatedNamesIn(css) {
 }
 
 // The replacement a DEPRECATED comment names, e.g.
-// `--color-poppy-darker: var(--color-poppy-800); /** DEPRECATED — use color.poppy.800 … */`
-// → `--color-poppy-800`. Used only to make the failure message actionable.
+// `--bds-color-poppy-800: var(--bds-color-poppy-800); /** DEPRECATED — use color.poppy.800 … */`
+// → `--bds-color-poppy-800`. Used only to make the failure message actionable.
 function replacementsIn(css) {
   const map = new Map();
   for (const m of css.matchAll(/^\s*(--[\w-]+)\s*:\s*var\((--[\w-]+)\)[^\n]*DEPRECATED/gm)) {
@@ -173,7 +174,9 @@ function buildKnownTokens(tokensOverride) {
     };
   }
   ensureDistTokens();
-  const registry = readFileSync(DIST_TOKENS, 'utf8');
+  // The canonical registry only — the generated compat bridge re-declares the retired
+  // pre-ADR-043 names, and docs must teach the `--bds-` spelling (brik-bds#2670).
+  const registry = canonicalPart(readFileSync(DIST_TOKENS, 'utf8'));
   const known = declaredNamesIn(registry);
   // ∪ component-scoped custom properties (CSS-Override-API knobs) — real names
   // that legitimately never enter the registry.

@@ -61,7 +61,7 @@ describe('lint-tokens Rule 7 (fallback-literal) — #1043 / ADR-014', () => {
   it('passes a nested Semantic-token fallback (the correct Tier 4 shape)', () => {
     const file = join(tmpDir, 'NestedToken.css');
     writeFileSync(file, `
-      .x { box-shadow: var(--bds-toast-shadow, var(--shadow-md)); }
+      .x { box-shadow: var(--bds-toast-shadow, var(--bds-shadow-md)); }
     `);
     const violations = runLinter({ cssFiles: [file], rule: 'fallback-literal' });
     expect(violations).toEqual([]);
@@ -70,8 +70,8 @@ describe('lint-tokens Rule 7 (fallback-literal) — #1043 / ADR-014', () => {
   it('passes a CSS keyword fallback (transparent / uppercase are not Tier-1 values)', () => {
     const file = join(tmpDir, 'Keyword.css');
     writeFileSync(file, `
-      .a { background: var(--surface-navigation, transparent); }
-      .b { text-transform: var(--text-transform-subtitle, uppercase); }
+      .a { background: var(--bds-surface-navigation, transparent); }
+      .b { text-transform: var(--bds-text-transform-subtitle, uppercase); }
     `);
     const violations = runLinter({ cssFiles: [file], rule: 'fallback-literal' });
     expect(violations).toEqual([]);
@@ -152,7 +152,7 @@ describe('lint-tokens Rule 7 (fallback-literal) — #1043 / ADR-014', () => {
       .x {
         box-shadow: var(
           --bds-toast-shadow,
-          var(--shadow-md)
+          var(--bds-shadow-md)
         );
       }
     `);
@@ -180,7 +180,7 @@ describe('lint-tokens Rule 7 (fallback-literal) — #1043 / ADR-014', () => {
     const file = join(tmpDir, 'Runaway.css');
     writeFileSync(file, `
       .a { content: "("; }
-      .b { color: var(--bds-safe-fg, var(--text-primary)); }
+      .b { color: var(--bds-safe-fg, var(--bds-text-primary)); }
     `);
     const violations = runLinter({ cssFiles: [file], rule: 'fallback-literal' });
     expect(violations).toEqual([]);
@@ -215,7 +215,7 @@ describe('lint-tokens Rule 7 (fallback-literal) — typed exemptions #1044', () 
   it('exempts a clamp() fallback anchored on Semantic tokens', () => {
     const file = join(tmpDir, 'TokenClamp.css');
     writeFileSync(file, `
-      .x { padding-block: var(--bds-hero-padding-y, clamp(var(--padding-xl), 6vw, var(--padding-huge))); }
+      .x { padding-block: var(--bds-hero-padding-y, clamp(var(--bds-padding-xl), 6vw, var(--bds-padding-huge))); }
     `);
     expect(runLinter({ cssFiles: [file], rule: 'fallback-literal' })).toEqual([]);
   });
@@ -223,7 +223,7 @@ describe('lint-tokens Rule 7 (fallback-literal) — typed exemptions #1044', () 
   it('exempts a min()/max() fallback anchored on tokens', () => {
     const file = join(tmpDir, 'TokenMinMax.css');
     writeFileSync(file, `
-      .x { inline-size: var(--bds-panel-w, min(var(--size-2200), 90vw)); }
+      .x { inline-size: var(--bds-panel-w, min(var(--bds-size-2200), 90vw)); }
     `);
     expect(runLinter({ cssFiles: [file], rule: 'fallback-literal' })).toEqual([]);
   });
@@ -253,7 +253,7 @@ describe('lint-tokens Rule 8 (retired-bp-namespace) — #1043 / ADR-014', () => 
   it('fires on a --bp-* reference and points at the --bds-* rename', () => {
     const file = join(tmpDir, 'BpRef.css');
     writeFileSync(file, `
-      .x { background: var(--bp-hero-img-card-bg, var(--surface-primary)); }
+      .x { background: var(--bp-hero-img-card-bg, var(--bds-surface-primary)); }
     `);
     const violations = runLinter({ cssFiles: [file], rule: 'retired-bp-namespace' });
     expect(violations).toHaveLength(1);
@@ -263,7 +263,7 @@ describe('lint-tokens Rule 8 (retired-bp-namespace) — #1043 / ADR-014', () => 
   it('fires on a --bp-* definition', () => {
     const file = join(tmpDir, 'BpDef.css');
     writeFileSync(file, `
-      .x { --bp-hero-img-card-bg: var(--surface-primary); }
+      .x { --bp-hero-img-card-bg: var(--bds-surface-primary); }
     `);
     const violations = runLinter({ cssFiles: [file], rule: 'retired-bp-namespace' });
     expect(violations).toHaveLength(1);
@@ -272,7 +272,7 @@ describe('lint-tokens Rule 8 (retired-bp-namespace) — #1043 / ADR-014', () => 
   it('passes once migrated to the sanctioned --bds-* namespace', () => {
     const file = join(tmpDir, 'BdsRef.css');
     writeFileSync(file, `
-      .x { background: var(--bds-hero-img-card-bg, var(--surface-primary)); }
+      .x { background: var(--bds-hero-img-card-bg, var(--bds-surface-primary)); }
     `);
     const violations = runLinter({ cssFiles: [file], rule: 'retired-bp-namespace' });
     expect(violations).toEqual([]);
@@ -305,7 +305,7 @@ describe('blueprint-path routing (pre-commit --files path) — #1043', () => {
 
   it('routes a --files blueprint path through retired-bp-namespace', () => {
     const file = blueprintFixture('Reg2.css', `
-      .x { background: var(--bp-foo-bar, var(--surface-primary)); }
+      .x { background: var(--bp-foo-bar, var(--bds-surface-primary)); }
     `);
     const violations = runLinter({ files: [file], rule: 'retired-bp-namespace' });
     expect(violations).toHaveLength(1);

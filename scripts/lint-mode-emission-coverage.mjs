@@ -34,6 +34,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { COLLECTIONS } from './generate-modes-css.mjs';
+import { canonicalPart } from './lib/bds-prefix.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -129,7 +130,8 @@ function main() {
     process.exit(1);
   }
   const data = JSON.parse(fs.readFileSync(TOKENS_STUDIO, 'utf8'));
-  const css = fs.readFileSync(DIST_TOKENS, 'utf8');
+  // Canonical part only: the bridge re-declares aliases inside the mode blocks and must not mask a dropped emission.
+  const css = canonicalPart(fs.readFileSync(DIST_TOKENS, 'utf8'));
   const rows = findCoverageViolations(data, css);
 
   if (json) {

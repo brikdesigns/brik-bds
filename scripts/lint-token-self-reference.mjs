@@ -2,7 +2,7 @@
 /**
  * lint-token-self-reference — fail when a custom property substitutes itself.
  *
- * `--box-shadow-md: var(--box-shadow-md);` is a dependency cycle. Per CSS
+ * `--bds-box-shadow-md: var(--bds-box-shadow-md);` is a dependency cycle. Per CSS
  * Custom Properties §3.2 Resolving Dependency Cycles, every custom property in
  * a cycle is invalid at computed-value time, so the name resolves to the
  * guaranteed-invalid value — it is *unset*, not merely unchanged. An earlier
@@ -14,7 +14,7 @@
  * figma-tokens.css / gap-fills.css, so the file read as harmless aliasing — but
  * any consumer that loaded bridge.css lost all fifteen. Verified in Chromium
  * against the real dist files: loading dist/tokens.css alone gives
- * `--border-radius-md: 12px`; loading dist/tokens.css + dist/bridge.css gives
+ * `--bds-border-radius-md: 12px`; loading dist/tokens.css + dist/bridge.css gives
  * the empty string.
  *
  * The failure mode is the dangerous one — silent. No parse error, no console

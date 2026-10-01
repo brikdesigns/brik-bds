@@ -5,27 +5,27 @@
  *
  * The token model has four tiers (docs-site token-anatomy → Tier): Raw (1),
  * Primitive (2), Semantic (3), Component (4). The rule is "higher tiers
- * reference lower tiers via var()" — a Semantic token (`--padding-lg`,
- * `--page-inset`, `--background-brand-primary`) resolves DOWN to a Primitive
- * (`--space-600`, `--color-poppy-500`), and only a Component-tier `--bds-*`
+ * reference lower tiers via var()" — a Semantic token (`--bds-padding-lg`,
+ * `--bds-page-inset`, `--bds-background-brand-primary`) resolves DOWN to a Primitive
+ * (`--bds-space-600`, `--bds-color-poppy-500`), and only a Component-tier `--bds-*`
  * knob resolves to a Semantic.
  *
  * ── The one sanctioned exception: color role-aliasing (ADR-035) ─────────────
  * A Semantic MAY alias another Semantic when the target resolves to a
- * `--color-*` Primitive. Color is the theme-varying axis: `--border-focus:
- * var(--border-brand-primary)` means "the focus ring IS the brand border", and
- * because `--border-brand-primary` is redefined per theme, the alias theme-
+ * `--color-*` Primitive. Color is the theme-varying axis: `--bds-border-focus:
+ * var(--bds-border-brand-primary)` means "the focus ring IS the brand border", and
+ * because `--bds-border-brand-primary` is redefined per theme, the alias theme-
  * tracks for free from one line. Banning it would force the alias to be re-
  * declared in every theme block and would decouple focus from brand — a
  * regression, not a purity win (#2187). So a color→color alias is legal.
  *
  * Every OTHER Semantic→Semantic reference is off-model, because a non-color
  * Semantic (spacing/size/type/radius/width) carries a mode or scale LADDER that
- * must not be parasitized. `--gutter-page: var(--padding-lg)` (ADR-025) borrowed
- * `--padding-lg`'s density ladder for a page inset — coupling unrelated concerns.
+ * must not be parasitized. `--gutter-page: var(--bds-padding-lg)` (ADR-025) borrowed
+ * `--bds-padding-lg`'s density ladder for a page inset — coupling unrelated concerns.
  * The remedy is a token that resolves its scale from Primitives directly
- * (`--page-inset`, now a layout-tier clamp over `--space-*` endpoints in
- * tokens/layout-fluid.css, ADR-042; `--display-fluid-lg: clamp(…, var(--font-size-1600))`).
+ * (`--bds-page-inset`, now a layout-tier clamp over `--space-*` endpoints in
+ * tokens/layout-fluid.css, ADR-042; `--bds-display-fluid-lg: clamp(…, var(--bds-font-size-1600))`).
  *
  * Why a dedicated gate: the sibling token gates read the reference GRAPH but
  * none read tier DIRECTION.
@@ -39,7 +39,7 @@
  * Broad rule (ADR-035, #2187): ANY non-Component token that references a
  * non-color Semantic is flagged — both a Semantic-named token (t3→t3) and a
  * Primitive-named token pointing UP at a Semantic (t2→t3, the exact shape
- * `--gutter-page: var(--padding-lg)` shipped as, since `--gutter-page` matches
+ * `--gutter-page: var(--bds-padding-lg)` shipped as, since `--gutter-page` matches
  * no Semantic prefix). Tier is classified by name prefix, kept in sync with
  * scripts/lint-tokens.js `SD_SEMANTIC_PREFIXES`; "resolves to color" is computed
  * from the actual reference graph, so it stays correct as tokens are added.
@@ -69,6 +69,10 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 import { lintIgnoreReason } from './lib/bds-lint-ignore.cjs';
+import { PREFIX, readGrammar } from './lib/bds-prefix.mjs';
+
+/** Slots the naming grammar registers as Primitive/Semantic (everything except the `bds` component slot). */
+const PRIM_SEM_SLOTS = readGrammar().slots.filter((e) => e.tier !== 'component').map((e) => e.slot);
 
 const DEFAULT_DIR = 'tokens';
 
@@ -78,28 +82,33 @@ const DEFAULT_DIR = 'tokens';
  * of these (and not a Webflow `--_*` or Component `--bds-*`) is Primitive-tier.
  */
 const SD_SEMANTIC_PREFIXES = [
-  '--padding-', '--gap-', '--text-', '--background-', '--surface-',
-  '--border-primary', '--border-secondary', '--border-muted', '--border-brand',
-  '--border-input', '--border-inverse', '--border-on-color', '--border-focus',
-  '--border-width-', '--border-radius-', '--page-', '--section-', '--body-', '--label-',
-  '--heading-', '--display-', '--subtitle-', '--icon-', '--font-family-',
-  '--box-shadow-', '--blur-radius-', '--size-', '--tooltip-',
+  '--bds-padding-', '--bds-gap-', '--bds-text-', '--bds-background-', '--bds-surface-',
+  '--bds-border-primary', '--bds-border-secondary', '--bds-border-muted', '--bds-border-brand',
+  '--bds-border-input', '--bds-border-inverse', '--bds-border-on-color', '--bds-border-focus',
+  '--bds-border-width-', '--bds-border-radius-', '--bds-page-', '--bds-section-', '--bds-body-', '--bds-label-',
+  '--bds-heading-', '--bds-display-', '--bds-subtitle-', '--bds-icon-', '--bds-font-family-',
+  '--bds-box-shadow-', '--bds-blur-radius-', '--bds-size-', '--bds-tooltip-',
 ];
 
 /** True when `name` is a Component-tier (t4) token — the only tier permitted
  *  to reference a Semantic unconditionally. */
 export function isComponent(name) {
-  return name.startsWith('--bds-');
+  // ADR-043: the System ID leads EVERY tier, so the prefix no longer marks t4. A
+  // `--bds-` name is Component-tier only when its body is on no Primitive/Semantic
+  // slot of the naming grammar (`--bds-slider-thumb-size`, not `--bds-space-600`).
+  if (!name.startsWith(PREFIX)) return false;
+  const body = name.slice(PREFIX.length);
+  return !PRIM_SEM_SLOTS.some((slot) => body === slot || body.startsWith(`${slot}-`));
 }
 
 /** True when `name` is a Semantic-tier (t3) token. */
 export function isSemantic(name) {
   if (isComponent(name)) return false; // Component (t4)
   // A numeric final segment is a raw scale STEP — Primitive — even under a
-  // prefix that is otherwise Semantic: `--border-radius-600` / `--size-400`
-  // are the Primitive scale, `--border-radius-lg` / `--size-md` are Semantic
+  // prefix that is otherwise Semantic: `--bds-border-radius-600` / `--bds-size-400`
+  // are the Primitive scale, `--bds-border-radius-lg` / `--size-md` are Semantic
   // roles that resolve to them. Without this, every generated role→step alias
-  // (`--size-md: var(--size-400)`) reads as a false hit.
+  // (`--size-md: var(--bds-size-400)`) reads as a false hit.
   if (/-\d+$/.test(name)) return false;
   if (name.startsWith('--_')) return true; // Webflow semantic
   return SD_SEMANTIC_PREFIXES.some((p) => name.startsWith(p));
@@ -111,10 +120,10 @@ export function isSemantic(name) {
  * a Semantic→Semantic reference is sanctioned iff the target bottoms out at a
  * color, the one theme-varying axis. `defs` maps a token name to the custom
  * properties its value substitutes. Unknown/undefined names (raw-valued
- * Primitives like `--space-600`, `--font-size-1600`) resolve to `false`.
+ * Primitives like `--bds-space-600`, `--bds-font-size-1600`) resolve to `false`.
  */
 export function resolvesToColor(name, defs, seen = new Set()) {
-  if (name.startsWith('--color-')) return true;
+  if (name.startsWith('--bds-color-')) return true;
   if (seen.has(name)) return false; // cycle guard — a cycle never reaches a color
   seen.add(name);
   const refs = defs[name];
@@ -253,9 +262,9 @@ function main() {
   if (findings.length > 0) {
     console.error('');
     console.error(`${findings.length} token(s) referencing a non-color Semantic token.`);
-    console.error('Point each at a Primitive (--space-*, --font-size-*, a numeric scale step, …). If it');
+    console.error('Point each at a Primitive (--bds-space-*, --bds-font-size-*, a numeric scale step, …). If it');
     console.error('must track a mode, give it its own [data-mode-*] ladder over Primitives (ADR-025,');
-    console.error('--page-inset). A color role-alias (target resolves to --color-*) is allowed (ADR-035).');
+    console.error('--bds-page-inset). A color role-alias (target resolves to --bds-color-*) is allowed (ADR-035).');
     console.error('A deliberate, temporary alias takes a reasoned `bds-lint-ignore — <why>`.');
     console.error('Tier model: design.brikdesigns.com/docs/foundation/token-anatomy#tier');
     process.exit(1);

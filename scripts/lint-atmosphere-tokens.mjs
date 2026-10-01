@@ -13,7 +13,7 @@
  *      `rgba(196, 154, 47, …)`, which leaked into every "effect" atmosphere
  *      when editorial-luxury was extracted from the Birdwell site.
  *   3. (effect atmospheres) use a `color-mix()` whose source colour is
- *      anything other than a canonical `--background-brand-primary` /
+ *      anything other than a canonical `--bds-background-brand-primary` /
  *      `--background-accent-*` role.
  *   4. Declare a color-foundation token (`--page/surface/background/text/
  *      border-*`) — surface colours come from the brand theme layer.
@@ -65,7 +65,7 @@ for (const file of cssFiles) {
 
     // Rule 1 — no off-canon custom-property declaration.
     if (/^\s*--(ambient|atmosphere)[\w-]*\s*:/.test(line)) {
-      errors.push(`${file}:${n}  off-canon token declaration — derive from --background-brand-primary / --background-accent-* via color-mix()\n    ${line.trim()}`);
+      errors.push(`${file}:${n}  off-canon token declaration — derive from --bds-background-brand-primary / --bds-background-accent-* via color-mix()\n    ${line.trim()}`);
     }
 
     // Rule 2 — no raw rgb()/rgba() colour literal (data-URI grain uses
@@ -77,8 +77,8 @@ for (const file of cssFiles) {
     // Rule 3 — every real color-mix() in an effect atmosphere pulls a
     // canonical role. Match `color-mix(in …` (the real function form) so
     // prose mentions of `color-mix()` in doc comments don't trip it.
-    if (EFFECT_FILES.has(file) && line.includes('color-mix(in ') && !/var\(--background-(brand-primary|accent-[a-z]+)\)/.test(line)) {
-      errors.push(`${file}:${n}  color-mix() does not source a canonical --background-brand-primary / --background-accent-* role\n    ${line.trim()}`);
+    if (EFFECT_FILES.has(file) && line.includes('color-mix(in ') && !/var\(--bds-background-(brand-primary|accent-[a-z]+)\)/.test(line)) {
+      errors.push(`${file}:${n}  color-mix() does not source a canonical --bds-background-brand-primary / --bds-background-accent-* role\n    ${line.trim()}`);
     }
 
     // Rule 4 — atmospheres must never DECLARE a color-foundation token;

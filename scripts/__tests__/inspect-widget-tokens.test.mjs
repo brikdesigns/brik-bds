@@ -41,7 +41,7 @@ const TOKEN_SOURCES = [
 // The earlier note here said they were "consumed in media-query math". That was
 // never verified and is not true — nothing consumes them. Corrected rather than
 // deleted because the false rationale is what made this look settled.
-const EXCEPTIONS = new Set(['--web', '--tablet', '--mobile']);
+const EXCEPTIONS = new Set(['--bds-web', '--bds-tablet', '--bds-mobile']);
 
 const widgetSrc = readFileSync(
   join(repoRoot, 'components/ui/BrikDevBar/widgets/inspect-widget.js'),
@@ -70,18 +70,18 @@ describe('inspect widget — token allowlist coverage', () => {
 
   // Explicit regression markers for the families that were silently dropped.
   it.each([
-    '--ease-out',
-    '--ease-in',
-    '--ease-in-out',
-    '--ease-spring',
-    '--box-shadow-md',
-    '--icon-md',
-    '--size-1000',
-    '--content-width-lg',
+    '--bds-ease-out',
+    '--bds-ease-in',
+    '--bds-ease-in-out',
+    '--bds-ease-spring',
+    '--bds-box-shadow-md',
+    '--bds-icon-md',
+    '--bds-size-1000',
+    '--bds-content-width-lg',
     '--layout-md',
     '--stagger-3',
-    '--page-primary',
-    '--duration-md',
+    '--bds-page-primary',
+    '--bds-duration-md',
   ])('classifies %s as a known token', (token) => {
     expect(isKnown(token)).toBe(true);
   });

@@ -48,6 +48,29 @@ const SD_CSS_PATH = path.join(
   __dirname, '..', 'build', 'figma', 'css', 'variables.css'
 );
 const REPO_ROOT = path.join(__dirname, '..');
+// System ID prefix (ADR-043) — read from the grammar, never re-typed here.
+const GRAMMAR = JSON.parse(fs.readFileSync(path.join(REPO_ROOT, 'tokens', 'naming-grammar.json'), 'utf8'));
+const ID_PREFIX = `--${GRAMMAR.ids.componentId}-`;
+// `--bds-text-primary` -> `--text-primary`: the body, for family / tier classification.
+const canon = (name) => (name.startsWith(ID_PREFIX) ? `--${name.slice(ID_PREFIX.length)}` : name);
+// Frozen pre-migration surface — the names a component must no longer read bare (AC3).
+let legacyNamesCache = null;
+let renamedKnobsCache = null;
+function renamedKnobs() {
+  if (!renamedKnobsCache) {
+    const p = path.join(REPO_ROOT, 'tokens', 'compat', 'renamed-knobs.json');
+    const { $comment, ...knobs } = fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf8')) : {};
+    renamedKnobsCache = new Map(Object.entries(knobs));
+  }
+  return renamedKnobsCache;
+}
+function legacyNames() {
+  if (!legacyNamesCache) {
+    const p = path.join(REPO_ROOT, 'tokens', 'compat', 'legacy-token-names.json');
+    legacyNamesCache = new Set(fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf8')).names : []);
+  }
+  return legacyNamesCache;
+}
 const COMPONENTS_DIR = path.join(__dirname, '..', 'components', 'ui');
 // Roots that get the bare-`bds-lint-ignore` rule ONLY (#1646). Not the token
 // suite — these carry story/demo styling the token rules intentionally allow.
@@ -332,6 +355,7 @@ const FAMILY_PREFIXES_FOR_VALUES = [
 ];
 
 function classifyTokenFamily(tokenName) {
+  tokenName = canon(tokenName);
   for (const prefix of FAMILY_PREFIXES_FOR_VALUES) {
     if (tokenName.startsWith(prefix)) return prefix;
   }
@@ -389,7 +413,7 @@ function parseCssTokens() {
               semanticTokens.add(tokenName);
             } else {
               // SD tokens: check prefix to classify
-              const isSemantic = SD_SEMANTIC_PREFIXES.some(p => tokenName.startsWith(p));
+              const isSemantic = SD_SEMANTIC_PREFIXES.some(p => canon(tokenName).startsWith(p));
               if (isSemantic) {
                 semanticTokens.add(tokenName);
               } else {
@@ -622,7 +646,8 @@ function checkHardcodedValues(line, lineNum, file, isComponent) {
  */
 function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
   const violations = [];
-  const regex = /var\((--[\w-]+)(?:\s*,\s*[^)]+)?\)/g;
+  // Every `var(--name` — including one nested in another var()'s fallback.
+  const regex = /var\(\s*(--[\w-]+)/g;
   let match;
 
   // Skip comment lines
@@ -643,6 +668,30 @@ function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
     // Check against valid token set
     if (tokens.allTokens.has(tokenName)) continue;
 
+    // ADR-043 / brik-bds#2670 (AC3): a component reads the prefixed name. A bare
+    // pre-migration name (or a renamed knob's old spelling) only resolves through
+    // the compat bridge, which is for consumers outside this repo, not for BDS.
+    const renamedTo = renamedKnobs().get(tokenName);
+    const bare = renamedTo
+      ? null
+      : (legacyNames().has(tokenName) || tokens.allTokens.has(`${ID_PREFIX}${tokenName.slice(2)}`))
+        ? `${ID_PREFIX}${tokenName.slice(2)}`
+        : null;
+    if (renamedTo || bare) {
+      violations.push({
+        rule: 'unprefixed-token',
+        severity: isComponent ? 'error' : 'warning',
+        file,
+        line: lineNum,
+        column: match.index + 1,
+        message: renamedTo
+          ? `Retired knob "var(${tokenName})" — renamed to "${renamedTo}" (ADR-043 § 5, reserved stem)`
+          : `Un-prefixed token "var(${tokenName})" — read "${bare}" (ADR-043: every token name leads with ${ID_PREFIX})`,
+        suggestion: `Replace with var(${renamedTo || bare}). The bare name only resolves through the compat bridge (tokens/compat/prefix-bridge.css).`,
+      });
+      continue;
+    }
+
     // --bds-{component}-{property} is the sanctioned Tier 4 component-token
     // namespace (ADR-014): component-local custom properties — either an
     // override knob or a runtime binding set by the component's JS/TSX. It is
@@ -651,7 +700,13 @@ function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
     // token, never a raw value). The retired --bp-* and bare --{component}-*
     // shapes are NOT skipped — they fall through to unknown-token / the
     // --bp- regression gate.
-    if (tokenName.startsWith('--bds-')) continue;
+    // After ADR-043 the prefix leads every tier, so a body on a Primitive/Semantic
+    // slot (`--bds-spce-600` is not, `--bds-space-999` is) must still resolve.
+    if (tokenName.startsWith(ID_PREFIX)) {
+      const body = tokenName.slice(ID_PREFIX.length);
+      const onSlot = GRAMMAR.slots.some((e) => e.tier !== 'component' && (body === e.slot || body.startsWith(`${e.slot}-`)));
+      if (!onSlot) continue;
+    }
 
     // Some component-specific CSS properties (e.g. in Storybook theme wrappers)
     // use tokens that are defined in .body.theme-N blocks — already in allTokens.
@@ -730,10 +785,10 @@ function checkDeprecatedTokens(line, lineNum, file) {
   const deprecated = loadDeprecatedPrimitives();
   if (deprecated.size === 0) return violations;
 
-  const regex = /var\(\s*(--color-[\w-]+)\s*[,)]/g;
+  const regex = /var\(\s*(--(?:bds-)?color-[\w-]+)\s*[,)]/g;
   let match;
   while ((match = regex.exec(line)) !== null) {
-    const replacement = deprecated.get(match[1]);
+    const replacement = deprecated.get(canon(match[1]));
     if (!replacement) continue;
     violations.push({
       rule: 'deprecated-token',
@@ -741,7 +796,7 @@ function checkDeprecatedTokens(line, lineNum, file) {
       file,
       line: lineNum,
       column: match.index + 1,
-      message: `"${match[1]}" is deprecated — use "${replacement}"`,
+      message: `"${match[1]}" is deprecated — use "${match[1].startsWith(ID_PREFIX) ? `${ID_PREFIX}${replacement.slice(2)}` : replacement}"`,
       suggestion: `The 6-step names are aliases onto the 11-step numeric scale (brik-bds#1739) and are retired by #1740`,
     });
   }
@@ -925,7 +980,7 @@ function loadDeprecatedGapPadding() {
   const map = new Map();
   if (fs.existsSync(GAP_FILLS)) {
     const content = fs.readFileSync(GAP_FILLS, 'utf8');
-    const regex = /^\s*(--(?:gap|padding)-[\w-]+)\s*:\s*var\((--(?:gap|padding)-[\w-]+)\)\s*;.*DEPRECATED/gm;
+    const regex = /^\s*(--(?:bds-)?(?:gap|padding)-[\w-]+)\s*:\s*var\((--(?:bds-)?(?:gap|padding)-[\w-]+)\)\s*;.*DEPRECATED/gm;
     for (const m of content.matchAll(regex)) {
       map.set(m[1], m[2]);
     }
@@ -942,7 +997,7 @@ function loadDeprecatedGapPadding() {
  */
 function resolveSpacingRung(token, deprecatedMap) {
   const canonical = deprecatedMap.get(token) || token;
-  const m = canonical.match(/^--(?:gap|padding)-([\w-]+)$/);
+  const m = canonical.match(/^--(?:bds-)?(?:gap|padding)-([\w-]+)$/);
   return m ? m[1] : null;
 }
 
@@ -1059,8 +1114,8 @@ function checkResponsiveTokenSwap(content, file) {
     for (const override of overrides) {
       if (lines[override.line - 1].includes('bds-lint-ignore')) continue;
 
-      const baseFamily = base.token.match(/^--(gap|padding)-/);
-      const overrideFamily = override.token.match(/^--(gap|padding)-/);
+      const baseFamily = base.token.match(/^--(?:bds-)?(gap|padding)-/);
+      const overrideFamily = override.token.match(/^--(?:bds-)?(gap|padding)-/);
       if (!baseFamily || !overrideFamily || baseFamily[1] !== overrideFamily[1]) {
         violations.push({
           rule: 'responsive-token-swap',
@@ -1268,8 +1323,7 @@ function checkTokenFamilyPairing(line, lineNum, file, isComponent) {
     const declRegex = /(^|[\s;{])(--[\w-]+)\s*:\s*var\((--[\w-]+)(?:\s*,[^)]*)?\)/g;
     while ((m = declRegex.exec(line)) !== null) {
       const lhs = m[2];
-      if (lhs.startsWith('--bds-')) continue;
-      const ruleKey = Object.entries(CUSTOM_PROP_TO_RULE).find(([prefix]) => lhs.startsWith(prefix))?.[1];
+      const ruleKey = Object.entries(CUSTOM_PROP_TO_RULE).find(([prefix]) => canon(lhs).startsWith(prefix))?.[1];
       if (!ruleKey) continue;
       pushViolation(lhs, m[3], ruleKey, m.index + m[1].length);
     }
@@ -1459,12 +1513,12 @@ function buildValueMaps() {
   }
 
   const FAMILIES = {
-    size: /^--size-\d+$/,
-    padding: /^--padding-[a-z]+$/,
-    gap: /^--gap-[a-z]+$/,
-    borderRadius: /^--border-radius-[a-z]+$/,
-    borderWidth: /^--border-width-[a-z]+$/,
-    fontSize: /^--(?:body|label|heading|display|subtitle)-[a-z]+$/,
+    size: /^--bds-size-\d+$/,
+    padding: /^--bds-padding-[a-z]+$/,
+    gap: /^--bds-gap-[a-z]+$/,
+    borderRadius: /^--bds-border-radius-[a-z]+$/,
+    borderWidth: /^--bds-border-width-[a-z]+$/,
+    fontSize: /^--bds-(?:body|label|heading|display|subtitle)-[a-z]+$/,
   };
 
   const maps = {};
@@ -1811,7 +1865,7 @@ function main() {
   if (fs.existsSync(FIGMA_TOKENS_PATH) && fs.existsSync(TOKENS_INDEX_PATH)) {
     const figmaCSS = fs.readFileSync(FIGMA_TOKENS_PATH, 'utf8');
     const cssBreakpoints = new Map();
-    for (const m of figmaCSS.matchAll(/^\s*--breakpoint-([\w-]+)\s*:\s*([^;]+);/gm)) {
+    for (const m of figmaCSS.matchAll(/^\s*--bds-breakpoint-([\w-]+)\s*:\s*([^;]+);/gm)) {
       cssBreakpoints.set(m[1], m[2].trim());
     }
 
@@ -1845,7 +1899,7 @@ function main() {
             file: TOKENS_INDEX_PATH,
             line,
             column: 1,
-            message: `breakpoints.${name} has no --breakpoint-${name} in figma-tokens.css`,
+            message: `breakpoints.${name} has no --bds-breakpoint-${name} in figma-tokens.css`,
             suggestion: `Add "${name}" to the ❖ Brik Foundations \`breakpoint\` collection and re-run npm run build:all-tokens, or drop it here`,
           });
         } else if (cssValue !== value) {
@@ -1855,7 +1909,7 @@ function main() {
             file: TOKENS_INDEX_PATH,
             line,
             column: 1,
-            message: `breakpoints.${name} is ${value} but --breakpoint-${name} is ${cssValue}`,
+            message: `breakpoints.${name} is ${value} but --bds-breakpoint-${name} is ${cssValue}`,
             suggestion: 'Fix the value in Figma, re-run npm run build:all-tokens, then match it here — never edit the TS literal alone',
           });
         }
@@ -1869,7 +1923,7 @@ function main() {
           file: TOKENS_INDEX_PATH,
           line: blockStart + 1,
           column: 1,
-          message: `--breakpoint-${name} is generated but missing from the \`breakpoints\` export`,
+          message: `--bds-breakpoint-${name} is generated but missing from the \`breakpoints\` export`,
           suggestion: `Add ${name}: '${cssBreakpoints.get(name)}' — a rung CSS ships but TS omits is unreachable from @media`,
         });
       }
@@ -1901,13 +1955,13 @@ function main() {
     // Primitives, for the one deref hop a base declaration makes:
     // `--gap-x: var(--space-NNN)`.
     const primitives = new Map();
-    for (const m of figmaCSS.matchAll(/^\s*(--space-[\w-]+)\s*:\s*(-?[\d.]+)px\s*;/gm)) {
+    for (const m of figmaCSS.matchAll(/^\s*(--bds-space-[\w-]+)\s*:\s*(-?[\d.]+)px\s*;/gm)) {
       primitives.set(m[1], parseFloat(m[2]));
     }
 
     for (const family of FAMILIES) {
       const baseTrack = new Map();
-      const baseRegex = new RegExp(`^\\s*--${family}-([\\w-]+)\\s*:\\s*([^;]+);`, 'gm');
+      const baseRegex = new RegExp(`^\\s*--bds-${family}-([\\w-]+)\\s*:\\s*([^;]+);`, 'gm');
       for (const m of figmaCSS.matchAll(baseRegex)) {
         const raw = m[2].trim();
         const alias = raw.match(/^var\((--[\w-]+)\)$/);
@@ -1917,7 +1971,7 @@ function main() {
       }
 
       // Mode overrides, with the line each one is declared on.
-      const declRegex = new RegExp(`^\\s*--${family}-([\\w-]+)\\s*:\\s*(-?[\\d.]+)px\\s*;`);
+      const declRegex = new RegExp(`^\\s*--bds-${family}-([\\w-]+)\\s*:\\s*(-?[\\d.]+)px\\s*;`);
       const tracks = [];
       let openTrack = null;
       for (let i = 0; i < modeLines.length; i++) {
@@ -1941,7 +1995,7 @@ function main() {
           file: FIGMA_TOKENS_PATH,
           line: 1,
           column: 1,
-          message: `Base ${family} scale is missing ${missingBase.map(r => `--${family}-${r}`).join(', ')} — the mode-track check cannot resolve a full track`,
+          message: `Base ${family} scale is missing ${missingBase.map(r => `--bds-${family}-${r}`).join(', ')} — the mode-track check cannot resolve a full track`,
           suggestion: `Restore the rung in the ❖ Brik Foundations \`spacing\` collection and re-run npm run build:all-tokens, or update RUNGS if the scale was renamed (brik-bds#2588)`,
         });
         continue;
@@ -1974,7 +2028,7 @@ function main() {
               file: MODES_SPACING_PATH,
               line,
               column: 1,
-              message: `[${mode}] --${family}-${rung} is 0px — a named rung collapsed onto --${family}-none`,
+              message: `[${mode}] --bds-${family}-${rung} is 0px — a named rung collapsed onto --bds-${family}-none`,
               suggestion: `Give spacing/${family}/${rung} a non-zero value in the "${mode}" mode of the ❖ Brik Foundations \`spacing\` collection, then re-pull and re-run npm run build:all-tokens`,
             });
           }
@@ -1987,7 +2041,7 @@ function main() {
               file: MODES_SPACING_PATH,
               line,
               column: 1,
-              message: `[${mode}] --${family}-${rung} is ${px}px — off the 4-point grid`,
+              message: `[${mode}] --bds-${family}-${rung} is ${px}px — off the 4-point grid`,
               suggestion: `Point spacing/${family}/${rung} at a space primitive divisible by 4 (nearest: ${Math.floor(px / 4) * 4}px or ${Math.floor(px / 4) * 4 + 4}px)`,
             });
           }
@@ -2003,7 +2057,7 @@ function main() {
             file: MODES_SPACING_PATH,
             line: cur.line,
             column: 1,
-            message: `[${mode}] ${family} scale is not strictly increasing: --${family}-${cur.rung} (${cur.px}px) is not greater than --${family}-${prev.rung} (${prev.px}px)`,
+            message: `[${mode}] ${family} scale is not strictly increasing: --bds-${family}-${cur.rung} (${cur.px}px) is not greater than --bds-${family}-${prev.rung} (${prev.px}px)`,
             suggestion: `Re-space the "${mode}" track in Figma so ${RUNGS.join(' < ')} holds, then re-pull and re-run npm run build:all-tokens — never hand-edit tokens/modes-spacing.css`,
           });
         }

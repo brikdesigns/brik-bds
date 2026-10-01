@@ -4,8 +4,8 @@
  *
  * ADR-015 (§ Amendment 2026-09-12) + tokens/contrast-pairings.json:
  *   On --surface-/-background-brand-primary the on-color text is ALWAYS
- *   --text-on-color-dark (mode-invariant white), at normal weight. Darkening it
- *   to --text-primary, or using the theme-FLIPPING --text-inverse (white in
+ *   --bds-text-on-color-dark (mode-invariant white), at normal weight. Darkening it
+ *   to --bds-text-primary, or using the theme-FLIPPING --bds-text-inverse (white in
  *   light, BLACK in dark) on the mode-invariant Poppy fill, are DISALLOWED —
  *   both render dark text on the brand in dark mode, which passes contrast
  *   (black-on-Poppy is 5.55:1) but violates the brand rule the operator set.
@@ -18,8 +18,8 @@
  *
  * Rule: for any component CSS rule whose background is a brand-primary fill, any
  * `color:` on that rule OR on a descendant selector under it must be
- * --text-on-color-dark. Anything else (--text-inverse, --text-primary,
- * --text-secondary, --text-muted, a raw hex, …) is a violation.
+ * --bds-text-on-color-dark. Anything else (--bds-text-inverse, --bds-text-primary,
+ * --bds-text-secondary, --bds-text-muted, a raw hex, …) is a violation.
  *
  * Escape hatch: `bds-lint-ignore` on the offending `color:` line (e.g. a genuine
  * nested surface inside a brand band that re-establishes its own light backdrop).
@@ -37,7 +37,7 @@ const { execSync } = require('child_process');
 const ROOT = path.join(__dirname, '..');
 const COMPONENTS = path.join(ROOT, 'components');
 const BRAND_FILL = /background(-color)?:\s*var\(--(surface|background)-brand-primary\)/;
-const SANCTIONED_FG = '--text-on-color-dark';
+const SANCTIONED_FG = '--bds-text-on-color-dark';
 // `color:` as its own property — NOT `background-color:` (which ends in "color:").
 const COLOR_TOKEN = /(?:^|[;{\s])color:\s*var\((--[a-z0-9-]+)\)/i;
 
@@ -104,14 +104,14 @@ function main() {
   }
 
   if (violations.length) {
-    console.error('✗ brand-fill-text: text on the Poppy brand fill must be --text-on-color-dark (white).\n');
+    console.error('✗ brand-fill-text: text on the Poppy brand fill must be --bds-text-on-color-dark (white).\n');
     for (const v of violations) {
-      console.error(`  ${v.file}\n    ${v.selector}\n    → color: var(${v.token})  (use var(--text-on-color-dark), or bds-lint-ignore a genuine nested surface)\n`);
+      console.error(`  ${v.file}\n    ${v.selector}\n    → color: var(${v.token})  (use var(--bds-text-on-color-dark), or bds-lint-ignore a genuine nested surface)\n`);
     }
-    console.error('ADR-015 § Amendment 2026-09-12 / tokens/contrast-pairings.json. --text-inverse flips BLACK in dark on the mode-invariant Poppy fill.');
+    console.error('ADR-015 § Amendment 2026-09-12 / tokens/contrast-pairings.json. --bds-text-inverse flips BLACK in dark on the mode-invariant Poppy fill.');
     process.exit(1);
   }
-  console.log('✓ brand-fill-text: on-brand text is --text-on-color-dark.');
+  console.log('✓ brand-fill-text: on-brand text is --bds-text-on-color-dark.');
 }
 
 main();

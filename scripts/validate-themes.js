@@ -19,7 +19,7 @@
  *     paints and scoring it would be meaningless.
  *   - A pairing carrying `alpha` is a FADED state (a disabled control under
  *     `opacity`). Both fg and bg are composited over `over` (default
- *     `--background-primary`) at that alpha before scoring, because `opacity`
+ *     `--bds-background-primary`) at that alpha before scoring, because `opacity`
  *     moves the label AND the fill toward the same backdrop. Without this the
  *     gate scores token names that never paint and reports a fade as safe —
  *     the blind spot ADR-028 § Consequences pt-2 documents (brik-bds#1687).
@@ -68,13 +68,13 @@ const MATRIX_END = '{/* matrix:end */}';
  *     is `--color-x{,-light}` shorthand for a token pair — dropped every
  *     declaration below it. During #1955 that cut the light `:root` from 20633
  *     to 8489 parsed chars and surfaced as a contrast-gate error on
- *     `--state-disabled-opacity`, ~150 lines away and unrelated.
+ *     `--bds-state-disabled-opacity`, ~150 lines away and unrelated.
  *
  *  2. **A comment minted a phantom declaration that ate a real one.** Prose
  *     reading "There is no --border-info: the gray one retired…" matches
  *     `(--[\w-]+)\s*:\s*([^;]+);`, and `[^;]+` then runs to the next real
- *     semicolon — which was the end of `--background-info`'s declaration two
- *     paragraphs later. `--background-info` resolved to undefined from #1959
+ *     semicolon — which was the end of `--bds-background-info`'s declaration two
+ *     paragraphs later. `--bds-background-info` resolved to undefined from #1959
  *     until #1972, and nothing noticed, because no pairing referenced it. The
  *     first one that did read `n/a`. That is the #1571 unmeasurable-pairing
  *     shape one layer down: the gate could not see the token, so it could not
@@ -128,7 +128,7 @@ function resolveAll(merged) {
 // Mirrors scripts/measure-disabled-contrast.mjs exactly, so a pairing's gate
 // ratio and that script's reported ratio are the same number.
 
-const DEFAULT_BACKDROP = '--background-primary';
+const DEFAULT_BACKDROP = '--bds-background-primary';
 
 function hexToRgb(hex) {
   const h = hex.replace('#', '');
@@ -138,7 +138,7 @@ function hexToRgb(hex) {
 
 /**
  * A pairing's `alpha` is either a literal or a token name. Prefer the token:
- * `alpha: "--state-disabled-opacity"` means retuning that token re-scores every
+ * `alpha: "--bds-state-disabled-opacity"` means retuning that token re-scores every
  * faded pairing automatically, so the value and its gate cannot drift.
  */
 function resolveAlpha(spec, theme) {

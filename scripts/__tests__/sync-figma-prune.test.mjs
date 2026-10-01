@@ -193,7 +193,7 @@ describe('sync-figma-mcp prune (brik-bds#754)', () => {
 
 // Reference guard for brik-bds#1797. The #754 prune above is correct for a
 // token Figma really retired, and wrong for one that shipped code still uses —
-// `--font-weight-heading` was dropped by a pull and had to be restored (#1748).
+// `--bds-font-weight-heading` was dropped by a pull and had to be restored (#1748).
 // canonical-check cannot see it: it validates references against an allowlist
 // regenerated from the same pull, so the removal validates itself.
 describe('sync-figma-mcp prune reference guard (brik-bds#1797)', () => {
@@ -227,13 +227,13 @@ describe('sync-figma-mcp prune reference guard (brik-bds#1797)', () => {
     const before = readFileSync(lib, 'utf8');
     const root = sourceRoot(tmpDir, 'src-css', {
       'components/ui/ContentBlock/ContentBlock.css':
-        '.bds-content-block__heading { font-weight: var(--font-weight-heading); }\n',
+        '.bds-content-block__heading { font-weight: var(--bds-font-weight-heading); }\n',
     });
 
     const res = runSync([dump, `--target=${lib}`, `--source-root=${root}`], tmpDir);
 
     expect(res.status).toBe(1);
-    expect(res.stderr).toContain('--font-weight-heading');
+    expect(res.stderr).toContain('--bds-font-weight-heading');
     expect(res.stderr).toContain('components/ui/ContentBlock/ContentBlock.css');
     // Refusal is terminal and pre-write — the library must be untouched.
     expect(readFileSync(lib, 'utf8')).toBe(before);
@@ -242,7 +242,7 @@ describe('sync-figma-mcp prune reference guard (brik-bds#1797)', () => {
   it('refuses on a reference from the TS token surface', () => {
     const { lib, dump } = fontWeightFixture('ref-ts');
     const root = sourceRoot(tmpDir, 'src-ts', {
-      'tokens/index.ts': "export const weight = { heading: 'var(--font-weight-heading)' };\n",
+      'tokens/index.ts': "export const weight = { heading: 'var(--bds-font-weight-heading)' };\n",
     });
 
     const res = runSync([dump, `--target=${lib}`, `--source-root=${root}`], tmpDir);
@@ -257,7 +257,7 @@ describe('sync-figma-mcp prune reference guard (brik-bds#1797)', () => {
     // there. Counting that as a reference would refuse every prune and disable
     // deletion-propagation (#754) outright.
     const root = sourceRoot(tmpDir, 'src-generated', {
-      'tokens/figma-tokens.css': ':root { --font-weight-heading: var(--font-weight-semibold); }\n',
+      'tokens/figma-tokens.css': ':root { --bds-font-weight-heading: var(--bds-font-weight-semibold); }\n',
     });
 
     const res = runSync([dump, `--target=${lib}`, `--source-root=${root}`], tmpDir);
@@ -271,16 +271,16 @@ describe('sync-figma-mcp prune reference guard (brik-bds#1797)', () => {
     const { lib, dump } = fontWeightFixture('allow');
     const root = sourceRoot(tmpDir, 'src-allow', {
       'components/ui/ContentBlock/ContentBlock.css':
-        '.bds-content-block__heading { font-weight: var(--font-weight-heading); }\n',
+        '.bds-content-block__heading { font-weight: var(--bds-font-weight-heading); }\n',
     });
 
     const res = runSync(
-      [dump, `--target=${lib}`, `--source-root=${root}`, '--allow-prune=--font-weight-heading'],
+      [dump, `--target=${lib}`, `--source-root=${root}`, '--allow-prune=--bds-font-weight-heading'],
       tmpDir
     );
 
     expect(res.status).toBe(0);
-    expect(res.stdout).toContain('--allow-prune: deleting --font-weight-heading');
+    expect(res.stdout).toContain('--allow-prune: deleting --bds-font-weight-heading');
     const out = JSON.parse(readFileSync(lib, 'utf8'))['primitives/value'];
     expect(out['font-weight']).toBeUndefined();
     expect(out.color.poppy.light.$value).toBe('#e35335');
@@ -290,7 +290,7 @@ describe('sync-figma-mcp prune reference guard (brik-bds#1797)', () => {
     const { lib, dump } = fontWeightFixture('allow-bare');
     const root = sourceRoot(tmpDir, 'src-allow-bare', {
       'components/ui/ContentBlock/ContentBlock.css':
-        '.x { font-weight: var(--font-weight-heading); }\n',
+        '.x { font-weight: var(--bds-font-weight-heading); }\n',
     });
 
     const res = runSync(
@@ -306,13 +306,13 @@ describe('sync-figma-mcp prune reference guard (brik-bds#1797)', () => {
     const before = readFileSync(lib, 'utf8');
     const root = sourceRoot(tmpDir, 'src-dry', {
       'components/ui/ContentBlock/ContentBlock.css':
-        '.x { font-weight: var(--font-weight-heading); }\n',
+        '.x { font-weight: var(--bds-font-weight-heading); }\n',
     });
 
     const res = runSync([dump, `--target=${lib}`, `--source-root=${root}`, '--dry-run'], tmpDir);
 
     expect(res.status).toBe(1);
-    expect(res.stderr).toContain('--font-weight-heading');
+    expect(res.stderr).toContain('--bds-font-weight-heading');
     expect(readFileSync(lib, 'utf8')).toBe(before);
   });
 
@@ -328,7 +328,7 @@ describe('sync-figma-mcp prune reference guard (brik-bds#1797)', () => {
     ])));
     // Source references a DIFFERENT token — the orphan is genuinely unused.
     const root = sourceRoot(tmpDir, 'src-unref', {
-      'components/ui/Card/Card.css': '.bds-card { color: var(--color-poppy-light); }\n',
+      'components/ui/Card/Card.css': '.bds-card { color: var(--bds-color-poppy-500); }\n',
     });
 
     const res = runSync([dump, `--target=${lib}`, `--source-root=${root}`], tmpDir);

@@ -17,18 +17,18 @@ beforeAll(() => {
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
 
 // A generated light file needs the --color-* primitives too: the gate resolves
-// aliases through them so `white` and var(--color-grayscale-white) compare equal.
-// `--color-grayscale-lightest` carries the #1739 shape on purpose: a 6-step
+// aliases through them so `white` and var(--bds-color-grayscale-white) compare equal.
+// `--bds-color-grayscale-100` carries the #1739 shape on purpose: a 6-step
 // name is an ALIAS onto a numeric stop, not a literal. The gate has to follow
 // that hop, or a #1740 rename to the numeric stop reads as a divergence.
 const PRIMS = `
-  --color-grayscale-white: #ffffff;
-  --color-grayscale-black: #000000;
-  --color-grayscale-darkest: #1b1b1b;
-  --color-grayscale-dark: #5a5a5a;
-  --color-grayscale-light: #828282;
-  --color-grayscale-100: #f2f2f2;
-  --color-grayscale-lightest: var(--color-grayscale-100);
+  --bds-color-grayscale-white: #ffffff;
+  --bds-color-grayscale-black: #000000;
+  --bds-color-grayscale-950: #1b1b1b;
+  --bds-color-grayscale-700: #5a5a5a;
+  --bds-color-grayscale-500: #828282;
+  --bds-color-grayscale-100: #f2f2f2;
+  --bds-color-grayscale-100: var(--bds-color-grayscale-100);
 `;
 
 function run({ light = '', dark = '', brandLight = '', brandDark = '' }) {
@@ -62,8 +62,8 @@ const names = (json) => json.unexplained.map((u) => u.name);
 describe('lint-theme-divergence', () => {
   it('passes when the brand value matches the generated value', () => {
     const { code, json } = run({
-      light: '  --text-primary: var(--color-grayscale-darkest);',
-      brandLight: '  --text-primary: var(--color-grayscale-darkest);',
+      light: '  --bds-text-primary: var(--bds-color-grayscale-950);',
+      brandLight: '  --bds-text-primary: var(--bds-color-grayscale-950);',
     });
     expect(code).toBe(0);
     expect(json.total).toBe(0);
@@ -75,19 +75,19 @@ describe('lint-theme-divergence', () => {
   // the gate has stopped gating.
   it('FAILS on an uncommented divergence — the #1686 shape', () => {
     const { code, json } = run({
-      dark: '  --background-inverse: var(--color-grayscale-light);',
-      brandDark: '  --background-inverse: var(--color-grayscale-black);',
+      dark: '  --bds-background-inverse: var(--bds-color-grayscale-500);',
+      brandDark: '  --bds-background-inverse: var(--bds-color-grayscale-black);',
     });
     expect(code).toBe(1);
-    expect(names(json)).toEqual(['--background-inverse']);
+    expect(names(json)).toEqual(['--bds-background-inverse']);
   });
 
   it('passes the same divergence once a comment sits directly above it', () => {
     const { code, json } = run({
-      dark: '  --background-inverse: var(--color-grayscale-light);',
+      dark: '  --bds-background-inverse: var(--bds-color-grayscale-500);',
       brandDark:
         '  /* Deliberate: the dark page is true black, so inverse must be dark (#1689). */\n' +
-        '  --background-inverse: var(--color-grayscale-black);',
+        '  --bds-background-inverse: var(--bds-color-grayscale-black);',
     });
     expect(code).toBe(0);
     expect(json.rows[0].explained).toBe(true);
@@ -95,49 +95,49 @@ describe('lint-theme-divergence', () => {
 
   it('does not let a grouping label count as an explanation', () => {
     const { code, json } = run({
-      dark: '  --surface-primary: var(--color-grayscale-darkest);',
-      brandDark: '  /* Surface */\n  --surface-primary: var(--color-grayscale-black);',
+      dark: '  --bds-surface-primary: var(--bds-color-grayscale-950);',
+      brandDark: '  /* Surface */\n  --bds-surface-primary: var(--bds-color-grayscale-black);',
     });
     expect(code).toBe(1);
-    expect(names(json)).toEqual(['--surface-primary']);
+    expect(names(json)).toEqual(['--bds-surface-primary']);
   });
 
   // The bug found while building this: a comment used to carry to every
   // declaration beneath it, so one real explanation marked the whole block
-  // explained — including --background-secondary, the value #1689 exists to
+  // explained — including --bds-background-secondary, the value #1689 exists to
   // resolve.
   it('does not let a comment explain a LATER unrelated declaration', () => {
     const { code, json } = run({
       dark:
-        '  --surface-primary: var(--color-grayscale-darkest);\n' +
-        '  --background-secondary: var(--color-grayscale-black);',
+        '  --bds-surface-primary: var(--bds-color-grayscale-950);\n' +
+        '  --bds-background-secondary: var(--bds-color-grayscale-black);',
       brandDark:
         '  /* A real explanation about surfaces and nothing else (#1689). */\n' +
-        '  --surface-primary: var(--color-grayscale-black);\n' +
-        '  --background-secondary: var(--color-grayscale-light);',
+        '  --bds-surface-primary: var(--bds-color-grayscale-black);\n' +
+        '  --bds-background-secondary: var(--bds-color-grayscale-500);',
     });
     expect(code).toBe(1);
-    expect(names(json)).toEqual(['--background-secondary']);
+    expect(names(json)).toEqual(['--bds-background-secondary']);
   });
 
   it('lets one comment cover a state family by naming its members', () => {
     const { code } = run({
       dark:
-        '  --surface-brand-primary: var(--color-grayscale-darkest);\n' +
-        '  --surface-brand-primary-hover: var(--color-grayscale-dark);',
+        '  --bds-surface-brand-primary: var(--bds-color-grayscale-950);\n' +
+        '  --bds-surface-brand-primary-hover: var(--bds-color-grayscale-700);',
       brandDark:
         '  /* Brand fills hold poppy and darken on interaction. Covers\n' +
-        '     --surface-brand-primary and --surface-brand-primary-hover (#1055). */\n' +
-        '  --surface-brand-primary: var(--color-grayscale-white);\n' +
-        '  --surface-brand-primary-hover: var(--color-grayscale-black);',
+        '     --bds-surface-brand-primary and --bds-surface-brand-primary-hover (#1055). */\n' +
+        '  --bds-surface-brand-primary: var(--bds-color-grayscale-white);\n' +
+        '  --bds-surface-brand-primary-hover: var(--bds-color-grayscale-black);',
     });
     expect(code).toBe(0);
   });
 
   it('treats an alias and its literal as the same value, not a divergence', () => {
     const { code, json } = run({
-      light: '  --border-on-color-dark: var(--color-grayscale-white);',
-      brandLight: '  --border-on-color-dark: white;',
+      light: '  --bds-border-on-color-dark: var(--bds-color-grayscale-white);',
+      brandLight: '  --bds-border-on-color-dark: white;',
     });
     expect(code).toBe(0);
     expect(json.total).toBe(0);
@@ -149,8 +149,8 @@ describe('lint-theme-divergence', () => {
   // reported all 25 renamed declarations in theme-brand-brik.css as unexplained.
   it('treats a 6-step name and the numeric stop it aliases as the same value', () => {
     const { code, json } = run({
-      light: '  --page-secondary: var(--color-grayscale-lightest);',
-      brandLight: '  --page-secondary: var(--color-grayscale-100);',
+      light: '  --bds-page-secondary: var(--bds-color-grayscale-100);',
+      brandLight: '  --bds-page-secondary: var(--bds-color-grayscale-100);',
     });
     expect(code).toBe(0);
     expect(json.total).toBe(0);
@@ -160,16 +160,16 @@ describe('lint-theme-divergence', () => {
   // different stops into each other.
   it('still reports a divergence when the numeric stop is a different colour', () => {
     const { code, json } = run({
-      light: '  --page-secondary: var(--color-grayscale-lightest);',
-      brandLight: '  --page-secondary: var(--color-grayscale-dark);',
+      light: '  --bds-page-secondary: var(--bds-color-grayscale-100);',
+      brandLight: '  --bds-page-secondary: var(--bds-color-grayscale-700);',
     });
     expect(code).toBe(1);
-    expect(names(json)).toEqual(['--page-secondary']);
+    expect(names(json)).toEqual(['--bds-page-secondary']);
   });
 
   it('ignores a brand-only token with nothing generated to diverge from', () => {
     const { code, json } = run({
-      brandLight: '  --brand-only-token: var(--color-grayscale-black);',
+      brandLight: '  --brand-only-token: var(--bds-color-grayscale-black);',
     });
     expect(code).toBe(0);
     expect(json.total).toBe(0);

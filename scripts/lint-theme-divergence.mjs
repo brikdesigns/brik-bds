@@ -8,7 +8,7 @@
  * emits into `tokens/figma-tokens.css` (light) and `tokens/figma-tokens-dark.css`
  * (dark). Some of those overrides are deliberate brand decisions; some are
  * typos. Nothing distinguished them, so an inverted value survived four months:
- * `--background-inverse` was pinned to the same primitive as `--text-inverse`,
+ * `--bds-background-inverse` was pinned to the same primitive as `--bds-text-inverse`,
  * rendering `Chip --primary` and `Button --inverse` at 1.00:1 while ENABLED
  * (brik-bds#1686, shipped in #50 on 2026-04-08).
  *
@@ -82,8 +82,8 @@ function parseBlock(cssPath, selectorRe) {
   // The looser "until the next comment" rule reads the file's grouping labels as
   // explanations: `/* Background — vibrant poppy-light base per brand canon
   // (BDS-22) */` introduces the brand fills, but the run beneath it also holds
-  // --background-primary and --background-secondary, which it says nothing
-  // about. That is how a lenient version of this gate passed --background-secondary
+  // --bds-background-primary and --bds-background-secondary, which it says nothing
+  // about. That is how a lenient version of this gate passed --bds-background-secondary
   // (the #1686-shaped value this issue exists to resolve) as explained.
   const token = /\/\*([\s\S]*?)\*\/|(--[\w-]+)\s*:\s*([^;]+);/g;
   let adjacent = null;
@@ -139,9 +139,9 @@ function isExplanatory(text) {
  *
  * Values are followed through primitive-to-primitive indirection, because the
  * 6-step names are themselves aliases onto the numeric scale since #1739
- * (`--color-grayscale-lightest: var(--color-grayscale-100)`). Storing the raw
+ * (`--bds-color-grayscale-100: var(--bds-color-grayscale-100)`). Storing the raw
  * declaration would leave the legacy name resolving to the string
- * `var(--color-grayscale-100)` while the numeric name resolves to `#f2f2f2`, so
+ * `var(--bds-color-grayscale-100)` while the numeric name resolves to `#f2f2f2`, so
  * a #1740 rename that changes nothing about the colour would read as 25
  * divergences needing explanation. Resolving both to the hex keeps this gate
  * measuring value, which is what its normalise() contract promises.
@@ -149,7 +149,7 @@ function isExplanatory(text) {
 function primitives() {
   const css = readFileSync(GEN_LIGHT, 'utf8');
   const raw = new Map();
-  for (const m of css.matchAll(/(--color-[\w-]+)\s*:\s*([^;]+);/g)) {
+  for (const m of css.matchAll(/(--bds-color-[\w-]+)\s*:\s*([^;]+);/g)) {
     raw.set(m[1], m[2].trim().toLowerCase());
   }
   const out = new Map();
@@ -176,7 +176,7 @@ const CSS_NAMED = new Map([
 
 /**
  * Compare by resolved colour where possible, so `white` and
- * `var(--color-grayscale-white)` are not reported as a divergence — that is a
+ * `var(--bds-color-grayscale-white)` are not reported as a divergence — that is a
  * notation difference with nothing to explain.
  */
 function normalise(value) {
@@ -262,7 +262,7 @@ for (const r of unexplained) {
 }
 console.log(
   `\n${YELLOW}  An override with no comment is indistinguishable from a typo. That is how${NC}\n` +
-    `${YELLOW}  --background-inverse shipped inverted and rendered two components at 1.00:1${NC}\n` +
+    `${YELLOW}  --bds-background-inverse shipped inverted and rendered two components at 1.00:1${NC}\n` +
     `${YELLOW}  for four months (#1686).${NC}\n\n` +
     '  Fix: either revert to the generated value, or add a comment above the\n' +
     '  declaration saying why it diverges. One comment covers the contiguous run\n' +

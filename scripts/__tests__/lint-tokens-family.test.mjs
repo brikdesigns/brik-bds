@@ -39,19 +39,19 @@ describe('lint-tokens Rule 5 (token-family pairing)', () => {
     const file = join(tmpDir, 'Failure.tsx');
     writeFileSync(file, `
       export function Failure() {
-        return <span style={{ backgroundColor: 'var(--text-service-marketing)' }} />;
+        return <span style={{ backgroundColor: 'var(--bds-text-service-marketing)' }} />;
       }
     `);
     const violations = runLinter({ tsxFiles: [file] });
     expect(violations.length).toBe(1);
-    expect(violations[0].message).toMatch(/backgroundColor.*--text-service-marketing/);
+    expect(violations[0].message).toMatch(/backgroundColor.*--bds-text-service-marketing/);
     expect(violations[0].message).toMatch(/text-family token in background slot/);
   });
 
   it('fires on CSS property using wrong-family token (background-color: var(--text-*))', () => {
     const file = join(tmpDir, 'Failure.css');
     writeFileSync(file, `
-      .x { background-color: var(--text-service-marketing); }
+      .x { background-color: var(--bds-text-service-marketing); }
     `);
     const violations = runLinter({ cssFiles: [file] });
     expect(violations).toHaveLength(1);
@@ -61,18 +61,18 @@ describe('lint-tokens Rule 5 (token-family pairing)', () => {
   it('fires on custom-property declaration using wrong-family value', () => {
     const file = join(tmpDir, 'Decl.css');
     writeFileSync(file, `
-      .x { --background-inverse: var(--text-service-marketing); }
+      .x { --bds-background-inverse: var(--bds-text-service-marketing); }
     `);
     const violations = runLinter({ cssFiles: [file] });
     expect(violations).toHaveLength(1);
-    expect(violations[0].message).toMatch(/--background-inverse.*--text-service-marketing/);
+    expect(violations[0].message).toMatch(/--bds-background-inverse.*--bds-text-service-marketing/);
   });
 
   it('fires on border-color: var(--text-*) and outline-color: var(--text-*)', () => {
     const file = join(tmpDir, 'BorderOutline.css');
     writeFileSync(file, `
-      .a { border-color: var(--text-negative); }
-      .b { outline-color: var(--text-positive); }
+      .a { border-color: var(--bds-text-negative); }
+      .b { outline-color: var(--bds-text-positive); }
     `);
     const violations = runLinter({ cssFiles: [file] });
     expect(violations).toHaveLength(2);
@@ -88,18 +88,18 @@ describe('lint-tokens Rule 5 (token-family pairing)', () => {
     const file = join(tmpDir, 'ServiceTagLike.css');
     writeFileSync(file, `
       .bds-service-tag--brand {
-        background-color: var(--background-service-brand);
-        color: var(--text-service-brand);
+        background-color: var(--bds-background-service-brand);
+        color: var(--bds-text-service-brand);
       }
     `);
     const violations = runLinter({ cssFiles: [file] });
     expect(violations).toEqual([]);
   });
 
-  it('passes canonical same-family custom-property override (--background-inverse: var(--background-primary))', () => {
+  it('passes canonical same-family custom-property override (--bds-background-inverse: var(--bds-background-primary))', () => {
     const file = join(tmpDir, 'SafeDecl.css');
     writeFileSync(file, `
-      .x { --background-inverse: var(--background-primary); }
+      .x { --bds-background-inverse: var(--bds-background-primary); }
     `);
     const violations = runLinter({ cssFiles: [file] });
     expect(violations).toEqual([]);
@@ -108,7 +108,7 @@ describe('lint-tokens Rule 5 (token-family pairing)', () => {
   it('honours bds-lint-ignore on the same line', () => {
     const file = join(tmpDir, 'Ignored.css');
     writeFileSync(file, `
-      .x { background-color: var(--border-muted); /* bds-lint-ignore token-family */ }
+      .x { background-color: var(--bds-border-muted); /* bds-lint-ignore token-family */ }
     `);
     const violations = runLinter({ cssFiles: [file] });
     expect(violations).toEqual([]);
@@ -117,7 +117,7 @@ describe('lint-tokens Rule 5 (token-family pairing)', () => {
   it('does not fire on border CSS shorthand (out of scope — bundles width/style)', () => {
     const file = join(tmpDir, 'Shorthand.css');
     writeFileSync(file, `
-      .x { border: 1px solid var(--text-negative); }
+      .x { border: 1px solid var(--bds-text-negative); }
     `);
     const violations = runLinter({ cssFiles: [file] });
     expect(violations).toEqual([]);

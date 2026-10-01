@@ -22,18 +22,18 @@ describe('checkCssRawValues', () => {
     expect(v).toHaveLength(1);
     expect(v[0].rule).toBe('css-raw-value');
     expect(v[0].severity).toBe('error');
-    expect(v[0].message).toContain('var(--size-600)');
+    expect(v[0].message).toContain('var(--bds-size-600)');
   });
 
   it('errors on a raw border-width px in a border shorthand', () => {
     const v = run('  border-bottom: 2px solid transparent;');
     expect(v).toHaveLength(1);
-    expect(v[0].message).toContain('var(--border-width-md)');
+    expect(v[0].message).toContain('var(--bds-border-width-md)');
   });
 
   it('errors on a raw font-size px that has an exact typography rung', () => {
     const v = run('  font-size: 14px;');
-    expect(v[0].message).toContain('var(--body-sm)');
+    expect(v[0].message).toContain('var(--bds-body-sm)');
   });
 
   it('errors on an off-scale container width (no token expresses it)', () => {
@@ -51,11 +51,11 @@ describe('checkCssRawValues', () => {
   });
 
   it('passes a value already using a token', () => {
-    expect(run('  height: var(--size-600);')).toHaveLength(0);
+    expect(run('  height: var(--bds-size-600);')).toHaveLength(0);
   });
 
   it('ignores a px inside a var() fallback (checkFallbackLiterals owns that)', () => {
-    expect(run('  height: var(--bds-x, var(--size-600));')).toHaveLength(0);
+    expect(run('  height: var(--bds-x, var(--bds-size-600));')).toHaveLength(0);
   });
 
   it('skips responsive math anchors', () => {
@@ -64,7 +64,7 @@ describe('checkCssRawValues', () => {
 
   it('exempts micro nudges (≤2px) on dimensional props but not border-width', () => {
     expect(run('  height: 1px;')).toHaveLength(0);
-    expect(run('  border-width: 1px;')[0].message).toContain('var(--border-width-sm)');
+    expect(run('  border-width: 1px;')[0].message).toContain('var(--bds-border-width-sm)');
   });
 
   it('respects bds-lint-ignore', () => {
