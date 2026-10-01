@@ -16,19 +16,19 @@ export type SocialIconType = 'badge' | 'glyph';
 
 /**
  * Hue source, applied on top of `type` (ADR-033 § 2's `emphasis` axis):
- * - `neutral` — neutral `--text-muted` token (the authored look: a
+ * - `neutral` — neutral `--bds-text-muted` token (the authored look: a
  *   `#828282` mid-gray badge, white glyph).
  * - `brand` — the platform's Foundations brand-color token, e.g.
- *   `--color-system-youtube` (brik-bds#1716). See SocialIcon.css for the
+ *   `--bds-color-system-youtube` (brik-bds#1716). See SocialIcon.css for the
  *   full per-platform mapping — every bundled platform has one, no fallback.
- * - `accent` — Brik's brand color, `--text-brand-primary`.
+ * - `accent` — Brik's brand color, `--bds-text-brand-primary`.
  * - `inverse` — near-black, the default treatment for a monochrome social row
- *   on a light surface (brik-bds#2274). `badge` fills `--surface-inverse`;
- *   `glyph` takes the `--color-grayscale-950` primitive that resolves to,
+ *   on a light surface (brik-bds#2274). `badge` fills `--bds-surface-inverse`;
+ *   `glyph` takes the `--bds-color-grayscale-950` primitive that resolves to,
  *   because `lint-tokens` bars a surface-family token from a text slot and the
- *   nearest semantic — `--text-on-color-light` — is NOT equivalent: it goes to
- *   `--color-grayscale-black` (#000) under the Brik dark theme while
- *   `--surface-inverse` stays #1b1b1b, which would paint the two halves
+ *   nearest semantic — `--bds-text-on-color-light` — is NOT equivalent: it goes to
+ *   `--bds-color-grayscale-black` (#000) under the Brik dark theme while
+ *   `--bds-surface-inverse` stays #1b1b1b, which would paint the two halves
  *   different blacks. See SocialIcon.css for the measurement.
  */
 export type SocialIconEmphasis = 'neutral' | 'brand' | 'accent' | 'inverse';

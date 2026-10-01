@@ -55,7 +55,7 @@ Both paths render the same pixels, so `editHref` has no canvas of its own — th
 
 ### Sticky
 
-Set `sticky` to pin the header to the top of its scroll container as the body scrolls. It renders an opaque `--surface-primary` background (so content passes cleanly beneath) and stacks above page content but below `TopNavigation` and overlays. Non-sticky remains the default — existing consumers are unaffected. The header sticks within the nearest scrolling ancestor, so that container — not the window — must own the scroll.
+Set `sticky` to pin the header to the top of its scroll container as the body scrolls. It renders an opaque `--bds-surface-primary` background (so content passes cleanly beneath) and stacks above page content but below `TopNavigation` and overlays. Non-sticky remains the default — existing consumers are unaffected. The header sticks within the nearest scrolling ancestor, so that container — not the window — must own the scroll.
 
 <Canvas of={Stories.Sticky} />
 
@@ -69,9 +69,9 @@ Four component-scoped CSS variables on `.bds-page-header` tune the internal rhyt
 
 | Variable | Default | Controls |
 | --- | --- | --- |
-| `--page-header-section-gap` | `--gap-xl` (24px) | Gap between root sections (inner / metadata / tabs) |
-| `--page-header-content-gap` | `--gap-sm` (6px) | Gap between the title-row and the subtitle |
-| `--page-header-actions-gap` | `--gap-sm` (6px) | Gap between the content column (title + subtitle) and the actions column |
+| `--page-header-section-gap` | `--bds-gap-xl` (24px) | Gap between root sections (inner / metadata / tabs) |
+| `--page-header-content-gap` | `--bds-gap-sm` (6px) | Gap between the title-row and the subtitle |
+| `--page-header-actions-gap` | `--bds-gap-sm` (6px) | Gap between the content column (title + subtitle) and the actions column |
 | `--page-header-padding-bottom` | `0` | Bottom padding below the header |
 
 <Canvas of={Stories.TunableSpacing} />

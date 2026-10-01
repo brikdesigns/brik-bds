@@ -20,6 +20,12 @@
  *                                       definitions (runtime mode — strict)
  *   canonical-check --allowlist <file>  Override allowlist source
  *                                       (default: dist/tokens.css)
+ *   canonical-check --no-bridge         Ignore the compat-alias section of the
+ *                                       allowlist, so a bare pre-ADR-043 name
+ *                                       (--text-primary) is a violation
+ *   canonical-check --bridge-paths <re> With --no-bridge: files matching these
+ *                                       comma-separated regexes may still read
+ *                                       compat-alias names
  *   canonical-check --prefixes <list>   Comma-separated prefixes to scan
  *                                       (default: text,surface,background,border,color)
  *   canonical-check --exempt <patterns> Comma-separated regex of tokens to
@@ -58,7 +64,7 @@ export const DEFAULT_PREFIXES = ['text', 'surface', 'background', 'border', 'col
 export const DEFAULT_EXEMPT_PATTERNS = [
   // Sizing-tier border tokens — spacing primitives, not surface borders.
   // Defined under their own canonical entries (--border-radius-*, --border-width-*).
-  /^--border-(radius|width)(-|$)/,
+  /^--(?:bds-)?border-(radius|width)(-|$)/,
   // fumadocs vendor prefix — design-token namespace consumed by docs sites
   // that override fumadocs internals. Not BDS-canonical by design.
   /^--color-fd-/,
@@ -76,6 +82,9 @@ export const DEFAULT_EXCLUDE_PATH_PATTERNS = [
 
 // ── Allowlist ────────────────────────────────────────────────────────────
 
+/** Start of the generated compat-alias section in dist/tokens.css (scripts/lib/bds-prefix.mjs BRIDGE_BEGIN). */
+const BRIDGE_SECTION_MARKER = '/* ===== BEGIN BDS PREFIX BRIDGE';
+
 /**
  * Parse a tokens.css string into the canonical Set of `--token-name`s.
  * Captures every CSS custom property *declaration* — handles both expanded
@@ -83,7 +92,15 @@ export const DEFAULT_EXCLUDE_PATH_PATTERNS = [
  * anchoring on line-start, `{`, or `;` boundaries. Skips declarations that
  * are merely `var(--name)` references — `(` is not a declaration boundary.
  */
-export function parseAllowlist(cssText) {
+export function parseAllowlist(cssText, { includeBridge = true } = {}) {
+  // ADR-043: dist/tokens.css ends with a generated compat section that re-declares
+  // every pre-prefix name as an alias of its `--bds-` name. Consumers still on the
+  // old spelling keep resolving, so it is allowed by default; the BDS repo itself
+  // passes `includeBridge: false` so a bare name in its own source is a violation.
+  if (!includeBridge) {
+    const at = cssText.indexOf(BRIDGE_SECTION_MARKER);
+    if (at !== -1) cssText = cssText.slice(0, at);
+  }
   const allowlist = new Set();
   const re = /(?:^|[{;])\s*(--[a-z][a-z0-9-]*)\s*:/gm;
   let match;
@@ -94,7 +111,7 @@ export function parseAllowlist(cssText) {
 }
 
 /** Read a file and parse its allowlist. Throws with a useful message if missing. */
-export function parseAllowlistFromFile(path) {
+export function parseAllowlistFromFile(path, opts) {
   if (!existsSync(path)) {
     throw new Error(
       `canonical-check: allowlist source not found at ${path}\n` +
@@ -102,7 +119,7 @@ export function parseAllowlistFromFile(path) {
       `\`npm run build:lib\` (BDS itself) to populate.`,
     );
   }
-  return parseAllowlist(readFileSync(path, 'utf8'));
+  return parseAllowlist(readFileSync(path, 'utf8'), opts);
 }
 
 /**
@@ -186,7 +203,7 @@ export function extractTokenReferences(text, prefixes = DEFAULT_PREFIXES) {
     .join('\n');
   const stripped = stripCssComments(filtered);
   const prefixGroup = prefixes.join('|');
-  const re = new RegExp(`--(?:${prefixGroup})-[a-z0-9-]*[a-z0-9]`, 'g');
+  const re = new RegExp(`--(?:bds-)?(?:${prefixGroup})-[a-z0-9-]*[a-z0-9]`, 'g');
   const found = new Set();
   let match;
   while ((match = re.exec(stripped)) !== null) {
@@ -207,7 +224,7 @@ export function extractTokenDefinitions(css, prefixes = DEFAULT_PREFIXES) {
   // Match on line-start, `{`, or `;` boundaries — handles both expanded
   // (one decl per line) and compact (`.foo { --x: y; }`) forms. Skips
   // `var(--x)` uses since `(` is not a declaration boundary.
-  const re = new RegExp(`(?:^|[{;])\\s*(--(?:${prefixGroup})-[a-z0-9-]*[a-z0-9])\\s*:`, 'gm');
+  const re = new RegExp(`(?:^|[{;])\\s*(--(?:bds-)?(?:${prefixGroup})-[a-z0-9-]*[a-z0-9])\\s*:`, 'gm');
   const found = new Set();
   let match;
   while ((match = re.exec(stripped)) !== null) {
@@ -279,6 +296,10 @@ export function sourceScan(opts) {
     extensions = DEFAULT_SCAN_EXTENSIONS,
     excludePathPatterns = DEFAULT_EXCLUDE_PATH_PATTERNS,
     exemptTokens = DEFAULT_EXEMPT_PATTERNS,
+    // Files matching `bridgePaths` may also read `bridgeAllowlist` names — the
+    // DevBar widgets, which ship to consumers still on bare names (#2678).
+    bridgePaths = [],
+    bridgeAllowlist = null,
   } = opts;
 
   if (!allowlist || allowlist.size === 0) {
@@ -294,9 +315,11 @@ export function sourceScan(opts) {
   for (const file of files) {
     const text = readFileSync(file, 'utf8');
     const refs = extractTokenReferences(text, prefixes);
+    const bridged = bridgeAllowlist && bridgePaths.some((re) => re.test(file));
     for (const token of refs) {
       if (isTokenExempt(token, exemptTokens)) continue;
       if (allowlist.has(token)) continue;
+      if (bridged && bridgeAllowlist.has(token)) continue;
       if (!tokenToFiles.has(token)) tokenToFiles.set(token, []);
       tokenToFiles.get(token).push(file);
     }
@@ -501,6 +524,9 @@ Usage:
                                       definitions (runtime mode — strict)
   canonical-check --allowlist <file>  Override allowlist source
                                       (default: node_modules/@brikdesigns/bds/dist/tokens.css)
+  canonical-check --no-bridge         Ignore the compat-alias section of the allowlist
+  canonical-check --bridge-paths <re> With --no-bridge: matching files may still read
+                                      compat-alias names (comma-separated regexes)
   canonical-check --prefixes <list>   Comma-separated prefixes to scan
                                       (default: text,surface,background,border,color)
   canonical-check --exempt <patterns> Comma-separated regex of tokens to skip
@@ -533,6 +559,8 @@ function parseCliArgs(argv) {
     if (a === '--help' || a === '-h') opts.help = true;
     else if (a === '--css') opts.cssFile = argv[++i];
     else if (a === '--allowlist') opts.allowlistPath = argv[++i];
+    else if (a === '--no-bridge') opts.noBridge = true;
+    else if (a === '--bridge-paths') opts.bridgePaths = argv[++i].split(',').map((s) => new RegExp(s));
     else if (a === '--prefixes') opts.prefixes = argv[++i].split(',').map((s) => s.trim()).filter(Boolean);
     else if (a === '--exempt') opts.exemptPatterns = argv[++i].split(',').map((s) => new RegExp(s));
     else if (a.startsWith('--format=')) opts.format = a.slice('--format='.length);
@@ -600,7 +628,7 @@ function main() {
   const allowlistPath = opts.allowlistPath ?? resolveDefaultAllowlistPath();
   let allowlist;
   try {
-    allowlist = parseAllowlistFromFile(allowlistPath);
+    allowlist = parseAllowlistFromFile(allowlistPath, { includeBridge: !opts.noBridge });
   } catch (err) {
     process.stderr.write(`${err.message}\n`);
     process.exit(2);
@@ -634,7 +662,13 @@ function main() {
     process.exit(2);
   }
 
-  const result = sourceScan({ paths: opts.paths, allowlist, prefixes, exemptTokens });
+  const bridgeAllowlist = opts.noBridge && opts.bridgePaths
+    ? parseAllowlistFromFile(allowlistPath, { includeBridge: true })
+    : null;
+  const result = sourceScan({
+    paths: opts.paths, allowlist, prefixes, exemptTokens,
+    bridgePaths: opts.bridgePaths ?? [], bridgeAllowlist,
+  });
   process.stdout.write(opts.format === 'json' ? renderJson(result, 'source') : renderMarkdown(result, 'source'));
   if (opts.reportPath) writeSarifReport(opts.reportPath, buildSarif({ result, mode: 'source' }));
   process.exit(result.violations.length > 0 ? 1 : 0);

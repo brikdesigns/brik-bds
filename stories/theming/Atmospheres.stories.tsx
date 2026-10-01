@@ -40,7 +40,7 @@ interface AtmosphereStoryRenderProps extends AtmosphereStoryArgs {
  */
 function AtmosphereStoryRender({ atmosphere, themeNumber }: AtmosphereStoryRenderProps) {
   return (
-    <div style={{ padding: 'var(--padding-lg)' }}>
+    <div style={{ padding: 'var(--bds-padding-lg)' }}>
       <AtmospherePreview
         atmosphere={atmosphere}
         entry={ATMOSPHERE_MANIFEST[atmosphere]}

@@ -171,7 +171,7 @@ if (jsonMode) {
     // Group by category
     const categories = {};
     for (const t of results.orphaned) {
-      const cat = t.replace(/^--/, '').split('-')[0];
+      const cat = t.replace(/^--(?:bds-)?/, '').split('-')[0];
       if (!categories[cat]) categories[cat] = [];
       categories[cat].push(t);
     }

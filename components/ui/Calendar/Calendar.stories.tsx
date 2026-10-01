@@ -2,9 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 const CalendarPlaceholder = () => (
   <div style={{
-    padding: 'var(--padding-xl)',
-    fontFamily: 'var(--font-family-body)',
-    color: 'var(--text-secondary)',
+    padding: 'var(--bds-padding-xl)',
+    fontFamily: 'var(--bds-font-family-body)',
+    color: 'var(--bds-text-secondary)',
     textAlign: 'center' as const,
   }}>
     Calendar component — coming soon.

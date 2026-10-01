@@ -45,11 +45,11 @@ export type CardControlActionAlign = 'center' | 'top';
 /**
  * Connection-status state for the `control` layout integration card.
  * Maps to canonical semantic token pairs:
- * - `not-configured` → `--text-muted` / `--background-status-neutral` (neutral/unconfigured)
- * - `connected`      → `--text-positive` / `--background-positive`
+ * - `not-configured` → `--bds-text-muted` / `--background-status-neutral` (neutral/unconfigured)
+ * - `connected`      → `--bds-text-positive` / `--bds-background-positive`
  * - `syncing`        → `--text-status-info` / `--background-status-info` (blue/in-progress)
- * - `synced`         → `--text-positive` / `--background-positive`
- * - `failed`         → `--text-negative` / `--background-negative`
+ * - `synced`         → `--bds-text-positive` / `--bds-background-positive`
+ * - `failed`         → `--bds-text-negative` / `--bds-background-negative`
  */
 export type CardControlConnectionStatus =
   | 'not-configured'
@@ -73,9 +73,9 @@ export type CardDisplayRowImageWidth = 'narrow' | 'standard' | 'wide' | (string 
  * the card edge.
  *
  * - `flush` (default) — the media bleeds to the card edge and only the text
- *   body carries the `--padding-lg` inset. The blog/story/product-grid look.
+ *   body carries the `--bds-padding-lg` inset. The blog/story/product-grid look.
  * - `inset` — the media AND the text body are framed together inside a single
- *   `--padding-huge` inset, with `--gap-xl` separating image from text. The
+ *   `--bds-padding-huge` inset, with `--bds-gap-xl` separating image from text. The
  *   service-card "card-vertical" look. Replaces the site-local
  *   `.service-card--inset` override so the treatment lives on the primitive,
  *   not per-consumer CSS.
@@ -88,9 +88,9 @@ export type CardMediaTreatment = 'flush' | 'inset';
  * shared media+body frame is; the matching `--gap-*` step separates image from
  * text.
  *
- * - `huge` (default) — `--padding-huge` (48px) + `--gap-xl`. The service-card
+ * - `huge` (default) — `--bds-padding-huge` (48px) + `--bds-gap-xl`. The service-card
  *   "card-vertical" look. Unchanged from before this prop existed.
- * - `lg` — `--padding-lg` (24px) + `--gap-lg`. The tighter image-top card.
+ * - `lg` — `--bds-padding-lg` (24px) + `--bds-gap-lg`. The tighter image-top card.
  *
  * Orthogonal to per-brand density: a client that wants everything tighter sets
  * the `data-mode-spacing` mode, which re-values these tokens globally — this
@@ -177,7 +177,7 @@ interface CardDefaultProps extends CardBaseProps {
    * Visual variant — outlined / brand / elevated / raised / borderless
    * (default `outlined`). Use `borderless` for cards sitting on a colored
    * surface, where the border ring reads as visual noise. `raised` —
-   * surface-primary fill, no border, with a `--box-shadow-md` drop shadow;
+   * surface-primary fill, no border, with a `--bds-box-shadow-md` drop shadow;
    * use for a focal/lone card or a grid cell that needs a lifted, contained
    * read (the shadow-casting counterpart to the now-flat `elevated`).
    */

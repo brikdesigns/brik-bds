@@ -11,10 +11,10 @@ const LogoItems = () => (
       <span
         key={name}
         style={{
-          fontFamily: 'var(--font-family-label)',
-          fontSize: 'var(--label-lg)',
-          fontWeight: 'var(--font-weight-semibold)',
-          color: 'var(--text-muted)',
+          fontFamily: 'var(--bds-font-family-label)',
+          fontSize: 'var(--bds-label-lg)',
+          fontWeight: 'var(--bds-font-weight-semibold)',
+          color: 'var(--bds-text-muted)',
           whiteSpace: 'nowrap',
         }}
       >

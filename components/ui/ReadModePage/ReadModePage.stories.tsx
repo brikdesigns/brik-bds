@@ -25,7 +25,7 @@ type Story = StoryObj;
 /* ─── Story helpers ──────────────────────────────────────────── */
 
 const Frame = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ maxWidth: '880px', padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+  <div style={{ maxWidth: '880px', padding: 'var(--bds-padding-lg)', background: 'var(--bds-surface-primary)' }}>
     {children}
   </div>
 );
@@ -79,7 +79,7 @@ export const Default: Story = {
 
       <DataSection title="Directory Listing" actions={<ViewEditToggle />}>
         <Field label="Care Philosophy">
-          <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', color: 'var(--text-primary)', lineHeight: 'var(--font-line-height-normal)' }}>
+          <p style={{ margin: 0, fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-md)', color: 'var(--bds-text-primary)', lineHeight: 'var(--bds-font-line-height-normal)' }}>
             We believe in transparent, partner-led engagement. Every client works directly with a senior strategist from discovery through delivery — no handoffs, no junior pass-throughs.
           </p>
         </Field>

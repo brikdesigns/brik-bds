@@ -13,13 +13,13 @@
   display: inline-flex;
   align-items: center;
   width: fit-content;
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
   line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically */
-  border-radius: var(--border-radius-pill);
+  border-radius: var(--bds-border-radius-pill);
   white-space: nowrap;
   text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wide);
+  letter-spacing: var(--bds-letter-spacing-wide);
   box-sizing: border-box;
 }
 
@@ -27,33 +27,33 @@
 
 .bds-badge--xs {
   /* bds-lint-ignore — 24px icon-only badge matches shared indicator spec */
-  width: var(--size-600);
-  height: var(--size-600);
+  width: var(--bds-size-600);
+  height: var(--bds-size-600);
   padding: 0;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--bds-border-radius-sm);
   justify-content: center;
   gap: 0;
 }
 
 .bds-badge--sm {
-  padding: var(--padding-tiny) var(--padding-sm);
-  gap: var(--gap-xs);
-  font-size: var(--label-tiny);
-  height: var(--size-700);
+  padding: var(--bds-padding-tiny) var(--bds-padding-sm);
+  gap: var(--bds-gap-xs);
+  font-size: var(--bds-label-tiny);
+  height: var(--bds-size-700);
 }
 
 .bds-badge--md {
-  padding: var(--padding-sm) var(--padding-md);
-  gap: var(--gap-sm);
-  font-size: var(--label-sm);
-  height: var(--size-800);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
+  gap: var(--bds-gap-sm);
+  font-size: var(--bds-label-sm);
+  height: var(--bds-size-800);
 }
 
 .bds-badge--lg {
-  padding: var(--padding-sm) var(--padding-md);
-  gap: var(--gap-md);
-  font-size: var(--label-md);
-  height: var(--size-1000);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
+  gap: var(--bds-gap-md);
+  font-size: var(--bds-label-md);
+  height: var(--bds-size-1000);
 }
 
 /* ─── Density (compact — tighter horizontal padding for dense rows) ── */
@@ -63,12 +63,12 @@
    unchanged. xs is icon-only and is unaffected. */
 
 .bds-badge--compact.bds-badge--sm {
-  padding-inline: var(--padding-xs);
+  padding-inline: var(--bds-padding-xs);
 }
 
 .bds-badge--compact.bds-badge--md,
 .bds-badge--compact.bds-badge--lg {
-  padding-inline: var(--padding-sm);
+  padding-inline: var(--bds-padding-sm);
 }
 
 /* ─── Icon Wrapper (shared sizing with Tag) ──────────────────── */
@@ -82,25 +82,25 @@
 
 /* Icon font-size matches container so the glyph fills the box */
 .bds-badge--xs .bds-badge__icon {
-  font-size: var(--icon-sm);
+  font-size: var(--bds-icon-sm);
 }
 
 .bds-badge--sm .bds-badge__icon {
-  width: var(--size-400);
-  height: var(--size-400);
-  font-size: var(--icon-sm);
+  width: var(--bds-size-400);
+  height: var(--bds-size-400);
+  font-size: var(--bds-icon-sm);
 }
 
 .bds-badge--md .bds-badge__icon {
-  width: var(--size-400);
-  height: var(--size-400);
-  font-size: var(--icon-sm);
+  width: var(--bds-size-400);
+  height: var(--bds-size-400);
+  font-size: var(--bds-icon-sm);
 }
 
 .bds-badge--lg .bds-badge__icon {
-  width: var(--icon-lg);
-  height: var(--icon-lg);
-  font-size: var(--label-xl);
+  width: var(--bds-icon-lg);
+  height: var(--bds-icon-lg);
+  font-size: var(--bds-label-xl);
 }
 
 /* ─── Tone × Solid (default, saturated bg) ───────────────────── */
@@ -109,64 +109,64 @@
    or menu underneath it, and is used here only by `appearance="subtle"`,
    whose whole contract is a pastel tint (#1909 § D). */
 
-/* Dark label: white on --background-positive (#27ae60) is 2.87:1 (fails AA);
-   --text-on-color-light is 6.00:1 in both themes (#995). */
+/* Dark label: white on --bds-background-positive (#27ae60) is 2.87:1 (fails AA);
+   --bds-text-on-color-light is 6.00:1 in both themes (#995). */
 .bds-badge--solid.bds-badge--tone-positive {
-  background-color: var(--background-positive);
-  color: var(--text-on-color-light);
+  background-color: var(--bds-background-positive);
+  color: var(--bds-text-on-color-light);
 }
 
 .bds-badge--solid.bds-badge--tone-warning {
-  background-color: var(--background-warning);
-  color: var(--text-neutral);
+  background-color: var(--bds-background-warning);
+  color: var(--bds-text-neutral);
 }
 
-/* Dark label: white on --background-negative (#eb5757) is 3.48:1 (fails AA);
-   --text-on-color-light is 4.95:1 in both themes (#995). */
+/* Dark label: white on --bds-background-negative (#eb5757) is 3.48:1 (fails AA);
+   --bds-text-on-color-light is 4.95:1 in both themes (#995). */
 .bds-badge--solid.bds-badge--tone-negative {
-  background-color: var(--background-negative);
-  color: var(--text-on-color-light);
+  background-color: var(--bds-background-negative);
+  color: var(--bds-text-on-color-light);
 }
 
 /* Blue — the info signal, freed for this family in #1959. Was spelled
    `progress` until ADR-033 § 1 retired the third synonym. */
 .bds-badge--solid.bds-badge--tone-info {
-  background-color: var(--background-info);
-  color: var(--text-on-color-dark);
+  background-color: var(--bds-background-info);
+  color: var(--bds-text-on-color-dark);
 }
 
 .bds-badge--solid.bds-badge--tone-brand {
-  background-color: var(--background-brand-primary);
-  color: var(--text-on-color-dark);
+  background-color: var(--bds-background-brand-primary);
+  color: var(--bds-text-on-color-dark);
 }
 
-/* Neutral — the saturated system neutral. `--text-neutral` resolves to the
-   same #363636, so the label must be --text-on-color-dark (10.6:1), not
-   --text-neutral (1.00:1 — the trap contrast-pairings.json records). */
+/* Neutral — the saturated system neutral. `--bds-text-neutral` resolves to the
+   same #363636, so the label must be --bds-text-on-color-dark (10.6:1), not
+   --bds-text-neutral (1.00:1 — the trap contrast-pairings.json records). */
 .bds-badge--solid.bds-badge--tone-neutral {
-  background-color: var(--background-neutral);
-  color: var(--text-on-color-dark);
+  background-color: var(--bds-background-neutral);
+  color: var(--bds-text-on-color-dark);
 }
 
 /* ─── Tone × Subtle (pastel bg, saturated text) ──────────────── */
 
-/* --text-positive is a gap-fill (tokens/gap-fills.css#913) tuned for
-   --surface-primary: it keeps the generated mid-green (#27ae60, 7.31:1 on
+/* --bds-text-positive is a gap-fill (tokens/gap-fills.css#913) tuned for
+   --bds-surface-primary: it keeps the generated mid-green (#27ae60, 7.31:1 on
    black) in dark mode, since that pairing is correct there. But
-   --surface-positive is a fixed-light pastel fill in BOTH themes (no dark
-   variant — #2402), so dark mode ends up painting the --surface-primary
+   --bds-surface-positive is a fixed-light pastel fill in BOTH themes (no dark
+   variant — #2402), so dark mode ends up painting the --bds-surface-primary
    dark-step text onto a light-step surface: 2.33:1, failing AA. Pin to the
-   primitive --text-positive's light value already resolves to
-   (--color-green-950) so this one pairing holds 6.9:1 in both themes,
-   without touching the --surface-primary pairing elsewhere. */
+   primitive --bds-text-positive's light value already resolves to
+   (--bds-color-green-950) so this one pairing holds 6.9:1 in both themes,
+   without touching the --bds-surface-primary pairing elsewhere. */
 .bds-badge--subtle.bds-badge--tone-positive {
-  background-color: var(--surface-positive);
-  color: var(--color-green-950);
+  background-color: var(--bds-surface-positive);
+  color: var(--bds-color-green-950);
 }
 
 .bds-badge--subtle.bds-badge--tone-warning {
-  background-color: var(--surface-warning);
-  color: var(--text-neutral);
+  background-color: var(--bds-surface-warning);
+  color: var(--bds-text-neutral);
 }
 
 /* --text-negative on --surface-negative measures 2.43:1 — an AA failure the
@@ -177,54 +177,54 @@
    that same gap, not introduced here, and not fixed here since the correct
    fix is at the primitive, not this rule. */
 .bds-badge--subtle.bds-badge--tone-negative {
-  background-color: var(--surface-negative);
-  color: var(--text-negative);
+  background-color: var(--bds-surface-negative);
+  color: var(--bds-text-negative);
 }
 
-/* --text-info on --surface-info measures 2.86:1 — an AA failure the blue
+/* --bds-text-info on --bds-surface-info measures 2.86:1 — an AA failure the blue
    family carries library-wide, tracked in #1972, not introduced here. */
 .bds-badge--subtle.bds-badge--tone-info {
-  background-color: var(--surface-info);
-  color: var(--text-info);
+  background-color: var(--bds-surface-info);
+  color: var(--bds-text-info);
 }
 
-/* --background-brand-secondary resolves per theme (theme-brand-brik.css):
-   --color-tan-100 in light, --color-grayscale-950 (near-black) in dark — the
+/* --bds-background-brand-secondary resolves per theme (theme-brand-brik.css):
+   --bds-color-tan-100 in light, --bds-color-grayscale-950 (near-black) in dark — the
    opposite direction fix each theme needs, so one static color can't clear
-   both. --text-brand-primary (--color-poppy-500) measured 3.32:1 on
+   both. --bds-text-brand-primary (--bds-color-poppy-500) measured 3.32:1 on
    tan-100 (fails) but 4.56:1 on grayscale-950 (already passes). Light gets a
-   darker poppy step (--color-poppy-700, 5.46:1 on tan-100); dark keeps the
+   darker poppy step (--bds-color-poppy-700, 5.46:1 on tan-100); dark keeps the
    existing token, which was already correct. */
 .bds-badge--subtle.bds-badge--tone-brand {
-  background-color: var(--background-brand-secondary);
-  color: var(--color-poppy-700);
+  background-color: var(--bds-background-brand-secondary);
+  color: var(--bds-color-poppy-700);
 }
 
 :root[data-theme="dark"] .bds-badge--subtle.bds-badge--tone-brand {
-  color: var(--text-brand-primary);
+  color: var(--bds-text-brand-primary);
 }
 
 .bds-badge--subtle.bds-badge--tone-neutral {
-  background-color: var(--surface-neutral);
-  color: var(--text-neutral);
+  background-color: var(--bds-surface-neutral);
+  color: var(--bds-text-neutral);
 }
 
 /* ─── Notification micro-interactions (keyframes in tokens/animations.css) ── */
 
 /* Pop-in: badge appears with a bounce scale */
 .bds-badge--animate-in {
-  animation: bds-pop var(--duration-lg) var(--ease-out);
+  animation: bds-pop var(--bds-duration-lg) var(--bds-ease-out);
 }
 
 /* Shake: bell icon / notification attention-getter */
 .bds-badge--shake {
-  animation: bds-shake 0.5s var(--ease-out); /* bds-lint-ignore — shake needs specific timing */
+  animation: bds-shake 0.5s var(--bds-ease-out); /* bds-lint-ignore — shake needs specific timing */
 }
 
 /* Pulse: persistent attention on unread notification badges */
 .bds-badge--pulse {
-  animation: bds-pop var(--duration-lg) var(--ease-out),
-    bds-pulse 1.4s var(--ease-in-out) 0.3s infinite;
+  animation: bds-pop var(--bds-duration-lg) var(--bds-ease-out),
+    bds-pulse 1.4s var(--bds-ease-in-out) 0.3s infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

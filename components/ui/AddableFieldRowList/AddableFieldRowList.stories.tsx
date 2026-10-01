@@ -296,7 +296,7 @@ export const MaxItemsCap: Story = {
     const [notes, setNotes] = useState<SimpleNote[]>([]);
 
     return (
-      <div style={{ width: 480, display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+      <div style={{ width: 480, display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xl)' }}>
         <AddableFieldRowList<SimpleNote>
           label="Quick notes (max 3)"
           values={notes}

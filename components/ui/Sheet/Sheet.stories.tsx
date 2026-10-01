@@ -82,14 +82,14 @@ type Story = StoryObj<typeof meta>;
 /* ─── Story content helpers ──────────────────────────────────── */
 
 const SampleContent = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', color: 'var(--text-primary)', lineHeight: 'var(--font-line-height-normal)' }}>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)', fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-md)', color: 'var(--bds-text-primary)', lineHeight: 'var(--bds-font-line-height-normal)' }}>
     <p style={{ margin: 0 }}>This is the sheet panel content. Use it for detail views, settings panels, or contextual information.</p>
-    <p style={{ margin: 0, color: 'var(--text-secondary)' }}>The sheet slides in from the edge of the screen and overlays the main content with a backdrop.</p>
+    <p style={{ margin: 0, color: 'var(--bds-text-secondary)' }}>The sheet slides in from the edge of the screen and overlays the main content with a backdrop.</p>
   </div>
 );
 
 const ReadOnlyFields = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)' }}>
     <Field label="Company">Brik Designs</Field>
     <Field label="Owner">Nick Stanerson</Field>
     <Field label="Industry">Design & Engineering</Field>
@@ -98,7 +98,7 @@ const ReadOnlyFields = () => (
 );
 
 const EditFormFields = ({ onChange }: { onChange?: (k: string, v: string) => void }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)' }}>
     <TextInput label="Company" defaultValue="Brik Designs" onChange={(e) => onChange?.('company', e.target.value)} />
     <TextInput label="Owner" defaultValue="Nick Stanerson" onChange={(e) => onChange?.('owner', e.target.value)} />
     <TextInput label="Industry" defaultValue="Design & Engineering" onChange={(e) => onChange?.('industry', e.target.value)} />
@@ -191,8 +191,8 @@ export const ReadMode: Story = {
     // guard. Compared against the resolved tokens rather than a literal `14px`,
     // so retuning the type scale can't quietly make the assertion vacuous.
     const root = getComputedStyle(document.documentElement);
-    const sheetTier = root.getPropertyValue('--label-sm').trim();
-    const pageTier = root.getPropertyValue('--label-md').trim();
+    const sheetTier = root.getPropertyValue('--bds-label-sm').trim();
+    const pageTier = root.getPropertyValue('--bds-label-md').trim();
     await expect(sheetTier).not.toBe(pageTier);
     await expect(getComputedStyle(label).fontSize).toBe(sheetTier);
   },
@@ -456,11 +456,11 @@ export const WithTabs: Story = {
               id: 'sources',
               label: 'Sources',
               content: (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
-                  <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-md)' }}>
+                  <p style={{ margin: 0, color: 'var(--bds-text-secondary)' }}>
                     Provenance for this record — shows which upstream topics and enrichment runs wrote to these fields.
                   </p>
-                  <ul style={{ margin: 0, paddingLeft: 'var(--padding-lg)' }}>
+                  <ul style={{ margin: 0, paddingLeft: 'var(--bds-padding-lg)' }}>
                     <li>Brand Strategy · 2 days ago</li>
                     <li>Manual Edit · 5 days ago</li>
                   </ul>

@@ -2,12 +2,12 @@
 /* ─── BulletList ───────────────────────────────────────────────── */
 
 .bds-bullet-list {
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
   margin: 0;
-  padding-left: var(--padding-lg);
+  padding-left: var(--bds-padding-lg);
 }
 
 /* ─── Markers ───────────────────────────────────────────────── */
@@ -27,14 +27,14 @@
 
 /* ─── Density ───────────────────────────────────────────────── */
 
-/* Density ladder uses --gap-sm/--gap-md — --gap-xs collapses to 0px outside
+/* Density ladder uses --bds-gap-sm/--bds-gap-md — --bds-gap-xs collapses to 0px outside
    default spacing mode, which would butt compact list items together. */
 .bds-bullet-list--density-compact .bds-bullet-list__item + .bds-bullet-list__item {
-  margin-top: var(--gap-sm);
+  margin-top: var(--bds-gap-sm);
 }
 
 .bds-bullet-list--density-comfortable .bds-bullet-list__item + .bds-bullet-list__item {
-  margin-top: var(--gap-md);
+  margin-top: var(--bds-gap-md);
 }
 
 /* ─── Item — reset font-size in case legacy webflow.css li rules leak ── */

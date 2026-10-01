@@ -6,19 +6,19 @@
 .bds-pricing-card {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
-  padding: var(--padding-lg);
-  background-color: var(--surface-primary);
-  border: var(--border-width-md) solid var(--border-secondary);
-  border-radius: var(--border-radius-md);
+  gap: var(--bds-gap-lg);
+  padding: var(--bds-padding-lg);
+  background-color: var(--bds-surface-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-secondary);
+  border-radius: var(--bds-border-radius-md);
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
 }
 
 .bds-pricing-card--highlighted {
-  border-color: var(--border-brand-primary);
-  box-shadow: var(--box-shadow-md);
+  border-color: var(--bds-border-brand-primary);
+  box-shadow: var(--bds-box-shadow-md);
 }
 
 /* ─── Top media slot ──────────────────────────────────── */
@@ -31,7 +31,7 @@
 }
 
 .bds-pricing-card__image :is(img, video, svg) {
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--bds-border-radius-sm);
 }
 
 /* ─── Header ──────────────────────────────────────────── */
@@ -39,7 +39,7 @@
 .bds-pricing-card__header {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
 }
 
 .bds-pricing-card__badge {
@@ -47,11 +47,11 @@
 }
 
 .bds-pricing-card__title {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-sm);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-snug);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-sm);
+  font-weight: var(--bds-font-weight-bold);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-primary);
   margin: 0;
 }
 
@@ -60,33 +60,33 @@
 .bds-pricing-card__price-block {
   display: flex;
   align-items: baseline;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
 }
 
 .bds-pricing-card__price {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-xl);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-xl);
+  font-weight: var(--bds-font-weight-bold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
   margin: 0;
 }
 
 .bds-pricing-card__period {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-regular);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-regular);
+  color: var(--bds-text-secondary);
 }
 
 /* ─── Description ─────────────────────────────────────── */
 
 .bds-pricing-card__description {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
   margin: 0;
 }
 
@@ -94,7 +94,7 @@
 
 .bds-pricing-card__divider {
   border: none;
-  border-top: var(--border-width-md) solid var(--border-muted);
+  border-top: var(--bds-border-width-md) solid var(--bds-border-muted);
   margin: 0;
 }
 
@@ -103,7 +103,7 @@
 .bds-pricing-card__features {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -112,15 +112,15 @@
 .bds-pricing-card__feature {
   display: flex;
   align-items: flex-start;
-  gap: var(--gap-md);
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
+  gap: var(--bds-gap-md);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
 }
 
 .bds-pricing-card__checkmark {
-  color: var(--text-brand-primary);
+  color: var(--bds-text-brand-primary);
   flex-shrink: 0;
 }
 
@@ -128,6 +128,6 @@
 
 .bds-pricing-card__action {
   margin-top: auto;
-  padding-top: var(--padding-sm);
+  padding-top: var(--bds-padding-sm);
 }
 }

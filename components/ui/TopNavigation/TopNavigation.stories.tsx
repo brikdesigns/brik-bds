@@ -24,10 +24,10 @@ const sampleLinks = [
 
 const LogoPlaceholder = () => (
   <div style={{
-    fontFamily: 'var(--font-family-heading)',
-    fontSize: 'var(--label-lg)',
-    fontWeight: 'var(--font-weight-bold)' as unknown as number,
-    color: 'var(--text-primary)',
+    fontFamily: 'var(--bds-font-family-heading)',
+    fontSize: 'var(--bds-label-lg)',
+    fontWeight: 'var(--bds-font-weight-bold)' as unknown as number,
+    color: 'var(--bds-text-primary)',
   }}>
     BrandName
   </div>

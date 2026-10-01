@@ -8,56 +8,56 @@
      it outranks the layered `.bds-blueprint-section` shorthand. */
   .bds-card-grid {
     padding-block-end: clamp(
-      var(--padding-huge),
+      var(--bds-padding-huge),
       9vw,
-      calc(var(--padding-huge) * 1.5)
+      calc(var(--bds-padding-huge) * 1.5)
     );
   }
 
   .bds-card-grid__header {
-    max-width: var(--content-width-text-md);
-    margin-bottom: var(--padding-xl);
+    max-width: var(--bds-content-width-text-md);
+    margin-bottom: var(--bds-padding-xl);
     display: flex;
     flex-direction: column;
   }
 
   /* Content rhythm (ADR-023 §3), mirroring the React twin in CardGrid.css:
-     subtitle→title is tight (--gap-sm), title→description is medium
-     (--gap-md). */
+     subtitle→title is tight (--bds-gap-sm), title→description is medium
+     (--bds-gap-md). */
 
   .bds-card-grid__header > * + * {
-    margin-top: var(--gap-md);
+    margin-top: var(--bds-gap-md);
   }
 
   .bds-card-grid__subtitle + .bds-card-grid__title {
-    margin-top: var(--gap-sm);
+    margin-top: var(--bds-gap-sm);
   }
 
   .bds-card-grid__subtitle {
     margin: 0;
-    font-family: var(--font-family-subtitle);
-    font-size: var(--subtitle-lg);
-    font-weight: var(--font-weight-medium);
+    font-family: var(--bds-font-family-subtitle);
+    font-size: var(--bds-subtitle-lg);
+    font-weight: var(--bds-font-weight-medium);
     letter-spacing: 0.08em;
-    text-transform: var(--text-transform-subtitle, uppercase);
-    color: var(--text-brand-primary);
+    text-transform: var(--bds-text-transform-subtitle, uppercase);
+    color: var(--bds-text-brand-primary);
   }
 
   .bds-card-grid__title {
     margin: 0;
-    font-family: var(--font-family-heading);
-    font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-xl));
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--font-line-height-tight);
-    color: var(--text-primary);
+    font-family: var(--bds-font-family-heading);
+    font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-xl));
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
   }
 
   .bds-card-grid__description {
     margin: 0;
-    font-family: var(--font-family-body);
-    font-size: var(--body-md);
-    line-height: var(--font-line-height-normal);
-    color: var(--text-primary);
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    line-height: var(--bds-font-line-height-normal);
+    color: var(--bds-text-primary);
   }
 
   /* ── --two-column-list item layout ──────────────────────────────
@@ -71,39 +71,39 @@
     padding: 0;
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--gap-xl);
+    gap: var(--bds-gap-xl);
   }
 
   @media (min-width: 768px) {
     .bp-services-two-col__list {
       grid-template-columns: repeat(2, 1fr);
-      gap: var(--gap-xl) var(--gap-huge);
+      gap: var(--bds-gap-xl) var(--bds-gap-huge);
     }
   }
 
   .bp-services-two-col__item {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-md);
+    gap: var(--bds-gap-md);
   }
 
   .bp-services-two-col__item-title {
     margin: 0;
     /* Pair: heading family + heading size. */
-    font-family: var(--font-family-heading);
-    font-size: var(--heading-md);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--font-line-height-tight);
-    color: var(--text-primary);
+    font-family: var(--bds-font-family-heading);
+    font-size: var(--bds-heading-md);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
   }
 
   .bp-services-two-col__item-desc {
     margin: 0;
     /* Pair: body family + body size. */
-    font-family: var(--font-family-body);
-    font-size: var(--body-md);
-    line-height: var(--font-line-height-normal);
-    color: var(--text-primary);
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    line-height: var(--bds-font-line-height-normal);
+    color: var(--bds-text-primary);
   }
 
   /* ── --card-grid item layout ────────────────────────────────────
@@ -117,7 +117,7 @@
     padding: 0;
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--gap-lg);
+    gap: var(--bds-gap-lg);
   }
 
   @media (min-width: 768px) {
@@ -160,16 +160,16 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    background: var(--surface-primary);
-    border: var(--border-width-md) solid var(--border-secondary);
-    border-radius: var(--border-radius-md);
+    background: var(--bds-surface-primary);
+    border: var(--bds-border-width-md) solid var(--bds-border-secondary);
+    border-radius: var(--bds-border-radius-md);
     overflow: hidden;
   }
 
   .bp-services-grid__media {
     position: relative;
     aspect-ratio: 3 / 2;
-    background: var(--surface-secondary);
+    background: var(--bds-surface-secondary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -184,25 +184,25 @@
 
   .bp-services-grid__media-fallback {
     /* Pair: heading family + heading size. */
-    font-family: var(--font-family-heading);
-    font-size: var(--heading-md);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary);
+    font-family: var(--bds-font-family-heading);
+    font-size: var(--bds-heading-md);
+    font-weight: var(--bds-font-weight-semibold);
+    color: var(--bds-text-primary);
     opacity: 0.55;
     letter-spacing: 0.02em;
   }
 
   .bp-services-grid__has-options {
     position: absolute;
-    top: var(--gap-md);
-    right: var(--gap-md);
+    top: var(--bds-gap-md);
+    right: var(--bds-gap-md);
     padding: 4px 10px;
-    background: var(--background-positive);
-    color: var(--text-on-color-dark);
+    background: var(--bds-background-positive);
+    color: var(--bds-text-on-color-dark);
     /* Pair: label family + label size. */
-    font-family: var(--font-family-label);
-    font-size: var(--label-sm);
-    font-weight: var(--font-weight-semibold);
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-sm);
+    font-weight: var(--bds-font-weight-semibold);
     letter-spacing: 0.02em;
     border-radius: 999px;
     line-height: 1.2;
@@ -212,8 +212,8 @@
   .bp-services-grid__card-body {
     display: flex;
     flex-direction: column;
-    gap: var(--gap-md);
-    padding: var(--padding-lg);
+    gap: var(--bds-gap-md);
+    padding: var(--bds-padding-lg);
     flex: 1 1 auto;
   }
 
@@ -228,56 +228,56 @@
     align-items: center;
     align-self: flex-start;
     padding: 4px 10px;
-    background: var(--surface-secondary);
-    color: var(--text-primary);
+    background: var(--bds-surface-secondary);
+    color: var(--bds-text-primary);
     /* Pair: label family + label size. */
-    font-family: var(--font-family-label);
-    font-size: var(--label-md);
-    font-weight: var(--font-weight-semibold);
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-md);
+    font-weight: var(--bds-font-weight-semibold);
     border-radius: 999px;
     line-height: 1.2;
     letter-spacing: 0.02em;
   }
 
   .bp-services-grid__card[data-category='brand'] .bp-services-grid__category-pill {
-    background: var(--color-yellow-300);
-    color: var(--color-yellow-950);
+    background: var(--bds-color-yellow-300);
+    color: var(--bds-color-yellow-950);
   }
   .bp-services-grid__card[data-category='marketing'] .bp-services-grid__category-pill {
-    background: var(--color-green-300);
-    color: var(--color-green-950);
+    background: var(--bds-color-green-300);
+    color: var(--bds-color-green-950);
   }
   .bp-services-grid__card[data-category='information'] .bp-services-grid__category-pill {
-    background: var(--color-blue-300);
-    color: var(--color-blue-950);
+    background: var(--bds-color-blue-300);
+    color: var(--bds-color-blue-950);
   }
   .bp-services-grid__card[data-category='product'] .bp-services-grid__category-pill {
-    background: var(--color-purple-300);
-    color: var(--color-purple-950);
+    background: var(--bds-color-purple-300);
+    color: var(--bds-color-purple-950);
   }
   .bp-services-grid__card[data-category='back-office'] .bp-services-grid__category-pill,
   .bp-services-grid__card[data-category='service'] .bp-services-grid__category-pill {
-    background: var(--color-orange-300);
-    color: var(--color-orange-950);
+    background: var(--bds-color-orange-300);
+    color: var(--bds-color-orange-950);
   }
 
   .bp-services-grid__card-title {
     margin: 0;
     /* Pair: heading family + heading size. */
-    font-family: var(--font-family-heading);
-    font-size: var(--heading-md);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--font-line-height-tight);
-    color: var(--text-primary);
+    font-family: var(--bds-font-family-heading);
+    font-size: var(--bds-heading-md);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
   }
 
   .bp-services-grid__card-desc {
     margin: 0;
     /* Pair: body family + body size. */
-    font-family: var(--font-family-body);
-    font-size: var(--body-md);
-    line-height: var(--font-line-height-normal);
-    color: var(--text-primary);
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    line-height: var(--bds-font-line-height-normal);
+    color: var(--bds-text-primary);
   }
 
   .bp-services-grid__cta-row {
@@ -288,19 +288,19 @@
   .bp-services-grid__cta {
     /* Astro "Learn more" — primary-button styling without the React
        `<LinkButton variant="primary">` the React rail uses.
-       --text-on-color-dark = white (text on a dark/saturated background fill). */
+       --bds-text-on-color-dark = white (text on a dark/saturated background fill). */
     display: inline-flex;
     align-items: center;
-    gap: var(--gap-sm);
-    padding: var(--padding-sm) var(--padding-lg);
-    background: var(--background-brand-primary);
-    color: var(--text-on-color-dark);
+    gap: var(--bds-gap-sm);
+    padding: var(--bds-padding-sm) var(--bds-padding-lg);
+    background: var(--bds-background-brand-primary);
+    color: var(--bds-text-on-color-dark);
     text-decoration: none;
-    border-radius: var(--border-radius-sm);
+    border-radius: var(--bds-border-radius-sm);
     /* Pair: label family + label size. */
-    font-family: var(--font-family-label);
-    font-size: var(--label-md);
-    font-weight: var(--font-weight-semibold);
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-md);
+    font-weight: var(--bds-font-weight-semibold);
     line-height: 1.4;
   }
 
@@ -309,6 +309,6 @@
   }
 
   .bp-services-grid__cta:focus-visible {
-    outline: 2px solid var(--border-focus, var(--text-brand-primary));
+    outline: 2px solid var(--bds-border-focus, var(--bds-text-brand-primary));
     outline-offset: 2px;
   }

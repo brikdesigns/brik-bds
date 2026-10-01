@@ -11,10 +11,10 @@ const MediaPlaceholder = ({ label, hue }: { label: string; hue: string }) => (
       display: 'grid',
       placeItems: 'center',
       background: hue,
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--label-lg)',
-      fontWeight: 'var(--font-weight-semibold)',
-      color: 'var(--text-primary)',
+      fontFamily: 'var(--bds-font-family-label)',
+      fontSize: 'var(--bds-label-lg)',
+      fontWeight: 'var(--bds-font-weight-semibold)',
+      color: 'var(--bds-text-primary)',
     }}
   >
     {label}
@@ -27,21 +27,21 @@ const steps = [
     title: 'Scope the work',
     description:
       'We map the surfaces, name the constraints, and agree what ships in the first release before anyone opens an editor.',
-    media: <MediaPlaceholder label="Scope" hue="var(--surface-secondary)" />,
+    media: <MediaPlaceholder label="Scope" hue="var(--bds-surface-secondary)" />,
   },
   {
     id: 'design',
     title: 'Design the system',
     description:
       'Tokens, then components, then pages — so the second page costs a fraction of the first.',
-    media: <MediaPlaceholder label="Design" hue="var(--surface-muted)" />,
+    media: <MediaPlaceholder label="Design" hue="var(--bds-surface-muted)" />,
   },
   {
     id: 'build',
     title: 'Build and hand over',
     description:
       'Shipped on your stack, with the design system documented so your team can extend it without us.',
-    media: <MediaPlaceholder label="Build" hue="var(--surface-accent)" />,
+    media: <MediaPlaceholder label="Build" hue="var(--bds-surface-accent)" />,
   },
 ];
 

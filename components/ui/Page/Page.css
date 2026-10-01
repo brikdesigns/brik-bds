@@ -13,23 +13,23 @@
   /* Shared horizontal inset. Header + body sit inside this padded column so
      the header's bottom divider aligns with body content (the renew #224
      model). Exposed as a custom property so PageContent can break out of it. */
-  padding-inline: var(--bds-page-padding-inline, 0); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  padding-inline: var(--bds-gutter-padding-inline, 0); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 /* ─── Horizontal inset scale ─────────────────────────────────── */
 
-.bds-page--padding-none { --bds-page-padding-inline: 0; }
-.bds-page--padding-sm   { --bds-page-padding-inline: var(--padding-sm); }
-.bds-page--padding-md   { --bds-page-padding-inline: var(--padding-md); }
-.bds-page--padding-lg   { --bds-page-padding-inline: var(--padding-lg); }
+.bds-page--padding-none { --bds-gutter-padding-inline: 0; }
+.bds-page--padding-sm   { --bds-gutter-padding-inline: var(--bds-padding-sm); }
+.bds-page--padding-md   { --bds-gutter-padding-inline: var(--bds-padding-md); }
+.bds-page--padding-lg   { --bds-gutter-padding-inline: var(--bds-padding-lg); }
 
 /* ─── Header → body gap (BDS --gap-* tokens) ─────────────────── */
 
-.bds-page--gap-sm   { gap: var(--gap-sm); }
-.bds-page--gap-md   { gap: var(--gap-md); }
-.bds-page--gap-lg   { gap: var(--gap-lg); }
-.bds-page--gap-xl   { gap: var(--gap-xl); }
-.bds-page--gap-huge { gap: var(--gap-huge); }
+.bds-page--gap-sm   { gap: var(--bds-gap-sm); }
+.bds-page--gap-md   { gap: var(--bds-gap-md); }
+.bds-page--gap-lg   { gap: var(--bds-gap-lg); }
+.bds-page--gap-xl   { gap: var(--bds-gap-xl); }
+.bds-page--gap-huge { gap: var(--bds-gap-huge); }
 
 /* ─── PageContent ──────────────────────────────────────────────── */
 
@@ -40,28 +40,28 @@
 }
 
 /* Inter-section vertical rhythm — stat row / FilterBar / display. */
-.bds-page__content--gap-sm   { gap: var(--gap-sm); }
-.bds-page__content--gap-md   { gap: var(--gap-md); }
-.bds-page__content--gap-lg   { gap: var(--gap-lg); }
-.bds-page__content--gap-xl   { gap: var(--gap-xl); }
-.bds-page__content--gap-huge { gap: var(--gap-huge); }
+.bds-page__content--gap-sm   { gap: var(--bds-gap-sm); }
+.bds-page__content--gap-md   { gap: var(--bds-gap-md); }
+.bds-page__content--gap-lg   { gap: var(--bds-gap-lg); }
+.bds-page__content--gap-xl   { gap: var(--bds-gap-xl); }
+.bds-page__content--gap-huge { gap: var(--bds-gap-huge); }
 
 /* Per-region inset override. `none` breaks out of the page column to go
    full-bleed; sm/md/lg break out then re-apply an explicit inset. */
 .bds-page__content--padding-none {
-  margin-inline: calc(-1 * var(--bds-page-padding-inline, 0)); /* bds-lint-ignore — breakout of component-scoped inset */
+  margin-inline: calc(-1 * var(--bds-gutter-padding-inline, 0)); /* bds-lint-ignore — breakout of component-scoped inset */
 }
 .bds-page__content--padding-sm {
-  margin-inline: calc(-1 * var(--bds-page-padding-inline, 0)); /* bds-lint-ignore — breakout of component-scoped inset */
-  padding-inline: var(--padding-sm);
+  margin-inline: calc(-1 * var(--bds-gutter-padding-inline, 0)); /* bds-lint-ignore — breakout of component-scoped inset */
+  padding-inline: var(--bds-padding-sm);
 }
 .bds-page__content--padding-md {
-  margin-inline: calc(-1 * var(--bds-page-padding-inline, 0)); /* bds-lint-ignore — breakout of component-scoped inset */
-  padding-inline: var(--padding-md);
+  margin-inline: calc(-1 * var(--bds-gutter-padding-inline, 0)); /* bds-lint-ignore — breakout of component-scoped inset */
+  padding-inline: var(--bds-padding-md);
 }
 .bds-page__content--padding-lg {
-  margin-inline: calc(-1 * var(--bds-page-padding-inline, 0)); /* bds-lint-ignore — breakout of component-scoped inset */
-  padding-inline: var(--padding-lg);
+  margin-inline: calc(-1 * var(--bds-gutter-padding-inline, 0)); /* bds-lint-ignore — breakout of component-scoped inset */
+  padding-inline: var(--bds-padding-lg);
 }
 
 /* Own the vertical scroll on fill-height pages (boards, calendars). */

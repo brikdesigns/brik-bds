@@ -7,7 +7,7 @@
  * Component-local tokens (ADR-014 Tier 4, --bds-{component}-{prop} —
  * defined here with defaults, overridable by a client theme or `style`):
  *   --bds-bg-pattern-color      Dot / line color. Defaults to
- *                               --border-secondary — a hairline-strength
+ *                               --bds-border-secondary — a hairline-strength
  *                               neutral border token that already flips
  *                               per theme (light: grayscale-lighter, dark:
  *                               grayscale-darker), so the pattern reads at
@@ -22,7 +22,7 @@
  */
 
 .bds-background-pattern {
-  --bds-bg-pattern-color: var(--border-secondary);
+  --bds-bg-pattern-color: var(--bds-border-secondary);
   --bds-bg-pattern-size: 15px;
   --bds-bg-pattern-dot-size: 1px;
   --bds-bg-pattern-opacity: 0.3;

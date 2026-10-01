@@ -6,7 +6,7 @@ import { SectionHeader } from './SectionHeader';
 <Meta of={Stories} />
 
 export const MeasureScale = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xl)' }}>
     {[
       { measure: 'sm', label: 'measure="sm" (44ch)', title: 'Simple, transparent pricing', description: 'No hidden fees. Cancel anytime.' },
       { measure: 'md', label: 'measure="md" (60ch, default)', title: 'Everything your practice needs', description: 'One platform for client intake, billing, and communication — built for teams that outgrew spreadsheets.' },
@@ -15,12 +15,12 @@ export const MeasureScale = () => (
       <div key={measure}>
         <div
           style={{
-            fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--body-xs)',
+            fontFamily: 'var(--bds-font-family-label)',
+            fontSize: 'var(--bds-body-xs)',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
-            color: 'var(--text-muted)',
-            marginBottom: 'var(--gap-sm)',
+            color: 'var(--bds-text-muted)',
+            marginBottom: 'var(--bds-gap-sm)',
           }}
         >
           {label}
@@ -53,7 +53,7 @@ Centered, `measure="md"` (600px) — the default shape for a section intro. `tit
 
 `align` — `'center'` (default) centers the column with auto margins and centers text/actions; `'start'` left-anchors the column with no auto margins. Exercise it on the `Default` canvas via the `align` Control.
 
-`measure` — the inline cap on the centered text column, a named role over the text rungs of the one width ladder (`--content-width-text-xs` 448px / `-text-sm` 600px / `-text-md` 720px; ADR-041 retired the parallel `--measure-*` family). Pick by content length, not by band width — a `measure-sm` intro can sit in an `xl` band.
+`measure` — the inline cap on the centered text column, a named role over the text rungs of the one width ladder (`--bds-content-width-text-xs` 448px / `-text-sm` 600px / `-text-md` 720px; ADR-041 retired the parallel `--measure-*` family). Pick by content length, not by band width — a `measure-sm` intro can sit in an `xl` band.
 
 <Canvas>
   <MeasureScale />
@@ -65,11 +65,11 @@ Centered, `measure="md"` (600px) — the default shape for a section intro. `tit
 
 <Canvas of={Stories.WithActions} />
 
-`onColor` — the CTA-band shape. Forwarded straight to `ContentBlock`, which owns the swap to `--text-on-color-dark`; SectionHeader adds no colour CSS of its own and still owns only measure + alignment. Use this instead of pushing a `color` override through `SectionHeader` into a slot it doesn't own.
+`onColor` — the CTA-band shape. Forwarded straight to `ContentBlock`, which owns the swap to `--bds-text-on-color-dark`; SectionHeader adds no colour CSS of its own and still owns only measure + alignment. Use this instead of pushing a `color` override through `SectionHeader` into a slot it doesn't own.
 
 <Canvas of={Stories.OnColor} />
 
-White on `--surface-brand-primary` is **3.78:1 — AA-large (3:1), not AA (4.5:1)**; brand-primary fills are gated AA-large by policy (`tokens/contrast-pairings.json`, BDS-22 / ADR-015). The `size="lg"` title is large text; keep a band `description` short.
+White on `--bds-surface-brand-primary` is **3.78:1 — AA-large (3:1), not AA (4.5:1)**; brand-primary fills are gated AA-large by policy (`tokens/contrast-pairings.json`, BDS-22 / ADR-015). The `size="lg"` title is large text; keep a band `description` short.
 
 ## Props
 

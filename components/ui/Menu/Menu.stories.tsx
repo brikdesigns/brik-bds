@@ -11,18 +11,18 @@ import { ServiceTag } from '../ServiceTag/ServiceTag';
 
 const SectionLabel = ({ children }: { children: string }) => (
   <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
+    fontFamily: 'var(--bds-font-family-label)',
+    fontSize: 'var(--bds-body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
     textTransform: 'uppercase' as const,
     letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
+    marginBottom: 'var(--bds-gap-md)',
+    color: 'var(--bds-text-muted)',
   }}>
     {children}
   </div>
 );
 
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+const Stack = ({ children, gap = 'var(--bds-gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
 );
 
@@ -86,7 +86,7 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div style={{ minHeight: 360, padding: 'var(--padding-lg)' }}>
+      <div style={{ minHeight: 360, padding: 'var(--bds-padding-lg)' }}>
         <Story />
       </div>
     ),
@@ -203,7 +203,7 @@ export const WithTrigger: Story = {
                   { id: '3', label: 'Archive', onClick: () => setActionOpen(false) },
                   { id: '4', label: 'Delete', disabled: true },
                 ]}
-                style={{ top: '100%', left: 0, marginTop: 'var(--gap-md)' }}
+                style={{ top: '100%', left: 0, marginTop: 'var(--bds-gap-md)' }}
               />
             </div>
           </div>
@@ -222,7 +222,7 @@ export const WithTrigger: Story = {
                   { id: 'procedure', label: 'Procedure', description: 'Step-by-step workflows', onClick: () => setAddOpen(false) },
                   { id: 'compliance', label: 'Compliance', description: 'Regulatory & safety tasks', onClick: () => setAddOpen(false) },
                 ]}
-                style={{ top: '100%', left: 0, marginTop: 'var(--gap-md)', minWidth: 280 }}
+                style={{ top: '100%', left: 0, marginTop: 'var(--bds-gap-md)', minWidth: 280 }}
               />
             </div>
           </div>
@@ -257,7 +257,7 @@ export const Placement: Story = {
         { id: '3', label: 'Archive', onClick: () => {} },
       ];
       return (
-        <div style={{ display: 'flex', gap: 'var(--gap-huge)', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 'var(--bds-gap-huge)', alignItems: 'center' }}>
           <div>
             <SectionLabel>placement=&quot;bottom&quot;</SectionLabel>
             <div style={{ position: 'relative', display: 'inline-block' }}>

@@ -11,11 +11,11 @@
 
 .bds-tab-bar-item {
   border: 0;
-  transition: opacity var(--duration-sm) var(--ease-out),
-    background-color var(--duration-sm) var(--ease-out),
-    color var(--duration-sm) var(--ease-out),
-    border-color var(--duration-sm) var(--ease-out),
-    transform var(--duration-sm) var(--ease-out);
+  transition: opacity var(--bds-duration-sm) var(--bds-ease-out),
+    background-color var(--bds-duration-sm) var(--bds-ease-out),
+    color var(--bds-duration-sm) var(--bds-ease-out),
+    border-color var(--bds-duration-sm) var(--bds-ease-out),
+    transform var(--bds-duration-sm) var(--bds-ease-out);
 }
 
 /* Micro press feedback on click */
@@ -25,7 +25,7 @@
 
 .bds-tab-bar-item:disabled {
   cursor: not-allowed;
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
   pointer-events: none;
 }
 
@@ -36,13 +36,13 @@
 .bds-tab-bar-item--has-dot {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 
 /* ── Text variant ── */
 
 .bds-tab-bar--text .bds-tab-bar-item:hover:not(:disabled) {
-  color: var(--text-brand-primary);
+  color: var(--bds-text-brand-primary);
 }
 
 .bds-tab-bar--text .bds-tab-bar-item:active:not(:disabled) {
@@ -63,30 +63,30 @@
    Bar baseline + per-tab indicator both live here (not inline) so that the
    baseline is a real element border (not an inline style), keeping specificity
    predictable when a tab bar is dropped into a PageHeader `tabs` slot.
-   Baseline width is `--border-width-md` (2px) — the brik structural default, so
+   Baseline width is `--bds-border-width-md` (2px) — the brik structural default, so
    the tab bar divider matches cards/inputs/nav rather than a 1px hairline.
 */
 
 .bds-tab-bar--tab {
-  border-bottom: var(--border-width-md) solid var(--border-secondary);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-secondary);
 }
 
-/* Items reserve the active-indicator's width (--border-width-lg = 4px) as a
+/* Items reserve the active-indicator's width (--bds-border-width-lg = 4px) as a
    transparent border on every item — so toggling active doesn't shift layout.
    Negative margin overlays the item border onto the bar baseline so the
    active indicator replaces (not stacks under) the divider segment. */
 .bds-tab-bar--tab .bds-tab-bar-item {
-  border-bottom: var(--border-width-lg) solid transparent;
-  margin-bottom: calc(-1 * var(--border-width-lg));
+  border-bottom: var(--bds-border-width-lg) solid transparent;
+  margin-bottom: calc(-1 * var(--bds-border-width-lg));
 }
 
 .bds-tab-bar--tab .bds-tab-bar-item[aria-selected="true"] {
-  border-bottom-color: var(--border-brand-primary);
+  border-bottom-color: var(--bds-border-brand-primary);
 }
 
 .bds-tab-bar--tab .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
-  color: var(--text-primary);
-  border-bottom-color: var(--border-primary);
+  color: var(--bds-text-primary);
+  border-bottom-color: var(--bds-border-primary);
 }
 
 .bds-tab-bar--tab .bds-tab-bar-item:active:not(:disabled) {
@@ -96,16 +96,16 @@
 /* ── Tab variant on-color ── */
 
 .bds-tab-bar--tab.bds-tab-bar--on-color {
-  border-bottom-color: var(--border-on-color-dark);
+  border-bottom-color: var(--bds-border-on-color-dark);
 }
 
 .bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] {
-  border-bottom-color: var(--border-on-color-dark);
+  border-bottom-color: var(--bds-border-on-color-dark);
 }
 
 .bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
   opacity: 0.8;
-  border-bottom-color: var(--border-on-color-dark);
+  border-bottom-color: var(--bds-border-on-color-dark);
 }
 
 .bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item:active:not(:disabled) {
@@ -115,12 +115,12 @@
 /* ── Box variant ── */
 
 .bds-tab-bar--box .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
-  background-color: var(--background-secondary);
-  color: var(--text-primary);
+  background-color: var(--bds-background-secondary);
+  color: var(--bds-text-primary);
 }
 
 .bds-tab-bar--box .bds-tab-bar-item:active:not(:disabled):not([aria-selected="true"]) {
-  background-color: var(--background-tertiary);
+  background-color: var(--bds-background-tertiary);
 }
 
 .bds-tab-bar--box .bds-tab-bar-item[aria-selected="true"]:active:not(:disabled) {
@@ -175,24 +175,24 @@
    vertical rail reads as a column of tabs rather than a stack of underlines. */
 .bds-tab-bar--tab[data-orientation='vertical'] {
   border-bottom: none;
-  border-inline-start: var(--border-width-md) solid var(--border-secondary);
+  border-inline-start: var(--bds-border-width-md) solid var(--bds-border-secondary);
   align-items: stretch;
 }
 
 .bds-tab-bar--tab[data-orientation='vertical'] .bds-tab-bar-item {
   border-bottom: none;
   margin-bottom: 0;
-  border-inline-start: var(--border-width-lg) solid transparent;
-  margin-inline-start: calc(-1 * var(--border-width-lg));
-  padding: var(--padding-md) var(--padding-lg);
+  border-inline-start: var(--bds-border-width-lg) solid transparent;
+  margin-inline-start: calc(-1 * var(--bds-border-width-lg));
+  padding: var(--bds-padding-md) var(--bds-padding-lg);
 }
 
 .bds-tab-bar--tab[data-orientation='vertical'] .bds-tab-bar-item[aria-selected='true'] {
-  border-inline-start-color: var(--border-brand-primary);
+  border-inline-start-color: var(--bds-border-brand-primary);
 }
 
 .bds-tab-bar--tab[data-orientation='vertical'] .bds-tab-bar-item:hover:not(:disabled):not([aria-selected='true']) {
-  border-inline-start-color: var(--border-primary);
+  border-inline-start-color: var(--bds-border-primary);
 }
 
 /* `--text-underline` below is the BEM variant modifier, not a `--text-*` token —
@@ -201,11 +201,11 @@
 .bds-tab-bar--text,
 .bds-tab-bar--text-underline, /* bds-lint-ignore — canonical-check: --text-underline modifier selector, not a token reference */
 .bds-tab-bar--tab {
-  gap: var(--gap-xl);
+  gap: var(--bds-gap-xl);
 }
 
 .bds-tab-bar--box {
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
 }
 
 /* `tab` aligns items to the bar's content-box bottom so the active indicator's
@@ -216,10 +216,10 @@
 
 /* ── Shared item typography + reset ── */
 .bds-tab-bar-item {
-  font-family: var(--font-family-label);
-  font-size: var(--label-md);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-md);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
   text-align: center;
   white-space: nowrap;
   cursor: pointer;
@@ -230,13 +230,13 @@
 
 /* ── text ── */
 .bds-tab-bar--text .bds-tab-bar-item {
-  color: var(--text-secondary);
+  color: var(--bds-text-secondary);
 }
 .bds-tab-bar--text .bds-tab-bar-item[aria-selected="true"] {
-  color: var(--text-brand-primary);
+  color: var(--bds-text-brand-primary);
 }
 .bds-tab-bar--text.bds-tab-bar--on-color .bds-tab-bar-item {
-  color: var(--text-on-color-dark);
+  color: var(--bds-text-on-color-dark);
   opacity: 0.6;
 }
 .bds-tab-bar--text.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] {
@@ -245,36 +245,36 @@
 
 /* ── text-underline ── */
 .bds-tab-bar--text-underline .bds-tab-bar-item { /* bds-lint-ignore — canonical-check: --text-underline modifier selector, not a token reference */
-  color: var(--text-secondary);
-  border-bottom: var(--border-width-md) solid transparent;
-  padding-bottom: var(--padding-sm);
+  color: var(--bds-text-secondary);
+  border-bottom: var(--bds-border-width-md) solid transparent;
+  padding-bottom: var(--bds-padding-sm);
 }
 .bds-tab-bar--text-underline .bds-tab-bar-item[aria-selected="true"] { /* bds-lint-ignore — canonical-check: --text-underline modifier selector, not a token reference */
-  color: var(--text-brand-primary);
-  border-bottom-color: var(--border-brand-primary);
+  color: var(--bds-text-brand-primary);
+  border-bottom-color: var(--bds-border-brand-primary);
 }
 .bds-tab-bar--text-underline.bds-tab-bar--on-color .bds-tab-bar-item { /* bds-lint-ignore — canonical-check: --text-underline modifier selector, not a token reference */
-  color: var(--text-on-color-dark);
+  color: var(--bds-text-on-color-dark);
   opacity: 0.6;
   border-bottom-color: transparent;
 }
 .bds-tab-bar--text-underline.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] { /* bds-lint-ignore — canonical-check: --text-underline modifier selector, not a token reference */
   opacity: 1;
-  border-bottom-color: var(--border-on-color-dark);
+  border-bottom-color: var(--bds-border-on-color-dark);
 }
 
 /* ── tab (border-bottom + overlap live in the tab-variant section above) ── */
 .bds-tab-bar--tab .bds-tab-bar-item {
-  color: var(--text-secondary);
+  color: var(--bds-text-secondary);
   background-color: transparent;
   padding: 0;
-  padding-bottom: var(--padding-sm);
+  padding-bottom: var(--bds-padding-sm);
 }
 .bds-tab-bar--tab .bds-tab-bar-item[aria-selected="true"] {
-  color: var(--text-brand-primary);
+  color: var(--bds-text-brand-primary);
 }
 .bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item {
-  color: var(--text-on-color-dark);
+  color: var(--bds-text-on-color-dark);
   opacity: 0.6;
 }
 .bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] {
@@ -283,24 +283,24 @@
 
 /* ── box ── */
 .bds-tab-bar--box .bds-tab-bar-item {
-  color: var(--text-secondary);
-  background-color: var(--background-primary);
-  padding: var(--padding-lg);
-  border: var(--border-width-md) solid var(--border-primary);
+  color: var(--bds-text-secondary);
+  background-color: var(--bds-background-primary);
+  padding: var(--bds-padding-lg);
+  border: var(--bds-border-width-md) solid var(--bds-border-primary);
 }
 .bds-tab-bar--box .bds-tab-bar-item[aria-selected="true"] {
-  color: var(--text-on-color-dark);
-  background-color: var(--background-brand-primary);
+  color: var(--bds-text-on-color-dark);
+  background-color: var(--bds-background-brand-primary);
   border-color: transparent;
 }
 .bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item {
-  color: var(--text-on-color-dark);
-  border-color: var(--border-on-color-dark);
+  color: var(--bds-text-on-color-dark);
+  border-color: var(--bds-border-on-color-dark);
   opacity: 0.6;
 }
 .bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] {
-  color: var(--text-on-color-dark);
-  background-color: var(--background-brand-primary);
+  color: var(--bds-text-on-color-dark);
+  background-color: var(--bds-background-brand-primary);
   border-color: transparent;
   opacity: 1;
 }

@@ -51,7 +51,7 @@ type Story = StoryObj<typeof DataSection>;
 /* ─── Story helpers ──────────────────────────────────────────── */
 
 const Frame = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ maxWidth: '880px', padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+  <div style={{ maxWidth: '880px', padding: 'var(--bds-padding-lg)', background: 'var(--bds-surface-primary)' }}>
     {children}
   </div>
 );

@@ -18,7 +18,7 @@ export interface SheetSectionProps extends Omit<HTMLAttributes<HTMLElement>, 'ti
   /**
    * HTML element for the title. Defaults to `h3` so the Sheet's own `<h2>`
    * title keeps outline hierarchy intact. Also drives the visual size —
-   * `h2`/`h3`/`h4` → `--heading-md`/`--heading-sm`/`--heading-tiny`.
+   * `h2`/`h3`/`h4` → `--bds-heading-md`/`--bds-heading-sm`/`--bds-heading-tiny`.
    */
   titleAs?: SheetSectionTitleAs;
   /**
@@ -39,10 +39,10 @@ export interface SheetSectionProps extends Omit<HTMLAttributes<HTMLElement>, 'ti
  *
  * Pairs a section title with its content and locks the vertical rhythm
  * between sections. The title's size follows `titleAs` on a
- * `h2`/`h3`/`h4` → `--heading-md`/`--heading-sm`/`--heading-tiny` ramp — every
- * tier stays larger than Field labels (`--label-sm` inside a Sheet body) so
+ * `h2`/`h3`/`h4` → `--bds-heading-md`/`--bds-heading-sm`/`--bds-heading-tiny` ramp — every
+ * tier stays larger than Field labels (`--bds-label-sm` inside a Sheet body) so
  * the label-above-heading inversion cannot recur (supersedes the legacy
- * uppercase `--label-sm` treatment).
+ * uppercase `--bds-label-sm` treatment).
  *
  * Composes inside `<Sheet>` — one section per logical grouping of fields.
  *

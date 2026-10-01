@@ -22,11 +22,11 @@ Flexible content container. A default flexible content slot (no `layout`), plus 
 
 The `layout` prop selects the arrangement. Default (no `layout`) gives a flexible `children` slot composable with `CardTitle`, `CardDescription`, and `CardFooter`. Each `layout` arranges the same optional slot set into a distinct shape.
 
-The default shape also takes a `variant`: `outlined` (default, secondary border), `brand` (primary-color border), `elevated` (surface fill, no border, no shadow), `raised` (surface fill, no border, `--box-shadow-md` drop shadow), and `borderless`.
+The default shape also takes a `variant`: `outlined` (default, secondary border), `brand` (primary-color border), `elevated` (surface fill, no border, no shadow), `raised` (surface fill, no border, `--bds-box-shadow-md` drop shadow), and `borderless`.
 
 Cycle `variant` in the Controls panel on the story above — it is a fill/border treatment, not a distinct semantic variant, so it is a control rather than a story per [ADR-010](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-010-storybook-axes-of-information.md).
 
-- `raised` — surface-primary fill, no border, with a cast `--box-shadow-md` drop shadow. The shadow-casting counterpart to the now-flat `elevated` (brik-bds#1146 / BACKLOG-493 removed `elevated`'s shadow so portal cards read flat). Use for a focal/lone card or a grid cell that needs a lifted, contained read.
+- `raised` — surface-primary fill, no border, with a cast `--bds-box-shadow-md` drop shadow. The shadow-casting counterpart to the now-flat `elevated` (brik-bds#1146 / BACKLOG-493 removed `elevated`'s shadow so portal cards read flat). Use for a focal/lone card or a grid cell that needs a lifted, contained read.
 - `borderless` — transparent fill, no border, no shadow. Use for cards placed on a colored surface (service-tier or brand-image background) where the `outlined` border ring reads as visual noise. The card inherits the parent surface rather than forcing its own.
 
 ### Leading media (avatar / image / logo)
@@ -41,7 +41,7 @@ Which of the three renders is content, not a semantic axis — set `media` in th
 
 <Canvas of={Stories.Stack} />
 
-The `mediaTreatment` prop controls how the `media` slot relates to the card edge. `flush` (default) bleeds the media to the edge and pads only the body (`--padding-lg`) — the blog/story/product-grid look. `inset` frames the media and body together in a single `--padding-huge` inset — the service-card "card-vertical" look. Cycle it in the Controls panel on the story above.
+The `mediaTreatment` prop controls how the `media` slot relates to the card edge. `flush` (default) bleeds the media to the edge and pads only the body (`--bds-padding-lg`) — the blog/story/product-grid look. `inset` frames the media and body together in a single `--bds-padding-huge` inset — the service-card "card-vertical" look. Cycle it in the Controls panel on the story above.
 
 ### Pricing layout
 

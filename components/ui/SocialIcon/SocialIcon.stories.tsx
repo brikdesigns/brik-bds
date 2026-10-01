@@ -27,7 +27,7 @@ const meta: Meta<typeof SocialIcon> = {
       control: 'select',
       options: ['neutral', 'brand', 'accent', 'inverse'],
       description:
-        'Hue source: `neutral` (`--text-muted`), `brand` (the platform\'s Foundations brand-color token — every platform has one), `accent` (`--text-brand-primary`), `inverse` (near-black `--surface-inverse`).',
+        'Hue source: `neutral` (`--bds-text-muted`), `brand` (the platform\'s Foundations brand-color token — every platform has one), `accent` (`--bds-text-brand-primary`), `inverse` (near-black `--bds-surface-inverse`).',
     },
     tone: { table: { disable: true } },
     size: {
@@ -82,26 +82,26 @@ const EMPHASES: SocialIconEmphasis[] = ['neutral', 'brand', 'accent', 'inverse']
  */
 export const AllMarks: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-md)' }}>
       {SOCIAL_ICON_PLATFORMS.map((platform) => (
-        <div key={platform} style={{ display: 'flex', alignItems: 'center', gap: 'var(--gap-md)' }}>
+        <div key={platform} style={{ display: 'flex', alignItems: 'center', gap: 'var(--bds-gap-md)' }}>
           <span
             style={{
               width: '80px',
               flexShrink: 0,
-              fontFamily: 'var(--font-family-label)',
-              fontSize: 'var(--label-sm)',
-              color: 'var(--text-secondary)',
+              fontFamily: 'var(--bds-font-family-label)',
+              fontSize: 'var(--bds-label-sm)',
+              color: 'var(--bds-text-secondary)',
             }}
           >
             {platform}
           </span>
-          <div style={{ display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 'var(--bds-gap-md)', flexWrap: 'wrap' }}>
             {TYPES.flatMap((type) =>
               EMPHASES.map((emphasis) => (
-                <div key={`${type}-${emphasis}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--gap-tiny)' }}>
+                <div key={`${type}-${emphasis}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--bds-gap-tiny)' }}>
                   <SocialIcon platform={platform} type={type} emphasis={emphasis} size="sm" />
-                  <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)' }}>
+                  <span style={{ fontSize: '0.625rem', color: 'var(--bds-text-muted)' }}>
                     {type}/{emphasis}
                   </span>
                 </div>

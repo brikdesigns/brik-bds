@@ -3,12 +3,12 @@
 
 .bds-card-control {
   display: flex;
-  gap: var(--padding-xl);
-  padding: var(--padding-xl);
-  background-color: var(--surface-primary);
-  border: var(--border-width-md) solid var(--border-muted);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-sm);
+  gap: var(--bds-padding-xl);
+  padding: var(--bds-padding-xl);
+  background-color: var(--bds-surface-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-muted);
+  border-radius: var(--bds-border-radius-lg);
+  box-shadow: var(--bds-shadow-sm);
   width: 100%;
   box-sizing: border-box;
   flex-wrap: wrap;
@@ -24,7 +24,7 @@
 .bds-card-control__content {
   display: flex;
   align-items: center;
-  gap: var(--padding-lg);
+  gap: var(--bds-padding-lg);
   flex: 1;
   min-width: 0;
 }
@@ -35,30 +35,30 @@
   display: flex;
   flex-direction: column;
   /* Title → description is the readable-separation step (ADR-023
-     content-rhythm map: heading ↔ body = --gap-md), matching Card's
+     content-rhythm map: heading ↔ body = --bds-gap-md), matching Card's
      control preset so the same relationship reads consistently. */
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   min-width: 0;
 }
 
 /* ─── Title ──────────────────────────────────────────────────── */
 
 .bds-card-control__title {
-  font-family: var(--font-family-label);
-  font-size: var(--label-lg);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-lg);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
   margin: 0;
 }
 
 /* ─── Description ────────────────────────────────────────────── */
 
 .bds-card-control__description {
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-muted);
   margin: 0;
 }
 

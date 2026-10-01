@@ -23,14 +23,14 @@
 /* ─── Gaps ──────────────────────────────────────────────────── */
 
 .bds-field-grid--gap-md {
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
 }
 
 .bds-field-grid--gap-lg {
-  gap: var(--gap-lg);
+  gap: var(--bds-gap-lg);
 }
 
 .bds-field-grid--gap-xl {
-  gap: var(--gap-xl);
+  gap: var(--bds-gap-xl);
 }
 }

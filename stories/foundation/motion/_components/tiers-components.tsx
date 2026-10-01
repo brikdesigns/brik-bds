@@ -7,13 +7,13 @@ import { type CSSProperties } from 'react';
 const codeBlock: CSSProperties = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
   fontSize: 12,
-  backgroundColor: 'var(--surface-secondary)',
+  backgroundColor: 'var(--bds-surface-secondary)',
   padding: '12px 16px',
-  borderRadius: 'var(--border-radius-sm)',
+  borderRadius: 'var(--bds-border-radius-sm)',
   overflow: 'auto',
   whiteSpace: 'pre',
   margin: '8px 0',
-  border: '1px solid var(--border-muted)',
+  border: '1px solid var(--bds-border-muted)',
 };
 
 const badgeStyle: CSSProperties = {
@@ -32,8 +32,8 @@ const badgeStyle: CSSProperties = {
 
 export function TierBadge({ tier }: { tier: 'lightweight' | 'gsap' | 'premium' }) {
   const colors = {
-    lightweight: { bg: 'var(--background-brand-secondary)', color: '#fff' },
-    gsap: { bg: 'var(--background-brand-primary)', color: '#fff' },
+    lightweight: { bg: 'var(--bds-background-brand-secondary)', color: '#fff' },
+    gsap: { bg: 'var(--bds-background-brand-primary)', color: '#fff' },
     premium: { bg: '#7c3aed', color: '#fff' },
   };
   const labels = { lightweight: 'Lightweight', gsap: 'GSAP', premium: 'Premium' };

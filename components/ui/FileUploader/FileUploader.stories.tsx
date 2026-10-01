@@ -73,7 +73,7 @@ export const WithFileList: Story = {
     function UploadWithFileList() {
       const [files, setFiles] = useState<File[]>([]);
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-md)' }}>
           <FileUploader
             label="Upload images"
             accept="image/*"
@@ -83,9 +83,9 @@ export const WithFileList: Story = {
           />
           {files.length > 0 && (
             <div style={{
-              fontFamily: 'var(--font-family-body)',
-              fontSize: 'var(--body-sm)',
-              color: 'var(--text-secondary)',
+              fontFamily: 'var(--bds-font-family-body)',
+              fontSize: 'var(--bds-body-sm)',
+              color: 'var(--bds-text-secondary)',
             }}>
               {files.map((f) => (
                 <div key={f.name}>{f.name} ({(f.size / 1024).toFixed(1)} KB)</div>

@@ -42,40 +42,40 @@ interface HealthData {
 // ─── Styles ─────────────────────────────────────────────────────────
 
 const card: CSSProperties = {
-  padding: 'var(--padding-lg)',
-  backgroundColor: 'var(--surface-primary)',
-  borderRadius: 'var(--border-radius-md)',
-  border: '1px solid var(--border-muted)', // bds-lint-ignore — card border
+  padding: 'var(--bds-padding-lg)',
+  backgroundColor: 'var(--bds-surface-primary)',
+  borderRadius: 'var(--bds-border-radius-md)',
+  border: '1px solid var(--bds-border-muted)', // bds-lint-ignore — card border
 };
 
 const metric: CSSProperties = {
-  fontFamily: 'var(--font-family-heading)',
-  fontSize: 'var(--heading-lg)',
-  fontWeight: 'var(--font-weight-bold)' as unknown as number,
-  color: 'var(--text-primary)',
+  fontFamily: 'var(--bds-font-family-heading)',
+  fontSize: 'var(--bds-heading-lg)',
+  fontWeight: 'var(--bds-font-weight-bold)' as unknown as number,
+  color: 'var(--bds-text-primary)',
 };
 
 const metricLabel: CSSProperties = {
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-sm)',
-  color: 'var(--text-muted)',
+  fontFamily: 'var(--bds-font-family-body)',
+  fontSize: 'var(--bds-body-sm)',
+  color: 'var(--bds-text-muted)',
 };
 
 const badge = (pass: boolean): CSSProperties => ({
   display: 'inline-block',
   padding: '2px 8px', // bds-lint-ignore — badge padding
-  borderRadius: 'var(--border-radius-sm)',
-  fontSize: 'var(--body-xs)',
-  fontFamily: 'var(--font-family-label)',
-  fontWeight: 'var(--font-weight-semibold)' as unknown as number,
-  backgroundColor: pass ? 'var(--color-system-green)' : 'var(--color-system-red)',
+  borderRadius: 'var(--bds-border-radius-sm)',
+  fontSize: 'var(--bds-body-xs)',
+  fontFamily: 'var(--bds-font-family-label)',
+  fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number,
+  backgroundColor: pass ? 'var(--bds-color-system-green)' : 'var(--bds-color-system-red)',
   color: '#fff', // bds-lint-ignore — badge text always white
 });
 
 // ─── Components ─────────────────────────────────────────────────────
 
 function MetricCard({ value, label, status }: { value: string; label: string; status?: 'good' | 'warn' | 'bad' }) {
-  const color = status === 'good' ? 'var(--color-system-green)' : status === 'bad' ? 'var(--color-system-red)' : 'var(--text-primary)';
+  const color = status === 'good' ? 'var(--bds-color-system-green)' : status === 'bad' ? 'var(--bds-color-system-red)' : 'var(--bds-text-primary)';
   return (
     <div style={card}>
       <div style={{ ...metric, color }}>{value}</div>
@@ -85,21 +85,21 @@ function MetricCard({ value, label, status }: { value: string; label: string; st
 }
 
 function CompletenessGrid({ gaps }: { gaps: { name: string; missing: string[] }[] }) {
-  if (gaps.length === 0) return <div style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)' }}>All components complete</div>;
+  if (gaps.length === 0) return <div style={{ color: 'var(--bds-text-muted)', fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)' }}>All components complete</div>;
   return (
-    <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)' }}>
+    <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)' }}>
       <thead>
-        <tr style={{ borderBottom: '1px solid var(--border-muted)' }}>
-          <th style={{ textAlign: 'left', padding: 'var(--gap-xs)', color: 'var(--text-secondary)' }}>Component</th>
-          <th style={{ textAlign: 'left', padding: 'var(--gap-xs)', color: 'var(--text-secondary)' }}>Missing</th>
+        <tr style={{ borderBottom: '1px solid var(--bds-border-muted)' }}>
+          <th style={{ textAlign: 'left', padding: 'var(--bds-gap-xs)', color: 'var(--bds-text-secondary)' }}>Component</th>
+          <th style={{ textAlign: 'left', padding: 'var(--bds-gap-xs)', color: 'var(--bds-text-secondary)' }}>Missing</th>
         </tr>
       </thead>
       <tbody>
         {gaps.map(g => (
-          <tr key={g.name} style={{ borderBottom: '1px solid var(--border-muted)' }}>
-            <td style={{ padding: 'var(--gap-xs)', color: 'var(--text-primary)' }}>{g.name}</td>
-            <td style={{ padding: 'var(--gap-xs)' }}>
-              {g.missing.map(m => <span key={m} style={{ ...badge(false), marginRight: 'var(--gap-xs)' }}>{m}</span>)}
+          <tr key={g.name} style={{ borderBottom: '1px solid var(--bds-border-muted)' }}>
+            <td style={{ padding: 'var(--bds-gap-xs)', color: 'var(--bds-text-primary)' }}>{g.name}</td>
+            <td style={{ padding: 'var(--bds-gap-xs)' }}>
+              {g.missing.map(m => <span key={m} style={{ ...badge(false), marginRight: 'var(--bds-gap-xs)' }}>{m}</span>)}
             </td>
           </tr>
         ))}
@@ -123,13 +123,13 @@ function HealthDashboard() {
 
   if (error) {
     return (
-      <div style={{ padding: 'var(--padding-xl)', fontFamily: 'var(--font-family-body)', color: 'var(--text-secondary)' }}>
+      <div style={{ padding: 'var(--bds-padding-xl)', fontFamily: 'var(--bds-font-family-body)', color: 'var(--bds-text-secondary)' }}>
         <p>{error}</p>
       </div>
     );
   }
   if (!data) {
-    return <div style={{ padding: 'var(--padding-xl)', fontFamily: 'var(--font-family-body)', color: 'var(--text-muted)' }}>Loading health data...</div>;
+    return <div style={{ padding: 'var(--bds-padding-xl)', fontFamily: 'var(--bds-font-family-body)', color: 'var(--bds-text-muted)' }}>Loading health data...</div>;
   }
 
   const h = data.health;
@@ -143,7 +143,7 @@ function HealthDashboard() {
       subtitle={`Generated ${new Date(data.generatedAt).toLocaleString()}`}
     >
       <DashboardSection title="Summary">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 'var(--gap-md)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 'var(--bds-gap-md)' }}>
           <MetricCard
             value={`${completePct}%`}
             label={`Completeness (${h.completeness?.complete}/${h.completeness?.total})`}
@@ -175,12 +175,12 @@ function HealthDashboard() {
 
       {data.grid?.categories && (
         <DashboardSection title="Grid compliance by category">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--gap-sm)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--bds-gap-sm)' }}>
             {data.grid.categories.map(cat => (
-              <div key={cat.name} style={{ ...card, padding: 'var(--padding-sm)' }}>
-                <div style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>{cat.name}</div>
-                <div style={{ fontFamily: 'var(--font-family-heading)', fontSize: 'var(--heading-sm)', color: cat.offGrid === 0 ? 'var(--color-system-green)' : 'var(--text-primary)' }}>
-                  {cat.pct}% <span style={{ fontSize: 'var(--body-xs)', color: 'var(--text-muted)' }}>({cat.onGrid}/{cat.total})</span>
+              <div key={cat.name} style={{ ...card, padding: 'var(--bds-padding-sm)' }}>
+                <div style={{ fontFamily: 'var(--bds-font-family-label)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-secondary)' }}>{cat.name}</div>
+                <div style={{ fontFamily: 'var(--bds-font-family-heading)', fontSize: 'var(--bds-heading-sm)', color: cat.offGrid === 0 ? 'var(--bds-color-system-green)' : 'var(--bds-text-primary)' }}>
+                  {cat.pct}% <span style={{ fontSize: 'var(--bds-body-xs)', color: 'var(--bds-text-muted)' }}>({cat.onGrid}/{cat.total})</span>
                 </div>
               </div>
             ))}
@@ -188,17 +188,17 @@ function HealthDashboard() {
         </DashboardSection>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--gap-md)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--bds-gap-md)' }}>
         {h.bundle && !('error' in h.bundle) && (
           <DashboardSection title="Bundle size">
-            <div style={{ ...card, padding: 'var(--padding-sm)' }}>
+            <div style={{ ...card, padding: 'var(--bds-padding-sm)' }}>
               <div style={metric}>{h.bundle.totalHuman}</div>
             </div>
           </DashboardSection>
         )}
         {h.deps && (
           <DashboardSection title="Dependencies">
-            <div style={{ ...card, padding: 'var(--padding-sm)' }}>
+            <div style={{ ...card, padding: 'var(--bds-padding-sm)' }}>
               <div style={metric}>{h.deps.total} outdated</div>
               <div style={metricLabel}>{h.deps.major?.length ?? 0} major version bumps</div>
             </div>

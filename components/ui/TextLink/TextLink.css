@@ -13,32 +13,32 @@
 .bds-text-link {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-xs);
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-text-link);
+  gap: var(--bds-gap-xs);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  font-weight: var(--bds-font-weight-medium);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-text-link);
   text-decoration: none;
   cursor: pointer;
   transition: color 0.2s;
 }
 
 .bds-text-link:hover {
-  color: var(--text-brand-primary);
+  color: var(--bds-text-brand-primary);
   text-decoration: underline;
 }
 
 .bds-text-link:focus-visible {
-  outline: 2px solid var(--border-brand-primary); /* bds-lint-ignore — focus ring */
+  outline: 2px solid var(--bds-border-brand-primary); /* bds-lint-ignore — focus ring */
   outline-offset: 2px; /* bds-lint-ignore — focus ring offset */
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--bds-border-radius-sm);
 }
 
 /* ─── Small variant ──────────────────────────────────────────── */
 
 .bds-text-link-small {
-  font-size: var(--body-sm);
+  font-size: var(--bds-body-sm);
 }
 
 /* ─── Neutral emphasis ───────────────────────────────────────────
@@ -50,7 +50,7 @@
    specificity. */
 
 .bds-text-link--emphasis-neutral {
-  color: var(--text-primary);
+  color: var(--bds-text-primary);
 }
 
 /* ─── Underline-always variant ──────────────────────────────────

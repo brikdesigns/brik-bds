@@ -16,21 +16,21 @@
 
 /* ─── Sharp ────────────────────────────────────────── */
 [data-mode-radius="sharp"] {
-  --border-radius-lg: 8px;
-  --border-radius-md: 4px;
-  --border-radius-sm: 2px;
+  --bds-border-radius-lg: 8px;
+  --bds-border-radius-md: 4px;
+  --bds-border-radius-sm: 2px;
 }
 
 /* ─── Round ────────────────────────────────────────── */
 [data-mode-radius="round"] {
-  --border-radius-lg: 40px;
-  --border-radius-md: 24px;
-  --border-radius-sm: 16px;
+  --bds-border-radius-lg: 40px;
+  --bds-border-radius-md: 24px;
+  --bds-border-radius-sm: 16px;
 }
 
 /* ─── Pill ────────────────────────────────────────── */
 [data-mode-radius="pill"] {
-  --border-radius-lg: 999px;
-  --border-radius-md: 999px;
-  --border-radius-sm: 999px;
+  --bds-border-radius-lg: 999px;
+  --bds-border-radius-md: 999px;
+  --bds-border-radius-sm: 999px;
 }

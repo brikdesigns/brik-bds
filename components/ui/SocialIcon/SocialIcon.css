@@ -19,29 +19,29 @@
 
 /* ─── type="badge" — background carries the emphasis color, glyph knocked out white ── */
 
-/* Constant white regardless of theme (context-pinned, unlike --text-inverse
+/* Constant white regardless of theme (context-pinned, unlike --bds-text-inverse
    which flips with theme polarity) — the glyph always reads as a white
    knockout on a colored badge, matching every real-world social badge
    (YouTube red + white play, Facebook blue + white F, …) regardless of the
    app's light/dark mode. */
 .bds-social-icon--badge {
-  color: var(--text-on-color-dark);
+  color: var(--bds-text-on-color-dark);
 }
 
 .bds-social-icon--badge.bds-social-icon--emphasis-neutral .bds-social-icon__bg {
-  fill: var(--text-muted);
+  fill: var(--bds-text-muted);
 }
 
 .bds-social-icon--badge.bds-social-icon--emphasis-accent .bds-social-icon__bg {
-  fill: var(--text-brand-primary);
+  fill: var(--bds-text-brand-primary);
 }
 
-/* `--surface-inverse`, not `--background-inverse`: a consuming theme (the
+/* `--bds-surface-inverse`, not `--bds-background-inverse`: a consuming theme (the
    brikdesigns marketing site) redefines `--background-*` in its dark root, so
    the badge would flip polarity there; `--surface-*` is the theme-tracking
    pair. The knocked-out white glyph above reads 17.22:1 on it (brik-bds#2274). */
 .bds-social-icon--badge.bds-social-icon--emphasis-inverse .bds-social-icon__bg {
-  fill: var(--surface-inverse);
+  fill: var(--bds-surface-inverse);
 }
 
 /* `--bds-social-icon-brand` is bound per-platform below (via `[data-platform]`
@@ -59,26 +59,26 @@
 }
 
 .bds-social-icon--glyph.bds-social-icon--emphasis-neutral {
-  color: var(--text-muted);
+  color: var(--bds-text-muted);
 }
 
 .bds-social-icon--glyph.bds-social-icon--emphasis-accent {
-  color: var(--text-brand-primary);
+  color: var(--bds-text-brand-primary);
 }
 
 /* The Foundations primitive, not a `--text-*` semantic. `lint-tokens` rejects a
-   surface-family token in a text slot, so the badge's own `--surface-inverse`
+   surface-family token in a text slot, so the badge's own `--bds-surface-inverse`
    is unavailable here — and its nearest semantic counterpart is NOT equivalent:
-   `--text-on-color-light` resolves to `--color-grayscale-black` (#000) under
+   `--bds-text-on-color-light` resolves to `--bds-color-grayscale-black` (#000) under
    `:root[data-theme="dark"] .theme-brand-brik` (dist/tokens.css:909) while
-   `--surface-inverse` stays `--color-grayscale-950` (#1b1b1b), so the glyph and
+   `--bds-surface-inverse` stays `--bds-color-grayscale-950` (#1b1b1b), so the glyph and
    badge halves would paint different blacks in exactly the root Storybook's
-   `brik-dark` renders (.storybook/preview.tsx:95-97). `--color-grayscale-950`
-   is declared once, unthemed, and is what `--surface-inverse` resolves to in
+   `brik-dark` renders (.storybook/preview.tsx:95-97). `--bds-color-grayscale-950`
+   is declared once, unthemed, and is what `--bds-surface-inverse` resolves to in
    all four roots — same reason the per-platform brand bindings below consume a
    primitive directly (brik-bds#2274). */
 .bds-social-icon--glyph.bds-social-icon--emphasis-inverse {
-  color: var(--color-grayscale-950);
+  color: var(--bds-color-grayscale-950);
 }
 
 .bds-social-icon--glyph.bds-social-icon--emphasis-brand {
@@ -91,42 +91,42 @@
    (design-tokens/foundations.json primitives/value/color/system,
    brik-bds#1716) — never a hardcoded hex or a component-local JS map. */
 .bds-social-icon--emphasis-brand[data-platform='youtube'] {
-  --bds-social-icon-brand: var(--color-system-youtube);
+  --bds-social-icon-brand: var(--bds-color-system-youtube);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='twitter'] {
-  --bds-social-icon-brand: var(--color-system-twitter);
+  --bds-social-icon-brand: var(--bds-color-system-twitter);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='facebook'] {
-  --bds-social-icon-brand: var(--color-system-facebook);
+  --bds-social-icon-brand: var(--bds-color-system-facebook);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='instagram'] {
-  --bds-social-icon-brand: var(--color-system-instagram);
+  --bds-social-icon-brand: var(--bds-color-system-instagram);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='linkedin'] {
-  --bds-social-icon-brand: var(--color-system-linkedin);
+  --bds-social-icon-brand: var(--bds-color-system-linkedin);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='yelp'] {
-  --bds-social-icon-brand: var(--color-system-yelp);
+  --bds-social-icon-brand: var(--bds-color-system-yelp);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='google'] {
-  --bds-social-icon-brand: var(--color-system-google);
+  --bds-social-icon-brand: var(--bds-color-system-google);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='apple'] {
-  --bds-social-icon-brand: var(--color-system-apple);
+  --bds-social-icon-brand: var(--bds-color-system-apple);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='bing'] {
-  --bds-social-icon-brand: var(--color-system-bing);
+  --bds-social-icon-brand: var(--bds-color-system-bing);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='tiktok'] {
-  --bds-social-icon-brand: var(--color-system-tiktok);
+  --bds-social-icon-brand: var(--bds-color-system-tiktok);
 }
 }

@@ -28,12 +28,12 @@ type Story = StoryObj<typeof Frame>;
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   <div
     style={{
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
+      fontFamily: 'var(--bds-font-family-label)',
+      fontSize: 'var(--bds-body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
       textTransform: 'uppercase' as const,
       letterSpacing: '0.05em',
-      color: 'var(--text-muted)',
-      marginBottom: 'var(--gap-sm)',
+      color: 'var(--bds-text-muted)',
+      marginBottom: 'var(--bds-gap-sm)',
     }}
   >
     {children}
@@ -42,14 +42,14 @@ const SectionLabel = ({ children }: { children: React.ReactNode }) => (
 
 const PlaceholderImage = () => (
   <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-    <rect width="400" height="300" fill="var(--surface-secondary)" />
+    <rect width="400" height="300" fill="var(--bds-surface-secondary)" />
     <text
       x="200"
       y="160"
       textAnchor="middle"
-      fontFamily="var(--font-family-body)"
+      fontFamily="var(--bds-font-family-body)"
       fontSize="20"
-      fill="var(--text-muted)"
+      fill="var(--bds-text-muted)"
     >
       400 × 300 placeholder
     </text>
@@ -74,7 +74,7 @@ export const Default: Story = {
 /** @summary Custom ratio via the `customRatio` prop */
 export const CustomRatio: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)', maxWidth: 480 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)', maxWidth: 480 }}>
       <div>
         <SectionLabel>customRatio=&quot;5 / 2&quot;</SectionLabel>
         <Frame customRatio="5 / 2">
@@ -107,7 +107,7 @@ export const CustomRatio: Story = {
  */
 export const HeightAnchored: Story = {
   render: () => (
-    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--gap-lg)' }}>
+    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 'var(--bds-gap-lg)' }}>
       {(['1-1', '4-3', '16-9', '21-9'] as const).map((r) => (
         <div key={r}>
           <SectionLabel>ratio=&quot;{r}&quot;</SectionLabel>
@@ -115,7 +115,7 @@ export const HeightAnchored: Story = {
             ratio={r}
             anchor="height"
             fit="cover"
-            style={{ height: 'var(--size-1400)', background: 'var(--surface-secondary)' }}
+            style={{ height: 'var(--bds-size-1400)', background: 'var(--bds-surface-secondary)' }}
           >
             <PlaceholderImage />
           </Frame>
@@ -131,20 +131,20 @@ export const CardImageArea: Story = {
     <div
       style={{
         maxWidth: 320,
-        background: 'var(--surface-primary)',
-        border: '1px solid var(--border-secondary)',
-        borderRadius: 'var(--border-radius-md)',
+        background: 'var(--bds-surface-primary)',
+        border: '1px solid var(--bds-border-secondary)',
+        borderRadius: 'var(--bds-border-radius-md)',
         overflow: 'hidden',
       }}
     >
       <Frame ratio="wide" fit="cover">
         <PlaceholderImage />
       </Frame>
-      <div style={{ padding: 'var(--padding-lg)' }}>
-        <h3 style={{ margin: 0, fontFamily: 'var(--font-family-heading)', fontSize: 'var(--heading-sm)' }}>
+      <div style={{ padding: 'var(--bds-padding-lg)' }}>
+        <h3 style={{ margin: 0, fontFamily: 'var(--bds-font-family-heading)', fontSize: 'var(--bds-heading-sm)' }}>
           Card title
         </h3>
-        <p style={{ margin: 'var(--gap-xs) 0 0', fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
+        <p style={{ margin: 'var(--bds-gap-xs) 0 0', fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-secondary)' }}>
           Frame holds the image area's shape regardless of the underlying media.
         </p>
       </div>

@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { bdsClass } from '../../utils';
 import './Tooltip.css';
 
-/** Gap between trigger and bubble (matches --padding-md fallback) */
+/** Gap between trigger and bubble (matches --bds-padding-md fallback) */
 const TOOLTIP_GAP = 8;
 
 /**

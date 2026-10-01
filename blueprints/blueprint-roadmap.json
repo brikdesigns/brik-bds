@@ -338,7 +338,7 @@
         "approachable"
       ],
       "layout_spec": "Two-column contact section: left 45% contains contact information — H2 heading, short reassurance sentence (muted), then stacked contact details as icon + label rows (phone, email, address, hours). Optional embedded Google Maps iframe at bottom of left column. Right 55% is the contact form: name, email, phone (optional), message textarea, and large primary submit button full-width. Form fields have clear label above, 48px height inputs, 8px radius. No floating labels.",
-      "css_hints": ".contact-split { display: grid; grid-template-columns: 45fr 55fr; gap: 80px; align-items: start; } .contact-info .detail { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; } form input, form textarea { width: 100%; border: 1.5px solid var(--border-primary); border-radius: 8px; padding: 12px 16px; font-size: 15px; } form textarea { min-height: 140px; resize: vertical; }",
+      "css_hints": ".contact-split { display: grid; grid-template-columns: 45fr 55fr; gap: 80px; align-items: start; } .contact-info .detail { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; } form input, form textarea { width: 100%; border: 1.5px solid var(--bds-border-primary); border-radius: 8px; padding: 12px 16px; font-size: 15px; } form textarea { min-height: 140px; resize: vertical; }",
       "source": "Original research",
       "required_facts": [
         "phone",
@@ -413,7 +413,7 @@
         "corporate"
       ],
       "layout_spec": "Long-form text content layout for Privacy Policy, Terms of Service, 404, and utility pages. Content column centered at 700–760px max-width. Section heading H1 (32–40px). Content uses H2 (22px) for major sections, H3 (18px) for subsections, body paragraphs (15px, 1.75 line-height). Ordered lists for numbered rules, unordered lists for items. Subtle left border (3px, accent-muted) on key callouts. No images, no CTAs except at very bottom. Quiet background (off-white or surface-secondary). Last-updated date shown near top in muted small text.",
-      "css_hints": ".legal-content { max-width: 760px; margin: 0 auto; padding: 64px 0; } .legal-content h2 { font-size: 22px; font-weight: 700; margin-top: 48px; margin-bottom: 12px; } .legal-content p, .legal-content li { font-size: 15px; line-height: 1.75; color: var(--text-secondary); } .legal-content .callout { border-left: 3px solid var(--border-brand); padding-left: 16px; color: var(--text-muted); }",
+      "css_hints": ".legal-content { max-width: 760px; margin: 0 auto; padding: 64px 0; } .legal-content h2 { font-size: 22px; font-weight: 700; margin-top: 48px; margin-bottom: 12px; } .legal-content p, .legal-content li { font-size: 15px; line-height: 1.75; color: var(--bds-text-secondary); } .legal-content .callout { border-left: 3px solid var(--border-brand); padding-left: 16px; color: var(--bds-text-muted); }",
       "source": "Original research",
       "required_facts": [],
       "catalogued_on": "2026-04-18"

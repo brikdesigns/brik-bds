@@ -20,30 +20,30 @@ function TocDemo(props: TableOfContentsProps) {
       style={{
         display: 'grid',
         gridTemplateColumns: '220px 1fr',
-        gap: 'var(--gap-xl)',
-        padding: 'var(--padding-lg)',
+        gap: 'var(--bds-gap-xl)',
+        padding: 'var(--bds-padding-lg)',
         alignItems: 'start',
       }}
     >
       <TableOfContents {...props} />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xl)' }}>
         {props.items.map((item) => (
           <section
             key={item.id}
             id={item.id}
-            style={{ minHeight: '70vh', display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}
+            style={{ minHeight: '70vh', display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-md)' }}
           >
             <h2
               style={{
-                fontFamily: 'var(--font-family-heading)',
-                fontSize: 'var(--heading-md)',
-                color: 'var(--text-primary)',
+                fontFamily: 'var(--bds-font-family-heading)',
+                fontSize: 'var(--bds-heading-md)',
+                color: 'var(--bds-text-primary)',
                 margin: 0,
               }}
             >
               {item.label}
             </h2>
-            <p style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', color: 'var(--text-secondary)', margin: 0 }}>
+            <p style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-md)', color: 'var(--bds-text-secondary)', margin: 0 }}>
               Scroll to watch the active item track this section.
             </p>
           </section>
@@ -64,44 +64,44 @@ function RailTocDemo(props: TableOfContentsProps) {
       style={{
         display: 'grid',
         gridTemplateColumns: '232px 1fr',
-        gap: 'var(--gap-xl)',
-        padding: 'var(--padding-lg)',
+        gap: 'var(--bds-gap-xl)',
+        padding: 'var(--bds-padding-lg)',
       }}
     >
       <div style={{ position: 'relative' }}>
         <div
           style={{
             position: 'sticky',
-            top: 'var(--gap-xl)',
+            top: 'var(--bds-gap-xl)',
             display: 'flex',
             flexDirection: 'column',
-            gap: 'var(--gap-xl)',
-            backgroundColor: 'var(--surface-secondary)',
-            borderRadius: 'var(--border-radius-lg)',
-            padding: 'var(--padding-md) var(--padding-md) var(--padding-md) 0',
+            gap: 'var(--bds-gap-xl)',
+            backgroundColor: 'var(--bds-surface-secondary)',
+            borderRadius: 'var(--bds-border-radius-lg)',
+            padding: 'var(--bds-padding-md) var(--bds-padding-md) var(--bds-padding-md) 0',
           }}
         >
           <TableOfContents {...props} />
         </div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xl)' }}>
         {props.items.map((item) => (
           <section
             key={item.id}
             id={item.id}
-            style={{ minHeight: '70vh', display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}
+            style={{ minHeight: '70vh', display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-md)' }}
           >
             <h2
               style={{
-                fontFamily: 'var(--font-family-heading)',
-                fontSize: 'var(--heading-md)',
-                color: 'var(--text-primary)',
+                fontFamily: 'var(--bds-font-family-heading)',
+                fontSize: 'var(--bds-heading-md)',
+                color: 'var(--bds-text-primary)',
                 margin: 0,
               }}
             >
               {item.label}
             </h2>
-            <p style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', color: 'var(--text-secondary)', margin: 0 }}>
+            <p style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-md)', color: 'var(--bds-text-secondary)', margin: 0 }}>
               Scroll to watch the active item track this section.
             </p>
           </section>

@@ -25,7 +25,7 @@ const meta: Meta<typeof SectionHeader> = {
     onColor: {
       control: { type: 'boolean' },
       description:
-        'Forwarded to `ContentBlock` — swaps the text slots to `--text-on-color-dark` for a section intro on a filled brand band. AA-large, not AA, on `--surface-brand-primary`.',
+        'Forwarded to `ContentBlock` — swaps the text slots to `--bds-text-on-color-dark` for a section intro on a filled brand band. AA-large, not AA, on `--bds-surface-brand-primary`.',
     },
   },
 };
@@ -34,7 +34,7 @@ export default meta;
 type Story = StoryObj<typeof SectionHeader>;
 
 const Band = ({
-  background = 'var(--surface-primary)',
+  background = 'var(--bds-surface-primary)',
   children,
 }: {
   background?: string;
@@ -42,9 +42,9 @@ const Band = ({
 }) => (
   <div
     style={{
-      maxWidth: 'var(--content-width-xl)',
+      maxWidth: 'var(--bds-content-width-xl)',
       marginInline: 'auto',
-      padding: 'var(--padding-lg)',
+      padding: 'var(--bds-padding-lg)',
       background,
     }}
   >
@@ -71,12 +71,12 @@ export const Default: Story = {
 
 /**
  * `onColor` on a filled brand band — the CTA-band shape. Forwarded to
- * `ContentBlock`, which owns the swap to `--text-on-color-dark`; SectionHeader
+ * `ContentBlock`, which owns the swap to `--bds-text-on-color-dark`; SectionHeader
  * still owns only measure + centering. This is what replaces a hand-rolled
  * `<h2>` + `<p>` with a per-instance `color` override on a CTA band
  * (brikdesigns/brikdesigns#937).
  *
- * Contrast: white on `--surface-brand-primary` is **3.78:1 — AA-large (3:1),
+ * Contrast: white on `--bds-surface-brand-primary` is **3.78:1 — AA-large (3:1),
  * not AA (4.5:1)**, gated that way by policy for brand-primary fills
  * (`tokens/contrast-pairings.json`, BDS-22 / ADR-015). The `size="lg"` title is
  * large text; keep `description` short on a band.
@@ -90,7 +90,7 @@ export const OnColor: Story = {
     onColor: true,
   },
   render: (args) => (
-    <Band background="var(--surface-brand-primary)">
+    <Band background="var(--bds-surface-brand-primary)">
       <SectionHeader {...args} />
     </Band>
   ),

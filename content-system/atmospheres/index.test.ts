@@ -57,7 +57,7 @@ describe('ATMOSPHERE_MANIFEST', () => {
     }
   });
 
-  it('dark-mode atmospheres pair --text-primary with --background-primary', () => {
+  it('dark-mode atmospheres pair --bds-text-primary with --bds-background-primary', () => {
     const darks = ATMOSPHERE_VALUES.filter(
       (a) => ATMOSPHERE_MANIFEST[a].themeMode === 'dark',
     );
@@ -65,33 +65,33 @@ describe('ATMOSPHERE_MANIFEST', () => {
     for (const slug of darks) {
       const pairings = ATMOSPHERE_MANIFEST[slug].safePairings;
       const hasPrimaryBody = pairings.some(
-        (p) => p.fg === '--text-primary' && p.bg === '--background-primary',
+        (p) => p.fg === '--bds-text-primary' && p.bg === '--bds-background-primary',
       );
       expect(hasPrimaryBody).toBe(true);
     }
   });
 
-  it('light-mode atmospheres pair brand fill with --text-on-color-dark', () => {
+  it('light-mode atmospheres pair brand fill with --bds-text-on-color-dark', () => {
     const lights = ATMOSPHERE_VALUES.filter(
       (a) => ATMOSPHERE_MANIFEST[a].themeMode === 'light',
     );
     for (const slug of lights) {
       const pairings = ATMOSPHERE_MANIFEST[slug].safePairings;
       const hasBrandHover = pairings.some(
-        (p) => p.fg === '--text-on-color-dark' && p.bg === '--background-brand-primary-hover',
+        (p) => p.fg === '--bds-text-on-color-dark' && p.bg === '--bds-background-brand-primary-hover',
       );
       expect(hasBrandHover).toBe(true);
     }
   });
 
-  it('dark-mode atmospheres pair brand fill with --text-on-color-light', () => {
+  it('dark-mode atmospheres pair brand fill with --bds-text-on-color-light', () => {
     const darks = ATMOSPHERE_VALUES.filter(
       (a) => ATMOSPHERE_MANIFEST[a].themeMode === 'dark',
     );
     for (const slug of darks) {
       const pairings = ATMOSPHERE_MANIFEST[slug].safePairings;
       const hasBrandHover = pairings.some(
-        (p) => p.fg === '--text-on-color-light' && p.bg === '--background-brand-primary-hover',
+        (p) => p.fg === '--bds-text-on-color-light' && p.bg === '--bds-background-brand-primary-hover',
       );
       expect(hasBrandHover).toBe(true);
     }
@@ -106,7 +106,7 @@ describe('ATMOSPHERE_MANIFEST', () => {
     }
   });
 
-  it('dark single-tone atmospheres do NOT promise --text-muted on --background-primary', () => {
+  it('dark single-tone atmospheres do NOT promise --bds-text-muted on --bds-background-primary', () => {
     // The default generator emission of text-muted on near-black sits
     // ~4.06:1 — below AA. Atmospheres can override the muted token to
     // fix it; until they do, the pair stays out of the safe set so the
@@ -117,7 +117,7 @@ describe('ATMOSPHERE_MANIFEST', () => {
     for (const slug of darks) {
       const pairings = ATMOSPHERE_MANIFEST[slug].safePairings;
       const hasMutedOnPrimary = pairings.some(
-        (p) => p.fg === '--text-muted' && p.bg === '--background-primary',
+        (p) => p.fg === '--bds-text-muted' && p.bg === '--bds-background-primary',
       );
       expect(hasMutedOnPrimary).toBe(false);
     }

@@ -7,7 +7,7 @@ import { Marquee } from './Marquee';
     the side-by-side comparison living here as a docs-local demo, never a
     story export. */}
 export const DirectionRow = ({ children }) => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>{children}</div>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)' }}>{children}</div>
 );
 
 export const items = ['Acme', 'Globex', 'Initech', 'Umbrella'];
@@ -17,10 +17,10 @@ export const LogoItems = () =>
     <span
       key={name}
       style={{
-        fontFamily: 'var(--font-family-label)',
-        fontSize: 'var(--label-lg)',
-        fontWeight: 'var(--font-weight-semibold)',
-        color: 'var(--text-muted)',
+        fontFamily: 'var(--bds-font-family-label)',
+        fontSize: 'var(--bds-label-lg)',
+        fontWeight: 'var(--bds-font-weight-semibold)',
+        color: 'var(--bds-text-muted)',
         whiteSpace: 'nowrap',
       }}
     >
@@ -65,8 +65,8 @@ Seamless, accessible scrolling item ticker for logo bands and trust strips. Dupl
 
 | Variable | Default | Set by |
 |---|---|---|
-| `--bds-marquee-gap` | `var(--size-1000)` (40px) | `gap` prop |
-| `--bds-marquee-logo-height` | `var(--size-600)` (24px) | `logoHeight` prop |
+| `--bds-marquee-gap` | `var(--bds-size-1000)` (40px) | `gap` prop |
+| `--bds-marquee-logo-height` | `var(--bds-size-600)` (24px) | `logoHeight` prop |
 
 ```tsx
 <Marquee gap={32} logoHeight={32}>…</Marquee>

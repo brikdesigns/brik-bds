@@ -66,7 +66,7 @@ export const Default: Story = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: 240, padding: 'var(--padding-md)', backgroundColor: 'var(--surface-primary)' }}>
+      <div style={{ width: 240, padding: 'var(--bds-padding-md)', backgroundColor: 'var(--bds-surface-primary)' }}>
         <Story />
       </div>
     ),
@@ -76,7 +76,7 @@ export const Default: Story = {
 /** @summary Attention-cue dot on active + inactive items */
 export const Dot: Story = {
   render: () => (
-    <div style={{ width: 240, padding: 'var(--padding-md)', backgroundColor: 'var(--surface-primary)' }}>
+    <div style={{ width: 240, padding: 'var(--bds-padding-md)', backgroundColor: 'var(--bds-surface-primary)' }}>
       <NavItem label="Dashboard" icon={<Icon icon={Icons.House} />} href="#dashboard" active dot />
       <NavItem label="Notifications" icon={<Icon icon={Icons.House} />} href="#notifications" dot="warning" />
     </div>

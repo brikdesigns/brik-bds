@@ -5,7 +5,7 @@ import { Stepper } from './Stepper';
 
 /* ─── Layout Helpers (story-only) ─────────────────────────────── */
 
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+const Stack = ({ children, gap = 'var(--bds-gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap, alignItems: 'center' }}>{children}</div>
 );
 
@@ -64,12 +64,12 @@ export const QuantitySelector: Story = {
     function Demo() {
       const [qty, setQty] = useState(1);
       return (
-        <Stack gap="var(--gap-md)">
+        <Stack gap="var(--bds-gap-md)">
           <Stepper value={qty} onChange={setQty} min={1} max={99} size="lg" />
           <span style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-sm)',
-            color: 'var(--text-secondary)',
+            fontFamily: 'var(--bds-font-family-body)',
+            fontSize: 'var(--bds-body-sm)',
+            color: 'var(--bds-text-secondary)',
           }}>
             {qty} {qty === 1 ? 'item' : 'items'} in cart
           </span>

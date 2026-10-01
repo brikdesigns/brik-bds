@@ -149,7 +149,7 @@ function isExplanatory(text) {
 function primitives() {
   const css = readFileSync(GEN_LIGHT, 'utf8');
   const raw = new Map();
-  for (const m of css.matchAll(/(--color-[\w-]+)\s*:\s*([^;]+);/g)) {
+  for (const m of css.matchAll(/(--bds-color-[\w-]+)\s*:\s*([^;]+);/g)) {
     raw.set(m[1], m[2].trim().toLowerCase());
   }
   const out = new Map();
@@ -262,7 +262,7 @@ for (const r of unexplained) {
 }
 console.log(
   `\n${YELLOW}  An override with no comment is indistinguishable from a typo. That is how${NC}\n` +
-    `${YELLOW}  --background-inverse shipped inverted and rendered two components at 1.00:1${NC}\n` +
+    `${YELLOW}  --bds-background-inverse shipped inverted and rendered two components at 1.00:1${NC}\n` +
     `${YELLOW}  for four months (#1686).${NC}\n\n` +
     '  Fix: either revert to the generated value, or add a comment above the\n' +
     '  declaration saying why it diverges. One comment covers the contiguous run\n' +

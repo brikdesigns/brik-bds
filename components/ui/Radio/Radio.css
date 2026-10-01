@@ -6,13 +6,13 @@
 .bds-radio {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   cursor: pointer;
   user-select: none;
 }
 
 .bds-radio--disabled {
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
   cursor: not-allowed;
 }
 
@@ -34,8 +34,8 @@
   height: 22px; /* bds-lint-ignore — fixed 22px control size, not a spacing-grid token */
   flex-shrink: 0;
   border-radius: 50%;
-  border: var(--border-width-lg) solid var(--border-primary);
-  background-color: var(--background-input);
+  border: var(--bds-border-width-lg) solid var(--bds-border-primary);
+  background-color: var(--bds-background-input);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,21 +55,21 @@
 
 /* ── Hover ── */
 .bds-radio:hover:not(.bds-radio--disabled) .bds-radio__indicator {
-  border-color: var(--border-brand-primary);
+  border-color: var(--bds-border-brand-primary);
 }
 
 /* ── Checked ── */
 .bds-radio__input:checked + .bds-radio__indicator {
-  border-color: var(--border-brand-primary);
+  border-color: var(--bds-border-brand-primary);
 }
 
 .bds-radio__input:checked + .bds-radio__indicator::after {
-  background-color: var(--surface-brand-primary);
+  background-color: var(--bds-surface-brand-primary);
 }
 
 /* ── Focus-visible ── */
 .bds-radio__input:focus-visible + .bds-radio__indicator {
-  box-shadow: 0 0 0 2px var(--border-brand-primary); /* bds-lint-ignore — focus ring */
+  box-shadow: 0 0 0 2px var(--bds-border-brand-primary); /* bds-lint-ignore — focus ring */
   outline: none;
 }
 
@@ -81,10 +81,10 @@
 /* ─── Label text ──────────────────────────────────────── */
 
 .bds-radio__text {
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
   text-transform: capitalize;
 }
 }

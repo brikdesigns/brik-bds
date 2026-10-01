@@ -27,7 +27,7 @@ export default meta;
 type Story = StoryObj<typeof Field>;
 
 const Frame = ({ width = '360px', children }: { width?: string; children: React.ReactNode }) => (
-  <div style={{ width, padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+  <div style={{ width, padding: 'var(--bds-padding-lg)', background: 'var(--bds-surface-primary)' }}>
     {children}
   </div>
 );
@@ -77,11 +77,11 @@ export const WithCompositeEmpty: Story = {
 export const WithRichValue: Story = {
   render: () => (
     <Frame>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)' }}>
         <Field label="Name">Birdwell & Mutlak Dentistry</Field>
 
         <Field label="Services">
-          <div style={{ display: 'flex', gap: 'var(--gap-xs)', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 'var(--bds-gap-xs)', flexWrap: 'wrap' }}>
             <Tag size="sm">Cosmetic</Tag>
             <Tag size="sm">General</Tag>
             <Tag size="sm">Implants</Tag>
@@ -93,14 +93,14 @@ export const WithRichValue: Story = {
             href="https://birdwelldentist.com"
             target="_blank"
             rel="noreferrer"
-            style={{ color: 'var(--text-brand-primary)', textDecoration: 'none' }}
+            style={{ color: 'var(--bds-text-brand-primary)', textDecoration: 'none' }}
           >
             birdwelldentist.com ↗
           </a>
         </Field>
 
         <Field label="Anti-messages">
-          <ul style={{ margin: 0, paddingLeft: 'var(--padding-lg)' }}>
+          <ul style={{ margin: 0, paddingLeft: 'var(--bds-padding-lg)' }}>
             <li>No price-first positioning</li>
             <li>No corporate-clinic language</li>
             <li>Avoid dental-industry jargon</li>

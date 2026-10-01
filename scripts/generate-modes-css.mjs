@@ -28,6 +28,7 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { PREFIX } from './lib/bds-prefix.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -53,7 +54,7 @@ export const COLLECTIONS = {
     defaultMode: 'default',
     nonDefaultModes: ['compact', 'comfortable', 'spacious'],
     unitSuffix: 'px',
-    tokenName: (group, name) => `--${group}-${name}`,
+    tokenName: (group, name) => `${PREFIX}${group}-${name}`,
     resolve: resolveSpaceRef,
     description:
       'Spacing density mode — modulates padding-* and gap-* tokens. ' +
@@ -66,14 +67,14 @@ export const COLLECTIONS = {
     defaultMode: 'default',
     nonDefaultModes: ['compact', 'comfortable', 'spacious', 'expressive'],
     unitSuffix: '',
-    tokenName: (group, name) => `--${group}-${name}`,
+    tokenName: (group, name) => `${PREFIX}${group}-${name}`,
     resolve: resolveFontSizeRef,
     description:
       'Typography heading-scale variant — selects one named heading scale. ' +
       'compact/comfortable/spacious are uniform density steps; expressive is a ' +
       'steeper modular curve (smaller small end, larger large end) for editorial / ' +
       'marketing surfaces. The variants are mutually exclusive — this axis owns ' +
-      '--heading-* alone (see ADR-013 amendment 2026-06-21, BDS #928). Emitted as ' +
+      '--bds-heading-* alone (see ADR-013 amendment 2026-06-21, BDS #928). Emitted as ' +
       'var(--font-size-NNN) references (matching how figma-tokens.css emits the ' +
       'default scale), so each variant reuses the shared font-size primitives. ' +
       'display-* is mode-invariant in Figma today so only heading-* emits overrides.',
@@ -96,7 +97,7 @@ export const COLLECTIONS = {
     // contradicts the token's meaning and gives it two value types (naming-canon
     // Rule 2 / ADR-033 § 5). Hold it out of the mode ladder.
     skipTokens: ['none'],
-    tokenName: (_group, name) => `--border-radius-${name}`,
+    tokenName: (_group, name) => `${PREFIX}border-radius-${name}`,
     resolve: resolveRadiusRef,
     description:
       'Corner-radius mode — overrides the semantic --border-radius-{none,sm,md,lg} ' +
@@ -126,7 +127,7 @@ export const COLLECTIONS = {
     resolve: resolveSpaceRef,
     outputFile: 'layout-fluid.css',
     description:
-      'Layout tier — device-fluid --page-inset / --section-padding-block. ' +
+      'Layout tier — device-fluid --bds-page-inset / --bds-section-padding-block. ' +
       'Interpolates continuously between the mobile/tablet/desktop endpoints ' +
       'via one piecewise calc(clamp(…) + clamp(…)) per token (ADR-042), ' +
       'rather than a [data-mode-*] override block.',
@@ -142,16 +143,16 @@ export const COLLECTIONS = {
     // Override the canonical --shadow-* tokens (BDS #2233 / PR #2237), NOT the
     // deprecated --box-shadow-* aliases — gap-fills.css derives those from
     // --shadow-*, so a --shadow-* override cascades to both.
-    tokenName: (size) => `--shadow-${size}`,
+    tokenName: (size) => `${PREFIX}shadow-${size}`,
     description:
-      'Elevation depth mode — overrides the composed --shadow-* box-shadow ' +
+      'Elevation depth mode — overrides the composed --bds-shadow-* box-shadow ' +
       'tokens. Figma source (elevation/* in tokens-studio.json) carries a ' +
       'y-offset (box-shadow group), blur-radius, spread, and opacity per size ' +
       '(#2243); x-offset is invariantly 0 and the color is always black, so only ' +
       'the alpha varies (rides the opacity sub-token). `flat` composes to a ' +
       'zeroed shorthand (no visible shadow); `lifted`/`dramatic` compose the ' +
       'full `0px y blur spread rgba(0,0,0,α)`. `subtle` is the default (no ' +
-      'attribute) and uses the hand-authored --shadow-* in tokens/gap-fills.css, ' +
+      'attribute) and uses the hand-authored --bds-shadow-* in tokens/gap-fills.css, ' +
       'which this overrides.',
   },
 };
@@ -175,7 +176,7 @@ function resolveFontSizeRef(value) {
   // scale and reuses the shared primitive, avoiding float-precision noise.
   const m = String(value).match(/^\{font-size\.(\w+)\}$/);
   if (!m) return value;
-  return `var(--font-size-${m[1]})`;
+  return `var(${PREFIX}font-size-${m[1]})`;
 }
 
 function resolveRadiusRef(value, primitives) {
@@ -320,7 +321,7 @@ function emitElevation(data, collectionKey) {
   lines.push(' *');
   lines.push(` * Selector contract: \`[data-mode-${collectionKey}="${cfg.nonDefaultModes.join('|')}"]\``);
   lines.push(' * on :root (html). Default mode (subtle) requires no attribute (uses the');
-  lines.push(' * hand-authored --shadow-* composition in gap-fills.css).');
+  lines.push(' * hand-authored --bds-shadow-* composition in gap-fills.css).');
   lines.push(' */');
   lines.push('');
 
@@ -477,7 +478,7 @@ function emitFluid(data, collectionKey) {
       );
     }
     const value = buildFluidValue({ w0, w1, w2, v0, v1, v2 });
-    lines.push(`  --${name}: ${value}; /* ${v0} → ${v1} → ${v2}px at ${w0} / ${w1} / ${w2} */`);
+    lines.push(`  ${PREFIX}${name}: ${value}; /* ${v0} → ${v1} → ${v2}px at ${w0} / ${w1} / ${w2} */`);
   }
 
   lines.push('}');

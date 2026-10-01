@@ -115,20 +115,20 @@ export const BRANDABLE_FAMILIES = ['surface', 'text', 'border', 'page', 'backgro
 
 /** `--font-family-{family}` → family. Mirrors dist/tokens.css. */
 export const FONT_FAMILY_TO_FAMILY = {
-  '--font-family-heading': 'heading',
-  '--font-family-display': 'display',
-  '--font-family-body': 'body',
-  '--font-family-label': 'label',
-  '--font-family-subtitle': 'subtitle',
+  '--bds-font-family-heading': 'heading',
+  '--bds-font-family-display': 'display',
+  '--bds-font-family-body': 'body',
+  '--bds-font-family-label': 'label',
+  '--bds-font-family-subtitle': 'subtitle',
 };
 
 /** font-size token prefix → family. `--font-size-*` is the raw math scale (no family). */
 const SIZE_PREFIX_TO_FAMILY = [
-  ['--heading-', 'heading'],
-  ['--display-', 'display'],
-  ['--body-', 'body'],
-  ['--label-', 'label'],
-  ['--subtitle-', 'subtitle'],
+  ['--bds-heading-', 'heading'],
+  ['--bds-display-', 'display'],
+  ['--bds-body-', 'body'],
+  ['--bds-label-', 'label'],
+  ['--bds-subtitle-', 'subtitle'],
 ];
 
 /** Selectors that establish Brand-Kit scope (the redefinition exception). */
@@ -193,8 +193,11 @@ export function familyOfFontFamilyToken(token) {
 
 /** Redefinition class of a declared token name: 'scale' | 'brandable' | null. */
 function redefinitionClass(name) {
-  if (SCALE_FAMILIES.some((f) => name.startsWith(`--${f}-`))) return 'scale';
-  if (BRANDABLE_FAMILIES.some((f) => name.startsWith(`--${f}-`))) return 'brandable';
+  // Both spellings: a bare `--heading-lg` override is a silent no-op after ADR-043
+  // (the bridge covers reads, not overrides), so it is exactly as off-contract.
+  const inFamily = (f) => name.startsWith(`--${f}-`) || name.startsWith(`--bds-${f}-`);
+  if (SCALE_FAMILIES.some(inFamily)) return 'scale';
+  if (BRANDABLE_FAMILIES.some(inFamily)) return 'brandable';
   return null;
 }
 
@@ -439,7 +442,7 @@ const HELP = `cascade-contract-check — enforce the BDS token adoption contract
 
 Usage:
   cascade-contract-check <file.css...>
-  cascade-contract-check --exempt --heading-lg,--heading-huge   transitional burn-down
+  cascade-contract-check --exempt --bds-heading-lg,--bds-heading-huge   transitional burn-down
   cascade-contract-check --format json
 
 Checks consumer CSS for:

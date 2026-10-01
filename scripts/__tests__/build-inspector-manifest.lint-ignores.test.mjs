@@ -15,7 +15,7 @@ describe('extractLintIgnores (#2170)', () => {
   it('extracts a trailing-comment ignore with its enclosing selector', () => {
     const css = `
 .bds-address-input__dropdown {
-  padding: var(--padding-sm);
+  padding: var(--bds-padding-sm);
   box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.12); /* bds-lint-ignore — shadow tokens resolve to zero */
 }`;
     expect(extractLintIgnores(css)).toEqual([
@@ -55,7 +55,7 @@ describe('extractLintIgnores (#2170)', () => {
     const css = `
 .bds-x {
   /* bds-lint-ignore — a note, not a declaration */
-  color: var(--text-primary);
+  color: var(--bds-text-primary);
 }`;
     expect(extractLintIgnores(css)).toEqual([]);
   });

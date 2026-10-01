@@ -7,11 +7,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--background-overlay);
+  background-color: var(--bds-background-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--padding-lg);
+  padding: var(--bds-padding-lg);
   z-index: 1000;
 }
 
@@ -19,9 +19,9 @@
   position: relative;
   width: 100%;
   max-height: 90vh;
-  background-color: var(--surface-primary);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-overlay);
+  background-color: var(--bds-surface-primary);
+  border-radius: var(--bds-border-radius-lg);
+  box-shadow: var(--bds-shadow-overlay);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -46,8 +46,8 @@
 /* ─── Header ─────────────────────────────────────────────────── */
 
 .bds-modal__header {
-  padding: var(--padding-lg);
-  border-bottom: var(--border-width-md) solid var(--border-muted);
+  padding: var(--bds-padding-lg);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-muted);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -57,11 +57,11 @@
 /* ─── Title ──────────────────────────────────────────────────── */
 
 .bds-modal__title {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-md);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-snug);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-md);
+  font-weight: var(--bds-font-weight-bold);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-primary);
   margin: 0;
 }
 
@@ -70,27 +70,27 @@
 /* Layout only — visual contract lives in CloseButton. Negative margin pulls the
  * padded hit-target so the glyph sits flush with the header's trailing edge. */
 .bds-modal__close {
-  margin-right: calc(-1 * var(--padding-xs));
+  margin-right: calc(-1 * var(--bds-padding-xs));
 }
 
 /* ─── Body ───────────────────────────────────────────────────── */
 
 .bds-modal__body {
-  padding: var(--padding-lg);
+  padding: var(--bds-padding-lg);
   overflow-y: auto;
   flex: 1;
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  color: var(--text-primary);
-  line-height: var(--font-line-height-normal);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  color: var(--bds-text-primary);
+  line-height: var(--bds-font-line-height-normal);
 }
 
 /* ─── Footer ─────────────────────────────────────────────────── */
 
 .bds-modal__footer {
-  padding: var(--padding-lg);
+  padding: var(--bds-padding-lg);
   display: flex;
-  gap: var(--gap-lg);
+  gap: var(--bds-gap-lg);
   justify-content: flex-end;
   flex-wrap: wrap;
   flex-shrink: 0;
@@ -105,8 +105,8 @@
 .bds-modal--preset-confirm {
   --bds-modal-confirm-max-width: 440px; /* component-local dimension; no shared registry rung (#2133) */
   max-width: var(--bds-modal-confirm-max-width);
-  padding: var(--padding-lg);
-  gap: var(--gap-lg);
+  padding: var(--bds-padding-lg);
+  gap: var(--bds-gap-lg);
   overflow: visible;
 }
 
@@ -115,26 +115,26 @@
 }
 
 .bds-modal__confirm-title {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-sm);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-snug);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-sm);
+  font-weight: var(--bds-font-weight-bold);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-primary);
   margin: 0;
 }
 
 .bds-modal__confirm-description {
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
   margin: 0;
 }
 
 .bds-modal__confirm-actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   flex-wrap: wrap;
 }
 }

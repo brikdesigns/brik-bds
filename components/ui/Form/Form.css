@@ -3,10 +3,10 @@
  * BDS Form
  *
  * Token reference:
- * - --gap-sm, --gap-md, --gap-lg, --gap-xl
- * - --padding-sm, --padding-md
- * - --border-radius-md
- * - --text-negative, --text-positive
+ * - --bds-gap-sm, --bds-gap-md, --bds-gap-lg, --bds-gap-xl
+ * - --bds-padding-sm, --bds-padding-md
+ * - --bds-border-radius-md
+ * - --bds-text-negative, --bds-text-positive
  */
 
 /* ─── Container ───────────────────────────────────────────────── */
@@ -20,11 +20,11 @@
 
 /* ─── Gap variants ────────────────────────────────────────────── */
 
-/* Variant names match the token they emit (was off-by-one: `--gap-sm`
-   class emitted var(--gap-md), etc. — renamed with identical pixels). */
-.bds-form--gap-md { gap: var(--gap-md); }
-.bds-form--gap-lg { gap: var(--gap-lg); }
-.bds-form--gap-xl { gap: var(--gap-xl); }
+/* Variant names match the token they emit (was off-by-one: `--bds-gap-sm`
+   class emitted var(--bds-gap-md), etc. — renamed with identical pixels). */
+.bds-form--gap-md { gap: var(--bds-gap-md); }
+.bds-form--gap-lg { gap: var(--bds-gap-lg); }
+.bds-form--gap-xl { gap: var(--bds-gap-xl); }
 
 /* ─── Header ──────────────────────────────────────────────────── */
 
@@ -32,52 +32,52 @@
   display: flex;
   flex-direction: column;
   /* Title → description is the readable-separation step (ADR-023
-     content-rhythm map: heading ↔ body = --gap-md). */
-  gap: var(--gap-md);
+     content-rhythm map: heading ↔ body = --bds-gap-md). */
+  gap: var(--bds-gap-md);
 }
 
 .bds-form__title {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-sm);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-snug);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-sm);
+  font-weight: var(--bds-font-weight-bold);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-primary);
   margin: 0;
 }
 
 .bds-form__description {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
   margin: 0;
 }
 
 /* ─── Messages ────────────────────────────────────────────────── */
 
 .bds-form__error {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-negative);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-negative);
   margin: 0;
-  padding: var(--padding-sm);
-  background: color-mix(in srgb, var(--text-negative) 8%, transparent);
-  border-radius: var(--border-radius-md);
+  padding: var(--bds-padding-sm);
+  background: color-mix(in srgb, var(--bds-text-negative) 8%, transparent);
+  border-radius: var(--bds-border-radius-md);
 }
 
 .bds-form__success {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-positive);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-positive);
   margin: 0;
-  padding: var(--padding-sm);
-  background: color-mix(in srgb, var(--text-positive) 8%, transparent);
-  border-radius: var(--border-radius-md);
+  padding: var(--bds-padding-sm);
+  background: color-mix(in srgb, var(--bds-text-positive) 8%, transparent);
+  border-radius: var(--bds-border-radius-md);
 }
 
 /* ─── Fields ──────────────────────────────────────────────────── */
@@ -96,16 +96,16 @@
   flex-wrap: wrap;
 }
 
-.bds-form__fields--gap-md { gap: var(--gap-md); }
-.bds-form__fields--gap-lg { gap: var(--gap-lg); }
-.bds-form__fields--gap-xl { gap: var(--gap-xl); }
+.bds-form__fields--gap-md { gap: var(--bds-gap-md); }
+.bds-form__fields--gap-lg { gap: var(--bds-gap-lg); }
+.bds-form__fields--gap-xl { gap: var(--bds-gap-xl); }
 
 /* ─── Footer ──────────────────────────────────────────────────── */
 
 .bds-form__footer {
   display: flex;
   align-items: center;
-  gap: var(--gap-md);
-  padding-top: var(--padding-md);
+  gap: var(--bds-gap-md);
+  padding-top: var(--bds-padding-md);
 }
 }

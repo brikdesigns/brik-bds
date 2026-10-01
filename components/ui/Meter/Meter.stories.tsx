@@ -89,6 +89,6 @@ export const CustomFillColor: Story = {
     max: 8,
     label: 'Department A',
     valueSuffix: '',
-    fillColor: 'var(--color-purple-500)',
+    fillColor: 'var(--bds-color-purple-500)',
   },
 };

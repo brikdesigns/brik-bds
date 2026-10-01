@@ -4,9 +4,9 @@
 /* ─── Root container ──────────────────────────────────── */
 
 .bds-collapsible {
-  background-color: var(--surface-primary);
-  padding: var(--padding-lg);
-  border-radius: var(--border-radius-md);
+  background-color: var(--bds-surface-primary);
+  padding: var(--bds-padding-lg);
+  border-radius: var(--bds-border-radius-md);
   width: 100%;
   box-sizing: border-box;
 }
@@ -18,7 +18,7 @@
   align-items: flex-start;
   justify-content: space-between;
   cursor: pointer;
-  gap: var(--gap-lg);
+  gap: var(--bds-gap-lg);
   width: 100%;
   background: none;
   border: none;
@@ -27,15 +27,15 @@
 }
 
 .bds-collapsible__header:focus-visible {
-  outline: 2px solid var(--border-brand-primary);
+  outline: 2px solid var(--bds-border-brand-primary);
   outline-offset: 2px;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--bds-border-radius-sm);
 }
 
 .bds-collapsible__header-left {
   display: flex;
   flex-direction: column;
-  gap: var(--padding-lg);
+  gap: var(--bds-padding-lg);
   flex: 1;
   min-width: 0;
 }
@@ -43,30 +43,30 @@
 .bds-collapsible__header-right {
   display: flex;
   align-items: center;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
 }
 
 /* ─── Section label ───────────────────────────────────── */
 
 .bds-collapsible__section-label {
-  font-family: var(--font-family-heading);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--heading-tiny);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-heading);
+  font-weight: var(--bds-font-weight-semibold);
+  font-size: var(--bds-heading-tiny);
+  color: var(--bds-text-secondary);
   text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wide);
-  line-height: var(--font-line-height-tight);
+  letter-spacing: var(--bds-letter-spacing-wide);
+  line-height: var(--bds-font-line-height-tight);
   margin: 0;
 }
 
 /* ─── Title ───────────────────────────────────────────── */
 
 .bds-collapsible__title {
-  font-family: var(--font-family-heading);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--heading-sm);
-  color: var(--text-primary);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-heading);
+  font-weight: var(--bds-font-weight-bold);
+  font-size: var(--bds-heading-sm);
+  color: var(--bds-text-primary);
+  line-height: var(--bds-font-line-height-tight);
   margin: 0;
 }
 
@@ -78,11 +78,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--background-secondary);
-  border-radius: var(--border-radius-md);
+  background-color: var(--bds-background-secondary);
+  border-radius: var(--bds-border-radius-md);
   flex-shrink: 0;
-  color: var(--text-primary);
-  font-size: var(--body-lg); /* bds-lint-ignore — icon sizing */
+  color: var(--bds-text-primary);
+  font-size: var(--bds-body-lg); /* bds-lint-ignore — icon sizing */
 }
 
 .bds-collapsible__icon {
@@ -97,10 +97,10 @@
 /* ─── Content area ────────────────────────────────────── */
 
 .bds-collapsible__content {
-  margin-top: var(--padding-lg);
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  color: var(--text-primary);
-  line-height: var(--font-line-height-normal);
+  margin-top: var(--bds-padding-lg);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  color: var(--bds-text-primary);
+  line-height: var(--bds-font-line-height-normal);
 }
 }

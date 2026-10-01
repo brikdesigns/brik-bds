@@ -128,7 +128,7 @@ function resolveAll(merged) {
 // Mirrors scripts/measure-disabled-contrast.mjs exactly, so a pairing's gate
 // ratio and that script's reported ratio are the same number.
 
-const DEFAULT_BACKDROP = '--background-primary';
+const DEFAULT_BACKDROP = '--bds-background-primary';
 
 function hexToRgb(hex) {
   const h = hex.replace('#', '');

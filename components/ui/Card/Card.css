@@ -4,41 +4,41 @@
 .bds-card {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
-  border-radius: var(--border-radius-md);
-  transition: box-shadow var(--duration-md) var(--ease-out),
-    transform var(--duration-md) var(--ease-out);
+  gap: var(--bds-gap-md);
+  border-radius: var(--bds-border-radius-md);
+  transition: box-shadow var(--bds-duration-md) var(--bds-ease-out),
+    transform var(--bds-duration-md) var(--bds-ease-out);
 }
 
 /* ─── Variants ───────────────────────────────────────────────── */
 
 .bds-card--outlined {
-  background-color: var(--surface-primary);
-  border: var(--border-width-md) solid var(--border-secondary);
-  box-shadow: var(--box-shadow-none);
+  background-color: var(--bds-surface-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-secondary);
+  box-shadow: var(--bds-box-shadow-none);
 }
 
 .bds-card--brand {
-  background-color: var(--surface-primary);
-  border: var(--border-width-md) solid var(--border-brand-primary);
-  box-shadow: var(--box-shadow-none);
+  background-color: var(--bds-surface-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-brand-primary);
+  box-shadow: var(--bds-box-shadow-none);
 }
 
 .bds-card--elevated {
-  background-color: var(--surface-primary);
+  background-color: var(--bds-surface-primary);
   border: none;
   /* Drop shadow removed (brik-bds#1146 / BACKLOG-493) — elevation now reads via
      the surface-primary fill, not a cast shadow. */
-  box-shadow: var(--box-shadow-none);
+  box-shadow: var(--bds-box-shadow-none);
 }
 
 /* Raised — surface-primary fill, no border, casts a real drop shadow. The
  * shadow-casting counterpart to the now-flat `elevated` (brik-bds#1146 /
  * BACKLOG-493 removed the shadow there so portal cards read flat). */
 .bds-card--raised {
-  background-color: var(--surface-primary);
+  background-color: var(--bds-surface-primary);
   border: none;
-  box-shadow: var(--box-shadow-md);
+  box-shadow: var(--bds-box-shadow-md);
 }
 
 /* Borderless — transparent, no border, no shadow. For cards on a colored
@@ -47,15 +47,15 @@
 .bds-card--borderless {
   background-color: transparent;
   border: none;
-  box-shadow: var(--box-shadow-none);
+  box-shadow: var(--bds-box-shadow-none);
 }
 
 /* ─── Padding ────────────────────────────────────────────────── */
 
-.bds-card--padding-none { padding: var(--padding-none); }
-.bds-card--padding-sm   { padding: var(--padding-sm); }
-.bds-card--padding-md   { padding: var(--padding-md); }
-.bds-card--padding-lg   { padding: var(--padding-lg); }
+.bds-card--padding-none { padding: var(--bds-padding-none); }
+.bds-card--padding-sm   { padding: var(--bds-padding-sm); }
+.bds-card--padding-md   { padding: var(--bds-padding-md); }
+.bds-card--padding-lg   { padding: var(--bds-padding-lg); }
 
 /* ─── Interactive ────────────────────────────────────────────── */
 
@@ -89,7 +89,7 @@
 .bds-card__content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   flex: 1 1 auto;
   min-width: 0;
 }
@@ -102,7 +102,7 @@
 .bds-card__media--lg,
 .bds-card__media--xl {
   overflow: hidden;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--bds-border-radius-sm);
 }
 
 /* bds-lint-ignore — thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
@@ -117,24 +117,24 @@
 /* ─── Subcomponents ──────────────────────────────────────────── */
 
 .bds-card-title {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-md);
-  font-weight: var(--font-weight-semibold);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-md);
+  font-weight: var(--bds-font-weight-semibold);
   margin: 0;
-  color: var(--text-primary);
+  color: var(--bds-text-primary);
 }
 
 .bds-card-description {
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  color: var(--bds-text-secondary);
   margin: 0;
-  line-height: var(--font-line-height-normal);
+  line-height: var(--bds-font-line-height-normal);
 }
 
 .bds-card-footer {
   margin-top: auto;
-  padding-top: var(--padding-sm);
+  padding-top: var(--bds-padding-sm);
 }
 
 /* ─── Layout: control ─────────────────────────────────────────── */
@@ -145,14 +145,14 @@
 .bds-card--layout-control {
   flex-direction: row;
   align-items: center;
-  gap: var(--padding-xl);
-  padding: var(--padding-xl);
-  background-color: var(--surface-primary);
-  border: var(--border-width-md) solid var(--border-muted);
-  border-radius: var(--border-radius-lg);
+  gap: var(--bds-padding-xl);
+  padding: var(--bds-padding-xl);
+  background-color: var(--bds-surface-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-muted);
+  border-radius: var(--bds-border-radius-lg);
   /* Drop shadow removed (brik-bds#1146 / BACKLOG-493) — control cards read flat
      against the page; the muted border carries the boundary. */
-  box-shadow: var(--box-shadow-none);
+  box-shadow: var(--bds-box-shadow-none);
   width: 100%;
   box-sizing: border-box;
   flex-wrap: wrap;
@@ -166,7 +166,7 @@
   /* Top-align the logo + badge with the title (not the vertical midline of the
      whole text block), so the leading mark reads against the first line. */
   align-items: flex-start;
-  gap: var(--padding-lg);
+  gap: var(--bds-padding-lg);
   flex: 1;
   min-width: 0;
 }
@@ -175,27 +175,27 @@
   display: flex;
   flex-direction: column;
   /* Title → description is the readable-separation step (ADR-023
-     content-rhythm map: heading/subtitle ↔ body = `--gap-md`), matching the
+     content-rhythm map: heading/subtitle ↔ body = `--bds-gap-md`), matching the
      stack-layout card bodies so the same relationship reads consistently
      across variants. */
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   min-width: 0;
 }
 
 .bds-card__control-title {
-  font-family: var(--font-family-label);
-  font-size: var(--label-lg);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-lg);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
   margin: 0;
 }
 
 .bds-card__control-description {
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-muted);
   margin: 0;
 }
 
@@ -225,7 +225,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   flex-shrink: 0;
 }
 
@@ -234,11 +234,11 @@
  * Composed from canonical semantic tokens — no invented names.
  *
  * State → token mapping:
- *   not-configured → --background-status-neutral / --text-muted (label)
- *   connected      → --background-positive / --text-positive
+ *   not-configured → --background-status-neutral / --bds-text-muted (label)
+ *   connected      → --bds-background-positive / --bds-text-positive
  *   syncing        → --background-status-info / --text-status-info
- *   synced         → --background-positive / --text-positive
- *   error          → --background-negative / --text-negative
+ *   synced         → --bds-background-positive / --bds-text-positive
+ *   error          → --bds-background-negative / --bds-text-negative
  */
 
 .bds-card__control-status {
@@ -247,7 +247,7 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 
 /* The status dot is the shared `<Dot>` primitive (owns its size + per-status
@@ -255,42 +255,42 @@
 
 /* Label text */
 .bds-card__control-status-label {
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-medium);
+  line-height: var(--bds-font-line-height-tight);
 }
 
 /* Last-synced line — drops below the dot+label row */
 .bds-card__control-status-synced {
   width: 100%;
   text-align: right;
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-muted);
 }
 
 /* ── Per-state label color (the dot's color comes from `<Dot status>`) ── */
 
 .bds-card__control-status--not-configured .bds-card__control-status-label {
-  color: var(--text-muted);
+  color: var(--bds-text-muted);
 }
 
 .bds-card__control-status--connected .bds-card__control-status-label {
-  color: var(--text-positive);
+  color: var(--bds-text-positive);
 }
 
 .bds-card__control-status--syncing .bds-card__control-status-label {
-  color: var(--text-info);
+  color: var(--bds-text-info);
 }
 
 .bds-card__control-status--synced .bds-card__control-status-label {
-  color: var(--text-positive);
+  color: var(--bds-text-positive);
 }
 
 .bds-card__control-status--failed .bds-card__control-status-label {
-  color: var(--text-negative);
+  color: var(--bds-text-negative);
 }
 
 /* ─── Layout: metric ─────────────────────────────────────────── */
@@ -299,8 +299,8 @@
  * Surface uses primary background + muted border. */
 
 .bds-card--layout-metric {
-  background-color: var(--surface-primary);
-  border: var(--border-width-md) solid var(--border-muted);
+  background-color: var(--bds-surface-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-muted);
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -309,34 +309,34 @@
 
 .bds-card__metric-inner {
   display: flex;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   align-items: flex-start;
-  padding: var(--padding-lg);
+  padding: var(--bds-padding-lg);
 }
 
 .bds-card__metric-content {
   flex: 1 0 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   min-width: 0;
 }
 
 .bds-card__metric-label {
-  font-family: var(--font-family-body);
-  font-size: var(--body-lg);
-  color: var(--text-secondary);
-  line-height: var(--font-line-height-normal);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-lg);
+  color: var(--bds-text-secondary);
+  line-height: var(--bds-font-line-height-normal);
   margin: 0;
   text-transform: capitalize;
 }
 
 .bds-card__metric-value {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--text-primary);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-xl);
+  font-weight: var(--bds-font-weight-bold);
+  color: var(--bds-text-primary);
+  line-height: var(--bds-font-line-height-tight);
   margin: 0;
 }
 
@@ -351,10 +351,10 @@
 /* Secondary detail line under the value (`layout="metric"`) — e.g. price •
  * frequency. Muted body text; additive, only emitted by the metric layout. */
 .bds-card__metric-detail {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  color: var(--text-muted);
-  line-height: var(--font-line-height-normal);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  color: var(--bds-text-muted);
+  line-height: var(--bds-font-line-height-normal);
   margin: 0;
 }
 
@@ -379,8 +379,8 @@
  * surface).
  *
  * Token pairs (paired family ↔ size only — never mix):
- *   title       — --font-family-heading + --heading-md
- *   description — --font-family-body + --body-md
+ *   title       — --bds-font-family-heading + --bds-heading-md
+ *   description — --bds-font-family-body + --bds-body-md
  *   overline/badge — own their own typography (component-internal)
  */
 
@@ -393,63 +393,63 @@
  */
 .bds-card--layout-stack.bds-card--tint-brand,
 .bds-card--layout-row.bds-card--tint-brand {
-  background-color: var(--surface-service-brand-light);
+  background-color: var(--bds-surface-service-brand-light);
 }
 .bds-card--layout-stack.bds-card--tint-marketing,
 .bds-card--layout-row.bds-card--tint-marketing {
-  background-color: var(--surface-service-marketing-light);
+  background-color: var(--bds-surface-service-marketing-light);
 }
 .bds-card--layout-stack.bds-card--tint-information,
 .bds-card--layout-row.bds-card--tint-information {
-  background-color: var(--surface-service-information-light);
+  background-color: var(--bds-surface-service-information-light);
 }
 .bds-card--layout-stack.bds-card--tint-product,
 .bds-card--layout-row.bds-card--tint-product {
-  background-color: var(--surface-service-product-light);
+  background-color: var(--bds-surface-service-product-light);
 }
 .bds-card--layout-stack.bds-card--tint-back-office,
 .bds-card--layout-row.bds-card--tint-back-office {
-  background-color: var(--surface-service-back-office-light);
+  background-color: var(--bds-surface-service-back-office-light);
 }
 
 .bds-card--layout-stack {
   /* Fill + border come from the `outlined`/`borderless`/`elevated`/`raised`
      variant class the render path emits; this block owns only structure. */
-  border-radius: var(--border-radius-md);
+  border-radius: var(--bds-border-radius-md);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: var(--padding-none);
-  gap: var(--gap-none);
+  padding: var(--bds-padding-none);
+  gap: var(--bds-gap-none);
 }
 
 /* Inset media treatment (`mediaTreatment="inset"`) — the "card-vertical" look.
  * Where the default `flush` treatment bleeds the media to the card edge and
  * pads only the text body, `inset` frames the media AND the body together in a
- * single --padding-huge inset, with --gap-xl separating image from text. The
- * body's own --padding-lg is zeroed so the frame isn't doubled. Ported from the
+ * single --bds-padding-huge inset, with --bds-gap-xl separating image from text. The
+ * body's own --bds-padding-lg is zeroed so the frame isn't doubled. Ported from the
  * brikdesigns-local `.service-card--inset` override so the treatment lives on
  * the primitive, not per-consumer CSS. */
 .bds-card--layout-stack-inset {
-  padding: var(--padding-huge);
-  gap: var(--gap-xl);
+  padding: var(--bds-padding-huge);
+  gap: var(--bds-gap-xl);
 }
 
 .bds-card--layout-stack-inset .bds-card__stack-body {
-  padding: var(--padding-none);
+  padding: var(--bds-padding-none);
 }
 
 /* Inset padding scale (`insetPadding="lg"`) — tightens the shared inset frame
- * from --padding-huge/--gap-xl down to --padding-lg/--gap-lg for a 24px
+ * from --bds-padding-huge/--bds-gap-xl down to --bds-padding-lg/--bds-gap-lg for a 24px
  * image-top card. Additive over `.bds-card--layout-stack-inset` (which still
  * supplies the frame and zeroes the body's own padding); the default
  * `huge` omits this class, so existing inset consumers are byte-identical.
  * Both selectors are single-class, so this must follow the base rule to win. */
 .bds-card--layout-stack-inset-lg {
-  padding: var(--padding-lg);
-  gap: var(--gap-lg);
+  padding: var(--bds-padding-lg);
+  gap: var(--bds-gap-lg);
 }
 
 .bds-card__stack-media {
@@ -465,13 +465,13 @@
 .bds-card__stack-media img,
 .bds-card__stack-media video,
 .bds-card__stack-media svg {
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--bds-border-radius-sm);
 }
 
 .bds-card__stack-badge {
   position: absolute;
-  top: var(--gap-md);
-  right: var(--gap-md);
+  top: var(--bds-gap-md);
+  right: var(--bds-gap-md);
   display: inline-flex;
   z-index: 1;
 }
@@ -479,8 +479,8 @@
 .bds-card__stack-body {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
-  padding: var(--padding-lg);
+  gap: var(--bds-gap-md);
+  padding: var(--bds-padding-lg);
   flex: 1 1 auto;
 }
 
@@ -492,19 +492,19 @@
 
 .bds-card__stack-title {
   margin: 0;
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-md);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-md);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
 }
 
 /* Under `layout="stack"` the body arrives as `children`, so a `<CardDescription>`
- * lands here carrying `.bds-card-description` (--text-secondary). A card-grid
- * cell body reads at --text-primary, so re-assert it here — this is the
+ * lands here carrying `.bds-card-description` (--bds-text-secondary). A card-grid
+ * cell body reads at --bds-text-primary, so re-assert it here — this is the
  * permanent home for the stack body-copy color (ADR-038). */
 .bds-card__stack-body > .bds-card-description {
-  color: var(--text-primary);
+  color: var(--bds-text-primary);
 }
 
 .bds-card__stack-action {
@@ -534,8 +534,8 @@
  * on narrow viewports without forcing a layout shift higher up.
  *
  * Token pairs (paired family ↔ size only — never mix):
- *   title       — --font-family-heading + --heading-md
- *   description — --font-family-body + --body-md
+ *   title       — --bds-font-family-heading + --bds-heading-md
+ *   description — --bds-font-family-body + --bds-body-md
  *   tag         — own typography (component-internal)
  */
 
@@ -545,11 +545,11 @@
   --bds-card-image-width: 35%;
   display: grid;
   grid-template-columns: var(--bds-card-image-width) 1fr;
-  gap: var(--gap-lg);
-  padding: var(--padding-lg);
-  background-color: var(--surface-primary);
-  border: var(--border-width-md) solid var(--border-secondary);
-  border-radius: var(--border-radius-md);
+  gap: var(--bds-gap-lg);
+  padding: var(--bds-padding-lg);
+  background-color: var(--bds-surface-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-secondary);
+  border-radius: var(--bds-border-radius-md);
   align-items: stretch;
   width: 100%;
   box-sizing: border-box;
@@ -569,13 +569,13 @@
 .bds-card__row-media img,
 .bds-card__row-media video,
 .bds-card__row-media svg {
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--bds-border-radius-sm);
 }
 
 .bds-card__row-body {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   min-width: 0;
 }
 
@@ -587,16 +587,16 @@
 
 .bds-card__row-title {
   margin: 0;
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-md);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-md);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
 }
 
 /* ADR-038 parity — see the `stack` note above. */
 .bds-card__row-body > .bds-card-description {
-  color: var(--text-primary);
+  color: var(--bds-text-primary);
 }
 
 .bds-card__row-action {
@@ -618,8 +618,8 @@
  * than the bespoke `--highlighted` modifier the old block owned. */
 
 .bds-card--layout-pricing {
-  gap: var(--gap-lg);
-  padding: var(--padding-lg);
+  gap: var(--bds-gap-lg);
+  padding: var(--bds-padding-lg);
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
@@ -633,13 +633,13 @@
 }
 
 .bds-card__pricing-media :is(img, video, svg) {
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--bds-border-radius-sm);
 }
 
 .bds-card__pricing-header {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
 }
 
 .bds-card__pricing-badge {
@@ -647,46 +647,46 @@
 }
 
 .bds-card__pricing-title {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-sm);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-snug);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-sm);
+  font-weight: var(--bds-font-weight-bold);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-primary);
   margin: 0;
 }
 
 .bds-card__pricing-price-block {
   display: flex;
   align-items: baseline;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
 }
 
 .bds-card__pricing-price {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-xl);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-xl);
+  font-weight: var(--bds-font-weight-bold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
   margin: 0;
 }
 
 .bds-card__pricing-period {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  font-weight: var(--font-weight-regular);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  font-weight: var(--bds-font-weight-regular);
+  color: var(--bds-text-secondary);
 }
 
 .bds-card__pricing-divider {
   border: none;
-  border-top: var(--border-width-md) solid var(--border-muted);
+  border-top: var(--bds-border-width-md) solid var(--bds-border-muted);
   margin: 0;
 }
 
 .bds-card__pricing-features {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -695,20 +695,20 @@
 .bds-card__pricing-feature {
   display: flex;
   align-items: flex-start;
-  gap: var(--gap-md);
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
+  gap: var(--bds-gap-md);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
 }
 
 .bds-card__pricing-check {
-  color: var(--text-brand-primary);
+  color: var(--bds-text-brand-primary);
   flex-shrink: 0;
 }
 
 .bds-card__pricing-action {
   margin-top: auto;
-  padding-top: var(--padding-sm);
+  padding-top: var(--bds-padding-sm);
 }
 }

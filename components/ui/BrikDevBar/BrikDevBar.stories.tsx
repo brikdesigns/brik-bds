@@ -58,18 +58,18 @@ function DevBarWithSlots() {
   return (
     <>
       <BrikDevBar />
-      <div style={{ padding: 'var(--padding-xl)', fontFamily: 'var(--font-family-body)' }}>
-        <p style={{ color: 'var(--text-primary)', marginBottom: 'var(--gap-md)' }}>
+      <div style={{ padding: 'var(--bds-padding-xl)', fontFamily: 'var(--bds-font-family-body)' }}>
+        <p style={{ color: 'var(--bds-text-primary)', marginBottom: 'var(--bds-gap-md)' }}>
           BrikDevBar has been mounted. The DevBar shell loads from{' '}
           <code>/brik-devbar.js</code> and two slots have been registered via{' '}
           <code>useDevBarSlot</code>: <strong>Personas</strong> and <strong>Theme</strong>.
         </p>
-        <p style={{ color: 'var(--text-muted)', fontSize: 'var(--body-sm)' }}>
+        <p style={{ color: 'var(--bds-text-muted)', fontSize: 'var(--bds-body-sm)' }}>
           If the DevBar shell is available (brik-devbar.js loaded), you should see the
           toolbar appear at the bottom of the preview. The slots below reflect local
           open/close state driven by <code>onActivate</code> / <code>onDeactivate</code>.
         </p>
-        <div style={{ marginTop: 'var(--gap-lg)', display: 'flex', gap: 'var(--gap-md)', flexWrap: 'wrap' }}>
+        <div style={{ marginTop: 'var(--bds-gap-lg)', display: 'flex', gap: 'var(--bds-gap-md)', flexWrap: 'wrap' }}>
           <SlotIndicator id="personas" open={personasOpen} label="Personas slot" />
           <SlotIndicator id="theme" open={themeOpen} label="Theme slot" />
         </div>
@@ -88,8 +88,8 @@ function SlotIndicator({ id, open, label }: { id: string; open: boolean; label: 
         borderRadius: '8px',
         border: `2px solid ${open ? BDS_POPPY : BDS_GRAY}`,
         background: open ? '#fff5f3' : '#fafafa',
-        fontFamily: 'var(--font-family-label)',
-        fontSize: 'var(--label-sm)',
+        fontFamily: 'var(--bds-font-family-label)',
+        fontSize: 'var(--bds-label-sm)',
         display: 'flex',
         alignItems: 'center',
         gap: '8px',
@@ -108,12 +108,12 @@ function SlotIndicator({ id, open, label }: { id: string; open: boolean; label: 
         }}
       />
       <div>
-        <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
+        <div style={{ fontWeight: 600, color: 'var(--bds-text-primary)' }}>
           {label}
         </div>
         <div
           style={{
-            color: open ? BDS_POPPY : 'var(--text-muted)',
+            color: open ? BDS_POPPY : 'var(--bds-text-muted)',
             fontSize: '11px',
             marginTop: 2,
           }}
@@ -163,12 +163,12 @@ function DevBarApiDemo() {
   return (
     <>
       <BrikDevBar />
-      <div style={{ padding: 'var(--padding-xl)', fontFamily: 'var(--font-family-body)' }}>
-        <p style={{ color: 'var(--text-primary)', marginBottom: 'var(--gap-md)' }}>
+      <div style={{ padding: 'var(--bds-padding-xl)', fontFamily: 'var(--bds-font-family-body)' }}>
+        <p style={{ color: 'var(--bds-text-primary)', marginBottom: 'var(--bds-gap-md)' }}>
           Demonstrates <code>useDevBarApi()</code> — imperative access for setting
           badges and toggling active state from outside the hook lifecycle.
         </p>
-        <div style={{ marginTop: 'var(--gap-lg)', display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)' }}>
+        <div style={{ marginTop: 'var(--bds-gap-lg)', display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-sm)' }}>
           <ApiRow label="window.BrikDevBar present" value={api !== null} />
           <ApiRow label="grid slot registered" value={registered} />
           <ApiRow label="grid slot active" value={gridOpen} />
@@ -184,10 +184,10 @@ function ApiRow({ label, value }: { label: string; value: boolean }) {
       style={{
         display: 'flex',
         alignItems: 'center',
-        gap: 'var(--gap-md)',
-        fontFamily: 'var(--font-family-label)',
-        fontSize: 'var(--label-sm)',
-        color: 'var(--text-primary)',
+        gap: 'var(--bds-gap-md)',
+        fontFamily: 'var(--bds-font-family-label)',
+        fontSize: 'var(--bds-label-sm)',
+        color: 'var(--bds-text-primary)',
       }}
     >
       <span

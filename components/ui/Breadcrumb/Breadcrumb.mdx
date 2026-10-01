@@ -14,17 +14,17 @@ export const SERVICE_LINES = [
 ];
 
 export const ServiceLineCascade = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xl)' }}>
     {SERVICE_LINES.map(({ id, label }) => (
       <div key={id} data-service-line={id}>
         <p
           style={{
-            fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--body-xs)',
+            fontFamily: 'var(--bds-font-family-label)',
+            fontSize: 'var(--bds-body-xs)',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
-            marginBottom: 'var(--gap-md)',
-            color: 'var(--text-muted)',
+            marginBottom: 'var(--bds-gap-md)',
+            color: 'var(--bds-text-muted)',
           }}
         >
           {`[data-service-line='${id}'] — ${label}`}

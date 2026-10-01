@@ -26,7 +26,7 @@ const meta: Meta<typeof ContentBlock> = {
     onColor: {
       control: { type: 'boolean' },
       description:
-        'Swaps the text slots to `--text-on-color-dark` for a block on a filled brand/dark surface. On `--surface-brand-primary` the pair is 3.78:1 — AA-large, not AA.',
+        'Swaps the text slots to `--bds-text-on-color-dark` for a block on a filled brand/dark surface. On `--bds-surface-brand-primary` the pair is 3.78:1 — AA-large, not AA.',
     },
   },
 };
@@ -36,13 +36,13 @@ type Story = StoryObj<typeof ContentBlock>;
 
 const Frame = ({
   width = '360px',
-  background = 'var(--surface-primary)',
+  background = 'var(--bds-surface-primary)',
   children,
 }: {
   width?: string;
   background?: string;
   children: React.ReactNode;
-}) => <div style={{ width, padding: 'var(--padding-lg)', background }}>{children}</div>;
+}) => <div style={{ width, padding: 'var(--bds-padding-lg)', background }}>{children}</div>;
 
 /**
  * All four slots filled — the full shape.
@@ -81,11 +81,11 @@ export const OmittedSlots: Story = {
 
 /**
  * `onColor` — the block sitting on a filled brand band. All three text slots
- * swap to `--text-on-color-dark`, so the consumer never pushes a per-instance
- * `color` into a slot the block owns. `--text-on-color-dark` is mode-invariant
+ * swap to `--bds-text-on-color-dark`, so the consumer never pushes a per-instance
+ * `color` into a slot the block owns. `--bds-text-on-color-dark` is mode-invariant
  * white, so the same story holds in light and dark.
  *
- * Contrast: white on `--surface-brand-primary` (`--color-poppy-500`) is
+ * Contrast: white on `--bds-surface-brand-primary` (`--bds-color-poppy-500`) is
  * **3.78:1 — AA-large (3:1), not AA (4.5:1)**. Brand-primary fills are gated
  * AA-large by policy (`tokens/contrast-pairings.json`, BDS-22 / ADR-015). The
  * title is large text and unaffected; keep `description` short on a band.
@@ -99,7 +99,7 @@ export const OnColor: Story = {
     onColor: true,
   },
   render: (args) => (
-    <Frame background="var(--surface-brand-primary)">
+    <Frame background="var(--bds-surface-brand-primary)">
       <ContentBlock {...args} />
     </Frame>
   ),
@@ -108,7 +108,7 @@ export const OnColor: Story = {
 /**
  * Asserts `onColor` stops at its OWN slots. The colour rule uses a child
  * combinator, so a nested ContentBlock handed to the `description` slot keeps
- * `--text-primary` — a neutral card inside a brand band is not the parent
+ * `--bds-text-primary` — a neutral card inside a brand band is not the parent
  * block's to repaint. A descendant combinator here would paint the nested
  * title white and fail this test.
  *
@@ -117,7 +117,7 @@ export const OnColor: Story = {
 export const InteractionTestOnColorNoLeak: Story = {
   tags: ['!manifest', 'interaction-test'],
   render: () => (
-    <Frame background="var(--surface-brand-primary)">
+    <Frame background="var(--bds-surface-brand-primary)">
       <ContentBlock
         onColor
         title="Get in touch"
@@ -137,9 +137,9 @@ export const InteractionTestOnColorNoLeak: Story = {
     await expect(getComputedStyle(outer).color).toBe('rgb(255, 255, 255)');
 
     // The nested block carries no --on-color modifier, so it must resolve to
-    // --text-primary rather than inheriting the band's on-color white.
+    // --bds-text-primary rather than inheriting the band's on-color white.
     const expected = getComputedStyle(canvasElement)
-      .getPropertyValue('--text-primary')
+      .getPropertyValue('--bds-text-primary')
       .trim();
     await expect(expected).not.toBe('');
     await expect(getComputedStyle(nested).color).not.toBe('rgb(255, 255, 255)');
@@ -162,7 +162,7 @@ export const SpacingModes: Story = {
       style={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: 'var(--gap-xl)',
+        gap: 'var(--bds-gap-xl)',
       }}
     >
       {(['default', 'compact', 'comfortable', 'spacious'] as const).map((mode) => (
@@ -171,9 +171,9 @@ export const SpacingModes: Story = {
             <p
               style={{
                 margin: '0 0 8px',
-                fontFamily: 'var(--font-family-label)',
-                fontSize: 'var(--label-sm)',
-                color: 'var(--text-secondary)',
+                fontFamily: 'var(--bds-font-family-label)',
+                fontSize: 'var(--bds-label-sm)',
+                color: 'var(--bds-text-secondary)',
                 textTransform: 'capitalize',
               }}
             >

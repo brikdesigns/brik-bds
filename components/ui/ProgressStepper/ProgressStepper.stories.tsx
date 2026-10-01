@@ -109,7 +109,7 @@ export const WithStepNavigation: Story = {
     const [active, setActive] = useState(0);
 
     return (
-      <div style={{ display: 'flex', gap: 'var(--space-1000)' }}>{/* bds-lint-ignore — 40px, no gap token */}
+      <div style={{ display: 'flex', gap: 'var(--bds-space-1000)' }}>{/* bds-lint-ignore — 40px, no gap token */}
         <ProgressStepper
           steps={steps}
           size={args.size}
@@ -119,13 +119,13 @@ export const WithStepNavigation: Story = {
           style={{ width: '260px' }}
         />
         <div style={{ flex: 1 }}>
-          <h2 style={{ margin: '0 0 var(--gap-md)' }}>{steps[active]?.label ?? 'Complete'}</h2>
-          <p style={{ color: 'var(--text-secondary)', margin: '0 0 var(--gap-xl)' }}>
+          <h2 style={{ margin: '0 0 var(--bds-gap-md)' }}>{steps[active]?.label ?? 'Complete'}</h2>
+          <p style={{ color: 'var(--bds-text-secondary)', margin: '0 0 var(--bds-gap-xl)' }}>
             {active < steps.length
               ? steps[active].description
               : 'All steps completed!'}
           </p>
-          <div style={{ display: 'flex', gap: 'var(--gap-md)' }}>
+          <div style={{ display: 'flex', gap: 'var(--bds-gap-md)' }}>
             <Button
               variant="secondary"
               onClick={() => setActive(Math.max(0, active - 1))}

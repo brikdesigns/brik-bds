@@ -78,8 +78,8 @@ beforeAll(() => {
   writeFileSync(join(bds, '.gitignore'), 'dist/\n');
 
   commitTokens({
-    source: ':root {\n  --measure-md: 60ch;\n  --measure-lg: 72ch;\n}\n',
-    dist: ':root {\n  --measure-md: 60ch;\n  --measure-lg: 72ch;\n}\n',
+    source: ':root {\n  --bds-measure-md: 60ch;\n  --bds-measure-lg: 72ch;\n}\n',
+    dist: ':root {\n  --bds-measure-md: 60ch;\n  --bds-measure-lg: 72ch;\n}\n',
     message: 'base',
   });
   git(['branch', 'base'], bds);
@@ -87,10 +87,10 @@ beforeAll(() => {
   consumer = join(root, 'gh', 'product', 'consumer');
   mkdirSync(join(consumer, 'src'), { recursive: true });
   git(['init', '-q', '-b', 'main'], consumer);
-  writeFileSync(join(consumer, 'src', 'page.css'), '.hero { max-width: var(--measure-md); }\n');
+  writeFileSync(join(consumer, 'src', 'page.css'), '.hero { max-width: var(--bds-measure-md); }\n');
   // Untracked files are invisible to `git grep`, which is the point — a stale
   // node_modules copy of BDS must never read as consumer usage.
-  writeFileSync(join(consumer, 'src', 'untracked.css'), '.x { width: var(--measure-lg); }\n');
+  writeFileSync(join(consumer, 'src', 'untracked.css'), '.x { width: var(--bds-measure-lg); }\n');
   git(['add', 'src/page.css'], consumer);
   git(['-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-qm', 'consumer'], consumer);
 });
@@ -102,8 +102,8 @@ afterAll(() => rmSync(root, { recursive: true, force: true }));
 describe('lint-deleted-token-consumers', { timeout: 30_000 }, () => {
   it('passes when the diff removes no declaration', () => {
     commitTokens({
-      source: ':root {\n  --measure-md: 60ch;\n  --measure-lg: 72ch;\n  --measure-sm: 44ch;\n}\n',
-      dist: ':root {\n  --measure-md: 60ch;\n  --measure-lg: 72ch;\n  --measure-sm: 44ch;\n}\n',
+      source: ':root {\n  --bds-measure-md: 60ch;\n  --bds-measure-lg: 72ch;\n  --bds-measure-sm: 44ch;\n}\n',
+      dist: ':root {\n  --bds-measure-md: 60ch;\n  --bds-measure-lg: 72ch;\n  --bds-measure-sm: 44ch;\n}\n',
       message: 'add a token',
     });
     const { code, json } = run();
@@ -115,22 +115,22 @@ describe('lint-deleted-token-consumers', { timeout: 30_000 }, () => {
   // The AC: the #2271 shape. Delete a name a consumer still uses.
   it('fails when a deleted name is still referenced downstream', () => {
     commitTokens({
-      source: ':root {\n  --measure-lg: 72ch;\n}\n',
-      dist: ':root {\n  --measure-lg: 72ch;\n}\n',
-      message: 'delete --measure-md',
+      source: ':root {\n  --bds-measure-lg: 72ch;\n}\n',
+      dist: ':root {\n  --bds-measure-lg: 72ch;\n}\n',
+      message: 'delete --bds-measure-md',
     });
     const { code, json } = run();
     expect(code).toBe(1);
-    expect(json.deleted).toEqual(['--measure-md']);
+    expect(json.deleted).toEqual(['--bds-measure-md']);
     expect(json.findings).toHaveLength(1);
-    expect(json.findings[0]).toMatchObject({ repo: 'fake/consumer', token: '--measure-md' });
+    expect(json.findings[0]).toMatchObject({ repo: 'fake/consumer', token: '--bds-measure-md' });
     expect(json.findings[0].at).toContain('src/page.css');
   });
 
   it('passes when the deleted name ships on as a deprecated alias', () => {
     commitTokens({
-      source: ':root {\n  --measure-lg: 72ch;\n  --measure-md: var(--measure-lg); /* DEPRECATED */\n}\n',
-      dist: ':root {\n  --measure-lg: 72ch;\n  --measure-md: var(--measure-lg);\n}\n',
+      source: ':root {\n  --bds-measure-lg: 72ch;\n  --bds-measure-md: var(--bds-measure-lg); /* DEPRECATED */\n}\n',
+      dist: ':root {\n  --bds-measure-lg: 72ch;\n  --bds-measure-md: var(--bds-measure-lg);\n}\n',
       message: 'deprecate rather than delete',
     });
     const { code, json } = run();
@@ -141,31 +141,44 @@ describe('lint-deleted-token-consumers', { timeout: 30_000 }, () => {
   it('passes when a declaration only MOVES between token files', () => {
     // Removed from gap-fills.css, still in the built registry.
     commitTokens({
-      source: ':root {\n  --measure-lg: 72ch;\n}\n',
-      dist: ':root {\n  --measure-lg: 72ch;\n  --measure-md: 60ch;\n}\n',
-      message: 'move --measure-md to another source file',
+      source: ':root {\n  --bds-measure-lg: 72ch;\n}\n',
+      dist: ':root {\n  --bds-measure-lg: 72ch;\n  --bds-measure-md: 60ch;\n}\n',
+      message: 'move --bds-measure-md to another source file',
     });
     const { code, json } = run();
     expect(code).toBe(0);
     expect(json.deleted).toEqual([]);
   });
 
+  it('does not read a changed value as a removal', () => {
+    // `-` + `+` of the same name is an edit: the name is still declared in tokens/.
+    // dist omits it on purpose (a name that lives in a file dist does not bundle).
+    commitTokens({
+      source: ':root {\n  --bds-measure-lg: 72ch;\n  --bds-measure-md: 61ch;\n}\n',
+      dist: ':root {\n  --bds-measure-lg: 72ch;\n}\n',
+      message: 'edit --bds-measure-md value',
+    });
+    const { code, json } = run();
+    expect(json.deleted).toEqual([]);
+    expect(code).toBe(0);
+  });
+
   it('does not treat a longer name as a reference to its prefix', () => {
     // `--measure` is a prefix of `--measure-md`; a fixed-string grep matches
     // both, so the boundary filter is what keeps this from a false positive.
     commitTokens({
-      source: ':root {\n  --measure-md: 60ch;\n  --measure-lg: 72ch;\n}\n',
-      dist: ':root {\n  --measure-md: 60ch;\n  --measure-lg: 72ch;\n}\n',
+      source: ':root {\n  --bds-measure-md: 60ch;\n  --bds-measure-lg: 72ch;\n}\n',
+      dist: ':root {\n  --bds-measure-md: 60ch;\n  --bds-measure-lg: 72ch;\n}\n',
       message: 'restore',
     });
     commitTokens({
-      source: ':root {\n  --measure-md: 60ch;\n  --measure-lg: 72ch;\n  --measure: 50ch;\n}\n',
-      dist: ':root {\n  --measure-md: 60ch;\n  --measure-lg: 72ch;\n  --measure: 50ch;\n}\n',
+      source: ':root {\n  --bds-measure-md: 60ch;\n  --bds-measure-lg: 72ch;\n  --measure: 50ch;\n}\n',
+      dist: ':root {\n  --bds-measure-md: 60ch;\n  --bds-measure-lg: 72ch;\n  --measure: 50ch;\n}\n',
       message: 'add the prefix name',
     });
     commitTokens({
-      source: ':root {\n  --measure-md: 60ch;\n  --measure-lg: 72ch;\n}\n',
-      dist: ':root {\n  --measure-md: 60ch;\n  --measure-lg: 72ch;\n}\n',
+      source: ':root {\n  --bds-measure-md: 60ch;\n  --bds-measure-lg: 72ch;\n}\n',
+      dist: ':root {\n  --bds-measure-md: 60ch;\n  --bds-measure-lg: 72ch;\n}\n',
       message: 'delete the prefix name only',
     });
     // Diff the last commit, not the whole branch: `--measure` was added and
@@ -182,9 +195,9 @@ describe('lint-deleted-token-consumers', { timeout: 30_000 }, () => {
   // it replaced.
   it('exits 2 rather than clean when a consumer cannot be reached', () => {
     commitTokens({
-      source: ':root {\n  --measure-lg: 72ch;\n}\n',
-      dist: ':root {\n  --measure-lg: 72ch;\n}\n',
-      message: 'delete --measure-md again',
+      source: ':root {\n  --bds-measure-lg: 72ch;\n}\n',
+      dist: ':root {\n  --bds-measure-lg: 72ch;\n}\n',
+      message: 'delete --bds-measure-md again',
     });
     const { code, stderr } = run(['--consumer', 'fake/does-not-exist@main']);
     expect(code).toBe(2);

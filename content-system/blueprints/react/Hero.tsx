@@ -38,9 +38,9 @@
  * `bds-blueprint-section__container` on the container, `bds-blueprint-section__missing` on the stub.
  *
  * Token pairs (paired family ↔ size — never mix):
- *   subtitle    — --font-family-label + --label-lg (uppercase eyebrow)
- *   title (h1)  — --font-family-heading + clamp(--heading-xl … --display-sm)
- *   lead        — --font-family-body + --heading-sm
+ *   subtitle    — --bds-font-family-label + --bds-label-lg (uppercase eyebrow)
+ *   title (h1)  — --bds-font-family-heading + clamp(--bds-heading-xl … --bds-display-sm)
+ *   lead        — --bds-font-family-body + --bds-heading-sm
  *
  * a11y: `<section>` with `aria-labelledby` → the h1. Eyebrow is prose, not a
  * heading. CTA is a `Button` with a :focus-visible ring.

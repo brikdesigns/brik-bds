@@ -8,15 +8,15 @@
 
 .bds-field--orientation-vertical {
   flex-direction: column;
-  /* Label ↔ value is the tight step (ADR-023 content-rhythm map: --gap-sm);
-     --gap-xs collapses to 0px outside default spacing mode. */
-  gap: var(--gap-sm);
+  /* Label ↔ value is the tight step (ADR-023 content-rhythm map: --bds-gap-sm);
+     --bds-gap-xs collapses to 0px outside default spacing mode. */
+  gap: var(--bds-gap-sm);
 }
 
 .bds-field--orientation-horizontal {
   flex-direction: row;
   align-items: baseline;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   justify-content: space-between;
 }
 
@@ -29,11 +29,11 @@
  * text-muted here (read), text-primary on TextInput (editable).
  */
 .bds-field__label {
-  font-family: var(--font-family-label);
+  font-family: var(--bds-font-family-label);
   /*
    * Tier resolution. The size is read from a Component-tier custom property so
    * a container can set the DEFAULT by inheritance — `.bds-sheet__body` declares
-   * `--label-sm`, so a Field dropped into a Sheet body is compact without the
+   * `--bds-label-sm`, so a Field dropped into a Sheet body is compact without the
    * caller knowing it landed there (#1383).
    *
    * This is inheritance, not a specificity contest. An explicit `tier` prop
@@ -41,10 +41,10 @@
    * element always beats a value inherited from an ancestor — so a pinned tier
    * wins inside a Sheet without needing `!important` or a longer selector.
    */
-  font-size: var(--bds-field-label-size, var(--label-md));
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-muted);
+  font-size: var(--bds-field-label-size, var(--bds-label-md));
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-muted);
   text-transform: capitalize;
   margin: 0;
 }
@@ -56,10 +56,10 @@
 /* ─── Value ───────────────────────────────────────────────── */
 
 .bds-field__value {
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
   margin: 0;
   min-width: 0;
 }
@@ -71,10 +71,10 @@
 /* ─── Empty state (horizontal) ──────────────────────────────── */
 
 .bds-field__empty {
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-muted);
   margin: 0;
 }
 
@@ -93,21 +93,21 @@
  * happens to render inside a Sheet body.
  */
 .bds-field--standard {
-  --bds-field-label-size: var(--label-md);
+  --bds-field-label-size: var(--bds-label-md);
 }
 
 .bds-field--compact {
-  --bds-field-label-size: var(--label-sm);
+  --bds-field-label-size: var(--bds-label-sm);
 }
 
 /* ─── Helper slot ───────────────────────────────────────── */
 
 .bds-field__helper {
-  font-family: var(--font-family-label);
-  font-size: var(--label-xs);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-muted);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-xs);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-muted);
   margin: 0;
   display: block;
 }
@@ -116,6 +116,6 @@
    accent-red onto the brand poppy per the Figma Brand Kit, and an error message
    must not render in the brand color. Same red family, correct semantics. */
 .bds-field__helper--tone-negative {
-  color: var(--text-negative);
+  color: var(--bds-text-negative);
 }
 }

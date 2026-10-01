@@ -12,18 +12,18 @@
 
 .bds-menu {
   /* ─── Component-scoped override surface ── */
-  --menu-enter-duration: var(--duration-md); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-  --menu-enter-ease: var(--ease-out);            /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --menu-enter-duration: var(--bds-duration-md); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --menu-enter-ease: var(--bds-ease-out);            /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 
   position: absolute;
   z-index: 100;
-  background-color: var(--background-primary);
-  border-radius: var(--border-radius-lg);
-  padding: var(--padding-md);
-  box-shadow: var(--shadow-lg);
+  background-color: var(--bds-background-primary);
+  border-radius: var(--bds-border-radius-lg);
+  padding: var(--bds-padding-md);
+  box-shadow: var(--bds-shadow-lg);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   --bds-menu-min-width: 200px; /* component-local dimension; no shared registry rung (#2133) */
   min-width: var(--bds-menu-min-width);
   max-height: min(60vh, 24rem); /* bds-lint-ignore — viewport-relative scroll cap so a long item list never grows past the viewport */
@@ -40,7 +40,7 @@
 .bds-menu--top {
   top: auto;
   bottom: 100%;
-  margin-bottom: var(--gap-md);
+  margin-bottom: var(--bds-gap-md);
   transform-origin: bottom center;
 }
 
@@ -49,18 +49,18 @@
 .bds-menu__header {
   display: flex;
   flex-direction: column;
-  padding: var(--padding-tiny) var(--padding-tiny) var(--padding-md);
-  border-bottom: var(--border-width-md) solid var(--border-muted);
-  /* Tight structural step below the divider; --gap-tiny is 0px outside
+  padding: var(--bds-padding-tiny) var(--bds-padding-tiny) var(--bds-padding-md);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-muted);
+  /* Tight structural step below the divider; --bds-gap-tiny is 0px outside
      default spacing mode. */
-  margin-bottom: var(--gap-sm);
-  font-family: var(--font-family-label);
-  font-size: var(--body-xs);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-secondary);
+  margin-bottom: var(--bds-gap-sm);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-body-xs);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
   text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wide);
+  letter-spacing: var(--bds-letter-spacing-wide);
   user-select: none;
 }
 
@@ -69,18 +69,18 @@
 .bds-menu__group {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
 }
 
 .bds-menu__title {
-  padding: var(--padding-tiny) var(--padding-tiny) 0;
-  font-family: var(--font-family-label);
-  font-size: var(--body-xs);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-secondary);
+  padding: var(--bds-padding-tiny) var(--bds-padding-tiny) 0;
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-body-xs);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
   text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wide);
+  letter-spacing: var(--bds-letter-spacing-wide);
   user-select: none;
 }
 
@@ -89,38 +89,38 @@
 .bds-menu__item {
   display: flex;
   align-items: center;
-  gap: var(--gap-md);
-  padding: var(--padding-tiny);
+  gap: var(--bds-gap-md);
+  padding: var(--bds-padding-tiny);
   background: none;
   border: none;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--bds-border-radius-sm);
   cursor: pointer;
   width: 100%;
   text-align: left;
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
   text-transform: capitalize;
 }
 
 .bds-menu__item--active {
-  background-color: var(--surface-secondary);
+  background-color: var(--bds-surface-secondary);
 }
 
 .bds-menu__item--disabled {
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
   cursor: not-allowed;
 }
 
 /* ─── Item hover ─────────────────────────────────────── */
 
 .bds-menu__item:not(.bds-menu__item--disabled) {
-  transition: background-color var(--duration-sm) var(--ease-out);
+  transition: background-color var(--bds-duration-sm) var(--bds-ease-out);
 }
 
 .bds-menu__item:hover:not(.bds-menu__item--disabled) {
-  background-color: var(--surface-secondary);
+  background-color: var(--bds-surface-secondary);
 }
 
 /* ─── Reduced motion ─────────────────────────────────── */
@@ -137,8 +137,8 @@
   justify-content: center;
   width: 24px; /* bds-lint-ignore — icon wrapper touch target */
   height: 24px; /* bds-lint-ignore — fixed 24px menu-item icon slot, not a spacing-grid token */
-  font-size: var(--icon-lg);
-  color: var(--text-primary);
+  font-size: var(--bds-icon-lg);
+  color: var(--bds-text-primary);
   flex-shrink: 0;
 }
 
@@ -147,7 +147,7 @@
 .bds-menu__text {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-tiny);
+  gap: var(--bds-gap-tiny);
   min-width: 0;
   flex: 1;
 }
@@ -155,16 +155,16 @@
 .bds-menu__label {
   font-family: inherit;
   font-size: inherit;
-  line-height: var(--font-line-height-tight);
+  line-height: var(--bds-font-line-height-tight);
   color: inherit;
 }
 
 .bds-menu__description {
-  font-family: var(--font-family-body);
-  font-size: var(--body-xs);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-xs);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
   text-transform: none;
 }
 
@@ -173,6 +173,6 @@
    label + description, and bump padding for breathing room. */
 .bds-menu__item--with-description {
   align-items: flex-start;
-  padding: var(--padding-sm);
+  padding: var(--bds-padding-sm);
 }
 }

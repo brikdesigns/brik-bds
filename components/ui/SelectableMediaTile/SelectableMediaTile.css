@@ -16,20 +16,20 @@
     padding: 0;
     background: none;
     border: none;
-    border-radius: var(--border-radius-md);
+    border-radius: var(--bds-border-radius-md);
     overflow: hidden;
     cursor: pointer;
     text-align: left;
     color: inherit;
     font: inherit;
-    box-shadow: inset 0 0 0 var(--border-width-md) var(--border-muted);
+    box-shadow: inset 0 0 0 var(--bds-border-width-md) var(--bds-border-muted);
     transition:
-      box-shadow var(--duration-sm) var(--ease-out),
-      transform var(--duration-sm) var(--ease-out);
+      box-shadow var(--bds-duration-sm) var(--bds-ease-out),
+      transform var(--bds-duration-sm) var(--bds-ease-out);
   }
 
   .bds-selectable-media-tile:hover:not(:disabled) {
-    box-shadow: inset 0 0 0 var(--border-width-md) var(--border-brand-primary);
+    box-shadow: inset 0 0 0 var(--bds-border-width-md) var(--bds-border-brand-primary);
   }
 
   .bds-selectable-media-tile:active:not(:disabled) {
@@ -37,7 +37,7 @@
   }
 
   .bds-selectable-media-tile:focus-visible {
-    outline: var(--border-width-lg) solid var(--state-focus);
+    outline: var(--bds-border-width-lg) solid var(--bds-state-focus);
     outline-offset: 2px;
   }
 
@@ -52,7 +52,7 @@
   .bds-selectable-media-tile__media {
     position: relative;
     display: block;
-    background-color: var(--surface-secondary);
+    background-color: var(--bds-surface-secondary);
   }
 
   /* ─── Selected check overlay ────────────────────────────────────
@@ -60,16 +60,16 @@
 
   .bds-selectable-media-tile__check {
     position: absolute;
-    top: var(--padding-tiny);
-    right: var(--padding-tiny);
+    top: var(--bds-padding-tiny);
+    right: var(--bds-padding-tiny);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--icon-md);
-    height: var(--icon-md);
-    border-radius: var(--border-radius-circle);
-    background-color: var(--background-brand-primary);
-    color: var(--text-on-color-dark);
+    width: var(--bds-icon-md);
+    height: var(--bds-icon-md);
+    border-radius: var(--bds-border-radius-circle);
+    background-color: var(--bds-background-brand-primary);
+    color: var(--bds-text-on-color-dark);
   }
 
   /* ─── Caption ───────────────────────────────────────────────────
@@ -78,13 +78,13 @@
   .bds-selectable-media-tile__caption {
     display: flex;
     align-items: center;
-    gap: var(--gap-tiny);
-    padding: var(--padding-tiny) var(--padding-sm);
-    font-family: var(--font-family-label);
-    font-size: var(--label-sm);
-    font-weight: var(--font-weight-medium);
-    line-height: var(--font-line-height-tight);
-    color: var(--text-secondary);
+    gap: var(--bds-gap-tiny);
+    padding: var(--bds-padding-tiny) var(--bds-padding-sm);
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-sm);
+    font-weight: var(--bds-font-weight-medium);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-secondary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -94,18 +94,18 @@
      Brand ring + emphasised caption. box-shadow keeps layout stable. */
 
   .bds-selectable-media-tile--selected {
-    box-shadow: inset 0 0 0 var(--border-width-md) var(--border-brand-primary);
+    box-shadow: inset 0 0 0 var(--bds-border-width-md) var(--bds-border-brand-primary);
   }
 
   .bds-selectable-media-tile--selected .bds-selectable-media-tile__caption {
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-brand-primary);
+    font-weight: var(--bds-font-weight-semibold);
+    color: var(--bds-text-brand-primary);
   }
 
   /* ─── Disabled ──────────────────────────────────────────────────── */
 
   .bds-selectable-media-tile--disabled {
-    opacity: var(--state-disabled-opacity);
+    opacity: var(--bds-state-disabled-opacity);
     cursor: not-allowed;
   }
 }

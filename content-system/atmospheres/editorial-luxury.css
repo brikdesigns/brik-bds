@@ -16,7 +16,7 @@
  * Surface colors are set by the brand theme layer (dist/tokens.css +
  * the client's theme CSS). The near-black page color (#08080a, not pure
  * #000 — avoids DPR gradient banding) is emitted by the dark-dominant
- * theme as var(--page-primary). Section-edge fades reference that token
+ * theme as var(--bds-page-primary). Section-edge fades reference that token
  * so they self-relativize with no hardcoded values here.
  *
  * Cost: one fixed body::before GPU layer for the base vignette, one
@@ -25,7 +25,7 @@
  * elements with `data-spotlight`.
  *
  * Import order: goes AFTER the per-client theme CSS (so it inherits
- * the client's --background-brand-primary) and AFTER the consumer site's
+ * the client's --bds-background-brand-primary) and AFTER the consumer site's
  * local stylesheet (so its surface tokens win over gray fallbacks).
  *
  * Consumer integration: the portal's generate-theme-css.ts appends an
@@ -35,10 +35,10 @@
  */
 
 /* Orb / vignette / spotlight colors derive from the client's brand hue
-   via color-mix() over the canonical --background-brand-primary role — no
+   via color-mix() over the canonical --bds-background-brand-primary role — no
    invented token family, no hardcoded palette. The atmosphere takes on
    each client's brand without edits here. The cool depth accent uses the
-   canonical --background-accent-blue role. (brik-bds#2372) */
+   canonical --bds-background-accent-blue role. (brik-bds#2372) */
 
 /* ───────────────────────────────────────────────────────────────────
  * Base atmosphere — dual-axis radial vignette on <body>.
@@ -51,8 +51,8 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 15% 0%,   color-mix(in srgb, var(--background-brand-primary) 7%, transparent), transparent 55%),
-    radial-gradient(ellipse 100% 80% at 85% 100%, color-mix(in srgb, var(--background-brand-primary) 4%, transparent), transparent 60%);
+    radial-gradient(ellipse 80% 60% at 15% 0%,   color-mix(in srgb, var(--bds-background-brand-primary) 7%, transparent), transparent 55%),
+    radial-gradient(ellipse 100% 80% at 85% 100%, color-mix(in srgb, var(--bds-background-brand-primary) 4%, transparent), transparent 60%);
 }
 body > * { position: relative; z-index: 1; }
 
@@ -103,28 +103,28 @@ section[data-ambient="top-right"]::before {
   right: -10%;
   width: 560px;
   height: 560px;
-  background: radial-gradient(circle, color-mix(in srgb, var(--background-brand-primary) 14%, transparent) 0%, transparent 60%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--bds-background-brand-primary) 14%, transparent) 0%, transparent 60%);
 }
 section[data-ambient="top-left"]::before {
   top: -15%;
   left: -10%;
   width: 560px;
   height: 560px;
-  background: radial-gradient(circle, color-mix(in srgb, var(--background-brand-primary) 14%, transparent) 0%, transparent 60%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--bds-background-brand-primary) 14%, transparent) 0%, transparent 60%);
 }
 section[data-ambient="split"]::before {
   top: 20%;
   left: -15%;
   width: 480px;
   height: 480px;
-  background: radial-gradient(circle, color-mix(in srgb, var(--background-brand-primary) 9%, transparent) 0%, transparent 60%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--bds-background-brand-primary) 9%, transparent) 0%, transparent 60%);
 }
 section[data-ambient="split"]::after {
   bottom: 20%;
   right: -15%;
   width: 480px;
   height: 480px;
-  background: radial-gradient(circle, color-mix(in srgb, var(--background-brand-primary) 9%, transparent) 0%, transparent 60%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--bds-background-brand-primary) 9%, transparent) 0%, transparent 60%);
 }
 section[data-ambient="center"]::before {
   top: 50%;
@@ -132,7 +132,7 @@ section[data-ambient="center"]::before {
   width: 720px;
   height: 720px;
   transform: translate(-50%, -50%);
-  background: radial-gradient(circle, color-mix(in srgb, var(--background-brand-primary) 9%, transparent) 0%, transparent 70%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--bds-background-brand-primary) 9%, transparent) 0%, transparent 70%);
 }
 section[data-ambient="bottom"]::before {
   bottom: -30%;
@@ -140,7 +140,7 @@ section[data-ambient="bottom"]::before {
   transform: translateX(-50%);
   width: 900px;
   height: 600px;
-  background: radial-gradient(ellipse, color-mix(in srgb, var(--background-brand-primary) 9%, transparent) 0%, transparent 60%);
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--bds-background-brand-primary) 9%, transparent) 0%, transparent 60%);
   border-radius: 50%;
 }
 section[data-ambient="depth"]::before {
@@ -149,7 +149,7 @@ section[data-ambient="depth"]::before {
   width: 60vw;
   height: 60vw;
   border-radius: 50%;
-  background: radial-gradient(closest-side, color-mix(in srgb, var(--background-accent-blue) 8%, transparent), transparent 70%);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--bds-background-accent-blue) 8%, transparent), transparent 70%);
 }
 section[data-ambient="depth"]::after {
   bottom: -10%;
@@ -158,7 +158,7 @@ section[data-ambient="depth"]::after {
   height: 40vw;
   border-radius: 50%;
   filter: blur(60px);
-  background: radial-gradient(closest-side, color-mix(in srgb, var(--background-brand-primary) 14%, transparent), transparent 70%);
+  background: radial-gradient(closest-side, color-mix(in srgb, var(--bds-background-brand-primary) 14%, transparent), transparent 70%);
 }
 
 /* ───────────────────────────────────────────────────────────────────
@@ -177,11 +177,11 @@ section[data-edge]::after {
 }
 section[data-edge]::before {
   top: 0;
-  background: linear-gradient(to bottom, var(--page-primary), transparent);
+  background: linear-gradient(to bottom, var(--bds-page-primary), transparent);
 }
 section[data-edge]::after {
   bottom: 0;
-  background: linear-gradient(to top, var(--page-primary), transparent);
+  background: linear-gradient(to top, var(--bds-page-primary), transparent);
 }
 
 /* ───────────────────────────────────────────────────────────────────
@@ -203,7 +203,7 @@ section[data-edge]::after {
   z-index: 0;
   background: radial-gradient(
     500px circle at var(--mx, 50%) var(--my, 50%),
-    color-mix(in srgb, var(--background-brand-primary) 10%, transparent),
+    color-mix(in srgb, var(--bds-background-brand-primary) 10%, transparent),
     transparent 40%
   );
   opacity: 0;

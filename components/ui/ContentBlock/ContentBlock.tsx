@@ -37,9 +37,9 @@ export interface ContentBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   size?: ContentBlockSize;
   /**
    * On-color mode — for a block sitting on a filled brand/dark surface.
-   * Swaps `title`/`subtitle`/`description` to `--text-on-color-dark` so the
+   * Swaps `title`/`subtitle`/`description` to `--bds-text-on-color-dark` so the
    * consumer never pushes a per-instance `color` override into a slot it does
-   * not own. On `--surface-brand-primary` the pair is 3.78:1 — AA-large, not
+   * not own. On `--bds-surface-brand-primary` the pair is 3.78:1 — AA-large, not
    * AA (`tokens/contrast-pairings.json`); keep band body copy short.
    */
   onColor?: boolean;

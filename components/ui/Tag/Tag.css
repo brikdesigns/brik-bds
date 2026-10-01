@@ -14,81 +14,81 @@
   justify-content: center;
   align-items: center;
   width: fit-content;
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
   line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically */
-  color: var(--text-primary);
+  color: var(--bds-text-primary);
   text-decoration: none;
   white-space: nowrap;
   text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wide);
+  letter-spacing: var(--bds-letter-spacing-wide);
   cursor: default;
   user-select: none;
   overflow: clip;
-  transition: background-color var(--duration-md) var(--ease-out);
+  transition: background-color var(--bds-duration-md) var(--bds-ease-out);
   box-sizing: border-box;
 }
 
 /* ─── Appearance (shared axis with Badge/Chip) ───────────────── */
 
 .bds-tag--solid {
-  background-color: var(--background-secondary);
-  /* On-color label. The base `--text-primary` pairs with the page, not this
-     fill: it holds in light (dark text on the light --background-secondary tint)
+  background-color: var(--bds-background-secondary);
+  /* On-color label. The base `--bds-text-primary` pairs with the page, not this
+     fill: it holds in light (dark text on the light --bds-background-secondary tint)
      but fails WCAG AA in dark mode (3.43:1, light text on the mid-gray tint).
-     `--text-on-color-light` holds AA in both themes (18.76:1 / 5.46:1) — the
-     same pairing SegmentedControl uses for its `--background-secondary` track. */
-  color: var(--text-on-color-light);
+     `--bds-text-on-color-light` holds AA in both themes (18.76:1 / 5.46:1) — the
+     same pairing SegmentedControl uses for its `--bds-background-secondary` track. */
+  color: var(--bds-text-on-color-light);
 }
 
 .bds-tag--subtle {
   background-color: transparent;
-  border: var(--border-width-md) solid var(--border-secondary);
+  border: var(--bds-border-width-md) solid var(--bds-border-secondary);
 }
 
 /* Quiet neutral fill — low-emphasis category label. Same AA-cleared
    pairing as Badge `info` (`--background-status-neutral` +
-   `--text-status-neutral`) — do NOT use `--text-muted` here, it fails
+   `--text-status-neutral`) — do NOT use `--bds-text-muted` here, it fails
    WCAG AA (1.87:1, see Select.css). */
 .bds-tag--muted {
-  background-color: var(--surface-neutral);
-  color: var(--text-neutral);
+  background-color: var(--bds-surface-neutral);
+  color: var(--bds-text-neutral);
 }
 
 /* ─── Sizes (shared scale with Badge) ────────────────────────── */
 
 .bds-tag--xs {
   /* bds-lint-ignore — 24px icon-only tag matches shared indicator spec */
-  width: var(--size-600);
-  height: var(--size-600);
+  width: var(--bds-size-600);
+  height: var(--bds-size-600);
   padding: 0;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--bds-border-radius-sm);
   justify-content: center;
   gap: 0;
 }
 
 .bds-tag--sm {
-  padding: var(--padding-tiny) var(--padding-sm);
-  gap: var(--gap-xs);
-  font-size: var(--label-tiny);
-  height: var(--size-700);
-  border-radius: var(--border-radius-sm);
+  padding: var(--bds-padding-tiny) var(--bds-padding-sm);
+  gap: var(--bds-gap-xs);
+  font-size: var(--bds-label-tiny);
+  height: var(--bds-size-700);
+  border-radius: var(--bds-border-radius-sm);
 }
 
 .bds-tag--md {
-  padding: var(--padding-sm) var(--padding-md);
-  gap: var(--gap-sm);
-  font-size: var(--label-sm);
-  height: var(--size-800);
-  border-radius: var(--border-radius-md);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
+  gap: var(--bds-gap-sm);
+  font-size: var(--bds-label-sm);
+  height: var(--bds-size-800);
+  border-radius: var(--bds-border-radius-md);
 }
 
 .bds-tag--lg {
-  padding: var(--padding-sm) var(--padding-md);
-  gap: var(--gap-md);
-  font-size: var(--label-md);
-  height: var(--size-1000);
-  border-radius: var(--border-radius-md);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
+  gap: var(--bds-gap-md);
+  font-size: var(--bds-label-md);
+  height: var(--bds-size-1000);
+  border-radius: var(--bds-border-radius-md);
 }
 
 /* ─── Density (compact — tighter horizontal padding for dense rows) ── */
@@ -99,12 +99,12 @@
    padding) and is unaffected. */
 
 .bds-tag--compact.bds-tag--sm {
-  padding-inline: var(--padding-xs);
+  padding-inline: var(--bds-padding-xs);
 }
 
 .bds-tag--compact.bds-tag--md,
 .bds-tag--compact.bds-tag--lg {
-  padding-inline: var(--padding-sm);
+  padding-inline: var(--bds-padding-sm);
 }
 
 /* ─── Disabled ────────────────────────────────────────────────── */
@@ -122,14 +122,14 @@
 
 .bds-tag--solid.bds-tag--disabled,
 .bds-tag--muted.bds-tag--disabled {
-  background-color: var(--background-disabled);
-  color: var(--text-disabled);
+  background-color: var(--bds-background-disabled);
+  color: var(--bds-text-disabled);
 }
 
 /* No fill of its own — a disabled fill would turn the outline into a solid grey
    block, the carve-out Button.css:270-276 already discovered. */
 .bds-tag--subtle.bds-tag--disabled {
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
 }
 
 /* ─── Icon Wrapper (shared sizing with Badge) ────────────────── */
@@ -143,25 +143,25 @@
 
 /* Icon font-size matches container so the glyph fills the box */
 .bds-tag--xs .bds-tag__icon {
-  font-size: var(--icon-sm);
+  font-size: var(--bds-icon-sm);
 }
 
 .bds-tag--sm .bds-tag__icon {
-  width: var(--size-400);
-  height: var(--size-400);
-  font-size: var(--icon-sm);
+  width: var(--bds-size-400);
+  height: var(--bds-size-400);
+  font-size: var(--bds-icon-sm);
 }
 
 .bds-tag--md .bds-tag__icon {
-  width: var(--size-400);
-  height: var(--size-400);
-  font-size: var(--icon-sm);
+  width: var(--bds-size-400);
+  height: var(--bds-size-400);
+  font-size: var(--bds-icon-sm);
 }
 
 .bds-tag--lg .bds-tag__icon {
-  width: var(--icon-lg);
-  height: var(--icon-lg);
-  font-size: var(--label-xl);
+  width: var(--bds-icon-lg);
+  height: var(--bds-icon-lg);
+  font-size: var(--bds-label-xl);
 }
 
 /* ─── Remove Button ───────────────────────────────────────────── */

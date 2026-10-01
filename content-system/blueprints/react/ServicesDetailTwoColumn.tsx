@@ -10,8 +10,8 @@
  * The 2-column list shape here doesn't use `<Card layout="stack">` —
  * these are plain title/description rows with no card surface. The
  * typography pairs respect the family↔size rule:
- *   title (h3)  — --font-family-heading + --heading-md
- *   description — --font-family-body + --body-md
+ *   title (h3)  — --bds-font-family-heading + --bds-heading-md
+ *   description — --bds-font-family-body + --bds-body-md
  *
  * @summary Key adapter — `<CardGrid>` + 2-col title/desc list.
  */
@@ -31,19 +31,19 @@ const LIST_STYLE: CSSProperties = {
 
 const TITLE_STYLE: CSSProperties = {
   margin: 0,
-  fontFamily: 'var(--font-family-heading)',
-  fontSize: 'var(--heading-md)',
-  fontWeight: 'var(--font-weight-semibold)',
-  lineHeight: 'var(--font-line-height-tight)',
-  color: 'var(--text-primary)',
+  fontFamily: 'var(--bds-font-family-heading)',
+  fontSize: 'var(--bds-heading-md)',
+  fontWeight: 'var(--bds-font-weight-semibold)',
+  lineHeight: 'var(--bds-font-line-height-tight)',
+  color: 'var(--bds-text-primary)',
 };
 
 const DESC_STYLE: CSSProperties = {
   margin: 0,
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-md)',
-  lineHeight: 'var(--font-line-height-normal)',
-  color: 'var(--text-primary)',
+  fontFamily: 'var(--bds-font-family-body)',
+  fontSize: 'var(--bds-body-md)',
+  lineHeight: 'var(--bds-font-line-height-normal)',
+  color: 'var(--bds-text-primary)',
 };
 
 export function ServicesDetailTwoColumn({ section }: Props) {

@@ -55,7 +55,7 @@ export const Default: Story = {
  *  @summary All credit-card marks */
 export const CreditCard: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-md)', alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--bds-gap-md)', alignItems: 'center' }}>
       {CREDIT_CARD_LOGOS.map((name) => (
         <Logo key={name} set="credit-card" name={name} size="lg" />
       ))}
@@ -67,7 +67,7 @@ export const CreditCard: Story = {
  *  connects to. @summary All integration marks */
 export const Integration: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--gap-md)', alignItems: 'center' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--bds-gap-md)', alignItems: 'center' }}>
       {INTEGRATION_LOGOS.map((name) => (
         <Logo key={name} set="integration" name={name} size="lg" />
       ))}
@@ -83,7 +83,7 @@ export const Integration: Story = {
  *  args-driven story can't express. @summary In Card media + TableLogoCell */
 export const InContainers: Story = {
   render: () => (
-    <div style={{ display: 'grid', gap: 'var(--gap-lg)', maxWidth: 420 }}>
+    <div style={{ display: 'grid', gap: 'var(--bds-gap-lg)', maxWidth: 420 }}>
       <Card media={{ logo: { set: 'integration', name: 'notion' } }}>
         <CardTitle as="h4">Notion</CardTitle>
         <CardDescription>Connected</CardDescription>

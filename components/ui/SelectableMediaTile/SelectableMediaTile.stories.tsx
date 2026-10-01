@@ -25,7 +25,7 @@ const Grid = ({ children }: { children: React.ReactNode }) => (
     style={{
       display: 'grid',
       gridTemplateColumns: 'repeat(3, 140px)',
-      gap: 'var(--gap-sm)',
+      gap: 'var(--bds-gap-sm)',
     }}
   >
     {children}

@@ -65,12 +65,12 @@ describe('formatCountUp (#2529)', () => {
 
 describe('cubicBezier (#2529)', () => {
   it('pins the endpoints', () => {
-    const ease = cubicBezier(0.16, 1, 0.3, 1); // --ease-out
+    const ease = cubicBezier(0.16, 1, 0.3, 1); // --bds-ease-out
     expect(ease(0)).toBeCloseTo(0, 3);
     expect(ease(1)).toBeCloseTo(1, 3);
   });
 
-  it('decelerates — --ease-out is past halfway by the time x is 0.5', () => {
+  it('decelerates — --bds-ease-out is past halfway by the time x is 0.5', () => {
     const ease = cubicBezier(0.16, 1, 0.3, 1);
     expect(ease(0.5)).toBeGreaterThan(0.5);
   });

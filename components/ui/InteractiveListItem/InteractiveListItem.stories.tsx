@@ -10,7 +10,7 @@ import { Icon } from '../Icon';
 
 const Stack = ({
   children,
-  gap = 'var(--gap-tiny)',
+  gap = 'var(--bds-gap-tiny)',
 }: {
   children: React.ReactNode;
   gap?: string;
@@ -116,12 +116,12 @@ export const ActivityFeed: Story = {
               style={{
                 width: 32,
                 height: 32,
-                borderRadius: 'var(--border-radius-circle)',
-                backgroundColor: 'var(--surface-secondary)',
+                borderRadius: 'var(--bds-border-radius-circle)',
+                backgroundColor: 'var(--bds-surface-secondary)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: 'var(--body-md)',
+                fontSize: 'var(--bds-body-md)',
               }}
               aria-hidden="true"
             >
@@ -132,7 +132,7 @@ export const ActivityFeed: Story = {
           subtitle={
             <>
               <span>Acme Dental Supply · Submitted 2d ago</span>
-              <span style={{ display: 'flex', gap: 'var(--gap-sm)' }}>
+              <span style={{ display: 'flex', gap: 'var(--bds-gap-sm)' }}>
                 <Badge tone="warning" size="xs">In review</Badge>
                 <Badge tone="negative" size="xs">High</Badge>
               </span>
@@ -147,12 +147,12 @@ export const ActivityFeed: Story = {
               style={{
                 width: 32,
                 height: 32,
-                borderRadius: 'var(--border-radius-circle)',
-                backgroundColor: 'var(--surface-positive, var(--surface-secondary))',
+                borderRadius: 'var(--bds-border-radius-circle)',
+                backgroundColor: 'var(--bds-surface-positive, var(--bds-surface-secondary))',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: 'var(--body-md)',
+                fontSize: 'var(--bds-body-md)',
               }}
               aria-hidden="true"
             >
@@ -163,7 +163,7 @@ export const ActivityFeed: Story = {
           subtitle={
             <>
               <span>Sarah Mitchell · Resolved 5d ago</span>
-              <span style={{ display: 'flex', gap: 'var(--gap-sm)' }}>
+              <span style={{ display: 'flex', gap: 'var(--bds-gap-sm)' }}>
                 <Badge tone="positive" size="xs">Resolved</Badge>
               </span>
             </>
@@ -199,7 +199,7 @@ export const Selectable: Story = {
     const [selectedId, setSelectedId] = React.useState<string>('discovery');
     return (
       <div style={{ minWidth: 360 }}>
-        <Stack gap="var(--gap-sm)">
+        <Stack gap="var(--bds-gap-sm)">
           {options.map((opt) => {
             const isSelected = selectedId === opt.id;
             return (
@@ -210,8 +210,8 @@ export const Selectable: Story = {
                   <Icon
                     icon={isSelected ? 'ph:check-circle-fill' : 'ph:file-text'}
                     style={{
-                      fontSize: 'var(--icon-md)',
-                      color: isSelected ? 'var(--text-brand-primary)' : 'var(--text-muted)',
+                      fontSize: 'var(--bds-icon-md)',
+                      color: isSelected ? 'var(--bds-text-brand-primary)' : 'var(--bds-text-muted)',
                     }}
                   />
                 }
@@ -263,7 +263,7 @@ export const ReadOnly: Story = {
     ];
     return (
       <div style={{ minWidth: 360 }}>
-        <Stack gap="var(--gap-tiny)">
+        <Stack gap="var(--bds-gap-tiny)">
           {rows.map((row) => (
             <InteractiveListItem
               key={row.title}

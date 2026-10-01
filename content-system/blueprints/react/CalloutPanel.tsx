@@ -24,9 +24,9 @@
  * `bds-blueprint-section__container` on the container.
  *
  * Token pairs (paired family ↔ size — never mix):
- *   subtitle    — --font-family-label + --label-lg (uppercase eyebrow)
- *   title (h2)  — --font-family-heading + clamp(--heading-lg, …, --heading-huge)
- *   description — --font-family-body + --heading-sm (section lead)
+ *   subtitle    — --bds-font-family-label + --bds-label-lg (uppercase eyebrow)
+ *   title (h2)  — --bds-font-family-heading + clamp(--bds-heading-lg, …, --bds-heading-huge)
+ *   description — --bds-font-family-body + --bds-heading-sm (section lead)
  *
  * a11y: `<section>` with `aria-labelledby` → the h2; the plan title is an
  * h3 nested under the section h2; CTA uses `Button` size="md" — DO NOT

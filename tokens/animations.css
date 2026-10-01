@@ -7,7 +7,7 @@
  * Import in consumer projects alongside figma-tokens.css and gap-fills.css:
  *   @import '../../brik-bds/tokens/animations.css';
  *
- * Usage in components: animation: bds-pulse 1.4s var(--ease-in-out) infinite;
+ * Usage in components: animation: bds-pulse 1.4s var(--bds-ease-in-out) infinite;
  * Usage with utility classes: see motion-classes.css
  * ─────────────────────────────────────────────────────────────────────────────
  */

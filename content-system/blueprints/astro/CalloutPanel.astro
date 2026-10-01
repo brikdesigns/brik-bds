@@ -105,57 +105,57 @@ const ctaUrl = cta && 'url' in cta ? cta.url : undefined;
   /* Section rhythm + centred container: ../section-shell.css (ADR-021).
      This family's rhythm moved from 9vw to the harmonised 7vw. */
   .bds-callout-panel {
-    background: var(--bds-callout-panel-bg, var(--page-primary));
+    background: var(--bds-callout-panel-bg, var(--bds-page-primary));
   }
 
   /* ── Section header ─────────────────────────────────────────── */
 
   .bds-callout-panel__header {
     text-align: center;
-    max-width: var(--content-width-text-md);
+    max-width: var(--bds-content-width-text-md);
     margin-inline: auto;
-    margin-bottom: var(--padding-xl);
+    margin-bottom: var(--bds-padding-xl);
     display: flex;
     flex-direction: column;
   }
 
   /* Content rhythm (ADR-023 §3), mirroring the React twin in CalloutPanel.css:
-     subtitle→title is tight (--gap-sm), title→description is medium
-     (--gap-md). */
+     subtitle→title is tight (--bds-gap-sm), title→description is medium
+     (--bds-gap-md). */
 
   .bds-callout-panel__header > * + * {
-    margin-top: var(--gap-md);
+    margin-top: var(--bds-gap-md);
   }
 
   .bds-callout-panel__subtitle + .bds-callout-panel__title {
-    margin-top: var(--gap-sm);
+    margin-top: var(--bds-gap-sm);
   }
 
   .bds-callout-panel__subtitle {
     margin: 0;
-    font-family: var(--font-family-label);
-    font-size: var(--label-lg);
-    font-weight: var(--font-weight-medium);
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-lg);
+    font-weight: var(--bds-font-weight-medium);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--text-brand-primary);
+    color: var(--bds-text-brand-primary);
   }
 
   .bds-callout-panel__header .bds-callout-panel__title {
     margin: 0;
-    font-family: var(--font-family-heading);
-    font-size: clamp(var(--heading-lg), 3.5vw, var(--heading-xl));
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--font-line-height-tight);
-    color: var(--text-primary);
+    font-family: var(--bds-font-family-heading);
+    font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-xl));
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
   }
 
   .bds-callout-panel__header .bds-callout-panel__description {
     margin: 0;
-    font-family: var(--font-family-body);
-    font-size: var(--heading-sm);
-    line-height: var(--font-line-height-relaxed);
-    color: var(--text-primary);
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-heading-sm);
+    line-height: var(--bds-font-line-height-relaxed);
+    color: var(--bds-text-primary);
   }
 
   /* ── Two-column split ───────────────────────────────────────── */
@@ -163,7 +163,7 @@ const ctaUrl = cta && 'url' in cta ? cta.url : undefined;
   .bds-callout-panel__columns {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--bds-callout-panel-gap, var(--gap-xl));
+    gap: var(--bds-callout-panel-gap, var(--bds-gap-xl));
     align-items: center;
   }
 
@@ -189,33 +189,33 @@ const ctaUrl = cta && 'url' in cta ? cta.url : undefined;
   /* ── Plan callout card ──────────────────────────────────────── */
 
   .bds-callout-panel__main {
-    background: var(--bds-callout-panel-card-bg, var(--surface-secondary));
-    border-radius: var(--bds-callout-panel-card-radius, var(--border-radius-lg));
-    padding: var(--bds-callout-panel-card-pad, var(--padding-xl));
+    background: var(--bds-callout-panel-card-bg, var(--bds-surface-secondary));
+    border-radius: var(--bds-callout-panel-card-radius, var(--bds-border-radius-lg));
+    padding: var(--bds-callout-panel-card-pad, var(--bds-padding-xl));
     display: flex;
     flex-direction: column;
-    gap: var(--gap-md);
+    gap: var(--bds-gap-md);
     align-items: flex-start;
   }
 
   .bds-callout-panel__main .bds-callout-panel__title {
     margin: 0;
-    font-family: var(--font-family-heading);
-    font-size: var(--heading-md);
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--font-line-height-tight);
-    color: var(--text-primary);
+    font-family: var(--bds-font-family-heading);
+    font-size: var(--bds-heading-md);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
   }
 
   .bds-callout-panel__main .bds-callout-panel__description {
     margin: 0;
-    font-family: var(--font-family-body);
-    font-size: var(--body-xl);
-    line-height: var(--font-line-height-relaxed);
-    color: var(--text-primary);
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-xl);
+    line-height: var(--bds-font-line-height-relaxed);
+    color: var(--bds-text-primary);
   }
 
   .bds-callout-panel__cta {
-    margin-top: var(--gap-md);
+    margin-top: var(--bds-gap-md);
   }
 </style>

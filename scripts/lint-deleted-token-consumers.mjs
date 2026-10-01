@@ -160,11 +160,15 @@ function removedTokenNames(base, head) {
     die(2, `git diff ${base}..${head} -- ${TOKEN_SOURCE_PATHSPEC} failed: ${err.stderr?.toString().trim() || err.message}`);
   }
   const names = new Set();
+  const readded = new Set();
   for (const line of diff.split('\n')) {
-    if (!line.startsWith('-') || line.startsWith('---')) continue;
-    const m = /^-\s*(--[A-Za-z0-9_-]+)\s*:/.exec(line);
-    if (m) names.add(m[1]);
+    if (line.startsWith('---') || line.startsWith('+++')) continue;
+    const m = /^([-+])\s*(--[A-Za-z0-9_-]+)\s*:/.exec(line);
+    if (!m) continue;
+    // A changed value is a `-` line plus a `+` line of the same name: still declared, not removed.
+    (m[1] === '-' ? names : readded).add(m[2]);
   }
+  for (const name of readded) names.delete(name);
   return names;
 }
 

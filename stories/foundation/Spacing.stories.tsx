@@ -38,31 +38,31 @@ const GAP = Object.fromEntries(
 /* ─── Helpers ─────────────────────────────────────────────────── */
 
 const Page = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ padding: 'var(--padding-xl)', fontFamily: 'var(--font-family-body)' }}>{children}</div>
+  <div style={{ padding: 'var(--bds-padding-xl)', fontFamily: 'var(--bds-font-family-body)' }}>{children}</div>
 );
 
 const SampleCard = () => (
   <div
     style={{
-      background: 'var(--surface-primary)',
-      border: '1px solid var(--border-secondary)',
-      borderRadius: 'var(--border-radius-md)',
-      padding: 'var(--padding-lg)',
+      background: 'var(--bds-surface-primary)',
+      border: '1px solid var(--bds-border-secondary)',
+      borderRadius: 'var(--bds-border-radius-md)',
+      padding: 'var(--bds-padding-lg)',
       display: 'flex',
       flexDirection: 'column',
-      gap: 'var(--gap-sm)',
+      gap: 'var(--bds-gap-sm)',
       maxWidth: 280,
     }}
   >
-    <h3 style={{ margin: 0, fontFamily: 'var(--font-family-heading)', fontSize: 'var(--heading-sm)', color: 'var(--text-primary)' }}>
+    <h3 style={{ margin: 0, fontFamily: 'var(--bds-font-family-heading)', fontSize: 'var(--bds-heading-sm)', color: 'var(--bds-text-primary)' }}>
       Card title
     </h3>
-    <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
+    <p style={{ margin: 0, fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-secondary)' }}>
       Title, description, actions — <code>padding-lg</code> outer, <code>gap-sm</code> between rows.
     </p>
-    <div style={{ display: 'flex', gap: 'var(--gap-xs)', justifyContent: 'flex-end' }}>
-      <span style={{ padding: 'var(--padding-xs) var(--padding-sm)', border: '1px solid var(--border-primary)', borderRadius: 'var(--border-radius-sm)', fontSize: 'var(--label-sm)', color: 'var(--text-primary)' }}>Cancel</span>
-      <span style={{ padding: 'var(--padding-xs) var(--padding-sm)', background: 'var(--background-brand-primary)', color: 'var(--text-on-color-dark)', borderRadius: 'var(--border-radius-sm)', fontSize: 'var(--label-sm)' }}>Save</span>
+    <div style={{ display: 'flex', gap: 'var(--bds-gap-xs)', justifyContent: 'flex-end' }}>
+      <span style={{ padding: 'var(--bds-padding-xs) var(--bds-padding-sm)', border: '1px solid var(--bds-border-primary)', borderRadius: 'var(--bds-border-radius-sm)', fontSize: 'var(--bds-label-sm)', color: 'var(--bds-text-primary)' }}>Cancel</span>
+      <span style={{ padding: 'var(--bds-padding-xs) var(--bds-padding-sm)', background: 'var(--bds-background-brand-primary)', color: 'var(--bds-text-on-color-dark)', borderRadius: 'var(--bds-border-radius-sm)', fontSize: 'var(--bds-label-sm)' }}>Save</span>
     </div>
   </div>
 );
@@ -89,24 +89,24 @@ export const Modes: Story = {
   render: () => (
     <div
       style={{
-        padding: 'var(--padding-lg)',
+        padding: 'var(--bds-padding-lg)',
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: 'var(--gap-md)',
-        background: 'var(--surface-secondary)',
+        gap: 'var(--bds-gap-md)',
+        background: 'var(--bds-surface-secondary)',
       }}
     >
       {MODES.map((mode) => (
         <div
           key={mode}
           data-mode-spacing={mode === 'default' ? undefined : mode}
-          style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)' }}
+          style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-sm)' }}
         >
           <code
             style={{
               fontFamily: 'ui-monospace, monospace',
-              fontSize: 'var(--body-xs)',
-              color: 'var(--text-secondary)',
+              fontSize: 'var(--bds-body-xs)',
+              color: 'var(--bds-text-secondary)',
             }}
           >
             {mode === 'default' ? '<div>' : `data-mode-spacing="${mode}"`}

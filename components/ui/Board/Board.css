@@ -3,7 +3,7 @@
  * Board — Kanban-style horizontal board layout.
  *
  * @token-exempt — the raw #fff values (card-check icon border) are var()
- * fallbacks for --text-on-color-dark. They activate only if the token
+ * fallbacks for --bds-text-on-color-dark. They activate only if the token
  * pipeline fails (stylesheet race, consumer missing BDS), matching the
  * defensive pattern in portal's global-error.tsx. Not a migration candidate.
  */
@@ -12,7 +12,7 @@
 
 .bds-board {
   display: flex;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
@@ -22,7 +22,7 @@
 
 /* Hide scrollbar but keep functionality */
 .bds-board::-webkit-scrollbar {
-  height: var(--size-150);
+  height: var(--bds-size-150);
 }
 
 .bds-board::-webkit-scrollbar-track {
@@ -30,12 +30,12 @@
 }
 
 .bds-board::-webkit-scrollbar-thumb {
-  background-color: var(--border-muted); /* bds-lint-ignore token-family — intentional alias: scrollbar thumb (thin UI, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md */
-  border-radius: var(--border-radius-pill);
+  background-color: var(--bds-border-muted); /* bds-lint-ignore token-family — intentional alias: scrollbar thumb (thin UI, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md */
+  border-radius: var(--bds-border-radius-pill);
 }
 
 .bds-board:hover::-webkit-scrollbar-thumb {
-  background-color: var(--border-secondary); /* bds-lint-ignore token-family — intentional alias: scrollbar thumb hover (thin UI, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md */
+  background-color: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: scrollbar thumb hover (thin UI, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md */
 }
 
 /* ─── Board column ────────────────────────────────────── */
@@ -49,7 +49,7 @@
   --bds-board-column-max-width: 400px; /* component-local dimension; no shared registry rung (#2133) */
   max-width: var(--bds-board-column-max-width);
   scroll-snap-align: start;
-  border-radius: var(--border-radius-200);
+  border-radius: var(--bds-border-radius-200);
   /* overflow: visible — card hover shadows, drag previews, and tooltip
      bubbles need to escape the column bounds. Vertical scrolling lives
      on `__items`; horizontal scrolling on the parent `<Board>`. The
@@ -62,46 +62,46 @@
 /* When column has a background color, give child items breathing room
    so cards aren't flush against the rounded corners of the column fill. */
 .bds-board-column[style*="background"] .bds-board-column__items {
-  padding: 0 var(--padding-sm);
+  padding: 0 var(--bds-padding-sm);
 }
 
 .bds-board-column__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--padding-sm) var(--padding-sm) var(--padding-md);
+  padding: var(--bds-padding-sm) var(--bds-padding-sm) var(--bds-padding-md);
   flex-shrink: 0;
 }
 
 .bds-board-column__title-group {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
 }
 
 .bds-board-column__title {
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  color: var(--bds-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  line-height: var(--font-line-height-tight);
+  line-height: var(--bds-font-line-height-tight);
   margin: 0;
 }
 
 .bds-board-column__count {
-  font-family: var(--font-family-label);
-  font-size: var(--body-xs);
-  font-weight: var(--font-weight-medium);
-  color: var(--text-secondary);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-body-xs);
+  font-weight: var(--bds-font-weight-medium);
+  color: var(--bds-text-secondary);
+  line-height: var(--bds-font-line-height-tight);
 }
 
 .bds-board-column__items {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   flex: 1;
   overflow-y: auto;
   min-height: 0;
@@ -110,18 +110,18 @@
 /* ─── Board header (column header with avatar + progress) */
 
 .bds-board-header {
-  border-radius: var(--border-radius-200);
-  padding: var(--padding-md) 0;
+  border-radius: var(--bds-border-radius-200);
+  padding: var(--bds-padding-md) 0;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   flex-shrink: 0;
 }
 
 .bds-board-header__profile {
   display: flex;
   align-items: center;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
 }
 
 .bds-board-header__info {
@@ -133,17 +133,17 @@
 
 /*
  * Column header name — heading family, semibold.
- * Heading scale minimum is --heading-tiny (18px / font-size-200).
- * --font-size-100 (16px) is body/label territory; never use it for a heading.
- * --font-weight-extrabold (800) is inappropriate on heading family;
+ * Heading scale minimum is --bds-heading-tiny (18px / font-size-200).
+ * --bds-font-size-100 (16px) is body/label territory; never use it for a heading.
+ * --bds-font-weight-extrabold (800) is inappropriate on heading family;
  * semibold (600) is the standard heading weight.
  */
 .bds-board-header__name {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-tiny);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-on-color-dark);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-tiny);
+  font-weight: var(--bds-font-weight-semibold);
+  color: var(--bds-text-on-color-dark);
+  line-height: var(--bds-font-line-height-tight);
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -152,15 +152,15 @@
 
 /*
  * Column header subtitle — subtitle family.
- * --subtitle-md matches the visual size with correct semantics.
+ * --bds-subtitle-md matches the visual size with correct semantics.
  */
 .bds-board-header__subtitle {
-  font-family: var(--font-family-subtitle);
-  font-size: var(--subtitle-md);
-  font-weight: var(--font-weight-regular);
-  color: var(--text-on-color-dark);
+  font-family: var(--bds-font-family-subtitle);
+  font-size: var(--bds-subtitle-md);
+  font-weight: var(--bds-font-weight-regular);
+  color: var(--bds-text-on-color-dark);
   opacity: 0.8;
-  line-height: var(--font-line-height-tight);
+  line-height: var(--bds-font-line-height-tight);
   margin: 0;
 }
 
@@ -176,30 +176,30 @@
 .bds-board-header__content {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 
 /* ─── Board card (task card) ─────────────────────────── */
 
 .bds-board-card {
   /* ─── Component-scoped override surface ── */
-  --bds-board-card-accent: var(--border-primary);       /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --bds-board-card-accent: var(--bds-border-primary);       /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   --board-card-hover-translate-y: -1px;                 /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-  background-color: var(--surface-primary);
-  border-left: var(--border-width-xl) solid var(--bds-board-card-accent); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-  border-radius: var(--border-radius-200);
-  padding: var(--space-500) var(--padding-md);
+  background-color: var(--bds-surface-primary);
+  border-left: var(--bds-border-width-xl) solid var(--bds-board-card-accent); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  border-radius: var(--bds-border-radius-200);
+  padding: var(--bds-space-500) var(--bds-padding-md);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   flex-shrink: 0;
-  transition: box-shadow var(--duration-md) var(--ease-out),
-    transform var(--duration-md) var(--ease-out);
+  transition: box-shadow var(--bds-duration-md) var(--bds-ease-out),
+    transform var(--bds-duration-md) var(--bds-ease-out);
 }
 
 .bds-board-card:hover {
-  box-shadow: inset 0 0 0 999px var(--state-hover-overlay),
-    var(--box-shadow-md);
+  box-shadow: inset 0 0 0 999px var(--bds-state-hover-overlay),
+    var(--bds-box-shadow-md);
   transform: translateY(var(--board-card-hover-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
@@ -213,13 +213,13 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 
 .bds-board-card__text {
   display: flex;
   flex-direction: column;
-  gap: var(--space-50);
+  gap: var(--bds-space-50);
   min-width: 0;
   flex: 1;
 }
@@ -227,39 +227,39 @@
 /*
  * Card title — label family, lg size.
  * Task titles are UI metadata, not editorial headings — label family
- * gives better legibility at card density. --label-lg (16px) is the
+ * gives better legibility at card density. --bds-label-lg (16px) is the
  * largest label size and reads well in a compact Kanban card.
  */
 .bds-board-card__title {
-  font-family: var(--font-family-label);
-  font-size: var(--label-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-lg);
+  font-weight: var(--bds-font-weight-semibold);
+  color: var(--bds-text-primary);
+  line-height: var(--bds-font-line-height-tight);
   margin: 0;
 }
 
 /*
  * Card subtitle — subtitle family.
- * Uses --subtitle-md (11.54px) for correct semantic sizing.
+ * Uses --bds-subtitle-md (11.54px) for correct semantic sizing.
  */
 .bds-board-card__subtitle {
-  font-family: var(--font-family-subtitle);
-  font-size: var(--subtitle-md);
-  font-weight: var(--font-weight-regular);
-  color: var(--text-primary);
-  line-height: var(--font-line-height-normal);
+  font-family: var(--bds-font-family-subtitle);
+  font-size: var(--bds-subtitle-md);
+  font-weight: var(--bds-font-weight-regular);
+  color: var(--bds-text-primary);
+  line-height: var(--bds-font-line-height-normal);
   margin: 0;
 }
 
 /* Compact density — tighter card for multi-card-per-column boards.
    Title drops one step; subtitle reads as label-family metadata. */
 .bds-board-card--compact .bds-board-card__title {
-  font-size: var(--label-md);
+  font-size: var(--bds-label-md);
 }
 .bds-board-card--compact .bds-board-card__subtitle {
-  font-family: var(--font-family-label);
-  text-transform: var(--text-transform-label);
+  font-family: var(--bds-font-family-label);
+  text-transform: var(--bds-text-transform-label);
 }
 
 /* Circular completion toggle styling lives in CompletionToggle.css —
@@ -273,13 +273,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 
 .bds-board-card__tags {
   display: flex;
   align-items: center;
-  gap: var(--space-100);
+  gap: var(--bds-space-100);
   flex-wrap: wrap;
   min-width: 0;
 }

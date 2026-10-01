@@ -7,9 +7,9 @@ import { useState, useEffect, type CSSProperties, type ReactNode } from 'react';
 const demoContainer: CSSProperties = {
   position: 'relative',
   overflow: 'hidden',
-  borderRadius: 'var(--border-radius-md)',
-  border: '1px solid var(--border-muted)',
-  backgroundColor: 'var(--surface-secondary)',
+  borderRadius: 'var(--bds-border-radius-md)',
+  border: '1px solid var(--bds-border-muted)',
+  backgroundColor: 'var(--bds-surface-secondary)',
 };
 
 const darkContainer: CSSProperties = {
@@ -21,13 +21,13 @@ const darkContainer: CSSProperties = {
 const codeBlock: CSSProperties = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
   fontSize: 12,
-  backgroundColor: 'var(--surface-secondary)',
+  backgroundColor: 'var(--bds-surface-secondary)',
   padding: '12px 16px',
-  borderRadius: 'var(--border-radius-sm)',
+  borderRadius: 'var(--bds-border-radius-sm)',
   overflow: 'auto',
   whiteSpace: 'pre',
   margin: '8px 0',
-  border: '1px solid var(--border-muted)',
+  border: '1px solid var(--bds-border-muted)',
 };
 
 // ---------------------------------------------------------------------------
@@ -52,7 +52,7 @@ export function AnimationDemo({
   return (
     <div style={{ marginBottom: 24 }}>
       {label && (
-        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8, color: 'var(--text-primary)' }}>
+        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8, color: 'var(--bds-text-primary)' }}>
           {label}
         </div>
       )}
@@ -75,10 +75,10 @@ export function AnimationDemo({
           marginTop: 8,
           padding: '4px 12px',
           fontSize: 12,
-          border: '1px solid var(--border-muted)',
-          borderRadius: 'var(--border-radius-sm)',
-          background: 'var(--surface-primary)',
-          color: 'var(--text-secondary)',
+          border: '1px solid var(--bds-border-muted)',
+          borderRadius: 'var(--bds-border-radius-sm)',
+          background: 'var(--bds-surface-primary)',
+          color: 'var(--bds-text-secondary)',
           cursor: 'pointer',
         }}
       >
@@ -126,8 +126,8 @@ export function ClipRevealDemo({ type }: { type: string }) {
       style={{
         width: '100%',
         height: 160,
-        borderRadius: 'var(--border-radius-md)',
-        background: 'linear-gradient(135deg, var(--background-brand-primary), var(--background-brand-secondary))',
+        borderRadius: 'var(--bds-border-radius-md)',
+        background: 'linear-gradient(135deg, var(--bds-background-brand-primary), var(--bds-background-brand-secondary))',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -153,12 +153,12 @@ export function GrainDemo({ variant = '' }: { variant?: string }) {
       style={{
         width: '100%',
         height: 160,
-        borderRadius: 'var(--border-radius-md)',
-        backgroundColor: variant === 'heavy' ? '#0a0a0a' : 'var(--surface-secondary)',
+        borderRadius: 'var(--bds-border-radius-md)',
+        backgroundColor: variant === 'heavy' ? '#0a0a0a' : 'var(--bds-surface-secondary)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: variant === 'heavy' ? '#f5f5f5' : 'var(--text-primary)',
+        color: variant === 'heavy' ? '#f5f5f5' : 'var(--bds-text-primary)',
         fontSize: 13,
         fontWeight: 500,
         position: 'relative',
@@ -180,8 +180,8 @@ export function GlassDemo({ variant = '' }: { variant?: string }) {
       style={{
         width: '100%',
         height: 200,
-        borderRadius: 'var(--border-radius-lg)',
-        background: 'linear-gradient(135deg, var(--background-brand-primary) 0%, var(--background-brand-secondary) 100%)',
+        borderRadius: 'var(--bds-border-radius-lg)',
+        background: 'linear-gradient(135deg, var(--bds-background-brand-primary) 0%, var(--bds-background-brand-secondary) 100%)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -195,7 +195,7 @@ export function GlassDemo({ variant = '' }: { variant?: string }) {
           padding: '24px 32px',
           borderRadius: 16,
           textAlign: 'center',
-          color: variant === 'dark' ? '#f5f5f5' : 'var(--text-primary)',
+          color: variant === 'dark' ? '#f5f5f5' : 'var(--bds-text-primary)',
         }}
       >
         <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 4 }}>.{cls}</div>
@@ -220,15 +220,15 @@ export function TextEffectDemo({ className, label, dark = false }: { className: 
     <div
       style={{
         padding: '24px 32px',
-        backgroundColor: dark ? '#0a0a0a' : 'var(--surface-secondary)',
-        borderRadius: 'var(--border-radius-md)',
+        backgroundColor: dark ? '#0a0a0a' : 'var(--bds-surface-secondary)',
+        borderRadius: 'var(--bds-border-radius-md)',
         textAlign: 'center',
-        color: dark ? '#f5f5f5' : 'var(--text-primary)',
+        color: dark ? '#f5f5f5' : 'var(--bds-text-primary)',
       }}
     >
       <span
         className={`${className} ${visible ? 'is-visible' : ''}`}
-        style={{ fontSize: 32, fontWeight: 700, fontFamily: 'var(--font-family-heading)' }}
+        style={{ fontSize: 32, fontWeight: 700, fontFamily: 'var(--bds-font-family-heading)' }}
       >
         {label}
       </span>
@@ -246,9 +246,9 @@ export function HoverDemo({ className, label }: { className: string; label: stri
       className={className}
       style={{
         padding: '16px 24px',
-        backgroundColor: 'var(--surface-primary)',
-        border: '1px solid var(--border-muted)',
-        borderRadius: 'var(--border-radius-md)',
+        backgroundColor: 'var(--bds-surface-primary)',
+        border: '1px solid var(--bds-border-muted)',
+        borderRadius: 'var(--bds-border-radius-md)',
         textAlign: 'center',
         cursor: 'pointer',
         fontWeight: 500,
@@ -272,7 +272,7 @@ export function VideoDemo({ variant = '' }: { variant?: string }) {
       style={{
         width: '100%',
         height: 240,
-        borderRadius: 'var(--border-radius-md)',
+        borderRadius: 'var(--bds-border-radius-md)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -312,7 +312,7 @@ export function SectionThemeDemo({ className, label }: { className: string; labe
       className={className}
       style={{
         padding: '32px 24px',
-        borderRadius: 'var(--border-radius-md)',
+        borderRadius: 'var(--bds-border-radius-md)',
         textAlign: 'center',
       }}
     >

@@ -12,7 +12,7 @@ export interface CompletionToggleProps
   disabled?: boolean;
   /**
    * Hover affordance for the incomplete (unchecked) state. `neutral`
-   * (default) borders in `--border-primary`; `brand` tints the hover with a
+   * (default) borders in `--bds-border-primary`; `brand` tints the hover with a
    * brand-primary border + brand-secondary fill, reading as "interactive".
    */
   accent?: 'neutral' | 'brand';

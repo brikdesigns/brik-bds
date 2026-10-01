@@ -9,12 +9,12 @@ export const Pill = ({ children }) => (
   <span
     style={{
       padding: '4px 12px',
-      background: 'var(--surface-secondary)',
-      border: '1px solid var(--border-secondary)',
+      background: 'var(--bds-surface-secondary)',
+      border: '1px solid var(--bds-border-secondary)',
       borderRadius: '9999px',
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--label-sm)',
-      color: 'var(--text-primary)',
+      fontFamily: 'var(--bds-font-family-label)',
+      fontSize: 'var(--bds-label-sm)',
+      color: 'var(--bds-text-primary)',
       whiteSpace: 'nowrap',
     }}
   >
@@ -23,17 +23,17 @@ export const Pill = ({ children }) => (
 );
 
 export const GapScale = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)' }}>
     {['tiny', 'xs', 'sm', 'md', 'lg', 'xl'].map((g) => (
       <div key={g}>
         <div
           style={{
-            fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--body-xs)',
+            fontFamily: 'var(--bds-font-family-label)',
+            fontSize: 'var(--bds-body-xs)',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
-            color: 'var(--text-muted)',
-            marginBottom: 'var(--gap-sm)',
+            color: 'var(--bds-text-muted)',
+            marginBottom: 'var(--bds-gap-sm)',
           }}
         >
           gap="{g}"
@@ -61,7 +61,7 @@ export const TagList = () => (
 );
 
 export const ActionRow = () => (
-  <div style={{ padding: 'var(--padding-md)', borderTop: '1px solid var(--border-secondary)', maxWidth: 480 }}>
+  <div style={{ padding: 'var(--bds-padding-md)', borderTop: '1px solid var(--bds-border-secondary)', maxWidth: 480 }}>
     <Cluster gap="sm" justify="end">
       <Pill>Cancel</Pill>
       <Pill>Save draft</Pill>

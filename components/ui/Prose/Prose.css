@@ -5,19 +5,19 @@
    element-adjacency rhythm and heading/link styling parity. */
 
 .bds-prose {
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-relaxed);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-relaxed);
+  color: var(--bds-text-primary);
 }
 
 .bds-prose a {
-  color: var(--text-text-link);
+  color: var(--bds-text-text-link);
 }
 
 .bds-prose :is(h1, h2, h3) {
-  font-family: var(--font-family-heading);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  color: var(--bds-text-primary);
 }
 
 /* ─── Adjacency rhythm (ADR-023 §3) ─────────────────────────────────
@@ -26,10 +26,10 @@
    legacy flat `.rich-content > * + * { margin-top: gap-md }` rule. */
 
 .bds-prose :is(h1, h2, h3) + p {
-  margin-top: var(--gap-md);
+  margin-top: var(--bds-gap-md);
 }
 
 .bds-prose p + p {
-  margin-top: var(--gap-lg);
+  margin-top: var(--bds-gap-lg);
 }
 }

@@ -69,6 +69,10 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 
 import { lintIgnoreReason } from './lib/bds-lint-ignore.cjs';
+import { PREFIX, readGrammar } from './lib/bds-prefix.mjs';
+
+/** Slots the naming grammar registers as Primitive/Semantic (everything except the `bds` component slot). */
+const PRIM_SEM_SLOTS = readGrammar().slots.filter((e) => e.tier !== 'component').map((e) => e.slot);
 
 const DEFAULT_DIR = 'tokens';
 
@@ -78,18 +82,23 @@ const DEFAULT_DIR = 'tokens';
  * of these (and not a Webflow `--_*` or Component `--bds-*`) is Primitive-tier.
  */
 const SD_SEMANTIC_PREFIXES = [
-  '--padding-', '--gap-', '--text-', '--background-', '--surface-',
-  '--border-primary', '--border-secondary', '--border-muted', '--border-brand',
-  '--border-input', '--border-inverse', '--border-on-color', '--border-focus',
-  '--border-width-', '--border-radius-', '--page-', '--section-', '--body-', '--label-',
-  '--heading-', '--display-', '--subtitle-', '--icon-', '--font-family-',
-  '--box-shadow-', '--blur-radius-', '--size-', '--tooltip-',
+  '--bds-padding-', '--bds-gap-', '--bds-text-', '--bds-background-', '--bds-surface-',
+  '--bds-border-primary', '--bds-border-secondary', '--bds-border-muted', '--bds-border-brand',
+  '--bds-border-input', '--bds-border-inverse', '--bds-border-on-color', '--bds-border-focus',
+  '--bds-border-width-', '--bds-border-radius-', '--bds-page-', '--bds-section-', '--bds-body-', '--bds-label-',
+  '--bds-heading-', '--bds-display-', '--bds-subtitle-', '--bds-icon-', '--bds-font-family-',
+  '--bds-box-shadow-', '--bds-blur-radius-', '--bds-size-', '--bds-tooltip-',
 ];
 
 /** True when `name` is a Component-tier (t4) token — the only tier permitted
  *  to reference a Semantic unconditionally. */
 export function isComponent(name) {
-  return name.startsWith('--bds-');
+  // ADR-043: the System ID leads EVERY tier, so the prefix no longer marks t4. A
+  // `--bds-` name is Component-tier only when its body is on no Primitive/Semantic
+  // slot of the naming grammar (`--bds-slider-thumb-size`, not `--bds-space-600`).
+  if (!name.startsWith(PREFIX)) return false;
+  const body = name.slice(PREFIX.length);
+  return !PRIM_SEM_SLOTS.some((slot) => body === slot || body.startsWith(`${slot}-`));
 }
 
 /** True when `name` is a Semantic-tier (t3) token. */
@@ -114,7 +123,7 @@ export function isSemantic(name) {
  * Primitives like `--space-600`, `--font-size-1600`) resolve to `false`.
  */
 export function resolvesToColor(name, defs, seen = new Set()) {
-  if (name.startsWith('--color-')) return true;
+  if (name.startsWith('--bds-color-')) return true;
   if (seen.has(name)) return false; // cycle guard — a cycle never reaches a color
   seen.add(name);
   const refs = defs[name];
@@ -253,9 +262,9 @@ function main() {
   if (findings.length > 0) {
     console.error('');
     console.error(`${findings.length} token(s) referencing a non-color Semantic token.`);
-    console.error('Point each at a Primitive (--space-*, --font-size-*, a numeric scale step, …). If it');
+    console.error('Point each at a Primitive (--bds-space-*, --bds-font-size-*, a numeric scale step, …). If it');
     console.error('must track a mode, give it its own [data-mode-*] ladder over Primitives (ADR-025,');
-    console.error('--page-inset). A color role-alias (target resolves to --color-*) is allowed (ADR-035).');
+    console.error('--bds-page-inset). A color role-alias (target resolves to --bds-color-*) is allowed (ADR-035).');
     console.error('A deliberate, temporary alias takes a reasoned `bds-lint-ignore — <why>`.');
     console.error('Tier model: design.brikdesigns.com/docs/foundation/token-anatomy#tier');
     process.exit(1);

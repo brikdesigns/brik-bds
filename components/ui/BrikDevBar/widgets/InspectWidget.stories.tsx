@@ -39,26 +39,26 @@ function InspectDemo() {
   return (
     <>
       <BrikDevBar />
-      <div style={{ padding: 'var(--padding-xl)', fontFamily: 'var(--font-family-body)', maxWidth: 720 }}>
-        <h2 style={{ ...{ fontSize: 'var(--heading-md)', fontWeight: 700, color: 'var(--text-primary)', margin: 0 } }}>
+      <div style={{ padding: 'var(--bds-padding-xl)', fontFamily: 'var(--bds-font-family-body)', maxWidth: 720 }}>
+        <h2 style={{ ...{ fontSize: 'var(--bds-heading-md)', fontWeight: 700, color: 'var(--bds-text-primary)', margin: 0 } }}>
           Brik Inspect
         </h2>
-        <p style={{ color: 'var(--text-secondary)', marginTop: 'var(--gap-sm)' }}>
+        <p style={{ color: 'var(--bds-text-secondary)', marginTop: 'var(--bds-gap-sm)' }}>
           Hover any element to see its computed style audited against BDS tokens. Click to lock
           the panel; click again or hit ESC to release. The inspect script is injected by{' '}
           <code>BrikDevBar.tsx</code> on mount.
         </p>
 
-        <div style={{ marginTop: 'var(--gap-xl)', display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
+        <div style={{ marginTop: 'var(--bds-gap-xl)', display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-md)' }}>
           <SampleCard
             title="Token-clean card"
             body="Every value below routes through a BDS variable — Inspect should show all green."
             style={{
-              padding: 'var(--padding-lg)',
-              border: '1px solid var(--border-secondary)',
-              borderRadius: 'var(--border-radius-md)',
-              background: 'var(--surface-primary)',
-              color: 'var(--text-primary)',
+              padding: 'var(--bds-padding-lg)',
+              border: '1px solid var(--bds-border-secondary)',
+              borderRadius: 'var(--bds-border-radius-md)',
+              background: 'var(--bds-surface-primary)',
+              color: 'var(--bds-text-primary)',
             }}
           />
 
@@ -91,8 +91,8 @@ function SampleCard({
 }) {
   return (
     <div style={style}>
-      <h3 style={{ margin: 0, fontSize: 'var(--heading-sm)', fontWeight: 600 }}>{title}</h3>
-      <p style={{ margin: 'var(--gap-sm) 0 0', fontSize: 'var(--body-sm)' }}>{body}</p>
+      <h3 style={{ margin: 0, fontSize: 'var(--bds-heading-sm)', fontWeight: 600 }}>{title}</h3>
+      <p style={{ margin: 'var(--bds-gap-sm) 0 0', fontSize: 'var(--bds-body-sm)' }}>{body}</p>
     </div>
   );
 }
@@ -114,7 +114,7 @@ export const LiveDemo: Story = {
 export const InteractionTestUrlActivation: Story = {
   tags: ['!manifest', 'interaction-test'],
   render: () => (
-    <div style={{ padding: 'var(--padding-lg)', fontFamily: 'var(--font-family-body)', color: 'var(--text-secondary)' }}>
+    <div style={{ padding: 'var(--bds-padding-lg)', fontFamily: 'var(--bds-font-family-body)', color: 'var(--bds-text-secondary)' }}>
       Behavioral assertion only — the play function loads the inspect widget with
       <code> ?inspect=1</code> and asserts it auto-activates. No visual surface.
     </div>

@@ -38,7 +38,7 @@ export interface SyncedMediaStepsProps extends HTMLAttributes<HTMLDivElement> {
   defaultActiveStep?: string;
   /** Auto-advance through the steps while the component is in view. Default `true`. Always off under `prefers-reduced-motion: reduce`. */
   autoplay?: boolean;
-  /** Dwell time per step — any CSS duration (`number` is treated as ms). Overrides the `--bds-synced-media-steps-interval` default, which resolves to the `--duration-autoplay` token. Drives both the countdown bar and the advance timer. */
+  /** Dwell time per step — any CSS duration (`number` is treated as ms). Overrides the `--bds-synced-media-steps-interval` default, which resolves to the `--bds-duration-autoplay` token. Drives both the countdown bar and the advance timer. */
   interval?: number | string;
   /** Pause the auto-advance while the pointer is over the component. Default `true`. Focus always pauses. */
   pauseOnHover?: boolean;
@@ -74,7 +74,7 @@ function parseCssDuration(raw: string): number | null {
 /**
  * Read the dwell time off the resolved custom property, so the JS timer and the
  * CSS countdown animation share one source of truth (the `interval` prop sets
- * that property; its default resolves to the `--duration-autoplay` token).
+ * that property; its default resolves to the `--bds-duration-autoplay` token).
  */
 function readIntervalMs(el: HTMLElement | null): number {
   if (!el || typeof window === 'undefined' || !window.getComputedStyle) {

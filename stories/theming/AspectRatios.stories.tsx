@@ -51,17 +51,17 @@ const DEPRECATED = [
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <section
     style={{
-      padding: 'var(--padding-xl)',
-      borderBottom: '1px solid var(--border-secondary)',
+      padding: 'var(--bds-padding-xl)',
+      borderBottom: '1px solid var(--bds-border-secondary)',
     }}
   >
     <h2
       style={{
         margin: 0,
-        marginBottom: 'var(--gap-lg)',
-        fontFamily: 'var(--font-family-heading)',
-        fontSize: 'var(--heading-lg)',
-        color: 'var(--text-primary)',
+        marginBottom: 'var(--bds-gap-lg)',
+        fontFamily: 'var(--bds-font-family-heading)',
+        fontSize: 'var(--bds-heading-lg)',
+        color: 'var(--bds-text-primary)',
       }}
     >
       {title}
@@ -75,7 +75,7 @@ const Grid = ({ children }: { children: React.ReactNode }) => (
     style={{
       display: 'grid',
       gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
-      gap: 'var(--gap-lg)',
+      gap: 'var(--bds-gap-lg)',
     }}
   >
     {children}
@@ -95,28 +95,28 @@ const Card = ({
     style={{
       display: 'flex',
       flexDirection: 'column',
-      gap: 'var(--gap-sm)',
+      gap: 'var(--bds-gap-sm)',
     }}
   >
     <div
       style={{
-        background: 'var(--surface-secondary)',
-        border: '1px solid var(--border-secondary)',
-        borderRadius: 'var(--border-radius-md)',
+        background: 'var(--bds-surface-secondary)',
+        border: '1px solid var(--bds-border-secondary)',
+        borderRadius: 'var(--bds-border-radius-md)',
         overflow: 'hidden',
       }}
     >
       <div
         style={{
-          aspectRatio: `var(${token})`,
+          aspectRatio: `var(--bds-${token.slice(2)})`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontFamily: 'var(--font-family-label)',
-          fontSize: 'var(--body-sm)',
-          color: 'var(--text-secondary)',
+          fontFamily: 'var(--bds-font-family-label)',
+          fontSize: 'var(--bds-body-sm)',
+          color: 'var(--bds-text-secondary)',
           background:
-            'repeating-linear-gradient(45deg, var(--surface-primary), var(--surface-primary) 8px, var(--surface-secondary) 8px, var(--surface-secondary) 16px)',
+            'repeating-linear-gradient(45deg, var(--bds-surface-primary), var(--bds-surface-primary) 8px, var(--bds-surface-secondary) 8px, var(--bds-surface-secondary) 16px)',
         }}
       >
         {slug}
@@ -126,21 +126,21 @@ const Card = ({
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 'var(--gap-tiny)',
-        fontFamily: 'var(--font-family-body)',
-        fontSize: 'var(--body-sm)',
+        gap: 'var(--bds-gap-tiny)',
+        fontFamily: 'var(--bds-font-family-body)',
+        fontSize: 'var(--bds-body-sm)',
       }}
     >
       <code
         style={{
           fontFamily: 'ui-monospace, monospace',
-          fontSize: 'var(--body-xs)',
-          color: 'var(--text-primary)',
+          fontSize: 'var(--bds-body-xs)',
+          color: 'var(--bds-text-primary)',
         }}
       >
         {token}
       </code>
-      <div style={{ color: 'var(--text-secondary)' }}>{meta}</div>
+      <div style={{ color: 'var(--bds-text-secondary)' }}>{meta}</div>
     </div>
   </div>
 );
@@ -154,7 +154,7 @@ const Card = ({
  */
 export const Catalog: Story = {
   render: () => (
-    <div style={{ fontFamily: 'var(--font-family-body)' }}>
+    <div style={{ fontFamily: 'var(--bds-font-family-body)' }}>
       <Section title="Primitives">
         <Grid>
           {PRIMITIVES.map(({ slug, value, note }) => (
@@ -193,9 +193,9 @@ export const Catalog: Story = {
         <p
           style={{
             margin: 0,
-            marginBottom: 'var(--gap-md)',
-            fontSize: 'var(--body-sm)',
-            color: 'var(--text-secondary)',
+            marginBottom: 'var(--bds-gap-md)',
+            fontSize: 'var(--bds-body-sm)',
+            color: 'var(--bds-text-secondary)',
           }}
         >
           Frame’s original ratio prop accepted mode-words. These still resolve to the correct
@@ -208,10 +208,10 @@ export const Catalog: Story = {
             listStyle: 'none',
             display: 'flex',
             flexDirection: 'column',
-            gap: 'var(--gap-sm)',
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-sm)',
-            color: 'var(--text-secondary)',
+            gap: 'var(--bds-gap-sm)',
+            fontFamily: 'var(--bds-font-family-body)',
+            fontSize: 'var(--bds-body-sm)',
+            color: 'var(--bds-text-secondary)',
           }}
         >
           {DEPRECATED.map(({ slug, use }) => (
@@ -238,21 +238,21 @@ export const FrameSlugs: Story = {
     <Section title="Frame ratio prop — slug vocabulary">
       <Grid>
         {(['1-1', '3-2', '2-3', '4-3', '16-9', '9-16', '21-9', 'photo-landscape', 'cinema'] as const).map((slug) => (
-          <div key={slug} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-sm)' }}>
+          <div key={slug} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-sm)' }}>
             <Frame
               ratio={slug}
               style={{
                 background:
-                  'repeating-linear-gradient(45deg, var(--surface-primary), var(--surface-primary) 8px, var(--surface-secondary) 8px, var(--surface-secondary) 16px)',
-                border: '1px solid var(--border-secondary)',
-                borderRadius: 'var(--border-radius-md)',
+                  'repeating-linear-gradient(45deg, var(--bds-surface-primary), var(--bds-surface-primary) 8px, var(--bds-surface-secondary) 8px, var(--bds-surface-secondary) 16px)',
+                border: '1px solid var(--bds-border-secondary)',
+                borderRadius: 'var(--bds-border-radius-md)',
               }}
             />
             <code
               style={{
                 fontFamily: 'ui-monospace, monospace',
-                fontSize: 'var(--body-xs)',
-                color: 'var(--text-primary)',
+                fontSize: 'var(--bds-body-xs)',
+                color: 'var(--bds-text-primary)',
               }}
             >
               {`<Frame ratio="${slug}" />`}

@@ -8,18 +8,18 @@ import { MediaTabs } from './MediaTabs';
     comparisons living here as docs-local demos, never story exports. */}
 
 export const DemoMedia = ({ label, hue }) => (
-  <div style={{ display: 'grid', placeItems: 'center', background: hue, fontFamily: 'var(--font-family-label)', color: 'var(--text-primary)' }}>
+  <div style={{ display: 'grid', placeItems: 'center', background: hue, fontFamily: 'var(--bds-font-family-label)', color: 'var(--bds-text-primary)' }}>
     {label}
   </div>
 );
 
 export const demoTabs = [
-  { id: 'marketing', label: 'Marketing', description: 'Campaigns, content, and the site that carries them.', media: <DemoMedia label="Marketing" hue="var(--surface-secondary)" /> },
-  { id: 'back-office', label: 'Back office', description: 'Intake, scheduling, billing — wired so the front of house can move.', media: <DemoMedia label="Back office" hue="var(--surface-muted)" /> },
+  { id: 'marketing', label: 'Marketing', description: 'Campaigns, content, and the site that carries them.', media: <DemoMedia label="Marketing" hue="var(--bds-surface-secondary)" /> },
+  { id: 'back-office', label: 'Back office', description: 'Intake, scheduling, billing — wired so the front of house can move.', media: <DemoMedia label="Back office" hue="var(--bds-surface-muted)" /> },
 ];
 
 export const OrientationDemo = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xl)' }}>
     <MediaTabs tabs={demoTabs} orientation="vertical" autoplay={false} />
     <MediaTabs tabs={demoTabs} orientation="horizontal" autoplay={false} />
   </div>
@@ -57,7 +57,7 @@ Reach for `SyncedMediaSteps` instead when the items are an **ordered sequence** 
 
 | Variable | Default | Set by |
 |---|---|---|
-| `--bds-media-tabs-interval` | `var(--duration-autoplay)` (10s) | `interval` prop |
+| `--bds-media-tabs-interval` | `var(--bds-duration-autoplay)` (10s) | `interval` prop |
 | `--bds-media-tabs-media-aspect` | `4 / 3` | CSS only |
 
 ```tsx

@@ -79,7 +79,7 @@ type Story = StoryObj<typeof TableView>;
 
 /** Preview surface for the shell — not the BDS `Frame` primitive (that one is an aspect-ratio media frame). */
 const PreviewFrame = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ maxWidth: '880px', padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+  <div style={{ maxWidth: '880px', padding: 'var(--bds-padding-lg)', background: 'var(--bds-surface-primary)' }}>
     {children}
   </div>
 );

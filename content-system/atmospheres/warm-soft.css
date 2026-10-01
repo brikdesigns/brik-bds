@@ -13,12 +13,12 @@
  *   - Section-edge vignettes optional (soft fade into the page color)
  *
  * Surface colors are set by the brand theme layer. The section-edge
- * fades reference var(--page-primary) so they self-relativize against
+ * fades reference var(--bds-page-primary) so they self-relativize against
  * whatever surface color the theme layer resolves.
  */
 
 /* The rose vignette is the atmosphere's wellness-coded identity, not the
-   client's brand — it consumes the canonical --background-accent-red role
+   client's brand — it consumes the canonical --bds-background-accent-red role
    via color-mix() rather than an invented ad-hoc token family. (brik-bds#2372) */
 
 /* Single quiet top-left vignette. Warm without being cinematic. */
@@ -29,7 +29,7 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 10% 0%, color-mix(in srgb, var(--background-accent-red) 5%, transparent), transparent 60%);
+    radial-gradient(ellipse 70% 50% at 10% 0%, color-mix(in srgb, var(--bds-background-accent-red) 5%, transparent), transparent 60%);
 }
 body > * { position: relative; z-index: 1; }
 
@@ -57,11 +57,11 @@ section[data-edge]::after {
 }
 section[data-edge]::before {
   top: 0;
-  background: linear-gradient(to bottom, var(--page-primary), transparent);
+  background: linear-gradient(to bottom, var(--bds-page-primary), transparent);
 }
 section[data-edge]::after {
   bottom: 0;
-  background: linear-gradient(to top, var(--page-primary), transparent);
+  background: linear-gradient(to top, var(--bds-page-primary), transparent);
 }
 
 /* data-ambient / data-spotlight are inert in warm-soft — anxiety-

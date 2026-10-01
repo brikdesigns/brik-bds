@@ -14,30 +14,30 @@
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--background-secondary);
-  border-radius: var(--border-radius-md);
+  background-color: var(--bds-background-secondary);
+  border-radius: var(--bds-border-radius-md);
   border: none;
   cursor: pointer;
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
   white-space: nowrap;
   text-transform: capitalize;
   box-sizing: border-box;
 }
 
 .bds-filter-button__trigger--active {
-  background-color: var(--background-brand-primary);
-  color: var(--text-on-color-dark);
+  background-color: var(--bds-background-brand-primary);
+  color: var(--bds-text-on-color-dark);
 }
 
 /* Disabled state — overrides active styling when both are set */
 
 .bds-filter-button__trigger:disabled,
 .bds-filter-button__trigger--disabled {
-  background-color: var(--background-disabled);
-  color: var(--text-disabled);
+  background-color: var(--bds-background-disabled);
+  color: var(--bds-text-disabled);
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -45,46 +45,46 @@
 /* Size variants — height scale matches Button/IconButton (4px grid, 8px steps) */
 
 .bds-filter-button__trigger--sm {
-  height: var(--size-800);
-  padding-inline: var(--padding-sm);
-  font-size: var(--label-sm);
-  gap: var(--gap-sm);
+  height: var(--bds-size-800);
+  padding-inline: var(--bds-padding-sm);
+  font-size: var(--bds-label-sm);
+  gap: var(--bds-gap-sm);
 }
 
 .bds-filter-button__trigger--md {
-  height: var(--size-1000);
-  padding-inline: var(--padding-lg);
-  font-size: var(--label-md);
-  gap: var(--gap-md);
+  height: var(--bds-size-1000);
+  padding-inline: var(--bds-padding-lg);
+  font-size: var(--bds-label-md);
+  gap: var(--bds-gap-md);
 }
 
 .bds-filter-button__trigger--lg {
-  height: var(--size-1200);
-  padding-inline: var(--padding-xl);
-  font-size: var(--label-lg);
-  gap: var(--gap-lg);
+  height: var(--bds-size-1200);
+  padding-inline: var(--bds-padding-xl);
+  font-size: var(--bds-label-lg);
+  gap: var(--bds-gap-lg);
 }
 
 /* ─── Caret icon ──────────────────────────────────────── */
 
 .bds-filter-button__caret {
-  font-size: var(--icon-sm);
+  font-size: var(--bds-icon-sm);
 }
 
 /* ─── Dropdown panel ──────────────────────────────────── */
 
 .bds-filter-button__dropdown {
   position: absolute;
-  top: calc(100% + var(--gap-md));
+  top: calc(100% + var(--bds-gap-md));
   left: 0;
   z-index: 100;
-  background-color: var(--background-primary);
-  border-radius: var(--border-radius-lg);
-  padding: var(--padding-md);
-  box-shadow: var(--shadow-lg);
+  background-color: var(--bds-background-primary);
+  border-radius: var(--bds-border-radius-lg);
+  padding: var(--bds-padding-md);
+  box-shadow: var(--bds-shadow-lg);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   --bds-filter-button-panel-min-width: 200px; /* component-local dimension; no shared registry rung (#2133) */
   min-width: var(--bds-filter-button-panel-min-width);
 }
@@ -94,29 +94,29 @@
 .bds-filter-button__option {
   display: flex;
   align-items: center;
-  gap: var(--gap-md);
-  padding: var(--padding-tiny);
+  gap: var(--bds-gap-md);
+  padding: var(--bds-padding-tiny);
   background: none;
   border: none;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--bds-border-radius-sm);
   cursor: pointer;
   width: 100%;
   text-align: left;
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
 }
 
 .bds-filter-button__option--selected {
-  background-color: var(--background-secondary);
+  background-color: var(--bds-background-secondary);
 }
 
 /* "All" / clear entry — separated from concrete options by a hairline.
-   Tight structural step; --gap-tiny is 0px outside default spacing mode. */
+   Tight structural step; --bds-gap-tiny is 0px outside default spacing mode. */
 .bds-filter-button__option--all {
-  margin-bottom: var(--gap-sm);
-  border-bottom: var(--border-width-sm) solid var(--border-muted);
+  margin-bottom: var(--bds-gap-sm);
+  border-bottom: var(--bds-border-width-sm) solid var(--bds-border-muted);
   border-radius: 0;
 }
 
@@ -128,8 +128,8 @@
   justify-content: center;
   width: 24px; /* bds-lint-ignore — icon wrapper touch target */
   height: 24px; /* bds-lint-ignore — fixed 24px clear-icon size, not a spacing-grid token */
-  font-size: var(--icon-lg);
-  color: var(--text-primary);
+  font-size: var(--bds-icon-lg);
+  color: var(--bds-text-primary);
   flex-shrink: 0;
 }
 }

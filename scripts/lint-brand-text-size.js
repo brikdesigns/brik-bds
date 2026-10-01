@@ -31,8 +31,8 @@ const { execSync } = require('child_process');
 
 const ROOT = path.join(__dirname, '..');
 const COMPONENTS = path.join(ROOT, 'components');
-const BRAND = '--text-brand-primary';
-const SMALL_BODY = /--body-(xs|sm)\b/; // paragraph copy at a small size
+const BRAND = '--bds-text-brand-primary';
+const SMALL_BODY = /--bds-body-(xs|sm)\b/; // paragraph copy at a small size
 
 function componentCssFiles() {
   const out = execSync(`grep -rlE -e "${BRAND}" "${COMPONENTS}" || true`, { encoding: 'utf8' });
@@ -65,16 +65,16 @@ function main() {
   }
 
   if (violations.length === 0) {
-    console.log('✓ brand-text-size: no --text-brand-primary on small body copy.');
+    console.log('✓ brand-text-size: no --bds-text-brand-primary on small body copy.');
     process.exit(0);
   }
 
-  console.error('✗ brand-text-size: --text-brand-primary used on small body copy (ADR-015 says use --text-primary).\n');
+  console.error('✗ brand-text-size: --bds-text-brand-primary used on small body copy (ADR-015 says use --bds-text-primary).\n');
   for (const v of violations) {
     console.error(`  ${v.file}:${v.line}  ${v.selector}`);
-    console.error(`     color: var(--text-brand-primary) in a rule sized ${v.size} — 3.78:1 on white, fails AA-normal.`);
+    console.error(`     color: var(--bds-text-brand-primary) in a rule sized ${v.size} — 3.78:1 on white, fails AA-normal.`);
   }
-  console.error('\n  Fix: use --text-primary for body copy, or promote to a --label-* affordance role (AA-large per ADR-015).');
+  console.error('\n  Fix: use --bds-text-primary for body copy, or promote to a --bds-label-* affordance role (AA-large per ADR-015).');
   console.error('  Escape hatch (tracked): add `bds-lint-ignore` on the line — see #1103.');
   process.exit(1);
 }

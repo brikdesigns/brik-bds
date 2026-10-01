@@ -27,7 +27,7 @@ export default meta;
 type Story = StoryObj<typeof Prose>;
 
 const Frame = ({ width = '480px', children }: { width?: string; children: React.ReactNode }) => (
-  <div style={{ width, padding: 'var(--padding-lg)', background: 'var(--surface-primary)' }}>
+  <div style={{ width, padding: 'var(--bds-padding-lg)', background: 'var(--bds-surface-primary)' }}>
     {children}
   </div>
 );
@@ -74,7 +74,7 @@ export const SpacingModes: Story = {
       style={{
         display: 'flex',
         flexWrap: 'wrap',
-        gap: 'var(--gap-xl)',
+        gap: 'var(--bds-gap-xl)',
       }}
     >
       {(['default', 'compact', 'comfortable', 'spacious'] as const).map((mode) => (
@@ -83,9 +83,9 @@ export const SpacingModes: Story = {
             <p
               style={{
                 margin: '0 0 8px',
-                fontFamily: 'var(--font-family-label)',
-                fontSize: 'var(--label-sm)',
-                color: 'var(--text-secondary)',
+                fontFamily: 'var(--bds-font-family-label)',
+                fontSize: 'var(--bds-label-sm)',
+                color: 'var(--bds-text-secondary)',
                 textTransform: 'capitalize',
               }}
             >

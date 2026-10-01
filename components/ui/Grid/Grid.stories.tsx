@@ -40,13 +40,13 @@ type Story = StoryObj<typeof Grid>;
 const Tile = ({ children }: { children: React.ReactNode }) => (
   <div
     style={{
-      padding: 'var(--padding-lg)',
-      background: 'var(--surface-secondary)',
-      border: '1px solid var(--border-secondary)',
-      borderRadius: 'var(--border-radius-md)',
-      fontFamily: 'var(--font-family-body)',
-      fontSize: 'var(--body-sm)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
-      color: 'var(--text-primary)',
+      padding: 'var(--bds-padding-lg)',
+      background: 'var(--bds-surface-secondary)',
+      border: '1px solid var(--bds-border-secondary)',
+      borderRadius: 'var(--bds-border-radius-md)',
+      fontFamily: 'var(--bds-font-family-body)',
+      fontSize: 'var(--bds-body-sm)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
+      color: 'var(--bds-text-primary)',
       textAlign: 'center' as const,
       minHeight: 80,
       display: 'flex',
@@ -61,12 +61,12 @@ const Tile = ({ children }: { children: React.ReactNode }) => (
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   <div
     style={{
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
+      fontFamily: 'var(--bds-font-family-label)',
+      fontSize: 'var(--bds-body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
       textTransform: 'uppercase' as const,
       letterSpacing: '0.05em',
-      color: 'var(--text-muted)',
-      marginBottom: 'var(--gap-sm)',
+      color: 'var(--bds-text-muted)',
+      marginBottom: 'var(--bds-gap-sm)',
     }}
   >
     {children}
@@ -88,7 +88,7 @@ export const Default: Story = {
 /** @summary Gap scale — xs through huge on a fixed 3-col grid */
 export const GapScale: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xl)' }}>
       {(['xs', 'sm', 'md', 'lg', 'xl', 'huge'] as const).map((gap) => (
         <div key={gap}>
           <SectionLabel>gap={gap}</SectionLabel>
@@ -106,7 +106,7 @@ export const GapScale: Story = {
 /** @summary Column counts 1 through 6 side-by-side */
 export const ColumnCounts: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xl)' }}>
       {([1, 2, 3, 4, 5, 6] as const).map((cols) => (
         <div key={cols}>
           <SectionLabel>columns={cols}</SectionLabel>

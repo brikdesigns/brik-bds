@@ -102,7 +102,7 @@ const meta: Meta<typeof Services3ColCardGrid> = {
     docs: {
       description: {
         component:
-          'Three-column service card grid blueprint. Each card composes BDS primitives — Card frame, Frame for the 3:2 image, ServiceTag for the category badge, LinkButton for the "Learn more" CTA, and Badge for the optional "Has Options" pill. Description copy uses `--text-primary` to clear AA contrast at 14–16px (BDS contrast burndown #40).',
+          'Three-column service card grid blueprint. Each card composes BDS primitives — Card frame, Frame for the 3:2 image, ServiceTag for the category badge, LinkButton for the "Learn more" CTA, and Badge for the optional "Has Options" pill. Description copy uses `--bds-text-primary` to clear AA contrast at 14–16px (BDS contrast burndown #40).',
       },
     },
   },

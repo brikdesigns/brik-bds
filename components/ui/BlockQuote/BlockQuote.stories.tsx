@@ -58,7 +58,7 @@ export const Neutral: Story = {
  */
 export const ServiceLineAccents: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)' }}>
       {(['brand', 'marketing', 'information', 'product', 'back-office'] as const).map(
         (line) => (
           <BlockQuote

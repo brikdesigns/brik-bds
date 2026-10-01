@@ -20,14 +20,14 @@
 /* ─── Gap ───────────────────────────────────────────────────── */
 
 .bds-tag-group--gap-xs {
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
 }
 
 .bds-tag-group--gap-sm {
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 
 .bds-tag-group--gap-md {
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
 }
 }

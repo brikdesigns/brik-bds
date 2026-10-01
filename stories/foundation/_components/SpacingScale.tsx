@@ -12,14 +12,14 @@ export function SpacingScale({ title, scale, prefix }: SpacingScaleProps) {
   );
 
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 32px)' }}>
       {title && (
         <h3
           style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--heading-sm, 20px)',
-            marginBottom: 'var(--gap-md, 8px)',
-            color: 'var(--text-primary)',
+            fontFamily: 'var(--bds-font-family-heading)',
+            fontSize: 'var(--bds-heading-sm, 20px)',
+            marginBottom: 'var(--bds-gap-md, 8px)',
+            color: 'var(--bds-text-primary)',
           }}
         >
           {title}
@@ -44,7 +44,7 @@ export function SpacingScale({ title, scale, prefix }: SpacingScaleProps) {
                   fontSize: '12px',
                   width: '160px',
                   flexShrink: 0,
-                  color: 'var(--text-muted)',
+                  color: 'var(--bds-text-muted)',
                 }}
               >
                 {prefix}-{step}
@@ -53,7 +53,7 @@ export function SpacingScale({ title, scale, prefix }: SpacingScaleProps) {
                 style={{
                   width: `${Math.min(px, 300)}px`,
                   height: '20px',
-                  backgroundColor: 'var(--background-brand-primary)',
+                  backgroundColor: 'var(--bds-background-brand-primary)',
                   borderRadius: '2px',
                   opacity: 0.7,
                   transition: 'width 200ms ease',
@@ -63,7 +63,7 @@ export function SpacingScale({ title, scale, prefix }: SpacingScaleProps) {
               <span
                 style={{
                   fontSize: '12px',
-                  color: 'var(--text-secondary)',
+                  color: 'var(--bds-text-secondary)',
                   fontFamily: 'ui-monospace, SFMono-Regular, monospace',
                   flexShrink: 0,
                 }}
@@ -88,14 +88,14 @@ export function SemanticSpacing({ title, tokens, varPrefix }: SemanticSpacingPro
   const entries = Object.entries(tokens);
 
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 32px)' }}>
       {title && (
         <h3
           style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--heading-sm, 20px)',
-            marginBottom: 'var(--gap-md, 8px)',
-            color: 'var(--text-primary)',
+            fontFamily: 'var(--bds-font-family-heading)',
+            fontSize: 'var(--bds-heading-sm, 20px)',
+            marginBottom: 'var(--bds-gap-md, 8px)',
+            color: 'var(--bds-text-primary)',
           }}
         >
           {title}
@@ -121,7 +121,7 @@ export function SemanticSpacing({ title, tokens, varPrefix }: SemanticSpacingPro
                       width: `var(${fullVar}, 16px)`,
                       maxWidth: '100px',
                       height: '16px',
-                      backgroundColor: 'var(--background-brand-primary)',
+                      backgroundColor: 'var(--bds-background-brand-primary)',
                       borderRadius: '2px',
                       opacity: 0.7,
                     }}
@@ -147,8 +147,8 @@ export function SemanticSpacing({ title, tokens, varPrefix }: SemanticSpacingPro
 
 const thStyle: React.CSSProperties = {
   padding: '8px 12px',
-  borderBottom: '2px solid var(--border-secondary)',
-  color: 'var(--text-muted)',
+  borderBottom: '2px solid var(--bds-border-secondary)',
+  color: 'var(--bds-text-muted)',
   fontSize: '12px',
   fontWeight: 600,
   textTransform: 'uppercase',
@@ -157,14 +157,14 @@ const thStyle: React.CSSProperties = {
 
 const tdStyle: React.CSSProperties = {
   padding: '8px 12px',
-  borderBottom: '1px solid var(--border-muted)',
+  borderBottom: '1px solid var(--bds-border-muted)',
   verticalAlign: 'middle',
 };
 
 const codeStyle: React.CSSProperties = {
   fontFamily: 'ui-monospace, SFMono-Regular, monospace',
   fontSize: '12px',
-  background: 'var(--surface-secondary)',
+  background: 'var(--bds-surface-secondary)',
   padding: '2px 6px',
   borderRadius: '3px',
 };

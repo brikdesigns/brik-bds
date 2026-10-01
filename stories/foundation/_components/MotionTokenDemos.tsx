@@ -7,8 +7,8 @@ const mono: CSSProperties = {
 
 const th: CSSProperties = {
   padding: '8px 12px',
-  borderBottom: '2px solid var(--border-secondary)',
-  color: 'var(--text-muted)',
+  borderBottom: '2px solid var(--bds-border-secondary)',
+  color: 'var(--bds-text-muted)',
   fontSize: '11px',
   fontWeight: 600,
   textTransform: 'uppercase',
@@ -18,16 +18,16 @@ const th: CSSProperties = {
 
 const td: CSSProperties = {
   padding: '8px 12px',
-  borderBottom: '1px solid var(--border-muted)',
+  borderBottom: '1px solid var(--bds-border-muted)',
   verticalAlign: 'middle',
   fontSize: '13px',
-  fontFamily: 'var(--font-family-body)',
-  color: 'var(--text-primary)',
+  fontFamily: 'var(--bds-font-family-body)',
+  color: 'var(--bds-text-primary)',
 };
 
 const code: CSSProperties = {
   ...mono,
-  background: 'var(--surface-secondary)',
+  background: 'var(--bds-surface-secondary)',
   padding: '2px 6px',
   borderRadius: '3px',
   color: 'inherit',
@@ -45,18 +45,18 @@ interface DurationEntry {
 }
 
 const DURATION_TOKENS: DurationEntry[] = [
-  { token: 'fast',   cssVar: '--duration-sm',   value: '100ms', use: 'Hover, focus, micro-interactions' },
-  { token: 'normal', cssVar: '--duration-md', value: '200ms', use: 'Buttons, cards, standard transitions' },
-  { token: 'slow',   cssVar: '--duration-lg',   value: '300ms', use: 'Modals, sheets, emphasis reveals' },
+  { token: 'fast',   cssVar: '--bds-duration-sm',   value: '100ms', use: 'Hover, focus, micro-interactions' },
+  { token: 'normal', cssVar: '--bds-duration-md', value: '200ms', use: 'Buttons, cards, standard transitions' },
+  { token: 'slow',   cssVar: '--bds-duration-lg',   value: '300ms', use: 'Modals, sheets, emphasis reveals' },
 ];
 
 const DURATION_PRIMITIVES = [
-  { cssVar: '--duration-100', value: '100ms' },
-  { cssVar: '--duration-200', value: '200ms' },
-  { cssVar: '--duration-300', value: '300ms' },
-  { cssVar: '--duration-400', value: '500ms' },
-  { cssVar: '--duration-500', value: '800ms' },
-  { cssVar: '--duration-600', value: '1000ms' },
+  { cssVar: '--bds-duration-100', value: '100ms' },
+  { cssVar: '--bds-duration-200', value: '200ms' },
+  { cssVar: '--bds-duration-300', value: '300ms' },
+  { cssVar: '--bds-duration-400', value: '500ms' },
+  { cssVar: '--bds-duration-500', value: '800ms' },
+  { cssVar: '--bds-duration-600', value: '1000ms' },
 ];
 
 function DurationDot({ cssVar }: { cssVar: string }) {
@@ -86,11 +86,11 @@ function DurationDot({ cssVar }: { cssVar: string }) {
           width: '16px',
           height: '16px',
           borderRadius: '50%',
-          background: 'var(--background-brand-primary)',
+          background: 'var(--bds-background-brand-primary)',
           opacity: playing ? 1 : 0.3,
           transform: playing ? 'scale(1)' : 'scale(0.6)',
           transition: playing
-            ? `opacity var(${cssVar}) var(--ease-out), transform var(${cssVar}) var(--ease-out)`
+            ? `opacity var(${cssVar}) var(--bds-ease-out), transform var(${cssVar}) var(--bds-ease-out)`
             : 'none',
           flexShrink: 0,
         }}
@@ -99,13 +99,13 @@ function DurationDot({ cssVar }: { cssVar: string }) {
         onClick={replay}
         style={{
           background: 'none',
-          border: '1px solid var(--border-secondary)',
-          borderRadius: 'var(--border-radius-sm, 2px)',
+          border: '1px solid var(--bds-border-secondary)',
+          borderRadius: 'var(--bds-border-radius-sm, 2px)',
           padding: '2px 8px',
           fontSize: '11px',
           cursor: 'pointer',
-          color: 'var(--text-muted)',
-          fontFamily: 'var(--font-family-body)',
+          color: 'var(--bds-text-muted)',
+          fontFamily: 'var(--bds-font-family-body)',
         }}
       >
         Play
@@ -116,7 +116,7 @@ function DurationDot({ cssVar }: { cssVar: string }) {
 
 export function DurationTable() {
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 32px)' }}>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
@@ -133,18 +133,18 @@ export function DurationTable() {
               <td style={td}><code style={code}>{t.token}</code></td>
               <td style={td}><code style={code}>{t.cssVar}</code></td>
               <td style={td}><code style={code}>{t.value}</code></td>
-              <td style={{ ...td, color: 'var(--text-secondary)' }}>{t.use}</td>
+              <td style={{ ...td, color: 'var(--bds-text-secondary)' }}>{t.use}</td>
               <td style={{ ...td, textAlign: 'center' }}><DurationDot cssVar={t.cssVar} /></td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <details style={{ marginTop: 'var(--gap-lg)', fontFamily: 'var(--font-family-body)', fontSize: '13px', color: 'var(--text-secondary)' }}>
-        <summary style={{ cursor: 'pointer', color: 'var(--text-muted)', fontSize: '12px' }}>
+      <details style={{ marginTop: 'var(--bds-gap-lg)', fontFamily: 'var(--bds-font-family-body)', fontSize: '13px', color: 'var(--bds-text-secondary)' }}>
+        <summary style={{ cursor: 'pointer', color: 'var(--bds-text-muted)', fontSize: '12px' }}>
           Primitive duration scale (Figma-sourced)
         </summary>
-        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 'var(--gap-sm)' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 'var(--bds-gap-sm)' }}>
           <thead>
             <tr>
               <th style={th}>CSS Variable</th>
@@ -179,25 +179,25 @@ interface EasingEntry {
 const EASING_TOKENS: EasingEntry[] = [
   {
     token: 'ease-out',
-    cssVar: '--ease-out',
+    cssVar: '--bds-ease-out',
     bezier: 'cubic-bezier(0.16, 1, 0.3, 1)',
     use: 'Decelerate — most UI transitions',
   },
   {
     token: 'ease-in',
-    cssVar: '--ease-in',
+    cssVar: '--bds-ease-in',
     bezier: 'cubic-bezier(0.7, 0, 0.84, 0)',
     use: 'Accelerate — exits, collapses',
   },
   {
     token: 'ease-in-out',
-    cssVar: '--ease-in-out',
+    cssVar: '--bds-ease-in-out',
     bezier: 'cubic-bezier(0.65, 0, 0.35, 1)',
     use: 'Symmetric — looping, continuous',
   },
   {
     token: 'ease-spring',
-    cssVar: '--ease-spring',
+    cssVar: '--bds-ease-spring',
     bezier: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
     use: 'Overshoot bounce — pop-in, badge appear',
   },
@@ -236,9 +236,9 @@ function EasingDemo({ cssVar, bezier }: { cssVar: string; bezier: string }) {
             width: '14px',
             height: '14px',
             borderRadius: '50%',
-            background: 'var(--background-brand-primary)',
+            background: 'var(--bds-background-brand-primary)',
             transition: playing
-              ? `transform var(--duration-lg, 300ms) var(${cssVar}, ${bezier})`
+              ? `transform var(--bds-duration-lg, 300ms) var(${cssVar}, ${bezier})`
               : 'none',
           }}
         />
@@ -247,13 +247,13 @@ function EasingDemo({ cssVar, bezier }: { cssVar: string; bezier: string }) {
         onClick={replay}
         style={{
           background: 'none',
-          border: '1px solid var(--border-secondary)',
-          borderRadius: 'var(--border-radius-sm, 2px)',
+          border: '1px solid var(--bds-border-secondary)',
+          borderRadius: 'var(--bds-border-radius-sm, 2px)',
           padding: '2px 8px',
           fontSize: '11px',
           cursor: 'pointer',
-          color: 'var(--text-muted)',
-          fontFamily: 'var(--font-family-body)',
+          color: 'var(--bds-text-muted)',
+          fontFamily: 'var(--bds-font-family-body)',
         }}
       >
         Play
@@ -264,7 +264,7 @@ function EasingDemo({ cssVar, bezier }: { cssVar: string; bezier: string }) {
 
 export function EasingTable() {
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 32px)' }}>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
@@ -281,7 +281,7 @@ export function EasingTable() {
               <td style={td}><code style={code}>{t.token}</code></td>
               <td style={td}><code style={code}>{t.cssVar}</code></td>
               <td style={{ ...td, ...mono, fontSize: '11px' }}>{t.bezier}</td>
-              <td style={{ ...td, color: 'var(--text-secondary)' }}>{t.use}</td>
+              <td style={{ ...td, color: 'var(--bds-text-secondary)' }}>{t.use}</td>
               <td style={{ ...td }}><EasingDemo cssVar={t.cssVar} bezier={t.bezier} /></td>
             </tr>
           ))}
@@ -366,8 +366,8 @@ function KeyframeMiniPreview({ name }: { name: string }) {
   const shimmerBase: CSSProperties = {
     width: '32px',
     height: '32px',
-    borderRadius: 'var(--border-radius-sm, 2px)',
-    background: 'linear-gradient(90deg, var(--surface-secondary) 25%, var(--border-muted) 50%, var(--surface-secondary) 75%)',
+    borderRadius: 'var(--bds-border-radius-sm, 2px)',
+    background: 'linear-gradient(90deg, var(--bds-surface-secondary) 25%, var(--bds-border-muted) 50%, var(--bds-surface-secondary) 75%)',
     backgroundSize: '400% 100%',
   };
 
@@ -375,7 +375,7 @@ function KeyframeMiniPreview({ name }: { name: string }) {
     width: '20px',
     height: '20px',
     borderRadius: '50%',
-    background: 'var(--background-brand-primary)',
+    background: 'var(--bds-background-brand-primary)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -384,8 +384,8 @@ function KeyframeMiniPreview({ name }: { name: string }) {
   const squareBase: CSSProperties = {
     width: '20px',
     height: '20px',
-    borderRadius: 'var(--border-radius-sm, 2px)',
-    background: 'var(--background-brand-primary)',
+    borderRadius: 'var(--bds-border-radius-sm, 2px)',
+    background: 'var(--bds-background-brand-primary)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -394,12 +394,12 @@ function KeyframeMiniPreview({ name }: { name: string }) {
   const animStyle: CSSProperties = isShimmer
     ? { ...shimmerBase, animation: `bds-shimmer 1.5s linear infinite` }
     : isPulse
-    ? { ...dotBase, animation: `bds-pulse 1.4s var(--ease-in-out) infinite` }
+    ? { ...dotBase, animation: `bds-pulse 1.4s var(--bds-ease-in-out) infinite` }
     : isSpin
     ? { ...squareBase, animation: `bds-spin 0.8s linear infinite` }
     : {
         ...squareBase,
-        animation: `${name} var(--duration-lg, 300ms) var(--ease-out, ease) both`,
+        animation: `${name} var(--bds-duration-lg, 300ms) var(--bds-ease-out, ease) both`,
       };
 
   return (
@@ -414,13 +414,13 @@ function KeyframeMiniPreview({ name }: { name: string }) {
           onClick={replay}
           style={{
             background: 'none',
-            border: '1px solid var(--border-secondary)',
-            borderRadius: 'var(--border-radius-sm, 2px)',
+            border: '1px solid var(--bds-border-secondary)',
+            borderRadius: 'var(--bds-border-radius-sm, 2px)',
             padding: '2px 8px',
             fontSize: '11px',
             cursor: 'pointer',
-            color: 'var(--text-muted)',
-            fontFamily: 'var(--font-family-body)',
+            color: 'var(--bds-text-muted)',
+            fontFamily: 'var(--bds-font-family-body)',
           }}
         >
           Replay
@@ -432,7 +432,7 @@ function KeyframeMiniPreview({ name }: { name: string }) {
 
 export function KeyframeTable() {
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 32px)' }}>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
         <thead>
           <tr>
@@ -446,14 +446,14 @@ export function KeyframeTable() {
           {KEYFRAMES.map((k) => (
             <tr key={k.name}>
               <td style={td}><code style={code}>{k.cssName}</code></td>
-              <td style={{ ...td, color: 'var(--text-secondary)', fontSize: '12px' }}>{k.animates}</td>
+              <td style={{ ...td, color: 'var(--bds-text-secondary)', fontSize: '12px' }}>{k.animates}</td>
               <td style={td}><code style={code}>{k.suggestedClass}</code></td>
               <td style={{ ...td, minWidth: '120px' }}><KeyframeMiniPreview name={k.cssName} /></td>
             </tr>
           ))}
         </tbody>
       </table>
-      <p style={{ fontFamily: 'var(--font-family-body)', fontSize: '12px', color: 'var(--text-muted)', marginTop: 'var(--gap-sm)' }}>
+      <p style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: '12px', color: 'var(--bds-text-muted)', marginTop: 'var(--bds-gap-sm)' }}>
         All keyframes are defined in <code style={code}>tokens/animations.css</code>. Reference them by name in component CSS
         or via the utility classes in <code style={code}>tokens/motion-classes.css</code>.
       </p>
@@ -473,14 +473,14 @@ interface UtilityEntry {
 
 const UTILITY_CLASSES: UtilityEntry[] = [
   // Entrance
-  { className: '.bds-enter-fade',       resolvedCSS: 'animation: bds-fade-in var(--duration-md) var(--ease-out) both',       group: 'Entrance' },
-  { className: '.bds-enter-slide-up',   resolvedCSS: 'animation: bds-slide-up var(--duration-md) var(--ease-out) both',     group: 'Entrance' },
-  { className: '.bds-enter-slide-down', resolvedCSS: 'animation: bds-slide-down var(--duration-md) var(--ease-out) both',   group: 'Entrance' },
-  { className: '.bds-enter-pop',        resolvedCSS: 'animation: bds-pop var(--duration-lg) var(--ease-spring) both',         group: 'Entrance' },
+  { className: '.bds-enter-fade',       resolvedCSS: 'animation: bds-fade-in var(--bds-duration-md) var(--bds-ease-out) both',       group: 'Entrance' },
+  { className: '.bds-enter-slide-up',   resolvedCSS: 'animation: bds-slide-up var(--bds-duration-md) var(--bds-ease-out) both',     group: 'Entrance' },
+  { className: '.bds-enter-slide-down', resolvedCSS: 'animation: bds-slide-down var(--bds-duration-md) var(--bds-ease-out) both',   group: 'Entrance' },
+  { className: '.bds-enter-pop',        resolvedCSS: 'animation: bds-pop var(--bds-duration-lg) var(--bds-ease-spring) both',         group: 'Entrance' },
   // Attention
-  { className: '.bds-anim-pulse',       resolvedCSS: 'animation: bds-pulse 1.4s var(--ease-in-out) infinite',                   group: 'Attention' },
-  { className: '.bds-anim-shake',       resolvedCSS: 'animation: bds-shake 0.5s var(--ease-out)',                               group: 'Attention' },
-  { className: '.bds-anim-bounce',      resolvedCSS: 'animation: bds-pop var(--duration-lg) var(--ease-spring)',              group: 'Attention' },
+  { className: '.bds-anim-pulse',       resolvedCSS: 'animation: bds-pulse 1.4s var(--bds-ease-in-out) infinite',                   group: 'Attention' },
+  { className: '.bds-anim-shake',       resolvedCSS: 'animation: bds-shake 0.5s var(--bds-ease-out)',                               group: 'Attention' },
+  { className: '.bds-anim-bounce',      resolvedCSS: 'animation: bds-pop var(--bds-duration-lg) var(--bds-ease-spring)',              group: 'Attention' },
   // State
   { className: '.bds-anim-spin',        resolvedCSS: 'animation: bds-spin 0.8s linear infinite',                               group: 'State' },
   { className: '.bds-anim-shimmer',     resolvedCSS: 'animation: bds-shimmer 1.5s linear infinite',                            group: 'State' },
@@ -497,18 +497,18 @@ export function UtilityClassTable() {
   const groups = ['Entrance', 'Attention', 'State', 'Stagger'];
 
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 32px)' }}>
       {groups.map((group) => {
         const rows = UTILITY_CLASSES.filter((c) => c.group === group);
         return (
-          <div key={group} style={{ marginBottom: 'var(--gap-xl)' }}>
+          <div key={group} style={{ marginBottom: 'var(--bds-gap-xl)' }}>
             <h4
               style={{
-                fontFamily: 'var(--font-family-heading)',
-                fontSize: 'var(--body-md, 14px)',
+                fontFamily: 'var(--bds-font-family-heading)',
+                fontSize: 'var(--bds-body-md, 14px)',
                 fontWeight: 600,
-                color: 'var(--text-secondary)',
-                marginBottom: 'var(--gap-sm)',
+                color: 'var(--bds-text-secondary)',
+                marginBottom: 'var(--bds-gap-sm)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em',
               }}
@@ -526,7 +526,7 @@ export function UtilityClassTable() {
                 {rows.map((row) => (
                   <tr key={row.className}>
                     <td style={{ ...td, width: '220px' }}><code style={code}>{row.className}</code></td>
-                    <td style={{ ...td, ...mono, fontSize: '11px', color: 'var(--text-muted)' }}>{row.resolvedCSS}</td>
+                    <td style={{ ...td, ...mono, fontSize: '11px', color: 'var(--bds-text-muted)' }}>{row.resolvedCSS}</td>
                   </tr>
                 ))}
               </tbody>
@@ -557,17 +557,17 @@ export function StaggerDemo() {
   ];
 
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
-      <div style={{ display: 'flex', gap: 'var(--gap-sm)', alignItems: 'flex-end', marginBottom: 'var(--gap-md)' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 32px)' }}>
+      <div style={{ display: 'flex', gap: 'var(--bds-gap-sm)', alignItems: 'flex-end', marginBottom: 'var(--bds-gap-md)' }}>
         {steps.map((s, i) => (
           <div
             key={`${key}-${i}`}
             style={{
               width: '28px',
               height: `${(i + 1) * 10 + 20}px`,
-              borderRadius: 'var(--border-radius-sm, 2px)',
-              background: 'var(--background-brand-primary)',
-              animation: 'bds-fade-in var(--duration-md, 200ms) var(--ease-out) both',
+              borderRadius: 'var(--bds-border-radius-sm, 2px)',
+              background: 'var(--bds-background-brand-primary)',
+              animation: 'bds-fade-in var(--bds-duration-md, 200ms) var(--bds-ease-out) both',
               animationDelay: s.delay,
               opacity: 0,
             }}
@@ -577,14 +577,14 @@ export function StaggerDemo() {
           onClick={replay}
           style={{
             background: 'none',
-            border: '1px solid var(--border-secondary)',
-            borderRadius: 'var(--border-radius-sm, 2px)',
+            border: '1px solid var(--bds-border-secondary)',
+            borderRadius: 'var(--bds-border-radius-sm, 2px)',
             padding: '4px 12px',
             fontSize: '12px',
             cursor: 'pointer',
-            color: 'var(--text-muted)',
-            fontFamily: 'var(--font-family-body)',
-            marginLeft: 'var(--gap-sm)',
+            color: 'var(--bds-text-muted)',
+            fontFamily: 'var(--bds-font-family-body)',
+            marginLeft: 'var(--bds-gap-sm)',
           }}
         >
           Replay

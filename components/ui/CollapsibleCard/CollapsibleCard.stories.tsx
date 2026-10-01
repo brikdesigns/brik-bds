@@ -43,8 +43,8 @@ export const Controlled: Story = {
   render: () => {
     const [open, setOpen] = useState(false);
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
-        <div style={{ display: 'flex', gap: 'var(--gap-sm)' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-md)' }}>
+        <div style={{ display: 'flex', gap: 'var(--bds-gap-sm)' }}>
           <button type="button" onClick={() => setOpen(true)} style={{ cursor: 'pointer' }}>Expand</button>
           <button type="button" onClick={() => setOpen(false)} style={{ cursor: 'pointer' }}>Collapse</button>
         </div>
