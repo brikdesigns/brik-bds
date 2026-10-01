@@ -22,7 +22,10 @@ import isChromatic from 'chromatic/isChromatic';
 // 3. Brik Brand theme (light + dark)
 // 4. Font Audit tool (client-sim theme for font-family validation)
 // 5. BDS shared keyframe library (bds-spin, bds-pulse, bds-pop, etc.)
-// 6. Storybook overrides (Base mode spacing, UI fixes)
+// 6. Prefix bridge — old bare names → `--bds-` (ADR-043, #2670). Consumers get
+//    it appended to dist/tokens.css; without it here, Storybook renders a token
+//    surface no consumer has, and the bare-name DevBar widgets resolve nothing.
+// 7. Storybook overrides (Base mode spacing, UI fixes)
 import '../tokens/figma-tokens.css';
 import '../tokens/gap-fills.css';
 import '../tokens/ratios.css';
@@ -31,6 +34,7 @@ import '../tokens/font-audit.css';
 import '../tokens/animations.css';
 import '../css/animations.css';
 import '../css/premium-effects.css';
+import '../tokens/compat/prefix-bridge.css';
 import './storybook-overrides.css';
 
 // Hides one React 18 dev warning from lottie-react v3, and only that one.

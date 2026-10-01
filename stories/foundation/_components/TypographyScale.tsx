@@ -184,7 +184,7 @@ export function SemanticTypographyTable({ title, tokens, category }: SemanticTyp
               </code>
               <span
                 style={{
-                  fontSize: `var(${cssVar})`,
+                  fontSize: `var(--bds-${name})`,
                   lineHeight: 1.3,
                   fontFamily: 'var(--bds-font-family-body)',
                   color: 'var(--bds-text-primary)',

@@ -104,7 +104,7 @@ const NO_FILL = /^(transparent|none|inherit|initial|unset|revert|revert-layer)$/
 const SURFACE_TOKENS = [
   '--bds-background-primary',
   '--bds-background-input',
-  '--bds-text-input-bg',
+  '--text-input-bg',
 ];
 const isSurfaceFill = (value) =>
   SURFACE_TOKENS.some((t) => value.includes(`var(${t})`)) || /var\(--bds-surface-/.test(value);

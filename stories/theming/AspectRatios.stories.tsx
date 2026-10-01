@@ -108,7 +108,7 @@ const Card = ({
     >
       <div
         style={{
-          aspectRatio: `var(${token})`,
+          aspectRatio: `var(--bds-${token.slice(2)})`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

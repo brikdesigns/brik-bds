@@ -225,15 +225,13 @@ function ThemeCard({ label, value }: { label: string; value: string }) {
 }
 
 function ColorSwatch({ name, isText }: { name: string; isText?: boolean }) {
-  const varName = `--${name}`;
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xs)' }}>
       <div
         style={{
           width: '100%',
           height: '48px',
-          backgroundColor: isText ? 'var(--bds-surface-primary)' : `var(${varName})`,
+          backgroundColor: isText ? 'var(--bds-surface-primary)' : `var(--bds-${name})`,
           borderRadius: 'var(--bds-border-radius-md)',
           border: 'var(--bds-border-width-lg) solid var(--bds-border-secondary)',
           display: 'flex',
@@ -242,7 +240,7 @@ function ColorSwatch({ name, isText }: { name: string; isText?: boolean }) {
         }}
       >
         {isText && (
-          <span style={{ color: `var(${varName})`, fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number, fontSize: 'var(--bds-body-lg)' }}>
+          <span style={{ color: `var(--bds-${name})`, fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number, fontSize: 'var(--bds-body-lg)' }}>
             Aa
           </span>
         )}
