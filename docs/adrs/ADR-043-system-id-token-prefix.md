@@ -1,6 +1,6 @@
 # ADR-043 — System ID: every token tier leads with the ID of the system that owns it
 
-**Status:** Ratified 2026-10-01 — moves to Accepted when the grammar file (#2669) ships (§ Enforcement)
+**Status:** Accepted 2026-10-01 — ratified (§ Ratification), and the grammar file shipped in #2673 (§ Enforcement)
 **Date:** 2026-10-01
 **Supersedes:** — (supersedes *in part*: the "same names, brand values" theming contract, listed under § Consequences)
 **Superseded by:** —
@@ -27,7 +27,7 @@ The operator answered in a structured prompt (chat, `/resume 2668 brikdesigns/br
 - OPERATOR SAID 2026-10-01 (chat, /resume 2668 session), on open question 1, tenant handles: "vale-partners, birdwell (Recommended)"
 - OPERATOR SAID 2026-10-01 (chat, /resume 2668 session), on open question 2, Brik's own brand: "bds (Recommended)"
 
-Both open questions are resolved in § Resolved questions. Per § Enforcement, the ADR is **Accepted** once #2669 ships with `lint-naming-canon` reading the grammar file.
+Both open questions are resolved in § Resolved questions. Per § Enforcement, the ADR became **Accepted** when #2669 shipped (#2673) with `lint-naming-canon` reading the grammar file.
 
 ## Context
 
@@ -193,10 +193,10 @@ The cascade mechanism is unchanged: `@layer client-theme` still wins over `@laye
 
 ## Enforcement
 
-This ADR moves to **Accepted** when both are true:
+This ADR moves to **Accepted** when both are true. Both were met on 2026-10-01:
 
-- the operator ratifies it
-- the grammar file (#2669) ships with `lint-naming-canon` reading it
+- the operator ratifies it (§ Ratification)
+- the grammar file (#2669) ships with `lint-naming-canon` reading it (#2673, `scripts/lint-naming-canon.mjs:121-125`)
 
 Budget: no new workflow. #2669 extends the existing required `naming-canon-check.yml` job.
 
