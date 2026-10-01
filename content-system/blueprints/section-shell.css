@@ -42,20 +42,23 @@
  *     --bds-blueprint-section-padding-inline: var(--padding-xl);
  *   }
  *
- * Vertical rhythm is deliberately NOT hooked: ADR-014 forbids a Tier-4
- * fallback that is a raw `clamp()` literal, so it stays a direct declaration
- * (the same reasoning already documented in `react/Hero.css`). A family that
- * genuinely needs different rhythm re-declares `padding-block` on a selector
- * of its own, which wins by being unlayered. Two do — `bds-card-grid`'s
+ * Vertical rhythm is deliberately NOT hooked: it reads the layout-tier token
+ * `--section-padding-block` (ADR-042) as a direct declaration, not a Tier-4
+ * fallback target (the same reasoning already documented in `react/Hero.css`,
+ * written when this was still ADR-014's forbidden raw `clamp()` literal). A
+ * family that genuinely needs different rhythm re-declares `padding-block`
+ * on a selector of its own, which wins by being unlayered. Two do — `bds-card-grid`'s
  * heavier bottom inset, and `.bds-hero--with-pricing-card`'s tighter interior
  * rhythm — and `scripts/lint-blueprint-naming.mjs` accepts exactly that shape
  * (modifier- or descendant-scoped) while rejecting a bare re-declaration.
  */
 
 @layer bds-components {
-  /* Section vertical rhythm. 7vw is the harmonised value (#1439 decision 1). */
+  /* Section vertical rhythm. Device-fluid layout tier (ADR-042), superseding
+     the hand-written 7vw clamp (#1439 decision 1, ADR-021) with the Figma-
+     sourced --section-padding-block (64 → 80 → 104px at 320/768/1440). */
   .bds-blueprint-section {
-    padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge));
+    padding-block: var(--section-padding-block);
   }
 
   /* Centred content band. Both hooks fall back to Semantic tokens. The

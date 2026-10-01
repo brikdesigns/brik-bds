@@ -70,4 +70,18 @@ describe('findCoverageViolations — proves the gate fails on the exact drift #3
     expect(rows.find((r) => r.collection === 'spacing').status).toBe('ok');
     expect(rows.find((r) => r.collection === 'breakpoint').status).toBe('excluded');
   });
+
+  it('excludes layout (ADR-042) — fluid, no [data-mode-layout] block by design', () => {
+    const data = studio({ layout: ['mobile', 'tablet', 'desktop'] });
+    const css = ':root { --page-inset: calc(clamp(1rem, 1vw, 2rem)); }'; // build-time clamp, no attr block
+    const rows = findCoverageViolations(data, css);
+    expect(rows.find((r) => r.collection === 'layout').status).toBe('excluded');
+  });
+
+  it('flags layout as a stale exclusion if it ever DOES emit a [data-mode-layout] block', () => {
+    const data = studio({ layout: ['mobile', 'tablet', 'desktop'] });
+    const css = '[data-mode-layout="mobile"] { --page-inset: 16px; }';
+    const rows = findCoverageViolations(data, css);
+    expect(rows.find((r) => r.collection === 'layout').status).toBe('stale-exclusion');
+  });
 });

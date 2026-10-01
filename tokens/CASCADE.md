@@ -46,9 +46,10 @@ renew-pms, brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
 7. `modes-borderradius.css` — corner-radius mode overrides (`[data-mode-radius="sharp|round|pill"]`) — auto-generated via `npm run build:modes`. Note the attribute is `data-mode-radius` while the source collection is `border-radius`; overrides the semantic `--border-radius-{none,sm,md,lg}` (defined in figma-tokens.css above, so it lands with the other mode files).
 8. `gap-fills.css` — manual tokens not yet in Figma
 9. `modes-elevation.css` — elevation depth mode overrides (`[data-mode-elevation="flat"]`) — auto-generated via `npm run build:modes`. **Concatenated after gap-fills.css, not with the other mode files**, because it overrides the `:root`-scoped `--shadow-*` tokens defined *in* gap-fills; its bare `[data-mode-elevation]` selector ties `:root` on specificity and must win by source order. Ships `flat`, `lifted`, and `dramatic` (#2243; `subtle` is the default and needs no attribute — see the mode-contracts table).
-10. `ratios.css` — `--aspect-*` tokens (dimensionless `<ratio>`, can't be a Figma Variable; BDS #486)
-11. `fluid-type.css` — `--display-fluid-*` clamp() tier (viewport-fluid marketing display type; can't be a Figma Variable; brik-bds#959)
-12. `animations.css` — shared keyframe library (`bds-spin`, `bds-pulse`, `bds-pop`, etc.) — required by any component CSS that references these names
+10. `layout-fluid.css` — the **layout tier**: device-fluid `--page-inset` / `--section-padding-block`, one piecewise `calc(clamp(…) + clamp(…))` per token threading the mobile/tablet/desktop endpoints (ADR-042) — auto-generated via `npm run build:modes` (`emitFluid` in `generate-modes-css.mjs`). Carries a plain `:root` block, no `[data-mode-*]` selector (there's no runtime mode to flip — see § Non-color mode contracts below), so it's concatenated beside `ratios.css`/`fluid-type.css`, not with the mode files above.
+11. `ratios.css` — `--aspect-*` tokens (dimensionless `<ratio>`, can't be a Figma Variable; BDS #486)
+12. `fluid-type.css` — `--display-fluid-*` clamp() tier (viewport-fluid marketing display type; can't be a Figma Variable; brik-bds#959)
+13. `animations.css` — shared keyframe library (`bds-spin`, `bds-pulse`, `bds-pop`, etc.) — required by any component CSS that references these names
 
 **Not bundled:** `bridge.css` (opt-in via separate export), `font-audit.css`
 (Storybook-only), `motion-classes.css` (opt-in utility classes — consumers import

@@ -358,7 +358,7 @@ function parseCssTokens() {
     '--padding-', '--gap-', '--text-', '--background-', '--surface-',
     '--border-primary', '--border-secondary', '--border-muted', '--border-brand',
     '--border-input', '--border-inverse', '--border-on-color', '--border-width-',
-    '--border-radius-', '--page-', '--body-', '--label-', '--heading-',
+    '--border-radius-', '--page-', '--section-', '--body-', '--label-', '--heading-',
     '--display-', '--subtitle-', '--icon-', '--font-family-', '--box-shadow-',
     '--blur-radius-', '--size-',
   ];
@@ -413,10 +413,12 @@ function parseCssTokens() {
   // Load token files
   const FIGMA_TOKENS = path.join(__dirname, '..', 'tokens', 'figma-tokens.css');
   const GAP_FILLS = path.join(__dirname, '..', 'tokens', 'gap-fills.css');
+  const LAYOUT_FLUID = path.join(__dirname, '..', 'tokens', 'layout-fluid.css');
   const RATIOS = path.join(__dirname, '..', 'tokens', 'ratios.css');
   const BRIDGE = path.join(__dirname, '..', 'tokens', 'compat', 'bridge.css');
   if (fs.existsSync(FIGMA_TOKENS)) loadFromCss(FIGMA_TOKENS);
   if (fs.existsSync(GAP_FILLS)) loadFromCss(GAP_FILLS);
+  if (fs.existsSync(LAYOUT_FLUID)) loadFromCss(LAYOUT_FLUID);
   if (fs.existsSync(RATIOS)) loadFromCss(RATIOS);
   if (fs.existsSync(BRIDGE)) loadFromCss(BRIDGE);
 
@@ -1431,6 +1433,7 @@ function buildValueMaps() {
     SD_CSS_PATH,
     path.join(REPO_ROOT, 'tokens', 'figma-tokens.css'),
     path.join(REPO_ROOT, 'tokens', 'gap-fills.css'),
+    path.join(REPO_ROOT, 'tokens', 'layout-fluid.css'),
     path.join(REPO_ROOT, 'tokens', 'ratios.css'),
     path.join(REPO_ROOT, 'tokens', 'compat', 'bridge.css'),
   ].filter(f => fs.existsSync(f));
