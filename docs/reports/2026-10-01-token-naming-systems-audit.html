@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Token Naming Systems Audit — 2026-10-01</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font: 15px/1.5 -apple-system, "Segoe UI", sans-serif; max-width: 62rem; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; font-size: 14px; }
+  th, td { border: 1px solid #ccc; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+  th { background: #f4f4f4; }
+  code, pre { font-family: ui-monospace, Menlo, monospace; font-size: .92em; background: #f3f3f3; padding: 0 .2em; }
+  pre { padding: .75rem; overflow-x: auto; }
+  .verdict { background: #fff4e5; border-left: 4px solid #e58a00; padding: .75rem 1rem; }
+  .ok { color: #1a7f37; } .bad { color: #b42318; font-weight: 600; }
+  blockquote { border-left: 3px solid #bbb; margin: .5rem 0; padding: .25rem .75rem; color: #444; }
+</style>
+</head>
+<body>
+
+<h1>Token Naming Systems Audit</h1>
+<p><strong>Date:</strong> 2026-10-01 · <strong>Repo:</strong> brik-bds @ <code>b2f081c1</code> (main) · <strong>Also read:</strong> brik-llm (agents, skills, hooks, RAG ingest), brik-client-portal, <code>web/*</code> · <strong>Tickets:</strong> brik-bds#2666 (grammar), #2645 (ADR-034), #2651 (Tier-4 lint), #2632 (manifest 404), brik-client-portal#4413, brik-llm#4040 (RAG 401) · <strong>Method:</strong> read-only architect pass (Fable), with five load-bearing claims re-checked by the session agent (marked ✔).</p>
+
+<p><strong>PROPOSED — needs operator ratification.</strong> The recommended grammar in §4 is a proposal. Nothing in canon changes until the operator ratifies it.</p>
+
+<blockquote>OPERATOR SAID 2026-10-01 (chat, /resume 2655 brikdesigns/brik-bds): "We're needing to add a new layer for "ID" to identify the system for clearer naming. This "ID" would be at the start of the design token (i.e. bds-;vale-;birdwell-). We're very concerned for several reasons - 1). agents were suggesting an updated formula outside of documented formula introducing a whole new naming system for each token segment label in our naming formula, 2). our documentation is outdated, 3). is our LLM/RAG even being used for design system data retrieval?"</blockquote>
+
+<div class="verdict">
+<p><strong>Verdict.</strong> Agents invent token formulas because the canon page contradicts itself, live code shows them a third grammar, no gate checks names, and the tools agents actually load don't state the formula. RAG works but is barely read for token work.</p>
+<p><strong>The ID layer cannot be a leading prefix as stated.</strong> <code>--bds-</code> already means a Tier-4 Component token (<code>token-anatomy.mdx:78</code>, ADR-014), so <code>--bds-color-poppy-500</code> would parse as component <code>color</code>, property <code>poppy-500</code>. Recommended alternative: put the ID inside the Primitive <code>{family}</code> segment, following the <code>--color-system-*</code> precedent that already ships.</p>
+</div>
+
+<h2>1. Your three concerns</h2>
+<table>
+<tr><th>#</th><th>Concern</th><th>Verdict</th><th>Evidence</th></tr>
+<tr><td>1</td><td>Agents suggest formulas outside the documented one</td><td class="bad">Confirmed</td><td>Three agents, three different per-tenant forms (#2645 comments). One proposed <code>--color-{tenant}-{family}-{step}</code>, whose segments aren't in the doc's segment table.</td></tr>
+<tr><td>2</td><td>Documentation is outdated</td><td class="bad">Confirmed, and worse: self-contradictory for months</td><td><code>--color-{family}-{step}</code> at <code>token-anatomy.mdx:41,49,66,273</code>, against a segment table (<code>:130-145</code>) that never defines <code>{family}</code> or <code>{step}</code>. The lines date from 2026-05-18 (<code>c9629d8b</code>), 07-22 (<code>cc9868b3</code>) and 08-31 (<code>28fb9369</code>). Six live tokens (<code>dist/tokens.css:45-50</code>, <code>--color-annotation-annotation-*</code>) parse under neither form.</td></tr>
+<tr><td>3</td><td>Is RAG used for design-system retrieval?</td><td class="bad">Barely (medium confidence)</td><td>The anatomy chunks get about 17 agent reads in 30 days (<code>cli-query</code>: <code>anatomy</code> 11 + <code>how-the-six-concepts</code> 6). Every canon-tokens read in the top 500 rows comes from the <code>rag-eval</code> harness, not from agents. <code>component-css-authoring</code>: 108 reads, none on token-anatomy. RAG was also down (401) for part of today, brik-llm#4040.</td></tr>
+</table>
+
+<h2>2. Every path an agent can use to learn the formula</h2>
+<table>
+<tr><th>Path</th><th>States a formula?</th><th>Agrees with canon?</th><th>Evidence</th></tr>
+<tr><td><code>~/.claude/CLAUDE.md</code>, <code>Github/CLAUDE.md</code></td><td>No. Allowlist rule only ("use names in dist/tokens.css")</td><td>silent</td><td>§ Invariants</td></tr>
+<tr><td><code>brik-bds/CLAUDE.md</code></td><td>No. Routes to token-anatomy, canon-css, <code>/bds-manifest.json</code></td><td class="bad">Manifest route is dead</td><td>✔ <code>curl design.brikdesigns.com/bds-manifest.json</code> → 404 (#2632)</td></tr>
+<tr><td>Consumer CLAUDE.md</td><td>Via <code>@import</code> of brik-bds/CLAUDE.md</td><td class="bad">portal, vale-partners, birdwell don't import it</td><td><code>_newclient</code>, <code>memphis-dental</code>, <code>seniorhomeessentials</code>, <code>treehouse</code> import it; <code>rg</code> for the import is empty in the other three</td></tr>
+<tr><td><code>brik-llm/operations/agents/design-system.md</code></td><td>No</td><td class="bad">Cites a file that doesn't exist and an old token file</td><td>✔ <code>:22</code> <code>tokens/TOKEN-REFERENCE.md</code>: no such file. <code>:21,28,53</code> name <code>tokens/figma-tokens.css</code>, not <code>dist/tokens.css</code></td></tr>
+<tr><td><code>canon-css</code> skill</td><td>No (retrieval recipe only)</td><td>silent</td><td><code>rg</code> for <code>{purpose}</code>/<code>{family}</code> empty</td></tr>
+<tr><td><code>validate-token-names</code> skill</td><td>Borders only</td><td>partial</td><td><code>SKILL.md:117</code></td></tr>
+<tr><td>Hook <code>token-name-guard.sh</code></td><td>No grammar. Allowlist for 5 prefix families</td><td class="bad"><code>--vale-*</code>, <code>--tncld-*</code>, <code>--portal-*</code> never checked</td><td>✔ <code>~/.claude/hooks/token-name-guard.sh:28</code> "Canonical prefix families: --text-*, --surface-*, --background-*, --border-*, --color-*"</td></tr>
+<tr><td>Docs host <code>/docs/foundation/token-anatomy.md</code></td><td>Yes</td><td>Same as source, contradiction included</td><td>200, 34 KB</td></tr>
+<tr><td>brik-rag <code>canon-tokens/token-anatomy</code></td><td>Yes (9 chunks)</td><td>Grammar matches; 2 commits behind</td><td>Last ingested 2026-09-27; misses <code>97ffe626</code> and <code>b2f081c1</code>. ✔ Ingest is weekly only: LaunchAgent <code>com.brik.doc-corpus-reingest</code>, Sunday 07:15</td></tr>
+<tr><td>Memory chunk <code>bds-token-anatomy</code></td><td>UNVERIFIED</td><td>unknown</td><td>13 reads/30d, more than canon <code>anatomy</code> (11). Its content couldn't be retrieved by <code>--source-types memory</code> this session</td></tr>
+<tr><td><code>brik-llm/foundations/brik-bds</code> mirror</td><td>Yes</td><td>1 commit behind</td><td>Not an ingest source and not imported, so low risk</td></tr>
+<tr><td>ADR-014, ADR-034</td><td>Tier-4 form; no consumer namespace</td><td class="bad">Agree, but still <code>Proposed</code></td><td>The mdx calls ADR-014 "the only sanctioned" namespace (<code>:78</code>) while its header says Proposed</td></tr>
+</table>
+
+<h2>3. Root cause, ranked</h2>
+<ol>
+<li><strong>Canon contradicts itself.</strong> Agents have to fill the <code>{family}</code> gap themselves. Three agents filled it three ways.</li>
+<li><strong>Live code teaches a different grammar.</strong> ✔ The portal emitter writes bare <code>--color-${seg}-lightest|lighter|dark|darker|darkest</code> (<code>brik-client-portal/src/lib/theming/generate-theme-css.ts:989-994</code>). It also writes <code>--${slug}-${seg}</code> (<code>:493-547</code>, e.g. <code>--vale-partners-olive-hover</code>). <code>theme-tncld.css</code> (14 <code>--tncld-*</code>) and <code>theme-brik-portal.css</code> (32 <code>--portal-*</code>) are hand-authored. Figma group names leak straight into tokens (<code>tokens-studio.json:417-436</code> → <code>tokens.css:45-50</code>).</li>
+<li><strong>No gate parses names.</strong> <code>lint-tokens.js:654</code> skips <code>--bds-*</code>. <code>lint-token-tiers.mjs:117</code> only asks whether a name starts with <code>--color-</code>. The hook ignores anything outside its five families. Invented names pass.</li>
+<li><strong>The tools agents actually load don't state the formula</strong> (§2), and the design-system agent points at a file that doesn't exist.</li>
+<li><strong>The governance ADRs aren't ratified.</strong> ADR-014 and ADR-034 are still Proposed, which gives agents licence to suggest alternatives.</li>
+</ol>
+
+<h2>4. The ID layer</h2>
+<h3>What ships today</h3>
+<table>
+<tr><th>Prefix</th><th>Count</th><th>Where it comes from</th></tr>
+<tr><td><code>--bds-</code></td><td>2,563 defs (includes mirror and worktrees)</td><td>Tier-4 component knobs</td></tr>
+<tr><td><code>--brik-</code></td><td>2,031</td><td>All Webflow legacy exports. Not BDS; ADR-034:46 rejects it</td></tr>
+<tr><td><code>--vale-partners-</code></td><td>59 generated + 6 hand</td><td>Portal emitter</td></tr>
+<tr><td><code>--tncld-</code></td><td>14</td><td>Hand-authored, <code>web/tncld</code></td></tr>
+<tr><td><code>--portal-</code></td><td>32</td><td>Hand-authored, portal</td></tr>
+<tr><td><code>--birdwell-</code></td><td>0</td><td>Birdwell uses bare <code>--color-*</code> ×32</td></tr>
+<tr><td><code>--color-system-{hue}</code></td><td>29</td><td>Identity-scoped colour already in canon: the precedent</td></tr>
+</table>
+
+<h3>The collision</h3>
+<p>A leading <code>--bds-</code> ID on every token makes <code>--bds-color-poppy-500</code> parse as Tier-4 <code>{component}=color</code>, <code>{property}=poppy-500</code> (<code>token-anatomy.mdx:78</code>, ADR-014). Either the Tier-4 namespace gets renamed (2,563 defs across every consumer), or the ID can't be a leading prefix.</p>
+
+<h3>Recommended grammar (medium-high confidence)</h3>
+<pre>Primitive: --color-{family}-{step}
+           {family} := [{id}-]{hue}    id from a closed registry: system, vale, tncld, portal, birdwell …
+                                       BDS's own primitives carry no id
+           --color-poppy-500 (BDS)  ·  --color-vale-olive-500 (tenant)  ·  --color-system-yelp (exists)
+Semantic:  unchanged — --background-brand-primary; a tenant overrides VALUES under the same names
+Component: unchanged — --bds-{component}-{property}</pre>
+<p><strong>NEW PROPOSALS in this grammar:</strong> (a) define <code>{family}</code> and <code>{step}</code> in the segment table (#2666 AC-1/3); (b) keep the ID registry as a closed list in <code>tokens/</code>. No new tier, no new prefix, and <code>--bds-</code> stays as it is.</p>
+<p><strong>Blast radius:</strong> 0 BDS renames in <code>dist/tokens.css</code>, plus 6 annotation fixes at the Figma source. One-file rewrite of the portal emitter (<code>generate-theme-css.ts:493-547, 985-995</code>), then regenerate vale. Hand renames: tncld (14) and portal (32). Style Dictionary is untouched. The three lint prefix lists learn the registry. Reversible: names change, values don't.</p>
+
+<h3>Decisions only the operator can make</h3>
+<table>
+<tr><th>#</th><th>Fork</th><th>Recommendation</th></tr>
+<tr><td>A</td><td>Should the ID be a leading prefix (as stated) or sit inside <code>{family}</code>?</td><td>Inside <code>{family}</code>. A leading prefix forces a Tier-4 rename across every repo.</td></tr>
+<tr><td>B</td><td>Tenant ramp steps: numeric <code>50–950</code> (BDS canon) or the tonal <code>lightest…darkest</code> the emitter writes today?</td><td>Numeric, so one grammar covers BDS and tenants.</td></tr>
+<tr><td>C</td><td>Do tenant <em>semantic</em> tokens ever carry an ID?</td><td>No. Same-name override is how theming works (<code>token-anatomy.mdx:66</code>).</td></tr>
+</table>
+
+<h2>5. Gates that stop it recurring</h2>
+<table>
+<tr><th>Gate</th><th>Extends</th><th>Cost</th></tr>
+<tr><td>Name-grammar lint: parse every <code>dist/tokens.css</code> name against a per-tier grammar table</td><td><code>scripts/lint-token-tiers.mjs:80,110-117</code>, run in the existing <code>lints</code> job (<code>tokens-gate.yml:413</code>). Same parser handles Tier 4 (#2651): one parser, two grammars</td><td>One npm script in a job that took 55 s to 1 m 45 s across 3 runs today</td></tr>
+<tr><td>Hook reads the same grammar JSON</td><td><code>token-name-guard.sh</code>, so pre-write checks stop ignoring tenant prefixes</td><td>~0</td></tr>
+<tr><td>Portal emitter output test</td><td><code>generate-theme-css.ts</code> (portal repo, separate PR, #4413)</td><td>One unit test</td></tr>
+<tr><td>RAG freshness: re-ingest on a docs merge, not only weekly</td><td><code>doc-corpus-reingest-cron.sh</code> + <code>morning-check.sh:841</code> freshness verdict</td><td>One dispatch per docs merge</td></tr>
+<tr><td>Docs-host probe: <code>/llms.txt</code> and <code>/bds-manifest.json</code> return 200</td><td>morning-check; and <code>docs-site/scripts/ensure-bds-dist.mjs:25</code> fails the build when the manifest is missing (#2632)</td><td>2 HTTP calls/day</td></tr>
+<tr><td>Retrieval wiring: design-system agent and <code>validate-token-names</code> state the formula and call <code>brik-rag</code></td><td><code>operations/agents/design-system.md:21-22,75-78</code>; fix the dead <code>TOKEN-REFERENCE.md</code> pointer</td><td>Doc edits</td></tr>
+</table>
+
+<h2>6. What happens next</h2>
+<ol>
+<li>The operator ratifies or changes forks A–C.</li>
+<li>#2666 is re-scoped to carry the ID layer. Its "deciding the per-tenant form is out of scope" line is overridden by the operator's direction above.</li>
+<li>Build #2666: one grammar on the page, the lint, and the docs-host and RAG freshness gates. Then #2645 (flip ADR-034) and portal#4413 (emitter) follow the ratified grammar.</li>
+</ol>
+
+</body>
+</html>
