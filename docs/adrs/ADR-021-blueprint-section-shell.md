@@ -3,7 +3,7 @@
 **Status:** Accepted (2026-07-26)
 **Date:** 2026-07-26
 **Supersedes:** —
-**Superseded by:** —
+**Superseded by:** [ADR-042](./ADR-042-layout-tier-device-clamp.md) — the 7vw section rhythm clamp only; `padding-block` now reads `--section-padding-block`
 **Owner:** Nick Stanerson
 **Related:** #1439 (this change), #1438 (blueprint cleanup umbrella), #1443 (token burn-down — canonicalised the token names this shell now consumes), ADR-014 (Tier-4 hook namespace — why rhythm is not hooked), ADR-017 (slot pattern gate — why `bds-blueprint-section__*` needs no allowlist entry), ADR-008 (naming canon)
 

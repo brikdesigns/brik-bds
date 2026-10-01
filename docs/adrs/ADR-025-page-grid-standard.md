@@ -4,6 +4,8 @@
 
 Accepted. Tracked by #1625 / #1628.
 
+Amended by [ADR-042](./ADR-042-layout-tier-device-clamp.md) (2026-10-01): `--page-inset`'s value is now a device-fluid layout-tier token (16 / 32 / 96px at 320 / 768 / 1440) and its `[data-mode-spacing]` ladder is removed. The width-container recipe below stands.
+
 ## Context
 
 ADR-023 locked content rhythm, ADR-024 locked component rhythm — both vertical. The horizontal frame around them had no standard: BDS ships `--content-width-*` and `--breakpoint-*` tokens (`tokens/gap-fills.css`) but no gutter token (`grep -i gutter dist/tokens.css` → empty before this change), and the width-container slot that USWDS fills with `grid-container` and GOV.UK with `govuk-width-container` was empty. The costs were measurable:
