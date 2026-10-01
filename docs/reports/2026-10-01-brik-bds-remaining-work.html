@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>brik-bds Remaining Work — 2026-10-01</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font: 15px/1.5 -apple-system, "Segoe UI", sans-serif; max-width: 62rem; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+  h3 { font-size: 1.02rem; margin-top: 1.25rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; font-size: 14px; }
+  th, td { border: 1px solid #ccc; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+  th { background: #f4f4f4; }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: .92em; background: #f3f3f3; padding: 0 .2em; }
+  pre { background: #f6f6f6; padding: .5rem .75rem; overflow-x: auto; font-size: 13px; }
+  .verdict { background: #fff4e5; border-left: 4px solid #e58a00; padding: .75rem 1rem; }
+  .decide { background: #eef4ff; border-left: 4px solid #2f6fdb; padding: .75rem 1rem; }
+  .ok { color: #1a7f37; } .bad { color: #b42318; font-weight: 600; } .unv { color: #8a5a00; font-style: italic; }
+  blockquote { border-left: 3px solid #bbb; margin: .5rem 0; padding: .25rem .75rem; color: #444; }
+  .wrap { overflow-x: auto; }
+  .n { text-align: right; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+
+<h1>brik-bds: Remaining Work — 2026-10-01</h1>
+<p><strong>Date:</strong> 2026-10-01 · <strong>Repo:</strong> brik-bds @ <code>8ffe0d0b</code> (main) · <strong>Replaces:</strong> a 2026-08-20 claude.ai artifact dashboard, hand-reassessed this session (<code>gh</code> re-run against live GitHub, not carried forward) · <strong>Follow-up:</strong> issue filed below for a gate the old board's premise missed.</p>
+
+<div class="verdict">
+<p><strong>Verdict.</strong> The 2026-08-20 board was stale by 42 days and materially wrong on every headline figure. Open issues were undercounted by 72 (162 → 234), gate arrears by 45 (22 → 64 unique), and the single p1 it reported had already grown to 10. Six weeks of unattended drift is the finding — not any one number below.</p>
+<table>
+<tr><th>Metric</th><th>2026-08-20 board</th><th class="n">Live 2026-10-01</th></tr>
+<tr><td>Open issues</td><td class="n">162</td><td class="n">234</td></tr>
+<tr><td>Gate arrears (unique issues)</td><td class="n">22</td><td class="n">64</td></tr>
+<tr><td>— needs:reconcile</td><td class="n">13</td><td class="n">36</td></tr>
+<tr><td>— needs:citation-fix</td><td class="n">7</td><td class="n">26</td></tr>
+<tr><td>— needs:size</td><td class="n">2</td><td class="n">5</td></tr>
+<tr><td>Ready to build (p1/p2, S/XS, unblocked)</td><td class="n">20</td><td class="n">43</td></tr>
+<tr><td>priority:p1-week</td><td class="n">1</td><td class="n">10</td></tr>
+<tr><td>30-day closed</td><td class="n">242</td><td class="n">161</td></tr>
+<tr><td>30-day opened</td><td class="n">299</td><td class="n">217</td></tr>
+</table>
+</div>
+
+<h2>1. Gate health</h2>
+<p>All three backlog-hygiene gates' most recent <em>non-cancelled</em> run reports <code>success</code>. The raw <code>gh run list</code> output for <code>issue-size-gate</code> shows mostly <code>cancelled</code> — that is GitHub Actions' concurrency group superseding duplicate runs fired by the same issue-label burst (confirmed: runs cluster in groups sharing a timestamp to the second, one <code>success</code> per group), not a gate failure.</p>
+<table>
+<tr><th>Gate</th><th>Last meaningful run</th><th class="n">Queue (unique)</th><th>What's waiting</th></tr>
+<tr><td><code>merge-reconcile</code></td><td class="ok">success</td><td class="n">36</td><td>Issues a merged PR may have settled or invalidated. §2.</td></tr>
+<tr><td><code>stale-citation-sweep</code></td><td class="ok">success</td><td class="n">26</td><td>Issues citing files/tokens that no longer exist. §3.</td></tr>
+<tr><td><code>issue-size-gate</code></td><td class="ok">success</td><td class="n">5</td><td>Needs a size label against the XS/S/M/L ladder. §4.</td></tr>
+</table>
+<p>1 issue (<a href="https://github.com/brikdesigns/brik-bds/issues/1453">#1453</a>) is double-counted above — flagged by both <code>needs:reconcile</code> and <code>needs:citation-fix</code> — so 36+26+5=67 sums to 64 unique issues.</p>
+
+<h2>2. Reconcile queue — 36 issues</h2>
+<p>Issues a merged PR may have already settled or invalidated. Each needs a read against the real diff, not a bulk close.</p>
+<div class="wrap">
+<table>
+<tr><th>Issue</th><th>Size</th><th>Title</th></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2638">#2638</a></td><td>S</td><td>Propagate BDS bumps to every web consumer and report version drift</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2632">#2632</a></td><td>S</td><td>docs host 404s /bds-manifest.json, but CLAUDE.md routes agents to it</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2624">#2624</a></td><td>M</td><td>docs-gate builds docs-site differently from Netlify, so CI stays green while the deploy is broken</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2616">#2616</a></td><td>S</td><td>Publish an agent-readable BDS surface: llms.txt, per-page markdown, and bds-manifest.json</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2586">#2586</a></td><td>S</td><td>Card/PricingCard/Board take the Tier-1 <code>--shadow-md</code>, so a consumer theme never reaches them</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2526">#2526</a></td><td>S</td><td>Decide taxonomy bucket for product page archetypes</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2481">#2481</a></td><td>S</td><td>Move ContactIcon badge/tile treatment to the Tag family</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2470">#2470</a></td><td>S</td><td>fix(toc): re-derive variant="rail" contrast pairings for a transparent box</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2355">#2355</a></td><td>S</td><td>Dependabot skipped the docs-site half of a critical alert</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2297">#2297</a></td><td>XS</td><td>TableOfContents scroll-spy interaction test flakes on the required check</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2228">#2228</a></td><td>S</td><td>Retire tiny and huge from ClusterGap and StackGap unions</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2226">#2226</a></td><td>S</td><td>Drop the deprecated step-word token aliases</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2181">#2181</a></td><td>M</td><td>Expose a sanctioned BDS override for service-themed CTAs (Button) and price ink (PricingCard)</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2063">#2063</a></td><td>—</td><td>Publish @brikdesigns/bds v0.172.0 (MediaTabs + motion + Marquee + SyncedMediaSteps)</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2037">#2037</a></td><td>L</td><td>Build Split, Row, Stat, and MediaBlock composition primitives</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1985">#1985</a></td><td>XS</td><td>Move Tag's neutral fill onto a background token like the other indicators</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1984">#1984</a></td><td>S</td><td>Remove the retired valence prop and value aliases one minor after #1957</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1983">#1983</a></td><td>M</td><td>Split Button's variant prop so a destructive action can also be low-emphasis</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1949">#1949</a></td><td>S</td><td>Disposition the colour ramps' two step vocabularies</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1940">#1940</a></td><td>S</td><td>DatePicker: accessible name without a visible label</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1927">#1927</a></td><td>L</td><td>Prefix the remaining bare BEM modifiers</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1812">#1812</a></td><td>M</td><td>Correct the disabled and positive semantic values in Figma</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1803">#1803</a></td><td>XS</td><td>Sync the inspect toolbar button with URL auto-activation</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1802">#1802</a></td><td>M</td><td>Fix AA contrast failures in devbar and events widget chrome</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1791">#1791</a></td><td>S</td><td>Reconcile mislabelled semantic entries in the inspect widget</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1746">#1746</a></td><td>S</td><td>Name the state leaking between visual suite invocations</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1742">#1742</a></td><td>M</td><td>Measure sub-part and surface fills under the disabled fade</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1741">#1741</a></td><td>S</td><td>SegmentedControl disabled item fails AA-large in dark</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1456">#1456</a></td><td>L</td><td>Consolidate selection primitives across component families</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1453">#1453</a></td><td>M</td><td>Unify read/edit mode into a Form-level primitive <span class="bad">(also in citation queue — see note)</span></td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1304">#1304</a></td><td>S</td><td>Decide Tag color axis vs Badge for tinted indicators</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/872">#872</a></td><td>M</td><td>Add collection-index/article/FAQ Astro blueprints</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/828">#828</a></td><td>M</td><td>Expose component spacing variables (space mode)</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/788">#788</a></td><td>M</td><td>Rename <code>audience</code> → <code>serviceLine</code> across the API</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/404">#404</a></td><td>S</td><td>Add Page/PageBody/DataDisplay primitives</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/224">#224</a></td><td>L</td><td>Wire IndustryPack compliance into gen</td></tr>
+</table>
+</div>
+<p><strong>Carried over, unresolved 6 weeks running:</strong> <a href="https://github.com/brikdesigns/brik-bds/issues/1453">#1453</a> was already flagged on the 2026-08-20 board with a noted stale premise (<code>SheetFieldLabel</code>/<code>SheetFieldValue</code> deleted in PR #687). It is still open, still flagged by both gates, and the premise judgment was never made. This is the queue's clearest case of a gate doing its job and nobody reading the result.</p>
+
+<h2>3. Citation queue — 26 issues</h2>
+<p>Issues citing files or tokens that no longer exist.</p>
+<div class="wrap">
+<table>
+<tr><th>Issue</th><th>Size</th><th>Title</th></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2683">#2683</a></td><td>M</td><td>docs: migrate docs-site token names to --bds-, then gate bare names</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2678">#2678</a></td><td>L</td><td>Rebind consumer theme overrides to --bds-* names before upgrading past #2670</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2666">#2666</a></td><td>XS</td><td>token-anatomy.mdx states two incompatible grammars for --color-*; 6 live tokens parse under neither</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2639">#2639</a></td><td>M</td><td>Audit blueprint wiring across BDS, portal, and sites</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2600">#2600</a></td><td>XS</td><td>Mirror font-family/icon and font-family/logo from Foundations into foundations.json</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2599">#2599</a></td><td>S</td><td>Delete the 11 stale color-typed primitives that throw 3 Style Dictionary transform errors</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2592">#2592</a></td><td>M</td><td>Guard same-family responsive token swaps (replaces dead lint-tokens --check-grid)</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2576">#2576</a></td><td>—</td><td>ReadModePage docs are retrievable only as canon-components/overview</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2547">#2547</a></td><td>S</td><td>Scroll-spy compares stale section positions</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2398">#2398</a></td><td>M</td><td>Canonical devbar widget edits cannot be merged</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2392">#2392</a></td><td>S</td><td>HeroLayout has no centered member or title font hook</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2239">#2239</a></td><td>S</td><td>pr-task strips the repo qualifier, so a cross-repo Refs points at this repo</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2222">#2222</a></td><td>S</td><td>fix(tokens): font-weight light and thin both resolve to 300, and light has no CSS token</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2059">#2059</a></td><td>XS</td><td>Point the token-authority canon at a path that exists in a fresh worktree</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2040">#2040</a></td><td>M</td><td>Consolidate the dual per-component doc surface</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2039">#2039</a></td><td>S</td><td>Purge retired Tier 1/Tier 2 vocabulary from the token PR checklist</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1924">#1924</a></td><td>M</td><td>Retire --box-shadow-* in favour of --shadow-*</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1908">#1908</a></td><td>XS</td><td>Narrow the bare test/ gitignore so scripts/test/ is tracked</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1888">#1888</a></td><td>S</td><td>Service-glyph source set is unrecorded, blocking any new or re-exported art</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1829">#1829</a></td><td>M</td><td>Add a product AppBar composite for the app shell</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1754">#1754</a></td><td>S</td><td>Reconcile raw --color-* guidance + close the fill escape hatch</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1740">#1740</a></td><td>L</td><td>Migrate consumers off 6-step token names</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1457">#1457</a></td><td>M</td><td>Fold or retire ProductSummaryCard (domain-specific card)</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1453">#1453</a></td><td>M</td><td>Unify read/edit mode into a Form-level primitive <span class="bad">(also in reconcile queue — see §2 note)</span></td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1028">#1028</a></td><td>M</td><td>Decouple dark hero color flips from the section surface</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/975">#975</a></td><td>S</td><td>Delete bridge.css + remove export + update Cascade doc</td></tr>
+</table>
+</div>
+
+<h2>4. Size queue — 5 issues</h2>
+<table>
+<tr><th>Issue</th><th>Title</th></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2576">#2576</a></td><td>ReadModePage docs are retrievable only as canon-components/overview</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2276">#2276</a></td><td>overflow-x:hidden on .bds-table defeats sticky action columns</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2275">#2275</a></td><td>Table cells collapse to one character instead of overflowing their scroll container</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2063">#2063</a></td><td>Publish @brikdesigns/bds v0.172.0 (MediaTabs + motion + Marquee + SyncedMediaSteps)</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1773">#1773</a></td><td>Select chevron override hook never reaches the chevron</td></tr>
+</table>
+<p>Note: <code>#2063</code> and <code>#2576</code> each appear in two queues (unsized <em>and</em> reconcile/citation) — a merged-but-unpublished release and a doc surface that is both miscited and unsized.</p>
+
+<h2>5. priority:p1-week — 10 issues</h2>
+<table>
+<tr><th>Issue</th><th>Title</th></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2676">#2676</a></td><td>sweep-merged-worktrees marks a branch REMOVE when an older merged PR shares its name, even with an open PR on it</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2668">#2668</a></td><td>Prefix every token tier with its owning System ID</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2666">#2666</a></td><td>token-anatomy.mdx states two incompatible grammars for --color-*; 6 live tokens parse under neither</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2632">#2632</a></td><td>docs host 404s /bds-manifest.json, but CLAUDE.md routes agents to it</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2624">#2624</a></td><td>docs-gate builds docs-site differently from Netlify, so CI stays green while the deploy is broken</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2595">#2595</a></td><td>Spacing & breakpoint token system: close the declared-but-not-wired gaps</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2592">#2592</a></td><td>Guard same-family responsive token swaps (replaces dead lint-tokens --check-grid)</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2589">#2589</a></td><td>Inspect widget reports declarations from non-matching @media rules as the live value</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2402">#2402</a></td><td>Gate --text-positive on --surface-positive — 2.33:1 in dark</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2309">#2309</a></td><td>meta: blueprint rail — Astro canonicity, taxonomy, and the website factory <em>(umbrella)</em></td></tr>
+</table>
+
+<h2>6. Ready to build — 43 issues</h2>
+<p>Every open issue that is p1 or p2, sized S or XS, and not frozen/iceboxed/an umbrella parent. This is the filter, not a recommendation — no dependency analysis applied.</p>
+<div class="wrap">
+<table>
+<tr><th>Issue</th><th>Size</th><th>Area</th><th>Title</th></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2676">#2676</a></td><td>S</td><td>tooling</td><td>sweep-merged-worktrees marks a branch REMOVE when an older merged PR shares its name</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2666">#2666</a></td><td>XS</td><td>tokens</td><td>token-anatomy.mdx states two incompatible grammars for --color-*</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2638">#2638</a></td><td>S</td><td>—</td><td>Propagate BDS bumps to every web consumer and report version drift</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2632">#2632</a></td><td>S</td><td>tooling</td><td>docs host 404s /bds-manifest.json, but CLAUDE.md routes agents to it</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2629">#2629</a></td><td>S</td><td>storybook</td><td>Move the AllMarks matrices to MDX and add per-state SocialIcon/ContactIcon stories</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2619">#2619</a></td><td>S</td><td>tooling</td><td>Agent-readable markdown escapes quotes as &amp;#x22; in 29 of 196 docs pages</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2616">#2616</a></td><td>S</td><td>tooling</td><td>Publish an agent-readable BDS surface: llms.txt, per-page markdown, and bds-manifest.json</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2593">#2593</a></td><td>S</td><td>tokens</td><td>Emit font-family fallbacks from the generator; delete the hand-authored brand quartet</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2589">#2589</a></td><td>S</td><td>tooling</td><td>Inspect widget reports declarations from non-matching @media rules as the live value</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2548">#2548</a></td><td>S</td><td>tooling</td><td>SKIP_STORY_CHECK=1 leaks into pre-push and blocks every push</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2481">#2481</a></td><td>S</td><td>components</td><td>Move ContactIcon badge/tile treatment to the Tag family</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2402">#2402</a></td><td>S</td><td>components, tokens</td><td>Gate --text-positive on --surface-positive — 2.33:1 in dark</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2355">#2355</a></td><td>S</td><td>tooling</td><td>Dependabot skipped the docs-site half of a critical alert</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2351">#2351</a></td><td>S</td><td>—</td><td>Figma's border-radius sm and lg aliases resolve to different values than BDS tokens of the same name</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2347">#2347</a></td><td>XS</td><td>tokens</td><td>Record the ramp anchor contract in an ADR</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2346">#2346</a></td><td>S</td><td>tokens, tooling</td><td>Validate .md prose token facts against dist/tokens.css</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2297">#2297</a></td><td>XS</td><td>tooling</td><td>TableOfContents scroll-spy interaction test flakes on the required check</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2294">#2294</a></td><td>S</td><td>components</td><td>Card has no prop for the -inverse service surface</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2281">#2281</a></td><td>S</td><td>tooling</td><td>prop-axes.mdx teaches the pre-ADR-033 axis vocabulary</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2257">#2257</a></td><td>XS</td><td>components</td><td>Card media radius sits one step below the card corner</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2239">#2239</a></td><td>S</td><td>tooling</td><td>pr-task strips the repo qualifier, so a cross-repo Refs points at this repo</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2096">#2096</a></td><td>S</td><td>tokens</td><td>Gate --text-negative — it is unmeasured and 3.48:1 on white</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2080">#2080</a></td><td>S</td><td>tokens</td><td>Give accent-{hue} a readable on-tint text token</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2059">#2059</a></td><td>XS</td><td>tooling</td><td>Point the token-authority canon at a path that exists in a fresh worktree</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1985">#1985</a></td><td>XS</td><td>components</td><td>Move Tag's neutral fill onto a background token like the other indicators</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1949">#1949</a></td><td>S</td><td>tokens</td><td>Disposition the colour ramps' two step vocabularies</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1926">#1926</a></td><td>S</td><td>components</td><td>Prefix the nine ambiguous bare BEM modifiers</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1887">#1887</a></td><td>XS</td><td>tooling</td><td>Decide Mobbin ToS 10.1 scope for client work</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1883">#1883</a></td><td>S</td><td>tooling</td><td>Restore issue Type coverage and pick one mechanism</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1796">#1796</a></td><td>S</td><td>tooling</td><td>Classify unstable captures as drops, not pixel regressions</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1788">#1788</a></td><td>S</td><td>components</td><td>Decide whether BDS buttons may require Font Awesome Pro</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1754">#1754</a></td><td>S</td><td>tokens</td><td>Reconcile raw --color-* guidance + close the fill escape hatch</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1741">#1741</a></td><td>S</td><td>components</td><td>SegmentedControl disabled item fails AA-large in dark</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1624">#1624</a></td><td>S</td><td>components, tokens</td><td>Point BDS component links at the --text-link alias</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1350">#1350</a></td><td>S</td><td>components</td><td>Add horizontal layout to ProgressStepper steps variant</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1349">#1349</a></td><td>S</td><td>components</td><td>Add content slot and category tint to ActivityTimeline events</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1256">#1256</a></td><td>S</td><td>tokens</td><td>Lighten avatar accent fills to pale system tints</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1254">#1254</a></td><td>S</td><td>storybook</td><td>Add ServiceTag Chromatic snapshots for bundled glyphs</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/1208">#1208</a></td><td>S</td><td>content-system</td><td>Recompose the two blog heroes from the kit</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/824">#824</a></td><td>S</td><td>tooling</td><td>Audit + CI-gate page-structure compliance in brikdesigns</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/821">#821</a></td><td>S</td><td>tokens</td><td>Brand Kit non-service semantics diverged from components</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/517">#517</a></td><td>S</td><td>storybook</td><td>Replace web-elements roadmap callouts</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/456">#456</a></td><td>S</td><td>tokens</td><td>Canonical opacity-tier taxonomy</td></tr>
+</table>
+</div>
+
+<h2>7. Composition — where the 234 sit</h2>
+<table>
+<tr><th>By size</th><th class="n">n</th></tr>
+<tr><td>size:m</td><td class="n">69</td></tr>
+<tr><td>size:s</td><td class="n">94</td></tr>
+<tr><td>size:l</td><td class="n">20</td></tr>
+<tr><td>size:xs</td><td class="n">28</td></tr>
+<tr><td>unsized</td><td class="n">23</td></tr>
+</table>
+<table>
+<tr><th>By priority</th><th class="n">n</th></tr>
+<tr><td>priority:p0-now</td><td class="n">0</td></tr>
+<tr><td>priority:p1-week</td><td class="n">10</td></tr>
+<tr><td>priority:p2-month</td><td class="n">77</td></tr>
+<tr><td>priority:p3-someday</td><td class="n">79</td></tr>
+<tr><td>no priority label</td><td class="n">68</td></tr>
+</table>
+<table>
+<tr><th>By area</th><th class="n">n</th></tr>
+<tr><td>area:components</td><td class="n">83</td></tr>
+<tr><td>area:tokens</td><td class="n">58</td></tr>
+<tr><td>area:storybook</td><td class="n">43</td></tr>
+<tr><td>area:tooling</td><td class="n">41</td></tr>
+<tr><td>area:content-system</td><td class="n">20</td></tr>
+</table>
+<table>
+<tr><th>Held back</th><th class="n">n</th></tr>
+<tr><td>meta:project (umbrella)</td><td class="n">21</td></tr>
+<tr><td>icebox</td><td class="n">10</td></tr>
+<tr><td>status:frozen</td><td class="n">2</td></tr>
+</table>
+<p>68 issues (29% of open) carry no priority label and <code>needs:priority</code> is 0 — there is no gate on this, same gap the 08-20 board called out (35 of 162 then). It has grown faster than the backlog: 29% unprioritized now vs 22% then.</p>
+
+<h2>8. Activity since 2026-08-20 — 42 merged PRs</h2>
+<p>Far too much to narrate PR-by-PR the way the 08-20 board did for its 4. By thread, from <code>gh pr list --state merged --search "merged:&gt;=2026-08-20"</code>:</p>
+<ul>
+<li><strong>Token naming/grammar (ADR-035, ADR-041, ADR-042, ADR-043):</strong> #2617 content-width ladder, #2612/#2614 spacing & padding track gates, #2659/#2662 device-fluid layout tier, #2671–#2680 System ID prefixing + <code>naming-grammar.json</code> as the declared source of truth.</li>
+<li><strong>Icon system:</strong> #2630/#2631/#2646 — icon catalog now derives from <code>icons.ts</code> through a weight-parity gate.</li>
+<li><strong><code>propagate.sh</code> hardening:</strong> #2634/#2637/#2640 — one consumer-bump lane, cleans up its own worktree/branch on abort, covers <code>web/*</code> consumers.</li>
+<li><strong>Agent-readable docs surface:</strong> #2618 shipped it (#2616's own fix), #2622/#2623/#2674 churned on where <code>bds-manifest.json</code> is served from — #2616 is still open in the reconcile queue despite this, meaning the fix shipped but the ticket was never closed against it.</li>
+<li><strong>3 report docs</strong> (#2596, #2642, #2657) and <strong>3 ADR ratifications</strong> (#2658, #2661, #2672/#2675) — this is the fourth in that series.</li>
+</ul>
+<p>30-day net is now <strong>+56</strong> (217 opened, 161 closed) — still backlog-growing, same direction as the 08-20 board's +57, despite the shipped volume above.</p>
+
+<h2>9. Filed this pass</h2>
+<p>None. Unlike the 08-20 session, this pass is a pure re-assessment — no fix, no new finding that rose to issue-worthy during data-gathering. Per file-don't-fix, anything found during a future working session on these queues still routes to <code>meta:digest</code> or a sized issue, not fixed here.</p>
+
+<h2>10. Provenance — regenerate every number above</h2>
+<pre><span style="color:#888"># open issues, size/priority/area splits</span>
+gh issue list --state open --limit 500 --json number --jq 'length'
+gh issue list --state open --limit 500 --json labels \
+  --jq '[.[].labels[].name|select(startswith("size:"))]|group_by(.)|map({k:.[0],n:length})[]'
+gh issue list --state open --limit 500 --json labels \
+  --jq '[.[].labels[].name|select(startswith("area:"))]|group_by(.)|map({k:.[0],n:length})[]'
+
+<span style="color:#888"># gate arrears — unique-issue count, not a naive label sum</span>
+for l in needs:size needs:reconcile needs:citation-fix; do
+  printf "%s %s\n" "$l" \
+    "$(gh issue list --state open --label "$l" --limit 200 --json number --jq 'length')"
+done
+gh issue list --state open --limit 500 --json number,labels --jq \
+  '[.[]|select([.labels[].name]|any(.=="needs:reconcile" or .=="needs:citation-fix" or .=="needs:size"))]|length'
+
+<span style="color:#888"># gate health — check the non-cancelled conclusion, concurrency cancels duplicates</span>
+for w in issue-size-gate merge-reconcile stale-citation-sweep; do
+  gh run list --workflow=$w.yml --limit 15 --json conclusion --jq \
+    '[.[]|select(.conclusion!="cancelled")][0].conclusion'
+done
+
+<span style="color:#888"># 30-day throughput</span>
+gh issue list --state closed --limit 800 --search 'closed:&gt;=2026-09-01' --json number --jq 'length'
+gh issue list --state all    --limit 800 --search 'created:&gt;=2026-09-01' --json number --jq 'length'
+
+<span style="color:#888"># the ready-to-build filter, verbatim</span>
+gh issue list --state open --limit 500 --json number,title,labels --jq '
+  [.[]|select([.labels[].name]
+    |(any(.=="priority:p1-week" or .=="priority:p2-month"))
+    and (any(.=="size:s" or .=="size:xs"))
+    and (any(.=="status:frozen" or .=="icebox" or .=="meta:project")|not))]
+  |.[]|"#\(.number) \(.title)"'</pre>
+<p>This board is a snapshot, not a live view — no GitHub connector refreshes it. Re-run before trusting a figure; the 08-20 board's failure mode was exactly this, carried for 42 days instead of regenerated.</p>
+
+</body>
+</html>
