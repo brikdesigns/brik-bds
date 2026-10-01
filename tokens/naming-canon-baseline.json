@@ -2,20 +2,20 @@
   "$comment": "ADR-033 violations that ship on main today, each keyed to the remediation issue that burns it down. Generated from `node scripts/lint-naming-canon.mjs --no-baseline --json`; see that gate's header for why this exists.  THIS FILE CAN ONLY SHRINK. lint-naming-canon fails on a STALE entry — one that no longer violates — so an entry cannot outlive its fix. Adding a row to keep a new violation green is the one edit that defeats the gate; do not.",
   "rules": {
     "1": {
-      "--content-width-default": 2226,
-      "--content-width-narrow": 2226,
-      "--content-width-wide": 2226,
-      "--duration-fast": 2226,
-      "--duration-normal": 2226,
-      "--duration-slow": 2226
+      "--bds-content-width-default": 2226,
+      "--bds-content-width-narrow": 2226,
+      "--bds-content-width-wide": 2226,
+      "--bds-duration-fast": 2226,
+      "--bds-duration-normal": 2226,
+      "--bds-duration-slow": 2226
     },
     "2": {
-      "--box-shadow-lg": 1924,
-      "--box-shadow-md": 1924,
-      "--box-shadow-sm": 1924,
-      "--box-shadow-xl": 1924,
-      "--easing-ease-in": 1910,
-      "--easing-ease-out": 1910
+      "--bds-box-shadow-lg": 1924,
+      "--bds-box-shadow-md": 1924,
+      "--bds-box-shadow-sm": 1924,
+      "--bds-box-shadow-xl": 1924,
+      "--bds-easing-ease-in": 1910,
+      "--bds-easing-ease-out": 1910
     },
     "3": {
       "BadgeTone#mixed": 1925,

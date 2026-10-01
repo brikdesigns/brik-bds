@@ -12,14 +12,14 @@ const BrikLogomark = () => (
   <div style={{
     width: 40,
     height: 40,
-    borderRadius: 'var(--border-radius-md)',
-    background: 'var(--background-brand-primary)',
-    color: 'var(--text-inverse)',
+    borderRadius: 'var(--bds-border-radius-md)',
+    background: 'var(--bds-background-brand-primary)',
+    color: 'var(--bds-text-inverse)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontFamily: 'var(--font-family-heading)',
-    fontWeight: 'var(--font-weight-bold)' as unknown as number,
+    fontFamily: 'var(--bds-font-family-heading)',
+    fontWeight: 'var(--bds-font-weight-bold)' as unknown as number,
   }}>
     B
   </div>
@@ -33,21 +33,21 @@ const defaultNavItems: SidebarNavItem[] = [
 ];
 
 const profileBlock = (
-  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--padding-sm)' }}>
+  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--bds-padding-sm)' }}>
     <div style={{
       width: 40, height: 40, borderRadius: '50%',
-      backgroundColor: 'var(--background-brand-primary)',
+      backgroundColor: 'var(--bds-background-brand-primary)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
-      color: 'var(--text-inverse)',
-      fontWeight: 'var(--font-weight-semibold)' as unknown as number,
+      color: 'var(--bds-text-inverse)',
+      fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number,
     }}>
       JD
     </div>
     <div>
-      <div style={{ fontSize: 'var(--body-sm)', fontWeight: 'var(--font-weight-semibold)' as unknown as number, color: 'var(--text-primary)' }}>
+      <div style={{ fontSize: 'var(--bds-body-sm)', fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number, color: 'var(--bds-text-primary)' }}>
         John Doe
       </div>
-      <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
+      <div style={{ fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-secondary)' }}>
         john@example.com
       </div>
     </div>

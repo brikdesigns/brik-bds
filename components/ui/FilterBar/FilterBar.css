@@ -4,13 +4,13 @@
 /*
  * No outer margin: the gap to the display below is the consumer's to set on
  * the wrapping layout primitive. The bar used to ship `margin-bottom:
- * var(--padding-lg)`, which does not collapse inside a flex `Stack` and so
+ * var(--bds-padding-lg)`, which does not collapse inside a flex `Stack` and so
  * silently added 24px on top of whatever gap the consumer passed.
  */
 .bds-filter-bar {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   flex-wrap: wrap;
 }
 
@@ -23,11 +23,11 @@
  */
 
 .bds-filter-bar__title {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-sm);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-snug);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-primary);
   margin: 0;
 }
 
@@ -35,7 +35,7 @@
 
 .bds-filter-bar__controls {
   display: flex;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
   margin-left: auto;
   flex-wrap: wrap;
   align-items: center;
@@ -50,7 +50,7 @@
 .bds-filter-bar__collapse-panel {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   --bds-filter-bar-panel-min-width: 200px; /* component-local dimension; no shared registry rung (#2133) */
   min-width: var(--bds-filter-bar-panel-min-width);
 }
@@ -70,7 +70,7 @@
 .bds-filter-bar__actions {
   display: flex;
   align-items: center;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
   margin-left: auto;
 }
 

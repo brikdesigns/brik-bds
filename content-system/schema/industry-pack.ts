@@ -402,8 +402,8 @@ export interface ServicesMegaMenuCategory {
    * Optional audience scope ID — when present, components should bind
    * this value to a `[data-audience=X]` (or equivalent) attribute on
    * the rendered column so the client theme can re-bind canonical
-   * brand tokens (`--background-brand-primary`, `--text-brand-primary`,
-   * `--border-brand-primary`) per audience.
+   * brand tokens (`--bds-background-brand-primary`, `--bds-text-brand-primary`,
+   * `--bds-border-brand-primary`) per audience.
    *
    * BCS packs only express the semantic ID; visual binding is a
    * client-theme concern. Sites without per-audience theming render

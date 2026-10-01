@@ -34,13 +34,13 @@ const Box = ({ children, w }: { children?: React.ReactNode; w?: string }) => (
   <div
     style={{
       width: w ?? 'auto',
-      padding: 'var(--padding-md)',
-      background: 'var(--surface-secondary)',
-      border: '1px dashed var(--border-secondary)',
-      borderRadius: 'var(--border-radius-sm)',
-      fontFamily: 'var(--font-family-body)',
-      fontSize: 'var(--body-sm)',
-      color: 'var(--text-primary)',
+      padding: 'var(--bds-padding-md)',
+      background: 'var(--bds-surface-secondary)',
+      border: '1px dashed var(--bds-border-secondary)',
+      borderRadius: 'var(--bds-border-radius-sm)',
+      fontFamily: 'var(--bds-font-family-body)',
+      fontSize: 'var(--bds-body-sm)',
+      color: 'var(--bds-text-primary)',
     }}
   >
     {children}
@@ -85,16 +85,16 @@ export const CardBody: Story = {
       gap="sm"
       style={{
         maxWidth: 320,
-        padding: 'var(--padding-lg)',
-        background: 'var(--surface-primary)',
-        border: '1px solid var(--border-secondary)',
-        borderRadius: 'var(--border-radius-md)',
+        padding: 'var(--bds-padding-lg)',
+        background: 'var(--bds-surface-primary)',
+        border: '1px solid var(--bds-border-secondary)',
+        borderRadius: 'var(--bds-border-radius-md)',
       }}
     >
-      <h3 style={{ margin: 0, fontFamily: 'var(--font-family-heading)', fontSize: 'var(--heading-sm)' }}>
+      <h3 style={{ margin: 0, fontFamily: 'var(--bds-font-family-heading)', fontSize: 'var(--bds-heading-sm)' }}>
         Card title
       </h3>
-      <p style={{ margin: 0, fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>
+      <p style={{ margin: 0, fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-secondary)' }}>
         Card description with a couple of sentences of supporting copy that demonstrates the typical Stack-with-md-gap rhythm.
       </p>
       <Stack orientation="horizontal" gap="xs" justify="end">

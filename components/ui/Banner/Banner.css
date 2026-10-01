@@ -6,7 +6,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--gap-lg);
+  gap: var(--bds-gap-lg);
   width: 100%;
   box-sizing: border-box;
 }
@@ -15,7 +15,7 @@
 
 .bds-banner__inner {
   display: flex;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   align-items: center;
   flex: 1 1 0;
   min-width: 0;
@@ -27,7 +27,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
   min-width: 0;
   flex: 1 1 0;
 }
@@ -35,19 +35,19 @@
 /* ─── Title ──────────────────────────────────────────────────── */
 
 .bds-banner__title {
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--label-md);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
+  font-size: var(--bds-label-md);
+  line-height: var(--bds-font-line-height-tight);
 }
 
 /* ─── Description ────────────────────────────────────────────── */
 
 .bds-banner__description {
-  font-family: var(--font-family-body);
-  font-weight: var(--font-weight-regular);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
+  font-family: var(--bds-font-family-body);
+  font-weight: var(--bds-font-weight-regular);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
 }
 
 /* ─── Actions area ───────────────────────────────────────────── */
@@ -55,7 +55,7 @@
 .bds-banner__actions {
   display: flex;
   align-items: center;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   flex-shrink: 0;
 }
 
@@ -65,12 +65,12 @@
 /* ─── Tone: announcement (brand-primary surface) ──────────────── */
 
 .bds-banner--tone-announcement {
-  background-color: var(--surface-brand-primary);
-  color: var(--text-on-color-dark);
-  padding: var(--padding-md) var(--padding-lg);
-  /* Match Button's base radius (--border-radius-md) so the announcement banner
+  background-color: var(--bds-surface-brand-primary);
+  color: var(--bds-text-on-color-dark);
+  padding: var(--bds-padding-md) var(--bds-padding-lg);
+  /* Match Button's base radius (--bds-border-radius-md) so the announcement banner
    * reads as cohesive with adjacent buttons. #1840. */
-  border-radius: var(--border-radius-md);
+  border-radius: var(--bds-border-radius-md);
 }
 
 /* ─── Tones: warning / negative / info / positive (status surfaces) ─── */
@@ -81,10 +81,10 @@
 .bds-banner--tone-negative,
 .bds-banner--tone-info,
 .bds-banner--tone-positive {
-  background-color: var(--surface-secondary);
-  color: var(--text-primary);
-  padding: var(--padding-lg);
-  border-radius: var(--border-radius-sm);
+  background-color: var(--bds-surface-secondary);
+  color: var(--bds-text-primary);
+  padding: var(--bds-padding-lg);
+  border-radius: var(--bds-border-radius-sm);
   align-items: flex-start;
 }
 
@@ -99,6 +99,6 @@
 .bds-banner--tone-negative .bds-banner__content,
 .bds-banner--tone-info .bds-banner__content,
 .bds-banner--tone-positive .bds-banner__content {
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 }

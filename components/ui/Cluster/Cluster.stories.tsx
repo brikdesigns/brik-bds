@@ -28,12 +28,12 @@ const Pill = ({ children }: { children: React.ReactNode }) => (
   <span
     style={{
       padding: '4px 12px',
-      background: 'var(--surface-secondary)',
-      border: '1px solid var(--border-secondary)',
+      background: 'var(--bds-surface-secondary)',
+      border: '1px solid var(--bds-border-secondary)',
       borderRadius: '9999px',
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--label-sm)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
-      color: 'var(--text-primary)',
+      fontFamily: 'var(--bds-font-family-label)',
+      fontSize: 'var(--bds-label-sm)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
+      color: 'var(--bds-text-primary)',
       whiteSpace: 'nowrap' as const,
     }}
   >
@@ -44,12 +44,12 @@ const Pill = ({ children }: { children: React.ReactNode }) => (
 const SectionLabel = ({ children }: { children: React.ReactNode }) => (
   <div
     style={{
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
+      fontFamily: 'var(--bds-font-family-label)',
+      fontSize: 'var(--bds-body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
       textTransform: 'uppercase' as const,
       letterSpacing: '0.05em',
-      color: 'var(--text-muted)',
-      marginBottom: 'var(--gap-sm)',
+      color: 'var(--bds-text-muted)',
+      marginBottom: 'var(--bds-gap-sm)',
     }}
   >
     {children}
@@ -76,7 +76,7 @@ export const Default: Story = {
  */
 export const Wrapping: Story = {
   render: () => (
-    <div style={{ maxWidth: 320, padding: 'var(--padding-md)', background: 'var(--surface-secondary)' }}>
+    <div style={{ maxWidth: 320, padding: 'var(--bds-padding-md)', background: 'var(--bds-surface-secondary)' }}>
       <SectionLabel>320px container</SectionLabel>
       <Cluster gap="sm">
         <Pill>logo design</Pill>

@@ -10,7 +10,7 @@ import * as Stories from './Field.stories';
 
 Read-mode label + value pair for page sections and Sheet body rows. One API covers text, tags, URLs, bullet lists, and empty states.
 
-The label's typography tier is **derived from the container**: page-tier (`--label-md`) by default, sheet-tier (`--label-sm`) inside a `Sheet` body. Omit the `tier` prop and a component reused in both places renders correctly in each.
+The label's typography tier is **derived from the container**: page-tier (`--bds-label-md`) by default, sheet-tier (`--bds-label-sm`) inside a `Sheet` body. Omit the `tier` prop and a component reused in both places renders correctly in each.
 
 ## Playground
 
@@ -47,7 +47,7 @@ When an entire section has no data (vs. one missing field), pass an `<EmptyState
 
 | Variable | Default | Use |
 | --- | --- | --- |
-| `--bds-field-label-size` | `var(--label-md)` | Label type size. `.bds-sheet__body` sets `var(--label-sm)`, so a Field inside a Sheet is sheet-tier without the caller passing `tier`. Set it on any other container to make that container's fields a different tier. |
+| `--bds-field-label-size` | `var(--bds-label-md)` | Label type size. `.bds-sheet__body` sets `var(--bds-label-sm)`, so a Field inside a Sheet is sheet-tier without the caller passing `tier`. Set it on any other container to make that container's fields a different tier. |
 
 `tier` is the per-instance form of the same knob: it declares the property on the Field root, and a declaration on the element beats one inherited from a container. That is what makes `tier="standard"` a working escape hatch for a page-tier field inside a Sheet body. Flip `tier` in the Playground Controls above to see `compact` type.
 

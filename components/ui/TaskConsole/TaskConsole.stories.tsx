@@ -30,13 +30,13 @@ type Story = StoryObj<typeof TaskConsole>;
 /* ─── Layout helpers ─────────────────────────────────────────── */
 
 const SectionLabel = ({ children }: { children: string }) => (
-  <span style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-sm)', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+  <span style={{ fontFamily: 'var(--bds-font-family-label)', fontSize: 'var(--bds-label-sm)', color: 'var(--bds-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
     {children}
   </span>
 );
 
 const Page = ({ children }: { children: React.ReactNode }) => (
-  <div style={{ padding: 'var(--padding-xl)', display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)', minHeight: '400px' }}>
+  <div style={{ padding: 'var(--bds-padding-xl)', display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xl)', minHeight: '400px' }}>
     {children}
   </div>
 );

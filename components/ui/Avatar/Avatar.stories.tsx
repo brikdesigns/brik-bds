@@ -103,7 +103,7 @@ export const Initials: Story = {
 /** @summary Overlapping stacked-avatar group composition */
 export const AvatarGroup: Story = {
   render: () => (
-    <div style={{ display: 'flex', marginLeft: 'var(--padding-sm)' }}>
+    <div style={{ display: 'flex', marginLeft: 'var(--bds-padding-sm)' }}>
       {([
         { name: 'Michael Scott', src: headshots.michael },
         { name: 'Dwight Schrute', src: headshots.dwight },
@@ -116,7 +116,7 @@ export const AvatarGroup: Story = {
           name={user.name}
           src={user.src}
           size="md"
-          style={{ marginLeft: '-12px', border: '2px solid var(--background-input)' }}
+          style={{ marginLeft: '-12px', border: '2px solid var(--bds-background-input)' }}
         />
       ))}
     </div>

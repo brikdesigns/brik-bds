@@ -39,7 +39,7 @@ const CONTRAST_PAIRS: {
           : undefined,
 }));
 
-const FONT_TOKENS = ['--font-family-heading', '--font-family-body', '--font-family-label'];
+const FONT_TOKENS = ['--bds-font-family-heading', '--bds-font-family-body', '--bds-font-family-label'];
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -123,17 +123,17 @@ function probeThemes(): ThemeResult[] {
 // ─── Styles ─────────────────────────────────────────────────────────
 
 const card: CSSProperties = {
-  padding: 'var(--padding-md)',
-  backgroundColor: 'var(--surface-primary)',
-  borderRadius: 'var(--border-radius-md)',
-  border: '1px solid var(--border-muted)', // bds-lint-ignore — card border
+  padding: 'var(--bds-padding-md)',
+  backgroundColor: 'var(--bds-surface-primary)',
+  borderRadius: 'var(--bds-border-radius-md)',
+  border: '1px solid var(--bds-border-muted)', // bds-lint-ignore — card border
 };
 
 const tableCell: CSSProperties = {
-  padding: 'var(--gap-xs) var(--gap-sm)',
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-sm)',
-  borderBottom: '1px solid var(--border-muted)', // bds-lint-ignore — table border
+  padding: 'var(--bds-gap-xs) var(--bds-gap-sm)',
+  fontFamily: 'var(--bds-font-family-body)',
+  fontSize: 'var(--bds-body-sm)',
+  borderBottom: '1px solid var(--bds-border-muted)', // bds-lint-ignore — table border
   verticalAlign: 'top',
 };
 
@@ -141,21 +141,21 @@ const swatch = (value: string): CSSProperties => ({
   display: 'inline-block',
   width: 14,                                         // bds-lint-ignore — swatch size
   height: 14,                                        // bds-lint-ignore — swatch size
-  borderRadius: 'var(--border-radius-sm)',
+  borderRadius: 'var(--bds-border-radius-sm)',
   backgroundColor: value || 'transparent',
-  border: '1px solid var(--border-muted)',           // bds-lint-ignore — swatch border
-  marginRight: 'var(--gap-xs)',
+  border: '1px solid var(--bds-border-muted)',           // bds-lint-ignore — swatch border
+  marginRight: 'var(--bds-gap-xs)',
   verticalAlign: 'middle',
 });
 
 const ratioBadge = (pass: boolean): CSSProperties => ({
   display: 'inline-block',
   padding: '2px 8px',                                // bds-lint-ignore — badge padding
-  borderRadius: 'var(--border-radius-sm)',
-  fontSize: 'var(--body-xs)',
-  fontFamily: 'var(--font-family-label)',
-  fontWeight: 'var(--font-weight-semibold)' as unknown as number,
-  backgroundColor: pass ? 'var(--color-system-green)' : 'var(--color-system-red)',
+  borderRadius: 'var(--bds-border-radius-sm)',
+  fontSize: 'var(--bds-body-xs)',
+  fontFamily: 'var(--bds-font-family-label)',
+  fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number,
+  backgroundColor: pass ? 'var(--bds-color-system-green)' : 'var(--bds-color-system-red)',
   color: '#FFFFFF',                                  // bds-lint-ignore — badge text always white for max contrast
 });
 
@@ -166,12 +166,12 @@ function ThemeCard({ theme }: { theme: ThemeResult }) {
 
   return (
     <div style={card}>
-      <header style={{ marginBottom: 'var(--gap-md)' }}>
+      <header style={{ marginBottom: 'var(--bds-gap-md)' }}>
         <h3
           style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--heading-sm)',
-            color: 'var(--text-primary)',
+            fontFamily: 'var(--bds-font-family-heading)',
+            fontSize: 'var(--bds-heading-sm)',
+            color: 'var(--bds-text-primary)',
             margin: 0,
           }}
         >
@@ -179,26 +179,26 @@ function ThemeCard({ theme }: { theme: ThemeResult }) {
         </h3>
         <p
           style={{
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-xs)',
-            color: 'var(--text-muted)',
-            margin: 'var(--gap-xs) 0 0',
+            fontFamily: 'var(--bds-font-family-body)',
+            fontSize: 'var(--bds-body-xs)',
+            color: 'var(--bds-text-muted)',
+            margin: 'var(--bds-gap-xs) 0 0',
           }}
         >
           {theme.description}
         </p>
       </header>
 
-      <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 'var(--gap-md)' }}>
+      <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 'var(--bds-gap-md)' }}>
         <tbody>
           {theme.pairs.map((pair) => (
             <tr key={pair.label}>
               <td style={tableCell}>
                 <span style={swatch(pair.bgValue)} />
                 <span style={swatch(pair.textValue)} />
-                <span style={{ fontFamily: 'var(--font-family-body)', color: 'var(--text-primary)' }}>{pair.label}</span>
+                <span style={{ fontFamily: 'var(--bds-font-family-body)', color: 'var(--bds-text-primary)' }}>{pair.label}</span>
                 {pair.note ? (
-                  <div style={{ fontSize: 'var(--body-xs)', color: 'var(--text-muted)', marginTop: 2 }}>
+                  <div style={{ fontSize: 'var(--bds-body-xs)', color: 'var(--bds-text-muted)', marginTop: 2 }}>
                     {pair.note}
                   </div>
                 ) : null}
@@ -207,7 +207,7 @@ function ThemeCard({ theme }: { theme: ThemeResult }) {
                 <span style={ratioBadge(pair.pass)}>
                   {pair.ratio > 0 ? `${pair.ratio.toFixed(2)}:1` : 'N/A'}
                 </span>
-                <div style={{ fontSize: 'var(--body-xs)', color: 'var(--text-muted)', marginTop: 2 }}>
+                <div style={{ fontSize: 'var(--bds-body-xs)', color: 'var(--bds-text-muted)', marginTop: 2 }}>
                   target {pair.threshold}:1
                 </div>
               </td>
@@ -218,19 +218,19 @@ function ThemeCard({ theme }: { theme: ThemeResult }) {
 
       <div
         style={{
-          fontFamily: 'var(--font-family-body)',
-          fontSize: 'var(--body-xs)',
-          color: 'var(--text-muted)',
+          fontFamily: 'var(--bds-font-family-body)',
+          fontSize: 'var(--bds-body-xs)',
+          color: 'var(--bds-text-muted)',
           lineHeight: 1.6,
         }}
       >
-        <strong style={{ color: 'var(--text-secondary)', fontFamily: 'var(--font-family-label)' }}>Fonts</strong>
+        <strong style={{ color: 'var(--bds-text-secondary)', fontFamily: 'var(--bds-font-family-label)' }}>Fonts</strong>
         {Object.entries(theme.fonts).map(([token, value]) => (
           <div key={token}>
             <code style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace' }}>
               {token.replace('--font-family-', '')}
             </code>
-            : <span style={{ color: 'var(--text-primary)' }}>{value}</span>
+            : <span style={{ color: 'var(--bds-text-primary)' }}>{value}</span>
           </div>
         ))}
       </div>
@@ -250,7 +250,7 @@ function ContrastComplianceDashboard() {
 
   if (!results) {
     return (
-      <div style={{ padding: 'var(--padding-xl)', fontFamily: 'var(--font-family-body)', color: 'var(--text-muted)' }}>
+      <div style={{ padding: 'var(--bds-padding-xl)', fontFamily: 'var(--bds-font-family-body)', color: 'var(--bds-text-muted)' }}>
         Evaluating themes...
       </div>
     );
@@ -280,7 +280,7 @@ function ContrastComplianceDashboard() {
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: 'var(--gap-md)',
+            gap: 'var(--bds-gap-md)',
           }}
         >
           {results.map((theme) => (
@@ -296,11 +296,11 @@ function ContrastComplianceDashboard() {
         <div style={card}>
           <ol
             style={{
-              fontFamily: 'var(--font-family-body)',
-              fontSize: 'var(--body-sm)',
-              color: 'var(--text-primary)',
+              fontFamily: 'var(--bds-font-family-body)',
+              fontSize: 'var(--bds-body-sm)',
+              color: 'var(--bds-text-primary)',
               margin: 0,
-              paddingLeft: 'var(--padding-md)',
+              paddingLeft: 'var(--bds-padding-md)',
               lineHeight: 1.7,
             }}
           >
@@ -311,11 +311,11 @@ function ContrastComplianceDashboard() {
             <li>
               If the failure is <code>text-inverse</code> on <code>background-brand-primary</code>, the brand
               color is too light to pair with white. Either darken the brand, or override{' '}
-              <code>--text-inverse</code> to a dark color for this brand.
+              <code>--bds-text-inverse</code> to a dark color for this brand.
             </li>
             <li>
               Client Sim assigns distinct font families to heading/body/label. A heading element using{' '}
-              <code>--font-family-body</code> shows up as Verdana instead of Georgia — that's a semantic token
+              <code>--bds-font-family-body</code> shows up as Verdana instead of Georgia — that's a semantic token
               misuse, not a contrast issue. Fix it in the component CSS.
             </li>
           </ol>

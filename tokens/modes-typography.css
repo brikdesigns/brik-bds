@@ -5,7 +5,7 @@
  * design-tokens/tokens-studio.json. Do not hand-edit — re-run
  * the generator after any Figma mode update.
  *
- * Typography heading-scale variant — selects one named heading scale. compact/comfortable/spacious are uniform density steps; expressive is a steeper modular curve (smaller small end, larger large end) for editorial / marketing surfaces. The variants are mutually exclusive — this axis owns --heading-* alone (see ADR-013 amendment 2026-06-21, BDS #928). Emitted as var(--font-size-NNN) references (matching how figma-tokens.css emits the default scale), so each variant reuses the shared font-size primitives. display-* is mode-invariant in Figma today so only heading-* emits overrides.
+ * Typography heading-scale variant — selects one named heading scale. compact/comfortable/spacious are uniform density steps; expressive is a steeper modular curve (smaller small end, larger large end) for editorial / marketing surfaces. The variants are mutually exclusive — this axis owns --bds-heading-* alone (see ADR-013 amendment 2026-06-21, BDS #928). Emitted as var(--font-size-NNN) references (matching how figma-tokens.css emits the default scale), so each variant reuses the shared font-size primitives. display-* is mode-invariant in Figma today so only heading-* emits overrides.
  *
  * Selector contract: `[data-mode-typography="compact|comfortable|spacious|expressive"]`
  * on :root (html). Default mode requires no attribute (uses figma-tokens.css base).
@@ -17,46 +17,46 @@
 /* ─── Compact ────────────────────────────────────────── */
 [data-mode-typography="compact"] {
   /* heading */
-  --heading-huge: var(--font-size-800);
-  --heading-lg: var(--font-size-500);
-  --heading-md: var(--font-size-400);
-  --heading-sm: var(--font-size-300);
-  --heading-tiny: var(--font-size-200);
-  --heading-xl: var(--font-size-600);
-  --heading-xxl: var(--font-size-700);
+  --bds-heading-huge: var(--bds-font-size-800);
+  --bds-heading-lg: var(--bds-font-size-500);
+  --bds-heading-md: var(--bds-font-size-400);
+  --bds-heading-sm: var(--bds-font-size-300);
+  --bds-heading-tiny: var(--bds-font-size-200);
+  --bds-heading-xl: var(--bds-font-size-600);
+  --bds-heading-xxl: var(--bds-font-size-700);
 }
 
 /* ─── Comfortable ────────────────────────────────────────── */
 [data-mode-typography="comfortable"] {
   /* heading */
-  --heading-huge: var(--font-size-1000);
-  --heading-lg: var(--font-size-700);
-  --heading-md: var(--font-size-600);
-  --heading-sm: var(--font-size-500);
-  --heading-tiny: var(--font-size-400);
-  --heading-xl: var(--font-size-800);
-  --heading-xxl: var(--font-size-900);
+  --bds-heading-huge: var(--bds-font-size-1000);
+  --bds-heading-lg: var(--bds-font-size-700);
+  --bds-heading-md: var(--bds-font-size-600);
+  --bds-heading-sm: var(--bds-font-size-500);
+  --bds-heading-tiny: var(--bds-font-size-400);
+  --bds-heading-xl: var(--bds-font-size-800);
+  --bds-heading-xxl: var(--bds-font-size-900);
 }
 
 /* ─── Spacious ────────────────────────────────────────── */
 [data-mode-typography="spacious"] {
   /* heading */
-  --heading-huge: var(--font-size-1100);
-  --heading-lg: var(--font-size-800);
-  --heading-md: var(--font-size-700);
-  --heading-sm: var(--font-size-600);
-  --heading-tiny: var(--font-size-500);
-  --heading-xl: var(--font-size-900);
-  --heading-xxl: var(--font-size-1000);
+  --bds-heading-huge: var(--bds-font-size-1100);
+  --bds-heading-lg: var(--bds-font-size-800);
+  --bds-heading-md: var(--bds-font-size-700);
+  --bds-heading-sm: var(--bds-font-size-600);
+  --bds-heading-tiny: var(--bds-font-size-500);
+  --bds-heading-xl: var(--bds-font-size-900);
+  --bds-heading-xxl: var(--bds-font-size-1000);
 }
 
 /* ─── Expressive ────────────────────────────────────────── */
 [data-mode-typography="expressive"] {
   /* heading */
-  --heading-huge: var(--font-size-1200);
-  --heading-lg: var(--font-size-700);
-  --heading-sm: var(--font-size-300);
-  --heading-tiny: var(--font-size-100);
-  --heading-xl: var(--font-size-900);
-  --heading-xxl: var(--font-size-1000);
+  --bds-heading-huge: var(--bds-font-size-1200);
+  --bds-heading-lg: var(--bds-font-size-700);
+  --bds-heading-sm: var(--bds-font-size-300);
+  --bds-heading-tiny: var(--bds-font-size-100);
+  --bds-heading-xl: var(--bds-font-size-900);
+  --bds-heading-xxl: var(--bds-font-size-1000);
 }

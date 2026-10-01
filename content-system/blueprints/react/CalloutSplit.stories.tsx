@@ -59,7 +59,7 @@ const meta: Meta<typeof CalloutSplit> = {
     docs: {
       description: {
         component:
-          'Legacy adapter for the `callout_split` blueprint key — maps `section.*` onto the canonical `<CalloutPanel>` primitive. Section header above a plan callout card. Plan card text uses `--text-primary` to clear AA on `--surface-secondary`; CTA uses `Button size="md"` to clear AA at the brand-poppy fill.',
+          'Legacy adapter for the `callout_split` blueprint key — maps `section.*` onto the canonical `<CalloutPanel>` primitive. Section header above a plan callout card. Plan card text uses `--bds-text-primary` to clear AA on `--bds-surface-secondary`; CTA uses `Button size="md"` to clear AA at the brand-poppy fill.',
       },
     },
   },

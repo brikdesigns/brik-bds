@@ -34,7 +34,7 @@ Component-scoped CSS variables exposed on `.bds-background-pattern`. Set on a wr
 
 | Variable | Default | Controls |
 |---|---|---|
-| `--bds-bg-pattern-color` | `var(--border-secondary)` | Dot / line color |
+| `--bds-bg-pattern-color` | `var(--bds-border-secondary)` | Dot / line color |
 | `--bds-bg-pattern-size` | `15px` | Grid pitch — distance between dots or lines |
 | `--bds-bg-pattern-dot-size` | `1px` | Dot diameter / line thickness |
 | `--bds-bg-pattern-opacity` | `0.3` | Layer opacity |
@@ -43,7 +43,7 @@ Component-scoped CSS variables exposed on `.bds-background-pattern`. Set on a wr
 ```css
 /* Example: a denser, higher-contrast grid in a hero section */
 .hero {
-  --bds-bg-pattern-color: var(--border-primary);
+  --bds-bg-pattern-color: var(--bds-border-primary);
   --bds-bg-pattern-size: 24px;
 }
 ```

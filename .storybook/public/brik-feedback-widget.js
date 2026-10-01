@@ -51,7 +51,7 @@
   // ── Chrome palette (#1305) ────────────────────────────────────────────────
   // The feedback widget is a Brik tool overlaid on client work, so its chrome
   // wears Brik's own brand (poppy) — NOT the client's brand token. Pin mode
-  // previously pulled `var(--background-brand-primary, …)` (the client's colour)
+  // previously pulled `var(--bds-background-brand-primary, …)` (the client's colour)
   // and fell back to a stray blue (#4665f5) on any mockup that didn't define it.
   // Values are canonical BDS poppy/neutral hexes (inlined because the widget
   // ships raw to Storage and runs inside self-contained mockups where the BDS
@@ -138,16 +138,16 @@
       border-radius: var(--radius-button, 100px);
       padding: var(--space-sm, 12px) var(--space-md, 20px);
       font-family: var(--typography-font-family-label, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif);
-      font-size: var(--label-sm, 14px);
-      font-weight: var(--font-weight-bold, 600);
-      letter-spacing: var(--letter-spacing-wide, 0);
+      font-size: var(--bds-label-sm, 14px);
+      font-weight: var(--bds-font-weight-bold, 600);
+      letter-spacing: var(--bds-letter-spacing-wide, 0);
       line-height: 1;
       text-decoration: none;
       text-transform: uppercase;
       cursor: pointer;
       box-shadow: var(--elevation-md, 0 4px 24px rgba(0,0,0,0.3));
-      transition: background var(--duration-fast, 0.15s) var(--ease-default, ease),
-                  transform var(--duration-fast, 0.15s) var(--ease-default, ease);
+      transition: background var(--bds-duration-fast, 0.15s) var(--ease-default, ease),
+                  transform var(--bds-duration-fast, 0.15s) var(--ease-default, ease);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -158,8 +158,8 @@
       appearance: none;
     }
     .bfb-btn svg {
-      width: var(--icon-md, 16px);
-      height: var(--icon-md, 16px);
+      width: var(--bds-icon-md, 16px);
+      height: var(--bds-icon-md, 16px);
       flex-shrink: 0;
     }
     .bfb-btn:hover { opacity: 0.9; transform: translateY(-1px); }
@@ -374,9 +374,9 @@
       line-height: 1;
       transition: background 0.12s, border-color 0.12s, color 0.12s;
     }
-    .bfb-tag:hover { border-color: var(--border-brand-primary, ${C.brand}); }
+    .bfb-tag:hover { border-color: var(--bds-border-brand-primary, ${C.brand}); }
     .bfb-tag:focus-visible {
-      outline: 2px solid var(--border-brand-primary, ${C.brand});
+      outline: 2px solid var(--bds-border-brand-primary, ${C.brand});
       outline-offset: 2px;
     }
     .bfb-tag--active {

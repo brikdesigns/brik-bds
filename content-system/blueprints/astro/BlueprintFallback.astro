@@ -55,53 +55,53 @@ const attrValue = unknownKey ?? '__null__';
 
 <style>
   .bp-fallback {
-    padding: var(--padding-xl) var(--padding-lg);
-    background: var(--surface-secondary, #f5f5f5);
-    border: var(--border-width-lg) dashed var(--border-secondary, #c0c0c0);
-    margin-block: var(--gap-md);
+    padding: var(--bds-padding-xl) var(--bds-padding-lg);
+    background: var(--bds-surface-secondary, #f5f5f5);
+    border: var(--bds-border-width-lg) dashed var(--bds-border-secondary, #c0c0c0);
+    margin-block: var(--bds-gap-md);
   }
 
   .bp-fallback__container {
-    max-width: var(--content-width-lg);
+    max-width: var(--bds-content-width-lg);
     margin-inline: auto;
     display: flex;
     flex-direction: column;
-    /* --gap-md, matching the React twin in BlueprintFallback.css. Was
-       --gap-tiny, which resolves to 0px outside default spacing mode and
+    /* --bds-gap-md, matching the React twin in BlueprintFallback.css. Was
+       --bds-gap-tiny, which resolves to 0px outside default spacing mode and
        collapsed these four lines into one block (ADR-023 §3). */
-    gap: var(--gap-md);
+    gap: var(--bds-gap-md);
   }
 
   .bp-fallback__label {
     margin: 0;
-    font-family: var(--font-family-label);
-    font-size: var(--label-lg);
-    font-weight: var(--font-weight-semibold);
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-lg);
+    font-weight: var(--bds-font-weight-semibold);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--text-primary);
+    color: var(--bds-text-primary);
   }
 
   .bp-fallback__key,
   .bp-fallback__meta,
   .bp-fallback__hint {
     margin: 0;
-    font-family: var(--font-family-body);
-    font-size: var(--body-xl);
-    line-height: var(--font-line-height-relaxed);
-    color: var(--text-secondary);
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-xl);
+    line-height: var(--bds-font-line-height-relaxed);
+    color: var(--bds-text-secondary);
   }
 
   .bp-fallback__hint {
-    font-size: var(--body-lg);
-    max-width: var(--content-width-text-md);
+    font-size: var(--bds-body-lg);
+    max-width: var(--bds-content-width-text-md);
   }
 
   .bp-fallback code {
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.9em;
-    padding: 0 var(--padding-tiny);
-    background: var(--surface-primary, #ffffff);
-    border-radius: var(--border-radius-sm);
+    padding: 0 var(--bds-padding-tiny);
+    background: var(--bds-surface-primary, #ffffff);
+    border-radius: var(--bds-border-radius-sm);
   }
 </style>

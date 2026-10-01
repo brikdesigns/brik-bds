@@ -20,10 +20,10 @@ export const portrait =
 export const DemoLabel = ({ children }) => (
   <p
     style={{
-      margin: '0 0 var(--gap-sm)',
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--label-sm)',
-      color: 'var(--text-secondary)',
+      margin: '0 0 var(--bds-gap-sm)',
+      fontFamily: 'var(--bds-font-family-label)',
+      fontSize: 'var(--bds-label-sm)',
+      color: 'var(--bds-text-secondary)',
     }}
   >
     {children}
@@ -31,7 +31,7 @@ export const DemoLabel = ({ children }) => (
 );
 
 export const Ratios = () => (
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--gap-lg)' }}>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--bds-gap-lg)' }}>
     {['1-1', '3-2', '4-3', '3-4', '16-9', '9-16'].map((r) => (
       <div key={r}>
         <DemoLabel>ratio="{r}"</DemoLabel>
@@ -42,7 +42,7 @@ export const Ratios = () => (
 );
 
 export const FitModes = () => (
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--gap-lg)' }}>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--bds-gap-lg)' }}>
     {['cover', 'contain', 'fill'].map((f) => (
       <div key={f}>
         <DemoLabel>fit="{f}"</DemoLabel>

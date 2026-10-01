@@ -9,7 +9,7 @@
 /* ─── Item ───────────────────────────────────────────────────── */
 
 .bds-accordion-item {
-  border-bottom: var(--border-width-lg) solid var(--border-muted);
+  border-bottom: var(--bds-border-width-lg) solid var(--bds-border-muted);
 }
 
 /* ─── Trigger ────────────────────────────────────────────────── */
@@ -19,12 +19,12 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: var(--padding-xl) 0;
+  padding: var(--bds-padding-xl) 0;
   cursor: pointer;
   background: none;
   border: none;
   text-align: left;
-  gap: var(--gap-lg);
+  gap: var(--bds-gap-lg);
 }
 
 /* ─── Text block (title + optional subtitle) ─────────────────── */
@@ -32,9 +32,9 @@
 .bds-accordion-trigger__text {
   display: flex;
   flex-direction: column;
-  /* Title ↔ subtitle is the tight step (ADR-023 content-rhythm map: --gap-sm),
+  /* Title ↔ subtitle is the tight step (ADR-023 content-rhythm map: --bds-gap-sm),
      matching InteractiveListItem's title/subtitle block. */
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   flex: 1;
   min-width: 0;
 }
@@ -42,21 +42,21 @@
 /* ─── Title ──────────────────────────────────────────────────── */
 
 .bds-accordion-trigger__title {
-  font-family: var(--font-family-label);
-  font-size: var(--label-lg);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-snug);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-lg);
+  font-weight: var(--bds-font-weight-bold);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-primary);
   margin: 0;
 }
 
 /* ─── Subtitle ───────────────────────────────────────────────── */
 
 .bds-accordion-trigger__subtitle {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
 }
 
 /* ─── Action (trailing slot, before the icon) ────────────────── */
@@ -64,25 +64,25 @@
 .bds-accordion-trigger__action {
   display: flex;
   align-items: center;
-  color: var(--text-secondary);
+  color: var(--bds-text-secondary);
   flex-shrink: 0;
 }
 
 /* ─── Icon ───────────────────────────────────────────────────── */
 
 .bds-accordion-trigger__icon {
-  font-size: var(--icon-lg);
-  color: var(--text-primary);
+  font-size: var(--bds-icon-lg);
+  color: var(--bds-text-primary);
   flex-shrink: 0;
 }
 
 /* ─── Content ────────────────────────────────────────────────── */
 
 .bds-accordion-content {
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
-  padding-bottom: var(--padding-xl);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
+  padding-bottom: var(--bds-padding-xl);
 }
 }

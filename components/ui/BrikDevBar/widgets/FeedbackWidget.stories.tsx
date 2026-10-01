@@ -101,15 +101,15 @@ function PinDemo({ token }: { token: string }) {
   }, [token]);
 
   return (
-    <div style={{ padding: 'var(--padding-xl)', fontFamily: 'var(--font-family-body)', maxWidth: 720 }}>
-      <h2 style={{ fontSize: 'var(--heading-md)', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+    <div style={{ padding: 'var(--bds-padding-xl)', fontFamily: 'var(--bds-font-family-body)', maxWidth: 720 }}>
+      <h2 style={{ fontSize: 'var(--bds-heading-md)', fontWeight: 700, color: 'var(--bds-text-primary)', margin: 0 }}>
         Pin-drop mode (default)
       </h2>
-      <p style={{ color: 'var(--text-secondary)', marginTop: 'var(--gap-sm)' }}>
+      <p style={{ color: 'var(--bds-text-secondary)', marginTop: 'var(--bds-gap-sm)' }}>
         Toolbar appears bottom-right. Toggle pin mode, then click anywhere in the iframe to drop
         a pin and leave a comment.
       </p>
-      <p style={{ color: 'var(--text-muted)', fontSize: 'var(--body-sm)', marginTop: 'var(--gap-md)' }}>
+      <p style={{ color: 'var(--bds-text-muted)', fontSize: 'var(--bds-body-sm)', marginTop: 'var(--bds-gap-md)' }}>
         Network is stubbed in this story — the review fetch and pin submissions are answered
         locally with canned JSON, so the full flow works without touching the portal.
       </p>
@@ -132,16 +132,16 @@ function FormUserDemo({ withDevBar, endpoint }: { withDevBar: boolean; endpoint:
   return (
     <>
       {withDevBar && <BrikDevBar />}
-      <div style={{ padding: 'var(--padding-xl)', fontFamily: 'var(--font-family-body)', maxWidth: 720 }}>
-        <h2 style={{ fontSize: 'var(--heading-md)', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+      <div style={{ padding: 'var(--bds-padding-xl)', fontFamily: 'var(--bds-font-family-body)', maxWidth: 720 }}>
+        <h2 style={{ fontSize: 'var(--bds-heading-md)', fontWeight: 700, color: 'var(--bds-text-primary)', margin: 0 }}>
           Form mode (Phase 2)
         </h2>
-        <p style={{ color: 'var(--text-secondary)', marginTop: 'var(--gap-sm)' }}>
+        <p style={{ color: 'var(--bds-text-secondary)', marginTop: 'var(--bds-gap-sm)' }}>
           {withDevBar
             ? 'Open the Feedback slot in the DevBar (bottom of preview). The panel matches the React DevFeedbackWidget UI: 4 type buttons + textarea + context line + submit.'
             : 'No DevBar mounted — the widget renders its standalone FAB at bottom-left. Click 💬 to open the panel.'}
         </p>
-        <p style={{ color: 'var(--text-muted)', fontSize: 'var(--body-sm)', marginTop: 'var(--gap-md)' }}>
+        <p style={{ color: 'var(--bds-text-muted)', fontSize: 'var(--bds-body-sm)', marginTop: 'var(--bds-gap-md)' }}>
           Submissions POST to <code>{endpoint}</code> with <code>credentials: &apos;include&apos;</code>.
           In Storybook the call is stubbed with a canned 200, so the full form flow works offline.
         </p>

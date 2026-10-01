@@ -10,20 +10,20 @@
 
 .bds-checkbox-group__legend {
   padding: 0;
-  margin-bottom: var(--gap-sm);
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-secondary);
+  margin-bottom: var(--bds-gap-sm);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-medium);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
 }
 
 /* ─── Select-all parent ───────────────────────────────── */
 
 .bds-checkbox-group__select-all {
-  margin-bottom: var(--gap-md);
-  padding-bottom: var(--gap-md);
-  border-bottom: var(--border-width-sm) solid var(--border-secondary);
+  margin-bottom: var(--bds-gap-md);
+  padding-bottom: var(--bds-gap-md);
+  border-bottom: var(--bds-border-width-sm) solid var(--bds-border-secondary);
 }
 
 /* ─── Options layout ──────────────────────────────────── */
@@ -31,19 +31,19 @@
 .bds-checkbox-group__options {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
 }
 
 .bds-checkbox-group__options--orientation-horizontal {
   flex-direction: row;
   flex-wrap: wrap;
-  column-gap: var(--gap-xl);
+  column-gap: var(--bds-gap-xl);
 }
 
 /* ─── Disabled group ──────────────────────────────────── */
 /* Each Checkbox self-fades via its own --disabled class; only the legend needs it. */
 
 .bds-checkbox-group--disabled .bds-checkbox-group__legend {
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
 }
 }

@@ -11,23 +11,23 @@
 .bds-checklist-group__header {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
-  margin-bottom: var(--gap-lg);
+  gap: var(--bds-gap-xs);
+  margin-bottom: var(--bds-gap-lg);
 }
 
 .bds-checklist-group__title {
   margin: 0;
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-tiny);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-tiny);
+  font-weight: var(--bds-font-weight-bold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
 }
 
 .bds-checklist-group__counter {
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  color: var(--bds-text-secondary);
 }
 
 /* ─── Rows ────────────────────────────────────────────── */
@@ -35,6 +35,6 @@
 .bds-checklist-group__items {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
 }
 }

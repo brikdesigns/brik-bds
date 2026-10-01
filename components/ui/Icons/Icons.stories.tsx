@@ -15,19 +15,19 @@ import {
 
 const SectionLabel = ({ children }: { children: string }) => (
   <div style={{
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
+    fontFamily: 'var(--bds-font-family-label)',
+    fontSize: 'var(--bds-body-xs)', // bds-lint-ignore — story-only inline demo style, not shipped component CSS
     textTransform: 'uppercase' as const,
     letterSpacing: '0.05em',
-    marginBottom: 'var(--gap-md)',
-    color: 'var(--text-muted)',
+    marginBottom: 'var(--bds-gap-md)',
+    color: 'var(--bds-text-muted)',
   }}>
     {children}
   </div>
 );
 
 const captionStyle = {
-  fontFamily: 'var(--font-family-system, monospace)',
+  fontFamily: 'var(--bds-font-family-system, monospace)',
   fontSize: '10px', // bds-lint-ignore — caption size
   textAlign: 'center' as const,
   wordBreak: 'break-all' as const,
@@ -42,16 +42,16 @@ const IconCard = ({ entry }: { entry: CatalogEntry }) => (
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: 'var(--gap-xs)',
-    padding: 'var(--padding-md)',
-    borderRadius: 'var(--border-radius-md)',
-    border: '1px solid var(--border-muted)',
+    gap: 'var(--bds-gap-xs)',
+    padding: 'var(--bds-padding-md)',
+    borderRadius: 'var(--bds-border-radius-md)',
+    border: '1px solid var(--bds-border-muted)',
   }}>
-    <Icon icon={entry.icon} style={{ fontSize: '20px', color: 'var(--text-primary)' }} /> {/* bds-lint-ignore — icon display size */}
-    <span style={{ ...captionStyle, color: 'var(--text-secondary)' }}>{entry.name}</span>
-    <span style={{ ...captionStyle, color: 'var(--text-muted)' }}>{entry.icon}</span>
+    <Icon icon={entry.icon} style={{ fontSize: '20px', color: 'var(--bds-text-primary)' }} /> {/* bds-lint-ignore — icon display size */}
+    <span style={{ ...captionStyle, color: 'var(--bds-text-secondary)' }}>{entry.name}</span>
+    <span style={{ ...captionStyle, color: 'var(--bds-text-muted)' }}>{entry.icon}</span>
     <span
-      style={{ ...captionStyle, color: entry.offline ? 'var(--text-muted)' : 'var(--text-negative)' }}
+      style={{ ...captionStyle, color: entry.offline ? 'var(--bds-text-muted)' : 'var(--bds-text-negative)' }}
       title={entry.offline
         ? 'Bundled in icons.generated.json — renders with the network blocked'
         : 'Not in the bundled subset — falls through to a runtime Iconify CDN fetch; run npm run gen:icons'}
@@ -65,13 +65,13 @@ const IconGrid = ({ entries }: { entries: CatalogEntry[] }) => (
   <div style={{
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))',
-    gap: 'var(--gap-md)',
+    gap: 'var(--bds-gap-md)',
   }}>
     {entries.map((entry) => <IconCard key={entry.name} entry={entry} />)}
   </div>
 );
 
-const Stack = ({ children, gap = 'var(--gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
+const Stack = ({ children, gap = 'var(--bds-gap-xl)' }: { children: React.ReactNode; gap?: string }) => (
   <div style={{ display: 'flex', flexDirection: 'column', gap }}>{children}</div>
 );
 
@@ -125,22 +125,22 @@ export const Setup: Story = {
   render: () => (
     <Stack>
       <div style={{
-        fontFamily: 'var(--font-family-body)',
-        fontSize: 'var(--body-md)',
-        color: 'var(--text-primary)',
-        lineHeight: 'var(--font-line-height-normal)',
+        fontFamily: 'var(--bds-font-family-body)',
+        fontSize: 'var(--bds-body-md)',
+        color: 'var(--bds-text-primary)',
+        lineHeight: 'var(--bds-font-line-height-normal)',
         maxWidth: '640px',
       }}>
-        <h3 style={{ fontFamily: 'var(--font-family-heading)', margin: '0 0 var(--gap-sm)' }}>
+        <h3 style={{ fontFamily: 'var(--bds-font-family-heading)', margin: '0 0 var(--bds-gap-sm)' }}>
           Phosphor icons through the BDS atom
         </h3>
-        <p style={{ margin: '0 0 var(--gap-md)', color: 'var(--text-secondary)' }}>
+        <p style={{ margin: '0 0 var(--bds-gap-md)', color: 'var(--bds-text-secondary)' }}>
           BDS wraps Iconify with its own <code>&lt;Icon&gt;</code> atom, which
           resolves Phosphor (<code>ph:*</code>) glyphs from a subset bundled into the package — no
           runtime CDN request. Every glyph in this catalog renders through that atom, so it shows
           the default <code>outline-bold</code> weight a consumer actually gets.
         </p>
-        <p style={{ margin: '0 0 var(--gap-md)', color: 'var(--text-secondary)' }}>
+        <p style={{ margin: '0 0 var(--bds-gap-md)', color: 'var(--bds-text-secondary)' }}>
           The name constants in <code>components/icons.ts</code> are internal to BDS source.
           A consuming app passes the <code>ph:*</code> string, or imports the semantic{' '}
           <code>ACTION_ICONS</code> set.
@@ -150,15 +150,15 @@ export const Setup: Story = {
       <div>
         <SectionLabel>Usage</SectionLabel>
         <pre style={{
-          fontFamily: 'var(--font-family-system, monospace)',
+          fontFamily: 'var(--bds-font-family-system, monospace)',
           fontSize: '13px', // bds-lint-ignore — story-only demo label sizing, not shipped component CSS
-          background: 'var(--surface-primary)',
-          padding: 'var(--padding-lg)',
-          borderRadius: 'var(--border-radius-md)',
-          border: '1px solid var(--border-muted)',
+          background: 'var(--bds-surface-primary)',
+          padding: 'var(--bds-padding-lg)',
+          borderRadius: 'var(--bds-border-radius-md)',
+          border: '1px solid var(--bds-border-muted)',
           overflow: 'auto',
           margin: 0,
-          color: 'var(--text-primary)',
+          color: 'var(--bds-text-primary)',
         }}>
 {`// Inside BDS source — import the constant
 import { Icon } from '../Icon';
@@ -178,9 +178,9 @@ import { Icon, ACTION_ICONS } from '@brikdesigns/bds';
 
       <div>
         <SectionLabel>Sample icons</SectionLabel>
-        <div style={{ display: 'flex', gap: 'var(--gap-xl)', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: 'var(--bds-gap-xl)', alignItems: 'center' }}>
           {[Icons.Check, Icons.X, Icons.Info, Icons.House, Icons.Gear].map((icon) => (
-            <Icon key={icon} icon={icon} style={{ fontSize: '24px', color: 'var(--text-primary)' }} /> /* bds-lint-ignore — icon display size */
+            <Icon key={icon} icon={icon} style={{ fontSize: '24px', color: 'var(--bds-text-primary)' }} /> /* bds-lint-ignore — icon display size */
           ))}
         </div>
       </div>
@@ -188,9 +188,9 @@ import { Icon, ACTION_ICONS } from '@brikdesigns/bds';
       <div>
         <SectionLabel>Coverage</SectionLabel>
         <p style={{
-          fontFamily: 'var(--font-family-body)',
-          fontSize: 'var(--body-sm)',
-          color: 'var(--text-secondary)',
+          fontFamily: 'var(--bds-font-family-body)',
+          fontSize: 'var(--bds-body-sm)',
+          color: 'var(--bds-text-secondary)',
           margin: 0,
         }}>
           {iconConstants().length} constants in <code>components/icons.ts</code>,{' '}
@@ -252,9 +252,9 @@ export const Ungrouped: Story = {
     const strays = ungrouped();
     return strays.length === 0 ? (
       <p style={{
-        fontFamily: 'var(--font-family-body)',
-        fontSize: 'var(--body-md)',
-        color: 'var(--text-secondary)',
+        fontFamily: 'var(--bds-font-family-body)',
+        fontSize: 'var(--bds-body-md)',
+        color: 'var(--bds-text-secondary)',
         margin: 0,
       }}>
         All {iconConstants().length} constants in <code>components/icons.ts</code> are filed into a

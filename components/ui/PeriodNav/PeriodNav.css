@@ -4,17 +4,17 @@
 .bds-period-nav {
   display: flex;
   align-items: center;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 
 /* ─── Current-period label (heading-sm, centered between the controls) ─── */
 
 .bds-period-nav__label {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-sm);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-snug);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-primary);
   text-align: center;
   margin: 0;
 }

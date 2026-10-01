@@ -117,7 +117,7 @@ export const WithControlledTabs: Story = {
 
       return (
         <div>
-          <div style={{ borderBottom: 'var(--border-width-md) solid var(--border-secondary)' }}>
+          <div style={{ borderBottom: 'var(--bds-border-width-md) solid var(--bds-border-secondary)' }}>
             <TabBar
               variant="tab"
               items={tabs.map((label, i) => ({
@@ -128,10 +128,10 @@ export const WithControlledTabs: Story = {
             />
           </div>
           <div style={{
-            padding: 'var(--padding-lg)',
-            fontFamily: 'var(--font-family-body)',
-            fontSize: 'var(--body-md)',
-            color: 'var(--text-secondary)',
+            padding: 'var(--bds-padding-lg)',
+            fontFamily: 'var(--bds-font-family-body)',
+            fontSize: 'var(--bds-body-md)',
+            color: 'var(--bds-text-secondary)',
           }}>
             Content for "{tabs[activeIndex]}" tab
           </div>

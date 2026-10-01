@@ -74,24 +74,24 @@ const items = section.items;
 
 <style>
   .bp-logo-wall {
-    padding-block: var(--bds-logo-wall-padding-y, clamp(var(--padding-lg), 5vw, var(--padding-xl)));
+    padding-block: var(--bds-logo-wall-padding-y, clamp(var(--bds-padding-lg), 5vw, var(--bds-padding-xl)));
   }
 
   .bp-logo-wall__container {
-    max-width: var(--content-width-xl);
+    max-width: var(--bds-content-width-xl);
     margin-inline: auto;
-    padding-inline: var(--page-inset);
+    padding-inline: var(--bds-page-inset);
   }
 
   .bp-logo-wall__title {
-    margin: 0 0 var(--gap-lg);
-    font-family: var(--font-family-label);
-    font-size: var(--label-lg);
-    font-weight: var(--font-weight-medium);
+    margin: 0 0 var(--bds-gap-lg);
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-lg);
+    font-weight: var(--bds-font-weight-medium);
     letter-spacing: 0.04em;
     text-transform: uppercase;
     text-align: center;
-    color: var(--text-secondary);
+    color: var(--bds-text-secondary);
   }
 
   /* Static (non-marquee) strip — a centered wrapped row. The marquee treatment
@@ -102,7 +102,7 @@ const items = section.items;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: var(--bds-logo-wall-gap, var(--size-1000));
+    gap: var(--bds-logo-wall-gap, var(--bds-size-1000));
   }
 
   .bp-logo-wall__strip[data-motion='marquee'] {
@@ -113,7 +113,7 @@ const items = section.items;
      `Marquee` primitive (`.bds-marquee__group img`). */
   .bp-logo-wall__strip:not([data-motion='marquee']) img,
   .bp-logo-wall__strip:not([data-motion='marquee']) svg {
-    height: var(--bds-logo-wall-logo-height, var(--size-600));
+    height: var(--bds-logo-wall-logo-height, var(--bds-size-600));
     width: auto;
     flex-shrink: 0;
   }

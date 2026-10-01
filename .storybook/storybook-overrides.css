@@ -30,12 +30,12 @@
      future, redefine inside body[data-bds-dark="true"] .sbdocs. */
   --sb-code-block-bg: #1e1e1e;
   --sb-code-block-text: #d4d4d4;
-  --sb-code-block-border: var(--border-muted, rgba(0, 0, 0, 0.12));
+  --sb-code-block-border: var(--bds-border-muted, rgba(0, 0, 0, 0.12));
 
   /* Triple-link header (ADR-007 ComponentLinks block) */
-  --sb-component-links-color: var(--text-muted);
-  --sb-component-links-hover: var(--text-brand-primary);
-  --sb-component-links-sep-color: var(--border-muted);
+  --sb-component-links-color: var(--bds-text-muted);
+  --sb-component-links-hover: var(--bds-text-brand-primary);
+  --sb-component-links-sep-color: var(--bds-border-muted);
 }
 
 /* ============================================
@@ -159,7 +159,7 @@ pre,
 
 /* Inline code — subtle background, respects theme text color */
 code:not([class*="language-"]):not(pre code) {
-  background-color: var(--surface-secondary) !important;
+  background-color: var(--bds-surface-secondary) !important;
   color: inherit !important;
   padding: 0.15em 0.4em !important;
   border-radius: 4px !important;
@@ -232,12 +232,12 @@ button.docblock-code-toggle {
   display: inline-flex !important;
   align-items: center !important;
   gap: 6px !important;
-  background: var(--surface-secondary) !important;
-  color: var(--text-secondary) !important;
-  border: 1px solid var(--border-muted) !important;
+  background: var(--bds-surface-secondary) !important;
+  color: var(--bds-text-secondary) !important;
+  border: 1px solid var(--bds-border-muted) !important;
   border-radius: 4px !important;
   box-shadow: none !important;
-  font-family: var(--font-family-body, sans-serif) !important;
+  font-family: var(--bds-font-family-body, sans-serif) !important;
   font-size: 12px !important;
   font-weight: 500 !important;
   padding: 6px 12px !important;
@@ -251,13 +251,13 @@ button.docblock-code-toggle {
 
 #storybook-docs#storybook-docs .sbdocs-preview-actions button:hover,
 #storybook-docs#storybook-docs button.docblock-code-toggle:hover {
-  color: var(--text-brand-primary) !important;
-  background-color: var(--surface-primary) !important;
-  border-color: var(--border-secondary) !important;
+  color: var(--bds-text-brand-primary) !important;
+  background-color: var(--bds-surface-primary) !important;
+  border-color: var(--bds-border-secondary) !important;
 }
 
 #storybook-docs#storybook-docs .sbdocs-preview-actions button:focus-visible {
-  outline: 2px solid var(--text-brand-primary) !important;
+  outline: 2px solid var(--bds-text-brand-primary) !important;
   outline-offset: 2px !important;
 }
 
@@ -311,8 +311,8 @@ button.docblock-code-toggle::after {
    same scope where .body.theme-X sets them. All wrappers below
    are transparent so the body bg shows through. */
 body.body {
-  background-color: var(--page-primary) !important;
-  color: var(--text-primary) !important;
+  background-color: var(--bds-page-primary) !important;
+  color: var(--bds-text-primary) !important;
   min-height: 100vh;
 }
 
@@ -400,18 +400,18 @@ div[class*="docs-story"] {
    Internal padding gives Carbon-style breathing room around the rendered
    component so it doesn't touch the preview-block edges. */
 #storybook-docs#storybook-docs .sbdocs-preview {
-  background: var(--surface-primary) !important;
-  border-color: var(--border-secondary) !important;
+  background: var(--bds-surface-primary) !important;
+  border-color: var(--bds-border-secondary) !important;
   box-shadow: none !important;
   margin: 16px 0 24px !important;
-  padding: var(--padding-xl) !important;
+  padding: var(--bds-padding-xl) !important;
   overflow: hidden !important;
 }
 
 /* Source code reveal inside preview — strip the parent padding so the
    code block fills the bottom of the preview frame edge-to-edge. */
 #storybook-docs#storybook-docs .sbdocs-preview .docblock-source {
-  margin: var(--padding-xl) calc(-1 * var(--padding-xl)) calc(-1 * var(--padding-xl)) !important;
+  margin: var(--bds-padding-xl) calc(-1 * var(--bds-padding-xl)) calc(-1 * var(--bds-padding-xl)) !important;
   border-radius: 0 !important;
   border-left: none !important;
   border-right: none !important;
@@ -464,18 +464,18 @@ body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
 .sbdocs h2:not(.sbdocs-preview *),
 .sbdocs h3:not(.sbdocs-preview *),
 .sbdocs h4:not(.sbdocs-preview *) {
-  color: var(--text-primary) !important;
-  font-family: var(--font-family-heading, inherit) !important;
+  color: var(--bds-text-primary) !important;
+  font-family: var(--bds-font-family-heading, inherit) !important;
 }
 
 .sbdocs p:not(.sbdocs-preview *),
 .sbdocs li:not(.sbdocs-preview *) {
-  color: var(--text-secondary) !important;
-  font-family: var(--font-family-body, inherit) !important;
+  color: var(--bds-text-secondary) !important;
+  font-family: var(--bds-font-family-body, inherit) !important;
 }
 
 .sbdocs a:not([class*="docblock"]):not([class*="anchor"]):not([class*="bds-button"]):not(.sbdocs-preview *) {
-  color: var(--text-brand-primary) !important;
+  color: var(--bds-text-brand-primary) !important;
 }
 
 /* Description / subtitle blocks — scope to docs chrome only.
@@ -483,7 +483,7 @@ body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
  * including consumer components. */
 .sbdocs div[class*="Description"]:not(.sbdocs-preview *),
 .sbdocs div[class*="Subtitle"]:not(.sbdocs-preview *) {
-  color: var(--text-secondary) !important;
+  color: var(--bds-text-secondary) !important;
 }
 
 /* Args/props table — doubled-ID to beat emotion's && on td backgrounds.
@@ -492,51 +492,51 @@ body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
 #storybook-docs#storybook-docs .docblock-argstable {
   border-radius: 6px !important;
   overflow: hidden !important;
-  color: var(--text-primary) !important;
+  color: var(--bds-text-primary) !important;
 }
 
 #storybook-docs#storybook-docs .docblock-argstable thead th {
-  color: var(--text-muted) !important;
-  border-color: var(--border-muted) !important;
+  color: var(--bds-text-muted) !important;
+  border-color: var(--bds-border-muted) !important;
 }
 
 #storybook-docs#storybook-docs .docblock-argstable tbody > tr > td,
 #storybook-docs#storybook-docs .docblock-argstable tbody > tr > th {
-  background: var(--surface-primary) !important;
-  color: var(--text-primary) !important;
-  border-color: var(--border-muted) !important;
+  background: var(--bds-surface-primary) !important;
+  color: var(--bds-text-primary) !important;
+  border-color: var(--bds-border-muted) !important;
 }
 
 #storybook-docs#storybook-docs .docblock-argstable tbody > tr > td span,
 #storybook-docs#storybook-docs .docblock-argstable tbody > tr > td p {
-  color: var(--text-secondary) !important;
+  color: var(--bds-text-secondary) !important;
 }
 
 /* Prop name (first column) — brand color for emphasis */
 #storybook-docs#storybook-docs .docblock-argstable tbody > tr > td:first-of-type {
-  color: var(--text-brand-primary) !important;
+  color: var(--bds-text-brand-primary) !important;
 }
 
 /* Prop default value badges — secondary surface to pop against white cells */
 #storybook-docs#storybook-docs .docblock-argstable td code {
-  background-color: var(--surface-secondary) !important;
-  color: var(--text-primary) !important;
+  background-color: var(--bds-surface-secondary) !important;
+  color: var(--bds-text-primary) !important;
 }
 
 /* Prop type badges (the "undefined", "string", etc. pills) */
 #storybook-docs#storybook-docs .docblock-argstable td button,
 #storybook-docs#storybook-docs .docblock-argstable td [class*="TypeUnion"] span {
-  color: var(--text-muted) !important;
+  color: var(--bds-text-muted) !important;
 }
 
 /* TOC (table of contents) in docs sidebar */
 .sbdocs [class*="toc"] a {
-  color: var(--text-secondary) !important;
+  color: var(--bds-text-secondary) !important;
 }
 
 .sbdocs [class*="toc"] a:hover,
 .sbdocs [class*="toc"] a[data-active="true"] {
-  color: var(--text-brand-primary) !important;
+  color: var(--bds-text-brand-primary) !important;
 }
 
 /* ============================================
@@ -557,24 +557,24 @@ body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
 
 .body {
   /* Padding tokens - Base mode */
-  --padding-none: var(--space-0);
-  --padding-tiny: var(--space-200);
-  --padding-xs: var(--space-250);
-  --padding-sm: var(--space-300);
-  --padding-md: var(--space-400);
-  --padding-lg: var(--space-600);
-  --padding-xl: var(--space-800);
-  --padding-huge: var(--space-1200);
+  --bds-padding-none: var(--bds-space-0);
+  --bds-padding-tiny: var(--bds-space-200);
+  --bds-padding-xs: var(--bds-space-250);
+  --bds-padding-sm: var(--bds-space-300);
+  --bds-padding-md: var(--bds-space-400);
+  --bds-padding-lg: var(--bds-space-600);
+  --bds-padding-xl: var(--bds-space-800);
+  --bds-padding-huge: var(--bds-space-1200);
 
   /* Gap tokens - Base mode */
-  --gap-none: var(--space-0);
-  --gap-tiny: var(--space-50);
-  --gap-xs: var(--space-100);
-  --gap-sm: var(--space-150);
-  --gap-md: var(--space-200);
-  --gap-lg: var(--space-400);
-  --gap-xl: var(--space-600);
-  --gap-huge: var(--space-800);
+  --bds-gap-none: var(--bds-space-0);
+  --bds-gap-tiny: var(--bds-space-50);
+  --bds-gap-xs: var(--bds-space-100);
+  --bds-gap-sm: var(--bds-space-150);
+  --bds-gap-md: var(--bds-space-200);
+  --bds-gap-lg: var(--bds-space-400);
+  --bds-gap-xl: var(--bds-space-600);
+  --bds-gap-huge: var(--bds-space-800);
 }
 
 /* ============================================
@@ -707,7 +707,7 @@ body[data-bds-dark="true"] #storybook-docs#storybook-docs .sbdocs-preview {
   gap: 0;
   margin: -8px 0 24px !important;
   padding: 0;
-  font-family: var(--font-family-body, inherit);
+  font-family: var(--bds-font-family-body, inherit);
   font-size: 14px;
   line-height: 1.4;
 }

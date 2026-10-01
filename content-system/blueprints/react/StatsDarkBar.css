@@ -17,7 +17,7 @@
  */
 
 .bds-stats-dark-bar {
-  background: var(--bds-stats-dark-bar-bg, var(--surface-inverse));
+  background: var(--bds-stats-dark-bar-bg, var(--bds-surface-inverse));
 }
 
 .bds-stats-dark-bar__list {
@@ -26,7 +26,7 @@
   padding: 0;
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--gap-xl);
+  gap: var(--bds-gap-xl);
 }
 
 @media (min-width: 640px) {
@@ -38,19 +38,19 @@
 .bds-stats-dark-bar__item {
   display: flex;
   flex-direction: column;
-  /* Value↔label is a tight text pairing: --gap-sm. Not --gap-tiny, which
+  /* Value↔label is a tight text pairing: --bds-gap-sm. Not --bds-gap-tiny, which
      resolves to 0px outside default spacing mode (ADR-023 §3). */
-  gap: var(--gap-sm);
-  padding-block: var(--padding-sm);
-  border-left: 1px solid var(--bds-stats-dark-bar-divider, var(--border-secondary));
-  padding-left: var(--padding-md);
+  gap: var(--bds-gap-sm);
+  padding-block: var(--bds-padding-sm);
+  border-left: 1px solid var(--bds-stats-dark-bar-divider, var(--bds-border-secondary));
+  padding-left: var(--bds-padding-md);
 }
 
 @media (max-width: 639px) {
   .bds-stats-dark-bar__item {
     border-left: none;
-    border-top: 1px solid var(--bds-stats-dark-bar-divider, var(--border-secondary));
-    padding-top: var(--padding-md);
+    border-top: 1px solid var(--bds-stats-dark-bar-divider, var(--bds-border-secondary));
+    padding-top: var(--bds-padding-md);
     padding-left: 0;
   }
 
@@ -61,17 +61,17 @@
 }
 
 .bds-stats-dark-bar__value {
-  font-family: var(--font-family-display);
-  font-size: clamp(var(--heading-xl), 4vw, var(--heading-huge));
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--bds-stats-dark-bar-value-color, var(--text-inverse));
+  font-family: var(--bds-font-family-display);
+  font-size: clamp(var(--bds-heading-xl), 4vw, var(--bds-heading-huge));
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-stats-dark-bar-value-color, var(--bds-text-inverse));
 }
 
 .bds-stats-dark-bar__label {
-  font-family: var(--font-family-label);
-  font-size: var(--label-lg);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-lg);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--bds-stats-dark-bar-label-color, var(--text-inverse));
+  color: var(--bds-stats-dark-bar-label-color, var(--bds-text-inverse));
 }

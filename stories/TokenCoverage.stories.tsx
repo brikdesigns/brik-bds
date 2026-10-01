@@ -18,25 +18,25 @@ interface CoverageData {
 // ─── Styles ─────────────────────────────────────────────────────────
 
 const card: CSSProperties = {
-  padding: 'var(--padding-lg)',
-  backgroundColor: 'var(--surface-primary)',
-  borderRadius: 'var(--border-radius-md)',
-  border: '1px solid var(--border-muted)',
+  padding: 'var(--bds-padding-lg)',
+  backgroundColor: 'var(--bds-surface-primary)',
+  borderRadius: 'var(--bds-border-radius-md)',
+  border: '1px solid var(--bds-border-muted)',
 };
 
 const metric: CSSProperties = {
-  fontFamily: 'var(--font-family-heading)',
-  fontSize: 'var(--heading-lg)',
-  fontWeight: 'var(--font-weight-bold)' as unknown as number,
-  color: 'var(--text-primary)',
+  fontFamily: 'var(--bds-font-family-heading)',
+  fontSize: 'var(--bds-heading-lg)',
+  fontWeight: 'var(--bds-font-weight-bold)' as unknown as number,
+  color: 'var(--bds-text-primary)',
 };
 
 const tableCell: CSSProperties = {
-  padding: 'var(--gap-xs) var(--gap-sm)',
-  fontFamily: 'var(--font-family-body)',
-  fontSize: 'var(--body-sm)',
-  borderBottom: '1px solid var(--border-muted)',
-  color: 'var(--text-primary)',
+  padding: 'var(--bds-gap-xs) var(--bds-gap-sm)',
+  fontFamily: 'var(--bds-font-family-body)',
+  fontSize: 'var(--bds-body-sm)',
+  borderBottom: '1px solid var(--bds-border-muted)',
+  color: 'var(--bds-text-primary)',
 };
 
 // ─── Components ─────────────────────────────────────────────────────
@@ -44,7 +44,7 @@ const tableCell: CSSProperties = {
 function Bar({ value, max, color }: { value: number; max: number; color: string }) {
   const pct = max > 0 ? Math.min((value / max) * 100, 100) : 0;
   return (
-    <div style={{ width: '100%', height: 6, backgroundColor: 'var(--background-secondary)', borderRadius: 3, overflow: 'hidden' }}>
+    <div style={{ width: '100%', height: 6, backgroundColor: 'var(--bds-background-secondary)', borderRadius: 3, overflow: 'hidden' }}>
       <div style={{ width: `${pct}%`, height: '100%', backgroundColor: color, borderRadius: 3 }} />
     </div>
   );
@@ -54,20 +54,20 @@ function TokenUsageTable({ tokens, maxCount }: { tokens: CoverageData['used']; m
   return (
     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
       <thead>
-        <tr style={{ borderBottom: '2px solid var(--border-muted)' }}>
-          <th style={{ ...tableCell, textAlign: 'left', color: 'var(--text-secondary)' }}>Token</th>
-          <th style={{ ...tableCell, textAlign: 'right', color: 'var(--text-secondary)', width: 60 }}>Uses</th>
-          <th style={{ ...tableCell, color: 'var(--text-secondary)', width: 120 }}>Coverage</th>
-          <th style={{ ...tableCell, textAlign: 'left', color: 'var(--text-secondary)' }}>Components</th>
+        <tr style={{ borderBottom: '2px solid var(--bds-border-muted)' }}>
+          <th style={{ ...tableCell, textAlign: 'left', color: 'var(--bds-text-secondary)' }}>Token</th>
+          <th style={{ ...tableCell, textAlign: 'right', color: 'var(--bds-text-secondary)', width: 60 }}>Uses</th>
+          <th style={{ ...tableCell, color: 'var(--bds-text-secondary)', width: 120 }}>Coverage</th>
+          <th style={{ ...tableCell, textAlign: 'left', color: 'var(--bds-text-secondary)' }}>Components</th>
         </tr>
       </thead>
       <tbody>
         {tokens.slice(0, 30).map(t => (
           <tr key={t.token}>
-            <td style={{ ...tableCell, fontFamily: 'var(--font-family-system, monospace)', fontSize: 'var(--body-xs)' }}>{t.token}</td>
+            <td style={{ ...tableCell, fontFamily: 'var(--bds-font-family-system, monospace)', fontSize: 'var(--bds-body-xs)' }}>{t.token}</td>
             <td style={{ ...tableCell, textAlign: 'right' }}>{t.count}</td>
-            <td style={tableCell}><Bar value={t.count} max={maxCount} color="var(--color-system-green)" /></td>
-            <td style={{ ...tableCell, fontSize: 'var(--body-xs)', color: 'var(--text-muted)' }}>{t.components.slice(0, 5).join(', ')}{t.components.length > 5 ? ` +${t.components.length - 5}` : ''}</td>
+            <td style={tableCell}><Bar value={t.count} max={maxCount} color="var(--bds-color-system-green)" /></td>
+            <td style={{ ...tableCell, fontSize: 'var(--bds-body-xs)', color: 'var(--bds-text-muted)' }}>{t.components.slice(0, 5).join(', ')}{t.components.length > 5 ? ` +${t.components.length - 5}` : ''}</td>
           </tr>
         ))}
       </tbody>
@@ -85,13 +85,13 @@ function OrphanedList({ tokens }: { tokens: string[] }) {
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-md)' }}>
       {Object.entries(groups).sort((a, b) => b[1].length - a[1].length).map(([cat, toks]) => (
         <div key={cat}>
-          <div style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-sm)', color: 'var(--text-secondary)', marginBottom: 'var(--gap-xs)' }}>
-            {cat} <span style={{ color: 'var(--text-muted)' }}>({toks.length})</span>
+          <div style={{ fontFamily: 'var(--bds-font-family-label)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-secondary)', marginBottom: 'var(--bds-gap-xs)' }}>
+            {cat} <span style={{ color: 'var(--bds-text-muted)' }}>({toks.length})</span>
           </div>
-          <div style={{ fontFamily: 'var(--font-family-system, monospace)', fontSize: 'var(--body-xs)', color: 'var(--text-muted)', lineHeight: 1.8 }}>
+          <div style={{ fontFamily: 'var(--bds-font-family-system, monospace)', fontSize: 'var(--bds-body-xs)', color: 'var(--bds-text-muted)', lineHeight: 1.8 }}>
             {toks.join(', ')}
           </div>
         </div>
@@ -101,7 +101,7 @@ function OrphanedList({ tokens }: { tokens: string[] }) {
 }
 
 function HardcodedLeaderboard({ items }: { items: CoverageData['hardcoded'] }) {
-  if (items.length === 0) return <div style={{ color: 'var(--text-muted)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)' }}>No hardcoded values detected</div>;
+  if (items.length === 0) return <div style={{ color: 'var(--bds-text-muted)', fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)' }}>No hardcoded values detected</div>;
   const max = items[0]?.count ?? 1;
   return (
     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -110,7 +110,7 @@ function HardcodedLeaderboard({ items }: { items: CoverageData['hardcoded'] }) {
           <tr key={item.component}>
             <td style={{ ...tableCell, width: 180 }}>{item.component}</td>
             <td style={{ ...tableCell, textAlign: 'right', width: 50 }}>{item.count}</td>
-            <td style={tableCell}><Bar value={item.count} max={max} color="var(--color-system-yellow)" /></td>
+            <td style={tableCell}><Bar value={item.count} max={max} color="var(--bds-color-system-yellow)" /></td>
           </tr>
         ))}
       </tbody>
@@ -131,8 +131,8 @@ function TokenCoverageDashboard() {
       .catch(() => setError('Health data not found. Run: node scripts/build-health-data.js'));
   }, []);
 
-  if (error) return <div style={{ padding: 'var(--padding-xl)', fontFamily: 'var(--font-family-body)', color: 'var(--text-secondary)' }}>{error}</div>;
-  if (!data) return <div style={{ padding: 'var(--padding-xl)', fontFamily: 'var(--font-family-body)', color: 'var(--text-muted)' }}>Loading...</div>;
+  if (error) return <div style={{ padding: 'var(--bds-padding-xl)', fontFamily: 'var(--bds-font-family-body)', color: 'var(--bds-text-secondary)' }}>{error}</div>;
+  if (!data) return <div style={{ padding: 'var(--bds-padding-xl)', fontFamily: 'var(--bds-font-family-body)', color: 'var(--bds-text-muted)' }}>Loading...</div>;
 
   const maxCount = data.used[0]?.count ?? 1;
 
@@ -147,11 +147,11 @@ function TokenCoverageDashboard() {
       }
     >
       <DashboardSection title="Summary">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--gap-md)' }}>
-          <div style={card}><div style={metric}>{data.totalDefined}</div><div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>Total defined</div></div>
-          <div style={card}><div style={{ ...metric, color: 'var(--color-system-green)' }}>{data.totalUsed}</div><div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>Used in components</div></div>
-          <div style={card}><div style={{ ...metric, color: data.totalOrphaned > 50 ? 'var(--color-system-yellow)' : 'var(--text-primary)' }}>{data.totalOrphaned}</div><div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>Orphaned</div></div>
-          <div style={card}><div style={{ ...metric, color: 'var(--color-system-green)' }}>{data.usagePct}%</div><div style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>Usage rate</div></div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--bds-gap-md)' }}>
+          <div style={card}><div style={metric}>{data.totalDefined}</div><div style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-muted)' }}>Total defined</div></div>
+          <div style={card}><div style={{ ...metric, color: 'var(--bds-color-system-green)' }}>{data.totalUsed}</div><div style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-muted)' }}>Used in components</div></div>
+          <div style={card}><div style={{ ...metric, color: data.totalOrphaned > 50 ? 'var(--bds-color-system-yellow)' : 'var(--bds-text-primary)' }}>{data.totalOrphaned}</div><div style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-muted)' }}>Orphaned</div></div>
+          <div style={card}><div style={{ ...metric, color: 'var(--bds-color-system-green)' }}>{data.usagePct}%</div><div style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-muted)' }}>Usage rate</div></div>
         </div>
       </DashboardSection>
 
@@ -182,8 +182,8 @@ function TokenCoverageDashboard() {
             <tbody>
               {data.undeclared.slice(0, 20).map(u => (
                 <tr key={u.token}>
-                  <td style={{ ...tableCell, fontFamily: 'var(--font-family-system, monospace)', fontSize: 'var(--body-xs)' }}>{u.token}</td>
-                  <td style={{ ...tableCell, color: 'var(--text-muted)' }}>{u.components.join(', ')}</td>
+                  <td style={{ ...tableCell, fontFamily: 'var(--bds-font-family-system, monospace)', fontSize: 'var(--bds-body-xs)' }}>{u.token}</td>
+                  <td style={{ ...tableCell, color: 'var(--bds-text-muted)' }}>{u.components.join(', ')}</td>
                 </tr>
               ))}
             </tbody>

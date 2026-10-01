@@ -24,21 +24,21 @@
 :root {
   /* ── Primitives ──
      Numerical, dimension-explicit. Use these when the literal ratio matters. */
-  --aspect-1-1:  1 / 1;
-  --aspect-3-2:  3 / 2;
-  --aspect-2-3:  2 / 3;
-  --aspect-4-3:  4 / 3;
-  --aspect-3-4:  3 / 4;
-  --aspect-4-5:  4 / 5;
-  --aspect-16-9: 16 / 9;
-  --aspect-9-16: 9 / 16;
-  --aspect-21-9: 21 / 9;
+  --bds-aspect-1-1:  1 / 1;
+  --bds-aspect-3-2:  3 / 2;
+  --bds-aspect-2-3:  2 / 3;
+  --bds-aspect-4-3:  4 / 3;
+  --bds-aspect-3-4:  3 / 4;
+  --bds-aspect-4-5:  4 / 5;
+  --bds-aspect-16-9: 16 / 9;
+  --bds-aspect-9-16: 9 / 16;
+  --bds-aspect-21-9: 21 / 9;
 
   /* ── Semantic aliases ──
      Role-named. Use these when the role drives the choice (photo crop, hero,
      cinema slot) and the literal ratio is incidental. */
-  --aspect-square:          var(--aspect-1-1);
-  --aspect-photo-landscape: var(--aspect-3-2);
-  --aspect-photo-portrait:  var(--aspect-2-3);
-  --aspect-cinema:          var(--aspect-16-9);
+  --bds-aspect-square:          var(--bds-aspect-1-1);
+  --bds-aspect-photo-landscape: var(--bds-aspect-3-2);
+  --bds-aspect-photo-portrait:  var(--bds-aspect-2-3);
+  --bds-aspect-cinema:          var(--bds-aspect-16-9);
 }

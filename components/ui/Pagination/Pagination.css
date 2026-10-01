@@ -6,7 +6,7 @@
 .bds-pagination {
   display: flex;
   width: 100%;
-  padding: var(--padding-lg) 0;
+  padding: var(--bds-padding-lg) 0;
   box-sizing: border-box;
 }
 
@@ -27,7 +27,7 @@
 .bds-pagination__items {
   display: flex;
   align-items: center;
-  gap: var(--gap-lg);
+  gap: var(--bds-gap-lg);
 }
 
 /* ─── Arrow buttons ───────────────────────────────────── */
@@ -38,29 +38,29 @@
   justify-content: center;
   width: 48px; /* bds-lint-ignore — Figma-driven arrow size */
   height: 48px; /* bds-lint-ignore — fixed 48px control height, not a spacing-grid token */
-  border-radius: var(--border-radius-pill);
-  background-color: var(--background-brand-primary);
-  color: var(--text-on-color-dark);
+  border-radius: var(--bds-border-radius-pill);
+  background-color: var(--bds-background-brand-primary);
+  color: var(--bds-text-on-color-dark);
   border: none;
   cursor: pointer;
-  font-size: var(--icon-lg);
+  font-size: var(--bds-icon-lg);
   flex-shrink: 0;
 }
 
 .bds-pagination__arrow--disabled {
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
   cursor: not-allowed;
 }
 
 /* ─── Page numbers ────────────────────────────────────── */
 
 .bds-pagination__page {
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-muted);
-  padding: var(--padding-sm);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-muted);
+  padding: var(--bds-padding-sm);
   background: none;
   border: none;
   cursor: pointer;
@@ -69,19 +69,19 @@
 }
 
 .bds-pagination__page--active {
-  color: var(--text-brand-primary);
+  color: var(--bds-text-brand-primary);
   cursor: default;
 }
 
 /* ─── Ellipsis ────────────────────────────────────────── */
 
 .bds-pagination__ellipsis {
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-muted);
-  padding: var(--padding-sm);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-muted);
+  padding: var(--bds-padding-sm);
   min-width: 24px; /* bds-lint-ignore — fixed 24px min tap target, not a spacing-grid token */
   text-align: center;
   cursor: default;

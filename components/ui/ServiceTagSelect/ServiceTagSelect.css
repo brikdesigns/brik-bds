@@ -7,8 +7,8 @@
  * and focus ring. Native radios are visually hidden but stay focusable.
  *
  * Token reference:
- * - --gap-sm (option spacing)          - --border-radius-md (ring radius)
- * - --border-primary (selected ring)   - --border-brand-primary (focus ring)
+ * - --bds-gap-sm (option spacing)          - --bds-border-radius-md (ring radius)
+ * - --bds-border-primary (selected ring)   - --bds-border-brand-primary (focus ring)
  */
 
 /* ── Group ── */
@@ -16,7 +16,7 @@
 .bds-service-tag-select {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
 }
 
 /* ── Option (label wrapping a hidden radio + ServiceTag) ── */
@@ -24,31 +24,31 @@
 .bds-service-tag-select__option {
   display: inline-flex;
   align-items: center;
-  border-radius: var(--border-radius-sm);
+  border-radius: var(--bds-border-radius-sm);
   /* Transparent ring by default so selecting adds no layout shift. */
-  box-shadow: 0 0 0 var(--border-width-lg) transparent;
+  box-shadow: 0 0 0 var(--bds-border-width-lg) transparent;
   cursor: pointer;
-  transition: box-shadow var(--duration-sm) var(--ease-out);
+  transition: box-shadow var(--bds-duration-sm) var(--bds-ease-out);
 }
 
 /* ── Selected ── */
 
 .bds-service-tag-select__option--selected {
-  box-shadow: 0 0 0 var(--border-width-lg) var(--border-primary);
+  box-shadow: 0 0 0 var(--bds-border-width-lg) var(--bds-border-primary);
 }
 
 /* ── Focus (keyboard) — ring follows the focused radio ── */
 
 .bds-service-tag-select__input:focus-visible + .bds-service-tag {
-  outline: var(--border-width-lg) solid var(--border-focus);
-  outline-offset: var(--border-width-sm);
+  outline: var(--bds-border-width-lg) solid var(--bds-border-focus);
+  outline-offset: var(--bds-border-width-sm);
 }
 
 /* ── Disabled ── */
 
 .bds-service-tag-select--disabled .bds-service-tag-select__option {
   cursor: not-allowed;
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
 }
 
 /* ── Visually-hidden native radio (stays focusable for keyboard + SR) ── */

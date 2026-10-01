@@ -8,13 +8,13 @@ import { Stack } from './Stack';
     concern (#1489). The Box/SectionLabel helpers are gallery scaffolding, which
     the story-shape standard says never belongs in a story file. */}
 export const Box = ({ children, w }) => (
-  <div style={{ width: w ?? 'auto', padding: 'var(--padding-md)', background: 'var(--surface-secondary)', border: '1px dashed var(--border-secondary)', borderRadius: 'var(--border-radius-sm)', fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-sm)', color: 'var(--text-primary)' }}>
+  <div style={{ width: w ?? 'auto', padding: 'var(--bds-padding-md)', background: 'var(--bds-surface-secondary)', border: '1px dashed var(--bds-border-secondary)', borderRadius: 'var(--bds-border-radius-sm)', fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-primary)' }}>
     {children}
   </div>
 );
 
 export const SectionLabel = ({ children }) => (
-  <div style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--body-xs)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)', marginBottom: 'var(--gap-sm)' }}>
+  <div style={{ fontFamily: 'var(--bds-font-family-label)', fontSize: 'var(--bds-body-xs)', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--bds-text-muted)', marginBottom: 'var(--bds-gap-sm)' }}>
     {children}
   </div>
 );
@@ -60,7 +60,7 @@ export const AlignmentScale = () => (
     {['start', 'center', 'end', 'stretch'].map((a) => (
       <div key={a}>
         <SectionLabel>align="{a}" (horizontal stack)</SectionLabel>
-        <div style={{ height: 80, background: 'var(--surface-secondary)', padding: 'var(--padding-xs)' }}>
+        <div style={{ height: 80, background: 'var(--bds-surface-secondary)', padding: 'var(--bds-padding-xs)' }}>
           <Stack orientation="horizontal" gap="sm" align={a} style={{ height: '100%' }}>
             <Box w="60px">A</Box>
             <Box w="60px">B</Box>

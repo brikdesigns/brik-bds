@@ -16,24 +16,24 @@ import { baseTheme, baseClientFacts, placeholderImage } from './_fixtures';
  */
 const serviceLineCascadeStyles = `
 [data-service-line='brand'] {
-  --page-brand-primary: var(--color-yellow-500);
-  --text-brand-primary: var(--color-yellow-700);
+  --bds-page-brand-primary: var(--bds-color-yellow-500);
+  --bds-text-brand-primary: var(--bds-color-yellow-700);
 }
 [data-service-line='marketing'] {
-  --page-brand-primary: var(--color-green-500);
-  --text-brand-primary: var(--color-green-700);
+  --bds-page-brand-primary: var(--bds-color-green-500);
+  --bds-text-brand-primary: var(--bds-color-green-700);
 }
 [data-service-line='information'] {
-  --page-brand-primary: var(--color-blue-500);
-  --text-brand-primary: var(--color-blue-700);
+  --bds-page-brand-primary: var(--bds-color-blue-500);
+  --bds-text-brand-primary: var(--bds-color-blue-700);
 }
 [data-service-line='product'] {
-  --page-brand-primary: var(--color-purple-500);
-  --text-brand-primary: var(--color-purple-700);
+  --bds-page-brand-primary: var(--bds-color-purple-500);
+  --bds-text-brand-primary: var(--bds-color-purple-700);
 }
 [data-service-line='service'] {
-  --page-brand-primary: var(--color-orange-500);
-  --text-brand-primary: var(--color-orange-700);
+  --bds-page-brand-primary: var(--bds-color-orange-500);
+  --bds-text-brand-primary: var(--bds-color-orange-700);
 }
 `;
 

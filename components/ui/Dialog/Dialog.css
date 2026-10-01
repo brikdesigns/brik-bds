@@ -4,7 +4,7 @@
 .bds-dialog-backdrop {
   position: fixed;
   inset: 0;
-  background-color: var(--background-overlay);
+  background-color: var(--bds-background-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -12,36 +12,36 @@
 }
 
 .bds-dialog {
-  background-color: var(--surface-primary);
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-overlay);
+  background-color: var(--bds-surface-primary);
+  border-radius: var(--bds-border-radius-md);
+  box-shadow: var(--bds-shadow-overlay);
   max-width: 440px; /* bds-lint-ignore — design constraint */
   width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
-  padding: var(--padding-xl);
+  gap: var(--bds-gap-lg);
+  padding: var(--bds-padding-xl);
 }
 
 /* ─── Title ──────────────────────────────────────────────────── */
 
 .bds-dialog__title {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-sm);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--font-line-height-snug);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-sm);
+  font-weight: var(--bds-font-weight-bold);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-primary);
   margin: 0;
 }
 
 /* ─── Description ────────────────────────────────────────────── */
 
 .bds-dialog__description {
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
   margin: 0;
 }
 
@@ -50,19 +50,19 @@
 .bds-dialog__actions {
   display: flex;
   justify-content: flex-end;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   flex-wrap: wrap;
 }
 
 /* ─── Buttons ────────────────────────────────────────────────── */
 
 .bds-dialog__button {
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--label-sm);
-  line-height: var(--font-line-height-normal);
-  padding: var(--padding-sm) var(--padding-lg);
-  border-radius: var(--border-radius-sm);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
+  font-size: var(--bds-label-sm);
+  line-height: var(--bds-font-line-height-normal);
+  padding: var(--bds-padding-sm) var(--bds-padding-lg);
+  border-radius: var(--bds-border-radius-sm);
   cursor: pointer;
   border: none;
   transition: filter 0.15s ease;
@@ -73,18 +73,18 @@
 }
 
 .bds-dialog__button--cancel {
-  background-color: var(--surface-secondary);
-  color: var(--text-primary);
-  border: var(--border-width-md) solid var(--border-secondary);
+  background-color: var(--bds-surface-secondary);
+  color: var(--bds-text-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-secondary);
 }
 
 .bds-dialog__button--confirm {
-  background-color: var(--background-brand-primary);
-  color: var(--text-on-color-dark);
+  background-color: var(--bds-background-brand-primary);
+  color: var(--bds-text-on-color-dark);
 }
 
 .bds-dialog__button--tone-negative {
-  background-color: var(--background-negative);
-  color: var(--text-on-color-dark);
+  background-color: var(--bds-background-negative);
+  color: var(--bds-text-on-color-dark);
 }
 }

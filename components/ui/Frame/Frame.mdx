@@ -8,12 +8,12 @@ import { Frame } from './Frame';
 export const SectionLabel = ({ children }) => (
   <div
     style={{
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--body-xs)',
+      fontFamily: 'var(--bds-font-family-label)',
+      fontSize: 'var(--bds-body-xs)',
       textTransform: 'uppercase',
       letterSpacing: '0.05em',
-      color: 'var(--text-muted)',
-      marginBottom: 'var(--gap-sm)',
+      color: 'var(--bds-text-muted)',
+      marginBottom: 'var(--bds-gap-sm)',
     }}
   >
     {children}
@@ -22,14 +22,14 @@ export const SectionLabel = ({ children }) => (
 
 export const PlaceholderImage = () => (
   <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
-    <rect width="400" height="300" fill="var(--surface-secondary)" />
+    <rect width="400" height="300" fill="var(--bds-surface-secondary)" />
     <text
       x="200"
       y="160"
       textAnchor="middle"
-      fontFamily="var(--font-family-body)"
+      fontFamily="var(--bds-font-family-body)"
       fontSize="20"
-      fill="var(--text-muted)"
+      fill="var(--bds-text-muted)"
     >
       400 × 300 placeholder
     </text>
@@ -37,7 +37,7 @@ export const PlaceholderImage = () => (
 );
 
 export const RatioPresets = () => (
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--gap-lg)' }}>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--bds-gap-lg)' }}>
     {['square', 'portrait', 'landscape', 'wide', 'ultrawide'].map((r) => (
       <div key={r}>
         <SectionLabel>ratio="{r}"</SectionLabel>
@@ -50,11 +50,11 @@ export const RatioPresets = () => (
 );
 
 export const FitModes = () => (
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--gap-lg)' }}>
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'var(--bds-gap-lg)' }}>
     {['cover', 'contain', 'fill', 'none'].map((f) => (
       <div key={f}>
         <SectionLabel>fit="{f}"</SectionLabel>
-        <Frame ratio="square" fit={f} style={{ background: 'var(--surface-secondary)' }}>
+        <Frame ratio="square" fit={f} style={{ background: 'var(--bds-surface-secondary)' }}>
           <img
             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MCA1MCI+PHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjZTM1MzM1Ii8+PC9zdmc+"
             alt=""

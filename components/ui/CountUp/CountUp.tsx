@@ -22,7 +22,7 @@ export interface CountUpProps extends HTMLAttributes<HTMLSpanElement> {
  * plain static number — the animation is a pure enhancement on top (the same
  * by-construction gate `_Media.astro`'s `bg-video` uses). Duration and easing
  * come from `--bds-count-up-duration` / `--bds-count-up-ease` (token-backed:
- * `--duration-xl` / `--ease-out`), overridable per consumer.
+ * `--bds-duration-xl` / `--bds-ease-out`), overridable per consumer.
  *
  * `tabular-nums` (in `CountUp.css`) holds the width steady as digits change, so
  * the surrounding layout does not jitter through the sweep.

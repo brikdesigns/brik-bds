@@ -53,10 +53,10 @@ describe('Card anatomy API (ADR-038)', () => {
     expect(getComputedStyle(overline!).alignSelf).toBe('flex-start');
   });
 
-  it('layout="stack"/"row" body copy resolves --text-primary via the parity rule', async () => {
+  it('layout="stack"/"row" body copy resolves --bds-text-primary via the parity rule', async () => {
     // Body arrives as `children`, so a `<CardDescription>` there carries
-    // `.bds-card-description` (--text-secondary). The `.bds-card__{stack,row}-body >
-    // .bds-card-description` parity rule re-asserts --text-primary; without it every
+    // `.bds-card-description` (--bds-text-secondary). The `.bds-card__{stack,row}-body >
+    // .bds-card-description` parity rule re-asserts --bds-text-primary; without it every
     // card-grid body line silently re-styles to the lighter secondary color.
     //
     // Sentinel token values rather than `dist/tokens.css`: that file is a build
@@ -64,7 +64,7 @@ describe('Card anatomy API (ADR-038)', () => {
     // `var(--text-*)` invalid at computed-value time — the assertion would then
     // pass vacuously on a shared inherited fallback.
     const tokens = document.createElement('style');
-    tokens.textContent = ':root{--text-primary:rgb(11,11,11);--text-secondary:rgb(99,99,99)}';
+    tokens.textContent = ':root{--bds-text-primary:rgb(11,11,11);--bds-text-secondary:rgb(99,99,99)}';
     document.head.appendChild(tokens);
 
     for (const layout of ['stack', 'row'] as const) {
@@ -122,14 +122,14 @@ describe('Card anatomy API (ADR-038)', () => {
     beforeEach(() => {
       tokens = document.createElement('style');
       tokens.textContent =
-        ':root{--padding-huge:48px;--padding-lg:24px;--gap-xl:40px;--gap-lg:16px}';
+        ':root{--bds-padding-huge:48px;--bds-padding-lg:24px;--bds-gap-xl:40px;--bds-gap-lg:16px}';
       document.head.appendChild(tokens);
     });
     afterEach(() => tokens.remove());
 
     const insetArgs = { layout: 'stack', mediaTreatment: 'inset', title: 'T' } as const;
 
-    it('default inset is 48px (--padding-huge) with no -lg class — consumers byte-identical', async () => {
+    it('default inset is 48px (--bds-padding-huge) with no -lg class — consumers byte-identical', async () => {
       const el = await mount(h(Card as never, insetArgs));
       const rootEl = el.firstElementChild as HTMLElement;
       expect(rootEl.className).toContain('bds-card--layout-stack-inset');
@@ -146,7 +146,7 @@ describe('Card anatomy API (ADR-038)', () => {
       expect(getComputedStyle(rootEl).paddingTop).toBe('48px');
     });
 
-    it('insetPadding="lg" tightens the frame to 24px (--padding-lg) + --gap-lg', async () => {
+    it('insetPadding="lg" tightens the frame to 24px (--bds-padding-lg) + --bds-gap-lg', async () => {
       const el = await mount(h(Card as never, { ...insetArgs, insetPadding: 'lg' }));
       const rootEl = el.firstElementChild as HTMLElement;
       expect(rootEl.className).toContain('bds-card--layout-stack-inset');

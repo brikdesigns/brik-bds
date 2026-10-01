@@ -35,9 +35,9 @@ function SubNavigationStory({
       header={
         showHeader ? (
           <div style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--heading-sm)',
-            color: 'var(--text-primary)',
+            fontFamily: 'var(--bds-font-family-heading)',
+            fontSize: 'var(--bds-heading-sm)',
+            color: 'var(--bds-text-primary)',
           }}>
             Settings
           </div>
@@ -45,7 +45,7 @@ function SubNavigationStory({
       }
       footer={
         showFooter ? (
-          <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>
+          <div style={{ fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-muted)' }}>
             Last sync: 2 min ago
           </div>
         ) : undefined

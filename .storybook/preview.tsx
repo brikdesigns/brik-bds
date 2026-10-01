@@ -117,11 +117,11 @@ const ThemedDocsContainer: typeof DefaultDocsContainer = (props) => {
     }
     if (isDark) {
       darkStyle.textContent = `
-        .sbdocs-preview { border-color: var(--border-secondary) !important; background: var(--surface-primary) !important; }
-        .docblock-argstable { border-color: var(--border-secondary) !important; }
-        .docblock-argstable th, .docblock-argstable td { border-color: var(--border-muted) !important; color: var(--text-primary) !important; }
-        .docblock-argstable th { background: var(--surface-primary) !important; }
-        [class*="ActionBar"] button { color: var(--text-muted) !important; }
+        .sbdocs-preview { border-color: var(--bds-border-secondary) !important; background: var(--bds-surface-primary) !important; }
+        .docblock-argstable { border-color: var(--bds-border-secondary) !important; }
+        .docblock-argstable th, .docblock-argstable td { border-color: var(--bds-border-muted) !important; color: var(--bds-text-primary) !important; }
+        .docblock-argstable th { background: var(--bds-surface-primary) !important; }
+        [class*="ActionBar"] button { color: var(--bds-text-muted) !important; }
       `;
     } else {
       darkStyle.textContent = '';
@@ -188,11 +188,11 @@ const withTheme: Decorator = (Story, context) => {
     }
     if (isDark) {
       darkStyle.textContent = `
-        .sbdocs-preview { border-color: var(--border-secondary) !important; background: var(--surface-primary) !important; }
-        .docblock-argstable { border-color: var(--border-secondary) !important; }
-        .docblock-argstable th, .docblock-argstable td { border-color: var(--border-muted) !important; color: var(--text-primary) !important; }
-        .docblock-argstable th { background: var(--surface-primary) !important; }
-        [class*="ActionBar"] button { color: var(--text-muted) !important; }
+        .sbdocs-preview { border-color: var(--bds-border-secondary) !important; background: var(--bds-surface-primary) !important; }
+        .docblock-argstable { border-color: var(--bds-border-secondary) !important; }
+        .docblock-argstable th, .docblock-argstable td { border-color: var(--bds-border-muted) !important; color: var(--bds-text-primary) !important; }
+        .docblock-argstable th { background: var(--bds-surface-primary) !important; }
+        [class*="ActionBar"] button { color: var(--bds-text-muted) !important; }
       `;
     } else {
       darkStyle.textContent = '';
@@ -225,7 +225,7 @@ const withTheme: Decorator = (Story, context) => {
   return (
     <div
       style={{
-        padding: 'var(--padding-md)',
+        padding: 'var(--bds-padding-md)',
         minHeight: '100vh',
         width: '100%',
         boxSizing: 'border-box' as const,

@@ -80,11 +80,11 @@ function EventsDemo({ seed }: { seed: boolean }) {
   return (
     <>
       <BrikDevBar />
-      <div style={{ padding: 'var(--padding-xl)', fontFamily: 'var(--font-family-body)', maxWidth: 720 }}>
-        <h2 style={{ fontSize: 'var(--heading-md)', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
+      <div style={{ padding: 'var(--bds-padding-xl)', fontFamily: 'var(--bds-font-family-body)', maxWidth: 720 }}>
+        <h2 style={{ fontSize: 'var(--bds-heading-md)', fontWeight: 700, color: 'var(--bds-text-primary)', margin: 0 }}>
           Events slot
         </h2>
-        <p style={{ color: 'var(--text-secondary)', marginTop: 'var(--gap-sm)' }}>
+        <p style={{ color: 'var(--bds-text-secondary)', marginTop: 'var(--bds-gap-sm)' }}>
           Open the Events slot in the DevBar (bottom of the preview) to see the live event tail.
           {seed
             ? ' This story seeds a fake MemoryTransport with three events.'
@@ -94,13 +94,13 @@ function EventsDemo({ seed }: { seed: boolean }) {
           <button
             type="button"
             style={{
-              marginTop: 'var(--gap-md)',
+              marginTop: 'var(--bds-gap-md)',
               padding: '8px 16px',
-              borderRadius: 'var(--border-radius-sm)',
-              border: '1px solid var(--border-secondary)',
-              background: 'var(--surface-primary)',
-              fontFamily: 'var(--font-family-label)',
-              fontSize: 'var(--label-sm)',
+              borderRadius: 'var(--bds-border-radius-sm)',
+              border: '1px solid var(--bds-border-secondary)',
+              background: 'var(--bds-surface-primary)',
+              fontFamily: 'var(--bds-font-family-label)',
+              fontSize: 'var(--bds-label-sm)',
               cursor: 'pointer',
             }}
             onClick={() => {

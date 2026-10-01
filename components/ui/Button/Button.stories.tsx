@@ -107,7 +107,7 @@ const Close = () => (
 
 /* ─── Layout helpers (story-only) ─────────────────────────────── */
 
-const Row = ({ children, gap = 'var(--padding-sm)' }: { children: React.ReactNode; gap?: string }) => (
+const Row = ({ children, gap = 'var(--bds-padding-sm)' }: { children: React.ReactNode; gap?: string }) => (
   <div style={{ display: 'flex', gap, flexWrap: 'wrap', alignItems: 'center' }}>{children}</div>
 );
 
@@ -221,7 +221,7 @@ export const InteractionTestDisabled: Story = {
     await expect(['rgba(0, 0, 0, 0)', 'transparent']).toContain(bg);
 
     // A filled disabled Button must not paint its label in its own background
-    // colour. The Figma source shipped --text-disabled and --background-disabled
+    // colour. The Figma source shipped --bds-text-disabled and --bds-background-disabled
     // as the same grayscale step, so this rendered at 1.00:1 — a grey blob with
     // no visible text (#1571). Threshold is 3:1, not 4.5: WCAG 1.4.3 exempts
     // inactive components, so the bar is legibility, not conformance.

@@ -9,16 +9,16 @@
 
 .bds-chip {
   /* ─── Component-scoped override surface ── */
-  --chip-hover-overlay: var(--state-hover-overlay, rgba(0, 0, 0, 0.04));     /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-  --chip-pressed-overlay: var(--state-pressed-overlay, rgba(0, 0, 0, 0.08)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --chip-hover-overlay: var(--bds-state-hover-overlay, rgba(0, 0, 0, 0.04));     /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --chip-pressed-overlay: var(--bds-state-pressed-overlay, rgba(0, 0, 0, 0.08)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: var(--border-radius-pill);
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-normal);
+  border-radius: var(--bds-border-radius-pill);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-normal);
   text-transform: capitalize;
   cursor: pointer;
   user-select: none;
@@ -26,9 +26,9 @@
      parity with neighboring outlined pill components (FilterButton,
      etc.) in the same row — keeps box dimensions stable across mixed
      pill clusters. */
-  border: var(--border-width-md) solid transparent;
+  border: var(--bds-border-width-md) solid transparent;
   overflow: clip;
-  transition: filter var(--duration-sm) var(--ease-out);
+  transition: filter var(--bds-duration-sm) var(--bds-ease-out);
   box-sizing: border-box;
 }
 
@@ -41,43 +41,43 @@
 }
 
 .bds-chip:focus-visible {
-  outline: var(--border-width-lg) solid var(--state-focus, currentColor);
+  outline: var(--bds-border-width-lg) solid var(--bds-state-focus, currentColor);
   outline-offset: 2px;
 }
 
 /* ─── Sizes ───────────────────────────────────────────────────── */
 
 .bds-chip--sm {
-  padding: var(--padding-tiny) var(--padding-sm);
-  font-size: var(--label-tiny);
-  gap: var(--gap-xs);
-  height: var(--size-700);
+  padding: var(--bds-padding-tiny) var(--bds-padding-sm);
+  font-size: var(--bds-label-tiny);
+  gap: var(--bds-gap-xs);
+  height: var(--bds-size-700);
 }
 
 .bds-chip--md {
-  padding: var(--padding-sm) var(--padding-md);
-  font-size: var(--label-sm);
-  gap: var(--gap-sm);
-  height: var(--size-800);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
+  font-size: var(--bds-label-sm);
+  gap: var(--bds-gap-sm);
+  height: var(--bds-size-800);
 }
 
 .bds-chip--lg {
-  padding: var(--padding-sm) var(--padding-md);
-  font-size: var(--label-md);
-  gap: var(--gap-md);
-  height: var(--size-1000);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
+  font-size: var(--bds-label-md);
+  gap: var(--bds-gap-md);
+  height: var(--bds-size-1000);
 }
 
 /* ─── Variants (hierarchy only) ───────────────────────────────── */
 
 .bds-chip--primary {
-  background-color: var(--background-inverse);
-  color: var(--text-inverse);
+  background-color: var(--bds-background-inverse);
+  color: var(--bds-text-inverse);
 }
 
 .bds-chip--secondary {
-  background-color: var(--background-secondary);
-  color: var(--text-primary);
+  background-color: var(--bds-background-secondary);
+  color: var(--bds-text-primary);
 }
 
 /* ─── Disabled ────────────────────────────────────────────────── */
@@ -86,13 +86,13 @@
    fade (ADR-028 pt-1). Fading composited the label and the pill toward the same
    backdrop and left `--secondary` at 2.34:1 in dark against the 3:1 floor; the
    swap measures 5.22:1 light / 3.29:1 dark. Moving the label to
-   `--text-on-color-light` — the fix Tag and SegmentedControl used for this same
+   `--bds-text-on-color-light` — the fix Tag and SegmentedControl used for this same
    fill — makes the faded number *worse* (2.06:1), which is why the mechanism
    had to change rather than the foreground. `node
    scripts/measure-disabled-contrast.mjs` reproduces all four. #1701 */
 .bds-chip--disabled {
-  background-color: var(--background-disabled);
-  color: var(--text-disabled);
+  background-color: var(--bds-background-disabled);
+  color: var(--bds-text-disabled);
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -111,19 +111,19 @@
   --bds-chip-sm-icon-size: 10px; /* component-local micro-graphic size; no registry rung (#2138) */
   width: var(--bds-chip-sm-icon-size);
   height: var(--bds-chip-sm-icon-size);
-  font-size: var(--label-tiny);
+  font-size: var(--bds-label-tiny);
 }
 
 .bds-chip--md .bds-chip__icon {
-  width: var(--size-400);
-  height: var(--size-400);
-  font-size: var(--icon-sm);
+  width: var(--bds-size-400);
+  height: var(--bds-size-400);
+  font-size: var(--bds-icon-sm);
 }
 
 .bds-chip--lg .bds-chip__icon {
-  width: var(--icon-lg);
-  height: var(--icon-lg);
-  font-size: var(--label-xl);
+  width: var(--bds-icon-lg);
+  height: var(--bds-icon-lg);
+  font-size: var(--bds-label-xl);
 }
 
 .bds-chip__avatar {
@@ -131,7 +131,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border-radius: var(--border-radius-pill);
+  border-radius: var(--bds-border-radius-pill);
   overflow: hidden;
 }
 

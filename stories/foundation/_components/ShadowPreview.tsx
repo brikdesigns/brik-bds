@@ -11,14 +11,14 @@ export function ShadowScale({ title, scale, prefix, label }: ShadowScaleProps) {
   );
 
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 32px)' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 32px)' }}>
       {title && (
         <h3
           style={{
-            fontFamily: 'var(--font-family-heading)',
-            fontSize: 'var(--heading-sm, 20px)',
-            marginBottom: 'var(--gap-md, 8px)',
-            color: 'var(--text-primary)',
+            fontFamily: 'var(--bds-font-family-heading)',
+            fontSize: 'var(--bds-heading-sm, 20px)',
+            marginBottom: 'var(--bds-gap-md, 8px)',
+            color: 'var(--bds-text-primary)',
           }}
         >
           {title}
@@ -28,7 +28,7 @@ export function ShadowScale({ title, scale, prefix, label }: ShadowScaleProps) {
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
-          gap: 'var(--gap-lg, 16px)',
+          gap: 'var(--bds-gap-lg, 16px)',
         }}
       >
         {entries.map(([step, value]) => {
@@ -46,8 +46,8 @@ export function ShadowScale({ title, scale, prefix, label }: ShadowScaleProps) {
                 style={{
                   width: '80px',
                   height: '80px',
-                  backgroundColor: 'var(--surface-primary)',
-                  borderRadius: 'var(--border-radius-md, 4px)',
+                  backgroundColor: 'var(--bds-surface-primary)',
+                  borderRadius: 'var(--bds-border-radius-md, 4px)',
                   boxShadow: shadow,
                   margin: '16px auto',
                 }}
@@ -56,7 +56,7 @@ export function ShadowScale({ title, scale, prefix, label }: ShadowScaleProps) {
                 style={{
                   fontSize: '12px',
                   fontWeight: 600,
-                  color: 'var(--text-primary)',
+                  color: 'var(--bds-text-primary)',
                 }}
               >
                 {prefix}--{step}
@@ -64,7 +64,7 @@ export function ShadowScale({ title, scale, prefix, label }: ShadowScaleProps) {
               <code
                 style={{
                   fontSize: '11px',
-                  color: 'var(--text-muted)',
+                  color: 'var(--bds-text-muted)',
                   fontFamily: 'ui-monospace, SFMono-Regular, monospace',
                 }}
               >

@@ -39,7 +39,7 @@
   --bds-media-band-surface: transparent;
   --bds-media-band-graphic: none;
   --bds-media-band-seam-from: transparent;
-  --bds-media-band-seam-to: var(--surface-primary);
+  --bds-media-band-seam-to: var(--bds-surface-primary);
   --bds-media-band-seam-height: 80px;
 
   position: relative;

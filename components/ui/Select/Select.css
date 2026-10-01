@@ -4,8 +4,8 @@
 .bds-select-wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
-  color: var(--text-primary);
+  gap: var(--bds-gap-md);
+  color: var(--bds-text-primary);
 }
 
 .bds-select-wrapper--full-width {
@@ -15,18 +15,18 @@
 /* ─── Label ──────────────────────────────────────────────────── */
 
 .bds-select-label {
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
   text-transform: capitalize;
 }
 
-.bds-select-label--sm { font-size: var(--label-sm); }
-.bds-select-label--md { font-size: var(--label-md); }
-.bds-select-label--lg { font-size: var(--label-lg); }
+.bds-select-label--sm { font-size: var(--bds-label-sm); }
+.bds-select-label--md { font-size: var(--bds-label-md); }
+.bds-select-label--lg { font-size: var(--bds-label-lg); }
 
 .bds-select-label--tone-negative {
-  color: var(--text-negative);
+  color: var(--bds-text-negative);
 }
 
 /* ─── Field wrapper ──────────────────────────────────────────── */
@@ -41,25 +41,25 @@
 
 .bds-select {
   /* ─── Component-scoped override surface ── */
-  --bds-select-chevron-color: var(--text-muted);
-  --bds-select-icon-color: var(--text-muted);
+  --bds-select-chevron-color: var(--bds-text-muted);
+  --bds-select-icon-color: var(--bds-text-muted);
 
   display: inline-block;
   width: 100%;
-  font-family: var(--font-family-body);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
-  background-color: var(--background-input);
-  border: var(--border-width-md) solid var(--border-input);
-  border-radius: var(--border-radius-md);
+  font-family: var(--bds-font-family-body);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
+  background-color: var(--bds-background-input);
+  border: var(--bds-border-width-md) solid var(--bds-border-input);
+  border-radius: var(--bds-border-radius-md);
   outline: none;
-  transition: border-color var(--duration-md) var(--ease-out),
-    box-shadow var(--duration-md) var(--ease-out);
+  transition: border-color var(--bds-duration-md) var(--bds-ease-out),
+    box-shadow var(--bds-duration-md) var(--bds-ease-out);
   cursor: pointer;
   appearance: none;
   box-sizing: border-box;
-  padding-inline: var(--padding-xs) calc(var(--padding-xs) * 4);
+  padding-inline: var(--bds-padding-xs) calc(var(--bds-padding-xs) * 4);
 }
 
 /*
@@ -69,75 +69,75 @@
  * Browser auto-centers text within the explicit height.
  */
 .bds-select--sm {
-  font-size: var(--body-sm);
-  height: var(--size-800);
+  font-size: var(--bds-body-sm);
+  height: var(--bds-size-800);
 }
 
 .bds-select--md {
-  font-size: var(--body-md);
-  height: var(--size-1000);
+  font-size: var(--bds-body-md);
+  height: var(--bds-size-1000);
 }
 
 .bds-select--lg {
-  font-size: var(--body-lg);
-  height: var(--size-1200);
+  font-size: var(--bds-body-lg);
+  height: var(--bds-size-1200);
 }
 
 /* With icon — extra left padding */
 .bds-select--has-icon {
-  padding-left: calc(var(--padding-xs) * 4);
+  padding-left: calc(var(--bds-padding-xs) * 4);
 }
 
 /* Interactive states */
 .bds-select:hover:not(:disabled) {
-  border-color: var(--border-primary);
+  border-color: var(--bds-border-primary);
 }
 
 .bds-select:focus {
-  border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 1px var(--border-brand-primary);
+  border-color: var(--bds-border-brand-primary);
+  box-shadow: 0 0 0 1px var(--bds-border-brand-primary);
 }
 
 .bds-select:focus-visible {
-  border-color: var(--border-brand-primary);
-  box-shadow: 0 0 0 1px var(--border-brand-primary);
+  border-color: var(--bds-border-brand-primary);
+  box-shadow: 0 0 0 1px var(--bds-border-brand-primary);
   outline: none;
 }
 
 .bds-select:disabled {
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
 }
 
-/* Placeholder color. Use --text-secondary (~9:1 on white, WCAG AA) — not
-   --text-muted (#bdbdbd, 1.87:1), which fails AA as rendered select text.
+/* Placeholder color. Use --bds-text-secondary (~9:1 on white, WCAG AA) — not
+   --bds-text-muted (#bdbdbd, 1.87:1), which fails AA as rendered select text.
    Same root cause / fix as #765 (breadcrumb + pricing-card). brik-bds#942. */
 .bds-select:invalid,
 .bds-select--placeholder {
-  color: var(--text-secondary);
+  color: var(--bds-text-secondary);
 }
 
 /* Error state */
 .bds-select--tone-negative {
-  border-color: var(--border-negative);
+  border-color: var(--bds-border-negative);
 }
 
 .bds-select--tone-negative:hover:not(:disabled) {
-  border-color: var(--border-negative);
+  border-color: var(--bds-border-negative);
 }
 
 .bds-select--tone-negative:focus,
 .bds-select--tone-negative:focus-visible {
-  border-color: var(--border-negative);
-  box-shadow: 0 0 0 1px var(--text-negative);
+  border-color: var(--bds-border-negative);
+  box-shadow: 0 0 0 1px var(--bds-text-negative);
 }
 
 /* ─── Chevron icon ───────────────────────────────────────────── */
 
 .bds-select-chevron {
   position: absolute;
-  right: var(--padding-xs);
+  right: var(--bds-padding-xs);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -151,7 +151,7 @@
 
 .bds-select-icon {
   position: absolute;
-  left: var(--padding-xs);
+  left: var(--bds-padding-xs);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -163,14 +163,14 @@
 /* ─── Helper / error text ────────────────────────────────────── */
 
 .bds-select-helper {
-  font-family: var(--font-family-body);
-  font-size: var(--body-sm);
-  line-height: var(--font-line-height-normal);
-  /* AA-compliant: --text-muted (#bdbdbd) fails as below-input helper text. #942 */
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-normal);
+  /* AA-compliant: --bds-text-muted (#bdbdbd) fails as below-input helper text. #942 */
+  color: var(--bds-text-secondary);
 }
 
 .bds-select-helper--tone-negative {
-  color: var(--text-negative);
+  color: var(--bds-text-negative);
 }
 }

@@ -58,14 +58,14 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
    * Title scale. Default: 'lg'.
    *
    * The step names are offset from the tokens they render — `lg` is the
-   * page-title default and renders `--heading-xl`, the Section-headline step
+   * page-title default and renders `--bds-heading-xl`, the Section-headline step
    * the build standards assign a page's `<h1>`. Only `md` and `sm` name-match
-   * their token. `lg` is not `--heading-lg`. See brik-bds#1997.
+   * their token. `lg` is not `--bds-heading-lg`. See brik-bds#1997.
    */
   size?: 'sm' | 'md' | 'lg';
   /**
    * Pin the header to the top of its scroll container on scroll
-   * (`position: sticky`). Renders an opaque `--surface-primary` background so
+   * (`position: sticky`). Renders an opaque `--bds-surface-primary` background so
    * body content scrolls cleanly beneath it. Default `false` — non-sticky
    * consumers are unaffected. The header sticks within the nearest scrolling
    * ancestor; ensure that container, not the window, owns the scroll.
@@ -121,11 +121,11 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
  * cascade level (theme file, `globals.css`, `style` prop). Defaults preserve
  * the lean 0.57.0 shape:
  *
- * - `--page-header-section-gap` (default `--gap-xl`, 24px) — between
+ * - `--page-header-section-gap` (default `--bds-gap-xl`, 24px) — between
  *   root sections (inner / metadata / tabs).
- * - `--page-header-content-gap` (default `--gap-lg`, 16px) — between
+ * - `--page-header-content-gap` (default `--bds-gap-lg`, 16px) — between
  *   the title-row and the subtitle.
- * - `--page-header-actions-gap` (default `--gap-sm`, 6px) — between
+ * - `--page-header-actions-gap` (default `--bds-gap-sm`, 6px) — between
  *   the content column (title + subtitle) and the actions column.
  * - `--page-header-padding-bottom` (default `0`) — bottom padding below the
  *   header. The header draws no default divider (a header with no `tabs` ends

@@ -32,11 +32,11 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
   layout?: FieldLayout;
   /**
    * Typography tier override. **Omit it** — the tier is derived from the
-   * container, so a Field is page-tier (`--label-md`) by default and sheet-tier
-   * (`--label-sm`) inside a `Sheet` body, with no prop passed.
+   * container, so a Field is page-tier (`--bds-label-md`) by default and sheet-tier
+   * (`--bds-label-sm`) inside a `Sheet` body, with no prop passed.
    *
    * Pass a value only to pin against the container: `standard` forces
-   * `--label-md` even inside a Sheet body, `compact` forces `--label-sm`
+   * `--bds-label-md` even inside a Sheet body, `compact` forces `--bds-label-sm`
    * anywhere. A dual-context component should not pass this at all.
    */
   tier?: FieldTier;

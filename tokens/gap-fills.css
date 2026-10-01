@@ -29,11 +29,11 @@
      subtitle = uppercase (all-caps labels)
      Components reference these via var(), Webflow classes inherit directly.
      Override per-theme by redefining in .body.theme-N blocks. */
-  --text-transform-heading: capitalize;
-  --text-transform-label: capitalize;
-  --text-transform-subtitle: uppercase;
-  --text-transform-body: none;
-  --text-transform-display: none;
+  --bds-text-transform-heading: capitalize;
+  --bds-text-transform-label: capitalize;
+  --bds-text-transform-subtitle: uppercase;
+  --bds-text-transform-body: none;
+  --bds-text-transform-display: none;
 
   /* ── Letter-spacing (gap-fill — not yet in Figma/SD; #1845) ──
      One semantic tracking token for the wide, uppercase-label style shared by
@@ -42,58 +42,58 @@
      backing token (drift risk). The one-off 0.04em (Board) and 0.08em (Table)
      stay inline — two singletons don't justify tokens.
      Promote to a Figma letterSpacing variable once that primitive type lands. */
-  --letter-spacing-wide: 0.05em;
+  --bds-letter-spacing-wide: 0.05em;
 
   /* ── System Color Extras ── */
-  --color-system-transparent: #0000;
-  --color-system-lightbox: #000000a3;
+  --bds-color-system-transparent: #0000;
+  --bds-color-system-lightbox: #000000a3;
 
   /* ── Focus ring (gap-fill — not yet in Figma/SD) ──
      References the border brand-primary token. Override per-theme for branded focus rings. */
-  --border-focus: var(--border-brand-primary);
+  --bds-border-focus: var(--bds-border-brand-primary);
 
   /* ── Font Weight Aliases (Webflow double-dash → SD single-dash) ──
-     Old components reference --font-weight--bold; SD uses --font-weight-bold. */
-  --font-weight--bold:       var(--font-weight-bold);
-  --font-weight--semi-bold:  var(--font-weight-semibold);
-  --font-weight--medium:     var(--font-weight-medium);
-  --font-weight--regular:    var(--font-weight-regular);
-  --font-weight--thin:       var(--font-weight-thin);
+     Old components reference --bds-font-weight--bold; SD uses --bds-font-weight-bold. */
+  --bds-font-weight--bold:       var(--bds-font-weight-bold);
+  --bds-font-weight--semi-bold:  var(--bds-font-weight-semibold);
+  --bds-font-weight--medium:     var(--bds-font-weight-medium);
+  --bds-font-weight--regular:    var(--bds-font-weight-regular);
+  --bds-font-weight--thin:       var(--bds-font-weight-thin);
 
   /* ── Easing overrides ──
-     figma-tokens.css (SD output) exports --easing-ease-in and --easing-ease-out as the
+     figma-tokens.css (SD output) exports --bds-easing-ease-in and --bds-easing-ease-out as the
      literal string "String value" — a Figma limitation (no native easing variable type).
      These declarations overwrite those broken values with correct CSS cubic-bezier curves.
      ⚠️  LOAD-BEARING OVERRIDE: do not remove without fixing the Figma variable type first. */
-  --easing-ease-in:     cubic-bezier(0.4, 0, 1, 1); /* bds-lint-ignore — load-bearing override of SD "String value" */
-  --easing-ease-out:    cubic-bezier(0, 0, 0.2, 1); /* bds-lint-ignore — load-bearing override of SD "String value" */
-  --easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1); /* TODO: promote to Figma */
+  --bds-easing-ease-in:     cubic-bezier(0.4, 0, 1, 1); /* bds-lint-ignore — load-bearing override of SD "String value" */
+  --bds-easing-ease-out:    cubic-bezier(0, 0, 0.2, 1); /* bds-lint-ignore — load-bearing override of SD "String value" */
+  --bds-easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1); /* TODO: promote to Figma */
 
   /* ── Missing Semantic Tokens ── */
   /* Light value here; dark value in the :root[data-theme="dark"] block below.
      Keep the two in lockstep, and move both together when promoted to Figma. */
-  --background-tertiary: var(--color-grayscale-300);
+  --bds-background-tertiary: var(--bds-color-grayscale-300);
 
   /* Theme-responsive positive/success TEXT role (light value here, dark in the
-     :root[data-theme="dark"] block below). The generated --text-positive
-     (figma-tokens.css) is --color-system-green #27ae60 in BOTH themes = only
-     2.87:1 on white --surface-primary, failing AA. Re-pin to green-darkest on
+     :root[data-theme="dark"] block below). The generated --bds-text-positive
+     (figma-tokens.css) is --bds-color-system-green #27ae60 in BOTH themes = only
+     2.87:1 on white --bds-surface-primary, failing AA. Re-pin to green-darkest on
      light surfaces (8.5:1 AAA). Fill roles (--background/surface/border-positive)
      stay mid-green — text role only. RETIRE once the Figma source emits these
      theme-responsive values and re-syncs. (#913) */
-  --text-positive: var(--color-green-950);
+  --bds-text-positive: var(--bds-color-green-950);
 
   /* Theme-responsive AA-safe brand TEXT step (light value here, dark in the
-     :root[data-theme="dark"] block below). --text-brand-primary serves a
+     :root[data-theme="dark"] block below). --bds-text-brand-primary serves a
      heading/accent role and is gated AA-large (3:1) on the strength of that
      size; a brand-colored label at SMALL size has had no token, so the usage
      rule (BDS-18, restated in theme-brand-brik.css) sends small copy to
-     --text-primary, which drops the brand entirely.
+     --bds-text-primary, which drops the brand entirely.
 
      TableOfContents `variant="rail"` is the first surface that needs both: a
-     14px bold active label, brand-colored, on --surface-secondary. 14px bold is
+     14px bold active label, brand-colored, on --bds-surface-secondary. 14px bold is
      below WCAG's large-text floor (18.66px bold), so the bar is AA 4.5:1 — and
-     --text-brand-primary (poppy-500) measures 3.38:1 there. Darkening one step
+     --bds-text-brand-primary (poppy-500) measures 3.38:1 there. Darkening one step
      to poppy-700 gives 5.56:1. Dark mode keeps poppy-500 (4.56:1 on the
      near-black secondary surface); darkening there would sink it.
 
@@ -103,12 +103,12 @@
      (CASCADE.md § "Add a semantic token Figma doesn't export"), and because
      lint-tokens.js resolves the canonical registry from this file, not the
      brand theme. RETIRE once the Figma source emits it. (#2270) */
-  --text-brand-primary-strong: var(--color-poppy-700);
+  --bds-text-brand-primary-strong: var(--bds-color-poppy-700);
 
   /* System color surface variants (used by TaskConsole status rows) */
-  --color-system-red-surface:   var(--color-system-red-light);
-  --color-system-green-surface: var(--color-system-green-light);
-  --color-system-blue-surface:  var(--color-system-blue-light);
+  --bds-color-system-red-surface:   var(--bds-color-system-red-light);
+  --bds-color-system-green-surface: var(--bds-color-system-green-light);
+  --bds-color-system-blue-surface:  var(--bds-color-system-blue-light);
 
   /* ── Slider Component Variables ──
      CSS custom properties set dynamically by the Slider component via JS.
@@ -118,7 +118,7 @@
   --bds-slider-track-height: 4px;
 
   /* ── Icon size extensions (gap-fill — not yet in Figma; see #758) ──
-     The base icon ramp (--icon-tiny/xs/sm/md/lg/xl/huge) is Figma-sourced again
+     The base icon ramp (--bds-icon-tiny/xs/sm/md/lg/xl/huge) is Figma-sourced again
      via figma-tokens.css, so the 2026-04-03 "restore the full set" block was
      removed here to end the duplication. Only the two size-scale bridges stay:
      12px / 24px are not on the font-size scale.
@@ -129,23 +129,23 @@
      the Figma-backed tiny/huge to 3xs/3xl on that basis — the reasoning-from-
      our-own-fill-ins that #2594 reverts. Promote or rename them via Figma
      (#758), never by inferring a ladder from this file. */
-  --icon-2xs: var(--size-300);   /* 12px — Button xs icon; between icon-tiny (~11.5px) and icon-xs (14px) */
-  --icon-2xl: var(--size-600);   /* 24px — Button xl icon; between icon-xl (~22.5px) and icon-huge (~25.3px) */
+  --bds-icon-2xs: var(--bds-size-300);   /* 12px — Button xs icon; between icon-tiny (~11.5px) and icon-xs (14px) */
+  --bds-icon-2xl: var(--bds-size-600);   /* 24px — Button xl icon; between icon-xl (~22.5px) and icon-huge (~25.3px) */
 
   /* ── Semantic Tokens Not Yet in Figma/SD ── */
-  --surface-nav: var(--color-grayscale-white);
-  --surface-navigation: var(--color-grayscale-white); /* canonical; --surface-nav kept for backward compat */
-  --surface-brand-secondary: var(--color-yellow-500);
-  --background-brand-secondary: var(--color-grayscale-white);
-  --background-image: #17171799; /* bds-lint-ignore — semi-transparent dark overlay; no primitive equivalent exists yet. Promote to Figma once an opacity token primitive is available. */
-  --background-image-brand: var(--color-poppy-500);
+  --bds-surface-nav: var(--bds-color-grayscale-white);
+  --bds-surface-navigation: var(--bds-color-grayscale-white); /* canonical; --bds-surface-nav kept for backward compat */
+  --bds-surface-brand-secondary: var(--bds-color-yellow-500);
+  --bds-background-brand-secondary: var(--bds-color-grayscale-white);
+  --bds-background-image: #17171799; /* bds-lint-ignore — semi-transparent dark overlay; no primitive equivalent exists yet. Promote to Figma once an opacity token primitive is available. */
+  --bds-background-image-brand: var(--bds-color-poppy-500);
   /* `none`, not `0px`: box-shadow needs at least two lengths, so
      `box-shadow: 0px` is invalid and the declaration is dropped. Card's seven
-     `box-shadow: var(--box-shadow-none)` sites therefore rendered no shadow by
+     `box-shadow: var(--bds-box-shadow-none)` sites therefore rendered no shadow by
      accident rather than because the token said so — same pixels, wrong
      mechanism (#1919). Verified in Chromium: `box-shadow: 0px` computes to
      `none`, and so does this. */
-  --box-shadow-none: none;
+  --bds-box-shadow-none: none;
 
   /* ── Status Semantic Tokens ── (now in figma-tokens.css via Style Dictionary) */
   /* (12 status gap-fills removed 2026-04-12 — now generated by Style Dictionary
@@ -166,16 +166,16 @@
   /* ── Forward-facing alias: hyperlink semantic ──
      Figma defines this as `text/text-link` (node 22846-1906), backed by
      `color/poppy/light` → resolved to --brand-primary. Style Dictionary
-     emits the path-joined name `--text-text-link` (prefix `text` + token
+     emits the path-joined name `--bds-text-text-link` (prefix `text` + token
      `text-link` joined by `-`), which is awkward at consumer sites. This
      alias gives consumers a clean canonical name while preserving the alias
      chain — per-theme --brand-primary overrides still flow through.
 
      ⚠️ Use ONLY for interactive hyperlinks (text that does something on
-     click). Categorically distinct from --background-info / --text-info,
+     click). Categorically distinct from --bds-background-info / --bds-text-info,
      which since brik-bds#1959 are the BLUE informational signal (ADR-033 § 5).
      The gray family that used to hold those names is now --*-neutral. */
-  --text-link: var(--text-text-link); /* color role-alias — sanctioned (ADR-035): both resolve to a --color-* Primitive, so it theme-tracks correctly */
+  --bds-text-link: var(--bds-text-text-link); /* color role-alias — sanctioned (ADR-035): both resolve to a --color-* Primitive, so it theme-tracks correctly */
 
   /* ── The `neutral` intent family — now Figma-sourced (brik-bds#1959) ──
      All four purposes come from figma-tokens.css since the Foundations rename
@@ -185,12 +185,12 @@
      scripts/lint-token-shadowing.mjs rejects.
 
      One value moved in the handover, deliberately. Figma emits
-     --background-neutral as --color-system-neutral (saturated, #363636);
-     the gap-fill declared --color-system-neutral-light (#d4d4d4). Figma is
+     --bds-background-neutral as --bds-color-system-neutral (saturated, #363636);
+     the gap-fill declared --bds-color-system-neutral-light (#d4d4d4). Figma is
      formula-correct per docs/primitives/color — background variants are
      saturated, surface variants are subtle tints — so the generated value
      stands and the five consumers that wanted the subtle tint moved to
-     --surface-neutral, which is the same #d4d4d4 they already rendered.
+     --bds-surface-neutral, which is the same #d4d4d4 they already rendered.
 
      (The paragraph that used to stand here banned curly braces in this file's
      comments, because validate-themes.js ended a block at the first closing
@@ -211,12 +211,12 @@
      amendment was needed: they are hue-source names, and the hue-source
      scope (purpose, then `accent`, then the hue) is already documented at
      docs/primitives/color § Accent and already Figma-sourced —
-     --background-accent-purple / -orange resolve to the same
-     --color-system-purple / -orange these aliases did. So the two names
+     --bds-background-accent-purple / -orange resolve to the same
+     --bds-color-system-purple / -orange these aliases did. So the two names
      retired into an existing family rather than minting a word. */
-  --background-info:                 var(--color-system-blue);
-  --text-info:                       var(--color-system-blue);
-  --surface-info:                    var(--color-system-blue-light);
+  --bds-background-info:                 var(--bds-color-system-blue);
+  --bds-text-info:                       var(--bds-color-system-blue);
+  --bds-surface-info:                    var(--bds-color-system-blue-light);
 
   /* Six more `status-` aliases (info + neutral) stood here as the one-minor
      compatibility shim #1955 and #1959 shipped alongside the intent-form
@@ -225,7 +225,7 @@
      --background/text-neutral, resolved above and in figma-tokens.css.
 
      The one alias carrying a `-subtle` modifier had already folded into
-     --surface-info, because `surface` means the subtle tint and the modifier
+     --bds-surface-info, because `surface` means the subtle tint and the modifier
      was therefore redundant (#1909 § D). All four names in the registry that
      carried that modifier were in this family, so no token name contains it
      now. Deleted names are spelled with a glob (`--*-status-*`) and never in
@@ -236,45 +236,45 @@
   /* ── System color hover/pressed states ──
      Darken system colors for interactive feedback on destructive/positive buttons.
      TODO: promote to Figma variables once interaction states are modeled for system colors. */
-  --background-negative-hover:   color-mix(in srgb, var(--color-system-red) 85%, black);
-  --background-negative-pressed: color-mix(in srgb, var(--color-system-red) 70%, black);
-  --background-positive-hover:   color-mix(in srgb, var(--color-system-green) 85%, black);
-  --background-positive-pressed: color-mix(in srgb, var(--color-system-green) 70%, black);
+  --bds-background-negative-hover:   color-mix(in srgb, var(--bds-color-system-red) 85%, black);
+  --bds-background-negative-pressed: color-mix(in srgb, var(--bds-color-system-red) 70%, black);
+  --bds-background-positive-hover:   color-mix(in srgb, var(--bds-color-system-green) 85%, black);
+  --bds-background-positive-pressed: color-mix(in srgb, var(--bds-color-system-green) 70%, black);
 
   /* Presence (for Avatar online/away/busy/offline indicators) */
-  --background-presence-online:  var(--color-system-green);
-  --background-presence-away:    var(--color-system-yellow);
-  --background-presence-busy:    var(--color-system-red);
-  --background-presence-offline: var(--color-grayscale-500);
+  --bds-background-presence-online:  var(--bds-color-system-green);
+  --bds-background-presence-away:    var(--bds-color-system-yellow);
+  --bds-background-presence-busy:    var(--bds-color-system-red);
+  --bds-background-presence-offline: var(--bds-color-grayscale-500);
 
   /* ── Shadow Semantic Tokens ──
      Composed box-shadow values for consistent elevation.
      Components should use these instead of raw rgba() values.
      TODO: promote to Figma variables → Style Dictionary once layer is stable. */
-  --shadow-sm:      0px 2px 4px 0px rgba(0, 0, 0, 0.06);
-  --shadow-md:      0px 4px 12px 0px rgba(0, 0, 0, 0.12);
-  --shadow-lg:      0px 4px 16px 0px rgba(0, 0, 0, 0.12);
-  --shadow-xl:      0px 8px 24px 4px rgba(0, 0, 0, 0.20);
-  --shadow-overlay: 0px 4px 32px 0px rgba(0, 0, 0, 0.24); /* elevated panel shadow — Modal, Dialog, Sheet */
+  --bds-shadow-sm:      0px 2px 4px 0px rgba(0, 0, 0, 0.06);
+  --bds-shadow-md:      0px 4px 12px 0px rgba(0, 0, 0, 0.12);
+  --bds-shadow-lg:      0px 4px 16px 0px rgba(0, 0, 0, 0.12);
+  --bds-shadow-xl:      0px 8px 24px 4px rgba(0, 0, 0, 0.20);
+  --bds-shadow-overlay: 0px 4px 32px 0px rgba(0, 0, 0, 0.24); /* elevated panel shadow — Modal, Dialog, Sheet */
 
   /* Bridge aliases — consuming projects (tokens.ts) reference --box-shadow-*;
      these ensure the default values resolve even without a client theme file.
      Per-theme blocks may override --box-shadow-* to suppress or restyle elevation.
-     ⚠️  LOAD-BEARING OVERRIDE: figma-tokens.css (SD output) exports --box-shadow-sm/md/lg/xl
+     ⚠️  LOAD-BEARING OVERRIDE: figma-tokens.css (SD output) exports --bds-box-shadow-sm/md/lg/xl
      as single blur values (e.g. "2px") — a Figma variable limitation. These declarations
      intentionally overwrite those with the correct full box-shadow shorthand.
      Do NOT remove these or reorder the import cascade (figma-tokens.css → gap-fills.css). */
-  --box-shadow-sm:  var(--shadow-sm); /* bds-lint-ignore — load-bearing override of SD single-blur values */
-  --box-shadow-md:  var(--shadow-md); /* bds-lint-ignore — load-bearing override */
-  --box-shadow-lg:  var(--shadow-lg); /* bds-lint-ignore — load-bearing override */
-  --box-shadow-xl:  var(--shadow-xl); /* bds-lint-ignore — load-bearing override */
+  --bds-box-shadow-sm:  var(--bds-shadow-sm); /* bds-lint-ignore — load-bearing override of SD single-blur values */
+  --bds-box-shadow-md:  var(--bds-shadow-md); /* bds-lint-ignore — load-bearing override */
+  --bds-box-shadow-lg:  var(--bds-shadow-lg); /* bds-lint-ignore — load-bearing override */
+  --bds-box-shadow-xl:  var(--bds-shadow-xl); /* bds-lint-ignore — load-bearing override */
 
   /* Overlay (for Modal, Sheet, Dialog backdrops) */
-  --background-overlay: rgba(0, 0, 0, 0.4);
+  --bds-background-overlay: rgba(0, 0, 0, 0.4);
 
   /* ── Tooltip component tokens ── */
-  --tooltip-background: var(--color-grayscale-950);
-  --tooltip-text: var(--text-inverse);
+  --bds-tooltip-background: var(--bds-color-grayscale-950);
+  --bds-tooltip-text: var(--bds-text-inverse);
 
   /* ── Layout width tokens ──
      ONE ladder for every horizontal cap on a page — text column and band alike
@@ -289,7 +289,7 @@
      Band-vs-measure is a real distinction (ADR-032 §2 was right about it) but it
      is a role, not a second token family. The parallel `--measure-*` ladder that
      ADR-032 §1 minted handed "reading column" to two tokens at once — the role
-     sat on BOTH --measure-md and --content-width-sm — and brikdesigns#1827
+     sat on BOTH --bds-measure-md and --bds-content-width-sm — and brikdesigns#1827
      shipped a layout defect by reading that role table correctly.
 
      The text rungs interleave numerically with the band rungs (600 < 640 < 720 <
@@ -299,14 +299,14 @@
      THE COLUMN RULE: a column has one content width and one left edge. The
      element that OWNS the column sets the width; blocks nested inside it never
      re-cap themselves. Two caps in one column is the defect, not the fix. */
-  --content-width-text-xs:   448px;  /* text — short intro: eyebrow + one-line title */
-  --content-width-text-sm:   600px;  /* text — section intro: title + description (the default) */
-  --content-width-text-md:   720px;  /* text — long-form prose, rich-text body */
-  --content-width-sm:        640px;  /* band — narrow band, focused forms */
-  --content-width-md:        800px;  /* band — standard text-led body section */
-  --content-width-lg:       1024px;  /* band — feature grids, CTA bands */
-  --content-width-xl:       1280px;  /* band — the page band: hero, header, footer */
-  --content-width-full:      100%;   /* band — full-bleed (use sparingly — prefer explicit widths) */
+  --bds-content-width-text-xs:   448px;  /* text — short intro: eyebrow + one-line title */
+  --bds-content-width-text-sm:   600px;  /* text — section intro: title + description (the default) */
+  --bds-content-width-text-md:   720px;  /* text — long-form prose, rich-text body */
+  --bds-content-width-sm:        640px;  /* band — narrow band, focused forms */
+  --bds-content-width-md:        800px;  /* band — standard text-led body section */
+  --bds-content-width-lg:       1024px;  /* band — feature grids, CTA bands */
+  --bds-content-width-xl:       1280px;  /* band — the page band: hero, header, footer */
+  --bds-content-width-full:      100%;   /* band — full-bleed (use sparingly — prefer explicit widths) */
 
   /* ── Page inset (ADR-025 recipe; ADR-042 value) ──
      The inline inset between the viewport edge and a page's content band —
@@ -320,7 +320,7 @@
      the page-EDGE inset, never a grid gap. The old name's deprecated alias was
      removed post-migration once no consumer referenced it.
 
-     --page-inset now lives in tokens/layout-fluid.css (ADR-042), as a
+     --bds-page-inset now lives in tokens/layout-fluid.css (ADR-042), as a
      device-fluid clamp() built from the layout/{mobile,tablet,desktop} Figma
      modes — not a flat value here, and not spacing-mode-modulated any more:
      one token must not carry both a density axis and a device axis (ADR-042
@@ -331,10 +331,10 @@
      dd518e12) misaligned the nav from BDS section content NOT because it was
      a clamp() — it was because two DIFFERENT tokens disagreed (nav read one,
      sections read another). One token read by both nav and sections can be a
-     fluid clamp() safely; --page-inset is read by both and now is one. */
+     fluid clamp() safely; --bds-page-inset is read by both and now is one. */
 
   /* ── Content measure — RETIRED (ADR-041, superseding ADR-032 §1) ──
-     --measure-sm/md/lg (44ch/60ch/72ch) were a second width ladder for the text
+     --bds-measure-sm/md/lg (44ch/60ch/72ch) were a second width ladder for the text
      column inside a band. The job is real; the separate family was not. They are
      now the --content-width-text-* rungs above, at the px widths they already
      rendered: sm 44ch→text-xs 448px, md 60ch→text-sm 600px, lg 72ch→text-md
@@ -344,14 +344,14 @@
      the old names.
 
      Why px and not ch: ADR-032 §1 justified `ch` because "a measure tracks the
-     type size". Nothing in BDS scales body type — --body-md is a fixed 16px, only
+     type size". Nothing in BDS scales body type — --bds-body-md is a fixed 16px, only
      the four --display-fluid-* heading tokens clamp, and [data-mode-spacing]
      never touches font-size. So `ch` bought no tracking and cost real alignment:
      two siblings sharing one cap resolved to two different pixel widths, which is
      exactly the two-left-edges defect brikdesigns#1827 shipped. */
 
   /* Breakpoint reference values — PROMOTED to Figma (#2591).
-     --breakpoint-desktop/wide/wider were hand-authored here because the ❖ Brik
+     --bds-breakpoint-desktop/wide/wider were hand-authored here because the ❖ Brik
      Foundations `breakpoint` collection only carried mobile/tablet/web. Those
      three rungs now exist as Figma variables (same value in all three modes),
      so Style Dictionary emits them in figma-tokens.css and the hand-authored
@@ -362,16 +362,16 @@
 
   /* ── Border-width semantic aliases (mode-catalog names) — RETIRED (ADR-033 §3, #1923)
      --border-width-thin/standard/bold (1/2/3px) were fixed-value duplicates of
-     --border-width-sm/md that froze what the spacing modes vary, so §3
+     --bds-border-width-sm/md that froze what the spacing modes vary, so §3
      dispositions them as delete-not-rename.
 
      MIGRATION — value-preserving targets, not the t-shirt rung above (#2271):
-       --border-width-thin     1px → --border-width-50   (--border-width-sm)
-       --border-width-standard 2px → --border-width-100  (--border-width-md)
-       --border-width-bold     3px → --border-width-200
+       --border-width-thin     1px → --bds-border-width-50   (--bds-border-width-sm)
+       --border-width-standard 2px → --bds-border-width-100  (--bds-border-width-md)
+       --border-width-bold     3px → --bds-border-width-200
 
-     `bold` has NO t-shirt equivalent. This note used to name --border-width-lg,
-     which aliases --border-width-300 (4px) — following it verbatim silently
+     `bold` has NO t-shirt equivalent. This note used to name --bds-border-width-lg,
+     which aliases --bds-border-width-300 (4px) — following it verbatim silently
      widened every `bold` border by 1px. The two surviving mappings are also
      only value-preserving at the DEFAULT spacing mode: sm/md/lg are re-pointed
      under [data-mode-borderwidth] (see modes-borderwidth.css), where the
@@ -385,25 +385,25 @@
      `npm run lint-deleted-token-consumers` in CI, not asserted by hand.
 
      If borderWidth mode overrides land and a client theme needs mode-catalog
-     names, reintroduce them in Figma against --border-width-sm/md/lg, not as
+     names, reintroduce them in Figma against --bds-border-width-sm/md/lg, not as
      fixed px here (the original invention-pressure note: brik-bds#302, brik-llm#52). */
 
   /* ── Interaction state overlays (gap-fill — add to Figma when interaction tokens land) */
-  --state-hover-overlay: rgba(0, 0, 0, 0.04); /* bds-lint-ignore — rgba overlay, no token equivalent */
-  --state-pressed-overlay: rgba(0, 0, 0, 0.08); /* bds-lint-ignore — rgba overlay, no token equivalent */
-  --state-focus: currentColor; /* bds-lint-ignore — resolves at use-site */
+  --bds-state-hover-overlay: rgba(0, 0, 0, 0.04); /* bds-lint-ignore — rgba overlay, no token equivalent */
+  --bds-state-pressed-overlay: rgba(0, 0, 0, 0.08); /* bds-lint-ignore — rgba overlay, no token equivalent */
+  --bds-state-focus: currentColor; /* bds-lint-ignore — resolves at use-site */
   /* 0.5 is the measured floor, not a preference: a faded fill-less control's
-     label composites toward the page, and --text-primary clears the AA-large
+     label composites toward the page, and --bds-text-primary clears the AA-large
      3:1 floor at 0.5 in BOTH modes (3.32:1 light / 4.82:1 dark) and fails at
      0.45 in light. Verify with `node scripts/measure-disabled-contrast.mjs
      --sweep`; gated by the faded pairings in tokens/contrast-pairings.json
      (ADR-028 pt-2, #1687). Every disabled-scoped `opacity` in components/ui
      reads this token — do not reintroduce a literal. */
-  --state-disabled-opacity: 0.5;
+  --bds-state-disabled-opacity: 0.5;
 
   /* ── Disabled pair — light-mode correction (#1571)
-     The Figma source emits --text-disabled, --background-disabled AND
-     --border-disabled as the same --color-grayscale-500 (#828282), so a
+     The Figma source emits --bds-text-disabled, --bds-background-disabled AND
+     --bds-border-disabled as the same --bds-color-grayscale-500 (#828282), so a
      disabled Button painted its label in its own background colour: measured
      1.00:1 on `components-button--disabled`, a solid grey blob with no visible
      text. WCAG 1.4.3 exempts inactive components, so this is a legibility
@@ -412,38 +412,38 @@
      Pale fill + mid-grey label reads as disabled and measures 5.22:1
      (300 #e0e0e0 behind 700 #5a5a5a; re-derived against the current ramp at
      #1809, replacing an unreproducible 5.45:1).
-     --border-disabled stays at the generated -light: it is the edge against the
+     --bds-border-disabled stays at the generated -light: it is the edge against the
      page, not against the fill. Dark mode is corrected in theme-brand-brik.css,
      which owns the dark values at a higher specificity than this block.
 
      RETIRE both lines once the Figma variables are corrected and re-synced. */
-  --background-disabled: var(--color-grayscale-300);
-  --text-disabled: var(--color-grayscale-700);
+  --bds-background-disabled: var(--bds-color-grayscale-300);
+  --bds-text-disabled: var(--bds-color-grayscale-700);
 
   /* ── Motion semantic aliases ──
      Semantic duration + easing tokens consumed by all BDS component CSS.
      Map to Figma primitive duration/easing tokens where available.
      Note: --easing-ease-* in figma-tokens.css export as "String value"
      (Figma limitation) so direct cubic-bezier values are used here. */
-  --duration-sm:   var(--duration-100);   /* 100ms — micro-interactions: hover, focus */
-  --duration-md:   var(--duration-200);   /* 200ms — standard transitions: buttons, cards */
-  --duration-lg:   var(--duration-300);   /* 300ms — emphasis: modals, sheets, reveals */
-  --duration-xl:   var(--duration-400);   /* 500ms — cross-fades, long reveals (one rung past --duration-lg) */
+  --bds-duration-sm:   var(--bds-duration-100);   /* 100ms — micro-interactions: hover, focus */
+  --bds-duration-md:   var(--bds-duration-200);   /* 200ms — standard transitions: buttons, cards */
+  --bds-duration-lg:   var(--bds-duration-300);   /* 300ms — emphasis: modals, sheets, reveals */
+  --bds-duration-xl:   var(--bds-duration-400);   /* 500ms — cross-fades, long reveals (one rung past --bds-duration-lg) */
 
   /* Periodic / loop durations — role tokens, NOT steps on the transition ramp
-     above (ADR-033 § Named exceptions, same basis as --shadow-overlay). These
+     above (ADR-033 § Named exceptions, same basis as --bds-shadow-overlay). These
      feed animation-duration on infinite loops and JS auto-advance intervals, so
      they live in seconds. Reach for sm/md/lg for any tween; only
      continuous or timed-advance motion uses these. */
-  --duration-marquee:  55s;  /* full marquee loop period — logo tickers, continuous scroll */
-  --duration-autoplay: 10s;  /* dwell before auto-advance — carousels, media tabs */
+  --bds-duration-marquee:  55s;  /* full marquee loop period — logo tickers, continuous scroll */
+  --bds-duration-autoplay: 10s;  /* dwell before auto-advance — carousels, media tabs */
 
-  --ease-out:         cubic-bezier(0.16, 1, 0.3, 1);     /* decelerate — most UI transitions */
-  --ease-in:          cubic-bezier(0.7, 0, 0.84, 0);     /* accelerate — exits, collapses */
-  --ease-in-out:      cubic-bezier(0.65, 0, 0.35, 1);    /* symmetric — looping, continuous */
-  --ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — pop-in, badge appear */
-  --ease-spring-soft: cubic-bezier(0, 1.08, 0.77, 1.01); /* gentle overshoot settle — media/panel entrance */
-  --ease-linear:      linear;                            /* constant velocity — marquees, continuous loops */
+  --bds-ease-out:         cubic-bezier(0.16, 1, 0.3, 1);     /* decelerate — most UI transitions */
+  --bds-ease-in:          cubic-bezier(0.7, 0, 0.84, 0);     /* accelerate — exits, collapses */
+  --bds-ease-in-out:      cubic-bezier(0.65, 0, 0.35, 1);    /* symmetric — looping, continuous */
+  --bds-ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — pop-in, badge appear */
+  --bds-ease-spring-soft: cubic-bezier(0, 1.08, 0.77, 1.01); /* gentle overshoot settle — media/panel entrance */
+  --bds-ease-linear:      linear;                            /* constant velocity — marquees, continuous loops */
 
   /* ── DEPRECATED numeric-rung aliases (#2594) — DROP NEXT MINOR ──
      ADR-033 §3 renamed 13 ❖ Brik Foundations step words to numeric t-shirt
@@ -457,19 +457,19 @@
      Each retired numeric name now aliases the Figma rung (not a primitive) so
      mode-varying families keep tracking their per-mode value. Shipped for one
      minor so consumer repos migrate. */
-  --gap-2xs:             var(--gap-tiny);           /* bds-lint-ignore — DEPRECATED, use --gap-tiny (#2594); drop next minor */
-  --gap-2xl:             var(--gap-huge);           /* bds-lint-ignore — DEPRECATED, use --gap-huge (#2594); drop next minor */
-  --padding-2xs:         var(--padding-tiny);       /* bds-lint-ignore — DEPRECATED, use --padding-tiny (#2594); drop next minor */
-  --padding-2xl:         var(--padding-huge);       /* bds-lint-ignore — DEPRECATED, use --padding-huge (#2594); drop next minor */
-  --icon-3xs:            var(--icon-tiny);          /* bds-lint-ignore — DEPRECATED, use --icon-tiny (#2594); drop next minor */
-  --icon-3xl:            var(--icon-huge);          /* bds-lint-ignore — DEPRECATED, use --icon-huge (#2594); drop next minor */
-  --body-2xs:            var(--body-tiny);          /* bds-lint-ignore — DEPRECATED, use --body-tiny (#2594); drop next minor */
-  --body-2xl:            var(--body-huge);          /* bds-lint-ignore — DEPRECATED, use --body-huge (#2594); drop next minor */
-  --heading-xs:          var(--heading-tiny);       /* bds-lint-ignore — DEPRECATED, use --heading-tiny (#2594); drop next minor */
-  --heading-2xl:         var(--heading-xxl);        /* bds-lint-ignore — DEPRECATED, use --heading-xxl (#2594); drop next minor */
-  --heading-3xl:         var(--heading-huge);       /* bds-lint-ignore — DEPRECATED, use --heading-huge (#2594); drop next minor */
-  --label-2xs:           var(--label-tiny);         /* bds-lint-ignore — DEPRECATED, use --label-tiny (#2594); drop next minor */
-  --border-width-2xl:    var(--border-width-huge);  /* bds-lint-ignore — DEPRECATED, use --border-width-huge (#2594); drop next minor */
+  --bds-gap-2xs:             var(--bds-gap-tiny);           /* bds-lint-ignore — DEPRECATED, use --bds-gap-tiny (#2594); drop next minor */
+  --bds-gap-2xl:             var(--bds-gap-huge);           /* bds-lint-ignore — DEPRECATED, use --bds-gap-huge (#2594); drop next minor */
+  --bds-padding-2xs:         var(--bds-padding-tiny);       /* bds-lint-ignore — DEPRECATED, use --bds-padding-tiny (#2594); drop next minor */
+  --bds-padding-2xl:         var(--bds-padding-huge);       /* bds-lint-ignore — DEPRECATED, use --bds-padding-huge (#2594); drop next minor */
+  --bds-icon-3xs:            var(--bds-icon-tiny);          /* bds-lint-ignore — DEPRECATED, use --bds-icon-tiny (#2594); drop next minor */
+  --bds-icon-3xl:            var(--bds-icon-huge);          /* bds-lint-ignore — DEPRECATED, use --bds-icon-huge (#2594); drop next minor */
+  --bds-body-2xs:            var(--bds-body-tiny);          /* bds-lint-ignore — DEPRECATED, use --bds-body-tiny (#2594); drop next minor */
+  --bds-body-2xl:            var(--bds-body-huge);          /* bds-lint-ignore — DEPRECATED, use --bds-body-huge (#2594); drop next minor */
+  --bds-heading-xs:          var(--bds-heading-tiny);       /* bds-lint-ignore — DEPRECATED, use --bds-heading-tiny (#2594); drop next minor */
+  --bds-heading-2xl:         var(--bds-heading-xxl);        /* bds-lint-ignore — DEPRECATED, use --bds-heading-xxl (#2594); drop next minor */
+  --bds-heading-3xl:         var(--bds-heading-huge);       /* bds-lint-ignore — DEPRECATED, use --bds-heading-huge (#2594); drop next minor */
+  --bds-label-2xs:           var(--bds-label-tiny);         /* bds-lint-ignore — DEPRECATED, use --bds-label-tiny (#2594); drop next minor */
+  --bds-border-width-2xl:    var(--bds-border-width-huge);  /* bds-lint-ignore — DEPRECATED, use --bds-border-width-huge (#2594); drop next minor */
 
   /* ── DEPRECATED step-word aliases (ADR-033 §3, #1923) — DROP NEXT MINOR ──
      Positional, value-preserving renames of the retired step words. Each old
@@ -480,12 +480,12 @@
 
      `duration` and `content-width` are NOT backed by a ❖ Brik Foundations
      variable, so #2594's revert does not reach them — they stay retired. */
-  --duration-fast:       var(--duration-sm);        /* bds-lint-ignore — DEPRECATED, use --duration-sm (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
-  --duration-normal:     var(--duration-md);        /* bds-lint-ignore — DEPRECATED, use --duration-md (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
-  --duration-slow:       var(--duration-lg);        /* bds-lint-ignore — DEPRECATED, use --duration-lg (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
-  --content-width-narrow:  var(--content-width-sm); /* bds-lint-ignore — DEPRECATED, use --content-width-sm (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
-  --content-width-default: var(--content-width-md); /* bds-lint-ignore — DEPRECATED, use --content-width-md (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
-  --content-width-wide:    var(--content-width-lg); /* bds-lint-ignore — DEPRECATED, use --content-width-lg (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --bds-duration-fast:       var(--bds-duration-sm);        /* bds-lint-ignore — DEPRECATED, use --bds-duration-sm (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --bds-duration-normal:     var(--bds-duration-md);        /* bds-lint-ignore — DEPRECATED, use --bds-duration-md (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --bds-duration-slow:       var(--bds-duration-lg);        /* bds-lint-ignore — DEPRECATED, use --bds-duration-lg (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --bds-content-width-narrow:  var(--bds-content-width-sm); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-sm (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --bds-content-width-default: var(--bds-content-width-md); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-md (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
+  --bds-content-width-wide:    var(--bds-content-width-lg); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-lg (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
 
   /* ── DEPRECATED measure aliases (ADR-041, #2615) — DROP NEXT MINOR ──
      The `--measure-*` family folded into the one ladder's `-text-` rungs. The
@@ -496,9 +496,9 @@
      resolves to the px width its `ch` value already rendered at the fixed 16px
      body size (44ch→448, 60ch→600, 72ch→720), so this is a ≤3px move, not a
      retune. The follow-up drops this block once brikdesigns#1856 has migrated. */
-  --measure-sm: var(--content-width-text-xs); /* bds-lint-ignore — DEPRECATED, use --content-width-text-xs (ADR-041, #2615); drop next minor */
-  --measure-md: var(--content-width-text-sm); /* bds-lint-ignore — DEPRECATED, use --content-width-text-sm (ADR-041, #2615); drop next minor */
-  --measure-lg: var(--content-width-text-md); /* bds-lint-ignore — DEPRECATED, use --content-width-text-md (ADR-041, #2615); drop next minor */
+  --bds-measure-sm: var(--bds-content-width-text-xs); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-text-xs (ADR-041, #2615); drop next minor */
+  --bds-measure-md: var(--bds-content-width-text-sm); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-text-sm (ADR-041, #2615); drop next minor */
+  --bds-measure-lg: var(--bds-content-width-text-md); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-text-md (ADR-041, #2615); drop next minor */
 }
 
 /* ── Dark-mode corrections for generated tokens ──
@@ -508,17 +508,17 @@
    higher specificity, in theme-brand-brik.css).
    RETIRE each entry once the Figma source is corrected and re-synced. */
 :root[data-theme="dark"] {
-  /* Dark value for the --background-tertiary gap-fill (light value above, in
+  /* Dark value for the --bds-background-tertiary gap-fill (light value above, in
      :root). It's a hover/preview fill (e.g. SegmentedControl inactive hover),
      so in dark mode it must read as a step TOWARD the active surface
-     (--background-primary = black), not its light-mode inverse. Mirrors the
-     --background-primary-hover dark step so --text-primary clears AA on it.
+     (--bds-background-primary = black), not its light-mode inverse. Mirrors the
+     --bds-background-primary-hover dark step so --bds-text-primary clears AA on it.
      No dark value previously existed → light #e0e0e0 fill + light #f2f2f2 text
      = ~1.1:1, invisible. (#916) */
-  --background-tertiary: var(--color-grayscale-950);
+  --bds-background-tertiary: var(--bds-color-grayscale-950);
 
-  /* Dark value for the --text-positive gap-fill (light value above, in :root).
-     On --surface-primary = black in dark mode, mid-green --color-system-green
+  /* Dark value for the --bds-text-positive gap-fill (light value above, in :root).
+     On --bds-surface-primary = black in dark mode, mid-green --bds-color-system-green
      #27ae60 clears AA at 7.31:1 (re-derived against the current ramp at #1809,
      replacing an unreproducible 6.0:1) — consumer-validated in brikdesigns#455.
      So dark mode keeps the generated mid-green; only the LIGHT value needed
@@ -526,26 +526,26 @@
      Re-pinned explicitly here (rather than left to the generated layer) to keep
      the light/dark pair in lockstep and self-documenting. Figma source still
      emits mid-green for both — correct it and drop both lines. (#913) */
-  --text-positive: var(--color-system-green);
+  --bds-text-positive: var(--bds-color-system-green);
 
-  /* Dark value for the --text-brand-primary-strong gap-fill (light value above,
-     in :root). On the near-black --surface-secondary, poppy-500 already clears
+  /* Dark value for the --bds-text-brand-primary-strong gap-fill (light value above,
+     in :root). On the near-black --bds-surface-secondary, poppy-500 already clears
      AA at 4.56:1; the light-mode darkening to poppy-700 would sink it, so this
      step is light-mode-only in effect. Pinned explicitly rather than left to
      inherit the :root value, to keep the light/dark pair in lockstep and
-     self-documenting — the same reason --text-positive is repeated here. (#2270) */
-  --text-brand-primary-strong: var(--color-poppy-500);
+     self-documenting — the same reason --bds-text-positive is repeated here. (#2270) */
+  --bds-text-brand-primary-strong: var(--bds-color-poppy-500);
 
   /* Dark values for the disabled pair (light values above, in :root). The
      generated dark layer repeats the light-mode defect — figma-tokens-dark.css
-     emits BOTH --text-disabled and --background-disabled as
-     --color-grayscale-700, so a consumer running data-theme="dark" WITHOUT
+     emits BOTH --bds-text-disabled and --bds-background-disabled as
+     --bds-color-grayscale-700, so a consumer running data-theme="dark" WITHOUT
      .theme-brand-brik gets the same 1:1 invisible label. theme-brand-brik.css
      corrects the branded dark case at a higher specificity; this block covers
      the bare one, landing on the same pair (3.29:1).
 
      RETIRE both lines once the Figma variables are corrected and re-synced.
      (#1571) */
-  --background-disabled: var(--color-grayscale-800);
-  --text-disabled: var(--color-grayscale-500);
+  --bds-background-disabled: var(--bds-color-grayscale-800);
+  --bds-text-disabled: var(--bds-color-grayscale-500);
 }

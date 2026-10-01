@@ -36,7 +36,7 @@
 .bds-marquee__track {
   display: flex;
   width: max-content;
-  animation: bds-marquee-scroll var(--duration-marquee) var(--ease-linear) infinite;
+  animation: bds-marquee-scroll var(--bds-duration-marquee) var(--bds-ease-linear) infinite;
 }
 
 .bds-marquee[data-direction='rtl'] .bds-marquee__track {
@@ -51,13 +51,13 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
-  gap: var(--bds-marquee-gap, var(--size-1000));
-  padding-inline-end: var(--bds-marquee-gap, var(--size-1000));
+  gap: var(--bds-marquee-gap, var(--bds-size-1000));
+  padding-inline-end: var(--bds-marquee-gap, var(--bds-size-1000));
 }
 
 .bds-marquee__group img,
 .bds-marquee__group svg {
-  height: var(--bds-marquee-logo-height, var(--size-600));
+  height: var(--bds-marquee-logo-height, var(--bds-size-600));
   width: auto;
   flex-shrink: 0;
 }

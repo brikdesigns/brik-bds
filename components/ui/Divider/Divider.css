@@ -11,7 +11,7 @@
 .bds-divider--orientation-horizontal {
   width: 100%;
   height: 0;
-  border-top: var(--border-width-md) solid var(--border-muted);
+  border-top: var(--bds-border-width-md) solid var(--bds-border-muted);
 }
 
 /* ─── Vertical ───────────────────────────────────────────────── */
@@ -20,16 +20,16 @@
   width: 0;
   height: 100%;
   align-self: stretch;
-  border-left: var(--border-width-md) solid var(--border-muted);
+  border-left: var(--bds-border-width-md) solid var(--bds-border-muted);
 }
 
 /* ─── Spacing ────────────────────────────────────────────────── */
 
-.bds-divider--orientation-horizontal.bds-divider--spacing-sm { margin-top: var(--padding-sm); margin-bottom: var(--padding-sm); }
-.bds-divider--orientation-horizontal.bds-divider--spacing-md { margin-top: var(--padding-md); margin-bottom: var(--padding-md); }
-.bds-divider--orientation-horizontal.bds-divider--spacing-lg { margin-top: var(--padding-lg); margin-bottom: var(--padding-lg); }
+.bds-divider--orientation-horizontal.bds-divider--spacing-sm { margin-top: var(--bds-padding-sm); margin-bottom: var(--bds-padding-sm); }
+.bds-divider--orientation-horizontal.bds-divider--spacing-md { margin-top: var(--bds-padding-md); margin-bottom: var(--bds-padding-md); }
+.bds-divider--orientation-horizontal.bds-divider--spacing-lg { margin-top: var(--bds-padding-lg); margin-bottom: var(--bds-padding-lg); }
 
-.bds-divider--orientation-vertical.bds-divider--spacing-sm { margin-left: var(--padding-sm); margin-right: var(--padding-sm); }
-.bds-divider--orientation-vertical.bds-divider--spacing-md { margin-left: var(--padding-md); margin-right: var(--padding-md); }
-.bds-divider--orientation-vertical.bds-divider--spacing-lg { margin-left: var(--padding-lg); margin-right: var(--padding-lg); }
+.bds-divider--orientation-vertical.bds-divider--spacing-sm { margin-left: var(--bds-padding-sm); margin-right: var(--bds-padding-sm); }
+.bds-divider--orientation-vertical.bds-divider--spacing-md { margin-left: var(--bds-padding-md); margin-right: var(--bds-padding-md); }
+.bds-divider--orientation-vertical.bds-divider--spacing-lg { margin-left: var(--bds-padding-lg); margin-right: var(--bds-padding-lg); }
 }

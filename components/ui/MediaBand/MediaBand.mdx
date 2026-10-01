@@ -56,15 +56,15 @@ Component-scoped CSS variables on `.bds-media-band`. Set them on a wrapping elem
 | `--bds-media-band-surface` | `transparent` | Band fill — inherits the page surface until a consumer opts in |
 | `--bds-media-band-graphic` | `none` | `background-image` on the decorative layer when the `graphic` slot is empty |
 | `--bds-media-band-seam-from` | `transparent` | Seam gradient color at the inward end |
-| `--bds-media-band-seam-to` | `var(--surface-primary)` | Seam gradient color at the band edge — set to the neighbouring section's surface |
+| `--bds-media-band-seam-to` | `var(--bds-surface-primary)` | Seam gradient color at the band edge — set to the neighbouring section's surface |
 | `--bds-media-band-seam-height` | `80px` | Depth of the seam fade |
 
 ```css
 /* Example: a tinted workflow band seaming into a secondary-surface section */
 .workflow-band {
-  --bds-media-band-surface: var(--surface-secondary);
+  --bds-media-band-surface: var(--bds-surface-secondary);
   --bds-media-band-graphic: url('/acme/workflow.svg');
-  --bds-media-band-seam-to: var(--surface-primary);
+  --bds-media-band-seam-to: var(--bds-surface-primary);
 }
 ```
 

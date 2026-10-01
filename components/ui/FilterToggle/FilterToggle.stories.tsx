@@ -91,7 +91,7 @@ export const InteractionTestDisabledLabelLegible: Story = {
     await expect(toggle).toBeDisabled();
 
     // FilterToggle repaints itself when disabled (FilterToggle.css:32-35 sets
-    // --background-disabled + --text-disabled), the same treatment that rendered
+    // --bds-background-disabled + --bds-text-disabled), the same treatment that rendered
     // an invisible label at 1:1 in Button (#1571) and FilterButton (#1503).
     // 3:1 rather than 4.5: WCAG 1.4.3 exempts inactive components, so the bar is
     // legibility. Token-level source of truth: tokens/contrast-pairings.json +

@@ -16,9 +16,9 @@
 }
 
 .bds-image__caption {
-  margin-top: var(--gap-sm);
-  font-family: var(--font-family-label);
-  font-size: var(--body-sm);
-  color: var(--text-secondary);
+  margin-top: var(--bds-gap-sm);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-body-sm);
+  color: var(--bds-text-secondary);
 }
 }

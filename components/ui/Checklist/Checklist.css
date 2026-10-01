@@ -13,32 +13,32 @@
   .bds-checklist {
     display: flex;
     align-items: center;
-    gap: var(--gap-md);
-    padding: var(--padding-sm) var(--padding-md);
-    border-radius: var(--border-radius-sm);
+    gap: var(--bds-gap-md);
+    padding: var(--bds-padding-sm) var(--bds-padding-md);
+    border-radius: var(--bds-border-radius-sm);
     background-color: transparent;
     cursor: pointer;
     user-select: none;
-    transition: background-color var(--duration-md) var(--ease-out);
+    transition: background-color var(--bds-duration-md) var(--bds-ease-out);
   }
 
-  /* Hover + pressed mirror the ghost Button (--background-primary-hover /
-     --background-secondary-hover) so a clickable row and a ghost button feel
+  /* Hover + pressed mirror the ghost Button (--bds-background-primary-hover /
+     --bds-background-secondary-hover) so a clickable row and a ghost button feel
      identical. No translateY nudge — a full-width list row shouldn't shift. */
   .bds-checklist:hover {
-    background-color: var(--background-primary-hover);
+    background-color: var(--bds-background-primary-hover);
   }
 
   .bds-checklist:not(.bds-checklist--disabled):active {
-    background-color: var(--background-secondary-hover);
+    background-color: var(--bds-background-secondary-hover);
   }
 
   .bds-checklist--checked {
-    background-color: var(--surface-secondary);
+    background-color: var(--bds-surface-secondary);
   }
 
   .bds-checklist--disabled {
-    opacity: var(--state-disabled-opacity);
+    opacity: var(--bds-state-disabled-opacity);
     cursor: not-allowed;
   }
 
@@ -47,7 +47,7 @@
   }
 
   .bds-checklist--disabled.bds-checklist--checked:hover {
-    background-color: var(--surface-secondary);
+    background-color: var(--bds-surface-secondary);
   }
 
   /* Hide the native input — the <span class="bds-completion-toggle">
@@ -68,7 +68,7 @@
   /* When the input is focused (keyboard nav), surface the focus ring
      on the visible toggle. */
   .bds-checklist__input:focus-visible + .bds-checklist__toggle {
-    outline: var(--border-width-lg) solid var(--state-focus, currentColor);
+    outline: var(--bds-border-width-lg) solid var(--bds-state-focus, currentColor);
     outline-offset: 2px;
   }
 
@@ -82,16 +82,16 @@
   .bds-checklist__label {
     flex: 1;
     min-width: 0;
-    font-family: var(--font-family-label);
-    font-size: var(--label-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--text-primary);
-    line-height: var(--font-line-height-normal);
-    transition: color var(--duration-md) var(--ease-out);
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-sm);
+    font-weight: var(--bds-font-weight-medium);
+    color: var(--bds-text-primary);
+    line-height: var(--bds-font-line-height-normal);
+    transition: color var(--bds-duration-md) var(--bds-ease-out);
   }
 
   .bds-checklist--checked .bds-checklist__label {
-    color: var(--text-muted);
+    color: var(--bds-text-muted);
     text-decoration: line-through;
   }
 }

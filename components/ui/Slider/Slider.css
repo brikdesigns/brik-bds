@@ -7,7 +7,7 @@
  * prefix marks them as non-global.
  *
  * @token-exempt — the thumb shadow (line 8) uses a custom rgba(0,0,0,0.1)
- * deliberately lighter than --shadow-sm; already annotated
+ * deliberately lighter than --bds-shadow-sm; already annotated
  * `bds-lint-ignore — promote to Figma`. Remove this exemption once the
  * value ships as a Figma token.
  */
@@ -16,9 +16,9 @@
 .bds-slider {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   width: 100%;
-  --bds-slider-thumb-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* bds-lint-ignore — lighter than --shadow-sm; promote to Figma */
+  --bds-slider-thumb-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* bds-lint-ignore — lighter than --bds-shadow-sm; promote to Figma */
 }
 
 /* ─── Label row ── */
@@ -30,26 +30,26 @@
 
 .bds-slider__label {
   margin: 0;
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-snug);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-primary);
   text-transform: capitalize;
 }
 
 .bds-slider__value {
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  font-weight: var(--font-weight-regular);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-regular);
+  color: var(--bds-text-secondary);
 }
 
 .bds-slider-input {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
-  height: var(--bds-slider-track-height, var(--size-150));
+  height: var(--bds-slider-track-height, var(--bds-size-150));
   background: transparent;
   margin: 0;
   cursor: pointer;
@@ -57,78 +57,78 @@
 
 /* Track */
 .bds-slider-input::-webkit-slider-runnable-track {
-  height: var(--bds-slider-track-height, var(--size-150));
-  border-radius: var(--border-radius-pill);
+  height: var(--bds-slider-track-height, var(--bds-size-150));
+  border-radius: var(--bds-border-radius-pill);
   background: linear-gradient(
     to right,
-    var(--background-brand-primary) 0%,
-    var(--background-brand-primary) var(--bds-slider-percent, 50%),
-    var(--border-secondary) var(--bds-slider-percent, 50%),
-    var(--border-secondary) 100%
+    var(--bds-background-brand-primary) 0%,
+    var(--bds-background-brand-primary) var(--bds-slider-percent, 50%),
+    var(--bds-border-secondary) var(--bds-slider-percent, 50%),
+    var(--bds-border-secondary) 100%
   );
 }
 
 .bds-slider-input::-moz-range-track {
-  height: var(--bds-slider-track-height, var(--size-150));
-  border-radius: var(--border-radius-pill);
-  background: var(--border-secondary); /* bds-lint-ignore token-family — intentional alias: track rail (thin neutral line, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md */
+  height: var(--bds-slider-track-height, var(--bds-size-150));
+  border-radius: var(--bds-border-radius-pill);
+  background: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: track rail (thin neutral line, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md */
   border: none;
 }
 
 .bds-slider-input::-moz-range-progress {
-  height: var(--bds-slider-track-height, var(--size-150));
-  border-radius: var(--border-radius-pill);
-  background: var(--background-brand-primary);
+  height: var(--bds-slider-track-height, var(--bds-size-150));
+  border-radius: var(--bds-border-radius-pill);
+  background: var(--bds-background-brand-primary);
 }
 
 /* Thumb */
 .bds-slider-input::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: var(--bds-slider-thumb-size, var(--size-500));
-  height: var(--bds-slider-thumb-size, var(--size-500));
+  width: var(--bds-slider-thumb-size, var(--bds-size-500));
+  height: var(--bds-slider-thumb-size, var(--bds-size-500));
   border-radius: 50%;
-  background: var(--surface-primary);
-  border: var(--border-width-200) solid var(--background-brand-primary);
+  background: var(--bds-surface-primary);
+  border: var(--bds-border-width-200) solid var(--bds-background-brand-primary);
   box-shadow: var(--bds-slider-thumb-shadow);
   cursor: pointer;
-  margin-top: calc((var(--bds-slider-track-height, var(--size-150)) - var(--bds-slider-thumb-size, var(--size-500))) / 2);
-  transition: box-shadow var(--duration-sm) var(--ease-out);
+  margin-top: calc((var(--bds-slider-track-height, var(--bds-size-150)) - var(--bds-slider-thumb-size, var(--bds-size-500))) / 2);
+  transition: box-shadow var(--bds-duration-sm) var(--bds-ease-out);
 }
 
 .bds-slider-input::-moz-range-thumb {
-  width: var(--bds-slider-thumb-size, var(--size-500));
-  height: var(--bds-slider-thumb-size, var(--size-500));
+  width: var(--bds-slider-thumb-size, var(--bds-size-500));
+  height: var(--bds-slider-thumb-size, var(--bds-size-500));
   border-radius: 50%;
-  background: var(--surface-primary);
-  border: var(--border-width-200) solid var(--background-brand-primary);
+  background: var(--bds-surface-primary);
+  border: var(--bds-border-width-200) solid var(--bds-background-brand-primary);
   box-shadow: var(--bds-slider-thumb-shadow);
   cursor: pointer;
-  transition: box-shadow var(--duration-sm) var(--ease-out);
+  transition: box-shadow var(--bds-duration-sm) var(--bds-ease-out);
 }
 
 /* Focus */
 .bds-slider-input:focus-visible::-webkit-slider-thumb {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--background-brand-primary) 30%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bds-background-brand-primary) 30%, transparent);
 }
 
 .bds-slider-input:focus-visible::-moz-range-thumb {
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--background-brand-primary) 30%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bds-background-brand-primary) 30%, transparent);
 }
 
 /* Disabled */
 .bds-slider-input:disabled {
   cursor: not-allowed;
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
   pointer-events: none;
 }
 
 .bds-slider-input:disabled::-webkit-slider-thumb {
-  background: var(--border-secondary); /* bds-lint-ignore token-family — intentional alias: disabled thumb flattened to border neutral; see docs/TOKEN-PR-CHECKLIST.md */
-  border-color: var(--border-secondary);
+  background: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: disabled thumb flattened to border neutral; see docs/TOKEN-PR-CHECKLIST.md */
+  border-color: var(--bds-border-secondary);
 }
 
 .bds-slider-input:disabled::-moz-range-thumb {
-  background: var(--border-secondary); /* bds-lint-ignore token-family — intentional alias: disabled thumb flattened to border neutral; see docs/TOKEN-PR-CHECKLIST.md */
-  border-color: var(--border-secondary);
+  background: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: disabled thumb flattened to border neutral; see docs/TOKEN-PR-CHECKLIST.md */
+  border-color: var(--bds-border-secondary);
 }
 }

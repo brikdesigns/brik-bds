@@ -31,17 +31,17 @@
    One step thinner than Standard at md and lg; sm matches because
    sub-pixel rendering below 1px is unreliable across browsers. */
 [data-mode-borderwidth="thin"] {
-  --border-width-sm: 1px;
-  --border-width-md: 1px;
-  --border-width-lg: 2px;
+  --bds-border-width-sm: 1px;
+  --bds-border-width-md: 1px;
+  --bds-border-width-lg: 2px;
 }
 
 /* ─── Bold ─────────────────────────────────────────────────────
    One step bolder than Standard at every size. */
 [data-mode-borderwidth="bold"] {
-  --border-width-sm: 2px;
-  --border-width-md: 3px;
-  --border-width-lg: 4px;
+  --bds-border-width-sm: 2px;
+  --bds-border-width-md: 3px;
+  --bds-border-width-lg: 4px;
 }
 
 /* ─── Dark-mode parity ─────────────────────────────────────────

@@ -222,8 +222,8 @@ export const Sticky: Story = {
       style={{
         height: 320,
         overflowY: 'auto',
-        border: '1px solid var(--border-muted)',
-        background: 'var(--surface-primary)',
+        border: '1px solid var(--bds-border-muted)',
+        background: 'var(--bds-surface-primary)',
       }}
     >
       <PageHeader
@@ -232,8 +232,8 @@ export const Sticky: Story = {
         sticky
         actions={<Button variant="primary" size="sm">Action</Button>}
       />
-      <div style={{ padding: 'var(--padding-lg)' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-md)' }}>
+      <div style={{ padding: 'var(--bds-padding-lg)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-md)' }}>
           {Array.from({ length: 12 }).map((_, i) => (
             <p key={i}>
               Row {i + 1} — body content scrolls beneath the pinned header, which keeps
@@ -270,10 +270,10 @@ export const TunableSpacing: Story = {
     actions: <Button variant="primary" size="sm">Action</Button>,
     style: {
       // bds-lint-ignore — component-scoped CSS variables, not design tokens
-      ['--page-header-section-gap' as string]: 'var(--gap-xl)',
-      ['--page-header-content-gap' as string]: 'var(--gap-md)',
-      ['--page-header-actions-gap' as string]: 'var(--gap-md)',
-      ['--page-header-padding-bottom' as string]: 'var(--padding-md)',
+      ['--page-header-section-gap' as string]: 'var(--bds-gap-xl)',
+      ['--page-header-content-gap' as string]: 'var(--bds-gap-md)',
+      ['--page-header-actions-gap' as string]: 'var(--bds-gap-md)',
+      ['--page-header-padding-bottom' as string]: 'var(--bds-padding-md)',
     } as CSSProperties,
   },
 };

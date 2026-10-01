@@ -2,8 +2,8 @@
 /* ─── SidebarNavigation ──────────────────────────────────────── */
 
 .bds-sidebar-nav {
-  background-color: var(--surface-primary);
-  border-right: var(--border-width-md) solid var(--border-secondary);
+  background-color: var(--bds-surface-primary);
+  border-right: var(--bds-border-width-md) solid var(--bds-border-secondary);
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -26,7 +26,7 @@
 
 .bds-sidebar-nav__logo {
   padding: 24px 24px 20px; /* bds-lint-ignore — Figma sidebar spec */
-  border-bottom: var(--border-width-md) solid var(--border-secondary);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-secondary);
 }
 
 /* ─── Nav section ────────────────────────────────────────────── */
@@ -37,7 +37,7 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
 }
 
 /* ─── Collapsed mode ─────────────────────────────────────────── */
@@ -57,7 +57,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
 }
 
 .bds-sidebar-nav--collapsed .bds-sidebar-nav__profile {
@@ -70,13 +70,13 @@
 
 .bds-sidebar-nav__footer {
   padding: 12px 24px; /* bds-lint-ignore — Figma sidebar spec */
-  border-top: var(--border-width-md) solid var(--border-secondary);
+  border-top: var(--bds-border-width-md) solid var(--bds-border-secondary);
 }
 
 /* ─── Profile section ────────────────────────────────────────── */
 
 .bds-sidebar-nav__profile {
   padding: 16px 24px; /* bds-lint-ignore — Figma sidebar spec */
-  border-top: var(--border-width-md) solid var(--border-secondary);
+  border-top: var(--bds-border-width-md) solid var(--bds-border-secondary);
 }
 }

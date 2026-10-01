@@ -10,16 +10,16 @@ interface ThemeComparisonProps {
 
 export function ThemeComparison({
   tokens = [
-    '--page-primary',
-    '--surface-primary',
-    '--background-brand-primary',
-    '--text-primary',
-    '--text-brand-primary',
-    '--border-brand-primary',
+    '--bds-page-primary',
+    '--bds-surface-primary',
+    '--bds-background-brand-primary',
+    '--bds-text-primary',
+    '--bds-text-brand-primary',
+    '--bds-border-brand-primary',
   ],
 }: ThemeComparisonProps) {
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 32px)', overflowX: 'auto' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 32px)', overflowX: 'auto' }}>
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
         <thead>
           <tr>
@@ -66,7 +66,7 @@ function ThemeColorCell({ themeKey, cssVar }: { themeKey: ThemeNumber; cssVar: s
         width: '32px',
         height: '32px',
         borderRadius: '4px',
-        border: '1px solid var(--border-secondary)',
+        border: '1px solid var(--bds-border-secondary)',
         backgroundColor: `var(${cssVar})`,
       }}
     />
@@ -79,8 +79,8 @@ export function ThemeOverview() {
       style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-        gap: 'var(--gap-md, 8px)',
-        marginBottom: 'var(--padding-xl, 32px)',
+        gap: 'var(--bds-gap-md, 8px)',
+        marginBottom: 'var(--bds-padding-xl, 32px)',
       }}
     >
       {THEME_KEYS.map((key) => {
@@ -91,16 +91,16 @@ export function ThemeOverview() {
             className={`body theme-${key}`}
             style={{
               padding: '16px',
-              borderRadius: 'var(--border-radius-md, 4px)',
-              backgroundColor: 'var(--page-primary)',
-              border: '1px solid var(--border-secondary)',
+              borderRadius: 'var(--bds-border-radius-md, 4px)',
+              backgroundColor: 'var(--bds-page-primary)',
+              border: '1px solid var(--bds-border-secondary)',
             }}
           >
             <div
               style={{
                 fontWeight: 700,
                 fontSize: '14px',
-                color: 'var(--text-primary)',
+                color: 'var(--bds-text-primary)',
                 marginBottom: '4px',
               }}
             >
@@ -109,7 +109,7 @@ export function ThemeOverview() {
             <div
               style={{
                 fontSize: '12px',
-                color: 'var(--text-muted)',
+                color: 'var(--bds-text-muted)',
                 marginBottom: '8px',
               }}
             >
@@ -121,8 +121,8 @@ export function ThemeOverview() {
                   width: '24px',
                   height: '24px',
                   borderRadius: '50%',
-                  backgroundColor: 'var(--background-brand-primary)',
-                  border: '1px solid var(--border-secondary)',
+                  backgroundColor: 'var(--bds-background-brand-primary)',
+                  border: '1px solid var(--bds-border-secondary)',
                 }}
               />
               <div
@@ -130,8 +130,8 @@ export function ThemeOverview() {
                   width: '24px',
                   height: '24px',
                   borderRadius: '50%',
-                  backgroundColor: 'var(--surface-secondary)',
-                  border: '1px solid var(--border-secondary)',
+                  backgroundColor: 'var(--bds-surface-secondary)',
+                  border: '1px solid var(--bds-border-secondary)',
                 }}
               />
               <div
@@ -139,8 +139,8 @@ export function ThemeOverview() {
                   width: '24px',
                   height: '24px',
                   borderRadius: '50%',
-                  backgroundColor: 'var(--text-brand-primary)',
-                  border: '1px solid var(--border-secondary)',
+                  backgroundColor: 'var(--bds-text-brand-primary)',
+                  border: '1px solid var(--bds-border-secondary)',
                 }}
               />
             </div>
@@ -153,8 +153,8 @@ export function ThemeOverview() {
 
 const thStyle: React.CSSProperties = {
   padding: '8px 12px',
-  borderBottom: '2px solid var(--border-secondary)',
-  color: 'var(--text-muted)',
+  borderBottom: '2px solid var(--bds-border-secondary)',
+  color: 'var(--bds-text-muted)',
   fontSize: '11px',
   fontWeight: 600,
   textTransform: 'uppercase',
@@ -164,6 +164,6 @@ const thStyle: React.CSSProperties = {
 
 const tdStyle: React.CSSProperties = {
   padding: '8px 12px',
-  borderBottom: '1px solid var(--border-muted)',
+  borderBottom: '1px solid var(--bds-border-muted)',
   verticalAlign: 'middle',
 };

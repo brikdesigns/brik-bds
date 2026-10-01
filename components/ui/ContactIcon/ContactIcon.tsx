@@ -16,9 +16,9 @@ export type ContactIconType = 'badge' | 'glyph';
 
 /**
  * Hue source, applied on top of `type` (ADR-033 § 2's `emphasis` axis):
- * - `neutral` — neutral `--text-muted` token (the authored look: a
+ * - `neutral` — neutral `--bds-text-muted` token (the authored look: a
  *   `#828282` mid-gray badge, white glyph).
- * - `accent` — Brik's brand color, `--text-brand-primary`.
+ * - `accent` — Brik's brand color, `--bds-text-brand-primary`.
  *
  * Contact marks (message, email, website, calendar, phone) have no brand
  * identity — unlike `SocialIcon`, there is no `emphasis="brand"` here

@@ -7,68 +7,68 @@
 
   .bds-block-quote {
     margin: 0;
-    padding: var(--padding-md) var(--padding-lg);
+    padding: var(--bds-padding-md) var(--bds-padding-lg);
     display: flex;
     flex-direction: column;
-    gap: var(--gap-md);
-    border-left: var(--border-width-xl) solid var(--border-primary);
-    border-radius: var(--border-radius-md);
-    background-color: var(--surface-secondary);
+    gap: var(--bds-gap-md);
+    border-left: var(--bds-border-width-xl) solid var(--bds-border-primary);
+    border-radius: var(--bds-border-radius-md);
+    background-color: var(--bds-surface-secondary);
   }
 
   .bds-block-quote__body {
     margin: 0;
-    font-family: var(--font-family-body);
-    font-size: var(--heading-sm);
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-heading-sm);
     font-style: italic;
-    font-weight: var(--font-weight-regular);
-    line-height: var(--font-line-height-normal);
-    color: var(--text-primary);
+    font-weight: var(--bds-font-weight-regular);
+    line-height: var(--bds-font-line-height-normal);
+    color: var(--bds-text-primary);
   }
 
   .bds-block-quote__attribution {
     display: flex;
     flex-direction: column;
-    /* Cite ↔ role is the tight step (ADR-023 content-rhythm map: --gap-sm). */
-    gap: var(--gap-sm);
+    /* Cite ↔ role is the tight step (ADR-023 content-rhythm map: --bds-gap-sm). */
+    gap: var(--bds-gap-sm);
   }
 
   .bds-block-quote__cite {
-    font-family: var(--font-family-label);
-    font-size: var(--label-md);
-    font-weight: var(--font-weight-semibold);
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-md);
+    font-weight: var(--bds-font-weight-semibold);
     font-style: normal;
-    line-height: var(--font-line-height-snug);
-    color: var(--text-muted);
+    line-height: var(--bds-font-line-height-snug);
+    color: var(--bds-text-muted);
   }
 
   /* ─── Service-line accents ───────────────────────────────────────
      Left-border + soft tint from the per-line service tokens. */
 
   .bds-block-quote--brand {
-    border-left-color: var(--border-service-brand);
-    background-color: var(--surface-service-brand-light);
+    border-left-color: var(--bds-border-service-brand);
+    background-color: var(--bds-surface-service-brand-light);
   }
 
   .bds-block-quote--marketing {
-    border-left-color: var(--border-service-marketing);
-    background-color: var(--surface-service-marketing-light);
+    border-left-color: var(--bds-border-service-marketing);
+    background-color: var(--bds-surface-service-marketing-light);
   }
 
   .bds-block-quote--information {
-    border-left-color: var(--border-service-information);
-    background-color: var(--surface-service-information-light);
+    border-left-color: var(--bds-border-service-information);
+    background-color: var(--bds-surface-service-information-light);
   }
 
   .bds-block-quote--product {
-    border-left-color: var(--border-service-product);
-    background-color: var(--surface-service-product-light);
+    border-left-color: var(--bds-border-service-product);
+    background-color: var(--bds-surface-service-product-light);
   }
 
   /* `service` is the deprecated alias of `back-office` — same orange tokens. */
   .bds-block-quote--back-office,
   .bds-block-quote--service {
-    border-left-color: var(--border-service-back-office);
-    background-color: var(--surface-service-back-office-light);
+    border-left-color: var(--bds-border-service-back-office);
+    background-color: var(--bds-surface-service-back-office-light);
   }
 }

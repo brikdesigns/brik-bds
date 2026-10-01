@@ -29,15 +29,15 @@
   // `npm run gen:widget-tokens` to re-sync them, and `:check` gates them in CI
   // (scripts/gen-widget-tokens.mjs). Everything else here is hand-maintained.
   const T = {
-    poppy: '#e35335', // --color-poppy-500
-    poppyDark: '#b0351b', // --color-poppy-700
-    white: '#ffffff', // --color-grayscale-white
-    tanLightest: '#f1f0ec', // --color-tan-100
-    grayLighter: '#e0e0e0', // --color-grayscale-300
-    grayLight: '#828282', // --color-grayscale-500
-    grayDark: '#5a5a5a', // --color-grayscale-700
-    grayDarker: '#333333', // --color-grayscale-800
-    grayDarkest: '#1b1b1b', // --color-grayscale-950
+    poppy: '#e35335', // --bds-color-poppy-500
+    poppyDark: '#b0351b', // --bds-color-poppy-700
+    white: '#ffffff', // --bds-color-grayscale-white
+    tanLightest: '#f1f0ec', // --bds-color-tan-100
+    grayLighter: '#e0e0e0', // --bds-color-grayscale-300
+    grayLight: '#828282', // --bds-color-grayscale-500
+    grayDark: '#5a5a5a', // --bds-color-grayscale-700
+    grayDarker: '#333333', // --bds-color-grayscale-800
+    grayDarkest: '#1b1b1b', // --bds-color-grayscale-950
     fontFamily: "'Poppins', system-ui, sans-serif",
     fontFamilyMono:
       "'JetBrains Mono', ui-monospace, SF Mono, Menlo, Consolas, monospace",

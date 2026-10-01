@@ -4,25 +4,25 @@
 .bds-checkbox {
   display: inline-flex;
   align-items: center;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   cursor: pointer;
   user-select: none;
 }
 
 .bds-checkbox--disabled {
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
   cursor: not-allowed;
 }
 
 /* ─── Input ──────────────────────────────────────────────────── */
 
 .bds-checkbox__input {
-  width: var(--size-400);
-  height: var(--size-400);
+  width: var(--bds-size-400);
+  height: var(--bds-size-400);
   margin: 0;
   cursor: pointer;
   flex-shrink: 0;
-  accent-color: var(--background-brand-primary);
+  accent-color: var(--bds-background-brand-primary);
 }
 
 .bds-checkbox--disabled .bds-checkbox__input {
@@ -32,10 +32,10 @@
 /* ─── Label text ─────────────────────────────────────────────── */
 
 .bds-checkbox__text {
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
   text-transform: capitalize;
 }
 }

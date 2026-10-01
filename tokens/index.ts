@@ -463,18 +463,18 @@ export const fontLineHeights = {
  * Semantic font weights, exposed as `var()` references (never literal
  * numbers) so weight remains themeable through the same cascade as size
  * and color. `heading` is the single weight every `heading.*` preset below
- * uses — one source for "heading weight," see `--font-weight-heading` in
- * dist/tokens.css (aliases `--font-weight-semibold`).
+ * uses — one source for "heading weight," see `--bds-font-weight-heading` in
+ * dist/tokens.css (aliases `--bds-font-weight-semibold`).
  */
 export const weight = {
-  thin: 'var(--font-weight-thin)',
-  regular: 'var(--font-weight-regular)',
-  medium: 'var(--font-weight-medium)',
-  semibold: 'var(--font-weight-semibold)',
-  bold: 'var(--font-weight-bold)',
-  extrabold: 'var(--font-weight-extrabold)',
-  black: 'var(--font-weight-black)',
-  heading: 'var(--font-weight-heading)',
+  thin: 'var(--bds-font-weight-thin)',
+  regular: 'var(--bds-font-weight-regular)',
+  medium: 'var(--bds-font-weight-medium)',
+  semibold: 'var(--bds-font-weight-semibold)',
+  bold: 'var(--bds-font-weight-bold)',
+  extrabold: 'var(--bds-font-weight-extrabold)',
+  black: 'var(--bds-font-weight-black)',
+  heading: 'var(--bds-font-weight-heading)',
 } as const;
 
 // ─── Shared typography presets ────────────────────────────────────────
@@ -484,121 +484,121 @@ export const weight = {
 // consumers can swap their local exports for these verbatim. Plain
 // serializable objects — SSR/RSC-safe, no client boundary required.
 //
-// Every `heading.*` entry uses `weight.heading` (`--font-weight-heading`,
+// Every `heading.*` entry uses `weight.heading` (`--bds-font-weight-heading`,
 // = semibold/600) — no bold(700) in a heading preset, full stop.
 
 export const text = {
   /** body/md · 16/150 — default body text */
   body: {
-    fontFamily: 'var(--font-family-body)',
-    fontSize: 'var(--body-md)',
+    fontFamily: 'var(--bds-font-family-body)',
+    fontSize: 'var(--bds-body-md)',
     fontWeight: weight.regular,
-    lineHeight: 'var(--font-line-height-normal)',
-    color: 'var(--text-primary)',
+    lineHeight: 'var(--bds-font-line-height-normal)',
+    color: 'var(--bds-text-primary)',
   } satisfies CSSProperties,
 
   /** body/lg · 18/150 — larger body text (marketing) */
   bodyLg: {
-    fontFamily: 'var(--font-family-body)',
-    fontSize: 'var(--body-lg)',
+    fontFamily: 'var(--bds-font-family-body)',
+    fontSize: 'var(--bds-body-lg)',
     fontWeight: weight.regular,
-    lineHeight: 'var(--font-line-height-normal)',
-    color: 'var(--text-primary)',
+    lineHeight: 'var(--bds-font-line-height-normal)',
+    color: 'var(--bds-text-primary)',
   } satisfies CSSProperties,
 
   /** body/sm · 14/150 — secondary body text */
   bodySmall: {
-    fontFamily: 'var(--font-family-body)',
-    fontSize: 'var(--body-sm)',
+    fontFamily: 'var(--bds-font-family-body)',
+    fontSize: 'var(--bds-body-sm)',
     fontWeight: weight.regular,
-    lineHeight: 'var(--font-line-height-normal)',
-    color: 'var(--text-secondary)',
+    lineHeight: 'var(--bds-font-line-height-normal)',
+    color: 'var(--bds-text-secondary)',
   } satisfies CSSProperties,
 
   /** body/xs · 11.5/150 — fine print, timestamps */
   bodyXs: {
-    fontFamily: 'var(--font-family-body)',
-    fontSize: 'var(--body-xs)',
+    fontFamily: 'var(--bds-font-family-body)',
+    fontSize: 'var(--bds-body-xs)',
     fontWeight: weight.regular,
-    lineHeight: 'var(--font-line-height-normal)',
-    color: 'var(--text-muted)',
+    lineHeight: 'var(--bds-font-line-height-normal)',
+    color: 'var(--bds-text-muted)',
   } satisfies CSSProperties,
 
   /** body/md muted — descriptive text, notes */
   muted: {
-    fontFamily: 'var(--font-family-body)',
-    fontSize: 'var(--body-md)',
+    fontFamily: 'var(--bds-font-family-body)',
+    fontSize: 'var(--bds-body-md)',
     fontWeight: weight.regular,
-    lineHeight: 'var(--font-line-height-normal)',
-    color: 'var(--text-secondary)',
+    lineHeight: 'var(--bds-font-line-height-normal)',
+    color: 'var(--bds-text-secondary)',
   } satisfies CSSProperties,
 } as const;
 
 export const heading = {
   /** Page-level heading (heading/large · 32px) */
   page: {
-    fontFamily: 'var(--font-family-heading)',
-    fontSize: 'var(--heading-lg)',
+    fontFamily: 'var(--bds-font-family-heading)',
+    fontSize: 'var(--bds-heading-lg)',
     fontWeight: weight.heading,
-    lineHeight: 'var(--font-line-height-snug)',
-    color: 'var(--text-primary)',
+    lineHeight: 'var(--bds-font-line-height-snug)',
+    color: 'var(--bds-text-primary)',
     margin: 0,
   } satisfies CSSProperties,
 
   /** Section heading inside a card (heading/sm · 20px) */
   section: {
-    fontFamily: 'var(--font-family-heading)',
-    fontSize: 'var(--heading-sm)',
+    fontFamily: 'var(--bds-font-family-heading)',
+    fontSize: 'var(--bds-heading-sm)',
     fontWeight: weight.heading,
-    color: 'var(--text-primary)',
+    color: 'var(--bds-text-primary)',
     margin: 0,
   } satisfies CSSProperties,
 
   /** Sub-section heading (heading/tiny · 16px) */
   subsection: {
-    fontFamily: 'var(--font-family-heading)',
-    fontSize: 'var(--heading-tiny)',
+    fontFamily: 'var(--bds-font-family-heading)',
+    fontSize: 'var(--bds-heading-tiny)',
     fontWeight: weight.heading,
-    color: 'var(--text-primary)',
+    color: 'var(--bds-text-primary)',
     margin: 0,
   } satisfies CSSProperties,
 
   /** Card title (heading/small, no margin) */
   card: {
-    fontFamily: 'var(--font-family-heading)',
-    fontSize: 'var(--heading-sm)',
+    fontFamily: 'var(--bds-font-family-heading)',
+    fontSize: 'var(--bds-heading-sm)',
     fontWeight: weight.heading,
-    color: 'var(--text-primary)',
+    color: 'var(--bds-text-primary)',
     margin: 0,
   } satisfies CSSProperties,
 
   /** heading/lg · 32/110 (marketing) — top-level page heading */
   lg: {
-    fontFamily: 'var(--font-family-heading)',
-    fontSize: 'var(--heading-lg)',
+    fontFamily: 'var(--bds-font-family-heading)',
+    fontSize: 'var(--bds-heading-lg)',
     fontWeight: weight.heading,
-    lineHeight: 'var(--font-line-height-tight)',
-    color: 'var(--text-primary)',
+    lineHeight: 'var(--bds-font-line-height-tight)',
+    color: 'var(--bds-text-primary)',
     margin: 0,
   } satisfies CSSProperties,
 
   /** heading/md · 25.3/125 (marketing) */
   md: {
-    fontFamily: 'var(--font-family-heading)',
-    fontSize: 'var(--heading-md)',
+    fontFamily: 'var(--bds-font-family-heading)',
+    fontSize: 'var(--bds-heading-md)',
     fontWeight: weight.heading,
-    lineHeight: 'var(--font-line-height-snug)',
-    color: 'var(--text-primary)',
+    lineHeight: 'var(--bds-font-line-height-snug)',
+    color: 'var(--bds-text-primary)',
     margin: 0,
   } satisfies CSSProperties,
 
   /** heading/sm · 20/125 (marketing) */
   sm: {
-    fontFamily: 'var(--font-family-heading)',
-    fontSize: 'var(--heading-sm)',
+    fontFamily: 'var(--bds-font-family-heading)',
+    fontSize: 'var(--bds-heading-sm)',
     fontWeight: weight.heading,
-    lineHeight: 'var(--font-line-height-snug)',
-    color: 'var(--text-primary)',
+    lineHeight: 'var(--bds-font-line-height-snug)',
+    color: 'var(--bds-text-primary)',
     margin: 0,
   } satisfies CSSProperties,
 } as const;
@@ -606,47 +606,47 @@ export const heading = {
 export const label = {
   /** subtitle/md — uppercase label (Figma "subtitle/md") */
   subtitle: {
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--label-sm)',
+    fontFamily: 'var(--bds-font-family-label)',
+    fontSize: 'var(--bds-label-sm)',
     fontWeight: weight.medium,
-    color: 'var(--text-secondary)',
+    color: 'var(--bds-text-secondary)',
     textTransform: 'uppercase' as const,
-    letterSpacing: 'var(--letter-spacing-wide)',
+    letterSpacing: 'var(--bds-letter-spacing-wide)',
   } satisfies CSSProperties,
 
   /** Standard label (label/sm · 14px) */
   sm: {
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--label-sm)',
+    fontFamily: 'var(--bds-font-family-label)',
+    fontSize: 'var(--bds-label-sm)',
     fontWeight: weight.medium,
-    color: 'var(--text-primary)',
+    color: 'var(--bds-text-primary)',
   } satisfies CSSProperties,
 
   /** Label/md (16px) */
   md: {
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--label-md)',
+    fontFamily: 'var(--bds-font-family-label)',
+    fontSize: 'var(--bds-label-md)',
     fontWeight: weight.medium,
-    color: 'var(--text-primary)',
+    color: 'var(--bds-text-primary)',
   } satisfies CSSProperties,
 
   /** label/sm · 14/125 semibold (marketing) — bolder counterpart to `label.sm` */
   smBold: {
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--label-sm)',
+    fontFamily: 'var(--bds-font-family-label)',
+    fontSize: 'var(--bds-label-sm)',
     fontWeight: weight.semibold,
-    lineHeight: 'var(--font-line-height-snug)',
-    color: 'var(--text-primary)',
+    lineHeight: 'var(--bds-font-line-height-snug)',
+    color: 'var(--bds-text-primary)',
     whiteSpace: 'nowrap' as const,
     margin: 0,
   } satisfies CSSProperties,
 
   /** label/tiny — semibold for badges and compact metadata */
   tiny: {
-    fontFamily: 'var(--font-family-label)',
-    fontSize: 'var(--label-tiny)',
+    fontFamily: 'var(--bds-font-family-label)',
+    fontSize: 'var(--bds-label-tiny)',
     fontWeight: weight.semibold,
-    color: 'var(--text-primary)',
+    color: 'var(--bds-text-primary)',
   } satisfies CSSProperties,
 } as const;
 
@@ -656,24 +656,24 @@ export const label = {
  * Maps to SD single-dash --space-* variables (NOT the legacy --space-- double-dash format).
  */
 export const semanticSpace = {
-  "none": "var(--space-0)",
-  "tiny": "var(--space-200)",
-  "xs": "var(--space-250)",
-  "sm": "var(--space-300)",
-  "md": "var(--space-400)",
-  "lg": "var(--space-600)",
-  "xl": "var(--space-800)",
-  "huge": "var(--space-1200)",
-  "gap--none": "var(--space-0)",
-  "gap--tiny": "var(--space-50)",
-  "gap--xs": "var(--space-100)",
-  "gap--sm": "var(--space-150)",
-  "gap--md": "var(--space-200)",
-  "gap--lg": "var(--space-400)",
-  "gap--xl": "var(--space-600)",
-  "gap--huge": "var(--space-800)",
-  "button": "var(--space-200)",
-  "input": "var(--space-200)"
+  "none": "var(--bds-space-0)",
+  "tiny": "var(--bds-space-200)",
+  "xs": "var(--bds-space-250)",
+  "sm": "var(--bds-space-300)",
+  "md": "var(--bds-space-400)",
+  "lg": "var(--bds-space-600)",
+  "xl": "var(--bds-space-800)",
+  "huge": "var(--bds-space-1200)",
+  "gap--none": "var(--bds-space-0)",
+  "gap--tiny": "var(--bds-space-50)",
+  "gap--xs": "var(--bds-space-100)",
+  "gap--sm": "var(--bds-space-150)",
+  "gap--md": "var(--bds-space-200)",
+  "gap--lg": "var(--bds-space-400)",
+  "gap--xl": "var(--bds-space-600)",
+  "gap--huge": "var(--bds-space-800)",
+  "button": "var(--bds-space-200)",
+  "input": "var(--bds-space-200)"
 } as const;
 
 /**
@@ -770,7 +770,7 @@ export type MediaQueryDown = keyof typeof mediaQueries.down;
  * themselves (brikdesigns#1827).
  *
  * Keys match the CSS custom properties exactly (`textSm` →
- * `--content-width-text-sm`); the old `narrow`/`default`/`wide` keys are gone,
+ * `--bds-content-width-text-sm`); the old `narrow`/`default`/`wide` keys are gone,
  * as their CSS aliases are already deprecated in gap-fills.css.
  */
 export const contentWidths = {
@@ -790,19 +790,19 @@ export type ContentWidth = keyof typeof contentWidths;
  * Page inset — the inline inset between the viewport edge and a page's
  * content band (ADR-025 recipe). Device-fluid (ADR-042): a piecewise clamp()
  * threading the mobile/tablet/desktop endpoints, so it is exposed as a var()
- * reference, not a raw px value. Maps to the --page-inset CSS custom property
+ * reference, not a raw px value. Maps to the --bds-page-inset CSS custom property
  * in tokens/layout-fluid.css.
  */
-export const pageInset = 'var(--page-inset)' as const;
+export const pageInset = 'var(--bds-page-inset)' as const;
 
 /**
  * Section block padding — the layout tier's vertical rhythm for a top-level
  * blueprint section (ADR-042), superseding the hand-written 7vw clamp()
  * (ADR-021). Device-fluid like {@link pageInset}, so exposed the same way.
- * Maps to the --section-padding-block CSS custom property in
+ * Maps to the --bds-section-padding-block CSS custom property in
  * tokens/layout-fluid.css.
  */
-export const sectionPaddingBlock = 'var(--section-padding-block)' as const;
+export const sectionPaddingBlock = 'var(--bds-section-padding-block)' as const;
 
 /**
  * Measure — the max inline width of a CENTERED text column inside a band.

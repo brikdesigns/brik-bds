@@ -44,9 +44,9 @@ import '../section-shell.css';
 // quote, centred and constrained to the quote's measure. Inline var() token
 // styles follow the local blueprint-adapter precedent (ServicesDetailTwoColumn).
 const mediaStyle = {
-  maxWidth: 'var(--content-width-text-sm)',
+  maxWidth: 'var(--bds-content-width-text-sm)',
   marginInline: 'auto',
-  marginBottom: 'var(--gap-xl)',
+  marginBottom: 'var(--bds-gap-xl)',
 } as const;
 
 interface Props extends BlueprintProps {}

@@ -4,7 +4,7 @@
 .bds-data-section {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
 }
 
 /* Vertical rhythm + divider between consecutive sections on the same page.
@@ -12,14 +12,14 @@
    is the page's structural separator, not decoration. Matches the token
    treatment used by <Divider />. */
 .bds-data-section + .bds-data-section {
-  margin-top: var(--padding-lg);
-  padding-top: var(--padding-lg);
-  border-top: var(--border-width-md) solid var(--border-muted);
+  margin-top: var(--bds-padding-lg);
+  padding-top: var(--bds-padding-lg);
+  border-top: var(--bds-border-width-md) solid var(--bds-border-muted);
 }
 
 .bds-data-section--spacing-lg + .bds-data-section {
-  margin-top: var(--padding-xl);
-  padding-top: var(--padding-xl);
+  margin-top: var(--bds-padding-xl);
+  padding-top: var(--bds-padding-xl);
 }
 
 /* ─── Header ───────────────────────────────────────────────────── */
@@ -28,35 +28,35 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--gap-lg);
+  gap: var(--bds-gap-lg);
 }
 
 .bds-data-section__titles {
   display: flex;
   flex-direction: column;
   /* Title → subtitle is the tight, one-unit step (ADR-023 content-rhythm
-     map). `--gap-sm`, not `--gap-xs`: the latter collapses to 0px outside
+     map). `--bds-gap-sm`, not `--bds-gap-xs`: the latter collapses to 0px outside
      default spacing mode and would erase the pairing. */
-  gap: var(--gap-sm);
+  gap: var(--bds-gap-sm);
   min-width: 0;
 }
 
 /* Title — heading-tier typography. Semantic element is `h2` by default (see
    `titleAs` prop). The BEM class names the role; the HTML tag is semantic. */
 .bds-data-section__title {
-  font-family: var(--font-family-heading);
-  font-size: var(--heading-sm);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-primary);
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
   margin: 0;
 }
 
 .bds-data-section__subtitle {
-  font-family: var(--font-family-body);
-  font-size: var(--body-md);
-  line-height: var(--font-line-height-normal);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
   margin: 0;
 }
 
@@ -97,13 +97,13 @@
      content owns its type tokens, this slot only lays it out */
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
+  gap: var(--bds-gap-lg);
 }
 
 /* Header → content gap is tighter than between content blocks so the header
    visually groups with its data. */
 .bds-data-section__header + .bds-data-section__content {
-  margin-top: var(--gap-sm);
+  margin-top: var(--bds-gap-sm);
 }
 
 /* ─── Loading skeleton (DataSection.loading) ──────────────────── */
@@ -111,7 +111,7 @@
 .bds-data-section__skeleton-field {
   display: flex;
   flex-direction: column;
-  /* Mirrors Field's stacked label ↔ value tight step (ADR-023 map: --gap-sm). */
-  gap: var(--gap-sm);
+  /* Mirrors Field's stacked label ↔ value tight step (ADR-023 map: --bds-gap-sm). */
+  gap: var(--bds-gap-sm);
 }
 }

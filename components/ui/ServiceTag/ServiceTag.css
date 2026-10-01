@@ -4,46 +4,46 @@
 .bds-service-tag {
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-family-label);
-  font-weight: var(--font-weight-semibold);
+  font-family: var(--bds-font-family-label);
+  font-weight: var(--bds-font-weight-semibold);
   line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically; shared with Badge + Tag */
   white-space: nowrap;
   text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wide);
-  border-radius: var(--border-radius-sm);
+  letter-spacing: var(--bds-letter-spacing-wide);
+  border-radius: var(--bds-border-radius-sm);
   box-sizing: border-box;
 }
 
 .bds-service-tag--has-icon {
-  gap: var(--gap-xs);
+  gap: var(--bds-gap-xs);
 }
 
 /* ─── Sizes ──────────────────────────────────────────────────── */
 
 .bds-service-tag--sm {
-  height: var(--size-700);
-  padding-inline: var(--padding-sm);
-  font-size: var(--label-tiny);
+  height: var(--bds-size-700);
+  padding-inline: var(--bds-padding-sm);
+  font-size: var(--bds-label-tiny);
 }
 
 .bds-service-tag--md {
-  height: var(--size-800);
-  padding-inline: var(--padding-sm);
-  font-size: var(--label-sm);
+  height: var(--bds-size-800);
+  padding-inline: var(--bds-padding-sm);
+  font-size: var(--bds-label-sm);
 }
 
 .bds-service-tag--lg {
-  height: var(--size-1000);
-  padding-inline: var(--padding-md);
-  font-size: var(--label-md);
+  height: var(--bds-size-1000);
+  padding-inline: var(--bds-padding-md);
+  font-size: var(--bds-label-md);
 }
 
-/* lg is the only size with extra inline padding (--padding-md vs --padding-sm).
+/* lg is the only size with extra inline padding (--bds-padding-md vs --bds-padding-sm).
    With an icon present that reads as too much lead-in space before the glyph,
    so icon-text lg drops back to the sm/md inline padding. Two-class selector
    outranks the single-class --lg rule, so order is irrelevant. */
 .bds-service-tag--lg.bds-service-tag--has-icon {
-  padding-inline: var(--padding-sm);
+  padding-inline: var(--bds-padding-sm);
 }
 
 /* ─── Trailing slot ──────────────────────────────────────────── */
@@ -53,8 +53,8 @@
    reads as floating away from the edge. Two-class selector so it outranks the
    size rules above, including the lg + has-icon pair. */
 .bds-service-tag.bds-service-tag--has-trailing {
-  gap: var(--gap-xs);
-  padding-inline-end: var(--padding-tiny);
+  gap: var(--bds-gap-xs);
+  padding-inline-end: var(--bds-padding-tiny);
 }
 
 /* `color: inherit` is load-bearing: the slot picks up the tag's
@@ -71,15 +71,15 @@
 
 /* ─── Category colors ────────────────────────────────────────── */
 
-.bds-service-tag--brand       { background-color: var(--background-service-brand);       color: var(--text-service-brand-on-light); }
-.bds-service-tag--marketing   { background-color: var(--background-service-marketing);   color: var(--text-service-marketing-on-light); }
-.bds-service-tag--information { background-color: var(--background-service-information); color: var(--text-service-information-on-light); }
-.bds-service-tag--product     { background-color: var(--background-service-product);     color: var(--text-service-product-on-light); }
-.bds-service-tag--back-office { background-color: var(--background-service-back-office); color: var(--text-service-back-office-on-light); }
+.bds-service-tag--brand       { background-color: var(--bds-background-service-brand);       color: var(--bds-text-service-brand-on-light); }
+.bds-service-tag--marketing   { background-color: var(--bds-background-service-marketing);   color: var(--bds-text-service-marketing-on-light); }
+.bds-service-tag--information { background-color: var(--bds-background-service-information); color: var(--bds-text-service-information-on-light); }
+.bds-service-tag--product     { background-color: var(--bds-background-service-product);     color: var(--bds-text-service-product-on-light); }
+.bds-service-tag--back-office { background-color: var(--bds-background-service-back-office); color: var(--bds-text-service-back-office-on-light); }
 /* `--service` is the @deprecated alias of `--back-office` (kept for prop-API
    compat during the cross-repo rename). Same back-office tokens; remove with
    the `service` ServiceLine member in a future major. */
-.bds-service-tag--service     { background-color: var(--background-service-back-office); color: var(--text-service-back-office-on-light); }
+.bds-service-tag--service     { background-color: var(--bds-background-service-back-office); color: var(--bds-text-service-back-office-on-light); }
 
 /* ─── Icon ───────────────────────────────────────────────────── */
 
@@ -104,21 +104,21 @@
 }
 
 /* bds-lint-ignore — Figma-driven badge dimensions */
-.bds-service-tag--icon-sm { width: 20px; height: 20px; border-radius: var(--border-radius-sm); } /* bds-lint-ignore — Figma-driven 20px icon dimensions, not spacing-grid tokens */
-.bds-service-tag--icon-md { width: 28px; height: 28px; border-radius: var(--border-radius-md); } /* bds-lint-ignore — Figma-driven 28px icon dimensions, not spacing-grid tokens */
-.bds-service-tag--icon-lg { width: 40px; height: 40px; border-radius: var(--border-radius-md); } /* bds-lint-ignore — Figma-driven 40px icon dimensions, not spacing-grid tokens */
+.bds-service-tag--icon-sm { width: 20px; height: 20px; border-radius: var(--bds-border-radius-sm); } /* bds-lint-ignore — Figma-driven 20px icon dimensions, not spacing-grid tokens */
+.bds-service-tag--icon-md { width: 28px; height: 28px; border-radius: var(--bds-border-radius-md); } /* bds-lint-ignore — Figma-driven 28px icon dimensions, not spacing-grid tokens */
+.bds-service-tag--icon-lg { width: 40px; height: 40px; border-radius: var(--bds-border-radius-md); } /* bds-lint-ignore — Figma-driven 40px icon dimensions, not spacing-grid tokens */
 
 /* ─── Dot variant (color-dot marker + neutral pill) ─────────────── */
 
 /* Neutral fill — deliberately NOT a `.bds-service-tag--{category}` fill.
    Same AA-cleared pairing Tag `--solid` and SegmentedControl's track already
-   use (`--background-secondary` + `--text-on-color-light`; see Tag.css) —
+   use (`--bds-background-secondary` + `--bds-text-on-color-light`; see Tag.css) —
    holds AA in both light and dark. Only the dot marker below carries the
    service color, so the pill itself reads neutral. */
 .bds-service-tag--dot {
-  gap: var(--gap-xs);
-  background-color: var(--background-secondary);
-  color: var(--text-on-color-light);
+  gap: var(--bds-gap-xs);
+  background-color: var(--bds-background-secondary);
+  color: var(--bds-text-on-color-light);
 }
 
 .bds-service-tag__dot {

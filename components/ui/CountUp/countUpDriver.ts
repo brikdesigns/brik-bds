@@ -68,7 +68,7 @@ export function formatCountUp(value: number, parsed: ParsedCountUp): string {
 
 /**
  * A cubic-bézier easing function `y(x)` for `x` in `[0, 1]`, so the count honours
- * the same curve as CSS `--ease-*` (default `--ease-out`). Newton–Raphson on the
+ * the same curve as CSS `--ease-*` (default `--bds-ease-out`). Newton–Raphson on the
  * x-polynomial, the standard closed approach; five iterations is ample for a
  * value tween. Mirrors what the browser does for a CSS `cubic-bezier()` timing.
  */

@@ -27,7 +27,7 @@ Select has no semantic-variant axis — all variation (size, icon, options shape
 States exposed via Controls:
 
 - **Default** — light input border
-- **Hover** — darker border via `--border-primary`
+- **Hover** — darker border via `--bds-border-primary`
 - **Focus** — brand border + focus ring
 - **Error** — red border + ring (set `error` Control)
 - **Disabled** — 50% opacity, non-interactive
@@ -48,13 +48,13 @@ Component-scoped CSS variables exposed on `.bds-select`. Set on a wrapping eleme
 
 | Variable | Default | Controls |
 |---|---|---|
-| `--bds-select-chevron-color` | `var(--text-muted)` | Color of the dropdown chevron icon |
-| `--bds-select-icon-color` | `var(--text-muted)` | Color of the optional leading icon |
+| `--bds-select-chevron-color` | `var(--bds-text-muted)` | Color of the dropdown chevron icon |
+| `--bds-select-icon-color` | `var(--bds-text-muted)` | Color of the optional leading icon |
 
 ```css
 /* Example: match chevron to brand color in a themed form */
 .branded-form {
-  --bds-select-chevron-color: var(--text-brand-primary);
-  --bds-select-icon-color: var(--text-brand-primary);
+  --bds-select-chevron-color: var(--bds-text-brand-primary);
+  --bds-select-icon-color: var(--bds-text-brand-primary);
 }
 ```

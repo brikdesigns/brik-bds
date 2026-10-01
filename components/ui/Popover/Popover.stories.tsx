@@ -8,15 +8,15 @@ const sampleContent = (
   <div style={{
     display: 'flex',
     flexDirection: 'column',
-    gap: 'var(--gap-sm)',
-    fontFamily: 'var(--font-family-body)',
-    fontSize: 'var(--body-md)',
-    color: 'var(--text-primary)',
+    gap: 'var(--bds-gap-sm)',
+    fontFamily: 'var(--bds-font-family-body)',
+    fontSize: 'var(--bds-body-md)',
+    color: 'var(--bds-text-primary)',
   }}>
-    <strong style={{ fontWeight: 'var(--font-weight-semibold)' as unknown as number }}>
+    <strong style={{ fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number }}>
       Popover title
     </strong>
-    <p style={{ margin: 0, color: 'var(--text-secondary)' }}>
+    <p style={{ margin: 0, color: 'var(--bds-text-secondary)' }}>
       This is some helpful content inside the popover panel.
     </p>
   </div>

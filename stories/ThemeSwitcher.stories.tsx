@@ -15,15 +15,15 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
   return (
     <div
       style={{
-        padding: 'var(--padding-lg)',
-        fontFamily: 'var(--font-family-body)',
+        padding: 'var(--bds-padding-lg)',
+        fontFamily: 'var(--bds-font-family-body)',
       }}
     >
       <h1
         style={{
-          fontFamily: 'var(--font-family-heading)',
-          fontSize: 'var(--heading-xxl)',
-          marginBottom: 'var(--padding-md)',
+          fontFamily: 'var(--bds-font-family-heading)',
+          fontSize: 'var(--bds-heading-xxl)',
+          marginBottom: 'var(--bds-padding-md)',
         }}
       >
         BDS Theme Switcher
@@ -31,9 +31,9 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
 
       <p
         style={{
-          fontSize: 'var(--body-lg)',
-          color: 'var(--text-secondary)',
-          marginBottom: 'var(--padding-lg)',
+          fontSize: 'var(--bds-body-lg)',
+          color: 'var(--bds-text-secondary)',
+          marginBottom: 'var(--bds-padding-lg)',
         }}
       >
         Use the toolbar controls above to switch themes.
@@ -44,8 +44,8 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: 'var(--gap-md)',
-          marginBottom: 'var(--padding-xl)',
+          gap: 'var(--bds-gap-md)',
+          marginBottom: 'var(--bds-padding-xl)',
         }}
       >
         <ThemeCard label="Theme" value={currentTheme} />
@@ -55,8 +55,8 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
 
       <p
         style={{
-          color: 'var(--text-muted)',
-          marginBottom: 'var(--padding-xl)',
+          color: 'var(--bds-text-muted)',
+          marginBottom: 'var(--bds-padding-xl)',
           fontStyle: 'italic',
         }}
       >
@@ -65,7 +65,7 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
 
       {/* Color Swatches */}
       <SectionTitle>Page and surface</SectionTitle>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--gap-md)', marginBottom: 'var(--padding-lg)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--bds-gap-md)', marginBottom: 'var(--bds-padding-lg)' }}>
         <ColorSwatch name="page-primary" />
         <ColorSwatch name="page-secondary" />
         <ColorSwatch name="surface-primary" />
@@ -74,7 +74,7 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
       </div>
 
       <SectionTitle>Brand and background</SectionTitle>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--gap-md)', marginBottom: 'var(--padding-lg)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--bds-gap-md)', marginBottom: 'var(--bds-padding-lg)' }}>
         <ColorSwatch name="background-brand-primary" />
         <ColorSwatch name="background-brand-secondary" />
         <ColorSwatch name="background-primary" />
@@ -82,7 +82,7 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
       </div>
 
       <SectionTitle>Text</SectionTitle>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--gap-md)', marginBottom: 'var(--padding-lg)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 'var(--bds-gap-md)', marginBottom: 'var(--bds-padding-lg)' }}>
         <ColorSwatch name="text-primary" isText />
         <ColorSwatch name="text-secondary" isText />
         <ColorSwatch name="text-muted" isText />
@@ -94,39 +94,39 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
       <SectionTitle>Typography</SectionTitle>
       <div
         style={{
-          backgroundColor: 'var(--surface-secondary)',
-          padding: 'var(--padding-md)',
-          borderRadius: 'var(--border-radius-md)',
-          marginBottom: 'var(--padding-lg)',
+          backgroundColor: 'var(--bds-surface-secondary)',
+          padding: 'var(--bds-padding-md)',
+          borderRadius: 'var(--bds-border-radius-md)',
+          marginBottom: 'var(--bds-padding-lg)',
         }}
       >
-        <p style={{ fontFamily: 'var(--font-family-display)', fontSize: 'var(--heading-xl)', marginBottom: 'var(--gap-sm)' }}>
+        <p style={{ fontFamily: 'var(--bds-font-family-display)', fontSize: 'var(--bds-heading-xl)', marginBottom: 'var(--bds-gap-sm)' }}>
           Display Font
         </p>
-        <p style={{ fontFamily: 'var(--font-family-heading)', fontSize: 'var(--heading-lg)', marginBottom: 'var(--gap-sm)' }}>
+        <p style={{ fontFamily: 'var(--bds-font-family-heading)', fontSize: 'var(--bds-heading-lg)', marginBottom: 'var(--bds-gap-sm)' }}>
           Heading Font
         </p>
-        <p style={{ fontFamily: 'var(--font-family-body)', fontSize: 'var(--body-md)', marginBottom: 'var(--gap-sm)' }}>
+        <p style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-md)', marginBottom: 'var(--bds-gap-sm)' }}>
           Body font for paragraphs and content
         </p>
-        <p style={{ fontFamily: 'var(--font-family-label)', fontSize: 'var(--label-md)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <p style={{ fontFamily: 'var(--bds-font-family-label)', fontSize: 'var(--bds-label-md)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           Label Font
         </p>
       </div>
 
       {/* Buttons */}
       <SectionTitle>Buttons</SectionTitle>
-      <div style={{ display: 'flex', gap: 'var(--gap-lg)', flexWrap: 'wrap', marginBottom: 'var(--padding-lg)' }}>
+      <div style={{ display: 'flex', gap: 'var(--bds-gap-lg)', flexWrap: 'wrap', marginBottom: 'var(--bds-padding-lg)' }}>
         <button
           style={{
-            padding: 'var(--gap-md) var(--padding-sm)',
-            backgroundColor: 'var(--background-brand-primary)',
-            color: 'var(--text-inverse)',
+            padding: 'var(--bds-gap-md) var(--bds-padding-sm)',
+            backgroundColor: 'var(--bds-background-brand-primary)',
+            color: 'var(--bds-text-inverse)',
             border: 'none',
-            borderRadius: 'var(--border-radius-md)',
-            fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--body-md)',
-            fontWeight: 'var(--font-weight-semibold)' as unknown as number,
+            borderRadius: 'var(--bds-border-radius-md)',
+            fontFamily: 'var(--bds-font-family-label)',
+            fontSize: 'var(--bds-body-md)',
+            fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number,
             cursor: 'pointer',
           }}
         >
@@ -134,14 +134,14 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
         </button>
         <button
           style={{
-            padding: 'var(--gap-md) var(--padding-sm)',
+            padding: 'var(--bds-gap-md) var(--bds-padding-sm)',
             backgroundColor: 'transparent',
-            color: 'var(--text-brand-primary)',
-            border: 'var(--border-width-lg) solid var(--border-brand-primary)',
-            borderRadius: 'var(--border-radius-md)',
-            fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--body-md)',
-            fontWeight: 'var(--font-weight-semibold)' as unknown as number,
+            color: 'var(--bds-text-brand-primary)',
+            border: 'var(--bds-border-width-lg) solid var(--bds-border-brand-primary)',
+            borderRadius: 'var(--bds-border-radius-md)',
+            fontFamily: 'var(--bds-font-family-label)',
+            fontSize: 'var(--bds-body-md)',
+            fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number,
             cursor: 'pointer',
           }}
         >
@@ -149,13 +149,13 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
         </button>
         <button
           style={{
-            padding: 'var(--gap-md) var(--padding-sm)',
-            backgroundColor: 'var(--surface-secondary)',
-            color: 'var(--text-primary)',
-            border: 'var(--border-width-lg) solid var(--border-secondary)',
-            borderRadius: 'var(--border-radius-md)',
-            fontFamily: 'var(--font-family-label)',
-            fontSize: 'var(--body-md)',
+            padding: 'var(--bds-gap-md) var(--bds-padding-sm)',
+            backgroundColor: 'var(--bds-surface-secondary)',
+            color: 'var(--bds-text-primary)',
+            border: 'var(--bds-border-width-lg) solid var(--bds-border-secondary)',
+            borderRadius: 'var(--bds-border-radius-md)',
+            fontFamily: 'var(--bds-font-family-label)',
+            fontSize: 'var(--bds-body-md)',
             cursor: 'pointer',
           }}
         >
@@ -165,7 +165,7 @@ function ThemeDemo({ currentTheme = 'brik' as ThemeNumber }) {
 
       {/* All Themes Grid */}
       <SectionTitle>All available themes</SectionTitle>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--gap-md)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--bds-gap-md)' }}>
         {(['brik', 'brik-dark', 'client-sim'] as ThemeNumber[]).map((num) => (
           <ThemePreview key={num} themeNum={num} isActive={num === currentTheme} />
         ))}
@@ -178,10 +178,10 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
     <h2
       style={{
-        fontFamily: 'var(--font-family-heading)',
-        fontSize: 'var(--heading-lg)',
-        marginBottom: 'var(--gap-lg)',
-        marginTop: 'var(--padding-lg)',
+        fontFamily: 'var(--bds-font-family-heading)',
+        fontSize: 'var(--bds-heading-lg)',
+        marginBottom: 'var(--bds-gap-lg)',
+        marginTop: 'var(--bds-padding-lg)',
       }}
     >
       {children}
@@ -193,29 +193,29 @@ function ThemeCard({ label, value }: { label: string; value: string }) {
   return (
     <div
       style={{
-        backgroundColor: 'var(--surface-secondary)',
-        padding: 'var(--padding-sm)',
-        borderRadius: 'var(--border-radius-md)',
-        border: 'var(--border-width-lg) solid var(--border-secondary)',
+        backgroundColor: 'var(--bds-surface-secondary)',
+        padding: 'var(--bds-padding-sm)',
+        borderRadius: 'var(--bds-border-radius-md)',
+        border: 'var(--bds-border-width-lg) solid var(--bds-border-secondary)',
       }}
     >
       <div
         style={{
-          fontSize: 'var(--label-sm)',
-          color: 'var(--text-muted)',
+          fontSize: 'var(--bds-label-sm)',
+          color: 'var(--bds-text-muted)',
           textTransform: 'uppercase',
           letterSpacing: '0.05em',
-          marginBottom: 'var(--gap-xs)',
-          fontFamily: 'var(--font-family-label)',
+          marginBottom: 'var(--bds-gap-xs)',
+          fontFamily: 'var(--bds-font-family-label)',
         }}
       >
         {label}
       </div>
       <div
         style={{
-          fontSize: 'var(--body-lg)',
-          fontWeight: 'var(--font-weight-semibold)' as unknown as number,
-          fontFamily: 'var(--font-family-heading)',
+          fontSize: 'var(--bds-body-lg)',
+          fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number,
+          fontFamily: 'var(--bds-font-family-heading)',
         }}
       >
         {value}
@@ -228,30 +228,30 @@ function ColorSwatch({ name, isText }: { name: string; isText?: boolean }) {
   const varName = `--${name}`;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xs)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xs)' }}>
       <div
         style={{
           width: '100%',
           height: '48px',
-          backgroundColor: isText ? 'var(--surface-primary)' : `var(${varName})`,
-          borderRadius: 'var(--border-radius-md)',
-          border: 'var(--border-width-lg) solid var(--border-secondary)',
+          backgroundColor: isText ? 'var(--bds-surface-primary)' : `var(${varName})`,
+          borderRadius: 'var(--bds-border-radius-md)',
+          border: 'var(--bds-border-width-lg) solid var(--bds-border-secondary)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
         {isText && (
-          <span style={{ color: `var(${varName})`, fontWeight: 'var(--font-weight-semibold)' as unknown as number, fontSize: 'var(--body-lg)' }}>
+          <span style={{ color: `var(${varName})`, fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number, fontSize: 'var(--bds-body-lg)' }}>
             Aa
           </span>
         )}
       </div>
       <span
         style={{
-          fontSize: 'var(--body-xs)',
-          color: 'var(--text-muted)',
-          fontFamily: 'var(--font-family-label)',
+          fontSize: 'var(--bds-body-xs)',
+          color: 'var(--bds-text-muted)',
+          fontFamily: 'var(--bds-font-family-label)',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
@@ -269,21 +269,21 @@ function ThemePreview({ themeNum, isActive }: { themeNum: ThemeNumber; isActive:
   return (
     <div
       style={{
-        padding: 'var(--gap-lg)',
-        borderRadius: 'var(--border-radius-md)',
-        border: isActive ? '2px solid var(--border-brand-primary)' : 'var(--border-width-lg) solid var(--border-secondary)',
-        backgroundColor: 'var(--surface-secondary)',
+        padding: 'var(--bds-gap-lg)',
+        borderRadius: 'var(--bds-border-radius-md)',
+        border: isActive ? '2px solid var(--bds-border-brand-primary)' : 'var(--bds-border-width-lg) solid var(--bds-border-secondary)',
+        backgroundColor: 'var(--bds-surface-secondary)',
         opacity: isActive ? 1 : 0.7,
       }}
     >
-      <div style={{ fontWeight: 'var(--font-weight-semibold)' as unknown as number, marginBottom: 'var(--gap-xs)', fontSize: 'var(--body-md)' }}>
+      <div style={{ fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number, marginBottom: 'var(--bds-gap-xs)', fontSize: 'var(--bds-body-md)' }}>
         {themeNum}: {meta.name}
       </div>
-      <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-muted)' }}>
+      <div style={{ fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-muted)' }}>
         {meta.isDark ? 'Dark' : 'Light'}
       </div>
       {isActive && (
-        <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-brand-primary)', fontWeight: 'var(--font-weight-semibold)' as unknown as number, marginTop: 'var(--gap-xs)' }}>
+        <div style={{ fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-brand-primary)', fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number, marginTop: 'var(--bds-gap-xs)' }}>
           Active
         </div>
       )}

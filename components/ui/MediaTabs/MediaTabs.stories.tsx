@@ -11,10 +11,10 @@ const MediaPlaceholder = ({ label, hue }: { label: string; hue: string }) => (
       display: 'grid',
       placeItems: 'center',
       background: hue,
-      fontFamily: 'var(--font-family-label)',
-      fontSize: 'var(--label-lg)',
-      fontWeight: 'var(--font-weight-semibold)',
-      color: 'var(--text-primary)',
+      fontFamily: 'var(--bds-font-family-label)',
+      fontSize: 'var(--bds-label-lg)',
+      fontWeight: 'var(--bds-font-weight-semibold)',
+      color: 'var(--bds-text-primary)',
     }}
   >
     {label}
@@ -27,21 +27,21 @@ const tabs = [
     label: 'Marketing',
     description:
       'Campaigns, content, and the site that carries them — shipped on a system your team can extend without us.',
-    media: <MediaPlaceholder label="Marketing" hue="var(--surface-secondary)" />,
+    media: <MediaPlaceholder label="Marketing" hue="var(--bds-surface-secondary)" />,
   },
   {
     id: 'back-office',
     label: 'Back office',
     description:
       'The unglamorous operations layer — intake, scheduling, billing — wired so the front of house can move.',
-    media: <MediaPlaceholder label="Back office" hue="var(--surface-muted)" />,
+    media: <MediaPlaceholder label="Back office" hue="var(--bds-surface-muted)" />,
   },
   {
     id: 'analytics',
     label: 'Analytics',
     description:
       'One place the numbers actually agree, so the next decision starts from evidence instead of a guess.',
-    media: <MediaPlaceholder label="Analytics" hue="var(--surface-accent)" />,
+    media: <MediaPlaceholder label="Analytics" hue="var(--bds-surface-accent)" />,
   },
 ];
 

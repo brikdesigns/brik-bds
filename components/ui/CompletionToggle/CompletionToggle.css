@@ -10,56 +10,56 @@
   ───────────────────────────────────────────────────────────────── */
 
   .bds-completion-toggle {
-    width: var(--size-600);
-    height: var(--size-600);
+    width: var(--bds-size-600);
+    height: var(--bds-size-600);
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--border-radius-circle);
-    border: var(--border-width-md) solid var(--border-input);
-    background-color: var(--background-input);
+    border-radius: var(--bds-border-radius-circle);
+    border: var(--bds-border-width-md) solid var(--bds-border-input);
+    background-color: var(--bds-background-input);
     cursor: pointer;
     padding: 0;
     transition:
-      background-color var(--duration-md) var(--ease-out),
-      border-color var(--duration-md) var(--ease-out);
+      background-color var(--bds-duration-md) var(--bds-ease-out),
+      border-color var(--bds-duration-md) var(--bds-ease-out);
   }
 
   .bds-completion-toggle:hover {
-    border-color: var(--border-primary);
+    border-color: var(--bds-border-primary);
   }
 
   /* Brand-accent hover — tints only the incomplete (unchecked) state so a
      checked toggle keeps its stable brand-primary fill on hover. */
   .bds-completion-toggle--accent-brand:not(.bds-completion-toggle--checked):hover {
-    border-color: var(--border-brand-primary);
-    background-color: var(--background-brand-secondary);
+    border-color: var(--bds-border-brand-primary);
+    background-color: var(--bds-background-brand-secondary);
   }
 
   .bds-completion-toggle:focus-visible {
-    outline: var(--border-width-lg) solid var(--state-focus, currentColor);
+    outline: var(--bds-border-width-lg) solid var(--bds-state-focus, currentColor);
     outline-offset: 2px;
   }
 
   .bds-completion-toggle--checked {
-    background-color: var(--background-brand-primary);
-    border-color: var(--background-brand-primary);
+    background-color: var(--bds-background-brand-primary);
+    border-color: var(--bds-background-brand-primary);
   }
 
   .bds-completion-toggle--disabled {
-    opacity: var(--state-disabled-opacity);
+    opacity: var(--bds-state-disabled-opacity);
     cursor: not-allowed;
   }
 
   /* CSS-only checkmark — no icon font dependency */
   .bds-completion-toggle__icon {
     display: block;
-    border-left: var(--border-width-md) solid var(--text-on-color-dark);
-    border-bottom: var(--border-width-md) solid var(--text-on-color-dark);
+    border-left: var(--bds-border-width-md) solid var(--bds-text-on-color-dark);
+    border-bottom: var(--bds-border-width-md) solid var(--bds-text-on-color-dark);
     transform: rotate(-45deg) translate(1px, -1px);
     --bds-completion-toggle-check-length: 10px; /* CSS checkmark leg; decorative geometry, no registry rung (#2138) */
     width: var(--bds-completion-toggle-check-length);
-    height: var(--size-150);
+    height: var(--bds-size-150);
   }
 }

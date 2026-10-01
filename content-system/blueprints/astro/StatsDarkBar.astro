@@ -21,10 +21,10 @@
  *
  * CSS custom properties:
  *   --bds-stats-dark-bar-padding-y
- *   --bds-stats-dark-bar-bg        (default: var(--surface-inverse))
- *   --bds-stats-dark-bar-value-color   (default: var(--text-inverse))
- *   --bds-stats-dark-bar-label-color   (default: var(--text-inverse))
- *   --bds-stats-dark-bar-divider       (default: var(--border-secondary))
+ *   --bds-stats-dark-bar-bg        (default: var(--bds-surface-inverse))
+ *   --bds-stats-dark-bar-value-color   (default: var(--bds-text-inverse))
+ *   --bds-stats-dark-bar-label-color   (default: var(--bds-text-inverse))
+ *   --bds-stats-dark-bar-divider       (default: var(--bds-border-secondary))
  *
  * a11y: semantic list (ul/li). If section.heading present, wired via
  * aria-labelledby; if absent, aria-label fallback. Numbers are
@@ -77,17 +77,17 @@ const motion = section.contentMotion ?? 'none';
 
 <style>
   .bp-stats-dark-bar {
-    background: var(--bds-stats-dark-bar-bg, var(--surface-inverse, var(--color-grayscale-black)));
+    background: var(--bds-stats-dark-bar-bg, var(--bds-surface-inverse, var(--bds-color-grayscale-black)));
     padding-block: var(
       --bds-stats-dark-bar-padding-y,
-      clamp(var(--padding-lg), 5vw, var(--padding-xl))
+      clamp(var(--bds-padding-lg), 5vw, var(--bds-padding-xl))
     );
   }
 
   .bp-stats-dark-bar__container {
-    max-width: var(--content-width-xl);
+    max-width: var(--bds-content-width-xl);
     margin-inline: auto;
-    padding-inline: var(--padding-xl); /* bds-lint-ignore — legacy bp-* inset predates --gutter-page; realigning 32→24px is a visual change gated on Chromatic quota (#771), same deferral as #1630 */
+    padding-inline: var(--bds-padding-xl); /* bds-lint-ignore — legacy bp-* inset predates --gutter-page; realigning 32→24px is a visual change gated on Chromatic quota (#771), same deferral as #1630 */
   }
 
   .bp-stats-dark-bar__list {
@@ -96,7 +96,7 @@ const motion = section.contentMotion ?? 'none';
     padding: 0;
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--gap-xl);
+    gap: var(--bds-gap-xl);
   }
 
   @media (min-width: 640px) {
@@ -108,19 +108,19 @@ const motion = section.contentMotion ?? 'none';
   .bp-stats-dark-bar__item {
     display: flex;
     flex-direction: column;
-    /* Value↔label is a tight text pairing: --gap-sm. Not --gap-tiny, which
+    /* Value↔label is a tight text pairing: --bds-gap-sm. Not --bds-gap-tiny, which
        resolves to 0px outside default spacing mode (ADR-023 §3). */
-    gap: var(--gap-sm);
-    padding-block: var(--padding-sm);
-    border-left: 1px solid var(--bds-stats-dark-bar-divider, var(--border-secondary));
-    padding-left: var(--padding-md);
+    gap: var(--bds-gap-sm);
+    padding-block: var(--bds-padding-sm);
+    border-left: 1px solid var(--bds-stats-dark-bar-divider, var(--bds-border-secondary));
+    padding-left: var(--bds-padding-md);
   }
 
   @media (max-width: 639px) {
     .bp-stats-dark-bar__item {
       border-left: none;
-      border-top: 1px solid var(--bds-stats-dark-bar-divider, var(--border-secondary));
-      padding-top: var(--padding-md);
+      border-top: 1px solid var(--bds-stats-dark-bar-divider, var(--bds-border-secondary));
+      padding-top: var(--bds-padding-md);
       padding-left: 0;
     }
     .bp-stats-dark-bar__item:first-child {
@@ -130,18 +130,18 @@ const motion = section.contentMotion ?? 'none';
   }
 
   .bp-stats-dark-bar__value {
-    font-family: var(--font-family-display, var(--font-family-heading));
-    font-size: clamp(var(--heading-xl), 4vw, var(--heading-huge));
-    font-weight: var(--font-weight-semibold);
-    line-height: var(--font-line-height-tight);
-    color: var(--bds-stats-dark-bar-value-color, var(--text-inverse, var(--color-grayscale-white)));
+    font-family: var(--bds-font-family-display, var(--bds-font-family-heading));
+    font-size: clamp(var(--bds-heading-xl), 4vw, var(--bds-heading-huge));
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-stats-dark-bar-value-color, var(--bds-text-inverse, var(--bds-color-grayscale-white)));
   }
 
   .bp-stats-dark-bar__label {
-    font-family: var(--font-family-label);
-    font-size: var(--label-lg);
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-lg);
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--bds-stats-dark-bar-label-color, var(--text-inverse, var(--color-grayscale-100)));
+    color: var(--bds-stats-dark-bar-label-color, var(--bds-text-inverse, var(--bds-color-grayscale-100)));
   }
 </style>

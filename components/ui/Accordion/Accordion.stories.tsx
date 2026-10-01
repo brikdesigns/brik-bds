@@ -80,9 +80,9 @@ export const WithRichContent: Story = {
         id: 'rich-1',
         title: 'Getting started',
         content: (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)' }}>
             <p style={{ margin: 0 }}>Follow these steps to get started with our platform:</p>
-            <ol style={{ margin: 0, paddingLeft: 'var(--padding-xl)' }}>
+            <ol style={{ margin: 0, paddingLeft: 'var(--bds-padding-xl)' }}>
               <li>Create your account</li>
               <li>Complete the onboarding questionnaire</li>
               <li>Schedule your kickoff call</li>
@@ -95,7 +95,7 @@ export const WithRichContent: Story = {
         id: 'rich-2',
         title: 'Billing and payments',
         content: (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-lg)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)' }}>
             <p style={{ margin: 0 }}>We accept all major credit cards, ACH transfers, and invoicing for enterprise clients.</p>
             <p style={{ margin: 0 }}>Payments are due within 15 days of invoice date.</p>
           </div>
@@ -126,14 +126,14 @@ export const WithTriggerSlots: Story = {
         id: 'belief-1',
         title: 'Design is a business decision',
         subtitle: 'Why every pixel earns its place',
-        action: <span style={{ fontSize: 'var(--label-lg)', fontWeight: 'var(--font-weight-bold)', color: 'var(--text-muted)' }}>01</span>,
+        action: <span style={{ fontSize: 'var(--bds-label-lg)', fontWeight: 'var(--bds-font-weight-bold)', color: 'var(--bds-text-muted)' }}>01</span>,
         content: 'We treat design as leverage on outcomes, not decoration — every choice ties back to what the business needs to move.',
       },
       {
         id: 'belief-2',
         title: 'Systems outlast screens',
         subtitle: 'Tokens and primitives over one-off layouts',
-        action: <span style={{ fontSize: 'var(--label-lg)', fontWeight: 'var(--font-weight-bold)', color: 'var(--text-muted)' }}>02</span>,
+        action: <span style={{ fontSize: 'var(--bds-label-lg)', fontWeight: 'var(--bds-font-weight-bold)', color: 'var(--bds-text-muted)' }}>02</span>,
         content: 'A design system compounds: the second page is cheaper than the first, and the tenth is nearly free.',
       },
       {

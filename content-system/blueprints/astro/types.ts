@@ -336,8 +336,8 @@ export interface BlueprintSection {
     readonly hasOptions?: boolean;
     /**
      * Service-line slug for `data-service-line` scope binding. Re-binds
-     * canonical brand tokens (`--brand-primary`, `--background-brand-primary`,
-     * `--text-brand-primary`, `--border-brand-primary`) within the rendered
+     * canonical brand tokens (`--brand-primary`, `--bds-background-brand-primary`,
+     * `--bds-text-brand-primary`, `--bds-border-brand-primary`) within the rendered
      * card so each card can carry its own service-line color. Used by
      * `feature_grid`. The consumer site MUST define the
      * `[data-service-line='X'] { … }` cascade rules per the BDS scope-binding

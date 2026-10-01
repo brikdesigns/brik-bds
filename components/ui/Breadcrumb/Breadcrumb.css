@@ -7,7 +7,7 @@
      clips the terminal crumb (#468). Below the tablet breakpoint the
      intermediate crumbs collapse instead — see the media query below. */
   flex-wrap: wrap;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   align-items: center;
   min-width: 0;
 }
@@ -21,22 +21,22 @@
 .bds-breadcrumb__item {
   display: flex;
   align-items: center;
-  gap: var(--gap-md);
+  gap: var(--bds-gap-md);
   min-width: 0;
 }
 
 /* ─── Link ───────────────────────────────────────────────────── */
 
 .bds-breadcrumb__link {
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  font-weight: var(--font-weight-semibold);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-semibold);
   /* `snug`, not `tight`: the ellipsis below needs `overflow: hidden`, and a
      `tight` (110%) line box is shorter than the glyph extent, so it clips
      descenders (g/y/p/q). `snug` (125%) is the shortest line box that still
      contains them (#2519). */
-  line-height: var(--font-line-height-snug);
-  color: var(--text-brand-primary);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-brand-primary);
   text-decoration: none;
   text-transform: capitalize;
   cursor: pointer;
@@ -51,16 +51,16 @@
 /* ─── Current page ───────────────────────────────────────────── */
 
 .bds-breadcrumb__current {
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
   /* Regular weight (links are semi-bold) so the current page reads as the
      recessive "you are here" — a weight-based hierarchy that holds on any
-     surface, including the [data-audience] tints below where --text-secondary
+     surface, including the [data-audience] tints below where --bds-text-secondary
      collapses onto the link colour and contrast can't carry the distinction. */
-  font-weight: var(--font-weight-regular);
+  font-weight: var(--bds-font-weight-regular);
   /* `snug` for the same descender-clip reason as `__link` above (#2519). */
-  line-height: var(--font-line-height-snug);
-  color: var(--text-secondary);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-secondary);
   text-transform: capitalize;
   cursor: default;
   min-width: 0;
@@ -72,11 +72,11 @@
 /* ─── Separator ──────────────────────────────────────────────── */
 
 .bds-breadcrumb__separator {
-  font-family: var(--font-family-label);
-  font-size: var(--label-md);
-  color: var(--text-muted);
-  line-height: var(--font-line-height-tight);
-  padding: 0 var(--padding-tiny);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-md);
+  color: var(--bds-text-muted);
+  line-height: var(--bds-font-line-height-tight);
+  padding: 0 var(--bds-padding-tiny);
   flex-shrink: 0;
 }
 
@@ -89,15 +89,15 @@
 }
 
 .bds-breadcrumb__ellipsis {
-  font-family: var(--font-family-label);
-  font-size: var(--label-sm);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--font-line-height-tight);
-  color: var(--text-secondary);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-secondary);
 }
 
 /* ─── Narrow viewports — collapse the middle of the trail ────────
- * `Home / … / Current`. 767px is one below --breakpoint-tablet (768px);
+ * `Home / … / Current`. 767px is one below --bds-breakpoint-tablet (768px);
  * CSS custom properties can't be used inside @media rules (tokens/index.ts).
  * The intermediate crumbs are visually hidden rather than `display: none`,
  * so screen-reader users keep the full trail — only the sighted mobile
@@ -122,7 +122,7 @@
 }
 
 /* ─── Audience cascade — service-line tinting ────────────────────
- * Re-binds canonical --text-secondary / --text-muted inside each
+ * Re-binds canonical --bds-text-secondary / --bds-text-muted inside each
  * [data-audience='X'] subtree, scoped to .bds-breadcrumb only so
  * other secondary text on the page is unaffected.
  *
@@ -131,41 +131,41 @@
  * to the back-office hue (underlying tokens are *-back-office-*).
  * Same mapping as HeroSplitImageCardOverlay.
  *
- * Pattern: rebind canonical generic tokens (--text-secondary,
- * --text-muted) — never introduce scoped hierarchy modifiers like
+ * Pattern: rebind canonical generic tokens (--bds-text-secondary,
+ * --bds-text-muted) — never introduce scoped hierarchy modifiers like
  * --text-service-X-muted (forbidden by BDS naming canon: scoped
  * tokens carry context modifiers only, not hierarchy). */
 
 :is([data-audience='brand'], [data-service-line='brand']) .bds-breadcrumb {
-  --text-secondary: var(--text-service-brand-on-light);
-  --text-muted: var(--text-service-brand-on-light);
+  --bds-text-secondary: var(--bds-text-service-brand-on-light);
+  --bds-text-muted: var(--bds-text-service-brand-on-light);
 }
 
 :is([data-audience='marketing'], [data-service-line='marketing']) .bds-breadcrumb {
-  --text-secondary: var(--text-service-marketing-on-light);
-  --text-muted: var(--text-service-marketing-on-light);
+  --bds-text-secondary: var(--bds-text-service-marketing-on-light);
+  --bds-text-muted: var(--bds-text-service-marketing-on-light);
 }
 
 :is([data-audience='information'], [data-service-line='information']) .bds-breadcrumb {
-  --text-secondary: var(--text-service-information-on-light);
-  --text-muted: var(--text-service-information-on-light);
+  --bds-text-secondary: var(--bds-text-service-information-on-light);
+  --bds-text-muted: var(--bds-text-service-information-on-light);
 }
 
 :is([data-audience='product'], [data-service-line='product']) .bds-breadcrumb {
-  --text-secondary: var(--text-service-product-on-light);
-  --text-muted: var(--text-service-product-on-light);
+  --bds-text-secondary: var(--bds-text-service-product-on-light);
+  --bds-text-muted: var(--bds-text-service-product-on-light);
 }
 
 :is([data-audience='back-office'], [data-service-line='back-office']) .bds-breadcrumb {
-  --text-secondary: var(--text-service-back-office-on-light);
-  --text-muted: var(--text-service-back-office-on-light);
+  --bds-text-secondary: var(--bds-text-service-back-office-on-light);
+  --bds-text-muted: var(--bds-text-service-back-office-on-light);
 }
 
 /* @deprecated alias of [data-audience='back-office'] — remove with the
    `service` ServiceLine member in a future major. */
 :is([data-audience='service'], [data-service-line='service']) .bds-breadcrumb {
-  --text-secondary: var(--text-service-back-office-on-light);
-  --text-muted: var(--text-service-back-office-on-light);
+  --bds-text-secondary: var(--bds-text-service-back-office-on-light);
+  --bds-text-muted: var(--bds-text-service-back-office-on-light);
 }
 
 /* ─── Dark mode: flip the on-dark companions ONLY on the inverse pricing-card band ──
@@ -174,40 +174,40 @@
  * (`.service-surface` — e.g. the service-LINE hero, brikdesigns /services/brand).
  * But inside `.bds-hero--with-pricing-card` the surface flips to the {hue} inverse
  * (dark) companion in dark mode, so those on-light tokens collapse onto it — the
- * current crumb, which rides --text-secondary, vanishes (1:1; brikdesigns#688).
+ * current crumb, which rides --bds-text-secondary, vanishes (1:1; brikdesigns#688).
  * Scope the on-dark flip to that pricing-card band ONLY — the exact scope where
  * HeroSplitImageCardOverlay flips the headline/link cascade — so the current crumb
  * clears AA on the dark band (6.89–9.06:1) WITHOUT inverting the light-tint pages.
  * A bare [data-audience] flip regressed /services/brand to 1:1 (0.122.2). */
 :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='brand'], [data-service-line='brand']) .bds-breadcrumb {
-  --text-secondary: var(--text-service-brand-on-dark);
-  --text-muted: var(--text-service-brand-on-dark);
+  --bds-text-secondary: var(--bds-text-service-brand-on-dark);
+  --bds-text-muted: var(--bds-text-service-brand-on-dark);
 }
 
 :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='marketing'], [data-service-line='marketing']) .bds-breadcrumb {
-  --text-secondary: var(--text-service-marketing-on-dark);
-  --text-muted: var(--text-service-marketing-on-dark);
+  --bds-text-secondary: var(--bds-text-service-marketing-on-dark);
+  --bds-text-muted: var(--bds-text-service-marketing-on-dark);
 }
 
 :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='information'], [data-service-line='information']) .bds-breadcrumb {
-  --text-secondary: var(--text-service-information-on-dark);
-  --text-muted: var(--text-service-information-on-dark);
+  --bds-text-secondary: var(--bds-text-service-information-on-dark);
+  --bds-text-muted: var(--bds-text-service-information-on-dark);
 }
 
 :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='product'], [data-service-line='product']) .bds-breadcrumb {
-  --text-secondary: var(--text-service-product-on-dark);
-  --text-muted: var(--text-service-product-on-dark);
+  --bds-text-secondary: var(--bds-text-service-product-on-dark);
+  --bds-text-muted: var(--bds-text-service-product-on-dark);
 }
 
 :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='back-office'], [data-service-line='back-office']) .bds-breadcrumb {
-  --text-secondary: var(--text-service-back-office-on-dark);
-  --text-muted: var(--text-service-back-office-on-dark);
+  --bds-text-secondary: var(--bds-text-service-back-office-on-dark);
+  --bds-text-muted: var(--bds-text-service-back-office-on-dark);
 }
 
 /* @deprecated alias of [data-audience='back-office'] — see above. */
 :root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='service'], [data-service-line='service']) .bds-breadcrumb {
-  --text-secondary: var(--text-service-back-office-on-dark);
-  --text-muted: var(--text-service-back-office-on-dark);
+  --bds-text-secondary: var(--bds-text-service-back-office-on-dark);
+  --bds-text-muted: var(--bds-text-service-back-office-on-dark);
 }
 
 /* ─── Switcher — sibling-record caret + menu ─────────────────────
@@ -224,12 +224,12 @@
 }
 
 .bds-breadcrumb__switch-menu {
-  top: calc(100% + var(--gap-xs));
+  top: calc(100% + var(--bds-gap-xs));
   left: 0;
 }
 
 .bds-breadcrumb__switch-caret {
-  transition: transform var(--duration-sm) var(--ease-out);
+  transition: transform var(--bds-duration-sm) var(--bds-ease-out);
 }
 
 .bds-breadcrumb__switch [aria-expanded='true'] .bds-breadcrumb__switch-caret {

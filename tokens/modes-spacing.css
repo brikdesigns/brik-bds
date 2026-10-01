@@ -17,55 +17,55 @@
 /* ─── Compact ────────────────────────────────────────── */
 [data-mode-spacing="compact"] {
   /* padding */
-  --padding-huge: 32px;
-  --padding-lg: 16px;
-  --padding-md: 12px;
-  --padding-sm: 8px;
-  --padding-tiny: 2px;
-  --padding-xl: 24px;
-  --padding-xs: 4px;
+  --bds-padding-huge: 32px;
+  --bds-padding-lg: 16px;
+  --bds-padding-md: 12px;
+  --bds-padding-sm: 8px;
+  --bds-padding-tiny: 2px;
+  --bds-padding-xl: 24px;
+  --bds-padding-xs: 4px;
   /* gap */
-  --gap-huge: 24px;
-  --gap-lg: 12px;
-  --gap-sm: 4px;
-  --gap-tiny: 1px;
-  --gap-xl: 16px;
-  --gap-xs: 2px;
+  --bds-gap-huge: 24px;
+  --bds-gap-lg: 12px;
+  --bds-gap-sm: 4px;
+  --bds-gap-tiny: 1px;
+  --bds-gap-xl: 16px;
+  --bds-gap-xs: 2px;
 }
 
 /* ─── Comfortable ────────────────────────────────────────── */
 [data-mode-spacing="comfortable"] {
   /* padding */
-  --padding-huge: 80px;
-  --padding-lg: 32px;
-  --padding-md: 20px;
-  --padding-sm: 16px;
-  --padding-xl: 40px;
-  --padding-xs: 12px;
+  --bds-padding-huge: 80px;
+  --bds-padding-lg: 32px;
+  --bds-padding-md: 20px;
+  --bds-padding-sm: 16px;
+  --bds-padding-xl: 40px;
+  --bds-padding-xs: 12px;
   /* gap */
-  --gap-huge: 64px;
-  --gap-lg: 40px;
-  --gap-md: 32px;
-  --gap-sm: 8px;
-  --gap-xl: 48px;
+  --bds-gap-huge: 64px;
+  --bds-gap-lg: 40px;
+  --bds-gap-md: 32px;
+  --bds-gap-sm: 8px;
+  --bds-gap-xl: 48px;
 }
 
 /* ─── Spacious ────────────────────────────────────────── */
 [data-mode-spacing="spacious"] {
   /* padding */
-  --padding-huge: 128px;
-  --padding-lg: 48px;
-  --padding-md: 28px;
-  --padding-sm: 24px;
-  --padding-tiny: 12px;
-  --padding-xl: 80px;
-  --padding-xs: 16px;
+  --bds-padding-huge: 128px;
+  --bds-padding-lg: 48px;
+  --bds-padding-md: 28px;
+  --bds-padding-sm: 24px;
+  --bds-padding-tiny: 12px;
+  --bds-padding-xl: 80px;
+  --bds-padding-xs: 16px;
   /* gap */
-  --gap-huge: 128px;
-  --gap-lg: 56px;
-  --gap-md: 48px;
-  --gap-sm: 16px;
-  --gap-tiny: 4px;
-  --gap-xl: 104px;
-  --gap-xs: 8px;
+  --bds-gap-huge: 128px;
+  --bds-gap-lg: 56px;
+  --bds-gap-md: 48px;
+  --bds-gap-sm: 16px;
+  --bds-gap-tiny: 4px;
+  --bds-gap-xl: 104px;
+  --bds-gap-xs: 8px;
 }

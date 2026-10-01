@@ -53,20 +53,20 @@ export function AtmospherePreview({ atmosphere, entry, cssHref, themeNumber = 'b
   }, [atmosphere, cssHref, themeNumber]);
 
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 40px)' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 40px)' }}>
       <div
         style={{
           display: 'grid',
           gridTemplateColumns: '1.6fr 1fr',
-          gap: 'var(--gap-lg, 20px)',
-          marginBottom: 'var(--gap-md, 12px)',
+          gap: 'var(--bds-gap-lg, 20px)',
+          marginBottom: 'var(--bds-gap-md, 12px)',
           alignItems: 'stretch',
         }}
       >
         <div
           style={{
-            borderRadius: 'var(--border-radius-lg, 12px)',
-            border: '1px solid var(--border-primary, #333)',
+            borderRadius: 'var(--bds-border-radius-lg, 12px)',
+            border: '1px solid var(--bds-border-primary, #333)',
             overflow: 'hidden',
             minHeight: 380,
           }}
@@ -148,68 +148,68 @@ function buildPreviewHTML(atmosphere: Atmosphere, cssHref: string, themeNumber: 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body {
-    font-family: var(--font-family-body, system-ui, sans-serif);
-    color: var(--text-primary);
-    background: var(--background-primary);
+    font-family: var(--bds-font-family-body, system-ui, sans-serif);
+    color: var(--bds-text-primary);
+    background: var(--bds-background-primary);
     overflow: hidden;
   }
   .preview-root {
-    padding: var(--padding-lg, 16px);
+    padding: var(--bds-padding-lg, 16px);
     height: 100%;
     display: flex;
     flex-direction: column;
-    gap: var(--gap-md, 12px);
+    gap: var(--bds-gap-md, 12px);
   }
   .preview-hero {
     position: relative;
-    border-radius: var(--border-radius-md, 8px);
-    padding: var(--padding-lg, 20px);
+    border-radius: var(--bds-border-radius-md, 8px);
+    padding: var(--bds-padding-lg, 20px);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     min-height: 140px;
-    background: var(--surface-primary);
-    border: 1px solid var(--border-primary);
+    background: var(--bds-surface-primary);
+    border: 1px solid var(--bds-border-primary);
   }
   .preview-eyebrow {
-    font-family: var(--font-family-label, system-ui, sans-serif);
+    font-family: var(--bds-font-family-label, system-ui, sans-serif);
     font-size: 9px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--text-brand-primary);
-    margin-bottom: var(--gap-xs, 8px);
+    color: var(--bds-text-brand-primary);
+    margin-bottom: var(--bds-gap-xs, 8px);
   }
   .preview-h1 {
-    font-family: var(--font-family-heading, system-ui, sans-serif);
+    font-family: var(--bds-font-family-heading, system-ui, sans-serif);
     font-size: 22px;
     line-height: 1.15;
     font-weight: 400;
     letter-spacing: -0.01em;
-    color: var(--text-primary);
+    color: var(--bds-text-primary);
     max-width: 22ch;
   }
   .preview-h1 em {
-    color: var(--text-brand-primary);
+    color: var(--bds-text-brand-primary);
     font-style: italic;
   }
   .preview-sub {
-    margin-top: var(--gap-xs, 8px);
+    margin-top: var(--bds-gap-xs, 8px);
     font-size: 12px;
-    color: var(--text-secondary);
-    font-family: var(--font-family-body, system-ui, sans-serif);
+    color: var(--bds-text-secondary);
+    font-family: var(--bds-font-family-body, system-ui, sans-serif);
   }
   .preview-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: var(--gap-sm, 12px);
+    gap: var(--bds-gap-sm, 12px);
     flex: 1;
   }
   .preview-card {
     position: relative;
-    border-radius: var(--border-radius-sm, 6px);
-    padding: var(--padding-md, 14px);
-    border: 1px solid var(--border-muted);
-    background: var(--surface-secondary);
+    border-radius: var(--bds-border-radius-sm, 6px);
+    padding: var(--bds-padding-md, 14px);
+    border: 1px solid var(--bds-border-muted);
+    background: var(--bds-surface-secondary);
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -218,29 +218,29 @@ function buildPreviewHTML(atmosphere: Atmosphere, cssHref: string, themeNumber: 
     width: 22px;
     height: 22px;
     border-radius: var(--border-radius-xs, 4px);
-    border: 1px solid var(--border-brand-primary);
-    margin-bottom: var(--gap-xs, 8px);
+    border: 1px solid var(--bds-border-brand-primary);
+    margin-bottom: var(--bds-gap-xs, 8px);
   }
   .preview-card h3 {
-    font-family: var(--font-family-heading, system-ui, sans-serif);
+    font-family: var(--bds-font-family-heading, system-ui, sans-serif);
     font-size: 12px;
     font-weight: 500;
-    color: var(--text-primary);
+    color: var(--bds-text-primary);
     margin-bottom: 4px;
   }
   .preview-card p {
-    font-family: var(--font-family-body, system-ui, sans-serif);
+    font-family: var(--bds-font-family-body, system-ui, sans-serif);
     font-size: 10px;
     line-height: 1.4;
-    color: var(--text-secondary);
+    color: var(--bds-text-secondary);
   }
   .preview-cta {
-    border-radius: var(--border-radius-sm, 6px);
+    border-radius: var(--bds-border-radius-sm, 6px);
     padding: 12px 16px;
     text-align: center;
-    background: var(--background-brand-primary);
-    color: var(--text-inverse, #fff);
-    font-family: var(--font-family-label, system-ui, sans-serif);
+    background: var(--bds-background-brand-primary);
+    color: var(--bds-text-inverse, #fff);
+    font-family: var(--bds-font-family-label, system-ui, sans-serif);
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.1em;

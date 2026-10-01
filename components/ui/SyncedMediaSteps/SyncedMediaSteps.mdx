@@ -8,18 +8,18 @@ import { SyncedMediaSteps } from './SyncedMediaSteps';
     demo, never a story export. */}
 
 export const DemoMedia = ({ label, hue }) => (
-  <div style={{ display: 'grid', placeItems: 'center', background: hue, fontFamily: 'var(--font-family-label)', color: 'var(--text-primary)' }}>
+  <div style={{ display: 'grid', placeItems: 'center', background: hue, fontFamily: 'var(--bds-font-family-label)', color: 'var(--bds-text-primary)' }}>
     {label}
   </div>
 );
 
 export const demoSteps = [
-  { id: 'scope', title: 'Scope the work', description: 'Map the surfaces and agree what ships first.', media: <DemoMedia label="Scope" hue="var(--surface-secondary)" /> },
-  { id: 'design', title: 'Design the system', description: 'Tokens, then components, then pages.', media: <DemoMedia label="Design" hue="var(--surface-muted)" /> },
+  { id: 'scope', title: 'Scope the work', description: 'Map the surfaces and agree what ships first.', media: <DemoMedia label="Scope" hue="var(--bds-surface-secondary)" /> },
+  { id: 'design', title: 'Design the system', description: 'Tokens, then components, then pages.', media: <DemoMedia label="Design" hue="var(--bds-surface-muted)" /> },
 ];
 
 export const MediaPositionDemo = () => (
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--gap-xl)' }}>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xl)' }}>
     <SyncedMediaSteps steps={demoSteps} mediaPosition="end" autoplay={false} />
     <SyncedMediaSteps steps={demoSteps} mediaPosition="start" autoplay={false} />
   </div>
@@ -55,7 +55,7 @@ An ordered step sequence — a process, a how-it-works band — where the active
 
 | Variable | Default | Set by |
 |---|---|---|
-| `--bds-synced-media-steps-interval` | `var(--duration-autoplay)` (10s) | `interval` prop |
+| `--bds-synced-media-steps-interval` | `var(--bds-duration-autoplay)` (10s) | `interval` prop |
 | `--bds-synced-media-steps-media-aspect` | `4 / 3` | CSS only |
 
 ```tsx
