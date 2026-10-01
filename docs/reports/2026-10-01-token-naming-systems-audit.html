@@ -24,6 +24,8 @@
 
 <p><strong>PROPOSED — needs operator ratification.</strong> The recommended grammar in §4 is a proposal. Nothing in canon changes until the operator ratifies it.</p>
 
+<p><strong>Superseded 2026-10-01: the verdict's second paragraph and §4.</strong> The operator rejected ID-inside-<code>{family}</code> and asked for a leading ID on every tier. The decision and its operator quotes are now in <a href="../adrs/ADR-043-system-id-token-prefix.md">ADR-043</a> (Project brik-bds#2668). The parse collision this report names (<code>--bds-color-…</code> read as a component) is handled there by reserving the first body segment (ADR-043 §5).</p>
+
 <blockquote>OPERATOR SAID 2026-10-01 (chat, /resume 2655 brikdesigns/brik-bds): "We're needing to add a new layer for "ID" to identify the system for clearer naming. This "ID" would be at the start of the design token (i.e. bds-;vale-;birdwell-). We're very concerned for several reasons - 1). agents were suggesting an updated formula outside of documented formula introducing a whole new naming system for each token segment label in our naming formula, 2). our documentation is outdated, 3). is our LLM/RAG even being used for design system data retrieval?"</blockquote>
 
 <div class="verdict">
