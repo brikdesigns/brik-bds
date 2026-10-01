@@ -4,7 +4,7 @@
  *
  * BDS disables a control one of two ways (ADR-028):
  *
- *   token swap — repaint the control with --bds-background-disabled / --bds-text-disabled
+ *   token swap — repaint the control with --background-disabled / --text-disabled
  *   opacity fade — keep the enabled colours and fade the whole control
  *
  * The token swap is measurable by the normal contrast gate, because both sides
@@ -158,14 +158,14 @@ const CASES = [
   { group: 'fill-bearing (already fades)', label: 'Chip secondary', fill: '--bds-background-secondary', text: '--bds-text-primary' },
   // The same fill with the on-color foreground its two siblings already moved
   // to. Tag.css:34-43 and SegmentedControl.css:10-13 both pair
-  // `--bds-background-secondary` with `--bds-text-on-color-light` precisely because
-  // `--bds-text-primary` fails dark AA on it; Chip is the last holdout (#1701).
+  // `--background-secondary` with `--text-on-color-light` precisely because
+  // `--text-primary` fails dark AA on it; Chip is the last holdout (#1701).
   { group: 'fill-bearing (already fades)', label: 'Chip secondary → on-color', fill: '--bds-background-secondary', text: '--bds-text-on-color-light' },
   { group: 'fill-bearing (already fades)', label: 'Tag solid', fill: '--bds-background-secondary', text: '--bds-text-on-color-light' },
   { group: 'fill-bearing (already fades)', label: 'Tag muted', fill: '--bds-background-status-neutral', text: '--bds-text-status-neutral' },
   // Only the ITEM carries :disabled here, never the track — so these fade
   // toward the track, not the page. An inactive item is transparent (fill-less
-  // against the track); an active one paints the `--bds-background-primary` pill.
+  // against the track); an active one paints the `--background-primary` pill.
   { group: 'fill-bearing (already fades)', label: 'SegmentedControl item, inactive', fill: null, backdrop: '--bds-background-secondary', text: '--bds-text-on-color-light' },
   { group: 'fill-bearing (already fades)', label: 'SegmentedControl item, active', fill: '--bds-background-primary', backdrop: '--bds-background-secondary', text: '--bds-text-primary' },
   // ── fill-less (the cohort the fade suits) ──

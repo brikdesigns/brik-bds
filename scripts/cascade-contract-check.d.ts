@@ -50,10 +50,10 @@ export function scanCascadeContract(opts: ScanOptions): ScanResult;
 /** Throw on the first violation (vitest-friendly). */
 export function assertCascadeContract(css: string, opts?: Omit<ScanOptions, 'css'>): void;
 
-/** Family of a font-size token (`--bds-heading-lg` → `'heading'`), or null. */
+/** Family of a font-size token (`--heading-lg` → `'heading'`), or null. */
 export function familyOfSizeToken(token: string): string | null;
 
-/** Family of a `--font-family-*` token (`--bds-font-family-display` → `'display'`), or null. */
+/** Family of a `--font-family-*` token (`--font-family-display` → `'display'`), or null. */
 export function familyOfFontFamilyToken(token: string): string | null;
 
 /** Scale families a consumer may never redefine. */

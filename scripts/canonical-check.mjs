@@ -20,9 +20,13 @@
  *                                       definitions (runtime mode — strict)
  *   canonical-check --allowlist <file>  Override allowlist source
  *                                       (default: dist/tokens.css)
- *   canonical-check --no-bridge         Ignore the compat-alias section of the allowlist, so
-                                      a bare pre-ADR-043 name (--text-primary) is a violation
-  canonical-check --prefixes <list>   Comma-separated prefixes to scan
+ *   canonical-check --no-bridge         Ignore the compat-alias section of the
+ *                                       allowlist, so a bare pre-ADR-043 name
+ *                                       (--text-primary) is a violation
+ *   canonical-check --bridge-paths <re> With --no-bridge: files matching these
+ *                                       comma-separated regexes may still read
+ *                                       compat-alias names
+ *   canonical-check --prefixes <list>   Comma-separated prefixes to scan
  *                                       (default: text,surface,background,border,color)
  *   canonical-check --exempt <patterns> Comma-separated regex of tokens to
  *                                       skip (e.g. '^--border-(radius|width)')
@@ -292,6 +296,10 @@ export function sourceScan(opts) {
     extensions = DEFAULT_SCAN_EXTENSIONS,
     excludePathPatterns = DEFAULT_EXCLUDE_PATH_PATTERNS,
     exemptTokens = DEFAULT_EXEMPT_PATTERNS,
+    // Files matching `bridgePaths` may also read `bridgeAllowlist` names — the
+    // DevBar widgets, which ship to consumers still on bare names (#2678).
+    bridgePaths = [],
+    bridgeAllowlist = null,
   } = opts;
 
   if (!allowlist || allowlist.size === 0) {
@@ -307,9 +315,11 @@ export function sourceScan(opts) {
   for (const file of files) {
     const text = readFileSync(file, 'utf8');
     const refs = extractTokenReferences(text, prefixes);
+    const bridged = bridgeAllowlist && bridgePaths.some((re) => re.test(file));
     for (const token of refs) {
       if (isTokenExempt(token, exemptTokens)) continue;
       if (allowlist.has(token)) continue;
+      if (bridged && bridgeAllowlist.has(token)) continue;
       if (!tokenToFiles.has(token)) tokenToFiles.set(token, []);
       tokenToFiles.get(token).push(file);
     }
@@ -514,6 +524,9 @@ Usage:
                                       definitions (runtime mode — strict)
   canonical-check --allowlist <file>  Override allowlist source
                                       (default: node_modules/@brikdesigns/bds/dist/tokens.css)
+  canonical-check --no-bridge         Ignore the compat-alias section of the allowlist
+  canonical-check --bridge-paths <re> With --no-bridge: matching files may still read
+                                      compat-alias names (comma-separated regexes)
   canonical-check --prefixes <list>   Comma-separated prefixes to scan
                                       (default: text,surface,background,border,color)
   canonical-check --exempt <patterns> Comma-separated regex of tokens to skip
@@ -547,6 +560,7 @@ function parseCliArgs(argv) {
     else if (a === '--css') opts.cssFile = argv[++i];
     else if (a === '--allowlist') opts.allowlistPath = argv[++i];
     else if (a === '--no-bridge') opts.noBridge = true;
+    else if (a === '--bridge-paths') opts.bridgePaths = argv[++i].split(',').map((s) => new RegExp(s));
     else if (a === '--prefixes') opts.prefixes = argv[++i].split(',').map((s) => s.trim()).filter(Boolean);
     else if (a === '--exempt') opts.exemptPatterns = argv[++i].split(',').map((s) => new RegExp(s));
     else if (a.startsWith('--format=')) opts.format = a.slice('--format='.length);
@@ -648,7 +662,13 @@ function main() {
     process.exit(2);
   }
 
-  const result = sourceScan({ paths: opts.paths, allowlist, prefixes, exemptTokens });
+  const bridgeAllowlist = opts.noBridge && opts.bridgePaths
+    ? parseAllowlistFromFile(allowlistPath, { includeBridge: true })
+    : null;
+  const result = sourceScan({
+    paths: opts.paths, allowlist, prefixes, exemptTokens,
+    bridgePaths: opts.bridgePaths ?? [], bridgeAllowlist,
+  });
   process.stdout.write(opts.format === 'json' ? renderJson(result, 'source') : renderMarkdown(result, 'source'));
   if (opts.reportPath) writeSarifReport(opts.reportPath, buildSarif({ result, mode: 'source' }));
   process.exit(result.violations.length > 0 ? 1 : 0);

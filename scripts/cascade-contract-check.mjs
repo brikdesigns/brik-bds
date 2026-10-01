@@ -113,7 +113,7 @@ export const SCALE_FAMILIES = ['heading', 'display', 'font-size'];
  */
 export const BRANDABLE_FAMILIES = ['surface', 'text', 'border', 'page', 'background'];
 
-/** `--bds-font-family-{family}` → family. Mirrors dist/tokens.css. */
+/** `--font-family-{family}` → family. Mirrors dist/tokens.css. */
 export const FONT_FAMILY_TO_FAMILY = {
   '--bds-font-family-heading': 'heading',
   '--bds-font-family-display': 'display',
@@ -122,7 +122,7 @@ export const FONT_FAMILY_TO_FAMILY = {
   '--bds-font-family-subtitle': 'subtitle',
 };
 
-/** font-size token prefix → family. `--bds-font-size-*` is the raw math scale (no family). */
+/** font-size token prefix → family. `--font-size-*` is the raw math scale (no family). */
 const SIZE_PREFIX_TO_FAMILY = [
   ['--bds-heading-', 'heading'],
   ['--bds-display-', 'display'],
@@ -186,7 +186,7 @@ export function familyOfSizeToken(token) {
   return null;
 }
 
-/** Family of a `--bds-font-family-*` token, or null. */
+/** Family of a `--font-family-*` token, or null. */
 export function familyOfFontFamilyToken(token) {
   return FONT_FAMILY_TO_FAMILY[token] ?? null;
 }

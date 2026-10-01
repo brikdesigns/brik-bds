@@ -7,7 +7,7 @@
  * instead of living in one session's shell history.
  *
  * The case that matters most is `longest slot wins`: the gate keys
- * `--bds-border-radius-100` to the `border-radius` property slot, not to the
+ * `--border-radius-100` to the `border-radius` property slot, not to the
  * `border` color purpose. Get that backwards and 38 length tokens read as
  * colors, which is precisely the one-name-two-concepts collision brik-bds#1910
  * exists to catalogue.
@@ -102,7 +102,7 @@ describe('lint-token-purpose-slots', () => {
   });
 
   it('a slotless exception is not reported as drift', () => {
-    // `--bds-web` is in SLOTLESS_EXCEPTIONS: decided carve-out, no rename owed.
+    // `--web` is in SLOTLESS_EXCEPTIONS: decided carve-out, no rename owed.
     // A gate that prints "drift" here re-opens a settled question every run.
     const { code, out } = run(CLEAN.replace('}\n', '  --bds-web: 1200;\n}\n'));
     expect(out).toMatch(/--bds-web — slotless by exception/);

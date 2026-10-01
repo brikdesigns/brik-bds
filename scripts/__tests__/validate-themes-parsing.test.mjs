@@ -10,7 +10,7 @@
  *      away (#1955).
  *   2. Prose of the form "There is no --border-info: …" parsed AS a declaration
  *      whose value ran to the next real semicolon, eating the real
- *      `--bds-background-info` declaration. It was invisible from #1959 to #1972,
+ *      `--background-info` declaration. It was invisible from #1959 to #1972,
  *      and no gate could fail on it because no gate could see it.
  *
  * Both are asserted here on the exact shapes that shipped, not on synthetic
@@ -51,7 +51,7 @@ describe('#1965 hazard 1 — a brace inside a comment must not end the block', (
     // The tempting case: brace-expansion shorthand for a token pair.
     const file = fixture(`:root {
   --before: #111111;
-  /* --bds-color-system-neutral{,-light} are theme-invariant */
+  /* --color-system-neutral{,-light} are theme-invariant */
   --after: #222222;
 }
 `);
@@ -71,7 +71,7 @@ describe('#1965 hazard 1 — a brace inside a comment must not end the block', (
 
 describe('#1965 hazard 2 — prose naming a token must not parse as a declaration', () => {
   it('does not mint a phantom declaration from "There is no --x: …" prose', () => {
-    // Verbatim shape from gap-fills.css, which is why --bds-background-info was
+    // Verbatim shape from gap-fills.css, which is why --background-info was
     // undefined: `[^;]+` ran from the comment to the next real semicolon.
     const file = fixture(`:root {
   /* There is no --border-info: the gray one retired with the rename and blue

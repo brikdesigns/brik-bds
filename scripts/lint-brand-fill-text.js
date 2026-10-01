@@ -4,8 +4,8 @@
  *
  * ADR-015 (§ Amendment 2026-09-12) + tokens/contrast-pairings.json:
  *   On --surface-/-background-brand-primary the on-color text is ALWAYS
- *   --bds-text-on-color-dark (mode-invariant white), at normal weight. Darkening it
- *   to --bds-text-primary, or using the theme-FLIPPING --bds-text-inverse (white in
+ *   --text-on-color-dark (mode-invariant white), at normal weight. Darkening it
+ *   to --text-primary, or using the theme-FLIPPING --text-inverse (white in
  *   light, BLACK in dark) on the mode-invariant Poppy fill, are DISALLOWED —
  *   both render dark text on the brand in dark mode, which passes contrast
  *   (black-on-Poppy is 5.55:1) but violates the brand rule the operator set.
@@ -18,8 +18,8 @@
  *
  * Rule: for any component CSS rule whose background is a brand-primary fill, any
  * `color:` on that rule OR on a descendant selector under it must be
- * --bds-text-on-color-dark. Anything else (--bds-text-inverse, --bds-text-primary,
- * --bds-text-secondary, --bds-text-muted, a raw hex, …) is a violation.
+ * --text-on-color-dark. Anything else (--text-inverse, --text-primary,
+ * --text-secondary, --text-muted, a raw hex, …) is a violation.
  *
  * Escape hatch: `bds-lint-ignore` on the offending `color:` line (e.g. a genuine
  * nested surface inside a brand band that re-establishes its own light backdrop).

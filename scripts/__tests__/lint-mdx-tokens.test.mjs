@@ -29,6 +29,13 @@ beforeAll(() => {
       '  --bds-border-muted: #ccc;\n' +
       '  --bds-color-poppy-500: #e35335;\n' +
       '  --bds-color-poppy-light: var(--bds-color-poppy-500); /** DEPRECATED — use color.poppy.500 (brik-bds#1739) */\n' +
+      '  --bds-color-poppy-800: #9e2f18;\n' +
+      '}\n' +
+      // The compat bridge shape (#2670): pure-prefix aliases + a retired word step.
+      ':root {\n' +
+      '  --text-primary: var(--bds-text-primary);\n' +
+      '  --color-poppy-light: var(--bds-color-poppy-light);\n' +
+      '  --color-poppy-darker: var(--bds-color-poppy-800);\n' +
       '}\n',
   );
 });
@@ -176,6 +183,36 @@ describe('lint-mdx-tokens', () => {
     expect(byKind).toEqual({
       '--bds-color-poppy-light': 'deprecated',
       '--bds-surface-success': 'phantom',
+    });
+  });
+
+  it('passes a bare name the compat bridge still serves (#2670)', () => {
+    const { code } = run(fence('color: var(--text-primary);'));
+    expect(code).toBe(0);
+  });
+
+  it('FAILS on a bare phantom (#2670)', () => {
+    const { code, json } = run(fence('color: var(--surface-success);'));
+    expect(code).toBe(1);
+    expect(json.violations[0]).toMatchObject({ token: '--surface-success', kind: 'phantom' });
+  });
+
+  it('FAILS on a retired word step served by the bridge (#2670)', () => {
+    const { code, json } = run(table('`--color-poppy-darker`'));
+    expect(code).toBe(1);
+    expect(json.violations[0]).toMatchObject({
+      token: '--color-poppy-darker',
+      kind: 'deprecated',
+      replacement: '--bds-color-poppy-800',
+    });
+  });
+
+  it('carries a DEPRECATED name onto its bare bridge alias (#2670)', () => {
+    const { json } = run(fence('a: var(--color-poppy-light);'));
+    expect(json.violations[0]).toMatchObject({
+      token: '--color-poppy-light',
+      kind: 'deprecated',
+      replacement: '--bds-color-poppy-500',
     });
   });
 

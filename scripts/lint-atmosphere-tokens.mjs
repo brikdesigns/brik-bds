@@ -13,7 +13,7 @@
  *      `rgba(196, 154, 47, …)`, which leaked into every "effect" atmosphere
  *      when editorial-luxury was extracted from the Birdwell site.
  *   3. (effect atmospheres) use a `color-mix()` whose source colour is
- *      anything other than a canonical `--bds-background-brand-primary` /
+ *      anything other than a canonical `--background-brand-primary` /
  *      `--background-accent-*` role.
  *   4. Declare a color-foundation token (`--page/surface/background/text/
  *      border-*`) — surface colours come from the brand theme layer.

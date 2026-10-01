@@ -3,22 +3,22 @@
  * lint-brand-text-size — enforce ADR-015's brand-text usage rule.
  *
  * ADR-015 (§ Advisory claim) + tokens/contrast-pairings.json state:
- *   "small body copy NEVER uses --bds-text-brand-primary, it uses --bds-text-primary."
+ *   "small body copy NEVER uses --text-brand-primary, it uses --text-primary."
  * That rule was advisory-only — the contrast gate scores token *pairings*, not
- * rendered font sizes, so it can't catch `--bds-text-brand-primary` bound to small
+ * rendered font sizes, so it can't catch `--text-brand-primary` bound to small
  * body text (3.78:1 on white — below the AA-normal 4.5:1 floor). This lint makes
  * the rule CI-asserted (#1064 / BDS-18, AC1).
  *
  * Scope decision — body vs label:
- *   `--bds-text-brand-primary` is legitimately used across the library for LINK / TAB /
+ *   `--text-brand-primary` is legitimately used across the library for LINK / TAB /
  *   BREADCRUMB affordances, which ADR-015 gates at AA-large (3:1) as brand accent.
  *   BDS's type system separates `--body-*` (paragraph copy) from `--label-*` (UI
  *   labels/links). This lint flags brand-primary co-occurring with a SMALL BODY
- *   size (`--bds-body-xs` / `--bds-body-sm`) — the exact "small body copy" the rule bans —
+ *   size (`--body-xs` / `--body-sm`) — the exact "small body copy" the rule bans —
  *   and deliberately leaves `--label-*` affordances alone. Whether small `--label-*`
  *   brand text is acceptable is the #1064 AC3 policy reconciliation, not this lint.
  *
- * Escape hatch: put `bds-lint-ignore` on the `--bds-text-brand-primary` line (tracked
+ * Escape hatch: put `bds-lint-ignore` on the `--text-brand-primary` line (tracked
  * cases live in #1103).
  *
  * Usage:

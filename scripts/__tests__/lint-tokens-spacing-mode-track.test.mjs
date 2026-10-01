@@ -6,13 +6,13 @@ import { spawnSync } from 'node:child_process';
 /**
  * Rule `spacing-mode-track` (#2588).
  *
- * Every `[data-mode-spacing]` track collapsed `--bds-gap-tiny` and `--bds-gap-xs` to
+ * Every `[data-mode-spacing]` track collapsed `--gap-tiny` and `--gap-xs` to
  * `0px` and `npm run lint-tokens:grid` still exited 0 — step 5 read only
  * `tokens/figma-tokens.css`, and `grid-4pt` is warning-only by design. These
  * tests pin the three failure classes the new rule must block on, and the fact
  * that it blocks without `--check-grid` (the `validate` path never passes it).
  *
- * The `--bds-padding-*` family joined the rule in #2613, once its own broken
+ * The `--padding-*` family joined the rule in #2613, once its own broken
  * `compact` rungs were fixed in Figma. Each family gets the same four cases:
  * the two families resolve separate base tracks and separate overrides, so a
  * regex or a track-resolution bug can reach one and miss the other.
@@ -86,8 +86,8 @@ describe('spacing-mode-track — --bds-padding-*', () => {
   });
 
   it('resolves un-overridden padding rungs from the base track', () => {
-    // `comfortable` emits no --bds-padding-tiny (it equals the base 8px), so pulling
-    // --bds-padding-xs down to 8px breaks monotonicity only if the base rung is
+    // `comfortable` emits no --padding-tiny (it equals the base 8px), so pulling
+    // --padding-xs down to 8px breaks monotonicity only if the base rung is
     // resolved — modes-spacing.css alone shows a lone 8px and nothing wrong.
     const { violations } = withModesCss((css) =>
       css.replace('--bds-padding-xs: 12px;', '--bds-padding-xs: 8px;'),
@@ -136,7 +136,7 @@ describe('spacing-mode-track', () => {
   });
 
   it('resolves un-overridden rungs from the base track', () => {
-    // `comfortable` emits no --bds-gap-tiny (it equals the base), so a base-only
+    // `comfortable` emits no --gap-tiny (it equals the base), so a base-only
     // regression must still surface against that track — reading
     // modes-spacing.css alone would see nothing at all here.
     const { violations } = withModesCss((css) =>

@@ -15,16 +15,16 @@
  *
  *   Flagged   — a rhythm-bearing property set to a non-zero px/rem/em literal:
  *                 gap: 8px;   margin-top: 12px;   margin: 0 0 1rem;
- *             — a mode-collapsing token (`--bds-gap-xs` / `--bds-gap-tiny`, both 0px in
+ *             — a mode-collapsing token (`--gap-xs` / `--gap-tiny`, both 0px in
  *               every non-default spacing mode) on an unambiguously VERTICAL
  *               property (`row-gap`, `margin`, `margin-top/-bottom/-block*`):
- *                 margin-top: var(--bds-gap-xs);   row-gap: var(--bds-gap-tiny);
+ *                 margin-top: var(--gap-xs);   row-gap: var(--gap-tiny);
  *               The `gap` shorthand is exempt from this rule — its direction
  *               depends on flex-direction, which a line-scanner can't see, and
- *               horizontal icon/label gaps legitimately use `--bds-gap-xs`.
+ *               horizontal icon/label gaps legitimately use `--gap-xs`.
  *
  *   Allowed   — the same property driven by a token (the whole point):
- *                 gap: var(--bds-gap-md);   margin-top: var(--bds-gap-sm);
+ *                 gap: var(--gap-md);   margin-top: var(--gap-sm);
  *             — literals that live only inside a `var(--x, <fallback>)` default
  *               or a `--bds-*` runtime binding (a sanctioned Component-tier
  *               pattern): `margin-top: calc(var(--bds-thumb, 20px) / 2)`. The
@@ -75,7 +75,7 @@ const LITERAL_RE = /(-?\d*\.?\d+)(px|rem|em)\b/g;
 /**
  * Properties that are vertical no matter the layout context. The `gap`
  * shorthand is deliberately absent: its axis depends on flex-direction,
- * and horizontal icon/label gaps legitimately use `--bds-gap-xs`.
+ * and horizontal icon/label gaps legitimately use `--gap-xs`.
  */
 const VERTICAL_PROPS = new Set([
   'row-gap',

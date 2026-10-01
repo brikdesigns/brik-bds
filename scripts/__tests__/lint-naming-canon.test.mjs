@@ -10,12 +10,12 @@
  * Four cases are regression guards for over-reach found while building the gate,
  * and they matter as much as the sabotage cases — a gate that flags correct code
  * gets suppressed, and a suppressed gate enforces nothing:
- *   • `--bds-color-blue-light`   rule 1 does not judge a colour tail (§ 3); rule 7 does
- *   • `--bds-font-weight-bold`   `bold` is font-weight's CSS keyword, not a step
+ *   • `--color-blue-light`   rule 1 does not judge a colour tail (§ 3); rule 7 does
+ *   • `--font-weight-bold`   `bold` is font-weight's CSS keyword, not a step
  *   • `--border-width-thin`  longest-match: a property slot, NOT the `border`
  *                            colour purpose — this one silently vanished from a
  *                            passing run mid-build
- *   • `--bds-font-family-body`   `Poppins` vs `Poppins, sans-serif` is one type
+ *   • `--font-family-body`   `Poppins` vs `Poppins, sans-serif` is one type
  */
 
 import { describe, it, expect } from 'vitest';
@@ -217,7 +217,7 @@ describe('rule 1 — step vocabulary (ADR-033 § 3)', () => {
   });
 
   it('a § Named exception is not a step violation', () => {
-    // `--bds-content-width-full` and `--bds-border-radius-pill` are in the clean fixture
+    // `--content-width-full` and `--border-radius-pill` are in the clean fixture
     // inside families that DO take steps, so only the exception list keeps them green.
     const { code, out } = run();
     expect(out).not.toMatch(/content-width-full/);
@@ -237,7 +237,7 @@ describe('rule 1 — step vocabulary (ADR-033 § 3)', () => {
   });
 
   it('does NOT flag a CSS keyword in a family that takes no steps', () => {
-    // `--bds-font-weight-bold` / `--bds-letter-spacing-wide` / `--bds-font-line-height-normal`
+    // `--font-weight-bold` / `--letter-spacing-wide` / `--font-line-height-normal`
     // use words § 3 retires as STEP words, but none of those families ships a
     // single numeric or t-shirt step, so § 3 does not reach them.
     const { code, out } = run();
@@ -267,7 +267,7 @@ describe('rule 2 — one name, two value types (ADR-033 § 5)', () => {
   });
 
   it('resolves var() to classify — skipping the ref hides the collision entirely', () => {
-    // `var(--bds-shadow-md)` is a shadow LIST, not a reference. A gate that treats a
+    // `var(--shadow-md)` is a shadow LIST, not a reference. A gate that treats a
     // ref as its own type sees one type and reports clean, which is exactly why
     // lint-token-shadowing cannot substitute for this rule.
     const json = JSON.parse(run({
@@ -299,7 +299,7 @@ describe('rule 2 — one name, two value types (ADR-033 § 5)', () => {
   });
 
   it('does NOT manufacture a collision from a bare keyword', () => {
-    // Regression guard: the clean fixture declares `--bds-font-family-body` as
+    // Regression guard: the clean fixture declares `--font-family-body` as
     // `Poppins` and as `Poppins, sans-serif`. One font stack, one with a
     // fallback — counting `keyword` as a distinct type made this a finding.
     const { code, out } = run();

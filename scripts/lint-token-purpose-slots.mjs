@@ -9,7 +9,7 @@
  * docs/foundation/token-anatomy documents ONE formula — the colour intent form
  * `--{purpose}-{role}`, whose `purpose` vocabulary is the closed list
  * page/surface/background/text/border/color. 325 of the 701 token names that
- * ship are outside that list (`--bds-font-size-100`, `--bds-gap-md`, `--bds-ease-spring`).
+ * ship are outside that list (`--font-size-100`, `--gap-md`, `--ease-spring`).
  * Nothing said whether those were drift or a second legitimate formula, so
  * brik-bds#1910 axis 3 could not be answered and the naming ADR could not be
  * written. The verdict, recorded in token-anatomy § Non-color anatomy: they are
@@ -63,7 +63,7 @@ import { fileURLToPath } from 'node:url';
 
 /**
  * Every purpose slot that ships, longest-match-first at lookup time so
- * `--bds-border-radius-100` keys to `border-radius` (a property scale) and not to
+ * `--border-radius-100` keys to `border-radius` (a property scale) and not to
  * `border` (a colour purpose). That collision is not cosmetic: `--border-*` is
  * 45 colour tokens AND 44 length tokens under one first segment.
  *
@@ -97,7 +97,7 @@ const DRIFT_BACKLOG = {
   tooltip: 1910,
 
   // Style Dictionary's primitive easing export. Two names for one concept
-  // (`--bds-easing-ease-in` vs `--bds-ease-in`) at DIFFERENT values, and the stutter
+  // (`--easing-ease-in` vs `--ease-in`) at DIFFERENT values, and the stutter
   // in `easing-ease-` is the tell. Zero `var()` references in components/;
   // `--ease-*` carries all 70.
   easing: 1910,
@@ -108,7 +108,7 @@ const DRIFT_BACKLOG = {
  * owed — a deliberate carve-out, mirrored in `EXCEPTIONS` at
  * scripts/__tests__/inspect-widget-tokens.test.mjs.
  *
- * `--bds-web` / `--bds-tablet` / `--bds-mobile` are unitless Figma primitives with zero
+ * `--web` / `--tablet` / `--mobile` are unitless Figma primitives with zero
  * `var()` consumers, and `--breakpoint-*` — the family a rename would move them
  * to — has none either (measured 2026-08-20 across brik-bds, brik-client-portal,
  * brikdesigns). Renaming one dead family into another buys nothing. Whether BDS
@@ -141,7 +141,7 @@ const T_SHIRT = new Set(GRAMMAR.steps.slotAuditTShirt);
 
 /**
  * A null/reset step is orthogonal to the scale it sits beside — every scale
- * needs one, so `--bds-gap-none` next to `--bds-gap-md` is not two vocabularies.
+ * needs one, so `--gap-none` next to `--gap-md` is not two vocabularies.
  * Classified separately and excluded from the MIXED test for that reason.
  */
 const RESET_STEPS = new Set(GRAMMAR.steps.reset);

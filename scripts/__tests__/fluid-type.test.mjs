@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path';
 /**
  * Fluid display type tier (brik-bds#959 / brik-client-portal#1350).
  *
- * Pins that the hand-authored `--bds-display-fluid-*` clamp() tier is defined for
+ * Pins that the hand-authored `--display-fluid-*` clamp() tier is defined for
  * every display step, stays on-system (max anchors to a static --display-*
  * token, min to a --font-size-* primitive), is distinct from the static scale,
  * and is wired into the dist/tokens.css concat so consumers actually receive it.
@@ -51,7 +51,7 @@ describe('fluid-type.css — fluid display tier', () => {
   });
 
   it('is distinct from the static display scale (additive, not a redefinition)', () => {
-    // It must NOT redefine the static --bds-display-sm/md/lg/xl tokens themselves.
+    // It must NOT redefine the static --display-sm/md/lg/xl tokens themselves.
     for (const step of STEPS) {
       expect(fluidCss).not.toMatch(new RegExp(`(?<!fluid-)--bds-display-${step}\\s*:`));
     }

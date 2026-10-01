@@ -13,7 +13,7 @@
  * Nothing caught this because each source file is correct in isolation. The
  * shadowing exists only in the concatenation, which no per-file lint reads.
  * Eleven tokens were shadowed when this gate was written (#1808), including
- * `--bds-text-disabled` at dist/tokens.css:500, whose dead declaration carries a
+ * `--text-disabled` at dist/tokens.css:500, whose dead declaration carries a
  * doc comment describing behaviour it does not produce. That is the class named
  * in brikdesigns/brik-llm#2206: an artifact that reads as in-effect and has
  * never applied — #1785 one layer up, in a font-family stack.

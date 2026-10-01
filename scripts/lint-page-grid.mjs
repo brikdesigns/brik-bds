@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 /**
  * lint-page-grid — enforces the ADR-025 width-container recipe: a page
- * container's inline inset comes from the canonical `--bds-page-inset` token
+ * container's inline inset comes from the canonical `--page-inset` token
  * (renamed from `--gutter-page`, ADR-025; the alias was removed post-migration).
  *
  * The page-grid standard (ADR-025, published at
  * design.brikdesigns.com/docs/build-standards/page-grid) locks the container
  * recipe to `max-width: var(--content-width-*)` + `margin-inline: auto` +
- * `padding-inline: var(--bds-page-inset)`. A container that swaps in some other
+ * `padding-inline: var(--page-inset)`. A container that swaps in some other
  * inset re-opens the misalignment the token exists to close: BDS sections and
  * consumer containers (nav, footer) stop lining up flush at the page edge.
  *
@@ -17,15 +17,15 @@
  *               `max-width: var(--content-width-*)`, or a Footer-style
  *               centering inset `…(100% - var(--content-width-*))…` — a
  *               `padding-inline` whose value never references
- *               `var(--bds-page-inset`:
- *                 padding-inline: var(--bds-padding-lg);
+ *               `var(--page-inset`:
+ *                 padding-inline: var(--padding-lg);
  *                 padding-inline: 24px;
  *
  *   Allowed   — the recipe (the whole point), directly or as an ADR-014 hook
  *               fallback:
- *                 padding-inline: var(--bds-page-inset);
- *                 padding-inline: var(--bds-blueprint-section-padding-inline, var(--bds-page-inset));
- *                 padding-inline: max(var(--bds-page-inset), calc((100% - var(--bds-content-width-xl)) / 2));
+ *                 padding-inline: var(--page-inset);
+ *                 padding-inline: var(--bds-blueprint-section-padding-inline, var(--page-inset));
+ *                 padding-inline: max(var(--page-inset), calc((100% - var(--content-width-xl)) / 2));
  *             — a container rule with NO `padding-inline` of its own (the
  *               inset is inherited from a parent shell) or one that overrides
  *               via a `--bds-*` hook custom property (the sanctioned ADR-014
@@ -138,7 +138,7 @@ export function extractAstroStyles(text) {
 
 /**
  * Scan CSS text for page-container rules whose `padding-inline` bypasses
- * `--bds-page-inset`. Pure (no disk) so the rule is unit-testable.
+ * `--page-inset`. Pure (no disk) so the rule is unit-testable.
  */
 export function scanCssText(text, rel = '', lineOffset = 0, sourceLines = null) {
   const lines = sourceLines ?? text.split('\n');

@@ -466,4 +466,28 @@ describe('ADR-043 prefix + compat bridge (brik-bds#2670)', () => {
     const refs = extractTokenReferences('.x { color: var(--bds-text-nope); }');
     expect(refs.has('--bds-text-nope')).toBe(true);
   });
+
+  it('lets only bridgePaths files read bridge names, and still flags their phantoms', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'cc-bridge-'));
+    try {
+      mkdirSync(join(dir, 'widgets'));
+      writeFileSync(join(dir, 'widgets', 'w.js'), 'a = "var(--text-primary) var(--text-ghost)";');
+      writeFileSync(join(dir, 'c.css'), '.x { color: var(--text-primary); }');
+      const result = sourceScan({
+        paths: [dir],
+        allowlist: parseAllowlist(css, { includeBridge: false }),
+        bridgePaths: [/widgets\//],
+        bridgeAllowlist: parseAllowlist(css),
+      });
+      const byToken = Object.fromEntries(
+        result.violations.map((v) => [v.token, v.files.map((f) => f.slice(dir.length + 1))]),
+      );
+      expect(byToken).toEqual({
+        '--text-primary': ['c.css'],
+        '--text-ghost': ['widgets/w.js'],
+      });
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
 });

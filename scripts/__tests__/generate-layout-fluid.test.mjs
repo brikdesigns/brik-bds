@@ -9,7 +9,7 @@ import { fmtNum, buildFluidValue } from '../generate-modes-css.mjs';
 // `npm run build:modes` itself. These tests exercise the two exported pure
 // pieces: the number formatter, and the piecewise clamp() builder (ADR-042
 // D3), plus a committed-file drift check against the exact strings it must
-// keep emitting for --bds-page-inset / --bds-section-padding-block.
+// keep emitting for --page-inset / --section-padding-block.
 
 const REPO_ROOT = resolve(import.meta.dirname, '..', '..');
 const LAYOUT_FLUID_CSS = resolve(REPO_ROOT, 'tokens', 'layout-fluid.css');

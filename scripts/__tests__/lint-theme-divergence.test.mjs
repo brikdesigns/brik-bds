@@ -17,8 +17,8 @@ beforeAll(() => {
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
 
 // A generated light file needs the --color-* primitives too: the gate resolves
-// aliases through them so `white` and var(--bds-color-grayscale-white) compare equal.
-// `--bds-color-grayscale-100` carries the #1739 shape on purpose: a 6-step
+// aliases through them so `white` and var(--color-grayscale-white) compare equal.
+// `--color-grayscale-lightest` carries the #1739 shape on purpose: a 6-step
 // name is an ALIAS onto a numeric stop, not a literal. The gate has to follow
 // that hop, or a #1740 rename to the numeric stop reads as a divergence.
 const PRIMS = `
@@ -104,7 +104,7 @@ describe('lint-theme-divergence', () => {
 
   // The bug found while building this: a comment used to carry to every
   // declaration beneath it, so one real explanation marked the whole block
-  // explained — including --bds-background-secondary, the value #1689 exists to
+  // explained — including --background-secondary, the value #1689 exists to
   // resolve.
   it('does not let a comment explain a LATER unrelated declaration', () => {
     const { code, json } = run({

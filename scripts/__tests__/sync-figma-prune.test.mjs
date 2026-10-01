@@ -193,7 +193,7 @@ describe('sync-figma-mcp prune (brik-bds#754)', () => {
 
 // Reference guard for brik-bds#1797. The #754 prune above is correct for a
 // token Figma really retired, and wrong for one that shipped code still uses —
-// `--bds-font-weight-heading` was dropped by a pull and had to be restored (#1748).
+// `--font-weight-heading` was dropped by a pull and had to be restored (#1748).
 // canonical-check cannot see it: it validates references against an allowlist
 // regenerated from the same pull, so the removal validates itself.
 describe('sync-figma-mcp prune reference guard (brik-bds#1797)', () => {

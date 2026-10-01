@@ -33,7 +33,7 @@ describe('findTierViolations', () => {
 
   it('flags a Primitive-named token pointing up at a non-color Semantic (t2→t3, ADR-035)', () => {
     // --gutter-page matches no Semantic prefix → classifies Primitive. The broad
-    // rule (ADR-035, #2187) now catches it: --bds-padding-lg is not a color, so the
+    // rule (ADR-035, #2187) now catches it: --padding-lg is not a color, so the
     // alias is off-model. This is exactly the shape the original --gutter-page
     // bug had (ADR-025), previously a KNOWN LIMITATION.
     const line = '--gutter-page: var(--bds-padding-lg);';
@@ -68,7 +68,7 @@ describe('findTierViolations', () => {
   });
 
   it('ALLOWS a color role-alias — Semantic → Semantic that resolves to --color-* (ADR-035)', () => {
-    // --bds-border-focus (a color role) aliases --bds-border-brand-primary, which
+    // --border-focus (a color role) aliases --border-brand-primary, which
     // resolves to a --color-* Primitive → theme-tracks → sanctioned.
     const defs = {
       '--bds-border-focus': ['--bds-border-brand-primary'],

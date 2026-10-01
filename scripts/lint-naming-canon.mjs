@@ -10,7 +10,7 @@
  * free to invent a synonym for a concept the system already had a word for —
  * and every existing gate passed, because the shape was correct. `negative` has
  * four spellings (`error`, `negative`, `danger`, `destructive`),
- * `--bds-box-shadow-md` is a blur length at one line and a shadow list at another,
+ * `--box-shadow-md` is a blur length at one line and a shadow list at another,
  * and `.bds-banner--tone-error` sits beside `.bds-badge--error`.
  *
  * ADR-033 closes those lists. This gate is what stops them re-opening — it is
@@ -21,7 +21,7 @@
  *   1  step        A token's step falls outside its family's vocabulary (§ 3)
  *                  and is not a § Named exception. Reads dist/tokens.css.
  *   2  type        One name defined twice with different value TYPES (§ 5's
- *                  `--bds-box-shadow-md` class). Reads dist/tokens.css.
+ *                  `--box-shadow-md` class). Reads dist/tokens.css.
  *   3  union       A prop union mixes axes from § 2's table, or carries a
  *                  § Retired valence word. Reads components/ui/**\/*.tsx.
  *   4  modifier    A BEM modifier with no axis prefix (§ 4), or a retired
@@ -53,16 +53,16 @@
  *
  * `lint-token-shadowing` asks "is one name declared twice with different
  * values", is type-blind, and ACCEPTS a `bds-lint-ignore` marker on the winner.
- * That is why `--bds-box-shadow-md` is green there: the override is deliberate and
+ * That is why `--box-shadow-md` is green there: the override is deliberate and
  * marked. Rule 2 asks the narrower, harder question — do the two declarations
  * have different value *types* — and does NOT honour the marker, because a
- * consumer reading line 329 concludes `--bds-box-shadow-md` is a length and is
+ * consumer reading line 329 concludes `--box-shadow-md` is a length and is
  * wrong no matter how deliberate the override is. A marked override of a value
  * is a decision; a marked override of a *type* is a name carrying two concepts.
  *
  * Rule 2 therefore resolves `var()` transitively before classifying. Skipping
- * refs is what makes the exemplar invisible: `--bds-box-shadow-md: 8px` (length) vs
- * `--bds-box-shadow-md: var(--bds-shadow-md)` reads as one type until the ref resolves
+ * refs is what makes the exemplar invisible: `--box-shadow-md: 8px` (length) vs
+ * `--box-shadow-md: var(--shadow-md)` reads as one type until the ref resolves
  * to `0px 4px 12px 0px rgba(...)`.
  *
  * ── Sibling gates, and why this is none of them ────────────────────────────
@@ -213,8 +213,8 @@ const RETIRED_AXIS_VALUES = {
  * is the source of truth for the Foundations families
  * (`docs-site/content/docs/foundation/index.mdx:12`) and every one of its
  * ladders is worded — `tiny · xs · sm · md · lg · xl · (xxl) · huge`, no numeric
- * rung anywhere. `3xs`/`2xs`/`2xl`/`3xl` stay in the set: `--bds-icon-2xs` and
- * `--bds-icon-2xl` are real gap-fill rungs (`tokens/gap-fills.css`), and the 13
+ * rung anywhere. `3xs`/`2xs`/`2xl`/`3xl` stay in the set: `--icon-2xs` and
+ * `--icon-2xl` are real gap-fill rungs (`tokens/gap-fills.css`), and the 13
  * names #2229 minted ship one more minor as deprecated aliases.
  *
  * Ordering, low to high: tiny · 3xs · 2xs · xs · sm · md · lg · xl · 2xl · xxl · 3xl · huge.
@@ -223,7 +223,7 @@ const T_SHIRT = new Set(GRAMMAR.steps.tShirt);
 
 /**
  * A null/reset step is orthogonal to the scale beside it — every scale needs
- * one, so `--bds-gap-none` next to `--bds-gap-md` is not a second vocabulary. Same
+ * one, so `--gap-none` next to `--gap-md` is not a second vocabulary. Same
  * carve-out lint-token-purpose-slots makes, for the same reason.
  */
 const RESET_STEPS = new Set(GRAMMAR.steps.reset);
@@ -289,12 +289,12 @@ const BOOLEAN_MODIFIERS = new Set([
  *
  * ADR-033 § 3 governs the STEP of the two non-colour formulas —
  * `--{property}-{step}` at Primitive, `--{role}-{step}` at Semantic. A colour
- * token's tail is a ROLE, not a step: `--bds-color-blue-500` and
- * `--bds-background-brand-primary` name a rung of a hue ramp and a brand role, and
+ * token's tail is a ROLE, not a step: `--color-blue-light` and
+ * `--background-brand-primary` name a rung of a hue ramp and a brand role, and
  * § 3's t-shirt/numeric vocabulary cannot express either.
  *
  * This matters because the ramps would otherwise dominate rule 1. Grouping by
- * family puts `--bds-color-blue-500` (numeric) beside `--bds-color-blue-500` (word) in
+ * family puts `--color-blue-500` (numeric) beside `--color-blue-light` (word) in
  * one family, so the measured "takes steps" test fires and 57 ramp rungs across
  * 10 hues read as step-word violations — a disposition ADR-033 never made. That
  * the ramps carry two vocabularies at all is a real finding, but it is a finding
@@ -369,7 +369,7 @@ function collectDeclarations(cssPath) {
  * The value type a declaration resolves to, following `var()` to the last
  * declaration of the referenced name (which is the one that wins the cascade).
  *
- * Following the ref is the whole of rule 2: `--bds-box-shadow-md: var(--bds-shadow-md)`
+ * Following the ref is the whole of rule 2: `--box-shadow-md: var(--shadow-md)`
  * is a shadow list, not a reference, and treating it as its own type is what
  * hides the collision with the `8px` at line 329.
  */
@@ -426,14 +426,14 @@ function stepVocabulary(tail) {
 
 /**
  * Group tokens into families by everything before the last segment, so
- * `--bds-gap-md` and `--bds-gap-tiny` share the family `--gap-` while
- * `--bds-background-brand-primary` keys to `--background-brand-`.
+ * `--gap-md` and `--gap-tiny` share the family `--gap-` while
+ * `--background-brand-primary` keys to `--background-brand-`.
  *
  * A family TAKES STEPS if it is measured to carry at least one numeric or
  * t-shirt step. Measured, not declared: a declared list of step-taking families
  * is a second source of truth, and two sources for one fact is how the docs came
- * to disagree with the registry. It is also what keeps `--bds-font-weight-bold` and
- * `--bds-letter-spacing-wide` green — `bold` and `wide` are the CSS keyword values
+ * to disagree with the registry. It is also what keeps `--font-weight-bold` and
+ * `--letter-spacing-wide` green — `bold` and `wide` are the CSS keyword values
  * of those properties, and neither family ships a single numeric or t-shirt
  * step, so neither takes steps and § 3 does not reach them.
  */
@@ -487,9 +487,9 @@ function typeFindings(byName) {
       // An unresolvable or cyclic ref is not evidence of a second type. Nor is a
       // bare `keyword`, which is whatever did not parse as a known category, so
       // it carries no category information to collide with. Counting it manufactured
-      // five findings that are not type collisions at all: `--bds-font-family-body`
+      // five findings that are not type collisions at all: `--font-family-body`
       // (`Poppins` at :149 vs `Poppins, sans-serif` at :843 — one font stack, one
-      // with a fallback) and `--bds-border-on-color-dark` (`white` at :836 vs a
+      // with a fallback) and `--border-on-color-dark` (`white` at :836 vs a
       // resolved `#fff` at :471 — one colour, two spellings).
       if (t === 'unresolved' || t === 'cycle' || t === 'keyword') continue;
       if (!types.has(t)) types.set(t, d.line);
@@ -972,10 +972,10 @@ function collectReferences(dirs) {
  * asked to fix — #1982's failure mode, one rule over. Three of these are not
  * "drop the `status-` segment": the `-subtle` names fold into `surface`
  * (the purpose already means the subtle tint, #1909 § D), `status-neutral`
- * aliased `--bds-surface-neutral` and NOT `--bds-background-neutral` (the saturated
+ * aliased `--surface-neutral` and NOT `--background-neutral` (the saturated
  * #363636 is a different colour from the #d4d4d4 it shipped), and a retired
  * valence word has to route through § 1 — `--background-status-error` is
- * `--bds-background-negative`, never `--background-error`, which does not exist.
+ * `--background-negative`, never `--background-error`, which does not exist.
  */
 const REFERENCE_TARGETS = {
   '--background-status-error': '--bds-background-negative',

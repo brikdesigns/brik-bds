@@ -164,7 +164,7 @@ describe('lint-deleted-token-consumers', { timeout: 30_000 }, () => {
   });
 
   it('does not treat a longer name as a reference to its prefix', () => {
-    // `--measure` is a prefix of `--bds-measure-md`; a fixed-string grep matches
+    // `--measure` is a prefix of `--measure-md`; a fixed-string grep matches
     // both, so the boundary filter is what keeps this from a false positive.
     commitTokens({
       source: ':root {\n  --bds-measure-md: 60ch;\n  --bds-measure-lg: 72ch;\n}\n',
@@ -185,7 +185,7 @@ describe('lint-deleted-token-consumers', { timeout: 30_000 }, () => {
     // removed within this test, so against `base` the net change is nothing.
     const { code, json } = run([], 'HEAD~1');
     expect(json.deleted).toEqual(['--measure']);
-    // The consumer uses --bds-measure-md, never --measure. No finding, exit 0.
+    // The consumer uses --measure-md, never --measure. No finding, exit 0.
     expect(json.findings).toEqual([]);
     expect(code).toBe(0);
   });

@@ -46,7 +46,7 @@ const TOKENS_DIR = path.join(ROOT, 'tokens');
 // `nonDefaultModes`: the modes we DO emit overrides for
 // `unitSuffix`: 'px' for spacing, '' for unitless tokens (border-radius), etc.
 // `tokenPrefix`: how to format the CSS variable name. '<group>-<name>' yields
-//   --bds-padding-xl / --bds-gap-md.
+//   --padding-xl / --gap-md.
 
 export const COLLECTIONS = {
   spacing: {
@@ -92,7 +92,7 @@ export const COLLECTIONS = {
     fileName: 'borderradius',
     unitSuffix: 'px', // resolve returns the raw primitive value; suffix the unit (like spacing)
     // `none` is the square-corner constant (0) every mode must preserve — a
-    // component that asks for --bds-border-radius-none means "no rounding". Figma's
+    // component that asks for --border-radius-none means "no rounding". Figma's
     // pill slice authors none=999 (it maps every step to pill), which both
     // contradicts the token's meaning and gives it two value types (naming-canon
     // Rule 2 / ADR-033 § 5). Hold it out of the mode ladder.
@@ -140,9 +140,9 @@ export const COLLECTIONS = {
     sizes: ['sm', 'md', 'lg', 'xl'],
     defaultMode: 'subtle',
     nonDefaultModes: ['flat', 'lifted', 'dramatic'],
-    // Override the canonical --bds-shadow-* tokens (BDS #2233 / PR #2237), NOT the
-    // deprecated --bds-box-shadow-* aliases — gap-fills.css derives those from
-    // --bds-shadow-*, so a --bds-shadow-* override cascades to both.
+    // Override the canonical --shadow-* tokens (BDS #2233 / PR #2237), NOT the
+    // deprecated --box-shadow-* aliases — gap-fills.css derives those from
+    // --shadow-*, so a --shadow-* override cascades to both.
     tokenName: (size) => `${PREFIX}shadow-${size}`,
     description:
       'Elevation depth mode — overrides the composed --bds-shadow-* box-shadow ' +
@@ -282,7 +282,7 @@ function emitCollection(data, collectionKey) {
 function composeShadow(slice, size) {
   // Figma elevation carries a y-offset (`box-shadow` group), a `blur-radius`, a
   // `spread`, and an `opacity` per size (#2243). The x-offset is invariantly 0
-  // and the shadow color is always black — matching the hand-authored --bds-shadow-*
+  // and the shadow color is always black — matching the hand-authored --shadow-*
   // in gap-fills.css, every one of which is `0px … rgba(0,0,0,α)` — so only the
   // alpha varies and it rides the `opacity` sub-token.
   const y = slice['box-shadow']?.[size]?.$value ?? 0;
@@ -292,7 +292,7 @@ function composeShadow(slice, size) {
 
   // A shadow with no length AND full transparency is absent → emit a
   // fully-zeroed box-shadow SHORTHAND (`0px 0px 0px 0px transparent`), NOT the
-  // `none` keyword. The base --bds-shadow-* in gap-fills.css is a box-shadow
+  // `none` keyword. The base --shadow-* in gap-fills.css is a box-shadow
   // shorthand; overriding it with `none` gives one token name two value types,
   // which ADR-033 § 5 rejects (naming-canon Rule 2 — a `bds-lint-ignore` does
   // not rescue it). The all-zero shorthand renders identically (no visible
