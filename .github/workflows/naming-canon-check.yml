@@ -91,3 +91,11 @@ jobs:
       # cannot silently break it.
       - name: Sibling gate still passes (SLOT_REGISTRY export)
         run: npx vitest run scripts/__tests__/lint-token-purpose-slots.test.mjs
+
+      # The grammar file (tokens/naming-grammar.json, #2669) is the one declared
+      # grammar: the docs check proves token-anatomy.mdx prints its formulas, and
+      # the vitest proves a component stem may not start with a reserved word.
+      - name: Grammar file - docs formulas and reserved stems
+        run: |
+          npm run lint-naming-grammar-docs
+          npx vitest run scripts/__tests__/naming-grammar.test.mjs

@@ -74,58 +74,10 @@ import { fileURLToPath } from 'node:url';
  * see stepVocabulary(). Two sources of truth for one fact is how the docs came
  * to disagree with the registry in the first place.
  */
-export const SLOT_REGISTRY = [
-  // ── Colour intent formula (already documented) ──────────────────────────
-  { slot: 'color', family: 'color', tier: 'primitive' },
-  { slot: 'page', family: 'color', tier: 'semantic' },
-  { slot: 'surface', family: 'color', tier: 'semantic' },
-  { slot: 'background', family: 'color', tier: 'semantic' },
-  { slot: 'text', family: 'color', tier: 'semantic' },
-  { slot: 'border', family: 'color', tier: 'semantic' },
-
-  // ── Tier 2 — property scales, keyed by CSS property name ────────────────
-  { slot: 'font-size', family: 'property', tier: 'primitive' },
-  { slot: 'font-weight', family: 'property', tier: 'primitive' },
-  { slot: 'font-family', family: 'property', tier: 'primitive' },
-  { slot: 'font-line-height', family: 'property', tier: 'primitive' },
-  { slot: 'font-casing', family: 'property', tier: 'primitive' },
-  { slot: 'letter-spacing', family: 'property', tier: 'primitive' },
-  { slot: 'space', family: 'property', tier: 'primitive' },
-  { slot: 'size', family: 'property', tier: 'primitive' },
-  { slot: 'border-radius', family: 'property', tier: 'primitive' },
-  { slot: 'border-width', family: 'property', tier: 'primitive' },
-  { slot: 'shadow-blur', family: 'property', tier: 'primitive' },
-  { slot: 'shadow-offset', family: 'property', tier: 'primitive' },
-  { slot: 'shadow-spread', family: 'property', tier: 'primitive' },
-  { slot: 'blur-radius', family: 'property', tier: 'primitive' },
-  { slot: 'duration', family: 'property', tier: 'primitive' },
-  { slot: 'delay', family: 'property', tier: 'primitive' },
-  { slot: 'iteration', family: 'property', tier: 'primitive' },
-  { slot: 'breakpoint', family: 'property', tier: 'primitive' },
-  { slot: 'aspect', family: 'property', tier: 'primitive' },
-
-  // ── Tier 3 — semantic roles ─────────────────────────────────────────────
-  { slot: 'gap', family: 'role', tier: 'semantic' },
-  { slot: 'padding', family: 'role', tier: 'semantic' },
-  { slot: 'section', family: 'role', tier: 'semantic' },
-  // `gutter` retired: `--gutter-page` was renamed to `--page-inset` (ADR-025)
-  // and no `--gutter-*` ships. The slot matched nothing, so the entry was inert.
-  { slot: 'heading', family: 'role', tier: 'semantic' },
-  { slot: 'display', family: 'role', tier: 'semantic' },
-  { slot: 'body', family: 'role', tier: 'semantic' },
-  { slot: 'label', family: 'role', tier: 'semantic' },
-  { slot: 'subtitle', family: 'role', tier: 'semantic' },
-  { slot: 'icon', family: 'role', tier: 'semantic' },
-  { slot: 'shadow', family: 'role', tier: 'semantic' },
-  { slot: 'box-shadow', family: 'role', tier: 'semantic' },
-  { slot: 'ease', family: 'role', tier: 'semantic' },
-  { slot: 'content-width', family: 'role', tier: 'semantic' },
-  { slot: 'measure', family: 'role', tier: 'semantic' },
-  { slot: 'state', family: 'role', tier: 'semantic' },
-
-  // ── Tier 4 — component knobs (ADR-014) ──────────────────────────────────
-  { slot: 'bds', family: 'component', tier: 'component' },
-];
+const GRAMMAR = JSON.parse(
+  fs.readFileSync(new URL('../tokens/naming-grammar.json', import.meta.url), 'utf8'),
+);
+export const SLOT_REGISTRY = GRAMMAR.slots;
 
 /**
  * slot → tracking issue. Drift that ships today. Registered so the census is
@@ -178,16 +130,14 @@ function lineOf(src, index) {
 /** Longest-match-first, so `border-radius` wins over `border`. */
 const SLOTS_BY_LENGTH = [...SLOT_REGISTRY].sort((a, b) => b.slot.length - a.slot.length);
 
-const T_SHIRT = new Set([
-  'tiny', '2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', 'xxl', 'huge',
-]);
+const T_SHIRT = new Set(GRAMMAR.steps.slotAuditTShirt);
 
 /**
  * A null/reset step is orthogonal to the scale it sits beside — every scale
  * needs one, so `--gap-none` next to `--gap-md` is not two vocabularies.
  * Classified separately and excluded from the MIXED test for that reason.
  */
-const RESET_STEPS = new Set(['none', '0']);
+const RESET_STEPS = new Set(GRAMMAR.steps.reset);
 
 /**
  * Which step vocabulary a token's tail is drawn from. Reported per slot so a
