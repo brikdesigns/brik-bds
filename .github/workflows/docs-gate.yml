@@ -312,6 +312,17 @@ jobs:
         if: always() && steps.install.outcome == 'success'
         run: npm run lint-component-props
 
+      # ─── check-docs-surfaces ────────────────────────────────────────────────
+      # #2632: /bds-manifest.json got shipped, reverted, and the docs host sat
+      # 404ing on a CLAUDE.md-documented route with nothing catching it. Hits
+      # design.brikdesigns.com directly — the only check in this job that needs
+      # network egress to prod — so a transient prod outage can fail this step
+      # without a corresponding code regression; that's a known tradeoff, not
+      # a bug in the check.
+      - name: Check docs-host surfaces are live
+        if: always() && steps.install.outcome == 'success'
+        run: npm run check-docs-surfaces
+
   # ─── doc-links-check — own runner, needs the Storybook index ────────────────
   #
   # The storybook-link class validates story IDs against the build's own index
