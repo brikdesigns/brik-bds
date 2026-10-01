@@ -237,10 +237,16 @@ function main() {
 }
 
 // Entry-point detection — ESM doesn't have `require.main === module`. Compare
-// the resolved file path of this module against argv[1].
+// the resolved file path of this module against argv[1]. argv[1] needs
+// fs.realpathSync: npm's `bin` mechanism always invokes a published CLI
+// through a node_modules/.bin symlink, and Node's ESM loader resolves
+// symlinks for import.meta.url but not for argv[1] — without this the two
+// sides never match and main() silently never runs (brik-bds#2663).
 const isCliEntry = (() => {
   try {
-    return path.resolve(fileURLToPath(import.meta.url)) === path.resolve(process.argv[1] ?? '');
+    const argv1 = process.argv[1];
+    if (!argv1) return false;
+    return path.resolve(fileURLToPath(import.meta.url)) === fs.realpathSync(path.resolve(argv1));
   } catch (err) {
     process.stderr.write(`gen-icon-collection: could not determine CLI entry — ${err.message}\n`);
     return false;
