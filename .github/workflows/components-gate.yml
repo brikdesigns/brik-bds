@@ -198,6 +198,7 @@ jobs:
             'scripts/generate-component-axes.mjs' \
             'scripts/lint-content-rhythm.mjs' \
             'scripts/gen-icon-collection.mjs' \
+            'scripts/lint-icon-weight-parity.mjs' \
             'scripts/lint-inline-var.mjs' \
             'scripts/wrap-component-layers.mjs' \
             'scripts/lint-page-grid.mjs' \
@@ -320,9 +321,23 @@ jobs:
       # components/icons.generated.json must cover every shipped `ph:*` usage,
       # or the icon silently falls through to the Iconify CDN and the
       # offline-icon guarantee is gone. Also catches a typo'd icon name. (#1002)
+      #
+      # lint-icon-weight-parity is the weight-aware half: gen:icons:check only
+      # proves the collection matches what BDS's own generator would produce,
+      # which happens to imply bold-weight coverage for THIS repo's default
+      # weight. It says nothing for a consumer whose generator never learned
+      # to bundle a weight twin — exactly how brikdesigns forked
+      # gen-icon-collection.mjs and silently lost it (#2406). One combined
+      # step rather than a second gate: for brik-bds the two assertions
+      # overlap on the sync case, so this replaces the single-purpose step
+      # rather than adding a parallel one.
       - name: Check offline icon collection is in sync
         if: always() && steps.install.outcome == 'success'
         run: npm run gen:icons:check
+
+      - name: Check icon weight parity
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-icon-weight-parity
 
       # ─── inline-var-check ───────────────────────────────────────────────────
       # No NEW raw inline `var(--…)` token consumption in component TSX —

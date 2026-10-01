@@ -64,6 +64,16 @@
       "import": "./scripts/check-widget-drift.mjs",
       "default": "./scripts/check-widget-drift.mjs"
     },
+    "./gen-icon-collection": {
+      "types": "./scripts/gen-icon-collection.d.ts",
+      "import": "./scripts/gen-icon-collection.mjs",
+      "default": "./scripts/gen-icon-collection.mjs"
+    },
+    "./lint-icon-weight-parity": {
+      "types": "./scripts/lint-icon-weight-parity.d.ts",
+      "import": "./scripts/lint-icon-weight-parity.mjs",
+      "default": "./scripts/lint-icon-weight-parity.mjs"
+    },
     "./widgets/*": "./components/ui/BrikDevBar/widgets/*"
   },
   "files": [
@@ -84,13 +94,19 @@
     "scripts/cascade-contract-check.d.ts",
     "scripts/check-widget-drift.mjs",
     "scripts/check-widget-drift.d.ts",
+    "scripts/gen-icon-collection.mjs",
+    "scripts/gen-icon-collection.d.ts",
+    "scripts/lint-icon-weight-parity.mjs",
+    "scripts/lint-icon-weight-parity.d.ts",
     "components/ui/BrikDevBar/widgets/*.js"
   ],
   "bin": {
     "bds-find": "scripts/bds-find.mjs",
     "canonical-check": "scripts/canonical-check.mjs",
     "canonical-class-check": "scripts/canonical-class-check.mjs",
-    "cascade-contract-check": "scripts/cascade-contract-check.mjs"
+    "cascade-contract-check": "scripts/cascade-contract-check.mjs",
+    "gen-icon-collection": "scripts/gen-icon-collection.mjs",
+    "lint-icon-weight-parity": "scripts/lint-icon-weight-parity.mjs"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -221,6 +237,7 @@
     "gen:icons": "node scripts/gen-icon-collection.mjs",
     "gen:icons:check": "node scripts/gen-icon-collection.mjs --check",
     "gen:icons:update": "node scripts/gen-icon-collection.mjs && git add components/icons.generated.json",
+    "lint-icon-weight-parity": "node scripts/lint-icon-weight-parity.mjs",
     "gen:logos": "node scripts/gen-logos.mjs",
     "gen:logos:check": "node scripts/gen-logos.mjs --check",
     "gen:logos:update": "node scripts/gen-logos.mjs && git add components/ui/Logo/logos.generated.ts",
