@@ -172,27 +172,27 @@
      ═══════════════════════════════════════════════
      Override any of these in theme-{client}.css to
      customize animation feel per brand:
-       --bds-duration-fast/normal/slow  = interaction speed
-       --bds-ease-out/in/in-out/spring  = animation personality
+       --duration-fast/normal/slow  = interaction speed
+       --ease-out/in/in-out/spring  = animation personality
        --stagger-*                  = list reveal cadence
      Example (luxury, slow & elegant):
-       --bds-duration-fast: 150ms;
-       --bds-duration-normal: 300ms;
-       --bds-duration-slow: 500ms;
-       --bds-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+       --duration-fast: 150ms;
+       --duration-normal: 300ms;
+       --duration-slow: 500ms;
+       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
      Example (snappy SaaS dashboard):
-       --bds-duration-fast: 80ms;
-       --bds-duration-normal: 150ms;
-       --bds-duration-slow: 250ms;
+       --duration-fast: 80ms;
+       --duration-normal: 150ms;
+       --duration-slow: 250ms;
      ═══════════════════════════════════════════════ */
-  --bds-ease-in: var(--bds-easing-ease-in);
-  --bds-ease-out: var(--bds-easing-ease-out);
-  --bds-ease-in-out: var(--bds-easing-ease-in-out);
-  --bds-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — use for pop-in, badge appear */
+  --ease-in: var(--bds-easing-ease-in);
+  --ease-out: var(--bds-easing-ease-out);
+  --ease-in-out: var(--bds-easing-ease-in-out);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — use for pop-in, badge appear */
 
-  --bds-duration-fast: var(--bds-duration-100);
-  --bds-duration-normal: var(--bds-duration-200);
-  --bds-duration-slow: var(--bds-duration-300);
+  --duration-fast: var(--bds-duration-100);
+  --duration-normal: var(--bds-duration-200);
+  --duration-slow: var(--bds-duration-300);
 
   --stagger-1: 0ms;
   --stagger-2: 50ms;

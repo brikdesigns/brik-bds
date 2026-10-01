@@ -150,6 +150,19 @@ describe('lint-deleted-token-consumers', { timeout: 30_000 }, () => {
     expect(json.deleted).toEqual([]);
   });
 
+  it('does not read a changed value as a removal', () => {
+    // `-` + `+` of the same name is an edit: the name is still declared in tokens/.
+    // dist omits it on purpose (a name that lives in a file dist does not bundle).
+    commitTokens({
+      source: ':root {\n  --bds-measure-lg: 72ch;\n  --bds-measure-md: 61ch;\n}\n',
+      dist: ':root {\n  --bds-measure-lg: 72ch;\n}\n',
+      message: 'edit --bds-measure-md value',
+    });
+    const { code, json } = run();
+    expect(json.deleted).toEqual([]);
+    expect(code).toBe(0);
+  });
+
   it('does not treat a longer name as a reference to its prefix', () => {
     // `--measure` is a prefix of `--bds-measure-md`; a fixed-string grep matches
     // both, so the boundary filter is what keeps this from a false positive.
