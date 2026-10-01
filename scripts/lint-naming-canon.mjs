@@ -16,7 +16,7 @@
  * ADR-033 closes those lists. This gate is what stops them re-opening — it is
  * #1910 AC #5, and ADR-033 § Enforcement is its spec.
  *
- * ── The six rules (ADR-033 § Enforcement) ──────────────────────────────────
+ * ── The seven rules (rules 1-6: ADR-033 § Enforcement; rule 7: ADR-043) ────
  *
  *   1  step        A token's step falls outside its family's vocabulary (§ 3)
  *                  and is not a § Named exception. Reads dist/tokens.css.
@@ -33,6 +33,11 @@
  *   6  reference   A `var(--*-status-*)` consumption of the family § Token
  *                  families retired and #1958 deleted. Reads components/,
  *                  content-system/, lib/, docs-site/.
+ *   7  color body  A `--color-*` token that does not parse as
+ *                  `color-{family}-{step}` against tokens/naming-grammar.json
+ *                  (ADR-043 § 2, § 4: closed families, numeric steps 50-950).
+ *                  Word steps (`-light`, `-darkest`, …) retire in #2670. Reads
+ *                  dist/tokens.css.
  *
  * ── Why rule 6 reads references, when 1-5 read names ───────────────────────
  *
@@ -98,7 +103,7 @@
  * `main` unnoticed, which is the whole failure the gate exists to prevent.
  *
  * ── CLI ────────────────────────────────────────────────────────────────────
- *   node scripts/lint-naming-canon.mjs              all five rules
+ *   node scripts/lint-naming-canon.mjs              all seven rules
  *   node scripts/lint-naming-canon.mjs --rule 3     one rule
  *   node scripts/lint-naming-canon.mjs --json       machine-readable
  *   node scripts/lint-naming-canon.mjs --census     every finding, baselined too
@@ -1015,6 +1020,41 @@ function referenceFindings(refs) {
   return findings;
 }
 
+// ── Rule 7 — a colour Primitive parses as color-{family}-{step} ────────────
+
+const COLOR_GRAMMAR = GRAMMAR.tiers.primitive.color;
+const COLOR_FAMILIES = new Set(COLOR_GRAMMAR.families);
+const COLOR_STEPS = new Set(COLOR_GRAMMAR.steps);
+const RETIRED_WORD_STEPS = new Set(COLOR_GRAMMAR.retiredWordSteps);
+
+/**
+ * ADR-043 § 2/§ 4 declare ONE colour Primitive body, `color-{family}-{step}`,
+ * with a closed family list and numeric steps. Rule 1 deliberately skips colour
+ * (a colour tail was a role under ADR-033 § 3), so nothing judged the colour
+ * ramps until this rule. Families and steps are read from the grammar file.
+ */
+function colorBodyFindings(byName) {
+  const findings = [];
+  for (const name of byName.keys()) {
+    if (!name.startsWith('--color-')) continue;
+    const parts = name.slice('--color-'.length).split('-');
+    const step = parts[parts.length - 1];
+    const family = parts.slice(0, -1).join('-');
+    if (parts.length === 2 && COLOR_FAMILIES.has(family) && COLOR_STEPS.has(step)) continue;
+    findings.push({
+      rule: 7,
+      id: name,
+      detail: parts.length === 2 && COLOR_FAMILIES.has(family) && RETIRED_WORD_STEPS.has(step)
+        ? `word step \`${step}\` is retired (ADR-043 § 4) — numeric \`${COLOR_GRAMMAR.steps[0]}\`-`
+          + `\`${COLOR_GRAMMAR.steps[COLOR_GRAMMAR.steps.length - 1]}\` only; removed in #2670`
+        : `\`${name}\` does not parse as \`--${COLOR_GRAMMAR.body}\` `
+          + `(families: ${COLOR_GRAMMAR.families.join(' | ')}; steps: numeric ${COLOR_GRAMMAR.steps[0]}-`
+          + `${COLOR_GRAMMAR.steps[COLOR_GRAMMAR.steps.length - 1]})`,
+    });
+  }
+  return findings;
+}
+
 // ── Baseline ────────────────────────────────────────────────────────────────
 
 /**
@@ -1042,6 +1082,7 @@ const RULE_NAMES = {
   4: 'BEM modifier without its axis prefix (§ 4)',
   5: 'word on no closed list — default-deny (§ 6)',
   6: 'reference to a deleted --*-status-* token (§ Token families)',
+  7: 'colour Primitive is not color-{family}-{step} (ADR-043 § 2, § 4)',
 };
 
 function main() {
@@ -1060,7 +1101,7 @@ function main() {
   const onlyRule = args.includes('--rule') ? Number(flag('--rule', '0')) : null;
 
   if (onlyRule !== null && !RULE_NAMES[onlyRule]) {
-    console.error(`lint-naming-canon: --rule must be 1-6, got ${onlyRule}`);
+    console.error(`lint-naming-canon: --rule must be 1-7, got ${onlyRule}`);
     process.exit(2);
   }
 
@@ -1125,6 +1166,7 @@ function main() {
     ),
     ...vocabularyFindings(unions.unions, modifiers.mods),
     ...referenceFindings(refs),
+    ...colorBodyFindings(tokens.byName),
   ];
   if (onlyRule !== null) all = all.filter((f) => f.rule === onlyRule);
 
@@ -1173,7 +1215,7 @@ function main() {
     + `${lines.size} service line(s) exempt on ${slBlocks.size} block(s)`
   );
 
-  for (const rule of onlyRule !== null ? [onlyRule] : [1, 2, 3, 4, 5, 6]) {
+  for (const rule of onlyRule !== null ? [onlyRule] : [1, 2, 3, 4, 5, 6, 7]) {
     const l = live.filter((f) => f.rule === rule);
     const b = baselined.filter((f) => f.rule === rule);
     if (l.length === 0 && b.length === 0) continue;

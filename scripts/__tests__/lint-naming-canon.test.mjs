@@ -10,7 +10,7 @@
  * Four cases are regression guards for over-reach found while building the gate,
  * and they matter as much as the sabotage cases — a gate that flags correct code
  * gets suppressed, and a suppressed gate enforces nothing:
- *   • `--color-blue-light`   a colour tail is a role, not a step (§ 3)
+ *   • `--color-blue-light`   rule 1 does not judge a colour tail (§ 3); rule 7 does
  *   • `--font-weight-bold`   `bold` is font-weight's CSS keyword, not a step
  *   • `--border-width-thin`  longest-match: a property slot, NOT the `border`
  *                            colour purpose — this one silently vanished from a
@@ -35,10 +35,10 @@ const REPO = path.join(HERE, '..', '..');
  * rather than as a passing test with a quiet false positive.
  */
 const CLEAN_TOKENS = `:root {
-  /* Colour intent formula — the tail is a role, § 3 does not reach it. */
+  /* Colour Primitive — color-{family}-{step}, numeric steps (ADR-043 § 4). */
   --color-blue-500: #2f6fed;
-  --color-blue-light: #9dbcf7;
-  --color-blue-dark: #17408f;
+  --color-blue-300: #9dbcf7;
+  --color-blue-800: #17408f;
   --background-brand-primary: var(--color-blue-500);
   --text-negative: #b3261e;
   --border-neutral: #d8d8d8;
@@ -187,7 +187,7 @@ function withTokens(...decls) {
 }
 
 describe('lint-naming-canon — fixture', () => {
-  it('the clean fixture passes all six rules', () => {
+  it('the clean fixture passes all seven rules', () => {
     const { code, out } = run();
     expect(out).toMatch(/clean — 0 live violation/);
     expect(code).toBe(0);
@@ -225,13 +225,15 @@ describe('rule 1 — step vocabulary (ADR-033 § 3)', () => {
     expect(code).toBe(0);
   });
 
-  it('does NOT flag a colour ramp rung — a colour tail is a role, not a step', () => {
+  it('rule 1 does NOT judge a colour ramp rung — rule 7 does', () => {
     // Regression guard. Grouping by family puts `--color-blue-500` (numeric)
-    // beside `--color-blue-light` (word), so without the colour carve-out 57 ramp
-    // rungs read as step-word violations — a disposition ADR-033 never made.
-    const { code, out } = run();
-    expect(out).not.toMatch(/--color-blue-(light|dark)/);
-    expect(code).toBe(0);
+    // beside `--color-blue-light` (word), so without the colour carve-out ramp
+    // rungs read as step-word violations under rule 1. The word step is still
+    // red, but as rule 7 (ADR-043 § 4), never as a rule 1 step finding.
+    const { code, out } = run({ tokens: withTokens('--color-blue-light: #9dbcf7;') });
+    expect(out).not.toMatch(/Rule 1/);
+    expect(out).toMatch(/Rule 7/);
+    expect(code).toBe(1);
   });
 
   it('does NOT flag a CSS keyword in a family that takes no steps', () => {
@@ -621,6 +623,33 @@ describe('rule 6 — the deleted --*-status-* family cannot come back (§ Token 
   });
 });
 
+describe('rule 7 — a colour Primitive is color-{family}-{step} (ADR-043 § 2, § 4)', () => {
+  it('fails on a family outside the grammar: --color-foo-500', () => {
+    const { code, out } = run({ tokens: withTokens('--color-foo-500: #000;') });
+    expect(code).toBe(1);
+    expect(out).toMatch(/Rule 7/);
+    expect(out).toMatch(/--color-foo-500 — `--color-foo-500` does not parse as `--color-\{family\}-\{step\}`/);
+  });
+
+  it('fails on a word step, and names the retirement: --color-poppy-lightest', () => {
+    const { code, out } = run({ tokens: withTokens('--color-poppy-lightest: #fde;') });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--color-poppy-lightest — word step `lightest` is retired \(ADR-043 § 4\).*#2670/);
+  });
+
+  it('fails on a numeric step outside 50-950', () => {
+    const { code, out } = run({ tokens: withTokens('--color-poppy-550: #fde;') });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--color-poppy-550 — .*does not parse/);
+  });
+
+  it('passes on --color-poppy-500', () => {
+    const { code, out } = run({ tokens: withTokens('--color-poppy-500: #e35335;') });
+    expect(out).not.toMatch(/Rule 7/);
+    expect(code).toBe(0);
+  });
+});
+
 describe('the baseline can only shrink', () => {
   const planted = { tokens: withTokens('--content-width-narrow: 640px;') };
 
@@ -695,6 +724,6 @@ describe('a broken scan never reads as clean', () => {
   it('exit 2 on a bad --rule', () => {
     const { code, out } = run({ args: ['--rule', '9'] });
     expect(code).toBe(2);
-    expect(out).toMatch(/--rule must be 1-6/);
+    expect(out).toMatch(/--rule must be 1-7/);
   });
 });
