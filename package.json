@@ -74,10 +74,12 @@
       "import": "./scripts/lint-icon-weight-parity.mjs",
       "default": "./scripts/lint-icon-weight-parity.mjs"
     },
+    "./naming-grammar.json": "./tokens/naming-grammar.json",
     "./widgets/*": "./components/ui/BrikDevBar/widgets/*"
   },
   "files": [
     "dist",
+    "tokens/naming-grammar.json",
     "blueprints/blueprint-library.json",
     "content-system/compliance/*.md",
     "content-system/atmospheres/*.css",
@@ -227,6 +229,7 @@
     "lint-token-purpose-slots": "node scripts/lint-token-purpose-slots.mjs",
     "lint-naming-canon": "node scripts/lint-naming-canon.mjs",
     "lint-naming-canon:census": "node scripts/lint-naming-canon.mjs --census",
+    "lint-naming-grammar-docs": "node scripts/lint-naming-grammar-docs.mjs",
     "slot-pattern-check": "node scripts/slot-pattern-check.mjs components content-system/blueprints",
     "slot-pattern-check:report": "node scripts/slot-pattern-check.mjs --format md components content-system/blueprints stories || true",
     "build:types": "tsc --project tsconfig.build.json",

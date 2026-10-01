@@ -1,0 +1,158 @@
+{
+  "$comment": "The token naming grammar, declared once. Read by lint-naming-canon.mjs, lint-token-purpose-slots.mjs, the grammar vitest and the token-anatomy docs check. Spec: docs/adrs/ADR-043-system-id-token-prefix.md (ID, shape, reserved words) and ADR-033 (vocabularies). Vocabularies moved verbatim from the hardcoded sets those scripts held; changing a word here changes the gate.",
+  "version": 1,
+  "shape": "--{id}-{body}",
+  "ids": {
+    "$comment": "ADR-043 section 3. An agent may propose token values, never token names and never IDs: a new ID is a brik-bds PR to this registry, reviewed by a human.",
+    "rules": [
+      "lowercase kebab-case",
+      "never equals a reserved word",
+      "never prefixes another registered ID"
+    ],
+    "registry": {
+      "bds": { "system": "brik-bds", "library": "Foundations + the default (Brik) Brand Kit that ships in dist/tokens.css" },
+      "vale-partners": { "system": "web/vale-partners", "library": "Vale Partners Brand Kit" },
+      "tncld": { "system": "web/tncld", "library": "TNCLD Brand Kit" },
+      "birdwell": { "system": "web/birdwell-mutlak", "library": "Birdwell Brand Kit" },
+      "portal": { "system": "product/brik-client-portal", "library": "portal product theme" }
+    },
+    "componentId": "bds"
+  },
+  "tiers": {
+    "primitive": {
+      "color": {
+        "body": "color-{family}-{step}",
+        "families": ["blue", "grayscale", "green", "orange", "pink", "poppy", "purple", "tan", "yellow"],
+        "steps": ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"],
+        "stepsSource": "brik-llm scripts/tokens/generate-color-ramps.js:38 (STOPS)",
+        "retiredWordSteps": ["lightest", "lighter", "light", "dark", "darker", "darkest", "base"]
+      },
+      "scale": {
+        "body": "{scale}-{step}",
+        "scales": [
+          "font-size", "font-weight", "font-family", "font-line-height", "font-casing", "letter-spacing",
+          "space", "size", "border-radius", "border-width", "shadow-blur", "shadow-offset", "shadow-spread",
+          "blur-radius", "duration", "delay", "iteration", "breakpoint", "aspect"
+        ]
+      }
+    },
+    "semantic": {
+      "formula": "{purpose}-{role}[-{state}]",
+      "purposes": ["page", "surface", "background", "text", "border"],
+      "roles": [
+        "gap", "padding", "section", "heading", "display", "body", "label", "subtitle", "icon",
+        "shadow", "box-shadow", "ease", "content-width", "measure", "state"
+      ],
+      "states": ["hover", "pressed", "disabled"]
+    },
+    "component": {
+      "body": "{component}-{property}",
+      "stemRule": "The first body segment is the component stem. It may not begin with a reserved word (ADR-043 section 5)."
+    }
+  },
+  "reservedWords": {
+    "$comment": "ADR-043 section 5. The first body segment names the tier: color or a scale word is Primitive, a purpose or role word is Semantic, anything else is a Component stem. Derived from tiers above; the vitest asserts they agree.",
+    "color": ["color"],
+    "scale": ["font", "letter", "space", "size", "border", "shadow", "blur", "duration", "delay", "iteration", "breakpoint", "aspect"],
+    "purposeAndRole": [
+      "page", "surface", "background", "text", "border",
+      "gap", "padding", "section", "heading", "display", "body", "label", "subtitle", "icon",
+      "shadow", "box", "ease", "content", "measure", "state"
+    ]
+  },
+  "slots": [
+    { "slot": "color", "family": "color", "tier": "primitive" },
+    { "slot": "page", "family": "color", "tier": "semantic" },
+    { "slot": "surface", "family": "color", "tier": "semantic" },
+    { "slot": "background", "family": "color", "tier": "semantic" },
+    { "slot": "text", "family": "color", "tier": "semantic" },
+    { "slot": "border", "family": "color", "tier": "semantic" },
+    { "slot": "font-size", "family": "property", "tier": "primitive" },
+    { "slot": "font-weight", "family": "property", "tier": "primitive" },
+    { "slot": "font-family", "family": "property", "tier": "primitive" },
+    { "slot": "font-line-height", "family": "property", "tier": "primitive" },
+    { "slot": "font-casing", "family": "property", "tier": "primitive" },
+    { "slot": "letter-spacing", "family": "property", "tier": "primitive" },
+    { "slot": "space", "family": "property", "tier": "primitive" },
+    { "slot": "size", "family": "property", "tier": "primitive" },
+    { "slot": "border-radius", "family": "property", "tier": "primitive" },
+    { "slot": "border-width", "family": "property", "tier": "primitive" },
+    { "slot": "shadow-blur", "family": "property", "tier": "primitive" },
+    { "slot": "shadow-offset", "family": "property", "tier": "primitive" },
+    { "slot": "shadow-spread", "family": "property", "tier": "primitive" },
+    { "slot": "blur-radius", "family": "property", "tier": "primitive" },
+    { "slot": "duration", "family": "property", "tier": "primitive" },
+    { "slot": "delay", "family": "property", "tier": "primitive" },
+    { "slot": "iteration", "family": "property", "tier": "primitive" },
+    { "slot": "breakpoint", "family": "property", "tier": "primitive" },
+    { "slot": "aspect", "family": "property", "tier": "primitive" },
+    { "slot": "gap", "family": "role", "tier": "semantic" },
+    { "slot": "padding", "family": "role", "tier": "semantic" },
+    { "slot": "section", "family": "role", "tier": "semantic" },
+    { "slot": "heading", "family": "role", "tier": "semantic" },
+    { "slot": "display", "family": "role", "tier": "semantic" },
+    { "slot": "body", "family": "role", "tier": "semantic" },
+    { "slot": "label", "family": "role", "tier": "semantic" },
+    { "slot": "subtitle", "family": "role", "tier": "semantic" },
+    { "slot": "icon", "family": "role", "tier": "semantic" },
+    { "slot": "shadow", "family": "role", "tier": "semantic" },
+    { "slot": "box-shadow", "family": "role", "tier": "semantic" },
+    { "slot": "ease", "family": "role", "tier": "semantic" },
+    { "slot": "content-width", "family": "role", "tier": "semantic" },
+    { "slot": "measure", "family": "role", "tier": "semantic" },
+    { "slot": "state", "family": "role", "tier": "semantic" },
+    { "slot": "bds", "family": "component", "tier": "component" }
+  ],
+  "steps": {
+    "$comment": "ADR-033 section 3 as amended by #2594. tShirt is the lint-naming-canon rule-1 vocabulary; slotAuditTShirt is the narrower set lint-token-purpose-slots has always classified with (no 3xs/3xl) - kept distinct so its output is unchanged.",
+    "tShirt": ["tiny", "3xs", "2xs", "xs", "sm", "md", "lg", "xl", "2xl", "xxl", "3xl", "huge"],
+    "slotAuditTShirt": ["tiny", "2xs", "xs", "sm", "md", "lg", "xl", "2xl", "xxl", "huge"],
+    "reset": ["none", "0"],
+    "retired": {
+      "standard": { "--border-width-": "deleted, not renamed", "default": "md" },
+      "thin": { "--border-width-": "deleted, not renamed", "default": "sm" },
+      "bold": { "--border-width-": "deleted, not renamed", "default": "lg" },
+      "normal": { "--duration-": "md", "default": "md" },
+      "fast": { "--duration-": "sm", "default": "sm" },
+      "slow": { "--duration-": "lg", "default": "lg" },
+      "narrow": { "--content-width-": "sm", "default": "sm" },
+      "default": { "--content-width-": "md", "default": "md" },
+      "wide": { "--content-width-": "lg", "default": "lg" }
+    },
+    "namedExceptions": [
+      "--size-pill", "--size-circle",
+      "--border-radius-pill", "--border-radius-circle",
+      "--aspect-square", "--aspect-cinema", "--aspect-photo-landscape", "--aspect-photo-portrait",
+      "--iteration-infinite",
+      "--content-width-full",
+      "--shadow-overlay",
+      "--duration-marquee", "--duration-autoplay",
+      "--web", "--tablet", "--mobile"
+    ]
+  },
+  "valence": {
+    "words": ["negative", "positive", "warning", "info", "neutral"],
+    "retired": {
+      "error": "negative",
+      "success": "positive",
+      "danger": "negative",
+      "destructive": "negative",
+      "information": "info",
+      "progress": "info"
+    }
+  },
+  "axes": {
+    "tone": { "concept": "valence", "valuesFrom": "valence" },
+    "status": { "concept": "presence/lifecycle", "values": null },
+    "variant": { "concept": "form", "values": null },
+    "emphasis": { "concept": "hue source", "values": ["neutral", "brand", "accent", "inverse"] },
+    "appearance": { "concept": "fill treatment", "values": ["solid", "subtle", "muted"] },
+    "density": { "concept": "spacing compression", "values": ["comfortable", "compact"] },
+    "orientation": { "concept": "layout direction", "values": ["horizontal", "vertical"] },
+    "layout": { "concept": "component arrangement", "values": null }
+  },
+  "docs": {
+    "$comment": "token-anatomy.mdx must contain, verbatim, the formula strings derived from tiers above: --{semantic.formula}, --{primitive.color.body}, --{ids.componentId}-{component.body} (scripts/lint-naming-grammar-docs.mjs). #2666 rewrites the page and will add the --{id}-{body} shape.",
+    "page": "docs-site/content/docs/foundation/token-anatomy.mdx"
+  }
+}

@@ -118,20 +118,20 @@ import path from 'node:path';
 import process from 'node:process';
 import { SLOT_REGISTRY } from './lint-token-purpose-slots.mjs';
 
+// Every closed vocabulary below is DATA in tokens/naming-grammar.json (#2669),
+// so the lint, the docs check and the hook read one list. The rationale for
+// each list stays beside its binding here.
+const GRAMMAR = JSON.parse(
+  fs.readFileSync(new URL('../tokens/naming-grammar.json', import.meta.url), 'utf8'),
+);
+
 // ── Vocabulary — every list closed by ADR-033 ───────────────────────────────
 
 /** § 1. The valence axis, in the token layer's words. */
-const VALENCE = new Set(['negative', 'positive', 'warning', 'info', 'neutral']);
+const VALENCE = new Set(GRAMMAR.valence.words);
 
 /** § Retired vocabulary → Valence words. retired → canonical. */
-const RETIRED_VALENCE = {
-  error: 'negative',
-  success: 'positive',
-  danger: 'negative',
-  destructive: 'negative',
-  information: 'info',
-  progress: 'info',
-};
+const RETIRED_VALENCE = GRAMMAR.valence.retired;
 
 /**
  * § 2. One word per axis, and each word names exactly one axis.
@@ -143,29 +143,26 @@ const RETIRED_VALENCE = {
  */
 /** § 2. The orientation axis (#2001 amendment). Shared so the name-identified
  * check below reads the same closed value list rule 5 does. */
-const ORIENTATION_VALUES = new Set(['horizontal', 'vertical']);
+const ORIENTATION_VALUES = new Set(GRAMMAR.axes.orientation.values);
 
-const AXES = {
-  tone: { concept: 'valence', values: VALENCE },
-  status: { concept: 'presence/lifecycle', values: null },
-  variant: { concept: 'form', values: null },
-  // `inverse` admitted by § Amendments (#2279) — a near-black inverted palette,
-  // already BDS's word for it on Button and Footer, where it sits on `variant`
-  // and is part of the mixing #1983 owns.
-  emphasis: { concept: 'hue source', values: new Set(['neutral', 'brand', 'accent', 'inverse']) },
-  appearance: { concept: 'fill treatment', values: new Set(['solid', 'subtle', 'muted']) },
-  density: { concept: 'spacing compression', values: new Set(['comfortable', 'compact']) },
-  orientation: { concept: 'layout direction', values: ORIENTATION_VALUES },
-  // `layout` (ADR-038, #2459) — a component's arrangement of one shared slot set
-  // (Card: stack / row / metric / control). Per-subject like `variant`/`status`
-  // (`values: null`), so rule 5 does not default-deny its members and compound
-  // sub-modifiers (`--layout-stack-inset`, `--layout-control-action-center`) pass.
-  // Distinct from `orientation`: that is horizontal/vertical DIRECTION; this is
-  // WHICH arrangement. The § 2 `layout → orientation` retirement stays scoped to
-  // horizontal/vertical unions by its value-corroboration guard, so a stack/row
-  // union named `layout` does not collide.
-  layout: { concept: 'component arrangement', values: null },
-};
+// Axis comments (ADR-033 § 2) - the per-axis amendments:
+//   • `inverse` on emphasis: admitted by § Amendments (#2279) - a near-black
+//     inverted palette, already BDS's word for it on Button and Footer.
+//   • `layout` (ADR-038, #2459): a component's arrangement of one shared slot
+//     set (Card: stack / row / metric / control). Per-subject like
+//     `variant`/`status` (`values: null`), so rule 5 does not default-deny its
+//     members. Distinct from `orientation` (horizontal/vertical DIRECTION).
+const AXES = Object.fromEntries(
+  Object.entries(GRAMMAR.axes).map(([axis, a]) => [
+    axis,
+    {
+      concept: a.concept,
+      values: a.valuesFrom === 'valence' ? VALENCE
+        : axis === 'orientation' ? ORIENTATION_VALUES
+        : a.values ? new Set(a.values) : null,
+    },
+  ]),
+);
 
 /**
  * § 2 axes a union carries in its TYPE NAME, not only in its member values.
@@ -216,16 +213,14 @@ const RETIRED_AXIS_VALUES = {
  *
  * Ordering, low to high: tiny · 3xs · 2xs · xs · sm · md · lg · xl · 2xl · xxl · 3xl · huge.
  */
-const T_SHIRT = new Set([
-  'tiny', '3xs', '2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', 'xxl', '3xl', 'huge',
-]);
+const T_SHIRT = new Set(GRAMMAR.steps.tShirt);
 
 /**
  * A null/reset step is orthogonal to the scale beside it — every scale needs
  * one, so `--gap-none` next to `--gap-md` is not a second vocabulary. Same
  * carve-out lint-token-purpose-slots makes, for the same reason.
  */
-const RESET_STEPS = new Set(['none', '0']);
+const RESET_STEPS = new Set(GRAMMAR.steps.reset);
 
 /**
  * § 3 + § Retired vocabulary → Step words. Retired as STEP words, with the
@@ -234,17 +229,7 @@ const RESET_STEPS = new Set(['none', '0']);
  * migration target is already known, not the closed set of affected families
  * (§ 3's prose retires the words generally; its table is the measured mapping).
  */
-const RETIRED_STEPS = {
-  standard: { '--border-width-': 'deleted, not renamed', default: 'md' },
-  thin: { '--border-width-': 'deleted, not renamed', default: 'sm' },
-  bold: { '--border-width-': 'deleted, not renamed', default: 'lg' },
-  normal: { '--duration-': 'md', default: 'md' },
-  fast: { '--duration-': 'sm', default: 'sm' },
-  slow: { '--duration-': 'lg', default: 'lg' },
-  narrow: { '--content-width-': 'sm', default: 'sm' },
-  default: { '--content-width-': 'md', default: 'md' },
-  wide: { '--content-width-': 'lg', default: 'lg' },
-};
+const RETIRED_STEPS = GRAMMAR.steps.retired;
 
 /**
  * NOT retired: `tiny`, `huge`, `xxl` (#2594).
@@ -266,16 +251,7 @@ const RETIRED_STEPS = {
  * § Named exceptions — not retired. A shape constant, a CSS keyword, or a role
  * has no position on a linear scale, so a step vocabulary cannot express it.
  */
-const NAMED_EXCEPTIONS = new Set([
-  '--size-pill', '--size-circle',
-  '--border-radius-pill', '--border-radius-circle',
-  '--aspect-square', '--aspect-cinema', '--aspect-photo-landscape', '--aspect-photo-portrait',
-  '--iteration-infinite',
-  '--content-width-full',
-  '--shadow-overlay',
-  '--duration-marquee', '--duration-autoplay',
-  '--web', '--tablet', '--mobile',
-]);
+const NAMED_EXCEPTIONS = new Set(GRAMMAR.steps.namedExceptions);
 
 /**
  * § 4. The axis prefixes a BEM modifier may carry. `variant-` and `preset-` are
