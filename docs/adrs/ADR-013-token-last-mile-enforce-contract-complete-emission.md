@@ -1,11 +1,23 @@
 # ADR-013 — Token last mile: enforce the cascade contract, complete mode emission
 
-**Status:** Proposed
-**Date:** 2026-06-19
+**Status:** Accepted
+**Date:** 2026-06-19 (ratified 2026-10-01, #2654)
 **Supersedes:** —
 **Superseded by:** —
-**Related:** [#340](https://github.com/brikdesigns/brik-bds/issues/340) (wire data-mode overrides for non-color tokens), [#920](https://github.com/brikdesigns/brik-bds/issues/920) (typography modes), [PR #483](https://github.com/brikdesigns/brik-bds/pull/483) (spacing modes — paradigm precedent), [cascade.mdx](../../docs-site/content/docs/getting-started/cascade.mdx) (the consumer contract this ADR enforces), [ADR-008](./ADR-008-naming-canon-closed-allowlist.md) (closed-allowlist precedent for stopping drift at the source), [ADR-011](./ADR-011-service-line-token-value-model.md) (Figma-is-SoT value model)
+**Related:** [#340](https://github.com/brikdesigns/brik-bds/issues/340) (wire data-mode overrides for non-color tokens — **closed**), [#920](https://github.com/brikdesigns/brik-bds/issues/920) (typography modes — **closed**), [PR #483](https://github.com/brikdesigns/brik-bds/pull/483) (spacing modes — paradigm precedent), [cascade.mdx](../../docs-site/content/docs/getting-started/cascade.mdx) (the consumer contract this ADR enforces), [ADR-008](./ADR-008-naming-canon-closed-allowlist.md) (closed-allowlist precedent for stopping drift at the source), [ADR-011](./ADR-011-service-line-token-value-model.md) (Figma-is-SoT value model)
 **Owner:** Nick Stanerson
+
+## Ratification
+
+OPERATOR SAID 2026-10-01 (chat, /resume 2655 brikdesigns/brik-bds): "Let's ratify - ensure there's no overlapping work in other sessions. We can also use Opus when/if needed."
+
+All three mechanisms below were reconciled against the shipped code before this flip, not assumed from the issue that proposed ratifying it:
+
+- **Mechanism 1** (§Decision-1, source↔emitted diff) — `scripts/lint-mode-emission-coverage.mjs` (header cites "the drift that motivated #340"), run by the `Mode-emission coverage check` step at `tokens-gate.yml:439-440`, inside the same PR-blocking `lints` job as the ADR-035 gate.
+- **Mechanism 2** (§Decision-2, cascade contract gate) — `scripts/cascade-contract-check.mjs`, published as `@brikdesigns/bds/cascade-contract-check` (`package.json:57-60`). PR-blocking via its own dedicated `.github/workflows/cascade-contract-check.yml`, a **required status check on `main` since #2038** — not merely wired into the local `npm run validate` convenience script.
+- **Mechanism 3** (§Decision-3, consumer adoption) — confirmed live, not theoretical: `brikdesigns/scripts/lint-tokens.mjs:48` imports `scanCascadeContract` from the published export, and `brikdesigns/scripts/cascade-contract-allowlist.txt:4,13,28` cites "ADR-013 §2" / "§3 proof-of-loop closed" as the rule it implements.
+
+`#340` and `#920`, the two sequencing issues §Decision-1 named as "a near-term project," are both closed — the sequencing reads as history, not pending work.
 
 ## Context
 
