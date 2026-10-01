@@ -16,6 +16,24 @@ a consumer greps this file before bumping.
 > `#1186` will add the manifest + CI check that *enforces* this section. Until
 > it lands, the entry is a convention, not a gate.
 
+## v0.193.1 — 2026-10-01
+
+No class hook is renamed or removed, so there is **no breaking class-hook
+table**. But this release is a **visual change for every consumer**: the
+layout tier ([ADR-042](docs/adrs/ADR-042-layout-tier-device-clamp.md), [#2660](https://github.com/brikdesigns/brik-bds/issues/2660)).
+
+| Token | 320px | 768px | 1440px+ | Was |
+|---|---|---|---|---|
+| `--page-inset` | 16px | 32px | 96px | 24px fixed |
+| `--section-padding-block` (new) | 64px | 80px | 104px | `.bds-blueprint-section`: `clamp(var(--padding-xl), 7vw, var(--padding-huge))` |
+
+- Both tokens scale fluidly between those widths. They are flat above 1440px.
+- `[data-mode-spacing]` no longer changes `--page-inset`.
+- `layout-fluid.css` loads after `gap-fills.css` in `dist/tokens.css`. A
+  consumer that redefines `--page-inset` in `:root` *before* `tokens.css` is
+  now overridden.
+- Check visual regression on your bump PR before merging it.
+
 ## v0.184.0 — 2026-09-06
 
 Additive only — **no breaking class-hook changes**. Three new presentational,
