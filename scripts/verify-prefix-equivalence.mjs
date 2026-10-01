@@ -30,6 +30,7 @@ import {
   BRIDGE_BEGIN,
   PREFIX,
   REPO_ROOT,
+  RENAMED_KNOBS,
   canonicalPart,
   declarationMap,
   isRetiredWordStepName,
@@ -60,7 +61,8 @@ export function normaliseBase(baseCss, legacy = readLegacy()) {
       }
       let v = value;
       for (const [word, numeric] of Object.entries(legacy.wordSteps)) v = v.split(`var(${word})`).join(`var(${numeric})`);
-      m.set(unprefixName(name), stripValue(v));
+      // A declared colour renamed after the migration (#2677) compares under its new name.
+      m.set(unprefixName(RENAMED_KNOBS[name] ?? name), stripValue(v));
     }
     out.set(context, m);
   }
@@ -120,7 +122,7 @@ export function compareDist({ baseCss, headDistCss, legacy = readLegacy() }) {
   for (const [context, names] of baseDeclared) {
     for (const oldName of names.keys()) {
       if (oldName.startsWith(PREFIX)) continue; // Component-tier `--bds-*`: same name, no alias
-      const target = prefixName(legacy.wordSteps[oldName] ?? oldName);
+      const target = RENAMED_KNOBS[oldName] ?? prefixName(legacy.wordSteps[oldName] ?? oldName);
       const alias = bridge.get(context)?.get(oldName);
       if (alias === undefined) failures.push(`bridge: ${oldName} has no alias in ${context}`);
       else if (alias !== `var(${target})`) failures.push(`bridge: ${oldName} in ${context} is ${alias}, expected var(${target})`);

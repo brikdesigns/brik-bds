@@ -654,6 +654,23 @@ describe('rule 7 — a colour Primitive is color-{family}-{step} (ADR-043 § 2, 
     expect(out).not.toMatch(/Rule 7/);
     expect(code).toBe(0);
   });
+
+  it('passes the registered named families and endpoints (#2677)', () => {
+    const { code, out } = run({
+      tokens: withTokens('--color-system-red: #f00; --color-annotation-light-pink: #fde; --color-grayscale-black: #000;'),
+    });
+    expect(out).not.toMatch(/Rule 7/);
+    expect(code).toBe(0);
+  });
+
+  it('fails an unregistered name in a named family: --color-system-teal, --color-annotation-annotation-pink', () => {
+    const { code, out } = run({
+      tokens: withTokens('--color-system-teal: #0aa; --color-annotation-annotation-pink: #fde;'),
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--color-system-teal — .*does not parse/);
+    expect(out).toMatch(/--color-annotation-annotation-pink — .*does not parse/);
+  });
 });
 
 describe('the baseline can only shrink', () => {

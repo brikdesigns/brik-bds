@@ -1,5 +1,11 @@
 {
-  "$comment": "ADR-043 section 5: Component knobs renamed off a reserved stem (text-, page-). Old name -> new name. Read by scripts/lib/bds-prefix.mjs (bridge + codemod) and scripts/lint-tokens.js.",
+  "$comment": "ADR-043 section 5: Component knobs renamed off a reserved stem (text-, page-). Old name -> new name. Read by scripts/lib/bds-prefix.mjs (bridge + codemod) and scripts/lint-tokens.js. ADR-043 section 2 / #2677: the six doubled `--color-annotation-annotation-*` colours are renamed `--bds-color-annotation-{hue}` (same file, same bridge path).",
   "--bds-text-area-min-width": "--bds-textarea-min-width",
-  "--bds-page-padding-inline": "--bds-gutter-padding-inline"
+  "--bds-page-padding-inline": "--bds-gutter-padding-inline",
+  "--color-annotation-annotation-pink": "--bds-color-annotation-pink",
+  "--color-annotation-annotation-purple": "--bds-color-annotation-purple",
+  "--color-annotation-annotation-blue": "--bds-color-annotation-blue",
+  "--color-annotation-annotation-light-pink": "--bds-color-annotation-light-pink",
+  "--color-annotation-annotation-light-purple": "--bds-color-annotation-light-purple",
+  "--color-annotation-annotation-light-blue": "--bds-color-annotation-light-blue"
 }
