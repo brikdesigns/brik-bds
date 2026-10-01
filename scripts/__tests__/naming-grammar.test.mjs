@@ -26,7 +26,7 @@ function stemOf(name) {
 const reservedStem = (name) => RESERVED.has(stemOf(name));
 
 describe('component stem vs reserved words (ADR-043 section 5)', () => {
-  it.each(['--bds-textarea-min-width', '--bds-gutter-padding-inline'])('fails: %s', (name) => {
+  it.each(['--bds-text-area-min-width', '--bds-page-padding-inline'])('fails: %s', (name) => {
     expect(reservedStem(name)).toBe(true);
   });
 
