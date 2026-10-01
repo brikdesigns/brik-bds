@@ -49,6 +49,18 @@ const WIDGETS_DIR = path.join(REPO_ROOT, 'components', 'ui', 'BrikDevBar', 'widg
 const MANAGED_PREFIX = '--bds-color-';
 
 /**
+ * The widgets are byte-copied into consumers still on un-prefixed BDS, so their
+ * annotations keep the pre-ADR-043 spelling (`--color-poppy-500`) until those
+ * consumers move (#2678). Read either spelling as the prefixed source name;
+ * anything else is unmanaged.
+ */
+export function managedName(token) {
+  if (token.startsWith(MANAGED_PREFIX)) return token;
+  if (token.startsWith('--color-')) return `--bds-${token.slice(2)}`;
+  return null;
+}
+
+/**
  * `key: '#hex', // --token-name` inside a widget's T block.
  * Captured in four parts so everything but the literal is preserved verbatim —
  * the T blocks are column-aligned by hand and a rewrite must not disturb that.
@@ -100,8 +112,9 @@ export function reconcile(source, declared) {
   const unresolved = [];
 
   const next = source.replace(ENTRY_RE, (match, head, literal, mid, token) => {
-    if (!token.startsWith(MANAGED_PREFIX)) return match; // unmanaged — see scope note
-    const real = resolveToken(declared, token);
+    const name = managedName(token);
+    if (name === null) return match; // unmanaged — see scope note
+    const real = resolveToken(declared, name);
     if (real === null) {
       unresolved.push({ token, literal });
       return match;
@@ -128,9 +141,7 @@ function main(argv) {
     const source = fs.readFileSync(file, 'utf8');
     const { next, drifted, unresolved } = reconcile(source, declared);
 
-    managedCount += [...source.matchAll(ENTRY_RE)].filter((m) =>
-      m[4].startsWith(MANAGED_PREFIX),
-    ).length;
+    managedCount += [...source.matchAll(ENTRY_RE)].filter((m) => managedName(m[4]) !== null).length;
 
     for (const u of unresolved) {
       unresolvedCount += 1;
@@ -151,6 +162,12 @@ function main(argv) {
   }
 
   if (unresolvedCount > 0) return 1;
+
+  // A rename that stops the entry pattern matching would otherwise pass as "0 match".
+  if (managedCount === 0) {
+    console.error('gen-widget-tokens: 0 inlined color primitives found — the gate matched nothing.');
+    return 1;
+  }
 
   if (check) {
     if (driftCount > 0) {

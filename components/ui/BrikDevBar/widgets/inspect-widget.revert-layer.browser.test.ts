@@ -35,7 +35,7 @@ beforeAll(() => {
   // selectors score one class/attribute = 100) and mask the token.
   const style = document.createElement('style');
   style.textContent = `
-    .token-rule { color: var(--bds-text-primary); }
+    .token-rule { color: var(--text-primary); }
     [class*="bds-"] { color: revert-layer; }
     .only-revert { background-color: revert-layer; }
   `;
@@ -46,7 +46,7 @@ describe('inspect widget — cascade-keyword skip (#1615)', () => {
   it('returns the real token, not the revert-layer reset rule', () => {
     document.body.innerHTML = `<div id="t" class="bds-x token-rule">x</div>`;
     const declared = getDeclaredValue(document.getElementById('t')!, 'color');
-    expect(declared?.value.trim()).toBe('var(--bds-text-primary)');
+    expect(declared?.value.trim()).toBe('var(--text-primary)');
   });
 
   it('returns null when the only matching rule is a cascade reset', () => {

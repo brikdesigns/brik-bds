@@ -3,7 +3,7 @@
  *
  * The widget shipped failing AA in eleven places — four `#fff`-on-poppy-500
  * fills and one poppy-500 label at 3.78:1, a `#3aa86b` BDS badge at 3.00:1, an
- * unknown-token warning at 2.20:1, four `--bds-text-muted` rules at 3.84:1 painted
+ * unknown-token warning at 2.20:1, four `--text-muted` rules at 3.84:1 painted
  * at 10–12px where the token is sanctioned only for AA-large, and an inline
  * `style="color:#3aa86b"` in the panel template at 3.00:1.
  *

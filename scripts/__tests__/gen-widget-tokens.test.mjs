@@ -93,6 +93,18 @@ describe('reconcile', () => {
     expect(next).toBe(src);
   });
 
+  it('resolves a pre-prefix --color-* annotation against the --bds- source (#2670)', () => {
+    // Widgets ship to consumers still on un-prefixed BDS, so they keep the old
+    // spelling. The gate must still see their drift.
+    const src = `    colorGrayscaleDarkest: '#333333', // --color-grayscale-950\n`;
+    const { next, drifted, unresolved } = reconcile(src, declared);
+    expect(unresolved).toEqual([]);
+    expect(drifted).toEqual([
+      { token: '--color-grayscale-950', was: '#333333', now: '#1b1b1b' },
+    ]);
+    expect(next).toContain("'#1b1b1b', // --color-grayscale-950");
+  });
+
   it('reports a --color-* annotation that names no declared token', () => {
     const src = `    colorGhost: '#abcdef', // --bds-color-grayscale-404\n`;
     const { next, unresolved } = reconcile(src, declared);

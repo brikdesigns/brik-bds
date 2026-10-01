@@ -138,66 +138,66 @@
     // for outlines and borders, and fails AA for anything carrying a label.
     // Fills and text that carry a label use poppy-700 (6.23:1), hovering to
     // poppy-800 (10.24:1). Same split #1576 made in feedback-widget.js.
-    colorPoppyLight:       '#e35335', // --bds-color-poppy-500
-    colorPoppyDark:        '#b0351b', // --bds-color-poppy-700
-    colorPoppyDarker:      '#7d1d09', // --bds-color-poppy-800
-    colorPoppyLightest:    '#ffefeb', // --bds-color-poppy-100
-    colorPoppyLighter:     '#ffa693', // --bds-color-poppy-300
-    colorGrayscaleWhite:   '#ffffff', // --bds-color-grayscale-white
-    colorGrayscaleLightest:'#f2f2f2', // --bds-color-grayscale-100
-    colorGrayscaleLighter: '#e0e0e0', // --bds-color-grayscale-300
+    colorPoppyLight:       '#e35335', // --color-poppy-500
+    colorPoppyDark:        '#b0351b', // --color-poppy-700
+    colorPoppyDarker:      '#7d1d09', // --color-poppy-800
+    colorPoppyLightest:    '#ffefeb', // --color-poppy-100
+    colorPoppyLighter:     '#ffa693', // --color-poppy-300
+    colorGrayscaleWhite:   '#ffffff', // --color-grayscale-white
+    colorGrayscaleLightest:'#f2f2f2', // --color-grayscale-100
+    colorGrayscaleLighter: '#e0e0e0', // --color-grayscale-300
     // Muted text ON the near-black pill/panel chrome. Not grayscale-500: that
     // is the muted stop for LIGHT surfaces, and on grayscale-950 it measures
     // 4.48:1 — under AA for the 10.26px pill meta. 400 is 7.94:1, and is the
     // stop #1737 minted for the hand-pinned #bdbdbd this chrome used to carry.
-    colorGrayscaleMuted:   '#b0b0b0', // --bds-color-grayscale-400
-    colorGrayscaleDark:    '#5a5a5a', // --bds-color-grayscale-700
-    colorGrayscaleDarker:  '#333333', // --bds-color-grayscale-800
-    colorGrayscaleDarkest: '#1b1b1b', // --bds-color-grayscale-950
-    colorTanLightest:      '#f1f0ec', // --bds-color-tan-100
+    colorGrayscaleMuted:   '#b0b0b0', // --color-grayscale-400
+    colorGrayscaleDark:    '#5a5a5a', // --color-grayscale-700
+    colorGrayscaleDarker:  '#333333', // --color-grayscale-800
+    colorGrayscaleDarkest: '#1b1b1b', // --color-grayscale-950
+    colorTanLightest:      '#f1f0ec', // --color-tan-100
     // Semantic surfaces (light theme — inspector mirrors feedback widget)
-    backgroundBrandPrimary: '#e35335', // --bds-background-brand-primary
-    textPrimary:   '#333333', // --bds-text-primary
-    textSecondary: '#4f4f4f', // --bds-text-secondary
-    // --bds-text-muted (#828282) is 3.84:1 on white — sanctioned at AA-LARGE only
+    backgroundBrandPrimary: '#e35335', // --background-brand-primary
+    textPrimary:   '#333333', // --text-primary
+    textSecondary: '#4f4f4f', // --text-secondary
+    // --text-muted (#828282) is 3.84:1 on white — sanctioned at AA-LARGE only
     // (tokens/contrast-pairings.json). Every label in this panel is 10–12px, so
-    // nothing here qualifies; they use --bds-text-secondary (7.44:1) instead. The
+    // nothing here qualifies; they use --text-secondary (7.44:1) instead. The
     // entry stays because the panel may yet need a large-text muted role.
-    textMuted:     '#828282', // --bds-text-muted
-    textInverse:   '#ffffff', // --bds-text-inverse
-    borderPrimary: '#e0e0e0', // --bds-border-primary
+    textMuted:     '#828282', // --text-muted
+    textInverse:   '#ffffff', // --text-inverse
+    borderPrimary: '#e0e0e0', // --border-primary
     // Status. Each carries white text or sits on white, so each is picked to
     // clear AA 4.5:1 rather than to match the 6-step status hues.
-    colorGreenLightest:    '#f8fff3', // --bds-color-green-100
-    statusOk:   '#437f4e', // --bds-color-green-900
-    statusWarn: '#795e1f', // --bds-color-yellow-900
-    // Standalone by necessity: BDS has no red ramp, and --bds-color-system-red
+    colorGreenLightest:    '#f8fff3', // --color-green-100
+    statusOk:   '#437f4e', // --color-green-900
+    statusWarn: '#795e1f', // --color-yellow-900
+    // Standalone by necessity: BDS has no red ramp, and --color-system-red
     // (#eb5757) is 3.30:1 on this panel's white. #d83a3a is 4.58:1.
     statusErr:  '#d83a3a',
     // Typography
     fontFamily:         "'Poppins', system-ui, sans-serif",
     fontFamilyMono:     "'JetBrains Mono', ui-monospace, SF Mono, Menlo, Consolas, monospace",
-    fontSizeXs:         '10.26px', // --bds-font-size-25
-    fontSizeSm:         '11.54px', // --bds-font-size-50
-    fontSizeBody:       '14px',    // --bds-font-size-75
-    fontSizeMd:         '16px',    // --bds-font-size-100
+    fontSizeXs:         '10.26px', // --font-size-25
+    fontSizeSm:         '11.54px', // --font-size-50
+    fontSizeBody:       '14px',    // --font-size-75
+    fontSizeMd:         '16px',    // --font-size-100
     fontWeightMedium:   '500',
     fontWeightSemiBold: '600',
     fontWeightBold:     '700',
     lineHeightTight:    '1.3',
     lineHeightNormal:   '150%',
     // Space
-    space100: '4px',  // --bds-space-100
-    space200: '8px',  // --bds-space-200
-    space300: '12px', // --bds-space-300
-    space400: '16px', // --bds-space-400
-    space500: '20px', // --bds-space-500
-    space600: '24px', // --bds-space-600
+    space100: '4px',  // --space-100
+    space200: '8px',  // --space-200
+    space300: '12px', // --space-300
+    space400: '16px', // --space-400
+    space500: '20px', // --space-500
+    space600: '24px', // --space-600
     // Border radius
-    radius100: '4px',   // --bds-border-radius-100
-    radius200: '8px',   // --bds-border-radius-200
-    radius300: '12px',  // --bds-border-radius-300
-    radiusPill:'999px', // --bds-border-radius-pill
+    radius100: '4px',   // --border-radius-100
+    radius200: '8px',   // --border-radius-200
+    radius300: '12px',  // --border-radius-300
+    radiusPill:'999px', // --border-radius-pill
   };
 
   // ── State ───────────────────────────────────────────────────────────────
@@ -606,7 +606,7 @@
     return null;
   }
 
-  // Look up a token's manifest entry by name (e.g. "--bds-color-poppy-500").
+  // Look up a token's manifest entry by name (e.g. "--color-poppy-light").
   function findTokenMeta(tokenName) {
     return manifest?.tokens?.[tokenName] || null;
   }
@@ -1398,9 +1398,9 @@
   //  - font-family is the ONLY signal that decides `isViolation`. It is the
   //    robust one: the UA fallback (serif) reads nothing like any BDS token
   //    family, so there is no ambiguity. font-size is NOT reliable the same
-  //    way — `--bds-body-md` resolves to the same 16px the UA default also
+  //    way — `--body-md` resolves to the same 16px the UA default also
   //    happens to use for body text, so a raw computed-size compare cannot
-  //    tell "tokenized at --bds-body-md" from "never tokenized, sitting on the UA
+  //    tell "tokenized at --body-md" from "never tokenized, sitting on the UA
   //    16px default" without false-flagging every legitimately-tokenized
   //    16px leaf. font-size is exposed on the result for a human/agent to
   //    eyeball, but never flips `isViolation` on its own. This is a
@@ -1419,22 +1419,22 @@
   // literal "Poppins", so this is not a gap in practice; broadening it is a
   // one-line follow-up if a theme ever diverges display/subtitle from body).
   const TYPE_FAMILY_VARS = [
-    '--bds-font-family-body', '--bds-font-family-heading', '--bds-font-family-label',
+    '--font-family-body', '--font-family-heading', '--font-family-label',
   ];
 
   // Every body/heading/label/subtitle/display SIZE token in
   // tokens/figma-tokens.css. Diagnostic only (see the design note above) —
   // never gates `isViolation`.
   const TYPE_SIZE_VARS = [
-    '--bds-body-tiny', '--bds-body-xs', '--bds-body-sm', '--bds-body-md', '--bds-body-lg', '--bds-body-xl', '--bds-body-huge',
-    '--bds-heading-tiny', '--bds-heading-sm', '--bds-heading-md', '--bds-heading-lg', '--bds-heading-xl', '--bds-heading-xxl', '--bds-heading-huge',
-    '--bds-label-tiny', '--bds-label-xs', '--bds-label-sm', '--bds-label-md', '--bds-label-lg', '--bds-label-xl',
-    '--bds-subtitle-sm', '--bds-subtitle-md', '--bds-subtitle-lg',
-    '--bds-display-sm', '--bds-display-md', '--bds-display-lg', '--bds-display-xl',
+    '--body-tiny', '--body-xs', '--body-sm', '--body-md', '--body-lg', '--body-xl', '--body-huge',
+    '--heading-tiny', '--heading-sm', '--heading-md', '--heading-lg', '--heading-xl', '--heading-xxl', '--heading-huge',
+    '--label-tiny', '--label-xs', '--label-sm', '--label-md', '--label-lg', '--label-xl',
+    '--subtitle-sm', '--subtitle-md', '--subtitle-lg',
+    '--display-sm', '--display-md', '--display-lg', '--display-xl',
   ];
 
   // Read a custom property's CASCADE-RESOLVED value off `:root` (chained
-  // `var()` references — e.g. `--bds-body-md: var(--bds-font-size-100)` — resolve
+  // `var()` references — e.g. `--body-md: var(--font-size-100)` — resolve
   // through, so this returns the real px/family value, not the raw alias).
   function rootTokenValue(varName) {
     return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();

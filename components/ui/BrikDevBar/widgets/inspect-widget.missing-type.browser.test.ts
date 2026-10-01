@@ -52,12 +52,12 @@ beforeAll(() => {
   const style = document.createElement('style');
   style.textContent = `
     :root {
-      --bds-font-family-body: Poppins;
-      --bds-font-family-heading: Poppins;
-      --bds-font-family-label: Poppins;
-      --bds-body-md: 16px;
+      --font-family-body: Poppins;
+      --font-family-heading: Poppins;
+      --font-family-label: Poppins;
+      --body-md: 16px;
     }
-    .bds-tokenized-ancestor { font-family: var(--bds-font-family-body); }
+    .bds-tokenized-ancestor { font-family: var(--font-family-body); }
     .bds-untokenized-leaf { margin-top: 4px; } /* the Collapsible-shape bug: no font-family anywhere */
     .bds-wrapper { display: flex; }
   `;

@@ -39,7 +39,7 @@ beforeAll(() => {
   // Authored before any audit call so the rules index caches with it present.
   const style = document.createElement('style');
   style.textContent = `
-    .co-present { border: 2px solid var(--bds-border-primary); }
+    .co-present { border: 2px solid var(--border-primary); }
   `;
   document.head.appendChild(style);
 });
@@ -79,7 +79,7 @@ describe('effectiveBackground — reads <html> own background (#2197 F)', () => 
 });
 
 describe('auditProp — hardcoded co-present with a token still flags (#2197 G)', () => {
-  it('flags the raw 2px in `2px solid var(--bds-border-primary)`', () => {
+  it('flags the raw 2px in `2px solid var(--border-primary)`', () => {
     api.setLintIgnores([]); // empty exception baseline → auditReady()
     document.body.innerHTML = `<div id="c" class="co-present">x</div>`;
     const audit = api.auditProp(document.getElementById('c')!, 'border');
