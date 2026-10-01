@@ -1,0 +1,5 @@
+{
+  "$comment": "ADR-043 section 5: Component knobs renamed off a reserved stem (text-, page-). Old name -> new name. Read by scripts/lib/bds-prefix.mjs (bridge + codemod) and scripts/lint-tokens.js.",
+  "--bds-text-area-min-width": "--bds-textarea-min-width",
+  "--bds-page-padding-inline": "--bds-gutter-padding-inline"
+}

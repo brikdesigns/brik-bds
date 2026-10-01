@@ -46,7 +46,7 @@ const TOKEN_SOURCE = path.join(REPO_ROOT, 'tokens', 'figma-tokens.css');
 const WIDGETS_DIR = path.join(REPO_ROOT, 'components', 'ui', 'BrikDevBar', 'widgets');
 
 // Only these are safe to resolve to a single value — see the scope note above.
-const MANAGED_PREFIX = '--color-';
+const MANAGED_PREFIX = '--bds-color-';
 
 /**
  * `key: '#hex', // --token-name` inside a widget's T block.

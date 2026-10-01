@@ -13,8 +13,10 @@
 
 import { register } from '@tokens-studio/sd-transforms';
 import StyleDictionary from 'style-dictionary';
+import { registerBdsHooks, SD_PREFIX } from './scripts/lib/sd-bds.mjs';
 
 register(StyleDictionary);
+registerBdsHooks(StyleDictionary);
 
 // Semantic color groups — only these change between light and dark modes
 const SEMANTIC_GROUPS = ['background', 'text', 'border', 'surface', 'page', 'interaction'];
@@ -27,9 +29,11 @@ export default {
     warnings: 'disabled',
   },
   source: ['design-tokens/tokens-figma-dark.json'],
-  preprocessors: ['tokens-studio'],
+  preprocessors: ['tokens-studio', 'bds/retire-word-steps'],
   platforms: {
     css: {
+      // System ID (ADR-043): every CSS custom property leads with `--bds-`.
+      prefix: SD_PREFIX,
       transformGroup: 'tokens-studio',
       transforms: ['name/kebab'],
       buildPath: 'build/figma/css/',
