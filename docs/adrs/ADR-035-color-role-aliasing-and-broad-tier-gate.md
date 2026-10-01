@@ -1,11 +1,17 @@
 # ADR-035 — Color role-aliasing is the one sanctioned Semantic→Semantic reference; the tier gate broadens to enforce it
 
-**Status:** Proposed
-**Date:** 2026-08-30
+**Status:** Accepted
+**Date:** 2026-08-30 (ratified 2026-10-01, #2653)
 **Supersedes:** —
 **Superseded by:** —
 **Owner:** Nick Stanerson
 **Related:** [#2187](https://github.com/brikdesigns/brik-bds/issues/2187) (this ADR's issue — the broad tier-direction gate), [#2186](https://github.com/brikdesigns/brik-bds/issues/2186) (the pre-existing t3→t3 refs this rule resolves), [ADR-025](./ADR-025-page-grid-standard.md) (`--page-inset`, the `--gutter-page` bug that motivated the narrow gate), [token-anatomy.mdx](../../docs-site/content/docs/foundation/token-anatomy.mdx) (the Tier canon this amends), `scripts/lint-token-tiers.mjs` (the gate)
+
+## Ratification
+
+OPERATOR SAID 2026-10-01 (chat, /resume 2655 brikdesigns/brik-bds): "Let's ratify - ensure there's no overlapping work in other sessions. We can also use Opus when/if needed."
+
+Reconciled against the shipped mechanism before this flip, not assumed from the prose: `scripts/lint-token-tiers.mjs` implements `resolvesToColor` exactly as decided (`:116-123`), the broad t2-or-t3 scope (`:169-176`), and the `tokens/compat/bridge.css` carve-out (`:192-198`); it runs inside the `lints` job (`tokens-gate.yml:409-412`), which `tokens-gate` (`:574-620`) fails closed on — genuinely PR-blocking, not the `changes` classifier. The four worked examples in the Decision table (`--border-focus`, `--tooltip-text`, `--text-link`, `--display-fluid-sm`) match the live declarations in `tokens/gap-fills.css` and `tokens/fluid-type.css`; `--gutter-page` no longer exists, confirming the ADR-025 removal. `node scripts/lint-token-tiers.mjs` exits 0 clean against the current registry.
 
 ## Context
 
