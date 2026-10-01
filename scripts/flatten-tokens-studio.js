@@ -196,7 +196,8 @@ for (const [col, modes] of Object.entries(collections)) {
   }
 }
 
-// ─── Drop elevation-internal composite sub-tokens (#2243) ────────
+// ─── Drop elevation-internal composite sub-tokens (#2243) and the layout
+// ─── tier (ADR-042) ────────────────────────────────────────────────
 // The `spread` and `opacity` groups live in the elevation collection ONLY to be
 // composed into the --shadow-* shorthand by generate-modes-css.mjs, which reads
 // design-tokens/tokens-studio.json directly — never the flattened SD input. If
@@ -206,7 +207,20 @@ for (const [col, modes] of Object.entries(collections)) {
 // in tokens-studio.json), so deleting the top-level keys is safe.
 // (The older blur-radius / box-shadow groups still emit — grandfathered,
 // registered slots; excluding those is a separate cleanup.)
-for (const internal of ['spread', 'opacity']) delete merged[internal];
+//
+// `layout` (ADR-042) is the device-fluid TIER: generate-modes-css.mjs reads
+// `layout/{mobile,tablet,desktop}` directly from tokens-studio.json and builds
+// one piecewise clamp() per token into tokens/layout-fluid.css. `layout` has no
+// entry in DEFAULT_MODES above, so the merge loop would otherwise pick
+// whichever mode sorts first (`layout/desktop` is listed first in the source)
+// and Style Dictionary would emit that as a flat, device-invariant
+// --page-inset / --section-padding-block — a static copy of a token that is
+// supposed to vary continuously by device, landing at the SAME name and
+// racing the fluid one on cascade order. Deleting the merged key (it is
+// wrapped under `layout` by the needsWrapping branch above, same as
+// `border-width` / `breakpoint`) is the minimal fix, same pattern as
+// spread/opacity above.
+for (const internal of ['spread', 'opacity', 'layout']) delete merged[internal];
 
 // ─── Fix font-line-height: Tokens Studio exports % as px ─────
 // Figma stores line-height as percentages (110%, 125%, 150%) but

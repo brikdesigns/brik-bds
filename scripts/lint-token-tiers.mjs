@@ -24,8 +24,8 @@
  * must not be parasitized. `--gutter-page: var(--padding-lg)` (ADR-025) borrowed
  * `--padding-lg`'s density ladder for a page inset — coupling unrelated concerns.
  * The remedy is a token that resolves its scale from Primitives directly
- * (`--page-inset: var(--space-600)` + a `[data-mode-spacing]` ladder;
- * `--display-fluid-lg: clamp(…, var(--font-size-1600))`).
+ * (`--page-inset`, now a layout-tier clamp over `--space-*` endpoints in
+ * tokens/layout-fluid.css, ADR-042; `--display-fluid-lg: clamp(…, var(--font-size-1600))`).
  *
  * Why a dedicated gate: the sibling token gates read the reference GRAPH but
  * none read tier DIRECTION.
@@ -81,7 +81,7 @@ const SD_SEMANTIC_PREFIXES = [
   '--padding-', '--gap-', '--text-', '--background-', '--surface-',
   '--border-primary', '--border-secondary', '--border-muted', '--border-brand',
   '--border-input', '--border-inverse', '--border-on-color', '--border-focus',
-  '--border-width-', '--border-radius-', '--page-', '--body-', '--label-',
+  '--border-width-', '--border-radius-', '--page-', '--section-', '--body-', '--label-',
   '--heading-', '--display-', '--subtitle-', '--icon-', '--font-family-',
   '--box-shadow-', '--blur-radius-', '--size-', '--tooltip-',
 ];

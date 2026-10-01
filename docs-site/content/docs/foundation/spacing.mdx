@@ -1,12 +1,19 @@
 ---
 title: Spacing
-description: The 4-point grid, semantic padding and gap tokens, and the primitive scale.
+description: The 4-point grid, semantic padding and gap tokens, the device-fluid layout tier, and the primitive scale.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 import { spaceScale, semanticSpace } from '@bds-tokens';
 
-Spacing tokens control padding, margins, and gaps. BDS modulates `--padding-*` and `--gap-*` via three named density modes (`compact`, `comfortable`, `spacious`) plus the unmodified default — components react automatically once `[data-mode-spacing]` is set on `:root`.
+Spacing tokens control padding, margins, and gaps. Each token answers to exactly one axis:
+
+| Axis | Tokens | Varies with |
+|---|---|---|
+| **Density** | `--padding-*`, `--gap-*` | `[data-mode-spacing]` on `:root` — one value at every viewport |
+| **Device** | `--page-inset`, `--section-padding-block` (the [layout tier](#layout-tier)) | Viewport width — fluid from mobile to desktop, never by density |
+
+No token takes both, so density modes and device modes never multiply ([ADR-042](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-042-layout-tier-device-clamp.md)).
 
 <Callout type="warn">
   **Spacing values are multiples of 4px, with two named exceptions.** `npm run lint-tokens:grid` reports off-grid values as warnings — it is a review aid, not a merge gate. What *does* block is `spacing-mode-track` (part of `npm run validate`): every `[data-mode-spacing]` track must stay a strictly increasing seven-rung scale with no rung at 0px, and any override it declares must be on-grid.
@@ -65,6 +72,44 @@ Three named modes plus default modulate `--padding-*` and `--gap-*`:
 
 Mode values auto-generate at [`tokens/modes-spacing.css`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/modes-spacing.css) — never hand-edit. Re-run `npm run build:sd-figma` after a Figma mode update.
 
+## Layout tier
+
+Two tokens set the page frame, and they are the **only** spacing tokens that change with the viewport. They scale smoothly between three device endpoints and stay flat above desktop.
+
+| Token | Fills | Mobile 320 | Tablet 768 | Desktop 1440+ |
+|---|---|---|---|---|
+| `--page-inset` | `padding-inline` — viewport edge ↔ content band | 16px (`--space-400`) | 32px (`--space-800`) | 96px (`--space-2100`) |
+| `--section-padding-block` | `padding-block` — a section's top and bottom band | 64px (`--space-1600`) | 80px (`--space-1800`) | 104px (`--space-2200`) |
+
+```css
+.my-section {
+  padding-block: var(--section-padding-block);
+}
+.my-section__container {
+  max-width: var(--content-width-xl);
+  margin-inline: auto;
+  padding-inline: var(--page-inset);
+}
+```
+
+In TS, import `pageInset` and `sectionPaddingBlock` from `@bds-tokens` rather than writing the `var()` string inline.
+
+**Where the values come from.** The Figma Foundations library has a `layout` collection with three modes — `desktop`, `tablet`, `mobile`. Each variable aliases a spacing primitive. Switch a frame's mode to mock a smaller device.
+
+**How it becomes fluid.** Figma variables hold static numbers, so the build turns the three modes into one value: two `clamp()` segments added together, one from mobile to tablet and one from tablet to desktop. The widths are read from `--breakpoint-mobile`, `--breakpoint-tablet` and `--breakpoint-wider`. Output lands in [`tokens/layout-fluid.css`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/layout-fluid.css) — never hand-edit. Re-run `npm run build:modes` after a Figma change.
+
+```css
+--page-inset: calc(clamp(1rem, 0.2857rem + 3.5714vw, 2rem) + clamp(0rem, -4.5714rem + 9.5238vw, 4rem));
+```
+
+<Callout type="warn">
+  **Never re-declare a layout-tier value in a site.** No site-level `clamp()`, no `@media` override of `--page-inset`. The nav and every section read the same token, so they cannot drift apart. A component that needs a different step at a breakpoint picks **another fixed token** inside an `@media` on a `--breakpoint-*` rung — the component tokens themselves never change with viewport width.
+</Callout>
+
+<Callout>
+  **Accessibility.** Bounds are in `rem`, so the floors grow with the user's font size. At 320px the inset floors at 16px per side, leaving a 288px content box for [WCAG 1.4.10 Reflow](https://www.w3.org/WAI/WCAG21/Understanding/reflow.html).
+</Callout>
+
 ## Space scale
 
 The raw spacing scale from 0 to 176px. Semantic tokens reference these steps.
@@ -75,6 +120,7 @@ The raw spacing scale from 0 to 176px. Semantic tokens reference these steps.
 
 - [Content Rhythm](/docs/build-standards/content-rhythm) — **the standard these tokens serve**: which gap goes between which pair of elements, and where each step is set. This page is the catalog; that page is the rule.
 - [Page Grid](/docs/build-standards/page-grid) — the horizontal axis: the width-container recipe and `--page-inset`
+- [Screen breakpoints](/docs/foundation/size#screen-breakpoints) — the `--breakpoint-*` rungs the layout tier's endpoints sit on
 - [Cascade rules](/docs/getting-started/cascade) — how layers interact
 - [Color tokens](/docs/foundation/color) — semantic surface tokens that pair with these spacings
 - [Typography tokens](/docs/foundation/typography) — type scale for content within these spaces

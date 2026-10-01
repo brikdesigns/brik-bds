@@ -70,6 +70,7 @@ Figma organises variables into named collections. Each collection has modes. Sty
 | `border-width` | `default` | `--border-width-sm/md/lg` |
 | `elevation` | `subtle` | `--box-shadow-sm/md/lg/xl` (single-blur; bridged to composed `--shadow-*` in `gap-fills.css`), `--blur-radius-*` |
 | `breakpoint` | `default` | `--breakpoint-mobile/tablet/desktop/wide/wider` |
+| `layout` | `mobile` + `tablet` + `desktop` | `--page-inset`, `--section-padding-block` — **not** flattened by Style Dictionary; the build turns all three modes into one fluid `clamp()` in `layout-fluid.css` ([layout tier](/docs/foundation/spacing#layout-tier)) |
 
 **Light vs dark mode:** `figma-tokens.css` uses the `light` mode of the `color` collection. `figma-tokens-dark.css` uses the `dark` mode. Both files use identical variable names — consuming projects import dark after light, and the browser applies whichever matches `[data-theme="dark"]`.
 
@@ -80,7 +81,7 @@ Each page below explains one primitive group: what tokens exist, what they mean 
 <Cards>
   <Card title="Color" href="/docs/foundation/color" description="Semantic color roles + interaction states + status + the primitive palettes." />
   <Card title="Typography" href="/docs/foundation/typography" description="Font families, the type scale, weights, line heights, and the semantic role rule." />
-  <Card title="Spacing" href="/docs/foundation/spacing" description="The 4-point grid, semantic padding and gap tokens, the primitive space scale." />
+  <Card title="Spacing" href="/docs/foundation/spacing" description="The 4-point grid, semantic padding and gap tokens, the device-fluid layout tier, the primitive space scale." />
   <Card title="Size" href="/docs/foundation/size" description="Container sizes, breakpoints, hero constraints, and the element-size scale." />
   <Card title="Border" href="/docs/foundation/border" description="Corner rounding and line thickness — the tokens that frame a component's edge." />
   <Card title="Elevation" href="/docs/foundation/elevation" description="The Figma Elevation collection — composed semantic shadows + primitive blur/spread scales." />

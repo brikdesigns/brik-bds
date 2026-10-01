@@ -68,6 +68,8 @@ BDS defines five canonical breakpoints. All five are Figma variables in the ❖ 
   **The `--breakpoint-*` CSS custom properties are reference-only by design** (ADR-025 §4). CSS variables can't be read inside `@media()`, so real breakpoint logic goes through the TS exports below — which is why [Token Anatomy → Named exceptions](/docs/foundation/token-anatomy#named-exceptions) records zero `var(--breakpoint-*)` references anywhere. That is an intentional split, not dead weight: the CSS vars carry the values into Figma and the docs, the TS exports carry them into conditions.
 </Callout>
 
+The [layout tier](/docs/foundation/spacing#layout-tier) also reads three rungs — `mobile`, `tablet` and `wider` — at build time, as the widths where `--page-inset` and `--section-padding-block` hit their device values. Moving one of those rungs in Figma moves the tier's endpoint with it.
+
 ### Using breakpoints in CSS
 
 `mediaQueries` gives ready-made conditions, so a call site never re-derives one. `up.<rung>` is mobile-first (`min-width`); `down.<rung>` is the exclusive complement, stepped down 0.02px so `up` and `down` never both match at the boundary.

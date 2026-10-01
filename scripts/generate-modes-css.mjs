@@ -106,6 +106,31 @@ export const COLLECTIONS = {
       'values (like the spacing modes) rather than var() aliases — the pill/circle ' +
       'primitives are Semantic-tier by name, so a var() alias would be off-model.',
   },
+  layout: {
+    // The layout TIER (ADR-042) — the one collection whose values legitimately
+    // vary by DEVICE rather than by a runtime-switchable density/style MODE.
+    // Every other entry in this registry emits a `[data-mode-*]` override
+    // block a consumer flips at runtime; this one has no such attribute —
+    // there is nothing to flip, because the three Figma modes (mobile/tablet/
+    // desktop) are baked at BUILD time into one piecewise clamp() per token
+    // that already threads all three endpoints (same reason breakpoint can't
+    // be a runtime mode either — see tokens/CASCADE.md § Breakpoint; var()
+    // cannot parametrize anything here, so there is no selector to write).
+    fluid: true,
+    // Figma mode name → the `breakpoint/default` rung it reads its device
+    // width from. `desktop` reads `wider` (1440), not `desktop` (1024) — 1440
+    // is the width of the Figma frames the desktop endpoint was measured on
+    // (ADR-042 D4).
+    modes: ['mobile', 'tablet', 'desktop'],
+    rungs: { mobile: 'mobile', tablet: 'tablet', desktop: 'wider' },
+    resolve: resolveSpaceRef,
+    outputFile: 'layout-fluid.css',
+    description:
+      'Layout tier — device-fluid --page-inset / --section-padding-block. ' +
+      'Interpolates continuously between the mobile/tablet/desktop endpoints ' +
+      'via one piecewise calc(clamp(…) + clamp(…)) per token (ADR-042), ' +
+      'rather than a [data-mode-*] override block.',
+  },
   elevation: {
     // Elevation is the first COMPOSITE collection: each token is a multi-part
     // box-shadow, not a single value, so it uses the dedicated emitElevation
@@ -329,6 +354,138 @@ function emitElevation(data, collectionKey) {
   return lines.join('\n');
 }
 
+// ─── Fluid emit (layout tier, ADR-042) ──────────────────────────────
+//
+// The layout tier has no default/override shape — it has three device
+// endpoints that all feed ONE calc() expression per token, so it gets its own
+// branch rather than a mode-by-mode selector loop like emitCollection, and
+// rather than a shadow box per size like emitElevation.
+
+/** Round to 4 decimals (killing float noise) and format, trimming a trailing
+ *  `.0000` (and any other trailing zeros) so `1` prints as `1`, not `1.0000`. */
+export function fmtNum(n) {
+  const rounded = Math.round(n * 10000) / 10000;
+  const normalized = rounded === 0 ? 0 : rounded; // -0 → 0
+  if (Number.isInteger(normalized)) return String(normalized);
+  return normalized.toFixed(4).replace(/0+$/, '').replace(/\.$/, '');
+}
+
+/**
+ * Pure math for one layout-tier token's piecewise fluid clamp (ADR-042 D3):
+ *
+ *   calc(clamp(v0, b1 + s1·vw, v1) + clamp(0, b2 + s2·vw, v2 − v1))
+ *
+ * Three endpoints (v0 @ w0px, v1 @ w1px, v2 @ w2px) become two linear
+ * segments so one fluid value threads all three rungs exactly — a single
+ * clamp() from mobile straight to desktop misses the tablet rung. Bounds and
+ * intercepts are emitted in `rem` (so a 200%-zoom root raises the floor with
+ * it, per WCAG 1.4.4); slope stays in `vw` (device width is what should drive
+ * it, not the root font size). No special-casing is needed for a degenerate
+ * segment (v1 === v0 or v2 === v1) — the slope term reduces to 0 and the
+ * bound collapses to a constant on its own.
+ *
+ * Throws on non-monotonic endpoints — a silently wrong clamp is worse than a
+ * red build (ADR-042 § Refusal).
+ */
+export function buildFluidValue({ w0, w1, w2, v0, v1, v2 }) {
+  if (!(v0 <= v1 && v1 <= v2)) {
+    throw new Error(
+      `Non-monotonic layout endpoints (need v0 ≤ v1 ≤ v2): v0=${v0} v1=${v1} v2=${v2}`
+    );
+  }
+
+  const slope1 = ((v1 - v0) / (w1 - w0)) * 100;
+  const base1 = (v0 - ((v1 - v0) / (w1 - w0)) * w0) / 16;
+  const min1 = v0 / 16;
+  const max1 = v1 / 16;
+
+  const slope2 = ((v2 - v1) / (w2 - w1)) * 100;
+  const base2 = (-((v2 - v1) / (w2 - w1)) * w1) / 16;
+  const max2 = (v2 - v1) / 16;
+
+  const seg1 = `clamp(${fmtNum(min1)}rem, ${fmtNum(base1)}rem + ${fmtNum(slope1)}vw, ${fmtNum(max1)}rem)`;
+  const seg2 = `clamp(0rem, ${fmtNum(base2)}rem + ${fmtNum(slope2)}vw, ${fmtNum(max2)}rem)`;
+
+  return `calc(${seg1} + ${seg2})`;
+}
+
+function emitFluid(data, collectionKey) {
+  const cfg = COLLECTIONS[collectionKey];
+  const primitives = data['primitives/value'] ?? {};
+  const rungSlice = readModeTokens(data, 'breakpoint', 'default');
+
+  const rungPx = (rungName) => {
+    const token = rungSlice[rungName];
+    if (!token || typeof token.$value !== 'number') {
+      throw new Error(
+        `Missing/invalid breakpoint/default rung "${rungName}" needed by the ${collectionKey} fluid tier`
+      );
+    }
+    return token.$value;
+  };
+  const w0 = rungPx(cfg.rungs.mobile);
+  const w1 = rungPx(cfg.rungs.tablet);
+  const w2 = rungPx(cfg.rungs.desktop);
+
+  const slices = {};
+  for (const mode of cfg.modes) slices[mode] = readModeTokens(data, collectionKey, mode);
+
+  // Variable set is read off the desktop slice; every mode must carry the
+  // same names (Figma authors all three modes on one variable collection).
+  const names = Object.keys(slices.desktop).sort((a, b) => a.localeCompare(b));
+
+  const lines = [];
+  lines.push('/**');
+  lines.push(` * BDS ${collectionKey} tier — device-fluid clamp() (ADR-042)`);
+  lines.push(' *');
+  lines.push(' * Auto-generated by scripts/generate-modes-css.mjs from');
+  lines.push(' * design-tokens/tokens-studio.json. Do not hand-edit — re-run');
+  lines.push(' * `npm run build:modes` after any Figma mode update.');
+  lines.push(' *');
+  for (const w of cfg.description.match(/.{1,76}(\s|$)/g) ?? [cfg.description]) {
+    lines.push(` * ${w.trim()}`);
+  }
+  lines.push(' *');
+  lines.push(' * Source: `layout/mobile` + `layout/tablet` + `layout/desktop`');
+  lines.push(' * (design-tokens/tokens-studio.json). Rung px read from');
+  lines.push(` * \`breakpoint/default\` — mobile→\`${cfg.rungs.mobile}\` (${w0}),`);
+  lines.push(` * tablet→\`${cfg.rungs.tablet}\` (${w1}), desktop→\`${cfg.rungs.desktop}\` (${w2}).`);
+  lines.push(' *');
+  lines.push(' * No `@media`: a media/container query CONDITION cannot read a custom');
+  lines.push(' * property (`var()` only resolves in declaration values), so a');
+  lines.push(' * [data-mode-*]-style attribute block would be inert here — the whole');
+  lines.push(' * point is one clamp() that already threads all three device rungs.');
+  lines.push(' *');
+  lines.push(' * `vw`, never `cqi`: this tier is page-level and full-bleed; a `cqi`');
+  lines.push(' * read against a narrow container would shrink the margin it is meant');
+  lines.push(' * to hold steady.');
+  lines.push(' *');
+  lines.push(' * Bounds/intercepts in `rem` (so WCAG 1.4.4 200%-zoom raises the floor');
+  lines.push(' * with the root font size), slope in `vw` (device width drives it, not');
+  lines.push(' * font size). Flat above the desktop rung — segment 2 clamps at v2 − v1.');
+  lines.push(' */');
+  lines.push('');
+  lines.push(':root {');
+
+  for (const name of names) {
+    const v0 = cfg.resolve(slices.mobile[name]?.$value, primitives);
+    const v1 = cfg.resolve(slices.tablet[name]?.$value, primitives);
+    const v2 = cfg.resolve(slices.desktop[name]?.$value, primitives);
+    if (typeof v0 !== 'number' || typeof v1 !== 'number' || typeof v2 !== 'number') {
+      throw new Error(
+        `Could not resolve an alias for --${name} across layout/{mobile,tablet,desktop}`
+      );
+    }
+    const value = buildFluidValue({ w0, w1, w2, v0, v1, v2 });
+    lines.push(`  --${name}: ${value}; /* ${v0} → ${v1} → ${v2}px at ${w0} / ${w1} / ${w2} */`);
+  }
+
+  lines.push('}');
+  lines.push('');
+
+  return lines.join('\n');
+}
+
 // ─── Main ───────────────────────────────────────────────────────────
 
 function generate(collectionKey) {
@@ -340,20 +497,32 @@ function generate(collectionKey) {
 
   // One generic emitter drives single-value collections; per-collection
   // behaviour (which groups, how a token ref resolves, unit suffix) lives in
-  // the COLLECTIONS registry above. Composite collections (elevation) route to
-  // their own emitter since one CSS token composes multiple source sub-tokens.
+  // the COLLECTIONS registry above. Composite collections (elevation) and the
+  // fluid layout tier each route to their own emitter: elevation because one
+  // CSS token composes multiple source sub-tokens, layout because it has no
+  // default/override shape at all — three endpoints feed one calc().
   const css = cfg.composite
     ? emitElevation(data, collectionKey)
+    : cfg.fluid
+    ? emitFluid(data, collectionKey)
     : emitCollection(data, collectionKey);
 
-  // Output file may differ from the collection key (border-radius → modes-borderradius.css).
-  const fileName = cfg.fileName ?? collectionKey;
-  const outFile = path.join(TOKENS_DIR, `modes-${fileName}.css`);
+  // Output file may differ from the collection key (border-radius →
+  // modes-borderradius.css; layout → layout-fluid.css, no `modes-` prefix
+  // since it carries no [data-mode-*] block for that prefix to describe).
+  const outFile = cfg.fluid
+    ? path.join(TOKENS_DIR, cfg.outputFile)
+    : path.join(TOKENS_DIR, `modes-${cfg.fileName ?? collectionKey}.css`);
   fs.writeFileSync(outFile, css);
 
   // Summary
   const overrideCount = (css.match(/^\s+--/gm) ?? []).length;
-  console.log(`  ✓ tokens/modes-${fileName}.css (${overrideCount} overrides across ${cfg.nonDefaultModes.length} modes)`);
+  if (cfg.fluid) {
+    console.log(`  ✓ tokens/${cfg.outputFile} (${overrideCount} device-fluid declaration(s))`);
+  } else {
+    const fileName = cfg.fileName ?? collectionKey;
+    console.log(`  ✓ tokens/modes-${fileName}.css (${overrideCount} overrides across ${cfg.nonDefaultModes.length} modes)`);
+  }
 }
 
 function main() {

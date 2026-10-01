@@ -17,7 +17,7 @@ Tighter means more coupled. As the relationship loosens — words in a heading p
 | Heading / subtitle ↔ body | Readable separation | `--gap-md` | 8px |
 | Paragraph ↔ paragraph | Distinct thoughts | `--gap-lg` | 16px |
 | Block ↔ block | Separate content units | `--gap-xl` | 24px |
-| Section ↔ section | Page-level break | `padding-block: clamp(--padding-xl, 7vw, --padding-huge)` | 32–48px, fluid |
+| Section ↔ section | Page-level break | `padding-block: var(--section-padding-block)` | 64–104px, fluid by device |
 
 <Callout type="warn">
   Never use `--gap-xs` or `--gap-tiny` in any vertical rhythm position — content or component. Both collapse to `0px` outside the default [spacing mode](/docs/foundation/spacing#spacing-modes), which erases the step entirely. And never hardcode a px value: the scale re-modulates per mode, a literal does not. The `lint-content-rhythm` gate enforces both rules on component CSS.
@@ -80,7 +80,7 @@ You rarely set these values by hand — the standard is baked into the layer tha
 - **Text within a block** → `ContentBlock` (named slots) or `Prose` (free HTML) own it. See [Content blocks and prose](/docs/build-standards/page-structure#content-blocks-and-prose).
 - **A section intro (centered title + description)** → `SectionHeader`. It composes `ContentBlock` for this rhythm and adds the one thing rhythm alone doesn't: the horizontal **measure** that caps and centers the text column so intros stop being 600px on one page and full-width on the next. See [Text column vs band](/docs/build-standards/page-grid#text-column-vs-band).
 - **Block ↔ block** → the layout primitive's `gap` (`Stack`, `Grid`) — `--gap-xl` in a section's content region.
-- **Section ↔ section** → the section shell's `padding-block` clamp, harmonised to `7vw` ([ADR-021](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-021-blueprint-section-shell.md)). A section needing a different band re-declares `padding-block` on its own selector.
+- **Section ↔ section** → the section shell's `padding-block: var(--section-padding-block)`, the [layout tier](/docs/foundation/spacing#layout-tier) token ([ADR-042](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-042-layout-tier-device-clamp.md), replacing ADR-021's `7vw` clamp). A section needing a different band re-declares `padding-block` on its own selector.
 
 ## Related
 

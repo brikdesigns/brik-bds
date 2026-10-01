@@ -788,11 +788,21 @@ export type ContentWidth = keyof typeof contentWidths;
 
 /**
  * Page inset — the inline inset between the viewport edge and a page's
- * content band (ADR-025). Mode-modulated (references the Primitive --space-*
- * per spacing mode), so it is exposed as a var() reference, not a raw px value.
- * Maps to the --page-inset CSS custom property in gap-fills.css.
+ * content band (ADR-025 recipe). Device-fluid (ADR-042): a piecewise clamp()
+ * threading the mobile/tablet/desktop endpoints, so it is exposed as a var()
+ * reference, not a raw px value. Maps to the --page-inset CSS custom property
+ * in tokens/layout-fluid.css.
  */
 export const pageInset = 'var(--page-inset)' as const;
+
+/**
+ * Section block padding — the layout tier's vertical rhythm for a top-level
+ * blueprint section (ADR-042), superseding the hand-written 7vw clamp()
+ * (ADR-021). Device-fluid like {@link pageInset}, so exposed the same way.
+ * Maps to the --section-padding-block CSS custom property in
+ * tokens/layout-fluid.css.
+ */
+export const sectionPaddingBlock = 'var(--section-padding-block)' as const;
 
 /**
  * Measure — the max inline width of a CENTERED text column inside a band.

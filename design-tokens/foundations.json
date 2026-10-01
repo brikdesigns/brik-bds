@@ -3084,6 +3084,72 @@
       "$value": 1440
     }
   },
+  "layout/desktop": {
+    "page-inset": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "number",
+      "$value": "{space.2100}",
+      "$description": "Inline page margin (viewport edge to content band). Device-fluid in code: 16/32/96 at 320/768/1440 (ADR-042)."
+    },
+    "section-padding-block": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "number",
+      "$value": "{space.2200}",
+      "$description": "Section block padding. Device-fluid in code: 64/80/104 at 320/768/1440 (ADR-042)."
+    }
+  },
+  "layout/tablet": {
+    "page-inset": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "number",
+      "$value": "{space.800}",
+      "$description": "Inline page margin (viewport edge to content band). Device-fluid in code: 16/32/96 at 320/768/1440 (ADR-042)."
+    },
+    "section-padding-block": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "number",
+      "$value": "{space.1800}",
+      "$description": "Section block padding. Device-fluid in code: 64/80/104 at 320/768/1440 (ADR-042)."
+    }
+  },
+  "layout/mobile": {
+    "page-inset": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "number",
+      "$value": "{space.400}",
+      "$description": "Inline page margin (viewport edge to content band). Device-fluid in code: 16/32/96 at 320/768/1440 (ADR-042)."
+    },
+    "section-padding-block": {
+      "$extensions": {
+        "com.figma.scopes": [
+          "ALL_SCOPES"
+        ]
+      },
+      "$type": "number",
+      "$value": "{space.1600}",
+      "$description": "Section block padding. Device-fluid in code: 64/80/104 at 320/768/1440 (ADR-042)."
+    }
+  },
   "border-width/default": {
     "sm": {
       "$extensions": {
@@ -5207,6 +5273,9 @@
       "breakpoint/default",
       "breakpoint/compact",
       "breakpoint/comfortable",
+      "layout/desktop",
+      "layout/tablet",
+      "layout/mobile",
       "border-width/default",
       "border-width/thick",
       "border-width/thin",

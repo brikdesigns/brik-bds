@@ -34,7 +34,7 @@ The `lint-page-grid` gate fails any container rule whose `padding-inline` bypass
 
 This is the gap-vs-padding rule from [Content Rhythm](/docs/build-standards/content-rhythm#gap-padding-or-margin) applied horizontally: gap is between siblings, padding is the edge.
 
-`--page-inset` (renamed from `--gutter-page`; the old name survives as a deprecated alias) carries its own `[data-mode-spacing]` ladder over Primitives — `--space-600` at default, `--space-400`/`--space-800`/`--space-1200` for compact/comfortable/spacious — so it re-modulates under [spacing modes](/docs/foundation/spacing#spacing-modes) but does not vary with viewport width. It references Primitives directly rather than aliasing the Semantic `--padding-lg` ([ADR-025](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-025-page-grid-standard.md) amendment; a Semantic→Semantic reference is off the tier model). The stepped-not-fluid choice is deliberate: a fluid `clamp()` inset misaligns consumer containers from BDS section content at intermediate widths — brikdesigns shipped one and had to walk it back. In TS, import `pageInset` from `@bds-tokens` rather than writing the `var()` string inline.
+`--page-inset` (renamed from `--gutter-page`; the old name survives as a deprecated alias) is part of the [layout tier](/docs/foundation/spacing#layout-tier): it scales with the viewport — **16px at 320, 32px at 768, 96px at 1440 and above** — and does **not** change with [spacing modes](/docs/foundation/spacing#spacing-modes) ([ADR-042](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-042-layout-tier-device-clamp.md); its old density ladder is gone). The fluid value lives only on this one BDS token. Never re-declare it with a site-level `clamp()`: brikdesigns once did, and its nav drifted from its sections because two tokens disagreed — one shared token can't. In TS, import `pageInset` from `@bds-tokens` rather than writing the `var()` string inline.
 
 ## Content width roles
 
@@ -124,12 +124,12 @@ Like the rhythm scale, you rarely write the recipe by hand — it is baked into 
 
 - **Product apps** → the `Page` primitive; its `padding` prop sets the shell inset (`lg` is the page gutter).
 - **Full-bleed backgrounds with constrained content** → `Footer`'s `containerMaxWidth` shape: the background spans the viewport while `padding-inline: max(var(--page-inset), calc((100% - var(--content-width-xl)) / 2))` centres the content band.
-- **Section vertical band** → unchanged from ADR-021: `padding-block: clamp(var(--padding-xl), 7vw, var(--padding-huge))`. A page is a stack of full-bleed sections; the vertical band is the clamp, the horizontal band is this recipe.
+- **Section vertical band** → `padding-block: var(--section-padding-block)` — 64px at 320, 80px at 768, 104px at 1440 and above ([ADR-042](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-042-layout-tier-device-clamp.md); it replaces ADR-021's `7vw` clamp). A page is a stack of full-bleed sections; the vertical band is `--section-padding-block`, the horizontal band is this recipe.
 
 ## Related
 
 - [Content Rhythm](/docs/build-standards/content-rhythm) — the vertical axis this page mirrors.
 - [Page Structure](/docs/build-standards/page-structure) — the HTML skeleton these containers live in.
 - [Composition Layers](/docs/build-standards/composition-layers) — the Blueprint → Layout → Container → Block or Control → Component model.
-- [Spacing](/docs/foundation/spacing) — the `--padding-*` scale behind the gutter and the density modes that modulate it.
+- [Spacing](/docs/foundation/spacing) — the `--padding-*` scale, the density modes that modulate it, and the layout tier that sets the page inset.
 - [Size](/docs/foundation/size) — the `--content-width-*` ladder's token catalog.

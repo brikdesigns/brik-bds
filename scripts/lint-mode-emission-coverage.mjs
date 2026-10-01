@@ -50,6 +50,7 @@ const WIRED_LEGACY = {
 const EXCLUDED = {
   breakpoint: 'excluded (#931): var() is invalid inside @media/@container conditions, so a [data-mode-breakpoint] var block would be inert for responsive switching — the "looks-wired-isn\'t" gap #340 exists to close. Excluded from RUNTIME mode emission only; since #2591 the collection ships as build-time tokens (--breakpoint-* in figma-tokens.css + the breakpoints/mediaQueries TS exports). Still detected as multi-modal because the Figma collection still has three mode GROUPS (multiModalCollections counts groups, not value variation) — no rung has varied by mode since #2604 retired `web`. See tokens/CASCADE.md § Breakpoint is intentionally excluded',
   color: 'light/dark ships via the [data-theme="dark"] cascade (figma-tokens-dark.css), not a [data-mode-*] block',
+  layout: 'excluded (ADR-042): the layout tier has no [data-mode-*] runtime layer by design — its three modes (mobile/tablet/desktop) are baked at build time into one piecewise clamp() per token in tokens/layout-fluid.css (emitFluid in generate-modes-css.mjs), the same "no var() in a condition" reasoning that excludes breakpoint, except here there is no runtime attribute at all to check for, wired or not',
 };
 
 /** Multi-modal collections in the Figma source: `collection/{mode}` groups with

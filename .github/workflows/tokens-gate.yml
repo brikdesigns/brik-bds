@@ -192,6 +192,7 @@ jobs:
             'scripts/validate-all.js' \
             'scripts/validate-themes.js' \
             'scripts/__tests__/generate-color-ramps.test.mjs' \
+            'scripts/__tests__/generate-layout-fluid.test.mjs' \
             'scripts/__tests__/lint-token-purpose-slots.test.mjs' \
             'scripts/__tests__/lint-token-self-reference.test.mjs' \
             'scripts/__tests__/lint-token-tiers.test.mjs' \
@@ -474,6 +475,7 @@ jobs:
         run: |
           npx vitest run \
             scripts/__tests__/generate-color-ramps.test.mjs \
+            scripts/__tests__/generate-layout-fluid.test.mjs \
             scripts/__tests__/lint-tokens-deprecated.test.mjs \
             scripts/__tests__/lint-token-purpose-slots.test.mjs \
             scripts/__tests__/lint-token-self-reference.test.mjs \

@@ -208,6 +208,7 @@ The first slot is a **CSS property name** at the Primitive tier and a **semantic
 | `--content-width-*` | t-shirt | the one horizontal-cap ladder — bands and text columns (ADR-041) |
 | `--measure-*` | t-shirt | **deprecated** — aliases to `--content-width-text-*`; drops next minor (ADR-041) |
 | `--state-*` | state (`hover`, `disabled`) | interaction overlays and opacities |
+| `--section-*` | property (`padding-block`) | the [layout tier](/docs/foundation/spacing#layout-tier)'s device-fluid section band (ADR-042) |
 
 <Callout type="warn">
   **Two first segments carry both formulas.** `--border-*` is 20 color tokens *and* 38 length tokens (`--border-radius-*`, `--border-width-*`); `--shadow-*` is elevation *and* the primitive parts (`--shadow-blur-*`, `--shadow-offset-*`, `--shadow-spread-*`). Match on the longest slot, never the first segment — `--border-radius-100` is a length, not a color.
