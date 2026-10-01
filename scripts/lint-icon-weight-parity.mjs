@@ -163,9 +163,12 @@ function main() {
   process.exit(0);
 }
 
+// argv[1] needs fs.realpathSync — see gen-icon-collection.mjs (brik-bds#2663).
 const isCliEntry = (() => {
   try {
-    return path.resolve(fileURLToPath(import.meta.url)) === path.resolve(process.argv[1] ?? '');
+    const argv1 = process.argv[1];
+    if (!argv1) return false;
+    return path.resolve(fileURLToPath(import.meta.url)) === fs.realpathSync(path.resolve(argv1));
   } catch (err) {
     process.stderr.write(`lint-icon-weight-parity: could not determine CLI entry — ${err.message}\n`);
     return false;
