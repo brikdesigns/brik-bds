@@ -31,7 +31,7 @@
 }
 
 .bds-time-picker__label--tone-negative {
-  color: var(--bds-color-system-red);
+  color: var(--bds-text-error);
 }
 
 /* Label sizes */
@@ -112,7 +112,7 @@
 }
 
 .bds-time-picker__helper--tone-negative {
-  color: var(--bds-color-system-red);
+  color: var(--bds-text-error);
 }
 
 /* ─── Popover panel ──────────────────────────────────────────── */

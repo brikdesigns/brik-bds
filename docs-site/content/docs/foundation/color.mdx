@@ -312,6 +312,23 @@ Five stops per family are new. Two of them close specific, filed gaps:
 | `--color-poppy-600` | `#c94428` | **4.84:1 on white — clears AA (4.5:1).** The near-Poppy step [ADR-015](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-015-brand-primary-aa-large-contrast-policy.md)/[ADR-016](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-016-small-primary-button-contrast.md) said did not exist, unblocking [#479](https://github.com/brikdesigns/brik-bds/issues/479) |
 | `--color-grayscale-400` | `#b0b0b0` | Fills the `#828282` → `#e0e0e0` gap from [#1726](https://github.com/brikdesigns/brik-bds/issues/1726). It is **not** `#bdbdbd` — no even OKLCh ramp lands there, so consumers that hand-pinned `#bdbdbd` are migrating to this value, not matching it |
 
+## Colour families by purpose
+
+Four colour groups sit beside the numeric ramps. Each has one purpose, declared in `tokens/naming-grammar.json` (`$purposes`). Pick by purpose, not by how the hue looks.
+
+{/* lint-mdx-tokens-ignore-start — names the families by their registered prefix */}
+
+| Family | Purpose | Rule for agents |
+|---|---|---|
+| `system` | **Messaging.** Error, success, warning, neutral and info colours for Alert, Badge and Toast, plus link blue and accent hues. | Never read `--bds-color-system-*` in a component. Read the Semantic that aliases it, such as `--bds-text-error`. `lint-tokens` rule 18 fails the build otherwise. |
+| `social` | **Third-party brand marks.** YouTube, X/Twitter, Facebook, Instagram, LinkedIn, Yelp, Google, Apple, Bing and TikTok, for `SocialIcon`. | These are the platforms' colours, not Brik's. Never use one as a UI accent. |
+| `annotation` | **Annotation tooling.** Mark-up colours for design and doc annotation. | Never in product UI. |
+| `grayscale-black`, `grayscale-white` | **Brand-guide-invariant constants.** Foundation black and white that every brand guide carries. | A brand kit never rebinds them. |
+
+{/* lint-mdx-tokens-ignore-end */}
+
+`transparent` and `lightbox` are utility constants that keep their `system` names as grammar `namedExceptions`. They are not messaging colours. Full rules: [Token Anatomy](/docs/foundation/token-anatomy).
+
 ## Primitives
 
 Raw color scales from the Figma Brand Kit, rendered from `color-ramps.generated.json`. **Components reference these via semantic tokens — never directly.** The primitives change rarely; the semantic mappings change per theme.

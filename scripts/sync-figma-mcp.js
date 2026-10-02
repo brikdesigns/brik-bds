@@ -346,8 +346,8 @@ function deleteLeaf(set, varName) {
 
 // ─── Reference guard (brik-bds#1797) ─────────────────────────────
 // A leaf path maps 1:1 onto its CSS custom-property name by swapping `/` for
-// `-`: `font-weight/heading` → `--font-weight-heading`, `color/system/youtube`
-// → `--color-system-youtube`. Verified against tokens/figma-tokens.css.
+// `-`: `font-weight/heading` → `--font-weight-heading`, `color/social/youtube`
+// → `--color-social-youtube`. Verified against tokens/figma-tokens.css.
 // ADR-043: every emitted CSS name leads with the System ID, so the guard must
 // search source for `--bds-…` — the Figma path itself stays un-prefixed.
 function leafPathToVarName(leafPath) {

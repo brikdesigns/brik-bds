@@ -91,42 +91,42 @@
    (design-tokens/foundations.json primitives/value/color/system,
    brik-bds#1716) — never a hardcoded hex or a component-local JS map. */
 .bds-social-icon--emphasis-brand[data-platform='youtube'] {
-  --bds-social-icon-brand: var(--bds-color-system-youtube);
+  --bds-social-icon-brand: var(--bds-color-social-youtube);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='twitter'] {
-  --bds-social-icon-brand: var(--bds-color-system-twitter);
+  --bds-social-icon-brand: var(--bds-color-social-twitter);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='facebook'] {
-  --bds-social-icon-brand: var(--bds-color-system-facebook);
+  --bds-social-icon-brand: var(--bds-color-social-facebook);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='instagram'] {
-  --bds-social-icon-brand: var(--bds-color-system-instagram);
+  --bds-social-icon-brand: var(--bds-color-social-instagram);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='linkedin'] {
-  --bds-social-icon-brand: var(--bds-color-system-linkedin);
+  --bds-social-icon-brand: var(--bds-color-social-linkedin);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='yelp'] {
-  --bds-social-icon-brand: var(--bds-color-system-yelp);
+  --bds-social-icon-brand: var(--bds-color-social-yelp);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='google'] {
-  --bds-social-icon-brand: var(--bds-color-system-google);
+  --bds-social-icon-brand: var(--bds-color-social-google);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='apple'] {
-  --bds-social-icon-brand: var(--bds-color-system-apple);
+  --bds-social-icon-brand: var(--bds-color-social-apple);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='bing'] {
-  --bds-social-icon-brand: var(--bds-color-system-bing);
+  --bds-social-icon-brand: var(--bds-color-social-bing);
 }
 
 .bds-social-icon--emphasis-brand[data-platform='tiktok'] {
-  --bds-social-icon-brand: var(--bds-color-system-tiktok);
+  --bds-social-icon-brand: var(--bds-color-social-tiktok);
 }
 }

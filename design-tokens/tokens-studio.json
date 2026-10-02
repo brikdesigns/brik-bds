@@ -322,7 +322,9 @@
           },
           "$type": "color",
           "$value": "#e9d8fc"
-        },
+        }
+      },
+      "social": {
         "youtube": {
           "$extensions": {
             "com.figma.scopes": [

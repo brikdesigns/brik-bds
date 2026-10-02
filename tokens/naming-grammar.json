@@ -27,12 +27,21 @@
         "stepsSource": "brik-llm scripts/tokens/generate-color-ramps.js:38 (STOPS)",
         "retiredWordSteps": ["lightest", "lighter", "light", "dark", "darker", "darkest", "base"],
         "namedFamilies": {
-          "$comment": "#2677, ratified by the operator 2026-10-01. Non-numeric colour families: body is color-{family}-{name}, {name} from the closed list. A new name is a PR to this file.",
-          "system": ["red", "green", "yellow", "blue", "purple", "orange", "neutral", "blue-light", "neutral-light", "green-light", "red-light", "yellow-light", "orange-light", "purple-light", "youtube", "twitter", "facebook", "instagram", "linkedin", "yelp", "google", "apple", "bing", "tiktok", "transparent", "lightbox", "red-surface", "green-surface", "blue-surface"],
+          "$comment": "#2677, ratified by the operator 2026-10-01. Non-numeric colour families: body is color-{family}-{name}, {name} from the closed list. A new name is a PR to this file. #2689: every family states its purpose in $purposes; a name that does not fit its family's purpose belongs in another family.",
+          "$purposes": {
+            "system": "Messaging colours (error, success, warning, neutral, info, plus link blue and accent hues) for Alert, Badge and Toast; components never read them directly, they read the Semantic that aliases them.",
+            "social": "Third-party brand marks (YouTube, X/Twitter, Facebook, Instagram, LinkedIn, Yelp, Google, Apple, Bing, TikTok) used by SocialIcon; these are the platforms' colours, not Brik's, and no brand kit rebinds them.",
+            "annotation": "Annotation-tooling colours (pink, purple, blue and their light tints) used to mark up designs and docs, never product UI."
+          },
+          "system": ["red", "green", "yellow", "blue", "purple", "orange", "neutral", "blue-light", "neutral-light", "green-light", "red-light", "yellow-light", "orange-light", "purple-light", "red-surface", "green-surface", "blue-surface"],
+          "social": ["youtube", "twitter", "facebook", "instagram", "linkedin", "yelp", "google", "apple", "bing", "tiktok"],
           "annotation": ["pink", "purple", "blue", "light-pink", "light-purple", "light-blue"]
         },
         "namedSteps": {
           "$comment": "#2677: named endpoints of a numeric family.",
+          "$purposes": {
+            "grayscale": "black and white are foundation constants every brand guide carries; a brand kit never rebinds grayscale-black or grayscale-white."
+          },
           "grayscale": ["black", "white"]
         }
       },
@@ -136,7 +145,8 @@
       "--content-width-full",
       "--shadow-overlay",
       "--duration-marquee", "--duration-autoplay",
-      "--web", "--tablet", "--mobile"
+      "--web", "--tablet", "--mobile",
+      "--color-system-transparent", "--color-system-lightbox"
     ]
   },
   "valence": {

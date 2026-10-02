@@ -960,6 +960,37 @@ function checkRetiredBpNamespace(line, lineNum, file) {
 }
 
 /**
+ * Rule 18: Component reads a `system` colour directly (brik-bds#2689)
+ *
+ * `--bds-color-system-*` is the MESSAGING colour family (error/success/warning/
+ * neutral/info for Alert, Badge, Toast). A component never reads the Primitive:
+ * it reads the Semantic that aliases it (`--bds-text-error`, `--bds-surface-*`,
+ * `--bds-border-*`), so the meaning travels with the theme. Flags definitions
+ * and `var()` references; the bare pre-ADR-043 spelling is flagged too.
+ */
+function checkSystemColorDirectRead(line, lineNum, file) {
+  const violations = [];
+  const trimmed = line.trim();
+  if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) return violations;
+  if (line.includes('bds-lint-ignore')) return violations;
+
+  const regex = /(--(?:bds-)?color-system-[\w-]+)/g;
+  let match;
+  while ((match = regex.exec(line)) !== null) {
+    violations.push({
+      rule: 'system-color-direct-read',
+      severity: 'error',
+      file,
+      line: lineNum,
+      column: match.index + 1,
+      message: `Component reads the messaging Primitive "${match[1]}" directly`,
+      suggestion: 'Read the Semantic that aliases it (e.g. --bds-text-error). system colours are messaging-only; see token-anatomy.',
+    });
+  }
+  return violations;
+}
+
+/**
  * Deprecated gap/padding rung aliases — read from tokens/gap-fills.css's own
  * "DEPRECATED numeric-rung aliases (#2594)" block rather than hand-listing
  * `2xs`/`2xl`. ADR-033 §3's numeric rename was superseded by #2594 in the
@@ -1744,6 +1775,7 @@ function main() {
       // Rule 7 + 8: Tier 4 hook discipline (#1043) — apply to component source too.
       allViolations.push(...checkFallbackLiterals(line, lineNum, file, isComponent, lines));
       allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));
+      allViolations.push(...checkSystemColorDirectRead(line, lineNum, file));
 
       // Rule 4: grid compliance (opt-in via --check-grid)
       if (checkGrid) {
@@ -1782,6 +1814,7 @@ function main() {
       // Rule 7 + 8: Tier 4 hook discipline (#1043)
       allViolations.push(...checkFallbackLiterals(line, lineNum, file, true, lines));
       allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));
+      allViolations.push(...checkSystemColorDirectRead(line, lineNum, file));
 
       if (checkGrid) {
         allViolations.push(...checkGridCompliance(line, lineNum, file));
@@ -1814,6 +1847,7 @@ function main() {
       allViolations.push(...checkDeprecatedTokens(line, lineNum, file));
       allViolations.push(...checkFallbackLiterals(line, lineNum, file, true, lines));
       allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));
+      allViolations.push(...checkSystemColorDirectRead(line, lineNum, file));
     }
 
     // Rule 13 (#2592): .css only — the brace/selector tracker assumes plain

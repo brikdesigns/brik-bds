@@ -300,19 +300,13 @@
   --color-purple-light: var(--bds-color-purple-500);
   --color-purple-lighter: var(--bds-color-purple-300);
   --color-purple-lightest: var(--bds-color-purple-100);
-  --color-system-apple: var(--bds-color-system-apple);
-  --color-system-bing: var(--bds-color-system-bing);
   --color-system-blue: var(--bds-color-system-blue);
   --color-system-blue-light: var(--bds-color-system-blue-light);
   --color-system-blue-surface: var(--bds-color-system-blue-surface);
-  --color-system-facebook: var(--bds-color-system-facebook);
-  --color-system-google: var(--bds-color-system-google);
   --color-system-green: var(--bds-color-system-green);
   --color-system-green-light: var(--bds-color-system-green-light);
   --color-system-green-surface: var(--bds-color-system-green-surface);
-  --color-system-instagram: var(--bds-color-system-instagram);
   --color-system-lightbox: var(--bds-color-system-lightbox);
-  --color-system-linkedin: var(--bds-color-system-linkedin);
   --color-system-neutral: var(--bds-color-system-neutral);
   --color-system-neutral-light: var(--bds-color-system-neutral-light);
   --color-system-orange: var(--bds-color-system-orange);
@@ -322,13 +316,9 @@
   --color-system-red: var(--bds-color-system-red);
   --color-system-red-light: var(--bds-color-system-red-light);
   --color-system-red-surface: var(--bds-color-system-red-surface);
-  --color-system-tiktok: var(--bds-color-system-tiktok);
   --color-system-transparent: var(--bds-color-system-transparent);
-  --color-system-twitter: var(--bds-color-system-twitter);
   --color-system-yellow: var(--bds-color-system-yellow);
   --color-system-yellow-light: var(--bds-color-system-yellow-light);
-  --color-system-yelp: var(--bds-color-system-yelp);
-  --color-system-youtube: var(--bds-color-system-youtube);
   --color-tan-100: var(--bds-color-tan-100);
   --color-tan-200: var(--bds-color-tan-200);
   --color-tan-300: var(--bds-color-tan-300);
@@ -1149,4 +1139,14 @@
   --color-annotation-annotation-light-pink: var(--bds-color-annotation-light-pink);
   --color-annotation-annotation-light-purple: var(--bds-color-annotation-light-purple);
   --color-annotation-annotation-light-blue: var(--bds-color-annotation-light-blue);
+  --color-system-youtube: var(--bds-color-social-youtube);
+  --color-system-twitter: var(--bds-color-social-twitter);
+  --color-system-facebook: var(--bds-color-social-facebook);
+  --color-system-instagram: var(--bds-color-social-instagram);
+  --color-system-linkedin: var(--bds-color-social-linkedin);
+  --color-system-yelp: var(--bds-color-social-yelp);
+  --color-system-google: var(--bds-color-social-google);
+  --color-system-apple: var(--bds-color-social-apple);
+  --color-system-bing: var(--bds-color-social-bing);
+  --color-system-tiktok: var(--bds-color-social-tiktok);
 }

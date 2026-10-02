@@ -7,7 +7,7 @@ import { describe, it, expect } from 'vitest';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { expectedFormulas, missingFormulas } from '../lint-naming-grammar-docs.mjs';
+import { expectedFormulas, missingFormulas, repeatedHeadings } from '../lint-naming-grammar-docs.mjs';
 
 const REPO = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const grammar = JSON.parse(fs.readFileSync(path.join(REPO, 'tokens', 'naming-grammar.json'), 'utf8'));
@@ -80,5 +80,38 @@ describe('token-anatomy.mdx docs check', () => {
   it('fails when the page does not print the scale body --{scale}-{step}', () => {
     const noScale = mdx.replaceAll(`--${grammar.tiers.primitive.scale.body}`, '--{property}-{step}');
     expect(missingFormulas(grammar, noScale)).toEqual([`--${grammar.tiers.primitive.scale.body}`]);
+  });
+});
+
+describe('token-anatomy.mdx repeated-heading check (#2689)', () => {
+  const mdx = fs.readFileSync(path.join(REPO, grammar.docs.page), 'utf8');
+
+  it('passes on the current page', () => {
+    expect(repeatedHeadings(mdx)).toEqual([]);
+  });
+
+  it('fails when a section is pasted twice', () => {
+    expect(repeatedHeadings(`${mdx}\n## Tier\n\nagain\n`)).toEqual(['Tier']);
+  });
+
+  it('ignores a repeated heading inside a fenced code block', () => {
+    expect(repeatedHeadings('## A\n\n```\n## A\n```\n')).toEqual([]);
+  });
+});
+
+describe('named colour families state their purpose (#2689)', () => {
+  const color = grammar.tiers.primitive.color;
+
+  it('has a one-sentence purpose for system, social and annotation', () => {
+    for (const f of ['system', 'social', 'annotation']) {
+      expect(color.namedFamilies.$purposes[f], f).toMatch(/\.$/);
+    }
+    expect(color.namedSteps.$purposes.grayscale).toMatch(/never rebinds/);
+  });
+
+  it('keeps the social marks out of system', () => {
+    for (const n of color.namedFamilies.social) expect(color.namedFamilies.system).not.toContain(n);
+    expect(color.namedFamilies.system).not.toContain('transparent');
+    expect(grammar.steps.namedExceptions).toContain('--color-system-transparent');
   });
 });

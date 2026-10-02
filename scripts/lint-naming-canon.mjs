@@ -1037,8 +1037,10 @@ const COLOR_FAMILIES = new Set(COLOR_GRAMMAR.families);
 const COLOR_STEPS = new Set(COLOR_GRAMMAR.steps);
 const RETIRED_WORD_STEPS = new Set(COLOR_GRAMMAR.retiredWordSteps);
 // Non-numeric families and named endpoints (#2677): closed lists, still read from the grammar file.
-const { $comment: _nf, ...COLOR_NAMED_FAMILIES } = COLOR_GRAMMAR.namedFamilies;
-const { $comment: _ns, ...COLOR_NAMED_STEPS } = COLOR_GRAMMAR.namedSteps;
+const { $comment: _nf, $purposes: _nfp, ...COLOR_NAMED_FAMILIES } = COLOR_GRAMMAR.namedFamilies;
+const { $comment: _ns, $purposes: _nsp, ...COLOR_NAMED_STEPS } = COLOR_GRAMMAR.namedSteps;
+// Single colour names that are not a family member at all (#2689): `transparent`, `lightbox`.
+const COLOR_NAMED_EXCEPTIONS = new Set(GRAMMAR.steps.namedExceptions);
 
 /**
  * ADR-043 § 2/§ 4 declare ONE colour Primitive body, `color-{family}-{step}`,
@@ -1057,6 +1059,7 @@ function colorBodyFindings(byName) {
     if (parts.length === 2 && COLOR_FAMILIES.has(family) && COLOR_STEPS.has(step)) continue;
     if (parts.length === 2 && COLOR_NAMED_STEPS[family]?.includes(step)) continue;
     if (COLOR_NAMED_FAMILIES[parts[0]]?.includes(parts.slice(1).join('-'))) continue;
+    if (COLOR_NAMED_EXCEPTIONS.has(`--${body}`)) continue;
     findings.push({
       rule: 7,
       id: name,
