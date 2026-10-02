@@ -179,12 +179,6 @@
   --breakpoint-tablet: var(--bds-breakpoint-tablet);
   --breakpoint-wide: var(--bds-breakpoint-wide);
   --breakpoint-wider: var(--bds-breakpoint-wider);
-  --color-annotation-annotation-blue: var(--bds-color-annotation-annotation-blue);
-  --color-annotation-annotation-light-blue: var(--bds-color-annotation-annotation-light-blue);
-  --color-annotation-annotation-light-pink: var(--bds-color-annotation-annotation-light-pink);
-  --color-annotation-annotation-light-purple: var(--bds-color-annotation-annotation-light-purple);
-  --color-annotation-annotation-pink: var(--bds-color-annotation-annotation-pink);
-  --color-annotation-annotation-purple: var(--bds-color-annotation-annotation-purple);
   --color-blue-100: var(--bds-color-blue-100);
   --color-blue-200: var(--bds-color-blue-200);
   --color-blue-300: var(--bds-color-blue-300);
@@ -1149,4 +1143,10 @@
 :root {
   --bds-text-area-min-width: var(--bds-textarea-min-width);
   --bds-page-padding-inline: var(--bds-gutter-padding-inline);
+  --color-annotation-annotation-pink: var(--bds-color-annotation-pink);
+  --color-annotation-annotation-purple: var(--bds-color-annotation-purple);
+  --color-annotation-annotation-blue: var(--bds-color-annotation-blue);
+  --color-annotation-annotation-light-pink: var(--bds-color-annotation-light-pink);
+  --color-annotation-annotation-light-purple: var(--bds-color-annotation-light-purple);
+  --color-annotation-annotation-light-blue: var(--bds-color-annotation-light-blue);
 }

@@ -183,27 +183,27 @@
       }
     },
     "annotation": {
-      "annotation-pink": {
+      "pink": {
         "$value": "#bb1eeb",
         "$type": "color"
       },
-      "annotation-purple": {
+      "purple": {
         "$value": "#601ff9",
         "$type": "color"
       },
-      "annotation-blue": {
+      "blue": {
         "$value": "#2f80ed",
         "$type": "color"
       },
-      "annotation-light-pink": {
+      "light-pink": {
         "$value": "#f8e8fd",
         "$type": "color"
       },
-      "annotation-light-purple": {
+      "light-purple": {
         "$value": "#e6dbff",
         "$type": "color"
       },
-      "annotation-light-blue": {
+      "light-blue": {
         "$value": "#d1e5ff",
         "$type": "color"
       }
