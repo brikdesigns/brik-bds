@@ -80,7 +80,7 @@ The heading ramp is the read page's ramp unchanged: `PageHeader title` is the `<
 
 ## State shell
 
-**None of the four [`DataView`](/docs/components/data-view) shells applies.** They wrap a *display* and own error, loading, and empty for it; a form has no empty state, and its errors and pending state already have slots:
+**None of the four [data view shells](/docs/components/data-view) applies.** They wrap a *display* and own error, loading, and empty for it; a form has no empty state, and its errors and pending state already have slots:
 
 - **Loading the record before the form renders** — `DataSection loading`, which draws field-shaped skeletons matching the `FieldGrid` the section will hold.
 - **Submitting** — `PageHeader saveLoading` on the Save button, plus `saveDisabled` while the form is invalid.

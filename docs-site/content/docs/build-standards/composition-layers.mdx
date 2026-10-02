@@ -13,12 +13,16 @@ The one-sentence form: *Blueprints compose the page. Containers hold collections
 
 | Layer | Responsibility | Vocabulary | Examples |
 |---|---|---|---|
-| **Blueprint** | Page role with surrounding structure (vertical rhythm, container, background surface) | Page-level semantic | `Hero`, `Content`, `CTA` |
-| **Layout** | Pure composition primitive — arranges children. No styling beyond structure. | Composition | `Stack`, `Cluster`, `Grid`, `Split`, `Row` |
-| **Container** | Styled holder that composes blocks into a self-contained unit. Carries border / padding / elevation / radius. | Bounded unit | `Card`, `List`, `Form`, `Accordion`, `Tabs` |
-| **Block** | Composed content unit — fixed slot shape filled with atoms. | Slot + atoms | `ContentBlock`, `MediaBlock`, `ListItem`, `FormField`, `Stat` |
+| **Blueprint** | Page role with surrounding structure (vertical rhythm, container, background surface) | Page-level semantic | `Hero`, `Features`, `Cta` |
+| **Layout** | Pure composition primitive — arranges children. No styling beyond structure. | Composition | `Stack`, `Cluster`, `Grid` |
+| **Container** | Styled holder that composes blocks into a self-contained unit. Carries border / padding / elevation / radius. | Bounded unit | `Card`, `CardList`, `Form`, `Accordion` |
+| **Block** | Composed content unit — fixed slot shape filled with atoms. | Slot + atoms | `ContentBlock`, `InteractiveListItem`, `Field` |
 | **Control** | Interactive bar that operates on an adjacent display or heads a page. Fixed slot shape filled with controls, not content. | Slot + controls | `FilterBar`, `PageHeader`, `TabBar`, `SubNavigation`, `Pagination` |
-| **Component** | Single primitive atom. | One primitive | `Button`, `Input`, `Image`, `Badge`, `Icon` |
+| **Component** | Single primitive atom. | One primitive | `Button`, `TextInput`, `Image`, `Badge`, `Icon` |
+
+<Callout type="warn">
+  **Planned, not yet exported:** the layout primitives `Split` and `Row`, and the blocks `MediaBlock` and `Stat`. They are specified by [#2037](https://github.com/brikdesigns/brik-bds/issues/2037). Until they ship, use `Grid` or `Cluster` for a side-by-side layout, `Image` + `ContentBlock` for a media block, and `Card layout="metric"` for a stat.
+</Callout>
 
 <Callout type="info">
   **"Blueprint" is the layer; "section" is not.** Three different things shared the word `Section` before [ADR-037](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-037-astro-is-the-canonical-blueprint-rail.md) §5 renamed this layer, and the other two are unchanged:
@@ -34,8 +38,8 @@ The one-sentence form: *Blueprints compose the page. Containers hold collections
 | Layer | Directory | Notes |
 |---|---|---|
 | Blueprint | `content-system/blueprints/{react,astro}/` | Blueprint families per ADR-008 play this layer |
-| Layout | `components/ui/` | `Stack`, `Cluster`, `Grid`, `Split`, `Row` |
-| Container | `components/ui/` | `Card`, `Accordion`, `List` |
+| Layout | `components/ui/` | `Stack`, `Cluster`, `Grid` |
+| Container | `components/ui/` | `Card`, `Accordion`, `CardList` |
 | Block | `components/ui/` | `Field`, `Card layout="metric"` |
 | Control | `components/ui/` | `FilterBar`, `PageHeader`, `TabBar`, `SubNavigation`, `Pagination` |
 | Component | `components/ui/` | Atomic primitives |
@@ -58,17 +62,17 @@ A Card encodes only its container styling (border, radius, padding, elevation). 
 // ✅ Stacked card — Stack layout inside Card
 <Card>
   <Stack>
-    <MediaBlock />
-    <ContentBlock />
+    <Image src="/team.jpg" alt="The team at work" />
+    <ContentBlock title="Our story" />
   </Stack>
 </Card>
 
-// ✅ Horizontal card — Split layout inside Card
+// ✅ Horizontal card — Grid layout inside Card
 <Card>
-  <Split>
-    <MediaBlock />
-    <ContentBlock />
-  </Split>
+  <Grid columns={2}>
+    <Image src="/team.jpg" alt="The team at work" />
+    <ContentBlock title="Our story" />
+  </Grid>
 </Card>
 
 // ❌ Don't bake orientation into Card
@@ -78,24 +82,16 @@ A Card encodes only its container styling (border, radius, padding, elevation). 
 
 This keeps `CardImageLeft`, `CardStacked`, `CardHorizontal` from existing — they're all "Card + a layout child."
 
-## Stat is a block
+## A stat is a block
 
-`Stat` (value + label, two slots, no border styling) is a **block**, not a container. The bordered "stat tile" look is a Card containing a Stat.
+A stat (value + label, two slots, no border styling) is a **block**, not a container. The bordered "stat tile" look is a Card holding the stat. A standalone `Stat` block is planned ([#2037](https://github.com/brikdesigns/brik-bds/issues/2037)); today the tile ships as `Card layout="metric"`.
 
 ```tsx
 // Bordered stat tile
-<Card>
-  <Stat value="75%" label="of website credibility comes from design" />
-</Card>
-
-// Card with content + metric
-<Card>
-  <ContentBlock title="First impressions" body="..." />
-  <Stat value="0.05s" label="to make a first impression" />
-</Card>
+<Card layout="metric" overline="Of website credibility comes from design" title="75%" />
 ```
 
-If you find yourself reaching for a `StatCard`, you're conflating block and container — write it as `Card` + `Stat` instead.
+If you find yourself reaching for a `StatCard`, you're conflating block and container — compose a Card around the stat instead.
 
 ## Control vs block and container
 

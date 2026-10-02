@@ -338,3 +338,72 @@ export function Passthru(props: PassthruProps) { return null; }
     expect(JSON.parse(stdout).violations).toEqual([]);
   });
 });
+
+// ── Docs name only real exports (#2700) ───────────────────────────────────────
+
+describe('lint-component-props — docs names must be real exports', () => {
+  let xroot;
+
+  beforeAll(() => {
+    xroot = mkdtempSync(join(tmpdir(), 'docnames-'));
+    writeFileSync(join(xroot, 'tsconfig.json'), JSON.stringify({ compilerOptions: { noEmit: true } }));
+    mkdirSync(join(xroot, 'components', 'ui', 'Real'), { recursive: true });
+    writeFileSync(join(xroot, 'components', 'ui', 'Real', 'Real.tsx'), 'export const Real = 1;\nexport const Direct = 2;\n');
+    writeFileSync(join(xroot, 'components', 'ui', 'Real', 'index.ts'), "export * from './Real';\nexport { Direct as Renamed } from './Real';\n");
+    writeFileSync(join(xroot, 'components', 'ui', 'index.ts'), "export * from './Real';\n");
+    // Entry re-exports ui via `export *` AND exports a name directly.
+    writeFileSync(join(xroot, 'components', 'index.ts'), "export * from './ui';\nexport const Top = 3;\n");
+    mkdirSync(join(xroot, 'docs'), { recursive: true });
+  });
+  afterAll(() => rmSync(xroot, { recursive: true, force: true }));
+
+  const check = (mdx) => {
+    const file = join(xroot, 'docs', 'page.mdx');
+    writeFileSync(file, mdx);
+    let code = 0;
+    let stdout = '';
+    try {
+      stdout = execFileSync('node', [SCRIPT, '--json', '--root', xroot, '--files', file], { encoding: 'utf8' });
+    } catch (err) {
+      code = err.status ?? 1;
+      stdout = err.stdout?.toString() ?? '';
+    }
+    const json = JSON.parse(stdout);
+    return { code, names: json.violations.filter((v) => v.kind === 'absent-export').map((v) => v.prop) };
+  };
+
+  it('passes real exports (re-exported, renamed, direct) in JSX and bds imports', () => {
+    const r = check(
+      "```tsx\nimport { Real, Renamed, Top } from '@brikdesigns/bds';\n<Real><Renamed /><Top /></Real>\n```\n",
+    );
+    expect(r).toEqual({ code: 0, names: [] });
+  });
+
+  it('flags an absent JSX tag and an absent bds import (red)', () => {
+    const r = check("```tsx\nimport { Ghost } from '@brikdesigns/bds';\n<Real><Split /></Real>\n```\n");
+    expect(r.code).toBe(1);
+    expect(r.names.sort()).toEqual(['Ghost', 'Split']);
+  });
+
+  it('flags an absent name in a Component table column, not in prose', () => {
+    const r = check(
+      '| Layer | Component |\n|---|---|\n| Layout | `Real`, `Row` |\n\nProse naming `Stat` and <Spec /> is fine.\n',
+    );
+    expect(r.names).toEqual(['Row']);
+  });
+
+  it('does not flag generics, locally declared tags, or other-module imports', () => {
+    const r = check(
+      "```tsx\nimport { Link } from 'next/link';\nfunction Mine() { return null; }\n" +
+      'const [x] = useState<Thing[]>([]);\n<Link><Mine /></Link>\n```\n',
+    );
+    expect(r).toEqual({ code: 0, names: [] });
+  });
+
+  it('ignores non-code fences and allowlisted names (Icon pattern, retired)', () => {
+    const r = check(
+      '```html\n<Nope />\n```\n\n```tsx\n<Real icon={<PlusIcon />} />\n<AlertBanner />\n```\n',
+    );
+    expect(r).toEqual({ code: 0, names: [] });
+  });
+});

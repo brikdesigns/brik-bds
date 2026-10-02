@@ -7,10 +7,10 @@ import { Callout } from 'fumadocs-ui/components/callout';
 
 The vocabulary of site-footer patterns — one half of the [Layout Archetypes](/docs/theming/layout-archetypes) Dimension, sibling to [Navigation Archetypes](/docs/theming/navigation-archetypes) and selected the same way. An archetype is a **layout-level decision**: which content blocks the footer carries and how they weight against each other. Styling is inherited from the client theme + atmosphere.
 
-Each industry pack declares its default in the `footerArchetype` field. Consumer sites render the shape via the BDS `<SiteFooter>` component from `@brikdesigns/bds/blueprints-astro`.
+Each industry pack declares its default in the `footerArchetype` field. Consumer sites will render the shape via a BDS `SiteFooter` component from `@brikdesigns/bds/blueprints-astro` — **planned, not yet exported** (v0.2; see the status note below).
 
 <Callout type="warn">
-  **v0.1 status:** vocabulary + industry-pack field ship now so packs can declare a default. Live `<SiteFooter>` preview arrives with v0.2 of `@brikdesigns/bds/blueprints-astro`. Until then, client sites hand-roll the footer and treat this page as the spec — same pattern Birdwell followed for navigation before PR #171 shipped the nav archetype render surface.
+  **v0.1 status:** vocabulary + industry-pack field ship now so packs can declare a default. Live `SiteFooter` preview arrives with v0.2 of `@brikdesigns/bds/blueprints-astro`. Until then, client sites hand-roll the footer and treat this page as the spec — same pattern Birdwell followed for navigation before PR #171 shipped the nav archetype render surface.
 </Callout>
 
 ## Vocabulary

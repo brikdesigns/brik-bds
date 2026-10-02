@@ -7,7 +7,7 @@ import { Cards, Card } from 'fumadocs-ui/components/card';
 
 The Layout Archetypes Dimension covers **site chrome shape** — the header at the top of every page and the footer at the bottom. Two sibling vocabularies, paired but orthogonal: a client can pick `editorial-transparent` nav with `legal_heavy` footer, or `utility-first` nav with `cta_focused` footer, or any other combination. One of the four [Theming Dimensions](/docs/theming).
 
-Each industry pack declares a default for both in its `navigationIA` and `footerArchetype` fields. Consumer sites render the shapes at build time via the BDS `<SiteHeader>` and `<SiteFooter>` components from `@brikdesigns/bds/blueprints-astro`.
+Each industry pack declares a default for both in its `navigationIA` and `footerArchetype` fields. Consumer sites render the header at build time via the BDS `<SiteHeader>` component from `@brikdesigns/bds/blueprints-astro`; the matching `SiteFooter` is **planned, not yet exported** (v0.2).
 
 Archetypes are **layout-level decisions**, not styling — they describe which content blocks appear, in what arrangement, and how they respond to scroll. Styling is inherited from the client theme + atmosphere.
 
@@ -26,7 +26,7 @@ Same resolution model for both nav and footer:
 2. **Look up the pack** via `getPackByIndustrySlug(industry_slug)` from `@brikdesigns/bds/content-system`.
 3. **Read `pack.navigationIA`** and **`pack.footerArchetype`** — those are the defaults. If absent, fall back to `smallBusiness.navigationIA` and `DEFAULT_FOOTER_ARCHETYPE` (`four_col_directory`).
 4. **Check the portal Intel tab** — admin may have overridden either per-client. Overrides win.
-5. **Pass the resolved values to `<SiteHeader>` and `<SiteFooter archetype={…}>`** from `@brikdesigns/bds/blueprints-astro` (footer render surface lands in v0.2).
+5. **Pass the resolved values to `<SiteHeader>`** from `@brikdesigns/bds/blueprints-astro`. The footer render surface (`SiteFooter`) is **planned** for v0.2 — until then, hand-roll the footer to the resolved archetype.
 
 Until the Astro blueprint components land, client Astro sites hand-roll their header and footer against the semantics documented on each archetype page and swap to the BDS components for free at v0.2 upgrade. The Birdwell & Mutlak site is the reference implementation of `editorial-transparent` — see `web/birdwell-mutlak/src/components/Nav.astro`.
 

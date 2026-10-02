@@ -86,7 +86,7 @@ CSS Layers handle the **values** cascade. But Theming as a whole composes across
 |---|---|---|
 | **Tokens** | Color / type / spacing values | Brand Kit Library → `theme-{client}.css` in `client-theme` Layer |
 | **Atmospheres** | Ambient decoration — grain, vignettes, orbs, spotlights | `@brikdesigns/bds/atmospheres/{slug}.css` |
-| **Layout Archetypes** | Site-header + footer shape, scroll + drawer behavior | `<SiteHeader>` / `<SiteFooter>` from blueprints |
+| **Layout Archetypes** | Site-header + footer shape, scroll + drawer behavior | `<SiteHeader>` from blueprints; `SiteFooter` planned (v0.2) |
 | **Blueprints** | Section composition — hero / services / testimonials shapes | Authored in BDS, tagged by mood + industry; rendered on the Astro rail ([ADR-037](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-037-astro-is-the-canonical-blueprint-rail.md)), React for CMS-backed sites |
 
 A client picks values for each Dimension independently. Three different Dimensions == three different decisions — composing nothing cross-couples. Full Theming Tenet overview at [Theming](/docs/theming).
