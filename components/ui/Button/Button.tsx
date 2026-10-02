@@ -1,7 +1,9 @@
 import {
   forwardRef,
   type AnchorHTMLAttributes,
+  type ComponentPropsWithRef,
   type ButtonHTMLAttributes,
+  type JSXElementConstructor,
   type ReactNode,
   type Ref,
 } from 'react';
@@ -120,12 +122,20 @@ type StyleAndContentKeys =
   | keyof TextContentProps
   | keyof IconOnlyContentProps;
 
-type AnchorElementProps = { href: string } & Omit<
-  AnchorHTMLAttributes<HTMLAnchorElement>,
-  'href' | StyleAndContentKeys
->;
+type AnchorLinkProps = ComponentPropsWithRef<'a'> & { href: string };
 
-type ButtonElementProps = { href?: undefined } & Omit<
+type AnchorElementProps = {
+  href: string;
+  /**
+   * Render the link with a router component (e.g. `next/link`'s `Link`)
+   * instead of a plain `<a>`, so navigation stays client-side. Receives the
+   * same `href`, `className`, `ref`, and aria props the `<a>` would. Ignored
+   * unless `href` is set.
+   */
+  linkComponent?: JSXElementConstructor<AnchorLinkProps>;
+} & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | StyleAndContentKeys>;
+
+type ButtonElementProps = { href?: undefined; linkComponent?: never } & Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
   StyleAndContentKeys
 >;
@@ -196,6 +206,7 @@ export function composeButtonClasses({
  * - **Text link**:     `<Button variant="outline" href="/docs">Read docs</Button>`
  * - **Icon-only**:     `<Button variant="ghost" icon={<X/>} label="Close" />`
  * - **Icon link**:     `<Button variant="ghost" icon={<X/>} label="Open" href="/x" />`
+ * - **Router link**:   `<Button href="/x" linkComponent={Link}>Open</Button>` (e.g. `next/link`)
  *
  * State props (combine with any variant):
  * - `selected`  — active state modifier on top of variant
@@ -260,10 +271,18 @@ export const Button = forwardRef<ButtonRef, ButtonProps>(function Button(props, 
   ) : null;
 
   if (isAnchor(rest as ElementProps)) {
-    const { href, label, iconBefore: _ib, iconAfter: _ia, icon: _ic, children: _ch, ...anchorProps } =
-      rest as AnchorElementProps & TextContentProps & IconOnlyContentProps;
+    const {
+      href,
+      label,
+      linkComponent: LinkComponent = 'a',
+      iconBefore: _ib,
+      iconAfter: _ia,
+      icon: _ic,
+      children: _ch,
+      ...anchorProps
+    } = rest as AnchorElementProps & TextContentProps & IconOnlyContentProps;
     return (
-      <a
+      <LinkComponent
         ref={ref as Ref<HTMLAnchorElement>}
         href={href}
         className={classes}
@@ -273,7 +292,7 @@ export const Button = forwardRef<ButtonRef, ButtonProps>(function Button(props, 
       >
         {contentNode}
         {spinner}
-      </a>
+      </LinkComponent>
     );
   }
 
