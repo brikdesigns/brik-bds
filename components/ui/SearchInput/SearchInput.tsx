@@ -8,7 +8,8 @@ import {
 } from 'react';
 import { Icon } from '../Icon';
 import { MagnifyingGlass, X } from '../../icons';
-import { TextInput, type TextInputProps } from '../TextInput/TextInput';
+import { TextInput, type TextInputBaseProps } from '../TextInput/TextInput';
+import type { AccessibleNameProps } from '../../utils';
 import './SearchInput.css';
 
 /**
@@ -18,8 +19,8 @@ import './SearchInput.css';
  * sets `type="search"`, the magnifying glass icon, and the clear button
  * internally.
  */
-export interface SearchInputProps
-  extends Omit<TextInputProps, 'type' | 'iconBefore' | 'iconAfter'> {
+export interface SearchInputBaseProps
+  extends Omit<TextInputBaseProps, 'type' | 'iconBefore' | 'iconAfter'> {
   /**
    * Called when the clear button is clicked.
    * In controlled mode (`value` provided) use this to reset `value`.
@@ -27,6 +28,13 @@ export interface SearchInputProps
    */
   onClear?: () => void;
 }
+
+/**
+ * SearchInput props. Inherits TextInput's accessible-name requirement: supply
+ * `label` (visible), `aria-label`, or `aria-labelledby`. Omitting all three is
+ * a type error.
+ */
+export type SearchInputProps = SearchInputBaseProps & AccessibleNameProps;
 
 
 /**

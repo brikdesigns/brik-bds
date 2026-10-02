@@ -1,13 +1,13 @@
 import { type HTMLAttributes, useState, useRef, useCallback } from 'react';
 import { Icon } from '../Icon';
 import { CloudArrowUp } from '../../icons';
-import { bdsClass } from '../../utils';
+import { bdsClass, type AccessibleNameProps } from '../../utils';
 import './FileUploader.css';
 
 /**
- * FileUploader component props
+ * FileUploader props other than the accessible name (see `FileUploaderProps`).
  */
-export interface FileUploaderProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
+export interface FileUploaderBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChange'> {
   /** Accepted file types (e.g., ".pdf,.svg" or "image/svg+xml" or "image/*") */
   accept?: string;
   /** Allow multiple files */
@@ -16,8 +16,6 @@ export interface FileUploaderProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   maxSize?: number;
   /** Disabled state */
   disabled?: boolean;
-  /** Custom label text */
-  label?: string;
   /** Helper text below the label */
   helperText?: string;
   /** Error message */
@@ -25,6 +23,14 @@ export interface FileUploaderProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   /** Change handler with selected files */
   onChange?: (files: File[]) => void;
 }
+
+/**
+ * FileUploader component props. An accessible name is required: supply `label`
+ * (visible prompt text, also names the dropzone), `aria-label`, or
+ * `aria-labelledby` — the name is applied to the focusable dropzone. Omitting
+ * all three is a type error.
+ */
+export type FileUploaderProps = FileUploaderBaseProps & AccessibleNameProps;
 
 // `accept` honors three forms per HTML spec: extension (`.svg`), MIME type
 // (`image/svg+xml`), and MIME wildcard (`image/*`). Browsers only enforce
@@ -72,7 +78,9 @@ export function FileUploader({
   multiple = false,
   maxSize,
   disabled = false,
-  label = 'Drag and drop files here',
+  label,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
   helperText,
   error,
   onChange,
@@ -183,10 +191,11 @@ export function FileUploader({
           disabled ? 'bds-file-uploader__dropzone--disabled' : undefined,
           displayError ? 'bds-file-uploader__dropzone--tone-negative' : undefined,
         )}
-        aria-label="File upload dropzone"
+        aria-labelledby={ariaLabelledby}
+        aria-label={ariaLabelledby ? undefined : (ariaLabel ?? label)}
       >
         <span className="bds-file-uploader__icon"><Icon icon={CloudArrowUp} /></span>
-        <p className="bds-file-uploader__label">{label}</p>
+        <p className="bds-file-uploader__label">{label ?? 'Drag and drop files here'}</p>
         <p className="bds-file-uploader__helper">
           or <span className="bds-file-uploader__browse">browse files</span>
         </p>

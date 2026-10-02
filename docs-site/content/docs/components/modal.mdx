@@ -92,6 +92,7 @@ Pass a custom `footer` to override the auto-rendered actions while keeping the r
 
 ## Accessibility
 
+- **An accessible name is required (type-enforced).** Pass `title` (labels the dialog via `aria-labelledby`) or `aria-label` for a titleless modal; omitting both is a type error.
 - Renders `role="dialog"` (or `alertdialog` for confirm preset) with `aria-labelledby` linking the title.
 - Focus trap inside the modal — `Tab` cycles within, focus returns to the trigger on close.
 - `Escape` closes (auto). Backdrop click closes by default; opt out via `closeOnBackdrop={false}`.

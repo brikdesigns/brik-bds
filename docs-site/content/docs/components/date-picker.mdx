@@ -78,6 +78,7 @@ const [date, setDate] = useState<Date | null>(null);
 
 ## Accessibility
 
+- **An accessible name is required (type-enforced).** Pass `label` (visible), `aria-label`, or `aria-labelledby`; omitting all three is a type error. The name is applied to the trigger button.
 - The trigger is a real `<input>` — keyboard access, focus ring, screen-reader labels match TextInput.
 - The calendar popover uses Radix Popover under the hood — focus trap, `Esc` to dismiss, click-outside to close.
 - Selected date announces via `aria-live` on the trigger.

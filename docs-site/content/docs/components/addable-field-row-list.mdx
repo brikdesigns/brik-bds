@@ -89,7 +89,7 @@ interface HolidayRow {
 >
   {({ row, update }) => (
     <>
-      <TextInput value={row.date} onChange={(e) => update({ date: e.target.value })} />
+      <TextInput aria-label="Date" value={row.date} onChange={(e) => update({ date: e.target.value })} />
       <TextInput
         type="time"
         value={row.open}
@@ -125,9 +125,9 @@ Same primitive, taller content. Three TextArea fields per row in a `1fr 1fr 1fr`
 >
   {({ row, update }) => (
     <>
-      <TextArea value={row.competitor} onChange={(e) => update({ competitor: e.target.value })} rows={3} />
-      <TextArea value={row.gap} onChange={(e) => update({ gap: e.target.value })} rows={3} />
-      <TextArea value={row.copyImplication} onChange={(e) => update({ copyImplication: e.target.value })} rows={3} />
+      <TextArea aria-label="Competitor" value={row.competitor} onChange={(e) => update({ competitor: e.target.value })} rows={3} />
+      <TextArea aria-label="Gap" value={row.gap} onChange={(e) => update({ gap: e.target.value })} rows={3} />
+      <TextArea aria-label="Copy implication" value={row.copyImplication} onChange={(e) => update({ copyImplication: e.target.value })} rows={3} />
     </>
   )}
 </AddableFieldRowList>

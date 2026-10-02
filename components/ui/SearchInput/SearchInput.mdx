@@ -37,3 +37,5 @@ The clear button appears automatically when the field has a value and disappears
 > **Note** — For controlled usage, wire `value` + `onChange` + `onClear` together. `onClear` fires when the ✕ button is clicked; in controlled mode it is your responsibility to reset `value` to `''`.
 
 > **Note** — All `TextInput` updates (focus ring, error styling, sizing tokens) propagate here automatically. `type`, `iconBefore`, and `iconAfter` are reserved by `SearchInput`; everything else passes through.
+
+> **Note** — An accessible name is required and type-enforced: pass `label` (visible), `aria-label`, or `aria-labelledby`. Omitting all three is a type error. The name is applied to the input.

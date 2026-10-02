@@ -5,16 +5,16 @@ import {
   useState,
   useCallback,
 } from 'react';
-import { bdsClass } from '../../utils';
+import { bdsClass, type AccessibleNameProps } from '../../utils';
 import './ToggleSwitch.css';
 
 export type ToggleSwitchSize = 'lg' | 'md' | 'sm';
 
 export type ToggleSwitchVariant = 'default' | 'accent-knob';
 
-export interface ToggleSwitchProps
+/** ToggleSwitch props other than the accessible name (see `ToggleSwitchProps`). */
+export interface ToggleSwitchBaseProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
-  label?: ReactNode;
   size?: ToggleSwitchSize;
   /**
    * Visual variant. `default` carries state on the track (brand-fill when on,
@@ -29,6 +29,13 @@ export interface ToggleSwitchProps
   disabled?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
+
+/**
+ * ToggleSwitch component props. An accessible name is required: supply `label`
+ * (visible, `ReactNode`), `aria-label`, or `aria-labelledby`. Omitting all
+ * three is a type error.
+ */
+export type ToggleSwitchProps = ToggleSwitchBaseProps & AccessibleNameProps<ReactNode>;
 
 /**
  * Size dimensions from Figma — runtime-calculated, stays inline.

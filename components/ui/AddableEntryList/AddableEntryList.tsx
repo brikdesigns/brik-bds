@@ -291,7 +291,9 @@ export function AddableEntryList({
               </div>
               <TextInput
                 size={INPUT_SIZE[size]}
-                label={primaryLabel}
+                {...(primaryLabel
+                  ? { label: primaryLabel }
+                  : { 'aria-label': label ? `${label} entry` : 'Entry' })}
                 type={primaryInputType}
                 inputMode={primaryInputType === 'url' ? 'url' : undefined}
                 autoComplete={primaryInputType === 'url' ? 'url' : undefined}
@@ -302,7 +304,9 @@ export function AddableEntryList({
               />
               <TextArea
                 size={TEXTAREA_SIZE[size]}
-                label={secondaryLabel}
+                {...(secondaryLabel
+                  ? { label: secondaryLabel }
+                  : { 'aria-label': label ? `${label} details` : 'Entry details' })}
                 value={entry.secondary}
                 onChange={(e) => update(index, { secondary: e.target.value })}
                 placeholder={secondaryPlaceholder}
@@ -588,7 +592,9 @@ function SuggestionModeEdit({
           <div ref={secondaryWrapRef}>
             <TextArea
               size={TEXTAREA_SIZE[size]}
-              label={secondaryLabel}
+              {...(secondaryLabel
+                ? { label: secondaryLabel }
+                : { 'aria-label': label ? `${label} details` : 'New entry details' })}
               value={secondaryDraft}
               onChange={(e) => setSecondaryDraft(e.target.value)}
               onKeyDown={handleSecondaryKey}

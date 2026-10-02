@@ -120,6 +120,7 @@ export const WithHeaderControl: Story = {
           headerControl={
             <DatePicker
               id="ds-header-month"
+              aria-label="Reporting month"
               precision="month"
               size="sm"
               value={month}

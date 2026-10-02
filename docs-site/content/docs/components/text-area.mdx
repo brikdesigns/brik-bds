@@ -25,9 +25,9 @@ import { TextArea } from '@brikdesigns/bds';
 ### Sizes
 
 ```tsx
-<TextArea size="sm" placeholder="Small" rows={3} />
-<TextArea size="md" placeholder="Medium (default)" rows={4} />
-<TextArea size="lg" placeholder="Large" rows={5} />
+<TextArea size="sm" aria-label="Notes" placeholder="Small" rows={3} />
+<TextArea size="md" aria-label="Notes" placeholder="Medium (default)" rows={4} />
+<TextArea size="lg" aria-label="Notes" placeholder="Large" rows={5} />
 ```
 
 - **`sm`** — 14px text. Inline editing, dense forms.
@@ -62,9 +62,9 @@ import { TextArea } from '@brikdesigns/bds';
 Default is `vertical` — users can drag the bottom-right handle to make it taller. Use `none` for fixed-size cells.
 
 ```tsx
-<TextArea placeholder="Fixed size" rows={4} resize="none" />
-<TextArea placeholder="Resize horizontally" resize="horizontal" />
-<TextArea placeholder="Resize both" resize="both" />
+<TextArea aria-label="Notes" placeholder="Fixed size" rows={4} resize="none" />
+<TextArea aria-label="Notes" placeholder="Resize horizontally" resize="horizontal" />
+<TextArea aria-label="Notes" placeholder="Resize both" resize="both" />
 ```
 
 | Mode | Effect |
@@ -85,6 +85,7 @@ Default is `vertical` — users can drag the bottom-right handle to make it tall
 
 ## Accessibility
 
+- **An accessible name is required (type-enforced).** Pass `label` (visible), `aria-label`, or `aria-labelledby`; omitting all three is a type error. The name is applied to the `<textarea>`.
 - Renders a real `<textarea>` — keyboard, scroll, native resize handle all platform.
 - `label` auto-wires `htmlFor`/`id`. If you don't pass `label`, supply `aria-label`.
 - `error` sets `aria-invalid` and links the message.

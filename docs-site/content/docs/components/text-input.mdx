@@ -103,6 +103,7 @@ The previous `EmailInput` and `SearchInput` wrappers were removed per [ADR-004](
 
 ## Accessibility
 
+- **An accessible name is required (type-enforced).** Pass `label` (visible), `aria-label`, or `aria-labelledby`; omitting all three is a type error. The name is applied to the `<input>`.
 - Renders a real `<input>` — keyboard, focus ring, autofill, password manager hooks all platform-native.
 - `label` auto-wires `htmlFor`/`id`. If you don't pass `label`, supply `aria-label` or wrap in your own `<label>`.
 - `error` sets `aria-invalid` and links the message via `aria-describedby`.

@@ -245,6 +245,7 @@ export function RelationshipField({
       {!atLimit && (
         <div className="bds-relationship-field__add">
           <Select
+            aria-label={label ? `Add ${label}` : 'Add item'}
             size={SELECT_SIZE[size]}
             value={pendingId}
             onChange={(e) => setPendingId(e.target.value)}

@@ -9,22 +9,21 @@ import {
 import * as Popover from '@radix-ui/react-popover';
 import { Icon } from '../Icon';
 import { Clock } from '../../icons';
-import { bdsClass } from '../../utils';
+import { bdsClass, type AccessibleNameProps } from '../../utils';
 import './TimePicker.css';
 
 // ─── Types ──────────────────────────────────────────────────────────
 
 export type TimePickerSize = 'sm' | 'md' | 'lg';
 
-export interface TimePickerProps {
+/** TimePicker props other than the accessible name (see `TimePickerProps`). */
+export interface TimePickerBaseProps {
   /** Selected time value in HH:mm (24h) format */
   value?: string;
   /** Called when a time is selected — value in HH:mm (24h) format */
   onChange?: (value: string) => void;
   /** Size variant matching BDS form components */
   size?: TimePickerSize;
-  /** Optional label */
-  label?: string;
   /** Helper text below input */
   helperText?: string;
   /** Error message (triggers error state) */
@@ -44,6 +43,14 @@ export interface TimePickerProps {
   /** Additional className */
   className?: string;
 }
+
+/**
+ * TimePicker component props. An accessible name is required: supply `label`
+ * (visible, wired via `<label htmlFor>`), `aria-label`, or `aria-labelledby`.
+ * The name is applied to the trigger button. When a visible `label` is present
+ * it wins over `aria-label`. Omitting all three is a type error.
+ */
+export type TimePickerProps = TimePickerBaseProps & AccessibleNameProps;
 
 // ─── Helpers ────────────────────────────────────────────────────────
 
@@ -175,6 +182,8 @@ export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(
       minuteStep = 1,
       use24Hour = false,
       id,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledby,
       className = '',
     },
     ref
@@ -273,6 +282,8 @@ export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(
                 disabled && 'bds-time-picker__trigger--disabled',
                 open && 'bds-time-picker__trigger--open',
               )}
+              aria-label={label ? undefined : ariaLabel}
+              aria-labelledby={ariaLabelledby}
               aria-invalid={hasError}
               aria-describedby={
                 error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined

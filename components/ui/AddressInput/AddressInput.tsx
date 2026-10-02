@@ -10,7 +10,7 @@ import {
 } from 'react';
 import { Icon } from '../Icon';
 import { MapPin } from '../../icons';
-import { bdsClass } from '../../utils';
+import { bdsClass, type AccessibleNameProps } from '../../utils';
 import './AddressInput.css';
 
 /**
@@ -33,14 +33,12 @@ export interface AddressSuggestion {
 }
 
 /**
- * AddressInput component props
+ * AddressInput props other than the accessible name (see `AddressInputProps`).
  */
-export interface AddressInputProps
+export interface AddressInputBaseProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'type'> {
   /** Size variant */
   size?: AddressInputSize;
-  /** Optional label text */
-  label?: string;
   /** Full width input */
   fullWidth?: boolean;
   /** Location suggestions to show in the dropdown */
@@ -48,6 +46,12 @@ export interface AddressInputProps
   /** Callback when a suggestion is selected */
   onSuggestionSelect?: (suggestion: AddressSuggestion) => void;
 }
+
+/**
+ * AddressInput component props. An accessible name is required: supply `label`
+ * (visible), `aria-label`, or `aria-labelledby`. Omitting all three is a type error.
+ */
+export type AddressInputProps = AddressInputBaseProps & AccessibleNameProps;
 
 /**
  * AddressInput - Location input with autocomplete suggestions

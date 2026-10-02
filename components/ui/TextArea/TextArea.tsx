@@ -1,5 +1,5 @@
 import { useId, type TextareaHTMLAttributes } from 'react';
-import { bdsClass } from '../../utils';
+import { bdsClass, type AccessibleNameProps } from '../../utils';
 import './TextArea.css';
 
 /**
@@ -8,9 +8,9 @@ import './TextArea.css';
 export type TextAreaSize = 'sm' | 'md' | 'lg';
 
 /**
- * TextArea component props
+ * TextArea props other than the accessible name (see `TextAreaProps`).
  */
-export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextAreaBaseProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   /** Size variant (controls font-size, matching TextInput) */
   size?: TextAreaSize;
   /** Placeholder text */
@@ -27,8 +27,6 @@ export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
   onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   /** Allow resize */
   resize?: 'none' | 'both' | 'horizontal' | 'vertical';
-  /** Optional label text */
-  label?: string;
   /** Helper text shown below textarea */
   helperText?: string;
   /** Error message (shows error state when provided) */
@@ -36,6 +34,12 @@ export interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
   /** Full width textarea */
   fullWidth?: boolean;
 }
+
+/**
+ * TextArea component props. An accessible name is required: supply `label`
+ * (visible), `aria-label`, or `aria-labelledby`. Omitting all three is a type error.
+ */
+export type TextAreaProps = TextAreaBaseProps & AccessibleNameProps;
 
 /**
  * TextArea - BDS themed multi-line text input component

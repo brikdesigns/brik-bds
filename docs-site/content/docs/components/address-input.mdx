@@ -67,6 +67,7 @@ Debounce the `fetchSuggestions` call upstream — typing fires `onChange` on eve
 
 ## Accessibility
 
+- **An accessible name is required (type-enforced).** Pass `label` (visible), `aria-label`, or `aria-labelledby`; omitting all three is a type error. The name is applied to the `<input>`.
 - Renders an `<input>` with the location icon as a decorative leading affordance (`aria-hidden`).
 - The suggestion list uses `role="listbox"`; selected suggestions are announced via `aria-activedescendant`.
 - Keyboard: `↓`/`↑` navigates suggestions, `Enter` selects, `Esc` dismisses.

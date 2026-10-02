@@ -1,16 +1,19 @@
 import { useState, useId } from 'react';
 import { Icon } from '../Icon';
 import { Eye, EyeSlash } from '../../icons';
-import { TextInput, type TextInputProps } from '../TextInput/TextInput';
+import { TextInput, type TextInputBaseProps } from '../TextInput/TextInput';
+import type { AccessibleNameProps } from '../../utils';
 import './PasswordInput.css';
 
 /**
  * PasswordInput component props
  *
  * Extends TextInput props. The `type` prop is omitted — it is controlled
- * internally by the show/hide toggle.
+ * internally by the show/hide toggle. Inherits TextInput's accessible-name
+ * requirement: supply `label`, `aria-label`, or `aria-labelledby`.
  */
-export type PasswordInputProps = Omit<TextInputProps, 'type' | 'iconAfter'>;
+export type PasswordInputProps = Omit<TextInputBaseProps, 'type' | 'iconAfter'> &
+  AccessibleNameProps;
 
 /**
  * PasswordInput — TextInput wrapper with show/hide password toggle.

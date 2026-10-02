@@ -34,3 +34,5 @@ AddressInput only ships two sizes today (no `lg`).
 > **Note** — AddressInput specialization is justified per [ADR-010 amendment §2](../../../docs/adrs/ADR-010-storybook-axes-of-information.md) because the suggestion dropdown is unique interactive behavior beyond `<TextInput type="text" />`. The consumer provides the `suggestions` array and the filter logic; the component owns the open/close state, click-outside dismissal, and Escape key handling.
 
 > **Note** — The Default story embeds a controlled `useState` + filter hook in its `render` so the autocomplete flow is exercisable without leaving Storybook. Real consumers wire their own data source (Google Places API, internal address service, etc.) — the in-story hook is illustrative, not a recommended implementation.
+
+> **Note** — An accessible name is required and type-enforced: pass `label` (visible), `aria-label`, or `aria-labelledby`. Omitting all three is a type error. The name is applied to the input.
