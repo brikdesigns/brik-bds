@@ -102,6 +102,7 @@
     "scripts/gen-icon-collection.d.ts",
     "scripts/lint-icon-weight-parity.mjs",
     "scripts/lint-icon-weight-parity.d.ts",
+    "scripts/lint-consumer-shadows.mjs",
     "components/ui/BrikDevBar/widgets/*.js"
   ],
   "bin": {
@@ -110,7 +111,8 @@
     "canonical-class-check": "scripts/canonical-class-check.mjs",
     "cascade-contract-check": "scripts/cascade-contract-check.mjs",
     "gen-icon-collection": "scripts/gen-icon-collection.mjs",
-    "lint-icon-weight-parity": "scripts/lint-icon-weight-parity.mjs"
+    "lint-icon-weight-parity": "scripts/lint-icon-weight-parity.mjs",
+    "lint-consumer-shadows": "scripts/lint-consumer-shadows.mjs"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -289,7 +291,8 @@
     "lint-gate-pathspecs": "node scripts/lint-gate-pathspecs.mjs",
     "render:astro-stories": "node scripts/render-astro-blueprints.mjs",
     "verify:astro-stories": "node scripts/render-astro-blueprints.mjs --check",
-    "lint-hand-rolled-sections": "node scripts/lint-hand-rolled-sections.mjs"
+    "lint-hand-rolled-sections": "node scripts/lint-hand-rolled-sections.mjs",
+    "lint-consumer-shadows": "node scripts/lint-consumer-shadows.mjs"
   },
   "keywords": [
     "brik",
