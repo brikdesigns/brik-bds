@@ -133,6 +133,12 @@ commit_on "$WT_ROOT/squashed" "squash.txt"
 g -C "$PRIMARY" worktree add -q -b task/open-pr "$WT_ROOT/open-pr" main
 commit_on "$WT_ROOT/open-pr" "openpr.txt"
 
+# 6b. REUSED NAME (#2676) — an older MERGED PR and a newer OPEN PR share one
+# headRefName, the shape a slug reused by a later new-task.sh ticket produces.
+# The sort must not let the merged PR's state outrank the open one's.
+g -C "$PRIMARY" worktree add -q -b task/reused-name "$WT_ROOT/reused-name" main
+commit_on "$WT_ROOT/reused-name" "reused.txt"
+
 STUB_BIN="$TMPROOT/bin"
 mkdir -p "$STUB_BIN"
 cat > "$STUB_BIN/gh" <<'STUB'
@@ -145,7 +151,9 @@ if [ "${1:-}" = "pr" ] && [ "${2:-}" = "list" ]; then
  {"number":903,"headRefName":"task/wtless-merged","state":"MERGED","mergedAt":"2026-08-15T00:00:00Z"},
  {"number":904,"headRefName":"task/wtless-open","state":"OPEN","mergedAt":null},
  {"number":905,"headRefName":"task/pushed-merged","state":"MERGED","mergedAt":"2026-08-16T00:00:00Z"},
- {"number":906,"headRefName":"task/pushed-open","state":"OPEN","mergedAt":null}]
+ {"number":906,"headRefName":"task/pushed-open","state":"OPEN","mergedAt":null},
+ {"number":2622,"headRefName":"task/reused-name","state":"MERGED","mergedAt":"2026-09-01T00:00:00Z"},
+ {"number":2674,"headRefName":"task/reused-name","state":"OPEN","mergedAt":null}]
 JSON
   exit 0
 fi
@@ -194,6 +202,12 @@ fi
 check "non-squash merged → REMOVE"          "REMOVE — merged into main" "$(line_for ff-merged)"
 check "squash-merged PR → REMOVE"           "REMOVE — PR #901 merged"    "$(line_for squashed)"
 check "open PR → KEEP"                      "KEEP — PR #902 open"        "$(line_for open-pr)"
+check "reused name, newer PR open → KEEP (#2676)" "KEEP — PR #2674 open"  "$(line_for reused-name)"
+if grep -qE "^task/reused-name[[:space:]].*REMOVE" <<<"$OUT"; then
+  echo -e "  ${RED}FAIL${NC}  reused-name must never read REMOVE while its newer PR is open"; FAIL=$((FAIL+1))
+else
+  echo -e "  ${GREEN}PASS${NC}  reused-name must never read REMOVE while its newer PR is open"; PASS=$((PASS+1))
+fi
 check "dirty → KEEP"                        "KEEP — 1 uncommitted"      "$(line_for dirty)"
 check "unmerged w/ commits → REVIEW"        "REVIEW — clean, unlanded"  "$(line_for unmerged)"
 

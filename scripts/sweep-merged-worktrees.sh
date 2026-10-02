@@ -199,7 +199,7 @@ m = [p for p in prs if p.get("headRefName") == b]
 if not m:
     print("none|-")
     sys.exit()
-m.sort(key=lambda p: (p.get("state") == "MERGED", p.get("number")), reverse=True)
+m.sort(key=lambda p: (p.get("state") == "OPEN", p.get("number")), reverse=True)
 p = m[0]
 print("#%s|%s" % (p["number"], p["state"]))'
 }
