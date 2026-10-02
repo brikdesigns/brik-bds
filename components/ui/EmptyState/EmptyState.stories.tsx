@@ -59,6 +59,6 @@ export const WithCustomContent: Story = {
   args: {
     title: 'Upload your files',
     description: 'Drag and drop or click to browse.',
-    children: <FileUploader label="Upload your files" accept=".pdf,.png,.jpg" />,
+    children: <FileUploader aria-label="Upload your files" accept=".pdf,.png,.jpg" />,
   },
 };
