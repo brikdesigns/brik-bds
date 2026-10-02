@@ -34,10 +34,10 @@
   box-sizing: border-box;
 }
 
-/* 768px is --bds-breakpoint-tablet; CSS custom properties can't be used inside
-   @media rules (tokens/index.ts). Below it the media panel stacks under the
-   steps, so the sequence still reads top-to-bottom. */
-@media (min-width: 768px) {
+/* --bds-up-tablet is the 768px tablet rung, resolved at build time (ADR-044).
+   Below it the media panel stacks under the steps, so the sequence still
+   reads top-to-bottom. */
+@media (--bds-up-tablet) {
   .bds-synced-media-steps {
     grid-template-columns: 1fr 1fr;
     align-items: center;

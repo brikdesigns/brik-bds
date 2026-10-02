@@ -50,7 +50,7 @@ A column has one content width and one left edge: the element that owns the colu
 
 ## Screen breakpoints
 
-BDS defines five canonical breakpoints. All five are Figma variables in the ❖ Brik Foundations `breakpoint` collection, and the CSS custom properties (`--breakpoint-*`) are generated from them. **For CSS `@media` rules, import `mediaQueries` (or `breakpoints`) from `@bds-tokens`** — CSS custom properties cannot be used inside `@media()`.
+BDS defines five canonical breakpoints. All five are Figma variables in the ❖ Brik Foundations `breakpoint` collection, and the CSS custom properties (`--breakpoint-*`) are generated from them. **For CSS `@media` rules inside BDS, use the `--bds-up-*` / `--bds-down-*` custom media below; in TS, import `mediaQueries` (or `breakpoints`) from `@bds-tokens`** — CSS custom properties (`var()`) cannot be used inside `@media()`.
 
 | Name | CSS Variable | Value |
 |---|---|---|
@@ -87,13 +87,15 @@ const styles = {
 ```
 
 ```css
-/* In plain CSS — hardcode the value, comment the token name */
-@media (min-width: 1024px) { /* --breakpoint-desktop */
+/* In BDS component CSS — a breakpoint custom media, resolved to px at build time */
+@media (--bds-up-desktop) {
   .sidebar-layout {
     display: grid;
   }
 }
 ```
+
+The names are `--bds-up-<rung>` (`min-width`, all five rungs) and `--bds-down-<rung>` (`max-width`, rung minus 0.02px; every rung except `mobile`). They live in `tokens/custom-media.css`, and `postcss.config.mjs` resolves each one to px, so `dist/styles.css` ships plain `@media` conditions — `@custom-media` is not Baseline in browsers. `lint-tokens` pins each definition to its `--breakpoint-*` rung and fails any literal px in an `@media` under `components/` ([ADR-044](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-044-breakpoint-custom-media.md)). Consumers are unaffected: they get the resolved px from `dist`.
 
 ### Using breakpoints in JavaScript
 

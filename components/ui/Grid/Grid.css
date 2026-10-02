@@ -41,7 +41,7 @@
 /* Fixed column counts collapse predictably at narrow widths.
    `auto-fit` / `auto-fill` reflow on their own and don't need this. */
 
-@media (max-width: 991px) {
+@media (--bds-down-desktop) {
   .bds-grid--cols-3,
   .bds-grid--cols-4,
   .bds-grid--cols-5,
@@ -50,7 +50,7 @@
   }
 }
 
-@media (max-width: 639px) {
+@media (--bds-down-tablet) {
   .bds-grid--cols-2,
   .bds-grid--cols-3,
   .bds-grid--cols-4,

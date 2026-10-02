@@ -118,6 +118,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",
     "@chromatic-com/storybook": "^5.2.1",
+    "@csstools/postcss-global-data": "^4.0.0",
     "@fontsource/hind": "5.3.0",
     "@fontsource/ibm-plex-mono": "5.3.0",
     "@fontsource/ibm-plex-sans": "5.3.0",
@@ -147,6 +148,7 @@
     "husky": "^9.1.7",
     "lottie-react": "^3.1.0",
     "playwright": "^1.59.1",
+    "postcss-custom-media": "^12.0.3",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "storybook": "10.3.6",

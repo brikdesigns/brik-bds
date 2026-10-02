@@ -1046,9 +1046,11 @@ function resolveSpacingRung(token, deprecatedMap) {
  * hatch, same as every other rule in this file.
  *
  * CSS custom properties cannot appear inside an `@media` condition (ADR-025
- * §4 / brik-bds#2591), so detection reads literal min-width/max-width px from
- * the condition text — never a --breakpoint-* name — and keys purely on the
- * declared values inside each block.
+ * §4 / brik-bds#2591), so a condition is either a literal min-width/max-width
+ * px or, since ADR-044 (#2644), a `--bds-up-*` / `--bds-down-*` custom-media
+ * name. `resolveMediaWidth` turns either into direction + px (the name via
+ * tokens/custom-media.css), and the rule keys purely on the declared values
+ * inside each block.
  *
  * Operates on a whole file at once (unlike every other rule here, which is
  * per-line): correlating a base declaration against its @media override needs
@@ -1058,6 +1060,47 @@ function resolveSpacingRung(token, deprecatedMap) {
  * today; it does not need to handle selector-nested @media since this
  * codebase's build pipeline doesn't emit that shape.
  */
+/**
+ * Rule 14: no literal px in an @media condition under components/ (ADR-044, #2644).
+ * Use `@media (--bds-up-<rung>)` / `(--bds-down-<rung>)` from tokens/custom-media.css.
+ * Scoped to components/ — content-system/blueprints still carries literal px
+ * (filed follow-up). Same pattern as the AC check: rg '@media[^{]*[0-9]px' components/
+ */
+function checkLiteralMediaPx(line, lineNum, file) {
+  if (!file.split(path.sep).includes('components')) return [];
+  if (line.includes('bds-lint-ignore')) return [];
+  if (!/@media[^{]*[0-9]px/.test(line)) return [];
+  return [{
+    rule: 'media-literal-px',
+    severity: 'error',
+    file,
+    line: lineNum,
+    column: 1,
+    message: 'literal px in an @media condition',
+    suggestion: 'Use a breakpoint custom media: (--bds-up-tablet) / (--bds-down-tablet) etc. (tokens/custom-media.css, ADR-044)',
+  }];
+}
+
+let customMediaCache = null;
+function loadCustomMedia() {
+  if (customMediaCache) return customMediaCache;
+  customMediaCache = new Map();
+  const p = path.join(__dirname, '..', 'tokens', 'custom-media.css');
+  if (fs.existsSync(p)) {
+    for (const m of fs.readFileSync(p, 'utf8').matchAll(/^@custom-media\s+(--[\w-]+)\s+\(([^)]+)\)\s*;/gm)) {
+      customMediaCache.set(m[1], m[2].trim());
+    }
+  }
+  return customMediaCache;
+}
+
+/** `min-width: 768px` | `--bds-down-tablet` -> { dir: 'min'|'max', px } or null. */
+function resolveMediaWidth(condition) {
+  const resolved = loadCustomMedia().get(condition.trim()) || condition;
+  const m = resolved.match(/(min|max)-width:\s*(\d+(?:\.\d+)?)px/);
+  return m ? { dir: m[1], px: m[2] } : null;
+}
+
 function checkResponsiveTokenSwap(content, file) {
   const violations = [];
   const deprecatedMap = loadDeprecatedGapPadding();
@@ -1173,7 +1216,7 @@ function checkResponsiveTokenSwap(content, file) {
         });
       }
 
-      const widthMatch = override.condition.match(/(min|max)-width:\s*(\d+(?:\.\d+)?)px/);
+      const widthMatch = resolveMediaWidth(override.condition);
       if (!widthMatch) continue;
 
       const baseRung = resolveSpacingRung(base.token, deprecatedMap);
@@ -1193,7 +1236,7 @@ function checkResponsiveTokenSwap(content, file) {
         continue;
       }
 
-      const direction = widthMatch[1];
+      const direction = widthMatch.dir;
       const inverted = direction === 'max' ? overrideRank > baseRank : overrideRank < baseRank;
       if (inverted) {
         violations.push({
@@ -1815,6 +1858,7 @@ function main() {
       allViolations.push(...checkFallbackLiterals(line, lineNum, file, true, lines));
       allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));
       allViolations.push(...checkSystemColorDirectRead(line, lineNum, file));
+      allViolations.push(...checkLiteralMediaPx(line, lineNum, file));
 
       if (checkGrid) {
         allViolations.push(...checkGridCompliance(line, lineNum, file));
@@ -1961,6 +2005,50 @@ function main() {
           suggestion: `Add ${name}: '${cssBreakpoints.get(name)}' — a rung CSS ships but TS omits is unreachable from @media`,
         });
       }
+    }
+  }
+
+  // 4b-2. Custom-media drift (ADR-044, #2644) — tokens/custom-media.css is
+  // hand-authored (a media condition cannot read var()), so every definition must
+  // equal its --bds-breakpoint-* rung: up = the rung, down = rung - 0.02px (the
+  // same step-down as `mediaQueries` in tokens/index.ts). Drift = a layout defect.
+  const CUSTOM_MEDIA_PATH = path.join(__dirname, '..', 'tokens', 'custom-media.css');
+  if (fs.existsSync(FIGMA_TOKENS_PATH)) {
+    const figmaCSS = fs.readFileSync(FIGMA_TOKENS_PATH, 'utf8');
+    const rungs = new Map();
+    for (const m of figmaCSS.matchAll(/^\s*--bds-breakpoint-([\w-]+)\s*:\s*(\d+(?:\.\d+)?)px;/gm)) {
+      rungs.set(m[1], parseFloat(m[2]));
+    }
+    const defs = new Map();
+    const cmLines = fs.existsSync(CUSTOM_MEDIA_PATH)
+      ? fs.readFileSync(CUSTOM_MEDIA_PATH, 'utf8').split('\n') : [];
+    cmLines.forEach((l, i) => {
+      const m = l.match(/^@custom-media\s+--bds-(up|down)-([\w-]+)\s+\(([^)]+)\)\s*;/);
+      if (m) defs.set(`${m[1]}-${m[2]}`, { value: m[3].trim(), line: i + 1 });
+    });
+    const fail = (line, message, suggestion) => allViolations.push({
+      rule: 'breakpoint-custom-media-drift', severity: 'error', file: CUSTOM_MEDIA_PATH,
+      line, column: 1, message, suggestion,
+    });
+    if (defs.size === 0) {
+      fail(1, 'tokens/custom-media.css is missing or defines no --bds-up-*/--bds-down-* — components cannot resolve @media', 'Restore the file (ADR-044)');
+    }
+    for (const [key, { value, line }] of defs) {
+      const [dir, name] = key.split(/-(.+)/);
+      const px = rungs.get(name);
+      if (px === undefined) {
+        fail(line, `--bds-${key} has no --bds-breakpoint-${name} in figma-tokens.css`, 'Drop it, or add the rung in Figma first');
+        continue;
+      }
+      const expected = dir === 'up'
+        ? `min-width: ${px}px`
+        : `max-width: ${Number((px - 0.02).toFixed(2))}px`;
+      if (value !== expected) {
+        fail(line, `--bds-${key} is (${value}) but --bds-breakpoint-${name} requires (${expected})`, 'Match the rung; down = rung minus 0.02px');
+      }
+    }
+    for (const name of rungs.keys()) {
+      if (!defs.has(`up-${name}`)) fail(1, `--bds-up-${name} is missing for --bds-breakpoint-${name}`, `Add @custom-media --bds-up-${name} (min-width: ${rungs.get(name)}px)`);
     }
   }
 
