@@ -605,7 +605,7 @@
   margin-top: auto;
 }
 
-@media (max-width: 640px) {
+@media (--bds-down-tablet) {
   .bds-card--layout-row {
     grid-template-columns: 1fr;
   }

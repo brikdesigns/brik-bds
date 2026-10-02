@@ -103,7 +103,7 @@
  * so screen-reader users keep the full trail — only the sighted mobile
  * layout trades it for the ellipsis. */
 
-@media (max-width: 767px) {
+@media (--bds-down-tablet) {
   .bds-breadcrumb__item--ellipsis {
     display: flex;
   }

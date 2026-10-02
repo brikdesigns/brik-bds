@@ -1,0 +1,21 @@
+/*
+ * Breakpoint custom media (ADR-044, #2644) — hand-authored, build-time only.
+ *
+ * A media condition cannot read var(), so components reference these names
+ * instead of a literal px: `@media (--bds-down-tablet) { ... }`.
+ * postcss.config.mjs resolves every one to px; none reaches dist/styles.css.
+ *
+ * Each rung MUST equal its --bds-breakpoint-* in figma-tokens.css and its
+ * `mediaQueries` condition in tokens/index.ts (down = rung - 0.02px).
+ * Pinned by scripts/lint-tokens.js § 4b (breakpoint-custom-media-drift).
+ */
+@custom-media --bds-up-mobile (min-width: 320px);
+@custom-media --bds-up-tablet (min-width: 768px);
+@custom-media --bds-up-desktop (min-width: 1024px);
+@custom-media --bds-up-wide (min-width: 1280px);
+@custom-media --bds-up-wider (min-width: 1440px);
+
+@custom-media --bds-down-tablet (max-width: 767.98px);
+@custom-media --bds-down-desktop (max-width: 1023.98px);
+@custom-media --bds-down-wide (max-width: 1279.98px);
+@custom-media --bds-down-wider (max-width: 1439.98px);

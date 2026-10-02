@@ -30,7 +30,7 @@
 /* ─── Desktop min-width ──────────────────────────────────────── */
 /* bds-lint-ignore — design-spec min-width */
 
-@media (min-width: 768px) {
+@media (--bds-up-tablet) {
   .bds-modal { min-width: 640px; }
 }
 
@@ -110,7 +110,7 @@
   overflow: visible;
 }
 
-@media (min-width: 768px) {
+@media (--bds-up-tablet) {
   .bds-modal--preset-confirm { min-width: 0; }
 }
 

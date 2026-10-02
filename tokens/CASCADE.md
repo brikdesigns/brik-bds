@@ -97,6 +97,7 @@ The paragraphs above are about the **runtime** `[data-mode-*]` layer, and they s
 |---|---|---|
 | `--breakpoint-*` in `tokens/figma-tokens.css` | the six rungs as px, reference-only (ADR-025 §4) | Style Dictionary, via `npm run build:all-tokens` |
 | `breakpoints` + `mediaQueries` in `tokens/index.ts` | the five mode-invariant rungs as TS literals + ready-made `up`/`down` conditions | hand-mirrored, pinned to the CSS by `lint-tokens.js` § 4b |
+| `@custom-media --bds-up-*` / `--bds-down-*` in `tokens/custom-media.css` | the same conditions for component CSS (`@media (--bds-down-tablet)`); resolved to px by `postcss-custom-media` (fed by `@csstools/postcss-global-data` in `postcss.config.mjs`), so none reaches `dist/styles.css` | hand-authored, pinned to the CSS rungs by `lint-tokens.js` § 4b-2; literal px in a `components/**/*.css` `@media` is an error (ADR-044) |
 
 A media query is resolved when the stylesheet is authored, not when an attribute is set, so the build-time surface is where a breakpoint can do work at all. `scripts/flatten-tokens-studio.js` pins `breakpoint: 'default'` for the same reason — see the comment on `DEFAULT_MODES`.
 
