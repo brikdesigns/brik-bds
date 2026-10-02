@@ -42,6 +42,19 @@
 </table>
 </div>
 
+<div class="decide">
+<p><strong>Session update — 2026-10-01, later same day (verified via live <code>gh</code> calls against 3 issues + 1 PR, not a re-run of the full census below).</strong></p>
+<table>
+<tr><th>Item</th><th>Status at time of report</th><th>Status now</th></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2402">#2402</a> — Gate --text-positive on --surface-positive</td><td class="bad">open, p1-week</td><td class="unv">fix in <a href="https://github.com/brikdesigns/brik-bds/pull/2686">PR #2686</a>, auto-merge enabled — CI caught 2 real problems post-rebase (3/54 checks failed), both now addressed: see note below. Not yet confirmed green.</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2632">#2632</a> — docs host 404s /bds-manifest.json</td><td class="bad">open, reconcile queue</td><td class="ok">closed 2026-10-01 by <a href="https://github.com/brikdesigns/brik-bds/pull/2685">PR #2685</a></td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2624">#2624</a> — docs-gate vs. Netlify build divergence</td><td class="bad">open, p1-week</td><td class="unv">still open, still p1-week — retitled to the root cause PR #2685 actually found ("docs-site Netlify deploys post no GitHub status"); #2685 (merged) wired the status hooks + drift check but left #2624 itself open via <code>Refs</code>, not a closing keyword. Candidate for a close-with-evidence re-triage — not done in this pass.</td></tr>
+</table>
+<p>Once PR #2686 merges, <code>priority:p1-week</code> drops from 10 to 9 (§5) and open issues from 234 to 233. Both numbers are stated, not yet re-counted — re-run §10's queries to confirm after the merge lands, per this report's own re-run-don't-carry-forward rule.</p>
+<p>Also found and fixed in-session, not yet its own issue: PR #2686 had been open since before <a href="https://github.com/brikdesigns/brik-bds/issues/2668">#2668</a>'s --bds- System ID prefix migration (#2670/#2682) landed on main, producing a real merge conflict — 4 token references in <code>Badge.css</code> and their matching <code>contrast-pairings.json</code> rows were pinned by their pre-migration names and never touched by that migration's codemod (the dataset rows didn't exist on <code>main</code> yet to be rewritten). Rebased and hand-rebound onto <code>--bds-*</code>; <code>contrast-gate -- --check-matrix</code> and the Badge browser test both pass post-rebase. Per <code>agent-provenance-doctrine</code>: this is a proposed finding, not filed — routes to <code>meta:digest</code> or a sized issue in a future pass, not fixed further here.</p>
+<p>That rebase introduced two further problems, both caught by CI rather than by me, and both fixed in-session: (1) the binary screenshot conflict was resolved via <code>git checkout --ours</code>, which kept a baseline 30px short of the story's new (longer) rendered height — the <code>visual</code> gate failed with "Expected image dimensions to be 960×4029px, but received 960×4059px"; the <strong>Update Visual Baselines</strong> workflow was dispatched against the PR branch per this repo's never-regenerate-locally rule, not yet confirmed landed. (2) <code>ac-close-gate</code> correctly failed the PR's <code>Closes #2402</code> keyword — of #2402's 4 acceptance criteria, only 3 are satisfiable from this repo; AC4 needs a published release consumed by <code>brikdesigns</code> and its own <code>test:a11y</code> re-run, which can't happen before this PR merges. Fixed by editing the PR to <code>Part of #2402</code> and ticking AC1–3 on the issue with cited evidence (<a href="https://github.com/brikdesigns/brik-bds/issues/2402#issuecomment-5943079027">comment</a>); AC4 stays unticked and #2402 stays open pending a future <code>brikdesigns</code>-repo session.</p>
+</div>
+
 <h2>1. Gate health</h2>
 <p>All three backlog-hygiene gates' most recent <em>non-cancelled</em> run reports <code>success</code>. The raw <code>gh run list</code> output for <code>issue-size-gate</code> shows mostly <code>cancelled</code> — that is GitHub Actions' concurrency group superseding duplicate runs fired by the same issue-label burst (confirmed: runs cluster in groups sharing a timestamp to the second, one <code>success</code> per group), not a gate failure.</p>
 <table>
@@ -58,8 +71,8 @@
 <table>
 <tr><th>Issue</th><th>Size</th><th>Title</th></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2638">#2638</a></td><td>S</td><td>Propagate BDS bumps to every web consumer and report version drift</td></tr>
-<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2632">#2632</a></td><td>S</td><td>docs host 404s /bds-manifest.json, but CLAUDE.md routes agents to it</td></tr>
-<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2624">#2624</a></td><td>M</td><td>docs-gate builds docs-site differently from Netlify, so CI stays green while the deploy is broken</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2632">#2632</a></td><td>S</td><td>docs host 404s /bds-manifest.json, but CLAUDE.md routes agents to it <span class="ok">— closed same day, see update box above</span></td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2624">#2624</a></td><td>M</td><td>docs-gate builds docs-site differently from Netlify, so CI stays green while the deploy is broken <span class="unv">— retitled, see update box above</span></td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2616">#2616</a></td><td>S</td><td>Publish an agent-readable BDS surface: llms.txt, per-page markdown, and bds-manifest.json</td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2586">#2586</a></td><td>S</td><td>Card/PricingCard/Board take the Tier-1 <code>--shadow-md</code>, so a consumer theme never reaches them</td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2526">#2526</a></td><td>S</td><td>Decide taxonomy bucket for product page archetypes</td></tr>
@@ -142,18 +155,18 @@
 </table>
 <p>Note: <code>#2063</code> and <code>#2576</code> each appear in two queues (unsized <em>and</em> reconcile/citation) — a merged-but-unpublished release and a doc surface that is both miscited and unsized.</p>
 
-<h2>5. priority:p1-week — 10 issues</h2>
+<h2>5. priority:p1-week — 10 issues <span class="unv">(9 once PR #2686 merges — see update box above)</span></h2>
 <table>
 <tr><th>Issue</th><th>Title</th></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2676">#2676</a></td><td>sweep-merged-worktrees marks a branch REMOVE when an older merged PR shares its name, even with an open PR on it</td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2668">#2668</a></td><td>Prefix every token tier with its owning System ID</td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2666">#2666</a></td><td>token-anatomy.mdx states two incompatible grammars for --color-*; 6 live tokens parse under neither</td></tr>
-<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2632">#2632</a></td><td>docs host 404s /bds-manifest.json, but CLAUDE.md routes agents to it</td></tr>
-<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2624">#2624</a></td><td>docs-gate builds docs-site differently from Netlify, so CI stays green while the deploy is broken</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2632">#2632</a></td><td>docs host 404s /bds-manifest.json, but CLAUDE.md routes agents to it <span class="ok">— closed same day</span></td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2624">#2624</a></td><td>docs-gate builds docs-site differently from Netlify, so CI stays green while the deploy is broken <span class="unv">— retitled, still open</span></td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2595">#2595</a></td><td>Spacing & breakpoint token system: close the declared-but-not-wired gaps</td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2592">#2592</a></td><td>Guard same-family responsive token swaps (replaces dead lint-tokens --check-grid)</td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2589">#2589</a></td><td>Inspect widget reports declarations from non-matching @media rules as the live value</td></tr>
-<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2402">#2402</a></td><td>Gate --text-positive on --surface-positive — 2.33:1 in dark</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2402">#2402</a></td><td>Gate --text-positive on --surface-positive — 2.33:1 in dark <span class="unv">— fix ready, PR #2686</span></td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2309">#2309</a></td><td>meta: blueprint rail — Astro canonicity, taxonomy, and the website factory <em>(umbrella)</em></td></tr>
 </table>
 
@@ -165,7 +178,7 @@
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2676">#2676</a></td><td>S</td><td>tooling</td><td>sweep-merged-worktrees marks a branch REMOVE when an older merged PR shares its name</td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2666">#2666</a></td><td>XS</td><td>tokens</td><td>token-anatomy.mdx states two incompatible grammars for --color-*</td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2638">#2638</a></td><td>S</td><td>—</td><td>Propagate BDS bumps to every web consumer and report version drift</td></tr>
-<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2632">#2632</a></td><td>S</td><td>tooling</td><td>docs host 404s /bds-manifest.json, but CLAUDE.md routes agents to it</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2632">#2632</a></td><td>S</td><td>tooling</td><td>docs host 404s /bds-manifest.json, but CLAUDE.md routes agents to it <span class="ok">— closed same day</span></td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2629">#2629</a></td><td>S</td><td>storybook</td><td>Move the AllMarks matrices to MDX and add per-state SocialIcon/ContactIcon stories</td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2619">#2619</a></td><td>S</td><td>tooling</td><td>Agent-readable markdown escapes quotes as &amp;#x22; in 29 of 196 docs pages</td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2616">#2616</a></td><td>S</td><td>tooling</td><td>Publish an agent-readable BDS surface: llms.txt, per-page markdown, and bds-manifest.json</td></tr>
@@ -173,7 +186,7 @@
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2589">#2589</a></td><td>S</td><td>tooling</td><td>Inspect widget reports declarations from non-matching @media rules as the live value</td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2548">#2548</a></td><td>S</td><td>tooling</td><td>SKIP_STORY_CHECK=1 leaks into pre-push and blocks every push</td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2481">#2481</a></td><td>S</td><td>components</td><td>Move ContactIcon badge/tile treatment to the Tag family</td></tr>
-<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2402">#2402</a></td><td>S</td><td>components, tokens</td><td>Gate --text-positive on --surface-positive — 2.33:1 in dark</td></tr>
+<tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2402">#2402</a></td><td>S</td><td>components, tokens</td><td>Gate --text-positive on --surface-positive — 2.33:1 in dark <span class="unv">— fix ready, PR #2686</span></td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2355">#2355</a></td><td>S</td><td>tooling</td><td>Dependabot skipped the docs-site half of a critical alert</td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2351">#2351</a></td><td>S</td><td>—</td><td>Figma's border-radius sm and lg aliases resolve to different values than BDS tokens of the same name</td></tr>
 <tr><td><a href="https://github.com/brikdesigns/brik-bds/issues/2347">#2347</a></td><td>XS</td><td>tokens</td><td>Record the ramp anchor contract in an ADR</td></tr>
