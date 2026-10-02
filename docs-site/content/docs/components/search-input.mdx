@@ -44,9 +44,9 @@ Uncontrolled, the field tracks its own value to toggle the clear button and rese
 `sm` (32px), `md` (40px, default), `lg` (48px) — inherited from TextInput.
 
 ```tsx
-<SearchInput size="sm" placeholder="Compact" />
-<SearchInput size="md" placeholder="Default" />
-<SearchInput size="lg" placeholder="Prominent" />
+<SearchInput size="sm" aria-label="Search" placeholder="Compact" />
+<SearchInput size="md" aria-label="Search" placeholder="Default" />
+<SearchInput size="lg" aria-label="Search" placeholder="Prominent" />
 ```
 
 ### Error and helper text
@@ -54,7 +54,7 @@ Uncontrolled, the field tracks its own value to toggle the clear button and rese
 Inherited from TextInput. `error` triggers `aria-invalid` and replaces `helperText`.
 
 ```tsx
-<SearchInput placeholder="Search" helperText="Searches names and tags" />
+<SearchInput aria-label="Search" placeholder="Search" helperText="Searches names and tags" />
 ```
 
 ## When *not* to use
@@ -68,6 +68,7 @@ Inherited from TextInput. `error` triggers `aria-invalid` and replaces `helperTe
 
 ## Accessibility
 
+- **An accessible name is required (type-enforced).** Pass `label` (visible), `aria-label`, or `aria-labelledby`; omitting all three is a type error. The name is applied to the `<input>`.
 - Renders a native `<input type="search">`, so assistive tech announces it as a search field.
 - The clear button is a keyboard-reachable `<button type="button">` (`tabIndex={0}`) with `aria-label` "Clear search"; the magnifying glass is decorative.
 - **Pass a `label`** (or an `aria-label` via passthrough props) so the field has an accessible name.

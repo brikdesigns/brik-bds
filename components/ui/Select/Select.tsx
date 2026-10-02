@@ -1,7 +1,7 @@
 import { forwardRef, useId, useState, type SelectHTMLAttributes, type ReactNode } from 'react';
 import { Icon } from '../Icon';
 import { CaretDownBold } from '../../icons';
-import { bdsClass } from '../../utils';
+import { bdsClass, type AccessibleNameProps } from '../../utils';
 import './Select.css';
 
 export interface SelectOption {
@@ -17,7 +17,8 @@ export interface SelectOptionGroup {
 
 export type SelectSize = 'sm' | 'md' | 'lg';
 
-export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
+/** Select props other than the accessible name (see `SelectProps`). */
+export interface SelectBaseProps extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'size'> {
   /** Flat options or grouped option groups. Mix freely — entries with an `options` key render as `<optgroup>`, others as `<option>`. */
   options: (SelectOption | SelectOptionGroup)[];
   /** Empty-value option text shown when no selection has been made. Renders as a placeholder-styled first option. */
@@ -37,8 +38,6 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
   disabled?: boolean;
   /** Size variant. Default `md`; `sm` and `lg` adjust padding and font size. */
   size?: SelectSize;
-  /** Visible label rendered above the select. Auto-wires `htmlFor`/`id` for accessibility. */
-  label?: string;
   /** Small text shown below the select. Hidden when `error` is present. */
   helperText?: string;
   /** Error message. Sets `aria-invalid` and replaces `helperText`. */
@@ -50,6 +49,13 @@ export interface SelectProps extends Omit<SelectHTMLAttributes<HTMLSelectElement
   /** Native change handler — receives the change event. */
   onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
+
+/**
+ * Select component props. An accessible name is required: supply `label`
+ * (visible, auto-wires `htmlFor`/`id`), `aria-label`, or `aria-labelledby`.
+ * Omitting all three is a type error.
+ */
+export type SelectProps = SelectBaseProps & AccessibleNameProps;
 
 function isOptionGroup(opt: SelectOption | SelectOptionGroup): opt is SelectOptionGroup {
   return 'options' in opt;

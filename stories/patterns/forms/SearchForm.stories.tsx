@@ -40,10 +40,11 @@ export const Default: Story = {
         footer={<Button type="submit" size="sm">Search</Button>}
       >
         <div style={{ flex: '1 1 200px' }}>
-          <TextInput placeholder="Search..." fullWidth />
+          <TextInput aria-label="Search" placeholder="Search..." fullWidth />
         </div>
         <div style={{ flex: '0 1 160px' }}>
           <Select
+            aria-label="Category"
             options={[
               { label: 'All', value: 'all' },
               { label: 'Products', value: 'products' },

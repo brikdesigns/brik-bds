@@ -6,7 +6,8 @@ import {
 } from 'react';
 import { Icon } from '../Icon';
 import { CaretUpBold, CaretDownBold } from '../../icons';
-import { TextInput, type TextInputProps } from '../TextInput/TextInput';
+import { TextInput, type TextInputBaseProps } from '../TextInput/TextInput';
+import type { AccessibleNameProps } from '../../utils';
 import './NumberInput.css';
 
 /**
@@ -15,8 +16,8 @@ import './NumberInput.css';
  * `type` and `iconAfter` are reserved — the component sets `type="number"`
  * and manages the stepper buttons internally.
  */
-export interface NumberInputProps
-  extends Omit<TextInputProps, 'type' | 'iconAfter'> {
+export interface NumberInputBaseProps
+  extends Omit<TextInputBaseProps, 'type' | 'iconAfter'> {
   /** Minimum allowed value. Forwarded to the native input. */
   min?: number;
   /** Maximum allowed value. Forwarded to the native input. */
@@ -24,6 +25,13 @@ export interface NumberInputProps
   /** Step increment / decrement amount. Defaults to 1. */
   step?: number;
 }
+
+/**
+ * NumberInput props. Inherits TextInput's accessible-name requirement: supply
+ * `label` (visible), `aria-label`, or `aria-labelledby`. Omitting all three is
+ * a type error.
+ */
+export type NumberInputProps = NumberInputBaseProps & AccessibleNameProps;
 
 /**
  * Dispatch a synthetic input event so React's onChange fires when

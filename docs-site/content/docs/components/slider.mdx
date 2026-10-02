@@ -76,6 +76,7 @@ const [value, setValue] = useState(50);
 
 ## Accessibility
 
+- **An accessible name is required (type-enforced).** Pass `label` (visible), `aria-label`, or `aria-labelledby`; omitting all three is a type error. The name is applied to the range `<input>`.
 - Renders a real `<input type="range">` — keyboard arrows nudge the value, `Home`/`End` jump to min/max.
 - `label` auto-wires `htmlFor`/`id`. Pair with `aria-label` if you skip the visible label.
 - The current value is announced via `aria-valuenow` (set automatically from `value`).

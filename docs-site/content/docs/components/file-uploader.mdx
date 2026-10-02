@@ -120,6 +120,7 @@ const [files, setFiles] = useState<File[]>([]);
 
 ## Accessibility
 
+- **An accessible name is required (type-enforced).** Pass `label` (visible), `aria-label`, or `aria-labelledby`; omitting all three is a type error. The name is applied to the focusable drop zone.
 - The drop zone is a real `<button>` — keyboard `Enter`/`Space` opens the file picker.
 - Drag-over state is announced via `aria-busy` on the zone during drop.
 - `error` sets `aria-invalid` and links to the message via `aria-describedby`.

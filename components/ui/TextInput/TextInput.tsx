@@ -1,5 +1,5 @@
 import { forwardRef, useId, type InputHTMLAttributes, type ReactNode } from 'react';
-import { bdsClass } from '../../utils';
+import { bdsClass, type AccessibleNameProps } from '../../utils';
 import './TextInput.css';
 
 /**
@@ -8,13 +8,11 @@ import './TextInput.css';
 export type TextInputSize = 'sm' | 'md' | 'lg';
 
 /**
- * TextInput component props
+ * TextInput props other than the accessible name (see `TextInputProps`).
  */
-export interface TextInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+export interface TextInputBaseProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
   /** Size variant (per Figma design specs) */
   size?: TextInputSize;
-  /** Optional label text */
-  label?: string;
   /** Helper text shown below input */
   helperText?: string;
   /** Error message (shows error state when provided) */
@@ -28,6 +26,12 @@ export interface TextInputProps extends Omit<InputHTMLAttributes<HTMLInputElemen
   /** Hide the input border. Use on dark/inverse surfaces where the fill provides sufficient contrast. */
   hideBorder?: boolean;
 }
+
+/**
+ * TextInput component props. An accessible name is required: supply `label`
+ * (visible), `aria-label`, or `aria-labelledby`. Omitting all three is a type error.
+ */
+export type TextInputProps = TextInputBaseProps & AccessibleNameProps;
 
 /**
  * TextInput - BDS themed text input component

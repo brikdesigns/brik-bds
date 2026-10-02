@@ -39,3 +39,5 @@ All other variation (size, label, helper text, error, disabled state) is exposed
 > **Note** — `minDate` / `maxDate` constrain which days (or, in `precision="month"`, months) are selectable. The constraint is inclusive at the picker's granularity (time-of-day on the boundary dates is ignored). Out-of-range cells render with `disabled` styling and ignore click events.
 
 > **Note** — The error state is announced via `role="alert"` on the helper text and `aria-invalid="true"` on the trigger. Setting `error` to a non-empty string also suppresses `helperText` so the two never co-render.
+
+> **Note** — An accessible name is required and type-enforced: pass `label` (visible), `aria-label`, or `aria-labelledby`. Omitting all three is a type error. The name is applied to the trigger button.

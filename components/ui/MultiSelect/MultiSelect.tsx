@@ -10,7 +10,7 @@ import {
 } from '../Select/Select';
 import { Tag } from '../Tag/Tag';
 import { XBold } from '../../icons';
-import { bdsClass } from '../../utils';
+import { bdsClass, type AccessibleNameProps } from '../../utils';
 import './MultiSelect.css';
 
 /**
@@ -67,9 +67,9 @@ function isOptionGroup(
 export type MultiSelectSize = SelectSize;
 
 /**
- * MultiSelect component props
+ * MultiSelect props other than the accessible name (see `MultiSelectProps`).
  */
-export interface MultiSelectProps {
+export interface MultiSelectBaseProps {
   /**
    * Available options to choose from. Flat options or grouped option groups —
    * mix freely; entries with an `options` key render as a labelled `<optgroup>`
@@ -86,8 +86,6 @@ export interface MultiSelectProps {
   placeholder?: string;
   /** Size variant (matching Select/TextInput) */
   size?: MultiSelectSize;
-  /** Optional label text */
-  label?: string;
   /** Helper text shown below the component */
   helperText?: string;
   /** Error message (shows error state when provided) */
@@ -103,6 +101,13 @@ export interface MultiSelectProps {
   /** Optional style override */
   style?: CSSProperties;
 }
+
+/**
+ * MultiSelect component props. An accessible name is required: supply `label`
+ * (visible), `aria-label`, or `aria-labelledby` — forwarded to the underlying
+ * Select. Omitting all three is a type error.
+ */
+export type MultiSelectProps = MultiSelectBaseProps & AccessibleNameProps;
 
 /**
  * MultiSelect - BDS themed multi-select component
@@ -140,7 +145,6 @@ export function MultiSelect({
   onChange,
   placeholder = 'Select...',
   size = 'md',
-  label,
   helperText,
   error,
   disabled = false,
@@ -148,6 +152,9 @@ export function MultiSelect({
   tagSize,
   className = '',
   style,
+  // `label` / `aria-label` / `aria-labelledby` — kept together so the
+  // "at least one" union is forwarded to Select intact.
+  ...accessibleName
 }: MultiSelectProps) {
   // Internal state for uncontrolled mode
   const [internalValue, setInternalValue] = useState<string[]>(defaultValue ?? []);
@@ -222,7 +229,7 @@ export function MultiSelect({
       style={style}
     >
       <Select
-        label={label}
+        {...accessibleName}
         placeholder={remainingCount === 0 ? 'All options selected' : placeholder}
         value=""
         onChange={(e) => {

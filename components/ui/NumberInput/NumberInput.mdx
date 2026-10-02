@@ -35,3 +35,5 @@ The stepper buttons are always present. Clicking increment / decrement fires `on
 > **Note** — NumberInput specialization is justified per [ADR-004 §Amendment 2026-05-17](../../../docs/adrs/ADR-004-component-bloat-guardrails.md): steppers are distinct interactive behavior beyond `type="number"`. For plain text, email, tel, or url inputs use [`TextInput`](/?path=/docs/components-text-input--docs) directly.
 
 > **Note** — All `TextInput` updates (focus ring, error styling, sizing tokens) propagate here automatically. `type` and `iconAfter` are reserved by `NumberInput`; everything else passes through.
+
+> **Note** — An accessible name is required and type-enforced: pass `label` (visible), `aria-label`, or `aria-labelledby`. Omitting all three is a type error. The name is applied to the input.

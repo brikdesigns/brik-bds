@@ -78,6 +78,7 @@ Inherited from TextInput. `error` triggers `aria-invalid` and replaces `helperTe
 
 ## Accessibility
 
+- **An accessible name is required (type-enforced).** Pass `label` (visible), `aria-label`, or `aria-labelledby`; omitting all three is a type error. The name is applied to the `<input>`.
 - The steppers are `<button type="button">` with `aria-label` "Increment" / "Decrement" and `tabIndex={-1}` — they are reachable by pointer, and keyboard users step the value with the native `ArrowUp` / `ArrowDown` on the focused input.
 - **Always pass `label`** — it becomes the accessible name for the field.
 - `type="number"` is reserved by NumberInput and cannot be overridden.

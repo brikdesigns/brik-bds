@@ -2,7 +2,7 @@ import { type ReactNode, useEffect, useId } from 'react';
 import { createPortal } from 'react-dom';
 import { Button } from '../Button';
 import { CloseButton } from '../CloseButton';
-import { bdsClass, resolveRetiredValue } from '../../utils';
+import { bdsClass, resolveRetiredValue, type ModalAccessibleNameProps } from '../../utils';
 import './Modal.css';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
@@ -14,19 +14,12 @@ const RETIRED_CONFIRM_VARIANTS: Record<string, ModalConfirmVariant> = { destruct
 interface ModalBaseProps {
   isOpen: boolean;
   onClose: () => void;
-  title?: ReactNode;
-  /**
-   * Accessible name for the dialog. A titled modal is labelled by its
-   * `title` automatically (`aria-labelledby`); supply `aria-label` to name
-   * a titleless modal so `role="dialog"` always has an accessible name.
-   */
-  'aria-label'?: string;
   size?: ModalSize;
   closeOnBackdrop?: boolean;
   closeOnEscape?: boolean;
 }
 
-interface ModalDefaultProps extends ModalBaseProps {
+interface ModalDefaultBaseProps extends ModalBaseProps {
   /**
    * Default modal — flexible header / body / footer layout.
    *
@@ -43,7 +36,7 @@ interface ModalDefaultProps extends ModalBaseProps {
   showCloseButton?: boolean;
 }
 
-interface ModalConfirmPresetProps extends ModalBaseProps {
+interface ModalConfirmPresetBaseProps extends ModalBaseProps {
   /**
    * Confirm preset — compact alertdialog with title + description + locked
    * confirm/cancel footer. Replaces the legacy `Dialog` component
@@ -79,6 +72,12 @@ interface ModalConfirmPresetProps extends ModalBaseProps {
   /** Optional extra body content rendered between description and footer */
   children?: ReactNode;
 }
+
+// A dialog must have an accessible name: a `title` (labels the dialog via
+// `aria-labelledby`) or an `aria-label` for a titleless modal. Omitting both
+// is a type error.
+type ModalDefaultProps = ModalDefaultBaseProps & ModalAccessibleNameProps;
+type ModalConfirmPresetProps = ModalConfirmPresetBaseProps & ModalAccessibleNameProps;
 
 export type ModalProps = ModalDefaultProps | ModalConfirmPresetProps;
 

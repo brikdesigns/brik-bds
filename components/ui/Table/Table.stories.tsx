@@ -215,7 +215,7 @@ export const CellTypes: Story = {
               <TableTextCell primary={row.owner} secondary={row.email} />
               <TableCell><Tag size="sm">{row.category}</Tag></TableCell>
               <TableCell><Badge tone={row.status} size="sm">{statusLabel(row.status)}</Badge></TableCell>
-              <TableCell><TextInput size="sm" placeholder={row.service} /></TableCell>
+              <TableCell><TextInput size="sm" aria-label={`${row.service} note`} placeholder={row.service} /></TableCell>
               <TableCell>
                 <TextLink href="#" size="small" iconAfter={<Icon icon="ph:arrow-square-out" />}>Open</TextLink>
               </TableCell>

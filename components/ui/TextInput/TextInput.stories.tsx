@@ -111,14 +111,14 @@ export const Default: Story = {
     showLeadingIcon: false,
     showTrailingIcon: false,
   },
-  render: ({ showLeadingIcon, showTrailingIcon, ...args }) => (
+  render: ({ showLeadingIcon, showTrailingIcon, ...args }: DefaultArgs) => (
     <TextInput
       {...args}
       iconBefore={showLeadingIcon ? <Icon icon="ph:user" /> : undefined}
       iconAfter={showTrailingIcon ? <Icon icon="ph:check-circle" /> : undefined}
     />
   ),
-  play: async ({ canvasElement }) => {
+  play: async ({ canvasElement }: { canvasElement: HTMLElement }) => {
     const canvas = within(canvasElement);
     const input = canvas.getByRole('textbox');
 

@@ -24,6 +24,7 @@
     "stories/**/*",
     ".storybook/**/*",
     "**/*.stories.tsx",
+    "**/*.type-test.tsx",
     "**/*.mdx"
   ]
 }

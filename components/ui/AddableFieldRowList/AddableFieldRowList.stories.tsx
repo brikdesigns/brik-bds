@@ -72,12 +72,14 @@ export const Default: Story = {
               <TextInput
                 value={row.label}
                 onChange={(e) => update({ label: e.target.value })}
+                aria-label="Contact type"
                 placeholder="e.g. Phone"
                 fullWidth
               />
               <TextInput
                 value={row.value}
                 onChange={(e) => update({ value: e.target.value })}
+                aria-label="Contact value"
                 placeholder="e.g. (615) 555-0100"
                 fullWidth
               />
@@ -131,12 +133,14 @@ export const SoftwareInventory: Story = {
               <TextInput
                 value={row.name}
                 onChange={(e) => update({ name: e.target.value })}
+                aria-label="Tool name"
                 placeholder="e.g. HubSpot"
                 fullWidth
               />
               <TextInput
                 value={row.purpose}
                 onChange={(e) => update({ purpose: e.target.value })}
+                aria-label="Tool purpose"
                 placeholder="What this tool is used for"
                 fullWidth
               />
@@ -144,6 +148,7 @@ export const SoftwareInventory: Story = {
                 options={CATEGORY_OPTIONS}
                 value={row.category}
                 onChange={(e) => update({ category: e.target.value as Tool['category'] })}
+                aria-label="Tool category"
               />
             </>
           )}
@@ -192,6 +197,7 @@ export const HolidayHours: Story = {
                 type="time"
                 value={row.open}
                 onChange={(e) => update({ open: e.target.value })}
+                aria-label="Opening time"
                 disabled={row.closed}
                 fullWidth
               />
@@ -199,6 +205,7 @@ export const HolidayHours: Story = {
                 type="time"
                 value={row.close}
                 onChange={(e) => update({ close: e.target.value })}
+                aria-label="Closing time"
                 disabled={row.closed}
                 fullWidth
               />
@@ -255,6 +262,7 @@ export const CompetitiveFrames: Story = {
               <TextArea
                 value={row.competitor}
                 onChange={(e) => update({ competitor: e.target.value })}
+                aria-label="Competitor"
                 placeholder="Name or archetype"
                 rows={3}
                 fullWidth
@@ -262,6 +270,7 @@ export const CompetitiveFrames: Story = {
               <TextArea
                 value={row.gap}
                 onChange={(e) => update({ gap: e.target.value })}
+                aria-label="Gap"
                 placeholder="What they lack that this client can claim"
                 rows={3}
                 fullWidth
@@ -269,6 +278,7 @@ export const CompetitiveFrames: Story = {
               <TextArea
                 value={row.copyImplication}
                 onChange={(e) => update({ copyImplication: e.target.value })}
+                aria-label="Copy implication"
                 placeholder="How this should shape on-site copy"
                 rows={3}
                 fullWidth
@@ -313,6 +323,7 @@ export const MaxItemsCap: Story = {
             <TextInput
               value={row.text}
               onChange={(e) => update({ text: e.target.value })}
+              aria-label="Note"
               placeholder="Type a quick note…"
               fullWidth
             />

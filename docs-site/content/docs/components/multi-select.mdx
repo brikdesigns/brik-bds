@@ -77,6 +77,7 @@ By default selected-item tags match the dropdown size. Override with `tagSize` f
 
 ## Accessibility
 
+- **An accessible name is required (type-enforced).** Pass `label` (visible), `aria-label`, or `aria-labelledby`; omitting all three is a type error. The name is applied to the underlying `<select>`.
 - Renders a `<select multiple>` (visually hidden) plus the rendered Tag list. Keyboard navigation matches the native multi-select.
 - Each selected Tag carries a `Remove {label}` accessible name on its dismiss button.
 - `aria-invalid` on the underlying select when `error` is present.

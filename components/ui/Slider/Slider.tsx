@@ -3,8 +3,9 @@ import {
   type CSSProperties,
   useState,
   useCallback,
+  useId,
 } from 'react';
-import { bdsClass } from '../../utils';
+import { bdsClass, type AccessibleNameProps } from '../../utils';
 import './Slider.css';
 
 /**
@@ -13,9 +14,9 @@ import './Slider.css';
 export type SliderSize = 'sm' | 'md' | 'lg';
 
 /**
- * Slider component props
+ * Slider props other than the accessible name (see `SliderProps`).
  */
-export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size' | 'onChange'> {
+export interface SliderBaseProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'size' | 'onChange'> {
   /** Current value (controlled) */
   value?: number;
   /** Default value (uncontrolled) */
@@ -28,8 +29,6 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
   step?: number;
   /** Size variant */
   size?: SliderSize;
-  /** Optional label */
-  label?: string;
   /** Show current value */
   showValue?: boolean;
   /** Disabled state */
@@ -37,6 +36,13 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
   /** Change handler */
   onChange?: (value: number) => void;
 }
+
+/**
+ * Slider component props. An accessible name is required: supply `label`
+ * (visible, wired to the range input via `aria-labelledby`), `aria-label`, or
+ * `aria-labelledby`. Omitting all three is a type error.
+ */
+export type SliderProps = SliderBaseProps & AccessibleNameProps;
 
 /**
  * Track height by size
@@ -92,6 +98,7 @@ export function Slider({
   style,
   ...props
 }: SliderProps) {
+  const labelId = useId();
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState(defaultValue);
   const currentValue = isControlled ? value : internalValue;
@@ -122,7 +129,7 @@ export function Slider({
     <div className={bdsClass('bds-slider', className)} style={style}>
       {(label || showValue) && (
         <div className="bds-slider__label-row">
-          {label && <span className="bds-slider__label">{label}</span>}
+          {label && <span id={labelId} className="bds-slider__label">{label}</span>}
           {showValue && <span className="bds-slider__value">{currentValue}</span>}
         </div>
       )}
@@ -137,6 +144,7 @@ export function Slider({
         disabled={disabled}
         className="bds-slider-input"
         style={inputStyles}
+        aria-labelledby={label ? labelId : undefined}
         {...props}
       />
     </div>

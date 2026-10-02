@@ -158,7 +158,9 @@ export function DependentSelect({
   return (
     <div className={bdsClass('bds-dependent-select', className)} style={style}>
       <Select
-        label={parent.label}
+        {...(parent.label
+          ? { label: parent.label }
+          : { 'aria-label': 'Parent selection' })}
         options={parent.options}
         value={parent.value}
         defaultValue={parent.defaultValue}
@@ -169,7 +171,9 @@ export function DependentSelect({
       />
       {child.multiple ? (
         <MultiSelect
-          label={child.label}
+          {...(child.label
+            ? { label: child.label }
+            : { 'aria-label': 'Dependent selection' })}
           options={controlOptions}
           value={child.value}
           defaultValue={child.defaultValue}
@@ -181,7 +185,9 @@ export function DependentSelect({
         />
       ) : (
         <Select
-          label={child.label}
+          {...(child.label
+            ? { label: child.label }
+            : { 'aria-label': 'Dependent selection' })}
           options={controlOptions}
           value={child.value}
           defaultValue={child.defaultValue}

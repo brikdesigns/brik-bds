@@ -36,7 +36,7 @@ export const Default: Story = {
       <CardControl
         {...args}
         badge={<Badge size="xs" status="positive" icon={<Icon icon="ph:check" />} />}
-        action={<ToggleSwitch checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
+        action={<ToggleSwitch aria-label="Notifications" checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
       />
     );
   },

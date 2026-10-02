@@ -118,7 +118,7 @@ export const InteractionTestKeyboardActivation: Story = {
     const clickSpy = fn();
     input.click = clickSpy;
 
-    const dropzone = canvas.getByRole('button', { name: 'File upload dropzone' });
+    const dropzone = canvas.getByRole('button', { name: 'Upload a file' });
     dropzone.focus();
     await userEvent.keyboard('{Enter}');
     await expect(clickSpy).toHaveBeenCalled();

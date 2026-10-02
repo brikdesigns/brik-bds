@@ -6,7 +6,7 @@ import {
   type KeyboardEvent,
 } from 'react';
 import * as Popover from '@radix-ui/react-popover';
-import { bdsClass } from '../../utils';
+import { bdsClass, type AccessibleNameProps } from '../../utils';
 import './DatePicker.css';
 
 // ─── Types ──────────────────────────────────────────────────────────
@@ -14,7 +14,8 @@ import './DatePicker.css';
 export type DatePickerSize = 'sm' | 'md' | 'lg';
 export type DatePickerPrecision = 'day' | 'month';
 
-export interface DatePickerProps {
+/** DatePicker props other than the accessible name (see `DatePickerProps`). */
+export interface DatePickerBaseProps {
   /** Selected date value */
   value?: Date | null;
   /** Called when a date is selected */
@@ -27,8 +28,6 @@ export interface DatePickerProps {
    * `onChange` to the first of the selected month.
    */
   precision?: DatePickerPrecision;
-  /** Optional label */
-  label?: string;
   /** Helper text below input */
   helperText?: string;
   /** Error message (triggers error state) */
@@ -45,16 +44,18 @@ export interface DatePickerProps {
   maxDate?: Date;
   /** Input id */
   id?: string;
-  /**
-   * Accessible name for the trigger when no visible `label` is rendered —
-   * e.g. a header-embedded picker whose purpose the surrounding title already
-   * conveys visually. Forwarded to the trigger's `aria-label`. Ignored when a
-   * visible `label` is present (the `<label htmlFor>` association wins).
-   */
-  'aria-label'?: string;
   /** Additional className */
   className?: string;
 }
+
+/**
+ * DatePicker component props. An accessible name is required: supply `label`
+ * (visible, wired via `<label htmlFor>`), `aria-label` (e.g. a header-embedded
+ * picker whose purpose the surrounding title already conveys), or
+ * `aria-labelledby`. The name is applied to the trigger button. When a visible
+ * `label` is present it wins over `aria-label`. Omitting all three is a type error.
+ */
+export type DatePickerProps = DatePickerBaseProps & AccessibleNameProps;
 
 // ─── Constants ──────────────────────────────────────────────────────
 
@@ -391,6 +392,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
       maxDate,
       id,
       'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledby,
       className = '',
     },
     ref
@@ -441,6 +443,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
                 open && 'bds-date-picker__trigger--open',
               )}
               aria-label={label ? undefined : ariaLabel}
+              aria-labelledby={ariaLabelledby}
               aria-invalid={hasError}
               aria-describedby={
                 error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
