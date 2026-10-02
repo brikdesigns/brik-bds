@@ -40,12 +40,12 @@
   --bds-color-system-apple: #000000;
   --bds-color-system-bing: #1f70f1;
   --bds-color-system-tiktok: #000000;
-  --bds-color-annotation-annotation-pink: #bb1eeb;
-  --bds-color-annotation-annotation-purple: #601ff9;
-  --bds-color-annotation-annotation-blue: #2f80ed;
-  --bds-color-annotation-annotation-light-pink: #f8e8fd;
-  --bds-color-annotation-annotation-light-purple: #e6dbff;
-  --bds-color-annotation-annotation-light-blue: #d1e5ff;
+  --bds-color-annotation-pink: #bb1eeb;
+  --bds-color-annotation-purple: #601ff9;
+  --bds-color-annotation-blue: #2f80ed;
+  --bds-color-annotation-light-pink: #f8e8fd;
+  --bds-color-annotation-light-purple: #e6dbff;
+  --bds-color-annotation-light-blue: #d1e5ff;
   --bds-color-blue-50: #fcfeff;
   --bds-color-blue-100: #f8fdff;
   --bds-color-blue-200: #d6f0fa;

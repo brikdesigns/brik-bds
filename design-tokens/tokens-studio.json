@@ -415,7 +415,7 @@
         }
       },
       "annotation": {
-        "annotation-pink": {
+        "pink": {
           "$extensions": {
             "com.figma.scopes": [
               "ALL_SCOPES"
@@ -424,7 +424,7 @@
           "$type": "color",
           "$value": "#bb1eeb"
         },
-        "annotation-purple": {
+        "purple": {
           "$extensions": {
             "com.figma.scopes": [
               "ALL_SCOPES"
@@ -433,7 +433,7 @@
           "$type": "color",
           "$value": "#601ff9"
         },
-        "annotation-blue": {
+        "blue": {
           "$extensions": {
             "com.figma.scopes": [
               "ALL_SCOPES"
@@ -442,7 +442,7 @@
           "$type": "color",
           "$value": "#2f80ed"
         },
-        "annotation-light-pink": {
+        "light-pink": {
           "$extensions": {
             "com.figma.scopes": [
               "ALL_SCOPES"
@@ -451,7 +451,7 @@
           "$type": "color",
           "$value": "#f8e8fd"
         },
-        "annotation-light-purple": {
+        "light-purple": {
           "$extensions": {
             "com.figma.scopes": [
               "ALL_SCOPES"
@@ -460,7 +460,7 @@
           "$type": "color",
           "$value": "#e6dbff"
         },
-        "annotation-light-blue": {
+        "light-blue": {
           "$extensions": {
             "com.figma.scopes": [
               "ALL_SCOPES"

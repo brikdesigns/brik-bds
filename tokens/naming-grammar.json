@@ -25,7 +25,16 @@
         "families": ["blue", "grayscale", "green", "orange", "pink", "poppy", "purple", "tan", "yellow"],
         "steps": ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "950"],
         "stepsSource": "brik-llm scripts/tokens/generate-color-ramps.js:38 (STOPS)",
-        "retiredWordSteps": ["lightest", "lighter", "light", "dark", "darker", "darkest", "base"]
+        "retiredWordSteps": ["lightest", "lighter", "light", "dark", "darker", "darkest", "base"],
+        "namedFamilies": {
+          "$comment": "#2677, ratified by the operator 2026-10-01. Non-numeric colour families: body is color-{family}-{name}, {name} from the closed list. A new name is a PR to this file.",
+          "system": ["red", "green", "yellow", "blue", "purple", "orange", "neutral", "blue-light", "neutral-light", "green-light", "red-light", "yellow-light", "orange-light", "purple-light", "youtube", "twitter", "facebook", "instagram", "linkedin", "yelp", "google", "apple", "bing", "tiktok", "transparent", "lightbox", "red-surface", "green-surface", "blue-surface"],
+          "annotation": ["pink", "purple", "blue", "light-pink", "light-purple", "light-blue"]
+        },
+        "namedSteps": {
+          "$comment": "#2677: named endpoints of a numeric family.",
+          "grayscale": ["black", "white"]
+        }
       },
       "scale": {
         "body": "{scale}-{step}",
