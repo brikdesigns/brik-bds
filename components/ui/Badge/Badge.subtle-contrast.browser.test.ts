@@ -81,15 +81,14 @@ function contrastRatio(fg: string, bg: string) {
 }
 
 describe('Badge appearance="subtle" contrast (#2402)', () => {
-  // `negative` and `info` are deliberately excluded: both are pre-existing,
-  // library-wide AA failures in their primitive (red has no darker sibling
-  // to pin to; blue measures 2.86:1) tracked at the primitive level in
-  // #2096 and #1972 respectively, not fixed per-component here.
+  // `info` is deliberately excluded: a pre-existing AA failure in its
+  // primitive (blue measures 2.86:1) tracked in #1972, not fixed per-component.
   it.each<[BadgeTone, number]>([
     ['positive', 4.5],
     ['warning', 4.5],
     ['neutral', 4.5],
     ['brand', 4.5],
+    ['negative', 4.5],
   ])('tone="%s" clears AA (%s:1) in both themes on the real rendered badge', async (tone, floor) => {
     const el = await mount(tone);
 

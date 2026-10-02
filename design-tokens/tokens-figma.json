@@ -86,7 +86,7 @@
     },
     "system": {
       "red": {
-        "$value": "#eb5757",
+        "$value": "#e52424",
         "$type": "color"
       },
       "green": {

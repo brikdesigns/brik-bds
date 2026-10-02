@@ -121,11 +121,12 @@
   color: var(--bds-text-neutral);
 }
 
-/* Dark label: white on --bds-background-negative (#eb5757) is 3.48:1 (fails AA);
-   --bds-text-on-color-light is 4.95:1 in both themes (#995). */
+/* White label: --bds-background-negative is #e52424 after the #2096 primitive
+   darken, where white is 4.56:1 in both themes and the old dark label fell to
+   3.78:1. (At the prior #eb5757 it was the reverse: white 3.48:1, dark 4.95:1, #995.) */
 .bds-badge--solid.bds-badge--tone-negative {
   background-color: var(--bds-background-negative);
-  color: var(--bds-text-on-color-light);
+  color: var(--bds-text-on-color-dark);
 }
 
 /* Blue — the info signal, freed for this family in #1959. Was spelled
@@ -169,16 +170,15 @@
   color: var(--bds-text-neutral);
 }
 
-/* --text-negative on --surface-negative measures 2.43:1 — an AA failure the
-   red family carries library-wide (#eb5757 has no darker sibling in the
-   token system to pin to, unlike positive's --color-green-950). #2096
-   already tracks darkening the --color-system-red primitive itself
-   (precedent: #1972/#2056 for blue); this pairing is a fresh consumer of
-   that same gap, not introduced here, and not fixed here since the correct
-   fix is at the primitive, not this rule. */
+/* --bds-surface-negative is a FIXED light tint in both themes, so the label
+   needs a dark foreground in both; --bds-text-negative cannot be that (it must
+   stay light enough for the dark surface, and measured 2.43:1 here). Pinned to
+   the primitive --bds-color-poppy-800 (7.14:1 in both themes), the same shape
+   as tone-positive's --bds-color-green-950 pin. Gated in contrast-pairings.json
+   ("Subtle negative Badge label on tint fill"). #2096 */
 .bds-badge--subtle.bds-badge--tone-negative {
   background-color: var(--bds-surface-negative);
-  color: var(--bds-text-negative);
+  color: var(--bds-color-poppy-800);
 }
 
 /* --bds-text-info on --bds-surface-info measures 2.86:1 — an AA failure the blue
