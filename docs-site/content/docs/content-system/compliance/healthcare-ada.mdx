@@ -46,14 +46,13 @@ Record the regime answers in each consumer repo's `CLAUDE.md` under a **Complian
 
 ## Component-level rules
 
-These graduate from "good practice" to TypeScript-required as the a11y-props rollout lands.
+These are enforced by TypeScript — omitting the prop is a compile error, not a lint warning.
 
 | Component | Required prop |
 |---|---|
-| `Button` | accessible text — children or `aria-label` |
-| `IconLink` | `aria-label` |
-| `Modal` | `ariaLabelledBy` + `ariaDescribedBy`, focus trap, focus return |
-| `FormField` | `label` |
+| `Button` | Text children, or `icon` with a required `label` (icon-only; also covers icon-only links via `href`) |
+| `TextInput`, `TextArea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `SearchInput`, `DatePicker`, `TimePicker`, `AddressInput`, `FileUploader`, `Slider`, `ToggleSwitch` | One of `label`, `aria-label`, or `aria-labelledby` (`AccessibleNameProps`) |
+| `Modal` | `title` or `aria-label` (`ModalAccessibleNameProps`) |
 | `Image` | `alt` (empty string allowed only for decorative imagery) |
 
 ---

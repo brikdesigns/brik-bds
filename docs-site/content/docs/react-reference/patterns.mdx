@@ -19,10 +19,10 @@ The single most-built pattern across portal, renew-pms, and brikdesigns. BDS shi
 <Form onSubmit={handleSubmit}>
   <FieldGrid columns={2}>
     <Field label="First name" required>
-      <Input name="firstName" />
+      <TextInput name="firstName" aria-label="First name" />
     </Field>
     <Field label="Last name" required>
-      <Input name="lastName" />
+      <TextInput name="lastName" aria-label="Last name" />
     </Field>
     <Field label="Role" helper="Used for in-product permissions">
       <Select name="role" aria-label="Role" options={roles} />

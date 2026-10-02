@@ -180,13 +180,14 @@ Rationale: blocking on `serious`/`critical` is the lowest bar that catches real 
 
 ### 6c. Extend BDS component types with accessibility-required props
 
-Flip undocumented-but-expected a11y props from "good practice" to "TypeScript-required." Components to update first:
+Flip undocumented-but-expected a11y props from "good practice" to "TypeScript-required." Shipped (brik-bds#2698):
 
-- `Button` — require `aria-label` if no text children (icon-only buttons)
-- `IconLink` — require `aria-label`
-- `Modal` — require `ariaLabelledBy` + `ariaDescribedBy`
-- `FormField` — require `label` prop; no label = TypeScript error
-- `Image` — require `alt` prop; decorative images must pass `alt=""` explicitly
+- `Button` — icon-only (`icon`, no children) requires `label`. An icon-only link is a `Button` with `href`.
+- Form controls (`TextInput`, `TextArea`, `NumberInput`, `PasswordInput`, `SearchInput`, `Select`, `MultiSelect`, `DatePicker`, `TimePicker`, `Slider`, `FileUploader`, `ToggleSwitch`, `AddressInput`) — require one of `label`, `aria-label`, `aria-labelledby`; none = TypeScript error
+- `Modal` — requires `title` or `aria-label`
+- `Image` — requires `alt`; decorative images pass `alt=""` explicitly
+
+Focus trap and focus return on overlays are not yet built (brik-bds#1372).
 
 ### 6d. Add a portal-wide "Accessibility Preferences" panel
 

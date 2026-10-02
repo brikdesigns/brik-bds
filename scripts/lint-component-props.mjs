@@ -80,15 +80,42 @@
  *     structural type, so inherited HTML attributes would otherwise flood the
  *     check with hundreds of DOM props that no curated table should list.
  *
+ * ── Docs name only real exports (#2700) ─────────────────────────────────────
+ * Separate from the prop tables above: a docs page must not present a component
+ * the package does not export. #2700 found 13 names (`IconLink`, `FormField`,
+ * `Split`, …) written as current API that an agent would import or hand-roll.
+ *
+ * "Real" = exported from the package entry `components/index.ts`, resolved
+ * syntactically through `export * from` / `export { a as b } from` / direct
+ * `export const|function|class|…` (types included). Scope — a name is checked
+ * ONLY where it is presented as API:
+ *   • a JSX tag `<Name` (or `<BDS.Name`) inside a fenced tsx/jsx/ts/js block;
+ *   • a name in `import { … } from '@brikdesigns/bds'` (exact specifier — the
+ *     content-system / blueprints-astro sub-entries are not checked) in such a block;
+ *   • a backticked PascalCase name in a column headed Component(s)/Example(s)
+ *     of a markdown table outside a fence.
+ * Prose backticks are NOT checked ("planned" / "retired" notes name absent
+ * components on purpose). Inside a fence, a tag is skipped when the same block
+ * imports it from another module or declares it (function/const/class) — that
+ * is the sample's own code, not BDS API — and generic arguments (`useState<T>`)
+ * are never tags. Scanned: docs-site/content/docs plus component/stories .mdx.
+ *
+ * `@brikdesigns/bds/blueprints-astro` components (the `*.astro` files published by
+ * `./blueprints-astro/*.astro`) count as real for tags/tables, not for the main import.
+ *
+ * Anything else absent must be in DOC_NAME_ALLOWLIST below, each with a reason
+ * category. Fix the docs first: allowlist only what is genuinely not BDS API.
+ *
  * ── Exit codes ─────────────────────────────────────────────────────────────────
  *   0  Clean — every documented prop matches source, every declared prop is documented
- *   1  Drift found
+ *   1  Drift found (prop-table drift, or a docs name that is not a real export)
  *   2  Bad invocation (marker points at a missing file/type, malformed table)
  *
  * ── CLI ────────────────────────────────────────────────────────────────────────
  *   lint-component-props [--json] [--files <f1.mdx> …] [--root <dir>]
  *
- * `--files` verify only the listed .mdx (else every docs-site component page).
+ * `--files` verify only the listed .mdx (else every docs-site component page for
+ *           prop tables; the export check always scans all docs .mdx unless --files).
  * `--root`  resolve tsconfig + marker paths under this dir instead of the repo
  *           (hermetic fixtures, for tests).
  */
@@ -343,6 +370,187 @@ const normDefault = (d) => {
   return s.replace(/^["]([^"]*)["]$/, "'$1'"); // "x" → 'x'
 };
 
+// ── Docs name only real exports (#2700) ───────────────────────────────────────
+
+// Reviewed allowlist: a PascalCase name used in a docs sample/table that is NOT
+// an export of components/index.ts, with the reason category. Keep it SHORT —
+// planned/absent BDS names are fixed or marked in the docs, never listed here.
+// Categories: consumer-side | third-party | placeholder | html-or-framework.
+const DOC_NAME_ALLOWLIST = new Map([
+  // retired — named in a "Before / Old" migration sample on purpose.
+  ['AlertBanner', 'retired: removed in #725, shown as the "Before" in the Banner migration'],
+  ['ServiceBadge', 'retired: removed in #572, shown as the "Old" in the ServiceTag migration'],
+  ['EmailInput', 'retired: removed per ADR-004, shown in the TextInput migration'],
+  // placeholder — a consumer's own component standing in for app content.
+  ['App', 'placeholder: the consumer app root'],
+  ['ClientBody', 'placeholder: consumer page body'],
+  ['OverviewTab', 'placeholder: consumer tab content'],
+  ['EngagementsTab', 'placeholder: consumer tab content'],
+  ['DetailsTab', 'placeholder: consumer tab content'],
+  ['SourcesTab', 'placeholder: consumer tab content'],
+  ['HistoryTab', 'placeholder: consumer tab content'],
+  ['ViewEditToggle', 'placeholder: consumer read/edit switch'],
+  ['IdentityView', 'placeholder: consumer read-mode body'],
+  ['IdentityForm', 'placeholder: consumer edit-mode body'],
+  ['ReadOnlyFields', 'placeholder: consumer read-mode body'],
+  ['EditFormFields', 'placeholder: consumer edit-mode body'],
+  ['ServiceSnapshot', 'placeholder: consumer sheet content'],
+  ['ActivityList', 'placeholder: consumer sheet content'],
+  ['MetadataCard', 'placeholder: consumer rail content'],
+  ['NotificationSettings', 'placeholder: consumer popover content'],
+  ['StatusGlyph', 'placeholder: consumer leading marker'],
+  ['MyCustomEmpty', 'placeholder: consumer empty-state override'],
+  ['MyTableSkeleton', 'placeholder: consumer loading-state override'],
+]);
+// Pattern entries (same reason requirement).
+const DOC_NAME_PATTERNS = [
+  { re: /^[A-Z]\w*Icon$/, reason: "third-party: the consumer's icon-library components passed to ReactNode icon slots" },
+];
+
+const REAL_EXPORT_ENTRY = 'components/index.ts';
+const DOC_FENCE_LANGS = new Set(['tsx', 'jsx', 'ts', 'js', 'typescript', 'javascript']);
+const TABLE_NAME_HEADERS = new Set(['component', 'components', 'example', 'examples']);
+
+// Every name exported (value or type) by the package entry, followed through
+// `export * from`, `export { a as b } from` and direct exported declarations.
+function collectPackageExports(entry) {
+  const names = new Set();
+  const seen = new Set();
+  const visit = (spec) => {
+    const file = [spec, `${spec}.ts`, `${spec}.tsx`, join(spec, 'index.ts'), join(spec, 'index.tsx')]
+      .find((f) => existsSync(f) && statSync(f).isFile());
+    if (!file || seen.has(file)) return;
+    seen.add(file);
+    const sf = ts.createSourceFile(file, readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, false);
+    for (const st of sf.statements) {
+      if (ts.isExportDeclaration(st)) {
+        if (!st.exportClause) {
+          if (st.moduleSpecifier) visit(resolve(dirname(file), st.moduleSpecifier.text));
+        } else if (ts.isNamedExports(st.exportClause)) {
+          st.exportClause.elements.forEach((e) => names.add(e.name.text));
+        } else {
+          names.add(st.exportClause.name.text);
+        }
+      } else if (ts.getModifiers?.(st)?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) {
+        if (ts.isVariableStatement(st)) {
+          st.declarationList.declarations.forEach((d) => ts.isIdentifier(d.name) && names.add(d.name.text));
+        } else if (st.name) names.add(st.name.text);
+      }
+    }
+  };
+  visit(entry);
+  return names;
+}
+
+// → [{ name, line, kind }] — names presented as BDS API in one .mdx.
+function findDocNameUses(mdxFile) {
+  const lines = readFileSync(mdxFile, 'utf8').split('\n');
+  const uses = [];
+  let fence = null; // { lang, start, body: [{text,line}] }
+  let tableCol = null; // column indices of name columns for the current table
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const f = line.match(/^\s*(```|~~~)\s*([\w-]*)/);
+    if (f) {
+      if (!fence) { fence = { lang: f[2].toLowerCase(), body: [] }; tableCol = null; continue; }
+      if (DOC_FENCE_LANGS.has(fence.lang)) uses.push(...fenceUses(fence.body));
+      fence = null;
+      continue;
+    }
+    if (fence) { fence.body.push({ text: line, line: i + 1 }); continue; }
+
+    // Component table: header row → remember the name columns; body rows → names.
+    if (/^\s*\|/.test(line)) {
+      if (tableCol === null && isDivider(lines[i + 1] || '')) {
+        const hdr = cells(line).map((h) => h.replace(/[*`]/g, '').toLowerCase());
+        tableCol = hdr.map((h, idx) => (TABLE_NAME_HEADERS.has(h) ? idx : -1)).filter((idx) => idx !== -1);
+        continue;
+      }
+      if (tableCol && tableCol.length > 0 && !isDivider(line)) {
+        const c = cells(line);
+        for (const idx of tableCol) {
+          for (const m of (c[idx] ?? '').matchAll(/`<?([A-Z]\w*)\b[^`]*`/g)) {
+            uses.push({ name: m[1], line: i + 1, kind: 'table' });
+          }
+        }
+      }
+    } else {
+      tableCol = null;
+    }
+  }
+  return uses;
+}
+
+// JSX tags + @brikdesigns/bds imports of one fenced block, minus the block's own
+// imports/declarations.
+function fenceUses(body) {
+  const text = body.map((b) => b.text).join('\n');
+  const own = new Set();
+  const lineAt = (idx) => body[text.slice(0, idx).split('\n').length - 1]?.line ?? body[0].line;
+  const uses = [];
+  for (const m of text.matchAll(/import\s+(?:type\s+)?([^;'"]*?)\s*from\s*['"]([^'"]+)['"]/g)) {
+    const bds = m[2] === '@brikdesigns/bds';
+    const named = (m[1].match(/\{([^}]*)\}/)?.[1] ?? '').split(',')
+      .map((s) => s.trim().replace(/^type\s+/, '').split(/\s+as\s+/)).filter((p) => p[0]);
+    const deflt = m[1].replace(/\{[^}]*\}/, '').replace(/,/g, '').trim().split(/\s+as\s+/).pop();
+    for (const [orig, alias] of named) {
+      if (bds) uses.push({ name: orig, line: lineAt(m.index), kind: 'import' });
+      else own.add(alias ?? orig);
+    }
+    if (deflt && !bds) own.add(deflt);
+  }
+  for (const m of text.matchAll(/\b(?:function|const|let|class)\s+([A-Z]\w*)/g)) own.add(m[1]);
+  // `<Name` / `<BDS.Name` as a tag: not preceded by an identifier char or `)`/`]` (that is
+  // a generic argument, `useState<T>`), followed by whitespace, `>`, `/` or `.`.
+  for (const m of text.matchAll(/(?<![\w)\]])<(BDS\.)?([A-Z]\w*)(?=[\s>/.<]|$)/g)) {
+    if (!m[1] && own.has(m[2])) continue;
+    uses.push({ name: m[2], line: lineAt(m.index), kind: 'jsx' });
+  }
+  return uses;
+}
+
+// The `@brikdesigns/bds/blueprints-astro` components (published via the
+// `./blueprints-astro/*.astro` export) — real, but not in the main entry. Valid
+// as JSX tags / table names; NOT valid in an `import … from '@brikdesigns/bds'`.
+function blueprintAstroNames() {
+  const dir = join(ROOT, 'content-system', 'blueprints', 'astro');
+  return existsSync(dir)
+    ? readdirSync(dir).filter((f) => f.endsWith('.astro') && !f.startsWith('_')).map((f) => f.slice(0, -6))
+    : [];
+}
+
+const isAllowlisted = (name) =>
+  DOC_NAME_ALLOWLIST.has(name) || DOC_NAME_PATTERNS.some(({ re }) => re.test(name));
+
+// → violations for every docs name that is neither a real export nor allowlisted.
+function checkDocExports(mdxFiles) {
+  const entry = join(ROOT, REAL_EXPORT_ENTRY);
+  if (!existsSync(entry)) {
+    // Hermetic test fixtures have no package entry; the real repo must.
+    if (ROOT === REPO_ROOT) {
+      console.error(`✗ package entry not found: ${REAL_EXPORT_ENTRY}`);
+      process.exit(2);
+    }
+    return [];
+  }
+  const exported = collectPackageExports(entry);
+  const astro = new Set(blueprintAstroNames());
+  const out = [];
+  for (const f of mdxFiles) {
+    const reported = new Set();
+    for (const u of findDocNameUses(f)) {
+      if (exported.has(u.name) || (u.kind !== 'import' && astro.has(u.name))) continue;
+      if (isAllowlisted(u.name) || reported.has(u.name)) continue;
+      reported.add(u.name);
+      out.push({
+        file: relPosix(f), line: u.line, type: 'docs', prop: u.name, kind: 'absent-export',
+        detail: `"${u.name}" (${u.kind}) is not exported from ${REAL_EXPORT_ENTRY} — correct it to a real export, mark it planned/consumer-side in prose, or allowlist it with a reason`,
+      });
+    }
+  }
+  return out;
+}
+
 // ── Main ────────────────────────────────────────────────────────────────────
 
 function walk(dir, pred, acc = []) {
@@ -369,6 +577,16 @@ function main() {
     ? explicit.map((f) => resolve(f)).filter((f) => f.endsWith('.mdx') && existsSync(f))
     : walk(docsComponents, (f) => f.endsWith('.mdx'));
 
+  const exportViolations = checkDocExports(
+    explicit
+      ? mdxFiles
+      : [
+          ...walk(join(ROOT, 'docs-site', 'content', 'docs'), (f) => f.endsWith('.mdx')),
+          ...walk(join(ROOT, 'components'), (f) => f.endsWith('.mdx')),
+          ...walk(join(ROOT, 'stories'), (f) => f.endsWith('.mdx')),
+        ],
+  );
+
   // Gather every marked table first, so we build ONE program over all sources.
   const tablesByFile = [];
   const sourceFiles = new Set();
@@ -391,7 +609,7 @@ function main() {
     process.exit(2);
   }
 
-  if (tablesByFile.length === 0) {
+  if (tablesByFile.length === 0 && exportViolations.length === 0) {
     const msg = 'lint-component-props: no {/* props-check: … */} markers found — nothing to verify.';
     if (jsonMode) console.log(JSON.stringify({ tables: 0, violations: [] }));
     else console.log(msg + '\n');
@@ -404,7 +622,7 @@ function main() {
   const typeCache = new Map(); // `${abs}#${typeName}` → propsOfType result
   const defaultsCache = new Map(); // abs → Map
 
-  const violations = [];
+  const violations = [...exportViolations];
   const documentedByType = new Map(); // `${abs}#${typeName}` → Set<propName>
   const firstTableForType = new Map(); // same key → the table to report against
   for (const t of tablesByFile) {
@@ -504,7 +722,7 @@ function main() {
 
   if (violations.length === 0) {
     console.log(
-      `lint-component-props: clean — ${tablesByFile.length} marked table(s) verified against source, 0 drift\n`,
+      `lint-component-props: clean — ${tablesByFile.length} marked table(s) verified against source, 0 drift; docs names all real exports\n`,
     );
     process.exit(0);
   }
@@ -520,7 +738,9 @@ function main() {
   }
   console.log(
     '\n  A documented prop must match the component source. Fix the table against\n' +
-    '  the .tsx, or drop the prop from the table if it no longer exists.\n',
+    '  the .tsx, or drop the prop from the table if it no longer exists.\n' +
+    '  [absent-export]: a docs sample/table names a component the package does not\n' +
+    '  export. Use the real export, or mark it planned/consumer-side in prose.\n',
   );
   process.exit(1);
 }

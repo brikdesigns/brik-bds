@@ -67,7 +67,7 @@ Don't reach for `var(--text-primary)` directly in TSX — wrap tokens in typed p
 
 ### 4. Root layout
 
-The portal pattern: `next/font` body class, anti-FOUC theme-init script, and a thin `<BDSProvider>` wrapping `ThemeProvider` from `@brikdesigns/bds`.
+The portal pattern: `next/font` body class, anti-FOUC theme-init script, and a thin consumer-side `BDSProvider` (your own file, not a BDS export) wrapping `ThemeProvider` from `@brikdesigns/bds`.
 
 ```tsx
 // src/app/layout.tsx

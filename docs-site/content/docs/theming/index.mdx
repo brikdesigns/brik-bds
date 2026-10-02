@@ -20,7 +20,7 @@ Theming is one of four **Tenets** of the system: Foundation, Theming, Motion, Co
 |---|---|---|---|
 | **Tokens** | Color, type, spacing values | `theme-{client}.css` (`@layer client-theme`) | Required |
 | **Atmospheres** | Ambient mood — grain, glow, vignettes, surface treatments | `@brikdesigns/bds/atmospheres/{slug}.css` | Optional — industry default can win |
-| **Layout Archetypes** | Site-header *and* site-footer shape, plus scroll + drawer behavior | `<SiteHeader>` and `<SiteFooter>` from `@brikdesigns/bds/blueprints-astro` | Optional — industry default can win |
+| **Layout Archetypes** | Site-header *and* site-footer shape, plus scroll + drawer behavior | `<SiteHeader>` from `@brikdesigns/bds/blueprints-astro`; `SiteFooter` planned (v0.2) | Optional — industry default can win |
 | **Blueprints** | Section composition — how a hero / services / testimonials slot is built | Authored in BDS, tagged by mood + industry | Authored centrally; clients pick |
 
 Dimensions are independent. A client can redefine tokens, keep the industry's default atmosphere, swap to a non-default navigation archetype, and use the same blueprints another client uses — nothing cross-couples. Each Dimension has its own deep-dive page; the sections below summarize each and link out.
@@ -59,7 +59,7 @@ The locked sets of site-header and site-footer patterns Brik builds from — e.g
 
 Nav and footer are sibling vocabularies — paired but independent. They are orthogonal to atmosphere and blueprint: a dental client can keep the dental pack's default nav while picking a non-default atmosphere, swap the footer archetype for compliance reasons, and pull in the same section blueprints a real-estate client uses.
 
-Full vocabularies, scroll + drawer behavior options, and per-industry defaults: [Layout Archetypes](/docs/theming/layout-archetypes). *(Footer is v0.1 — `<SiteFooter>` render lands in blueprints-astro v0.2.)*
+Full vocabularies, scroll + drawer behavior options, and per-industry defaults: [Layout Archetypes](/docs/theming/layout-archetypes). *(Footer is v0.1 — the `SiteFooter` render surface is planned for blueprints-astro v0.2.)*
 
 ## Blueprints Dimension
 
