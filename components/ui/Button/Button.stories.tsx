@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef, type ComponentPropsWithoutRef } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within, fn } from 'storybook/test';
 import { Button } from './Button';
@@ -189,6 +189,46 @@ export const InteractionTestAsLink: Story = {
     await expect(link).toHaveAttribute('href', '#');
     // Anchor branch renders <a>, not <button> — no Control snapshot can show this.
     await expect(link.tagName).toBe('A');
+  },
+};
+
+/** Stand-in for a router link such as `next/link` — marks itself so the test can tell it rendered. */
+const RouterLink = forwardRef<HTMLAnchorElement, ComponentPropsWithoutRef<'a'> & { href: string }>(
+  function RouterLink(props, ref) {
+    return <a ref={ref} data-router-link="" {...props} />;
+  },
+);
+
+/**
+ * `linkComponent` swaps the rendered anchor for a router link so consumers keep
+ * client-side navigation without hand-applying `.bds-button` classes. The stub
+ * stands in for `next/link`: it receives `href`, `className`, and `aria-label`,
+ * and the test asserts they arrive, including the icon-only `label`.
+ *
+ * @summary Verifies `linkComponent` gets href, classes, name
+ */
+export const InteractionTestRouterLink: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  render: () => {
+    return (
+      <Row>
+        <Button href="/docs" linkComponent={RouterLink}>
+          Read docs
+        </Button>
+        <Button variant="ghost" icon={<Close />} label="Open docs" href="/docs" linkComponent={RouterLink} />
+      </Row>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const text = canvas.getByRole('link', { name: 'Read docs' });
+    const icon = canvas.getByRole('link', { name: 'Open docs' });
+
+    for (const link of [text, icon]) {
+      await expect(link).toHaveAttribute('data-router-link');
+      await expect(link).toHaveAttribute('href', '/docs');
+      await expect(link).toHaveClass('bds-button');
+    }
   },
 };
 

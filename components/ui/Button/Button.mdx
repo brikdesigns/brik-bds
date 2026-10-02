@@ -14,6 +14,7 @@ Triggers an event or action. A single unified component covering four render sha
 - **Text link** — `<Button href="/docs">Read docs</Button>` (renders `<a>`)
 - **Icon-only** — `<Button icon={<X/>} label="Close" />` (`label` required)
 - **Icon link** — `<Button icon={<X/>} label="Open" href="/x" />`
+- **Router link** — `<Button href="/x" linkComponent={Link}>Open</Button>` (pass `next/link`'s `Link` to keep client-side navigation; `linkComponent` replaces the `<a>`, so `href` is still required)
 
 `IconButton` and `LinkButton` remain available as `@deprecated` thin wrappers around `Button` for backward compatibility — prefer the unified API in new code. Consumer migration is tracked separately before they're removed in a future minor.
 
