@@ -214,7 +214,7 @@
     "check:token-bridge": "node scripts/build-token-bridge.mjs --check",
     "verify-prefix-equivalence": "node scripts/verify-prefix-equivalence.mjs",
     "build:all-tokens": "npm run build:sd-figma && npm run build:sd-dark && npm run build:modes",
-    "build:lib": "vite build --config vite.config.lib.ts && npm run build:types && npm run build:content-system && npm run build:dist-tokens && npm run build:inspector-manifest",
+    "build:lib": "vite build --config vite.config.lib.ts && node scripts/check-dist-custom-media.mjs && npm run build:types && npm run build:content-system && npm run build:dist-tokens && npm run build:inspector-manifest",
     "build:content-system": "tsc --project tsconfig.content-system.json && esbuild content-system/index.ts --bundle --format=esm --platform=neutral --outfile=dist/content-system/index.mjs && esbuild content-system/blueprints/astro/types.ts --bundle --format=esm --platform=neutral --outfile=dist/content-system/blueprints/astro/types.mjs",
     "build:inspector-manifest": "node scripts/build-inspector-manifest.mjs",
     "bds:find": "node scripts/bds-find.mjs",

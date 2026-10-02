@@ -22,8 +22,8 @@ BDS ships breakpoint tokens (`--bds-breakpoint-*`, `mediaQueries` in `tokens/ind
 ## Decision
 
 1. **Mechanism:** `postcss-custom-media` fed by `@csstools/postcss-global-data`, configured in a root `postcss.config.mjs`. Component CSS writes `@media (--bds-down-tablet)`.
-   - Vite applies a PostCSS config to all imported CSS automatically — https://vite.dev/guide/features.html
-   - `postcss-custom-media` resolves definitions per file only, so `postcss-global-data` runs first to supply `tokens/custom-media.css` to every file — https://github.com/csstools/postcss-plugins/tree/main/plugins/postcss-custom-media
+   - Vite applies a PostCSS config to all imported CSS automatically — <https://vite.dev/guide/features.html>
+   - `postcss-custom-media` resolves definitions per file only, so `postcss-global-data` runs first to supply `tokens/custom-media.css` to every file — <https://github.com/csstools/postcss-plugins/tree/main/plugins/postcss-custom-media>
    - `@custom-media` is not Baseline in browsers (MDN), so it must be fully resolved at build time. `dist/styles.css` contains zero `@custom-media` and zero `(--bds-…)` media conditions.
 2. **Rejected:** Lightning CSS. Vite marks `css.transformer: 'lightningcss'` experimental (https://vite.dev/guide/features.html).
 3. **Names:** `--bds-up-{mobile,tablet,desktop,wide,wider}` (`min-width`) and `--bds-down-{tablet,desktop,wide,wider}` (`max-width`, rung − 0.02px). They carry the ADR-043 `--bds-` prefix and mirror `mediaQueries` exactly. No new rung is invented.
@@ -41,6 +41,7 @@ BDS ships breakpoint tokens (`--bds-breakpoint-*`, `mediaQueries` in `tokens/ind
 
 - `scripts/lint-tokens.js` § 4b-2 `breakpoint-custom-media-drift`: every definition must equal its `--bds-breakpoint-*` rung (down = rung − 0.02px). Drift is an error.
 - `media-literal-px` (Rule 14): a literal px in an `@media` under `components/**/*.css` is an error. Budget: one regex per CSS line inside the existing `lint-tokens` pass, no new workflow.
+- `scripts/check-dist-custom-media.mjs`, run inside `build:lib` right after the Vite build: fails if `dist/styles.css` holds any `@custom-media` or unresolved `(--bds-…)` condition. Lint checks the names; this checks they resolved, so a build path that skips `postcss.config.mjs` cannot publish. Budget: one regex over one file per `build:lib`.
 - Rule 13 (`responsive-token-swap`) resolves `--bds-up-*` / `--bds-down-*` to direction + px, so it keeps checking direction.
 
 ## Consequences
