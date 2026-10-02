@@ -3,7 +3,7 @@
 
 import SwiftUI
 public enum BDSSemanticColor {
-    public static let textNegative = Color(red: 0.9216, green: 0.3412, blue: 0.3412)
+    public static let textNegative = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
     public static let textPositive = Color(red: 0.1529, green: 0.6824, blue: 0.3765)
     public static let textWarning = Color(red: 0.9490, green: 0.7882, blue: 0.2980)
     public static let textAccentRed = Color(red: 0.8902, green: 0.3255, blue: 0.2078)
@@ -38,9 +38,9 @@ public enum BDSSemanticColor {
     public static let textServiceBrandOnLight = Color(red: 0.3882, green: 0.2784, blue: 0.0863)
     public static let textServiceMarketingOnDark = Color(red: 0.9176, green: 1.0000, blue: 0.8549)
     public static let textAccent = Color(red: 0.5451, green: 0.5333, blue: 0.4902)
-    public static let textError = Color(red: 0.9216, green: 0.3412, blue: 0.3412)
+    public static let textError = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
     public static let textSuccess = Color(red: 0.1529, green: 0.6824, blue: 0.3765)
-    public static let borderNegative = Color(red: 0.9216, green: 0.3412, blue: 0.3412)
+    public static let borderNegative = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
     public static let borderPositive = Color(red: 0.1529, green: 0.6824, blue: 0.3765)
     public static let borderWarning = Color(red: 0.9490, green: 0.7882, blue: 0.2980)
     public static let borderInput = Color(red: 0.5098, green: 0.5098, blue: 0.5098)
@@ -64,8 +64,8 @@ public enum BDSSemanticColor {
     public static let borderAccentGreen = Color(red: 0.1529, green: 0.6824, blue: 0.3765)
     public static let borderAccentPurple = Color(red: 0.6078, green: 0.3176, blue: 0.8784)
     public static let borderAccentOrange = Color(red: 0.9490, green: 0.6000, blue: 0.2902)
-    public static let borderAccentRed = Color(red: 0.9216, green: 0.3412, blue: 0.3412)
-    public static let backgroundNegative = Color(red: 0.9216, green: 0.3412, blue: 0.3412)
+    public static let borderAccentRed = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
+    public static let backgroundNegative = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
     public static let backgroundPositive = Color(red: 0.1529, green: 0.6824, blue: 0.3765)
     public static let backgroundWarning = Color(red: 0.9490, green: 0.7882, blue: 0.2980)
     public static let backgroundPrimaryHover = Color(red: 0.9490, green: 0.9490, blue: 0.9490)

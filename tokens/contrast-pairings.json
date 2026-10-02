@@ -544,6 +544,29 @@
       "thresholdType": "AA"
     },
     {
+      "group": "negative",
+      "label": "Negative/error text on surface",
+      "fg": "--bds-text-negative",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA",
+      "note": "Was ungated (#2096): --bds-text-negative resolved to --bds-color-system-red #eb5757 = 3.48:1 on white. The primitive is darkened to #e52424 (4.56:1 light on white, 4.61:1 dark on black). One theme-invariant value cannot do more: it must sit between L 0.175 (4.5:1 on black) and L 0.183 (4.5:1 on white), so this is the only band that clears both themes."
+    },
+    {
+      "group": "negative",
+      "label": "Negative/error text on page",
+      "fg": "--bds-text-negative",
+      "bg": "--bds-page-primary",
+      "thresholdType": "AA"
+    },
+    {
+      "group": "negative",
+      "label": "Subtle negative Badge label on tint fill",
+      "fg": "--bds-color-poppy-800",
+      "bg": "--bds-surface-negative",
+      "thresholdType": "AA",
+      "note": "Badge `appearance=\"subtle\" tone=\"negative\"` (Badge.css). --bds-surface-negative is a FIXED light tint (#fccccc) in both themes, so its label needs a dark foreground in both themes, while --bds-text-negative must stay light enough for the black dark surface (row above). No single --bds-text-negative value clears both (it measured 2.43:1 here, #2096 comment), so Badge.css pins the label to the primitive --bds-color-poppy-800 (7.14:1 in BOTH themes) \u2014 the same pin Badge uses for tone=\"positive\" (--bds-color-green-950, row below)."
+    },
+    {
       "group": "positive",
       "label": "Solid positive Badge label on fill",
       "fg": "--bds-text-on-color-light",
@@ -591,11 +614,11 @@
     },
     {
       "group": "negative",
-      "label": "Solid error Badge label on fill",
-      "fg": "--bds-text-on-color-light",
+      "label": "Solid error label on fill",
+      "fg": "--bds-text-on-color-dark",
       "bg": "--bds-background-negative",
       "thresholdType": "AA",
-      "note": "Dark badge label on the saturated error fill (4.95:1 both modes). White label was 3.48:1 and failed AA (#995)."
+      "note": "White label on the error fill, 4.56:1 both modes, after --bds-color-system-red was darkened to #e52424 (#2096). Badge solid+negative, Counter, Button and Dialog render this pair. Before the darken the dark label was the passing one (4.95:1; white 3.48:1, #995); it now measures 3.78:1."
     },
     {
       "group": "accent",

@@ -22,7 +22,7 @@ public enum BDSColor {
     public static let colorGrayscaleLight = Color(red: 0.5098, green: 0.5098, blue: 0.5098) /// DEPRECATED — use color.grayscale.500 (brik-bds#1739)
     public static let colorGrayscaleLighter = Color(red: 0.8784, green: 0.8784, blue: 0.8784) /// DEPRECATED — use color.grayscale.300 (brik-bds#1739)
     public static let colorGrayscaleLightest = Color(red: 0.9490, green: 0.9490, blue: 0.9490) /// DEPRECATED — use color.grayscale.100 (brik-bds#1739)
-    public static let colorSystemRed = Color(red: 0.9216, green: 0.3412, blue: 0.3412)
+    public static let colorSystemRed = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
     public static let colorSystemGreen = Color(red: 0.1529, green: 0.6824, blue: 0.3765)
     public static let colorSystemYellow = Color(red: 0.9490, green: 0.7882, blue: 0.2980)
     public static let colorSystemBlue = Color(red: 0.1412, green: 0.3804, blue: 0.7059)
