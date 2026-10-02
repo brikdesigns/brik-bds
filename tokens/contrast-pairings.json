@@ -584,6 +584,14 @@
     },
     {
       "group": "warning",
+      "label": "Rating stars (outlined Testimonial/CardTestimonial) on surface",
+      "fg": "--bds-color-yellow-800",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large",
+      "note": "Stars are a meaningful non-text graphic (role=\"img\" + aria-label), so WCAG 1.4.11 requires 3:1, not 4.5:1. They used --bds-text-warning (#f2c94c) = 1.59:1 on white (#2697). Pinned to the static primitive --bds-color-yellow-800 (#8e7729): 4.36:1 light, ~3.9:1 dark. The brand variant uses --bds-text-on-color-dark on --bds-surface-brand-primary (existing row above). --bds-text-warning is left unchanged: it feeds fills that pass."
+    },
+    {
+      "group": "warning",
       "label": "Subtle warning Badge label on tint fill",
       "fg": "--bds-text-neutral",
       "bg": "--bds-surface-warning",

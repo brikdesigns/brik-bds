@@ -94,6 +94,9 @@
   gap: var(--bds-gap-md);
   font-size: var(--bds-heading-lg);
   line-height: var(--bds-font-line-height-snug);
-  color: var(--bds-text-warning);
 }
+
+/* --bds-text-warning (#f2c94c) was 1.59:1 on white / 2.38:1 on brand (#2697); stars are a meaningful graphic (role="img"), so WCAG 1.4.11 needs 3:1. */
+.bds-testimonial--brand .bds-testimonial__stars { color: var(--bds-text-on-color-dark); }
+.bds-testimonial--outlined .bds-testimonial__stars { color: var(--bds-color-yellow-800); }
 }
