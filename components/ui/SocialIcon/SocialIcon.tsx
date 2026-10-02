@@ -19,7 +19,7 @@ export type SocialIconType = 'badge' | 'glyph';
  * - `neutral` — neutral `--bds-text-muted` token (the authored look: a
  *   `#828282` mid-gray badge, white glyph).
  * - `brand` — the platform's Foundations brand-color token, e.g.
- *   `--bds-color-system-youtube` (brik-bds#1716). See SocialIcon.css for the
+ *   `--bds-color-social-youtube` (brik-bds#1716). See SocialIcon.css for the
  *   full per-platform mapping — every bundled platform has one, no fallback.
  * - `accent` — Brik's brand color, `--bds-text-brand-primary`.
  * - `inverse` — near-black, the default treatment for a monochrome social row

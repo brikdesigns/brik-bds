@@ -32,6 +32,23 @@ export function missingFormulas(grammar, mdx) {
   return expectedFormulas(grammar).filter((f) => !mdx.includes(f));
 }
 
+/**
+ * `##` headings that appear more than once. A stale merge once pasted a whole
+ * section block twice with two disagreeing tables (#2689); a repeated `##` is
+ * the cheap, reliable tell. Fenced code blocks are skipped.
+ */
+export function repeatedHeadings(mdx) {
+  const seen = new Map();
+  let fenced = false;
+  for (const line of mdx.split('\n')) {
+    if (/^\s*```/.test(line)) { fenced = !fenced; continue; }
+    if (fenced) continue;
+    const m = /^##\s+(.+?)\s*$/.exec(line);
+    if (m) seen.set(m[1], (seen.get(m[1]) ?? 0) + 1);
+  }
+  return [...seen].filter(([, n]) => n > 1).map(([h]) => h);
+}
+
 function main() {
   const grammar = JSON.parse(fs.readFileSync(path.join(ROOT, 'tokens', 'naming-grammar.json'), 'utf8'));
   const page = path.join(ROOT, grammar.docs.page);
@@ -43,6 +60,12 @@ function main() {
   if (missing.length > 0) {
     console.error(`lint-naming-grammar-docs: ${grammar.docs.page} differs from tokens/naming-grammar.json`);
     for (const f of missing) console.error(`  missing formula: ${f}`);
+    process.exit(1);
+  }
+  const repeated = repeatedHeadings(fs.readFileSync(page, 'utf8'));
+  if (repeated.length > 0) {
+    console.error(`lint-naming-grammar-docs: ${grammar.docs.page} repeats a \`##\` heading`);
+    for (const h of repeated) console.error(`  repeated heading: ## ${h}`);
     process.exit(1);
   }
   console.log(`lint-naming-grammar-docs: clean — ${expectedFormulas(grammar).length} formula(s) match`);

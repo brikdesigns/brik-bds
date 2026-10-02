@@ -663,6 +663,20 @@ describe('rule 7 — a colour Primitive is color-{family}-{step} (ADR-043 § 2, 
     expect(code).toBe(0);
   });
 
+  it('passes social marks and the transparent/lightbox named exceptions (#2689)', () => {
+    const { code, out } = run({
+      tokens: withTokens('--bds-color-social-youtube: #f00; --bds-color-system-transparent: #0000; --bds-color-system-lightbox: #000a;'),
+    });
+    expect(out).not.toMatch(/Rule 7/);
+    expect(code).toBe(0);
+  });
+
+  it('fails a social mark left under system: --color-system-youtube (#2689)', () => {
+    const { code, out } = run({ tokens: withTokens('--color-system-youtube: #f00;') });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--color-system-youtube — .*does not parse/);
+  });
+
   it('fails an unregistered name in a named family: --color-system-teal, --color-annotation-annotation-pink', () => {
     const { code, out } = run({
       tokens: withTokens('--color-system-teal: #0aa; --color-annotation-annotation-pink: #fde;'),

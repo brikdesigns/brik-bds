@@ -7,5 +7,15 @@
   "--color-annotation-annotation-blue": "--bds-color-annotation-blue",
   "--color-annotation-annotation-light-pink": "--bds-color-annotation-light-pink",
   "--color-annotation-annotation-light-purple": "--bds-color-annotation-light-purple",
-  "--color-annotation-annotation-light-blue": "--bds-color-annotation-light-blue"
+  "--color-annotation-annotation-light-blue": "--bds-color-annotation-light-blue",
+  "--color-system-youtube": "--bds-color-social-youtube",
+  "--color-system-twitter": "--bds-color-social-twitter",
+  "--color-system-facebook": "--bds-color-social-facebook",
+  "--color-system-instagram": "--bds-color-social-instagram",
+  "--color-system-linkedin": "--bds-color-social-linkedin",
+  "--color-system-yelp": "--bds-color-social-yelp",
+  "--color-system-google": "--bds-color-social-google",
+  "--color-system-apple": "--bds-color-social-apple",
+  "--color-system-bing": "--bds-color-social-bing",
+  "--color-system-tiktok": "--bds-color-social-tiktok"
 }

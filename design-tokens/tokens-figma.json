@@ -140,7 +140,9 @@
       "purple-light": {
         "$value": "#e9d8fc",
         "$type": "color"
-      },
+      }
+    },
+    "social": {
       "youtube": {
         "$value": "#cd201f",
         "$type": "color"
