@@ -80,6 +80,7 @@ permissions:
   contents: read
   issues: read # read each referenced issue's body to count its unticked ACs
   pull-requests: read # list the PR's commits — the second input the parser reads (brik-llm#3306)
+  actions: write # re-run this gate's own stale failed runs once one passes (brik-client-portal#4446)
 
 # `queue: max`, NOT `cancel-in-progress` — same reasoning as verify.yml (#1443).
 # The `labeled`/`unlabeled` types above are load-bearing for the `ac:none` hatch,
@@ -87,10 +88,17 @@ permissions:
 # workflow opens 4–5 runs inside two seconds on every PR. Under
 # `cancel-in-progress` four die at the queue stage emitting no check-run.
 #
-# This gate is not a required context today, so a latch here does not block a
-# merge — but it reports a verdict the author is meant to act on, and a verdict
+# Where this gate is a required context (brik-client-portal `staging`, #4168), a
+# run that dies without a check-run would latch the merge; everywhere, a verdict
 # decided by which of four same-second runs survived is not one. At ~5s a run the
 # extra cost is ~20s per PR.
+#
+# Keeping every run has its own latch, which the second step below retires
+# (brik-client-portal#4446): GitHub requires the latest attempt of EVERY check
+# suite carrying a required name to pass, not the newest run. Measured on
+# brik-client-portal#4437 @ 8e03d3b2: the newest ac-close-gate run went green at
+# 13:24 UTC and the PR stayed BLOCKED (mergeable: MERGEABLE) behind its four
+# open-time failures until each was re-run at 14:22; it merged at 14:23.
 #
 # `queue: max` and `cancel-in-progress: true` together are a workflow validation
 # error, so the two lines change as a pair.
@@ -420,7 +428,38 @@ jobs:
             core.info(`Gate self-test: ${FIXTURE_COUNT}/${FIXTURE_COUNT} fixtures pass.`);
 
             // ── Scan the real PR ─────────────────────────────────────────
-            const pr = context.payload.pull_request;
+            // Every verdict failure carries this, because the PR UI shows N
+            // red runs identically and an operator read them as merge
+            // conflicts (brik-client-portal#4446).
+            const LATCH_NOTE = [
+              'NOTE — every ac-close-gate run on this commit must pass, not only the newest:',
+              'GitHub counts each run separately, and label events open 4–5 of them per PR.',
+              'A run that PASSES re-runs its failed siblings itself, so once the cause is',
+              'fixed, re-run ANY ONE ac-close-gate run. `mergeable: MERGEABLE` with',
+              '`mergeStateStatus: BLOCKED` on a red gate is this, never a merge conflict.',
+            ].join('\n');
+            const failVerdict = (message) => core.setFailed(`${message}\n\n${LATCH_NOTE}`);
+
+            // Read the PR LIVE, not from the event payload
+            // (brik-client-portal#4446). A re-run replays its original payload,
+            // so a run re-run after the body or labels changed would judge the
+            // PR as it WAS — and the step below re-runs stale failures precisely
+            // so they re-judge it as it IS. An unreadable PR falls back to the
+            // payload and says so, rather than failing a verdict it could reach.
+            let pr = context.payload.pull_request;
+            try {
+              const { data } = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pr.number,
+              });
+              pr = data;
+            } catch (e) {
+              core.warning(
+                `Could not read PR #${pr.number} live (${e.status || e.message}) — judging the ` +
+                'event payload, which a re-run replays as it was when the run first fired.',
+              );
+            }
             const body = pr.body || '';
             const labels = (pr.labels || []).map((l) => (typeof l === 'string' ? l : l.name));
 
@@ -467,7 +506,7 @@ jobs:
               return;
             }
             if (hatch.state === 'label-only') {
-              core.setFailed(
+              failVerdict(
                 `PR is labelled \`${EXEMPT_LABEL}\` with no \`Ac-exempt: <reason>\` line in the body.\n` +
                 `The label makes the partial close visible on the board; the reason is what makes it\n` +
                 `reviewable. Add a body line of at least ${MIN_REASON_CHARS} characters saying which AC\n` +
@@ -476,14 +515,14 @@ jobs:
               return;
             }
             if (hatch.state === 'reason-only') {
-              core.setFailed(
+              failVerdict(
                 `PR body declares \`Ac-exempt:\` but the PR is not labelled \`${EXEMPT_LABEL}\`.\n` +
                 'Without the label the waiver is invisible on the board — add it.',
               );
               return;
             }
             if (hatch.state === 'short') {
-              core.setFailed(
+              failVerdict(
                 `\`Ac-exempt:\` reason is ${hatch.reason.length} chars (need >= ${MIN_REASON_CHARS}): ` +
                 `"${hatch.reason}".\nSay which AC is not done and why the issue closes anyway.`,
               );
@@ -554,4 +593,125 @@ jobs:
               `\`Ac-exempt: <reason>\` of at least ${MIN_REASON_CHARS} characters. Both are required.`,
             );
 
-            core.setFailed(messages.join('\n'));
+            failVerdict(messages.join('\n'));
+
+      # Reached ONLY when the verdict above passed — a failed step skips every
+      # step after it. GitHub requires the latest attempt of every check suite
+      # carrying this name to pass (measured, see `concurrency:` above), so a
+      # green run leaves the PR BLOCKED behind any sibling that failed on input
+      # that has since changed. Each sibling re-run re-judges the live PR, so a
+      # sibling that is still wrong fails again; this never turns a red verdict
+      # green, it only stops a superseded one from latching.
+      - name: Re-run this gate's stale failed runs on the same commit
+        uses: actions/github-script@v7
+        with:
+          script: |
+            // The workflow file, not `context.workflow` (the display name): the
+            // runs API takes a file name or id, and the path is identical in
+            // every copy of this twin.
+            const WORKFLOW_FILE = 'ac-close-gate.yml';
+
+            // The runs to re-run, from `listWorkflowRuns` rows (which carry
+            // each run's LATEST attempt). Only a COMPLETED failure: a queued or
+            // in-progress sibling will reach its own verdict, and the re-run
+            // API refuses a run that has not finished. Other commits are
+            // excluded — required checks are judged on the head commit only.
+            function staleRuns(runs, headSha, currentRunId) {
+              return runs
+                .filter((r) => r.head_sha === headSha && r.id !== currentRunId)
+                .filter((r) => r.status === 'completed' && r.conclusion === 'failure')
+                .map((r) => r.id);
+            }
+
+            const SHA = 'a'.repeat(40);
+            const OTHER = 'b'.repeat(40);
+            const run = (id, conclusion, extra = {}) => ({
+              id, head_sha: SHA, status: 'completed', conclusion, ...extra,
+            });
+            const SIBLING_FIXTURES = [
+              {
+                // brik-client-portal#4437 @ 8e03d3b2: four open-time failures
+                // and the one run re-run green — the shape that latched.
+                name: 'live #4437 shape — four stale failures behind one green',
+                runs: [run(1, 'failure'), run(2, 'failure'), run(3, 'failure'), run(4, 'failure'), run(5, 'success')],
+                current: 5,
+                expect: [1, 2, 3, 4],
+              },
+              { name: 'all green is a no-op', runs: [run(1, 'success'), run(2, 'success')], current: 2, expect: [] },
+              { name: 'never re-runs itself', runs: [run(7, 'failure')], current: 7, expect: [] },
+              {
+                name: 'an unfinished sibling is left to reach its own verdict',
+                runs: [run(1, 'failure', { status: 'in_progress', conclusion: null }), run(2, 'success')],
+                current: 2,
+                expect: [],
+              },
+              {
+                name: 'a cancelled or skipped sibling is not a failure',
+                runs: [run(1, 'cancelled'), run(2, 'skipped'), run(3, 'success')],
+                current: 3,
+                expect: [],
+              },
+              {
+                name: 'another commit is out of scope',
+                runs: [run(1, 'failure', { head_sha: OTHER }), run(2, 'success')],
+                current: 2,
+                expect: [],
+              },
+            ];
+
+            const siblingFailures = [];
+            for (const f of SIBLING_FIXTURES) {
+              const got = staleRuns(f.runs, SHA, f.current);
+              if (JSON.stringify(got) !== JSON.stringify(f.expect)) {
+                siblingFailures.push(`  ${f.name}: expected ${JSON.stringify(f.expect)}, got ${JSON.stringify(got)}`);
+              }
+            }
+            if (siblingFailures.length > 0) {
+              core.setFailed(
+                ['Sibling self-test failed — the stale-run selector is broken:', '', ...siblingFailures].join('\n'),
+              );
+              return;
+            }
+            core.info(`Sibling self-test: ${SIBLING_FIXTURES.length}/${SIBLING_FIXTURES.length} fixtures pass.`);
+
+            // ── Re-run the real siblings ─────────────────────────────────
+            // A read or re-run that fails is a WARNING, never a red verdict:
+            // the gate itself passed, and failing it here would latch the PR
+            // by the very route this step exists to close. The fallback is the
+            // manual re-run the warning names.
+            const headSha = context.payload.pull_request.head.sha;
+            let runs = [];
+            try {
+              runs = await github.paginate(github.rest.actions.listWorkflowRuns, {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: WORKFLOW_FILE,
+                head_sha: headSha,
+                event: 'pull_request',
+                per_page: 100,
+              });
+            } catch (e) {
+              core.warning(
+                `Could not list ${WORKFLOW_FILE} runs for ${headSha.slice(0, 8)} (${e.status || e.message}) — ` +
+                'any stale failed sibling still latches the PR; re-run each by hand.',
+              );
+              return;
+            }
+
+            const stale = staleRuns(runs, headSha, context.runId);
+            if (stale.length === 0) {
+              core.info(`No stale failed sibling among ${runs.length} run(s) on ${headSha.slice(0, 8)}.`);
+              return;
+            }
+            for (const id of stale) {
+              try {
+                await github.rest.actions.reRunWorkflowFailedJobs({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  run_id: id,
+                });
+                core.info(`Re-ran stale failed sibling run ${id}.`);
+              } catch (e) {
+                core.warning(`Could not re-run sibling run ${id} (${e.status || e.message}) — re-run it by hand.`);
+              }
+            }
