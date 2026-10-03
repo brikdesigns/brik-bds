@@ -290,6 +290,51 @@ jobs:
               return [...new Set(commitRefs)].filter((num) => !declared.has(num));
             }
 
+            // ── The promotion boundary (brik-client-portal#4497) ─────────
+            // `pulls.listCommits` returns `base...head`, which on a normal PR
+            // IS the new work. On a PROMOTION PR — integration branch onto the
+            // production branch — it is the entire payload: dozens of commits
+            // already merged to the integration branch, where this guard ran
+            // and passed on each one. Re-presented here they read as dozens of
+            // fresh closing declarations for issues that closed weeks ago.
+            //
+            // brik-client-portal#4496 is the measured case: 72 issues reported
+            // closed-by-commit, and three of those commit messages carried a
+            // qualified keyword whose only documented remedy is "reword the
+            // commit" — impossible, since they are immutable on `staging`. The
+            // guard was red by construction, and the promotion could only land
+            // with `--admin` on a required check.
+            //
+            // A promotion PR is exactly the PR whose base is NOT the repo's
+            // default branch — the default IS the integration branch in all
+            // four consumers (measured 2026-10-03: brik-llm `main`, brik-bds
+            // `main`, brik-client-portal `staging`, brikdesigns `staging`).
+            function isPromotionShaped(baseRef, defaultBranch) {
+              return Boolean(defaultBranch) && Boolean(baseRef) && baseRef !== defaultBranch;
+            }
+
+            // The new input is `head \ (base ∪ default)`, computed as a set
+            // difference over two compares that are each bounded by the
+            // DIVERGENCE, not by history depth:
+            //
+            //   Y = compare(default, head).commits  — head \ default
+            //   Z = compare(default, base).commits  — base \ default
+            //   Y \ Z = head \ (default ∪ base)
+            //
+            // Measured on #4496 (git rev-list, 2026-10-03): Y = 34, Z = 33,
+            // Y \ Z = {affb0ff6} — the promotion's own merge commit, which
+            // carries no closing keyword. Y alone is NOT enough: it still holds
+            // `main`'s 33 prior promotion squashes, whose concatenated bodies
+            // carry every `Closes #N` they ever squashed.
+            //
+            // When base IS the default branch this degenerates to Y (Z is
+            // empty), which is `listCommits`' own answer — so the normal path
+            // is provably unchanged, and is left calling `listCommits` anyway.
+            function newCommitsOnly(headNotDefault, baseNotDefault) {
+              const alreadyPromoted = new Set(baseNotDefault.map((c) => c.sha));
+              return headNotDefault.filter((c) => !alreadyPromoted.has(c.sha));
+            }
+
             // ── Fixture matrix ───────────────────────────────────────────
             // Each `expect` asserts only the counts (or refs) that must hold.
             // `ZW` is the zero-width space the brik-bds neutralizer inserts;
@@ -473,8 +518,90 @@ jobs:
               }
             }
 
+            // The promotion-boundary matrix (brik-client-portal#4497). Pure set
+            // algebra over shas, so it is asserted directly rather than through
+            // checkExpect, whose shape is a scan result.
+            //
+            // `scan` is in HEAD order: newCommitsOnly filters, it does not sort,
+            // so the order the API returned is the order the guard reports.
+            const BOUNDARY_FIXTURES = [
+              {
+                name: 'normal PR — base IS the default branch',
+                base: 'staging',
+                dflt: 'staging',
+                // Z is empty by construction when base === default, so the
+                // difference degenerates to Y — listCommits' own answer.
+                head: ['a1', 'b2'],
+                baseOnly: [],
+                expect: { promotion: false, scan: ['a1', 'b2'] },
+              },
+              {
+                name: 'promotion PR — base `main`, default `staging`',
+                base: 'main',
+                dflt: 'staging',
+                // Y holds the promotion merge AND main's prior squashes, whose
+                // concatenated bodies carry every `Closes #N` they ever squashed.
+                head: ['promo', 'squash31', 'squash32'],
+                baseOnly: ['squash31', 'squash32'],
+                expect: { promotion: true, scan: ['promo'] },
+              },
+              {
+                name: 'promotion PR carrying a NEW commit still presents it',
+                base: 'main',
+                dflt: 'staging',
+                head: ['promo', 'hotfix', 'squash31'],
+                baseOnly: ['squash31'],
+                expect: { promotion: true, scan: ['promo', 'hotfix'] },
+              },
+              {
+                name: 'measured #4496 shape — Y 34, Z 33, difference is the merge',
+                base: 'main',
+                dflt: 'staging',
+                // git rev-list, 2026-10-03, H=affb0ff6 B=3d185a73 D=6b59aab9.
+                head: ['affb0ff6', ...Array.from({ length: 33 }, (_, i) => `sq${i}`)],
+                baseOnly: Array.from({ length: 33 }, (_, i) => `sq${i}`),
+                expect: { promotion: true, scan: ['affb0ff6'] },
+              },
+              {
+                name: 'unreadable default branch is never promotion-shaped',
+                base: 'main',
+                dflt: '',
+                head: ['a1'],
+                baseOnly: [],
+                expect: { promotion: false, scan: ['a1'] },
+              },
+              {
+                name: 'missing base ref is never promotion-shaped',
+                base: '',
+                dflt: 'staging',
+                head: ['a1'],
+                baseOnly: [],
+                expect: { promotion: false, scan: ['a1'] },
+              },
+            ];
+
+            for (const f of BOUNDARY_FIXTURES) {
+              const gotShaped = isPromotionShaped(f.base, f.dflt);
+              if (gotShaped !== f.expect.promotion) {
+                selfTestFailures.push(
+                  `  boundary/${f.name}: isPromotionShaped expected ${f.expect.promotion}, got ${gotShaped}`,
+                );
+              }
+              const gotScan = newCommitsOnly(
+                f.head.map((sha) => ({ sha })),
+                f.baseOnly.map((sha) => ({ sha })),
+              ).map((c) => c.sha);
+              if (JSON.stringify(gotScan) !== JSON.stringify(f.expect.scan)) {
+                selfTestFailures.push(
+                  `  boundary/${f.name}: newCommitsOnly expected ` +
+                  `${JSON.stringify(f.expect.scan)}, got ${JSON.stringify(gotScan)}`,
+                );
+              }
+            }
+
             const FIXTURE_COUNT =
-              FIXTURES.length + COMMIT_FIXTURES.length + PARITY_FIXTURES.length;
+              FIXTURES.length + COMMIT_FIXTURES.length + PARITY_FIXTURES.length +
+              BOUNDARY_FIXTURES.length;
             if (selfTestFailures.length > 0) {
               core.setFailed(
                 [
@@ -502,13 +629,71 @@ jobs:
             const commitQualifiers = [];  // rule 4 ESCALATED here — FAIL
             const commitRefs = new Set(); // rule 3 candidates from commits
             const refSource = new Map();  // rule 5 — ref → the commit that closes it
+
+            const baseRef = (context.payload.pull_request.base || {}).ref || '';
+            const headSha = (context.payload.pull_request.head || {}).sha || '';
+            const defaultBranch =
+              (context.payload.repository || {}).default_branch || '';
+
+            // One un-paginated compare per side. The endpoint returns up to 250
+            // commits plus `total_commits` for the whole comparison
+            // (https://docs.github.com/en/rest/commits/commits#compare-two-commits,
+            // fetched 2026-10-03). Both ranges are bounded by the DIVERGENCE,
+            // not by history depth — 34 and 33 on #4496 — so 250 is slack. Past
+            // it the difference cannot be proven, so this throws and the caller
+            // falls back to the full list rather than under-scanning.
+            async function compareCommitList(base, head) {
+              const { data } = await github.request(
+                'GET /repos/{owner}/{repo}/compare/{basehead}',
+                {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  basehead: `${base}...${head}`,
+                },
+              );
+              const commits = data.commits || [];
+              if ((data.total_commits || 0) > commits.length) {
+                throw new Error(
+                  `compare ${base}...${head} returned ${commits.length} of ` +
+                  `${data.total_commits} commits — truncated`,
+                );
+              }
+              return commits;
+            }
+
+            let scanned = null;
+            let scanLabel = 'this PR\'s full commit list';
+            if (isPromotionShaped(baseRef, defaultBranch)) {
+              try {
+                const [headNotDefault, baseNotDefault] = await Promise.all([
+                  compareCommitList(defaultBranch, headSha),
+                  compareCommitList(defaultBranch, baseRef),
+                ]);
+                scanned = newCommitsOnly(headNotDefault, baseNotDefault);
+                scanLabel =
+                  `the promotion boundary (base \`${baseRef}\` is not the default ` +
+                  `branch \`${defaultBranch}\`): ${headNotDefault.length} commit(s) ` +
+                  `on head, ${baseNotDefault.length} already on base`;
+              } catch (e) {
+                core.warning(
+                  `Could not derive the promotion boundary (${e.status || e.message}) — ` +
+                  'falling back to this PR\'s FULL commit list. On a promotion that ' +
+                  're-presents already-merged closing keywords, so expect this run to ' +
+                  'be noisy. It fails loud rather than scanning less than it should.',
+                );
+              }
+            }
+
             try {
-              const commits = await github.paginate(github.rest.pulls.listCommits, {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.payload.pull_request.number,
-                per_page: 100,
-              });
+              const commits = scanned !== null ? scanned : await github.paginate(
+                github.rest.pulls.listCommits,
+                {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.payload.pull_request.number,
+                  per_page: 100,
+                },
+              );
               for (const c of commits) {
                 const sha = (c.sha || '').slice(0, 8);
                 const scan = scanCommitMessage(c.commit && c.commit.message);
@@ -527,7 +712,10 @@ jobs:
                   }
                 }
               }
-              core.info(`Scanned ${commits.length} commit message(s) for closing keywords.`);
+              core.info(
+                `Scanned ${commits.length} commit message(s) for closing keywords, ` +
+                `from ${scanLabel}.`,
+              );
             } catch (e) {
               core.warning(
                 `Could not list this PR's commits (${e.status || e.message}) — the ` +
