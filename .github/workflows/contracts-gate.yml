@@ -262,6 +262,15 @@ jobs:
           grep -q 'existing_bump_pr "-v\$BDS_VERSION"' scripts/propagate.sh \
             || { echo "::error::npm track no longer guards on \$BDS_VERSION"; exit 1; }
 
+      # ─── binding-check (#2720) ──────────────────────────────────────────────
+      # An old-name override is a silent no-op from 0.195.0, so typecheck and
+      # build pass on a bump that renders Brik defaults. propagate checks the
+      # release it installs and opens such a bump as a draft naming each one.
+      # The test also asserts propagate.sh still sources and calls the lib.
+      - name: Bump binding-check contract
+        if: always() && steps.node.outcome == 'success'
+        run: bash scripts/lib/tests/test-binding-check.sh
+
       # ─── propagate-save-exact (#2335) ───────────────────────────────────────
       # Without --save-exact npm writes `^<version>`, and brikdesigns'
       # lint:bds-pin fails the build on a range spec — so the propagator opened
@@ -486,6 +495,14 @@ jobs:
         run: |
           shellcheck -e SC2148 scripts/lib/bump-pr-guard.sh
           shellcheck -e SC1091 scripts/lib/tests/test-bump-pr-guard.sh
+
+      - name: shellcheck — binding-check
+        if: always() && steps.shellcheck.outcome == 'success'
+        # SC2148: sourced library, no shebang contract. SC1091: sourced at
+        # runtime. SC2016: the wiring greps match a literal `$` in propagate.sh.
+        run: |
+          shellcheck -e SC2148 scripts/lib/binding-check.sh
+          shellcheck -e SC1091,SC2016 scripts/lib/tests/test-binding-check.sh
 
       - name: shellcheck — release-tag-guard
         if: always() && steps.shellcheck.outcome == 'success'

@@ -103,6 +103,7 @@
     "scripts/lint-icon-weight-parity.mjs",
     "scripts/lint-icon-weight-parity.d.ts",
     "scripts/lint-consumer-shadows.mjs",
+    "scripts/check-bds-binding.mjs",
     "components/ui/BrikDevBar/widgets/*.js"
   ],
   "bin": {
@@ -112,7 +113,8 @@
     "cascade-contract-check": "scripts/cascade-contract-check.mjs",
     "gen-icon-collection": "scripts/gen-icon-collection.mjs",
     "lint-icon-weight-parity": "scripts/lint-icon-weight-parity.mjs",
-    "lint-consumer-shadows": "scripts/lint-consumer-shadows.mjs"
+    "lint-consumer-shadows": "scripts/lint-consumer-shadows.mjs",
+    "bds-check-binding": "scripts/check-bds-binding.mjs"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"

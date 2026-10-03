@@ -37,6 +37,8 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/mirror-widgets.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/bump-pr-guard.sh"
 # shellcheck source=scripts/lib/release-tag-guard.sh
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/release-tag-guard.sh"
+# shellcheck source=scripts/lib/binding-check.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/binding-check.sh"
 
 # ─── Configuration ────────────────────────────────────────────────
 BDS_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -236,7 +238,9 @@ DEGRADED=false
 
 # A failure between `worktree add` and PR creation exits under set -e; this
 # removes the worktree + local branch it leaves (#1676). See bump-pr-guard.sh.
-trap cleanup_claimed_worktree EXIT
+# It also removes the dry-run binding check's packed release (#2720).
+BINDING_TMP=""
+trap 'cleanup_claimed_worktree; [ -z "$BINDING_TMP" ] || rm -rf "$BINDING_TMP"' EXIT
 
 # ─── Preflight ────────────────────────────────────────────────────
 info "Running preflight checks..."
@@ -495,6 +499,43 @@ EOF
   echo ""
 }
 
+# ─── Binding check, dry-run half (#2720) ──────────────────────────
+# A real run checks the copy npm installs in the worktree. A dry-run installs
+# nothing, so it packs the release once per run and checks each consumer's
+# origin/<base> sources against it. BDS_BINDING_PKG names an unpacked package
+# to use instead — for exercising a bin no published release carries yet.
+BINDING_PKG_DIR="${BDS_BINDING_PKG:-}"
+dry_run_binding_check() {
+  local name="$1" path="$2" base="$3"
+  if [ -z "$BINDING_PKG_DIR" ]; then
+    BINDING_TMP=$(mktemp -d "${TMPDIR:-/tmp}/bds-binding-XXXXXXXX")
+    local tgz
+    # npm pack runs from the consumer so its .npmrc supplies the registry auth.
+    if tgz=$(cd "$path" && npm pack "$BDS_PACKAGE_NAME@$BDS_VERSION" --pack-destination "$BINDING_TMP" --json 2>/dev/null \
+               | jq -r '.[0].filename') \
+       && tar -xzf "$BINDING_TMP/$tgz" -C "$BINDING_TMP" 2>/dev/null; then
+      BINDING_PKG_DIR="$BINDING_TMP/package"
+    else
+      warn "$name: binding check not run — could not npm pack $BDS_PACKAGE_NAME@$BDS_VERSION"
+      return
+    fi
+  fi
+
+  local src violations status=0
+  src=$(mktemp -d "${TMPDIR:-/tmp}/bds-binding-src-XXXXXXXX")
+  materialize_consumer_sources "$path" "origin/$base" "$src"
+  violations=$(binding_check "$src" "$BINDING_PKG_DIR") || status=$?
+  rm -rf "$src"
+  case "$status" in
+    0) ok "$name: binding check passed — no old-name overrides on origin/$base" ;;
+    1)
+      warn "$name: [dry-run] would open as a DRAFT — $(printf '%s\n' "$violations" | grep -c .) old-name override(s) on origin/$base:"
+      printf '%s\n' "$violations" | sed 's/^/    /'
+      ;;
+    *) warn "$name: binding check not run — $violations" ;;
+  esac
+}
+
 # ─── npm Track ────────────────────────────────────────────────────
 propagate_npm() {
   local name="$1" path="$2" base="$3" area_label="$4" freeze_label="${5:-}"
@@ -579,6 +620,7 @@ propagate_npm() {
   echo -e "${DIM}────────────${NC}"
 
   if [ "$DRY_RUN" = true ]; then
+    dry_run_binding_check "$name" "$path" "$base"
     info "[dry-run] Would run npm update in $name and open PR against $base"
     echo ""
     return
@@ -647,6 +689,18 @@ propagate_npm() {
     info "Re-synced $(echo "$synced" | wc -l | tr -d ' ') mirrored widget(s) from the installed package"
   fi
 
+  # Typecheck and build cannot see an override of a pre-ADR-043 name — it is a
+  # silent no-op — so check the release just installed before proposing it.
+  # Overrides found: the PR opens as a draft that names them (#2720).
+  local binding_violations binding_status=0
+  binding_violations=$(binding_check "$worktree_path" "$worktree_path/node_modules/$BDS_PACKAGE_NAME") \
+    || binding_status=$?
+  case "$binding_status" in
+    0) ok "$name: binding check passed" ;;
+    1) warn "$name: $(printf '%s\n' "$binding_violations" | grep -c .) old-name override(s) — opening as a draft" ;;
+    *) warn "$name: binding check not run — $binding_violations" ;;
+  esac
+
   git add package.json package-lock.json
   git_signed commit -m "chore(bds): bump $BDS_PACKAGE_NAME to $BDS_VERSION" --quiet
   git_signed push -u origin "$pr_branch" --quiet
@@ -654,14 +708,18 @@ propagate_npm() {
 
   # A consumer with a version freeze (freeze_label set) gets the label only on
   # a patch bump — every bot bump used to land red on brikdesigns' freeze guard
-  # until a human labelled it (#1286, #1302, #1741, #1876; #2633).
-  local labels=(--label "$area_label") freeze_note=""
+  # until a human labelled it (#1286, #1302, #1741, #1876; #2633). A bump with
+  # old-name overrides never gets it: the draft waits for a human either way.
+  local labels=(--label "$area_label") freeze_note="" draft=()
+  [ "$binding_status" = 1 ] && draft=(--draft)
   if [ -n "$freeze_label" ]; then
-    if is_patch_bump "$current_version" "$BDS_VERSION"; then
+    if ! is_patch_bump "$current_version" "$BDS_VERSION"; then
+      freeze_note="**Needs \`$freeze_label\` from a human:** \`$current_version\` → \`$BDS_VERSION\` is not a patch bump, so the version freeze holds it (brik-bds#2633)."
+    elif [ "$binding_status" = 1 ]; then
+      freeze_note="**Needs \`$freeze_label\` from a human:** a patch bump, but held back from the label until the overrides below are rebound (brik-bds#2720)."
+    else
       labels+=(--label "$freeze_label")
       freeze_note="**\`$freeze_label\` applied automatically:** \`$current_version\` → \`$BDS_VERSION\` is a patch bump (brik-bds#2633)."
-    else
-      freeze_note="**Needs \`$freeze_label\` from a human:** \`$current_version\` → \`$BDS_VERSION\` is not a patch bump, so the version freeze holds it (brik-bds#2633)."
     fi
   fi
 
@@ -674,6 +732,8 @@ Bumps \`$BDS_PACKAGE_NAME\`: \`$current_version\` → \`$BDS_VERSION\`.
 See [brik-bds](https://github.com/brikdesigns/brik-bds) for release details. CHANGELOG.md coming soon.
 
 **Before merge:** run \`npm install\` locally and verify typecheck + build pass.
+
+$(binding_check_pr_note "$binding_status" "$binding_violations")
 
 $freeze_note
 
@@ -689,6 +749,7 @@ EOF
     --body "$pr_body" \
     --base "$base" \
     --head "$pr_branch" \
+    ${draft[@]+"${draft[@]}"} \
     "${labels[@]}")
   ok "PR: $pr_url"
   ANY_UPDATED=true
