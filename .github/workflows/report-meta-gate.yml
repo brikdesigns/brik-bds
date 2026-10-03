@@ -1,0 +1,39 @@
+name: report-meta-gate
+
+# CI gate: fails any PR that commits a docs/reports/*.html missing the ADR-046
+# metadata contract, or leaves docs/reports/manifest.json stale (brik-llm#4101).
+#
+# The ADR-046 reports index reads the manifest. A report without the contract
+# is invisible to it, and a stale manifest shows the wrong status or owner.
+#
+# scripts/reports/report-meta.py is a WATCHED TWIN of brik-llm's canonical
+# copy (brik-llm scripts/audit/overlap-twin-drift.py::TWINS). Fix it there and
+# re-sync; a local edit is drift. Its contract tests live with the canonical.
+#
+# Budget: one ubuntu-latest job, ~10s including checkout, on PRs matching the
+# paths below. Not a required check, so the paths filter cannot block a merge
+# (contrast claude-md-shape-lint.yml, #4104). It replaces no gate; it is
+# net-new, because no existing gate reads report metadata.
+
+on:
+  pull_request:
+    paths:
+      - 'docs/reports/**'
+      - 'scripts/reports/**'
+      - '.github/workflows/report-meta-gate.yml'
+
+concurrency:
+  group: report-meta-gate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  report-meta-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check every report carries the contract and the manifest is current
+        run: python3 scripts/reports/report-meta.py check
