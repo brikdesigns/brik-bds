@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "generated_by": "brikdesigns/brik-llm:scripts/reports/report-meta.py",
+  "contract": "docs/reports/README.md#metadata-contract",
+  "count": 5,
+  "reports": [
+    {
+      "path": "docs/reports/2026-09-26-foundations-disconnect-assessment.html",
+      "title": "Foundations Disconnect Assessment — 2026-09-26",
+      "status": "current",
+      "subject": "bds",
+      "owner": "nstaner",
+      "generated": "2026-09-26",
+      "supersedes": "none",
+      "cadence": "once",
+      "source": "manual"
+    },
+    {
+      "path": "docs/reports/2026-09-30-foundations-modes-viewport-audit.html",
+      "title": "Foundations Modes Audit — 2026-09-30",
+      "status": "current",
+      "subject": "bds",
+      "owner": "nstaner",
+      "generated": "2026-09-30",
+      "supersedes": "none",
+      "cadence": "once",
+      "source": "manual"
+    },
+    {
+      "path": "docs/reports/2026-10-01-brik-bds-remaining-work.html",
+      "title": "brik-bds Remaining Work — 2026-10-01",
+      "status": "current",
+      "subject": "bds",
+      "owner": "nstaner",
+      "generated": "2026-10-01",
+      "supersedes": "none",
+      "cadence": "once",
+      "source": "manual"
+    },
+    {
+      "path": "docs/reports/2026-10-01-spacing-confidence-round.html",
+      "title": "Spacing Confidence Round — 2026-10-01",
+      "status": "current",
+      "subject": "bds",
+      "owner": "nstaner",
+      "generated": "2026-10-01",
+      "supersedes": "none",
+      "cadence": "once",
+      "source": "manual"
+    },
+    {
+      "path": "docs/reports/2026-10-01-token-naming-systems-audit.html",
+      "title": "Token Naming Systems Audit — 2026-10-01",
+      "status": "current",
+      "subject": "bds",
+      "owner": "nstaner",
+      "generated": "2026-10-01",
+      "supersedes": "none",
+      "cadence": "once",
+      "source": "manual"
+    }
+  ]
+}
