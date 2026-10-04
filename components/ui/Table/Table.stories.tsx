@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from '@iconify/react';
 import {
@@ -25,7 +26,8 @@ import { TextInput } from '../TextInput';
 import { TextLink } from '../TextLink';
 import { Tooltip } from '../Tooltip';
 import { ServiceTag, type ServiceLine } from '../ServiceTag';
-import { Eye, Pen, EllipsisVertical } from '../../icons';
+import { Menu, type MenuItemData } from '../Menu';
+import { Eye, Pen, Ellipsis, Copy, Trash, Warning } from '../../icons';
 
 /* ─── Sample data ─────────────────────────────────────────────── */
 
@@ -265,41 +267,77 @@ export const Loading: Story = {
    PATTERNS — actions cell + cell-level interactivity canon
    ═══════════════════════════════════════════════════════════════ */
 
+// Tertiary row actions surfaced behind the `[⋯]` overflow trigger — kept
+// out of the primary `[View][Edit]` cluster per the actions-cell canon.
+const overflowActions = (closeMenu: () => void): MenuItemData[] => [
+  { id: 'duplicate', label: 'Duplicate', icon: <Icon icon={Copy} />, onClick: closeMenu },
+  { id: 'deactivate', label: 'Deactivate', icon: <Icon icon={Warning} />, onClick: closeMenu },
+  { id: 'delete', label: 'Delete', icon: <Icon icon={Trash} />, onClick: closeMenu },
+];
+
 /**
  * Right-aligned `[View][Edit][⋯]` cluster using `<TableActionsCell>`.
  * Owns alignment, shrink-to-content width, and the `--bds-gap-sm` rhythm —
  * consumers stop hand-rolling `style={{ textAlign: 'right' }}` on
- * `<TableCell>`.
+ * `<TableCell>`. The `[⋯]` is a `Button` (`ph:dots-three`, `variant="secondary"`)
+ * opening a `Menu` of tertiary actions — not its own cell, per
+ * [ADR-027](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-027-table-cell-layer-ownership.md),
+ * so each row owns its own open state (`openRow`) with one `Menu` instance
+ * per row. Irreducible — the trigger/panel wiring only shows against a real
+ * `Menu`.
  *
  * @summary With actions cell
  */
 export const WithActionsCell: Story = {
-  render: () => (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Email</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead style={{ textAlign: 'right' }}>Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {users.map((user) => (
-          <TableRow key={user.email}>
-            <TableCell>{user.name}</TableCell>
-            <TableCell>{user.email}</TableCell>
-            <TableCell><Badge tone={user.status} size="sm">{statusLabel(user.status)}</Badge></TableCell>
-            <TableActionsCell>
-              <Button variant="secondary" size="md" icon={<Icon icon={Eye} />} label="View" />
-              <Button variant="secondary" size="md" icon={<Icon icon={Pen} />} label="Edit" />
-              <Button variant="secondary" size="md" icon={<Icon icon={EllipsisVertical} />} label="More" />
-            </TableActionsCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
-  ),
+  render: () => {
+    function ActionsCellDemo() {
+      const [openRow, setOpenRow] = useState<string | null>(null);
+
+      return (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead style={{ textAlign: 'right' }}>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.email}>
+                <TableCell>{user.name}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell><Badge tone={user.status} size="sm">{statusLabel(user.status)}</Badge></TableCell>
+                <TableActionsCell>
+                  <Button variant="secondary" size="md" icon={<Icon icon={Eye} />} label="View" />
+                  <Button variant="secondary" size="md" icon={<Icon icon={Pen} />} label="Edit" />
+                  <div style={{ position: 'relative', display: 'inline-block' }}>
+                    <Button
+                      variant="secondary"
+                      size="md"
+                      icon={<Icon icon={Ellipsis} />}
+                      label="More actions"
+                      aria-haspopup="menu"
+                      aria-expanded={openRow === user.email}
+                      onClick={() => setOpenRow(openRow === user.email ? null : user.email)}
+                    />
+                    <Menu
+                      isOpen={openRow === user.email}
+                      onClose={() => setOpenRow(null)}
+                      items={overflowActions(() => setOpenRow(null))}
+                      style={{ top: '100%', right: 0, marginTop: 'var(--bds-gap-md)', minWidth: 160 }}
+                    />
+                  </div>
+                </TableActionsCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      );
+    }
+    return <ActionsCellDemo />;
+  },
 };
 
 /**
