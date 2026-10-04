@@ -56,6 +56,31 @@
  * `{ type: 'VARIABLE_ALIAS', id }` — sync-figma-mcp.js:418 already resolves that
  * shape, and re-encoding it here would be a second copy of logic that can drift.
  *
+ * ── Sibling of brik-client-portal src/lib/figma/headless-extraction.ts ─────
+ * The portal runs this same `use_figma` capture-and-tile transport against
+ * CLIENT files, and could not import this script: it is absent from
+ * `@brikdesigns/bds`'s published `files[]`, so there is no module to require.
+ * That second implementation was ratified as a fork (brik-client-portal#4503),
+ * not accepted as duplication — the two are expected to agree everywhere except
+ * a short list of portal-forced differences, which lives in THAT file's header
+ * as a numbered list. This file is the baseline the list is written against;
+ * nothing here needs to change for a portal divergence to be legitimate.
+ *
+ * The list is enforced in both directions by a gate on the portal side —
+ * `src/lib/figma/extractor-parity.ts`, run by `scripts/audit-extractor-parity.ts`
+ * (brik-client-portal#4544). It executes both sides' emitted Plugin API code
+ * against one fake `figma` and diffs the envelopes, then compares the merged
+ * dumps; an UNDOCUMENTED divergence fails, and so does a documented one that has
+ * quietly disappeared. The reach is a sibling checkout (`BRIK_BDS_DIR`, or a
+ * walk up for `brik/brik-bds`), enforcing via the portal's `.husky/pre-push` and
+ * skipping cleanly where this repo is absent.
+ *
+ * So: a change to this file's EXTRACTION or MERGE can fail a push in the portal
+ * repo, on a machine that has both checked out. That is the gate working. The
+ * fix is never to weaken it — either make the matching portal change, or add the
+ * new difference to that header's numbered list and to `DIVERGENCE_COVERAGE`
+ * in `extractor-parity.ts`, in the same change.
+ *
  * Usage:
  *   node scripts/pull-variables-headless.mjs --emit-code [--start=N] [--budget=N]
  *   node scripts/pull-variables-headless.mjs --emit-external-code
