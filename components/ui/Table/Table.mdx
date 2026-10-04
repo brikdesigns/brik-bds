@@ -34,6 +34,8 @@ A `<TableCell>` accepts any content. This table exercises the composition catalo
 
 The trailing `[View][Edit][⋯]` cluster composes with `<TableActionsCell>` — it owns alignment, shrink-to-content width, and the `--bds-gap-sm` rhythm, so consumers stop hand-rolling `style={{ textAlign: 'right' }}` on `<TableCell>`.
 
+The `[⋯]` is not its own cell component — per [ADR-027](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-027-table-cell-layer-ownership.md), a `Button` + `Menu` arrangement inside `TableActionsCell` owns no cell-level concern of its own, so it stays a documented composition rather than a published `Table*Cell`. Pair a `Button` (`icon={<Icon icon="ph:dots-three" />}`, `variant="secondary"`, `size="md"`, `label="More actions"`) with a `Menu` listing the tertiary actions that don't fit `[View][Edit]` — each row owns its own open state, and the trigger's wrapping `div` needs `position: relative` so the `Menu` anchors to that row's button rather than the table.
+
 <Canvas of={Stories.WithActionsCell} />
 
 The canonical read/edit row has three click-target classes — **Name** (`<TextLink>` opening the read sheet), **foreign-key cells** (`<TextLink>` opening the related entity's read sheet), and **Actions** (`<TableActionsCell>`). Read-only display cells (Status / Public / Featured) stay plain `<Badge>` or text.
