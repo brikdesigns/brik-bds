@@ -47,8 +47,16 @@
 # host + SESSION ID + a SET of branches, in that precedence.
 #
 #   1. Same session id → same session, whatever repo or branch it is standing in.
-#   2. Else same host AND the branch is in the claim's branch set → my own claim.
+#      Both ids known and DIFFERENT → foreign, whatever host or branch (#4260).
+#   2. Else (an id missing on either side) same host AND the branch is in the
+#      claim's branch set → my own claim.
 #   3. Else foreign.
+#
+# Rule 1's second half closes the case rule 2 could not see: on 2026-09-22 two
+# sessions on brik-mini both wrote to task/hybrid-rpc-query-len-cap
+# (brik-client-portal#4164) — same host, a branch in the claim's set, so the
+# second read the first's claim as its own. It also stops two sessions' pickups
+# matching each other through claim-write.sh's shared placeholder branch.
 #
 # Host+branch alone was wrong for a case that is routine, not exotic: this lib
 # and issue-overlap.sh are canon in brik-llm and twin-synced to consumers, so ONE
@@ -265,8 +273,12 @@ claim_is_foreign() {
         their_session="${5:-}" my_session="${6:-}"
 
   # 1. Same session, whatever repo or branch it is standing in.
-  if [ -n "$their_session" ] && [ -n "$my_session" ] && [ "$their_session" = "$my_session" ]; then
-    return 1
+  # 1b. Two known ids that differ are two sessions, whatever host or branch
+  #     (brik-llm#4260). Without this, a second session continuing a branch the
+  #     claim names read as "mine" under rule 2 and the gate went silent.
+  if [ -n "$their_session" ] && [ -n "$my_session" ]; then
+    [ "$their_session" = "$my_session" ] && return 1
+    return 0
   fi
 
   # 2. Same host and my branch is in the claim's set.
@@ -777,8 +789,17 @@ check_issue_claim() {
         echo ""
         echo "    Host:   ${their_host}"
         echo "    Branch: ${their_branch}"
+        [ -n "$their_session" ] && echo "    Session: ${their_session}"
         echo "    Age:    $(claim_age_human "$age")"
         echo ""
+        # Same host and my branch in their set: rule 2 alone would have called
+        # this mine. It is another session CONTINUING that branch (#4260).
+        if [ "$their_host" = "$my_host" ] \
+           && ! claim_is_foreign "$their_host" "$their_branch" "$my_host" "$my_branch"; then
+          echo -e "${_IC_YELLOW}  You are on ${my_branch}, a branch this claim names — that session may${_IC_NC}"
+          echo -e "${_IC_YELLOW}  still be writing to it. Stacked or follow-up work is fine; check first.${_IC_NC}"
+          echo ""
+        fi
         echo -e "${_IC_RED}  This issue is open and its work is not merged — checked, not assumed.${_IC_NC}"
         echo -e "${_IC_RED}  Two sessions on one ticket is the failure this exists to stop —${_IC_NC}"
         echo -e "${_IC_RED}  brik-llm#1485 is four collisions in 95 minutes, including two with${_IC_NC}"
