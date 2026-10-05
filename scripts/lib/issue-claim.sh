@@ -100,6 +100,11 @@ CLAIM_MARKER='<!-- claim -->'
 # 12h: longer than any real task sitting idle mid-session, short enough that an
 # abandoned worktree does not wedge the ticket until someone notices.
 CLAIM_STALE_SECONDS="${CLAIM_STALE_SECONDS:-43200}"
+# The branch cell claim-write.sh writes before new-task.sh has cut a branch. It
+# lives here, not in claim-write.sh, because the PR lookup below must recognise
+# it: interpolated raw into a gh api path, its spaces hang gh forever, and every
+# later read of that issue hung with it (brik-llm#4194).
+CLAIM_PENDING_BRANCH='(pending — not yet branched)'
 
 # ── Pure helpers (no network, no git) ──────────────────────────────
 
@@ -563,12 +568,33 @@ _ic_issue_state() {
 # The `?head=` query string is QUOTED and must stay that way: zsh glob-expands a
 # bare `?` in a gh api path, `no matches found` kills the first stage of a
 # pipeline, and the failure then looks like a valid empty answer.
+#
+# The branch is URL-encoded before it reaches that string. A space in a gh api
+# path does not error — gh never returns — so a raw `(pending — not yet
+# branched)` cell wedged every pickup of the issue it sat on (brik-llm#4194).
+# The placeholder itself skips the call: no branch means no PR, and `none`
+# keeps the claim standing, which is right for a session that has not branched
+# yet. Without jq, a name outside the plain ref charset is answered the same
+# way rather than sent unencoded.
 _ic_pr_state() {
   local repo="${1:?}" br="${2:?}" out
   # A second `local`, not a fourth assignment above: SC2318, same as
   # _ic_fetch_comments' key.
   local owner="${repo%%/*}"
-  out="$(gh api "repos/${repo}/pulls?head=${owner}:${br}&state=all" \
+  local enc
+  if [ "$br" = "$CLAIM_PENDING_BRANCH" ]; then
+    printf 'none'
+    return 0
+  fi
+  if command -v jq >/dev/null 2>&1; then
+    enc="$(jq -rn --arg s "$br" '$s | @uri')" || return 1
+  else
+    case "$br" in
+      *[!A-Za-z0-9._/-]*) printf 'none'; return 0 ;;
+    esac
+    enc="$br"
+  fi
+  out="$(gh api "repos/${repo}/pulls?head=${owner}:${enc}&state=all" \
     --jq '[.[] | if .merged_at then "MERGED" else (.state | ascii_upcase) end] | join(" ")' \
     2>/dev/null)" || return 1
   case " $out " in
