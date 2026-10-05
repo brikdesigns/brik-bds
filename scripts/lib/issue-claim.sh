@@ -84,6 +84,8 @@
 # Usage (sourced):
 #   source scripts/lib/issue-claim.sh
 #   check_issue_claim "1541" "task/tooling-issue-claim-gate"   # refuses or claims
+#   check_issue_claim "1541" "$branch" --fail-closed           # same, but refuses
+#                                                              # when it cannot read
 #   report_issue_comments "1541"                               # digest + prompt
 #   report_issue_comments "1541" --report                      # digest, no prompt
 #
@@ -93,6 +95,14 @@
 # Exit / return codes (sourced mode):
 #   0  clear to proceed (no claim, my own claim, or a stale one)
 #   1  a live claim from another session — caller should abort
+#   2  --fail-closed only: the claim could NOT be read — caller should abort
+#
+# FAIL-OPEN IS THE DEFAULT, AND IT IS DELIBERATE (brik-llm#4306). A pickup that
+# cannot read the claim — gh missing, a bad ref, a failed comments read — warns
+# and proceeds, because a flaky network must not block work. An ENFORCING caller
+# (a prod apply, a promotion lane) needs the opposite: an unreadable claim is not
+# a clear one. `--fail-closed` gives it that without a wrapper of its own — before
+# it, brik-client-portal#4630 had to re-read the comments itself to get there.
 
 # shellcheck disable=SC2148  # sourced
 
@@ -498,6 +508,12 @@ _ic_resolve_ref() {
 # _io_issue_state's $4 and cost that fix its first cut.
 _IC_COMMENTS_KEY=""
 _IC_COMMENTS_NDJSON=""
+# The key whose last read FAILED (brik-llm#4306). A failed read still caches an
+# empty stream — the default mode reads that as "no claim", unchanged — and this
+# is how --fail-closed tells the two apart. Keyed rather than a bare flag because
+# callers prime the cache themselves (resume-supersede-check.sh, the portal's
+# db-migrate-api.sh) and set only the two globals above.
+_IC_COMMENTS_FAILED_KEY=""
 
 # One JSON object per line. NDJSON rather than a single array because
 # `gh api --paginate` concatenates one array PER PAGE, which is not valid JSON as
@@ -515,9 +531,11 @@ _ic_fetch_comments() {
   local key="$owner/$repo#$num"
   [ "$_IC_COMMENTS_KEY" = "$key" ] && return 0
   command -v jq >/dev/null 2>&1 || { _IC_COMMENTS_KEY=""; return 1; }
+  local rc=0
   _IC_COMMENTS_NDJSON="$(gh api "repos/$owner/$repo/issues/$num/comments" --paginate \
-    --jq '.[] | {id, login: .user.login, created_at, body} | @json' 2>/dev/null || true)"
+    --jq '.[] | {id, login: .user.login, created_at, body} | @json' 2>/dev/null)" || rc=$?
   _IC_COMMENTS_KEY="$key"
+  if [ "$rc" -ne 0 ]; then _IC_COMMENTS_FAILED_KEY="$key"; else _IC_COMMENTS_FAILED_KEY=""; fi
   return 0
 }
 
@@ -530,13 +548,26 @@ _ic_fetch_comments() {
 # With no jq, falls back to the pre-#2755 form: same endpoint, same one call,
 # gh's internal jq. The claim gate keeps working exactly as it shipped; only the
 # comment digest goes quiet.
+#
+# A 4th arg of `strict` (brik-llm#4306, --fail-closed only) returns 2 when the
+# comments could not be read, on either branch. Without it the rc is always 0,
+# because three callers run this bare under `set -e` and must not change.
 _ic_find_claim() {
-  local owner="$1" repo="$2" num="$3"
+  local owner="$1" repo="$2" num="$3" strict="${4:-}"
   if ! _ic_fetch_comments "$owner" "$repo" "$num"; then
+    if [ "$strict" = "strict" ]; then
+      gh api "repos/$owner/$repo/issues/$num/comments" --paginate \
+        --jq "[.[] | select(.body | contains(\"$CLAIM_MARKER\"))] | last | select(.) | \"\(.id)\t\(.body)\"" \
+        2>/dev/null || return 2
+      return 0
+    fi
     gh api "repos/$owner/$repo/issues/$num/comments" --paginate \
       --jq "[.[] | select(.body | contains(\"$CLAIM_MARKER\"))] | last | select(.) | \"\(.id)\t\(.body)\"" \
       2>/dev/null || true
     return 0
+  fi
+  if [ "$strict" = "strict" ] && [ "$_IC_COMMENTS_FAILED_KEY" = "$owner/$repo#$num" ]; then
+    return 2
   fi
   [ -n "$_IC_COMMENTS_NDJSON" ] || return 0
   printf '%s\n' "$_IC_COMMENTS_NDJSON" \
@@ -649,19 +680,32 @@ _ic_claim_release_reason() {
   return 0
 }
 
-# check_issue_claim <issue-ref> <branch> [--report]
+# --fail-closed's refusal, one wording for every unread path (brik-llm#4306).
+_ic_refuse_unread() {
+  echo -e "${_IC_RED}✗ $1 — the claim was NOT read. Refusing (--fail-closed).${_IC_NC}" >&2
+  echo -e "${_IC_RED}  An unreadable claim is not a clear one. Check \`gh auth status\`, then re-run.${_IC_NC}" >&2
+}
+
+# check_issue_claim <issue-ref> <branch> [--report|--fail-closed]
 # --report prints and always returns 0 (for /resume, which must not abort).
+# --fail-closed enforces as the default does, and returns 2 instead of 0 on every
+# path that could not read the claim (brik-llm#4306 — header § FAIL-OPEN).
 check_issue_claim() {
   local ref="${1:-}" branch="${2:-}" mode="${3:-enforce}"
-  [ -z "$ref" ] && return 0
+  if [ -z "$ref" ]; then
+    [ "$mode" = "--fail-closed" ] && { _ic_refuse_unread "No issue reference given"; return 2; }
+    return 0
+  fi
 
   if ! command -v gh >/dev/null 2>&1; then
+    [ "$mode" = "--fail-closed" ] && { _ic_refuse_unread "gh not on PATH"; return 2; }
     echo -e "${_IC_YELLOW}⚠  gh not on PATH — skipping the claim check.${_IC_NC}" >&2
     return 0
   fi
 
   local resolved owner repo num
   resolved="$(_ic_resolve_ref "$ref")" || {
+    [ "$mode" = "--fail-closed" ] && { _ic_refuse_unread "Could not parse issue reference '${ref}'"; return 2; }
     echo -e "${_IC_YELLOW}⚠  Could not parse issue reference '${ref}' — skipping the claim check.${_IC_NC}" >&2
     return 0
   }
@@ -670,6 +714,7 @@ check_issue_claim() {
   # `gh api repos///issues//comments` fails into _ic_find_claim's `|| true`, and
   # the gate then reports clean on a claimed ticket (brik-llm#2798).
   if [ -z "$owner" ] || [ -z "$repo" ] || [ -z "$num" ]; then
+    [ "$mode" = "--fail-closed" ] && { _ic_refuse_unread "Could not resolve '${ref}' to owner/repo/number"; return 2; }
     echo -e "${_IC_YELLOW}⚠  Could not resolve '${ref}' to owner/repo/number — claim check NOT run.${_IC_NC}" >&2
     return 0
   fi
@@ -690,7 +735,16 @@ check_issue_claim() {
   # second read of the same endpoint. `|| true` because a missing jq is handled
   # by _ic_find_claim's fallback, not by aborting the claim check.
   _ic_fetch_comments "$owner" "$repo" "$num" || true
-  found="$(_ic_find_claim "$owner" "$repo" "$num")"
+  if [ "$mode" = "--fail-closed" ]; then
+    # A failed read caches an empty stream, which reads as "no claim" — the
+    # fail-open half of #4306. Strict mode asks the cache which one it was.
+    found="$(_ic_find_claim "$owner" "$repo" "$num" strict)" || {
+      _ic_refuse_unread "Could not read the comments on ${owner}/${repo}#${num}"
+      return 2
+    }
+  else
+    found="$(_ic_find_claim "$owner" "$repo" "$num")"
+  fi
   id="${found%%$'\t'*}"
   body="${found#*$'\t'}"
 
