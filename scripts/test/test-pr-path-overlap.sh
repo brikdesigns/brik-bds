@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Contract gate for the same-path open-PR check (lib/pr-path-overlap.sh).
 #
-# brik-bds#1545, the same-path slice of brik-llm#1485. What it locks:
+# Ported from brik-bds (brik-bds#1545) for brik-llm#1697; the same-path slice of
+# brik-llm#1485. What it locks:
 #
 #   - exact-path matching, because a directory-level heuristic is how the
 #     existing keyword check (new-task.sh:285-307) produces noise, and a warning
@@ -19,7 +20,7 @@
 # git hook inherits GIT_DIR, and that is how the sibling overlap-filters test
 # rewrote refs in the live repo.
 #
-# Run: bash scripts/__tests__/test-pr-path-overlap.sh
+# Run: bash scripts/test/test-pr-path-overlap.sh
 
 set -u
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_NAMESPACE \
@@ -184,7 +185,7 @@ assert_eq "non-interactive continues instead of reading stdin" "yes" \
 assert_eq "my own branch: overlap with itself is not reported" "no" \
   "$(run_check fake_diff fake_prs task/infra-propagate-freeze | grep -q 'PR #1528' && echo yes || echo no)"
 
-echo "── ticket_paths_from_text: the false-positive bar (brik-llm#2313) ──"
+echo "── ticket_paths_from_text: the false-positive bar (#2313) ──"
 
 # A realistic tracked-file list. `config.json` lives in two directories and
 # nowhere at root, which is what makes the uniqueness rule load-bearing rather
@@ -203,12 +204,12 @@ operations/mcp/README.md'
 assert_eq "a full path written in the body is found" "scripts/lib/pr-path-overlap.sh" \
   "$(ticket_paths_from_text 'see `scripts/lib/pr-path-overlap.sh` for the predicate' "$TRACKED")"
 
-# The reason bare basenames are resolved at all: brik-llm#2313's own body writes
+# The reason bare basenames are resolved at all: #2313's own body writes
 # new-task.sh five times and never once writes scripts/new-task.sh.
 assert_eq "an unambiguous bare basename resolves to its tracked path" "scripts/new-task.sh" \
   "$(ticket_paths_from_text 'new-task.sh is where the question is cheap to answer' "$TRACKED")"
 
-# The near-miss the whole gate lives or dies on (brik-llm#2101 — a gate that cries wolf
+# The near-miss the whole gate lives or dies on (#2101 — a gate that cries wolf
 # gets disabled). Two tracked files carry config.json, so it resolves to neither
 # rather than to an arbitrary one.
 assert_eq "an AMBIGUOUS bare basename resolves to nothing" "" \
@@ -242,9 +243,9 @@ assert_eq "the same path named twice is returned once" "scripts/new-task.sh" \
   "$(ticket_paths_from_text 'new-task.sh … and scripts/new-task.sh again' "$TRACKED")"
 
 # The live under-report, pinned so it is a known cost rather than a surprise:
-# brik-llm tracks two new-task.sh, so brik-llm#2313's own bare mentions resolve to
+# brik-llm tracks two new-task.sh, so #2313's own bare mentions resolve to
 # nothing and only its fully-qualified paths are seen. Emitting both candidates
-# would warn about scripts/shared/ for a ticket that meant scripts/ (brik-llm#2101).
+# would warn about scripts/shared/ for a ticket that meant scripts/ (#2101).
 DUP_TRACKED='scripts/new-task.sh
 scripts/shared/new-task.sh
 scripts/lib/pr-path-overlap.sh'
@@ -268,7 +269,7 @@ assert_eq "the ticket's own PR is partitioned out by title reference" "2400" \
   "$(printf '%s\n' "$TRECORDS" | _pto_partition_records 2313 mine | cut -f1 | paste -sd'|' -)"
 assert_eq "every other PR stays in the comparison set" "2401|2402" \
   "$(printf '%s\n' "$TRECORDS" | _pto_partition_records 2313 others | cut -f1 | paste -sd'|' -)"
-# Prefix safety: the token 2313 must not claim #23130's PR, nor #231's.
+# Prefix safety: #2313 must not claim #23130's PR, nor #231's.
 assert_eq "a longer number is not this ticket" "" \
   "$(printf '%s\n' '2500	task/x	feat: thing (#23130)	a.sh' | _pto_partition_records 2313 mine | cut -f1)"
 
@@ -300,7 +301,7 @@ assert_eq "the colliding PR on a DIFFERENT ticket is named" "yes" \
   "$(printf '%s' "$OUT" | grep -q 'PR #2401' && echo yes || echo no)"
 assert_eq "the shared path is printed" "yes" \
   "$(printf '%s' "$OUT" | grep -q 'scripts/new-task.sh' && echo yes || echo no)"
-# The duplicate-warning noise this must not produce: brik-llm#1533 already named #2400.
+# The duplicate-warning noise this must not produce: #1533 already named #2400.
 assert_eq "the ticket's OWN open PR is not re-reported as a collision" "no" \
   "$(printf '%s' "$OUT" | grep -q 'PR #2400' && echo yes || echo no)"
 assert_eq "it returns 0 — this warns, it never blocks worktree creation" "0" \
@@ -332,12 +333,12 @@ assert_eq "a failed gh call warns that the check was SKIPPED" "yes" \
 assert_eq "a failed gh call never prints the all-clear" "no" \
   "$(printf '%s' "$OUT" | grep -q 'No open PR touches' && echo yes || echo no)"
 
-# The blind spot brik-llm#2313 exists to close, end to end: two sessions, two tickets,
+# The blind spot #2313 exists to close, end to end: two sessions, two tickets,
 # one file. The number-keyed gate reports clean on this input.
 assert_eq "the same-file-different-ticket case is caught before any file is written" "yes" \
   "$(run_tcheck t_prs </dev/null | grep -q 'DIFFERENT tickets' && echo yes || echo no)"
 
-echo "── new-task.sh wiring (brik-llm#2313) ──"
+echo "── new-task.sh wiring (#2313) ──"
 
 # The gate is only a gate if it is CALLED. Everything above passes with the call
 # site deleted — which is precisely how both of new-task.sh's overlap gates
@@ -348,11 +349,36 @@ assert_eq "new-task.sh sources the same-path lib" "yes" \
   "$(grep -q 'lib/pr-path-overlap.sh' "$NEW_TASK" && echo yes || echo no)"
 assert_eq "new-task.sh actually calls the task-start check" "yes" \
   "$(grep -qE '^[[:space:]]*check_ticket_path_overlap[[:space:]]' "$NEW_TASK" && echo yes || echo no)"
-# Ordering: before the worktree exists is the entire premise of brik-llm#2313.
+# Ordering: before the worktree exists is the entire premise of #2313.
 assert_eq "the check runs BEFORE git worktree add" "yes" \
   "$(awk '/^[[:space:]]*check_ticket_path_overlap[[:space:]]/ {c=NR}
           /git worktree add/ {w=NR}
           END { print (c > 0 && w > 0 && c < w) ? "yes" : "no" }' "$NEW_TASK")"
+
+echo "── every issue ref is repo-qualified (brik-llm#2916) ──"
+
+# This file is a byte-identical twin, so a bare `#1533` resolves against whatever
+# repo is READING it. The tail of check_pr_path_overlap printed one, and in
+# brik-client-portal #1533 is a merged CMS PR about content_pages — an unrelated
+# ticket cited to the operator as the reason for the warning.
+#
+# Asserted over the whole file rather than over one string, because the defect is
+# the habit: brik-bds had already fixed its own copy by hand and the improvement
+# never came back to canon, which is drift flowing the wrong way (brik-llm#2442).
+#
+# The `--issue` ref-format example is the one legitimate bare form — it documents
+# the three shapes the flag accepts, so `#2313` there is syntax, not a citation.
+BARE_REFS="$(grep -nE '(^|[^A-Za-z0-9#/_-])#[0-9]+' "$LIB" \
+             | grep -v 'brik-llm#\|brik-bds#' \
+             | grep -v 'the three forms new-task.sh --issue' || true)"
+assert_eq "no bare #N survives anywhere in the lib" "" "$BARE_REFS"
+
+# The two user-facing blocks specifically: a comment with a wrong ref misleads a
+# reader, an OUTPUT line with one misleads the operator mid-run.
+assert_eq "the PR-time warning cites its gate repo-qualified" "yes" \
+  "$(grep -qF 'The ticket-number gate (brik-llm#1533)' "$LIB" && echo yes || echo no)"
+assert_eq "the diff-time warning cites its gate repo-qualified" "yes" \
+  "$(grep -qF '(brik-llm#1533): brik-bds#1528 and brik-bds#1529' "$LIB" && echo yes || echo no)"
 
 echo ""
 if [ "$FAIL" -gt 0 ]; then

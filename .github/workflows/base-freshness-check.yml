@@ -11,7 +11,7 @@ name: Base Freshness Check
 # at merge time. brikdesigns/brik-llm#1485, class (c).
 #
 # The predicate is NOT "is the diff empty" — see scripts/lib/base-freshness.sh
-# for why, and scripts/__tests__/test-base-freshness.sh for the fixture that
+# for why, and scripts/test/test-base-freshness.sh for the fixture that
 # fails if someone swaps it for the obvious version.
 #
 # Cheap by design: git only, no npm ci, no build. fetch-depth 0 because the check

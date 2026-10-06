@@ -1,28 +1,35 @@
 #!/usr/bin/env bash
-# Contract gate for scripts/lib/identity-guard.sh (#1634).
+# Contract gate for scripts/lib/identity-guard.sh (#1841).
 #
 # `git -C "" config user.name Test` is a silent no-op on the path argument — it
 # writes to whatever repo is current. Worktrees share the primary's .git/config,
 # so one such call pollutes every checkout at once, and nothing notices until a
-# commit reaches main with the wrong author. `68ab0ac` on main is one.
+# commit reaches a base branch with the wrong author. Probed 2026-08-02: exit 0,
+# and the fixture's name came back from `git config --local user.name`. The same
+# probe showed `git -C "" init` REINITIALISES the live repo at exit 0, while the
+# path form `git init ""` fails 128 — which is why the fixtures were switched.
 #
 # Two halves under test, because the leak has two ends:
-#   - check_commit_identity  — the pre-commit backstop. Would have caught 68ab0ac.
+#   - check_commit_identity  — the pre-commit backstop. Would have caught
+#     `68ab0ac` on brik-bds' main (brikdesigns/brik-bds#1634).
 #   - assert_throwaway_repo  — the fixture-side refusal that stops the write.
 #
 # The load-bearing case is the LIVE-REPO one: assert_throwaway_repo must refuse a
 # path that resolves outside $TMPDIR, and must refuse an empty path outright. A
 # test that only proved "it accepts a sandbox" would pass against the bug.
 #
-# Hermetic: throwaway repos only. The unset below is per #1539 — a test invoked
-# from a git hook inherits GIT_DIR, which is how a sibling test once rewrote refs
-# in the live repo.
+# Hermetic: throwaway repos only. The unset below is per #1672 / brik-bds#1539 —
+# a test invoked from a git hook inherits GIT_DIR, and GIT_DIR beats directory
+# discovery, so every fixture `git` call would drive the caller's repository.
 #
-# Run: bash scripts/__tests__/test-identity-guard.sh
+# Run: bash scripts/test/test-identity-guard.sh
 
 set -u
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_NAMESPACE \
       GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES
+# The effective-layer case below injects config through GIT_CONFIG_*, so a value
+# inherited from the caller would silently join every other case's identity.
+unset GIT_CONFIG_COUNT GIT_CONFIG_GLOBAL GIT_CONFIG_SYSTEM GIT_CONFIG_NOSYSTEM
 
 LIB="$(cd "$(dirname "$0")/.." && pwd)/lib/identity-guard.sh"
 [ -f "$LIB" ] || { echo "lib not found at $LIB"; exit 1; }
@@ -37,7 +44,6 @@ assert_eq() {
 }
 
 TMPROOT="$(mktemp -d "${TMPDIR:-/tmp}/brik-identity-guard-XXXXXXXX")"
-trap 'rm -rf "$TMPROOT"' EXIT
 case "$TMPROOT" in
   /*/brik-identity-guard-*) : ;;
   *) echo "refusing to run: TMPROOT looks wrong ($TMPROOT)"; exit 1 ;;
@@ -48,7 +54,9 @@ esac
 # needing the real repo.
 OUTSIDE="$HOME/.brik-identity-guard-outside-$$"
 rm -rf "$OUTSIDE"; mkdir -p "$OUTSIDE"
-trap 'rm -rf "$TMPROOT" "$OUTSIDE"' EXIT
+# shellcheck disable=SC2329,SC2317  # invoked via the trap; see the sweep suite
+cleanup() { rm -rf "$TMPROOT" "$OUTSIDE"; }
+trap cleanup EXIT
 git init -q -b main "$OUTSIDE"
 
 SANDBOX="$TMPROOT/sandbox"
@@ -66,12 +74,16 @@ identity_verdict() {
 }
 
 echo "── check_commit_identity: fixture identities are refused ──"
-assert_eq "t@example.com (the 68ab0ac author)" "refused" \
+assert_eq "t@example.com (the brik-bds 68ab0ac author)" "refused" \
   "$(identity_verdict "Test" "t@example.com")"
 assert_eq "reserved domain, real-looking name" "refused" \
   "$(identity_verdict "Ada Lovelace" "ada@example.org")"
 assert_eq "bare fixture name, real domain" "refused" \
   "$(identity_verdict "Test" "nick@brikdesigns.com")"
+# This repo's own sweep fixture uses guardtest@example.com — caught by domain,
+# not by name, since the exact-match name list deliberately excludes "guardtest".
+assert_eq "guardtest@example.com (the sweep fixture identity)" "refused" \
+  "$(identity_verdict "guardtest" "guardtest@example.com")"
 
 echo "── check_commit_identity: real identities pass ──"
 assert_eq "a real committer" "allowed" \
@@ -81,6 +93,20 @@ assert_eq "GitHub noreply address" "allowed" \
 # The fixture-name match is exact so it cannot swallow real people.
 assert_eq "a person whose name starts with Test" "allowed" \
   "$(identity_verdict "Testa Nguyen" "testa@brikdesigns.com")"
+
+echo "── check_commit_identity: reads the EFFECTIVE identity, not one layer ──"
+# The point of `git config user.email` over `git config --local user.email`: the
+# guard has to fire however the pollution arrived. GIT_CONFIG_* is a layer that
+# is neither --local nor --global, and the local layer is explicitly emptied
+# first, so a guard that read only --local would report allowed here.
+assert_eq "polluted from a non-local layer, local layer clean" "refused" \
+  "$( cd "$OUTSIDE" || exit 9
+      git config --local --unset user.name 2>/dev/null || true
+      git config --local --unset user.email 2>/dev/null || true
+      export GIT_CONFIG_COUNT=2 \
+             GIT_CONFIG_KEY_0=user.name  GIT_CONFIG_VALUE_0=Test \
+             GIT_CONFIG_KEY_1=user.email GIT_CONFIG_VALUE_1=t@example.com
+      if check_commit_identity 2>/dev/null; then echo allowed; else echo refused; fi )"
 
 echo "── check_commit_identity: escape hatches ──"
 assert_eq "BRIK_ALLOW_TEST_IDENTITY=1 overrides" "allowed" \
@@ -105,8 +131,23 @@ assert_eq "a path that does not exist" "refused" "$(throwaway_verdict "$TMPROOT/
 assert_eq "a directory that is not a repo" "refused" \
   "$(mkdir -p "$TMPROOT/plain"; throwaway_verdict "$TMPROOT/plain")"
 
-echo "── assert_throwaway_repo: a real sandbox is accepted ──"
+echo "── assert_throwaway_repo: real sandboxes are accepted ──"
 assert_eq "a git repo under \$TMPDIR" "accepted" "$(throwaway_verdict "$SANDBOX")"
+# test-new-task-flag-order.sh guards a BARE fixture origin, and a bare repo has no
+# work tree — a guard written against `--show-toplevel` would reject it.
+assert_eq "a bare git repo under \$TMPDIR" "accepted" \
+  "$(git init -q --bare "$TMPROOT/bare.git"; throwaway_verdict "$TMPROOT/bare.git")"
+
+echo "── the two init forms differ, which is why the fixtures use the path form ──"
+# The fixtures were switched from `git -C "$X" init` to `git init "$X"`. That is
+# only worth doing if the -C form really is the silent one; assert both halves so
+# a future "simplification" back to -C fails here.
+assert_eq "\`git init ''\` fails outright" "failed" \
+  "$( cd "$SANDBOX" || exit 9
+      if git init -q "" >/dev/null 2>&1; then echo ok; else echo failed; fi )"
+assert_eq "\`git -C '' init\` silently succeeds against the current repo" "ok" \
+  "$( cd "$SANDBOX" || exit 9
+      if git -C "" init -q >/dev/null 2>&1; then echo ok; else echo failed; fi )"
 
 echo "── the guard never writes to the repo it is inspecting ──"
 # check_commit_identity is read-only; prove it, because a guard that mutates the
@@ -118,7 +159,7 @@ assert_eq "local config is unchanged after a check" "same" \
   "$([ "$BEFORE" = "$AFTER" ] && echo same || echo changed)"
 
 echo "── negative control: a permissive guard must FAIL the cases above ──"
-# Rebuild the pre-guard world — the refusal returns 0 — and require the 68ab0ac
+# Rebuild the pre-guard world — the refusal returns 0 — and require the fixture
 # identity to come back allowed. Without this, a guard stubbed to `return 0`
 # would pass every assertion above and the suite would report green.
 PERMISSIVE="$TMPROOT/identity-guard-permissive.sh"

@@ -22,6 +22,10 @@ unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_NAMESPACE \
       GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES
 
 LIB="$(cd "$(dirname "$0")/.." && pwd)/lib/issue-path-overlap.sh"
+# assert_throwaway_repo (#1841), required before the identity writes
+# below by #3156.
+# shellcheck source=/dev/null
+source "$(cd "$(dirname "$0")/.." && pwd)/lib/identity-guard.sh"
 [ -f "$LIB" ] || { echo "lib not found at $LIB"; exit 1; }
 
 PASS=0; FAIL=0; FAILED_CASES=()
@@ -207,6 +211,7 @@ trap 'rm -rf "$TMP"' EXIT
 for r in a b; do
   mkdir -p "$TMP/$r"
   git -C "$TMP/$r" init -q
+  assert_throwaway_repo "$TMP/$r" "issue-path-overlap fixture repo $r"
   git -C "$TMP/$r" config user.email t@t; git -C "$TMP/$r" config user.name t
   printf 'shared\n' > "$TMP/$r/same.sh"
   printf 'differs in %s\n' "$r" > "$TMP/$r/diff.sh"
@@ -241,6 +246,127 @@ FLEETOUT="$(
 )"
 assert_eq "the fleet walk survives set -euo pipefail with no checkouts present" \
   "yes" "$(saw "$FLEETOUT" "SURVIVED")"
+
+echo "── ubiquity suppression is a CORPUS property, not a denylist (#2910) ──"
+
+# The defect: a real tracked file that half the backlog mentions in passing. On
+# #2906's live run `CLAUDE.md` alone drove 35 of 48 hits. Anchoring cannot catch
+# it — CLAUDE.md is a tracked file — so the key is document frequency.
+#
+# Nothing below is stubbed inside the lib: `issues_naming_paths` runs for real
+# against a real corpus, and the only seams are the same three I/O ones the
+# cases above use. The thresholds are lowered so an 8-row fixture can express a
+# distribution; the DEFAULTS are asserted separately, at the floor case.
+UB_TRACKED='CLAUDE.md
+scripts/lib/issue-overlap.sh
+scripts/lib/gh-error-classify.sh
+scripts/new-task.sh'
+
+# df over this corpus: CLAUDE.md 6, issue-overlap.sh 2, gh-error-classify.sh 1.
+UB_ROWS="$(printf '%s\n' \
+  $'101\tRecord the rule\t101 Record the rule Then write it into CLAUDE.md so it binds.' \
+  $'102\tName the gate budget\t102 Name the gate budget The line belongs in CLAUDE.md.' \
+  $'103\tRetire the legacy path\t103 Retire the legacy path Update CLAUDE.md when it lands.' \
+  $'104\tDocument the twin registry\t104 Document the twin registry A pointer in CLAUDE.md, not prose.' \
+  $'105\tSplit the operating manual\t105 Split the operating manual CLAUDE.md is too long.' \
+  $'201\tissue-overlap misses a same-day track\t201 issue-overlap misses a same-day track The bug is in scripts/lib/issue-overlap.sh and CLAUDE.md describes it wrong.' \
+  $'202\tRepo-qualify the overlap ref\t202 Repo-qualify the overlap ref A bare number resolves wrong in scripts/lib/issue-overlap.sh.' \
+  $'301\tgh-error-classify returns unknown for a 503\t301 gh-error-classify returns unknown for a 503 See scripts/lib/gh-error-classify.sh.')"
+
+ub_run() {
+  local ticket="$1" rows="${2:-$UB_ROWS}" tracked="${3:-$UB_TRACKED}"
+  (
+    # shellcheck source=/dev/null
+    source "$LIB"
+    eval "_stub_rows() { printf '%s' '$rows'; }"
+    eval "_stub_text() { printf '%s' '$ticket'; }"
+    eval "_stub_tracked() { printf '%s' '$tracked'; }"
+    _stub_fleet() { :; }
+    # shellcheck disable=SC2034
+    {
+      IPO_ROWS_CMD=_stub_rows
+      PTO_TEXT_CMD=_stub_text
+      IPO_TRACKED_CMD=_stub_tracked
+      IPO_FLEET_CMD=_stub_fleet
+      IPO_MAX_HITS="${UB_MAX:-0}"
+    }
+    check_issue_path_overlap "brikdesigns/brik-llm#999"
+  ) 2>&1
+}
+
+# cut = max(corpus * pct/100, floor) = max(8 * 0.30, 2) = 2.4
+export IPO_UBIQUITY_PCT=30 IPO_UBIQUITY_MIN=2
+
+MIXED="$(ub_run 'Rework scripts/lib/issue-overlap.sh; note it in CLAUDE.md.')"
+assert_eq "a ubiquitous path stops driving hits when a rarer one is present" \
+  "no" "$(saw "$MIXED" "#101 —")"
+assert_eq "and the specific path still reports every issue that names it" \
+  "yes" "$(saw "$MIXED" "#202 —")"
+assert_eq "a hit that ALSO names the ubiquitous path is kept on the rare one" \
+  "yes" "$(saw "$MIXED" "#201 —")"
+assert_eq "the suppressed path is not listed on the hits that survive" \
+  "no" "$(saw "$MIXED" "CLAUDE.md")"
+
+# AC3, the case a filename denylist gets wrong by construction.
+ONLYUB="$(ub_run 'The operating manual itself is the problem. CLAUDE.md has grown past reading.')"
+assert_eq "a ticket genuinely ABOUT the ubiquitous path still gets its hits" \
+  "yes" "$(saw "$ONLYUB" "#101 —")"
+assert_eq "and the hit names the path back" \
+  "yes" "$(saw "$ONLYUB" "CLAUDE.md")"
+
+# AC4 — ordering happens before the IPO_MAX_HITS cap, so the cap shows the
+# informative rows. On #2906 the cap's 8 rows were in issue-number order and the
+# two genuinely relevant hits sat inside the `… and 40 more` remainder.
+ORDERED="$(ub_run 'Touches scripts/lib/issue-overlap.sh and scripts/lib/gh-error-classify.sh.')"
+assert_eq "the rarest shared path sorts first, ahead of a lower-numbered issue" \
+  "301" "$(printf '%s\n' "$ORDERED" | awk '/^    #/ { sub(/^ *#/, ""); sub(/ .*/, ""); print; exit }')"
+
+# The cap slices whatever it is handed, so ordering has to be upstream of it.
+# With one row shown, that row must be the rare one and the rest must be counted.
+CAPPED="$(UB_MAX=1 ub_run 'Touches scripts/lib/issue-overlap.sh and scripts/lib/gh-error-classify.sh.')"
+assert_eq "the single row a cap of 1 shows is the rare hit, not the lowest number" \
+  "yes" "$(saw "$CAPPED" "#301 —")"
+assert_eq "and the rows it cut are counted, never silently dropped" \
+  "yes" "$(saw "$CAPPED" "… and 2 more")"
+
+unset IPO_UBIQUITY_PCT IPO_UBIQUITY_MIN
+
+# The floor, at its DEFAULT of 5, driving the same 8-row corpus at a percentage
+# small enough that the percentage alone would suppress everything: 8 * 10% is
+# 0.8, so `scripts/lib/issue-overlap.sh` at df 2 would read as ubiquitous
+# alongside `CLAUDE.md` at df 6. Both suppressed means nothing specific is left,
+# the AC3 fallback fires, and the noise comes back with it — a gate that suppresses
+# EVERYTHING suppresses nothing. The floor is what stops a small backlog from
+# landing there: a path is not ubiquitous until at least five issues name it.
+export IPO_UBIQUITY_PCT=10
+FLOORED="$(ub_run 'Rework scripts/lib/issue-overlap.sh; note it in CLAUDE.md.')"
+assert_eq "the floor keeps a df-2 path specific where 10% of 8 issues would not" \
+  "yes" "$(saw "$FLOORED" "#202 —")"
+assert_eq "so the ubiquitous path is still suppressed rather than fallen back to" \
+  "no" "$(saw "$FLOORED" "#101 —")"
+unset IPO_UBIQUITY_PCT
+
+# Same #2423 exposure as everything else in this lib: the suppression path ends
+# in a pipeline, and a `cut` that emits nothing returns into new-task.sh's `set -e`.
+STRICT_UB="$(
+  T_ROWS="$UB_ROWS" T_TRACKED="$UB_TRACKED" \
+  T_TEXT='Rework scripts/lib/issue-overlap.sh; note it in CLAUDE.md.' \
+  LIB="$LIB" bash -c '
+    set -euo pipefail
+    source "$LIB"
+    _stub_rows()    { printf "%s" "$T_ROWS"; }
+    _stub_text()    { printf "%s" "$T_TEXT"; }
+    _stub_tracked() { printf "%s" "$T_TRACKED"; }
+    _stub_fleet()   { :; }
+    IPO_UBIQUITY_PCT=30 IPO_UBIQUITY_MIN=2 \
+    IPO_ROWS_CMD=_stub_rows PTO_TEXT_CMD=_stub_text \
+    IPO_TRACKED_CMD=_stub_tracked IPO_FLEET_CMD=_stub_fleet \
+      check_issue_path_overlap "brikdesigns/brik-llm#999"
+    echo SURVIVED
+  ' 2>&1
+)"
+assert_eq "suppression survives set -euo pipefail" \
+  "yes" "$(saw "$STRICT_UB" "SURVIVED")"
 
 echo "── new-task.sh must actually CALL it (the #2765 shape) ──"
 
