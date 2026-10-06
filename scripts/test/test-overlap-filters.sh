@@ -17,22 +17,13 @@
 # So the logic moved into a lib and this locks it. Pure functions plus a
 # throwaway repo for the ancestor check; no network, no real repo touched.
 #
-# Run: bash scripts/__tests__/test-overlap-filters.sh
+# Run: bash scripts/test/test-overlap-filters.sh
 
 set -u
 
-# ── Hermetic against an inherited git environment ──
-# "no real repo touched" above depends on this. Every git call below is scoped
-# with `git -C "$REPO"`, but -C only changes DIRECTORY — GIT_DIR wins over
-# directory discovery, so with GIT_DIR exported every one of them retargets the
-# real repository. Git hooks export exactly that.
-#
-# Wiring this test into brik-bds's pre-push (brik-bds#1533) proved it the hard
-# way on 2026-07-29: `git init --bare` set core.bare=true on the live repo,
-# `commit -qm base` landed on the checked-out task branch and orphaned its real
-# commit, the fixture merge moved `main` to a tree that deleted the repo, and
-# `push -u origin task/live` put two fixture refs on GitHub. Recoverable, but
-# only because `main` on the remote happened not to move.
+# Hermetic against an inherited git environment (#1672): a git hook exports
+# GIT_DIR, and GIT_DIR beats directory discovery — every `git -C "$FIXTURE"`
+# call would then operate on the caller's real repository.
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_NAMESPACE \
       GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES
 
@@ -40,6 +31,9 @@ LIB="$(cd "$(dirname "$0")/.." && pwd)/lib/overlap-filters.sh"
 [ -f "$LIB" ] || { echo "lib not found at $LIB"; exit 1; }
 # shellcheck source=/dev/null
 source "$LIB"
+# assert_throwaway_repo (#1841), required before the identity writes
+# below by #3156. This is the fixture whose pre-push run moved a live
+# repo's refs/heads/main to a fixture commit (see the header).
 # shellcheck source=/dev/null
 source "$(cd "$(dirname "$0")/.." && pwd)/lib/identity-guard.sh"
 
@@ -115,13 +109,7 @@ REPO="$TMPROOT/r"
 BARE="$TMPROOT/r.git"
 git init -q --bare "$BARE"
 git init -q -b main "$REPO"
-
-# Belt to the unset above's braces: prove the fixture repo is what the git calls
-# actually resolve to before any of them mutate anything. If a git env var ever
-# leaks past the unset — or $REPO comes through empty, which makes `git -C ""`
-# target the live repo — this fails loudly instead of silently rewriting refs in
-# whatever repository the caller happened to be standing in (#1539, #1634).
-assert_throwaway_repo "$REPO" "overlap-filters fixture"
+assert_throwaway_repo "$REPO" "overlap-filters fixture repo"
 git -C "$REPO" config user.email t@example.com
 git -C "$REPO" config user.name Test
 git -C "$REPO" remote add origin "$BARE"

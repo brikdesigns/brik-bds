@@ -76,6 +76,8 @@ const steps = [
   // origin that way. This list keeps growing; the requirement was unenforced.
   // Static read only: the gate must never run the tests it inspects. #1548.
   { name: 'Test Git Env', cmd: 'node scripts/lint-test-git-env.mjs' },
+  // Canonical tests synced from brik-llm live in scripts/test/ (brik-llm#4164).
+  { name: 'Test Git Env (scripts/test)', cmd: 'node scripts/lint-test-git-env.mjs scripts/test' },
 
   // Guards the overlap gate's pure helpers. new-task.sh refuses to run outside
   // the primary worktree, so its inline logic can't be exercised by a test —
@@ -85,7 +87,7 @@ const steps = [
   // A bash test in a directory of .test.mjs files, deliberately: it is kept
   // byte-identical to the brik-llm and brik-client-portal copies, and vitest
   // only globs .test.* so it never collides with `npm test`.
-  { name: 'Overlap Filters', cmd: 'bash scripts/__tests__/test-overlap-filters.sh' },
+  { name: 'Overlap Filters', cmd: 'bash scripts/test/test-overlap-filters.sh' },
 
   // The overlap gate's control flow, driven end-to-end through a fake `gh` on
   // PATH: a hit must WARN, never abort the caller. It aborted for months' worth
@@ -101,7 +103,7 @@ const steps = [
   // Claim-gate decision logic — staleness, identity, marker round-trip. Pure,
   // so it runs anywhere; see the lib header for why the claim is a marker
   // comment rather than an assignee. brik-bds#1541.
-  { name: 'Issue Claim', cmd: 'bash scripts/__tests__/test-issue-claim.sh' },
+  { name: 'Issue Claim', cmd: 'bash scripts/test/test-issue-claim.sh' },
 
   // Ticketless claim keying — per-slug markers, the prefix case, and the reuse
   // contract with issue-claim.sh. Pure; the shared staleness logic is covered by
@@ -111,14 +113,14 @@ const steps = [
   // Same-path overlap decision logic — exact-path intersection, self-exclusion
   // by head ref, and the fail-loud-on-gh-error branch. Both the git read and the
   // gh read are injected, so this touches no repo and no network. brik-bds#1545.
-  { name: 'PR Path Overlap', cmd: 'bash scripts/__tests__/test-pr-path-overlap.sh' },
+  { name: 'PR Path Overlap', cmd: 'bash scripts/test/test-pr-path-overlap.sh' },
 
   // Base-freshness decision logic. The fixture rebuilds the brik-client-portal
   // #2538 empty merge from scratch and asserts that the OBVIOUS predicate (the
   // three-dot diff) still reads healthy there — so swapping the check for
   // `git diff base...HEAD --stat` fails here with an explanation rather than
   // shipping a gate that cannot fire. brik-bds#1546.
-  { name: 'Base Freshness', cmd: 'bash scripts/__tests__/test-base-freshness.sh' },
+  { name: 'Base Freshness', cmd: 'bash scripts/test/test-base-freshness.sh' },
 
   // pr-task.sh --dry-run. Asserts the ABSENCE of side effects — no push (read off
   // a bare remote's refs, not off stdout), no `gh pr create` (read off a stub's

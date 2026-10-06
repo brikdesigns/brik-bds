@@ -322,7 +322,7 @@ jobs:
       # gating it here is what stops the slug path regressing to the old shape.
       - name: Issue-claim contract
         if: always()
-        run: bash scripts/__tests__/test-issue-claim.sh < /dev/null
+        run: bash scripts/test/test-issue-claim.sh < /dev/null
 
       # slug-claim.sh sources issue-claim.sh for the staleness/identity half, so
       # it is a second consumer of the same slug-resolution path. Gated here for
@@ -335,15 +335,15 @@ jobs:
       # ─── identity-guard-check ───────────────────────────────────────────────
       - name: Fixture identity cannot reach the live repo
         if: always()
-        run: bash scripts/__tests__/test-identity-guard.sh < /dev/null
+        run: bash scripts/test/test-identity-guard.sh < /dev/null
 
       # The callers, so a dropped assert_throwaway_repo shows up as a red suite
       # rather than a silently unguarded fixture.
       - name: Guarded fixtures still pass
         if: always()
         run: |
-          bash scripts/__tests__/test-overlap-filters.sh < /dev/null
-          bash scripts/__tests__/test-base-freshness.sh < /dev/null
+          bash scripts/test/test-overlap-filters.sh < /dev/null
+          bash scripts/test/test-base-freshness.sh < /dev/null
 
       # ─── issue-link-resolver-check ──────────────────────────────────────────
       - name: Issue-link resolver contract holds
@@ -405,7 +405,7 @@ jobs:
       # ─── pr-path-overlap-check ──────────────────────────────────────────────
       - name: Same-path overlap contract
         if: always()
-        run: bash scripts/__tests__/test-pr-path-overlap.sh < /dev/null
+        run: bash scripts/test/test-pr-path-overlap.sh < /dev/null
 
       # ─── issue-path-overlap-check ───────────────────────────────────────────
       # The synced twin of brik-llm's open-issue path gate (brik-llm#2314). The
@@ -413,7 +413,7 @@ jobs:
       # in this file touched before it.
       - name: Open-issue path overlap contract
         if: always()
-        run: bash scripts/__tests__/test-issue-path-overlap.sh < /dev/null
+        run: bash scripts/test/test-issue-path-overlap.sh < /dev/null
 
       # ─── session-budget-contract ────────────────────────────────────────────
       - name: Budget arithmetic matches the canon, and exceeding it refuses
@@ -536,9 +536,9 @@ jobs:
         run: |
           shellcheck --severity=warning \
                      scripts/lib/identity-guard.sh \
-                     scripts/__tests__/test-identity-guard.sh \
-                     scripts/__tests__/test-overlap-filters.sh \
-                     scripts/__tests__/test-base-freshness.sh
+                     scripts/test/test-identity-guard.sh \
+                     scripts/test/test-overlap-filters.sh \
+                     scripts/test/test-base-freshness.sh
 
       - name: shellcheck — issue-link resolver
         if: always() && steps.shellcheck.outcome == 'success'
@@ -576,14 +576,14 @@ jobs:
         run: |
           shellcheck -S warning -e SC1091,SC2148 \
             scripts/lib/pr-path-overlap.sh \
-            scripts/__tests__/test-pr-path-overlap.sh
+            scripts/test/test-pr-path-overlap.sh
 
       - name: shellcheck — issue-path overlap
         if: always() && steps.shellcheck.outcome == 'success'
         run: |
           shellcheck -S warning -e SC1091,SC2148 \
             scripts/lib/issue-path-overlap.sh \
-            scripts/__tests__/test-issue-path-overlap.sh
+            scripts/test/test-issue-path-overlap.sh
 
       - name: shellcheck — session budget
         if: always() && steps.shellcheck.outcome == 'success'

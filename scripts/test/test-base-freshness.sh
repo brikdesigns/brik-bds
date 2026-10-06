@@ -17,7 +17,7 @@
 # a git hook inherits GIT_DIR, which is how the sibling overlap-filters test
 # rewrote refs in the live repo.
 #
-# Run: bash scripts/__tests__/test-base-freshness.sh
+# Run: bash scripts/test/test-base-freshness.sh
 
 set -u
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_NAMESPACE \
@@ -27,6 +27,10 @@ LIB="$(cd "$(dirname "$0")/.." && pwd)/lib/base-freshness.sh"
 [ -f "$LIB" ] || { echo "lib not found at $LIB"; exit 1; }
 # shellcheck source=/dev/null
 source "$LIB"
+# assert_throwaway_repo (#1841). #3156 replaced this fixture's own inline
+# git-dir check with the shared guard: same subject, and the guard also
+# refuses an EMPTY path — where `cd "$REPO"` is a no-op and the inline
+# check would have resolved the CWD's git-dir and passed.
 # shellcheck source=/dev/null
 source "$(cd "$(dirname "$0")/.." && pwd)/lib/identity-guard.sh"
 
@@ -88,9 +92,8 @@ REPO="$TMPROOT/r"
 git init -q -b main "$REPO"
 
 # Prove the fixture is what the git calls actually resolve to before any of them
-# mutate anything — belt to the unset above's braces (#1539), and a guard against
-# an empty $REPO making `git -C ""` write to the live repo (#1634).
-assert_throwaway_repo "$REPO" "base-freshness fixture"
+# mutate anything — belt to the unset above's braces (#1539). Physical paths:
+assert_throwaway_repo "$REPO" "base-freshness fixture repo"
 
 git -C "$REPO" config user.email t@example.com
 git -C "$REPO" config user.name Test
@@ -141,8 +144,7 @@ echo "── local mode: a genuinely fresh bump ──"
 # Same setup, but main never moved the pin.
 REPO2="$TMPROOT/r2"
 git init -q -b main "$REPO2"
-# The second fixture went unguarded until #1634 — same writes, same blast radius.
-assert_throwaway_repo "$REPO2" "base-freshness second fixture"
+assert_throwaway_repo "$REPO2" "base-freshness fixture repo2"
 git -C "$REPO2" config user.email t@example.com
 git -C "$REPO2" config user.name Test
 printf '{"dependencies":{"@brikdesigns/bds":"^0.136.0"}}\n' > "$REPO2/package.json"
