@@ -22,7 +22,12 @@
 #      - DETACHED worktrees (no branch ref at all) are flagged for REVIEW, never
 #        removed (brik-llm#2277). They used to be invisible here — see the block
 #        in pass 1 for why the verdict is FLAG-only.
-#      - Clean+unlanded+no-PR worktrees are flagged for REVIEW.
+#      - Clean+unlanded+no-PR worktrees are flagged for REVIEW, with a loud STALE
+#        marker once the tip is >=7 days old (never removed — brik-llm#3997).
+#      - CLOSED-unmerged PR + clean + tip == PR head is REMOVABLE after >=14 days
+#        closed (brik-llm#3997). GitHub keeps refs/pull/N/head, so nothing is lost;
+#        a tip past the PR head stays REVIEW. Thresholds: BRIK_SWEEP_CLOSED_DAYS,
+#        BRIK_SWEEP_REVIEW_FLAG_DAYS.
 #
 # 2. ORPHAN directories under the worktree root that git NO LONGER tracks
 #    (absent from `git worktree list` — `git worktree prune` already stripped
@@ -180,7 +185,7 @@ fi
 PR_JSON=""
 if command -v gh >/dev/null 2>&1; then
   GH_ERR="$(mktemp)"
-  if ! PR_JSON="$(gh pr list --state all --limit 800 --json number,headRefName,state,mergedAt 2>"$GH_ERR")" \
+  if ! PR_JSON="$(gh pr list --state all --limit 800 --json number,headRefName,state,mergedAt,closedAt,headRefOid 2>"$GH_ERR")" \
      || [ -z "$PR_JSON" ]; then
     PR_JSON=""
     echo -e "${YELLOW}⚠  'gh pr list' failed — PR state shows '—' for every branch, so nothing below can classify as merged.${NC}" >&2
@@ -199,10 +204,50 @@ m = [p for p in prs if p.get("headRefName") == b]
 if not m:
     print("none|-")
     sys.exit()
-m.sort(key=lambda p: (p.get("state") == "OPEN", p.get("number")), reverse=True)
+m.sort(key=lambda p: (p.get("state") == "MERGED", p.get("number")), reverse=True)
 p = m[0]
 print("#%s|%s" % (p["number"], p["state"]))'
 }
+
+# A CLOSED-unmerged PR, for the age-out bands (#3997). Picks the SAME PR as
+# pr_for_branch (MERGED first, then highest number) so the two never disagree, and
+# returns "closedAt|headRefOid" — empty fields when the PR is not CLOSED or the map
+# was unreadable. Separate from pr_for_branch on purpose: its "num|state" shape is
+# parsed with ${pr%%|*} / ${pr##*|} at every call site.
+pr_closed_info() {  # $1=branch -> "closedAt|headRefOid"
+  [ -z "$PR_JSON" ] && { echo "|"; return; }
+  printf '%s' "$PR_JSON" | BRANCH="$1" python3 -c '
+import json, os, sys
+b = os.environ["BRANCH"]
+m = [p for p in json.load(sys.stdin) if p.get("headRefName") == b]
+if not m:
+    print("|"); sys.exit()
+m.sort(key=lambda p: (p.get("state") == "MERGED", p.get("number")), reverse=True)
+p = m[0]
+if p.get("state") != "CLOSED":
+    print("|"); sys.exit()
+print("%s|%s" % (p.get("closedAt") or "", p.get("headRefOid") or ""))'
+}
+
+# Whole days since an ISO-8601 timestamp (GitHub's closedAt) or a unix epoch.
+age_days() {  # $1=ISO-8601 or epoch -> integer days, empty when unparseable
+  python3 -c '
+import sys, time, datetime
+v = sys.argv[1]
+try:
+    t = float(v) if v.isdigit() else datetime.datetime.fromisoformat(v.replace("Z", "+00:00")).timestamp()
+except ValueError:
+    sys.exit()
+print(int((time.time() - t) // 86400))' "$1" 2>/dev/null
+}
+
+# Age thresholds, overridable so the tests need not wait two weeks (#3997).
+#   CLOSED_REAP_DAYS  — a CLOSED-unmerged PR whose worktree is clean and whose tip IS
+#                       the PR's head is reapable once it has been closed this long.
+#   REVIEW_FLAG_DAYS  — a REVIEW verdict (no PR, clean, unlanded) is loudly flagged
+#                       once its tip is this old. Flag only; never removed.
+CLOSED_REAP_DAYS="${BRIK_SWEEP_CLOSED_DAYS:-14}"
+REVIEW_FLAG_DAYS="${BRIK_SWEEP_REVIEW_FLAG_DAYS:-7}"
 
 # Did the PR lookup ANSWER for this branch? `pr_for_branch` already returns two
 # different "none" shapes — the em-dash when PR_JSON is empty (the call failed, so
@@ -397,8 +442,33 @@ while IFS=$'\t' read -r path ref; do
   elif pr_unknown "$prstate"; then
     verdict="REVIEW — clean, unlanded, PR state UNREADABLE (gh call failed)"
     REVIEW=$((REVIEW+1)); UNKNOWN_PR=$((UNKNOWN_PR+1))
+  elif [ "$prstate" = "CLOSED" ]; then
+    # CLOSED-unmerged (#3997). Abandoned work, and without this band it sat in
+    # REVIEW forever. Reapable only when the tip IS the PR's head: GitHub keeps
+    # refs/pull/N/head, so nothing is lost. A tip that moved past the PR head holds
+    # commits the PR never saw and stays REVIEW.
+    IFS='|' read -r closed_at head_oid <<<"$(pr_closed_info "$branch")"
+    closed_age="$(age_days "$closed_at")"
+    if [ -z "$closed_age" ] || [ -z "$head_oid" ]; then
+      verdict="REVIEW — clean, PR $prnum closed unmerged, close date/head unreadable"; REVIEW=$((REVIEW+1))
+    elif [ "$tip" != "$head_oid" ]; then
+      verdict="REVIEW — PR $prnum closed unmerged, but local tip is past the PR head (unpushed commits)"; REVIEW=$((REVIEW+1))
+    elif [ "$closed_age" -ge "$CLOSED_REAP_DAYS" ]; then
+      reason="PR $prnum closed unmerged ${closed_age}d, tip == PR head"
+      verdict="REMOVE — $reason"
+      REMOVE_PATHS+=("$path"); REMOVE_BRANCHES+=("$branch"); REMOVE_LABELS+=("$reason")
+    else
+      verdict="REVIEW — PR $prnum closed unmerged ${closed_age}d ago (reapable at ${CLOSED_REAP_DAYS}d)"; REVIEW=$((REVIEW+1))
+    fi
   else
-    verdict="REVIEW — clean, unlanded, no merged PR"; REVIEW=$((REVIEW+1))
+    verdict="REVIEW — clean, unlanded, no merged PR"
+    # Age flag (#3997): a worktree can sit here for weeks. Flag only — with no PR the
+    # commits may be the only copy, so this is never a removal.
+    tip_age="$(age_days "$(git -C "$path" log -1 --format=%ct "$branch" 2>/dev/null)")"
+    if [ -n "$tip_age" ] && [ "$tip_age" -ge "$REVIEW_FLAG_DAYS" ]; then
+      verdict="REVIEW — ⚠ STALE ${tip_age}d: clean, unlanded, no PR — open a PR or discard"
+    fi
+    REVIEW=$((REVIEW+1))
   fi
   $JSON || printf '%-50s %-9s %-9s %s\n' "$branch" "$([ "$dirty" = 0 ] && echo clean || echo "DIRTY")" "$prnum" "$verdict"
   json_row worktree "$branch" "$([ "$dirty" = 0 ] && echo clean || echo "DIRTY")" "$prnum" "$verdict"
@@ -533,6 +603,15 @@ while IFS= read -r branch; do
   elif pr_unknown "$prstate"; then
     verdict="KEEP — PR state UNREADABLE for $branch (gh call failed)"
     BRANCH_KEPT=$((BRANCH_KEPT+1)); UNKNOWN_PR=$((UNKNOWN_PR+1))
+  elif [ "$prstate" = "CLOSED" ] \
+       && IFS='|' read -r closed_at head_oid <<<"$(pr_closed_info "$branch")" \
+       && closed_age="$(age_days "$closed_at")" && [ -n "$closed_age" ] \
+       && [ "$closed_age" -ge "$CLOSED_REAP_DAYS" ] \
+       && [ -n "$head_oid" ] && [ "$(git rev-parse "refs/heads/$branch" 2>/dev/null)" = "$head_oid" ]; then
+    # CLOSED-unmerged and the branch tip IS the PR head (#3997): refs/pull/N/head
+    # keeps every commit, so deleting loses nothing.
+    verdict="DELETE — PR $prnum closed unmerged ${closed_age}d, tip == PR head, remote gone"
+    DELETE_BRANCH_NAMES+=("$branch"); DELETE_BRANCH_LABELS+=("PR $prnum closed unmerged")
   else
     # No PR at all is the one shape that may be unpushed work. Keep it.
     verdict="KEEP — no merged PR for $branch"; BRANCH_KEPT=$((BRANCH_KEPT+1))
