@@ -264,6 +264,9 @@ if [ -n "$ISSUE_REF" ]; then
          echo -e "${YELLOW}  Check the number, or pass the cross-repo form owner/repo#N.${NC}" ;;
       5) echo -e "${YELLOW}  The read failed rather than came back empty — usually transient.${NC}"
          echo -e "${YELLOW}  Re-run the same command; it retries once on its own first.${NC}" ;;
+      6) echo -e "${YELLOW}  That number is a PULL REQUEST, not an issue. Pass the issue it is for.${NC}"
+         echo -e "${YELLOW}  The REST issues endpoint answers for PRs too, which is why this is${NC}"
+         echo -e "${YELLOW}  caught here rather than by the number looking wrong (#2448).${NC}" ;;
       *) echo -e "${YELLOW}  Unexpected gate status ${overlap_rc}.${NC}" ;;
     esac
     echo ""
