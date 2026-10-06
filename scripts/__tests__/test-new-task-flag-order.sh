@@ -29,6 +29,8 @@ unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_NAMESPACE \
 
 SCRIPTS="$(cd "$(dirname "$0")/.." && pwd)"
 [ -f "$SCRIPTS/new-task.sh" ] || { echo "new-task.sh not found under $SCRIPTS"; exit 1; }
+# shellcheck source=/dev/null
+source "$SCRIPTS/lib/identity-guard.sh"
 
 DERIVED_MARKER='Derived --issue'
 
@@ -71,6 +73,7 @@ build_repo() {
   # origin HEAD`; a fresh bare repo has no HEAD target.
   git -C "$remote" symbolic-ref HEAD refs/heads/main
   git init -q -b main "$primary"
+  assert_throwaway_repo "$primary" "new-task fixture"
   (
     cd "$primary" || exit 1
     git config user.email t@example.com; git config user.name Test

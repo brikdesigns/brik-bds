@@ -75,9 +75,9 @@ const steps = [
   // its fixture `git` calls drive the LIVE repo — #1539 pushed fixture refs to
   // origin that way. This list keeps growing; the requirement was unenforced.
   // Static read only: the gate must never run the tests it inspects. #1548.
-  { name: 'Test Git Env', cmd: 'node scripts/lint-test-git-env.mjs' },
+  { name: 'Test Git Env (scripts/__tests__)', cmd: 'node scripts/lint-test-git-env.mjs scripts/__tests__' },
   // Canonical tests synced from brik-llm live in scripts/test/ (brik-llm#4164).
-  { name: 'Test Git Env (scripts/test)', cmd: 'node scripts/lint-test-git-env.mjs scripts/test' },
+  { name: 'Test Git Env', cmd: 'node scripts/lint-test-git-env.mjs' },
 
   // Guards the overlap gate's pure helpers. new-task.sh refuses to run outside
   // the primary worktree, so its inline logic can't be exercised by a test —
