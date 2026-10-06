@@ -24,6 +24,16 @@
 # comments read it always did. The 12h timer stays as the fallback for the case
 # it is genuinely good at: a session that died leaving no PR.
 #
+# A third signal costs nothing at all (brik-llm#4414): a `<!-- brik-handoff`
+# comment on the same issue, posted AFTER the claim's Since. A hand-off is
+# session close (rag:handoff-discipline), so its claim is over. It is read from
+# the comments the gate already fetched, and it is the rule
+# resume-supersede-check.sh:250-256 already applied — before it, that gate said
+# "handed off from — proceed" and this one refused the same pickup over the same
+# marker. The write half is release_issue_claim, which /hand-off runs through
+# `claim-write.sh --release`; this rule is the backstop for a session that
+# handed off without it.
+#
 # BRANCH-GONE IS DELIBERATELY NOT A SIGNAL ON ITS OWN, and #2204 asked for it.
 # `git ls-remote` cannot tell "merged and reaped" from "created by new-task.sh
 # and never pushed" — and the never-pushed window is the entire reason this gate
@@ -96,6 +106,7 @@
 #                                                              # when it cannot read
 #   report_issue_comments "1541"                               # digest + prompt
 #   report_issue_comments "1541" --report                      # digest, no prompt
+#   release_issue_claim "brikdesigns/brik-llm#1541"            # drop MY claim
 #
 # Call check_issue_claim FIRST when you want both: it primes the comment cache,
 # so the digest costs zero additional API calls.
@@ -341,6 +352,24 @@ claim_is_released() {
   [ "$issue_state" = "CLOSED" ] && return 0
   case "$pr_state" in MERGED|CLOSED) return 0 ;; esac
   return 1
+}
+
+# Echo the newest hand-off stamp that postdates <since>, and return 0; rc 1 when
+# none does. Reads the comments NDJSON on stdin (brik-llm#4414).
+#
+# ISO-8601 Zulu stamps compare correctly as strings, which is how
+# resume-supersede-check.sh compares the same two values. Only the HTML marker
+# counts — the legacy `## Handoff` heading predates claims, and a heading match
+# would read any comment quoting one.
+claim_handoff_after() {
+  local since="${1:-}" at
+  [ -n "$since" ] || return 1
+  command -v jq >/dev/null 2>&1 || return 1
+  at="$(jq -rs --arg s "$since" '
+      [ .[] | select((.body // "") | test("<!--\\s*brik-handoff"; "i"))
+            | .created_at // empty | select(. > $s) ] | max // empty' 2>/dev/null)" || return 1
+  [ -n "$at" ] || return 1
+  printf '%s' "$at"
 }
 
 # ── Comment digest, pure half (brik-llm#2755) ──────────────────────
@@ -650,11 +679,22 @@ _ic_pr_state() {
 
 # Echo why the claim is over and return 0; silent rc 1 when it still stands.
 #
-# Issue state first: it is one call regardless of how many branches the claim
+# A hand-off after the claim's <since> goes first because it is free: it reads
+# the comments check_issue_claim already cached, and only when that cache holds
+# this issue (brik-llm#4414).
+#
+# Issue state next: it is one call regardless of how many branches the claim
 # names, and it is the only signal that covers a ticket closed as `not planned`,
 # closed by a PR that closed rather than merged, or closed by hand.
 _ic_claim_release_reason() {
-  local owner="${1:?}" repo="${2:?}" num="${3:?}" branches="${4:-}"
+  local owner="${1:?}" repo="${2:?}" num="${3:?}" branches="${4:-}" since="${5:-}"
+  local handoff_at=""
+  if [ -n "$since" ] && [ "$_IC_COMMENTS_KEY" = "$owner/$repo#$num" ] \
+     && handoff_at="$(printf '%s\n' "$_IC_COMMENTS_NDJSON" | claim_handoff_after "$since")"; then
+    printf 'that session handed off at %s, after claiming' "$handoff_at"
+    return 0
+  fi
+
   local state=""
   state="$(_ic_issue_state "$owner" "$repo" "$num")" || state="unknown"
   if claim_is_released "$state" unknown; then
@@ -779,7 +819,7 @@ check_issue_claim() {
       # work is actually still in flight (brik-llm#2204). Only reached here —
       # a clear ticket, my own claim, or an already-expired one costs nothing.
       if release_reason="$(_ic_claim_release_reason "$owner" "$repo" "$num" \
-                            "$their_branch")"; then
+                            "$their_branch" "$stamp")"; then
         echo -e "${_IC_YELLOW}⚠  A claim by ${their_host} / ${their_branch} is no longer live — ${release_reason}.${_IC_NC}" >&2
         echo -e "${_IC_YELLOW}   Taking the ticket; no NEW_TASK_STEAL_CLAIM needed.${_IC_NC}" >&2
       else
@@ -847,6 +887,70 @@ check_issue_claim() {
 
   # Assignee is board visibility only — it cannot discriminate sessions.
   gh issue edit "$num" --repo "$owner/$repo" --add-assignee @me >/dev/null 2>&1 || true
+  return 0
+}
+
+# release_issue_claim <issue-ref> — delete THIS session's claim marker
+# (brik-llm#4414). /hand-off runs it through `claim-write.sh --release`.
+#
+# The header's "why staleness instead of an explicit release" still holds: a
+# session that dies runs nothing, so the timer and the release signals stay. A
+# hand-off is the one moment a session reliably closes ON PURPOSE, and its
+# claims outlived it by the full 12h — 1546fc53's claims on #4359 and
+# brik-client-portal#4788 were still refusing pickups five hours after it handed
+# off on #4303.
+#
+# Session id ONLY, never host+branch: at hand-off the branch is usually merged
+# and reaped, and two sessions on one host share it through claim-write.sh's
+# placeholder branch. No session id means no way to tell mine from a rival's,
+# so nothing is released.
+#
+# The marker is re-read by id just before the delete. Between the comments read
+# and the delete a rival pickup may legitimately rewrite it — the hand-off it
+# reads releases mine — and deleting that would drop a live claim.
+#
+# Returns: 0 released · 3 nothing of mine here (no marker, or another
+# session's, left in place) · 1 could not read or delete · 2 bad ref or no
+# session id.
+release_issue_claim() {
+  local ref="${1:-}" my_session resolved owner repo num
+  my_session="$(claim_session_id)"
+  if [ -z "$my_session" ]; then
+    echo -e "${_IC_YELLOW}⚠  No session id (CLAUDE_CODE_SESSION_ID) — cannot tell this session's claim from a rival's. Releasing nothing.${_IC_NC}" >&2
+    return 2
+  fi
+  command -v gh >/dev/null 2>&1 || { echo -e "${_IC_YELLOW}⚠  gh not on PATH — no claim released.${_IC_NC}" >&2; return 1; }
+  resolved="$(_ic_resolve_ref "$ref")" || { echo "  · '${ref}' is not an issue reference — skipped" >&2; return 2; }
+  read -r owner repo num <<<"$resolved"
+  { [ -n "$owner" ] && [ -n "$repo" ] && [ -n "$num" ]; } || return 2
+
+  local found id body their_session current
+  found="$(_ic_find_claim "$owner" "$repo" "$num" strict)" || {
+    echo -e "${_IC_YELLOW}⚠  ${owner}/${repo}#${num}: could not read the comments — claim NOT released.${_IC_NC}" >&2
+    return 1
+  }
+  [ -n "$found" ] || return 3
+  id="${found%%$'\t'*}"
+  body="${found#*$'\t'}"
+  their_session="$(parse_claim_session "$body")"
+  if [ "$their_session" != "$my_session" ]; then
+    echo "  · ${owner}/${repo}#${num}: claimed by session ${their_session:-unknown} — left in place"
+    return 3
+  fi
+
+  current="$(gh api "repos/$owner/$repo/issues/comments/$id" --jq '.body' 2>/dev/null)" || {
+    echo -e "${_IC_YELLOW}⚠  ${owner}/${repo}#${num}: could not re-read the claim — NOT released.${_IC_NC}" >&2
+    return 1
+  }
+  if [ "$(parse_claim_session "$current")" != "$my_session" ]; then
+    echo "  · ${owner}/${repo}#${num}: re-claimed by another session since the read — left in place"
+    return 3
+  fi
+  gh api -X DELETE "repos/$owner/$repo/issues/comments/$id" >/dev/null 2>&1 || {
+    echo -e "${_IC_YELLOW}⚠  ${owner}/${repo}#${num}: could not delete the claim — NOT released.${_IC_NC}" >&2
+    return 1
+  }
+  echo -e "${_IC_GREEN}✓ Released the claim on ${owner}/${repo}#${num}.${_IC_NC}"
   return 0
 }
 

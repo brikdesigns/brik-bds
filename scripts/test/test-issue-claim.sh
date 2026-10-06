@@ -169,6 +169,22 @@ assert_not "a lowercase state is not silently accepted — _ic_issue_state upcas
 assert_not "NO PR for the branch reads as unknown and keeps blocking — a deleted branch and an unpushed one look identical, and un-gating there re-opens #2645" \
   claim_is_released OPEN none
 
+echo "── claim_handoff_after (#4414) ──"
+HO_NDJSON="$(printf '%s\n' \
+  '{"id":1,"login":"x","created_at":"2026-10-06T17:49:00Z","body":"<!-- claim -->\n| Since | 2026-10-06T17:49:00Z |"}' \
+  '{"id":2,"login":"x","created_at":"2026-10-06T18:29:00Z","body":"<!-- brik-handoff:v1 -->\n## Handoff"}' \
+  '{"id":3,"login":"x","created_at":"2026-10-06T19:00:00Z","body":"quoting an old ## Handoff heading is not one"}')"
+assert_eq "a hand-off after the claim's Since releases it, and names when" \
+  "2026-10-06T18:29:00Z" "$(printf '%s\n' "$HO_NDJSON" | claim_handoff_after 2026-10-06T17:49:00Z)"
+assert_not "a hand-off BEFORE the claim does not — the claimant picked up after it" \
+  sh -c 'printf "%s\n" "$1" | { . "$2"; claim_handoff_after 2026-10-06T18:30:00Z; }' _ "$HO_NDJSON" "$LIB"
+assert_not "a legacy heading in prose is not a hand-off marker" \
+  sh -c 'printf "%s\n" "$1" | { . "$2"; claim_handoff_after 2026-10-06T18:45:00Z; }' _ "$HO_NDJSON" "$LIB"
+assert_not "an empty Since releases nothing — a malformed claim is the timer's job" \
+  sh -c 'printf "%s\n" "$1" | { . "$2"; claim_handoff_after ""; }' _ "$HO_NDJSON" "$LIB"
+assert_not "no comments at all releases nothing" \
+  sh -c 'printf "" | { . "$1"; claim_handoff_after 2026-10-06T17:49:00Z; }' _ "$LIB"
+
 echo "── _ic_entry_repo / _ic_entry_branch ──"
 assert_eq "splits a repo-qualified entry" "brikdesigns/brik-llm" "$(_ic_entry_repo brikdesigns/brik-llm:task/x)"
 assert_eq "…and its branch, slashes intact" "task/x" "$(_ic_entry_branch brikdesigns/brik-llm:task/x)"
