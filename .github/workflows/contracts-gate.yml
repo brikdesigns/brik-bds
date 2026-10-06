@@ -433,7 +433,7 @@ jobs:
       # ─── worktree-sweep-contract ────────────────────────────────────────────
       - name: Pass-1 verdict contract (dry-run only)
         if: always()
-        run: bash scripts/__tests__/test-sweep-worktree-classification.sh
+        run: bash scripts/test/test-sweep-worktree-classification.sh
 
       # ─── shell-syntax-check ─────────────────────────────────────────────────
       - name: Parse-check every scripts/**/*.sh
@@ -597,7 +597,7 @@ jobs:
         if: always() && steps.shellcheck.outcome == 'success'
         run: |
           shellcheck scripts/sweep-merged-worktrees.sh \
-                     scripts/__tests__/test-sweep-worktree-classification.sh
+                     scripts/test/test-sweep-worktree-classification.sh
 
   # ─── Merge-queue readiness (#2447) ──────────────────────────────────────────
   #
