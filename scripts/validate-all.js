@@ -93,7 +93,7 @@ const steps = [
   // PATH: a hit must WARN, never abort the caller. It aborted for months' worth
   // of agent sessions in one afternoon — `read -r` returns 1 on EOF and
   // new-task.sh calls the gate unguarded under `set -e`. brik-bds#1549.
-  { name: 'Overlap Confirm', cmd: 'bash scripts/__tests__/test-issue-overlap-confirm.sh' },
+  { name: 'Overlap Confirm', cmd: 'bash scripts/test/test-issue-overlap-confirm.sh' },
 
   // The pre-push hook's own ref-scope decision (tags-only vs carries commits).
   // A hook can't be exercised without pushing, so its logic lives in a lib and
