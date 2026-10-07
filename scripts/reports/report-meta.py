@@ -310,12 +310,22 @@ def cmd_stamp(root: Path, args) -> int:
         "report-status": args.status,
         "report-subject": args.subject,
         "report-owner": args.owner,
-        "report-generated": args.generated or dt.date.today().isoformat(),
+        "report-generated": args.generated,
         "report-supersedes": args.supersedes,
         "report-cadence": args.cadence,
         "report-source": args.source,
     }
     values = {k: (v if v is not None else existing.get(k)) for k, v in values.items()}
+    # Today is the LAST resort, not the first (brik-llm#4427). Defaulting before
+    # the merge above made `report-generated` the one field that ignored the
+    # partial-update contract every other field obeys: the merge saw a non-None
+    # value and never fell back to the file's own. Re-stamping any other field —
+    # a typo fix, an added --supersedes — silently rewrote the date the content
+    # describes to the date of the edit, and `report-freshness-check.py` keys on
+    # that field, so a stale report read as fresh. A first stamp still has
+    # nothing to preserve and still gets today.
+    if not values["report-generated"]:
+        values["report-generated"] = dt.date.today().isoformat()
     missing = [k for k, v in values.items() if not v]
     if missing:
         print(f"report-meta: stamp needs a value for {', '.join(missing)}", file=sys.stderr)
