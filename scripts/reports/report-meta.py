@@ -17,7 +17,8 @@ Every committed report under docs/reports/ carries these seven tags:
     report-subject     brik | bds | portal | llm
     report-owner       a GitHub login
     report-generated   YYYY-MM-DD — the date the content describes
-    report-supersedes  repo-relative path of the report this replaces, or none
+    report-supersedes  repo-relative path of the report this replaces, an
+                       https:// URL for a predecessor outside the store, or none
     report-cadence     once | on-demand | daily | weekly | monthly
     report-source      repo-relative path of the generator, or manual
 
@@ -38,9 +39,14 @@ Usage (global flags go before the subcommand):
 
 `check` fails on: a missing, duplicated or invalid tag; a subject that
 disagrees with the report's folder; a status that disagrees with an
-`[ARCHIVED]` title prefix; a supersedes pointer to a missing report, or one
-that is not marked superseded; a `superseded` report nothing points at; a
+`[ARCHIVED]` title prefix; a supersedes PATH pointing at a missing report, or
+one that is not marked superseded; a `superseded` report nothing points at; a
 source path that does not exist; a non-kebab filename; a stale manifest.
+
+A supersedes URL names a predecessor this repo does not hold — a claude.ai
+artifact, a Notion page, another repo's store — so nothing here can mark it
+`superseded` and nothing here can resolve it. It is recorded, not enforced:
+it trips neither reciprocity rule.
 
 Exit codes: 0 clean · 1 violations · 2 usage or unreadable input.
 
@@ -78,6 +84,9 @@ CADENCES = ("once", "on-demand", "daily", "weekly", "monthly")
 OWNER_RE = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*\.html$")
+# `https://` only: a predecessor worth recording is reachable, and `http://` left
+# open would swallow a typo'd path into the unchecked branch (brik-llm#4422).
+SUPERSEDES_URL_RE = re.compile(r"^https://[^\s\"'<>]+$")
 ARCHIVED_PREFIX = "[ARCHIVED]"
 
 BLOCK_OPEN = "<!-- report-meta: contract in docs/reports/README.md (ADR-046) -->"
@@ -180,10 +189,13 @@ def validate(root: Path, rel: str, meta: dict[str, list[str]], title: str) -> li
         errs.append(f"report-source=\"{m['report-source']}\" — no such file in this repo (or use: manual)")
     if "report-supersedes" in m and m["report-supersedes"] != "none":
         tgt = m["report-supersedes"]
-        if tgt == rel:
+        if SUPERSEDES_URL_RE.match(tgt):
+            pass  # outside the store: unresolvable here, so recorded unchecked
+        elif tgt == rel:
             errs.append("report-supersedes points at itself")
         elif not (root / tgt).is_file():
-            errs.append(f"report-supersedes=\"{tgt}\" — no such report (or use: none)")
+            errs.append(f"report-supersedes=\"{tgt}\" — no such report "
+                        "(or an https:// URL for a predecessor outside the store, or use: none)")
     want = folder_subject(rel)
     if want and m.get("report-subject") not in (None, want):
         errs.append(f"report-subject=\"{m['report-subject']}\" but the report sits in {want}/")
@@ -228,6 +240,8 @@ def cmd_check(root: Path, as_json: bool = False) -> int:
         for e in validate(root, r["path"], r["meta"], r["title"]):
             problems.append((r["path"], e))
         tgt = by_path[r["path"]].get("report-supersedes", "none")
+        # `tgt in by_path` is also what exempts the URL form: a predecessor
+        # outside the store is in no row, so neither reciprocity rule can fire.
         if tgt != "none" and tgt in by_path:
             pointed_at[tgt] = r["path"]
             if by_path[tgt].get("report-status") != "superseded":
@@ -348,7 +362,9 @@ def main(argv: list[str]) -> int:
     sp.add_argument("--subject", choices=SUBJECTS)
     sp.add_argument("--owner")
     sp.add_argument("--generated", help="YYYY-MM-DD (default: today, for a new report)")
-    sp.add_argument("--supersedes", help="repo-relative report path, or none")
+    sp.add_argument("--supersedes",
+                    help="repo-relative report path, an https:// URL for a predecessor "
+                         "outside the store, or none")
     sp.add_argument("--cadence", choices=CADENCES)
     sp.add_argument("--source", help="repo-relative generator path, or manual")
     args = ap.parse_args(argv)
