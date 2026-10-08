@@ -571,21 +571,32 @@ rm -rf "$FAKE"
 
 echo "── _ic_warn_if_bot_identity (brik-llm#4063) ──"
 # `gh` as a shell function, so this stays inside the suite's no-network rule:
-# the only input the helper reads is `gh auth status`, so the fixture IS the
-# machine state. Both shapes verified against gh 2.86.0 on 2026-10-08.
+# the only input the helper reads is `gh auth status --json hosts`, so the
+# fixture IS the machine state. Key names and values read on the MacBook
+# (gh 2.86.0) and brik-mini (2.90.0), 2026-10-08.
+#
+# The stub refuses a TEXT-mode `auth status` rather than serving it: that form
+# prints most of an App token unmasked (#4533), so a revert to it has to fail a
+# case here instead of passing off a fixture that holds no token either way.
+# The text-mode tally goes to a FILE, not a variable: every call below is made
+# inside `$(…)`, and a subshell's increment would never reach this scope — the
+# assertion would read 0 forever and pass against the very revert it guards.
 _ic_gh_status_fixture=""
+_ic_gh_text_mode_log="$(mktemp -t ic-gh-text-mode.XXXXXX)"
 gh() {
   if [ "${1:-}" = "auth" ] && [ "${2:-}" = "status" ]; then
-    printf '%s\n' "$_ic_gh_status_fixture"; return 0
+    case " $* " in
+      *" --json "*) printf '%s\n' "$_ic_gh_status_fixture"; return 0 ;;
+      *) echo text-mode >> "$_ic_gh_text_mode_log"; return 1 ;;
+    esac
   fi
   return 0
 }
 
-_ic_gh_status_fixture='github.com
-  X Failed to log in to github.com account nstaner (keyring)
-  - Active account: false
-  ✓ Logged in to github.com account brik-ci-bot[bot] (hosts.yml)
-  - Active account: true'
+_ic_gh_status_fixture='{"hosts":{"github.com":[
+  {"active":false,"login":"nstaner","state":"error","tokenSource":"keyring"},
+  {"active":true,"login":"brik-ci-bot[bot]","state":"success","tokenSource":"hosts.yml"}
+]}}'
 WARN="$(_ic_warn_if_bot_identity 2>&1)"
 assert_ok "names the active account when it is an App" \
   grep -q 'Active gh account is brik-ci-bot\[bot\]' <<<"$WARN"
@@ -594,17 +605,27 @@ assert_ok "…and prints the switch-back command" \
 
 # Control: a human active account must stay silent, or the hint is noise on
 # every quota blip and stops meaning "wrong identity".
-_ic_gh_status_fixture='github.com
-  ✓ Logged in to github.com account nstaner (keyring)
-  - Active account: true
-  X Failed to log in to github.com account brik-ci-bot[bot] (hosts.yml)
-  - Active account: false'
+_ic_gh_status_fixture='{"hosts":{"github.com":[
+  {"active":true,"login":"nstaner","state":"success","tokenSource":"keyring"},
+  {"active":false,"login":"brik-ci-bot[bot]","state":"error","tokenSource":"hosts.yml"}
+]}}'
 assert_eq "says nothing when the active account is a human login" "" \
   "$(_ic_warn_if_bot_identity 2>&1)"
 
-# Control: the bot being merely PRESENT is not the fault — only active is.
+# Control: the bot being merely PRESENT is not the fault — only ACTIVE is. A
+# live bot sitting inactive beside a live human is the sharpest version of
+# that: everything about it is healthy except which one gh would write as.
+_ic_gh_status_fixture='{"hosts":{"github.com":[
+  {"active":true,"login":"nstaner","state":"success","tokenSource":"keyring"},
+  {"active":false,"login":"brik-ci-bot[bot]","state":"success","tokenSource":"hosts.yml"}
+]}}'
 assert_eq "a present but inactive bot account is not flagged" "" \
   "$(_ic_warn_if_bot_identity 2>&1)"
+
+# #4533: no call above may have used the text form.
+assert_eq "the identity probe uses --json, never text-mode gh auth status" "0" \
+  "$(wc -l < "$_ic_gh_text_mode_log" | tr -d ' ')"
+rm -f "$_ic_gh_text_mode_log"
 unset -f gh
 
 echo ""
