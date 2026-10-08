@@ -464,12 +464,13 @@ fi
 # degraded to no gate at all, which is the brik-llm#1485 duplicate-work class.
 #
 # Only on the failure path, and `gh auth status` is a local read with no API
-# cost. It masks tokens, so no credential value is read here or printed.
+# cost. The `--json hosts` form is the one with no token field — the text form
+# prints most of an App token unmasked and bash-leak-guard.sh Rule 18b denies
+# it (#4533), so no credential value is read here or printed.
 _ic_warn_if_bot_identity() {
   local active
-  active="$(gh auth status --hostname github.com 2>&1 \
-    | awk '/Logged in to|Failed to log in to/{a=$0} /Active account: true/{print a; exit}' \
-    | sed -E 's/.*account ([^ ]+).*/\1/')" || return 0
+  active="$(gh auth status --json hosts 2>/dev/null \
+    | jq -r '(.hosts["github.com"] // [])[] | select(.active) | .login')" || return 0
   case "$active" in
     *'[bot]')
       echo -e "${_IC_YELLOW}   Active gh account is ${active} — an App token cannot write issue comments.${_IC_NC}" >&2
@@ -762,7 +763,7 @@ _ic_claim_release_reason() {
 # --fail-closed's refusal, one wording for every unread path (brik-llm#4306).
 _ic_refuse_unread() {
   echo -e "${_IC_RED}✗ $1 — the claim was NOT read. Refusing (--fail-closed).${_IC_NC}" >&2
-  echo -e "${_IC_RED}  An unreadable claim is not a clear one. Check \`gh auth status\`, then re-run.${_IC_NC}" >&2
+  echo -e "${_IC_RED}  An unreadable claim is not a clear one. Check \`gh auth status --json hosts\`, then re-run.${_IC_NC}" >&2
 }
 
 # check_issue_claim <issue-ref> <branch> [--report|--fail-closed]
