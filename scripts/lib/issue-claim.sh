@@ -452,6 +452,33 @@ if [ -r "${_IC_LIB_DIR}/gh-error-classify.sh" ]; then
   source "${_IC_LIB_DIR}/gh-error-classify.sh"
 fi
 
+# _ic_warn_if_bot_identity — name the active gh account when a claim write fails
+# and that account is an App (brik-llm#4063).
+#
+# `recover-git-auth.sh` logs gh in as brik-ci-bot[bot] with a contents:read
+# installation token, and that becomes the ACTIVE account. Reads keep working,
+# so the gate looks healthy right up to the comment POST, which 403s. On
+# brik-mini on 2026-10-02 the warning below was the only trace: "Could not post
+# the claim comment — proceeding unclaimed", with nothing to separate a wrong
+# identity from a quota blip or a network stumble. The claim gate had silently
+# degraded to no gate at all, which is the brik-llm#1485 duplicate-work class.
+#
+# Only on the failure path, and `gh auth status` is a local read with no API
+# cost. It masks tokens, so no credential value is read here or printed.
+_ic_warn_if_bot_identity() {
+  local active
+  active="$(gh auth status --hostname github.com 2>&1 \
+    | awk '/Logged in to|Failed to log in to/{a=$0} /Active account: true/{print a; exit}' \
+    | sed -E 's/.*account ([^ ]+).*/\1/')" || return 0
+  case "$active" in
+    *'[bot]')
+      echo -e "${_IC_YELLOW}   Active gh account is ${active} — an App token cannot write issue comments.${_IC_NC}" >&2
+      echo -e "${_IC_YELLOW}   Switch back: gh auth switch --hostname github.com --user <your-account>${_IC_NC}" >&2
+      ;;
+  esac
+  return 0
+}
+
 # owner/name for the current repo, for zero GraphQL points (brik-llm#1754).
 #
 # `gh repo view --json nameWithOwner` costs 1 point and this lib is on the
@@ -878,11 +905,13 @@ check_issue_claim() {
   if [ -n "$id" ] && [ "$id" != "$found" ]; then
     gh api -X PATCH "repos/$owner/$repo/issues/comments/$id" -f body="$new_body" >/dev/null 2>&1 \
       && echo -e "${_IC_GREEN}✓ Claim refreshed on ${owner}/${repo}#${num} (${my_host} / ${new_branches}).${_IC_NC}" \
-      || echo -e "${_IC_YELLOW}⚠  Could not refresh the claim comment — proceeding unclaimed.${_IC_NC}" >&2
+      || { echo -e "${_IC_YELLOW}⚠  Could not refresh the claim comment — proceeding unclaimed.${_IC_NC}" >&2
+           _ic_warn_if_bot_identity; }
   else
     gh api -X POST "repos/$owner/$repo/issues/$num/comments" -f body="$new_body" >/dev/null 2>&1 \
       && echo -e "${_IC_GREEN}✓ Claimed ${owner}/${repo}#${num} (${my_host} / ${new_branches}).${_IC_NC}" \
-      || echo -e "${_IC_YELLOW}⚠  Could not post the claim comment — proceeding unclaimed.${_IC_NC}" >&2
+      || { echo -e "${_IC_YELLOW}⚠  Could not post the claim comment — proceeding unclaimed.${_IC_NC}" >&2
+           _ic_warn_if_bot_identity; }
   fi
 
   # Assignee is board visibility only — it cannot discriminate sessions.

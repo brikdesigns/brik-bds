@@ -569,6 +569,44 @@ assert_eq "a live rival claim under --fail-closed is still rc 1, not 2 — claim
   "$(claim_rc "$GHP" ':' o/r#7 --fail-closed)"
 rm -rf "$FAKE"
 
+echo "── _ic_warn_if_bot_identity (brik-llm#4063) ──"
+# `gh` as a shell function, so this stays inside the suite's no-network rule:
+# the only input the helper reads is `gh auth status`, so the fixture IS the
+# machine state. Both shapes verified against gh 2.86.0 on 2026-10-08.
+_ic_gh_status_fixture=""
+gh() {
+  if [ "${1:-}" = "auth" ] && [ "${2:-}" = "status" ]; then
+    printf '%s\n' "$_ic_gh_status_fixture"; return 0
+  fi
+  return 0
+}
+
+_ic_gh_status_fixture='github.com
+  X Failed to log in to github.com account nstaner (keyring)
+  - Active account: false
+  ✓ Logged in to github.com account brik-ci-bot[bot] (hosts.yml)
+  - Active account: true'
+WARN="$(_ic_warn_if_bot_identity 2>&1)"
+assert_ok "names the active account when it is an App" \
+  grep -q 'Active gh account is brik-ci-bot\[bot\]' <<<"$WARN"
+assert_ok "…and prints the switch-back command" \
+  grep -q 'gh auth switch --hostname github.com --user' <<<"$WARN"
+
+# Control: a human active account must stay silent, or the hint is noise on
+# every quota blip and stops meaning "wrong identity".
+_ic_gh_status_fixture='github.com
+  ✓ Logged in to github.com account nstaner (keyring)
+  - Active account: true
+  X Failed to log in to github.com account brik-ci-bot[bot] (hosts.yml)
+  - Active account: false'
+assert_eq "says nothing when the active account is a human login" "" \
+  "$(_ic_warn_if_bot_identity 2>&1)"
+
+# Control: the bot being merely PRESENT is not the fault — only active is.
+assert_eq "a present but inactive bot account is not flagged" "" \
+  "$(_ic_warn_if_bot_identity 2>&1)"
+unset -f gh
+
 echo ""
 if [ "$FAIL" -gt 0 ]; then
   echo "── issue-claim: $PASS passed, $FAIL failed"
