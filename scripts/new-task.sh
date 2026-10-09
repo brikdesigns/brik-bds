@@ -461,6 +461,30 @@ echo -e "${YELLOW}▸ Creating worktree at ${WORKTREE_BASE}/${TASK_NAME}...${NC}
 mkdir -p "$WORKTREE_BASE"
 git worktree add "${WORKTREE_BASE}/${TASK_NAME}" -b "${BRANCH_NAME}" "origin/${BASE_BRANCH}"
 
+# ── Record the ticket ON the branch (brik-llm#1707, ported by brik-llm#4550) ──
+# The only durable branch → ticket link there is. brik-llm/scripts/new-task.sh
+# :520-545 is canon for this block; this is that same four lines, unchanged.
+#
+# The slug derivation above (:234) only fires when the slug CARRIES a number, and
+# an explicit --issue leaves no trace on the branch at all — so once this shell
+# exits the ref is gone, and pr-task.sh is left deriving the issue from the slug
+# a second time or from commit-body trailers.
+#
+# brik-llm#4550 gives it a second reader: the UserPromptSubmit heartbeat hook
+# reads this config to know which ticket to renew the claim lease on. Without it
+# a BDS session's claim still decays into a 12h timer, and a session still
+# running at 12h+1s reads `stale` — which is how a ticket gets built twice. The
+# hook is fleet-wide; this config is the only thing it was missing here.
+#
+# Per-branch git config, not a file: it is local, free, survives the worktree
+# being removed and re-added, and cannot be committed by accident.
+#
+# `|| true` — this is a convenience record, not a gate. A config write failing
+# must not destroy a worktree that already exists.
+if [ -n "$ISSUE_REF" ]; then
+  git -C "${WORKTREE_BASE}/${TASK_NAME}" config "branch.${BRANCH_NAME}.brikTaskIssue" "$ISSUE_REF" || true
+fi
+
 cd "${WORKTREE_BASE}/${TASK_NAME}"
 
 # ── Install dependencies ──
