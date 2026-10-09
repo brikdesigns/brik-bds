@@ -628,6 +628,189 @@ assert_eq "the identity probe uses --json, never text-mode gh auth status" "0" \
 rm -f "$_ic_gh_text_mode_log"
 unset -f gh
 
+# ── renew_issue_claim — the lease is renewed, not merely timed (brik-llm#4550) ──
+#
+# A claim marker was ALREADY a lease — Host, Session, Since and a TTL
+# (CLAIM_STALE_SECONDS, issue-claim.sh:131) — that nothing ever renewed, so it
+# decayed into a 12h timer and was wrong in BOTH directions. These cases lock the
+# half that makes a per-turn hook safe to run at all:
+#
+#   · promote-only BY CONSTRUCTION — a session can rewrite only a marker whose
+#     Session row is its own id, so there is no path to shortening a rival's lease
+#   · only `Since` moves — Host, Branch and Session come back byte-identical,
+#     because the row is edited in place rather than re-rendered through
+#     claim_marker_body, which would reformat a marker written by another version
+#   · the throttle reads and writes NOTHING inside its window — the one property
+#     that makes this affordable on every turn of eight concurrent sessions
+#
+# The call log is the instrument, and it is controlled on both sides: the same
+# `$RLOG`, reset the same way, is asserted NON-empty on the renewing path and
+# EMPTY on the throttled one. An empty log therefore means "gh was not called",
+# never "logging broke".
+#
+# Offline throughout: a fake `gh` on PATH, a scratch stamp dir, no git.
+echo "── renew_issue_claim — lease renewal (brik-llm#4550) ──"
+if ! command -v jq >/dev/null 2>&1; then
+  FAIL=$((FAIL+1)); FAILED_CASES+=("renew_issue_claim needs jq to build its fixtures")
+  echo "  ✗ renew_issue_claim: jq not on PATH — the claim lib needs it too (issue-claim.sh:609)"
+else
+
+RFAKE="$(mktemp -d "${TMPDIR:-/tmp}/ic-renew.XXXXXXXX")"
+mkdir -p "$RFAKE/bin"
+RLOG="$RFAKE/calls.log";       : >"$RLOG"
+RBODY="$RFAKE/comments.ndjson"; : >"$RBODY"
+RPATCH="$RFAKE/patched.body";   : >"$RPATCH"
+RSTAMPS="$RFAKE/stamps"
+cat >"$RFAKE/bin/gh" <<'EOF'
+#!/usr/bin/env bash
+printf '%s\n' "$*" >>"$RLOG"
+case "${1:-} ${2:-}" in
+  "api -X")
+    # gh api -X PATCH repos/o/r/issues/comments/<id> -f body=<body>
+    for a in "$@"; do
+      case "$a" in body=*) printf '%s' "${a#body=}" >"$RPATCH" ;; esac
+    done
+    [ "${GH_PATCH_FAIL:-0}" = "1" ] && exit 1
+    echo '{}' ;;
+  "api repos/o/r/issues/"*"/comments") cat "$RBODY" ;;
+esac
+EOF
+chmod +x "$RFAKE/bin/gh"
+export RLOG RBODY RPATCH
+RPATH="$RFAKE/bin:$PATH"
+
+# The fixture is the lib's OWN renderer, so a fixture cannot drift from the
+# parser — the same reasoning as test-session-heartbeat.sh:24-27.
+mk_comment() {  # <id> <body>
+  jq -cn --argjson id "$1" --arg b "$2" \
+    '{id:$id, login:"nstaner", created_at:"2026-10-08T00:00:00Z", body:$b}'
+}
+
+RSESSION=me
+RWINDOW=600
+# A fresh bash per call: the comment cache (_IC_COMMENTS_KEY) is process-global,
+# and a warm cache would hide the very reads these cases count.
+renew_run() {  # args… → rc on stdout
+  # CLAUDE_CODE_SESSION_ID is cleared alongside it: claim_session_id falls back to
+  # it (issue-claim.sh:157-159), and this suite runs INSIDE a Claude session, so an
+  # inherited one makes the no-session-id case look like a live session.
+  ( cd "$RFAKE" && PATH="$RPATH" \
+      CLAIM_SESSION_ID="$RSESSION" \
+      CLAUDE_CODE_SESSION_ID="" \
+      BRIK_CLAIM_RENEW_DIR="$RSTAMPS" \
+      CLAIM_RENEW_THROTTLE_SECONDS="$RWINDOW" \
+      capped "$BASH" -c 'source "$1"; shift; renew_issue_claim "$@"' _ "$LIB" "$@" \
+      >/dev/null 2>&1 )
+  echo $?
+}
+
+MINE="$(claim_marker_body brik-mini task/mine "$OLD" me)"
+
+# ── refuses before it reaches the network ────────────────────────────
+: >"$RLOG"; RSESSION=""
+assert_eq "no session id → 2 — nothing can tell my claim from a rival's" "2" "$(renew_run o/r#7)"
+assert_eq "…and gh was never called" "" "$(cat "$RLOG")"
+RSESSION=me
+
+: >"$RLOG"
+assert_eq "an unparseable ref → 2" "2" "$(renew_run 'a/b#12x')"
+assert_eq "…and gh was never called" "" "$(cat "$RLOG")"
+
+# ── renews my own claim, and ONLY the Since row ──────────────────────
+rm -rf "$RSTAMPS"; : >"$RLOG"; : >"$RPATCH"
+mk_comment 4242 "$MINE" >"$RBODY"
+assert_eq "renews a claim this session holds → 0" "0" "$(renew_run o/r#7)"
+RENEWED="$(cat "$RPATCH")"
+assert_ok "…by PATCHing the marker comment, by id" \
+  grep -q '^api -X PATCH repos/o/r/issues/comments/4242' "$RLOG"
+assert_eq "…every row but Since comes back byte-identical — the marker is edited in place, never re-rendered" \
+  "$(grep -v '^| Since | ' <<<"$MINE")" "$(grep -v '^| Since | ' <<<"$RENEWED")"
+assert_eq "…Session survives, so the next renewal still recognises it as mine" \
+  "me" "$(parse_claim_session "$RENEWED")"
+assert_not "…and Since actually moved" \
+  test "$OLD" = "$(parse_claim "$RENEWED" | cut -f3)"
+
+# The whole point of #4550, stated as the before/after it fixes.
+assert_ok "the unrenewed 25h-old claim WAS stale — a live session read as abandoned" \
+  claim_is_stale "$OLD" "$NOW" 43200
+assert_not "…and the renewed one reads LIVE against the real clock" \
+  claim_is_stale "$(parse_claim "$RENEWED" | cut -f3)" "$(date +%s)" 43200
+
+# ── the throttle: zero reads, zero writes, inside the window ─────────
+: >"$RLOG"
+assert_eq "a second renewal inside the window → 4" "4" "$(renew_run o/r#7)"
+assert_eq "…having made ZERO gh calls — this is what makes a per-turn hook affordable" \
+  "" "$(cat "$RLOG")"
+
+: >"$RLOG"
+assert_eq "--force renews anyway → 0" "0" "$(renew_run --force o/r#7)"
+assert_ok "…and the SAME log records it — so the empty log above means not-called, not broken" \
+  grep -q 'PATCH' "$RLOG"
+
+RWINDOW=0; : >"$RLOG"
+assert_eq "a 0s window renews on the next call — the knob is read at CALL time, never bound at source time" \
+  "0" "$(renew_run o/r#7)"
+RWINDOW=600
+
+# One stamp per session per ticket: a session holding two tickets must renew both.
+: >"$RLOG"
+assert_eq "a DIFFERENT ticket is not throttled by the first one's stamp" "0" "$(renew_run o/r#8)"
+assert_eq "…two stamps on disk, one per ticket" "2" \
+  "$(find "$RSTAMPS" -type f | wc -l | tr -d ' ')"
+
+# ── a rival's claim is read and left exactly as it was ───────────────
+rm -rf "$RSTAMPS"; : >"$RLOG"; : >"$RPATCH"
+mk_comment 4243 "$(claim_marker_body brik-mini task/theirs "$OLD" rival)" >"$RBODY"
+assert_eq "a rival's claim → 3" "3" "$(renew_run o/r#7)"
+assert_eq "…and NOTHING was written — promote-only is structural here, not a convention to uphold" \
+  "" "$(cat "$RPATCH")"
+assert_eq "…no PATCH reached the log at all" "" "$(grep -F -- '-X PATCH' "$RLOG" || true)"
+
+# A second session on the same ticket must still get its own read — the stamp is
+# keyed on session AND ticket, so one session's throttle cannot silence another's.
+rm -rf "$RSTAMPS"; : >"$RLOG"
+mk_comment 4242 "$MINE" >"$RBODY"
+renew_run o/r#7 >/dev/null
+RSESSION=rival; : >"$RLOG"
+assert_eq "another SESSION is not throttled by mine → 3" "3" "$(renew_run o/r#7)"
+assert_ok "…it did read, and found nothing of its own" grep -q 'comments' "$RLOG"
+RSESSION=me
+
+# ── a marker this lib did not write is not rewritten ─────────────────
+rm -rf "$RSTAMPS"; : >"$RPATCH"
+mk_comment 4244 "$CLAIM_MARKER
+| Session | \`me\` |" >"$RBODY"
+assert_eq "a marker with no Since row → 3" "3" "$(renew_run o/r#7)"
+assert_eq "…nothing PATCHed — a renewal renews a lease, it never invents one" "" "$(cat "$RPATCH")"
+
+# ── an unclaimed ticket costs one read per WINDOW, not one per turn ──
+rm -rf "$RSTAMPS"; : >"$RLOG"; : >"$RBODY"
+assert_eq "no marker anywhere → 3" "3" "$(renew_run o/r#7)"
+assert_ok "…and it did look" grep -q 'comments' "$RLOG"
+: >"$RLOG"
+assert_eq "…the miss is stamped too, so the next turn → 4" "4" "$(renew_run o/r#7)"
+assert_eq "…with zero gh calls" "" "$(cat "$RLOG")"
+
+# ── a failed write is a retry, not a silent success ──────────────────
+rm -rf "$RSTAMPS"
+mk_comment 4242 "$MINE" >"$RBODY"
+export GH_PATCH_FAIL=1
+assert_eq "a PATCH that fails → 1" "1" "$(renew_run o/r#7)"
+assert_eq "…and no stamp was written, so the next turn retries rather than waiting out the window" \
+  "0" "$(find "$RSTAMPS" -type f 2>/dev/null | wc -l | tr -d ' ')"
+unset GH_PATCH_FAIL
+
+# ── positive control ─────────────────────────────────────────────────
+# Runs the suite's own assert machinery on a comparison known to be false, in a
+# subshell so the counters do not escape. If this ever reports 0 failures, every
+# ✓ above is decorative.
+RCONTROL="$( FAIL=0; PASS=0; FAILED_CASES=(); assert_eq "control" "a" "b" >/dev/null 2>&1; echo "$FAIL" )"
+assert_eq "positive control — assert_eq reports a false comparison as a failure" "1" "$RCONTROL"
+
+rm -rf "$RFAKE"
+unset -f renew_run mk_comment
+fi
+
 echo ""
 if [ "$FAIL" -gt 0 ]; then
   echo "── issue-claim: $PASS passed, $FAIL failed"
