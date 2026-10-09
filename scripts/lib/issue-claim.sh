@@ -135,6 +135,14 @@ CLAIM_STALE_SECONDS="${CLAIM_STALE_SECONDS:-43200}"
 # later read of that issue hung with it (brik-llm#4194).
 CLAIM_PENDING_BRANCH='(pending — not yet branched)'
 
+# How long a renewal is good for (brik-llm#4550). 600s against the 43200s TTL is
+# a 72x margin, so the lease cannot lapse even if seventy consecutive renewals
+# fail. The window is not about freshness — it is about cost: the renewal runs
+# from the UserPromptSubmit hook, on every turn of every session, and this fleet
+# runs eight at once. Inside the window renew_issue_claim reads nothing and
+# writes nothing.
+CLAIM_RENEW_THROTTLE_SECONDS="${CLAIM_RENEW_THROTTLE_SECONDS:-600}"
+
 # ── Pure helpers (no network, no git) ──────────────────────────────
 
 # This session's identity. Host discriminates the two machines; branch
@@ -981,6 +989,130 @@ release_issue_claim() {
     return 1
   }
   echo -e "${_IC_GREEN}✓ Released the claim on ${owner}/${repo}#${num}.${_IC_NC}"
+  return 0
+}
+
+# ── Lease renewal (brik-llm#4550) ───────────────────────────────────
+#
+# A claim marker is ALREADY a lease — it carries Host, Session, Since and a TTL
+# (CLAIM_STALE_SECONDS, :131). Nothing ever renewed `Since`, so the lease decayed
+# into a 12h timer and was wrong in both directions: an ended session kept
+# refusing a ticket for up to 12h, and a session still running at 12h+1s read
+# `stale`, which is how a ticket gets built twice.
+#
+# brik-llm#4542 answered only the second half, and only for /resume: it probes
+# the claimant's heartbeat over the SSH mesh from resume-supersede-check.sh.
+# Renewal answers both halves at EVERY call site at once, because
+# check_issue_claim, claim-probe.sh and resume-supersede-check.sh all read
+# `Since` already — not one of them changes. It also works when the claimant's
+# machine is asleep, which a mesh probe cannot.
+#
+# PROMOTE-ONLY BY CONSTRUCTION — the same one-way rule as session-heartbeat.sh
+# :32-43, but here it is structural rather than a convention to uphold: a session
+# can only rewrite a marker whose `Session` row is its own id, so a renewal can
+# lengthen its own claim and has no path to shortening a rival's. A renewal that
+# fails for any reason leaves the stamp exactly as it was, and the timer decides
+# as it did before.
+#
+# Only the `Since` row is rewritten. Host, Branch and Session are passed through
+# untouched rather than re-rendered through claim_marker_body, so a renewal can
+# never reformat a marker written by a different version of this lib.
+
+_ic_renew_dir() { printf '%s' "${BRIK_CLAIM_RENEW_DIR:-$HOME/.brik/claim-renew}"; }
+
+# Resolved at call time, never bound at source time — the exact false pass
+# session-heartbeat.sh:64-68 documents, where a knob set after the lib is sourced
+# is silently ignored and the test passes by reading the real directory.
+_ic_renew_window() { printf '%s' "${CLAIM_RENEW_THROTTLE_SECONDS:-600}"; }
+
+# One stamp per session per ticket: two sessions renewing two claims on the same
+# issue must not share a throttle, and one session holding claims on several
+# tickets must renew each.
+_ic_renew_stamp_file() {  # <session> <owner> <repo> <num>
+  printf '%s/%s' "$(_ic_renew_dir)" \
+    "$(printf '%s--%s-%s-%s' "${1:-}" "${2:-}" "${3:-}" "${4:-}" \
+       | tr -c 'A-Za-z0-9._-' '-' | cut -c1-180)"
+}
+
+# renew_issue_claim [--force] <issue-ref>
+#
+# Returns: 0 renewed · 1 a read or write failed · 2 bad ref or no session id ·
+# 3 nothing of mine here (no marker, or another session's — left untouched) ·
+# 4 throttled, and nothing was read or written.
+renew_issue_claim() {
+  local ref="" force=0
+  while [ $# -gt 0 ]; do
+    case "${1:-}" in
+      --force) force=1; shift ;;
+      *) ref="${1:-}"; shift ;;
+    esac
+  done
+
+  local my_session resolved owner repo num
+  my_session="$(claim_session_id)"
+  # No session id means no way to tell my claim from a rival's — the same reason
+  # release_issue_claim refuses. Renewing on host+branch would let two sessions
+  # sharing claim-write.sh's placeholder branch renew each other's leases.
+  [ -n "$my_session" ] || return 2
+  resolved="$(_ic_resolve_ref "$ref")" || return 2
+  read -r owner repo num <<<"$resolved"
+  { [ -n "$owner" ] && [ -n "$repo" ] && [ -n "$num" ]; } || return 2
+
+  # THROTTLE FIRST, before `gh` is looked up let alone called. Everything above
+  # this point is string handling; this is the line that makes a per-turn hook
+  # affordable.
+  local stamp_file last now
+  stamp_file="$(_ic_renew_stamp_file "$my_session" "$owner" "$repo" "$num")"
+  now="$(date +%s)"
+  if [ "$force" -eq 0 ] && [ -r "$stamp_file" ]; then
+    last="$(cat "$stamp_file" 2>/dev/null)"
+    case "$last" in
+      ''|*[!0-9]*) : ;;  # unreadable stamp → renew now and rewrite it
+      *) [ "$(( now - last ))" -lt "$(_ic_renew_window)" ] && return 4 ;;
+    esac
+  fi
+
+  command -v gh >/dev/null 2>&1 || return 1
+
+  local found id body their_session new_body stamp
+  found="$(_ic_find_claim "$owner" "$repo" "$num" strict)" || return 1
+  # No marker at all is not an error and not something to retry every turn —
+  # stamp it so an unclaimed ticket costs one read per window, not one per turn.
+  [ -n "$found" ] || { _ic_renew_touch "$stamp_file" "$now"; return 3; }
+  id="${found%%$'\t'*}"
+  body="${found#*$'\t'}"
+  their_session="$(parse_claim_session "$body")"
+  if [ "$their_session" != "$my_session" ]; then
+    _ic_renew_touch "$stamp_file" "$now"
+    return 3
+  fi
+  # A marker with no `Since` row is not one this lib wrote; rewriting it would
+  # invent a lease rather than renew one.
+  parse_claim "$body" >/dev/null 2>&1 || { _ic_renew_touch "$stamp_file" "$now"; return 3; }
+
+  stamp="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  # awk, not sed: a claim body is arbitrary text from the API and a sed
+  # replacement string would have to escape every & and backslash in it. Only the
+  # FIRST Since row is touched, so a marker quoting another marker cannot be
+  # rewritten twice.
+  new_body="$(printf '%s\n' "$body" | awk -v stamp="$stamp" '
+    !done && /^\| Since \| .* \|$/ { print "| Since | " stamp " |"; done = 1; next }
+    { print }
+  ')"
+  [ -n "$new_body" ] || return 1
+
+  gh api -X PATCH "repos/$owner/$repo/issues/comments/$id" -f body="$new_body" >/dev/null 2>&1 || return 1
+  _ic_renew_touch "$stamp_file" "$now"
+  return 0
+}
+
+# Best-effort: a throttle stamp that cannot be written costs an extra API read
+# next turn, never a failed renewal.
+_ic_renew_touch() {  # <file> <epoch>
+  local f="${1:-}" now="${2:-}"
+  [ -n "$f" ] || return 0
+  mkdir -p "$(dirname "$f")" 2>/dev/null || return 0
+  printf '%s\n' "$now" > "$f" 2>/dev/null || true
   return 0
 }
 
