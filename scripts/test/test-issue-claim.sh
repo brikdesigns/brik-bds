@@ -144,9 +144,21 @@ assert_not "rejects a body that is not a claim" parse_claim_session "just a norm
 echo "── claim_is_released (#2204) ──"
 assert_ok  "a CLOSED issue releases the claim — the marker has always printed that promise" \
   claim_is_released CLOSED unknown
-assert_ok  "a MERGED PR releases the claim" \
+# The second fail-open, measured 2026-10-10 on brik-llm#4554. The MERGED arm was
+# written for "the claimant's work is demonstrably over", but a PR that completes
+# a ticket carries a closing keyword and the ISSUE goes CLOSED — so the issue
+# arm below already covers that case, and the PR arm only ever fired on the
+# `Part of #N` shape, where the session is still running. Session bc8b91f8
+# renewed its lease at 13:14:14Z, merged #4601 (`Part of #4554`) at 13:20:01Z,
+# and was still running (pid 7237) when a pickup probed four minutes later and
+# was told the claim was dead. `resume-supersede-check.sh:29-32` had ruled the
+# same question the other way since #4103 — two gates, opposite verdicts, and
+# the canonical one held the permissive rule.
+assert_not "a MERGED PR on an OPEN issue does NOT release the claim — \`Part of #N\` is the normal shape of a session that lands one PR and keeps building" \
   claim_is_released OPEN MERGED
-assert_ok  "a CLOSED PR releases it too — closed-not-merged still means that work ended" \
+assert_ok  "a MERGED PR that CLOSED the ticket still releases, via the issue-state arm — the case #2204 was written for" \
+  claim_is_released CLOSED MERGED
+assert_ok  "a CLOSED PR releases it — closed-not-merged on an open ticket still means that work ended" \
   claim_is_released OPEN CLOSED
 assert_not "an open issue with an OPEN PR is a real session — it must still block" \
   claim_is_released OPEN OPEN
