@@ -201,7 +201,7 @@ ${CLAIM_MARKER}
 ${session_row:+${session_row}
 }| Since | ${stamp} |
 
-Another session's \`new-task.sh\` will refuse this ticket until this issue closes, every branch above is gone, their PRs are merged or closed, or the claim ages out (${CLAIM_STALE_SECONDS}s). Rewritten in place on each pickup — never a second comment.
+Another session's \`new-task.sh\` will refuse this ticket until this issue closes, every branch above has its PR closed without merging, or the claim ages out (${CLAIM_STALE_SECONDS}s). Rewritten in place on each pickup — never a second comment. A **merged** PR does not end this claim — \`Part of #N\` is the normal shape of a session that lands one PR and keeps building.
 
 One session working two repos (a canon lib plus its twin) adds its second branch to the row above; it is not a second claimant.
 
@@ -355,10 +355,29 @@ claim_branch_union() {
 # of every session between `new-task.sh` and `pr-task.sh` — the window #2645 was
 # lost in — and it is also what a deleted-but-never-pushed branch looks like. See
 # the header on why branch absence is not a signal in its own right.
+#
+# MERGED is NOT a release either. A merged PR ends a PR, not a
+# session: brik-llm's own convention is `Part of #N` / `Refs #N` for a PR that
+# does not complete its ticket (CLAUDE.md § github-closing-keyword-parser), so
+# "landed one PR and kept building" is the NORMAL shape of a multi-PR session,
+# not an edge case. When a PR does complete the ticket it carries a closing
+# keyword, the issue goes CLOSED, and the issue_state arm above releases the
+# claim — so the MERGED arm never added reach on the case it was written for
+# (#2204) and only ever fired on the `Part of` case, where it is wrong.
+#
+# Measured 2026-10-10 on brik-llm#4554: session bc8b91f8 renewed its lease at
+# 13:14:14Z, merged #4601 (`Part of #4554`) at 13:20:01Z, and was still running
+# (pid 7237) when a pickup probed at ~13:24Z and was told the claim was dead.
+# `resume-supersede-check.sh:29-32` already rules this the other way — "an open
+# item with a merged PR is NOT counted toward superseded" (#4103) — so the two
+# gates disagreed, and the canonical one held the permissive rule.
+#
+# CLOSED (unmerged) still releases: an abandoned PR on an open ticket is the
+# signal #2204 was actually reaching for, and nothing measured contradicts it.
 claim_is_released() {
   local issue_state="${1:-unknown}" pr_state="${2:-unknown}"
   [ "$issue_state" = "CLOSED" ] && return 0
-  case "$pr_state" in MERGED|CLOSED) return 0 ;; esac
+  case "$pr_state" in CLOSED) return 0 ;; esac
   return 1
 }
 
@@ -764,7 +783,7 @@ _ic_claim_release_reason() {
   done
   [ "$n" -gt 0 ] || return 1
 
-  printf 'its PR is merged or closed'
+  printf 'its PR was closed without merging'
   return 0
 }
 
