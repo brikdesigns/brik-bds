@@ -181,6 +181,34 @@ assert_not "a lowercase state is not silently accepted — _ic_issue_state upcas
 assert_not "NO PR for the branch reads as unknown and keeps blocking — a deleted branch and an unpushed one look identical, and un-gating there re-opens #2645" \
   claim_is_released OPEN none
 
+# The opt-in restoration of the MERGED arm, for a lane whose claim is scoped to
+# ONE PR whose merge IS the completion — brik-client-portal's `promote.sh`
+# staging→main lane (#4434 AC4). The default above stays fail-closed; what is
+# locked here is that the knob reaches ONLY the MERGED arm.
+#
+# Set in this shell, not a subshell: PASS/FAIL are plain variables, so a
+# subshell would swallow every count and a failure inside it would exit 0.
+CLAIM_RELEASE_ON_MERGE=1
+assert_ok  "CLAIM_RELEASE_ON_MERGE=1 releases on a MERGED PR — a promotion lane is one-PR-per-promotion, and that merge IS its completion (#4434 AC4)" \
+  claim_is_released OPEN MERGED
+assert_not "the knob does not reach an OPEN PR — a promotion still building must block" \
+  claim_is_released OPEN OPEN
+assert_not "the knob does not reach \`none\` — an unpushed branch still blocks (#2645)" \
+  claim_is_released OPEN none
+assert_eq "the knob rewords the marker's release promise, so the claim states the rule its reader is judged by" \
+  "yes" "$(case "$(claim_marker_body h task/promote-1 2026-10-10T00:00:00Z)" in
+            *"its PR merged or closed"*) echo yes ;; *) echo no ;; esac)"
+# shellcheck disable=SC2034  # read by the sourced lib, not by this file
+CLAIM_RELEASE_ON_MERGE=true
+assert_not "a knob set to anything but 1 is off — only the exact string opts in" \
+  claim_is_released OPEN MERGED
+unset CLAIM_RELEASE_ON_MERGE
+assert_not "unsetting the knob restores the default — it is read per call, never latched" \
+  claim_is_released OPEN MERGED
+assert_eq "and the marker's default wording comes back with it" \
+  "yes" "$(case "$(claim_marker_body h task/dev-1 2026-10-10T00:00:00Z)" in
+            *"A **merged** PR does not end this claim"*) echo yes ;; *) echo no ;; esac)"
+
 echo "── claim_handoff_after (#4414) ──"
 HO_NDJSON="$(printf '%s\n' \
   '{"id":1,"login":"x","created_at":"2026-10-06T17:49:00Z","body":"<!-- claim -->\n| Since | 2026-10-06T17:49:00Z |"}' \

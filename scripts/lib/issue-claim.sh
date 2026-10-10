@@ -135,6 +135,16 @@ CLAIM_STALE_SECONDS="${CLAIM_STALE_SECONDS:-43200}"
 # later read of that issue hung with it (brik-llm#4194).
 CLAIM_PENDING_BRANCH='(pending — not yet branched)'
 
+# Opt-in: does a MERGED PR end the claim? Default 0 — see claim_is_released's
+# header for why a merged PR normally means "still building", not "done".
+#
+# The one shape that genuinely differs is a lane where the claim is scoped to a
+# SINGLE PR and that PR's merge IS the completion — `promote.sh`'s staging→main
+# promotion in brik-client-portal (#4434 AC4), where the lane must free the
+# moment the promotion lands. A dev session is multi-PR (`Part of #N`); a
+# promotion is one-PR-per-promotion. Set it per-caller, never globally.
+CLAIM_RELEASE_ON_MERGE="${CLAIM_RELEASE_ON_MERGE:-0}"
+
 # How long a renewal is good for (brik-llm#4550). 600s against the 43200s TTL is
 # a 72x margin, so the lease cannot lapse even if seventy consecutive renewals
 # fail. The window is not about freshness — it is about cost: the renewal runs
@@ -190,6 +200,16 @@ claim_marker_body() {
   # Omitted rather than rendered empty when there is no session id, so a
   # hand-run pickup writes exactly the marker it wrote before brik-llm#2792.
   [ -n "$session" ] && session_row="| Session | ${BT}${session}${BT} |"
+  # The marker states the release rule the reader will actually be judged by,
+  # so it tracks CLAIM_RELEASE_ON_MERGE rather than hard-coding the default.
+  local release_rule merged_note
+  if [ "${CLAIM_RELEASE_ON_MERGE:-0}" = "1" ]; then
+    release_rule="every branch above has its PR merged or closed"
+    merged_note="This lane runs with ${BT}CLAIM_RELEASE_ON_MERGE=1${BT}: the claim is scoped to one PR, and that PR's merge IS its completion."
+  else
+    release_rule="every branch above has its PR closed without merging"
+    merged_note="A **merged** PR does not end this claim — ${BT}Part of #N${BT} is the normal shape of a session that lands one PR and keeps building."
+  fi
   cat <<EOF
 ${CLAIM_MARKER}
 🤖 **Claimed** — a session is working this ticket.
@@ -201,7 +221,7 @@ ${CLAIM_MARKER}
 ${session_row:+${session_row}
 }| Since | ${stamp} |
 
-Another session's \`new-task.sh\` will refuse this ticket until this issue closes, every branch above has its PR closed without merging, or the claim ages out (${CLAIM_STALE_SECONDS}s). Rewritten in place on each pickup — never a second comment. A **merged** PR does not end this claim — \`Part of #N\` is the normal shape of a session that lands one PR and keeps building.
+Another session's \`new-task.sh\` will refuse this ticket until this issue closes, ${release_rule}, or the claim ages out (${CLAIM_STALE_SECONDS}s). Rewritten in place on each pickup — never a second comment. ${merged_note}
 
 One session working two repos (a canon lib plus its twin) adds its second branch to the row above; it is not a second claimant.
 
@@ -374,10 +394,17 @@ claim_branch_union() {
 #
 # CLOSED (unmerged) still releases: an abandoned PR on an open ticket is the
 # signal #2204 was actually reaching for, and nothing measured contradicts it.
+#
+# CLAIM_RELEASE_ON_MERGE=1 restores the MERGED arm for the one caller whose
+# claim is scoped to a single PR whose merge IS the completion (see the knob's
+# declaration above). Opt-in per-caller; the default stays fail-closed.
 claim_is_released() {
   local issue_state="${1:-unknown}" pr_state="${2:-unknown}"
   [ "$issue_state" = "CLOSED" ] && return 0
-  case "$pr_state" in CLOSED) return 0 ;; esac
+  case "$pr_state" in
+    CLOSED) return 0 ;;
+    MERGED) [ "${CLAIM_RELEASE_ON_MERGE:-0}" = "1" ] && return 0 ;;
+  esac
   return 1
 }
 
@@ -783,7 +810,14 @@ _ic_claim_release_reason() {
   done
   [ "$n" -gt 0 ] || return 1
 
-  printf 'its PR was closed without merging'
+  # The wording has to track the knob, not the default: under
+  # CLAIM_RELEASE_ON_MERGE=1 a merged PR reaches here too, and
+  # "closed without merging" would then be a false statement of fact.
+  if [ "${CLAIM_RELEASE_ON_MERGE:-0}" = "1" ]; then
+    printf 'its PR is merged or closed'
+  else
+    printf 'its PR was closed without merging'
+  fi
   return 0
 }
 
