@@ -211,10 +211,19 @@
 }
 
 /* ─── Switcher — sibling-record caret + menu ─────────────────────
- * Rendered as the last child of the trail (`nav.bds-breadcrumb`) only when
- * two or more `options` are passed. The trail already `flex-wrap`s and the
- * caret never shrinks, so it rides the end of the last crumb. Folded in from
- * the former standalone BreadcrumbSwitcher component (#2521). */
+ * Two mount points, same markup (Breadcrumb.tsx):
+ *   1. Last child of the trail (`nav.bds-breadcrumb`) when two or more
+ *      top-level `options` are passed.
+ *   2. Inline inside any `.bds-breadcrumb__item` — after that crumb's
+ *      label/link, before the separator to the next crumb — when that
+ *      item's own `switcher` carries two or more options.
+ * No positional selector depends on either slot: `inline-flex` + `flex-shrink:
+ * 0` just makes the caret a normal flex child that rides its container's gap
+ * (the nav's at the trail's end, the item's mid-trail) and never shrinks when
+ * the trail wraps. A mid-trail instance on a crumb that collapses below the
+ * tablet breakpoint (`--item--collapsible`) collapses with it — visually
+ * hidden, still in the accessibility tree, same as the rest of that crumb.
+ * Folded in from the former standalone BreadcrumbSwitcher component (#2521). */
 
 .bds-breadcrumb__switch {
   position: relative;

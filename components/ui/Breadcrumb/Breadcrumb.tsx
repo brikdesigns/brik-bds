@@ -9,6 +9,33 @@ import './Breadcrumb.css';
 export interface BreadcrumbItem {
   label: string;
   href?: string;
+  /**
+   * Sibling records THIS crumb can switch to — e.g. the "client" crumb on an
+   * admin project page switching between clients, not just the trailing
+   * project-to-project switcher. Renders the same caret + menu as the
+   * top-level {@link BreadcrumbProps.options}, inline right after this
+   * crumb's label/link and before the separator to the next crumb. Two or
+   * more `options` are required to render anything — fewer renders nothing,
+   * same floor as the trailing switcher.
+   */
+  switcher?: {
+    /** Sibling records to switch between, including the current one. */
+    options: BreadcrumbSwitchOption[];
+    /**
+     * Accessible label for this crumb's switch trigger, e.g. `Switch client`.
+     * Required (not optional, unlike the top-level `switchLabel`) — a trail
+     * can carry more than one per-crumb switcher, so each needs its own
+     * distinguishing name rather than falling back to a shared generic label.
+     */
+    switchLabel: string;
+    /**
+     * Called when a non-current option is selected, with its `href`. Defaults
+     * to a full-page navigation (`window.location.href = href`) — pass a
+     * router-aware handler for client-side routing. Independent of the
+     * top-level {@link BreadcrumbProps.onNavigate}.
+     */
+    onNavigate?: (href: string, option: BreadcrumbSwitchOption) => void;
+  };
 }
 
 export type BreadcrumbSeparator = 'slash' | 'chevron';
@@ -16,8 +43,8 @@ export type BreadcrumbSeparator = 'slash' | 'chevron';
 /**
  * A sibling record the trail can switch to — e.g. another service page in the
  * same service line, or another project on the same client. Passing two or
- * more of these to {@link Breadcrumb} renders a caret + switcher menu after
- * the trail.
+ * more of these to {@link Breadcrumb} (via {@link BreadcrumbProps.options} or
+ * a per-crumb {@link BreadcrumbItem.switcher}) renders a caret + switcher menu.
  */
 export interface BreadcrumbSwitchOption {
   /** Display label for the sibling record. */
@@ -97,7 +124,13 @@ function BreadcrumbLink({
  * switcher: a caret after the trail opens a menu of siblings. Without them the
  * trail is a pure, stateless breadcrumb.
  *
- * @summary Navigation breadcrumb trail, optional sibling-record switcher
+ * Any individual crumb can carry its OWN switcher too — pass `switcher` on
+ * that {@link BreadcrumbItem} (e.g. the "client" crumb on an admin project
+ * page switching between clients). It renders inline right after that crumb,
+ * independent of the trailing `options` switcher — a trail can have neither,
+ * either, or both.
+ *
+ * @summary Navigation breadcrumb trail, optional trailing and/or per-crumb sibling-record switcher
  */
 export function Breadcrumb({
   items,
@@ -134,6 +167,7 @@ export function Breadcrumb({
       {items.map((item, i) => {
         const isLast = i === items.length - 1;
         const isIntermediate = i > 0 && !isLast;
+        const itemHasSwitcher = !!item.switcher && item.switcher.options.length > 1;
         return (
           <Fragment key={`${item.label}-${i}`}>
             {collapses && i === 1 && (
@@ -168,6 +202,13 @@ export function Breadcrumb({
                   {item.label}
                 </BreadcrumbLink>
               )}
+              {itemHasSwitcher && (
+                <BreadcrumbSwitch
+                  options={item.switcher!.options}
+                  switchLabel={item.switcher!.switchLabel}
+                  onNavigate={item.switcher!.onNavigate}
+                />
+              )}
             </span>
           </Fragment>
         );
@@ -180,12 +221,15 @@ export function Breadcrumb({
 }
 
 /**
- * BreadcrumbSwitch — the caret trigger + sibling-record menu rendered after the
- * trail when {@link Breadcrumb} gets two or more `options`. Kept internal (not
- * exported) so it only mounts when needed and a plain breadcrumb stays
- * stateless. The trailing crumb keeps `aria-current="page"`; this caret is a
- * separate `aria-haspopup="menu"` control alongside it, never folded into the
- * trail.
+ * BreadcrumbSwitch — the caret trigger + sibling-record menu. Mounted once
+ * after the trail when {@link Breadcrumb} gets two or more top-level
+ * `options`, and again inline per crumb for any {@link BreadcrumbItem} that
+ * carries its own `switcher` with two or more options — each call gets its
+ * own open/close state, so multiple instances in one trail don't interfere.
+ * Kept internal (not exported) so it only mounts when needed and a plain
+ * breadcrumb stays stateless. The trailing crumb keeps `aria-current="page"`;
+ * a caret is a separate `aria-haspopup="menu"` control alongside it, never
+ * folded into the trail.
  */
 function BreadcrumbSwitch({
   options,
