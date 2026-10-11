@@ -47,6 +47,8 @@ export const ServiceLineCascade = () => (
 
 Navigation breadcrumb trail showing the current page location within a hierarchy. Toggle `separator` (`slash` / `chevron`) via Controls on Default.
 
+A crumb trail, a trailing sibling-record switcher, and a per-crumb sibling-record switcher on any middle crumb can all coexist — see Patterns below.
+
 Pass `linkComponent` (e.g. `next/link`) so linked crumbs route client-side instead of triggering a full-page reload. See [framework guides → client-side routing](/docs/getting-started/framework-guides).
 
 ## Default
@@ -77,6 +79,16 @@ trail stays a plain breadcrumb. `onNavigate` routes the selection client-side;
 without it BDS does a full-page navigation.
 
 <Canvas of={Stories.WithSwitcher} />
+
+### Per-crumb switcher
+
+Any crumb — not just the trailing one — can carry its own `switcher`. The
+"Acme Holdings" crumb below opens a menu of sibling clients, independent of
+the trailing project-to-project switcher at the end of the same trail. A
+trail can have neither, either, or both; each switcher keeps its own
+open/close state.
+
+<Canvas of={Stories.WithPerCrumbSwitcher} />
 
 ### Service-line cascade
 

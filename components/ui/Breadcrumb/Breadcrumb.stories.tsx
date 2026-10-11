@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, waitFor } from 'storybook/test';
-import { Breadcrumb } from './Breadcrumb';
+import { Breadcrumb, type BreadcrumbItem } from './Breadcrumb';
 import { type BdsLinkComponent } from '../NavItem';
 
 /* Story-only stand-in for a router `Link` (Next.js / Remix). Tags the rendered
@@ -22,7 +22,7 @@ const meta: Meta<typeof Breadcrumb> = {
     items: {
       control: 'object',
       description:
-        'Crumb trail in order. The last item renders as plain text with `aria-current="page"`; earlier items render as `<a>` when `href` is set.',
+        'Crumb trail in order. The last item renders as plain text with `aria-current="page"`; earlier items render as `<a>` when `href` is set. Any item can also carry its own `switcher` (`{ options, switchLabel, onNavigate? }`) to render a caret + sibling-record menu inline right after that crumb — two or more `options` required, same as the trailing switcher.',
     },
     separator: {
       control: 'select',
@@ -203,5 +203,170 @@ export const InteractionTestSwitchNavigate: Story = {
       label: 'Brand identity',
       href: '#brand-identity',
     });
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   4. PER-CRUMB SWITCHER — a MIDDLE crumb (not just the trailing one) can
+      carry its own `switcher`, rendered inline right after that crumb. E.g.
+      the "client" crumb on an admin project page switching between clients,
+      independent of a project-to-project trailing switcher on the same trail.
+   ═══════════════════════════════════════════════════════════════ */
+
+const SIBLING_CLIENTS = [
+  { label: 'Acme Holdings', href: '#acme-holdings', current: true },
+  { label: 'Beacon Group', href: '#beacon-group' },
+  { label: 'Summit Partners', href: '#summit-partners' },
+];
+
+const SIBLING_PROJECTS = [
+  { label: 'Brand Refresh', href: '#brand-refresh', current: true },
+  { label: 'Site Rebuild', href: '#site-rebuild' },
+];
+
+/**
+ * The "client" crumb carries its own `switcher` — a caret right after
+ * "Acme Holdings" opens a menu of sibling clients, independent of the
+ * trailing project-to-project switcher on "Brand Refresh" at the end of the
+ * same trail. A trail can have neither, either, or both.
+ * @summary Middle crumb with its own sibling-record switcher
+ */
+export const WithPerCrumbSwitcher: Story = {
+  args: {
+    items: [
+      { label: 'Home', href: '#' },
+      { label: 'Clients', href: '#' },
+      {
+        label: 'Acme Holdings',
+        href: '#acme-holdings',
+        switcher: {
+          options: SIBLING_CLIENTS,
+          switchLabel: 'Switch client',
+          onNavigate: fn(),
+        },
+      },
+      { label: 'Projects', href: '#' },
+      { label: 'Brand Refresh' },
+    ],
+    options: SIBLING_PROJECTS,
+    switchLabel: 'Switch project',
+    onNavigate: fn(),
+  },
+};
+
+/**
+ * The per-crumb caret opens its menu on click, closes on Escape, and returns
+ * focus to its own trigger — the same keyboard contract as the trailing
+ * switcher, proven on a MIDDLE crumb.
+ * @summary Asserts per-crumb switch keyboard open/close, focus return
+ */
+export const InteractionTestPerCrumbSwitchKeyboard: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: [
+      { label: 'Home', href: '#' },
+      { label: 'Clients', href: '#' },
+      {
+        label: 'Acme Holdings',
+        href: '#acme-holdings',
+        switcher: {
+          options: SIBLING_CLIENTS,
+          switchLabel: 'Switch client',
+          onNavigate: fn(),
+        },
+      },
+      { label: 'Brand Refresh' },
+    ],
+  },
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: 'Switch client' });
+    await userEvent.click(trigger);
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'));
+    await expect(canvas.getByRole('menu')).toBeInTheDocument();
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
+    await expect(canvas.queryByRole('menu')).not.toBeInTheDocument();
+    await expect(trigger).toHaveFocus();
+  },
+};
+
+/**
+ * Selecting a non-current option on the per-crumb switcher calls ITS OWN
+ * `onNavigate` with its href — a middle crumb's switcher wires up the same as
+ * the trailing one.
+ * @summary Asserts onNavigate wiring on per-crumb switch option select
+ */
+export const InteractionTestPerCrumbSwitchNavigate: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: [
+      { label: 'Home', href: '#' },
+      { label: 'Clients', href: '#' },
+      {
+        label: 'Acme Holdings',
+        href: '#acme-holdings',
+        switcher: {
+          options: SIBLING_CLIENTS,
+          switchLabel: 'Switch client',
+          onNavigate: fn(),
+        },
+      },
+      { label: 'Brand Refresh' },
+    ],
+  },
+  play: async ({ canvas, args }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Switch client' }));
+    await userEvent.click(await canvas.findByRole('menuitem', { name: 'Beacon Group' }));
+    await expect((args.items[2] as BreadcrumbItem).switcher!.onNavigate).toHaveBeenCalledWith(
+      '#beacon-group',
+      { label: 'Beacon Group', href: '#beacon-group' }
+    );
+  },
+};
+
+/**
+ * A middle crumb's switcher and the trailing switcher on the same trail are
+ * fully independent — two distinct carets, each with its own accessible name
+ * and its own open/close state. Opening one never opens or affects the other.
+ * @summary Asserts a mid-trail and trailing switcher don't interfere
+ */
+export const InteractionTestMultipleSwitchersIndependent: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: [
+      { label: 'Home', href: '#' },
+      { label: 'Clients', href: '#' },
+      {
+        label: 'Acme Holdings',
+        href: '#acme-holdings',
+        switcher: {
+          options: SIBLING_CLIENTS,
+          switchLabel: 'Switch client',
+          onNavigate: fn(),
+        },
+      },
+      { label: 'Projects', href: '#' },
+      { label: 'Brand Refresh' },
+    ],
+    options: SIBLING_PROJECTS,
+    switchLabel: 'Switch project',
+    onNavigate: fn(),
+  },
+  play: async ({ canvas }) => {
+    const clientTrigger = canvas.getByRole('button', { name: 'Switch client' });
+    const projectTrigger = canvas.getByRole('button', { name: 'Switch project' });
+
+    await userEvent.click(clientTrigger);
+    await waitFor(() => expect(clientTrigger).toHaveAttribute('aria-expanded', 'true'));
+    await expect(projectTrigger).toHaveAttribute('aria-expanded', 'false');
+    await expect(canvas.getAllByRole('menu')).toHaveLength(1);
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(clientTrigger).toHaveAttribute('aria-expanded', 'false'));
+
+    await userEvent.click(projectTrigger);
+    await waitFor(() => expect(projectTrigger).toHaveAttribute('aria-expanded', 'true'));
+    await expect(clientTrigger).toHaveAttribute('aria-expanded', 'false');
   },
 };

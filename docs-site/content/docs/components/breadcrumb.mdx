@@ -86,6 +86,36 @@ Pass two or more `options` (plus a `switchLabel`) to render a caret after the tr
 />
 ```
 
+### Per-crumb switcher
+
+The switcher above is scoped to the *trailing* crumb. Any crumb — including a MIDDLE one — can carry its own, independent switcher by passing `switcher` on that item instead: e.g. the "client" crumb on an admin project page switching between clients, while a separate trailing switcher (or none) handles project-to-project. It renders inline right after that crumb's label/link, before the separator to the next crumb, using the same caret + menu, the same two-or-more-options floor, and the same `BreadcrumbSwitchOption` shape as the trailing switcher. A trail can have neither, either, or both — each switcher keeps its own open/close state, so one never affects the other.
+
+`switcher.switchLabel` is required (not optional, unlike the top-level `switchLabel`) — a trail can carry more than one per-crumb switcher, so each needs its own distinguishing accessible name rather than a shared generic fallback.
+
+```tsx
+<Breadcrumb
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Clients', href: '/clients' },
+    {
+      label: 'Acme Holdings',
+      href: '/clients/acme-holdings',
+      switcher: {
+        options: [
+          { label: 'Acme Holdings', href: '/clients/acme-holdings', current: true },
+          { label: 'Beacon Group', href: '/clients/beacon-group' },
+          { label: 'Summit Partners', href: '/clients/summit-partners' },
+        ],
+        switchLabel: 'Switch client',
+        onNavigate: (href) => router.push(href),
+      },
+    },
+    { label: 'Projects', href: '/clients/acme-holdings/projects' },
+    { label: 'Brand Refresh' },
+  ]}
+/>
+```
+
 ## Service-line cascade
 
 When a breadcrumb sits inside a `[data-service-line='X']` subtree, the current-page label and separators rebind canonical `--text-secondary` and `--text-muted` to the matching `--text-service-{name}` value (`brand`, `marketing`, `information`, `product`, and `service` → back-office).
@@ -135,6 +165,11 @@ Plus standard `<nav>` HTML attributes.
 interface BreadcrumbItem {
   label: ReactNode;
   href?: string;
+  switcher?: {
+    options: BreadcrumbSwitchOption[];
+    switchLabel: string;
+    onNavigate?: (href: string, option: BreadcrumbSwitchOption) => void;
+  };
 }
 ```
 
