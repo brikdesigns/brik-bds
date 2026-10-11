@@ -33,7 +33,7 @@
       "subject": "bds",
       "owner": "nstaner",
       "generated": "2026-10-01",
-      "supersedes": "none",
+      "supersedes": "https://github.com/brikdesigns/brik-llm/blob/main/docs/reports/bds/brik-bds-remaining-work.html",
       "cadence": "once",
       "source": "manual"
     },
