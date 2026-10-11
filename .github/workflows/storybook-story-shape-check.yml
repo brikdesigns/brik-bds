@@ -52,7 +52,7 @@ concurrency:
 
 jobs:
   storybook-story-shape-check:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Checkout code
         uses: actions/checkout@v6

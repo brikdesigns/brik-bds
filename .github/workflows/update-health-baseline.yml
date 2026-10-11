@@ -28,7 +28,7 @@ concurrency:
 
 jobs:
   update-baseline:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       # App-token push so the commit triggers CI — same reason as
       # update-visual-baselines.yml (#1662). Scoped to contents:write alone.

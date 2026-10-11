@@ -24,7 +24,7 @@ concurrency:
 jobs:
   check-drift:
     name: Check consumer drift
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     permissions:
       contents: read
     steps:

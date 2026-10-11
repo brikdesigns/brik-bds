@@ -127,7 +127,7 @@ jobs:
   # while the aggregate `visual` job below still runs and reports green.
   changes:
     name: classify diff
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     outputs:
       # '[1,2,3,4,5,6,7,8]' to run every shard, '[]' to run none.
       shards: ${{ steps.classify.outputs.shards }}
@@ -347,7 +347,7 @@ jobs:
   # green. When they did run, it fails unless all eight passed.
   visual:
     name: visual
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: [changes, shard]
     if: always()
     steps:

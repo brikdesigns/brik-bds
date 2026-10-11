@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   build-tokens:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     permissions:
       contents: write
 

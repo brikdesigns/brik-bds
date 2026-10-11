@@ -104,7 +104,7 @@ jobs:
     # Group-qualified: visual.yml, tokens-gate.yml and docs-gate.yml all have a
     # classifier, and undifferentiated rows in the PR checks list are useless.
     name: classify diff (contracts)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     outputs:
       run: ${{ steps.classify.outputs.run }}
       readiness: ${{ steps.classify.outputs.readiness }}
@@ -197,7 +197,7 @@ jobs:
   # the branch-protection context stays stable however this fans out.
   contracts:
     name: script contracts
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: changes
     permissions:
       contents: read
@@ -619,7 +619,7 @@ jobs:
   # the same reason the gate-pathspec lint needs no install.
   readiness:
     name: merge-queue readiness
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: changes
     permissions:
       contents: read
@@ -652,7 +652,7 @@ jobs:
   # has to report, so it reports green.
   contracts-gate:
     name: contracts-gate
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: [changes, contracts, readiness]
     if: always()
     steps:

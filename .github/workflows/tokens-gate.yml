@@ -124,7 +124,7 @@ jobs:
     # nothing to tell them apart. The required context is the aggregate job
     # below, so this name is free to be legible.
     name: classify diff (tokens)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     outputs:
       # 'true' to run the lints, 'false' to skip them.
       run: ${{ steps.classify.outputs.run }}
@@ -238,7 +238,7 @@ jobs:
   # how the work above is reshaped.
   lints:
     name: token lints
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: changes
     permissions:
       contents: read
@@ -522,7 +522,7 @@ jobs:
   # only on a push (#2415).
   deleted-token-sweep:
     name: deleted-token consumer sweep
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: changes
     permissions:
       contents: read
@@ -575,7 +575,7 @@ jobs:
 
   tokens-gate:
     name: tokens-gate
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: [changes, lints, deleted-token-sweep]
     if: always()
     steps:

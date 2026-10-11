@@ -80,7 +80,7 @@ jobs:
   arm-automerge:
     # issue_comment fires for issues too; only PR comments are relevant.
     if: github.event_name != 'issue_comment' || github.event.issue.pull_request
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       # pull_request_target checks out the BASE by default, which is what we
       # want: the eligibility script and its policy table must come from the

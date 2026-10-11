@@ -73,7 +73,7 @@ permissions:
 
 jobs:
   require-area-label:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       # On a merge group there is no PR payload to inspect, and the PR was
       # already required to pass this gate before it could be queued. Report

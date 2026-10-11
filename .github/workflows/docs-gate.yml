@@ -107,7 +107,7 @@ jobs:
     # a classifier, and with #2098's remaining groups there would be several
     # indistinguishable rows in the PR checks list.
     name: classify diff (docs)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     outputs:
       lints: ${{ steps.classify.outputs.lints }}
       doclinks: ${{ steps.classify.outputs.doclinks }}
@@ -222,7 +222,7 @@ jobs:
   # 0 and none leaves the git tree dirty.
   lints:
     name: docs lints
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: changes
     permissions:
       contents: read
@@ -411,7 +411,7 @@ jobs:
   # still has to report, so it reports green.
   docs-gate:
     name: docs-gate
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: [changes, lints, doclinks, docssite]
     if: always()
     steps:
