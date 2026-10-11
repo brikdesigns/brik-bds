@@ -36,7 +36,7 @@ concurrency:
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     permissions:
       contents: write # create the GitHub Release on tag push
       packages: write

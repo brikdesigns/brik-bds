@@ -68,7 +68,7 @@ permissions:
 
 jobs:
   md-creation-gate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - uses: actions/checkout@v4
         with:

@@ -126,7 +126,7 @@ jobs:
     # docs-gate.yml all have a classifier, so an unqualified `classify diff`
     # would be one of several indistinguishable rows in the PR checks list.
     name: classify diff (components)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     outputs:
       lints: ${{ steps.classify.outputs.lints }}
       bundlescan: ${{ steps.classify.outputs.bundlescan }}
@@ -277,7 +277,7 @@ jobs:
   # misleading reds.
   lints:
     name: component lints
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: changes
     permissions:
       contents: read
@@ -532,7 +532,7 @@ jobs:
   # and the required check still has to report, so it reports green.
   components-gate:
     name: components-gate
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     needs: [changes, lints, bundlescan, astro, test]
     if: always()
     steps:

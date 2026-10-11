@@ -34,7 +34,7 @@ permissions:
 
 jobs:
   size-label-gate:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     # Skip the events the gate triggers on itself (adding/removing needs:size),
     # so it doesn't chase its own label churn.
     if: >-

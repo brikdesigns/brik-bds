@@ -46,7 +46,7 @@ permissions:
 
 jobs:
   reconcile:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     steps:
       - name: Reconcile issues against merged PRs
         uses: actions/github-script@v7
