@@ -184,3 +184,104 @@ describe('resolveBlueprintShortlist', () => {
     expect(withInactive.length).toBeGreaterThanOrEqual(ranked.length);
   });
 });
+
+// ── Design-decision affinity (ADR-039 Style axis, #2774) ──────────────────
+
+describe('design-decision affinity scoring', () => {
+  // Synthetic, because no entry in blueprint-library.json declares affinity
+  // yet — the vocabularies ship first so the portal's decision set (#4973)
+  // can be authored against them. These fixtures exercise the terms now so
+  // the first authored array lands on tested math.
+  const base = normalized[0];
+  const withAffinity = {
+    ...base,
+    atmospheres: ['editorial-luxury'],
+    animation_tiers: ['expressive'],
+    spacing_modes: ['spacious'],
+  } as typeof base;
+
+  const fullPicks: BlueprintShortlistProfile = {
+    atmosphere: 'editorial-luxury',
+    animation_tier: 'expressive',
+    spacing_mode: 'spacious',
+  };
+
+  it('adds each axis weight exactly once on a hit', () => {
+    const before = scoreBlueprintForProfile(base, fullPicks);
+    const after = scoreBlueprintForProfile(withAffinity, fullPicks);
+
+    expect(after.score - before.score).toBe(
+      SHORTLIST_WEIGHTS.atmosphereMatch +
+        SHORTLIST_WEIGHTS.animationTierMatch +
+        SHORTLIST_WEIGHTS.spacingModeMatch,
+    );
+    expect(after.atmosphere_match).toBe(true);
+    expect(after.animation_tier_match).toBe(true);
+    expect(after.spacing_mode_match).toBe(true);
+  });
+
+  it('scores nothing when the blueprint declares no affinity', () => {
+    const entry = scoreBlueprintForProfile(base, fullPicks);
+
+    expect(entry.atmosphere_match).toBe(false);
+    expect(entry.animation_tier_match).toBe(false);
+    expect(entry.spacing_mode_match).toBe(false);
+    expect(entry.score).toBe(scoreBlueprintForProfile(base, {}).score);
+  });
+
+  it('scores nothing when the profile made no design decisions', () => {
+    // The pre-#2774 caller shape. An affinity-carrying blueprint must score
+    // identically for it, or publishing the vocabularies would silently
+    // re-rank every existing shortlist.
+    expect(scoreBlueprintForProfile(withAffinity, {}).score).toBe(
+      scoreBlueprintForProfile(base, {}).score,
+    );
+  });
+
+  it('scores nothing on a near-miss pick', () => {
+    const entry = scoreBlueprintForProfile(withAffinity, {
+      atmosphere: 'minimal-clinical',
+      animation_tier: 'subtle',
+      spacing_mode: 'compact',
+    });
+
+    expect(entry.atmosphere_match).toBe(false);
+    expect(entry.animation_tier_match).toBe(false);
+    expect(entry.spacing_mode_match).toBe(false);
+    expect(entry.score).toBe(scoreBlueprintForProfile(base, {}).score);
+  });
+
+  it('never filters — an affinity miss re-ranks but cannot shrink a shortlist', () => {
+    const profile: BlueprintShortlistProfile = {
+      brand_personality: ['Trustworthy', 'Warm', 'Professional'],
+      industry_slug: 'dental',
+      atmosphere: 'editorial-luxury',
+      animation_tier: 'expressive',
+      spacing_mode: 'spacious',
+    };
+
+    const withoutDecisions = resolveBlueprintShortlist(
+      {
+        brand_personality: profile.brand_personality,
+        industry_slug: profile.industry_slug,
+      },
+      normalized,
+    );
+    const withDecisions = resolveBlueprintShortlist(profile, normalized);
+
+    expect(withDecisions.map((bp) => bp.key).sort()).toEqual(
+      withoutDecisions.map((bp) => bp.key).sort(),
+    );
+  });
+
+  it('lets a fully-matching blueprint outrank a bare universal one', () => {
+    // The weights are tuned so the three design decisions (3+2+1 = 6) clear
+    // `universalBonus` (5). That ordering is the point of the tuning, so it
+    // is asserted rather than left to the constants.
+    expect(
+      SHORTLIST_WEIGHTS.atmosphereMatch +
+        SHORTLIST_WEIGHTS.animationTierMatch +
+        SHORTLIST_WEIGHTS.spacingModeMatch,
+    ).toBeGreaterThan(SHORTLIST_WEIGHTS.universalBonus);
+  });
+});

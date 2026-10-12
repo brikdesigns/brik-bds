@@ -88,3 +88,39 @@ export {
   isColorPrimitiveTier,
   type ColorPrimitiveTier,
 } from './color-primitive-tier';
+
+// ── Expression modes (ADR-039 Style axis, #2774) ──────────────────
+// The five `[data-mode-*]` axes, one closed list per axis, each equal to the
+// selector values in the matching tokens/modes-*.css. See
+// `expression-modes.test.ts` for the contract and each module's header for
+// why the attribute-absent default is not a member.
+
+export {
+  SPACING_MODE_VALUES,
+  isSpacingMode,
+  type SpacingMode,
+} from './spacing-mode';
+
+export {
+  RADIUS_MODE_VALUES,
+  isRadiusMode,
+  type RadiusMode,
+} from './radius-mode';
+
+export {
+  ELEVATION_MODE_VALUES,
+  isElevationMode,
+  type ElevationMode,
+} from './elevation-mode';
+
+export {
+  TYPOGRAPHY_MODE_VALUES,
+  isTypographyMode,
+  type TypographyMode,
+} from './typography-mode';
+
+export {
+  BORDERWIDTH_MODE_VALUES,
+  isBorderWidthMode,
+  type BorderWidthMode,
+} from './borderwidth-mode';

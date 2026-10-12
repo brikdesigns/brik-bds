@@ -1,4 +1,31 @@
 {
+  "@modes": {
+    "borderwidth": [
+      "thin",
+      "bold"
+    ],
+    "elevation": [
+      "flat",
+      "lifted",
+      "dramatic"
+    ],
+    "radius": [
+      "sharp",
+      "round",
+      "pill"
+    ],
+    "spacing": [
+      "compact",
+      "comfortable",
+      "spacious"
+    ],
+    "typography": [
+      "compact",
+      "comfortable",
+      "spacious",
+      "expressive"
+    ]
+  },
   "AddableEntryList": {
     "size": [
       "sm",

@@ -1,4 +1,12 @@
-import type { Personality, VisualStyle, IndustrySlug } from '../vocabularies';
+import type {
+  Personality,
+  VisualStyle,
+  IndustrySlug,
+  Atmosphere,
+  AnimationTier,
+  SpacingMode,
+} from '../vocabularies';
+import { isAtmosphere, isAnimationTier, isSpacingMode } from '../vocabularies';
 import type {
   Mood,
   IndustryTag,
@@ -46,6 +54,33 @@ export interface Blueprint {
   moods: readonly Mood[];
   /** Industry-fit tags. Projected onto IndustrySlug via bridge. */
   industries: readonly IndustryTag[];
+
+  // ── Design-decision affinity (optional, ADR-039 Style axis) ─────
+  /**
+   * Which design-decision values this blueprint is a good fit for. Each is a
+   * closed BCS vocabulary (`Atmosphere`, `AnimationTier`, `SpacingMode`) and
+   * feeds an additive term in the resolver's shortlist score — see
+   * `SHORTLIST_WEIGHTS` in `resolver.ts`.
+   *
+   * These are AFFINITY, never a requirement: a blueprint that declares none
+   * still ranks on moods + industry exactly as before, and a profile whose
+   * pick is absent from a declared list simply earns no bonus. Nothing is
+   * filtered out on an affinity miss, so adding a list can only re-rank, not
+   * shrink, a shortlist.
+   *
+   * OMIT a field to declare no affinity. An EMPTY array is rejected by
+   * `validateBlueprint` — it reads as "affine to nothing", which is what
+   * omission already means, and the two spellings would score identically
+   * while implying different authorial intent.
+   *
+   * Unpopulated across all 13 entries as of #2774: the vocabularies ship
+   * first so the portal's decision set (#4973) can be authored against them,
+   * and per-blueprint affinity is authored once that set exists rather than
+   * guessed here.
+   */
+  atmospheres?: readonly Atmosphere[];
+  animation_tiers?: readonly AnimationTier[];
+  spacing_modes?: readonly SpacingMode[];
 
   // ── Layout archetype (v1, current) ─────────────────────────────
   /** Prose description of the layout — feeds the mockup generator system prompt. */
@@ -192,6 +227,33 @@ export function validateBlueprint(bp: Blueprint): ValidationResult {
   } else {
     for (const i of bp.industries) {
       if (!isIndustryTag(i)) push('industries', `Unknown industry tag "${i}".`);
+    }
+  }
+
+  // Design-decision affinity. Optional by field, but once declared the
+  // members are held to the same closed vocabularies the portal picks from —
+  // an unvalidated affinity list scores nothing and says nothing, which is
+  // the silent-drift shape `bcs-vocab-check` exists to prevent.
+  const affinityFields = [
+    ['atmospheres', bp.atmospheres, isAtmosphere, 'atmosphere'],
+    ['animation_tiers', bp.animation_tiers, isAnimationTier, 'animation tier'],
+    ['spacing_modes', bp.spacing_modes, isSpacingMode, 'spacing mode'],
+  ] as const;
+
+  for (const [field, values, guard, label] of affinityFields) {
+    if (values === undefined) continue;
+    if (!Array.isArray(values)) {
+      push(field, `${field} must be an array when present — omit it to declare no affinity.`);
+      continue;
+    }
+    if (values.length === 0) {
+      push(field, `${field} is empty — omit the field instead; an empty list declares nothing.`);
+      continue;
+    }
+    for (const v of values) {
+      if (typeof v !== 'string' || !guard(v)) {
+        push(field, `Unknown ${label} "${v}".`);
+      }
     }
   }
 
