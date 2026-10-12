@@ -33,13 +33,18 @@ beforeAll(async () => {
     BrikInspect?: {
       getDeclaredValue?: typeof getDeclaredValue;
       auditProp?: typeof auditProp;
+      setLintIgnores?: (list: Array<{ selector: string; property: string }>) => void;
     };
   }).BrikInspect;
-  if (!api?.getDeclaredValue || !api?.auditProp) {
-    throw new Error('widget did not expose BrikInspect.getDeclaredValue / auditProp');
+  if (!api?.getDeclaredValue || !api?.auditProp || !api?.setLintIgnores) {
+    throw new Error('widget did not expose BrikInspect.getDeclaredValue / auditProp / setLintIgnores');
   }
   getDeclaredValue = api.getDeclaredValue;
   auditProp = api.auditProp;
+  // auditProp's isViolation branch is gated on auditReady(); without a
+  // baseline call the #2589-AC5 test's isViolation assertion passes
+  // vacuously regardless of the fix (brik-bds#2777 qa review).
+  api.setLintIgnores([]);
 
   // Repro fixture (issue's own shape): a two-breakpoint `gap` via CSS vars —
   // a base rule, plus one `@media (max-width: 991px)` override later in
