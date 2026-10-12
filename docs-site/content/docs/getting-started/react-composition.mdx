@@ -27,27 +27,27 @@ Maps Figma style names to CSS-custom-property references. **One leaf = one `var(
 
 ```ts title="src/lib/tokens.ts"
 export const font = {
-  family: { body: 'var(--font-family-body)', heading: 'var(--font-family-heading)', label: 'var(--font-family-label)' /* ... */ },
+  family: { body: 'var(--bds-font-family-body)', heading: 'var(--bds-font-family-heading)', label: 'var(--bds-font-family-label)' /* ... */ },
   size: {
-    body: { xs: 'var(--body-xs)', sm: 'var(--body-sm)', md: 'var(--body-md)', lg: 'var(--body-lg)' /* ... */ },
-    label: { sm: 'var(--label-sm)', md: 'var(--label-md)' /* ... */ },
-    heading: { small: 'var(--heading-sm)', medium: 'var(--heading-md)' /* ... */ },
+    body: { xs: 'var(--bds-body-xs)', sm: 'var(--bds-body-sm)', md: 'var(--bds-body-md)', lg: 'var(--bds-body-lg)' /* ... */ },
+    label: { sm: 'var(--bds-label-sm)', md: 'var(--bds-label-md)' /* ... */ },
+    heading: { small: 'var(--bds-heading-sm)', medium: 'var(--bds-heading-md)' /* ... */ },
   },
-  lineHeight: { tight: 'var(--font-line-height-tight)', normal: 'var(--font-line-height-normal)' /* ... */ },
+  lineHeight: { tight: 'var(--bds-font-line-height-tight)', normal: 'var(--bds-font-line-height-normal)' /* ... */ },
   weight: { light: 300, regular: 400, medium: 500, semibold: 600, bold: 700 },
 } as const;
 
 export const color = {
-  text: { primary: 'var(--text-primary)', secondary: 'var(--text-secondary)', muted: 'var(--text-muted)' /* ... */ },
-  surface: { primary: 'var(--surface-primary)' /* ... */ },
-  border: { primary: 'var(--border-primary)', muted: 'var(--border-muted)' /* ... */ },
+  text: { primary: 'var(--bds-text-primary)', secondary: 'var(--bds-text-secondary)', muted: 'var(--bds-text-muted)' /* ... */ },
+  surface: { primary: 'var(--bds-surface-primary)' /* ... */ },
+  border: { primary: 'var(--bds-border-primary)', muted: 'var(--bds-border-muted)' /* ... */ },
 } as const;
 
-export const space = { none: 'var(--padding-none)', xs: 'var(--padding-xs)', sm: 'var(--padding-sm)', md: 'var(--padding-md)', lg: 'var(--padding-lg)' /* ... */ } as const;
-export const gap = { none: 'var(--gap-none)', xs: 'var(--gap-xs)', sm: 'var(--gap-sm)', md: 'var(--gap-md)' /* ... */ } as const;
+export const space = { none: 'var(--bds-padding-none)', xs: 'var(--bds-padding-xs)', sm: 'var(--bds-padding-sm)', md: 'var(--bds-padding-md)', lg: 'var(--bds-padding-lg)' /* ... */ } as const;
+export const gap = { none: 'var(--bds-gap-none)', xs: 'var(--bds-gap-xs)', sm: 'var(--bds-gap-sm)', md: 'var(--bds-gap-md)' /* ... */ } as const;
 export const border = {
-  width: { sm: 'var(--border-width-sm)' /* ... */ },
-  radius: { sm: 'var(--border-radius-sm)' /* ... */ },
+  width: { sm: 'var(--bds-border-width-sm)' /* ... */ },
+  radius: { sm: 'var(--bds-border-radius-sm)' /* ... */ },
 } as const;
 ```
 

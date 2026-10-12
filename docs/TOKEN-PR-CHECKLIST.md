@@ -50,21 +50,21 @@ Custom-property declarations inherit the allowlist of their LHS prefix family �
 
 ```css
 /* ✅ Pass — same family */
-background-color: var(--background-primary);
-color: var(--text-primary);
-border-color: var(--border-negative);
+background-color: var(--bds-background-primary);
+color: var(--bds-text-primary);
+border-color: var(--bds-border-negative);
 
 /* ✅ Pass — border allows fill-matching --background-* */
-border-color: var(--background-brand-primary);
+border-color: var(--bds-background-brand-primary);
 
 /* ❌ Fail — text family in background slot */
-background-color: var(--text-service-marketing);
+background-color: var(--bds-text-service-marketing);
 
 /* ❌ Fail — background family in text slot */
-color: var(--background-warning);
+color: var(--bds-background-warning);
 
-/* ❌ Fail — text family in border slot (use --border-negative instead) */
-border-color: var(--text-negative);
+/* ❌ Fail — text family in border slot (use --bds-border-negative instead) */
+border-color: var(--bds-text-negative);
 ```
 
 ### Registry of intentional cross-family aliases
@@ -76,17 +76,17 @@ A 1–2px line or a thin neutral UI element has no content box to hang a `border
 
 | Site | Token | Element |
 |---|---|---|
-| `ActivityTimeline.css` | `--border-muted` | hairline connector (2px) |
-| `Board.css` | `--border-muted`, `--border-secondary` | scrollbar thumb |
-| `ProgressStepper.css` | `--border-secondary` | connector line (2px) + inactive dot |
-| `Slider.css` | `--border-secondary` | track rail + disabled thumb |
+| `ActivityTimeline.css` | `--bds-border-muted` | hairline connector (2px) |
+| `Board.css` | `--bds-border-muted`, `--bds-border-secondary` | scrollbar thumb |
+| `ProgressStepper.css` | `--bds-border-secondary` | connector line (2px) + inactive dot |
+| `Slider.css` | `--bds-border-secondary` | track rail + disabled thumb |
 
 **`--surface-muted` rendered as `border-color` — `TaskConsole` in-progress spinner track.**
 The spinner ring's 3/4 track must stay *subtle on whatever surface it sits on* across themes. No border-family token does this: `--border-primary` resolves to `grayscale-darkest` (#1b1b1b) under `.theme-brand-brik` and reads dark on white; `--border-muted` is mid-grey (#828282) in `:root`. `--surface-muted` is the only token that tracks surface lightness per theme (#f2f2f2 light / #1b1b1b dark), keeping the track subtle in both modes while the leading quadrant carries `--border-brand-primary`. This is a surface-tracking fill in a border slot by design, not a hue mismatch.
 
 | Site | Token | Element |
 |---|---|---|
-| `TaskConsole.css` | `--surface-muted` | spinner track (`border-color`, 3/4 ring) |
+| `TaskConsole.css` | `--bds-surface-muted` | spinner track (`border-color`, 3/4 ring) |
 
 ---
 
@@ -137,11 +137,11 @@ Tier 2 — Client Theme (theme-{client}.css)
 
   /* TIER 1 — Brand primitives. Hex appears ONCE, here. */
   --color-brand-purple-base: #ba9cc5;
-  --color-grayscale-black:   #0a0a0a;
+  --bds-color-grayscale-black:   #0a0a0a;
 
   /* TIER 2 — Semantic overrides. var() references only. */
-  --background-brand-primary: var(--color-brand-purple-base);
-  --text-primary:             var(--color-grayscale-black);
+  --bds-background-brand-primary: var(--color-brand-purple-base);
+  --bds-text-primary:             var(--bds-color-grayscale-black);
 }
 ```
 
@@ -155,7 +155,7 @@ When semantic tokens hold raw hex instead of `var()` references, every future co
 
 | Violation | Fix |
 |-----------|-----|
-| `--background-brand-primary: #ba9cc5` in Tier 2 | Move hex to Tier 1 as `--color-purple-base`, reference with `var()` |
+| `--bds-background-brand-primary: #ba9cc5` in Tier 2 | Move hex to Tier 1 as `--color-purple-base`, reference with `var()` |
 | Using `color.department.red` for overdue/error state | Use `color.system.red` — department colors are for chips only |
 | `size="xs"` on Badge with label text | Use `size="sm"` — xs is icon-only |
 | `padding: '40px'` in style prop | Add to `space` in `tokens.ts`, use `space['2xl']` |

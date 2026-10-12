@@ -20,7 +20,7 @@ A Figma variable holds a single dimension, so the Elevation collection's `box-sh
 |---|---|---|
 | Figma collection | `Elevation` → groups `box-shadow`, `blur-radius` | `design-tokens/tokens-studio.json` |
 | Style Dictionary output | `--box-shadow-*` (single blur), `--blur-radius-*`, `--shadow-blur/offset/spread-*` | `tokens/figma-tokens.css` |
-| Composed semantic (what you use) | `--shadow-sm/md/lg/xl`, `--shadow-overlay` | `tokens/gap-fills.css` |
+| Composed semantic (what you use) | `--bds-shadow-sm/md/lg/xl`, `--bds-shadow-overlay` | `tokens/gap-fills.css` |
 
 <Callout type="info">
   **`--shadow-*` is canonical for elevation; `--box-shadow-{sm,md,lg,xl}` is a deprecated alias** ([#2233](https://github.com/brikdesigns/brik-bds/issues/2233)). Both ship and resolve identically, but component CSS now references only `--shadow-*` — the safe composed base, defined once. The `--box-shadow-{sm..xl}` aliases survive only for existing consumers; don't reach for them in new work. Note `--box-shadow-none` (value `none`, for *suppressing* a shadow) is a separate token with no `--shadow-*` twin — it stays as-is.
@@ -32,16 +32,16 @@ Ready-to-use `box-shadow` values defined in `tokens/gap-fills.css`. These are wh
 
 | Token | CSS Variable | Value | Use case |
 |---|---|---|---|
-| Small | `--shadow-sm` | `0px 2px 4px 0px rgba(0,0,0,0.06)` | Subtle cards, inputs |
-| Medium | `--shadow-md` | `0px 4px 12px 0px rgba(0,0,0,0.12)` | Cards, panels |
-| Large | `--shadow-lg` | `0px 4px 16px 0px rgba(0,0,0,0.12)` | Dropdowns, popovers |
-| Extra large | `--shadow-xl` | `0px 8px 24px 4px rgba(0,0,0,0.20)` | Modals, dialogs |
+| Small | `--bds-shadow-sm` | `0px 2px 4px 0px rgba(0,0,0,0.06)` | Subtle cards, inputs |
+| Medium | `--bds-shadow-md` | `0px 4px 12px 0px rgba(0,0,0,0.12)` | Cards, panels |
+| Large | `--bds-shadow-lg` | `0px 4px 16px 0px rgba(0,0,0,0.12)` | Dropdowns, popovers |
+| Extra large | `--bds-shadow-xl` | `0px 8px 24px 4px rgba(0,0,0,0.20)` | Modals, dialogs |
 
 ### Overlay
 
 | Token | CSS Variable | Value |
 |---|---|---|
-| Overlay | `--background-overlay` | `rgba(0, 0, 0, 0.4)` |
+| Overlay | `--bds-background-overlay` | `rgba(0, 0, 0, 0.4)` |
 
 Used for modal backdrops and drawer overlays.
 
@@ -67,14 +67,14 @@ Controls how far a shadow extends outward.
 
 | Token | CSS Variable | Value |
 |---|---|---|
-| Small | `--blur-radius-sm` | 8px |
-| Medium | `--blur-radius-md` | 12px |
-| Large | `--blur-radius-lg` | 14px |
-| Extra large | `--blur-radius-xl` | 16px |
+| Small | `--bds-blur-radius-sm` | 8px |
+| Medium | `--bds-blur-radius-md` | 12px |
+| Large | `--bds-blur-radius-lg` | 14px |
+| Extra large | `--bds-blur-radius-xl` | 16px |
 
 ```css
 .frosted-panel {
-  backdrop-filter: blur(var(--blur-radius-md));
+  backdrop-filter: blur(var(--bds-blur-radius-md));
 }
 ```
 
