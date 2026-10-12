@@ -28,11 +28,11 @@
     },
     {
       "path": "docs/reports/2026-10-01-brik-bds-remaining-work.html",
-      "title": "brik-bds Remaining Work — 2026-10-01",
+      "title": "brik-bds Remaining Work — 2026-10-12",
       "status": "current",
       "subject": "bds",
       "owner": "nstaner",
-      "generated": "2026-10-01",
+      "generated": "2026-10-12",
       "supersedes": "https://github.com/brikdesigns/brik-llm/blob/main/docs/reports/bds/brik-bds-remaining-work.html",
       "cadence": "once",
       "source": "manual"
