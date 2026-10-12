@@ -1141,17 +1141,55 @@
     return rules;
   }
 
-  function walkRules(cssRules, out) {
+  // `conditions` is the stack of enclosing @media / @supports conditions this
+  // rule is nested under, each `{ type: 'media' | 'supports', text }`. A
+  // style rule records it (#2589) so getDeclaredValue can check whether every
+  // enclosing condition currently holds before admitting the rule as a
+  // candidate — an inactive `@media` block tying on specificity and winning
+  // on source order otherwise reads as a live cascade defect.
+  function walkRules(cssRules, out, conditions) {
+    conditions = conditions || [];
     for (const rule of Array.from(cssRules)) {
       if (rule.type === CSSRule.STYLE_RULE) {
         const selectors = rule.selectorText.split(',').map((s) => s.trim());
         for (const sel of selectors) {
-          out.push({ selector: sel, style: rule.style, specificity: calcSpecificity(sel) });
+          out.push({ selector: sel, style: rule.style, specificity: calcSpecificity(sel), conditions });
         }
+      } else if (typeof CSSContainerRule !== 'undefined' && rule instanceof CSSContainerRule) {
+        // A container query's condition depends on the matched container's
+        // size, which isn't recoverable from rule text the way `@media` /
+        // `@supports` are — so its contents are excluded from the candidate
+        // set entirely rather than admitted unconditionally (#2589 AC3).
+        continue;
+      } else if (typeof CSSSupportsRule !== 'undefined' && rule instanceof CSSSupportsRule) {
+        walkRules(rule.cssRules, out, conditions.concat([{ type: 'supports', text: rule.conditionText }]));
+      } else if (typeof CSSMediaRule !== 'undefined' && rule instanceof CSSMediaRule) {
+        walkRules(rule.cssRules, out, conditions.concat([{ type: 'media', text: rule.conditionText || rule.media.mediaText }]));
       } else if (rule.cssRules) {
-        walkRules(rule.cssRules, out);
+        walkRules(rule.cssRules, out, conditions);
       }
     }
+  }
+
+  // Does every enclosing @media / @supports condition on a candidate rule
+  // currently evaluate true? Container-scoped rules never reach here —
+  // walkRules drops them before they enter the index (#2589 AC3).
+  function conditionsMatch(conditions) {
+    if (!conditions || !conditions.length) return true;
+    return conditions.every((c) => {
+      try {
+        if (c.type === 'media') return window.matchMedia(c.text).matches;
+        if (c.type === 'supports') return CSS.supports(c.text);
+      } catch (e) {
+        // Malformed condition text the engine can't parse — fail closed
+        // (exclude the rule) rather than crash the panel, but surface it:
+        // silently dropping a rule here is the exact false-negative class
+        // this fix exists to prevent.
+        console.warn('[BrikInspect] could not evaluate condition:', c.text, e);
+        return false;
+      }
+      return true;
+    });
   }
 
   function calcSpecificity(sel) {
@@ -1244,6 +1282,10 @@
 
     const rules = buildRulesIndex();
     rules.forEach((rule, order) => {
+      // An inactive `@media` / `@supports` block otherwise ties on specificity
+      // with the base rule and wins on later source order — reporting a token
+      // that isn't the one actually in effect (#2589).
+      if (!conditionsMatch(rule.conditions)) return;
       let matches = false;
       try { matches = el.matches(rule.selector); } catch (e) { return; }
       if (!matches) return;
