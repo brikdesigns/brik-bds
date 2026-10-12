@@ -241,8 +241,8 @@ The `editTarget` prop documents which pattern is in play (`'page'` navigates, `'
 The vertical gap between consecutive `SheetSection`s is `SheetSection`'s own concern — tune it with the `spacing` prop (`md` or `lg`) rather than inline `marginTop`, custom flex gaps, or spacer `<div>`s.
 
 ```css
-.bds-sheet-section + .bds-sheet-section { margin-top: var(--padding-lg); }
-.bds-sheet-section--spacing-lg + .bds-sheet-section { margin-top: var(--padding-xl); }
+.bds-sheet-section + .bds-sheet-section { margin-top: var(--bds-padding-lg); }
+.bds-sheet-section--spacing-lg + .bds-sheet-section { margin-top: var(--bds-padding-xl); }
 ```
 
 ## Sheet vs page

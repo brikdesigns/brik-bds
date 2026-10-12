@@ -50,9 +50,12 @@
  * ── Families checked ───────────────────────────────────────────────────────────
  * Only the Semantic-tier families `dist/tokens.css` is authoritative for (see
  * FAMILIES), in both the ADR-043 `--bds-` spelling and the bare spelling the
- * compat bridge still serves (#2670). Bridge aliases that rename the body (the
- * retired word steps) are flagged as deprecated. Other prefixes (`--font-*`,
- * `--space-*`, `--aspect-*`, `--_*`, client `--theme-*`) are out of scope.
+ * compat bridge still serves (#2670). Every bridge alias — a pure-prefix
+ * re-spelling (`--text-primary`) and a renamed body (a retired word step)
+ * alike — is flagged `deprecated` (#2683): the docs rewrite moved every live
+ * doc onto the `--bds-` spelling, so a bare name still being taught is drift,
+ * not a supported second spelling. Other prefixes (`--font-*`, `--space-*`,
+ * `--aspect-*`, `--_*`, client `--theme-*`) are out of scope.
  *
  * ── Registry source ────────────────────────────────────────────────────────────
  * Reads `dist/tokens.css`. That file is git-ignored (a build artifact), so the
@@ -113,6 +116,15 @@ const LINE_IGNORE = 'lint-mdx-tokens-ignore';
 const BLOCK_START = /lint-mdx-tokens-ignore-start/;
 const BLOCK_END = /lint-mdx-tokens-ignore-end/;
 
+// Pages explicitly carved out of #2683's docs rewrite — out of scope, owned by
+// a separate ticket — so newly gating bare names as `deprecated` (#2683) does
+// not fail this file's pre-existing bare-name mentions that nobody has moved
+// to `--bds-` yet. Remove a page's row the same PR that migrates it; this set
+// must be empty once that work lands.
+const PENDING_BDS_MIGRATION = new Set([
+  'docs-site/content/docs/foundation/token-anatomy.mdx',
+]);
+
 // ── Registry ────────────────────────────────────────────────────────────────
 
 function ensureDistTokens() {
@@ -156,21 +168,21 @@ function replacementsIn(css) {
   return map;
 }
 
-// A bridge alias whose body differs from its target's (`--color-poppy-darker:
-// var(--bds-color-poppy-800)`) is a retired name, not a re-spelling — the 54
-// word steps and the renamed knobs (brik-bds#2670). Gated like DEPRECATED. A
-// pure-prefix alias of a DEPRECATED name inherits that deprecation.
+// Every bridge alias is a bare pre-#2670 spelling of a `--bds-` name — the
+// docs rewrite (#2683) moved every live doc off the bare spelling onto the
+// registry name, so any bare name still resolving via the bridge is taught
+// vocabulary consumers are migrating off, same as a renamed word step
+// (`--color-poppy-darker: var(--bds-color-poppy-800)`). Both shapes gate as
+// DEPRECATED here: a pure-prefix alias (`--text-primary: var(--bds-text-
+// primary)`) and a renamed one (brik-bds#2670) alike.
 function bridgeDeprecations(css, deprecated, replacements) {
   for (const m of css.matchAll(/^\s*--([\w-]+)\s*:\s*var\(--bds-([\w-]+)\)/gm)) {
     const [name, body] = [`--${m[1]}`, m[2]];
     const target = `--bds-${body}`;
-    if (m[1] !== body) {
-      deprecated.add(name);
-      replacements.set(name, target);
-    } else if (deprecated.has(target)) {
-      deprecated.add(name);
-      replacements.set(name, replacements.get(target) ?? null);
-    }
+    deprecated.add(name);
+    // If the bridge's own target is itself DEPRECATED (a retired word step),
+    // point the bare name at the ultimate fix, not the deprecated middle name.
+    replacements.set(name, deprecated.has(target) ? (replacements.get(target) ?? target) : target);
   }
 }
 
@@ -284,7 +296,7 @@ function main() {
     : [
         ...walk(DOCS_DIR, (f) => f.endsWith('.mdx')),
         ...walk(COMPONENTS_DIR, (f) => f.endsWith('.mdx')),
-      ];
+      ].filter((f) => !PENDING_BDS_MIGRATION.has(relPosix(f)));
 
   const violations = [];
   for (const f of files) violations.push(...scanFile(f, registry));

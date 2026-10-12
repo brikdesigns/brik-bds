@@ -18,8 +18,8 @@ A **Library** is the authoritative source of token definitions for a scope. BDS 
 
 | Library | Primitives | Semantic tokens | Modes |
 |---|---|---|---|
-| **Foundations** | `--color-grayscale-*`, `--color-system-*`, `--font-size-*`, `--space-*`, `--border-radius-*`, `--shadow-*`, motion primitives, annotation | Universal defaults (`--text-primary`, `--surface-primary`, `--background-positive`, etc.) | borderwidth, spacing, typography, elevation, breakpoint, radius, icon |
-| **Brand Kit** (per client) | Brand color family ramps (`--color-poppy-*`, `--color-tan-*`, etc.) | Brand overrides on the same canonical names (`--background-brand-primary`, `--text-brand-primary`, plus service-line semantics where applicable) | `color` (light / dark) per brand |
+| **Foundations** | `--color-grayscale-*`, `--color-system-*`, `--font-size-*`, `--space-*`, `--border-radius-*`, `--shadow-*`, motion primitives, annotation | Universal defaults (`--bds-text-primary`, `--bds-surface-primary`, `--bds-background-positive`, etc.) | borderwidth, spacing, typography, elevation, breakpoint, radius, icon |
+| **Brand Kit** (per client) | Brand color family ramps (`--color-poppy-*`, `--color-tan-*`, etc.) | Brand overrides on the same canonical names (`--bds-background-brand-primary`, `--bds-text-brand-primary`, plus service-line semantics where applicable) | `color` (light / dark) per brand |
 
 <Callout type="warn">
   **Foundations Library MUST NOT carry brand-specific values.** That's the failure pattern brik-bds#712 retired — the deleted `primitives/value.{brand, theme.brik, theme.blue}` groups were brand-specific tokens sitting in Foundations. If a token would change per client, it belongs in a Brand Kit, not in Foundations.
@@ -97,7 +97,7 @@ npm run build:all-tokens
 | New client onboarding (Vale / Renew / Memphis / etc.) | Create a new Brand Kit Library in Figma. Set up brand color primitives + brand semantic overrides + dark mode. Emit `theme-{client}.css`. |
 | Brand refresh on an existing client | Update the client's Brand Kit Library only. Foundations doesn't change. Pull → rebuild → ship the regenerated `theme-{client}.css`. |
 | New universal token (math scale, system color, base semantic) | Add to **Foundations Library**. Affects every brand. Coordinate via PR + Chromatic. |
-| New brand-specific concept (service-line, audience-scoped color, custom dimension) | Add to the relevant **Brand Kit Library** as a brand-specific semantic token (e.g., `--background-service-marketing`). Foundations stays untouched. |
+| New brand-specific concept (service-line, audience-scoped color, custom dimension) | Add to the relevant **Brand Kit Library** as a brand-specific semantic token (e.g., `--bds-background-service-marketing`). Foundations stays untouched. |
 
 ## Drift signals
 

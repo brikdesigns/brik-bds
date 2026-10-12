@@ -61,8 +61,8 @@ import { ProgressCircle } from '@brikdesigns/bds';
   label="Tasks complete"
   showValue={
     <div style={{ textAlign: 'center' }}>
-      <div style={{ fontSize: 'var(--heading-md)', fontWeight: 'var(--font-weight-bold)' }}>70%</div>
-      <div style={{ fontSize: 'var(--body-sm)', color: 'var(--text-secondary)' }}>of 200</div>
+      <div style={{ fontSize: 'var(--bds-heading-md)', fontWeight: 'var(--bds-font-weight-bold)' }}>70%</div>
+      <div style={{ fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-secondary)' }}>of 200</div>
     </div>
   }
 />
@@ -81,7 +81,7 @@ import { ProgressCircle } from '@brikdesigns/bds';
 `fillColor` is an escape hatch that overrides the status-token stroke. Prefer `status` for semantic color; reach for `fillColor` only for one-off brand-coded rings.
 
 ```tsx
-<ProgressCircle value={60} fillColor="var(--background-brand-primary)" showValue label="Brand progress" />
+<ProgressCircle value={60} fillColor="var(--bds-background-brand-primary)" showValue label="Brand progress" />
 ```
 
 ## When *not* to use

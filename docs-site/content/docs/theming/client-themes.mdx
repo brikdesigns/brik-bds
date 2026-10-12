@@ -79,24 +79,24 @@ Create a `theme-{client}.css` file in the consuming project and add it as the fi
 /* theme-acme.css — all that's needed for a full rebrand */
 :root {
   /* Required — brand identity */
-  --background-brand-primary:         #2563EB;
-  --text-brand-primary:               #2563EB;
-  --border-brand-primary:             #2563EB;
-  --surface-brand-primary:            #EFF6FF;
+  --bds-background-brand-primary:         #2563EB;
+  --bds-text-brand-primary:               #2563EB;
+  --bds-border-brand-primary:             #2563EB;
+  --bds-surface-brand-primary:            #EFF6FF;
 
   /* Required if overriding brand-primary — interaction states */
-  --background-brand-primary-hover:   #1D4ED8;
-  --background-brand-primary-pressed: #1E40AF;
+  --bds-background-brand-primary-hover:   #1D4ED8;
+  --bds-background-brand-primary-pressed: #1E40AF;
 
   /* Recommended — surfaces and page */
-  --page-primary:                     #F8FAFC;
-  --surface-primary:                  #FFFFFF;
-  --surface-secondary:                #F1F5F9;
+  --bds-page-primary:                     #F8FAFC;
+  --bds-surface-primary:                  #FFFFFF;
+  --bds-surface-secondary:                #F1F5F9;
 
   /* Optional — custom fonts */
-  --font-family-heading:              'Neue Haas Grotesk', sans-serif;
-  --font-family-body:                 'Inter', sans-serif;
-  --font-family-label:                'Inter', sans-serif;
+  --bds-font-family-heading:              'Neue Haas Grotesk', sans-serif;
+  --bds-font-family-body:                 'Inter', sans-serif;
+  --bds-font-family-label:                'Inter', sans-serif;
 }
 ```
 
@@ -134,35 +134,35 @@ Re-bind `--background-brand-primary`, `--text-brand-primary`, `--border-brand-pr
   /* …rest of the navy ramp… */
 
   /* Default brand binding (no audience selected) — components fall back here. */
-  --background-brand-primary:         var(--vale-partners-navy-darker);
-  --text-brand-primary:               var(--vale-partners-navy-darker);
-  --border-brand-primary:             var(--vale-partners-navy-darker);
+  --bds-background-brand-primary:         var(--vale-partners-navy-darker);
+  --bds-text-brand-primary:               var(--vale-partners-navy-darker);
+  --bds-border-brand-primary:             var(--vale-partners-navy-darker);
 }
 
 /* Audience scopes — each one re-binds the canonical brand tokens inside its
    subtree. Adding a fourth audience is one more block; nothing else changes. */
 [data-audience='healthcare'] {
-  --background-brand-primary:         var(--vale-partners-olive);
-  --text-brand-primary:               var(--vale-partners-olive-darker);
-  --border-brand-primary:             var(--vale-partners-olive);
-  --background-brand-primary-hover:   var(--vale-partners-olive-dark);
-  --background-brand-primary-pressed: var(--vale-partners-olive-darker);
+  --bds-background-brand-primary:         var(--vale-partners-olive);
+  --bds-text-brand-primary:               var(--vale-partners-olive-darker);
+  --bds-border-brand-primary:             var(--vale-partners-olive);
+  --bds-background-brand-primary-hover:   var(--vale-partners-olive-dark);
+  --bds-background-brand-primary-pressed: var(--vale-partners-olive-darker);
 }
 
 [data-audience='land'] {
-  --background-brand-primary:         var(--vale-partners-gold);
-  --text-brand-primary:               var(--vale-partners-gold);
-  --border-brand-primary:             var(--vale-partners-gold);
-  --background-brand-primary-hover:   var(--vale-partners-gold-dark);
-  --background-brand-primary-pressed: var(--vale-partners-gold-darker);
+  --bds-background-brand-primary:         var(--vale-partners-gold);
+  --bds-text-brand-primary:               var(--vale-partners-gold);
+  --bds-border-brand-primary:             var(--vale-partners-gold);
+  --bds-background-brand-primary-hover:   var(--vale-partners-gold-dark);
+  --bds-background-brand-primary-pressed: var(--vale-partners-gold-darker);
 }
 
 [data-audience='commercial'] {
-  --background-brand-primary:         var(--vale-partners-navy-darker);
-  --text-brand-primary:               var(--vale-partners-navy-darker);
-  --border-brand-primary:             var(--vale-partners-navy-darker);
-  --background-brand-primary-hover:   var(--vale-partners-navy-dark);
-  --background-brand-primary-pressed: var(--vale-partners-navy-darkest);
+  --bds-background-brand-primary:         var(--vale-partners-navy-darker);
+  --bds-text-brand-primary:               var(--vale-partners-navy-darker);
+  --bds-border-brand-primary:             var(--vale-partners-navy-darker);
+  --bds-background-brand-primary-hover:   var(--vale-partners-navy-dark);
+  --bds-background-brand-primary-pressed: var(--vale-partners-navy-darkest);
 }
 ```
 
@@ -173,16 +173,16 @@ CSS custom properties scope to the element they're set on and cascade into every
 ```html
 <section class="services-grid">
   <article data-audience="healthcare">
-    <h3 style="color: var(--text-brand-primary)">Healthcare</h3>     <!-- olive -->
-    <button style="background: var(--background-brand-primary)">Explore</button>
+    <h3 style="color: var(--bds-text-brand-primary)">Healthcare</h3>     <!-- olive -->
+    <button style="background: var(--bds-background-brand-primary)">Explore</button>
   </article>
   <article data-audience="land">
-    <h3 style="color: var(--text-brand-primary)">Land</h3>            <!-- gold -->
-    <button style="background: var(--background-brand-primary)">Explore</button>
+    <h3 style="color: var(--bds-text-brand-primary)">Land</h3>            <!-- gold -->
+    <button style="background: var(--bds-background-brand-primary)">Explore</button>
   </article>
   <article data-audience="commercial">
-    <h3 style="color: var(--text-brand-primary)">Commercial</h3>      <!-- navy -->
-    <button style="background: var(--background-brand-primary)">Explore</button>
+    <h3 style="color: var(--bds-text-brand-primary)">Commercial</h3>      <!-- navy -->
+    <button style="background: var(--bds-background-brand-primary)">Explore</button>
   </article>
 </section>
 ```
@@ -228,23 +228,23 @@ Not every token is meant to vary per brand. Use the table to decide what to put 
 
 | Token group | Per-client override? | Notes |
 |---|---|---|
-| Brand colors (`--background-brand-primary`, `--text-brand-primary`, `--surface-brand-primary`, `--border-brand-primary`) | **Required** | Core brand identity. |
-| Interaction states (`--background-brand-primary-hover`, `--background-brand-primary-pressed`) | **Required if brand colors change** | Defined at `:root` in `gap-fills.css` — not inside theme blocks. If you change brand without overriding these, hover/press keep the default Poppy tint. |
-| Surfaces + page (`--surface-primary`, `--surface-secondary`, `--page-primary`) | **Recommended** | Tune neutrals to the brand. |
-| Fonts (`--font-family-heading`, `--font-family-body`, `--font-family-label`) | **Optional** | See "Typography-only client override" below. |
+| Brand colors (`--bds-background-brand-primary`, `--bds-text-brand-primary`, `--bds-surface-brand-primary`, `--bds-border-brand-primary`) | **Required** | Core brand identity. |
+| Interaction states (`--bds-background-brand-primary-hover`, `--bds-background-brand-primary-pressed`) | **Required if brand colors change** | Defined at `:root` in `gap-fills.css` — not inside theme blocks. If you change brand without overriding these, hover/press keep the default Poppy tint. |
+| Surfaces + page (`--bds-surface-primary`, `--bds-surface-secondary`, `--bds-page-primary`) | **Recommended** | Tune neutrals to the brand. |
+| Fonts (`--bds-font-family-heading`, `--bds-font-family-body`, `--bds-font-family-label`) | **Optional** | See "Typography-only client override" below. |
 | Canonical status (`--background/surface/text/border-positive/negative/warning`) | **Yes** | First-class Figma variables. Override if the brand red/green/yellow clashes with the default. |
-| The `info` signal (`--background-info`, `--surface-info`, `--text-info`) | **No** | Blue, universal semantic meaning. Gap-fills over the system blue primitive. |
+| The `info` signal (`--bds-background-info`, `--bds-surface-info`, `--bds-text-info`) | **No** | Blue, universal semantic meaning. Gap-fills over the system blue primitive. |
 | The per-hue accent set (`--text/background/border/surface/page-accent-{hue}`) | **No** | Mirrored 1:1 from the ❖ Brik Brand Kit Figma library and Figma-sourced from the system color primitives, so `accent-purple` is the same purple in every theme. Category color, not a valence. `red` is the one exception — it aliases the brand poppy — see [The per-hue accent set](/docs/foundation/color#the-per-hue-accent-set). |
-| Presence (`--background-presence-online/away/busy/offline`) | **No — intentionally frozen** | Shared chat/status semantics across products. |
-| Shadows + overlay (`--shadow-sm`..`--shadow-xl`, `--background-overlay`) | **No** | Hardcoded `rgba()` values; not expected to vary per brand. |
+| Presence (`--bds-background-presence-online/away/busy/offline`) | **No — intentionally frozen** | Shared chat/status semantics across products. |
+| Shadows + overlay (`--bds-shadow-sm`..`--bds-shadow-xl`, `--bds-background-overlay`) | **No** | Hardcoded `rgba()` values; not expected to vary per brand. |
 
 ### Interaction-state override example
 
 ```css
 :root {
-  --background-brand-primary:         #2563EB;
-  --background-brand-primary-hover:   #1D4ED8;   /* must set manually */
-  --background-brand-primary-pressed: #1E40AF;   /* must set manually */
+  --bds-background-brand-primary:         #2563EB;
+  --bds-background-brand-primary-hover:   #1D4ED8;   /* must set manually */
+  --bds-background-brand-primary-pressed: #1E40AF;   /* must set manually */
 }
 ```
 
@@ -258,10 +258,10 @@ To override fonts without changing any colors:
 
 ```css
 :root {
-  --font-family-heading: 'Playfair Display', serif;
-  --font-family-body:    'Source Sans 3', sans-serif;
-  --font-family-label:   'Source Sans 3', sans-serif;
-  --font-family-display: 'Playfair Display', serif;
+  --bds-font-family-heading: 'Playfair Display', serif;
+  --bds-font-family-body:    'Source Sans 3', sans-serif;
+  --bds-font-family-label:   'Source Sans 3', sans-serif;
+  --bds-font-family-display: 'Playfair Display', serif;
 }
 ```
 

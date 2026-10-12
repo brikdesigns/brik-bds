@@ -71,11 +71,11 @@ A consumer's `theme-{client}.css` overrides Brand Kit-controlled semantic tokens
 
 | Token group | Per-client override? |
 |---|---|
-| Brand colors (`--background-brand-primary`, `--text-brand-primary`, `--surface-brand-primary`, `--border-brand-primary`) | **Required** |
-| Brand interaction states (`--background-brand-primary-hover` / `-pressed`) | **Required if brand colors change** |
-| Page + surface neutrals (`--page-primary`, `--surface-primary`, `--surface-secondary`) | **Recommended** |
-| Fonts (`--font-family-heading` / `-body` / `-label`) | **Optional** |
-| Status (`--background-positive` / `-negative` / `-warning`, etc.) | **Yes** if brand red/green/yellow clashes |
+| Brand colors (`--bds-background-brand-primary`, `--bds-text-brand-primary`, `--bds-surface-brand-primary`, `--bds-border-brand-primary`) | **Required** |
+| Brand interaction states (`--bds-background-brand-primary-hover` / `-pressed`) | **Required if brand colors change** |
+| Page + surface neutrals (`--bds-page-primary`, `--bds-surface-primary`, `--bds-surface-secondary`) | **Recommended** |
+| Fonts (`--bds-font-family-heading` / `-body` / `-label`) | **Optional** |
+| Status (`--bds-background-positive` / `-negative` / `-warning`, etc.) | **Yes** if brand red/green/yellow clashes |
 | Extended status / presence / shadows | **No** — system invariants |
 
 ## Theming dimensions
@@ -135,11 +135,11 @@ Semantic color tokens — the names components reference, and the only names a B
 
 | Family | Concept | Examples |
 |---|---|---|
-| `--page-*` | Page canvas (body fill) | `--page-primary`, `--page-secondary`, `--page-brand-primary` |
-| `--surface-*` | Surfaces resting on the page (cards, navs, panels) | `--surface-primary`, `--surface-secondary`, `--surface-brand-primary` |
-| `--background-*` | Interactive backgrounds (buttons, status fills, accents) | `--background-brand-primary`, `--background-positive`, `--background-input` |
-| `--text-*` | Type colors | `--text-primary`, `--text-brand-primary`, `--text-on-color-dark` |
-| `--border-*` | Edge colors | `--border-primary`, `--border-brand-primary`, `--border-input` |
+| `--page-*` | Page canvas (body fill) | `--bds-page-primary`, `--bds-page-secondary`, `--bds-page-brand-primary` |
+| `--surface-*` | Surfaces resting on the page (cards, navs, panels) | `--bds-surface-primary`, `--bds-surface-secondary`, `--bds-surface-brand-primary` |
+| `--background-*` | Interactive backgrounds (buttons, status fills, accents) | `--bds-background-brand-primary`, `--bds-background-positive`, `--bds-background-input` |
+| `--text-*` | Type colors | `--bds-text-primary`, `--bds-text-brand-primary`, `--bds-text-on-color-dark` |
+| `--border-*` | Edge colors | `--bds-border-primary`, `--bds-border-brand-primary`, `--bds-border-input` |
 
 Full registry at [Color](/docs/foundation/color). Canonical bundle: `dist/tokens.css`.
 

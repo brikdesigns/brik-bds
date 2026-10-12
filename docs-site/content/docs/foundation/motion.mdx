@@ -17,10 +17,10 @@ The default choice. These carry the overwhelming majority of motion in BDS, and 
 
 | Token | Resolves to | Use case |
 |---|---|---|
-| `--duration-sm` | `100ms` | Micro-interactions — hover, focus |
-| `--duration-md` | `200ms` | Standard transitions — buttons, cards |
-| `--duration-lg` | `300ms` | Emphasis — modals, sheets, reveals |
-| `--duration-xl` | `500ms` | Cross-fades, long reveals — one rung past `--duration-lg` |
+| `--bds-duration-sm` | `100ms` | Micro-interactions — hover, focus |
+| `--bds-duration-md` | `200ms` | Standard transitions — buttons, cards |
+| `--bds-duration-lg` | `300ms` | Emphasis — modals, sheets, reveals |
+| `--bds-duration-xl` | `500ms` | Cross-fades, long reveals — one rung past `--bds-duration-lg` |
 
 Defined in `tokens/gap-fills.css` as aliases of the numeric primitives below. The step words follow the t-shirt ramp per [ADR-033 § 3](/docs); the legacy `fast` / `normal` / `slow` are `sm` / `md` / `lg` grandfathered pending rename.
 
@@ -30,8 +30,8 @@ A separate class from the transition tier above. These are not tween lengths —
 
 | Token | Value | Use case |
 |---|---|---|
-| `--duration-marquee` | `55s` | Full marquee loop period — logo tickers, continuous scroll |
-| `--duration-autoplay` | `10s` | Dwell before auto-advance — carousels, media tabs |
+| `--bds-duration-marquee` | `55s` | Full marquee loop period — logo tickers, continuous scroll |
+| `--bds-duration-autoplay` | `10s` | Dwell before auto-advance — carousels, media tabs |
 
 Defined in `tokens/gap-fills.css`. Measured from inspiration teardowns; re-run the Playwright capture before treating a value as canon later — vendor sites drift.
 
@@ -41,12 +41,12 @@ The underlying primitive scale, generated from Figma. Use one of these only when
 
 | Token | Value | Suffix matches value |
 |---|---|---|
-| `--duration-100` | `100ms` | yes |
-| `--duration-200` | `200ms` | yes |
-| `--duration-300` | `300ms` | yes |
-| `--duration-400` | `500ms` | **no** |
-| `--duration-500` | `800ms` | **no** |
-| `--duration-600` | `1000ms` | **no** |
+| `--bds-duration-100` | `100ms` | yes |
+| `--bds-duration-200` | `200ms` | yes |
+| `--bds-duration-300` | `300ms` | yes |
+| `--bds-duration-400` | `500ms` | **no** |
+| `--bds-duration-500` | `800ms` | **no** |
+| `--bds-duration-600` | `1000ms` | **no** |
 
 The break at `--duration-400` is the trap: it reads as 400ms and resolves to 500ms, so an animation lands 25% slower than intended and nothing errors. If you are reaching past `--duration-300`, read the value rather than the name.
 
@@ -56,12 +56,12 @@ Four curves, each with a distinct job. Pair `--ease-out` with most UI transition
 
 | Token | Value | Use case |
 |---|---|---|
-| `--ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` | Decelerate — most UI transitions |
-| `--ease-in` | `cubic-bezier(0.7, 0, 0.84, 0)` | Accelerate — exits, collapses |
-| `--ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | Symmetric — looping, continuous |
-| `--ease-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` | Overshoot bounce — pop-in, badge appear |
-| `--ease-spring-soft` | `cubic-bezier(0, 1.08, 0.77, 1.01)` | Gentle overshoot settle — media/panel entrance (softer than `--ease-spring`) |
-| `--ease-linear` | `linear` | Constant velocity — marquees, continuous loops |
+| `--bds-ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` | Decelerate — most UI transitions |
+| `--bds-ease-in` | `cubic-bezier(0.7, 0, 0.84, 0)` | Accelerate — exits, collapses |
+| `--bds-ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | Symmetric — looping, continuous |
+| `--bds-ease-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` | Overshoot bounce — pop-in, badge appear |
+| `--bds-ease-spring-soft` | `cubic-bezier(0, 1.08, 0.77, 1.01)` | Gentle overshoot settle — media/panel entrance (softer than `--bds-ease-spring`) |
+| `--bds-ease-linear` | `linear` | Constant velocity — marquees, continuous loops |
 
 Defined alongside the semantic durations in `tokens/gap-fills.css`.
 
@@ -92,8 +92,8 @@ Motion tokens are authored in three different places, which matters when you nee
 
 | Token group | Source | Editable |
 |---|---|---|
-| `--duration-100` … `--duration-600` | Figma → `design-tokens/tokens-studio.json` → `tokens/figma-tokens.css` | Figma only — the CSS is auto-generated |
-| `--duration-sm` / `-normal` / `-slow`, all `--ease-*` | `tokens/gap-fills.css` | Hand-authored |
+| `--bds-duration-100` … `--bds-duration-600` | Figma → `design-tokens/tokens-studio.json` → `tokens/figma-tokens.css` | Figma only — the CSS is auto-generated |
+| `--bds-duration-sm` / `-normal` / `-slow`, all `--ease-*` | `tokens/gap-fills.css` | Hand-authored |
 | `--stagger-1` … `--stagger-6` | `tokens/bridge.css` | Hand-authored |
 
 Ready-made utility classes built on these tokens — `.bds-enter-*`, `.bds-anim-*` — live in `tokens/motion-classes.css` over the keyframes in `tokens/animations.css`. Prefer an existing class before writing a new animation.
