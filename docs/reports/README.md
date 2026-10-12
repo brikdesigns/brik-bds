@@ -1,6 +1,6 @@
 # docs/reports
 
-Committed BDS reports. Each one carries the ADR-046 metadata contract: seven
+Committed BDS reports. Each one carries the ADR-046 metadata contract: nine
 `report-*` `<meta>` tags in one marked block.
 
 The contract is defined once, in brik-llm `docs/reports/README.md`
@@ -14,7 +14,8 @@ The contract is defined once, in brik-llm `docs/reports/README.md`
 
    ```sh
    scripts/reports/report-meta.py stamp <file> \
-     --status current --subject bds --owner <login> \
+     --status active --type <t> --themes <list|none> \
+     --subject bds --owner <login> \
      --supersedes none --cadence once --source manual
    ```
 

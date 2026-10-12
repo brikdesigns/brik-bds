@@ -7,7 +7,11 @@
     {
       "path": "docs/reports/2026-09-26-foundations-disconnect-assessment.html",
       "title": "Foundations Disconnect Assessment — 2026-09-26",
-      "status": "current",
+      "status": "active",
+      "type": "assessment",
+      "themes": [
+        "design-system"
+      ],
       "subject": "bds",
       "owner": "nstaner",
       "generated": "2026-09-26",
@@ -18,7 +22,11 @@
     {
       "path": "docs/reports/2026-09-30-foundations-modes-viewport-audit.html",
       "title": "Foundations Modes Audit — 2026-09-30",
-      "status": "current",
+      "status": "active",
+      "type": "audit",
+      "themes": [
+        "design-system"
+      ],
       "subject": "bds",
       "owner": "nstaner",
       "generated": "2026-09-30",
@@ -29,7 +37,11 @@
     {
       "path": "docs/reports/2026-10-01-brik-bds-remaining-work.html",
       "title": "brik-bds Remaining Work — 2026-10-12",
-      "status": "current",
+      "status": "active",
+      "type": "plan",
+      "themes": [
+        "design-system"
+      ],
       "subject": "bds",
       "owner": "nstaner",
       "generated": "2026-10-12",
@@ -40,7 +52,11 @@
     {
       "path": "docs/reports/2026-10-01-spacing-confidence-round.html",
       "title": "Spacing Confidence Round — 2026-10-01",
-      "status": "current",
+      "status": "active",
+      "type": "assessment",
+      "themes": [
+        "design-system"
+      ],
       "subject": "bds",
       "owner": "nstaner",
       "generated": "2026-10-01",
@@ -51,7 +67,11 @@
     {
       "path": "docs/reports/2026-10-01-token-naming-systems-audit.html",
       "title": "Token Naming Systems Audit — 2026-10-01",
-      "status": "current",
+      "status": "active",
+      "type": "audit",
+      "themes": [
+        "design-system"
+      ],
       "subject": "bds",
       "owner": "nstaner",
       "generated": "2026-10-01",
