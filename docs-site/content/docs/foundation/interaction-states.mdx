@@ -16,10 +16,10 @@ These four tokens are mode-invariant — they resolve to the same value in light
 
 | Token | Value | Purpose |
 |---|---|---|
-| `--state-hover-overlay` | `rgba(0, 0, 0, 0.04)` | Subtle hover overlay on any surface |
-| `--state-pressed-overlay` | `rgba(0, 0, 0, 0.08)` | Stronger overlay for `:active` / press |
-| `--state-focus` | `currentColor` | Keyboard focus ring color — resolves to the element's own text color at use-site |
-| `--state-disabled-opacity` | `0.5` | Opacity for disabled elements that have no fill of their own |
+| `--bds-state-hover-overlay` | `rgba(0, 0, 0, 0.04)` | Subtle hover overlay on any surface |
+| `--bds-state-pressed-overlay` | `rgba(0, 0, 0, 0.08)` | Stronger overlay for `:active` / press |
+| `--bds-state-focus` | `currentColor` | Keyboard focus ring color — resolves to the element's own text color at use-site |
+| `--bds-state-disabled-opacity` | `0.5` | Opacity for disabled elements that have no fill of their own |
 
 <Callout type="warn">
   The overlays are a fixed black `rgba` in **both** modes — there is no white-overlay override for dark surfaces today, so a hover/press overlay reads faintly on very dark backgrounds. Wire a dark-mode override if a dark surface needs a stronger cue.
@@ -34,28 +34,28 @@ These four tokens are mode-invariant — they resolve to the same value in light
 ```css
 /* Hover — composable overlay on any background */
 .bds-component:hover {
-  box-shadow: inset 0 0 0 999px var(--state-hover-overlay);
+  box-shadow: inset 0 0 0 999px var(--bds-state-hover-overlay);
 }
 
 /* Press — stronger overlay */
 .bds-component:active {
-  box-shadow: inset 0 0 0 999px var(--state-pressed-overlay);
+  box-shadow: inset 0 0 0 999px var(--bds-state-pressed-overlay);
 }
 
 /* Focus — reuses existing border-width token; offset is fixed at 2px for a11y */
 .bds-component:focus-visible {
-  outline: var(--border-width-lg) solid var(--state-focus);
+  outline: var(--bds-border-width-lg) solid var(--bds-state-focus);
   outline-offset: 2px;
 }
 
 /* Brand button hover — solid primitive (not overlay) since fill needs a real shift */
 .bds-button--primary:hover {
-  background-color: var(--background-brand-primary-hover);
+  background-color: var(--bds-background-brand-primary-hover);
 }
 
 /* Disabled — only for a component with no fill of its own. See the callout. */
 .bds-component--disabled {
-  opacity: var(--state-disabled-opacity);
+  opacity: var(--bds-state-disabled-opacity);
   cursor: not-allowed;
   pointer-events: none;
 }
@@ -79,12 +79,12 @@ What the shipped Brik theme resolves to, by stop:
 
 | Token | Light mode | Dark mode |
 |---|---|---|
-| `--background-brand-primary` | `--color-poppy-500` | `--color-poppy-500` |
-| `--background-brand-primary-hover` | `--color-poppy-700` | `--color-poppy-700` |
-| `--background-brand-primary-pressed` | `--color-poppy-800` | `--color-poppy-800` |
-| `--surface-brand-primary` | `--color-poppy-500` | `--color-grayscale-950` |
-| `--surface-brand-primary-hover` | `--color-poppy-700` | `--color-grayscale-800` |
-| `--surface-brand-primary-pressed` | `--color-poppy-800` | `--color-grayscale-700` |
+| `--bds-background-brand-primary` | `--bds-color-poppy-500` | `--bds-color-poppy-500` |
+| `--bds-background-brand-primary-hover` | `--bds-color-poppy-700` | `--bds-color-poppy-700` |
+| `--bds-background-brand-primary-pressed` | `--bds-color-poppy-800` | `--bds-color-poppy-800` |
+| `--bds-surface-brand-primary` | `--bds-color-poppy-500` | `--bds-color-grayscale-950` |
+| `--bds-surface-brand-primary-hover` | `--bds-color-poppy-700` | `--bds-color-grayscale-800` |
+| `--bds-surface-brand-primary-pressed` | `--bds-color-poppy-800` | `--bds-color-grayscale-700` |
 
 Read the *direction*, not a fixed step count:
 

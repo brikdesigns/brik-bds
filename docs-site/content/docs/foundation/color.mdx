@@ -237,8 +237,8 @@ Within the color `role`/`modifier` vocabulary, four concepts share light/dark wo
 The legible foreground for content resting on a **colored, branded, or dark** surface. Grayscale, brand-agnostic, consumed by component variants (Button `on-color`, the Tab-bar `onColor` mode).
 
 ```css
---text-on-color-light   /* dark FG  — for a light colored fill */
---text-on-color-dark    /* white FG — for a dark colored fill  */
+--bds-text-on-color-light   /* dark FG  — for a light colored fill */
+--bds-text-on-color-dark    /* white FG — for a dark colored fill  */
 ```
 
 `on-color` is the whole role; `light`/`dark` names the fill tone it targets. It never carries a hue.
@@ -248,8 +248,8 @@ The legible foreground for content resting on a **colored, branded, or dark** su
 For a token whose hue is already named (a service line, a brand scope), pins the value for a **known, fixed backdrop tone**.
 
 ```css
---background-service-brand-on-light   /* brand fill, on a light surface */
---text-service-brand-on-dark          /* brand text, on a dark surface  */
+--bds-background-service-brand-on-light   /* brand fill, on a light surface */
+--bds-text-service-brand-on-dark          /* brand text, on a dark surface  */
 ```
 
 The `-color-` infix is dropped because the scope (`service-brand`) already implies color. The leading `on-` marks context — distinct from tone.
@@ -309,8 +309,8 @@ Five stops per family are new. Two of them close specific, filed gaps:
 
 | Stop | Value | Why it exists |
 |---|---|---|
-| `--color-poppy-600` | `#c94428` | **4.84:1 on white — clears AA (4.5:1).** The near-Poppy step [ADR-015](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-015-brand-primary-aa-large-contrast-policy.md)/[ADR-016](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-016-small-primary-button-contrast.md) said did not exist, unblocking [#479](https://github.com/brikdesigns/brik-bds/issues/479) |
-| `--color-grayscale-400` | `#b0b0b0` | Fills the `#828282` → `#e0e0e0` gap from [#1726](https://github.com/brikdesigns/brik-bds/issues/1726). It is **not** `#bdbdbd` — no even OKLCh ramp lands there, so consumers that hand-pinned `#bdbdbd` are migrating to this value, not matching it |
+| `--bds-color-poppy-600` | `#c94428` | **4.84:1 on white — clears AA (4.5:1).** The near-Poppy step [ADR-015](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-015-brand-primary-aa-large-contrast-policy.md)/[ADR-016](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-016-small-primary-button-contrast.md) said did not exist, unblocking [#479](https://github.com/brikdesigns/brik-bds/issues/479) |
+| `--bds-color-grayscale-400` | `#b0b0b0` | Fills the `#828282` → `#e0e0e0` gap from [#1726](https://github.com/brikdesigns/brik-bds/issues/1726). It is **not** `#bdbdbd` — no even OKLCh ramp lands there, so consumers that hand-pinned `#bdbdbd` are migrating to this value, not matching it |
 
 ## Colour families by purpose
 

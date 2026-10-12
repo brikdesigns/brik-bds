@@ -11,7 +11,7 @@ Spacing tokens control padding, margins, and gaps. Each token answers to exactly
 | Axis | Tokens | Varies with |
 |---|---|---|
 | **Density** | `--padding-*`, `--gap-*` | `[data-mode-spacing]` on `:root` — one value at every viewport |
-| **Device** | `--page-inset`, `--section-padding-block` (the [layout tier](#layout-tier)) | Viewport width — fluid from mobile to desktop, never by density |
+| **Device** | `--bds-page-inset`, `--bds-section-padding-block` (the [layout tier](#layout-tier)) | Viewport width — fluid from mobile to desktop, never by density |
 
 No token takes both, so density modes and device modes never multiply ([ADR-042](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-042-layout-tier-device-clamp.md)).
 
@@ -78,17 +78,17 @@ Two tokens set the page frame, and they are the **only** spacing tokens that cha
 
 | Token | Fills | Mobile 320 | Tablet 768 | Desktop 1440+ |
 |---|---|---|---|---|
-| `--page-inset` | `padding-inline` — viewport edge ↔ content band | 16px (`--space-400`) | 32px (`--space-800`) | 96px (`--space-2100`) |
-| `--section-padding-block` | `padding-block` — a section's top and bottom band | 64px (`--space-1600`) | 80px (`--space-1800`) | 104px (`--space-2200`) |
+| `--bds-page-inset` | `padding-inline` — viewport edge ↔ content band | 16px (`--bds-space-400`) | 32px (`--bds-space-800`) | 96px (`--bds-space-2100`) |
+| `--bds-section-padding-block` | `padding-block` — a section's top and bottom band | 64px (`--bds-space-1600`) | 80px (`--bds-space-1800`) | 104px (`--bds-space-2200`) |
 
 ```css
 .my-section {
-  padding-block: var(--section-padding-block);
+  padding-block: var(--bds-section-padding-block);
 }
 .my-section__container {
-  max-width: var(--content-width-xl);
+  max-width: var(--bds-content-width-xl);
   margin-inline: auto;
-  padding-inline: var(--page-inset);
+  padding-inline: var(--bds-page-inset);
 }
 ```
 
@@ -99,7 +99,7 @@ In TS, import `pageInset` and `sectionPaddingBlock` from `@bds-tokens` rather th
 **How it becomes fluid.** Figma variables hold static numbers, so the build turns the three modes into one value: two `clamp()` segments added together, one from mobile to tablet and one from tablet to desktop. The widths are read from `--breakpoint-mobile`, `--breakpoint-tablet` and `--breakpoint-wider`. Output lands in [`tokens/layout-fluid.css`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/layout-fluid.css) — never hand-edit. Re-run `npm run build:modes` after a Figma change.
 
 ```css
---page-inset: calc(clamp(1rem, 0.2857rem + 3.5714vw, 2rem) + clamp(0rem, -4.5714rem + 9.5238vw, 4rem));
+--bds-page-inset: calc(clamp(1rem, 0.2857rem + 3.5714vw, 2rem) + clamp(0rem, -4.5714rem + 9.5238vw, 4rem));
 ```
 
 <Callout type="warn">
