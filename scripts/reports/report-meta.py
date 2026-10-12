@@ -11,9 +11,11 @@ This one file defines the contract, stamps it onto a report, checks it, and
 writes the manifest the index reads. The contract itself, with field meanings,
 is documented in docs/reports/README.md § Metadata contract.
 
-Every committed report under docs/reports/ carries these seven tags:
+Every committed report under docs/reports/ carries these nine tags:
 
-    report-status      current | archived | superseded
+    report-status      active | archived
+    report-type        audit | assessment | plan | retro | reference
+    report-themes      a comma-separated list of the theme vocabulary below, or none
     report-subject     brik | bds | portal | llm
     report-owner       a GitHub login
     report-generated   YYYY-MM-DD — the date the content describes
@@ -21,6 +23,14 @@ Every committed report under docs/reports/ carries these seven tags:
                        https:// URL for a predecessor outside the store, or none
     report-cadence     once | on-demand | daily | weekly | monthly
     report-source      repo-relative path of the generator, or manual
+
+Themes reuse the GitHub `theme:*` labels so a report and a ticket filter the
+same way: accessibility, agent-ops, design-system, documentation, observability,
+performance, security-hardening, tech-debt, ui-cleanup. A report may carry none.
+
+Status is binary, like `engagements.status`. A replaced report is `archived`,
+and the report that replaced it names it in `report-supersedes`; "superseded" is
+that pointer, not a third state. The title carries no status.
 
 The filename carries no data: `<kebab-slug>.html`. The date is read from
 `report-generated`, never parsed from the name, so the three repos' existing
@@ -33,20 +43,20 @@ Usage (global flags go before the subcommand):
     report-meta.py [--json] check              # exit 1 on any violation
     report-meta.py [--dry-run] manifest [--write]
     report-meta.py parse FILE...               # JSON {path: meta}
-    report-meta.py [--dry-run] [--json] stamp FILE --status S --subject S
+    report-meta.py [--dry-run] [--json] stamp FILE --status S --type T --themes L --subject S
                    [--owner O] [--generated D] [--supersedes P] [--cadence C] [--source P]
     Every subcommand takes --root DIR (default: the repo containing the cwd).
 
-`check` fails on: a missing, duplicated or invalid tag; a subject that
-disagrees with the report's folder; a status that disagrees with an
-`[ARCHIVED]` title prefix; a supersedes PATH pointing at a missing report, or
-one that is not marked superseded; a `superseded` report nothing points at; a
-source path that does not exist; a non-kebab filename; a stale manifest.
+`check` fails on: a missing, duplicated or invalid tag; a theme outside the
+vocabulary or repeated; a subject that disagrees with the report's folder; a
+title that starts with `[ARCHIVED]` (status carries it); a supersedes PATH
+pointing at a missing report, or one that is not `archived`; a source path that
+does not exist; a non-kebab filename; a stale manifest.
 
 A supersedes URL names a predecessor this repo does not hold — a claude.ai
 artifact, a Notion page, another repo's store — so nothing here can mark it
-`superseded` and nothing here can resolve it. It is recorded, not enforced:
-it trips neither reciprocity rule.
+`archived` and nothing here can resolve it. It is recorded, not enforced: it
+trips no reciprocity rule.
 
 Exit codes: 0 clean · 1 violations · 2 usage or unreadable input.
 
@@ -71,6 +81,8 @@ CANONICAL = "brikdesigns/brik-llm:scripts/reports/report-meta.py"
 
 FIELDS = (
     "report-status",
+    "report-type",
+    "report-themes",
     "report-subject",
     "report-owner",
     "report-generated",
@@ -78,7 +90,13 @@ FIELDS = (
     "report-cadence",
     "report-source",
 )
-STATUSES = ("current", "archived", "superseded")
+STATUSES = ("active", "archived")
+TYPES = ("audit", "assessment", "plan", "retro", "reference")
+# Mirrors the repo's `theme:*` GitHub labels; keep in step with the portal's
+# ops_reports.themes check (src/lib/ops-reports/manifest.ts REPORT_THEMES).
+THEMES = ("accessibility", "agent-ops", "design-system", "documentation",
+          "observability", "performance", "security-hardening", "tech-debt", "ui-cleanup")
+NO_THEMES = "none"
 SUBJECTS = ("brik", "bds", "portal", "llm")
 CADENCES = ("once", "on-demand", "daily", "weekly", "monthly")
 OWNER_RE = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$")
@@ -148,6 +166,12 @@ def flat(meta: dict[str, list[str]]) -> dict[str, str]:
     return {k: v[0] for k, v in meta.items() if k in FIELDS and v}
 
 
+def themes_of(value: str) -> list[str]:
+    """The theme list a `report-themes` value names; `none` is the empty list."""
+    parts = [t.strip() for t in value.split(",") if t.strip()]
+    return [] if parts == [NO_THEMES] else parts
+
+
 def folder_subject(rel: str) -> str | None:
     """The subject a report's folder implies, when it sits in a subject folder."""
     parts = Path(rel).relative_to(REPORTS_REL).parts
@@ -174,6 +198,13 @@ def validate(root: Path, rel: str, meta: dict[str, list[str]], title: str) -> li
             errs.append(f"{field}=\"{m[field]}\" — expected {expect}")
 
     bad("report-status", lambda v: v in STATUSES, " | ".join(STATUSES))
+    bad("report-type", lambda v: v in TYPES, " | ".join(TYPES))
+    if "report-themes" in m:
+        picked = themes_of(m["report-themes"])
+        unknown = [t for t in picked if t not in THEMES]
+        if not m["report-themes"].strip() or unknown or len(set(picked)) != len(picked):
+            errs.append(f"report-themes=\"{m['report-themes']}\" — expected a comma-separated list of "
+                        f"{' | '.join(THEMES)}, no repeats, or {NO_THEMES}")
     bad("report-subject", lambda v: v in SUBJECTS, " | ".join(SUBJECTS))
     bad("report-owner", OWNER_RE.match, "a GitHub login")
     bad("report-cadence", lambda v: v in CADENCES, " | ".join(CADENCES))
@@ -199,11 +230,8 @@ def validate(root: Path, rel: str, meta: dict[str, list[str]], title: str) -> li
     want = folder_subject(rel)
     if want and m.get("report-subject") not in (None, want):
         errs.append(f"report-subject=\"{m['report-subject']}\" but the report sits in {want}/")
-    archived_title = title.startswith(ARCHIVED_PREFIX)
-    if archived_title and m.get("report-status") not in (None, "archived"):
-        errs.append(f"title starts {ARCHIVED_PREFIX} but report-status=\"{m['report-status']}\"")
-    if m.get("report-status") == "archived" and not archived_title:
-        errs.append(f"report-status=\"archived\" but the <title> lacks the {ARCHIVED_PREFIX} prefix")
+    if title.startswith(ARCHIVED_PREFIX):
+        errs.append(f"title starts {ARCHIVED_PREFIX} — drop it; report-status carries the archive")
     return errs
 
 
@@ -219,8 +247,10 @@ def manifest_doc(rows: list[dict]) -> str:
     reports = []
     for r in rows:
         m = flat(r["meta"])
-        reports.append({"path": r["path"], "title": r["title"],
-                        **{f.removeprefix("report-"): m.get(f) for f in FIELDS}})
+        row = {f.removeprefix("report-"): m.get(f) for f in FIELDS}
+        if row["themes"] is not None:
+            row["themes"] = themes_of(row["themes"])
+        reports.append({"path": r["path"], "title": r["title"], **row})
     doc = {
         "schema": 1,
         "generated_by": CANONICAL,
@@ -235,20 +265,14 @@ def cmd_check(root: Path, as_json: bool = False) -> int:
     rows = collect(root)
     problems: list[tuple[str, str]] = []
     by_path = {r["path"]: flat(r["meta"]) for r in rows}
-    pointed_at = {}
     for r in rows:
         for e in validate(root, r["path"], r["meta"], r["title"]):
             problems.append((r["path"], e))
         tgt = by_path[r["path"]].get("report-supersedes", "none")
         # `tgt in by_path` is also what exempts the URL form: a predecessor
-        # outside the store is in no row, so neither reciprocity rule can fire.
-        if tgt != "none" and tgt in by_path:
-            pointed_at[tgt] = r["path"]
-            if by_path[tgt].get("report-status") != "superseded":
-                problems.append((r["path"], f"supersedes {tgt}, which is not marked report-status=\"superseded\""))
-    for path, m in by_path.items():
-        if m.get("report-status") == "superseded" and path not in pointed_at:
-            problems.append((path, "report-status=\"superseded\" but no report names it in report-supersedes"))
+        # outside the store is in no row, so the reciprocity rule cannot fire.
+        if tgt != "none" and tgt in by_path and by_path[tgt].get("report-status") != "archived":
+            problems.append((r["path"], f"supersedes {tgt}, which is not marked report-status=\"archived\""))
     mf = root / MANIFEST_REL
     expected = manifest_doc(rows)
     if not mf.is_file():
@@ -308,6 +332,8 @@ def cmd_stamp(root: Path, args) -> int:
     existing = flat(parse_file(path)[0])
     values = {
         "report-status": args.status,
+        "report-type": args.type,
+        "report-themes": args.themes,
         "report-subject": args.subject,
         "report-owner": args.owner,
         "report-generated": args.generated,
@@ -369,6 +395,8 @@ def main(argv: list[str]) -> int:
     sp = sub.add_parser("stamp", help="write or replace the contract block in one report")
     sp.add_argument("file")
     sp.add_argument("--status", choices=STATUSES)
+    sp.add_argument("--type", choices=TYPES)
+    sp.add_argument("--themes", help=f"comma-separated subset of {', '.join(THEMES)}, or {NO_THEMES}")
     sp.add_argument("--subject", choices=SUBJECTS)
     sp.add_argument("--owner")
     sp.add_argument("--generated", help="YYYY-MM-DD (default: today, for a new report)")
