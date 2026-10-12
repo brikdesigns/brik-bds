@@ -59,7 +59,48 @@ Source of truth: [`manifest/component-axes.json`](https://github.com/brikdesigns
   TypeScript is the authoritative gate. Pass only values the component's declared union includes — never invent values. The manifest shows which types are exported.
 </Callout>
 
+## Expression modes
+
+The five **expression-mode axes** are the Style half of [ADR-039](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-039-blueprint-parameterization-axes.md). They are not component props — no component declares them. They are attributes set once on `:root` (the `<html>` element), and every component inherits the retuned tokens.
+
+| Axis | Attribute on `:root` | Values | Default (no attribute) |
+|---|---|---|---|
+| Spacing | `data-mode-spacing` | `compact` · `comfortable` · `spacious` | `default` |
+| Typography | `data-mode-typography` | `compact` · `comfortable` · `spacious` · `expressive` | `default` |
+| Radius | `data-mode-radius` | `sharp` · `round` · `pill` | `soft` |
+| Elevation | `data-mode-elevation` | `flat` · `lifted` · `dramatic` | `subtle` |
+| Border width | `data-mode-borderwidth` | `thin` · `bold` | `standard` |
+
+<Callout type="warn">
+  **Each default is the attribute-ABSENT state** — there is no `[data-mode-radius="soft"]` selector, and setting one does nothing. Omit the attribute to get the default. For the same reason the defaults are not members of the closed vocabularies below.
+</Callout>
+
+Closed value lists live in `content-system/vocabularies/{spacing,typography,radius,elevation,borderwidth}-mode.ts`, published as `@brikdesigns/bds/content-system`. They are surfaced to the portal's enum gate under the reserved `@modes` key in [`manifest/component-axes.json`](https://github.com/brikdesigns/brik-bds/blob/main/manifest/component-axes.json), alongside the component axes.
+
+The authority is the CSS, not the TypeScript: `tokens/modes-*.css` is what ships, and `content-system/vocabularies/expression-modes.test.ts` parses it to hold each list equal to the selectors it declares. A Figma mode rename fails that test rather than drifting into a portal pick-list.
+
+**Motion has no mode axis.** There is no `data-mode-motion` selector; motion is expressed through the `AnimationTier` vocabulary (`subtle` · `moderate` · `expressive`) and the `reveal` / `contentMotion` prop axes, with `none` meaning no motion classes are emitted.
+
+## Blueprint shortlist weights
+
+`resolveBlueprintShortlist` ranks the blueprint library against a company profile. The weights are exported as `SHORTLIST_WEIGHTS` from `content-system/blueprints/resolver.ts` so the portal runs the same math on the same numbers — this table documents them, the export is the gate.
+
+| Term | Weight | Counts |
+|---|---|---|
+| `perPersonalityHit` | 2 | once per overlapping personality |
+| `perVisualStyleHit` | 1 | once per overlapping visual style |
+| `industrySlugMatch` | 3 | once |
+| `universalBonus` | 5 | once, for a universal blueprint |
+| `atmosphereMatch` | 3 | once |
+| `animationTierMatch` | 2 | once |
+| `spacingModeMatch` | 1 | once |
+
+The three design-decision terms descend by how much of a section's rendering the axis governs: the atmosphere sets the whole visual register and is a peer of the industry match, the animation tier governs motion only, the spacing mode governs density alone. Combined they cap at **6**, just above `universalBonus` — deliberately, so a blueprint matching every decision the client made outranks an evergreen one matching none.
+
+Each is matched against an **optional** affinity array on the blueprint (`atmospheres`, `animation_tiers`, `spacing_modes`). Every term is additive and none filters, so a blueprint that declares no affinity scores exactly what it scored before these existed, and an affinity miss can re-rank a shortlist but never shrink it.
+
 ## Related
 
 - [Components](/docs/components) — each component implements the axes documented here
 - [Slot Vocabulary](/docs/build-standards/slot-vocabulary) — slot names that pair with these axis props
+- [Client Themes](/docs/theming/client-themes) — the four Theming Dimensions the expression modes sit inside

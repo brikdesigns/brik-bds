@@ -175,6 +175,13 @@ export default defineConfig({
           name: 'content-system',
           environment: 'node',
           include: ['content-system/**/*.test.ts'],
+          // The expression-mode vocabulary contract reads tokens/modes-*.css
+          // with `?raw` to assert each closed list equals the selectors that
+          // ship (#2774). Vitest stubs CSS to an empty string by default, and
+          // the stub swallows `?raw` too — every selector set came back `[]`,
+          // which reads as "the CSS declares nothing" rather than as a failed
+          // read. Processing CSS here makes the raw query return the file.
+          css: true,
         },
       },
       {

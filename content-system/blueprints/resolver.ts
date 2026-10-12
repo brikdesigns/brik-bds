@@ -1,4 +1,11 @@
-import type { Personality, VisualStyle, IndustrySlug } from '../vocabularies';
+import type {
+  Personality,
+  VisualStyle,
+  IndustrySlug,
+  Atmosphere,
+  AnimationTier,
+  SpacingMode,
+} from '../vocabularies';
 import type { NormalizedBlueprint } from './schema';
 
 /**
@@ -16,6 +23,17 @@ export interface BlueprintShortlistProfile {
   readonly brand_personality?: readonly Personality[] | null;
   readonly style_preferences?: readonly VisualStyle[] | null;
   readonly industry_slug?: IndustrySlug | null;
+
+  /**
+   * Design-decision picks (ADR-039 Style axis). One value each, matched
+   * against the blueprint's optional affinity arrays. Optional and
+   * independent of the three onboarding axes above: a profile that has not
+   * reached the design-decision step scores exactly as it did before these
+   * existed.
+   */
+  readonly atmosphere?: Atmosphere | null;
+  readonly animation_tier?: AnimationTier | null;
+  readonly spacing_mode?: SpacingMode | null;
 }
 
 /**
@@ -28,12 +46,28 @@ export interface BlueprintShortlistProfile {
  * visual-style signal. A universal blueprint ships with a baseline
  * lift that keeps evergreen layouts in the shortlist even when the
  * client has picked traits that don't overlap with authored moods.
+ *
+ * The three design-decision terms (ADR-039 Style axis, #2774) descend by how
+ * much of a section's rendering the axis governs: `atmosphere` sets the whole
+ * visual register and is a peer of `industrySlugMatch`; `animation_tier`
+ * governs motion only; `spacing_mode` governs density alone. Each is a single
+ * pick matched against an optional affinity array, so the three cap at 6
+ * combined — just above `universalBonus`, which is deliberate: a blueprint
+ * that matches every design decision the client made should outrank an
+ * evergreen one that matches none. They are documented in `prop-axes.mdx`
+ * § Blueprint shortlist weights, which is the copy the portal reads.
+ *
+ * ADDITIVE ONLY. No term subtracts and no term filters, so a blueprint that
+ * declares no affinity scores exactly what it scored before these existed.
  */
 export const SHORTLIST_WEIGHTS = {
   perPersonalityHit: 2,
   perVisualStyleHit: 1,
   industrySlugMatch: 3,
   universalBonus: 5,
+  atmosphereMatch: 3,
+  animationTierMatch: 2,
+  spacingModeMatch: 1,
 } as const;
 
 export interface BlueprintShortlistEntry {
@@ -43,6 +77,14 @@ export interface BlueprintShortlistEntry {
   readonly visual_style_hits: readonly VisualStyle[];
   readonly industry_match: boolean;
   readonly is_universal: boolean;
+  /**
+   * Design-decision affinity hits. `false` covers both "the profile made no
+   * pick" and "the blueprint declares no affinity" — neither scores, and the
+   * caller that needs to tell them apart reads the profile and the blueprint.
+   */
+  readonly atmosphere_match: boolean;
+  readonly animation_tier_match: boolean;
+  readonly spacing_mode_match: boolean;
 }
 
 export interface ResolveBlueprintShortlistOptions {
@@ -88,11 +130,25 @@ export function scoreBlueprintForProfile(
   const industryMatch =
     industrySlug !== null && blueprint.industry_slugs.includes(industrySlug);
 
+  // Design-decision affinity. A missing pick or an undeclared affinity array
+  // both read as "no hit" — the term is additive, so neither penalizes.
+  const affine = <T extends string>(
+    pick: T | null | undefined,
+    declared: readonly T[] | undefined,
+  ): boolean => pick != null && declared !== undefined && declared.includes(pick);
+
+  const atmosphereMatch = affine(profile.atmosphere, blueprint.atmospheres);
+  const animationTierMatch = affine(profile.animation_tier, blueprint.animation_tiers);
+  const spacingModeMatch = affine(profile.spacing_mode, blueprint.spacing_modes);
+
   let score = 0;
   score += personalityHits.length * SHORTLIST_WEIGHTS.perPersonalityHit;
   score += visualStyleHits.length * SHORTLIST_WEIGHTS.perVisualStyleHit;
   if (industryMatch) score += SHORTLIST_WEIGHTS.industrySlugMatch;
   if (blueprint.is_universal) score += SHORTLIST_WEIGHTS.universalBonus;
+  if (atmosphereMatch) score += SHORTLIST_WEIGHTS.atmosphereMatch;
+  if (animationTierMatch) score += SHORTLIST_WEIGHTS.animationTierMatch;
+  if (spacingModeMatch) score += SHORTLIST_WEIGHTS.spacingModeMatch;
 
   return {
     blueprint,
@@ -101,6 +157,9 @@ export function scoreBlueprintForProfile(
     visual_style_hits: visualStyleHits,
     industry_match: industryMatch,
     is_universal: blueprint.is_universal,
+    atmosphere_match: atmosphereMatch,
+    animation_tier_match: animationTierMatch,
+    spacing_mode_match: spacingModeMatch,
   };
 }
 

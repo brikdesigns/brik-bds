@@ -18,6 +18,10 @@
  */
 
 import type { CSSProperties } from 'react';
+import type {
+  SpacingMode as ExpressionSpacingMode,
+  RadiusMode,
+} from '../content-system/vocabularies';
 
 /**
  * Available theme identifiers
@@ -46,13 +50,25 @@ export type TypographyStack = 'default' | 'serif' | 'modern' | 'classic';
 
 /**
  * Spacing density type
+ *
+ * Aliased to the BCS vocabulary rather than re-declared — the authority is
+ * `[data-mode-spacing]` in tokens/modes-spacing.css, held there by
+ * content-system/vocabularies/expression-modes.test.ts (#2774). Type-only, so
+ * this entry point gains no runtime dependency on content-system.
  */
-export type SpacingMode = 'compact' | 'comfortable' | 'spacious';
+export type SpacingMode = ExpressionSpacingMode;
 
 /**
  * Border style type
+ *
+ * Aliased to the `radius-mode` vocabulary for the same reason. This union
+ * previously read `'sharp' | 'rounded' | 'pill'` — a second, hand-maintained
+ * copy that had drifted: `rounded` matches no selector in
+ * tokens/modes-borderradius.css, which emits `sharp | round | pill`. Nothing
+ * consumed the value (getThemeClasses below reads only `themeNumber`), so the
+ * rename is inert at runtime; it stops the drift recurring.
  */
-export type BorderMode = 'sharp' | 'rounded' | 'pill';
+export type BorderMode = RadiusMode;
 
 /**
  * Full theme configuration
@@ -74,7 +90,7 @@ export const defaultTheme: BDSThemeConfig = {
   colorMode: 'light',
   typography: 'default',
   spacing: 'comfortable',
-  border: 'rounded',
+  border: 'round',
 };
 
 /**

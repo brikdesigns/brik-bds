@@ -1,11 +1,11 @@
 # ADR-039 — Blueprint parameterization: four customization axes + anti-hand-roll guardrails
 
-**Status:** Accepted (2026-09-12)
+**Status:** Accepted (2026-09-12); amended 2026-10-12 (§ Amendment — the Style axis names its values)
 **Date:** 2026-09-12
 **Supersedes:** [ADR-008](./ADR-008-naming-canon-closed-allowlist.md) §3 in part — the clause banning *alignment* from blueprint modifiers/props is narrowed (see § Decision 1). ADR-008 §3's ban on *appearance* and *theme* words (`--dark`, `--branded`, `--inverse`) stands unchanged.
 **Superseded by:** —
 **Owner:** Nick Stanerson
-**Related:** [ADR-037](./ADR-037-astro-is-the-canonical-blueprint-rail.md) (Astro is the canonical blueprint rail; the two-rail delivery model), [ADR-008](./ADR-008-naming-canon-closed-allowlist.md) (naming canon, closed allowlist), [brik-llm ADR-011](https://github.com/brikdesigns/brik-llm) (blueprintKey dispatcher home), [#2309](https://github.com/brikdesigns/brik-bds/issues/2309) (blueprint-rail umbrella), [prop-axes.mdx](../../docs-site/content/docs/build-standards/prop-axes.mdx), [client-themes.mdx](../../docs-site/content/docs/theming/client-themes.mdx) (the four Theming Dimensions), [composition-layers.mdx](../../docs-site/content/docs/build-standards/composition-layers.mdx)
+**Related:** [ADR-037](./ADR-037-astro-is-the-canonical-blueprint-rail.md) (Astro is the canonical blueprint rail; the two-rail delivery model), [ADR-008](./ADR-008-naming-canon-closed-allowlist.md) (naming canon, closed allowlist), [brik-llm ADR-011](https://github.com/brikdesigns/brik-llm) (blueprintKey dispatcher home), [#2309](https://github.com/brikdesigns/brik-bds/issues/2309) (blueprint-rail umbrella), [#2774](https://github.com/brikdesigns/brik-bds/issues/2774) (the 2026-10-12 amendment below), [prop-axes.mdx](../../docs-site/content/docs/build-standards/prop-axes.mdx), [client-themes.mdx](../../docs-site/content/docs/theming/client-themes.mdx) (the four Theming Dimensions), [composition-layers.mdx](../../docs-site/content/docs/build-standards/composition-layers.mdx)
 
 ## Context
 
@@ -43,7 +43,7 @@ A session assessment (2026-09-12, four subagent audits) established the ground t
 
 | Axis | Varies | Mechanism | Vocabulary home | State |
 |---|---|---|---|---|
-| **Style** | color, type, surface, background, spacing, elevation, ambient decoration | the four **Theming Dimensions** — client tokens (`theme-{client}.css`) + atmosphere pick + per-block `--bds-{block}-*` hooks | `client-themes.mdx` (unchanged) | ✅ built |
+| **Style** | color, type, surface, background, spacing, elevation, ambient decoration | the four **Theming Dimensions** — client tokens (`theme-{client}.css`) + atmosphere pick + per-block `--bds-{block}-*` hooks | `client-themes.mdx` + `content-system/vocabularies/*-mode.ts` (named by § Amendment 2026-10-12) | ✅ built |
 | **Structure / placement** | `layout`, `align`, `columns`, `ratio` | curated closed-union **prop axes** on the blueprint | `prop-axes.mdx` (extended) | build |
 | **Media** | `media: image \| video \| bg-video \| none` (+ `Frame` ratio) | curated closed-union **prop axis** | `prop-axes.mdx` (extended) | build |
 | **Motion** | `reveal: none \| fade \| rise \| stagger`; `content: count-up \| marquee \| animated-svg` | curated closed-union **prop axis**, backed by `--duration-*`/`--ease-*`, reduced-motion-gated by construction | `prop-axes.mdx` (extended) | wire (foundation exists) |
@@ -67,6 +67,63 @@ Non-cookie-cutter output comes from the **product** of the axes, not from catalo
 ### 4. The axes are agent-selectable by construction
 
 Every axis value is a member of a closed TypeScript union, surfaced in `manifest/component-axes.json` (ADR-009) and validated at generate-time against the same enum gate the portal already applies to `blueprintKey` (`brik-client-portal/src/lib/blueprints/known-keys.ts`). An agent picks a value from a finite set; it never writes a CSS rule, a keyframe, or a raw token value.
+
+## Amendment — 2026-10-12 (the Style axis names its values; "BDS CSS selector values win")
+
+**Trigger:** [#2774](https://github.com/brikdesigns/brik-bds/issues/2774). The table above routed the Style axis to `client-themes.mdx (unchanged)` and left its values unwritten, because Style was the already-built axis. Four portal-side copies filled the gap and drifted from the CSS that renders — measured 2026-10-11 against `rg -o '\[data-mode-[a-z]+="[a-z-]+"\]' tokens/modes-*.css`: the portal's `EXPRESSION_MODE_VALUES` carried `base`, `soft`, `rounded`, `subtle`, `elevated`, `floating`; `visual_identity_spec` carried `tight`, `generous`, `cinematic`, `stillness`, `present`. Not one of those strings matches a selector — a client who picked `rounded` or `elevated` picked something no CSS rule answers — and in the other direction the shipped `lifted` and `dramatic` were absent from every portal list, so they could not be picked at all. BDS itself had a copy too: `tokens/index.ts` declared `BorderMode = 'sharp' | 'rounded' | 'pill'` where the CSS switches on `round`.
+
+> OPERATOR SAID 2026-10-11 (Claude Code session, `e54586cf-bb0a-49f7-8d53-18d40b7596ee.jsonl:451`): "Yes to A + B - above (both); we can file the above effort and hand off to begin phase 0. Let's ensure phase 2 can reach a high confidence assessment before we start. We should be able to learn more in phases 0 + 1. Thoughts? Let's also ensure we're 100% aligned on adopting existing logic and not introducing any risk of drift or tech debt."
+
+— where **A** = "BDS owns every design vocabulary; the portal imports, never copies" and **B** = "design-decision inputs move from the design phase to engagement setup".
+
+### A1. The five Style-axis value lists
+
+Published from `content-system/vocabularies/{spacing,typography,radius,elevation,borderwidth}-mode.ts`, one closed `as const` list + `is*` guard per axis, same shape as `animation-tier.ts`:
+
+| Axis | Attribute | Values | Default |
+|---|---|---|---|
+| spacing | `data-mode-spacing` | `compact` · `comfortable` · `spacious` | `default` |
+| typography | `data-mode-typography` | `compact` · `comfortable` · `spacious` · `expressive` | `default` |
+| radius | `data-mode-radius` | `sharp` · `round` · `pill` | `soft` |
+| elevation | `data-mode-elevation` | `flat` · `lifted` · `dramatic` | `subtle` |
+| borderwidth | `data-mode-borderwidth` | `thin` · `bold` | `standard` |
+
+**Each default is the attribute-ABSENT state and is therefore not a vocabulary member.** No `[data-mode-radius="soft"]` selector exists; omitting the attribute is how you get `soft`. A pick-list that offers the default as a value offers a string the CSS will ignore — which is half of how the portal's copies drifted (`base`, `soft`, `subtle`, `none` are all defaults promoted to members).
+
+The typography axis is heading-scale-variant selection, not strictly density ([ADR-013](./ADR-013-token-last-mile-enforce-contract-complete-emission.md) § Amendment 2026-06-21) — `expressive` is a steeper modular ratio, not a fourth density step. It shares three value *names* with spacing and is a different axis; the two lists are separate modules on purpose.
+
+### A2. BDS CSS selector values win
+
+**`tokens/modes-*.css` is the authority for every Style-axis value. Nothing may declare a member the selectors do not carry, and no consumer may define its own list.** The TypeScript vocabulary is a projection of the CSS, not a parallel source — a drift between them is a defect in the TypeScript by definition.
+
+This is the same gate discipline ADR-039 § Decision-4 already applies to the other three axes, pointed at the one axis that was exempt. Enforcement, no new workflow:
+
+1. `content-system/vocabularies/expression-modes.test.ts` parses `tokens/modes-*.css` and asserts set equality per axis, that no axis claims its attribute-absent default, and that the glob reads exactly one file per declared axis — a sixth mode file shipping without a vocabulary fails there. It parses the CSS rather than the `COLLECTIONS` registry in `scripts/generate-modes-css.mjs` because `modes-borderwidth.css` is hand-authored and pre-dates that registry: the registry covers four of five axes, the CSS covers all five and is what ships.
+2. `manifest/component-axes.json` surfaces the five lists under the reserved `@modes` key (ADR-009), read from the vocabulary modules by `scripts/generate-component-axes.mjs` and gated by the existing `npm run typegen:axes:check`. `@` cannot begin a TS export name, so the key can never collide with a component.
+3. `tokens/index.ts` aliases its `SpacingMode` / `BorderMode` to the vocabularies instead of re-declaring them, retiring the `rounded` drift.
+
+The portal imports from `@brikdesigns/bds/content-system` and deletes its copies ([brik-client-portal#4382](https://github.com/brikdesigns/brik-client-portal/issues/4382), [#4973](https://github.com/brikdesigns/brik-client-portal/issues/4973)) — out of scope here, but the reason the lists are published rather than internal.
+
+### A3. Motion maps onto the animation tier; there is no `data-mode-motion`
+
+**No motion mode axis exists and none is added.** `rg 'data-(motion|animation)' tokens/*.css` returns nothing (#2774 measured the built `dist/tokens.css` the same way). Motion is class-based via `tokens/animations.css` + `tokens/motion-classes.css` and is selected through the existing `AnimationTier` vocabulary (`content-system/vocabularies/animation-tier.ts`) — `subtle` · `moderate` · `expressive`, the same three names § Decision-2's `reveal`/`contentMotion` enums render through.
+
+| Expression `motion` pick | Resolves to |
+|---|---|
+| `subtle` / `moderate` / `expressive` | the `AnimationTier` member of that name |
+| `none` | **no motion classes emitted** — the absence of a tier, not a fourth tier |
+
+`none` is deliberately not an `AnimationTier` member, for the same reason the mode defaults are not vocabulary members: it names the absence of the thing. A caller holding `none` emits nothing; a caller holding a tier emits that tier's classes, reduced-motion-gated by construction (§ Enforcement 4).
+
+### A4. Blueprints may declare Style affinity
+
+`Blueprint` gains three **optional** affinity arrays — `atmospheres`, `animation_tiers`, `spacing_modes` — validated against the vocabularies by `validateBlueprint`, and scored by `resolveBlueprintShortlist` with the weights published as `SHORTLIST_WEIGHTS` and documented in `prop-axes.mdx` § Blueprint shortlist weights. Three properties make this safe to add before the portal's decision set exists:
+
+- **Affinity, not requirement.** Every term is additive and none filters, so a blueprint declaring no affinity scores exactly what it scored before, and a profile that has not reached the design-decision step scores exactly as it did before.
+- **Omit, don't empty.** An empty array is a schema error — it declares nothing while looking like a declaration.
+- **Unpopulated as of #2774.** All 13 library entries pass the schema with the fields absent. Deriving an affinity from an authored mood would be inventing a client-visible ranking input; the arrays get authored once the portal's decision set is real ([brik-client-portal#4973](https://github.com/brikdesigns/brik-client-portal/issues/4973)).
+
+**What this amendment does not change.** Style remains the built axis — no new mode axis, no new token, no change to a selector or an emitted value. It writes down the values that already render and names where they live.
 
 ## Enforcement — the anti-hand-roll guardrails
 
