@@ -18,27 +18,27 @@ Size tokens define dimensional constraints — how big things can be, where the 
 
 | Token | CSS Variable | Value | Caps | Use for |
 |---|---|---|---|---|
-| Text XS | `--content-width-text-xs` | 448px | text | Short intro — eyebrow + one-line title |
-| Text SM | `--content-width-text-sm` | 600px | text | Section intro — title + description (the default) |
-| Text MD | `--content-width-text-md` | 720px | text | Long-form prose, rich-text body |
-| Narrow | `--content-width-sm` | 640px | band | Narrow band, focused forms |
-| Default | `--content-width-md` | 800px | band | Standard body sections |
-| Wide | `--content-width-lg` | 1024px | band | Feature sections, content grids |
-| XL | `--content-width-xl` | 1280px | band | Hero bands, wide layouts |
-| Full | `--content-width-full` | 100% | band | Full-bleed (use sparingly) |
+| Text XS | `--bds-content-width-text-xs` | 448px | text | Short intro — eyebrow + one-line title |
+| Text SM | `--bds-content-width-text-sm` | 600px | text | Section intro — title + description (the default) |
+| Text MD | `--bds-content-width-text-md` | 720px | text | Long-form prose, rich-text body |
+| Narrow | `--bds-content-width-sm` | 640px | band | Narrow band, focused forms |
+| Default | `--bds-content-width-md` | 800px | band | Standard body sections |
+| Wide | `--bds-content-width-lg` | 1024px | band | Feature sections, content grids |
+| XL | `--bds-content-width-xl` | 1280px | band | Hero bands, wide layouts |
+| Full | `--bds-content-width-full` | 100% | band | Full-bleed (use sparingly) |
 
 The text rungs interleave numerically with the band rungs (600 < 640 < 720 < 800). Pick a rung by its **role**, which the name states — never by sorting the ladder.
 
 ```css
 /* a band */
 .content-section {
-  max-width: var(--content-width-md);
+  max-width: var(--bds-content-width-md);
   margin-inline: auto;
 }
 
 /* the text column inside it */
 .article-body {
-  max-width: var(--content-width-text-sm);
+  max-width: var(--bds-content-width-text-sm);
 }
 ```
 
@@ -54,11 +54,11 @@ BDS defines five canonical breakpoints. All five are Figma variables in the ❖ 
 
 | Name | CSS Variable | Value |
 |---|---|---|
-| Mobile | `--breakpoint-mobile` | 320px |
-| Tablet | `--breakpoint-tablet` | 768px |
-| Desktop | `--breakpoint-desktop` | 1024px |
-| Wide | `--breakpoint-wide` | 1280px |
-| Wider | `--breakpoint-wider` | 1440px |
+| Mobile | `--bds-breakpoint-mobile` | 320px |
+| Tablet | `--bds-breakpoint-tablet` | 768px |
+| Desktop | `--bds-breakpoint-desktop` | 1024px |
+| Wide | `--bds-breakpoint-wide` | 1280px |
+| Wider | `--bds-breakpoint-wider` | 1440px |
 
 <Callout type="warn">
 **`--breakpoint-web` no longer exists.** A sixth rung named `web` (1200px default / 800px compact / 1400px comfortable) was a legacy layout-width value, never a screen breakpoint, and was retired from the ❖ Brik Foundations library in #2604. Five is the whole ladder.
@@ -123,13 +123,13 @@ Fixed element dimensions — icons, dots, indicators — use the numeric `--size
 
 | Token | Value |
 |---|---|
-| `--size-50` | 2px |
-| `--size-100` | 4px |
-| `--size-200` | 8px |
-| `--size-400` | 16px |
-| `--size-600` | 24px |
-| `--size-800` | 32px |
-| `--size-1000` | 40px |
+| `--bds-size-50` | 2px |
+| `--bds-size-100` | 4px |
+| `--bds-size-200` | 8px |
+| `--bds-size-400` | 16px |
+| `--bds-size-600` | 24px |
+| `--bds-size-800` | 32px |
+| `--bds-size-1000` | 40px |
 
 The scale runs `--size-0` (0) through `--size-2200` (100px).
 
@@ -139,28 +139,28 @@ The scale runs `--size-0` (0) through `--size-2200` (100px).
 
 | Token | CSS Variable | Ratio |
 |---|---|---|
-| Square | `--aspect-1-1` | 1 / 1 |
-| Landscape | `--aspect-4-3` | 4 / 3 |
-| Portrait | `--aspect-3-4` | 3 / 4 |
-| Landscape (photo) | `--aspect-3-2` | 3 / 2 |
-| Portrait (photo) | `--aspect-2-3` | 2 / 3 |
-| Portrait (social) | `--aspect-4-5` | 4 / 5 |
-| Widescreen | `--aspect-16-9` | 16 / 9 |
-| Vertical (stories) | `--aspect-9-16` | 9 / 16 |
-| Ultrawide | `--aspect-21-9` | 21 / 9 |
+| Square | `--bds-aspect-1-1` | 1 / 1 |
+| Landscape | `--bds-aspect-4-3` | 4 / 3 |
+| Portrait | `--bds-aspect-3-4` | 3 / 4 |
+| Landscape (photo) | `--bds-aspect-3-2` | 3 / 2 |
+| Portrait (photo) | `--bds-aspect-2-3` | 2 / 3 |
+| Portrait (social) | `--bds-aspect-4-5` | 4 / 5 |
+| Widescreen | `--bds-aspect-16-9` | 16 / 9 |
+| Vertical (stories) | `--bds-aspect-9-16` | 9 / 16 |
+| Ultrawide | `--bds-aspect-21-9` | 21 / 9 |
 
 Four aliases point at the primitive above so intent reads at the call site — prefer them where one fits.
 
 | Alias | Resolves to | Names |
 |---|---|---|
-| `--aspect-square` | `--aspect-1-1` | Avatars, thumbnails |
-| `--aspect-cinema` | `--aspect-16-9` | Video, hero media |
-| `--aspect-photo-landscape` | `--aspect-3-2` | Landscape photography |
-| `--aspect-photo-portrait` | `--aspect-2-3` | Portrait photography |
+| `--bds-aspect-square` | `--bds-aspect-1-1` | Avatars, thumbnails |
+| `--bds-aspect-cinema` | `--bds-aspect-16-9` | Video, hero media |
+| `--bds-aspect-photo-landscape` | `--bds-aspect-3-2` | Landscape photography |
+| `--bds-aspect-photo-portrait` | `--bds-aspect-2-3` | Portrait photography |
 
 ```css
 .media-frame {
-  aspect-ratio: var(--aspect-cinema);
+  aspect-ratio: var(--bds-aspect-cinema);
 }
 ```
 

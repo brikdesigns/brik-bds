@@ -13,12 +13,12 @@ This vocabulary is the **single source of truth** for tier values. It is exporte
 
 | Tier | Drives | Constraints |
 |---|---|---|
-| `primary` | Chromatic brand identity. Resolves into `--background-brand-primary`, `--surface-brand-primary`, `--text-brand-primary`, `--border-brand-primary`, `--text-link`. | Must be the brand identity color. Tag exactly one primitive. |
-| `secondary` | Supporting brand color. Drives `--background-brand-secondary`, `--surface-brand-secondary` when present. | Tag-only today; no automatic mapping beyond the brand-secondary slots. |
+| `primary` | Chromatic brand identity. Resolves into `--bds-background-brand-primary`, `--bds-surface-brand-primary`, `--bds-text-brand-primary`, `--bds-border-brand-primary`, `--bds-text-link`. | Must be the brand identity color. Tag exactly one primitive. |
+| `secondary` | Supporting brand color. Drives `--bds-background-brand-secondary`, `--bds-surface-brand-secondary` when present. | Tag-only today; no automatic mapping beyond the brand-secondary slots. |
 | `tertiary` | Third-tier brand color. | Tag-only **by contract** ([resolution rule below](#tertiary-and-accent-resolution)). No brand slot. |
 | `accent` | Non-primary chromatic color — Brik's tertiary brand colour; may be neutral *or* chromatic by palette size. | Tag-only **by contract** ([resolution rule below](#tertiary-and-accent-resolution)). No brand slot. |
 | `neutral` | Gray ramp source. Drives gray-ramp neutral resolution. | Tagged on the brand's gray primitive. **Never** the white or black primitive. |
-| `brand-fill` | AA-safe variant of `primary` used for filled brand surfaces and brand-colored text — `--background-brand-primary`, `--text-brand-primary`. | Specify when `primary` fails AA contrast against the paper/white surface. Pair with the underlying `primary` — `brand-fill` is the contrast-safe twin, not a replacement. |
+| `brand-fill` | AA-safe variant of `primary` used for filled brand surfaces and brand-colored text — `--bds-background-brand-primary`, `--bds-text-brand-primary`. | Specify when `primary` fails AA contrast against the paper/white surface. Pair with the underlying `primary` — `brand-fill` is the contrast-safe twin, not a replacement. |
 
 ### Why brand-fill exists
 
@@ -85,9 +85,9 @@ Two orthogonal axes pair with the tier vocabulary above. Don't mix them.
 **Semantic aliases carry state.** Interaction-state names (`-hover`, `-pressed`, `-active`, `-disabled`) live on canonical aliases like `--background-brand-primary-hover` — never on primitives. Each state alias **references** a tonal stop:
 
 ```css
---background-brand-primary:         var(--vale-partners-olive);          /* base */
---background-brand-primary-hover:   var(--vale-partners-olive-lighter);  /* one stop up */
---background-brand-primary-pressed: var(--vale-partners-olive-dark);     /* one stop down */
+--bds-background-brand-primary:         var(--vale-partners-olive);          /* base */
+--bds-background-brand-primary-hover:   var(--vale-partners-olive-lighter);  /* one stop up */
+--bds-background-brand-primary-pressed: var(--vale-partners-olive-dark);     /* one stop down */
 ```
 
 <Callout type="warn">

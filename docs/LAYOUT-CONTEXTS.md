@@ -44,13 +44,13 @@ Full horizontal space, reading and editing both common, may contain multiple she
 
 | Tier | Token | Family | Weight | When |
 |------|-------|--------|--------|------|
-| Page title | `--heading-xl` | heading | semibold | Top of route; one per page |
-| Section title | `--heading-sm` | heading | semibold | Major section anchor inside the page |
-| Subsection title | `--heading-sm` | heading | semibold | Nested grouping below a section |
-| Field label | `--label-md` | label | semibold | Above a value or input |
-| Field value | `--body-md` | body | regular | Read-mode display |
-| Helper / caption | `--label-sm` | label | regular | Secondary context under a field |
-| Body paragraph | `--body-md` | body | regular | Prose blocks (rare on admin pages) |
+| Page title | `--bds-heading-xl` | heading | semibold | Top of route; one per page |
+| Section title | `--bds-heading-sm` | heading | semibold | Major section anchor inside the page |
+| Subsection title | `--bds-heading-sm` | heading | semibold | Nested grouping below a section |
+| Field label | `--bds-label-md` | label | semibold | Above a value or input |
+| Field value | `--bds-body-md` | body | regular | Read-mode display |
+| Helper / caption | `--bds-label-sm` | label | regular | Secondary context under a field |
+| Body paragraph | `--bds-body-md` | body | regular | Prose blocks (rare on admin pages) |
 
 **Section title and Subsection title share `--heading-sm` by design** — the tier is carried by the heading *element* (`<h2>` vs `<h3>`, via `DataSection`'s `titleAs`), not by a size step. `DataSection.css:46-49` renders both, and the [record-read heading ramp](../docs-site/content/docs/build-standards/page-archetypes/record-read.mdx) states the same. The `--heading-sm` step is also what `FilterBar` renders, which is why "control bar or section header" is decided by [what the title is over](../docs-site/content/docs/build-standards/composition-layers.mdx), never by rendered size.
 
@@ -62,11 +62,11 @@ Narrower than a page, denser, title + sections + fields. `<Sheet>` owns the titl
 
 | Tier | Token | Family | Weight | When |
 |------|-------|--------|--------|------|
-| Sheet title | `--heading-md` | heading | semibold | **Rendered by `<Sheet>` — do not restyle** |
-| Section heading | `--heading-sm` | heading | semibold | Top of each `<SheetSection>` |
-| Field label | `--label-sm` | label | semibold | Above a value or input (always **smaller** than section heading) |
-| Field value | `--body-md` | body | regular | Read-mode display |
-| Helper / caption | `--label-xs` | label | regular | Secondary context, error text, hint |
+| Sheet title | `--bds-heading-md` | heading | semibold | **Rendered by `<Sheet>` — do not restyle** |
+| Section heading | `--bds-heading-sm` | heading | semibold | Top of each `<SheetSection>` |
+| Field label | `--bds-label-sm` | label | semibold | Above a value or input (always **smaller** than section heading) |
+| Field value | `--bds-body-md` | body | regular | Read-mode display |
+| Helper / caption | `--bds-label-xs` | label | regular | Secondary context, error text, hint |
 
 **Key inversion to kill:** section heading uses `--heading-sm` (heading family); field label uses `--label-sm` (label family). Different families, different sizes — field label is always **smaller** than section heading. If a sheet's labels look bigger than its section headings, the label-tier / heading-tier assignment is swapped. Fix the assignment, not the size.
 
@@ -78,11 +78,11 @@ Edit-primary. Inputs dominate. Label weight carries more semantic load than in a
 
 | Tier | Token | Family | Weight | When |
 |------|-------|--------|--------|------|
-| Form title | `--heading-sm` | heading | semibold | **Rendered by `<Form>` — do not restyle** |
-| Form description | `--body-sm` | body | regular | Rendered by `<Form>` |
-| Fieldset heading | `--label-lg` | label | semibold | Grouping of related inputs (rare) |
-| Field label | `--label-md` | label | semibold | Above an input (rendered by input component, don't duplicate) |
-| Helper / error | `--label-sm` | label | regular | Under an input |
+| Form title | `--bds-heading-sm` | heading | semibold | **Rendered by `<Form>` — do not restyle** |
+| Form description | `--bds-body-sm` | body | regular | Rendered by `<Form>` |
+| Fieldset heading | `--bds-label-lg` | label | semibold | Grouping of related inputs (rare) |
+| Field label | `--bds-label-md` | label | semibold | Above an input (rendered by input component, don't duplicate) |
+| Helper / error | `--bds-label-sm` | label | regular | Under an input |
 
 Field labels inside `<TextInput>` / `<Select>` / `<Checkbox>` are already the canonical form-field label — don't wrap them in additional label spans. If a field grouping needs a heading, use the fieldset tier (`--label-lg`), not a subtitle.
 
@@ -92,11 +92,11 @@ Compact summary of one entity, repeated in a grid. No section hierarchy — titl
 
 | Tier | Token | Family | Weight | When |
 |------|-------|--------|--------|------|
-| Card title | `--heading-tiny` | heading | semibold | Entity name or primary identifier |
-| Card subtitle | `--label-xs` | label | semibold + uppercase | Optional — category, status label. BEM role: `__subtitle` ([canon](https://design.brikdesigns.com/docs/primitives/naming-conventions#subtitle)). The uppercase label-tier styling is a Card-context choice; the BEM name is the same `__subtitle` as PageHeader/Sheet/DataSection. |
-| Metadata label | `--label-sm` | label | regular | "Created" / "Owner" / etc. |
-| Metadata value | `--body-sm` | body | regular | Value beside a metadata label |
-| Supporting text | `--body-sm` | body | regular | One-line description |
+| Card title | `--bds-heading-tiny` | heading | semibold | Entity name or primary identifier |
+| Card subtitle | `--bds-label-xs` | label | semibold + uppercase | Optional — category, status label. BEM role: `__subtitle` ([canon](https://design.brikdesigns.com/docs/primitives/naming-conventions#subtitle)). The uppercase label-tier styling is a Card-context choice; the BEM name is the same `__subtitle` as PageHeader/Sheet/DataSection. |
+| Metadata label | `--bds-label-sm` | label | regular | "Created" / "Owner" / etc. |
+| Metadata value | `--bds-body-sm` | body | regular | Value beside a metadata label |
+| Supporting text | `--bds-body-sm` | body | regular | One-line description |
 
 Cards don't use section headings. If a card needs sections, it's outgrown the context — promote to a sheet or page.
 
@@ -153,10 +153,10 @@ The tiers above are enforced by **container-context primitives** — a small set
 
 | Need | Primitive | Tier it enforces |
 |---|---|---|
-| Page title | `PageHeader` | `--heading-xl` semibold, via its own `<h1>` (`PageHeader.css:69-76`) |
-| Page section heading + edit affordance | `DataSection` (`title`) | `--heading-sm` semibold (`DataSection.css:46-49`) |
+| Page title | `PageHeader` | `--bds-heading-xl` semibold, via its own `<h1>` (`PageHeader.css:69-76`) |
+| Page section heading + edit affordance | `DataSection` (`title`) | `--bds-heading-sm` semibold (`DataSection.css:46-49`) |
 | Sheet section heading | `SheetSection` (`heading`) | its own heading tier, `h3` by default |
-| Field label + value, read mode | `Field` inside `FieldGrid` | `--label-md` on a page, `--label-sm` inside a `Sheet` body — derived from the container, no prop |
+| Field label + value, read mode | `Field` inside `FieldGrid` | `--bds-label-md` on a page, `--bds-label-sm` inside a `Sheet` body — derived from the container, no prop |
 | Form title + description | `Form` | rendered by `Form`, do not restyle |
 | Input label + helper + error | `TextInput` / `Select` / `Checkbox` | the input owns its own label; never wrap it |
 | Card title, subtitle, metadata | `Card` with a `preset` (`control`, `summary`, `display`, `display-row`) | the preset locks the tiers |

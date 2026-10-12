@@ -138,23 +138,23 @@ Iconify icons render with `fill="currentColor"`, so they inherit color from the 
 
 ```tsx
 {/* inherits the surrounding text color */}
-<span style={{ color: 'var(--text-muted)' }}>
+<span style={{ color: 'var(--bds-text-muted)' }}>
   <Icon icon="ph:info" /> Quiet hint
 </span>
 
 {/* status icon */}
-<Icon icon="ph:check-circle-fill" style={{ color: 'var(--text-positive)' }} />
+<Icon icon="ph:check-circle-fill" style={{ color: 'var(--bds-text-positive)' }} />
 ```
 
 Text tokens commonly used for icon fill:
 
 | Token | Use |
 |---|---|
-| `--text-primary` | Default icon next to body text |
-| `--text-secondary` / `--text-muted` | Quiet / secondary icons |
-| `--text-link` | Icons inside links |
-| `--text-positive` / `--text-negative` / `--text-info` | Status icons |
-| `--text-inverse` | Icons on dark / inverted surfaces |
+| `--bds-text-primary` | Default icon next to body text |
+| `--bds-text-secondary` / `--bds-text-muted` | Quiet / secondary icons |
+| `--bds-text-link` | Icons inside links |
+| `--bds-text-positive` / `--bds-text-negative` / `--bds-text-info` | Status icons |
+| `--bds-text-inverse` | Icons on dark / inverted surfaces |
 
 BDS text tokens are mode-aware, so an icon colored with one retones automatically in `brik-dark` — prefer them over hardcoded colors.
 
@@ -163,7 +163,7 @@ BDS text tokens are mode-aware, so an icon colored with one retones automaticall
 [ServiceTag](/docs/components/service-tag)'s per-service glyphs are **not** Phosphor icons — they're custom SVG assets under `components/ui/ServiceTag/icons/`. They render via CSS `mask-image` with `background-color: currentColor` (not `<img src>`), so the fill is CSS-recolorable and inherits the tag's service text token:
 
 ```css
-.bds-service-tag--marketing { color: var(--text-service-marketing-on-light); }
+.bds-service-tag--marketing { color: var(--bds-text-service-marketing-on-light); }
 .bds-service-tag__icon      { background-color: currentColor; /* masked glyph */ }
 ```
 

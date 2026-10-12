@@ -13,9 +13,9 @@ Three declarations, always together:
 
 ```css
 .my-container {
-  max-width: var(--content-width-xl);   /* the band */
+  max-width: var(--bds-content-width-xl);   /* the band */
   margin-inline: auto;                  /* centred */
-  padding-inline: var(--page-inset);    /* the page-edge inset */
+  padding-inline: var(--bds-page-inset);    /* the page-edge inset */
 }
 ```
 
@@ -29,7 +29,7 @@ The `lint-page-grid` gate fails any container rule whose `padding-inline` bypass
 
 | Sense | Relationship | Mechanism |
 |---|---|---|
-| Page inset | Viewport edge ↔ content band | `padding-inline: var(--page-inset)` on the container |
+| Page inset | Viewport edge ↔ content band | `padding-inline: var(--bds-page-inset)` on the container |
 | Column gutter | Sibling ↔ sibling in a `Grid` or `Cluster` | The primitive's `gap`, from the `--gap-*` scale |
 
 This is the gap-vs-padding rule from [Content Rhythm](/docs/build-standards/content-rhythm#gap-padding-or-margin) applied horizontally: gap is between siblings, padding is the edge.
@@ -42,14 +42,14 @@ This is the gap-vs-padding rule from [Content Rhythm](/docs/build-standards/cont
 
 | Token | Width | Caps | Role |
 |---|---|---|---|
-| `--content-width-text-xs` | 448px | text | Short intro — a single-line eyebrow + title |
-| `--content-width-text-sm` | 600px | text | Section intro — title + description (the default) |
-| `--content-width-text-md` | 720px | text | Long-form prose, rich-text body |
-| `--content-width-sm` | 640px | band | Narrow band, focused forms |
-| `--content-width-md` | 800px | band | Standard text-led body sections |
-| `--content-width-lg` | 1024px | band | Feature grids, CTA bands |
-| `--content-width-xl` | 1280px | band | The page band — hero, header, footer, most sections |
-| `--content-width-full` | 100% | band | Full-bleed; prefer an explicit width |
+| `--bds-content-width-text-xs` | 448px | text | Short intro — a single-line eyebrow + title |
+| `--bds-content-width-text-sm` | 600px | text | Section intro — title + description (the default) |
+| `--bds-content-width-text-md` | 720px | text | Long-form prose, rich-text body |
+| `--bds-content-width-sm` | 640px | band | Narrow band, focused forms |
+| `--bds-content-width-md` | 800px | band | Standard text-led body sections |
+| `--bds-content-width-lg` | 1024px | band | Feature grids, CTA bands |
+| `--bds-content-width-xl` | 1280px | band | The page band — hero, header, footer, most sections |
+| `--bds-content-width-full` | 100% | band | Full-bleed; prefer an explicit width |
 
 The text rungs interleave numerically with the band rungs (600 < 640 < 720 < 800). That is expected and harmless: **pick a rung by its role, which the name states — never by sorting the ladder.**
 
@@ -69,13 +69,13 @@ This is the rule most often missed. A section's content container picks one rung
 
 ```css
 /* ✅ one owner, one cap */
-.split__content { max-width: var(--content-width-text-sm); }
+.split__content { max-width: var(--bds-content-width-text-sm); }
 .split__content > .prose { /* no max-width — inherits the column */ }
 
 /* ❌ two caps, two left edges */
-.split__content { max-width: var(--content-width-text-sm); }
-.split__content > .hero  { max-width: var(--content-width-sm); }
-.split__content > .prose { max-width: var(--content-width-text-md); }
+.split__content { max-width: var(--bds-content-width-text-sm); }
+.split__content > .hero  { max-width: var(--bds-content-width-sm); }
+.split__content > .prose { max-width: var(--bds-content-width-text-md); }
 ```
 
 If a block genuinely needs a different width from its siblings, it is not in that column — give it its own column, or restructure. Don't re-cap inside one.
@@ -100,7 +100,7 @@ Don't hand-roll the cap. A centered section intro — eyebrow / title / descript
   title="What we do"
   description="From branding to websites to behind-the-scenes systems…"
 />
-// centered · measure-md (--content-width-text-sm, 600px) · <h2> title at heading-lg — nothing to override
+// centered · measure-md (--bds-content-width-text-sm, 600px) · <h2> title at heading-lg — nothing to override
 ```
 
 `measure` (`sm` / `md` / `lg`, default `md`) picks the cap; `align` (`center` / `start`, default `center`) picks whether the column centers in the band or anchors to its start. `SectionHeader` never sets a band width — drop it inside the section's width-container and it caps the text within. This is the single replacement for the ad-hoc measures a section header used to be written with (`600px`, `700px`, `width: 70%`, `max-width: none`, a reused band rung).
@@ -117,8 +117,8 @@ Like the rhythm scale, you rarely write the recipe by hand — it is baked into 
 
 ```css
 .bds-cta__container {
-  --bds-blueprint-section-content-width: var(--content-width-lg);
-  --bds-blueprint-section-padding-inline: var(--padding-xl);
+  --bds-blueprint-section-content-width: var(--bds-content-width-lg);
+  --bds-blueprint-section-padding-inline: var(--bds-padding-xl);
 }
 ```
 

@@ -117,7 +117,7 @@ Plus all standard HTML attributes for the rendered `div`.
 | `--bds-bg-field-src` | `none` | Lottie source when no `src` prop is passed |
 | `--bds-bg-field-tint` | `transparent` | Flat wash over the field |
 | `--bds-bg-field-opacity` | `1` | Opacity of the whole layer |
-| `--bds-bg-field-particle` | `var(--text-muted)` | Particle colour for `mode="canvas"` |
+| `--bds-bg-field-particle` | `var(--bds-text-muted)` | Particle colour for `mode="canvas"` |
 
 `--bds-bg-field-particle` reaches the canvas through the element's inherited `color`, because a 2D context cannot read a custom property. The indirection keeps the value in the token layer instead of hardcoded in the paint loop.
 

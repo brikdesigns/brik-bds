@@ -43,7 +43,7 @@ import { ProgressBar } from '@brikdesigns/bds';
 `fillColor` overrides the brand-primary default. Use for status-coded progress (red for "deletion in progress", green for "import complete").
 
 ```tsx
-<ProgressBar value={75} label="Migration progress" fillColor="var(--background-positive)" />
+<ProgressBar value={75} label="Migration progress" fillColor="var(--bds-background-positive)" />
 ```
 
 ## Pattern: animated progress
@@ -84,7 +84,7 @@ useEffect(() => {
 |---|---|---|
 | `value` | `number` (0–100) *(required)* | — |
 | `label` | `string` | — |
-| `fillColor` | `string` | `var(--background-brand-primary)` |
+| `fillColor` | `string` | `var(--bds-background-brand-primary)` |
 
 Plus all standard `<div>` HTML attributes (excluding `role`, which ProgressBar locks to `progressbar`).
 

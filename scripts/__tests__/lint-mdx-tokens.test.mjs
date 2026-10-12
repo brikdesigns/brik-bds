@@ -186,9 +186,14 @@ describe('lint-mdx-tokens', () => {
     });
   });
 
-  it('passes a bare name the compat bridge still serves (#2670)', () => {
-    const { code } = run(fence('color: var(--text-primary);'));
-    expect(code).toBe(0);
+  it('FAILS on a pure-prefix bare name the compat bridge serves — deprecated, not phantom (#2683)', () => {
+    const { code, json } = run(fence('color: var(--text-primary);'));
+    expect(code).toBe(1);
+    expect(json.violations[0]).toMatchObject({
+      token: '--text-primary',
+      kind: 'deprecated',
+      replacement: '--bds-text-primary',
+    });
   });
 
   it('FAILS on a bare phantom (#2670)', () => {

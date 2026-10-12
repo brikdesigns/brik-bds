@@ -13,11 +13,11 @@ Tighter means more coupled. As the relationship loosens — words in a heading p
 
 | Relationship | Intent | Token | Base |
 |---|---|---|---|
-| Title ↔ subtitle / eyebrow | Tightly coupled — reads as one unit | `--gap-sm` | 6px |
-| Heading / subtitle ↔ body | Readable separation | `--gap-md` | 8px |
-| Paragraph ↔ paragraph | Distinct thoughts | `--gap-lg` | 16px |
-| Block ↔ block | Separate content units | `--gap-xl` | 24px |
-| Section ↔ section | Page-level break | `padding-block: var(--section-padding-block)` | 64–104px, fluid by device |
+| Title ↔ subtitle / eyebrow | Tightly coupled — reads as one unit | `--bds-gap-sm` | 6px |
+| Heading / subtitle ↔ body | Readable separation | `--bds-gap-md` | 8px |
+| Paragraph ↔ paragraph | Distinct thoughts | `--bds-gap-lg` | 16px |
+| Block ↔ block | Separate content units | `--bds-gap-xl` | 24px |
+| Section ↔ section | Page-level break | `padding-block: var(--bds-section-padding-block)` | 64–104px, fluid by device |
 
 <Callout type="warn">
   Never use `--gap-xs` or `--gap-tiny` in any vertical rhythm position — content or component. Both collapse to `0px` outside the default [spacing mode](/docs/foundation/spacing#spacing-modes), which erases the step entirely. And never hardcode a px value: the scale re-modulates per mode, a literal does not. The `lint-content-rhythm` gate enforces both rules on component CSS.
@@ -29,13 +29,13 @@ The same discipline extends one layer up: vertical space **between components** 
 
 | Relationship | Intent | Token | Base |
 |---|---|---|---|
-| Label ↔ the control it names | Reads as one unit — meter label ↔ bar, stacked field label ↔ value | `--gap-sm` | 6px |
-| Row ↔ row in a dense container | Menu options, list items, bullet items (comfortable density steps up one) | `--gap-sm` | 6px |
-| Control ↔ control in a cluster | Footer actions, a filter-chip row | `--gap-md` | 8px |
-| Field ↔ field in a form | Distinct inputs, one flow | `--gap-lg` | 16px |
-| Card ↔ card in a grid or list | Separate bounded units | `--gap-lg` | 16px |
-| Banner ↔ banner in a group | A queue the reader clears, not peers they compare — one step tighter than cards so the stack reads as one notice block ([banner groups](/docs/build-standards/banner-groups)) | `--gap-md` | 8px |
-| Container ↔ container | Same as block ↔ block above | `--gap-xl` | 24px |
+| Label ↔ the control it names | Reads as one unit — meter label ↔ bar, stacked field label ↔ value | `--bds-gap-sm` | 6px |
+| Row ↔ row in a dense container | Menu options, list items, bullet items (comfortable density steps up one) | `--bds-gap-sm` | 6px |
+| Control ↔ control in a cluster | Footer actions, a filter-chip row | `--bds-gap-md` | 8px |
+| Field ↔ field in a form | Distinct inputs, one flow | `--bds-gap-lg` | 16px |
+| Card ↔ card in a grid or list | Separate bounded units | `--bds-gap-lg` | 16px |
+| Banner ↔ banner in a group | A queue the reader clears, not peers they compare — one step tighter than cards so the stack reads as one notice block ([banner groups](/docs/build-standards/banner-groups)) | `--bds-gap-md` | 8px |
+| Container ↔ container | Same as block ↔ block above | `--bds-gap-xl` | 24px |
 
 Layout primitives (`Stack`, `Grid`, `Cluster`) stay generic — they can't know which relationship they're arranging, so this table governs **which `gap` value you pass**, not the primitive. Horizontal gaps (icon ↔ label, chips in a row) are outside this table; `--gap-xs` remains legitimate there.
 
