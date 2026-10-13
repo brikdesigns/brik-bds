@@ -260,10 +260,11 @@ function referencesIn(dir, name) {
     throw new Error(`git grep failed in ${dir}: ${err.stderr?.toString().trim() || err.message}`);
   }
   // A token name is a prefix of longer names (`--border-width-1` of
-  // `--border-width-100`), so the fixed-string match above over-matches.
-  // Require a non-name character (or EOL) after it. Token names are
-  // `--[A-Za-z0-9_-]+`, so no character in one is a regex metacharacter.
-  const bounded = new RegExp(`${name}(?![A-Za-z0-9_-])`);
+  // `--border-width-100`) and a suffix of others (`--tablet` of Webflow's
+  // `--_width---breakpoint--tablet`), so the fixed-string match above
+  // over-matches. Require a non-name character (or EOL) on both sides. Token
+  // names are `--[A-Za-z0-9_-]+`, so no character in one is a regex metacharacter.
+  const bounded = new RegExp(`(?<![A-Za-z0-9_-])${name}(?![A-Za-z0-9_-])`);
   return out
     .split('\n')
     .filter(Boolean)
