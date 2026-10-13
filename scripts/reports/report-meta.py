@@ -324,6 +324,17 @@ def insert_block(text: str, block: str) -> str:
     return block + text
 
 
+def _gh_login() -> str | None:
+    """The authenticated GitHub login, or None if `gh` can't answer."""
+    try:
+        out = subprocess.run(["gh", "api", "user", "-q", ".login"],
+                              capture_output=True, text=True, timeout=10)
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    login = out.stdout.strip()
+    return login if out.returncode == 0 and login else None
+
+
 def cmd_stamp(root: Path, args) -> int:
     path = Path(args.file).resolve()
     if not path.is_file():
@@ -352,6 +363,14 @@ def cmd_stamp(root: Path, args) -> int:
     # nothing to preserve and still gets today.
     if not values["report-generated"]:
         values["report-generated"] = dt.date.today().isoformat()
+    # The GitHub login is the last resort, not the first, for the same reason
+    # as report-generated above: a re-stamp that supplies neither --owner nor
+    # a flag must keep the file's own existing value, not overwrite it with
+    # whoever happens to run the command. Only a first stamp with no --owner
+    # falls through to `gh api user` — local `git config user.name` is never
+    # consulted (portal#5029: it was leaking in as the owner at write time).
+    if not values["report-owner"]:
+        values["report-owner"] = _gh_login()
     missing = [k for k, v in values.items() if not v]
     if missing:
         print(f"report-meta: stamp needs a value for {', '.join(missing)}", file=sys.stderr)
