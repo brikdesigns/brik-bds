@@ -150,9 +150,17 @@ jobs:
 
             // The AC section runs from its heading to the next heading at the
             // same-or-higher level. `##` and `###` both occur in Brik bodies.
-            const AC_HEADING = /^(#{2,3})\s*acceptance\s+criteria\b/i;
+            // `## Acceptance` alone counts: 12 issues used it and no close gate saw
+            // them (brik-llm#4794). Same widening as scripts/pm/story-validate.py.
+            const AC_HEADING = /^(#{2,3})\s*acceptance(?:\s+criteria\b|\s*$)/i;
             const ANY_HEADING = /^(#{1,6})\s+/;
             const UNTICKED = /^\s*[-*]\s+\[ \]/;
+
+            // An AC that names scheduled work is not done until it ran once
+            // (brik-llm#4794): four issues closed before the cron they wired ever
+            // fired. The issue body needs a `Verified-run: <run URL or log line>`.
+            const SCHEDULED_AC = /\b(?:cron|launchagents?|launchd|openclaw\s+routines?|scheduled\s+(?:run|workflow|job|routine))\b/i;
+            const VERIFIED_RUN = /^\s*Verified-run:\s*\S/im;
 
             const EXEMPT_LABEL = 'ac:none';
             const EXEMPT_LINE = /^\s*Ac-exempt:\s*(\S.*?)\s*$/im;
@@ -252,6 +260,7 @@ jobs:
               const lines = (body || '').split(/\r?\n/);
               let depth = null;
               const unticked = [];
+              const scheduled = [];
               let inFence = false;
               for (const line of lines) {
                 if (/^\s*(```|~~~)/.test(line)) { inFence = !inFence; continue; }
@@ -264,8 +273,19 @@ jobs:
                 const h = ANY_HEADING.exec(line);
                 if (h && h[1].length <= depth) break; // section ended
                 if (UNTICKED.test(line)) unticked.push(line.trim());
+                if (/^\s*[-*]\s+\[[ xX]\]/.test(line) && SCHEDULED_AC.test(line)) scheduled.push(line.trim());
               }
-              return { hasSection: depth !== null, unticked };
+              return { hasSection: depth !== null, unticked, scheduled };
+            }
+
+            // A `Verified-run:` line anywhere in the issue body outside a fence.
+            function hasVerifiedRun(body) {
+              let inFence = false;
+              for (const line of (body || '').split(/\r?\n/)) {
+                if (/^\s*(```|~~~)/.test(line)) { inFence = !inFence; continue; }
+                if (!inFence && VERIFIED_RUN.test(line)) return true;
+              }
+              return false;
             }
 
             // The hatch, and its two partial states. Returns one of:
@@ -399,6 +419,50 @@ jobs:
                 body: '',
                 expect: { hasSection: false, unticked: 0 },
               },
+              {
+                name: 'a bare `## Acceptance` heading is an AC section (#4794)',
+                body: `${H}${H} Acceptance\n\n- [ ] one\n`,
+                expect: { hasSection: true, unticked: 1 },
+              },
+              {
+                name: '`## Acceptance tests` is not an AC section',
+                body: `${H}${H} Acceptance tests\n\n- [ ] one\n`,
+                expect: { hasSection: false, unticked: 0 },
+              },
+            ];
+
+            // Scheduled-work ACs (brik-llm#4794): {scheduled: count, verified: bool}.
+            const SCHEDULED_FIXTURES = [
+              {
+                name: 'cron AC with no Verified-run line',
+                body: `${AC}\n\n- [x] The cron fires every hour\n`,
+                expect: { scheduled: 1, verified: false },
+              },
+              {
+                name: 'cron AC with a Verified-run line',
+                body: `${AC}\n\n- [x] The cron fires every hour\n\nVerified-run: https://github.com/o/r/actions/runs/1\n`,
+                expect: { scheduled: 1, verified: true },
+              },
+              {
+                name: 'LaunchAgent AC under a bare `## Acceptance` heading',
+                body: `${H}${H} Acceptance\n\n- [ ] LaunchAgent loads on boot\n`,
+                expect: { scheduled: 1, verified: false },
+              },
+              {
+                name: 'no scheduled work, no line needed',
+                body: `${AC}\n\n- [x] The button renders\n`,
+                expect: { scheduled: 0, verified: false },
+              },
+              {
+                name: 'cron named outside the AC section is not gated',
+                body: `Runs on a cron.\n\n${AC}\n\n- [x] The button renders\n`,
+                expect: { scheduled: 0, verified: false },
+              },
+              {
+                name: 'a fenced Verified-run example is not a verification',
+                body: `${AC}\n\n- [x] The cron fires\n\n\`\`\`\nVerified-run: example\n\`\`\`\n`,
+                expect: { scheduled: 1, verified: false },
+              },
             ];
 
             const EXEMPT_FIXTURES = [
@@ -508,6 +572,12 @@ jobs:
                 );
               }
             }
+            for (const f of SCHEDULED_FIXTURES) {
+              const got = { scheduled: untickedAcs(f.body).scheduled.length, verified: hasVerifiedRun(f.body) };
+              if (!eq(got, f.expect)) {
+                selfTestFailures.push(`  scheduled/${f.name}: expected ${JSON.stringify(f.expect)}, got ${JSON.stringify(got)}`);
+              }
+            }
             for (const f of EXEMPT_FIXTURES) {
               const got = exemption(f.body, f.labels).state;
               if (got !== f.expect) {
@@ -534,7 +604,7 @@ jobs:
             }
 
             const FIXTURE_COUNT = REF_FIXTURES.length + UNION_FIXTURES.length
-              + AC_FIXTURES.length + EXEMPT_FIXTURES.length + BOUNDARY_FIXTURES.length;
+              + AC_FIXTURES.length + SCHEDULED_FIXTURES.length + EXEMPT_FIXTURES.length + BOUNDARY_FIXTURES.length;
             if (selfTestFailures.length > 0) {
               core.setFailed(
                 [
@@ -714,6 +784,7 @@ jobs:
             }
 
             const offenders = [];
+            const unverified = [];
             for (const num of refs) {
               let issue;
               try {
@@ -731,16 +802,42 @@ jobs:
                 core.warning(`Could not resolve #${num} (${e.status || e.message}) — not gated.`);
                 continue;
               }
-              const { hasSection, unticked } = untickedAcs(issue.body || '');
+              const { hasSection, unticked, scheduled } = untickedAcs(issue.body || '');
               if (!hasSection) {
                 core.info(`#${num} has no \`## Acceptance criteria\` section — nothing to assert.`);
                 continue;
+              }
+              if (scheduled.length > 0 && !hasVerifiedRun(issue.body)) {
+                unverified.push({ num, title: issue.title, scheduled });
               }
               if (unticked.length === 0) {
                 core.info(`#${num}: all acceptance criteria ticked.`);
                 continue;
               }
               offenders.push({ num, title: issue.title, unticked });
+            }
+
+            if (unverified.length > 0) {
+              const lines = [
+                `This PR closes ${unverified.length} issue(s) whose acceptance criteria name scheduled work with no \`Verified-run:\` line.`,
+                '',
+                'A cron, LaunchAgent or OpenClaw routine is not done until it has run once. Four',
+                'issues closed before the work they wired ever fired (brik-llm#4794).',
+                '',
+              ];
+              for (const u of unverified) {
+                lines.push(`  #${u.num} — ${u.title}`);
+                for (const line of u.scheduled) lines.push(`      ${line}`);
+                lines.push('');
+              }
+              lines.push(
+                'Add `Verified-run: <run URL or log line>` to the issue body once the scheduled',
+                'work has actually run, then re-run. If this PR only wires it, use `Part of #N`',
+                'so the issue stays open. Use `workflow_dispatch` for the proof: GitHub cron slots fire hours late.',
+              );
+              if (offenders.length > 0) lines.push('', '(Unticked criteria are reported separately below.)');
+              failVerdict(lines.join('\n'));
+              if (offenders.length === 0) return;
             }
 
             if (offenders.length === 0) {
