@@ -507,7 +507,6 @@
   --measure-lg: var(--bds-measure-lg);
   --measure-md: var(--bds-measure-md);
   --measure-sm: var(--bds-measure-sm);
-  --mobile: var(--bds-mobile);
   --padding-2xl: var(--bds-padding-2xl);
   --padding-2xs: var(--bds-padding-2xs);
   --padding-huge: var(--bds-padding-huge);
@@ -686,7 +685,6 @@
   --surface-service-product-inverse: var(--bds-surface-service-product-inverse);
   --surface-service-product-light: var(--bds-surface-service-product-light);
   --surface-warning: var(--bds-surface-warning);
-  --tablet: var(--bds-tablet);
   --text-accent: var(--bds-text-accent);
   --text-accent-blue: var(--bds-text-accent-blue);
   --text-accent-green: var(--bds-text-accent-green);
@@ -734,7 +732,6 @@
   --text-warning: var(--bds-text-warning);
   --tooltip-background: var(--bds-tooltip-background);
   --tooltip-text: var(--bds-tooltip-text);
-  --web: var(--bds-web);
 }
 
 :root[data-theme="dark"] {

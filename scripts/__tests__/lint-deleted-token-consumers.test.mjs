@@ -87,7 +87,7 @@ beforeAll(() => {
   consumer = join(root, 'gh', 'product', 'consumer');
   mkdirSync(join(consumer, 'src'), { recursive: true });
   git(['init', '-q', '-b', 'main'], consumer);
-  writeFileSync(join(consumer, 'src', 'page.css'), '.hero { max-width: var(--bds-measure-md); }\n');
+  writeFileSync(join(consumer, 'src', 'page.css'), '.hero { max-width: var(--bds-measure-md); }\n.x { --_width---breakpoint--measure: 60ch; }\n');
   // Untracked files are invisible to `git grep`, which is the point — a stale
   // node_modules copy of BDS must never read as consumer usage.
   writeFileSync(join(consumer, 'src', 'untracked.css'), '.x { width: var(--bds-measure-lg); }\n');
@@ -166,6 +166,8 @@ describe('lint-deleted-token-consumers', { timeout: 30_000 }, () => {
   it('does not treat a longer name as a reference to its prefix', () => {
     // `--measure` is a prefix of `--measure-md`; a fixed-string grep matches
     // both, so the boundary filter is what keeps this from a false positive.
+    // The consumer also declares `--_width---breakpoint--measure`, which ends in
+    // the deleted name: the boundary has to hold on the leading side too.
     commitTokens({
       source: ':root {\n  --bds-measure-md: 60ch;\n  --bds-measure-lg: 72ch;\n}\n',
       dist: ':root {\n  --bds-measure-md: 60ch;\n  --bds-measure-lg: 72ch;\n}\n',

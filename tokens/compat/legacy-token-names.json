@@ -486,7 +486,6 @@
     "--measure-lg",
     "--measure-md",
     "--measure-sm",
-    "--mobile",
     "--padding-2xl",
     "--padding-2xs",
     "--padding-huge",
@@ -665,7 +664,6 @@
     "--surface-service-product-inverse",
     "--surface-service-product-light",
     "--surface-warning",
-    "--tablet",
     "--text-accent",
     "--text-accent-blue",
     "--text-accent-green",
@@ -712,8 +710,7 @@
     "--text-transform-subtitle",
     "--text-warning",
     "--tooltip-background",
-    "--tooltip-text",
-    "--web"
+    "--tooltip-text"
   ],
   "wordSteps": {
     "--color-blue-dark": "--color-blue-700",
