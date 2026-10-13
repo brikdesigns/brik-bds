@@ -95,16 +95,6 @@
   --bds-border-input: var(--bds-color-grayscale-500);
   --bds-border-inverse: var(--bds-color-grayscale-white);
   --bds-border-on-color-dark: white;
-  /* Typography — all four families add the `, sans-serif` fallback the generated
-   * tokens omit, so text still renders if the Poppins webfont fails to load.
-   * Same family in every role by brand intent; the roles exist so a client theme
-   * can diverge them without touching components. Covers --bds-font-family-body,
-   * --bds-font-family-label, --bds-font-family-heading and --bds-font-family-display.
-   * (#1689) */
-  --bds-font-family-body: Poppins, sans-serif;
-  --bds-font-family-label: Poppins, sans-serif;
-  --bds-font-family-heading: Poppins, sans-serif;
-  --bds-font-family-display: Poppins, sans-serif;
 }
 
 /* ─── Dark mode (data-theme attribute) ───────────────────────── */
