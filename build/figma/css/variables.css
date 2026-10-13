@@ -141,12 +141,12 @@
   --bds-font-weight-black: 900;
   --bds-font-weight-semibold: 600;
   --bds-font-weight-extrabold: 800;
-  --bds-font-family-display: Poppins;
-  --bds-font-family-heading: Poppins;
-  --bds-font-family-label: Poppins;
-  --bds-font-family-body: Poppins;
-  --bds-font-family-subtitle: Poppins;
-  --bds-font-family-system: 'Courier New';
+  --bds-font-family-display: Poppins, sans-serif;
+  --bds-font-family-heading: Poppins, sans-serif;
+  --bds-font-family-label: Poppins, sans-serif;
+  --bds-font-family-body: Poppins, sans-serif;
+  --bds-font-family-subtitle: Poppins, sans-serif;
+  --bds-font-family-system: 'Courier New', monospace;
   --bds-easing-ease-in: String value;
   --bds-easing-ease-out: String value;
   --bds-delay-0: 0ms;

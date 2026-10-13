@@ -192,6 +192,29 @@ StyleDictionary.registerTransform({
   transform: (token) => `${token.$value}%`,
 });
 
+// The kit's font-family values are bare family names ("Poppins"). A failed webfont
+// load drops a bare name to the UA default, so the generated token carries a generic
+// fallback, chosen per role. `system` is monospace; icon/logo roles have no honest
+// generic family, so they stay bare. A value already holding a stack is left alone.
+const FONT_FALLBACK_BY_ROLE = {
+  display: 'sans-serif',
+  heading: 'sans-serif',
+  label: 'sans-serif',
+  body: 'sans-serif',
+  subtitle: 'sans-serif',
+  system: 'monospace',
+};
+
+StyleDictionary.registerTransform({
+  name: 'bds/fontFamily/fallback',
+  type: 'value',
+  filter: (token) => token.path[0] === 'font-family' && token.path[1] in FONT_FALLBACK_BY_ROLE,
+  transform: (token) => {
+    const value = String(token.$value);
+    return value.includes(',') ? value : `${value}, ${FONT_FALLBACK_BY_ROLE[token.path[1]]}`;
+  },
+});
+
 // ─── Config ─────────────────────────────────────────────────────
 
 export default {
@@ -203,7 +226,7 @@ export default {
       // CSS only — js/swift keep their names, Figma + tokens-studio JSON untouched.
       prefix: SD_PREFIX,
       transformGroup: 'tokens-studio',
-      transforms: ['name/kebab', 'bds/lineHeight/percent'],
+      transforms: ['name/kebab', 'bds/lineHeight/percent', 'bds/fontFamily/fallback'],
       buildPath: 'build/figma/css/',
       files: [
         {
