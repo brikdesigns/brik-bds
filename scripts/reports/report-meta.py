@@ -25,8 +25,9 @@ Every committed report under docs/reports/ carries these nine tags:
     report-source      repo-relative path of the generator, or manual
 
 Themes reuse the GitHub `theme:*` labels so a report and a ticket filter the
-same way: accessibility, agent-ops, design-system, documentation, observability,
-performance, security-hardening, tech-debt, ui-cleanup. A report may carry none.
+same way: accessibility, agent-ops, backlog, design-system, documentation,
+observability, performance, release, security-hardening, tech-debt, ui-cleanup.
+A report may carry none.
 
 Status is binary, like `engagements.status`. A replaced report is `archived`,
 and the report that replaced it names it in `report-supersedes`; "superseded" is
@@ -94,8 +95,9 @@ STATUSES = ("active", "archived")
 TYPES = ("audit", "assessment", "plan", "retro", "reference")
 # Mirrors the repo's `theme:*` GitHub labels; keep in step with the portal's
 # ops_reports.themes check (src/lib/ops-reports/manifest.ts REPORT_THEMES).
-THEMES = ("accessibility", "agent-ops", "design-system", "documentation",
-          "observability", "performance", "security-hardening", "tech-debt", "ui-cleanup")
+THEMES = ("accessibility", "agent-ops", "backlog", "design-system", "documentation",
+          "observability", "performance", "release", "security-hardening", "tech-debt",
+          "ui-cleanup")
 NO_THEMES = "none"
 SUBJECTS = ("brik", "bds", "portal", "llm")
 CADENCES = ("once", "on-demand", "daily", "weekly", "monthly")
