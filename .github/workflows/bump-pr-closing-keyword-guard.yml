@@ -83,6 +83,15 @@ name: bump-pr-closing-keyword-guard
 #   inverse would red a working path. Commit-only was 1 of 30, and it is the one
 #   that did damage.
 #
+#   An ALREADY-CLOSED target is exempt (brik-client-portal#5253). The harm rule 5
+#   names is a merge closing an issue the body declined to close; when the issue
+#   is already closed there is no such close to prevent, so the disagreement is
+#   inert. Promotion PR brik-client-portal#5226 failed on `#5161 (826f1f71)
+#   Closes #5161` — #5161 had closed on its own `staging` merge, and the commit
+#   is immutable there, so the documented remedy ("amend the commit") did not
+#   exist and the PR landed on a hand exemption. The state read reuses rule 3's
+#   `issues.get`, and a ref that cannot be resolved is never treated as closed.
+#
 # Self-testing: the FIXTURES matrix below runs before the real PR body is
 # scanned and fails the job on any mismatch, so every copy of this file
 # verifies its own detection logic on every PR.
@@ -285,9 +294,24 @@ jobs:
             // carries inside a fence does not count as a declaration — quoted
             // material is not intent, and an un-neutralized one is already
             // rule 1's job.
-            function commitOnlyCloses(bodyRefs, commitRefs) {
+            //
+            // An ALREADY-CLOSED ref is not a finding (brik-client-portal#5253).
+            // The rule exists because a commit-only `Closes` closes an issue the
+            // body deliberately did not — but an issue that is already closed has
+            // nothing left for the merge to close, so the disagreement has no
+            // consequence to guard against. The live case is promotion PR
+            // brik-client-portal#5226, failed on *"#5161 (826f1f71) Closes #5161"*
+            // where #5161 had closed on its own `staging` merge days earlier; the
+            // commit is immutable on `staging`, so the documented remedy
+            // ("reword the commit") does not exist and the only out was a hand
+            // exemption. `closedRefs` holds only refs RESOLVED as closed — an
+            // unresolvable one stays a finding, so the skip fails closed.
+            function commitOnlyCloses(bodyRefs, commitRefs, closedRefs) {
               const declared = new Set(bodyRefs);
-              return [...new Set(commitRefs)].filter((num) => !declared.has(num));
+              const closed = new Set(closedRefs || []);
+              return [...new Set(commitRefs)].filter(
+                (num) => !declared.has(num) && !closed.has(num),
+              );
             }
 
             // ── The promotion boundary (brik-client-portal#4497) ─────────
@@ -500,6 +524,34 @@ jobs:
                 commit: ``,
                 expect: [],
               },
+              {
+                // The live brik-client-portal#5226 shape. #5161 closed on its own
+                // `staging` merge before the promotion PR re-presented the commit,
+                // so there is nothing left for the merge to close.
+                name: 'already-CLOSED commit-only ref is not a finding (#5226 shape)',
+                body: `Promote #5150 #5155 #5159 → main`,
+                commit: `fix(infra): ledger lookups read here-strings\n\nCloses ${H}5161`,
+                closed: ['5161'],
+                expect: [],
+              },
+              {
+                // The property the skip must NOT break: #1362's target was OPEN,
+                // and that is the incident rule 5 was written for.
+                name: 'OPEN commit-only ref still fails (#1362 shape preserved)',
+                body: `Part of ${H}1354\n\n\`Part of\`, not \`Closes\`, deliberately.`,
+                commit: `fix(ci): pin the regression reference\n\nCloses ${H}1354`,
+                closed: [],
+                expect: ['1354'],
+              },
+              {
+                // Fails closed: an unresolvable ref never reaches `closed`, so a
+                // read failure cannot silence the rule.
+                name: 'mixed — the closed one is skipped, the open one is not',
+                body: `Part of ${H}900`,
+                commit: `fix: two\n\nCloses ${H}900\nCloses ${H}901`,
+                closed: ['901'],
+                expect: ['900'],
+              },
             ];
 
             for (const f of FIXTURES) checkExpect(f.name, scanBody(f.body), f.expect);
@@ -510,6 +562,7 @@ jobs:
               const got = commitOnlyCloses(
                 scanBody(f.body).proseRefs,
                 scanCommitMessage(f.commit).proseRefs,
+                f.closed || [],
               );
               if (JSON.stringify([...got].sort()) !== JSON.stringify([...f.expect].sort())) {
                 selfTestFailures.push(
@@ -727,7 +780,14 @@ jobs:
             // Rule 3 — resolve each prose ref's labels; flag the umbrellas.
             // Union of both inputs: an umbrella closed from a commit message is
             // the same defect as one closed from the body.
+            //
+            // The same fetch answers rule 5's already-closed question
+            // (brik-client-portal#5253), so the skip costs no additional API
+            // call. A ref this loop could not resolve never enters `closedRefs`
+            // and so stays a rule 5 finding — the skip fails closed, matching how
+            // the `continue` above leaves it in scope for the umbrella check.
             const umbrellaViolations = [];
+            const closedRefs = new Set();
             for (const num of new Set([...proseRefs, ...commitRefs])) {
               let labels = [];
               try {
@@ -737,6 +797,7 @@ jobs:
                   issue_number: Number(num),
                 });
                 labels = (data.labels || []).map((l) => (typeof l === 'string' ? l : l.name));
+                if (data.state === 'closed') closedRefs.add(num);
               } catch (e) {
                 core.info(`Could not resolve #${num} (${e.status || e.message}) — skipping umbrella check for it.`);
                 continue;
@@ -758,7 +819,16 @@ jobs:
 
             // Rule 5 — both inputs are read above; this is where they are
             // COMPARED (brikdesigns#1365).
-            const commitOnly = commitOnlyCloses(proseRefs, [...commitRefs]);
+            const commitOnly = commitOnlyCloses(proseRefs, [...commitRefs], closedRefs);
+            const skippedClosed = [...commitRefs].filter(
+              (num) => !new Set(proseRefs).has(num) && closedRefs.has(num),
+            );
+            if (skippedClosed.length > 0) {
+              core.info(
+                `Rule 5 — ${skippedClosed.length} commit-only ref(s) skipped as already ` +
+                `CLOSED, so the merge closes nothing: ${skippedClosed.map((n) => `#${n}`).join(', ')}.`,
+              );
+            }
 
             if (violations.length === 0 && negations.length === 0
                 && umbrellaViolations.length === 0
