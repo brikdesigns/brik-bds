@@ -9,8 +9,8 @@
 #   ./scripts/new-task.sh bds-button-variants
 #   ./scripts/new-task.sh tokens-figma-pull
 #
-# Flags (--issue / --no-issue / --base / --yes) may be written before or after
-# the slug.
+# Flags (--issue / --no-issue / --base / --yes / --allow-worktree-overlap /
+# --allow-pr-overlap) may be written before or after the slug.
 #
 # Creates:
 #   ../brik-bds-worktrees/{scope}-{name}/   on branch  task/{scope}-{name}
@@ -42,6 +42,14 @@ OVER_BUDGET=0
 # folding this into them would auto-proceed the one signal that means another
 # session is editing the file right now.
 ALLOW_WT_OVERLAP=0
+
+# Opt-out for the ticket-path gate (brik-client-portal#5261). Separate from
+# ALLOW_WT_OVERLAP because the two gates report different facts with different
+# remedies: a sibling worktree is mid-EDIT (read the worktree, nothing is pushed),
+# versus a PR is already OPEN on this file (read the PR, the work may be done).
+# Waiving one must not waive the other. Not folded into NEW_TASK_YES/AUTO_YES for
+# the same reason spelled out above.
+ALLOW_PR_OVERLAP=0
 
 # Issue-number overlap gate. Worktrees isolate FILES, not INTENT: two sessions
 # can each create a correct worktree and build the same fix. brik-bds took four
@@ -150,6 +158,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --allow-worktree-overlap)
       ALLOW_WT_OVERLAP=1
+      shift
+      ;;
+    --allow-pr-overlap)
+      ALLOW_PR_OVERLAP=1
       shift
       ;;
     --yes|-y)
@@ -279,7 +291,12 @@ if [ -n "$ISSUE_REF" ]; then
   # work is identical (#1663). Advisory — it never refuses, and never aborts on
   # an unreadable title either (see the `|| return 0` in check_title_overlap).
   check_title_overlap "$ISSUE_REF"
-  check_ticket_path_overlap "$ISSUE_REF"
+  # Guarded and REFUSING since brik-client-portal#5261 — rc 8 is a confirmed hit.
+  # The refusal itself is deferred to just below the worktree gate, so a session
+  # that trips both reads both before it is stopped; see the block there.
+  # Unguarded under `set -e` this would exit 8 with no remedy line at all.
+  path_rc=0
+  check_ticket_path_overlap "$ISSUE_REF" || path_rc=$?
   # Sibling-worktree gate (brik-llm#1932). Every gate above reads state that
   # reached GitHub; this one reads `git worktree list` + `git status` and sees the
   # window none of them can — a session that has a worktree and edits but has not
@@ -304,6 +321,23 @@ if [ -n "$ISSUE_REF" ]; then
     echo -e "${YELLOW}  create (brik-llm#2635) — the owning session is mid-edit.${NC}"
     echo ""
     echo -e "${YELLOW}  If the overlap is genuinely benign, re-run with --allow-worktree-overlap.${NC}"
+    exit 1
+  fi
+  # Deferred refusal for the ticket-path gate above (brik-client-portal#5261).
+  # It sits AFTER the worktree gate rather than beside its own call so that a
+  # session colliding on both fronts sees both reports; the worktree gate reads
+  # PTO_TICKET_PATHS, which is published before the rc 8 return.
+  if [ "$path_rc" -eq 8 ] && [ "$ALLOW_PR_OVERLAP" != "1" ]; then
+    echo ""
+    echo -e "${RED}✗ Refusing to create a worktree — an open PR already touches these files.${NC}"
+    echo ""
+    echo -e "${YELLOW}  Read that PR before you write anything. It may already do this work,${NC}"
+    echo -e "${YELLOW}  and if it does not, you now know the conflict you are about to create.${NC}"
+    echo -e "${YELLOW}  On 2026-10-17 two sessions wrote the same approval file 107 seconds${NC}"
+    echo -e "${YELLOW}  apart with this gate present but advisory; one session's work was${NC}"
+    echo -e "${YELLOW}  discarded (brik-client-portal#5256).${NC}"
+    echo ""
+    echo -e "${YELLOW}  If the overlap is genuinely benign, re-run with --allow-pr-overlap.${NC}"
     exit 1
   fi
   # The issue-side half of the same question (brik-llm#2314). The line above

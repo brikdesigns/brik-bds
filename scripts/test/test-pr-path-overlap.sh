@@ -304,16 +304,39 @@ assert_eq "the shared path is printed" "yes" \
 # The duplicate-warning noise this must not produce: #1533 already named #2400.
 assert_eq "the ticket's OWN open PR is not re-reported as a collision" "no" \
   "$(printf '%s' "$OUT" | grep -q 'PR #2400' && echo yes || echo no)"
-assert_eq "it returns 0 — this warns, it never blocks worktree creation" "0" \
+# brik-client-portal#5261: a confirmed hit REFUSES. It returned 0 here until
+# 2026-10-17, and the one caller shape that matters — an agent session, i.e.
+# non-interactive — was waved through by the `[ -t 0 ]` branch this replaced.
+assert_eq "a confirmed hit returns 8, not 0" "8" \
   "$(run_tcheck t_prs >/dev/null 2>&1; echo $?)"
-assert_eq "non-interactive continues instead of reading stdin" "yes" \
+assert_eq "8, not 7 — a caller must be able to waive this without waiving the worktree gate" "no" \
+  "$(run_tcheck t_prs >/dev/null 2>&1; [ $? -eq 7 ] && echo yes || echo no)"
+assert_eq "a non-interactive caller is refused, not continued" "no" \
   "$(run_tcheck t_prs </dev/null | grep -q 'non-interactive: continuing' && echo yes || echo no)"
+assert_eq "the refusal is distinctly marked, not another yellow warning" "yes" \
+  "$(run_tcheck t_prs </dev/null | grep -q '⛔ OPEN PR ALREADY TOUCHING' && echo yes || echo no)"
+# An interactive caller must get the same verdict — the terminal is not the
+# variable that decides whether two sessions are about to write one file. CI has
+# no tty to run that case on, so assert the absence of the branch instead: the
+# verdict is unreachable from `[ -t 0 ]` only if the function no longer tests it.
+PPO_LIB="$(cd "$(dirname "$0")/../lib" && pwd)/pr-path-overlap.sh"
+# Comments stripped: the replaced branch is NAMED in a comment there, on purpose.
+TICKET_FN_CODE="$(awk '/^check_ticket_path_overlap\(\)/ {f=1} f && /^}/ {exit} f' "$PPO_LIB" \
+                  | grep -v '^[[:space:]]*#')"
+# Positive control for the extraction above — an empty body would pass the next
+# assertion for the wrong reason, which is how a structural check goes blind.
+assert_eq "the function body was actually extracted" "yes" \
+  "$(printf '%s' "$TICKET_FN_CODE" | grep -q 'overlapping_prs' && echo yes || echo no)"
+assert_eq "the verdict no longer branches on whether stdin is a terminal" "no" \
+  "$(printf '%s' "$TICKET_FN_CODE" | grep -q -- '-t 0' && echo yes || echo no)"
 
 OUT="$(run_tcheck t_unrelated)"
 assert_eq "no overlap says so once, and names no PR" "yes" \
   "$(printf '%s' "$OUT" | grep -q 'No open PR touches a path named in #2313' && echo yes || echo no)"
 assert_eq "no overlap prints no PR number" "no" \
   "$(printf '%s' "$OUT" | grep -q 'PR #' && echo yes || echo no)"
+assert_eq "no overlap returns 0 — only a CONFIRMED hit refuses" "0" \
+  "$(run_tcheck t_unrelated >/dev/null 2>&1; echo $?)"
 
 # AC: paths not knowable up front → no-op WITH A NOTE, never a failure and never
 # a silence that reads as an all-clear.
@@ -332,6 +355,11 @@ assert_eq "a failed gh call warns that the check was SKIPPED" "yes" \
   "$(printf '%s' "$OUT" | grep -q 'ticket path-overlap skipped, not passed' && echo yes || echo no)"
 assert_eq "a failed gh call never prints the all-clear" "no" \
   "$(printf '%s' "$OUT" | grep -q 'No open PR touches' && echo yes || echo no)"
+# The failure mode brik-client-portal#5261 must not introduce: a gate that
+# refuses when its instrument is blind gets switched off, and then it stops
+# catching the hits too.
+assert_eq "a failed gh call still returns 0 — an unreadable instrument never refuses" "0" \
+  "$(run_tcheck failing_gh >/dev/null 2>&1; echo $?)"
 
 # The blind spot #2313 exists to close, end to end: two sessions, two tickets,
 # one file. The number-keyed gate reports clean on this input.
@@ -354,6 +382,28 @@ assert_eq "the check runs BEFORE git worktree add" "yes" \
   "$(awk '/^[[:space:]]*check_ticket_path_overlap[[:space:]]/ {c=NR}
           /git worktree add/ {w=NR}
           END { print (c > 0 && w > 0 && c < w) ? "yes" : "no" }' "$NEW_TASK")"
+
+# brik-client-portal#5261. The lib returning 8 changes nothing on its own — the
+# gate is the caller. Three things have to hold together, and each is a way the
+# wiring has actually been lost before:
+#   1. the call is GUARDED, or `set -e` exits on 8 with no remedy line printed;
+#   2. something tests for 8 and exits;
+#   3. the opt-out is its OWN flag, not --allow-worktree-overlap and not
+#      NEW_TASK_YES, which every agent session sets.
+assert_eq "the call is guarded, so set -e cannot swallow the refusal" "yes" \
+  "$(grep -qE '^[[:space:]]*check_ticket_path_overlap[[:space:]].*\|\|' "$NEW_TASK" && echo yes || echo no)"
+assert_eq "new-task.sh refuses on rc 8" "yes" \
+  "$(grep -qE '\-eq 8 \]' "$NEW_TASK" && echo yes || echo no)"
+assert_eq "the opt-out is its own flag" "yes" \
+  "$(grep -q -- '--allow-pr-overlap' "$NEW_TASK" && echo yes || echo no)"
+assert_eq "the opt-out is documented in the usage header" "yes" \
+  "$(awk 'NR<60' "$NEW_TASK" | grep -q -- '--allow-pr-overlap' && echo yes || echo no)"
+assert_eq "NEW_TASK_YES does not waive it" "no" \
+  "$(awk '/-eq 8 \]/,/^[[:space:]]*fi$/' "$NEW_TASK" | grep -q 'NEW_TASK_YES' && echo yes || echo no)"
+# A ticketless branch is the other way past this gate: no --issue, no paths, no
+# check. brik-llm already refuses that shape outright; the assertion keeps it so.
+assert_eq "a run with neither --issue nor --no-issue is refused outright" "yes" \
+  "$(grep -q 'Refusing to create a worktree with no ticket' "$NEW_TASK" && echo yes || echo no)"
 
 echo "── every issue ref is repo-qualified (brik-llm#2916) ──"
 

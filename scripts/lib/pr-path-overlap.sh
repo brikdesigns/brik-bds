@@ -56,12 +56,20 @@
 # brik-client-portal did not carry the file for the 12 days after brik-llm#2323
 # put it there (brik-llm#2272/#2447).
 #
-# Return codes: always 0. This is a warning, not a gate.
+# Return codes:
+#   check_pr_path_overlap     — always 0. A warning at PR-create time, not a gate.
+#   check_ticket_path_overlap — 8 on a CONFIRMED hit, 0 otherwise (including every
+#                               path where the instrument could not read). 8 is
+#                               distinct from issue-overlap.sh's 7 so a caller can
+#                               waive "a sibling is mid-edit" without also waiving
+#                               "a PR is already open on this file"
+#                               (brik-client-portal#5261).
 
 # shellcheck disable=SC2148  # sourced
 
 _PPO_YELLOW='\033[1;33m'
 _PPO_GREEN='\033[0;32m'
+_PPO_RED='\033[0;31m'
 _PPO_NC='\033[0m'
 
 # Set by check_ticket_path_overlap; read by the sibling-worktree gate in
@@ -372,7 +380,7 @@ check_ticket_path_overlap() {
   fi
 
   echo ""
-  echo -e "${_PPO_YELLOW}⚠  Open PR(s) already touching a path this ticket names:${_PPO_NC}"
+  echo -e "${_PPO_RED}⛔ OPEN PR ALREADY TOUCHING A PATH THIS TICKET NAMES:${_PPO_NC}"
   printf '%s\n' "$hits" | awk -F'\t' '{ printf "    PR #%s — %s\n        %s\n", $1, $2, $3 }'
   echo ""
   echo -e "${_PPO_YELLOW}   The ticket-number gate (brik-llm#1533) cannot see this: those PRs are on${_PPO_NC}"
@@ -380,11 +388,27 @@ check_ticket_path_overlap() {
   echo -e "${_PPO_YELLOW}   whole point of asking now rather than at PR-create. brik-llm#2313.${_PPO_NC}"
   echo ""
 
-  if [ -t 0 ]; then
-    echo -e "${_PPO_YELLOW}   Press Enter to continue, Ctrl+C to abort.${_PPO_NC}"
-    read -r || true
-  else
-    echo -e "${_PPO_YELLOW}   → non-interactive: continuing.${_PPO_NC}"
-  fi
-  return 0
+  # REFUSING, and deliberately NOT via the `[ -t 0 ]` prompt this block used to
+  # end on (brik-client-portal#5261). That prompt read `→ non-interactive:
+  # continuing.` and returned 0, and every agent session is non-interactive — so
+  # on the one caller shape that matters the gate found the collision, printed
+  # it, and waved it through. On 2026-10-17 two sessions wrote the same
+  # supabase/prod-approved-migrations.txt 107 seconds apart on one machine with
+  # this gate present; one session's work was discarded and the operator had to
+  # adjudicate which approval counted.
+  #
+  # check_worktree_overlap (scripts/lib/issue-overlap.sh) already settled this
+  # question for its own signal and says why: "NEW_TASK_YES=1 is how the entire
+  # fleet runs. Sharing that disposition would make the strongest signal in the
+  # file the one nobody ever sees." That reasoning is identical here; it simply
+  # was not applied to this half.
+  #
+  # 8, not 7: the caller must be able to waive "a sibling is mid-EDIT" without
+  # also waiving "a PR is already OPEN on this file". They are different facts
+  # with different remedies — read the worktree, versus read the PR.
+  #
+  # Only a CONFIRMED hit returns 8. Every unreadable-instrument path above still
+  # returns 0 and says SKIPPED: a gate that refuses on missing data gets
+  # switched off, which is the failure mode this change exists to avoid.
+  return 8
 }
