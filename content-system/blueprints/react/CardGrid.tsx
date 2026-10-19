@@ -35,6 +35,14 @@
  * </CardGrid>
  * ```
  *
+ * Two ways to drive it, mirroring `../astro/CardGrid.astro` (#2352): **composed**
+ * (the example above — the consumer supplies `children`) or **dispatched** (a
+ * `section` + a `layout`; the block renders `section.items` itself).
+ * `BlueprintDispatcher` sends `card_grid` → `layout="card-grid"` (3-column
+ * `<Card layout="stack">` grid) and `two_column_detail` → `layout="two-column-list"`
+ * (2-column title/description rows, no card surface). Both emit
+ * `data-blueprint-key="card_grid"`.
+ *
  * Token pairs (paired family ↔ size — never mix):
  *   subtitle    — --bds-font-family-subtitle + --bds-subtitle-lg + --bds-text-transform-subtitle
  *   title (h2)  — --bds-font-family-heading + clamp(--bds-heading-lg, ..., --bds-heading-huge)
@@ -47,7 +55,20 @@
  * @summary Generic section wrapper for any header + grid-of-cards layout.
  */
 import { type HTMLAttributes, type ReactNode } from 'react';
+import {
+  Badge,
+  Button,
+  Card,
+  CardDescription,
+  Frame,
+  Grid,
+  ServiceTag,
+  Stack,
+  type ServiceLine,
+} from '../../../components';
 import { bdsClass } from '../../../components/utils';
+import type { BlueprintProps, CardGridLayout } from '../astro/types';
+import { BlockMedia } from './BlockMedia';
 import '../section-shell.css';
 import './CardGrid.css';
 
@@ -76,7 +97,16 @@ export interface CardGridProps extends HTMLAttributes<HTMLElement> {
   children: ReactNode;
 }
 
-export function CardGrid({
+/** Dispatched-mode props: a `BlueprintSection` plus the item `layout`. */
+export interface CardGridSectionProps extends BlueprintProps {
+  /** Item layout rendered from `section.items`. Defaults to `card-grid`. */
+  layout?: CardGridLayout;
+}
+
+// Reset for the `<ul>` item lists below — no token values, so inline is fine.
+const LIST_RESET = { listStyle: 'none', margin: 0, padding: 0 } as const;
+
+function CardGridShell({
   sectionKey,
   title,
   subtitle,
@@ -108,6 +138,100 @@ export function CardGrid({
         {children}
       </div>
     </section>
+  );
+}
+
+function CardGridFromSection({ section, layout = 'card-grid' }: CardGridSectionProps) {
+  return (
+    <CardGridShell
+      sectionKey={section.sectionKey}
+      title={section.heading ?? ''}
+      subtitle={section.subheading ?? undefined}
+      description={section.body ?? undefined}
+    >
+      {layout === 'two-column-list' ? (
+        <Grid as="ul" columns={2} gap="xl" role="list" style={LIST_RESET}>
+          {section.items.map((item, idx) => (
+            <li key={`${section.sectionKey}-${idx}`}>
+              <Stack gap="sm">
+                <h3 className="bds-card-grid__item-title">{item.title}</h3>
+                <p className="bds-card-grid__item-description">{item.description}</p>
+              </Stack>
+            </li>
+          ))}
+        </Grid>
+      ) : (
+        <Grid as="ul" columns={3} gap="lg" role="list" style={LIST_RESET}>
+          {section.items.map((item, idx) => {
+            const category = (item.category ?? null) as ServiceLine | null;
+            return (
+              <li key={`${section.sectionKey}-${idx}`} style={{ display: 'flex' }}>
+                <Card
+                  layout="stack"
+                  title={item.title}
+                  media={
+                    item.imageUrl ? (
+                      <BlockMedia
+                        media="image"
+                        src={item.imageUrl}
+                        alt={item.imageAlt ?? ''}
+                        ratio="3-2"
+                        fit="cover"
+                      />
+                    ) : category ? (
+                      <Frame customRatio="3 / 2" fit="cover">
+                        <ServiceTag
+                          category={category}
+                          variant="icon"
+                          size="lg"
+                          serviceName={item.title}
+                        />
+                      </Frame>
+                    ) : undefined
+                  }
+                  overline={
+                    category ? (
+                      <ServiceTag
+                        category={category}
+                        variant="icon-text"
+                        size="sm"
+                        serviceName={item.title}
+                      />
+                    ) : undefined
+                  }
+                  badge={
+                    item.hasOptions ? (
+                      <Badge status="positive" size="sm" appearance="solid">
+                        Has Options
+                      </Badge>
+                    ) : undefined
+                  }
+                  action={
+                    item.href ? (
+                      <Button href={item.href} variant="primary" size="sm">
+                        Learn more
+                      </Button>
+                    ) : undefined
+                  }
+                >
+                  {item.description ? (
+                    <CardDescription>{item.description}</CardDescription>
+                  ) : undefined}
+                </Card>
+              </li>
+            );
+          })}
+        </Grid>
+      )}
+    </CardGridShell>
+  );
+}
+
+export function CardGrid(props: CardGridProps | CardGridSectionProps) {
+  return 'section' in props ? (
+    <CardGridFromSection {...props} />
+  ) : (
+    <CardGridShell {...props} />
   );
 }
 

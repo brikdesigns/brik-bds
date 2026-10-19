@@ -15,10 +15,19 @@
  *                        an `aside` media card (image + optional price overlay)
  *
  * `media` is an optional composed slot (the split's / pricing-card's second
- * column). The `HeroSplit6040` adapter builds the image node — or a
- * `data-content-needed` stub when `clientFacts.heroImageUrl` is missing — and
- * the `HeroSplitImageCardOverlay` adapter builds the pricing-card aside; both
- * pass it here.
+ * column). In the dispatched path (below) the `split` layout builds the image
+ * node itself — or a `data-content-needed` stub when `clientFacts.heroImageUrl`
+ * is missing (CI grep on `dist/` blocks publish on the stub); the
+ * `HeroSplitImageCardOverlay` adapter builds the pricing-card aside and passes
+ * it here.
+ *
+ * Two ways to drive it, mirroring `../astro/Hero.astro` (#2352): **composed**
+ * (`title` / `lead` / `media` …) or **dispatched** (a `section` + `clientFacts`
+ * and a `layout` of `split` or `interior-minimal` — the block maps `section.*`
+ * itself). `BlueprintDispatcher` sends `hero_split` → `layout="split"` and
+ * `hero_interior_minimal` → `layout="interior-minimal"`, with the key as
+ * `blueprintKey`. `with-pricing-card` stays composed (its aside is built by the
+ * `HeroSplitImageCardOverlay` adapter).
  *
  * `breadcrumb` and `eyebrow` are optional composed nodes (used by
  * `--with-pricing-card`); they render above the eyebrow text when present and
@@ -52,8 +61,16 @@ import { type HTMLAttributes, type ReactNode } from 'react';
 import { Button } from '../../../components';
 import type { ButtonVariant } from '../../../components/ui/Button';
 import { bdsClass } from '../../../components/utils';
-import type { BlueprintAlign, BlueprintCta, BlueprintReveal, HeroLayout } from '../astro/types';
+import type {
+  BlueprintAlign,
+  BlueprintCta,
+  BlueprintProps,
+  BlueprintReveal,
+  HeroLayout,
+  KnownBlueprintKey,
+} from '../astro/types';
 import { isActionCta } from '../astro/types';
+import { BlockMedia } from './BlockMedia';
 import { BlockReveal } from './BlockReveal';
 import '../section-shell.css';
 import './Hero.css';
@@ -124,7 +141,21 @@ export interface HeroProps extends HTMLAttributes<HTMLElement> {
   ctaVariant?: ButtonVariant;
 }
 
-export function Hero({
+/**
+ * Dispatched-mode props: a `BlueprintSection` plus the key's own `layout` /
+ * `blueprintKey` (what `BlueprintDispatcher` passes). `align` / `reveal` are not
+ * read here — the dispatched path never carried them (the Astro rail reads them
+ * from the section; the React adapters did not, and this collapse must not
+ * change the markup).
+ */
+export interface HeroSectionProps extends BlueprintProps {
+  /** `split` (default) or `interior-minimal`. `with-pricing-card` is composed-only. */
+  layout?: Exclude<HeroLayout, 'with-pricing-card'>;
+  /** Rendered as `data-blueprint-key` so the scaffold contract can assert on it. */
+  blueprintKey?: KnownBlueprintKey;
+}
+
+function HeroShell({
   sectionKey,
   title,
   subtitle,
@@ -179,6 +210,51 @@ export function Hero({
       </div>
     </section>
   );
+}
+
+function HeroFromSection({ section, clientFacts, layout = 'split', blueprintKey }: HeroSectionProps) {
+  const heroImage = clientFacts.heroImageUrl;
+
+  // Media axis (ADR-039, #2493): the media column renders through the shared
+  // `<BlockMedia>` primitive, class-identical to the Astro rail's `<Media>`.
+  // The dispatched path is image-only; `video` / `bg-video` are selected by
+  // composing `<Hero media={…}>` directly (the portal generator drives that).
+  //
+  // Decorative-default alt: the h1 conveys meaning; the hero image is
+  // atmospheric. Assistive tech skips it and reads the headline instead.
+  const media =
+    layout === 'split' ? (
+      heroImage ? (
+        <div className="bds-hero__media">
+          <BlockMedia media="image" src={heroImage} alt="" ratio="4-5" loading="eager" />
+        </div>
+      ) : (
+        <div
+          className="bds-blueprint-section__missing bds-hero__missing"
+          data-content-needed="hero_image_url"
+          role="presentation"
+        >
+          <p className="bds-blueprint-section__missing-label">Hero image missing for this client.</p>
+        </div>
+      )
+    ) : undefined;
+
+  return (
+    <HeroShell
+      layout={layout}
+      sectionKey={section.sectionKey}
+      title={section.heading ?? ''}
+      subtitle={section.subheading ?? undefined}
+      lead={section.body ?? undefined}
+      cta={section.cta ?? undefined}
+      media={media}
+      data-blueprint-key={blueprintKey}
+    />
+  );
+}
+
+export function Hero(props: HeroProps | HeroSectionProps) {
+  return 'section' in props ? <HeroFromSection {...props} /> : <HeroShell {...props} />;
 }
 
 export default Hero;

@@ -17,6 +17,11 @@
  * `lint-blueprint-naming` reinvented-primitive error; resolving that
  * pre-existing hazard is part of this consolidation.
  *
+ * Two ways to drive it, mirroring `../astro/About.astro` (#2352): **composed**
+ * (`title` / `body` / `testimonial`) or **dispatched** (a `section` — the block
+ * maps `section.*` itself, taking the first item as the pull-quote).
+ * `BlueprintDispatcher` sends `story_split` here, with the key as `blueprintKey`.
+ *
  * Slots (all pass `scripts/slot-pattern-check.mjs`):
  *   bds-about, __container, __narrative, __subtitle, __title, __lead, __callout
  *
@@ -37,7 +42,7 @@ import { type HTMLAttributes } from 'react';
 
 import { CardTestimonial } from '../../../components';
 import { bdsClass } from '../../../components/utils';
-import type { BlueprintAlign } from '../astro/types';
+import type { BlueprintAlign, BlueprintProps, KnownBlueprintKey } from '../astro/types';
 import '../section-shell.css';
 import './About.css';
 
@@ -77,7 +82,13 @@ export interface AboutProps extends HTMLAttributes<HTMLElement> {
   align?: BlueprintAlign;
 }
 
-export function About({
+/** Dispatched-mode props: a `BlueprintSection` plus the key rendered as the marker. */
+export interface AboutSectionProps extends BlueprintProps {
+  /** Rendered as `data-blueprint-key` so the scaffold contract can assert on it. */
+  blueprintKey?: KnownBlueprintKey;
+}
+
+function AboutShell({
   sectionKey,
   title,
   subtitle,
@@ -121,6 +132,29 @@ export function About({
       </div>
     </section>
   );
+}
+
+function AboutFromSection({ section, blueprintKey }: AboutSectionProps) {
+  const callout = section.items[0];
+
+  return (
+    <AboutShell
+      sectionKey={section.sectionKey}
+      title={section.heading ?? ''}
+      subtitle={section.subheading ?? undefined}
+      body={section.body ?? undefined}
+      testimonial={
+        callout
+          ? { quote: callout.description, author: callout.title }
+          : undefined
+      }
+      data-blueprint-key={blueprintKey}
+    />
+  );
+}
+
+export function About(props: AboutProps | AboutSectionProps) {
+  return 'section' in props ? <AboutFromSection {...props} /> : <AboutShell {...props} />;
 }
 
 export default About;

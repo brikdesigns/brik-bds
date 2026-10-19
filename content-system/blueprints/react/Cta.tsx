@@ -16,10 +16,18 @@
  * "do the thing" + "hedge / talk first" pair common on marketing closing
  * sections, which the single-`cta` legacy contract couldn't express).
  *
- * This is the props-based primitive (mirrors `<CalloutPanel>` / `<CardGrid>`).
- * New consumers compose it directly; the `cta_centered` and
- * `cta_split_contact` blueprint keys dispatch through their adapters, which
- * map `section.*` → these props. The adapters retire in Phase E.
+ * Two ways to drive it, mirroring `../astro/Cta.astro` (#2352):
+ *   - **Composed** — pass `title` / `body` / `primaryCta` / `aside` directly.
+ *   - **Dispatched** — pass a `section` (+ `clientFacts`, `theme`) and an optional
+ *     `layout`; the block maps `section.*` → its own props. The `split` layout
+ *     also builds the contact-method aside from `clientFacts.{phone,email}`.
+ *     `BlueprintDispatcher` sends `cta_centered` → `layout="default"` and
+ *     `cta_split_contact` → `layout="split"`, with the key as `blueprintKey`.
+ *
+ * required_facts for `split`: ['phone', 'email'] — the scaffold preflight gates
+ * the blueprint before those are populated. If a fact arrives null at runtime the
+ * method renders a `data-content-needed` stub in place of the link — CI grep on
+ * `dist/` blocks publish on the stub.
  *
  * Slots (all pass `scripts/slot-pattern-check.mjs`):
  *   bds-cta, __container, __message, __title, __description, __actions, __aside
@@ -40,7 +48,13 @@ import { type HTMLAttributes, type ReactNode } from 'react';
 
 import { Button } from '../../../components';
 import { bdsClass } from '../../../components/utils';
-import type { BlueprintAlign, BlueprintCta, CtaLayout } from '../astro/types';
+import type {
+  BlueprintAlign,
+  BlueprintCta,
+  BlueprintProps,
+  CtaLayout,
+  KnownBlueprintKey,
+} from '../astro/types';
 import { isActionCta } from '../astro/types';
 import '../section-shell.css';
 import './Cta.css';
@@ -87,6 +101,19 @@ export interface CtaProps extends HTMLAttributes<HTMLElement> {
   aside?: ReactNode;
 }
 
+/**
+ * Dispatched-mode props: a `BlueprintSection` plus the key's own `layout` /
+ * `blueprintKey` (what `BlueprintDispatcher` passes). `align` is not read here —
+ * the dispatched path never carried it (the Astro rail reads it from the section;
+ * the React adapters did not, and this collapse must not change the markup).
+ */
+export interface CtaSectionProps extends BlueprintProps {
+  /** `default` (centred closing prompt) or `split` (message + contact aside). */
+  layout?: CtaLayout;
+  /** Rendered as `data-blueprint-key` so the scaffold contract can assert on it. */
+  blueprintKey?: KnownBlueprintKey;
+}
+
 function CtaButton({
   cta,
   variant,
@@ -107,7 +134,7 @@ function CtaButton({
   );
 }
 
-export function Cta({
+function CtaShell({
   sectionKey,
   title,
   body,
@@ -161,6 +188,71 @@ export function Cta({
       </div>
     </section>
   );
+}
+
+function ContactMethod({
+  fact,
+  label,
+  value,
+  href,
+}: {
+  fact: string;
+  label: string;
+  value: string | null;
+  href: string | null;
+}) {
+  if (value && href) {
+    return (
+      <a href={href} className="bds-cta__method">
+        <span className="bds-cta__method-label">{label}</span>
+        <span className="bds-cta__method-value">{value}</span>
+      </a>
+    );
+  }
+  return (
+    <div className="bds-cta__method" data-content-needed={fact} role="presentation">
+      <span className="bds-cta__method-label">{label}</span>
+      <span className="bds-cta__method-value">{label} missing</span>
+    </div>
+  );
+}
+
+function CtaFromSection({ section, clientFacts, layout = 'default', blueprintKey }: CtaSectionProps) {
+  const phone = clientFacts.phone;
+  const email = clientFacts.email;
+
+  return (
+    <CtaShell
+      layout={layout}
+      sectionKey={section.sectionKey}
+      title={section.heading ?? ''}
+      body={section.body ?? undefined}
+      primaryCta={section.cta ?? undefined}
+      data-blueprint-key={blueprintKey}
+      aside={
+        layout === 'split' ? (
+          <>
+            <ContactMethod
+              fact="phone"
+              label="Call"
+              value={phone}
+              href={phone ? `tel:${phone.replace(/[^+\d]/g, '')}` : null}
+            />
+            <ContactMethod
+              fact="email"
+              label="Email"
+              value={email}
+              href={email ? `mailto:${email}` : null}
+            />
+          </>
+        ) : undefined
+      }
+    />
+  );
+}
+
+export function Cta(props: CtaProps | CtaSectionProps) {
+  return 'section' in props ? <CtaFromSection {...props} /> : <CtaShell {...props} />;
 }
 
 export default Cta;

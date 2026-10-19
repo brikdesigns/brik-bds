@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { JSX } from 'react';
 
+import type { BlueprintProps } from '../astro/types';
 import { Features } from './Features';
+import { baseClientFacts, baseTheme } from './_fixtures';
 import fadeSquare from '../../../components/ui/AnimatedIcon/_examples/fade-square.json';
 
 /* ─── Demo data-service-line cascade ────────────────────────────────────
@@ -170,5 +172,83 @@ export const AnimatedSvg: Story = {
     body: 'Each card icon animates via the Lottie AnimatedIcon primitive — the content-motion axis value animated-svg.',
     contentMotion: 'animated-svg',
     items: items.map((item) => ({ ...item, animationUrl: fadeSquare })),
+  },
+};
+
+/* ─── Dispatched (section-driven) ──────────────────────────────────
+ *
+ * The same block, driven by a `BlueprintSection` — `section.items` map onto the
+ * feature cards. What `BlueprintDispatcher` renders for the `feature_grid` key
+ * (#2352).
+ */
+
+const featuresSection: BlueprintProps['section'] = {
+  sectionKey: 'features-branded-dark-default',
+  sectionType: 'features',
+  heading: 'Featured capabilities',
+  subheading: null,
+  body: 'A short section subheading that frames the cards below — typically a cross-sell or capability roll-up.',
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'feature_grid',
+    moodKeywords: ['bold', 'modern'],
+    layoutBlueprint: 'feature_grid',
+    imageOpportunity: 'illustration per card',
+    illustrationOpportunity: 'scene per card',
+  },
+  items: [
+    {
+      title: 'Capability one',
+      description: 'A two-line card description that sets the type rhythm without competing with the title.',
+      href: '#',
+      serviceLine: 'brand',
+    },
+    {
+      title: 'Capability two',
+      description: 'A two-line card description that sets the type rhythm without competing with the title.',
+      href: '#',
+      serviceLine: 'marketing',
+    },
+    {
+      title: 'Capability three',
+      description: 'A two-line card description that sets the type rhythm without competing with the title.',
+      href: '#',
+      serviceLine: 'service',
+    },
+  ],
+};
+
+/** @summary Dispatched features — three service-line cards */
+export const DispatchedDefault: Story = {
+  args: {
+    section: featuresSection,
+    clientFacts: baseClientFacts,
+    theme: { ...baseTheme, themeMode: 'dark' },
+    blueprintKey: 'feature_grid',
+  },
+};
+
+/**
+ * Distinct from `DispatchedDefault` because the row-wrap behaviour at the
+ * desktop breakpoint is the layout property worth verifying.
+ *
+ * @summary Dispatched features — fourth card wraps to row two
+ */
+export const DispatchedWrapped: Story = {
+  args: {
+    ...DispatchedDefault.args,
+    section: {
+      ...featuresSection,
+      sectionKey: 'features-branded-dark-wrapped',
+      items: [
+        ...featuresSection.items,
+        {
+          title: 'Capability four',
+          description: 'A two-line card description that sets the type rhythm without competing with the title.',
+          href: '#',
+          serviceLine: 'information',
+        },
+      ],
+    },
   },
 };

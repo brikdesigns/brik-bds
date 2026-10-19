@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Badge, Button, Card, CardDescription, Frame, Grid, ServiceTag, Stack } from '../../../components';
 import { CardGrid } from './CardGrid';
-import { placeholderImage } from './_fixtures';
+import type { BlueprintProps } from '../astro/types';
+import { baseClientFacts, baseTheme, placeholderImage } from './_fixtures';
 
 const meta: Meta<typeof CardGrid> = {
   title: 'Blueprints/card_grid',
@@ -112,3 +113,85 @@ export const TwoColumnList: Story = {
   },
 };
 
+
+/* ─── Dispatched (section-driven) ──────────────────────────────────
+ *
+ * The same block, driven by a `BlueprintSection` — the block renders
+ * `section.items` itself for the chosen `layout`. This is what
+ * `BlueprintDispatcher` renders for `card_grid` (`layout="card-grid"`) and
+ * `two_column_detail` (`layout="two-column-list"`) (#2352).
+ */
+
+const cardDescription =
+  'A two-line card description that sets the type rhythm without trying to tell the whole story.';
+
+const servicesGridSection: BlueprintProps['section'] = {
+  sectionKey: 'services-grid-default',
+  sectionType: 'services',
+  heading: 'Featured services',
+  subheading: 'Acme',
+  body: 'A one-line section subheading that frames the service catalog below.',
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'card_grid',
+    moodKeywords: ['approachable', 'modern'],
+    layoutBlueprint: 'card_grid',
+    imageOpportunity: 'illustration per card',
+    illustrationOpportunity: 'scene per service',
+  },
+  items: ['One', 'Two', 'Three', 'Four', 'Five', 'Six'].map((n, i) => ({
+    title: `Service ${n.toLowerCase()}`,
+    description: cardDescription,
+    href: '#',
+    imageUrl: placeholderImage(480, 320, '#eaf1fb', '#1f3d70', `Service ${n}`),
+    category: 'information',
+    // Two and five carry the "Has Options" pill.
+    ...(i === 1 || i === 4 ? { hasOptions: true } : {}),
+  })),
+};
+
+const twoColumnSection: BlueprintProps['section'] = {
+  sectionKey: 'services-two-col-default',
+  sectionType: 'services',
+  heading: 'What we do',
+  subheading: 'Services',
+  body: 'A one-line section subheading that frames the service catalog below — short enough to scan, specific enough to set expectations.',
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'two_column_detail',
+    moodKeywords: ['professional'],
+    layoutBlueprint: 'two_column_detail',
+    imageOpportunity: null,
+    illustrationOpportunity: null,
+  },
+  items: ['first', 'second', 'third', 'fourth', 'fifth', 'sixth'].map((ordinal, i) => ({
+    title: `Service ${['one', 'two', 'three', 'four', 'five', 'six'][i]}`,
+    description: `A one-line description of the ${ordinal} service offering.`,
+  })),
+};
+
+/**
+ * Six service cards — each composes a `Card layout="stack"` with a 3:2 image,
+ * a `ServiceTag` overline, an optional "Has Options" `Badge` and a "Learn more"
+ * button (the `card_grid` key).
+ *
+ * @summary Dispatched card-grid — six service cards from section data
+ */
+export const DispatchedCardGrid: Story = {
+  args: {
+    section: servicesGridSection,
+    clientFacts: baseClientFacts,
+    theme: baseTheme,
+    layout: 'card-grid',
+  },
+};
+
+/** @summary Dispatched two-column-list — six title/description rows */
+export const DispatchedTwoColumnList: Story = {
+  args: {
+    section: twoColumnSection,
+    clientFacts: baseClientFacts,
+    theme: baseTheme,
+    layout: 'two-column-list',
+  },
+};

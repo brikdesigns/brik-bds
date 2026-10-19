@@ -42,7 +42,7 @@ import '../section-shell.css';
 
 // Media axis (ADR-039 #2518): the optional testimonial video sits above the
 // quote, centred and constrained to the quote's measure. Inline var() token
-// styles follow the local blueprint-adapter precedent (ServicesDetailTwoColumn).
+// styles follow the local blueprint-adapter precedent.
 const mediaStyle = {
   maxWidth: 'var(--bds-content-width-text-sm)',
   marginInline: 'auto',

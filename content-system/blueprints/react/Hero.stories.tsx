@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Hero } from './Hero';
-import { placeholderImage } from './_fixtures';
+import type { BlueprintProps } from '../astro/types';
+import { baseClientFacts, baseTheme, placeholderImage } from './_fixtures';
 
 const meta: Meta<typeof Hero> = {
   title: 'Blueprints/hero',
@@ -110,5 +111,85 @@ export const MissingImage: Story = {
         <p className="bds-blueprint-section__missing-label">Hero image missing for this client.</p>
       </div>
     ),
+  },
+};
+
+/* ─── Dispatched (section-driven) ──────────────────────────────────
+ *
+ * The same block, driven by a `BlueprintSection` instead of composed props —
+ * what `BlueprintDispatcher` renders for the `hero_split` /
+ * `hero_interior_minimal` keys (#2352). The `layout` + `blueprintKey` args are
+ * the ones the dispatcher registry passes.
+ */
+
+const splitSection: BlueprintProps['section'] = {
+  sectionKey: 'hero-split-default',
+  sectionType: 'hero',
+  heading: 'A clear, compelling headline goes here.',
+  subheading: 'Acme',
+  body: 'One or two sentences of supporting copy — long enough to set the rhythm of body type next to the headline without overwhelming it.',
+  cta: { label: 'Learn more', url: '#' },
+  visualNotes: {
+    blueprintKey: 'hero_split',
+    moodKeywords: ['professional', 'modern'],
+    layoutBlueprint: 'hero_split',
+    imageOpportunity: 'studio photography',
+    illustrationOpportunity: null,
+  },
+  items: [],
+};
+
+const interiorSection: BlueprintProps['section'] = {
+  sectionKey: 'hero-interior-default',
+  sectionType: 'hero',
+  heading: 'Interior page headline.',
+  subheading: 'Section',
+  body: 'A short interior-page lead — one sentence of supporting copy that frames the page topic without competing with the headline.',
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'hero_interior_minimal',
+    moodKeywords: ['professional'],
+    layoutBlueprint: 'hero_interior_minimal',
+    imageOpportunity: null,
+    illustrationOpportunity: null,
+  },
+  items: [],
+};
+
+/**
+ * `section` + `clientFacts.heroImageUrl` → the split layout, with the 4:5 image
+ * built by the block (the `hero_split` key).
+ *
+ * @summary Dispatched split — section data + hero image
+ */
+export const DispatchedSplit: Story = {
+  args: {
+    section: splitSection,
+    clientFacts: { ...baseClientFacts, heroImageUrl: placeholderImage(960, 1200, '#eaf1fb', '#1f3d70', 'Hero') },
+    theme: baseTheme,
+    layout: 'split',
+    blueprintKey: 'hero_split',
+  },
+};
+
+/** @summary Dispatched split, no hero image — content-needed stub */
+export const DispatchedSplitMissingImage: Story = {
+  args: {
+    section: splitSection,
+    clientFacts: baseClientFacts,
+    theme: baseTheme,
+    layout: 'split',
+    blueprintKey: 'hero_split',
+  },
+};
+
+/** @summary Dispatched interior-minimal — eyebrow + h1 + lead, no CTA */
+export const DispatchedInteriorMinimal: Story = {
+  args: {
+    section: interiorSection,
+    clientFacts: baseClientFacts,
+    theme: baseTheme,
+    layout: 'interior-minimal',
+    blueprintKey: 'hero_interior_minimal',
   },
 };

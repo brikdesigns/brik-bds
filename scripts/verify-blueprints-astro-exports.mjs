@@ -808,9 +808,9 @@ const assertions = [
   // Every shipped blueprint's marker present across direct-import pages
   { name: 'hero_split marker (home)',         pass: homeHtml.includes('data-blueprint-key="hero_split"') },
   { name: 'stats_bar marker (home)',           pass: homeHtml.includes('data-blueprint-key="stats_bar"') },
-  // `two_column_detail` dispatches through the @deprecated
-  // ServicesDetailTwoColumn adapter, which delegates to <CardGrid> (brik-bds#580).
-  // The rendered marker is therefore CardGrid's `card_grid`, not the legacy key;
+  // `two_column_detail` dispatches to <CardGrid layout="two-column-list">
+  // (brik-bds#580, #2352). The rendered marker is therefore CardGrid's
+  // `card_grid`, not the legacy key;
   // the section content itself is covered by the 'services items rendered' probe.
   { name: 'two_column_detail → card_grid marker (home)',pass: homeHtml.includes('data-blueprint-key="card_grid"') },
   { name: 'story_split marker (home)',        pass: homeHtml.includes('data-blueprint-key="story_split"') },
