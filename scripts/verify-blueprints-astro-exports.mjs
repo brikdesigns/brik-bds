@@ -600,6 +600,32 @@ import { SiteHeader } from '@brikdesigns/bds/blueprints-astro';
   );
 }
 
+// GhlForm page fixture (brik-client-portal#5364) — TWO forms on one page, so the
+// "form_embed.js loads once per page" contract is exercised against a real
+// `astro build`, not asserted from the source. Not added to the axe scan: the
+// iframe src is the live GHL host, which a file:// scan would try to reach.
+writeFileSync(
+  join(scratch, 'src/pages/ghl-form.astro'),
+  `---
+import { GhlForm } from '@brikdesigns/bds/blueprints-astro';
+---
+<html lang="en">
+  <head>
+    <title>BDS ghl-form verify</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <main>
+      <h1>ghl-form</h1>
+      <GhlForm formId="formAAAA" formName="Contact Us" height={838} />
+      <GhlForm formId="formBBBB" formName="Request a Quote" height={914} />
+    </main>
+  </body>
+</html>
+`,
+);
+
 // Dispatcher page fixture — exercises <BlueprintDispatcher> end-to-end.
 // Includes 8 known sections (covering every v0.1 component) + 1
 // UNKNOWN section with blueprintKey='hero_centered_gradient' (valid
@@ -792,6 +818,7 @@ const dispatchedHtmlPath = resolve(scratch, 'dist/dispatched/index.html');
 const homeHtml = readFileSync(homeHtmlPath, 'utf8');
 const interiorHtml = readFileSync(interiorHtmlPath, 'utf8');
 const dispatchedHtml = readFileSync(dispatchedHtmlPath, 'utf8');
+const ghlFormHtml = readFileSync(resolve(scratch, 'dist/ghl-form/index.html'), 'utf8');
 
 // Per-archetype rendered HTML (#2373) — one page each.
 const archetypeHtmlPaths = Object.fromEntries(
@@ -928,6 +955,23 @@ const assertions = [
   { name: 'shell: sr-only utility replaced the duplicated bp-* headings', pass:
       homeHtml.includes('class="bds-visually-hidden"') &&
       !homeHtml.includes('__sr-heading')
+  },
+
+  // GhlForm (brik-client-portal#5364) — the issue's three render contracts.
+  { name: 'ghl-form: each iframe renders with its non-empty title', pass:
+      /<iframe[^>]*\btitle="Contact Us"/.test(ghlFormHtml) &&
+      /<iframe[^>]*\btitle="Request a Quote"/.test(ghlFormHtml) &&
+      !/<iframe[^>]*\btitle=""/.test(ghlFormHtml)
+  },
+  { name: 'ghl-form: iframe src is the widget URL for the form id', pass:
+      ghlFormHtml.includes('src="https://link.brikdesigns.com/widget/form/formAAAA"') &&
+      ghlFormHtml.includes('src="https://link.brikdesigns.com/widget/form/formBBBB"')
+  },
+  { name: 'ghl-form: height reserved per form (--bds-ghl-form-height)', pass:
+      ghlFormHtml.includes('--bds-ghl-form-height:838px') && ghlFormHtml.includes('--bds-ghl-form-height:914px')
+  },
+  { name: 'ghl-form: form_embed.js loaded exactly once for two forms', pass:
+      (ghlFormHtml.match(/<script[^>]+src="https:\/\/link\.brikdesigns\.com\/js\/form_embed\.js"/g) || []).length === 1
   },
 
   // Cross-blueprint contract checks

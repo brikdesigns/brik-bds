@@ -228,6 +228,20 @@ async function main() {
     emitted.push('HeroMediaCard--missing.html');
   }
 
+  // GhlForm — a GoHighLevel form iframe (brik-client-portal#5364). Not a
+  // dispatched blueprint (no `blueprintKey`), so it renders off direct props,
+  // following the `SiteHeader` precedent. Its `bds-ghl-form` class is owned by
+  // `components/ui/GhlForm/GhlForm.css`, imported by `_AstroFrame.tsx`.
+  {
+    const mod = await server.ssrLoadModule(join(astroDir, 'GhlForm.astro'));
+    const container = await experimental_AstroContainer.create();
+    const html = await container.renderToString(mod.default, {
+      props: { formId: 'rvGeUFEFytjrjxr7XiDE', formName: 'Contact Us', height: 838 },
+    });
+    writeFile(join(outDir, 'GhlForm.html'), `${html.replace(/\sdata-astro-source-(file|loc)="[^"]*"/g, '').trim()}\n`);
+    emitted.push('GhlForm.html');
+  }
+
   await assertDispatcherRendersEveryKey(server, {
     theme: baseTheme,
     clientFacts: baseClientFacts,
@@ -300,7 +314,8 @@ function assertStylesheetCoverage() {
   // `blueprintKey`), so scanned explicitly here alongside SiteHeader.
   const heroMediaCardHtml = ['HeroMediaCardImage.html', 'HeroMediaCardPrice.html', 'HeroMediaCard.html', 'HeroMediaCard--missing.html']
     .map((f) => readFileSync(join(outDir, f), 'utf8'));
-  const html = [...blockHtml, ...shellHtml, ...heroMediaCardHtml].join('\n');
+  const ghlFormHtml = [readFileSync(join(outDir, 'GhlForm.html'), 'utf8')];
+  const html = [...blockHtml, ...shellHtml, ...heroMediaCardHtml, ...ghlFormHtml].join('\n');
 
   // Root class only — `bds-hero__title` and `bds-button--primary` are covered by
   // whatever stylesheet owns `bds-hero` / `bds-button`.

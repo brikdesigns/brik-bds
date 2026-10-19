@@ -45,6 +45,9 @@ import '../../../components/ui/Marquee/Marquee.css';
 // count-up renders unstyled in the Astro story and `verify:astro-stories`
 // (which asserts every `bds-*` root class resolves) fails.
 import '../../../components/ui/CountUp/CountUp.css';
+// `GhlForm.astro` (brik-client-portal#5364) renders `bds-ghl-form`, which resolves
+// to this stylesheet — same Layer 3 requirement as the imports above.
+import '../../../components/ui/GhlForm/GhlForm.css';
 
 export function AstroFrame({ html }: { html: string }) {
   return <div dangerouslySetInnerHTML={{ __html: html }} />;

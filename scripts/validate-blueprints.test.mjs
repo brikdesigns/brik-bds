@@ -61,8 +61,8 @@ const pascal = (key) => key.replace(/(^|_)([a-z0-9])/g, (_, __, c) => c.toUpperC
  *
  * Since #2304 the tree also carries the files the two filesystem axes read: a
  * component per registry key on each rail, a `.stories.tsx` beside every React
- * component, and the three structural non-blueprints
- * (`BlueprintDispatcher` / `BlueprintFallback` / `SiteHeader`). The last group
+ * component, and the structural non-blueprints
+ * (`BlueprintDispatcher` / `BlueprintFallback` / `SiteHeader` / `GhlForm`). The last group
  * exists because the on-disk gate asserts its own exclusion list still resolves
  * on disk — a synthetic tree missing them is not a violation to detect, it is
  * an unrealistic tree.
@@ -155,6 +155,7 @@ function plant({
   // Structural non-blueprints — see the doc comment above.
   write('content-system/blueprints/astro/BlueprintFallback.astro', '---\n---\n');
   write('content-system/blueprints/astro/SiteHeader.astro', '---\n---\n');
+  write('content-system/blueprints/astro/GhlForm.astro', '---\n---\n');
   write('content-system/blueprints/react/BlueprintFallback.tsx', 'export function BlueprintFallback() { return null; }\n');
 
   // One component per dispatched key, plus any deliberately-unreachable file.

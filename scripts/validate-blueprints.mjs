@@ -88,6 +88,8 @@ const NON_BLUEPRINT_COMPONENTS = new Set([
   'BlueprintFallback',
   // Site-shell nav, not a blueprint — see content-system/blueprints/astro/index.ts.
   'SiteHeader',
+  // GoHighLevel form iframe, not a blueprint — see content-system/blueprints/astro/index.ts.
+  'GhlForm',
 ]);
 
 const PROJECTION_FIELDS = ['personality', 'visual_style', 'industry_slugs', 'is_universal'];

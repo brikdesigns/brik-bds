@@ -1,0 +1,24 @@
+@layer bds-components {
+/**
+ * BDS GhlForm — a GoHighLevel form embedded as an iframe.
+ *
+ * Naming: .bds-ghl-form (single element, no BEM parts). Shared by the React
+ * component and `GhlForm.astro` — the Astro twin emits this class and relies on
+ * the consumer's `@brikdesigns/bds/styles.css`, like `bds-button`.
+ *
+ * CSS Override API: --bds-ghl-form-height (component-local runtime binding, set
+ * from the `height` prop; not part of the canonical token registry). It is
+ * reserved as `min-height` so the section holds its space before GHL's
+ * `form_embed.js` sizes the frame; the script may then grow the frame past it.
+ */
+
+.bds-ghl-form {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: var(--bds-ghl-form-height);
+  min-height: var(--bds-ghl-form-height);
+  border: none;
+  border-radius: var(--bds-border-radius-sm);
+}
+}
