@@ -1,17 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { AstroFrame } from './_AstroFrame';
-import './__generated__/StatsDarkBar.css';
-import html from './__generated__/StatsDarkBar.html?raw';
-import countUpHtml from './__generated__/StatsDarkBar--count-up.html?raw';
+import './__generated__/StatsBar.css';
+import html from './__generated__/StatsBar.html?raw';
+import countUpHtml from './__generated__/StatsBar--count-up.html?raw';
 
 /**
- * `StatsDarkBar.astro` on the canonical rail (ADR-037), pre-rendered by
- * `scripts/render-astro-blueprints.mjs`. The React twin is `Blueprints/stats-dark-bar`.
+ * `StatsBar.astro` on the canonical rail (ADR-037), pre-rendered by
+ * `scripts/render-astro-blueprints.mjs`. The React twin is `Blueprints/stats-bar`.
  * The first block to adopt the content-motion axis `count-up` (ADR-039 §Decision 2, #2529).
  */
 const meta: Meta<typeof AstroFrame> = {
-  title: 'Blueprints/astro-stats-dark-bar',
+  title: 'Blueprints/astro-stats-bar',
   component: AstroFrame,
   tags: ['surface-web'],
   argTypes: {

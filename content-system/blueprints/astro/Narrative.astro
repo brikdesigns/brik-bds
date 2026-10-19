@@ -1,22 +1,22 @@
 ---
 /**
- * About — canonical `bds-about` narrative block for the Astro rail.
- * Twin of the React `<About>` primitive (brik-bds#1198). Renamed from
+ * Narrative — canonical `bds-narrative` narrative block for the Astro rail.
+ * Twin of the React `<Narrative>` primitive (brik-bds#1198). Renamed from
  * `AboutStorySplit.astro` in #2302: the file is the block, and `about` is a
  * single-member family, so there is no layout modifier and no layout prop
  * (ADR-008 §3). The former `bp-about-story-split` class was already retired
- * for the structural `bds-about` block. Label + heading + narrative, with an
+ * for the structural `bds-narrative` block. Label + heading + narrative, with an
  * optional pull-quote.
  *
  * `blueprintKey` is supplied by `BlueprintDispatcher.astro` and rendered as
  * `data-blueprint-key`; composing this block directly emits no key marker.
  *
- * The pull-quote is a blueprint-owned `bds-about__callout` figure styled to
+ * The pull-quote is a blueprint-owned `bds-narrative__callout` figure styled to
  * mirror the React path's outlined `<CardTestimonial>`. Astro has no
  * CardTestimonial twin, and the blueprint naming gate forbids a blueprint
  * carrying a component's internal `__body` slot — so the Astro path
  * reproduces the outlined-card look under the single published
- * `bds-about__callout` slot, styling its children with element selectors
+ * `bds-narrative__callout` slot, styling its children with element selectors
  * (the self-contained-scoped-style pattern every Astro blueprint uses).
  * React and Astro reach visual parity via separate code, as the family
  * always has.
@@ -32,10 +32,10 @@
  * required_facts: []. Section-driven.
  *
  * CSS custom properties (Tier-4 hooks):
- *   --bds-about-bg              (default: var(--bds-page-primary))
- *   --bds-about-heading-color   (default: var(--bds-text-primary))
- *   --bds-about-body-color      (default: var(--bds-text-secondary))
- *   --bds-about-eyebrow-color   (default: var(--bds-text-brand-primary))
+ *   --bds-narrative-bg              (default: var(--bds-page-primary))
+ *   --bds-narrative-heading-color   (default: var(--bds-text-primary))
+ *   --bds-narrative-body-color      (default: var(--bds-text-secondary))
+ *   --bds-narrative-eyebrow-color   (default: var(--bds-text-brand-primary))
  *
  * a11y: h2 + aria-labelledby. Pull-quote uses semantic blockquote + cite.
  * Reading order: narrative first (left column), supporting callout second
@@ -54,7 +54,7 @@ interface Props extends BlueprintProps {
   blueprintKey?: KnownBlueprintKey;
   /**
    * Narrative-column placement (structure axis, ADR-039). `left` (default) or
-   * `center`; emits `bds-about--align-center`. Matches the React twin.
+   * `center`; emits `bds-narrative--align-center`. Matches the React twin.
    */
   align?: BlueprintAlign;
 }
@@ -65,23 +65,23 @@ const callout = section.items[0];
 ---
 
 <section
-  class={`bds-blueprint-section bds-about${align === 'center' ? ' bds-about--align-center' : ''}`}
+  class={`bds-blueprint-section bds-narrative${align === 'center' ? ' bds-narrative--align-center' : ''}`}
   aria-labelledby={titleId}
   data-blueprint-key={blueprintKey}
 >
-  <div class="bds-blueprint-section__container bds-about__container">
-    <div class="bds-about__narrative">
+  <div class="bds-blueprint-section__container bds-narrative__container">
+    <div class="bds-narrative__narrative">
       {section.subheading && (
-        <p class="bds-about__subtitle">{section.subheading}</p>
+        <p class="bds-narrative__subtitle">{section.subheading}</p>
       )}
-      <h2 id={titleId} class="bds-about__title">{section.heading}</h2>
+      <h2 id={titleId} class="bds-narrative__title">{section.heading}</h2>
       {section.body && (
-        <p class="bds-about__lead">{section.body}</p>
+        <p class="bds-narrative__lead">{section.body}</p>
       )}
     </div>
 
     {callout && (
-      <figure class="bds-about__callout">
+      <figure class="bds-narrative__callout">
         <blockquote>{callout.description}</blockquote>
         <figcaption>
           <cite>{callout.title}</cite>
@@ -93,73 +93,73 @@ const callout = section.items[0];
 
 <style>
   /* Section rhythm + centred container: ../section-shell.css (ADR-021). */
-  .bds-about {
-    background: var(--bds-about-bg, var(--bds-page-primary));
+  .bds-narrative {
+    background: var(--bds-narrative-bg, var(--bds-page-primary));
   }
 
-  .bds-about__container {
+  .bds-narrative__container {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--bds-gap-xl);
   }
 
   @media (min-width: 768px) {
-    .bds-about__container:has(.bds-about__callout) {
+    .bds-narrative__container:has(.bds-narrative__callout) {
       grid-template-columns: 3fr 2fr;
       gap: var(--bds-gap-huge);
       align-items: start;
     }
   }
 
-  .bds-about__narrative {
+  .bds-narrative__narrative {
     display: flex;
     flex-direction: column;
   }
 
   /* ── --align-center: structure axis (ADR-039 §1) ──────────────
-     Mirrors ../react/About.css. Centres the narrative column; `left` is the
+     Mirrors ../react/Narrative.css. Centres the narrative column; `left` is the
      default and emits no modifier. */
-  .bds-about--align-center .bds-about__narrative {
+  .bds-narrative--align-center .bds-narrative__narrative {
     align-items: center;
     text-align: center;
   }
 
-  /* Content rhythm (ADR-023 §3), mirroring the React twin in About.css:
+  /* Content rhythm (ADR-023 §3), mirroring the React twin in Narrative.css:
      eyebrow→title is tight (--bds-gap-sm), title→lead is medium (--bds-gap-md). */
 
-  .bds-about__narrative > * + * {
+  .bds-narrative__narrative > * + * {
     margin-top: var(--bds-gap-md);
   }
 
-  .bds-about__subtitle + .bds-about__title {
+  .bds-narrative__subtitle + .bds-narrative__title {
     margin-top: var(--bds-gap-sm);
   }
 
-  .bds-about__subtitle {
+  .bds-narrative__subtitle {
     margin: 0;
     font-family: var(--bds-font-family-label);
     font-size: var(--bds-label-lg);
     font-weight: var(--bds-font-weight-medium);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--bds-about-eyebrow-color, var(--bds-text-brand-primary));
+    color: var(--bds-narrative-eyebrow-color, var(--bds-text-brand-primary));
   }
 
-  .bds-about__title {
+  .bds-narrative__title {
     margin: 0;
     font-family: var(--bds-font-family-heading);
     font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-xl));
     font-weight: var(--bds-font-weight-semibold);
     line-height: var(--bds-font-line-height-tight);
-    color: var(--bds-about-heading-color, var(--bds-text-primary));
+    color: var(--bds-narrative-heading-color, var(--bds-text-primary));
   }
 
-  .bds-about__lead {
+  .bds-narrative__lead {
     margin: 0;
     font-family: var(--bds-font-family-body);
     font-size: var(--bds-heading-sm);
     line-height: var(--bds-font-line-height-relaxed);
-    color: var(--bds-about-body-color, var(--bds-text-secondary));
+    color: var(--bds-narrative-body-color, var(--bds-text-secondary));
     max-width: 65ch;
   }
 
@@ -170,7 +170,7 @@ const callout = section.items[0];
      slots absent from the published allowlist (canonical-class-check). So the
      only bds- class is the published `__callout`; its children are styled by
      element selectors, and the quote mark is a decorative `::before`. */
-  .bds-about__callout {
+  .bds-narrative__callout {
     display: flex;
     flex-direction: column;
     gap: var(--bds-gap-lg);
@@ -181,7 +181,7 @@ const callout = section.items[0];
     border: var(--bds-border-width-md) solid var(--bds-border-secondary);
   }
 
-  .bds-about__callout::before {
+  .bds-narrative__callout::before {
     content: '“';
     font-family: var(--bds-font-family-display);
     font-size: var(--bds-heading-huge);
@@ -191,7 +191,7 @@ const callout = section.items[0];
     user-select: none;
   }
 
-  .bds-about__callout blockquote {
+  .bds-narrative__callout blockquote {
     margin: 0;
     font-family: var(--bds-font-family-body);
     font-size: var(--bds-body-md);
@@ -200,7 +200,7 @@ const callout = section.items[0];
     color: var(--bds-text-primary);
   }
 
-  .bds-about__callout figcaption {
+  .bds-narrative__callout figcaption {
     display: flex;
     flex-direction: column;
     /* Tight text pairing: --bds-gap-sm. Not --bds-gap-xs, which resolves to 0px
@@ -208,7 +208,7 @@ const callout = section.items[0];
     gap: var(--bds-gap-sm);
   }
 
-  .bds-about__callout cite {
+  .bds-narrative__callout cite {
     margin: 0;
     font-family: var(--bds-font-family-label);
     font-size: var(--bds-label-md);

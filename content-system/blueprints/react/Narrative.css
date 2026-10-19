@@ -1,25 +1,25 @@
 /*
- * About — `bds-about` section styles (Phase D, brik-bds#1198). Consolidates
+ * Narrative — `bds-narrative` section styles (Phase D, brik-bds#1198). Consolidates
  * the former bp-about-story-split. Single-member family → no layout modifier;
  * the narrative-plus-callout split is a *state* driven by the presence of the
  * `__callout` slot via `:has()`, not a named modifier.
  *
  * This file owns ONLY layout + non-component narrative text. The pull-quote's
  * surface/border/typography live in `.bds-card-testimonial` (the
- * <CardTestimonial> primitive). Tier-4 `--bds-about-*` hooks let a consumer
+ * <CardTestimonial> primitive). Tier-4 `--bds-narrative-*` hooks let a consumer
  * retheme without forking the block; each falls back to a Semantic token per
  * ADR-014.
  *
  * Section rhythm + the centred container live in `../section-shell.css`
  * (ADR-021): `bds-blueprint-section` and `bds-blueprint-section__container`
- * are composed onto the same elements in About.tsx, not redeclared here.
+ * are composed onto the same elements in Narrative.tsx, not redeclared here.
  */
 
-.bds-about {
-  background: var(--bds-about-bg, var(--bds-page-primary));
+.bds-narrative {
+  background: var(--bds-narrative-bg, var(--bds-page-primary));
 }
 
-.bds-about__container {
+.bds-narrative__container {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--bds-gap-xl);
@@ -27,14 +27,14 @@
 
 /* Two-column narrative + callout only when a pull-quote is present. */
 @media (min-width: 768px) {
-  .bds-about__container:has(.bds-about__callout) {
+  .bds-narrative__container:has(.bds-narrative__callout) {
     grid-template-columns: 3fr 2fr;
     gap: var(--bds-gap-huge);
     align-items: start;
   }
 }
 
-.bds-about__narrative {
+.bds-narrative__narrative {
   display: flex;
   flex-direction: column;
 }
@@ -43,7 +43,7 @@
    Centres the narrative column. `left` is the default and emits no modifier, so
    existing about sections render unchanged. Structural placement, not
    appearance (see BlueprintAlign in astro/types.ts). */
-.bds-about--align-center .bds-about__narrative {
+.bds-narrative--align-center .bds-narrative__narrative {
   align-items: center;
   text-align: center;
 }
@@ -53,38 +53,38 @@
    (--bds-gap-sm), title→lead is medium (--bds-gap-md). The composed `callout` slot
    takes the medium default through `> * + *`. */
 
-.bds-about__narrative > * + * {
+.bds-narrative__narrative > * + * {
   margin-top: var(--bds-gap-md);
 }
 
-.bds-about__subtitle + .bds-about__title {
+.bds-narrative__subtitle + .bds-narrative__title {
   margin-top: var(--bds-gap-sm);
 }
 
-.bds-about__subtitle {
+.bds-narrative__subtitle {
   margin: 0;
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-lg);
   font-weight: var(--bds-font-weight-medium);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--bds-about-eyebrow-color, var(--bds-text-brand-primary));
+  color: var(--bds-narrative-eyebrow-color, var(--bds-text-brand-primary));
 }
 
-.bds-about__title {
+.bds-narrative__title {
   margin: 0;
   font-family: var(--bds-font-family-heading);
   font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-xl));
   font-weight: var(--bds-font-weight-semibold);
   line-height: var(--bds-font-line-height-tight);
-  color: var(--bds-about-heading-color, var(--bds-text-primary));
+  color: var(--bds-narrative-heading-color, var(--bds-text-primary));
 }
 
-.bds-about__lead {
+.bds-narrative__lead {
   margin: 0;
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-heading-sm);
   line-height: var(--bds-font-line-height-relaxed);
-  color: var(--bds-about-body-color, var(--bds-text-secondary));
+  color: var(--bds-narrative-body-color, var(--bds-text-secondary));
   max-width: 65ch;
 }

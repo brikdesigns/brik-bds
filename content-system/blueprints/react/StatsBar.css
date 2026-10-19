@@ -1,26 +1,26 @@
 /*
- * StatsDarkBar — `bds-stats-dark-bar` section styles. React twin of the
+ * StatsBar — `bds-stats-bar` section styles. React twin of the
  * Astro `stats_bar` blueprint (brik-bds#2012, the deferred half of
  * the #2010 parity reconcile).
  *
  * Section rhythm + the centred container come from `../section-shell.css`
  * (ADR-021): `bds-blueprint-section` and `bds-blueprint-section__container`
- * are composed onto the same elements in StatsDarkBar.tsx, not redeclared
+ * are composed onto the same elements in StatsBar.tsx, not redeclared
  * here. The Astro twin still carries its own pre-ADR-021 `bp-*` rhythm
  * (5vw vs the harmonised 7vw) — that divergence retires with #2302's
  * consolidation, not here, because lint-blueprint-naming.mjs rejects a bare
  * `padding-block` re-declaration.
  *
- * Tier-4 `--bds-stats-dark-bar-*` hooks let a consumer retheme the bar
+ * Tier-4 `--bds-stats-bar-*` hooks let a consumer retheme the bar
  * without forking the block. Names and fallbacks mirror the Astro twin's
  * scoped <style> so the two render identically.
  */
 
-.bds-stats-dark-bar {
-  background: var(--bds-stats-dark-bar-bg, var(--bds-surface-inverse));
+.bds-stats-bar {
+  background: var(--bds-stats-bar-bg, var(--bds-surface-inverse));
 }
 
-.bds-stats-dark-bar__list {
+.bds-stats-bar__list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -30,48 +30,48 @@
 }
 
 @media (min-width: 640px) {
-  .bds-stats-dark-bar__list {
+  .bds-stats-bar__list {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   }
 }
 
-.bds-stats-dark-bar__item {
+.bds-stats-bar__item {
   display: flex;
   flex-direction: column;
   /* Value↔label is a tight text pairing: --bds-gap-sm. Not --bds-gap-tiny, which
      resolves to 0px outside default spacing mode (ADR-023 §3). */
   gap: var(--bds-gap-sm);
   padding-block: var(--bds-padding-sm);
-  border-left: 1px solid var(--bds-stats-dark-bar-divider, var(--bds-border-secondary));
+  border-left: 1px solid var(--bds-stats-bar-divider, var(--bds-border-secondary));
   padding-left: var(--bds-padding-md);
 }
 
 @media (max-width: 639px) {
-  .bds-stats-dark-bar__item {
+  .bds-stats-bar__item {
     border-left: none;
-    border-top: 1px solid var(--bds-stats-dark-bar-divider, var(--bds-border-secondary));
+    border-top: 1px solid var(--bds-stats-bar-divider, var(--bds-border-secondary));
     padding-top: var(--bds-padding-md);
     padding-left: 0;
   }
 
-  .bds-stats-dark-bar__item:first-child {
+  .bds-stats-bar__item:first-child {
     border-top: none;
     padding-top: 0;
   }
 }
 
-.bds-stats-dark-bar__value {
+.bds-stats-bar__value {
   font-family: var(--bds-font-family-display);
   font-size: clamp(var(--bds-heading-xl), 4vw, var(--bds-heading-huge));
   font-weight: var(--bds-font-weight-semibold);
   line-height: var(--bds-font-line-height-tight);
-  color: var(--bds-stats-dark-bar-value-color, var(--bds-text-inverse));
+  color: var(--bds-stats-bar-value-color, var(--bds-text-inverse));
 }
 
-.bds-stats-dark-bar__label {
+.bds-stats-bar__label {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-lg);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--bds-stats-dark-bar-label-color, var(--bds-text-inverse));
+  color: var(--bds-stats-bar-label-color, var(--bds-text-inverse));
 }

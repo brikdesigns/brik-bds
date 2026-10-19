@@ -25,15 +25,15 @@
  *   card_grid                     → CardGrid        layout="card-grid"
  *   callout_split                 → CalloutPanel
  *   feature_grid                  → Features
- *   story_split                   → About
- *   stats_bar                     → StatsDarkBar
+ *   story_split                   → Narrative
+ *   stats_bar                     → StatsBar
  *   testimonials_featured_large   → TestimonialsFeaturedLarge
  *   cta_split_contact             → Cta             layout="split"
  *   cta_centered                  → Cta             layout="default"
  *   logo_wall                     → LogoWall
  *
  * `blueprintKey` goes to the blocks that render a per-key `data-blueprint-key`
- * marker (Hero, Cta, About, Features). CardGrid and CalloutPanel emit their own
+ * marker (Hero, Cta, Narrative, Features). CardGrid and CalloutPanel emit their own
  * block-level marker (`card_grid` / `callout_split`), so `two_column_detail`
  * renders `data-blueprint-key="card_grid"` — as on the Astro rail.
  *
@@ -67,14 +67,14 @@ import type {
   ResolvedTheme,
 } from '../astro/types';
 
-import { About } from './About';
+import { Narrative } from './Narrative';
 import { CalloutPanel } from './CalloutPanel';
 import { CardGrid } from './CardGrid';
 import { Cta } from './Cta';
 import { Features } from './Features';
 import { Hero } from './Hero';
 import { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
-import { StatsDarkBar } from './StatsDarkBar';
+import { StatsBar } from './StatsBar';
 import { TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge';
 import { LogoWall } from './LogoWall';
 import { BlueprintFallback } from './BlueprintFallback';
@@ -100,8 +100,8 @@ const BLUEPRINT_REGISTRY: Partial<Record<KnownBlueprintKey, Registered>> = {
   card_grid: entry(CardGrid, { layout: 'card-grid' }),
   callout_split: entry(CalloutPanel, {}),
   feature_grid: entry(Features, { blueprintKey: 'feature_grid' }),
-  story_split: entry(About, { blueprintKey: 'story_split' }),
-  stats_bar: entry(StatsDarkBar, {}),
+  story_split: entry(Narrative, { blueprintKey: 'story_split' }),
+  stats_bar: entry(StatsBar, {}),
   testimonials_featured_large: entry(TestimonialsFeaturedLarge, {}),
   cta_split_contact: entry(Cta, { layout: 'split', blueprintKey: 'cta_split_contact' }),
   cta_centered: entry(Cta, { layout: 'default', blueprintKey: 'cta_centered' }),

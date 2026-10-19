@@ -20,11 +20,11 @@
  * required_facts: []. Section-driven.
  *
  * CSS custom properties:
- *   --bds-stats-dark-bar-padding-y
- *   --bds-stats-dark-bar-bg        (default: var(--bds-surface-inverse))
- *   --bds-stats-dark-bar-value-color   (default: var(--bds-text-inverse))
- *   --bds-stats-dark-bar-label-color   (default: var(--bds-text-inverse))
- *   --bds-stats-dark-bar-divider       (default: var(--bds-border-secondary))
+ *   --bds-stats-bar-padding-y
+ *   --bds-stats-bar-bg        (default: var(--bds-surface-inverse))
+ *   --bds-stats-bar-value-color   (default: var(--bds-text-inverse))
+ *   --bds-stats-bar-label-color   (default: var(--bds-text-inverse))
+ *   --bds-stats-bar-divider       (default: var(--bds-border-secondary))
  *
  * a11y: semantic list (ul/li). If section.heading present, wired via
  * aria-labelledby; if absent, aria-label fallback. Numbers are
@@ -53,22 +53,22 @@ const motion = section.contentMotion ?? 'none';
 ---
 
 <section
-  class="bp-stats-dark-bar"
+  class="bp-stats-bar"
   aria-labelledby={hasHeading ? titleId : undefined}
   aria-label={!hasHeading ? 'Key stats' : undefined}
   data-blueprint-key="stats_bar"
 >
-  <div class="bp-stats-dark-bar__container">
+  <div class="bp-stats-bar__container">
     {hasHeading && (
       <h2 id={titleId} class="bds-visually-hidden">{section.heading}</h2>
     )}
-    <ul class="bp-stats-dark-bar__list" role="list">
+    <ul class="bp-stats-bar__list" role="list">
       {items.map((item) => (
-        <li class="bp-stats-dark-bar__item">
-          <span class="bp-stats-dark-bar__value">
+        <li class="bp-stats-bar__item">
+          <span class="bp-stats-bar__value">
             {motion === 'count-up' ? <CountUp value={item.title} /> : item.title}
           </span>
-          <span class="bp-stats-dark-bar__label">{item.description}</span>
+          <span class="bp-stats-bar__label">{item.description}</span>
         </li>
       ))}
     </ul>
@@ -76,21 +76,21 @@ const motion = section.contentMotion ?? 'none';
 </section>
 
 <style>
-  .bp-stats-dark-bar {
-    background: var(--bds-stats-dark-bar-bg, var(--bds-surface-inverse, var(--bds-color-grayscale-black)));
+  .bp-stats-bar {
+    background: var(--bds-stats-bar-bg, var(--bds-surface-inverse, var(--bds-color-grayscale-black)));
     padding-block: var(
-      --bds-stats-dark-bar-padding-y,
+      --bds-stats-bar-padding-y,
       clamp(var(--bds-padding-lg), 5vw, var(--bds-padding-xl))
     );
   }
 
-  .bp-stats-dark-bar__container {
+  .bp-stats-bar__container {
     max-width: var(--bds-content-width-xl);
     margin-inline: auto;
     padding-inline: var(--bds-padding-xl); /* bds-lint-ignore — legacy bp-* inset predates --gutter-page; realigning 32→24px is a visual change gated on Chromatic quota (#771), same deferral as #1630 */
   }
 
-  .bp-stats-dark-bar__list {
+  .bp-stats-bar__list {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -100,48 +100,48 @@ const motion = section.contentMotion ?? 'none';
   }
 
   @media (min-width: 640px) {
-    .bp-stats-dark-bar__list {
+    .bp-stats-bar__list {
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     }
   }
 
-  .bp-stats-dark-bar__item {
+  .bp-stats-bar__item {
     display: flex;
     flex-direction: column;
     /* Value↔label is a tight text pairing: --bds-gap-sm. Not --bds-gap-tiny, which
        resolves to 0px outside default spacing mode (ADR-023 §3). */
     gap: var(--bds-gap-sm);
     padding-block: var(--bds-padding-sm);
-    border-left: 1px solid var(--bds-stats-dark-bar-divider, var(--bds-border-secondary));
+    border-left: 1px solid var(--bds-stats-bar-divider, var(--bds-border-secondary));
     padding-left: var(--bds-padding-md);
   }
 
   @media (max-width: 639px) {
-    .bp-stats-dark-bar__item {
+    .bp-stats-bar__item {
       border-left: none;
-      border-top: 1px solid var(--bds-stats-dark-bar-divider, var(--bds-border-secondary));
+      border-top: 1px solid var(--bds-stats-bar-divider, var(--bds-border-secondary));
       padding-top: var(--bds-padding-md);
       padding-left: 0;
     }
-    .bp-stats-dark-bar__item:first-child {
+    .bp-stats-bar__item:first-child {
       border-top: none;
       padding-top: 0;
     }
   }
 
-  .bp-stats-dark-bar__value {
+  .bp-stats-bar__value {
     font-family: var(--bds-font-family-display, var(--bds-font-family-heading));
     font-size: clamp(var(--bds-heading-xl), 4vw, var(--bds-heading-huge));
     font-weight: var(--bds-font-weight-semibold);
     line-height: var(--bds-font-line-height-tight);
-    color: var(--bds-stats-dark-bar-value-color, var(--bds-text-inverse, var(--bds-color-grayscale-white)));
+    color: var(--bds-stats-bar-value-color, var(--bds-text-inverse, var(--bds-color-grayscale-white)));
   }
 
-  .bp-stats-dark-bar__label {
+  .bp-stats-bar__label {
     font-family: var(--bds-font-family-label);
     font-size: var(--bds-label-lg);
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--bds-stats-dark-bar-label-color, var(--bds-text-inverse, var(--bds-color-grayscale-100)));
+    color: var(--bds-stats-bar-label-color, var(--bds-text-inverse, var(--bds-color-grayscale-100)));
   }
 </style>

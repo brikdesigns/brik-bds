@@ -72,7 +72,7 @@ A name describes **layout shape only**. The same three-up grid renders services,
 
 So `card_grid`, `hero_split`, `cta_centered`, `story_split`, `two_column_detail` — a vocabulary a client site can adopt without inheriting another client's content model.
 
-Enforced by `scripts/lint-blueprint-naming.mjs` as `blueprint-key-context-word`, on both pre-commit and the `validate` chain. It reads the two places a key is declared — `blueprints/blueprint-library.json` and `content-system/blueprints/astro/types.ts` — and ships with **no allowlist**. `blueprints/blueprint-roadmap.json` is out of scope by design: its entries are design candidates, not contracts, and a candidate becomes a contract when it graduates into the library — which is exactly when the rule bites.
+Enforced by `scripts/lint-blueprint-naming.mjs` as `blueprint-key-context-word`, on both pre-commit and the `validate` chain. It reads the two places a key is declared — `blueprints/blueprint-library.json` and `content-system/blueprints/astro/types.ts` — and, for the component name, every blueprint component filename (`react/*.tsx`, `astro/*.astro`) and the export names in both barrels (`react/index.ts`, `astro/index.ts`), splitting PascalCase into words. It ships with **no allowlist**. `blueprints/blueprint-roadmap.json` is out of scope by design: its entries are design candidates, not contracts, and a candidate becomes a contract when it graduates into the library — which is exactly when the rule bites.
 
 Source: [ADR-037](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-037-astro-is-the-canonical-blueprint-rail.md) §4.
 
@@ -98,7 +98,7 @@ Blueprints ship on two renderers. **Astro is canonical** (ADR-037 §1) — it ca
 ### Class naming
 
 1. **Single namespace.** Every class uses `bds-`. The `bp-` prefix is deprecated — no new `bp-*` classes after ADR-008.
-2. **One block per family.** `bds-hero`, `bds-cta`, `bds-services`, `bds-features`, `bds-about`, `bds-callout-panel`. Each family is one block with structural modifiers, not N separate blueprints.
+2. **One block per family.** `bds-hero`, `bds-cta`, `bds-services`, `bds-features`, `bds-narrative`, `bds-callout-panel`. Each family is one block with structural modifiers, not N separate blueprints.
 3. **Well-formed slots.** Every `bds-{block}__{slot}` must match the kebab-case BEM pattern above. The slot-pattern gate fails on malformed shapes, not on new well-formed words.
 4. **Structural-only modifiers.** Modifier names describe structure (`--split-image`, `--two-column`) — never appearance (`--dark`) or theme (`--inverse`). A "dark" CTA themed light makes the name a lie. Placement is the exception: alignment is a curated closed-enum axis the component writes (`--align-center`, `--align-left`), because a re-theme preserves placement even as it changes appearance — [ADR-039](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-039-blueprint-parameterization-axes.md) narrows [ADR-008](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-008-naming-canon-closed-allowlist.md) §3 to exempt it.
 5. **Compose, don't reimplement.** A blueprint `.tsx` that imports nothing from `components/ui/*` is almost always drift.
@@ -123,6 +123,8 @@ Kept so a search for the old name finds the current one. These are **history, no
 | `features_3col_branded_dark` | `feature_grid` | Brand + atmosphere + a column count |
 | `hero_split_60_40` | `hero_split` | The ratio is a prop |
 | `stats_dark_bar` | `stats_bar` | `dark` is an atmosphere token |
+| `About`, `bds-about` | `Narrative`, `bds-narrative` | Content domain in a component name; the block is a narrative column with an optional pull-quote, nothing about it is about-page-specific. The key stays `story_split` ([#2793](https://github.com/brikdesigns/brik-bds/issues/2793)) |
+| `StatsDarkBar`, `bds-stats-dark-bar` | `StatsBar`, `bds-stats-bar` | `dark` is an atmosphere token; `bar` is a layout word. The key stays `stats_bar` ([#2793](https://github.com/brikdesigns/brik-bds/issues/2793)) |
 
 ## Related
 

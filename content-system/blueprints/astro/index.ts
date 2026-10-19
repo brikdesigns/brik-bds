@@ -79,11 +79,11 @@ export { default as HeroMediaCardImage }        from './HeroMediaCardImage.astro
 export { default as HeroMediaCardPrice }        from './HeroMediaCardPrice.astro';
 
 export { default as Cta }                       from './Cta.astro';
-export { default as About }                     from './About.astro';
+export { default as Narrative }                 from './Narrative.astro';
 export { default as Features }                  from './Features.astro';
 export { default as CardGrid }                  from './CardGrid.astro';
 export { default as CalloutPanel }              from './CalloutPanel.astro';
-export { default as StatsDarkBar }              from './StatsDarkBar.astro';
+export { default as StatsBar }                  from './StatsBar.astro';
 export { default as TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge.astro';
 
 // `<LogoWall>` — logo / partner / trust strip; the first block to adopt the

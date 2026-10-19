@@ -3,7 +3,7 @@
  * container, the sr-only utility, and the content-needed media stub are
  * defined for BOTH renderers (brik-bds#1439, umbrella #1438).
  *
- * Before this file, all six canonical families (`bds-hero`, `bds-about`,
+ * Before this file, all six canonical families (`bds-hero`, `bds-narrative`,
  * `bds-features`, `bds-cta`, `bds-card-grid`, `bds-callout-panel`) re-declared
  * the same four blocks in their own CSS — once in `react/*.css`, again in each
  * `astro/*.astro` scoped <style>. The copies had drifted: the vertical-rhythm
@@ -71,7 +71,7 @@
   }
 
   /* Visually-hidden utility — collapses the `__sr-heading` blocks that were
-     copy-pasted verbatim into StatsDarkBar.astro and
+     copy-pasted verbatim into StatsBar.astro and
      TestimonialsFeaturedLarge.astro. */
   .bds-visually-hidden {
     position: absolute;
