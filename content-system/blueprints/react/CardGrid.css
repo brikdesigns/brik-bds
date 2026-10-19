@@ -14,6 +14,8 @@
  *   bds-card-grid__subtitle
  *   bds-card-grid__title
  *   bds-card-grid__description
+ *   bds-card-grid__item-title        (two-column-list layout row title, h3)
+ *   bds-card-grid__item-description  (two-column-list layout row description)
  *
  * Token pairs — paired family ↔ size only:
  *   subtitle    : --bds-font-family-subtitle + --bds-subtitle-lg + --bds-text-transform-subtitle
@@ -78,6 +80,23 @@
 }
 
 .bds-card-grid__description {
+  margin: 0;
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-primary);
+}
+
+.bds-card-grid__item-title {
+  margin: 0;
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-md);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
+}
+
+.bds-card-grid__item-description {
   margin: 0;
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-md);

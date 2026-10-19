@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Image } from '../../../components';
 import { CalloutPanel } from './CalloutPanel';
-import { placeholderImage } from './_fixtures';
+import type { BlueprintProps } from '../astro/types';
+import { baseClientFacts, baseTheme, placeholderImage } from './_fixtures';
 
 const meta: Meta<typeof CalloutPanel> = {
   title: 'Blueprints/callout_panel',
@@ -73,5 +74,44 @@ export const WithMedia: Story = {
         ratio="square"
       />
     ),
+  },
+};
+
+/* ─── Dispatched (section-driven) ──────────────────────────────────
+ *
+ * The same block, driven by a `BlueprintSection` — the first item becomes the
+ * plan callout. What `BlueprintDispatcher` renders for the `callout_split` key
+ * (#2352).
+ */
+
+const supportSection: BlueprintProps['section'] = {
+  sectionKey: 'support-plan-default',
+  sectionType: 'cta',
+  heading: 'Monthly support services',
+  subheading: null,
+  body: 'A short subheading that frames the support offering — what the visitor gets and why it matters to them.',
+  cta: { label: 'Learn more', url: '#' },
+  visualNotes: {
+    blueprintKey: 'callout_split',
+    moodKeywords: ['approachable', 'warm'],
+    layoutBlueprint: 'callout_split',
+    imageOpportunity: 'persona avatars + photo tile',
+    illustrationOpportunity: 'persona-cluster scene',
+  },
+  items: [
+    {
+      title: 'Monthly Support Plan',
+      description:
+        'A two- or three-sentence description of the plan offering — what the cadence covers, what the deliverables look like, and what the visitor walks away with after signing up.',
+    },
+  ],
+};
+
+/** @summary Dispatched callout — header + plan card from section */
+export const Dispatched: Story = {
+  args: {
+    section: supportSection,
+    clientFacts: baseClientFacts,
+    theme: baseTheme,
   },
 };

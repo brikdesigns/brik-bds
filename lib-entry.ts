@@ -6,6 +6,6 @@ export * from './tokens';
 
 // BDS Blueprint React renderers — twin of `./blueprints-astro` for
 // React / Next.js consumers. Ships through the main bundle so consumers
-// import via `import { BlueprintDispatcher, Services3ColCardGrid } from
+// import via `import { BlueprintDispatcher, CardGrid } from
 // '@brikdesigns/bds'` (no separate sub-path required).
 export * from './content-system/blueprints/react';

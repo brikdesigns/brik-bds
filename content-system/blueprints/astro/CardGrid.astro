@@ -32,9 +32,8 @@
  * `layout` default.
  *
  * `CardGridLayout` is imported from `./types`, the contract module both rails
- * share. The React rail expresses the same two layouts through composed
- * children (its `Services3ColCardGrid` / `ServicesDetailTwoColumn` adapters),
- * because React blueprints can pass nodes and Astro dispatch cannot.
+ * share. The React rail takes the same `layout` prop (#2352): its `<CardGrid>`
+ * renders `section.items` for either layout, or composes consumer children.
  *
  * The rendered marker is this block's own `card_grid`, not the dispatching
  * key — unchanged from the pre-consolidation adapters, which emitted nothing

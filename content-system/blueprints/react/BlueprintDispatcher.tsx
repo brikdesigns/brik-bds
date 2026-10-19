@@ -12,9 +12,34 @@
  * framework-agnostic; the file lives in `astro/` for historical
  * reasons since Astro shipped first).
  *
- * Adding a new blueprint = one import + one registry entry here +
- * one barrel export in `./index.ts`. Keep the React registry in
- * lockstep with the Astro registry — both must list the same keys.
+ * The registry is a table of `{component, props}` entries — the same shape and
+ * the same key → (block, layout) mapping as `BlueprintDispatcher.astro` (#2352,
+ * ADR-037 §2, canon `blueprints/two-rails-one-canonical`). The component gets
+ * the full `BlueprintProps` plus the key's own `layout` / `blueprintKey`:
+ *
+ *   hero_split                    → Hero            layout="split"
+ *   hero_split_image_card_overlay → HeroSplitImageCardOverlay (kept adapter —
+ *                                   builds the breadcrumb / pricing-card aside)
+ *   hero_interior_minimal         → Hero            layout="interior-minimal"
+ *   two_column_detail             → CardGrid        layout="two-column-list"
+ *   card_grid                     → CardGrid        layout="card-grid"
+ *   callout_split                 → CalloutPanel
+ *   feature_grid                  → Features
+ *   story_split                   → About
+ *   stats_bar                     → StatsDarkBar
+ *   testimonials_featured_large   → TestimonialsFeaturedLarge
+ *   cta_split_contact             → Cta             layout="split"
+ *   cta_centered                  → Cta             layout="default"
+ *   logo_wall                     → LogoWall
+ *
+ * `blueprintKey` goes to the blocks that render a per-key `data-blueprint-key`
+ * marker (Hero, Cta, About, Features). CardGrid and CalloutPanel emit their own
+ * block-level marker (`card_grid` / `callout_split`), so `two_column_detail`
+ * renders `data-blueprint-key="card_grid"` — as on the Astro rail.
+ *
+ * Adding a new blueprint = one registry entry here + (if it is a new block) one
+ * barrel export in `./index.ts`. Keep the React registry in lockstep with the
+ * Astro registry — both must list the same keys.
  *
  * ## Contract
  *
@@ -25,21 +50,14 @@
  *
  *   Behavior:
  *     - section.visualNotes.blueprintKey ∈ BLUEPRINT_REGISTRY →
- *         renders the matching component with full BlueprintProps
+ *         renders the matching block with full BlueprintProps plus the
+ *         key's own `layout` / `blueprintKey` props
  *     - section.visualNotes.blueprintKey ∉ BLUEPRINT_REGISTRY →
  *         renders BlueprintFallback (which emits a
  *         data-blueprint-unknown-key attribute for CI grep)
  *     - section.visualNotes is null → falls back
- *
- * ## v0.1 React registry (1 blueprint)
- *
- * The React renderer surface starts with `card_grid`,
- * the blueprint that drives brikdesigns.com service-line index pages.
- * Subsequent React renderers (HeroSplit6040, HeroInteriorMinimal,
- * etc. — Workstream A in the gap audit) ship in their own PRs and
- * each appends one entry here.
  */
-import type { ComponentType } from 'react';
+import { Fragment, type ComponentType, type ReactElement } from 'react';
 
 import type {
   BlueprintProps,
@@ -49,37 +67,45 @@ import type {
   ResolvedTheme,
 } from '../astro/types';
 
-import { Services3ColCardGrid } from './Services3ColCardGrid';
-import { CalloutSplit } from './CalloutSplit';
-import { Features3ColBrandedDark } from './Features3ColBrandedDark';
-import { HeroSplit6040 } from './HeroSplit6040';
+import { About } from './About';
+import { CalloutPanel } from './CalloutPanel';
+import { CardGrid } from './CardGrid';
+import { Cta } from './Cta';
+import { Features } from './Features';
+import { Hero } from './Hero';
 import { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
-import { HeroInteriorMinimal } from './HeroInteriorMinimal';
-import { ServicesDetailTwoColumn } from './ServicesDetailTwoColumn';
-import { AboutStorySplit } from './AboutStorySplit';
 import { StatsDarkBar } from './StatsDarkBar';
 import { TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge';
-import { CtaDarkCentered } from './CtaDarkCentered';
-import { CtaSplitContact } from './CtaSplitContact';
 import { LogoWall } from './LogoWall';
 import { BlueprintFallback } from './BlueprintFallback';
 
-const BLUEPRINT_REGISTRY: Partial<
-  Record<KnownBlueprintKey, ComponentType<BlueprintProps>>
-> = {
-  hero_split: HeroSplit6040,
-  hero_split_image_card_overlay: HeroSplitImageCardOverlay,
-  hero_interior_minimal: HeroInteriorMinimal,
-  two_column_detail: ServicesDetailTwoColumn,
-  card_grid: Services3ColCardGrid,
-  callout_split: CalloutSplit,
-  feature_grid: Features3ColBrandedDark,
-  story_split: AboutStorySplit,
-  stats_bar: StatsDarkBar,
-  testimonials_featured_large: TestimonialsFeaturedLarge,
-  cta_centered: CtaDarkCentered,
-  cta_split_contact: CtaSplitContact,
-  logo_wall: LogoWall,
+// The registry. Key order doesn't matter; lookup is by key. `entry(block, props)`
+// pairs a block with the per-key extras (`layout`, and `blueprintKey` for the
+// blocks that render the marker) and is type-checked per entry, so a layout a
+// block does not support is a compile error, not a silent miss. At render time
+// the block receives the full `BlueprintProps` plus those extras, like Astro.
+type Registered = (blueprint: BlueprintProps) => ReactElement;
+const entry =
+  <const P extends object>(Block: ComponentType<BlueprintProps & P>, props: P): Registered =>
+  (blueprint) => <Block {...blueprint} {...props} />;
+
+const BLUEPRINT_REGISTRY: Partial<Record<KnownBlueprintKey, Registered>> = {
+  hero_split: entry(Hero, { layout: 'split', blueprintKey: 'hero_split' }),
+  hero_split_image_card_overlay: entry(HeroSplitImageCardOverlay, {}),
+  hero_interior_minimal: entry(Hero, {
+    layout: 'interior-minimal',
+    blueprintKey: 'hero_interior_minimal',
+  }),
+  two_column_detail: entry(CardGrid, { layout: 'two-column-list' }),
+  card_grid: entry(CardGrid, { layout: 'card-grid' }),
+  callout_split: entry(CalloutPanel, {}),
+  feature_grid: entry(Features, { blueprintKey: 'feature_grid' }),
+  story_split: entry(About, { blueprintKey: 'story_split' }),
+  stats_bar: entry(StatsDarkBar, {}),
+  testimonials_featured_large: entry(TestimonialsFeaturedLarge, {}),
+  cta_split_contact: entry(Cta, { layout: 'split', blueprintKey: 'cta_split_contact' }),
+  cta_centered: entry(Cta, { layout: 'default', blueprintKey: 'cta_centered' }),
+  logo_wall: entry(LogoWall, {}),
 };
 
 interface Props {
@@ -106,15 +132,12 @@ export function BlueprintDispatcher({ sections, clientFacts, theme }: Props) {
     <>
       {sections.map((section) => {
         const key = section.visualNotes?.blueprintKey;
-        const Component =
-          (key && BLUEPRINT_REGISTRY[key]) || BlueprintFallback;
+        const render = key ? BLUEPRINT_REGISTRY[key] : undefined;
+        const blueprint = { section, clientFacts, theme };
         return (
-          <Component
-            key={section.sectionKey}
-            section={section}
-            clientFacts={clientFacts}
-            theme={theme}
-          />
+          <Fragment key={section.sectionKey}>
+            {render ? render(blueprint) : <BlueprintFallback {...blueprint} />}
+          </Fragment>
         );
       })}
     </>

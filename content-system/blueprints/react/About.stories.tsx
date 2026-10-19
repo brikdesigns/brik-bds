@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+import type { BlueprintProps } from '../astro/types';
 import { About } from './About';
+import { baseClientFacts, baseTheme } from './_fixtures';
 
 const meta: Meta<typeof About> = {
   title: 'Blueprints/about',
@@ -77,5 +79,52 @@ export const AlignCenter: Story = {
     ...NarrativeOnly.args,
     sectionKey: 'about-align-center',
     align: 'center',
+  },
+};
+
+/* ─── Dispatched (section-driven) ──────────────────────────────────
+ *
+ * The same block, driven by a `BlueprintSection` — the first item becomes the
+ * pull-quote. What `BlueprintDispatcher` renders for the `story_split` key (#2352).
+ */
+
+const storySection: BlueprintProps['section'] = {
+  sectionKey: 'about-story-default',
+  sectionType: 'content_block',
+  heading: 'A story-led section that introduces the brand.',
+  subheading: 'Who we are',
+  body: 'A short paragraph of about-copy that sets context for the visitor — who you are, what you do, and the posture you bring to the work. Long enough to set the type rhythm but short enough that a visitor will actually read it.',
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'story_split',
+    moodKeywords: ['warm', 'professional'],
+    layoutBlueprint: 'story_split',
+    imageOpportunity: null,
+    illustrationOpportunity: null,
+  },
+  items: [
+    {
+      title: 'Sample Quote, Role',
+      description:
+        'A short pull-quote that reinforces the section narrative — typically two sentences attributed to a leader or customer.',
+    },
+  ],
+};
+
+/** @summary Dispatched story — narrative + pull-quote */
+export const DispatchedStory: Story = {
+  args: {
+    section: storySection,
+    clientFacts: baseClientFacts,
+    theme: baseTheme,
+    blueprintKey: 'story_split',
+  },
+};
+
+/** @summary Dispatched story — narrative only, no pull-quote callout */
+export const DispatchedNarrativeOnly: Story = {
+  args: {
+    ...DispatchedStory.args,
+    section: { ...storySection, sectionKey: 'about-story-narrative-only', items: [] },
   },
 };

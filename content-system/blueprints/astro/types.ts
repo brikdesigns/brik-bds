@@ -119,9 +119,7 @@ export type CtaLayout = 'default' | 'split';
  *   `card-grid`       — 3-up bordered cards with media, category, CTA.
  *   `two-column-list` — 2-up plain title/description rows, no card surface.
  *
- * The React rail expresses the same two layouts through its composed-children
- * adapters (`Services3ColCardGrid` / `ServicesDetailTwoColumn`) rather than a
- * prop, because React blueprints can pass nodes and Astro dispatch cannot.
+ * The React rail takes the same `layout` prop on its `<CardGrid>` (#2352).
  * Adding a third layout still means adding it here first.
  */
 export type CardGridLayout = 'card-grid' | 'two-column-list';

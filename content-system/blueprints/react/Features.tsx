@@ -37,6 +37,10 @@
  * Composed with the shared shell (ADR-021): `bds-blueprint-section` on the root,
  * `bds-blueprint-section__container` on the container.
  *
+ * Two ways to drive it, mirroring `../astro/Features.astro` (#2352): **composed**
+ * (`title` / `body` / `items`) or **dispatched** (a `section` — the block maps
+ * `section.*` itself). `BlueprintDispatcher` sends `feature_grid` here.
+ *
  * a11y: section uses `h2` + aria-labelledby; cards are a `<ul role="list">`;
  * card title is an `h3`. Card title uses `--bds-font-weight-bold` + 18px and the
  * description 16px regular to clear AA on saturated brand backgrounds (BDS
@@ -49,7 +53,13 @@ import { type HTMLAttributes } from 'react';
 
 import { Card, ServiceTag, Stack, type ServiceLine } from '../../../components';
 import { bdsClass } from '../../../components/utils';
-import type { BlueprintAlign, BlueprintColumns, BlueprintContentMotion } from '../astro/types';
+import type {
+  BlueprintAlign,
+  BlueprintColumns,
+  BlueprintContentMotion,
+  BlueprintProps,
+  KnownBlueprintKey,
+} from '../astro/types';
 import { BlockContentMotion } from './BlockContentMotion';
 import '../section-shell.css';
 import './Features.css';
@@ -128,7 +138,18 @@ export interface FeaturesProps extends HTMLAttributes<HTMLElement> {
   contentMotion?: BlueprintContentMotion;
 }
 
-export function Features({
+/**
+ * Dispatched-mode props: a `BlueprintSection` plus the key rendered as the
+ * marker. `align` / `columns` / `contentMotion` are not read here — the
+ * dispatched path never carried them (the Astro rail reads them from the
+ * section; the React adapter did not, and this collapse must not change markup).
+ */
+export interface FeaturesSectionProps extends BlueprintProps {
+  /** Rendered as `data-blueprint-key`; defaults to `feature_grid`. */
+  blueprintKey?: KnownBlueprintKey;
+}
+
+function FeaturesShell({
   sectionKey,
   title,
   subtitle,
@@ -266,6 +287,34 @@ export function Features({
       </div>
     </section>
   );
+}
+
+function FeaturesFromSection({ section, blueprintKey }: FeaturesSectionProps) {
+  const items: FeatureItem[] = section.items.map((item) => ({
+    title: item.title,
+    description: item.description ?? undefined,
+    href: item.href ?? undefined,
+    imageUrl: item.imageUrl ?? undefined,
+    imageAlt: item.imageAlt ?? undefined,
+    // `serviceLine` canonical; `audience` deprecated alias (#788). Resolve it
+    // here so the card emits one consistent `data-service-line`.
+    serviceLine: (item.serviceLine ?? item.audience ?? undefined) as ServiceLine | undefined,
+  }));
+
+  return (
+    <FeaturesShell
+      sectionKey={section.sectionKey}
+      title={section.heading ?? undefined}
+      subtitle={section.subheading ?? undefined}
+      body={section.body ?? undefined}
+      items={items}
+      data-blueprint-key={blueprintKey ?? 'feature_grid'}
+    />
+  );
+}
+
+export function Features(props: FeaturesProps | FeaturesSectionProps) {
+  return 'section' in props ? <FeaturesFromSection {...props} /> : <FeaturesShell {...props} />;
 }
 
 export default Features;

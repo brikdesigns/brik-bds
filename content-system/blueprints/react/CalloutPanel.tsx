@@ -10,11 +10,10 @@
  * composition — pass any node (e.g. an `<Image>`) to flip to a
  * two-column split.
  *
- * This is the props-based primitive (mirrors the `<CardGrid>` precedent
- * from brik-bds#585). New consumers compose it directly; the
- * `callout_split` blueprint key dispatches through the
- * `CalloutSplit` adapter, which maps `section.*` → these
- * props. The adapter retires in Phase E.
+ * Two ways to drive it, mirroring `../astro/CalloutPanel.astro` (#2352):
+ * **composed** (`title` / `panelTitle` / `cta` …) or **dispatched** (a `section`
+ * — the block maps `section.*` itself, taking the first item as the plan
+ * callout). `BlueprintDispatcher` sends `callout_split` here.
  *
  * Slots used (all on docs/SLOT-ALLOWLIST.md):
  *   bds-callout-panel, __container, __header, __subtitle, __title,
@@ -39,7 +38,7 @@ import { type HTMLAttributes, type ReactNode } from 'react';
 
 import { Button, Card, Stack } from '../../../components';
 import { bdsClass } from '../../../components/utils';
-import type { BlueprintCta } from '../astro/types';
+import type { BlueprintCta, BlueprintProps } from '../astro/types';
 import { isActionCta } from '../astro/types';
 import '../section-shell.css';
 import './CalloutPanel.css';
@@ -70,7 +69,10 @@ export interface CalloutPanelProps extends HTMLAttributes<HTMLElement> {
   media?: ReactNode;
 }
 
-export function CalloutPanel({
+/** Dispatched-mode props: a `BlueprintSection` (the block hardcodes its own marker). */
+export type CalloutPanelSectionProps = BlueprintProps;
+
+function CalloutPanelShell({
   sectionKey,
   title,
   subtitle,
@@ -145,6 +147,30 @@ export function CalloutPanel({
         </div>
       </div>
     </section>
+  );
+}
+
+function CalloutPanelFromSection({ section }: CalloutPanelSectionProps) {
+  const plan = section.items?.[0];
+
+  return (
+    <CalloutPanelShell
+      sectionKey={section.sectionKey}
+      title={section.heading ?? ''}
+      subtitle={section.subheading ?? undefined}
+      description={section.body ?? undefined}
+      panelTitle={plan?.title ?? ''}
+      panelDescription={plan?.description ?? undefined}
+      cta={section.cta ?? undefined}
+    />
+  );
+}
+
+export function CalloutPanel(props: CalloutPanelProps | CalloutPanelSectionProps) {
+  return 'section' in props ? (
+    <CalloutPanelFromSection {...props} />
+  ) : (
+    <CalloutPanelShell {...props} />
   );
 }
 
