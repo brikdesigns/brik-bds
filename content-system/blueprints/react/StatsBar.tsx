@@ -1,5 +1,5 @@
 /**
- * StatsDarkBar — React twin of the Astro `stats_bar` blueprint
+ * StatsBar — React twin of the Astro `stats_bar` blueprint
  * (brik-bds#2012, the deferred half of the #2010 parity reconcile).
  *
  * #2010 de-wired `stats_bar` from the Astro `BLUEPRINT_REGISTRY` to
@@ -37,11 +37,11 @@ import { bdsClass } from '../../../components/utils';
 import type { BlueprintProps } from '../astro/types';
 import { BlockContentMotion } from './BlockContentMotion';
 import '../section-shell.css';
-import './StatsDarkBar.css';
+import './StatsBar.css';
 
 interface Props extends BlueprintProps {}
 
-export function StatsDarkBar({ section }: Props) {
+export function StatsBar({ section }: Props) {
   const titleId = `${section.sectionKey}-title`;
   const hasHeading = Boolean(section.heading);
   // The content-motion axis (ADR-039 §Decision 2, #2529). `count-up` is the
@@ -52,7 +52,7 @@ export function StatsDarkBar({ section }: Props) {
 
   return (
     <section
-      className={bdsClass('bds-blueprint-section', 'bds-stats-dark-bar')}
+      className={bdsClass('bds-blueprint-section', 'bds-stats-bar')}
       aria-labelledby={hasHeading ? titleId : undefined}
       aria-label={hasHeading ? undefined : 'Key stats'}
       data-blueprint-key="stats_bar"
@@ -67,13 +67,13 @@ export function StatsDarkBar({ section }: Props) {
           </h2>
         )}
 
-        <ul className="bds-stats-dark-bar__list" role="list">
+        <ul className="bds-stats-bar__list" role="list">
           {section.items.map((item) => (
-            <li key={item.title} className="bds-stats-dark-bar__item">
-              <span className="bds-stats-dark-bar__value">
+            <li key={item.title} className="bds-stats-bar__item">
+              <span className="bds-stats-bar__value">
                 <BlockContentMotion contentMotion={motion}>{item.title}</BlockContentMotion>
               </span>
-              <span className="bds-stats-dark-bar__label">{item.description}</span>
+              <span className="bds-stats-bar__label">{item.description}</span>
             </li>
           ))}
         </ul>
@@ -82,4 +82,4 @@ export function StatsDarkBar({ section }: Props) {
   );
 }
 
-export default StatsDarkBar;
+export default StatsBar;

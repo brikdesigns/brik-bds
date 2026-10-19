@@ -1,5 +1,5 @@
 /**
- * About — canonical `bds-about` narrative section primitive (Phase D,
+ * Narrative — canonical `bds-narrative` narrative section primitive (Phase D,
  * brik-bds#1198). Consolidates the about blueprint family — the last family
  * in the ADR-008 Phase D sequence — retiring the per-blueprint
  * `bp-about-story-split` class.
@@ -17,13 +17,13 @@
  * `lint-blueprint-naming` reinvented-primitive error; resolving that
  * pre-existing hazard is part of this consolidation.
  *
- * Two ways to drive it, mirroring `../astro/About.astro` (#2352): **composed**
+ * Two ways to drive it, mirroring `../astro/Narrative.astro` (#2352): **composed**
  * (`title` / `body` / `testimonial`) or **dispatched** (a `section` — the block
  * maps `section.*` itself, taking the first item as the pull-quote).
  * `BlueprintDispatcher` sends `story_split` here, with the key as `blueprintKey`.
  *
  * Slots (all pass `scripts/slot-pattern-check.mjs`):
- *   bds-about, __container, __narrative, __subtitle, __title, __lead, __callout
+ *   bds-narrative, __container, __narrative, __subtitle, __title, __lead, __callout
  *
  * Composed with the shared shell (ADR-021): `bds-blueprint-section` on the root,
  * `bds-blueprint-section__container` on the container.
@@ -44,10 +44,10 @@ import { CardTestimonial } from '../../../components';
 import { bdsClass } from '../../../components/utils';
 import type { BlueprintAlign, BlueprintProps, KnownBlueprintKey } from '../astro/types';
 import '../section-shell.css';
-import './About.css';
+import './Narrative.css';
 
 /** Optional pull-quote rendered as a `CardTestimonial` aside. */
-export interface AboutTestimonial {
+export interface NarrativeTestimonial {
   /** The quote body. */
   quote: string;
   /** Attribution — typically a name. Maps to `CardTestimonial` `authorName`. */
@@ -56,7 +56,7 @@ export interface AboutTestimonial {
   authorRole?: string;
 }
 
-export interface AboutProps extends HTMLAttributes<HTMLElement> {
+export interface NarrativeProps extends HTMLAttributes<HTMLElement> {
   /**
    * Stable section identifier. Drives the `aria-labelledby` id — keep it
    * stable across renders for a given section.
@@ -73,22 +73,22 @@ export interface AboutProps extends HTMLAttributes<HTMLElement> {
    * narrative-plus-callout layout; when absent it is a single narrative
    * column. Rendered as an `outlined` `<CardTestimonial>`.
    */
-  testimonial?: AboutTestimonial;
+  testimonial?: NarrativeTestimonial;
   /**
    * Narrative-column placement (structure axis, ADR-039). `left` (default) or
-   * `center`; emits the enum-bound `bds-about--align-center` modifier. Reads
+   * `center`; emits the enum-bound `bds-narrative--align-center` modifier. Reads
    * most naturally on the single-column (no-testimonial) narrative.
    */
   align?: BlueprintAlign;
 }
 
 /** Dispatched-mode props: a `BlueprintSection` plus the key rendered as the marker. */
-export interface AboutSectionProps extends BlueprintProps {
+export interface NarrativeSectionProps extends BlueprintProps {
   /** Rendered as `data-blueprint-key` so the scaffold contract can assert on it. */
   blueprintKey?: KnownBlueprintKey;
 }
 
-function AboutShell({
+function NarrativeShell({
   sectionKey,
   title,
   subtitle,
@@ -97,32 +97,32 @@ function AboutShell({
   align = 'left',
   className,
   ...rest
-}: AboutProps) {
+}: NarrativeProps) {
   const titleId = `${sectionKey}-title`;
 
   return (
     <section
       className={bdsClass(
         'bds-blueprint-section',
-        'bds-about',
-        align === 'center' && 'bds-about--align-center',
+        'bds-narrative',
+        align === 'center' && 'bds-narrative--align-center',
         className,
       )}
       aria-labelledby={titleId}
       {...rest}
     >
-      <div className="bds-blueprint-section__container bds-about__container">
-        <div className="bds-about__narrative">
-          {subtitle && <p className="bds-about__subtitle">{subtitle}</p>}
-          <h2 id={titleId} className="bds-about__title">
+      <div className="bds-blueprint-section__container bds-narrative__container">
+        <div className="bds-narrative__narrative">
+          {subtitle && <p className="bds-narrative__subtitle">{subtitle}</p>}
+          <h2 id={titleId} className="bds-narrative__title">
             {title}
           </h2>
-          {body && <p className="bds-about__lead">{body}</p>}
+          {body && <p className="bds-narrative__lead">{body}</p>}
         </div>
 
         {testimonial && (
           <CardTestimonial
-            className="bds-about__callout"
+            className="bds-narrative__callout"
             variant="outlined"
             quote={testimonial.quote}
             authorName={testimonial.author}
@@ -134,11 +134,11 @@ function AboutShell({
   );
 }
 
-function AboutFromSection({ section, blueprintKey }: AboutSectionProps) {
+function NarrativeFromSection({ section, blueprintKey }: NarrativeSectionProps) {
   const callout = section.items[0];
 
   return (
-    <AboutShell
+    <NarrativeShell
       sectionKey={section.sectionKey}
       title={section.heading ?? ''}
       subtitle={section.subheading ?? undefined}
@@ -153,8 +153,8 @@ function AboutFromSection({ section, blueprintKey }: AboutSectionProps) {
   );
 }
 
-export function About(props: AboutProps | AboutSectionProps) {
-  return 'section' in props ? <AboutFromSection {...props} /> : <AboutShell {...props} />;
+export function Narrative(props: NarrativeProps | NarrativeSectionProps) {
+  return 'section' in props ? <NarrativeFromSection {...props} /> : <NarrativeShell {...props} />;
 }
 
-export default About;
+export default Narrative;

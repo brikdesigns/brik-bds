@@ -161,3 +161,84 @@ describe('blueprint-key-context-word', () => {
     expect(output).toContain('`support` is a content domain');
   });
 });
+
+describe('blueprint-key-context-word — component names (#2793)', () => {
+  /**
+   * Plant a clean key surface plus component files and barrel exports.
+   * `react` / `astro` are filenames inside each rail; `reactBarrel` /
+   * `astroBarrel` are the export names written into each `index.ts`.
+   */
+  function plantNames({ react = [], astro = [], reactBarrel = [], astroBarrel = [] }) {
+    const root = plant(['hero_split']);
+    const base = join(root, 'content-system', 'blueprints');
+    for (const name of react) writeFileSync(join(base, 'react', name), '');
+    for (const name of astro) writeFileSync(join(base, 'astro', name), '');
+    writeFileSync(
+      join(base, 'react', 'index.ts'),
+      reactBarrel.map((n) => `export { ${n} } from './${n}';`).join('\n') + '\n',
+    );
+    writeFileSync(
+      join(base, 'astro', 'index.ts'),
+      astroBarrel.map((n) => `export { default as ${n} } from './${n}.astro';`).join('\n') + '\n',
+    );
+    return root;
+  }
+
+  it('passes layout-only component filenames and barrel exports', () => {
+    const { output } = run(
+      plantNames({
+        react: ['Narrative.tsx', 'StatsBar.tsx', 'CalloutPanel.tsx'],
+        astro: ['Narrative.astro', 'StatsBar.astro', 'CalloutPanel.astro'],
+        reactBarrel: ['Narrative', 'StatsBar', 'CalloutPanel'],
+        astroBarrel: ['Narrative', 'StatsBar', 'CalloutPanel'],
+      }),
+    );
+    expect(output).not.toContain('blueprint-key-context-word');
+  });
+
+  it('rejects a content-domain word in a React component filename', () => {
+    const { status, output } = run(plantNames({ react: ['About.tsx'] }));
+    expect(status).toBe(1);
+    expect(output).toContain('blueprint-key-context-word');
+    expect(output).toContain('react/About.tsx');
+    expect(output).toContain('`about` is a content domain');
+  });
+
+  it('rejects an atmosphere word in an Astro component filename', () => {
+    const { status, output } = run(plantNames({ astro: ['StatsDarkBar.astro'] }));
+    expect(status).toBe(1);
+    expect(output).toContain('astro/StatsDarkBar.astro');
+    expect(output).toContain('`dark` is an atmosphere/brand word');
+  });
+
+  it('splits PascalCase into words, so a domain word mid-name is caught', () => {
+    const { status, output } = run(plantNames({ react: ['ServicesCardGrid.tsx'] }));
+    expect(status).toBe(1);
+    expect(output).toContain('`services` is a content domain');
+  });
+
+  it('rejects a banned word in a React barrel export name', () => {
+    const { status, output } = run(plantNames({ reactBarrel: ['AboutX'] }));
+    expect(status).toBe(1);
+    expect(output).toContain('blueprint-key-context-word');
+    expect(output).toContain('react/index.ts');
+    expect(output).toContain('`about` is a content domain');
+  });
+
+  it('rejects a banned word in an Astro barrel export name', () => {
+    const { status, output } = run(plantNames({ astroBarrel: ['SupportPanel'] }));
+    expect(status).toBe(1);
+    expect(output).toContain('astro/index.ts');
+    expect(output).toContain('`support` is a content domain');
+  });
+
+  it('ignores stories, tests and underscore-prefixed internals', () => {
+    const { output } = run(
+      plantNames({
+        react: ['About.stories.tsx', 'About.test.ts', '_AboutFrame.tsx'],
+        astro: ['About.stories.tsx', '_DarkFrame.astro'],
+      }),
+    );
+    expect(output).not.toContain('blueprint-key-context-word');
+  });
+});

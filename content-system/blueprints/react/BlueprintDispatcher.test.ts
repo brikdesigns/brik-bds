@@ -29,7 +29,7 @@ import type {
   KnownBlueprintKey,
 } from '../astro/types';
 import { WIRED_BLUEPRINT_KEYS } from '../astro/types';
-import { About } from './About';
+import { Narrative } from './Narrative';
 import { BlueprintDispatcher } from './BlueprintDispatcher';
 import { CalloutPanel } from './CalloutPanel';
 import { CardGrid } from './CardGrid';
@@ -159,14 +159,14 @@ const CASES: Case[] = [
       items: [{ title: 'Sample Quote, Role', description: 'A short pull-quote.' }],
     }),
     clientFacts: facts(),
-    direct: { block: About, props: { blueprintKey: 'story_split' } },
+    direct: { block: Narrative, props: { blueprintKey: 'story_split' } },
   },
   {
     name: 'story_split-narrative-only',
     key: 'story_split',
     section: section('story_split', 'about-narrative', {}),
     clientFacts: facts(),
-    direct: { block: About, props: { blueprintKey: 'story_split' } },
+    direct: { block: Narrative, props: { blueprintKey: 'story_split' } },
   },
   {
     name: 'cta_centered',

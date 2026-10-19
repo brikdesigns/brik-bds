@@ -33,7 +33,7 @@ Every Brik page follows this semantic shell. The landmark elements (`<header>`, 
 
 ## Section pattern
 
-A section is a `<section>` element carrying a blueprint BEM block name. The valid block names are defined in [Naming Principles](/docs/build-standards/naming-principles#blueprint-naming-rules): `bds-hero`, `bds-cta`, `bds-services`, `bds-features`, `bds-about`, `bds-callout-panel`.
+A section is a `<section>` element carrying a blueprint BEM block name. The valid block names are defined in [Naming Principles](/docs/build-standards/naming-principles#blueprint-naming-rules): `bds-hero`, `bds-cta`, `bds-services`, `bds-features`, `bds-narrative`, `bds-callout-panel`.
 
 ```html
 <section class="bds-features">
@@ -97,10 +97,10 @@ Use [Layout primitives](/docs/build-standards/composition-layers#the-layers) —
 </div>
 
 <!-- Split (image + text) -->
-<div class="bds-about__content">
+<div class="bds-narrative__content">
   <div class="bds-split">
-    <div class="bds-about__media"><img .../></div>
-    <div class="bds-about__body">...</div>
+    <div class="bds-narrative__media"><img .../></div>
+    <div class="bds-narrative__body">...</div>
   </div>
 </div>
 ```

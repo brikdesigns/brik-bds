@@ -126,7 +126,7 @@ A blueprint name or manifest key describes **layout shape only**. Content domain
 
 So `services_3col_card_grid` → `card_grid` (column count is a prop), `cta_dark_centered` → `cta_centered` (dark is an atmosphere), `hero_split_60_40` → `hero_split` (ratio is a prop). The rename set and its codemod are #2303.
 
-Corollary: a *layout* word in a name is correct (`split`, `grid`, `centered`, `two_column`); a *domain* word is not (`services`, `support_plan`, `about`, `team`). `about_story_split` → `story_split` for this reason. `SupportPlan` → `CalloutPanel` (#2305) closes the last domain-coupled name in the active set.
+Corollary: a *layout* word in a name is correct (`split`, `grid`, `centered`, `two_column`); a *domain* word is not (`services`, `support_plan`, `about`, `team`). `about_story_split` → `story_split` for this reason. `SupportPlan` → `CalloutPanel` (#2305) and `About` → `Narrative` (#2793) close the last domain-coupled component names in the active set; `StatsDarkBar` → `StatsBar` (#2793) closes the last atmosphere-coupled one. The `blueprint-key-context-word` rule now judges component filenames and barrel export names as well as keys, with no allowlist.
 
 ### 5. The two vocabularies are named as separate axes
 

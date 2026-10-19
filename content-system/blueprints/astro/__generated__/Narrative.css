@@ -1,71 +1,71 @@
 /* Section rhythm + centred container: ../section-shell.css (ADR-021). */
-  .bds-about {
-    background: var(--bds-about-bg, var(--bds-page-primary));
+  .bds-narrative {
+    background: var(--bds-narrative-bg, var(--bds-page-primary));
   }
 
-  .bds-about__container {
+  .bds-narrative__container {
     display: grid;
     grid-template-columns: 1fr;
     gap: var(--bds-gap-xl);
   }
 
   @media (min-width: 768px) {
-    .bds-about__container:has(.bds-about__callout) {
+    .bds-narrative__container:has(.bds-narrative__callout) {
       grid-template-columns: 3fr 2fr;
       gap: var(--bds-gap-huge);
       align-items: start;
     }
   }
 
-  .bds-about__narrative {
+  .bds-narrative__narrative {
     display: flex;
     flex-direction: column;
   }
 
   /* ── --align-center: structure axis (ADR-039 §1) ──────────────
-     Mirrors ../react/About.css. Centres the narrative column; `left` is the
+     Mirrors ../react/Narrative.css. Centres the narrative column; `left` is the
      default and emits no modifier. */
-  .bds-about--align-center .bds-about__narrative {
+  .bds-narrative--align-center .bds-narrative__narrative {
     align-items: center;
     text-align: center;
   }
 
-  /* Content rhythm (ADR-023 §3), mirroring the React twin in About.css:
+  /* Content rhythm (ADR-023 §3), mirroring the React twin in Narrative.css:
      eyebrow→title is tight (--bds-gap-sm), title→lead is medium (--bds-gap-md). */
 
-  .bds-about__narrative > * + * {
+  .bds-narrative__narrative > * + * {
     margin-top: var(--bds-gap-md);
   }
 
-  .bds-about__subtitle + .bds-about__title {
+  .bds-narrative__subtitle + .bds-narrative__title {
     margin-top: var(--bds-gap-sm);
   }
 
-  .bds-about__subtitle {
+  .bds-narrative__subtitle {
     margin: 0;
     font-family: var(--bds-font-family-label);
     font-size: var(--bds-label-lg);
     font-weight: var(--bds-font-weight-medium);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--bds-about-eyebrow-color, var(--bds-text-brand-primary));
+    color: var(--bds-narrative-eyebrow-color, var(--bds-text-brand-primary));
   }
 
-  .bds-about__title {
+  .bds-narrative__title {
     margin: 0;
     font-family: var(--bds-font-family-heading);
     font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-xl));
     font-weight: var(--bds-font-weight-semibold);
     line-height: var(--bds-font-line-height-tight);
-    color: var(--bds-about-heading-color, var(--bds-text-primary));
+    color: var(--bds-narrative-heading-color, var(--bds-text-primary));
   }
 
-  .bds-about__lead {
+  .bds-narrative__lead {
     margin: 0;
     font-family: var(--bds-font-family-body);
     font-size: var(--bds-heading-sm);
     line-height: var(--bds-font-line-height-relaxed);
-    color: var(--bds-about-body-color, var(--bds-text-secondary));
+    color: var(--bds-narrative-body-color, var(--bds-text-secondary));
     max-width: 65ch;
   }
 
@@ -76,7 +76,7 @@
      slots absent from the published allowlist (canonical-class-check). So the
      only bds- class is the published `__callout`; its children are styled by
      element selectors, and the quote mark is a decorative `::before`. */
-  .bds-about__callout {
+  .bds-narrative__callout {
     display: flex;
     flex-direction: column;
     gap: var(--bds-gap-lg);
@@ -87,7 +87,7 @@
     border: var(--bds-border-width-md) solid var(--bds-border-secondary);
   }
 
-  .bds-about__callout::before {
+  .bds-narrative__callout::before {
     content: '“';
     font-family: var(--bds-font-family-display);
     font-size: var(--bds-heading-huge);
@@ -97,7 +97,7 @@
     user-select: none;
   }
 
-  .bds-about__callout blockquote {
+  .bds-narrative__callout blockquote {
     margin: 0;
     font-family: var(--bds-font-family-body);
     font-size: var(--bds-body-md);
@@ -106,7 +106,7 @@
     color: var(--bds-text-primary);
   }
 
-  .bds-about__callout figcaption {
+  .bds-narrative__callout figcaption {
     display: flex;
     flex-direction: column;
     /* Tight text pairing: --bds-gap-sm. Not --bds-gap-xs, which resolves to 0px
@@ -114,7 +114,7 @@
     gap: var(--bds-gap-sm);
   }
 
-  .bds-about__callout cite {
+  .bds-narrative__callout cite {
     margin: 0;
     font-family: var(--bds-font-family-label);
     font-size: var(--bds-label-md);
