@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { StatsDarkBar } from './StatsDarkBar';
+import { StatsBar } from './StatsBar';
 import type { BlueprintProps } from '../astro/types';
 import { baseTheme, baseClientFacts } from './_fixtures';
 
@@ -52,9 +52,9 @@ const baseProps = propsFor(statsSection);
 
 /* ─── Meta ─────────────────────────────────────────────────────── */
 
-const meta: Meta<typeof StatsDarkBar> = {
-  title: 'Blueprints/stats-dark-bar',
-  component: StatsDarkBar,
+const meta: Meta<typeof StatsBar> = {
+  title: 'Blueprints/stats-bar',
+  component: StatsBar,
   tags: ['surface-web'],
   argTypes: {
     section: { control: false, description: 'Section content shape — sectionKey, heading, items, visualNotes. Set in code.' },
@@ -73,7 +73,7 @@ const meta: Meta<typeof StatsDarkBar> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof StatsDarkBar>;
+type Story = StoryObj<typeof StatsBar>;
 
 /* ─── Stories ──────────────────────────────────────────────────── */
 

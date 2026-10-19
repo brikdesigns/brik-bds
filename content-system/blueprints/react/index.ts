@@ -113,19 +113,19 @@ export type { BlockRevealProps } from './BlockReveal';
 // selected by the `contentMotion` axis, reduced-motion-gated by construction;
 // `animated-svg` lands with its own adopting block (#2533). Each value ships
 // with its first adopter (a component unreachable from the dispatcher cannot
-// ship, #2012) — `marquee` → LogoWall, `count-up` → StatsDarkBar (#2532).
+// ship, #2012) — `marquee` → LogoWall, `count-up` → StatsBar (#2532).
 export { BlockContentMotion } from './BlockContentMotion';
 export type { BlockContentMotionProps } from './BlockContentMotion';
 
-// `<About>` — the `bds-about` narrative section primitive
+// `<Narrative>` — the `bds-narrative` narrative section primitive
 // (post-brik-bds#1198 consolidation, the last Phase D family). Props-based:
 // eyebrow + `h2` + lead, with an optional `testimonial` pull-quote composed
 // as a `<CardTestimonial>` aside. Single-member family → no layout modifier;
 // the split is a `:has()`-driven state, not a named modifier. Replaces the
 // ADR-008-banned `bp-about-story-split`. New consumers compose this directly,
 // or pass a `section`; `story_split` dispatches here.
-export { About } from './About';
-export type { AboutProps, AboutSectionProps, AboutTestimonial } from './About';
+export { Narrative } from './Narrative';
+export type { NarrativeProps, NarrativeSectionProps, NarrativeTestimonial } from './Narrative';
 
 // `<Features>` — the `bds-features` feature-grid section primitive
 // (post-brik-bds#1197 consolidation). Props-based: an optional header above a
@@ -139,15 +139,15 @@ export type { FeaturesProps, FeaturesSectionProps, FeatureItem } from './Feature
 // Key adapters that remain. `HeroSplitImageCardOverlay` builds a breadcrumb +
 // pricing-card aside from section data and has its own props (consumers type
 // against `ComponentProps<typeof HeroSplitImageCardOverlay>`), so it is not a
-// thin wrapper over `<Hero>`. `StatsDarkBar` / `TestimonialsFeaturedLarge` are
+// thin wrapper over `<Hero>`. `StatsBar` / `TestimonialsFeaturedLarge` are
 // already one block per key (the rail-parity convention).
 export { HeroSplitImageCardOverlay } from './HeroSplitImageCardOverlay';
-export { StatsDarkBar } from './StatsDarkBar';
+export { StatsBar } from './StatsBar';
 export { TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge';
 
 // `<LogoWall>` — logo / partner / trust strip; the first block to adopt the
 // content-motion axis (#2529). Named per block (not block+layout), matching the
-// newer StatsDarkBar / TestimonialsFeaturedLarge rail-parity convention.
+// newer StatsBar / TestimonialsFeaturedLarge rail-parity convention.
 export { LogoWall } from './LogoWall';
 
 // ── Dispatch surface ────────────────────────────────────────────

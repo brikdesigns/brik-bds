@@ -151,9 +151,9 @@ import type { HeroLayout, CtaLayout, CardGridLayout } from '@brikdesigns/bds/blu
 import {
   Hero,
   Cta,
-  About,
+  Narrative,
   CardGrid,
-  StatsDarkBar,
+  StatsBar,
   TestimonialsFeaturedLarge,
   SiteHeader,
 } from '@brikdesigns/bds/blueprints-astro';
@@ -258,7 +258,7 @@ const servicesProps: BlueprintProps = {
   }),
 };
 
-const aboutProps: BlueprintProps = {
+const narrativeProps: BlueprintProps = {
   theme, clientFacts,
   section: makeSection({
     sectionKey: 'home_about',
@@ -375,9 +375,9 @@ const ctaDarkProps: BlueprintProps = {
     />
     <main>
       <Hero layout={splitHero} blueprintKey="hero_split" {...heroSplitProps} />
-      <StatsDarkBar {...statsProps} />
+      <StatsBar {...statsProps} />
       <CardGrid layout={twoColList} {...servicesProps} />
-      <About blueprintKey="story_split" {...aboutProps} />
+      <Narrative blueprintKey="story_split" {...narrativeProps} />
       <TestimonialsFeaturedLarge {...testimonialsProps} />
       <Cta layout={splitCta} blueprintKey="cta_split_contact" {...ctaSplitProps} />
     </main>
@@ -1085,11 +1085,11 @@ const expectedFiles = [
   'content-system/blueprints/astro/HeroMediaCardImage.astro',
   'content-system/blueprints/astro/HeroMediaCardPrice.astro',
   'content-system/blueprints/astro/Cta.astro',
-  'content-system/blueprints/astro/About.astro',
+  'content-system/blueprints/astro/Narrative.astro',
   'content-system/blueprints/astro/Features.astro',
   'content-system/blueprints/astro/CardGrid.astro',
   'content-system/blueprints/astro/CalloutPanel.astro',
-  'content-system/blueprints/astro/StatsDarkBar.astro',
+  'content-system/blueprints/astro/StatsBar.astro',
   'content-system/blueprints/astro/TestimonialsFeaturedLarge.astro',
   // Dispatch surface (PR #7)
   'content-system/blueprints/astro/BlueprintDispatcher.astro',

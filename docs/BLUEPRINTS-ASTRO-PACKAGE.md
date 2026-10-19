@@ -64,10 +64,10 @@ A small-business home page composed of 6 section blueprints, plus 2 generally-re
 | `<SiteHeader archetype={…}>` | 1 | Nav archetype dispatcher (5 archetypes, single component) |
 | `<BlueprintDispatcher sections={…}>` | 1 | Section dispatcher |
 | `<BlueprintFallback>` | 1 | Unknown-key renderer, emits `<!-- bp-unknown: {key} -->` for CI grep |
-| Per-blueprint Astro components | **8** | `HeroSplit6040`, `StatsDarkBar`, `ServicesDetailTwoColumn`, `AboutStorySplit`, `TestimonialsFeaturedLarge`, `CtaSplitContact`, `CtaDarkCentered`, `HeroInteriorMinimal` |
+| Per-blueprint Astro components | **8** | `HeroSplit6040`, `StatsBar`, `ServicesDetailTwoColumn`, `AboutStorySplit`, `TestimonialsFeaturedLarge`, `CtaSplitContact`, `CtaDarkCentered`, `HeroInteriorMinimal` |
 | Type exports | 5 | `BlueprintKey`, `BlueprintSection`, `ClientFacts`, `ResolvedTheme`, `KnownBlueprintKey` |
 
-> **Amended 2026-09-09 (#2302).** The row above records the v0.1 shape, where a component was a blueprint *key*. Since #2302 a component is a **block** and the layout it renders in is a prop, so those eight per-key files are gone: `HeroSplit6040` / `HeroInteriorMinimal` / `HeroSplitImageCardOverlay` → `<Hero layout>`, `CtaDarkCentered` / `CtaSplitContact` → `<Cta layout>`, `Services3ColCardGrid` / `ServicesDetailTwoColumn` → `<CardGrid layout>`, `SupportPlanCalloutSplit` → `<CalloutPanel>`, `AboutStorySplit` → `<About>`, `Features3ColBrandedDark` → `<Features>`. Every key still resolves — `<BlueprintDispatcher>` maps key → (block, layout). Current surface: [Blueprints](../docs-site/content/docs/theming/blueprints.mdx).
+> **Amended 2026-09-09 (#2302).** The row above records the v0.1 shape, where a component was a blueprint *key*. Since #2302 a component is a **block** and the layout it renders in is a prop, so those eight per-key files are gone: `HeroSplit6040` / `HeroInteriorMinimal` / `HeroSplitImageCardOverlay` → `<Hero layout>`, `CtaDarkCentered` / `CtaSplitContact` → `<Cta layout>`, `Services3ColCardGrid` / `ServicesDetailTwoColumn` → `<CardGrid layout>`, `SupportPlanCalloutSplit` → `<CalloutPanel>`, `AboutStorySplit` → `<Narrative>`, `Features3ColBrandedDark` → `<Features>`. Every key still resolves — `<BlueprintDispatcher>` maps key → (block, layout). Current surface: [Blueprints](../docs-site/content/docs/theming/blueprints.mdx).
 
 **Why these 8 blueprints:** they cover Vale's home composition completely (hero → stats → services → about → testimonials → CTA) using moods that match Vale's resolved brand (professional, trustworthy, luxury where relevant). `HeroInteriorMinimal` + `CtaDarkCentered` cover every other page Vale needs in the first shippable slice (services, services detail, about, contact).
 
@@ -129,7 +129,7 @@ import HeroSplit6040 from './blueprints/HeroSplit6040.astro';
 import BlueprintFallback from './blueprints/BlueprintFallback.astro';
 const BLUEPRINT_REGISTRY = {
   hero_split: HeroSplit6040,
-  stats_bar: StatsDarkBar,
+  stats_bar: StatsBar,
   two_column_detail: ServicesDetailTwoColumn,
   story_split: AboutStorySplit,
   testimonials_featured_large: TestimonialsFeaturedLarge,

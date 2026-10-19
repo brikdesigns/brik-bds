@@ -321,7 +321,7 @@ function checkHardcodedAspectRatio(file, errors) {
 
 const SHELL_FAMILIES = [
   'bds-hero',
-  'bds-about',
+  'bds-narrative',
   'bds-features',
   'bds-cta',
   'bds-card-grid',
@@ -404,6 +404,17 @@ function checkSectionShellRedeclaration(file, errors) {
 // `blueprints/blueprint-roadmap.json` is also out of scope. Its entries are
 // design candidates, not contracts — a candidate becomes a contract when it
 // graduates into the library, which is exactly when this rule bites.
+//
+// COMPONENT NAMES (#2793) — ADR-037 §4 and naming-principles.mdx apply the
+// same rule to the component that renders a key, so the same word sets also
+// judge, on both rails:
+//   3. blueprint component filenames — `react/*.tsx`, `astro/*.astro`
+//      (stories, tests, `_`-prefixed internals and the `__generated__` /
+//      `__fixtures__` / `__golden__` subdirs are not component names), and
+//   4. the export names in both barrels, `react/index.ts` + `astro/index.ts`.
+// PascalCase / SCREAMING_SNAKE names are split into lowercase words first.
+// Still no allowlist — `About` and `StatsDarkBar` were renamed rather than
+// excused.
 
 const DOMAIN_WORDS = new Set([
   'services', 'service', 'support', 'plan', 'plans',
@@ -415,16 +426,27 @@ const ATMOSPHERE_WORDS = new Set(['dark', 'light', 'brand', 'branded']);
 /** `3col`, `60`, `40` — a column count or ratio is a prop, not a name. */
 const NUMERIC_SEGMENT = /\d/;
 
+/**
+ * Why `word` may not appear in a blueprint name, or null. Keys also reject
+ * numeric segments; component names do not (`numeric: false`) — a digit in a
+ * name is not a column count the way `3col` in a key is.
+ */
+function contextWordReason(word, { numeric }) {
+  if (DOMAIN_WORDS.has(word)) {
+    return `\`${word}\` is a content domain — express it via the entry's \`industries\`/\`moods\` metadata or the site content, not the name`;
+  }
+  if (ATMOSPHERE_WORDS.has(word)) {
+    return `\`${word}\` is an atmosphere/brand word — express it via tokens and the resolved atmosphere, not the name`;
+  }
+  if (numeric && NUMERIC_SEGMENT.test(word)) {
+    return `\`${word}\` bakes a column count or ratio into the name — that is a prop`;
+  }
+  return null;
+}
+
 function checkKeyContextWords(key, file, line, errors) {
   for (const segment of key.split('_')) {
-    let reason = null;
-    if (DOMAIN_WORDS.has(segment)) {
-      reason = `\`${segment}\` is a content domain — express it via the entry's \`industries\`/\`moods\` metadata or the site content, not the key`;
-    } else if (ATMOSPHERE_WORDS.has(segment)) {
-      reason = `\`${segment}\` is an atmosphere/brand word — express it via tokens and the resolved atmosphere, not the key`;
-    } else if (NUMERIC_SEGMENT.test(segment)) {
-      reason = `\`${segment}\` bakes a column count or ratio into the name — that is a prop`;
-    }
+    const reason = contextWordReason(segment, { numeric: true });
     if (!reason) continue;
     errors.push({
       file,
@@ -436,6 +458,76 @@ function checkKeyContextWords(key, file, line, errors) {
         `A key describes layout shape only (ADR-037 §4).`,
       snippet: key,
     });
+  }
+}
+
+/** `StatsDarkBar` → `['stats','dark','bar']`; `WIRED_BLUEPRINT_KEYS` → lowercase words. */
+function nameWords(name) {
+  return name
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+    .split(/[\s_]+/)
+    .filter(Boolean)
+    .map((w) => w.toLowerCase());
+}
+
+function checkComponentNameWords(name, file, line, errors) {
+  for (const word of nameWords(name)) {
+    const reason = contextWordReason(word, { numeric: false });
+    if (!reason) continue;
+    errors.push({
+      file,
+      line,
+      severity: 'error',
+      rule: 'blueprint-key-context-word',
+      message:
+        `Blueprint component name \`${name}\` carries a context word: ${reason}. ` +
+        `A component name describes layout shape only (ADR-037 §4).`,
+      snippet: name,
+    });
+  }
+}
+
+/** Not a component name: stories, tests, `_`-prefixed internals. */
+const NON_COMPONENT_FILE = /(^_)|(\.stories\.)|(\.test\.)/;
+
+function checkComponentFilenames(errors) {
+  for (const [subdir, ext] of [['react', '.tsx'], ['astro', '.astro']]) {
+    const dir = path.join(BLUEPRINTS_DIR, subdir);
+    if (!fs.existsSync(dir)) continue;
+    // Non-recursive on purpose: `__generated__`, `__fixtures__`, `__golden__`
+    // and `__examples__` are subdirectories, so never reached.
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (!entry.isFile() || !entry.name.endsWith(ext)) continue;
+      if (NON_COMPONENT_FILE.test(entry.name)) continue;
+      checkComponentNameWords(entry.name.slice(0, -ext.length), path.join(dir, entry.name), 1, errors);
+    }
+  }
+}
+
+/** `export { A, B as C } from` / `export type { … } from` — one clause, maybe multi-line. */
+const BARREL_EXPORT_RE = /^export\s+(?:type\s+)?\{([^}]*)\}/gm;
+
+function checkBarrelExportNames(errors) {
+  for (const subdir of ['react', 'astro']) {
+    const barrel = path.join(BLUEPRINTS_DIR, subdir, 'index.ts');
+    if (!fs.existsSync(barrel)) continue;
+    const text = fs.readFileSync(barrel, 'utf8');
+    for (const match of text.matchAll(BARREL_EXPORT_RE)) {
+      const bodyStart = match.index + match[0].indexOf('{') + 1;
+      let offset = 0;
+      for (const rawSpec of match[1].split(',')) {
+        const specStart = bodyStart + offset;
+        offset += rawSpec.length + 1;
+        const spec = rawSpec.replace(/\/\/.*$/gm, '').trim();
+        if (!spec) continue;
+        // `default as X` / `A as B` — the name consumers import is the last token.
+        const exported = spec.split(/\s+as\s+/).pop().trim();
+        const lead = rawSpec.length - rawSpec.trimStart().length;
+        const line = text.slice(0, specStart + lead).split('\n').length;
+        checkComponentNameWords(exported, barrel, line, errors);
+      }
+    }
   }
 }
 
@@ -500,6 +592,8 @@ for (const file of files) {
 // violations don't block unrelated commits, and the key set has none.
 checkManifestKeys(findings);
 checkTypeSurfaceKeys(findings);
+checkComponentFilenames(findings);
+checkBarrelExportNames(findings);
 
 const errors = findings.filter((f) => f.severity === 'error');
 const warnings = findings.filter((f) => f.severity === 'warn');

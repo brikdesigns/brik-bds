@@ -178,7 +178,7 @@ const cardGridTwoColumnList: Section = {
   ],
 };
 
-const about: Section = {
+const narrative: Section = {
   sectionKey: 'about-story-default',
   sectionType: 'content_block',
   heading: 'A story-led section that introduces the brand.',
@@ -260,7 +260,7 @@ const calloutPanel: Section = {
   ],
 };
 
-const statsDarkBar: Section = {
+const statsBar: Section = {
   sectionKey: 'stats-bar-default',
   sectionType: 'stats',
   heading: 'By the numbers',
@@ -287,8 +287,8 @@ const statsDarkBar: Section = {
 // fixture; only `contentMotion` differs, so the rail renders each number through
 // `_CountUp`. The generated story shows the static final numbers (the count is a
 // client-only enhancement, so the pre-rendered HTML rests on the final value).
-const statsDarkBarCountUp: Section = {
-  ...statsDarkBar,
+const statsBarCountUp: Section = {
+  ...statsBar,
   sectionKey: 'stats-bar-count-up',
   contentMotion: 'count-up',
 };
@@ -323,7 +323,7 @@ const testimonialsFeaturedLarge: Section = {
 // placeholder so the pre-rendered story rests on a deterministic still (no
 // autoplay, no network). The `layout` token the renderer threads through is
 // ignored by `TestimonialsFeaturedLarge.astro` — the video comes from the
-// fixture, mirroring the LogoWall/StatsDarkBar content-axis precedent below.
+// fixture, mirroring the LogoWall/StatsBar content-axis precedent below.
 const testimonialsFeaturedLargeVideo: Section = {
   ...testimonialsFeaturedLarge,
   sectionKey: 'testimonials-featured-video',
@@ -382,11 +382,11 @@ const SECTIONS: Record<string, Section> = {
   'Cta:split': ctaSplit,
   'CardGrid:card-grid': cardGrid,
   'CardGrid:two-column-list': cardGridTwoColumnList,
-  About: about,
+  Narrative: narrative,
   Features: features,
   CalloutPanel: calloutPanel,
-  StatsDarkBar: statsDarkBar,
-  'StatsDarkBar:count-up': statsDarkBarCountUp,
+  StatsBar: statsBar,
+  'StatsBar:count-up': statsBarCountUp,
   TestimonialsFeaturedLarge: testimonialsFeaturedLarge,
   'TestimonialsFeaturedLarge:video': testimonialsFeaturedLargeVideo,
   'LogoWall:static': logoWallStatic,

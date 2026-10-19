@@ -47,15 +47,15 @@
  *   card_grid                     → CardGrid        layout="card-grid"
  *   callout_split                 → CalloutPanel
  *   feature_grid                  → Features
- *   story_split                   → About
- *   stats_bar                     → StatsDarkBar
+ *   story_split                   → Narrative
+ *   stats_bar                     → StatsBar
  *   testimonials_featured_large   → TestimonialsFeaturedLarge
  *   cta_split_contact             → Cta             layout="split"
  *   cta_centered                  → Cta             layout="default"
  *   logo_wall                     → LogoWall
  *
  * `blueprintKey` is passed to the blocks that emit a per-key
- * `data-blueprint-key` marker (Hero, Cta, About, Features), so one file keeps
+ * `data-blueprint-key` marker (Hero, Cta, Narrative, Features), so one file keeps
  * emitting the distinct markers the scaffold contract asserts on. CardGrid and
  * CalloutPanel emit their own block-level marker instead (`card_grid` /
  * `callout_split`) — unchanged from the adapters they absorbed,
@@ -80,11 +80,11 @@ import type { BlueprintSection, ClientFacts, ResolvedTheme } from './types';
 
 import Hero from './Hero.astro';
 import Cta from './Cta.astro';
-import About from './About.astro';
+import Narrative from './Narrative.astro';
 import Features from './Features.astro';
 import CardGrid from './CardGrid.astro';
 import CalloutPanel from './CalloutPanel.astro';
-import StatsDarkBar from './StatsDarkBar.astro';
+import StatsBar from './StatsBar.astro';
 import TestimonialsFeaturedLarge from './TestimonialsFeaturedLarge.astro';
 import LogoWall from './LogoWall.astro';
 import BlueprintFallback from './BlueprintFallback.astro';
@@ -100,8 +100,8 @@ const BLUEPRINT_REGISTRY = {
   card_grid: { component: CardGrid, props: { layout: 'card-grid' } },
   callout_split: { component: CalloutPanel, props: {} },
   feature_grid: { component: Features, props: { blueprintKey: 'feature_grid' } },
-  story_split: { component: About, props: { blueprintKey: 'story_split' } },
-  stats_bar: { component: StatsDarkBar, props: {} },
+  story_split: { component: Narrative, props: { blueprintKey: 'story_split' } },
+  stats_bar: { component: StatsBar, props: {} },
   testimonials_featured_large: { component: TestimonialsFeaturedLarge, props: {} },
   cta_split_contact: { component: Cta, props: { layout: 'split', blueprintKey: 'cta_split_contact' } },
   cta_centered: { component: Cta, props: { layout: 'default', blueprintKey: 'cta_centered' } },

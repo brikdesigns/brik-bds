@@ -53,12 +53,12 @@ const BLOCKS = [
   { name: 'Hero', layouts: ['split', 'interior-minimal', 'with-pricing-card'] },
   { name: 'Cta', layouts: ['default', 'split'] },
   { name: 'CardGrid', layouts: ['card-grid', 'two-column-list'] },
-  { name: 'About', layouts: [null] },
+  { name: 'Narrative', layouts: [null] },
   { name: 'Features', layouts: [null] },
   { name: 'CalloutPanel', layouts: [null] },
-  // StatsDarkBar's second slug is the content-motion axis (count-up), not a
+  // StatsBar's second slug is the content-motion axis (count-up), not a
   // layout — it renders the static bar and the count-up treatment (#2529).
-  { name: 'StatsDarkBar', layouts: [null, 'count-up'] },
+  { name: 'StatsBar', layouts: [null, 'count-up'] },
   // Second slug is the media axis (video), not a layout — the block renders the
   // quote-only default and the video treatment (#2518). Threaded `layout` token
   // is ignored; the video comes from the fixture's `items[0].videoUrl`.

@@ -133,7 +133,7 @@ export type CardGridLayout = 'card-grid' | 'two-column-list';
  * `--centered` — for *placement only*: appearance (`--dark`) and theme
  * (`--inverse`) words stay banned, because a re-theme falsifies them, while
  * alignment is a composition choice a re-theme preserves. Each block keeps its
- * established default (Hero/About content is `left`; Cta/Features headers are
+ * established default (Hero/Narrative content is `left`; Cta/Features headers are
  * `center`) and the modifier is emitted only for the non-default value, so the
  * axis adds variants without changing any existing rendering.
  *
@@ -238,7 +238,7 @@ export type BlueprintReveal = 'none' | 'fade' | 'rise' | 'stagger';
  * **All three values render (#2531/#2532/#2533).** Each value's dispatcher ships
  * with the block that first adopts it, because a component unreachable from the
  * blueprint dispatcher cannot ship (#2012) — `marquee` → LogoWall, `count-up` →
- * StatsDarkBar, `animated-svg` → Features (each card's icon, from `items[].animationUrl`).
+ * StatsBar, `animated-svg` → Features (each card's icon, from `items[].animationUrl`).
  * `marquee` and `count-up` render identically on both rails; `animated-svg`
  * animates on the React rail and shows its static poster on the Astro rail.
  *
@@ -465,7 +465,7 @@ export interface BlueprintSection {
   /**
    * Motion axis — content-specific motion treatment (ADR-039 §Decision 2, #2494).
    * A curated closed union rendered through the shared `BlockContentMotion`
-   * dispatcher: `marquee` (LogoWall, #2531) and `count-up` (StatsDarkBar, #2532)
+   * dispatcher: `marquee` (LogoWall, #2531) and `count-up` (StatsBar, #2532)
    * render on both rails; `animated-svg` is reserved until #2533. Omitted →
    * `none`.
    *
