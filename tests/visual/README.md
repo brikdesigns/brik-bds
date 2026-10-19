@@ -384,6 +384,21 @@ Mac-generated PNG is a guaranteed false positive in CI. Run the
 regenerates inside the pinned container and pushes the commit to your branch
 for review.
 
+On a PR, adding the `visual:rebaseline` label runs the same job against the PR
+branch (#2796). This is the agent path: `brik-agent` holds no `actions:write`
+(ADR-049 Amendment 1), so a dispatch from it returns 403, but it can add a
+label. The label path uses the shipped defaults, so dispatch instead when you
+need `prune`, `threshold` or `floor`. The label is removed when the run ends;
+add it again to re-run.
+
+```sh
+gh pr edit <n> --repo brikdesigns/brik-bds --add-label visual:rebaseline
+```
+
+The PR branch must contain this trigger, because a `pull_request` run uses the
+merge commit's copy of the workflow. If the branch predates #2796, merge `main`
+into it first.
+
 The push uses a `brik-ci-bot` App installation token, so the gates re-run on
 the new commit on their own. That is deliberate and load-bearing: a push
 authenticated with the default `GITHUB_TOKEN` cannot trigger CI, which used to
