@@ -104,3 +104,9 @@ export { default as LogoWall }                  from './LogoWall.astro';
 export { default as BlueprintDispatcher } from './BlueprintDispatcher.astro';
 export { default as BlueprintFallback }   from './BlueprintFallback.astro';
 export { default as SiteHeader }          from './SiteHeader.astro';
+
+// `<GhlForm>` — a GoHighLevel form iframe (brik-client-portal#5364). Not a
+// blueprint — no `blueprintKey`, no dispatcher entry; a page composes it
+// directly, like <SiteHeader>. Emits GHL's `form_embed.js` once per page. React
+// twin: `components/ui/GhlForm/GhlForm.tsx`.
+export { default as GhlForm }             from './GhlForm.astro';

@@ -62,6 +62,7 @@ export * from './FilterToggle';
 export * from './Frame';
 export * from './Footer';
 export * from './Form';
+export * from './GhlForm';
 export * from './Grid';
 export * from './Icon';
 export * from './Icons';

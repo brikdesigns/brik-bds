@@ -1,0 +1,65 @@
+/*
+ * ghl-form-a11y.css — the canon Custom CSS for a GoHighLevel form's own fields.
+ *
+ * GHL's default form fails WCAG 2.1 AA: field borders measure 1.47:1 against the
+ * form background (1.4.11 needs 3:1), and checkboxes, the submit button and the
+ * privacy link have no visible focus ring (2.4.7). brikdesigns/rebel-cfo#12
+ * measured the failure and the fix below on the live form: borders 10.86:1, focus
+ * ring 21:1 on every field, checkbox, button and link.
+ *
+ * NOT a BDS stylesheet — it is not imported by `styles.css` and styles nothing
+ * on the host page. It is pasted into the form's Custom CSS field in GHL
+ * (Styles > Advanced > Custom CSS) and applies inside the form's iframe.
+ *
+ * PASTE NEEDS RESOLVED VALUES. The iframe is cross-origin, so no `var(--bds-*)`
+ * resolves inside it. The five properties in the `:root` block below are the
+ * only values the rules read: swap each `var(--bds-*)` for the value it resolves
+ * to in the client's theme before pasting (look it up in `dist/tokens.css`, or the
+ * client's `theme-{client}.css`). The rules underneath stay as written.
+ * Nothing here resolves them for you — pasting this file verbatim leaves every
+ * `var()` unset and the form unstyled.
+ *
+ * TWO PER-CLIENT VALUES, border and focus. Each must reach 3:1 against the form
+ * background (`--bds-ghl-form-surface`, white unless the form's background is
+ * changed in GHL). The defaults are pinned in `tokens/contrast-pairings.json`
+ * and checked by `npm run contrast-gate`; a client override is the client's to
+ * check, against the same 3:1 floor.
+ *
+ * The doubled `#_builder-form#_builder-form` out-ranks GHL's own `!important`
+ * field rules. The selectors are the ones verified on rebel-cfo#12; they track
+ * GHL's markup, so a GHL markup change is a reason to re-measure (unverified).
+ */
+:root {
+  --bds-ghl-form-border: var(--bds-border-input);
+  --bds-ghl-form-focus: var(--bds-border-focus);
+  --bds-ghl-form-surface: var(--bds-surface-primary);
+  --bds-ghl-form-border-width: var(--bds-border-width-sm);
+  --bds-ghl-form-focus-width: var(--bds-border-width-md);
+  --bds-ghl-form-focus-gap: var(--bds-space-50);
+}
+
+/* 1.4.11 — field borders at 3:1 or better. */
+#_builder-form#_builder-form .form-builder--item .form-control,
+#_builder-form#_builder-form .form-builder--item textarea,
+#_builder-form#_builder-form .form-builder--item select,
+#_builder-form#_builder-form .form-builder--item input[type='checkbox'],
+#_builder-form#_builder-form .form-builder--item input[type='radio'] {
+  border: var(--bds-ghl-form-border-width) solid var(--bds-ghl-form-border) !important;
+}
+
+/* 2.4.7 — a visible focus ring on every field, checkbox, button and link. The
+   surface-coloured shadow fills the gap between control and ring so the ring
+   reads on any form background. */
+#_builder-form#_builder-form .form-builder--item .form-control:focus-visible,
+#_builder-form#_builder-form .form-builder--item textarea:focus-visible,
+#_builder-form#_builder-form .form-builder--item select:focus-visible,
+#_builder-form#_builder-form .form-builder--item input[type='checkbox']:focus-visible,
+#_builder-form#_builder-form .form-builder--item input[type='radio']:focus-visible,
+#_builder-form#_builder-form .form-builder--item button:focus-visible,
+#_builder-form#_builder-form .form-builder--item a:focus-visible {
+  outline: var(--bds-ghl-form-focus-width) solid var(--bds-ghl-form-focus) !important;
+  outline-offset: var(--bds-ghl-form-focus-gap) !important;
+  box-shadow:
+    0 0 0 var(--bds-ghl-form-focus-gap) var(--bds-ghl-form-surface),
+    0 0 0 calc(var(--bds-ghl-form-focus-gap) + var(--bds-ghl-form-focus-width)) var(--bds-ghl-form-focus) !important;
+}

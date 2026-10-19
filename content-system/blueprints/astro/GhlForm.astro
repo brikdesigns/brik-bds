@@ -1,0 +1,61 @@
+---
+/**
+ * GhlForm — a GoHighLevel form embedded as an iframe. Astro twin of
+ * `components/ui/GhlForm/GhlForm.tsx` (brik-client-portal#5364).
+ *
+ * GHL forms are Brik's form standard: the iframe posts from the visitor's
+ * browser straight to GHL, so no Brik host handles the submission. This renders
+ * the same iframe the hand-written embeds did, with a required `title`, and
+ * emits GHL's `form_embed.js` once per page however many forms the page holds.
+ *
+ * NOT a dispatched blueprint — no `blueprintKey`, no `BlueprintDispatcher`
+ * entry. A page composes it directly, like `SiteHeader`.
+ *
+ * Styling: `bds-ghl-form` lives in `components/ui/GhlForm/GhlForm.css`, which
+ * ships in `@brikdesigns/bds/styles.css`. The form's own field styling is set
+ * inside GHL — see `components/ui/GhlForm/ghl-form-a11y.css`.
+ *
+ * Props:
+ *   - formId   — the `id` in the form's GHL embed code
+ *   - formName — becomes the iframe `title` (WCAG 4.1.2); blank falls back to `Form`
+ *   - height   — px from the embed code's `data-height`, reserved as `min-height`
+ */
+export interface Props {
+  formId: string;
+  formName: string;
+  height: number;
+}
+
+const { formId, formName, height } = Astro.props;
+
+const frameId = `inline-${formId}`;
+const name = formName.trim() || 'Form';
+
+// Once per page: `Astro.locals` is one object per rendered page, so the first
+// <GhlForm> on a page emits the script and the rest see the flag. `defer` runs
+// it after the whole document is parsed, so every iframe on the page exists.
+const locals = Astro.locals as Record<string, unknown>;
+const emitEmbedScript = !locals.bdsGhlFormEmbedEmitted;
+locals.bdsGhlFormEmbedEmitted = true;
+---
+
+<iframe
+  class="bds-ghl-form"
+  style={`--bds-ghl-form-height:${height}px`}
+  src={`https://link.brikdesigns.com/widget/form/${formId}`}
+  id={frameId}
+  title={name}
+  data-layout="{'id':'INLINE'}"
+  data-trigger-type="alwaysShow"
+  data-trigger-value=""
+  data-activation-type="alwaysActivated"
+  data-activation-value=""
+  data-deactivation-type="neverDeactivate"
+  data-deactivation-value=""
+  data-form-name={name}
+  data-height={height}
+  data-layout-iframe-id={frameId}
+  data-form-id={formId}
+  data-cookie-consent="true"
+  data-cookie-consent-provider="auto"></iframe>
+{emitEmbedScript && <script is:inline defer src="https://link.brikdesigns.com/js/form_embed.js"></script>}

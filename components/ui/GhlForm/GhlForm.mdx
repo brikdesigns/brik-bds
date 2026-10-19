@@ -1,0 +1,39 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './GhlForm.stories';
+
+<Meta of={Stories} />
+
+# GhlForm
+
+<ComponentLinks slug="ghl-form" />
+
+A GoHighLevel form embedded as an iframe. GHL forms are Brik's form standard: the iframe posts from the visitor's browser straight to GHL, so no Brik host handles the submission. `GhlForm` renders the iframe the hand-written embeds used to, with a required `title`, and loads GHL's `form_embed.js` once per page however many forms the page holds.
+
+`GhlForm` has no variants — the form's fields are drawn inside GHL's frame, so there is no BDS visual axis. The props select which form, name it for assistive tech, and reserve its height.
+
+This is the React twin for Next.js sites. Astro sites import `GhlForm` from `@brikdesigns/bds/blueprints-astro`; it takes the same three props and emits the same markup.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## CSS Override API
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `--bds-ghl-form-height` | set from the `height` prop | Height and `min-height` reserved for the frame |
+
+## Accessibility baseline for the form's own fields
+
+The fields inside the frame are styled in GHL, not here. GHL's default form fails WCAG 2.1 AA: field borders sit at 1.47:1 against the form background (1.4.11 needs 3:1), and checkboxes, the submit button and the privacy link have no visible focus ring (2.4.7).
+
+`ghl-form-a11y.css`, beside this component, is the canon Custom CSS that fixes both. It is authored against BDS tokens, but the frame is cross-origin and cannot see them, so what is pasted into the form's Custom CSS in GHL must be the resolved values. Border and focus colour are the two per-client values; each must reach 3:1 against the form background.
+
+## Notes
+
+> **Note** — The frame's `lang` and document `<title>` belong to GHL and cannot be set from the host page. The iframe `title` is the one name this component controls, so it is never empty: a blank `formName` falls back to `Form`.

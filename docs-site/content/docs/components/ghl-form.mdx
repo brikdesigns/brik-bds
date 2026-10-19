@@ -1,0 +1,61 @@
+---
+title: GhlForm
+description: A GoHighLevel form embedded as an iframe, with a required title and a reserved height.
+---
+
+GhlForm embeds a GoHighLevel (GHL) form as an iframe. GHL forms are Brik's form standard: the iframe posts from the visitor's browser straight to GHL, so no Brik host handles the submission. GhlForm renders the iframe the hand-written embeds used to, gives it a `title`, loads GHL's `form_embed.js` once per page however many forms the page holds, and reserves the form's height so the section does not collapse before GHL sizes the frame.
+
+It has one appearance — the fields are drawn inside GHL's frame, so there is no BDS visual axis. The props select which form, name it for assistive tech, and reserve its height.
+
+## Use it for
+
+- The contact, inquiry or intake form on a client site
+- Any page that embeds a GHL form by its embed code
+
+There are two twins with the same props and the same markup: React for Next.js sites, Astro for Astro sites.
+
+## Import
+
+```tsx
+import { GhlForm } from '@brikdesigns/bds';
+```
+
+```astro
+---
+import { GhlForm } from '@brikdesigns/bds/blueprints-astro';
+---
+<GhlForm formId="rvGeUFEFytjrjxr7XiDE" formName="Contact Us" height={838} />
+```
+
+## Default
+
+```tsx
+<GhlForm formId="rvGeUFEFytjrjxr7XiDE" formName="Contact Us" height={838} />
+```
+
+`formId` and `height` come from the form's GHL embed code (`data-form-id`, `data-height`). `formName` becomes the iframe `title`, which a screen reader announces for the frame. A blank `formName` falls back to `Form`, so the title is never empty.
+
+## Accessibility
+
+- The iframe always has a non-empty `title` (WCAG 4.1.2).
+- GHL's default form fails WCAG 2.1 AA: field borders measure 1.47:1 against the form background (1.4.11 needs 3:1), and checkboxes, the submit button and the privacy link have no visible focus ring (2.4.7). The fix is Custom CSS pasted into the form in GHL; the canon file is `components/ui/GhlForm/ghl-form-a11y.css`.
+- That file is authored against BDS tokens, but the frame is cross-origin and cannot see them, so the pasted copy needs each `var(--bds-*)` in its `:root` block swapped for the value it resolves to in the client's theme. Border colour and focus colour are the two per-client values; each must reach 3:1 against the form background. The BDS defaults are checked by `npm run contrast-gate`.
+- The frame's `lang` and document `<title>` belong to GHL and cannot be set from the host page.
+
+## CSS Override API
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `--bds-ghl-form-height` | set from the `height` prop | Height and `min-height` reserved for the frame |
+
+## API
+
+{/* props-check: GhlFormProps @ components/ui/GhlForm/GhlForm.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `formId` | `string` | — (required — the `id` in the form's GHL embed code) |
+| `formName` | `string` | — (required — becomes the iframe `title`; blank falls back to `Form`) |
+| `height` | `number` | — (required — px from the embed code's `data-height`, reserved as `min-height`) |
+
+Inherits the native `<iframe>` attributes except `src`, `title`, `height` and `children`.
