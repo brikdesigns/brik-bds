@@ -241,15 +241,19 @@ function extractRegistryKeys(source) {
 /**
  * Extract the BLUEPRINT_REGISTRY key set from the React
  * BlueprintDispatcher.tsx. The React registry is a
- * `const BLUEPRINT_REGISTRY: Partial<Record<...>> = { key: Component, ... };`
- * object (no `as const`); we read the `key:` identifiers from that block.
+ * `const BLUEPRINT_REGISTRY: Partial<Record<...>> = { key: entry(Component, { ... }), ... };`
+ * object (no `as const`) since #2352; we read the `key:` identifiers from that
+ * block. A key is a lowercase name followed by `entry(` or a bare component, so
+ * the nested `layout:` / `blueprintKey:` props an entry wraps onto its own
+ * lines are never read as keys.
  */
+const REACT_REGISTRY_ENTRY = /^\s*([a-z][a-z0-9_]*)\s*:\s*(?:entry\(\s*)?([A-Z][\w$]*)/;
 function extractReactRegistryKeys(source) {
   const block = source.match(/const BLUEPRINT_REGISTRY\b[\s\S]*?=\s*\{([\s\S]*?)\n\}/);
   if (!block) return null;
   return block[1]
     .split('\n')
-    .map((line) => line.match(/^\s*([a-z][a-z0-9_]*)\s*:/))
+    .map((line) => line.match(REACT_REGISTRY_ENTRY))
     .filter(Boolean)
     .map((m) => m[1]);
 }
@@ -472,8 +476,8 @@ function extractRegistryComponents(source, extractor) {
  * registry (#2304 AC 1).
  *
  * Reachability is TRANSITIVE, not direct, because the rails are two layers
- * deep since #2302: the registry dispatches `HeroSplit6040`, which composes
- * `Hero`, which composes `HeroMediaCard`. A direct-dispatch rule would call
+ * deep since #2302: the registry dispatches `HeroSplitImageCardOverlay`,
+ * which composes `Hero`, which composes `HeroMediaCard`. A direct-dispatch rule would call
  * eleven correctly-wired files orphans on the first run, and the only way to
  * green it would be the allowlist ADR-006 §157 rules out.
  *
@@ -568,7 +572,7 @@ async function validateStoryCoverage(reactDispatcherSrc, readSource) {
   if (!registryBlock) return issues; // already reported by validateRuntimeParity
 
   const imports = localImportMap(reactDispatcherSrc);
-  const entries = [...registryBlock[1].matchAll(/^\s*([a-z][a-z0-9_]*)\s*:\s*([A-Za-z_$][\w$]*)/gm)];
+  const entries = registryBlock[1].split('\n').map((line) => line.match(REACT_REGISTRY_ENTRY)).filter(Boolean);
 
   for (const [, key, identifier] of entries) {
     const target = imports.get(identifier);
