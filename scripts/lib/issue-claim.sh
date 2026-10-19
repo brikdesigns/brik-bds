@@ -128,6 +128,14 @@
 CLAIM_MARKER='<!-- claim -->'
 # 12h: longer than any real task sitting idle mid-session, short enough that an
 # abandoned worktree does not wedge the ticket until someone notices.
+#
+# Per-caller override, same shape as CLAIM_RELEASE_ON_MERGE below: a prod lane
+# is not a dev session, and 12h idle on a write lock is not "abandoned
+# eventually", it is "blocking everyone for half a day" (brik-llm#4606). The
+# promotion lane (brik-client-portal#4435, `promote.sh`) sets this to 3600 —
+# one go's writes, not a session's lifetime — immediately before sourcing this
+# file, same place it sets CLAIM_RELEASE_ON_MERGE=1. Set it per-caller, never
+# globally: the 43200s default below still governs every ordinary ticket claim.
 CLAIM_STALE_SECONDS="${CLAIM_STALE_SECONDS:-43200}"
 # The branch cell claim-write.sh writes before new-task.sh has cut a branch. It
 # lives here, not in claim-write.sh, because the PR lookup below must recognise
@@ -152,6 +160,17 @@ CLAIM_RELEASE_ON_MERGE="${CLAIM_RELEASE_ON_MERGE:-0}"
 # runs eight at once. Inside the window renew_issue_claim reads nothing and
 # writes nothing.
 CLAIM_RENEW_THROTTLE_SECONDS="${CLAIM_RENEW_THROTTLE_SECONDS:-600}"
+
+# Opt-in, empty by default: what is this go FOR? A blocked session reading a
+# ticket claim can safely wait out the 12h timer; a blocked session reading the
+# PROMOTION lane cannot, because that lane gates every other session's prod
+# write (brik-llm#4606). Set by the caller before claiming — `promote.sh`
+# writes the payload it is about to prepare — and rendered into the marker as
+# a `Scope` row plus the computed `Expected release` (Since + CLAIM_STALE_SECONDS),
+# so the reader sees what is being written and roughly when the lane frees,
+# without needing to read the holder's own session. Unset, the marker carries
+# neither row — the pre-#4606 shape, unchanged for an ordinary ticket claim.
+CLAIM_SCOPE="${CLAIM_SCOPE:-}"
 
 # ── Pure helpers (no network, no git) ──────────────────────────────
 
@@ -210,6 +229,20 @@ claim_marker_body() {
     release_rule="every branch above has its PR closed without merging"
     merged_note="A **merged** PR does not end this claim — ${BT}Part of #N${BT} is the normal shape of a session that lands one PR and keeps building."
   fi
+  # Scope + Expected release (brik-llm#4606): opt-in via CLAIM_SCOPE, so an
+  # ordinary ticket claim renders exactly as before. A blocked session should
+  # not have to guess what a prod-lane holder is writing or when it frees —
+  # the scope names the go, the expected release is Since + CLAIM_STALE_SECONDS,
+  # best-effort (an unparseable stamp just omits the row, never blocks on it).
+  local scope_row="" expect_row=""
+  if [ -n "${CLAIM_SCOPE:-}" ]; then
+    scope_row="| Scope | ${CLAIM_SCOPE} |"
+    local since_epoch expect_stamp
+    if since_epoch="$(claim_stamp_to_epoch "$stamp" 2>/dev/null)" \
+         && expect_stamp="$(claim_epoch_to_stamp $(( since_epoch + CLAIM_STALE_SECONDS )) 2>/dev/null)"; then
+      expect_row="| Expected release | ${expect_stamp} (unless renewed) |"
+    fi
+  fi
   cat <<EOF
 ${CLAIM_MARKER}
 🤖 **Claimed** — a session is working this ticket.
@@ -220,7 +253,9 @@ ${CLAIM_MARKER}
 | Branch | ${cell} |
 ${session_row:+${session_row}
 }| Since | ${stamp} |
-
+${scope_row:+${scope_row}
+}${expect_row:+${expect_row}
+}
 Another session's \`new-task.sh\` will refuse this ticket until this issue closes, ${release_rule}, or the claim ages out (${CLAIM_STALE_SECONDS}s). Rewritten in place on each pickup — never a second comment. ${merged_note}
 
 One session working two repos (a canon lib plus its twin) adds its second branch to the row above; it is not a second claimant.
@@ -260,6 +295,28 @@ parse_claim_session() {
   printf '%s\n' "$body" | sed -n 's/^| Session | `\(.*\)` |$/\1/p' | head -1
 }
 
+# The go's scope, or empty when the claimant did not set CLAIM_SCOPE (an
+# ordinary ticket claim). Same shape as parse_claim_session.
+parse_claim_scope() {
+  local body="${1:-}"
+  case "$body" in
+    *"$CLAIM_MARKER"*) : ;;
+    *) return 1 ;;
+  esac
+  printf '%s\n' "$body" | sed -n 's/^| Scope | \(.*\) |$/\1/p' | head -1
+}
+
+# The computed Expected release stamp, or empty when there is no Scope row to
+# have derived it from.
+parse_claim_expected_release() {
+  local body="${1:-}"
+  case "$body" in
+    *"$CLAIM_MARKER"*) : ;;
+    *) return 1 ;;
+  esac
+  printf '%s\n' "$body" | sed -n 's/^| Expected release | \(.*\) |$/\1/p' | head -1
+}
+
 # ISO-8601 Zulu → epoch seconds. BSD date (macOS, both operator machines) and
 # GNU date (ubuntu CI) take incompatible flags, so try BSD then fall back.
 # Echoes nothing and returns non-zero on an unparseable stamp — a claim we
@@ -269,6 +326,19 @@ claim_stamp_to_epoch() {
   [ -n "$stamp" ] || return 1
   out="$(date -u -j -f '%Y-%m-%dT%H:%M:%SZ' "$stamp" +%s 2>/dev/null)" \
     || out="$(date -u -d "$stamp" +%s 2>/dev/null)" \
+    || return 1
+  [ -n "$out" ] || return 1
+  printf '%s' "$out"
+}
+
+# The inverse of claim_stamp_to_epoch — needed to render a claim's computed
+# `Expected release` (Since + CLAIM_STALE_SECONDS) as an ISO-8601 Zulu stamp,
+# same BSD-then-GNU fallback.
+claim_epoch_to_stamp() {
+  local epoch="${1:-}" out
+  [ -n "$epoch" ] || return 1
+  out="$(date -u -r "$epoch" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)" \
+    || out="$(date -u -d "@${epoch}" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null)" \
     || return 1
   [ -n "$out" ] || return 1
   printf '%s' "$out"
@@ -920,6 +990,15 @@ check_issue_claim() {
         echo "    Branch: ${their_branch}"
         [ -n "$their_session" ] && echo "    Session: ${their_session}"
         echo "    Age:    $(claim_age_human "$age")"
+        # Scope + Expected release (brik-llm#4606): only present when the
+        # claimant set CLAIM_SCOPE, which is the promotion lane's case, not an
+        # ordinary ticket claim — so a blocked session reads what the holder is
+        # writing and roughly when the lane frees, instead of just that it is held.
+        local their_scope their_expected
+        their_scope="$(parse_claim_scope "$body")"
+        their_expected="$(parse_claim_expected_release "$body")"
+        [ -n "$their_scope" ] && echo "    Scope:  ${their_scope}"
+        [ -n "$their_expected" ] && echo "    Ends:   ${their_expected} (unless renewed)"
         echo ""
         # Same host and my branch in their set: rule 2 alone would have called
         # this mine. It is another session CONTINUING that branch (#4260).
