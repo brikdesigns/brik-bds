@@ -30,7 +30,7 @@ export interface GhlFormProps
  * the same iframe the hand-written embeds did, with a required `title`, and loads
  * GHL's `form_embed.js` once per page however many forms the page holds.
  *
- * The form's own field styling is set inside GHL — see `ghl-form-a11y.css` for
+ * The form's own field styling is set inside GHL — see `docs/ghl-form-a11y.css` for
  * the baseline that clears WCAG 2.1 AA 1.4.11 / 2.4.7. The frame's `lang` and
  * `<title>` are GHL's and cannot be set from here.
  *

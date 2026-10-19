@@ -7,12 +7,13 @@
  * measured the failure and the fix below on the live form: borders 10.86:1, focus
  * ring 21:1 on every field, checkbox, button and link.
  *
- * NOT a BDS stylesheet — it is not imported by `styles.css` and styles nothing
- * on the host page. It is pasted into the form's Custom CSS field in GHL
+ * NOT a BDS stylesheet — it lives in `docs/`, not `components/ui/`, so it is not
+ * wrapped in `@layer bds-components`, not imported by `styles.css`, and styles
+ * nothing on the host page. It is pasted into the form's Custom CSS field in GHL
  * (Styles > Advanced > Custom CSS) and applies inside the form's iframe.
  *
  * PASTE NEEDS RESOLVED VALUES. The iframe is cross-origin, so no `var(--bds-*)`
- * resolves inside it. The five properties in the `:root` block below are the
+ * resolves inside it. The six properties in the `:root` block below are the
  * only values the rules read: swap each `var(--bds-*)` for the value it resolves
  * to in the client's theme before pasting (look it up in `dist/tokens.css`, or the
  * client's `theme-{client}.css`). The rules underneath stay as written.

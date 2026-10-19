@@ -38,7 +38,7 @@ import { GhlForm } from '@brikdesigns/bds/blueprints-astro';
 ## Accessibility
 
 - The iframe always has a non-empty `title` (WCAG 4.1.2).
-- GHL's default form fails WCAG 2.1 AA: field borders measure 1.47:1 against the form background (1.4.11 needs 3:1), and checkboxes, the submit button and the privacy link have no visible focus ring (2.4.7). The fix is Custom CSS pasted into the form in GHL; the canon file is `components/ui/GhlForm/ghl-form-a11y.css`.
+- GHL's default form fails WCAG 2.1 AA: field borders measure 1.47:1 against the form background (1.4.11 needs 3:1), and checkboxes, the submit button and the privacy link have no visible focus ring (2.4.7). The fix is Custom CSS pasted into the form in GHL; the canon file is `docs/ghl-form-a11y.css`.
 - That file is authored against BDS tokens, but the frame is cross-origin and cannot see them, so the pasted copy needs each `var(--bds-*)` in its `:root` block swapped for the value it resolves to in the client's theme. Border colour and focus colour are the two per-client values; each must reach 3:1 against the form background. The BDS defaults are checked by `npm run contrast-gate`.
 - The frame's `lang` and document `<title>` belong to GHL and cannot be set from the host page.
 

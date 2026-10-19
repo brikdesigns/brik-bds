@@ -678,7 +678,7 @@
       "fg": "--bds-border-input",
       "bg": "--bds-surface-primary",
       "thresholdType": "AA-large",
-      "note": "WCAG 1.4.11 non-text contrast, 3:1. The canon GhlForm field border (components/ui/GhlForm/ghl-form-a11y.css) is --bds-border-input; GHL's own default is #d0d5dd at 1.47:1. A client may override the value, and the override must still clear this floor."
+      "note": "WCAG 1.4.11 non-text contrast, 3:1. The canon GhlForm field border (docs/ghl-form-a11y.css) is --bds-border-input; GHL's own default is #d0d5dd at 1.47:1. A client may override the value, and the override must still clear this floor."
     },
     {
       "group": "brand",
@@ -686,7 +686,7 @@
       "fg": "--bds-border-focus",
       "bg": "--bds-surface-primary",
       "thresholdType": "AA-large",
-      "note": "WCAG 1.4.11 / 2.4.7, 3:1. The canon GhlForm focus ring (components/ui/GhlForm/ghl-form-a11y.css) is --bds-border-focus. A client may override the value, and the override must still clear this floor."
+      "note": "WCAG 1.4.11 / 2.4.7, 3:1. The canon GhlForm focus ring (docs/ghl-form-a11y.css) is --bds-border-focus. A client may override the value, and the override must still clear this floor."
     }
   ]
 }
