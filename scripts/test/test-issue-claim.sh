@@ -209,6 +209,29 @@ assert_eq "and the marker's default wording comes back with it" \
   "yes" "$(case "$(claim_marker_body h task/dev-1 2026-10-10T00:00:00Z)" in
             *"A **merged** PR does not end this claim"*) echo yes ;; *) echo no ;; esac)"
 
+echo "── CLAIM_SCOPE + CLAIM_STALE_SECONDS override (brik-llm#4606) ──"
+assert_eq "an ordinary claim (no CLAIM_SCOPE) renders no Scope row" \
+  "" "$(parse_claim_scope "$(claim_marker_body h task/dev-1 2026-10-10T00:00:00Z)")"
+assert_eq "…and no Expected release row either" \
+  "" "$(parse_claim_expected_release "$(claim_marker_body h task/dev-1 2026-10-10T00:00:00Z)")"
+# shellcheck disable=SC2034  # read by the sourced lib, not by this file
+CLAIM_SCOPE="Vale edit-setup, one row"
+assert_eq "CLAIM_SCOPE round-trips through the rendered marker" \
+  "Vale edit-setup, one row" \
+  "$(parse_claim_scope "$(claim_marker_body h task/promote-1 2026-10-10T00:00:00Z)")"
+# shellcheck disable=SC2034  # read by the sourced lib, not by this file
+CLAIM_STALE_SECONDS=3600
+assert_eq "Expected release is Since + CLAIM_STALE_SECONDS, not the 12h default" \
+  "2026-10-10T01:00:00Z (unless renewed)" \
+  "$(parse_claim_expected_release "$(claim_marker_body h task/promote-1 2026-10-10T00:00:00Z)")"
+# shellcheck disable=SC2034  # read by the sourced lib, not by this file
+CLAIM_STALE_SECONDS=43200
+unset CLAIM_SCOPE
+assert_eq "unsetting CLAIM_SCOPE restores the default (no Scope row) — read per call, never latched" \
+  "" "$(parse_claim_scope "$(claim_marker_body h task/promote-1 2026-10-10T00:00:00Z)")"
+assert_not "parse_claim_scope rejects a body that is not a claim" parse_claim_scope "just a normal comment"
+assert_not "parse_claim_expected_release rejects a body that is not a claim" parse_claim_expected_release "just a normal comment"
+
 echo "── claim_handoff_after (#4414) ──"
 HO_NDJSON="$(printf '%s\n' \
   '{"id":1,"login":"x","created_at":"2026-10-06T17:49:00Z","body":"<!-- claim -->\n| Since | 2026-10-06T17:49:00Z |"}' \
