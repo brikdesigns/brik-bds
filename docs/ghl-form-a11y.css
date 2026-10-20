@@ -12,31 +12,31 @@
  * nothing on the host page. It is pasted into the form's Custom CSS field in GHL
  * (Styles > Advanced > Custom CSS) and applies inside the form's iframe.
  *
- * PASTE NEEDS RESOLVED VALUES. The iframe is cross-origin, so no `var(--bds-*)`
- * resolves inside it. The six properties in the `:root` block below are the
- * only values the rules read: swap each `var(--bds-*)` for the value it resolves
- * to in the client's theme before pasting (look it up in `dist/tokens.css`, or the
- * client's `theme-{client}.css`). The rules underneath stay as written.
- * Nothing here resolves them for you — pasting this file verbatim leaves every
- * `var()` unset and the form unstyled.
+ * PASTE NEEDS RESOLVED VALUES. The iframe is cross-origin, so no `var()` resolves
+ * inside it. The rules read six existing canonical tokens, listed in the `:root`
+ * block below: `--border-input`, `--border-focus`, `--surface-primary`,
+ * `--border-width-sm`, `--border-width-md` and `--space-50`. Paste a resolved value
+ * for each (look it up in `dist/tokens.css`, or the client's `theme-{client}.css`)
+ * and the rules underneath stay as written. Nothing here resolves them for you —
+ * pasting this file verbatim leaves every `var()` unset and the form unstyled.
  *
  * TWO PER-CLIENT VALUES, border and focus. Each must reach 3:1 against the form
- * background (`--bds-ghl-form-surface`, white unless the form's background is
- * changed in GHL). The defaults are pinned in `tokens/contrast-pairings.json`
- * and checked by `npm run contrast-gate`; a client override is the client's to
- * check, against the same 3:1 floor.
+ * background (`--surface-primary`, white unless the form's background is changed
+ * in GHL). The defaults are pinned in `tokens/contrast-pairings.json` and checked
+ * by `npm run contrast-gate`; a client override is the client's to check, against
+ * the same 3:1 floor.
  *
  * The doubled `#_builder-form#_builder-form` out-ranks GHL's own `!important`
  * field rules. The selectors are the ones verified on rebel-cfo#12; they track
  * GHL's markup, so a GHL markup change is a reason to re-measure (unverified).
  */
 :root {
-  --bds-ghl-form-border: var(--bds-border-input);
-  --bds-ghl-form-focus: var(--bds-border-focus);
-  --bds-ghl-form-surface: var(--bds-surface-primary);
-  --bds-ghl-form-border-width: var(--bds-border-width-sm);
-  --bds-ghl-form-focus-width: var(--bds-border-width-md);
-  --bds-ghl-form-focus-gap: var(--bds-space-50);
+  --border-input: var(--bds-border-input);
+  --border-focus: var(--bds-border-focus);
+  --surface-primary: var(--bds-surface-primary);
+  --border-width-sm: var(--bds-border-width-sm);
+  --border-width-md: var(--bds-border-width-md);
+  --space-50: var(--bds-space-50);
 }
 
 /* 1.4.11 — field borders at 3:1 or better. */
@@ -45,7 +45,7 @@
 #_builder-form#_builder-form .form-builder--item select,
 #_builder-form#_builder-form .form-builder--item input[type='checkbox'],
 #_builder-form#_builder-form .form-builder--item input[type='radio'] {
-  border: var(--bds-ghl-form-border-width) solid var(--bds-ghl-form-border) !important;
+  border: var(--border-width-sm) solid var(--border-input) !important;
 }
 
 /* 2.4.7 — a visible focus ring on every field, checkbox, button and link. The
@@ -58,9 +58,9 @@
 #_builder-form#_builder-form .form-builder--item input[type='radio']:focus-visible,
 #_builder-form#_builder-form .form-builder--item button:focus-visible,
 #_builder-form#_builder-form .form-builder--item a:focus-visible {
-  outline: var(--bds-ghl-form-focus-width) solid var(--bds-ghl-form-focus) !important;
-  outline-offset: var(--bds-ghl-form-focus-gap) !important;
+  outline: var(--border-width-md) solid var(--border-focus) !important;
+  outline-offset: var(--space-50) !important;
   box-shadow:
-    0 0 0 var(--bds-ghl-form-focus-gap) var(--bds-ghl-form-surface),
-    0 0 0 calc(var(--bds-ghl-form-focus-gap) + var(--bds-ghl-form-focus-width)) var(--bds-ghl-form-focus) !important;
+    0 0 0 var(--space-50) var(--surface-primary),
+    0 0 0 calc(var(--space-50) + var(--border-width-md)) var(--border-focus) !important;
 }
