@@ -11,7 +11,7 @@ import { describe, it, expect } from 'vitest';
 import { GhlForm } from './GhlForm';
 import { GHL_FORM_EMBED_SRC, ensureGhlEmbedScript } from './ghlEmbed';
 
-const render = (props: { formId: string; formName: string; height: number }) =>
+const render = (props: { formId: string; formName: string; height: number; lazy?: boolean }) =>
   renderToStaticMarkup(createElement(GhlForm, props));
 
 describe('GhlForm markup', () => {
@@ -47,6 +47,32 @@ describe('GhlForm markup', () => {
     expect(html).toContain('data-deactivation-type="neverDeactivate"');
     expect(html).toContain('data-cookie-consent="true"');
     expect(html).toContain('data-cookie-consent-provider="auto"');
+  });
+});
+
+describe('GhlForm lazy', () => {
+  const base = { formId: 'rvGeUFEFytjrjxr7XiDE', formName: 'Contact Us', height: 838 };
+  const url = 'https://link.brikdesigns.com/widget/form/rvGeUFEFytjrjxr7XiDE';
+
+  it('default output is identical to lazy={false}', () => {
+    expect(render({ ...base, lazy: false })).toBe(render(base));
+  });
+
+  it('lazy={false} sets src and no data-src', () => {
+    const html = render({ ...base, lazy: false });
+    expect(html).toContain(` src="${url}"`);
+    expect(html).not.toContain('data-src');
+  });
+
+  it('lazy omits src and emits the same URL as data-src', () => {
+    const html = render({ ...base, lazy: true });
+    expect(html).not.toMatch(/\ssrc=/);
+    expect(html).toContain(`data-src="${url}"`);
+  });
+
+  it('lazy leaves every other attribute unchanged', () => {
+    const strip = (h: string) => h.replace(` src="${url}"`, '').replace(` data-src="${url}"`, '');
+    expect(strip(render({ ...base, lazy: true }))).toBe(strip(render(base)));
   });
 });
 

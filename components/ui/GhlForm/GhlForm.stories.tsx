@@ -27,6 +27,11 @@ const meta: Meta<typeof GhlForm> = {
       description:
         "Height in px from the embed code's `data-height`, reserved as `min-height` so the section does not collapse before GHL sizes the frame.",
     },
+    lazy: {
+      control: 'boolean',
+      description:
+        'Opt-in. Omits `src` and emits the URL as `data-src`; the consumer sets `frame.src = frame.dataset.src` when the form is first shown. Default false.',
+    },
   },
 };
 
@@ -78,5 +83,29 @@ export const InteractionTestIframeTitle: Story = {
     await expect(
       document.querySelectorAll(`script[src="${GHL_FORM_EMBED_SRC}"]`).length,
     ).toBe(1);
+  },
+};
+
+/**
+ * Opt-in `lazy`: no `src`, the URL waits on `data-src` until the consumer
+ * shows the form and copies it across.
+ * @summary lazy omits src and carries the URL on data-src
+ */
+export const InteractionTestLazy: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    formId: 'rvGeUFEFytjrjxr7XiDE',
+    formName: 'Contact Us',
+    height: 838,
+    lazy: true,
+  },
+  play: async ({ canvasElement }) => {
+    const frame = canvasElement.querySelector('iframe');
+    await expect(frame).not.toBeNull();
+    await expect(frame?.hasAttribute('src')).toBe(false);
+    await expect(frame?.getAttribute('data-src')).toBe(
+      'https://link.brikdesigns.com/widget/form/rvGeUFEFytjrjxr7XiDE',
+    );
+    await expect(frame?.getAttribute('title')).toBe('Contact Us');
   },
 };

@@ -12,11 +12,21 @@ A GoHighLevel form embedded as an iframe. GHL forms are Brik's form standard: th
 
 `GhlForm` has no variants — the form's fields are drawn inside GHL's frame, so there is no BDS visual axis. The props select which form, name it for assistive tech, and reserve its height.
 
-This is the React twin for Next.js sites. Astro sites import `GhlForm` from `@brikdesigns/bds/blueprints-astro`; it takes the same three props and emits the same markup.
+This is the React twin for Next.js sites. Astro sites import `GhlForm` from `@brikdesigns/bds/blueprints-astro`; it takes the same props and emits the same markup.
 
 ## Default
 
 <Canvas of={Stories.Default} />
+
+## Lazy loading
+
+Pass `lazy` for a form that starts hidden, such as one panel of a toggle. The iframe renders with no `src`; the URL is on `data-src` instead, so GHL's `form_embed.js` does not measure a frame that is not visible. Everything else — `id`, `title`, the `data-*` attributes, the height variable, the once-per-page script — is unchanged.
+
+**The page must finish the load.** When the form is first shown, set `frame.src = frame.dataset.src`. Until then the frame is blank. `lazy` defaults to `false`, which renders `src` as before.
+
+```tsx
+<GhlForm formId="rvGeUFEFytjrjxr7XiDE" formName="Contact Us" height={838} lazy />
+```
 
 ## Props
 
