@@ -35,6 +35,16 @@ import { GhlForm } from '@brikdesigns/bds/blueprints-astro';
 
 `formId` and `height` come from the form's GHL embed code (`data-form-id`, `data-height`). `formName` becomes the iframe `title`, which a screen reader announces for the frame. A blank `formName` falls back to `Form`, so the title is never empty.
 
+## Lazy loading
+
+Pass `lazy` for a form that starts hidden, such as one panel of a toggle. The iframe renders with no `src`; the URL is on `data-src` instead, so GHL's `form_embed.js` does not measure a frame that is not visible. Everything else is unchanged.
+
+The page must finish the load: when the form is first shown, set `frame.src = frame.dataset.src`. Until then the frame is blank. `lazy` defaults to `false`.
+
+```tsx
+<GhlForm formId="rvGeUFEFytjrjxr7XiDE" formName="Contact Us" height={838} lazy />
+```
+
 ## Accessibility
 
 - The iframe always has a non-empty `title` (WCAG 4.1.2).
@@ -57,5 +67,8 @@ import { GhlForm } from '@brikdesigns/bds/blueprints-astro';
 | `formId` | `string` | — (required — the `id` in the form's GHL embed code) |
 | `formName` | `string` | — (required — becomes the iframe `title`; blank falls back to `Form`) |
 | `height` | `number` | — (required — px from the embed code's `data-height`, reserved as `min-height`) |
+| `lazy` | `boolean` | `false` |
+
+`lazy` omits `src` and emits the URL as `data-src`; the consumer sets `src` from `data-src` when the form is first shown.
 
 Inherits the native `<iframe>` attributes except `src`, `title`, `height` and `children`.

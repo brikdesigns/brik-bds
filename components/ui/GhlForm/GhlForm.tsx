@@ -20,6 +20,15 @@ export interface GhlFormProps
    * frame grows past it if the form is taller.
    */
   height: number;
+  /**
+   * Opt-in deferred load. When true the iframe has NO `src` — the URL is on
+   * `data-src` instead — so GHL's `form_embed.js` does not size a frame that
+   * is hidden (e.g. one panel of a toggle). The consumer MUST set
+   * `frame.src = frame.dataset.src` when the form is first shown; until then
+   * the frame stays blank. Everything else is unchanged. Default `false`
+   * renders `src` as before.
+   */
+  lazy?: boolean;
 }
 
 /**
@@ -34,6 +43,9 @@ export interface GhlFormProps
  * the baseline that clears WCAG 2.1 AA 1.4.11 / 2.4.7. The frame's `lang` and
  * `<title>` are GHL's and cannot be set from here.
  *
+ * Pass `lazy` for a form that starts hidden: it renders `data-src` instead of `src`,
+ * and the page sets `src` from `data-src` when the form is first shown.
+ *
  * Astro twin: `content-system/blueprints/astro/GhlForm.astro`.
  *
  * @example
@@ -43,7 +55,7 @@ export interface GhlFormProps
  *
  * @summary A GoHighLevel form iframe with a required title and a reserved height
  */
-export function GhlForm({ formId, formName, height, className, style, ...props }: GhlFormProps) {
+export function GhlForm({ formId, formName, height, lazy = false, className, style, ...props }: GhlFormProps) {
   useEffect(() => {
     ensureGhlEmbedScript(document);
   }, []);
@@ -57,7 +69,7 @@ export function GhlForm({ formId, formName, height, className, style, ...props }
       className={bdsClass('bds-ghl-form', className)}
       // Runtime binding for the CSS — defining a --bds-* property, not consuming a token.
       style={{ ...style, '--bds-ghl-form-height': `${height}px` } as CSSProperties}
-      src={ghlFormSrc(formId)}
+      {...(lazy ? { 'data-src': ghlFormSrc(formId) } : { src: ghlFormSrc(formId) })}
       id={frameId}
       title={name}
       data-layout="{'id':'INLINE'}"

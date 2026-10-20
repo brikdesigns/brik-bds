@@ -19,17 +19,23 @@
  *   - formId   — the `id` in the form's GHL embed code
  *   - formName — becomes the iframe `title` (WCAG 4.1.2); blank falls back to `Form`
  *   - height   — px from the embed code's `data-height`, reserved as `min-height`
+ *   - lazy     — opt-in (default false). Omits `src` and emits the same URL as
+ *                `data-src`, so GHL's form_embed.js does not size a hidden frame.
+ *                The consumer MUST set `frame.src = frame.dataset.src` when the
+ *                form is first shown.
  */
 export interface Props {
   formId: string;
   formName: string;
   height: number;
+  lazy?: boolean;
 }
 
-const { formId, formName, height } = Astro.props;
+const { formId, formName, height, lazy = false } = Astro.props;
 
 const frameId = `inline-${formId}`;
 const name = formName.trim() || 'Form';
+const formSrc = `https://link.brikdesigns.com/widget/form/${formId}`;
 
 // Once per page: `Astro.locals` is one object per rendered page, so the first
 // <GhlForm> on a page emits the script and the rest see the flag. `defer` runs
@@ -42,7 +48,8 @@ locals.bdsGhlFormEmbedEmitted = true;
 <iframe
   class="bds-ghl-form"
   style={`--bds-ghl-form-height:${height}px`}
-  src={`https://link.brikdesigns.com/widget/form/${formId}`}
+  src={lazy ? undefined : formSrc}
+  data-src={lazy ? formSrc : undefined}
   id={frameId}
   title={name}
   data-layout="{'id':'INLINE'}"

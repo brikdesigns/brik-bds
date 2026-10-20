@@ -620,6 +620,7 @@ import { GhlForm } from '@brikdesigns/bds/blueprints-astro';
       <h1>ghl-form</h1>
       <GhlForm formId="formAAAA" formName="Contact Us" height={838} />
       <GhlForm formId="formBBBB" formName="Request a Quote" height={914} />
+      <GhlForm formId="formCCCC" formName="Hidden Form" height={700} lazy />
     </main>
   </body>
 </html>
@@ -970,7 +971,11 @@ const assertions = [
   { name: 'ghl-form: height reserved per form (--bds-ghl-form-height)', pass:
       ghlFormHtml.includes('--bds-ghl-form-height:838px') && ghlFormHtml.includes('--bds-ghl-form-height:914px')
   },
-  { name: 'ghl-form: form_embed.js loaded exactly once for two forms', pass:
+  { name: 'ghl-form: lazy form has data-src and no src', pass:
+      ghlFormHtml.includes('data-src="https://link.brikdesigns.com/widget/form/formCCCC"') &&
+      !/(?<!data-)src="https:\/\/link\.brikdesigns\.com\/widget\/form\/formCCCC"/.test(ghlFormHtml)
+  },
+  { name: 'ghl-form: form_embed.js loaded exactly once for three forms', pass:
       (ghlFormHtml.match(/<script[^>]+src="https:\/\/link\.brikdesigns\.com\/js\/form_embed\.js"/g) || []).length === 1
   },
 
