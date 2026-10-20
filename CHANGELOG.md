@@ -16,6 +16,21 @@ a consumer greps this file before bumping.
 > `#1186` will add the manifest + CI check that *enforces* this section. Until
 > it lands, the entry is a convention, not a gate.
 
+## v0.201.0 — 2026-10-19
+
+**Breaking (consumer CSS + exports).** Adds `GhlForm` (React + Astro).
+
+| Old | New |
+|---|---|
+| `.bds-about`, `.bds-about--align-center`, `.bds-about__{callout,container,lead,narrative,subtitle,title}` | `.bds-narrative…` (same suffixes) |
+| `.bds-stats-dark-bar`, `.bds-stats-dark-bar__{item,label,list,value}` | `.bds-stats-bar…` |
+| `--bds-about-{bg,body-color,eyebrow-color,heading-color}` | `--bds-narrative-…` |
+| `--bds-stats-dark-bar-{bg,divider,label-color,padding-y,value-color}` | `--bds-stats-bar-…` |
+
+Exports: `About`→`Narrative`, `StatsDarkBar`→`StatsBar` (React + `blueprints-astro`).
+
+Removed ([#2794](https://github.com/brikdesigns/brik-bds/pull/2794)): `HeroSplit6040`, `HeroInteriorMinimal` → `Hero`; `Services3ColCardGrid`, `ServicesDetailTwoColumn` → `CardGrid`; `CalloutSplit` → `CalloutPanel`; `Features3ColBrandedDark` → `Features`; `AboutStorySplit` → `Narrative`; `CtaDarkCentered`, `CtaSplitContact` → `Cta`.
+
 ## v0.193.1 — 2026-10-01
 
 No class hook is renamed or removed, so there is **no breaking class-hook
