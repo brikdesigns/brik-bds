@@ -278,6 +278,25 @@ UNKNOWN_PR=0
 #     "beyond a symbolic link" (verified 2026-09-29, with and without --no-index and
 #     --stdin), so the test is direct: a symlink stores no content, and removing the
 #     worktree leaves whatever it pointed at untouched.
+#   - a GITLINK whose POINTER drifted: bds-propagate advances foundations/brik-bds in
+#     the base branch, a worktree merges that in, and its submodule checkout stays
+#     where it was — ` M foundations/brik-bds` nobody authored. repo-state.sh:341
+#     already names this as the #829 failure mode. On 2026-10-17 it pinned three
+#     worktrees at KEEP, two with PRs merged ~23 days earlier (#4919).
+#
+# That last one is NARROWER than "the path is a submodule", and deliberately so.
+# THREE different submodule states all reach porcelain as the same ` M <path>` line,
+# and only the first carries no authored work (probed 2026-10-17, git 2.x):
+#
+#   state                      `git diff --raw HEAD -- <path>`      work inside?
+#   pointer drift              :160000 160000 <src> 0000000 M       no
+#   content edited inside      :160000 160000 <src> <src> M         YES
+#   untracked file inside      (no raw line at all)                 YES
+#
+# So the dst sha discriminates, and even then the submodule's OWN porcelain is
+# consulted before skipping: `git checkout <other-sha>` inside a submodule AND an
+# uncommitted edit on top is one worktree, one porcelain line, and real work to
+# lose. Both conditions must hold or the line counts as dirt, as before.
 #
 # This NARROWS what counts as dirt; it does not weaken the guard. Anything else
 # still counts, still yields KEEP, and DIRTY_WHY carries the reason into the verdict
@@ -303,6 +322,14 @@ dirty_count() {  # $1=worktree path -> sets DIRTY_N (real changes) + DIRTY_WHY (
         numstat="$(git -C "$wt" diff --numstat HEAD -- "$p" 2>/dev/null | awk 'NR==1{print $1"/"$2}')"
         if [ "$numstat" = "0/0" ] \
            && git -C "$wt" diff --summary HEAD -- "$p" 2>/dev/null | grep -q '^ mode change '; then
+          continue
+        fi
+        # Gitlink POINTER drift, and only that: both modes 160000, dst sha all-zero
+        # (git does not resolve the checked-out commit), and nothing uncommitted
+        # inside the submodule itself. See the table in the preamble.
+        if git -C "$wt" diff --raw HEAD -- "$p" 2>/dev/null \
+             | grep -qE '^:160000 160000 [0-9a-f]+ 0+ ' \
+           && [ -z "$(git -C "$wt/$p" status --porcelain 2>/dev/null)" ]; then
           continue
         fi ;;
     esac
@@ -828,8 +855,17 @@ if [ "$n" -gt 0 ]; then
       # CANONICAL_PATH (:93), so nothing reports drift on it. Until that gate covers
       # the test too, this string is a cross-repo contract: do not rename it. #3939
       #
-      # The safety argument below covers it unchanged: the verdict is already REMOVE, which
-      # requires clean AND landed, and `dirty_count` counts real work only.
+      # The safety argument below covers it unchanged: the verdict is already REMOVE,
+      # which requires clean AND landed.
+      #
+      # It used to add "and `dirty_count` counts real work only", which was FALSE for a
+      # gitlink nobody authored and made this whole fallback unreachable in the one case
+      # it was written for: a populated submodule drifts its pointer, `dirty_count`
+      # scored it real=1, and the worktree was filtered out at CLASSIFICATION long before
+      # the removal loop could ever run. Three worktrees sat that way, two with PRs merged
+      # ~23 days earlier. `dirty_count` now carves the drift out (see its preamble), so the
+      # clause is true as written — but it is a PROPERTY of that function, not a premise
+      # this block may assume. #4919
       #
       # Safe because the verdict for $p is already REMOVE, which requires clean
       # AND landed; a dirty or unlanded worktree never reaches this loop. The

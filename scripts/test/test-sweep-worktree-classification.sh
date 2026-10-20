@@ -1075,6 +1075,118 @@ else
   echo -e "  ${RED}FAIL${NC}  --apply removed a worktree holding real uncommitted work"; FAIL=$((FAIL+1))
 fi
 
+# ── Pass 5: submodule gitlink drift vs. real work inside a submodule (#4919) ──
+#
+# bds-propagate advances foundations/brik-bds in the base branch; a worktree merges
+# that in and its submodule checkout stays put, so ` M foundations/brik-bds` appears
+# that nobody authored. `dirty_count` scored it real=1 → KEEP, and three worktrees
+# were pinned that way, two with PRs merged ~23 days earlier. The removal fallback
+# for "containing submodules" could never fire, because classification filtered the
+# worktree out long before the removal loop.
+#
+# The carve-out is deliberately narrow, and the two negative controls below are the
+# reason. THREE submodule states reach porcelain as the identical ` M <path>` line
+# and only the first has nothing to lose (probed 2026-10-17):
+#
+#   pointer drift          :160000 160000 <src> 0000000 M      no work inside
+#   content edited inside  :160000 160000 <src> <src>   M      REAL work
+#   untracked file inside  (no --raw line at all)              REAL work
+#
+# A carve-out keyed on "the path is a gitlink" would delete B and C's work.
+echo
+echo -e "${YELLOW}▸ submodule gitlink drift vs. real work inside a submodule (#4919)${NC}"
+
+SUBREMOTE="$TMPROOT/subsrc"
+REMOTE5="$TMPROOT/remote5.git"
+PRIMARY5="$TMPROOT/primary5"
+WT5="$TMPROOT/p5-worktrees"
+
+# The submodule source: two commits, so a checkout can sit at the older one.
+git init -q -b main "$SUBREMOTE"
+g -C "$SUBREMOTE" config user.email "guardtest@example.com"
+g -C "$SUBREMOTE" config user.name "guardtest"
+g -C "$SUBREMOTE" config commit.gpgsign false
+echo v1 > "$SUBREMOTE/lib.txt"
+g -C "$SUBREMOTE" add lib.txt
+g -C "$SUBREMOTE" commit -q -m v1
+SUB_OLD="$(g -C "$SUBREMOTE" rev-parse HEAD)"
+echo v2 > "$SUBREMOTE/lib.txt"
+g -C "$SUBREMOTE" commit -q -am v2
+
+git init -q --bare "$REMOTE5"
+git init -q -b main "$PRIMARY5"
+assert_throwaway_repo "$PRIMARY5" "sweep fixture primary5"
+g -C "$PRIMARY5" config user.email "guardtest@example.com"
+g -C "$PRIMARY5" config user.name "guardtest"
+g -C "$PRIMARY5" config commit.gpgsign false
+# git >=2.38 refuses file:// submodules unless this is set (CVE-2022-39253).
+g -C "$PRIMARY5" config protocol.file.allow always
+echo seed > "$PRIMARY5/README.md"
+g -C "$PRIMARY5" add README.md
+g -C "$PRIMARY5" commit -q -m seed
+g -C "$PRIMARY5" -c protocol.file.allow=always submodule add -q "$SUBREMOTE" vendor/sub
+g -C "$PRIMARY5" commit -q -m "add submodule"
+g -C "$PRIMARY5" remote add origin "$REMOTE5"
+g -C "$PRIMARY5" push -q -u origin main
+mkdir -p "$WT5"
+
+STUB5="$TMPROOT/bin5"
+mkdir -p "$STUB5"
+cat > "$STUB5/gh" <<'STUB'
+#!/usr/bin/env bash
+if [ "${1:-}" = "pr" ] && [ "${2:-}" = "list" ]; then
+  cat <<'JSON'
+[{"number":950,"headRefName":"task/gitlink-drift","state":"MERGED","mergedAt":"2026-09-01T00:00:00Z"},
+ {"number":951,"headRefName":"task/sub-content-dirt","state":"MERGED","mergedAt":"2026-09-01T00:00:00Z"},
+ {"number":952,"headRefName":"task/sub-untracked","state":"MERGED","mergedAt":"2026-09-01T00:00:00Z"}]
+JSON
+  exit 0
+fi
+exit 1
+STUB
+chmod +x "$STUB5/gh"
+
+# A) POINTER DRIFT — submodule populated, checkout rolled back to the older commit,
+#    nothing edited inside. The live shape. Must not pin a merged worktree.
+g -C "$PRIMARY5" worktree add -q -b task/gitlink-drift "$WT5/gitlink-drift" main
+g -C "$WT5/gitlink-drift" -c protocol.file.allow=always submodule update -q --init vendor/sub
+g -C "$WT5/gitlink-drift/vendor/sub" checkout -q "$SUB_OLD"
+
+# B) CONTENT EDITED INSIDE the submodule — pointer matches, an uncommitted edit sits
+#    in the submodule's own tree. Real work; must still KEEP.
+g -C "$PRIMARY5" worktree add -q -b task/sub-content-dirt "$WT5/sub-content-dirt" main
+g -C "$WT5/sub-content-dirt" -c protocol.file.allow=always submodule update -q --init vendor/sub
+echo "unsaved work" >> "$WT5/sub-content-dirt/vendor/sub/lib.txt"
+
+# C) UNTRACKED FILE INSIDE the submodule — reaches porcelain with NO --raw line at
+#    all, so a carve-out reading only --raw would skip it silently. Must still KEEP.
+g -C "$PRIMARY5" worktree add -q -b task/sub-untracked "$WT5/sub-untracked" main
+g -C "$WT5/sub-untracked" -c protocol.file.allow=always submodule update -q --init vendor/sub
+echo scratch > "$WT5/sub-untracked/vendor/sub/untracked.txt"
+
+# Preconditions. All three must reach porcelain as the SAME line, or the three
+# checks below would pass on a fixture that never reproduced the ambiguity.
+check "fixture: pointer drift reaches porcelain" " M vendor/sub" \
+  "$(g -C "$WT5/gitlink-drift" status --porcelain)"
+check "fixture: submodule content edit reaches porcelain identically" " M vendor/sub" \
+  "$(g -C "$WT5/sub-content-dirt" status --porcelain)"
+check "fixture: untracked-in-submodule reaches porcelain identically" " M vendor/sub" \
+  "$(g -C "$WT5/sub-untracked" status --porcelain)"
+# And the discriminator itself must hold, or the carve-out is keying on nothing.
+check "fixture: drift's raw diff carries an all-zero dst sha" "160000 160000" \
+  "$(g -C "$WT5/gitlink-drift" diff --raw HEAD -- vendor/sub)"
+
+D5="$( (cd "$PRIMARY5" && PATH="$STUB5:$PATH" BRIK_WORKTREE_ROOT="$WT5" "$SWEEPER" 2>&1) )"
+$VERBOSE && { echo "$D5"; echo; }
+row5() { grep -E "^task/$1[[:space:]]" <<<"$D5"; }
+
+check "gitlink pointer drift does not pin a merged worktree (#4919)" \
+  "REMOVE — PR #950 merged" "$(row5 gitlink-drift)"
+check "an uncommitted edit INSIDE the submodule still KEEPs" \
+  "KEEP — 1 uncommitted change(s)" "$(row5 sub-content-dirt)"
+check "an untracked file INSIDE the submodule still KEEPs" \
+  "KEEP — 1 uncommitted change(s)" "$(row5 sub-untracked)"
+
 echo
 if [ "$FAIL" -eq 0 ]; then
   echo -e "${GREEN}✓ ${PASS} passed${NC}"
