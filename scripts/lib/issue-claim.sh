@@ -187,6 +187,26 @@ claim_session_id() {
   printf '%s' "${CLAIM_SESSION_ID:-${CLAUDE_CODE_SESSION_ID:-}}"
 }
 
+# The running session's harness peer name — what ListAgents shows and what
+# SendMessage accepts (brik-llm#4607). A claim carries the session UUID, which no
+# peer can address; the name is in the harness's own record,
+# ~/.claude/sessions/<CLAUDE_PID>.json `.name`. Empty when unreadable (no jq, not
+# a Claude session, record gone), and the marker then omits the row. Restricted to
+# the characters a name is made of, so a hostile or odd record cannot put markup
+# or a table break into a comment. CLAIM_PEER_NAME exists for the same reason as
+# CLAIM_SESSION_ID: the contract test has no real harness record to read.
+claim_peer_name() {
+  local name="${CLAIM_PEER_NAME:-}" rec
+  if [ -z "$name" ] && [ -n "${CLAUDE_PID:-}" ] && command -v jq >/dev/null 2>&1; then
+    rec="${CLAUDE_SESSIONS_DIR:-$HOME/.claude/sessions}/${CLAUDE_PID}.json"
+    [ -r "$rec" ] && name="$(jq -r '.name // empty' "$rec" 2>/dev/null || true)"
+  fi
+  case "$name" in
+    ''|*[!A-Za-z0-9._-]*) return 0 ;;
+  esac
+  printf '%s' "$name"
+}
+
 # Strip leading and trailing spaces. Parameter expansion only — `read -a` and
 # `[[ =~ ]]` both behave differently under zsh, which is $SHELL on both machines
 # and the shell /resume sources this lib from (brik-llm#2798).
@@ -205,8 +225,8 @@ _ic_entry_branch() { printf '%s' "${1#*:}"; }
 _ic_entry_repo()   { case "${1:-}" in *:*) printf '%s' "${1%%:*}" ;; *) printf '' ;; esac; }
 
 claim_marker_body() {
-  local host="${1:?}" branches="${2:?}" stamp="${3:?}" session="${4:-}"
-  local BT='`' cell="" rest="$branches" entry session_row=""
+  local host="${1:?}" branches="${2:?}" stamp="${3:?}" session="${4:-}" peer="${5:-}"
+  local BT='`' cell="" rest="$branches" entry session_row="" peer_row=""
   while [ -n "$rest" ]; do
     case "$rest" in
       *,*) entry="${rest%%,*}"; rest="${rest#*,}" ;;
@@ -219,6 +239,9 @@ claim_marker_body() {
   # Omitted rather than rendered empty when there is no session id, so a
   # hand-run pickup writes exactly the marker it wrote before brik-llm#2792.
   [ -n "$session" ] && session_row="| Session | ${BT}${session}${BT} |"
+  # The harness peer name (brik-llm#4607): the address SendMessage takes, which
+  # the session id is not. Omitted when unknown, same as the Session row.
+  [ -n "$peer" ] && peer_row="| Peer | ${BT}${peer}${BT} |"
   # The marker states the release rule the reader will actually be judged by,
   # so it tracks CLAIM_RELEASE_ON_MERGE rather than hard-coding the default.
   local release_rule merged_note
@@ -252,6 +275,7 @@ ${CLAIM_MARKER}
 | Host | \`${host}\` |
 | Branch | ${cell} |
 ${session_row:+${session_row}
+}${peer_row:+${peer_row}
 }| Since | ${stamp} |
 ${scope_row:+${scope_row}
 }${expect_row:+${expect_row}
@@ -293,6 +317,17 @@ parse_claim_session() {
     *) return 1 ;;
   esac
   printf '%s\n' "$body" | sed -n 's/^| Session | `\(.*\)` |$/\1/p' | head -1
+}
+
+# The claimant's harness peer name, or empty for a marker written before
+# brik-llm#4607 or by a session whose name was unreadable.
+parse_claim_peer() {
+  local body="${1:-}"
+  case "$body" in
+    *"$CLAIM_MARKER"*) : ;;
+    *) return 1 ;;
+  esac
+  printf '%s\n' "$body" | sed -n 's/^| Peer | `\(.*\)` |$/\1/p' | head -1
 }
 
 # The go's scope, or empty when the claimant did not set CLAIM_SCOPE (an
@@ -989,6 +1024,10 @@ check_issue_claim() {
         echo "    Host:   ${their_host}"
         echo "    Branch: ${their_branch}"
         [ -n "$their_session" ] && echo "    Session: ${their_session}"
+        # SendMessage addresses a peer by name, not by session id (brik-llm#4607).
+        local their_peer
+        their_peer="$(parse_claim_peer "$body")"
+        [ -n "$their_peer" ] && echo "    Peer:   ${their_peer}  (SendMessage to: ${their_peer})"
         echo "    Age:    $(claim_age_human "$age")"
         # Scope + Expected release (brik-llm#4606): only present when the
         # claimant set CLAIM_SCOPE, which is the promotion lane's case, not an
@@ -1042,7 +1081,7 @@ check_issue_claim() {
   if [ "$mine" -eq 1 ] && [ -n "${their_branch:-}" ]; then
     new_branches="$(claim_branch_union "$their_branch" "$my_entry")"
   fi
-  new_body="$(claim_marker_body "$my_host" "$new_branches" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$my_session")"
+  new_body="$(claim_marker_body "$my_host" "$new_branches" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$my_session" "$(claim_peer_name)")"
   if [ -n "$id" ] && [ "$id" != "$found" ]; then
     gh api -X PATCH "repos/$owner/$repo/issues/comments/$id" -f body="$new_body" >/dev/null 2>&1 \
       && echo -e "${_IC_GREEN}✓ Claim refreshed on ${owner}/${repo}#${num} (${my_host} / ${new_branches}).${_IC_NC}" \

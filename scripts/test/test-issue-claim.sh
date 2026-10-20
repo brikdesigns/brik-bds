@@ -130,6 +130,31 @@ assert_eq "a marker written with no session id has no Session row and reads empt
   "$(parse_claim_session "$(claim_marker_body h task/x 2026-01-01T00:00:00Z)")"
 assert_not "rejects a body that is not a claim" parse_claim_session "just a normal comment"
 
+echo "── parse_claim_peer / claim_peer_name (brik-llm#4607) ──"
+assert_eq "reads the Peer row back" "brik-llm-1a" \
+  "$(parse_claim_peer "$(claim_marker_body h task/x 2026-01-01T00:00:00Z sess-1 brik-llm-1a)")"
+assert_eq "a marker written with no peer name has no Peer row and reads empty" "" \
+  "$(parse_claim_peer "$(claim_marker_body h task/x 2026-01-01T00:00:00Z sess-1)")"
+assert_eq "the Peer row does not disturb the three-field parse_claim contract" \
+  "h	task/x	2026-01-01T00:00:00Z" \
+  "$(parse_claim "$(claim_marker_body h task/x 2026-01-01T00:00:00Z sess-1 brik-llm-1a)")"
+assert_not "parse_claim_peer rejects a body that is not a claim" parse_claim_peer "just a normal comment"
+PEERDIR="$(mktemp -d "${TMPDIR:-/tmp}/ic-peer.XXXXXXXX")"
+printf '{"pid":4242,"name":"brik-llm-1a","nameSource":"derived"}' >"$PEERDIR/4242.json"
+printf '{"pid":4243,"name":"x | `y`\n## injected"}'              >"$PEERDIR/4243.json"
+printf '{"pid":4244}'                                             >"$PEERDIR/4244.json"
+assert_eq "claim_peer_name reads .name from the harness record for CLAUDE_PID" "brik-llm-1a" \
+  "$(CLAUDE_PID=4242 CLAUDE_SESSIONS_DIR="$PEERDIR" CLAIM_PEER_NAME='' claim_peer_name)"
+assert_eq "a name carrying markup or a table break is refused, not written" "" \
+  "$(CLAUDE_PID=4243 CLAUDE_SESSIONS_DIR="$PEERDIR" CLAIM_PEER_NAME='' claim_peer_name)"
+assert_eq "a record with no name reads empty" "" \
+  "$(CLAUDE_PID=4244 CLAUDE_SESSIONS_DIR="$PEERDIR" CLAIM_PEER_NAME='' claim_peer_name)"
+assert_eq "no record for the pid reads empty" "" \
+  "$(CLAUDE_PID=9999 CLAUDE_SESSIONS_DIR="$PEERDIR" CLAIM_PEER_NAME='' claim_peer_name)"
+assert_eq "no CLAUDE_PID reads empty" "" \
+  "$(unset CLAUDE_PID; CLAUDE_SESSIONS_DIR="$PEERDIR" CLAIM_PEER_NAME='' claim_peer_name)"
+rm -rf "$PEERDIR"
+
 # ── Claim LIFETIME: three signals that outrank the timer (brik-llm#2204) ──────
 #
 # The timer alone refused work that was already merged — three times in one
@@ -507,7 +532,7 @@ EOF
 chmod +x "$FAKE/gh"
 export GH_LOG GH_COMMENTS
 MY_HOST="$(hostname -s 2>/dev/null || echo unknown-host)"
-jq -cn --arg b "$(claim_marker_body "$MY_HOST" "o/r:task/shared" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" first-session)" \
+jq -cn --arg b "$(claim_marker_body "$MY_HOST" "o/r:task/shared" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" first-session first-peer)" \
   '{id: 42, login: "nstaner", created_at: "2026-10-05T15:23:37Z", body: $b}' >"$GH_COMMENTS"
 
 resume_as() {
@@ -520,6 +545,7 @@ assert_eq "different-session resume of a claimed branch returns 0 — warn, not 
   "0" "$(resume_as second-session)"
 assert_ok "…and warns that the ticket is claimed" grep -q 'already claimed by another session' "$FAKE/out"
 assert_ok "…naming the claimant's session" grep -q 'Session: first-session' "$FAKE/out"
+assert_ok "…and the peer name SendMessage accepts (#4607)" grep -q 'SendMessage to: first-peer' "$FAKE/out"
 assert_ok "…and saying my branch is one the claim names" grep -q 'a branch this claim names' "$FAKE/out"
 
 assert_eq "same-session resume returns 0" "0" "$(resume_as first-session)"
