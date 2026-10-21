@@ -316,6 +316,17 @@ jobs:
         if: always()
         run: bash scripts/lib/tests/test-gh-error-classify.sh
 
+      # ─── propagate-auth-preflight-check (brik-bds#2783) ─────────────────────
+      # Preflight used `gh auth status` (text mode), which fails non-zero if
+      # ANY stored host account errors, active or not — so a dead, unrelated,
+      # INACTIVE account (e.g. a rotated token still cached in hosts.yml)
+      # blocked every consumer bump, daily LaunchAgent lane included. The gate
+      # proves the fixed predicate tolerates that case and still fails when
+      # the ACTIVE account is the dead one.
+      - name: Auth-preflight contract
+        if: always()
+        run: bash scripts/lib/tests/test-propagate-auth-preflight.sh
+
       # issue-claim.sh became a consumer of the helper in brikdesigns/brik-llm#1754
       # (it resolves the repo slug via gh_repo_slug instead of spending a GraphQL
       # point on `gh repo view`). Its own suite already covers _ic_resolve_ref, so
@@ -524,6 +535,7 @@ jobs:
         run: |
           shellcheck -e SC2148 scripts/lib/gh-error-classify.sh
           shellcheck -e SC1091,SC2329,SC2317 scripts/lib/tests/test-gh-error-classify.sh
+          shellcheck scripts/lib/tests/test-propagate-auth-preflight.sh
           shellcheck -e SC1091 scripts/sweep-board-claims.sh
           shellcheck -S warning -e SC1091,SC1010 scripts/lib/issue-claim.sh
           shellcheck -S warning -e SC1091 scripts/lib/slug-claim.sh
