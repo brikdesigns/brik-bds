@@ -49,6 +49,14 @@ type Story = StoryObj<typeof GhlForm>;
 
 /** @summary Interactive playground for prop tweaking */
 export const Default: Story = {
+  // no-visual: the story screenshots the LIVE third-party GHL form
+  // (rvGeUFEFytjrjxr7XiDE) in a cross-origin iframe, so the pixels are GHL's,
+  // not ours. The gate fails on it with bimodal diffs (~36052 px at ratio 0.06,
+  // or 805 px at ratio 0.01) on main and on PRs alike, while PRs that don't
+  // change it pass: runs 39509355495, 39504292951, 39502520088, 39494684381,
+  // and main 2026-10-21T13:40Z. Regenerating the baseline cannot fix it.
+  // brik-client-portal#5364.
+  tags: ['no-visual'],
   args: {
     formId: 'rvGeUFEFytjrjxr7XiDE',
     formName: 'Contact Us',
