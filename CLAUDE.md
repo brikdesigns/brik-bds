@@ -10,7 +10,7 @@ Hosts:
 - Brik Content System (`content-system/`) — vocabulary peer to the token system, published as `@brikdesigns/bds/content-system`
 - Storybook + Chromatic — `localhost:6006` for in-repo dev (Storybook MCP is dev-only); the hosted build is human-facing (a client-rendered SPA). Consumer-repo agents read BDS from **source**, not over the network → § Reading BDS from a consumer repo
 
-This CLAUDE.md is `@import`-ed by every consumer of `@brikdesigns/bds` — the BDS rules below load into portal / renew / freedom / web/{slug}/ sessions too.
+This CLAUDE.md is read inside brik-bds. Portal and brik-llm `@import` `BDS-CONSUMER.md` instead, so the BDS development rules below do NOT load there. A `web/{slug}/` site loads them only if its own CLAUDE.md imports this file.
 
 ## brik-bds specifics
 
@@ -21,7 +21,7 @@ This CLAUDE.md is `@import`-ed by every consumer of `@brikdesigns/bds` — the B
 - **Pre-implementation** — BUILD new / composite components in Storybook + code with tokens (Storybook + the coded component are the source of truth; Figma is the *token* source, NOT a component-layout gate; Paper is for client sites, NEVER BDS). PREFER nesting existing primitives over new components → [component-build](.claude/standards/component-build.md).
 - **Pre-PR** — RUN `./scripts/pr-checklist.sh` before any PR touching tokens, themes, or component CSS. ONE concern per PR.
 - **Publish** — `git tag v0.X.Y && git push origin v0.X.Y` triggers [`Release` workflow](.github/workflows/release.yml). After publish, UPDATE the brik-llm submodule pointer.
-- **Chromatic = hosting, NOT a visual gate** — RUN `npm run chromatic` after any component CSS or story change; it only publishes the Storybook and is NOT an agent read path. NEVER treat a green Chromatic check as visual coverage — a quota-exhausted build still exits 0 → [`.claude/references/chromatic.md`](.claude/references/chromatic.md), `→ rag:chromatic`.
+- **Chromatic = hosting, NOT a visual gate** — RUN `npm run chromatic` after any component CSS or story change; it only publishes the Storybook. It is NOT an agent read path. NEVER treat a green Chromatic check as visual coverage: a quota-exhausted build still exits 0 → [`.claude/references/chromatic.md`](.claude/references/chromatic.md), `→ rag:chromatic`.
 - **Reading BDS from a consumer repo** (portal / `web/{slug}/` agents) — PREFER **source**: `node_modules/@brikdesigns/bds/components/`, which pins the exact version the consumer renders.
 - Else read the sibling `~/Documents/GitHub/brik/brik-bds/` (`components/ui/**/*.{mdx,tsx,css}`).
 - With no checkout, use the agent-readable docs surface → [`docs/runbooks/agent-docs-access.md`](docs/runbooks/agent-docs-access.md).
