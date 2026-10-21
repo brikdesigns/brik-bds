@@ -36,6 +36,68 @@ See [`tokens/CASCADE.md`](https://github.com/brikdesigns/brik-bds/blob/main/toke
 
 Use the paintbrush icon in the Storybook toolbar to switch themes in real time.
 
+## Light and dark: one base mode per client
+
+<Callout type="info">
+  **A client site ships one base mode. It does not get a light/dark toggle.** `company_profiles.theme_mode` decides which way the client theme is built: `light` puts dark text on light surfaces, and `dark` puts light text on dark surfaces. The portal theme generator writes that one set of semantic tokens into `@layer client-theme`. It writes no `[data-theme]` or `prefers-color-scheme` block, so a visitor cannot switch the site to the other mode.
+</Callout>
+
+- The light/dark switch in [How themes work](#how-themes-work) belongs to Brik's own theme (`theme-brand-brik`). Client themes don't inherit it.
+- A dark section on a light page, or the reverse, is not a second mode. The section reads the inverse tokens, such as `--background-inverse`, which the generator writes for both base modes.
+- When `theme_mode` is unset, the generator guesses: dark if the palette has a `black` primitive, otherwise light. That guess is often wrong, because most palettes include a black. Set the mode before you generate the theme.
+
+## How the website builder's picks resolve to a mode
+
+The website builder takes pick tags such as `Modern`, `Minimal`, `Dark`, `spacious` or `expressive`. One pure lookup in the portal resolves them: `resolveDesignDecisionSet` in `src/lib/design/decision-set.ts`. It makes no model call. Each tag belongs to a vocabulary, and only some vocabularies affect the mode.
+
+| Vocabulary | Example tags | What it decides | Affects the mode? |
+|---|---|---|---|
+| Personality | `Modern`, `Minimal`, `Bold`, `Luxury`, `Warm` | Seeds an atmosphere | Indirectly, through the seeded atmosphere's paired mode |
+| Visual style | `Dark`, `Light`, `Minimal`, `Editorial` | Style preference for briefs and blueprint scoring | Only `Dark` and `Light`, which set it directly |
+| [Atmosphere](/docs/theming/atmospheres) | `editorial-luxury`, `warm-soft` | Decoration layer | Indirectly, because each atmosphere has a paired mode |
+| Theme mode | `light`, `dark` | Base mode | Yes, directly |
+| [Expression modes](/docs/build-standards/prop-axes#expression-modes) | `compact`, `spacious`, `sharp`, `pill`, `flat` | `data-mode-*` attributes on `:root` | No |
+| Animation tier | `subtle`, `moderate`, `expressive` | Motion classes | No |
+
+Some tags belong to more than one vocabulary. A free pick of `Modern` or `Minimal` counts as both a personality and a visual style. `expressive` is both an animation tier and a typography mode; a free pick reads it as the animation tier.
+
+### Order of precedence
+
+The resolver settles **theme mode** in this order:
+
+1. The confirmed `company_profiles.theme_mode`.
+2. A `Dark` or `Light` pick.
+3. The paired mode of the resolved atmosphere (`ATMOSPHERE_THEME_MODE`).
+4. Unset. The generator then falls back to the `black`-primitive guess above.
+
+It settles **atmosphere** in this order:
+
+1. The confirmed `company_profiles.atmosphere`.
+2. An atmosphere picked by name.
+3. The atmosphere that the personality picks seed most often. When a mode is already set, only seeds that pair with that mode count.
+4. When only a mode is set, the fallback for that mode: `light` gives `clean-bright`, and `dark` gives `cinematic-dramatic`.
+
+**Personality seeds an atmosphere. It doesn't lock it.** The seeds are:
+
+| Personality | Seeded atmosphere | Paired mode |
+|---|---|---|
+| Modern, Minimal, Professional, Corporate | `minimal-clinical` | light |
+| Warm, Approachable | `warm-soft` | light |
+| Playful, Trustworthy | `clean-bright` | light |
+| Bold, Energetic | `cinematic-dramatic` | dark |
+| Luxury, Refined, Authoritative | `editorial-luxury` | dark |
+
+### Who writes the stored values
+
+`theme_mode` and `atmosphere` on `company_profiles` are what the generator reads. Two writers set them:
+
+| Writer | When | What it writes |
+|---|---|---|
+| Design-direction task | Only when the field is unset | `theme_mode` from the brief's color direction, and `atmosphere` from the personality seed |
+| Homepage-approval gate (`design_homepage_approval`) | When the operator completes it | The operator's confirmed values. They overwrite whatever was there, and are prefilled from the approved variant. |
+
+The company's **Branding** tab shows both values (Visual Direction).
+
 ## Token cascade
 
 The full cascade order in a consuming project's `globals.css` (order matters):
