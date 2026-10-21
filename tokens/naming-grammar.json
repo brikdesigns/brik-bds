@@ -14,6 +14,7 @@
       "vale-partners": { "system": "web/vale-partners", "library": "Vale Partners Brand Kit" },
       "tncld": { "system": "web/tncld", "library": "TNCLD Brand Kit" },
       "birdwell": { "system": "web/birdwell-mutlak", "library": "Birdwell Brand Kit" },
+      "rebel-cfo": { "system": "web/rebel-cfo", "library": "Rebel CFO Brand Kit" },
       "portal": { "system": "product/brik-client-portal", "library": "portal product theme" }
     },
     "componentId": "bds"
