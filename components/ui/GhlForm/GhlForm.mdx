@@ -42,7 +42,7 @@ Pass `lazy` for a form that starts hidden, such as one panel of a toggle. The if
 
 The fields inside the frame are styled in GHL, not here. GHL's default form fails WCAG 2.1 AA: field borders sit at 1.47:1 against the form background (1.4.11 needs 3:1), and checkboxes, the submit button and the privacy link have no visible focus ring (2.4.7).
 
-`docs/ghl-form-a11y.css` is the canon Custom CSS that fixes both. It is authored against BDS tokens, but the frame is cross-origin and cannot see them, so what is pasted into the form's Custom CSS in GHL must be the resolved values. Border and focus colour are the two per-client values; each must reach 3:1 against the form background.
+`docs/ghl-form-a11y.css` is the canon Custom CSS that fixes both. It is authored against BDS tokens, but the frame is cross-origin and cannot see them, so what is pasted into the form's Custom CSS in GHL must be the resolved values. Border colour, focus colour and the checked-checkbox fill are the three per-client values; each must reach 3:1 against the form background.
 
 ## Notes
 
