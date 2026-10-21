@@ -67,6 +67,8 @@ export {
   noticeOfPrivacyPractices,
   privacyPolicy,
   termsOfService,
+  privacyPolicyGeneral,
+  termsOfServiceGeneral,
   type LegalTemplate,
   type LegalTemplateField,
   type LegalTemplateKey,

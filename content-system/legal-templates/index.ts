@@ -11,6 +11,8 @@ import type { LegalTemplate, LegalTemplateKey, LegalTemplateKeyAlias } from './t
 import { noticeOfPrivacyPractices } from './notice-of-privacy-practices';
 import { privacyPolicy } from './privacy-policy';
 import { termsOfService } from './terms-of-service';
+import { privacyPolicyGeneral } from './privacy-policy-general';
+import { termsOfServiceGeneral } from './terms-of-service-general';
 
 export type {
   LegalTemplate,
@@ -21,12 +23,14 @@ export type {
   LegalRegime,
 } from './types';
 
-export { noticeOfPrivacyPractices, privacyPolicy, termsOfService };
+export { noticeOfPrivacyPractices, privacyPolicy, termsOfService, privacyPolicyGeneral, termsOfServiceGeneral };
 
 export const legalTemplates: Record<LegalTemplateKey, LegalTemplate> = {
   'notice-of-privacy-practices': noticeOfPrivacyPractices,
   'privacy-policy': privacyPolicy,
   'terms-of-service': termsOfService,
+  'privacy-policy-general': privacyPolicyGeneral,
+  'terms-of-service-general': termsOfServiceGeneral,
 };
 
 /**
