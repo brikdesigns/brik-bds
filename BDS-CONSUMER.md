@@ -1,12 +1,12 @@
 # BDS Consumer Rules
 
-Rules for any project that imports `@brikdesigns/bds` (portal, renew-pms, brikdesigns.com). For BDS development itself, see [CLAUDE.md](CLAUDE.md). For the React composition layer (typed primitives, style presets, `Prose` markdown renderer), see [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition).
+Rules for any project that imports `@brikdesigns/bds` (portal, brikdesigns.com). For BDS development itself, see [CLAUDE.md](CLAUDE.md). For the React composition layer (typed primitives, style presets, `Prose` markdown renderer), see [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition).
 
 ---
 
 ## Package — never the submodule
 
-BDS ships as the **`@brikdesigns/bds` npm package**. All active consumers (portal, renew-pms, brikdesigns.com) consume tokens and components via the package; the legacy git-submodule pattern is **deprecated**. If you find a project still importing `'../../brik-bds/tokens/figma-tokens.css'`, migrate it to `'@brikdesigns/bds/tokens.css'`.
+BDS ships as the **`@brikdesigns/bds` npm package**. All active consumers (portal, brikdesigns.com) consume tokens and components via the package; the legacy git-submodule pattern is **deprecated**. If you find a project still importing `'../../brik-bds/tokens/figma-tokens.css'`, migrate it to `'@brikdesigns/bds/tokens.css'`.
 
 For BDS development itself, edit in `~/Documents/GitHub/brik/brik-bds/`, run `npm run build`, and release it.
 
@@ -46,7 +46,7 @@ For BDS development itself, edit in `~/Documents/GitHub/brik/brik-bds/`, run `np
 
 ## Consuming Tokens in Code
 
-**Standard globals.css cascade** (matches portal, renew-pms, brikdesigns.com):
+**Standard globals.css cascade** (matches portal, brikdesigns.com):
 
 ```css
 @import '@brikdesigns/bds/tokens.css' layer(bds-tokens);

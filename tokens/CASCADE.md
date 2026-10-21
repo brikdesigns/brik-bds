@@ -34,7 +34,7 @@ Brik's Figma workspace subscribes to four team libraries. **Only two of them are
 ## What ships to consumers
 
 `dist/tokens.css` is the bundle shipped to downstream consumers (portal,
-renew-pms, brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
+brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
 `scripts/build-dist-tokens.js`, which concatenates — in this order:
 
 1. `figma-tokens.css` — auto-generated light-mode tokens (`:root`)
@@ -55,9 +55,22 @@ renew-pms, brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
 (Storybook-only), `motion-classes.css` (opt-in utility classes — consumers import
 directly if they want them), `storybook-themes.ts`, `index.ts`.
 
-## Dark-mode selector contract
+## Color-mode contract
 
-**Single switch across the ecosystem: `[data-theme="dark"]` attribute on `<html>`.**
+Theme and color mode are two separate axes. Never mix them.
+
+| Axis | Answers | Switch | Values |
+|---|---|---|---|
+| **Theme** | Whose brand? | a class (`.theme-brand-brik`) or `@layer client-theme` | one per brand |
+| **Color mode** | Which way does that brand render? | `data-theme` on `<html>` | `light` (default, no attribute needed), `dark` |
+
+The attribute is called `data-theme` for historical reasons. It carries the color mode, not the theme. Say "color mode" in prose. Don't rename the attribute, because every dark selector in this repo depends on it.
+
+Spacing, radius and the other non-color modes have their own switches. See [§ Non-color mode contracts](#non-color-mode-contracts).
+
+### The one switch
+
+**`[data-theme="dark"]` on `<html>` is the only dark switch in the ecosystem.**
 
 - Figma-generated tokens: `:root[data-theme="dark"]`
 - Brand overrides: `.theme-brand-brik[data-theme="dark"]`
@@ -66,6 +79,23 @@ directly if they want them), `storybook-themes.ts`, `index.ts`.
 - Astro/Webflow/static consumers set it manually on `<html>`
 
 No consumer should toggle a `.dark` class — the attribute is the only switch.
+
+### Client themes ship one color mode
+
+- `company_profiles.theme_mode` is the client's **default** color mode. It is not a list of supported modes.
+- The portal theme generator writes one set of semantic tokens. It writes no `[data-theme="dark"]` block and no `prefers-color-scheme` block, so visitors can't switch modes.
+- Build a second color mode (a visitor toggle) only when a client asks for one.
+
+> OPERATOR SAID 2026-10-21 (chat, adc82c92-ee87-47ea-86bb-882e70222963.jsonl:1831): "let's have the logic for modes be only when a client asks for now until we iron out the above logic. Let's address the above loose ends and any remaining work on this topic. Also, what is the "CASCADE.md" file? Is this aligned with our LLM/RAG? Is this following our writing standards? Are we properly tracking this markdown file?"
+
+### Contrast is its own switch (reserved, not built)
+
+- More contrast is not a third color mode. It layers on top of light or dark.
+- Reserved switch: `data-contrast="more"` on `<html>`, matching the OS `prefers-contrast: more` query.
+- Nothing ships it yet. No selector in `tokens/` or `components/` reads it. Build it when a client needs it.
+- It's a separate switch because a contrast block only overrides the tokens that fail, such as borders and secondary text. That way it works with any theme and either color mode, and no palette needs a second copy.
+
+AGENT DECIDED (revisable): contrast is a separate `data-contrast` switch, not a `data-theme` value. Evidence: no contrast selector exists today, and folding it into `data-theme` would need four palettes (light, dark, and a high-contrast version of each). Revert: delete this subsection. Revisit it if Figma models contrast as extra modes of the color collection.
 
 ## Non-color mode contracts
 
@@ -133,7 +163,7 @@ A media query is resolved when the stylesheet is authored, not when an attribute
 | Fix a value that came out of Figma wrong | Fix it in Figma and re-pull (`bun scripts/pull-variables.js … && node scripts/sync-figma-mcp.js …`). Add a manual `figma-corrections.css` only as a last resort when the Figma source genuinely can't be edited — and bundle it in `scripts/build-dist-tokens.js` after `figma-tokens-dark.css`. |
 | Add a semantic token Figma doesn't export | `gap-fills.css` |
 | Adjust Brik's brand colors / fonts | `theme-brand-brik.css` — consumers get these automatically when they apply `.theme-brand-brik` to `<body>` |
-| Wire a non-color mode pick (Thin/Bold/Compact/Round/etc.) into CSS overrides | `modes-{category}.css` (borderwidth, spacing, and typography modes are wired today — see the build order above; add `modes-radius.css`, etc. as each new mode is wired) |
+| Wire a non-color mode pick (Thin/Bold/Compact/Round/etc.) into CSS overrides | `modes-{category}.css` (see § Non-color mode contracts for which modes are wired today) |
 | Add a Webflow-facing alias | `bridge.css` (deprecated layer) |
 | Touch an auto-generated file | Don't. Fix in Figma and re-pull, or add an override in a manual file. |
 
