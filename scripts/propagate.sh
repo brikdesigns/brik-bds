@@ -255,13 +255,20 @@ if ! command -v gh &>/dev/null; then
   exit 1
 fi
 
-if ! gh auth status &>/dev/null; then
-  err "gh CLI not authenticated. Run: gh auth login"
+if ! command -v jq &>/dev/null; then
+  err "jq not found. Install: brew install jq"
   exit 1
 fi
 
-if ! command -v jq &>/dev/null; then
-  err "jq not found. Install: brew install jq"
+# gh auth status (text mode) fails non-zero if ANY stored host account errors,
+# even an inactive one — confirmed against gh's own source (cli/cli
+# pkg/cmd/auth/status/status.go: `if finalErr == nil && entry.State !=
+# authEntryStateSuccess { finalErr = cmdutil.SilentError }` runs over every
+# entry, active or not). propagate only ever acts as the active identity, so
+# check that one account instead of the whole stored set (brik-bds#2783).
+if ! gh auth status --json hosts 2>/dev/null \
+     | jq -e '.hosts[][] | select(.active) | select(.state == "success")' >/dev/null; then
+  err "gh CLI not authenticated. Run: gh auth login"
   exit 1
 fi
 
