@@ -45,6 +45,8 @@ Use the paintbrush icon in the Storybook toolbar to switch themes in real time.
 - The light/dark switch in [How themes work](#how-themes-work) belongs to Brik's own theme (`theme-brand-brik`). Client themes don't inherit it.
 - A dark section on a light page, or the reverse, is not a second mode. The section reads the inverse tokens, such as `--background-inverse`, which the generator writes for both base modes.
 - When `theme_mode` is unset, the generator guesses: dark if the palette has a `black` primitive, otherwise light. That guess is often wrong, because most palettes include a black. Set the mode before you generate the theme.
+- `theme_mode` is the client's default color mode. A second mode, which gives visitors a toggle, is built only when a client asks for one.
+- Higher contrast is reserved as its own switch, not a third mode. It isn't built yet. See [`tokens/CASCADE.md` § Color-mode contract](https://github.com/brikdesigns/brik-bds/blob/main/tokens/CASCADE.md#color-mode-contract).
 
 ## How the website builder's picks resolve to a mode
 
