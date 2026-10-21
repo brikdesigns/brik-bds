@@ -17,7 +17,9 @@
 export type LegalTemplateKey =
   | 'notice-of-privacy-practices'
   | 'privacy-policy'
-  | 'terms-of-service';
+  | 'terms-of-service'
+  | 'privacy-policy-general'
+  | 'terms-of-service-general';
 
 /** Maps to the portal site-structure `templateKey` values. */
 export type LegalTemplateKeyAlias = 'hipaa-notice' | 'privacy-policy' | 'terms-of-service';
