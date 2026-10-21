@@ -10,7 +10,7 @@ BDS ships as the **`@brikdesigns/bds` npm package**. All active consumers (porta
 
 For BDS development itself, edit in `~/Documents/GitHub/brik/brik-bds/`, run `npm run build`, and release it.
 
-**One lane for version bumps.** Only `brik-bds/scripts/propagate.sh` changes the `@brikdesigns/bds` version in a consumer. NEVER hand-edit it in `package.json` or bundle a bump into a feature PR. A hand-bump and the bot's daily bump collide on the same lockfile lines (brikdesigns#1734 / #1738). Need a release now? Run `./scripts/propagate.sh --only <consumer>` from brik-bds. A feature that needs the new version waits for that PR to merge, then rebases. Propagate skips a version an open PR already pins, closes older bump PRs it supersedes, and applies brikdesigns' `bds-unfreeze` label on patch bumps only (brik-bds#2633).
+**One lane for version bumps.** Only `brik-bds/scripts/propagate.sh` changes the `@brikdesigns/bds` version in a consumer. NEVER hand-edit it in `package.json` or bundle a bump into a feature PR. Need a release now? Run `./scripts/propagate.sh --only <consumer>` from brik-bds. A feature that needs the new version waits for that PR to merge, then rebases. → [propagate-version-bumps](.claude/references/propagate-version-bumps.md) for the collision incident and propagate's internals.
 
 ---
 
@@ -24,7 +24,7 @@ For BDS development itself, edit in `~/Documents/GitHub/brik/brik-bds/`, run `np
 6. **Never guess token values.** Every value must come from Figma data or explicit user input.
 7. **Never hand-write dark mode overrides.** Import `figma-tokens-dark.css`, never write `[data-theme="dark"]` blocks.
 8. **Single-source components.** Never duplicate a form, view, or interactive component across routes. If it exists in BDS, use BDS.
-9. **Check Storybook before building custom UI.** Query Storybook MCP tools first. Fix at consumer level before editing BDS CSS.
+9. **Check BDS source before building custom UI.** Read the sibling `brik-bds/components/ui/**` or `node_modules/@brikdesigns/bds/components/`. Storybook MCP is dev-only and works only inside brik-bds. Fix at consumer level before editing BDS CSS.
 
 ---
 
