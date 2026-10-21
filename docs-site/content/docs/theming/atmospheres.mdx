@@ -23,7 +23,7 @@ The portal's theme generator reads `company_profiles.atmosphere` at extraction t
 | **Navigation IA** | `pack.navigationIA` (industry default) + portal overrides | Header archetype + scroll + mobile drawer |
 | **Blueprints** | Per-section, per-page (forthcoming) | Layout primitives |
 
-Each axis is an independent decision. A dental practice might pick `theme_mode: dark` + `atmosphere: editorial-luxury` + `navigation: editorial-transparent`; a wellness studio might pick `theme_mode: light` + `atmosphere: warm-soft` + `navigation: calm-flat`. The portal Intel tab is the single admin surface to set all four.
+Each axis can be set on its own. A dental practice might pick `theme_mode: dark` + `atmosphere: editorial-luxury` + `navigation: editorial-transparent`; a wellness studio might pick `theme_mode: light` + `atmosphere: warm-soft` + `navigation: calm-flat`. Theme mode and atmosphere seed each other's defaults, but setting either one overrides the seed. The full resolution order and who writes each value are in [Client Themes § How the website builder's picks resolve to a mode](/docs/theming/client-themes#how-the-website-builders-picks-resolve-to-a-mode).
 
 ## Vocabulary
 
@@ -89,8 +89,8 @@ Explicit no-op. Emits no rules. Fallback when `company_profiles.atmosphere` is n
 
 When building a new client site:
 
-1. **Read `company_profiles.theme_mode`** (light | dark). If unset, default from `pack.affinities.visualStyle[0]` — `Dark` → dark, anything else → light.
-2. **Read `company_profiles.atmosphere`**. If unset, use the natural pairing from `ATMOSPHERE_THEME_MODE`:
+1. **Read `company_profiles.theme_mode`** (light | dark). It is the client's one base mode; client sites get no light/dark toggle. If it is unset, the design-direction task fills it from the brief's color direction. The order of precedence is in [Client Themes](/docs/theming/client-themes#order-of-precedence).
+2. **Read `company_profiles.atmosphere`**. If it is unset, the design-direction task seeds it from the locked personality. To pick one by hand, match it to the mode with `ATMOSPHERE_THEME_MODE`:
    - dark + dental / med-aesthetic → `editorial-luxury`
    - dark + legal / agency → `cinematic-dramatic`
    - light + wellness / therapy → `warm-soft`
