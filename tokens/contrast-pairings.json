@@ -687,6 +687,14 @@
       "bg": "--bds-surface-primary",
       "thresholdType": "AA-large",
       "note": "WCAG 1.4.11 / 2.4.7, 3:1. The canon GhlForm focus ring (docs/ghl-form-a11y.css) is --bds-border-focus. A client may override the value, and the override must still clear this floor."
+    },
+    {
+      "group": "brand",
+      "label": "GHL form checked-checkbox fill on form background",
+      "fg": "--bds-background-brand-primary",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large",
+      "note": "WCAG 1.4.11, 3:1. The canon GhlForm checked fill (docs/ghl-form-a11y.css) is --bds-background-brand-primary. A theme whose brand-primary is dark on a dark form (Birdwell: black on #000000, 1:1) must paste a visible value, and that value must still clear this floor."
     }
   ]
 }
