@@ -1,6 +1,7 @@
 # ADR-015 — Brand-primary holds the vibrant brand color; its fills + accent text are gated AA-large (3:1)
 
-**Status:** Accepted (2026-06-30; amended 2026-07-01, 2026-09-12) — shipped via BDS-22 ([#1053](https://github.com/brikdesigns/brik-bds/pull/1053)); see § Amendment (2026-07-01) and § Amendment (2026-09-12)
+**Status:** Accepted (2026-06-30; amended 2026-07-01, 2026-09-12, 2026-10-22) — shipped via BDS-22 ([#1053](https://github.com/brikdesigns/brik-bds/pull/1053)); see § Amendment (2026-07-01), § Amendment (2026-09-12) and § Amendment (2026-10-22)
+**Supersedes:** [ADR-016](./ADR-016-small-primary-button-contrast.md) (since the 2026-10-22 amendment)
 **Date:** 2026-06-30
 **Related:** BDS-22 (Brand Color Update), BDS-18 (Color Pairings), BDS-20 (Expand Color Scale), [#710](https://github.com/brikdesigns/brik-bds/pull/710) + [#719](https://github.com/brikdesigns/brik-bds/pull/719) (the AA darkening this reverses), [ADR-011](./ADR-011-service-line-token-value-model.md) (Figma Brand Kit is SoT), [Color Pairings](../../docs-site/content/docs/foundation/color-pairings.mdx), `tokens/contrast-pairings.json` (rule in force)
 **Owner:** Nick Stanerson
@@ -105,3 +106,15 @@ The 2026-07-01 amendment framed the white-on-Poppy CTA *label* as accepted debt.
 **Enforcement (closes the § Advisory claim gap for this case).** The original ADR flagged its usage rule as "advisory — not CI-asserted." The on-brand-fill-text half is now **CI-asserted**: `scripts/lint-brand-fill-text.js` (`npm run lint-brand-fill-text`, wired in `tokens-gate.yml`, #2488) fails when text on a `--surface-`/`--background-brand-primary` fill resolves to anything but `--text-on-color-dark` — catching both `--text-primary` darkening and the theme-flipping `--text-inverse` (black-in-dark) that this can't otherwise see, since the contrast gate accepts dark-on-Poppy (5.55:1). The `--text-brand-primary` small-body-copy half stays asserted by `lint-brand-text-size.js` (#1064).
 
 No BDS token *values* change in this amendment; it is docs + the JSON `note`/`policy` prose. The component sweep + lint land in #2488.
+
+## Amendment (2026-10-22) — primary buttons follow the 2026-09-12 rule; ADR-016 is superseded
+
+ADR-016 accepted Option C on 2026-07-03: point primary-button fills at an AA-passing near-Poppy step. The step shipped as `--color-poppy-600` (`#c94428`, 4.84:1 on white) in v0.152.0, but no Semantic token and no `Button` fill ever pointed at it, so for three months two accepted ADRs gave opposite answers for the same pixels. Agents kept reopening the question.
+
+**Decision (owner, Nick Stanerson):** the 2026-09-12 amendment wins. A primary button is on-color text on the brand fill, so it gets the same rule: **vibrant Poppy fill, white label at normal weight, every size.** 3.78:1 stays owner-accepted debt. `--color-poppy-600` stays a primitive and is not repointed as the button fill. ADR-016 is **Superseded** and #479 (its implementation ticket) closes as not planned.
+
+> OPERATOR SAID 2026-10-22 (Claude Code session `1cf4f135-d75e-42f0-8e0c-b786f9825224.jsonl:910`): "let's continue - ADR-015 amendment wins. Should ADR-016 be archived to avoid confusion? We've addressed this issue MULTIPLE times - let's stop wasting costs on the same problem. Let's write one ADR to consolidate Critical work - please flag any other areas to improve or fix on this topic the "don't talk to each other" is a major concern and deeply rooted issue in our system. The wiring is there, but the connections need to be made or the work needs to be finished."
+
+**Do not reopen this** by minting a darker button fill, a size floor, or a bold label. A future change to the Poppy rail is a new ADR that supersedes this one, not a component fix.
+
+No token values change. Docs updated in the same PR: `docs/adrs/README.md`, ADR-016's status, `docs-site/content/docs/foundation/color-pairings.mdx` (brand section + decision records) and `color.mdx` (the 11-step table row).
