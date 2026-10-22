@@ -513,6 +513,35 @@ claim_is_released() {
   return 1
 }
 
+# The session ids a hand-off body names, as lowercase 8-hex prefixes, one per
+# line. `/hand-off` writes `session `<8hex>`` into its closing line and prose;
+# every agent posts as the operator's GitHub login (#4303), so the body is the
+# only place a hand-off says WHICH session wrote it. One regex, shared with the
+# jq filter below, so the two readers cannot drift (brik-llm#5072).
+# The AUTHOR is named on a `Session: \`<id8>\`` line or the closing `Session spend:`
+# line (hand-off.md). Prose that mentions another session ("claimed by live
+# session `1cf4f135`") is not authorship, so only those two line shapes count.
+HANDOFF_SESSION_LINE_RE='^[[:space:]]*Session( spend)?:'
+HANDOFF_SESSION_RE='session:? *`?([0-9a-f]{8})'
+handoff_session_ids() {
+  printf '%s\n' "${1:-}" | grep -iE "$HANDOFF_SESSION_LINE_RE" | grep -oiE "$HANDOFF_SESSION_RE" \
+    | sed -E 's/.*([0-9a-fA-F]{8})$/\1/' | tr 'A-F' 'a-f' | sort -u
+}
+
+# Does a hand-off body release <session>'s claim? Echo one word:
+#   named         the body names this session — it handed off, claim released
+#   other         the body names only OTHER sessions — this claim is still live
+#   unattributed  the body names no session — released, as before #5072, but
+#                 flagged so the reader can tell it is a guess
+# <session> may be a full UUID; only its first 8 hex digits are compared.
+handoff_release_verdict() {
+  local body="${1:-}" session="${2:-}" prefix ids
+  prefix="$(printf '%s' "$session" | cut -c1-8 | tr 'A-F' 'a-f')"
+  ids="$(handoff_session_ids "$body")"
+  if [ -z "$ids" ] || [ -z "$prefix" ]; then printf 'unattributed'; return 0; fi
+  if printf '%s\n' "$ids" | grep -qx "$prefix"; then printf 'named'; else printf 'other'; fi
+}
+
 # Echo the newest hand-off stamp that postdates <since>, and return 0; rc 1 when
 # none does. Reads the comments NDJSON on stdin (brik-llm#4414).
 #
@@ -520,13 +549,28 @@ claim_is_released() {
 # resume-supersede-check.sh compares the same two values. Only the HTML marker
 # counts — the legacy `## Handoff` heading predates claims, and a heading match
 # would read any comment quoting one.
+#
+# With <session> (the claim holder's id), a hand-off counts only if its author
+# line names that session or it names none; a hand-off that names only other sessions
+# is another session's wrap and does not release this claim (brik-llm#5072:
+# 2026-10-22 a refresh posted by session 1cf4f135 released a live claim held by
+# a84db305, and a third session took the ticket). A hand-off that names no
+# session still releases, and the stamp is suffixed " (unattributed hand-off)".
 claim_handoff_after() {
-  local since="${1:-}" at
+  local since="${1:-}" session="${2:-}" at prefix
   [ -n "$since" ] || return 1
   command -v jq >/dev/null 2>&1 || return 1
-  at="$(jq -rs --arg s "$since" '
+  prefix="$(printf '%s' "$session" | cut -c1-8 | tr 'A-F' 'a-f')"
+  at="$(jq -rs --arg s "$since" --arg p "$prefix" --arg re "$HANDOFF_SESSION_RE" --arg ln '^\s*Session( spend)?:' '
       [ .[] | select((.body // "") | test("<!--\\s*brik-handoff"; "i"))
-            | .created_at // empty | select(. > $s) ] | max // empty' 2>/dev/null)" || return 1
+            | select((.created_at // "") > $s)
+            | { at: .created_at,
+                ids: [ (.body // "") | split("\n")[] | select(test($ln; "i"))
+                       | match($re; "gi").captures[0].string | ascii_downcase ] }
+            | select($p == "" or (.ids | length) == 0 or any(.ids[]; . == $p))
+            | { at, un: ($p != "" and (.ids | length) == 0) } ]
+      | max_by(.at) // empty
+      | if .un then .at + " (unattributed hand-off)" else .at end' 2>/dev/null)" || return 1
   [ -n "$at" ] || return 1
   printf '%s' "$at"
 }
@@ -875,9 +919,9 @@ _ic_pr_state() {
 # closed by a PR that closed rather than merged, or closed by hand.
 _ic_claim_release_reason() {
   local owner="${1:?}" repo="${2:?}" num="${3:?}" branches="${4:-}" since="${5:-}"
-  local handoff_at=""
+  local session="${6:-}" handoff_at=""
   if [ -n "$since" ] && [ "$_IC_COMMENTS_KEY" = "$owner/$repo#$num" ] \
-     && handoff_at="$(printf '%s\n' "$_IC_COMMENTS_NDJSON" | claim_handoff_after "$since")"; then
+     && handoff_at="$(printf '%s\n' "$_IC_COMMENTS_NDJSON" | claim_handoff_after "$since" "$session")"; then
     printf 'that session handed off at %s, after claiming' "$handoff_at"
     return 0
   fi
@@ -1013,7 +1057,7 @@ check_issue_claim() {
       # work is actually still in flight (brik-llm#2204). Only reached here —
       # a clear ticket, my own claim, or an already-expired one costs nothing.
       if release_reason="$(_ic_claim_release_reason "$owner" "$repo" "$num" \
-                            "$their_branch" "$stamp")"; then
+                            "$their_branch" "$stamp" "$their_session")"; then
         echo -e "${_IC_YELLOW}⚠  A claim by ${their_host} / ${their_branch} is no longer live — ${release_reason}.${_IC_NC}" >&2
         echo -e "${_IC_YELLOW}   Taking the ticket; no NEW_TASK_STEAL_CLAIM needed.${_IC_NC}" >&2
       else
