@@ -508,7 +508,7 @@ fi
 # Confirm plain `git worktree remove` really does refuse, so this test fails
 # loudly if a future git drops the restriction and the fallback becomes dead code.
 RAW_ERR="$(g -C "$PRIMARY" worktree remove "$WT_ROOT/submod" 2>&1 || true)"
-if printf '%s' "$RAW_ERR" | grep -q 'containing submodules'; then
+if grep -q 'containing submodules' <<<"$RAW_ERR"; then
   echo -e "  ${GREEN}PASS${NC}  git still refuses to remove a submodule-bearing worktree"; PASS=$((PASS+1))
 else
   echo -e "  ${RED}FAIL${NC}  git no longer refuses — revisit the fallback, it may be dead code"
@@ -528,7 +528,7 @@ fi
 check "fallback is reported, not silent" "submodule fallback" "$APPLY_OUT"
 
 # The misleading guess must be gone: a real failure now prints git's own words.
-if printf '%s' "$APPLY_OUT" | grep -q 'locked or untracked junk'; then
+if grep -q 'locked or untracked junk' <<<"$APPLY_OUT"; then
   echo -e "  ${RED}FAIL${NC}  the guessed 'locked or untracked junk?' message is still emitted"; FAIL=$((FAIL+1))
 else
   echo -e "  ${GREEN}PASS${NC}  no guessed 'locked or untracked junk?' message"; PASS=$((PASS+1))
@@ -600,7 +600,7 @@ fi
 
 # The verdict REASON must survive into the payload, not just the decision word —
 # "KEEP" alone cannot tell a dirty worktree from one with an open PR.
-if printf '%s' "$json_out" | grep -q '"verdict"' && printf '%s' "$json_out" | grep -q '"decision"'; then
+if grep -q '"verdict"' <<<"$json_out" && grep -q '"decision"' <<<"$json_out"; then
   echo -e "  ${GREEN}PASS${NC}  payload carries verdict + decision"; PASS=$((PASS+1))
 else
   echo -e "  ${RED}FAIL${NC}  payload dropped the verdict reason"; FAIL=$((FAIL+1))
