@@ -42,8 +42,9 @@
  * `light → 500` is load-bearing: 500 is the brand base by convention
  * (`--color-poppy-light` is annotated "Brand primary base" in the kit), and it
  * puts the generated 600 between `light` and `dark` — the intermediate
- * AA-passing near-Poppy step that ADR-016 Option C's durable fix for #479
- * needs and that the 6-step ladder had nowhere to put.
+ * AA-passing near-Poppy step that the 6-step ladder had nowhere to put.
+ * (ADR-016 planned it as the button fill; ADR-015's 2026-10-22 amendment
+ * superseded that, so 600 is a primitive only.)
  *
  * The mapping is ORDINAL, not absolute-lightness. Families do not share an L
  * range (green's `light` sits at L 0.93, poppy's at L 0.63), so a global

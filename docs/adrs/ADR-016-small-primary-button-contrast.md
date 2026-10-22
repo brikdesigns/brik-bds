@@ -1,6 +1,7 @@
 # ADR-016 — White labels on the vibrant Poppy fill fail AA at every button size: choosing the small-primary-button remedy
 
-**Status:** Accepted (2026-07-03) — **Option C** (durable near-Poppy AA step) ratified by the owner. Supersedes the "pending" framing below.
+**Status:** **Superseded** (2026-10-22) by [ADR-015 § Amendment (2026-10-22)](./ADR-015-brand-primary-aa-large-contrast-policy.md). Option C was accepted 2026-07-03 but never wired: `--color-poppy-600` shipped (v0.152.0), and no Semantic token or `Button` fill ever pointed at it. The owner then ruled that the ADR-015 amendment wins, so primary buttons keep the vibrant Poppy fill with a white label at every size. Read ADR-015 for the current rule. This file stays for history.
+**Superseded by:** [ADR-015](./ADR-015-brand-primary-aa-large-contrast-policy.md) (§ Amendment 2026-10-22)
 **Date:** 2026-07-02
 **Related:** [#479](https://github.com/brikdesigns/brik-bds/issues/479) (this decision) · sub-issue of [#526](https://github.com/brikdesigns/brik-bds/issues/526) (WCAG AA contrast contract) · [ADR-015](./ADR-015-brand-primary-aa-large-contrast-policy.md) (brand-primary holds vibrant Poppy, fills gated AA-large — the decision this extends) · [#1064](https://github.com/brikdesigns/brik-bds/issues/1064) / BDS-18 (safe-pairing docs + brand-text usage lint) · [#1065](https://github.com/brikdesigns/brik-bds/issues/1065) / BDS-20 (11-step scale — supplies the token Option C needs) · [ADR-011](./ADR-011-service-line-token-value-model.md) (Figma Brand Kit is SoT) · `tokens/contrast-pairings.json` (rule in force) · brikdesigns#75 (axe baseline)
 **Owner:** Nick Stanerson
