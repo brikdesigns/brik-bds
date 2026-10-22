@@ -1,0 +1,196 @@
+name: Site a11y (reusable)
+
+# The shared WCAG 2.1 AA gate for Brik client sites (brik-llm#5076, ADR-051 D6).
+# A site calls it instead of carrying its own copy; the audit logic it runs is
+# `@brikdesigns/bds/site-a11y` (scripts/site-a11y/), so the workflow and the
+# grader version together under one BDS tag.
+#
+# NOT a BDS gate. It triggers only on `workflow_call`, so it never runs on a
+# brik-bds PR and is not in .github/required-checks.json.
+#
+# Caller shape (the scaffold emits this — brik-llm/web-template/):
+#
+#   on:
+#     pull_request: { branches: [staging, main] }
+#     workflow_dispatch:
+#       inputs: { pr: { required: true, type: string } }
+#   permissions: { contents: read, pull-requests: read }
+#   jobs:
+#     audit:
+#       uses: brikdesigns/brik-bds/.github/workflows/site-a11y.yml@v0.205.0
+#       with:
+#         production-site: <netlify-prod-site>
+#         staging-site: <netlify-staging-site>
+#         pr: ${{ inputs.pr }}
+#       secrets: inherit
+#     axe:
+#       needs: audit
+#       if: always()
+#       runs-on: ubuntu-slim
+#       steps:
+#         - run: test "${{ needs.audit.result }}" = success
+#
+# Why the caller keeps a job called `axe`: sites require a check named `axe`
+# on both protected branches, and a reusable workflow's check-run is reported
+# under the CALLER's job id. The thin `axe` job keeps that context stable, so
+# moving a site onto this gate needs no branch-protection edit.
+#
+# Why the deploy-preview and not a CI build: we audit what is actually served,
+# so CDN/edge artifacts and deploy-side env interpolation are in scope, and no
+# build secrets need to exist in GitHub Actions.
+#
+# Vendor facts this relies on (docs.github.com, "Reuse workflows"): the
+# `github` context — event, ref, sha — is the caller's; `secrets: inherit`
+# passes the caller's secrets within the org; permissions can only be kept or
+# reduced from the caller's, which is why the caller grants pull-requests: read.
+
+on:
+  workflow_call:
+    inputs:
+      production-site:
+        description: "Netlify site name whose deploy-preview gates a PR into main"
+        required: true
+        type: string
+      staging-site:
+        description: "Netlify site name whose deploy-preview gates a PR into staging"
+        required: true
+        type: string
+      pr:
+        description: "PR number, on a workflow_dispatch re-fire only — pass the caller's inputs.pr"
+        required: false
+        type: string
+        default: ""
+      node-version:
+        description: "Node version for the site's npm ci"
+        required: false
+        type: string
+        default: "20"
+    secrets:
+      PACKAGES_READ_TOKEN:
+        description: "Reads @brikdesigns/* from GitHub Packages via the site's .npmrc"
+        # Not `required: true`: callers pass it with `secrets: inherit`, and an
+        # absent token already fails `npm ci` loudly on the 401.
+        required: false
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  axe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+
+      # @brikdesigns/bds is on GitHub Packages; the site's .npmrc reads this token.
+      - name: Install dependencies
+        env:
+          PACKAGES_READ_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      # Each Netlify site builds its own preview for a PR, and the two are NOT
+      # interchangeable: the one whose deploy-preview check is required on this
+      # PR's base branch is the artifact that will actually be merged and
+      # served. Auditing the other site's preview would gate on a bundle nobody
+      # is about to ship.
+      #
+      #   base staging -> <staging-site>/deploy-preview
+      #   base main    -> <production-site>/deploy-preview
+      - name: Resolve the deploy-preview host for this PR's base
+        id: host
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+          # Empty on a dispatch; the PR number is an input there and the base is
+          # read back from the API, so a manual re-fire cannot audit the wrong
+          # site by having its base typed in wrong.
+          PR_FROM_EVENT: ${{ github.event.pull_request.number }}
+          BASE_FROM_EVENT: ${{ github.event.pull_request.base.ref }}
+          PR_FROM_INPUT: ${{ inputs.pr }}
+          PRODUCTION_SITE: ${{ inputs.production-site }}
+          STAGING_SITE: ${{ inputs.staging-site }}
+        run: |
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            PR="$PR_FROM_INPUT"
+            if [ -z "$PR" ]; then
+              echo "Dispatched with no PR number — the caller must pass its inputs.pr through as 'pr'." >&2
+              exit 1
+            fi
+            # One call, and treat a failed call as a failure rather than as a
+            # value: a 403 body piped on as HEAD_SHA reads as a SHA mismatch,
+            # a real error wearing the wrong error's clothes.
+            if ! PR_JSON="$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR" 2>&1)"; then
+              echo "Could not read PR #$PR:" >&2
+              echo "$PR_JSON" >&2
+              exit 1
+            fi
+            BASE="$(printf '%s' "$PR_JSON" | jq -r '.base.ref')"
+            HEAD_SHA="$(printf '%s' "$PR_JSON" | jq -r '.head.sha')"
+            # The point of a dispatch is to put a check on the PR's head commit.
+            # On any other ref the result attaches to the wrong SHA and
+            # protection stays blocked while the run is green. Refuse instead.
+            if [ "$HEAD_SHA" != "$GITHUB_SHA" ]; then
+              echo "This run is on $GITHUB_SHA but PR #$PR's head is $HEAD_SHA." >&2
+              echo "Re-dispatch with --ref set to that PR's head branch." >&2
+              exit 1
+            fi
+          else
+            PR="$PR_FROM_EVENT"
+            BASE="$BASE_FROM_EVENT"
+          fi
+          case "$BASE" in
+            staging) SITE="$STAGING_SITE" ;;
+            main)    SITE="$PRODUCTION_SITE" ;;
+            *)
+              echo "Unexpected base branch '$BASE' — refusing to guess a preview host." >&2
+              exit 1
+              ;;
+          esac
+          echo "pr=$PR" >> "$GITHUB_OUTPUT"
+          echo "site=$SITE" >> "$GITHUB_OUTPUT"
+          echo "PR #$PR, base '$BASE' -> Netlify site '$SITE'."
+
+      - name: Wait for the Netlify deploy-preview
+        id: deploy
+        env:
+          SITE: ${{ steps.host.outputs.site }}
+          PR: ${{ steps.host.outputs.pr }}
+        run: |
+          DEPLOY_URL="https://deploy-preview-${PR}--${SITE}.netlify.app"
+          echo "Polling $DEPLOY_URL for live deploy …"
+          for i in $(seq 1 60); do
+            CODE=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 "$DEPLOY_URL/" || echo "000")
+            if [ "$CODE" = "200" ]; then
+              echo "Deploy live (HTTP $CODE) on attempt $i."
+              echo "url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "  attempt $i: HTTP $CODE — sleeping 10s"
+            sleep 10
+          done
+          echo "Deploy never reached HTTP 200 after 10 minutes." >&2
+          exit 1
+
+      - name: Run a11y suite
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
+        run: npm run test:a11y
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v5
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
