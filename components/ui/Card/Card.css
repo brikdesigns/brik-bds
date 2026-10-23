@@ -235,7 +235,7 @@
  *
  * State → token mapping:
  *   not-configured → --background-status-neutral / --bds-text-muted (label)
- *   linked         → --background-status-neutral / --bds-text-muted (label)
+ *   linked         → neutral tone (--tone-neutral modifier) → --bds-text-muted (label)
  *   connected      → --bds-background-positive / --bds-text-positive
  *   syncing        → --background-status-info / --text-status-info
  *   synced         → --bds-background-positive / --bds-text-positive
@@ -278,7 +278,7 @@
   color: var(--bds-text-muted);
 }
 
-.bds-card__control-status--linked .bds-card__control-status-label {
+.bds-card__control-status--tone-neutral .bds-card__control-status-label {
   color: var(--bds-text-muted);
 }
 

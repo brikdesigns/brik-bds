@@ -503,6 +503,7 @@ function renderAnatomy({
                 className={bdsClass(
                   'bds-card__control-status',
                   `bds-card__control-status--${resolvedConnectionStatus}`,
+                  `bds-card__control-status--tone-${CONNECTION_STATUS_DOT[resolvedConnectionStatus]}`,
                 )}
                 role="status"
                 aria-label={`Connection status: ${CONNECTION_STATUS_LABELS[resolvedConnectionStatus]}`}
