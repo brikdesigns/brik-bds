@@ -116,6 +116,7 @@
     ],
     "status": [
       "not-configured",
+      "linked",
       "connected",
       "syncing",
       "synced",
