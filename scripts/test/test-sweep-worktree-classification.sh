@@ -1187,6 +1187,175 @@ check "an uncommitted edit INSIDE the submodule still KEEPs" \
 check "an untracked file INSIDE the submodule still KEEPs" \
   "KEEP — 1 uncommitted change(s)" "$(row5 sub-untracked)"
 
+# ── Pass 6: a zero-commit worktree asks its ticket's claim (#4376) ───────────
+#
+# A worktree with no commits read `REVIEW — no commits yet (session may be
+# mid-setup)` forever, a session five minutes old and one dead for weeks alike.
+# The verdict now comes from the claim on the ticket new-task.sh recorded on the
+# branch (`branch.<b>.brikTaskIssue`). Every marker below is written by
+# issue-claim.sh's own claim_marker_body, so a change to the canonical marker
+# shape breaks this suite rather than silently blinding the reaper.
+#
+# Branches are cut with an OLD committer date (the reflog's creation stamp) except
+# zc-fresh-stale, which is the fail-open window: new-task.sh proceeds unclaimed when
+# its claim write fails, so a stale claim on a minutes-old branch must not REMOVE.
+echo
+echo -e "${YELLOW}▸ zero-commit worktrees ask the ticket's claim (#4376)${NC}"
+
+REMOTE6="$TMPROOT/remote6.git"
+PRIMARY6="$TMPROOT/primary6"
+WT6="$TMPROOT/p6-worktrees"
+git init -q --bare "$REMOTE6"
+git init -q -b main "$PRIMARY6"
+assert_throwaway_repo "$PRIMARY6" "sweep fixture primary6"
+g -C "$PRIMARY6" config user.email "guardtest@example.com"
+g -C "$PRIMARY6" config user.name "guardtest"
+g -C "$PRIMARY6" config commit.gpgsign false
+echo seed > "$PRIMARY6/README.md"
+g -C "$PRIMARY6" add README.md
+g -C "$PRIMARY6" commit -q -m seed
+g -C "$PRIMARY6" remote add origin "$REMOTE6"
+g -C "$PRIMARY6" push -q -u origin main
+mkdir -p "$WT6"
+
+OLD_DATE="2026-01-01T00:00:00Z"
+NOW_STAMP="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+HOUR_AGO="$(python3 -c 'import datetime as d; print((d.datetime.now(d.timezone.utc)-d.timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ"))')"
+FUTURE="2099-01-01T00:00:00Z"
+
+CLAIMS6="$TMPROOT/claims6"
+mkdir -p "$CLAIMS6"
+# One file per issue, holding what `gh api … --jq '… | .body | @json'` prints: one
+# JSON string per marker comment. An empty file is a ticket with no marker.
+claim_file() {  # $1=issue  $2=host  $3=branch cell  $4=Since
+  # shellcheck source=/dev/null
+  ( source "$(cd "$SCRIPT_DIR/.." && pwd)/lib/issue-claim.sh" \
+      && claim_marker_body "$2" "$3" "$4" "sess-$1" ) \
+    | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))' > "$CLAIMS6/$1"
+}
+claim_file 4601 claim-host "brikdesigns/brik-llm:task/zc-live" "$HOUR_AGO"
+claim_file 4602 claim-host "brikdesigns/brik-llm:task/zc-stale" "$OLD_DATE"
+: > "$CLAIMS6/4603"
+claim_file 4604 claim-host "brikdesigns/brik-llm:task/somewhere-else" "$HOUR_AGO"
+claim_file 4605 claim-host "brikdesigns/brik-llm:task/zc-fresh-stale" "$OLD_DATE"
+claim_file 4607 claim-host "brikdesigns/brik-llm:(pending — not yet branched), brikdesigns/brik-llm:task/zc-qualified" "$NOW_STAMP"
+claim_file 4608 claim-host "brikdesigns/brik-llm:task/zc-future" "$FUTURE"
+export CLAIMS6
+
+STUB6="$TMPROOT/bin6"
+mkdir -p "$STUB6"
+cat > "$STUB6/gh" <<'STUB'
+#!/usr/bin/env bash
+if [ "${1:-}" = "pr" ] && [ "${2:-}" = "list" ]; then
+  [ "${STUB6_PR_FAIL:-0}" = "1" ] && { echo "gh: API rate limit exceeded" >&2; exit 1; }
+  echo '[]'; exit 0
+fi
+if [ "${1:-}" = "api" ]; then
+  path="${2:-}"
+  num="$(printf '%s' "$path" | sed -n 's#^repos/.*/issues/\([0-9][0-9]*\)/comments$#\1#p')"
+  # A bare ref must arrive as gh's own placeholder, a qualified one as itself.
+  case "$num:$path" in
+    4607:repos/brikdesigns/brik-llm/*) : ;;
+    4607:*) echo "stub: 4607 expected the qualified path, got $path" >&2; exit 1 ;;
+    *:'repos/{owner}/{repo}/'*) : ;;
+    *) echo "stub: unexpected path $path" >&2; exit 1 ;;
+  esac
+  [ "$num" = "4606" ] && { echo "gh: HTTP 502: Bad Gateway" >&2; exit 1; }
+  [ -r "$CLAIMS6/$num" ] && { cat "$CLAIMS6/$num"; exit 0; }
+  echo "gh: Not Found (HTTP 404)" >&2; exit 1
+fi
+exit 1
+STUB
+chmod +x "$STUB6/gh"
+
+zc_worktree() {  # $1=slug  $2=issue ref or ""  $3=branch-creation date or ""
+  if [ -n "$3" ]; then
+    GIT_COMMITTER_DATE="$3" g -C "$PRIMARY6" worktree add -q -b "task/$1" "$WT6/$1" main
+  else
+    g -C "$PRIMARY6" worktree add -q -b "task/$1" "$WT6/$1" main
+  fi
+  [ -n "$2" ] && g -C "$PRIMARY6" config "branch.task/$1.brikTaskIssue" "$2"
+  return 0
+}
+zc_worktree zc-live        4601                       "$OLD_DATE"
+zc_worktree zc-stale       4602                       "$OLD_DATE"
+zc_worktree zc-absent      4603                       "$OLD_DATE"
+zc_worktree zc-other       4604                       "$OLD_DATE"
+zc_worktree zc-fresh-stale 4605                       ""
+zc_worktree zc-unreadable  4606                       "$OLD_DATE"
+zc_worktree zc-noref       ""                         "$OLD_DATE"
+zc_worktree zc-qualified   "brikdesigns/brik-llm#4607" "$OLD_DATE"
+zc_worktree zc-future      4608                       "$OLD_DATE"
+
+# Preconditions: the old-branch fixtures must really read old, and none may carry a
+# commit, or every verdict below would be testing some other band.
+check "fixture: an old branch's reflog carries its 2026-01-01 creation" "@{1767225600}" \
+  "$(g -C "$WT6/zc-stale" reflog show --date=unix --format='%gd' refs/heads/task/zc-stale)"
+check "fixture: zero-commit branch reflog is creation-only" "branch: Created from" \
+  "$(g -C "$WT6/zc-stale" reflog show --format='%gs' refs/heads/task/zc-stale)"
+
+D6="$( (cd "$PRIMARY6" && PATH="$STUB6:$PATH" BRIK_WORKTREE_ROOT="$WT6" "$SWEEPER" 2>&1) )"
+$VERBOSE && { echo "$D6"; echo; }
+row6() { grep -E "^task/$1[[:space:]]" <<<"$D6"; }
+
+check "live claim → KEEP, naming the holding host (AC2)" \
+  "KEEP — claimed by claim-host 1h" "$(row6 zc-live)"
+# No minute digit asserted: the claim is 1h old to the second, so a fast run reads
+# `1h ago` and a slower one `1h0m ago`.
+check "…and the claim's age and ticket" " ago on #4601, no commits yet" "$(row6 zc-live)"
+check "claim older than CLAIM_STALE_SECONDS → REMOVE, naming its age (AC1)" \
+  "REMOVE — no commits, claim stale (" "$(row6 zc-stale)"
+check "…and the stale verdict states the window it was judged by" "> 12h)" "$(row6 zc-stale)"
+check "no claim marker at all → REMOVE" \
+  "REMOVE — no commits, claim absent on #4603 (no claim marker on the ticket)" "$(row6 zc-absent)"
+check "a live claim naming ANOTHER branch is not this worktree's claim → REMOVE" \
+  "claim absent on #4604 (the claim names other branches, not this one)" "$(row6 zc-other)"
+check "stale claim on a minutes-old branch → REVIEW (the fail-open claim write)" \
+  "but branch is only" "$(row6 zc-fresh-stale)"
+check "unreadable claim → REVIEW, saying so" \
+  "REVIEW — no commits yet, claim UNREADABLE on #4606: comments read failed: gh: HTTP 502" "$(row6 zc-unreadable)"
+check "no ticket on the branch → REVIEW, keeping the old wording's prefix" \
+  "REVIEW — no commits yet, no ticket recorded on the branch" "$(row6 zc-noref)"
+check "owner/repo#N ticket record reads its own repo's claim → KEEP" \
+  "KEEP — claimed by claim-host" "$(row6 zc-qualified)"
+check "a far-future Since is UNREADABLE, not stale" \
+  "claim UNREADABLE on #4608: claim Since $FUTURE is in the future" "$(row6 zc-future)"
+
+# Positive control (AC3): the same instrument that REMOVEs zc-stale must say KEEP for
+# the freshly-claimed zc-live, and never REMOVE any of the doubtful shapes.
+for slug in zc-live zc-qualified zc-fresh-stale zc-unreadable zc-noref zc-future; do
+  if grep -qE "^task/${slug}[[:space:]].*REMOVE" <<<"$D6"; then
+    echo -e "  ${RED}FAIL${NC}  task/$slug must never read REMOVE"; FAIL=$((FAIL+1))
+  else
+    echo -e "  ${GREEN}PASS${NC}  task/$slug must never read REMOVE"; PASS=$((PASS+1))
+  fi
+done
+check "removable count is 3 (zc-stale + zc-absent + zc-other)" "3 worktree(s) removable" "$D6"
+
+# A window override moves the line: at 30 days the 2026-01-01 claim is still stale,
+# and at 100 years it is live — proof the verdict reads CLAIM_STALE_SECONDS.
+D6W="$( (cd "$PRIMARY6" && PATH="$STUB6:$PATH" BRIK_WORKTREE_ROOT="$WT6" \
+  CLAIM_STALE_SECONDS=3153600000 "$SWEEPER" 2>&1) )"
+check "CLAIM_STALE_SECONDS is honoured: a 100-year window makes the old claim live" \
+  "KEEP — claimed by claim-host" "$(grep -E '^task/zc-stale[[:space:]]' <<<"$D6W")"
+
+# gh pr list failing must not let a stale claim REMOVE: no PR is an absence the
+# degraded run never established (#3603).
+D6P="$( (cd "$PRIMARY6" && PATH="$STUB6:$PATH" BRIK_WORKTREE_ROOT="$WT6" STUB6_PR_FAIL=1 "$SWEEPER" 2>&1) )"
+check "stale claim + unreadable PR state → REVIEW, not REMOVE" \
+  "but PR state UNREADABLE" "$(grep -E '^task/zc-stale[[:space:]]' <<<"$D6P")"
+check "…and nothing is removable in that degraded run" "0 worktree(s) removable" "$D6P"
+
+# --apply actually removes the stale one and leaves the live one standing.
+A6="$( (cd "$PRIMARY6" && PATH="$STUB6:$PATH" BRIK_WORKTREE_ROOT="$WT6" "$SWEEPER" --apply 2>&1) )"
+$VERBOSE && { echo "$A6"; echo; }
+if [ ! -d "$WT6/zc-stale" ] && [ -d "$WT6/zc-live" ] && [ -d "$WT6/zc-fresh-stale" ]; then
+  echo -e "  ${GREEN}PASS${NC}  --apply removed the stale-claim worktree and kept the live and fresh ones"; PASS=$((PASS+1))
+else
+  echo -e "  ${RED}FAIL${NC}  --apply: zc-stale present=$([ -d "$WT6/zc-stale" ] && echo y || echo n) zc-live present=$([ -d "$WT6/zc-live" ] && echo y || echo n) zc-fresh-stale present=$([ -d "$WT6/zc-fresh-stale" ] && echo y || echo n)"
+  FAIL=$((FAIL+1))
+fi
+
 echo
 if [ "$FAIL" -eq 0 ]; then
   echo -e "${GREEN}✓ ${PASS} passed${NC}"
