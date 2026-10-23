@@ -46,6 +46,7 @@ export type CardControlActionAlign = 'center' | 'top';
  * Connection-status state for the `control` layout integration card.
  * Maps to canonical semantic token pairs:
  * - `not-configured` → `--bds-text-muted` / `--background-status-neutral` (neutral/unconfigured)
+ * - `linked`         → `--bds-text-muted` / `--background-status-neutral` (linked, nothing read yet — NOT green)
  * - `connected`      → `--bds-text-positive` / `--bds-background-positive`
  * - `syncing`        → `--text-status-info` / `--background-status-info` (blue/in-progress)
  * - `synced`         → `--bds-text-positive` / `--bds-background-positive`
@@ -53,6 +54,7 @@ export type CardControlActionAlign = 'center' | 'top';
  */
 export type CardControlConnectionStatus =
   | 'not-configured'
+  | 'linked'
   | 'connected'
   | 'syncing'
   | 'synced'
@@ -250,7 +252,7 @@ interface CardAnatomyProps extends CardBaseProps {
   description?: ReactNode;
   /** Trailing-block vertical alignment (`control` only) — `center` (default) / `top`. */
   actionAlign?: CardControlActionAlign;
-  /** Connection-status indicator (`control` only) — `not-configured` / `connected` / `syncing` / `synced` / `failed`. */
+  /** Connection-status indicator (`control` only) — `not-configured` / `linked` / `connected` / `syncing` / `synced` / `failed`. */
   connectionStatus?: CardControlConnectionStatus;
   /** "Last synced" label below the status indicator (`control` only). */
   lastSynced?: string;
@@ -414,6 +416,7 @@ function renderDefault({
 
 const CONNECTION_STATUS_LABELS: Record<CardControlConnectionStatus, string> = {
   'not-configured': 'Not configured',
+  linked:           'Linked',
   connected:        'Connected',
   syncing:          'Syncing',
   synced:           'Synced',
@@ -427,6 +430,7 @@ const CONNECTION_STATUS_LABELS: Record<CardControlConnectionStatus, string> = {
  */
 const CONNECTION_STATUS_DOT: Record<CardControlConnectionStatus, DotTone> = {
   'not-configured': 'neutral',
+  linked:           'neutral',
   connected:        'positive',
   syncing:          'info',
   synced:           'positive',

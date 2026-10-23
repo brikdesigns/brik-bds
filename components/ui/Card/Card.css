@@ -235,6 +235,7 @@
  *
  * State → token mapping:
  *   not-configured → --background-status-neutral / --bds-text-muted (label)
+ *   linked         → --background-status-neutral / --bds-text-muted (label)
  *   connected      → --bds-background-positive / --bds-text-positive
  *   syncing        → --background-status-info / --text-status-info
  *   synced         → --bds-background-positive / --bds-text-positive
@@ -274,6 +275,10 @@
 /* ── Per-state label color (the dot's color comes from `<Dot status>`) ── */
 
 .bds-card__control-status--not-configured .bds-card__control-status-label {
+  color: var(--bds-text-muted);
+}
+
+.bds-card__control-status--linked .bds-card__control-status-label {
   color: var(--bds-text-muted);
 }
 
