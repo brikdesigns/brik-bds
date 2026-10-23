@@ -199,7 +199,7 @@ export const Control: Story = {
     },
     connectionStatus: {
       control: 'select',
-      options: ['not-configured', 'connected', 'syncing', 'synced', 'error'],
+      options: ['not-configured', 'linked', 'connected', 'syncing', 'synced', 'failed'],
       description:
         'Connection-status state (a state of this one card, not a variant). Renders a status indicator in the trailing block alongside the `action`.',
     },
