@@ -175,7 +175,7 @@ Two optional slots extend `metric` for a labelled selection — the shape the re
 />
 ```
 
-`actionAlign` controls vertical alignment of the trailing block — `center` (default) or `top`, which anchors to the upper-right when descriptions are tall. `connectionStatus` accepts `not-configured`, `connected`, `syncing`, `synced`, or `failed` and renders a status indicator alongside the action; pass `lastSynced` for a timestamp beneath it.
+`actionAlign` controls vertical alignment of the trailing block — `center` (default) or `top`, which anchors to the upper-right when descriptions are tall. `connectionStatus` accepts `not-configured`, `linked` (linked, nothing read yet: neutral, never green), `connected`, `syncing`, `synced`, or `failed` and renders a status indicator alongside the action; pass `lastSynced` for a timestamp beneath it.
 
 <Callout type="info">
   **`layout="control"` replaces the standalone `<CardControl>` component**, which is deprecated per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md) ([#657](https://github.com/brikdesigns/brik-bds/issues/657)). New code should use the layout; see the [CardControl migration guide](/docs/components/card-control#migration).
@@ -273,7 +273,7 @@ One flat slot set serves all four arrangements. A slot that a layout does not re
 | `mediaTreatment` | `'flush' \| 'inset'` | `'flush'` |
 | `description` | `ReactNode` | — |
 | `actionAlign` | `'center' \| 'top'` | `'center'` |
-| `connectionStatus` | `'not-configured' \| 'connected' \| 'syncing' \| 'synced' \| 'failed'` | — |
+| `connectionStatus` | `'not-configured' \| 'linked' \| 'connected' \| 'syncing' \| 'synced' \| 'failed'` | — |
 | `lastSynced` | `string` | — |
 | `detail` | `ReactNode` | — |
 

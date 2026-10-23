@@ -79,7 +79,7 @@ Two optional slots extend `metric` for a labelled selection (the shape the remov
 
 `layout="control"` — settings / integration row. Leading `media` (logo) + `title` / `description` on the left, (`connectionStatus` indicator + `action`) on the right. Use `actionAlign="top"` for long descriptions where the action should anchor to the upper-right corner.
 
-The `connectionStatus` prop accepts `not-configured | connected | syncing | synced | error` and renders a status indicator in the trailing block, coexisting with the `action` slot; pass `lastSynced` for a timestamp beneath it. `connectionStatus` is a **state of one card, not a set of variants** — cycle it in the Controls panel on the story below rather than reaching for separate stories.
+The `connectionStatus` prop accepts `not-configured | linked | connected | syncing | synced | failed` (`linked` = connected to the source but nothing read yet; renders a neutral dot, never green — only `connected` and `synced` mean data is flowing) and renders a status indicator in the trailing block, coexisting with the `action` slot; pass `lastSynced` for a timestamp beneath it. `connectionStatus` is a **state of one card, not a set of variants** — cycle it in the Controls panel on the story below rather than reaching for separate stories.
 
 <Canvas of={Stories.Control} />
 

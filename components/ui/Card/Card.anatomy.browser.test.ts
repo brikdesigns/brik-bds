@@ -174,4 +174,15 @@ describe('Card anatomy API (ADR-038)', () => {
     expect(rootEl.className).toContain('bds-card--layout-stack');
     expect(rootEl.textContent).toContain('Only a title');
   });
+
+  it('layout="control" connectionStatus="linked" shows "Linked" with a neutral (non-green) Dot', async () => {
+    const el = await mount(
+      h(Card as never, { layout: 'control', title: 'Source', connectionStatus: 'linked' }),
+    );
+    const status = el.querySelector('.bds-card__control-status--linked');
+    expect(status).not.toBeNull();
+    expect(status?.querySelector('.bds-card__control-status-label')?.textContent).toBe('Linked');
+    expect(status?.querySelector('.bds-dot--tone-neutral')).not.toBeNull();
+    expect(status?.querySelector('.bds-dot--tone-positive')).toBeNull();
+  });
 });
