@@ -245,6 +245,50 @@
   transform: rotate(180deg);
 }
 
+/* ─── Switcher menu controls — scope label, search, filters ──────
+ * Rendered through Menu's `header` slot (see BreadcrumbSwitch), so they sit
+ * inside the menu's outside-click boundary and above the list. The header is
+ * pinned while the list scrolls so the search box never scrolls out of reach.
+ * Menu's header uppercases its text; only the scope label keeps that. */
+
+.bds-breadcrumb__switch-menu .bds-menu__header {
+  position: sticky;
+  top: calc(-1 * var(--bds-padding-md));
+  z-index: 1;
+  /* Opaque so list items scroll beneath it, and tall enough to cover the
+     menu's own top padding the negative `top` reaches into. */
+  background-color: var(--bds-background-primary);
+  padding-top: var(--bds-padding-md);
+}
+
+.bds-breadcrumb__switch-controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-gap-md);
+}
+
+.bds-breadcrumb__switch-scope {
+  overflow-wrap: anywhere;
+}
+
+.bds-breadcrumb__switch-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bds-gap-sm);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.bds-breadcrumb__switch-status {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: var(--bds-font-weight-regular);
+}
+
+.bds-breadcrumb__switch-status:empty {
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .bds-breadcrumb__switch-caret {
     transition: none;

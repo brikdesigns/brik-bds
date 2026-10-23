@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, userEvent, waitFor } from 'storybook/test';
-import { Breadcrumb, type BreadcrumbItem } from './Breadcrumb';
+import {
+  Breadcrumb,
+  type BreadcrumbItem,
+  type BreadcrumbSwitchFilter,
+  type BreadcrumbSwitchOption,
+} from './Breadcrumb';
 import { type BdsLinkComponent } from '../NavItem';
 
 /* Story-only stand-in for a router `Link` (Next.js / Remix). Tags the rendered
@@ -22,7 +27,7 @@ const meta: Meta<typeof Breadcrumb> = {
     items: {
       control: 'object',
       description:
-        'Crumb trail in order. The last item renders as plain text with `aria-current="page"`; earlier items render as `<a>` when `href` is set. Any item can also carry its own `switcher` (`{ options, switchLabel, onNavigate? }`) to render a caret + sibling-record menu inline right after that crumb — two or more `options` required, same as the trailing switcher.',
+        'Crumb trail in order. The last item renders as plain text with `aria-current="page"`; earlier items render as `<a>` when `href` is set. Any item can also carry its own `switcher` (`{ options, switchLabel, onNavigate?, filters?, scopeLabel?, searchThreshold? }`) to render a caret + sibling-record menu inline right after that crumb — two or more `options` required, same as the trailing switcher.',
     },
     separator: {
       control: 'select',
@@ -47,6 +52,20 @@ const meta: Meta<typeof Breadcrumb> = {
       control: false,
       description:
         'Called with the selected href when a non-current option is chosen. Defaults to a full-page navigation — pass a router-aware handler for client-side routing.',
+    },
+    filters: {
+      control: 'object',
+      description:
+        'Binary filters rendered as `FilterToggle`s above the list, off by default. Each is `{ id, label, facet, value }`; when on, options narrow to those where `option.facets[facet] === value`. The `current` option always stays visible.',
+    },
+    scopeLabel: {
+      control: 'text',
+      description: 'Text rendered above the list naming what it contains, e.g. `Clients with Online Business Listings`.',
+    },
+    searchThreshold: {
+      control: 'number',
+      description:
+        'A labelled search box (filters options by label, case-insensitive) shows once the option count is greater than this. Default `8`; `0` always shows it.',
     },
   },
 };
@@ -368,5 +387,271 @@ export const InteractionTestMultipleSwitchersIndependent: Story = {
     await userEvent.click(projectTrigger);
     await waitFor(() => expect(projectTrigger).toHaveAttribute('aria-expanded', 'true'));
     await expect(clientTrigger).toHaveAttribute('aria-expanded', 'false');
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   5. SEARCH + FILTERS — a long switcher list narrows by a labelled search
+      box (once the option count passes `searchThreshold`, default 8), by
+      `FilterToggle` filters that match an option's `facets`, and carries an
+      optional `scopeLabel` above the list. Both the trailing `options` and a
+      per-crumb `switcher` take the same props.
+   ═══════════════════════════════════════════════════════════════ */
+
+const INDUSTRY_CLIENTS: BreadcrumbSwitchOption[] = [
+  { label: 'Acme Dental', href: '#acme-dental', current: true, hint: 'Dental', facets: { industry: 'dental' } },
+  { label: 'Beacon Orthodontics', href: '#beacon-ortho', hint: 'Dental', facets: { industry: 'dental' } },
+  { label: 'Cedar Family Dentistry', href: '#cedar-family', hint: 'Dental', facets: { industry: 'dental' } },
+  { label: 'Delta Chiropractic', href: '#delta-chiro', hint: 'Chiropractic', facets: { industry: 'chiropractic' } },
+  { label: 'Elm Street Chiropractic', href: '#elm-street', hint: 'Chiropractic', facets: { industry: 'chiropractic' } },
+  { label: 'Fern Veterinary', href: '#fern-vet', hint: 'Veterinary', facets: { industry: 'veterinary' } },
+  { label: 'Grove Physical Therapy', href: '#grove-pt', hint: 'Physical therapy', facets: { industry: 'physical-therapy' } },
+  { label: 'Harbor Dermatology', href: '#harbor-derm', hint: 'Dermatology', facets: { industry: 'dermatology' } },
+  { label: 'Iris Optometry', href: '#iris-optometry', hint: 'Optometry', facets: { industry: 'optometry' } },
+  { label: 'Juniper Pediatrics', href: '#juniper-peds', hint: 'Pediatrics', facets: { industry: 'pediatrics' } },
+];
+
+const SAME_INDUSTRY: BreadcrumbSwitchFilter[] = [
+  { id: 'same-industry', label: 'Same industry', facet: 'industry', value: 'dental' },
+];
+
+const SEARCH_TRAIL: BreadcrumbItem[] = [
+  { label: 'Home', href: '#' },
+  { label: 'Clients', href: '#' },
+  { label: 'Acme Dental' },
+];
+
+/**
+ * Past eight options the menu gains a labelled search box (override with
+ * `searchThreshold`). Options carry a secondary `hint`; a `FilterToggle`
+ * narrows them by `facets` (off by default); `scopeLabel` names the list.
+ * Opened on load so the controls are visible.
+ * @summary Switcher with search, hints, filter and scope label
+ */
+export const WithSwitcherFilters: Story = {
+  tags: ['no-visual'],
+  args: {
+    items: SEARCH_TRAIL,
+    options: INDUSTRY_CLIENTS,
+    switchLabel: 'Switch client',
+    scopeLabel: 'Clients with Online Business Listings',
+    filters: SAME_INDUSTRY,
+    onNavigate: fn(),
+  },
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Switch client' }));
+  },
+};
+
+/**
+ * The per-crumb `switcher` accepts the same `scopeLabel`, `filters` and
+ * `searchThreshold` as the trailing `options`.
+ * @summary Per-crumb switcher with search, filter and scope
+ */
+export const WithSwitcherFiltersPerCrumb: Story = {
+  tags: ['no-visual'],
+  args: {
+    items: [
+      { label: 'Home', href: '#' },
+      {
+        label: 'Acme Dental',
+        href: '#acme-dental',
+        switcher: {
+          options: INDUSTRY_CLIENTS,
+          switchLabel: 'Switch client',
+          scopeLabel: 'Clients with Online Business Listings',
+          filters: SAME_INDUSTRY,
+          onNavigate: fn(),
+        },
+      },
+      { label: 'Listings' },
+    ],
+  },
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Switch client' }));
+  },
+};
+
+/**
+ * Search appears only once the option count passes the threshold (default 8):
+ * three options show no search box.
+ * @summary Asserts no search box at or below the threshold
+ */
+export const InteractionTestSearchHiddenBelowThreshold: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: SEARCH_TRAIL,
+    options: SIBLING_CLIENTS,
+    switchLabel: 'Switch client',
+    onNavigate: fn(),
+  },
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Switch client' }));
+    await canvas.findByRole('menu');
+    await expect(canvas.queryByRole('searchbox')).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * `searchThreshold` overrides the default: three options plus a threshold of
+ * two shows the search box.
+ * @summary Asserts searchThreshold overrides the default
+ */
+export const InteractionTestSearchThresholdOverride: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: SEARCH_TRAIL,
+    options: SIBLING_CLIENTS,
+    switchLabel: 'Switch client',
+    searchThreshold: 2,
+    onNavigate: fn(),
+  },
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Switch client' }));
+    await expect(await canvas.findByRole('searchbox', { name: 'Search options' })).toBeInTheDocument();
+  },
+};
+
+/**
+ * Typing narrows options by label, case-insensitively; clearing restores them;
+ * a query with no match shows an empty message; Escape still closes the menu
+ * from the search box and returns focus to the trigger.
+ * @summary Asserts search narrows, empty state, focus return
+ */
+export const InteractionTestSearchNarrows: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: SEARCH_TRAIL,
+    options: INDUSTRY_CLIENTS,
+    switchLabel: 'Switch client',
+    onNavigate: fn(),
+  },
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: 'Switch client' });
+    await userEvent.click(trigger);
+    const search = await canvas.findByRole('searchbox', { name: 'Search options' });
+    await expect(canvas.getAllByRole('menuitem')).toHaveLength(INDUSTRY_CLIENTS.length);
+
+    await userEvent.type(search, 'CHIRO');
+    await waitFor(() => expect(canvas.getAllByRole('menuitem')).toHaveLength(2));
+    await expect(canvas.getByRole('menuitem', { name: /Delta Chiropractic/ })).toBeInTheDocument();
+    await expect(canvas.queryByRole('menuitem', { name: /Acme Dental/ })).not.toBeInTheDocument();
+
+    await userEvent.clear(search);
+    await waitFor(() => expect(canvas.getAllByRole('menuitem')).toHaveLength(INDUSTRY_CLIENTS.length));
+
+    await userEvent.type(search, 'zzz-no-match');
+    await expect(await canvas.findByText('No matches')).toBeInTheDocument();
+    await expect(canvas.queryAllByRole('menuitem')).toHaveLength(0);
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
+    await expect(canvas.queryByRole('menu')).not.toBeInTheDocument();
+    await expect(trigger).toHaveFocus();
+  },
+};
+
+/**
+ * A filter renders as a `FilterToggle` with an accessible name, off by
+ * default. Turning it on keeps only options whose `facets[facet] === value`
+ * plus the current option (which carries no matching facet here); turning it
+ * off restores the list. Selecting a filtered option still navigates.
+ * @summary Asserts filter narrows by facet, keeps current
+ */
+export const InteractionTestFilterToggle: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: SEARCH_TRAIL,
+    // Current option has NO facets — it must stay visible regardless.
+    options: INDUSTRY_CLIENTS.map((option) =>
+      option.current ? { label: option.label, href: option.href, current: true } : option
+    ),
+    switchLabel: 'Switch client',
+    filters: SAME_INDUSTRY,
+    onNavigate: fn(),
+  },
+  play: async ({ canvas, args }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Switch client' }));
+    const toggle = await canvas.findByRole('button', { name: 'Same industry' });
+    await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+    await expect(canvas.getAllByRole('menuitem')).toHaveLength(INDUSTRY_CLIENTS.length);
+
+    await userEvent.click(toggle);
+    await waitFor(() => expect(toggle).toHaveAttribute('aria-pressed', 'true'));
+    // current (Acme Dental) + the two other dental clients.
+    await expect(canvas.getAllByRole('menuitem')).toHaveLength(3);
+    await expect(canvas.getByRole('menuitem', { name: /Acme Dental/ })).toBeInTheDocument();
+    await expect(canvas.getByRole('menuitem', { name: /Beacon Orthodontics/ })).toBeInTheDocument();
+    await expect(canvas.queryByRole('menuitem', { name: /Delta Chiropractic/ })).not.toBeInTheDocument();
+
+    await userEvent.click(canvas.getByRole('menuitem', { name: /Cedar Family Dentistry/ }));
+    await expect(args.onNavigate).toHaveBeenCalledWith(
+      '#cedar-family',
+      INDUSTRY_CLIENTS[2]
+    );
+  },
+};
+
+/**
+ * Hints render as secondary text, and the scope label renders above the list.
+ * @summary Asserts hint text and scope label render
+ */
+export const InteractionTestHintScopeLabel: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: SEARCH_TRAIL,
+    options: SIBLING_CLIENTS.map((option, i) => ({ ...option, hint: `Industry ${i}` })),
+    switchLabel: 'Switch client',
+    scopeLabel: 'Clients with Online Business Listings',
+    onNavigate: fn(),
+  },
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Switch client' }));
+    await expect(await canvas.findByText('Clients with Online Business Listings')).toBeInTheDocument();
+    await expect(canvas.getByText('Industry 1')).toBeInTheDocument();
+  },
+};
+
+/**
+ * The per-crumb `switcher` supports search + filters too, independent of the
+ * trailing switcher.
+ * @summary Asserts per-crumb switcher search and filter
+ */
+export const InteractionTestPerCrumbSearchFilter: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: [
+      { label: 'Home', href: '#' },
+      {
+        label: 'Acme Dental',
+        href: '#acme-dental',
+        switcher: {
+          options: INDUSTRY_CLIENTS,
+          switchLabel: 'Switch client',
+          scopeLabel: 'Clients with Online Business Listings',
+          filters: SAME_INDUSTRY,
+          onNavigate: fn(),
+        },
+      },
+      { label: 'Listings' },
+    ],
+  },
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: 'Switch client' });
+    await userEvent.click(trigger);
+    await expect(await canvas.findByText('Clients with Online Business Listings')).toBeInTheDocument();
+    await userEvent.type(await canvas.findByRole('searchbox', { name: 'Search options' }), 'grove');
+    await waitFor(() => expect(canvas.getAllByRole('menuitem')).toHaveLength(1));
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'));
+    await expect(trigger).toHaveFocus();
+
+    // Reopen: query resets, filter is still off.
+    await userEvent.click(trigger);
+    await expect(await canvas.findByRole('searchbox', { name: 'Search options' })).toHaveValue('');
+    await expect(canvas.getByRole('button', { name: 'Same industry' })).toHaveAttribute('aria-pressed', 'false');
+    await userEvent.click(canvas.getByRole('button', { name: 'Same industry' }));
+    await waitFor(() => expect(canvas.getAllByRole('menuitem')).toHaveLength(3));
   },
 };

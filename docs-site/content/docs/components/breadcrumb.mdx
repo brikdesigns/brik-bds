@@ -116,6 +116,38 @@ The switcher above is scoped to the *trailing* crumb. Any crumb — including a 
 />
 ```
 
+### Search, filters and scope label
+
+A long switcher menu — every client in a practice, say — can be narrowed in three ways. They work on the trailing `options` and on a per-crumb `switcher` alike.
+
+- **Search.** A labelled search box appears once the option count is greater than `searchThreshold` (default `8`; `0` always shows it). It matches the option `label`, case-insensitively, and clears when the menu closes.
+- **Filters.** Pass `filters` to render `FilterToggle`s, off by default. Turning one on keeps only options whose `facets[facet] === value`; the `current` option always stays visible. Filtering is client-side — BDS fetches nothing.
+- **Scope label.** `scopeLabel` names the list, rendered above it.
+
+Options can carry a `hint` — secondary text under the label — which is display only and not searched. Search takes focus when the menu opens; Escape closes the menu and returns focus to the caret.
+
+```tsx
+<Breadcrumb
+  items={[
+    { label: 'Home', href: '/' },
+    { label: 'Acme Dental', href: '/clients/acme-dental' },
+    { label: 'Listings' },
+  ]}
+  options={clients.map((c) => ({
+    label: c.name,
+    href: `/clients/${c.slug}/listings`,
+    current: c.slug === 'acme-dental',
+    hint: c.industry,
+    facets: { industry: c.industrySlug },
+  }))}
+  switchLabel="Switch client"
+  scopeLabel="Clients with Online Business Listings"
+  filters={[
+    { id: 'same-industry', label: 'Same industry', facet: 'industry', value: 'dental' },
+  ]}
+/>
+```
+
 ## Service-line cascade
 
 When a breadcrumb sits inside a `[data-service-line='X']` subtree, the current-page label and separators rebind canonical `--text-secondary` and `--text-muted` to the matching `--text-service-{name}` value (`brand`, `marketing`, `information`, `product`, and `service` → back-office).
@@ -143,6 +175,7 @@ The component itself stays scope-blind — only the cascade block in `Breadcrumb
 - The last item carries `aria-current="page"` and renders as plain text — not a link.
 - Earlier items render as `<a>` when `href` is set.
 - Separators are decorative (`aria-hidden`).
+- Switcher search is labelled ("Search options"), each filter toggle is a button with `aria-pressed` and its label as its name, and an empty result is announced through a status region.
 
 ## API
 
@@ -156,6 +189,9 @@ The component itself stays scope-blind — only the cascade block in `Breadcrumb
 | `options` | `BreadcrumbSwitchOption[]` | — (two or more render the switcher caret) |
 | `switchLabel` | `string` | — (required when `options` is passed) |
 | `onNavigate` | `(href: string, option: BreadcrumbSwitchOption) => void` | `undefined` (`window.location.href = href`) |
+| `filters` | `BreadcrumbSwitchFilter[]` | — (each renders a `FilterToggle`, off by default) |
+| `scopeLabel` | `string` | — (rendered above the list) |
+| `searchThreshold` | `number` | `8` (search shows when the option count is greater; `0` always shows it) |
 
 Plus standard `<nav>` HTML attributes.
 
@@ -169,6 +205,9 @@ interface BreadcrumbItem {
     options: BreadcrumbSwitchOption[];
     switchLabel: string;
     onNavigate?: (href: string, option: BreadcrumbSwitchOption) => void;
+    filters?: BreadcrumbSwitchFilter[];
+    scopeLabel?: string;
+    searchThreshold?: number;
   };
 }
 ```
@@ -181,6 +220,24 @@ interface BreadcrumbSwitchOption {
   href: string;
   /** The record currently being viewed — highlighted and non-navigating. */
   current?: boolean;
+  /** Secondary text under the label. Display only — not searched. */
+  hint?: string;
+  /** Data a filter matches against, keyed by facet name. Never rendered. */
+  facets?: Record<string, string>;
+}
+```
+
+### BreadcrumbSwitchFilter
+
+```ts
+interface BreadcrumbSwitchFilter {
+  id: string;
+  /** Toggle label and accessible name. */
+  label: string;
+  /** Key into each option's `facets`. */
+  facet: string;
+  /** Facet value an option must equal while the filter is on. */
+  value: string;
 }
 ```
 
