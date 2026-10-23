@@ -15,10 +15,12 @@
 #    Conservative:
 #      - DIRTY worktrees are KEPT (uncommitted work — never auto-removed).
 #      - OPEN-PR worktrees are KEPT (work in flight).
-#      - NOT-STARTED worktrees (tip still == origin/main) are flagged for REVIEW,
-#        never removed. `--is-ancestor` is reflexive, so without this a worktree
-#        fresh out of new-task.sh read as "merged into main" and was swept
-#        before its session's first commit (brik-llm#1616).
+#      - NOT-STARTED worktrees (no commits on the branch) never read as landed.
+#        `--is-ancestor` is reflexive, so without this a worktree fresh out of
+#        new-task.sh read as "merged into main" and was swept before its
+#        session's first commit (brik-llm#1616). Their verdict comes from the
+#        ticket's claim (#4376): live → KEEP; stale or absent, with the branch
+#        also older than CLAIM_STALE_SECONDS → REMOVE; unreadable → REVIEW.
 #      - DETACHED worktrees (no branch ref at all) are flagged for REVIEW, never
 #        removed (brik-llm#2277). They used to be invisible here — see the block
 #        in pass 1 for why the verdict is FLAG-only.
@@ -90,6 +92,7 @@
 #                                                          # (always a dry-run read; never mutates)
 #
 # Env: BRIK_WORKTREE_ROOT overrides the swept root (default: <primary>-worktrees).
+#      CLAIM_STALE_SECONDS (default 43200, issue-claim.sh's) is the zero-commit window.
 # Requires: gh (for PR state). Without gh, falls back to ancestor-of-main only
 # for tracked worktrees; orphans need a MERGED PR so they stay flag-only. When gh
 # is INSTALLED but its call fails, that same fallback engages and the run says so
@@ -115,7 +118,7 @@ while [ $# -gt 0 ]; do
       [ $# -ge 2 ] || { echo -e "${RED}--keep needs a worktree or slug name${NC}" >&2; exit 2; }
       KEEP_LIST+=("$2"); shift ;;
     --json) JSON=true ;;
-    -h|--help) sed -n '2,91p' "$0"; exit 0 ;;   # header ends at the Requires: note
+    -h|--help) sed -n '2,93p' "$0"; exit 0 ;;   # header ends at the Requires: note
     *) echo -e "${RED}Unknown flag: $1${NC}" >&2; exit 2 ;;
   esac
   shift
@@ -225,11 +228,11 @@ import json, os, sys
 b = os.environ["BRANCH"]
 m = [p for p in json.load(sys.stdin) if p.get("headRefName") == b]
 if not m:
-    print("|"); sys.exit()
+    print("|")
 m.sort(key=lambda p: (p.get("state") == "OPEN", p.get("number")), reverse=True)
 p = m[0]
 if p.get("state") != "CLOSED":
-    print("|"); sys.exit()
+    print("|")
 print("%s|%s" % (p.get("closedAt") or "", p.get("headRefOid") or ""))'
 }
 
@@ -263,6 +266,112 @@ REVIEW_FLAG_DAYS="${BRIK_SWEEP_REVIEW_FLAG_DAYS:-7}"
 # top of the screen (#3603). The reaping behaviour was right; only the wording lied.
 pr_unknown() { [ "$1" = "—" ]; }
 UNKNOWN_PR=0
+
+# A ZERO-COMMIT worktree asks the ticket's CLAIM whether its session is alive
+# (#4376). It used to read `REVIEW — no commits yet (session may be mid-setup)`
+# forever: the reaper could not tell a session five minutes old from one dead for
+# weeks, so only an operator ever cleared the row. Liveness is the claim's `Since`
+# — renewed every turn by the session-heartbeat hook — not the presence of a
+# directory (a worktree is not a claim, rag:fleet-op-lock).
+#
+# The join: branches are `task/<slug>` with no number (#2514), so the branch name
+# cannot find the ticket. new-task.sh records it on the branch as git config
+# `branch.<b>.brikTaskIssue` (new-task.sh, #1707) — a bare `N` (this repo) or
+# `owner/repo#N`. The claim marker on that issue names its branches as
+# `owner/repo:<branch>` entries; it counts for THIS worktree only when one entry's
+# branch part is this branch.
+#
+# VENDORED, not sourced. scripts/lib/issue-claim.sh is the canon (claim_is_stale,
+# parse_claim), but three of this file's consumers carry it and the client sites
+# do not — the same reason gh-error-classify.sh is not sourced above. The window
+# and skew are the lib's own names and defaults, so one override governs both. The
+# in-window decision is claim_is_stale's; the two "cannot date it" arms differ ON
+# PURPOSE: the lib calls an undatable or far-future stamp stale because its action
+# is "do not block", and here stale means REMOVE, so they read UNREADABLE instead.
+#
+# One REST read per zero-commit worktree that has a ticket, never GraphQL — the
+# fleet shares that bucket (rag:github-api-quota-is-shared-across-the-fleet).
+#
+# Sets CLAIM_STATE (live|stale|absent|noref|unreadable) + CLAIM_HOST, CLAIM_AGE
+# (seconds), CLAIM_REF, CLAIM_WHY. Call it bare, never in $(…) — see dirty_count.
+CLAIM_STALE_SECONDS="${CLAIM_STALE_SECONDS:-43200}"
+CLAIM_SKEW_SECONDS="${CLAIM_SKEW_SECONDS:-300}"
+CLAIM_STATE="" CLAIM_HOST="" CLAIM_AGE="" CLAIM_REF="" CLAIM_WHY=""
+zero_commit_claim() {  # $1=worktree path  $2=branch
+  local wt="$1" b="$2" ref nwo num err out rc=0 parsed
+  CLAIM_STATE="unreadable"; CLAIM_HOST=""; CLAIM_AGE=""; CLAIM_WHY=""
+  ref="$(git -C "$wt" config --get "branch.$b.brikTaskIssue" 2>/dev/null || true)"
+  CLAIM_REF="$ref"
+  [ -n "$ref" ] || { CLAIM_STATE="noref"; return; }
+  case "$ref" in
+    *'#'*) nwo="${ref%%#*}"; num="${ref#*#}" ;;
+    *)     nwo="";           num="$ref" ;;
+  esac
+  # gh fills {owner}/{repo} from this checkout's remote, locally, for no API cost.
+  [ -n "$nwo" ] || nwo='{owner}/{repo}'
+  case "$num" in ''|*[!0-9]*) CLAIM_WHY="ticket record '$ref' is not an issue ref"; return ;; esac
+  case "$nwo" in
+    '{owner}/{repo}') : ;;
+    */*/*|*[!A-Za-z0-9._/-]*|/*|*/) CLAIM_WHY="ticket record '$ref' is not an issue ref"; return ;;
+    */*) : ;;
+    *) CLAIM_WHY="ticket record '$ref' is not an issue ref"; return ;;
+  esac
+  command -v gh >/dev/null 2>&1 || { CLAIM_WHY="gh not installed"; return; }
+  err="$(mktemp)"
+  out="$(cd "$PRIMARY" && gh api "repos/$nwo/issues/$num/comments" --paginate \
+    --jq '.[] | select((.body // "") | contains("<!-- claim -->")) | .body | @json' 2>"$err")" || rc=$?
+  if [ "$rc" -ne 0 ]; then
+    CLAIM_WHY="comments read failed: $(head -1 "$err" | cut -c1-80)"
+    rm -f "$err"; return
+  fi
+  rm -f "$err"
+  parsed="$(printf '%s' "$out" | BRANCH="$b" NOW="$(date +%s)" WINDOW="$CLAIM_STALE_SECONDS" \
+    SKEW="$CLAIM_SKEW_SECONDS" python3 -c '
+import datetime, json, os, re, sys
+# Unit-separated, not tab: tab is IFS whitespace, so the shell read would collapse
+# the empty middle fields and shift the reason into the host.
+def out(state, host="", age="", why=""):
+    print("\x1f".join((state, host, age, why)))
+    sys.exit()
+lines = [l for l in sys.stdin.read().splitlines() if l.strip()]
+if not lines:
+    out("absent", why="no claim marker on the ticket")
+try:
+    body = json.loads(lines[-1])            # the newest marker, as parse_claim reads it
+except ValueError:
+    out("unreadable", why="claim marker is not JSON")
+def row(label):
+    m = re.search(r"^\| %s \| (.*) \|$" % label, body, re.M)
+    return m.group(1).strip() if m else ""
+tick = chr(96)                              # a backtick, kept out of the shell string
+host, cell, since = row("Host").strip(tick), row("Branch").replace(tick, ""), row("Since")
+if not (host and cell and since):
+    out("unreadable", why="claim marker has no Host/Branch/Since row")
+named = {e.strip().split(":", 1)[-1] for e in cell.split(",") if e.strip()}
+if os.environ["BRANCH"] not in named:
+    out("absent", host, why="the claim names other branches, not this one")
+try:
+    then = datetime.datetime.strptime(since, "%Y-%m-%dT%H:%M:%SZ") \
+        .replace(tzinfo=datetime.timezone.utc).timestamp()
+except ValueError:
+    out("unreadable", host, why="claim Since %s is undatable" % since)
+age = int(os.environ["NOW"]) - int(then)
+if age < -int(os.environ["SKEW"]):
+    out("unreadable", host, why="claim Since %s is in the future" % since)
+age = max(age, 0)
+out("live" if age < int(os.environ["WINDOW"]) else "stale", host, str(age))' 2>/dev/null)" \
+    || parsed=""
+  [ -n "$parsed" ] || { CLAIM_WHY="claim marker could not be parsed"; return; }
+  IFS=$'\x1f' read -r CLAIM_STATE CLAIM_HOST CLAIM_AGE CLAIM_WHY <<<"$parsed"
+}
+
+# Seconds as `45m` / `14h3m` / `12h` — the shape claim_age_human prints.
+human_secs() {  # $1=seconds
+  local s="${1:-0}"
+  if [ "$s" -lt 3600 ]; then printf '%dm' $(( s / 60 ))
+  elif [ $(( s % 3600 )) -eq 0 ]; then printf '%dh' $(( s / 3600 ))
+  else printf '%dh%dm' $(( s / 3600 )) $(( (s % 3600) / 60 )); fi
+}
 
 # Uncommitted work in a worktree, counted as WORK rather than as lines of
 # `git status --porcelain` (#2782). Two shapes reach porcelain as a line while
@@ -469,7 +578,42 @@ while IFS=$'\t' read -r path ref; do
   elif [ "$prstate" = "OPEN" ]; then
     verdict="KEEP — PR $prnum open"; KEPT=$((KEPT+1))
   elif [ "$started" = "no" ]; then
-    verdict="REVIEW — no commits yet (session may be mid-setup)"; REVIEW=$((REVIEW+1))
+    # Ask the ticket's claim (#4376) — see zero_commit_claim. REMOVE needs BOTH the
+    # claim AND the branch past the window: new-task.sh proceeds unclaimed when its
+    # claim write fails (fail-open, issue-claim.sh), so a stale or absent claim on a
+    # branch cut minutes ago is that failure, not a dead session. Nothing is lost on
+    # REMOVE — no commits, the dirty guard above already ran, the branch is its base.
+    zero_commit_claim "$path" "$branch"
+    created="$(git -C "$path" reflog show --date=unix --format='%gd' "refs/heads/$branch" 2>/dev/null \
+      | tail -1 | sed -n 's/.*@{\([0-9][0-9]*\)}$/\1/p')"
+    branch_age=""; [ -n "$created" ] && branch_age=$(( $(date +%s) - created ))
+    window="$(human_secs "$CLAIM_STALE_SECONDS")"
+    on_ref="${CLAIM_REF:+ on #${CLAIM_REF##*#}}"
+    case "$CLAIM_STATE" in
+      live)
+        verdict="KEEP — claimed by ${CLAIM_HOST} $(human_secs "$CLAIM_AGE") ago${on_ref}, no commits yet"; KEPT=$((KEPT+1)) ;;
+      stale|absent)
+        if [ "$CLAIM_STATE" = "stale" ]; then
+          why="claim stale ($(human_secs "$CLAIM_AGE") > ${window})"
+        else
+          why="claim absent${on_ref} (${CLAIM_WHY})"
+        fi
+        if pr_unknown "$prstate"; then
+          verdict="REVIEW — no commits yet, ${why}, but PR state UNREADABLE (gh call failed)"
+          REVIEW=$((REVIEW+1)); UNKNOWN_PR=$((UNKNOWN_PR+1))
+        elif [ -z "$branch_age" ] || [ "$branch_age" -lt "$CLAIM_STALE_SECONDS" ]; then
+          verdict="REVIEW — no commits yet, ${why}, but branch is $([ -n "$branch_age" ] && echo "only $(human_secs "$branch_age") old" || echo "of unknown age") (session may be mid-setup)"
+          REVIEW=$((REVIEW+1))
+        else
+          reason="no commits, ${why}, branch $(human_secs "$branch_age") old"
+          verdict="REMOVE — $reason"
+          REMOVE_PATHS+=("$path"); REMOVE_BRANCHES+=("$branch"); REMOVE_LABELS+=("$reason")
+        fi ;;
+      noref)
+        verdict="REVIEW — no commits yet, no ticket recorded on the branch to ask its claim (session may be mid-setup)"; REVIEW=$((REVIEW+1)) ;;
+      *)
+        verdict="REVIEW — no commits yet, claim UNREADABLE${on_ref}: ${CLAIM_WHY}"; REVIEW=$((REVIEW+1)) ;;
+    esac
   elif pr_unknown "$prstate"; then
     verdict="REVIEW — clean, unlanded, PR state UNREADABLE (gh call failed)"
     REVIEW=$((REVIEW+1)); UNKNOWN_PR=$((UNKNOWN_PR+1))
