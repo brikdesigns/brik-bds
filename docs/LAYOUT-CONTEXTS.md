@@ -141,7 +141,7 @@ If a section needs explanation, that's a sign the section name is too abstract. 
 
 ### 7. Title case for all headings, labels, and buttons
 
-Per ecosystem rule. Never sentence case for UI text.
+On Brik's own surfaces (brikdesigns.com, the client portal, BDS product UI), never sentence case for UI text. A client site follows the client's content standard. See [Headings § Casing by surface](../docs-site/content/docs/build-standards/headings.mdx#casing-by-surface).
 
 ---
 

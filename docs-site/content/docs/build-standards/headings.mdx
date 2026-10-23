@@ -81,6 +81,19 @@ Prepositions of four letters or more are treated as major words and stay capital
 
 Enforcement lives in each consumer repo (e.g. a JSX heading lint gate in brikdesigns, [brikdesigns#491](https://github.com/brikdesigns/brikdesigns/issues/491)), not in BDS.
 
+### Casing by surface
+
+This rule is **Brik's** content standard. A client site follows the client's own content standard instead.
+
+| Surface | Headings | Buttons and labels | Navigation |
+|---|---|---|---|
+| Brik's own: brikdesigns.com, the client portal, BDS product UI | Title Case | Title Case | Title Case |
+| A client site (`web/*`) | The client's content standard | The client's content standard | The client's content standard |
+
+A client with no content standard on file gets the house default: navigation in Title Case, headings and buttons in sentence case. The client's standard lives on its portal profile, not in BDS.
+
+**Write the casing into the copy.** CSS `text-transform` cannot produce either rule: `capitalize` uppercases every word (so "Get In Touch", not "Get in Touch"), and nothing in CSS produces sentence case. The `--bds-text-transform-*` tokens are for visual transforms only, such as an ALL CAPS eyebrow ([brik-bds#2831](https://github.com/brikdesigns/brik-bds/issues/2831)).
+
 ## Related
 
 - [Typography](/docs/foundation/typography) — the `--heading-*` / `--display-*` / `--label-*` scales and the font-family role rule.
