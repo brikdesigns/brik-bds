@@ -90,6 +90,34 @@ open/close state.
 
 <Canvas of={Stories.WithPerCrumbSwitcher} />
 
+### Search, filters and scope label
+
+A long switcher menu is narrowed three ways, on the trailing `options` and on a
+per-crumb `switcher` alike:
+
+- **Search** — a labelled search box appears once the option count is greater
+  than `searchThreshold` (default `8`; `0` always shows it). It matches the
+  option `label`, case-insensitively, and resets each time the menu closes.
+- **Filters** — pass `filters` (`{ id, label, facet, value }`) to render
+  `FilterToggle`s, off by default. Turning one on keeps only options whose
+  `facets[facet] === value`; the `current` option always stays visible. Give
+  options a `facets` record to match against. Filtering is client-side — BDS
+  fetches nothing.
+- **Scope label** — `scopeLabel` names the list above it, e.g. "Clients with
+  Online Business Listings".
+
+Options may also carry a `hint` — secondary text under the label (the
+industry, say). It is display only and not searched.
+
+Search takes focus when the menu opens. Escape closes the menu and returns
+focus to the caret from the search box or a toggle.
+
+<Canvas of={Stories.WithSwitcherFilters} />
+
+The per-crumb `switcher` takes the same three props:
+
+<Canvas of={Stories.WithSwitcherFiltersPerCrumb} />
+
 ### Service-line cascade
 
 Inside a `[data-service-line='X']` subtree, the current-page label and

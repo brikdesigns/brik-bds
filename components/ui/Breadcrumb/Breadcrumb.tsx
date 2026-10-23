@@ -1,7 +1,17 @@
-import { Fragment, useEffect, useRef, useState, type HTMLAttributes, type ReactNode } from 'react';
+import {
+  Fragment,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type HTMLAttributes,
+  type ReactNode,
+} from 'react';
 import { type BdsLinkComponent } from '../NavItem';
 import { Menu } from '../Menu/Menu';
 import { Button } from '../Button/Button';
+import { SearchInput } from '../SearchInput/SearchInput';
+import { FilterToggle } from '../FilterToggle/FilterToggle';
 import { Icon } from '../Icon/Icon';
 import { bdsClass } from '../../utils';
 import './Breadcrumb.css';
@@ -18,7 +28,7 @@ export interface BreadcrumbItem {
    * more `options` are required to render anything — fewer renders nothing,
    * same floor as the trailing switcher.
    */
-  switcher?: {
+  switcher?: BreadcrumbSwitchMenuProps & {
     /** Sibling records to switch between, including the current one. */
     options: BreadcrumbSwitchOption[];
     /**
@@ -53,9 +63,63 @@ export interface BreadcrumbSwitchOption {
   href: string;
   /** The record currently being viewed — highlighted and non-navigating. */
   current?: boolean;
+  /**
+   * Secondary text shown under the label, e.g. the record's industry. Display
+   * only — search matches the label, not the hint.
+   */
+  hint?: string;
+  /**
+   * Data a {@link BreadcrumbSwitchFilter} matches against, keyed by facet
+   * name — e.g. `{ industry: 'dental' }`. Never rendered; an option without
+   * the facet is hidden when a filter on that facet is on (unless `current`).
+   */
+  facets?: Record<string, string>;
 }
 
-export interface BreadcrumbProps extends HTMLAttributes<HTMLElement> {
+/**
+ * A binary on/off filter shown as a `FilterToggle` in a switcher menu. Off by
+ * default. When on, options narrow client-side to those where
+ * `option.facets[facet] === value`; the `current` option always stays visible.
+ * Several filters on at once narrow together (an option must satisfy all).
+ */
+export interface BreadcrumbSwitchFilter {
+  /** Stable identifier for this filter within its switcher. */
+  id: string;
+  /** Toggle label and accessible name, e.g. `Same industry`. */
+  label: string;
+  /** Key into each option's `facets` to compare. */
+  facet: string;
+  /** Facet value an option must equal to stay visible while the filter is on. */
+  value: string;
+}
+
+/**
+ * Search, filter and scope props shared by the top-level switcher and every
+ * per-crumb {@link BreadcrumbItem.switcher}. All optional; the menu is a plain
+ * list without them.
+ */
+export interface BreadcrumbSwitchMenuProps {
+  /**
+   * Binary filters rendered as `FilterToggle`s above the list, off by default.
+   * See {@link BreadcrumbSwitchFilter}.
+   */
+  filters?: BreadcrumbSwitchFilter[];
+  /**
+   * Text rendered above the list naming what it contains, e.g.
+   * `Clients with Online Business Listings`.
+   */
+  scopeLabel?: string;
+  /**
+   * A labelled search box (filters options by label, case-insensitive) shows
+   * once the option count is greater than this. Default `8`; pass `0` to
+   * always search.
+   */
+  searchThreshold?: number;
+}
+
+export interface BreadcrumbProps
+  extends HTMLAttributes<HTMLElement>,
+    BreadcrumbSwitchMenuProps {
   /** Crumb trail in order. The last item is rendered as plain text with `aria-current="page"`; earlier items render as `<a>` when `href` is set. */
   items: BreadcrumbItem[];
   /** Visual separator between crumbs. Default `slash` (`/`); `chevron` renders `›`. */
@@ -84,6 +148,8 @@ export interface BreadcrumbProps extends HTMLAttributes<HTMLElement> {
    */
   onNavigate?: (href: string, option: BreadcrumbSwitchOption) => void;
 }
+
+const DEFAULT_SEARCH_THRESHOLD = 8;
 
 const SEPARATOR_CHARS: Record<BreadcrumbSeparator, string> = {
   slash: '/',
@@ -139,6 +205,9 @@ export function Breadcrumb({
   options,
   switchLabel,
   onNavigate,
+  filters,
+  scopeLabel,
+  searchThreshold,
   className,
   style,
   ...props
@@ -207,6 +276,9 @@ export function Breadcrumb({
                   options={item.switcher!.options}
                   switchLabel={item.switcher!.switchLabel}
                   onNavigate={item.switcher!.onNavigate}
+                  filters={item.switcher!.filters}
+                  scopeLabel={item.switcher!.scopeLabel}
+                  searchThreshold={item.switcher!.searchThreshold}
                 />
               )}
             </span>
@@ -214,7 +286,14 @@ export function Breadcrumb({
         );
       })}
       {hasSwitcher && (
-        <BreadcrumbSwitch options={options!} switchLabel={switchLabel} onNavigate={onNavigate} />
+        <BreadcrumbSwitch
+          options={options!}
+          switchLabel={switchLabel}
+          onNavigate={onNavigate}
+          filters={filters}
+          scopeLabel={scopeLabel}
+          searchThreshold={searchThreshold}
+        />
       )}
     </nav>
   );
@@ -235,16 +314,49 @@ function BreadcrumbSwitch({
   options,
   switchLabel,
   onNavigate,
-}: {
+  filters,
+  scopeLabel,
+  searchThreshold = DEFAULT_SEARCH_THRESHOLD,
+}: BreadcrumbSwitchMenuProps & {
   options: BreadcrumbSwitchOption[];
   switchLabel?: string;
   onNavigate?: (href: string, option: BreadcrumbSwitchOption) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const [activeFilterIds, setActiveFilterIds] = useState<ReadonlySet<string>>(new Set());
   const triggerRef = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
 
   const activeHref = options.find((option) => option.current)?.href;
+
+  const showSearch = options.length > searchThreshold;
+  const hasFilters = !!filters && filters.length > 0;
+  const hasControls = showSearch || hasFilters || !!scopeLabel;
+
+  // A search left in the box would greet the next open with a stale narrowed
+  // list. Filter toggles are a deliberate lens, so they persist across opens.
+  useEffect(() => {
+    if (!isOpen) setQuery('');
+  }, [isOpen]);
+
+  const visibleOptions = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    const live = (filters ?? []).filter((filter) => activeFilterIds.has(filter.id));
+    return options.filter((option) => {
+      if (showSearch && needle && !option.label.toLowerCase().includes(needle)) return false;
+      if (option.current) return true;
+      return live.every((filter) => option.facets?.[filter.facet] === filter.value);
+    });
+  }, [options, query, filters, activeFilterIds, showSearch]);
+
+  const toggleFilter = (id: string) =>
+    setActiveFilterIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
 
   useEffect(() => {
     // Return focus to the trigger when the menu closes via Escape or an
@@ -282,9 +394,47 @@ function BreadcrumbSwitch({
         onClose={() => setIsOpen(false)}
         activeId={activeHref}
         className="bds-breadcrumb__switch-menu"
-        items={options.map((option) => ({
+        header={
+          hasControls ? (
+            <div className="bds-breadcrumb__switch-controls">
+              {scopeLabel && <span className="bds-breadcrumb__switch-scope">{scopeLabel}</span>}
+              {showSearch && (
+                <SearchInput
+                  size="sm"
+                  fullWidth
+                  aria-label="Search options"
+                  placeholder="Search"
+                  autoFocus
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onClear={() => setQuery('')}
+                />
+              )}
+              {hasFilters && (
+                <div className="bds-breadcrumb__switch-filters">
+                  {filters!.map((filter) => (
+                    <FilterToggle
+                      key={filter.id}
+                      size="sm"
+                      label={filter.label}
+                      active={activeFilterIds.has(filter.id)}
+                      onToggle={() => toggleFilter(filter.id)}
+                    />
+                  ))}
+                </div>
+              )}
+              {/* Always mounted so assistive tech announces the empty result;
+                  a live region inserted already populated is often missed. */}
+              <div className="bds-breadcrumb__switch-status" role="status">
+                {visibleOptions.length === 0 ? 'No matches' : null}
+              </div>
+            </div>
+          ) : undefined
+        }
+        items={visibleOptions.map((option) => ({
           id: option.href,
           label: option.label,
+          description: option.hint,
           onClick: () => {
             setIsOpen(false);
             if (option.current) return;
