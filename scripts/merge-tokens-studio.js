@@ -10,12 +10,7 @@
  * Writes:
  *   design-tokens/tokens-studio.json
  *
- * Merge contract:
- *   - Brand Kit wins on any token path that appears in both Libraries
- *     within the same set (deep merge, Brand Kit values replace Foundations).
- *   - tokenSetOrder: Foundations sets first, then Brand Kit sets.
- *   - $themes: preserved from Foundations (they reference mode picks across
- *     all sets; Brand Kit doesn't define themes).
+ * Merge contract: see mergeLibraries in scripts/lib/tokens-studio-compose.cjs.
  *
  * Usage:
  *   node scripts/merge-tokens-studio.js [--slug=brik] [--dry-run] [--check]
@@ -35,6 +30,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { mergeLibraries } = require('./lib/tokens-studio-compose.cjs');
 
 const args = process.argv.slice(2);
 const dryRun = args.includes('--dry-run');
@@ -60,61 +56,9 @@ if (!fs.existsSync(BRAND_KIT_FILE)) {
 const foundations = JSON.parse(fs.readFileSync(FOUNDATIONS_FILE, 'utf8'));
 const brandKit = JSON.parse(fs.readFileSync(BRAND_KIT_FILE, 'utf8'));
 
-// Deep merge two token set objects. `override` wins on any conflicting leaf.
-function deepMerge(base, override) {
-  if (!base || typeof base !== 'object') return override;
-  if (!override || typeof override !== 'object') return base;
-  const result = { ...base };
-  for (const [key, value] of Object.entries(override)) {
-    if (
-      value &&
-      typeof value === 'object' &&
-      !Array.isArray(value) &&
-      result[key] &&
-      typeof result[key] === 'object' &&
-      !Array.isArray(result[key])
-    ) {
-      result[key] = deepMerge(result[key], value);
-    } else {
-      result[key] = value;
-    }
-  }
-  return result;
-}
-
-// Build merged tokenSetOrder: Foundations first, then Brand Kit (deduped).
-const foundationsOrder =
-  foundations.$metadata?.tokenSetOrder ??
-  Object.keys(foundations).filter((k) => !k.startsWith('$'));
-const brandKitOrder =
-  brandKit.$metadata?.tokenSetOrder ??
-  Object.keys(brandKit).filter((k) => !k.startsWith('$'));
-const mergedOrder = [
-  ...foundationsOrder,
-  ...brandKitOrder.filter((k) => !foundationsOrder.includes(k)),
-];
-
-// Merge token sets (non-metadata keys).
-const merged = {};
-
-for (const [key, value] of Object.entries(foundations)) {
-  if (!key.startsWith('$')) merged[key] = value;
-}
-for (const [key, value] of Object.entries(brandKit)) {
-  if (key.startsWith('$')) continue;
-  merged[key] = merged[key] ? deepMerge(merged[key], value) : value;
-}
-
-// Reconstruct $metadata.
-merged.$metadata = {
-  ...foundations.$metadata,
-  tokenSetOrder: mergedOrder,
-};
-
-// Preserve $themes from Foundations.
-if (foundations.$themes) {
-  merged.$themes = foundations.$themes;
-}
+// The merge contract lives in lib/tokens-studio-compose.cjs, shared with
+// compileClientTheme so a client theme and this file cannot drift (#2836).
+const { merged, foundationsOrder, brandKitOrder, mergedOrder } = mergeLibraries(foundations, brandKit);
 
 console.log(`Merging foundations (${foundationsOrder.length} sets) + brand-kits/${slug} (${brandKitOrder.length} sets)`);
 console.log(`tokenSetOrder (${mergedOrder.length}): ${mergedOrder.join(', ')}`);

@@ -62,7 +62,20 @@ function walk(node, fn) {
   for (const child of Object.values(node)) walk(child, fn);
 }
 
-/** Register the preprocessor on a StyleDictionary class. */
+// The kit's font-family values are bare family names ("Poppins"). A failed webfont
+// load drops a bare name to the UA default, so the generated token carries a generic
+// fallback, chosen per role. `system` is monospace; icon/logo roles have no honest
+// generic family, so they stay bare. A value already holding a stack is left alone.
+const FONT_FALLBACK_BY_ROLE = {
+  display: 'sans-serif',
+  heading: 'sans-serif',
+  label: 'sans-serif',
+  body: 'sans-serif',
+  subtitle: 'sans-serif',
+  system: 'monospace',
+};
+
+/** Register the preprocessor and the CSS value transforms on a StyleDictionary class. */
 export function registerBdsHooks(StyleDictionary) {
   const grammar = readGrammar();
   StyleDictionary.registerPreprocessor({
@@ -76,11 +89,59 @@ export function registerBdsHooks(StyleDictionary) {
       return dictionary;
     },
   });
+
+  // Line-height values from Figma are percentages stored as plain numbers
+  // (e.g. 150 = 150%). $type "number" prevents ts/size/px from adding "px",
+  // but we still need the "%" unit for CSS to interpret them correctly.
+  StyleDictionary.registerTransform({
+    name: 'bds/lineHeight/percent',
+    type: 'value',
+    filter: (token) => token.path[0] === 'font-line-height' && token.$value !== 0,
+    transform: (token) => `${token.$value}%`,
+  });
+
+  StyleDictionary.registerTransform({
+    name: 'bds/fontFamily/fallback',
+    type: 'value',
+    filter: (token) => token.path[0] === 'font-family' && token.path[1] in FONT_FALLBACK_BY_ROLE,
+    transform: (token) => {
+      const value = String(token.$value);
+      return value.includes(',') ? value : `${value}, ${FONT_FALLBACK_BY_ROLE[token.path[1]]}`;
+    },
+  });
 }
 
 /** CSS file filter: everything except the retired word steps. */
 export function isCanonicalCssToken(token) {
   return !isRetiredWordStep(token.path);
+}
+
+/**
+ * The canonical CSS platform. sd.config.tokens-studio.mjs builds Brik's
+ * variables.css with it; compileClientTheme formats a client kit with it.
+ * Requires registerBdsHooks (and sd-transforms' register) on the class first.
+ */
+export function cssPlatform({ buildPath, selector }) {
+  return {
+    // System ID (ADR-043): every CSS custom property leads with `--bds-`.
+    // CSS only — js/swift keep their names, Figma + tokens-studio JSON untouched.
+    prefix: SD_PREFIX,
+    transformGroup: 'tokens-studio',
+    transforms: ['name/kebab', 'bds/lineHeight/percent', 'bds/fontFamily/fallback'],
+    ...(buildPath ? { buildPath } : {}),
+    files: [
+      {
+        destination: 'variables.css',
+        format: 'css/variables',
+        // The 54 word-step colour primitives retire from the canonical CSS (ADR-043 section 4).
+        filter: isCanonicalCssToken,
+        options: {
+          outputReferences: true,
+          selector,
+        },
+      },
+    ],
+  };
 }
 
 export { SD_PREFIX };

@@ -13,7 +13,7 @@
 
 import { register } from '@tokens-studio/sd-transforms';
 import StyleDictionary from 'style-dictionary';
-import { registerBdsHooks, isCanonicalCssToken, SD_PREFIX } from './scripts/lib/sd-bds.mjs';
+import { registerBdsHooks, cssPlatform } from './scripts/lib/sd-bds.mjs';
 
 // Register Tokens Studio transforms (math resolution, dimension px, etc.)
 register(StyleDictionary);
@@ -180,67 +180,16 @@ const swiftFiles = [
   },
 ];
 
-// ─── Custom transforms ───────────────────────────────────────────
-
-// Line-height values from Figma are percentages stored as plain numbers
-// (e.g. 150 = 150%). $type "number" prevents ts/size/px from adding "px",
-// but we still need the "%" unit for CSS to interpret them correctly.
-StyleDictionary.registerTransform({
-  name: 'bds/lineHeight/percent',
-  type: 'value',
-  filter: (token) => token.path[0] === 'font-line-height' && token.$value !== 0,
-  transform: (token) => `${token.$value}%`,
-});
-
-// The kit's font-family values are bare family names ("Poppins"). A failed webfont
-// load drops a bare name to the UA default, so the generated token carries a generic
-// fallback, chosen per role. `system` is monospace; icon/logo roles have no honest
-// generic family, so they stay bare. A value already holding a stack is left alone.
-const FONT_FALLBACK_BY_ROLE = {
-  display: 'sans-serif',
-  heading: 'sans-serif',
-  label: 'sans-serif',
-  body: 'sans-serif',
-  subtitle: 'sans-serif',
-  system: 'monospace',
-};
-
-StyleDictionary.registerTransform({
-  name: 'bds/fontFamily/fallback',
-  type: 'value',
-  filter: (token) => token.path[0] === 'font-family' && token.path[1] in FONT_FALLBACK_BY_ROLE,
-  transform: (token) => {
-    const value = String(token.$value);
-    return value.includes(',') ? value : `${value}, ${FONT_FALLBACK_BY_ROLE[token.path[1]]}`;
-  },
-});
-
 // ─── Config ─────────────────────────────────────────────────────
+// The CSS platform (transforms bds/lineHeight/percent + bds/fontFamily/fallback,
+// prefix, word-step filter) is cssPlatform() in scripts/lib/sd-bds.mjs, shared
+// with compileClientTheme so a client theme compiles exactly as this build (#2836).
 
 export default {
   source: ['design-tokens/tokens-figma.json'],
   preprocessors: ['tokens-studio', 'bds/retire-word-steps'],
   platforms: {
-    css: {
-      // System ID (ADR-043): every CSS custom property leads with `--bds-`.
-      // CSS only — js/swift keep their names, Figma + tokens-studio JSON untouched.
-      prefix: SD_PREFIX,
-      transformGroup: 'tokens-studio',
-      transforms: ['name/kebab', 'bds/lineHeight/percent', 'bds/fontFamily/fallback'],
-      buildPath: 'build/figma/css/',
-      files: [
-        {
-          destination: 'variables.css',
-          format: 'css/variables',
-          // The 54 word-step colour primitives retire from the canonical CSS (ADR-043 section 4).
-          filter: isCanonicalCssToken,
-          options: {
-            outputReferences: true,
-            selector: ':root',
-          },
-        },
-      ],
-    },
+    css: cssPlatform({ buildPath: 'build/figma/css/', selector: ':root' }),
 
     js: {
       transformGroup: 'tokens-studio',

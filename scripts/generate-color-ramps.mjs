@@ -311,6 +311,61 @@ export function buildAll() {
 }
 
 /**
+ * One family's #1739 rewrite, pure: numeric stops carry the literal values and
+ * the six legacy names become aliases onto them. `applyToKits` writes it into
+ * the committed kits; `compileClientTheme` applies it to a client kit in memory,
+ * so a client ramp is this generator's ramp and nothing else's (#2836).
+ */
+export function applyRamp(familyName, entries) {
+  const { stops } = buildRamp(familyName, entries);
+
+  const next = {};
+
+  // Absolute endpoints first, unchanged — white and black are shared by the
+  // whole system, not steps in any family's ladder.
+  for (const key of Object.keys(entries)) {
+    if (NON_RAMP_KEYS.has(key)) next[key] = entries[key];
+  }
+
+  // Numeric stops carry the values.
+  for (const stop of STOPS) {
+    const { hex, source, legacyName } = stops[stop];
+    const carried = source === 'anchor' ? entries[legacyName] : undefined;
+    // The numeric stop keeps its OWN annotation and never inherits the legacy
+    // alias's. Carrying `entries[legacyName].$description` here stamped
+    // "DEPRECATED — use color.blue.100" onto stop 100 itself — a stop telling
+    // you to use itself — and made `--apply` non-idempotent against its own
+    // output, contradicting the header's "re-running is a no-op". It also
+    // dropped the real curation notes ("Brand primary base", "Hover state")
+    // that live on the stops. The alias's DEPRECATED line is regenerated
+    // below, so nothing is lost by not carrying it up.
+    const description = entries[stop]?.$description;
+    next[stop] = {
+      $extensions: carried?.$extensions ?? entries[stop]?.$extensions ?? {
+        'com.figma.scopes': ['ALL_SCOPES'],
+      },
+      $type: 'color',
+      $value: hex,
+      ...(description ? { $description: description } : {}),
+    };
+  }
+
+  // Legacy names become aliases onto their pinned stop.
+  for (const [legacyName, stop] of Object.entries(ANCHOR_STOPS)) {
+    next[legacyName] = {
+      $extensions: entries[legacyName]?.$extensions ?? {
+        'com.figma.scopes': ['ALL_SCOPES'],
+      },
+      $type: 'color',
+      $value: `{color.${familyName}.${stop}}`,
+      $description: `DEPRECATED — use color.${familyName}.${stop} (brik-bds#1739)`,
+    };
+  }
+
+  return next;
+}
+
+/**
  * Rewrite the Brand Kits so the numeric stops carry the literal values and the
  * six legacy names become aliases onto them (brik-bds#1739).
  *
@@ -345,53 +400,7 @@ export function applyToKits() {
     const before = JSON.stringify(kit);
 
     for (const familyName of Object.keys(families)) {
-      const entries = families[familyName];
-      const { stops } = buildRamp(familyName, entries);
-
-      const next = {};
-
-      // Absolute endpoints first, unchanged — white and black are shared by the
-      // whole system, not steps in any family's ladder.
-      for (const key of Object.keys(entries)) {
-        if (NON_RAMP_KEYS.has(key)) next[key] = entries[key];
-      }
-
-      // Numeric stops carry the values.
-      for (const stop of STOPS) {
-        const { hex, source, legacyName } = stops[stop];
-        const carried = source === 'anchor' ? entries[legacyName] : undefined;
-        // The numeric stop keeps its OWN annotation and never inherits the legacy
-        // alias's. Carrying `entries[legacyName].$description` here stamped
-        // "DEPRECATED — use color.blue.100" onto stop 100 itself — a stop telling
-        // you to use itself — and made `--apply` non-idempotent against its own
-        // output, contradicting the header's "re-running is a no-op". It also
-        // dropped the real curation notes ("Brand primary base", "Hover state")
-        // that live on the stops. The alias's DEPRECATED line is regenerated
-        // below, so nothing is lost by not carrying it up.
-        const description = entries[stop]?.$description;
-        next[stop] = {
-          $extensions: carried?.$extensions ?? entries[stop]?.$extensions ?? {
-            'com.figma.scopes': ['ALL_SCOPES'],
-          },
-          $type: 'color',
-          $value: hex,
-          ...(description ? { $description: description } : {}),
-        };
-      }
-
-      // Legacy names become aliases onto their pinned stop.
-      for (const [legacyName, stop] of Object.entries(ANCHOR_STOPS)) {
-        next[legacyName] = {
-          $extensions: entries[legacyName]?.$extensions ?? {
-            'com.figma.scopes': ['ALL_SCOPES'],
-          },
-          $type: 'color',
-          $value: `{color.${familyName}.${stop}}`,
-          $description: `DEPRECATED — use color.${familyName}.${stop} (brik-bds#1739)`,
-        };
-      }
-
-      families[familyName] = next;
+      families[familyName] = applyRamp(familyName, families[familyName]);
     }
 
     const after = `${JSON.stringify(kit, null, 2)}\n`;
