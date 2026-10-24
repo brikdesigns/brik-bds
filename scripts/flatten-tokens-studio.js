@@ -11,6 +11,10 @@
  *   3. Writes design-tokens/tokens-figma.json (consumed by sd.config.tokens-studio.mjs)
  *   4. Writes separate mode files for theme variants
  *
+ * The flatten itself — default modes, set wrapping, the dropped internal
+ * groups, the line-height fix — is flattenTokensStudio in
+ * scripts/lib/tokens-studio-compose.cjs, shared with compileClientTheme (#2836).
+ *
  * Default mode selection (matches Webflow Foundations site defaults):
  *   color: light, icon: solid, border-radius: soft, spacing: default,
  *   breakpoint: default, border-width: default, elevation: subtle,
@@ -24,44 +28,20 @@
 
 const fs = require('fs');
 const path = require('path');
+const { flattenTokensStudio } = require('./lib/tokens-studio-compose.cjs');
 
 const INPUT = path.join(__dirname, '../design-tokens/tokens-studio.json');
 let OUTPUT = path.join(__dirname, '../design-tokens/tokens-figma.json');
 
-// Default modes — these match the Webflow Foundations site defaults
-const DEFAULT_MODES = {
-  primitives: 'value',
-  color: 'light',
-  icon: 'solid',
-  'border-radius': 'soft',
-  spacing: 'default',
-  // `breakpoint` is pinned to `default` on purpose, and unlike its neighbours it
-  // is NOT overridable in practice (#2591). Every other collection here names a
-  // starting mode that generate-modes-css.mjs then re-emits under [data-mode-*];
-  // breakpoint has no runtime mode layer, because a breakpoint's only consumer
-  // is an @media condition and that is a build-time literal — there is no
-  // element to carry a data attribute and no cascade to re-resolve against.
-  // Alternate modes would mean shipping a parallel sheet of duplicated @media
-  // blocks. Since #2604 retired the `web` rung — the only one that ever varied
-  // (1200/800/1400) — all five remaining rungs are identical across all three
-  // modes, so the pin is value-neutral today. It stays because the collection
-  // still HAS three modes: re-introduce a mode-varying rung and this line is
-  // what keeps the emitted sheet single-valued instead of silently picking one.
-  // See tokens/CASCADE.md § Breakpoint.
-  breakpoint: 'default',
-  'border-width': 'default',
-  elevation: 'subtle',
-  typography: 'default',
-};
-
 // Parse CLI overrides: --mode spacing=spacious,color=dark  --output path/to/output.json
+const modes = {};
 const args = process.argv.slice(2);
 const modeIdx = args.indexOf('--mode');
 if (modeIdx !== -1 && args[modeIdx + 1]) {
   const overrides = args[modeIdx + 1].split(',');
   for (const o of overrides) {
     const [col, mode] = o.split('=');
-    if (col && mode) DEFAULT_MODES[col] = mode;
+    if (col && mode) modes[col] = mode;
   }
 }
 const outIdx = args.indexOf('--output');
@@ -69,180 +49,12 @@ if (outIdx !== -1 && args[outIdx + 1]) {
   OUTPUT = path.resolve(args[outIdx + 1]);
 }
 
-// ─── Deep merge ──────────────────────────────────────────────────
-
-function deepMerge(target, source) {
-  for (const [key, val] of Object.entries(source)) {
-    if (val && typeof val === 'object' && !Array.isArray(val) && val.$value === undefined) {
-      if (!target[key] || typeof target[key] !== 'object') {
-        target[key] = {};
-      }
-      deepMerge(target[key], val);
-    } else {
-      target[key] = val;
-    }
-  }
-  return target;
-}
-
-// ─── Strip Figma-specific extensions (keep $value, $type, $description) ──
-
-function cleanToken(token) {
-  const cleaned = {};
-  if (token.$value !== undefined) cleaned.$value = token.$value;
-  if (token.$type !== undefined) cleaned.$type = token.$type;
-  if (token.$description !== undefined) cleaned.$description = token.$description;
-  return cleaned;
-}
-
-function cleanTree(obj) {
-  const result = {};
-  for (const [key, val] of Object.entries(obj)) {
-    if (val && typeof val === 'object') {
-      if (val.$value !== undefined) {
-        result[key] = cleanToken(val);
-        // Handle collision: node is both a token AND a group (e.g. icon collection
-        // sets icon.$value while typography collection adds icon.tiny, icon.xs, etc.)
-        for (const [ck, cv] of Object.entries(val)) {
-          if (ck.startsWith('$')) continue;
-          if (cv && typeof cv === 'object') {
-            if (cv.$value !== undefined) {
-              result[key][ck] = cleanToken(cv);
-            } else {
-              const sub = cleanTree(cv);
-              if (Object.keys(sub).length > 0) {
-                result[key][ck] = sub;
-              }
-            }
-          }
-        }
-        // Warn about collision so it's visible in build output
-        const childKeys = Object.keys(result[key]).filter(k => !k.startsWith('$'));
-        if (childKeys.length > 0) {
-          console.warn(`  COLLISION: "${key}" is both a token ($value) and a group (${childKeys.length} children: ${childKeys.slice(0, 3).join(', ')}${childKeys.length > 3 ? '...' : ''})`);
-        }
-      } else {
-        const cleaned = cleanTree(val);
-        if (Object.keys(cleaned).length > 0) {
-          result[key] = cleaned;
-        }
-      }
-    }
-  }
-  return result;
-}
-
 // ─── Main ────────────────────────────────────────────────────────
 
 console.log('Flattening Tokens Studio output...\n');
 
 const data = JSON.parse(fs.readFileSync(INPUT, 'utf8'));
-
-// Identify available sets
-const sets = Object.keys(data).filter(k => k[0] !== '$' && k !== 'global');
-const collections = {};
-for (const s of sets) {
-  const parts = s.split('/');
-  const col = parts[0];
-  const mode = parts[1] || 'value';
-  if (!collections[col]) collections[col] = [];
-  collections[col].push(mode);
-}
-
-console.log('  Collections found:');
-for (const [col, modes] of Object.entries(collections)) {
-  const selected = DEFAULT_MODES[col] || modes[0];
-  const marker = modes.includes(selected) ? selected : modes[0] + ' (fallback)';
-  console.log(`    ${col}: ${modes.join(', ')}  → using "${marker}"`);
-}
-
-// ─── Detect if a set's direct children are all leaf tokens ────
-// Sets like border-width/default and breakpoint/default have tokens
-// directly at root ({sm: {$value}, md: {$value}}) with no parent
-// group wrapper. These need wrapping under the collection name so
-// they don't orphan into the global namespace.
-
-function needsWrapping(setData) {
-  for (const val of Object.values(setData)) {
-    if (val && typeof val === 'object' && val.$value !== undefined) {
-      return true; // direct leaf tokens at root — needs wrapping
-    }
-  }
-  return false;
-}
-
-// Merge selected sets
-const merged = {};
-for (const [col, modes] of Object.entries(collections)) {
-  const selected = DEFAULT_MODES[col] || modes[0];
-  const setKey = modes.length === 1 && modes[0] === 'value'
-    ? `${col}/${modes[0]}`
-    : `${col}/${selected}`;
-
-  const setData = data[setKey];
-  if (!setData) {
-    console.warn(`  WARNING: Set "${setKey}" not found, skipping`);
-    continue;
-  }
-
-  // Wrap rootless semantic sets under their collection name
-  // e.g. border-width/default → { "border-width": { sm, md, lg } }
-  //      breakpoint/default   → { "breakpoint": { web, tablet, mobile } }
-  if (col !== 'primitives' && needsWrapping(setData)) {
-    console.log(`    ↳ Wrapping "${setKey}" tokens under "${col}"`);
-    deepMerge(merged, { [col]: setData });
-  } else {
-    deepMerge(merged, setData);
-  }
-}
-
-// ─── Drop elevation-internal composite sub-tokens (#2243) and the layout
-// ─── tier (ADR-042) ────────────────────────────────────────────────
-// The `spread` and `opacity` groups live in the elevation collection ONLY to be
-// composed into the --shadow-* shorthand by generate-modes-css.mjs, which reads
-// design-tokens/tokens-studio.json directly — never the flattened SD input. If
-// left in, Style Dictionary emits them to :root as bare --spread-* / --opacity-*
-// globals: a shadow alpha masquerading as a general --opacity-md token, which
-// the token-purpose slot lint rightly rejects. They are elevation-only (asserted
-// in tokens-studio.json), so deleting the top-level keys is safe.
-// (The older blur-radius / box-shadow groups still emit — grandfathered,
-// registered slots; excluding those is a separate cleanup.)
-//
-// `layout` (ADR-042) is the device-fluid TIER: generate-modes-css.mjs reads
-// `layout/{mobile,tablet,desktop}` directly from tokens-studio.json and builds
-// one piecewise clamp() per token into tokens/layout-fluid.css. `layout` has no
-// entry in DEFAULT_MODES above, so the merge loop would otherwise pick
-// whichever mode sorts first (`layout/desktop` is listed first in the source)
-// and Style Dictionary would emit that as a flat, device-invariant
-// --page-inset / --section-padding-block — a static copy of a token that is
-// supposed to vary continuously by device, landing at the SAME name and
-// racing the fluid one on cascade order. Deleting the merged key (it is
-// wrapped under `layout` by the needsWrapping branch above, same as
-// `border-width` / `breakpoint`) is the minimal fix, same pattern as
-// spread/opacity above.
-for (const internal of ['spread', 'opacity', 'layout']) delete merged[internal];
-
-// ─── Fix font-line-height: Tokens Studio exports % as px ─────
-// Figma stores line-height as percentages (110%, 125%, 150%) but
-// Tokens Studio exports them as "110px", "125px". Convert back.
-
-if (merged['font-line-height']) {
-  for (const [key, token] of Object.entries(merged['font-line-height'])) {
-    if (token && token.$value && typeof token.$value === 'string' && token.$value.endsWith('px')) {
-      const num = parseFloat(token.$value);
-      // Line-height values are percentages (100-200 range), not pixel values
-      if (num >= 100 && num <= 300) {
-        const fixed = `${num}%`;
-        console.log(`    ↳ Fixed font-line-height/${key}: ${token.$value} → ${fixed}`);
-        token.$value = fixed;
-        token.$type = 'number'; // percentage, not dimension
-      }
-    }
-  }
-}
-
-// Clean Figma-specific extensions
-const cleaned = cleanTree(merged);
+const cleaned = flattenTokensStudio(data, { modes, log: console.log, warn: console.warn });
 
 // Count tokens (handles collision nodes that are both token AND group)
 let count = 0;
