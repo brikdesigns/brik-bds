@@ -71,6 +71,26 @@ describe('compileClientTheme', () => {
     expect(generated).toEqual(rampValues(REFERENCE_CSS, 'blue'));
   });
 
+  it('compiles a client kit that carries no grayscale family', async () => {
+    // A client kit names its own families only. Foundations keeps grayscale as
+    // literal word steps, which bds/retire-word-steps refuses unless applyRamp
+    // has aliased them, so the compiler ramps the Foundations grayscale.
+    const blue = readBrikKit()['primitives/value'].color.blue;
+    const kit = {
+      'primitives/value': {
+        color: {
+          acme: Object.fromEntries(
+            Object.entries(ANCHOR_STOPS).map(([name, stop]) => [name, { $type: 'color', $value: blue[stop].$value }]),
+          ),
+        },
+      },
+    };
+    const css = await compileClientTheme(kit);
+    expect(rampValues(css, 'acme')).toEqual(rampValues(REFERENCE_CSS, 'blue'));
+    expect(Object.keys(rampValues(css, 'grayscale')).sort()).toEqual([...STOPS].sort());
+    expect(kit['primitives/value'].color).not.toHaveProperty('grayscale');
+  });
+
   it('honours selector', async () => {
     const css = await compileClientTheme(readBrikKit(), { selector: '[data-client="acme"]' });
     expect(css).toContain('[data-client="acme"] {');
