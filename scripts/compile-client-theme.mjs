@@ -17,7 +17,6 @@
  * the `@brikdesigns/bds/compile-client-theme` subpath, not from the lib entry.
  */
 
-import fs from 'node:fs';
 import { register } from '@tokens-studio/sd-transforms';
 import StyleDictionary from 'style-dictionary';
 
@@ -25,18 +24,14 @@ import { applyRamp } from './generate-color-ramps.mjs';
 import { registerBdsHooks, cssPlatform } from './lib/sd-bds.mjs';
 import compose from './lib/tokens-studio-compose.cjs';
 
-const { mergeLibraries, flattenTokensStudio } = compose;
+// Imported, not read from disk: consumers bundle this subpath, and a bundled
+// import.meta.url no longer points into this package.
+import FOUNDATIONS from '../design-tokens/foundations.json' with { type: 'json' };
 
-const FOUNDATIONS_URL = new URL('../design-tokens/foundations.json', import.meta.url);
+const { mergeLibraries, flattenTokensStudio } = compose;
 
 register(StyleDictionary);
 registerBdsHooks(StyleDictionary);
-
-let foundationsCache;
-function readFoundations() {
-  foundationsCache ??= JSON.parse(fs.readFileSync(FOUNDATIONS_URL, 'utf8'));
-  return foundationsCache;
-}
 
 /**
  * Compile a Brand Kit to the `--bds-*` custom-property sheet.
@@ -50,7 +45,7 @@ function readFoundations() {
  * @returns {Promise<string>}
  */
 export async function compileClientTheme(kit, opts = {}) {
-  const { foundations = readFoundations(), modes = {}, selector = ':root' } = opts;
+  const { foundations = FOUNDATIONS, modes = {}, selector = ':root' } = opts;
 
   const brandKit = structuredClone(kit);
   const families = brandKit?.['primitives/value']?.color;

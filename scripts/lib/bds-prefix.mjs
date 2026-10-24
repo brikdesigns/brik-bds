@@ -23,6 +23,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+// Imported, not read from GRAMMAR_PATH / RENAMED_KNOBS_PATH: this module loads
+// inside compileClientTheme, which consumers bundle, and a bundled
+// import.meta.url no longer points into this package.
+import GRAMMAR from '../../tokens/naming-grammar.json' with { type: 'json' };
+import RENAMED_KNOBS_FILE from '../../tokens/compat/renamed-knobs.json' with { type: 'json' };
+
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const REPO_ROOT = path.resolve(HERE, '..', '..');
 
@@ -31,7 +37,7 @@ export const RENAMED_KNOBS_PATH = path.join(REPO_ROOT, 'tokens', 'compat', 'rena
 export const LEGACY_PATH = path.join(REPO_ROOT, 'tokens', 'compat', 'legacy-token-names.json');
 
 export function readGrammar() {
-  return JSON.parse(fs.readFileSync(GRAMMAR_PATH, 'utf8'));
+  return structuredClone(GRAMMAR);
 }
 
 /** The ID every BDS Primitive / Semantic / Component name leads with. */
@@ -98,7 +104,7 @@ export function readLegacy() {
  * are not in the legacy snapshot; the bridge still carries the old spelling.
  */
 export const RENAMED_KNOBS = (() => {
-  const { $comment, ...knobs } = JSON.parse(fs.readFileSync(RENAMED_KNOBS_PATH, 'utf8'));
+  const { $comment, ...knobs } = RENAMED_KNOBS_FILE;
   return knobs;
 })();
 
