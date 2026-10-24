@@ -6,7 +6,10 @@
  * file portable and out of the BDS lib build.
  */
 
-/** A Brand Kit, shaped like design-tokens/brand-kits/brik.json (Tokens Studio sets). */
+/**
+ * A Brand Kit, shaped like design-tokens/brand-kits/brik.json (Tokens Studio sets).
+ * A kit without a `grayscale` family is compiled with the Foundations grayscale.
+ */
 export type BrandKit = Record<string, unknown>;
 
 export interface CompileClientThemeOptions {

@@ -17,7 +17,6 @@
  * the `@brikdesigns/bds/compile-client-theme` subpath, not from the lib entry.
  */
 
-import fs from 'node:fs';
 import { register } from '@tokens-studio/sd-transforms';
 import StyleDictionary from 'style-dictionary';
 
@@ -25,18 +24,14 @@ import { applyRamp } from './generate-color-ramps.mjs';
 import { registerBdsHooks, cssPlatform } from './lib/sd-bds.mjs';
 import compose from './lib/tokens-studio-compose.cjs';
 
-const { mergeLibraries, flattenTokensStudio } = compose;
+// Imported, not read from disk: consumers bundle this subpath, and a bundled
+// import.meta.url no longer points into this package.
+import FOUNDATIONS from '../design-tokens/foundations.json' with { type: 'json' };
 
-const FOUNDATIONS_URL = new URL('../design-tokens/foundations.json', import.meta.url);
+const { mergeLibraries, flattenTokensStudio } = compose;
 
 register(StyleDictionary);
 registerBdsHooks(StyleDictionary);
-
-let foundationsCache;
-function readFoundations() {
-  foundationsCache ??= JSON.parse(fs.readFileSync(FOUNDATIONS_URL, 'utf8'));
-  return foundationsCache;
-}
 
 /**
  * Compile a Brand Kit to the `--bds-*` custom-property sheet.
@@ -50,14 +45,17 @@ function readFoundations() {
  * @returns {Promise<string>}
  */
 export async function compileClientTheme(kit, opts = {}) {
-  const { foundations = readFoundations(), modes = {}, selector = ':root' } = opts;
+  const { foundations = FOUNDATIONS, modes = {}, selector = ':root' } = opts;
 
   const brandKit = structuredClone(kit);
-  const families = brandKit?.['primitives/value']?.color;
-  if (families && typeof families === 'object') {
-    for (const familyName of Object.keys(families)) {
-      families[familyName] = applyRamp(familyName, families[familyName]);
-    }
+  brandKit['primitives/value'] ??= {};
+  const families = (brandKit['primitives/value'].color ??= {});
+  // Foundations carries grayscale as six literal word steps, and only applyRamp
+  // turns those into the aliases bds/retire-word-steps requires. A client kit
+  // that names no grays of its own ramps the Foundations grayscale.
+  families.grayscale ??= structuredClone(foundations['primitives/value'].color.grayscale);
+  for (const familyName of Object.keys(families)) {
+    families[familyName] = applyRamp(familyName, families[familyName]);
   }
 
   const { merged } = mergeLibraries(foundations, brandKit);

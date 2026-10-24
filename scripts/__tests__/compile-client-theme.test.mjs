@@ -3,6 +3,8 @@ import { readFileSync, mkdtempSync, readdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { pathToFileURL } from 'node:url';
+import { build } from 'esbuild';
 
 import { compileClientTheme } from '../compile-client-theme.mjs';
 import { ANCHOR_STOPS, STOPS } from '../generate-color-ramps.mjs';
@@ -69,10 +71,47 @@ describe('compileClientTheme', () => {
     expect(generated).toEqual(rampValues(REFERENCE_CSS, 'blue'));
   });
 
+  it('compiles a client kit that carries no grayscale family', async () => {
+    // A client kit names its own families only. Foundations keeps grayscale as
+    // literal word steps, which bds/retire-word-steps refuses unless applyRamp
+    // has aliased them, so the compiler ramps the Foundations grayscale.
+    const blue = readBrikKit()['primitives/value'].color.blue;
+    const kit = {
+      'primitives/value': {
+        color: {
+          acme: Object.fromEntries(
+            Object.entries(ANCHOR_STOPS).map(([name, stop]) => [name, { $type: 'color', $value: blue[stop].$value }]),
+          ),
+        },
+      },
+    };
+    const css = await compileClientTheme(kit);
+    expect(rampValues(css, 'acme')).toEqual(rampValues(REFERENCE_CSS, 'blue'));
+    expect(Object.keys(rampValues(css, 'grayscale')).sort()).toEqual([...STOPS].sort());
+    expect(kit['primitives/value'].color).not.toHaveProperty('grayscale');
+  });
+
   it('honours selector', async () => {
     const css = await compileClientTheme(readBrikKit(), { selector: '[data-client="acme"]' });
     expect(css).toContain('[data-client="acme"] {');
     expect(css).not.toContain(':root {');
+  });
+
+  // A consumer's server build bundles this subpath (the portal's Netlify
+  // functions use esbuild), and inside a bundle import.meta.url is the bundle's
+  // own path. Data the compiler read from disk relative to its source file
+  // would then be looked up beside the bundle, and the import would throw
+  // before compileClientTheme ever ran.
+  it('compiles the same sheet when bundled and loaded from outside the package', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'compile-client-theme-bundle-'));
+    try {
+      const outfile = join(dir, 'bundle.mjs');
+      await build({ entryPoints: [COMPILER], bundle: true, platform: 'node', format: 'esm', outfile, logLevel: 'silent' });
+      const { compileClientTheme: bundled } = await import(pathToFileURL(outfile).href);
+      expect(await bundled(readBrikKit())).toBe(REFERENCE_CSS);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
   });
 
   // The "writes no file" claim is checked in a child process that wraps every
