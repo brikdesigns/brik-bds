@@ -94,8 +94,8 @@ npm run build:all-tokens
 
 | Scenario | Library decision |
 |---|---|
-| New client onboarding (Vale / Renew / Memphis / etc.) | Create a new Brand Kit Library in Figma. Set up brand color primitives + brand semantic overrides + dark mode. Emit `theme-{client}.css`. |
-| Brand refresh on an existing client | Update the client's Brand Kit Library only. Foundations doesn't change. Pull → rebuild → ship the regenerated `theme-{client}.css`. |
+| New client onboarding (Vale / Renew / Memphis / etc.) | No Brand Kit Library. The portal compiles the client's theme from the client profile via `compileClientTheme` and publishes it to the client site. BDS emits only Brik's own kit (`design-tokens/brand-kits/brik.json`). |
+| Brand refresh on an existing client | Update the client profile in the portal; it recompiles and republishes the theme via `compileClientTheme`. Foundations doesn't change. For Brik itself, update the Brik Brand Kit Library → pull → rebuild. |
 | New universal token (math scale, system color, base semantic) | Add to **Foundations Library**. Affects every brand. Coordinate via PR + Chromatic. |
 | New brand-specific concept (service-line, audience-scoped color, custom dimension) | Add to the relevant **Brand Kit Library** as a brand-specific semantic token (e.g., `--bds-background-service-marketing`). Foundations stays untouched. |
 
