@@ -145,7 +145,7 @@ Each `.body.theme-{name}` block overrides a fixed set of **semantic color tokens
 
 ## Adding a custom client brand
 
-Create a `theme-{client}.css` file in the consuming project and add it as the final import in `globals.css` (after the BDS cascade above). Override any semantic tokens at `:root` level:
+Client themes are generated, not hand-written. The portal builds each client's theme from the client profile — BDS `compileClientTheme` ramps the brand colors and serialises them to CSS — and the client site fetches it at build. Hand-written theme files exist only for Brik itself (`tokens/theme-brand-brik.css`) and TNCLD (portal#4413). The generated file overrides semantic tokens at `:root` level, shaped like this:
 
 ```css
 /* theme-acme.css — all that's needed for a full rebrand */
