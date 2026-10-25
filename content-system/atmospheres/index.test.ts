@@ -4,6 +4,7 @@ import {
   ATMOSPHERE_MANIFEST,
   getAtmosphereImportPath,
   getAtmosphereSafePairings,
+  getSafePairingsForThemeMode,
 } from './index';
 import { ATMOSPHERE_VALUES } from '../vocabularies/atmosphere';
 
@@ -143,6 +144,30 @@ describe('getAtmosphereSafePairings', () => {
 
   it('returns an empty array for `none`', () => {
     expect(getAtmosphereSafePairings('none')).toEqual([]);
+  });
+});
+
+describe('getSafePairingsForThemeMode', () => {
+  const brandFill = (fg: string) => (p: { fg: string; bg: string }) =>
+    p.fg === fg && p.bg === '--bds-background-brand-primary';
+
+  it('pairs brand fill with --bds-text-on-color-light on a dark page', () => {
+    const dark = getSafePairingsForThemeMode('dark');
+    expect(dark.some(brandFill('--bds-text-on-color-light'))).toBe(true);
+    expect(dark.some(brandFill('--bds-text-on-color-dark'))).toBe(false);
+  });
+
+  it('pairs brand fill with --bds-text-on-color-dark on a light page', () => {
+    const light = getSafePairingsForThemeMode('light');
+    expect(light.some(brandFill('--bds-text-on-color-dark'))).toBe(true);
+    expect(light.some(brandFill('--bds-text-on-color-light'))).toBe(false);
+  });
+
+  it('keeps --bds-text-muted on --bds-background-primary out of the dark set', () => {
+    const dark = getSafePairingsForThemeMode('dark');
+    expect(
+      dark.some((p) => p.fg === '--bds-text-muted' && p.bg === '--bds-background-primary'),
+    ).toBe(false);
   });
 });
 

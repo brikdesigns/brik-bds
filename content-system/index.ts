@@ -20,6 +20,7 @@ export {
   ATMOSPHERE_MANIFEST,
   getAtmosphereImportPath,
   getAtmosphereSafePairings,
+  getSafePairingsForThemeMode,
   type AtmosphereManifestEntry,
   type SafePairing,
   type SurfaceProfile,

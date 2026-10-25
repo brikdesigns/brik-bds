@@ -27,7 +27,7 @@
  *     theme CSS). See brik-bds#369.
  */
 
-import type { Atmosphere } from '../vocabularies/atmosphere';
+import type { Atmosphere, ThemeMode } from '../vocabularies/atmosphere';
 
 /**
  * One BDS-contract token pairing the atmosphere guarantees passes WCAG AA
@@ -74,6 +74,11 @@ export type SurfaceProfile =
 export interface AtmosphereManifestEntry {
   slug: Atmosphere;
   cssPath: string;
+  /**
+   * @deprecated No atmosphere sets a colour, so the page mode is the
+   * client's `theme_mode`, never the atmosphere's. Removal tracked in
+   * brik-bds#2818.
+   */
   themeMode: 'light' | 'dark' | null;
   /** One-line description for admin UI tooltips. */
   blurb: string;
@@ -96,6 +101,11 @@ export interface AtmosphereManifestEntry {
    * check #11 (W1-BDS handoff). Adding a pair here means the preflight
    * starts validating it; removing one means the preflight stops gating
    * on it.
+   *
+   * @deprecated Keyed to the atmosphere's mode, so a light atmosphere on a
+   * dark page skips the dark-page pairings. Use
+   * `getSafePairingsForThemeMode(theme_mode)`. Removal tracked in
+   * brik-bds#2818.
    */
   safePairings: readonly SafePairing[];
 }
@@ -255,7 +265,24 @@ export function getAtmosphereImportPath(atmosphere: Atmosphere): string {
  * Convenience accessor — returns the safePairings for a given atmosphere.
  * Returns an empty array when the slug is `none` or the atmosphere
  * declares no constraints; callers fall back to their own defaults.
+ *
+ * @deprecated Use `getSafePairingsForThemeMode`. Removal tracked in
+ * brik-bds#2818.
  */
 export function getAtmosphereSafePairings(atmosphere: Atmosphere): readonly SafePairing[] {
   return ATMOSPHERE_MANIFEST[atmosphere].safePairings;
+}
+
+const THEME_MODE_SAFE_PAIRINGS: Record<ThemeMode, readonly SafePairing[]> = {
+  light: [...LIGHT_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_LIGHT_THEME],
+  dark: [...DARK_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_DARK_THEME],
+};
+
+/**
+ * The BDS-contract token pairings a page in `themeMode` must pass at
+ * WCAG AA. The page mode is the client's `theme_mode`; atmospheres set no
+ * colour, so they do not choose the pairings (brik-client-portal#5512).
+ */
+export function getSafePairingsForThemeMode(themeMode: ThemeMode): readonly SafePairing[] {
+  return THEME_MODE_SAFE_PAIRINGS[themeMode];
 }
