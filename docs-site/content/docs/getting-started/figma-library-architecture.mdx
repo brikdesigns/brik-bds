@@ -8,7 +8,7 @@ import { Callout } from 'fumadocs-ui/components/callout';
 A **Library** is the authoritative source of token definitions for a scope. BDS uses two:
 
 - **Foundations Library** — universal, brand-agnostic. Owns math scales (typography / spacing / elevation / motion), grayscale primitives, system messaging primitives, and base semantic tokens that have a sensible default before any brand applies.
-- **[Client] Brand Kit Library** — one per client. Owns brand color primitives (poppy / tan / etc. for Brik; whatever palette the client has), brand semantic overrides (light + dark), and any client-specific mode picks.
+- **Brik Brand Kit Library** — Brik's own brand; clients have no Brand Kit Library (the portal owns per-client values). Owns brand color primitives (poppy / tan / etc.), brand semantic overrides (light + dark), and any mode picks.
 
 <Callout type="info">
   "Library" is a logical concept, implementation-agnostic. Today both libraries are Figma files managed via the Tokens Studio plugin. If the storage layer changes (raw DTCG JSON, Penpot, etc.), the Library distinction still holds — it's a *role*, not a tool.
@@ -19,7 +19,7 @@ A **Library** is the authoritative source of token definitions for a scope. BDS 
 | Library | Primitives | Semantic tokens | Modes |
 |---|---|---|---|
 | **Foundations** | `--color-grayscale-*`, `--color-system-*`, `--font-size-*`, `--space-*`, `--border-radius-*`, `--shadow-*`, motion primitives, annotation | Universal defaults (`--bds-text-primary`, `--bds-surface-primary`, `--bds-background-positive`, etc.) | borderwidth, spacing, typography, elevation, breakpoint, radius, icon |
-| **Brand Kit** (per client) | Brand color family ramps (`--color-poppy-*`, `--color-tan-*`, etc.) | Brand overrides on the same canonical names (`--bds-background-brand-primary`, `--bds-text-brand-primary`, plus service-line semantics where applicable) | `color` (light / dark) per brand |
+| **Brand Kit** (Brik's own) | Brand color family ramps (`--color-poppy-*`, `--color-tan-*`, etc.) | Brand overrides on the same canonical names (`--bds-background-brand-primary`, `--bds-text-brand-primary`, plus service-line semantics where applicable) | `color` (light / dark) per brand |
 
 <Callout type="warn">
   **Foundations Library MUST NOT carry brand-specific values.** That's the failure pattern brik-bds#712 retired — the deleted `primitives/value.{brand, theme.brik, theme.blue}` groups were brand-specific tokens sitting in Foundations. If a token would change per client, it belongs in a Brand Kit, not in Foundations.
@@ -48,7 +48,7 @@ Both libraries flow through the same Style Dictionary pipeline, into the same `d
                               ▼
               tokens/figma-tokens.css            (Foundations → @layer bds-tokens)
               tokens/figma-tokens-dark.css       (Foundations dark mode)
-              tokens/theme-{client}.css          (Brand Kit → @layer client-theme)
+              tokens/theme-brand-brik.css        (Brik Brand Kit → @layer client-theme)
 
                               │ build-dist-tokens.js
                               ▼
@@ -110,4 +110,4 @@ npm run build:all-tokens
 - [Token Anatomy](/docs/foundation/token-anatomy) — the four-tier abstraction stack the libraries feed into
 - [The cascade](/docs/getting-started/cascade) — how Library output maps to CSS Layers at consumer runtime
 - [Style Dictionary build pipeline](/docs/react-reference/utilities#style-dictionary-build-pipeline) — commands + outputs per library
-- [Client Themes](/docs/theming/client-themes) — the consumer-side `theme-{client}.css` override matrix (the runtime shape Brand Kits emit into)
+- [Client Themes](/docs/theming/client-themes) — the consumer-side `theme-{client}.css` override matrix (the runtime shape the portal publishes per client)
