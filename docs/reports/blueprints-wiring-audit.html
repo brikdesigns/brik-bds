@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- report-meta: contract in docs/reports/README.md (ADR-046) -->
+<meta name="report-status" content="active">
+<meta name="report-type" content="audit">
+<meta name="report-themes" content="design-system">
+<meta name="report-subject" content="bds">
+<meta name="report-owner" content="nstaner">
+<meta name="report-generated" content="2026-10-26">
+<meta name="report-supersedes" content="none">
+<meta name="report-cadence" content="once">
+<meta name="report-source" content="manual">
+<!-- /report-meta -->
+<title>Blueprints Wiring Audit — 2026-10-26</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font: 15px/1.5 -apple-system, "Segoe UI", sans-serif; max-width: 62rem; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; font-size: 14px; }
+  th, td { border: 1px solid #ccc; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+  th { background: #f4f4f4; }
+  code, pre { font-family: ui-monospace, Menlo, monospace; font-size: .92em; background: #f3f3f3; padding: 0 .2em; }
+  pre { padding: .75rem; overflow-x: auto; }
+  .verdict { background: #fff4e5; border-left: 4px solid #e58a00; padding: .75rem 1rem; }
+  .ok { color: #1a7f37; font-weight: 600; } .bad { color: #b42318; font-weight: 600; } .mid { color: #9a6700; font-weight: 600; }
+  blockquote { border-left: 3px solid #bbb; margin: .5rem 0; padding: .25rem .75rem; color: #444; }
+</style>
+</head>
+<body>
+
+<h1>Blueprints Wiring Audit</h1>
+<p><strong>Date:</strong> 2026-10-26 · <strong>Issue:</strong> brik-bds#2639 (under #2309) · <strong>Read:</strong> brik-bds <code>895151ed</code> (main), brik-client-portal <code>288c67b8</code> (staging), 8 client-site repos in <code>~/Documents/GitHub/web</code> + <code>brik/brikdesigns</code>. Local checkouts only; production data not queried.</p>
+
+<p><strong>PROPOSED — needs operator decision.</strong> The answer in §2 and the cut list in §5 are recommendations. Nothing is removed or rewired by this report.</p>
+
+<div class="verdict">
+<p><strong>Verdict: not bloat. Keep blueprints, and build new client sites from them. Confidence: medium-high (about 75%).</strong></p>
+<p>The 2026-09-30 premise that "almost nothing is built from blueprints" is out of date. Since then the portal has wired the BDS resolver into the design decision set and the mockup prompt, and the scaffold emits <code>BlueprintDispatcher</code> into new sites. What is true: <strong>0 of 8 existing sites use the dispatcher</strong>, they were hand-written before the rail existed. The dead weight is small and specific: two unused snippet fields, one uncalled route, and three stale docs (§5).</p>
+<p>The one real fork is whether to also drop the portal's <code>design_blueprints</code> table. It still has 4 live read sites, so dropping it is a rewire, not a delete (§4).</p>
+</div>
+
+<h2>1. Surface matrix</h2>
+<p>Each row was read on 2026-10-26. "Instrument" is the search that produced the finding.</p>
+<table>
+<tr><th>Surface</th><th>State</th><th>Evidence (file:line)</th><th>Instrument</th></tr>
+<tr><td>BDS library JSON</td><td class="ok">wired (metadata)</td><td><code>blueprints/blueprint-library.json</code>: 13 active entries. All 13 carry <code>layout_spec</code> + <code>css_hints</code>; 0 of 13 carry <code>html_snippet</code>/<code>css_snippet</code>/<code>pattern_spec</code>/<code>js_snippet</code>.</td><td>python over the JSON, key counter</td></tr>
+<tr><td>BDS two component rails</td><td class="ok">wired</td><td>Astro registry <code>BlueprintDispatcher.astro:92</code>; React <code>BlueprintDispatcher.tsx</code>; <code>WIRED_BLUEPRINT_KEYS</code> has 13 keys (<code>astro/types.ts:64</code>); 28 story files titled <code>Blueprints/…</code>.</td><td>rg + python</td></tr>
+<tr><td>BDS resolver</td><td class="ok">wired</td><td><code>resolveBlueprintShortlist</code> <code>resolver.ts:183</code>, <code>SHORTLIST_WEIGHTS</code> <code>:63</code>; consumed by the portal (next rows).</td><td>rg</td></tr>
+<tr><td>Schema snippet / v2 fields</td><td class="bad">dead</td><td><code>schema.ts:91,93</code> (<code>html_snippet</code>, <code>css_snippet</code>), <code>:103-104</code> (<code>pattern_spec</code>, <code>js_snippet</code>). 0 of 13 library entries populate them; portal never reads them (below).</td><td>python + rg</td></tr>
+<tr><td>Roadmap</td><td class="mid">intentional, not inventory</td><td><code>blueprint-roadmap.json</code>: 20 candidates, file states "NOT inventory" in its own <code>_comment</code>.</td><td>python</td></tr>
+<tr><td>Portal → design decision set → mockup prompt</td><td class="ok">wired (new since 9/30)</td><td><code>decision-set.ts:643</code> calls <code>composeBlueprints</code>; result is <code>blueprintShortlist</code> <code>:669</code>; read at <code>generate-mockups-worker.ts:1720,2595</code>.</td><td>rg</td></tr>
+<tr><td>Portal <code>layout_spec</code>/<code>css_hints</code> → AI prompt</td><td class="ok">wired</td><td><code>generate-mockups-worker.ts:1221-1222</code>, selected at <code>:1258,:1280</code>.</td><td>rg</td></tr>
+<tr><td>Portal homepage mockup run</td><td class="ok">reachable in the local catalog</td><td><code>runMockupGeneration</code> <code>generate-mockups-worker.ts:1633</code> ← <code>generate-mockups/route.ts:134</code> ← <code>fire-and-forget.ts:20</code>; template row with <code>type: design_generate_mockups</code> at <code>supabase/local-catalog-seed.sql:970</code>. Prod catalog not checked.</td><td>rg</td></tr>
+<tr><td>Portal <code>html_snippet</code>/<code>css_snippet</code></td><td class="bad">dead</td><td>Only mention: a comment, <code>scripts/generate-blueprint-seed.mts:115</code>. No select reads them. Control: the same grep finds the live column list at <code>content.ts:672</code>.</td><td>rg over <code>src</code> + <code>scripts</code></td></tr>
+<tr><td>Portal <code>/api/brand/resolve/[companyId]</code></td><td class="bad">no callers</td><td>Route calls <code>composeBlueprints</code> at <code>route.ts:116</code>. <code>rg "brand/resolve" src scripts</code> outside the route returns only a comment (<code>generate-mockups-worker.ts:1133</code>) and unrelated <code>resolve-engagement-brand</code> imports. The library <code>compose-blueprints.ts</code> itself stays: it has a real caller (<code>decision-set.ts:86</code>).</td><td>rg; portal repo only</td></tr>
+<tr><td>Portal scaffold</td><td class="mid">wired for new sites, static compositions</td><td>Emits <code>BlueprintDispatcher</code> (<code>scaffold-templates.ts:1861</code>); keys come from fixed page compositions (<code>dev-scaffold-site-worker.ts:136,377</code>), checked against <code>WIRED_BLUEPRINT_KEYS</code> (<code>:93</code>); stub <code>visualNotes.blueprintKey</code> written at <code>scaffold-templates.ts:1651</code>. Not driven by the content step's own choice.</td><td>rg + read</td></tr>
+<tr><td>Portal <code>design_blueprints</code> table</td><td class="mid">live reads, duplicates BDS JSON</td><td>Read at <code>content.ts:671</code>, <code>generate-mockups-worker.ts:1257,1279</code>, <code>audit-sites/route.ts:626</code>. Seeded by <code>scripts/generate-blueprint-seed.mts</code>; drift gate <code>scripts/fragility-check.sh:257-264</code> → <code>scripts/audit-blueprint-manifest-drift.ts</code>. No test covers the DB path (not re-verified today; carried from 9/30).</td><td>rg</td></tr>
+<tr><td>Client sites (8 repos)</td><td class="bad">bypassed</td><td>0 of 8 import <code>BlueprintDispatcher</code>. 2 import one component: <code>GhlForm</code> from <code>blueprints-astro</code> (<code>birdwell-mutlak/src/components/sections/InquiryForm.astro:9</code>, <code>rebel-cfo/src/components/FinalCta.astro:2</code>). brikdesigns (Next): <code>Hero</code>/<code>CardGrid</code> from the root entry (<code>services/[serviceLineSlug]/page.tsx:9</code>, <code>CrossReferenceBlock.tsx:2</code>), no dispatcher (<code>HeroBlock.tsx</code> docblock cites #1349).</td><td>rg per repo; control: <code>@brikdesigns/bds</code> imports found in 4 of the repos checked</td></tr>
+</table>
+
+<h2>2. Should client sites be built from blueprints?</h2>
+<p><strong>Recommendation: YES for new scaffolds, no retrofit of the 8 existing sites. Confidence about 75%.</strong></p>
+<ul>
+<li>The scaffold already builds from them (<code>scaffold-templates.ts:1861</code>), and the portal's design decisions already rank them (<code>decision-set.ts:643</code>). Cutting blueprints now would remove working code, not dead code.</li>
+<li>The existing sites are hand-written; retrofitting them is a per-site migration with no demonstrated need. That is a separate call from keeping the rail.</li>
+<li>What lowers confidence: the scaffold's keys come from static compositions, not from the content step's choice, and no scaffolded site has shipped through it in the repos I could see. The "YES" in #2639's wording (wire scaffold to the content step's blueprints) is therefore still unbuilt.</li>
+</ul>
+
+<h2>3. #2639's 2026-09-30 claims that no longer hold</h2>
+<table>
+<tr><th>9/30 claim</th><th>Today</th></tr>
+<tr><td><code>compose-blueprints.ts</code> has no callers</td><td class="bad">False. Caller: <code>decision-set.ts:86,643</code>. Only the <code>/api/brand/resolve</code> route is uncalled.</td></tr>
+<tr><td>Scaffold stores <code>blueprintKey</code> but ignores it</td><td class="bad">False. It validates keys against <code>WIRED_BLUEPRINT_KEYS</code> and emits the dispatcher.</td></tr>
+<tr><td>Homepage <code>runMockupGeneration</code> unreached</td><td class="bad">False in the local catalog (<code>local-catalog-seed.sql:970</code>). Prod catalog unchecked.</td></tr>
+<tr><td>Only live portal path is the AI prompt, layout/css hints</td><td class="bad">Incomplete. The shortlist now feeds the prompt too (<code>:1720</code>).</td></tr>
+<tr><td>Schema v1/v2 fields have no consumer</td><td>Partly true. <code>layout_spec</code>/<code>css_hints</code> are consumed; snippet and v2 fields are not.</td></tr>
+<tr><td>birdwell <code>blueprintKey</code> nothing reads</td><td>Still there (<code>src/data/content.ts:17,63</code>); synced content, no reader found.</td></tr>
+<tr><td>0 of 6 Astro sites use dispatcher/components</td><td class="mid">Still 0 for the dispatcher; 2 now import <code>GhlForm</code>.</td></tr>
+</table>
+
+<h2>4. Decision for the operator</h2>
+<table>
+<tr><th>Option</th><th>What it means</th><th>Cost</th></tr>
+<tr><td><strong>A. Keep and trim (recommended)</strong></td><td>Remove only the dead items in §5. Keep <code>design_blueprints</code> and the seed. File the doc fixes.</td><td>about S, no behaviour change</td></tr>
+<tr><td>B. Keep and drop the DB mirror</td><td>Portal reads BDS JSON directly; delete <code>design_blueprints</code>, seed script and drift gate. Rewires 4 read sites plus the admin table.</td><td>about M in the portal, a migration (prod data call)</td></tr>
+<tr><td>C. Reduce to prompt hints</td><td>Remove the rails, dispatcher, scaffold wiring. Contradicts ADR-037 and ADR-039.</td><td>about L, not recommended</td></tr>
+</table>
+
+<h2>5. Proposed cut list (each needs the operator's words first)</h2>
+<table>
+<tr><th>#</th><th>Cut</th><th>Files</th><th>Why it is safe</th></tr>
+<tr><td>1</td><td>Remove <code>html_snippet</code>/<code>css_snippet</code> from the schema and ARCHITECTURE.md</td><td><code>schema.ts:91,93</code>; <code>blueprints/ARCHITECTURE.md:112-113</code>; portal <code>generate-blueprint-seed.mts:115</code> (comment)</td><td>0 of 13 entries populate; no portal select reads them (§1). Sites on older BDS: not searched.</td></tr>
+<tr><td>2</td><td>Remove the <code>/api/brand/resolve/[companyId]</code> route</td><td><code>src/app/api/brand/resolve/[companyId]/route.ts</code> (portal)</td><td>No caller in portal <code>src</code>/<code>scripts</code>. Callers outside the portal repo (agents, MCP, other repos) not searched, so unverified.</td></tr>
+<tr><td>3</td><td>Decide on <code>pattern_spec</code>/<code>js_snippet</code> (v2)</td><td><code>schema.ts:103-104</code></td><td>0 of 13 populate; ARCHITECTURE.md:214 calls the v2 phase "Ongoing" (Phase D). Reserved, not dead. Keep unless the operator retires the pivot.</td></tr>
+</table>
+
+<h3>Stale docs (list only; not fixed here)</h3>
+<table>
+<tr><th>Doc</th><th>Problem</th></tr>
+<tr><td><code>blueprints/ARCHITECTURE.md:213</code></td><td>Phase C "Pending", but <code>resolveBlueprintShortlist</code> exists (<code>resolver.ts:183</code>) and the portal uses it.</td></tr>
+<tr><td><code>docs-site/content/docs/web-elements/blueprints.mdx:81</code>, <code>docs/adrs/ADR-037-astro-is-the-canonical-blueprint-rail.md:101</code></td><td>Name a <code>blueprints-react</code> export; <code>package.json</code> has none (<code>grep -c '"./blueprints-react' package.json</code> → 0). Owned by #2393.</td></tr>
+<tr><td>Portal <code>fragility-check.sh:257-264</code> comment</td><td>States that a missed seed regen "silently drops active blueprints from the content generator's vocabulary". The audit-sites read (<code>route.ts:626</code>) is the one I could confirm; the content generator's read was not traced. Unverified.</td></tr>
+</table>
+
+<h2>6. Method limits</h2>
+<ul>
+<li><strong>Instrument error caught and fixed.</strong> My first site sweep reported 0 adoption for birdwell-mutlak and rebel-cfo. A direct grep (<code>rebel-cfo/src/components/FinalCta.astro:2</code>) contradicted it, so I redid the sweep with a simpler query and the counts above are from that rerun.</li>
+<li>8 site repos were present locally, not 13. <code>memphis-dental</code>, <code>seniorhomeessentials</code> and <code>treehouse-pediatric-dentistry</code> have no <code>@brikdesigns/bds</code> import in <code>src</code>. <code>nickstanerson.com</code> has no <code>src</code>.</li>
+<li>Portal was read on <code>staging</code> in the primary checkout; branch tips may differ from prod.</li>
+<li>Size tripwire from #2639 (per-page tracing) was not hit: every check was grep-level.</li>
+</ul>
+
+</body>
+</html>
