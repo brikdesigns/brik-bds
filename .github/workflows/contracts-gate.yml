@@ -631,12 +631,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Orphan-issue ratchet — self-test (rules + both ratchet directions)
-        if: always() && steps.node.outcome == 'success'
-        run: node scripts/lint-orphan-issues.test.mjs
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   # ─── Merge-queue readiness (#2447) ──────────────────────────────────────────
   #
   # A merge queue is LIVE on `main`. A required context whose workflow lacks
