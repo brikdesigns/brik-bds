@@ -147,8 +147,6 @@
   --bds-font-family-body: Poppins, sans-serif;
   --bds-font-family-subtitle: Poppins, sans-serif;
   --bds-font-family-system: 'Courier New', monospace;
-  --bds-easing-ease-in: String value;
-  --bds-easing-ease-out: String value;
   --bds-delay-0: 0ms;
   --bds-delay-100: 100ms;
   --bds-delay-200: 200ms;

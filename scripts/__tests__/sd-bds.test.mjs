@@ -24,6 +24,11 @@ describe('isRetiredWordStep', () => {
     expect(isCanonicalCssToken({ path: ['color', 'tan', 'darkest'] })).toBe(false);
     expect(isCanonicalCssToken({ path: ['color', 'tan', '950'] })).toBe(true);
   });
+
+  it('drops Figma\'s "String value" placeholder, keeps a real value (#2602)', () => {
+    expect(isCanonicalCssToken({ path: ['easing', 'ease-in'], $value: 'String value' })).toBe(false);
+    expect(isCanonicalCssToken({ path: ['easing', 'ease-in'], $value: 'cubic-bezier(0.4, 0, 1, 1)' })).toBe(true);
+  });
 });
 
 describe('prefix helpers', () => {
