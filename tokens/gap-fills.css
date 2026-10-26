@@ -543,6 +543,11 @@
      var(--bds-shell-top-bar-height) on an ancestor. Unit-bearing because the
      rail subtracts it inside calc(). */
   --bds-subnav-top:                 0px;
+
+  /* PageHeader sticky offset (brik-bds#2842). Same contract as --bds-subnav-top:
+     0px by default, set var(--bds-shell-top-bar-height) on an ancestor when the
+     shell has a top bar. Unit-bearing so a consumer can use it inside calc(). */
+  --bds-page-header-top:            0px;
 }
 
 /* ── Dark-mode corrections for generated tokens ──

@@ -55,9 +55,26 @@ Both paths render the same pixels, so `editHref` has no canvas of its own — th
 
 ### Sticky
 
-Set `sticky` to pin the header to the top of its scroll container as the body scrolls. It renders an opaque `--bds-surface-primary` background (so content passes cleanly beneath) and stacks above page content but below `TopNavigation` and overlays. Non-sticky remains the default — existing consumers are unaffected. The header sticks within the nearest scrolling ancestor, so that container — not the window — must own the scroll.
+Set `sticky` to pin the header to the top of its scroll container as the body scrolls. It renders an opaque `--bds-surface-primary` background (so content passes cleanly beneath) and stacks at `--bds-z-page-header` — above page content and the section rail, below the shell top bar and overlays. Non-sticky remains the default — existing consumers are unaffected. The header sticks within the nearest scrolling ancestor, so that container — not the window — must own the scroll.
+
+- **Offset** — `top` reads `--bds-page-header-top`, which defaults to `0px`. A shell with a top bar sets `--bds-page-header-top: var(--bds-shell-top-bar-height)` on an ancestor. Never set it on the header itself.
+- **Focus visibility (WCAG 2.4.11)** — a sticky header can cover the element keyboard focus moves to. Give the scroll container `scroll-padding-top` equal to the offset plus the header's height, e.g. `scroll-padding-top: calc(var(--bds-page-header-top) + 120px)` with the height your variant renders. Use the window's `html` element when the window scrolls.
 
 <Canvas of={Stories.Sticky} />
+
+### Variants
+
+`variant` fixes the header's shape for the page. No variant collapses, resizes or animates on scroll.
+
+| `variant` | Renders |
+| --- | --- |
+| `full` (default) | Every slot |
+| `compact` | Media, a `--bds-heading-sm` title, actions and tabs. `size` is ignored. |
+| `tabs-only` | Tabs only; the title stays as a visually hidden `<h1>` |
+
+<Canvas of={Stories.VariantFull} />
+<Canvas of={Stories.VariantCompact} />
+<Canvas of={Stories.VariantTabsOnly} />
 
 ## Props
 

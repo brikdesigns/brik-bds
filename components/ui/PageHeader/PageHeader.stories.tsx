@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, fn, within } from 'storybook/test';
 import { PageHeader } from './PageHeader';
@@ -54,6 +54,12 @@ const meta: Meta<typeof PageHeader> = {
       control: 'select',
       options: ['sm', 'md', 'lg'],
       description: 'Title scale. Default `lg`.',
+    },
+    variant: {
+      control: 'select',
+      options: ['full', 'compact', 'tabs-only'],
+      description:
+        'Header shape, fixed per page. `compact` = small title + actions + tabs; `tabs-only` = tabs with a visually hidden `<h1>`. Default `full`.',
     },
     sticky: {
       control: 'boolean',
@@ -244,6 +250,139 @@ export const Sticky: Story = {
       </div>
     </div>
   ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   3b. VARIANTS — full / compact / tabs-only, sticky under a shell
+   ═══════════════════════════════════════════════════════════════ */
+
+const sectionTabs = (
+  <TabBar variant="tab" items={[
+    { label: 'All', active: true, onClick: () => {} },
+    { label: 'Active', active: false, onClick: () => {} },
+    { label: 'Archived', active: false, onClick: () => {} },
+  ]} />
+);
+
+const variantArgs = {
+  title: 'Companies',
+  subtitle: 'Every lead, prospect and client.',
+  breadcrumbs: <Breadcrumb items={sampleBreadcrumbs} />,
+  actions: <Button variant="primary" size="sm">New company</Button>,
+  metadata: [{ label: 'Total', value: '42' }],
+  tabs: sectionTabs,
+};
+
+/** Scrolls the nearest scroll container and returns the header height before and after. */
+async function heightAcrossScroll(scroller: HTMLElement, header: HTMLElement) {
+  const before = header.getBoundingClientRect().height;
+  scroller.scrollTop = scroller.scrollHeight;
+  await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
+  return { before, after: header.getBoundingClientRect().height };
+}
+
+function StickyFrame({ children, shellOffset = false }: { children: ReactNode; shellOffset?: boolean }) {
+  return (
+    <div
+      data-testid="scroller"
+      style={{
+        height: 320,
+        overflowY: 'auto',
+        background: 'var(--bds-surface-primary)',
+        ...(shellOffset ? ({ '--bds-page-header-top': 'var(--bds-shell-top-bar-height)' } as CSSProperties) : {}),
+      }}
+    >
+      {children}
+      <div style={{ height: 1200, padding: 'var(--bds-padding-lg)' }}>Body content scrolls beneath the header.</div>
+    </div>
+  );
+}
+
+/**
+ * Every slot renders. Sticky at the default `0px` offset; the header keeps its
+ * height when the container scrolls.
+ * @summary Full variant — every slot, sticky at the default offset
+ */
+export const VariantFull: Story = {
+  tags: ['interaction-test'],
+  args: { ...variantArgs, variant: 'full', sticky: true },
+  render: (args) => (
+    <StickyFrame>
+      <PageHeader {...args} />
+    </StickyFrame>
+  ),
+  play: async ({ canvasElement }) => {
+    const header = canvasElement.querySelector('.bds-page-header') as HTMLElement;
+    const style = getComputedStyle(header);
+    await expect(style.position).toBe('sticky');
+    await expect(style.top).toBe('0px');
+    await expect(style.zIndex).toBe('20');
+    await expect(style.transitionDuration).toBe('0s');
+    await expect(style.animationName).toBe('none');
+    await expect(within(header).getByText('Every lead, prospect and client.')).toBeInTheDocument();
+    const { before, after } = await heightAcrossScroll(within(canvasElement).getByTestId('scroller'), header);
+    await expect(after).toBe(before);
+  },
+};
+
+/**
+ * Small title, actions and tabs — breadcrumbs, subtitle and metadata are not
+ * rendered. A shell with a top bar sets `--bds-page-header-top` on an ancestor,
+ * so the header pins 64px down, below the bar.
+ * @summary Compact variant — small title + tabs, pinned below a top bar
+ */
+export const VariantCompact: Story = {
+  tags: ['interaction-test'],
+  args: { ...variantArgs, variant: 'compact', sticky: true },
+  render: (args) => (
+    <StickyFrame shellOffset>
+      <PageHeader {...args} />
+    </StickyFrame>
+  ),
+  play: async ({ canvasElement }) => {
+    const header = canvasElement.querySelector('.bds-page-header') as HTMLElement;
+    const style = getComputedStyle(header);
+    await expect(style.top).toBe('64px');
+    await expect(style.transitionDuration).toBe('0s');
+    await expect(style.animationName).toBe('none');
+    const scoped = within(header);
+    await expect(scoped.getByRole('heading', { level: 1, name: 'Companies' })).toBeVisible();
+    await expect(scoped.getByRole('button', { name: 'New company' })).toBeInTheDocument();
+    await expect(scoped.queryByText('Every lead, prospect and client.')).toBeNull();
+    await expect(scoped.queryByText('Total')).toBeNull();
+    await expect(header.querySelector('.bds-breadcrumb')).toBeNull();
+    const { before, after } = await heightAcrossScroll(within(canvasElement).getByTestId('scroller'), header);
+    await expect(after).toBe(before);
+  },
+};
+
+/**
+ * Only the tabs are visible. The title stays as a visually hidden `<h1>` so the
+ * page keeps its heading.
+ * @summary Tabs-only variant — tabs with a visually hidden h1
+ */
+export const VariantTabsOnly: Story = {
+  tags: ['interaction-test'],
+  args: { ...variantArgs, variant: 'tabs-only', sticky: true },
+  render: (args) => (
+    <StickyFrame>
+      <PageHeader {...args} />
+    </StickyFrame>
+  ),
+  play: async ({ canvasElement }) => {
+    const header = canvasElement.querySelector('.bds-page-header') as HTMLElement;
+    const style = getComputedStyle(header);
+    await expect(style.position).toBe('sticky');
+    await expect(style.transitionDuration).toBe('0s');
+    await expect(style.animationName).toBe('none');
+    const scoped = within(header);
+    const h1 = scoped.getByRole('heading', { level: 1, name: 'Companies' });
+    await expect(Math.round(h1.getBoundingClientRect().width)).toBe(1);
+    await expect(scoped.queryByRole('button', { name: 'New company' })).toBeNull();
+    await expect(scoped.getByRole('tab', { name: 'Active' })).toBeInTheDocument();
+    const { before, after } = await heightAcrossScroll(within(canvasElement).getByTestId('scroller'), header);
+    await expect(after).toBe(before);
+  },
 };
 
 /* ═══════════════════════════════════════════════════════════════
