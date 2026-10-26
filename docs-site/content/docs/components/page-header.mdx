@@ -144,11 +144,11 @@ The step names are offset from the tokens they render. `lg` is the page-title de
 
 `sticky` pins the header to the top of its scroll container with an opaque surface, stacked at `--bds-z-page-header` — above page content and the section rail, below the shell top bar and overlays.
 
-`top` reads `--bds-page-header-top`, which defaults to `0px`. A shell with a top bar sets it on an ancestor, never on the header itself:
+`top` reads `--bds-pageheader-top`, which defaults to `0px`. A shell with a top bar sets it on an ancestor, never on the header itself:
 
 ```css
 .app-shell {
-  --bds-page-header-top: var(--bds-shell-top-bar-height);
+  --bds-pageheader-top: var(--bds-shell-top-bar-height);
 }
 ```
 
@@ -156,7 +156,7 @@ The step names are offset from the tokens they render. `lg` is the page-title de
 
 ```css
 .app-shell__content {
-  scroll-padding-top: calc(var(--bds-page-header-top) + 120px); /* 120px = your header's height */
+  scroll-padding-top: calc(var(--bds-pageheader-top) + 120px); /* 120px = your header's height */
 }
 ```
 

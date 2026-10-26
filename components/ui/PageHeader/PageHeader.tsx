@@ -86,7 +86,7 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
    * consumers are unaffected. The header sticks within the nearest scrolling
    * ancestor; ensure that container, not the window, owns the scroll.
    *
-   * The offset is `--bds-page-header-top` (default `0px`). A shell with a top
+   * The offset is `--bds-pageheader-top` (default `0px`). A shell with a top
    * bar sets it to the `--bds-shell-top-bar-height` token on an ancestor, so the
    * header pins below the bar instead of under it.
    */

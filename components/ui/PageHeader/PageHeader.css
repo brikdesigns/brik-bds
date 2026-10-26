@@ -35,7 +35,7 @@
 /* ─── Sticky ─────────────────────────────────────────────────
    Opt-in via the `sticky` prop. Pins to the top of the nearest scroll
    container; the opaque surface keeps body content from showing through.
-   --bds-page-header-top is 0px on :root. A shell with a top bar sets it to
+   --bds-pageheader-top is 0px on :root. A shell with a top bar sets it to
    var(--bds-shell-top-bar-height) on an ancestor. Never declared here — a
    declaration on the header would shadow an ancestor's value (brik-bds#2842).
    --bds-z-page-header sits above page content and the section rail but below
@@ -43,7 +43,7 @@
    scroll, and none declares a transition or animation. */
 .bds-page-header--sticky {
   position: sticky;
-  top: var(--bds-page-header-top);
+  top: var(--bds-pageheader-top);
   z-index: var(--bds-z-page-header);
   background-color: var(--bds-surface-primary);
 }

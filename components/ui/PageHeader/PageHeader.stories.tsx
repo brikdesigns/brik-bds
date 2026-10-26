@@ -289,7 +289,7 @@ function StickyFrame({ children, shellOffset = false }: { children: ReactNode; s
         height: 320,
         overflowY: 'auto',
         background: 'var(--bds-surface-primary)',
-        ...(shellOffset ? ({ '--bds-page-header-top': 'var(--bds-shell-top-bar-height)' } as CSSProperties) : {}),
+        ...(shellOffset ? ({ '--bds-pageheader-top': 'var(--bds-shell-top-bar-height)' } as CSSProperties) : {}),
       }}
     >
       {children}
@@ -327,7 +327,7 @@ export const VariantFull: Story = {
 
 /**
  * Small title, actions and tabs — breadcrumbs, subtitle and metadata are not
- * rendered. A shell with a top bar sets `--bds-page-header-top` on an ancestor,
+ * rendered. A shell with a top bar sets `--bds-pageheader-top` on an ancestor,
  * so the header pins 64px down, below the bar.
  * @summary Compact variant — small title + tabs, pinned below a top bar
  */
