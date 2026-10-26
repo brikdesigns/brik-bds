@@ -60,14 +60,16 @@
   --bds-font-weight--regular:    var(--bds-font-weight-regular);
   --bds-font-weight--thin:       var(--bds-font-weight-thin);
 
-  /* ── Easing overrides ──
-     figma-tokens.css (SD output) exports --bds-easing-ease-in and --bds-easing-ease-out as the
-     literal string "String value" — a Figma limitation (no native easing variable type).
-     These declarations overwrite those broken values with correct CSS cubic-bezier curves.
-     ⚠️  LOAD-BEARING OVERRIDE: do not remove without fixing the Figma variable type first. */
-  --bds-easing-ease-in:     cubic-bezier(0.4, 0, 1, 1); /* bds-lint-ignore — load-bearing override of SD "String value" */
-  --bds-easing-ease-out:    cubic-bezier(0, 0, 0.2, 1); /* bds-lint-ignore — load-bearing override of SD "String value" */
-  --bds-easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1); /* TODO: promote to Figma */
+  /* ── Easing curves (repo-owned) ──
+     Motion curves are declared here, not generated from Figma. The foundations
+     `easing/ease-in` and `easing/ease-out` leaves hold Figma's "String value"
+     placeholder and are filtered out of figma-tokens.css (isCanonicalCssToken in
+     scripts/lib/sd-bds.mjs), so these three declarations are the only source.
+     Promoting them to Figma means an EASING-typed variable (Plugin API only; the REST
+     variables endpoint does not list EASING) plus a pull-path change — see #2602. */
+  --bds-easing-ease-in:     cubic-bezier(0.4, 0, 1, 1); /* bds-lint-ignore — repo-owned curve, no Figma source (#2602) */
+  --bds-easing-ease-out:    cubic-bezier(0, 0, 0.2, 1); /* bds-lint-ignore — repo-owned curve, no Figma source (#2602) */
+  --bds-easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ── Missing Semantic Tokens ── */
   /* Light value here; dark value in the :root[data-theme="dark"] block below.
@@ -422,9 +424,9 @@
 
   /* ── Motion semantic aliases ──
      Semantic duration + easing tokens consumed by all BDS component CSS.
-     Map to Figma primitive duration/easing tokens where available.
-     Note: --easing-ease-* in figma-tokens.css export as "String value"
-     (Figma limitation) so direct cubic-bezier values are used here. */
+     Durations alias Figma primitive duration tokens; the sm/md/lg/xl rungs and the
+     deprecated fast/normal/slow aliases are repo-owned (no Figma semantic motion layer).
+     Easing curves are repo-owned too — see "Easing curves" above. */
   --bds-duration-sm:   var(--bds-duration-100);   /* 100ms — micro-interactions: hover, focus */
   --bds-duration-md:   var(--bds-duration-200);   /* 200ms — standard transitions: buttons, cards */
   --bds-duration-lg:   var(--bds-duration-300);   /* 300ms — emphasis: modals, sheets, reveals */

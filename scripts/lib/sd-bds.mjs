@@ -111,9 +111,17 @@ export function registerBdsHooks(StyleDictionary) {
   });
 }
 
-/** CSS file filter: everything except the retired word steps. */
+/**
+ * Figma's literal placeholder for a text variable nobody filled in. The foundations
+ * `easing/ease-in` and `easing/ease-out` leaves carry it; emitting it is invalid CSS
+ * (`--bds-easing-ease-in: String value`). Motion curves are repo-owned in
+ * tokens/gap-fills.css, so a placeholder leaf never reaches the CSS (#2602).
+ */
+const FIGMA_PLACEHOLDER_VALUE = 'String value';
+
+/** CSS file filter: everything except the retired word steps and Figma placeholders. */
 export function isCanonicalCssToken(token) {
-  return !isRetiredWordStep(token.path);
+  return !isRetiredWordStep(token.path) && token.$value !== FIGMA_PLACEHOLDER_VALUE;
 }
 
 /**

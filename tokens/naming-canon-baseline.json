@@ -13,9 +13,7 @@
       "--bds-box-shadow-lg": 1924,
       "--bds-box-shadow-md": 1924,
       "--bds-box-shadow-sm": 1924,
-      "--bds-box-shadow-xl": 1924,
-      "--bds-easing-ease-in": 1910,
-      "--bds-easing-ease-out": 1910
+      "--bds-box-shadow-xl": 1924
     },
     "3": {
       "BadgeTone#mixed": 1925,
