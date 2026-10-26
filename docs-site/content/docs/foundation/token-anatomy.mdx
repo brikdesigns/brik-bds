@@ -230,6 +230,8 @@ Each segment is fixed vocabulary:
 | `modifier` (optional) | Context / tone / hierarchy — see [Color modifiers](/docs/foundation/color#color-modifiers) | `--background-service-brand-on-light` |
 | `state` (optional) | `hover`, `pressed`, `disabled` | `--background-brand-primary-hover` |
 
+**`surface` vs `background` — the rule.** Both are fills; they differ by what they sit on. A `--surface-*` token is a *region* that holds content: a card body, a panel, a subtle tint behind text. A `--background-*` token is a fill on a *small element placed on a surface*: a Button, solid Badge, Tag, Dot, Counter. Within an intent family the two usually split by strength — `--background-neutral` is the saturated charcoal, `--surface-neutral` the subtle tint — and the label token follows the fill (`--text-on-color-dark` on a saturated `--background-*`, the matching `--text-{intent}` on its `--surface-*` tint). Pick by role, never by which value looks right; a same-valued pair stays invisible until a theme splits it.
+
 `color` is **not** a purpose. It is the reserved word that opens a color Primitive (`--color-{family}-{step}`), so a Semantic name never begins with it.
 
 Status, service-line, and presence semantic tokens use the **scoped-intent** form — the scope (`service-marketing`, `presence-online`) already names the hue, so they never also take a `-brand`/`-primary` role segment. Everything else uses the plain **intent** form.

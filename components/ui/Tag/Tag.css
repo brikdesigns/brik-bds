@@ -32,13 +32,14 @@
 /* ─── Appearance (shared axis with Badge/Chip) ───────────────── */
 
 .bds-tag--solid {
-  background-color: var(--bds-background-secondary);
-  /* On-color label. The base `--bds-text-primary` pairs with the page, not this
-     fill: it holds in light (dark text on the light --bds-background-secondary tint)
-     but fails WCAG AA in dark mode (3.43:1, light text on the mid-gray tint).
-     `--bds-text-on-color-light` holds AA in both themes (18.76:1 / 5.46:1) — the
-     same pairing SegmentedControl uses for its `--bds-background-secondary` track. */
-  color: var(--bds-text-on-color-light);
+  /* A Tag is a small element placed ON a surface, so its fill is a background
+     token, never a surface one. Neutral family, not the layer-2b control chrome
+     (--bds-background-secondary): a tenant that darkens that chrome would
+     otherwise break every default Tag (portal 1.22:1, #2852).
+     The label MUST be --bds-text-on-color-dark — --bds-text-neutral resolves
+     to the same value as this fill and measures 1.00:1. */
+  background-color: var(--bds-background-neutral);
+  color: var(--bds-text-on-color-dark);
 }
 
 .bds-tag--subtle {

@@ -81,9 +81,9 @@ Categorization labels for classifying records — industry, segment, owner, size
 
 **Appearance** (shared axis with Badge and Chip — see [Vocabulary › Axes](https://design.brikdesigns.com/docs/primitives/naming-conventions)) and icon slots are exposed via Controls on Default:
 
-- **`solid`** (default) — Neutral filled background. Matches existing Tag styling.
+- **`solid`** (default) — Neutral-family fill (`--bds-background-neutral`, saturated charcoal) with a white on-color label. A Tag is a small element placed on a surface, so its fill is a background token.
 - **`subtle`** — Transparent background with a hairline border. Lower visual weight when Tags sit on a colored surface.
-- **`muted`** — Quiet neutral fill for a low-emphasis category label, using the same AA-cleared pairing as Badge `info`. **Boundary:** `muted` is a quiet neutral label, not a status — for semantic status (positive/warning/error/etc.) use `Badge` instead.
+- **`muted`** — Quiet neutral fill for a low-emphasis category label, using the same AA-cleared pairing as Badge `info`. **Boundary:** Tags carry classification, never status. `muted` paints the subtle surface tint (`--bds-surface-neutral` + `--bds-text-neutral`); it is a quiet neutral label, not a status — for semantic status (positive/warning/error/etc.) use `Badge` instead.
 
 Below: appearance, sizes, and density — axes where a side-by-side comparison is clearer than toggling Controls.
 

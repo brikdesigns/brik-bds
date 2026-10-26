@@ -19,7 +19,8 @@ export type TagDensity = 'comfortable' | 'compact';
  * Tag fill appearance — shared axis with Badge (`solid | subtle`) and
  * Chip (`solid | outline`). Tag supports the two pastel-capable values,
  * plus a quiet neutral fill.
- * - `solid`  — neutral filled background (current default styling).
+ * - `solid`  — neutral family fill (`--bds-background-neutral`) with an
+ *   on-color label.
  * - `subtle` — transparent background with a hairline border.
  * - `muted`  — quiet neutral fill — low-emphasis category label. For
  *   semantic status (positive/warning/error/etc.) use `Badge` instead.
