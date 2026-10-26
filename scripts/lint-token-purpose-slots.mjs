@@ -118,8 +118,8 @@ const DRIFT_BACKLOG = {
  * different claims: drift is owed a rename, an exception is not, and a gate that
  * prints "drift" for a decided carve-out re-opens a settled question every run.
  */
-/** Component-tier stems dist/tokens.css declares (Slider variables). */
-const COMPONENT_KNOB_STEMS = new Set(['slider']);
+/** Component-tier stems dist/tokens.css declares (Slider variables, SubNavigation offset). */
+const COMPONENT_KNOB_STEMS = new Set(['slider', 'subnav']);
 
 const SLOTLESS_EXCEPTIONS = new Set(['web', 'tablet', 'mobile']);
 

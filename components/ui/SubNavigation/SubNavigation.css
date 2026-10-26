@@ -10,15 +10,16 @@
   width: var(--bds-subnav-width);
   flex-shrink: 0;
   align-self: flex-start;
-  /* Sticky section rail below the shell top bar. A shell with no top bar sets
-     --bds-subnav-top: 0 on the rail or an ancestor. Read with a fallback, never
-     declared here — a declaration on the rail would shadow an ancestor's value. */
+  /* Sticky section rail, flush to the top by default (--bds-subnav-top is 0px on
+     :root). A shell with a top bar sets --bds-subnav-top:
+     var(--bds-shell-top-bar-height) on the rail or an ancestor. Never declared
+     here — a declaration on the rail would shadow an ancestor's value. */
   position: sticky;
-  top: var(--bds-subnav-top, var(--bds-shell-top-bar-height));
+  top: var(--bds-subnav-top);
   z-index: var(--bds-z-sticky);
   /* Viewport minus the offset, whatever the page height; 100vh fallback first. */
-  height: calc(100vh - var(--bds-subnav-top, var(--bds-shell-top-bar-height)));
-  height: calc(100dvh - var(--bds-subnav-top, var(--bds-shell-top-bar-height)));
+  height: calc(100vh - var(--bds-subnav-top));
+  height: calc(100dvh - var(--bds-subnav-top));
   /* Scrolls only when its own items overflow that height. */
   overflow-y: auto;
 }

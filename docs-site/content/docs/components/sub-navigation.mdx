@@ -98,7 +98,7 @@ import Link from 'next/link';
 
 Each `SubNavItem` is `{ label, href, active?, icon?, disabled?, group?, dot? }`. Consecutive items sharing a `group` render under one group header; `dot` (`true` or a `Dot` tone) adds an attention cue.
 
-At tablet width and up the rail is sticky and full-height below the shell top bar (`--bds-subnav-top`, default `var(--bds-shell-top-bar-height)`; set `0` when the shell has no top bar) and scrolls only when its items overflow. Below the tablet breakpoint it is a single horizontally scrolling row. `onSelect` fires on click of an enabled item, before navigation.
+At tablet width and up the rail is sticky and full-height at `--bds-subnav-top` (default `0`; set `var(--bds-shell-top-bar-height)` when the shell has a top bar) and scrolls only when its items overflow. Below the tablet breakpoint it is a single horizontally scrolling row. `onSelect` fires on click of an enabled item, before navigation.
 
 ## Related
 

@@ -18,7 +18,7 @@ Second-column nav for app shells that pair a collapsed primary `SidebarNavigatio
 
 At tablet width and up the rail is `position: sticky` and fills the viewport below the shell top bar, whatever the page content height. It scrolls vertically on its own only when its items overflow.
 
-- **Offset** — `top` and the height deduction read `--bds-subnav-top`, which defaults to `var(--bds-shell-top-bar-height)`. A shell with no top bar sets `--bds-subnav-top: 0` on the rail or an ancestor.
+- **Offset** — `top` and the height deduction read `--bds-subnav-top`, which defaults to `0`. A shell with a top bar sets `--bds-subnav-top: var(--bds-shell-top-bar-height)` on the rail or an ancestor.
 - **Height** — `100dvh` minus the offset, with a `100vh` fallback for browsers without dynamic viewport units.
 - **Layering** — `--bds-z-sticky`, below the shell top bar (`--bds-z-shell`).
 - **Below the tablet breakpoint** (`--bds-down-tablet`) — it is no longer sticky or full-height. Items render as one horizontally scrolling row with a bottom divider; group headers sit inline in the row. See the **Mobile** story.

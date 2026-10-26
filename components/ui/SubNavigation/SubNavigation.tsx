@@ -61,9 +61,9 @@ export interface SubNavigationProps {
  *
  * For a single-sidebar app shell, use `SidebarNavigation` directly.
  *
- * At tablet width and up it is a sticky, full-height rail: it sticks below the
- * shell top bar (`--bds-shell-top-bar-height`; override with
- * `--bds-subnav-top: 0` for a shell with no top bar) and scrolls on its own
+ * At tablet width and up it is a sticky, full-height rail: it sticks at
+ * `--bds-subnav-top` (default `0`; a shell with a top bar sets it to the
+ * `--bds-shell-top-bar-height` token on an ancestor) and scrolls on its own
  * only when its items overflow. Below the tablet breakpoint it becomes a single
  * horizontally scrolling row.
  *

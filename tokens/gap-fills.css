@@ -537,6 +537,12 @@
   --bds-shell-sidebar-width:        260px;
   --bds-shell-sidebar-width-collapsed: var(--bds-size-1800);
   --bds-shell-rail-width:           220px;
+
+  /* SubNavigation sticky offset (brik-bds#2841). 0px, not the top-bar height:
+     the canonical app shell has no top bar. A shell with one sets it to
+     var(--bds-shell-top-bar-height) on an ancestor. Unit-bearing because the
+     rail subtracts it inside calc(). */
+  --bds-subnav-top:                 0px;
 }
 
 /* ── Dark-mode corrections for generated tokens ──

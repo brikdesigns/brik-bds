@@ -150,9 +150,8 @@ export const GroupedWithDots: Story = {
    ═══════════════════════════════════════════════════════════════ */
 
 /**
- * The rail sticks below the shell top bar and fills the viewport height while
- * the content column scrolls. Set `--bds-subnav-top: 0` for a shell with no
- * top bar.
+ * The rail sticks flush to the top and fills the viewport height while the
+ * content column scrolls. A shell with a top bar sets `--bds-subnav-top`.
  * @summary Sticky full-height rail beside tall page content
  */
 export const StickyRail: Story = {
@@ -170,33 +169,34 @@ export const StickyRail: Story = {
     const rail = canvasElement.querySelector('.bds-subnav') as HTMLElement;
     const style = getComputedStyle(rail);
     await expect(style.position).toBe('sticky');
-    // Default offset is the shell top-bar height (--bds-size-1600, 64px).
-    await expect(style.top).toBe('64px');
-    // Rail height is the viewport minus the offset, not the page height.
-    await expect(rail.getBoundingClientRect().height).toBeLessThan(window.innerHeight);
-    await expect(rail.getBoundingClientRect().height).toBeGreaterThan(0);
+    // Default offset is 0 — the canonical app shell has no top bar.
+    await expect(style.top).toBe('0px');
+    // Rail height is the viewport minus the offset (0), not the 300vh page height.
+    await expect(Math.round(rail.getBoundingClientRect().height)).toBe(window.innerHeight);
   },
 };
 
 /**
- * A shell with no top bar sets `--bds-subnav-top: 0` on an ancestor; the rail
- * reads it rather than shadowing it.
- * @summary Ancestor-set offset of 0 for a shell with no top bar
+ * A shell with a top bar sets `--bds-subnav-top` on an ancestor; the rail reads
+ * it rather than shadowing it.
+ * @summary Ancestor-set offset below a shell top bar
  */
-export const StickyRailNoTopBar: Story = {
+export const StickyRailBelowTopBar: Story = {
   tags: ['!manifest', 'interaction-test'],
   args: { items: groupedItems },
   render: (args) => (
-    <div style={{ display: 'flex', alignItems: 'flex-start', '--bds-subnav-top': '0px' } as React.CSSProperties}>
+    <div style={{ display: 'flex', alignItems: 'flex-start', '--bds-subnav-top': 'var(--bds-shell-top-bar-height)' } as React.CSSProperties}>
       <SubNavigationStory {...args} />
       <div style={{ flex: 1, height: '300vh', padding: 'var(--bds-padding-lg)' }}>
-        Tall page content with no shell top bar.
+        Tall page content below a 64px shell top bar.
       </div>
     </div>
   ),
   play: async ({ canvasElement }) => {
     const rail = canvasElement.querySelector('.bds-subnav') as HTMLElement;
-    await expect(getComputedStyle(rail).top).toBe('0px');
+    // --bds-shell-top-bar-height is --bds-size-1600, 64px.
+    await expect(getComputedStyle(rail).top).toBe('64px');
+    await expect(Math.round(rail.getBoundingClientRect().height)).toBe(window.innerHeight - 64);
   },
 };
 
