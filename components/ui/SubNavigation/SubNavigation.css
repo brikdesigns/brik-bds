@@ -89,7 +89,6 @@
     position: static;
     width: 100%;
     height: auto;
-    align-self: stretch;
     overflow-y: visible;
     border-right: none;
     border-bottom: var(--bds-border-width-md) solid var(--bds-border-secondary);

@@ -274,4 +274,10 @@ export const InteractionTestFlatItems: Story = {
 export const Mobile: Story = {
   args: { items: groupedItems },
   globals: { viewport: { value: 'mobile', isRotated: false } },
+  play: async ({ canvasElement }) => {
+    const rail = canvasElement.querySelector('.bds-subnav') as HTMLElement;
+    await expect(getComputedStyle(rail).position).toBe('static');
+    // One row tall, never stretched to a flex-row parent's height.
+    await expect(rail.getBoundingClientRect().height).toBeLessThan(window.innerHeight / 2);
+  },
 };
