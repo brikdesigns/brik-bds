@@ -58,7 +58,7 @@
     },
     {
       "group": "neutral",
-      "label": "Solid Tag / MultiSelect chip label on fill",
+      "label": "On-color-light label on secondary fill",
       "fg": "--bds-text-on-color-light",
       "bg": "--bds-background-secondary",
       "thresholdType": "AA"
@@ -96,11 +96,11 @@
     },
     {
       "group": "neutral",
-      "label": "Solid neutral indicator label on fill",
+      "label": "Solid neutral indicator / Solid Tag label on fill",
       "fg": "--bds-text-on-color-dark",
       "bg": "--bds-background-neutral",
       "thresholdType": "AA",
-      "note": "Badge `appearance=\"solid\"`, Dot and Counter render the `neutral` tone on --bds-background-neutral (#1957) \u2014 an indicator is a small element placed ON a surface, so its fill is a background token, never a surface one. The label MUST be --bds-text-on-color-dark: --bds-text-neutral resolves to the same --bds-color-system-neutral as the fill and measures 1.00:1, which is exactly the trap the row above records."
+      "note": "Badge `appearance=\"solid\"`, Dot, Counter and the default Tag (`appearance=\"solid\"`, #2852) render the `neutral` tone on --bds-background-neutral (#1957) \u2014 an indicator is a small element placed ON a surface, so its fill is a background token, never a surface one. The label MUST be --bds-text-on-color-dark: --bds-text-neutral resolves to the same --bds-color-system-neutral as the fill and measures 1.00:1, which is exactly the trap the row above records."
     },
     {
       "group": "info",
