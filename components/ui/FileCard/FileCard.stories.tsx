@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn, userEvent, within } from 'storybook/test';
 import { FileCard } from './FileCard';
 import { FileUploader } from '../FileUploader/FileUploader';
 
@@ -129,5 +129,41 @@ export const UploadFlow: Story = {
       );
     }
     return <UploaderPair />;
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   Q5 — irreducible: Replace / Delete must be real BDS Buttons
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Replace / Delete compose `Button` (secondary / negative) inside a
+ * `ButtonGroup` — never hand-rolled `<button>`s, whose hover read a surface
+ * token the portal dark theme never sets (portal#4671). Asserts the primitive
+ * classes, the handler wiring, and that an omitted handler renders no button.
+ *
+ * @summary Guards FileCard actions composing Button + ButtonGroup
+ */
+export const InteractionTestActionsComposeButton: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    preview: 'icon',
+    name: 'brand-guidelines.pdf',
+    onReplace: fn(),
+    onDelete: fn(),
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const replace = canvas.getByRole('button', { name: 'Replace' });
+    const del = canvas.getByRole('button', { name: 'Delete' });
+
+    await expect(replace).toHaveClass('bds-button', 'bds-button--secondary');
+    await expect(del).toHaveClass('bds-button', 'bds-button--tone-negative');
+    await expect(replace.closest('.bds-button-group')).not.toBeNull();
+
+    await userEvent.click(replace);
+    await userEvent.click(del);
+    await expect(args.onReplace).toHaveBeenCalledTimes(1);
+    await expect(args.onDelete).toHaveBeenCalledTimes(1);
   },
 };
