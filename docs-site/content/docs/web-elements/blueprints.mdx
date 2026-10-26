@@ -78,7 +78,7 @@ Blueprints ship on **two** renderers, and they are not peers. [ADR-037](https://
 | Site class | Rail | Content source | Entry point |
 |---|---|---|---|
 | Standard client site | **Astro** (canonical) | in-repo content | `@brikdesigns/bds/blueprints-astro` → `<BlueprintDispatcher>` |
-| Client site with a CMS or database; `brikdesigns.com` | React / Next.js | portal Supabase | `@brikdesigns/bds/blueprints-react` → `<BlueprintDispatcher>` |
+| Client site with a CMS or database; `brikdesigns.com` | React / Next.js | portal Supabase | `@brikdesigns/bds` (root entry) → `<BlueprintDispatcher>` |
 
 React is a **supported** rail, not a lesser one — and it is the source of the composition *API* both rails now share. React named files by block with the layout as a prop first; ADR-037's 2026-09-08 amendment brought Astro onto that shape, so today a component is a **block** on either rail and `layout` is a prop. The `HeroLayout` / `CtaLayout` / `CardGridLayout` unions live in one framework-agnostic module (`astro/types.ts`) that both rails read, so a layout cannot be added to one rail only.
 
