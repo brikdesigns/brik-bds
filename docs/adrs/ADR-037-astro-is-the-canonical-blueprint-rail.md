@@ -229,3 +229,13 @@ OPERATOR SAID 2026-09-08 (session chat): "Let's proceed with your recommendation
 - § Decision 2's "unshipped generation" framing is withdrawn. Both rails ship the same blocks; neither generation is ahead.
 
 **What this amendment does not do.** It does not change which rail is canonical (§1 stands — Astro), does not re-open deletion (§ What this ADR refuses stands), and does not rename any blueprint key. Keys are #2303.
+
+### 2026-10-26 — The React rail has no `blueprints-react` subpath (#2393)
+
+§ 1's site-class table names `blueprints-react` as the React rail's entry point. `package.json` has no such export; its blueprint exports are `./blueprints-astro`, `./blueprints-astro/types`, `./blueprints-astro/*.astro`, `./blueprints` and `./blueprints/library.json`. The React blueprints ship through the root entry instead: `lib-entry.ts:11` re-exports `content-system/blueprints/react`, which includes `BlueprintDispatcher`.
+
+**Decision: amend, do not add the subpath.** For a Next.js client site, the entry point is `@brikdesigns/bds` (root), importing the component directly (`Hero`, `CardGrid`, `BlueprintDispatcher`, …). The React rail has no subpath by design. Reading § 1's `blueprints-react` as "the React blueprints exported from the root entry" is correct; grepping a consumer for the literal string `blueprints-react` will find nothing and means nothing.
+
+**Why not add the subpath.** It would give the rails symmetric entry points, but it needs a bundling decision (the React blueprints currently ride the root entry's graph) and a new gate on the export surface. No consumer needs it: `brikdesigns` already imports from the root. This is revisable: if a consumer needs a React-only entry, add `./blueprints-react` and a rule in `scripts/verify-blueprints-astro-exports.mjs`.
+
+No gate is added; this is a text change only.
