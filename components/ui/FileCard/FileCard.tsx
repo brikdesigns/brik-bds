@@ -1,6 +1,7 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
 import { Icon } from '../Icon';
 import { Button } from '../Button';
+import { ButtonGroup } from '../ButtonGroup';
 import { Image } from '../Image';
 import { Frame, type FrameRatio } from '../Frame';
 import { ArrowSquareOut, CloudArrowUp, File as FileIcon, Trash } from '../../icons';
@@ -174,30 +175,30 @@ export function FileCard({
         </div>
       </div>
       {(onReplace || onDelete) && (
-        <div className="bds-file-card__actions">
+        <ButtonGroup className="bds-file-card__actions">
           {onReplace && (
-            <button
-              type="button"
-              className="bds-file-card__action"
+            <Button
+              variant="secondary"
+              size="sm"
+              iconBefore={<Icon icon={CloudArrowUp} />}
               onClick={onReplace}
               disabled={disabled}
             >
-              <Icon icon={CloudArrowUp} />
-              <span>Replace</span>
-            </button>
+              Replace
+            </Button>
           )}
           {onDelete && (
-            <button
-              type="button"
-              className="bds-file-card__action"
+            <Button
+              variant="negative"
+              size="sm"
+              iconBefore={<Icon icon={Trash} />}
               onClick={onDelete}
               disabled={disabled}
             >
-              <Icon icon={Trash} />
-              <span>Delete</span>
-            </button>
+              Delete
+            </Button>
           )}
-        </div>
+        </ButtonGroup>
       )}
     </div>
   );

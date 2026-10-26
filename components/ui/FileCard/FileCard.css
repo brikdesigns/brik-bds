@@ -5,18 +5,19 @@
  * Token reference:
  * - --bds-surface-primary (card body)
  * - --bds-surface-muted (preview backdrop)
- * - --bds-surface-secondary-hover (action button hover)
  * - --bds-border-secondary (card border)
  * - --bds-border-radius-md
  * - --bds-padding-sm, --bds-padding-md
- * - --bds-gap-tiny, --bds-gap-xs, --bds-gap-sm, --bds-gap-md
+ * - --bds-gap-sm, --bds-gap-md
  * - --bds-text-primary, --bds-text-secondary
  * - --bds-size-1400 (fixed preview height)
  *
  * Preview aspect-ratio is owned by <Frame> (the `--aspect-*` family), not here.
  * Image/svg previews render through <Image>, which wraps that Frame in a
  * <figure>; the open-in-new-tab affordance is a <Button variant="secondary"
- * size="sm">, which owns its own styling.
+ * size="sm">, which owns its own styling. The Replace / Delete action row is a
+ * <ButtonGroup> of <Button variant="secondary" | "negative" size="sm"> — layout
+ * and every button state come from those primitives, not from this file.
  */
 
 /* ─── Wrapper ─────────────────────────────────────────────────── */
@@ -131,39 +132,5 @@
    which owns its color, sizing, and interactive states. */
 .bds-file-card__open {
   flex: 0 0 auto;
-}
-
-/* ─── Action row ──────────────────────────────────────────────── */
-
-.bds-file-card__actions {
-  display: flex;
-  gap: var(--bds-gap-xs);
-}
-
-.bds-file-card__action {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--bds-gap-xs);
-  padding: var(--bds-padding-xs) var(--bds-padding-sm);
-  background-color: var(--bds-surface-primary);
-  border: var(--bds-border-width-md) solid var(--bds-border-secondary);
-  border-radius: var(--bds-border-radius-sm);
-  font-family: var(--bds-font-family-label);
-  font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-regular);
-  color: var(--bds-text-primary);
-  cursor: pointer;
-  transition: background-color var(--bds-duration-sm) var(--bds-ease-out),
-    border-color var(--bds-duration-sm) var(--bds-ease-out);
-}
-
-.bds-file-card__action:hover:not(:disabled),
-.bds-file-card__action:focus-visible:not(:disabled) {
-  background-color: var(--bds-surface-secondary-hover);
-}
-
-.bds-file-card__action:disabled {
-  cursor: not-allowed;
-  opacity: var(--bds-state-disabled-opacity);
 }
 }
