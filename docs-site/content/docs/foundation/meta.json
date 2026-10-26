@@ -11,6 +11,7 @@
     "size",
     "motion",
     "border",
-    "elevation"
+    "elevation",
+    "stacking"
   ]
 }
