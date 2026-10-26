@@ -170,11 +170,33 @@ export const StickyRail: Story = {
     const rail = canvasElement.querySelector('.bds-subnav') as HTMLElement;
     const style = getComputedStyle(rail);
     await expect(style.position).toBe('sticky');
-    await expect(style.top).not.toBe('auto');
-    await expect(style.top).toBe(`${parseFloat(style.top)}px`);
+    // Default offset is the shell top-bar height (--bds-size-1600, 64px).
+    await expect(style.top).toBe('64px');
     // Rail height is the viewport minus the offset, not the page height.
     await expect(rail.getBoundingClientRect().height).toBeLessThan(window.innerHeight);
     await expect(rail.getBoundingClientRect().height).toBeGreaterThan(0);
+  },
+};
+
+/**
+ * A shell with no top bar sets `--bds-subnav-top: 0` on an ancestor; the rail
+ * reads it rather than shadowing it.
+ * @summary Ancestor-set offset of 0 for a shell with no top bar
+ */
+export const StickyRailNoTopBar: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: { items: groupedItems },
+  render: (args) => (
+    <div style={{ display: 'flex', alignItems: 'flex-start', '--bds-subnav-top': '0px' } as React.CSSProperties}>
+      <SubNavigationStory {...args} />
+      <div style={{ flex: 1, height: '300vh', padding: 'var(--bds-padding-lg)' }}>
+        Tall page content with no shell top bar.
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const rail = canvasElement.querySelector('.bds-subnav') as HTMLElement;
+    await expect(getComputedStyle(rail).top).toBe('0px');
   },
 };
 
