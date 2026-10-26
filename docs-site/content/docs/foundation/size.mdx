@@ -97,6 +97,37 @@ const styles = {
 
 The names are `--bds-up-<rung>` (`min-width`, all five rungs) and `--bds-down-<rung>` (`max-width`, rung minus 0.02px; every rung except `mobile`). They live in `tokens/custom-media.css`, and `postcss.config.mjs` resolves each one to px, so `dist/styles.css` ships plain `@media` conditions — `@custom-media` is not Baseline in browsers. `lint-tokens` pins each definition to its `--breakpoint-*` rung and fails any literal px in an `@media` under `components/` ([ADR-044](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-044-breakpoint-custom-media.md)). Consumers are unaffected: they get the resolved px from `dist`.
 
+### Using breakpoints in your own CSS
+
+`@brikdesigns/bds/custom-media.css` ships the same `--bds-up-*` / `--bds-down-*` definitions. A browser can't read `@custom-media`, so run your CSS through [postcss-custom-media](https://github.com/csstools/postcss-plugins/tree/main/plugins/postcss-custom-media) and load the definitions with `@csstools/postcss-global-data`, which keeps them out of your output:
+
+```bash
+npm i -D postcss postcss-custom-media @csstools/postcss-global-data
+```
+
+```js
+// postcss.config.mjs
+import { createRequire } from 'node:module';
+import postcssGlobalData from '@csstools/postcss-global-data';
+import postcssCustomMedia from 'postcss-custom-media';
+
+const customMedia = createRequire(import.meta.url).resolve('@brikdesigns/bds/custom-media.css');
+
+export default {
+  plugins: [postcssGlobalData({ files: [customMedia] }), postcssCustomMedia()],
+};
+```
+
+```css
+/* in */
+@media (--bds-up-tablet) { .shell { display: grid; } }
+
+/* out */
+@media (min-width: 768px) { .shell { display: grid; } }
+```
+
+The repo runs this recipe against its own package on every change: `npm run example:consumer-breakpoints` compiles `examples/consumer-breakpoints/input.css` and fails if any custom media is left unresolved.
+
 ### Using breakpoints in JavaScript
 
 ```ts
@@ -132,6 +163,28 @@ Fixed element dimensions — icons, dots, indicators — use the numeric `--size
 | `--bds-size-1000` | 40px |
 
 The scale runs `--size-0` (0) through `--size-2200` (100px).
+
+## Shell sizes
+
+Fixed dimensions of the product app shell. Use them for the layout the shell owns — the fixed top bar, the sidebar column, and the section rail — so a consumer never repeats the px.
+
+| Token | Value | Source |
+|---|---|---|
+| `--bds-shell-top-bar-height` | 64px (`--bds-size-1600`) | Portal top bar height |
+| `--bds-shell-sidebar-width` | 260px | `SidebarNavigation` default expanded width |
+| `--bds-shell-sidebar-width-collapsed` | 80px (`--bds-size-1800`) | `SidebarNavigation` default collapsed width |
+| `--bds-shell-rail-width` | 220px | Section rail (`SubNavigation`) column in the portal |
+
+```css
+.shell__rail {
+  position: sticky;
+  top: var(--bds-shell-top-bar-height);
+  width: var(--bds-shell-rail-width);
+  height: calc(100vh - var(--bds-shell-top-bar-height));
+}
+```
+
+Layer the shell with [Stacking order](/docs/foundation/stacking).
 
 ## Aspect ratio
 

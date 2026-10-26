@@ -548,4 +548,42 @@
      (#1571) */
   --bds-background-disabled: var(--bds-color-grayscale-800);
   --bds-text-disabled: var(--bds-color-grayscale-500);
+
+  /* ── Stacking order (brik-bds#2840) ──
+     One ladder for every layer that has to outrank another. Components still
+     carry raw z-index values; they move onto this scale in a separate
+     sub-issue. The rungs leave room for the raw values they will map onto:
+       sticky 10 (SidebarNavigation) · page-header 20 (PageHeader)
+       dropdown 100 (Menu, Popover, TopNavigation, FilterButton, AddressInput;
+       50 DatePicker and 200 AddableEntryList/AddableTagList fold in)
+       sheet-backdrop 900 / sheet 901 (Sheet) · modal 1000 (Modal)
+       dialog 1100 (Dialog) · tooltip 1200 (Tooltip, was 1000 and tied Modal)
+       max 9999 (TaskConsole)
+     Order, low to high: sticky < page-header < shell < dropdown < sheet-backdrop
+     < sheet < modal < dialog < tooltip < max. The shell (top bar) sits ABOVE
+     the page header so a sticky PageHeader never slides over it. */
+  --bds-z-sticky:         10;
+  --bds-z-page-header:    20;
+  --bds-z-shell:          30;
+  --bds-z-dropdown:      100;
+  --bds-z-sheet-backdrop: 900;
+  --bds-z-sheet:         901;
+  --bds-z-modal:        1000;
+  --bds-z-dialog:       1100;
+  --bds-z-tooltip:      1200;
+  --bds-z-max:          9999;
+
+  /* ── Product shell sizes (brik-bds#2840) ──
+     Fixed dimensions of the product app shell. Sources:
+       top bar 64px  — brik-client-portal src/components/portal-top-bar.tsx:57
+                       (height: '64px') and src/app/globals.css:970-971; aliases
+                       --bds-size-1600 (tokens/figma-tokens.css:284)
+       sidebar 260px / 80px collapsed — SidebarNavigation.tsx:75 defaults
+                       (the portal passes no width); 80px aliases --bds-size-1800
+       section rail 220px — brik-client-portal src/app/globals.css:932
+                       (.portal-page__rail width) */
+  --bds-shell-top-bar-height:       var(--bds-size-1600);
+  --bds-shell-sidebar-width:        260px;
+  --bds-shell-sidebar-width-collapsed: var(--bds-size-1800);
+  --bds-shell-rail-width:           220px;
 }

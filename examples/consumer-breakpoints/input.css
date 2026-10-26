@@ -1,0 +1,17 @@
+/* Consumer stylesheet — uses the BDS breakpoint ladder by name. */
+.shell {
+  display: block;
+}
+
+@media (--bds-up-tablet) {
+  .shell {
+    display: grid;
+    grid-template-columns: var(--bds-shell-sidebar-width) 1fr;
+  }
+}
+
+@media (--bds-down-tablet) {
+  .shell__rail {
+    position: static;
+  }
+}
