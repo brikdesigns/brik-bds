@@ -120,10 +120,11 @@ const DRIFT_BACKLOG = {
  */
 /**
  * Component-tier stems dist/tokens.css declares (Slider variables, SubNavigation
- * and PageHeader offsets). The stem is the first hyphen segment, so
- * `--bds-page-header-top` registers as `page`.
+ * and PageHeader offsets). The stem is the first hyphen segment, so a knob's
+ * stem must not collide with a Semantic family: `--bds-pageheader-top`, not
+ * `--bds-page-header-top`, which would register every `--bds-page-*` colour.
  */
-const COMPONENT_KNOB_STEMS = new Set(['slider', 'subnav', 'page']);
+const COMPONENT_KNOB_STEMS = new Set(['slider', 'subnav', 'pageheader']);
 
 const SLOTLESS_EXCEPTIONS = new Set(['web', 'tablet', 'mobile']);
 
