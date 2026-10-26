@@ -27,7 +27,7 @@
  *     theme CSS). See brik-bds#369.
  */
 
-import type { Atmosphere, ThemeMode } from '../vocabularies/atmosphere';
+import { DEPRECATED_ATMOSPHERES, type Atmosphere, type ThemeMode } from '../vocabularies/atmosphere';
 
 /**
  * One BDS-contract token pairing the atmosphere guarantees passes WCAG AA
@@ -80,6 +80,11 @@ export interface AtmosphereManifestEntry {
    * brik-bds#2818.
    */
   themeMode: 'light' | 'dark' | null;
+  /**
+   * Set only on deprecated atmospheres: the replacement slug and the
+   * version that removes this one. Mirrors DEPRECATED_ATMOSPHERES.
+   */
+  deprecated?: { readonly replacedBy: Atmosphere; readonly removeIn: string };
   /** One-line description for admin UI tooltips. */
   blurb: string;
   /** Short industries/verticals that naturally fit this atmosphere. */
@@ -185,7 +190,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     slug: 'editorial-luxury',
     cssPath: '@brikdesigns/bds/atmospheres/editorial-luxury.css',
     themeMode: 'dark',
-    blurb: 'Gold orbs + film grain overlay. Quiet-luxury dark decoration.',
+    blurb: 'Gold orbs + film grain overlay. Quiet-luxury decoration.',
     naturalFit: ['luxury dental', 'med-aesthetic', 'editorial hospitality'],
     surfaceProfile: 'single-tone-dark',
     safePairings: [...DARK_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_DARK_THEME],
@@ -194,7 +199,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     slug: 'cinematic-dramatic',
     cssPath: '@brikdesigns/bds/atmospheres/cinematic-dramatic.css',
     themeMode: 'dark',
-    blurb: 'Aurora drift + conic spotlight. Theatrical dark decoration.',
+    blurb: 'Aurora drift + conic spotlight. Theatrical decoration.',
     naturalFit: ['legal', 'agency', 'finance', 'dark-mode SaaS'],
     surfaceProfile: 'single-tone-dark',
     safePairings: [...DARK_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_DARK_THEME],
@@ -203,6 +208,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     slug: 'minimal-clinical',
     cssPath: '@brikdesigns/bds/atmospheres/minimal-clinical.css',
     themeMode: 'light',
+    deprecated: DEPRECATED_ATMOSPHERES['minimal-clinical'],
     blurb: 'Pure white, zero atmospheric effects. Trust via precision.',
     naturalFit: ['non-luxury healthcare', 'legal (gravitas)', 'minimal SaaS'],
     // Minimal-clinical commonly pairs a light hero with a dark CTA
@@ -215,7 +221,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     slug: 'warm-soft',
     cssPath: '@brikdesigns/bds/atmospheres/warm-soft.css',
     themeMode: 'light',
-    blurb: 'Quiet rose vignette + minimal grain. Anxiety-safe light decoration.',
+    blurb: 'Quiet rose vignette + minimal grain. Anxiety-safe decoration.',
     naturalFit: ['wellness', 'therapy', 'mental health', 'recovery'],
     surfaceProfile: 'single-tone-light',
     safePairings: [...LIGHT_TONE_PAIRINGS, ...BASELINE_BRAND_PAIRINGS_LIGHT_THEME],
@@ -224,6 +230,7 @@ export const ATMOSPHERE_MANIFEST: Record<Atmosphere, AtmosphereManifestEntry> = 
     slug: 'clean-bright',
     cssPath: '@brikdesigns/bds/atmospheres/clean-bright.css',
     themeMode: 'light',
+    deprecated: DEPRECATED_ATMOSPHERES['clean-bright'],
     blurb: 'Pure white. No effects. Brand lives in type and imagery.',
     naturalFit: ['SaaS', 'tech', 'startups', 'utility marketing'],
     surfaceProfile: 'single-tone-light',

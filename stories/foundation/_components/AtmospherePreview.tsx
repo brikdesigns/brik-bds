@@ -86,10 +86,6 @@ export function AtmospherePreview({ atmosphere, entry, cssHref, themeNumber = 'b
               <td style={docTdMono}>{entry.slug}</td>
             </tr>
             <tr>
-              <td style={docTd}><strong>Theme mode</strong></td>
-              <td style={docTdMono}>{entry.themeMode ?? '(any)'}</td>
-            </tr>
-            <tr>
               <td style={docTd}><strong>Blurb</strong></td>
               <td style={docTd}>{entry.blurb}</td>
             </tr>

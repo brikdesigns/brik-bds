@@ -5,12 +5,12 @@ description: The Atmospheres Theming Dimension — CSS decoration overlays that 
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Atmospheres are **CSS decoration overlays** that sit on top of a client's Tokens Dimension to establish visual character — dark-luxury-editorial, soft-wellness, clean-clinical, etc. — without duplicating CSS per client. One of the four [Theming Dimensions](/docs/theming), orthogonal to Tokens, Layout Archetypes, and Blueprints.
+Atmospheres are **CSS decoration overlays** that sit on top of a client's Tokens Dimension to establish visual character — luxury-editorial, soft-wellness, organic-paper — without duplicating CSS per client. One of the five [Theming Dimensions](/docs/theming), orthogonal to the others. They are mode-agnostic: every atmosphere works on a light page and on a dark one.
 
-The portal's theme generator reads `company_profiles.atmosphere` at extraction time and emits an `@import` into the stored theme artifact pointing at `@brikdesigns/bds/atmospheres/{slug}.css`. The consumer Astro site fetches one theme artifact at build; the atmosphere cascades automatically.
+The portal's theme generator reads `company_profiles.atmosphere` at extraction time and inlines that atmosphere's CSS (from `@brikdesigns/bds/atmospheres/{slug}.css`) into the stored theme artifact. It does not emit an `@import`. The consumer Astro site fetches one theme artifact at build; the atmosphere cascades automatically.
 
 <Callout type="info">
-**Atmospheres are decoration only.** They add vignettes, grain, orbs, and spotlights — they do not set surface colors. Background and text colors come from the Tokens Dimension (`dist/tokens.css` + the client's `theme-{slug}.css` in `@layer client-theme`). Import `@brikdesigns/bds/page-base.css` after tokens to wire `html/body` background to `var(--page-primary)` before any atmosphere loads.
+**Atmospheres are decoration only.** They add vignettes, grain, orbs, and spotlights — they do not set surface colors, and none is tied to light or dark. The only mode-specific rule is the grain blend, keyed to `:root[data-theme="dark"]`. Background and text colors come from the Tokens Dimension (`dist/tokens.css` + the client's `theme-{slug}.css` in `@layer client-theme`). Import `@brikdesigns/bds/page-base.css` after tokens to wire `html/body` background to `var(--page-primary)` before any atmosphere loads.
 </Callout>
 
 ## How atmospheres compose with themes
@@ -18,26 +18,30 @@ The portal's theme generator reads `company_profiles.atmosphere` at extraction t
 | Axis | Where it's set | What it controls |
 |---|---|---|
 | **Theme tokens** | `design_token_extraction` task reads `company_profiles.color_primitives` + `typography` | Brand palette, fonts, spacing, border-radius |
-| **Theme mode** | `company_profiles.theme_mode` (light / dark) | Whether text is dark-on-light or light-on-dark |
+| **Theme mode** | `company_profiles.theme_mode` (light / dark) | Whether text is dark-on-light or light-on-dark. The only source of light or dark |
 | **Atmosphere** | `company_profiles.atmosphere` (this vocab) | Decoration layer — vignettes, grain, orbs, spotlights |
 | **Navigation IA** | `pack.navigationIA` (industry default) + portal overrides | Header archetype + scroll + mobile drawer |
-| **Blueprints** | Per-section, per-page (forthcoming) | Layout primitives |
+| **Expression modes** | `[data-mode-*]` on `:root` | Spacing, radius, type, width, motion |
 
-Each axis can be set on its own. A dental practice might pick `theme_mode: dark` + `atmosphere: editorial-luxury` + `navigation: editorial-transparent`; a wellness studio might pick `theme_mode: light` + `atmosphere: warm-soft` + `navigation: calm-flat`. Theme mode and atmosphere seed each other's defaults, but setting either one overrides the seed. The full resolution order and who writes each value are in [Client Themes § How the website builder's picks resolve to a mode](/docs/theming/client-themes#how-the-website-builders-picks-resolve-to-a-mode).
+Each axis is set on its own. A dental practice might pick `theme_mode: dark` + `atmosphere: editorial-luxury` + `navigation: editorial-transparent`; a wellness studio might pick `theme_mode: light` + `atmosphere: warm-soft` + `navigation: calm-flat`. Any atmosphere pairs with either mode: a dark client with `warm-soft` is valid. The full resolution order and who writes each value are in [Client Themes § How the website builder's picks resolve to a mode](/docs/theming/client-themes#how-the-website-builders-picks-resolve-to-a-mode).
 
 ## Vocabulary
 
 The locked enum lives in `content-system/vocabularies/atmosphere.ts`.
 
-| Slug | Theme mode | Natural fit |
+| Slug | Grain blend (light / dark) | Natural fit |
 |---|---|---|
-| `editorial-luxury` | dark | dental · med-aesthetic · luxury hospitality |
-| `cinematic-dramatic` | dark | legal · agency · finance · dark-mode SaaS |
-| `minimal-clinical` | light | healthcare (non-luxury) · legal · minimal SaaS |
-| `warm-soft` | light | wellness · therapy · mental-health · recovery |
-| `clean-bright` | light | SaaS · tech · productivity |
-| `organic-textured` | light | MUA · organic beauty · artisan · natural products |
-| `none` | (any) | explicit no-op — fallback when atmosphere is null |
+| `editorial-luxury` | multiply / overlay | dental · med-aesthetic · luxury hospitality |
+| `cinematic-dramatic` | no grain | legal · agency · finance · SaaS |
+| `warm-soft` | multiply / screen | wellness · therapy · mental-health · recovery |
+| `organic-textured` | multiply / screen | MUA · organic beauty · artisan · natural products |
+| `none` | no grain | explicit no-op — fallback when atmosphere is null |
+| `minimal-clinical` | deprecated | emits nothing — use `none` |
+| `clean-bright` | deprecated | emits nothing — use `none` |
+
+<Callout type="warn">
+`minimal-clinical` and `clean-bright` are deprecated and will be removed in `1.0.0` (`DEPRECATED_ATMOSPHERES` in `content-system/vocabularies/atmosphere.ts`). Both emit zero CSS, so they are two names for `none`. Migrate stored `company_profiles.atmosphere` values to `none` before removal.
+</Callout>
 
 ## Per-atmosphere reference
 
@@ -45,43 +49,31 @@ Each atmosphere renders on the same compact composite (hero + services grid + CT
 
 ### editorial-luxury
 
-Gold radial orbs driven by `data-ambient` attributes on sections; SVG Perlin film grain at 32% opacity with `mix-blend-mode: overlay`; cursor-tracking spotlight on elements with `data-spotlight`. Section-edge fades reference `var(--page-primary)` from the theme layer so they blend into whatever surface color the brand sets. Honors reduced-motion.
+Radial orbs (from the brand colour) driven by `data-ambient` attributes on sections; SVG Perlin film grain at 32% opacity with `mix-blend-mode: multiply` on light and `overlay` on dark; cursor-tracking spotlight on elements with `data-spotlight`. Section-edge fades reference `var(--page-primary)` from the theme layer so they blend into whatever surface color the brand sets. Honors reduced-motion.
 
 <AtmospherePreview atmosphere="editorial-luxury" />
 
 ### cinematic-dramatic
 
-Aurora-drift gradient at the top of the viewport (42s cycle, animated via `@property` interpolation) and a conic rotating spotlight on sections marked `data-ambient="spotlight"`. No grain — the aurora is already doing the atmospheric work. Section-edge fades reference `var(--page-primary)`. Fit for legal / agency / finance / dark-mode SaaS.
+Aurora-drift gradient at the top of the viewport (42s cycle, animated via `@property` interpolation) and a conic rotating spotlight on sections marked `data-ambient="spotlight"`. No grain — the aurora is already doing the atmospheric work. Section-edge fades reference `var(--page-primary)`. Fit for legal / agency / finance / SaaS.
 
 <AtmospherePreview atmosphere="cinematic-dramatic" />
 
-### minimal-clinical
-
-Zero atmospheric decoration. Trust comes from typography and precision alone. Intentionally empty — establishes the shared `data-ambient` / `data-edge` / `data-spotlight` attribute vocabulary without layering anything visually. Healthcare practices that aren't aiming luxury, legal where gravitas matters more than editorial warmth, minimal SaaS.
-
-<AtmospherePreview atmosphere="minimal-clinical" />
-
 ### warm-soft
 
-Single quiet rose vignette in the top-left corner and subtle grain at 15% opacity with `mix-blend-mode: multiply`. No motion, no spotlights, no depth orbs — anxiety-sensitive audiences (wellness, therapy, mental health, recovery) shouldn't see cinematic flourish. Section-edge fades reference `var(--page-primary)`.
+Single quiet rose vignette in the top-left corner and subtle grain at 15% opacity with `mix-blend-mode: multiply` on light and `screen` on dark. No motion, no spotlights, no depth orbs — anxiety-sensitive audiences (wellness, therapy, mental health, recovery) shouldn't see cinematic flourish. Section-edge fades reference `var(--page-primary)`.
 
 <AtmospherePreview atmosphere="warm-soft" />
 
-### clean-bright
-
-Zero CSS decoration. Brand lives entirely in typography, imagery, and color accents. Sister to `minimal-clinical` — same visual posture, different semantic intent (SaaS/tech vs healthcare/legal).
-
-<AtmospherePreview atmosphere="clean-bright" />
-
 ### organic-textured
 
-SVG Perlin grain at 40% opacity with `mix-blend-mode: multiply` for a tactile, recycled-paper texture. Subtle earth-tone radial tint in the bottom-right. Fit for MUA / organic beauty / artisan / natural-products brands where tactile materiality matters more than digital polish.
+SVG Perlin grain at 40% opacity with `mix-blend-mode: multiply` on light and `screen` on dark for a tactile, recycled-paper texture. Subtle earth-tone radial tint in the bottom-right. Fit for MUA / organic beauty / artisan / natural-products brands where tactile materiality matters more than digital polish.
 
 <AtmospherePreview atmosphere="organic-textured" />
 
 ### none
 
-Explicit no-op. Emits no rules. Fallback when `company_profiles.atmosphere` is null or a client doesn't want an atmospheric layer. Exists so the portal's theme generator can unconditionally emit an `@import` without branching.
+Explicit no-op. Emits no rules. Fallback when `company_profiles.atmosphere` is null or a client doesn't want an atmospheric layer. Exists so the portal's theme generator can unconditionally inline an atmosphere without branching.
 
 <AtmospherePreview atmosphere="none" />
 
@@ -90,20 +82,19 @@ Explicit no-op. Emits no rules. Fallback when `company_profiles.atmosphere` is n
 When building a new client site:
 
 1. **Read `company_profiles.theme_mode`** (light | dark). It is the client's one base mode; client sites get no light/dark toggle. If it is unset, the design-direction task fills it from the brief's color direction. The order of precedence is in [Client Themes](/docs/theming/client-themes#order-of-precedence).
-2. **Read `company_profiles.atmosphere`**. If it is unset, the design-direction task seeds it from the locked personality. To pick one by hand, match it to the mode with `ATMOSPHERE_THEME_MODE`:
-   - dark + dental / med-aesthetic → `editorial-luxury`
-   - dark + legal / agency → `cinematic-dramatic`
-   - light + wellness / therapy → `warm-soft`
-   - light + healthcare (non-luxury) → `minimal-clinical`
-   - light + SaaS / tech → `clean-bright`
-   - light + MUA / beauty → `organic-textured`
-3. **The portal theme generator** emits the `@import` into the stored theme CSS; consumer sites pull the theme at build time and the atmosphere cascades automatically. No per-client atmosphere CSS in the consumer repo.
-4. **Extending the vocabulary**: new atmospheres go through the BDS PR process — add the slug to `ATMOSPHERE_VALUES`, write a CSS file in `content-system/atmospheres/`, add a manifest entry, extend the `package.json` exports, and add a preview block to this page. Don't invent atmospheres per client; graduate them.
+2. **Read `company_profiles.atmosphere`**. Pick by fit, not by mode — every atmosphere works in both:
+   - dental / med-aesthetic / luxury hospitality → `editorial-luxury`
+   - legal / agency / finance → `cinematic-dramatic`
+   - wellness / therapy → `warm-soft`
+   - MUA / beauty / artisan → `organic-textured`
+   - no decoration wanted → `none` (never the deprecated `minimal-clinical` or `clean-bright`)
+3. **The portal theme generator** inlines the atmosphere CSS into the stored theme CSS; consumer sites pull the theme at build time and the atmosphere cascades automatically. No per-client atmosphere CSS in the consumer repo.
+4. **Extending the vocabulary**: new atmospheres go through the BDS PR process — add the slug to `ATMOSPHERE_VALUES`, write a CSS file in `content-system/atmospheres/`, add a manifest entry, extend the `package.json` exports, key any grain blend to `:root[data-theme="dark"]`, and add a preview block to this page. Don't invent atmospheres per client; graduate them.
 
 ## Related
 
-- [Theming Overview](/docs/theming) — the four Theming Dimensions in context
+- [Theming Overview](/docs/theming) — the five Theming Dimensions in context
 - [Client Themes](/docs/theming/client-themes) — the Tokens Dimension below the atmosphere
 - [Layout Archetypes](/docs/theming/layout-archetypes) — site-header and site-footer pattern vocabularies
-- [Blueprints](/docs/theming/blueprints) — page-layout vocabulary (separate axis from atmosphere)
+- [Blueprints](/docs/web-elements/blueprints) — section composition (not a Theming Dimension)
 - [Content System / Industries](/docs/content-system/industries) — industry packs declare default atmospheres
