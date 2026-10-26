@@ -245,6 +245,13 @@
       "negative"
     ]
   },
+  "PageHeader": {
+    "variant": [
+      "full",
+      "compact",
+      "tabs-only"
+    ]
+  },
   "ProgressCircle": {
     "size": [
       "sm",
