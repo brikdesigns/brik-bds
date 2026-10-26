@@ -26,6 +26,18 @@ export interface MetadataItem {
  */
 export type PageHeaderMode = 'read' | 'edit';
 
+/**
+ * Header shape, fixed per page — no variant collapses or expands on scroll.
+ *
+ * - `full` — every slot renders (breadcrumbs, media, title, subtitle, actions,
+ *   metadata, tabs).
+ * - `compact` — media, a small (`--bds-heading-sm`) title, actions and tabs.
+ *   Breadcrumbs, subtitle and metadata are not rendered; `size` is ignored.
+ * - `tabs-only` — only the `tabs` slot is visible. The title still renders as a
+ *   visually hidden `<h1>`, so the page keeps its heading.
+ */
+export type PageHeaderVariant = 'full' | 'compact' | 'tabs-only';
+
 export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
   /** Page title — rendered as the H1. */
   title: string;
@@ -64,11 +76,19 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
    */
   size?: 'sm' | 'md' | 'lg';
   /**
+   * Header shape, fixed per page. Default `'full'`. See {@link PageHeaderVariant}.
+   */
+  variant?: PageHeaderVariant;
+  /**
    * Pin the header to the top of its scroll container on scroll
    * (`position: sticky`). Renders an opaque `--bds-surface-primary` background so
    * body content scrolls cleanly beneath it. Default `false` — non-sticky
    * consumers are unaffected. The header sticks within the nearest scrolling
    * ancestor; ensure that container, not the window, owns the scroll.
+   *
+   * The offset is `--bds-page-header-top` (default `0px`). A shell with a top
+   * bar sets it to the `--bds-shell-top-bar-height` token on an ancestor, so the
+   * header pins below the bar instead of under it.
    */
   sticky?: boolean;
   /**
@@ -145,6 +165,7 @@ export function PageHeader({
   tabs,
   metadata,
   size = 'lg',
+  variant = 'full',
   sticky = false,
   mode,
   onEdit,
@@ -206,19 +227,38 @@ export function PageHeader({
     return null;
   })();
 
+  const isFull = variant === 'full';
+
+  if (variant === 'tabs-only') {
+    return (
+      <div
+        className={bdsClass('bds-page-header', 'bds-page-header--tabs-only', sticky && 'bds-page-header--sticky', className)}
+        style={style}
+        data-mode={mode}
+        data-variant={variant}
+        {...props}
+      >
+        <h1 className="bds-page-header__title bds-page-header__title--hidden">{title}</h1>
+        {tabs && <div className="bds-page-header__tabs">{tabs}</div>}
+      </div>
+    );
+  }
+
   return (
     <div
       className={bdsClass(
         'bds-page-header',
-        size !== 'lg' && `bds-page-header--${size}`,
+        isFull && size !== 'lg' && `bds-page-header--${size}`,
+        !isFull && `bds-page-header--${variant}`,
         sticky && 'bds-page-header--sticky',
         className,
       )}
       style={style}
       data-mode={mode}
+      data-variant={variant}
       {...props}
     >
-      {breadcrumbs}
+      {isFull && breadcrumbs}
 
       <div className="bds-page-header__inner">
         <div className="bds-page-header__content">
@@ -228,12 +268,12 @@ export function PageHeader({
             {resolvedMedia && <div className="bds-page-header__media">{resolvedMedia}</div>}
             <h1 className="bds-page-header__title">{title}</h1>
           </div>
-          {subtitle && <p className="bds-page-header__subtitle">{subtitle}</p>}
+          {isFull && subtitle && <p className="bds-page-header__subtitle">{subtitle}</p>}
         </div>
         {resolvedActions && <div className="bds-page-header__actions">{resolvedActions}</div>}
       </div>
 
-      {metadata && metadata.length > 0 && (
+      {isFull && metadata && metadata.length > 0 && (
         <div className="bds-page-header__metadata">
           <div className="bds-page-header__metadata-inner">
             {metadata.map((item) => (
