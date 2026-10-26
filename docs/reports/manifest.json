@@ -2,7 +2,7 @@
   "schema": 1,
   "generated_by": "brikdesigns/brik-llm:scripts/reports/report-meta.py",
   "contract": "docs/reports/README.md#metadata-contract",
-  "count": 5,
+  "count": 6,
   "reports": [
     {
       "path": "docs/reports/2026-09-26-foundations-disconnect-assessment.html",
@@ -75,6 +75,21 @@
       "subject": "bds",
       "owner": "nstaner",
       "generated": "2026-10-01",
+      "supersedes": "none",
+      "cadence": "once",
+      "source": "manual"
+    },
+    {
+      "path": "docs/reports/blueprints-wiring-audit.html",
+      "title": "Blueprints Wiring Audit — 2026-10-26",
+      "status": "active",
+      "type": "audit",
+      "themes": [
+        "design-system"
+      ],
+      "subject": "bds",
+      "owner": "nstaner",
+      "generated": "2026-10-26",
       "supersedes": "none",
       "cadence": "once",
       "source": "manual"
