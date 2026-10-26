@@ -6,8 +6,20 @@
   border-right: var(--bds-border-width-md) solid var(--bds-border-secondary);
   display: flex;
   flex-direction: column;
-  height: 100%;
   box-sizing: border-box;
+  width: var(--bds-subnav-width);
+  flex-shrink: 0;
+  align-self: flex-start;
+  /* Sticky section rail below the shell top bar. A shell with no top bar sets
+     --bds-subnav-top: 0 on the rail or an ancestor. */
+  --bds-subnav-top: var(--bds-shell-top-bar-height);
+  position: sticky;
+  top: var(--bds-subnav-top);
+  z-index: var(--bds-z-sticky);
+  /* Viewport minus the offset, whatever the page height; 100vh fallback first. */
+  height: calc(100vh - var(--bds-subnav-top));
+  height: calc(100dvh - var(--bds-subnav-top));
+  /* Scrolls only when its own items overflow that height. */
   overflow-y: auto;
 }
 
@@ -47,5 +59,58 @@
 .bds-subnav__footer {
   padding: var(--bds-padding-md);
   border-top: var(--bds-border-width-md) solid var(--bds-border-secondary);
+}
+
+/* ─── Groups ─────────────────────────────────────────────────── */
+
+.bds-subnav__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-gap-xs);
+}
+
+.bds-subnav__group-label {
+  padding: var(--bds-padding-sm) var(--bds-padding-md) var(--bds-padding-tiny);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-body-xs);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: var(--bds-letter-spacing-wide);
+  user-select: none;
+}
+
+/* ─── Below tablet: one horizontally scrolling row ───────────── */
+
+@media (--bds-down-tablet) {
+  .bds-subnav {
+    position: static;
+    width: 100%;
+    height: auto;
+    align-self: stretch;
+    overflow-y: visible;
+    border-right: none;
+    border-bottom: var(--bds-border-width-md) solid var(--bds-border-secondary);
+  }
+
+  .bds-subnav__nav {
+    flex: none;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .bds-subnav__nav > *,
+  .bds-subnav__group > * {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .bds-subnav__group {
+    flex-direction: row;
+    align-items: center;
+  }
 }
 }
