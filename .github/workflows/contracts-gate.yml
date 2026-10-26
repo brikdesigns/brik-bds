@@ -201,6 +201,9 @@ jobs:
     needs: changes
     permissions:
       contents: read
+      # Read-only, for the orphan-issue ratchet — it asserts against live issue
+      # state, the only place the fact it guards exists.
+      issues: read
     # The `success()` half matters: an explicit `if` REPLACES the implicit
     # needs-succeeded gate, so without it a FAILED classify (output == '') would
     # still satisfy `!= 'false'`.
@@ -611,6 +614,29 @@ jobs:
           shellcheck scripts/sweep-merged-worktrees.sh \
                      scripts/test/test-sweep-worktree-classification.sh
 
+      # ─── orphan-issue ratchet (brik-bds#2792; brikdesigns#1528, #1612) ──────
+      #
+      # NOT a thirteenth script contract: it reads LIVE issue state, so unlike
+      # the suites above it can go red with no change in the diff — a newly filed
+      # unparented issue reddens the next run. That is the point (an orphan is
+      # reachable by no pickup path: /resume walks an umbrella's sub-issues,
+      # resume-orphan-scan.sh reports unparented issues only at p0/p1), and it is
+      # why it sits in the one job that already runs on every push to `main`.
+      #
+      # Budget: one GraphQL query (<=100 issues/page) inside this already-required
+      # job — no new workflow, never a loop; the hourly bucket is shared fleet-wide.
+      - name: Orphan-issue ratchet (every open issue has a home)
+        if: always() && steps.node.outcome == 'success'
+        run: node scripts/lint-orphan-issues.mjs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Orphan-issue ratchet — self-test (rules + both ratchet directions)
+        if: always() && steps.node.outcome == 'success'
+        run: node scripts/lint-orphan-issues.test.mjs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   # ─── Merge-queue readiness (#2447) ──────────────────────────────────────────
   #
   # A merge queue is LIVE on `main`. A required context whose workflow lacks
@@ -694,7 +720,7 @@ jobs:
             echo "  the first — read all of them before pushing a fix."
             failed=1
           else
-            echo "✓ all twelve script contracts passed."
+            echo "✓ all twelve script contracts and the orphan-issue ratchet passed."
           fi
 
           if [ "${{ needs.changes.outputs.readiness }}" != "true" ]; then
