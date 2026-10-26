@@ -37,6 +37,7 @@
  * Usage:
  *   node scripts/lint-hand-rolled-sections.mjs                 # default corpus
  *   node scripts/lint-hand-rolled-sections.mjs --root <dir>    # fixture tree / client src
+ *   node scripts/lint-hand-rolled-sections.mjs --root <dir> --skip-rule style-block
  */
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
@@ -61,6 +62,14 @@ function argValue(flag) {
 
 const SCAN_ROOT =
   argValue('--root') ?? join(ROOT, 'content-system', 'blueprints', 'astro', '__examples__');
+
+/**
+ * Rule ids to skip, from `--skip-rule a,b`. The blueprint sources themselves
+ * legitimately own a `<style>` block (it is how a blueprint ships its CSS), so the
+ * widened scan over `content-system/blueprints/astro` skips `style-block` and holds
+ * only the motion and raw-value rules (#2556).
+ */
+const SKIP_RULES = new Set((argValue('--skip-rule') ?? '').split(',').filter(Boolean));
 
 /** The `bds-lint-ignore` keyword that exempts a line from this gate. */
 const IGNORE_RULE = 'hand-rolled-section';
@@ -152,6 +161,7 @@ for (const path of files) {
   const { lines, offset } = markup(readFileSync(path, 'utf8'));
   lines.forEach((line, i) => {
     for (const rule of RULES) {
+      if (SKIP_RULES.has(rule.id)) continue;
       const hit = rule.test(line);
       if (!hit) continue;
       const ignoreLine = forIgnore(line);

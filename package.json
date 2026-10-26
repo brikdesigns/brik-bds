@@ -329,7 +329,7 @@
     "lint-gate-pathspecs": "node scripts/lint-gate-pathspecs.mjs",
     "render:astro-stories": "node scripts/render-astro-blueprints.mjs",
     "verify:astro-stories": "node scripts/render-astro-blueprints.mjs --check",
-    "lint-hand-rolled-sections": "node scripts/lint-hand-rolled-sections.mjs",
+    "lint-hand-rolled-sections": "node scripts/lint-hand-rolled-sections.mjs && node scripts/lint-hand-rolled-sections.mjs --root content-system/blueprints/astro --skip-rule style-block",
     "lint-consumer-shadows": "node scripts/lint-consumer-shadows.mjs"
   },
   "keywords": [
