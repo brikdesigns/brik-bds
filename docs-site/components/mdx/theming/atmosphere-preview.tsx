@@ -145,8 +145,8 @@ const COMPOSITE_STYLES = `
 `;
 
 function buildSrcDoc(slug: Atmosphere, atmosphereCss: string): string {
-  const dataTheme =
-    ATMOSPHERE_MANIFEST[slug].themeMode === 'dark' ? 'dark' : 'light';
+  // Atmospheres are mode-agnostic (brik-bds#2818); the preview renders light.
+  const dataTheme = 'light';
 
   return `<!doctype html>
 <html data-theme="${dataTheme}">
@@ -234,7 +234,6 @@ export function AtmospherePreview({ atmosphere }: AtmospherePreviewProps) {
         >
           <tbody>
             <Row label="Slug" mono>{entry.slug}</Row>
-            <Row label="Theme mode" mono>{entry.themeMode ?? '(any)'}</Row>
             <Row label="Blurb">{entry.blurb}</Row>
             <Row label="Natural fit">{entry.naturalFit.join('  ·  ')}</Row>
             <Row label="Surface profile" mono>{entry.surfaceProfile}</Row>

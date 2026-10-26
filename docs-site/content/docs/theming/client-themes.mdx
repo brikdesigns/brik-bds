@@ -54,9 +54,9 @@ The website builder takes pick tags such as `Modern`, `Minimal`, `Dark`, `spacio
 
 | Vocabulary | Example tags | What it decides | Affects the mode? |
 |---|---|---|---|
-| Personality | `Modern`, `Minimal`, `Bold`, `Luxury`, `Warm` | Seeds an atmosphere | Indirectly, through the seeded atmosphere's paired mode |
+| Personality | `Modern`, `Minimal`, `Bold`, `Luxury`, `Warm` | Personality only. It picks no atmosphere | No |
 | Visual style | `Dark`, `Light`, `Minimal`, `Editorial` | Style preference for briefs and blueprint scoring | Only `Dark` and `Light`, which set it directly |
-| [Atmosphere](/docs/theming/atmospheres) | `editorial-luxury`, `warm-soft` | Decoration layer | Indirectly, because each atmosphere has a paired mode |
+| [Atmosphere](/docs/theming/atmospheres) | `editorial-luxury`, `warm-soft` | Decoration layer | No. Atmospheres are mode-agnostic |
 | Theme mode | `light`, `dark` | Base mode | Yes, directly |
 | [Expression modes](/docs/build-standards/prop-axes#expression-modes) | `compact`, `spacious`, `sharp`, `pill`, `flat` | `data-mode-*` attributes on `:root` | No |
 | Animation tier | `subtle`, `moderate`, `expressive` | Motion classes | No |
@@ -69,33 +69,15 @@ The resolver settles **theme mode** in this order:
 
 1. The confirmed `company_profiles.theme_mode`.
 2. A `Dark` or `Light` pick.
-3. The paired mode of the resolved atmosphere (`ATMOSPHERE_THEME_MODE`).
-4. Unset. The generator then falls back to the `black`-primitive guess above.
+3. Unset. The generator then falls back to the `black`-primitive guess above.
 
-It settles **atmosphere** in this order:
+It settles **atmosphere** separately, and the mode never filters it:
 
 1. The confirmed `company_profiles.atmosphere`.
 2. An atmosphere picked by name.
-3. The atmosphere that the personality picks seed most often. When a mode is already set, only seeds that pair with that mode count.
-4. When only a mode is set, the fallback for that mode: `light` gives `clean-bright`, and `dark` gives `cinematic-dramatic`.
+3. Unset.
 
-**Personality seeds an atmosphere. It doesn't lock it.** The seeds are:
-
-| Personality | Seeded atmosphere | Paired mode |
-|---|---|---|
-| Modern | `minimal-clinical` | light |
-| Minimal | `minimal-clinical` | light |
-| Professional | `minimal-clinical` | light |
-| Corporate | `minimal-clinical` | light |
-| Warm | `warm-soft` | light |
-| Approachable | `warm-soft` | light |
-| Playful | `clean-bright` | light |
-| Trustworthy | `clean-bright` | light |
-| Bold | `cinematic-dramatic` | dark |
-| Energetic | `cinematic-dramatic` | dark |
-| Luxury | `editorial-luxury` | dark |
-| Refined | `editorial-luxury` | dark |
-| Authoritative | `editorial-luxury` | dark |
+**A personality decides no atmosphere.** Atmosphere is an explicit pick. Every atmosphere works with either mode, so a dark client with `warm-soft` is valid.
 
 ### Who writes the stored values
 
@@ -103,7 +85,7 @@ It settles **atmosphere** in this order:
 
 | Writer | When | What it writes |
 |---|---|---|
-| Design-direction task | Only when the field is unset | `theme_mode` from the brief's color direction, and `atmosphere` from the personality seed |
+| Design-direction task | Only when the field is unset | `theme_mode` from the brief's color direction. It does not set `atmosphere` |
 | Homepage-approval gate (`design_homepage_approval`) | When the operator completes it | The operator's confirmed values. They overwrite whatever was there, and are prefilled from the approved variant. |
 
 The company's **Branding** tab shows both values (Visual Direction).
@@ -141,7 +123,7 @@ Each `.body.theme-{name}` block overrides a fixed set of **semantic color tokens
 
 **Typography tokens** are not overridden by `data-theme="light"` vs `data-theme="dark"` — both share the Brik font stack. The `theme-client-sim` class demonstrates font family overrides only.
 
-**Spacing tokens** are not theme-controlled — spacing comes from the Base/Spacious mode set on `.body`, not from theme classes.
+**Spacing tokens** are not theme-controlled — spacing comes from the `[data-mode-spacing]` expression mode on `:root` (`tokens/modes-spacing.css`), not from theme classes.
 
 ## Adding a custom client brand
 
@@ -341,6 +323,6 @@ This is exactly what `.body.theme-client-sim` demonstrates in the toolbar.
 
 ## Related
 
-- [Theming Overview](/docs/theming) — the four Theming Dimensions in context
+- [Theming Overview](/docs/theming) — the five Theming Dimensions in context
 - [Atmospheres](/docs/theming/atmospheres) — the Atmospheres Dimension (CSS decoration overlays)
 - [Primitives → Color](/docs/foundation/color) — the semantic tokens this layer overrides

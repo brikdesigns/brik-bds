@@ -6,7 +6,7 @@ import {
   getAtmosphereSafePairings,
   getSafePairingsForThemeMode,
 } from './index';
-import { ATMOSPHERE_VALUES } from '../vocabularies/atmosphere';
+import { ATMOSPHERE_VALUES, DEPRECATED_ATMOSPHERES } from '../vocabularies/atmosphere';
 
 /**
  * Atmosphere manifest contract tests.
@@ -130,6 +130,26 @@ describe('getAtmosphereImportPath', () => {
     expect(getAtmosphereImportPath('editorial-luxury')).toBe(
       '@brikdesigns/bds/atmospheres/editorial-luxury.css',
     );
+  });
+});
+
+describe('deprecated atmospheres (brik-bds#2818)', () => {
+  it('deprecates exactly clean-bright and minimal-clinical, replaced by none, with a removal version', () => {
+    expect(Object.keys(DEPRECATED_ATMOSPHERES).sort()).toEqual(['clean-bright', 'minimal-clinical']);
+    for (const dep of Object.values(DEPRECATED_ATMOSPHERES)) {
+      expect(dep.replacedBy).toBe('none');
+      expect(dep.removeIn).toMatch(/^\d+\.\d+\.\d+$/);
+    }
+  });
+
+  it('mirrors the deprecation on the manifest entry, and only on those entries', () => {
+    for (const slug of ATMOSPHERE_VALUES) {
+      expect(ATMOSPHERE_MANIFEST[slug].deprecated).toEqual(
+        slug in DEPRECATED_ATMOSPHERES
+          ? DEPRECATED_ATMOSPHERES[slug as keyof typeof DEPRECATED_ATMOSPHERES]
+          : undefined,
+      );
+    }
   });
 });
 

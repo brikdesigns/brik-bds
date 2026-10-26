@@ -80,18 +80,21 @@ A consumer's `theme-{client}.css` overrides Brand Kit-controlled semantic tokens
 
 ## Theming dimensions
 
-CSS Layers handle the **values** cascade. But Theming as a whole composes across four independent **Theming Dimensions** (each a separate decision a client makes):
+CSS Layers handle the **values** cascade. But Theming as a whole composes across five independent **Theming Dimensions** (each a separate decision a client makes):
 
 | Theming Dimension | Decides | Where it lives |
 |---|---|---|
 | **Tokens** | Color / type / spacing values | Brand Kit Library → `theme-{client}.css` in `client-theme` Layer |
-| **Atmospheres** | Ambient decoration — grain, vignettes, orbs, spotlights | `@brikdesigns/bds/atmospheres/{slug}.css` |
+| **Theme Mode** | Light or dark base — the only source of it | `company_profiles.theme_mode`; `<html data-theme>` |
+| **Atmospheres** | Ambient decoration — grain, vignettes, orbs, spotlights. No color; works in light and dark | `@brikdesigns/bds/atmospheres/{slug}.css` |
+| **Expression Modes** | Density and shape — spacing, radius, type, width, motion | `[data-mode-*]` on `:root` (`tokens/modes-*.css`) |
 | **Layout Archetypes** | Site-header + footer shape, scroll + drawer behavior | `<SiteHeader>` from blueprints; `SiteFooter` planned (v0.2) |
-| **Blueprints** | Section composition — hero / services / testimonials shapes | Authored in BDS, tagged by mood + industry; rendered on the Astro rail ([ADR-037](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-037-astro-is-the-canonical-blueprint-rail.md)), React for CMS-backed sites |
 
-A client picks values for each Dimension independently. Three different Dimensions == three different decisions — composing nothing cross-couples. Full Theming Tenet overview at [Theming](/docs/theming).
+Blueprints (section composition — hero / services / testimonials shapes) are not a Theming Dimension. They are authored in BDS, tagged by mood + industry, and rendered on the Astro rail ([ADR-037](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-037-astro-is-the-canonical-blueprint-rail.md)), React for CMS-backed sites.
 
-Blueprint **keys name layout only** — `card_grid`, `hero_split`, `cta_centered`. Content domain lives in the library entry's `industries` / `moods`, brand and atmosphere in tokens ([ADR-037](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-037-astro-is-the-canonical-blueprint-rail.md) §4). See [Blueprints](/docs/theming/blueprints) for the two-rail relationship.
+A client picks values for each Dimension independently. Different Dimensions == different decisions — composing nothing cross-couples. Full Theming Tenet overview at [Theming](/docs/theming).
+
+Blueprint **keys name layout only** — `card_grid`, `hero_split`, `cta_centered`. Content domain lives in the library entry's `industries` / `moods`, brand and atmosphere in tokens ([ADR-037](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-037-astro-is-the-canonical-blueprint-rail.md) §4). See [Blueprints](/docs/web-elements/blueprints) for the two-rail relationship.
 
 <Callout type="warn">
   **Atmospheres decorate; tokens decide values.** Atmosphere CSS files MUST NOT override `--page-*`, `--surface-*`, `--background-*`, `--text-*`, or `--border-*` — those are Tokens-Dimension concerns. Atmosphere is for decorative-only properties (filters, masks, pseudo-element graphics, etc.).
@@ -125,7 +128,7 @@ A Mode varies a token's *value* on a system-wide axis any consumer can toggle. M
 | `breakpoint` | `data-mode-breakpoint` | `default` | `compact`, `comfortable` | ⏳ #340 |
 | `icon` | `data-mode-icon` | `solid` | `outline` | ⏳ #340 |
 
-Each wired mode emits a `tokens/modes-{collection}.css` file scoped via `[data-mode-{collection}="value"]`. Modes are **not** a substitute for Theming Dimensions (which compose subsystems per brand) or for Brand Kit overrides (which change *values*, not modes).
+Each wired mode emits a `tokens/modes-{collection}.css` file scoped via `[data-mode-{collection}="value"]`. Expression Modes are their own Theming Dimension, and are **not** a substitute for Brand Kit overrides (which change *values*, not modes).
 
 The `typography` axis is **heading-scale-variant selection**, not strictly density: `compact`/`comfortable`/`spacious` are uniform density steps, while `expressive` is a steeper modular curve (smaller small end, larger large end) for editorial / marketing surfaces. The variants are mutually exclusive — this axis owns `--heading-*` alone, so a second axis varying the same tokens is not added (it would collide on cascade order rather than compose). See [ADR-013](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-013-token-last-mile-enforce-contract-complete-emission.md) amendment 2026-06-21.
 
@@ -189,7 +192,7 @@ The three rules split by what they can see. `canonical-check` answers "does this
 
 - [Token Anatomy](/docs/foundation/token-anatomy) — the six-concept disambiguation map + Tier abstraction stack
 - [Library architecture](/docs/getting-started/figma-library-architecture) — Foundations vs Brand Kit Libraries + the Style Dictionary pipeline
-- [Theming](/docs/theming) — full Theming Tenet (Tokens / Atmospheres / Layout / Blueprints Dimensions)
+- [Theming](/docs/theming) — full Theming Tenet (Tokens / Theme Mode / Atmospheres / Expression Modes / Layout Dimensions)
 - [Client Themes](/docs/theming/client-themes) — per-client override matrix + minimal `theme-{client}.css` template
 - [Atmospheres](/docs/theming/atmospheres) — the Atmospheres Dimension
 - [Color](/docs/foundation/color) — full canonical color registry

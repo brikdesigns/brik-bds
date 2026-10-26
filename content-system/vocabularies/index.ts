@@ -81,6 +81,7 @@ export {
   isThemeMode,
   type ThemeMode,
   ATMOSPHERE_THEME_MODE,
+  DEPRECATED_ATMOSPHERES,
 } from './atmosphere';
 
 export {

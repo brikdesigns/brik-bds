@@ -37,6 +37,18 @@ const nextConfig = {
       // 308 the Markdown surface to destinations that have no page. The
       // wildcard itself needs no twin — it is a 1:1 passthrough, so
       // path-to-regexp carries the `.md` through to a real page.
+      // Blueprints moved from Theming to Web Elements (brik-bds#2818): they
+      // are section composition, not theming.
+      {
+        source: '/docs/theming/blueprints',
+        destination: '/docs/web-elements/blueprints',
+        permanent: true,
+      },
+      {
+        source: '/docs/theming/blueprints.md',
+        destination: '/docs/web-elements/blueprints.md',
+        permanent: true,
+      },
       {
         source: '/docs/primitives/naming-conventions',
         destination: '/docs/build-standards',

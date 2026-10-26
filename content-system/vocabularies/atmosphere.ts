@@ -1,14 +1,20 @@
 /**
  * Atmosphere — the canonical CSS layer that sits on top of a client's
- * theme to add dark-luxury-editorial / soft-wellness / clean-clinical etc.
+ * theme to add editorial-luxury / soft-wellness / organic-paper etc.
  * visual character through radial blurs, film grain, vignettes, and
  * ambient glows.
  *
- * Paired with `theme_mode` on company_profiles (dark | light) and consumed
- * by the portal's `generate-theme-css.ts` at theme-extraction time. The
- * generated theme CSS references the chosen atmosphere via @import from
- * `@brikdesigns/bds/atmospheres/{atmosphere}.css`; the consumer Astro site
- * pulls the theme artifact at build time and cascades automatically.
+ * Atmospheres are mode-agnostic decoration (brik-bds#2818). None sets a
+ * surface or text colour — every glow and vignette is built from the
+ * client's own tokens via color-mix(), so each works on a light or a dark
+ * page. The one mode-specific detail is the grain blend mode, which each
+ * grain atmosphere keys to `:root[data-theme="dark"]` in its CSS. Light or
+ * dark is set only by `theme_mode` on company_profiles (see THEME_MODE_VALUES).
+ *
+ * The portal's `generate-theme-css.ts` inlines the chosen atmosphere's CSS
+ * into the stored theme artifact (it does not @import it); the consumer
+ * Astro site pulls the theme artifact at build time and cascades
+ * automatically.
  *
  * Atmospheres are orthogonal to the navigation archetype (see NAV_ARCHETYPE_VALUES)
  * and to the blueprint library — they're pure CSS layer decisions, not
@@ -16,51 +22,40 @@
  *
  * Semantics:
  *
- *   editorial-luxury (dark)
- *     Pure near-black surfaces (#08080a), atmospheric gold radial orbs
- *     (blurred 120px), SVG Perlin film grain at 32% opacity + overlay,
- *     cursor-tracking spotlights on interactive cards, section-edge
+ *   editorial-luxury
+ *     Atmospheric radial orbs from the brand colour (blurred 120px), SVG
+ *     Perlin film grain at 32% opacity (multiply on light, overlay on
+ *     dark), cursor-tracking spotlights on interactive cards, section-edge
  *     vignettes. The "quiet luxury" treatment — hero photography breathes,
  *     depth comes from blur + noise rather than surface shifts.
  *     Fit: luxury dental, med-aesthetic, editorial hospitality.
- *     Reference: web/birdwell-mutlak (pre-migration brand-overrides.css).
  *
- *   cinematic-dramatic (dark)
- *     Deeper navy-black base (#060612), aurora drift gradients in cool
- *     tones, centered radial glow behind hero, section-edge vignettes
- *     for "page-turn" feel, conic rotating spotlight. More theatrical
- *     than editorial-luxury — leans dramatic instead of quiet.
- *     Fit: legal, agency, dark-mode SaaS, finance.
+ *   cinematic-dramatic
+ *     Aurora drift gradients in cool tones, centered radial glow behind
+ *     hero, section-edge vignettes for "page-turn" feel, conic rotating
+ *     spotlight. No grain. More theatrical than editorial-luxury.
+ *     Fit: legal, agency, SaaS, finance.
  *
- *   minimal-clinical (light)
- *     Pure white surfaces, no ambient effects, high contrast type,
- *     no blurs or grain. The opposite of editorial-luxury — trust comes
- *     from precision, not atmosphere.
- *     Fit: healthcare practices that aren't aiming luxury, legal where
- *     gravitas > editorial, SaaS/tech with minimal aesthetic.
- *
- *   warm-soft (light)
- *     Warm ivory base (#fbf7f0), single top-left radial vignette in
- *     rose/terracotta, reduced grain (15% opacity), no depth orbs.
- *     Calmer than minimal-clinical; quieter than organic-textured.
+ *   warm-soft
+ *     Single top-left radial vignette in rose, reduced grain (15%
+ *     opacity; multiply on light, screen on dark), no depth orbs.
  *     Fit: wellness, therapy, mental health, recovery, palliative care.
  *
- *   clean-bright (light)
- *     Pure white (#ffffff) with zero atmospheric effects. Visual interest
- *     comes entirely from typography, imagery, and color accents —
- *     nothing layered behind or over content.
- *     Fit: SaaS, tech, startups, utility-focused marketing.
- *
- *   organic-textured (light)
- *     Warm cream base (#f5efe6), SVG grain at 40% opacity with sepia
- *     multiply, subtle earth-tone radial tint. Textured-paper feel
- *     without going fully cinematic.
+ *   organic-textured
+ *     SVG grain at 40% opacity (multiply on light, screen on dark),
+ *     subtle earth-tone radial tint. Textured-paper feel without going
+ *     fully cinematic.
  *     Fit: MUA, organic/natural products, artisan brands, beauty editorial.
  *
  *   none
  *     No atmosphere layer. Renders as pure theme tokens with zero
  *     additional CSS. Fallback for clients who haven't picked or don't
- *     want an atmospheric layer; also the default when theme_mode is null.
+ *     want an atmospheric layer.
+ *
+ *   clean-bright, minimal-clinical (deprecated)
+ *     Both emit zero CSS — two names for `none`. Kept in the vocabulary
+ *     until DEPRECATED_ATMOSPHERES[slug].removeIn so stored profile rows
+ *     still validate; migrate them to `none`.
  */
 export const ATMOSPHERE_VALUES = [
   'editorial-luxury',
@@ -78,12 +73,23 @@ export const isAtmosphere = (value: string): value is Atmosphere =>
   (ATMOSPHERE_VALUES as readonly string[]).includes(value);
 
 /**
+ * Atmospheres kept for stored-row compatibility only. Both emit zero CSS
+ * (comments only), so `none` is the replacement. Slated for removal in
+ * `removeIn` (the next major, per the BDS deprecation cycle); migrate
+ * `company_profiles.atmosphere` to `none` before then.
+ * Tracked in brik-bds#2818.
+ */
+export const DEPRECATED_ATMOSPHERES = {
+  'clean-bright': { replacedBy: 'none', removeIn: '1.0.0' },
+  'minimal-clinical': { replacedBy: 'none', removeIn: '1.0.0' },
+} as const satisfies Partial<Record<Atmosphere, { replacedBy: Atmosphere; removeIn: string }>>;
+
+
+/**
  * Theme mode — the light/dark axis that atmospheres compose with.
  *
- * `theme_mode` is a sibling column on company_profiles, picked by the admin
- * at intel-tab time. Not every atmosphere works with every mode — e.g.
- * editorial-luxury assumes dark; clean-bright assumes light. See
- * ATMOSPHERE_THEME_MODE below for the natural pairings.
+ * `theme_mode` is a sibling column on company_profiles and the only source
+ * of light or dark. Every atmosphere works with both modes.
  */
 export const THEME_MODE_VALUES = ['light', 'dark'] as const;
 
@@ -93,9 +99,10 @@ export const isThemeMode = (value: string): value is ThemeMode =>
   (THEME_MODE_VALUES as readonly string[]).includes(value);
 
 /**
- * Natural theme_mode pairing for each atmosphere. The portal UI can use
- * this to auto-set or hint the correct `theme_mode` when the admin picks
- * an atmosphere. Not a hard constraint — clients can override.
+ * @deprecated Advisory only — atmospheres are mode-agnostic and set no
+ * colour, so the page mode is the client's `theme_mode`, never the
+ * atmosphere's. Nothing may derive, filter, or overwrite a mode from this
+ * map. Removed with the deprecated atmospheres (see DEPRECATED_ATMOSPHERES).
  */
 export const ATMOSPHERE_THEME_MODE: Record<Atmosphere, ThemeMode | null> = {
   'editorial-luxury': 'dark',

@@ -78,17 +78,17 @@ const meta: Meta<AtmosphereStoryArgs> = {
 export default meta;
 type Story = StoryObj<AtmosphereStoryArgs>;
 
-/** @summary Editorial-luxury atmosphere — gold orbs, film grain, dark */
+/** @summary Editorial-luxury atmosphere — orbs, grain; light or dark */
 export const EditorialLuxury: Story = {
   args: { atmosphere: 'editorial-luxury' },
 };
 
-/** @summary Cinematic-dramatic atmosphere — dark, high-contrast */
+/** @summary Cinematic-dramatic atmosphere — aurora; light or dark */
 export const CinematicDramatic: Story = {
   args: { atmosphere: 'cinematic-dramatic' },
 };
 
-/** @summary Minimal-clinical atmosphere — spare, precise, cool */
+/** @summary Minimal-clinical atmosphere — deprecated, use none */
 export const MinimalClinical: Story = {
   args: { atmosphere: 'minimal-clinical' },
 };
@@ -98,7 +98,7 @@ export const WarmSoft: Story = {
   args: { atmosphere: 'warm-soft' },
 };
 
-/** @summary Clean-bright atmosphere — light, open, energetic */
+/** @summary Clean-bright atmosphere — deprecated, use none */
 export const CleanBright: Story = {
   args: { atmosphere: 'clean-bright' },
 };
