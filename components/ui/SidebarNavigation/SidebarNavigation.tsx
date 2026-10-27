@@ -1,6 +1,7 @@
 import { type ReactNode } from 'react';
 import { NavItem, type BdsLinkComponent } from '../NavItem';
 import { bdsClass } from '../../utils';
+import { useAppShell } from '../AppShell';
 import './SidebarNavigation.css';
 
 export interface SidebarNavItem {
@@ -31,7 +32,8 @@ export interface SidebarNavigationProps {
   /**
    * Render in collapsed (icon-only) mode. Item labels become `aria-label`;
    * visible content is the icon only. Default width drops to 80px. Pair with
-   * `SubNavigation` for a two-column app shell.
+   * `SubNavigation` for a two-column app shell. Inside an `AppShell` it
+   * defaults to collapsed below the tablet breakpoint; pass it to override.
    */
   collapsed?: boolean;
   /**
@@ -67,11 +69,15 @@ export function SidebarNavigation({
   footerActions,
   profile,
   userSection,
-  collapsed = false,
+  collapsed: collapsedProp,
   position = 'fixed',
   width,
   linkComponent,
 }: SidebarNavigationProps) {
+  // An explicit `collapsed` wins; otherwise follow the surrounding AppShell,
+  // which collapses the sidebar below the tablet breakpoint.
+  const shell = useAppShell();
+  const collapsed = collapsedProp ?? shell?.collapsed ?? false;
   const resolvedWidth = width ?? (collapsed ? '80px' : '260px');
   const resolvedProfile = profile ?? userSection;
 

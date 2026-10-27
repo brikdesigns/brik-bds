@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, waitFor } from 'storybook/test';
 import { Icon } from '@iconify/react';
 import {
   Table,
@@ -27,6 +28,10 @@ import { TextLink } from '../TextLink';
 import { Tooltip } from '../Tooltip';
 import { ServiceTag, type ServiceLine } from '../ServiceTag';
 import { Menu, type MenuItemData } from '../Menu';
+import { AppShell } from '../AppShell';
+import { Page, PageContent } from '../Page';
+import { PageHeader } from '../PageHeader';
+import { SubNavigation } from '../SubNavigation/SubNavigation';
 import { Eye, Pen, Ellipsis, Copy, Trash, Warning } from '../../icons';
 
 /* ─── Sample data ─────────────────────────────────────────────── */
@@ -73,6 +78,11 @@ const meta: Meta<typeof Table> = {
     roundedBottom: {
       control: 'boolean',
       description: 'Round the bottom-left / bottom-right outer corners (draws a subtle outer border). On by default.',
+    },
+    scrollable: {
+      control: 'boolean',
+      description:
+        'Wrap the table in a horizontal scroll container so a wide table scrolls sideways instead of overflowing the page. Off by default.',
     },
     headerBackground: {
       control: 'select',
@@ -629,5 +639,123 @@ export const WithServiceTagCell: Story = {
         </TableBody>
       </Table>
     );
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLLABLE — a wide table scrolls inside its own wrapper, not the page
+   ═══════════════════════════════════════════════════════════════ */
+
+const wideColumns = [
+  'Client name',
+  'Primary contact',
+  'Engagement lead',
+  'Quarterly revenue forecast',
+  'Contract renewal date',
+  'Billing frequency',
+  'Service line',
+  'Onboarding status',
+  'Last activity',
+  'Region',
+];
+
+const WideTable = ({ rows }: { rows: number }) => (
+  <Table scrollable aria-label="Clients">
+    <TableHeader>
+      <TableRow>
+        {wideColumns.map((column) => (
+          <TableHead key={column}>{column}</TableHead>
+        ))}
+      </TableRow>
+    </TableHeader>
+    <TableBody>
+      {Array.from({ length: rows }, (_, row) => (
+        <TableRow key={row}>
+          {wideColumns.map((column) => (
+            <TableCell key={column}>{`${column} ${row + 1}`}</TableCell>
+          ))}
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+);
+
+/**
+ * `scrollable` wraps the table in its own horizontal scroll container, so a table
+ * wider than its column scrolls sideways there instead of stretching the page.
+ * While it overflows, the wrapper is keyboard-focusable so the scroll is
+ * reachable without a mouse; the table's `aria-label` names the wrapper region.
+ *
+ * @summary Wide table scrolls sideways inside its own wrapper
+ */
+export const Scrollable: Story = {
+  render: () => (
+    <div style={{ maxWidth: 'var(--bds-content-width-text-xs)' }}>
+      <WideTable rows={4} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const wrapper = canvasElement.querySelector('.bds-table-scroll') as HTMLElement;
+    await expect(getComputedStyle(wrapper).overflowX).toBe('auto');
+    await expect(wrapper.scrollWidth).toBeGreaterThan(wrapper.clientWidth);
+    await waitFor(() => expect(wrapper).toHaveAttribute('tabindex', '0'));
+    // The label names the region once, not the region and the table both.
+    await expect(wrapper).toHaveAttribute('role', 'region');
+    await expect(wrapper).toHaveAttribute('aria-label', 'Clients');
+    await expect(wrapper.querySelector('table')).not.toHaveAttribute('aria-label');
+    wrapper.scrollLeft = wrapper.scrollWidth;
+    await expect(wrapper.scrollLeft).toBeGreaterThan(0);
+    // The overflow stays in the wrapper: the page itself does not scroll sideways.
+    await expect(document.documentElement.scrollWidth).toBeLessThanOrEqual(document.documentElement.clientWidth);
+  },
+};
+
+/**
+ * A scrollable table inside the app shell: scrolling the table sideways and the
+ * window downwards leaves the sticky `PageHeader` and `SubNavigation` — both
+ * OUTSIDE the table — pinned.
+ *
+ * @summary Page sticky elements stay pinned beside a scrolling table
+ */
+export const InteractionTestScrollableKeepsPageSticky: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  render: () => (
+    <AppShell
+      rail={
+        <SubNavigation
+          items={[
+            { label: 'Clients', href: '#clients', active: true },
+            { label: 'People', href: '#people' },
+          ]}
+        />
+      }
+      main={
+        <Page>
+          <PageHeader title="Clients" sticky />
+          <PageContent>
+            <WideTable rows={40} />
+          </PageContent>
+        </Page>
+      }
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const wrapper = canvasElement.querySelector('.bds-table-scroll') as HTMLElement;
+    const header = canvasElement.querySelector('.bds-page-header') as HTMLElement;
+    const subnav = canvasElement.querySelector('.bds-subnav') as HTMLElement;
+    const frame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+
+    // The table scrolls sideways inside its wrapper...
+    await expect(wrapper.scrollWidth).toBeGreaterThan(wrapper.clientWidth);
+    wrapper.scrollLeft = wrapper.scrollWidth;
+    await expect(wrapper.scrollLeft).toBeGreaterThan(0);
+
+    // ...and the window scrolls down past the header's natural position.
+    window.scrollTo(0, 600);
+    await frame();
+    await expect(window.scrollY).toBeGreaterThan(0);
+    await expect(header.getBoundingClientRect().top).toBe(0);
+    await expect(subnav.getBoundingClientRect().top).toBe(0);
+    window.scrollTo(0, 0);
   },
 };

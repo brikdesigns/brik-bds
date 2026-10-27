@@ -1,0 +1,75 @@
+---
+title: App Shell
+description: The product layout frame — sticky top bar, primary nav, section rail and main slots, with the window owning vertical scroll.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+AppShell is the frame every product page sits in: an optional sticky `topBar`, a primary `nav` column, a section `rail` column and the `main` region. It owns the layout and the sticky offsets, so [Page](/docs/components/page), `SubNavigation` and `PageHeader` pin correctly without each page re-deriving them.
+
+## Use it for
+
+- The outermost layout of a product app (portal, back office)
+- Pinning `PageHeader` and `SubNavigation` below a shell top bar
+- Collapsing the primary sidebar to icons on small screens without per-page code
+
+## Import
+
+```tsx
+import { AppShell } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+Each slot is optional. An absent slot renders nothing — no empty wrapper, no empty landmark.
+
+```tsx
+<AppShell
+  topBar={<header>…</header>}
+  nav={<SidebarNavigation logo={logo} navItems={items} position="sticky" />}
+  rail={<SubNavigation items={sections} />}
+  main={
+    <Page>
+      <PageHeader title="Services" sticky />
+      <PageContent>…</PageContent>
+    </Page>
+  }
+/>
+```
+
+### With a top bar
+
+`topBar` is pinned to the top of the window. The shell sets `--bds-subnav-top` and `--bds-pageheader-top` to the top bar's height (`--bds-shell-top-bar-height`), and `SubNavigation` and `PageHeader` read them, so neither slides under the bar.
+
+### Below the tablet breakpoint
+
+The primary sidebar collapses to its icon-only form automatically. An explicit `collapsed` prop on `SidebarNavigation` still wins.
+
+<Callout type="info">
+  The window owns vertical scroll. The shell sets `overflow-x: clip` (never `hidden`, which would make it the scroll container and capture every sticky child) and no element sets `overflow-y: auto|scroll`. `PageContent scroll` is a second scroll owner — leave it off inside the shell unless the page must fill the viewport.
+</Callout>
+
+## When *not* to use
+
+- **Marketing pages.** AppShell is the product frame; a marketing site composes Blueprints instead.
+- **Page-level content grouping.** Use [Page](/docs/components/page) for the header-to-body column and the layout primitives inside it.
+
+## Accessibility
+
+- `main` renders a `<main>` landmark; the top bar, nav and rail wrappers are plain `div`s, so semantics come from what you place in them (a `SidebarNavigation`'s `<aside>`, a `SubNavigation`'s `<nav>`).
+- The collapsed sidebar keeps every item's label as its `aria-label`.
+
+## API
+
+### AppShell
+
+{/* props-check: AppShellProps @ components/ui/AppShell/AppShell.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `topBar` | `ReactNode` | — |
+| `nav` | `ReactNode` | — |
+| `rail` | `ReactNode` | — |
+| `main` | `ReactNode` | — |

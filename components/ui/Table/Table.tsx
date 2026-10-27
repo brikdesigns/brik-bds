@@ -4,7 +4,12 @@ import {
   type HTMLAttributes,
   type TdHTMLAttributes,
   type ThHTMLAttributes,
+  type ReactElement,
   type ReactNode,
+  cloneElement,
+  useEffect,
+  useRef,
+  useState,
 } from 'react';
 import { bdsClass } from '../../utils';
 import { Avatar, type AvatarStatus } from '../Avatar';
@@ -38,6 +43,13 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
   roundedBottom?: boolean;
   /** Header row background fill. Default `secondary`. */
   headerBackground?: TableHeaderBackground;
+  /**
+   * Wrap the table in a horizontal scroll container so a table wider than its
+   * column scrolls sideways there, not across the page. The wrapper keeps the
+   * columns at their natural width, is keyboard-focusable while the table
+   * overflows, and takes the table's `aria-label` as its region name. Default `false`.
+   */
+  scrollable?: boolean;
   /** Table content — typically `TableHead` and `TableBody` from this same module. */
   children: ReactNode;
 }
@@ -49,7 +61,7 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
  * (`data-size`, `data-striped`, `data-flush`, `data-header-border`,
  * `data-header-border-weight`, `data-rounded-top`, `data-rounded-bottom`,
  * `data-header-bg`). CSS reads those selectors, eliminating the need for
- * React context.
+ * React context. `scrollable` wraps the `<table>` in a `.bds-table-scroll` div.
  *
  * @summary Themed data table with striped + size variants
  */
@@ -62,12 +74,13 @@ export function Table({
   roundedTop = true,
   roundedBottom = true,
   headerBackground = 'secondary',
+  scrollable = false,
   children,
   className,
   style,
   ...props
 }: TableProps) {
-  return (
+  const table = (
     <table
       className={bdsClass('bds-table', className)}
       style={style}
@@ -83,6 +96,44 @@ export function Table({
     >
       {children}
     </table>
+  );
+
+  if (!scrollable) return table;
+
+  return <TableScroll label={props['aria-label']}>{table}</TableScroll>;
+}
+
+/**
+ * The `scrollable` wrapper. It joins the tab order only while the table overflows
+ * — a scroll container must be keyboard-reachable, but a tab stop that scrolls
+ * nothing is noise. It is a named region only when the table carries a label,
+ * and then the label lives here alone so it is not announced twice.
+ */
+function TableScroll({ label, children }: { label?: string; children: ReactElement }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [overflowing, setOverflowing] = useState(false);
+
+  useEffect(() => {
+    const wrapper = ref.current;
+    if (!wrapper || typeof ResizeObserver === 'undefined') return;
+    const measure = () => setOverflowing(wrapper.scrollWidth > wrapper.clientWidth);
+    const observer = new ResizeObserver(measure);
+    observer.observe(wrapper);
+    if (wrapper.firstElementChild) observer.observe(wrapper.firstElementChild);
+    measure();
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className="bds-table-scroll"
+      tabIndex={overflowing ? 0 : undefined}
+      role={label ? 'region' : undefined}
+      aria-label={label}
+    >
+      {label ? cloneElement(children, { 'aria-label': undefined }) : children}
+    </div>
   );
 }
 

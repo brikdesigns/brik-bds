@@ -25,6 +25,13 @@ const meta: Meta<typeof TabBar> = {
         'below the active tab. `tab` = bottom-border bar with brand-color underline. `box` = filled ' +
         'background for active, bordered for inactive.',
     },
+    overflow: {
+      control: 'select',
+      options: ['wrap', 'scroll'],
+      description:
+        '`wrap` (default) flows tabs that outgrow the rail onto a new row. `scroll` keeps one row and scrolls ' +
+        'it sideways — use it where a second row would push the page down, e.g. below the tablet breakpoint.',
+    },
     onColor: {
       control: 'boolean',
       description: 'On-color mode — switches text/border to on-color-dark tokens for brand/dark backgrounds.',
@@ -100,6 +107,61 @@ export const Box: Story = {
       { label: 'Draft' },
       { label: 'Archived' },
     ],
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLLABLE — Q3 starting point: tabs that outgrow their container
+   scroll sideways instead of wrapping onto a second row
+   ═══════════════════════════════════════════════════════════════ */
+
+const overflowingTabs = [
+  { label: 'Overview', active: true },
+  { label: 'Billing', dot: true },
+  { label: 'Team members' },
+  { label: 'Integrations' },
+  { label: 'Notifications' },
+  { label: 'Security' },
+  { label: 'Audit log' },
+  { label: 'Danger zone' },
+];
+
+/**
+ * `overflow: 'scroll'` keeps the rail on one row and scrolls it horizontally
+ * when the tabs outgrow their container — the right choice below the tablet
+ * breakpoint, where a wrapped rail pushes the page body down. The story pins
+ * the container to a phone width so the overflow is visible; the active
+ * indicator and any focus ring stay un-clipped.
+ * @summary Tabs scroll horizontally instead of wrapping
+ */
+export const Scrollable: Story = {
+  args: {
+    variant: 'tab',
+    overflow: 'scroll',
+    items: overflowingTabs,
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ maxWidth: 'var(--bds-content-width-text-xs)' }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const bar = canvasElement.querySelector('.bds-tab-bar') as HTMLElement;
+    const style = getComputedStyle(bar);
+    // Scrolls sideways, never wraps.
+    await expect(style.overflowX).toBe('auto');
+    await expect(style.flexWrap).toBe('nowrap');
+    await expect(bar.scrollWidth).toBeGreaterThan(bar.clientWidth);
+    // One row: every tab shares a top edge.
+    const tops = new Set(
+      Array.from(bar.querySelectorAll('[role="tab"]')).map((t) => Math.round(t.getBoundingClientRect().top)),
+    );
+    await expect(tops.size).toBe(1);
+    // The last tab is reachable by scrolling the rail.
+    bar.scrollLeft = bar.scrollWidth;
+    await expect(bar.scrollLeft).toBeGreaterThan(0);
   },
 };
 

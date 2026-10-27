@@ -1,0 +1,41 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './AppShell.stories';
+
+<Meta of={Stories} />
+
+# App shell
+
+<ComponentLinks slug="app-shell" />
+
+The product layout frame: an optional sticky `topBar`, a primary `nav` column, a section `rail` column and the `main` region. The window owns vertical scroll — no shell element is a scroll container — so every sticky descendant pins against the viewport. An absent slot renders nothing.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Patterns
+
+Compose `main` with the `Page` primitives. The rail is a full-height sibling of the page body, never a child of `PageContent`; second-level drill-down is `PageHeader`'s `tabs`.
+
+<Canvas of={Stories.WithPage} />
+
+With a `topBar`, the shell pins it and sets `--bds-subnav-top` and `--bds-pageheader-top` to its height, so a sticky `SubNavigation` and `PageHeader` sit just below it.
+
+<Canvas of={Stories.WithTopBar} />
+
+Below the tablet breakpoint the primary sidebar collapses to icons on its own. Pass `collapsed` to `SidebarNavigation` to override.
+
+<Canvas of={Stories.Mobile} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Why `overflow-x: clip`, never `hidden`.** Any non-`visible` overflow on an ancestor makes it the scroll container for sticky descendants; `clip` does not. A `hidden` shell would capture every sticky child and pin it to the shell, not the window.
+
+> **`PageContent scroll` is a second scroll owner.** It gives a fill-height body its own vertical scroll. Inside an `AppShell` the window already scrolls, so leave `scroll` off unless the page is a board or calendar that must fill the viewport.
+
+> **`nav` should be a `SidebarNavigation`.** The shell makes it sticky whatever its `position` prop says, so it keeps its column, and offsets it below the top bar. A table that outgrows its column uses `<Table scrollable>`, which scrolls inside its own wrapper and leaves the page's sticky elements pinned.

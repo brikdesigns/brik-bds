@@ -46,6 +46,9 @@ export type TabBarVariant = 'text' | 'text-underline' | 'tab' | 'box';
 /** Rail axis. Vertical stacks the tabs and sets `aria-orientation`. */
 export type TabBarOrientation = 'horizontal' | 'vertical';
 
+/** What a horizontal rail does when its tabs outgrow it: wrap or scroll. */
+export type TabBarOverflow = 'wrap' | 'scroll';
+
 /**
  * TabBar component props
  */
@@ -66,6 +69,13 @@ export interface TabBarProps extends HTMLAttributes<HTMLDivElement> {
    * tabs keyboard contract is active. Default `'horizontal'`.
    */
   orientation?: TabBarOrientation;
+  /**
+   * What a horizontal rail does when its tabs outgrow it. `'wrap'` (default)
+   * flows the extra tabs onto a new row; `'scroll'` keeps one row and scrolls it
+   * sideways — use it where a second row would push the page down (below the
+   * tablet breakpoint, inside an `AppShell`). No effect on a vertical rail.
+   */
+  overflow?: TabBarOverflow;
 }
 
 /**
@@ -111,12 +121,14 @@ export function TabBar({
   variant = 'text',
   onColor = false,
   orientation = 'horizontal',
+  overflow = 'wrap',
   className = '',
   style,
   ...props
 }: TabBarProps) {
   const variantClass = `bds-tab-bar--${variant}`;
   const onColorClass = onColor ? 'bds-tab-bar--on-color' : '';
+  const scrollClass = overflow === 'scroll' && orientation === 'horizontal' ? 'bds-tab-bar--scroll' : '';
 
   // The tabs keyboard contract only engages once panels are wired, so existing
   // label-only rails keep their current (all-tabbable, no arrow-key) behaviour.
@@ -156,7 +168,7 @@ export function TabBar({
 
   return (
     <div
-      className={bdsClass('bds-tab-bar', variantClass, onColorClass, className)}
+      className={bdsClass('bds-tab-bar', variantClass, onColorClass, scrollClass, className)}
       style={style}
       role="tablist"
       aria-orientation={orientation === 'vertical' ? 'vertical' : undefined}

@@ -30,6 +30,10 @@ A `<TableCell>` accepts any content. This table exercises the composition catalo
 
 <Canvas of={Stories.Loading} />
 
+A table wider than its column should scroll inside its own box, not stretch the page. `scrollable` wraps the table in a horizontal scroll container that keeps the columns at their natural width and is keyboard-focusable while the table overflows; give the table an `aria-label` and the wrapper becomes a named region. Sticky elements outside the table — `PageHeader`, `SubNavigation` — stay pinned while it scrolls.
+
+<Canvas of={Stories.Scrollable} />
+
 ## Patterns
 
 The trailing `[View][Edit][⋯]` cluster composes with `<TableActionsCell>` — it owns alignment, shrink-to-content width, and the `--bds-gap-sm` rhythm, so consumers stop hand-rolling `style={{ textAlign: 'right' }}` on `<TableCell>`.
