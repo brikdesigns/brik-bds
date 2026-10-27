@@ -77,7 +77,7 @@
   font-weight: var(--bds-font-weight-semibold);
   line-height: var(--bds-font-line-height-normal);
   color: var(--bds-text-secondary);
-  text-transform: uppercase;
+  text-transform: var(--bds-text-transform-subtitle);
   letter-spacing: var(--bds-letter-spacing-wide);
   user-select: none;
 }

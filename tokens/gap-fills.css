@@ -24,9 +24,10 @@
 :root {
   /* ── Typography Text-Transform ──
      Semantic casing rules per font role.
-     heading/label/subtitle = capitalize (Title Case)
-     body/display = none (no forced casing)
+     heading/label = capitalize (flips to none once the Title Case audit lands, #2831)
      subtitle = uppercase (all-caps labels)
+     body/display = none (no forced casing)
+     These are visual transforms; copy casing is a content standard.
      Components reference these via var(), Webflow classes inherit directly.
      Override per-theme by redefining in .body.theme-N blocks. */
   --bds-text-transform-heading: capitalize;

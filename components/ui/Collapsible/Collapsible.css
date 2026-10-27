@@ -53,7 +53,7 @@
   font-weight: var(--bds-font-weight-semibold);
   font-size: var(--bds-heading-tiny);
   color: var(--bds-text-secondary);
-  text-transform: uppercase;
+  text-transform: var(--bds-text-transform-subtitle);
   letter-spacing: var(--bds-letter-spacing-wide);
   line-height: var(--bds-font-line-height-tight);
   margin: 0;

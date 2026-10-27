@@ -38,7 +38,7 @@
   line-height: var(--bds-font-line-height-snug);
   color: var(--bds-text-brand-primary);
   text-decoration: none;
-  text-transform: capitalize;
+  text-transform: var(--bds-text-transform-label);
   cursor: pointer;
   /* A single label longer than its container ellipsises rather than
      overflowing — the case wrapping alone can't reach (#468). */
@@ -61,7 +61,7 @@
   /* `snug` for the same descender-clip reason as `__link` above (#2519). */
   line-height: var(--bds-font-line-height-snug);
   color: var(--bds-text-secondary);
-  text-transform: capitalize;
+  text-transform: var(--bds-text-transform-label);
   cursor: default;
   min-width: 0;
   overflow: hidden;

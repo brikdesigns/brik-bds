@@ -59,7 +59,7 @@
   font-weight: var(--bds-font-weight-semibold);
   line-height: var(--bds-font-line-height-normal);
   color: var(--bds-text-secondary);
-  text-transform: uppercase;
+  text-transform: var(--bds-text-transform-subtitle);
   letter-spacing: var(--bds-letter-spacing-wide);
   user-select: none;
 }
@@ -79,7 +79,7 @@
   font-weight: var(--bds-font-weight-semibold);
   line-height: var(--bds-font-line-height-normal);
   color: var(--bds-text-secondary);
-  text-transform: uppercase;
+  text-transform: var(--bds-text-transform-subtitle);
   letter-spacing: var(--bds-letter-spacing-wide);
   user-select: none;
 }
@@ -101,7 +101,7 @@
   font-size: var(--bds-body-md);
   line-height: var(--bds-font-line-height-normal);
   color: var(--bds-text-primary);
-  text-transform: capitalize;
+  text-transform: var(--bds-text-transform-label);
 }
 
 .bds-menu__item--active {

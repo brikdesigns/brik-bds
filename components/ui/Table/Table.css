@@ -118,7 +118,7 @@
   font-family: var(--bds-font-family-subtitle);
   font-size: var(--bds-subtitle-sm);
   font-weight: var(--bds-font-weight-semibold);
-  text-transform: uppercase;
+  text-transform: var(--bds-text-transform-subtitle);
   letter-spacing: 0.08em;
   padding: var(--bds-padding-tiny) var(--bds-padding-md);
   border-bottom: var(--bds-border-width-md) solid var(--bds-border-muted);

@@ -27,7 +27,7 @@
   font-family: var(--bds-font-family-label);
   font-weight: var(--bds-font-weight-semibold);
   line-height: var(--bds-font-line-height-tight);
-  text-transform: capitalize;
+  text-transform: var(--bds-text-transform-label);
 }
 
 .bds-time-picker__label--tone-negative {

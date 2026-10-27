@@ -81,7 +81,7 @@
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-sm);
   color: var(--bds-text-secondary);
-  text-transform: capitalize;
+  text-transform: var(--bds-text-transform-label);
 }
 
 /* Label ↔ bar is the tight step (--bds-gap-sm); --bds-gap-xs collapses to 0px

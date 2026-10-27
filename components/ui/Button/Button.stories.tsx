@@ -162,6 +162,27 @@ export const IconOnly: Story = {
   },
 };
 
+/**
+ * Copy casing is a content standard, not a Button concern: the label renders
+ * as authored. The `--bds-text-transform-label` token is a visual transform
+ * only, so sentence-case and Title Case copy both come through as written once
+ * it is `none`.
+ *
+ * @summary Sentence-case and Title Case copy side by side
+ */
+export const CopyCasing: Story = {
+  render: () => (
+    <Row>
+      <Button variant="primary" size="md">Get in touch</Button>
+      <Button variant="primary" size="md">Get in Touch</Button>
+    </Row>
+  ),
+  args: {
+    variant: 'primary',
+    size: 'md',
+  },
+};
+
 /* ═══════════════════════════════════════════════════════════════
    INTERACTION TESTS — play-only, off-sidebar + off-MCP (['!manifest']).
    AsLink and Disabled render identically to Controls-reachable states

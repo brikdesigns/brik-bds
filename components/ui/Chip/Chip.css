@@ -19,7 +19,7 @@
   font-family: var(--bds-font-family-label);
   font-weight: var(--bds-font-weight-semibold);
   line-height: var(--bds-font-line-height-normal);
-  text-transform: capitalize;
+  text-transform: var(--bds-text-transform-label);
   cursor: pointer;
   user-select: none;
   /* Transparent border preserved at chip's intrinsic box for visual

@@ -27,7 +27,7 @@
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
-  text-transform: capitalize;
+  text-transform: var(--bds-text-transform-label);
   /* Unified border model — all variants share the same box dimensions.
    * Bordered variants (secondary, outline) override border-color only.
    * Without this, sub-pixel border widths cause 1–2px height differences

@@ -8,7 +8,7 @@
   cursor: pointer;
   user-select: none;
   color: var(--bds-text-primary);
-  text-transform: capitalize;
+  text-transform: var(--bds-text-transform-label);
 }
 
 .bds-toggle-switch--disabled {
