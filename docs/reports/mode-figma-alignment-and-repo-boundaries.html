@@ -23,25 +23,26 @@
   th { background: #f4f4f4; }
   code, pre { font-family: ui-monospace, Menlo, monospace; font-size: .92em; background: #f3f3f3; padding: 0 .2em; }
   .verdict { background: #fff4e5; border-left: 4px solid #e58a00; padding: .75rem 1rem; }
-  .ok { color: #1a7f37; } .bad { color: #b42318; font-weight: 600; }
+  .ok { color: #1a7f37; } .bad { color: #b42318; font-weight: 600; } .warn { color: #9a6700; font-weight: 600; }
   blockquote { border-left: 3px solid #bbb; margin: .5rem 0; padding: .25rem .75rem; color: #444; }
 </style>
 </head>
 <body>
 
 <h1>Mode Alignment and Repo Boundaries</h1>
-<p>2026-10-27 · Opus reassessment before building brik-bds#2601 · read on <code>origin/main</code> 4e656e25</p>
+<p>2026-10-27 · Opus reassessment before building brik-bds#2601 · repo read on <code>origin/main</code> 4e656e25 · Figma read live from ❖ Brik Foundations (<code>Rkdc3SIWJUdgoAkeadgZZe</code>) via <code>use_figma</code>, after the operator's border-width update</p>
 
 <div class="verdict">
 <p><strong>Verdict: yes, this is a systemic class, not a one-off.</strong> Confidence: high.</p>
 <p>One class: <strong>canon was copied out of its owning repo, kept its "source of truth" label, and no gate compares the copy to Figma.</strong></p>
-<p>Three mechanisms let it survive. Each is cited below.</p>
+<p>Four mechanisms let it survive. Each is cited below.</p>
 <ol>
   <li>The March spec in brik-llm still calls itself the source of truth. Two MCP servers and a script read it. No drift check covers its folder.</li>
   <li>Border-width was hand-wired before the mode generator existed, and was never moved into it. The coverage gate exempts it and checks only that a selector exists.</li>
   <li>No single table says which repo owns which kind of file. So nothing flags a design-system file living in brik-llm.</li>
+  <li><strong>The repo's copy of Figma is stale, and nothing says so.</strong> <code>design-tokens/foundations.json</code> was last pulled 2026-10-13 (a46ba24d). Figma now has a new border-width scale and an <code>icon</code> collection that the copy lacks. Every gate reads the copy, so every gate is green against old Figma.</li>
 </ol>
-<p>Border-width is the only mode collection still not built from Figma. Elevation's default is a second hand-written value.</p>
+<p>Brand themes can already override border-width values and modes (§3b, run this session). The override logic is sound; its inputs are stale.</p>
 </div>
 
 <h2>1. Your questions, answered</h2>
@@ -74,30 +75,64 @@ In <code>scripts/rag/</code>, only <code>README.md</code> names the doc.</td></t
 </table>
 
 <h2>2. Every mode collection against Figma</h2>
-<p>Source: <code>design-tokens/tokens-studio.json</code> collections, compared with <code>tokens/modes-*.css</code>.</p>
+<p>Source: live Figma (11 collections, read 2026-10-27), compared with the repo copy <code>design-tokens/foundations.json</code> and <code>tokens/modes-*.css</code>. "Figma first mode" is the mode Figma lists first, which Figma treats as its default.</p>
 <table>
-<tr><th>Collection</th><th>Figma modes</th><th>Code</th><th>Built from Figma?</th><th>Status</th></tr>
-<tr><td>border-width</td><td>default · thin · thick</td><td>default · thin · <strong>bold</strong></td><td>Default only. Thin and bold are hand-written.</td><td class="bad">Names and values wrong (§3)</td></tr>
-<tr><td>elevation</td><td>flat · subtle · lifted · dramatic</td><td>Same names. <code>subtle</code> is the <code>:root</code> default.</td><td>flat, lifted, dramatic yes. <strong>subtle no</strong>: hand-written in <code>tokens/gap-fills.css:255-259</code>.</td><td class="bad">Default values wrong: shadow-sm blur 4 vs Figma 8; opacity .06 vs .08</td></tr>
-<tr><td>border-radius</td><td>sharp · soft · round · pill</td><td>Same</td><td>Yes</td><td class="ok">Aligned. Separate Figma alias issue: #2351</td></tr>
-<tr><td>spacing</td><td>compact · default · comfortable · spacious</td><td>Same</td><td>Yes</td><td class="ok">Aligned (values checked by the 09-30 audit)</td></tr>
-<tr><td>typography</td><td>5 modes</td><td>Same</td><td>Yes</td><td class="ok">Aligned</td></tr>
-<tr><td>color</td><td>light · dark</td><td><code>[data-theme]</code></td><td>Yes</td><td class="ok">By design</td></tr>
-<tr><td>breakpoint, layout</td><td>3 each</td><td>Build-time only</td><td>Yes</td><td class="ok">Excluded by design (lint <code>:51-57</code>)</td></tr>
-<tr><td>icon</td><td><em>No collection</em></td><td>None</td><td>n/a</td><td class="bad">Docs still list it (§4)</td></tr>
+<tr><th>Collection</th><th>Figma modes (first = Figma default)</th><th>Repo default</th><th>In repo copy?</th><th>Status</th></tr>
+<tr><td>border-width</td><td><strong>default</strong> · thin · thick</td><td>default</td><td>Yes, but old values</td><td class="bad">Values changed in Figma; thin/bold hand-written (§3)</td></tr>
+<tr><td>elevation</td><td><strong>flat</strong> · subtle · lifted · dramatic</td><td class="bad">subtle</td><td>Yes</td><td class="bad"><code>subtle</code> hand-written in <code>tokens/gap-fills.css:255-259</code>: blur 4 vs Figma 8, opacity .06 vs .08. Default differs from Figma's first mode</td></tr>
+<tr><td>border-radius</td><td><strong>sharp</strong> · soft · round · pill</td><td class="bad">soft</td><td>Yes</td><td class="warn">Generated. Default differs from Figma's first mode. Alias issue #2351</td></tr>
+<tr><td>spacing</td><td><strong>default</strong> · compact · comfortable · spacious</td><td>default</td><td>Yes</td><td class="ok">Aligned at last pull (09-30 audit)</td></tr>
+<tr><td>typography</td><td><strong>default</strong> + 4</td><td>default</td><td>Yes</td><td class="ok">Aligned at last pull</td></tr>
+<tr><td>color</td><td><strong>light</strong> · dark</td><td>light</td><td>Yes</td><td class="ok">Ships as <code>[data-theme]</code> by design</td></tr>
+<tr><td>breakpoint, layout</td><td>3 each</td><td>default / desktop</td><td>Yes</td><td class="ok">Build-time only by design (lint <code>:51-57</code>)</td></tr>
+<tr><td>icon</td><td><strong>solid</strong> · outline (2 vars)</td><td>solid (<code>tokens-studio-compose.cjs:95</code>)</td><td class="bad">No</td><td class="bad">Exists in Figma, never pulled. After a pull the coverage lint will flag it as multi-modal and unwired, so #2601 must wire or exclude it</td></tr>
+<tr><td>motion</td><td>"Mode 1", 0 vars</td><td>—</td><td>No</td><td class="ok">Empty in Figma; nothing to pull</td></tr>
 </table>
+<p>The repo picks defaults from a hand-written table, not from Figma: <code>DEFAULT_MODES</code> in <code>scripts/lib/tokens-studio-compose.cjs:92-114</code>, and again as <code>defaultMode</code> in <code>scripts/generate-modes-css.mjs:87</code> (soft) and <code>:141</code> (subtle). Whether Figma's first mode is <em>meant</em> as the product default for radius and elevation is <strong>unverified</strong>. Figma always lists some mode first.</p>
 
-<h2>3. Border-width: Figma versus the CSS</h2>
+<h2>3. Border-width: live Figma versus the CSS</h2>
+<h3>3a. Primitives</h3>
+<p>Figma renamed the scale so the step is px × 100. The repo copy still has the old numbering.</p>
 <table>
-<tr><th>Mode</th><th>Source</th><th>sm</th><th>md</th><th>lg</th><th>xl</th><th>huge</th></tr>
-<tr><td rowspan="2">default</td><td>Figma</td><td>1</td><td>2</td><td>4</td><td>5</td><td>6</td></tr>
-<tr><td>CSS</td><td colspan="5" class="ok">Same: generated in <code>tokens/figma-tokens.css:340-344</code></td></tr>
-<tr><td rowspan="2">thin</td><td>Figma</td><td>0.25</td><td>0.5</td><td>2</td><td>3</td><td>4</td></tr>
-<tr><td>CSS</td><td class="bad">1</td><td class="bad">1</td><td>2</td><td class="bad">missing</td><td class="bad">missing</td></tr>
-<tr><td rowspan="2">thick</td><td>Figma</td><td>2</td><td>4</td><td>6</td><td>8</td><td>12</td></tr>
-<tr><td>CSS (<code>bold</code>)</td><td>2</td><td class="bad">3</td><td class="bad">4</td><td class="bad">missing</td><td class="bad">missing</td></tr>
+<tr><th>Step</th><th>0</th><th>25</th><th>50</th><th>100</th><th>200</th><th>300</th><th>400</th><th>500</th><th>600–1200</th></tr>
+<tr><td>Figma (live)</td><td>0</td><td>0.25</td><td>0.5</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6–12, one per px</td></tr>
+<tr><td>Repo (<code>figma-tokens.css:249-255</code>)</td><td>0</td><td class="bad">missing</td><td class="bad">1</td><td class="bad">2</td><td class="bad">3</td><td class="bad">4</td><td class="bad">5</td><td class="bad">6</td><td class="bad">missing</td></tr>
 </table>
-<p>Figma's thin sm and md are below 1px. How browsers draw a 0.25px border is <strong>unverified</strong> here. It is a design check for Figma, not a code call.</p>
+<h3>3b. Semantic steps, per mode (px)</h3>
+<table>
+<tr><th>Mode</th><th>Source</th><th>none</th><th>sm</th><th>md</th><th>lg</th><th>xl</th><th>huge</th></tr>
+<tr><td rowspan="2">default</td><td>Figma</td><td>0</td><td>0.5</td><td>1</td><td>3</td><td>4</td><td>5</td></tr>
+<tr><td>CSS (<code>figma-tokens.css:340-344</code>)</td><td>0</td><td class="bad">1</td><td class="bad">2</td><td class="bad">4</td><td class="bad">5</td><td class="bad">6</td></tr>
+<tr><td rowspan="2">thin</td><td>Figma</td><td>0</td><td>0.25</td><td>0.5</td><td>1</td><td>2</td><td>3</td></tr>
+<tr><td>CSS (hand-written)</td><td>—</td><td class="bad">1</td><td class="bad">1</td><td class="bad">2</td><td class="bad">missing</td><td class="bad">missing</td></tr>
+<tr><td rowspan="2">thick</td><td>Figma</td><td>0</td><td>1</td><td>3</td><td>5</td><td>8</td><td>12</td></tr>
+<tr><td>CSS (<code>bold</code>, hand-written)</td><td>—</td><td class="bad">2</td><td class="bad">3</td><td class="bad">4</td><td class="bad">missing</td><td class="bad">missing</td></tr>
+</table>
+<p><strong>The default shift is client-visible.</strong> Pulling Figma changes what every BDS consumer renders with no mode set:</p>
+<table>
+<tr><th>Step</th><th>Today</th><th>After pull</th><th>Uses in <code>components/</code> (non-story)</th></tr>
+<tr><td>md</td><td>2px</td><td>1px</td><td>86</td></tr>
+<tr><td>lg</td><td>4px</td><td>3px</td><td>34</td></tr>
+<tr><td>sm</td><td>1px</td><td>0.5px</td><td>10</td></tr>
+<tr><td>xl / huge</td><td>5 / 6px</td><td>4 / 5px</td><td>2 / 1</td></tr>
+</table>
+<p>Default <code>sm</code> becomes 0.5px and thin <code>sm</code> 0.25px. How browsers draw a sub-pixel border at 1× and 2× is <strong>unverified</strong> here; the visual gate (<code>visual.yml</code>) will show it on the pull PR.</p>
+
+<h3>3c. Theming: brand themes override values and modes</h3>
+<p>Run this session against the current compiler. All three paths work.</p>
+<table>
+<tr><th>Layer</th><th>Mechanism</th><th>Evidence</th><th>Result</th></tr>
+<tr><td>Brand theme picks a mode</td><td><code>compileClientTheme(kit, { modes: { 'border-width': 'thick' } })</code> → <code>flattenTokensStudio</code> merges it over <code>DEFAULT_MODES</code></td><td><code>tokens-studio-compose.cjs:202-204</code></td><td class="ok">sm/md/lg = 2/4/6px (old copy's thick)</td></tr>
+<tr><td>Brand theme overrides a value</td><td>Brand Kit key <code>border-width/default</code> deep-merged over Foundations</td><td><code>mergeLibraries</code>, <code>tokens-studio-compose.cjs:44-51</code></td><td class="ok">md = 7px from the kit</td></tr>
+<tr><td>Runtime mode on a page</td><td><code>[data-mode-borderwidth]</code> attribute</td><td>Portal <code>decision-set.ts:515</code></td><td class="warn">Works only for names in <code>modes-borderwidth.css</code> (thin, bold). <code>thick</code> does nothing today</td></tr>
+</table>
+<p>What this means for #2601:</p>
+<ul>
+<li>The pull and generator must keep both brand-kit paths working. The positive control above becomes a test.</li>
+<li>No brand kit sets border-width today. <code>brik.json</code> is the only kit; a search for <code>border-width</code> in <code>design-tokens/brand-kits/</code> came back empty (control: <code>border</code> matched 4 lines). So no kit breaks on the rename.</li>
+<li>A kit that later aliases a border-width primitive by step must use the new numbering (new 100 = 1px; old 100 = 2px). The pull PR should state this in the token docs.</li>
+<li>The portal says <code>borderWidth</code> has "no stored producer yet" (<code>decision-set.ts:176-192</code>) and its test pins <code>bold</code> (<code>__tests__/decision-set.test.ts:231</code>). Both move to <code>thick</code>.</li>
+</ul>
 <p><strong>Who uses it:</strong> no consumer source sets <code>data-mode-borderwidth</code>. Searches came back empty in brikdesigns and all 9 <code>web/*</code> sites; the control search for <code>data-theme</code> found tncld. Only the portal can emit it, from a stored decision set (<code>brik-client-portal/src/lib/design/decision-set.ts:515</code>). Whether any prod row sets it is <strong>unverified</strong>.</p>
 
 <h2>4. Stale docs that teach agents the wrong thing</h2>
@@ -105,10 +140,10 @@ In <code>scripts/rag/</code>, only <code>README.md</code> names the doc.</td></t
 <tr><th>File</th><th>What it says</th><th>What is true</th></tr>
 <tr><td><code>docs-site/…/getting-started/cascade.mdx:117, :123, :158</code></td><td><code>bold</code></td><td>Figma says <code>thick</code></td></tr>
 <tr><td><code>cascade.mdx:125, :127</code></td><td>Radius and elevation "⏳ #340"</td><td>Both are wired (<code>tokens/modes-borderradius.css</code>, <code>modes-elevation.css</code>)</td></tr>
-<tr><td><code>cascade.mdx:129</code></td><td>An <code>icon</code> mode row</td><td>No icon collection in Figma</td></tr>
+<tr><td><code>cascade.mdx:129</code></td><td>An <code>icon</code> mode row</td><td>Correct: Figma has icon solid / outline. Code does not emit it yet</td></tr>
 <tr><td><code>docs-site/…/foundation/border.mdx:32</code></td><td>"Radius modes are not wired yet"</td><td>They are wired</td></tr>
 <tr><td><code>border.mdx:63-76</code></td><td>thin / bold with the CSS values</td><td>thin / thick with Figma values</td></tr>
-<tr><td><code>tokens/modes-borderwidth.css</code> header</td><td>Cites the brik-llm doc; says Figma is 0.5 / 1 / 2</td><td>Figma default is 1 / 2 / 4</td></tr>
+<tr><td><code>tokens/modes-borderwidth.css</code> header</td><td>Cites the brik-llm doc; says Figma is 0.5 / 1 / 2</td><td>Live Figma default sm / md / lg is 0.5 / 1 / 3. The file should be generated, not edited</td></tr>
 </table>
 <p><code>bold</code> also appears in <code>tokens/CASCADE.md</code>, ADR-039, <code>prop-axes.mdx</code>, <code>installation.mdx</code>, <code>framework-guides.mdx</code>, <code>interaction-states.mdx</code>, <code>content-system/vocabularies/borderwidth-mode.ts</code> and <code>scripts/generate-component-axes.mjs</code>.</p>
 
@@ -142,13 +177,16 @@ In <code>scripts/rag/</code>, only <code>README.md</code> names the doc.</td></t
 
 <h2>7. Proposed order</h2>
 <ol>
+<li><strong>Pull Figma first (own PR, S).</strong> Headless pull via <code>scripts/pull-variables-headless.mjs</code> into <code>foundations.json</code> + <code>tokens-studio.json</code>. Brings the new border-width scale and the <code>icon</code> collection. The visual gate shows the default shift (§3b) on that PR. Needs the operator call in §8 before merge.</li>
 <li><strong>brik-bds#2601, re-scoped (S → M).</strong>
   <ul>
   <li>Move border-width into <code>generate-modes-css.mjs</code>; delete the hand-written file.</li>
   <li>Emit <code>thin</code> and <code>thick</code> with Figma values, xl and huge included.</li>
   <li>Keep <code>bold</code> as a deprecated alias of <code>thick</code> for one release.</li>
+  <li>Wire <code>icon</code> (solid / outline) or add it to <code>EXCLUDED</code> with a reason.</li>
   <li>Make <code>lint-mode-emission-coverage.mjs</code> compare names and values against Figma for every collection; delete <code>WIRED_LEGACY</code>.</li>
   <li>The gate will then fail on the elevation default. Fix it in the same PR.</li>
+  <li>Turn the §3c theming control into a test: a brand kit can pick <code>thick</code> and override one step.</li>
   <li>Fix the §4 docs, <code>borderwidth-mode.ts</code>, and the portal <code>decision-set</code> test.</li>
   </ul></li>
 <li><strong>brik-llm, under #3566:</strong> the first five rows of §5.</li>
@@ -160,7 +198,14 @@ In <code>scripts/rag/</code>, only <code>README.md</code> names the doc.</td></t
 <blockquote>OPERATOR SAID 2026-09-26 (chat, quoted in brik-bds#2601): "Figma is the source - why are you insisting we introduce new names in our token system?"</blockquote>
 <blockquote>OPERATOR SAID 2026-10-27 (Claude Code, 90cbd40d…jsonl:194): "let's ensure we're aligned on our border-width logic - we use t-shirt sizes for width. Where are thick and bold being pulled from? Looks like we have modes for borders - are we confident in these naming? In Figma our border-width modes are default, thin and thick, so why is bold referenced as a name? Naming is CRITICAL - agents need to understand how critical it is to follow clear naming standards and taxonomy across our token system - t-shirt-sizing, modes, theming. Please reassess this gap before proceed with 2601 - we can involve Opus if needed. https://design.brikdesigns.com/docs/foundation/token-anatomy#primitive-tier-scales https://design.brikdesigns.com/docs/getting-started/cascade#modes"</blockquote>
 <blockquote>OPERATOR SAID 2026-10-27 (Claude Code, 90cbd40d…jsonl:241): "Let's use Opus to reassess - we're concerned as to why we're referencing token logic from back in March. We've made a number of updates since March 12, which tells us our infra, system logic and LLM are cluttered with outdated references. Why is this allowed to happen? Why was tokens/modes-borderwidth.css hand-written w/o Figma ever referenced? All of token collections need to be aligned to our design system - This is another MAJOR gap - https://design.brikdesigns.com/docs/foundation/border Let's also ensure agents have a clear understanding of our repo paramaters between brik-bds, brik-llm, brik-client-poral and brikdesigns. Very important we're not confusing agents by having design system scripts in brik-llm, for instance. brik-llm is our business intelligence which informs everything throughout our ecosystem. Please reassess the above to ensure the above aren't symptons of a deeper infrastructure and script fragmentation issue. Let's also assess our backlog for any relevant work as this has been an ongoing hygiene effort as we mature our ops and LLM/RAG."</blockquote>
-<p>Read together: mode names are <code>default</code> / <code>thin</code> / <code>thick</code>; steps stay t-shirt (<code>sm</code> → <code>huge</code>). The one open call is whether to ship Figma's <em>values</em> as they are, including the sub-pixel thin steps.</p>
+<blockquote>OPERATOR SAID 2026-10-27 (Claude Code, 90cbd40d…jsonl:574): "the above report isn't active. We updated our Figma foundations with the appropriate border-width scale - see width collection and updated primitives. Our theming layers can override these values and modes - this includes brand themes - important we have this in our logic. Let's reassess with the updated token set in Figma: https://www.figma.com/design/Rkdc3SIWJUdgoAkeadgZZe/%E2%9D%96-Brik-Foundations?node-id=22846-1906&amp;t=4BnJOVkN1oidgANZ-1&amp;view=variables"</blockquote>
+<p>Read together:</p>
+<ul>
+<li>Mode names are <code>default</code> / <code>thin</code> / <code>thick</code>. Steps stay t-shirt (<code>none</code> → <code>huge</code>).</li>
+<li>The Figma scale is the operator's intended scale.</li>
+<li>Brand themes must keep overriding values and modes (§3c).</li>
+</ul>
+<p><strong>Open call (client-visible):</strong> ship the default shift as Figma has it (md 2 → 1px on 86 component uses; sm 0.5px), and keep the radius and elevation defaults at soft / subtle or move them to Figma's first modes, sharp / flat.</p>
 
 </body>
 </html>
