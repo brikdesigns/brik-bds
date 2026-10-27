@@ -26,7 +26,7 @@ describe('checkCssRawValues', () => {
   });
 
   it('errors on a raw border-width px in a border shorthand', () => {
-    const v = run('  border-bottom: 2px solid transparent;');
+    const v = run('  border-bottom: 1px solid transparent;');
     expect(v).toHaveLength(1);
     expect(v[0].message).toContain('var(--bds-border-width-md)');
   });
@@ -64,7 +64,7 @@ describe('checkCssRawValues', () => {
 
   it('exempts micro nudges (≤2px) on dimensional props but not border-width', () => {
     expect(run('  height: 1px;')).toHaveLength(0);
-    expect(run('  border-width: 1px;')[0].message).toContain('var(--bds-border-width-sm)');
+    expect(run('  border-width: 1px;')[0].message).toContain('var(--bds-border-width-md)');
   });
 
   it('respects bds-lint-ignore', () => {

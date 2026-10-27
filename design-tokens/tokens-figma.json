@@ -1325,28 +1325,60 @@
       "$value": 0,
       "$type": "dimension"
     },
+    "25": {
+      "$value": 0.25,
+      "$type": "dimension"
+    },
     "50": {
-      "$value": 1,
+      "$value": 0.5,
       "$type": "dimension"
     },
     "100": {
-      "$value": 2,
+      "$value": 1,
       "$type": "dimension"
     },
     "200": {
-      "$value": 3,
+      "$value": 2,
       "$type": "dimension"
     },
     "300": {
-      "$value": 4,
+      "$value": 3,
       "$type": "dimension"
     },
     "400": {
-      "$value": 5,
+      "$value": 4,
       "$type": "dimension"
     },
     "500": {
+      "$value": 5,
+      "$type": "dimension"
+    },
+    "600": {
       "$value": 6,
+      "$type": "dimension"
+    },
+    "700": {
+      "$value": 7,
+      "$type": "dimension"
+    },
+    "800": {
+      "$value": 8,
+      "$type": "dimension"
+    },
+    "900": {
+      "$value": 9,
+      "$type": "dimension"
+    },
+    "1000": {
+      "$value": 10,
+      "$type": "dimension"
+    },
+    "1100": {
+      "$value": 11,
+      "$type": "dimension"
+    },
+    "1200": {
+      "$value": 12,
       "$type": "dimension"
     },
     "sm": {
