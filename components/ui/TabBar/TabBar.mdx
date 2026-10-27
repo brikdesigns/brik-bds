@@ -33,6 +33,12 @@ Horizontal tab navigation with four style variants: text, text-underline, tab (b
 
 <Canvas of={Stories.Box} />
 
+### Scrollable
+
+`overflow="scroll"` keeps the rail on one row and scrolls it sideways when the tabs outgrow their container — the right choice below the tablet breakpoint, where a wrapped rail pushes the page body down. The active indicator and focus ring stay un-clipped. The default, `overflow="wrap"`, flows extra tabs onto a new row.
+
+<Canvas of={Stories.Scrollable} />
+
 ## Patterns
 
 A tab bar switches between sibling panels of one entity: its lifecycle status (in a `PageHeader`) or the sections of a settings page. It does not switch a view mode (that is a [`SegmentedControl`](/?path=/docs/components-segmented-control--docs)) and it does not narrow rows by an attribute (that is a [`FilterBar`](/?path=/docs/components-filter-bar--docs)); see [page chrome placement](https://design.brikdesigns.com/docs/build-standards/composition-layers#page-chrome-placement).

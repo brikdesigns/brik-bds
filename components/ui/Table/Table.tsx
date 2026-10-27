@@ -38,6 +38,13 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
   roundedBottom?: boolean;
   /** Header row background fill. Default `secondary`. */
   headerBackground?: TableHeaderBackground;
+  /**
+   * Wrap the table in a horizontal scroll container so a table wider than its
+   * column scrolls sideways there, not across the page. The wrapper keeps the
+   * columns at their natural width, is keyboard-focusable, and takes the table's
+   * `aria-label` as its region name. Default `false`.
+   */
+  scrollable?: boolean;
   /** Table content — typically `TableHead` and `TableBody` from this same module. */
   children: ReactNode;
 }
@@ -49,7 +56,7 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
  * (`data-size`, `data-striped`, `data-flush`, `data-header-border`,
  * `data-header-border-weight`, `data-rounded-top`, `data-rounded-bottom`,
  * `data-header-bg`). CSS reads those selectors, eliminating the need for
- * React context.
+ * React context. `scrollable` wraps the `<table>` in a `.bds-table-scroll` div.
  *
  * @summary Themed data table with striped + size variants
  */
@@ -62,12 +69,13 @@ export function Table({
   roundedTop = true,
   roundedBottom = true,
   headerBackground = 'secondary',
+  scrollable = false,
   children,
   className,
   style,
   ...props
 }: TableProps) {
-  return (
+  const table = (
     <table
       className={bdsClass('bds-table', className)}
       style={style}
@@ -83,6 +91,22 @@ export function Table({
     >
       {children}
     </table>
+  );
+
+  if (!scrollable) return table;
+
+  // A scroll container must be reachable by keyboard; it is a named region only
+  // when the table carries a label, since an unnamed region is a worse landmark.
+  const label = props['aria-label'];
+  return (
+    <div
+      className="bds-table-scroll"
+      tabIndex={0}
+      role={label ? 'region' : undefined}
+      aria-label={label}
+    >
+      {table}
+    </div>
   );
 }
 

@@ -1,0 +1,91 @@
+@layer bds-components {
+/* ─── AppShell — product layout frame ────────────────────────── */
+
+/* The WINDOW owns vertical scroll: nothing in this file sets overflow-y.
+   Horizontal overflow is `clip`, which — unlike `hidden` — does not make the
+   shell a scroll container, so sticky descendants still pin to the viewport. */
+.bds-app-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: clip;
+  background-color: var(--bds-page-primary);
+}
+
+/* A top bar sets the sticky offsets SubNavigation and PageHeader read. Set on
+   the shell, an ancestor of both — never on them, which would shadow it. */
+.bds-app-shell--top-bar {
+  --bds-subnav-top: var(--bds-shell-top-bar-height);
+  --bds-pageheader-top: var(--bds-shell-top-bar-height);
+}
+
+/* ─── Top bar ────────────────────────────────────────────────── */
+
+.bds-app-shell__top-bar {
+  position: sticky;
+  top: 0;
+  z-index: var(--bds-z-shell);
+  box-sizing: border-box;
+  flex: none;
+  height: var(--bds-shell-top-bar-height);
+  background-color: var(--bds-surface-primary);
+}
+
+/* ─── Body row: nav | rail | main ────────────────────────────── */
+
+.bds-app-shell__body {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Full-height columns: they stretch to the row, so a sticky nav/rail inside
+   has the whole page height to travel through. They size to their content. */
+.bds-app-shell__nav,
+.bds-app-shell__rail {
+  flex: none;
+}
+
+/* The sidebar sticks below the top bar, not under it. */
+.bds-app-shell--top-bar .bds-app-shell__nav .bds-sidebar-nav--sticky {
+  top: var(--bds-shell-top-bar-height);
+  height: calc(100vh - var(--bds-shell-top-bar-height));
+  height: calc(100dvh - var(--bds-shell-top-bar-height));
+}
+
+/* `main` is the flex-column parent Page's fill-height body requires. */
+.bds-app-shell__main {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Below tablet the rail (SubNavigation) turns into a one-row strip, so the body
+   becomes a grid: nav keeps its own full-height column and the rail sits above
+   main in the other, instead of squeezing beside it. */
+@media (--bds-down-tablet) {
+  .bds-app-shell__body {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+  }
+
+  .bds-app-shell__nav {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .bds-app-shell__rail {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .bds-app-shell__main {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+}

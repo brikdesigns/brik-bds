@@ -304,4 +304,41 @@
   border-color: transparent;
   opacity: 1;
 }
+
+/* ── Scroll overflow (opt-in: overflow="scroll", horizontal only) ──
+   One row that scrolls sideways when the tabs outgrow it. `overflow-x: auto`
+   also makes the box clip vertically at its padding edge, which would cut off
+   the focus ring and the `tab` variant's active indicator (it overlays the bar
+   baseline and pokes past it). So the rail gets one indicator-width of padding
+   as room for both, and an equal negative margin so its footprint on the page
+   is unchanged. The `tab` baseline is drawn as a background instead of a
+   border, because a border sits outside the clip. */
+.bds-tab-bar--scroll {
+  --bds-tab-bar-bleed: var(--bds-border-width-lg); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding-block: var(--bds-tab-bar-bleed); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  margin-block: calc(-1 * var(--bds-tab-bar-bleed)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+.bds-tab-bar--scroll .bds-tab-bar-item {
+  flex-shrink: 0;
+}
+
+.bds-tab-bar--scroll.bds-tab-bar--tab {
+  --bds-tab-bar-baseline: var(--bds-border-secondary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  border-bottom: 0;
+  /* The bar keeps its old footprint: bleed above and below, less the 2px the
+     baseline border used to add below the content. */
+  margin-bottom: calc(-1 * (var(--bds-tab-bar-bleed) - var(--bds-border-width-md))); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  background-image: linear-gradient(var(--bds-tab-bar-baseline), var(--bds-tab-bar-baseline)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  background-repeat: no-repeat;
+  background-size: 100% var(--bds-border-width-md);
+  background-position: 0 calc(100% - (var(--bds-tab-bar-bleed) - var(--bds-border-width-md))); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+.bds-tab-bar--scroll.bds-tab-bar--tab.bds-tab-bar--on-color {
+  --bds-tab-bar-baseline: var(--bds-border-on-color-dark); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
 }

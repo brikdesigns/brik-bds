@@ -12,6 +12,27 @@
   color: var(--bds-text-primary);
 }
 
+/* ─── Scroll wrapper (scrollable) ────────────────────────────── */
+
+/* Horizontal only: the wrapper is as tall as the table, so the window keeps
+   vertical scroll and sticky elements OUTSIDE the table (PageHeader,
+   SubNavigation) still pin to the viewport. */
+.bds-table-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.bds-table-scroll:focus-visible {
+  outline: var(--bds-border-width-lg) solid var(--bds-state-focus, currentColor);
+  outline-offset: calc(-1 * var(--bds-border-width-lg)); /* bds-lint-ignore — keeps the ring inside the clipped scroll area */
+}
+
+/* Columns keep their natural width and the wrapper scrolls, rather than the
+   browser squeezing every column until the text wraps one word per line. */
+.bds-table-scroll > .bds-table {
+  min-width: max-content;
+}
+
 /* ─── Rounded outer corners + boundary ───────────────────────── */
 
 /* A visible outer border makes the rounded corners read; only drawn when
