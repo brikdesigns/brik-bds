@@ -88,6 +88,15 @@ check "picks the newer .1 tag, not the lexically-later bare name" "bds-2026-08-3
 check "C2 is now behind the newest tag and is refused" "refuses" \
   "$(release_tag_target_advances "$C2" && echo advances || echo refuses)"
 
+echo "release_tag_target_is_newest — newest tag at C3"
+check "the newest tag's own commit is the no-op case" "newest" \
+  "$(release_tag_target_is_newest "$C3" && echo newest || echo not)"
+check "an ancestor of the newest tag is NOT the no-op case (stays an error)" "not" \
+  "$(release_tag_target_is_newest "$C2" && echo newest || echo not)"
+C4="$(commit four)"
+check "a commit past the newest tag is NOT the no-op case" "not" \
+  "$(release_tag_target_is_newest "$C4" && echo newest || echo not)"
+
 echo ""
 if [ "$FAIL" -gt 0 ]; then
   echo "FAIL — $PASS passed, $FAIL failed"

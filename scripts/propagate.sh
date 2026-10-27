@@ -831,15 +831,20 @@ elif [ "$ANY_UPDATED" = true ]; then
   # bds-2026-08-30. The tag was a duplicate under a new name. brik-llm#2948.
   #
   # Only the missing `workflows` permission on the App token stopped it landing.
-  if ! release_tag_target_advances "$LOCAL_HEAD"; then
+  if release_tag_target_is_newest "$LOCAL_HEAD"; then
+    # Consumers were bumped to a release that is already tagged (a consumer
+    # lagged the last run). Nothing new to release is not a failure — exiting 1
+    # here posted an undeclared-exit alert to #mac-mini-health (brik-llm#4795).
+    info "Release already tagged at $(newest_release_tag) — consumers bumped to it, no new tag."
+  elif ! release_tag_target_advances "$LOCAL_HEAD"; then
     err "Refusing to tag $TAG at $(echo "$LOCAL_HEAD" | cut -c1-7) — it is at or behind $(newest_release_tag)."
     err "$BDS_REMOTE/$BDS_BRANCH has not moved past the newest release tag; the consumers were bumped but nothing new was released."
     exit 1
+  else
+    git_signed tag -a "$TAG" "$LOCAL_HEAD" -m "BDS release $TAG — propagated to consumers"
+    git_signed push origin "$TAG" --quiet
+    ok "Tagged release: $TAG at $(echo "$LOCAL_HEAD" | cut -c1-7)"
   fi
-
-  git_signed tag -a "$TAG" "$LOCAL_HEAD" -m "BDS release $TAG — propagated to consumers"
-  git_signed push origin "$TAG" --quiet
-  ok "Tagged release: $TAG at $(echo "$LOCAL_HEAD" | cut -c1-7)"
 fi
 
 echo ""
