@@ -53,6 +53,10 @@ Both paths render the same pixels, so `editHref` has no canvas of its own — th
 
 ## Patterns
 
+### Tabs
+
+The `tabs` slot carries the **lifecycle status** of the page's entity (Draft / Published / Archived). It does not carry an entity switch (that is the sub-nav rail beside the page), an attribute filter (that is a `FilterBar` in the body), or a view mode (that is a `SegmentedControl`). The full rule is [page chrome placement](https://design.brikdesigns.com/docs/build-standards/composition-layers#page-chrome-placement).
+
 ### Sticky
 
 Set `sticky` to pin the header to the top of its scroll container as the body scrolls. It renders an opaque `--bds-surface-primary` background (so content passes cleanly beneath) and stacks at `--bds-z-page-header` — above page content and the section rail, below the shell top bar and overlays. Non-sticky remains the default — existing consumers are unaffected. The header sticks within the nearest scrolling ancestor, so that container — not the window — must own the scroll.

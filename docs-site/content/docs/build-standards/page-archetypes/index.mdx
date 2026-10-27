@@ -1,6 +1,6 @@
 ---
 title: Page Archetypes
-description: The four product page shapes — record read, record edit, collection, profile — which one a given surface gets, and the shell all four share.
+description: The five product page shapes — record read, record edit, collection, profile, section hub — which one a given surface gets, and the shell all five share.
 ---
 
 import { Cards, Card } from 'fumadocs-ui/components/card';
@@ -8,13 +8,14 @@ import { Callout } from 'fumadocs-ui/components/callout';
 
 A **page archetype** is a named composition for a whole product page: which Control heads it, which display fills its body, and which state shell wraps that display. [Composition Layers](/docs/build-standards/composition-layers) names the parts and [Display Choice](/docs/build-standards/display-choice) picks the display; an archetype is the assembled page those two decisions land in.
 
-Product apps get four. Marketing pages get [blueprint families](/docs/web-elements/blueprints) instead — the archetypes here assume the [product app shell](/docs/build-standards/page-structure#product-app-shell), not the section-and-band structure of a marketing page.
+Product apps get five. Marketing pages get [blueprint families](/docs/web-elements/blueprints) instead — the archetypes here assume the [product app shell](/docs/build-standards/page-structure#product-app-shell), not the section-and-band structure of a marketing page.
 
 <Cards>
   <Card title="Record Read" href="/docs/build-standards/page-archetypes/record-read" description="One record's own attributes, read-only, with per-section edit affordances." />
   <Card title="Record Edit" href="/docs/build-standards/page-archetypes/record-edit" description="The page-level edit half of read and edit parity — one form for the whole record." />
   <Card title="Collection" href="/docs/build-standards/page-archetypes/collection" description="Many peer items behind a control bar — table, card list, or board." />
   <Card title="Profile" href="/docs/build-standards/page-archetypes/profile" description="One entity across tabs, where each tab is itself a record or a collection." />
+  <Card title="Section Hub" href="/docs/build-standards/page-archetypes/section-hub" description="A section's landing page — a rail of entities, status tabs, and a filtered collection." />
 </Cards>
 
 ## Pick the archetype
@@ -27,15 +28,17 @@ Ask how many records the page is about, then whether the user is reading or writ
 | One record, one view | Writing the whole record at once | [Record edit](/docs/build-standards/page-archetypes/record-edit) |
 | Many peer records | Scanning, filtering, or picking one | [Collection](/docs/build-standards/page-archetypes/collection) |
 | One entity split across tabs | Both, per tab | [Profile](/docs/build-standards/page-archetypes/profile) |
+| Many peer records, one of several sibling entities the user switches between | Scanning, filtering, or picking one | [Section hub](/docs/build-standards/page-archetypes/section-hub) |
 
 Two tie-breaks resolve the cases that look like more than one row:
 
 - **Per-section edit is still record read.** A page where each `DataSection` opens its own sheet or swaps its own body in place is the read archetype with an edit affordance, not the edit archetype. Record edit is for a page that puts the *whole* record in one form.
+- **A section hub is a collection with chrome around it.** Its body follows [Collection](/docs/build-standards/page-archetypes/collection) unchanged; the hub adds the rail and the status tabs. A collection with no sibling entities and no rail is plain Collection.
 - **A tab is not an archetype.** Tabs make a page a profile; each tab's body then picks its own archetype from the three rows above.
 
 ## The shared shell
 
-All four compose the same three primitives. `Page` owns the horizontal inset and the header-to-body gap, `PageHeader` is the page's only `<h1>`, and `PageContent` owns the rhythm between stacked body regions.
+All five compose the same three primitives. `Page` owns the horizontal inset and the header-to-body gap, `PageHeader` is the page's only `<h1>`, and `PageContent` owns the rhythm between stacked body regions.
 
 ```tsx
 import { Page, PageHeader, PageContent } from '@brikdesigns/bds';

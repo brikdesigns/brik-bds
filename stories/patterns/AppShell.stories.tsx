@@ -117,7 +117,10 @@ export const Default: Story = {
  * Do NOT nest `SubNavigation` inside `PageContent`: that drops the rail into the
  * content column below the header, breaking the two-column shell (brik-client-
  * portal#3162). Second-level drill-down is `PageHeader`'s `tabs` slot (a
- * `TabBar`), never a second rail.
+ * `TabBar`), never a second rail. Those tabs carry the entity's lifecycle status
+ * (Draft / Published / Archived) — an attribute filter (industry, owner,
+ * active-only) belongs in a `FilterBar` in the body (see
+ * Layouts / section-hub).
  *
  * @summary Canonical shell composed with the Page primitives
  */
@@ -144,7 +147,7 @@ export const WithPage: Story = {
           <PageHeader
             title="Services"
             subtitle="Everything the client can be sold, grouped by service line."
-            tabs={<TabBar items={[{ label: 'Active', active: true }, { label: 'Archived' }]} />}
+            tabs={<TabBar items={[{ label: 'Draft', active: true }, { label: 'Published' }, { label: 'Archived' }]} />}
           />
           <PageContent>
             <p style={{ fontSize: 'var(--bds-body-md)', color: 'var(--bds-text-secondary)' }}>
