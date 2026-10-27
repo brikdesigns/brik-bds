@@ -61,3 +61,18 @@ release_tag_target_advances() {
   fi
   return 0
 }
+
+# release_tag_target_is_newest <commit-ish>
+#
+# Returns 0 when <commit-ish> IS the newest bds-* tag's commit — the release
+# already exists, so a propagate run that bumped consumers to it has nothing
+# left to tag. That is a benign no-op, unlike a target strictly BEHIND the
+# newest tag (a backwards release), which release_tag_target_advances also
+# refuses and which stays an error.
+# Returns 1 otherwise, including when there are no tags.
+release_tag_target_is_newest() {
+  local target="$1" newest
+  newest="$(newest_release_tag)"
+  [ -z "$newest" ] && return 1
+  [ "$(git rev-parse "$target^{commit}" 2>/dev/null)" = "$(git rev-parse "${newest}^{commit}" 2>/dev/null)" ]
+}
