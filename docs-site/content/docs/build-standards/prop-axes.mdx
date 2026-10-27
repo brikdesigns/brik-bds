@@ -59,6 +59,54 @@ Source of truth: [`manifest/component-axes.json`](https://github.com/brikdesigns
   TypeScript is the authoritative gate. Pass only values the component's declared union includes — never invent values. The manifest shows which types are exported.
 </Callout>
 
+## Blueprint axes
+
+Blueprints carry their own prop axes — the Structure, Media and Motion axes of [ADR-039](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-039-blueprint-parameterization-axes.md). They are system names, the same as component axes: a blueprint that varies placement, media or motion uses these words and these values, never a block-local word. An agent picks a value from the closed union; the block writes the enum-bound class (`bds-hero--align-center`, `bds-block-reveal--rise`), and no consumer writes the CSS.
+
+Source of truth: [`content-system/blueprints/astro/types.ts`](https://github.com/brikdesigns/brik-bds/blob/main/content-system/blueprints/astro/types.ts) — the framework-agnostic contract both rails import, so an axis cannot land on one rail only. `ratio` is the one exception: it reuses `FrameRatio` from [`components/ui/Frame/Frame.tsx`](https://github.com/brikdesigns/brik-bds/blob/main/components/ui/Frame/Frame.tsx). Blueprint axes are not yet in `manifest/component-axes.json`.
+
+| Axis | ADR-039 axis | Values | Omitted → | Decides |
+|---|---|---|---|---|
+| `layout` | Structure | per block — `HeroLayout`: `split` · `interior-minimal` · `with-pricing-card`; `CtaLayout`: `default` · `split`; `CardGridLayout`: `card-grid` · `two-column-list` | `split` · `default` · `card-grid` | The shape the block renders in. A layout is a prop, never a filename. |
+| `align` | Structure | `center` · `left` | the block's own default (matrix below) | Content placement. The `--align-*` modifier is written only for the non-default value. |
+| `columns` | Structure | `2` · `3` · `4` | the responsive ramp 1 → 2 → 3 | Column count of the block's own item grid. |
+| `ratio` | Media | `1-1` · `3-2` · `2-3` · `4-3` · `3-4` · `4-5` · `16-9` · `9-16` · `21-9`; aliases `square` · `photo-landscape` · `photo-portrait` · `cinema` | `16-9` (`BlockMedia`) | The aspect ratio the media `Frame` locks to. |
+| `media` | Media | `image` · `video` · `bg-video` · `none` | `image` | Which media element renders, through the shared `BlockMedia` primitive (`_Media.astro` on Astro). `bg-video` is reduced-motion-gated. |
+| `reveal` | Motion | `none` · `fade` · `rise` · `stagger` | `none` | The block's entrance animation (`bds-block-reveal--*`). Every preset is off under `prefers-reduced-motion`. |
+| `contentMotion` | Motion | `none` · `marquee` · `count-up` · `animated-svg` | `none` | Motion inside the content, through `BlockContentMotion`. Each value is reduced-motion-gated by its primitive. |
+
+**`ratio` is the media aspect ratio, not a column split.** ADR-039 sketched `ratio` as a Structure value (`50-50` · `60-40`). That split was never built; the shipped `ratio` is `FrameRatio` on the media frame. Do not pass a column split to `ratio`.
+
+Never pass the deprecated `FrameRatio` mode-words (`portrait` · `landscape` · `wide` · `ultrawide`) — use the ratio they name.
+
+### Blueprint coverage matrix
+
+A cell names the block's default, or ✓ when the axis has no default. Values come in two ways: a **prop** the dispatcher sets per blueprint key, or a **section** field (`section.reveal`, `section.contentMotion`) that travels with the content.
+
+| Block | `layout` | `align` | `columns` | `ratio` | `media` | `reveal` | `contentMotion` |
+|---|---|---|---|---|---|---|---|
+| Hero | `split` | `left` | — | — | Astro: `image` (prop) · React: a `media` slot | Astro: section · React: prop | — |
+| Cta | `default` | `center` | — | — | — | — | — |
+| CardGrid | `card-grid` | — | Astro only | — | — | — | — |
+| Features | — | `center` | ✓ | — | — | — | `animated-svg` (React prop) |
+| Narrative | — | `left` | — | — | — | — | — |
+| HeroMediaCard | — | — | — | ✓ | — | — | — |
+| HeroMediaCardImage | — | — | — | ✓ | — | — | — |
+| LogoWall | — | — | — | — | — | — | `marquee` (section) |
+| StatsBar | — | — | — | — | — | — | `count-up` (section) |
+
+No axis yet: CalloutPanel, HeroMediaCardPrice, TestimonialsFeaturedLarge (both rails); GhlForm, SiteHeader (Astro only); HeroSplitImageCardOverlay (React only).
+
+**Rail differences:**
+- **Hero `media`** — Astro takes the enum. React takes a composed `media` node, normally a `<BlockMedia media=…>`; its dispatched path renders `image` only.
+- **Hero `reveal`** — Astro reads `section.reveal`. React takes the `reveal` prop on a composed `<Hero>`; its dispatched path does not read `section.reveal`.
+- **CardGrid `columns`** — Astro only. The React `CardGrid` composes children, so column count belongs to the consumer's `<Grid columns>`.
+- **Features `contentMotion: animated-svg`** — animates on React. Astro shows each card's static `imageUrl` poster, which is also the reduced-motion and no-JS state.
+
+<Callout type="info">
+  **Style is not a prop axis.** Color, type, surface, spacing, radius and elevation stay in the five [Theming Dimensions](/docs/theming) — client tokens, atmosphere, and the [expression modes](#expression-modes) below. A blueprint never takes a style prop, a `className` pass-through or a `style` object (ADR-039 § What this ADR refuses).
+</Callout>
+
 ## Expression modes
 
 The five **expression-mode axes** are the Style half of [ADR-039](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-039-blueprint-parameterization-axes.md). They are not component props — no component declares them. They are attributes set once on `:root` (the `<html>` element), and every component inherits the retuned tokens.
@@ -79,7 +127,7 @@ Closed value lists live in `content-system/vocabularies/{spacing,typography,radi
 
 The authority is the CSS, not the TypeScript: `tokens/modes-*.css` is what ships, and `content-system/vocabularies/expression-modes.test.ts` parses it to hold each list equal to the selectors it declares. A Figma mode rename fails that test rather than drifting into a portal pick-list.
 
-**Motion has no mode axis.** There is no `data-mode-motion` selector; motion is expressed through the `AnimationTier` vocabulary (`subtle` · `moderate` · `expressive`) and the `reveal` / `contentMotion` prop axes, with `none` meaning no motion classes are emitted.
+**Motion has no mode axis.** There is no `data-mode-motion` selector; motion is expressed through the `AnimationTier` vocabulary (`subtle` · `moderate` · `expressive`) and the `reveal` / `contentMotion` [blueprint axes](#blueprint-axes), with `none` meaning no motion classes are emitted.
 
 ## Blueprint shortlist weights
 
