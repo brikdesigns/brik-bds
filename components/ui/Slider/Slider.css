@@ -88,7 +88,7 @@
   height: var(--bds-slider-thumb-size, var(--bds-size-500));
   border-radius: 50%;
   background: var(--bds-surface-primary);
-  border: var(--bds-border-width-200) solid var(--bds-background-brand-primary);
+  border: var(--bds-border-width-300) solid var(--bds-background-brand-primary);
   box-shadow: var(--bds-slider-thumb-shadow);
   cursor: pointer;
   margin-top: calc((var(--bds-slider-track-height, var(--bds-size-150)) - var(--bds-slider-thumb-size, var(--bds-size-500))) / 2);
@@ -100,7 +100,7 @@
   height: var(--bds-slider-thumb-size, var(--bds-size-500));
   border-radius: 50%;
   background: var(--bds-surface-primary);
-  border: var(--bds-border-width-200) solid var(--bds-background-brand-primary);
+  border: var(--bds-border-width-300) solid var(--bds-background-brand-primary);
   box-shadow: var(--bds-slider-thumb-shadow);
   cursor: pointer;
   transition: box-shadow var(--bds-duration-sm) var(--bds-ease-out);
