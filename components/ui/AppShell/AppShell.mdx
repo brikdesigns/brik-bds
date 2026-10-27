@@ -38,4 +38,4 @@ Below the tablet breakpoint the primary sidebar collapses to icons on its own. P
 
 > **`PageContent scroll` is a second scroll owner.** It gives a fill-height body its own vertical scroll. Inside an `AppShell` the window already scrolls, so leave `scroll` off unless the page is a board or calendar that must fill the viewport.
 
-> **`nav` should be a `SidebarNavigation` with `position="sticky"`.** The shell offsets it below the top bar. A table that outgrows its column uses `<Table scrollable>`, which scrolls inside its own wrapper and leaves the page's sticky elements pinned.
+> **`nav` should be a `SidebarNavigation`.** The shell makes it sticky whatever its `position` prop says, so it keeps its column, and offsets it below the top bar. A table that outgrows its column uses `<Table scrollable>`, which scrolls inside its own wrapper and leaves the page's sticky elements pinned.

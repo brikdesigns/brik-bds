@@ -1,6 +1,6 @@
 'use client';
 
-import { type HTMLAttributes, type ReactNode, useEffect, useState } from 'react';
+import { type HTMLAttributes, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { bdsClass } from '../../utils';
 import { mediaQueries } from '../../../tokens';
 import { AppShellContext } from './AppShellContext';
@@ -14,7 +14,8 @@ export interface AppShellProps extends Omit<HTMLAttributes<HTMLDivElement>, 'chi
    */
   topBar?: ReactNode;
   /**
-   * Primary navigation column — a `SidebarNavigation` with `position="sticky"`.
+   * Primary navigation column — a `SidebarNavigation`. The shell makes it sticky
+   * whatever its `position` prop says, so it keeps its column width.
    * Below the tablet breakpoint the shell collapses it to icon-only on its own.
    */
   nav?: ReactNode;
@@ -72,13 +73,14 @@ export function AppShell({ topBar, nav, rail, main, className, ...props }: AppSh
   const hasNav = hasSlot(nav);
   const hasRail = hasSlot(rail);
   const hasMain = hasSlot(main);
+  const context = useMemo(() => ({ collapsed }), [collapsed]);
 
   return (
-    <AppShellContext.Provider value={{ collapsed }}>
+    <AppShellContext.Provider value={context}>
       <div
         className={bdsClass('bds-app-shell', className)}
-        data-top-bar={hasTopBar || undefined}
         {...props}
+        data-top-bar={hasTopBar || undefined}
       >
         {hasTopBar && <div className="bds-app-shell__top-bar">{topBar}</div>}
         {(hasNav || hasRail || hasMain) && (

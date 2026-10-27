@@ -304,7 +304,29 @@ export const InteractionTestShellOffset: Story = {
     await expect(Math.round(header.getBoundingClientRect().top)).toBe(64);
     await scrollWindowTo(0);
 
-    // Without a top bar the offsets stay at their 0px defaults.
+    // The offsets hang off the shell's top-bar marker.
     await expect(shell).toHaveAttribute('data-top-bar', 'true');
+  },
+};
+
+/**
+ * A `SidebarNavigation` left at its `fixed` default still takes up its column:
+ * the shell makes it sticky, so `main` starts beside it, not under it.
+ * @summary Default-position sidebar keeps its column width
+ */
+export const InteractionTestNavDefaultPosition: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    nav: <SidebarNavigation logo={<BrikLogomark />} navItems={primaryItems} />,
+    main: <p>Main</p>,
+  },
+  play: async ({ canvasElement }) => {
+    const navColumn = canvasElement.querySelector('.bds-app-shell__nav') as HTMLElement;
+    const sidebar = canvasElement.querySelector('.bds-sidebar-nav') as HTMLElement;
+    const main = canvasElement.querySelector('.bds-app-shell__main') as HTMLElement;
+
+    await expect(getComputedStyle(sidebar).position).toBe('sticky');
+    await expect(navColumn.getBoundingClientRect().width).toBeGreaterThan(0);
+    await expect(main.getBoundingClientRect().left).toBeGreaterThanOrEqual(sidebar.getBoundingClientRect().right);
   },
 };

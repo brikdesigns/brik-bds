@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect } from 'storybook/test';
+import { expect, waitFor } from 'storybook/test';
 import { Icon } from '@iconify/react';
 import {
   Table,
@@ -683,7 +683,8 @@ const WideTable = ({ rows }: { rows: number }) => (
 /**
  * `scrollable` wraps the table in its own horizontal scroll container, so a table
  * wider than its column scrolls sideways there instead of stretching the page.
- * The wrapper is keyboard-focusable so the scroll is reachable without a mouse.
+ * While it overflows, the wrapper is keyboard-focusable so the scroll is
+ * reachable without a mouse; the table's `aria-label` names the wrapper region.
  *
  * @summary Wide table scrolls sideways inside its own wrapper
  */
@@ -697,7 +698,11 @@ export const Scrollable: Story = {
     const wrapper = canvasElement.querySelector('.bds-table-scroll') as HTMLElement;
     await expect(getComputedStyle(wrapper).overflowX).toBe('auto');
     await expect(wrapper.scrollWidth).toBeGreaterThan(wrapper.clientWidth);
-    await expect(wrapper).toHaveAttribute('tabindex', '0');
+    await waitFor(() => expect(wrapper).toHaveAttribute('tabindex', '0'));
+    // The label names the region once, not the region and the table both.
+    await expect(wrapper).toHaveAttribute('role', 'region');
+    await expect(wrapper).toHaveAttribute('aria-label', 'Clients');
+    await expect(wrapper.querySelector('table')).not.toHaveAttribute('aria-label');
     wrapper.scrollLeft = wrapper.scrollWidth;
     await expect(wrapper.scrollLeft).toBeGreaterThan(0);
     // The overflow stays in the wrapper: the page itself does not scroll sideways.

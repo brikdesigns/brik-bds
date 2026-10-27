@@ -48,8 +48,20 @@
   flex: none;
 }
 
+/* Inside the shell the sidebar is always sticky. Its `fixed` default leaves the
+   flow, which would give the nav column 0px width and slide `main` under it. */
+.bds-app-shell__nav .bds-sidebar-nav {
+  position: sticky;
+  top: 0;
+  left: auto;
+  bottom: auto;
+  height: 100vh;
+  height: 100dvh;
+  flex-shrink: 0;
+}
+
 /* The sidebar sticks below the top bar, not under it. */
-.bds-app-shell[data-top-bar="true"] .bds-app-shell__nav .bds-sidebar-nav--sticky {
+.bds-app-shell[data-top-bar="true"] .bds-app-shell__nav .bds-sidebar-nav {
   top: var(--bds-shell-top-bar-height);
   height: calc(100vh - var(--bds-shell-top-bar-height));
   height: calc(100dvh - var(--bds-shell-top-bar-height));
