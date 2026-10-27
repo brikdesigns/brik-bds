@@ -70,7 +70,7 @@ Source of truth: [`content-system/blueprints/astro/types.ts`](https://github.com
 | `layout` | Structure | per block — `HeroLayout`: `split` · `interior-minimal` · `with-pricing-card`; `CtaLayout`: `default` · `split`; `CardGridLayout`: `card-grid` · `two-column-list` | `split` · `default` · `card-grid` | The shape the block renders in. A layout is a prop, never a filename. |
 | `align` | Structure | `center` · `left` | the block's own default (matrix below) | Content placement. The `--align-*` modifier is written only for the non-default value. |
 | `columns` | Structure | `2` · `3` · `4` | the responsive ramp 1 → 2 → 3 | Column count of the block's own item grid. |
-| `ratio` | Media | `1-1` · `3-2` · `2-3` · `4-3` · `3-4` · `4-5` · `16-9` · `9-16` · `21-9`; aliases `square` · `photo-landscape` · `photo-portrait` · `cinema` | `16-9` (`BlockMedia`) | The aspect ratio the media `Frame` locks to. |
+| `ratio` | Media | `1-1` · `3-2` · `2-3` · `4-3` · `3-4` · `4-5` · `16-9` · `9-16` · `21-9`; aliases `square` · `photo-landscape` · `photo-portrait` · `cinema` | per block — `16-9` on `BlockMedia` (matrix below) | The aspect ratio the media `Frame` locks to. |
 | `media` | Media | `image` · `video` · `bg-video` · `none` | `image` | Which media element renders, through the shared `BlockMedia` primitive (`_Media.astro` on Astro). `bg-video` is reduced-motion-gated. |
 | `reveal` | Motion | `none` · `fade` · `rise` · `stagger` | `none` | The block's entrance animation (`bds-block-reveal--*`). Every preset is off under `prefers-reduced-motion`. |
 | `contentMotion` | Motion | `none` · `marquee` · `count-up` · `animated-svg` | `none` | Motion inside the content, through `BlockContentMotion`. Each value is reduced-motion-gated by its primitive. |
@@ -81,23 +81,25 @@ Never pass the deprecated `FrameRatio` mode-words (`portrait` · `landscape` · 
 
 ### Blueprint coverage matrix
 
-A cell names the block's default, or ✓ when the axis has no default. Values come in two ways: a **prop** the dispatcher sets per blueprint key, or a **section** field (`section.reveal`, `section.contentMotion`) that travels with the content.
+A cell names the block's default when the axis is omitted; ✓ means the block takes the axis with no default. The two motion axes always default to `none`, so their cells name the values the block renders instead. Values come in two ways: a **prop** the dispatcher sets per blueprint key, or a **section** field (`section.reveal`, `section.contentMotion`) that travels with the content.
 
 | Block | `layout` | `align` | `columns` | `ratio` | `media` | `reveal` | `contentMotion` |
 |---|---|---|---|---|---|---|---|
-| Hero | `split` | `left` | — | — | Astro: `image` (prop) · React: a `media` slot | Astro: section · React: prop | — |
-| Cta | `default` | `center` | — | — | — | — | — |
+| Hero | `split` | `left` | — | `4-5` (split) · `square` (price card) | Astro: `image` (prop) · React: a `media` slot | all four — Astro: section · React: prop | — |
+| Cta | `default` | `center` (ignored on `split`) | — | — | — | — | — |
 | CardGrid | `card-grid` | — | Astro only | — | — | — | — |
 | Features | — | `center` | ✓ | — | — | — | `animated-svg` (React prop) |
 | Narrative | — | `left` | — | — | — | — | — |
-| HeroMediaCard | — | — | — | ✓ | — | — | — |
-| HeroMediaCardImage | — | — | — | ✓ | — | — | — |
+| HeroMediaCard | — | — | — | `square` | — | — | — |
+| HeroMediaCardImage | — | — | — | `square` | — | — | — |
 | LogoWall | — | — | — | — | — | — | `marquee` (section) |
 | StatsBar | — | — | — | — | — | — | `count-up` (section) |
 
 No axis yet: CalloutPanel, HeroMediaCardPrice, TestimonialsFeaturedLarge (both rails); GhlForm, SiteHeader (Astro only); HeroSplitImageCardOverlay (React only).
 
 **Rail differences:**
+- **Hero `layout`** — React's dispatched Hero takes `split` or `interior-minimal`; `with-pricing-card` is composed only.
+- **Hero `ratio`** — Astro names the prop `imageRatio`. React's dispatched path fixes `4-5`.
 - **Hero `media`** — Astro takes the enum. React takes a composed `media` node, normally a `<BlockMedia media=…>`; its dispatched path renders `image` only.
 - **Hero `reveal`** — Astro reads `section.reveal`. React takes the `reveal` prop on a composed `<Hero>`; its dispatched path does not read `section.reveal`.
 - **CardGrid `columns`** — Astro only. The React `CardGrid` composes children, so column count belongs to the consumer's `<Grid columns>`.
