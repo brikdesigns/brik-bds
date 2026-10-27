@@ -10,7 +10,7 @@
   line-height: var(--bds-font-line-height-tight);
   border-radius: var(--bds-border-radius-pill);
   white-space: nowrap;
-  text-transform: uppercase;
+  text-transform: var(--bds-text-transform-subtitle);
   letter-spacing: var(--bds-letter-spacing-wide);
   min-width: 0;
 }

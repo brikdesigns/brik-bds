@@ -36,6 +36,6 @@
   font-size: var(--bds-body-md);
   line-height: var(--bds-font-line-height-normal);
   color: var(--bds-text-primary);
-  text-transform: capitalize;
+  text-transform: var(--bds-text-transform-label);
 }
 }

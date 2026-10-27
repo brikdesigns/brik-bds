@@ -20,7 +20,7 @@
   color: var(--bds-text-primary);
   text-decoration: none;
   white-space: nowrap;
-  text-transform: uppercase;
+  text-transform: var(--bds-text-transform-subtitle);
   letter-spacing: var(--bds-letter-spacing-wide);
   cursor: default;
   user-select: none;

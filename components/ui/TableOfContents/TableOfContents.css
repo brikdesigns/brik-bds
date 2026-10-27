@@ -28,7 +28,7 @@
   font-size: var(--bds-label-xs);
   font-weight: var(--bds-font-weight-medium);
   letter-spacing: var(--bds-letter-spacing-wide);
-  text-transform: uppercase;
+  text-transform: var(--bds-text-transform-subtitle);
   color: var(--bds-text-secondary);
   padding: 0 var(--bds-padding-md);
 }

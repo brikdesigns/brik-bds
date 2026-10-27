@@ -84,7 +84,7 @@
   font-size: var(--bds-label-sm);
   font-weight: var(--bds-font-weight-semibold);
   color: var(--bds-text-secondary);
-  text-transform: uppercase;
+  text-transform: var(--bds-text-transform-subtitle);
   letter-spacing: 0.04em;
   line-height: var(--bds-font-line-height-tight);
   margin: 0;

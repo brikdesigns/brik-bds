@@ -90,7 +90,7 @@
 .bds-progress-stepper__label {
   font-family: var(--bds-font-family-body);
   line-height: var(--bds-font-line-height-snug);
-  text-transform: capitalize;
+  text-transform: var(--bds-text-transform-label);
   transition: color 0.15s ease;
 }
 

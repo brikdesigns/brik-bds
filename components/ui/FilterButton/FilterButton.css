@@ -23,7 +23,7 @@
   line-height: var(--bds-font-line-height-tight);
   color: var(--bds-text-primary);
   white-space: nowrap;
-  text-transform: capitalize;
+  text-transform: var(--bds-text-transform-label);
   box-sizing: border-box;
 }
 
