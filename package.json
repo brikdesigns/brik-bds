@@ -262,6 +262,7 @@
     "lint-merge-queue-readiness": "node scripts/lint-merge-queue-readiness.mjs",
     "lint-content-rhythm": "node scripts/lint-content-rhythm.mjs",
     "lint-page-grid": "node scripts/lint-page-grid.mjs",
+    "lint-orphan-issues": "node scripts/lint-orphan-issues.mjs",
     "canonical-check": "node scripts/canonical-check.mjs --no-bridge --bridge-paths BrikDevBar/widgets/ --allowlist dist/tokens.css components content-system/blueprints content-system/atmospheres content-system/industries",
     "canonical-check:report": "node scripts/canonical-check.mjs --no-bridge --bridge-paths BrikDevBar/widgets/ --allowlist dist/tokens.css --format md components content-system stories || true",
     "canonical-class-check": "node scripts/canonical-class-check.mjs --allowlist dist/styles.css content-system/blueprints",
