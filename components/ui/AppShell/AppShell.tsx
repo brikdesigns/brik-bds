@@ -76,7 +76,8 @@ export function AppShell({ topBar, nav, rail, main, className, ...props }: AppSh
   return (
     <AppShellContext.Provider value={{ collapsed }}>
       <div
-        className={bdsClass('bds-app-shell', hasTopBar && 'bds-app-shell--top-bar', className)}
+        className={bdsClass('bds-app-shell', className)}
+        data-top-bar={hasTopBar || undefined}
         {...props}
       >
         {hasTopBar && <div className="bds-app-shell__top-bar">{topBar}</div>}

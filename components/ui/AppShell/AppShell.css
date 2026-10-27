@@ -16,7 +16,7 @@
 
 /* A top bar sets the sticky offsets SubNavigation and PageHeader read. Set on
    the shell, an ancestor of both — never on them, which would shadow it. */
-.bds-app-shell--top-bar {
+.bds-app-shell[data-top-bar="true"] {
   --bds-subnav-top: var(--bds-shell-top-bar-height);
   --bds-pageheader-top: var(--bds-shell-top-bar-height);
 }
@@ -49,7 +49,7 @@
 }
 
 /* The sidebar sticks below the top bar, not under it. */
-.bds-app-shell--top-bar .bds-app-shell__nav .bds-sidebar-nav--sticky {
+.bds-app-shell[data-top-bar="true"] .bds-app-shell__nav .bds-sidebar-nav--sticky {
   top: var(--bds-shell-top-bar-height);
   height: calc(100vh - var(--bds-shell-top-bar-height));
   height: calc(100dvh - var(--bds-shell-top-bar-height));

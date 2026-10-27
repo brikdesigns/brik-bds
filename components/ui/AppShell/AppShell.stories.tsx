@@ -305,6 +305,6 @@ export const InteractionTestShellOffset: Story = {
     await scrollWindowTo(0);
 
     // Without a top bar the offsets stay at their 0px defaults.
-    await expect(shell).toHaveClass('bds-app-shell--top-bar');
+    await expect(shell).toHaveAttribute('data-top-bar', 'true');
   },
 };
