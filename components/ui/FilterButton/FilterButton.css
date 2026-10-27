@@ -77,7 +77,7 @@
   position: absolute;
   top: calc(100% + var(--bds-gap-md));
   left: 0;
-  z-index: 100;
+  z-index: var(--bds-z-dropdown);
   background-color: var(--bds-background-primary);
   border-radius: var(--bds-border-radius-lg);
   padding: var(--bds-padding-md);

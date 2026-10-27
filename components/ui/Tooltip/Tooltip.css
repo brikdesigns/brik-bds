@@ -20,7 +20,7 @@
   line-height: var(--bds-font-line-height-normal);
   border-radius: var(--bds-border-radius-sm);
   white-space: nowrap;
-  z-index: 1000;
+  z-index: var(--bds-z-tooltip);
   pointer-events: none;
   opacity: 0;
   transition: opacity var(--bds-duration-md) var(--bds-ease-out);

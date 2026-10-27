@@ -3,7 +3,7 @@
 
 .bds-task-console {
   position: fixed;
-  z-index: 9999;
+  z-index: var(--bds-z-max);
   width: 360px; /* bds-lint-ignore — design constraint matching Google Drive widget */
   max-height: 80vh;
   display: flex;

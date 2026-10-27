@@ -112,7 +112,7 @@
   border: var(--bds-border-width-md) solid var(--bds-border-muted);
   padding: var(--bds-padding-sm);
   width: 280px; /* bds-lint-ignore — fixed calendar width */
-  z-index: 50; /* bds-lint-ignore — popover stacking */
+  z-index: var(--bds-z-dropdown);
 }
 
 /* ─── Calendar header ────────────────────────────────────────── */

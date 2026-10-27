@@ -21,7 +21,7 @@
   box-shadow: var(--bds-shadow-lg);
   border: var(--bds-border-width-md) solid var(--bds-border-secondary);
   padding: var(--bds-padding-md);
-  z-index: 100;
+  z-index: var(--bds-z-dropdown);
   box-sizing: border-box;
   --bds-popover-min-width: 200px; /* component-local dimension; no shared registry rung (#2133) */
   min-width: var(--bds-popover-min-width);
