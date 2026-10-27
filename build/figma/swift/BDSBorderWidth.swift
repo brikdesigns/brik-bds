@@ -4,16 +4,24 @@
 import SwiftUI
 public enum BDSBorderWidth {
     public static let borderWidth0: CGFloat = 0
-    public static let borderWidth50: CGFloat = 1
-    public static let borderWidth100: CGFloat = 2
-    public static let borderWidth200: CGFloat = 3
-    public static let borderWidth300: CGFloat = 4
-    public static let borderWidth400: CGFloat = 5
-    public static let borderWidth500: CGFloat = 6
-    public static let borderWidthSm: CGFloat = 1
-    public static let borderWidthMd: CGFloat = 2
-    public static let borderWidthXl: CGFloat = 5
-    public static let borderWidthLg: CGFloat = 4
-    public static let borderWidthHuge: CGFloat = 6
+    public static let borderWidth25: CGFloat = 0.25
+    public static let borderWidth50: CGFloat = 0.5
+    public static let borderWidth100: CGFloat = 1
+    public static let borderWidth200: CGFloat = 2
+    public static let borderWidth300: CGFloat = 3
+    public static let borderWidth400: CGFloat = 4
+    public static let borderWidth500: CGFloat = 5
+    public static let borderWidth600: CGFloat = 6
+    public static let borderWidth700: CGFloat = 7
+    public static let borderWidth800: CGFloat = 8
+    public static let borderWidth900: CGFloat = 9
+    public static let borderWidth1000: CGFloat = 10
+    public static let borderWidth1100: CGFloat = 11
+    public static let borderWidth1200: CGFloat = 12
+    public static let borderWidthSm: CGFloat = 0.5
+    public static let borderWidthMd: CGFloat = 1
+    public static let borderWidthXl: CGFloat = 4
+    public static let borderWidthLg: CGFloat = 3
+    public static let borderWidthHuge: CGFloat = 5
     public static let borderWidthNone: CGFloat = 0
 }

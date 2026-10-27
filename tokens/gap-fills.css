@@ -367,14 +367,15 @@
      --bds-border-width-sm/md that froze what the spacing modes vary, so §3
      dispositions them as delete-not-rename.
 
-     MIGRATION — value-preserving targets, not the t-shirt rung above (#2271):
-       --border-width-thin     1px → --bds-border-width-50   (--bds-border-width-sm)
-       --border-width-standard 2px → --bds-border-width-100  (--bds-border-width-md)
-       --border-width-bold     3px → --bds-border-width-200
+     MIGRATION — value-preserving targets, not the t-shirt rung above (#2271).
+     Primitive step = px × 100 since the 2026-10-27 Figma pull (#2601):
+       --border-width-thin     1px → --bds-border-width-100  (--bds-border-width-md)
+       --border-width-standard 2px → --bds-border-width-200
+       --border-width-bold     3px → --bds-border-width-300  (--bds-border-width-lg)
 
-     `bold` has NO t-shirt equivalent. This note used to name --bds-border-width-lg,
-     which aliases --bds-border-width-300 (4px) — following it verbatim silently
-     widened every `bold` border by 1px. The two surviving mappings are also
+     Only `standard` has NO t-shirt equivalent at the default mode. This note
+     once named --bds-border-width-lg for `bold` while lg was 4px — following it
+     verbatim silently widened every `bold` border by 1px. The t-shirt mappings are also
      only value-preserving at the DEFAULT spacing mode: sm/md/lg are re-pointed
      under [data-mode-borderwidth] (see modes-borderwidth.css), where the
      deleted trio were fixed. A consumer that needs a fixed width wants the
