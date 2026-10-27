@@ -1,6 +1,6 @@
 ---
 title: Composition Layers
-description: Six conceptual layers — Blueprint, Layout, Container, Block, Control, Component — and the decision rules for assembling them.
+description: Six conceptual layers — Blueprint, Layout, Container, Block, Control, Component — the decision rules for assembling them, and where page chrome (rail, tabs, filters, view toggle) sits.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -159,6 +159,52 @@ The last case is the one that ships. A section header plus a hand-placed count a
 
 Don't reach for a `Card` when a `DataSection` is right. Cards are self-contained units in a grid; `DataSection` is one region of a larger page.
 
+## Page chrome placement
+
+The six layers above say what a thing *is*. The Control layer holds four bars that all look like "a row of choices" — a sub-nav rail, page-header tabs, a filter bar, and a segmented control — and consumers have picked between them by feel. Each carries exactly one kind of thing:
+
+| Chrome | Carries | URL |
+| --- | --- | --- |
+| Sub-nav rail (`SubNavigation`) | The entity or structural segment that partitions rows | Route-group layout at the current URL |
+| Page-header tabs (`TabBar` in `PageHeader`) | Lifecycle status of the current entity | `?status=`, default omitted, resolved on the server |
+| Filters (`FilterBar`) | Non-partitioning, nullable, multi-valued or high-cardinality attributes | Params named after the field; kept across status tabs, dropped across rail items |
+| Segmented control (`SegmentedControl`) | View mode only, never a data segment | None |
+
+`?tab=` is reserved for detail pages.
+
+In one line: **rail = entity, page-header tabs = status, filters = attributes, segmented control = view mode.**
+
+Two tests settle the borderline cases:
+
+- **Does it change which rows exist, or how they look?** "Companies / People / Vendors" are different row sets: rail. "List / Grid" is the same rows drawn differently: segmented control. A data segment in a segmented control is the mistake.
+- **Is every row in exactly one of the values?** Lifecycle status is: a project is Planned, In progress, or Done, and the tabs partition it. An attribute that can be empty, holds several values, or has many values (industry, owner, tag) is not a partition: a filter.
+
+Order on the page, outside in: the rail is a full-height sibling column of `Page`, `PageHeader` and its tabs head the body to the rail's right, and the `FilterBar` heads the display inside `PageContent`. The rail is never inside `PageContent`, and tabs never nest inside tabs; a second level of tabs is a filter in disguise. The assembled page is the [Section hub](/docs/build-standards/page-archetypes/section-hub).
+
+```tsx
+// ❌ An attribute in the tab slot — industry is not a lifecycle status
+<PageHeader title="Services" tabs={<TabBar items={industryTabs} />} />
+
+// ✅ Status in the header, the attribute in the filter bar
+<PageHeader title="Services" tabs={<TabBar items={statusTabs} />} />
+<FilterBar title="Services" label="services" total={n} filtered={m}>
+  <FilterButton label="Industry" options={industries} value={industry} onChange={setIndustry} />
+</FilterBar>
+```
+
+### Sticky headers and horizontal scroll
+
+A `thead` cannot stick to the page from inside an `overflow-x` wrapper. A sticky element sticks to its nearest scrolling ancestor, and any `overflow` value other than `visible` on an ancestor makes that ancestor the scroll container, even when it never actually scrolls. The header then pins to the wrapper's box, which does not move, so it never appears to stick. Pinned end columns resolve the same way.
+
+BDS's own `Table` shows the trap. Its two rounded-corner options are on by default, and `.bds-table[data-rounded-top="true"]` / `[data-rounded-bottom="true"]` set `overflow: hidden` on the table itself (`components/ui/Table/Table.css:20-23`; defaults at `Table.tsx:62-63`). BDS ships no sticky header; a consumer that adds one inherits that clip.
+
+Pick one behaviour per table, because a table cannot have both:
+
+| The table must | Do this | Not this |
+| --- | --- | --- |
+| Keep its header pinned to the page as the page scrolls | Keep every ancestor between the table and the page's scroll container at `overflow: visible`, turn the rounded options off, and make the table fit its width (merge or drop columns, or switch to a card list at narrow widths) | Wrap the table in `overflow-x: auto` to rescue a wide table |
+| Scroll sideways because it is wide | Let the wrapper own both axes: give it a bounded height so the header sticks to the wrapper's top, not the page's | Expect the header to follow the page past the wrapper |
+
 ## Identify the layer before you target it
 
 When a change names an element ("the card", "the section", "the button"), find the target by its **layer**, reading the DOM top-down (Blueprint → Layout → Container → Block or Control → Component) — **never by selector-name resemblance.**
@@ -177,5 +223,6 @@ The block-vs-container decision rule above answers "what layer is this?"; apply 
 - [Page Structure](/docs/build-standards/page-structure) — how sections are structured in HTML
 - [Content Rhythm](/docs/build-standards/content-rhythm) — the spacing scale between these layers, from text pairings to section breaks, and which layer owns the separator between sections
 - [Display Choice](/docs/build-standards/display-choice) — which display a Control layer bar heads
-- [Page Archetypes](/docs/build-standards/page-archetypes) — the four assembled product pages these layers compose into
+- [Page Archetypes](/docs/build-standards/page-archetypes) — the five assembled product pages these layers compose into
+- [Section Hub](/docs/build-standards/page-archetypes/section-hub) — where the rail, status tabs, and filter bar sit on one page
 - [Web Elements — Blueprints](/docs/web-elements/blueprints) — the blueprint families that make up this layer

@@ -1,0 +1,86 @@
+---
+title: Section Hub
+description: A section's landing page — a sub-nav rail of sibling entities, lifecycle status tabs in the page header, and a filtered collection in the body.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+The page a product section opens on. The user is in a section that holds several sibling entities (Projects, Backlog, Releases) and wants the rows of one of them, narrowed to what they care about. A level-1 index page.
+
+Reach for it when the section has two or more sibling entities that each get their own list. If the page is a set of peer records and nothing sits beside it, that is plain [Collection](/docs/build-standards/page-archetypes/collection). If the page is about one entity split across tabs, that is a [Profile](/docs/build-standards/page-archetypes/profile).
+
+A section hub adds nothing to the Collection body. It is a Collection with the three chrome layers around it placed correctly, which is the part consumers kept getting wrong.
+
+## Composition
+
+Each chrome layer carries one kind of thing, per [page chrome placement](/docs/build-standards/composition-layers#page-chrome-placement).
+
+| Region | Component | Carries |
+|---|---|---|
+| Left column | `SubNavigation` | The entity: which sibling list this is |
+| Page header | `PageHeader` with a `TabBar` in `tabs` | Lifecycle status of that entity |
+| Body, above the display | `FilterBar` | Attributes that narrow the rows |
+| Body | `Table`, `CardList`, or `Board` | The rows, per [Display Choice](/docs/build-standards/display-choice) |
+
+```tsx
+<div style={{ display: 'flex', minHeight: '100vh' }}>
+  <SubNavigation items={railItems} />
+  <main style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+    <Page padding="none">
+      <PageHeader
+        title="Projects"
+        subtitle="Every project across all service lines."
+        tabs={<TabBar items={statusTabs} />}
+      />
+      <PageContent>
+        <FilterBar title="Projects" label="projects" total={n} filtered={m} onClear={clear}>
+          <FilterButton label="Service line" options={lines} value={line} onChange={setLine} />
+        </FilterBar>
+        <Table>{/* rows */}</Table>
+      </PageContent>
+    </Page>
+  </main>
+</div>
+```
+
+The live canvas is the `Layouts / section-hub` story in Storybook (`layouts-section-hub--default`). Pick a status tab, then a service line: both apply, and the counter shows the filtered result against the status tab's rows.
+
+## The rail is a sibling of the page
+
+`SubNavigation` is a direct child of the shell row, beside `<main>`, never inside `PageContent`. It fills the full height so its divider runs the whole column, and `Page` needs a flex-column parent, which `<main>` provides. The same rule is stated in `Page` and in the `Layouts / app-shell` story.
+
+## URLs
+
+| Layer | URL |
+|---|---|
+| Rail item | The route itself, rendered by the section's route-group layout |
+| Status tab | `?status=`; the default tab omits the param and the server resolves it |
+| Filter | A param named after the field; kept when the status tab changes, dropped when the rail item changes |
+
+`?tab=` is reserved for detail pages. Putting status or a filter in `?tab=` makes a list URL look like a record.
+
+Switching the rail item drops the filters because they belong to that entity's fields; a service-line filter on Projects means nothing on Releases. Switching the status tab keeps them: the user is still narrowing the same rows.
+
+## State shell
+
+Follows the display, as in [Collection](/docs/build-standards/page-archetypes/collection#state-shell). The shell wraps the display only; the rail, the header with its tabs, and the `FilterBar` keep rendering while the display loads or is empty, so a user is never left without a way to change the entity, the status, or the filter.
+
+## Wide tables
+
+A section hub's display is usually a table, and a wide table raises the sticky-header question. Choose per the [sticky headers and horizontal scroll](/docs/build-standards/composition-layers#sticky-headers-and-horizontal-scroll) rule before wrapping it in `overflow-x`.
+
+## Don'ts
+
+- **Don't put an entity switch in the header tabs.** Entities are the rail; two entities in tabs make the rail redundant.
+- **Don't put an attribute in the header tabs.** A value that can be empty, holds several values, or has many values is a filter. If a user would expect to combine it with another, it is a filter.
+- **Don't nest a second `TabBar` under the header tabs.** A second level of tabs is a filter in disguise.
+- **Don't use a `SegmentedControl` to pick a data segment.** It is for view mode (list, grid) only.
+- **Don't put `SubNavigation` inside `PageContent`.** It is a full-height sibling of `Page`.
+- **Don't carry filters across a rail item.** They are fields of the entity you left.
+
+## Related
+
+- [Collection](/docs/build-standards/page-archetypes/collection) — the body of a section hub.
+- [Composition Layers: page chrome placement](/docs/build-standards/composition-layers#page-chrome-placement) — the layer rule and the sticky-header rule.
+- [Profile](/docs/build-standards/page-archetypes/profile) — one entity across tabs, which is where `?tab=` belongs.
+- [Page Structure](/docs/build-standards/page-structure#product-app-shell) — the landmark and skip-link rules the surrounding shell satisfies.

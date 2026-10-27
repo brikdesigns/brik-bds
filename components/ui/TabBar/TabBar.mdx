@@ -35,6 +35,8 @@ Horizontal tab navigation with four style variants: text, text-underline, tab (b
 
 ## Patterns
 
+A tab bar switches between sibling panels of one entity: its lifecycle status (in a `PageHeader`) or the sections of a settings page. It does not switch a view mode (that is a [`SegmentedControl`](/?path=/docs/components-segmented-control--docs)) and it does not narrow rows by an attribute (that is a [`FilterBar`](/?path=/docs/components-filter-bar--docs)); see [page chrome placement](https://design.brikdesigns.com/docs/build-standards/composition-layers#page-chrome-placement).
+
 Real-world usage: settings page navigation where clicking a tab switches the active tab and its content.
 
 <Canvas of={Stories.WithControlledTabs} />
