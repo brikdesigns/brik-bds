@@ -243,8 +243,8 @@ export const Density: Story = {
 
     await expect(getComputedStyle(defaultTitle).fontSize).toBe('18px'); // --bds-label-lg
     await expect(getComputedStyle(compactTitle).fontSize).toBe('16px'); // --bds-label-md
-    // Compact subtitle reads as label-family metadata (capitalize).
-    await expect(getComputedStyle(compactSubtitle).textTransform).toBe('capitalize');
+    // Compact subtitle reads as label-family metadata: copy renders as authored.
+    await expect(getComputedStyle(compactSubtitle).textTransform).toBe('none');
   },
 };
 
