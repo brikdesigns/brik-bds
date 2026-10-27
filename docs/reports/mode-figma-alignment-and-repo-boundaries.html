@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- report-meta: contract in docs/reports/README.md (ADR-046) -->
+<meta name="report-status" content="active">
+<meta name="report-type" content="assessment">
+<meta name="report-themes" content="design-system,agent-ops">
+<meta name="report-subject" content="bds">
+<meta name="report-owner" content="nstaner">
+<meta name="report-generated" content="2026-10-27">
+<meta name="report-supersedes" content="none">
+<meta name="report-cadence" content="once">
+<meta name="report-source" content="manual">
+<!-- /report-meta -->
+<title>Mode Alignment and Repo Boundaries</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font: 15px/1.5 -apple-system, "Segoe UI", sans-serif; max-width: 62rem; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; font-size: 14px; }
+  th, td { border: 1px solid #ccc; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+  th { background: #f4f4f4; }
+  code, pre { font-family: ui-monospace, Menlo, monospace; font-size: .92em; background: #f3f3f3; padding: 0 .2em; }
+  .verdict { background: #fff4e5; border-left: 4px solid #e58a00; padding: .75rem 1rem; }
+  .ok { color: #1a7f37; } .bad { color: #b42318; font-weight: 600; }
+  blockquote { border-left: 3px solid #bbb; margin: .5rem 0; padding: .25rem .75rem; color: #444; }
+</style>
+</head>
+<body>
+
+<h1>Mode Alignment and Repo Boundaries</h1>
+<p>2026-10-27 · Opus reassessment before building brik-bds#2601 · read on <code>origin/main</code> 4e656e25</p>
+
+<div class="verdict">
+<p><strong>Verdict: yes, this is a systemic class, not a one-off.</strong> Confidence: high.</p>
+<p>One class: <strong>canon was copied out of its owning repo, kept its "source of truth" label, and no gate compares the copy to Figma.</strong></p>
+<p>Three mechanisms let it survive. Each is cited below.</p>
+<ol>
+  <li>The March spec in brik-llm still calls itself the source of truth. Two MCP servers and a script read it. No drift check covers its folder.</li>
+  <li>Border-width was hand-wired before the mode generator existed, and was never moved into it. The coverage gate exempts it and checks only that a selector exists.</li>
+  <li>No single table says which repo owns which kind of file. So nothing flags a design-system file living in brik-llm.</li>
+</ol>
+<p>Border-width is the only mode collection still not built from Figma. Elevation's default is a second hand-written value.</p>
+</div>
+
+<h2>1. Your questions, answered</h2>
+<table>
+<tr><th>Question</th><th>Answer</th><th>Evidence</th></tr>
+<tr><td>Why does March-era token logic still reach agents?</td>
+<td>The 2026-03-12 spec still says it is the source of truth. MCP servers and a script read it directly. RAG does <em>not</em> ingest it, so RAG hygiene never saw it.</td>
+<td>brik-llm <code>websites/shared/MODE-ARCHITECTURE.md:5</code> "Source of truth for mode values"; <code>:31</code> Thin / Standard / Bold.<br>
+<code>operations/mcp/brik-themes/server.py:100-104</code> hardcodes <code>thin, standard, bold</code>; <code>:75</code> says keep it "in lockstep" with the doc.<br>
+<code>operations/mcp/brik-tools/server.py:134-135</code> serves the doc to agents.<br>
+<code>websites/04-development/webflow_prep.py:496</code> "the authoritative spec".<br>
+In <code>scripts/rag/</code>, only <code>README.md</code> names the doc.</td></tr>
+<tr><td>Why was this allowed to happen?</td>
+<td>The stale-canon gate only watches three folders. <code>websites/shared/</code> is not one of them, and the doc has no frontmatter to check.</td>
+<td>brik-llm <code>scripts/audit/reference-drift.py:106-110</code> (<code>GOVERNED_GLOBS</code>: references, skills, standards).</td></tr>
+<tr><td>Why was <code>modes-borderwidth.css</code> hand-written without Figma?</td>
+<td>It was wired on 2026-04-30 from the March spec, before the generator existed. The generator was later built for radius, spacing, type and elevation, and border-width was left out.</td>
+<td>Commit cd6be637 (PR #335, issue #313); its header cites the brik-llm doc.<br>
+<code>scripts/generate-modes-css.mjs:15</code> "Easy to extend to … border-width".</td></tr>
+<tr><td>Why did no gate catch it?</td>
+<td>#340 closed it as "✅ emitted (legacy path)". The coverage guard lists it as exempt and only checks that a selector string exists. It never compares names or values.</td>
+<td><code>scripts/lint-mode-emission-coverage.mjs:46-48</code> (<code>WIRED_LEGACY</code>); existence check at <code>:77-79</code>.</td></tr>
+<tr><td>Why did two recent audits miss it?</td>
+<td>The 09-26 and 09-30 audits caught the <em>name</em> split and filed #2601. They compared values for spacing only. The 10-01 naming audit never looked at modes.</td>
+<td><code>docs/reports/2026-09-30-foundations-modes-viewport-audit.html</code> § 2 ("Name split thick/bold, tracked in #2601") and § 4 (spacing values only).<br>
+<code>2026-10-01-token-naming-systems-audit.html</code>: 0 matches for "mode" (grep; its own headings are about token-name formula).</td></tr>
+<tr><td>Is it deeper script fragmentation?</td>
+<td>Partly. The mode spec, the MCP catalog and webflow_prep are the real leak. The script duplication is smaller than it looks. The colour-ramp script stays in brik-llm by operator decision (it has no BDS equivalent).</td>
+<td>brik-llm#5131, closed 2026-10-26: <q>OPERATOR SAID 2026-10-26 (Claude Code, brik-client-portal session): "Let's keep the color ramp. Let's address #4757 next"</q></td></tr>
+</table>
+
+<h2>2. Every mode collection against Figma</h2>
+<p>Source: <code>design-tokens/tokens-studio.json</code> collections, compared with <code>tokens/modes-*.css</code>.</p>
+<table>
+<tr><th>Collection</th><th>Figma modes</th><th>Code</th><th>Built from Figma?</th><th>Status</th></tr>
+<tr><td>border-width</td><td>default · thin · thick</td><td>default · thin · <strong>bold</strong></td><td>Default only. Thin and bold are hand-written.</td><td class="bad">Names and values wrong (§3)</td></tr>
+<tr><td>elevation</td><td>flat · subtle · lifted · dramatic</td><td>Same names. <code>subtle</code> is the <code>:root</code> default.</td><td>flat, lifted, dramatic yes. <strong>subtle no</strong>: hand-written in <code>tokens/gap-fills.css:255-259</code>.</td><td class="bad">Default values wrong: shadow-sm blur 4 vs Figma 8; opacity .06 vs .08</td></tr>
+<tr><td>border-radius</td><td>sharp · soft · round · pill</td><td>Same</td><td>Yes</td><td class="ok">Aligned. Separate Figma alias issue: #2351</td></tr>
+<tr><td>spacing</td><td>compact · default · comfortable · spacious</td><td>Same</td><td>Yes</td><td class="ok">Aligned (values checked by the 09-30 audit)</td></tr>
+<tr><td>typography</td><td>5 modes</td><td>Same</td><td>Yes</td><td class="ok">Aligned</td></tr>
+<tr><td>color</td><td>light · dark</td><td><code>[data-theme]</code></td><td>Yes</td><td class="ok">By design</td></tr>
+<tr><td>breakpoint, layout</td><td>3 each</td><td>Build-time only</td><td>Yes</td><td class="ok">Excluded by design (lint <code>:51-57</code>)</td></tr>
+<tr><td>icon</td><td><em>No collection</em></td><td>None</td><td>n/a</td><td class="bad">Docs still list it (§4)</td></tr>
+</table>
+
+<h2>3. Border-width: Figma versus the CSS</h2>
+<table>
+<tr><th>Mode</th><th>Source</th><th>sm</th><th>md</th><th>lg</th><th>xl</th><th>huge</th></tr>
+<tr><td rowspan="2">default</td><td>Figma</td><td>1</td><td>2</td><td>4</td><td>5</td><td>6</td></tr>
+<tr><td>CSS</td><td colspan="5" class="ok">Same: generated in <code>tokens/figma-tokens.css:340-344</code></td></tr>
+<tr><td rowspan="2">thin</td><td>Figma</td><td>0.25</td><td>0.5</td><td>2</td><td>3</td><td>4</td></tr>
+<tr><td>CSS</td><td class="bad">1</td><td class="bad">1</td><td>2</td><td class="bad">missing</td><td class="bad">missing</td></tr>
+<tr><td rowspan="2">thick</td><td>Figma</td><td>2</td><td>4</td><td>6</td><td>8</td><td>12</td></tr>
+<tr><td>CSS (<code>bold</code>)</td><td>2</td><td class="bad">3</td><td class="bad">4</td><td class="bad">missing</td><td class="bad">missing</td></tr>
+</table>
+<p>Figma's thin sm and md are below 1px. How browsers draw a 0.25px border is <strong>unverified</strong> here. It is a design check for Figma, not a code call.</p>
+<p><strong>Who uses it:</strong> no consumer source sets <code>data-mode-borderwidth</code>. Searches came back empty in brikdesigns and all 9 <code>web/*</code> sites; the control search for <code>data-theme</code> found tncld. Only the portal can emit it, from a stored decision set (<code>brik-client-portal/src/lib/design/decision-set.ts:515</code>). Whether any prod row sets it is <strong>unverified</strong>.</p>
+
+<h2>4. Stale docs that teach agents the wrong thing</h2>
+<table>
+<tr><th>File</th><th>What it says</th><th>What is true</th></tr>
+<tr><td><code>docs-site/…/getting-started/cascade.mdx:117, :123, :158</code></td><td><code>bold</code></td><td>Figma says <code>thick</code></td></tr>
+<tr><td><code>cascade.mdx:125, :127</code></td><td>Radius and elevation "⏳ #340"</td><td>Both are wired (<code>tokens/modes-borderradius.css</code>, <code>modes-elevation.css</code>)</td></tr>
+<tr><td><code>cascade.mdx:129</code></td><td>An <code>icon</code> mode row</td><td>No icon collection in Figma</td></tr>
+<tr><td><code>docs-site/…/foundation/border.mdx:32</code></td><td>"Radius modes are not wired yet"</td><td>They are wired</td></tr>
+<tr><td><code>border.mdx:63-76</code></td><td>thin / bold with the CSS values</td><td>thin / thick with Figma values</td></tr>
+<tr><td><code>tokens/modes-borderwidth.css</code> header</td><td>Cites the brik-llm doc; says Figma is 0.5 / 1 / 2</td><td>Figma default is 1 / 2 / 4</td></tr>
+</table>
+<p><code>bold</code> also appears in <code>tokens/CASCADE.md</code>, ADR-039, <code>prop-axes.mdx</code>, <code>installation.mdx</code>, <code>framework-guides.mdx</code>, <code>interaction-states.mdx</code>, <code>content-system/vocabularies/borderwidth-mode.ts</code> and <code>scripts/generate-component-axes.mjs</code>.</p>
+
+<h2>5. Repo boundaries: what sits in the wrong place</h2>
+<p>brik-llm is business intelligence. BDS owns token names, modes and values: brik-llm <code>.claude/references/project-registry.md:18</code>, ADR-020 <code>:28</code>, ADR-025 <code>:32, :38</code>. Each states a piece; none says "never copy it elsewhere".</p>
+<table>
+<tr><th>Surface in brik-llm</th><th>Problem</th><th>Proposed fix</th></tr>
+<tr><td><code>websites/shared/MODE-ARCHITECTURE.md</code></td><td>March spec still claims source of truth</td><td>Replace the body with a pointer to <code>design.brikdesigns.com/docs/foundation/border</code> and <code>…/cascade#modes</code></td></tr>
+<tr><td><code>operations/mcp/brik-themes/server.py:71-106</code></td><td>Hardcoded copy of the March mode names</td><td>Read mode names from BDS <code>design-tokens/foundations.json</code></td></tr>
+<tr><td><code>operations/mcp/brik-tools/server.py:134-135</code></td><td>Serves the March doc to agents</td><td>Drop the resource or serve the BDS page</td></tr>
+<tr><td><code>websites/04-development/webflow_prep.py:496-507, :696, :1046</code></td><td>Mode defaults from the March doc (<code>borderWidth: standard</code>)</td><td>Repoint to BDS. Whether this script is still used is <strong>unverified</strong></td></tr>
+<tr><td><code>scripts/audit/reference-drift.py:106-110</code></td><td>Does not watch <code>websites/shared/</code></td><td>Add it to <code>GOVERNED_GLOBS</code></td></tr>
+<tr><td><code>scripts/tokens/push-figma-variables*</code>, <code>figma-variables.sh</code>, <code>sync-tokens-to-notion.py</code>; <code>scripts/sync-figma-to-portal.py</code>; <code>software/03-design/design_token_extractor.py</code></td><td>Design-system pipeline scripts living in brik-llm. Each one's callers are <strong>unverified</strong></td><td>One keep / move / retire call per script, as #5131 did. The ramp script stays.</td></tr>
+<tr><td><code>.claude/references/project-registry.md:16-18</code></td><td>No "owns / never owns" rule per repo</td><td>Add that column to the existing table. No new registry.</td></tr>
+</table>
+
+<h2>6. Backlog this maps to</h2>
+<p>All open. <code>claim-probe.sh</code> exit 0 (no live claims) on #2601, #2595, #2851, brik-llm#3566, #5063.</p>
+<table>
+<tr><th>Issue</th><th>Priority</th><th>Covers</th><th>Gap</th></tr>
+<tr><td>brik-bds#2601</td><td>p2</td><td>bold → thick rename</td><td>Not values, not the generator, not a gate. Re-scope (§7)</td></tr>
+<tr><td>brik-bds#2595</td><td>p1</td><td>Parent: declared-but-not-wired modes</td><td>None</td></tr>
+<tr><td>brik-bds#2851</td><td>p2 · L</td><td>The one theming umbrella</td><td>None</td></tr>
+<tr><td>brik-bds#2351</td><td>p2</td><td>Radius Figma alias mismatch</td><td>Same class; the parity gate would catch it</td></tr>
+<tr><td>brik-bds#2226</td><td>—</td><td>Drop step-word aliases</td><td>Related (<code>thin/standard/bold</code> width aliases in <code>gap-fills.css:365-376</code>)</td></tr>
+<tr><td>brik-llm#3566</td><td>p2 · L</td><td>Program: no misconception reaches agents as canon</td><td>Home for the brik-llm half of §5</td></tr>
+<tr><td>brik-llm#5063</td><td>p1</td><td>Point agents at Figma Variables</td><td>Same direction; MCP catalog is in scope there</td></tr>
+<tr><td>brik-llm#4697</td><td>p2</td><td>Stale-canon warning</td><td>Related</td></tr>
+<tr><td>brik-llm#3960</td><td>p2</td><td>Script + infra ADR decisions</td><td>None of its 4 children covers design-system ownership</td></tr>
+</table>
+
+<h2>7. Proposed order</h2>
+<ol>
+<li><strong>brik-bds#2601, re-scoped (S → M).</strong>
+  <ul>
+  <li>Move border-width into <code>generate-modes-css.mjs</code>; delete the hand-written file.</li>
+  <li>Emit <code>thin</code> and <code>thick</code> with Figma values, xl and huge included.</li>
+  <li>Keep <code>bold</code> as a deprecated alias of <code>thick</code> for one release.</li>
+  <li>Make <code>lint-mode-emission-coverage.mjs</code> compare names and values against Figma for every collection; delete <code>WIRED_LEGACY</code>.</li>
+  <li>The gate will then fail on the elevation default. Fix it in the same PR.</li>
+  <li>Fix the §4 docs, <code>borderwidth-mode.ts</code>, and the portal <code>decision-set</code> test.</li>
+  </ul></li>
+<li><strong>brik-llm, under #3566:</strong> the first five rows of §5.</li>
+<li><strong>brik-llm:</strong> the ownership column, then one call per remaining design-system script.</li>
+</ol>
+<p>The value-parity gate answers a class the operator named on 2026-10-27: every token collection must match the design system. The whole turn is quoted in §8.</p>
+
+<h2>8. Naming: already settled</h2>
+<blockquote>OPERATOR SAID 2026-09-26 (chat, quoted in brik-bds#2601): "Figma is the source - why are you insisting we introduce new names in our token system?"</blockquote>
+<blockquote>OPERATOR SAID 2026-10-27 (Claude Code, 90cbd40d…jsonl:194): "let's ensure we're aligned on our border-width logic - we use t-shirt sizes for width. Where are thick and bold being pulled from? Looks like we have modes for borders - are we confident in these naming? In Figma our border-width modes are default, thin and thick, so why is bold referenced as a name? Naming is CRITICAL - agents need to understand how critical it is to follow clear naming standards and taxonomy across our token system - t-shirt-sizing, modes, theming. Please reassess this gap before proceed with 2601 - we can involve Opus if needed. https://design.brikdesigns.com/docs/foundation/token-anatomy#primitive-tier-scales https://design.brikdesigns.com/docs/getting-started/cascade#modes"</blockquote>
+<blockquote>OPERATOR SAID 2026-10-27 (Claude Code, 90cbd40d…jsonl:241): "Let's use Opus to reassess - we're concerned as to why we're referencing token logic from back in March. We've made a number of updates since March 12, which tells us our infra, system logic and LLM are cluttered with outdated references. Why is this allowed to happen? Why was tokens/modes-borderwidth.css hand-written w/o Figma ever referenced? All of token collections need to be aligned to our design system - This is another MAJOR gap - https://design.brikdesigns.com/docs/foundation/border Let's also ensure agents have a clear understanding of our repo paramaters between brik-bds, brik-llm, brik-client-poral and brikdesigns. Very important we're not confusing agents by having design system scripts in brik-llm, for instance. brik-llm is our business intelligence which informs everything throughout our ecosystem. Please reassess the above to ensure the above aren't symptons of a deeper infrastructure and script fragmentation issue. Let's also assess our backlog for any relevant work as this has been an ongoing hygiene effort as we mature our ops and LLM/RAG."</blockquote>
+<p>Read together: mode names are <code>default</code> / <code>thin</code> / <code>thick</code>; steps stay t-shirt (<code>sm</code> → <code>huge</code>). The one open call is whether to ship Figma's <em>values</em> as they are, including the sub-pixel thin steps.</p>
+
+</body>
+</html>

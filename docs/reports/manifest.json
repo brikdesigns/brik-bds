@@ -2,7 +2,7 @@
   "schema": 1,
   "generated_by": "brikdesigns/brik-llm:scripts/reports/report-meta.py",
   "contract": "docs/reports/README.md#metadata-contract",
-  "count": 6,
+  "count": 7,
   "reports": [
     {
       "path": "docs/reports/2026-09-26-foundations-disconnect-assessment.html",
@@ -90,6 +90,22 @@
       "subject": "bds",
       "owner": "nstaner",
       "generated": "2026-10-26",
+      "supersedes": "none",
+      "cadence": "once",
+      "source": "manual"
+    },
+    {
+      "path": "docs/reports/mode-figma-alignment-and-repo-boundaries.html",
+      "title": "Mode Alignment and Repo Boundaries",
+      "status": "active",
+      "type": "assessment",
+      "themes": [
+        "design-system",
+        "agent-ops"
+      ],
+      "subject": "bds",
+      "owner": "nstaner",
+      "generated": "2026-10-27",
       "supersedes": "none",
       "cadence": "once",
       "source": "manual"
