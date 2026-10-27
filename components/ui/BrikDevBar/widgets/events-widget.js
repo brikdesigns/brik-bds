@@ -69,7 +69,7 @@
       font-size: 11px;
       font-weight: 700;
       color: ${T.grayDark};
-      text-transform: var(--bds-text-transform-subtitle);
+      text-transform: uppercase;
       letter-spacing: 0.08em;
     }
     .bev-count {

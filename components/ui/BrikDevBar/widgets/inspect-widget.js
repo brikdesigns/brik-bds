@@ -417,7 +417,7 @@
       padding: 2px 6px; border-radius: ${T.radius100};
       font-size: 10px; font-weight: ${T.fontWeightBold};
       font-family: ${T.fontFamily};
-      letter-spacing: 0.04em; text-transform: var(--bds-text-transform-subtitle);
+      letter-spacing: 0.04em; text-transform: uppercase;
     }
     .bi-pill__badge--bds  { background: ${T.statusOk}; color: ${T.colorGrayscaleWhite}; }
     .bi-pill__badge--warn { background: ${T.colorPoppyDark}; color: ${T.colorGrayscaleWhite}; }
@@ -468,7 +468,7 @@
       font-size: ${T.fontSizeXs};
       font-weight: ${T.fontWeightBold};
       color: ${T.textSecondary};
-      text-transform: var(--bds-text-transform-subtitle);
+      text-transform: uppercase;
       letter-spacing: 0.08em;
       margin-bottom: ${T.space200};
     }

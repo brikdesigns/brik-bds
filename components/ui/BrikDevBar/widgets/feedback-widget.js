@@ -143,7 +143,7 @@
       letter-spacing: var(--letter-spacing-wide, 0);
       line-height: 1;
       text-decoration: none;
-      text-transform: var(--bds-text-transform-subtitle);
+      text-transform: uppercase;
       cursor: pointer;
       box-shadow: var(--elevation-md, 0 4px 24px rgba(0,0,0,0.3));
       transition: background var(--duration-fast, 0.15s) var(--ease-default, ease),
@@ -355,7 +355,7 @@
       display: block;
       font-size: 11px;
       font-weight: 600;
-      text-transform: var(--bds-text-transform-subtitle);
+      text-transform: uppercase;
       letter-spacing: 0.04em;
       color: #666;
       margin-bottom: 6px;
