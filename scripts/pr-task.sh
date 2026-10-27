@@ -553,9 +553,13 @@ echo ""
 # ancestor test plus a reflog not-started guard, and is dry-run by default.
 WORKTREE_DIR=$(git rev-parse --show-toplevel)
 if [[ "$WORKTREE_DIR" == *"worktrees"* ]]; then
-  echo -e "  ${YELLOW}Cleanup (run after PR is merged, from the primary worktree):${NC}"
-  echo "    cd $(dirname "$WORKTREE_DIR")/../brik-bds"
-  echo "    ./scripts/sweep-merged-worktrees.sh                            # dry-run first"
-  echo "    ./scripts/sweep-merged-worktrees.sh --apply --delete-branches --sweep-remote-refs"
+  # The merge lands after this script exits, so nothing here can reap or slim
+  # anything yet: the daily sweep does it, and --slim-only drops node_modules +
+  # .next sooner (brik-llm#5134, #5137).
+  echo -e "  ${YELLOW}Cleanup:${NC} automatic once the PR merges — com.brik.worktree-sweep runs daily and also when disk runs low."
+  echo "    Sooner, from the primary repo, after the merge:"
+  echo "      cd $(dirname "$WORKTREE_DIR")/../brik-bds"
+  echo "      ./scripts/sweep-merged-worktrees.sh --slim-only --only $(basename "$WORKTREE_DIR")   # drop node_modules + .next, keep the worktree"
+  echo "      ./scripts/sweep-merged-worktrees.sh --apply --delete-branches --sweep-remote-refs  # remove every merged worktree"
   echo ""
 fi
