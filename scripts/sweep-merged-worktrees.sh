@@ -90,9 +90,23 @@
 #                                                          # also delete landed origin/task/* refs
 #   ./scripts/sweep-merged-worktrees.sh --json             # one JSON object on stdout, then exit
 #                                                          # (always a dry-run read; never mutates)
+#   ./scripts/sweep-merged-worktrees.sh --slim-only        # delete node_modules + .next from merged
+#                                                          # worktrees; never removes a worktree (#5134)
+#   ./scripts/sweep-merged-worktrees.sh --slim-only --only foo
+#                                                          # ...for worktree/branch 'foo' only
+#
+# --slim-only (#5134): a merged worktree held ~3.3 GB of node_modules and ~0.7 GB of .next
+# until the daily reaper removed the whole worktree, and a dirty or REVIEW one held it
+# forever. It is its own mode, and --apply runs the same pass over the worktrees it did not
+# remove. A worktree is slimmed only when its PR is MERGED, its tip IS that PR's head (nothing
+# newer was committed), and both directories are git-IGNORED and real directories — so nothing
+# tracked or uncommitted is touched. Unless BRIK_SWEEP_SLIM_IDLE_MIN is 0, a worktree with a
+# non-ignored write, or a .next / npm write, inside that many minutes is skipped (a session may
+# still be working in it). The caller that owns the worktree passes 0 with --only.
 #
 # Env: BRIK_WORKTREE_ROOT overrides the swept root (default: <primary>-worktrees).
 #      CLAIM_STALE_SECONDS (default 43200, issue-claim.sh's) is the zero-commit window.
+#      BRIK_SWEEP_SLIM_IDLE_MIN (default 60) is the --slim-only idle window; 0 disables it.
 # Requires: gh (for PR state). Without gh, falls back to ancestor-of-main only
 # for tracked worktrees; orphans need a MERGED PR so they stay flag-only. When gh
 # is INSTALLED but its call fails, that same fallback engages and the run says so
@@ -105,8 +119,10 @@ RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; CYAN='\033[0;36m'; NC
 APPLY=false
 DELETE_BRANCHES=false
 SWEEP_REMOTE_REFS=false
+SLIM_ONLY=false
 JSON=false
 declare -a KEEP_LIST=()
+declare -a ONLY_LIST=()
 # `--keep` takes a value, so the loop consumes two args — a bare `for arg in "$@"`
 # cannot express that.
 while [ $# -gt 0 ]; do
@@ -114,11 +130,15 @@ while [ $# -gt 0 ]; do
     --apply|--reap) APPLY=true ;;
     --delete-branches) DELETE_BRANCHES=true ;;
     --sweep-remote-refs) SWEEP_REMOTE_REFS=true ;;
+    --slim-only) SLIM_ONLY=true ;;
+    --only)
+      [ $# -ge 2 ] || { echo -e "${RED}--only needs a worktree or slug name${NC}" >&2; exit 2; }
+      ONLY_LIST+=("$2"); shift ;;
     --keep)
       [ $# -ge 2 ] || { echo -e "${RED}--keep needs a worktree or slug name${NC}" >&2; exit 2; }
       KEEP_LIST+=("$2"); shift ;;
     --json) JSON=true ;;
-    -h|--help) sed -n '2,93p' "$0"; exit 0 ;;   # header ends at the Requires: note
+    -h|--help) sed -n '2,113p' "$0"; exit 0 ;;   # header ends at the Requires: note
     *) echo -e "${RED}Unknown flag: $1${NC}" >&2; exit 2 ;;
   esac
   shift
@@ -130,6 +150,17 @@ done
 # exit 0 and a clean payload, and nothing was reaped.
 if $JSON && { $APPLY || $SWEEP_REMOTE_REFS; }; then
   echo -e "${RED}--json reports; it does not reap. Drop --apply/--sweep-remote-refs, or drop --json.${NC}" >&2
+  exit 2
+fi
+
+# --slim-only is its own mode, so a flag that asks for another pass is a usage error, not
+# something to drop silently: the caller asked for a removal, saw exit 0, and nothing happened.
+if $SLIM_ONLY && { $APPLY || $DELETE_BRANCHES || $SWEEP_REMOTE_REFS || $JSON; }; then
+  echo -e "${RED}--slim-only deletes build output only. Drop --apply/--delete-branches/--sweep-remote-refs/--json, or drop --slim-only.${NC}" >&2
+  exit 2
+fi
+if [ ${#ONLY_LIST[@]} -gt 0 ] && ! $SLIM_ONLY; then
+  echo -e "${RED}--only narrows --slim-only; it does nothing on its own.${NC}" >&2
   exit 2
 fi
 
@@ -464,9 +495,120 @@ branch_exists_local() { git show-ref --verify --quiet "refs/heads/$1"; }
 # the branch as present so an unreachable origin can never trigger a reap.
 branch_absent_remote() { $REMOTE_OK && ! grep -qxF "$1" <<<"$REMOTE_HEADS"; }
 
+# True when everything in $1 is build output git never tracks: .next, .source,
+# node_modules, and a `supabase` tree holding no files. Top-level names only —
+# a file or any other directory fails it, and so does a `supabase` with a file in it.
+only_build_output() {  # $1=dir; an empty dir is not build output, so it stays FLAG
+  [ -n "$(find "$1" -mindepth 1 -maxdepth 1 -print -quit 2>/dev/null)" ] \
+    && [ -z "$(find "$1" -mindepth 1 -maxdepth 1 ! -name .next ! -name .source ! -name node_modules ! -name supabase -print -quit 2>/dev/null)" ] \
+    && [ -z "$(find "$1/supabase" ! -type d -print -quit 2>/dev/null)" ]
+}
+
 human_size() {  # $1=KB -> human string
   awk -v k="$1" 'BEGIN{ if(k>=1048576) printf "%.1f GB", k/1048576; else if(k>=1024) printf "%.0f MB", k/1024; else printf "%d KB", k }'
 }
+
+# The slim pass (#5134). Deletes node_modules and .next from a worktree whose work has landed
+# and leaves everything else: the worktree, its branch, tracked and uncommitted files. See the
+# --slim-only header for the contract; this is the one place it is enforced.
+#
+# The PR picked is the SAME one pr_for_branch picks (any OPEN first, then highest number), so
+# this can never slim a worktree the classification below calls open. headRefOid is the PR head
+# at merge: a tip past it is commits that never landed, and the worktree is left alone.
+#
+# `git check-ignore` is the guard that the directory is build output. It reports nothing for a
+# tracked path, and refuses a path beyond a symlink — which is why a symlinked node_modules is
+# skipped outright: it holds no content, and removing the link frees nothing.
+#
+# $1.. = worktree paths to leave to the removal pass (--apply passes REMOVE_PATHS).
+SLIM_IDLE_MIN="${BRIK_SWEEP_SLIM_IDLE_MIN:-60}"
+SLIM_DIRS=(node_modules .next)
+pr_merged_head() {  # $1=branch -> the merged PR's headRefOid, empty when the chosen PR is not MERGED
+  [ -z "$PR_JSON" ] && return
+  printf '%s' "$PR_JSON" | BRANCH="$1" python3 -c '
+import json, os, sys
+m = [p for p in json.load(sys.stdin) if p.get("headRefName") == os.environ["BRANCH"]]
+if not m:
+    sys.exit()
+m.sort(key=lambda p: (p.get("state") == "OPEN", p.get("number")), reverse=True)
+if m[0].get("state") == "MERGED":
+    print(m[0].get("headRefOid") or "")'
+}
+
+# Was anything a session might be using written inside the idle window? 0 means the caller
+# owns the worktree and has said so, so there is nothing to wait for.
+slim_recently_active() {  # $1=worktree path -> 0 when active
+  local wt="$1" min="$SLIM_IDLE_MIN" f
+  [ "$min" -gt 0 ] 2>/dev/null || return 1
+  while IFS= read -r -d '' f; do
+    [ -n "$(find "$wt/$f" -mmin "-$min" -print -quit 2>/dev/null)" ] && return 0
+  done < <(git -C "$wt" ls-files -m -o --exclude-standard -z 2>/dev/null)
+  [ -n "$(find "$wt/.next" -maxdepth 2 -type f -mmin "-$min" -print -quit 2>/dev/null)" ] && return 0
+  [ -n "$(find "$wt/node_modules/.package-lock.json" -mmin "-$min" -print -quit 2>/dev/null)" ] && return 0
+  return 1
+}
+
+slim_merged_worktrees() {
+  local path ref branch tip head slim_n=0 slim_kb=0 skip i d kb hit only wt_root_phys p_phys
+  local -a targets
+  wt_root_phys="$(cd "$WORKTREE_ROOT" 2>/dev/null && pwd -P)"
+  if [ -z "$PR_JSON" ]; then
+    echo -e "${YELLOW}⚠  PR state unreadable — nothing slimmed.${NC}" >&2
+    return 0
+  fi
+  while IFS=$'\t' read -r path ref; do
+    [ "$path" = "$PRIMARY" ] && continue
+    [ "$ref" = "-" ] && continue                      # detached: no branch to prove it landed
+    branch="${ref#refs/heads/}"
+    kept "$(basename "$path")" && continue
+    kept "$branch" && continue
+    if [ ${#ONLY_LIST[@]} -gt 0 ]; then
+      only=false
+      for hit in "${ONLY_LIST[@]}"; do
+        [ "$(basename "$path")" = "$hit" ] || [ "$branch" = "$hit" ] || [ "$branch" = "task/$hit" ] && only=true
+      done
+      $only || continue
+    fi
+    skip=false
+    for ((i=0; i<${#REMOVE_PATHS[@]}; i++)); do
+      [ "${REMOVE_PATHS[$i]}" = "$path" ] && skip=true
+    done
+    $skip && continue
+    # Physical path under the worktree root, same guard as every rm in this script.
+    p_phys="$(cd "$path" 2>/dev/null && pwd -P)"
+    case "${p_phys:-/nonexistent}" in "${wt_root_phys:-/nonexistent-root}"/?*) ;; *) continue ;; esac
+    head="$(pr_merged_head "$branch")"
+    [ -n "$head" ] || continue
+    tip="$(git -C "$path" rev-parse HEAD 2>/dev/null)"
+    [ "$tip" = "$head" ] || continue
+    targets=()
+    for d in "${SLIM_DIRS[@]}"; do
+      [ -d "$path/$d" ] || continue
+      [ -L "$path/$d" ] && continue                     # a link points at a tree this worktree does not own
+      git -C "$path" check-ignore -q "$d" 2>/dev/null || continue
+      targets+=("$d")
+    done
+    [ ${#targets[@]} -gt 0 ] || continue
+    slim_recently_active "$path" && continue
+    kb=0
+    for d in "${targets[@]}"; do
+      kb=$(( kb + $(du -sk "$p_phys/$d" 2>/dev/null | awk '{print $1+0}') ))
+      rm -rf "${p_phys:?}/$d"
+    done
+    slim_n=$((slim_n+1)); slim_kb=$((slim_kb+kb))
+    echo -e "  ${GREEN}SLIM${NC} ${branch} $(human_size "$kb") (${targets[*]})"
+  done < <(git worktree list --porcelain | awk '
+    /^worktree /{ if (wt != "") print wt "\t" (ref == "" ? "-" : ref); wt=$2; ref="" }
+    /^branch /  { ref=$2 }
+    END         { if (wt != "") print wt "\t" (ref == "" ? "-" : ref) }')
+  echo -e "${GREEN}Slimmed ${slim_n} merged worktree(s), $(human_size "$slim_kb").${NC}"
+}
+
+declare -a REMOVE_PATHS=()   # read by the slim pass; --slim-only exits before pass 1 fills it
+if $SLIM_ONLY; then
+  slim_merged_worktrees
+  exit 0
+fi
 
 # --json rows accumulate as TSV and are serialised by python3 at the end (#2609).
 # Hand-escaping a verdict like `KEEP — PR #123 open` into JSON from shell is exactly
@@ -529,6 +671,19 @@ while IFS=$'\t' read -r path ref; do
     json_row worktree "$branch" "-" "-" "KEEP — --keep"
     KEPT=$((KEPT+1)); continue
   fi
+  # Claude Code's `isolation: worktree` puts agent worktrees in
+  # <primary>/.claude/worktrees/, outside $WORKTREE_ROOT. The removal pass guards
+  # its rm fallback to $WORKTREE_ROOT (correctly), so a merged harness worktree
+  # whose `git worktree remove` fails (any repo with a submodule) was counted
+  # removable, refused at removal, and never converged (#4258). The harness owns
+  # that directory, so say so instead of promising a removal this script cannot do.
+  case "$path" in
+    "$PRIMARY"/.claude/worktrees/*)
+      verdict="REVIEW — harness-managed (.claude/worktrees), outside reaper scope"; REVIEW=$((REVIEW+1))
+      $JSON || printf '%-50s %-9s %-9s %s\n' "$branch" "-" "-" "$verdict"
+      json_row worktree "$branch" "-" "-" "$verdict"
+      continue ;;
+  esac
   dirty_count "$path"; dirty="$DIRTY_N"
   tip=$(git -C "$path" rev-parse "$branch" 2>/dev/null)
   anc="no"; git merge-base --is-ancestor "$tip" origin/main 2>/dev/null && anc="yes"
@@ -708,6 +863,18 @@ if [ -d "$WORKTREE_ROOT" ]; then
     # never a worktree; deriving `task/<slug>` from its name and reaping it because
     # that GUESS happens to match a merged PR is the name-collision `rm -rf` #2293
     # warns of. Report that there is no branch to resolve rather than guessing one.
+    # The exception (#4199): a `npm run dev` that outlived `git worktree remove`
+    # recreates the directory holding nothing but build output. There is no work in
+    # it to lose, so it is reapable without a branch. Anything else in the dir —
+    # one source file, a symlink with another name — keeps the FLAG below.
+    if [ ! -e "$abs/.git" ] && only_build_output "$abs"; then
+      verdict="REAP — no .git, holds only build output"
+      REAP_PATHS+=("$abs"); REAP_LABELS+=("build output only"); REAP_KB+=("$kb")
+      ORPHAN_REAP_KB=$((ORPHAN_REAP_KB+kb))
+      $JSON || printf '%-50s %-11s %s\n' "$slug" "$(human_size "$kb")" "$verdict"
+      json_row orphan "$slug" "$kb" "$verdict"
+      continue
+    fi
     if [ ! -e "$abs/.git" ]; then
       verdict="FLAG — not a worktree (no .git), no branch to resolve"; ORPHAN_FLAG=$((ORPHAN_FLAG+1))
       $JSON || printf '%-50s %-11s %s\n' "$slug" "$(human_size "$kb")" "$verdict"
@@ -916,6 +1083,11 @@ echo -e "${CYAN}Summary:${NC} ${n} worktree(s) removable · ${KEPT} kept · ${RE
 if [ "$UNKNOWN_PR" -gt 0 ]; then
   echo -e "${YELLOW}  ⚠  ${UNKNOWN_PR} of those verdicts could not read PR state — 'gh pr list' failed, so nothing above is evidence a branch did NOT land.${NC}" >&2
 fi
+
+# Before the "nothing to remove" exit, because the worktrees it helps are exactly the ones
+# nothing else removes — dirty or REVIEW, merged, holding their weight (#5134). The ones this
+# run is about to remove are left to it.
+$APPLY && slim_merged_worktrees
 
 if [ "$n" -eq 0 ] && [ "$nr" -eq 0 ] && [ "$nb" -eq 0 ] && [ "$nrf" -eq 0 ]; then
   echo -e "${GREEN}Nothing to remove.${NC}"
