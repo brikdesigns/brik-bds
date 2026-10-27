@@ -125,7 +125,7 @@
   top: 100%;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: var(--bds-z-dropdown);
   margin-top: var(--bds-gap-sm);
   background-color: var(--bds-surface-primary);
   border-radius: var(--bds-border-radius-lg);

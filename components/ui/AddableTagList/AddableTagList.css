@@ -88,7 +88,7 @@
   top: calc(100% + var(--bds-gap-xs));
   left: 0;
   right: 0;
-  z-index: 200;
+  z-index: var(--bds-z-dropdown);
   list-style: none;
   margin: 0;
   padding: var(--bds-padding-sm);

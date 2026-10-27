@@ -16,7 +16,7 @@
   --menu-enter-ease: var(--bds-ease-out);            /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 
   position: absolute;
-  z-index: 100;
+  z-index: var(--bds-z-dropdown);
   background-color: var(--bds-background-primary);
   border-radius: var(--bds-border-radius-lg);
   padding: var(--bds-padding-md);

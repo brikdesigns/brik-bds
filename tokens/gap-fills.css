@@ -502,13 +502,13 @@
   --bds-measure-md: var(--bds-content-width-text-sm); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-text-sm (ADR-041, #2615); drop next minor */
   --bds-measure-lg: var(--bds-content-width-text-md); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-text-md (ADR-041, #2615); drop next minor */
 
-  /* ── Stacking order (brik-bds#2840) ──
-     One ladder for every layer that has to outrank another. Components still
-     carry raw z-index values; they move onto this scale in a separate
-     sub-issue. The rungs leave room for the raw values they will map onto:
-       sticky 10 (SidebarNavigation) · page-header 20 (PageHeader)
-       dropdown 100 (Menu, Popover, TopNavigation, FilterButton, AddressInput;
-       50 DatePicker and 200 AddableEntryList/AddableTagList fold in)
+  /* ── Stacking order (brik-bds#2840, components moved on in #2845) ──
+     One ladder for every layer that has to outrank another. Component CSS
+     uses these tokens for every layer value; raw 0–4 stays only for stacking
+     inside one component. Who sits on each rung:
+       sticky 10 (SidebarNavigation, SubNavigation) · page-header 20 (PageHeader)
+       dropdown 100 (Menu, Popover, TopNavigation, FilterButton, AddressInput,
+       DatePicker — was 50 — and AddableEntryList/AddableTagList — was 200)
        sheet-backdrop 900 / sheet 901 (Sheet) · modal 1000 (Modal)
        dialog 1100 (Dialog) · tooltip 1200 (Tooltip, was 1000 and tied Modal)
        max 9999 (TaskConsole)

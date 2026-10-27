@@ -19,7 +19,7 @@
   padding: var(--bds-padding-md) var(--bds-padding-lg);
   background-color: var(--bds-surface-nav);
   box-sizing: border-box;
-  z-index: 100;
+  z-index: var(--bds-z-dropdown);
 }
 
 .bds-top-navigation--sticky {

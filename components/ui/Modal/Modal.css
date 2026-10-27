@@ -12,7 +12,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--bds-padding-lg);
-  z-index: 1000;
+  z-index: var(--bds-z-modal);
 }
 
 .bds-modal {

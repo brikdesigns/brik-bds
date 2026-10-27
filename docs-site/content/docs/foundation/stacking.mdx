@@ -19,21 +19,21 @@ One ladder orders every layer that has to outrank another. Use a `--bds-z-*` tok
 
 Listed from the bottom of the stack to the top. A higher row always paints over a lower one.
 
-| Token | Value | Layer | Today's raw value it maps to |
+| Token | Value | Layer | Used by |
 |---|---|---|---|
-| `--bds-z-sticky` | 10 | Sticky in-flow chrome, such as the sidebar | `SidebarNavigation` 10 |
-| `--bds-z-page-header` | 20 | Sticky page header | `PageHeader` 20 |
+| `--bds-z-sticky` | 10 | Sticky in-flow chrome, such as the sidebar | `SidebarNavigation`, `SubNavigation` |
+| `--bds-z-page-header` | 20 | Sticky page header | `PageHeader` |
 | `--bds-z-shell` | 30 | App shell top bar — above the page header | none yet (portal top bar uses 9) |
-| `--bds-z-dropdown` | 100 | Menus, popovers, date pickers, address and filter lists | `Menu`, `Popover`, `TopNavigation`, `FilterButton`, `AddressInput` 100; `DatePicker` 50; `AddableEntryList`, `AddableTagList` 200 |
-| `--bds-z-sheet-backdrop` | 900 | Sheet scrim | `Sheet` 900 |
-| `--bds-z-sheet` | 901 | Sheet panel | `Sheet` 901 |
-| `--bds-z-modal` | 1000 | Modal | `Modal` 1000 |
-| `--bds-z-dialog` | 1100 | Dialog — over a modal it was opened from | `Dialog` 1100 |
-| `--bds-z-tooltip` | 1200 | Tooltip — over every surface it can point at | `Tooltip` 1000 |
-| `--bds-z-max` | 9999 | Developer tooling that must never be covered | `TaskConsole` 9999 |
+| `--bds-z-dropdown` | 100 | Menus, popovers, date pickers, address and filter lists | `Menu`, `Popover`, `TopNavigation`, `FilterButton`, `AddressInput`, `DatePicker`, `AddableEntryList`, `AddableTagList` |
+| `--bds-z-sheet-backdrop` | 900 | Sheet scrim | `Sheet` |
+| `--bds-z-sheet` | 901 | Sheet panel | `Sheet` |
+| `--bds-z-modal` | 1000 | Modal | `Modal` |
+| `--bds-z-dialog` | 1100 | Dialog — over a modal it was opened from | `Dialog` |
+| `--bds-z-tooltip` | 1200 | Tooltip — over every surface it can point at | `Tooltip` |
+| `--bds-z-max` | 9999 | Developer tooling that must never be covered | `TaskConsole` |
 
 <Callout type="info">
-  Component CSS still carries the raw values in the last column. Moving each component onto this scale is tracked separately, so until then the tokens are for new code and for consumers. `Modal` and `Tooltip` both use 1000 today and tie; the scale puts the tooltip above the modal, so a tooltip inside a modal is never hidden by it.
+  Every layer value in component CSS reads from this table, so the table is the single source. A raw `z-index` of 0–4 is fine only for stacking inside one component, such as a decorative layer behind content. Moving onto the scale changed three values: `Tooltip` went from 1000 to 1200, so a tooltip inside a modal is no longer tied with it; `DatePicker` went from 50 to 100 and `AddableEntryList` / `AddableTagList` from 200 to 100, so every dropdown sits on one rung.
 </Callout>
 
 ## Order rules
