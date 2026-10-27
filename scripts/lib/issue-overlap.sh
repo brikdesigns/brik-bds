@@ -737,6 +737,19 @@ _io_worktree_status() {
     | awk 'NF'
 }
 
+# Paths a worktree has DELETED (a `D` in either porcelain column). A deletion is
+# not an edit in flight: a gutted worktree is every-row-`D`, outlives the sweep
+# because it is dirty, and would otherwise collide with any task naming `.husky/*`
+# (#4523). Still counted in the ambient "N dirty file(s)" line, never intersected.
+# IO_WORKTREE_DELETED_CMD is the test seam, as IO_WORKTREE_STATUS_CMD is.
+_io_worktree_deleted() {
+  git -C "${1:-}" status --porcelain 2>/dev/null \
+    | awk 'substr($0,1,2) ~ /D/' \
+    | cut -c4- \
+    | sed 's/^"\(.*\)"$/\1/' \
+    | awk 'NF'
+}
+
 _io_sibling_worktrees() {
   local self here
   self="$(_io_physical "$(git rev-parse --show-toplevel 2>/dev/null || printf '.')")"
@@ -793,13 +806,17 @@ check_worktree_overlap() {
               "$(git rev-parse --show-toplevel 2>/dev/null)")"
   fi
 
-  local wt dirty shared dirty_report="" collisions=""
+  local wt dirty deleted live shared dirty_report="" collisions=""
   while IFS= read -r wt; do
     [ -n "$wt" ] || continue
     dirty="$(${IO_WORKTREE_STATUS_CMD:-_io_worktree_status} "$wt")"
     [ -n "$dirty" ] || continue
     dirty_report="${dirty_report}${wt}"$'\t'"$(printf '%s\n' "$dirty" | wc -l | tr -d ' ')"$'\n'
-    shared="$(_io_intersect "$mine" "$dirty")"
+    deleted="$(${IO_WORKTREE_DELETED_CMD:-_io_worktree_deleted} "$wt")"
+    live="$dirty"
+    [ -z "$deleted" ] || live="$(printf '%s\n' "$dirty" | grep -vxFf <(printf '%s\n' "$deleted") || true)"
+    [ -n "$live" ] || continue
+    shared="$(_io_intersect "$mine" "$live")"
     [ -n "$shared" ] || continue
     collisions="${collisions}${wt}"$'\t'"$(printf '%s\n' "$shared" | paste -sd, -)"$'\n'
   done < <(printf '%s\n' "$siblings")
