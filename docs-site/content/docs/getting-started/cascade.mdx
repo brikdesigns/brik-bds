@@ -114,13 +114,13 @@ Foundation, Theming, Motion, Content are the four **Tenets** of BDS. Tokens span
 A Mode varies a token's *value* on a system-wide axis any consumer can toggle. Modes are **orthogonal** to Library, Layer, and Tier — every semantic token can have per-mode values without changing its name.
 
 ```html
-<html data-theme="dark" data-mode-borderwidth="bold" data-mode-spacing="comfortable">
+<html data-theme="dark" data-mode-borderwidth="thick" data-mode-spacing="comfortable">
 ```
 
 | Mode collection | Attribute | Default | Other values | Wired? |
 |---|---|---|---|---|
 | `color` | `data-theme` (legacy attribute) | `light` | `dark` | ✅ |
-| `borderwidth` | `data-mode-borderwidth` | `default` | `thin`, `bold` | ✅ |
+| `borderwidth` | `data-mode-borderwidth` | `default` | `thin`, `thick` | ✅ |
 | `spacing` | `data-mode-spacing` | `default` | `compact`, `comfortable`, `spacious` | ✅ |
 | `border-radius` | `data-mode-radius` | `soft` | `sharp`, `round`, `pill` | ⏳ [#340](https://github.com/brikdesigns/brik-bds/issues/340) |
 | `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious`, `expressive` | ✅ `modes-typography.css` (heading-* only) |
@@ -155,7 +155,7 @@ Full registry at [Color](/docs/foundation/color). Canonical bundle: `dist/tokens
 | Attribute | Values | Effect |
 |---|---|---|
 | `data-theme` | `light` (default) / `dark` | Color mode |
-| `data-mode-borderwidth` | `default` (omit) / `thin` / `bold` | Borderwidth mode |
+| `data-mode-borderwidth` | `default` (omit) / `thin` / `thick` | Borderwidth mode |
 | `data-mode-spacing` | `default` (omit) / `compact` / `comfortable` / `spacious` | Spacing density mode |
 | `data-audience` / `data-service` / `data-department` | Per-site convention | Re-binds canonical brand tokens within a subtree (multi-brand pattern — see [Client Themes → scope binding](/docs/theming/client-themes#per-audience-scope-binding)) |
 

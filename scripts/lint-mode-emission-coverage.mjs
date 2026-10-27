@@ -17,8 +17,7 @@
  * Sources of truth (no duplicated wiring knowledge):
  *   - COLLECTIONS registry (imported from generate-modes-css.mjs) → the
  *     registry-wired collections + their data-mode attribute (cfg.attr ?? key).
- *   - WIRED_LEGACY → collections emitted outside the registry (border-width via
- *     the hand-authored modes-borderwidth.css, appended in MODE_FILES).
+ *     border-width joined it in #2601; nothing is wired outside it any more.
  *   - EXCLUDED → intentionally-unwired collections, each with a named reason.
  *
  * Run:
@@ -40,12 +39,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const TOKENS_STUDIO = path.join(ROOT, 'design-tokens/tokens-studio.json');
 const DIST_TOKENS = path.join(ROOT, 'dist/tokens.css');
-
-// Collections emitted OUTSIDE the COLLECTIONS registry (AC bullet 4). Maps the
-// source collection name → its data-mode attribute.
-const WIRED_LEGACY = {
-  'border-width': 'borderwidth', // hand-authored tokens/modes-borderwidth.css (pre-registry)
-};
 
 // Intentionally-unwired multi-modal collections — named, never silent (AC bullet 2).
 const EXCLUDED = {
@@ -73,11 +66,10 @@ export function multiModalCollections(data) {
   return out;
 }
 
-/** collection → data-mode attribute, from the registry then the legacy map. */
+/** collection → data-mode attribute, from the registry. */
 export function wiredAttrFor(collection) {
   const cfg = COLLECTIONS[collection];
   if (cfg) return cfg.attr ?? collection;
-  if (collection in WIRED_LEGACY) return WIRED_LEGACY[collection];
   return null;
 }
 

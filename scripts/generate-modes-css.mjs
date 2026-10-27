@@ -10,9 +10,10 @@
  * Currently wires:
  *   - spacing     → padding-* and gap-* tokens
  *   - typography  → display-* and heading-* type scales
+ *   - border-width → border-width-{sm,md,lg,xl,huge}
  *
  * Easy to extend to:
- *   - border-radius / border-width / elevation / breakpoint / icon
+ *   - border-radius / elevation / breakpoint / icon
  *
  * Run:
  *   node scripts/generate-modes-css.mjs              # all wired collections
@@ -107,6 +108,30 @@ export const COLLECTIONS = {
       'values (like the spacing modes) rather than var() aliases — the pill/circle ' +
       'primitives are Semantic-tier by name, so a var() alias would be off-model.',
   },
+  'border-width': {
+    // Flat slice like border-radius: border-width/{mode} carries none/sm/md/lg/xl/huge
+    // at the slice root.
+    flat: true,
+    defaultMode: 'default',
+    nonDefaultModes: ['thin', 'thick'],
+    // Attribute + file keep the pre-generator names (data-mode-borderwidth,
+    // modes-borderwidth.css) so existing consumers keep working.
+    attr: 'borderwidth',
+    fileName: 'borderwidth',
+    // `bold` was the hand-authored name for `thick` before the Figma pull
+    // (brik-bds#2601). Keep it as a selector alias for one release so the
+    // portal's `data-mode-borderwidth="bold"` still resolves; drop it after.
+    selectorAliases: { thick: ['bold'] },
+    unitSuffix: '', // resolve returns a var() alias that already carries the unit
+    tokenName: (_group, name) => `${PREFIX}border-width-${name}`,
+    resolve: resolveBorderWidthRef,
+    description:
+      'Border-weight mode — overrides the semantic --border-width-{sm,md,lg,xl,huge} ' +
+      'tokens. thin drops one weight, thick raises it. Default is the figma-tokens.css ' +
+      'base and emits no attribute; `none` is 0 in every mode, so it never overrides. ' +
+      'Emitted as var(--border-width-NNN) references, matching how figma-tokens.css ' +
+      'emits the default ramp.',
+  },
   layout: {
     // The layout TIER (ADR-042) — the one collection whose values legitimately
     // vary by DEVICE rather than by a runtime-switchable density/style MODE.
@@ -190,6 +215,14 @@ function resolveRadiusRef(value, primitives) {
   return primitives['border-radius']?.[m[1]]?.$value ?? value;
 }
 
+function resolveBorderWidthRef(value) {
+  // {border-width.NNN} → var(--border-width-NNN), like resolveFontSizeRef. Every
+  // border-width primitive is a numeric step, so the alias stays Semantic→Primitive.
+  const m = String(value).match(/^\{border-width\.(\w+)\}$/);
+  if (!m) return value;
+  return `var(${PREFIX}border-width-${m[1]})`;
+}
+
 function readModeTokens(data, collectionKey, modeName) {
   const sliceKey = `${collectionKey}/${modeName}`;
   const slice = data[sliceKey];
@@ -220,6 +253,9 @@ function emitCollection(data, collectionKey) {
   lines.push(' *');
   lines.push(` * Selector contract: \`[data-mode-${attr}="${cfg.nonDefaultModes.join('|')}"]\``);
   lines.push(' * on :root (html). Default mode requires no attribute (uses figma-tokens.css base).');
+  for (const [mode, aliases] of Object.entries(cfg.selectorAliases ?? {})) {
+    lines.push(` * Deprecated alias: ${aliases.map((a) => `"${a}"`).join(', ')} → "${mode}" (one release).`);
+  }
   lines.push(' *');
   lines.push(' * Companion to figma-tokens-dark.css and modes-borderwidth.css per the cascade');
   lines.push(' * documented in tokens/CASCADE.md.');
@@ -264,7 +300,9 @@ function emitCollection(data, collectionKey) {
     if (body.length === 0) continue; // mode identical to default — nothing to emit
 
     lines.push(`/* ─── ${modeName.charAt(0).toUpperCase() + modeName.slice(1)} ────────────────────────────────────────── */`);
-    lines.push(`[data-mode-${attr}="${modeName}"] {`);
+    const selectors = [modeName, ...(cfg.selectorAliases?.[modeName] ?? [])]
+      .map((m) => `[data-mode-${attr}="${m}"]`);
+    lines.push(`${selectors.join(',\n')} {`);
     lines.push(...body);
     lines.push('}');
     lines.push('');

@@ -86,7 +86,7 @@ Published from `content-system/vocabularies/{spacing,typography,radius,elevation
 | typography | `data-mode-typography` | `compact` · `comfortable` · `spacious` · `expressive` | `default` |
 | radius | `data-mode-radius` | `sharp` · `round` · `pill` | `soft` |
 | elevation | `data-mode-elevation` | `flat` · `lifted` · `dramatic` | `subtle` |
-| borderwidth | `data-mode-borderwidth` | `thin` · `bold` | `standard` |
+| borderwidth | `data-mode-borderwidth` | `thin` · `thick` | `default` |
 
 **Each default is the attribute-ABSENT state and is therefore not a vocabulary member.** No `[data-mode-radius="soft"]` selector exists; omitting the attribute is how you get `soft`. A pick-list that offers the default as a value offers a string the CSS will ignore — which is half of how the portal's copies drifted (`base`, `soft`, `subtle`, `none` are all defaults promoted to members).
 
@@ -98,7 +98,7 @@ The typography axis is heading-scale-variant selection, not strictly density ([A
 
 This is the same gate discipline ADR-039 § Decision-4 already applies to the other three axes, pointed at the one axis that was exempt. Enforcement, no new workflow:
 
-1. `content-system/vocabularies/expression-modes.test.ts` parses `tokens/modes-*.css` and asserts set equality per axis, that no axis claims its attribute-absent default, and that the glob reads exactly one file per declared axis — a sixth mode file shipping without a vocabulary fails there. It parses the CSS rather than the `COLLECTIONS` registry in `scripts/generate-modes-css.mjs` because `modes-borderwidth.css` is hand-authored and pre-dates that registry: the registry covers four of five axes, the CSS covers all five and is what ships.
+1. `content-system/vocabularies/expression-modes.test.ts` parses `tokens/modes-*.css` and asserts set equality per axis, that no axis claims its attribute-absent default, and that the glob reads exactly one file per declared axis — a sixth mode file shipping without a vocabulary fails there. It parses the CSS rather than the `COLLECTIONS` registry in `scripts/generate-modes-css.mjs` because the CSS is what ships. (When this was written `modes-borderwidth.css` was hand-authored and the registry covered four of five axes; since #2601 it covers all five, and border-width's `bold` was renamed to Figma's `thick`.)
 2. `manifest/component-axes.json` surfaces the five lists under the reserved `@modes` key (ADR-009), read from the vocabulary modules by `scripts/generate-component-axes.mjs` and gated by the existing `npm run typegen:axes:check`. `@` cannot begin a TS export name, so the key can never collide with a component.
 3. `tokens/index.ts` aliases its `SpacingMode` / `BorderMode` to the vocabularies instead of re-declaring them, retiring the `rounded` drift.
 

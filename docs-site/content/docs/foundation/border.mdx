@@ -56,24 +56,29 @@ Border width tokens control line thickness for borders, dividers, and outlines.
 | None | `--bds-border-width-none` | No border (0px) |
 | Small | `--bds-border-width-sm` | Subtle hairline |
 | Medium | `--bds-border-width-md` | Default visible border |
-| Large | `--bds-border-width-lg` | Prominent border (4px default; varies by border-width mode) |
+| Large | `--bds-border-width-lg` | Prominent border (3px default; varies by border-width mode) |
+| Extra large | `--bds-border-width-xl` | Heavy border (4px default) |
+| Huge | `--bds-border-width-huge` | Heaviest border (5px default) |
 
 ### Width modes
 
-Border density is a theme-level mode. Set `data-mode-borderwidth` on `:root` (or any subtree) to shift every `--border-width-*` semantic token at once; the default (no attribute) keeps the standard values. Two override modes ship today — `thin` and `bold` — wired in [`tokens/modes-borderwidth.css`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/modes-borderwidth.css):
+Border density is a theme-level mode. Set `data-mode-borderwidth` on `:root` (or any subtree) to shift every `--border-width-*` semantic token at once; the default (no attribute) keeps the base values. Two override modes ship — `thin` and `thick`, the Figma mode names — generated into [`tokens/modes-borderwidth.css`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/modes-borderwidth.css):
 
-| Token | `default` | `thin` | `bold` |
+| Token | `default` | `thin` | `thick` |
 |---|---|---|---|
-| `--bds-border-width-sm` | 1px | 1px | 2px |
-| `--bds-border-width-md` | 2px | 1px | 3px |
-| `--bds-border-width-lg` | 4px | 2px | 4px |
+| `--bds-border-width-none` | 0 | 0 | 0 |
+| `--bds-border-width-sm` | 0.5px | 0.25px | 1px |
+| `--bds-border-width-md` | 1px | 0.5px | 3px |
+| `--bds-border-width-lg` | 3px | 1px | 5px |
+| `--bds-border-width-xl` | 4px | 2px | 8px |
+| `--bds-border-width-huge` | 5px | 3px | 12px |
 
 ```html
-<html data-mode-borderwidth="bold">   <!-- whole document -->
+<html data-mode-borderwidth="thick">   <!-- whole document -->
 <section data-mode-borderwidth="thin">…</section>   <!-- one subtree -->
 ```
 
-`thin` matches `default` at `sm` because sub-pixel borders below 1px render unreliably across browsers. Values verified against `dist/tokens.css`; re-pull after a Figma mode change (`npm run build:sd-figma`).
+`bold` is the retired name for `thick`. It still matches for one release, then stops resolving — switch to `thick`. Values verified against `dist/tokens.css`; after a Figma mode change, re-pull and regenerate with `npm run build:modes`.
 
 ## Related
 
