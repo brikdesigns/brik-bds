@@ -1356,6 +1356,115 @@ else
   FAIL=$((FAIL+1))
 fi
 
+# ── Harness worktrees and build-output orphans (#4258, #4199) ────────────────
+# #4258: a merged worktree under <primary>/.claude/worktrees is outside the root the
+# removal pass is guarded to, so it was counted removable and then refused. It must
+# read REVIEW and stay out of the removable count; a merged worktree under the real
+# root is the control that the REMOVE path still works in the same run.
+# #4199: a no-.git dir holding only build output is reapable; one stray source file,
+# or a file under supabase/, keeps it FLAG-only.
+echo
+echo -e "${YELLOW}▸ harness worktrees + build-output orphans (#4258, #4199)${NC}"
+
+REMOTE7="$TMPROOT/remote7.git"
+PRIMARY7="$TMPROOT/primary7"
+WT7="$TMPROOT/primary7-worktrees"
+git init -q --bare "$REMOTE7"
+git init -q -b main "$PRIMARY7"
+assert_throwaway_repo "$PRIMARY7" "sweep fixture primary7"
+g -C "$PRIMARY7" config user.email "guardtest@example.com"
+g -C "$PRIMARY7" config user.name "guardtest"
+g -C "$PRIMARY7" config commit.gpgsign false
+echo seed > "$PRIMARY7/README.md"
+g -C "$PRIMARY7" add README.md
+g -C "$PRIMARY7" commit -q -m seed
+g -C "$PRIMARY7" remote add origin "$REMOTE7"
+g -C "$PRIMARY7" push -q -u origin main
+mkdir -p "$WT7" "$PRIMARY7/.claude/worktrees"
+
+# Each is merged by fast-forward, so only the PATH separates the two verdicts.
+for spec in "agent-merged:$PRIMARY7/.claude/worktrees/agent-merged" "normal-merged:$WT7/normal-merged"; do
+  slug="${spec%%:*}"; dest="${spec#*:}"
+  g -C "$PRIMARY7" fetch -q origin main
+  g -C "$PRIMARY7" worktree add -q -b "task/$slug" "$dest" origin/main
+  commit_on "$dest" "$slug.txt"
+  g -C "$PRIMARY7" push -q origin "task/$slug:main"
+done
+g -C "$PRIMARY7" fetch -q origin main
+
+mk_orphan() {  # $1=slug  $2..=paths to create (trailing / = directory)
+  local slug="$1"; shift
+  mkdir -p "$WT7/$slug"
+  for rel in "$@"; do
+    case "$rel" in
+      */) mkdir -p "$WT7/$slug/$rel" ;;
+      *)  mkdir -p "$WT7/$slug/$(dirname "$rel")"; echo x > "$WT7/$slug/$rel" ;;
+    esac
+  done
+}
+mk_orphan orph-build   .next/cache/a.js .source/b.json node_modules/m/index.js supabase/migrations/
+mk_orphan orph-src     .next/cache/a.js src/app.ts
+mk_orphan orph-supa    .next/cache/a.js supabase/seed.sql
+mk_orphan orph-other   node_modules/m/index.js .env
+
+STUB7="$TMPROOT/bin7"
+mkdir -p "$STUB7"
+# shellcheck disable=SC2016  # the stub's ${1:-} must stay literal
+printf '%s\n' '#!/usr/bin/env bash' \
+  'if [ "${1:-}" = "pr" ] && [ "${2:-}" = "list" ]; then echo "[]"; exit 0; fi' 'exit 0' > "$STUB7/gh"
+chmod +x "$STUB7/gh"
+
+D7="$( (cd "$PRIMARY7" && PATH="$STUB7:$PATH" BRIK_WORKTREE_ROOT="$WT7" "$SWEEPER" 2>&1) )"
+$VERBOSE && { echo "$D7"; echo; }
+check "harness worktree → REVIEW, outside reaper scope (#4258)" "REVIEW — harness-managed" "$(grep -E '^task/agent-merged[[:space:]]' <<<"$D7")"
+check "control — a merged worktree under the real root still REMOVEs" "REMOVE — merged into main" "$(grep -E '^task/normal-merged[[:space:]]' <<<"$D7")"
+check "only the real-root worktree is counted removable" "1 worktree(s) removable" "$D7"
+check "build-output-only orphan → REAP (#4199)" "REAP — no .git, holds only build output" "$(grep -E '^orph-build[[:space:]]' <<<"$D7")"
+check "orphan with a source file → still FLAG" "FLAG — not a worktree (no .git)" "$(grep -E '^orph-src[[:space:]]' <<<"$D7")"
+check "orphan with a file under supabase/ → still FLAG" "FLAG — not a worktree (no .git)" "$(grep -E '^orph-supa[[:space:]]' <<<"$D7")"
+check "orphan with an unlisted top-level file → still FLAG" "FLAG — not a worktree (no .git)" "$(grep -E '^orph-other[[:space:]]' <<<"$D7")"
+check "exactly one orphan is reapable" "1 orphan(s) reapable" "$D7"
+
+A7="$( (cd "$PRIMARY7" && PATH="$STUB7:$PATH" BRIK_WORKTREE_ROOT="$WT7" "$SWEEPER" --apply 2>&1) )"
+$VERBOSE && { echo "$A7"; echo; }
+if [ ! -d "$WT7/orph-build" ] && [ ! -d "$WT7/normal-merged" ] \
+   && [ -d "$WT7/orph-src" ] && [ -d "$WT7/orph-supa" ] && [ -d "$WT7/orph-other" ] \
+   && [ -d "$PRIMARY7/.claude/worktrees/agent-merged" ]; then
+  echo -e "  ${GREEN}PASS${NC}  --apply reaped the build-output orphan and the real-root worktree, kept the rest"; PASS=$((PASS+1))
+else
+  echo -e "  ${RED}FAIL${NC}  --apply: orph-build=$([ -d "$WT7/orph-build" ] && echo kept || echo gone) normal-merged=$([ -d "$WT7/normal-merged" ] && echo kept || echo gone) orph-src=$([ -d "$WT7/orph-src" ] && echo kept || echo gone) agent-merged=$([ -d "$PRIMARY7/.claude/worktrees/agent-merged" ] && echo kept || echo gone)"
+  FAIL=$((FAIL+1))
+fi
+A7B="$( (cd "$PRIMARY7" && PATH="$STUB7:$PATH" BRIK_WORKTREE_ROOT="$WT7" "$SWEEPER" --apply 2>&1) )"
+check "a second --apply converges: nothing removable" "0 worktree(s) removable" "$A7B"
+check "…and no orphan reapable" "0 orphan(s) reapable" "$A7B"
+
+# #4258 AC: the rm guard is unchanged for a path outside BOTH roots. A submodule-bearing
+# merged worktree is the only shape that reaches the guarded fallback (plain
+# `git worktree remove` refuses it), so put one outside both and require the refusal.
+g -C "$PRIMARY7" reset -q --hard origin/main
+g -C "$PRIMARY7" -c protocol.file.allow=always submodule add -q "$SUBREMOTE" foundations/sub >/dev/null 2>&1 || true
+g -C "$PRIMARY7" commit -q -m "add submodule" >/dev/null 2>&1 || true
+g -C "$PRIMARY7" push -q origin main
+g -C "$PRIMARY7" fetch -q origin main
+OUTSIDE7="$TMPROOT/outside7-elsewhere"
+g -C "$PRIMARY7" worktree add -q -b task/outside-merged "$OUTSIDE7" origin/main
+g -C "$OUTSIDE7" -c protocol.file.allow=always submodule update --init --recursive >/dev/null 2>&1 || true
+commit_on "$OUTSIDE7" "outside.txt"
+g -C "$PRIMARY7" push -q origin task/outside-merged:main
+g -C "$PRIMARY7" fetch -q origin main
+if [ -z "$(find "$OUTSIDE7/foundations/sub" -mindepth 1 -maxdepth 1 2>/dev/null)" ]; then
+  echo -e "  ${RED}FAIL${NC}  fixture: outside-both-roots submodule never populated — guard case not reproduced"; FAIL=$((FAIL+1))
+fi
+O7="$( (cd "$PRIMARY7" && PATH="$STUB7:$PATH" BRIK_WORKTREE_ROOT="$WT7" "$SWEEPER" --apply 2>&1) )"
+$VERBOSE && { echo "$O7"; echo; }
+check "rm guard still refuses a path outside both roots" "refusing to rm outside" "$O7"
+if [ -d "$OUTSIDE7" ] && [ -d "$PRIMARY7/.claude/worktrees/agent-merged" ]; then
+  echo -e "  ${GREEN}PASS${NC}  …and nothing outside \$WORKTREE_ROOT was removed"; PASS=$((PASS+1))
+else
+  echo -e "  ${RED}FAIL${NC}  a path outside \$WORKTREE_ROOT was removed"; FAIL=$((FAIL+1))
+fi
+
 echo
 if [ "$FAIL" -eq 0 ]; then
   echo -e "${GREEN}✓ ${PASS} passed${NC}"
