@@ -5,7 +5,11 @@ import { SPACING_MODE_VALUES, isSpacingMode } from './spacing-mode';
 import { RADIUS_MODE_VALUES, isRadiusMode } from './radius-mode';
 import { ELEVATION_MODE_VALUES, isElevationMode } from './elevation-mode';
 import { TYPOGRAPHY_MODE_VALUES, isTypographyMode } from './typography-mode';
-import { BORDERWIDTH_MODE_VALUES, isBorderWidthMode } from './borderwidth-mode';
+import {
+  BORDERWIDTH_MODE_VALUES,
+  BORDERWIDTH_MODE_DEPRECATED_ALIASES,
+  isBorderWidthMode,
+} from './borderwidth-mode';
 
 /**
  * Expression-mode vocabulary contract (ADR-039 amendment, #2774).
@@ -14,18 +18,19 @@ import { BORDERWIDTH_MODE_VALUES, isBorderWidthMode } from './borderwidth-mode';
  * values the shipped CSS actually switches on. "BDS CSS selector values win"
  * is the rule; this is the instrument that enforces it.
  *
- * WHY THE CSS AND NOT THE REGISTRY. Four of the five mode files are emitted
- * from the COLLECTIONS registry in `scripts/generate-modes-css.mjs`, which
- * `lint-mode-emission-coverage.mjs` already imports. `modes-borderwidth.css`
- * is hand-authored and pre-dates that registry, so COLLECTIONS covers four of
- * five. The CSS covers all five, and it is also the artifact that actually
- * ships in dist/tokens.css — a drift the CSS does not show cannot reach a
- * browser.
+ * WHY THE CSS AND NOT THE REGISTRY. All five mode files are emitted from the
+ * COLLECTIONS registry in `scripts/generate-modes-css.mjs` (border-width since
+ * #2601), but the CSS is the artifact that actually ships in dist/tokens.css —
+ * a drift the CSS does not show cannot reach a browser.
  *
  * DEFAULT MODES ARE NOT MEMBERS. Each axis has a default expressed by the
- * ABSENCE of the attribute (`soft` radius, `subtle` elevation, `standard`
- * border-width, `default` spacing/typography). No selector carries them, so
- * no vocabulary does either — see each module's header.
+ * ABSENCE of the attribute (`soft` radius, `subtle` elevation, `default`
+ * border-width/spacing/typography). No selector carries them, so no
+ * vocabulary does either — see each module's header.
+ *
+ * DEPRECATED ALIASES ARE SELECTORS, NOT MEMBERS. A retired mode name kept for
+ * one release (border-width `bold` → `thick`) is matched by the CSS, so the
+ * selector set is members + aliases.
  */
 
 /**
@@ -59,6 +64,8 @@ interface ModeAxis {
   readonly guard: (value: string) => boolean;
   /** The attribute-absent default, asserted to be absent from the selectors. */
   readonly defaultMode: string;
+  /** Retired names still matched by a selector, keyed to their replacement member. */
+  readonly aliases?: Readonly<Record<string, string>>;
 }
 
 const MODE_AXES: readonly ModeAxis[] = [
@@ -100,7 +107,8 @@ const MODE_AXES: readonly ModeAxis[] = [
     cssFile: 'modes-borderwidth.css',
     values: BORDERWIDTH_MODE_VALUES,
     guard: isBorderWidthMode,
-    defaultMode: 'standard',
+    defaultMode: 'default',
+    aliases: BORDERWIDTH_MODE_DEPRECATED_ALIASES,
   },
 ];
 
@@ -126,10 +134,21 @@ function selectorValues(css: string, attribute: string): string[] {
 describe('expression-mode vocabularies match the shipped CSS selectors', () => {
   it.each(MODE_AXES)(
     '$axis equals the [data-mode-$attribute] values in $cssFile',
-    ({ attribute, cssFile, values }) => {
+    ({ attribute, cssFile, values, aliases = {} }) => {
       expect(selectorValues(readModeCss(cssFile), attribute)).toEqual(
-        [...values].sort(),
+        [...values, ...Object.keys(aliases)].sort(),
       );
+    },
+  );
+
+  it.each(MODE_AXES.filter((a) => a.aliases))(
+    '$axis aliases each point at a member and pass the guard',
+    ({ values, aliases = {}, guard }) => {
+      for (const [alias, member] of Object.entries(aliases)) {
+        expect(values).toContain(member);
+        expect(values).not.toContain(alias);
+        expect(guard(alias)).toBe(true);
+      }
     },
   );
 

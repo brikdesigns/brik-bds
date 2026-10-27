@@ -10,7 +10,7 @@ This doc uses the locked BDS token vocabulary (see [Token Anatomy](../docs-site/
 - **Library** — the logical source of token definitions (Foundations Library / [Client] Brand Kit Library). Today: Figma files managed via Tokens Studio. Exactly two Figma libraries feed this pipeline — see below.
 - **Layer** — a CSS `@layer` in the cascade (`bds-tokens` / `bds-components` / `client-theme` / `client-overrides`). Where a token's *value* lands at runtime.
 - **Tier** — a token's abstraction level (Raw / Primitive / Semantic / Component). Independent from Layer.
-- **Mode** — an orthogonal axis varying token values (color light/dark, borderwidth thin/standard/bold, etc.).
+- **Mode** — an orthogonal axis varying token values (color light/dark, borderwidth thin/default/thick, etc.).
 - **Theming Dimension** — composable subsystem of the Theming Tenet (Tokens / Atmospheres / Layout / Blueprints).
 - **Tenet** — system pillar (Foundation / Theming / Motion / Content).
 
@@ -40,7 +40,7 @@ brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
 1. `figma-tokens.css` — auto-generated light-mode tokens (`:root`)
 2. `figma-tokens-dark.css` — auto-generated dark-mode tokens (`:root[data-theme="dark"]`)
 3. `theme-brand-brik.css` — Brik brand overrides (scoped to `.theme-brand-brik` class)
-4. `modes-borderwidth.css` — borderWidth mode overrides (`[data-mode-borderwidth="thin|bold"]`)
+4. `modes-borderwidth.css` — borderWidth mode overrides (`[data-mode-borderwidth="thin|thick"]`; `bold` is a one-release alias of `thick`) — auto-generated via `npm run build:modes`
 5. `modes-spacing.css` — spacing density mode overrides (`[data-mode-spacing="compact|comfortable|spacious"]`) — auto-generated from `design-tokens/tokens-studio.json` via `npm run build:modes`
 6. `modes-typography.css` — typography heading-scale-variant overrides (`[data-mode-typography="compact|comfortable|spacious|expressive"]`) — auto-generated from `design-tokens/tokens-studio.json` via `npm run build:modes`
 7. `modes-borderradius.css` — corner-radius mode overrides (`[data-mode-radius="sharp|round|pill"]`) — auto-generated via `npm run build:modes`. Note the attribute is `data-mode-radius` while the source collection is `border-radius`; overrides the semantic `--border-radius-{none,sm,md,lg}` (defined in figma-tokens.css above, so it lands with the other mode files).
@@ -103,7 +103,7 @@ AGENT DECIDED (revisable): contrast is a separate `data-contrast` switch, not a 
 
 | Collection | Attribute | Default (no attr) | Other values | Wired? |
 |---|---|---|---|---|
-| `borderwidth` | `data-mode-borderwidth` | `default` | `thin`, `bold` | ✅ `modes-borderwidth.css` |
+| `borderwidth` | `data-mode-borderwidth` | `default` | `thin`, `thick` | ✅ `modes-borderwidth.css` (`bold` → `thick` alias, one release) |
 | `spacing` | `data-mode-spacing` | `default` | `compact`, `comfortable`, `spacious` | ✅ `modes-spacing.css` |
 | `border-radius` | `data-mode-radius` | `soft` | `sharp`, `round`, `pill` | ✅ `modes-borderradius.css` (attr `data-mode-radius`; source collection `border-radius`) |
 | `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious`, `expressive` | ✅ `modes-typography.css` (heading-* only; display-* mode-invariant) |

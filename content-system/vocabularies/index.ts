@@ -122,6 +122,7 @@ export {
 
 export {
   BORDERWIDTH_MODE_VALUES,
+  BORDERWIDTH_MODE_DEPRECATED_ALIASES,
   isBorderWidthMode,
   type BorderWidthMode,
 } from './borderwidth-mode';

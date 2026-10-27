@@ -31,8 +31,8 @@ describe('wiredAttrFor', () => {
     expect(wiredAttrFor('border-radius')).toBe('radius'); // cfg.attr override
     expect(wiredAttrFor('elevation')).toBe('elevation');
   });
-  it('maps the legacy border-width collection to borderwidth', () => {
-    expect(wiredAttrFor('border-width')).toBe('borderwidth');
+  it('maps border-width through the registry to borderwidth (#2601)', () => {
+    expect(wiredAttrFor('border-width')).toBe('borderwidth'); // cfg.attr override
   });
   it('returns null for an unknown collection', () => {
     expect(wiredAttrFor('nonesuch')).toBeNull();

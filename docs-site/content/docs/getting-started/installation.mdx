@@ -59,7 +59,7 @@ The `layer()` clause is load-bearing — `tokens.css` ships **unlayered**, so wi
 Set switches on `<html>` (or use `<ThemeProvider>` in React apps which manages them automatically):
 
 ```html
-<html data-theme="dark" data-mode-borderwidth="bold">
+<html data-theme="dark" data-mode-borderwidth="thick">
   <body class="theme-brand-brik">
     <!-- ... -->
   </body>
@@ -70,7 +70,7 @@ Set switches on `<html>` (or use `<ThemeProvider>` in React apps which manages t
 |---|---|---|
 | `<body class="theme-brand-brik">` | — | Loads Brik's brand colors / fonts. Replace with your own client theme class if applicable. |
 | `<html data-theme>` | `light` (default) / `dark` | Color mode |
-| `<html data-mode-borderwidth>` | `thin` / `bold` (omit for Standard) | Borderwidth mode |
+| `<html data-mode-borderwidth>` | `thin` / `thick` (omit for default) | Borderwidth mode |
 
 See [The cascade](/docs/getting-started/cascade) for the full switch table including audience scope binding for multi-brand sites.
 

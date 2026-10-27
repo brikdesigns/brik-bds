@@ -16,7 +16,7 @@ Every BDS token answers seven independent questions. Without distinct vocabulary
 | Abstraction level | **Tier** | What *kind* of token is it? | Raw · Primitive · Semantic · Component |
 | Source of truth | **Library** | Where is it *defined*? | Foundations Library · [Client] Brand Kit Library |
 | CSS cascade origin | **Layer** | Which `@layer` *carries its value*? | `bds-tokens` · `bds-components` · `client-theme` · `client-overrides` |
-| Value axis | **Mode** | Which axis *varies its value*? | color light/dark · borderwidth thin/bold · spacing compact/spacious · … |
+| Value axis | **Mode** | Which axis *varies its value*? | color light/dark · borderwidth thin/thick · spacing compact/spacious · … |
 | System pillar | **Tenet** | Which *system pillar* governs it? | Foundation · Theming · Motion · Content |
 
 **These are orthogonal.** A token has one answer for each. Mixing them — calling `--brand-tertiary` a "tier" because it sits at the top level — is the failure mode the cleanup retired.

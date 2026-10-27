@@ -1004,15 +1004,19 @@
 }
 
 [data-mode-borderwidth="thin"] {
+  --border-width-huge: var(--bds-border-width-huge);
   --border-width-lg: var(--bds-border-width-lg);
   --border-width-md: var(--bds-border-width-md);
   --border-width-sm: var(--bds-border-width-sm);
+  --border-width-xl: var(--bds-border-width-xl);
 }
 
-[data-mode-borderwidth="bold"] {
+[data-mode-borderwidth="thick"], [data-mode-borderwidth="bold"] {
+  --border-width-huge: var(--bds-border-width-huge);
   --border-width-lg: var(--bds-border-width-lg);
   --border-width-md: var(--bds-border-width-md);
   --border-width-sm: var(--bds-border-width-sm);
+  --border-width-xl: var(--bds-border-width-xl);
 }
 
 [data-mode-spacing="compact"] {
