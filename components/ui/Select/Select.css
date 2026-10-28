@@ -18,7 +18,7 @@
   font-family: var(--bds-font-family-label);
   font-weight: var(--bds-font-weight-semibold);
   line-height: var(--bds-font-line-height-tight);
-  text-transform: var(--bds-text-transform-label);
+  text-transform: var(--bds-text-transform-field-label);
 }
 
 .bds-select-label--sm { font-size: var(--bds-label-sm); }

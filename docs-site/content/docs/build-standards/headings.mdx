@@ -94,6 +94,8 @@ A client with no content standard on file gets the house default: navigation in 
 
 **Write the casing into the copy.** CSS `text-transform` cannot produce either rule: `capitalize` uppercases every word (so "Get In Touch", not "Get in Touch"), and nothing in CSS produces sentence case. The `--bds-text-transform-*` tokens are for visual transforms only, such as an ALL CAPS eyebrow ([brik-bds#2831](https://github.com/brikdesigns/brik-bds/issues/2831)).
 
+**Form-field labels are the one exception.** The label of a form control (TextInput, TextArea, Select, DatePicker, TimePicker, FileUploader, AddressInput, the Addable lists, Checkbox, Radio, ToggleSwitch, Slider, and the Field read-mode label) renders Title Case through `--bds-text-transform-field-label` (`capitalize`), so a sentence-case `label="Confirm password"` shows as "Confirm Password". Buttons, tags, badges, menus, breadcrumbs and other navigation stay on `--bds-text-transform-label` (`none`) and render as authored.
+
 ## Related
 
 - [Typography](/docs/foundation/typography) — the `--heading-*` / `--display-*` / `--label-*` scales and the font-family role rule.

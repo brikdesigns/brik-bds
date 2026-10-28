@@ -2,6 +2,7 @@ import React, { forwardRef, type ComponentPropsWithoutRef } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within, fn } from 'storybook/test';
 import { Button } from './Button';
+import { TextInput } from '../TextInput/TextInput';
 // Same helper the contrast gate uses (scripts/validate-themes.js), so a story
 // assertion and the token-level gate can never disagree on the arithmetic.
 import { contrastRatio } from '../../../scripts/lib/wcag.mjs';
@@ -166,13 +167,16 @@ export const IconOnly: Story = {
  * Copy casing is a content standard, not a Button concern: the label renders
  * as authored. The `--bds-text-transform-label` token is a visual transform
  * only, so sentence-case and Title Case copy both come through as written once
- * it is `none`.
+ * it is `none`. Form-field labels are the exception: they read
+ * `--bds-text-transform-field-label` (`capitalize`), so a sentence-case
+ * `label` renders Title Case beside a Button that renders as authored (#2831).
  *
- * @summary Sentence-case and Title Case copy side by side
+ * @summary Field label capitalized, Button as authored
  */
 export const CopyCasing: Story = {
   render: () => (
     <Row>
+      <TextInput label="Confirm password" placeholder="Sentence-case label" />
       <Button variant="primary" size="md">Get in touch</Button>
       <Button variant="primary" size="md">Get in Touch</Button>
     </Row>
