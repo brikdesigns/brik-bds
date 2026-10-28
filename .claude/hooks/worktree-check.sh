@@ -36,7 +36,8 @@ fi
 
 GUARD="$REPO_ROOT/scripts/worktree-guard.sh"
 
-# Only fire inside brik-bds — other repos don't have this script.
+# Guard script missing or non-executable? Skip silently — this hook is wired
+# into a settings.json that may outlive any specific repo state.
 [ ! -x "$GUARD" ] && exit 0
 
 MODE="${BDS_WORKTREE_GUARD:-warn}"
