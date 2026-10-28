@@ -59,7 +59,7 @@ const meta: Meta<typeof PageHeader> = {
       control: 'select',
       options: ['full', 'compact', 'tabs-only'],
       description:
-        'Header shape, fixed per page. `compact` = small title + actions + tabs; `tabs-only` = tabs with a visually hidden `<h1>`. Default `full`.',
+        'Header shape, fixed per page. `compact` = title + actions + tabs; `tabs-only` = tabs with a visually hidden `<h1>`. Default `full`.',
     },
     sticky: {
       control: 'boolean',
@@ -326,10 +326,10 @@ export const VariantFull: Story = {
 };
 
 /**
- * Small title, actions and tabs — breadcrumbs, subtitle and metadata are not
+ * Title, actions and tabs — breadcrumbs, subtitle and metadata are not
  * rendered. A shell with a top bar sets `--bds-pageheader-top` on an ancestor,
  * so the header pins 64px down, below the bar.
- * @summary Compact variant — small title + tabs, pinned below a top bar
+ * @summary Compact variant — title + tabs, pinned below a top bar
  */
 export const VariantCompact: Story = {
   tags: ['interaction-test'],
