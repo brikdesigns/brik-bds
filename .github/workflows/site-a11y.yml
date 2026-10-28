@@ -86,13 +86,17 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: ${{ inputs.node-version }}
-          cache: npm
+          # A scaffolded site has no package-lock.json until its first install
+          # is committed, and setup-node fails the cache step without one.
+          cache: ${{ hashFiles('package-lock.json') != '' && 'npm' || '' }}
 
       # @brikdesigns/bds is on GitHub Packages; the site's .npmrc reads this token.
+      # No lockfile yet (freshly scaffolded site) -> `npm install`, not `npm ci`.
       - name: Install dependencies
         env:
           PACKAGES_READ_TOKEN: ${{ secrets.PACKAGES_READ_TOKEN }}
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
 
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
