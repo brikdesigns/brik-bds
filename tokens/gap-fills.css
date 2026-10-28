@@ -25,6 +25,8 @@
   /* ── Typography Text-Transform ──
      Semantic casing rules per font role.
      heading/label = none (copy renders as authored; Title Case is a content standard, #2831)
+     field-label = capitalize (form-control labels render Title Case via CSS even when the
+       author writes sentence case; Button/Tag/nav stay on label = none; #2831)
      subtitle = uppercase (all-caps labels)
      body/display = none (no forced casing)
      These are visual transforms; copy casing is a content standard.
@@ -32,6 +34,7 @@
      Override per-theme by redefining in .body.theme-N blocks. */
   --bds-text-transform-heading: none;
   --bds-text-transform-label: none;
+  --bds-text-transform-field-label: capitalize;
   --bds-text-transform-subtitle: uppercase;
   --bds-text-transform-body: none;
   --bds-text-transform-display: none;

@@ -71,7 +71,7 @@
   line-height: var(--bds-font-line-height-snug);
   color: var(--bds-text-primary);
   margin: 0;
-  text-transform: var(--bds-text-transform-label);
+  text-transform: var(--bds-text-transform-field-label);
 }
 
 /* ─── Helper / Error text ─────────────────────────────────────── */

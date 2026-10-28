@@ -45,7 +45,7 @@
   font-weight: var(--bds-font-weight-semibold);
   line-height: var(--bds-font-line-height-tight);
   color: var(--bds-text-muted);
-  text-transform: var(--bds-text-transform-label);
+  text-transform: var(--bds-text-transform-field-label);
   margin: 0;
 }
 
