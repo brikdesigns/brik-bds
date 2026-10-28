@@ -31,7 +31,7 @@ export type PageHeaderMode = 'read' | 'edit';
  *
  * - `full` — every slot renders (breadcrumbs, media, title, subtitle, actions,
  *   metadata, tabs).
- * - `compact` — media, a small (`--bds-heading-sm`) title, actions and tabs.
+ * - `compact` — media, the title (`--bds-heading-xl`, same as `full`), actions and tabs.
  *   Breadcrumbs, subtitle and metadata are not rendered; `size` is ignored.
  * - `tabs-only` — only the `tabs` slot is visible. The title still renders as a
  *   visually hidden `<h1>`, so the page keeps its heading.

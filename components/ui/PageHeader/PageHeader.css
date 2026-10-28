@@ -49,11 +49,11 @@
 }
 
 /* ─── Variants ───────────────────────────────────────────────
-   `compact` keeps media, title, actions and tabs at the small title scale.
+   `compact` keeps media, title, actions and tabs. Its title stays at the
+   `size="lg"` Section-headline step above; a variant changes which slots
+   render, never the title step. Size classes apply to `full` only, so
+   `--md` / `--sm` never reach a compact header.
    `tabs-only` shows only the tabs; its <h1> stays in the accessibility tree. */
-.bds-page-header--compact .bds-page-header__title {
-  font-size: var(--bds-heading-sm);
-}
 
 .bds-page-header__title--hidden {
   position: absolute;
