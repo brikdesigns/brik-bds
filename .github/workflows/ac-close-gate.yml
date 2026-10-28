@@ -54,6 +54,18 @@ name: ac-close-gate
 #   partial close visible on the board, the reason makes it justified where
 #   review reads. Neither is inferable from the other.
 #
+# THE REMAINDER PATH (brik-llm#4350)
+#   `Part of #N` and `Refs #N` close nothing, so merging one gated nothing and
+#   the unticked ACs it left lived only in a session transcript. PR #4336
+#   merged AC4/AC5 of #1262 and stopped; AC1–AC3 sat unticked until the
+#   operator asked what was next. So on MERGE (the `closed` event, merged
+#   only) this step does not gate: it posts ONE comment on each open `Part of`
+#   / `Refs` issue naming its still-unticked `## Acceptance criteria` lines,
+#   and edits that same comment on every later merge. Advisory — this path
+#   never fails the run. An issue the PR also closes is left to the gate
+#   above; a promotion PR is skipped, its refs were named when they merged
+#   to the integration branch.
+#
 # Self-testing: the FIXTURES matrix runs before the real PR body is read and
 # fails the job on any mismatch, so every copy verifies its own detection logic
 # on every PR. A check only ever observed passing is not a proven check.
@@ -74,11 +86,13 @@ on:
     # a label, so taking or dropping it must re-run the gate. Without them the
     # verdict is decided on the labels the PR happened to have at open time —
     # the stale-input failure repro-before-fix-gate.yml already documents.
-    types: [opened, edited, synchronize, reopened, labeled, unlabeled]
+    # `closed` is the remainder path (brik-llm#4350); the job's `if:` drops an
+    # unmerged close before a runner starts.
+    types: [opened, edited, synchronize, reopened, labeled, unlabeled, closed]
 
 permissions:
   contents: read
-  issues: read # read each referenced issue's body to count its unticked ACs
+  issues: write # read each referenced issue's body; on merge, post or edit the one remainder comment (brik-llm#4350)
   pull-requests: read # list the PR's commits — the second input the parser reads (brik-llm#3306)
   actions: write # re-run this gate's own stale failed runs once one passes (brik-client-portal#4446)
 
@@ -110,6 +124,7 @@ concurrency:
 jobs:
   ac-close-gate:
     runs-on: ubuntu-slim
+    if: github.event.action != 'closed' || github.event.pull_request.merged
     steps:
       - name: Fail a closing PR whose issue still has unticked acceptance criteria
         uses: actions/github-script@v7
@@ -300,6 +315,70 @@ jobs:
               if (!hasLabel && reason) return { state: 'reason-only' };
               if (reason.length < MIN_REASON_CHARS) return { state: 'short', reason };
               return { state: 'exempt', reason };
+            }
+
+            // ── The remainder path (brik-llm#4350) ───────────────────────
+            // Same-repo `Part of #N` / `Partial for #N` / `Refs #N`, from the
+            // body and every commit, minus any issue the PR also closes — that
+            // one is the gate's, and naming it twice is the noise this avoids.
+            const REMAINDER_REF = /\b(?:part\s+of|partial\s+for|refs?)\b:?\s*#(\d+)/gi;
+            const REMAINDER_MARKER = '<!-- ac-close-gate:remainder';
+
+            function remainderRefs(body, commitMessages) {
+              const refs = new Set();
+              for (const text of [body, ...(commitMessages || [])]) {
+                let inFence = false;
+                for (const line of (text || '').split(/\r?\n/)) {
+                  if (/^\s*(```|~~~)/.test(line)) { inFence = !inFence; continue; }
+                  if (inFence) continue;
+                  let m;
+                  REMAINDER_REF.lastIndex = 0;
+                  while ((m = REMAINDER_REF.exec(stripEmphasis(line))) !== null) refs.add(m[1]);
+                }
+              }
+              const closed = new Set(allClosingRefs(body, commitMessages));
+              return [...refs].filter((num) => !closed.has(num));
+            }
+
+            // The one comment this path owns on an issue: bot-authored and
+            // carrying the marker. Anything else is someone else's comment.
+            function findRemainderComment(comments) {
+              return (comments || []).find(
+                (c) => c.user && c.user.type === 'Bot' && (c.body || '').startsWith(REMAINDER_MARKER),
+              ) || null;
+            }
+
+            // The PRs already named, read back from the marker, so a second
+            // merge extends the list instead of starting a new comment.
+            function remainderPrs(existingBody, prNumber) {
+              const m = /prs=([\d,]+)/.exec(existingBody || '');
+              const prs = m ? m[1].split(',').filter(Boolean) : [];
+              if (!prs.includes(String(prNumber))) prs.push(String(prNumber));
+              return prs;
+            }
+
+            function remainderComment(prs, unticked) {
+              const latest = prs[prs.length - 1];
+              const named = prs.map((n) => `#${n}`).join(', ');
+              const head = `${REMAINDER_MARKER} prs=${prs.join(',')} -->`;
+              if (unticked.length === 0) {
+                return [
+                  head,
+                  `**Acceptance criteria all ticked** as of the merge of #${latest}. Nothing remains on this issue's checklist — close it if no other work is owed.`,
+                  '',
+                  `Merged against this issue: ${named}`,
+                ].join('\n');
+              }
+              return [
+                head,
+                `**Remainder after #${latest} merged** — ${unticked.length} acceptance criteri${unticked.length === 1 ? 'on is' : 'a are'} still unticked:`,
+                '',
+                ...unticked.map((line) => `1. ${line.replace(/^[-*]\s+\[ \]\s*/, '')}`),
+                '',
+                'Tick what has landed. Split the rest into a follow-up (`Recovers from #N`) or mark it rejected, per `issue-style.md` § Closing discipline.',
+                '',
+                `Merged against this issue: ${named}. This comment is edited in place by \`ac-close-gate\` on each merge.`,
+              ].join('\n');
             }
 
             // ── Fixture matrix ───────────────────────────────────────────
@@ -548,6 +627,56 @@ jobs:
               },
             ];
 
+            // The remainder path (brik-llm#4350). REF_FIXTURES above still
+            // assert `Part of` and `Refs` CLOSE nothing; these assert they
+            // NAME a remainder.
+            const REMAINDER_REF_FIXTURES = [
+              { name: 'Part of names a remainder', body: `Part of ${H}729`, commits: [], expect: ['729'] },
+              { name: 'Refs names a remainder', body: `Refs ${H}729`, commits: [], expect: ['729'] },
+              { name: 'Partial for names a remainder', body: `Partial for ${H}729`, commits: [], expect: ['729'] },
+              {
+                name: 'live #1262 shape — the ref exists ONLY in a commit message',
+                body: '',
+                commits: [`feat: AC4 and AC5\n\nPart of ${H}1262`],
+                expect: ['1262'],
+              },
+              { name: 'Closes is the gate\'s, not a remainder', body: `Closes ${H}729`, commits: [], expect: [] },
+              { name: 'Part of AND Closes the same issue — the close wins', body: `Part of ${H}5\nCloses ${H}5`, commits: [], expect: [] },
+              { name: 'cross-repo Part of is out of scope', body: `Part of brikdesigns/brik-bds${H}729`, commits: [], expect: [] },
+              { name: 'fenced Part of is an example', body: `\`\`\`\nPart of ${H}729\n\`\`\``, commits: [], expect: [] },
+              { name: 'bare link is not a remainder', body: `Ports it (${H}612)`, commits: [], expect: [] },
+            ];
+
+            const bot = (body) => ({ user: { type: 'Bot' }, body });
+            const human = (body) => ({ user: { type: 'User' }, body });
+            const COMMENT_FIXTURES = [
+              {
+                name: 'a second merge EDITS the existing comment',
+                comments: [human('looks good'), bot(`${REMAINDER_MARKER} prs=12 -->\nold`)],
+                pr: 34,
+                expect: { found: true, prs: ['12', '34'] },
+              },
+              { name: 'first merge starts the list', comments: [human('looks good')], pr: 34, expect: { found: false, prs: ['34'] } },
+              {
+                name: 'a re-run of the same PR does not repeat it',
+                comments: [bot(`${REMAINDER_MARKER} prs=12,34 -->`)],
+                pr: 34,
+                expect: { found: true, prs: ['12', '34'] },
+              },
+              {
+                name: 'a human quoting the marker is not the comment',
+                comments: [human(`${REMAINDER_MARKER} prs=9 -->`)],
+                pr: 34,
+                expect: { found: false, prs: ['34'] },
+              },
+              {
+                name: 'another bot\'s comment is not the comment',
+                comments: [bot('<!-- issue-facet-gate -->')],
+                pr: 34,
+                expect: { found: false, prs: ['34'] },
+              },
+            ];
+
             const selfTestFailures = [];
             const eq = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
@@ -603,8 +732,31 @@ jobs:
               }
             }
 
+            for (const f of REMAINDER_REF_FIXTURES) {
+              const got = remainderRefs(f.body, f.commits).sort();
+              if (!eq(got, [...f.expect].sort())) {
+                selfTestFailures.push(`  remainder/${f.name}: expected ${JSON.stringify(f.expect)}, got ${JSON.stringify(got)}`);
+              }
+            }
+            for (const f of COMMENT_FIXTURES) {
+              const existing = findRemainderComment(f.comments);
+              const got = { found: existing !== null, prs: remainderPrs(existing && existing.body, f.pr) };
+              if (!eq(got, f.expect)) {
+                selfTestFailures.push(`  comment/${f.name}: expected ${JSON.stringify(f.expect)}, got ${JSON.stringify(got)}`);
+              }
+            }
+            {
+              // The rendered comment must be findable by the next merge, or
+              // AC 2 (edit, never duplicate) fails one merge later.
+              const rendered = remainderComment(['12', '34'], ['- [ ] one']);
+              if (!findRemainderComment([bot(rendered)]) || !eq(remainderPrs(rendered, 56), ['12', '34', '56'])) {
+                selfTestFailures.push('  comment/rendered comment round-trips through its own marker: it does not');
+              }
+            }
+
             const FIXTURE_COUNT = REF_FIXTURES.length + UNION_FIXTURES.length
-              + AC_FIXTURES.length + SCHEDULED_FIXTURES.length + EXEMPT_FIXTURES.length + BOUNDARY_FIXTURES.length;
+              + AC_FIXTURES.length + SCHEDULED_FIXTURES.length + EXEMPT_FIXTURES.length + BOUNDARY_FIXTURES.length
+              + REMAINDER_REF_FIXTURES.length + COMMENT_FIXTURES.length + 1;
             if (selfTestFailures.length > 0) {
               core.setFailed(
                 [
@@ -743,6 +895,51 @@ jobs:
                 'PR body ONLY. A closing keyword reachable only from a commit message is ' +
                 'not gated on this run.',
               );
+            }
+
+            // ── On merge: name the remainder, never gate (brik-llm#4350) ──
+            // Every failure here is a warning: the PR has already merged, and
+            // a red run on it would block nothing and explain nothing.
+            if (context.payload.action === 'closed') {
+              if (isPromotionShaped(baseRef, defaultBranch)) {
+                core.info('Promotion PR — its Part of / Refs issues were named when they merged to the integration branch.');
+                return;
+              }
+              const remainder = remainderRefs(body, commitMessages);
+              if (remainder.length === 0) {
+                core.info('No same-repo Part of / Refs issue in the PR body or its commits — no remainder to name.');
+                return;
+              }
+              for (const num of remainder) {
+                try {
+                  const issueRef = { owner: context.repo.owner, repo: context.repo.repo, issue_number: Number(num) };
+                  const { data: issue } = await github.rest.issues.get(issueRef);
+                  if (issue.pull_request || issue.state !== 'open') {
+                    core.info(`#${num} is not an open issue — no remainder to name.`);
+                    continue;
+                  }
+                  const { hasSection, unticked } = untickedAcs(issue.body || '');
+                  const comments = await github.paginate(github.rest.issues.listComments, { ...issueRef, per_page: 100 });
+                  const existing = findRemainderComment(comments);
+                  if (!hasSection || (unticked.length === 0 && !existing)) {
+                    core.info(`#${num}: ${hasSection ? 'all acceptance criteria ticked' : 'no acceptance section'} — no comment.`);
+                    continue;
+                  }
+                  const commentBody = remainderComment(remainderPrs(existing && existing.body, pr.number), unticked);
+                  if (existing) {
+                    await github.rest.issues.updateComment({
+                      owner: context.repo.owner, repo: context.repo.repo, comment_id: existing.id, body: commentBody,
+                    });
+                    core.info(`#${num}: edited the remainder comment — ${unticked.length} unticked.`);
+                  } else {
+                    await github.rest.issues.createComment({ ...issueRef, body: commentBody });
+                    core.info(`#${num}: posted the remainder comment — ${unticked.length} unticked.`);
+                  }
+                } catch (e) {
+                  core.warning(`Could not name the remainder on #${num} (${e.status || e.message}) — advisory, not retried.`);
+                }
+              }
+              return;
             }
 
             const refs = allClosingRefs(body, commitMessages);
@@ -884,6 +1081,8 @@ jobs:
       # sibling that is still wrong fails again; this never turns a red verdict
       # green, it only stops a superseded one from latching.
       - name: Re-run this gate's stale failed runs on the same commit
+        # A merged PR has no merge left to unblock.
+        if: github.event.action != 'closed'
         uses: actions/github-script@v7
         with:
           script: |
