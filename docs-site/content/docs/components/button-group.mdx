@@ -70,7 +70,7 @@ Stack buttons in a column. Pair with `fullWidth` on each button for stacked auth
 
 - **Don't put more than 3 buttons in a group.** A "toolbar" of 5 unrelated actions is a different pattern — use spacing, not grouping.
 - **Don't mix sizes inside a group.** All buttons should share the same `size`. Mixed sizes break the rhythm.
-- **Don't use it in a width-constrained cell** (a data-grid action column). ButtonGroup `flex-wrap`s and forces `--gap-md` — two icon buttons overflow a narrow (~120px) column and wrap onto a second line ([portal #2782](https://github.com/brikdesigns/brik-client-portal/issues/2782)). Keep a non-wrapping `<Stack direction="horizontal" gap="xs" justify="end">` in those cells; reach for ButtonGroup only where the row has room (footers, bars).
+- **Don't use it in a width-constrained cell** (a data-grid action column). ButtonGroup `flex-wrap`s and forces `--gap-md` — two icon buttons overflow a narrow (~120px) column and wrap onto a second line ([portal #2782](https://github.com/brikdesigns/brik-client-portal/issues/2782)). Use [`TableActionsCell`](/docs/components/table) in those cells; reach for ButtonGroup only where the row has room (footers, bars).
 
 ## Accessibility
 
