@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, within } from 'storybook/test';
+import { expect, fn, waitFor, within } from 'storybook/test';
 import { PageHeader } from './PageHeader';
 import { PageHeaderActions } from './PageHeaderActions';
 import { Breadcrumb } from '../Breadcrumb';
@@ -65,6 +65,11 @@ const meta: Meta<typeof PageHeader> = {
       control: 'boolean',
       description:
         'Pin the header to the top of its scroll container on scroll. Renders an opaque surface so content scrolls beneath it. Default `false`.',
+    },
+    condenseOnScroll: {
+      control: 'boolean',
+      description:
+        'With `sticky`: once the pinned header has scrolled a header height past its pin, hide breadcrumbs, subtitle and metadata, tighten the gaps and step the title down two steps (`lg` → `--bds-heading-md`). Exposed as `data-condensed`. Default `false`.',
     },
     mode: {
       control: 'select',
@@ -250,6 +255,69 @@ export const Sticky: Story = {
       </div>
     </div>
   ),
+};
+
+/**
+ * Opt in with `condenseOnScroll` (it needs `sticky`). The header starts full size.
+ * Once it has pinned and the body has scrolled a header height past the pin, the
+ * breadcrumbs, subtitle and metadata hide, the gaps tighten and the title steps
+ * down two steps on the heading scale. Scrolling back to the pin restores it.
+ * The state is on the header as `data-condensed`.
+ * @summary Sticky header that condenses and steps its title down
+ */
+export const CondenseOnScroll: Story = {
+  tags: ['interaction-test'],
+  render: () => (
+    <div
+      data-testid="scroller"
+      style={{
+        height: 360,
+        overflowY: 'auto',
+        border: '1px solid var(--bds-border-muted)',
+        background: 'var(--bds-surface-primary)',
+      }}
+    >
+      <PageHeader
+        title="Companies"
+        subtitle="Every lead, prospect and client."
+        breadcrumbs={<Breadcrumb items={sampleBreadcrumbs} />}
+        metadata={[
+          { label: 'Total', value: '42' },
+          { label: 'Active', value: '31' },
+        ]}
+        actions={<Button variant="primary" size="sm">New company</Button>}
+        tabs={sectionTabs}
+        sticky
+        condenseOnScroll
+      />
+      <div style={{ padding: 'var(--bds-padding-lg)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-md)' }}>
+          {Array.from({ length: 30 }).map((_, i) => (
+            <p key={i}>Row {i + 1} — scroll this container; the header condenses once it has pinned.</p>
+          ))}
+        </div>
+      </div>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const header = canvasElement.querySelector('.bds-page-header') as HTMLElement;
+    const scroller = within(canvasElement).getByTestId('scroller');
+    const scoped = within(header);
+    await expect(header).toHaveAttribute('data-condensed', 'false');
+    await expect(scoped.getByText('Every lead, prospect and client.')).toBeVisible();
+
+    scroller.scrollTop = scroller.scrollHeight;
+    await waitFor(() => expect(header).toHaveAttribute('data-condensed', 'true'));
+    await expect(scoped.queryByText('Every lead, prospect and client.')).not.toBeVisible();
+    await expect(scoped.queryByText('Total')).not.toBeVisible();
+    await expect(header.querySelector('.bds-breadcrumb')).not.toBeVisible();
+    await expect(scoped.getByRole('heading', { level: 1, name: 'Companies' })).toBeVisible();
+    await expect(scoped.getByRole('button', { name: 'New company' })).toBeVisible();
+    await expect(scoped.getByRole('tab', { name: 'Active' })).toBeVisible();
+
+    scroller.scrollTop = 0;
+    await waitFor(() => expect(header).toHaveAttribute('data-condensed', 'false'));
+  },
 };
 
 /* ═══════════════════════════════════════════════════════════════

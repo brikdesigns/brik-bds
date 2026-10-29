@@ -76,6 +76,9 @@ export default function Page() {
           building, so a case that must FAIL cannot live alongside one that
           must pass. Re-run it by hand if you change the read-mode branch. */}
       <PageHeader title="Server record" mode="read" editHref="/records/1/edit" />
+      {/* `condenseOnScroll` is a boolean and the scroll logic lives in a
+          client effect inside PageHeader, so a server component can pass it. */}
+      <PageHeader title="Server condensed" sticky condenseOnScroll />
     </main>
   );
 }

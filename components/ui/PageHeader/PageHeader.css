@@ -40,12 +40,63 @@
    declaration on the header would shadow an ancestor's value (brik-bds#2842).
    --bds-z-page-header sits above page content and the section rail but below
    the shell top bar, dropdowns and overlays. No variant changes height on
-   scroll, and none declares a transition or animation. */
+   scroll, and none declares a transition or animation — except the opt-in
+   `condenseOnScroll` (see "Condense on scroll" below), which does both on a
+   sticky header only. */
 .bds-page-header--sticky {
   position: sticky;
   top: var(--bds-pageheader-top);
   z-index: var(--bds-z-page-header);
   background-color: var(--bds-surface-primary);
+}
+
+/* ─── Condense on scroll ─────────────────────────────────────
+   Opt-in via `condenseOnScroll` (with `sticky`). The component sets
+   data-condensed="false" | "true"; the attribute is absent when the prop is off,
+   so none of this reaches an existing consumer.
+
+   Condensed: breadcrumbs, subtitle and metadata hide; media, title, actions and
+   tabs stay; the section gaps tighten; the title steps down two steps on the
+   heading scale. The `size="lg"` default title is --bds-heading-xl, so it lands
+   on --bds-heading-md. `md` / `sm` titles are already at md / sm, so they land
+   on --bds-heading-tiny — the bottom of the scale, one step for `sm`.
+   Only the title's font-size animates; the hidden slots snap. The trigger is a
+   sentinel above the header with a hysteresis band (condenseOnScroll.ts), so no
+   size change here can feed back into it. */
+.bds-page-header[data-condensed] .bds-page-header__title {
+  transition: font-size var(--bds-duration-md) var(--bds-ease-out);
+}
+
+.bds-page-header[data-condensed='true'] {
+  --page-header-section-gap: var(--bds-gap-md);
+}
+
+.bds-page-header[data-condensed='true'] .bds-page-header__breadcrumbs,
+.bds-page-header[data-condensed='true'] .bds-page-header__subtitle,
+.bds-page-header[data-condensed='true'] .bds-page-header__metadata {
+  display: none;
+}
+
+.bds-page-header[data-condensed='true'] .bds-page-header__title {
+  font-size: var(--bds-heading-md);
+}
+
+.bds-page-header--md[data-condensed='true'] .bds-page-header__title,
+.bds-page-header--sm[data-condensed='true'] .bds-page-header__title {
+  font-size: var(--bds-heading-tiny);
+}
+
+/* A zero-height marker the header renders just before itself; layout-inert. */
+.bds-page-header__condense-sentinel {
+  display: block;
+  height: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-page-header[data-condensed] .bds-page-header__title {
+    transition: none;
+  }
 }
 
 /* ─── Variants ───────────────────────────────────────────────
