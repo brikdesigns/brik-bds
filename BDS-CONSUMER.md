@@ -60,7 +60,7 @@ Per-tier breakdown + atmosphere overlays in [The Cascade](https://design.brikdes
 
 ```tsx
 import { font, color, space, gap, border } from '@/lib/tokens';
-import { text, heading, detail } from '@/lib/styles';
+import { text, heading, label } from '@/lib/styles';
 ```
 
 Full pattern in [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition) (typed primitives, style presets, `Prose` markdown renderer, pre-commit gate).
@@ -102,6 +102,21 @@ style={text.body}
 - Heading/title/name → `--font-family-heading`
 - Label/badge/tag/button/caption → `--font-family-label`
 - Body copy/description/paragraph → `--font-family-body`
+
+---
+
+## Build Standards — Canon Owns How a Page Is Composed
+
+[Build Standards](https://design.brikdesigns.com/docs/build-standards) is the one source for page composition and heading hierarchy in every consumer. A consumer doc (`CODING-STANDARDS.md`, a site `CLAUDE.md`, a skill) APPLIES canon in a table and links the canon page; NEVER restate a canon rule in your own words or override it. A consumer doc that disagrees with canon is drift. Fix canon in brik-bds first if canon is wrong, then make the consumer doc match. Consumer docs are ingested into brik-rag next to canon, so drift gives agents two conflicting answers.
+
+| Decision | Canon page |
+|---|---|
+| Which layer an element is: Blueprint, Layout, Container, Block, Control or Component | [Composition Layers](https://design.brikdesigns.com/docs/build-standards/composition-layers) |
+| Which heading token (by layer) and which HTML element (by outline position) | [Headings](https://design.brikdesigns.com/docs/build-standards/headings) |
+| Which product page shape: Record read, Record edit, Collection, Profile or Section hub (marketing pages use blueprints) | [Page Archetypes](https://design.brikdesigns.com/docs/build-standards/page-archetypes) |
+| Which display for the data | [Display Choice](https://design.brikdesigns.com/docs/build-standards/display-choice) |
+| Which gap between siblings | [Content Rhythm](https://design.brikdesigns.com/docs/build-standards/content-rhythm) |
+| Slot and prop names (`title` vs `header`) | [Slot Vocabulary](https://design.brikdesigns.com/docs/build-standards/slot-vocabulary) |
 
 ---
 

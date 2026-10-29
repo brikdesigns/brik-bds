@@ -113,7 +113,7 @@ A control bar and a section header both render a title at `--heading-sm`, so the
 | The title heads | Reach for | Component |
 |---|---|---|
 | A display — table, list, board, card grid | A control bar | `FilterBar` |
-| A record — fields in read or edit mode | The section container's own header | `DataSection` `title`, `SheetSection` `heading` |
+| A record — fields in read or edit mode | The section container's own header | `DataSection` `title`, `SheetSection` `title` |
 | The whole page | The page header | `PageHeader` |
 
 ```tsx
@@ -152,7 +152,7 @@ The last case is the one that ships. A section header plus a hand-placed count a
 | Container | Purpose | When |
 |---|---|---|
 | `DataSection` | Titled block of read-mode data on a page | Overview / profile tabs, client-detail pages |
-| `SheetSection` | Titled block inside a sheet body (uppercase label heading) | Any grouping inside `<Sheet>` |
+| `SheetSection` | Titled block inside a sheet body (`titleAs` sets the heading step) | Any grouping inside `<Sheet>` |
 | `Card` (and variants) | Bordered, self-contained content unit | Grids of comparable items, dashboards, marketing |
 | `Board` (`BoardColumn`, `BoardCard`) | Kanban-style container | Task boards |
 | `Dialog` / `Modal` / `Sheet` | Overlay containers | Focused interactions |

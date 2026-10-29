@@ -27,7 +27,7 @@ Every term here matches the canonical BEM pattern enforced by `scripts/slot-patt
 | `__hero-title`, `__page-heading` | `__title` — the parent block already names the context |
 
 <Callout type="warn">
-  `.bds-sheet-section__heading` predates this rule and renders an uppercase label `h3` — a different visual role. Do not generalize from this exception. New names always use `__title`.
+  `.bds-sheet-section__heading` predates this rule; the component's prop is `title`, but the CSS slot keeps the old name. Do not generalize from this exception. New names always use `__title`.
 </Callout>
 
 ### Title casing
@@ -103,7 +103,7 @@ These are different layers.
 The slot is not the text. When documenting a section header with a `[View]` / `[Edit]` toggle:
 
 - The slot holding the toggle → `actions`
-- The component rendering two buttons → `ButtonGroup` (but in a **width-constrained data-grid cell**, keep a non-wrapping `<Stack direction="horizontal" justify="end">` — ButtonGroup wraps + forces `gap-md`, see [Button group → When *not* to use](/docs/components/button-group))
+- The component rendering two buttons → `ButtonGroup` (but in a **width-constrained data-grid cell**, use `TableActionsCell` — ButtonGroup wraps + forces `gap-md`, see [Button group → When *not* to use](/docs/components/button-group))
 - The text on each button → button-label
 
 ## Value
