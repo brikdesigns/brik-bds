@@ -7,6 +7,8 @@ import {
   type BreadcrumbSwitchOption,
 } from './Breadcrumb';
 import { type BdsLinkComponent } from '../NavItem';
+import { SubNavigation } from '../SubNavigation/SubNavigation';
+import { breadcrumbTrailFromNav, subNavItemsFromNav, type NavSection } from './navTrail';
 
 /* Story-only stand-in for a router `Link` (Next.js / Remix). Tags the rendered
  * anchor so the injected-routing path is visible in the DOM. */
@@ -469,6 +471,44 @@ export const WithSwitcherFiltersPerCrumb: Story = {
   },
   play: async ({ canvas }) => {
     await userEvent.click(canvas.getByRole('button', { name: 'Switch client' }));
+  },
+};
+
+/* One declaration feeds both the rail and the trail. */
+const SETTINGS_NAV: NavSection = {
+  label: 'Settings',
+  href: '/settings',
+  items: [
+    { label: 'Services', href: '/settings/services' },
+    { label: 'Agreements', href: '/settings/agreements' },
+  ],
+};
+
+/**
+ * Declare the nav once as a `NavSection`, then derive the `SubNavigation` items
+ * (`subNavItemsFromNav`) and the trail (`breadcrumbTrailFromNav`) from it — the
+ * rail's active item and the last crumb can never disagree, and a label is
+ * renamed in one place. Pure functions: call them from a server or client
+ * component with the current pathname.
+ * @summary Rail and breadcrumb derived from one nav declaration
+ */
+export const FromNavDeclaration: Story = {
+  tags: ['no-visual'],
+  render: () => {
+    const pathname = '/settings/agreements';
+    return (
+      <>
+        <Breadcrumb items={breadcrumbTrailFromNav(pathname, SETTINGS_NAV)} />
+        <SubNavigation
+          ariaLabel="Settings"
+          items={subNavItemsFromNav(pathname, SETTINGS_NAV)}
+        />
+      </>
+    );
+  },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText('Agreements', { selector: '[aria-current="page"]' })).toBeVisible();
+    await expect(canvas.getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '/settings');
   },
 };
 
