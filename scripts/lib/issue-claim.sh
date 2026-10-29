@@ -976,6 +976,89 @@ _ic_refuse_unread() {
   echo -e "${_IC_RED}  An unreadable claim is not a clear one. Check \`gh auth status --json hosts\`, then re-run.${_IC_NC}" >&2
 }
 
+# ── Read-back after the write (brik-llm#5260) ──────────────────────
+#
+# check_issue_claim reads, decides, then writes — so two sessions whose reads
+# both land before either write both see a clear ticket and both claim it. On
+# 2026-10-29 two pickups of one /resume prompt ran 61s apart and the gate caught
+# the second; a few seconds apart, both would have built #5875.
+#
+# The rule: after posting, re-read. The EARLIEST foreign marker posted after the
+# claim I read (or after nothing) wins — comment ids are assigned in write order,
+# so every racer reaches the same verdict without talking to the others. The
+# loser deletes its own comment. A later racer is not my problem: its own
+# read-back sees me and backs off.
+#
+# Fail-OPEN on everything it cannot read — no id back from the POST, no jq, a
+# failed re-read. That is the behaviour before this existed, never worse.
+
+# _ic_claim_readback <owner> <repo> <num> <my_id> <read_id> <host> <branch> <session>
+# 0 = I hold it (or could not tell) · 1 = an earlier racer holds it, mine deleted.
+_ic_claim_readback() {
+  local owner="$1" repo="$2" num="$3" my_id="$4" read_id="${5:-0}"
+  local my_host="$6" my_branch="$7" my_session="$8"
+  _ic_is_digits "$my_id" || return 0
+  _ic_is_digits "$read_id" || read_id=0
+  command -v jq >/dev/null 2>&1 || return 0
+
+  # Read-after-write lag on GitHub's list endpoint is the one way an earlier
+  # racer's comment could be missing here. Knob is read at CALL time.
+  local delay="${CLAIM_READBACK_DELAY_SECONDS:-1}"
+  [ "$delay" != "0" ] && sleep "$delay"
+
+  # Fresh read, and the cache follows it so report_issue_comments in this
+  # shell sees the thread as it now is.
+  _IC_COMMENTS_KEY=""
+  _ic_fetch_comments "$owner" "$repo" "$num" || return 0
+  [ "$_IC_COMMENTS_FAILED_KEY" = "$owner/$repo#$num" ] && return 0
+
+  local rival_ids rid rbody parsed their_session
+  rival_ids="$(printf '%s\n' "$_IC_COMMENTS_NDJSON" \
+    | jq -r --arg m "$CLAIM_MARKER" --argjson lo "$read_id" --argjson me "$my_id" \
+        'select((.body // "") | contains($m)) | select(.id > $lo and .id < $me) | .id' \
+        2>/dev/null)" || return 0
+
+  # A here-string, not `for rid in $rival_ids`: zsh does not word-split an
+  # unquoted expansion (same class as #2798).
+  while IFS= read -r rid; do
+    [ -n "$rid" ] || continue
+    rbody="$(printf '%s\n' "$_IC_COMMENTS_NDJSON" \
+      | jq -r --argjson id "$rid" 'select(.id == $id) | .body' 2>/dev/null)"
+    parsed="$(parse_claim "$rbody")" || continue
+    claim_is_foreign "$(printf '%s' "$parsed" | cut -f1)" "$(printf '%s' "$parsed" | cut -f2)" \
+      "$my_host" "$my_branch" "$(parse_claim_session "$rbody")" "$my_session" || continue
+
+    gh api -X DELETE "repos/$owner/$repo/issues/comments/$my_id" >/dev/null 2>&1 \
+      || echo -e "${_IC_YELLOW}⚠  Could not delete my losing claim comment ${my_id} — delete it by hand.${_IC_NC}" >&2
+    echo ""
+    echo -e "${_IC_RED}✗ ${owner}/${repo}#${num} was claimed by another session in the same seconds.${_IC_NC}"
+    echo ""
+    echo "    Host:    $(printf '%s' "$parsed" | cut -f1)"
+    echo "    Branch:  $(printf '%s' "$parsed" | cut -f2)"
+    their_session="$(parse_claim_session "$rbody")"
+    [ -n "$their_session" ] && echo "    Session: ${their_session}"
+    echo ""
+    echo -e "${_IC_RED}  Its claim was posted first, so it holds the ticket and this session's${_IC_NC}"
+    echo -e "${_IC_RED}  claim was withdrawn (brik-llm#5260). Pick another item.${_IC_NC}"
+    return 1
+  done <<<"$rival_ids"
+  return 0
+}
+
+# _ic_delete_taken_over <owner> <repo> <num> <old_id> <old_body>
+# Remove the stale / released marker a takeover replaced, so a ticket never
+# accretes one marker per pickup. Re-read by id first: if its owner renewed it
+# since my read, it is live again and stays.
+_ic_delete_taken_over() {
+  local owner="$1" repo="$2" num="$3" old_id="$4" old_body="$5" current
+  current="$(gh api "repos/$owner/$repo/issues/comments/$old_id" --jq '.body' 2>/dev/null)" || return 0
+  if [ "$current" != "$old_body" ]; then
+    echo -e "${_IC_YELLOW}⚠  The claim I took over on ${owner}/${repo}#${num} changed since my read — left in place.${_IC_NC}" >&2
+    return 0
+  fi
+  gh api -X DELETE "repos/$owner/$repo/issues/comments/$old_id" >/dev/null 2>&1 || true
+}
+
 # check_issue_claim <issue-ref> <branch> [--report|--fail-closed]
 # --report prints and always returns 0 (for /resume, which must not abort).
 # --fail-closed enforces as the default does, and returns 2 instead of 0 on every
@@ -1126,16 +1209,29 @@ check_issue_claim() {
     new_branches="$(claim_branch_union "$their_branch" "$my_entry")"
   fi
   new_body="$(claim_marker_body "$my_host" "$new_branches" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$my_session" "$(claim_peer_name)")"
-  if [ -n "$id" ] && [ "$id" != "$found" ]; then
+  local has_old=0
+  [ -n "$id" ] && [ "$id" != "$found" ] && has_old=1
+  if [ "$has_old" -eq 1 ] && [ "$mine" -eq 1 ]; then
     gh api -X PATCH "repos/$owner/$repo/issues/comments/$id" -f body="$new_body" >/dev/null 2>&1 \
       && echo -e "${_IC_GREEN}✓ Claim refreshed on ${owner}/${repo}#${num} (${my_host} / ${new_branches}).${_IC_NC}" \
       || { echo -e "${_IC_YELLOW}⚠  Could not refresh the claim comment — proceeding unclaimed.${_IC_NC}" >&2
            _ic_warn_if_bot_identity; }
   else
-    gh api -X POST "repos/$owner/$repo/issues/$num/comments" -f body="$new_body" >/dev/null 2>&1 \
-      && echo -e "${_IC_GREEN}✓ Claimed ${owner}/${repo}#${num} (${my_host} / ${new_branches}).${_IC_NC}" \
-      || { echo -e "${_IC_YELLOW}⚠  Could not post the claim comment — proceeding unclaimed.${_IC_NC}" >&2
-           _ic_warn_if_bot_identity; }
+    # A new claim, or a takeover of a stale / released / stolen one, is always a
+    # NEW comment, never a PATCH of the old: comment ids are the only ordering two
+    # racing writers share, and a PATCH has none (brik-llm#5260).
+    local my_id=""
+    if my_id="$(gh api -X POST "repos/$owner/$repo/issues/$num/comments" -f body="$new_body" --jq '.id' 2>/dev/null)"; then
+      _ic_claim_readback "$owner" "$repo" "$num" "$my_id" "$( [ "$has_old" -eq 1 ] && printf '%s' "$id" )" \
+        "$my_host" "$my_branch" "$my_session" || return 1
+      if [ "$has_old" -eq 1 ]; then
+        _ic_delete_taken_over "$owner" "$repo" "$num" "$id" "$body"
+      fi
+      echo -e "${_IC_GREEN}✓ Claimed ${owner}/${repo}#${num} (${my_host} / ${new_branches}).${_IC_NC}"
+    else
+      echo -e "${_IC_YELLOW}⚠  Could not post the claim comment — proceeding unclaimed.${_IC_NC}" >&2
+      _ic_warn_if_bot_identity
+    fi
   fi
 
   # Assignee is board visibility only — it cannot discriminate sessions.
