@@ -14,6 +14,8 @@ import {
   Tooltip,
   Accordion,
   PageHeader,
+  Breadcrumb,
+  breadcrumbTrailFromNav,
 } from '@brikdesigns/bds';
 
 /**
@@ -42,6 +44,17 @@ function assertServerReadableArray(name: string, value: readonly string[], expec
 }
 
 export default function Page() {
+  // A function export from a banner-free module must be callable on the server
+  // (brik-bds#2903). A client reference would throw here during prerender.
+  const trail = breadcrumbTrailFromNav('/settings/services', {
+    label: 'Settings',
+    href: '/settings',
+    items: [{ label: 'Services', href: '/settings/services' }],
+  });
+  if (trail.length !== 2 || trail[1].label !== 'Services' || trail[1].href !== undefined) {
+    throw new Error('RSC smoke FAILED — breadcrumbTrailFromNav returned ' + JSON.stringify(trail));
+  }
+
   assertServerReadableArray('SOCIAL_ICON_PLATFORMS', SOCIAL_ICON_PLATFORMS, 10);
   assertServerReadableArray('CONTACT_ICON_PLATFORMS', CONTACT_ICON_PLATFORMS, 5);
 
@@ -75,6 +88,7 @@ export default function Page() {
           It is not committed as a gate because the fixture asserts by
           building, so a case that must FAIL cannot live alongside one that
           must pass. Re-run it by hand if you change the read-mode branch. */}
+      <Breadcrumb items={trail} />
       <PageHeader title="Server record" mode="read" editHref="/records/1/edit" />
     </main>
   );

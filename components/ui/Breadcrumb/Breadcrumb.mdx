@@ -127,6 +127,41 @@ separators rebind to the matching service color.
   <ServiceLineCascade />
 </Canvas>
 
+### Derive the trail from the nav
+
+Declare the nav once as a `NavSection`, then derive both the `SubNavigation`
+items and the breadcrumb from it. The trail is `Section / Item`; the item is
+picked by longest path-prefix, so a detail page under `/settings/services/42`
+still resolves to `Settings / Services`. Pass `trailing` for a record crumb on a
+detail page. When nothing matches it returns `[]`.
+
+```tsx
+import {
+  Breadcrumb,
+  SubNavigation,
+  breadcrumbTrailFromNav,
+  subNavItemsFromNav,
+  type NavSection,
+} from '@brikdesigns/bds';
+
+const SETTINGS_NAV: NavSection = {
+  label: 'Settings',
+  href: '/settings',
+  items: [
+    { label: 'Services', href: '/settings/services' },
+    { label: 'Agreements', href: '/settings/agreements' },
+  ],
+};
+
+<SubNavigation items={subNavItemsFromNav(pathname, SETTINGS_NAV)} />
+<Breadcrumb items={breadcrumbTrailFromNav(pathname, SETTINGS_NAV)} />
+```
+
+Both helpers are pure and hook-free, and ship without the `'use client'`
+banner, so a Server Component can call them directly with the pathname.
+
+<Canvas of={Stories.FromNavDeclaration} />
+
 ## Props
 
 <ArgTypes of={Stories} />

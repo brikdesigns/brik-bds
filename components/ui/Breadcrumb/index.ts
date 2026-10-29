@@ -8,3 +8,11 @@ export {
   type BreadcrumbSwitchMenuProps,
 } from './Breadcrumb';
 export { default } from './Breadcrumb';
+export {
+  breadcrumbTrailFromNav,
+  subNavItemsFromNav,
+  type NavSection,
+  type NavTree,
+  type NavTreeItem,
+  type BreadcrumbTrailOptions,
+} from './navTrail';

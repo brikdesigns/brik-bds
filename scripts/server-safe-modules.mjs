@@ -43,6 +43,10 @@ export const SERVER_SAFE_MODULES = [
   // data, no React import.
   'components/ui/SocialIcon/social-icons.generated',
   'components/ui/ContactIcon/contact-icons.generated',
+  // Pure functions over plain objects (breadcrumbTrailFromNav, subNavItemsFromNav);
+  // type-only imports, no React runtime. A server layout calls them to build the
+  // trail before handing it to <Breadcrumb>, so they must be real values.
+  'components/ui/Breadcrumb/navTrail',
 ];
 
 /** `true` if the chunk/module name shipped banner-free. */
