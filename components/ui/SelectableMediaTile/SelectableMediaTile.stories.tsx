@@ -168,7 +168,7 @@ export const PickOneGallery: Story = {
               key={photo.id}
               value={photo.id}
               src={photo.src}
-              alt={photo.name}
+              alt=""
               caption={photo.name}
             />
           ))}

@@ -72,7 +72,13 @@
 
   /* The <label> root is never focused itself — the ring follows the hidden
      native input's keyboard focus, so a mouse click on the row shows none. */
-  .bds-interactive-list-item:focus-visible,
+  .bds-interactive-list-item:focus-visible {
+    outline: var(--bds-border-width-lg) solid var(--bds-state-focus, currentColor);
+    outline-offset: 2px;
+  }
+
+  /* Separate rule: a browser without :has() drops only this one, never the
+     stand-alone button's ring above. */
   .bds-interactive-list-item:has(.bds-interactive-list-item__input:focus-visible) {
     outline: var(--bds-border-width-lg) solid var(--bds-state-focus, currentColor);
     outline-offset: 2px;

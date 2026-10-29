@@ -78,9 +78,11 @@ export const Default: Story = {
 export const ChildrenMode: Story = {
   render: () => (
     <RadioGroup legend="Meeting" defaultValue="kickoff">
-      <InteractiveListItem value="kickoff" title="Kickoff call" subtitle="Oct 2" />
-      <InteractiveListItem value="review" title="Design review" subtitle="Oct 16" />
-      <InteractiveListItem value="handoff" title="Launch handoff" subtitle="Oct 30" />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-sm)' }}>
+        <InteractiveListItem value="kickoff" title="Kickoff call" subtitle="Oct 2" />
+        <InteractiveListItem value="review" title="Design review" subtitle="Oct 16" />
+        <InteractiveListItem value="handoff" title="Launch handoff" subtitle="Oct 30" />
+      </div>
     </RadioGroup>
   ),
 };

@@ -82,9 +82,11 @@ export const Default: Story = {
 export const ChildrenMode: Story = {
   render: () => (
     <CheckboxGroup legend="Channels" defaultValue={['email']}>
-      <InteractiveListItem value="email" title="Email" subtitle="Daily summary" />
-      <InteractiveListItem value="sms" title="SMS" subtitle="Urgent only" />
-      <InteractiveListItem value="push" title="Push" subtitle="Every update" />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-sm)' }}>
+        <InteractiveListItem value="email" title="Email" subtitle="Daily summary" />
+        <InteractiveListItem value="sms" title="SMS" subtitle="Urgent only" />
+        <InteractiveListItem value="push" title="Push" subtitle="Every update" />
+      </div>
     </CheckboxGroup>
   ),
 };
