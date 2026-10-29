@@ -102,11 +102,11 @@ Read the *direction*, not a fixed step count:
 
 ## Selectable
 
-Hover and press are **transient** — they exist only while the pointer is down. Selection is **persistent**: a control stays chosen until the reader unchooses it, carried in the DOM by `aria-pressed`. It is an interaction like the others on this page, not a per-component invention.
+Hover and press are **transient** — they exist only while the pointer is down. Selection is **persistent**: a control stays chosen until the reader unchooses it. How the DOM carries it follows cardinality ([ADR-045](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-045-selection-semantics-follow-cardinality.md)): a stand-alone toggle uses `aria-pressed` with a fixed label; a pick-one group is a native radio group, and a pick-many group is a native checkbox group, each inside a `<fieldset>` + `<legend>`. It is an interaction like the others on this page, not a per-component invention.
 
 ### Selectable is one interaction
 
-There is one selectable pattern — an `aria-pressed` toggle whose chosen state reads as brand emphasis, a tint plus a ring — and it has **one canonical source**. A component *consumes* that source; it does not re-copy the `aria-pressed` wiring and re-paint the selected treatment in its own CSS.
+There is one selectable pattern — a chosen state that reads as brand emphasis, a tint plus a ring — and it has **one canonical source**. A component *consumes* that source; it does not re-copy the selection wiring and re-paint the selected treatment in its own CSS. In a group, the source is `RadioGroup` / `CheckboxGroup`; a stand-alone control is the `aria-pressed` toggle.
 
 Today four components hand-roll it with no shared source — `CompletionToggle`, `InteractiveListItem`, `FilterToggle`, `SelectableMediaTile` (grep `aria-pressed` in `components/ui`). Each re-invents the tint and ring, and the CSS comments admit it (`InteractiveListItem.css`: *Mirrors `Button --selected`*). That duplication is the drift this rule names: selectability is a cross-cutting interaction the system should express once, not re-derive per component.
 
@@ -116,7 +116,7 @@ Today four components hand-roll it with no shared source — `CompletionToggle`,
 
 ### A tile is not a row
 
-Layout is the primary classifier, and there are two: a **list** is vertical, a row; a **grid** is two-dimensional, a tile. A selected row and a selected tile share the *interaction semantics* — `aria-pressed`, brand emphasis — but not the *CSS*. The row draws an inset box that leaves its metrics unchanged; the tile draws a ring with `box-shadow` so the grid doesn't reflow. Never port one layout's selected styling onto the other — they are the same interaction expressed for two different shapes, and conflating them is how a tile inherits a row's inset box and reflows the grid.
+Layout is the primary classifier, and there are two: a **list** is vertical, a row; a **grid** is two-dimensional, a tile. A selected row and a selected tile share the *interaction semantics* — the same cardinality rule, brand emphasis — but not the *CSS*. The row draws an inset box that leaves its metrics unchanged; the tile draws a ring with `box-shadow` so the grid doesn't reflow. Never port one layout's selected styling onto the other — they are the same interaction expressed for two different shapes, and conflating them is how a tile inherits a row's inset box and reflows the grid.
 
 ## Focus ring rules
 

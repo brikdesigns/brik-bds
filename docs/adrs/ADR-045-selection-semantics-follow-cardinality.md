@@ -1,8 +1,8 @@
 # ADR-045 — Selection semantics follow cardinality: a toggle is `aria-pressed`, a group is radio or checkbox
 
-**Status:** Proposed 2026-10-29. § Open call needs the operator's ruling before this becomes Accepted.
+**Status:** **Accepted** 2026-10-29 (§ Ruling)
 **Date:** 2026-10-29
-**Supersedes:** — (amends in part: the "carried in the DOM by `aria-pressed`" line of [Interaction States § Selectable](../../docs-site/content/docs/foundation/interaction-states.mdx), lines 105 and 109, once ratified)
+**Supersedes:** — (amends in part: the "carried in the DOM by `aria-pressed`" wording of [Interaction States § Selectable](../../docs-site/content/docs/foundation/interaction-states.mdx), amended in the same PR)
 **Superseded by:** —
 **Owner:** Nick Stanerson
 **Related:** [#1456](https://github.com/brikdesigns/brik-bds/issues/1456) (this ADR is its AC1), [#2698](https://github.com/brikdesigns/brik-bds/issues/2698) (parent), [#2385](https://github.com/brikdesigns/brik-bds/issues/2385) (Selectable canon, ratified), [#2427](https://github.com/brikdesigns/brik-bds/issues/2427) (Picker rename), [ADR-004](./ADR-004-component-bloat-guardrails.md) (bloat guardrails)
@@ -15,7 +15,7 @@ OPERATOR SAID 2026-09-11 (chat, quoted on [#2385](https://github.com/brikdesigns
 
 Flag 1, ratified by that reply: "Selectable = one interaction, one source. Document the `aria-pressed` toggle pattern once + a shared CSS layer or hook; components consume, not re-copy."
 
-This ADR keeps flag 1's decision (one interaction, one source) and proposes changing the ARIA it names for one case: grouped selection. That change is the § Open call.
+This ADR keeps flag 1's decision (one interaction, one source) and changes the ARIA it names for one case: grouped selection. The operator ruled on that change in § Ruling.
 
 ## Context
 
@@ -102,9 +102,15 @@ Native radios sharing a `name` give the APG keyboard model (one Tab stop, arrow 
 
 A radio cannot be unchecked by clicking it again (APG: Space "checks the focused radio button if it is not already checked"). A pick-one group that also allows "nothing selected", like `photo-slot-pinner`, adds an explicit "None" option or a separate clear `Button`. It does not fall back to `aria-pressed`.
 
-## Open call
+## Ruling
 
-Flag 1 of #2385, ratified on 2026-09-11, names "the `aria-pressed` toggle pattern" as the one Selectable pattern. § 1 keeps `aria-pressed` for stand-alone toggles and moves grouped selection to radio / checkbox semantics. That changes the wording the operator ratified, even though it keeps the decision ("one interaction, one source"). This ADR stays Proposed until the operator rules on that line. Once it is ratified, the same PR that accepts this ADR amends `interaction-states.mdx:105,109`.
+Flag 1 of #2385, ratified on 2026-09-11, names "the `aria-pressed` toggle pattern" as the one Selectable pattern. § 1 keeps `aria-pressed` for stand-alone toggles and moves grouped selection to radio / checkbox semantics. That changes the wording the operator ratified, while keeping the decision ("one interaction, one source").
+
+The question put to the operator: "the canon you approved on 2026-09-11 (#2385 flag 1) says every selection uses `aria-pressed`. This ADR would change that wording for groups. Approve the change, or keep `aria-pressed` everywhere?"
+
+OPERATOR SAID 2026-10-29 (chat, session `526da05e-4ad0-4826-83eb-40053d6e6bd0.jsonl`:407): "approved"
+
+The same PR amends Interaction States § Selectable to the cardinality rule.
 
 ## Alternatives considered
 
