@@ -1,5 +1,8 @@
+'use client';
+
 import { type ReactNode, useId, useState } from 'react';
 import { Radio } from '../Radio';
+import { SelectionGroupContext, type SelectionGroupContextValue } from '../shared/useSelectionGroup';
 import { bdsClass } from '../../utils';
 import './RadioGroup.css';
 
@@ -13,8 +16,15 @@ export interface RadioGroupOption {
 }
 
 export interface RadioGroupProps {
-  /** Options in render order. */
-  options: RadioGroupOption[];
+  /** Options in render order, each rendered as a `Radio`. Omit when passing `children`. */
+  options?: RadioGroupOption[];
+  /**
+   * Group-aware items (`SelectableMediaTile`, `InteractiveListItem`), each with
+   * a `value`. Rendered inside the same `<fieldset>` / `<legend>`, after any
+   * `options`, in whatever layout the caller composes — `orientation` styles
+   * `options` only.
+   */
+  children?: ReactNode;
   /** Controlled selected value. Pair with `onChange`. */
   value?: string;
   /** Initial selected value for uncontrolled use. */
@@ -47,6 +57,10 @@ export interface RadioGroupProps {
  * needed). `Radio` remains the standalone item. Orientation is a prop, not a
  * per-orientation story (ADR-010 Rule 5).
  *
+ * Pass `options` for a plain list of radios, or `children` for pick-one groups
+ * of richer items: a `SelectableMediaTile` / `InteractiveListItem` with a
+ * `value` renders as a native radio inside the group (ADR-045).
+ *
  * @example
  * ```tsx
  * <RadioGroup
@@ -64,6 +78,7 @@ export interface RadioGroupProps {
  */
 export function RadioGroup({
   options,
+  children,
   value,
   defaultValue,
   onChange,
@@ -86,6 +101,14 @@ export function RadioGroup({
     onChange?.(next);
   };
 
+  const group: SelectionGroupContextValue = {
+    kind: 'radio',
+    name: groupName,
+    isSelected: (optionValue) => selected === optionValue,
+    onChange: select,
+    disabled,
+  };
+
   return (
     <fieldset
       className={bdsClass('bds-radio-group', disabled && 'bds-radio-group--disabled', className)}
@@ -94,19 +117,22 @@ export function RadioGroup({
       disabled={disabled}
     >
       {legend && <legend className="bds-radio-group__legend">{legend}</legend>}
-      <div className={bdsClass('bds-radio-group__options', `bds-radio-group__options--orientation-${orientation}`)}>
-        {options.map((option) => (
-          <Radio
-            key={option.value}
-            name={groupName}
-            value={option.value}
-            label={option.label}
-            checked={selected === option.value}
-            disabled={disabled || option.disabled}
-            onChange={() => select(option.value)}
-          />
-        ))}
-      </div>
+      {options && (
+        <div className={bdsClass('bds-radio-group__options', `bds-radio-group__options--orientation-${orientation}`)}>
+          {options.map((option) => (
+            <Radio
+              key={option.value}
+              name={groupName}
+              value={option.value}
+              label={option.label}
+              checked={selected === option.value}
+              disabled={disabled || option.disabled}
+              onChange={() => select(option.value)}
+            />
+          ))}
+        </div>
+      )}
+      <SelectionGroupContext.Provider value={group}>{children}</SelectionGroupContext.Provider>
     </fieldset>
   );
 }

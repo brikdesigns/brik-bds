@@ -2,7 +2,9 @@
   /* ─── InteractiveListItem ───────────────────────────────────────
      Clickable horizontal row: leading + (title + subtitle) + trailing.
      The whole row is a <button> — single click target, native focus,
-     native Space/Enter.
+     native Space/Enter. Inside a RadioGroup / CheckboxGroup the root is a
+     <label> wrapping a visually hidden native input instead (ADR-045); the
+     same classes style both roots.
 
      Distinct from CardControl (which is a settings card whose trailing
      action is the click target, not the card). Use this when the row
@@ -48,11 +50,12 @@
     font-size: var(--bds-label-sm);
   }
 
-  .bds-interactive-list-item:not(.bds-interactive-list-item--readonly):hover:not(:disabled) {
+  /* `:not(--disabled)` covers the <label> root, which has no `:disabled`. */
+  .bds-interactive-list-item:not(.bds-interactive-list-item--readonly):hover:not(:disabled):not(.bds-interactive-list-item--disabled) {
     background-color: var(--bds-surface-secondary);
   }
 
-  .bds-interactive-list-item:not(.bds-interactive-list-item--readonly):active:not(:disabled) {
+  .bds-interactive-list-item:not(.bds-interactive-list-item--readonly):active:not(:disabled):not(.bds-interactive-list-item--disabled) {
     transform: scale(0.99);
   }
 
@@ -67,7 +70,16 @@
     cursor: default;
   }
 
+  /* The <label> root is never focused itself — the ring follows the hidden
+     native input's keyboard focus, so a mouse click on the row shows none. */
   .bds-interactive-list-item:focus-visible {
+    outline: var(--bds-border-width-lg) solid var(--bds-state-focus, currentColor);
+    outline-offset: 2px;
+  }
+
+  /* Separate rule: a browser without :has() drops only this one, never the
+     stand-alone button's ring above. */
+  .bds-interactive-list-item:has(.bds-interactive-list-item__input:focus-visible) {
     outline: var(--bds-border-width-lg) solid var(--bds-state-focus, currentColor);
     outline-offset: 2px;
   }
@@ -83,13 +95,29 @@
     box-shadow: inset 0 0 0 var(--bds-border-width-md) var(--bds-border-brand-primary);
   }
 
-  .bds-interactive-list-item--selected:hover:not(:disabled) {
+  .bds-interactive-list-item--selected:hover:not(:disabled):not(.bds-interactive-list-item--disabled) {
     background-color: var(--bds-surface-brand-secondary);
   }
 
   .bds-interactive-list-item--disabled {
     opacity: var(--bds-state-disabled-opacity);
     cursor: not-allowed;
+  }
+
+  /* ─── Visually-hidden native input (group mode) ────────────────
+     Stays focusable for keyboard + screen readers; the <label> is the
+     click target. Same clip pattern as ServiceTagSelect. */
+
+  .bds-interactive-list-item__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px; /* bds-lint-ignore — visually-hidden clip pattern, not text rhythm */
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   /* ─── Leading slot ─────────────────────────────────────────────

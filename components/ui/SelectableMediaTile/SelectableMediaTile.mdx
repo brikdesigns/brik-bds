@@ -8,7 +8,7 @@ import * as Stories from './SelectableMediaTile.stories';
 
 <ComponentLinks slug="selectable-media-tile" />
 
-A vertical, image-first toggle: a full-bleed image on top, a caption below, and a persistent selected state, with the whole tile as a single `<button>` click target. Use it for image or avatar grids where each cell toggles on and off — a hero-photo picker, a gallery multi-select, an avatar chooser.
+A vertical, image-first toggle: a full-bleed image on top, a caption below, and a persistent selected state, with the whole tile as a single `<button aria-pressed>` click target when it stands alone, or a native radio / checkbox when it sits inside a group (see Patterns). Use it for image or avatar grids where each cell toggles on and off — a hero-photo picker, a gallery multi-select, an avatar chooser.
 
 ## Default
 
@@ -21,6 +21,12 @@ A vertical, image-first toggle: a full-bleed image on top, a caption below, and 
 The irreducible composition is a single-select image grid — one tile pinned at a time, clicking the pinned tile clears it. Selection shows a brand ring, a check overlay on the image, and an emphasised caption, which Controls can't express.
 
 <Canvas of={Stories.SingleSelectGrid} />
+
+### Pick one
+
+Selection semantics follow cardinality (ADR-045). A **single** stand-alone tile is a toggle. When tiles are a **pick-one** set, put them inside a [`RadioGroup`](/?path=/docs/components-radio-group--docs) and give each a `value`: the tile renders as a `<label>` around a visually hidden native radio, the group is one Tab stop, the arrow keys move focus and selection together, and assistive tech announces "radio, checked". Selection comes from the group — drop `selected` and `onClick`. For pick-many, use a `CheckboxGroup` the same way.
+
+<Canvas of={Stories.PickOneGallery} />
 
 ## Props
 

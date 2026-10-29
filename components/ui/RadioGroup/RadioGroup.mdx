@@ -8,11 +8,21 @@ import * as Stories from './RadioGroup.stories';
 
 <ComponentLinks slug="radio-group" />
 
-Single-select group of [`Radio`](/?path=/docs/components-radio--docs) options in a native `<fieldset>`. The wrapper owns the shared `name`, the controlled `value`, and the group's `orientation`; the browser owns single-select exclusivity and roving arrow-key focus, because the children are native radios sharing that `name` — no JavaScript keyboard handling. `Radio` stays the standalone item for the rare solo case.
+Single-select group of [`Radio`](/?path=/docs/components-radio--docs) options in a native `<fieldset>`. The wrapper owns the shared `name`, the controlled `value`, and the group's `orientation`; the browser owns single-select exclusivity and roving arrow-key focus, because the children are native radios sharing that `name` — no JavaScript keyboard handling. `Radio` stays the standalone item for the rare solo case. Pass `options` for plain radios, or `children` to put group-aware items inside the same fieldset.
 
 ## Playground
 
 <Canvas of={Stories.Default} />
+
+## Patterns
+
+### Children mode
+
+With `children`, the group provides its `name`, selected value, change handler and `disabled` to [`SelectableMediaTile`](/?path=/docs/components-selectable-media-tile--docs) and [`InteractiveListItem`](/?path=/docs/components-interactive-list-item--docs) through one shared hook (`useSelectionGroup`, internal). Each item then renders a `<label>` around a visually hidden native radio instead of an `aria-pressed` button. Give each item a `value`; the group is still one Tab stop.
+
+<Canvas of={Stories.ChildrenMode} />
+
+ See the live pick-one gallery on [`SelectableMediaTile`](/?path=/docs/components-selectable-media-tile--docs#pick-one) (ADR-045).
 
 ## Props
 

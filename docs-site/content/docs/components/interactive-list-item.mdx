@@ -99,6 +99,7 @@ See [Card control](/docs/components/card-control) for the settings-row shape.
 
 - Renders a real `<button>` (or a `<div>` when `interactive={false}`) — native focus ring, `Space` / `Enter` activation, and `disabled` come for free.
 - `selected` sets `aria-pressed` so assistive tech reads the toggle state; leave it `undefined` for a plain drill-in row.
+- Inside a `RadioGroup` / `CheckboxGroup`, give the row a `value`: it renders a `<label>` around a visually hidden native radio / checkbox instead, selection comes from the group, and there is no `aria-pressed`.
 - `interactive={false}` rows carry no button semantics — they're purely presentational.
 
 ## API
@@ -113,6 +114,7 @@ See [Card control](/docs/components/card-control) for the settings-row shape.
 | `size` | `'sm' \| 'md'` | `'md'` |
 | `disabled` | `boolean` | `false` |
 | `selected` | `boolean` | — |
+| `value` | `string` | — |
 | `interactive` | `boolean` | `true` |
 | `onClick` | `() => void` | — |
 

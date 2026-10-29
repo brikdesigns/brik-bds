@@ -84,7 +84,12 @@ interface StyleProps {
   fullWidth?: boolean;
   /** Loading state — spinner replaces content, click blocked, width preserved */
   loading?: boolean;
-  /** Selected state — modifier layered on top of `variant`. Use for active filters / segmented control. */
+  /**
+   * Selected state — modifier layered on top of `variant`. Use for active filters / segmented control.
+   * When defined, a `<button>` also sets `aria-pressed` so it reads as a toggle; leave `undefined`
+   * (the default) for an ordinary action button. Anchors keep the class only — `aria-pressed` is
+   * not valid on a link. For a pick-one / pick-many group, use `RadioGroup` / `CheckboxGroup`.
+   */
   selected?: boolean;
   className?: string;
 }
@@ -170,7 +175,7 @@ export function composeButtonClasses({
   size = 'md',
   fullWidth = false,
   loading = false,
-  selected = false,
+  selected,
   iconOnly = false,
   className,
 }: {
@@ -209,7 +214,7 @@ export function composeButtonClasses({
  * - **Router link**:   `<Button href="/x" linkComponent={Link}>Open</Button>` (e.g. `next/link`)
  *
  * State props (combine with any variant):
- * - `selected`  — active state modifier on top of variant
+ * - `selected`  — active state modifier on top of variant; on a `<button>` it also sets `aria-pressed` when defined
  * - `disabled`  — non-interactive (button mode only — anchors lack native disabled)
  * - `loading`   — spinner replaces content, click blocked, width preserved
  * - `fullWidth` — stretches to container
@@ -233,7 +238,7 @@ export const Button = forwardRef<ButtonRef, ButtonProps>(function Button(props, 
     size = 'md',
     fullWidth = false,
     loading = false,
-    selected = false,
+    selected,
     className,
     ...rest
   } = props;
@@ -313,6 +318,7 @@ export const Button = forwardRef<ButtonRef, ButtonProps>(function Button(props, 
       disabled={isDisabled}
       aria-label={iconOnly ? label : label || undefined}
       aria-busy={loading || undefined}
+      aria-pressed={selected}
       {...buttonProps}
     >
       {contentNode}

@@ -1,17 +1,34 @@
+'use client';
+
 import {
   forwardRef,
   type ButtonHTMLAttributes,
   type ForwardedRef,
   type HTMLAttributes,
   type ReactNode,
+  type Ref,
 } from 'react';
+import { useSelectionGroup } from '../shared/useSelectionGroup';
 import { bdsClass } from '../../utils';
 import './InteractiveListItem.css';
 
 export type InteractiveListItemSize = 'sm' | 'md';
 
+/**
+ * The element the root renders as: `<button>` standalone, `<label>` inside a
+ * `RadioGroup` / `CheckboxGroup` (ADR-045).
+ */
+export type InteractiveListItemElement = HTMLButtonElement | HTMLLabelElement;
+
 export interface InteractiveListItemProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'title'> {
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'title' | 'value'> {
+  /**
+   * This row's value inside a `RadioGroup` / `CheckboxGroup`. Required there —
+   * the group matches it against its own `value` to decide `selected`. Without
+   * a surrounding group (or without a `value`) the row stays a standalone
+   * `aria-pressed` toggle button.
+   */
+  value?: string;
   /**
    * Leading slot — typically a `UserAvatar`, an icon inside a colored
    * circle, or a status indicator. Fixed width; doesn't shrink.
@@ -48,6 +65,10 @@ export interface InteractiveListItemProps
    * When provided, the row also exposes `aria-pressed`, giving it toggle
    * semantics; leave it `undefined` for a plain drill-in row.
    *
+   * For a pick-one / pick-many list, put the rows inside a `RadioGroup` /
+   * `CheckboxGroup` instead and give each a `value` — selection then comes from
+   * the group and `selected` is ignored (ADR-045).
+   *
    * Interactive rows only — ignored when `interactive={false}`.
    */
   selected?: boolean;
@@ -82,6 +103,12 @@ export interface InteractiveListItemProps
  * nest interactive elements inside the slots; if the trailing slot
  * needs to be its own click target, use `CardControl` instead.
  *
+ * Inside a `RadioGroup` (pick one) or `CheckboxGroup` (pick many), give the
+ * row a `value`: it renders as a `<label>` wrapping a visually hidden native
+ * radio / checkbox, so the group — not a row of `aria-pressed` toggles — is what
+ * assistive tech reads. Selection, `name`, `disabled` and change handling come
+ * from the group; `onClick` and `selected` are ignored there (ADR-045).
+ *
  * For a **display-only row** (status list, per-page composition list —
  * anything that shows data without drilling in), pass `interactive={false}`:
  * same slot API, rendered as a non-interactive `<div>` with no click
@@ -100,7 +127,7 @@ export interface InteractiveListItemProps
  *
  * @summary Clickable horizontal row — leading + title + subtitle + trailing
  */
-export const InteractiveListItem = forwardRef<HTMLButtonElement, InteractiveListItemProps>(
+export const InteractiveListItem = forwardRef<InteractiveListItemElement, InteractiveListItemProps>(
   (
     {
       leading,
@@ -113,10 +140,13 @@ export const InteractiveListItem = forwardRef<HTMLButtonElement, InteractiveList
       interactive = true,
       className,
       onClick,
+      value,
       ...props
     },
     ref,
   ) => {
+    const group = useSelectionGroup();
+
     const slots = (
       <>
         {leading !== undefined && (
@@ -136,7 +166,7 @@ export const InteractiveListItem = forwardRef<HTMLButtonElement, InteractiveList
 
     // Read-only row — non-interactive <div>, display only. Drops every
     // button-only concern (onClick / disabled / selected). The forwardRef is
-    // typed to the interactive <button>, so the div branch casts ref + the
+    // typed to the interactive <button> / <label>, so the div branch casts ref + the
     // remaining props (which may carry button-only attrs) to div shapes.
     if (!interactive) {
       return (
@@ -155,9 +185,41 @@ export const InteractiveListItem = forwardRef<HTMLButtonElement, InteractiveList
       );
     }
 
+    // Inside a RadioGroup / CheckboxGroup — a <label> wrapping a visually hidden
+    // native input (the ServiceTagSelect rendering, ADR-045 § 2). The group owns
+    // name, checked, disabled and change; the browser owns the keyboard model.
+    if (group && value !== undefined) {
+      const isDisabled = disabled || group.disabled;
+      const isSelected = group.isSelected(value);
+      return (
+        <label
+          ref={ref as Ref<HTMLLabelElement>}
+          className={bdsClass(
+            'bds-interactive-list-item',
+            `bds-interactive-list-item--${size}`,
+            isSelected && 'bds-interactive-list-item--selected',
+            isDisabled && 'bds-interactive-list-item--disabled',
+            className,
+          )}
+          {...(props as unknown as HTMLAttributes<HTMLLabelElement>)}
+        >
+          <input
+            type={group.kind}
+            name={group.name}
+            value={value}
+            checked={isSelected}
+            disabled={isDisabled}
+            onChange={() => group.onChange(value)}
+            className="bds-interactive-list-item__input"
+          />
+          {slots}
+        </label>
+      );
+    }
+
     return (
       <button
-        ref={ref}
+        ref={ref as Ref<HTMLButtonElement>}
         type="button"
         className={bdsClass(
           'bds-interactive-list-item',
@@ -167,6 +229,7 @@ export const InteractiveListItem = forwardRef<HTMLButtonElement, InteractiveList
           className,
         )}
         disabled={disabled}
+        value={value}
         aria-pressed={selected}
         onClick={onClick}
         {...props}

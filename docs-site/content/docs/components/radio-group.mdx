@@ -60,6 +60,7 @@ Set `orientation="horizontal"` for a compact inline row; the default is a vertic
 
 - Renders a `<fieldset role="radiogroup">`; a `legend` prop is the group's visible label. Omit `legend` and pass `aria-label` to label the group without visible text.
 - Each option is a native `<input type="radio">` sharing one `name`, so the browser enforces single-selection and arrow-key roving focus with no custom key handling.
+- `InteractiveListItem` / `SelectableMediaTile` passed as `children` render a visually hidden native radio inside a `<label>` (no `aria-pressed`), so the group stays one tab stop.
 - Tab reaches the group; arrow keys move selection within it.
 
 ## API
@@ -69,6 +70,7 @@ Set `orientation="horizontal"` for a compact inline row; the default is a vertic
 | Prop | Type | Default |
 |---|---|---|
 | `options` | `RadioGroupOption[]` | — |
+| `children` | `ReactNode` | — |
 | `value` | `string` | — |
 | `defaultValue` | `string` | — |
 | `onChange` | `(value: string) => void` | — |

@@ -75,6 +75,7 @@ Reach for [InteractiveListItem](/docs/components/interactive-list-item)'s `selec
 - Renders a real `<button>` — native focus ring, `Space` / `Enter` activation, and `disabled` come for free.
 - `alt` is required — the tile is a real control, not decoration.
 - `selected` sets `aria-pressed` so assistive tech reads the toggle state.
+- Inside a `RadioGroup` / `CheckboxGroup`, give the tile a `value`: it renders a `<label>` around a visually hidden native radio / checkbox instead, selection comes from the group, and there is no `aria-pressed`.
 
 ## API
 
@@ -86,6 +87,7 @@ Reach for [InteractiveListItem](/docs/components/interactive-list-item)'s `selec
 | `alt` | `string` *(required)* | — |
 | `caption` | `ReactNode` | — |
 | `selected` | `boolean` | — |
+| `value` | `string` | — |
 | `disabled` | `boolean` | `false` |
 | `aspectRatio` | `FrameRatio` | `'4-3'` |
 | `onClick` | `() => void` | — |

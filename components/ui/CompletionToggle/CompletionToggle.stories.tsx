@@ -60,12 +60,11 @@ export const Default: Story = {
     await expect(toggle).toHaveAttribute('aria-pressed', 'false');
 
     // Round-trip the state: not-complete → complete → not-complete.
-    // aria-label flips to "Mark incomplete" while checked so the next
-    // canvas.getByRole query has to match the new accessible name.
+    // The accessible name is fixed (ADR-045 § 4); only aria-pressed carries state.
     await userEvent.click(toggle);
-    await expect(canvas.getByRole('button', { name: 'Mark incomplete' })).toHaveAttribute('aria-pressed', 'true');
+    await expect(canvas.getByRole('button', { name: 'Mark complete' })).toHaveAttribute('aria-pressed', 'true');
 
-    await userEvent.click(canvas.getByRole('button', { name: 'Mark incomplete' }));
+    await userEvent.click(canvas.getByRole('button', { name: 'Mark complete' }));
     await expect(canvas.getByRole('button', { name: 'Mark complete' })).toHaveAttribute('aria-pressed', 'false');
 
     // Blur so the post-play canvas matches the canonical idle state.

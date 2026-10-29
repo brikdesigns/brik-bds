@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { RadioGroup } from './RadioGroup';
+import { InteractiveListItem } from '../InteractiveListItem';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -12,7 +13,12 @@ const meta: Meta<typeof RadioGroup> = {
   argTypes: {
     options: {
       control: 'object',
-      description: 'Options in render order. Each is `{ label, value, disabled? }`.',
+      description: 'Options in render order. Each is `{ label, value, disabled? }`. Omit when passing `children`.',
+    },
+    children: {
+      control: false,
+      description:
+        'Group-aware items (`SelectableMediaTile`, `InteractiveListItem`) rendered inside the fieldset. Each reads the group through `useSelectionGroup` and renders a native radio, so the group stays one Tab stop.',
     },
     value: {
       control: 'text',
@@ -61,6 +67,24 @@ export const Default: Story = {
       { label: 'Enterprise — Custom pricing', value: 'enterprise' },
     ],
   },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   CHILDREN MODE — group-aware rows instead of `options` (ADR-045).
+   Each InteractiveListItem reads the group and renders a native radio.
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Pick-one rows as group-aware children */
+export const ChildrenMode: Story = {
+  render: () => (
+    <RadioGroup legend="Meeting" defaultValue="kickoff">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-sm)' }}>
+        <InteractiveListItem value="kickoff" title="Kickoff call" subtitle="Oct 2" />
+        <InteractiveListItem value="review" title="Design review" subtitle="Oct 16" />
+        <InteractiveListItem value="handoff" title="Launch handoff" subtitle="Oct 30" />
+      </div>
+    </RadioGroup>
+  ),
 };
 
 /* ═══════════════════════════════════════════════════════════════
