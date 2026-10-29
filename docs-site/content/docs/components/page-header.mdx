@@ -127,7 +127,7 @@ The step names are offset from the tokens they render. `lg` is the page-title de
 
 ### Compact and tabs-only
 
-`variant` fixes the header's shape for the page. Default `full`. No variant collapses, resizes or animates on scroll.
+`variant` fixes the header's shape for the page. Default `full`. No variant changes shape on scroll; `condenseOnScroll` is a separate opt-in that applies to any of them.
 
 | `variant` | Renders |
 |---|---|
@@ -158,6 +158,27 @@ The step names are offset from the tokens they render. `lg` is the page-title de
 .app-shell__content {
   scroll-padding-top: calc(var(--bds-pageheader-top) + 120px); /* 120px = your header's height */
 }
+```
+
+### Condense on scroll
+
+`condenseOnScroll` (with `sticky`) shrinks the pinned header once the page has scrolled. Default `false`; without `sticky` it does nothing, because a header that scrolls away has nothing to condense.
+
+| | Expanded | Condensed |
+| --- | --- | --- |
+| Breadcrumbs, subtitle, metadata | Shown | Hidden |
+| Media, title, actions, tabs | Shown | Shown |
+| Title | `lg` (default) `--bds-heading-xl`; `md` `--bds-heading-md`; `sm` `--bds-heading-sm` | Two steps down: `lg` to `--bds-heading-md`; `md` and `sm` to `--bds-heading-tiny` (the bottom of the scale) |
+| Section gap | `--page-header-section-gap` (`--bds-gap-xl`) | `--bds-gap-md` |
+
+The header condenses once the page has scrolled a header height past the point where it pins, and expands again when scrolled back to the pin; between the two it keeps its state. That gap is deliberate: condensing moves the content below the header up, and a browser with scroll anchoring scrolls back by the same amount, which would carry the page back across the trigger if it sat exactly at the pin. The threshold is measured from `--bds-pageheader-top`.
+
+The state is exposed as `data-condensed="true"` or `"false"` on the header, and is absent when the prop is off. The title's `font-size` animates; under `prefers-reduced-motion: reduce` nothing does. The prop is a boolean, so a React Server Component can pass it.
+
+The header renders a zero-height `<span aria-hidden>` immediately before itself to detect scroll position. In a flex or grid parent that sets `gap`, it counts as one more item.
+
+```tsx
+<PageHeader title="Companies" subtitle="Every lead, prospect and client." sticky condenseOnScroll />
 ```
 
 ### Read and edit mode
@@ -271,6 +292,7 @@ The canonical layout — breadcrumb + identity mark + title + actions + metadata
 | `size` | `'sm' \| 'md' \| 'lg'` | `'lg'` |
 | `variant` | `'full' \| 'compact' \| 'tabs-only'` | `'full'` |
 | `sticky` | `boolean` | `false` |
+| `condenseOnScroll` | `boolean` | `false` |
 | `mode` | `'read' \| 'edit'` | — |
 | `onEdit` | `() => void` | — |
 | `editHref` | `string` | — |

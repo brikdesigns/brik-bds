@@ -1,9 +1,10 @@
-import { type HTMLAttributes, type ReactNode } from 'react';
+import { type HTMLAttributes, type ReactNode, useEffect, useRef, useState } from 'react';
 import { Icon } from '../Icon';
 import { Pen } from '../../icons';
 import { Button } from '../Button';
 import { ButtonGroup } from '../ButtonGroup';
 import { bdsClass } from '../../utils';
+import { observeCondense } from './condenseOnScroll';
 import './PageHeader.css';
 
 export interface MetadataItem {
@@ -28,6 +29,8 @@ export type PageHeaderMode = 'read' | 'edit';
 
 /**
  * Header shape, fixed per page — no variant collapses or expands on scroll.
+ * (The opt-in `condenseOnScroll` prop is the one exception, and it is a prop,
+ * not a variant: it applies to any variant.)
  *
  * - `full` — every slot renders (breadcrumbs, media, title, subtitle, actions,
  *   metadata, tabs).
@@ -91,6 +94,27 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
    * header pins below the bar instead of under it.
    */
   sticky?: boolean;
+  /**
+   * Condense the header once it has pinned. Default `false` — existing consumers
+   * see no change. Only meaningful with `sticky`: a header that scrolls away has
+   * nothing to condense, so without `sticky` this does nothing.
+   *
+   * When the pinned header has scrolled past its natural position it hides the
+   * breadcrumbs, subtitle and metadata, tightens its section gaps, and steps the
+   * title down two steps on the heading scale (`lg` → `--bds-heading-md`;
+   * `md` / `sm` → `--bds-heading-tiny`, the bottom of the scale). Media, title,
+   * actions and tabs stay. It returns to full size when scrolled back up.
+   *
+   * The state is exposed as `data-condensed="true" | "false"` (absent when the
+   * prop is off). Under `prefers-reduced-motion: reduce` the title snaps instead
+   * of animating.
+   *
+   * Boolean, so it crosses the RSC boundary. The scroll logic is an
+   * `IntersectionObserver` on a zero-height sentinel the header renders just
+   * before itself — see `condenseOnScroll.ts` for why it cannot oscillate.
+   * In a flex or grid parent that sets `gap`, the sentinel is one more item.
+   */
+  condenseOnScroll?: boolean;
   /**
    * Bimodal page state. Drives auto-rendered `actions` when no explicit
    * `actions` slot is provided. See {@link PageHeaderMode}.
@@ -167,6 +191,7 @@ export function PageHeader({
   size = 'lg',
   variant = 'full',
   sticky = false,
+  condenseOnScroll = false,
   mode,
   onEdit,
   editHref,
@@ -181,6 +206,17 @@ export function PageHeader({
   style,
   ...props
 }: PageHeaderProps) {
+  // Condensing is a property of a *pinned* header; without `sticky` it is inert.
+  const condensable = condenseOnScroll && sticky;
+  const headerRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLSpanElement>(null);
+  const [condensed, setCondensed] = useState(false);
+
+  useEffect(() => {
+    if (!condensable || !headerRef.current || !sentinelRef.current) return;
+    return observeCondense(sentinelRef.current, headerRef.current, setCondensed);
+  }, [condensable]);
+
   // `media` is the canonical slot; `badge` is the deprecated alias (#1705).
   const resolvedMedia: ReactNode = media ?? badge;
 
@@ -244,8 +280,9 @@ export function PageHeader({
     );
   }
 
-  return (
+  const header = (
     <div
+      ref={headerRef}
       className={bdsClass(
         'bds-page-header',
         isFull && size !== 'lg' && `bds-page-header--${size}`,
@@ -256,9 +293,13 @@ export function PageHeader({
       style={style}
       data-mode={mode}
       data-variant={variant}
+      data-condensed={condensable ? String(condensed) : undefined}
       {...props}
     >
-      {isFull && breadcrumbs}
+      {/* The wrapper exists only when condensing, so the DOM a non-opted-in
+          consumer renders is unchanged — the slot is a bare ReactNode and CSS
+          has nothing else to hide it by. */}
+      {isFull && breadcrumbs && (condensable ? <div className="bds-page-header__breadcrumbs">{breadcrumbs}</div> : breadcrumbs)}
 
       <div className="bds-page-header__inner">
         <div className="bds-page-header__content">
@@ -288,6 +329,17 @@ export function PageHeader({
 
       {tabs && <div className="bds-page-header__tabs">{tabs}</div>}
     </div>
+  );
+
+  if (!condensable) return header;
+
+  // The sentinel sits where the header's natural top is and moves only with the
+  // scroll offset, so shrinking the header cannot move it. See condenseOnScroll.ts.
+  return (
+    <>
+      <span ref={sentinelRef} className="bds-page-header__condense-sentinel" aria-hidden="true" />
+      {header}
+    </>
   );
 }
 
