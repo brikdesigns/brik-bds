@@ -26,7 +26,9 @@ export interface CompletionToggleProps
  * wherever a discrete unit of work has a "complete / not complete"
  * state — task cards, checklist rows, completion-state lists.
  *
- * Renders as a `<button>` so it is a self-contained click target.
+ * Renders as a `<button>` so it is a self-contained click target. State is
+ * carried by `aria-pressed`; the accessible name stays fixed across states, per
+ * the WAI-ARIA toggle-button pattern.
  * For row-style use where the entire row is the click target (label +
  * toggle), use `Checklist` instead — it shares this control's
  * visual and pairs it with a native `<label>` + `<input>`.
@@ -68,7 +70,7 @@ export const CompletionToggle = forwardRef<HTMLButtonElement, CompletionTogglePr
         )}
         disabled={disabled}
         aria-pressed={checked}
-        aria-label={ariaLabel ?? (checked ? 'Mark incomplete' : 'Mark complete')}
+        aria-label={ariaLabel ?? 'Mark complete'}
         onClick={(e) => {
           e.stopPropagation();
           onClick?.(e);

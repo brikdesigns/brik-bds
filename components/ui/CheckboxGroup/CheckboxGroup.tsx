@@ -1,5 +1,8 @@
+'use client';
+
 import { type ReactNode, useMemo, useState } from 'react';
 import { Checkbox } from '../Checkbox';
+import { SelectionGroupContext, type SelectionGroupContextValue } from '../shared/useSelectionGroup';
 import { bdsClass } from '../../utils';
 import './CheckboxGroup.css';
 
@@ -13,8 +16,20 @@ export interface CheckboxGroupOption {
 }
 
 export interface CheckboxGroupProps {
-  /** Options in render order. */
-  options: CheckboxGroupOption[];
+  /** Options in render order, each rendered as a `Checkbox`. Omit when passing `children`. */
+  options?: CheckboxGroupOption[];
+  /**
+   * Group-aware items (`InteractiveListItem`, `SelectableMediaTile`), each with
+   * a `value`. Rendered inside the same `<fieldset>` / `<legend>`, after any
+   * `options`, in whatever layout the caller composes — `orientation` styles
+   * `options` only. `selectAllLabel` covers `options` only.
+   */
+  children?: ReactNode;
+  /**
+   * Native `name` shared by the checkboxes rendered from `children`. Omit when
+   * the selection is read from `onChange` rather than a surrounding `<form>`.
+   */
+  name?: string;
   /** Controlled selected values. Pair with `onChange`. */
   value?: string[];
   /** Initial selected values for uncontrolled use. */
@@ -43,6 +58,10 @@ export interface CheckboxGroupProps {
  * standalone item; orientation is a prop, not a per-orientation story (ADR-010
  * Rule 5).
  *
+ * Pass `options` for a plain list of checkboxes, or `children` for pick-many
+ * groups of richer items: an `InteractiveListItem` / `SelectableMediaTile` with
+ * a `value` renders as a native checkbox inside the group (ADR-045).
+ *
  * @example
  * ```tsx
  * <CheckboxGroup
@@ -61,6 +80,8 @@ export interface CheckboxGroupProps {
  */
 export function CheckboxGroup({
   options,
+  children,
+  name,
   value,
   defaultValue,
   onChange,
@@ -88,7 +109,7 @@ export function CheckboxGroup({
   };
 
   const selectableValues = useMemo(
-    () => options.filter((o) => !o.disabled).map((o) => o.value),
+    () => (options ?? []).filter((o) => !o.disabled).map((o) => o.value),
     [options],
   );
   const allSelected =
@@ -105,13 +126,21 @@ export function CheckboxGroup({
     }
   };
 
+  const group: SelectionGroupContextValue = {
+    kind: 'checkbox',
+    name,
+    isSelected: (optionValue) => selected.includes(optionValue),
+    onChange: toggle,
+    disabled,
+  };
+
   return (
     <fieldset
       className={bdsClass('bds-checkbox-group', disabled && 'bds-checkbox-group--disabled', className)}
       disabled={disabled}
     >
       {legend && <legend className="bds-checkbox-group__legend">{legend}</legend>}
-      {selectAllLabel && (
+      {selectAllLabel && options && (
         <div className="bds-checkbox-group__select-all">
           <Checkbox
             label={selectAllLabel}
@@ -121,23 +150,26 @@ export function CheckboxGroup({
           />
         </div>
       )}
-      <div
-        className={bdsClass(
-          'bds-checkbox-group__options',
-          `bds-checkbox-group__options--orientation-${orientation}`,
-        )}
-      >
-        {options.map((option) => (
-          <Checkbox
-            key={option.value}
-            value={option.value}
-            label={option.label}
-            checked={selected.includes(option.value)}
-            disabled={disabled || option.disabled}
-            onChange={() => toggle(option.value)}
-          />
-        ))}
-      </div>
+      {options && (
+        <div
+          className={bdsClass(
+            'bds-checkbox-group__options',
+            `bds-checkbox-group__options--orientation-${orientation}`,
+          )}
+        >
+          {options.map((option) => (
+            <Checkbox
+              key={option.value}
+              value={option.value}
+              label={option.label}
+              checked={selected.includes(option.value)}
+              disabled={disabled || option.disabled}
+              onChange={() => toggle(option.value)}
+            />
+          ))}
+        </div>
+      )}
+      <SelectionGroupContext.Provider value={group}>{children}</SelectionGroupContext.Provider>
     </fieldset>
   );
 }

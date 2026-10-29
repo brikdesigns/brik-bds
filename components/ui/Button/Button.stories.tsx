@@ -58,7 +58,7 @@ const meta: Meta<typeof Button> = {
     selected: {
       control: 'boolean',
       description:
-        'Selected state modifier — layered on top of `variant`. Use for active filters / segmented control selections.',
+        'Selected state modifier — layered on top of `variant`. Undefined by default; when defined (true or false) the button is a toggle and sets `aria-pressed`.',
     },
     iconBefore: {
       control: false,

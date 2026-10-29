@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { CheckboxGroup } from './CheckboxGroup';
+import { InteractiveListItem } from '../InteractiveListItem';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -12,7 +13,17 @@ const meta: Meta<typeof CheckboxGroup> = {
   argTypes: {
     options: {
       control: 'object',
-      description: 'Options in render order. Each is `{ label, value, disabled? }`.',
+      description: 'Options in render order. Each is `{ label, value, disabled? }`. Omit when passing `children`.',
+    },
+    children: {
+      control: false,
+      description:
+        'Group-aware items (`SelectableMediaTile`, `InteractiveListItem`) rendered inside the fieldset. Each reads the group through `useSelectionGroup` and renders a native checkbox.',
+    },
+    name: {
+      control: 'text',
+      description:
+        'Native `name` for the checkboxes rendered from `children`. Omit when the selection is read from `onChange` rather than a `<form>`.',
     },
     value: {
       control: 'object',
@@ -60,6 +71,22 @@ export const Default: Story = {
       { label: 'Weekly digest', value: 'digest' },
     ],
   },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   CHILDREN MODE — group-aware rows instead of `options` (ADR-045).
+   Each InteractiveListItem reads the group and renders a native checkbox.
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Pick-many rows as group-aware children */
+export const ChildrenMode: Story = {
+  render: () => (
+    <CheckboxGroup legend="Channels" defaultValue={['email']}>
+      <InteractiveListItem value="email" title="Email" subtitle="Daily summary" />
+      <InteractiveListItem value="sms" title="SMS" subtitle="Urgent only" />
+      <InteractiveListItem value="push" title="Push" subtitle="Every update" />
+    </CheckboxGroup>
+  ),
 };
 
 /* ═══════════════════════════════════════════════════════════════

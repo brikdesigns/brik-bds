@@ -5,6 +5,7 @@ import { InteractiveListItem } from './InteractiveListItem';
 import { Avatar } from '../Avatar';
 import { Badge } from '../Badge';
 import { Icon } from '../Icon';
+import { CheckboxGroup } from '../CheckboxGroup';
 
 /* ─── Layout helper (story-only) ─────────────────────────────────── */
 
@@ -50,7 +51,12 @@ const meta: Meta<typeof InteractiveListItem> = {
     selected: {
       control: 'boolean',
       description:
-        'Persistent toggle state — brand tint + inset ring, and sets `aria-pressed`. Leave undefined for a plain drill-in row.',
+        'Persistent toggle state — brand tint + inset ring, and sets `aria-pressed`. Leave undefined for a plain drill-in row. Standalone only: inside a `RadioGroup` / `CheckboxGroup` the group decides.',
+    },
+    value: {
+      control: 'text',
+      description:
+        'The option value this row represents. Required inside a `RadioGroup` / `CheckboxGroup`, where the row renders a native radio / checkbox instead of a toggle button.',
     },
     interactive: {
       control: 'boolean',
@@ -238,6 +244,72 @@ export const Selectable: Story = {
     await userEvent.click(kickoff);
     await expect(kickoff).toHaveAttribute('aria-pressed', 'true');
     await expect(discovery).toHaveAttribute('aria-pressed', 'false');
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   PICK MANY — a list inside CheckboxGroup (ADR-045 reference)
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * The pick-many list. Inside a `CheckboxGroup` each row is a `<label>` around a
+ * visually hidden native checkbox: every row is its own Tab stop, Space toggles
+ * it, and assistive tech announces "checkbox, checked". No `aria-pressed` —
+ * the group owns the selected array, so the row carries `value` instead of
+ * `selected` / `onClick`.
+ *
+ * @summary Pick-many service list — rows inside a CheckboxGroup
+ */
+export const PickManyList: Story = {
+  render: () => {
+    const options = [
+      { id: 'cleaning', title: 'Hygiene cleaning', subtitle: '60 min' },
+      { id: 'whitening', title: 'Teeth whitening', subtitle: '45 min' },
+      { id: 'xray', title: 'Digital X-rays', subtitle: '15 min' },
+    ];
+    const [picked, setPicked] = React.useState<string[]>(['cleaning']);
+    return (
+      <div style={{ minWidth: 360 }}>
+        <CheckboxGroup legend="Services" value={picked} onChange={setPicked}>
+          <Stack gap="var(--bds-gap-sm)">
+            {options.map((opt) => (
+              <InteractiveListItem
+                key={opt.id}
+                value={opt.id}
+                title={opt.title}
+                subtitle={opt.subtitle}
+              />
+            ))}
+          </Stack>
+        </CheckboxGroup>
+      </div>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const group = canvas.getByRole('group', { name: 'Services' });
+    const boxes = within(group).getAllByRole('checkbox');
+    const [cleaning, whitening, xray] = boxes;
+
+    // Checkbox role, the seeded row checked, no toggle buttons.
+    await expect(boxes).toHaveLength(3);
+    await expect(canvas.queryByRole('button')).toBeNull();
+    await expect(cleaning).toBeChecked();
+    await expect(whitening).not.toBeChecked();
+
+    // Space toggles the focused row; each row is its own tab stop.
+    await userEvent.tab();
+    await expect(cleaning).toHaveFocus();
+    await userEvent.tab();
+    await expect(whitening).toHaveFocus();
+    await userEvent.keyboard(' ');
+    await expect(whitening).toBeChecked();
+    await expect(cleaning).toBeChecked();
+
+    // Space again clears it; the other rows are untouched.
+    await userEvent.keyboard(' ');
+    await expect(whitening).not.toBeChecked();
+    await expect(xray).not.toBeChecked();
   },
 };
 

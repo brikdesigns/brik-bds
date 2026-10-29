@@ -8,11 +8,19 @@ import * as Stories from './CheckboxGroup.stories';
 
 <ComponentLinks slug="checkbox-group" />
 
-Multi-select group of [`Checkbox`](/?path=/docs/components-checkbox--docs) options in a native `<fieldset>` + `<legend>`. The wrapper owns the selected-values array and orientation, and optionally renders a select-all parent that reflects `indeterminate` when the selection is partial. `Checkbox` stays the standalone item for a single binary choice.
+Multi-select group of [`Checkbox`](/?path=/docs/components-checkbox--docs) options in a native `<fieldset>` + `<legend>`. The wrapper owns the selected-values array and orientation, and optionally renders a select-all parent that reflects `indeterminate` when the selection is partial. `Checkbox` stays the standalone item for a single binary choice. Pass `options` for plain checkboxes, or `children` to put group-aware items inside the same fieldset.
 
 ## Playground
 
 <Canvas of={Stories.Default} />
+
+## Patterns
+
+### Children mode
+
+With `children`, the group provides its selected array, toggle handler, optional `name` and `disabled` to [`InteractiveListItem`](/?path=/docs/components-interactive-list-item--docs) and [`SelectableMediaTile`](/?path=/docs/components-selectable-media-tile--docs) through one shared hook (`useSelectionGroup`, internal). Each item then renders a `<label>` around a visually hidden native checkbox instead of an `aria-pressed` button. Give each item a `value`. See the live pick-many list on [`InteractiveListItem`](/?path=/docs/components-interactive-list-item--docs#pick-many) (ADR-045). Select-all is an `options`-mode feature; it is not rendered with `children`.
+
+<Canvas of={Stories.ChildrenMode} />
 
 ## Props
 

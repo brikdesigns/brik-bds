@@ -2,6 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect, userEvent, within } from 'storybook/test';
 import { SelectableMediaTile } from './SelectableMediaTile';
+import { RadioGroup } from '../RadioGroup';
 
 /* ─── Deterministic placeholder images (story-only) ──────────────────
    Inline SVG data-URIs so Chromatic snapshots never depend on the
@@ -45,7 +46,13 @@ const meta: Meta<typeof SelectableMediaTile> = {
     caption: { control: 'text', description: 'Caption below the image (ReactNode).' },
     selected: {
       control: 'boolean',
-      description: 'Persistent toggle state — brand ring + check overlay, sets `aria-pressed`.',
+      description:
+        'Persistent toggle state — brand ring + check overlay, sets `aria-pressed`. Standalone only: inside a `RadioGroup` / `CheckboxGroup` the group decides.',
+    },
+    value: {
+      control: 'text',
+      description:
+        'The option value this tile represents. Required inside a `RadioGroup` / `CheckboxGroup`, where the tile renders a native radio / checkbox instead of a toggle button.',
     },
     disabled: { control: 'boolean', description: 'Mutes styling and blocks the click.' },
     aspectRatio: {
@@ -134,5 +141,69 @@ export const SingleSelectGrid: Story = {
     // Clicking the pinned tile again clears it.
     await userEvent.click(team);
     await expect(team).toHaveAttribute('aria-pressed', 'false');
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   PICK ONE — a gallery inside RadioGroup (ADR-045 reference)
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * The pick-one gallery. Inside a `RadioGroup` each tile is a `<label>` around a
+ * visually hidden native radio: the group is one Tab stop, the arrow keys move
+ * focus and selection together, and assistive tech announces "radio, checked".
+ * No `aria-pressed` — the group owns selection, so the tile carries `value`
+ * instead of `selected` / `onClick`.
+ *
+ * @summary Pick-one photo gallery — tiles inside a RadioGroup
+ */
+export const PickOneGallery: Story = {
+  render: () => {
+    const [pinned, setPinned] = React.useState('hero');
+    return (
+      <RadioGroup legend="Hero photo" value={pinned} onChange={setPinned}>
+        <Grid>
+          {PHOTOS.map((photo) => (
+            <SelectableMediaTile
+              key={photo.id}
+              value={photo.id}
+              src={photo.src}
+              alt={photo.name}
+              caption={photo.name}
+            />
+          ))}
+        </Grid>
+      </RadioGroup>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const group = canvas.getByRole('radiogroup', { name: 'Hero photo' });
+    const radios = within(group).getAllByRole('radio');
+    const [hero, lobby, team] = radios;
+
+    // Radio role, one checked option, no toggle buttons.
+    await expect(radios).toHaveLength(3);
+    await expect(canvas.queryByRole('button')).toBeNull();
+    await expect(hero).toBeChecked();
+    await expect(lobby).not.toBeChecked();
+
+    // Tab enters the group at ONE stop (the checked radio); the next Tab leaves it.
+    await userEvent.tab();
+    await expect(hero).toHaveFocus();
+    await userEvent.tab();
+    await expect(radios).not.toContain(canvasElement.ownerDocument.activeElement);
+
+    // Arrows move focus and selection together inside the group.
+    hero.focus();
+    await userEvent.keyboard('{ArrowRight}');
+    await expect(lobby).toHaveFocus();
+    await expect(lobby).toBeChecked();
+    await expect(hero).not.toBeChecked();
+
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(team).toHaveFocus();
+    await expect(team).toBeChecked();
+    await expect(lobby).not.toBeChecked();
   },
 };

@@ -65,7 +65,7 @@ Pass `selectAllLabel` to render a parent checkbox above the options. It checks o
 ## Accessibility
 
 - Renders a `<fieldset>` with the `legend` prop as the group's visible label.
-- Each option is a native checkbox; selection is a controlled `string[]` passed through `value` / `onChange`.
+- Each option is a native checkbox — including `InteractiveListItem` / `SelectableMediaTile` passed as `children`, which render a visually hidden native checkbox inside a `<label>` (no `aria-pressed`); selection is a controlled `string[]` passed through `value` / `onChange`.
 - The select-all parent uses the DOM `indeterminate` property when the selection is partial, so assistive tech announces the mixed state.
 
 ## API
@@ -75,6 +75,8 @@ Pass `selectAllLabel` to render a parent checkbox above the options. It checks o
 | Prop | Type | Default |
 |---|---|---|
 | `options` | `CheckboxGroupOption[]` | — |
+| `children` | `ReactNode` | — |
+| `name` | `string` | — |
 | `value` | `string[]` | — |
 | `defaultValue` | `string[]` | — |
 | `onChange` | `(value: string[]) => void` | — |

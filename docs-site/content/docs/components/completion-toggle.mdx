@@ -59,7 +59,7 @@ const [done, setDone] = useState(false);
 ## Accessibility
 
 - Renders a `<button type="button">` with `aria-pressed` reflecting `checked`.
-- The accessible name defaults to `"Mark complete"` / `"Mark incomplete"` based on state; pass `aria-label` to override.
+- The accessible name defaults to `"Mark complete"` and does not change with state — `aria-pressed` carries the state (WAI-ARIA toggle button); pass `aria-label` to override.
 - The check glyph is `aria-hidden` — state is conveyed by `aria-pressed`, not the icon.
 
 ## API
