@@ -19,8 +19,8 @@ public enum BDSSemanticColor {
     public static let textAccentPurple = Color(red: 0.6196, green: 0.5451, blue: 0.7608)
     public static let textNeutral = Color(red: 0.2118, green: 0.2118, blue: 0.2118)
     public static let textBrandPrimary = Color(red: 0.8902, green: 0.3255, blue: 0.2078)
-    public static let textAccentOrange = Color(red: 0.9059, green: 0.3804, blue: 0.2039)
     public static let textTextLink = Color(red: 0.1412, green: 0.3804, blue: 0.7059)
+    public static let textAccentOrange = Color(red: 0.9059, green: 0.3804, blue: 0.2039)
     public static let textDisabled = Color(red: 0.5098, green: 0.5098, blue: 0.5098) /// Disabled button text (all variants)
     public static let textServiceBrand = Color(red: 0.8549, green: 0.7333, blue: 0.3255)
     public static let textServiceInformation = Color(red: 0.8392, green: 0.9412, blue: 0.9804)
@@ -86,9 +86,9 @@ public enum BDSSemanticColor {
     public static let backgroundAccentYellow = Color(red: 0.9569, green: 0.8275, blue: 0.3922)
     public static let backgroundNeutral = Color(red: 0.2118, green: 0.2118, blue: 0.2118)
     public static let backgroundBrandPrimary = Color(red: 0.8902, green: 0.3255, blue: 0.2078)
-    public static let backgroundAccentOrange = Color(red: 0.9569, green: 0.5333, blue: 0.3961)
     public static let backgroundBrandPrimaryHover = Color(red: 0.6902, green: 0.2078, blue: 0.1059) /// Primary button hover background
     public static let backgroundBrandPrimaryPressed = Color(red: 0.4902, green: 0.1137, blue: 0.0353) /// Primary button pressed background
+    public static let backgroundAccentOrange = Color(red: 0.9569, green: 0.5333, blue: 0.3961)
     public static let backgroundDisabled = Color(red: 0.5098, green: 0.5098, blue: 0.5098) /// Disabled button background (all variants)
     public static let backgroundServiceBrand = Color(red: 0.9569, green: 0.8275, blue: 0.3922)
     public static let backgroundServiceBrandOnLight = Color(red: 0.3882, green: 0.2784, blue: 0.0863)

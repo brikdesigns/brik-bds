@@ -19,8 +19,8 @@
   --bds-text-accent-purple: var(--bds-color-purple-500);
   --bds-text-neutral: var(--bds-color-system-neutral);
   --bds-text-brand-primary: var(--bds-color-poppy-500);
-  --bds-text-accent-orange: var(--bds-color-orange-500);
   --bds-text-text-link: var(--bds-color-system-blue);
+  --bds-text-accent-orange: var(--bds-color-orange-500);
   --bds-text-disabled: var(--bds-color-grayscale-600); /** Disabled text (dark mode) */
   --bds-text-service-brand: var(--bds-color-yellow-600);
   --bds-text-service-information: var(--bds-color-blue-300);
@@ -86,9 +86,9 @@
   --bds-background-accent-yellow: var(--bds-color-yellow-500);
   --bds-background-neutral: var(--bds-color-system-neutral);
   --bds-background-brand-primary: var(--bds-color-poppy-500);
-  --bds-background-accent-orange: var(--bds-color-orange-400);
   --bds-background-brand-primary-hover: var(--bds-color-poppy-700); /** Primary button hover background (dark mode) */
   --bds-background-brand-primary-pressed: var(--bds-color-poppy-800); /** Primary button pressed background (dark mode) */
+  --bds-background-accent-orange: var(--bds-color-orange-400);
   --bds-background-disabled: var(--bds-color-grayscale-500); /** Disabled background (dark mode) */
   --bds-background-service-brand: var(--bds-color-yellow-500);
   --bds-background-service-brand-on-light: var(--bds-color-yellow-950);

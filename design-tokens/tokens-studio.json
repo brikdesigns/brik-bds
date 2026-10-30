@@ -7100,15 +7100,6 @@
         "$type": "color",
         "$value": "{color.poppy.500}"
       },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.500}"
-      },
       "text-link": {
         "$extensions": {
           "com.figma.scopes": [
@@ -7117,6 +7108,15 @@
         },
         "$type": "color",
         "$value": "{color.system.blue}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.500}"
       },
       "disabled": {
         "$extensions": {
@@ -7709,15 +7709,6 @@
         "$type": "color",
         "$value": "{color.poppy.500}"
       },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.400}"
-      },
       "brand-primary-hover": {
         "$extensions": {
           "com.figma.scopes": [
@@ -7737,6 +7728,15 @@
         "$type": "color",
         "$value": "{color.poppy.800}",
         "$description": "Primary button pressed background"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.400}"
       },
       "disabled": {
         "$extensions": {
@@ -8578,15 +8578,6 @@
         "$type": "color",
         "$value": "{color.poppy.500}"
       },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.500}"
-      },
       "text-link": {
         "$extensions": {
           "com.figma.scopes": [
@@ -8595,6 +8586,15 @@
         },
         "$type": "color",
         "$value": "{color.system.blue}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.500}"
       },
       "disabled": {
         "$extensions": {
@@ -9187,15 +9187,6 @@
         "$type": "color",
         "$value": "{color.poppy.500}"
       },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.400}"
-      },
       "brand-primary-hover": {
         "$extensions": {
           "com.figma.scopes": [
@@ -9215,6 +9206,15 @@
         "$type": "color",
         "$value": "{color.poppy.800}",
         "$description": "Primary button pressed background (dark mode)"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.400}"
       },
       "disabled": {
         "$extensions": {
