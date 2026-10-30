@@ -3,6 +3,105 @@
   "primitives/value": {
     "color": {
       "grayscale": {
+        "50": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#f8f8f8"
+        },
+        "100": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#f2f2f2"
+        },
+        "200": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#e9e9e9"
+        },
+        "300": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#e0e0e0"
+        },
+        "400": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#b0b0b0"
+        },
+        "500": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#828282"
+        },
+        "600": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#6e6e6e"
+        },
+        "700": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#5a5a5a"
+        },
+        "800": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#333333"
+        },
+        "900": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#272727"
+        },
+        "950": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#1b1b1b"
+        },
         "white": {
           "$extensions": {
             "com.figma.scopes": [
@@ -37,7 +136,7 @@
             }
           },
           "$type": "color",
-          "$value": "#333333",
+          "$value": "{color.grayscale.950}",
           "$description": "Primary Text on Light Backgrounds"
         },
         "darker": {
@@ -50,7 +149,7 @@
             }
           },
           "$type": "color",
-          "$value": "#4f4f4f",
+          "$value": "{color.grayscale.800}",
           "$description": "Secondary Text / Icons"
         },
         "dark": {
@@ -60,7 +159,7 @@
             ]
           },
           "$type": "color",
-          "$value": "#828282",
+          "$value": "{color.grayscale.700}",
           "$description": "Placeholder Text / Tertiary Content"
         },
         "light": {
@@ -73,7 +172,7 @@
             }
           },
           "$type": "color",
-          "$value": "#bdbdbd",
+          "$value": "{color.grayscale.500}",
           "$description": "Secondary Borders / Muted UI"
         },
         "lighter": {
@@ -83,7 +182,7 @@
             ]
           },
           "$type": "color",
-          "$value": "#e0e0e0",
+          "$value": "{color.grayscale.300}",
           "$description": "Borders / Disabled Text"
         },
         "lightest": {
@@ -93,7 +192,7 @@
             ]
           },
           "$type": "color",
-          "$value": "#f2f2f2",
+          "$value": "{color.grayscale.100}",
           "$description": "Light Background / UI Elements"
         }
       },
@@ -5683,7 +5782,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.950}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -5747,6 +5846,43 @@
         },
         "$type": "color",
         "$value": "{color.system.blue}"
+      },
+      "disabled": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.500}",
+        "$description": "Disabled button text (all variants)"
+      },
+      "error": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.red}"
+      },
+      "success": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
       }
     },
     "border": {
@@ -5793,7 +5929,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.lighter}"
+        "$value": "{color.grayscale.950}"
       },
       "secondary": {
         "$extensions": {
@@ -5802,7 +5938,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.dark}"
+        "$value": "{color.grayscale.100}"
       },
       "muted": {
         "$extensions": {
@@ -5811,7 +5947,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.light}"
+        "$value": "{color.grayscale.100}"
       },
       "inverse": {
         "$extensions": {
@@ -5838,7 +5974,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.950}"
       },
       "neutral": {
         "$extensions": {
@@ -5857,6 +5993,70 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
+      },
+      "disabled": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.500}",
+        "$description": "Disabled button border (all variants)"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow}"
+      },
+      "accent-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.blue}"
+      },
+      "accent-green": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.purple}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.red}"
       }
     },
     "background": {
@@ -5975,7 +6175,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.dark}"
+        "$value": "{color.grayscale.100}"
       },
       "muted": {
         "$extensions": {
@@ -5993,7 +6193,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.950}"
       },
       "input": {
         "$extensions": {
@@ -6020,7 +6220,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.950}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -6066,6 +6266,25 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.black}"
+      },
+      "disabled": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.500}",
+        "$description": "Disabled button background (all variants)"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
       }
     },
     "surface": {
@@ -6158,7 +6377,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.lighter}"
+        "$value": "{color.grayscale.100}"
       },
       "secondary-pressed": {
         "$extensions": {
@@ -6176,7 +6395,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.950}"
       },
       "neutral": {
         "$extensions": {
@@ -6213,6 +6432,60 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.black}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow-light}"
+      },
+      "accent-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.blue-light}"
+      },
+      "accent-green": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green-light}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.purple-light}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange-light}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.red-light}"
       }
     },
     "page": {
@@ -6232,7 +6505,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.lighter}"
+        "$value": "{color.grayscale.100}"
       },
       "inverse": {
         "$extensions": {
@@ -6241,7 +6514,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.950}"
       },
       "brand-primary": {
         "$extensions": {
@@ -6251,6 +6524,42 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.red}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.purple}"
       }
     }
   },
@@ -6308,7 +6617,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.light}"
+        "$value": "{color.grayscale.100}"
       },
       "muted": {
         "$extensions": {
@@ -6317,7 +6626,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.dark}"
+        "$value": "{color.grayscale.600}"
       },
       "inverse": {
         "$extensions": {
@@ -6344,7 +6653,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.950}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -6408,6 +6717,43 @@
         },
         "$type": "color",
         "$value": "{color.system.blue}"
+      },
+      "disabled": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.600}",
+        "$description": "Disabled button text (all variants)"
+      },
+      "error": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.red}"
+      },
+      "success": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
       }
     },
     "border": {
@@ -6454,7 +6800,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darker}"
+        "$value": "{color.grayscale.900}"
       },
       "secondary": {
         "$extensions": {
@@ -6463,7 +6809,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.light}"
+        "$value": "{color.grayscale.800}"
       },
       "muted": {
         "$extensions": {
@@ -6472,7 +6818,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.dark}"
+        "$value": "{color.grayscale.800}"
       },
       "inverse": {
         "$extensions": {
@@ -6481,7 +6827,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.950}"
       },
       "on-color-dark": {
         "$extensions": {
@@ -6499,7 +6845,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.950}"
       },
       "neutral": {
         "$extensions": {
@@ -6518,6 +6864,70 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.lightest}"
+      },
+      "disabled": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.500}",
+        "$description": "Disabled button border (all variants)"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow}"
+      },
+      "accent-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.blue}"
+      },
+      "accent-green": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.purple}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.red}"
       }
     },
     "background": {
@@ -6618,7 +7028,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.950}"
       },
       "primary-pressed": {
         "$extensions": {
@@ -6636,7 +7046,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.light}"
+        "$value": "{color.grayscale.black}"
       },
       "muted": {
         "$extensions": {
@@ -6654,7 +7064,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.white}"
+        "$value": "{color.grayscale.200}"
       },
       "input": {
         "$extensions": {
@@ -6681,7 +7091,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.950}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -6727,6 +7137,25 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.black}"
+      },
+      "disabled": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.500}",
+        "$description": "Disabled button background (all variants)"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
       }
     },
     "surface": {
@@ -6792,7 +7221,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.950}"
       },
       "primary-hover": {
         "$extensions": {
@@ -6837,7 +7266,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.white}"
+        "$value": "{color.grayscale.950}"
       },
       "neutral": {
         "$extensions": {
@@ -6874,6 +7303,60 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.black}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow-light}"
+      },
+      "accent-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.blue-light}"
+      },
+      "accent-green": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green-light}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.purple-light}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange-light}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.red-light}"
       }
     },
     "page": {
@@ -6893,7 +7376,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.darker}"
+        "$value": "{color.grayscale.black}"
       },
       "inverse": {
         "$extensions": {
@@ -6902,7 +7385,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.white}"
+        "$value": "{color.grayscale.100}"
       },
       "brand-primary": {
         "$extensions": {
@@ -6912,6 +7395,42 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.darkest}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.orange}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.red}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.purple}"
       }
     }
   }

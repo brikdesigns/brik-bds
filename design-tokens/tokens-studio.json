@@ -7109,15 +7109,6 @@
         "$type": "color",
         "$value": "{color.system.blue}"
       },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.500}"
-      },
       "disabled": {
         "$extensions": {
           "com.figma.scopes": [
@@ -7127,6 +7118,33 @@
         "$type": "color",
         "$value": "{color.grayscale.500}",
         "$description": "Disabled button text (all variants)"
+      },
+      "error": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.red}"
+      },
+      "success": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.500}"
       },
       "service-brand": {
         "$extensions": {
@@ -7271,24 +7289,6 @@
         },
         "$type": "color",
         "$value": "{color.tan.700}"
-      },
-      "error": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.system.red}"
-      },
-      "success": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.system.green}"
       }
     },
     "border": {
@@ -7410,60 +7410,6 @@
         "$value": "{color.grayscale.500}",
         "$description": "Disabled button border (all variants)"
       },
-      "service-brand": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.yellow.500}"
-      },
-      "service-information": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.blue.500}"
-      },
-      "service-back-office": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.500}"
-      },
-      "service-product": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.purple.500}"
-      },
-      "service-marketing": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.green.500}"
-      },
-      "accent": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.tan.700}"
-      },
       "accent-yellow": {
         "$extensions": {
           "com.figma.scopes": [
@@ -7517,6 +7463,60 @@
         },
         "$type": "color",
         "$value": "{color.system.red}"
+      },
+      "service-brand": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.yellow.500}"
+      },
+      "service-information": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.blue.500}"
+      },
+      "service-back-office": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.500}"
+      },
+      "service-product": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.purple.500}"
+      },
+      "service-marketing": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.green.500}"
+      },
+      "accent": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.tan.700}"
       }
     },
     "background": {
@@ -7729,15 +7729,6 @@
         "$value": "{color.poppy.800}",
         "$description": "Primary button pressed background"
       },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.400}"
-      },
       "disabled": {
         "$extensions": {
           "com.figma.scopes": [
@@ -7747,6 +7738,15 @@
         "$type": "color",
         "$value": "{color.grayscale.500}",
         "$description": "Disabled button background (all variants)"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.400}"
       },
       "service-brand": {
         "$extensions": {
@@ -8041,6 +8041,60 @@
         "$value": "{color.poppy.950}",
         "$description": "Primary surface pressed"
       },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.yellow.200}"
+      },
+      "accent-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.blue.300}"
+      },
+      "accent-green": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.green.200}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.purple.200}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.200}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.500}"
+      },
       "service-brand": {
         "$extensions": {
           "com.figma.scopes": [
@@ -8229,60 +8283,6 @@
         },
         "$type": "color",
         "$value": "{color.tan.100}"
-      },
-      "accent-yellow": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.yellow.200}"
-      },
-      "accent-blue": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.blue.300}"
-      },
-      "accent-green": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.green.200}"
-      },
-      "accent-purple": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.purple.200}"
-      },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.200}"
-      },
-      "accent-red": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.poppy.500}"
       }
     },
     "page": {
@@ -8321,6 +8321,42 @@
         },
         "$type": "color",
         "$value": "{color.poppy.500}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.yellow.500}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.500}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.500}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.purple.500}"
       },
       "service-brand": {
         "$extensions": {
@@ -8376,33 +8412,6 @@
         "$type": "color",
         "$value": "{color.tan.100}"
       },
-      "accent-yellow": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.yellow.500}"
-      },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.500}"
-      },
-      "accent-red": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.poppy.500}"
-      },
       "service-green": {
         "$extensions": {
           "com.figma.scopes": [
@@ -8411,15 +8420,6 @@
         },
         "$type": "color",
         "$value": "{color.green.500}"
-      },
-      "accent-purple": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.purple.500}"
       },
       "service-blue": {
         "$extensions": {
@@ -8587,15 +8587,6 @@
         "$type": "color",
         "$value": "{color.system.blue}"
       },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.500}"
-      },
       "disabled": {
         "$extensions": {
           "com.figma.scopes": [
@@ -8605,6 +8596,33 @@
         "$type": "color",
         "$value": "{color.grayscale.600}",
         "$description": "Disabled text (dark mode)"
+      },
+      "error": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.red}"
+      },
+      "success": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.500}"
       },
       "service-brand": {
         "$extensions": {
@@ -8749,24 +8767,6 @@
         },
         "$type": "color",
         "$value": "{color.tan.400}"
-      },
-      "error": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.system.red}"
-      },
-      "success": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.system.green}"
       }
     },
     "border": {
@@ -8888,60 +8888,6 @@
         "$value": "{color.grayscale.500}",
         "$description": "Disabled border (dark mode)"
       },
-      "service-brand": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.yellow.500}"
-      },
-      "service-information": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.blue.500}"
-      },
-      "service-back-office": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.500}"
-      },
-      "service-product": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.purple.500}"
-      },
-      "service-marketing": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.green.500}"
-      },
-      "accent": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.tan.700}"
-      },
       "accent-yellow": {
         "$extensions": {
           "com.figma.scopes": [
@@ -8995,6 +8941,60 @@
         },
         "$type": "color",
         "$value": "{color.system.red}"
+      },
+      "service-brand": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.yellow.500}"
+      },
+      "service-information": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.blue.500}"
+      },
+      "service-back-office": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.500}"
+      },
+      "service-product": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.purple.500}"
+      },
+      "service-marketing": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.green.500}"
+      },
+      "accent": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.tan.700}"
       }
     },
     "background": {
@@ -9207,15 +9207,6 @@
         "$value": "{color.poppy.800}",
         "$description": "Primary button pressed background (dark mode)"
       },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.400}"
-      },
       "disabled": {
         "$extensions": {
           "com.figma.scopes": [
@@ -9225,6 +9216,15 @@
         "$type": "color",
         "$value": "{color.grayscale.500}",
         "$description": "Disabled background (dark mode)"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.400}"
       },
       "service-brand": {
         "$extensions": {
@@ -9519,6 +9519,60 @@
         "$value": "{color.grayscale.600}",
         "$description": "Primary surface pressed (dark mode)"
       },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.yellow.200}"
+      },
+      "accent-blue": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.blue.200}"
+      },
+      "accent-green": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.green.100}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.purple.200}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.100}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.500}"
+      },
       "service-brand": {
         "$extensions": {
           "com.figma.scopes": [
@@ -9707,60 +9761,6 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.950}"
-      },
-      "accent-yellow": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.yellow.200}"
-      },
-      "accent-blue": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.blue.200}"
-      },
-      "accent-green": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.green.100}"
-      },
-      "accent-purple": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.purple.200}"
-      },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.100}"
-      },
-      "accent-red": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.poppy.500}"
       }
     },
     "page": {
@@ -9799,6 +9799,42 @@
         },
         "$type": "color",
         "$value": "{color.poppy.500}"
+      },
+      "accent-yellow": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.yellow.500}"
+      },
+      "accent-orange": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.orange.500}"
+      },
+      "accent-red": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.500}"
+      },
+      "accent-purple": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.purple.500}"
       },
       "service-brand": {
         "$extensions": {
@@ -9854,33 +9890,6 @@
         "$type": "color",
         "$value": "{color.tan.950}"
       },
-      "accent-yellow": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.yellow.500}"
-      },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.500}"
-      },
-      "accent-red": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.poppy.500}"
-      },
       "service-green": {
         "$extensions": {
           "com.figma.scopes": [
@@ -9889,15 +9898,6 @@
         },
         "$type": "color",
         "$value": "{color.green.500}"
-      },
-      "accent-purple": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.purple.500}"
       },
       "service-blue": {
         "$extensions": {
