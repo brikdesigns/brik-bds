@@ -7,7 +7,6 @@ import { ELEVATION_MODE_VALUES, isElevationMode } from './elevation-mode';
 import { TYPOGRAPHY_MODE_VALUES, isTypographyMode } from './typography-mode';
 import {
   BORDERWIDTH_MODE_VALUES,
-  BORDERWIDTH_MODE_DEPRECATED_ALIASES,
   isBorderWidthMode,
 } from './borderwidth-mode';
 
@@ -108,7 +107,6 @@ const MODE_AXES: readonly ModeAxis[] = [
     values: BORDERWIDTH_MODE_VALUES,
     guard: isBorderWidthMode,
     defaultMode: 'default',
-    aliases: BORDERWIDTH_MODE_DEPRECATED_ALIASES,
   },
 ];
 

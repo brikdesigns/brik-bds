@@ -16,19 +16,7 @@
  */
 export const BORDERWIDTH_MODE_VALUES = ['thin', 'thick'] as const;
 
-/**
- * Retired names still matched by a selector for one release, mapped to the
- * member that replaced them. `bold` was the hand-authored name for `thick`
- * before the Figma pull (#2601); the generator emits it as a second selector
- * on the `thick` block, and the guard below still accepts it so a stored
- * `bold` keeps validating. Remove both in the release after.
- */
-export const BORDERWIDTH_MODE_DEPRECATED_ALIASES = { bold: 'thick' } as const;
-
-export type BorderWidthMode =
-  | (typeof BORDERWIDTH_MODE_VALUES)[number]
-  | keyof typeof BORDERWIDTH_MODE_DEPRECATED_ALIASES;
+export type BorderWidthMode = (typeof BORDERWIDTH_MODE_VALUES)[number];
 
 export const isBorderWidthMode = (value: string): value is BorderWidthMode =>
-  (BORDERWIDTH_MODE_VALUES as readonly string[]).includes(value) ||
-  Object.keys(BORDERWIDTH_MODE_DEPRECATED_ALIASES).includes(value);
+  (BORDERWIDTH_MODE_VALUES as readonly string[]).includes(value);
