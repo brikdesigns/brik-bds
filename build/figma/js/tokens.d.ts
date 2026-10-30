@@ -533,8 +533,8 @@ export const textAccentGreen: string;
 export const textAccentPurple: string;
 export const textNeutral: string;
 export const textBrandPrimary: string;
-export const textAccentOrange: string;
 export const textTextLink: string;
+export const textAccentOrange: string;
 /** Disabled button text (all variants) */
 export const textDisabled: string;
 export const textServiceBrand: string;
@@ -602,11 +602,11 @@ export const backgroundOnColorLight: string;
 export const backgroundAccentYellow: string;
 export const backgroundNeutral: string;
 export const backgroundBrandPrimary: string;
-export const backgroundAccentOrange: string;
 /** Primary button hover background */
 export const backgroundBrandPrimaryHover: string;
 /** Primary button pressed background */
 export const backgroundBrandPrimaryPressed: string;
+export const backgroundAccentOrange: string;
 /** Disabled button background (all variants) */
 export const backgroundDisabled: string;
 export const backgroundServiceBrand: string;

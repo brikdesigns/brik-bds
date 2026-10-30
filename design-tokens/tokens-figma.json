@@ -2021,12 +2021,12 @@
       "$value": "{color.poppy.500}",
       "$type": "color"
     },
-    "accent-orange": {
-      "$value": "{color.orange.500}",
-      "$type": "color"
-    },
     "text-link": {
       "$value": "{color.system.blue}",
+      "$type": "color"
+    },
+    "accent-orange": {
+      "$value": "{color.orange.500}",
       "$type": "color"
     },
     "disabled": {
@@ -2295,10 +2295,6 @@
       "$value": "{color.poppy.500}",
       "$type": "color"
     },
-    "accent-orange": {
-      "$value": "{color.orange.400}",
-      "$type": "color"
-    },
     "brand-primary-hover": {
       "$value": "{color.poppy.700}",
       "$type": "color",
@@ -2308,6 +2304,10 @@
       "$value": "{color.poppy.800}",
       "$type": "color",
       "$description": "Primary button pressed background"
+    },
+    "accent-orange": {
+      "$value": "{color.orange.400}",
+      "$type": "color"
     },
     "disabled": {
       "$value": "{color.grayscale.500}",
