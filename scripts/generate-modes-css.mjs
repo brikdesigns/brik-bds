@@ -118,10 +118,6 @@ export const COLLECTIONS = {
     // modes-borderwidth.css) so existing consumers keep working.
     attr: 'borderwidth',
     fileName: 'borderwidth',
-    // `bold` was the hand-authored name for `thick` before the Figma pull
-    // (brik-bds#2601). Keep it as a selector alias for one release so the
-    // portal's `data-mode-borderwidth="bold"` still resolves; drop it after.
-    selectorAliases: { thick: ['bold'] },
     unitSuffix: '', // resolve returns a var() alias that already carries the unit
     tokenName: (_group, name) => `${PREFIX}border-width-${name}`,
     resolve: resolveBorderWidthRef,
