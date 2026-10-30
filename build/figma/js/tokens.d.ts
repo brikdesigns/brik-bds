@@ -15,17 +15,17 @@ export const colorGrayscale900: string;
 export const colorGrayscale950: string;
 export const colorGrayscaleWhite: string;
 export const colorGrayscaleBlack: string;
-/** DEPRECATED — use color.grayscale.950 (brik-bds#1739) */
+/** Primary Text on Light Backgrounds */
 export const colorGrayscaleDarkest: string;
-/** DEPRECATED — use color.grayscale.800 (brik-bds#1739) */
+/** Secondary Text / Icons */
 export const colorGrayscaleDarker: string;
-/** DEPRECATED — use color.grayscale.700 (brik-bds#1739) */
+/** Placeholder Text / Tertiary Content */
 export const colorGrayscaleDark: string;
-/** DEPRECATED — use color.grayscale.500 (brik-bds#1739) */
+/** Secondary Borders / Muted UI */
 export const colorGrayscaleLight: string;
-/** DEPRECATED — use color.grayscale.300 (brik-bds#1739) */
+/** Borders / Disabled Text */
 export const colorGrayscaleLighter: string;
-/** DEPRECATED — use color.grayscale.100 (brik-bds#1739) */
+/** Light Background / UI Elements */
 export const colorGrayscaleLightest: string;
 export const colorSystemRed: string;
 export const colorSystemGreen: string;
@@ -57,197 +57,6 @@ export const colorAnnotationBlue: string;
 export const colorAnnotationLightPink: string;
 export const colorAnnotationLightPurple: string;
 export const colorAnnotationLightBlue: string;
-export const colorBlue50: string;
-export const colorBlue100: string;
-export const colorBlue200: string;
-export const colorBlue300: string;
-export const colorBlue400: string;
-export const colorBlue500: string;
-export const colorBlue600: string;
-export const colorBlue700: string;
-export const colorBlue800: string;
-export const colorBlue900: string;
-export const colorBlue950: string;
-/** DEPRECATED — use color.blue.100 (brik-bds#1739) */
-export const colorBlueLightest: string;
-/** DEPRECATED — use color.blue.300 (brik-bds#1739) */
-export const colorBlueLighter: string;
-/** DEPRECATED — use color.blue.500 (brik-bds#1739) */
-export const colorBlueLight: string;
-/** DEPRECATED — use color.blue.700 (brik-bds#1739) */
-export const colorBlueDark: string;
-/** DEPRECATED — use color.blue.800 (brik-bds#1739) */
-export const colorBlueDarker: string;
-/** DEPRECATED — use color.blue.950 (brik-bds#1739) */
-export const colorBlueDarkest: string;
-export const colorGreen50: string;
-export const colorGreen100: string;
-export const colorGreen200: string;
-export const colorGreen300: string;
-export const colorGreen400: string;
-export const colorGreen500: string;
-export const colorGreen600: string;
-export const colorGreen700: string;
-export const colorGreen800: string;
-export const colorGreen900: string;
-export const colorGreen950: string;
-/** DEPRECATED — use color.green.100 (brik-bds#1739) */
-export const colorGreenLightest: string;
-/** DEPRECATED — use color.green.300 (brik-bds#1739) */
-export const colorGreenLighter: string;
-/** DEPRECATED — use color.green.500 (brik-bds#1739) */
-export const colorGreenLight: string;
-/** DEPRECATED — use color.green.700 (brik-bds#1739) */
-export const colorGreenDark: string;
-/** DEPRECATED — use color.green.800 (brik-bds#1739) */
-export const colorGreenDarker: string;
-/** DEPRECATED — use color.green.950 (brik-bds#1739) */
-export const colorGreenDarkest: string;
-export const colorOrange50: string;
-export const colorOrange100: string;
-export const colorOrange200: string;
-export const colorOrange300: string;
-export const colorOrange400: string;
-export const colorOrange500: string;
-export const colorOrange600: string;
-export const colorOrange700: string;
-export const colorOrange800: string;
-export const colorOrange900: string;
-export const colorOrange950: string;
-/** DEPRECATED — use color.orange.100 (brik-bds#1739) */
-export const colorOrangeLightest: string;
-/** DEPRECATED — use color.orange.300 (brik-bds#1739) */
-export const colorOrangeLighter: string;
-/** DEPRECATED — use color.orange.500 (brik-bds#1739) */
-export const colorOrangeLight: string;
-/** DEPRECATED — use color.orange.700 (brik-bds#1739) */
-export const colorOrangeDark: string;
-/** DEPRECATED — use color.orange.800 (brik-bds#1739) */
-export const colorOrangeDarker: string;
-/** DEPRECATED — use color.orange.950 (brik-bds#1739) */
-export const colorOrangeDarkest: string;
-export const colorPink50: string;
-export const colorPink100: string;
-export const colorPink200: string;
-export const colorPink300: string;
-export const colorPink400: string;
-export const colorPink500: string;
-export const colorPink600: string;
-export const colorPink700: string;
-export const colorPink800: string;
-export const colorPink900: string;
-export const colorPink950: string;
-/** DEPRECATED — use color.pink.100 (brik-bds#1739) */
-export const colorPinkLightest: string;
-/** DEPRECATED — use color.pink.300 (brik-bds#1739) */
-export const colorPinkLighter: string;
-/** DEPRECATED — use color.pink.500 (brik-bds#1739) */
-export const colorPinkLight: string;
-/** DEPRECATED — use color.pink.700 (brik-bds#1739) */
-export const colorPinkDark: string;
-/** DEPRECATED — use color.pink.800 (brik-bds#1739) */
-export const colorPinkDarker: string;
-/** DEPRECATED — use color.pink.950 (brik-bds#1739) */
-export const colorPinkDarkest: string;
-export const colorPoppy50: string;
-/** Subtle tints / hover backgrounds */
-export const colorPoppy100: string;
-export const colorPoppy200: string;
-/** Light accent */
-export const colorPoppy300: string;
-export const colorPoppy400: string;
-/** Brand primary base */
-export const colorPoppy500: string;
-export const colorPoppy600: string;
-/** Hover state */
-export const colorPoppy700: string;
-/** Pressed state */
-export const colorPoppy800: string;
-export const colorPoppy900: string;
-/** Deep accent */
-export const colorPoppy950: string;
-/** DEPRECATED — use color.poppy.100 (brik-bds#1739) */
-export const colorPoppyLightest: string;
-/** DEPRECATED — use color.poppy.300 (brik-bds#1739) */
-export const colorPoppyLighter: string;
-/** DEPRECATED — use color.poppy.500 (brik-bds#1739) */
-export const colorPoppyLight: string;
-/** DEPRECATED — use color.poppy.700 (brik-bds#1739) */
-export const colorPoppyDark: string;
-/** DEPRECATED — use color.poppy.800 (brik-bds#1739) */
-export const colorPoppyDarker: string;
-/** DEPRECATED — use color.poppy.950 (brik-bds#1739) */
-export const colorPoppyDarkest: string;
-export const colorPurple50: string;
-export const colorPurple100: string;
-export const colorPurple200: string;
-export const colorPurple300: string;
-export const colorPurple400: string;
-export const colorPurple500: string;
-export const colorPurple600: string;
-export const colorPurple700: string;
-export const colorPurple800: string;
-export const colorPurple900: string;
-export const colorPurple950: string;
-/** DEPRECATED — use color.purple.100 (brik-bds#1739) */
-export const colorPurpleLightest: string;
-/** DEPRECATED — use color.purple.300 (brik-bds#1739) */
-export const colorPurpleLighter: string;
-/** DEPRECATED — use color.purple.500 (brik-bds#1739) */
-export const colorPurpleLight: string;
-/** DEPRECATED — use color.purple.700 (brik-bds#1739) */
-export const colorPurpleDark: string;
-/** DEPRECATED — use color.purple.800 (brik-bds#1739) */
-export const colorPurpleDarker: string;
-/** DEPRECATED — use color.purple.950 (brik-bds#1739) */
-export const colorPurpleDarkest: string;
-export const colorTan50: string;
-/** Accent background */
-export const colorTan100: string;
-export const colorTan200: string;
-export const colorTan300: string;
-export const colorTan400: string;
-export const colorTan500: string;
-export const colorTan600: string;
-export const colorTan700: string;
-export const colorTan800: string;
-export const colorTan900: string;
-export const colorTan950: string;
-/** DEPRECATED — use color.tan.100 (brik-bds#1739) */
-export const colorTanLightest: string;
-/** DEPRECATED — use color.tan.300 (brik-bds#1739) */
-export const colorTanLighter: string;
-/** DEPRECATED — use color.tan.500 (brik-bds#1739) */
-export const colorTanLight: string;
-/** DEPRECATED — use color.tan.700 (brik-bds#1739) */
-export const colorTanDark: string;
-/** DEPRECATED — use color.tan.800 (brik-bds#1739) */
-export const colorTanDarker: string;
-/** DEPRECATED — use color.tan.950 (brik-bds#1739) */
-export const colorTanDarkest: string;
-export const colorYellow50: string;
-export const colorYellow100: string;
-export const colorYellow200: string;
-export const colorYellow300: string;
-export const colorYellow400: string;
-export const colorYellow500: string;
-export const colorYellow600: string;
-export const colorYellow700: string;
-export const colorYellow800: string;
-export const colorYellow900: string;
-export const colorYellow950: string;
-/** DEPRECATED — use color.yellow.100 (brik-bds#1739) */
-export const colorYellowLightest: string;
-/** DEPRECATED — use color.yellow.300 (brik-bds#1739) */
-export const colorYellowLighter: string;
-/** DEPRECATED — use color.yellow.500 (brik-bds#1739) */
-export const colorYellowLight: string;
-/** DEPRECATED — use color.yellow.700 (brik-bds#1739) */
-export const colorYellowDark: string;
-/** DEPRECATED — use color.yellow.800 (brik-bds#1739) */
-export const colorYellowDarker: string;
-/** DEPRECATED — use color.yellow.950 (brik-bds#1739) */
-export const colorYellowDarkest: string;
 export const fontWeightBold: string;
 export const fontWeightMedium: string;
 export const fontWeightRegular: string;
@@ -539,22 +348,6 @@ export const textDisabled: string;
 export const textError: string;
 export const textSuccess: string;
 export const textAccentOrange: string;
-export const textServiceBrand: string;
-export const textServiceInformation: string;
-export const textServiceBackOffice: string;
-export const textServiceProduct: string;
-export const textServiceMarketing: string;
-export const textServiceMarketingOnLight: string;
-export const textServiceBackOfficeOnDark: string;
-export const textServiceBackOfficeOnLight: string;
-export const textServiceProductOnDark: string;
-export const textServiceProductOnLight: string;
-export const textServiceInformationOnDark: string;
-export const textServiceInformationOnLight: string;
-export const textServiceBrandOnDark: string;
-export const textServiceBrandOnLight: string;
-export const textServiceMarketingOnDark: string;
-export const textAccent: string;
 export const borderNegative: string;
 export const borderPositive: string;
 export const borderWarning: string;
@@ -575,12 +368,6 @@ export const borderAccentGreen: string;
 export const borderAccentPurple: string;
 export const borderAccentOrange: string;
 export const borderAccentRed: string;
-export const borderServiceBrand: string;
-export const borderServiceInformation: string;
-export const borderServiceBackOffice: string;
-export const borderServiceProduct: string;
-export const borderServiceMarketing: string;
-export const borderAccent: string;
 export const backgroundNegative: string;
 export const backgroundPositive: string;
 export const backgroundWarning: string;
@@ -602,29 +389,11 @@ export const backgroundOnColorLight: string;
 export const backgroundAccentYellow: string;
 export const backgroundNeutral: string;
 export const backgroundBrandPrimary: string;
-/** Primary button hover background */
 export const backgroundBrandPrimaryHover: string;
-/** Primary button pressed background */
 export const backgroundBrandPrimaryPressed: string;
 /** Disabled button background (all variants) */
 export const backgroundDisabled: string;
 export const backgroundAccentOrange: string;
-export const backgroundServiceBrand: string;
-export const backgroundServiceBrandOnLight: string;
-export const backgroundServiceMarketing: string;
-export const backgroundServiceMarketingOnLight: string;
-export const backgroundServiceBackOffice: string;
-export const backgroundServiceBackOfficeOnLight: string;
-export const backgroundServiceProduct: string;
-export const backgroundServiceProductOnLight: string;
-export const backgroundServiceInformation: string;
-export const backgroundServiceInformationOnLight: string;
-export const backgroundServiceBrandOnDark: string;
-export const backgroundServiceMarketingOnDark: string;
-export const backgroundServiceBackOfficeOnDark: string;
-export const backgroundServiceProductOnDark: string;
-export const backgroundServiceInformationOnDark: string;
-export const backgroundAccent: string;
 export const surfacePositive: string;
 export const surfaceNegative: string;
 export const surfaceWarning: string;
@@ -640,9 +409,7 @@ export const surfaceSecondaryPressed: string;
 export const surfaceInverse: string;
 export const surfaceNeutral: string;
 export const surfaceBrandPrimary: string;
-/** Primary surface hover */
 export const surfaceBrandPrimaryHover: string;
-/** Primary surface pressed */
 export const surfaceBrandPrimaryPressed: string;
 export const surfaceAccentYellow: string;
 export const surfaceAccentBlue: string;
@@ -650,27 +417,6 @@ export const surfaceAccentGreen: string;
 export const surfaceAccentPurple: string;
 export const surfaceAccentOrange: string;
 export const surfaceAccentRed: string;
-export const surfaceServiceBrand: string;
-export const surfaceServiceMarketing: string;
-export const surfaceServiceProduct: string;
-export const surfaceServiceBackOffice: string;
-export const surfaceServiceInformation: string;
-export const surfaceServiceMarketingDark: string;
-export const surfaceServiceBackOfficeLight: string;
-export const surfaceServiceBackOfficeDark: string;
-export const surfaceServiceProductLight: string;
-export const surfaceServiceProductDark: string;
-export const surfaceServiceInformationLight: string;
-export const surfaceServiceInformationDark: string;
-export const surfaceServiceBrandLight: string;
-export const surfaceServiceBrandDark: string;
-export const surfaceServiceMarketingLight: string;
-export const surfaceServiceMarketingInverse: string;
-export const surfaceServiceProductInverse: string;
-export const surfaceServiceBackOfficeInverse: string;
-export const surfaceServiceInformationInverse: string;
-export const surfaceServiceBrandInverse: string;
-export const surfaceAccent: string;
 export const pagePrimary: string;
 export const pageSecondary: string;
 export const pageInverse: string;
@@ -679,11 +425,3 @@ export const pageAccentYellow: string;
 export const pageAccentOrange: string;
 export const pageAccentRed: string;
 export const pageAccentPurple: string;
-export const pageServiceBrand: string;
-export const pageServiceMarketing: string;
-export const pageServiceProduct: string;
-export const pageServiceBackOffice: string;
-export const pageServiceInformation: string;
-export const pageAccent: string;
-export const pageServiceGreen: string;
-export const pageServiceBlue: string;

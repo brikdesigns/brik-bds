@@ -42,7 +42,9 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..');
-const TOKEN_SOURCE = path.join(REPO_ROOT, 'tokens', 'figma-tokens.css');
+// The widgets are Brik chrome, so they resolve against Foundations plus Brik's
+// generated layer: since #2910 the Brik palette lives there, not in `:root`.
+const TOKEN_SOURCES = ['tokens/figma-tokens.css', 'tokens/theme-brand-brik.generated.css'];
 const WIDGETS_DIR = path.join(REPO_ROOT, 'components', 'ui', 'BrikDevBar', 'widgets');
 
 // Only these are safe to resolve to a single value — see the scope note above.
@@ -129,7 +131,9 @@ export function reconcile(source, declared) {
 
 function main(argv) {
   const check = argv.includes('--check');
-  const declared = parseTokenCss(fs.readFileSync(TOKEN_SOURCE, 'utf8'));
+  const declared = parseTokenCss(
+    TOKEN_SOURCES.map((rel) => fs.readFileSync(path.join(REPO_ROOT, rel), 'utf8')).join('\n'),
+  );
 
   let driftCount = 0;
   let unresolvedCount = 0;
@@ -146,7 +150,7 @@ function main(argv) {
     for (const u of unresolved) {
       unresolvedCount += 1;
       console.error(
-        `✗ ${rel}: ${u.token} is not declared in tokens/figma-tokens.css ` +
+        `✗ ${rel}: ${u.token} is not declared in ${TOKEN_SOURCES.join(' or ')} ` +
           `(inlined as ${u.literal}). Fix the comment or the token.`,
       );
     }

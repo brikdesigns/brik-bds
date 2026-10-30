@@ -9,16 +9,17 @@ import { build } from 'esbuild';
 import { compileClientTheme } from '../compile-client-theme.mjs';
 import { ANCHOR_STOPS, STOPS } from '../generate-color-ramps.mjs';
 
-// compileClientTheme is the committed Brik build run in memory (#2836). The
-// committed build/figma/css/variables.css is therefore its oracle: the Brik kit
-// must compile to it byte for byte, and the tests below that change the kit
-// prove that comparison can fail.
+// compileClientTheme is the committed build run in memory (#2836). Since #2910
+// that build is Foundations alone, so build/figma/css/variables.css is the
+// oracle for an empty kit, byte for byte. The Brik kit's own compile is pinned
+// by `npm run build:brand-brik:check`; the tests below compare against it.
 
 const REPO_ROOT = resolve(import.meta.dirname, '..', '..');
 const COMPILER = resolve(REPO_ROOT, 'scripts', 'compile-client-theme.mjs');
 const REFERENCE_CSS = readFileSync(resolve(REPO_ROOT, 'build', 'figma', 'css', 'variables.css'), 'utf8');
 const readBrikKit = () =>
   JSON.parse(readFileSync(resolve(REPO_ROOT, 'design-tokens', 'brand-kits', 'brik.json'), 'utf8'));
+const compileBrik = () => compileClientTheme(readBrikKit());
 
 /** `--bds-color-<family>-<stop>` → value, read off a compiled sheet. */
 function rampValues(css, family) {
@@ -30,8 +31,15 @@ function rampValues(css, family) {
 }
 
 describe('compileClientTheme', () => {
-  it('compiles the Brik kit to the committed build/figma/css/variables.css, byte for byte', async () => {
-    expect(await compileClientTheme(readBrikKit())).toBe(REFERENCE_CSS);
+  it('compiles an empty kit to the committed build/figma/css/variables.css, byte for byte', async () => {
+    expect(await compileClientTheme({})).toBe(REFERENCE_CSS);
+  });
+
+  it('the Brik kit adds to Foundations (positive control for the byte comparison)', async () => {
+    const css = await compileBrik();
+    expect(css).not.toBe(REFERENCE_CSS);
+    expect(rampValues(css, 'poppy')).not.toEqual({});
+    expect(rampValues(REFERENCE_CSS, 'poppy')).toEqual({});
   });
 
   it('a changed kit value changes the output (positive control for the byte comparison)', async () => {
@@ -42,10 +50,11 @@ describe('compileClientTheme', () => {
     for (const stop of STOPS) if (!Object.values(ANCHOR_STOPS).includes(stop)) delete blue[stop];
     blue['500'].$value = '#123456';
     const css = await compileClientTheme(kit);
-    expect(css).not.toBe(REFERENCE_CSS);
+    const brik = await compileBrik();
+    expect(css).not.toBe(brik);
     const ramp = rampValues(css, 'blue');
     expect(ramp['500']).toBe('#123456');
-    expect(ramp['400']).not.toBe(rampValues(REFERENCE_CSS, 'blue')['400']);
+    expect(ramp['400']).not.toBe(rampValues(brik, 'blue')['400']);
   });
 
   it('never mutates the kit it is given', async () => {
@@ -68,7 +77,7 @@ describe('compileClientTheme', () => {
 
     const generated = rampValues(await compileClientTheme(kit), 'blue');
     expect(Object.keys(generated).sort()).toEqual([...STOPS].sort());
-    expect(generated).toEqual(rampValues(REFERENCE_CSS, 'blue'));
+    expect(generated).toEqual(rampValues(await compileBrik(), 'blue'));
   });
 
   it('compiles a client kit that carries no grayscale family', async () => {
@@ -86,7 +95,7 @@ describe('compileClientTheme', () => {
       },
     };
     const css = await compileClientTheme(kit);
-    expect(rampValues(css, 'acme')).toEqual(rampValues(REFERENCE_CSS, 'blue'));
+    expect(rampValues(css, 'acme')).toEqual(rampValues(await compileBrik(), 'blue'));
     expect(Object.keys(rampValues(css, 'grayscale')).sort()).toEqual([...STOPS].sort());
     expect(kit['primitives/value'].color).not.toHaveProperty('grayscale');
   });
@@ -108,7 +117,8 @@ describe('compileClientTheme', () => {
       const outfile = join(dir, 'bundle.mjs');
       await build({ entryPoints: [COMPILER], bundle: true, platform: 'node', format: 'esm', outfile, logLevel: 'silent' });
       const { compileClientTheme: bundled } = await import(pathToFileURL(outfile).href);
-      expect(await bundled(readBrikKit())).toBe(REFERENCE_CSS);
+      expect(await bundled({})).toBe(REFERENCE_CSS);
+      expect(await bundled(readBrikKit())).toBe(await compileBrik());
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }

@@ -45,6 +45,11 @@
      heading/accent role this token serves; small body copy uses --bds-text-primary
      (usage rule tracked in BDS-18). Restored from the poppy-dark AA divergence (BDS-22). */
   --bds-text-brand-primary: var(--bds-color-poppy-500);
+  /* --bds-text-brand-primary-strong: one poppy step darker for the 14px bold TOC
+     active label on --bds-surface-secondary (5.56:1 vs 3.38:1). Moved here from
+     the gap-fills :root, which is Foundations-only since #2910 and so cannot
+     name a poppy primitive. (#2270) */
+  --bds-text-brand-primary-strong: var(--bds-color-poppy-700);
   /* Surface */
   --bds-surface-primary: var(--bds-color-grayscale-white);
   --bds-surface-secondary: var(--bds-color-grayscale-100);
@@ -123,6 +128,9 @@
   --bds-text-muted: var(--bds-color-grayscale-700);
   --bds-text-inverse: var(--bds-color-grayscale-black);
   --bds-text-brand-primary: var(--bds-color-poppy-500);
+  /* --bds-text-brand-primary-strong dark: poppy-500 already clears AA at 4.56:1 on
+     the near-black secondary surface; darkening would sink it. (#2270, #2910) */
+  --bds-text-brand-primary-strong: var(--bds-color-poppy-500);
   --bds-text-on-color-dark: var(--bds-color-grayscale-white);
   /* Pinned to true black rather than the generated -darkest (#1b1b1b), matching
    * the true-black system in --bds-background-primary. This is the label for a

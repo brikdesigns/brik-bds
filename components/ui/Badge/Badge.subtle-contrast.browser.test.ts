@@ -8,6 +8,7 @@ import { Badge, type BadgeTone } from './Badge';
 import figmaTokensCss from '../../../tokens/figma-tokens.css?raw';
 import figmaTokensDarkCss from '../../../tokens/figma-tokens-dark.css?raw';
 import gapFillsCss from '../../../tokens/gap-fills.css?raw';
+import themeBrandBrikGeneratedCss from '../../../tokens/theme-brand-brik.generated.css?raw';
 import themeBrandBrikCss from '../../../tokens/theme-brand-brik.css?raw';
 
 /**
@@ -18,7 +19,8 @@ import themeBrandBrikCss from '../../../tokens/theme-brand-brik.css?raw';
  * pairing fails here, not only in `npm run contrast-gate`'s source-file read.
  *
  * Injects the real token source files (tokens/figma-tokens.css,
- * figma-tokens-dark.css, gap-fills.css, theme-brand-brik.css — the same
+ * figma-tokens-dark.css, gap-fills.css, theme-brand-brik.generated.css,
+ * theme-brand-brik.css — the same
  * cascade dist/tokens.css concatenates, per scripts/build-dist-tokens.js) as
  * a <style> tag, mirroring Card.anatomy.browser.test.ts's sentinel-injection
  * pattern: dist/tokens.css is a build artifact that may be absent in CI, but
@@ -34,7 +36,9 @@ let root: Root;
 
 beforeAll(() => {
   const style = document.createElement('style');
-  style.textContent = [figmaTokensCss, figmaTokensDarkCss, gapFillsCss, themeBrandBrikCss].join('\n\n');
+  style.textContent = [figmaTokensCss, figmaTokensDarkCss, gapFillsCss, themeBrandBrikGeneratedCss, themeBrandBrikCss].join(
+    '\n\n',
+  );
   document.head.appendChild(style);
   document.body.classList.add('theme-brand-brik');
 });

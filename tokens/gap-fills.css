@@ -86,8 +86,12 @@
      2.87:1 on white --bds-surface-primary, failing AA. Re-pin to green-darkest on
      light surfaces (8.5:1 AAA). Fill roles (--background/surface/border-positive)
      stay mid-green — text role only. RETIRE once the Figma source emits these
-     theme-responsive values and re-syncs. (#913) */
-  --bds-text-positive: var(--bds-color-green-950);
+     theme-responsive values and re-syncs. (#913)
+
+     A literal, not var(--bds-color-green-950): green-950 is a Brand Kit
+     primitive and :root is Foundations-only since #2910, which has no AA
+     green text step. Same value, so no consumer's render moves. */
+  --bds-text-positive: #2a5542; /* bds-lint-ignore — Foundations has no AA green text primitive (#913, #2910) */
 
   /* Theme-responsive AA-safe brand TEXT step (light value here, dark in the
      :root[data-theme="dark"] block below). --bds-text-brand-primary serves a
@@ -99,8 +103,8 @@
      TableOfContents `variant="rail"` is the first surface that needs both: a
      14px bold active label, brand-colored, on --bds-surface-secondary. 14px bold is
      below WCAG's large-text floor (18.66px bold), so the bar is AA 4.5:1 — and
-     --bds-text-brand-primary (poppy-500) measures 3.38:1 there. Darkening one step
-     to poppy-700 gives 5.56:1. Dark mode keeps poppy-500 (4.56:1 on the
+     Brik's --bds-text-brand-primary measures 3.38:1 there. Darkening one step
+     gives 5.56:1. Brik dark mode keeps the base step (4.56:1 on the
      near-black secondary surface); darkening there would sink it.
 
      Gated as "Rail TOC active label on secondary surface" in
@@ -108,8 +112,12 @@
      because it is a new Semantic token, not a brand re-pin of a generated one
      (CASCADE.md § "Add a semantic token Figma doesn't export"), and because
      lint-tokens.js resolves the canonical registry from this file, not the
-     brand theme. RETIRE once the Figma source emits it. (#2270) */
-  --bds-text-brand-primary-strong: var(--bds-color-poppy-700);
+     brand theme. RETIRE once the Figma source emits it. (#2270)
+
+     This :root value is the Foundations default, the same grayscale step as
+     --bds-text-brand-primary. Brik's darker brand pin lives in theme-brand-brik.css,
+     because :root is Foundations-only since #2910. */
+  --bds-text-brand-primary-strong: var(--bds-color-grayscale-950);
 
   /* System color surface variants (used by TaskConsole status rows) */
   --bds-color-system-red-surface:   var(--bds-color-system-red-light);
@@ -141,10 +149,10 @@
   /* ── Semantic Tokens Not Yet in Figma/SD ── */
   --bds-surface-nav: var(--bds-color-grayscale-white);
   --bds-surface-navigation: var(--bds-color-grayscale-white); /* canonical; --bds-surface-nav kept for backward compat */
-  --bds-surface-brand-secondary: var(--bds-color-yellow-500);
+  --bds-surface-brand-secondary: var(--bds-color-grayscale-100); /* Foundations default; yellow-500 was a Brand Kit primitive, and Brik pins its own in theme-brand-brik.css (#2910) */
   --bds-background-brand-secondary: var(--bds-color-grayscale-white);
   --bds-background-image: #17171799; /* bds-lint-ignore — semi-transparent dark overlay; no primitive equivalent exists yet. Promote to Figma once an opacity token primitive is available. */
-  --bds-background-image-brand: var(--bds-color-poppy-500);
+  --bds-background-image-brand: var(--bds-color-grayscale-950); /* Foundations default, = --bds-background-brand-primary; Brik's brand fill is in theme-brand-brik.css (#2910) */
   /* `none`, not `0px`: box-shadow needs at least two lengths, so
      `box-shadow: 0px` is invalid and the declaration is dropped. Card's seven
      `box-shadow: var(--bds-box-shadow-none)` sites therefore rendered no shadow by
@@ -171,7 +179,7 @@
 
   /* ── Forward-facing alias: hyperlink semantic ──
      Figma defines this as `text/text-link` (node 22846-1906), backed by
-     `color/poppy/light` → resolved to --brand-primary. Style Dictionary
+     the active Brand Kit's primary → resolved to --brand-primary. Style Dictionary
      emits the path-joined name `--bds-text-text-link` (prefix `text` + token
      `text-link` joined by `-`), which is awkward at consumer sites. This
      alias gives consumers a clean canonical name while preserving the alias
@@ -585,12 +593,12 @@
   --bds-text-positive: var(--bds-color-system-green);
 
   /* Dark value for the --bds-text-brand-primary-strong gap-fill (light value above,
-     in :root). On the near-black --bds-surface-secondary, poppy-500 already clears
-     AA at 4.56:1; the light-mode darkening to poppy-700 would sink it, so this
-     step is light-mode-only in effect. Pinned explicitly rather than left to
-     inherit the :root value, to keep the light/dark pair in lockstep and
-     self-documenting — the same reason --bds-text-positive is repeated here. (#2270) */
-  --bds-text-brand-primary-strong: var(--bds-color-poppy-500);
+     in :root): the Foundations dark --bds-text-brand-primary step. Pinned
+     explicitly rather than left to inherit the :root value, to keep the
+     light/dark pair in lockstep and self-documenting — the same reason
+     --bds-text-positive is repeated here. Brik's brand pair lives in
+     theme-brand-brik.css (#2270, #2910). */
+  --bds-text-brand-primary-strong: var(--bds-color-grayscale-100);
 
   /* Dark values for the disabled pair (light values above, in :root). The
      generated dark layer repeats the light-mode defect — figma-tokens-dark.css

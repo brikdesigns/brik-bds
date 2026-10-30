@@ -4,7 +4,7 @@
  * Called by: npm run build:lib (as the final step)
  *
  * Produces:
- *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + theme-brand-brik.css + modes-*.css + gap-fills.css + modes-elevation.css + layout-fluid.css + ratios.css + fluid-type.css + animations.css concatenated
+ *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + theme-brand-brik.generated.css + theme-brand-brik.css + modes-*.css + gap-fills.css + modes-elevation.css + layout-fluid.css + ratios.css + fluid-type.css + animations.css concatenated
  *   dist/bridge.css  — clean name ↔ Webflow internal name aliases
  *   dist/prefix-bridge.css — old-name → `--bds-` aliases (ADR-043); also appended to dist/tokens.css
  */

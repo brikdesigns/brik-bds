@@ -11,6 +11,8 @@ import { spawnSync } from 'node:child_process';
 const REPO_ROOT = resolve(import.meta.dirname, '..', '..');
 const LINTER = resolve(REPO_ROOT, 'scripts', 'lint-tokens.js');
 const FIGMA_TOKENS = resolve(REPO_ROOT, 'tokens', 'figma-tokens.css');
+// Brik's ramps left `:root` for `.theme-brand-brik` in #2910; canonical CSS is both.
+const BRAND_BRIK_GEN = resolve(REPO_ROOT, 'tokens', 'theme-brand-brik.generated.css');
 // ADR-043 / #2670: the 54 word steps are retired from canonical CSS and live
 // only in the generated bridge, as `--color-poppy-light: var(--bds-color-poppy-500)`.
 const BRIDGE = resolve(REPO_ROOT, 'tokens', 'compat', 'prefix-bridge.css');
@@ -77,8 +79,10 @@ describe('the alias layer preserves every legacy value (#1739 AC 1)', () => {
   // still resolves, through the bridge, and still paints the exact color it
   // painted before. The canonical CSS no longer declares the word steps.
   const canonical = new Map();
-  for (const m of readFileSync(FIGMA_TOKENS, 'utf8').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
-    if (!canonical.has(m[1])) canonical.set(m[1], m[2].trim());
+  for (const f of [FIGMA_TOKENS, BRAND_BRIK_GEN]) {
+    for (const m of readFileSync(f, 'utf8').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
+      if (!canonical.has(m[1])) canonical.set(m[1], m[2].trim());
+    }
   }
   const bridge = new Map();
   for (const m of readFileSync(BRIDGE, 'utf8').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
@@ -124,7 +128,7 @@ describe('the named aliases still paint their FROZEN values (#1949)', () => {
   const baseline = JSON.parse(readFileSync(ALIAS_BASELINE, 'utf8')).aliases;
 
   const decls = new Map();
-  for (const f of [FIGMA_TOKENS, BRIDGE]) {
+  for (const f of [FIGMA_TOKENS, BRAND_BRIK_GEN, BRIDGE]) {
     for (const m of readFileSync(f, 'utf8').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
       if (!decls.has(m[1])) decls.set(m[1], m[2].trim());
     }

@@ -42,6 +42,8 @@ const FIGMA_LIGHT = path.join(ROOT, 'tokens', 'figma-tokens.css');
 const FIGMA_DARK = path.join(ROOT, 'tokens', 'figma-tokens-dark.css');
 const GAP_FILLS = path.join(ROOT, 'tokens', 'gap-fills.css');
 const BRAND_BRIK = path.join(ROOT, 'tokens', 'theme-brand-brik.css');
+// Brik's Brand Kit compiled as a client theme; :root is Foundations-only (#2910).
+const BRAND_BRIK_GEN = path.join(ROOT, 'tokens', 'theme-brand-brik.generated.css');
 
 const DATASET = require(path.join(ROOT, 'tokens', 'contrast-pairings.json'));
 
@@ -166,20 +168,26 @@ function composite(over, under, alpha) {
 }
 
 // ─── Theme assembly (the real Brik default cascade) ─────────────────
-// light = figma :root + gap-fills :root + .theme-brand-brik
-// dark  = light + figma dark :root[data-theme=dark] + gap-fills dark + dark .theme-brand-brik
+// light = figma :root + gap-fills :root + generated .theme-brand-brik + .theme-brand-brik
+// dark  = light + figma dark :root[data-theme=dark] + gap-fills dark
+//         + generated dark .theme-brand-brik + dark .theme-brand-brik
 //   gap-fills dark sits after figma dark (equal specificity, loaded later in the
 //   import cascade) and before brandBrikDark (which pins at higher specificity).
 
 const figmaLight = extractBlock(FIGMA_LIGHT, /:root/);
 const gapFills = extractBlock(GAP_FILLS, /:root/);
 const gapFillsDark = extractBlock(GAP_FILLS, /:root\[data-theme="dark"\]/);
+const brandBrikGenLight = extractBlock(BRAND_BRIK_GEN, /(?:^|\})\s*\.theme-brand-brik/m);
 const brandBrikLight = extractBlock(BRAND_BRIK, /(?:^|\})\s*\.theme-brand-brik/m);
 const figmaDark = extractBlock(FIGMA_DARK, /:root\[data-theme="dark"\]/);
+const brandBrikGenDark = extractBlock(BRAND_BRIK_GEN, /:root\[data-theme="dark"\]\s*\.theme-brand-brik/);
 const brandBrikDark = extractBlock(BRAND_BRIK, /:root\[data-theme="dark"\]\s*\.theme-brand-brik/);
 
-const lightVars = resolveAll({ ...figmaLight, ...gapFills, ...brandBrikLight });
-const darkVars = resolveAll({ ...figmaLight, ...gapFills, ...brandBrikLight, ...figmaDark, ...gapFillsDark, ...brandBrikDark });
+const lightVars = resolveAll({ ...figmaLight, ...gapFills, ...brandBrikGenLight, ...brandBrikLight });
+const darkVars = resolveAll({
+  ...figmaLight, ...gapFills, ...brandBrikGenLight, ...brandBrikLight,
+  ...figmaDark, ...gapFillsDark, ...brandBrikGenDark, ...brandBrikDark,
+});
 
 const THEMES = [
   { key: 'light', label: 'Brik · Light', vars: lightVars },
