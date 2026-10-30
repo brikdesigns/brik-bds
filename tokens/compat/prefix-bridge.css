@@ -1059,7 +1059,7 @@
   --border-width-xl: var(--bds-border-width-xl);
 }
 
-[data-mode-borderwidth="thick"], [data-mode-borderwidth="bold"] {
+[data-mode-borderwidth="thick"] {
   --border-width-huge: var(--bds-border-width-huge);
   --border-width-lg: var(--bds-border-width-lg);
   --border-width-md: var(--bds-border-width-md);

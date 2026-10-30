@@ -41,7 +41,7 @@ brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
 2. `figma-tokens-dark.css` — auto-generated dark-mode tokens (`:root[data-theme="dark"]`)
 3. `theme-brand-brik.generated.css` — Brik's Brand Kit compiled like a client kit (`npm run build:brand-brik`, via `compileClientTheme`), scoped to `.theme-brand-brik`; only Brik's delta over Foundations + gap-fills, compared on resolved values
 4. `theme-brand-brik.css` — hand-written Brik overrides, after the generated layer (scoped to `.theme-brand-brik` class)
-5. `modes-borderwidth.css` — borderWidth mode overrides (`[data-mode-borderwidth="thin|thick"]`; `bold` is a one-release alias of `thick`) — auto-generated via `npm run build:modes`
+5. `modes-borderwidth.css` — borderWidth mode overrides (`[data-mode-borderwidth="thin|thick"]`) — auto-generated via `npm run build:modes`
 6. `modes-spacing.css` — spacing density mode overrides (`[data-mode-spacing="compact|comfortable|spacious"]`) — auto-generated from `design-tokens/tokens-studio.json` via `npm run build:modes`
 7. `modes-typography.css` — typography heading-scale-variant overrides (`[data-mode-typography="compact|comfortable|spacious|expressive"]`) — auto-generated from `design-tokens/tokens-studio.json` via `npm run build:modes`
 8. `modes-borderradius.css` — corner-radius mode overrides (`[data-mode-radius="sharp|round|pill"]`) — auto-generated via `npm run build:modes`. Note the attribute is `data-mode-radius` while the source collection is `border-radius`; overrides the semantic `--border-radius-{none,sm,md,lg}` (defined in figma-tokens.css above, so it lands with the other mode files).
@@ -104,7 +104,7 @@ AGENT DECIDED (revisable): contrast is a separate `data-contrast` switch, not a 
 
 | Collection | Attribute | Default (no attr) | Other values | Wired? |
 |---|---|---|---|---|
-| `borderwidth` | `data-mode-borderwidth` | `default` | `thin`, `thick` | ✅ `modes-borderwidth.css` (`bold` → `thick` alias, one release) |
+| `borderwidth` | `data-mode-borderwidth` | `default` | `thin`, `thick` | ✅ `modes-borderwidth.css` |
 | `spacing` | `data-mode-spacing` | `default` | `compact`, `comfortable`, `spacious` | ✅ `modes-spacing.css` |
 | `border-radius` | `data-mode-radius` | `soft` | `sharp`, `round`, `pill` | ✅ `modes-borderradius.css` (attr `data-mode-radius`; source collection `border-radius`) |
 | `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious`, `expressive` | ✅ `modes-typography.css` (heading-* only; display-* mode-invariant) |

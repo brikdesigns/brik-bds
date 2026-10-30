@@ -9,7 +9,6 @@
  *
  * Selector contract: `[data-mode-borderwidth="thin|thick"]`
  * on :root (html). Default mode requires no attribute (uses figma-tokens.css base).
- * Deprecated alias: "bold" → "thick" (one release).
  *
  * Companion to figma-tokens-dark.css and modes-borderwidth.css per the cascade
  * documented in tokens/CASCADE.md.
@@ -25,8 +24,7 @@
 }
 
 /* ─── Thick ────────────────────────────────────────── */
-[data-mode-borderwidth="thick"],
-[data-mode-borderwidth="bold"] {
+[data-mode-borderwidth="thick"] {
   --bds-border-width-huge: var(--bds-border-width-1200);
   --bds-border-width-lg: var(--bds-border-width-500);
   --bds-border-width-md: var(--bds-border-width-300);
