@@ -64,8 +64,8 @@
    * poppy-800 / poppy-950 (10.24:1 / 15.57:1 under a white label) — a jump of two
    * and three steps off the base, which reads as a state change to a different
    * fill rather than a hover. Keeping 700 / 800 preserves the BDS-22 ladder. */
-  --bds-surface-brand-primary-hover: var(--bds-color-poppy-700);
-  --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800);
+  --bds-surface-brand-primary-hover: var(--bds-color-poppy-700); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
+  --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
   --bds-surface-brand-secondary: var(--bds-color-tan-100);
   --bds-surface-nav: var(--bds-color-grayscale-white);
   /* Background — vibrant poppy-light base per brand canon; darkens on interaction (BDS-22) */
@@ -163,9 +163,9 @@
      Covers --bds-surface-brand-primary, --bds-surface-brand-primary-hover and
      --bds-surface-brand-primary-pressed — all three diverge from the generated
      grayscale for this reason. */
-  --bds-surface-brand-primary: var(--bds-color-poppy-500);
-  --bds-surface-brand-primary-hover: var(--bds-color-poppy-700);
-  --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800);
+  --bds-surface-brand-primary: var(--bds-color-poppy-500); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
+  --bds-surface-brand-primary-hover: var(--bds-color-poppy-700); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
+  --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
   --bds-surface-brand-secondary: var(--bds-color-grayscale-950);
   --bds-surface-nav: var(--bds-color-grayscale-black);
   --bds-surface-muted: var(--bds-color-grayscale-950);
