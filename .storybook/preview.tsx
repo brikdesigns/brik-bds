@@ -19,7 +19,7 @@ import isChromatic from 'chromatic/isChromatic';
 // Import token CSS in cascade order:
 // 1. Figma tokens (SD output — primitives + semantic defaults)
 // 2. Gap-fills (manual tokens not yet in Figma)
-// 3. Brik Brand theme (light + dark)
+// 3. Brik Brand theme (light + dark) — generated layer, then hand overrides (#2910)
 // 4. Font Audit tool (client-sim theme for font-family validation)
 // 5. BDS shared keyframe library (bds-spin, bds-pulse, bds-pop, etc.)
 // 6. Prefix bridge — old bare names → `--bds-` (ADR-043, #2670). Consumers get
@@ -29,6 +29,7 @@ import isChromatic from 'chromatic/isChromatic';
 import '../tokens/figma-tokens.css';
 import '../tokens/gap-fills.css';
 import '../tokens/ratios.css';
+import '../tokens/theme-brand-brik.generated.css';
 import '../tokens/theme-brand-brik.css';
 import '../tokens/font-audit.css';
 import '../tokens/animations.css';

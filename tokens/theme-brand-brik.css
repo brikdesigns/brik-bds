@@ -45,6 +45,11 @@
      heading/accent role this token serves; small body copy uses --bds-text-primary
      (usage rule tracked in BDS-18). Restored from the poppy-dark AA divergence (BDS-22). */
   --bds-text-brand-primary: var(--bds-color-poppy-500);
+  /* --bds-text-brand-primary-strong: one poppy step darker for the 14px bold TOC
+     active label on --bds-surface-secondary (5.56:1 vs 3.38:1). Moved here from
+     the gap-fills :root, which is Foundations-only since #2910 and so cannot
+     name a poppy primitive. (#2270) */
+  --bds-text-brand-primary-strong: var(--bds-color-poppy-700);
   /* Surface */
   --bds-surface-primary: var(--bds-color-grayscale-white);
   --bds-surface-secondary: var(--bds-color-grayscale-100);
@@ -59,8 +64,8 @@
    * poppy-800 / poppy-950 (10.24:1 / 15.57:1 under a white label) — a jump of two
    * and three steps off the base, which reads as a state change to a different
    * fill rather than a hover. Keeping 700 / 800 preserves the BDS-22 ladder. */
-  --bds-surface-brand-primary-hover: var(--bds-color-poppy-700);
-  --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800);
+  --bds-surface-brand-primary-hover: var(--bds-color-poppy-700); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
+  --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
   --bds-surface-brand-secondary: var(--bds-color-tan-100);
   --bds-surface-nav: var(--bds-color-grayscale-white);
   /* Background — vibrant poppy-light base per brand canon; darkens on interaction (BDS-22) */
@@ -123,6 +128,9 @@
   --bds-text-muted: var(--bds-color-grayscale-700);
   --bds-text-inverse: var(--bds-color-grayscale-black);
   --bds-text-brand-primary: var(--bds-color-poppy-500);
+  /* --bds-text-brand-primary-strong dark: poppy-500 already clears AA at 4.56:1 on
+     the near-black secondary surface; darkening would sink it. (#2270, #2910) */
+  --bds-text-brand-primary-strong: var(--bds-color-poppy-500);
   --bds-text-on-color-dark: var(--bds-color-grayscale-white);
   /* Pinned to true black rather than the generated -darkest (#1b1b1b), matching
    * the true-black system in --bds-background-primary. This is the label for a
@@ -155,9 +163,9 @@
      Covers --bds-surface-brand-primary, --bds-surface-brand-primary-hover and
      --bds-surface-brand-primary-pressed — all three diverge from the generated
      grayscale for this reason. */
-  --bds-surface-brand-primary: var(--bds-color-poppy-500);
-  --bds-surface-brand-primary-hover: var(--bds-color-poppy-700);
-  --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800);
+  --bds-surface-brand-primary: var(--bds-color-poppy-500); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
+  --bds-surface-brand-primary-hover: var(--bds-color-poppy-700); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
+  --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
   --bds-surface-brand-secondary: var(--bds-color-grayscale-950);
   --bds-surface-nav: var(--bds-color-grayscale-black);
   --bds-surface-muted: var(--bds-color-grayscale-950);

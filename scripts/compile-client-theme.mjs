@@ -50,9 +50,9 @@ export async function compileClientTheme(kit, opts = {}) {
   const brandKit = structuredClone(kit);
   brandKit['primitives/value'] ??= {};
   const families = (brandKit['primitives/value'].color ??= {});
-  // Foundations carries grayscale as six literal word steps, and only applyRamp
-  // turns those into the aliases bds/retire-word-steps requires. A client kit
-  // that names no grays of its own ramps the Foundations grayscale.
+  // A client kit that names no grays of its own ramps the Foundations
+  // grayscale. applyRamp also re-derives the six word steps as aliases onto the
+  // numeric scale, which bds/retire-word-steps requires (numeric since #2912).
   families.grayscale ??= structuredClone(foundations['primitives/value'].color.grayscale);
   for (const familyName of Object.keys(families)) {
     families[familyName] = applyRamp(familyName, families[familyName]);

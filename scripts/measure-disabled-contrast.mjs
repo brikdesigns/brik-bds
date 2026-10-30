@@ -51,6 +51,7 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FIGMA_LIGHT = path.join(ROOT, 'tokens', 'figma-tokens.css');
 const FIGMA_DARK = path.join(ROOT, 'tokens', 'figma-tokens-dark.css');
 const GAP_FILLS = path.join(ROOT, 'tokens', 'gap-fills.css');
+const BRAND_BRIK_GEN = path.join(ROOT, 'tokens', 'theme-brand-brik.generated.css');
 const BRAND_BRIK = path.join(ROOT, 'tokens', 'theme-brand-brik.css');
 
 const AA_LARGE = 3;
@@ -91,22 +92,26 @@ function resolveAll(merged) {
   return out;
 }
 
-// light = figma :root + gap-fills :root + .theme-brand-brik
-// dark  = light + figma dark + gap-fills dark + dark .theme-brand-brik
+// light = figma :root + gap-fills :root + .theme-brand-brik (generated, then hand-written)
+// dark  = light + figma dark + gap-fills dark + dark .theme-brand-brik (same order)
 const figmaLight = extractBlock(FIGMA_LIGHT, /:root/);
 const gapFills = extractBlock(GAP_FILLS, /:root/);
 const gapFillsDark = extractBlock(GAP_FILLS, /:root\[data-theme="dark"\]/);
+const brandBrikGenLight = extractBlock(BRAND_BRIK_GEN, /(?:^|\})\s*\.theme-brand-brik/m);
 const brandBrikLight = extractBlock(BRAND_BRIK, /(?:^|\})\s*\.theme-brand-brik/m);
 const figmaDark = extractBlock(FIGMA_DARK, /:root\[data-theme="dark"\]/);
+const brandBrikGenDark = extractBlock(BRAND_BRIK_GEN, /:root\[data-theme="dark"\]\s*\.theme-brand-brik/);
 const brandBrikDark = extractBlock(BRAND_BRIK, /:root\[data-theme="dark"\]\s*\.theme-brand-brik/);
 
-const LIGHT = resolveAll({ ...figmaLight, ...gapFills, ...brandBrikLight });
+const LIGHT = resolveAll({ ...figmaLight, ...gapFills, ...brandBrikGenLight, ...brandBrikLight });
 const DARK = resolveAll({
   ...figmaLight,
   ...gapFills,
+  ...brandBrikGenLight,
   ...brandBrikLight,
   ...figmaDark,
   ...gapFillsDark,
+  ...brandBrikGenDark,
   ...brandBrikDark,
 });
 

@@ -6,7 +6,8 @@
  *
  * `tokens/theme-brand-brik.css` re-declares tokens that Style Dictionary already
  * emits into `tokens/figma-tokens.css` (light) and `tokens/figma-tokens-dark.css`
- * (dark). Some of those overrides are deliberate brand decisions; some are
+ * (dark), overlaid by the generated Brik layer `tokens/theme-brand-brik.generated.css`
+ * (#2910). Some of those overrides are deliberate brand decisions; some are
  * typos. Nothing distinguished them, so an inverted value survived four months:
  * `--background-inverse` was pinned to the same primitive as `--text-inverse`,
  * rendering `Chip --primary` and `Button --inverse` at 1.00:1 while ENABLED
@@ -34,7 +35,7 @@
  * brik-bds#1689.
  */
 
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -49,6 +50,10 @@ function argValue(flag) {
 const BRAND = argValue('--brand') ?? join(ROOT, 'tokens', 'theme-brand-brik.css');
 const GEN_LIGHT = argValue('--gen-light') ?? join(ROOT, 'tokens', 'figma-tokens.css');
 const GEN_DARK = argValue('--gen-dark') ?? join(ROOT, 'tokens', 'figma-tokens-dark.css');
+// Since #2910 `:root` is Foundations alone and Brik's generated values live in
+// a `.theme-brand-brik` layer holding only Brik's delta. "Generated" is the two
+// together: the Foundations block with the Brik layer laid over it.
+const GEN_BRAND = argValue('--gen-brand') ?? join(ROOT, 'tokens', 'theme-brand-brik.generated.css');
 
 const reportMode = process.argv.includes('--report');
 const jsonMode = process.argv.includes('--json');
@@ -147,7 +152,7 @@ function isExplanatory(text) {
  * measuring value, which is what its normalise() contract promises.
  */
 function primitives() {
-  const css = readFileSync(GEN_LIGHT, 'utf8');
+  const css = readFileSync(GEN_LIGHT, 'utf8') + (existsSync(GEN_BRAND) ? readFileSync(GEN_BRAND, 'utf8') : '');
   const raw = new Map();
   for (const m of css.matchAll(/(--bds-color-[\w-]+)\s*:\s*([^;]+);/g)) {
     raw.set(m[1], m[2].trim().toLowerCase());
@@ -190,6 +195,9 @@ function normalise(value) {
 
 function audit(mode, genPath, genRe, brandRe) {
   const gen = parseBlock(genPath, genRe);
+  if (existsSync(GEN_BRAND)) {
+    for (const [name, decl] of parseBlock(GEN_BRAND, brandRe)) gen.set(name, decl);
+  }
   const brand = parseBlock(BRAND, brandRe);
 
   const rows = [];

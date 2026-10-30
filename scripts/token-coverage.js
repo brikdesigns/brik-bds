@@ -19,6 +19,8 @@ const ROOT = path.join(__dirname, '..');
 const COMPONENTS_DIR = path.join(ROOT, 'components', 'ui');
 const TOKEN_SOURCES = [
   path.join(ROOT, 'tokens', 'figma-tokens.css'),
+  // Brik's Brand Kit names, out of `:root` since #2910.
+  path.join(ROOT, 'tokens', 'theme-brand-brik.generated.css'),
   path.join(ROOT, 'tokens', 'gap-fills.css'),
 ];
 

@@ -37,11 +37,19 @@ export function assembleCanonical(read, log = () => {}) {
     log('  ⚠ No figma-tokens-dark.css found — run npm run build:sd-dark to generate');
   }
 
-  // Brik brand theme — applied when consumer sets .theme-brand-brik on <body>
-  const brand = read('tokens/theme-brand-brik.css');
+  // Brik brand theme — applied when consumer sets .theme-brand-brik on <body>.
+  // The generated layer (Brik's Brand Kit through compileClientTheme, #2910)
+  // loads first; the hand-written deliberate overrides load after it and win.
+  // Optional: a git ref from before #2910 has no generated file.
   let themeBrandBrik = '';
+  const brandGenerated = read('tokens/theme-brand-brik.generated.css');
+  if (brandGenerated !== null) {
+    themeBrandBrik += '\n\n' + brandGenerated;
+    log('  ✓ Including generated Brik brand theme');
+  }
+  const brand = read('tokens/theme-brand-brik.css');
   if (brand !== null) {
-    themeBrandBrik = '\n\n' + brand;
+    themeBrandBrik += '\n\n' + brand;
     log('  ✓ Including Brik brand theme');
   }
 

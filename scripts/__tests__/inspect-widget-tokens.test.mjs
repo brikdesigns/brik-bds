@@ -24,9 +24,11 @@ const repoRoot = join(here, '..', '..');
 // Committed token sources that declare BDS custom properties: the Style
 // Dictionary export plus the two hand-authored semantic layers (bridge.css owns
 // --ease-*; gap-fills.css owns --content-width-*/--layout-*). dist/tokens.css is
-// a build artifact and not committed, so we read source.
+// a build artifact and not committed, so we read source. Brik's generated layer
+// carries the Brand Kit names `:root` stopped declaring in #2910.
 const TOKEN_SOURCES = [
   'tokens/figma-tokens.css',
+  'tokens/theme-brand-brik.generated.css',
   'tokens/compat/bridge.css',
   'tokens/gap-fills.css',
 ];

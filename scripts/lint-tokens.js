@@ -396,7 +396,7 @@ function parseCssTokens() {
     while (i < lines.length) {
       const line = lines[i];
 
-      if (/^(:root|\.body)\s*\{/.test(line) || /^\.body\.theme-\d+/.test(line)) {
+      if (/^(:root|\.body|\.theme-brand-brik)\s*\{/.test(line) || /^\.body\.theme-\d+/.test(line)) {
         i++;
         let braceDepth = 1;
         while (i < lines.length && braceDepth > 0) {
@@ -440,7 +440,11 @@ function parseCssTokens() {
   const LAYOUT_FLUID = path.join(__dirname, '..', 'tokens', 'layout-fluid.css');
   const RATIOS = path.join(__dirname, '..', 'tokens', 'ratios.css');
   const BRIDGE = path.join(__dirname, '..', 'tokens', 'compat', 'bridge.css');
+  // Brik's Brand Kit layer (#2910): :root is Foundations-only, so Brik's
+  // primitives and service tokens are declared here and nowhere in figma-tokens.css.
+  const BRAND_BRIK_GEN = path.join(__dirname, '..', 'tokens', 'theme-brand-brik.generated.css');
   if (fs.existsSync(FIGMA_TOKENS)) loadFromCss(FIGMA_TOKENS);
+  if (fs.existsSync(BRAND_BRIK_GEN)) loadFromCss(BRAND_BRIK_GEN);
   if (fs.existsSync(GAP_FILLS)) loadFromCss(GAP_FILLS);
   if (fs.existsSync(LAYOUT_FLUID)) loadFromCss(LAYOUT_FLUID);
   if (fs.existsSync(RATIOS)) loadFromCss(RATIOS);
@@ -1560,6 +1564,7 @@ function buildValueMaps() {
   const SOURCES = [
     SD_CSS_PATH,
     path.join(REPO_ROOT, 'tokens', 'figma-tokens.css'),
+    path.join(REPO_ROOT, 'tokens', 'theme-brand-brik.generated.css'),
     path.join(REPO_ROOT, 'tokens', 'gap-fills.css'),
     path.join(REPO_ROOT, 'tokens', 'layout-fluid.css'),
     path.join(REPO_ROOT, 'tokens', 'ratios.css'),
