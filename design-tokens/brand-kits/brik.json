@@ -2311,42 +2311,6 @@
         "$type": "color",
         "$value": "{color.grayscale.white}"
       },
-      "accent-yellow": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.yellow.500}"
-      },
-      "accent-blue": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.blue.300}"
-      },
-      "accent-green": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.green.300}"
-      },
-      "accent-purple": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.purple.500}"
-      },
       "accent-red": {
         "$extensions": {
           "com.figma.scopes": [
@@ -2572,15 +2536,6 @@
         },
         "$type": "color",
         "$value": "{color.system.red}"
-      },
-      "success": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.system.green}"
       }
     },
     "border": {
@@ -3554,42 +3509,6 @@
         "$type": "color",
         "$value": "{color.grayscale.black}"
       },
-      "accent-yellow": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.yellow.500}"
-      },
-      "accent-blue": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.blue.300}"
-      },
-      "accent-green": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.green.300}"
-      },
-      "accent-purple": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.purple.500}"
-      },
       "accent-red": {
         "$extensions": {
           "com.figma.scopes": [
@@ -3815,15 +3734,6 @@
         },
         "$type": "color",
         "$value": "{color.system.red}"
-      },
-      "success": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.system.green}"
       }
     },
     "border": {

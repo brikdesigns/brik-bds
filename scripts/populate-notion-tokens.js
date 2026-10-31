@@ -294,10 +294,6 @@ const semanticTokens = [
   { name: 'text-brand', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/brand', element: 'text', role: 'brand', value: '{color.poppy.light}' },
   { name: 'text-inverse', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/inverse', element: 'text', role: 'inverse', value: '{color.grayscale.white}' },
   { name: 'text-on-color', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/on-color', element: 'text', role: 'on-color', value: '{color.grayscale.white}' },
-  { name: 'text-accent-yellow', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/accent-yellow', element: 'text', role: 'accent', value: '{color.system.yellow}' },
-  { name: 'text-accent-blue', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/accent-blue', element: 'text', role: 'accent', value: '{color.system.blue}' },
-  { name: 'text-accent-green', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/accent-green', element: 'text', role: 'accent', value: '{color.system.green}' },
-  { name: 'text-accent-purple', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/accent-purple', element: 'text', role: 'accent', value: '{color.system.purple}' },
   { name: 'text-accent-red', type: 'alias', foundation: 'color', collection: 'color', figmaVar: 'text/accent-red', element: 'text', role: 'accent', value: '{color.system.red}' },
 
   // -------------------------------------------------------------------------
