@@ -22,6 +22,14 @@ export interface ServiceTagProps extends Omit<HTMLAttributes<HTMLSpanElement>, '
    */
   serviceName?: string;
   /**
+   * Custom glyph that replaces the resolved service icon — e.g. an `<Icon>`
+   * for a plan-coverage check (#2417). Rendered by the `icon` and `icon-text`
+   * variants, decorative (`aria-hidden`), sized per `size` in CSS, and colored
+   * by the tag's service text token through `currentColor`. Ignored by the
+   * `text` and `dot` variants.
+   */
+  icon?: ReactNode;
+  /**
    * Trailing affordance rendered *inside* the tag — e.g. the dismiss control
    * `MultiSelect` supplies for a selected chip. It inherits the tag's service
    * text color, so it stays WCAG AA on every service fill without the caller
@@ -77,6 +85,7 @@ export function ServiceTag({
   size = 'md',
   label,
   serviceName,
+  icon,
   trailing,
   className,
   style,
@@ -105,7 +114,11 @@ export function ServiceTag({
         title={serviceName || config.label}
         {...props}
       >
-        <ServiceTagIcon glyph={resolveServiceIcon(category, serviceName)} size={iconSize} />
+        {icon ? (
+          <CustomIcon icon={icon} />
+        ) : (
+          <ServiceTagIcon glyph={resolveServiceIcon(category, serviceName)} size={iconSize} />
+        )}
       </span>
     );
   }
@@ -130,7 +143,7 @@ export function ServiceTag({
   }
 
   const iconSize = tagIconSizeMap[size];
-  const showIcon = variant === 'icon-text' && !!serviceName;
+  const showIcon = variant === 'icon-text' && (!!icon || !!serviceName);
 
   return (
     <span
@@ -145,7 +158,12 @@ export function ServiceTag({
       style={style}
       {...props}
     >
-      {showIcon && <ServiceTagIcon glyph={resolveServiceIcon(category, serviceName)} size={iconSize} />}
+      {showIcon &&
+        (icon ? (
+          <CustomIcon icon={icon} />
+        ) : (
+          <ServiceTagIcon glyph={resolveServiceIcon(category, serviceName)} size={iconSize} />
+        ))}
       {displayLabel}
       {!!trailing && <span className="bds-service-tag__trailing">{trailing}</span>}
     </span>
@@ -179,6 +197,20 @@ function ServiceTagIcon({ glyph, size }: { glyph: string; size: number }) {
       // user input. Inlined (not a URL) so the glyph paints with no network.
       dangerouslySetInnerHTML={{ __html: svg }}
     />
+  );
+}
+
+/**
+ * CustomIcon — wrapper for a consumer-supplied glyph (`icon` prop). Sized by
+ * `font-size` per tag size in ServiceTag.css, so an `<Icon>` (1em) fills it
+ * with no width/height on the node; `currentColor` carries the service text
+ * token, already AA-cleared against the service fill.
+ */
+function CustomIcon({ icon }: { icon: ReactNode }) {
+  return (
+    <span aria-hidden className="bds-service-tag__icon">
+      {icon}
+    </span>
   );
 }
 

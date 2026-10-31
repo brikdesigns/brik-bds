@@ -85,6 +85,8 @@ Categorization labels for classifying records — industry, segment, owner, size
 - **`subtle`** — Transparent background with a hairline border. Lower visual weight when Tags sit on a colored surface.
 - **`muted`** — Quiet neutral fill for a low-emphasis category label, using the same AA-cleared pairing as Badge `info`. **Boundary:** Tags carry classification, never status. `muted` paints the subtle surface tint (`--bds-surface-neutral` + `--bds-text-neutral`); it is a quiet neutral label, not a status — for semantic status (positive/warning/error/etc.) use `Badge` instead.
 
+**Service color:** Tag has no service-color axis. A Brik service-line category, or any glyph that should sit on a service fill, is a `ServiceTag`, using its `icon` prop for a custom glyph (#2417).
+
 Below: appearance, sizes, and density — axes where a side-by-side comparison is clearer than toggling Controls.
 
 ### Appearance

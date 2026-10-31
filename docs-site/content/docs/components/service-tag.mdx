@@ -94,6 +94,14 @@ Icons are bundled at build time from `components/ui/ServiceTag/icons/[category]/
 
 The glyph is an inline SVG painted with `fill="currentColor"`, so it inherits the tag's service text token (`--text-service-{name}`) and retones correctly in both `brik-light` and `brik-dark` — the icon always matches the label. To recolor an icon in a custom context, set `color` on the parent and the glyph follows.
 
+### Custom glyph
+
+Pass `icon` to replace the resolved glyph with any node, such as a plan-coverage check. It renders in the `icon` and `icon-text` variants, is hidden from assistive tech, is sized per `size`, and takes the same service text color. The icon square is 20, 28 or 40px; there is no 32px step, so use `md` (#2417).
+
+```tsx
+<ServiceTag category="marketing" variant="icon" icon={<Icon icon="ph:check-bold" />} aria-hidden />
+```
+
 ## Accessibility
 
 - Renders a `<span>` — non-interactive by default.
@@ -110,6 +118,7 @@ The glyph is an inline SVG painted with `fill="currentColor"`, so it inherits th
 | `size` | `ServiceTagSize` | `'md'` |
 | `label` | `string` | category default label |
 | `serviceName` | `string` | — |
+| `icon` | `ReactNode` | — |
 | `trailing` | `ReactNode` | — |
 
 `ServiceTagVariant` adds `dot` alongside the three above — a colour-only marker with

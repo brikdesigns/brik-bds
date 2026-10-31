@@ -1,5 +1,6 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import { Icon } from '@iconify/react';
 import * as Stories from './ServiceTag.stories';
 import { ServiceTag } from './ServiceTag';
 
@@ -19,6 +20,17 @@ export const DotByCategory = () => (
         <ServiceTag category="back-office" variant="dot" size={size} />
       </div>
     ))}
+  </div>
+);
+
+{/* Axis comparison — the `icon` slot across sizes. Docs-local for the same
+    reason as DotByCategory: `icon` is an icon-slot Control, not a story. */}
+export const CustomGlyphBySize = () => (
+  <div style={{ display: 'flex', gap: 'var(--bds-gap-md)', flexWrap: 'wrap', alignItems: 'center' }}>
+    {['sm', 'md', 'lg'].map((size) => (
+      <ServiceTag key={size} category="marketing" variant="icon" size={size} icon={<Icon icon="ph:check-bold" />} aria-hidden />
+    ))}
+    <ServiceTag category="marketing" variant="icon-text" icon={<Icon icon="ph:check-bold" />} label="Starter Stack" />
   </div>
 );
 
@@ -51,6 +63,18 @@ only the marker carries the service color, unlike the fully-colored `text` /
 
 <Canvas>
   <DotByCategory />
+</Canvas>
+
+### Custom glyph
+
+`icon` swaps the resolved service glyph for any node — a plan-coverage check, a
+social mark — on the service fill, in the service text color. It renders in
+`icon` and `icon-text` only. The icon square is 20 / 28 / 40px (`sm` / `md` /
+`lg`), the same as Figma's `brik-tag-service-*` squares. There is no 32px step:
+use `md` for Figma's 32px `brik-tag-subscription` (#2417).
+
+<Canvas>
+  <CustomGlyphBySize />
 </Canvas>
 
 ## Props

@@ -27,6 +27,11 @@ const meta: Meta<typeof ServiceTag> = {
       control: 'select',
       options: ['sm', 'md', 'lg'],
     },
+    icon: {
+      control: false,
+      description:
+        'Custom glyph (e.g. `<Icon icon="ph:check" />`) that replaces the resolved service icon. Decorative, sized per `size`, inherits the service text color. Rendered by `icon` and `icon-text`; ignored by `text` and `dot`.',
+    },
     trailing: {
       control: false,
       description:
