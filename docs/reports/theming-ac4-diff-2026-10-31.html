@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- report-meta: contract in docs/reports/README.md (ADR-046) -->
+<meta name="report-status" content="active">
+<meta name="report-type" content="assessment">
+<meta name="report-themes" content="design-system">
+<meta name="report-subject" content="bds">
+<meta name="report-owner" content="nstaner">
+<meta name="report-generated" content="2026-10-31">
+<meta name="report-supersedes" content="none">
+<meta name="report-cadence" content="once">
+<meta name="report-source" content="manual">
+<!-- /report-meta -->
+<title>Theming AC4 Diff — 2026-10-31</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font: 15px/1.5 -apple-system, "Segoe UI", sans-serif; max-width: 62rem; margin: 2rem auto; padding: 0 1rem; color: #222; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; font-size: 14px; }
+  th, td { border: 1px solid #ccc; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+  th { background: #f4f4f4; }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: .92em; background: #f3f3f3; padding: 0 .2em; }
+  .verdict { background: #fff4e5; border-left: 4px solid #e58a00; padding: .75rem 1rem; }
+  .decide { background: #eef4ff; border-left: 4px solid #2f6fdb; padding: .75rem 1rem; }
+  .ok { color: #1a7f37; } .bad { color: #b42318; font-weight: 600; }
+  .wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<h1>Theming AC4: Client-Site Diff for the Foundation-Leak Fix</h1>
+<p><strong>Date:</strong> 2026-10-31 · <strong>Issue:</strong> brik-bds#2910 AC4 · <strong>Umbrella:</strong> brik-bds#2851 · <strong>Change under test:</strong> PR #2913 (<code>8fe4e3f1</code>, merged to main, not released) · <strong>Baseline:</strong> <code>@brikdesigns/bds@0.217.0</code> (npm latest at time of run)</p>
+
+<div class="verdict">
+<p><strong>Verdict (HIGH confidence): releasing #2913 changes no rendered pixel on Birdwell Mutlak, Rebel CFO or Vale Partners.</strong> All 54 of 54 built pages were checked in light and dark mode. 107 of 108 captures were compared; the one left out is a redirect stub. Every compared capture shows 0 changed pixels, except Vale's home page, which plays a video hero and stays inside its own capture noise (see the control). No page paints Brik's Poppy palette after the change.</p>
+</div>
+
+<div class="decide">
+<p><strong>Open call (operator):</strong> AC4 go, i.e. may the next BDS release ship #2913? A release changes what client sites build against, so it waits for your go. #2913 merged to main on 2026-10-30, before this AC4 ran, so the next BDS release ships it whether or not this call is made first.</p>
+</div>
+
+<h2>1. Method</h2>
+<ul>
+  <li>Each site's <code>origin/main</code> was checked out in a detached worktree, and its <code>prebuild</code> (theme fetch) ran once, so both builds share the same theme inputs.</li>
+  <li><strong>Base:</strong> the site was built with BDS 0.217.0 from npm. <strong>Candidate:</strong> the site was built with a tarball of BDS main <code>8fe4e3f1</code> (<code>build:lib</code> and <code>check:esm</code> both exited 0).</li>
+  <li>Site commits: birdwell-mutlak <code>5b97307</code>, rebel-cfo <code>84d6b5d</code>, vale-partners <code>6b22905</code>.</li>
+  <li>Population: every <code>index.html</code> in each built <code>dist/</code>, giving Birdwell 36, Rebel 4 and Vale 14 pages. Vale's two Google site-verification <code>.html</code> files are not pages and were excluded.</li>
+  <li>Per page and per colour scheme, Playwright Chromium rendered a 1280px-wide full-page screenshot, with animations off and reduced motion. A pixel counted as changed when any channel moved by more than 8. Every custom property was also resolved on <code>&lt;html&gt;</code> and <code>&lt;body&gt;</code>, and each brand, accent or page slot was resolved to its painted colour.</li>
+  <li><strong>Positive control (the build really differs):</strong> the first <code>:root</code> block of <code>dist/tokens.css</code> contains Poppy 24 times in 0.217.0 and 0 times in main. On every page, 400 to 426 custom properties resolve differently and 88 to 153 brand slots paint differently. The candidate is therefore a different token cascade, not a rebuild of the same one.</li>
+  <li><strong>Noise control (the diff can see change):</strong> Vale home, base build captured against itself, gave 0.410% (light) and 3.492% (dark) changed pixels, all from its <code>&lt;video&gt;</code> hero.</li>
+</ul>
+
+<h2>2. Results</h2>
+<div class="wrap"><table>
+<tr><th>Site</th><th>Pages</th><th>Captures compared</th><th>Non-zero pixel diffs</th><th>Pages now painting Poppy</th><th>Custom props changed per page</th></tr>
+<tr><td>Birdwell Mutlak</td><td>36</td><td>71 of 72</td><td class="ok">0</td><td class="ok">0</td><td>0–426</td></tr>
+<tr><td>Rebel CFO</td><td>4</td><td>8 of 8</td><td class="ok">0</td><td class="ok">0</td><td>400</td></tr>
+<tr><td>Vale Partners</td><td>14</td><td>28 of 28</td><td>2 (home only: 0.035% light, 0.126% dark)</td><td class="ok">0</td><td>0–412</td></tr>
+</table></div>
+<ul>
+  <li><strong>Vale home:</strong> the diffs of 0.035% and 0.126% are below the base-against-base noise of 0.410% and 3.492% on the same page, so they are video frames, not token change.</li>
+  <li><strong>Uncompared capture:</strong> <code>/services/root-canal-therapy/</code> on Birdwell is a <code>&lt;meta http-equiv="refresh" content="0;url=/services/periodontal-care"&gt;</code> stub. Its light capture finished before the redirect fired (0 px). Its dark capture lost the race in 2 of 2 reruns. The page it redirects to is compared in both schemes (0 px).</li>
+  <li>Screenshot sizes matched on all 107 compared captures.</li>
+</ul>
+
+<h2>3. Latent Risk: Unbound Brand Slots Change Colour, Unseen</h2>
+<p>None of these slots paint on any measured page today. If a future section uses one without the site's theme binding it, the colour shown changes from Brik's Poppy to the Foundation grayscale. Neither colour is the client's brand, so the bug of an unbound slot already existed before #2913; the release only changes the colour it shows. The values below are for light mode.</p>
+<div class="wrap"><table>
+<tr><th>Site</th><th>Slot (example)</th><th>0.217.0</th><th>main</th></tr>
+<tr><td>Birdwell</td><td><code>--bds-text-brand-primary</code>, <code>--bds-border-brand-primary</code> (65 slots were Poppy)</td><td>rgb(227, 83, 53) Poppy</td><td>rgb(242, 242, 242)</td></tr>
+<tr><td>Birdwell, Rebel</td><td><code>--bds-background-accent</code></td><td>rgb(173, 170, 160) tan</td><td>rgb(255, 255, 255)</td></tr>
+<tr><td>Birdwell</td><td><code>--page-accent</code></td><td>rgb(71, 69, 60)</td><td>rgb(0, 0, 0)</td></tr>
+<tr><td>Vale</td><td><code>--bds-surface-brand-primary</code> (18 slots were Poppy)</td><td>rgb(227, 83, 53) Poppy</td><td>rgb(27, 27, 27)</td></tr>
+<tr><td>Vale</td><td><code>--page-accent</code>, <code>--bds-surface-accent</code></td><td>rgb(241, 240, 236)</td><td>rgb(19, 26, 8)</td></tr>
+<tr><td>All three</td><td><code>--bds-*-accent-red</code></td><td>rgb(227, 83, 53) Poppy</td><td>rgb(229, 36, 36) system red</td></tr>
+</table></div>
+<p>AGENT DECIDED (revisable): this is not a release blocker. Evidence: 0 changed pixels across the population, and the slots were already off-brand before the change. Revert: treat it as a blocker and bind each site's brand slots before release. Binding them is the remaining work in #2851 (steps 5 and 6).</p>
+
+<h2>4. Not Covered</h2>
+<ul>
+  <li>Other consumers of BDS (brikdesigns.com, the portal, other client sites) were not built. This AC covers the three sites #2910 names.</li>
+  <li>Only a 1280px viewport was tested. The token change is not viewport-dependent, but a narrow-only section that uses an unbound slot would not appear here.</li>
+  <li>Interactive states (hover, focus, open menus) were not driven. <code>-hover</code> brand slots do move (see §3).</li>
+</ul>
+
+</body>
+</html>
