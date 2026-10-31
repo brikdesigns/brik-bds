@@ -15,7 +15,7 @@ const GLYPH = createElement('i', { 'data-glyph': 'check' });
 const html = (props: Partial<ServiceTagProps>) =>
   renderToStaticMarkup(createElement(ServiceTag, { category: 'marketing', ...props }));
 
-const WRAPPER = 'class="bds-service-tag__icon bds-service-tag__icon--custom"';
+const WRAPPER = 'class="bds-service-tag__icon"';
 
 describe('ServiceTag icon slot', () => {
   it('replaces the service glyph in the icon variant', () => {
@@ -39,6 +39,6 @@ describe('ServiceTag icon slot', () => {
   it('keeps the bundled service glyph when no icon is passed', () => {
     const markup = html({ variant: 'icon', serviceName: 'Email Marketing' });
     expect(markup).toContain('<svg');
-    expect(markup).not.toContain('bds-service-tag__icon--custom');
+    expect(markup).not.toContain('<span aria-hidden="true" class="bds-service-tag__icon">');
   });
 });

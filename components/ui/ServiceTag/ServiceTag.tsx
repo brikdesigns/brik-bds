@@ -208,7 +208,7 @@ function ServiceTagIcon({ glyph, size }: { glyph: string; size: number }) {
  */
 function CustomIcon({ icon }: { icon: ReactNode }) {
   return (
-    <span aria-hidden className="bds-service-tag__icon bds-service-tag__icon--custom">
+    <span aria-hidden className="bds-service-tag__icon">
       {icon}
     </span>
   );
