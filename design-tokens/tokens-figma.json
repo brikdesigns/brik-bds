@@ -1382,22 +1382,6 @@
       "$value": "{color.grayscale.950}",
       "$type": "color"
     },
-    "accent-yellow": {
-      "$value": "{color.system.yellow}",
-      "$type": "color"
-    },
-    "accent-blue": {
-      "$value": "{color.system.blue}",
-      "$type": "color"
-    },
-    "accent-green": {
-      "$value": "{color.system.green}",
-      "$type": "color"
-    },
-    "accent-purple": {
-      "$value": "{color.system.purple}",
-      "$type": "color"
-    },
     "neutral": {
       "$value": "{color.system.neutral}",
       "$type": "color"
@@ -1417,10 +1401,6 @@
     },
     "error": {
       "$value": "{color.system.red}",
-      "$type": "color"
-    },
-    "success": {
-      "$value": "{color.system.green}",
       "$type": "color"
     },
     "accent-orange": {

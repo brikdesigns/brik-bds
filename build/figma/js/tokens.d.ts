@@ -336,17 +336,12 @@ export const textMuted: string;
 export const textInverse: string;
 export const textOnColorDark: string;
 export const textOnColorLight: string;
-export const textAccentYellow: string;
-export const textAccentBlue: string;
-export const textAccentGreen: string;
-export const textAccentPurple: string;
 export const textNeutral: string;
 export const textBrandPrimary: string;
 export const textTextLink: string;
 /** Disabled button text (all variants) */
 export const textDisabled: string;
 export const textError: string;
-export const textSuccess: string;
 export const textAccentOrange: string;
 export const borderNegative: string;
 export const borderPositive: string;

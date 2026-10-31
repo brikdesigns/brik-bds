@@ -97,10 +97,6 @@
   --bds-color-yellow-900: #795e1f;
   --bds-color-yellow-950: #634716;
   --bds-text-accent-red: var(--bds-color-poppy-500);
-  --bds-text-accent-yellow: var(--bds-color-yellow-500);
-  --bds-text-accent-blue: var(--bds-color-blue-300);
-  --bds-text-accent-green: var(--bds-color-green-300);
-  --bds-text-accent-purple: var(--bds-color-purple-500);
   --bds-text-brand-primary: var(--bds-color-poppy-500);
   --bds-text-accent-orange: var(--bds-color-orange-500);
   --bds-text-service-brand: var(--bds-color-yellow-600);
@@ -199,10 +195,6 @@
 
 :root[data-theme="dark"] .theme-brand-brik {
   --bds-text-accent-red: var(--bds-color-poppy-500);
-  --bds-text-accent-yellow: var(--bds-color-yellow-500);
-  --bds-text-accent-blue: var(--bds-color-blue-300);
-  --bds-text-accent-green: var(--bds-color-green-300);
-  --bds-text-accent-purple: var(--bds-color-purple-500);
   --bds-text-brand-primary: var(--bds-color-poppy-500);
   --bds-text-accent-orange: var(--bds-color-orange-500);
   --bds-text-service-brand: var(--bds-color-yellow-600);

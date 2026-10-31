@@ -498,12 +498,8 @@
   --surface-secondary-hover: var(--bds-surface-secondary-hover);
   --surface-secondary-pressed: var(--bds-surface-secondary-pressed);
   --surface-warning: var(--bds-surface-warning);
-  --text-accent-blue: var(--bds-text-accent-blue);
-  --text-accent-green: var(--bds-text-accent-green);
   --text-accent-orange: var(--bds-text-accent-orange);
-  --text-accent-purple: var(--bds-text-accent-purple);
   --text-accent-red: var(--bds-text-accent-red);
-  --text-accent-yellow: var(--bds-text-accent-yellow);
   --text-brand-primary: var(--bds-text-brand-primary);
   --text-brand-primary-strong: var(--bds-text-brand-primary-strong);
   --text-disabled: var(--bds-text-disabled);
@@ -519,7 +515,6 @@
   --text-positive: var(--bds-text-positive);
   --text-primary: var(--bds-text-primary);
   --text-secondary: var(--bds-text-secondary);
-  --text-success: var(--bds-text-success);
   --text-text-link: var(--bds-text-text-link);
   --text-transform-body: var(--bds-text-transform-body);
   --text-transform-display: var(--bds-text-transform-display);
@@ -766,12 +761,8 @@
   --surface-service-product-inverse: var(--bds-surface-service-product-inverse);
   --surface-service-product-light: var(--bds-surface-service-product-light);
   --text-accent: var(--bds-text-accent);
-  --text-accent-blue: var(--bds-text-accent-blue);
-  --text-accent-green: var(--bds-text-accent-green);
   --text-accent-orange: var(--bds-text-accent-orange);
-  --text-accent-purple: var(--bds-text-accent-purple);
   --text-accent-red: var(--bds-text-accent-red);
-  --text-accent-yellow: var(--bds-text-accent-yellow);
   --text-brand-primary: var(--bds-text-brand-primary);
   --text-brand-primary-strong: var(--bds-text-brand-primary-strong);
   --text-inverse: var(--bds-text-inverse);
@@ -901,12 +892,8 @@
   --surface-service-product-inverse: var(--bds-surface-service-product-inverse);
   --surface-service-product-light: var(--bds-surface-service-product-light);
   --text-accent: var(--bds-text-accent);
-  --text-accent-blue: var(--bds-text-accent-blue);
-  --text-accent-green: var(--bds-text-accent-green);
   --text-accent-orange: var(--bds-text-accent-orange);
-  --text-accent-purple: var(--bds-text-accent-purple);
   --text-accent-red: var(--bds-text-accent-red);
-  --text-accent-yellow: var(--bds-text-accent-yellow);
   --text-brand-primary: var(--bds-text-brand-primary);
   --text-brand-primary-strong: var(--bds-text-brand-primary-strong);
   --text-disabled: var(--bds-text-disabled);
@@ -1009,12 +996,8 @@
   --surface-secondary-hover: var(--bds-surface-secondary-hover);
   --surface-secondary-pressed: var(--bds-surface-secondary-pressed);
   --surface-warning: var(--bds-surface-warning);
-  --text-accent-blue: var(--bds-text-accent-blue);
-  --text-accent-green: var(--bds-text-accent-green);
   --text-accent-orange: var(--bds-text-accent-orange);
-  --text-accent-purple: var(--bds-text-accent-purple);
   --text-accent-red: var(--bds-text-accent-red);
-  --text-accent-yellow: var(--bds-text-accent-yellow);
   --text-brand-primary: var(--bds-text-brand-primary);
   --text-brand-primary-strong: var(--bds-text-brand-primary-strong);
   --text-disabled: var(--bds-text-disabled);
@@ -1028,7 +1011,6 @@
   --text-positive: var(--bds-text-positive);
   --text-primary: var(--bds-text-primary);
   --text-secondary: var(--bds-text-secondary);
-  --text-success: var(--bds-text-success);
   --text-text-link: var(--bds-text-text-link);
   --text-warning: var(--bds-text-warning);
 }
