@@ -2,7 +2,7 @@
   "schema": 1,
   "generated_by": "brikdesigns/brik-llm:scripts/reports/report-meta.py",
   "contract": "docs/reports/README.md#metadata-contract",
-  "count": 7,
+  "count": 8,
   "reports": [
     {
       "path": "docs/reports/2026-09-26-foundations-disconnect-assessment.html",
@@ -106,6 +106,21 @@
       "subject": "bds",
       "owner": "nstaner",
       "generated": "2026-10-27",
+      "supersedes": "none",
+      "cadence": "once",
+      "source": "manual"
+    },
+    {
+      "path": "docs/reports/theming-ac4-diff-2026-10-31.html",
+      "title": "Theming AC4 Diff — 2026-10-31",
+      "status": "active",
+      "type": "assessment",
+      "themes": [
+        "design-system"
+      ],
+      "subject": "bds",
+      "owner": "nstaner",
+      "generated": "2026-10-31",
       "supersedes": "none",
       "cadence": "once",
       "source": "manual"
