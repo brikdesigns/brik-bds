@@ -92,6 +92,31 @@
   flex-shrink: 0;
 }
 
+/* Consumer glyph (`icon` prop, #2417). Sized by font-size, never width/height,
+   so an <Icon> (1em) fills it; color inherits the service text token. The
+   icon-only steps sit at ~half the box — the 16px-in-32 ratio Figma's
+   `brik-tag-subscription` uses — and the pill steps match Tag's icon slot. */
+.bds-service-tag__icon--custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bds-service-tag--icon-sm .bds-service-tag__icon--custom {
+  font-size: var(--bds-icon-xs);
+}
+
+.bds-service-tag--sm .bds-service-tag__icon--custom,
+.bds-service-tag--md .bds-service-tag__icon--custom,
+.bds-service-tag--icon-md .bds-service-tag__icon--custom {
+  font-size: var(--bds-icon-sm);
+}
+
+.bds-service-tag--lg .bds-service-tag__icon--custom,
+.bds-service-tag--icon-lg .bds-service-tag__icon--custom {
+  font-size: var(--bds-icon-lg);
+}
+
 /* ─── Icon-only variant (square badge) ───────────────────────── */
 
 .bds-service-tag--icon {
