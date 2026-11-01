@@ -40,7 +40,7 @@ brikdesigns) via `@brikdesigns/bds/tokens.css`. Built by
 1. `figma-tokens.css` — auto-generated light-mode tokens (`:root`), **Foundations only** since #2910: no Brand Kit value reaches `:root`, so an unbound client slot falls back to the Foundations grayscale, never Poppy
 2. `figma-tokens-dark.css` — auto-generated dark-mode tokens (`:root[data-theme="dark"]`)
 3. `theme-brand-brik.generated.css` — Brik's Brand Kit compiled like a client kit (`npm run build:brand-brik`, via `compileClientTheme`), scoped to `.theme-brand-brik`; only Brik's delta over Foundations + gap-fills, compared on resolved values
-4. `theme-brand-brik.css` — hand-written Brik overrides, after the generated layer (scoped to `.theme-brand-brik` class)
+4. `theme-brand-brik.css` — hand-written Brik residue, after the generated layer (scoped to `.theme-brand-brik` class): only the gap-fill tokens the Brand Kit cannot carry (#2920)
 5. `modes-borderwidth.css` — borderWidth mode overrides (`[data-mode-borderwidth="thin|thick"]`) — auto-generated via `npm run build:modes`
 6. `modes-spacing.css` — spacing density mode overrides (`[data-mode-spacing="compact|comfortable|spacious"]`) — auto-generated from `design-tokens/tokens-studio.json` via `npm run build:modes`
 7. `modes-typography.css` — typography heading-scale-variant overrides (`[data-mode-typography="compact|comfortable|spacious|expressive"]`) — auto-generated from `design-tokens/tokens-studio.json` via `npm run build:modes`
@@ -163,7 +163,7 @@ A media query is resolved when the stylesheet is authored, not when an attribute
 |---|---|
 | Fix a value that came out of Figma wrong | Fix it in Figma and re-pull (`bun scripts/pull-variables.js … && node scripts/sync-figma-mcp.js …`). Add a manual `figma-corrections.css` only as a last resort when the Figma source genuinely can't be edited — and bundle it in `scripts/build-dist-tokens.js` after `figma-tokens-dark.css`. |
 | Add a semantic token Figma doesn't export | `gap-fills.css` |
-| Adjust Brik's brand colors / fonts | `theme-brand-brik.css` — consumers get these automatically when they apply `.theme-brand-brik` to `<body>` |
+| Adjust Brik's brand colors / fonts | The Figma Brik Brand Kit → `scripts/pull-variables-headless.mjs` + `sync-figma-mcp.js --library=brand-kit` → `npm run build:brand-brik` (`theme-brand-brik.generated.css`); `theme-brand-brik.css` only for a gap-fill token the Brand Kit cannot carry. Consumers get both when they apply `.theme-brand-brik` to `<body>` |
 | Wire a non-color mode pick (Thin/Bold/Compact/Round/etc.) into CSS overrides | `modes-{category}.css` (see § Non-color mode contracts for which modes are wired today) |
 | Add a Webflow-facing alias | `bridge.css` (deprecated layer) |
 | Touch an auto-generated file | Don't. Fix in Figma and re-pull, or add an override in a manual file. |
@@ -178,7 +178,7 @@ place for a correction is a manual file bundled AFTER the auto-generated ones.
 
 ## Manual (safe to edit)
 
-- `theme-brand-brik.css` — Brik brand overrides (class-scoped, bundled into dist)
+- `theme-brand-brik.css` — Brik gap-fill residue (class-scoped, bundled into dist); every other Brik value comes from the Brand Kit
 - `modes-borderwidth.css` — borderWidth mode overrides (`[data-mode-borderwidth]`-scoped, bundled into dist)
 - `gap-fills.css` — tokens Figma doesn't export yet
 - `bridge.css` — legacy Webflow aliases (deprecated, opt-in only)

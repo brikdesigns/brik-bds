@@ -33,7 +33,8 @@ BDS sources tokens from two logical [Libraries](/docs/getting-started/figma-libr
                               ▼
         tokens/figma-tokens.css         (Foundations primitives + base semantics — @layer bds-tokens)
         tokens/figma-tokens-dark.css    (Foundations dark — scoped to [data-theme="dark"])
-        tokens/theme-brand-brik.css     (Brik Brand Kit — scoped to .theme-brand-brik)
+        tokens/theme-brand-brik.generated.css (Brik Brand Kit — scoped to .theme-brand-brik)
+        tokens/theme-brand-brik.css     (Brik gap-fill residue)
         build/figma/js/tokens.mjs       (JS object form)
         build/figma/swift/*.swift       (iOS sync)
                               │ scripts/build-dist-tokens.js
@@ -60,7 +61,7 @@ BDS sources tokens from two logical [Libraries](/docs/getting-started/figma-libr
 | `npm run build:lib` | full repo | Publishable `dist/` |
 
 <Callout type="warn">
-  **Never hand-edit `tokens/figma-tokens.css` or `tokens/figma-tokens-dark.css`.** They're regenerated on every build and your edit will silently disappear. Add the token to the appropriate **Library** in Figma → re-pull → rerun `build:sd-figma`. The only manual token files are `tokens/gap-fills.css` (tokens not yet in Figma — destined to migrate) and `tokens/theme-brand-brik.css` (Brik's own Brand Kit — pending automated emission from a Brand Kit pull).
+  **Never hand-edit `tokens/figma-tokens.css` or `tokens/figma-tokens-dark.css`.** They're regenerated on every build and your edit will silently disappear. Add the token to the appropriate **Library** in Figma → re-pull → rerun `build:sd-figma`. The only manual token files are `tokens/gap-fills.css` (tokens not yet in Figma — destined to migrate) and `tokens/theme-brand-brik.css` (the few Brik gap-fill tokens the Brand Kit cannot carry — Brik's colors themselves come from the Brand Kit pull).
 </Callout>
 
 <Callout type="error">
