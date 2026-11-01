@@ -3,8 +3,7 @@
  * Source: design-tokens/brand-kits/brik.json via compileClientTheme.
  * Regenerate: node scripts/build-brand-brik-theme.mjs (brik-bds#2910).
  *
- * Brik's delta over the Foundations `:root` only. The gap-fill tokens the
- * Brand Kit cannot carry load after this, from tokens/theme-brand-brik.css.
+ * Brik's delta over the Foundations `:root` only, gap-fills included.
  */
 
 .theme-brand-brik {
@@ -96,6 +95,7 @@
   --bds-color-yellow-800: #8e7729;
   --bds-color-yellow-900: #795e1f;
   --bds-color-yellow-950: #634716;
+  --bds-background-image: rgba(23, 23, 23, 0.6);
   --bds-text-accent-red: var(--bds-color-poppy-500);
   --bds-text-secondary: var(--bds-color-grayscale-800);
   --bds-text-muted: var(--bds-color-grayscale-700);
@@ -117,6 +117,7 @@
   --bds-text-service-brand-on-light: var(--bds-color-yellow-950);
   --bds-text-service-marketing-on-dark: var(--bds-color-green-200);
   --bds-text-accent: var(--bds-color-tan-700);
+  --bds-text-brand-primary-strong: var(--bds-color-poppy-700);
   --bds-border-secondary: var(--bds-color-grayscale-300);
   --bds-border-muted: var(--bds-color-grayscale-300);
   --bds-border-brand-primary: var(--bds-color-poppy-500);
@@ -153,6 +154,8 @@
   --bds-background-service-product-on-dark: var(--bds-color-purple-100);
   --bds-background-service-information-on-dark: var(--bds-color-blue-200);
   --bds-background-accent: var(--bds-color-tan-400);
+  --bds-background-brand-secondary: var(--bds-color-tan-100);
+  --bds-background-image-brand: var(--bds-color-poppy-500);
   --bds-surface-brand-primary: var(--bds-color-poppy-500);
   --bds-surface-brand-primary-hover: var(--bds-color-poppy-700);
   --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800);
@@ -183,6 +186,7 @@
   --bds-surface-service-information-inverse: var(--bds-color-grayscale-white);
   --bds-surface-service-brand-inverse: var(--bds-color-grayscale-white);
   --bds-surface-accent: var(--bds-color-tan-100);
+  --bds-surface-brand-secondary: var(--bds-color-tan-100);
   --bds-page-brand-primary: var(--bds-color-poppy-500);
   --bds-page-accent-yellow: var(--bds-color-yellow-500);
   --bds-page-accent-orange: var(--bds-color-orange-500);
@@ -200,6 +204,7 @@
 }
 
 :root[data-theme="dark"] .theme-brand-brik {
+  --bds-background-image: rgba(0, 0, 0, 0.8);
   --bds-text-accent-red: var(--bds-color-poppy-500);
   --bds-text-secondary: var(--bds-color-grayscale-300);
   --bds-text-muted: var(--bds-color-grayscale-700);
@@ -222,6 +227,7 @@
   --bds-text-service-brand-on-light: var(--bds-color-yellow-950);
   --bds-text-service-marketing-on-dark: var(--bds-color-green-300);
   --bds-text-accent: var(--bds-color-tan-400);
+  --bds-text-brand-primary-strong: var(--bds-color-poppy-500);
   --bds-border-primary: var(--bds-color-grayscale-800);
   --bds-border-secondary: var(--bds-color-grayscale-700);
   --bds-border-muted: var(--bds-color-grayscale-700);
@@ -264,6 +270,8 @@
   --bds-background-service-product-on-dark: var(--bds-color-purple-300);
   --bds-background-service-information-on-dark: var(--bds-color-blue-300);
   --bds-background-accent: var(--bds-color-tan-500);
+  --bds-background-brand-secondary: var(--bds-color-grayscale-950);
+  --bds-background-image-brand: var(--bds-color-poppy-500);
   --bds-surface-primary: var(--bds-color-grayscale-black);
   --bds-surface-brand-primary: var(--bds-color-poppy-500);
   --bds-surface-brand-primary-hover: var(--bds-color-poppy-700);
@@ -295,6 +303,8 @@
   --bds-surface-service-information-inverse: var(--bds-color-blue-950);
   --bds-surface-service-brand-inverse: var(--bds-color-yellow-950);
   --bds-surface-accent: var(--bds-color-grayscale-950);
+  --bds-surface-brand-secondary: var(--bds-color-grayscale-950);
+  --bds-surface-nav: var(--bds-color-grayscale-black);
   --bds-page-secondary: var(--bds-color-grayscale-800);
   --bds-page-brand-primary: var(--bds-color-poppy-500);
   --bds-page-accent-yellow: var(--bds-color-yellow-500);

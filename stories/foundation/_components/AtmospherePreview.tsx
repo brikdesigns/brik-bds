@@ -7,7 +7,6 @@ import figmaTokensUrl from '../../../tokens/figma-tokens.css?url';
 import figmaTokensDarkUrl from '../../../tokens/figma-tokens-dark.css?url';
 import gapFillsUrl from '../../../tokens/gap-fills.css?url';
 import themeBrandBrikGeneratedUrl from '../../../tokens/theme-brand-brik.generated.css?url';
-import themeBrandBrikUrl from '../../../tokens/theme-brand-brik.css?url';
 
 /**
  * Supported Storybook theme identifier (mirrors `tokens/storybook-themes.ts`).
@@ -39,7 +38,7 @@ interface Props {
  * to its own document.
  *
  * Inside the iframe: BDS tokens load first (figma-tokens → gap-fills →
- * theme-brand-brik.generated → theme-brand-brik), then the atmosphere CSS cascades on top. The
+ * theme-brand-brik.generated), then the atmosphere CSS cascades on top. The
  * composite body uses BDS token references so theme switches are visible
  * on the tokens the atmosphere does NOT override (type, radius, gap, etc).
  */
@@ -139,7 +138,6 @@ function buildPreviewHTML(atmosphere: Atmosphere, cssHref: string, themeNumber: 
 <link rel="stylesheet" href="${figmaTokensDarkUrl}">
 <link rel="stylesheet" href="${gapFillsUrl}">
 <link rel="stylesheet" href="${themeBrandBrikGeneratedUrl}">
-<link rel="stylesheet" href="${themeBrandBrikUrl}">
 <!-- Atmosphere layer (cascades on top) -->
 <link rel="stylesheet" href="${cssHref}">
 <style>

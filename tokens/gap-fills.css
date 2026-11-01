@@ -97,7 +97,7 @@
      :root[data-theme="dark"] block below). --bds-text-brand-primary serves a
      heading/accent role and is gated AA-large (3:1) on the strength of that
      size; a brand-colored label at SMALL size has had no token, so the usage
-     rule (BDS-18, restated in theme-brand-brik.css) sends small copy to
+     rule (BDS-18) sends small copy to
      --bds-text-primary, which drops the brand entirely.
 
      TableOfContents `variant="rail"` is the first surface that needs both: a
@@ -108,15 +108,15 @@
      near-black secondary surface); darkening there would sink it.
 
      Gated as "Rail TOC active label on secondary surface" in
-     contrast-pairings.json. Declared here rather than in theme-brand-brik.css
+     contrast-pairings.json. Declared here rather than only as a Brik override
      because it is a new Semantic token, not a brand re-pin of a generated one
      (CASCADE.md § "Add a semantic token Figma doesn't export"), and because
      lint-tokens.js resolves the canonical registry from this file, not the
      brand theme. RETIRE once the Figma source emits it. (#2270)
 
      This :root value is the Foundations default, the same grayscale step as
-     --bds-text-brand-primary. Brik's darker brand pin lives in theme-brand-brik.css,
-     because :root is Foundations-only since #2910. */
+     --bds-text-brand-primary. Brik's darker brand pin is a Brand Kit variable
+     (#2927), because :root is Foundations-only since #2910. */
   --bds-text-brand-primary-strong: var(--bds-color-grayscale-950);
 
   /* System color surface variants (used by TaskConsole status rows) */
@@ -149,10 +149,10 @@
   /* ── Semantic Tokens Not Yet in Figma/SD ── */
   --bds-surface-nav: var(--bds-color-grayscale-white);
   --bds-surface-navigation: var(--bds-color-grayscale-white); /* canonical; --bds-surface-nav kept for backward compat */
-  --bds-surface-brand-secondary: var(--bds-color-grayscale-100); /* Foundations default; yellow-500 was a Brand Kit primitive, and Brik pins its own in theme-brand-brik.css (#2910) */
+  --bds-surface-brand-secondary: var(--bds-color-grayscale-100); /* Foundations default; yellow-500 was a Brand Kit primitive, and Brik pins its own in the Brand Kit (#2927) */
   --bds-background-brand-secondary: var(--bds-color-grayscale-white);
   --bds-background-image: #17171799; /* bds-lint-ignore — semi-transparent dark overlay; no primitive equivalent exists yet. Promote to Figma once an opacity token primitive is available. */
-  --bds-background-image-brand: var(--bds-color-grayscale-950); /* Foundations default, = --bds-background-brand-primary; Brik's brand fill is in theme-brand-brik.css (#2910) */
+  --bds-background-image-brand: var(--bds-color-grayscale-950); /* Foundations default, = --bds-background-brand-primary; Brik's brand fill is in the Brand Kit (#2927) */
   /* `none`, not `0px`: box-shadow needs at least two lengths, so
      `box-shadow: 0px` is invalid and the declaration is dropped. Card's seven
      `box-shadow: var(--bds-box-shadow-none)` sites therefore rendered no shadow by
@@ -597,8 +597,8 @@
      in :root): the Foundations dark --bds-text-brand-primary step. Pinned
      explicitly rather than left to inherit the :root value, to keep the
      light/dark pair in lockstep and self-documenting — the same reason
-     --bds-text-positive is repeated here. Brik's brand pair lives in
-     theme-brand-brik.css (#2270, #2910). */
+     --bds-text-positive is repeated here. Brik's brand pair is a Brand Kit
+     variable (#2270, #2927). */
   --bds-text-brand-primary-strong: var(--bds-color-grayscale-100);
 
   /* Dark values for the disabled pair (light values above, in :root). The

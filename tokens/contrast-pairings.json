@@ -69,7 +69,7 @@
       "fg": "--bds-text-primary",
       "bg": "--bds-background-secondary",
       "thresholdType": "AA-large",
-      "note": "Button --secondary and Chip --secondary labels. Absent from this dataset until #1689, which is why dark --bds-background-secondary could sit at 3.43:1 against --bds-text-primary unnoticed while the two --bds-text-on-color-light pairings above kept it looking gated. Gated AA-large (3:1), not AA: the token carries two OPPOSITE foregrounds \u2014 this light one and the black --bds-text-on-color-light \u2014 and no grayscale step clears 4.5:1 for both (-light: 3.43 / 5.46; -dark: 6.16 / 3.04). Both consumers are control labels, the case ADR-015 and #1571 already hold at AA-large. Body copy must NOT use this fill; the reasoning is recorded on the declaration in tokens/theme-brand-brik.css."
+      "note": "Button --secondary and Chip --secondary labels. Absent from this dataset until #1689, which is why dark --bds-background-secondary could sit at 3.43:1 against --bds-text-primary unnoticed while the two --bds-text-on-color-light pairings above kept it looking gated. Gated AA-large (3:1), not AA: the token carries two OPPOSITE foregrounds \u2014 this light one and the black --bds-text-on-color-light \u2014 and no grayscale step clears 4.5:1 for both (-light: 3.43 / 5.46; -dark: 6.16 / 3.04). Both consumers are control labels, the case ADR-015 and #1571 already hold at AA-large. Body copy must NOT use this fill (#1689)."
     },
     {
       "group": "neutral",
@@ -607,7 +607,7 @@
       "appliesTo": [
         "light"
       ],
-      "note": "Badge `appearance=\"subtle\" tone=\"brand\"` (Badge.css). --bds-background-brand-secondary resolves per theme (theme-brand-brik.css): --bds-color-tan-100 in light, --bds-color-grayscale-950 in dark — found during the #2402 subtle-tone family audit. The original --bds-text-brand-primary (--bds-color-poppy-500) measured 3.32:1 on tan-100 (fails) but 4.56:1 on grayscale-950 (already passed), so a single static color can't fix both: Badge.css pins light to --bds-color-poppy-700 (5.46:1 on tan-100) via a `:root[data-theme=\"dark\"]` override, split into two `appliesTo`-scoped rows here (mirroring the `service` group's light/dark pairs above) since the component swaps `fg` by theme, which a single row can't express."
+      "note": "Badge `appearance=\"subtle\" tone=\"brand\"` (Badge.css). --bds-background-brand-secondary resolves per theme (theme-brand-brik.generated.css): --bds-color-tan-100 in light, --bds-color-grayscale-950 in dark — found during the #2402 subtle-tone family audit. The original --bds-text-brand-primary (--bds-color-poppy-500) measured 3.32:1 on tan-100 (fails) but 4.56:1 on grayscale-950 (already passed), so a single static color can't fix both: Badge.css pins light to --bds-color-poppy-700 (5.46:1 on tan-100) via a `:root[data-theme=\"dark\"]` override, split into two `appliesTo`-scoped rows here (mirroring the `service` group's light/dark pairs above) since the component swaps `fg` by theme, which a single row can't express."
     },
     {
       "group": "brand",

@@ -25,7 +25,7 @@
  * tokens (`--text-*`, `--background-*`, `--border-*`, `--interaction-*`) or the
  * mode-scoped scales (`--font-size-*`, `--space-*`, `--border-radius-*`): those
  * are redeclared per theme and per mode across figma-tokens-dark.css,
- * theme-brand-brik.css and modes-*.css, so "the" value is a cascade question
+ * theme-brand-brik.generated.css and modes-*.css, so "the" value is a cascade question
  * with no single answer a generator can pick. Color primitives are declared once,
  * in `:root`, and are mode-invariant. Annotated entries naming anything else are
  * left alone (and reported by --check as unmanaged, not as drift).

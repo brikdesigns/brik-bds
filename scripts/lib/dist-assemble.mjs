@@ -38,19 +38,14 @@ export function assembleCanonical(read, log = () => {}) {
   }
 
   // Brik brand theme — applied when consumer sets .theme-brand-brik on <body>.
-  // The generated layer (Brik's Brand Kit through compileClientTheme, #2910)
-  // loads first; the hand-written deliberate overrides load after it and win.
+  // Brik's Brand Kit through compileClientTheme (#2910) carries every Brik
+  // override since #2927 retired the hand-written layer.
   // Optional: a git ref from before #2910 has no generated file.
   let themeBrandBrik = '';
   const brandGenerated = read('tokens/theme-brand-brik.generated.css');
   if (brandGenerated !== null) {
     themeBrandBrik += '\n\n' + brandGenerated;
     log('  ✓ Including generated Brik brand theme');
-  }
-  const brand = read('tokens/theme-brand-brik.css');
-  if (brand !== null) {
-    themeBrandBrik += '\n\n' + brand;
-    log('  ✓ Including Brik brand theme');
   }
 
   let modeOverrides = '';

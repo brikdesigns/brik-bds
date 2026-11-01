@@ -205,7 +205,7 @@
   color: var(--bds-text-info);
 }
 
-/* --bds-background-brand-secondary resolves per theme (theme-brand-brik.css):
+/* --bds-background-brand-secondary resolves per theme (theme-brand-brik.generated.css):
    --bds-color-tan-100 in light, --bds-color-grayscale-950 (near-black) in dark — the
    opposite direction fix each theme needs, so one static color can't clear
    both. --bds-text-brand-primary (--bds-color-poppy-500) measured 3.32:1 on

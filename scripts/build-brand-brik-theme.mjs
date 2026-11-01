@@ -26,9 +26,9 @@
  * light value on <body> beats the dark value `:root[data-theme="dark"]` sets on
  * <html>, because the body's own declaration wins over inheritance.
  *
- * The hand-written tokens/theme-brand-brik.css still loads AFTER this layer,
- * holding only the gap-fill names withGaps() would overwrite if the Brand Kit
- * declared them. Every other Brik override is a Brand Kit variable (#2920).
+ * Every Brik override is a Brand Kit variable, gap-fill names included: the kit
+ * wins over a gap-fill for each name it declares. #2927 retired the
+ * hand-written tokens/theme-brand-brik.css that used to load after this layer.
  *
  * Usage:
  *   node scripts/build-brand-brik-theme.mjs           # write
@@ -86,6 +86,20 @@ function blockDeclarations(css, selector) {
   return declarations(text.slice(start, text.indexOf('\n}', start)));
 }
 
+/** The `--bds-*` name of every variable in the kit's light and dark color collections. */
+function kitDeclaredNames(kit) {
+  const names = new Set();
+  const walk = (node, path) => {
+    for (const [key, child] of Object.entries(node)) {
+      if (key.startsWith('$') || !child || typeof child !== 'object') continue;
+      if ('$value' in child) names.add(`--bds-${[...path, key].join('-')}`);
+      else walk(child, [...path, key]);
+    }
+  };
+  for (const collection of ['color/light', 'color/dark']) walk(kit[collection] ?? {}, []);
+  return names;
+}
+
 const kit = JSON.parse(readFileSync(KIT, 'utf8'));
 
 // gap-fills.css sits on `:root` with the Foundations primitives, so a gap-fill
@@ -95,12 +109,17 @@ const kit = JSON.parse(readFileSync(KIT, 'utf8'));
 const gapFills = readFileSync(GAP_FILLS, 'utf8');
 const gapLight = blockDeclarations(gapFills, ':root');
 const gapDark = blockDeclarations(gapFills, ':root[data-theme="dark"]');
-const withGaps = (decls, ...layers) => new Map([...decls, ...layers.flatMap((layer) => [...layer])]);
+// The Brand Kit wins over a gap-fill for every name it declares, so a Brik
+// override can live in Figma even when its name is a gap-fill (#2927). A
+// gap-fill still wins over a Foundations name, as it does on `:root`.
+const kitNames = kitDeclaredNames(kit);
+const withGaps = (decls, layers, keep = new Set()) =>
+  new Map([...decls, ...layers.flatMap((layer) => [...layer]).filter(([name]) => !keep.has(name))]);
 
-const brikLight = withGaps(declarations(await compileClientTheme(kit)), gapLight);
-const baseLight = withGaps(declarations(await compileClientTheme({})), gapLight);
-const brikDark = withGaps(declarations(await compileClientTheme(kit, { modes: { color: 'dark' } })), gapLight, gapDark);
-const baseDark = withGaps(declarations(await compileClientTheme({}, { modes: { color: 'dark' } })), gapLight, gapDark);
+const brikLight = withGaps(declarations(await compileClientTheme(kit)), [gapLight], kitNames);
+const baseLight = withGaps(declarations(await compileClientTheme({})), [gapLight]);
+const brikDark = withGaps(declarations(await compileClientTheme(kit, { modes: { color: 'dark' } })), [gapLight, gapDark], kitNames);
+const baseDark = withGaps(declarations(await compileClientTheme({}, { modes: { color: 'dark' } })), [gapLight, gapDark]);
 
 const rBrikLight = resolver(brikLight);
 const rBaseLight = resolver(baseLight);
@@ -124,8 +143,7 @@ const output =
   ` * Source: design-tokens/brand-kits/brik.json via compileClientTheme.\n` +
   ` * Regenerate: node scripts/build-brand-brik-theme.mjs (brik-bds#2910).\n` +
   ` *\n` +
-  ` * Brik's delta over the Foundations \`:root\` only. The gap-fill tokens the\n` +
-  ` * Brand Kit cannot carry load after this, from tokens/theme-brand-brik.css.\n` +
+  ` * Brik's delta over the Foundations \`:root\` only, gap-fills included.\n` +
   ` */\n\n` +
   block(LIGHT_SELECTOR, light) +
   '\n' +
