@@ -1,36 +1,80 @@
 @layer bds-components {
 /* ─── FieldGrid ────────────────────────────────────────────────── */
 
+/*
+ * Two elements, because `@container` queries an ANCESTOR: a rule can restyle
+ * a descendant of the container, never the container itself. The root is the
+ * size container (`container-type: inline-size`, width = the parent's content
+ * width, so it measures the panel the grid sits in, not the viewport); the
+ * inner `__cells` element is the grid whose column count changes.
+ *
+ * Why a wrapper instead of `container-type` on the caller's parent: BDS does not
+ * control the parent (a Sheet body, a PageContent, a Card), and setting
+ * containment there would be a side effect on every consumer.
+ *
+ * The `--cols-N` / `--gap-*` modifiers stay on the root, where they always were,
+ * and target the cells element from there.
+ *
+ * Inline-size containment gives the root no intrinsic width, so it sizes like
+ * any block: fill the parent. Place it in a flex row only with a `flex` basis.
+ */
 .bds-field-grid {
-  display: grid;
+  container-type: inline-size;
   text-align: left;
+}
+
+.bds-field-grid__cells {
+  display: grid;
 }
 
 /* ─── Columns ───────────────────────────────────────────────── */
 
-.bds-field-grid--cols-2 {
+/*
+ * `columns` is a MAXIMUM. Every grid starts at 2 columns (narrow container) and
+ * adds columns as the container widens, up to its own `columns` value.
+ *
+ *   container < 480px         2 columns
+ *   480px <= container < 720  3 columns (a `columns={2}` grid stays at 2)
+ *   container >= 720px        4 columns (a `columns={3}` grid stays at 3)
+ *
+ * The two thresholds are literal px because a container condition cannot read
+ * var(), and no container-width scale exists in the token registry (see
+ * `--bds-grid-min-col-width` in scripts/lint-tokens.js). They are measured in
+ * FieldGrid.mdx § Container thresholds; keep this table, the mdx and the
+ * browser test in step.
+ */
+.bds-field-grid--cols-2 > .bds-field-grid__cells,
+.bds-field-grid--cols-3 > .bds-field-grid__cells,
+.bds-field-grid--cols-4 > .bds-field-grid__cells {
   grid-template-columns: 1fr 1fr;
 }
 
-.bds-field-grid--cols-3 {
-  grid-template-columns: 1fr 1fr 1fr;
+@container (min-width: 480px) {
+  .bds-field-grid--cols-3 > .bds-field-grid__cells,
+  .bds-field-grid--cols-4 > .bds-field-grid__cells {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
-.bds-field-grid--cols-4 {
-  grid-template-columns: repeat(4, 1fr);
+@container (min-width: 720px) {
+  .bds-field-grid--cols-4 > .bds-field-grid__cells {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 /* ─── Gaps ──────────────────────────────────────────────────── */
 
-.bds-field-grid--gap-md {
+/* Declared once per gap size, outside every @container rule, so the same token
+   resolves at every column count. */
+.bds-field-grid--gap-md > .bds-field-grid__cells {
   gap: var(--bds-gap-md);
 }
 
-.bds-field-grid--gap-lg {
+.bds-field-grid--gap-lg > .bds-field-grid__cells {
   gap: var(--bds-gap-lg);
 }
 
-.bds-field-grid--gap-xl {
+.bds-field-grid--gap-xl > .bds-field-grid__cells {
   gap: var(--bds-gap-xl);
 }
 }

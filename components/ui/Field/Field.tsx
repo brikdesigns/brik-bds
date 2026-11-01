@@ -7,6 +7,7 @@ export type FieldOrientation = 'vertical' | 'horizontal';
 /** @deprecated Renamed `FieldOrientation`; values `stacked`/`inline` → `vertical`/`horizontal` (ADR-033 § 2). */
 export type FieldLayout = FieldOrientation;
 
+export type FieldSpan = 'full';
 export type FieldTier = 'standard' | 'compact';
 export type FieldHelperTone = 'neutral' | 'negative';
 
@@ -47,6 +48,11 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
    * treatment is warranted — prefer inline text for per-row empties.
    */
   empty?: ReactNode;
+  /**
+   * `full` spans every column of a parent `FieldGrid` at every width. Omit it for
+   * the default single cell. No effect outside a grid.
+   */
+  span?: FieldSpan;
   /** Helper or validation text rendered below the value. */
   helper?: ReactNode;
   /** Tone for the helper slot. `neutral` = muted gray (default). `negative` = red. */
@@ -77,6 +83,7 @@ export function Field({
   layout,
   tier,
   empty = 'Not set',
+  span,
   helper,
   helperTone,
   className,
@@ -103,6 +110,7 @@ export function Field({
         // Only an explicit tier emits a class. No class = the container's
         // inherited default applies, which is how context adaptivity works.
         tier && `bds-field--${tier}`,
+        span && `bds-field--span-${span}`,
         className,
       )}
       style={style}

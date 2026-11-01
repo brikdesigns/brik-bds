@@ -27,6 +27,10 @@ Field has no semantic-variant axis — all variation (label, value content, orie
 
 ## Patterns
 
+### Full-width in a FieldGrid
+
+`span="full"` makes a Field span every column of its parent [`FieldGrid`](?path=/docs/components-field-grid--docs) at every width, which stays correct as the grid steps between 4, 3 and 2 columns. Without it a Field takes one cell. It has no effect outside a grid. See the `FullSpan` story on `FieldGrid`.
+
 ### Composite empty
 
 When an entire section has no data (vs. one missing field), pass an `<EmptyState>` into `empty`. Use the full bordered treatment sparingly — one per section at most.

@@ -20,6 +20,15 @@
   justify-content: space-between;
 }
 
+/* ─── Span ──────────────────────────────────────────────────── */
+
+/* `1 / -1` runs from the first to the last explicit grid line, so it spans every
+   column at every width — FieldGrid changes its column count per container, and
+   this needs no matching rule. Inert outside a grid. */
+.bds-field--span-full {
+  grid-column: 1 / -1;
+}
+
 /* ─── Label ───────────────────────────────────────────────── */
 
 /*
