@@ -29,7 +29,7 @@ The trigger was an events-landing cleanup (BRIK-WEB-68): a single CMS prose blob
    | paragraph → paragraph (wide) | `--gap-lg` | 16 | 8 | 40 | 56 |
    | block → block (unchanged) | `--gap-xl` | 24 | 16 | 48 | 104 |
 
-   `--gap-xs` and `--gap-tiny` are **excluded**: both resolve to `0px` in compact/comfortable/spacious modes (verified in `dist/tokens.css`), which would collapse the tight gap outside default mode. `sm/md/lg` are the tightest tokens that stay non-zero and monotonic across all four modes and nest under the existing `--gap-xl` section gap without collision.
+   `--gap-xs` and `--gap-tiny` are **excluded**: they are sub-step slivers (1–8px) that do not track the rest of the ladder across modes — see the 2026-10-31 amendment below, which corrects this paragraph's original zero-value rationale. `sm/md/lg` are the tightest tokens that stay non-zero and monotonic across all four modes and nest under the existing `--gap-xl` section gap without collision.
 
 4. **`Blocks/` Storybook category.** Adds the missing layer→category mapping (`Layouts/` and `Containers/` already mirror their layers; the Block layer had no category and `Field` was misfiled under `Components/`). Houses `ContentBlock` + `Prose` now; `MediaBlock`/`Stat`/`Field` migrate later. Rejected `Text/` — the Block layer also holds non-text units (`MediaBlock`, `Stat`), so a text-scoped category would fracture one layer across two.
 
@@ -50,6 +50,19 @@ This is the shape the system had already settled on in four places before this A
 - It does not compose — two nested bands, or a neutral card inside a brand band, would need an un-set escape hatch the class model has no room for.
 
 **Contrast is recorded, not raised.** `--text-on-color-dark` on `--surface-brand-primary` is **3.78:1 in both modes** (`--surface-brand-primary` is `--color-poppy-500` under `.theme-brand-brik` in light *and* dark), verified by `npm run contrast-gate`. That clears AA-large (3:1) and fails AA (4.5:1), which is the locked policy for brand-primary fills (`tokens/contrast-pairings.json` policy line, BDS-22 / ADR-015) and what `Banner --tone-announcement` already ships. The pairing is added to the dataset with the honest AA-large threshold and a note that this block, unlike a control label, carries body copy. Raising it means darkening the brand fill — a brand decision under #526, not a component one. Consumers keep band descriptions short.
+
+## Amendment 2026-10-31 — corrected rationale for the `--gap-xs` / `--gap-tiny` exclusion (#2735)
+
+The exclusion in Decision § 3 stands; its stated reason was wrong. The original text said both tokens resolve to zero outside default mode. They do not. Measured on `origin/main` 2026-10-05 (`tokens/figma-tokens.css:280-281`, `tokens/modes-spacing.css`):
+
+| Mode | `--gap-tiny` | `--gap-xs` | Source |
+|---|---|---|---|
+| default | 2px | 4px | `tokens/figma-tokens.css:280-281` (`--bds-space-50`, `--bds-space-100`) |
+| compact | 1px | 2px | `tokens/modes-spacing.css:31,33` |
+| comfortable | 2px (inherits default) | 4px (inherits default) | the comfortable block sets neither |
+| spacious | 4px | 8px | `tokens/modes-spacing.css:68,70` |
+
+Non-zero in every mode. The true reason for the ban: at 1–8px these are sub-step slivers. In compact they read as a 1–2px hairline, and in comfortable they inherit the default value while `--gap-sm` grows 6→8px, so the tight step does not re-modulate with the rest of the ladder. `sm/md/lg` are the tightest rungs that move with the mode. The ban and the `lint-content-rhythm` gate are unchanged.
 
 ## Consequences
 

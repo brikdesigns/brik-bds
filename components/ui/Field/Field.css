@@ -9,7 +9,7 @@
 .bds-field--orientation-vertical {
   flex-direction: column;
   /* Label ↔ value is the tight step (ADR-023 content-rhythm map: --bds-gap-sm);
-     --bds-gap-xs collapses to 0px outside default spacing mode. */
+     --bds-gap-xs is a 2–8px sliver that does not re-modulate with the ladder. */
   gap: var(--bds-gap-sm);
 }
 
