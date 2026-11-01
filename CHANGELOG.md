@@ -16,6 +16,10 @@ a consumer greps this file before bumping.
 > `#1186` will add the manifest + CI check that *enforces* this section. Until
 > it lands, the entry is a convention, not a gate.
 
+## v0.220.0 — 2026-11-01
+
+`FieldGrid` `columns` is now a maximum that steps down with its container width (`4` → 3 → 2 below `720px` / `480px`, `3` → 2 below `480px`; `2` is unchanged), and `Field` takes `span="full"`. No class hook renamed or removed. **Structure change:** `.bds-field-grid` is now the size container and the grid itself is its new child `.bds-field-grid__cells`; the `--cols-N` / `--gap-*` modifiers stay on the root. An override that set `grid-template-columns` or `gap` on `.bds-field-grid` must target `.bds-field-grid__cells` instead.
+
 ## v0.202.0 — 2026-10-20
 
 Adds an opt-in `lazy` prop to `GhlForm` (React + Astro). Additive; no class-hook changes. With `lazy`, the iframe omits `src` and carries the URL on `data-src`; the page sets `frame.src = frame.dataset.src` when the form is first shown. Default output is unchanged.
