@@ -428,8 +428,9 @@
      (300 #e0e0e0 behind 700 #5a5a5a; re-derived against the current ramp at
      #1809, replacing an unreproducible 5.45:1).
      --bds-border-disabled stays at the generated -light: it is the edge against the
-     page, not against the fill. Dark mode is corrected in theme-brand-brik.css,
-     which owns the dark values at a higher specificity than this block.
+     page, not against the fill. Dark mode is corrected in the Brik Brand Kit
+     (theme-brand-brik.generated.css), which owns the dark values at a higher
+     specificity than this block.
 
      RETIRE both lines once the Figma variables are corrected and re-synced. */
   --bds-background-disabled: var(--bds-color-grayscale-300);
@@ -569,7 +570,7 @@
    Re-pins generated (figma-tokens-dark.css) values that are wrong in dark mode.
    Last in cascade + same specificity as the generated :root[data-theme="dark"]
    block, so these win for ALL consumers (the brand theme also pins them, at
-   higher specificity, in theme-brand-brik.css).
+   higher specificity, in theme-brand-brik.generated.css).
    RETIRE each entry once the Figma source is corrected and re-synced. */
 :root[data-theme="dark"] {
   /* Dark value for the --bds-background-tertiary gap-fill (light value above, in
@@ -604,8 +605,8 @@
      generated dark layer repeats the light-mode defect — figma-tokens-dark.css
      emits BOTH --bds-text-disabled and --bds-background-disabled as
      --bds-color-grayscale-700, so a consumer running data-theme="dark" WITHOUT
-     .theme-brand-brik gets the same 1:1 invisible label. theme-brand-brik.css
-     corrects the branded dark case at a higher specificity; this block covers
+     .theme-brand-brik gets the same 1:1 invisible label. The Brik Brand Kit
+     (theme-brand-brik.generated.css) corrects the branded dark case at a higher specificity; this block covers
      the bare one, landing on the same pair (3.29:1).
 
      RETIRE both lines once the Figma variables are corrected and re-synced.

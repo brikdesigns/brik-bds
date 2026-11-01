@@ -1,105 +1,48 @@
 /**
- * Brik Brand Theme — Light + Dark modes
+ * Brik Brand Theme — hand-authored residue, Light + Dark modes
  *
- * Loaded by: bundled into dist/tokens.css (after figma-dark-corrections.css).
- * Every consumer with `@import '@brikdesigns/bds/tokens.css'` receives these
- * brand overrides. Also imported directly in Storybook preview.tsx.
+ * Loaded by: bundled into dist/tokens.css right after
+ * tokens/theme-brand-brik.generated.css (scripts/lib/dist-assemble.mjs), so a
+ * declaration here wins over the generated one. Also imported directly in
+ * Storybook preview.tsx.
  *
  * See tokens/CASCADE.md for the full load-order + selector contract.
  *
- * Color + typography overrides only; spacing uses Base mode defaults from figma-tokens.css.
+ * Every Brik color override now lives in the Figma Brand Kit
+ * (design-tokens/brand-kits/brik.json → theme-brand-brik.generated.css). The
+ * contrast rationale that used to sit beside each override is in this file's
+ * git history (`git log -p -- tokens/theme-brand-brik.css`) and is gated in
+ * tokens/contrast-pairings.json. (#2920)
  *
- * Primitives reference the 11-step numeric scale (brik-bds#1739/#1740). Some
- * comments below still name steps by their retired 6-step nicknames, which map:
- * lightest=100, lighter=300, light=500, dark=700, darker=800, darkest=950.
+ * What remains are the tokens with no Brand Kit variable: each one is a
+ * gap-fill name (tokens/gap-fills.css), and build-brand-brik-theme.mjs overlays
+ * the gap-fills AFTER the kit, so a Brand Kit variable of the same name would be
+ * overwritten. Keep them here until that overlay order changes.
  *
  * Selector contract: `.theme-brand-brik` for light mode, scoped with the
- * consumer-standard `[data-theme="dark"]` attribute for dark mode. Matches
- * figma-tokens-dark.css's dark-mode mechanism so Storybook and consumers
- * share one switch. Set by ThemeProvider for React apps; set manually on
- * html/body for Astro/Webflow/static sites.
+ * consumer-standard `[data-theme="dark"]` attribute for dark mode. Set by
+ * ThemeProvider for React apps; set manually on html/body for
+ * Astro/Webflow/static sites.
  */
 
 /* ─── Light mode ─────────────────────────────────────────────── */
 
 .theme-brand-brik {
-  /* Page */
-  --bds-page-primary: var(--bds-color-grayscale-white);
-  --bds-page-secondary: var(--bds-color-grayscale-100);
-  --bds-page-brand-primary: var(--bds-color-poppy-500);
-  /* Text */
-  --bds-text-primary: var(--bds-color-grayscale-950);
-  /* Both text steps sit one step DARKER than the generated theme, which puts
-   * --bds-text-secondary at -dark (#5a5a5a, 6.90:1 on white) and --bds-text-muted at
-   * -light (#828282, 3.84:1). At those values "muted" barely clears AA-large and
-   * cannot carry the small print it is used for. Shifting both down gives
-   * --bds-text-secondary 12.63:1 (AAA) and --bds-text-muted 6.90:1 (AA) — the muted step
-   * becomes usable for real copy and secondary stops competing with primary.
-   * Gated as "Secondary text on page" / "Muted text on page" in
-   * contrast-pairings.json. (#1689) */
-  --bds-text-secondary: var(--bds-color-grayscale-800);
-  --bds-text-muted: var(--bds-color-grayscale-700);
-  --bds-text-inverse: var(--bds-color-grayscale-white);
-  /* Brand canon (brand-kit brik.json): brand-primary text is vibrant poppy-light
-     (#e35335). On white = 3.80:1 — clears AA-large (3:1), the bar for the
-     heading/accent role this token serves; small body copy uses --bds-text-primary
-     (usage rule tracked in BDS-18). Restored from the poppy-dark AA divergence (BDS-22). */
-  --bds-text-brand-primary: var(--bds-color-poppy-500);
-  /* --bds-text-brand-primary-strong: one poppy step darker for the 14px bold TOC
-     active label on --bds-surface-secondary (5.56:1 vs 3.38:1). Moved here from
-     the gap-fills :root, which is Foundations-only since #2910 and so cannot
-     name a poppy primitive. (#2270) */
+  /* Gap-fill, no Brand Kit variable: one poppy step darker for the 14px bold
+     TOC active label on --bds-surface-secondary (5.56:1 vs 3.38:1). The
+     gap-fills :root is Foundations-only and cannot name a poppy primitive. (#2270) */
   --bds-text-brand-primary-strong: var(--bds-color-poppy-700);
-  /* Surface */
-  --bds-surface-primary: var(--bds-color-grayscale-white);
-  --bds-surface-secondary: var(--bds-color-grayscale-100);
-  /* Brand canon (brand-kit brik.json): vibrant poppy-light base, darkening on
-     interaction. White label on poppy-light = 3.78:1 — clears AA-large (3:1),
-     the correct bar for a UI-component fill + CTA label (gated as such in
-     contrast-pairings.json). Restored from the poppy-dark AA divergence (BDS-22). */
-  --bds-surface-brand-primary: var(--bds-color-poppy-500);
-  /* --bds-surface-brand-primary-hover and --bds-surface-brand-primary-pressed hold one
-   * interaction step each above
-   * the 500 base. The #2337 Brand Kit re-author moved the generated pair to
-   * poppy-800 / poppy-950 (10.24:1 / 15.57:1 under a white label) — a jump of two
-   * and three steps off the base, which reads as a state change to a different
-   * fill rather than a hover. Keeping 700 / 800 preserves the BDS-22 ladder. */
-  --bds-surface-brand-primary-hover: var(--bds-color-poppy-700); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
-  --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
+  /* Gap-fill, no Brand Kit variable: Brik's warm tan secondary brand fill. */
   --bds-surface-brand-secondary: var(--bds-color-tan-100);
+  /* Gap-fill, no Brand Kit variable: the nav bar sits on white like the page. */
   --bds-surface-nav: var(--bds-color-grayscale-white);
-  /* Background — vibrant poppy-light base per brand canon; darkens on interaction (BDS-22) */
-  --bds-background-brand-primary: var(--bds-color-poppy-500);
-  --bds-background-brand-primary-hover: var(--bds-color-poppy-700);
-  --bds-background-brand-primary-pressed: var(--bds-color-poppy-800);
+  /* Gap-fill, no Brand Kit variable: pairs with --bds-surface-brand-secondary. */
   --bds-background-brand-secondary: var(--bds-color-tan-100);
-  --bds-background-primary: var(--bds-color-grayscale-white);
-  --bds-background-secondary: var(--bds-color-grayscale-100);
-  /* Hover must DARKEN a light fill by one step, not jump to the generated
-   * -darker (#333333) — that is a near-black fill under a dark --bds-text-primary
-   * label, i.e. the #1686 shape. -lighter keeps the label legible and reads as a
-   * hover. The pressed step below is the genuinely dark one, and it is paired
-   * with white --bds-text-inverse (#902). (#1689) */
-  --bds-background-secondary-hover: var(--bds-color-grayscale-300);
-  /* Dark fill used by the inverse Button :hover (paired with white --bds-text-inverse).
-   * No longer consumed by secondary :active — that holds the hover fill (#902). */
-  --bds-background-secondary-pressed: var(--bds-color-grayscale-800);
-  --bds-background-inverse: var(--bds-color-grayscale-950);
-  --bds-background-input: var(--bds-color-grayscale-white);
+  /* Gap-fill, no Brand Kit variable: image scrim. A translucent literal — the
+     Brand Kit color collection holds aliases to opaque primitives only. */
   --bds-background-image: #17171799;
+  /* No Brand Kit or Foundations variable: the brand-tinted image fill. */
   --bds-background-image-brand: var(--bds-color-poppy-500);
-  /* Border */
-  --bds-border-primary: var(--bds-color-grayscale-950);
-  /* --bds-border-secondary / --bds-border-muted stay at 300 (#e0e0e0, 1.32:1 on the white
-   * page). The #2337 Brand Kit re-author moved the generated pair to grayscale-100
-   * (#f2f2f2, 1.12:1) — a divider that faint effectively disappears on white, and
-   * these two carry every card and table rule in the Brik theme. */
-  --bds-border-secondary: var(--bds-color-grayscale-300);
-  --bds-border-muted: var(--bds-color-grayscale-300);
-  --bds-border-brand-primary: var(--bds-color-poppy-500);
-  --bds-border-input: var(--bds-color-grayscale-500);
-  --bds-border-inverse: var(--bds-color-grayscale-white);
-  --bds-border-on-color-dark: white;
 }
 
 /* ─── Dark mode (data-theme attribute) ───────────────────────── */
@@ -108,162 +51,21 @@
  * while .theme-brand-brik is applied to body. Use a descendant combinator
  * so both anchors resolve correctly. */
 :root[data-theme="dark"] .theme-brand-brik {
-  /* Page */
-  --bds-page-primary: var(--bds-color-grayscale-black);
-  /* True-black system (see --bds-background-primary below): the page base is
-   * #000000, so the secondary page band has to be LIGHTER to be visible at all.
-   * The generated value is -black — identical to --bds-page-primary — which would
-   * erase the band. Inverted relative to light mode, where -lightest sits above
-   * white, and deliberately so. (#1689) */
-  --bds-page-secondary: var(--bds-color-grayscale-800);
-  --bds-page-brand-primary: var(--bds-color-poppy-500);
-  /* Text */
-  --bds-text-primary: var(--bds-color-grayscale-100);
-  --bds-text-secondary: var(--bds-color-grayscale-300);
-  /* --bds-text-muted holds 700 (#5a5a5a, 3.04:1 on the true-black page) — the tracked
-   * AA-large exception in contrast-pairings.json. The #2337 Brand Kit re-author
-   * moved the generated value to grayscale-600 (#6e6e6e, 4.12:1), which would
-   * clear plain AA and retire that exception. Adopting it changes a shipped brand
-   * value, so it is deferred to its own a11y change, not folded into the sync. */
-  --bds-text-muted: var(--bds-color-grayscale-700);
-  --bds-text-inverse: var(--bds-color-grayscale-black);
-  --bds-text-brand-primary: var(--bds-color-poppy-500);
-  /* --bds-text-brand-primary-strong dark: poppy-500 already clears AA at 4.56:1 on
+  /* Gap-fill, no Brand Kit variable: poppy-500 already clears AA at 4.56:1 on
      the near-black secondary surface; darkening would sink it. (#2270, #2910) */
   --bds-text-brand-primary-strong: var(--bds-color-poppy-500);
-  --bds-text-on-color-dark: var(--bds-color-grayscale-white);
-  /* Pinned to true black rather than the generated -darkest (#1b1b1b), matching
-   * the true-black system in --bds-background-primary. This is the label for a
-   * light/coloured fill, so it wants the darkest available step: -black gives
-   * 5.46:1 on --bds-background-secondary (#828282) where -darkest gives 4.48:1. It is
-   * mode-invariant by intent — "on-color-light" names the FILL, not the mode, so
-   * it must not follow the page. (#1689) */
-  --bds-text-on-color-light: var(--bds-color-grayscale-black);
-  /* One step lighter than the generated -dark (#5a5a5a), which sat at 1.83:1
-   * on the --bds-background-disabled fill (--bds-color-grayscale-800 #333333) —
-   * a disabled Button label that was there but unreadable. -light (#828282)
-   * lifts it to 3.29:1: still visibly muted against the enabled state, but
-   * legible. Light mode is corrected in gap-fills.css. (#1571) */
-  --bds-text-disabled: var(--bds-color-grayscale-500);
-  /* Surface */
-  /* True-black system (see --bds-background-primary): black, not the generated
-   * -darkest. Surfaces sit flush with the page in dark mode; separation comes
-   * from --border-* hairlines rather than a fill step. (#1689) */
-  --bds-surface-primary: var(--bds-color-grayscale-black);
-  /* 950 (#1b1b1b) — the one non-black surface in the true-black system. It
-     matches the generated dark value, so this is not a divergence.
-     --bds-text-secondary (300 #e0e0e0) reads 13.05:1 on this band. The note that
-     stood here measured a pre-#1136 ramp whose values no longer exist. */
-  --bds-surface-secondary: var(--bds-color-grayscale-950);
-  /* Brand canon: vibrant poppy-light base in dark mode too; state pair DARKENS
-     on interaction (matches light mode + --bds-background-brand-primary-hover/-pressed
-     below). Brightening to poppy-lighter/-lightest made the white --bds-text-on-color-dark
-     label illegible (1.89:1 hover / 1.12:1 pressed); poppy-dark/-darker keep it
-     ≥6:1 (#1055). Restored from the poppy-dark AA divergence (BDS-22).
-     Covers --bds-surface-brand-primary, --bds-surface-brand-primary-hover and
-     --bds-surface-brand-primary-pressed — all three diverge from the generated
-     grayscale for this reason. */
-  --bds-surface-brand-primary: var(--bds-color-poppy-500); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
-  --bds-surface-brand-primary-hover: var(--bds-color-poppy-700); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
-  --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800); /* bds-lint-ignore — deliberately shadows the generated layer, reason above (#2910) */
+  /* Gap-fill, no Brand Kit variable: the one non-black brand band in the
+     true-black dark system. */
   --bds-surface-brand-secondary: var(--bds-color-grayscale-950);
+  /* Gap-fill, no Brand Kit variable: the nav bar sits flush with the black page. */
   --bds-surface-nav: var(--bds-color-grayscale-black);
-  --bds-surface-muted: var(--bds-color-grayscale-950);
-  --bds-surface-overlay: var(--bds-color-grayscale-black);
-  /* Background — vibrant poppy-light base per brand canon (BDS-22) */
-  --bds-background-brand-primary: var(--bds-color-poppy-500);
+  /* Gap-fill, no Brand Kit variable: pairs with --bds-surface-brand-secondary. */
   --bds-background-brand-secondary: var(--bds-color-grayscale-950);
-  /* True-black system: the Brik dark page is #000000, not the generated -darkest
-   * (#1b1b1b). --bds-page-primary, --bds-surface-primary and this token all collapse to
-   * black so the page reads as one unbroken field; the generated theme instead
-   * stacks a #1b1b1b fill on a black page. Consequence: a neutral fill can no
-   * longer distinguish itself by being darker than the page, which is what
-   * --bds-background-secondary below is carrying. (#1689) */
-  --bds-background-primary: var(--bds-color-grayscale-black);
-  /* Mid-grey (#828282), NOT the generated -black — deliberate, and the one
-   * divergence in this block that is a genuine trade rather than a system
-   * statement.
-   *
-   * Two OPPOSITE foregrounds paint on this fill, so no step clears AA (4.5:1)
-   * for both:
-   *
-   *   fill               --bds-text-primary (light)   --bds-text-on-color-light (black)
-   *   -light  #828282        3.43:1                    5.46:1
-   *   -dark   #5a5a5a        6.16:1                    3.04:1
-   *   -black  #000000       18.76:1                    1.00:1
-   *
-   * The generated -black is not a candidate at all: it equals --bds-page-primary
-   * above, so a secondary Button or Chip would have no visible fill (1.00:1
-   * against the page), and it would paint the black --bds-text-on-color-light label
-   * in its own fill — the #1686 failure exactly. -light and -dark both keep both
-   * foregrounds above AA-large (3:1); -light is kept because it is the incumbent
-   * and both consumers here are control labels, which ADR-015 and #1571 already
-   * gate at AA-large rather than AA.
-   *
-   * So do NOT put body copy on this fill: --bds-text-primary lands at 3.43:1. Both
-   * pairings are gated in contrast-pairings.json. Reproduce with
-   * `node scripts/validate-themes.js`. (#1689) */
-  --bds-background-secondary: var(--bds-color-grayscale-500);
-  /* Inverse means "opposite of the page", and in dark mode the page is black —
-   * so this must be LIGHT. It shipped as -black in the original dark theme
-   * (#50), which put it on the same value as --bds-text-inverse (also -black, :92)
-   * and rendered `Chip --primary` and `Button --inverse` at 1.00:1: the label
-   * painted in its own fill, invisible, in the ENABLED state. Restored to the
-   * generated dark value (figma-tokens-dark.css:71), which was right all along
-   * — black on -lightest measures 18.76:1, and BDS already publishes this pair
-   * as safe for dark atmospheres ("light strip inside the dark page",
-   * content-system/atmospheres/index.ts:168). Gated in
-   * contrast-pairings.json so it cannot collapse again. (#1686) */
-  --bds-background-inverse: var(--bds-color-grayscale-100);
-  --bds-background-input: var(--bds-color-grayscale-black);
-  --bds-background-muted: var(--bds-color-grayscale-800);
+  /* Gap-fill, no Brand Kit variable: image scrim, heavier on the dark page.
+     A translucent literal, as in light mode. */
   --bds-background-image: #000000cc;
+  /* No Brand Kit or Foundations variable: the brand-tinted image fill. */
   --bds-background-image-brand: var(--bds-color-poppy-500);
-  /* Darkens on interaction (mirrors light mode) so the white on-color label stays
-     legible — poppy-lighter/-lightest failed AA-large (1.89:1 / 1.12:1) (#1055). */
-  --bds-background-brand-primary-hover: var(--bds-color-poppy-700);
-  --bds-background-brand-primary-pressed: var(--bds-color-poppy-800);
-  --bds-background-disabled: var(--bds-color-grayscale-800);
-  --bds-background-primary-hover: var(--bds-color-grayscale-950);
-  --bds-background-primary-pressed: var(--bds-color-grayscale-800);
-  --bds-background-secondary-hover: var(--bds-color-grayscale-800);
-  --bds-background-secondary-pressed: var(--bds-color-grayscale-950);
-  /* Border */
-  /* --bds-border-primary holds 800 (#333333, 1.66:1 on the true-black page). The
-   * #2337 Brand Kit re-author moved the generated value to grayscale-900
-   * (#272727, 1.41:1), which pushes the primary rule further toward invisible on
-   * black — the wrong direction for the token that outlines cards and inputs. */
-  --bds-border-primary: var(--bds-color-grayscale-800);
-  /* One step LIGHTER than the generated 800 (#333333): a secondary divider has
-   * to stay visible on the true-black page, and 800 measures 1.66:1 against it
-   * where 700 (#5a5a5a) reaches 3.04:1 (WCAG 1.4.11's boundary bar).
-   * --bds-border-input lands on 700 as well, which IS the generated value, so it is
-   * not a divergence — the same 3.04:1 carries its field boundary on the black
-   * --bds-background-input dark fill. */
-  --bds-border-secondary: var(--bds-color-grayscale-700);
-  /* Same reasoning and the same direction as --bds-border-secondary above: one step
-   * lighter than the generated 800. A muted hairline still has to be visible on
-   * the true-black page, and 800 measures 1.66:1 against it while 700 reaches
-   * 3.04:1 (WCAG 1.4.11's boundary bar). (#1689) */
-  --bds-border-muted: var(--bds-color-grayscale-700);
-  --bds-border-brand-primary: var(--bds-color-poppy-500);
-  --bds-border-input: var(--bds-color-grayscale-700);
-  /* Inverse border for a LIGHT strip inside the dark page, so it pairs with
-   * --bds-background-inverse (-lightest) above and must be dark. -black rather than
-   * the generated -darkest, per the true-black system. Opposite polarity to
-   * --bds-background-inverse on purpose: the fill is light, its border is dark.
-   * (#1689) */
-  --bds-border-inverse: var(--bds-color-grayscale-black);
-  /* Context-pinned: stays white in dark mode to match --bds-text-on-color-dark /
-   * --bds-background-on-color-dark. For borders on a fixed dark/colored surface
-   * (e.g. --bds-surface-brand-primary), so they don't vanish in dark mode (#980). */
-  --bds-border-on-color-dark: var(--bds-color-grayscale-white);
-  /* Matches --bds-background-disabled (-darker) so a disabled control's border and
-   * fill hold the same value — the border disappears into the fill by design,
-   * which is what makes a disabled control read as one flat shape. The generated
-   * -dark would outline it instead. Pairs with the #1571 --bds-text-disabled fix
-   * above. (#1689) */
-  --bds-border-disabled: var(--bds-color-grayscale-800);
 }
 
 /* No `prefers-color-scheme` fallback here on purpose.

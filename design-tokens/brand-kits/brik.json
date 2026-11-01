@@ -1971,6 +1971,24 @@
         },
         "$type": "color",
         "$value": "{color.tan.400}"
+      },
+      "secondary-hover": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.300}"
+      },
+      "secondary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.800}"
       }
     },
     "surface": {
@@ -2017,7 +2035,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.800}",
+        "$value": "{color.poppy.700}",
         "$description": "Primary surface hover"
       },
       "brand-primary-pressed": {
@@ -2027,7 +2045,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.poppy.950}",
+        "$value": "{color.poppy.800}",
         "$description": "Primary surface pressed"
       },
       "service-brand": {
@@ -2291,7 +2309,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.700}"
+        "$value": "{color.grayscale.800}"
       },
       "brand-primary": {
         "$extensions": {
@@ -2336,7 +2354,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.500}"
+        "$value": "{color.grayscale.700}"
       },
       "on-color-dark": {
         "$extensions": {
@@ -2573,7 +2591,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.100}"
+        "$value": "{color.grayscale.300}"
       },
       "muted": {
         "$extensions": {
@@ -2582,7 +2600,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.100}"
+        "$value": "{color.grayscale.300}"
       },
       "inverse": {
         "$extensions": {
@@ -2740,7 +2758,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.800}"
       },
       "brand-primary": {
         "$extensions": {
@@ -2877,7 +2895,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.950}"
+        "$value": "{color.grayscale.black}"
       },
       "secondary": {
         "$extensions": {
@@ -2886,7 +2904,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.500}"
       },
       "brand-primary": {
         "$extensions": {
@@ -2904,7 +2922,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.200}"
+        "$value": "{color.grayscale.100}"
       },
       "accent-yellow": {
         "$extensions": {
@@ -3023,7 +3041,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.500}",
+        "$value": "{color.grayscale.800}",
         "$description": "Disabled background (dark mode)"
       },
       "service-brand": {
@@ -3169,6 +3187,24 @@
         },
         "$type": "color",
         "$value": "{color.tan.500}"
+      },
+      "secondary-hover": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.800}"
+      },
+      "secondary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.950}"
       }
     },
     "surface": {
@@ -3179,7 +3215,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.950}"
+        "$value": "{color.grayscale.black}"
       },
       "secondary": {
         "$extensions": {
@@ -3197,7 +3233,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.500}"
+        "$value": "{color.poppy.500}"
       },
       "inverse": {
         "$extensions": {
@@ -3215,7 +3251,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.800}",
+        "$value": "{color.poppy.700}",
         "$description": "Primary surface hover (dark mode)"
       },
       "brand-primary-pressed": {
@@ -3225,7 +3261,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.600}",
+        "$value": "{color.poppy.800}",
         "$description": "Primary surface pressed (dark mode)"
       },
       "service-brand": {
@@ -3489,7 +3525,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.100}"
+        "$value": "{color.grayscale.300}"
       },
       "brand-primary": {
         "$extensions": {
@@ -3534,7 +3570,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.600}"
+        "$value": "{color.grayscale.700}"
       },
       "on-color-dark": {
         "$extensions": {
@@ -3561,7 +3597,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.950}"
+        "$value": "{color.grayscale.black}"
       },
       "disabled": {
         "$extensions": {
@@ -3570,7 +3606,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.600}",
+        "$value": "{color.grayscale.500}",
         "$description": "Disabled text (dark mode)"
       },
       "warning": {
@@ -3744,7 +3780,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.900}"
+        "$value": "{color.grayscale.800}"
       },
       "brand-primary": {
         "$extensions": {
@@ -3771,7 +3807,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.800}"
+        "$value": "{color.grayscale.700}"
       },
       "muted": {
         "$extensions": {
@@ -3780,7 +3816,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.800}"
+        "$value": "{color.grayscale.700}"
       },
       "inverse": {
         "$extensions": {
@@ -3789,7 +3825,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.950}"
+        "$value": "{color.grayscale.black}"
       },
       "on-color-light": {
         "$extensions": {
@@ -3807,7 +3843,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.500}",
+        "$value": "{color.grayscale.800}",
         "$description": "Disabled border (dark mode)"
       },
       "service-brand": {

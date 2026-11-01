@@ -247,7 +247,7 @@
 .bds-footer--default .bds-footer__social { color: var(--bds-text-muted); }
 
 /* On-color text on the mode-invariant Poppy fill must be white at all times.
-   --bds-text-inverse flips BLACK in dark (theme-brand-brik.css:134), so it painted
+   --bds-text-inverse flips BLACK in dark (Brik Brand Kit text/inverse), so it painted
    black-on-Poppy in dark; --bds-text-on-color-dark is mode-invariant white
    (ADR-015 § Amendment 2026-09-12, #2488). */
 .bds-footer--brand .bds-footer__heading { color: var(--bds-text-on-color-dark); }

@@ -26,9 +26,9 @@
  * light value on <body> beats the dark value `:root[data-theme="dark"]` sets on
  * <html>, because the body's own declaration wins over inheritance.
  *
- * The hand-written tokens/theme-brand-brik.css still loads AFTER this layer:
- * its overrides (#1689, BDS-22, #2337) are deliberate and not yet in the Brand
- * Kit. Folding them into brand-kits/brik.json is a Brand Kit Figma write.
+ * The hand-written tokens/theme-brand-brik.css still loads AFTER this layer,
+ * holding only the gap-fill names withGaps() would overwrite if the Brand Kit
+ * declared them. Every other Brik override is a Brand Kit variable (#2920).
  *
  * Usage:
  *   node scripts/build-brand-brik-theme.mjs           # write
@@ -124,8 +124,8 @@ const output =
   ` * Source: design-tokens/brand-kits/brik.json via compileClientTheme.\n` +
   ` * Regenerate: node scripts/build-brand-brik-theme.mjs (brik-bds#2910).\n` +
   ` *\n` +
-  ` * Brik's delta over the Foundations \`:root\` only. Deliberate hand overrides\n` +
-  ` * load after this, from tokens/theme-brand-brik.css.\n` +
+  ` * Brik's delta over the Foundations \`:root\` only. The gap-fill tokens the\n` +
+  ` * Brand Kit cannot carry load after this, from tokens/theme-brand-brik.css.\n` +
   ` */\n\n` +
   block(LIGHT_SELECTOR, light) +
   '\n' +

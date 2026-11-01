@@ -22,7 +22,7 @@ Under the hood:
 
 - `ThemeProvider` adds `theme-brand-brik` to `<body>` and sets `data-theme="dark"` (or `"light"`) on `<html>`.
 - CSS selectors like `.theme-brand-brik[data-theme="dark"] { … }` override the semantic tokens for that theme.
-- Brik's theme blocks live in `tokens/theme-brand-brik.css` (bundled into `dist/tokens.css`); the client-sim block lives in `tokens/font-audit.css`.
+- Brik's theme blocks live in `tokens/theme-brand-brik.generated.css`, compiled from the Figma Brand Kit, plus a small hand residue in `tokens/theme-brand-brik.css` (both bundled into `dist/tokens.css`); the client-sim block lives in `tokens/font-audit.css`.
 
 See [`tokens/CASCADE.md`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/CASCADE.md) for the full load order.
 
@@ -127,7 +127,7 @@ Each `.body.theme-{name}` block overrides a fixed set of **semantic color tokens
 
 ## Adding a custom client brand
 
-Client themes are generated, not hand-written. The portal builds each client's theme from the client profile — BDS `compileClientTheme` ramps the brand colors and serialises them to CSS — and the client site fetches it at build. Hand-written theme files exist only for Brik itself (`tokens/theme-brand-brik.css`) and TNCLD (portal#4413). The generated file overrides semantic tokens at `:root` level, shaped like this:
+Client themes are generated, not hand-written. The portal builds each client's theme from the client profile — BDS `compileClientTheme` ramps the brand colors and serialises them to CSS — and the client site fetches it at build. Hand-written theme files exist only for Brik's gap-fill residue (`tokens/theme-brand-brik.css`) and TNCLD (portal#4413). The generated file overrides semantic tokens at `:root` level, shaped like this:
 
 ```css
 /* theme-acme.css — all that's needed for a full rebrand */

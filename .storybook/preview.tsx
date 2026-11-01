@@ -17,7 +17,9 @@ import { InspectWidget } from './InspectWidget';
 import isChromatic from 'chromatic/isChromatic';
 
 // Import token CSS in cascade order:
-// 1. Figma tokens (SD output — primitives + semantic defaults)
+// 1. Figma tokens (SD output — primitives + semantic defaults), light then dark.
+//    The generated Brik layer is a delta over Foundations dark, so without the
+//    dark file Brik dark renders light text on dark fills (#2920).
 // 2. Gap-fills (manual tokens not yet in Figma)
 // 3. Brik Brand theme (light + dark) — generated layer, then hand overrides (#2910)
 // 4. Font Audit tool (client-sim theme for font-family validation)
@@ -27,6 +29,7 @@ import isChromatic from 'chromatic/isChromatic';
 //    surface no consumer has, and the bare-name DevBar widgets resolve nothing.
 // 7. Storybook overrides (Base mode spacing, UI fixes)
 import '../tokens/figma-tokens.css';
+import '../tokens/figma-tokens-dark.css';
 import '../tokens/gap-fills.css';
 import '../tokens/ratios.css';
 import '../tokens/theme-brand-brik.generated.css';

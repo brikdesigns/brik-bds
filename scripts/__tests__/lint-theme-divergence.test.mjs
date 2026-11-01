@@ -34,9 +34,13 @@ const PRIMS = `
 function run({ light = '', dark = '', brandLight = '', brandDark = '' }) {
   const genLight = join(dir, 'gen-light.css');
   const genDark = join(dir, 'gen-dark.css');
+  const genBrand = join(dir, 'gen-brand.css');
   const brand = join(dir, 'brand.css');
   writeFileSync(genLight, `:root {\n${PRIMS}${light}\n}\n`);
   writeFileSync(genDark, `:root[data-theme="dark"] {\n${dark}\n}\n`);
+  // Empty blocks on purpose: left unset, --gen-brand reads the real generated
+  // Brik layer, whose values would decide these fixtures (#2920).
+  writeFileSync(genBrand, `.theme-brand-brik {\n}\n:root[data-theme="dark"] .theme-brand-brik {\n}\n`);
   writeFileSync(
     brand,
     `.theme-brand-brik {\n${brandLight}\n}\n:root[data-theme="dark"] .theme-brand-brik {\n${brandDark}\n}\n`,
@@ -47,7 +51,7 @@ function run({ light = '', dark = '', brandLight = '', brandDark = '' }) {
   try {
     stdout = execFileSync(
       'node',
-      [SCRIPT, '--json', '--brand', brand, '--gen-light', genLight, '--gen-dark', genDark],
+      [SCRIPT, '--json', '--brand', brand, '--gen-light', genLight, '--gen-dark', genDark, '--gen-brand', genBrand],
       { encoding: 'utf8' },
     );
   } catch (err) {
