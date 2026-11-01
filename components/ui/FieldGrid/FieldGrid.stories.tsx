@@ -113,7 +113,7 @@ export const FullSpan: Story = {
     </Frame>
   ),
   play: async ({ canvasElement }) => {
-    const full = canvasElement.querySelector('.bds-field--size-full') as HTMLElement;
+    const full = canvasElement.querySelector('.bds-field--span-full') as HTMLElement;
     await expect(getComputedStyle(full).gridColumn).toBe('1 / -1');
   },
 };

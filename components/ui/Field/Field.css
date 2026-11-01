@@ -24,10 +24,9 @@
 
 /* `1 / -1` runs from the first to the last explicit grid line, so it spans every
    column at every width — FieldGrid changes its column count per container, and
-   this needs no matching rule. Inert outside a grid. The class is `--size-full`,
-   not `--span-full`: `size` is on ADR-033 § 4's closed modifier-axis list, `span`
-   is not. */
-.bds-field--size-full {
+   this needs no matching rule. Inert outside a grid. `span` is the grid-cell-extent
+   axis admitted by ADR-033's Amendments (#2930). */
+.bds-field--span-full {
   grid-column: 1 / -1;
 }
 

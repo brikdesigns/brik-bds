@@ -574,6 +574,55 @@ describe('rule 5 — `inverse` on the emphasis axis (§ Amendments, #2279)', () 
   });
 });
 
+describe('rule 4 + 5 — the `span` axis (§ Amendments, #2930)', () => {
+  it('admits the axis-prefixed modifier Field emits for span="full"', () => {
+    // Before the amendment this was `✗ --span-full — bare modifier`: `span` was
+    // on no axis list, so the gate could not tell it from an invented prefix.
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-field--span-full { grid-column: 1 / -1; }\n`,
+    });
+    expect(out).not.toMatch(/span-full/);
+    expect(code).toBe(0);
+  });
+
+  it('admits `full` in a governed span union', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type FieldSpan = 'full';\n`,
+    });
+    expect(out).not.toMatch(/FieldSpan/);
+    expect(code).toBe(0);
+  });
+
+  it('does not read `full` on an unrelated union as span', () => {
+    // PageHeaderVariant's real shape, `full` meaning "every slot renders". With
+    // `full` claimed by value, rule 3 read this as `density + span` and failed
+    // code this amendment does not touch.
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type HeaderVariant = 'full' | 'compact' | 'tabs-only';\n`,
+    });
+    expect(out).not.toMatch(/HeaderVariant/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies a bare `--full` — the prefix is what the amendment admits', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-field--full { grid-column: 1 / -1; }\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--full — bare modifier/);
+  });
+
+  it('still denies a neighbouring value the amendment did NOT admit', () => {
+    // `half` is the same axis by the same reasoning and has no caller; the axis
+    // is closed to `full`, or the amendment read as "open the axis".
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type ChipSpan = 'full' | 'half';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/ChipSpan\.half/);
+  });
+});
+
 describe('rule 6 — the deleted --*-status-* family cannot come back (§ Token families)', () => {
   it('fails on a var() reference to a deleted name', () => {
     const { code, out } = run({ refs: '.x { background: var(--surface-status-warning); }' });
