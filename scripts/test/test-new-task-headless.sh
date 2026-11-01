@@ -32,6 +32,10 @@
 # Run: bash scripts/test/test-new-task-headless.sh
 
 set -u
+
+# Hermetic: new-task.sh's disk preflight (#5135) reads the host's real free space;
+# a runner under the floor would refuse and read as a bug in what this tests.
+export DISK_HEADROOM_FLOOR_KB=0
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_NAMESPACE \
       GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES
 
