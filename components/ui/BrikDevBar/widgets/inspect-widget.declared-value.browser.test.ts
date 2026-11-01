@@ -12,6 +12,10 @@
  *      unit, and the winner was chosen with a blind `>=` that ignored
  *      `!important`.
  *
+ * #2265 adds the logical→physical fallback: CSSOM does not expand
+ * `padding-inline` / `margin-block` into physical longhands at the rule level,
+ * so the physical read serialised to "" and the panel dropped the row.
+ *
  * Runs under the `components-browser` vitest project (real chromium) — pending
  * substitution and computed pseudo behaviour have no meaning in jsdom.
  */
@@ -48,6 +52,9 @@ beforeAll(() => {
     .card { border: 3px solid var(--border-secondary); }
     #hi { color: rgb(1, 2, 3); }
     .lo { color: var(--text-primary) !important; }
+    .logical { padding-inline: var(--page-inset); padding-block: var(--padding-tiny); margin-inline: var(--gap-lg); margin-block: var(--gap-sm); }
+    .win { padding-inline: var(--page-inset); }
+    .win.win { padding-left: var(--padding-sm); }
   `;
   document.head.appendChild(style);
 });
@@ -68,6 +75,32 @@ describe('getDeclaredValue — !important beats higher specificity (#2195 D)', (
     document.body.innerHTML = `<div id="hi" class="lo">y</div>`;
     const declared = getDeclaredValue(document.getElementById('hi')!, 'color');
     expect(declared?.value.trim()).toBe('var(--text-primary)');
+  });
+});
+
+describe('getDeclaredValue — logical shorthand fallback (#2265)', () => {
+  const cases: Array<[string, string]> = [
+    ['padding-left', 'var(--page-inset)'],
+    ['padding-right', 'var(--page-inset)'],
+    ['padding-top', 'var(--padding-tiny)'],
+    ['padding-bottom', 'var(--padding-tiny)'],
+    ['margin-left', 'var(--gap-lg)'],
+    ['margin-right', 'var(--gap-lg)'],
+    ['margin-top', 'var(--gap-sm)'],
+    ['margin-bottom', 'var(--gap-sm)'],
+  ];
+  it.each(cases)('%s resolves the token from the logical shorthand', (prop, token) => {
+    document.body.innerHTML = `<div id="t" class="logical">x</div>`;
+    const declared = getDeclaredValue(document.getElementById('t')!, prop);
+    expect(declared?.value.trim()).toBe(token);
+  });
+
+  it('a higher-specificity physical longhand still beats the logical shorthand', () => {
+    document.body.innerHTML = `<div id="t" class="win">x</div>`;
+    const el = document.getElementById('t')!;
+    expect(getDeclaredValue(el, 'padding-left')?.value.trim()).toBe('var(--padding-sm)');
+    // The sibling side only has the logical shorthand to draw from.
+    expect(getDeclaredValue(el, 'padding-right')?.value.trim()).toBe('var(--page-inset)');
   });
 });
 

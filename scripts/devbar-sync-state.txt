@@ -6,11 +6,11 @@ b2bb07c960ad90e0286de974cfb59e8648d29a8e794e26260ab20ef1c964fe7c  brik/brik-llm/
 b2bb07c960ad90e0286de974cfb59e8648d29a8e794e26260ab20ef1c964fe7c  brik/brikdesigns/public/brik-devbar.js
 b2bb07c960ad90e0286de974cfb59e8648d29a8e794e26260ab20ef1c964fe7c  product/brik-client-portal/public/brik-devbar.js
 b2bb07c960ad90e0286de974cfb59e8648d29a8e794e26260ab20ef1c964fe7c  product/brik-client-portal/scripts/mockup-shared/devbar.js
-d9b1d1d4e5ca637fc3f0d84d55dda31fb6aab04b592ffbcc719329e9ebc6cab8  brik-bds/.storybook/public/brik-inspect.js
-d9b1d1d4e5ca637fc3f0d84d55dda31fb6aab04b592ffbcc719329e9ebc6cab8  brik/brik-llm/scripts/brik-dev-tool/widgets/inspect-widget.js
-d9b1d1d4e5ca637fc3f0d84d55dda31fb6aab04b592ffbcc719329e9ebc6cab8  brik/brikdesigns/public/brik-inspect.js
-d9b1d1d4e5ca637fc3f0d84d55dda31fb6aab04b592ffbcc719329e9ebc6cab8  product/brik-client-portal/public/brik-inspect.js
-d9b1d1d4e5ca637fc3f0d84d55dda31fb6aab04b592ffbcc719329e9ebc6cab8  product/brik-client-portal/scripts/mockup-shared/inspect-widget.js
+09479aca86a5bed495c70edb67ed25f9698b398bbbd3dd63eb835a8fa201aadd  brik-bds/.storybook/public/brik-inspect.js
+09479aca86a5bed495c70edb67ed25f9698b398bbbd3dd63eb835a8fa201aadd  brik/brik-llm/scripts/brik-dev-tool/widgets/inspect-widget.js
+09479aca86a5bed495c70edb67ed25f9698b398bbbd3dd63eb835a8fa201aadd  brik/brikdesigns/public/brik-inspect.js
+09479aca86a5bed495c70edb67ed25f9698b398bbbd3dd63eb835a8fa201aadd  product/brik-client-portal/public/brik-inspect.js
+09479aca86a5bed495c70edb67ed25f9698b398bbbd3dd63eb835a8fa201aadd  product/brik-client-portal/scripts/mockup-shared/inspect-widget.js
 f53a58bedccd829a3b28a1ded952544195c1697c60b4e1e7c7e3f320749da669  brik-bds/.storybook/public/brik-events-widget.js
 f53a58bedccd829a3b28a1ded952544195c1697c60b4e1e7c7e3f320749da669  brik/brik-llm/scripts/brik-dev-tool/widgets/events-widget.js
 f53a58bedccd829a3b28a1ded952544195c1697c60b4e1e7c7e3f320749da669  product/brik-client-portal/public/brik-events-widget.js

@@ -1244,6 +1244,19 @@
     'border-color': 'border',
     'border-width': 'border',
     'background-color': 'background',
+    // CSSOM never expands a logical shorthand into physical longhands at the
+    // rule level, so `padding-inline: var(--page-inset)` leaves `padding-left`
+    // / `padding-right` empty. Read the token off the logical shorthand. Single-
+    // value only: `padding-inline: 8px 24px` would report both sides as the
+    // pair. LTR assumption — no inline↔physical flipping. (#2265)
+    'padding-left': 'padding-inline',
+    'padding-right': 'padding-inline',
+    'padding-top': 'padding-block',
+    'padding-bottom': 'padding-block',
+    'margin-left': 'margin-inline',
+    'margin-right': 'margin-inline',
+    'margin-top': 'margin-block',
+    'margin-bottom': 'margin-block',
   };
 
   // Read `prop` off a CSSStyleDeclaration, falling back to its var()-bearing
