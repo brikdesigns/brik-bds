@@ -273,6 +273,32 @@ assert_not "an empty Since releases nothing — a malformed claim is the timer's
 assert_not "no comments at all releases nothing" \
   sh -c 'printf "" | { . "$1"; claim_handoff_after 2026-10-06T17:49:00Z; }' _ "$LIB"
 
+# ── attribution: only the holder's own hand-off releases its claim (#5072) ──
+# All agents post as the operator's login, so the body's session id is the
+# only evidence of whose hand-off it is.
+ATT_NDJSON="$(printf '%s\n' \
+  '{"id":1,"login":"x","created_at":"2026-10-22T14:00:00Z","body":"<!-- claim -->\n| Since | 2026-10-22T14:00:00Z |"}' \
+  '{"id":2,"login":"x","created_at":"2026-10-22T14:30:00Z","body":"<!-- brik-handoff:v1 -->\n## Handoff\nSession: `1cf4f135`"}')"
+assert_not "a hand-off naming ONLY another session leaves the claim live" \
+  sh -c 'printf "%s\n" "$1" | { . "$2"; claim_handoff_after 2026-10-22T14:00:00Z a84db305-1111-2222-3333-444444444444; }' _ "$ATT_NDJSON" "$LIB"
+assert_eq "a hand-off naming the holder's session releases it, bare stamp" \
+  "2026-10-22T14:30:00Z" "$(printf '%s\n' "$ATT_NDJSON" | claim_handoff_after 2026-10-22T14:00:00Z 1cf4f135-aaaa-bbbb-cccc-dddddddddddd)"
+UNATT_NDJSON="$(printf '%s\n' \
+  '{"id":2,"login":"x","created_at":"2026-10-22T14:30:00Z","body":"<!-- brik-handoff:v1 -->\n## Handoff\nno session line"}')"
+assert_eq "a hand-off naming no session still releases, flagged unattributed" \
+  "2026-10-22T14:30:00Z (unattributed hand-off)" "$(printf '%s\n' "$UNATT_NDJSON" | claim_handoff_after 2026-10-22T14:00:00Z a84db305-1111)"
+assert_eq "…and stays a bare stamp when no session is supplied (legacy callers)" \
+  "2026-10-22T14:30:00Z" "$(printf '%s\n' "$UNATT_NDJSON" | claim_handoff_after 2026-10-22T14:00:00Z)"
+PROSE_NDJSON="$(printf '%s\n' \
+  '{"id":2,"login":"x","created_at":"2026-10-22T14:30:00Z","body":"<!-- brik-handoff:v1 -->\n## Handoff\n- #5448 claimed by live session `1cf4f135` (brik-mini)\nSession spend: $1 (m; session f4d27093)"}')"
+assert_not "prose naming the holder's session is not authorship — it does not release the claim" \
+  sh -c 'printf "%s\n" "$1" | { . "$2"; claim_handoff_after 2026-10-22T14:00:00Z 1cf4f135-aaaa; }' _ "$PROSE_NDJSON" "$LIB"
+assert_eq "…the Session spend line names the author, who is released" \
+  "2026-10-22T14:30:00Z" "$(printf '%s\n' "$PROSE_NDJSON" | claim_handoff_after 2026-10-22T14:00:00Z f4d27093-bbbb)"
+assert_eq "handoff_release_verdict: named" "named" "$(handoff_release_verdict 'Session: `1cf4f135`' 1cf4f135-aaaa)"
+assert_eq "handoff_release_verdict: other" "other" "$(handoff_release_verdict 'Session: `1cf4f135`' a84db305-aaaa)"
+assert_eq "handoff_release_verdict: unattributed" "unattributed" "$(handoff_release_verdict 'no id here' a84db305-aaaa)"
+
 echo "── _ic_entry_repo / _ic_entry_branch ──"
 assert_eq "splits a repo-qualified entry" "brikdesigns/brik-llm" "$(_ic_entry_repo brikdesigns/brik-llm:task/x)"
 assert_eq "…and its branch, slashes intact" "task/x" "$(_ic_entry_branch brikdesigns/brik-llm:task/x)"
