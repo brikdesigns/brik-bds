@@ -97,13 +97,13 @@
   gap: var(--bds-features-gap, var(--bds-gap-lg));
 }
 
-@media (min-width: 768px) {
+@media (--bds-up-tablet) {
   .bds-features__grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 992px) {
+@media (--bds-up-desktop) {
   .bds-features__grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -111,9 +111,9 @@
 
 /* ── --cols-*: column-count axis (ADR-039 §1) ────────────────────────────────
    Caps the widest-breakpoint column count. Omitted → the default ramp above.
-   The 1→2 mobile/tablet steps are preserved; only the ≥992 count is overridden,
+   The 1→2 mobile/tablet steps are preserved; only the ≥1024 (desktop) count is overridden,
    enum-bound so a consumer never writes grid-template-columns. */
-@media (min-width: 992px) {
+@media (--bds-up-desktop) {
   .bds-features--cols-2 .bds-features__grid {
     grid-template-columns: repeat(2, 1fr);
   }

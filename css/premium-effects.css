@@ -686,7 +686,7 @@
    Scale down effects for mobile
    ========================================================================== */
 
-@media (max-width: 768px) {
+@media (--bds-down-tablet) {
   .gradient-orb {
     filter: blur(60px);
     opacity: 0.2;
