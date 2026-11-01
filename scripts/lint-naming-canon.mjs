@@ -550,6 +550,15 @@ function collectUnions(componentsDir) {
 }
 
 /**
+ * `span` (#2930 amendment) is judged by its PREFIX, never by its value. Its one
+ * value, `full`, is also a form value on `PageHeaderVariant` and a rung on
+ * `ModalSize`, so claiming it in `axesOf` would read `'full' | 'compact'` as
+ * span + density and fail a union that is not about grid extent. Rule 5 still
+ * default-denies any other `--span-*` / `*Span` member through `spec.values`.
+ */
+const SPAN_AXIS = 'span';
+
+/**
  * Every axis whose closed list claims this member. A SET, not one axis: ADR-033
  * puts `neutral` on § 1's valence list *and* on § 2's emphasis list, so a member
  * can be legal on more than one axis and a single-valued lookup gets it wrong.
@@ -573,6 +582,7 @@ function axesOf(member) {
     axes.add(RETIRED_AXIS_VALUES[member].axis);
   }
   for (const [axis, spec] of Object.entries(AXES)) {
+    if (axis === SPAN_AXIS) continue;
     if (spec.values && spec.values.has(member)) axes.add(axis);
   }
   return axes;

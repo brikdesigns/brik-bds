@@ -20,8 +20,46 @@ FieldGrid has no semantic-variant axis — all variation (column count, gap size
 
 <Canvas of={Stories.Default} />
 
-- **`columns`** — `2` (default), `3`, or `4`. No custom column templates; if you need something else, you're composing the wrong primitive.
+- **`columns`** — the **maximum** column count: `2` (default), `3`, or `4`. The grid steps down as its container narrows (see [Container thresholds](#container-thresholds)). No custom column templates; if you need something else, you're composing the wrong primitive.
 - **`gap`** — `md` / `lg` / `xl` (default). Matches the inter-cell spacing scale used across portal sheets.
+
+## Responsive columns
+
+The grid reads the width of the panel it sits in, not the viewport, so one `columns={4}` grid is 4-up on a full page and 2-up in a Sheet with no per-surface prop. Drag the container's corner to resize it.
+
+<Canvas of={Stories.Responsive} />
+
+### Container thresholds
+
+Two widths, measured on the grid's own container (the `.bds-field-grid` root; `@container`, not `@media`):
+
+| Container width | `columns={4}` | `columns={3}` | `columns={2}` |
+| --- | --- | --- | --- |
+| `720px` and wider | 4 | 3 | 2 |
+| `480px` to `719px` | 3 | 3 | 2 |
+| under `480px` | 2 | 2 | 2 |
+
+`columns={2}` never changes; before this behaviour it had no narrow rule either, and still has none. It also takes no containment, so its box is identical to before in every parent. The gap is the same `gap` token at every width.
+
+**Constraint for `columns={3}` and `{4}`.** The grid needs a container, which is its root with `container-type: inline-size`. That removes the root's intrinsic width, so in a shrink-to-fit parent (centered layout, `inline-block`, a flex item without a basis) it collapses to the parent's other content instead of the grid's own max-content. Give that parent a definite width, or the flex item a `flex` basis. Block-level parents, which is every Sheet body and `PageContent`, are unaffected.
+
+Measured in the Storybook build (Playwright, Chromium) against the content width of each panel, padding excluded:
+
+| Panel | Width |
+| --- | --- |
+| Sheet body, default `width="400px"` | `352px` → 2 columns |
+| Sheet body, `width="560px"` (the portal's stacked Sheet) | `512px` → 3 columns |
+| `PageContent` in `AppShell` (261px nav), 1024px viewport | `537px` → 3 columns |
+| `PageContent` in `AppShell`, 1280px viewport | `793px` → 4 columns |
+| `PageContent` in `AppShell`, 1440px viewport | `953px` → 4 columns |
+
+`720` and `480` keep every cell at or above about `145px` at the default spacing mode (`4 × 168px` at the wide edge, `3 × 149px` at the medium edge, with the `lg` gap). The `AppShell` rows are from the `Layouts/app-shell` `WithPage` story with its default zero page padding; a portal `Page` with `padding="lg"` is 48px narrower. They were not measured in the running portal.
+
+### Full-width cells
+
+A `Field` with `span="full"` takes every column at every width. Use it for a long value that should not share a row; other Fields keep one cell.
+
+<Canvas of={Stories.FullSpan} />
 
 ## Props
 
