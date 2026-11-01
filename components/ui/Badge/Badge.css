@@ -71,6 +71,23 @@
   padding-inline: var(--bds-padding-sm);
 }
 
+/* ─── Truncation (indicator standard) ────────────────────────── */
+/* One line, never wider than its container: a long label ends in an
+   ellipsis and the icon stays whole. A plain-text label carries its full
+   text as a native title (see the component). */
+
+.bds-badge {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.bds-badge__label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* ─── Icon Wrapper (shared sizing with Tag) ──────────────────── */
 
 .bds-badge__icon {

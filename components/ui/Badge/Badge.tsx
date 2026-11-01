@@ -113,7 +113,11 @@ export function Badge({
   return (
     <span className={classes} style={style} {...props}>
       {icon && <span className="bds-badge__icon">{icon}</span>}
-      {!isIconOnly && children}
+      {!isIconOnly && (
+        <span className="bds-badge__label" title={typeof children === 'string' ? children : undefined}>
+          {children}
+        </span>
+      )}
     </span>
   );
 }

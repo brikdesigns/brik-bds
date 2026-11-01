@@ -103,7 +103,11 @@ export function Tag({
   return (
     <span className={classes} style={style} {...props}>
       {icon && <span className="bds-tag__icon">{icon}</span>}
-      {!isIconOnly && children}
+      {!isIconOnly && (
+        <span className="bds-tag__label" title={typeof children === 'string' ? children : undefined}>
+          {children}
+        </span>
+      )}
       {!isIconOnly && trailingIcon && <span className="bds-tag__icon">{trailingIcon}</span>}
       {!isIconOnly && onRemove && !disabled && (
         <button
