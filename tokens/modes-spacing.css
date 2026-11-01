@@ -45,7 +45,7 @@
   /* gap */
   --bds-gap-huge: 64px;
   --bds-gap-lg: 40px;
-  --bds-gap-md: 32px;
+  --bds-gap-md: 16px;
   --bds-gap-sm: 8px;
   --bds-gap-xl: 48px;
 }
@@ -63,7 +63,7 @@
   /* gap */
   --bds-gap-huge: 128px;
   --bds-gap-lg: 56px;
-  --bds-gap-md: 48px;
+  --bds-gap-md: 24px;
   --bds-gap-sm: 16px;
   --bds-gap-tiny: 4px;
   --bds-gap-xl: 104px;

@@ -2805,7 +2805,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{space.800}"
+        "$value": "{space.400}"
       },
       "lg": {
         "$extensions": {
@@ -2955,7 +2955,7 @@
           ]
         },
         "$type": "number",
-        "$value": "{space.1200}"
+        "$value": "{space.600}"
       },
       "lg": {
         "$extensions": {
