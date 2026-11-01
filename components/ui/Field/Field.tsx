@@ -110,7 +110,7 @@ export function Field({
         // Only an explicit tier emits a class. No class = the container's
         // inherited default applies, which is how context adaptivity works.
         tier && `bds-field--${tier}`,
-        span && `bds-field--span-${span}`,
+        span && `bds-field--size-${span}`,
         className,
       )}
       style={style}

@@ -39,7 +39,9 @@ Two widths, measured on the grid's own container (the `.bds-field-grid` root; `@
 | `480px` to `719px` | 3 | 3 | 2 |
 | under `480px` | 2 | 2 | 2 |
 
-`columns={2}` never changes; before this behaviour it had no narrow rule either, and still has none. The gap is the same `gap` token at every width.
+`columns={2}` never changes; before this behaviour it had no narrow rule either, and still has none. It also takes no containment, so its box is identical to before in every parent. The gap is the same `gap` token at every width.
+
+**Constraint for `columns={3}` and `{4}`.** The grid needs a container, which is its root with `container-type: inline-size`. That removes the root's intrinsic width, so in a shrink-to-fit parent (centered layout, `inline-block`, a flex item without a basis) it collapses to the parent's other content instead of the grid's own max-content. Give that parent a definite width, or the flex item a `flex` basis. Block-level parents, which is every Sheet body and `PageContent`, are unaffected.
 
 Measured in the Storybook build (Playwright, Chromium) against the content width of each panel, padding excluded:
 
