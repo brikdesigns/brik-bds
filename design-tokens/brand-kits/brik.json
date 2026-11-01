@@ -1825,7 +1825,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.500}",
+        "$value": "{color.grayscale.300}",
         "$description": "Disabled button background (all variants)"
       },
       "service-brand": {
@@ -1989,6 +1989,33 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.800}"
+      },
+      "brand-secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.tan.100}"
+      },
+      "image": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "#17171799"
+      },
+      "image-brand": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.500}"
       }
     },
     "surface": {
@@ -2290,6 +2317,24 @@
         },
         "$type": "color",
         "$value": "{color.poppy.500}"
+      },
+      "brand-secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.tan.100}"
+      },
+      "nav": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.white}"
       }
     },
     "text": {
@@ -2390,7 +2435,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.500}",
+        "$value": "{color.grayscale.700}",
         "$description": "Disabled button text (all variants)"
       },
       "warning": {
@@ -2554,6 +2599,15 @@
         },
         "$type": "color",
         "$value": "{color.system.red}"
+      },
+      "brand-primary-strong": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.700}"
       }
     },
     "border": {
@@ -3205,6 +3259,33 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.950}"
+      },
+      "brand-secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.950}"
+      },
+      "image": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "#000000cc"
+      },
+      "image-brand": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.500}"
       }
     },
     "surface": {
@@ -3506,6 +3587,24 @@
         },
         "$type": "color",
         "$value": "{color.poppy.500}"
+      },
+      "brand-secondary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.950}"
+      },
+      "nav": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.black}"
       }
     },
     "text": {
@@ -3770,6 +3869,15 @@
         },
         "$type": "color",
         "$value": "{color.system.red}"
+      },
+      "brand-primary-strong": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.poppy.500}"
       }
     },
     "border": {

@@ -31,11 +31,11 @@ const PRIMS = `
   --bds-color-grayscale-100: var(--bds-color-grayscale-100);
 `;
 
-function run({ light = '', dark = '', brandLight = '', brandDark = '' }) {
+function run({ light = '', dark = '', brandLight = '', brandDark = '', noBrand = false }) {
   const genLight = join(dir, 'gen-light.css');
   const genDark = join(dir, 'gen-dark.css');
   const genBrand = join(dir, 'gen-brand.css');
-  const brand = join(dir, 'brand.css');
+  const brand = join(dir, noBrand ? 'absent.css' : 'brand.css');
   writeFileSync(genLight, `:root {\n${PRIMS}${light}\n}\n`);
   writeFileSync(genDark, `:root[data-theme="dark"] {\n${dark}\n}\n`);
   // Empty blocks on purpose: left unset, --gen-brand reads the real generated
@@ -175,6 +175,13 @@ describe('lint-theme-divergence', () => {
     const { code, json } = run({
       brandLight: '  --brand-only-token: var(--bds-color-grayscale-black);',
     });
+    expect(code).toBe(0);
+    expect(json.total).toBe(0);
+  });
+
+  // #2927 deleted the hand-written layer; no file means no hand override.
+  it('passes with zero divergences when the hand-written layer does not exist', () => {
+    const { code, json } = run({ light: '  --bds-text-primary: var(--bds-color-grayscale-950);', noBrand: true });
     expect(code).toBe(0);
     expect(json.total).toBe(0);
   });

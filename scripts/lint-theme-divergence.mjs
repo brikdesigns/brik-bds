@@ -4,7 +4,7 @@
  * Theme Divergence Check — every Brand Kit override of a generated token must
  * say why.
  *
- * `tokens/theme-brand-brik.css` re-declares tokens that Style Dictionary already
+ * `tokens/theme-brand-brik.css` (retired by #2927) re-declared tokens that Style Dictionary already
  * emits into `tokens/figma-tokens.css` (light) and `tokens/figma-tokens-dark.css`
  * (dark), overlaid by the generated Brik layer `tokens/theme-brand-brik.generated.css`
  * (#2910). Some of those overrides are deliberate brand decisions; some are
@@ -198,7 +198,9 @@ function audit(mode, genPath, genRe, brandRe) {
   if (existsSync(GEN_BRAND)) {
     for (const [name, decl] of parseBlock(GEN_BRAND, brandRe)) gen.set(name, decl);
   }
-  const brand = parseBlock(BRAND, brandRe);
+  // #2927 retired the hand-written layer: every Brik override is a Brand Kit
+  // variable, so with no file there is no hand override left to explain.
+  const brand = existsSync(BRAND) ? parseBlock(BRAND, brandRe) : new Map();
 
   const rows = [];
   for (const [name, b] of brand) {
