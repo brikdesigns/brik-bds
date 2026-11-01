@@ -96,7 +96,7 @@
   margin-inline: auto;
 }
 
-@media (max-width: 991.98px) {
+@media (--bds-down-desktop) {
   .bds-callout-panel__columns {
     grid-template-columns: 1fr;
   }

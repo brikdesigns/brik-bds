@@ -1067,11 +1067,21 @@ function resolveSpacingRung(token, deprecatedMap) {
 /**
  * Rule 14: no literal px in an @media condition under components/ (ADR-044, #2644).
  * Use `@media (--bds-up-<rung>)` / `(--bds-down-<rung>)` from tokens/custom-media.css.
- * Scoped to components/ — content-system/blueprints still carries literal px
- * (filed follow-up). Same pattern as the AC check: rg '@media[^{]*[0-9]px' components/
+ * Scope (#2731): components/, content-system/blueprints/react/ stylesheets, and
+ * css/premium-effects.css. The Astro half (blueprints/astro: `.astro` <style>
+ * blocks and the derived `__generated__/*.css`) ships raw with no PostCSS, so a
+ * `(--bds-*)` condition would never resolve there — out of scope here.
+ * Same pattern as the AC check: rg '@media[^{]*[0-9]px' components/
  */
+function isLiteralMediaPxScope(file) {
+  const norm = file.split(path.sep).join('/');
+  if (norm.split('/').includes('components')) return true;
+  if (/\.css$/.test(norm) && norm.includes('content-system/blueprints/react/')) return true;
+  return /(^|\/)css\/premium-effects\.css$/.test(norm);
+}
+
 function checkLiteralMediaPx(line, lineNum, file) {
-  if (!file.split(path.sep).includes('components')) return [];
+  if (!isLiteralMediaPxScope(file)) return [];
   if (line.includes('bds-lint-ignore')) return [];
   if (!/@media[^{]*[0-9]px/.test(line)) return [];
   return [{
@@ -1748,10 +1758,18 @@ function main() {
     : (anyExplicit ? [] : findFiles(COMPONENTS_DIR, /\.tsx$/))
   ).filter(f => !isBlueprint(f));
 
+  // css/premium-effects.css is scanned for Rule 14 only (#2731): it is a
+  // standalone stylesheet outside components/ui, so the full token suite does
+  // not apply to it. Staged/explicit mode picks it up only when listed.
+  const isPremiumEffects = (f) => /(^|[\\/])css[\\/]premium-effects\.css$/.test(f);
+  const premiumEffectsFiles = anyExplicit
+    ? [...new Set([...(explicitFiles || []), ...(explicitCssFiles || [])].filter(isPremiumEffects).map(f => path.resolve(f)))]
+    : [path.join(__dirname, '..', 'css', 'premium-effects.css')].filter(f => fs.existsSync(f));
+
   const cssFiles = (explicitCssFiles
     ? explicitCssFiles.filter(f => /\.css$/.test(f)).map(f => path.resolve(f))
     : (anyExplicit ? [] : findFiles(COMPONENTS_DIR, /\.css$/))
-  ).filter(f => !isBlueprint(f));
+  ).filter(f => !isBlueprint(f) && !isPremiumEffects(f));
 
   // Blueprint files (.css / .astro / .tsx under content-system/blueprints) get
   // the Tier 4 rule subset ONLY (fallback-literal + retired-bp namespace) —
@@ -1783,7 +1801,7 @@ function main() {
     : BARE_IGNORE_ONLY_DIRS.flatMap(d =>
         fs.existsSync(d) ? findFiles(d, /\.(tsx|ts|css|astro|mdx)$/) : []);
 
-  const totalFiles = tsxFiles.length + cssFiles.length + blueprintFiles.length + bareOnlyFiles.length;
+  const totalFiles = tsxFiles.length + cssFiles.length + blueprintFiles.length + premiumEffectsFiles.length + bareOnlyFiles.length;
   if (totalFiles === 0) {
     if (!jsonMode) console.log('  No files to scan — skipping.\n');
     if (jsonMode) {
@@ -1897,12 +1915,22 @@ function main() {
       allViolations.push(...checkFallbackLiterals(line, lineNum, file, true, lines));
       allViolations.push(...checkRetiredBpNamespace(line, lineNum, file));
       allViolations.push(...checkSystemColorDirectRead(line, lineNum, file));
+      // Rule 14 (#2731): react/*.css only (isLiteralMediaPxScope) — Astro CSS ships raw.
+      if (/\.css$/.test(file)) allViolations.push(...checkLiteralMediaPx(line, lineNum, file));
     }
 
     // Rule 13 (#2592): .css only — the brace/selector tracker assumes plain
     // CSS syntax and would misparse .astro frontmatter or .tsx JSX.
     if (/\.css$/.test(file)) {
       allViolations.push(...checkResponsiveTokenSwap(content, file));
+    }
+  }
+
+  // Rule 14 only (#2731) — see premiumEffectsFiles above.
+  for (const file of premiumEffectsFiles) {
+    const lines = fs.readFileSync(file, 'utf8').split('\n');
+    for (let i = 0; i < lines.length; i++) {
+      allViolations.push(...checkLiteralMediaPx(lines[i], i + 1, file));
     }
   }
 

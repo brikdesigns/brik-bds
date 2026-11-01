@@ -29,7 +29,7 @@
   gap: var(--bds-gap-xl);
 }
 
-@media (min-width: 640px) {
+@media (--bds-up-tablet) {
   .bds-stats-bar__list {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   }
@@ -46,7 +46,7 @@
   padding-left: var(--bds-padding-md);
 }
 
-@media (max-width: 639px) {
+@media (--bds-down-tablet) {
   .bds-stats-bar__item {
     border-left: none;
     border-top: 1px solid var(--bds-stats-bar-divider, var(--bds-border-secondary));
