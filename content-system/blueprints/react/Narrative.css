@@ -26,7 +26,7 @@
 }
 
 /* Two-column narrative + callout only when a pull-quote is present. */
-@media (min-width: 768px) {
+@media (--bds-up-tablet) {
   .bds-narrative__container:has(.bds-narrative__callout) {
     grid-template-columns: 3fr 2fr;
     gap: var(--bds-gap-huge);

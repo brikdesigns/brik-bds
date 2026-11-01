@@ -116,7 +116,7 @@
  * a blueprint must exist in the allowlist). The descendant `bp-services-grid__list`
  * is the Astro dispatched grid; it never appears in React DOM, so this rule is
  * inert in React and active only in Astro's own scoped copy in CardGrid.astro. */
-@media (min-width: 992px) {
+@media (--bds-up-desktop) {
   .bds-card-grid--cols-2 .bp-services-grid__list {
     grid-template-columns: repeat(2, 1fr);
   }

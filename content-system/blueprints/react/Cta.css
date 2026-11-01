@@ -106,7 +106,7 @@
   text-align: start;
 }
 
-@media (min-width: 768px) {
+@media (--bds-up-tablet) {
   .bds-cta--split .bds-cta__container {
     grid-template-columns: 3fr 2fr;
     gap: var(--bds-gap-huge);
@@ -141,7 +141,7 @@
   padding-inline-start: var(--bds-padding-lg);
 }
 
-@media (max-width: 767px) {
+@media (--bds-down-tablet) {
   .bds-cta__aside {
     border-left: none;
     border-top: 1px solid var(--bds-cta-divider, var(--bds-border-secondary));
