@@ -117,3 +117,31 @@ export const FullSpan: Story = {
     await expect(getComputedStyle(full).gridColumn).toBe('1 / -1');
   },
 };
+
+/**
+ * A long unbreakable value (email, Stripe id) wraps inside its own cell instead
+ * of painting over the neighbouring column.
+ * @summary Long unbreakable Field values in a 4-column grid
+ */
+export const LongValue: Story = {
+  args: {
+    columns: 4,
+    gap: 'lg',
+  },
+  render: (args) => (
+    <Frame width="960px">
+      <FieldGrid {...args}>
+        <Field label="Email">nick+clientadmin@brikdesigns.com</Field>
+        <Field label="Phone">(615) 555-0142</Field>
+        <Field label="Monthly price ID">price_1SrPncGEnoeiM14XMLFW42Mv</Field>
+        <Field label="Annual price ID">price_1SrPncGEnoeiM14XMLFW42Mw</Field>
+      </FieldGrid>
+    </Frame>
+  ),
+  play: async ({ canvasElement }) => {
+    const values = canvasElement.querySelectorAll<HTMLElement>('.bds-field__value');
+    for (const value of values) {
+      await expect(value.scrollWidth).toBeLessThanOrEqual(value.clientWidth);
+    }
+  },
+};
