@@ -1,5 +1,6 @@
-import type { HTMLAttributes, ReactNode } from 'react';
-import { Button } from '../Button';
+import { Children, cloneElement, isValidElement } from 'react';
+import type { HTMLAttributes, ReactElement, ReactNode } from 'react';
+import { Button, type ButtonSize } from '../Button';
 import { Counter, type CounterStatus } from '../Counter';
 import { Popover } from '../Popover';
 import { useElementWidth } from '../shared';
@@ -56,10 +57,18 @@ export interface FilterBarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'ti
    * Action buttons (typically a `<ButtonGroup>`) rendered flush-right, AFTER
    * the filter controls. Unlike `children` (filter controls), `actions` stays
    * visible when the bar collapses on narrow widths — it does NOT fold into
-   * the `Filters` popover — so primary/secondary actions (e.g. "Assign")
-   * remain reachable. Omit when the bar has no actions.
+   * the `Filters` popover — so secondary actions (e.g. "Export") remain
+   * reachable. Filter-bar actions are never `primary`: the page header owns the
+   * page's one primary. Omit when the bar has no actions.
    */
   actions?: ReactNode;
+  /**
+   * Size of the bar's own buttons (Clear, the collapsed `Filters` trigger),
+   * forwarded to any `actions` child that has no `size` of its own. Default
+   * `sm` — one step below the `md` page-header buttons so the bar sits lower in
+   * the page hierarchy.
+   */
+  size?: ButtonSize;
 }
 
 /**
@@ -115,6 +124,7 @@ export function FilterBar({
   children,
   activeFilterCount,
   actions,
+  size = 'sm',
   className,
   style,
   ...props
@@ -140,7 +150,7 @@ export function FilterBar({
     <>
       {children}
       {onClear && isFiltered && (
-        <Button variant="ghost" size="md" onClick={onClear}>
+        <Button variant="ghost" size={size} onClick={onClear}>
           {clearLabel}
         </Button>
       )}
@@ -175,7 +185,7 @@ export function FilterBar({
                 <div className="bds-filter-bar__collapse-panel">{controls}</div>
               }
             >
-              <Button variant="secondary" size="md">
+              <Button variant="secondary" size={size}>
                 {triggerLabel}
               </Button>
             </Popover>
@@ -184,7 +194,15 @@ export function FilterBar({
           <div className="bds-filter-bar__controls">{controls}</div>
         ))}
 
-      {actions && <div className="bds-filter-bar__actions">{actions}</div>}
+      {actions && (
+        <div className="bds-filter-bar__actions">
+          {Children.map(actions, (action) =>
+            isValidElement<{ size?: ButtonSize }>(action) && action.props.size === undefined
+              ? cloneElement(action as ReactElement<{ size?: ButtonSize }>, { size })
+              : action,
+          )}
+        </div>
+      )}
     </div>
   );
 }

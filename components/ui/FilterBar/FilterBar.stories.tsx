@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { fn } from 'storybook/test';
+import { expect, fn, within } from 'storybook/test';
 import { FilterBar } from './FilterBar';
 import { FilterButton } from '../FilterButton';
 import { FilterToggle } from '../FilterToggle';
 import { Button } from '../Button';
 import { ButtonGroup } from '../ButtonGroup';
 import { DataSection } from '../DataSection';
+import { PageHeader } from '../PageHeader';
 import type { CounterTone } from '../Counter';
 
 /* ─── Counter tone options for the activeStatus Control ─────────
@@ -106,6 +107,12 @@ const meta: Meta<typeof FilterBar> = {
     activeFilterCount: {
       control: false,
       description: 'Number of currently-active filters. Drives the `Filters (N)` label when the bar collapses on narrow own-widths (ADR-019). Story computes this from the hook-filtered subset.',
+    },
+    size: {
+      control: 'inline-radio',
+      options: ['xs', 'sm', 'md', 'lg', 'xl'],
+      description:
+        'Size of the bar\'s own buttons, forwarded to `actions` children with no `size`. Default `sm` — one step below `md` page-header buttons. Filter-bar buttons are never primary.',
     },
     actions: {
       control: false,
@@ -368,12 +375,8 @@ export const WithActions: Story = {
         onClear={handleClear}
         actions={
           <ButtonGroup align="end">
-            <Button variant="outline" size="md">
-              Export
-            </Button>
-            <Button variant="primary" size="md">
-              Assign service
-            </Button>
+            <Button variant="outline">Export</Button>
+            <Button variant="secondary">Assign service</Button>
           </ButtonGroup>
         }
       >
@@ -390,5 +393,47 @@ export const WithActions: Story = {
         />
       </FilterBar>
     );
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   UNDER PAGE HEADER — hierarchy composition (a layout question, so a
+   story rather than a control). The header's `md` buttons sit above
+   the bar's `sm` ones; the bar's actions are never primary.
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Filter bar one size below a md page header */
+export const UnderPageHeader: Story = {
+  args: { total: 24, filtered: 8, label: 'documents', title: 'Documents' },
+  render: (args) => (
+    <>
+      <PageHeader
+        title="Birdwell Mutlak Dentistry"
+        actions={
+          <ButtonGroup>
+            <Button variant="primary">Upload</Button>
+          </ButtonGroup>
+        }
+      />
+      <FilterBar {...args} onClear={fn()} actions={<ButtonGroup><Button variant="outline">Export</Button></ButtonGroup>} />
+    </>
+  ),
+};
+
+/** @summary Verifies Clear and actions default to sm, and size overrides */
+export const InteractionTestSize: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: { total: 24, filtered: 8, label: 'documents' },
+  render: (args) => (
+    <FilterBar
+      {...args}
+      onClear={fn()}
+      actions={<ButtonGroup><Button variant="outline">Export</Button></ButtonGroup>}
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('button', { name: 'Clear filters' })).toHaveClass('bds-button--sm');
+    await expect(canvas.getByRole('button', { name: 'Export' })).toHaveClass('bds-button--sm');
   },
 };

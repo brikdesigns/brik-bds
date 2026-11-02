@@ -20,7 +20,7 @@ Layout: `[title] [counter] ... [filter children] [clear?] [actions]`
 
 <Canvas of={Stories.WithActions} />
 
-`actions` renders a primary/secondary `ButtonGroup` (or any node) flush-right, after the filter controls and clear button. It is intentionally **exempt from the narrow-own-width collapse** (ADR-019): shrink the bar below ~600px of its own width and the filter controls fold into the `Filters (N)` popover, but `actions` stays visible outside it — a primary action like "Assign service" must never hide behind a popover trigger.
+`actions` renders a `ButtonGroup` of secondary / outline buttons (or any node) flush-right, after the filter controls and clear button. It is intentionally **exempt from the narrow-own-width collapse** (ADR-019): shrink the bar below ~600px of its own width and the filter controls fold into the `Filters (N)` popover, but `actions` stays visible outside it — an action like "Assign service" must never hide behind a popover trigger. Filter-bar buttons are **never primary** and default to `sm` (`size` prop) — one step below the `md` page-header buttons, so the bar sits lower in the page hierarchy; `actions` children without their own `size` inherit it.
 
 ## No filters
 
