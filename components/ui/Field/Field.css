@@ -72,6 +72,9 @@
   color: var(--bds-text-primary);
   margin: 0;
   min-width: 0;
+  /* A long unbreakable token (email, Stripe id) in a narrow FieldGrid cell
+     would otherwise overpaint the next column. */
+  overflow-wrap: anywhere;
 }
 
 .bds-field--orientation-horizontal .bds-field__value {
