@@ -30,6 +30,11 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { PREFIX } from './lib/bds-prefix.mjs';
+import { LAYOUT_TIER, layoutFluidEntries, resolveSpaceRef } from './lib/layout-fluid.mjs';
+
+// Re-exported: the fluid math moved to ./lib/layout-fluid.mjs (brik-bds#2954) so
+// compileClientTheme can share it; existing importers keep this path.
+export { fmtNum, buildFluidValue } from './lib/layout-fluid.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -139,13 +144,9 @@ export const COLLECTIONS = {
     // be a runtime mode either — see tokens/CASCADE.md § Breakpoint; var()
     // cannot parametrize anything here, so there is no selector to write).
     fluid: true,
-    // Figma mode name → the `breakpoint/default` rung it reads its device
-    // width from. `desktop` reads `wider` (1440), not `desktop` (1024) — 1440
-    // is the width of the Figma frames the desktop endpoint was measured on
-    // (ADR-042 D4).
-    modes: ['mobile', 'tablet', 'desktop'],
-    rungs: { mobile: 'mobile', tablet: 'tablet', desktop: 'wider' },
-    resolve: resolveSpaceRef,
+    // modes / rungs / resolve: LAYOUT_TIER in ./lib/layout-fluid.mjs, shared with
+    // compileClientTheme (brik-bds#2954).
+    ...LAYOUT_TIER,
     outputFile: 'layout-fluid.css',
     description:
       'Layout tier — device-fluid --bds-page-inset / --bds-section-padding-block. ' +
@@ -182,13 +183,6 @@ export const COLLECTIONS = {
 
 function loadTokensStudio() {
   return JSON.parse(fs.readFileSync(TOKENS_STUDIO, 'utf8'));
-}
-
-function resolveSpaceRef(value, primitives) {
-  // {space.NNNN} → primitive value
-  const m = String(value).match(/^\{space\.(\w+)\}$/);
-  if (!m) return value;
-  return primitives.space?.[m[1]]?.$value ?? value;
 }
 
 function resolveFontSizeRef(value) {
@@ -396,78 +390,9 @@ function emitElevation(data, collectionKey) {
 // branch rather than a mode-by-mode selector loop like emitCollection, and
 // rather than a shadow box per size like emitElevation.
 
-/** Round to 4 decimals (killing float noise) and format, trimming a trailing
- *  `.0000` (and any other trailing zeros) so `1` prints as `1`, not `1.0000`. */
-export function fmtNum(n) {
-  const rounded = Math.round(n * 10000) / 10000;
-  const normalized = rounded === 0 ? 0 : rounded; // -0 → 0
-  if (Number.isInteger(normalized)) return String(normalized);
-  return normalized.toFixed(4).replace(/0+$/, '').replace(/\.$/, '');
-}
-
-/**
- * Pure math for one layout-tier token's piecewise fluid clamp (ADR-042 D3):
- *
- *   calc(clamp(v0, b1 + s1·vw, v1) + clamp(0, b2 + s2·vw, v2 − v1))
- *
- * Three endpoints (v0 @ w0px, v1 @ w1px, v2 @ w2px) become two linear
- * segments so one fluid value threads all three rungs exactly — a single
- * clamp() from mobile straight to desktop misses the tablet rung. Bounds and
- * intercepts are emitted in `rem` (so a 200%-zoom root raises the floor with
- * it, per WCAG 1.4.4); slope stays in `vw` (device width is what should drive
- * it, not the root font size). No special-casing is needed for a degenerate
- * segment (v1 === v0 or v2 === v1) — the slope term reduces to 0 and the
- * bound collapses to a constant on its own.
- *
- * Throws on non-monotonic endpoints — a silently wrong clamp is worse than a
- * red build (ADR-042 § Refusal).
- */
-export function buildFluidValue({ w0, w1, w2, v0, v1, v2 }) {
-  if (!(v0 <= v1 && v1 <= v2)) {
-    throw new Error(
-      `Non-monotonic layout endpoints (need v0 ≤ v1 ≤ v2): v0=${v0} v1=${v1} v2=${v2}`
-    );
-  }
-
-  const slope1 = ((v1 - v0) / (w1 - w0)) * 100;
-  const base1 = (v0 - ((v1 - v0) / (w1 - w0)) * w0) / 16;
-  const min1 = v0 / 16;
-  const max1 = v1 / 16;
-
-  const slope2 = ((v2 - v1) / (w2 - w1)) * 100;
-  const base2 = (-((v2 - v1) / (w2 - w1)) * w1) / 16;
-  const max2 = (v2 - v1) / 16;
-
-  const seg1 = `clamp(${fmtNum(min1)}rem, ${fmtNum(base1)}rem + ${fmtNum(slope1)}vw, ${fmtNum(max1)}rem)`;
-  const seg2 = `clamp(0rem, ${fmtNum(base2)}rem + ${fmtNum(slope2)}vw, ${fmtNum(max2)}rem)`;
-
-  return `calc(${seg1} + ${seg2})`;
-}
-
 function emitFluid(data, collectionKey) {
   const cfg = COLLECTIONS[collectionKey];
-  const primitives = data['primitives/value'] ?? {};
-  const rungSlice = readModeTokens(data, 'breakpoint', 'default');
-
-  const rungPx = (rungName) => {
-    const token = rungSlice[rungName];
-    if (!token || typeof token.$value !== 'number') {
-      throw new Error(
-        `Missing/invalid breakpoint/default rung "${rungName}" needed by the ${collectionKey} fluid tier`
-      );
-    }
-    return token.$value;
-  };
-  const w0 = rungPx(cfg.rungs.mobile);
-  const w1 = rungPx(cfg.rungs.tablet);
-  const w2 = rungPx(cfg.rungs.desktop);
-
-  const slices = {};
-  for (const mode of cfg.modes) slices[mode] = readModeTokens(data, collectionKey, mode);
-
-  // Variable set is read off the desktop slice; every mode must carry the
-  // same names (Figma authors all three modes on one variable collection).
-  const names = Object.keys(slices.desktop).sort((a, b) => a.localeCompare(b));
+  const { w0, w1, w2, entries } = layoutFluidEntries(data, { collectionKey, ...cfg });
 
   const lines = [];
   lines.push('/**');
@@ -502,16 +427,7 @@ function emitFluid(data, collectionKey) {
   lines.push('');
   lines.push(':root {');
 
-  for (const name of names) {
-    const v0 = cfg.resolve(slices.mobile[name]?.$value, primitives);
-    const v1 = cfg.resolve(slices.tablet[name]?.$value, primitives);
-    const v2 = cfg.resolve(slices.desktop[name]?.$value, primitives);
-    if (typeof v0 !== 'number' || typeof v1 !== 'number' || typeof v2 !== 'number') {
-      throw new Error(
-        `Could not resolve an alias for --${name} across layout/{mobile,tablet,desktop}`
-      );
-    }
-    const value = buildFluidValue({ w0, w1, w2, v0, v1, v2 });
+  for (const { name, value, v0, v1, v2 } of entries) {
     lines.push(`  ${PREFIX}${name}: ${value}; /* ${v0} → ${v1} → ${v2}px at ${w0} / ${w1} / ${w2} */`);
   }
 

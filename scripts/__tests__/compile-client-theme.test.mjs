@@ -197,3 +197,57 @@ describe('compileClientTheme', () => {
     });
   });
 });
+
+// A kit may set the layout tier (brik-bds#2954). The compiler drops `layout` before
+// Style Dictionary (ADR-042), so these pin the kit's own device-fluid clamp.
+describe('compileClientTheme — kit layout tier', () => {
+  const layoutSets = (inset, block) =>
+    Object.fromEntries(
+      ['mobile', 'tablet', 'desktop'].map((mode, i) => [
+        `layout/${mode}`,
+        {
+          'page-inset': { $type: 'number', $value: `{space.${inset[i]}}` },
+          'section-padding-block': { $type: 'number', $value: `{space.${block[i]}}` },
+        },
+      ])
+    );
+  // space.600 / 1000 / 1600 = 24 / 40 / 64px; space.1200 / 1600 / 2000 = 48 / 64 / 88px.
+  const kit2 = () => ({ ...readBrikKit(), ...layoutSets([600, 1000, 1600], [1200, 1600, 2000]) });
+
+  /** One declared token's calc(clamp() + clamp()) resolved at a viewport width, 16px root. */
+  function valueAt(css, name, widthPx) {
+    const decl = css.match(new RegExp(`${name}: ([^;]+);`))?.[1];
+    if (!decl) throw new Error(`${name} not declared`);
+    let total = 0;
+    for (const [, min, base, slope, max] of decl.matchAll(
+      /clamp\((-?[\d.]+)rem,\s*(-?[\d.]+)rem \+ (-?[\d.]+)vw,\s*(-?[\d.]+)rem\)/g
+    )) {
+      total += Math.max(+min * 16, Math.min(+max * 16, +base * 16 + (+slope / 100) * widthPx));
+    }
+    return Math.round(total);
+  }
+
+  it('control: the Brik kit declares no layout tier, so its output has none', async () => {
+    expect(await compileBrik()).not.toMatch(/--bds-(page-inset|section-padding-block):/);
+  });
+
+  it('a kit that sets the layout tier gets its own value at 320 / 768 / 1440', async () => {
+    const css = await compileClientTheme(kit2(), { selector: '.theme-kit2' });
+    expect([320, 768, 1440].map((w) => valueAt(css, '--bds-page-inset', w))).toEqual([24, 40, 64]);
+    expect([320, 768, 1440].map((w) => valueAt(css, '--bds-section-padding-block', w))).toEqual([48, 64, 88]);
+    expect(css.trimEnd().split('\n').at(-4)).toBe('.theme-kit2 {');
+  });
+
+  it('a kit that sets one token keeps Foundations for the other', async () => {
+    const kit = readBrikKit();
+    kit['layout/mobile'] = { 'page-inset': { $type: 'number', $value: '{space.600}' } };
+    const css = await compileClientTheme(kit);
+    expect([320, 768, 1440].map((w) => valueAt(css, '--bds-page-inset', w))).toEqual([24, 32, 96]);
+    expect([320, 768, 1440].map((w) => valueAt(css, '--bds-section-padding-block', w))).toEqual([64, 80, 104]);
+  });
+
+  it('refuses endpoints that shrink as the device grows', async () => {
+    const kit = { ...readBrikKit(), ...layoutSets([1600, 1000, 600], [1200, 1600, 2000]) };
+    await expect(compileClientTheme(kit)).rejects.toThrow(/non-monotonic/i);
+  });
+});
