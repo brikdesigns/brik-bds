@@ -102,6 +102,8 @@ In TS, import `pageInset` and `sectionPaddingBlock` from `@bds-tokens` rather th
 --bds-page-inset: calc(clamp(1rem, 0.2857rem + 3.5714vw, 2rem) + clamp(0rem, -4.5714rem + 9.5238vw, 4rem));
 ```
 
+**Per-client values.** A Brand Kit sets its own layout tier by carrying `layout/mobile`, `layout/tablet` and `layout/desktop` sets of `{space.NNNN}` aliases onto the shared space scale. `compileClientTheme` then ends that kit's theme CSS with its own `--bds-page-inset` and `--bds-section-padding-block`, built by the same clamp math. A kit that sets neither inherits the values above. Endpoints must not shrink as the device grows, or the build refuses.
+
 <Callout type="warn">
   **Never re-declare a layout-tier value in a site.** No site-level `clamp()`, no `@media` override of `--page-inset`. The nav and every section read the same token, so they cannot drift apart. A component that needs a different step at a breakpoint picks **another fixed token** inside an `@media` on a `--breakpoint-*` rung — the component tokens themselves never change with viewport width.
 </Callout>
