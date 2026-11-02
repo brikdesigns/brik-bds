@@ -186,6 +186,26 @@ export type BlueprintColumns = 2 | 3 | 4;
 export type BlueprintMedia = 'image' | 'video' | 'bg-video' | 'none';
 
 /**
+ * Aspect-ratio slugs a section's `media.ratio` may carry — the non-deprecated
+ * `FrameRatio` set, matching the portal's `FRAME_RATIOS`.
+ */
+export type BlueprintMediaRatio =
+  | '1-1' | '3-2' | '2-3' | '4-3' | '3-4' | '4-5' | '16-9' | '9-16' | '21-9'
+  | 'square' | 'photo-landscape' | 'photo-portrait' | 'cinema';
+
+/** Where a section's media asset comes from. */
+export type BlueprintMediaSource = 'client' | 'stock' | 'placeholder';
+
+/** Per-section media axis value (`role: 'none'` carries no ratio / source). */
+export type BlueprintSectionMedia =
+  | { readonly role: 'none' }
+  | {
+      readonly role: 'image' | 'video' | 'bg-video';
+      readonly ratio: BlueprintMediaRatio;
+      readonly source: BlueprintMediaSource;
+    };
+
+/**
  * Motion axis — block entrance reveal (ADR-039 §Decision 2, #2494).
  *
  * A curated closed union that replaces the free-text `visualNotes.animationSuggestion`
@@ -472,6 +492,26 @@ export interface BlueprintSection {
    * Additive, optional — blueprints that don't read it are unaffected.
    */
   readonly contentMotion?: BlueprintContentMotion;
+  /**
+   * Structure axis — per-section content placement (ADR-039 §Decision 1).
+   * `BlueprintDispatcher` applies it over the registry default; unset keeps
+   * the block's own default. Read by blocks that declare an `align` prop.
+   */
+  readonly align?: BlueprintAlign;
+  /**
+   * Structure axis — per-section item-grid column count (ADR-039 §Decision 1).
+   * Applied over the registry default by `BlueprintDispatcher`; read by
+   * blocks that declare a `columns` prop (`Features`, `CardGrid`).
+   */
+  readonly columns?: BlueprintColumns;
+  /**
+   * Media axis — per-section media (ADR-039 §Media axis). Same shape as the
+   * portal's `planMediaSchemaLoose`: `role` is the `BlueprintMedia` the block's
+   * `media` prop takes; `ratio` maps to the block's `imageRatio`; `source`
+   * (where the asset comes from) is carried for the consumer and not rendered
+   * by the dispatcher.
+   */
+  readonly media?: BlueprintSectionMedia;
   readonly visualNotes: {
     readonly blueprintKey: KnownBlueprintKey | null;
     readonly moodKeywords: readonly string[];

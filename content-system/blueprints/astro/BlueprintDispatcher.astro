@@ -88,6 +88,7 @@ import StatsBar from './StatsBar.astro';
 import TestimonialsFeaturedLarge from './TestimonialsFeaturedLarge.astro';
 import LogoWall from './LogoWall.astro';
 import BlueprintFallback from './BlueprintFallback.astro';
+import { resolveSectionProps } from './section-axes';
 
 // The registry. Key order doesn't matter; lookup is by key. Every entry's
 // component accepts `BlueprintProps`; `props` carries the per-key extras
@@ -128,6 +129,6 @@ const { sections, clientFacts, theme } = Astro.props;
   }
   const Component = entry.component;
   return (
-    <Component section={section} clientFacts={clientFacts} theme={theme} {...entry.props} />
+    <Component section={section} clientFacts={clientFacts} theme={theme} {...resolveSectionProps(entry.props, section)} />
   );
 })}
