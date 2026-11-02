@@ -62,3 +62,15 @@
   min-width: 0;
 }
 }
+
+/* ─── Overflow: trigger + Menu anchored under it ───────────── */
+
+.bds-button-group__overflow {
+  position: relative;
+}
+
+.bds-button-group__menu {
+  top: 100%;
+  right: 0;
+  margin-top: var(--bds-gap-sm);
+}

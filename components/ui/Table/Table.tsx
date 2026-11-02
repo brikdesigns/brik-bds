@@ -6,13 +6,16 @@ import {
   type ThHTMLAttributes,
   type ReactElement,
   type ReactNode,
+  Children,
   cloneElement,
+  isValidElement,
   useEffect,
   useRef,
   useState,
 } from 'react';
 import { bdsClass } from '../../utils';
 import { Avatar, type AvatarStatus } from '../Avatar';
+import type { ButtonSize } from '../Button';
 import { Image } from '../Image';
 import { Logo, type LogoProps } from '../Logo';
 import { Skeleton } from '../Skeleton';
@@ -371,13 +374,18 @@ export function TableSkeletonRow({
 export type TableActionsCellAlign = 'right' | 'center';
 
 export interface TableActionsCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
-  /** Action buttons — icon-only `Button icon={...}` in `size="md"` with `variant="secondary"` (`IconButton` is `@deprecated`). */
+  /** Action buttons — icon-only `Button icon={...}` with `variant="secondary"` (sized by the cell's `size`, default `sm`) (`IconButton` is `@deprecated`). */
   children: ReactNode;
   /**
    * Horizontal alignment of the action cluster. Default `right` (canonical
    * trailing-actions column). Use `center` for symmetric-action tables.
    */
   align?: TableActionsCellAlign;
+  /**
+   * Size applied to every child button that does not set its own `size`.
+   * Default `sm`, so text and icon buttons in an action cell share one height.
+   */
+  size?: ButtonSize;
 }
 
 /**
@@ -408,8 +416,8 @@ export interface TableActionsCellProps extends TdHTMLAttributes<HTMLTableCellEle
  *   <TableCell><TextLink size="small" onClick={openFkSheet}>{service.serviceLine}</TextLink></TableCell>
  *   <TableCell><Badge status="positive" size="sm">Active</Badge></TableCell>
  *   <TableActionsCell>
- *     <Button variant="secondary" size="md" icon={<Eye />} label="View" onClick={openSheet} />
- *     <Button variant="secondary" size="md" icon={<Pen />} label="Edit" onClick={navigateEdit} />
+ *     <Button variant="secondary" icon={<Eye />} label="View" onClick={openSheet} />
+ *     <Button variant="secondary" icon={<Pen />} label="Edit" onClick={navigateEdit} />
  *   </TableActionsCell>
  * </TableRow>
  * ```
@@ -419,11 +427,18 @@ export interface TableActionsCellProps extends TdHTMLAttributes<HTMLTableCellEle
 export function TableActionsCell({
   children,
   align = 'right',
+  size = 'sm',
   className,
   style,
   'aria-label': ariaLabel,
   ...props
 }: TableActionsCellProps) {
+  const sized = Children.map(children, (child) => {
+    if (!isValidElement(child)) return child;
+    const childProps = child.props as { size?: ButtonSize };
+    if (childProps.size !== undefined) return child;
+    return cloneElement(child, { size } as Partial<typeof childProps>);
+  });
   return (
     <td
       className={bdsClass(
@@ -435,7 +450,7 @@ export function TableActionsCell({
       aria-label={ariaLabel ?? 'Actions'}
       {...props}
     >
-      <div className="bds-table-actions-cell__group">{children}</div>
+      <div className="bds-table-actions-cell__group">{sized}</div>
     </td>
   );
 }

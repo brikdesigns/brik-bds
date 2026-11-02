@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { ButtonGroup } from './ButtonGroup';
 import { Button } from '../Button';
 
@@ -51,6 +52,15 @@ const meta: Meta<typeof ButtonGroup> = {
         '`end` is the canonical modal / sheet action-row choice (primary far right, secondary to its left). ' +
         '`between` places the first child against the leading edge and the last against the trailing edge.',
     },
+    size: {
+      control: 'select',
+      options: ['xs', 'sm', 'md', 'lg', 'xl'],
+      description: 'Size applied to every child that sets no `size` of its own, so text and icon buttons share one height.',
+    },
+    maxVisible: {
+      control: 'number',
+      description: 'Buttons shown before the rest roll into an overflow Menu. Default 3, primary included. Horizontal groups only.',
+    },
     fullWidth: {
       control: 'boolean',
       description: 'Stretch buttons to fill container width equally. When true, `align` is ignored.',
@@ -92,7 +102,7 @@ export const Default: Story = {
    inline toolbars on rows / cards (edit, copy, share, delete).
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Icon-button toolbar — up to 4 actions */
+/** @summary Icon-button toolbar — up to 3 actions */
 export const IconButtonGroup: Story = {
   args: {
     orientation: 'horizontal',
@@ -103,7 +113,6 @@ export const IconButtonGroup: Story = {
     <ButtonGroup {...args}>
       <Button icon={<Edit />} label="Edit" variant="secondary" />
       <Button icon={<Copy />} label="Copy" variant="secondary" />
-      <Button icon={<Share />} label="Share" variant="secondary" />
       <Button icon={<Trash />} label="Delete" variant="negative" />
     </ButtonGroup>
   ),
@@ -131,4 +140,91 @@ export const ActionBar: Story = {
       <Button variant="primary">Save</Button>
     </ButtonGroup>
   ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   OVERFLOW — a 4th and later button rolls into a Menu. Icon groups
+   get a [⋯] icon button; text groups get a "View More" text button.
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Icon overflow — 5 icon buttons, 3 shown plus [⋯] */
+export const IconOverflow: Story = {
+  parameters: { layout: 'padded' },
+  decorators: [(Story) => <div style={{ minHeight: 220 }}><Story /></div>],
+  args: { size: 'sm' },
+  render: (args) => (
+    <ButtonGroup {...args}>
+      <Button icon={<Edit />} label="Edit" variant="secondary" />
+      <Button icon={<Copy />} label="Copy" variant="secondary" />
+      <Button icon={<Share />} label="Share" variant="secondary" />
+      <Button icon={<Trash />} label="Delete" variant="negative" />
+      <Button icon={<Edit />} label="Rename" variant="secondary" />
+    </ButtonGroup>
+  ),
+};
+
+/** @summary Text overflow — 5 text buttons, 3 shown plus "View More" */
+export const TextOverflow: Story = {
+  parameters: { layout: 'padded' },
+  decorators: [(Story) => <div style={{ minHeight: 220 }}><Story /></div>],
+  args: { size: 'sm' },
+  render: (args) => (
+    <ButtonGroup {...args}>
+      <Button variant="primary">Save</Button>
+      <Button variant="outline">Preview</Button>
+      <Button variant="ghost">Cancel</Button>
+      <Button variant="ghost">Duplicate</Button>
+      <Button variant="ghost">Archive</Button>
+    </ButtonGroup>
+  ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   INTERACTION TESTS — play-only, hidden from MCP + sidebar.
+   ═══════════════════════════════════════════════════════════════ */
+
+/** @summary Verifies the overflow Menu holds the buttons past the third */
+export const InteractionTestOverflow: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: { size: 'sm' },
+  render: (args) => (
+    <ButtonGroup {...args}>
+      <Button icon={<Edit />} label="Edit" variant="secondary" />
+      <Button icon={<Copy />} label="Copy" variant="secondary" />
+      <Button icon={<Share />} label="Share" variant="secondary" />
+      <Button icon={<Trash />} label="Delete" variant="negative" />
+      <Button icon={<Edit />} label="Rename" variant="secondary" />
+    </ButtonGroup>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.queryByRole('button', { name: 'Delete' })).toBeNull();
+    await expect(canvas.getByRole('button', { name: 'Share' })).toBeVisible();
+    await userEvent.click(canvas.getByRole('button', { name: 'More actions' }));
+    // Presence, not visibility: the Menu fades in, and the visual suite pauses animations at opacity 0.
+    await expect(await canvas.findByRole('menuitem', { name: 'Delete' })).toBeInTheDocument();
+    await expect(canvas.getByRole('menuitem', { name: 'Rename' })).toBeInTheDocument();
+  },
+};
+
+/** @summary Verifies text and icon buttons share height at every size */
+export const InteractionTestEqualHeight: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  render: () => (
+    <div>
+      {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
+        <ButtonGroup key={size} size={size} data-testid={`group-${size}`}>
+          <Button variant="secondary">Text</Button>
+          <Button icon={<Edit />} label="Edit" variant="secondary" />
+        </ButtonGroup>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    for (const size of ['xs', 'sm', 'md', 'lg', 'xl']) {
+      const group = within(canvasElement).getByTestId(`group-${size}`);
+      const [text, icon] = Array.from(group.querySelectorAll('button'));
+      await expect(text.getBoundingClientRect().height).toBe(icon.getBoundingClientRect().height);
+    }
+  },
 };
