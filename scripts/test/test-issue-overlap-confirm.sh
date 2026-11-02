@@ -34,7 +34,7 @@ assert_eq() {
   if [ "$want" = "$got" ]; then PASS=$((PASS+1)); echo "  ✓ $label";
   else FAIL=$((FAIL+1)); FAILED_CASES+=("$label"); echo "  ✗ $label"; echo "      want: [$want]"; echo "      got:  [$got]"; fi
 }
-has() { printf '%s' "$1" | grep -q "$2" && echo yes || echo no; }
+has() { grep -q "$2" <<<"$1" && echo yes || echo no; }
 
 TMPROOT="$(mktemp -d "${TMPDIR:-/tmp}/brik-overlap-confirm-XXXXXXXX")"
 trap 'rm -rf "$TMPROOT"' EXIT
