@@ -80,6 +80,10 @@ This is the rule most often missed. A section's content container picks one rung
 
 If a block genuinely needs a different width from its siblings, it is not in that column — give it its own column, or restructure. Don't re-cap inside one.
 
+## Read-mode field grid
+
+Inside the band, a record's own attributes are a `FieldGrid columns={4}` that steps 4 → 3 → 2 by container width, with a fixed gap and `span="full"` for long values. The rule is stated once, in [Record Read § Grid](/docs/build-standards/page-archetypes/record-read#grid); this page does not restate it.
+
 ## Text column vs band
 
 A band width is not a text width. `--content-width-xl` (1280px) sizes the *band*; a title or description spanning the full 1280px is unreadable. The **text column** is the readable column *inside* the band — a narrower cap applied to the text group, not to the container.

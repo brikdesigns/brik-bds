@@ -95,6 +95,34 @@ export const Default: Story = {
   ),
 };
 
+/**
+ * One parent section with two child sections. The parent is the `<h2>` and
+ * carries `actions`; each child sets `titleAs="h3"` so the outline stays
+ * h2 → h3. Section actions belong in `actions`, never in the body.
+ *
+ * @summary Nested sections under an h2 parent
+ */
+export const Nested: Story = {
+  render: () => (
+    <Frame>
+      <DataSection title="Brand" actions={<Button size="sm" variant="secondary">Edit</Button>}>
+        <DataSection title="Logo" titleAs="h3">
+          <FieldGrid columns={4}>
+            <Field label="Primary">Wordmark</Field>
+            <Field label="Favicon">Monogram</Field>
+          </FieldGrid>
+        </DataSection>
+        <DataSection title="Color" titleAs="h3">
+          <FieldGrid columns={4}>
+            <Field label="Primary">#1F4D3A</Field>
+            <Field label="Accent">#E4572E</Field>
+          </FieldGrid>
+        </DataSection>
+      </DataSection>
+    </Frame>
+  ),
+};
+
 /* ═══════════════════════════════════════════════════════════════
    VARIANTS — irreducible composition (stacked read-mode page)
    ═══════════════════════════════════════════════════════════════ */
