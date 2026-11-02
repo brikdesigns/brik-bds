@@ -3060,100 +3060,6 @@
       "$value": 1440
     }
   },
-  "breakpoint/compact": {
-    "tablet": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "dimension",
-      "$value": 768
-    },
-    "mobile": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "dimension",
-      "$value": 320
-    },
-    "desktop": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "dimension",
-      "$value": 1024
-    },
-    "wide": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "dimension",
-      "$value": 1280
-    },
-    "wider": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "dimension",
-      "$value": 1440
-    }
-  },
-  "breakpoint/comfortable": {
-    "tablet": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "dimension",
-      "$value": 768
-    },
-    "mobile": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "dimension",
-      "$value": 320
-    },
-    "desktop": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "dimension",
-      "$value": 1024
-    },
-    "wide": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "dimension",
-      "$value": 1280
-    },
-    "wider": {
-      "$extensions": {
-        "com.figma.scopes": [
-          "ALL_SCOPES"
-        ]
-      },
-      "$type": "dimension",
-      "$value": 1440
-    }
-  },
   "layout/desktop": {
     "page-inset": {
       "$extensions": {
@@ -5341,8 +5247,6 @@
       "spacing/comfortable",
       "spacing/spacious",
       "breakpoint/default",
-      "breakpoint/compact",
-      "breakpoint/comfortable",
       "layout/desktop",
       "layout/tablet",
       "layout/mobile",
