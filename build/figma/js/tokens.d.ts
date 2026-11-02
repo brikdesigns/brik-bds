@@ -60,7 +60,7 @@ export const colorAnnotationLightBlue: string;
 export const fontWeightBold: string;
 export const fontWeightMedium: string;
 export const fontWeightRegular: string;
-export const fontWeightThin: string;
+export const fontWeightLight: string;
 export const fontWeightBlack: string;
 export const fontWeightSemibold: string;
 export const fontWeightExtrabold: string;

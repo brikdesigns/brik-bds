@@ -61,7 +61,7 @@ const DISPLAY = {
 // Weight token suffixes match the real --font-weight-* names; the numeric
 // value drives the sample and is shown alongside.
 const WEIGHTS = {
-  thin: '300',
+  light: '300',
   regular: '400',
   medium: '500',
   semibold: '600',

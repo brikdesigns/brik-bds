@@ -62,7 +62,8 @@
   --bds-font-weight--semi-bold:  var(--bds-font-weight-semibold);
   --bds-font-weight--medium:     var(--bds-font-weight-medium);
   --bds-font-weight--regular:    var(--bds-font-weight-regular);
-  --bds-font-weight--thin:       var(--bds-font-weight-thin);
+  --bds-font-weight--light:      var(--bds-font-weight-light);
+  --bds-font-weight--thin:       var(--bds-font-weight-light);  /* bds-lint-ignore — DEPRECATED, use --bds-font-weight--light (#2222); drop next minor */
 
   /* ── Easing curves (repo-owned) ──
      Motion curves are declared here, not generated from Figma. The foundations
@@ -460,6 +461,11 @@
   --bds-ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — pop-in, badge appear */
   --bds-ease-spring-soft: cubic-bezier(0, 1.08, 0.77, 1.01); /* gentle overshoot settle — media/panel entrance */
   --bds-ease-linear:      linear;                            /* constant velocity — marquees, continuous loops */
+
+  /* ── DEPRECATED font-weight `thin` (#2222) — DROP NEXT MINOR ──
+     Figma's `font-weight/thin` was value 300, which is CSS *Light*; it is renamed
+     `light` at the source (value unchanged), so `thin` stays one minor as an alias. */
+  --bds-font-weight-thin:    var(--bds-font-weight-light);  /* bds-lint-ignore — DEPRECATED, use --bds-font-weight-light (#2222); drop next minor */
 
   /* ── DEPRECATED numeric-rung aliases (#2594) — DROP NEXT MINOR ──
      ADR-033 §3 renamed 13 ❖ Brik Foundations step words to numeric t-shirt

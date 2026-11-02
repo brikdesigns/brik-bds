@@ -501,7 +501,7 @@
         "$type": "text",
         "$value": "400"
       },
-      "thin": {
+      "light": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"

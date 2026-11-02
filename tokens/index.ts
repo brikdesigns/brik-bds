@@ -455,12 +455,11 @@ export const fontSizeScale = {
 export const fontWeights = {
   "bold": "700",
   "regular": "400",
-  "semi-bold": "600",
+  "semibold": "600",
   "light": "300",
   "medium": "500",
-  "extra-bold": "800",
-  "black": "900",
-  "thin": "300"
+  "extrabold": "800",
+  "black": "900"
 } as const;
 
 /**
@@ -483,7 +482,9 @@ export const fontLineHeights = {
  * dist/tokens.css (aliases `--bds-font-weight-semibold`).
  */
 export const weight = {
-  thin: 'var(--bds-font-weight-thin)',
+  light: 'var(--bds-font-weight-light)',
+  /** @deprecated `thin` was value 300 (CSS Light) — use `light` (#2222); drops next minor. */
+  thin: 'var(--bds-font-weight-light)',
   regular: 'var(--bds-font-weight-regular)',
   medium: 'var(--bds-font-weight-medium)',
   semibold: 'var(--bds-font-weight-semibold)',
