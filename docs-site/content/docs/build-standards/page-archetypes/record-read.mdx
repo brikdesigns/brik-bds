@@ -26,13 +26,13 @@ Reach for it when the page is about one record and the reader is reading. If the
   <PageContent>
     <ProfileView loading={isLoading} error={error?.message}>
       <DataSection title="Identity" actions={<Button size="sm" variant="secondary">Edit</Button>}>
-        <FieldGrid columns={2}>
+        <FieldGrid columns={4}>
           <Field label="Business Name">{client.name}</Field>
           <Field label="Industry">{client.industry}</Field>
         </FieldGrid>
       </DataSection>
       <DataSection title="Location">
-        <FieldGrid columns={2}>
+        <FieldGrid columns={4}>
           <Field label="City">{client.city}</Field>
           <Field label="State">{client.state}</Field>
         </FieldGrid>
@@ -43,6 +43,16 @@ Reach for it when the page is about one record and the reader is reading. If the
 ```
 
 Stack the sections as direct `PageContent` children. Do not wrap them in a `Stack` with a hand-set gap — the space *and* the rule between two `DataSection` siblings come from the component's own adjacency selector, per [the section separator](/docs/build-standards/content-rhythm#the-section-separator). Any element inserted between two sections breaks that selector and the second section silently loses its rule.
+
+## Grid
+
+Read-mode panels use `FieldGrid columns={4}`. `columns` is the maximum: the grid steps 4 → 3 → 2 by the width of its own container, not the viewport, so the same call is 4-up on a full page and 2-up in a `Sheet` ([container thresholds](/docs/components/field-grid)).
+
+- **Gap is fixed.** Leave `gap` at its default (`lg`). There is no per-width gap.
+- **Long values take `span="full"`.** A paragraph, an address block or a URL list goes on a `Field` with `span="full"` so it never squeezes a cell; every other `Field` stays one cell.
+- **Do not choose `columns` per surface.** A narrower surface is handled by the container step-down, not by a smaller `columns`.
+
+This is the one place the read-mode grid rule is stated; [Page Grid](/docs/build-standards/page-grid#read-mode-field-grid) links here.
 
 ## State shell
 
@@ -89,4 +99,4 @@ The page-level `[Edit]` in `PageHeader` is a different thing — it routes to th
 - [Collection](/docs/build-standards/page-archetypes/collection) — the archetype when the page is about a set rather than one record.
 - [Profile](/docs/build-standards/page-archetypes/profile) — this archetype as one tab of a tabbed entity page.
 - [Storybook — read-mode-page](https://storybook.brikdesigns.com/?path=/docs/containers-read-mode-page--overview) — live canvases and the two section-level edit conventions.
-- [Display Choice](/docs/build-standards/display-choice) — why one record's own scalars are a field grid and not a table.
+- [Display Choice](/docs/build-standards/display-choice) — why one record's own scalars are a field grid and not a table, and which display a status list or a single active subscription gets.

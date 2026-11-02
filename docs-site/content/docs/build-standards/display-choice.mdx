@@ -41,7 +41,16 @@ When two rows above both look defensible, these resolve it.
 - **Peer categories are tabs; a sequence is an accordion.** Both hide all but one panel, so the rendered output does not tell you which was right — ask what the *set* is. Options the reader chooses **between** ("Healthcare / Legal / Retail") are peers and get tabs. Steps the reader walks **through** ("Scope → Design → Build") are ordered, and an accordion keeps every label visible so the reader can see where they are in the sequence. Tabs collapse the other labels into a rail and lose that.
 - **Many items or tall content breaks the tie toward accordion.** Tabs need every label on one rail and every panel roughly the same height; past about five items, or when a panel is tall enough that mobile must stack it, the accordion is the one that still works. Tab count and panel height are the only two places on this page where the amount of content is a legitimate selector — because they are constraints on the *control*, not on the data.
 - **The display never demotes its content.** A display that pushes the item's most substantive content down the type scale is the wrong display. A card's supporting text sits below body; a table's body data is **body text in every column**, with de-emphasis carried by `--text-muted` alone. If the pick costs the content two type steps, re-pick.
+- **One active instance of a thing is a `DataSection`, not a table row.** A support plan, a recurring engagement or a subscription the company has right now is a record in its own right: its attributes are a `FieldGrid` inside a `DataSection`. A table needs two or more peers to scan. When a company has several active instances, render one `DataSection` per instance.
+- **A read-only status list is `InteractiveListItem` rows with a trailing `Badge`.** Each row names the item and the badge carries its state. When each item has its **own action** (sync, connect, configure), the list is one [`Card layout="control"`](/docs/components/card) per item instead, because a list row has nowhere correct to put the control.
 - **If two still hold, the decision is underspecified.** That is a gap in this page, not a judgment call to make locally. File it.
+
+## View toggles
+
+A view toggle is for **collections only**. A single record has no alternate view, so it never gets one.
+
+- **Each view needs its own field.** A board groups by a stage field and a calendar places by a date field. A collection with no such field has no honest second view, so it gets no toggle.
+- **Add the `ViewSwitcher` when the first toggle ships.** Do not add a switcher to a collection that has only one view.
 
 ## State shells
 
