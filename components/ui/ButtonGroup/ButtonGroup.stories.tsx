@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, waitFor, within } from 'storybook/test';
+import { expect, userEvent, within } from 'storybook/test';
 import { ButtonGroup } from './ButtonGroup';
 import { Button } from '../Button';
 
@@ -201,9 +201,9 @@ export const InteractionTestOverflow: Story = {
     await expect(canvas.queryByRole('button', { name: 'Delete' })).toBeNull();
     await expect(canvas.getByRole('button', { name: 'Share' })).toBeVisible();
     await userEvent.click(canvas.getByRole('button', { name: 'More actions' }));
-    // The Menu fades in; wait for the entrance animation to finish before asserting visibility.
-    await waitFor(() => expect(canvas.getByRole('menuitem', { name: 'Delete' })).toBeVisible());
-    await expect(canvas.getByRole('menuitem', { name: 'Rename' })).toBeVisible();
+    // Presence, not visibility: the Menu fades in, and the visual suite pauses animations at opacity 0.
+    await expect(await canvas.findByRole('menuitem', { name: 'Delete' })).toBeInTheDocument();
+    await expect(canvas.getByRole('menuitem', { name: 'Rename' })).toBeInTheDocument();
   },
 };
 
