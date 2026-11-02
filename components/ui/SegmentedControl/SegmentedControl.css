@@ -9,7 +9,8 @@
  * Token reference:
  * - --bds-background-secondary (track fill)    - --bds-background-primary (active pill)
  * - --bds-background-tertiary (hover/press)    - --bds-text-on-color-light (inactive label)
- * - --bds-text-primary (active/hover label)    - --bds-border-brand-primary (focus ring)
+ * - --bds-text-primary (active/hover label)    - --bds-border-brand-primary (focus ring, active-item boundary)
+ * - --bds-border-width-md (item border; item padding is reduced by it)
  */
 
 /* ── Container / track ── */
@@ -42,7 +43,9 @@
      SAME property — mixing shorthand + non-shorthand triggered React's
      "conflicting style property" warning when these were inline. See #993. */
   background-color: transparent;
-  border: none;
+  /* Unified border model (mirrors Button.css) — every item reserves the same
+     border box so the active state shifts nothing. Active overrides border-color only. */
+  border: var(--bds-border-width-md) solid transparent;
   border-radius: var(--bds-border-radius-sm);
   /* Inactive label sits on the --bds-background-secondary track, a light-ish neutral
      surface in BOTH themes. --bds-text-on-color-light is fixed dark in both themes →
@@ -51,6 +54,7 @@
   min-width: 0;
   transition: background-color var(--bds-duration-sm) var(--bds-ease-out),
     color var(--bds-duration-sm) var(--bds-ease-out),
+    border-color var(--bds-duration-sm) var(--bds-ease-out),
     box-shadow var(--bds-duration-sm) var(--bds-ease-out);
 }
 
@@ -61,17 +65,17 @@
 /* ── Size ── */
 
 .bds-segmented-control--sm .bds-segmented-control-item {
-  padding: var(--bds-gap-xs) var(--bds-padding-md);
+  padding: calc(var(--bds-gap-xs) - var(--bds-border-width-md)) calc(var(--bds-padding-md) - var(--bds-border-width-md));
   font-size: var(--bds-label-sm);
 }
 
 .bds-segmented-control--md .bds-segmented-control-item {
-  padding: var(--bds-gap-sm) var(--bds-padding-lg);
+  padding: calc(var(--bds-gap-sm) - var(--bds-border-width-md)) calc(var(--bds-padding-lg) - var(--bds-border-width-md));
   font-size: var(--bds-label-md);
 }
 
 .bds-segmented-control--lg .bds-segmented-control-item {
-  padding: var(--bds-gap-md) var(--bds-padding-xl);
+  padding: calc(var(--bds-gap-md) - var(--bds-border-width-md)) calc(var(--bds-padding-xl) - var(--bds-border-width-md));
   font-size: var(--bds-label-md);
 }
 
@@ -80,6 +84,8 @@
 .bds-segmented-control-item--active {
   background-color: var(--bds-background-primary);
   color: var(--bds-text-primary);
+  /* WCAG 1.4.11: fill alone is 1.12:1 on the track; the border carries the state at ≥3:1. */
+  border-color: var(--bds-border-brand-primary);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — no composite --box-shadow-* matches this value (nearest is --bds-shadow-sm 0px 2px 4px 0.06); a --box-shadow-xs is a separate proposal (#2171 out-of-scope) */
 }
 

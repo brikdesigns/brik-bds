@@ -16,6 +16,10 @@ a consumer greps this file before bumping.
 > `#1186` will add the manifest + CI check that *enforces* this section. Until
 > it lands, the entry is a convention, not a gate.
 
+## v0.220.1 — 2026-11-01
+
+The selected `SegmentedControl` item now carries a `--bds-border-brand-primary` border, because its fill alone measured 1.12:1 against the track and WCAG 1.4.11 wants 3:1 for a selected-state indicator ([brikdesigns#1427](https://github.com/brikdesigns/brikdesigns/issues/1427)). No class hook renamed or removed. **Box change:** every `.bds-segmented-control-item` now has a `--bds-border-width-md` transparent border, and its padding is reduced by that width so the item's size is unchanged. If a consumer overrides `padding` or `border` on `.bds-segmented-control-item`, re-check it.
+
 ## v0.220.0 — 2026-11-01
 
 `FieldGrid` `columns` is now a maximum that steps down with its container width (`4` → 3 → 2 below `720px` / `480px`, `3` → 2 below `480px`; `2` is unchanged), and `Field` takes `span="full"` (class `.bds-field--span-full`). No class hook renamed or removed. **Structure change:** `FieldGrid` renders a new child `.bds-field-grid__cells`. For `columns={2}` (the default) nothing else changes: `.bds-field-grid` is still the grid and the child is `display: contents`. For `columns={3}` / `{4}` the root becomes the size container (`container-type: inline-size`) and the grid is the child, so an override of `grid-template-columns` or `gap` on `.bds-field-grid` must target `.bds-field-grid__cells`. **Constraint (3 / 4):** inline-size containment removes the root's intrinsic width, so in a shrink-to-fit parent (centered layout, inline-block, a flex item without a basis) the grid collapses to the parent's other content; give that parent a definite width or the flex item a `flex` basis.
