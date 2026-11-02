@@ -16,6 +16,16 @@ a consumer greps this file before bumping.
 > `#1186` will add the manifest + CI check that *enforces* this section. Until
 > it lands, the entry is a convention, not a gate.
 
+## Unreleased
+
+`--font-weight-thin` (value 300, which is CSS *Light*) is renamed `--font-weight-light` at the Figma source; the value is unchanged. **Breaking (consumer CSS):** `--bds-font-weight-thin`, `--bds-font-weight--thin`, `--font-weight-thin`, `--font-weight--thin` and `weight.thin` ship one minor as deprecated aliases of the `light` names, then drop. The JS `fontWeights` mirror now matches the CSS tokens exactly: `light` stays, the duplicate `thin` key is removed, and `semi-bold` / `extra-bold` become `semibold` / `extrabold` (no downstream repo reads those keys). No `100` / `200` rungs ship, and none are implied ([#2222](https://github.com/brikdesigns/brik-bds/issues/2222)).
+
+| Old | New |
+|---|---|
+| `--font-weight-thin` | `--font-weight-light` |
+| `--font-weight--thin` | `--font-weight--light` |
+| `weight.thin` | `weight.light` |
+
 ## v0.220.1 — 2026-11-01
 
 The selected `SegmentedControl` item now carries a `--bds-border-brand-primary` border, because its fill alone measured 1.12:1 against the track and WCAG 1.4.11 wants 3:1 for a selected-state indicator ([brikdesigns#1427](https://github.com/brikdesigns/brikdesigns/issues/1427)). No class hook renamed or removed. **Box change:** every `.bds-segmented-control-item` now has a `--bds-border-width-md` transparent border, and its padding is reduced by that width so the item's size is unchanged. If a consumer overrides `padding` or `border` on `.bds-segmented-control-item`, re-check it.
