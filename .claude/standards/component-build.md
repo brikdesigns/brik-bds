@@ -335,25 +335,33 @@ A11y behavior — keyboard nav, focus management, dismissal handlers — compose
 
 ## Button & IconButton sizing — the 4-point grid
 
-All sizes follow the 4px grid (24, 32, 40, 48, 56 px).
+All sizes follow the 4px grid (24, 32, 40, 48, 56 px). Text and icon-only `Button` share the same height at every size.
 
 ```
-tiny  (24px)   Compact UI — sidebar icons, inline badges, dense lists
-sm    (32px)   Secondary controls — filter bar, toolbar, card footers
-md    (40px)   Default — table row actions, form controls, most content
-lg    (48px)   Primary actions — page-level CTAs, dialog footers
+xs    (24px)   Compact UI — sidebar icons, inline badges, dense lists
+sm    (32px)   Table cells, filter bars, toolbars, section titles, compact card footers
+md    (40px)   Default — page-header actions, form controls, dialog footers, standard cards
+lg    (48px)   Dialog / sheet primary confirm
 xl    (56px)   Hero actions — landing pages, mobile touch targets
 ```
 
+**Grouping rules (ButtonGroup):**
+
+- **One primary per group.** Everything else is secondary / outline / ghost.
+- **Max 3 buttons per group, primary included.** A 4th+ rolls into an overflow control that opens a `Menu` — ellipsis icon button for icon groups, "View More" text button for text groups.
+- **One size per group.** Text and icon buttons grouped together share a size (and therefore height). If heights look mismatched, fix the child `size`; if they truly differ at the same size, revisit the size tokens.
+
 **Context rules:**
 
-- **Table cells** → always `md`. Never `sm` — too small for click targets in data rows.
-- **Filter bars / toolbars** → `sm` is acceptable for dense horizontal groupings.
+- **Table cells** → `sm`: a single text button, or icon buttons (view / edit / delete) — also `sm`. `TableActionsCell` defaults to `sm`.
+- **Page headers** → `md` for every action in `PageHeaderActions`, one primary.
+- **Filter bars / toolbars** → one size below the page header's buttons (`sm` under an `md` header); never `primary`.
+- **Section titles** → `sm`, text and icon buttons the same size.
 - **Dialog / sheet actions** → `md` for secondary, `lg` for primary confirm.
 - **Card footers** → `sm` for compact cards, `md` for standard cards.
-- **Inline with text** → `tiny` only, and only when the button is decorative.
+- **Inline with text** → `xs` only, and only when the button is decorative.
 
-**IconButton ≠ smaller Button.** An icon-only button at `md` is the same 40 px height as a labeled `md` Button. Don't use `sm` IconButton as a "compact alternative" to `md` Button in the same row.
+**IconButton ≠ smaller Button.** An icon-only button at a given size is the same height as a labeled Button at that size. Don't mix sizes in one row to fake a "compact" icon button.
 
 ## Table cell patterns
 

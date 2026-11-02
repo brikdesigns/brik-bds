@@ -68,7 +68,8 @@ Stack buttons in a column. Pair with `fullWidth` on each button for stacked auth
   **Don't use ButtonGroup for unrelated actions.** It's a semantic group — readers infer that the buttons share context. Two unrelated CTAs in the same row look the same visually but break expectations.
 </Callout>
 
-- **Don't put more than 3 buttons in a group.** A "toolbar" of 5 unrelated actions is a different pattern — use spacing, not grouping.
+- **Don't put more than 3 buttons in a group.** A 4th+ rolls into an overflow `Menu` automatically (ellipsis icon button for icon groups, "View More" for text groups; `maxVisible` tunes the cutoff). A "toolbar" of 5 unrelated actions is a different pattern — use spacing, not grouping.
+- **Don't use more than one primary per group.** ButtonGroup warns in development.
 - **Don't mix sizes inside a group.** All buttons should share the same `size`. Mixed sizes break the rhythm.
 - **Don't use it in a width-constrained cell** (a data-grid action column). ButtonGroup `flex-wrap`s and forces `--gap-md` — two icon buttons overflow a narrow (~120px) column and wrap onto a second line ([portal #2782](https://github.com/brikdesigns/brik-client-portal/issues/2782)). Use [`TableActionsCell`](/docs/components/table) in those cells; reach for ButtonGroup only where the row has room (footers, bars).
 
@@ -90,6 +91,8 @@ Stack buttons in a column. Pair with `fullWidth` on each button for stacked auth
 | `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` |
 | `fullWidth` | `boolean` | `false` |
 | `align` | `ButtonGroupAlign` | `'start'` |
+| `size` | `ButtonSize` | — (children keep their own) |
+| `maxVisible` | `number` | `3` |
 
 Plus all standard `<div>` HTML attributes.
 

@@ -30,7 +30,22 @@ Canonical action set — one primary + two secondary buttons (`outline`, `ghost`
 
 <Canvas of={Stories.IconButtonGroup} />
 
-Inline toolbar of icon-only [`Button`](/?path=/docs/components-button--docs) children (`<Button icon={...} label="..." />`) — up to 4 actions. Common for row / card chrome (edit, copy, share, delete). The final destructive variant signals an irreversible action.
+Inline toolbar of icon-only [`Button`](/?path=/docs/components-button--docs) children (`<Button icon={...} label="..." />`) — up to 3 actions; a 4th rolls into the overflow control (below). Common for row / card chrome (edit, copy, share, delete). The final destructive variant signals an irreversible action.
+
+### Overflow
+
+<Canvas of={Stories.IconOverflow} />
+
+A group shows at most **3 buttons, primary included** (`maxVisible`, default 3). Anything beyond rolls into one overflow control that opens a [`Menu`](/?path=/docs/components-menu--docs) of the remaining actions: an **ellipsis icon button** ("More actions") when the visible buttons are icon-only, a **"View More" text button** otherwise.
+
+<Canvas of={Stories.TextOverflow} />
+
+### Hierarchy and size
+
+- **One primary per group.** In development, ButtonGroup warns when more than one visible child is `variant="primary"`.
+- **One size per group.** Pass `size` on the group to apply it to every child that has no `size` of its own. Text and icon-only `Button` share the same height at every size, so mixed groups line up when sizes match; a height mismatch means a child was given a different `size`, not a token problem.
+- **Tables:** a cell holds one text button or icon buttons (view / edit / delete), all at `sm` — `TableActionsCell` defaults its children to `sm`.
+- **Filter bars** sit one size below the page header's buttons and never hold a primary.
 
 ## Patterns
 
