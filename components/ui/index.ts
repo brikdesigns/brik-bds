@@ -79,6 +79,7 @@ export * from './TopNavigation';
 export * from './NavItem';
 export * from './NotificationList';
 export * from './AppShell';
+export * from './AppBar';
 export * from './Page';
 export * from './PageHeader';
 export * from './Pagination';

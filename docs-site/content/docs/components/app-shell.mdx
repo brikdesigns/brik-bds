@@ -27,7 +27,7 @@ Each slot is optional. An absent slot renders nothing — no empty wrapper, no e
 
 ```tsx
 <AppShell
-  topBar={<header>…</header>}
+  topBar={<AppBar breadcrumbs={<Breadcrumb items={trail} />} />}
   nav={<SidebarNavigation logo={logo} navItems={items} position="sticky" />}
   rail={<SubNavigation items={sections} />}
   main={

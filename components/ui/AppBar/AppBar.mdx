@@ -1,0 +1,41 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './AppBar.stories';
+
+<Meta of={Stories} />
+
+# App bar
+
+<ComponentLinks slug="app-bar" />
+
+The product app-shell bar: breadcrumbs on the left, then `actions` and a `utilities` cluster on the right. `TopNavigation` is the marketing navbar; `AppBar` is the product app-shell bar.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+Each slot is optional, and an absent slot renders nothing. The right-hand clusters stay right-aligned with or without breadcrumbs.
+
+### Breadcrumbs only
+
+<Canvas of={Stories.BreadcrumbsOnly} />
+
+### Utilities only
+
+<Canvas of={Stories.UtilitiesOnly} />
+
+### Empty
+
+<Canvas of={Stories.Empty} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Why a `<div>`, not a `<header>`.** The product-shell canon forbids a banner landmark outside `<main>` (page-structure, "Product app shell"), so the bar adds no landmark of its own.
+
+> **The shell owns pinning.** Pass `<AppBar />` as `AppShell`'s `topBar`; the shell wrapper sets `position: sticky`, the z-index and the height. The bar sets none of these and fills the slot.

@@ -1,0 +1,41 @@
+@layer bds-components {
+/* ─── AppBar — product app-shell bar ─────────────────────────── */
+
+/* Fills AppShell's `topBar` slot. Pinning (sticky, z-index) belongs to the
+   shell's wrapper, never to the bar. */
+.bds-app-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--bds-gap-md);
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--bds-shell-top-bar-height);
+  padding: 0 var(--bds-padding-xl);
+  background-color: var(--bds-surface-primary);
+  border-bottom: var(--bds-border-width-md) solid var(--bds-border-secondary);
+}
+
+/* Left slot: shrinks before the right-hand clusters do. */
+.bds-app-bar__breadcrumbs {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Right-hand clusters. The auto start margin keeps them right-aligned whether
+   or not the breadcrumbs slot rendered, so no empty placeholder is needed. */
+.bds-app-bar__end {
+  display: flex;
+  align-items: center;
+  gap: var(--bds-gap-md);
+  margin-inline-start: auto;
+  flex: none;
+}
+
+.bds-app-bar__actions,
+.bds-app-bar__utilities {
+  display: flex;
+  align-items: center;
+  gap: var(--bds-gap-sm);
+}
+}

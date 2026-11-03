@@ -1,0 +1,82 @@
+---
+title: App bar
+description: The product app-shell bar — breadcrumbs on the left, actions and a utility cluster on the right.
+---
+
+AppBar is the bar at the top of a product app: breadcrumbs on the left, then `actions` and a `utilities` cluster (notifications, theme, profile) on the right. It is the content of [AppShell](/docs/components/app-shell)'s `topBar` slot.
+
+`TopNavigation` is the marketing navbar; `AppBar` is the product app-shell bar.
+
+## Use it for
+
+- The top bar of a product app (portal, back office), inside `AppShell`
+- Carrying the breadcrumb trail and the non-navigation utilities in one place
+
+## Import
+
+```tsx
+import { AppBar } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+Every slot is optional. An absent slot renders nothing — no empty wrapper, no gap. The right-hand clusters stay right-aligned with or without breadcrumbs.
+
+```tsx
+<AppShell
+  topBar={
+    <AppBar
+      breadcrumbs={<Breadcrumb items={trail} />}
+      actions={<Button size="md">New project</Button>}
+      utilities={
+        <>
+          <Button variant="secondary" icon={<Icon icon="ph:bell" />} label="Notifications" />
+          <Avatar name="Nick Stanerson" />
+        </>
+      }
+    />
+  }
+  main={…}
+/>
+```
+
+### Utilities only
+
+```tsx
+<AppBar utilities={<Avatar name="Nick Stanerson" />} />
+```
+
+## When *not* to use
+
+- **Marketing sites.** Use [TopNavigation](/docs/components/top-navigation) — logo, links and a CTA.
+- **Page titles and page actions.** Those belong to [PageHeader](/docs/components/page-header), inside `main`.
+- **Primary navigation.** Use [SidebarNavigation](/docs/components/sidebar-navigation).
+
+## Accessibility
+
+- Renders a `<div>`, deliberately not a `<header>`. The product-shell canon forbids a `<header>` landmark in a product app ([Page structure → Product app shell](/docs/build-standards/page-structure)), so the bar adds no landmark of its own; semantics come from what you place in the slots (a `Breadcrumb`'s `<nav>`, buttons).
+- It does not pin itself. `AppShell`'s `topBar` wrapper sets `position: sticky`, the z-index and the height; AppBar fills the slot.
+
+## Tokens
+
+Height `--bds-shell-top-bar-height`, surface `--bds-surface-primary`, bottom border `--bds-border-secondary`; all flip with the theme.
+
+## API
+
+{/* props-check: AppBarProps @ components/ui/AppBar/AppBar.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `breadcrumbs` | `ReactNode` | — |
+| `actions` | `ReactNode` | — |
+| `utilities` | `ReactNode` | — |
+
+Plus standard `<div>` HTML attributes.
+
+## Related
+
+- [AppShell](/docs/components/app-shell) — the frame whose `topBar` slot this fills
+- [TopNavigation](/docs/components/top-navigation) — the marketing navbar
+- [Breadcrumb](/docs/components/breadcrumb) — the usual `breadcrumbs` content
