@@ -611,6 +611,22 @@
       "note": "The odd one out, and gated AA rather than AAA for that reason. The other five accent surfaces are pale system tints; red has no system tint in canon \u2014 the Figma Brand Kit aliases every accent-red purpose to the brand poppy (color/poppy/light [base], #e35335), so --bds-surface-accent-red is a saturated FILL, not a wash (#2066). Dark ink clears 4.56:1 on it, which is AA for a label but short of the AAA body aim the tints hold. Do not put small body copy on this one; Avatar's red initials fill is the shipped consumer (Avatar.css:30) and it pairs --bds-text-on-color-light."
     },
     {
+      "group": "accent",
+      "label": "Muted on-color text on a dark surface",
+      "fg": "--bds-text-on-color-dark-muted",
+      "bg": "--bds-surface-inverse",
+      "thresholdType": "AA",
+      "note": "ADR-046 (#2970): the on-color family's muted step, white at 70% composited onto the fill it sits on (the gate scores a color-mix(... transparent) foreground over its bg). AA, not AA-large: it carries secondary body copy (captions, eyebrows, meta lines) on dark sections, the role --bds-text-secondary holds on light ones. NOT paired with the brand fill on purpose: solid white is already 3.78:1 there (ADR-015), and the muted step drops to ~2.6:1, so text on the brand fill stays solid white."
+    },
+    {
+      "group": "accent",
+      "label": "Muted on-color text on the purple accent tint",
+      "fg": "--bds-text-on-color-light-muted",
+      "bg": "--bds-surface-accent-purple",
+      "thresholdType": "AA",
+      "note": "ADR-046 (#2970): the dark-ink muted step on a pale fill. The purple tint is the darkest of the five accent tints, so it bounds the other four."
+    },
+    {
       "group": "neutral",
       "label": "GHL form field border on form background",
       "fg": "--bds-border-input",

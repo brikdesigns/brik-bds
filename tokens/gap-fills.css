@@ -328,6 +328,18 @@
   /* Overlay (for Modal, Sheet, Dialog backdrops) */
   --bds-background-overlay: rgba(0, 0, 0, 0.4);
 
+  /* ── On-color muted steps (ADR-046, #2970) ──
+     The on-color family's second step: muted text and hairlines over brand
+     fills, dark sections and photos. Composed from the solid on-color token,
+     the way Form.css:67 composes its tint, so a kit that rebinds the parent on
+     :root carries the step with it. Mode-invariant, like their parents.
+     Muted text is NOT for the brand fill: white is already 3.78:1 there
+     (ADR-015), so the muted step drops below 3:1. Use solid white on it. */
+  --bds-text-on-color-dark-muted:    color-mix(in srgb, var(--bds-text-on-color-dark) 70%, transparent);
+  --bds-text-on-color-light-muted:   color-mix(in srgb, var(--bds-text-on-color-light) 70%, transparent);
+  --bds-border-on-color-dark-muted:  color-mix(in srgb, var(--bds-border-on-color-dark) 12%, transparent);
+  --bds-border-on-color-light-muted: color-mix(in srgb, var(--bds-border-on-color-light) 12%, transparent);
+
   /* ── Tooltip component tokens ── */
   --bds-tooltip-background: var(--bds-color-grayscale-950);
   --bds-tooltip-text: var(--bds-text-inverse);
