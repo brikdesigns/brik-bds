@@ -466,7 +466,7 @@ function serializeArgs(map) {
   return [...map.entries()]
     .map(([k, v]) => `${k}=${v.raw}`)
     .sort()
-    .join(' ');
+    .join('\0');
 }
 
 
