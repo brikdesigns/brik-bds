@@ -84,7 +84,7 @@ const CLEAN_TOKENS = `:root {
 
 const CLEAN_TSX = `export type BadgeTone = 'negative' | 'positive' | 'warning' | 'info' | 'neutral';
 export type BadgeEmphasis = 'neutral' | 'brand' | 'accent';
-export type BadgeAppearance = 'solid' | 'subtle' | 'muted';
+export type BadgeAppearance = 'solid' | 'subtle' | 'outline';
 export type BadgeDensity = 'comfortable' | 'compact';
 // \`variant\` and \`status\` are per-component by § 2, so rule 5 must not reach them.
 export type CardVariant = 'outlined' | 'elevated' | 'borderless';

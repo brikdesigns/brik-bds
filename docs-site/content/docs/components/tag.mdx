@@ -48,7 +48,7 @@ import { Tag } from '@brikdesigns/bds';
 
 ## Variants
 
-Four sizes (`xs` is icon-only) and two appearances.
+Four sizes (`xs` is icon-only), three appearances and seven colors.
 
 ### Sizes
 
@@ -62,11 +62,30 @@ Four sizes (`xs` is icon-only) and two appearances.
 
 ### Appearances
 
-`solid` (default) is neutral filled. `subtle` is transparent with a hairline border — lower visual weight when Tags sit on a colored surface.
+`appearance` is the same three words Badge uses (Avatar takes `solid` and `subtle`):
+
+- `solid` (default) — saturated fill with an on-color label.
+- `subtle` — pale `--bds-background-*-light` fill with the dark-ink label `--bds-text-on-color-light`.
+- `outline` — transparent fill, `--bds-text-primary` label, border only. Lower visual weight when Tags sit on a colored surface.
 
 ```tsx
 <Tag appearance="solid">Cosmetic</Tag>
 <Tag appearance="subtle">Cosmetic</Tag>
+<Tag appearance="outline">Cosmetic</Tag>
+```
+
+<Callout type="warn">
+  **Breaking in 0.222.** The old `subtle` (transparent + border) is now `outline`, and the old `muted` (quiet neutral fill) is now `subtle`. `muted` is removed. Migrate with `node node_modules/@brikdesigns/bds/scripts/codemod-tag-appearance.mjs --dry-run src`, then run it once without `--dry-run`. It rewrites only `<Tag>` elements, and it is not idempotent — never re-run it on a migrated tree.
+</Callout>
+
+### Colors
+
+`color` names the category: `neutral` (default) or an accent hue — `blue`, `green`, `orange`, `purple`, `yellow`, `red`. The hues are the same ones Avatar uses. Status colors (positive, warning, negative, info) are not Tag colors; a status is a [Badge](/docs/components/badge) `tone`.
+
+```tsx
+<Tag color="blue">Dental</Tag>
+<Tag color="green" appearance="subtle">Real Estate</Tag>
+<Tag color="purple" appearance="outline">Cosmetic</Tag>
 ```
 
 ### With icons
@@ -106,6 +125,7 @@ Pass `icon` (left) or `trailingIcon` (right). Icon is **required** when `size="x
 |---|---|---|
 | `size` | `TagSize` | `'md'` |
 | `appearance` | `TagAppearance` | `'solid'` |
+| `color` | `TagColor` | `'neutral'` |
 | `icon` | `ReactNode` | — |
 | `trailingIcon` | `ReactNode` | — |
 | `disabled` | `boolean` | `false` |

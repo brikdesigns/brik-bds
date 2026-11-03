@@ -66,6 +66,10 @@
       "offline",
       "busy",
       "away"
+    ],
+    "appearance": [
+      "solid",
+      "subtle"
     ]
   },
   "BackgroundPattern": {
@@ -84,7 +88,8 @@
     ],
     "appearance": [
       "solid",
-      "subtle"
+      "subtle",
+      "outline"
     ]
   },
   "Button": {
@@ -373,7 +378,7 @@
     "appearance": [
       "solid",
       "subtle",
-      "muted"
+      "outline"
     ]
   },
   "TaskConsole": {

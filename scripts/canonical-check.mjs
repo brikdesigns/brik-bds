@@ -203,7 +203,9 @@ export function extractTokenReferences(text, prefixes = DEFAULT_PREFIXES) {
     .join('\n');
   const stripped = stripCssComments(filtered);
   const prefixGroup = prefixes.join('|');
-  const re = new RegExp(`--(?:bds-)?(?:${prefixGroup})-[a-z0-9-]*[a-z0-9]`, 'g');
+  // The lookbehind keeps a BEM modifier (`.bds-tag--color-blue`) from reading
+  // as a reference: a token's `--` never follows a name character.
+  const re = new RegExp(`(?<![A-Za-z0-9_-])--(?:bds-)?(?:${prefixGroup})-[a-z0-9-]*[a-z0-9]`, 'g');
   const found = new Set();
   let match;
   while ((match = re.exec(stripped)) !== null) {

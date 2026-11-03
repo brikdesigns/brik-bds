@@ -46,6 +46,12 @@ When `src` is omitted (or fails to load), Avatar generates initials from `name`.
 <Avatar name="Alice Chen" color="purple" />
 ```
 
+`appearance` picks the treatment, the same axis Badge and Tag use. `solid` (default) is the saturated accent fill. `subtle` is its pale `--bds-background-accent-{color}-light` step with a dark-ink label. With no `color`, `subtle` is the pale brand fill.
+
+```tsx
+<Avatar name="Alice Chen" color="purple" appearance="subtle" />
+```
+
 ### Sizes
 
 | Size | Diameter | Use |
@@ -116,6 +122,7 @@ Negative-margin stack for "10 people commented" indicators.
 | `size` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` |
 | `status` | `'online' \| 'offline' \| 'busy' \| 'away'` | — |
 | `color` | `'green' \| 'purple' \| 'blue' \| 'orange' \| 'yellow' \| 'red'` | — |
+| `appearance` | `'solid' \| 'subtle'` | `'solid'` |
 
 Plus standard `<div>` HTML attributes.
 

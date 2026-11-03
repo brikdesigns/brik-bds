@@ -25,8 +25,8 @@ The same boundary is why the two families take different prop axes: interactive 
 
 | Component | Selected by | Ruled out by | Axis |
 |---|---|---|---|
-| **[`Tag`](/docs/components/tag)** | A **categorization** the reader did not choose — industry, segment, owner, content type. The label is a class the record belongs to | The label is a *value judgment* about state (that is `Badge`); or clicking it filters or removes something (that is `Chip`) | `appearance` `solid` · `subtle` · `muted` |
-| **[`Badge`](/docs/components/badge)** | A **semantic status** — a value judgment the system makes about one record ("Paid", "Overdue", "In progress") | The label classifies rather than judges (that is `Tag`); or the status is about the whole surface, not one record (that is a [`Banner`](/docs/components/banner)) | `tone` `positive` · `warning` · `negative` · `info` · `brand` · `neutral` |
+| **[`Tag`](/docs/components/tag)** | A **categorization** the reader did not choose — industry, segment, owner, content type. The label is a class the record belongs to | The label is a *value judgment* about state (that is `Badge`); or clicking it filters or removes something (that is `Chip`) | `color` `neutral` · accent hue; `appearance` `solid` · `subtle` · `outline` |
+| **[`Badge`](/docs/components/badge)** | A **semantic status** — a value judgment the system makes about one record ("Paid", "Overdue", "In progress") | The label classifies rather than judges (that is `Tag`); or the status is about the whole surface, not one record (that is a [`Banner`](/docs/components/banner)) | `tone` `positive` · `warning` · `negative` · `info` · `brand` · `neutral`; `appearance` `solid` · `subtle` · `outline` |
 | **[`Dot`](/docs/components/dot)** | The **same status as a Badge, with no room for words** — a leading marker in a dense row or list where the colour alone carries it | The status needs a word to be unambiguous; a colour-only indicator has no accessible name of its own | `tone` (Badge's set, plus `default`) |
 | **[`Counter`](/docs/components/counter)** | A **number** — unread count, item quantity, step position | The content is a word, not a quantity | `status`, `size` |
 | **[`ServiceTag`](/docs/components/service-tag)** | A **Brik service line** specifically — brand, marketing, information, product, back-office. It owns that fixed colour vocabulary | Any category that is not a service line — a generic category is a `Tag` | `category` + `variant` `text` · `icon-text` · `icon` · `dot` |
@@ -34,11 +34,30 @@ The same boundary is why the two families take different prop axes: interactive 
 
 ## The tie-breaks
 
-- **Classify vs judge separates `Tag` from `Badge`.** "Healthcare", "Enterprise", "Blog post" are classes the record belongs to → `Tag`. "Paid", "Overdue", "Draft" are the system's assessment of it → `Badge`. The test: could two records legitimately carry *both* labels at once and mean different things? Category and status are orthogonal, which is why `Badge` has `status` and `Tag` does not.
+- **Classify vs judge separates `Tag` from `Badge`.** "Healthcare", "Enterprise", "Blog post" are classes the record belongs to → `Tag`. "Paid", "Overdue", "Draft" are the system's assessment of it → `Badge`. The test: could two records legitimately carry *both* labels at once and mean different things? Category and status are orthogonal, which is why `Badge` takes a `tone` (a status) and `Tag` takes a `color` (a category hue), and the two never share a color set.
 - **A `Dot` is a `Badge` that ran out of space, not a quieter one.** Reach for it only when the row genuinely cannot hold a word — and give it an accessible name, because colour is not one.
 - **`ServiceTag` is not "`Tag`, themed."** It is bound to the five Brik service lines and their fixed colours. A category outside that set is a `Tag`; adding a sixth colour to `ServiceTag` is a system change, not a callsite one.
 - **A hand-rolled pill is a missing component, not a local style.** Writing `<span className="my-section__chip">` for a read-only label means the CSS carries chrome the indicator components already own, and the element is invisible to every gate that measures indicators. Use the component; if none of the six fits, that is a gap in this page — file it.
 - **Interactivity is decided by the design, not by whether a handler happens to exist yet.** A pill that *will* filter is a `Chip` from the start. A pill that will never be clicked stays an indicator even if a stray `onClick` gets attached to it — remove the handler rather than reclassifying the pill.
+
+## One anatomy
+
+Badge, Tag and Avatar share one fill vocabulary, so the same word means the same thing on all three. What differs is *what the color names*:
+
+| Component | Names | Color prop | Color set |
+|---|---|---|---|
+| **Badge** | a status — a judgment about one record | `tone` | the system families: positive, warning, negative, info, brand, neutral |
+| **Tag** | a category — what a record is | `color` | `neutral`, or an accent hue: blue, green, orange, purple, yellow, red |
+| **Avatar** | an identity — who someone is | `color` | the six accent hues |
+| **Chip** | an action | `variant` | `primary` · `secondary` |
+
+`appearance` is the fill, and it reads the same everywhere:
+
+- **`solid`** — saturated `--bds-background-*` fill with an on-color label.
+- **`subtle`** — pale `--bds-background-*-light` fill with the dark-ink label `--bds-text-on-color-light`. Brand has no `-light` token; its pale fill is `--bds-background-brand-secondary`.
+- **`outline`** — transparent fill, `--bds-text-primary` label, border only. Badge and Tag take it; Avatar has no outline.
+
+Chip keeps `variant`: it is an action with hierarchy, not an indicator with a fill form.
 
 ## Groups
 

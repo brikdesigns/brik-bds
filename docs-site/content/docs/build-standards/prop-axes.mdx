@@ -13,15 +13,16 @@ A prop is an **axis** when more than one component exposes it. Axis names belong
 |---|---|---|---|
 | `size` | `xs` · `sm` · `md` · `lg` (indicators); `tiny` · `sm` · `md` · `lg` · `xl` (buttons) | Physical dimensions on a shared scale | Badge, Tag, Chip, Button, IconButton, ServiceTag, Field, Sheet, most form controls |
 | `tone` | `positive` · `warning` · `negative` · `info` · `brand` · `neutral` | Semantic value judgment — which system color tier applies | Badge, Dot |
+| `color` | `neutral` · `blue` · `green` · `orange` · `purple` · `yellow` · `red` (Tag); the six hues (Avatar) | Category or identity hue — which accent family paints it | Tag, Avatar |
 | `variant` | component-specific (see matrix) | Shared prop *name*; meaning varies by component | Chip, Button, IconButton, LinkButton, Card, ServiceTag |
-| `appearance` | `solid` · `subtle` · `outline` | How the shape is filled vs bordered | Badge (`solid` / `subtle`), Tag (`solid` / `subtle`) |
+| `appearance` | `solid` · `subtle` · `outline` | How the shape is filled vs bordered | Badge, Tag (`solid` / `subtle` / `outline`), Avatar (`solid` / `subtle`) |
 
 ## variant vs appearance
 
 > `appearance` describes **fill**. `variant` is the shared prop *name* — its meaning varies by component.
 
 - **Interactive components (Chip, Button)** use `variant` only. They have hierarchy to express.
-- **Read-only indicators (Badge, Tag)** use `appearance` only. Fill form is the only lever.
+- **Read-only indicators (Badge, Tag, Avatar)** use `appearance` only. Fill form is the only lever.
 
 Never cross this boundary.
 
@@ -45,14 +46,15 @@ Source of truth: [`manifest/component-axes.json`](https://github.com/brikdesigns
 | Chip | `primary` · `secondary` | — | `sm` · `md` · `lg` | — |
 | Card | `outlined` · `brand` · `elevated` · `borderless` | — | — | — |
 | ServiceTag | `text` · `icon-text` · `icon` · `dot` | — | `sm` · `md` · `lg` | — |
-| Tag | — | `solid` · `subtle` · `muted` | `xs` · `sm` · `md` · `lg` | — |
-| Badge | — | `solid` · `subtle` | `xs` · `sm` · `md` · `lg` | `positive` · `warning` · `negative` · `info` · `brand` · `neutral` |
+| Tag | — | `solid` · `subtle` · `outline` | `xs` · `sm` · `md` · `lg` | — |
+| Badge | — | `solid` · `subtle` · `outline` | `xs` · `sm` · `md` · `lg` | `positive` · `warning` · `negative` · `info` · `brand` · `neutral` |
 
 **Notes:**
 - `selected` is **not** a variant — it is a boolean state prop on Button / IconButton (`selected={true}`), applied as a modifier on top of any variant. Never list it in the variant union.
 - Chip `appearance` removed in v0.66 — Chip is interactive; emphasis lives on `variant` only.
 - Card `variant` encodes border/elevation style — not a hierarchy or fill axis. `CardPreset` (`control` · `summary` · `display` · `display-row`) is orthogonal to `variant`.
-- Badge `outline` appearance excluded — low contrast for status indicators.
+- Badge `outline` was once excluded for low contrast. It ships in 0.222 with the tone carried by the border and a `--bds-text-primary` label, so the label never depends on a status color. Tag's `subtle` (transparent + border) was renamed `outline` and its `muted` (quiet neutral fill) renamed `subtle` in the same release (#2943).
+- Tag and Avatar take a `color` (accent hue), Badge takes a `tone`. Color is never a `variant`.
 - **`tone` was `status` before [ADR-033 § 2](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md)** — on Badge and Dot, `status` is a deprecated alias honoured for one minor version. `status` itself now names presence or lifecycle (Avatar, Card, Table), never valence. Badge, Dot and Banner all use `tone`; the value sets are per-component (Dot adds `default`, Banner has its own union) and TypeScript is the gate.
 
 <Callout type="info">

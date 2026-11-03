@@ -31,12 +31,13 @@ export type BadgeSize = 'xs' | 'sm' | 'md' | 'lg';
 export type BadgeDensity = 'comfortable' | 'compact';
 
 /**
- * Badge fill appearance — shared axis with Chip (`solid | outline`) and
- * Tag (`solid | subtle`). Badge supports the two pastel-capable values.
- * - `solid`  — saturated status-color background, high emphasis.
- * - `subtle` — pastel status-color background, saturated text, lower emphasis.
+ * Badge fill appearance — the indicator axis shared with Tag (`solid | subtle
+ * | outline`) and Avatar (`solid | subtle`).
+ * - `solid`   — saturated status-color background, high emphasis.
+ * - `subtle`  — pale `-light` status-color background, dark-ink label, lower emphasis.
+ * - `outline` — transparent background, `--bds-text-primary` label, tone-colored border only.
  */
-export type BadgeAppearance = 'solid' | 'subtle';
+export type BadgeAppearance = 'solid' | 'subtle' | 'outline';
 
 /** Badge component props */
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
@@ -52,7 +53,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   status?: BadgeTone;
   /** Size variant — xs is icon-only (no text) */
   size?: BadgeSize;
-  /** Fill appearance — solid (saturated bg) or subtle (pastel bg). */
+  /** Fill appearance — `solid` (saturated bg), `subtle` (pale bg) or `outline` (border only). */
   appearance?: BadgeAppearance;
   /** Density — `compact` tightens horizontal padding for dense rows. Default `comfortable`. */
   density?: BadgeDensity;
@@ -79,6 +80,7 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
  * ```tsx
  * <Badge tone="positive">Success</Badge>
  * <Badge tone="warning" size="sm" appearance="subtle">Pending</Badge>
+ * <Badge tone="info" appearance="outline">Draft</Badge>
  * <Badge tone="negative" size="lg">Failed</Badge>
  * ```
  *
