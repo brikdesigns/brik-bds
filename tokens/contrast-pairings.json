@@ -773,6 +773,14 @@
       "fg": "--bds-text-on-color-light",
       "bg": "--bds-background-accent-red-light",
       "thresholdType": "AA"
+    },
+    {
+      "group": "indicator",
+      "label": "Outline info Badge edge on surface",
+      "fg": "--bds-border-info",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large",
+      "note": "WCAG 1.4.11, 3:1. The edge of an `outline` Badge with tone=\"info\" (brik-bds#2943), the one tone that had no --border-* token."
     }
   ]
 }

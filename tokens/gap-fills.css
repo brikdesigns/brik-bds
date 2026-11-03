@@ -218,8 +218,9 @@
      these names moved to --*-neutral above, so the two concepts are no longer
      one `status-` segment apart.
 
-     There is no --border-info: the gray one retired with the rename and blue
-     has no border counterpart.
+     --border-info is the blue edge of an `outline` Badge (brik-bds#2943). The
+     gray one retired with the rename; this one is minted fresh on the blue
+     signal, next to the other three, and gated in contrast-pairings.json.
 
      `purple` and `orange` used to sit here under `status-` names, and
      brik-bds#1958 recorded an ADR-033 § 6 amendment as owed for them. No
@@ -232,6 +233,7 @@
   --bds-background-info:                 var(--bds-color-system-blue);
   --bds-text-info:                       var(--bds-color-system-blue);
   --bds-surface-info:                    var(--bds-color-system-blue-light);
+  --bds-border-info:                     var(--bds-color-system-blue);
 
   /* Six more `status-` aliases (info + neutral) stood here as the one-minor
      compatibility shim #1955 and #1959 shipped alongside the intent-form
