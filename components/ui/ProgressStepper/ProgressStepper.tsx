@@ -4,6 +4,7 @@ import './ProgressStepper.css';
 
 export type ProgressStepperSize = 'sm' | 'md';
 export type ProgressStepperVariant = 'steps' | 'dots';
+export type ProgressStepperOrientation = 'vertical' | 'horizontal';
 
 export type StepStatus = 'complete' | 'active' | 'upcoming';
 
@@ -30,8 +31,15 @@ interface CommonProgressStepperProps extends Omit<HTMLAttributes<HTMLElement>, '
 }
 
 interface StepsProgressStepperProps extends CommonProgressStepperProps {
-  /** Visual variant — 'steps' (default) renders a vertical labeled stepper */
+  /** Visual variant — 'steps' (default) renders a labeled stepper */
   variant?: 'steps';
+  /**
+   * Layout of the `steps` variant. `vertical` (default) stacks steps in a
+   * column — for sidebars. `horizontal` lays them in a row with connector
+   * lines between — for wizard headers above full-width content. Scrolls
+   * within its own container on narrow viewports instead of overflowing the page.
+   */
+  orientation?: ProgressStepperOrientation;
   /** Step definitions with labels and optional descriptions */
   steps: ProgressStep[];
 }
@@ -70,9 +78,11 @@ function getStepStatus(index: number, activeStep: number): StepStatus {
  * Two visual variants share the same `activeStep` / `linear` / `onStepClick`
  * model. Pick the one that fits the layout:
  *
- * - **`variant="steps"`** (default) — vertical labeled list with numbered
- *   circles, checkmarks on complete, and optional descriptions per step.
- *   Use for setup wizards, checkout flows, and multi-page forms.
+ * - **`variant="steps"`** (default) — labeled list with numbered circles,
+ *   checkmarks on complete, and optional descriptions per step. Vertical by
+ *   default (sidebars); `orientation="horizontal"` lays it in a row for
+ *   wizard headers above full-width content. Use for setup wizards,
+ *   checkout flows, and multi-page forms.
  *
  * - **`variant="dots"`** — compact horizontal dot row with the active dot
  *   stretching wider. No labels. Use on mobile, in carousels, or as a
@@ -90,6 +100,17 @@ function getStepStatus(index: number, activeStep: number): StepStatus {
  *     { label: 'Review' },
  *   ]}
  *   activeStep={1}
+ *   onStepClick={setStep}
+ * />
+ * ```
+ *
+ * @example Horizontal steps (wizard header)
+ * ```tsx
+ * <ProgressStepper
+ *   orientation="horizontal"
+ *   steps={[{ label: 'Details' }, { label: 'Services' }, { label: 'Review' }]}
+ *   activeStep={1}
+ *   linear
  *   onStepClick={setStep}
  * />
  * ```
@@ -117,6 +138,7 @@ function StepsRender({
   steps,
   activeStep,
   size = 'md',
+  orientation = 'vertical',
   linear = false,
   onStepClick,
   className = '',
@@ -131,6 +153,7 @@ function StepsRender({
       className={bdsClass(
         'bds-progress-stepper',
         'bds-progress-stepper--variant-steps',
+        `bds-progress-stepper--orientation-${orientation}`,
         className,
       )}
       style={style}
@@ -160,7 +183,7 @@ function StepsRender({
         };
 
         return (
-          <div key={index} role="listitem" aria-current={status === 'active' ? 'step' : undefined}>
+          <div key={index} role="listitem" className="bds-progress-stepper__step" aria-current={status === 'active' ? 'step' : undefined}>
             <div
               className={bdsClass(
                 'bds-progress-stepper__step-row',
