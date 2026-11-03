@@ -773,8 +773,30 @@
     },
     {
       "group": "indicator",
+      "label": "Outline neutral edge on surface",
+      "fg": "--bds-border-secondary",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large",
+      "note": "WCAG 1.4.11, 3:1. The edge of an `outline` Tag with `color=\"neutral\"` (brik-bds#2943) against the surface it sits on."
+    },
+    {
+      "group": "indicator",
       "label": "Outline accent-blue Tag edge on surface",
       "fg": "--bds-border-accent-blue",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "indicator",
+      "label": "Outline accent-green Tag edge on surface",
+      "fg": "--bds-border-accent-green",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "indicator",
+      "label": "Outline accent-orange Tag edge on surface",
+      "fg": "--bds-border-accent-orange",
       "bg": "--bds-surface-primary",
       "thresholdType": "AA-large"
     },
@@ -787,6 +809,13 @@
     },
     {
       "group": "indicator",
+      "label": "Outline accent-yellow Tag edge on surface",
+      "fg": "--bds-border-accent-yellow",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "indicator",
       "label": "Outline accent-red Tag edge on surface",
       "fg": "--bds-border-accent-red",
       "bg": "--bds-surface-primary",
@@ -794,8 +823,30 @@
     },
     {
       "group": "indicator",
+      "label": "Outline positive Badge edge on surface",
+      "fg": "--bds-border-positive",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large",
+      "note": "WCAG 1.4.11, 3:1. The edge of an `outline` Badge (brik-bds#2943) against the surface it sits on."
+    },
+    {
+      "group": "indicator",
+      "label": "Outline warning Badge edge on surface",
+      "fg": "--bds-border-warning",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "indicator",
       "label": "Outline negative Badge edge on surface",
       "fg": "--bds-border-negative",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "indicator",
+      "label": "Outline neutral Badge edge on surface",
+      "fg": "--bds-border-neutral",
       "bg": "--bds-surface-primary",
       "thresholdType": "AA-large"
     },
