@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
 import libraryJson from '../../blueprints/blueprint-library.json';
+import { ATMOSPHERE_VALUES, DEPRECATED_ATMOSPHERES, type Atmosphere } from '../vocabularies';
 import { WIRED_BLUEPRINT_KEYS } from './astro/types';
 import {
   normalizeBlueprintLibrary,
@@ -188,11 +189,15 @@ describe('resolveBlueprintShortlist', () => {
 // ── Design-decision affinity (ADR-039 Style axis, #2774) ──────────────────
 
 describe('design-decision affinity scoring', () => {
-  // Synthetic, because no entry in blueprint-library.json declares affinity
-  // yet — the vocabularies ship first so the portal's decision set (#4973)
-  // can be authored against them. These fixtures exercise the terms now so
-  // the first authored array lands on tested math.
-  const base = normalized[0];
+  // Synthetic: `base` has its authored arrays stripped so the math is tested
+  // against a known zero. The authored arrays are tested on real entries in
+  // the next block.
+  const base = {
+    ...normalized[0],
+    atmospheres: undefined,
+    animation_tiers: undefined,
+    spacing_modes: undefined,
+  } as (typeof normalized)[number];
   const withAffinity = {
     ...base,
     atmospheres: ['editorial-luxury'],
@@ -283,5 +288,63 @@ describe('design-decision affinity scoring', () => {
         SHORTLIST_WEIGHTS.animationTierMatch +
         SHORTLIST_WEIGHTS.spacingModeMatch,
     ).toBeGreaterThan(SHORTLIST_WEIGHTS.universalBonus);
+  });
+});
+
+// ── Authored library affinity (#2824) ─────────────────────────────────────
+
+describe('authored library affinity', () => {
+  const entry = (key: string) => {
+    const bp = normalized.find((b) => b.key === key);
+    if (!bp) throw new Error(`no library entry "${key}"`);
+    return bp;
+  };
+
+  it('gives every live atmosphere at least one entry and no entry a deprecated one', () => {
+    const declared = new Set(normalized.flatMap((bp) => bp.atmospheres ?? []));
+    const live = ATMOSPHERE_VALUES.filter((a) => !(a in DEPRECATED_ATMOSPHERES));
+
+    expect(live.filter((a) => !declared.has(a))).toEqual([]);
+    expect(Object.keys(DEPRECATED_ATMOSPHERES).filter((a) => declared.has(a as Atmosphere))).toEqual([]);
+  });
+
+  it('matches an atmosphere on a real entry', () => {
+    const bp = entry('testimonials_featured_large');
+
+    expect(scoreBlueprintForProfile(bp, { atmosphere: 'editorial-luxury' }).atmosphere_match).toBe(true);
+    expect(scoreBlueprintForProfile(bp, { atmosphere: 'warm-soft' }).atmosphere_match).toBe(false);
+  });
+
+  it('scores a deprecated atmosphere pick as its replacement', () => {
+    // `clean-bright` is still on stored profile rows; the library only
+    // declares `none`, which replaced it.
+    const bp = entry('logo_wall');
+
+    expect(scoreBlueprintForProfile(bp, { atmosphere: 'clean-bright' }).atmosphere_match).toBe(true);
+    expect(scoreBlueprintForProfile(bp, { atmosphere: 'minimal-clinical' }).atmosphere_match).toBe(true);
+    expect(scoreBlueprintForProfile(entry('cta_centered'), { atmosphere: 'clean-bright' }).atmosphere_match).toBe(
+      false,
+    );
+  });
+
+  it('matches an animation tier on a real entry, and every moderate entry takes expressive too', () => {
+    const bp = entry('stats_bar');
+
+    expect(scoreBlueprintForProfile(bp, { animation_tier: 'moderate' }).animation_tier_match).toBe(true);
+    expect(scoreBlueprintForProfile(bp, { animation_tier: 'expressive' }).animation_tier_match).toBe(true);
+    expect(scoreBlueprintForProfile(bp, { animation_tier: 'subtle' }).animation_tier_match).toBe(false);
+
+    // A client who picks more motion must not rank motion-carrying entries lower.
+    const moderateOnly = normalized
+      .filter((b) => b.animation_tiers?.includes('moderate') && !b.animation_tiers.includes('expressive'))
+      .map((b) => b.key);
+    expect(moderateOnly).toEqual([]);
+  });
+
+  it('matches a spacing mode on a real entry', () => {
+    const bp = entry('hero_interior_minimal');
+
+    expect(scoreBlueprintForProfile(bp, { spacing_mode: 'compact' }).spacing_mode_match).toBe(true);
+    expect(scoreBlueprintForProfile(bp, { spacing_mode: 'spacious' }).spacing_mode_match).toBe(false);
   });
 });

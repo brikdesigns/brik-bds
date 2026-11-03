@@ -151,6 +151,8 @@ The three design-decision terms descend by how much of a section's rendering the
 
 Each is matched against an **optional** affinity array on the blueprint (`atmospheres`, `animation_tiers`, `spacing_modes`). Every term is additive and none filters, so a blueprint that declares no affinity scores exactly what it scored before these existed, and an affinity miss can re-rank a shortlist but never shrink it.
 
+All 13 library entries declare `atmospheres`; the tier and spacing arrays appear only where the entry's own spec grounds them (#2824). Entries list live atmospheres only. A profile still holding a deprecated pick (`clean-bright`, `minimal-clinical`) scores as `none`, the atmosphere that replaced it. An entry that takes `moderate` motion also takes `expressive`, so picking more motion never ranks a motion-carrying entry lower.
+
 ## Related
 
 - [Components](/docs/components) — each component implements the axes documented here

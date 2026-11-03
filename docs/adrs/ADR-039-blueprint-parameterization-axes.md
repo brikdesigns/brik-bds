@@ -122,6 +122,7 @@ The portal imports from `@brikdesigns/bds/content-system` and deletes its copies
 - **Affinity, not requirement.** Every term is additive and none filters, so a blueprint declaring no affinity scores exactly what it scored before, and a profile that has not reached the design-decision step scores exactly as it did before.
 - **Omit, don't empty.** An empty array is a schema error — it declares nothing while looking like a declaration.
 - **Unpopulated as of #2774.** All 13 library entries pass the schema with the fields absent. Deriving an affinity from an authored mood would be inventing a client-visible ranking input; the arrays get authored once the portal's decision set is real ([brik-client-portal#4973](https://github.com/brikdesigns/brik-client-portal/issues/4973)).
+- **Authored in #2824 (operator-approved table, 2026-11-02).** Atmosphere affinity reads each entry's own visual devices (glow, photography, serif, illustration) against each atmosphere's decoration, never its moods. Deprecated atmospheres were re-mapped to `none`, and the resolver scores a deprecated pick as its replacement. The per-entry rationale lives in the #2824 PR body.
 
 **What this amendment does not change.** Style remains the built axis — no new mode axis, no new token, no change to a selector or an emitted value. It writes down the values that already render and names where they live.
 
