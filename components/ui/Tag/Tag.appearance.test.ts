@@ -22,13 +22,13 @@ describe('Tag appearance + color markup', () => {
   it('defaults to a solid neutral Tag', () => {
     const html = tag({});
     expect(html).toContain('bds-tag--solid');
-    expect(html).toContain('bds-tag--neutral');
+    expect(html).toContain('bds-tag--color-neutral');
   });
 
   it('puts the appearance and the color on the element', () => {
     const html = tag({ appearance: 'outline', color: 'purple' });
     expect(html).toContain('bds-tag--outline');
-    expect(html).toContain('bds-tag--purple');
+    expect(html).toContain('bds-tag--color-purple');
   });
 });
 

@@ -107,7 +107,7 @@ export function Tag({
     'bds-tag',
     `bds-tag--${size}`,
     `bds-tag--${appearance}`,
-    `bds-tag--${color}`,
+    `bds-tag--color-${color}`,
     density === 'compact' && 'bds-tag--compact',
     disabled && 'bds-tag--disabled',
     className

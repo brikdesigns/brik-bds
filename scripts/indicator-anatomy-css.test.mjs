@@ -24,7 +24,7 @@ describe('Tag CSS — appearance × color', () => {
 
   it.each(['neutral', ...HUES])('has solid, subtle and outline rules for color=%s', (color) => {
     for (const appearance of ['solid', 'subtle', 'outline']) {
-      expect(tagCss, `${appearance} × ${color}`).toContain(`.bds-tag--${appearance}.bds-tag--${color}`);
+      expect(tagCss, `${appearance} × ${color}`).toContain(`.bds-tag--${appearance}.bds-tag--color-${color}`);
     }
   });
 
