@@ -38,6 +38,11 @@ const meta: Meta<typeof Avatar> = {
       options: [undefined, 'green', 'purple', 'blue', 'orange', 'yellow', 'red'],
       description: 'Accent color for the initials fallback. No effect when an image loads.',
     },
+    appearance: {
+      control: 'select',
+      options: ['solid', 'subtle'],
+      description: 'Fill for the initials fallback — `solid` (saturated accent, default) or `subtle` (pale `-light` accent, dark-ink initials). No effect when an image loads.',
+    },
   },
 };
 

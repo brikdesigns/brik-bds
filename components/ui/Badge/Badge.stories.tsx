@@ -29,8 +29,8 @@ const meta: Meta<typeof Badge> = {
     },
     appearance: {
       control: 'select',
-      options: ['solid', 'subtle'],
-      description: 'Fill appearance — `solid` (saturated bg) or `subtle` (pastel bg, saturated text).',
+      options: ['solid', 'subtle', 'outline'],
+      description: 'Fill appearance — `solid` (saturated bg), `subtle` (pale `-light` bg, dark-ink label) or `outline` (transparent, tone-colored border, `--bds-text-primary` label).',
     },
     density: {
       control: 'select',

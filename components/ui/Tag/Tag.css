@@ -29,31 +29,136 @@
   box-sizing: border-box;
 }
 
-/* ─── Appearance (shared axis with Badge/Chip) ───────────────── */
+/* ─── Appearance × color (one anatomy with Badge and Avatar) ──── */
+/* A Tag is a small element placed ON a surface, so every fill is a
+   `--bds-background-*` token, never a `--bds-surface-*` one (token-anatomy.mdx,
+   small-element rule). `appearance` picks the treatment, `color` picks the
+   family; each pairing below is one rule so the cascade never has to guess.
 
-.bds-tag--solid {
-  /* A Tag is a small element placed ON a surface, so its fill is a background
-     token, never a surface one. Neutral family, not the layer-2b control chrome
-     (--bds-background-secondary): a tenant that darkens that chrome would
-     otherwise break every default Tag (portal 1.22:1, #2852).
-     The label MUST be --bds-text-on-color-dark — --bds-text-neutral resolves
-     to the same value as this fill and measures 1.00:1. */
+   solid   — saturated fill + on-color label.
+   subtle  — pale `-light` fill + the dark-ink label `--bds-text-on-color-light`
+             (theme-stable, never a theme-flipping `--bds-text-{role}`).
+   outline — transparent fill + `--bds-text-primary` label + a border only. */
+
+/* neutral · solid
+   Neutral family, not the layer-2b control chrome (--bds-background-secondary):
+   a tenant that darkens that chrome would otherwise break every default Tag
+   (portal 1.22:1, #2852). The label MUST be --bds-text-on-color-dark —
+   --bds-text-neutral resolves to the same value as this fill and measures 1.00:1. */
+.bds-tag--solid.bds-tag--neutral {
   background-color: var(--bds-background-neutral);
   color: var(--bds-text-on-color-dark);
 }
 
-.bds-tag--subtle {
+.bds-tag--subtle.bds-tag--neutral {
+  background-color: var(--bds-background-neutral-light);
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-tag--outline.bds-tag--neutral {
   background-color: transparent;
+  color: var(--bds-text-primary);
   border: var(--bds-border-width-md) solid var(--bds-border-secondary);
 }
 
-/* Quiet neutral fill — low-emphasis category label. Same AA-cleared
-   pairing as Badge `info` (`--background-status-neutral` +
-   `--text-status-neutral`) — do NOT use `--bds-text-muted` here, it fails
-   WCAG AA (1.87:1, see Select.css). */
-.bds-tag--muted {
-  background-color: var(--bds-surface-neutral);
-  color: var(--bds-text-neutral);
+/* accent hues — Avatar.css reads the same six solid pairings. The label on a
+   saturated accent fill is --bds-text-on-color-light: black holds AA across all
+   six, where white would fail on yellow and orange. */
+
+.bds-tag--solid.bds-tag--blue {
+  background-color: var(--bds-background-accent-blue);
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-tag--subtle.bds-tag--blue {
+  background-color: var(--bds-background-accent-blue-light);
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-tag--outline.bds-tag--blue {
+  background-color: transparent;
+  color: var(--bds-text-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-accent-blue);
+}
+
+.bds-tag--solid.bds-tag--green {
+  background-color: var(--bds-background-accent-green);
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-tag--subtle.bds-tag--green {
+  background-color: var(--bds-background-accent-green-light);
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-tag--outline.bds-tag--green {
+  background-color: transparent;
+  color: var(--bds-text-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-accent-green);
+}
+
+.bds-tag--solid.bds-tag--orange {
+  background-color: var(--bds-background-accent-orange);
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-tag--subtle.bds-tag--orange {
+  background-color: var(--bds-background-accent-orange-light);
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-tag--outline.bds-tag--orange {
+  background-color: transparent;
+  color: var(--bds-text-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-accent-orange);
+}
+
+.bds-tag--solid.bds-tag--purple {
+  background-color: var(--bds-background-accent-purple);
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-tag--subtle.bds-tag--purple {
+  background-color: var(--bds-background-accent-purple-light);
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-tag--outline.bds-tag--purple {
+  background-color: transparent;
+  color: var(--bds-text-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-accent-purple);
+}
+
+.bds-tag--solid.bds-tag--yellow {
+  background-color: var(--bds-background-accent-yellow);
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-tag--subtle.bds-tag--yellow {
+  background-color: var(--bds-background-accent-yellow-light);
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-tag--outline.bds-tag--yellow {
+  background-color: transparent;
+  color: var(--bds-text-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-accent-yellow);
+}
+
+.bds-tag--solid.bds-tag--red {
+  background-color: var(--bds-background-accent-red);
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-tag--subtle.bds-tag--red {
+  background-color: var(--bds-background-accent-red-light);
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-tag--outline.bds-tag--red {
+  background-color: transparent;
+  color: var(--bds-text-primary);
+  border: var(--bds-border-width-md) solid var(--bds-border-accent-red);
 }
 
 /* ─── Sizes (shared scale with Badge) ────────────────────────── */
@@ -110,26 +215,28 @@
 
 /* ─── Disabled ────────────────────────────────────────────────── */
 
-/* Split by variant, the way Button.css:263-277 splits its own: `solid` and
-   `muted` paint a fill at the root and take the token swap (ADR-028 pt-1),
-   `subtle` is an outline with `background-color: transparent` and keeps the
-   fade (pt-2). Faded, the filled pair sat at 2.06:1 dark (`solid`) and 2.31:1
-   light (`muted`) against a 3:1 floor — neither was in
-   `tokens/contrast-pairings.json`, so neither was visible to `contrast-gate`.
-   The swap measures 5.22:1 light / 3.29:1 dark. #1701 */
+/* Split by appearance, the way Button.css:263-277 splits its own: `solid` and
+   `subtle` paint a fill at the root and take the token swap (ADR-028 pt-1) —
+   in every `color`, so a disabled Tag reads as one grey chip whatever hue it
+   carried; `outline` has `background-color: transparent` and keeps the fade
+   (pt-2). Faded, a filled Tag sat at 2.06:1 dark / 2.31:1 light against a 3:1
+   floor and was invisible to `contrast-gate`; the swap measures 5.22:1 light /
+   3.29:1 dark. #1701 */
 .bds-tag--disabled {
   cursor: not-allowed;
 }
 
+/* Same two-class weight as the `appearance × color` rules above and later in
+   the file, so the swap wins for every hue without per-color repetition. */
 .bds-tag--solid.bds-tag--disabled,
-.bds-tag--muted.bds-tag--disabled {
+.bds-tag--subtle.bds-tag--disabled {
   background-color: var(--bds-background-disabled);
   color: var(--bds-text-disabled);
 }
 
 /* No fill of its own — a disabled fill would turn the outline into a solid grey
    block, the carve-out Button.css:270-276 already discovered. */
-.bds-tag--subtle.bds-tag--disabled {
+.bds-tag--outline.bds-tag--disabled {
   opacity: var(--bds-state-disabled-opacity);
 }
 

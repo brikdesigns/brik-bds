@@ -1,6 +1,23 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './Avatar.stories';
+import { Avatar } from './Avatar';
+
+{/* Appearance × color comparison — docs-local, not a story export: `appearance`
+    and `color` are Controls on Initials, and a side-by-side matrix is an MDX
+    concern (#1489). */}
+export const AppearanceScale = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)' }}>
+    {['solid', 'subtle'].map((appearance) => (
+      <div key={appearance} style={{ display: 'flex', gap: 'var(--bds-gap-md)', flexWrap: 'wrap', alignItems: 'center' }}>
+        <Avatar name="Brik Designs" appearance={appearance} />
+        {['blue', 'green', 'orange', 'purple', 'yellow', 'red'].map((color) => (
+          <Avatar key={color} name={color} color={color} appearance={appearance} />
+        ))}
+      </div>
+    ))}
+  </div>
+);
 
 <Meta of={Stories} />
 
@@ -19,6 +36,12 @@ User profile images with automatic fallback to initials. Supports multiple sizes
 Initials-only fallback vs photo-backed avatar — the two content-type starting points. Size, status, and color are Controls on both.
 
 <Canvas of={Stories.Initials} />
+
+`appearance` is the indicator axis shared with Badge and Tag: `solid` (default) is the saturated accent fill, `subtle` its pale `-light` step with a dark-ink label. With no `color`, `subtle` is the pale brand fill. No effect once an image loads.
+
+<Canvas>
+  <AppearanceScale />
+</Canvas>
 
 - **`xs`** — 24px, dense inline affordances (dropdown triggers, compact rows)
 - **`sm`** — 32px, compact lists and inline mentions

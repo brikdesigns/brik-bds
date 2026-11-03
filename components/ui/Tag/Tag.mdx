@@ -5,7 +5,7 @@ import * as Stories from './Tag.stories';
 import { Tag } from './Tag';
 import { Badge } from '../Badge/Badge';
 
-{/* Axis comparisons — appearance / size / density. Docs-local, not story
+{/* Axis comparisons — appearance / color / size / density. Docs-local, not story
     exports: each axis is a Control on Default, and a side-by-side gallery is
     an MDX concern (#1489). Same rationale as BadgeTagAlignmentDemo below. */}
 export const AxisRow = ({ children }) => (
@@ -16,8 +16,22 @@ export const AppearanceScale = () => (
   <AxisRow>
     <Tag appearance="solid">Solid</Tag>
     <Tag appearance="subtle">Subtle</Tag>
-    <Tag appearance="muted">Muted</Tag>
+    <Tag appearance="outline">Outline</Tag>
   </AxisRow>
+);
+
+export const COLORS = ['neutral', 'blue', 'green', 'orange', 'purple', 'yellow', 'red'];
+
+export const ColorScale = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)' }}>
+    {['solid', 'subtle', 'outline'].map((appearance) => (
+      <AxisRow key={appearance}>
+        {COLORS.map((color) => (
+          <Tag key={color} appearance={appearance} color={color}>{color}</Tag>
+        ))}
+      </AxisRow>
+    ))}
+  </div>
 );
 
 export const SizeScale = () => (
@@ -79,20 +93,32 @@ Categorization labels for classifying records — industry, segment, owner, size
 
 ## Variants
 
-**Appearance** (shared axis with Badge and Chip — see [Vocabulary › Axes](https://design.brikdesigns.com/docs/primitives/naming-conventions)) and icon slots are exposed via Controls on Default:
+**Appearance** (shared axis with Badge and Avatar — see [Vocabulary › Axes](https://design.brikdesigns.com/docs/primitives/naming-conventions)), **color**, and icon slots are exposed via Controls on Default:
 
-- **`solid`** (default) — Neutral-family fill (`--bds-background-neutral`, saturated charcoal) with a white on-color label. A Tag is a small element placed on a surface, so its fill is a background token.
-- **`subtle`** — Transparent background with a hairline border. Lower visual weight when Tags sit on a colored surface.
-- **`muted`** — Quiet neutral fill for a low-emphasis category label, using the same AA-cleared pairing as Badge `info`. **Boundary:** Tags carry classification, never status. `muted` paints the subtle surface tint (`--bds-surface-neutral` + `--bds-text-neutral`); it is a quiet neutral label, not a status — for semantic status (positive/warning/error/etc.) use `Badge` instead.
+- **`solid`** (default) — Saturated `--bds-background-*` fill with an on-color label: neutral is charcoal with a white label; each accent hue takes the dark ink `--bds-text-on-color-light`. A Tag is a small element placed on a surface, so its fill is a background token.
+- **`subtle`** — Pale `--bds-background-*-light` fill with the dark-ink label `--bds-text-on-color-light` on every color.
+- **`outline`** — Transparent fill, `--bds-text-primary` label, and a border only (`--bds-border-secondary` for neutral, `--bds-border-accent-{hue}` for a hue). Lower visual weight when Tags sit on a colored surface.
+
+**Color** is `neutral` (default) or an accent hue — `blue`, `green`, `orange`, `purple`, `yellow`, `red`, the same hues Avatar takes. **Boundary:** Tags carry classification, never status. There is no positive / warning / negative color on a Tag; for semantic status use `Badge` and its `tone`.
+
+**Breaking in 0.222.** The old `subtle` (transparent + border) is now `outline`, and the old `muted` (quiet neutral fill) is now `subtle`. `muted` is removed. Migrate with `scripts/codemod-tag-appearance.mjs`; run it once, never twice.
 
 **Service color:** Tag has no service-color axis. A Brik service-line category, or any glyph that should sit on a service fill, is a `ServiceTag`, using its `icon` prop for a custom glyph (#2417).
 
-Below: appearance, sizes, and density — axes where a side-by-side comparison is clearer than toggling Controls.
+Below: appearance, color, sizes, and density — axes where a side-by-side comparison is clearer than toggling Controls.
 
 ### Appearance
 
 <Canvas>
   <AppearanceScale />
+</Canvas>
+
+### Color
+
+Each appearance across every color.
+
+<Canvas>
+  <ColorScale />
 </Canvas>
 
 ### Sizes

@@ -5,6 +5,12 @@ import './Avatar.css';
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type AvatarStatus = 'online' | 'offline' | 'busy' | 'away';
 export type AvatarColor = 'green' | 'purple' | 'blue' | 'orange' | 'yellow' | 'red';
+/**
+ * Fill appearance — the indicator axis shared with Badge and Tag.
+ * - `solid`  — saturated fill + on-color initials (default).
+ * - `subtle` — pale `-light` fill + dark-ink initials.
+ */
+export type AvatarAppearance = 'solid' | 'subtle';
 
 export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
   /** Image source URL */
@@ -24,6 +30,13 @@ export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
    * (e.g. contact id) to one of these six. Omit for the default brand fill.
    */
   color?: AvatarColor;
+  /**
+   * Fill appearance for the initials fallback (no effect when an image loads).
+   * `subtle` swaps the saturated accent fill for its pale
+   * `--background-accent-{color}-light` step; with no `color` it is the pale
+   * brand fill. Default `solid`.
+   */
+  appearance?: AvatarAppearance;
 }
 
 function getInitials(name: string): string {
@@ -52,6 +65,7 @@ export function Avatar({
   size = 'md',
   status,
   color,
+  appearance = 'solid',
   className,
   style,
   ...props
@@ -69,6 +83,7 @@ export function Avatar({
         // Color only styles the initials fill; when an image loads it covers
         // the background, so applying the class unconditionally is harmless.
         color && !showImage ? `bds-avatar--accent-${color}` : undefined,
+        appearance === 'subtle' && !showImage ? 'bds-avatar--subtle' : undefined,
         className,
       )}
       style={style}
