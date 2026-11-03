@@ -347,6 +347,24 @@ fixed: [`visual.yml`](../../.github/workflows/visual.yml) runs the suite once,
 and invocation 1 is clean. The root cause is unidentified and tracked
 separately — tracked in #1746.
 
+## Reading a value out of the gate (#1800)
+
+A browser `console.log` from `.storybook/vitest.visual.setup.ts` never reaches
+the CI log: `afterEach` runs after the test has finished, so the output is
+dropped (`ctx.annotate` fails there for the same reason). Use `gateDiag`
+instead:
+
+```ts
+import { gateDiag } from './vitest.visual.setup';
+await gateDiag('label', getComputedStyle(el).fontFamily); // any JSON value
+```
+
+It appends `{ label, value }` to `visual-diag.jsonl`, which every shard uploads
+as the `visual-diag-shard-N` artifact on **passing and failing** runs. Download
+it with `gh run download <run-id> -n visual-diag-shard-<N>`. Remove the call
+before merging — it is a measuring tool, not a gate. Locally the file lands at
+the repo root (gitignored).
+
 ## Opting a story out
 
 Tag it `no-visual` (JS-driven animation that can never produce a stable

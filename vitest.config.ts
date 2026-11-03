@@ -87,6 +87,19 @@ export default defineConfig({
             headless: true,
             provider: playwright(),
             instances: [{ browser: 'chromium' }],
+            // #1800 — the gate's read-out channel from the browser context. A
+            // browser console.log from afterEach is dropped (the test has
+            // already finished), so a reading goes to the Node side and lands
+            // in visual-diag.jsonl, which visual.yml uploads on every run.
+            // See tests/visual/README.md § Reading a value out of the gate.
+            commands: {
+              gateDiag: (_ctx: unknown, label: string, value: unknown) => {
+                fs.appendFileSync(
+                  path.join(dirname, 'visual-diag.jsonl'),
+                  JSON.stringify({ label, value }) + '\n',
+                );
+              },
+            },
             ...(visualGate && {
               expect: {
                 toMatchScreenshot: {
