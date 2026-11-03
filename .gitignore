@@ -55,7 +55,7 @@ json/
 cms/
 markdown/
 images/
-test/
+/test/
 
 # ─── Root css/ and js/ directories ───────────────────────────────
 # BDS animation library lives here (used by mockups and Astro builds).
