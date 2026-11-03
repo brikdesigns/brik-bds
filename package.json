@@ -130,6 +130,7 @@
     "scripts/site-a11y/index.d.ts",
     "scripts/lint-consumer-shadows.mjs",
     "scripts/check-bds-binding.mjs",
+    "scripts/codemod-tag-appearance.mjs",
     "components/ui/BrikDevBar/widgets/*.js"
   ],
   "bin": {
