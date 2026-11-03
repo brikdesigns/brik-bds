@@ -15,7 +15,12 @@ const meta: Meta<typeof ProgressStepper> = {
     variant: {
       control: 'select',
       options: ['steps', 'dots'],
-      description: '`steps` (default) — vertical labeled list with numbered circles. `dots` — compact horizontal dot row.',
+      description: '`steps` (default) — labeled list with numbered circles. `dots` — compact horizontal dot row.',
+    },
+    orientation: {
+      control: 'inline-radio',
+      options: ['vertical', 'horizontal'],
+      description: 'Layout of the `steps` variant — `vertical` (default, sidebars) or `horizontal` (wizard headers). `steps` variant only.',
     },
     steps: {
       control: false,
@@ -53,6 +58,12 @@ const onboardingSteps: ProgressStep[] = [
   { label: 'Company details', description: 'Tell us about your business' },
   { label: 'Service selection', description: 'Choose your services' },
   { label: 'Review & confirm', description: 'Review your selections' },
+];
+
+const wizardSteps: ProgressStep[] = [
+  { label: 'Details' },
+  { label: 'Services' },
+  { label: 'Review' },
 ];
 
 /* ─── Default ─────────────────────────────────────────────────── */
@@ -147,6 +158,62 @@ export const WithStepNavigation: Story = {
   },
 };
 
+/**
+ * `orientation="horizontal"` above full-width content — the wizard-header
+ * layout: numbered circles, a check on complete steps, connector lines between
+ * steps, labels beside the circles. Same `activeStep` / `linear` /
+ * `onStepClick` model as vertical. Scrolls inside its own container on narrow
+ * viewports.
+ *
+ * @summary Horizontal 3-step wizard header with Back/Continue
+ */
+export const WizardHeader: Story = {
+  args: {
+    linear: true,
+  },
+  argTypes: {
+    activeStep: { table: { disable: true } },
+    variant: { table: { disable: true } },
+    orientation: { table: { disable: true } },
+    count: { table: { disable: true } },
+  },
+  render: (args) => {
+    const [active, setActive] = useState(0);
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-xl)', width: 'min(40rem, 90vw)' }}>
+        <ProgressStepper
+          steps={wizardSteps}
+          orientation="horizontal"
+          size={args.size}
+          linear={args.linear}
+          activeStep={active}
+          onStepClick={setActive}
+        />
+        <div>
+          <h2 style={{ margin: '0 0 var(--bds-gap-md)' }}>{wizardSteps[active]?.label ?? 'Complete'}</h2>
+          <div style={{ display: 'flex', gap: 'var(--bds-gap-md)' }}>
+            <Button
+              variant="secondary"
+              onClick={() => setActive(Math.max(0, active - 1))}
+              disabled={active === 0}
+            >
+              Back
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => setActive(Math.min(wizardSteps.length, active + 1))}
+              disabled={active >= wizardSteps.length}
+            >
+              Continue
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  },
+};
+
 /* ═══════════════════════════════════════════════════════════════
    INTERACTION TEST — play-only, hidden from MCP discovery
    ═══════════════════════════════════════════════════════════════ */
@@ -169,6 +236,36 @@ export const InteractionTestKeyboardActivation: Story = {
   play: async ({ args, canvas }) => {
     const step = canvas.getByRole('button', { name: 'Go to step 1: Account setup' });
     step.focus();
+    await userEvent.keyboard('{Enter}');
+    await expect(args.onStepClick).toHaveBeenCalledWith(0);
+  },
+};
+
+/**
+ * The horizontal layout must behave like vertical: `aria-current="step"` on
+ * the active step, completed steps are keyboard-operable buttons that fire
+ * `onStepClick`, and in `linear` mode upcoming steps are not.
+ * @summary Horizontal steps — aria-current, click-back, linear lock
+ */
+export const InteractionTestHorizontalNavigation: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    steps: wizardSteps,
+    orientation: 'horizontal',
+    activeStep: 1,
+    linear: true,
+    onStepClick: fn(),
+  },
+  play: async ({ args, canvas }) => {
+    await expect(canvas.getByRole('list')).toHaveClass('bds-progress-stepper--orientation-horizontal');
+    const items = canvas.getAllByRole('listitem');
+    await expect(items[1]).toHaveAttribute('aria-current', 'step');
+    await expect(items[0]).not.toHaveAttribute('aria-current');
+
+    await expect(canvas.queryByRole('button', { name: /Go to step 3/ })).toBeNull();
+
+    const back = canvas.getByRole('button', { name: 'Go to step 1: Details' });
+    back.focus();
     await userEvent.keyboard('{Enter}');
     await expect(args.onStepClick).toHaveBeenCalledWith(0);
   },

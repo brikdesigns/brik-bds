@@ -3,7 +3,8 @@
  * BDS ProgressStepper — Class-based styles
  *
  * Two visual variants share the same component:
- *   - 'steps' (default): vertical labeled stepper with circles + connectors
+ *   - 'steps' (default): labeled stepper with circles + connectors;
+ *     vertical by default, horizontal via --orientation-horizontal
  *   - 'dots': compact horizontal dot row (active dot stretches wider)
  *
  * Token references use the BDS semantic token layer (never primitives).
@@ -17,6 +18,14 @@
 .bds-progress-stepper--variant-steps {
   display: flex;
   flex-direction: column;
+}
+
+.bds-progress-stepper--variant-steps.bds-progress-stepper--orientation-horizontal {
+  flex-direction: row;
+  align-items: flex-start;
+  /* Narrow viewports: scroll inside the stepper rather than overflow the page */
+  overflow-x: auto;
+  padding-block: var(--bds-gap-xs); /* room so the focus ring isn't clipped by overflow */
 }
 
 .bds-progress-stepper--variant-dots {
@@ -158,6 +167,39 @@
 
 .bds-progress-stepper__connector--incomplete {
   background-color: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: 2px connector line (border semantics, fill mechanics); see docs/TOKEN-PR-CHECKLIST.md */
+}
+
+/* ─── Horizontal orientation (steps variant) ─────────────────── */
+
+/* Each step = row + connector side by side; connector stretches to fill the
+   space between steps. Last step has no connector, so it hugs its content. */
+.bds-progress-stepper--orientation-horizontal .bds-progress-stepper__step {
+  display: flex;
+  align-items: flex-start;
+  flex: 1 1 auto;
+}
+
+.bds-progress-stepper--orientation-horizontal .bds-progress-stepper__step:last-child {
+  flex: 0 0 auto;
+}
+
+.bds-progress-stepper--orientation-horizontal .bds-progress-stepper__connector {
+  width: auto;
+  height: 2px; /* bds-lint-ignore — Figma connector width */
+  min-width: var(--bds-gap-md);
+  min-height: 0;
+  flex: 1 1 auto;
+  margin-left: var(--bds-gap-sm);
+  margin-right: var(--bds-gap-sm);
+}
+
+/* Center the line on the circle: (circle - 2) / 2 */
+.bds-progress-stepper--orientation-horizontal .bds-progress-stepper__connector--sm {
+  margin-top: 11px; /* bds-lint-ignore — (24 - 2) / 2 to center beside circle */
+}
+
+.bds-progress-stepper--orientation-horizontal .bds-progress-stepper__connector--md {
+  margin-top: 15px; /* bds-lint-ignore — (32 - 2) / 2 to center beside circle */
 }
 
 /* ─── Dots variant ───────────────────────────────────────────── */

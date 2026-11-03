@@ -1,6 +1,6 @@
 ---
 title: Progress stepper
-description: Step indicator for multi-step flows. Two variants — labeled vertical steps and compact horizontal dots.
+description: Step indicator for multi-step flows. Two variants — labeled steps (vertical or horizontal) and compact horizontal dots.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -53,6 +53,20 @@ The default labeled variant.
     { label: 'Confirm', description: 'Review and submit' },
   ]}
   activeStep={0}
+  onStepClick={(step) => setStep(step)}
+/>
+```
+
+### Horizontal steps
+
+`orientation="horizontal"` lays the steps in a row with connector lines between them — a wizard header above full-width content. Default is `vertical` (sidebars). States, `aria-current`, and `linear` click-back match the vertical layout. On narrow viewports it scrolls inside its own container instead of overflowing the page; keep labels short.
+
+```tsx
+<ProgressStepper
+  orientation="horizontal"
+  steps={[{ label: 'Details' }, { label: 'Services' }, { label: 'Review' }]}
+  activeStep={1}
+  linear
   onStepClick={(step) => setStep(step)}
 />
 ```
@@ -127,6 +141,7 @@ Then one of the two variant shapes:
 |---|---|---|
 | `variant` | `'steps'` | `'steps'` |
 | `steps` | `ProgressStep[]` *(required)* | — |
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` |
 
 {/* props-check: DotsProgressStepperProps @ components/ui/ProgressStepper/ProgressStepper.tsx */}
 | Prop | Type | Default |

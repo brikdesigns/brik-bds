@@ -8,13 +8,19 @@ import * as Stories from './ProgressStepper.stories';
 
 <ComponentLinks slug="progress-stepper" />
 
-Multi-step progress indicator. Shows the current position in a wizard, onboarding flow, or checkout sequence. Two variants — labeled `steps` and unlabeled `dots` — plus optional linear-mode constraint.
+Multi-step progress indicator. Shows the current position in a wizard, onboarding flow, or checkout sequence. Two variants — labeled `steps` (vertical or horizontal) and unlabeled `dots` — plus optional linear-mode constraint.
 
 ## Default
 
 <Canvas of={Stories.Default} />
 
 ## Variants
+
+### Steps — horizontal
+
+`orientation="horizontal"` lays the `steps` variant out in a row with connector lines between steps. Use it as a wizard header above full-width content; keep the default `vertical` for sidebars. Complete / active / upcoming states, `aria-current="step"`, and `linear` click-back behave identically in both orientations. On narrow viewports the stepper scrolls inside its own container rather than overflowing the page — keep labels short.
+
+<Canvas of={Stories.WizardHeader} />
 
 ### Dots
 
