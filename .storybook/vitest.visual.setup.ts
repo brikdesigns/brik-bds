@@ -387,8 +387,6 @@ afterEach(async (ctx) => {
 
   // Webfonts load lazily per font-face use; don't screenshot mid-swap.
   await document.fonts.ready;
-  // PROOF-PROBE (#1800) — removed before merge.
-  await gateDiag(`${storyId} font-family`, getComputedStyle(document.querySelector('code') ?? document.body).fontFamily);
 
   // #2119 — one extra DOM walk over the already-mounted story before the
   // screenshot compare below. auditMissingType's own isTextLeaf check is the
