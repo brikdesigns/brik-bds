@@ -123,7 +123,7 @@ The prop layer migrates to the token layer's vocabulary, not the reverse. `error
 | Presence / lifecycle — the state of a named subject | `status` | per-subject, scoped-intent token-backed | Avatar, Card, Table, TaskConsole | — |
 | Form — mutually exclusive visual or structural shape, no valence | `variant` | per-component | Card, TabBar, Skeleton, Sheet, ServiceTag, Testimonial, Footer, ToggleSwitch, ProgressStepper | — |
 | Hue source — which palette paints it | `emphasis` | `neutral` · `brand` · `accent` · `inverse` | TextLink, SocialIcon, ContactIcon (`tone` → `emphasis` landed, #1925) | Banner, Badge, Counter (brand member extracted, below); Button (`inverse`, `on-color` leave `variant` — #1983) — `inverse` added by § Amendments (#2279) |
-| Fill treatment intensity | `appearance` | `solid` · `subtle` · `muted` | Tag | — |
+| Fill treatment intensity | `appearance` | `solid` · `subtle` · `outline` (amended by #2943; Tag's `subtle`→`outline`, `muted`→`subtle`) | Badge, Tag, Avatar (`solid` · `subtle` only) | — |
 | Spacing compression | `density` | `comfortable` · `compact` | Tag, Sheet | — |
 | Orientation — mutually-exclusive layout direction, no valence | `orientation` | `horizontal` · `vertical` | ButtonGroup, Divider, CardList | Stack, Form (`direction`/`layout` → `orientation`); Field (`layout` → `orientation`; `stacked`/`inline` → `vertical`/`horizontal`) — added by § Amendments (#2001) |
 

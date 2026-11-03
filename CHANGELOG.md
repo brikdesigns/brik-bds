@@ -18,6 +18,19 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+Indicators share one anatomy: Badge and Tag take `appearance` `solid | subtle | outline`, Avatar takes `solid | subtle`, and Tag takes a `color` (`neutral` or an accent hue). `subtle` is always a pale `--bds-background-*-light` fill with the dark-ink label `--bds-text-on-color-light`; `outline` is transparent with `--bds-text-primary` and a border. Badge, Tag and Avatar CSS read no `--bds-surface-*` and no `--bds-color-*` primitive ([#2943](https://github.com/brikdesigns/brik-bds/issues/2943)). Target: 0.222.0 (a minor, per `docs/RELEASE.md` on 0.x).
+
+**Breaking (`<Tag appearance>`):** the two old values swap meaning, and `muted` is removed. A consumer must migrate in one pass: a find/replace done in two steps turns every `muted` Tag into `outline`. Run `node node_modules/@brikdesigns/bds/scripts/codemod-tag-appearance.mjs --dry-run src`, then once without `--dry-run`. It rewrites only `<Tag>`, lists any dynamic `appearance={...}` as `needs review`, and is not idempotent: never re-run it on a migrated tree.
+
+| Old | New |
+|---|---|
+| `<Tag appearance="subtle">` (transparent + border) | `<Tag appearance="outline">` |
+| `<Tag appearance="muted">` (quiet neutral fill) | `<Tag appearance="subtle">` |
+| `.bds-tag--subtle` (transparent + border) | `.bds-tag--outline` |
+| `.bds-tag--muted` | `.bds-tag--subtle` |
+
+**Also (consumer CSS):** every `.bds-tag` now carries a `.bds-tag--{color}` class (default `.bds-tag--neutral`), and Tag fills are now keyed on `appearance` x `color` compound selectors, so an override of `.bds-tag--solid` alone may lose on specificity. The subtle Badge tones now read `--bds-background-{tone}-light` (pale fills) and brand subtle reads `--bds-background-brand-secondary`; the dark-mode override on brand subtle is gone. New: `.bds-badge--outline`, `.bds-avatar--subtle`.
+
 `--font-weight-thin` (value 300, which is CSS *Light*) is renamed `--font-weight-light` at the Figma source; the value is unchanged. **Breaking (consumer CSS):** `--bds-font-weight-thin`, `--bds-font-weight--thin`, `--font-weight-thin`, `--font-weight--thin` and `weight.thin` ship one minor as deprecated aliases of the `light` names, then drop. The JS `fontWeights` mirror now matches the CSS tokens exactly: `light` stays, the duplicate `thin` key is removed, and `semi-bold` / `extra-bold` become `semibold` / `extrabold` (no downstream repo reads those keys). No `100` / `200` rungs ship, and none are implied ([#2222](https://github.com/brikdesigns/brik-bds/issues/2222)).
 
 | Old | New |

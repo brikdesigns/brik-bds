@@ -5,7 +5,7 @@ description: Status indicators and labels. Non-interactive — for displaying st
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Badge displays contextual status. It uses semantic system colors to communicate state at a glance, with `solid` (saturated) and `subtle` (pastel) appearances for different surface contexts.
+Badge displays contextual status. It uses semantic system colors to communicate state at a glance, with `solid` (saturated), `subtle` (pale) and `outline` (border only) appearances for different surface contexts.
 
 <ComparisonGrid
   items={[
@@ -49,7 +49,7 @@ import { Badge } from '@brikdesigns/bds';
 
 ## Variants
 
-Six status colors across four sizes, each available in `solid` and `subtle` appearances.
+Six status colors across four sizes, each available in `solid`, `subtle` and `outline` appearances — the same three words Tag uses (Avatar takes `solid` and `subtle`).
 
 ### Status colors
 
@@ -69,12 +69,22 @@ Six status colors across four sizes, each available in `solid` and `subtle` appe
 
 ### Subtle appearance
 
-Lower-emphasis pastel fill. Use inline with content, in table cells, on cards — anywhere `solid` would over-emphasize.
+Lower-emphasis pale fill (`--bds-background-{tone}-light`) with a dark-ink label (`--bds-text-on-color-light`) in every tone. Use inline with content, in table cells, on cards — anywhere `solid` would over-emphasize.
 
 <ComponentPreview code={`<BDS.Badge tone="positive" appearance="subtle">Done</BDS.Badge>
 <BDS.Badge tone="info" appearance="subtle">In progress</BDS.Badge>`}>
   <BDS.Badge tone="positive" appearance="subtle">Done</BDS.Badge>
   <BDS.Badge tone="info" appearance="subtle">In progress</BDS.Badge>
+</ComponentPreview>
+
+### Outline appearance
+
+Transparent fill, `--bds-text-primary` label, and the tone in the border alone (`--bds-border-{tone}`). Lowest weight — for a status that must not compete with the row around it.
+
+<ComponentPreview code={`<BDS.Badge tone="positive" appearance="outline">Done</BDS.Badge>
+<BDS.Badge tone="info" appearance="outline">In progress</BDS.Badge>`}>
+  <BDS.Badge tone="positive" appearance="outline">Done</BDS.Badge>
+  <BDS.Badge tone="info" appearance="outline">In progress</BDS.Badge>
 </ComponentPreview>
 
 ### Sizes
@@ -105,7 +115,7 @@ Pass `icon` for a leading visual. Required when `size="xs"` (icon-only).
 </Callout>
 
 - **Don't pick `brand` for routine status.** It draws the eye like a CTA. Reserve for genuinely-featured states.
-- **Don't mix `solid` and `subtle` appearances in the same cluster.** Pick one per row for visual coherence.
+- **Don't mix appearances in the same cluster.** Pick one per row for visual coherence.
 
 ## Accessibility
 
@@ -128,11 +138,13 @@ Pass `icon` for a leading visual. Required when `size="xs"` (icon-only).
 
 ## Tokens
 
-- `--color-system-green` / `--color-system-green-light` — Positive
-- `--color-system-red` / `--color-system-red-light` — Error
-- `--color-system-yellow` / `--color-system-yellow-light` — Warning
-- `--color-system-blue` / `--color-system-blue-light` — Progress
-- `--color-system-neutral` / `--color-system-neutral-light` — Info
+Per `tone` (`positive`, `warning`, `negative`, `info`, `neutral`):
+
+- `--bds-background-{tone}` — `solid` fill
+- `--bds-background-{tone}-light` — `subtle` fill
+- `--bds-border-{tone}` — `outline` edge
+
+`brand` is the exception: `solid` is `--bds-background-brand-primary`, `subtle` is `--bds-background-brand-secondary` with `--bds-text-brand-primary-strong`, and `outline` is `--bds-border-brand-primary`.
 
 ## Related
 
