@@ -106,3 +106,4 @@ tests/visual/__screenshots__/*-win32.png
 visual-report.json
 dropped.txt
 __pycache__/
+visual-diag.jsonl

@@ -22,7 +22,7 @@
  * no new trigger.
  */
 import { afterEach, beforeAll, expect, vi } from 'vitest';
-import { page } from '@vitest/browser/context';
+import { commands, page } from '@vitest/browser/context';
 import widgetSource from '../components/ui/BrikDevBar/widgets/inspect-widget.js?raw';
 
 // Every face the gate renders, bundled by Vite instead of fetched from
@@ -363,6 +363,15 @@ beforeAll(async () => {
   await loadMissingTypeGate();
 }, 120_000);
 
+/**
+ * Read a value out of the gate's browser context (#1800), on a passing run.
+ * Appends `{ label, value }` to visual-diag.jsonl (see vitest.config.ts); CI
+ * uploads it as the `visual-diag-shard-N` artifact. `value` must be JSON.
+ */
+export async function gateDiag(label: string, value: unknown): Promise<void> {
+  await (commands as unknown as Record<string, (...a: unknown[]) => Promise<void>>).gateDiag(label, value);
+}
+
 afterEach(async (ctx) => {
   // Only story tests carry storyId (set by @storybook/addon-vitest).
   const storyId = (ctx.task.meta as { storyId?: string }).storyId;
@@ -378,6 +387,8 @@ afterEach(async (ctx) => {
 
   // Webfonts load lazily per font-face use; don't screenshot mid-swap.
   await document.fonts.ready;
+  // PROOF-PROBE (#1800) — removed before merge.
+  await gateDiag(`${storyId} font-family`, getComputedStyle(document.querySelector('code') ?? document.body).fontFamily);
 
   // #2119 — one extra DOM walk over the already-mounted story before the
   // screenshot compare below. auditMissingType's own isTextLeaf check is the
