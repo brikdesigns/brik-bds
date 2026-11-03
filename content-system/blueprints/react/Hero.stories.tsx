@@ -10,7 +10,7 @@ const meta: Meta<typeof Hero> = {
   tags: ['surface-web'],
   argTypes: {
     sectionKey: { control: 'text', description: 'Unique section key — drives element ids.' },
-    layout: { control: 'inline-radio', options: ['split', 'interior-minimal', 'with-pricing-card'], description: 'Structural layout modifier per ADR-008 §3.' },
+    layout: { control: 'inline-radio', options: ['split', 'interior-minimal', 'with-pricing-card', 'centered'], description: 'Structural layout modifier per ADR-008 §3.' },
     align: { control: 'inline-radio', options: ['left', 'center'], description: 'Content-column placement (structure axis, ADR-039). `left` default; `center` emits `bds-hero--align-center`.' },
     subtitle: { control: 'text', description: 'Eyebrow above the h1.' },
     title: { control: 'text', description: 'Page h1 — Hero blueprints own the page heading. Accepts a node, so inline emphasis (`<em>`) can sit inside it.' },
@@ -94,6 +94,34 @@ export const AlignCenter: Story = {
     sectionKey: 'hero-align-center',
     align: 'center',
   },
+};
+
+/**
+ * `layout="centered"`: a single centred column with no media, its measure capped
+ * by `--bds-content-width-md`. The h1 takes the standard ramp until a consumer
+ * sets `--bds-hero-title-font-family` / `-font-size` — shown here with the display
+ * pair, which is how a centred display hero is expressed without a selector override.
+ *
+ * @summary Centered — one centred column, display title via hooks
+ */
+export const Centered: Story = {
+  args: {
+    ...Default.args,
+    sectionKey: 'hero-centered',
+    layout: 'centered',
+  },
+  decorators: [
+    (Story) => (
+      <div
+        style={{
+          ['--bds-hero-title-font-family' as string]: 'var(--bds-font-family-display)',
+          ['--bds-hero-title-font-size' as string]: 'var(--bds-display-lg)',
+        }}
+      >
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 /**

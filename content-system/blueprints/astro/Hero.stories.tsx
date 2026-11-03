@@ -5,6 +5,7 @@ import './__generated__/Hero.css';
 import split from './__generated__/Hero--split.html?raw';
 import interiorMinimal from './__generated__/Hero--interior-minimal.html?raw';
 import withPricingCard from './__generated__/Hero--with-pricing-card.html?raw';
+import centered from './__generated__/Hero--centered.html?raw';
 
 /**
  * `Hero.astro` on the canonical rail (ADR-037), pre-rendered by
@@ -35,3 +36,6 @@ export const InteriorMinimal: Story = { render: () => <AstroFrame html={interior
 
 /** @summary With-pricing-card — service hero with a price overlay. */
 export const WithPricingCard: Story = { render: () => <AstroFrame html={withPricingCard} /> };
+
+/** @summary Centered — single centred column, no media. */
+export const Centered: Story = { render: () => <AstroFrame html={centered} /> };

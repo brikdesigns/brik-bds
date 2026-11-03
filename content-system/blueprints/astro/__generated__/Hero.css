@@ -42,8 +42,8 @@
 
   .bds-hero__title {
     margin: 0;
-    font-family: var(--bds-font-family-heading);
-    font-size: clamp(var(--bds-heading-xl), 4vw, var(--bds-display-sm));
+    font-family: var(--bds-hero-title-font-family, var(--bds-font-family-heading));
+    font-size: var(--bds-hero-title-font-size, clamp(var(--bds-heading-xl), 4vw, var(--bds-display-sm)));
     font-weight: var(--bds-font-weight-semibold);
     line-height: var(--bds-font-line-height-tight);
     color: var(--bds-hero-headline-color, var(--bds-text-primary));
@@ -76,6 +76,21 @@
   /* Mirrors ../react/Hero.css. Centres the content stack; `left` is the
      default and emits no modifier, so existing heroes render unchanged. */
   .bds-hero--align-center .bds-hero__content {
+    align-items: center;
+    text-align: center;
+  }
+
+  /* ── --centered: single centred column, no media ───────────────── */
+  /* Mirrors ../react/Hero.css. The title's family and size are consumer hooks
+     (`--bds-hero-title-font-family` / `-font-size`), not set here. */
+  .bds-hero--centered .bds-hero__container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bds-gap-md);
+    max-width: var(--bds-content-width-md);
+  }
+
+  .bds-hero--centered .bds-hero__content {
     align-items: center;
     text-align: center;
   }
@@ -124,7 +139,7 @@
   }
 
   .bds-hero--split .bds-hero__title {
-    font-size: clamp(var(--bds-heading-xxl), 5vw, var(--bds-display-sm));
+    font-size: var(--bds-hero-title-font-size, clamp(var(--bds-heading-xxl), 5vw, var(--bds-display-sm)));
     position: relative;
   }
 
@@ -324,7 +339,7 @@
   }
 
   .bds-hero--with-pricing-card .bds-hero__title {
-    font-size: clamp(var(--bds-heading-xl), 5vw, var(--bds-heading-xxl));
+    font-size: var(--bds-hero-title-font-size, clamp(var(--bds-heading-xl), 5vw, var(--bds-heading-xxl)));
     font-weight: var(--bds-font-weight-bold);
     color: var(--bds-hero-headline-color, var(--bds-text-primary));
   }

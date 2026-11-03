@@ -49,8 +49,8 @@
 
 .bds-hero__title {
   margin: 0;
-  font-family: var(--bds-font-family-heading);
-  font-size: clamp(var(--bds-heading-xl), 4vw, var(--bds-display-sm));
+  font-family: var(--bds-hero-title-font-family, var(--bds-font-family-heading));
+  font-size: var(--bds-hero-title-font-size, clamp(var(--bds-heading-xl), 4vw, var(--bds-display-sm)));
   font-weight: var(--bds-font-weight-semibold);
   line-height: var(--bds-font-line-height-tight);
   color: var(--bds-hero-headline-color, var(--bds-text-primary));
@@ -86,6 +86,24 @@
   max-width: var(--bds-content-width-text-md);
 }
 
+/* ── --centered: single centred column, no media ─────────────────────────── */
+/* A centred display hero: the content stack is centred and the measure is
+   capped by a token. The title's family and size are NOT set here — a consumer
+   re-scales the h1 through `--bds-hero-title-font-family` / `-font-size`
+   instead of overriding the selector. Same stack placement as `--align-center`,
+   but this layout also drops the media column and owns the measure. */
+.bds-hero--centered .bds-hero__container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-gap-md);
+  max-width: var(--bds-content-width-md);
+}
+
+.bds-hero--centered .bds-hero__content {
+  align-items: center;
+  text-align: center;
+}
+
 /* ── --split: content column + media column (60/40) ──────────────────────── */
 
 /* One step larger than the base title. The Astro twin has carried this since
@@ -94,7 +112,7 @@
    way round (#2344). The base `clamp(--bds-heading-xl, 4vw, …)` was never a
    decision about the 60/40 hero — React simply had no `--split` override. */
 .bds-hero--split .bds-hero__title {
-  font-size: clamp(var(--bds-heading-xxl), 5vw, var(--bds-display-sm));
+  font-size: var(--bds-hero-title-font-size, clamp(var(--bds-heading-xxl), 5vw, var(--bds-display-sm)));
 }
 
 .bds-hero--split .bds-hero__container {
@@ -358,7 +376,7 @@ img.bds-hero__icon {
 }
 
 .bds-hero--with-pricing-card .bds-hero__title {
-  font-size: clamp(var(--bds-heading-xl), 5vw, var(--bds-heading-xxl));
+  font-size: var(--bds-hero-title-font-size, clamp(var(--bds-heading-xl), 5vw, var(--bds-heading-xxl)));
   font-weight: var(--bds-font-weight-bold);
   color: var(--bds-hero-headline-color, var(--bds-text-primary));
 }
