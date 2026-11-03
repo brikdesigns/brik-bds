@@ -13,7 +13,7 @@ const meta: Meta<typeof Hero> = {
     layout: { control: 'inline-radio', options: ['split', 'interior-minimal', 'with-pricing-card'], description: 'Structural layout modifier per ADR-008 §3.' },
     align: { control: 'inline-radio', options: ['left', 'center'], description: 'Content-column placement (structure axis, ADR-039). `left` default; `center` emits `bds-hero--align-center`.' },
     subtitle: { control: 'text', description: 'Eyebrow above the h1.' },
-    title: { control: 'text', description: 'Page h1 — Hero blueprints own the page heading.' },
+    title: { control: 'text', description: 'Page h1 — Hero blueprints own the page heading. Accepts a node, so inline emphasis (`<em>`) can sit inside it.' },
     lead: { control: 'text', description: 'Supporting lead paragraph.' },
     cta: { control: false, description: 'Primary action `{ label, url }`.' },
     media: { control: false, description: 'Composed media column node for `layout="split"`.' },
@@ -93,6 +93,24 @@ export const AlignCenter: Story = {
     ...Default.args,
     sectionKey: 'hero-align-center',
     align: 'center',
+  },
+};
+
+/**
+ * `title` is a `ReactNode`: inline emphasis sits inside the one `h1`, and the
+ * `<em>` inherits the heading's family, size and colour — it only adds italics.
+ *
+ * @summary Title with inline emphasis
+ */
+export const TitleWithEmphasis: Story = {
+  args: {
+    ...Default.args,
+    sectionKey: 'hero-title-emphasis',
+    title: (
+      <>
+        Care that feels <em>personal</em>
+      </>
+    ),
   },
 };
 

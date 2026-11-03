@@ -80,14 +80,19 @@ import './Hero.css';
 // `import type { HeroLayout } from './Hero'` path is unchanged.
 export type { HeroLayout };
 
-export interface HeroProps extends HTMLAttributes<HTMLElement> {
+// `title` is the headline node here, not the native tooltip attribute.
+export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   /**
    * Stable section identifier. Drives the `aria-labelledby` id — keep it
    * stable across renders for a given section.
    */
   sectionKey: string;
-  /** Hero headline. Renders as the page `<h1>`. */
-  title: string;
+  /**
+   * Hero headline. Renders as the page `<h1>`. A `ReactNode` so inline emphasis
+   * (e.g. an `<em>`) can sit inside the heading; the `h1` and its token pair
+   * stay the block's, and the emphasis inherits them.
+   */
+  title: ReactNode;
   /** Optional uppercase eyebrow above the headline. */
   subtitle?: string;
   /** Optional lead paragraph under the headline. */
