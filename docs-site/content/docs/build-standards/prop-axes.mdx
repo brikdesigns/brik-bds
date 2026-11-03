@@ -1,21 +1,32 @@
 ---
 title: Prop Axes
-description: The four shared prop names — size, tone, variant, appearance — that any BDS component with overlapping visual concerns must use.
+description: The ten shared axis words — tone, status, variant, emphasis, appearance, density, color, orientation, layout, span — that any BDS component with overlapping concerns must use.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
 A prop is an **axis** when more than one component exposes it. Axis names belong to the system, not any single component. When adding a new pill, chip, or indicator, reuse the axis names below — never invent `kind`, `style`, or `flavor`.
 
-## The four axes
+## The axes
+
+Source of truth: [ADR-033 § 2](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md) and its § Amendments, enforced from [`tokens/naming-grammar.json`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/naming-grammar.json) by `lint-naming-canon`. When this table and the ADR disagree, the ADR wins and this page is the bug.
 
 | Axis | Values | Meaning | Components |
 |---|---|---|---|
-| `size` | `xs` · `sm` · `md` · `lg` (indicators); `tiny` · `sm` · `md` · `lg` · `xl` (buttons) | Physical dimensions on a shared scale | Badge, Tag, Chip, Button, IconButton, ServiceTag, Field, Sheet, most form controls |
-| `tone` | `positive` · `warning` · `negative` · `info` · `brand` · `neutral` | Semantic value judgment — which system color tier applies | Badge, Dot |
-| `color` | `neutral` · `blue` · `green` · `orange` · `purple` · `yellow` · `red` (Tag); the six hues (Avatar) | Category or identity hue — which accent family paints it | Tag, Avatar |
-| `variant` | component-specific (see matrix) | Shared prop *name*; meaning varies by component | Chip, Button, IconButton, LinkButton, Card, ServiceTag |
-| `appearance` | `solid` · `subtle` · `outline` | How the shape is filled vs bordered | Badge, Tag (`solid` / `subtle` / `outline`), Avatar (`solid` / `subtle`) |
+| `tone` | `negative` · `positive` · `warning` · `info` · `neutral` | Valence — what this communicates about a state | Badge, Dot, Banner, Field (`helperTone`) |
+| `status` | per-subject | Presence or lifecycle — the state of a named subject | Avatar, Card, Table, TaskConsole |
+| `variant` | per-component (see matrix) | Form — mutually exclusive visual or structural shape, no valence | Card, TabBar, Skeleton, Sheet, ServiceTag, Testimonial, Footer, ToggleSwitch, ProgressStepper |
+| `emphasis` | `neutral` · `brand` · `accent` · `inverse` | Hue source — which palette paints it | TextLink, SocialIcon, ContactIcon |
+| `appearance` | `solid` · `subtle` · `outline` | Fill treatment — how the shape is filled vs bordered | Badge, Tag, Avatar (`solid` · `subtle` only) |
+| `density` | `comfortable` · `compact` | Spacing compression | Tag, Sheet |
+| `color` | `neutral` · `blue` · `green` · `orange` · `purple` · `yellow` · `red` | Accent hue — which named hue paints it | Tag, Avatar |
+| `orientation` | `horizontal` · `vertical` | Layout direction, no valence | ButtonGroup, Divider, CardList |
+| `layout` | per-component | Arrangement — which arrangement of one shared slot set a Container renders | Card |
+| `span` | `full` | Grid extent — how many of its parent grid's tracks a grid child occupies | Field |
+
+`error` and `progress` are retired valence words: use `negative` and `info` ([ADR-033 § Retired vocabulary](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md#retired-vocabulary)). `brand` is not a valence either: ADR-033 moves it to `emphasis="brand"`. Badge's `tone` still accepts `brand` until that migration lands (see the matrix below), so do not copy it into a new union.
+
+`size` is not an ADR-033 axis word. It is a step ladder — `xs` · `sm` · `md` · `lg` on indicators, `tiny` · `sm` · `md` · `lg` · `xl` on buttons — and its rungs follow ADR-033 § 3.
 
 ## variant vs appearance
 
