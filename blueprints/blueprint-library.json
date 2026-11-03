@@ -31,6 +31,14 @@
       "last_reviewed": "2026-09-09",
       "required_facts": [
         "hero_image_url"
+      ],
+      "atmospheres": [
+        "cinematic-dramatic",
+        "editorial-luxury"
+      ],
+      "animation_tiers": [
+        "moderate",
+        "expressive"
       ]
     },
     {
@@ -53,7 +61,11 @@
       "is_active": true,
       "version": "1.0.0",
       "last_reviewed": "2026-09-08",
-      "required_facts": []
+      "required_facts": [],
+      "atmospheres": [
+        "warm-soft",
+        "none"
+      ]
     },
     {
       "key": "feature_grid",
@@ -78,7 +90,15 @@
       "is_active": true,
       "version": "2.0.0",
       "last_reviewed": "2026-09-09",
-      "required_facts": []
+      "required_facts": [],
+      "atmospheres": [
+        "none",
+        "cinematic-dramatic"
+      ],
+      "spacing_modes": [
+        "spacious",
+        "comfortable"
+      ]
     },
     {
       "key": "stats_bar",
@@ -104,7 +124,14 @@
       "is_active": true,
       "version": "2.0.0",
       "last_reviewed": "2026-09-09",
-      "required_facts": []
+      "required_facts": [],
+      "atmospheres": [
+        "none"
+      ],
+      "animation_tiers": [
+        "moderate",
+        "expressive"
+      ]
     },
     {
       "key": "testimonials_featured_large",
@@ -129,7 +156,10 @@
       "is_active": true,
       "version": "1.0.0",
       "last_reviewed": "2026-09-08",
-      "required_facts": []
+      "required_facts": [],
+      "atmospheres": [
+        "editorial-luxury"
+      ]
     },
     {
       "key": "cta_centered",
@@ -152,7 +182,11 @@
       "is_active": true,
       "version": "2.0.0",
       "last_reviewed": "2026-09-09",
-      "required_facts": []
+      "required_facts": [],
+      "atmospheres": [
+        "cinematic-dramatic",
+        "editorial-luxury"
+      ]
     },
     {
       "key": "callout_split",
@@ -177,7 +211,15 @@
       "is_active": true,
       "version": "2.0.0",
       "last_reviewed": "2026-09-09",
-      "required_facts": []
+      "required_facts": [],
+      "atmospheres": [
+        "warm-soft",
+        "none"
+      ],
+      "spacing_modes": [
+        "spacious",
+        "comfortable"
+      ]
     },
     {
       "key": "cta_split_contact",
@@ -206,6 +248,10 @@
       "required_facts": [
         "phone",
         "email"
+      ],
+      "atmospheres": [
+        "warm-soft",
+        "none"
       ]
     },
     {
@@ -235,7 +281,14 @@
       "is_active": true,
       "version": "1.0.0",
       "last_reviewed": "2026-09-08",
-      "required_facts": []
+      "required_facts": [],
+      "atmospheres": [
+        "none"
+      ],
+      "spacing_modes": [
+        "compact",
+        "comfortable"
+      ]
     },
     {
       "key": "story_split",
@@ -263,7 +316,15 @@
       "is_active": true,
       "version": "2.0.0",
       "last_reviewed": "2026-09-09",
-      "required_facts": []
+      "required_facts": [],
+      "atmospheres": [
+        "warm-soft",
+        "organic-textured"
+      ],
+      "spacing_modes": [
+        "comfortable",
+        "spacious"
+      ]
     },
     {
       "key": "two_column_detail",
@@ -292,7 +353,14 @@
       "is_active": true,
       "version": "2.0.0",
       "last_reviewed": "2026-09-09",
-      "required_facts": []
+      "required_facts": [],
+      "atmospheres": [
+        "none"
+      ],
+      "animation_tiers": [
+        "moderate",
+        "expressive"
+      ]
     },
     {
       "key": "card_grid",
@@ -317,7 +385,15 @@
       "is_active": true,
       "version": "2.0.0",
       "last_reviewed": "2026-09-09",
-      "required_facts": []
+      "required_facts": [],
+      "atmospheres": [
+        "none",
+        "warm-soft"
+      ],
+      "animation_tiers": [
+        "moderate",
+        "expressive"
+      ]
     },
     {
       "key": "logo_wall",
@@ -343,7 +419,10 @@
       "is_active": true,
       "version": "1.0.0",
       "last_reviewed": "2026-09-13",
-      "required_facts": []
+      "required_facts": [],
+      "atmospheres": [
+        "none"
+      ]
     }
   ]
 }

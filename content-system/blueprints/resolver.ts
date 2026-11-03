@@ -6,6 +6,7 @@ import type {
   AnimationTier,
   SpacingMode,
 } from '../vocabularies';
+import { DEPRECATED_ATMOSPHERES } from '../vocabularies';
 import type { NormalizedBlueprint } from './schema';
 
 /**
@@ -137,7 +138,13 @@ export function scoreBlueprintForProfile(
     declared: readonly T[] | undefined,
   ): boolean => pick != null && declared !== undefined && declared.includes(pick);
 
-  const atmosphereMatch = affine(profile.atmosphere, blueprint.atmospheres);
+  // A deprecated pick still sits on stored profile rows; it scores as the
+  // atmosphere that replaced it, since the library declares only live values.
+  const atmosphere =
+    profile.atmosphere != null && profile.atmosphere in DEPRECATED_ATMOSPHERES
+      ? DEPRECATED_ATMOSPHERES[profile.atmosphere as keyof typeof DEPRECATED_ATMOSPHERES].replacedBy
+      : profile.atmosphere;
+  const atmosphereMatch = affine(atmosphere, blueprint.atmospheres);
   const animationTierMatch = affine(profile.animation_tier, blueprint.animation_tiers);
   const spacingModeMatch = affine(profile.spacing_mode, blueprint.spacing_modes);
 
