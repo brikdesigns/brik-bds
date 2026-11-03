@@ -209,8 +209,9 @@
 
 /* ─── Tone × Outline (transparent fill, primary label, border only) ── */
 /* The tone lives in the edge alone; the label stays --bds-text-primary so it
-   reads on whatever surface the Badge sits on. Each edge is gated at the 3:1
-   non-text floor against --bds-surface-primary (WCAG 1.4.11). */
+   reads on whatever surface the Badge sits on. The label names the status, so
+   the edge is decorative and not held to WCAG 1.4.11's 3:1 (Understanding
+   1.4.11, Boundaries): contrast-pairings.json gates the label, not the edge. */
 
 .bds-badge--outline {
   background-color: transparent;

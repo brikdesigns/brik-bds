@@ -97,7 +97,7 @@ Categorization labels for classifying records — industry, segment, owner, size
 
 - **`solid`** (default) — Saturated `--bds-background-*` fill with an on-color label: neutral is charcoal with a white label; each accent hue takes the dark ink `--bds-text-on-color-light`. A Tag is a small element placed on a surface, so its fill is a background token.
 - **`subtle`** — Pale `--bds-background-*-light` fill with the dark-ink label `--bds-text-on-color-light` on every color.
-- **`outline`** — Transparent fill, `--bds-text-primary` label, and a border only (`--bds-border-secondary` for neutral, `--bds-border-accent-{hue}` for a hue). Lower visual weight when Tags sit on a colored surface.
+- **`outline`** — Transparent fill, `--bds-text-primary` label, and a border only (`--bds-border-secondary` for neutral, `--bds-border-accent-{hue}` for a hue). Lower visual weight when Tags sit on a colored surface. The label carries the meaning, so the border is decorative and is not held to WCAG 1.4.11's 3:1.
 
 **Color** is `neutral` (default) or an accent hue — `blue`, `green`, `orange`, `purple`, `yellow`, `red`, the same hues Avatar takes. **Boundary:** Tags carry classification, never status. There is no positive / warning / negative color on a Tag; for semantic status use `Badge` and its `tone`.
 

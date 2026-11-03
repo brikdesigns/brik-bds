@@ -79,7 +79,7 @@ Lower-emphasis pale fill (`--bds-background-{tone}-light`) with a dark-ink label
 
 ### Outline appearance
 
-Transparent fill, `--bds-text-primary` label, and the tone in the border alone (`--bds-border-{tone}`). Lowest weight — for a status that must not compete with the row around it.
+Transparent fill, `--bds-text-primary` label, and the tone in the border alone (`--bds-border-{tone}`). Lowest weight — for a status that must not compete with the row around it. The label names the status, so the border is decorative and is not held to WCAG 1.4.11's 3:1 ([Understanding 1.4.11, Boundaries](https://www.w3.org/WAI/WCAG21/Understanding/non-text-contrast.html)); `contrast-pairings.json` gates the label, not the edge.
 
 <ComponentPreview code={`<BDS.Badge tone="positive" appearance="outline">Done</BDS.Badge>
 <BDS.Badge tone="info" appearance="outline">In progress</BDS.Badge>`}>
