@@ -87,10 +87,6 @@ export interface Blueprint {
   layout_spec: string;
   /** Optional CSS pattern notes or snippets. */
   css_hints?: string;
-  /** Optional HTML snippet using BDS `var()` tokens. */
-  html_snippet?: string;
-  /** Optional CSS snippet using BDS `var()` tokens. */
-  css_snippet?: string;
 
   // ── Interaction pattern (v2, optional) ─────────────────────────
   /**
