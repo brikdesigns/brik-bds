@@ -182,7 +182,8 @@ The set is mirrored 1:1 from the **❖ Brik Brand Kit** Figma library, which is 
 | `--text-accent-{hue}` | `--color-system-{hue}` — the vivid step | Colored label or icon on a neutral surface |
 | `--background-accent-{hue}` | `--color-system-{hue}` — the vivid step | A saturated fill: a dot, a solid chip, a chart mark |
 | `--border-accent-{hue}` | `--color-system-{hue}` — the vivid step | A hairline or left-rule keyed to the category |
-| `--surface-accent-{hue}` | `--color-system-{hue}-light` — the pale tint | A wash behind content: a subtle chip, a callout, a row highlight |
+| `--surface-accent-{hue}` | `--color-system-{hue}-light` — the pale tint | A wash behind content: a callout, a row highlight |
+| `--background-accent-{hue}-light` | `--surface-accent-{hue}` (red: `--bds-color-system-red-light`) | The pale fill of a small element: a `subtle` Tag or Avatar |
 | `--page-accent-{hue}` | `--color-system-{hue}-light` — the pale tint | A full-page or section-wide wash |
 
 <ColorGrid
@@ -264,7 +265,7 @@ The hard reverse across light/dark mode (lightest ↔ darkest), mirroring the re
 
 ### -light and -dark
 
-The pastel or deep shade of a **surface** (`--surface-service-brand-light` = pastel). Tone shifts the shade; context targets the backdrop. Tone is why scoped context had to be spelled `-on-light`/`-on-dark` — `-light`/`-dark` was already taken.
+The pastel or deep shade of a **surface** or a **background** (`--surface-service-brand-light` = pastel). On `background` it names the pale fill of a small element: `--background-{role}-light` exists for `neutral`, `positive`, `warning`, `negative`, `info` and `accent-{hue}`, and is what a `subtle` Badge, Tag or Avatar paints. Its label is always `--text-on-color-light`, gated in [the matrix](/docs/foundation/color-pairings#the-matrix). Tone shifts the shade; context targets the backdrop. Tone is why scoped context had to be spelled `-on-light`/`-on-dark` — `-light`/`-dark` was already taken.
 
 | You want… | Token |
 |---|---|
@@ -272,6 +273,7 @@ The pastel or deep shade of a **surface** (`--surface-service-brand-light` = pas
 | A service hue tuned for a known backdrop | `--{purpose}-service-{line}-on-{light\|dark}` |
 | An element that hard-flips with the theme | `--{purpose}-inverse` |
 | A pastel/deep variant of a service surface | `--surface-service-{line}-{light\|dark}` |
+| The pale fill of a small element (a `subtle` Badge, Tag, Avatar) | `--background-{role}-light` |
 | A service card surface: neutral white in light, deep tint in dark | `--surface-service-{line}-inverse` |
 
 ## The 11-step scale

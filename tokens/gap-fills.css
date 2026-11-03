@@ -248,6 +248,41 @@
      full spelling would keep matching the greps that assert the family is
      gone. */
 
+  /* ── Pale indicator fills — --background-{role}-light (brik-bds#2943) ──
+     The `subtle` appearance of Badge, Tag and Avatar. An indicator is a small
+     element placed ON a surface, so its fill is a --background-* token
+     (token-anatomy § surface vs background); before these existed, the pale
+     tints were only spelled --surface-*, so the components read the surface
+     purpose. `-light` is the pastel tone modifier (color.mdx § -light and
+     -dark), the same one --surface-service-{line}-light carries.
+
+     Each one is a color role-alias of its matching --surface-* tint
+     (ADR-035, sanctioned by lint-token-tiers), so the Brik Brand Kit's
+     per-theme accent tints carry over in both themes without a second
+     declaration. accent-red is the exception: the Brand Kit binds
+     --bds-surface-accent-red to the saturated poppy-500, so its pale fill
+     takes the system red tint directly.
+
+     The label on every one of these is --bds-text-on-color-light: the fills
+     hold a pale value in both themes, so a theme-flipping --bds-text-{role}
+     would fall below AA in dark (OPERATOR CHOSE 2026-11-03: dark ink on every
+     pale fill). contrast-pairings.json gates each pair.
+
+     brand-primary has no pale fill here: --bds-surface-brand-primary is the
+     saturated brand color, and the brand pastel is already
+     --bds-background-brand-secondary. */
+  --bds-background-neutral-light:       var(--bds-surface-neutral);
+  --bds-background-positive-light:      var(--bds-surface-positive);
+  --bds-background-warning-light:       var(--bds-surface-warning);
+  --bds-background-negative-light:      var(--bds-surface-negative);
+  --bds-background-info-light:          var(--bds-surface-info);
+  --bds-background-accent-blue-light:   var(--bds-surface-accent-blue);
+  --bds-background-accent-green-light:  var(--bds-surface-accent-green);
+  --bds-background-accent-orange-light: var(--bds-surface-accent-orange);
+  --bds-background-accent-purple-light: var(--bds-surface-accent-purple);
+  --bds-background-accent-yellow-light: var(--bds-surface-accent-yellow);
+  --bds-background-accent-red-light:    var(--bds-color-system-red-light);
+
   /* ── System color hover/pressed states ──
      Darken system colors for interactive feedback on destructive/positive buttons.
      TODO: promote to Figma variables once interaction states are modeled for system colors. */

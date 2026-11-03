@@ -695,6 +695,84 @@
       "bg": "--bds-surface-primary",
       "thresholdType": "AA-large",
       "note": "WCAG 1.4.11, 3:1. The canon GhlForm checked fill (docs/ghl-form-a11y.css) is --bds-background-brand-primary. A theme whose brand-primary is dark on a dark form (Birdwell: black on #000000, 1:1) must paste a visible value, and that value must still clear this floor."
+    },
+    {
+      "group": "indicator",
+      "label": "Subtle indicator label on the neutral pale fill",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-neutral-light",
+      "thresholdType": "AA",
+      "note": "The `subtle` appearance of Badge, Tag and Avatar (brik-bds#2943). Each --bds-background-{role}-light holds a pale value in BOTH themes, so the label is the theme-stable dark ink --bds-text-on-color-light, never a theme-flipping --bds-text-{role} (OPERATOR CHOSE 2026-11-03). Gated AA, the indicator-label floor; these eleven rows are what stop a future re-point of a -light fill onto a mid-tone step."
+    },
+    {
+      "group": "indicator",
+      "label": "Subtle indicator label on the positive pale fill",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-positive-light",
+      "thresholdType": "AA"
+    },
+    {
+      "group": "indicator",
+      "label": "Subtle indicator label on the warning pale fill",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-warning-light",
+      "thresholdType": "AA"
+    },
+    {
+      "group": "indicator",
+      "label": "Subtle indicator label on the negative pale fill",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-negative-light",
+      "thresholdType": "AA"
+    },
+    {
+      "group": "indicator",
+      "label": "Subtle indicator label on the info pale fill",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-info-light",
+      "thresholdType": "AA"
+    },
+    {
+      "group": "indicator",
+      "label": "Subtle indicator label on the accent-blue pale fill",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-accent-blue-light",
+      "thresholdType": "AA"
+    },
+    {
+      "group": "indicator",
+      "label": "Subtle indicator label on the accent-green pale fill",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-accent-green-light",
+      "thresholdType": "AA"
+    },
+    {
+      "group": "indicator",
+      "label": "Subtle indicator label on the accent-orange pale fill",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-accent-orange-light",
+      "thresholdType": "AA"
+    },
+    {
+      "group": "indicator",
+      "label": "Subtle indicator label on the accent-purple pale fill",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-accent-purple-light",
+      "thresholdType": "AA"
+    },
+    {
+      "group": "indicator",
+      "label": "Subtle indicator label on the accent-yellow pale fill",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-accent-yellow-light",
+      "thresholdType": "AA"
+    },
+    {
+      "group": "indicator",
+      "label": "Subtle indicator label on the accent-red pale fill",
+      "fg": "--bds-text-on-color-light",
+      "bg": "--bds-background-accent-red-light",
+      "thresholdType": "AA"
     }
   ]
 }
