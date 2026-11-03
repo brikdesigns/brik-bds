@@ -201,6 +201,11 @@
   --bds-page-service-green: var(--bds-color-green-500);
   --bds-page-service-blue: var(--bds-color-blue-200);
   --bds-border-focus: var(--bds-border-brand-primary);
+  --bds-background-accent-blue-light: var(--bds-surface-accent-blue);
+  --bds-background-accent-green-light: var(--bds-surface-accent-green);
+  --bds-background-accent-orange-light: var(--bds-surface-accent-orange);
+  --bds-background-accent-purple-light: var(--bds-surface-accent-purple);
+  --bds-background-accent-yellow-light: var(--bds-surface-accent-yellow);
 }
 
 :root[data-theme="dark"] .theme-brand-brik {
@@ -320,4 +325,9 @@
   --bds-page-service-green: var(--bds-color-green-500);
   --bds-page-service-blue: var(--bds-color-blue-200);
   --bds-border-focus: var(--bds-border-brand-primary);
+  --bds-background-accent-blue-light: var(--bds-surface-accent-blue);
+  --bds-background-accent-green-light: var(--bds-surface-accent-green);
+  --bds-background-accent-orange-light: var(--bds-surface-accent-orange);
+  --bds-background-accent-purple-light: var(--bds-surface-accent-purple);
+  --bds-background-accent-yellow-light: var(--bds-surface-accent-yellow);
 }
