@@ -48,7 +48,31 @@ const events = [
 
 ### Event shape
 
-Each event is a fixed `TimelineEvent`: an `icon` in the dot, a `label`, an optional `detail` line, and a pre-formatted `timestamp`. The first event (or any with `isOrigin`) gets the brand-colored dot; the rest use a muted dot. ActivityTimeline is a pure display component — format timestamps and compose labels in your data layer before passing them in.
+Each event is a `TimelineEvent`: an `icon` in the dot, a `label`, an optional `detail` line, an optional `content` slot, and a pre-formatted `timestamp`. The first event (or any with `isOrigin`) gets the brand-colored dot; the rest use a muted dot. ActivityTimeline is a pure display component — format timestamps and compose labels in your data layer before passing them in.
+
+### Rich content
+
+`content` takes any `ReactNode` and renders below `detail`, above `timestamp`. Compose it from existing primitives — a [`TagGroup`](/docs/components/tag-group) of changed fields, or a decision body with a [`Tag`](/docs/components/tag), text, and a [`TextLink`](/docs/components/text-link) so an evidence URL is clickable.
+
+```tsx
+{
+  icon: <Icon icon="ph:check-circle" />,
+  label: 'Offline acceptance recorded',
+  detail: 'by Nick Stanerson',
+  content: (
+    <>
+      <Tag size="sm" color="green">Approval</Tag>
+      <p>Client approved the revised scope by email.</p>
+      <TextLink href={evidenceUrl}>View evidence</TextLink>
+    </>
+  ),
+  timestamp: 'Apr 12, 2026, 3:15 PM',
+}
+```
+
+### Category and status
+
+The category channel is the `icon` slot plus a `Tag` inside `content`. There is no per-category tint on the dot and no `tone` / `status` prop. [Category and status are orthogonal](/docs/build-standards/indicators) — `Tag` takes a `color` (a category hue), `Badge` takes a `tone` (a status), and the two never share a color set. A tinted dot would have to pick one meaning. Put a `Badge` in `content` if an event needs a status.
 
 ## When *not* to use
 
@@ -77,6 +101,7 @@ interface TimelineEvent {
   icon: ReactNode;          // rendered inside the event dot
   label: string;            // primary line, e.g. "Request submitted"
   detail?: string | null;   // secondary line, e.g. "by Emily Rivera"
+  content?: ReactNode;      // rich body below detail, above timestamp (Tags, text, links)
   timestamp: string;        // pre-formatted by the consumer
   isOrigin?: boolean;       // brand-colored dot; defaults to the first event
 }

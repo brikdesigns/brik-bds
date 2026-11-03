@@ -99,6 +99,19 @@
   margin-top: 2px; /* bds-lint-ignore — tight detail spacing */
 }
 
+/* Body — consumer-composed rich content (Tags, paragraphs, links) */
+.bds-activity-timeline__body {
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-xs);
+  color: var(--bds-text-secondary);
+  margin-top: var(--bds-gap-sm);
+}
+
+/* Body → timestamp: separate the rich block from the timestamp line */
+.bds-activity-timeline__body + .bds-activity-timeline__timestamp {
+  margin-top: var(--bds-gap-sm);
+}
+
 /* Timestamp */
 .bds-activity-timeline__timestamp {
   font-family: var(--bds-font-family-body);

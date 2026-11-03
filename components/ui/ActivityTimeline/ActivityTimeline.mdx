@@ -16,6 +16,14 @@ The component renders whatever `events` sequence it's given — edit the `events
 
 <Canvas of={Stories.Default} />
 
+## Content
+
+An event's optional `content` slot takes any node and renders it below `detail`, above `timestamp` — a `TagGroup` of changed fields, or a decision body with a `Tag`, text, and a clickable `TextLink`. The consumer composes the nodes; ActivityTimeline stays a pure display component.
+
+<Canvas of={Stories.WithContent} />
+
+The category channel is the `icon` slot plus a `Tag` inside `content`. There is no per-category dot tint: category and status are orthogonal ([Indicators](/docs/build-standards/indicators) — "Category and status are orthogonal"), so a dot colour would conflate the two. Name the category with a `Tag`; name a status with a `Badge`.
+
 ## Props
 
 <ArgTypes of={Stories} />
