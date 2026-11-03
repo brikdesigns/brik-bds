@@ -187,6 +187,18 @@ describe('extractTokenReferences', () => {
     expect(refs.has('--color-grayscale')).toBe(false);
     expect(refs.has('--bds-surface-primary')).toBe(true);
   });
+
+  it('does not read a BEM modifier as a token reference', () => {
+    // Regression (#2943): ADR-033 § 4 derives `.bds-tag--color-blue` from the
+    // `color` prop. A token reference never follows a name character, so the
+    // modifier must not surface as `--color-blue`.
+    const input = `.bds-tag--solid.bds-tag--color-blue { color: var(--bds-text-primary); }
+      el.className = 'bds-tag--color-red';`;
+    const refs = extractTokenReferences(input);
+    expect(refs.has('--color-blue')).toBe(false);
+    expect(refs.has('--color-red')).toBe(false);
+    expect(refs.has('--bds-text-primary')).toBe(true);
+  });
 });
 
 describe('extractTokenDefinitions', () => {
