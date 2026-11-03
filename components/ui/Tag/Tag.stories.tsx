@@ -29,8 +29,13 @@ const meta: Meta<typeof Tag> = {
     },
     appearance: {
       control: 'select',
-      options: ['solid', 'subtle', 'muted'],
-      description: 'Fill: `solid` (neutral filled background, default), `subtle` (transparent + hairline border), or `muted` (quiet neutral fill — low-emphasis category label).',
+      options: ['solid', 'subtle', 'outline'],
+      description: 'Fill: `solid` (saturated fill, default), `subtle` (pale `-light` fill, dark-ink label), or `outline` (transparent + border). Same three words as Badge.',
+    },
+    color: {
+      control: 'select',
+      options: ['neutral', 'blue', 'green', 'orange', 'purple', 'yellow', 'red'],
+      description: 'Category color: `neutral` (default) or an accent hue shared with Avatar. Status colors are a Badge `tone`.',
     },
     density: {
       control: 'select',
@@ -54,5 +59,5 @@ export const Default: Story = {
   args: { children: 'Tag', size: 'md' },
 };
 
-/* `appearance`, `size`, and `density` are Controls on Default — the
+/* `appearance`, `color`, `size`, and `density` are Controls on Default — the
    side-by-side comparisons live in Tag.mdx as docs-local demos (#1489). */

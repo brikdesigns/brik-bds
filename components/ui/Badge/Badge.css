@@ -122,9 +122,9 @@
 
 /* ─── Tone × Solid (default, saturated bg) ───────────────────── */
 /* Badge is an indicator — a small element placed ON a surface — so every
-   `solid` fill is a `--background-*` token. `--surface-*` belongs to the card
-   or menu underneath it, and is used here only by `appearance="subtle"`,
-   whose whole contract is a pastel tint (#1909 § D). */
+   fill is a `--background-*` token. `--surface-*` belongs to the card or menu
+   underneath it and is never read here; the pastel tint of `subtle` is
+   `--bds-background-{tone}-light` (#2943). */
 
 /* Dark label: white on --bds-background-positive (#27ae60) is 2.87:1 (fails AA);
    --bds-text-on-color-light is 6.00:1 in both themes (#995). */
@@ -166,65 +166,65 @@
   color: var(--bds-text-on-color-dark);
 }
 
-/* ─── Tone × Subtle (pastel bg, saturated text) ──────────────── */
+/* ─── Tone × Subtle (pale -light fill, dark-ink label) ───────── */
+/* Each `--bds-background-{tone}-light` holds a pale value in BOTH themes, so the
+   label is the theme-stable dark ink --bds-text-on-color-light, never a
+   theme-flipping --bds-text-{tone} (which sank to 2.33:1 on the old fixed-light
+   surface tints in dark mode, #2402). Every pair is gated in
+   tokens/contrast-pairings.json. */
 
-/* --bds-text-positive is a gap-fill (tokens/gap-fills.css#913) tuned for
-   --bds-surface-primary: it keeps the generated mid-green (#27ae60, 7.31:1 on
-   black) in dark mode, since that pairing is correct there. But
-   --bds-surface-positive is a fixed-light pastel fill in BOTH themes (no dark
-   variant — #2402), so dark mode ends up painting the --bds-surface-primary
-   dark-step text onto a light-step surface: 2.33:1, failing AA. Pin to the
-   primitive --bds-text-positive's light value already resolves to
-   (--bds-color-green-950) so this one pairing holds 6.9:1 in both themes,
-   without touching the --bds-surface-primary pairing elsewhere. */
 .bds-badge--subtle.bds-badge--tone-positive {
-  background-color: var(--bds-surface-positive);
-  color: var(--bds-color-green-950);
+  background-color: var(--bds-background-positive-light);
+  color: var(--bds-text-on-color-light);
 }
 
 .bds-badge--subtle.bds-badge--tone-warning {
-  background-color: var(--bds-surface-warning);
-  color: var(--bds-text-neutral);
+  background-color: var(--bds-background-warning-light);
+  color: var(--bds-text-on-color-light);
 }
 
-/* --bds-surface-negative is a FIXED light tint in both themes, so the label
-   needs a dark foreground in both; --bds-text-negative cannot be that (it must
-   stay light enough for the dark surface, and measured 2.43:1 here). Pinned to
-   the primitive --bds-color-poppy-800 (7.14:1 in both themes), the same shape
-   as tone-positive's --bds-color-green-950 pin. Gated in contrast-pairings.json
-   ("Subtle negative Badge label on tint fill"). #2096 */
 .bds-badge--subtle.bds-badge--tone-negative {
-  background-color: var(--bds-surface-negative);
-  color: var(--bds-color-poppy-800);
+  background-color: var(--bds-background-negative-light);
+  color: var(--bds-text-on-color-light);
 }
 
-/* --bds-text-info on --bds-surface-info measures 2.86:1 — an AA failure the blue
-   family carries library-wide, tracked in #1972, not introduced here. */
 .bds-badge--subtle.bds-badge--tone-info {
-  background-color: var(--bds-surface-info);
-  color: var(--bds-text-info);
+  background-color: var(--bds-background-info-light);
+  color: var(--bds-text-on-color-light);
 }
 
-/* --bds-background-brand-secondary resolves per theme (theme-brand-brik.generated.css):
-   --bds-color-tan-100 in light, --bds-color-grayscale-950 (near-black) in dark — the
-   opposite direction fix each theme needs, so one static color can't clear
-   both. --bds-text-brand-primary (--bds-color-poppy-500) measured 3.32:1 on
-   tan-100 (fails) but 4.56:1 on grayscale-950 (already passes). Light gets a
-   darker poppy step (--bds-color-poppy-700, 5.46:1 on tan-100); dark keeps the
-   existing token, which was already correct. */
+/* Brand has no `-light` token: its pale fill is --bds-background-brand-secondary,
+   which resolves per theme (tan-100 light, near-black dark). The strong brand
+   text step follows it in both themes — poppy-700 in light, poppy-500 in dark
+   (#2270) — so no dark-mode override is needed. */
 .bds-badge--subtle.bds-badge--tone-brand {
   background-color: var(--bds-background-brand-secondary);
-  color: var(--bds-color-poppy-700);
-}
-
-:root[data-theme="dark"] .bds-badge--subtle.bds-badge--tone-brand {
-  color: var(--bds-text-brand-primary);
+  color: var(--bds-text-brand-primary-strong);
 }
 
 .bds-badge--subtle.bds-badge--tone-neutral {
-  background-color: var(--bds-surface-neutral);
-  color: var(--bds-text-neutral);
+  background-color: var(--bds-background-neutral-light);
+  color: var(--bds-text-on-color-light);
 }
+
+/* ─── Tone × Outline (transparent fill, primary label, border only) ── */
+/* The tone lives in the edge alone; the label stays --bds-text-primary so it
+   reads on whatever surface the Badge sits on. The label names the status, so
+   the edge is decorative and not held to WCAG 1.4.11's 3:1 (Understanding
+   1.4.11, Boundaries): contrast-pairings.json gates the label, not the edge. */
+
+.bds-badge--outline {
+  background-color: transparent;
+  color: var(--bds-text-primary);
+  border: var(--bds-border-width-md) solid transparent;
+}
+
+.bds-badge--outline.bds-badge--tone-positive { border-color: var(--bds-border-positive); }
+.bds-badge--outline.bds-badge--tone-warning  { border-color: var(--bds-border-warning); }
+.bds-badge--outline.bds-badge--tone-negative { border-color: var(--bds-border-negative); }
+.bds-badge--outline.bds-badge--tone-info     { border-color: var(--bds-border-info); }
+.bds-badge--outline.bds-badge--tone-brand    { border-color: var(--bds-border-brand-primary); }
+.bds-badge--outline.bds-badge--tone-neutral  { border-color: var(--bds-border-neutral); }
 
 /* ─── Notification micro-interactions (keyframes in tokens/animations.css) ── */
 

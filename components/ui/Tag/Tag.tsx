@@ -16,16 +16,24 @@ export type TagSize = 'xs' | 'sm' | 'md' | 'lg';
 export type TagDensity = 'comfortable' | 'compact';
 
 /**
- * Tag fill appearance — shared axis with Badge (`solid | subtle`) and
- * Chip (`solid | outline`). Tag supports the two pastel-capable values,
- * plus a quiet neutral fill.
- * - `solid`  — neutral family fill (`--bds-background-neutral`) with an
- *   on-color label.
- * - `subtle` — transparent background with a hairline border.
- * - `muted`  — quiet neutral fill — low-emphasis category label. For
- *   semantic status (positive/warning/error/etc.) use `Badge` instead.
+ * Tag fill appearance — the indicator axis shared with Badge (`solid | subtle
+ * | outline`) and Avatar (`solid | subtle`). Chip is an action, not an
+ * indicator, and keeps its own `variant`.
+ * - `solid`   — saturated `--bds-background-*` fill with an on-color label.
+ * - `subtle`  — pale `--bds-background-*-light` fill with a dark-ink label.
+ * - `outline` — transparent fill, `--bds-text-primary` label, border only.
+ *
+ * Renamed in 0.222: the old `subtle` (transparent + border) is now `outline`,
+ * and the old `muted` (quiet neutral fill) is now `subtle`. Run
+ * `scripts/codemod-tag-appearance.mjs` to migrate callsites.
  */
-export type TagAppearance = 'solid' | 'subtle' | 'muted';
+export type TagAppearance = 'solid' | 'subtle' | 'outline';
+
+/**
+ * Tag color — what category the Tag names. `neutral` or one of the six accent
+ * hues (shared with Avatar). Status colors belong to `Badge` `tone`.
+ */
+export type TagColor = 'neutral' | 'blue' | 'green' | 'orange' | 'purple' | 'yellow' | 'red';
 
 /** Tag component props */
 export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
@@ -34,10 +42,12 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
   /** Size variant — xs is icon-only (no text) */
   size?: TagSize;
   /**
-   * Fill appearance — `solid` (neutral fill), `subtle` (transparent +
-   * border), or `muted` (quiet neutral fill — low-emphasis category label).
+   * Fill appearance — `solid` (saturated fill), `subtle` (pale fill), or
+   * `outline` (transparent + border). Default `solid`.
    */
   appearance?: TagAppearance;
+  /** Category color — `neutral` or an accent hue. Default `neutral`. */
+  color?: TagColor;
   /** Density — `compact` tightens horizontal padding for dense rows. Default `comfortable`. */
   density?: TagDensity;
   /** Optional leading icon (left) — required for xs size */
@@ -71,7 +81,8 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
  * <Tag>Category</Tag>
  * <Tag size="xs" icon={<Icon />} />
  * <Tag size="lg" icon={<Icon />}>With Icon</Tag>
- * <Tag appearance="subtle">Outlined</Tag>
+ * <Tag appearance="outline">Outlined</Tag>
+ * <Tag color="blue" appearance="subtle">Segment</Tag>
  * ```
  *
  * @summary Categorization label for content
@@ -80,6 +91,7 @@ export function Tag({
   children,
   size = 'md',
   appearance = 'solid',
+  color = 'neutral',
   density = 'comfortable',
   icon,
   trailingIcon,
@@ -95,6 +107,7 @@ export function Tag({
     'bds-tag',
     `bds-tag--${size}`,
     `bds-tag--${appearance}`,
+    `bds-tag--color-${color}`,
     density === 'compact' && 'bds-tag--compact',
     disabled && 'bds-tag--disabled',
     className

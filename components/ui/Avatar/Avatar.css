@@ -29,6 +29,26 @@
 .bds-avatar--accent-yellow { background-color: var(--bds-background-accent-yellow); color: var(--bds-text-on-color-light); }
 .bds-avatar--accent-red    { background-color: var(--bds-background-accent-red);    color: var(--bds-text-on-color-light); }
 
+/* ─── Subtle appearance (pale fill) ──────────────────────────── */
+/* `appearance="subtle"` — the pale `--bds-background-accent-{hue}-light` step
+   with the same dark-ink label, so a hue reads as the same family in both
+   appearances. Two-class selectors outrank the one-class solid rules above.
+   With no `color`, subtle is the pale brand fill — --bds-background-brand-secondary
+   has no `-light` token (it resolves per theme), and its strong brand text step
+   follows it in both themes (the Badge brand subtle pairing). */
+
+.bds-avatar--subtle {
+  background-color: var(--bds-background-brand-secondary);
+  color: var(--bds-text-brand-primary-strong);
+}
+
+.bds-avatar--subtle.bds-avatar--accent-green  { background-color: var(--bds-background-accent-green-light); color: var(--bds-text-on-color-light); }
+.bds-avatar--subtle.bds-avatar--accent-purple { background-color: var(--bds-background-accent-purple-light); color: var(--bds-text-on-color-light); }
+.bds-avatar--subtle.bds-avatar--accent-blue   { background-color: var(--bds-background-accent-blue-light); color: var(--bds-text-on-color-light); }
+.bds-avatar--subtle.bds-avatar--accent-orange { background-color: var(--bds-background-accent-orange-light); color: var(--bds-text-on-color-light); }
+.bds-avatar--subtle.bds-avatar--accent-yellow { background-color: var(--bds-background-accent-yellow-light); color: var(--bds-text-on-color-light); }
+.bds-avatar--subtle.bds-avatar--accent-red    { background-color: var(--bds-background-accent-red-light); color: var(--bds-text-on-color-light); }
+
 /* ─── Sizes ──────────────────────────────────────────────────── */
 /* bds-lint-ignore — Figma-driven avatar dimensions, no semantic size token */
 
