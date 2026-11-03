@@ -459,7 +459,7 @@ if (errors.length > 0) {
 
 const modeNameById = new Map();
 for (const col of collections) {
-  for (const m of col.modes) modeNameById.set(`${col.name} ${m.modeId}`, m.name);
+  for (const m of col.modes) modeNameById.set(`${col.name}\0${m.modeId}`, m.name);
 }
 
 const dump = {
@@ -479,7 +479,7 @@ const dump = {
     scopes: v.scopes ?? [],
     valuesByMode: Object.fromEntries(
       Object.entries(v.valuesByMode).map(([modeId, val]) => [
-        modeNameById.get(`${v.collection} ${modeId}`) ?? modeId,
+        modeNameById.get(`${v.collection}\0${modeId}`) ?? modeId,
         val,
       ])
     ),

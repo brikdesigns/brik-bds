@@ -775,13 +775,13 @@ function serviceLineBlocks(componentsDir) {
 function serviceLineExemption(occurrences, lines, blocks) {
   const byPair = new Map();
   for (const { block, mod, file } of occurrences) {
-    const key = `${mod} ${file}`;
+    const key = `${mod}\0${file}`;
     if (!byPair.has(key)) byPair.set(key, []);
     byPair.get(key).push(block);
   }
   return (mod, file) => {
     if (!lines.has(mod)) return false;
-    const seen = byPair.get(`${mod} ${file}`);
+    const seen = byPair.get(`${mod}\0${file}`);
     return Array.isArray(seen) && seen.length > 0 && seen.every((b) => blocks.has(b));
   };
 }
