@@ -50,7 +50,7 @@ const CHECK = process.argv.includes('--check');
 
 /** The eight blocks of #2339 AC3, with the layout axis each one takes. */
 const BLOCKS = [
-  { name: 'Hero', layouts: ['split', 'interior-minimal', 'with-pricing-card'] },
+  { name: 'Hero', layouts: ['split', 'interior-minimal', 'with-pricing-card', 'centered'] },
   { name: 'Cta', layouts: ['default', 'split'] },
   { name: 'CardGrid', layouts: ['card-grid', 'two-column-list'] },
   { name: 'Narrative', layouts: [null] },

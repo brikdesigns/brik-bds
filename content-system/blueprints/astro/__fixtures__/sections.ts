@@ -50,6 +50,19 @@ const heroInteriorMinimal: Section = {
   items: [],
 };
 
+// `centered` has no dispatcher key (the dispatcher maps a key to one layout, and
+// none maps to this one). The fixture borrows `hero_interior_minimal` only to
+// satisfy the renderer's known-key assertion; the generated `Hero--centered`
+// markup is rendered with an explicit `layout="centered"`, not via the key.
+const heroCentered: Section = {
+  ...heroInteriorMinimal,
+  sectionKey: 'hero-centered-default',
+  heading: 'A centred headline.',
+  subheading: 'Section',
+  body: 'A short centred lead — one sentence that frames the page without competing with the headline.',
+  cta: { label: 'Learn more', url: '#' },
+};
+
 const heroWithPricingCard: Section = {
   sectionKey: 'hero-img-card-default',
   sectionType: 'hero',
@@ -378,6 +391,7 @@ const SECTIONS: Record<string, Section> = {
   'Hero:split': heroSplit,
   'Hero:interior-minimal': heroInteriorMinimal,
   'Hero:with-pricing-card': heroWithPricingCard,
+  'Hero:centered': heroCentered,
   'Cta:default': ctaDefault,
   'Cta:split': ctaSplit,
   'CardGrid:card-grid': cardGrid,

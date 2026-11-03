@@ -49,12 +49,13 @@
  * Token pairs (paired family ↔ size — never mix):
  *   subtitle    — --bds-font-family-label + --bds-label-lg (uppercase eyebrow)
  *   title (h1)  — --bds-font-family-heading + clamp(--bds-heading-xl … --bds-display-sm)
+ *                 (overridable as a pair: --bds-hero-title-font-family / -font-size)
  *   lead        — --bds-font-family-body + --bds-heading-sm
  *
  * a11y: `<section>` with `aria-labelledby` → the h1. Eyebrow is prose, not a
  * heading. CTA is a `Button` with a :focus-visible ring.
  *
- * @summary Page hero — content column with an `--interior-minimal` (no media), `--split` (media column), or `--with-pricing-card` (content trail + image/price card) layout.
+ * @summary Page hero — content column with an `--interior-minimal` (no media), `--split` (media column), `--with-pricing-card` (content trail + image/price card), or `--centered` (single centred column) layout.
  */
 import { type HTMLAttributes, type ReactNode } from 'react';
 
@@ -103,6 +104,8 @@ export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
    * `split` = content column + `media` column (the flagship 60/40 hero).
    * `interior-minimal` = content column only, narrower, no media.
    * `with-pricing-card` = interior split; content trail + an `aside` image/price card.
+   * `centered` = single centred column, no media; re-scale its h1 with the
+   * `--bds-hero-title-font-family` / `-font-size` hooks.
    */
   layout?: HeroLayout;
   /**
@@ -177,7 +180,7 @@ function HeroShell({
   ...rest
 }: HeroProps) {
   const titleId = `${sectionKey}-title`;
-  const hasMedia = layout !== 'interior-minimal';
+  const hasMedia = layout !== 'interior-minimal' && layout !== 'centered';
 
   return (
     <section

@@ -103,8 +103,10 @@ export type WiredBlueprintKey = (typeof WIRED_BLUEPRINT_KEYS)[number];
  *   `split`             — content column + media column (the 60/40 hero).
  *   `interior-minimal`  — narrow content column only, no media.
  *   `with-pricing-card` — interior split; content trail + image/price card.
+ *   `centered`          — single centred column, no media; measure capped at
+ *                         `--bds-content-width-md`.
  */
-export type HeroLayout = 'split' | 'interior-minimal' | 'with-pricing-card';
+export type HeroLayout = 'split' | 'interior-minimal' | 'with-pricing-card' | 'centered';
 
 /**
  * `bds-cta` layouts.

@@ -80,7 +80,7 @@ Source of truth: [`content-system/blueprints/astro/types.ts`](https://github.com
 
 | Axis | ADR-039 axis | Values | Omitted → | Decides |
 |---|---|---|---|---|
-| `layout` | Structure | per block — `HeroLayout`: `split` · `interior-minimal` · `with-pricing-card`; `CtaLayout`: `default` · `split`; `CardGridLayout`: `card-grid` · `two-column-list` | `split` · `default` · `card-grid` | The shape the block renders in. A layout is a prop, never a filename. |
+| `layout` | Structure | per block — `HeroLayout`: `split` · `interior-minimal` · `with-pricing-card` · `centered`; `CtaLayout`: `default` · `split`; `CardGridLayout`: `card-grid` · `two-column-list` | `split` · `default` · `card-grid` | The shape the block renders in. A layout is a prop, never a filename. |
 | `align` | Structure | `center` · `left` | the block's own default (matrix below) | Content placement. The `--align-*` modifier is written only for the non-default value. |
 | `columns` | Structure | `2` · `3` · `4` | the responsive ramp 1 → 2 → 3 | Column count of the block's own item grid. |
 | `ratio` | Media | `1-1` · `3-2` · `2-3` · `4-3` · `3-4` · `4-5` · `16-9` · `9-16` · `21-9`; aliases `square` · `photo-landscape` · `photo-portrait` · `cinema` | per block — `16-9` on `BlockMedia` (matrix below) | The aspect ratio the media `Frame` locks to. |
