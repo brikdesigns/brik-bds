@@ -12,7 +12,7 @@
 }
 
 .bds-prose a {
-  color: var(--bds-text-text-link);
+  color: var(--bds-text-link);
 }
 
 .bds-prose :is(h1, h2, h3) {
