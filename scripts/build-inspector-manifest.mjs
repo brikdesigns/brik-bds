@@ -381,7 +381,7 @@ export function extractLintIgnores(css) {
           if (propMatch) {
             const property = propMatch[1].toLowerCase();
             for (const sel of splitSelectorGroup(group)) {
-              const key = `${normalizeSelector(sel)} ${property}`;
+              const key = `${normalizeSelector(sel)}\0${property}`;
               if (!seen.has(key)) {
                 seen.add(key);
                 out.push({ selector: normalizeSelector(sel), property });
@@ -420,7 +420,7 @@ function buildLintIgnores() {
   const seen = new Set();
   const deduped = [];
   for (const e of out) {
-    const key = `${e.selector} ${e.property}`;
+    const key = `${e.selector}\0${e.property}`;
     if (seen.has(key)) continue;
     seen.add(key);
     deduped.push(e);
