@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { Prose } from './Prose';
 // Spacing-density mode overrides — see ContentBlock.stories.tsx for why this
 // is imported directly rather than relying on the main Storybook preview.
@@ -97,4 +98,22 @@ export const SpacingModes: Story = {
       ))}
     </div>
   ),
+};
+
+/**
+ * Overriding only `--bds-text-link` on an ancestor recolors links inside the
+ * rendered HTML (brik-bds#1624).
+ * @summary Alias override alone recolors prose links
+ */
+export const InteractionTestAliasOverride: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  render: () => (
+    <div style={{ '--bds-text-link': 'rgb(0, 128, 0)' } as React.CSSProperties}>
+      <Prose html={SAMPLE_HTML} />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const link = canvas.getByRole('link', { name: 'reserve your spot' });
+    await expect(getComputedStyle(link).color).toBe('rgb(0, 128, 0)');
+  },
 };

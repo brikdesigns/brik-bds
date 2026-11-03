@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { TextLink } from './TextLink';
 
 /* ─── Inline SVG icon (story-only) ────────────────────────────── */
@@ -103,4 +104,27 @@ export const WithIcon: Story = {
       Back to Customers
     </TextLink>
   ),
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   INTERACTION TEST — ADR-010 Q5. The link color is read through the
+   `--bds-text-link` alias, so a consumer override of that one name
+   must recolor it (brik-bds#1624). The wrapper sets ONLY the alias.
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Overriding only `--bds-text-link` on an ancestor recolors the link.
+ * @summary Alias override alone recolors the link
+ */
+export const InteractionTestAliasOverride: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  render: () => (
+    <div style={{ '--bds-text-link': 'rgb(0, 128, 0)' } as React.CSSProperties}>
+      <TextLink href="#">Learn more</TextLink>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const link = canvas.getByRole('link', { name: 'Learn more' });
+    await expect(getComputedStyle(link).color).toBe('rgb(0, 128, 0)');
+  },
 };

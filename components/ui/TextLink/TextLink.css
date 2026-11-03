@@ -18,7 +18,7 @@
   font-size: var(--bds-body-md);
   font-weight: var(--bds-font-weight-medium);
   line-height: var(--bds-font-line-height-normal);
-  color: var(--bds-text-text-link);
+  color: var(--bds-text-link);
   text-decoration: none;
   cursor: pointer;
   transition: color 0.2s;

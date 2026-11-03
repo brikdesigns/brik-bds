@@ -186,6 +186,10 @@
      alias gives consumers a clean canonical name while preserving the alias
      chain — per-theme --brand-primary overrides still flow through.
 
+     Components (TextLink, Prose) read this alias, never the raw
+     `--bds-text-text-link`, so a consumer override of `--bds-text-link` alone
+     recolors them (brik-bds#1624). The raw name is read only by this alias.
+
      ⚠️ Use ONLY for interactive hyperlinks (text that does something on
      click). Categorically distinct from --bds-background-info / --bds-text-info,
      which since brik-bds#1959 are the BLUE informational signal (ADR-033 § 5).
