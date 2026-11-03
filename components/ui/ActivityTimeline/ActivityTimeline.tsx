@@ -11,6 +11,14 @@ export interface TimelineEvent {
   label: string;
   /** Secondary detail line (e.g. "by Emily Rivera") */
   detail?: string | null;
+  /**
+   * Rich body rendered below `detail` and above `timestamp` — a cluster of
+   * Tags ("fields updated"), a decision paragraph, a clickable `TextLink`.
+   * The consumer composes the nodes; ActivityTimeline only places them (it
+   * stays a pure display component). It has no category/status channel of its
+   * own: put a `Tag` here and an icon in `icon`.
+   */
+  content?: ReactNode;
   /** Timestamp string (pre-formatted by consumer) */
   timestamp: string;
   /** Whether this is the "origin" event — uses brand-colored dot */
@@ -28,7 +36,7 @@ export interface ActivityTimelineProps {
  * ActivityTimeline — vertical timeline display component.
  *
  * Renders a list of chronological events with a connecting rail,
- * icon dots, labels, detail text, and timestamps. The first event
+ * icon dots, labels, detail text, optional rich content, and timestamps. The first event
  * (or any event with `isOrigin`) uses the brand-colored dot;
  * all others use a muted surface dot.
  *
@@ -75,6 +83,9 @@ export function ActivityTimeline({ events, className = '' }: ActivityTimelinePro
               <div className="bds-activity-timeline__label">{event.label}</div>
               {event.detail && (
                 <div className="bds-activity-timeline__detail">{event.detail}</div>
+              )}
+              {event.content && (
+                <div className="bds-activity-timeline__body">{event.content}</div>
               )}
               <div className="bds-activity-timeline__timestamp">{event.timestamp}</div>
             </div>
