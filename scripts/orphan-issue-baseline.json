@@ -13,34 +13,5 @@
     "meta:project if it is genuinely a Project, or put",
     "`<!-- orphan-ok: <reason> -->` in its body per the discovery contract."
   ],
-  "issues": [
-    224,
-    404,
-    894,
-    1068,
-    1446,
-    1457,
-    1681,
-    1699,
-    1761,
-    1768,
-    1788,
-    1791,
-    1803,
-    1883,
-    1887,
-    1908,
-    2041,
-    2113,
-    2185,
-    2347,
-    2355,
-    2547,
-    2552,
-    2725,
-    2729,
-    2733,
-    2741,
-    2744
-  ]
+  "issues": []
 }
