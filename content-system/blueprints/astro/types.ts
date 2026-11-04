@@ -411,12 +411,6 @@ export interface BlueprintSectionContent {
      * service-line-specific values.
      */
     readonly serviceLine?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
-    /**
-     * @deprecated Use `serviceLine`. Retained as a working alias — blueprints
-     * read `serviceLine ?? audience` and emit both `data-service-line` and
-     * `data-audience`. Removed with the `audience` API in a future major (#788).
-     */
-    readonly audience?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
     /** Alt text for `imageUrl`. Defaults to empty (decorative) when omitted. */
     readonly imageAlt?: string;
     /**
@@ -481,19 +475,13 @@ export interface BlueprintSectionContent {
    */
   readonly serviceLine?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
   /**
-   * @deprecated Use `serviceLine`. Retained as a working alias — blueprints
-   * read `serviceLine ?? audience` and emit both `data-service-line` and
-   * `data-audience`. Removed with the `audience` API in a future major (#788).
-   */
-  readonly audience?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
-  /**
    * Optional eyebrow icon URL — manual override for decorative, non-
    * categorical images (campaign artwork, editorial illustrations).
    *
    * **Precedence (brik-bds#546):**
    *   1. If `iconUrl` is set, render a raw `<img>` (this slot's legacy
    *      contract — still respected for non-category eyebrows).
-   *   2. Otherwise, if `serviceLine` (or the deprecated `audience`) is set, the
+   *   2. Otherwise, if `serviceLine` is set, the
    *      blueprint renders a canonical `<ServiceTag category={serviceLine}
    *      variant="icon">` for the eyebrow — the design-system path. Theme-aware,
    *      no consumer-side URL computation needed.

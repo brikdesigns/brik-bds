@@ -148,7 +148,6 @@ const CASES: Case[] = [
       items: [
         { title: 'Image', description: 'With an image.', href: '/a', imageUrl: '/a.jpg', imageAlt: 'A' },
         { title: 'Service line', description: 'ServiceTag fallback.', serviceLine: 'marketing' },
-        { title: 'Audience alias', description: 'Deprecated alias.', audience: 'brand' },
         { title: 'Blank', description: '' },
       ],
     }),
