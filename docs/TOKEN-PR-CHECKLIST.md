@@ -23,7 +23,7 @@ Never combine theme changes + component fixes + submodule sync in a single PR. E
 |-------|----------------|
 | `lint-tokens.js --errors-only` | Primitive tokens in component CSS, hardcoded values, unknown vars, **wrong-family token in property slot (see table below)** |
 | `token-audit.sh` (consuming projects) | Raw hex, hardcoded px, raw `var()` strings in style props, wrong element types |
-| Tier 2 hex scan | Raw hex values in the semantic section of theme files |
+| Semantic-block hex scan | Raw hex values in the semantic block of theme files |
 
 All three must pass before the PR is ready for review.
 
@@ -94,7 +94,7 @@ The spinner ring's 3/4 track must stay *subtle on whatever surface it sits on* a
 
 - [ ] `./scripts/pr-checklist.sh` passes with zero errors
 - [ ] PR diff is scoped to one concern (see scope rule above)
-- [ ] Every semantic token in theme file references a primitive via `var()` — hex appears only in the Tier 1 primitives block
+- [ ] Every semantic token in theme file references a primitive via `var()` — hex appears only in the primitives block
 - [ ] Token used in the correct semantic category:
   - `page-*` → page-level backgrounds only
   - `background-*` → UI element fills (cards, buttons, inputs)
@@ -118,15 +118,17 @@ The spinner ring's 3/4 track must stay *subtle on whatever surface it sits on* a
 
 ## Architecture reference
 
-### 2-tier client theme structure
+### Foundations bundle vs client theme
+
+"Tier" names a token's abstraction level only (Raw / Primitive / Semantic / Component — [Token Anatomy](../docs-site/content/docs/foundation/token-anatomy.mdx)). The bundle/theme split is not a tier; at runtime it is the CSS cascade ([`tokens/CASCADE.md`](../tokens/CASCADE.md)).
 
 ```
-Tier 1 — BDS Foundations (figma-tokens.css + gap-fills.css)
+Foundations bundle — BDS (figma-tokens.css + gap-fills.css)
   Defines default values. Never edited in consuming projects.
 
-Tier 2 — Client Theme (theme-{client}.css)
+Client theme — theme-{client}.css
   Overrides semantic token VALUES only. Token names stay the same.
-  All hex values appear exactly once — in the Tier 1 primitives block.
+  All hex values appear exactly once — in the theme's primitives block.
   All semantic tokens reference those primitives via var().
 ```
 
@@ -135,17 +137,17 @@ Tier 2 — Client Theme (theme-{client}.css)
 ```css
 .theme-client {
 
-  /* TIER 1 — Brand primitives. Hex appears ONCE, here. */
+  /* PRIMITIVES — brand values. Hex appears ONCE, here. */
   --color-brand-purple-base: #ba9cc5;
   --bds-color-grayscale-black:   #0a0a0a;
 
-  /* TIER 2 — Semantic overrides. var() references only. */
+  /* SEMANTIC OVERRIDES — var() references only. pr-checklist.sh scans for hex from this marker down. */
   --bds-background-brand-primary: var(--color-brand-purple-base);
   --bds-text-primary:             var(--bds-color-grayscale-black);
 }
 ```
 
-### What raw hex in Tier 2 breaks
+### What raw hex in the semantic block breaks
 
 When semantic tokens hold raw hex instead of `var()` references, every future color change requires hunting down every occurrence instead of changing one primitive. It also makes dark mode impossible — the override block can't flip values it doesn't control.
 
@@ -155,7 +157,7 @@ When semantic tokens hold raw hex instead of `var()` references, every future co
 
 | Violation | Fix |
 |-----------|-----|
-| `--bds-background-brand-primary: #ba9cc5` in Tier 2 | Move hex to Tier 1 as `--color-purple-base`, reference with `var()` |
+| `--bds-background-brand-primary: #ba9cc5` in the semantic block | Move hex to the primitives block as `--color-purple-base`, reference with `var()` |
 | Using `color.department.red` for overdue/error state | Use `color.system.red` — department colors are for chips only |
 | `size="xs"` on Badge with label text | Use `size="sm"` — xs is icon-only |
 | `padding: '40px'` in style prop | Add to `space` in `tokens.ts`, use `space['2xl']` |
