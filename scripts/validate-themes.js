@@ -166,6 +166,20 @@ function composite(over, under, alpha) {
   );
 }
 
+/**
+ * A translucent foreground — `color-mix(in srgb, <colour> N%, transparent)`,
+ * the shape of the on-color muted steps (ADR-046) — paints N% of its colour
+ * over whatever sits under it, so the gate scores it composited onto its `bg`.
+ * Returns null for any other value, which then scores (or fails to resolve)
+ * exactly as before.
+ */
+const TRANSLUCENT = /^color-mix\(\s*in srgb\s*,\s*(.+?)\s+([\d.]+)%\s*,\s*transparent\s*\)$/;
+function resolveTranslucent(value, vars) {
+  const m = typeof value === 'string' ? value.match(TRANSLUCENT) : null;
+  if (!m) return null;
+  return { color: resolveVar(m[1].trim(), vars), alpha: Number(m[2]) / 100 };
+}
+
 // ─── Theme assembly (the real Brik default cascade) ─────────────────
 // light = figma :root + gap-fills :root + generated .theme-brand-brik
 // dark  = light + figma dark :root[data-theme=dark] + gap-fills dark
@@ -227,6 +241,12 @@ async function main() {
         }
         fgVal = composite(fgVal, backdrop, alpha);
         bgVal = composite(bgVal, backdrop, alpha);
+      }
+
+      // A translucent foreground scores what it paints: its colour over the bg.
+      const translucent = resolveTranslucent(fgVal, theme.vars);
+      if (translucent && isHex(translucent.color) && isHex(bgVal)) {
+        fgVal = composite(translucent.color, bgVal, translucent.alpha);
       }
 
       if (pairing.appliesTo && !pairing.appliesTo.includes(theme.key)) {
