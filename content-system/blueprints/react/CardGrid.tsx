@@ -68,6 +68,7 @@ import {
 } from '../../../components';
 import { bdsClass } from '../../../components/utils';
 import type { BlueprintProps, CardGridLayout } from '../astro/types';
+import { resolveSectionTitles } from '../astro/types';
 import { BlockMedia } from './BlockMedia';
 import '../section-shell.css';
 import './CardGrid.css';
@@ -142,11 +143,12 @@ function CardGridShell({
 }
 
 function CardGridFromSection({ section, layout = 'card-grid' }: CardGridSectionProps) {
+  const titles = resolveSectionTitles(section);
   return (
     <CardGridShell
       sectionKey={section.sectionKey}
-      title={section.heading ?? ''}
-      subtitle={section.subheading ?? undefined}
+      title={titles.title ?? ''}
+      subtitle={titles.subtitle ?? undefined}
       description={section.body ?? undefined}
     >
       {layout === 'two-column-list' ? (

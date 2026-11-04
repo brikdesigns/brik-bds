@@ -51,6 +51,7 @@
  *   item desc   : --bds-font-family-body     + --bds-body-md
  */
 import type { BlueprintColumns, BlueprintProps, CardGridLayout } from './types';
+import { resolveSectionTitles } from './types';
 import Media from './_Media.astro';
 
 export interface Props extends BlueprintProps {
@@ -74,10 +75,11 @@ export interface Props extends BlueprintProps {
 import '../section-shell.css';
 
 const { section, layout = 'card-grid', columns } = Astro.props;
+const titles = resolveSectionTitles(section);
 
 const titleId = `${section.sectionKey}-title`;
-const title = section.heading ?? '';
-const subtitle = section.subheading ?? undefined;
+const title = titles.title ?? '';
+const subtitle = titles.subtitle ?? undefined;
 const description = section.body ?? undefined;
 
 // Composed children take precedence over the section-driven item layouts, so

@@ -55,7 +55,7 @@ import type {
   CtaLayout,
   KnownBlueprintKey,
 } from '../astro/types';
-import { isActionCta } from '../astro/types';
+import { isActionCta, resolveSectionTitles } from '../astro/types';
 import '../section-shell.css';
 import './Cta.css';
 
@@ -218,6 +218,7 @@ function ContactMethod({
 }
 
 function CtaFromSection({ section, clientFacts, layout = 'default', blueprintKey }: CtaSectionProps) {
+  const titles = resolveSectionTitles(section);
   const phone = clientFacts.phone;
   const email = clientFacts.email;
 
@@ -225,7 +226,7 @@ function CtaFromSection({ section, clientFacts, layout = 'default', blueprintKey
     <CtaShell
       layout={layout}
       sectionKey={section.sectionKey}
-      title={section.heading ?? ''}
+      title={titles.title ?? ''}
       body={section.body ?? undefined}
       primaryCta={section.cta ?? undefined}
       data-blueprint-key={blueprintKey}

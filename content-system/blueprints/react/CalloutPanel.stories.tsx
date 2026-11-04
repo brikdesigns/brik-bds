@@ -87,8 +87,8 @@ export const WithMedia: Story = {
 const supportSection: BlueprintProps['section'] = {
   sectionKey: 'support-plan-default',
   sectionType: 'cta',
-  heading: 'Monthly support services',
-  subheading: null,
+  title: 'Monthly support services',
+  subtitle: null,
   body: 'A short subheading that frames the support offering — what the visitor gets and why it matters to them.',
   cta: { label: 'Learn more', url: '#' },
   visualNotes: {

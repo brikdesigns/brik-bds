@@ -70,7 +70,7 @@ import type {
   HeroLayout,
   KnownBlueprintKey,
 } from '../astro/types';
-import { isActionCta } from '../astro/types';
+import { isActionCta, resolveSectionTitles } from '../astro/types';
 import { BlockMedia } from './BlockMedia';
 import { BlockReveal } from './BlockReveal';
 import '../section-shell.css';
@@ -221,6 +221,7 @@ function HeroShell({
 }
 
 function HeroFromSection({ section, clientFacts, layout = 'split', blueprintKey }: HeroSectionProps) {
+  const titles = resolveSectionTitles(section);
   const heroImage = clientFacts.heroImageUrl;
 
   // Media axis (ADR-039, #2493): the media column renders through the shared
@@ -251,8 +252,8 @@ function HeroFromSection({ section, clientFacts, layout = 'split', blueprintKey 
     <HeroShell
       layout={layout}
       sectionKey={section.sectionKey}
-      title={section.heading ?? ''}
-      subtitle={section.subheading ?? undefined}
+      title={titles.title ?? ''}
+      subtitle={titles.subtitle ?? undefined}
       lead={section.body ?? undefined}
       cta={section.cta ?? undefined}
       media={media}

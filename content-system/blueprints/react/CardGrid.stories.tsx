@@ -128,8 +128,8 @@ const cardDescription =
 const servicesGridSection: BlueprintProps['section'] = {
   sectionKey: 'services-grid-default',
   sectionType: 'services',
-  heading: 'Featured services',
-  subheading: 'Acme',
+  title: 'Featured services',
+  subtitle: 'Acme',
   body: 'A one-line section subheading that frames the service catalog below.',
   cta: null,
   visualNotes: {
@@ -153,8 +153,8 @@ const servicesGridSection: BlueprintProps['section'] = {
 const twoColumnSection: BlueprintProps['section'] = {
   sectionKey: 'services-two-col-default',
   sectionType: 'services',
-  heading: 'What we do',
-  subheading: 'Services',
+  title: 'What we do',
+  subtitle: 'Services',
   body: 'A one-line section subheading that frames the service catalog below — short enough to scan, specific enough to set expectations.',
   cta: null,
   visualNotes: {

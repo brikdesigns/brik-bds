@@ -25,10 +25,11 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import type {
   BlueprintProps,
   BlueprintSection,
+  BlueprintSectionContent,
   ClientFacts,
   KnownBlueprintKey,
 } from '../astro/types';
-import { WIRED_BLUEPRINT_KEYS } from '../astro/types';
+import { WIRED_BLUEPRINT_KEYS, resolveSectionTitles } from '../astro/types';
 import { Narrative } from './Narrative';
 import { BlueprintDispatcher } from './BlueprintDispatcher';
 import { CalloutPanel } from './CalloutPanel';
@@ -43,12 +44,12 @@ import { baseClientFacts, baseTheme } from './_fixtures';
 const section = (
   blueprintKey: KnownBlueprintKey,
   sectionKey: string,
-  rest: Partial<BlueprintSection>,
+  rest: Partial<BlueprintSectionContent> & { title?: string | null; subtitle?: string | null },
 ): BlueprintSection => ({
   sectionKey,
   sectionType: 'content_block',
-  heading: 'A clear, compelling headline',
-  subheading: 'Eyebrow',
+  title: 'A clear, compelling headline',
+  subtitle: 'Eyebrow',
   body: 'Supporting copy that sets the type rhythm.',
   cta: { label: 'Learn more', url: '#go' },
   items: [],
@@ -294,4 +295,42 @@ describe('generic blocks render a section directly via `layout` (#2352)', () => 
       expect(html).toBe(dispatch(c));
     });
   }
+});
+
+describe('deprecated `heading` / `subheading` spelling still renders (#2563)', () => {
+  const deprecated = (s: BlueprintSection): BlueprintSection => {
+    const { title, subtitle, ...rest } = s as Extract<BlueprintSection, { title: string | null }>;
+    return { ...rest, heading: title, subheading: subtitle };
+  };
+
+  for (const c of CASES) {
+    it(`${c.name}: the deprecated spelling renders what the canonical spelling renders`, () => {
+      expect(dispatch({ ...c, section: deprecated(c.section) })).toBe(dispatch(c));
+    });
+  }
+
+  it('resolveSectionTitles reads either spelling, and null stays null', () => {
+    const base = CASES[0].section;
+    expect(resolveSectionTitles(base)).toEqual({
+      title: 'A clear, compelling headline',
+      subtitle: 'Eyebrow',
+    });
+    expect(resolveSectionTitles(deprecated(base))).toEqual({
+      title: 'A clear, compelling headline',
+      subtitle: 'Eyebrow',
+    });
+    expect(resolveSectionTitles(section('cta_centered', 'nulls', { title: null, subtitle: null }))).toEqual({
+      title: null,
+      subtitle: null,
+    });
+  });
+
+  it('a section mixing the two spellings fails to typecheck', () => {
+    const { title, subtitle, ...content } = CASES[0].section as Extract<BlueprintSection, { title: string | null }>;
+    // @ts-expect-error — canonical `title` with deprecated `subheading`
+    const mixedA: BlueprintSection = { ...content, title, subheading: subtitle };
+    // @ts-expect-error — both spellings of the title
+    const mixedB: BlueprintSection = { ...content, title, subtitle, heading: title };
+    expect([mixedA, mixedB]).toHaveLength(2);
+  });
 });

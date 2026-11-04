@@ -272,6 +272,7 @@ Consumer impact:
 
 - **Semver.** Adding a blueprint/archetype/vocabulary = minor. Changing a blueprint's props shape = MAJOR. Changing a CSS custom property name a client can override = MAJOR.
 - **Deprecation cycle.** Blueprint key marked `is_active: false` continues rendering for one minor version, warns in dev for one more, removed in next major.
+- **Deprecated: `BlueprintSection.heading` / `subheading` → `title` / `subtitle` (#2563).** The content-group taxonomy names a section's primary and secondary text `title` / `subtitle` (brikdesigns#1494). `BlueprintSection` accepts either spelling as a union, never a mix — the `FooterColumn` shape from #2528 — so the portal writer and site call sites migrate independently. Every blueprint reads both through `resolveSectionTitles()` (`content-system/blueprints/astro/types.ts`), and `BlueprintDispatcher.test.ts` pins that the deprecated spelling renders the same markup. The `heading` / `subheading` arm is removed in the next major, where a stale caller fails at compile time rather than rendering blank.
 - **`peerDependencies.astro: ">=5"`.** Blueprints use Astro 5 features (astro:assets image types). Client repos on Astro 4 must either upgrade or pin an older BDS.
 - **Dependabot at 100 clients is unworkable if left to default per-repo.** Policy:
   - Client repos pin `@brikdesigns/bds` to exact version.

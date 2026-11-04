@@ -60,6 +60,7 @@ import type {
   BlueprintProps,
   KnownBlueprintKey,
 } from '../astro/types';
+import { resolveSectionTitles } from '../astro/types';
 import { BlockContentMotion } from './BlockContentMotion';
 import '../section-shell.css';
 import './Features.css';
@@ -290,6 +291,7 @@ function FeaturesShell({
 }
 
 function FeaturesFromSection({ section, blueprintKey }: FeaturesSectionProps) {
+  const titles = resolveSectionTitles(section);
   const items: FeatureItem[] = section.items.map((item) => ({
     title: item.title,
     description: item.description ?? undefined,
@@ -304,8 +306,8 @@ function FeaturesFromSection({ section, blueprintKey }: FeaturesSectionProps) {
   return (
     <FeaturesShell
       sectionKey={section.sectionKey}
-      title={section.heading ?? undefined}
-      subtitle={section.subheading ?? undefined}
+      title={titles.title ?? undefined}
+      subtitle={titles.subtitle ?? undefined}
       body={section.body ?? undefined}
       items={items}
       data-blueprint-key={blueprintKey ?? 'feature_grid'}

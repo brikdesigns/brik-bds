@@ -171,8 +171,8 @@ export const MissingImage: Story = {
 const splitSection: BlueprintProps['section'] = {
   sectionKey: 'hero-split-default',
   sectionType: 'hero',
-  heading: 'A clear, compelling headline goes here.',
-  subheading: 'Acme',
+  title: 'A clear, compelling headline goes here.',
+  subtitle: 'Acme',
   body: 'One or two sentences of supporting copy — long enough to set the rhythm of body type next to the headline without overwhelming it.',
   cta: { label: 'Learn more', url: '#' },
   visualNotes: {
@@ -188,8 +188,8 @@ const splitSection: BlueprintProps['section'] = {
 const interiorSection: BlueprintProps['section'] = {
   sectionKey: 'hero-interior-default',
   sectionType: 'hero',
-  heading: 'Interior page headline.',
-  subheading: 'Section',
+  title: 'Interior page headline.',
+  subtitle: 'Section',
   body: 'A short interior-page lead — one sentence of supporting copy that frames the page topic without competing with the headline.',
   cta: null,
   visualNotes: {

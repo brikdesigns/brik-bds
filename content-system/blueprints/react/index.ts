@@ -22,6 +22,7 @@
 export type {
   KnownBlueprintKey,
   BlueprintSection,
+  BlueprintSectionContent,
   ClientFacts,
   ResolvedThemeMode,
   ResolvedAtmosphere,

@@ -18,8 +18,8 @@
  * Spec: PR #477 (design proposal archived to brik-rag: blueprint-proposal-features-3col-branded-dark).
  *
  * Contract: BlueprintProps.
- *   - section.heading           — section heading (h2, light text on dark)
- *   - section.subheading        — optional eyebrow text (uppercase)
+ *   - section.title             — section heading (h2, light text on dark)
+ *   - section.subtitle          — optional eyebrow text (uppercase)
  *   - section.body              — optional one-line lead under heading
  *   - section.items[]           — REQUIRED, each card (typically 3, supports 2-4)
  *       - title                 — service-line name (h3)
@@ -77,6 +77,7 @@
  * promotion gets it into compliant range).
  */
 import type { BlueprintAlign, BlueprintColumns, BlueprintProps, KnownBlueprintKey } from './types';
+import { resolveSectionTitles } from './types';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
@@ -101,6 +102,7 @@ interface Props extends BlueprintProps {
 }
 
 const { section, blueprintKey, align = 'center', columns } = Astro.props;
+const titles = resolveSectionTitles(section);
 const titleId = `${section.sectionKey}-title`;
 const sectionClass = [
   'bds-blueprint-section',
@@ -113,17 +115,17 @@ const sectionClass = [
 <section
   class={sectionClass}
   data-blueprint-key={blueprintKey}
-  aria-labelledby={section.heading ? titleId : undefined}
+  aria-labelledby={titles.title ? titleId : undefined}
 >
   <div class="bds-blueprint-section__container">
-    {(section.heading || section.subheading || section.body) && (
+    {(titles.title || titles.subtitle || section.body) && (
       <header class="bds-features__header">
-        {section.subheading && (
-          <p class="bds-features__subtitle">{section.subheading}</p>
+        {titles.subtitle && (
+          <p class="bds-features__subtitle">{titles.subtitle}</p>
         )}
-        {section.heading && (
+        {titles.title && (
           <h2 id={titleId} class="bds-features__title">
-            {section.heading}
+            {titles.title}
           </h2>
         )}
         {section.body && (

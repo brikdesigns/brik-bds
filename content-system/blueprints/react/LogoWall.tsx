@@ -16,7 +16,7 @@
  *
  * required_facts: []. Section-driven.
  *
- * a11y: a labelled region — `aria-labelledby` when `section.heading` is present
+ * a11y: a labelled region — `aria-labelledby` when `section.title` is present
  * (rendered as a visible eyebrow), `aria-label` fallback when it is not. Logo
  * images carry their own alt; `marquee`'s duplicate track group is aria-hidden
  * by the `Marquee` primitive so the set is announced once.
@@ -25,6 +25,7 @@
  */
 import { bdsClass } from '../../../components/utils';
 import type { BlueprintProps } from '../astro/types';
+import { resolveSectionTitles } from '../astro/types';
 import { BlockContentMotion } from './BlockContentMotion';
 import '../section-shell.css';
 import './LogoWall.css';
@@ -32,8 +33,9 @@ import './LogoWall.css';
 interface Props extends BlueprintProps {}
 
 export function LogoWall({ section }: Props) {
+  const titles = resolveSectionTitles(section);
   const titleId = `${section.sectionKey}-title`;
-  const hasHeading = Boolean(section.heading);
+  const hasHeading = Boolean(titles.title);
   const motion = section.contentMotion ?? 'none';
 
   const logos = section.items.map((item, i) =>
@@ -56,7 +58,7 @@ export function LogoWall({ section }: Props) {
       <div className="bds-blueprint-section__container">
         {hasHeading && (
           <h2 id={titleId} className="bds-logo-wall__title">
-            {section.heading}
+            {titles.title}
           </h2>
         )}
 

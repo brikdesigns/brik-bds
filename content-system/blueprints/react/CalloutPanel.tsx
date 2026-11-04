@@ -39,7 +39,7 @@ import { type HTMLAttributes, type ReactNode } from 'react';
 import { Button, Card, Stack } from '../../../components';
 import { bdsClass } from '../../../components/utils';
 import type { BlueprintCta, BlueprintProps } from '../astro/types';
-import { isActionCta } from '../astro/types';
+import { isActionCta, resolveSectionTitles } from '../astro/types';
 import '../section-shell.css';
 import './CalloutPanel.css';
 
@@ -151,13 +151,14 @@ function CalloutPanelShell({
 }
 
 function CalloutPanelFromSection({ section }: CalloutPanelSectionProps) {
+  const titles = resolveSectionTitles(section);
   const plan = section.items?.[0];
 
   return (
     <CalloutPanelShell
       sectionKey={section.sectionKey}
-      title={section.heading ?? ''}
-      subtitle={section.subheading ?? undefined}
+      title={titles.title ?? ''}
+      subtitle={titles.subtitle ?? undefined}
       description={section.body ?? undefined}
       panelTitle={plan?.title ?? ''}
       panelDescription={plan?.description ?? undefined}

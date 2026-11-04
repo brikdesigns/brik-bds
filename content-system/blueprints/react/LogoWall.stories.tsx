@@ -24,8 +24,8 @@ const logoItems = [
 const staticSection: BlueprintProps['section'] = {
   sectionKey: 'logo-wall-static',
   sectionType: 'content_block',
-  heading: 'Trusted by teams everywhere',
-  subheading: null,
+  title: 'Trusted by teams everywhere',
+  subtitle: null,
   body: null,
   cta: null,
   contentMotion: 'none',

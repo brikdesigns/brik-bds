@@ -9,7 +9,7 @@
  * ADR-021 section shell — no `bp-*` classes (ADR-008).
  *
  * Contract: BlueprintProps.
- *   - section.heading  — section label (visually-hidden `h2`, often
+ *   - section.title    — section label (visually-hidden `h2`, often
  *                        "What clients say")
  *   - section.items[0] — REQUIRED featured testimonial:
  *                          item.title       = attribution
@@ -37,6 +37,7 @@
 import { bdsClass } from '../../../components/utils';
 import { Testimonial } from '../../../components/ui/Testimonial';
 import type { BlueprintProps } from '../astro/types';
+import { resolveSectionTitles } from '../astro/types';
 import { BlockMedia } from './BlockMedia';
 import '../section-shell.css';
 
@@ -52,6 +53,7 @@ const mediaStyle = {
 interface Props extends BlueprintProps {}
 
 export function TestimonialsFeaturedLarge({ section }: Props) {
+  const titles = resolveSectionTitles(section);
   const titleId = `${section.sectionKey}-title`;
   const featured = section.items[0];
 
@@ -63,7 +65,7 @@ export function TestimonialsFeaturedLarge({ section }: Props) {
     >
       <div className="bds-blueprint-section__container">
         <h2 id={titleId} className="bds-visually-hidden">
-          {section.heading ?? 'Featured testimonial'}
+          {titles.title ?? 'Featured testimonial'}
         </h2>
 
         {featured && featured.videoUrl && (

@@ -43,6 +43,7 @@ import { type HTMLAttributes } from 'react';
 import { CardTestimonial } from '../../../components';
 import { bdsClass } from '../../../components/utils';
 import type { BlueprintAlign, BlueprintProps, KnownBlueprintKey } from '../astro/types';
+import { resolveSectionTitles } from '../astro/types';
 import '../section-shell.css';
 import './Narrative.css';
 
@@ -135,13 +136,14 @@ function NarrativeShell({
 }
 
 function NarrativeFromSection({ section, blueprintKey }: NarrativeSectionProps) {
+  const titles = resolveSectionTitles(section);
   const callout = section.items[0];
 
   return (
     <NarrativeShell
       sectionKey={section.sectionKey}
-      title={section.heading ?? ''}
-      subtitle={section.subheading ?? undefined}
+      title={titles.title ?? ''}
+      subtitle={titles.subtitle ?? undefined}
       body={section.body ?? undefined}
       testimonial={
         callout

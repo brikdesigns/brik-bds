@@ -32,7 +32,7 @@ import { Button } from '../../../components/ui/Button';
 import type { FrameRatio } from '../../../components/ui/Frame/Frame';
 import { ServiceTag } from '../../../components/ui/ServiceTag/ServiceTag';
 import type { BlueprintProps } from '../astro/types';
-import { isActionCta } from '../astro/types';
+import { isActionCta, resolveSectionTitles } from '../astro/types';
 import { Hero } from './Hero';
 import { HeroMediaCard } from './HeroMediaCard';
 import { HeroMediaCardImage } from './HeroMediaCardImage';
@@ -73,6 +73,7 @@ export function HeroSplitImageCardOverlay({
   icon,
   onPriceCtaClick,
 }: Props) {
+  const titles = resolveSectionTitles(section);
   const { breadcrumb = [], serviceLine, audience, iconUrl, iconAlt, priceCard } = section;
   // `serviceLine` is canonical; `audience` is the deprecated alias (#788).
   const resolvedServiceLine = serviceLine ?? audience;
@@ -176,8 +177,8 @@ export function HeroSplitImageCardOverlay({
     <Hero
       layout="with-pricing-card"
       sectionKey={section.sectionKey}
-      title={section.heading ?? ''}
-      subtitle={section.subheading ?? undefined}
+      title={titles.title ?? ''}
+      subtitle={titles.subtitle ?? undefined}
       lead={section.body ?? undefined}
       cta={section.cta ?? undefined}
       ctaVariant="inverse"

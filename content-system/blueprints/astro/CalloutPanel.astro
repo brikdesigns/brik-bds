@@ -17,8 +17,8 @@
  *
  * ── Contract ─────────────────────────────────────────────────────
  * Props: BlueprintProps.
- *   - section.heading    — section heading (h2)
- *   - section.subheading — optional eyebrow (uppercase)
+ *   - section.title      — section heading (h2)
+ *   - section.subtitle   — optional eyebrow (uppercase)
  *   - section.body       — optional one-line lead under the heading
  *   - section.items[0]   — { title: plan name, description: plan description }
  *   - section.cta        — { label, url } for the plan CTA
@@ -32,6 +32,7 @@
  * (16px label) — DO NOT downgrade to `sm` on this surface.
  */
 import type { BlueprintProps } from './types';
+import { resolveSectionTitles } from './types';
 
 export interface Props extends BlueprintProps {}
 
@@ -39,10 +40,11 @@ export interface Props extends BlueprintProps {}
 import '../section-shell.css';
 
 const { section } = Astro.props;
+const titles = resolveSectionTitles(section);
 
 const plan = section.items?.[0];
-const title = section.heading ?? '';
-const subtitle = section.subheading ?? undefined;
+const title = titles.title ?? '';
+const subtitle = titles.subtitle ?? undefined;
 const description = section.body ?? undefined;
 const panelTitle = plan?.title ?? '';
 const panelDescription = plan?.description ?? undefined;
