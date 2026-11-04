@@ -1,0 +1,45 @@
+@layer bds-components {
+/*
+ * CellLink — neutral row-identifier link/button for table and sheet cells.
+ * Font size, family and weight are inherited from the cell on purpose.
+ */
+
+.bds-cell-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bds-gap-xs);
+  max-width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: start;
+  color: var(--bds-text-primary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--bds-duration-sm) var(--bds-ease-out);
+}
+
+.bds-cell-link:hover {
+  color: var(--bds-text-brand-primary);
+}
+
+.bds-cell-link:focus-visible {
+  outline: 2px solid var(--bds-border-brand-primary); /* bds-lint-ignore — focus ring */
+  outline-offset: 2px; /* bds-lint-ignore — focus ring offset */
+  border-radius: var(--bds-border-radius-sm);
+}
+
+.bds-cell-link__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-cell-link {
+    transition: none;
+  }
+}
+}
