@@ -327,7 +327,7 @@ Every rule was red on `main` when the gate landed — 22 step words, 6 type coll
 
 Two limits are worth naming, because a gate whose blind spots are undocumented gets trusted past them:
 
-- **Rule 1 does not read colour tokens.** A colour token's tail is a role, not a step (`--color-blue-light`, `--background-brand-primary`), and § 3's numeric/t-shirt vocabulary cannot express either. The colour ramps *do* carry two vocabularies in one family — `--color-blue-500` beside `--color-blue-light`, across 10 hues — which this ADR never dispositioned. Filed as [#1949](https://github.com/brikdesigns/brik-bds/issues/1949) for a § 6 amendment; the gate may not assert a disposition the ADR has not made.
+- **Rule 1 does not read colour tokens.** A colour token's tail is a role, not a step (`--color-blue-light`, `--background-brand-primary`), and § 3's numeric/t-shirt vocabulary cannot express either. The colour ramps' two step vocabularies are dispositioned by § Amendments, "Colour ramps take numeric steps only" ([#1949](https://github.com/brikdesigns/brik-bds/issues/1949)), and judged by rule 7 rather than rule 1.
 - **Rule 4 reads CSS only.** A modifier built from a runtime value (`` `bds-badge--${tone}` ``) has no static spelling to judge — the same blind spot [`slot-pattern-check.mjs`](../../scripts/slot-pattern-check.mjs) documents at `:38-42`.
 
 ## Amendments
@@ -430,3 +430,18 @@ New words admitted or retired after acceptance, per § 6. Each entry names the w
 **`appearance`: `outline` in, `muted` out.** The same issue gives Badge, Tag and Avatar one fill vocabulary: `solid` (saturated fill), `subtle` (pale `-light` fill) and `outline` (transparent fill, border only). Tag's old `subtle` was a border-only treatment and its old `muted` was a pale fill, so the words move to match Badge: Tag `subtle` → `outline`, `muted` → `subtle`. After the change no `*Appearance` union carries `muted`, so it leaves the closed list rather than staying as an unused value.
 
 **Enforcement.** `tokens/naming-grammar.json` gains `axes.color` and swaps `muted` for `outline` in `axes.appearance`. `lint-naming-canon` reads `axes.color` into `AXES` and from there into `MODIFIER_AXES`, so `--color-{hue}` carries a blessed prefix and rule 5 still default-denies any other hue. `neutral` is now legal on both `emphasis` and `color`, but rule 3 judges a union by the intersection of its members' axes, and `TagColor`'s intersection is `{color}`, so no union reads as mixed. **Baseline:** −1. The `--muted` rule-4 row keyed to #1927 leaves `tokens/naming-canon-baseline.json`, because Tag was its last user and an entry that no longer violates fails the gate. No new rule, script or workflow.
+
+### Colour ramps take numeric steps only (2026-11-03, [#1949](https://github.com/brikdesigns/brik-bds/issues/1949))
+
+**What was open.** § 3 closed the step vocabulary for scale families and left the colour ramps out. Nine hues shipped an 11-rung numeric ramp (`50`–`950`) beside a six-rung word ramp (`lightest` · `lighter` · `light` · `dark` · `darker` · `darkest`) under one family name, and § Enforcement named the gap.
+
+**Disposition: retire the word ramp; numeric is the only colour Primitive step.** This entry records a decision already made, not a new one. [ADR-043](ADR-043-system-id-token-prefix.md) § 4 retires the word steps "from every tier and every system" and states that it dispositions #1949. The operator ratified ADR-043 as written on 2026-10-01; its quote B ties the numeric steps to the brik-llm colour rail. The reference counts behind the issue's first criterion were measured on 2026-09-09, per consumer, in the [#1949 disposition comment](https://github.com/brikdesigns/brik-bds/issues/1949).
+
+- **Family:** colour Primitive, `--bds-color-{family}-{step}`.
+- **Closed steps:** `50` · `100` · `200` · `300` · `400` · `500` · `600` · `700` · `800` · `900` · `950`, plus the named endpoints `grayscale-black` and `grayscale-white` (`tokens/naming-grammar.json` `tiers.primitive.color.namedSteps`).
+- **Retired:** `lightest` · `lighter` · `light` · `dark` · `darker` · `darkest` · `base` as colour steps (`retiredWordSteps`).
+- **Not a named exception.** The word ramp does not enter `steps.namedExceptions`. The earlier "a colour tail is a role" reading still keeps rule 1 off colour tokens, but the colour Primitive is now a scale family with its own rule.
+
+**The old names still resolve, and that is the bridge, not the canon.** Canonical output carries zero word-step colour names: `grep -oE -- '--bds-color-[a-z]+-(lightest|lighter|light|dark|darker|darkest|base):' dist/tokens.css` returns nothing. The 54 legacy names (nine hues × six) live only in the generated `tokens/compat/prefix-bridge.css`, each aliasing the numeric stop it always pointed at (`--color-blue-lightest: var(--bds-color-blue-100)`). That keeps the operator's 2026-09-09 direction to avoid deleting the aliases until the numeric transition proved out. Deleting them is [#2711](https://github.com/brikdesigns/brik-bds/issues/2711), which retires the whole bridge.
+
+**Enforcement.** Rule 7 (`colorBodyFindings()` in `lint-naming-canon`) parses every colour Primitive as `color-{family}-{step}` against the grammar file and fails a retired word step with its numeric target. `scripts/__tests__/lint-naming-canon.test.mjs` plants a `--bds-color-blue-light` case that fails as rule 7, never as rule 1. No new rule, script or workflow. **Baseline:** none. Rule 7 has no live colour finding on `main`, and the bridge is outside what the gate reads.
