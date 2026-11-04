@@ -55,7 +55,7 @@
   font-size: var(--bds-label-sm);
   /* Regular weight (links are semi-bold) so the current page reads as the
      recessive "you are here" — a weight-based hierarchy that holds on any
-     surface, including the [data-audience] tints below where --bds-text-secondary
+     surface, including the [data-service-line] tints below where --bds-text-secondary
      collapses onto the link colour and contrast can't carry the distinction. */
   font-weight: var(--bds-font-weight-regular);
   /* `snug` for the same descender-clip reason as `__link` above (#2519). */
@@ -123,10 +123,10 @@
 
 /* ─── Audience cascade — service-line tinting ────────────────────
  * Re-binds canonical --bds-text-secondary / --bds-text-muted inside each
- * [data-audience='X'] subtree, scoped to .bds-breadcrumb only so
+ * [data-service-line='X'] subtree, scoped to .bds-breadcrumb only so
  * other secondary text on the page is unaffected.
  *
- * `data-audience='back-office'` is canonical; `data-audience='service'` is a
+ * `data-service-line='back-office'` is canonical; `data-service-line='service'` is a
  * @deprecated alias kept for compat during the cross-repo rename. Both resolve
  * to the back-office hue (underlying tokens are *-back-office-*).
  * Same mapping as HeroSplitImageCardOverlay.
@@ -136,40 +136,40 @@
  * --text-service-X-muted (forbidden by BDS naming canon: scoped
  * tokens carry context modifiers only, not hierarchy). */
 
-:is([data-audience='brand'], [data-service-line='brand']) .bds-breadcrumb {
+[data-service-line='brand'] .bds-breadcrumb {
   --bds-text-secondary: var(--bds-text-service-brand-on-light);
   --bds-text-muted: var(--bds-text-service-brand-on-light);
 }
 
-:is([data-audience='marketing'], [data-service-line='marketing']) .bds-breadcrumb {
+[data-service-line='marketing'] .bds-breadcrumb {
   --bds-text-secondary: var(--bds-text-service-marketing-on-light);
   --bds-text-muted: var(--bds-text-service-marketing-on-light);
 }
 
-:is([data-audience='information'], [data-service-line='information']) .bds-breadcrumb {
+[data-service-line='information'] .bds-breadcrumb {
   --bds-text-secondary: var(--bds-text-service-information-on-light);
   --bds-text-muted: var(--bds-text-service-information-on-light);
 }
 
-:is([data-audience='product'], [data-service-line='product']) .bds-breadcrumb {
+[data-service-line='product'] .bds-breadcrumb {
   --bds-text-secondary: var(--bds-text-service-product-on-light);
   --bds-text-muted: var(--bds-text-service-product-on-light);
 }
 
-:is([data-audience='back-office'], [data-service-line='back-office']) .bds-breadcrumb {
+[data-service-line='back-office'] .bds-breadcrumb {
   --bds-text-secondary: var(--bds-text-service-back-office-on-light);
   --bds-text-muted: var(--bds-text-service-back-office-on-light);
 }
 
-/* @deprecated alias of [data-audience='back-office'] — remove with the
+/* @deprecated alias of [data-service-line='back-office'] — remove with the
    `service` ServiceLine member in a future major. */
-:is([data-audience='service'], [data-service-line='service']) .bds-breadcrumb {
+[data-service-line='service'] .bds-breadcrumb {
   --bds-text-secondary: var(--bds-text-service-back-office-on-light);
   --bds-text-muted: var(--bds-text-service-back-office-on-light);
 }
 
 /* ─── Dark mode: flip the on-dark companions ONLY on the inverse pricing-card band ──
- * The [data-audience] cascade above binds the *-on-light tokens (a dark hue),
+ * The [data-service-line] cascade above binds the *-on-light tokens (a dark hue),
  * which is correct wherever the breadcrumb sits on a fixed-light service tint
  * (`.service-surface` — e.g. the service-LINE hero, brikdesigns /services/brand).
  * But inside `.bds-hero--with-pricing-card` the surface flips to the {hue} inverse
@@ -178,34 +178,34 @@
  * Scope the on-dark flip to that pricing-card band ONLY — the exact scope where
  * HeroSplitImageCardOverlay flips the headline/link cascade — so the current crumb
  * clears AA on the dark band (6.89–9.06:1) WITHOUT inverting the light-tint pages.
- * A bare [data-audience] flip regressed /services/brand to 1:1 (0.122.2). */
-:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='brand'], [data-service-line='brand']) .bds-breadcrumb {
+ * A bare [data-service-line] flip regressed /services/brand to 1:1 (0.122.2). */
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-service-line='brand'] .bds-breadcrumb {
   --bds-text-secondary: var(--bds-text-service-brand-on-dark);
   --bds-text-muted: var(--bds-text-service-brand-on-dark);
 }
 
-:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='marketing'], [data-service-line='marketing']) .bds-breadcrumb {
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-service-line='marketing'] .bds-breadcrumb {
   --bds-text-secondary: var(--bds-text-service-marketing-on-dark);
   --bds-text-muted: var(--bds-text-service-marketing-on-dark);
 }
 
-:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='information'], [data-service-line='information']) .bds-breadcrumb {
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-service-line='information'] .bds-breadcrumb {
   --bds-text-secondary: var(--bds-text-service-information-on-dark);
   --bds-text-muted: var(--bds-text-service-information-on-dark);
 }
 
-:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='product'], [data-service-line='product']) .bds-breadcrumb {
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-service-line='product'] .bds-breadcrumb {
   --bds-text-secondary: var(--bds-text-service-product-on-dark);
   --bds-text-muted: var(--bds-text-service-product-on-dark);
 }
 
-:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='back-office'], [data-service-line='back-office']) .bds-breadcrumb {
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-service-line='back-office'] .bds-breadcrumb {
   --bds-text-secondary: var(--bds-text-service-back-office-on-dark);
   --bds-text-muted: var(--bds-text-service-back-office-on-dark);
 }
 
-/* @deprecated alias of [data-audience='back-office'] — see above. */
-:root[data-theme="dark"] .bds-hero--with-pricing-card:is([data-audience='service'], [data-service-line='service']) .bds-breadcrumb {
+/* @deprecated alias of [data-service-line='back-office'] — see above. */
+:root[data-theme="dark"] .bds-hero--with-pricing-card[data-service-line='service'] .bds-breadcrumb {
   --bds-text-secondary: var(--bds-text-service-back-office-on-dark);
   --bds-text-muted: var(--bds-text-service-back-office-on-dark);
 }

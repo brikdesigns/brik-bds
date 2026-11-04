@@ -28,7 +28,7 @@
  *       - imageUrl?             — top illustration src (omitted → blank brand block)
  *       - imageAlt?             — alt text for the illustration
  *       - animationUrl?         — Lottie URL for `contentMotion: animated-svg`. React-rail-only (see below).
- *       - serviceLine           — REQUIRED — drives `data-service-line` re-binding (`audience` is the @deprecated alias — #788)
+ *       - serviceLine           — REQUIRED — drives `data-service-line` re-binding
  *
  * required_facts: []. Section-driven.
  *
@@ -45,8 +45,7 @@
  *
  * ## Service-line scope binding (consumer responsibility)
  *
- * Each card emits `data-service-line={item.serviceLine ?? item.audience}` (and
- * the deprecated `data-audience` alias during the #788 window). Inside that
+ * Each card emits `data-service-line={item.serviceLine}`. Inside that
  * subtree, `--brand-primary` and `--bds-background-brand-primary` resolve to the
  * service line's color — but ONLY if the consumer site defines the
  * `[data-service-line='X']` cascade rules per
@@ -136,14 +135,12 @@ const sectionClass = [
 
     <ul class="bds-features__grid" role="list">
       {section.items.map((item) => {
-        // `serviceLine` is canonical; `audience` is the deprecated alias (#788).
-        const serviceLine = item.serviceLine ?? item.audience;
+        const serviceLine = item.serviceLine;
         return (
         <li class="bds-features__item">
           <article
             class="bds-features__card"
             data-service-line={serviceLine ?? undefined}
-            data-audience={serviceLine ?? undefined}
           >
             <a class="bds-features__card-link" href={item.href ?? '#'}>
               <div class="bds-features__media">

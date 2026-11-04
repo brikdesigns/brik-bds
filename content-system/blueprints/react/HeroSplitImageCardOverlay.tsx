@@ -17,8 +17,7 @@
  *                              price overlay + price CTA), or a
  *                              `data-content-needed` stub when `priceCard` is
  *                              absent (CI grep on `dist/` blocks publish).
- * `serviceLine ?? audience` is forwarded to `<Hero>` as both `data-service-line`
- * (canonical) and `data-audience` (@deprecated, #788) to drive the
+ * `serviceLine` is forwarded to `<Hero>` as `data-service-line` to drive the
  * service-token cascade.
  *
  * New consumers should compose `<Hero layout="with-pricing-card" …>` directly.
@@ -76,9 +75,7 @@ export function HeroSplitImageCardOverlay({
   onPriceCtaClick,
 }: Props) {
   const titles = resolveSectionTitles(section);
-  const { breadcrumb = [], serviceLine, audience, iconUrl, iconAlt, priceCard } = section;
-  // `serviceLine` is canonical; `audience` is the deprecated alias (#788).
-  const resolvedServiceLine = serviceLine ?? audience;
+  const { breadcrumb = [], serviceLine, iconUrl, iconAlt, priceCard } = section;
 
   const breadcrumbNode =
     breadcrumb.length > 0 ? (
@@ -92,7 +89,7 @@ export function HeroSplitImageCardOverlay({
    *   1. `icon` (a rendered node) → render inside an `aria-hidden` wrapper —
    *      decorative SVG/Image, no img/alt semantics (brik-bds#849). React-only.
    *   2. `iconUrl` → raw `<img>` (legacy / decorative-image escape hatch, #546).
-   *   3. `serviceLine` (or `audience`) set → canonical `<ServiceTag>` — the
+   *   3. `serviceLine` set → canonical `<ServiceTag>` — the
    *      design-system path.
    *   4. none → no eyebrow.
    * `showServiceTag={false}` suppresses the whole slot while leaving
@@ -115,10 +112,10 @@ export function HeroSplitImageCardOverlay({
               decoding="async"
             />
           )
-        : resolvedServiceLine
+        : serviceLine
           ? (
               <ServiceTag
-                category={resolvedServiceLine}
+                category={serviceLine}
                 variant="icon"
                 size="lg"
                 className="bds-hero__icon"
@@ -188,8 +185,7 @@ export function HeroSplitImageCardOverlay({
       breadcrumb={breadcrumbNode}
       eyebrow={eyebrowNode}
       media={media}
-      data-service-line={resolvedServiceLine}
-      data-audience={resolvedServiceLine}
+      data-service-line={serviceLine}
       data-blueprint-key="hero_split_image_card_overlay"
     />
   );
