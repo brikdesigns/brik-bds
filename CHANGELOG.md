@@ -16,6 +16,18 @@ a consumer greps this file before bumping.
 > `#1186` will add the manifest + CI check that *enforces* this section. Until
 > it lands, the entry is a convention, not a gate.
 
+## v0.223.0 — 2026-11-04
+
+`BlueprintSection` takes `title` / `subtitle`; `heading` / `subheading` still render but are deprecated and drop in the next major. A section carries one spelling or the other, never a mix, and every blueprint reads it through `resolveSectionTitles()` ([#2563](https://github.com/brikdesigns/brik-bds/issues/2563)). A minor, per `docs/RELEASE.md` on 0.x.
+
+**Breaking (types):** `BlueprintSection` is now a union, so spreading a `Partial<BlueprintSection>` over defaults or writing `interface X extends BlueprintSection` fails to typecheck. Type the partial as `Partial<BlueprintSectionContent> & { title?: string | null; subtitle?: string | null }`, the way `BlueprintDispatcher.test.ts` does. The unused `html_snippet` / `css_snippet` fields are gone from the blueprint schema type ([#2871](https://github.com/brikdesigns/brik-bds/issues/2871)).
+
+**Breaking (consumer CSS):** `.bds-hero__breadcrumb` is now `display: contents` and generates no box, so an override that sets its margin, padding, background or border no longer applies. Target its child instead ([#2288](https://github.com/brikdesigns/brik-bds/issues/2288)).
+
+| Old | New |
+|---|---|
+| `.bds-hero__breadcrumb { margin… }` | `.bds-hero__breadcrumb > * { margin… }` |
+
 ## v0.222.0 — 2026-11-03
 
 Indicators share one anatomy: Badge and Tag take `appearance` `solid | subtle | outline`, Avatar takes `solid | subtle`, and Tag takes a `color` (`neutral` or an accent hue). `subtle` is always a pale `--bds-background-*-light` fill with the dark-ink label `--bds-text-on-color-light`; `outline` is transparent with `--bds-text-primary` and a border. Badge, Tag and Avatar CSS read no `--bds-surface-*` and no `--bds-color-*` primitive ([#2943](https://github.com/brikdesigns/brik-bds/issues/2943)). A minor, per `docs/RELEASE.md` on 0.x.
