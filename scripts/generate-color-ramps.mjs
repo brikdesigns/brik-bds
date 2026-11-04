@@ -18,6 +18,11 @@
  * reusable for a future client kit rather than Brik-only.
  *
  * ── The mapping, and why it is anchor-preserving ────────────────────────────
+ * The contract below — the mapping, the direction (numeric authored, the six
+ * names derived), and the three assertions in `buildRamp` — is recorded in
+ * docs/adrs/ADR-047-color-ramp-anchor-contract.md (brik-bds#2347). Change it
+ * there first.
+ *
  * The six existing named stops are pinned at fixed numeric positions, byte for
  * byte:
  *

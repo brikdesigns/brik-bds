@@ -7,6 +7,9 @@
  * Color page cannot drift from the shipped ramp the way the 6-step prose did
  * (brik-bds#1753) — there is no hex value to hand-maintain here.
  *
+ * Which stop each of the six legacy anchor names pins is ADR-047
+ * (docs/adrs/ADR-047-color-ramp-anchor-contract.md), not restated here.
+ *
  * The palettes exported from `tokens/index.ts` still carry the six legacy anchor
  * names because they are public API of `@brikdesigns/bds`. This module is
  * docs-only and deliberately not re-exported from there.
