@@ -127,6 +127,7 @@ export * from './TextArea';
 export * from './TextInput';
 export * from './TimePicker';
 export * from './TextLink';
+export * from './CellLink';
 export * from './TaskConsole';
 export * from './Toast';
 export * from './Tooltip';

@@ -1,0 +1,74 @@
+---
+title: Cell link
+description: Neutral row-identifier link or button for table and sheet cells.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+CellLink is the link inside a table or sheet cell that names the row. Neutral text at rest, brand on hover — color is the only affordance, never an underline — so a column of names reads as identifiers, not calls-to-action.
+
+## Use it for
+
+- The name cell of a table row (company, contact, agreement)
+- A row that opens a sheet or runs a callback instead of navigating
+
+For a real call-to-action, use [TextLink](/docs/components/text-link).
+
+## Import
+
+```tsx
+import { CellLink } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Link
+
+Pass `href` to navigate. Renders an `<a>`.
+
+<ComponentPreview code={`<BDS.CellLink href="#">Acme Corporation</BDS.CellLink>`}>
+  <BDS.CellLink href="#">Acme Corporation</BDS.CellLink>
+</ComponentPreview>
+
+### Button
+
+Omit `href` and pass `onClick`. Renders a `<button type="button">`.
+
+```tsx
+<CellLink onClick={() => openSheet(row.id)}>Acme Corporation</CellLink>
+```
+
+## Sizing
+
+CellLink inherits the cell's font size and weight, so a linked cell and a plain-text cell in one column always match. There is no `size` or `weight` prop; set them on the cell.
+
+## When *not* to use
+
+<Callout type="warn">
+  **Don't use CellLink for a call-to-action.** A review link or an action in a cell is a TextLink or Button. CellLink is only for the cell that names the row.
+</Callout>
+
+## Accessibility
+
+- Renders a real `<a>` or `<button>`. Keyboard, focus ring, and context menu come from the platform.
+- The accessible name is the visible text — use the row's name, not "View".
+
+## API
+
+### CellLink
+
+{/* props-check: CellLinkProps @ components/ui/CellLink/CellLink.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `children` | `ReactNode` *(required)* | — |
+| `href` | `string` | — |
+| `iconBefore` | `ReactNode` | — |
+| `iconAfter` | `ReactNode` | — |
+
+Plus all standard `<a>` attributes with `href`, or `<button>` attributes without it.
+
+## Related
+
+- [TextLink](/docs/components/text-link) — brand-colored link for calls-to-action
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-cell-link--overview)**

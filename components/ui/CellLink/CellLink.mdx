@@ -1,0 +1,31 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './CellLink.stories';
+
+<Meta of={Stories} />
+
+# Cell link
+
+<ComponentLinks slug="cell-link" />
+
+The row-identifier link inside a table or sheet cell. Neutral text at rest, brand on hover — color is the only affordance, never an underline — so a column of names reads as identifiers, not calls-to-action. It inherits the cell's font size and weight; there is no `size` or `weight` prop.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+Pass `href` to navigate. For a real call-to-action use `TextLink` (brand blue), not `CellLink`.
+
+## Button
+
+<Canvas of={Stories.Button} />
+
+Omit `href` and pass `onClick` for a row that opens a sheet or runs a callback. It renders a real `<button type="button">`.
+
+## In a table
+
+<Canvas of={Stories.InTable} />
+
+## Props
+
+<ArgTypes of={Stories} />
