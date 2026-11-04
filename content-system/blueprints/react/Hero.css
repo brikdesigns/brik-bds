@@ -340,7 +340,16 @@
   }
 }
 
+/* Layout-neutral wrapper (#2288): it exists only as the styling hook, so it
+   generates no box — the switcher keeps laying out as a direct child of the
+   content column (no line-box shift, +4px at 390px). The descendant
+   `[data-audience] .bds-breadcrumb` tint (#781) still resolves through it. The
+   spacing the class carried before the wrapper moves to the child. */
 .bds-hero__breadcrumb {
+  display: contents;
+}
+
+.bds-hero__breadcrumb > * {
   margin-bottom: var(--bds-gap-sm);
 }
 
