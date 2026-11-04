@@ -41,7 +41,10 @@
 .bds-table[data-rounded-top="true"],
 .bds-table[data-rounded-bottom="true"] {
   border: var(--bds-border-width-md) solid var(--bds-border-muted);
-  overflow: hidden;
+  /* `clip`, not `hidden`: `hidden` makes the table a scroll container, so a
+     sticky cell resolves against the table instead of the `scrollable`
+     wrapper and never pins (#2276). `clip` crops the same way and does not. */
+  overflow: clip;
 }
 
 .bds-table[data-rounded-top="true"] {
@@ -419,5 +422,35 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--bds-gap-xs);
+}
+
+/* ─── Sticky end column ──────────────────────────────────────── */
+
+/* Pinned to the `scrollable` wrapper's end edge. Cells are transparent by
+   default, so a pinned one needs an opaque fill or the scrolling columns show
+   through it; the fill follows the row's own state. Override with
+   `--bds-table-sticky-end-bg`. */
+.bds-table-head--sticky-end,
+.bds-table-cell--sticky-end,
+.bds-table-actions-cell--sticky-end {
+  position: sticky;
+  inset-inline-end: 0;
+  z-index: 1;
+  background-color: var(--bds-table-sticky-end-bg, var(--bds-background-primary));
+}
+
+.bds-table[data-header-bg="secondary"] .bds-table-head--sticky-end,
+.bds-table-row--selected .bds-table-cell--sticky-end,
+.bds-table-row--selected .bds-table-actions-cell--sticky-end,
+.bds-table[data-striped="true"] .bds-table-body .bds-table-row:nth-child(even) .bds-table-cell--sticky-end,
+.bds-table[data-striped="true"] .bds-table-body .bds-table-row:nth-child(even) .bds-table-actions-cell--sticky-end {
+  background-color: var(--bds-table-sticky-end-bg, var(--bds-background-secondary));
+}
+
+/* Edge divider — only while columns still scroll under the pinned one. */
+.bds-table-scroll[data-end-clipped="true"] .bds-table-head--sticky-end,
+.bds-table-scroll[data-end-clipped="true"] .bds-table-cell--sticky-end,
+.bds-table-scroll[data-end-clipped="true"] .bds-table-actions-cell--sticky-end {
+  box-shadow: inset var(--bds-border-width-md) 0 0 var(--bds-border-muted);
 }
 }

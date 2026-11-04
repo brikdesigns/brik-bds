@@ -34,6 +34,12 @@ A table wider than its column should scroll inside its own box, not stretch the 
 
 <Canvas of={Stories.Scrollable} />
 
+### Sticky end column
+
+Set `stickyEnd` on the header and every cell of the last column — `TableHead`, `TableCell` or `TableActionsCell` — to pin it to the end edge while the table scrolls sideways. It needs `scrollable`: the pin sticks to that wrapper. The pinned fill follows the row state (default, striped, selected), a divider shows while columns remain to scroll under it, and `--bds-table-sticky-end-bg` overrides the fill.
+
+<Canvas of={Stories.StickyEndColumn} />
+
 ## Patterns
 
 The trailing `[View][Edit][⋯]` cluster composes with `<TableActionsCell>` — it owns alignment, shrink-to-content width, and the `--bds-gap-sm` rhythm, so consumers stop hand-rolling `style={{ textAlign: 'right' }}` on `<TableCell>`.

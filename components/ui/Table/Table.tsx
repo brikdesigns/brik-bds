@@ -115,22 +115,33 @@ export function Table({
 function TableScroll({ label, children }: { label?: string; children: ReactElement }) {
   const ref = useRef<HTMLDivElement>(null);
   const [overflowing, setOverflowing] = useState(false);
+  // True while content still sits past the end edge — a pinned end column
+  // only needs its elevation then, not once the table is scrolled fully across.
+  const [endClipped, setEndClipped] = useState(false);
 
   useEffect(() => {
     const wrapper = ref.current;
     if (!wrapper || typeof ResizeObserver === 'undefined') return;
-    const measure = () => setOverflowing(wrapper.scrollWidth > wrapper.clientWidth);
+    const measure = () => {
+      setOverflowing(wrapper.scrollWidth > wrapper.clientWidth);
+      setEndClipped(Math.ceil(wrapper.scrollLeft + wrapper.clientWidth) < wrapper.scrollWidth);
+    };
     const observer = new ResizeObserver(measure);
     observer.observe(wrapper);
     if (wrapper.firstElementChild) observer.observe(wrapper.firstElementChild);
+    wrapper.addEventListener('scroll', measure, { passive: true });
     measure();
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      wrapper.removeEventListener('scroll', measure);
+    };
   }, []);
 
   return (
     <div
       ref={ref}
       className="bds-table-scroll"
+      data-end-clipped={endClipped || undefined}
       tabIndex={overflowing ? 0 : undefined}
       role={label ? 'region' : undefined}
       aria-label={label}
@@ -211,6 +222,12 @@ export interface TableHeadProps extends ThHTMLAttributes<HTMLTableCellElement> {
   sortable?: boolean;
   sortDirection?: SortDirection;
   onSort?: () => void;
+  /**
+   * Pin this column to the end edge while the table scrolls sideways. Set it on
+   * the header and every body cell of the column. Needs `scrollable` on the
+   * `Table` — the pin sticks to that wrapper.
+   */
+  stickyEnd?: boolean;
   children: ReactNode;
 }
 
@@ -224,6 +241,7 @@ export function TableHead({
   sortable = false,
   sortDirection = 'none',
   onSort,
+  stickyEnd = false,
   children,
   className,
   style,
@@ -231,7 +249,12 @@ export function TableHead({
 }: TableHeadProps) {
   return (
     <th
-      className={bdsClass('bds-table-head', sortable && 'bds-table-head--sortable', className)}
+      className={bdsClass(
+        'bds-table-head',
+        sortable && 'bds-table-head--sortable',
+        stickyEnd && 'bds-table-head--sticky-end',
+        className,
+      )}
       style={style}
       onClick={sortable ? onSort : undefined}
       aria-sort={
@@ -295,17 +318,28 @@ export function TableSubheader({
 // ─── TableCell (<td>) ──────────────────────────────────────────
 
 export interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
+  /**
+   * Pin this column to the end edge while the table scrolls sideways. Set it on
+   * the header and every body cell of the column. Needs `scrollable` on the
+   * `Table` — the pin sticks to that wrapper.
+   */
+  stickyEnd?: boolean;
   children?: ReactNode;
 }
 
 export function TableCell({
+  stickyEnd = false,
   children,
   className,
   style,
   ...props
 }: TableCellProps) {
   return (
-    <td className={bdsClass('bds-table-cell', className)} style={style} {...props}>
+    <td
+      className={bdsClass('bds-table-cell', stickyEnd && 'bds-table-cell--sticky-end', className)}
+      style={style}
+      {...props}
+    >
       {children}
     </td>
   );
@@ -386,6 +420,12 @@ export interface TableActionsCellProps extends TdHTMLAttributes<HTMLTableCellEle
    * Default `sm`, so text and icon buttons in an action cell share one height.
    */
   size?: ButtonSize;
+  /**
+   * Pin this column to the end edge while the table scrolls sideways. Set it on
+   * the header and every body cell of the column. Needs `scrollable` on the
+   * `Table` — the pin sticks to that wrapper.
+   */
+  stickyEnd?: boolean;
 }
 
 /**
@@ -428,6 +468,7 @@ export function TableActionsCell({
   children,
   align = 'right',
   size = 'sm',
+  stickyEnd = false,
   className,
   style,
   'aria-label': ariaLabel,
@@ -444,6 +485,7 @@ export function TableActionsCell({
       className={bdsClass(
         'bds-table-actions-cell',
         `bds-table-actions-cell--${align}`,
+        stickyEnd && 'bds-table-actions-cell--sticky-end',
         className,
       )}
       style={style}
