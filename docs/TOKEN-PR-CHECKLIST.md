@@ -44,7 +44,7 @@ Custom-property declarations inherit the allowlist of their LHS prefix family �
 
 **TSX inline styles follow the same rule** — `style={{ backgroundColor: 'var(--text-service-marketing)' }}` is the canonical failure case.
 
-**Escape hatch:** when a cross-family alias is intentional (e.g. a divider line rendered as a 1px `background-color` of `--border-muted`), add an inline `bds-lint-ignore token-family — <reason>` comment and link to a tracking issue. The comment must justify the design intent, not silently suppress the rule.
+**Escape hatch:** when a cross-family alias is intentional (e.g. a divider line rendered as a 1px `background-color` of `--border-muted`), add an inline `bds-lint-ignore token-family — <reason> (#NNN)` comment. The comment must justify the design intent and cite a tracking issue: a reviewed alias cites its registry issue below, a deferred swap cites its own. `lint-tokens.js` rejects a waiver that cites no issue ([#1754](https://github.com/brikdesigns/brik-bds/issues/1754)).
 
 ### Examples
 

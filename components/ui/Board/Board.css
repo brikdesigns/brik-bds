@@ -30,12 +30,12 @@
 }
 
 .bds-board::-webkit-scrollbar-thumb {
-  background-color: var(--bds-border-muted); /* bds-lint-ignore token-family — intentional alias: scrollbar thumb (thin UI, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md */
+  background-color: var(--bds-border-muted); /* bds-lint-ignore token-family — intentional alias: scrollbar thumb (thin UI, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md, #777 */
   border-radius: var(--bds-border-radius-pill);
 }
 
 .bds-board:hover::-webkit-scrollbar-thumb {
-  background-color: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: scrollbar thumb hover (thin UI, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md */
+  background-color: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: scrollbar thumb hover (thin UI, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md, #777 */
 }
 
 /* ─── Board column ────────────────────────────────────── */

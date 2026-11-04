@@ -166,7 +166,7 @@
 }
 
 .bds-progress-stepper__connector--incomplete {
-  background-color: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: 2px connector line (border semantics, fill mechanics); see docs/TOKEN-PR-CHECKLIST.md */
+  background-color: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: 2px connector line (border semantics, fill mechanics); see docs/TOKEN-PR-CHECKLIST.md, #777 */
 }
 
 /* ─── Horizontal orientation (steps variant) ─────────────────── */
@@ -223,7 +223,7 @@
 }
 
 .bds-progress-stepper__dot--inactive {
-  background-color: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: inactive dot (thin UI, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md */
+  background-color: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: inactive dot (thin UI, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md, #777 */
   opacity: 1;
 }
 

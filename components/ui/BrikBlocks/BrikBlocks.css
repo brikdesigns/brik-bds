@@ -44,11 +44,11 @@
    to this exact grayscale value, so the primitive is used directly (same
    escape hatch as SocialIcon.css:81's --bds-color-grayscale-950 glyph). */
 .bds-brik-blocks__cell[data-cell='light'] {
-  background-color: var(--bds-color-grayscale-200); /* bds-lint-ignore token-family — decorative swatch, no semantic wrapper at this exact grayscale rung; see docs/TOKEN-PR-CHECKLIST.md */
+  background-color: var(--bds-color-grayscale-200); /* bds-lint-ignore token-family — decorative swatch, no semantic wrapper at this exact grayscale rung; see docs/TOKEN-PR-CHECKLIST.md, #2291 */
 }
 
 .bds-brik-blocks__cell[data-cell='dark'] {
-  background-color: var(--bds-color-grayscale-950); /* bds-lint-ignore token-family — decorative swatch, no semantic wrapper at this exact grayscale rung; see docs/TOKEN-PR-CHECKLIST.md */
+  background-color: var(--bds-color-grayscale-950); /* bds-lint-ignore token-family — decorative swatch, no semantic wrapper at this exact grayscale rung; see docs/TOKEN-PR-CHECKLIST.md, #2291 */
 }
 
 /* --bds-surface-brand-primary (not --bds-color-poppy-500 directly) — the Semantic

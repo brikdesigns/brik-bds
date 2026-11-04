@@ -5,6 +5,7 @@ import {
   hasLintIgnore,
   lintIgnoreReason,
   isBareLintIgnore,
+  lintIgnoreCitesIssue,
 } from '../lib/bds-lint-ignore.cjs';
 
 // Guards the invariant behind brikdesigns/brik-bds#1469: a `bds-lint-ignore`
@@ -70,6 +71,31 @@ describe('isBareLintIgnore — the gate predicate', () => {
 
   it('PASSES a line with no marker at all', () => {
     expect(isBareLintIgnore('height: 8px;')).toBe(false);
+  });
+});
+
+describe('lintIgnoreCitesIssue', () => {
+  it('accepts a bare, repo-qualified, or owner-qualified issue ref', () => {
+    expect(lintIgnoreCitesIssue('x; /* bds-lint-ignore token-family — alias (#777) */')).toBe(true);
+    expect(lintIgnoreCitesIssue('x; /* bds-lint-ignore token-family — see brik-bds#1754 */')).toBe(true);
+    expect(lintIgnoreCitesIssue('x; /* bds-lint-ignore token-family — brikdesigns/brikdesigns#822 */')).toBe(true);
+  });
+
+  it('rejects a reason with prose only', () => {
+    expect(lintIgnoreCitesIssue('x; /* bds-lint-ignore token-family */')).toBe(false);
+    expect(lintIgnoreCitesIssue('x; /* bds-lint-ignore token-family — see docs/TOKEN-PR-CHECKLIST.md */')).toBe(false);
+  });
+
+  it('does not read a hex colour as an issue ref', () => {
+    expect(lintIgnoreCitesIssue('x; /* bds-lint-ignore token-family — rest #4f4f4f, 7.32:1 */')).toBe(false);
+  });
+
+  it('reads only the waiver reason, not the code before the marker', () => {
+    expect(lintIgnoreCitesIssue('content: "#12"; /* bds-lint-ignore token-family */')).toBe(false);
+  });
+
+  it('is false when no marker is present', () => {
+    expect(lintIgnoreCitesIssue('x; /* #777 */')).toBe(false);
   });
 });
 

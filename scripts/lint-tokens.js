@@ -13,7 +13,8 @@
  *   4. Spacing values not aligned to 4-point grid (see https://design.brikdesigns.com/docs/foundation/spacing)
  *   5. Token-family pairing mismatch — a token used in a property whose family
  *      it doesn't belong to (e.g. background-color: var(--text-*)). See
- *      docs/TOKEN-PR-CHECKLIST.md for the property↔family table.
+ *      docs/TOKEN-PR-CHECKLIST.md for the property↔family table. Its
+ *      `bds-lint-ignore` waiver must cite a tracking issue (#1754).
  *   6. Raw inline var(--…) in component TSX — styles belong in the component's
  *      .css file (BEM under bds-), never a CSSProperties object. See the
  *      component-build standard §"Styles live in CSS". Errors repo-wide (the
@@ -34,6 +35,7 @@ const fs = require('fs');
 const path = require('path');
 const {
   isBareLintIgnore,
+  lintIgnoreCitesIssue,
   BARE_IGNORE_RULE,
   BARE_IGNORE_MESSAGE,
   BARE_IGNORE_FIX,
@@ -1363,8 +1365,10 @@ function checkGridCompliance(line, lineNum, file) {
  *   • CSS custom-property declaration:    --background-inverse: var(--text-foo);
  *   • TSX inline-style object:            style={{ backgroundColor: 'var(--text-foo)' }}
  *
- * Skips lines with `bds-lint-ignore` (escape hatch for cross-family aliases
- * that are intentional — e.g. hue-sharing across families).
+ * A `bds-lint-ignore` on the line is the escape hatch for cross-family aliases
+ * that are intentional — e.g. hue-sharing across families. It waives the
+ * mismatch only when its reason cites a tracking issue (#1754); a waiver with
+ * prose alone is reported in the mismatch's place.
  */
 function checkTokenFamilyPairing(line, lineNum, file, isComponent) {
   const violations = [];
@@ -1373,7 +1377,8 @@ function checkTokenFamilyPairing(line, lineNum, file, isComponent) {
   if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) {
     return violations;
   }
-  if (line.includes('bds-lint-ignore')) return violations;
+  const waived = line.includes('bds-lint-ignore');
+  if (waived && lintIgnoreCitesIssue(line)) return violations;
 
   const isTsx = /\.tsx?$/.test(file);
   const isCss = /\.css$/.test(file);
@@ -1426,6 +1431,14 @@ function checkTokenFamilyPairing(line, lineNum, file, isComponent) {
       if (!cssProp) continue;
       pushViolation(m[1], m[2], cssProp, m.index);
     }
+  }
+
+  if (waived) {
+    return violations.map((v) => ({
+      ...v,
+      message: `${v.message} — bds-lint-ignore waiver cites no issue`,
+      suggestion: 'Cite the tracking issue in the waiver: `bds-lint-ignore token-family — <reason> (#NNN)`. A reviewed alias goes in the registry in docs/TOKEN-PR-CHECKLIST.md; a deferred swap needs its own issue (#1754).',
+    }));
   }
 
   return violations;
