@@ -7,9 +7,12 @@
  * the consumer's `@brikdesigns/bds/styles.css`, like `bds-button`.
  *
  * CSS Override API: --bds-ghl-form-height (component-local runtime binding, set
- * from the `height` prop; not part of the canonical token registry). It is
- * reserved as `min-height` so the section holds its space before GHL's
- * `form_embed.js` sizes the frame; the script may then grow the frame past it.
+ * from the `height` prop; not part of the canonical token registry). It is the
+ * frame's initial height, so the section holds its space before GHL's
+ * `form_embed.js` loads. The script then resizes the frame by writing an inline
+ * `height` in both directions: it grows to fit the form and shrinks to the short
+ * thank-you message after submit. Never add a `min-height` floor here; it would
+ * pin the frame at the prop height.
  */
 
 .bds-ghl-form {
@@ -17,7 +20,6 @@
   width: 100%;
   max-width: 100%;
   height: var(--bds-ghl-form-height);
-  min-height: var(--bds-ghl-form-height);
   border: none;
   border-radius: var(--bds-border-radius-sm);
 }

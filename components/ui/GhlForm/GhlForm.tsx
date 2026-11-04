@@ -15,9 +15,10 @@ export interface GhlFormProps
    */
   formName: string;
   /**
-   * Height in px, from the embed code's `data-height`. Reserved as `min-height`
-   * so the section does not collapse before GHL's script sizes the frame; the
-   * frame grows past it if the form is taller.
+   * Height in px, from the embed code's `data-height`. The frame's initial
+   * height, so the section does not collapse before GHL's script loads. The
+   * script then resizes the frame in both directions: it grows to fit a taller
+   * form and shrinks to the short thank-you message after submit.
    */
   height: number;
   /**

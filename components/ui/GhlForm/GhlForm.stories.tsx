@@ -25,7 +25,7 @@ const meta: Meta<typeof GhlForm> = {
     height: {
       control: { type: 'number', min: 0, step: 10 },
       description:
-        "Height in px from the embed code's `data-height`, reserved as `min-height` so the section does not collapse before GHL sizes the frame.",
+        "Height in px from the embed code's `data-height`, the frame's initial height, so the section does not collapse before GHL sizes the frame. GHL's script then grows or shrinks it to fit.",
     },
     lazy: {
       control: 'boolean',
