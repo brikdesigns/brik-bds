@@ -296,10 +296,9 @@ const BOOLEAN_MODIFIERS = new Set([
  * This matters because the ramps would otherwise dominate rule 1. Grouping by
  * family puts `--color-blue-500` (numeric) beside `--color-blue-light` (word) in
  * one family, so the measured "takes steps" test fires and 57 ramp rungs across
- * 10 hues read as step-word violations — a disposition ADR-033 never made. That
- * the ramps carry two vocabularies at all is a real finding, but it is a finding
- * for an ADR amendment (§ 6), not something this gate may assert on its own.
- * Filed as brik-bds#1949.
+ * 10 hues read as step-word violations. The two vocabularies were dispositioned
+ * by ADR-043 § 4 (numeric only), recorded as an ADR-033 § Amendments entry
+ * (brik-bds#1949), and rule 7 judges the colour Primitive instead.
  */
 const SLOTS_BY_LENGTH = [...SLOT_REGISTRY].sort((a, b) => b.slot.length - a.slot.length);
 
