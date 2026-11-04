@@ -252,7 +252,7 @@ export function TableHead({
       className={bdsClass(
         'bds-table-head',
         sortable && 'bds-table-head--sortable',
-        stickyEnd && 'bds-table-head--sticky-end',
+        stickyEnd && 'bds-table-head--sticky',
         className,
       )}
       style={style}
@@ -336,7 +336,7 @@ export function TableCell({
 }: TableCellProps) {
   return (
     <td
-      className={bdsClass('bds-table-cell', stickyEnd && 'bds-table-cell--sticky-end', className)}
+      className={bdsClass('bds-table-cell', stickyEnd && 'bds-table-cell--sticky', className)}
       style={style}
       {...props}
     >
@@ -485,7 +485,7 @@ export function TableActionsCell({
       className={bdsClass(
         'bds-table-actions-cell',
         `bds-table-actions-cell--${align}`,
-        stickyEnd && 'bds-table-actions-cell--sticky-end',
+        stickyEnd && 'bds-table-actions-cell--sticky',
         className,
       )}
       style={style}

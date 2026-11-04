@@ -747,7 +747,7 @@ export const StickyEndColumn: Story = {
   ),
   play: async ({ canvasElement }) => {
     const wrapper = canvasElement.querySelector('.bds-table-scroll') as HTMLElement;
-    const cell = canvasElement.querySelector('.bds-table-actions-cell--sticky-end') as HTMLElement;
+    const cell = canvasElement.querySelector('.bds-table-actions-cell--sticky') as HTMLElement;
     await waitFor(() => expect(wrapper.scrollWidth).toBeGreaterThan(wrapper.clientWidth));
     await expect(getComputedStyle(cell).position).toBe('sticky');
     // Scrolled to the start, the pinned cell sits inside the wrapper's end edge

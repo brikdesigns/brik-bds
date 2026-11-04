@@ -430,27 +430,27 @@
    default, so a pinned one needs an opaque fill or the scrolling columns show
    through it; the fill follows the row's own state. Override with
    `--bds-table-sticky-end-bg`. */
-.bds-table-head--sticky-end,
-.bds-table-cell--sticky-end,
-.bds-table-actions-cell--sticky-end {
+.bds-table-head--sticky,
+.bds-table-cell--sticky,
+.bds-table-actions-cell--sticky {
   position: sticky;
   inset-inline-end: 0;
   z-index: 1;
   background-color: var(--bds-table-sticky-end-bg, var(--bds-background-primary));
 }
 
-.bds-table[data-header-bg="secondary"] .bds-table-head--sticky-end,
-.bds-table-row--selected .bds-table-cell--sticky-end,
-.bds-table-row--selected .bds-table-actions-cell--sticky-end,
-.bds-table[data-striped="true"] .bds-table-body .bds-table-row:nth-child(even) .bds-table-cell--sticky-end,
-.bds-table[data-striped="true"] .bds-table-body .bds-table-row:nth-child(even) .bds-table-actions-cell--sticky-end {
+.bds-table[data-header-bg="secondary"] .bds-table-head--sticky,
+.bds-table-row--selected .bds-table-cell--sticky,
+.bds-table-row--selected .bds-table-actions-cell--sticky,
+.bds-table[data-striped="true"] .bds-table-body .bds-table-row:nth-child(even) .bds-table-cell--sticky,
+.bds-table[data-striped="true"] .bds-table-body .bds-table-row:nth-child(even) .bds-table-actions-cell--sticky {
   background-color: var(--bds-table-sticky-end-bg, var(--bds-background-secondary));
 }
 
 /* Edge divider — only while columns still scroll under the pinned one. */
-.bds-table-scroll[data-end-clipped="true"] .bds-table-head--sticky-end,
-.bds-table-scroll[data-end-clipped="true"] .bds-table-cell--sticky-end,
-.bds-table-scroll[data-end-clipped="true"] .bds-table-actions-cell--sticky-end {
+.bds-table-scroll[data-end-clipped="true"] .bds-table-head--sticky,
+.bds-table-scroll[data-end-clipped="true"] .bds-table-cell--sticky,
+.bds-table-scroll[data-end-clipped="true"] .bds-table-actions-cell--sticky {
   box-shadow: inset var(--bds-border-width-md) 0 0 var(--bds-border-muted);
 }
 }
