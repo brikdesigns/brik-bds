@@ -1,7 +1,8 @@
 /**
  * Netlify Function — POST /api/feedback → Notion Backlog.
  *
- * Mirrors .storybook/middleware.mjs for the deployed static Storybook.
+ * Its dev-server twin, .storybook/middleware.mjs, was removed with the
+ * Storybook feedback widget (#2729).
  * Reads NOTION_TOKEN from the Netlify site's environment variables.
  */
 
