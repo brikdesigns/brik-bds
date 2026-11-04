@@ -711,6 +711,56 @@ export const Scrollable: Story = {
 };
 
 /**
+ * `stickyEnd` on the header and each cell of the last column pins it to the
+ * wrapper's end edge while the other columns scroll under it. The divider
+ * appears only while columns remain to scroll, and the pinned fill follows the
+ * row state (`striped` here). Needs `scrollable`.
+ *
+ * @summary Pinned end column stays visible during sideways scroll
+ */
+export const StickyEndColumn: Story = {
+  render: () => (
+    <div style={{ maxWidth: 'var(--bds-content-width-text-xs)' }}>
+      <Table scrollable striped aria-label="Clients">
+        <TableHeader>
+          <TableRow>
+            {wideColumns.map((column) => (
+              <TableHead key={column}>{column}</TableHead>
+            ))}
+            <TableHead stickyEnd>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {Array.from({ length: 4 }, (_, row) => (
+            <TableRow key={row}>
+              {wideColumns.map((column) => (
+                <TableCell key={column}>{`${column} ${row + 1}`}</TableCell>
+              ))}
+              <TableActionsCell stickyEnd>
+                <Button variant="secondary" icon={<Icon icon={Eye} />} label="View" />
+              </TableActionsCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const wrapper = canvasElement.querySelector('.bds-table-scroll') as HTMLElement;
+    const cell = canvasElement.querySelector('.bds-table-actions-cell--sticky') as HTMLElement;
+    await waitFor(() => expect(wrapper.scrollWidth).toBeGreaterThan(wrapper.clientWidth));
+    await expect(getComputedStyle(cell).position).toBe('sticky');
+    // Scrolled to the start, the pinned cell sits inside the wrapper's end edge
+    // and the divider shows; fully scrolled, the divider goes.
+    await waitFor(() => expect(wrapper).toHaveAttribute('data-end-clipped', 'true'));
+    const wrapperRight = wrapper.getBoundingClientRect().right;
+    await expect(Math.round(cell.getBoundingClientRect().right)).toBeLessThanOrEqual(Math.round(wrapperRight));
+    wrapper.scrollLeft = wrapper.scrollWidth;
+    await waitFor(() => expect(wrapper).not.toHaveAttribute('data-end-clipped'));
+  },
+};
+
+/**
  * A scrollable table inside the app shell: scrolling the table sideways and the
  * window downwards leaves the sticky `PageHeader` and `SubNavigation` — both
  * OUTSIDE the table — pinned.
