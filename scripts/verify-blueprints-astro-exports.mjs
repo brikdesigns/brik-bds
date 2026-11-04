@@ -139,6 +139,7 @@ writeFileSync(
 import type {
   KnownBlueprintKey,
   BlueprintSection,
+  BlueprintSectionContent,
   ClientFacts,
   ResolvedThemeMode,
   ResolvedAtmosphere,
@@ -191,13 +192,13 @@ const clientFacts: ClientFacts = {
   logoVariants: {},
 };
 
-function makeSection(overrides: Partial<BlueprintSection> & { sectionKey: string; sectionType: string; blueprintKey: KnownBlueprintKey }): BlueprintSection {
+function makeSection(overrides: Partial<BlueprintSectionContent> & { title?: string | null; subtitle?: string | null } & { sectionKey: string; sectionType: string; blueprintKey: KnownBlueprintKey }): BlueprintSection {
   const { blueprintKey, sectionKey, sectionType, ...rest } = overrides;
   return {
     sectionKey,
     sectionType,
-    heading: null,
-    subheading: null,
+    title: null,
+    subtitle: null,
     body: null,
     items: [],
     cta: null,
@@ -218,8 +219,8 @@ const heroSplitProps: BlueprintProps = {
     sectionKey: 'home_hero',
     sectionType: 'hero',
     blueprintKey: 'hero_split',
-    heading: 'Built to excel, driven to exceed',
-    subheading: 'Proving ground',
+    title: 'Built to excel, driven to exceed',
+    subtitle: 'Proving ground',
     body: 'A single-paragraph lead that fits inside 55ch and validates the lead rendering path.',
     cta: { label: 'Start the conversation', url: '/contact' },
   }),
@@ -231,7 +232,7 @@ const statsProps: BlueprintProps = {
     sectionKey: 'home_stats',
     sectionType: 'stats',
     blueprintKey: 'stats_bar',
-    heading: 'By the numbers',
+    title: 'By the numbers',
     items: [
       { title: '22+ years', description: 'Experience' },
       { title: '3 verticals', description: 'Healthcare · Land · Commercial' },
@@ -246,8 +247,8 @@ const servicesProps: BlueprintProps = {
     sectionKey: 'home_services',
     sectionType: 'services',
     blueprintKey: 'two_column_detail',
-    heading: 'How we work with you',
-    subheading: 'Three specialties',
+    title: 'How we work with you',
+    subtitle: 'Three specialties',
     body: 'Purpose-built teams for each line of business.',
     items: [
       { title: 'Healthcare real estate', description: 'Dental, veterinary, optometry — specialty brokerage with deep vertical expertise.' },
@@ -264,8 +265,8 @@ const narrativeProps: BlueprintProps = {
     sectionKey: 'home_about',
     sectionType: 'features',
     blueprintKey: 'story_split',
-    heading: 'Boutique by design',
-    subheading: 'Our approach',
+    title: 'Boutique by design',
+    subtitle: 'Our approach',
     body: 'Partner-direct from day one — we built the firm so clients never get handed off to a junior agent mid-transaction.',
     items: [
       { title: 'Managing partner', description: 'Every client works directly with a partner, not a team.' },
@@ -279,7 +280,7 @@ const testimonialsProps: BlueprintProps = {
     sectionKey: 'home_testimonials',
     sectionType: 'testimonials',
     blueprintKey: 'testimonials_featured_large',
-    heading: 'Client voices',
+    title: 'Client voices',
     items: [
       { title: 'Dr. Reference · Dental Practice', description: 'They understood our practice before we finished describing it. That alone saved us six months.' },
     ],
@@ -292,7 +293,7 @@ const ctaSplitProps: BlueprintProps = {
     sectionKey: 'home_cta',
     sectionType: 'cta',
     blueprintKey: 'cta_split_contact',
-    heading: 'Ready to talk?',
+    title: 'Ready to talk?',
     body: 'Reach out directly — you\\'ll be speaking with a partner within one business day.',
     cta: { label: 'Schedule an intro call', url: '/contact' },
   }),
@@ -304,8 +305,8 @@ const heroInteriorProps: BlueprintProps = {
     sectionKey: 'services_hero',
     sectionType: 'hero',
     blueprintKey: 'hero_interior_minimal',
-    heading: 'Services',
-    subheading: 'What we do',
+    title: 'Services',
+    subtitle: 'What we do',
     body: 'Purpose-built representation across healthcare, commercial, and land.',
   }),
 };
@@ -316,7 +317,7 @@ const ctaDarkProps: BlueprintProps = {
     sectionKey: 'services_cta',
     sectionType: 'cta',
     blueprintKey: 'cta_centered',
-    heading: 'Find your fit',
+    title: 'Find your fit',
     body: 'Schedule a consultation with a partner.',
     cta: { label: 'Book a call', url: '/contact' },
   }),
@@ -392,7 +393,7 @@ const ctaDarkProps: BlueprintProps = {
 writeFileSync(
   join(scratch, 'src/pages/interior.astro'),
   `---
-import type { BlueprintSection, BlueprintProps, ClientFacts, ResolvedTheme, KnownBlueprintKey } from '@brikdesigns/bds/blueprints-astro';
+import type { BlueprintSection, BlueprintSectionContent, BlueprintProps, ClientFacts, ResolvedTheme, KnownBlueprintKey } from '@brikdesigns/bds/blueprints-astro';
 import { Hero, Cta, SiteHeader } from '@brikdesigns/bds/blueprints-astro';
 
 const theme: ResolvedTheme = {
@@ -408,11 +409,11 @@ const clientFacts: ClientFacts = {
   logoUrl: null, logoVariants: {},
 };
 
-function mk(kind: 'hero' | 'cta', blueprintKey: KnownBlueprintKey, over: Partial<BlueprintSection>): BlueprintSection {
+function mk(kind: 'hero' | 'cta', blueprintKey: KnownBlueprintKey, over: Partial<BlueprintSectionContent> & { title?: string | null; subtitle?: string | null }): BlueprintSection {
   return {
     sectionKey: over.sectionKey ?? kind,
     sectionType: kind,
-    heading: null, subheading: null, body: null, items: [], cta: null,
+    title: null, subtitle: null, body: null, items: [], cta: null,
     visualNotes: { blueprintKey, moodKeywords: [], layoutBlueprint: 'test',
       imageOpportunity: null, illustrationOpportunity: null },
     ...over,
@@ -423,8 +424,8 @@ const heroInteriorProps: BlueprintProps = {
   theme, clientFacts,
   section: mk('hero', 'hero_interior_minimal', {
     sectionKey: 'services_hero',
-    heading: 'Services',
-    subheading: 'What we do',
+    title: 'Services',
+    subtitle: 'What we do',
     body: 'Purpose-built representation across healthcare, commercial, and land.',
   }),
 };
@@ -433,7 +434,7 @@ const ctaDarkProps: BlueprintProps = {
   theme, clientFacts,
   section: mk('cta', 'cta_centered', {
     sectionKey: 'services_cta',
-    heading: 'Find your fit',
+    title: 'Find your fit',
     body: 'Schedule a consultation with a partner.',
     cta: { label: 'Book a call', url: '/contact' },
   }),
@@ -643,7 +644,7 @@ import { GhlForm } from '@brikdesigns/bds/blueprints-astro';
 writeFileSync(
   join(scratch, 'src/pages/dispatched.astro'),
   `---
-import type { BlueprintSection, ClientFacts, ResolvedTheme, KnownBlueprintKey } from '@brikdesigns/bds/blueprints-astro';
+import type { BlueprintSection, BlueprintSectionContent, ClientFacts, ResolvedTheme, KnownBlueprintKey } from '@brikdesigns/bds/blueprints-astro';
 import { BlueprintDispatcher } from '@brikdesigns/bds/blueprints-astro';
 
 const theme: ResolvedTheme = {
@@ -667,12 +668,12 @@ const clientFacts: ClientFacts = {
   logoVariants: {},
 };
 
-function sec(blueprintKey: string, overrides: Partial<BlueprintSection> & { sectionKey: string }): BlueprintSection {
+function sec(blueprintKey: string, overrides: Partial<BlueprintSectionContent> & { title?: string | null; subtitle?: string | null } & { sectionKey: string }): BlueprintSection {
   return {
     sectionKey: overrides.sectionKey,
     sectionType: overrides.sectionType ?? 'content_block',
-    heading: overrides.heading ?? null,
-    subheading: overrides.subheading ?? null,
+    title: overrides.title ?? null,
+    subtitle: overrides.subtitle ?? null,
     body: overrides.body ?? null,
     items: overrides.items ?? [],
     cta: overrides.cta ?? null,
@@ -687,23 +688,23 @@ function sec(blueprintKey: string, overrides: Partial<BlueprintSection> & { sect
 }
 
 const sections: BlueprintSection[] = [
-  sec('hero_interior_minimal', { sectionKey: 'd_hero', sectionType: 'hero', heading: 'Dispatcher proving', body: 'Reads visualNotes.blueprintKey per section.' }),
+  sec('hero_interior_minimal', { sectionKey: 'd_hero', sectionType: 'hero', title: 'Dispatcher proving', body: 'Reads visualNotes.blueprintKey per section.' }),
   sec('stats_bar', { sectionKey: 'd_stats', sectionType: 'stats', items: [
     { title: '8', description: 'Blueprints shipped' },
     { title: '25', description: 'Library total' },
   ] }),
-  sec('two_column_detail', { sectionKey: 'd_services', sectionType: 'services', heading: 'What\\'s in v0.1', items: [
+  sec('two_column_detail', { sectionKey: 'd_services', sectionType: 'services', title: 'What\\'s in v0.1', items: [
     { title: 'Hero split 60/40', description: 'Text left, image right.' },
     { title: 'Stats dark bar', description: 'Proof points on dark.' },
   ] }),
-  sec('story_split', { sectionKey: 'd_about', sectionType: 'features', heading: 'How it works', body: 'Single prop shape; registry-driven dispatch.', items: [] }),
+  sec('story_split', { sectionKey: 'd_about', sectionType: 'features', title: 'How it works', body: 'Single prop shape; registry-driven dispatch.', items: [] }),
   sec('testimonials_featured_large', { sectionKey: 'd_test', sectionType: 'testimonials', items: [
     { title: 'Scaffold task · soon', description: 'When the portal scaffold runs, it emits <BlueprintDispatcher sections={...} /> on every page.' },
   ] }),
-  sec('cta_split_contact', { sectionKey: 'd_cta_split', sectionType: 'cta', heading: 'Reach out', body: 'Split CTA exercising phone + email.', cta: { label: 'Contact', url: '/contact' } }),
+  sec('cta_split_contact', { sectionKey: 'd_cta_split', sectionType: 'cta', title: 'Reach out', body: 'Split CTA exercising phone + email.', cta: { label: 'Contact', url: '/contact' } }),
   // Unknown key — falls through to BlueprintFallback.
-  sec('hero_centered_gradient' as KnownBlueprintKey, { sectionKey: 'd_unknown', sectionType: 'hero', heading: 'Not shipped yet' }),
-  sec('cta_centered', { sectionKey: 'd_cta_dark', sectionType: 'cta', heading: 'End of proof', cta: { label: 'Home', url: '/' } }),
+  sec('hero_centered_gradient' as KnownBlueprintKey, { sectionKey: 'd_unknown', sectionType: 'hero', title: 'Not shipped yet' }),
+  sec('cta_centered', { sectionKey: 'd_cta_dark', sectionType: 'cta', title: 'End of proof', cta: { label: 'Home', url: '/' } }),
 ];
 ---
 <html lang="en">

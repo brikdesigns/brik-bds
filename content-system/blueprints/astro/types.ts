@@ -330,12 +330,52 @@ export function isActionCta(
  * bodies; the scaffold template must render conditionally on null rather
  * than emitting `<p>null</p>` (the bug the Birdwell `NotionPageBody`
  * template shipped). See intel entry #18.
+ *
+ * The section's primary/secondary text is `title` / `subtitle` (the
+ * content-group taxonomy's slot names, brikdesigns#1494). `heading` /
+ * `subheading` is the deprecated spelling, still accepted so the portal
+ * writer and existing call sites migrate independently. A section carries
+ * one spelling or the other, never a mix — same union as `FooterColumn`
+ * (#2562). Templates read both through `resolveSectionTitles()`, never the
+ * keys directly. (#2563)
  */
-export interface BlueprintSection {
+export type BlueprintSection = BlueprintSectionContent &
+  (
+    | {
+        /** Section title — the primary text slot (usually the h2). */
+        readonly title: string | null;
+        /** Section subtitle — the secondary text slot (usually the eyebrow). */
+        readonly subtitle: string | null;
+        readonly heading?: never;
+        readonly subheading?: never;
+      }
+    | {
+        /** @deprecated Renamed to `title` (brikdesigns/brik-bds#2563); removed in the next major. */
+        readonly heading: string | null;
+        /** @deprecated Renamed to `subtitle` (brikdesigns/brik-bds#2563); removed in the next major. */
+        readonly subheading: string | null;
+        readonly title?: never;
+        readonly subtitle?: never;
+      }
+  );
+
+/**
+ * The single read point for a section's title/subtitle, whichever spelling
+ * it arrived in. Every blueprint template reads through this. (#2563)
+ */
+export function resolveSectionTitles(section: BlueprintSection): {
+  readonly title: string | null;
+  readonly subtitle: string | null;
+} {
+  return section.heading !== undefined
+    ? { title: section.heading, subtitle: section.subheading ?? null }
+    : { title: section.title ?? null, subtitle: section.subtitle ?? null };
+}
+
+/** Everything in a `BlueprintSection` except its title/subtitle pair. */
+export interface BlueprintSectionContent {
   readonly sectionKey: string;
   readonly sectionType: string;
-  readonly heading: string | null;
-  readonly subheading: string | null;
   readonly body: string | null;
   readonly items: readonly {
     readonly title: string;

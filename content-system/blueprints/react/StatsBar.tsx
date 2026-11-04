@@ -14,7 +14,7 @@
  * distinct from the adjacent body of the page.
  *
  * Contract: BlueprintProps.
- *   - section.heading (optional) — rendered as a visually-hidden label so the
+ *   - section.title (optional) — rendered as a visually-hidden label so the
  *     stats region has an accessible name
  *   - section.items[] — REQUIRED shape, each: { title, description }
  *     title = the number/string, description = the caption underneath
@@ -26,7 +26,7 @@
  * `BlockContentMotion` dispatcher; omitted → `none` (static). The first block to
  * adopt `count-up`, as `LogoWall` was for `marquee`.
  *
- * a11y: semantic list (ul/li). `aria-labelledby` when `section.heading` is
+ * a11y: semantic list (ul/li). `aria-labelledby` when `section.title` is
  * present, `aria-label` fallback when it is not. The numbers are content,
  * not decoration — screen readers read them (the count-up sweep only transiently
  * changes the text, so the final value is what assistive tech announces).
@@ -35,6 +35,7 @@
  */
 import { bdsClass } from '../../../components/utils';
 import type { BlueprintProps } from '../astro/types';
+import { resolveSectionTitles } from '../astro/types';
 import { BlockContentMotion } from './BlockContentMotion';
 import '../section-shell.css';
 import './StatsBar.css';
@@ -42,8 +43,9 @@ import './StatsBar.css';
 interface Props extends BlueprintProps {}
 
 export function StatsBar({ section }: Props) {
+  const titles = resolveSectionTitles(section);
   const titleId = `${section.sectionKey}-title`;
-  const hasHeading = Boolean(section.heading);
+  const hasHeading = Boolean(titles.title);
   // The content-motion axis (ADR-039 §Decision 2, #2529). `count-up` is the
   // value this block is built for — each stat number counts up into view via the
   // shared `BlockContentMotion` dispatcher, reduced-motion-gated by construction.
@@ -63,7 +65,7 @@ export function StatsBar({ section }: Props) {
       <div className="bds-blueprint-section__container">
         {hasHeading && (
           <h2 id={titleId} className="bds-visually-hidden">
-            {section.heading}
+            {titles.title}
           </h2>
         )}
 

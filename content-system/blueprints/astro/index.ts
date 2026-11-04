@@ -26,6 +26,7 @@ export type {
   KnownBlueprintKey,
   WiredBlueprintKey,
   BlueprintSection,
+  BlueprintSectionContent,
   BlueprintSectionMedia,
   BlueprintMediaRatio,
   BlueprintMediaSource,

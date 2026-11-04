@@ -22,8 +22,8 @@
  * always has.
  *
  * Contract: BlueprintProps.
- *   - section.heading    — section heading (h2)
- *   - section.subheading — eyebrow (optional)
+ *   - section.title      — section heading (h2)
+ *   - section.subtitle   — eyebrow (optional)
  *   - section.body       — the narrative (REQUIRED by content gen)
  *   - section.items[0]   — optional pull-quote:
  *                            item.title = attribution (role/name)
@@ -42,6 +42,7 @@
  * (right) — matches DOM order on every viewport.
  */
 import type { BlueprintAlign, BlueprintProps, KnownBlueprintKey } from './types';
+import { resolveSectionTitles } from './types';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
@@ -60,6 +61,7 @@ interface Props extends BlueprintProps {
 }
 
 const { section, blueprintKey, align = 'left' } = Astro.props;
+const titles = resolveSectionTitles(section);
 const titleId = `${section.sectionKey}-title`;
 const callout = section.items[0];
 ---
@@ -71,10 +73,10 @@ const callout = section.items[0];
 >
   <div class="bds-blueprint-section__container bds-narrative__container">
     <div class="bds-narrative__narrative">
-      {section.subheading && (
-        <p class="bds-narrative__subtitle">{section.subheading}</p>
+      {titles.subtitle && (
+        <p class="bds-narrative__subtitle">{titles.subtitle}</p>
       )}
-      <h2 id={titleId} class="bds-narrative__title">{section.heading}</h2>
+      <h2 id={titleId} class="bds-narrative__title">{titles.title}</h2>
       {section.body && (
         <p class="bds-narrative__lead">{section.body}</p>
       )}

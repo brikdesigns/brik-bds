@@ -16,7 +16,7 @@
  *
  * required_facts: []. Section-driven.
  *
- * a11y: a labelled region — aria-labelledby when section.heading is present
+ * a11y: a labelled region — aria-labelledby when section.title is present
  * (rendered as a visible eyebrow), aria-label fallback when it is not. The
  * marquee's duplicate track group is aria-hidden by `_Marquee`.
  *
@@ -27,6 +27,7 @@
  * `bds-*` class.
  */
 import type { BlueprintProps } from './types';
+import { resolveSectionTitles } from './types';
 // The file is underscore-prefixed (a partial excluded from the reachability
 // gate), but the imported identifier must be Capitalized for Astro to render it
 // as a component rather than a literal tag — same as `_Media.astro` → `Media`.
@@ -38,9 +39,10 @@ import '../section-shell.css';
 interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
+const titles = resolveSectionTitles(section);
 
 const titleId = `${section.sectionKey}-title`;
-const hasHeading = Boolean(section.heading);
+const hasHeading = Boolean(titles.title);
 const motion = section.contentMotion ?? 'none';
 const items = section.items;
 ---
@@ -53,7 +55,7 @@ const items = section.items;
 >
   <div class="bp-logo-wall__container">
     {hasHeading && (
-      <h2 id={titleId} class="bp-logo-wall__title">{section.heading}</h2>
+      <h2 id={titleId} class="bp-logo-wall__title">{titles.title}</h2>
     )}
 
     <div class="bp-logo-wall__strip" data-motion={motion}>

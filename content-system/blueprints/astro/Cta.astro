@@ -22,7 +22,7 @@
  *
  * ── Contract ─────────────────────────────────────────────────────
  * Props: BlueprintProps + `layout`.
- *   - section.heading   — CTA headline (h2 for page hierarchy)
+ *   - section.title     — CTA headline (h2 for page hierarchy)
  *   - section.body      — optional supporting paragraph
  *   - section.cta       — primary action (label + url)
  *   - clientFacts.phone — `--split` only, REQUIRED
@@ -53,6 +53,7 @@
  * - :focus-visible ring with high contrast on every interactive surface.
  */
 import type { BlueprintAlign, BlueprintProps, CtaLayout, KnownBlueprintKey } from './types';
+import { resolveSectionTitles } from './types';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
 import '../section-shell.css';
@@ -74,6 +75,7 @@ interface Props extends BlueprintProps {
 }
 
 const { section, clientFacts, layout = 'default', align = 'center', blueprintKey } = Astro.props;
+const titles = resolveSectionTitles(section);
 
 const titleId = `${section.sectionKey}-title`;
 const isSplit = layout === 'split';
@@ -114,7 +116,7 @@ const methods = isSplit
 >
   <div class="bds-blueprint-section__container bds-cta__container">
     <div class="bds-cta__message">
-      <h2 id={titleId} class="bds-cta__title">{section.heading}</h2>
+      <h2 id={titleId} class="bds-cta__title">{titles.title}</h2>
       {section.body && (
         <p class="bds-cta__description">{section.body}</p>
       )}

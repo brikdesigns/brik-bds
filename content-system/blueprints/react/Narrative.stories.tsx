@@ -91,8 +91,8 @@ export const AlignCenter: Story = {
 const storySection: BlueprintProps['section'] = {
   sectionKey: 'about-story-default',
   sectionType: 'content_block',
-  heading: 'A story-led section that introduces the brand.',
-  subheading: 'Who we are',
+  title: 'A story-led section that introduces the brand.',
+  subtitle: 'Who we are',
   body: 'A short paragraph of about-copy that sets context for the visitor — who you are, what you do, and the posture you bring to the work. Long enough to set the type rhythm but short enough that a visitor will actually read it.',
   cta: null,
   visualNotes: {

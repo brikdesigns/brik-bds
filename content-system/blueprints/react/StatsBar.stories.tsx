@@ -14,8 +14,8 @@ import { baseTheme, baseClientFacts } from './_fixtures';
 const statsSection: BlueprintProps['section'] = {
   sectionKey: 'stats-bar-default',
   sectionType: 'stats',
-  heading: 'By the numbers',
-  subheading: null,
+  title: 'By the numbers',
+  subtitle: null,
   body: null,
   cta: null,
   visualNotes: {

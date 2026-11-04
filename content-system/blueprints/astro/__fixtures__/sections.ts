@@ -19,8 +19,8 @@ type Section = BlueprintProps['section'];
 const heroSplit: Section = {
   sectionKey: 'hero-split-default',
   sectionType: 'hero',
-  heading: 'A clear, compelling headline goes here.',
-  subheading: 'Acme',
+  title: 'A clear, compelling headline goes here.',
+  subtitle: 'Acme',
   body: 'One or two sentences of supporting copy — long enough to set the rhythm of body type next to the headline without overwhelming it.',
   cta: { label: 'Learn more', url: '#' },
   visualNotes: {
@@ -36,8 +36,8 @@ const heroSplit: Section = {
 const heroInteriorMinimal: Section = {
   sectionKey: 'hero-interior-default',
   sectionType: 'hero',
-  heading: 'Interior page headline.',
-  subheading: 'Section',
+  title: 'Interior page headline.',
+  subtitle: 'Section',
   body: 'A short interior-page lead — one sentence of supporting copy that frames the page topic without competing with the headline.',
   cta: null,
   visualNotes: {
@@ -57,8 +57,8 @@ const heroInteriorMinimal: Section = {
 const heroCentered: Section = {
   ...heroInteriorMinimal,
   sectionKey: 'hero-centered-default',
-  heading: 'A centred headline.',
-  subheading: 'Section',
+  title: 'A centred headline.',
+  subtitle: 'Section',
   body: 'A short centred lead — one sentence that frames the page without competing with the headline.',
   cta: { label: 'Learn more', url: '#' },
 };
@@ -66,8 +66,8 @@ const heroCentered: Section = {
 const heroWithPricingCard: Section = {
   sectionKey: 'hero-img-card-default',
   sectionType: 'hero',
-  heading: 'Service detail headline.',
-  subheading: 'CATEGORY',
+  title: 'Service detail headline.',
+  subtitle: 'CATEGORY',
   body: 'A short interior-hero paragraph describing what this page covers — typically two or three sentences of supporting context before the visitor reaches the deliverable cards or pricing.',
   cta: { label: 'View details', url: '#' },
   breadcrumb: [
@@ -96,8 +96,8 @@ const heroWithPricingCard: Section = {
 const ctaDefault: Section = {
   sectionKey: 'cta-dark-centered-default',
   sectionType: 'cta',
-  heading: 'Ready to get started?',
-  subheading: null,
+  title: 'Ready to get started?',
+  subtitle: null,
   body: 'A closing prompt that earns the click — short, action-oriented, and specific to what the visitor gets after they tap the CTA.',
   cta: { label: 'Get in touch', url: '#contact' },
   visualNotes: {
@@ -113,8 +113,8 @@ const ctaDefault: Section = {
 const ctaSplit: Section = {
   sectionKey: 'cta-split-contact-default',
   sectionType: 'cta',
-  heading: 'Talk to a real person',
-  subheading: null,
+  title: 'Talk to a real person',
+  subtitle: null,
   body: 'Prefer to reach out directly? Call or email and someone on the team gets back to you the same day.',
   cta: { label: 'Start a project', url: '#start' },
   visualNotes: {
@@ -130,8 +130,8 @@ const ctaSplit: Section = {
 const cardGrid: Section = {
   sectionKey: 'services-grid-default',
   sectionType: 'services',
-  heading: 'Featured services',
-  subheading: 'Acme',
+  title: 'Featured services',
+  subtitle: 'Acme',
   body: 'A one-line section subheading that frames the service catalog below.',
   cta: null,
   visualNotes: {
@@ -170,8 +170,8 @@ const cardGrid: Section = {
 const cardGridTwoColumnList: Section = {
   sectionKey: 'services-two-col-default',
   sectionType: 'services',
-  heading: 'What we do',
-  subheading: 'Services',
+  title: 'What we do',
+  subtitle: 'Services',
   body: 'A one-line section subheading that frames the service catalog below — short enough to scan, specific enough to set expectations.',
   cta: null,
   visualNotes: {
@@ -194,8 +194,8 @@ const cardGridTwoColumnList: Section = {
 const narrative: Section = {
   sectionKey: 'about-story-default',
   sectionType: 'content_block',
-  heading: 'A story-led section that introduces the brand.',
-  subheading: 'Who we are',
+  title: 'A story-led section that introduces the brand.',
+  subtitle: 'Who we are',
   body: 'A short paragraph of about-copy that sets context for the visitor — who you are, what you do, and the posture you bring to the work. Long enough to set the type rhythm but short enough that a visitor will actually read it.',
   cta: null,
   visualNotes: {
@@ -217,8 +217,8 @@ const narrative: Section = {
 const features: Section = {
   sectionKey: 'features-branded-dark-default',
   sectionType: 'features',
-  heading: 'Featured capabilities',
-  subheading: null,
+  title: 'Featured capabilities',
+  subtitle: null,
   body: 'A short section subheading that frames the cards below — typically a cross-sell or capability roll-up.',
   cta: null,
   visualNotes: {
@@ -253,8 +253,8 @@ const features: Section = {
 const calloutPanel: Section = {
   sectionKey: 'support-plan-default',
   sectionType: 'cta',
-  heading: 'Monthly support services',
-  subheading: null,
+  title: 'Monthly support services',
+  subtitle: null,
   body: 'A short subheading that frames the support offering — what the visitor gets and why it matters to them.',
   cta: { label: 'Learn more', url: '#' },
   visualNotes: {
@@ -276,8 +276,8 @@ const calloutPanel: Section = {
 const statsBar: Section = {
   sectionKey: 'stats-bar-default',
   sectionType: 'stats',
-  heading: 'By the numbers',
-  subheading: null,
+  title: 'By the numbers',
+  subtitle: null,
   body: null,
   cta: null,
   visualNotes: {
@@ -309,8 +309,8 @@ const statsBarCountUp: Section = {
 const testimonialsFeaturedLarge: Section = {
   sectionKey: 'testimonials-featured-default',
   sectionType: 'testimonials',
-  heading: 'What clients say',
-  subheading: null,
+  title: 'What clients say',
+  subtitle: null,
   body: null,
   cta: null,
   visualNotes: {
@@ -365,8 +365,8 @@ const logoItems = ['Northwind', 'Acme Co.', 'Globex', 'Initech', 'Umbra'].map((n
 const logoWallStatic: Section = {
   sectionKey: 'logo-wall-static',
   sectionType: 'content_block',
-  heading: 'Trusted by teams everywhere',
-  subheading: null,
+  title: 'Trusted by teams everywhere',
+  subtitle: null,
   body: null,
   cta: null,
   contentMotion: 'none',

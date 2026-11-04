@@ -147,8 +147,8 @@ export const InteractionTestActionCta: Story = {
 const centeredSection: BlueprintProps['section'] = {
   sectionKey: 'cta-dark-centered-default',
   sectionType: 'cta',
-  heading: 'Ready to get started?',
-  subheading: null,
+  title: 'Ready to get started?',
+  subtitle: null,
   body: 'A closing prompt that earns the click — short, action-oriented, and specific to what the visitor gets after they tap the CTA.',
   cta: { label: 'Get in touch', url: '#contact' },
   visualNotes: {
@@ -164,8 +164,8 @@ const centeredSection: BlueprintProps['section'] = {
 const splitContactSection: BlueprintProps['section'] = {
   sectionKey: 'cta-split-contact-default',
   sectionType: 'cta',
-  heading: 'Talk to a real person',
-  subheading: null,
+  title: 'Talk to a real person',
+  subtitle: null,
   body: 'Prefer to reach out directly? Call or email and someone on the team gets back to you the same day.',
   cta: { label: 'Start a project', url: '#start' },
   visualNotes: {

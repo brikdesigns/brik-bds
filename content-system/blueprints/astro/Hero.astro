@@ -23,8 +23,8 @@
  *
  * ── Contract ─────────────────────────────────────────────────────
  * Props: BlueprintProps + `layout` (+ two `--with-pricing-card` options).
- *   - section.heading              — h1 (REQUIRED)
- *   - section.subheading           — eyebrow above h1 (optional)
+ *   - section.title                — h1 (REQUIRED)
+ *   - section.subtitle             — eyebrow above h1 (optional)
  *   - section.body                 — lead paragraph (optional)
  *   - section.cta                  — primary CTA (optional)
  *   - clientFacts.heroImageUrl     — `--split` media column; emits a
@@ -69,6 +69,7 @@
  *   the price-card image takes `section.priceCard.imageAlt` when informational.
  */
 import type { BlueprintAlign, BlueprintMedia, BlueprintProps, HeroLayout, KnownBlueprintKey } from './types';
+import { resolveSectionTitles } from './types';
 import HeroMediaCard from './HeroMediaCard.astro';
 import HeroMediaCardImage from './HeroMediaCardImage.astro';
 import HeroMediaCardPrice from './HeroMediaCardPrice.astro';
@@ -143,14 +144,15 @@ const {
   imageRatio,
   showServiceTag = true,
 } = Astro.props;
+const titles = resolveSectionTitles(section);
 
 const { breadcrumb = [], serviceLine, audience, iconUrl, iconAlt, priceCard } = section;
 // `serviceLine` is canonical; `audience` is the deprecated alias (#788).
 const resolvedServiceLine = serviceLine ?? audience;
 
 const titleId = `${section.sectionKey}-title`;
-const eyebrow = section.subheading;
-const headline = section.heading ?? '';
+const eyebrow = titles.subtitle;
+const headline = titles.title ?? '';
 const lead = section.body;
 const cta = section.cta;
 // Content-column entrance (motion axis, ADR-039 §Decision 2). `reveal` is a

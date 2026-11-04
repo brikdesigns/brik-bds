@@ -9,7 +9,7 @@
  * adjacent body of the page and reads as a weighty proof moment.
  *
  * Contract: BlueprintProps.
- *   - section.heading (optional, rendered as visually-hidden label
+ *   - section.title (optional, rendered as visually-hidden label
  *     for the stats region to give assistive tech a name)
  *   - section.items[] — REQUIRED shape, each: { title, description }
  *     title = the number/string, description = the caption
@@ -26,11 +26,12 @@
  *   --bds-stats-bar-label-color   (default: var(--bds-text-inverse))
  *   --bds-stats-bar-divider       (default: var(--bds-border-secondary))
  *
- * a11y: semantic list (ul/li). If section.heading present, wired via
+ * a11y: semantic list (ul/li). If section.title present, wired via
  * aria-labelledby; if absent, aria-label fallback. Numbers are
  * content, not decoration — readable by screen readers.
  */
 import type { BlueprintProps } from './types';
+import { resolveSectionTitles } from './types';
 // The file is underscore-prefixed (a partial excluded from the reachability
 // gate), but the imported identifier must be Capitalized for Astro to render it
 // as a component rather than a literal tag — same as `_Media.astro` → `Media`.
@@ -42,9 +43,10 @@ import '../section-shell.css';
 interface Props extends BlueprintProps {}
 
 const { section } = Astro.props;
+const titles = resolveSectionTitles(section);
 
 const titleId = `${section.sectionKey}-title`;
-const hasHeading = Boolean(section.heading);
+const hasHeading = Boolean(titles.title);
 const items = section.items;
 // Content-motion axis (#2529): `count-up` sweeps each stat number into view via
 // the shared `_CountUp` partial; the `bds-count-up` classes are canonical (from
@@ -60,7 +62,7 @@ const motion = section.contentMotion ?? 'none';
 >
   <div class="bp-stats-bar__container">
     {hasHeading && (
-      <h2 id={titleId} class="bds-visually-hidden">{section.heading}</h2>
+      <h2 id={titleId} class="bds-visually-hidden">{titles.title}</h2>
     )}
     <ul class="bp-stats-bar__list" role="list">
       {items.map((item) => (

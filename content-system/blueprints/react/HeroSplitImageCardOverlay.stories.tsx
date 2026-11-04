@@ -48,8 +48,8 @@ const serviceLineCascadeStyles = `
 const interiorHeroSection: BlueprintProps['section'] = {
   sectionKey: 'hero-img-card-default',
   sectionType: 'hero',
-  heading: 'Service detail headline.',
-  subheading: 'CATEGORY',
+  title: 'Service detail headline.',
+  subtitle: 'CATEGORY',
   body: 'A short interior-hero paragraph describing what this page covers — typically two or three sentences of supporting context before the visitor reaches the deliverable cards or pricing.',
   cta: { label: 'View details', url: '#' },
   breadcrumb: [

@@ -185,8 +185,8 @@ export const AnimatedSvg: Story = {
 const featuresSection: BlueprintProps['section'] = {
   sectionKey: 'features-branded-dark-default',
   sectionType: 'features',
-  heading: 'Featured capabilities',
-  subheading: null,
+  title: 'Featured capabilities',
+  subtitle: null,
   body: 'A short section subheading that frames the cards below — typically a cross-sell or capability roll-up.',
   cta: null,
   visualNotes: {

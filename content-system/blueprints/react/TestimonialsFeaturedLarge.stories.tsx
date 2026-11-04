@@ -14,8 +14,8 @@ import { baseTheme, baseClientFacts, placeholderImage } from './_fixtures';
 const testimonialSection: BlueprintProps['section'] = {
   sectionKey: 'testimonials-featured-default',
   sectionType: 'testimonials',
-  heading: 'What clients say',
-  subheading: null,
+  title: 'What clients say',
+  subtitle: null,
   body: null,
   cta: null,
   visualNotes: {
