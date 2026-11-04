@@ -85,7 +85,7 @@ if [ -f "$PROJECT_ROOT/scripts/token-audit.sh" ] && [ "$PROJECT_ROOT" != "$BDS_R
   fi
 fi
 
-# 1d. Check theme files for raw hex in Tier 2 (semantic) section
+# 1d. Check theme files for raw hex in the semantic block
 THEME_FILES=()
 while IFS= read -r -d '' f; do
   THEME_FILES+=("$f")
@@ -95,13 +95,14 @@ if [ ${#THEME_FILES[@]} -gt 0 ]; then
   printf "  Checking theme files for raw hex in semantic section... "
   HEX_VIOLATIONS=0
   for theme in "${THEME_FILES[@]}"; do
-    # Look for hex values that appear after the TIER 2 comment marker
-    if awk '/TIER 2/,EOF' "$theme" 2>/dev/null | grep -qE ':\s*#[0-9a-fA-F]{3,8}\s*;'; then
+    # Look for hex values after the SEMANTIC OVERRIDES comment marker.
+    # TIER 2 is the retired spelling of the same marker; older theme files carry it.
+    if awk '/TIER 2|SEMANTIC OVERRIDES/,EOF' "$theme" 2>/dev/null | grep -qE ':\s*#[0-9a-fA-F]{3,8}\s*;'; then
       HEX_VIOLATIONS=$((HEX_VIOLATIONS + 1))
-      OFFENDERS=$(awk '/TIER 2/,EOF' "$theme" | grep -nE ':\s*#[0-9a-fA-F]{3,8}\s*;' | sed 's/^/    /' || true)
+      OFFENDERS=$(awk '/TIER 2|SEMANTIC OVERRIDES/,EOF' "$theme" | grep -nE ':\s*#[0-9a-fA-F]{3,8}\s*;' | sed 's/^/    /' || true)
       echo -e "$FAIL"
       echo ""
-      echo -e "    ${RED}Raw hex in Tier 2 of $theme:${RESET}"
+      echo -e "    ${RED}Raw hex in the semantic block of $theme:${RESET}"
       echo "$OFFENDERS"
       echo ""
     fi
@@ -133,7 +134,7 @@ echo -e "${BOLD}Manual checks — complete before marking PR ready${RESET}"
 echo ""
 echo -e "${BOLD}  Author${RESET}"
 echo -e "  ${DIM}[ ]${RESET} PR diff is one concern (theme file, component, submodule sync — not all three)"
-echo -e "  ${DIM}[ ]${RESET} Every semantic token references a primitive via var() — no raw hex in Tier 2"
+echo -e "  ${DIM}[ ]${RESET} Every semantic token references a primitive via var() — no raw hex in the semantic block"
 echo -e "  ${DIM}[ ]${RESET} Token used in correct category:"
 echo -e "       ${DIM}page-*${RESET} → page backgrounds only"
 echo -e "       ${DIM}background-*${RESET} → UI element fills"
