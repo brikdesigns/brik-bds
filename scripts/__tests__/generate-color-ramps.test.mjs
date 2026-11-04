@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
-import { STOPS, ANCHOR_STOPS, buildAll } from '../generate-color-ramps.mjs';
+import { STOPS, ANCHOR_STOPS, buildAll, buildRamp } from '../generate-color-ramps.mjs';
 import { hexToOklch } from '../lib/oklch.mjs';
 import { contrastRatio, isHex } from '../lib/wcag.mjs';
 
@@ -288,5 +288,29 @@ describe('generate-color-ramps — a numeric-only Brand Kit (#2337)', () => {
       writeFileSync(BRAND_KIT, original);
       spawnSync('node', [GENERATOR], { cwd: REPO_ROOT, encoding: 'utf8' });
     }
+  });
+});
+
+describe('generate-color-ramps — the kit stops must match the ramp (ADR-047)', () => {
+  // The check that carries the anchor contract once the kit is numeric-authored:
+  // the round-trip assertion cannot fire (ADR-047 § Enforcement), so this one is
+  // what stops a hand-edited midpoint or an anchor moved without --apply.
+  const poppy = () =>
+    structuredClone(JSON.parse(readFileSync(BRAND_KIT, 'utf8'))['primitives/value'].color.poppy);
+
+  it('passes the committed kit', () => {
+    expect(() => buildRamp('poppy', poppy())).not.toThrow();
+  });
+
+  it('refuses a hand-edited midpoint', () => {
+    const entries = poppy();
+    entries['600'].$value = '#000001';
+    expect(() => buildRamp('poppy', entries)).toThrow(/Brand Kit stop 600 is #000001/);
+  });
+
+  it('refuses an anchor moved without re-deriving its midpoints', () => {
+    const entries = poppy();
+    entries['500'].$value = '#ff0000';
+    expect(() => buildRamp('poppy', entries)).toThrow(/Brand Kit stop 400 .* re-run it/);
   });
 });
