@@ -213,11 +213,11 @@
  * mode-aware companion fill consumed by the inverse `<Button>` variant
  * inside the hero, which IS a small bounded component.
  *
- * `data-audience='back-office'` is canonical; `data-audience='service'` is a
- * @deprecated alias kept for component-API compat during the cross-repo
- * rename. Both bind the orange back-office tokens (`service-back-office`,
- * renamed from the bug-named `service-service` in #563). API-level rename
- * `data-audience` → `data-service-line` is a separate cross-repo follow-up. */
+ * `data-service-line` is canonical; `data-audience` is the @deprecated alias
+ * (#788), and every rule dual-targets both. The value `back-office` is
+ * canonical; `service` is a @deprecated alias. Both bind the orange
+ * back-office tokens (`service-back-office`, renamed from the bug-named
+ * `service-service` in #563). Removing `data-audience` is #788 step 4. */
 .bds-hero--with-pricing-card:is([data-audience='brand'], [data-service-line='brand']) {
   background: var(--bds-surface-service-brand-inverse);
   --bds-hero-headline-color: var(--bds-text-service-brand-on-light);
