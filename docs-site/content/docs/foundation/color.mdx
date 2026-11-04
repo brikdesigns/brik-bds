@@ -14,6 +14,16 @@ Color tokens define the visual identity across all BDS themes. The system separa
 
 Click any swatch to copy `var(--token-name)` to your clipboard.
 
+## Which layer do I use?
+
+| You are filling… | Use |
+|---|---|
+| The page canvas: `body`, a full-bleed section | `--page-*` |
+| A region resting on the page: card, nav, panel | `--surface-*` |
+| A small element placed on a surface: button, input, solid badge, status fill | `--background-*` |
+
+**A raw `--color-*` primitive is never a page, surface, or background fill.** It is only for fixed-palette decoration that no semantic token covers, such as a colour swatch or a [tertiary or accent brand colour](/docs/content-system/vocabularies/color-primitive-tier#tertiary-and-accent-resolution). The three families are defined in the [cascade vocabulary](/docs/getting-started/cascade#color-foundations-vocabulary).
+
 ## Page and surface
 
 <ColorGrid
@@ -333,7 +343,7 @@ Four colour groups sit beside the numeric ramps. Each has one purpose, declared 
 
 ## Primitives
 
-Raw color scales from the Figma Brand Kit, rendered from `color-ramps.generated.json`. **Components reference these via semantic tokens — never directly.** The primitives change rarely; the semantic mappings change per theme.
+Raw color scales from the Figma Brand Kit, rendered from `color-ramps.generated.json`. **A primitive is never a page, surface, or background fill — reference it through a semantic token.** Its one direct use is fixed-palette decoration ([Which layer do I use?](#which-layer-do-i-use)). The primitives change rarely; the semantic mappings change per theme.
 
 <PaletteGrid title="Grayscale" palette={grayscale} prefix="--color-grayscale" columns={11} />
 <PaletteGrid title="Poppy (brand primary)" palette={poppy} prefix="--color-poppy" columns={11} />
