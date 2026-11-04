@@ -19,11 +19,11 @@
  * with a media area (image, a `<ServiceTag>` icon fallback, or a blank brand
  * block), an `h3` title, an optional description, and a "Learn more" CTA.
  *
- * ## Audience scope binding
+ * ## Service-line scope binding
  *
- * Each card emits `data-audience={item.audience}` to re-bind
+ * Each card emits `data-service-line={item.serviceLine}` to re-bind
  * `--bds-background-brand-primary` for that subtree. BDS ships the pattern, not
- * the values: the consumer defines the `[data-audience='X']` cascade rules in
+ * the values: the consumer defines the `[data-service-line='X']` cascade rules in
  * its own globals.css. Without them, every card resolves to the global brand
  * color (three identical cards — a missing-cascade bug on the consumer side,
  * not a renderer bug). Storybook demonstrates the pattern via a stories-only
@@ -93,12 +93,6 @@ export interface FeatureItem {
    * scope binding, and used for the `ServiceTag` icon fallback when no `imageUrl`.
    */
   serviceLine?: ServiceLine;
-  /**
-   * @deprecated Use `serviceLine`. Working alias — resolved as
-   * `serviceLine ?? audience`; the card emits both `data-service-line` and
-   * `data-audience` during the deprecation window (#788).
-   */
-  audience?: ServiceLine;
 }
 
 export interface FeaturesProps extends HTMLAttributes<HTMLElement> {
@@ -196,8 +190,7 @@ function FeaturesShell({
 
         <ul className="bds-features__grid" role="list">
           {items.map((item, idx) => {
-            // `serviceLine` is canonical; `audience` is the deprecated alias (#788).
-            const serviceLine = item.serviceLine ?? item.audience ?? null;
+            const serviceLine = item.serviceLine ?? null;
             // The static icon: image → ServiceTag → blank. It is ALSO the
             // `animated-svg` fallback — the reduced-motion / no-src / Astro-rail
             // state (#2533), so it is authored once and reused by the dispatch.
@@ -231,7 +224,6 @@ function FeaturesShell({
                   padding="none"
                   className="bds-features__card"
                   data-service-line={serviceLine ?? undefined}
-                  data-audience={serviceLine ?? undefined}
                 >
                   <a
                     className="bds-features__card-link"
@@ -298,9 +290,8 @@ function FeaturesFromSection({ section, blueprintKey }: FeaturesSectionProps) {
     href: item.href ?? undefined,
     imageUrl: item.imageUrl ?? undefined,
     imageAlt: item.imageAlt ?? undefined,
-    // `serviceLine` canonical; `audience` deprecated alias (#788). Resolve it
     // here so the card emits one consistent `data-service-line`.
-    serviceLine: (item.serviceLine ?? item.audience ?? undefined) as ServiceLine | undefined,
+    serviceLine: (item.serviceLine ?? undefined) as ServiceLine | undefined,
   }));
 
   return (

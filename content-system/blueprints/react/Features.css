@@ -8,7 +8,7 @@
  * Bold + 18px card title, 16px regular description — the AA-clearing posture
  * for white-on-saturated-brand backgrounds (BDS contrast burndown #40). Card
  * backgrounds resolve via `--bds-background-brand-primary`, re-bound per-card by
- * the consumer's `[data-audience='X']` cascade. BDS ships the pattern; the
+ * the consumer's `[data-service-line='X']` cascade. BDS ships the pattern; the
  * consumer ships the audience-specific values. Tier-4 `--bds-features-*` hooks
  * let a consumer retheme without forking the block.
  *
@@ -137,7 +137,7 @@
   width: 100%;
   /* Override the BDS Card outlined variant — branded cards read as
    * filled panels. Background resolves via --bds-background-brand-primary,
-   * re-bound per-card by the consumer's [data-audience='X'] cascade. */
+   * re-bound per-card by the consumer's [data-service-line='X'] cascade. */
   background: var(--bds-background-brand-primary);
   border: none;
   border-radius: var(--bds-features-card-radius, var(--bds-border-radius-lg));

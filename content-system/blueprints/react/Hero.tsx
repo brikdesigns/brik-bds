@@ -34,8 +34,7 @@
  * are absent for the simpler layouts. `ctaVariant` lets the pricing-card
  * variant render its `inverse` CTA against the service-line-tinted surface.
  * `data-service-line` (a plain attribute forwarded via `...rest`) drives the
- * service-token cascade in `Hero.css`; the @deprecated `data-audience` alias
- * still matches during the #788 window.
+ * service-token cascade in `Hero.css`.
  *
  * Hero blueprints own the page's singular `h1`.
  *
