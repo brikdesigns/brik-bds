@@ -11,8 +11,7 @@ import { addCollection } from '@iconify/react';
 import phData from '@iconify-json/ph/icons.json';
 addCollection(phData as Parameters<typeof addCollection>[0]);
 
-// Dev widgets — feedback FAB + inspector, rendered into the preview iframe
-import { FeedbackWidget } from './FeedbackWidget';
+// Dev widgets — inspector, rendered into the preview iframe
 import { InspectWidget } from './InspectWidget';
 import isChromatic from 'chromatic/isChromatic';
 
@@ -296,9 +295,9 @@ const preview: Preview = {
     },
     devWidgets: {
       name: 'Dev Widgets',
-      description: 'Show the Brik DevBar + Feedback widget in the preview',
-      // Default 'on' so the feedback widget collects design-system feedback
-      // from every visitor without requiring the toolbar toggle. Flip to 'off'
+      description: 'Show the Brik DevBar + Inspect widget in the preview',
+      // Default 'on' so the inspector is available to every visitor without
+      // requiring the toolbar toggle. Flip to 'off'
       // via the wrench toolbar when a story needs a clean canvas (e.g. visual
       // regression snapshots).
       defaultValue: 'on',
@@ -315,22 +314,17 @@ const preview: Preview = {
   decorators: [
     withTheme,
     // Dev widgets — on by default (devWidgets global) so every visitor to
-    // storybook.brikdesigns.com can submit design-system feedback and inspect
-    // components. Suppressed under Chromatic AND under the vitest browser
-    // runner (behavioral + ADR-026 visual gate) so neither the feedback FAB
-    // nor the DevBar/Inspect chrome appears in visual-regression snapshots;
+    // storybook.brikdesigns.com can inspect components. Suppressed under
+    // Chromatic AND under the vitest browser runner (behavioral + ADR-026
+    // visual gate) so no DevBar/Inspect chrome appears in visual-regression
+    // snapshots;
     // toggle off via the wrench toolbar for a clean canvas locally.
     (Story, context) => (
       <>
         <Story />
         {context.globals.devWidgets === 'on' &&
           !isChromatic() &&
-          !('__vitest_browser__' in globalThis) && (
-          <>
-            <FeedbackWidget />
-            <InspectWidget />
-          </>
-        )}
+          !('__vitest_browser__' in globalThis) && <InspectWidget />}
       </>
     ),
   ],
