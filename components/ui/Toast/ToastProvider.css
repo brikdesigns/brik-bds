@@ -1,0 +1,27 @@
+@layer bds-components {
+/*
+ * ToastProvider — fixed bottom-center stack. Position only: `Stack` owns the
+ * column and its rhythm, `Toast` owns the surface.
+ */
+
+.bds-toast-provider {
+  position: fixed;
+  bottom: var(--bds-gap-huge);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--bds-z-max);
+  width: calc(100% - 2 * var(--bds-gap-lg));
+  max-width: 600px; /* bds-lint-ignore — matches Toast max-width */
+  /* The container spans the viewport strip; only the toasts take clicks. */
+  pointer-events: none;
+}
+
+.bds-toast-provider__item {
+  pointer-events: auto;
+  animation: bds-slide-up var(--bds-duration-md) var(--bds-ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bds-toast-provider__item { animation: none; }
+}
+}

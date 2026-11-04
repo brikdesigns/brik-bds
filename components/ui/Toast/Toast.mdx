@@ -55,6 +55,31 @@ Component-scoped CSS variables exposed on `.bds-toast`. Set on a wrapping elemen
 }
 ```
 
+## ToastProvider
+
+Queue, stacking and auto-dismiss around `Toast`. Mount `ToastProvider` once near the app root, then call `useToast()` anywhere below it.
+
+<Canvas of={Stories.Provider} />
+
+```tsx
+const { success, error, toast, dismiss } = useToast();
+
+success('Changes saved');
+error('Save failed', 'Please try again.');
+const id = toast({ title: 'Uploading…', tone: 'info', duration: 0 }); // stays until dismissed
+dismiss(id);
+```
+
+| Behaviour | Detail |
+|---|---|
+| Stacking | Bottom-center, newest last. `maxVisible` (default `3`) show at once; the rest queue. |
+| Auto-dismiss | `duration` prop on the provider (default `4000` ms), overridable per toast. `0` keeps it until dismissed. The countdown starts when a toast becomes visible. |
+| Pause | Hovering or focusing a toast pauses its countdown. |
+| Urgency | `negative` toasts default to `assertive`; everything else is `polite`. Override per toast with `urgency`. |
+| Motion | The slide-up entrance is disabled under `prefers-reduced-motion`. |
+
+`useToast()` throws outside a `ToastProvider`.
+
 ## Notes
 
 ### Announcement priority

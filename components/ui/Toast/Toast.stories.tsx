@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Toast } from './Toast';
+import { ToastProvider, useToast } from './ToastProvider';
+import { Button } from '../Button';
+import { Stack } from '../Stack';
 
 const meta: Meta<typeof Toast> = {
   title: 'Components/toast',
@@ -70,4 +73,37 @@ export const Warning: Story = {
 /** @summary Info — info badge, circle-info icon */
 export const Info: Story = {
   args: { title: 'New update available', description: 'Version 2.1 is ready to install.', variant: 'info', onDismiss: () => {} },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   PROVIDER — queue, stacking, auto-dismiss
+   ═══════════════════════════════════════════════════════════════ */
+
+function ProviderDemo() {
+  const { success, error, warning, info } = useToast();
+  return (
+    <Stack orientation="horizontal" gap="sm">
+      <Button variant="outline" onClick={() => success('Changes saved', 'Your settings have been updated.')}>Success</Button>
+      <Button variant="outline" onClick={() => error('Something went wrong', 'Please try again.')}>Error</Button>
+      <Button variant="outline" onClick={() => warning('Session expiring')}>Warning</Button>
+      <Button variant="outline" onClick={() => info('New update available')}>Info</Button>
+    </Stack>
+  );
+}
+
+/**
+ * Wrap the app in `ToastProvider`, then call `useToast()` anywhere below it.
+ * Toasts stack bottom-center and auto-dismiss after 4 seconds; only
+ * `maxVisible` (3) show at once, the rest wait their turn. Hover or focus a
+ * toast to pause its countdown.
+ *
+ * @summary Provider + hook for queued, stacked, auto-dismissing toasts
+ */
+export const Provider: Story = {
+  render: () => (
+    <ToastProvider>
+      <ProviderDemo />
+    </ToastProvider>
+  ),
+  parameters: { layout: 'padded' },
 };
