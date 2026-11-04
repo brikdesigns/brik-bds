@@ -24,8 +24,8 @@ import { dirname, join } from 'node:path';
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(here, '..', '..');
 
+// The Storybook dev-server middleware was removed with its widget (#2729).
 const HANDLERS = [
-  ['.storybook/middleware.mjs', 'Storybook dev-server middleware'],
   ['netlify/functions/feedback.mjs', 'deployed Netlify function'],
 ];
 
