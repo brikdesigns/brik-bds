@@ -57,14 +57,14 @@
 .bds-text-input-field {
   /* ─── Component-scoped override surface ── */
   --text-input-focus-ring-width: 1px; /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-  --text-input-bg: var(--bds-background-input); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --text-input-bg: var(--bds-background-input); /* bds-lint-ignore — component-scoped CSS variable, not a design token (#914) */
   width: 100%;
   padding: 0 var(--bds-padding-xs);
   font-family: var(--bds-font-family-body);
   font-weight: var(--bds-font-weight-regular);
   line-height: var(--bds-font-line-height-normal);
   color: var(--bds-text-primary);
-  background-color: var(--text-input-bg); /* bds-lint-ignore — component-scoped CSS variable, not a design token; defaults to --bds-background-input */
+  background-color: var(--text-input-bg); /* bds-lint-ignore — component-scoped CSS variable, not a design token; defaults to --bds-background-input (#914) */
   /* Theme native date/time/number controls (calendar popup, spin buttons) to
      the brand instead of the browser default blue. Mirrors Checkbox.css. */
   accent-color: var(--bds-background-brand-primary);

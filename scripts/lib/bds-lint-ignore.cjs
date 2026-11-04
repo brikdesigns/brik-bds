@@ -57,6 +57,22 @@ function isBareLintIgnore(line) {
   return reason !== null && reason.length === 0;
 }
 
+// `#123`, `brik-bds#123`, `brikdesigns/brik-bds#123`. The lookahead rejects a
+// hex colour that starts with a digit (`#4f4f4f`); an all-digit hex (`#333`)
+// still reads as an issue ref.
+const ISSUE_REF_RE = /(?:^|[\s(,;])(?:[\w.-]+\/)?[\w.-]*#\d+(?![0-9a-fA-F])/;
+
+/**
+ * True when the line's `bds-lint-ignore` reason cites a tracked issue.
+ * The token-family waiver requires one (brikdesigns/brik-bds#1754): a
+ * cross-family alias is either a registry entry or a deferred swap, and both
+ * have an issue.
+ */
+function lintIgnoreCitesIssue(line) {
+  const reason = lintIgnoreReason(line);
+  return reason !== null && ISSUE_REF_RE.test(reason);
+}
+
 const BARE_IGNORE_RULE = 'bare-lint-ignore';
 const BARE_IGNORE_MESSAGE =
   'Bare `bds-lint-ignore` — a suppression must state why the line is exempt';
@@ -68,6 +84,7 @@ module.exports = {
   hasLintIgnore,
   lintIgnoreReason,
   isBareLintIgnore,
+  lintIgnoreCitesIssue,
   BARE_IGNORE_RULE,
   BARE_IGNORE_MESSAGE,
   BARE_IGNORE_FIX,

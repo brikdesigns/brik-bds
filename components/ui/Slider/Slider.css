@@ -71,7 +71,7 @@
 .bds-slider-input::-moz-range-track {
   height: var(--bds-slider-track-height, var(--bds-size-150));
   border-radius: var(--bds-border-radius-pill);
-  background: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: track rail (thin neutral line, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md */
+  background: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: track rail (thin neutral line, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md, #777 */
   border: none;
 }
 
@@ -123,12 +123,12 @@
 }
 
 .bds-slider-input:disabled::-webkit-slider-thumb {
-  background: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: disabled thumb flattened to border neutral; see docs/TOKEN-PR-CHECKLIST.md */
+  background: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: disabled thumb flattened to border neutral; see docs/TOKEN-PR-CHECKLIST.md, #777 */
   border-color: var(--bds-border-secondary);
 }
 
 .bds-slider-input:disabled::-moz-range-thumb {
-  background: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: disabled thumb flattened to border neutral; see docs/TOKEN-PR-CHECKLIST.md */
+  background: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: disabled thumb flattened to border neutral; see docs/TOKEN-PR-CHECKLIST.md, #777 */
   border-color: var(--bds-border-secondary);
 }
 }

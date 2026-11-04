@@ -206,7 +206,7 @@
 .bds-task-console .bds-task-console__icon--in-progress {
   width: var(--bds-icon-lg);
   height: var(--bds-icon-lg);
-  border-color: var(--bds-surface-muted); /* bds-lint-ignore token-family — intentional alias: spinner track needs surface-tracking lightness (no border token stays subtle in both light brand-theme + dark mode); see docs/TOKEN-PR-CHECKLIST.md */
+  border-color: var(--bds-surface-muted); /* bds-lint-ignore token-family — intentional alias: spinner track needs surface-tracking lightness (no border token stays subtle in both light brand-theme + dark mode); see docs/TOKEN-PR-CHECKLIST.md, #777 */
   border-top-color: var(--bds-border-brand-primary);
 }
 

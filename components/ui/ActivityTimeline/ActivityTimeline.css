@@ -66,7 +66,7 @@
   width: 2px; /* bds-lint-ignore — hairline connector */
   flex: 1;
   min-height: 20px; /* bds-lint-ignore — minimum connector height */
-  background-color: var(--bds-border-muted); /* bds-lint-ignore token-family — intentional alias: hairline connector (border semantics, fill mechanics); see docs/TOKEN-PR-CHECKLIST.md */
+  background-color: var(--bds-border-muted); /* bds-lint-ignore token-family — intentional alias: hairline connector (border semantics, fill mechanics); see docs/TOKEN-PR-CHECKLIST.md, #777 */
 }
 
 /* ─── Content ────────────────────────────────────────────────── */

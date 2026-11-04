@@ -105,10 +105,29 @@ describe('lint-tokens Rule 5 (token-family pairing)', () => {
     expect(violations).toEqual([]);
   });
 
-  it('honours bds-lint-ignore on the same line', () => {
+  it('honours a bds-lint-ignore that cites an issue on the same line', () => {
     const file = join(tmpDir, 'Ignored.css');
     writeFileSync(file, `
-      .x { background-color: var(--bds-border-muted); /* bds-lint-ignore token-family */ }
+      .x { background-color: var(--bds-border-muted); /* bds-lint-ignore token-family — hairline (#777) */ }
+    `);
+    const violations = runLinter({ cssFiles: [file] });
+    expect(violations).toEqual([]);
+  });
+
+  it('rejects a bds-lint-ignore that cites no issue (#1754)', () => {
+    const file = join(tmpDir, 'IgnoredUntracked.css');
+    writeFileSync(file, `
+      .x { background-color: var(--bds-border-muted); /* bds-lint-ignore token-family — hairline */ }
+    `);
+    const violations = runLinter({ cssFiles: [file] });
+    expect(violations).toHaveLength(1);
+    expect(violations[0].message).toMatch(/waiver cites no issue/);
+  });
+
+  it('does not flag an untracked bds-lint-ignore on a line with no family mismatch', () => {
+    const file = join(tmpDir, 'IgnoredClean.css');
+    writeFileSync(file, `
+      .x { background-color: var(--bds-background-primary); /* bds-lint-ignore — unrelated reason */ }
     `);
     const violations = runLinter({ cssFiles: [file] });
     expect(violations).toEqual([]);
