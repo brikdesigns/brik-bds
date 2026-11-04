@@ -32,9 +32,10 @@
  * `breadcrumb` and `eyebrow` are optional composed nodes (used by
  * `--with-pricing-card`); they render above the eyebrow text when present and
  * are absent for the simpler layouts. `ctaVariant` lets the pricing-card
- * variant render its `inverse` CTA against the audience-tinted surface.
- * `data-audience` (a plain attribute forwarded via `...rest`) drives the
- * service-token cascade in `Hero.css`.
+ * variant render its `inverse` CTA against the service-line-tinted surface.
+ * `data-service-line` (a plain attribute forwarded via `...rest`) drives the
+ * service-token cascade in `Hero.css`; the @deprecated `data-audience` alias
+ * still matches during the #788 window.
  *
  * Hero blueprints own the page's singular `h1`.
  *
@@ -144,7 +145,7 @@ export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   /**
    * Button variant for the primary CTA. Defaults to `primary`; the
    * `--with-pricing-card` variant passes `inverse` to sit on its
-   * audience-tinted surface.
+   * service-line-tinted surface.
    */
   ctaVariant?: ButtonVariant;
 }

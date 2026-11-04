@@ -17,7 +17,9 @@
  *                              price overlay + price CTA), or a
  *                              `data-content-needed` stub when `priceCard` is
  *                              absent (CI grep on `dist/` blocks publish).
- * `data-audience` is forwarded to `<Hero>` to drive the service-token cascade.
+ * `serviceLine ?? audience` is forwarded to `<Hero>` as both `data-service-line`
+ * (canonical) and `data-audience` (@deprecated, #788) to drive the
+ * service-token cascade.
  *
  * New consumers should compose `<Hero layout="with-pricing-card" …>` directly.
  * It is the supported dispatch path for its blueprint key, which three
@@ -42,15 +44,15 @@ interface Props extends BlueprintProps {
   imageRatio?: FrameRatio;
   /**
    * When false, suppresses the eyebrow icon slot (raw `iconUrl` image or the
-   * audience-driven `<ServiceTag>`) while keeping `audience` driving the
-   * hero's `data-audience` theming. Default true — the tag still renders when
+   * service-line-driven `<ServiceTag>`) while keeping `serviceLine` driving
+   * the hero's `data-service-line` theming. Default true — the tag still renders when
    * the prop is absent. (brik-bds#871)
    */
   showServiceTag?: boolean;
   /**
    * Decorative eyebrow icon as a rendered node — pass an SVG component or a
    * pre-configured `<Image>`. Takes precedence over `iconUrl` and the
-   * `audience` `<ServiceTag>`. Rendered inside an `aria-hidden` wrapper so
+   * `serviceLine` `<ServiceTag>`. Rendered inside an `aria-hidden` wrapper so
    * purely-decorative art carries no `img`/`alt` semantics (brik-bds#849).
    * React-only, like `onPriceCtaClick` — Astro blueprints can't pass a node.
    */
@@ -90,10 +92,11 @@ export function HeroSplitImageCardOverlay({
    *   1. `icon` (a rendered node) → render inside an `aria-hidden` wrapper —
    *      decorative SVG/Image, no img/alt semantics (brik-bds#849). React-only.
    *   2. `iconUrl` → raw `<img>` (legacy / decorative-image escape hatch, #546).
-   *   3. `audience` set → canonical `<ServiceTag>` — the design-system path.
+   *   3. `serviceLine` (or `audience`) set → canonical `<ServiceTag>` — the
+   *      design-system path.
    *   4. none → no eyebrow.
    * `showServiceTag={false}` suppresses the whole slot while leaving
-   * `data-audience` theming intact (brik-bds#871).
+   * `data-service-line` theming intact (brik-bds#871).
    */
   const eyebrowNode = showServiceTag
     ? icon
