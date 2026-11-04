@@ -2,7 +2,7 @@
   "version": "3.0.0",
   "last_reviewed": "2026-09-09",
   "review_cadence": "quarterly",
-  "_comment": "Shipped blueprint inventory — every entry dispatches on both rails (#2308). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
+  "_comment": "Shipped blueprint inventory — every entry dispatches on both rails unless it declares `rails` (#2308, #2304); collection_index, collection_entry and faq_accordion_grouped declare `[\"astro\"]` (#872). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
   "blueprints": [
     {
       "key": "hero_split",
@@ -422,6 +422,108 @@
       "required_facts": [],
       "atmospheres": [
         "none"
+      ]
+    },
+    {
+      "key": "collection_index",
+      "name": "Collection Index",
+      "section_type": "content_block",
+      "industries": [
+        "universal",
+        "saas",
+        "ecommerce",
+        "corporate",
+        "legal",
+        "finance",
+        "healthcare"
+      ],
+      "moods": [
+        "professional",
+        "modern",
+        "approachable",
+        "minimal"
+      ],
+      "layout_spec": "Section header (optional eyebrow, h2 title, optional lead) above a responsive grid of entry cards (1 column, 2 from 768px, 3 from 992px). Each card is an article: optional 3:2 image, optional service-line category label, h3 title that is the card's single stretched link, and the excerpt. No date is rendered — the item shape carries none. Lists blog posts, resources, case studies or news.",
+      "css_hints": ".bp-collection-index__list { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--bds-gap-lg); } .bp-collection-index__card { position: relative; border: var(--bds-border-width-md) solid var(--bds-border-secondary); border-radius: var(--bds-border-radius-md); } .bp-collection-index__link::after { content: ''; position: absolute; inset: 0; }",
+      "source": "brik-bds#872 — Astro-only block on the canonical rail (ADR-037)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-11-04",
+      "required_facts": [],
+      "atmospheres": [
+        "none"
+      ],
+      "rails": [
+        "astro"
+      ]
+    },
+    {
+      "key": "collection_entry",
+      "name": "Collection Entry",
+      "section_type": "content_block",
+      "industries": [
+        "universal",
+        "saas",
+        "ecommerce",
+        "corporate",
+        "legal",
+        "finance",
+        "healthcare"
+      ],
+      "moods": [
+        "professional",
+        "trustworthy",
+        "minimal",
+        "modern"
+      ],
+      "layout_spec": "Article detail for one collection entry. Section header (optional eyebrow, h2 title) above a single text-width column of long-form body. Body is plain text parsed into structure: blank lines split paragraphs, '## ' lines become h3, '### ' lines become h4, '- ' lines become a bulleted list. Rendered as text nodes only, never as HTML. No image: the item shape carries no per-entry image.",
+      "css_hints": ".bp-collection-entry__article { max-width: var(--bds-content-width-text-md); margin-inline: auto; } .bp-collection-entry__content > * + * { margin-top: var(--bds-gap-md); } .bp-collection-entry__content > * + :is(h3, h4) { margin-top: var(--bds-gap-xl); }",
+      "source": "brik-bds#872 — Astro-only block on the canonical rail (ADR-037)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-11-04",
+      "required_facts": [],
+      "atmospheres": [
+        "none"
+      ],
+      "rails": [
+        "astro"
+      ]
+    },
+    {
+      "key": "faq_accordion_grouped",
+      "name": "FAQ — Grouped Accordion",
+      "section_type": "faq",
+      "industries": [
+        "universal",
+        "healthcare",
+        "dental",
+        "legal",
+        "finance",
+        "saas",
+        "ecommerce"
+      ],
+      "moods": [
+        "professional",
+        "trustworthy",
+        "modern",
+        "minimal"
+      ],
+      "layout_spec": "Section header (optional eyebrow, h2 title, optional lead) above FAQ items grouped under h3 topic headings, in order of first appearance; items with no group render ungrouped, and with no groups at all the block is one flat list. Each item is a native details/summary disclosure: question in label-lg semibold on the summary with a decorative chevron that rotates when open, answer in body-md secondary text, items separated by a bottom border. Column capped at the text content width. No JavaScript.",
+      "css_hints": ".bp-faq-accordion__groups { max-width: var(--bds-content-width-text-md); display: flex; flex-direction: column; gap: var(--bds-gap-xl); } .bp-faq-accordion__item { border-bottom: var(--bds-border-width-sm) solid var(--bds-border-secondary); } .bp-faq-accordion__question { display: flex; justify-content: space-between; cursor: pointer; list-style: none; } .bp-faq-accordion__item[open] > .bp-faq-accordion__question::after { transform: rotate(-135deg); }",
+      "source": "brik-bds#872 — Astro-only block, promoted from the roadmap candidate of the same key",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-11-04",
+      "required_facts": [],
+      "atmospheres": [
+        "none"
+      ],
+      "rails": [
+        "astro"
       ]
     }
   ]

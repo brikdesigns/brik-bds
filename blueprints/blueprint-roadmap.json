@@ -348,32 +348,6 @@
       "catalogued_on": "2026-04-18"
     },
     {
-      "key": "faq_accordion_grouped",
-      "name": "FAQ — Grouped Accordion",
-      "section_type": "faq",
-      "disposition": "roadmap",
-      "industries": [
-        "universal",
-        "healthcare",
-        "dental",
-        "legal",
-        "finance",
-        "saas",
-        "ecommerce"
-      ],
-      "moods": [
-        "professional",
-        "trustworthy",
-        "modern",
-        "minimal"
-      ],
-      "layout_spec": "Full-width FAQ section. Section heading centered at top with optional subheading. Below: optional category tabs or pill filters (if multiple FAQ categories). FAQ items as accordion rows — question in bold (15px, 600 weight), expand chevron right-aligned, answer text (14px, muted, line-height 1.65) revealed on click with smooth max-height transition. Items separated by 1px bottom border. 20–30% narrower than full container width, centered, for readability. Open state: chevron rotates 180°, border-left 2px accent color.",
-      "css_hints": ".faq-list { max-width: 720px; margin: 0 auto; } .faq-item { border-bottom: 1px solid var(--rule-light); } .faq-trigger { display: flex; justify-content: space-between; align-items: center; padding: 20px 0; cursor: pointer; } .faq-content { overflow: hidden; transition: max-height 0.3s ease; } .faq-item.open .faq-trigger { color: var(--text-brand); }",
-      "source": "Original research",
-      "required_facts": [],
-      "catalogued_on": "2026-04-18"
-    },
-    {
       "key": "team_bio_grid",
       "name": "Team — Bio Grid",
       "section_type": "team",
