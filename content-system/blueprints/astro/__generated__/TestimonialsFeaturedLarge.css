@@ -1,9 +1,6 @@
 .bp-testimonials-featured {
     background: var(--bds-testimonials-featured-bg, var(--bds-surface-primary));
-    padding-block: var(
-      --bds-testimonials-featured-padding-y,
-      clamp(var(--bds-padding-xl), 7vw, var(--bds-padding-huge))
-    );
+    padding-block: var(--bds-testimonials-featured-padding-y, var(--bds-section-padding-block));
   }
 
   .bp-testimonials-featured__container {

@@ -21,6 +21,9 @@ import isChromatic from 'chromatic/isChromatic';
 //    The generated Brik layer is a delta over Foundations dark, so without the
 //    dark file Brik dark renders light text on dark fills (#2920).
 // 2. Gap-fills (manual tokens not yet in Figma)
+// 2b. Layout tier — device-fluid --bds-page-inset / --bds-section-padding-block
+//    (ADR-042). Consumers get it in dist/tokens.css; without it here every
+//    shell-band blueprint renders with 0 padding (#2740).
 // 3. Brik Brand theme (light + dark) — generated from the Brand Kit (#2910, #2927)
 // 4. Font Audit tool (client-sim theme for font-family validation)
 // 5. BDS shared keyframe library (bds-spin, bds-pulse, bds-pop, etc.)
@@ -31,6 +34,7 @@ import isChromatic from 'chromatic/isChromatic';
 import '../tokens/figma-tokens.css';
 import '../tokens/figma-tokens-dark.css';
 import '../tokens/gap-fills.css';
+import '../tokens/layout-fluid.css';
 import '../tokens/ratios.css';
 import '../tokens/theme-brand-brik.generated.css';
 import '../tokens/font-audit.css';
