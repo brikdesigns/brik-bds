@@ -178,7 +178,7 @@ Mobbin session is what keeps an agent clear of the derivative-works prohibition.
 
 **Open question — do not resolve in code.** §10.1 says _"All derivative works
 produced with the use of the Services […] belong to Mobbin."_ How far that
-reaches is a commercial/legal call, tracked in #1885. Until it is answered, hold
+reaches is a commercial/legal call, tracked in #1887. Until it is answered, hold
 the research-only line.
 
 The MCP is in beta, and pricing is stated differently in-product ("included with
