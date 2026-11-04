@@ -21,7 +21,7 @@ AGENT DECIDED (revisable): record the contract as the code holds it today, with 
 
 ### 1. Six anchors at fixed stops
 
-Each of the six old step names pins one numeric stop (`ANCHOR_STOPS`, `scripts/generate-color-ramps.mjs:89-96`):
+Each of the six old step names pins one numeric stop (`ANCHOR_STOPS`, `scripts/generate-color-ramps.mjs:94-101`):
 
 | Name | Stop |
 |---|---|
@@ -38,7 +38,7 @@ The mapping is ordinal, not by absolute lightness. Families do not share a light
 
 ### 2. Five generated stops, each the OKLCh midpoint of two anchors
 
-`DERIVED_FROM`, `scripts/generate-color-ramps.mjs:107-113`:
+`DERIVED_FROM`, `scripts/generate-color-ramps.mjs:112-118`:
 
 | Stop | Midpoint of |
 |---|---|
@@ -56,8 +56,8 @@ A generated stop reads anchors only, never another generated stop, so a rounding
 
 This is the disposition #2347 asked for: **invert**, not retire.
 
-- **Authored:** the numeric anchor stops (100, 300, 500, 700, 800, 950), in Figma and the kit JSON. When a kit has no word names, `buildRamp` reads each anchor from its pinned stop (`scripts/generate-color-ramps.mjs:198-210`). This is what fixed #2337.
-- **Derived:** the five midpoints, which the generator writes into the kit (`--apply`), and the six word names, which `applyRamp` re-emits as `{color.<family>.<stop>}` aliases marked `DEPRECATED` (`:353-363`).
+- **Authored:** the numeric anchor stops (100, 300, 500, 700, 800, 950), in Figma and the kit JSON. When a kit has no word names, `buildRamp` reads each anchor from its pinned stop (`scripts/generate-color-ramps.mjs:203-215`). This is what fixed #2337.
+- **Derived:** the five midpoints, which the generator writes into the kit (`--apply`), and the six word names, which `applyRamp` re-emits as `{color.<family>.<stop>}` aliases marked `DEPRECATED` (`:358-368`).
 - **Dropped from canonical CSS:** the word aliases. The `bds/retire-word-steps` preprocessor re-points any reference to them at the numeric stop, and `isCanonicalCssToken` filters them out (`scripts/lib/sd-bds.mjs:8-13`, `:122-124`). `dist/tokens.css` carries no word-step colour name.
 - **Still resolving for consumers:** the 54 unprefixed legacy names, through `tokens/compat/prefix-bridge.css` (`--color-blue-lightest: var(--bds-color-blue-100)`). That keeps the operator's 2026-09-09 direction not to delete the aliases until the numeric transition has proven out (quoted in the [#1949 disposition comment](https://github.com/brikdesigns/brik-bds/issues/1949)). Their removal is #2711.
 
@@ -82,8 +82,8 @@ The `tokens-gate` workflow runs `npm run gen:color-ramps:check` and `scripts/__t
 
 | Assertion | Where | Catches | Control, 2026-11-03 |
 |---|---|---|---|
-| Missing anchor | `scripts/generate-color-ramps.mjs:212-221` | a family with neither the word name nor its numeric stop | test "still refuses a family missing BOTH the name and its numeric stop" |
-| Kit stop vs generated | `:250-265` | a hand-edited midpoint, or an anchor moved without re-running `--apply` | tests under "the kit stops must match the ramp (ADR-047)": poppy `600` set to `#000001` throws; poppy `500` set to `#ff0000` throws at stop 400 |
-| Round-trip | `:233-248` | — | **cannot fire** (below) |
+| Missing anchor | `scripts/generate-color-ramps.mjs:217-226` | a family with neither the word name nor its numeric stop | test "still refuses a family missing BOTH the name and its numeric stop" |
+| Kit stop vs generated | `:255-270` | a hand-edited midpoint, or an anchor moved without re-running `--apply` | tests under "the kit stops must match the ramp (ADR-047)": poppy `600` set to `#000001` throws; poppy `500` set to `#ff0000` throws at stop 400 |
+| Round-trip | `:238-253` | — | **cannot fire** (below) |
 
 **The round-trip assertion is vacuous as written.** Both of its sides come from `resolveAnchor(familyName, entries, name)` on the same input, and no later loop overwrites an anchor stop. Every mismatch planted against it on 2026-11-03 (`light` aliased to the wrong stop, `light` a literal that disagrees with 500) was thrown by the kit-stop check first. What it was written for, that a word name lands on its pinned stop, is held by two other things: the kit-stop check, and the test "round-trips all six named steps", which asserts each alias is exactly `{color.<family>.<stop>}`. The assertion is left in place. It costs nothing and documents intent.
