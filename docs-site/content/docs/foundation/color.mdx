@@ -124,7 +124,7 @@ Canonical Figma tokens for positive, negative, and warning states. Background va
   columns={3}
 />
 
-**The `info` signal** — blue, and one of the five valence values. It came from Figma under the `status-` segment until [#1959](https://github.com/brikdesigns/brik-bds/issues/1959) freed the name: the gray family that used to hold `--*-info` is now `--*-neutral`, so `info` means blue and only blue. The `--*-status-info*` spellings still resolve as deprecated aliases for one minor ([#1958](https://github.com/brikdesigns/brik-bds/issues/1958) deletes them). There is no `--border-info` — the gray one retired with the rename and blue has no border counterpart.
+**The `info` signal** — blue, and one of the five valence values. It came from Figma under the `status-` segment until [#1959](https://github.com/brikdesigns/brik-bds/issues/1959) freed the name: the gray family that used to hold `--*-info` is now `--*-neutral`, so `info` means blue and only blue. The `--*-status-info*` spellings still resolve as deprecated aliases for one minor ([#1958](https://github.com/brikdesigns/brik-bds/issues/1958) deletes them). `info` has no Figma source. It is a hand-written gap-fill (`tokens/gap-fills.css:237-240`: background, text, surface and border), declared once in `:root` with no dark-mode value, so it does not flip with the theme. `--border-info` is the blue edge of an `outline` Badge.
 
 <ColorGrid
   colors={[
