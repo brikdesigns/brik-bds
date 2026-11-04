@@ -35,7 +35,7 @@ How a brand's third-and-beyond colours resolve:
 | **chromatic** (a colour) | the raw `--color-{name}` / `--color-{name}-{stop}` primitive — a canonical name already emitted into [tokens.css](/docs/foundation/color). Referenced ad hoc by generators and CSS. | none |
 | **neutral** (a gray) | the existing neutral path — the `neutral`-tier gray ramp, and in the portal mockup generator the dark/light/mid role assignment. | none (a neutral accent never gets a chromatic slot) |
 
-Consuming raw `--color-{name}` is **not** inventing a parallel taxonomy — those are canonical primitive names. `secondary` is unaffected: it keeps its `--*-brand-secondary` slot, which both generators emit. A future client that genuinely needs a tertiary brand slot returns here for a definition step first.
+Consuming raw `--color-{name}` for a tertiary or accent colour is **not** inventing a parallel taxonomy — those are canonical primitive names. It is decoration, never a fill: a raw `--color-*` is never a page, surface, or background fill ([Which layer do I use?](/docs/foundation/color#which-layer-do-i-use)). `secondary` is unaffected: it keeps its `--*-brand-secondary` slot, which both generators emit. A future client that genuinely needs a tertiary brand slot returns here for a definition step first.
 
 ## Anti-patterns
 
