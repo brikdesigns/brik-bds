@@ -1,3 +1,11 @@
+import type { Atmosphere, ThemeMode } from './atmosphere';
+import type { AnimationTier } from './animation-tier';
+import type { SpacingMode } from './spacing-mode';
+import type { TypographyMode } from './typography-mode';
+import type { RadiusMode } from './radius-mode';
+import type { ElevationMode } from './elevation-mode';
+import type { BorderWidthMode } from './borderwidth-mode';
+
 /**
  * Visual Style — the 13 canonical style directions captured in the client portal.
  *
@@ -33,6 +41,48 @@ export type VisualStyle = (typeof VISUAL_STYLE_VALUES)[number];
 
 export const isVisualStyle = (value: string): value is VisualStyle =>
   (VISUAL_STYLE_VALUES as readonly string[]).includes(value);
+
+/**
+ * What a Visual Style decides. Every key is optional: an omitted key means the
+ * style decides nothing on that axis, and the consumer leaves it at its own
+ * default (for the expression modes that is the attribute-absent state,
+ * ADR-039 § A1 — the defaults are not vocabulary members, so they cannot be
+ * named here). A preset never sets a colour, font or logo; those come from the
+ * client theme.
+ */
+export interface VisualStylePreset {
+  themeMode?: ThemeMode;
+  atmosphere?: Atmosphere;
+  spacingMode?: SpacingMode;
+  typographyMode?: TypographyMode;
+  radiusMode?: RadiusMode;
+  elevationMode?: ElevationMode;
+  borderWidthMode?: BorderWidthMode;
+  animationTier?: AnimationTier;
+}
+
+/**
+ * One preset per Visual Style (ADR-048 § 7, brik-llm ADR-050 decision A: BDS
+ * owns the vocabulary, the portal imports it). Content ratified by the
+ * operator on brik-bds#3007, 2026-11-05. `minimal-clinical` and `clean-bright`
+ * are deprecated aliases of `none` (DEPRECATED_ATMOSPHERES), so a style that
+ * wants no atmosphere layer says `none`.
+ */
+export const VISUAL_STYLE_PRESETS: Readonly<Record<VisualStyle, VisualStylePreset>> = {
+  Minimal:    { themeMode: 'light', atmosphere: 'none', spacingMode: 'spacious', typographyMode: 'comfortable', radiusMode: 'sharp', elevationMode: 'flat', borderWidthMode: 'thin', animationTier: 'subtle' },
+  Bold:       { atmosphere: 'cinematic-dramatic', spacingMode: 'comfortable', typographyMode: 'expressive', radiusMode: 'sharp', elevationMode: 'dramatic', borderWidthMode: 'thick', animationTier: 'expressive' },
+  Editorial:  { themeMode: 'light', atmosphere: 'editorial-luxury', spacingMode: 'spacious', typographyMode: 'spacious', radiusMode: 'sharp', elevationMode: 'flat', borderWidthMode: 'thin', animationTier: 'moderate' },
+  Playful:    { themeMode: 'light', atmosphere: 'warm-soft', spacingMode: 'comfortable', typographyMode: 'expressive', radiusMode: 'pill', elevationMode: 'lifted', animationTier: 'expressive' },
+  Luxurious:  { atmosphere: 'editorial-luxury', spacingMode: 'spacious', typographyMode: 'spacious', radiusMode: 'sharp', elevationMode: 'lifted', borderWidthMode: 'thin', animationTier: 'subtle' },
+  Modern:     { themeMode: 'light', atmosphere: 'none', spacingMode: 'comfortable', typographyMode: 'comfortable', radiusMode: 'round', elevationMode: 'lifted', borderWidthMode: 'thin', animationTier: 'moderate' },
+  Classic:    { themeMode: 'light', atmosphere: 'warm-soft', spacingMode: 'comfortable', typographyMode: 'comfortable', radiusMode: 'round', elevationMode: 'lifted', borderWidthMode: 'thin', animationTier: 'subtle' },
+  Dark:       { themeMode: 'dark', atmosphere: 'cinematic-dramatic', animationTier: 'moderate' },
+  Light:      { themeMode: 'light', atmosphere: 'none' },
+  Colorful:   { themeMode: 'light', atmosphere: 'warm-soft', spacingMode: 'comfortable', typographyMode: 'expressive', radiusMode: 'round', elevationMode: 'lifted', animationTier: 'expressive' },
+  Monochrome: { atmosphere: 'none', spacingMode: 'comfortable', typographyMode: 'comfortable', radiusMode: 'sharp', elevationMode: 'flat', borderWidthMode: 'thin', animationTier: 'subtle' },
+  Textural:   { themeMode: 'light', atmosphere: 'organic-textured', spacingMode: 'comfortable', typographyMode: 'comfortable', radiusMode: 'round', elevationMode: 'lifted', borderWidthMode: 'thick', animationTier: 'moderate' },
+  Brutalist:  { themeMode: 'light', atmosphere: 'none', spacingMode: 'compact', typographyMode: 'comfortable', radiusMode: 'sharp', elevationMode: 'flat', borderWidthMode: 'thick', animationTier: 'subtle' },
+};
 
 /**
  * Reference imagery registry.
