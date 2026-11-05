@@ -81,19 +81,6 @@
      Keep the two in lockstep, and move both together when promoted to Figma. */
   --bds-background-tertiary: var(--bds-color-grayscale-300);
 
-  /* Theme-responsive positive/success TEXT role (light value here, dark in the
-     :root[data-theme="dark"] block below). The generated --bds-text-positive
-     (figma-tokens.css) is --bds-color-system-green #27ae60 in BOTH themes = only
-     2.87:1 on white --bds-surface-primary, failing AA. Re-pin to green-darkest on
-     light surfaces (8.5:1 AAA). Fill roles (--background/surface/border-positive)
-     stay mid-green — text role only. RETIRE once the Figma source emits these
-     theme-responsive values and re-syncs. (#913)
-
-     A literal, not var(--bds-color-green-950): green-950 is a Brand Kit
-     primitive and :root is Foundations-only since #2910, which has no AA
-     green text step. Same value, so no consumer's render moves. */
-  --bds-text-positive: #2a5542; /* bds-lint-ignore — Foundations has no AA green text primitive (#913, #2910) */
-
   /* Theme-responsive AA-safe brand TEXT step (light value here, dark in the
      :root[data-theme="dark"] block below). --bds-text-brand-primary serves a
      heading/accent role and is gated AA-large (3:1) on the strength of that
@@ -470,26 +457,6 @@
      reads this token — do not reintroduce a literal. */
   --bds-state-disabled-opacity: 0.5;
 
-  /* ── Disabled pair — light-mode correction (#1571)
-     The Figma source emits --bds-text-disabled, --bds-background-disabled AND
-     --bds-border-disabled as the same --bds-color-grayscale-500 (#828282), so a
-     disabled Button painted its label in its own background colour: measured
-     1.00:1 on `components-button--disabled`, a solid grey blob with no visible
-     text. WCAG 1.4.3 exempts inactive components, so this is a legibility
-     defect rather than a conformance failure — but invisible is invisible.
-
-     Pale fill + mid-grey label reads as disabled and measures 5.22:1
-     (300 #e0e0e0 behind 700 #5a5a5a; re-derived against the current ramp at
-     #1809, replacing an unreproducible 5.45:1).
-     --bds-border-disabled stays at the generated -light: it is the edge against the
-     page, not against the fill. Dark mode is corrected in the Brik Brand Kit
-     (theme-brand-brik.generated.css), which owns the dark values at a higher
-     specificity than this block.
-
-     RETIRE both lines once the Figma variables are corrected and re-synced. */
-  --bds-background-disabled: var(--bds-color-grayscale-300);
-  --bds-text-disabled: var(--bds-color-grayscale-700);
-
   /* ── Motion semantic aliases ──
      Semantic duration + easing tokens consumed by all BDS component CSS.
      Durations alias Figma primitive duration tokens; the sm/md/lg/xl rungs and the
@@ -641,35 +608,10 @@
      = ~1.1:1, invisible. (#916) */
   --bds-background-tertiary: var(--bds-color-grayscale-950);
 
-  /* Dark value for the --bds-text-positive gap-fill (light value above, in :root).
-     On --bds-surface-primary = black in dark mode, mid-green --bds-color-system-green
-     #27ae60 clears AA at 7.31:1 (re-derived against the current ramp at #1809,
-     replacing an unreproducible 6.0:1) — consumer-validated in brikdesigns#455.
-     So dark mode keeps the generated mid-green; only the LIGHT value needed
-     correcting.
-     Re-pinned explicitly here (rather than left to the generated layer) to keep
-     the light/dark pair in lockstep and self-documenting. Figma source still
-     emits mid-green for both — correct it and drop both lines. (#913) */
-  --bds-text-positive: var(--bds-color-system-green);
-
   /* Dark value for the --bds-text-brand-primary-strong gap-fill (light value above,
      in :root): the Foundations dark --bds-text-brand-primary step. Pinned
      explicitly rather than left to inherit the :root value, to keep the
-     light/dark pair in lockstep and self-documenting — the same reason
-     --bds-text-positive is repeated here. Brik's brand pair is a Brand Kit
+     light/dark pair in lockstep and self-documenting. Brik's brand pair is a Brand Kit
      variable (#2270, #2927). */
   --bds-text-brand-primary-strong: var(--bds-color-grayscale-100);
-
-  /* Dark values for the disabled pair (light values above, in :root). The
-     generated dark layer repeats the light-mode defect — figma-tokens-dark.css
-     emits BOTH --bds-text-disabled and --bds-background-disabled as
-     --bds-color-grayscale-700, so a consumer running data-theme="dark" WITHOUT
-     .theme-brand-brik gets the same 1:1 invisible label. The Brik Brand Kit
-     (theme-brand-brik.generated.css) corrects the branded dark case at a higher specificity; this block covers
-     the bare one, landing on the same pair (3.29:1).
-
-     RETIRE both lines once the Figma variables are corrected and re-synced.
-     (#1571) */
-  --bds-background-disabled: var(--bds-color-grayscale-800);
-  --bds-text-disabled: var(--bds-color-grayscale-500);
 }

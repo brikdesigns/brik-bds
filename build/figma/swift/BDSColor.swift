@@ -52,4 +52,5 @@ public enum BDSColor {
     public static let colorAnnotationLightPink = Color(red: 0.9725, green: 0.9098, blue: 0.9922)
     public static let colorAnnotationLightPurple = Color(red: 0.9020, green: 0.8588, blue: 1.0000)
     public static let colorAnnotationLightBlue = Color(red: 0.8196, green: 0.8980, blue: 1.0000)
+    public static let colorGreen950 = Color(red: 0.1647, green: 0.3333, blue: 0.2588) /// AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542.
 }

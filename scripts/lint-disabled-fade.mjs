@@ -65,6 +65,7 @@ function argValue(flag) {
 }
 
 const SCAN_ROOT = argValue('--root') ?? join(ROOT, 'components', 'ui');
+const PAIRINGS = argValue('--pairings') ?? join(ROOT, 'tokens', 'contrast-pairings.json');
 const reportMode = process.argv.includes('--report');
 const jsonMode = process.argv.includes('--json');
 
@@ -400,17 +401,22 @@ const fadeRules = [...inventory].flatMap(([, e]) => e.rules.filter((r) => r.kind
 // RULE C — a fading component that paints its OWN resting fill, on the SAME
 // element and variant that fades, is on the wrong mechanism (ADR-028 pt-1).
 //
-// Enforced only for a fill at the component root painting a non-surface token;
-// that is the boundary ADR-028 § Amendment 2026-08-07 ratifies, and the set
-// #1701 converted (Chip, Tag solid/muted). Two narrower populations stay
-// report-only because the ADR has not ruled on them — see #1742:
-//   - sub-part fills (Pagination's arrow, Slider's track) — a fill inside a
-//     faded subtree, where nothing has measured whether the parent's single
-//     opacity is the same defect or an acceptable composition
-//   - surface-token fills, which pt-2 covers in prose
-// Reporting them while gating only the ratified half is deliberate: silently
-// dropping them would read as "covered", and gating them would be this gate
-// inventing a boundary the ADR never set.
+// Two things are enforced here, and they are deliberately different questions.
+//
+//   1. CONVERSION — a fill at the component root painting a non-surface token
+//      must be on the swap. That is the boundary ADR-028 § Amendment 2026-08-07
+//      ratifies, and the set #1701 converted (Chip, Tag solid/muted).
+//   2. MEASUREMENT — every other candidate (a sub-part fill such as Pagination's
+//      arrow or Slider's progress, or a surface-token fill such as an input's)
+//      must have its faded ratio scored by `contrast-gate`, i.e. a pairing with
+//      an `alpha` that names the component in `components` (#1742).
+//
+// Conversion is NOT enforced for the second population, and this is on purpose:
+// #1742's measurement shows eight of those pairings fall below 3:1, but whether
+// the answer is the swap (which contradicts Amendment §2 test 3 for the input
+// family) or a different opacity is an open decision (#3016). Gating a rule the
+// ADR has not made would invent a boundary; gating "nobody measured it" does
+// not — it is the same unmeasured-by-construction gap #1687 and #1701 closed.
 const ruleCCandidates = [...inventory]
   .map(([component, e]) => {
     if (!e.mechanisms.has('fade')) return null;
@@ -448,6 +454,33 @@ for (const [component, entry] of ruleCCandidates) {
       bareIgnore: false,
     });
   }
+}
+// The measurement half. A candidate is covered when a faded (`alpha`) pairing in
+// the contrast dataset names its component; the pairing then fails or carries a
+// tracked exception in `contrast-gate`, so the number cannot go stale unseen.
+const measuredFaded = new Set(
+  (JSON.parse(readFileSync(PAIRINGS, 'utf8')).pairings ?? [])
+    .filter((p) => p.alpha !== undefined)
+    .flatMap((p) => p.components ?? []),
+);
+for (const [component, entry] of ruleCCandidates) {
+  if (measuredFaded.has(component) || violations.some((v) => v.component === component)) continue;
+  const f = entry.ownFills[0];
+  const fade = entry.rules.find((r) => r.kind === 'fade');
+  violations.push({
+    rule: 'unmeasured-faded-fill',
+    component,
+    file: fade.file,
+    line: f.line,
+    selector: f.selector,
+    detail:
+      `paints ${f.value} (${f.scope}) and fades at ${fade.file}:${fade.line}, but no faded pairing in ` +
+      `tokens/contrast-pairings.json names ${component} in \`components\` — opacity composites the ` +
+      'label and the fill toward the same backdrop, so the enabled pair is not evidence about the faded ' +
+      'one. Measure it (node scripts/measure-disabled-contrast.mjs), add the pairing, and track an ' +
+      'exception if it fails (ADR-028 Amendment §3)',
+    bareIgnore: false,
+  });
 }
 // A fading component whose only fill is state-scoped is pt-2-correct today, but
 // it is the population that flips if #1701 widens the predicate — so it is
@@ -501,7 +534,7 @@ if (reportMode) {
     `\n  ── RULE C candidates: fading, but paint a RESTING fill ── ${DIM}${ruleCCandidates.length} component(s)${NC}`,
   );
   console.log(
-    `  ${DIM}ADR-028 pt-1 says these belong on the token swap. Report-only pending #1701.${NC}`,
+    `  ${DIM}Root fills on a non-surface token are gated for conversion (pt-1); every candidate here is gated for a measured faded pairing (#1742).${NC}`,
   );
   for (const [component, entry] of ruleCCandidates) {
     const fade = entry.rules.find((r) => r.kind === 'fade');
