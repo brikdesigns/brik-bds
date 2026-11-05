@@ -54,6 +54,9 @@ export const Default: Story = {
       'A two- or three-sentence description of the plan offering — what the cadence covers, what the deliverables look like, and what the visitor walks away with after signing up.',
     cta: { label: 'Learn more', url: '#' },
   },
+  // Toolbar > Atmosphere paints per-section effects only on
+  // `section[data-ambient]`; story-level so the default is unchanged (#529).
+  render: (args) => <CalloutPanel {...args} data-ambient="depth" />,
 };
 
 /**

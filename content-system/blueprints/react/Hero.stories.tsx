@@ -64,6 +64,9 @@ export const Default: Story = {
     cta: { label: 'Start a project', url: '#start' },
     media: demoImage,
   },
+  // Toolbar > Atmosphere paints per-section effects only on
+  // `section[data-ambient]`; story-level so Hero's default is unchanged (#529).
+  render: (args) => <Hero {...args} data-ambient="top-right" />,
 };
 
 /**

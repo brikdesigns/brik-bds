@@ -130,6 +130,9 @@ type Story = StoryObj<typeof HeroSplitImageCardOverlay>;
  */
 export const Default: Story = {
   args: baseProps,
+  // Toolbar > Atmosphere paints per-section effects only on
+  // `section[data-ambient]`; story-level so the default is unchanged (#529).
+  render: (args) => <HeroSplitImageCardOverlay {...args} data-ambient="split" />,
 };
 
 /* ─── Interaction tests — play-only, hidden from MCP discovery (Q5) ─── */
