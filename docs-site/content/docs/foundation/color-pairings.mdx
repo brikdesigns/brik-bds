@@ -204,6 +204,24 @@ node scripts/validate-themes.js --emit-matrix   # regenerate the table above
 
 To add or change a pairing, edit `tokens/contrast-pairings.json` and regenerate the matrix. The gate, the dashboard, and this page stay in lockstep because they read the same file.
 
+## Linting consumer overrides
+
+The gate scores BDS's own token values. A consumer that reassigns a `--bds-surface-*` / `--bds-background-*` token, or sets a raw color on one, composes a pairing the gate never saw (brikdesigns#676: `#bdbdbd` on `#4f4f4f` = 4.35:1, caught first by the downstream axe run). `lint-consumer-pairings` re-scores those overrides against this page's pairings, in the consumer's own PR gate:
+
+```bash
+npx lint-consumer-pairings src                                   # exits 1 on a failing pairing
+npx lint-consumer-pairings src --baseline .bds-pairings-baseline.json
+```
+
+- **`pairing-fails`** — an override changes a color a pairing uses; the re-scored pair falls below that pairing's floor (AA-large rows 3:1, all others 4.5:1 — the gate's floor, not the AAA aim).
+- **`unvalidated-surface`** — a raw hex/`rgb()` on a surface token that no pairing uses as a background, so no text is validated on it.
+- Escape hatch: `/* bds-lint-ignore <rule> — <reason> #<issue> */`. The marker needs an issue ref.
+- Faded (`alpha`) pairings are not re-scored; they composite onto a backdrop no token holds.
+
+The package ships the dataset as `@brikdesigns/bds/contrast-pairings.json` and the per-mode resolved set the lint reads as `@brikdesigns/bds/contrast-pairings.resolved.json`.
+
+**Adoption (brikdesigns, brik-client-portal):** add `"lint:pairings": "lint-consumer-pairings src --baseline .bds-pairings-baseline.json"` to `package.json`, run `npx lint-consumer-pairings src --baseline .bds-pairings-baseline.json --write-baseline` once to record existing violations (the baseline can only shrink), and call `npm run lint:pairings` from the same CI step that runs the token audit.
+
 ## Decision records
 
 The policies this page enforces are ratified in ADRs — all current, all cited inline above:
