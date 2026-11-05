@@ -117,7 +117,8 @@
       "brand",
       "elevated",
       "raised",
-      "borderless"
+      "borderless",
+      "filled"
     ],
     "status": [
       "not-configured",
