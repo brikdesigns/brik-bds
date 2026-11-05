@@ -205,6 +205,16 @@ describe('against the real contract (brikdesigns#676)', () => {
     expect(output).toContain('--bds-background-input (dark)');
   });
 
+  it('#1155 AC3: the secondary-text pairing is flagged below the AA floor (4.3599 -> 4.36; axe truncates it to 4.35)', () => {
+    const root = withReal({
+      'src/globals.css': ':root[data-theme="dark"] {\n  --bds-background-input: #4f4f4f;\n  --bds-text-secondary: #bdbdbd;\n}\n',
+    });
+    const { status, output } = run(root);
+    expect(status).toBe(1);
+    expect(output).toContain('--bds-text-secondary on --bds-background-input (dark)');
+    expect(output).toContain('#bdbdbd on #4f4f4f = 4.36:1, below the AA floor 4.5:1');
+  });
+
   it('CLEAN CONTROL: the BDS dark input fill via its own token passes', () => {
     const root = withReal({
       'src/globals.css': ':root[data-theme="dark"] {\n  --bds-background-input: var(--bds-color-grayscale-950);\n}\n',

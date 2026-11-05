@@ -67,6 +67,14 @@
     },
     {
       "group": "neutral",
+      "label": "Secondary text on input fill",
+      "fg": "--bds-text-secondary",
+      "bg": "--bds-background-input",
+      "thresholdType": "AA",
+      "note": "Secondary text a consumer renders inside a field (helper/prefix copy) is --bds-text-secondary. Gated AA so the consumer-pairing lint (#1155) reports the real ratio when a consumer reassigns --bds-background-input: brikdesigns#676 set it to #4f4f4f, where #bdbdbd secondary text is 4.3599:1 (axe truncates to 4.35; < 4.5)."
+    },
+    {
+      "group": "neutral",
       "label": "SegmentedControl inactive label on track",
       "fg": "--bds-text-on-color-light",
       "bg": "--bds-background-secondary",
