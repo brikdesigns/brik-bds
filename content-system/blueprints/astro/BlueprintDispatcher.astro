@@ -38,7 +38,7 @@
  * Since #2302 the Astro rail is one component per BLOCK, with the layout
  * carried as a prop, matching the React API. The registry is therefore what
  * turns a blueprint key into a (block, layout) pair — the key is no longer a
- * filename. Six blocks cover the twelve wired keys:
+ * filename. Twelve blocks cover the sixteen wired keys:
  *
  *   hero_split                    → Hero            layout="split"
  *   hero_split_image_card_overlay → Hero            layout="with-pricing-card"
@@ -53,10 +53,13 @@
  *   cta_split_contact             → Cta             layout="split"
  *   cta_centered                  → Cta             layout="default"
  *   logo_wall                     → LogoWall
+ *   collection_index              → CollectionIndex
+ *   collection_entry              → CollectionEntry
+ *   faq_accordion_grouped         → FaqAccordion
  *
  * `blueprintKey` is passed to the blocks that emit a per-key
- * `data-blueprint-key` marker (Hero, Cta, Narrative, Features), so one file keeps
- * emitting the distinct markers the scaffold contract asserts on. CardGrid and
+ * `data-blueprint-key` marker (Hero, Cta, Narrative, Features, CollectionIndex,
+ * CollectionEntry, FaqAccordion), so one file keeps emitting the distinct markers the scaffold contract asserts on. CardGrid and
  * CalloutPanel emit their own block-level marker instead (`card_grid` /
  * `callout_split`) — unchanged from the adapters they absorbed,
  * which emitted nothing of their own. `scripts/verify-blueprints-astro-
@@ -87,6 +90,9 @@ import CalloutPanel from './CalloutPanel.astro';
 import StatsBar from './StatsBar.astro';
 import TestimonialsFeaturedLarge from './TestimonialsFeaturedLarge.astro';
 import LogoWall from './LogoWall.astro';
+import CollectionIndex from './CollectionIndex.astro';
+import CollectionEntry from './CollectionEntry.astro';
+import FaqAccordion from './FaqAccordion.astro';
 import BlueprintFallback from './BlueprintFallback.astro';
 import { resolveSectionProps } from './section-axes';
 
@@ -107,6 +113,9 @@ const BLUEPRINT_REGISTRY = {
   cta_split_contact: { component: Cta, props: { layout: 'split', blueprintKey: 'cta_split_contact' } },
   cta_centered: { component: Cta, props: { layout: 'default', blueprintKey: 'cta_centered' } },
   logo_wall: { component: LogoWall, props: {} },
+  collection_index: { component: CollectionIndex, props: { blueprintKey: 'collection_index' } },
+  collection_entry: { component: CollectionEntry, props: { blueprintKey: 'collection_entry' } },
+  faq_accordion_grouped: { component: FaqAccordion, props: { blueprintKey: 'faq_accordion_grouped' } },
 } as const;
 
 interface Props {

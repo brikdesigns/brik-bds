@@ -705,6 +705,13 @@ const sections: BlueprintSection[] = [
   // Unknown key — falls through to BlueprintFallback.
   sec('hero_centered_gradient' as KnownBlueprintKey, { sectionKey: 'd_unknown', sectionType: 'hero', title: 'Not shipped yet' }),
   sec('cta_centered', { sectionKey: 'd_cta_dark', sectionType: 'cta', title: 'End of proof', cta: { label: 'Home', url: '/' } }),
+  sec('collection_index', { sectionKey: 'd_collection_index', sectionType: 'content_block', title: 'Latest entries', items: [
+    { title: 'First entry', description: 'An excerpt.', href: '/entries/first' },
+  ] }),
+  sec('collection_entry', { sectionKey: 'd_collection_entry', sectionType: 'content_block', title: 'An entry', body: 'Opening paragraph.\\n\\n## A heading\\n\\n- one\\n- two', items: [] }),
+  sec('faq_accordion_grouped', { sectionKey: 'd_faq', sectionType: 'faq', title: 'Questions', items: [
+    { title: 'A question?', description: 'An answer.', group: 'Topic' },
+  ] }),
 ];
 ---
 <html lang="en">
@@ -745,6 +752,9 @@ const DISPATCH_FIXTURE_KEYS = [
   'cta_split_contact',
   'hero_centered_gradient',
   'cta_centered',
+  'collection_index',
+  'collection_entry',
+  'faq_accordion_grouped',
 ];
 
 /**
@@ -1097,6 +1107,12 @@ const expectedFiles = [
   'content-system/blueprints/astro/CalloutPanel.astro',
   'content-system/blueprints/astro/StatsBar.astro',
   'content-system/blueprints/astro/TestimonialsFeaturedLarge.astro',
+  // Astro-only blocks (brik-bds#872) + the body parser `CollectionEntry.astro`
+  // imports — a co-located .ts, so it must be in `files` like section-axes.ts.
+  'content-system/blueprints/astro/CollectionIndex.astro',
+  'content-system/blueprints/astro/CollectionEntry.astro',
+  'content-system/blueprints/astro/FaqAccordion.astro',
+  'content-system/blueprints/astro/entry-body.ts',
   // Dispatch surface (PR #7)
   'content-system/blueprints/astro/BlueprintDispatcher.astro',
   'content-system/blueprints/astro/BlueprintFallback.astro',

@@ -1,0 +1,118 @@
+/* Section rhythm + centred container: ../section-shell.css (ADR-021). */
+
+  .bp-faq-accordion__header {
+    max-width: var(--bds-content-width-text-md);
+    margin-bottom: var(--bds-padding-xl);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Content rhythm (ADR-023 §3): subtitle→title is tight (--bds-gap-sm),
+     title→description is medium (--bds-gap-md). */
+
+  .bp-faq-accordion__header > * + * {
+    margin-top: var(--bds-gap-md);
+  }
+
+  .bp-faq-accordion__subtitle + .bp-faq-accordion__title {
+    margin-top: var(--bds-gap-sm);
+  }
+
+  .bp-faq-accordion__subtitle {
+    margin: 0;
+    font-family: var(--bds-font-family-subtitle);
+    font-size: var(--bds-subtitle-lg);
+    font-weight: var(--bds-font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: var(--bds-text-transform-subtitle, uppercase);
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bp-faq-accordion__title {
+    margin: 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-xl));
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-faq-accordion__description {
+    margin: 0;
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    line-height: var(--bds-font-line-height-normal);
+    color: var(--bds-text-secondary);
+  }
+
+  .bp-faq-accordion__groups {
+    max-width: var(--bds-content-width-text-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--bds-gap-xl);
+  }
+
+  .bp-faq-accordion__group-title {
+    margin: 0 0 var(--bds-gap-md);
+    font-family: var(--bds-font-family-heading);
+    font-size: var(--bds-heading-sm);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-faq-accordion__item {
+    border-bottom: var(--bds-border-width-sm) solid var(--bds-border-secondary);
+  }
+
+  .bp-faq-accordion__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--bds-gap-md);
+    padding-block: var(--bds-padding-md);
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-lg);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-snug);
+    color: var(--bds-text-primary);
+  }
+
+  /* Hide the UA disclosure marker (WebKit needs its own pseudo-element). */
+  .bp-faq-accordion__question::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Decorative chevron — no text, so it adds nothing to the accessible name. */
+  .bp-faq-accordion__question::after {
+    content: '';
+    flex: none;
+    width: var(--bds-padding-sm);
+    height: var(--bds-padding-sm);
+    border-right: var(--bds-border-width-md) solid currentColor;
+    border-bottom: var(--bds-border-width-md) solid currentColor;
+    transform: rotate(45deg);
+  }
+
+  .bp-faq-accordion__item[open] > .bp-faq-accordion__question::after {
+    transform: rotate(-135deg);
+  }
+
+  .bp-faq-accordion__question:focus-visible {
+    outline: var(--bds-border-width-md) solid var(--bds-border-focus);
+    outline-offset: var(--bds-border-width-md);
+  }
+
+  .bp-faq-accordion__answer {
+    padding-bottom: var(--bds-padding-md);
+  }
+
+  .bp-faq-accordion__answer p {
+    margin: 0;
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    line-height: var(--bds-font-line-height-relaxed);
+    color: var(--bds-text-secondary);
+  }

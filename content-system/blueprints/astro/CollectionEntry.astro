@@ -1,0 +1,180 @@
+---
+/**
+ * CollectionEntry — article-detail block for one entry of a collection (a blog
+ * post, resource, case study). Astro-only block on the canonical rail (ADR-037,
+ * brik-bds#872): `rails: ["astro"]` in blueprint-library.json, so there is no
+ * React twin. Section header, then the long-form body as real typographic
+ * structure (paragraphs, headings, lists), not a single `<p>`.
+ *
+ * `blueprintKey` is supplied by `BlueprintDispatcher.astro` and rendered as
+ * `data-blueprint-key`; composing this block directly emits no key marker.
+ *
+ * Contract: BlueprintProps.
+ *   - section.title    — entry title (h2, like every non-hero block, so the
+ *                        page's hero keeps the one h1)
+ *   - section.subtitle — eyebrow (optional)
+ *   - section.body     — the article text (REQUIRED by content gen)
+ *
+ * Body convention (parsed by `./entry-body.ts`, which has the tests):
+ *   - blank line  — paragraph break
+ *   - `## text`   — heading, rendered h3 (under the h2 title)
+ *   - `### text`  — sub-heading, rendered h4; promoted to h3 if no `## ` came first
+ *   - `- text`    — consecutive lines form one `<ul>`
+ *   - anything else is literal text. Body is untrusted CMS text: it is rendered
+ *     as text nodes only, never with `set:html`, so no markup can come through.
+ *
+ * No hero image: the item shape and `ClientFacts` carry no per-entry image
+ * (`clientFacts.heroImageUrl` is the site-wide hero, wrong for an article), so
+ * this block renders none rather than invent a field.
+ *
+ * Classes are `bp-collection-entry__*`, not `bds-*`: the canonical-class gate
+ * checks `bds-*` names against `dist/styles.css`, which is built from the React
+ * rail, and this block has no React twin to single-source them (same reason
+ * `SiteHeader.astro` uses `bp-site-header__*`).
+ *
+ * required_facts: []. Section-driven.
+ *
+ * Token pairs — paired family ↔ size only:
+ *   subtitle  : --bds-font-family-subtitle + --bds-subtitle-lg + --bds-text-transform-subtitle
+ *   title (h2): --bds-font-family-heading  + clamp(--bds-heading-lg, ..., --bds-heading-xl)
+ *   h3        : --bds-font-family-heading  + --bds-heading-md
+ *   h4        : --bds-font-family-heading  + --bds-heading-sm
+ *   prose     : --bds-font-family-body     + --bds-body-lg
+ *
+ * a11y: h2 + aria-labelledby; body headings follow it without skipping a level.
+ */
+import type { BlueprintProps, KnownBlueprintKey } from './types';
+import { resolveSectionTitles } from './types';
+import { parseEntryBody } from './entry-body';
+
+// Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
+import '../section-shell.css';
+
+interface Props extends BlueprintProps {
+  /**
+   * Blueprint key to emit as `data-blueprint-key`. Supplied by
+   * `BlueprintDispatcher.astro`; omitted when the block is composed directly.
+   */
+  blueprintKey?: KnownBlueprintKey;
+}
+
+const { section, blueprintKey } = Astro.props;
+const titles = resolveSectionTitles(section);
+const titleId = `${section.sectionKey}-title`;
+const blocks = parseEntryBody(section.body ?? '');
+---
+
+<section
+  class="bds-blueprint-section bp-collection-entry"
+  aria-labelledby={titleId}
+  data-blueprint-key={blueprintKey}
+>
+  <div class="bds-blueprint-section__container">
+    <article class="bp-collection-entry__article">
+      <header class="bp-collection-entry__header">
+        {titles.subtitle && (
+          <p class="bp-collection-entry__subtitle">{titles.subtitle}</p>
+        )}
+        <h2 id={titleId} class="bp-collection-entry__title">{titles.title}</h2>
+      </header>
+
+      <div class="bp-collection-entry__content">
+        {blocks.map((block) => {
+          if (block.type === 'heading') {
+            return block.level === 3 ? <h3>{block.text}</h3> : <h4>{block.text}</h4>;
+          }
+          if (block.type === 'list') {
+            return (
+              <ul>
+                {block.items.map((text) => <li>{text}</li>)}
+              </ul>
+            );
+          }
+          return <p>{block.text}</p>;
+        })}
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  /* Section rhythm + centred container: ../section-shell.css (ADR-021). */
+
+  .bp-collection-entry__article {
+    max-width: var(--bds-content-width-text-md);
+    margin-inline: auto;
+  }
+
+  .bp-collection-entry__header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--bds-gap-xl);
+  }
+
+  .bp-collection-entry__subtitle {
+    margin: 0;
+    font-family: var(--bds-font-family-subtitle);
+    font-size: var(--bds-subtitle-lg);
+    font-weight: var(--bds-font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: var(--bds-text-transform-subtitle, uppercase);
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bp-collection-entry__subtitle + .bp-collection-entry__title {
+    margin-top: var(--bds-gap-sm);
+  }
+
+  .bp-collection-entry__title {
+    margin: 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-xl));
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  /* Prose rhythm: every block is separated by --bds-gap-md; a heading takes a
+     larger gap above so it reads as the start of a new part. */
+  .bp-collection-entry__content > * {
+    margin: 0;
+  }
+
+  .bp-collection-entry__content > * + * {
+    margin-top: var(--bds-gap-md);
+  }
+
+  .bp-collection-entry__content > * + :is(h3, h4) {
+    margin-top: var(--bds-gap-xl);
+  }
+
+  .bp-collection-entry__content :is(h3, h4) {
+    font-family: var(--bds-font-family-heading);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-collection-entry__content h3 {
+    font-size: var(--bds-heading-md);
+  }
+
+  .bp-collection-entry__content h4 {
+    font-size: var(--bds-heading-sm);
+  }
+
+  .bp-collection-entry__content :is(p, li) {
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-lg);
+    line-height: var(--bds-font-line-height-relaxed);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-collection-entry__content ul {
+    padding-inline-start: var(--bds-padding-lg);
+  }
+
+  .bp-collection-entry__content li + li {
+    margin-top: var(--bds-gap-sm);
+  }
+</style>

@@ -1,0 +1,240 @@
+---
+/**
+ * FaqAccordion — grouped FAQ accordion. Astro-only block on the canonical rail
+ * (ADR-037, brik-bds#872): `rails: ["astro"]` in blueprint-library.json, so there
+ * is no React twin. Section header, then FAQ items under optional group headings.
+ *
+ * Built on native `<details>` / `<summary>`: no JavaScript and no client
+ * directive, so it opens and closes in static output, is keyboard-operable, and
+ * is announced as a disclosure by assistive tech with no ARIA added.
+ *
+ * `blueprintKey` is supplied by `BlueprintDispatcher.astro` and rendered as
+ * `data-blueprint-key`; composing this block directly emits no key marker.
+ *
+ * Contract: BlueprintProps.
+ *   - section.title / subtitle / body — header (h2 / eyebrow / lead)
+ *   - section.items[]                 — one disclosure per item:
+ *       item.title        = the question (the `<summary>`)
+ *       item.description  = the answer
+ *       item.group        = optional group name (additive field, see types.ts)
+ *
+ * Grouping: items with the same `group` are gathered under one h3, in order of
+ * first appearance. Items with no `group` form a leading group with no heading.
+ * When no item carries a `group` the block renders one flat list, no h3. (The
+ * existing `item.category` is a service-line enum, not a FAQ topic, so it is not
+ * reused for grouping.)
+ *
+ * Classes are `bp-faq-accordion__*`, not `bds-*`: the canonical-class gate
+ * checks `bds-*` names against `dist/styles.css`, which is built from the React
+ * rail, and this block has no React twin to single-source them (same reason
+ * `SiteHeader.astro` uses `bp-site-header__*`).
+ *
+ * required_facts: []. Section-driven.
+ *
+ * Token pairs — paired family ↔ size only:
+ *   subtitle    : --bds-font-family-subtitle + --bds-subtitle-lg + --bds-text-transform-subtitle
+ *   title (h2)  : --bds-font-family-heading  + clamp(--bds-heading-lg, ..., --bds-heading-xl)
+ *   lead        : --bds-font-family-body     + --bds-body-md
+ *   group (h3)  : --bds-font-family-heading  + --bds-heading-sm
+ *   question    : --bds-font-family-label    + --bds-label-lg
+ *   answer      : --bds-font-family-body     + --bds-body-md
+ *
+ * a11y: h2 + aria-labelledby; each named group is `role="group"` labelled by its
+ * h3. The disclosure chevron is a decorative `::after` and carries no text.
+ */
+import type { BlueprintProps, KnownBlueprintKey } from './types';
+import { resolveSectionTitles } from './types';
+
+// Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
+import '../section-shell.css';
+
+interface Props extends BlueprintProps {
+  /**
+   * Blueprint key to emit as `data-blueprint-key`. Supplied by
+   * `BlueprintDispatcher.astro`; omitted when the block is composed directly.
+   */
+  blueprintKey?: KnownBlueprintKey;
+}
+
+const { section, blueprintKey } = Astro.props;
+const titles = resolveSectionTitles(section);
+const titleId = `${section.sectionKey}-title`;
+
+// Group by `item.group`, preserving first-appearance order. The empty-string
+// key holds the ungrouped items and renders without a heading.
+const groups = new Map<string, (typeof section.items)[number][]>();
+for (const item of section.items) {
+  const name = item.group?.trim() ?? '';
+  const bucket = groups.get(name);
+  if (bucket) bucket.push(item);
+  else groups.set(name, [item]);
+}
+const groupList = [...groups.entries()].map(([name, items], index) => ({
+  name,
+  items,
+  headingId: `${section.sectionKey}-group-${index}`,
+}));
+---
+
+<section
+  class="bds-blueprint-section bp-faq-accordion"
+  aria-labelledby={titleId}
+  data-blueprint-key={blueprintKey}
+>
+  <div class="bds-blueprint-section__container">
+    <header class="bp-faq-accordion__header">
+      {titles.subtitle && (
+        <p class="bp-faq-accordion__subtitle">{titles.subtitle}</p>
+      )}
+      <h2 id={titleId} class="bp-faq-accordion__title">{titles.title}</h2>
+      {section.body && (
+        <p class="bp-faq-accordion__description">{section.body}</p>
+      )}
+    </header>
+
+    <div class="bp-faq-accordion__groups">
+      {groupList.map((group) => (
+        <div
+          class="bp-faq-accordion__group"
+          role={group.name ? 'group' : undefined}
+          aria-labelledby={group.name ? group.headingId : undefined}
+        >
+          {group.name && (
+            <h3 id={group.headingId} class="bp-faq-accordion__group-title">{group.name}</h3>
+          )}
+          <div class="bp-faq-accordion__list">
+            {group.items.map((item) => (
+              <details class="bp-faq-accordion__item">
+                <summary class="bp-faq-accordion__question">{item.title}</summary>
+                <div class="bp-faq-accordion__answer">
+                  <p>{item.description}</p>
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Section rhythm + centred container: ../section-shell.css (ADR-021). */
+
+  .bp-faq-accordion__header {
+    max-width: var(--bds-content-width-text-md);
+    margin-bottom: var(--bds-padding-xl);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Content rhythm (ADR-023 §3): subtitle→title is tight (--bds-gap-sm),
+     title→description is medium (--bds-gap-md). */
+
+  .bp-faq-accordion__header > * + * {
+    margin-top: var(--bds-gap-md);
+  }
+
+  .bp-faq-accordion__subtitle + .bp-faq-accordion__title {
+    margin-top: var(--bds-gap-sm);
+  }
+
+  .bp-faq-accordion__subtitle {
+    margin: 0;
+    font-family: var(--bds-font-family-subtitle);
+    font-size: var(--bds-subtitle-lg);
+    font-weight: var(--bds-font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: var(--bds-text-transform-subtitle, uppercase);
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bp-faq-accordion__title {
+    margin: 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-xl));
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-faq-accordion__description {
+    margin: 0;
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    line-height: var(--bds-font-line-height-normal);
+    color: var(--bds-text-secondary);
+  }
+
+  .bp-faq-accordion__groups {
+    max-width: var(--bds-content-width-text-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--bds-gap-xl);
+  }
+
+  .bp-faq-accordion__group-title {
+    margin: 0 0 var(--bds-gap-md);
+    font-family: var(--bds-font-family-heading);
+    font-size: var(--bds-heading-sm);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-faq-accordion__item {
+    border-bottom: var(--bds-border-width-sm) solid var(--bds-border-secondary);
+  }
+
+  .bp-faq-accordion__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--bds-gap-md);
+    padding-block: var(--bds-padding-md);
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-lg);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-snug);
+    color: var(--bds-text-primary);
+  }
+
+  /* Hide the UA disclosure marker (WebKit needs its own pseudo-element). */
+  .bp-faq-accordion__question::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Decorative chevron — no text, so it adds nothing to the accessible name. */
+  .bp-faq-accordion__question::after {
+    content: '';
+    flex: none;
+    width: var(--bds-padding-sm);
+    height: var(--bds-padding-sm);
+    border-right: var(--bds-border-width-md) solid currentColor;
+    border-bottom: var(--bds-border-width-md) solid currentColor;
+    transform: rotate(45deg);
+  }
+
+  .bp-faq-accordion__item[open] > .bp-faq-accordion__question::after {
+    transform: rotate(-135deg);
+  }
+
+  .bp-faq-accordion__question:focus-visible {
+    outline: var(--bds-border-width-md) solid var(--bds-border-focus);
+    outline-offset: var(--bds-border-width-md);
+  }
+
+  .bp-faq-accordion__answer {
+    padding-bottom: var(--bds-padding-md);
+  }
+
+  .bp-faq-accordion__answer p {
+    margin: 0;
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    line-height: var(--bds-font-line-height-relaxed);
+    color: var(--bds-text-secondary);
+  }
+</style>

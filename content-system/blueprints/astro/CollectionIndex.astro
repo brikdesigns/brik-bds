@@ -1,0 +1,279 @@
+---
+/**
+ * CollectionIndex — purpose-built listing of entries (blog posts, resources,
+ * case studies, news). Astro-only block on the canonical rail (ADR-037,
+ * brik-bds#872): `rails: ["astro"]` in blueprint-library.json, so there is no
+ * React twin. Section header, then a grid of cards, one `<article>` per entry.
+ *
+ * `blueprintKey` is supplied by `BlueprintDispatcher.astro` and rendered as
+ * `data-blueprint-key`; composing this block directly emits no key marker.
+ *
+ * Contract: BlueprintProps.
+ *   - section.title / subtitle / body — header (h2 / eyebrow / lead)
+ *   - section.items[]                 — one card per entry:
+ *       item.title        = entry title (h3); a real link when `href` is set
+ *       item.description  = excerpt
+ *       item.imageUrl     = card image (alt from `imageAlt`, decorative when omitted)
+ *       item.href         = the entry URL
+ *       item.category     = optional service-line label above the title
+ *
+ * No date is rendered: the item shape carries none and this block does not
+ * invent one. A `<time>` belongs here when an additive `date` field lands.
+ *
+ * Classes are `bp-collection-index__*`, not `bds-*`: the canonical-class gate
+ * checks `bds-*` names against `dist/styles.css`, which is built from the React
+ * rail, and this block has no React twin to single-source them (same reason
+ * `SiteHeader.astro` uses `bp-site-header__*`).
+ *
+ * required_facts: []. Section-driven.
+ *
+ * Token pairs — paired family ↔ size only:
+ *   subtitle    : --bds-font-family-subtitle + --bds-subtitle-lg + --bds-text-transform-subtitle
+ *   title (h2)  : --bds-font-family-heading  + clamp(--bds-heading-lg, ..., --bds-heading-xl)
+ *   lead        : --bds-font-family-body     + --bds-body-md
+ *   entry title : --bds-font-family-heading  + --bds-heading-sm
+ *   category    : --bds-font-family-label    + --bds-label-md
+ *   excerpt     : --bds-font-family-body     + --bds-body-md
+ *
+ * a11y: h2 + aria-labelledby; each entry is an `<article>` with an h3. The whole
+ * card is clickable through one link (the title's `::after` stretches over the
+ * card), so there is a single tab stop and no duplicate link text.
+ */
+import type { BlueprintProps, KnownBlueprintKey } from './types';
+import { resolveSectionTitles } from './types';
+import Media from './_Media.astro';
+
+// Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
+import '../section-shell.css';
+
+interface Props extends BlueprintProps {
+  /**
+   * Blueprint key to emit as `data-blueprint-key`. Supplied by
+   * `BlueprintDispatcher.astro`; omitted when the block is composed directly.
+   */
+  blueprintKey?: KnownBlueprintKey;
+}
+
+const { section, blueprintKey } = Astro.props;
+const titles = resolveSectionTitles(section);
+const titleId = `${section.sectionKey}-title`;
+
+const categoryLabels: Record<NonNullable<typeof section.items[number]['category']>, string> = {
+  brand: 'Brand',
+  marketing: 'Marketing',
+  information: 'Information',
+  product: 'Product',
+  'back-office': 'Back Office',
+  service: 'Back Office',
+};
+---
+
+<section
+  class="bds-blueprint-section bp-collection-index"
+  aria-labelledby={titleId}
+  data-blueprint-key={blueprintKey}
+>
+  <div class="bds-blueprint-section__container">
+    <header class="bp-collection-index__header">
+      {titles.subtitle && (
+        <p class="bp-collection-index__subtitle">{titles.subtitle}</p>
+      )}
+      <h2 id={titleId} class="bp-collection-index__title">{titles.title}</h2>
+      {section.body && (
+        <p class="bp-collection-index__description">{section.body}</p>
+      )}
+    </header>
+
+    {section.items.length > 0 && (
+      <ul class="bp-collection-index__list" role="list">
+        {section.items.map((item) => {
+          const categoryLabel = item.category ? categoryLabels[item.category] : null;
+          return (
+            <li class="bp-collection-index__item">
+              <article class="bp-collection-index__card">
+                {item.imageUrl && (
+                  <div class="bp-collection-index__media">
+                    <Media
+                      media="image"
+                      src={item.imageUrl}
+                      alt={item.imageAlt ?? ''}
+                      ratio="3-2"
+                      fit="cover"
+                    />
+                  </div>
+                )}
+                <div class="bp-collection-index__content">
+                  {categoryLabel && (
+                    <p class="bp-collection-index__category">{categoryLabel}</p>
+                  )}
+                  <h3 class="bp-collection-index__entry-title">
+                    {item.href ? (
+                      <a class="bp-collection-index__link" href={item.href}>{item.title}</a>
+                    ) : (
+                      item.title
+                    )}
+                  </h3>
+                  {item.description && (
+                    <p class="bp-collection-index__excerpt">{item.description}</p>
+                  )}
+                </div>
+              </article>
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </div>
+</section>
+
+<style>
+  /* Section rhythm + centred container: ../section-shell.css (ADR-021). */
+
+  .bp-collection-index__header {
+    max-width: var(--bds-content-width-text-md);
+    margin-bottom: var(--bds-padding-xl);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Content rhythm (ADR-023 §3): subtitle→title is tight (--bds-gap-sm),
+     title→description is medium (--bds-gap-md). */
+
+  .bp-collection-index__header > * + * {
+    margin-top: var(--bds-gap-md);
+  }
+
+  .bp-collection-index__subtitle + .bp-collection-index__title {
+    margin-top: var(--bds-gap-sm);
+  }
+
+  .bp-collection-index__subtitle {
+    margin: 0;
+    font-family: var(--bds-font-family-subtitle);
+    font-size: var(--bds-subtitle-lg);
+    font-weight: var(--bds-font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: var(--bds-text-transform-subtitle, uppercase);
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bp-collection-index__title {
+    margin: 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-xl));
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-collection-index__description {
+    margin: 0;
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    line-height: var(--bds-font-line-height-normal);
+    color: var(--bds-text-secondary);
+  }
+
+  .bp-collection-index__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--bds-gap-lg);
+  }
+
+  @media (min-width: 768px) {
+    .bp-collection-index__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 992px) {
+    .bp-collection-index__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .bp-collection-index__item {
+    display: flex;
+  }
+
+  .bp-collection-index__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: var(--bds-surface-primary);
+    border: var(--bds-border-width-md) solid var(--bds-border-secondary);
+    border-radius: var(--bds-border-radius-md);
+    overflow: hidden;
+  }
+
+  /* The image renders through the shared `<Media>` primitive; its `<Frame>` root
+     carries the 3/2 box, so no aspect-ratio is written here. */
+  .bp-collection-index__media {
+    background: var(--bds-surface-secondary);
+  }
+
+  .bp-collection-index__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bds-gap-md);
+    padding: var(--bds-padding-lg);
+    flex: 1 1 auto;
+  }
+
+  .bp-collection-index__category {
+    margin: 0;
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-md);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-snug);
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bp-collection-index__entry-title {
+    margin: 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: var(--bds-heading-sm);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-collection-index__link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* One stretched link per card: the pseudo-element covers the card, so the
+     whole card is the hit area while the title stays the only link text. */
+  .bp-collection-index__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .bp-collection-index__link:hover {
+    text-decoration: underline;
+  }
+
+  .bp-collection-index__link:focus-visible {
+    outline: none;
+  }
+
+  .bp-collection-index__link:focus-visible::after {
+    outline: var(--bds-border-width-md) solid var(--bds-border-focus);
+    outline-offset: calc(var(--bds-border-width-md) * -1);
+    border-radius: var(--bds-border-radius-md);
+  }
+
+  .bp-collection-index__excerpt {
+    margin: 0;
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    line-height: var(--bds-font-line-height-normal);
+    color: var(--bds-text-secondary);
+  }
+</style>

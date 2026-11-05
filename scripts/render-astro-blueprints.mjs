@@ -66,6 +66,10 @@ const BLOCKS = [
   // LogoWall's variant axis is the content-motion axis, not a layout — the two
   // slugs render the static strip and the marquee treatment (#2529).
   { name: 'LogoWall', layouts: ['static', 'marquee'] },
+  // Astro-only blocks (`rails: ["astro"]`, brik-bds#872) — no React twin, one slug each.
+  { name: 'CollectionIndex', layouts: [null] },
+  { name: 'CollectionEntry', layouts: [null] },
+  { name: 'FaqAccordion', layouts: [null] },
 ];
 
 /**

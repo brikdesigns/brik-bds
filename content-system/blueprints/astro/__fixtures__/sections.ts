@@ -386,6 +386,102 @@ const logoWallMarquee: Section = {
   contentMotion: 'marquee',
 };
 
+
+// ── CollectionIndex / CollectionEntry / FaqAccordion (brik-bds#872) ─────────
+// Astro-only blocks (`rails: ["astro"]`), so these fixtures have no React twin.
+
+const collectionIndex: Section = {
+  sectionKey: 'collection-index-default',
+  sectionType: 'content_block',
+  title: 'Latest from the journal',
+  subtitle: 'Resources',
+  body: 'Practical notes on running a growing business, written by the team.',
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'collection_index',
+    moodKeywords: ['professional', 'modern'],
+    layoutBlueprint: 'collection_index',
+    imageOpportunity: null,
+    illustrationOpportunity: null,
+  },
+  items: [
+    {
+      title: 'How we plan a quarter',
+      description: 'A walk through the three questions we answer before any work is scheduled.',
+      href: '/journal/plan-a-quarter',
+      imageUrl: placeholderImage(640, 427, '#eaf1fb', '#1f3d70', 'Plan'),
+      imageAlt: 'A planning board with sticky notes',
+      category: 'information',
+    },
+    {
+      title: 'What a good brief contains',
+      description: 'The short list of facts that make the first draft land closer to the mark.',
+      href: '/journal/good-brief',
+      imageUrl: placeholderImage(640, 427, '#eef2f7', '#33415a', 'Brief'),
+      imageAlt: '',
+      category: 'marketing',
+    },
+    {
+      title: 'Notes from a site migration',
+      description: 'What moved, what broke, and what we would do differently next time.',
+      href: '/journal/site-migration',
+    },
+  ],
+};
+
+const collectionEntry: Section = {
+  sectionKey: 'collection-entry-default',
+  sectionType: 'content_block',
+  title: 'How we plan a quarter',
+  subtitle: 'Journal',
+  body: [
+    'Every quarter starts with the same short conversation. We keep it short on purpose, because a long planning meeting usually means the plan is not clear yet.',
+    '## The three questions',
+    'We answer these in order and do not move on until each has one clear answer.',
+    [
+      '- What has to be true by the end of the quarter?',
+      '- What is the smallest piece of work that gets us there?',
+      '- Who owns it, and what do they need from the rest of us?',
+    ].join('\n'),
+    '## What we leave out',
+    'Anything that cannot be tied to the first question waits for next quarter.',
+    '### Why that is hard',
+    'Good ideas arrive all the time. Saying "not yet" is a skill the whole team has to practise.',
+  ].join('\n\n'),
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'collection_entry',
+    moodKeywords: ['professional', 'trustworthy'],
+    layoutBlueprint: 'collection_entry',
+    imageOpportunity: null,
+    illustrationOpportunity: null,
+  },
+  items: [],
+};
+
+const faqAccordion: Section = {
+  sectionKey: 'faq-accordion-default',
+  sectionType: 'faq',
+  title: 'Frequently asked questions',
+  subtitle: 'FAQ',
+  body: 'Short answers to the questions we hear most. Ask us if yours is not here.',
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'faq_accordion_grouped',
+    moodKeywords: ['professional', 'minimal'],
+    layoutBlueprint: 'faq_accordion_grouped',
+    imageOpportunity: null,
+    illustrationOpportunity: null,
+  },
+  items: [
+    { title: 'How long does a project take?', description: 'Most projects take six to eight weeks from kickoff to launch.', group: 'Getting started' },
+    { title: 'What do you need from us?', description: 'A short brief, your brand assets, and one person who can approve work.', group: 'Getting started' },
+    { title: 'How do you price your work?', description: 'A fixed fee per phase, agreed before the phase begins.', group: 'Pricing' },
+    { title: 'Can I change the scope?', description: 'Yes. Changes are priced and agreed in writing before they start.', group: 'Pricing' },
+    { title: 'Do you offer support after launch?', description: 'Every project includes thirty days of support, with ongoing plans after that.', group: 'Support' },
+  ],
+};
+
 /** Keyed `Block` or `Block:layout` — the renderer resolves the layout axis first. */
 const SECTIONS: Record<string, Section> = {
   'Hero:split': heroSplit,
@@ -405,6 +501,9 @@ const SECTIONS: Record<string, Section> = {
   'TestimonialsFeaturedLarge:video': testimonialsFeaturedLargeVideo,
   'LogoWall:static': logoWallStatic,
   'LogoWall:marquee': logoWallMarquee,
+  CollectionIndex: collectionIndex,
+  CollectionEntry: collectionEntry,
+  FaqAccordion: faqAccordion,
 };
 
 /** Resolves the fixture for a block, optionally narrowed to one layout. */

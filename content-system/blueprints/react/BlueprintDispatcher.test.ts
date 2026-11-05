@@ -22,6 +22,8 @@ import { describe, it, expect } from 'vitest';
 import { createElement, type ComponentType } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
+import libraryJson from '../../../blueprints/blueprint-library.json';
+
 import type {
   BlueprintProps,
   BlueprintSection,
@@ -258,9 +260,15 @@ const dispatch = (c: Case) =>
 /* ─── Tests ────────────────────────────────────────────────────── */
 
 describe('BlueprintDispatcher (React) — key → (block, layout), markup pinned (#2352)', () => {
-  it('covers every wired blueprint key', () => {
+  it('covers every wired blueprint key that declares the react rail', () => {
     const covered = new Set(CASES.map((c) => c.key));
-    expect([...WIRED_BLUEPRINT_KEYS].filter((k) => !covered.has(k))).toEqual([]);
+    // A key declaring `rails: ["astro"]` (#872) has no React block to pin.
+    const astroOnly = new Set(
+      (libraryJson.blueprints as { key: string; rails?: string[] }[])
+        .filter((bp) => bp.rails && !bp.rails.includes('react'))
+        .map((bp) => bp.key),
+    );
+    expect([...WIRED_BLUEPRINT_KEYS].filter((k) => !astroOnly.has(k) && !covered.has(k))).toEqual([]);
   });
 
   for (const c of CASES) {
