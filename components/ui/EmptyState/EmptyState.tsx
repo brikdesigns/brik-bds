@@ -28,6 +28,11 @@ export interface EmptyStateProps extends Omit<HTMLAttributes<HTMLDivElement>, 't
   };
   /** Optional custom content below the text (replaces button) */
   children?: ReactNode;
+  /**
+   * Strip the surface chrome (background, border, min-height) so the empty
+   * state sits flush inside a container that already provides its own surface.
+   */
+  inline?: boolean;
 }
 
 /**
@@ -46,12 +51,18 @@ export function EmptyState({
   media,
   buttonProps,
   children,
+  inline,
   className,
   style,
   ...props
 }: EmptyStateProps) {
   return (
-    <div className={bdsClass('bds-empty-state', className)} style={style} {...props}>
+    <div
+      className={bdsClass('bds-empty-state', className)}
+      style={style}
+      data-inline={inline || undefined}
+      {...props}
+    >
       {media && <div className="bds-empty-state__media">{media}</div>}
       <div className="bds-empty-state__text">
         <h2 className="bds-empty-state__title">{title}</h2>

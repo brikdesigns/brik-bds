@@ -54,6 +54,15 @@ export const WithMedia: Story = {
   },
 };
 
+/** @summary Inline — transparent, borderless, no min-height */
+export const Inline: Story = {
+  args: {
+    title: 'No results found',
+    description: 'Try adjusting your search or filters.',
+    inline: true,
+  },
+};
+
 /** @summary Custom children slot — a composed FileUploader affordance */
 export const WithCustomContent: Story = {
   args: {
