@@ -49,7 +49,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
-import { canonicalPart } from './lib/bds-prefix.mjs';
 
 /**
  * token name → tracking issue number. The shadow is owed a fix; the entry keeps
@@ -109,7 +108,7 @@ function topLevelBlocks(src) {
 
 function collect(cssPath) {
   // Canonical registry only; the compat bridge re-declares names by design.
-  const raw = canonicalPart(fs.readFileSync(cssPath, 'utf8'));
+  const raw = fs.readFileSync(cssPath, 'utf8');
   const clean = blankComments(raw);
   const byScope = new Map();
   let declarations = 0;

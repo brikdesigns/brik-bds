@@ -7,12 +7,11 @@
  *
  *   - sd.config.*.mjs            Style Dictionary emission (prefix + word-step retirement)
  *   - generate-modes-css.mjs     hand-rolled generator output
- *   - build-token-bridge.mjs     the generated old-name -> new-name bridge
+ *   - build-dist-tokens.js       writes dist/retired-token-names.json from buildRenameMap
  *   - codemod-bds-prefix.mjs     the one-shot source rewrite
- *   - verify-prefix-equivalence  the "no token values change" proof
  *   - lint-tokens.js             "component CSS reads an un-prefixed name"
  *
- * so the rename map the codemod applied and the alias set the bridge emits can
+ * so the rename map the codemod applied and the retired-name map dist ships can
  * never disagree: both come from `buildRenameMap()`.
  *
  * Reserved words, the registered ID and the numeric colour steps are read from
@@ -197,13 +196,31 @@ export function declarationMap(css) {
   return result;
 }
 
-// ─── dist/tokens.css section markers ──────────────────────────────────────
+// ─── Retired-name map (dist/retired-token-names.json) ─────────────────────
 
-export const BRIDGE_BEGIN = '/* ===== BEGIN BDS PREFIX BRIDGE (generated from tokens/compat/prefix-bridge.css — do not edit) ===== */';
-export const BRIDGE_END = '/* ===== END BDS PREFIX BRIDGE ===== */';
-
-/** The canonical (pre-bridge) part of a built dist/tokens.css. */
-export function canonicalPart(distCss) {
-  const i = distCss.indexOf(BRIDGE_BEGIN);
-  return i === -1 ? distCss : distCss.slice(0, i);
+/**
+ * Old name -> `--bds-` name for every pre-ADR-043 token name, keys sorted.
+ * Guard tooling reads the old-name SET from it; the old names no longer resolve
+ * in CSS. A renamed component knob's target is not declared in dist/tokens.css
+ * (it is read by components only), so knobs are included without that check;
+ * every other target must be declared or the build fails.
+ *
+ * @param {string} canonicalCss  the built dist/tokens.css
+ * @returns {{ map: Record<string,string>, missing: string[] }}
+ */
+export function buildRetiredNames(canonicalCss, legacy = readLegacy()) {
+  const declared = new Set();
+  for (const names of declarationMap(canonicalCss).values()) for (const n of names.keys()) declared.add(n);
+  const knobs = new Set(Object.keys(RENAMED_KNOBS));
+  const map = {};
+  const missing = [];
+  for (const [oldName, newName] of buildRenameMap(legacy)) {
+    if (!knobs.has(oldName) && !declared.has(newName)) {
+      missing.push(`${oldName} -> ${newName}`);
+      continue;
+    }
+    map[oldName] = newName;
+  }
+  const sorted = Object.fromEntries(Object.entries(map).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
+  return { map: sorted, missing };
 }

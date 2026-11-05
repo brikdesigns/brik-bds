@@ -245,7 +245,7 @@ export function FontWeightShowcase({ weights }: FontWeightShowcaseProps) {
                 color: 'var(--bds-text-muted)',
               }}
             >
-              --font-weight-{name}
+              --bds-font-weight-{name}
             </code>
             <span
               style={{

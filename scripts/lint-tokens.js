@@ -675,8 +675,8 @@ function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
     if (tokens.allTokens.has(tokenName)) continue;
 
     // ADR-043 / brik-bds#2670 (AC3): a component reads the prefixed name. A bare
-    // pre-migration name (or a renamed knob's old spelling) only resolves through
-    // the compat bridge, which is for consumers outside this repo, not for BDS.
+    // pre-migration name (or a renamed knob's old spelling) no longer resolves
+    // (the compat bridge was removed in #2711).
     const renamedTo = renamedKnobs().get(tokenName);
     const bare = renamedTo
       ? null
@@ -693,7 +693,7 @@ function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
         message: renamedTo
           ? `Retired knob "var(${tokenName})" — renamed to "${renamedTo}" (ADR-043 § 5, reserved stem)`
           : `Un-prefixed token "var(${tokenName})" — read "${bare}" (ADR-043: every token name leads with ${ID_PREFIX})`,
-        suggestion: `Replace with var(${renamedTo || bare}). The bare name only resolves through the compat bridge (tokens/compat/prefix-bridge.css).`,
+        suggestion: `Replace with var(${renamedTo || bare}). The bare name no longer resolves: the prefix bridge was removed in #2711.`,
       });
       continue;
     }

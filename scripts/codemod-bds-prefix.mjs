@@ -35,10 +35,9 @@ const SKIP_FILES = new Set([
   'tokens/modes-spacing.css',
   'tokens/modes-typography.css',
   'tokens/layout-fluid.css',
-  'tokens/compat/prefix-bridge.css',
   'tokens/compat/legacy-token-names.json',
   'tokens/naming-grammar.json',
-  // Frozen: keyed by the ORIGINAL word-step names so it proves the bridge preserves them.
+  // Frozen: keyed by the ORIGINAL word-step names so it proves the retired-name map's colours did not move.
   'tokens/color-alias-baseline.json',
   'tokens/compat/renamed-knobs.json',
 ]);

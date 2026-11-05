@@ -32,16 +32,17 @@ TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
 
 # A package dir shaped like node_modules/@brikdesigns/bds: the real bin under
-# scripts/, a bridge over the bin's 500-name floor under dist/.
+# scripts/, a retired-name map over the bin's 500-name floor under dist/.
 PKG="$TMP/pkg"
 mkdir -p "$PKG/scripts" "$PKG/dist"
 cp "$BIN" "$PKG/scripts/"
 {
-  echo ':root {'
-  echo '  --text-primary: var(--bds-text-primary);'
-  for i in $(seq 1 500); do echo "  --filler-$i: var(--bds-filler-$i);"; done
+  echo '{'
+  echo '  "--text-primary": "--bds-text-primary",'
+  for i in $(seq 1 500); do echo "  \"--filler-$i\": \"--bds-filler-$i\","; done
+  echo '  "--zz-last": "--bds-zz-last"'
   echo '}'
-} > "$PKG/dist/prefix-bridge.css"
+} > "$PKG/dist/retired-token-names.json"
 echo ':root { --bds-text-primary: #000; }' > "$PKG/dist/tokens.css"
 : > "$PKG/dist/styles.css"
 
@@ -70,10 +71,10 @@ check "missing bin names the issue" "1" "$(printf '%s' "$out" | grep -c 'predate
 
 BROKEN="$TMP/broken"; mkdir -p "$BROKEN/scripts" "$BROKEN/dist"
 cp "$BIN" "$BROKEN/scripts/"
-echo ':root { --text-primary: var(--bds-text-primary); }' > "$BROKEN/dist/prefix-bridge.css"
+echo '{ "--text-primary": "--bds-text-primary" }' > "$BROKEN/dist/retired-token-names.json"
 out=$(binding_check "$CLEAN" "$BROKEN"); rc=$?
 check "an errored check returns 2" "2" "$rc"
-check "an errored check echoes its reason" "1" "$(printf '%s' "$out" | grep -c 'bridged names')"
+check "an errored check echoes its reason" "1" "$(printf '%s' "$out" | grep -c 'retired names')"
 
 # ─── materialize_consumer_sources ───────────────────────────────────────────
 REPO="$TMP/repo"

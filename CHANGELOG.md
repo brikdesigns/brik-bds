@@ -16,6 +16,23 @@ a consumer greps this file before bumping.
 > `#1186` will add the manifest + CI check that *enforces* this section. Until
 > it lands, the entry is a convention, not a gate.
 
+## Migration: prefix bridge removed (#2711)
+
+Ships in the release after 0.224.0 (minor). The ADR-043 prefix bridge is gone: the 719 pre-prefix token names (`--text-primary`, `--color-poppy-light`, `--color-system-youtube`, the renamed component knobs, ...) no longer resolve. A read of an old name is an unset custom property, and an override of one is a no-op. Read and set the `--bds-` name.
+
+**Breaking (consumer tokens):**
+
+| Old | New |
+|---|---|
+| `@brikdesigns/bds/prefix-bridge.css` | removed; no CSS replacement |
+| old-name set and old → new lookup via that CSS | `@brikdesigns/bds/retired-token-names.json` (`{ "--old": "--bds-new" }`) |
+| `BEGIN BDS PREFIX BRIDGE` section at the end of `dist/tokens.css` | removed |
+| `bds-check-binding --bridge <f>` | `--retired <f>` (default `dist/retired-token-names.json`) |
+
+To rewrite old reads in a consumer, run `scripts/codemod-bds-prefix.mjs` from a brik-bds checkout (it is not shipped in the package). `bds-check-binding` stays: an old-name override now fails because it can no longer take effect.
+
+Consumer checklist: brik-client-portal `scripts/canonical-check.mjs:82`, `src/lib/theming/__tests__/theme-bds-binding.test.ts:35` and `theme-emitter-bds-binding.test.ts:34` (read the old-name set from the JSON), then resync the DevBar widget mirror and regenerate the blueprint seed; tncld `scripts/check-bds-binding.mjs:40`; brikdesigns DevBar widget resync (`scripts/sync-devbar-widgets.sh`).
+
 ## v0.223.0 — 2026-11-04
 
 `BlueprintSection` takes `title` / `subtitle`; `heading` / `subheading` still render but are deprecated and drop in the next major. A section carries one spelling or the other, never a mix, and every blueprint reads it through `resolveSectionTitles()` ([#2563](https://github.com/brikdesigns/brik-bds/issues/2563)). A minor, per `docs/RELEASE.md` on 0.x.

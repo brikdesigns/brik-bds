@@ -122,7 +122,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { SLOT_REGISTRY } from './lint-token-purpose-slots.mjs';
-import { ID, canonicalPart } from './lib/bds-prefix.mjs';
+import { ID } from './lib/bds-prefix.mjs';
 
 // Every closed vocabulary below is DATA in tokens/naming-grammar.json (#2669),
 // so the lint, the docs check and the hook read one list. The rationale for
@@ -347,7 +347,7 @@ function lineOf(src, index) {
  */
 function collectDeclarations(cssPath) {
   // The canonical registry only — the compat bridge re-declares retired bare names.
-  const raw = canonicalPart(fs.readFileSync(cssPath, 'utf8'));
+  const raw = fs.readFileSync(cssPath, 'utf8');
   const clean = blankComments(raw);
   const byName = new Map();
   let declarations = 0;

@@ -56,7 +56,7 @@
  */
 
 import fs from 'node:fs';
-import { ID, canonicalPart } from './lib/bds-prefix.mjs';
+import { ID } from './lib/bds-prefix.mjs';
 import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath } from 'node:url';
@@ -186,7 +186,7 @@ function slotFor(name) {
  */
 function collect(cssPath) {
   // The canonical registry only — the compat bridge re-declares retired bare names.
-  const raw = canonicalPart(fs.readFileSync(cssPath, 'utf8'));
+  const raw = fs.readFileSync(cssPath, 'utf8');
   const clean = blankComments(raw);
   const defs = new Map();
   const declRe = /(^|[{;\s])(--[A-Za-z0-9_-]+)\s*:/g;

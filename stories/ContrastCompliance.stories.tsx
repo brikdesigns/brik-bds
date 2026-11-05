@@ -228,7 +228,7 @@ function ThemeCard({ theme }: { theme: ThemeResult }) {
         {Object.entries(theme.fonts).map(([token, value]) => (
           <div key={token}>
             <code style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace' }}>
-              {token.replace('--font-family-', '')}
+              {token}
             </code>
             : <span style={{ color: 'var(--bds-text-primary)' }}>{value}</span>
           </div>

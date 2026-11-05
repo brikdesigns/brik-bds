@@ -11,7 +11,7 @@ const meta: Meta = {
     docs: {
       description: {
         component:
-          'Canonical aspect-ratio vocabulary backed by the `--aspect-*` token family (BDS #486). Use these tokens (or the `Frame` `ratio` slug prop) instead of hand-typed `aspect-ratio` CSS or `customRatio` strings — same drift-prevention principle as the color/spacing token families.',
+          'Canonical aspect-ratio vocabulary backed by the `--bds-aspect-*` token family (BDS #486). Use these tokens (or the `Frame` `ratio` slug prop) instead of hand-typed `aspect-ratio` CSS or `customRatio` strings — same drift-prevention principle as the color/spacing token families.',
       },
     },
   },
@@ -108,7 +108,7 @@ const Card = ({
     >
       <div
         style={{
-          aspectRatio: `var(--bds-${token.slice(2)})`,
+          aspectRatio: `var(${token})`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -161,7 +161,7 @@ export const Catalog: Story = {
             <Card
               key={slug}
               slug={slug}
-              token={`--aspect-${slug}`}
+              token={`--bds-aspect-${slug}`}
               meta={
                 <>
                   {value} — {note}
@@ -178,10 +178,10 @@ export const Catalog: Story = {
             <Card
               key={slug}
               slug={slug}
-              token={`--aspect-${slug}`}
+              token={`--bds-aspect-${slug}`}
               meta={
                 <>
-                  Resolves to <code>--aspect-{resolves}</code> — {note}
+                  Resolves to <code>--bds-aspect-{resolves}</code> — {note}
                 </>
               }
             />
@@ -229,7 +229,7 @@ export const Catalog: Story = {
 
 /**
  * bds-lint-ignore — theming reference, not a component story: this file IS the
- * docs surface for the `--aspect-*` slug vocabulary, and `stories/theming/` has
+ * docs surface for the `--bds-aspect-*` slug vocabulary, and `stories/theming/` has
  * no MDX page, so rule 5 has no target here (#1502).
  * @summary `Frame` consuming the new slug vocabulary.
  */

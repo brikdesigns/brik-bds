@@ -3,6 +3,7 @@ import { mkdtempSync, writeFileSync, rmSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { buildRenameMap } from '../lib/bds-prefix.mjs';
 
 // brik-bds#1739. The six named color steps still resolve — they are aliases
 // onto the 11-step numeric scale — but they are deprecated, and #1740 retires
@@ -13,10 +14,11 @@ const LINTER = resolve(REPO_ROOT, 'scripts', 'lint-tokens.js');
 const FIGMA_TOKENS = resolve(REPO_ROOT, 'tokens', 'figma-tokens.css');
 // Brik's ramps left `:root` for `.theme-brand-brik` in #2910; canonical CSS is both.
 const BRAND_BRIK_GEN = resolve(REPO_ROOT, 'tokens', 'theme-brand-brik.generated.css');
-// ADR-043 / #2670: the 54 word steps are retired from canonical CSS and live
-// only in the generated bridge, as `--color-poppy-light: var(--bds-color-poppy-500)`.
-const BRIDGE = resolve(REPO_ROOT, 'tokens', 'compat', 'prefix-bridge.css');
-const unprefix = (v) => v.replace(/--bds-/g, '--');
+// ADR-043 / #2670: the 54 word steps are retired from canonical CSS. The prefix
+// bridge that aliased them was removed in #2711; the rename map (the source of
+// dist/retired-token-names.json) still records `--color-poppy-light` ->
+// `--bds-color-poppy-500`.
+const RETIRED = Object.fromEntries(buildRenameMap());
 const RAMPS = resolve(REPO_ROOT, 'design-tokens', 'color-ramps.generated.json');
 const ALIAS_BASELINE = resolve(REPO_ROOT, 'tokens', 'color-alias-baseline.json');
 
@@ -74,21 +76,16 @@ describe('lint-tokens Rule 12 (deprecated-token)', () => {
   });
 });
 
-describe('the alias layer preserves every legacy value (#1739 AC 1)', () => {
-  // The contract the 606 existing call sites depend on: each `--color-*-<name>`
-  // still resolves, through the bridge, and still paints the exact color it
-  // painted before. The canonical CSS no longer declares the word steps.
+describe('the retired-name map preserves every legacy value (#1739 AC 1)', () => {
+  // Each `--color-*-<name>` maps to the numeric step that paints the exact color
+  // it painted before. The canonical CSS no longer declares the word steps, and
+  // since #2711 the old names no longer resolve.
   const canonical = new Map();
   for (const f of [FIGMA_TOKENS, BRAND_BRIK_GEN]) {
     for (const m of readFileSync(f, 'utf8').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
       if (!canonical.has(m[1])) canonical.set(m[1], m[2].trim());
     }
   }
-  const bridge = new Map();
-  for (const m of readFileSync(BRIDGE, 'utf8').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
-    if (!bridge.has(m[1])) bridge.set(m[1], m[2].trim());
-  }
-
   const ramps = JSON.parse(readFileSync(RAMPS, 'utf8'));
   const cases = [];
   for (const [family, stops] of Object.entries(ramps.brik['primitives/value'].color)) {
@@ -108,8 +105,8 @@ describe('the alias layer preserves every legacy value (#1739 AC 1)', () => {
     expect(cases).toHaveLength(54);
   });
 
-  it.each(cases)('$label still resolves to its original value', ({ legacy, numeric, hex }) => {
-    expect(bridge.get(legacy), `${legacy} must still be bridged`).toBe(`var(${numeric})`);
+  it.each(cases)('$label maps to a step with its original value', ({ legacy, numeric, hex }) => {
+    expect(RETIRED[legacy], `${legacy} must map to its numeric step`).toBe(numeric);
     expect(canonical.get(numeric)).toBe(hex);
   });
 
@@ -122,27 +119,25 @@ describe('the alias layer preserves every legacy value (#1739 AC 1)', () => {
 describe('the named aliases still paint their FROZEN values (#1949)', () => {
   // tokens/color-alias-baseline.json is the constant a re-sync cannot move.
   // It stays keyed by the ORIGINAL (un-prefixed) names on purpose: the migration
-  // must not move a shipped color, so the bridge is compared against the same
-  // frozen file. A failure here is a shipped color changing — read it as a
+  // must not move a shipped color, so the retired-name map is compared against
+  // the same frozen file. A failure here is a shipped color changing — read it as a
   // visual diff to approve or revert, never as a stale file to regenerate away.
   const baseline = JSON.parse(readFileSync(ALIAS_BASELINE, 'utf8')).aliases;
 
   const decls = new Map();
-  for (const f of [FIGMA_TOKENS, BRAND_BRIK_GEN, BRIDGE]) {
+  for (const f of [FIGMA_TOKENS, BRAND_BRIK_GEN]) {
     for (const m of readFileSync(f, 'utf8').matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)) {
       if (!decls.has(m[1])) decls.set(m[1], m[2].trim());
     }
   }
 
   const resolved = {};
-  for (const [name, value] of decls) {
+  for (const [name, target] of Object.entries(RETIRED)) {
     if (!/^--color-[a-z]+-(lightest|lighter|light|darkest|darker|dark)$/.test(name)) continue;
-    const alias = unprefix(value).match(/^var\((--color-[a-z]+-\d+)\)$/);
-    if (!alias) continue;
-    resolved[name] = { alias: alias[1], hex: decls.get(`--bds-${alias[1].slice(2)}`) };
+    resolved[name] = { alias: target.replace('--bds-', '--'), hex: decls.get(target) };
   }
 
-  it('covers every named alias the bridge emits — no silent shrinkage', () => {
+  it('covers every named alias the retired-name map carries — no silent shrinkage', () => {
     // Guards the denominator. Deleting an alias would otherwise pass by simply
     // never being compared, which is the exact deletion #1949 defers.
     expect(Object.keys(resolved).sort()).toEqual(Object.keys(baseline).sort());

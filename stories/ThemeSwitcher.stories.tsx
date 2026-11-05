@@ -255,7 +255,7 @@ function ColorSwatch({ name, isText }: { name: string; isText?: boolean }) {
           whiteSpace: 'nowrap',
         }}
       >
-        {name}
+        --bds-{name}
       </span>
     </div>
   );

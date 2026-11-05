@@ -11,7 +11,7 @@ const meta: Meta = {
     docs: {
       description: {
         component:
-          'The semantic type scale — heading / body / label / display roles, weights, and line heights — rendered live from the `--heading-*` / `--body-*` / `--label-*` / `--display-*` tokens. Pick a role by composition layer (see build-standards/headings); this gallery shows what each resolves to in the active typography mode.',
+          'The semantic type scale — heading / body / label / display roles, weights, and line heights — rendered live from the `--bds-heading-*` / `--bds-body-*` / `--bds-label-*` / `--bds-display-*` tokens. Pick a role by composition layer (see build-standards/headings); this gallery shows what each resolves to in the active typography mode.',
       },
     },
   },
@@ -84,10 +84,10 @@ const Page = ({ children }: { children: React.ReactNode }) => (
 export const Roles: Story = {
   render: () => (
     <Page>
-      <TypographyScale title="Display" scale={DISPLAY} prefix="--display" />
-      <TypographyScale title="Heading" scale={HEADING} prefix="--heading" />
-      <TypographyScale title="Body" scale={BODY} prefix="--body" />
-      <TypographyScale title="Label" scale={LABEL} prefix="--label" />
+      <TypographyScale title="Display" scale={DISPLAY} prefix="--bds-display" />
+      <TypographyScale title="Heading" scale={HEADING} prefix="--bds-heading" />
+      <TypographyScale title="Body" scale={BODY} prefix="--bds-body" />
+      <TypographyScale title="Label" scale={LABEL} prefix="--bds-label" />
 
       <h3
         style={{
@@ -112,14 +112,14 @@ export const Roles: Story = {
                 paddingTop: '2px',
               }}
             >
-              --font-line-height-{name}
+              --bds-font-line-height-{name}
             </code>
             <p
               style={{
                 margin: 0,
                 maxWidth: '360px',
                 fontSize: 'var(--bds-body-md)',
-                lineHeight: `var(--font-line-height-${name})`,
+                lineHeight: `var(--bds-font-line-height-${name})`,
                 color: 'var(--bds-text-primary)',
               }}
             >
