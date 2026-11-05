@@ -322,16 +322,6 @@
           },
           "$type": "color",
           "$value": "#e9d8fc"
-        },
-        "green-dark": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "TEXT_FILL"
-            ]
-          },
-          "$type": "color",
-          "$value": "#2a5542",
-          "$description": "AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542."
         }
       },
       "social": {
@@ -480,6 +470,18 @@
           },
           "$type": "color",
           "$value": "#d1e5ff"
+        }
+      },
+      "green": {
+        "950": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "TEXT_FILL"
+            ]
+          },
+          "$type": "color",
+          "$value": "#2a5542",
+          "$description": "AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542."
         }
       }
     },
@@ -5588,7 +5590,7 @@
       },
       "positive": {
         "$type": "color",
-        "$value": "{color.system.green-dark}",
+        "$value": "{color.green.950}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"

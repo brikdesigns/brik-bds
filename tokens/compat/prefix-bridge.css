@@ -176,6 +176,8 @@
   --color-grayscale-lighter: var(--bds-color-grayscale-300);
   --color-grayscale-lightest: var(--bds-color-grayscale-100);
   --color-grayscale-white: var(--bds-color-grayscale-white);
+  --color-green-950: var(--bds-color-green-950);
+  --color-green-darkest: var(--bds-color-green-950);
   --color-system-blue: var(--bds-color-system-blue);
   --color-system-blue-light: var(--bds-color-system-blue-light);
   --color-system-blue-surface: var(--bds-color-system-blue-surface);
@@ -594,10 +596,8 @@
   --color-green-700: var(--bds-color-green-700);
   --color-green-800: var(--bds-color-green-800);
   --color-green-900: var(--bds-color-green-900);
-  --color-green-950: var(--bds-color-green-950);
   --color-green-dark: var(--bds-color-green-700);
   --color-green-darker: var(--bds-color-green-800);
-  --color-green-darkest: var(--bds-color-green-950);
   --color-green-light: var(--bds-color-green-500);
   --color-green-lighter: var(--bds-color-green-300);
   --color-green-lightest: var(--bds-color-green-100);

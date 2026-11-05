@@ -30,7 +30,6 @@
   --bds-color-system-yellow-light: #f7e190;
   --bds-color-system-orange-light: #fad9ae;
   --bds-color-system-purple-light: #e9d8fc;
-  --bds-color-system-green-dark: #2a5542; /** AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542. */
   --bds-color-social-youtube: #cd201f;
   --bds-color-social-twitter: #1da1f2;
   --bds-color-social-facebook: #1877f2;
@@ -47,6 +46,7 @@
   --bds-color-annotation-light-pink: #f8e8fd;
   --bds-color-annotation-light-purple: #e6dbff;
   --bds-color-annotation-light-blue: #d1e5ff;
+  --bds-color-green-950: #2a5542; /** AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542. */
   --bds-font-weight-bold: 700;
   --bds-font-weight-medium: 500;
   --bds-font-weight-regular: 400;
@@ -315,7 +315,7 @@
   --bds-subtitle-md: var(--bds-font-size-50);
   --bds-subtitle-sm: var(--bds-font-size-25);
   --bds-text-negative: var(--bds-color-system-red);
-  --bds-text-positive: var(--bds-color-system-green-dark);
+  --bds-text-positive: var(--bds-color-green-950);
   --bds-text-warning: var(--bds-color-system-yellow);
   --bds-text-accent-red: var(--bds-color-system-red);
   --bds-text-primary: var(--bds-color-grayscale-950);

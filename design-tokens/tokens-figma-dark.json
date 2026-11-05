@@ -140,11 +140,6 @@
       "purple-light": {
         "$value": "#e9d8fc",
         "$type": "color"
-      },
-      "green-dark": {
-        "$value": "#2a5542",
-        "$type": "color",
-        "$description": "AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542."
       }
     },
     "social": {
@@ -213,6 +208,13 @@
       "light-blue": {
         "$value": "#d1e5ff",
         "$type": "color"
+      }
+    },
+    "green": {
+      "950": {
+        "$value": "#2a5542",
+        "$type": "color",
+        "$description": "AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542."
       }
     }
   },
