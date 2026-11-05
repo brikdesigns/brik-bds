@@ -41,6 +41,14 @@
   box-shadow: var(--bds-box-shadow-md);
 }
 
+/* Filled — neutral recessed panel: a grouping container that reads as part of
+ * the page rather than a raised object. Fill and border are existing tokens. */
+.bds-card--variant-filled {
+  background-color: var(--bds-surface-secondary);
+  border: var(--bds-border-width-md) solid var(--bds-border-muted);
+  box-shadow: var(--bds-box-shadow-none);
+}
+
 /* Borderless — transparent, no border, no shadow. For cards on a colored
  * surface (service-tier / brand-image background) where the outlined ring
  * reads as visual noise; the card inherits the parent surface. */
