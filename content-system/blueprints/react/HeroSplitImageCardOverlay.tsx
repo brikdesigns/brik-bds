@@ -65,6 +65,12 @@ interface Props extends BlueprintProps {
    * never receive this prop and keep their plain-anchor behavior. (brik-bds#843)
    */
   onPriceCtaClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
+  /**
+   * Opt-in atmosphere placement forwarded to the hero `<section>` so an
+   * `[data-atmosphere]` stylesheet can paint its per-section effect. Unset by
+   * default — nothing changes for consumers that don't pass it. (brik-bds#529)
+   */
+  'data-ambient'?: string;
 }
 
 export function HeroSplitImageCardOverlay({
@@ -73,6 +79,7 @@ export function HeroSplitImageCardOverlay({
   showServiceTag = true,
   icon,
   onPriceCtaClick,
+  'data-ambient': dataAmbient,
 }: Props) {
   const titles = resolveSectionTitles(section);
   const { breadcrumb = [], serviceLine, iconUrl, iconAlt, priceCard } = section;
@@ -187,6 +194,7 @@ export function HeroSplitImageCardOverlay({
       media={media}
       data-service-line={serviceLine}
       data-blueprint-key="hero_split_image_card_overlay"
+      data-ambient={dataAmbient}
     />
   );
 }
