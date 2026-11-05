@@ -140,6 +140,11 @@
       "purple-light": {
         "$value": "#e9d8fc",
         "$type": "color"
+      },
+      "green-dark": {
+        "$value": "#2a5542",
+        "$type": "color",
+        "$description": "AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542."
       }
     },
     "social": {
@@ -1395,7 +1400,7 @@
       "$type": "color"
     },
     "disabled": {
-      "$value": "{color.grayscale.600}",
+      "$value": "{color.grayscale.500}",
       "$type": "color",
       "$description": "Disabled button text (all variants)"
     },
@@ -1581,7 +1586,7 @@
       "$type": "color"
     },
     "disabled": {
-      "$value": "{color.grayscale.500}",
+      "$value": "{color.grayscale.800}",
       "$type": "color",
       "$description": "Disabled button background (all variants)"
     },
