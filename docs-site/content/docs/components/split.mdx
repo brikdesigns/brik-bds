@@ -32,13 +32,9 @@ import { Split } from '@brikdesigns/bds';
 </Split>
 ```
 
-### Stack below
+### Stacking
 
-`stackBelow` picks the breakpoint where the two regions become one column — `tablet` (default, under 768px) or `desktop` (under 1024px).
-
-```tsx
-<Split stackBelow="desktop">…</Split>
-```
+Below the tablet breakpoint (under 768px) the two regions become one column, in child order. This is fixed, not a prop.
 
 ## When *not* to use
 
@@ -61,7 +57,6 @@ import { Split } from '@brikdesigns/bds';
 | `ratio` | `SplitRatio` | `'50-50'` |
 | `gap` | `SplitGap` | `'xl'` |
 | `align` | `SplitAlign` | `'center'` |
-| `stackBelow` | `SplitStackBelow` | `'tablet'` |
 | `as` | `ElementType` | `'div'` |
 | `children` | `ReactNode` | — |
 

@@ -26,11 +26,6 @@ const meta: Meta<typeof Split> = {
     ratio: { control: 'select', options: ['50-50', '60-40', '40-60'] },
     gap: { control: 'select', options: ['none', 'xs', 'sm', 'md', 'lg', 'xl', 'huge'] },
     align: { control: 'select', options: ['start', 'center', 'end', 'stretch'] },
-    stackBelow: {
-      control: 'select',
-      options: ['tablet', 'desktop'],
-      description: 'Viewport rung below which the two regions stack into one column, in child order.',
-    },
     as: { control: false },
   },
 };
@@ -43,7 +38,7 @@ type Story = StoryObj<typeof Split>;
  * @summary Copy beside a photo at an even ratio
  */
 export const Default: Story = {
-  args: { ratio: '50-50', gap: 'xl', align: 'center', stackBelow: 'tablet' },
+  args: { ratio: '50-50', gap: 'xl', align: 'center' },
   render: (args) => (
     <Split {...args}>
       <ContentBlock

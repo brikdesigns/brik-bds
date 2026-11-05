@@ -33,15 +33,12 @@
 .bds-split--align-end     { align-items: end; }
 .bds-split--align-stretch { align-items: stretch; }
 
-/* ─── Stack to one column ────────────────────────────────────── */
+/* ─── Stack to one column below tablet ───────────────────────── */
 /* Child order is the stacking order — no `order` reshuffle, so reading
-   order and visual order stay the same at every width. */
+   order and visual order stay the same at every width. Same specificity
+   as the ratio rules, so this later rule wins below tablet. */
 
 @media (--bds-down-tablet) {
-  .bds-split--stack-below-tablet { grid-template-columns: 1fr; }
-}
-
-@media (--bds-down-desktop) {
-  .bds-split--stack-below-desktop { grid-template-columns: 1fr; }
+  .bds-split { grid-template-columns: 1fr; }
 }
 }
