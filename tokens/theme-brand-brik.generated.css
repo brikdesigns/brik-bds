@@ -7,6 +7,16 @@
  */
 
 .theme-brand-brik {
+  --bds-color-green-50: #fcfff9;
+  --bds-color-green-100: #f8fff3;
+  --bds-color-green-200: #eaffda;
+  --bds-color-green-300: #daffc0;
+  --bds-color-green-400: #ccffa8;
+  --bds-color-green-500: #bcff8c;
+  --bds-color-green-600: #abec7c;
+  --bds-color-green-700: #9ada6c;
+  --bds-color-green-800: #71a74a;
+  --bds-color-green-900: #437f4e;
   --bds-color-blue-50: #fcfeff;
   --bds-color-blue-100: #f8fdff;
   --bds-color-blue-200: #d6f0fa;
@@ -18,17 +28,6 @@
   --bds-color-blue-800: #4d6e7b;
   --bds-color-blue-900: #3f5b66;
   --bds-color-blue-950: #314952;
-  --bds-color-green-50: #fcfff9;
-  --bds-color-green-100: #f8fff3;
-  --bds-color-green-200: #eaffda;
-  --bds-color-green-300: #daffc0;
-  --bds-color-green-400: #ccffa8;
-  --bds-color-green-500: #bcff8c;
-  --bds-color-green-600: #abec7c;
-  --bds-color-green-700: #9ada6c;
-  --bds-color-green-800: #71a74a;
-  --bds-color-green-900: #437f4e;
-  --bds-color-green-950: #2a5542;
   --bds-color-orange-50: #fff4ee;
   --bds-color-orange-100: #ffe8dc;
   --bds-color-orange-200: #ffccb6;

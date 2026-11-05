@@ -184,7 +184,7 @@ The portal's `dev_scaffold_site` task preflights the content bundle against this
 - **JS budget target:** 0KB on pages with no interactive blueprints. ≤ 8KB gzipped per interactive blueprint (accordion, carousel, form validator). Measured the same way.
 - **Astro islands policy:**
   - Static content: pure SSR, no hydration.
-  - Interactive-on-scroll (`faq_accordion_grouped`, `testimonials_featured_large` carousel): `client:visible`.
+  - Interactive-on-scroll (`testimonials_featured_large` carousel): `client:visible`. `faq_accordion_grouped` needs none — it is native `<details>`/`<summary>`, static and JS-free.
   - Interactive above the fold (`nav_sticky_blur` scroll listener, mobile nav toggle): `client:load`.
   - Never `client:only`.
 - **Images:** `<Image>` from `astro:assets` for local; client-supplied hero uses `loading="eager"` + explicit width/height; interior uses `loading="lazy"`. Zero CLS tolerance.

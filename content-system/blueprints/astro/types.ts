@@ -40,7 +40,10 @@ export type KnownBlueprintKey =
   | 'testimonials_featured_large'
   | 'cta_centered'
   | 'cta_split_contact'
-  | 'logo_wall';
+  | 'logo_wall'
+  | 'collection_index'
+  | 'collection_entry'
+  | 'faq_accordion_grouped';
 
 /**
  * Blueprint keys that have a shipped Astro component wired into the
@@ -75,6 +78,9 @@ export const WIRED_BLUEPRINT_KEYS = [
   'cta_split_contact',
   'cta_centered',
   'logo_wall',
+  'collection_index',
+  'collection_entry',
+  'faq_accordion_grouped',
 ] as const satisfies readonly KnownBlueprintKey[];
 
 /** A `KnownBlueprintKey` with a shipped component (∈ `WIRED_BLUEPRINT_KEYS`). */
@@ -407,6 +413,12 @@ export interface BlueprintSectionContent {
     readonly serviceLine?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
     /** Alt text for `imageUrl`. Defaults to empty (decorative) when omitted. */
     readonly imageAlt?: string;
+    /**
+     * FAQ topic heading for `faq_accordion_grouped`. Items sharing a `group` render
+     * under one heading, in order of first appearance; items without one render
+     * ungrouped. Additive, optional — blueprints that don't read it are unaffected.
+     */
+    readonly group?: string;
     /**
      * Per-item video source for the media axis (`media: 'video'`, ADR-039
      * #2493/#2518). Consumed by `testimonials_featured_large`, which renders a

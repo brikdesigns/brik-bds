@@ -4,7 +4,7 @@
 import SwiftUI
 public enum BDSSemanticColor {
     public static let textNegative = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
-    public static let textPositive = Color(red: 0.1529, green: 0.6824, blue: 0.3765)
+    public static let textPositive = Color(red: 0.1647, green: 0.3333, blue: 0.2588)
     public static let textWarning = Color(red: 0.9490, green: 0.7882, blue: 0.2980)
     public static let textAccentRed = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
     public static let textPrimary = Color(red: 0.1059, green: 0.1059, blue: 0.1059)
@@ -16,7 +16,7 @@ public enum BDSSemanticColor {
     public static let textNeutral = Color(red: 0.2118, green: 0.2118, blue: 0.2118)
     public static let textBrandPrimary = Color(red: 0.1059, green: 0.1059, blue: 0.1059)
     public static let textTextLink = Color(red: 0.1412, green: 0.3804, blue: 0.7059)
-    public static let textDisabled = Color(red: 0.5098, green: 0.5098, blue: 0.5098) /// Disabled button text (all variants)
+    public static let textDisabled = Color(red: 0.3529, green: 0.3529, blue: 0.3529) /// Disabled button text (all variants)
     public static let textError = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
     public static let textAccentOrange = Color(red: 0.9490, green: 0.6000, blue: 0.2902)
     public static let borderNegative = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
@@ -61,7 +61,7 @@ public enum BDSSemanticColor {
     public static let backgroundBrandPrimary = Color(red: 0.1059, green: 0.1059, blue: 0.1059)
     public static let backgroundBrandPrimaryHover = Color(red: 0.2000, green: 0.2000, blue: 0.2000)
     public static let backgroundBrandPrimaryPressed = Color(red: 0.0000, green: 0.0000, blue: 0.0000)
-    public static let backgroundDisabled = Color(red: 0.5098, green: 0.5098, blue: 0.5098) /// Disabled button background (all variants)
+    public static let backgroundDisabled = Color(red: 0.8784, green: 0.8784, blue: 0.8784) /// Disabled button background (all variants)
     public static let backgroundAccentOrange = Color(red: 0.9490, green: 0.6000, blue: 0.2902)
     public static let surfacePositive = Color(red: 0.7451, green: 0.9569, blue: 0.8314)
     public static let surfaceNegative = Color(red: 0.9882, green: 0.8000, blue: 0.8000)

@@ -46,6 +46,7 @@
   --bds-color-annotation-light-pink: #f8e8fd;
   --bds-color-annotation-light-purple: #e6dbff;
   --bds-color-annotation-light-blue: #d1e5ff;
+  --bds-color-green-950: #2a5542; /** AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542. */
   --bds-font-weight-bold: 700;
   --bds-font-weight-medium: 500;
   --bds-font-weight-regular: 400;
@@ -314,7 +315,7 @@
   --bds-subtitle-md: var(--bds-font-size-50);
   --bds-subtitle-sm: var(--bds-font-size-25);
   --bds-text-negative: var(--bds-color-system-red);
-  --bds-text-positive: var(--bds-color-system-green);
+  --bds-text-positive: var(--bds-color-green-950);
   --bds-text-warning: var(--bds-color-system-yellow);
   --bds-text-accent-red: var(--bds-color-system-red);
   --bds-text-primary: var(--bds-color-grayscale-950);
@@ -326,7 +327,7 @@
   --bds-text-neutral: var(--bds-color-system-neutral);
   --bds-text-brand-primary: var(--bds-color-grayscale-950);
   --bds-text-text-link: var(--bds-color-system-blue);
-  --bds-text-disabled: var(--bds-color-grayscale-500); /** Disabled button text (all variants) */
+  --bds-text-disabled: var(--bds-color-grayscale-700); /** Disabled button text (all variants) */
   --bds-text-error: var(--bds-color-system-red);
   --bds-text-accent-orange: var(--bds-color-system-orange);
   --bds-border-negative: var(--bds-color-system-red);
@@ -371,7 +372,7 @@
   --bds-background-brand-primary: var(--bds-color-grayscale-950);
   --bds-background-brand-primary-hover: var(--bds-color-grayscale-800);
   --bds-background-brand-primary-pressed: var(--bds-color-grayscale-black);
-  --bds-background-disabled: var(--bds-color-grayscale-500); /** Disabled button background (all variants) */
+  --bds-background-disabled: var(--bds-color-grayscale-300); /** Disabled button background (all variants) */
   --bds-background-accent-orange: var(--bds-color-system-orange);
   --bds-surface-positive: var(--bds-color-system-green-light);
   --bds-surface-negative: var(--bds-color-system-red-light);

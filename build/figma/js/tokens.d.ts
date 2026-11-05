@@ -57,6 +57,8 @@ export const colorAnnotationBlue: string;
 export const colorAnnotationLightPink: string;
 export const colorAnnotationLightPurple: string;
 export const colorAnnotationLightBlue: string;
+/** AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542. */
+export const colorGreen950: string;
 export const fontWeightBold: string;
 export const fontWeightMedium: string;
 export const fontWeightRegular: string;

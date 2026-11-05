@@ -66,9 +66,15 @@ function parseDecls(body) {
   return vars;
 }
 
+// Blank comment bodies before looking for the block's closing `}` — a brace in a
+// comment otherwise truncates the block and every token below it reads as
+// undefined (#1965; validate-themes.js `blankComments`). This copy lacked it, so
+// `--bds-background-neutral-light` (gap-fills.css:280) never resolved here.
+const blankComments = (src) => src.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
+
 function extractBlock(cssPath, selectorRe) {
   if (!fs.existsSync(cssPath)) return {};
-  const css = fs.readFileSync(cssPath, 'utf8');
+  const css = blankComments(fs.readFileSync(cssPath, 'utf8'));
   const m = new RegExp(selectorRe.source + '\\s*\\{', selectorRe.flags).exec(css);
   if (!m) return {};
   const start = m.index + m[0].length;
@@ -162,12 +168,35 @@ const CASES = [
   // `--text-primary` fails dark AA on it; Chip is the last holdout (#1701).
   { group: 'fill-bearing (already fades)', label: 'Chip secondary → on-color', fill: '--bds-background-secondary', text: '--bds-text-on-color-light' },
   { group: 'fill-bearing (already fades)', label: 'Tag solid', fill: '--bds-background-secondary', text: '--bds-text-on-color-light' },
-  { group: 'fill-bearing (already fades)', label: 'Tag muted', fill: '--bds-background-status-neutral', text: '--bds-text-status-neutral' },
+  // Was `--bds-background-status-neutral`, removed in #2957 — the case crashed the
+  // whole script. Repointed to the neutral pair Tag.css:46-49 paints today (the
+  // old `--muted` variant is `--subtle` now), so the harness measures a fill Tag
+  // still ships rather than a token that no longer exists.
+  { group: 'fill-bearing (already fades)', label: 'Tag subtle neutral', fill: '--bds-background-neutral-light', text: '--bds-text-on-color-light' },
   // Only the ITEM carries :disabled here, never the track — so these fade
   // toward the track, not the page. An inactive item is transparent (fill-less
   // against the track); an active one paints the `--background-primary` pill.
   { group: 'fill-bearing (already fades)', label: 'SegmentedControl item, inactive', fill: null, backdrop: '--bds-background-secondary', text: '--bds-text-on-color-light' },
   { group: 'fill-bearing (already fades)', label: 'SegmentedControl item, active', fill: '--bds-background-primary', backdrop: '--bds-background-secondary', text: '--bds-text-primary' },
+  // ── sub-part fills under a faded parent (#1742) ──
+  // The parent applies ONE opacity to the whole subtree, so a sub-part's fill and
+  // its label (or its page edge) composite toward the page together — the same
+  // mechanism as the pt-1 failure, one level down. A graphic is scored as
+  // `text` against the page: WCAG 1.4.11 asks the same 3:1 of a UI boundary.
+  { group: 'sub-part fill', label: 'Pagination arrow label on brand fill', fill: '--bds-background-brand-primary', text: '--bds-text-on-color-dark' },
+  { group: 'sub-part fill', label: 'Slider progress + thumb border on page', fill: null, text: '--bds-background-brand-primary' },
+  { group: 'sub-part fill', label: 'Slider track rail on page', fill: null, text: '--bds-border-secondary' },
+  { group: 'sub-part fill', label: 'CompletionToggle check on brand fill (checked)', fill: '--bds-background-brand-primary', text: '--bds-text-on-color-dark' },
+  { group: 'sub-part fill', label: 'TabBar box selected label on brand fill', fill: '--bds-background-brand-primary', text: '--bds-text-on-color-dark' },
+  // ── surface-token fills (#1742) — ADR-028 Amendment §2 test 3 excludes these ──
+  { group: 'surface-token fill', label: 'Input value on input fill', fill: '--bds-background-input', text: '--bds-text-primary' },
+  { group: 'surface-token fill', label: 'Input placeholder (muted) on input fill', fill: '--bds-background-input', text: '--bds-text-muted' },
+  { group: 'surface-token fill', label: 'Select / picker placeholder (secondary) on input fill', fill: '--bds-background-input', text: '--bds-text-secondary' },
+  { group: 'surface-token fill', label: 'CompletionToggle unchecked border on page', fill: null, text: '--bds-border-input' },
+  { group: 'surface-token fill', label: 'FileUploader label (primary) on surface-primary', fill: '--bds-surface-primary', text: '--bds-text-primary' },
+  { group: 'surface-token fill', label: 'FileUploader hint (secondary) on surface-primary', fill: '--bds-surface-primary', text: '--bds-text-secondary' },
+  { group: 'surface-token fill', label: 'Stepper button icon on surface-secondary', fill: '--bds-surface-secondary', text: '--bds-text-primary' },
+  { group: 'surface-token fill', label: 'TabBar box unselected label on page', fill: '--bds-background-primary', text: '--bds-text-secondary' },
   // ── fill-less (the cohort the fade suits) ──
   { group: 'fill-less', label: 'Button outline / ghost label', fill: null, text: '--bds-text-primary' },
   { group: 'fill-less', label: 'TextInput value', fill: null, text: '--bds-text-primary' },

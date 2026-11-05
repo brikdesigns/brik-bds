@@ -13,11 +13,13 @@ export {
 export {
   VISUAL_STYLE_VALUES,
   VISUAL_STYLE_EXAMPLES,
+  VISUAL_STYLE_PRESETS,
   isVisualStyle,
   getVisualStyleExamples,
   getPrimaryVisualStyleExample,
   type VisualStyle,
   type VisualStyleExample,
+  type VisualStylePreset,
 } from './visual-style';
 
 export {

@@ -96,6 +96,12 @@ export { default as TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarg
 // partial.
 export { default as LogoWall }                  from './LogoWall.astro';
 
+// `<CollectionIndex>` / `<CollectionEntry>` / `<FaqAccordion>` — Astro-only blocks
+// (`rails: ["astro"]` in blueprint-library.json, brik-bds#872); no React twins.
+export { default as CollectionIndex }           from './CollectionIndex.astro';
+export { default as CollectionEntry }           from './CollectionEntry.astro';
+export { default as FaqAccordion }              from './FaqAccordion.astro';
+
 // ── Dispatch surface ────────────────────────────────────────────
 // <BlueprintDispatcher> is the primary consumer entrypoint — client
 // pages render a whole page body with a single component call, reading

@@ -17,6 +17,13 @@
   min-height: 240px; /* bds-lint-ignore — design constraint */
 }
 
+/* Inline — no surface chrome; the host container provides it. */
+.bds-empty-state[data-inline="true"] {
+  background-color: transparent;
+  border: none;
+  min-height: 0;
+}
+
 /* ─── Media (optional illustration above the text) ───────────── */
 
 .bds-empty-state__media {

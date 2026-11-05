@@ -35,10 +35,28 @@ function tree(components) {
   return root;
 }
 
+/**
+ * A pairings dataset naming `measured` components on a faded pairing — the
+ * shape `tokens/contrast-pairings.json` carries after #1742.
+ */
+function pairings(measured = []) {
+  const dir = mkdtempSync(join(tmpdir(), 'bds-disabled-fade-pairings-'));
+  trees.push(dir);
+  const file = join(dir, 'contrast-pairings.json');
+  writeFileSync(
+    file,
+    JSON.stringify({ pairings: [{ label: 'Faded x', alpha: '--bds-state-disabled-opacity', components: measured }] }),
+  );
+  return file;
+}
+
 /** Run the gate; never throws, so a failing exit is assertable. */
-function run(root) {
+function run(root, measured = []) {
   try {
-    return { code: 0, out: execFileSync('node', [GATE, '--root', root, '--json'], { encoding: 'utf8' }) };
+    return {
+      code: 0,
+      out: execFileSync('node', [GATE, '--root', root, '--pairings', pairings(measured), '--json'], { encoding: 'utf8' }),
+    };
   } catch (err) {
     return { code: err.status, out: err.stdout ?? '' };
   }
@@ -152,16 +170,57 @@ describe('lint-disabled-fade', () => {
     expect(code).toBe(0);
   });
 
-  it('passes a fader whose fill is a surface token', () => {
-    // ADR-028 pt-2 in prose: an input materialises the surface it sits on.
-    // Gating these would flag 13 components the ADR explicitly covers.
+  it('passes a fader whose fill is a surface token once its faded ratio is measured', () => {
+    // ADR-028 pt-2 in prose: an input materialises the surface it sits on, so it
+    // is NOT converted to the swap (Amendment §2 test 3). What the gate asks of
+    // it instead is that the prose has been checked against a measurement (#1742).
     const { code, out } = run(
       tree({
         TextInput: `.bds-text-input {\n  background-color: var(--bds-background-input);\n}\n` + FADE.replace(/thing/g, 'text-input'),
       }),
+      ['TextInput'],
     );
     expect(code).toBe(0);
     expect(JSON.parse(out).ruleCCandidates.map((c) => c.component)).toEqual(['TextInput']);
+  });
+
+  describe('#1742 — a fader that paints a fill must have a measured faded pairing', () => {
+    const INPUT = `.bds-text-input {\n  background-color: var(--bds-background-input);\n}\n` + FADE.replace(/thing/g, 'text-input');
+    const ARROW =
+      `.bds-pagination__arrow {\n  background-color: var(--bds-background-brand-primary);\n}\n` +
+      `.bds-pagination__arrow--disabled {\n  opacity: var(--bds-state-disabled-opacity);\n}\n`;
+
+    it('fails a surface-token fader no faded pairing names', () => {
+      const { code, out } = run(tree({ TextInput: INPUT }), []);
+      expect(code).toBe(1);
+      expect(JSON.parse(out).violations).toEqual([
+        expect.objectContaining({ rule: 'unmeasured-faded-fill', component: 'TextInput' }),
+      ]);
+    });
+
+    it('fails a sub-part fader no faded pairing names', () => {
+      const { code, out } = run(tree({ Pagination: ARROW }), ['TextInput']);
+      expect(code).toBe(1);
+      expect(JSON.parse(out).violations[0]).toMatchObject({ rule: 'unmeasured-faded-fill', component: 'Pagination' });
+    });
+
+    it('passes once a faded pairing names the component', () => {
+      expect(run(tree({ Pagination: ARROW }), ['Pagination']).code).toBe(0);
+    });
+
+    it('ignores a pairing that is not faded, even if it names the component', () => {
+      const dir = mkdtempSync(join(tmpdir(), 'bds-disabled-fade-pairings-'));
+      trees.push(dir);
+      const file = join(dir, 'p.json');
+      writeFileSync(file, JSON.stringify({ pairings: [{ label: 'Enabled', components: ['Pagination'] }] }));
+      let code = 0;
+      try {
+        execFileSync('node', [GATE, '--root', tree({ Pagination: ARROW }), '--pairings', file, '--json'], { encoding: 'utf8' });
+      } catch (err) {
+        code = err.status;
+      }
+      expect(code).toBe(1);
+    });
   });
 
   it('passes when the fill and the disabled state are different elements', () => {

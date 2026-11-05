@@ -1,0 +1,149 @@
+/* Section rhythm + centred container: ../section-shell.css (ADR-021). */
+
+  .bp-collection-index__header {
+    max-width: var(--bds-content-width-text-md);
+    margin-bottom: var(--bds-padding-xl);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Content rhythm (ADR-023 §3): subtitle→title is tight (--bds-gap-sm),
+     title→description is medium (--bds-gap-md). */
+
+  .bp-collection-index__header > * + * {
+    margin-top: var(--bds-gap-md);
+  }
+
+  .bp-collection-index__subtitle + .bp-collection-index__title {
+    margin-top: var(--bds-gap-sm);
+  }
+
+  .bp-collection-index__subtitle {
+    margin: 0;
+    font-family: var(--bds-font-family-subtitle);
+    font-size: var(--bds-subtitle-lg);
+    font-weight: var(--bds-font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: var(--bds-text-transform-subtitle, uppercase);
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bp-collection-index__title {
+    margin: 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-xl));
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-collection-index__description {
+    margin: 0;
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    line-height: var(--bds-font-line-height-normal);
+    color: var(--bds-text-secondary);
+  }
+
+  .bp-collection-index__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--bds-gap-lg);
+  }
+
+  @media (min-width: 768px) {
+    .bp-collection-index__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 992px) {
+    .bp-collection-index__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .bp-collection-index__item {
+    display: flex;
+  }
+
+  .bp-collection-index__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: var(--bds-surface-primary);
+    border: var(--bds-border-width-md) solid var(--bds-border-secondary);
+    border-radius: var(--bds-border-radius-md);
+    overflow: hidden;
+  }
+
+  /* The image renders through the shared `<Media>` primitive; its `<Frame>` root
+     carries the 3/2 box, so no aspect-ratio is written here. */
+  .bp-collection-index__media {
+    background: var(--bds-surface-secondary);
+  }
+
+  .bp-collection-index__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bds-gap-md);
+    padding: var(--bds-padding-lg);
+    flex: 1 1 auto;
+  }
+
+  .bp-collection-index__category {
+    margin: 0;
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-md);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-snug);
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bp-collection-index__entry-title {
+    margin: 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: var(--bds-heading-sm);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-collection-index__link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* One stretched link per card: the pseudo-element covers the card, so the
+     whole card is the hit area while the title stays the only link text. */
+  .bp-collection-index__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .bp-collection-index__link:hover {
+    text-decoration: underline;
+  }
+
+  .bp-collection-index__link:focus-visible {
+    outline: none;
+  }
+
+  .bp-collection-index__link:focus-visible::after {
+    outline: var(--bds-border-width-md) solid var(--bds-border-focus);
+    outline-offset: calc(var(--bds-border-width-md) * -1);
+    border-radius: var(--bds-border-radius-md);
+  }
+
+  .bp-collection-index__excerpt {
+    margin: 0;
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    line-height: var(--bds-font-line-height-normal);
+    color: var(--bds-text-secondary);
+  }

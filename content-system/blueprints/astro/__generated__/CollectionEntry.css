@@ -1,0 +1,79 @@
+/* Section rhythm + centred container: ../section-shell.css (ADR-021). */
+
+  .bp-collection-entry__article {
+    max-width: var(--bds-content-width-text-md);
+    margin-inline: auto;
+  }
+
+  .bp-collection-entry__header {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--bds-gap-xl);
+  }
+
+  .bp-collection-entry__subtitle {
+    margin: 0;
+    font-family: var(--bds-font-family-subtitle);
+    font-size: var(--bds-subtitle-lg);
+    font-weight: var(--bds-font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: var(--bds-text-transform-subtitle, uppercase);
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bp-collection-entry__subtitle + .bp-collection-entry__title {
+    margin-top: var(--bds-gap-sm);
+  }
+
+  .bp-collection-entry__title {
+    margin: 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-xl));
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  /* Prose rhythm: every block is separated by --bds-gap-md; a heading takes a
+     larger gap above so it reads as the start of a new part. */
+  .bp-collection-entry__content > * {
+    margin: 0;
+  }
+
+  .bp-collection-entry__content > * + * {
+    margin-top: var(--bds-gap-md);
+  }
+
+  .bp-collection-entry__content > * + :is(h3, h4) {
+    margin-top: var(--bds-gap-xl);
+  }
+
+  .bp-collection-entry__content :is(h3, h4) {
+    font-family: var(--bds-font-family-heading);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-collection-entry__content h3 {
+    font-size: var(--bds-heading-md);
+  }
+
+  .bp-collection-entry__content h4 {
+    font-size: var(--bds-heading-sm);
+  }
+
+  .bp-collection-entry__content :is(p, li) {
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-lg);
+    line-height: var(--bds-font-line-height-relaxed);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-collection-entry__content ul {
+    padding-inline-start: var(--bds-padding-lg);
+  }
+
+  .bp-collection-entry__content li + li {
+    margin-top: var(--bds-gap-sm);
+  }

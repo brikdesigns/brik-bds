@@ -68,6 +68,16 @@ When even a description would be excess noise.
 <EmptyState title="Nothing here yet" />
 ```
 
+### Inline
+
+Inside a Card, Drawer or Table that already provides a surface, set `inline` to drop the background, border and minimum height.
+
+```tsx
+<Card>
+  <EmptyState inline title="No results found" description="Try adjusting your search or filters." />
+</Card>
+```
+
 ## When *not* to use
 
 <Callout type="warn">
@@ -92,6 +102,7 @@ When even a description would be excess noise.
 | `buttonProps` | `{ children: ReactNode; onClick?: MouseEventHandler<HTMLButtonElement>; iconBefore?: ReactNode; iconAfter?: ReactNode; }` | — |
 | `children` | `ReactNode` (replaces button) | — |
 | `media` | `ReactNode` | — |
+| `inline` | `boolean` (strips background, border, min-height) | — |
 
 Plus all standard `<div>` HTML attributes (excluding `title`).
 
