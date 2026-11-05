@@ -331,6 +331,46 @@
     },
     {
       "group": "service",
+      "label": "ServiceTag brand \u2014 label on tag fill",
+      "fg": "--bds-text-service-brand-on-light",
+      "bg": "--bds-background-service-brand",
+      "thresholdType": "AA",
+      "note": "ServiceTag.css:74. Scored against --bds-background-service-*, the fill ServiceTag paints; the --bds-surface-service-* rows above are a different token (purple-400 vs purple-500 for product) and do not cover it (#850)."
+    },
+    {
+      "group": "service",
+      "label": "ServiceTag marketing \u2014 label on tag fill",
+      "fg": "--bds-text-service-marketing-on-light",
+      "bg": "--bds-background-service-marketing",
+      "thresholdType": "AA",
+      "note": "ServiceTag.css:75 (#850)."
+    },
+    {
+      "group": "service",
+      "label": "ServiceTag information \u2014 label on tag fill",
+      "fg": "--bds-text-service-information-on-light",
+      "bg": "--bds-background-service-information",
+      "thresholdType": "AA",
+      "note": "ServiceTag.css:76 (#850)."
+    },
+    {
+      "group": "service",
+      "label": "ServiceTag product \u2014 label on tag fill",
+      "fg": "--bds-text-service-product-on-light",
+      "bg": "--bds-background-service-product",
+      "thresholdType": "AA",
+      "note": "ServiceTag.css:77 (#850)."
+    },
+    {
+      "group": "service",
+      "label": "ServiceTag back-office \u2014 label on tag fill",
+      "fg": "--bds-text-service-back-office-on-light",
+      "bg": "--bds-background-service-back-office",
+      "thresholdType": "AA",
+      "note": "ServiceTag.css:78 (#850)."
+    },
+    {
+      "group": "service",
       "label": "Service brand \u2014 inverse card text (light)",
       "fg": "--bds-text-service-brand-on-light",
       "bg": "--bds-surface-service-brand-inverse",
