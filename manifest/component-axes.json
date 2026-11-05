@@ -348,6 +348,13 @@
       "lg"
     ]
   },
+  "Stat": {
+    "size": [
+      "lg",
+      "xl",
+      "2xl"
+    ]
+  },
   "Stepper": {
     "size": [
       "sm",

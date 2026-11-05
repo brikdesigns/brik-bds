@@ -1,0 +1,63 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Stat.stories';
+import { Stat } from './Stat';
+import { Grid } from '../Grid';
+
+<Meta of={Stories} />
+
+export const SizeScale = () => (
+  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--bds-gap-xl)', alignItems: 'flex-end' }}>
+    {['lg', 'xl', '2xl'].map((s) => (
+      <Stat key={s} size={s} value="98%" label={`size="${s}"`} />
+    ))}
+  </div>
+);
+
+export const StatsBand = () => (
+  <Grid columns={3} gap="lg">
+    <Stat value="24" label="Years in practice" />
+    <Stat value="3,000+" label="Patients served" />
+    <Stat value="4.9" label="Average rating" detail="From 412 reviews" />
+  </Grid>
+);
+
+# Stat
+
+<ComponentLinks slug="stat" />
+
+Stat pairs a figure with what it counts, plus an optional detail line, as one unbordered Block. Arrange several with Grid or Cluster; wrap one in Card when it needs a surface.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Label first
+
+<Canvas of={Stories.LabelFirst} />
+
+### On color
+
+<Canvas of={Stories.OnColor} />
+
+### Sizes
+
+<Canvas>
+  <SizeScale />
+</Canvas>
+
+## Patterns
+
+### Stats band
+
+Three Stats in a Grid — Stat owns the rhythm inside each pair, Grid owns the spacing between them.
+
+<Canvas>
+  <StatsBand />
+</Canvas>
+
+## Props
+
+<ArgTypes of={Stories} />

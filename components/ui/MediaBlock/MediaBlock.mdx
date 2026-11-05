@@ -1,0 +1,66 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './MediaBlock.stories';
+import { MediaBlock } from './MediaBlock';
+import { Grid } from '../Grid';
+import { Split } from '../Split';
+import { Image } from '../Image';
+import { ContentBlock } from '../ContentBlock';
+
+<Meta of={Stories} />
+
+export const placeholder =
+  'data:image/svg+xml;utf8,' +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="#e4b596"/></svg>',
+  );
+
+export const TeamGrid = () => (
+  <Grid columns={3} gap="lg">
+    {['First', 'Second', 'Third'].map((n) => (
+      <MediaBlock
+        key={n}
+        media={<Image src={placeholder} alt="" ratio="4-3" />}
+        title={`${n} team member`}
+        subtitle="Role"
+      />
+    ))}
+  </Grid>
+);
+
+export const SideBySide = () => (
+  <Split ratio="40-60" gap="lg">
+    <Image src={placeholder} alt="" ratio="4-3" />
+    <ContentBlock title="Case study" description="Media beside copy is a Split, not a MediaBlock variant." />
+  </Split>
+);
+
+# MediaBlock
+
+<ComponentLinks slug="media-block" />
+
+MediaBlock stacks a media slot above a ContentBlock, so the text keeps the same rhythm as every other content unit. It is always stacked; for media beside copy, compose Split + Image + ContentBlock.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Patterns
+
+### Team grid
+
+<Canvas>
+  <TeamGrid />
+</Canvas>
+
+### Media beside copy
+
+Orientation is a Layout decision (ADR-023 §5), so the side-by-side shape is Split, not a MediaBlock prop.
+
+<Canvas>
+  <SideBySide />
+</Canvas>
+
+## Props
+
+<ArgTypes of={Stories} />

@@ -623,6 +623,24 @@ describe('rule 4 + 5 — the `span` axis (§ Amendments, #2930)', () => {
   });
 });
 
+describe('rule 4 — the `ratio` axis (§ Amendments, #2037)', () => {
+  it('admits the axis-prefixed modifiers Split and Frame emit from `ratio`', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-split--ratio-60-40 { grid-template-columns: 3fr 2fr; }\n.bds-frame--ratio-square { aspect-ratio: 1; }\n`,
+    });
+    expect(out).not.toMatch(/ratio-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies a bare ratio value — the prefix is what the amendment admits', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-split--60-40 { grid-template-columns: 3fr 2fr; }\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--60-40 — bare modifier/);
+  });
+});
+
 describe('rule 6 — the deleted --*-status-* family cannot come back (§ Token families)', () => {
   it('fails on a var() reference to a deleted name', () => {
     const { code, out } = run({ refs: '.x { background: var(--surface-status-warning); }' });

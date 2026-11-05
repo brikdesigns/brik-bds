@@ -174,7 +174,8 @@
     "density": { "concept": "spacing compression", "values": ["comfortable", "compact"] },
     "orientation": { "concept": "layout direction", "values": ["horizontal", "vertical"] },
     "layout": { "concept": "component arrangement", "values": null },
-    "span": { "concept": "grid-cell extent", "values": ["full"] }
+    "span": { "concept": "grid-cell extent", "values": ["full"] },
+    "ratio": { "concept": "proportion", "values": null }
   },
   "docs": {
     "$comment": "token-anatomy.mdx must contain, verbatim, the formula strings derived from tiers above: --{semantic.formula}, --{primitive.color.body}, --{ids.componentId}-{component.body}, plus the shape (--{id}-{body}) and the scale body (--{primitive.scale.body}) (scripts/lint-naming-grammar-docs.mjs). #2666 rewrote the page around them.",

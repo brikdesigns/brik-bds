@@ -1,0 +1,16 @@
+@layer bds-components {
+/* ─── MediaBlock — media slot stacked above a ContentBlock ───── */
+/* Stacked only. Side-by-side is a Layout decision (ADR-023 §5):
+   compose Split + Image + ContentBlock instead of adding a variant. */
+
+.bds-media-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-gap-md);
+  min-width: 0;
+}
+
+.bds-media-block__media {
+  min-width: 0;
+}
+}
