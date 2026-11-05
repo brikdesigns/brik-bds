@@ -32,7 +32,7 @@ export function BorderRadiusPreview({ title, scale }: ScaleProps) {
               style={{
                 width: '72px',
                 height: '72px',
-                backgroundColor: 'var(--background-brand-primary, #e35335)',
+                backgroundColor: 'var(--bds-background-brand-primary, #e35335)',
                 borderRadius: value,
                 margin: '0 auto 8px',
                 opacity: 0.85,
@@ -42,7 +42,7 @@ export function BorderRadiusPreview({ title, scale }: ScaleProps) {
               style={{
                 fontSize: '12px',
                 fontWeight: 600,
-                color: 'var(--text-primary, #111827)',
+                color: 'var(--bds-text-primary, #111827)',
               }}
             >
               {step}
@@ -50,7 +50,7 @@ export function BorderRadiusPreview({ title, scale }: ScaleProps) {
             <code
               style={{
                 fontSize: '11px',
-                color: 'var(--text-muted, #6b7280)',
+                color: 'var(--bds-text-muted, #6b7280)',
                 fontFamily: 'ui-monospace, SFMono-Regular, monospace',
               }}
             >
@@ -84,7 +84,7 @@ export function BorderWidthPreview({ title, scale, prefix }: ScaleProps) {
                 fontFamily: 'ui-monospace, SFMono-Regular, monospace',
                 width: '180px',
                 flexShrink: 0,
-                color: 'var(--text-muted, #6b7280)',
+                color: 'var(--bds-text-muted, #6b7280)',
               }}
             >
               {prefix}-{step}
@@ -93,14 +93,14 @@ export function BorderWidthPreview({ title, scale, prefix }: ScaleProps) {
               style={{
                 width: '200px',
                 height: 0,
-                borderTop: `${value} solid var(--border-brand-primary, #e35335)`,
+                borderTop: `${value} solid var(--bds-border-brand-primary, #e35335)`,
                 flexShrink: 0,
               }}
             />
             <span
               className="text-xs"
               style={{
-                color: 'var(--text-secondary, #374151)',
+                color: 'var(--bds-text-secondary, #374151)',
                 fontFamily: 'ui-monospace, SFMono-Regular, monospace',
               }}
             >
@@ -124,7 +124,7 @@ interface ShadowScaleProps {
 /**
  * Grid of squares each rendering a synthetic shadow at the scale step's value.
  * The label prop drives whether the value goes into blur, spread, or offset.
- * For composed semantic tokens (--shadow-sm, --shadow-md, etc.) use a markdown
+ * For composed semantic tokens (--bds-shadow-sm, --bds-shadow-md, etc.) use a markdown
  * table — those aren't on a single-axis scale.
  */
 export function ShadowScale({ title, scale, prefix, label }: ShadowScaleProps) {
@@ -157,7 +157,7 @@ export function ShadowScale({ title, scale, prefix, label }: ShadowScaleProps) {
                 style={{
                   width: '80px',
                   height: '80px',
-                  backgroundColor: 'var(--surface-primary, #ffffff)',
+                  backgroundColor: 'var(--bds-surface-primary, #ffffff)',
                   borderRadius: '4px',
                   boxShadow: shadow,
                   margin: '16px auto',
@@ -167,7 +167,7 @@ export function ShadowScale({ title, scale, prefix, label }: ShadowScaleProps) {
                 style={{
                   fontSize: '12px',
                   fontWeight: 600,
-                  color: 'var(--text-primary, #111827)',
+                  color: 'var(--bds-text-primary, #111827)',
                 }}
               >
                 {prefix}-{step}
@@ -175,7 +175,7 @@ export function ShadowScale({ title, scale, prefix, label }: ShadowScaleProps) {
               <code
                 style={{
                   fontSize: '11px',
-                  color: 'var(--text-muted, #6b7280)',
+                  color: 'var(--bds-text-muted, #6b7280)',
                   fontFamily: 'ui-monospace, SFMono-Regular, monospace',
                 }}
               >

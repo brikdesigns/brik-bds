@@ -29,7 +29,7 @@ export function SpacingScale({ title, scale, prefix }: SpacingScaleProps) {
                   fontFamily: 'ui-monospace, SFMono-Regular, monospace',
                   width: '160px',
                   flexShrink: 0,
-                  color: 'var(--text-muted, #6b7280)',
+                  color: 'var(--bds-text-muted, #6b7280)',
                 }}
               >
                 {prefix}-{step}
@@ -38,7 +38,7 @@ export function SpacingScale({ title, scale, prefix }: SpacingScaleProps) {
                 style={{
                   width: `${Math.min(px, 300)}px`,
                   height: '20px',
-                  backgroundColor: 'var(--background-brand-primary, #e35335)',
+                  backgroundColor: 'var(--bds-background-brand-primary, #e35335)',
                   borderRadius: '2px',
                   opacity: 0.7,
                   flexShrink: 0,
@@ -47,7 +47,7 @@ export function SpacingScale({ title, scale, prefix }: SpacingScaleProps) {
               <span
                 className="text-xs"
                 style={{
-                  color: 'var(--text-secondary, #374151)',
+                  color: 'var(--bds-text-secondary, #374151)',
                   fontFamily: 'ui-monospace, SFMono-Regular, monospace',
                   flexShrink: 0,
                 }}
@@ -64,7 +64,7 @@ export function SpacingScale({ title, scale, prefix }: SpacingScaleProps) {
 
 interface SemanticSpacingProps {
   title?: string;
-  /** Map of token name → reference value (e.g. `{ "padding-md": "var(--space-400)" }`). */
+  /** Map of token name → reference value (e.g. `{ "padding-md": "var(--bds-space-400)" }`). */
   tokens: Record<string, string>;
   /** CSS variable prefix used for the rendered var (e.g. `--padding`). */
   varPrefix: string;
@@ -108,7 +108,7 @@ export function SemanticSpacing({ title, tokens, varPrefix }: SemanticSpacingPro
                       width: `var(${fullVar}, 16px)`,
                       maxWidth: '100px',
                       height: '16px',
-                      backgroundColor: 'var(--background-brand-primary, #e35335)',
+                      backgroundColor: 'var(--bds-background-brand-primary, #e35335)',
                       borderRadius: '2px',
                       opacity: 0.7,
                     }}
