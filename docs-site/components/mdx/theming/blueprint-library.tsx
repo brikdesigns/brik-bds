@@ -64,12 +64,12 @@ const tableStyle: React.CSSProperties = {
 const thStyle: React.CSSProperties = {
   textAlign: 'left',
   padding: '8px 10px',
-  borderBottom: '2px solid var(--border-muted)',
+  borderBottom: '2px solid var(--bds-border-muted)',
   fontWeight: 600,
 };
 const tdStyle: React.CSSProperties = {
   padding: '8px 10px',
-  borderBottom: '1px solid var(--border-muted)',
+  borderBottom: '1px solid var(--bds-border-muted)',
   verticalAlign: 'top',
 };
 const monoStyle: React.CSSProperties = {
@@ -79,7 +79,7 @@ const monoStyle: React.CSSProperties = {
 
 export function BlueprintLibrary() {
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 40px)' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 40px)' }}>
       <Metadata />
       <CoverageMatrix />
       <GroupedLibrary />
@@ -124,7 +124,7 @@ function CoverageMatrix() {
       <p
         style={{
           fontSize: 13,
-          color: 'var(--text-secondary)',
+          color: 'var(--bds-text-secondary)',
           marginBottom: 12,
         }}
       >
@@ -171,8 +171,8 @@ function CoverageMatrix() {
                           textAlign: 'center',
                           color:
                             count === 0
-                              ? 'var(--text-muted)'
-                              : 'var(--text-primary)',
+                              ? 'var(--bds-text-muted)'
+                              : 'var(--bds-text-primary)',
                           fontWeight: count > 0 ? 600 : 400,
                         }}
                       >
@@ -192,28 +192,28 @@ function CoverageMatrix() {
 
 function GroupedLibrary() {
   const detailsBoxStyle: React.CSSProperties = {
-    border: '1px solid var(--border-muted)',
-    borderRadius: 'var(--border-radius-md, 8px)',
+    border: '1px solid var(--bds-border-muted)',
+    borderRadius: 'var(--bds-border-radius-md, 8px)',
     padding: '12px 16px',
     marginBottom: 8,
-    background: 'var(--surface-secondary)',
+    background: 'var(--bds-surface-secondary)',
   };
   const summaryStyle: React.CSSProperties = {
     cursor: 'pointer',
     fontWeight: 600,
-    color: 'var(--text-primary)',
+    color: 'var(--bds-text-primary)',
   };
   const tagStyle: React.CSSProperties = {
     display: 'inline-block',
     padding: '2px 8px',
-    background: 'var(--surface-primary)',
-    border: '1px solid var(--border-muted)',
-    borderRadius: 'var(--border-radius-sm, 4px)',
+    background: 'var(--bds-surface-primary)',
+    border: '1px solid var(--bds-border-muted)',
+    borderRadius: 'var(--bds-border-radius-sm, 4px)',
     fontSize: 11,
     marginRight: 6,
     marginBottom: 4,
     fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
-    color: 'var(--text-secondary)',
+    color: 'var(--bds-text-secondary)',
   };
 
   return (
@@ -222,7 +222,7 @@ function GroupedLibrary() {
       <p
         style={{
           fontSize: 13,
-          color: 'var(--text-secondary)',
+          color: 'var(--bds-text-secondary)',
           marginBottom: 16,
         }}
       >
@@ -248,7 +248,7 @@ function GroupedLibrary() {
               {section.replace(/_/g, ' ')}{' '}
               <span
                 style={{
-                  color: 'var(--text-muted)',
+                  color: 'var(--bds-text-muted)',
                   fontWeight: 400,
                   fontSize: 13,
                 }}
@@ -265,7 +265,7 @@ function GroupedLibrary() {
                     style={{
                       marginLeft: 8,
                       fontSize: 12,
-                      color: 'var(--text-muted)',
+                      color: 'var(--bds-text-muted)',
                       fontWeight: 400,
                     }}
                   >
@@ -276,7 +276,7 @@ function GroupedLibrary() {
                       style={{
                         marginLeft: 8,
                         fontSize: 11,
-                        color: 'var(--text-error, #c00)',
+                        color: 'var(--bds-text-error, #c00)',
                       }}
                     >
                       inactive
@@ -289,7 +289,7 @@ function GroupedLibrary() {
                     marginTop: 12,
                     fontSize: 14,
                     lineHeight: 1.6,
-                    color: 'var(--text-primary)',
+                    color: 'var(--bds-text-primary)',
                   }}
                 >
                   <div style={{ marginBottom: 10 }}>
@@ -326,7 +326,7 @@ function GroupedLibrary() {
                     <p
                       style={{
                         margin: '4px 0 0',
-                        color: 'var(--text-secondary)',
+                        color: 'var(--bds-text-secondary)',
                       }}
                     >
                       {bp.layout_spec}
@@ -339,7 +339,7 @@ function GroupedLibrary() {
                         style={{
                           cursor: 'pointer',
                           fontSize: 12,
-                          color: 'var(--text-muted)',
+                          color: 'var(--bds-text-muted)',
                         }}
                       >
                         CSS hints
@@ -347,13 +347,13 @@ function GroupedLibrary() {
                       <pre
                         style={{
                           fontSize: 11,
-                          background: 'var(--surface-primary)',
+                          background: 'var(--bds-surface-primary)',
                           padding: 10,
-                          borderRadius: 'var(--border-radius-sm, 4px)',
-                          border: '1px solid var(--border-muted)',
+                          borderRadius: 'var(--bds-border-radius-sm, 4px)',
+                          border: '1px solid var(--bds-border-muted)',
                           overflow: 'auto',
                           marginTop: 6,
-                          color: 'var(--text-primary)',
+                          color: 'var(--bds-text-primary)',
                         }}
                       >
                         {bp.css_hints}
@@ -364,10 +364,10 @@ function GroupedLibrary() {
                   <div
                     style={{
                       fontSize: 12,
-                      color: 'var(--text-muted)',
+                      color: 'var(--bds-text-muted)',
                       marginTop: 10,
                       paddingTop: 8,
-                      borderTop: '1px solid var(--border-muted)',
+                      borderTop: '1px solid var(--bds-border-muted)',
                     }}
                   >
                     <strong>Tier:</strong> {bp.tier}

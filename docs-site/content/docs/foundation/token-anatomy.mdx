@@ -86,21 +86,21 @@ So a component stem may not begin with a reserved word. The closed lists are `re
 
 ## Tier
 
-Every token sits at exactly one Tier. Higher tiers reference lower tiers via `var()` — a Semantic resolves to a Primitive, a Component `--bds-*` knob to a Semantic. A Semantic aliasing another Semantic is off-model **with one exception: a color role-alias**, where the target resolves to a `--color-*` Primitive (e.g. `--border-focus: var(--border-brand-primary)`). Color is the theme-varying axis, so the alias theme-tracks for free; a non-color Semantic alias (spacing/size/type) instead parasitizes a scale ladder and is banned. `scripts/lint-token-tiers.mjs` enforces this (ADR-035, broadening the ADR-025 narrow gate). Components only consume the upper tiers.
+Every token sits at exactly one Tier. Higher tiers reference lower tiers via `var()` — a Semantic resolves to a Primitive, a Component `--bds-*` knob to a Semantic. A Semantic aliasing another Semantic is off-model **with one exception: a color role-alias**, where the target resolves to a `--color-*` Primitive (e.g. `--border-focus: var(--bds-border-brand-primary)`). Color is the theme-varying axis, so the alias theme-tracks for free; a non-color Semantic alias (spacing/size/type) instead parasitizes a scale ladder and is banned. `scripts/lint-token-tiers.mjs` enforces this (ADR-035, broadening the ADR-025 narrow gate). Components only consume the upper tiers.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Tier 4 — Component    (component-scoped knobs)         │
 │  --bds-{component}-{property}: var(<Semantic>)          │
-│  Example: --bds-toast-shadow: var(--shadow-md)          │
+│  Example: --bds-toast-shadow: var(--bds-shadow-md)      │
 └─────────────────────────────────────────────────────────┘
                           ▲
                           │ var()
 ┌─────────────────────────────────────────────────────────┐
 │  Tier 3 — Semantic     (what components consume)        │
 │  body: {purpose}-{role}[-{state}]                       │
-│  Example: --background-brand-primary:                   │
-│             var(--color-poppy-500)                      │
+│  Example: --bds-background-brand-primary:               │
+│             var(--bds-color-poppy-500)                  │
 └─────────────────────────────────────────────────────────┘
                           ▲
                           │ var()
@@ -165,7 +165,7 @@ A Tier 4 token serves one of two roles, both under the same name:
 
    ```css
    /* ✅ knob resolves to a Semantic token */
-   box-shadow: var(--bds-toast-shadow, var(--shadow-md));
+   box-shadow: var(--bds-toast-shadow, var(--bds-shadow-md));
 
    /* ❌ raw literal in the fallback — reintroduces an off-token value
       that ships silently if the token fails to resolve, and lint can't see it */
@@ -416,7 +416,7 @@ Every legitimate token answers all seven. If a token doesn't fit any one of them
 | Component CSS reading `--color-{family}-{step}` directly | Bypasses the Semantic tier. Locks the component to one brand. | Caught by `scripts/lint-tokens.js` |
 | `--bp-{blueprint}-{slot}-{prop}` (`--bp-hero-img-card-bg`) | Parallel Component-tier namespace that shipped ahead of canon. Invisible to lint because it's an undefined reference, not a real token. | [#1043](https://github.com/brikdesigns/brik-bds/issues/1043) / [ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md) → migrate to `--bds-*` |
 | `--{component}-{prop}` (`--toast-shadow`, `--select-chevron-color`) | Component knob without the `--bds-` prefix. Collides with the global namespace and isn't lint-recognized. | [#1043](https://github.com/brikdesigns/brik-bds/issues/1043) / [ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md) → migrate to `--bds-*` |
-| Raw literal inside a `var()` fallback on a tokenized property (`var(--shadow-md, 0 4px 12px …)`) | Reintroduces a Tier-1 value that ships silently if the token fails to resolve; lint sees only the canonical name and passes. | Caught by `scripts/lint-tokens.js` (fallback-literal rule, [#1043](https://github.com/brikdesigns/brik-bds/issues/1043)) |
+| Raw literal inside a `var()` fallback on a tokenized property (`var(--bds-shadow-md, 0 4px 12px …)`) | Reintroduces a Tier-1 value that ships silently if the token fails to resolve; lint sees only the canonical name and passes. | Caught by `scripts/lint-tokens.js` (fallback-literal rule, [#1043](https://github.com/brikdesigns/brik-bds/issues/1043)) |
 
 {/* lint-mdx-tokens-ignore-end */}
 

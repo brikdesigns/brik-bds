@@ -34,7 +34,7 @@ export function TypographyScale({ title, scale, prefix }: TypographyScaleProps) 
                 fontFamily: 'ui-monospace, SFMono-Regular, monospace',
                 width: '140px',
                 flexShrink: 0,
-                color: 'var(--text-muted, #6b7280)',
+                color: 'var(--bds-text-muted, #6b7280)',
               }}
             >
               {prefix}-{step}
@@ -43,8 +43,8 @@ export function TypographyScale({ title, scale, prefix }: TypographyScaleProps) 
               style={{
                 fontSize: value,
                 lineHeight: 1.2,
-                fontFamily: 'var(--font-family-body, system-ui)',
-                color: 'var(--text-primary, #111827)',
+                fontFamily: 'var(--bds-font-family-body, system-ui)',
+                color: 'var(--bds-text-primary, #111827)',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
@@ -56,7 +56,7 @@ export function TypographyScale({ title, scale, prefix }: TypographyScaleProps) 
             <span
               className="text-xs"
               style={{
-                color: 'var(--text-muted, #6b7280)',
+                color: 'var(--bds-text-muted, #6b7280)',
                 fontFamily: 'ui-monospace, SFMono-Regular, monospace',
                 flexShrink: 0,
                 marginLeft: 'auto',
@@ -109,7 +109,7 @@ export function FontFamilyShowcase({ families }: FontFamilyShowcaseProps) {
         <div
           key={f.cssVar}
           className="rounded-md border border-fd-border p-4"
-          style={{ background: 'var(--surface-secondary, #f9fafb)' }}
+          style={{ background: 'var(--bds-surface-secondary, #f9fafb)' }}
         >
           <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-fd-muted-foreground">
             {f.name}
@@ -118,7 +118,7 @@ export function FontFamilyShowcase({ families }: FontFamilyShowcaseProps) {
             style={{
               fontFamily: `var(${f.cssVar})`,
               fontSize: '28px',
-              color: 'var(--text-primary, #111827)',
+              color: 'var(--bds-text-primary, #111827)',
               marginBottom: '4px',
             }}
           >
@@ -128,7 +128,7 @@ export function FontFamilyShowcase({ families }: FontFamilyShowcaseProps) {
             className="text-[11px]"
             style={{
               fontFamily: 'ui-monospace, SFMono-Regular, monospace',
-              color: 'var(--text-muted, #6b7280)',
+              color: 'var(--bds-text-muted, #6b7280)',
             }}
           >
             {f.cssVar}
@@ -191,7 +191,7 @@ export function SemanticTypographyTable({ title, tokens }: SemanticTypographyTab
                   fontFamily: 'ui-monospace, SFMono-Regular, monospace',
                   width: '200px',
                   flexShrink: 0,
-                  color: 'var(--text-muted, #6b7280)',
+                  color: 'var(--bds-text-muted, #6b7280)',
                 }}
               >
                 {cssVar}
@@ -200,8 +200,8 @@ export function SemanticTypographyTable({ title, tokens }: SemanticTypographyTab
                 style={{
                   fontSize: `var(${cssVar})`,
                   lineHeight: 1.3,
-                  fontFamily: 'var(--font-family-body, system-ui)',
-                  color: 'var(--text-primary, #111827)',
+                  fontFamily: 'var(--bds-font-family-body, system-ui)',
+                  color: 'var(--bds-text-primary, #111827)',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
@@ -215,7 +215,7 @@ export function SemanticTypographyTable({ title, tokens }: SemanticTypographyTab
                 className="text-[11px]"
                 style={{
                   fontFamily: 'ui-monospace, SFMono-Regular, monospace',
-                  color: 'var(--text-muted, #6b7280)',
+                  color: 'var(--bds-text-muted, #6b7280)',
                   flexShrink: 0,
                 }}
               >
@@ -250,7 +250,7 @@ export function FontWeightShowcase({ weights }: FontWeightShowcaseProps) {
               fontFamily: 'ui-monospace, SFMono-Regular, monospace',
               width: '200px',
               flexShrink: 0,
-              color: 'var(--text-muted, #6b7280)',
+              color: 'var(--bds-text-muted, #6b7280)',
             }}
           >
             --font-weight-{name}
@@ -259,8 +259,8 @@ export function FontWeightShowcase({ weights }: FontWeightShowcaseProps) {
             style={{
               fontWeight: parseInt(value),
               fontSize: '18px',
-              fontFamily: 'var(--font-family-body, system-ui)',
-              color: 'var(--text-primary, #111827)',
+              fontFamily: 'var(--bds-font-family-body, system-ui)',
+              color: 'var(--bds-text-primary, #111827)',
             }}
           >
             The quick brown fox ({value})

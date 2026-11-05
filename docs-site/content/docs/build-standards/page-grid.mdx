@@ -127,8 +127,8 @@ Like the rhythm scale, you rarely write the recipe by hand — it is baked into 
 ```
 
 - **Product apps** → the `Page` primitive; its `padding` prop sets the shell inset (`lg` is the page gutter).
-- **Full-bleed backgrounds with constrained content** → `Footer`'s `containerMaxWidth` shape: the background spans the viewport while `padding-inline: max(var(--page-inset), calc((100% - var(--content-width-xl)) / 2))` centres the content band.
-- **Section vertical band** → `padding-block: var(--section-padding-block)` — 64px at 320, 80px at 768, 104px at 1440 and above ([ADR-042](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-042-layout-tier-device-clamp.md); it replaces ADR-021's `7vw` clamp). A page is a stack of full-bleed sections; the vertical band is `--section-padding-block`, the horizontal band is this recipe.
+- **Full-bleed backgrounds with constrained content** → `Footer`'s `containerMaxWidth` shape: the background spans the viewport while `padding-inline: max(var(--bds-page-inset), calc((100% - var(--bds-content-width-xl)) / 2))` centres the content band.
+- **Section vertical band** → `padding-block: var(--bds-section-padding-block)` — 64px at 320, 80px at 768, 104px at 1440 and above ([ADR-042](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-042-layout-tier-device-clamp.md); it replaces ADR-021's `7vw` clamp). A page is a stack of full-bleed sections; the vertical band is `--section-padding-block`, the horizontal band is this recipe.
 
 ## Related
 

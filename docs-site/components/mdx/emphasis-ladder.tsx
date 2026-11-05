@@ -40,7 +40,7 @@ export function EmphasisLadder({ caption, rungs }: EmphasisLadderProps) {
               className="flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold"
               style={{
                 background: 'var(--surface-subtle, #f3f4f6)',
-                color: 'var(--text-secondary, #6b7280)',
+                color: 'var(--bds-text-secondary, #6b7280)',
               }}
             >
               {i + 1}
