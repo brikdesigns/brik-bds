@@ -51,6 +51,22 @@
     },
     {
       "group": "neutral",
+      "label": "Input value on input fill",
+      "fg": "--bds-text-primary",
+      "bg": "--bds-background-input",
+      "thresholdType": "AAA",
+      "note": "TextInput / TextArea value text (TextInput.css:66). #1148: dark --bds-background-input was black, the same as Brik's dark --bds-surface-primary, so a field on a modal read as border-only."
+    },
+    {
+      "group": "neutral",
+      "label": "Input placeholder on input fill",
+      "fg": "--bds-text-muted",
+      "bg": "--bds-background-input",
+      "thresholdType": "AA-large",
+      "note": "Placeholder is --bds-text-muted (TextInput.css:91), gated like muted text on the page. #1148: lifting Brik's dark input fill to grayscale-950 dropped a grayscale-700 placeholder to 2.50:1, so Brik's dark --bds-text-muted moved to grayscale-600 (the Foundations dark value): 3.38:1 on the fill, 4.12:1 on black."
+    },
+    {
+      "group": "neutral",
       "label": "SegmentedControl inactive label on track",
       "fg": "--bds-text-on-color-light",
       "bg": "--bds-background-secondary",

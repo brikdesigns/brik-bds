@@ -3039,7 +3039,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.black}"
+        "$value": "{color.grayscale.950}"
       },
       "on-color-dark": {
         "$extensions": {
@@ -3669,7 +3669,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.700}"
+        "$value": "{color.grayscale.600}"
       },
       "on-color-dark": {
         "$extensions": {

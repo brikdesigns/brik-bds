@@ -212,7 +212,7 @@
   --bds-background-image: rgba(0, 0, 0, 0.8);
   --bds-text-accent-red: var(--bds-color-poppy-500);
   --bds-text-secondary: var(--bds-color-grayscale-300);
-  --bds-text-muted: var(--bds-color-grayscale-700);
+  --bds-text-muted: var(--bds-color-grayscale-600);
   --bds-text-on-color-light: var(--bds-color-grayscale-black);
   --bds-text-brand-primary: var(--bds-color-poppy-500);
   --bds-text-accent-orange: var(--bds-color-orange-500);
@@ -254,6 +254,7 @@
   --bds-background-primary: var(--bds-color-grayscale-black);
   --bds-background-secondary: var(--bds-color-grayscale-500);
   --bds-background-inverse: var(--bds-color-grayscale-100);
+  --bds-background-input: var(--bds-color-grayscale-950);
   --bds-background-accent-yellow: var(--bds-color-yellow-500);
   --bds-background-brand-primary: var(--bds-color-poppy-500);
   --bds-background-brand-primary-hover: var(--bds-color-poppy-700);
@@ -330,4 +331,5 @@
   --bds-background-accent-orange-light: var(--bds-surface-accent-orange);
   --bds-background-accent-purple-light: var(--bds-surface-accent-purple);
   --bds-background-accent-yellow-light: var(--bds-surface-accent-yellow);
+  --bds-text-on-color-light-muted: color-mix(in srgb, var(--bds-text-on-color-light) 70%, transparent);
 }

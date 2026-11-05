@@ -785,6 +785,7 @@
   --background-brand-secondary: var(--bds-background-brand-secondary);
   --background-image: var(--bds-background-image);
   --background-image-brand: var(--bds-background-image-brand);
+  --background-input: var(--bds-background-input);
   --background-inverse: var(--bds-background-inverse);
   --background-primary: var(--bds-background-primary);
   --background-secondary: var(--bds-background-secondary);
