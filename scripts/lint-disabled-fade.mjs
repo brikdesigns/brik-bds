@@ -412,7 +412,7 @@ const fadeRules = [...inventory].flatMap(([, e]) => e.rules.filter((r) => r.kind
 //      an `alpha` that names the component in `components` (#1742).
 //
 // Conversion is NOT enforced for the second population, and this is on purpose:
-// #1742's measurement shows seven of those pairings fall below 3:1, but whether
+// #1742's measurement shows eight of those pairings fall below 3:1, but whether
 // the answer is the swap (which contradicts Amendment §2 test 3 for the input
 // family) or a different opacity is an open decision (#3016). Gating a rule the
 // ADR has not made would invent a boundary; gating "nobody measured it" does

@@ -194,6 +194,26 @@
     },
     {
       "group": "faded",
+      "label": "Faded Slider track rail on page",
+      "fg": "--bds-border-secondary",
+      "bg": "--bds-background-primary",
+      "alpha": "--bds-state-disabled-opacity",
+      "components": [
+        "Slider"
+      ],
+      "thresholdType": "AA-large",
+      "lightException": {
+        "issue": 3016,
+        "reason": "1.14:1 light at 0.5, but the ENABLED rail is already 1.32:1, so the fade is not what fails it; light never clears 3:1 at any opacity. A thin neutral rail whose value is carried by the progress fill and the thumb (the row above), kept here so Slider's track is measured and not assumed. Tracked in #3016."
+      },
+      "darkException": {
+        "issue": 3016,
+        "reason": "1.52:1 dark at 0.5 (enabled 3.04:1, so the fade does cause this one); no opacity up to 0.80 clears 3:1 (2.30:1 at 0.80). Tracked in #3016."
+      },
+      "note": "Slider's track rail (--bds-border-secondary), brik-bds#1742. The one pairing here whose light result fails before any fade is applied."
+    },
+    {
+      "group": "faded",
       "label": "Faded muted placeholder on input fill",
       "fg": "--bds-text-muted",
       "bg": "--bds-background-input",
