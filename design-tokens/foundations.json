@@ -471,6 +471,18 @@
           "$type": "color",
           "$value": "#d1e5ff"
         }
+      },
+      "green": {
+        "950": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "TEXT_FILL"
+            ]
+          },
+          "$type": "color",
+          "$value": "#2a5542",
+          "$description": "AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542."
+        }
       }
     },
     "font-weight": {
@@ -5609,7 +5621,7 @@
       },
       "positive": {
         "$type": "color",
-        "$value": "{color.system.green}",
+        "$value": "{color.green.950}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5722,7 +5734,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.500}",
+        "$value": "{color.grayscale.700}",
         "$description": "Disabled button text (all variants)"
       },
       "error": {
@@ -6133,7 +6145,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.500}",
+        "$value": "{color.grayscale.300}",
         "$description": "Disabled button background (all variants)"
       },
       "accent-orange": {
@@ -6548,7 +6560,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.600}",
+        "$value": "{color.grayscale.500}",
         "$description": "Disabled button text (all variants)"
       },
       "error": {
@@ -6959,7 +6971,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.grayscale.500}",
+        "$value": "{color.grayscale.800}",
         "$description": "Disabled button background (all variants)"
       },
       "accent-orange": {
