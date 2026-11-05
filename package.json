@@ -47,6 +47,8 @@
     "./prefix-bridge.css": "./dist/prefix-bridge.css",
     "./page-base.css": "./dist/page-base.css",
     "./bds-manifest.json": "./dist/bds-manifest.json",
+    "./contrast-pairings.json": "./tokens/contrast-pairings.json",
+    "./contrast-pairings.resolved.json": "./dist/contrast-pairings.resolved.json",
     "./canonical-check": {
       "types": "./scripts/canonical-check.d.ts",
       "import": "./scripts/canonical-check.mjs",
@@ -93,6 +95,7 @@
   "files": [
     "dist",
     "tokens/naming-grammar.json",
+    "tokens/contrast-pairings.json",
     "tokens/custom-media.css",
     "blueprints/blueprint-library.json",
     "content-system/compliance/*.md",
@@ -130,6 +133,7 @@
     "scripts/site-a11y/*.mjs",
     "scripts/site-a11y/index.d.ts",
     "scripts/lint-consumer-shadows.mjs",
+    "scripts/lint-consumer-pairings.mjs",
     "scripts/check-bds-binding.mjs",
     "scripts/codemod-tag-appearance.mjs",
     "components/ui/BrikDevBar/widgets/*.js"
@@ -142,6 +146,7 @@
     "gen-icon-collection": "scripts/gen-icon-collection.mjs",
     "lint-icon-weight-parity": "scripts/lint-icon-weight-parity.mjs",
     "lint-consumer-shadows": "scripts/lint-consumer-shadows.mjs",
+    "lint-consumer-pairings": "scripts/lint-consumer-pairings.mjs",
     "bds-check-binding": "scripts/check-bds-binding.mjs"
   },
   "publishConfig": {
@@ -258,7 +263,7 @@
     "build:all-tokens": "npm run build:sd-figma && npm run build:sd-dark && npm run build:modes && npm run build:brand-brik",
     "build:brand-brik": "node scripts/build-brand-brik-theme.mjs",
     "build:brand-brik:check": "node scripts/build-brand-brik-theme.mjs --check",
-    "build:lib": "vite build --config vite.config.lib.ts && node scripts/check-dist-custom-media.mjs && npm run build:types && npm run build:content-system && npm run build:dist-tokens && npm run build:inspector-manifest",
+    "build:lib": "vite build --config vite.config.lib.ts && node scripts/check-dist-custom-media.mjs && npm run build:types && npm run build:content-system && npm run build:dist-tokens && npm run build:inspector-manifest && npm run build:contrast-pairings",
     "build:content-system": "tsc --project tsconfig.content-system.json && esbuild content-system/index.ts --bundle --format=esm --platform=neutral --outfile=dist/content-system/index.mjs && esbuild content-system/blueprints/astro/types.ts --bundle --format=esm --platform=neutral --outfile=dist/content-system/blueprints/astro/types.mjs",
     "build:inspector-manifest": "node scripts/build-inspector-manifest.mjs",
     "bds:find": "node scripts/bds-find.mjs",
@@ -337,7 +342,9 @@
     "render:astro-stories": "node scripts/render-astro-blueprints.mjs",
     "verify:astro-stories": "node scripts/render-astro-blueprints.mjs --check",
     "lint-hand-rolled-sections": "node scripts/lint-hand-rolled-sections.mjs && node scripts/lint-hand-rolled-sections.mjs --root content-system/blueprints/astro --skip-rule style-block",
-    "lint-consumer-shadows": "node scripts/lint-consumer-shadows.mjs"
+    "lint-consumer-shadows": "node scripts/lint-consumer-shadows.mjs",
+    "lint-consumer-pairings": "node scripts/lint-consumer-pairings.mjs",
+    "build:contrast-pairings": "node scripts/validate-themes.js --emit-resolved dist/contrast-pairings.resolved.json"
   },
   "keywords": [
     "brik",
