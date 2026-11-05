@@ -5,6 +5,8 @@ import { create } from 'storybook/theming';
 import type { ViewportMap } from 'storybook/viewport';
 import type { ThemeNumber } from '../tokens';
 import { storybookThemes } from '../tokens/storybook-themes';
+import { ATMOSPHERE_VALUES, DEPRECATED_ATMOSPHERES, type Atmosphere } from '../content-system/vocabularies/atmosphere';
+import { atmosphereCssMap } from './atmosphere-css';
 
 // Iconify — register Phosphor icon collection for offline/SSR use
 import { addCollection } from '@iconify/react';
@@ -249,6 +251,36 @@ const withTheme: Decorator = (Story, context) => {
   );
 };
 
+/**
+ * Atmosphere toolbar control — loads the chosen atmosphere's CSS into the
+ * preview document, the same cascade layer a client site adds on top of its
+ * theme. `none` removes the link, so the default renders pure theme tokens and
+ * leaves visual baselines untouched. Atmosphere CSS targets `:root`, `body` and
+ * `section[data-ambient]`, so a story only shows the effect when it renders a
+ * `data-ambient` section (see Foundation/Atmospheres → Toolbar).
+ */
+const ATMOSPHERE_LINK_ID = 'bds-atmosphere-css';
+const withAtmosphere: Decorator = (Story, context) => {
+  const atmosphere = (context.globals.atmosphere || 'none') as Atmosphere;
+
+  useLayoutEffect(() => {
+    const existing = document.getElementById(ATMOSPHERE_LINK_ID);
+    if (atmosphere === 'none') {
+      existing?.remove();
+      document.documentElement.removeAttribute('data-atmosphere');
+      return;
+    }
+    const link = (existing as HTMLLinkElement | null) ?? document.createElement('link');
+    link.id = ATMOSPHERE_LINK_ID;
+    link.rel = 'stylesheet';
+    link.href = atmosphereCssMap[atmosphere];
+    if (!existing) document.head.appendChild(link);
+    document.documentElement.setAttribute('data-atmosphere', atmosphere);
+  }, [atmosphere]);
+
+  return <Story />;
+};
+
 const preview: Preview = {
   globalTypes: {
     themeNumber: {
@@ -262,6 +294,20 @@ const preview: Preview = {
           { value: 'brik-dark', title: 'Brik Brand (Dark)' },
           { value: 'client-sim', title: 'Font Audit' },
         ],
+        dynamicTitle: true,
+      },
+    },
+    atmosphere: {
+      name: 'Atmosphere',
+      description: 'BDS atmosphere layer (orbs, glows, grain) on top of the theme',
+      defaultValue: 'none',
+      toolbar: {
+        icon: 'starhollow',
+        // Deprecated slugs emit zero CSS (two names for `none`) — not offered.
+        items: ATMOSPHERE_VALUES.filter((slug) => !(slug in DEPRECATED_ATMOSPHERES)).map((slug) => ({
+          value: slug,
+          title: slug === 'none' ? 'None' : slug,
+        })),
         dynamicTitle: true,
       },
     },
@@ -313,6 +359,7 @@ const preview: Preview = {
   },
   decorators: [
     withTheme,
+    withAtmosphere,
     // Dev widgets — on by default (devWidgets global) so every visitor to
     // storybook.brikdesigns.com can inspect components. Suppressed under
     // Chromatic AND under the vitest browser runner (behavioral + ADR-026
