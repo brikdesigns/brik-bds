@@ -62,13 +62,13 @@ Figma organises variables into named collections. Each collection has modes. Sty
 
 | Figma collection | Active mode | What it generates |
 |---|---|---|
-| `primitives` | `value` | Raw scale: `--color-poppy-*`, `--space-*`, `--font-size-*`, `--border-radius-*`, `--shadow-blur-*` |
-| `color` | `light` / `dark` | Semantic roles: `--background-*`, `--text-*`, `--surface-*`, `--border-*`, `--page-*` |
-| `typography` | `default` | Composite tokens: `--bds-heading-lg`, `--bds-body-md`, `--bds-label-sm`, `--font-family-*` |
-| `spacing` | `default` | `--padding-*`, `--gap-*` |
+| `primitives` | `value` | Raw scale: `--bds-color-poppy-*`, `--bds-space-*`, `--bds-font-size-*`, `--bds-border-radius-*`, `--bds-shadow-blur-*` |
+| `color` | `light` / `dark` | Semantic roles: `--bds-background-*`, `--bds-text-*`, `--bds-surface-*`, `--bds-border-*`, `--bds-page-*` |
+| `typography` | `default` | Composite tokens: `--bds-heading-lg`, `--bds-body-md`, `--bds-label-sm`, `--bds-font-family-*` |
+| `spacing` | `default` | `--bds-padding-*`, `--bds-gap-*` |
 | `border-radius` | `soft` | `--bds-border-radius-sm/md/lg` |
 | `border-width` | `default` | `--bds-border-width-sm/md/lg` |
-| `elevation` | `subtle` | `--bds-box-shadow-sm/md/lg/xl` (single-blur; bridged to composed `--shadow-*` in `gap-fills.css`), `--blur-radius-*` |
+| `elevation` | `subtle` | `--bds-box-shadow-sm/md/lg/xl` (single-blur; bridged to composed `--bds-shadow-*` in `gap-fills.css`), `--bds-blur-radius-*` |
 | `breakpoint` | `default` | `--bds-breakpoint-mobile/tablet/desktop/wide/wider` |
 | `layout` | `mobile` + `tablet` + `desktop` | `--bds-page-inset`, `--bds-section-padding-block` — **not** flattened by Style Dictionary; the build turns all three modes into one fluid `clamp()` in `layout-fluid.css` ([layout tier](/docs/foundation/spacing#layout-tier)) |
 
