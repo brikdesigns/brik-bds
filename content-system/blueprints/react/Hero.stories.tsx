@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 
+import { Breadcrumb } from '../../../components/ui/Breadcrumb';
 import { Hero } from './Hero';
 import type { BlueprintProps } from '../astro/types';
 import { baseClientFacts, baseTheme, placeholderImage } from './_fixtures';
@@ -237,5 +239,83 @@ export const DispatchedInteriorMinimal: Story = {
     theme: baseTheme,
     layout: 'interior-minimal',
     blueprintKey: 'hero_interior_minimal',
+  },
+};
+
+/* ─── Breadcrumb slot rhythm (#2288) ──────────────────────────────────────── */
+
+const crumbs = [{ label: 'Services', href: '/services' }, { label: 'Brand' }];
+
+/** Resolved px of a length token, read off a probe so the assertion tracks the token. */
+const resolveToken = (host: HTMLElement, token: string): number => {
+  const probe = host.ownerDocument.createElement('div');
+  probe.style.height = `var(${token})`;
+  host.appendChild(probe);
+  const px = probe.getBoundingClientRect().height;
+  probe.remove();
+  return px;
+};
+
+/**
+ * The breadcrumb→title step is carried by the `.bds-hero__breadcrumb` element's
+ * own `margin-bottom`, so a consumer reset on that class reaches it. A
+ * `display: contents` wrapper moved the margin onto a child the reset could not
+ * reach: a consumer zeroing `.bds-hero__breadcrumb` (brikdesigns) got +6px.
+ *
+ * @summary Breadcrumb margin is overridable at the class
+ */
+export const InteractionTestBreadcrumbMarginOverride: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    sectionKey: 'hero-breadcrumb-override',
+    layout: 'interior-minimal',
+    title: 'Brand',
+    breadcrumb: <Breadcrumb items={crumbs} />,
+  },
+  play: async ({ canvasElement }) => {
+    const wrapper = canvasElement.querySelector<HTMLElement>('.bds-hero__breadcrumb')!;
+    const nav = wrapper.querySelector<HTMLElement>('.bds-breadcrumb')!;
+    const title = canvasElement.querySelector<HTMLElement>('.bds-hero__title')!;
+    const gapSm = resolveToken(canvasElement, '--bds-gap-sm');
+    const step = () => title.getBoundingClientRect().top - nav.getBoundingClientRect().bottom;
+
+    // Default rhythm: one --bds-gap-sm step, on the element that carries the class.
+    await expect(getComputedStyle(wrapper).display).not.toBe('contents');
+    await expect(getComputedStyle(wrapper).marginBottom).toBe(`${gapSm}px`);
+    await expect(Math.abs(step() - gapSm)).toBeLessThan(0.5);
+
+    // The consumer reset: the class's own margin is zeroed, and the step goes with it.
+    const reset = canvasElement.ownerDocument.createElement('style');
+    reset.textContent = '.bds-hero__breadcrumb { margin-bottom: 0; }';
+    canvasElement.ownerDocument.head.appendChild(reset);
+    try {
+      await expect(Math.abs(step())).toBeLessThan(0.5);
+    } finally {
+      reset.remove();
+    }
+  },
+};
+
+/**
+ * An inline-level breadcrumb root (the old inline-flex switcher) sits in the
+ * slot without a line-box strut: the wrapper is exactly as tall as the child
+ * (a block wrapper added +4px at 390px, #2284).
+ *
+ * @summary Inline-level breadcrumb adds no strut
+ */
+export const InteractionTestBreadcrumbNoStrut: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    sectionKey: 'hero-breadcrumb-strut',
+    layout: 'interior-minimal',
+    title: 'Brand',
+    breadcrumb: <span data-testid="inline-crumb" style={{ display: 'inline-flex' }}>Services / Brand</span>,
+  },
+  play: async ({ canvasElement }) => {
+    const wrapper = canvasElement.querySelector<HTMLElement>('.bds-hero__breadcrumb')!;
+    const crumb = canvasElement.querySelector<HTMLElement>('[data-testid="inline-crumb"]')!;
+    await expect(
+      Math.abs(wrapper.getBoundingClientRect().height - crumb.getBoundingClientRect().height),
+    ).toBeLessThan(0.5);
   },
 };

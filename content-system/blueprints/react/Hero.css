@@ -339,17 +339,25 @@
   }
 }
 
-/* Layout-neutral wrapper (#2288): it exists only as the styling hook, so it
-   generates no box — the switcher keeps laying out as a direct child of the
-   content column (no line-box shift, +4px at 390px). The descendant
-   `[data-service-line] .bds-breadcrumb` tint (#781) still resolves through it. The
-   spacing the class carried before the wrapper moves to the child. */
+/* Breadcrumb slot (#2288). The margin lives ON the `.bds-hero__breadcrumb`
+   element, never on a child: a consumer that resets the rhythm with
+   `.x .bds-hero__breadcrumb { margin-bottom: 0 }` (brikdesigns does, beside a
+   flex `gap` on the column) reaches the element carrying the class, and a
+   `display: contents` wrapper dropped that margin onto a child the override
+   could not reach (+6px). A flex container, not a block: it blockifies an
+   inline-level child (the old inline-flex switcher root), so the wrapper adds no
+   line-box strut (+4px at 390px, #2284). The `[data-service-line] .bds-breadcrumb`
+   tint (#781) resolves through it. Matches the Astro rail, which carries the
+   class on the `<nav>` itself. */
 .bds-hero__breadcrumb {
-  display: contents;
+  display: flex;
+  margin-bottom: var(--bds-gap-sm);
 }
 
-.bds-hero__breadcrumb > * {
-  margin-bottom: var(--bds-gap-sm);
+/* A consumer that still passes the class on the breadcrumb root as well as
+   inside the wrapper gets one margin, not two (the block wrapper's collapse). */
+.bds-hero__breadcrumb .bds-hero__breadcrumb {
+  margin-bottom: 0;
 }
 
 /* Scoped to `img` only: this slot also carries `<ServiceTag variant="icon">`,
