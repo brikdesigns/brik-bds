@@ -322,7 +322,7 @@ A sidebar audit found 14 stories that shipped between the 2026-05-16 amendment a
 
 **Note on testimonial coexistence:** `Containers/card-testimonial` (bounded-surface variant) and `Components/testimonial` (`surface-web`-tagged primitive) both legitimately exist post-[#709](https://github.com/brikdesigns/brik-bds/pull/709) rename. Both are listed in their respective bucket rows; this is not a duplication.
 
-**Layouts aspirational members.** `Layouts/` lists `row` and `split` but the components don't ship yet. The 2026-05-16 amendment kept them on the spec as planned future-scope primitives; that posture is unchanged. File `feat(layout): row` / `feat(layout): split` issues when consumer demand surfaces (sibling shape to [#622](https://github.com/brikdesigns/brik-bds/issues/622) / [#623](https://github.com/brikdesigns/brik-bds/issues/623) / [#624](https://github.com/brikdesigns/brik-bds/issues/624)).
+**Layouts aspirational members.** `Layouts/` lists `row` and `split` but the components don't ship yet. The 2026-05-16 amendment kept them on the spec as planned future-scope primitives; that posture is unchanged. File `feat(layout): row` / `feat(layout): split` issues when consumer demand surfaces (sibling shape to [#622](https://github.com/brikdesigns/brik-bds/issues/622) / [#623](https://github.com/brikdesigns/brik-bds/issues/623) / [#624](https://github.com/brikdesigns/brik-bds/issues/624)). *Amended 2026-11-05: `Layouts/row` and `Layouts/split` now ship ([#2037](https://github.com/brikdesigns/brik-bds/issues/2037)); this note is historical.*
 
 ### 2026-05-18 — Part A: post-flatten audit corrections
 

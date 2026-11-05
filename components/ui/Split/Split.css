@@ -1,0 +1,47 @@
+@layer bds-components {
+/* ─── Split — two regions at a fixed ratio ───────────────────── */
+
+.bds-split {
+  display: grid;
+  min-width: 0;
+}
+
+/* Regions shrink instead of blowing out the track. */
+.bds-split > * {
+  min-width: 0;
+}
+
+/* ─── Ratio ──────────────────────────────────────────────────── */
+
+.bds-split--ratio-50-50 { grid-template-columns: 1fr 1fr; }
+.bds-split--ratio-60-40 { grid-template-columns: 3fr 2fr; }
+.bds-split--ratio-40-60 { grid-template-columns: 2fr 3fr; }
+
+/* ─── Gap (BDS --gap-* tokens) ───────────────────────────────── */
+
+.bds-split--gap-xs   { gap: var(--bds-gap-xs); }
+.bds-split--gap-sm   { gap: var(--bds-gap-sm); }
+.bds-split--gap-md   { gap: var(--bds-gap-md); }
+.bds-split--gap-lg   { gap: var(--bds-gap-lg); }
+.bds-split--gap-xl   { gap: var(--bds-gap-xl); }
+.bds-split--gap-huge { gap: var(--bds-gap-huge); }
+
+/* ─── Cross-axis alignment ───────────────────────────────────── */
+
+.bds-split--align-start   { align-items: start; }
+.bds-split--align-center  { align-items: center; }
+.bds-split--align-end     { align-items: end; }
+.bds-split--align-stretch { align-items: stretch; }
+
+/* ─── Stack to one column ────────────────────────────────────── */
+/* Child order is the stacking order — no `order` reshuffle, so reading
+   order and visual order stay the same at every width. */
+
+@media (--bds-down-tablet) {
+  .bds-split--stack-below-tablet { grid-template-columns: 1fr; }
+}
+
+@media (--bds-down-desktop) {
+  .bds-split--stack-below-desktop { grid-template-columns: 1fr; }
+}
+}

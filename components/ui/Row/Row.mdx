@@ -1,0 +1,25 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Row.stories';
+
+<Meta of={Stories} />
+
+# Row
+
+<ComponentLinks slug="row" />
+
+Row lays out its children on one horizontal line that never wraps. It is `Stack orientation="horizontal"` with row-shaped defaults; when items should flow onto a second line, use Cluster.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Trailing action
+
+<Canvas of={Stories.TrailingAction} />
+
+## Props
+
+<ArgTypes of={Stories} />

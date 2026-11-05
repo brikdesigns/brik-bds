@@ -1,0 +1,64 @@
+---
+title: Row
+description: One horizontal line of items that never wraps. Use for an icon beside a label or a title beside a trailing action.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Row lays out its children on one horizontal line that never wraps. It is a named `Stack orientation="horizontal"` with row-shaped defaults (`gap="sm"`, `align="center"`), so it shares Stack's gap scale and alignment options.
+
+## Use it for
+
+- An icon beside its label
+- A value beside its unit
+- A title beside a trailing action, with `justify="between"`
+
+## Import
+
+```tsx
+import { Row } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Justify
+
+`justify` spreads items along the line — `between` pushes the last item to the far edge.
+
+```tsx
+<Row justify="between">
+  <h3>Invoices</h3>
+  <Button size="sm">New invoice</Button>
+</Row>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Items that should flow onto a second line are a [Cluster](/docs/components/cluster), not a Row.** Row never wraps — tags, filter pills and button groups that can outgrow their container belong in Cluster.
+</Callout>
+
+- For two large regions at an uneven ratio, use [Split](/docs/components/split).
+
+## Accessibility
+
+- Renders a plain element (`<div>` by default, override with `as`) with `display: flex`. It adds no semantics; children keep their own roles.
+
+## API
+
+{/* props-check: RowProps @ components/ui/Row/Row.tsx */}
+| Prop | Type | Default |
+|---|---|---|
+| `gap` | `StackGap` | `'sm'` |
+| `align` | `StackAlign` | `'center'` |
+| `justify` | `StackJustify` | — |
+| `as` | `ElementType` | `'div'` |
+| `children` | `ReactNode` | — |
+
+`StackGap`, `StackAlign` and `StackJustify` are the [Stack](/docs/components/stack) unions. Plus all standard HTML attributes for the rendered element.
+
+## Related
+
+- [Stack](/docs/components/stack) — the primitive Row is built on
+- [Cluster](/docs/components/cluster) — horizontal and wrapping
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/layouts-row--default)**

@@ -84,7 +84,7 @@ Use `--` modifiers only for **structure**, never for appearance or theme:
 
 ## Layout inside sections
 
-Use [Layout primitives](/docs/build-standards/composition-layers#the-layers) — `Stack`, `Cluster`, `Grid` (`Split` and `Row` are [planned](https://github.com/brikdesigns/brik-bds/issues/2037), not yet exported) — to arrange blocks inside `__content`. Do not hand-roll flex/grid in section CSS when a layout primitive covers the case.
+Use [Layout primitives](/docs/build-standards/composition-layers#the-layers) — `Stack`, `Row`, `Cluster`, `Grid`, `Split` — to arrange blocks inside `__content`. Do not hand-roll flex/grid in section CSS when a layout primitive covers the case.
 
 ```html
 <!-- Grid of feature cards -->
@@ -98,7 +98,7 @@ Use [Layout primitives](/docs/build-standards/composition-layers#the-layers) —
 
 <!-- Split (image + text) -->
 <div class="bds-narrative__content">
-  <div class="bds-split">
+  <div class="bds-split bds-split--ratio-50-50 bds-split--gap-xl bds-split--align-center bds-split--stack-below-tablet"> <!-- BEM modifier classes, not tokens: lint-mdx-tokens-ignore -->
     <div class="bds-narrative__media"><img .../></div>
     <div class="bds-narrative__body">...</div>
   </div>
