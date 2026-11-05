@@ -35,9 +35,9 @@ export function NavigationIASpec({
       <div
         style={{
           padding: 16,
-          border: '1px dashed var(--border-muted)',
-          borderRadius: 'var(--border-radius-md, 8px)',
-          color: 'var(--text-muted)',
+          border: '1px dashed var(--bds-border-muted)',
+          borderRadius: 'var(--bds-border-radius-md, 8px)',
+          color: 'var(--bds-text-muted)',
           fontSize: 13,
         }}
       >
@@ -51,15 +51,15 @@ export function NavigationIASpec({
     ia.scrollBehavior === 'transparent-top-frosted-past-80';
 
   return (
-    <div style={{ marginBottom: 'var(--padding-xl, 40px)' }}>
+    <div style={{ marginBottom: 'var(--bds-padding-xl, 40px)' }}>
       {/* ── Visual preview ──────────────────────────────────── */}
       <div
         style={{
-          borderRadius: 'var(--border-radius-lg, 12px)',
-          border: '1px solid var(--border-primary)',
+          borderRadius: 'var(--bds-border-radius-lg, 12px)',
+          border: '1px solid var(--bds-border-primary)',
           overflow: 'hidden',
-          marginBottom: 'var(--gap-lg, 16px)',
-          background: 'var(--surface-secondary)',
+          marginBottom: 'var(--bds-gap-lg, 16px)',
+          background: 'var(--bds-surface-secondary)',
         }}
       >
         <div
@@ -68,18 +68,18 @@ export function NavigationIASpec({
             alignItems: 'center',
             gap: 24,
             padding: '14px 20px',
-            borderBottom: '1px solid var(--border-primary)',
+            borderBottom: '1px solid var(--bds-border-primary)',
             background: isTransparentScroll
-              ? 'var(--surface-inverse)'
-              : 'var(--surface-primary)',
+              ? 'var(--bds-surface-inverse)'
+              : 'var(--bds-surface-primary)',
             color: isTransparentScroll
-              ? 'var(--text-on-color-dark)'
-              : 'var(--text-primary)',
+              ? 'var(--bds-text-on-color-dark)'
+              : 'var(--bds-text-primary)',
           }}
         >
           <span
             style={{
-              fontFamily: 'var(--font-family-heading)',
+              fontFamily: 'var(--bds-font-family-heading)',
               fontWeight: 600,
             }}
           >
@@ -126,18 +126,18 @@ export function NavigationIASpec({
                 padding: '6px 14px',
                 background:
                   ia.utility.primaryCTA.variant === 'solid'
-                    ? 'var(--background-brand-primary)'
+                    ? 'var(--bds-background-brand-primary)'
                     : 'transparent',
                 border:
                   ia.utility.primaryCTA.variant === 'ghost'
-                    ? '1px solid var(--border-brand-primary)'
+                    ? '1px solid var(--bds-border-brand-primary)'
                     : 'none',
                 color:
                   ia.utility.primaryCTA.variant === 'solid'
-                    ? 'var(--text-on-color-dark)'
-                    : 'var(--text-brand-primary)',
-                borderRadius: 'var(--border-radius-pill, 9999px)',
-                fontFamily: 'var(--font-family-label)',
+                    ? 'var(--bds-text-on-color-dark)'
+                    : 'var(--bds-text-brand-primary)',
+                borderRadius: 'var(--bds-border-radius-pill, 9999px)',
+                fontFamily: 'var(--bds-font-family-label)',
                 fontSize: 11,
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
@@ -154,10 +154,10 @@ export function NavigationIASpec({
             padding: '8px 20px',
             fontSize: 11,
             opacity: 0.55,
-            fontFamily: 'var(--font-family-label)',
+            fontFamily: 'var(--bds-font-family-label)',
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
-            color: 'var(--text-secondary)',
+            color: 'var(--bds-text-secondary)',
           }}
         >
           Archetype: {ia.archetype} · {ia.primaryLinkCount} primary ·{' '}
@@ -171,7 +171,7 @@ export function NavigationIASpec({
           width: '100%',
           borderCollapse: 'collapse',
           fontSize: 13,
-          marginBottom: 'var(--gap-lg, 16px)',
+          marginBottom: 'var(--bds-gap-lg, 16px)',
         }}
       >
         <tbody>
@@ -203,13 +203,13 @@ export function NavigationIASpec({
 
       {/* ── Mega-menu preview ──────────────────────────────────── */}
       {ia.servicesMegaMenu && (
-        <div style={{ marginTop: 'var(--padding-lg, 24px)' }}>
+        <div style={{ marginTop: 'var(--bds-padding-lg, 24px)' }}>
           <h4
             style={{
-              fontFamily: 'var(--font-family-heading)',
-              fontSize: 'var(--heading-sm, 18px)',
-              marginBottom: 'var(--gap-md, 12px)',
-              color: 'var(--text-primary)',
+              fontFamily: 'var(--bds-font-family-heading)',
+              fontSize: 'var(--bds-heading-sm, 18px)',
+              marginBottom: 'var(--bds-gap-md, 12px)',
+              color: 'var(--bds-text-primary)',
             }}
           >
             {ia.servicesMegaMenu.triggerLabel} mega-menu
@@ -218,22 +218,22 @@ export function NavigationIASpec({
             style={{
               display: 'grid',
               gridTemplateColumns: `repeat(${ia.servicesMegaMenu.columns}, 1fr)`,
-              gap: 'var(--gap-lg, 16px)',
-              padding: 'var(--padding-md, 20px)',
-              border: '1px solid var(--border-primary)',
-              borderRadius: 'var(--border-radius-md, 8px)',
-              background: 'var(--surface-secondary)',
+              gap: 'var(--bds-gap-lg, 16px)',
+              padding: 'var(--bds-padding-md, 20px)',
+              border: '1px solid var(--bds-border-primary)',
+              borderRadius: 'var(--bds-border-radius-md, 8px)',
+              background: 'var(--bds-surface-secondary)',
             }}
           >
             {ia.servicesMegaMenu.categories.map((cat) => (
               <div key={cat.heading}>
                 <p
                   style={{
-                    fontFamily: 'var(--font-family-label)',
+                    fontFamily: 'var(--bds-font-family-label)',
                     fontSize: 11,
                     letterSpacing: '0.2em',
                     textTransform: 'uppercase',
-                    color: 'var(--text-brand-primary)',
+                    color: 'var(--bds-text-brand-primary)',
                     marginBottom: 12,
                   }}
                 >
@@ -255,7 +255,7 @@ export function NavigationIASpec({
                         style={{
                           fontSize: 14,
                           fontWeight: 500,
-                          color: 'var(--text-primary)',
+                          color: 'var(--bds-text-primary)',
                         }}
                       >
                         {item.label}
@@ -264,7 +264,7 @@ export function NavigationIASpec({
                         <div
                           style={{
                             fontSize: 12,
-                            color: 'var(--text-secondary)',
+                            color: 'var(--bds-text-secondary)',
                             marginTop: 2,
                           }}
                         >
@@ -279,19 +279,19 @@ export function NavigationIASpec({
             {ia.servicesMegaMenu.featured && (
               <div
                 style={{
-                  background: 'var(--surface-brand-primary)',
-                  border: '1px solid var(--border-brand-primary)',
-                  borderRadius: 'var(--border-radius-md, 8px)',
-                  padding: 'var(--padding-md, 16px)',
+                  background: 'var(--bds-surface-brand-primary)',
+                  border: '1px solid var(--bds-border-brand-primary)',
+                  borderRadius: 'var(--bds-border-radius-md, 8px)',
+                  padding: 'var(--bds-padding-md, 16px)',
                 }}
               >
                 <p
                   style={{
-                    fontFamily: 'var(--font-family-label)',
+                    fontFamily: 'var(--bds-font-family-label)',
                     fontSize: 10,
                     letterSpacing: '0.2em',
                     textTransform: 'uppercase',
-                    color: 'var(--text-brand-primary)',
+                    color: 'var(--bds-text-brand-primary)',
                     marginBottom: 8,
                   }}
                 >
@@ -299,11 +299,11 @@ export function NavigationIASpec({
                 </p>
                 <h5
                   style={{
-                    fontFamily: 'var(--font-family-heading)',
+                    fontFamily: 'var(--bds-font-family-heading)',
                     fontSize: 16,
                     marginBottom: 8,
                     lineHeight: 1.3,
-                    color: 'var(--text-primary)',
+                    color: 'var(--bds-text-primary)',
                   }}
                 >
                   {ia.servicesMegaMenu.featured.heading}
@@ -311,7 +311,7 @@ export function NavigationIASpec({
                 <p
                   style={{
                     fontSize: 13,
-                    color: 'var(--text-secondary)',
+                    color: 'var(--bds-text-secondary)',
                     marginBottom: 12,
                     lineHeight: 1.5,
                   }}
@@ -320,11 +320,11 @@ export function NavigationIASpec({
                 </p>
                 <span
                   style={{
-                    fontFamily: 'var(--font-family-label)',
+                    fontFamily: 'var(--bds-font-family-label)',
                     fontSize: 11,
                     letterSpacing: '0.14em',
                     textTransform: 'uppercase',
-                    color: 'var(--text-brand-primary)',
+                    color: 'var(--bds-text-brand-primary)',
                   }}
                 >
                   {ia.servicesMegaMenu.featured.ctaLabel} →
@@ -349,7 +349,7 @@ function Row({
 }) {
   const cellStyle: React.CSSProperties = {
     padding: '8px 10px',
-    borderBottom: '1px solid var(--border-muted)',
+    borderBottom: '1px solid var(--bds-border-muted)',
     verticalAlign: 'top',
   };
   return (

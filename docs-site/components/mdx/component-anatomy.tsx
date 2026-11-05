@@ -46,8 +46,8 @@ export function ComponentAnatomy({ children, parts }: ComponentAnatomyProps) {
             <span
               className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold"
               style={{
-                background: 'var(--background-brand-primary, #111827)',
-                color: 'var(--text-on-color-dark, #ffffff)',
+                background: 'var(--bds-background-brand-primary, #111827)',
+                color: 'var(--bds-text-on-color-dark, #ffffff)',
               }}
             >
               {part.number}

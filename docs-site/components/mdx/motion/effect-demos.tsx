@@ -5,25 +5,25 @@ import { useState, useEffect, type CSSProperties, type ReactNode } from 'react';
 const demoFrame: CSSProperties = {
   position: 'relative',
   overflow: 'hidden',
-  borderRadius: 'var(--border-radius-md)',
-  border: '1px solid var(--border-muted)',
-  backgroundColor: 'var(--surface-secondary)',
+  borderRadius: 'var(--bds-border-radius-md)',
+  border: '1px solid var(--bds-border-muted)',
+  backgroundColor: 'var(--bds-surface-secondary)',
 };
 
 const darkFrame: CSSProperties = {
   ...demoFrame,
-  backgroundColor: 'var(--surface-inverse)',
-  color: 'var(--text-on-color-dark)',
+  backgroundColor: 'var(--bds-surface-inverse)',
+  color: 'var(--bds-text-on-color-dark)',
 };
 
 const replayButton: CSSProperties = {
   marginTop: 8,
   padding: '4px 12px',
   fontSize: 12,
-  border: '1px solid var(--border-muted)',
-  borderRadius: 'var(--border-radius-sm)',
-  background: 'var(--surface-primary)',
-  color: 'var(--text-secondary)',
+  border: '1px solid var(--bds-border-muted)',
+  borderRadius: 'var(--bds-border-radius-sm)',
+  background: 'var(--bds-surface-primary)',
+  color: 'var(--bds-text-secondary)',
   cursor: 'pointer',
 };
 
@@ -71,7 +71,7 @@ export function AnimationDemo({
             fontSize: 13,
             fontWeight: 600,
             marginBottom: 8,
-            color: 'var(--text-primary)',
+            color: 'var(--bds-text-primary)',
           }}
         >
           {label}
@@ -115,13 +115,13 @@ export function ClipRevealDemo({ type }: { type: string }) {
       style={{
         width: '100%',
         height: 160,
-        borderRadius: 'var(--border-radius-md)',
+        borderRadius: 'var(--bds-border-radius-md)',
         background:
-          'linear-gradient(135deg, var(--background-brand-primary), var(--background-brand-secondary))',
+          'linear-gradient(135deg, var(--bds-background-brand-primary), var(--bds-background-brand-secondary))',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: 'var(--text-on-color-dark)',
+        color: 'var(--bds-text-on-color-dark)',
         fontWeight: 600,
         fontSize: 14,
       }}
@@ -141,12 +141,12 @@ export function GrainDemo({ variant = '' }: { variant?: string }) {
       style={{
         width: '100%',
         height: 160,
-        borderRadius: 'var(--border-radius-md)',
-        backgroundColor: isHeavy ? 'var(--surface-inverse)' : 'var(--surface-secondary)',
+        borderRadius: 'var(--bds-border-radius-md)',
+        backgroundColor: isHeavy ? 'var(--bds-surface-inverse)' : 'var(--bds-surface-secondary)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: isHeavy ? 'var(--text-on-color-dark)' : 'var(--text-primary)',
+        color: isHeavy ? 'var(--bds-text-on-color-dark)' : 'var(--bds-text-primary)',
         fontSize: 13,
         fontWeight: 500,
         position: 'relative',
@@ -166,9 +166,9 @@ export function GlassDemo({ variant = '' }: { variant?: string }) {
       style={{
         width: '100%',
         height: 200,
-        borderRadius: 'var(--border-radius-lg)',
+        borderRadius: 'var(--bds-border-radius-lg)',
         background:
-          'linear-gradient(135deg, var(--background-brand-primary) 0%, var(--background-brand-secondary) 100%)',
+          'linear-gradient(135deg, var(--bds-background-brand-primary) 0%, var(--bds-background-brand-secondary) 100%)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -182,7 +182,7 @@ export function GlassDemo({ variant = '' }: { variant?: string }) {
           padding: '24px 32px',
           borderRadius: 16,
           textAlign: 'center',
-          color: isDark ? 'var(--text-on-color-dark)' : 'var(--text-primary)',
+          color: isDark ? 'var(--bds-text-on-color-dark)' : 'var(--bds-text-primary)',
         }}
       >
         <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 4 }}>.{cls}</div>
@@ -214,10 +214,10 @@ export function TextEffectDemo({
     <div
       style={{
         padding: '24px 32px',
-        backgroundColor: dark ? 'var(--surface-inverse)' : 'var(--surface-secondary)',
-        borderRadius: 'var(--border-radius-md)',
+        backgroundColor: dark ? 'var(--bds-surface-inverse)' : 'var(--bds-surface-secondary)',
+        borderRadius: 'var(--bds-border-radius-md)',
         textAlign: 'center',
-        color: dark ? 'var(--text-on-color-dark)' : 'var(--text-primary)',
+        color: dark ? 'var(--bds-text-on-color-dark)' : 'var(--bds-text-primary)',
       }}
     >
       <span
@@ -225,7 +225,7 @@ export function TextEffectDemo({
         style={{
           fontSize: 32,
           fontWeight: 700,
-          fontFamily: 'var(--font-family-heading)',
+          fontFamily: 'var(--bds-font-family-heading)',
         }}
       >
         {label}
@@ -241,9 +241,9 @@ export function HoverDemo({ className, label }: { className: string; label: stri
       className={className}
       style={{
         padding: '16px 24px',
-        backgroundColor: 'var(--surface-primary)',
-        border: '1px solid var(--border-muted)',
-        borderRadius: 'var(--border-radius-md)',
+        backgroundColor: 'var(--bds-surface-primary)',
+        border: '1px solid var(--bds-border-muted)',
+        borderRadius: 'var(--bds-border-radius-md)',
         textAlign: 'center',
         cursor: 'pointer',
         fontWeight: 500,
@@ -270,13 +270,13 @@ export function VideoDemo({ variant = '' }: { variant?: string }) {
       style={{
         width: '100%',
         height: 240,
-        borderRadius: 'var(--border-radius-md)',
+        borderRadius: 'var(--bds-border-radius-md)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
         overflow: 'hidden',
-        background: 'var(--surface-inverse)',
+        background: 'var(--bds-surface-inverse)',
       }}
     >
       <div
@@ -284,7 +284,7 @@ export function VideoDemo({ variant = '' }: { variant?: string }) {
           position: 'absolute',
           inset: 0,
           background:
-            'linear-gradient(135deg, var(--background-brand-secondary) 0%, var(--background-brand-primary) 100%)',
+            'linear-gradient(135deg, var(--bds-background-brand-secondary) 0%, var(--bds-background-brand-primary) 100%)',
           opacity: 0.6,
           zIndex: 0,
         }}
@@ -293,7 +293,7 @@ export function VideoDemo({ variant = '' }: { variant?: string }) {
         style={{
           position: 'relative',
           zIndex: 2,
-          color: 'var(--text-on-color-dark)',
+          color: 'var(--bds-text-on-color-dark)',
           textAlign: 'center',
         }}
       >
@@ -319,7 +319,7 @@ export function SectionThemeDemo({
       className={className}
       style={{
         padding: '32px 24px',
-        borderRadius: 'var(--border-radius-md)',
+        borderRadius: 'var(--bds-border-radius-md)',
         textAlign: 'center',
       }}
     >

@@ -10,7 +10,7 @@ Atmospheres are **CSS decoration overlays** that sit on top of a client's Tokens
 The portal's theme generator reads `company_profiles.atmosphere` at extraction time and inlines that atmosphere's CSS (from `@brikdesigns/bds/atmospheres/{slug}.css`) into the stored theme artifact. It does not emit an `@import`. The consumer Astro site fetches one theme artifact at build; the atmosphere cascades automatically.
 
 <Callout type="info">
-**Atmospheres are decoration only.** They add vignettes, grain, orbs, and spotlights — they do not set surface colors, and none is tied to light or dark. The only mode-specific rule is the grain blend, keyed to `:root[data-theme="dark"]`. Background and text colors come from the Tokens Dimension (`dist/tokens.css` + the client's `theme-{slug}.css` in `@layer client-theme`). Import `@brikdesigns/bds/page-base.css` after tokens to wire `html/body` background to `var(--page-primary)` before any atmosphere loads.
+**Atmospheres are decoration only.** They add vignettes, grain, orbs, and spotlights — they do not set surface colors, and none is tied to light or dark. The only mode-specific rule is the grain blend, keyed to `:root[data-theme="dark"]`. Background and text colors come from the Tokens Dimension (`dist/tokens.css` + the client's `theme-{slug}.css` in `@layer client-theme`). Import `@brikdesigns/bds/page-base.css` after tokens to wire `html/body` background to `var(--bds-page-primary)` before any atmosphere loads.
 </Callout>
 
 ## How atmospheres compose with themes
@@ -49,19 +49,19 @@ Each atmosphere renders on the same compact composite (hero + services grid + CT
 
 ### editorial-luxury
 
-Radial orbs (from the brand colour) driven by `data-ambient` attributes on sections; SVG Perlin film grain at 32% opacity with `mix-blend-mode: multiply` on light and `overlay` on dark; cursor-tracking spotlight on elements with `data-spotlight`. Section-edge fades reference `var(--page-primary)` from the theme layer so they blend into whatever surface color the brand sets. Honors reduced-motion.
+Radial orbs (from the brand colour) driven by `data-ambient` attributes on sections; SVG Perlin film grain at 32% opacity with `mix-blend-mode: multiply` on light and `overlay` on dark; cursor-tracking spotlight on elements with `data-spotlight`. Section-edge fades reference `var(--bds-page-primary)` from the theme layer so they blend into whatever surface color the brand sets. Honors reduced-motion.
 
 <AtmospherePreview atmosphere="editorial-luxury" />
 
 ### cinematic-dramatic
 
-Aurora-drift gradient at the top of the viewport (42s cycle, animated via `@property` interpolation) and a conic rotating spotlight on sections marked `data-ambient="spotlight"`. No grain — the aurora is already doing the atmospheric work. Section-edge fades reference `var(--page-primary)`. Fit for legal / agency / finance / SaaS.
+Aurora-drift gradient at the top of the viewport (42s cycle, animated via `@property` interpolation) and a conic rotating spotlight on sections marked `data-ambient="spotlight"`. No grain — the aurora is already doing the atmospheric work. Section-edge fades reference `var(--bds-page-primary)`. Fit for legal / agency / finance / SaaS.
 
 <AtmospherePreview atmosphere="cinematic-dramatic" />
 
 ### warm-soft
 
-Single quiet rose vignette in the top-left corner and subtle grain at 15% opacity with `mix-blend-mode: multiply` on light and `screen` on dark. No motion, no spotlights, no depth orbs — anxiety-sensitive audiences (wellness, therapy, mental health, recovery) shouldn't see cinematic flourish. Section-edge fades reference `var(--page-primary)`.
+Single quiet rose vignette in the top-left corner and subtle grain at 15% opacity with `mix-blend-mode: multiply` on light and `screen` on dark. No motion, no spotlights, no depth orbs — anxiety-sensitive audiences (wellness, therapy, mental health, recovery) shouldn't see cinematic flourish. Section-edge fades reference `var(--bds-page-primary)`.
 
 <AtmospherePreview atmosphere="warm-soft" />
 

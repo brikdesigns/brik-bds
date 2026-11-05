@@ -61,7 +61,7 @@ Adjacency margin covers the one case a single flex `gap` cannot: a Block's title
 
 **The section component owns the separator between sections.** A hand-placed `<Divider />` between two sections is duplicate chrome — the line is already there.
 
-On a product page, consecutive `DataSection` siblings draw their own rule and their own space from one adjacency selector: `--padding-lg` of `margin-top`, the same again as `padding-top`, and a `--border-width-md` `--border-muted` top border. That is the identical token treatment `<Divider />` renders, so placing one between two `DataSection`s paints the line twice. `SheetSection` takes the spacing half of the same rule (`margin-top: var(--padding-lg)`) and deliberately draws **no** border — a sheet body is already a bounded surface.
+On a product page, consecutive `DataSection` siblings draw their own rule and their own space from one adjacency selector: `--padding-lg` of `margin-top`, the same again as `padding-top`, and a `--border-width-md` `--border-muted` top border. That is the identical token treatment `<Divider />` renders, so placing one between two `DataSection`s paints the line twice. `SheetSection` takes the spacing half of the same rule (`margin-top: var(--bds-padding-lg)`) and deliberately draws **no** border — a sheet body is already a bounded surface.
 
 | Between | Separator comes from | Hand-place a `Divider`? |
 |---|---|---|
@@ -80,7 +80,7 @@ You rarely set these values by hand — the standard is baked into the layer tha
 - **Text within a block** → `ContentBlock` (named slots) or `Prose` (free HTML) own it. See [Content blocks and prose](/docs/build-standards/page-structure#content-blocks-and-prose).
 - **A section intro (centered title + description)** → `SectionHeader`. It composes `ContentBlock` for this rhythm and adds the one thing rhythm alone doesn't: the horizontal **measure** that caps and centers the text column so intros stop being 600px on one page and full-width on the next. See [Text column vs band](/docs/build-standards/page-grid#text-column-vs-band).
 - **Block ↔ block** → the layout primitive's `gap` (`Stack`, `Grid`) — `--gap-xl` in a section's content region.
-- **Section ↔ section** → the section shell's `padding-block: var(--section-padding-block)`, the [layout tier](/docs/foundation/spacing#layout-tier) token ([ADR-042](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-042-layout-tier-device-clamp.md), replacing ADR-021's `7vw` clamp). A section needing a different band re-declares `padding-block` on its own selector.
+- **Section ↔ section** → the section shell's `padding-block: var(--bds-section-padding-block)`, the [layout tier](/docs/foundation/spacing#layout-tier) token ([ADR-042](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-042-layout-tier-device-clamp.md), replacing ADR-021's `7vw` clamp). A section needing a different band re-declares `padding-block` on its own selector.
 
 ## Related
 

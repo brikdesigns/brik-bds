@@ -14,18 +14,18 @@ const badgeStyle: CSSProperties = {
 
 const TIER_STYLES: Record<TierName, { bg: string; color: string; label: string }> = {
   lightweight: {
-    bg: 'var(--background-brand-secondary)',
-    color: 'var(--text-on-color-light)',
+    bg: 'var(--bds-background-brand-secondary)',
+    color: 'var(--bds-text-on-color-light)',
     label: 'Lightweight',
   },
   gsap: {
-    bg: 'var(--background-brand-primary)',
-    color: 'var(--text-on-color-dark)',
+    bg: 'var(--bds-background-brand-primary)',
+    color: 'var(--bds-text-on-color-dark)',
     label: 'GSAP',
   },
   premium: {
-    bg: 'var(--background-accent-purple)',
-    color: 'var(--text-on-color-dark)',
+    bg: 'var(--bds-background-accent-purple)',
+    color: 'var(--bds-text-on-color-dark)',
     label: 'Premium',
   },
 };

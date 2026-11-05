@@ -74,9 +74,15 @@ describe('devbar widgets — Storybook mirror matches canonical', () => {
  * A recorded hash for any of them that rots will fail this suite. Re-defer a
  * consumer ONLY by adding its prefix back here with a tracking issue, never by
  * hand-editing its recorded hash to pass.
+ *
+ * Re-deferred for #2711 (the `--bds-` widget rename): brikdesigns and
+ * brik-client-portal read the widgets against their PINNED bds. The portal also
+ * gates its mockup copy byte-for-byte against node_modules (portal#1583). Each
+ * one resyncs in the same PR as its bump past the bridge-removal release. Their
+ * recorded hashes are still the ones their files carry.
  */
 const STATE_FILE = join(repoRoot, 'scripts/devbar-sync-state.txt');
-const DEFERRED_PREFIXES = [];
+const DEFERRED_PREFIXES = ['brik/brikdesigns/', 'product/brik-client-portal/'];
 
 // consumer basename (either the bare canonical name or the brik-*.js public
 // name) → canonical source filename in CANONICAL_DIR.
