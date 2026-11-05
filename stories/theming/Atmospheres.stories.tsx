@@ -2,23 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { Atmosphere } from '../../content-system/vocabularies/atmosphere';
 import { ATMOSPHERE_MANIFEST } from '../../content-system/atmospheres';
 import { AtmospherePreview, type PreviewTheme } from '../foundation/_components/AtmospherePreview';
-
-// Atmosphere CSS is resolved per slug so the iframe preview can load
-// the correct asset at runtime. Using `new URL(path, import.meta.url)`
-// — Vite handles this as an asset reference and emits the same hashed
-// URL at build time that a `?url` import would produce. Chose this
-// shape over `?url` imports because the anti-slop scanner's import
-// resolver doesn't strip query-string suffixes and flags the `?url`
-// paths as unresolvable (pre-existing false positive from PR #188).
-const atmosphereCssMap: Record<Atmosphere, string> = {
-  'editorial-luxury': new URL('../../content-system/atmospheres/editorial-luxury.css', import.meta.url).href,
-  'cinematic-dramatic': new URL('../../content-system/atmospheres/cinematic-dramatic.css', import.meta.url).href,
-  'minimal-clinical': new URL('../../content-system/atmospheres/minimal-clinical.css', import.meta.url).href,
-  'warm-soft': new URL('../../content-system/atmospheres/warm-soft.css', import.meta.url).href,
-  'clean-bright': new URL('../../content-system/atmospheres/clean-bright.css', import.meta.url).href,
-  'organic-textured': new URL('../../content-system/atmospheres/organic-textured.css', import.meta.url).href,
-  'none': new URL('../../content-system/atmospheres/none.css', import.meta.url).href,
-};
+import { atmosphereCssMap } from '../../.storybook/atmosphere-css';
 
 interface AtmosphereStoryArgs {
   atmosphere: Atmosphere;
@@ -111,4 +95,32 @@ export const OrganicTextured: Story = {
 /** @summary Baseline with no atmosphere overrides applied */
 export const None: Story = {
   args: { atmosphere: 'none' },
+};
+
+/**
+ * Unlike the per-atmosphere stories above (which preview inside an iframe),
+ * this story renders in the Storybook document itself, where the toolbar's
+ * atmosphere stylesheet applies. Each section uses a different `data-ambient`
+ * placement so every effect the atmosphere defines is visible at once.
+ *
+ * @summary Follows the Atmosphere toolbar with data-ambient sections
+ */
+export const Toolbar: Story = {
+  args: { atmosphere: 'none' },
+  render: (_args, { globals }) => (
+    <div data-testid="atmosphere-toolbar-story" data-atmosphere={String(globals.atmosphere ?? 'none')}>
+      {(['spotlight', 'top-left', 'center', 'bottom'] as const).map((placement) => (
+        <section
+          key={placement}
+          data-ambient={placement}
+          style={{ padding: 'var(--bds-padding-xl)', minHeight: 200 }}
+        >
+          <h3 style={{ color: 'var(--bds-text-primary)' }}>data-ambient=&quot;{placement}&quot;</h3>
+          <p style={{ color: 'var(--bds-text-secondary)' }}>
+            Atmosphere: {String(globals.atmosphere ?? 'none')}
+          </p>
+        </section>
+      ))}
+    </div>
+  ),
 };
