@@ -12,6 +12,9 @@
  *   - A pairing flagged `darkException` whose DARK result is sub-threshold is
  *     REPORTED as a known, tracked exception (the systemic dark-mode service
  *     gap, brik-bds#823) and does NOT fail the gate.
+ *   - `lightException` is its twin for the LIGHT result (a faded brand label is
+ *     1.93:1 in light, brik-bds#1742). Same shape — `{ issue, reason }` — same
+ *     issue-ref requirement, same reporting; each applies to its own theme only.
  *   - A pairing flagged `appliesTo: ["light"|"dark"]` is evaluated ONLY in the
  *     listed theme(s); in any other theme it is marked n/a (mode-scoped). Use
  *     this for components that swap fg AND bg by theme (e.g. the inverse-surface
@@ -145,6 +148,26 @@ function hexToRgb(hex) {
  * `alpha: "--state-disabled-opacity"` means retuning that token re-scores every
  * faded pairing automatically, so the value and its gate cannot drift.
  */
+/**
+ * The tracked exception a pairing declares for `themeKey`, or undefined.
+ * `lightException` / `darkException` are one mechanism: a sub-threshold result
+ * in THAT theme is reported against `issue` instead of failing the gate. An
+ * exception with no issue number or no reason is refused outright — an
+ * untracked exemption is just a silenced failure.
+ */
+function exceptionFor(pairing, themeKey) {
+  const key = `${themeKey}Exception`;
+  const ex = pairing[key];
+  if (ex === undefined) return undefined;
+  if (!ex || !Number.isInteger(ex.issue) || typeof ex.reason !== 'string' || !ex.reason.trim()) {
+    throw new Error(
+      `Pairing "${pairing.label}": ${key} needs { issue: <number>, reason: <text> } — ` +
+        `an exception must point at the issue that tracks it.`,
+    );
+  }
+  return ex;
+}
+
 function resolveAlpha(spec, theme) {
   const raw = typeof spec === 'string' && spec.startsWith('--') ? theme.vars[spec] : spec;
   const n = typeof raw === 'string' ? Number.parseFloat(raw) : raw;
@@ -274,10 +297,11 @@ async function main() {
           // Clears the AA floor but misses the AAA aspiration → warn, don't block.
           status = 'warn';
           aaaWarnings++;
-        } else if (theme.key === 'dark' && pairing.darkException) {
-          // Genuine sub-threshold in dark on a pairing whose cause is tracked
-          // elsewhere (the service-tier gap #823; the faded Chip --secondary
-          // fill #1689). The row prints its own issue number.
+        } else if (exceptionFor(pairing, theme.key)) {
+          // Genuine sub-threshold in THIS theme on a pairing whose cause is
+          // tracked elsewhere (the service-tier gap #823; the faded Chip
+          // --secondary fill #1689; faded sub-part fills #1742). The row prints
+          // its own issue number.
           status = 'exception';
           exceptions++;
         } else {
@@ -297,6 +321,7 @@ async function main() {
           threshold: target,
           floor,
           ...(pairing.darkException ? { darkException: pairing.darkException } : {}),
+          ...(pairing.lightException ? { lightException: pairing.lightException } : {}),
         });
       }
       results.push({
@@ -310,7 +335,7 @@ async function main() {
         threshold: target,
         ratio,
         status,
-        exception: pairing.darkException || null,
+        exception: exceptionFor(pairing, theme.key) || null,
       });
     }
   }
@@ -371,7 +396,7 @@ function report(results, hardFailures, exceptions, aaaWarnings) {
     // Each row prints its own issue number above; don't restate one here — the
     // summary said "brik-bds#823" unconditionally, which misattributed every
     // non-service exception added since (#1687).
-    console.log(`  ⚠  ${exceptions} dark-mode pairing(s) below threshold — tracked exception(s), see the rows above`);
+    console.log(`  ⚠  ${exceptions} pairing result(s) below threshold — tracked exception(s), see the rows above`);
   }
   console.log('');
 }
@@ -446,4 +471,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { blankComments, parseDecls, extractBlock };
+module.exports = { blankComments, parseDecls, extractBlock, exceptionFor };

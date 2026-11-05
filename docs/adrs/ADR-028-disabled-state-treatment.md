@@ -1,6 +1,6 @@
 # ADR-028 — Disabled treatment is chosen by whether the control paints its own fill
 
-**Status:** Accepted (2026-08-04) — the **boundary rule** and its consequence that `Button` / `FilterButton` / `FilterToggle` keep today's grey-pill look are ratified by the owner. Supersedes the "pending ratification" framing. The narrower question #1667 posed — "should the 3 adopt the fade?" — is answered **no** by measurement, not by taste (§ Decision pt-1). **Amended 2026-08-06** — § Amendment: the mechanism is gated structurally, not by pixels, driven by [#1697](https://github.com/brikdesigns/brik-bds/issues/1697).
+**Status:** Accepted (2026-08-04) — the **boundary rule** and its consequence that `Button` / `FilterButton` / `FilterToggle` keep today's grey-pill look are ratified by the owner. Supersedes the "pending ratification" framing. The narrower question #1667 posed — "should the 3 adopt the fade?" — is answered **no** by measurement, not by taste (§ Decision pt-1). **Amended 2026-08-06** — § Amendment: the mechanism is gated structurally, not by pixels, driven by [#1697](https://github.com/brikdesigns/brik-bds/issues/1697). **Amended 2026-11-05** — § Amendment §3: sub-part and surface-token faders are measured, and the measurement is gated, driven by [#1742](https://github.com/brikdesigns/brik-bds/issues/1742).
 **Date:** 2026-08-04
 **Supersedes:** —
 **Superseded by:** —
@@ -180,11 +180,33 @@ Picking that number and that token is a visible change to 26 components with its
 
 **The foreground trap, recorded so it is not re-derived.** Moving `Chip --secondary`'s label to `--text-on-color-light` — the fix `Tag` and `SegmentedControl` already applied for this exact fill — improves the *enabled* pair (3.43:1 → 5.46:1) and makes the *faded* pair **worse** (2.34:1 → 2.06:1). Fading composites the label and the fill toward the same backdrop, so a foreground chosen for the enabled state is not evidence about the faded one. The mechanism had to change; the foreground could not save it. `node scripts/measure-disabled-contrast.mjs --alpha 0.5` reproduces all four numbers.
 
-**What is reported but not gated,** because this amendment does not rule on it — tracked in [#1742](https://github.com/brikdesigns/brik-bds/issues/1742):
+**What this amendment left unmeasured** — tracked in [#1742](https://github.com/brikdesigns/brik-bds/issues/1742), measured and gated by [§ Amendment §3](#amendment-3--the-two-unmeasured-populations-are-measured-and-the-measurement-is-gated-2026-11-05):
 
-- **Sub-part fills** — `Pagination`'s arrow, `Slider`'s track and thumb. A fill inside a faded subtree, where nothing has yet measured whether the parent's single `opacity` is the same defect or acceptable composition.
-- **Surface-token fills** — the 13 components test 3 excludes. Covered by pt-2 in prose, never measured against it.
-
-`npm run lint-disabled-fade -- --report` prints both populations under `RULE C`, so neither is silently absorbed.
+- **Sub-part fills** — `Pagination`'s arrow, `Slider`'s track and thumb. A fill inside a faded subtree, where nothing had measured whether the parent's single `opacity` is the same defect or acceptable composition.
+- **Surface-token fills** — the components test 3 excludes. Covered by pt-2 in prose, never measured against it.
 
 **Correction to § Amendment §1.** Its table's *Mechanism* row now covers pt-1 as well as pt-2; `lint-disabled-fade` exits 1 on a fill-bearing fader. Verified against the pre-fix tree: `node scripts/lint-disabled-fade.mjs --root <main>/components/ui` reports the four violations above, and 0 after conversion.
+
+## Amendment §3 — the two unmeasured populations are measured, and the measurement is gated (2026-11-05)
+
+> Driven by [#1742](https://github.com/brikdesigns/brik-bds/issues/1742). Amendment §2 ruled on the same-element, non-surface boundary and left sub-part fills and surface-token fills "reported but not gated" because nothing had measured them.
+
+**What the measurement says.** pt-2's prose — "the page or an ancestor surface shows through" — is **not** safe by assumption. At `--state-disabled-opacity` 0.5, seven faded pairings fall below the 3:1 floor in at least one theme (11 of 18 pairing-theme results scored):
+
+| Pairing | Components | Light | Dark |
+|---|---|---|---|
+| `--text-on-color-dark` on `--background-brand-primary` | Pagination arrow, CompletionToggle (checked), TabBar box (selected) | 1.93 | 2.58 |
+| `--background-brand-primary` on page | Slider progress + thumb border | 1.93 | 2.06 |
+| `--text-muted` on `--background-input` | TextInput, TextArea, NumberInput, AddressInput, DatePicker, TimePicker placeholder | 2.24 | 1.62 |
+| `--text-secondary` on `--background-input` / `--surface-primary` / `--background-primary` | Select placeholder, FileUploader hint, TabBar box (unselected) | 2.85 | pass |
+| `--border-input` on page | CompletionToggle (unchecked) | 1.80 | 1.52 |
+
+The input *value* (`--text-primary` on `--background-input`, 3.32 / 4.43) and the Stepper icon pass, so the assumption holds for the primary foreground and fails for the placeholder tier and for brand-filled sub-parts. The numbers reproduce with `node scripts/measure-disabled-contrast.mjs --alpha 0.5` and were recomputed independently of it. They are the same label-and-fill-toward-one-backdrop defect pt-1 describes, one level down.
+
+**What this amendment does not decide.** Whether the fix is the pt-1 swap for these controls or a different opacity. The swap for the input family contradicts § Amendment §2 test 3; no single opacity fixes all seven (light brand pairs stay under 3:1 up to 0.80, dark muted-on-input never clears); and [ADR-015's 2026-09-12 amendment](./ADR-015-brand-primary-aa-large-contrast-policy.md) forbids darkening or bolding the label on a brand fill. That decision is [#3016](https://github.com/brikdesigns/brik-bds/issues/3016). Test 3 stands as written until it lands.
+
+**What is gated.** The conversion half is unchanged: a root fill on a non-surface token must be on the swap. The new half is **measurement**. `lint-disabled-fade` exits 1 (`unmeasured-faded-fill`) on any fading component that paints a fill, sub-part or surface-token, and is not named in `components` on a faded (`alpha`) pairing in `tokens/contrast-pairings.json`. Gating the *conversion* of these populations would invent a boundary this ADR has not drawn; gating "nobody measured it" is the same unmeasured-by-construction class #1687 and #1701 closed, and it fails the moment a new fader appears with no faded pair behind it. It does not assert the pair passes — that is `contrast-gate`'s job, and a failing pair carries a tracked `lightException` / `darkException` (below).
+
+**Tracked exceptions.** `contrast-pairings.json` could only track a dark-mode failure (`darkException`); all seven fail in light and four also in dark; light is where the only choices were failing the gate or leaving the pair unscored. `lightException` is its twin — same `{ issue, reason }` shape, an issue number required, applying to its own theme only — and every failing pair above carries one pointing at #3016.
+
+**Correction to § Amendment §2.** `node scripts/measure-disabled-contrast.mjs --alpha 0.5` crashed on the `Tag muted` case, whose `--bds-background-status-neutral` was removed in #2957, so the "reproduces all four numbers" line was unrunnable. The case now measures `Tag subtle neutral` (`--bds-background-neutral-light` + `--bds-text-on-color-light`, 2.76 light / 3.88 dark) — the pair `Tag.css` paints today — so the "reproduces all four numbers" line no longer holds for that case — its historical figure was for the removed `--muted` pair. The script's copy of the cascade parser also lacked the comment-blanking `validate-themes.js` gained in #1965, so tokens declared after a brace in a comment (`--bds-background-neutral-light`) did not resolve; it now blanks comments the same way.
