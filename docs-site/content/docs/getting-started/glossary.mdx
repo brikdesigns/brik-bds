@@ -1,0 +1,126 @@
+---
+title: Glossary
+description: One name per concept for the words BDS, the Content System and the website builder use — Visual Style, industry pack, Template, theme and more.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Each term below has one meaning. When a word has several meanings in use, it is listed under [Words with more than one meaning](#words-with-more-than-one-meaning) with the name to use for each. The reasons behind these names are in [ADR-048](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-048-visual-style-and-theming-taxonomy.md).
+
+For the seven words that describe a single token (Anatomy, ID, Tier, Library, Layer, Mode, Tenet), see [Token Anatomy](/docs/foundation/token-anatomy).
+
+## How the pieces fit
+
+A client's site is built from four separate choices. None of them contains another.
+
+| Choice | Decides | Example |
+|---|---|---|
+| **Client theme** | Brand values: colours, fonts, logo | `theme-{client}.css` |
+| **Visual Style** | How the site looks | Dark, Modern, Playful |
+| **Industry pack** | What the site says | `dental` |
+| **Blueprints** | How each page section is laid out | a split hero, a service grid |
+
+A **Template** combines them: one look, one industry pack and a set of blueprints, shown with a sample client theme.
+
+## The four Tenets
+
+**Tenet.** One of the four pillars of BDS. Every token and doc belongs to one.
+
+- **Foundation.** The shared token canon: colour, type, spacing, radius, shadow.
+- **Theming.** How one component library renders as each client's brand. See [Theming](/docs/theming).
+- **Motion.** Animation tokens and behaviours.
+- **Content.** The **Content System**, BCS: vocabularies, industry packs, voices, compliance. See [Content System](/docs/content-system).
+
+## Theming terms
+
+**Theming Dimension.** One independent decision a client's theme is made of. There are five: Tokens, Theme Mode, Atmospheres, Expression Modes and Layout Archetypes. Say "Dimension", never "layer".
+
+**Client theme.** One client's brand values in `theme-{client}.css`. The portal generates it from the client profile. It is the only thing that sets a client's colours and fonts. See [Client themes](/docs/theming/client-themes).
+
+**Built-in theme.** A theme BDS ships for its own use: Brik, Brik Dark and Client Sim. Client Sim is a QA tool that shows where a component ignores the font tokens. None of them is a client theme.
+
+**Brand Kit.** The Figma library that holds Brik's own brand values. Clients have no Brand Kit; the portal holds their values. See [Library architecture](/docs/getting-started/figma-library-architecture).
+
+**Theme Mode.** Light or dark. It is the only source of light or dark.
+
+**Atmosphere.** Ambient decoration such as grain, glow or vignettes. It sets no colour and works in light and dark. See [Atmospheres](/docs/theming/atmospheres).
+
+**Expression Modes.** Density and shape settings set by `data-mode-*` attributes: spacing, typography, radius, elevation and borderwidth.
+
+**Layout Archetype.** The shape of the site header and footer, plus scroll and drawer behaviour. See [Layout Archetypes](/docs/theming/layout-archetypes).
+
+**Animation tier.** How much motion a site uses: subtle, moderate or expressive.
+
+**Image mood.** The photography direction: editorial, clinical, photojournalistic, lifestyle, abstract or documentary.
+
+## Visual Style
+
+**Visual Style.** A named look, such as Dark, Modern, Playful or Editorial. A client picks up to three; the first one leads and the others modify it. A picker may label it **Style**.
+
+A Visual Style is a preset, not a sixth Dimension. The plan is for each one to propose values for:
+
+- Theme Mode
+- Atmosphere
+- Expression Modes
+- Animation tier
+
+Image mood and suggested blueprints may be added later.
+
+Dark and Light are the exception: their whole preset is one Theme Mode value.
+
+A Visual Style never sets a colour, font or logo. Those come from the client theme. A style such as Colorful or Monochrome decides how much of the client's palette a page uses, never which colours.
+
+<Callout type="warn">
+  **Today only Dark and Light change anything.** They set the Theme Mode. The other Visual Styles are recorded and used in design briefs, but they do not yet set any other value. Giving each one its full preset is planned work, and the presets will live in BDS.
+</Callout>
+
+**Personality.** The brand's character, which drives voice and tone. It is a separate list from Visual Style. Bold, Minimal, Modern and Playful appear in both lists with different jobs: a Playful brand can use a Minimal style.
+
+## Content and industry terms
+
+**Industry pack.** What a site in one industry says: services, vocabulary, calls to action, compliance rules, page archetypes, and the shape of its header and footer. Each pack has a slug, such as `dental` or `real-estate-rv-mhc`; this is the sub-industry. `small-business` is the default when no pack matches. A pack never contains a Visual Style. It lists the styles that suit its industry. See [Industries](/docs/content-system/industries).
+
+**Parent industry.** The top-level group a pack belongs to: medical, real estate, small business or other. It is what the portal's "Industry" dropdown shows. A browse screen may label it **Category**.
+
+**Voice.** How copy sounds for a brand. See [Content System](/docs/content-system).
+
+## Composition terms
+
+**Blueprint.** A pre-built page section with set layout options. Blueprints are not a Theming Dimension. See [Blueprints](/docs/web-elements/blueprints).
+
+**Mood.** A tag a blueprint author puts on a blueprint, such as `bold` or `warm`. It is matched to Personality and Visual Style automatically. Clients never pick a Mood.
+
+**Blueprint industry tag.** A label on a blueprint naming the industries its layout fits, such as `healthcare` or `universal`. It is wider than the industry pack list.
+
+**Template.** A catalog entry made of:
+
+- a look: one Visual Style, plus up to two that modify it, such as Modern with Dark
+- one industry pack for sample content
+- a set of blueprints
+- a sample client theme to preview it
+
+It holds no values of its own. No Templates exist yet. A blueprint marked `tier: 'template'` is cleared to appear in one.
+
+## Words with more than one meaning
+
+| Word | Meaning | Say |
+|---|---|---|
+| bundle | `dist/tokens.css` | **BDS bundle** |
+| bundle | A named look such as Dark or Modern | **Visual Style** |
+| bundle | A service offering such as Brand Identity Bundle | the offering's name |
+| theme | One client's brand values | **client theme** |
+| theme | Brik, Brik Dark or Client Sim | **built-in theme** |
+| theme | Light or dark | **Theme Mode** |
+| theme | The numbered themes `theme-1` to `theme-8` | retired; they live in `brik-website-themes` |
+| theme | The pillar | **Theming Tenet** |
+| style | A named look | **Visual Style** |
+| style | ADR-039's customization axis for colour, type and surface | **Style axis** |
+| style | The portal's "Style Preferences" field | **Visual Style** picks |
+| industry | The top-level group in the portal dropdown | **Parent industry** |
+| industry | A pack slug such as `dental` | **Industry pack** |
+| sub-industry | A pack slug such as `dental` | **Industry pack** |
+| category | The top-level industry group | **Parent industry** |
+| template | A look, an industry pack and blueprints together | **Template** |
+| template | The shape of a docs page | **page template** |
+| layer | A CSS `@layer` | **Layer** |
+| layer | One of the five theming decisions | **Theming Dimension** |
