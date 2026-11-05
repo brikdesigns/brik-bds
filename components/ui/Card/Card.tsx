@@ -8,7 +8,15 @@ import { Icon } from '../Icon';
 import type { ServiceLine } from '../ServiceTag/service-config';
 import './Card.css';
 
-export type CardVariant = 'outlined' | 'brand' | 'elevated' | 'raised' | 'borderless';
+export type CardVariant = 'outlined' | 'brand' | 'elevated' | 'raised' | 'borderless' | 'filled';
+/**
+ * Class for a variant. `filled` is the one member emitted with its axis prefix
+ * (`bds-card--variant-filled`) — ADR-033 § 4 rejects a new bare modifier, and
+ * the older bare siblings are baselined, not a licence to add one.
+ */
+function cardVariantClass(variant: CardVariant): string {
+  return variant === 'filled' ? 'bds-card--variant-filled' : `bds-card--${variant}`;
+}
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 /**
  * Card layout arrangement (ADR-038) — the flat, anatomy-driven interface. One
@@ -176,8 +184,9 @@ interface CardDefaultProps extends CardBaseProps {
   /** Discriminant guard — the flat anatomy API uses `layout`; the default card omits it. */
   layout?: never;
   /**
-   * Visual variant — outlined / brand / elevated / raised / borderless
-   * (default `outlined`). Use `borderless` for cards sitting on a colored
+   * Visual variant — outlined / brand / elevated / raised / borderless / filled
+   * (default `outlined`). `filled` — neutral recessed panel: `--bds-surface-secondary`
+   * fill with a `--bds-border-muted` border, for a grouping container inside a page. Use `borderless` for cards sitting on a colored
    * surface, where the border ring reads as visual noise. `raised` —
    * surface-primary fill, no border, with a `--bds-box-shadow-md` drop shadow;
    * use for a focal/lone card or a grid cell that needs a lifted, contained
@@ -274,7 +283,7 @@ export type CardProps = CardDefaultProps | CardAnatomyProps;
  * - **Default** (no `layout`) — flexible content slot. Compose with
  *   `<CardTitle>`, `<CardDescription>`, `<CardFooter>` subcomponents.
  *   Visual variants: `outlined` (default) / `brand` / `elevated` / `raised` /
- *   `borderless`.
+ *   `borderless` / `filled`.
  * - **`layout="stack"`** — vertical grid cell: top `media`, `overline`,
  *   `title`, body `children`, bottom-anchored `action`.
  * - **`layout="row"`** — horizontal cell: `media` left, text column right.
@@ -379,7 +388,7 @@ function renderDefault({
 }: CardDefaultProps) {
   const classes = bdsClass(
     'bds-card',
-    `bds-card--${variant}`,
+    cardVariantClass(variant),
     `bds-card--padding-${padding}`,
     media && 'bds-card--media',
     interactive && 'bds-card--interactive',
@@ -553,7 +562,7 @@ function renderAnatomy({
       <div
         className={bdsClass(
           'bds-card',
-          `bds-card--${variant ?? 'outlined'}`,
+          cardVariantClass(variant ?? 'outlined'),
           'bds-card--layout-pricing',
           tint && `bds-card--tint-${tint}`,
           className,
@@ -633,7 +642,7 @@ function renderAnatomy({
     // Default surface is `outlined` (fill + border); the `-stack` block owns
     // only the structural bits, so borderless/elevated/raised compose without
     // the specificity overrides the old preset needed (ADR-038).
-    `bds-card--${variant ?? 'outlined'}`,
+    cardVariantClass(variant ?? 'outlined'),
     'bds-card--layout-stack',
     mediaTreatment === 'inset' && 'bds-card--layout-stack-inset',
     mediaTreatment === 'inset' &&
