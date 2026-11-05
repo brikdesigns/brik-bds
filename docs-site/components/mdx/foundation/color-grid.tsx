@@ -50,10 +50,10 @@ function ColorSwatch({ name, cssVar, isText }: ColorSwatchProps) {
           width: '100%',
           height: '56px',
           backgroundColor: isText
-            ? 'var(--surface-primary, #ffffff)'
+            ? 'var(--bds-surface-primary, #ffffff)'
             : `var(${cssVar})`,
-          borderRadius: 'var(--border-radius-sm, 2px)',
-          border: '1px solid var(--border-secondary, #e5e7eb)',
+          borderRadius: 'var(--bds-border-radius-sm, 2px)',
+          border: '1px solid var(--bds-border-secondary, #e5e7eb)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -70,7 +70,7 @@ function ColorSwatch({ name, cssVar, isText }: ColorSwatchProps) {
           style={{
             fontSize: '12px',
             fontWeight: 600,
-            color: 'var(--text-primary, #111827)',
+            color: 'var(--bds-text-primary, #111827)',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
@@ -82,8 +82,8 @@ function ColorSwatch({ name, cssVar, isText }: ColorSwatchProps) {
           style={{
             fontSize: '11px',
             color: copied
-              ? 'var(--text-brand-primary, #e35335)'
-              : 'var(--text-muted, #6b7280)',
+              ? 'var(--bds-text-brand-primary, #e35335)'
+              : 'var(--bds-text-muted, #6b7280)',
             fontFamily: 'ui-monospace, SFMono-Regular, monospace',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -166,15 +166,15 @@ export function PaletteGrid({ title, palette, prefix, columns = 8 }: PaletteGrid
                 width: '100%',
                 height: '56px',
                 backgroundColor: c.hex,
-                borderRadius: 'var(--border-radius-sm, 2px)',
-                border: '1px solid var(--border-secondary, #e5e7eb)',
+                borderRadius: 'var(--bds-border-radius-sm, 2px)',
+                border: '1px solid var(--bds-border-secondary, #e5e7eb)',
               }}
             />
             <div
               style={{
                 fontSize: '11px',
                 fontWeight: 600,
-                color: 'var(--text-primary, #111827)',
+                color: 'var(--bds-text-primary, #111827)',
                 fontFamily: 'ui-monospace, SFMono-Regular, monospace',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -186,7 +186,7 @@ export function PaletteGrid({ title, palette, prefix, columns = 8 }: PaletteGrid
             <div
               style={{
                 fontSize: '11px',
-                color: 'var(--text-muted, #6b7280)',
+                color: 'var(--bds-text-muted, #6b7280)',
                 fontFamily: 'ui-monospace, SFMono-Regular, monospace',
               }}
             >

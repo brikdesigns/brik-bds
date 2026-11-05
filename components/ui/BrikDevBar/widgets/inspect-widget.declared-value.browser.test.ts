@@ -49,23 +49,23 @@ beforeAll(() => {
   const style = document.createElement('style');
   style.textContent = `
     * { border: 0 solid; }
-    .card { border: 3px solid var(--border-secondary); }
+    .card { border: 3px solid var(--bds-border-secondary); }
     #hi { color: rgb(1, 2, 3); }
-    .lo { color: var(--text-primary) !important; }
-    .logical { padding-inline: var(--page-inset); padding-block: var(--padding-tiny); margin-inline: var(--gap-lg); margin-block: var(--gap-sm); }
-    .win { padding-inline: var(--page-inset); }
-    .win.win { padding-left: var(--padding-sm); }
+    .lo { color: var(--bds-text-primary) !important; }
+    .logical { padding-inline: var(--bds-page-inset); padding-block: var(--bds-padding-tiny); margin-inline: var(--bds-gap-lg); margin-block: var(--bds-gap-sm); }
+    .win { padding-inline: var(--bds-page-inset); }
+    .win.win { padding-left: var(--bds-padding-sm); }
   `;
   document.head.appendChild(style);
 });
 
 describe('getDeclaredValue — var()-shorthand longhand (#2195 B)', () => {
   it('reports the shorthand token for border-color, not the reset currentcolor', () => {
-    // AC: `border: 3px solid var(--border-secondary)` under a `*{ border: 0 solid }`
+    // AC: `border: 3px solid var(--bds-border-secondary)` under a `*{ border: 0 solid }`
     // reset → border-color row shows the token, not currentcolor.
     document.body.innerHTML = `<div id="t" class="card">x</div>`;
     const declared = getDeclaredValue(document.getElementById('t')!, 'border-color');
-    expect(declared?.value).toContain('var(--border-secondary)');
+    expect(declared?.value).toContain('var(--bds-border-secondary)');
     expect(declared?.value).not.toContain('currentcolor');
   });
 });
@@ -74,20 +74,20 @@ describe('getDeclaredValue — !important beats higher specificity (#2195 D)', (
   it('an !important class rule wins over a non-important #id rule', () => {
     document.body.innerHTML = `<div id="hi" class="lo">y</div>`;
     const declared = getDeclaredValue(document.getElementById('hi')!, 'color');
-    expect(declared?.value.trim()).toBe('var(--text-primary)');
+    expect(declared?.value.trim()).toBe('var(--bds-text-primary)');
   });
 });
 
 describe('getDeclaredValue — logical shorthand fallback (#2265)', () => {
   const cases: Array<[string, string]> = [
-    ['padding-left', 'var(--page-inset)'],
-    ['padding-right', 'var(--page-inset)'],
-    ['padding-top', 'var(--padding-tiny)'],
-    ['padding-bottom', 'var(--padding-tiny)'],
-    ['margin-left', 'var(--gap-lg)'],
-    ['margin-right', 'var(--gap-lg)'],
-    ['margin-top', 'var(--gap-sm)'],
-    ['margin-bottom', 'var(--gap-sm)'],
+    ['padding-left', 'var(--bds-page-inset)'],
+    ['padding-right', 'var(--bds-page-inset)'],
+    ['padding-top', 'var(--bds-padding-tiny)'],
+    ['padding-bottom', 'var(--bds-padding-tiny)'],
+    ['margin-left', 'var(--bds-gap-lg)'],
+    ['margin-right', 'var(--bds-gap-lg)'],
+    ['margin-top', 'var(--bds-gap-sm)'],
+    ['margin-bottom', 'var(--bds-gap-sm)'],
   ];
   it.each(cases)('%s resolves the token from the logical shorthand', (prop, token) => {
     document.body.innerHTML = `<div id="t" class="logical">x</div>`;
@@ -98,9 +98,9 @@ describe('getDeclaredValue — logical shorthand fallback (#2265)', () => {
   it('a higher-specificity physical longhand still beats the logical shorthand', () => {
     document.body.innerHTML = `<div id="t" class="win">x</div>`;
     const el = document.getElementById('t')!;
-    expect(getDeclaredValue(el, 'padding-left')?.value.trim()).toBe('var(--padding-sm)');
+    expect(getDeclaredValue(el, 'padding-left')?.value.trim()).toBe('var(--bds-padding-sm)');
     // The sibling side only has the logical shorthand to draw from.
-    expect(getDeclaredValue(el, 'padding-right')?.value.trim()).toBe('var(--page-inset)');
+    expect(getDeclaredValue(el, 'padding-right')?.value.trim()).toBe('var(--bds-page-inset)');
   });
 });
 

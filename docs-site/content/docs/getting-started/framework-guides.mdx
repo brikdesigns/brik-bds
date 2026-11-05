@@ -63,7 +63,7 @@ export const poppins = Poppins({
 
 For the override matrix and a minimal `theme-{client}.css` template, see [Client Themes](/docs/theming/client-themes).
 
-Don't reach for `var(--text-primary)` directly in TSX — wrap tokens in typed primitives (`src/lib/tokens.ts` + `src/lib/styles.ts`) so editor autocomplete catches typos at write-time. Full pattern: [React composition layer](/docs/getting-started/react-composition).
+Don't reach for `var(--bds-text-primary)` directly in TSX — wrap tokens in typed primitives (`src/lib/tokens.ts` + `src/lib/styles.ts`) so editor autocomplete catches typos at write-time. Full pattern: [React composition layer](/docs/getting-started/react-composition).
 
 ### 4. Root layout
 
@@ -317,7 +317,7 @@ Astro sites typically use the lightweight tier (CSS-only) plus Lenis for smooth 
 ### Common Astro gotchas
 
 <Callout type="warn">
-  **CSS custom properties resolve at use-time, not at definition time.** The `import` order in `BaseLayout.astro` controls *which `:root` declaration wins* — `theme-client.css` loaded last overrides BDS defaults. Don't try to "load styles.css after theme-client.css to make components pick up brand colors" — components reference `var(--background-brand-primary)` lazily; cascade resolves at render time.
+  **CSS custom properties resolve at use-time, not at definition time.** The `import` order in `BaseLayout.astro` controls *which `:root` declaration wins* — `theme-client.css` loaded last overrides BDS defaults. Don't try to "load styles.css after theme-client.css to make components pick up brand colors" — components reference `var(--bds-background-brand-primary)` lazily; cascade resolves at render time.
 </Callout>
 
 <Callout type="warn">

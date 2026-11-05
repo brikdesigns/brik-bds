@@ -47,16 +47,16 @@
   // `npm run gen:widget-tokens` to re-sync them, and `:check` gates them in CI
   // (scripts/gen-widget-tokens.mjs). Everything else here is hand-maintained.
   const T = {
-    colorPoppyLight:       '#e35335', // --color-poppy-500
-    colorPoppyDark:        '#b0351b', // --color-poppy-700
-    colorPoppyLightest:    '#ffefeb', // --color-poppy-100
-    colorGrayscaleWhite:   '#ffffff', // --color-grayscale-white
-    colorGrayscaleLighter: '#e0e0e0', // --color-grayscale-300
-    colorGrayscaleLight:   '#828282', // --color-grayscale-500
-    colorGrayscaleDark:    '#5a5a5a', // --color-grayscale-700
-    colorGrayscaleDarker:  '#333333', // --color-grayscale-800
-    colorGrayscaleDarkest: '#1b1b1b', // --color-grayscale-950
-    colorTanLightest:      '#f1f0ec', // --color-tan-100
+    colorPoppyLight:       '#e35335', // --bds-color-poppy-500
+    colorPoppyDark:        '#b0351b', // --bds-color-poppy-700
+    colorPoppyLightest:    '#ffefeb', // --bds-color-poppy-100
+    colorGrayscaleWhite:   '#ffffff', // --bds-color-grayscale-white
+    colorGrayscaleLighter: '#e0e0e0', // --bds-color-grayscale-300
+    colorGrayscaleLight:   '#828282', // --bds-color-grayscale-500
+    colorGrayscaleDark:    '#5a5a5a', // --bds-color-grayscale-700
+    colorGrayscaleDarker:  '#333333', // --bds-color-grayscale-800
+    colorGrayscaleDarkest: '#1b1b1b', // --bds-color-grayscale-950
+    colorTanLightest:      '#f1f0ec', // --bds-color-tan-100
     backgroundBrandPrimary:'#e35335',
     interactionBrandHover: '#b0351b',
     textPrimary:   '#333333',
