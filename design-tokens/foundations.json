@@ -2498,6 +2498,33 @@
         },
         "$type": "number",
         "$value": "{space.50}"
+      },
+      "3nano": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{space.50}"
+      },
+      "2nano": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{space.100}"
+      },
+      "nano": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{space.150}"
       }
     },
     "gap": {
@@ -2648,6 +2675,33 @@
         },
         "$type": "number",
         "$value": "{space.200}"
+      },
+      "3nano": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{space.50}"
+      },
+      "2nano": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{space.100}"
+      },
+      "nano": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{space.150}"
       }
     },
     "gap": {
@@ -2798,6 +2852,33 @@
         },
         "$type": "number",
         "$value": "{space.200}"
+      },
+      "3nano": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{space.50}"
+      },
+      "2nano": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{space.100}"
+      },
+      "nano": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{space.150}"
       }
     },
     "gap": {
@@ -2948,6 +3029,33 @@
         },
         "$type": "number",
         "$value": "{space.300}"
+      },
+      "3nano": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{space.50}"
+      },
+      "2nano": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{space.100}"
+      },
+      "nano": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{space.150}"
       }
     },
     "gap": {

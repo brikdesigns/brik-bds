@@ -390,9 +390,11 @@ New words admitted or retired after acceptance, per § 6. Each entry names the w
 | `label` | `tiny · xs · sm · md · lg · xl` |
 | `border-width` | `none · sm · md · lg · xl · huge` |
 
+> **Extended 2026-11-06 ([#1285](https://github.com/brikdesigns/brik-bds/issues/1285)):** `padding` now runs `none · 3nano · 2nano · nano · tiny · xs · …`. The three `nano` rungs are fixed and padding-only. See § Amendments, "`nano`".
+
 **The measured basis for two rows was a repo artifact, not a design rung.** § 3 sent `icon/tiny` to `3xs` and `icon/huge` to `3xl` because "`2xs` is already taken by a distinct 12px rung". That 12px rung is `--icon-2xs` in [`tokens/gap-fills.css`](../../tokens/gap-fills.css) — a hand-authored gap-fill with no Figma variable behind it ("not yet in Figma; see #758"). The ADR read the repo's own fill-ins as evidence about the ladder and renamed the Figma-backed rungs around them.
 
-- **Rungs:** `tiny` (below `3xs`) and `huge` (above `3xl`) join the t-shirt set; `xxl` sits between `2xl` and `3xl`. Full order: `tiny · 3xs · 2xs · xs · sm · md · lg · xl · 2xl · xxl · 3xl · huge`.
+- **Rungs:** `tiny` (below `3xs`) and `huge` (above `3xl`) join the t-shirt set; `xxl` sits between `2xl` and `3xl`. Full order: `tiny · 3xs · 2xs · xs · sm · md · lg · xl · 2xl · xxl · 3xl · huge`. `--padding-*` alone extends below `tiny` with `3nano · 2nano · nano` (#1285).
 - **Scope:** Foundations *tokens* only. `ButtonSize`'s `tiny → xs` stands — a component size union is governed by Storybook and the coded component, not by a Figma variable. The `duration` and `content-width` word ladders and the deleted `--border-width-{thin,standard,bold}` also stand: none is Figma-backed, so "Figma is the source" does not reach them.
 - **Values:** unchanged in every mode. The revert is positional, exactly as the rename was.
 
@@ -455,3 +457,23 @@ New words admitted or retired after acceptance, per § 6. Each entry names the w
 - **Correct today:** Frame (`bds-frame--ratio-{slug}`, from its `ratio` prop) and Split (`bds-split--ratio-{split}`).
 
 **Enforcement.** `tokens/naming-grammar.json` gains `axes.ratio` (`values: null`) in this PR. `lint-naming-canon` reads it into `AXES` and from there into `MODIFIER_AXES`, so `--ratio-*` carries a blessed prefix and the prop-to-class derivation holds. No new rule or mechanism. `scripts/__tests__/lint-naming-canon.test.mjs` plants an admitted `--ratio-60-40` and a still-denied bare `--60-40`. **Baseline:** −17. The `--ratio-*` rule-4 rows keyed to #1927 (Frame's slugs) leave `tokens/naming-canon-baseline.json`, because they no longer violate and a stale entry fails the gate.
+
+### `nano` — three fixed `padding` rungs below `tiny` (2026-11-06, [#1285](https://github.com/brikdesigns/brik-bds/issues/1285))
+
+**Does an existing § 3 word name these rungs?** No. The portal pads dense table cells, badges and pills at 2 / 4 / 6px, and only `--gap-*` holds those values, so ~33 sites break the gap/padding family rule on a `bds-lint-ignore`. `--padding-tiny` is 8px at default density, and `tiny` is the bottom of the order this ADR fixes (`tiny · 3xs · 2xs · xs · …`, #2594 above). No word on the closed list sits below it. Synonyms searched across `tokens/*.css`, `design-tokens/foundations.json`, `components/**`, `content-system/**` and the gate's lists:
+
+- `3xs` / `2xs` rank **above** `tiny` in the fixed order, so using them for 2–6px would make the names lie about their position. `--bds-padding-2xs` is also already taken: it is the deprecated alias of `tiny` at 8px (`tokens/gap-fills.css:504`).
+- A `4xs` rung would have no defined place against `tiny`, which already sits below `3xs`.
+- `micro` already means something else. [spacing § The two exceptions](../../docs-site/content/docs/foundation/spacing.mdx) and `scripts/lint-tokens.js`'s grid carve-out use it for the `0`/`1px`/`2px` values below the 4pt grid, not a 6px rung.
+- `compact` and `dense` are the density axis (§ 2, `[data-mode-spacing="compact"]`). `hairline` is a known invented name from the #512/#553 rollback.
+- `nano`, `mini`, `xxs`: zero hits as a token step, prop value or union member. The only `nano` in the repo is the `nanoid` dependency (`docs-site/package.json`).
+
+**Decision.** The operator chose one new step word, scoped to `padding`, at 2 / 4 / 6px and fixed in every spacing mode (2026-11-06, relayed in chat). AGENT DECIDED (revisable): the word is `nano`, and it uses the n-prefix grammar `xs` already uses (`xs` → `2xs` → `3xs`, smaller as the number grows). That gives three rungs from one word. Evidence: the negative search above. Revert: drop `steps.familySteps` and the three variables.
+
+- **Family:** `--padding-*` only. **Closed steps, low to high:** `3nano` (`{space.50}`, 2px) · `2nano` (`{space.100}`, 4px) · `nano` (`{space.150}`, 6px). They sit below `tiny`.
+- **Mode-invariant.** All four `spacing/*` modes carry the same alias, so `tokens/modes-spacing.css` emits no override for them. They sit outside the seven-rung `spacing-mode-track` check (`SPACING_RUNGS` in `lint-tokens.js`), which keeps checking the density rungs. In `compact`, `--padding-tiny` drops to 2px, below `--padding-nano`. That is accepted: the operator chose fixed values over mode-tracking.
+- **Not for `gap`.** `--gap-tiny` / `-xs` / `-sm` already hold 2 / 4 / 6px. A `nano` rung there would be a second name for an existing rung.
+
+**Standing rule (#2594) applies.** These are Foundations variables (`spacing/{compact,default,comfortable,spacious}` → `padding/3nano`, `padding/2nano`, `padding/nano`). This PR lands the repo mirror (`design-tokens/foundations.json`). The rungs are not complete until the same three variables exist in ❖ Brik Foundations, or the next pull deletes them.
+
+**Enforcement.** `tokens/naming-grammar.json` gains `steps.familySteps["--padding-"]`. `lint-naming-canon` reads it into `FAMILY_STEPS`, and rule 1 allows those words only inside that family. It does not add them to `T_SHIRT`, so `--gap-nano` is still denied. `scripts/__tests__/lint-naming-canon.test.mjs` plants the three admitted padding rungs and a denied `--bds-gap-nano` / `--bds-icon-2nano`. No new rule, script or workflow. **Baseline:** none. The amendment lands with the tokens that need it.

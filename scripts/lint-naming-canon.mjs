@@ -218,6 +218,7 @@ const RETIRED_AXIS_VALUES = {
  * names #2229 minted ship one more minor as deprecated aliases.
  *
  * Ordering, low to high: tiny · 3xs · 2xs · xs · sm · md · lg · xl · 2xl · xxl · 3xl · huge.
+ * `--padding-*` alone extends below `tiny` with `3nano · 2nano · nano` (FAMILY_STEPS).
  */
 const T_SHIRT = new Set(GRAMMAR.steps.tShirt);
 
@@ -227,6 +228,18 @@ const T_SHIRT = new Set(GRAMMAR.steps.tShirt);
  * carve-out lint-token-purpose-slots makes, for the same reason.
  */
 const RESET_STEPS = new Set(GRAMMAR.steps.reset);
+
+/**
+ * § Amendments (#1285) → step words legal in ONE family only, keyed by the same
+ * body-keyed family string stepFindings groups by. `nano` names three fixed
+ * rungs below `--padding-tiny` (`3nano · 2nano · nano`); on any other family it
+ * is still a rule-1 finding, which is why it is not in T_SHIRT.
+ */
+const FAMILY_STEPS = Object.fromEntries(
+  Object.entries(GRAMMAR.steps.familySteps ?? {})
+    .filter(([family]) => !family.startsWith('$'))
+    .map(([family, steps]) => [family, new Set(steps)]),
+);
 
 /**
  * § 3 + § Retired vocabulary → Step words. Retired as STEP words, with the
@@ -460,6 +473,7 @@ function stepFindings(byName) {
     for (const m of members) {
       if (m.vocab !== 'word') continue;
       if (NAMED_EXCEPTIONS.has(`--${bodyOf(m.name)}`)) continue;
+      if (FAMILY_STEPS[family]?.has(m.tail)) continue;
       const retired = RETIRED_STEPS[m.tail];
       const to = retired ? (retired[family] ?? retired.default) : null;
       findings.push({

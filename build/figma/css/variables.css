@@ -272,6 +272,9 @@
   --bds-padding-huge: var(--bds-space-1200);
   --bds-padding-xs: var(--bds-space-250);
   --bds-padding-tiny: var(--bds-space-200);
+  --bds-padding-3nano: var(--bds-space-50);
+  --bds-padding-2nano: var(--bds-space-100);
+  --bds-padding-nano: var(--bds-space-150);
   --bds-gap-none: var(--bds-space-0);
   --bds-gap-md: var(--bds-space-200);
   --bds-gap-lg: var(--bds-space-400);

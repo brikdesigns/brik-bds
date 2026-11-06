@@ -216,6 +216,27 @@ describe('rule 1 — step vocabulary (ADR-033 § 3)', () => {
     expect(out).toMatch(/--border-width-standard .*deleted, not renamed/);
   });
 
+  // § Amendments (#1285): `nano` admits three fixed rungs below `tiny`, for
+  // --padding-* ONLY. The admit and the scope are both planted, so a gate that
+  // drops the word or leaks it to every family goes red.
+  it('admits the `nano` rungs on --padding-* (ADR-033 § Amendments, #1285)', () => {
+    const { code, out } = run({ tokens: withTokens(
+      '--bds-padding-tiny: var(--bds-space-400);',
+      '--bds-padding-3nano: var(--bds-space-400);',
+      '--bds-padding-2nano: var(--bds-space-400);',
+      '--bds-padding-nano: var(--bds-space-400);',
+    ) });
+    expect(out).toMatch(/clean — 0 live violation/);
+    expect(code).toBe(0);
+  });
+
+  it('denies the `nano` rungs outside --padding-* — the word is padding-only', () => {
+    const { code, out } = run({ tokens: withTokens('--bds-gap-nano: var(--bds-space-400);', '--bds-icon-2nano: 4px;') });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--bds-gap-nano — step `nano` is outside --bds-gap-\*'s vocabulary/);
+    expect(out).toMatch(/--bds-icon-2nano — step `2nano` is outside --bds-icon-\*'s vocabulary/);
+  });
+
   it('a § Named exception is not a step violation', () => {
     // `--content-width-full` and `--border-radius-pill` are in the clean fixture
     // inside families that DO take steps, so only the exception list keeps them green.
