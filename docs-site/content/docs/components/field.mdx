@@ -93,6 +93,45 @@ For a section-level empty state (the whole section has no data, not just one fie
 </FieldGrid>
 ```
 
+### Read-mode value types
+
+Pick the child from the input the value is edited with. The edit-mode input decides the read-mode rendering, so two renderers of the same record never choose differently.
+
+| Edit-mode input | Read-mode `Field` child | Empty |
+|---|---|---|
+| Text input / URL | Plain text. A URL is a [TextLink](/docs/components/text-link) with the external icon. | "Not set" (Field default) |
+| Single select (enum) | [Badge](/docs/components/badge) when the enum is a state (Active, Failed, Pending). Plain formatted-label text when it is a category. Never [Dot](/docs/components/dot) beside a Badge on the same grid. | "Not set" |
+| Multi-select | [TagGroup](/docs/components/tag-group) of [Tag](/docs/components/tag) | "Not set" |
+| Textarea | `Field` with `span="full"` and a text child. No inline style on the child. | "Not set" |
+| Bulleted list | [BulletList](/docs/components/bullet-list) | "Not set" |
+| Date (calendar day) | Formatted date text, no time | "Not set" |
+| Timestamp (an instant) | Formatted, zone-labelled timestamp text in its own `Field`. Never a note under a Badge. | "Not set" |
+| Number / count | Formatted number text in its own `Field`, or a [Stat](/docs/components/stat) when it is a KPI | `0` or "Not set", by what the absence means |
+| Status + detail list | The status is one `Field`. The detail is a [Table](/docs/components/table) or list in its own [DataSection](/docs/components/data-section). | — |
+
+<Callout type="info">
+  Field does not preserve line breaks today — `Field.css` has no `white-space` rule — so a textarea value renders on one wrapped line unless the consumer splits it into paragraphs. Do not reach for an inline `white-space` style to work around it.
+</Callout>
+
+**One Field, one fact.** A second line under a value is a second `Field`, a `helper`, or a separate display — never a `Stack` inside a `Field`. A status, the time it was checked, and a count are three facts and three Fields.
+
+```tsx
+// Wrong — three facts packed into one Field
+<Field label="Uptime">
+  <Stack>
+    <Badge tone="positive">Up</Badge>
+    <span>Last check Nov 6, 2026, 3:04 PM CST · 2 errors</span>
+  </Stack>
+</Field>
+
+// Right — one fact per Field
+<FieldGrid columns={3}>
+  <Field label="Uptime"><Badge tone="positive">Up</Badge></Field>
+  <Field label="Uptime Checked">Nov 6, 2026, 3:04 PM CST</Field>
+  <Field label="Errors">2</Field>
+</FieldGrid>
+```
+
 ## When *not* to use
 
 <Callout type="warn">
