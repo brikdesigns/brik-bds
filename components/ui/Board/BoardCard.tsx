@@ -78,7 +78,7 @@ export function BoardCard({
       )}
       style={{
         ...style,
-        ...(accentColor ? { '--bds-board-card-accent': accentColor } as React.CSSProperties : {}),
+        ...(accentColor ? { '--bds-board-card-accent-color': accentColor } as React.CSSProperties : {}),
       }}
       {...props}
     >

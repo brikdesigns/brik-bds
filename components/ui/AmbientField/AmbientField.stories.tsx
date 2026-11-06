@@ -78,7 +78,7 @@ const meta: Meta<typeof AmbientField> = {
     src: {
       control: false,
       description:
-        'Lottie source (`mode="lottie"`). Omit to fall back to `--bds-bg-field-src`, the per-client swap path.',
+        'Lottie source (`mode="lottie"`). Omit to fall back to `--bds-ambient-field-src`, the per-client swap path.',
     },
     mode: {
       control: 'inline-radio',
@@ -150,7 +150,7 @@ export const SrcFromToken: Story = {
                 // and every field on the page picks up that client's loop.
                 // A data: URL stands in for the client-hosted file a real theme
                 // would point at.
-                '--bds-bg-field-src': `url("data:application/json;base64,${btoa(
+                '--bds-ambient-field-src': `url("data:application/json;base64,${btoa(
                   JSON.stringify(driftField),
                 )}")`,
               } as React.CSSProperties
@@ -179,9 +179,9 @@ export const Tinted: Story = {
                 // Theme-correct wash: the page surface, made translucent.
                 // An OPAQUE tint would hide the field completely rather than
                 // hold contrast over it — the value has to carry alpha.
-                '--bds-bg-field-tint':
+                '--bds-ambient-field-tint':
                   'color-mix(in srgb, var(--bds-surface-primary) 65%, transparent)',
-                '--bds-bg-field-opacity': '0.85',
+                '--bds-ambient-field-opacity': '0.85',
               } as React.CSSProperties
             }
           />

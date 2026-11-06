@@ -44,12 +44,13 @@
   fill: var(--bds-surface-inverse);
 }
 
-/* `--bds-social-icon-brand` is bound per-platform below (via `[data-platform]`
-   attribute selectors, brik-bds#1716) directly from the Foundations color
-   system primitive for that platform — every bundled platform has one, so
-   there is no fallback. */
+/* `--bds-social-icon-platform-color` is bound per-platform below (via
+   `[data-platform]` attribute selectors, brik-bds#1716) directly from the
+   Foundations color system primitive for that platform — every bundled
+   platform has one. The old `--bds-social-icon-brand` name is a deprecated
+   alias, kept for one minor and removed next major (brik-bds#2651). */
 .bds-social-icon--badge.bds-social-icon--emphasis-brand .bds-social-icon__bg {
-  fill: var(--bds-social-icon-brand);
+  fill: var(--bds-social-icon-platform-color);
 }
 
 /* ─── type="glyph" — background neutral/transparent, glyph carries the emphasis color ── */
@@ -82,7 +83,7 @@
 }
 
 .bds-social-icon--glyph.bds-social-icon--emphasis-brand {
-  color: var(--bds-social-icon-brand);
+  color: var(--bds-social-icon-platform-color);
 }
 
 /* ─── emphasis="brand" — per-platform Foundations token binding ─────────── */
@@ -91,42 +92,42 @@
    (design-tokens/foundations.json primitives/value/color/system,
    brik-bds#1716) — never a hardcoded hex or a component-local JS map. */
 .bds-social-icon--emphasis-brand[data-platform='youtube'] {
-  --bds-social-icon-brand: var(--bds-color-social-youtube);
+  --bds-social-icon-platform-color: var(--bds-social-icon-brand, var(--bds-color-social-youtube));
 }
 
 .bds-social-icon--emphasis-brand[data-platform='twitter'] {
-  --bds-social-icon-brand: var(--bds-color-social-twitter);
+  --bds-social-icon-platform-color: var(--bds-social-icon-brand, var(--bds-color-social-twitter));
 }
 
 .bds-social-icon--emphasis-brand[data-platform='facebook'] {
-  --bds-social-icon-brand: var(--bds-color-social-facebook);
+  --bds-social-icon-platform-color: var(--bds-social-icon-brand, var(--bds-color-social-facebook));
 }
 
 .bds-social-icon--emphasis-brand[data-platform='instagram'] {
-  --bds-social-icon-brand: var(--bds-color-social-instagram);
+  --bds-social-icon-platform-color: var(--bds-social-icon-brand, var(--bds-color-social-instagram));
 }
 
 .bds-social-icon--emphasis-brand[data-platform='linkedin'] {
-  --bds-social-icon-brand: var(--bds-color-social-linkedin);
+  --bds-social-icon-platform-color: var(--bds-social-icon-brand, var(--bds-color-social-linkedin));
 }
 
 .bds-social-icon--emphasis-brand[data-platform='yelp'] {
-  --bds-social-icon-brand: var(--bds-color-social-yelp);
+  --bds-social-icon-platform-color: var(--bds-social-icon-brand, var(--bds-color-social-yelp));
 }
 
 .bds-social-icon--emphasis-brand[data-platform='google'] {
-  --bds-social-icon-brand: var(--bds-color-social-google);
+  --bds-social-icon-platform-color: var(--bds-social-icon-brand, var(--bds-color-social-google));
 }
 
 .bds-social-icon--emphasis-brand[data-platform='apple'] {
-  --bds-social-icon-brand: var(--bds-color-social-apple);
+  --bds-social-icon-platform-color: var(--bds-social-icon-brand, var(--bds-color-social-apple));
 }
 
 .bds-social-icon--emphasis-brand[data-platform='bing'] {
-  --bds-social-icon-brand: var(--bds-color-social-bing);
+  --bds-social-icon-platform-color: var(--bds-social-icon-brand, var(--bds-color-social-bing));
 }
 
 .bds-social-icon--emphasis-brand[data-platform='tiktok'] {
-  --bds-social-icon-brand: var(--bds-color-social-tiktok);
+  --bds-social-icon-platform-color: var(--bds-social-icon-brand, var(--bds-color-social-tiktok));
 }
 }

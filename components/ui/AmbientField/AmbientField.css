@@ -18,20 +18,20 @@
  * The draw-method axis is on none of them, so a modifier would need a § 6 ADR
  * amendment first. Same call as Marquee and MediaBand.
  *
- * Component-local tokens (ADR-014 Tier 4, --bds-{component}-{prop} — defined
- * here with defaults, overridable by a client theme or `style`). Named to match
- * the sibling BackgroundPattern's --bds-bg-pattern-* family. The ticket sketched
- * these without the --bds- prefix, which would have read as global names rather
- * than component-local ones:
- *   --bds-bg-field-src        Lottie source for the token-driven per-client
- *                             swap, read once on mount when no `src` prop is
- *                             passed. Default `none`.
- *   --bds-bg-field-tint       Wash over the field. Default `transparent`.
- *   --bds-bg-field-opacity    Opacity of the whole layer.
- *   --bds-bg-field-particle   Particle colour for [data-mode='canvas']. Bound
- *                             to the canvas's `color`, because a 2D context
- *                             cannot read a custom property — see
- *                             particleField.ts.
+ * Component-local tokens (ADR-014 Tier 4, --bds-{component}[-{part}]-{property} —
+ * defined here with defaults, overridable by a client theme or `style`):
+ *   --bds-ambient-field-src             Lottie source for the token-driven
+ *                                       per-client swap, read once on mount when
+ *                                       no `src` prop is passed. Default `none`.
+ *   --bds-ambient-field-tint            Wash over the field. Default `transparent`.
+ *   --bds-ambient-field-opacity         Opacity of the whole layer.
+ *   --bds-ambient-field-particle-color  Particle colour for [data-mode='canvas'].
+ *                                       Bound to the canvas's `color`, because a
+ *                                       2D context cannot read a custom property
+ *                                       — see particleField.ts.
+ *
+ * The old --bds-bg-field-{src,tint,opacity,particle} names are deprecated
+ * aliases, kept as fallbacks for one minor and removed next major (brik-bds#2651).
  *
  * Reduced motion is the ship gate. The rule below freezes anything
  * animation-driven with no JS at all; the component additionally holds Lottie
@@ -40,17 +40,18 @@
  */
 
 .bds-ambient-field {
-  --bds-bg-field-src: none;
-  --bds-bg-field-tint: transparent;
-  --bds-bg-field-opacity: 1;
-  --bds-bg-field-particle: var(--bds-text-muted);
+  --bds-ambient-field-src: var(--bds-bg-field-src, none);
+  --bds-ambient-field-tint: var(--bds-bg-field-tint, transparent);
+  --bds-ambient-field-opacity: 1;
+  --bds-ambient-field-particle-color: var(--bds-bg-field-particle, var(--bds-text-muted));
 
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   overflow: clip;
-  opacity: var(--bds-bg-field-opacity);
+  /* Old name wins while it is set; alias removed next major (brik-bds#2651). */
+  opacity: var(--bds-bg-field-opacity, var(--bds-ambient-field-opacity));
 }
 
 /* ─── The field itself ───────────────────────────────────────── */
@@ -66,7 +67,7 @@
 .bds-ambient-field__canvas {
   /* particleField.ts reads this back off the canvas via getComputedStyle —
      the one value that has to cross from CSS into the 2D context. */
-  color: var(--bds-bg-field-particle);
+  color: var(--bds-ambient-field-particle-color);
 }
 
 /* ─── Tint wash ──────────────────────────────────────────────── */
@@ -77,7 +78,7 @@
 .bds-ambient-field__tint {
   position: absolute;
   inset: 0;
-  background: var(--bds-bg-field-tint);
+  background: var(--bds-ambient-field-tint);
 }
 
 /* ─── Reduced motion ─────────────────────────────────────────── */

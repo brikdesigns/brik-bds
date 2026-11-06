@@ -24,7 +24,7 @@ Living motion field behind content — **Premium tier**. The decorative layer on
 
 ### Source from a token
 
-Leave `src` off and set `--bds-bg-field-src`. This is the per-client swap path: one theme declaration changes the loop across every field on the page with no JSX change.
+Leave `src` off and set `--bds-ambient-field-src`. This is the per-client swap path: one theme declaration changes the loop across every field on the page with no JSX change.
 
 <Canvas of={Stories.SrcFromToken} />
 
@@ -32,7 +32,7 @@ Leave `src` off and set `--bds-bg-field-src`. This is the per-client swap path: 
 
 ### Holding contrast for the content above
 
-`--bds-bg-field-tint` washes over the field and `--bds-bg-field-opacity` pulls the whole layer back. The field carries no contrast guarantee of its own, so a busy loop under body copy needs both.
+`--bds-ambient-field-tint` washes over the field and `--bds-ambient-field-opacity` pulls the whole layer back. The field carries no contrast guarantee of its own, so a busy loop under body copy needs both.
 
 <Canvas of={Stories.Tinted} />
 
@@ -68,17 +68,19 @@ Component-scoped CSS variables on `.bds-ambient-field`. Set them on a wrapping e
 
 | Variable | Default | Controls |
 |---|---|---|
-| `--bds-bg-field-src` | `none` | Lottie source when no `src` prop is passed — the per-client swap path |
-| `--bds-bg-field-tint` | `transparent` | Flat wash over the field |
-| `--bds-bg-field-opacity` | `1` | Opacity of the whole layer |
-| `--bds-bg-field-particle` | `var(--bds-text-muted)` | Particle colour for `mode="canvas"` |
+| `--bds-ambient-field-src` | `none` | Lottie source when no `src` prop is passed — the per-client swap path |
+| `--bds-ambient-field-tint` | `transparent` | Flat wash over the field |
+| `--bds-ambient-field-opacity` | `1` | Opacity of the whole layer |
+| `--bds-ambient-field-particle-color` | `var(--bds-text-muted)` | Particle colour for `mode="canvas"` |
+
+Deprecated aliases: `--bds-bg-field-src`, `--bds-bg-field-tint`, `--bds-bg-field-opacity` and `--bds-bg-field-particle` still work until the next major.
 
 ```css
 /* Example: a client's own loop, pulled back behind body copy */
 .theme-acme .bds-ambient-field {
-  --bds-bg-field-src: url('/acme/field.json');
-  --bds-bg-field-tint: var(--bds-surface-primary);
-  --bds-bg-field-opacity: 0.7;
+  --bds-ambient-field-src: url('/acme/field.json');
+  --bds-ambient-field-tint: var(--bds-surface-primary);
+  --bds-ambient-field-opacity: 0.7;
 }
 ```
 
@@ -86,6 +88,6 @@ Component-scoped CSS variables on `.bds-ambient-field`. Set them on a wrapping e
 
 > **Note** — Premium tier. The motion budget it spends is only justified on surfaces that have committed to that tier; on every other surface prefer a static [BackgroundPattern](?path=/docs/containers-background-pattern--docs).
 
-> **Note** — `--bds-bg-field-src` is read once on mount with `getComputedStyle`. A CSS custom property is not available to the server, so a token-sourced field paints from the first client render rather than from SSR output. Pass `src` when that matters.
+> **Note** — `--bds-ambient-field-src` is read once on mount with `getComputedStyle`. A CSS custom property is not available to the server, so a token-sourced field paints from the first client render rather than from SSR output. Pass `src` when that matters.
 
-> **Note** — `--bds-bg-field-particle` reaches the canvas through the element's inherited `color`, because a 2D context cannot read a custom property. That indirection is deliberate — it keeps the one value that must cross from CSS into JS in the token layer instead of hardcoded in the paint loop.
+> **Note** — `--bds-ambient-field-particle-color` reaches the canvas through the element's inherited `color`, because a 2D context cannot read a custom property. That indirection is deliberate — it keeps the one value that must cross from CSS into JS in the token layer instead of hardcoded in the paint loop.

@@ -1,6 +1,6 @@
 # ADR-014 — Tier 4 component-token hook namespace: `--bds-{component}-{property}`
 
-**Status:** Proposed
+**Status:** Accepted (2026-11-06 — the shape is enforced by `scripts/lint-tokens.js` Rule 15 against `manifest/tier4-hooks.json`, [#2651](https://github.com/brikdesigns/brik-bds/issues/2651))
 **Date:** 2026-06-29
 **Supersedes:** —
 **Superseded by:** —
