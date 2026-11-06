@@ -66,7 +66,7 @@ function createParticles(
  * The teardown cancels any pending frame and disconnects the resize observer,
  * so an unmount mid-animation leaves nothing scheduled. Colour comes from the
  * canvas's own computed `color`, which AmbientField.css binds to
- * `--bds-bg-field-particle` — the canvas 2D context cannot read a custom
+ * `--bds-ambient-field-particle-color` — the canvas 2D context cannot read a custom
  * property, so the one value that must cross from CSS into JS crosses through
  * an inherited property instead of being hardcoded here.
  */

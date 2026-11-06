@@ -183,10 +183,10 @@
 
 .bds-board-card {
   /* ─── Component-scoped override surface ── */
-  --bds-board-card-accent: var(--bds-border-primary);       /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --bds-board-card-accent-color: var(--bds-board-card-accent, var(--bds-border-primary)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   --board-card-hover-translate-y: -1px;                 /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   background-color: var(--bds-surface-primary);
-  border-left: var(--bds-border-width-xl) solid var(--bds-board-card-accent); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  border-left: var(--bds-border-width-xl) solid var(--bds-board-card-accent-color); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   border-radius: var(--bds-border-radius-200);
   padding: var(--bds-space-500) var(--bds-padding-md);
   display: flex;

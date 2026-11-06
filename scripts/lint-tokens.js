@@ -646,6 +646,202 @@ function checkHardcodedValues(line, lineNum, file, isComponent) {
   return violations;
 }
 
+// ---------------------------------------------------------------------------
+// Rule 15: Tier 4 hook registry + shape — brik-bds#2651 / ADR-014
+// ---------------------------------------------------------------------------
+// Every `--bds-*` name that is not a token (not on a Primitive/Semantic slot,
+// not declared in a token source) is a Tier 4 hook. manifest/tier4-hooks.json
+// lists each one: who reads it, where it is set, and whether it is a knob (a
+// consumer may set it) or a runtime binding (the component's JS sets it, so a
+// consumer's value is clobbered). The file is generated from source —
+// `npm run tier4:registry` — and committed, so a new hook is a reviewed diff
+// line rather than a name that appears silently.
+
+const TIER4_REGISTRY_PATH = path.join(REPO_ROOT, 'manifest', 'tier4-hooks.json');
+const TIER4_SOURCE_DIRS = [COMPONENTS_DIR, BLUEPRINTS_DIR];
+
+// Old spellings kept as fallback-chain aliases for one minor version (#2651
+// AC5), removed in the next major. Each is read only on its alias line, so it
+// is listed under `aliases` in the registry, never as a hook.
+const TIER4_ALIASES = new Map([
+  ['--bds-bg-field-src', '--bds-ambient-field-src'],
+  ['--bds-bg-field-tint', '--bds-ambient-field-tint'],
+  ['--bds-bg-field-opacity', '--bds-ambient-field-opacity'],
+  ['--bds-bg-field-particle', '--bds-ambient-field-particle-color'],
+  ['--bds-social-icon-brand', '--bds-social-icon-platform-color'],
+  ['--bds-board-card-accent', '--bds-board-card-accent-color'],
+]);
+
+// A stem must abbreviate its component (`bg-pattern` ← BackgroundPattern,
+// `subnav` ← SubNavigation). These owners use a stem that does not, each for
+// a stated reason.
+const TIER4_DECLARED_STEMS = new Map([
+  ['page', { stem: 'gutter', reason: 'ADR-043 § 5 / #2670 — `page` is a reserved Semantic word' }],
+  ['section-shell', { stem: 'blueprint-section', reason: 'the shell every blueprint section composes; its hooks are read by each section' }],
+]);
+
+const TIER4_RESERVED_STEMS = new Set(
+  Object.entries(GRAMMAR.reservedWords).filter(([k]) => k !== '$comment').flatMap(([, words]) => words),
+);
+// A role or valence word names WHICH color, not WHAT is styled — it cannot be
+// a hook's property (`--bds-social-icon-brand` binds `fill` and `color`).
+const TIER4_ROLE_WORDS = new Set([
+  ...GRAMMAR.axes.emphasis.values,
+  ...GRAMMAR.valence.words,
+  ...Object.keys(GRAMMAR.valence.retired || {}),
+]);
+
+const kebabCase = (s) => s.replace(/^_+/, '').replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+
+/** The component a source file belongs to: its components/ui dir, or a blueprint's file name. */
+function tier4Owner(rel) {
+  const parts = rel.split('/');
+  if (parts[0] === 'components') return kebabCase(parts[2]);
+  return kebabCase(path.basename(rel).replace(/\.(astro|css|tsx|ts)$/, ''));
+}
+
+function isTier4Name(name, allTokens) {
+  if (!name.startsWith(ID_PREFIX) || allTokens.has(name)) return false;
+  const body = name.slice(ID_PREFIX.length);
+  return !GRAMMAR.slots.some((e) => e.tier !== 'component' && (body === e.slot || body.startsWith(`${e.slot}-`)));
+}
+
+/** Blank out comments, keeping every newline so match offsets map to the same line. */
+function stripCommentsKeepLines(text, isCss) {
+  const blank = (m) => m.replace(/[^\n]/g, ' ');
+  let out = text.replace(/\/\*[\s\S]*?\*\//g, blank).replace(/<!--[\s\S]*?-->/g, blank);
+  if (!isCss) out = out.replace(/(^|[^:\\])(\/\/[^\n]*)/g, (m, pre, c) => pre + blank(c));
+  return out;
+}
+
+/**
+ * Scan components/ui + blueprints source for Tier 4 hooks.
+ * @returns {Map<string, {reads: object[], sets: object[]}>} name → occurrences ({rel, line, owner, js})
+ */
+function scanTier4Hooks(allTokens, dirs = TIER4_SOURCE_DIRS) {
+  const NAME = '(--bds-[a-z0-9-]*[a-z0-9])';
+  const READS = [new RegExp(`var\\(\\s*${NAME}`, 'g'), new RegExp(`getPropertyValue\\(\\s*['"\`]${NAME}['"\`]`, 'g')];
+  const SET_CSS = new RegExp(`(?:^|[\\s;{"'\`])${NAME}\\s*:(?!:)`, 'gm');
+  const SET_JS = [new RegExp(`setProperty\\(\\s*['"\`]${NAME}['"\`]`, 'g'), new RegExp(`['"\`]${NAME}['"\`]\\s*(?:\\]\\s*)?[:=](?!=)`, 'g')];
+  const hooks = new Map();
+  const files = dirs.flatMap((d) => findFiles(d, /\.(css|tsx|ts|astro)$/))
+    .filter((f) => !/\.(stories|test|spec)\.tsx?$|\.d\.ts$/.test(f) && !/[\\/](__tests__|__fixtures__|__examples__)[\\/]/.test(f))
+    .sort();
+  for (const file of files) {
+    const rel = repoRel(file);
+    const isCss = file.endsWith('.css');
+    const text = stripCommentsKeepLines(fs.readFileSync(file, 'utf8'), isCss);
+    const lineAt = (i) => text.slice(0, i).split('\n').length;
+    // In .astro, a declaration inside <style> is CSS; one in markup or frontmatter is set by the component.
+    const styleSpans = file.endsWith('.astro') ? [...text.matchAll(/<style[\s\S]*?<\/style>/g)].map((m) => [m.index, m.index + m[0].length]) : [];
+    const inStyle = (i) => isCss || styleSpans.some(([a, b]) => i >= a && i < b);
+    const add = (name, i, kind, js) => {
+      if (!isTier4Name(name, allTokens)) return;
+      if (!hooks.has(name)) hooks.set(name, { reads: [], sets: [] });
+      hooks.get(name)[kind].push({ rel, line: lineAt(i), owner: tier4Owner(rel), js });
+    };
+    // A read's `js` is true for getPropertyValue(), false for var().
+    READS.forEach((re, k) => { for (const m of text.matchAll(re)) add(m[1], m.index, 'reads', k === 1); });
+    for (const m of text.matchAll(SET_CSS)) add(m[1], m.index + m[0].indexOf(m[1]), 'sets', !inStyle(m.index));
+    if (!isCss) for (const re of SET_JS) for (const m of text.matchAll(re)) add(m[1], m.index, 'sets', true);
+  }
+  return hooks;
+}
+
+/** The registry document generated from a scan. */
+function buildTier4Registry(scan) {
+  const uniq = (xs) => [...new Set(xs)].sort();
+  const hooks = {};
+  for (const name of [...scan.keys()].sort()) {
+    if (TIER4_ALIASES.has(name)) continue;
+    const { reads, sets } = scan.get(name);
+    hooks[name] = {
+      kind: sets.some((s) => s.js) ? 'runtime' : 'knob',
+      readBy: uniq(reads.map((r) => r.owner)),
+      readIn: uniq(reads.map((r) => r.rel)),
+      setIn: uniq(sets.map((s) => s.rel)),
+    };
+  }
+  return {
+    $comment: 'Generated by `npm run tier4:registry` (scripts/lint-tokens.js, brik-bds#2651) — never hand-edit. Every Tier 4 hook (ADR-014) read or set in components/ui and content-system/blueprints. kind: `knob` = a consumer may set it; `runtime` = the component\'s JS sets it, so a consumer value is overwritten. setIn: [] = no default; the read\'s var() fallback applies. Enforced by lint-tokens rules tier4-unregistered, tier4-shape, tier4-unread and tier4-registry-drift.',
+    aliases: Object.fromEntries([...TIER4_ALIASES].sort()),
+    hooks,
+  };
+}
+
+/** Shape problems for one hook name, given every component that reads or sets it. */
+function tier4ShapeProblems(name, owners) {
+  const segs = name.slice(ID_PREFIX.length).split('-');
+  const problems = [];
+  if (segs.length < 2) problems.push('needs a component stem and a property: --bds-{component}[-{part}]-{property}');
+  if (TIER4_RESERVED_STEMS.has(segs[0])) problems.push(`stem "${segs[0]}" is a reserved word, which reads as a token tier (ADR-043 § 5)`);
+  if (TIER4_ROLE_WORDS.has(segs.at(-1))) problems.push(`ends in the role word "${segs.at(-1)}" — name the styled property (color, fill, …), not the role`);
+  const abbreviates = (stem, owner) => {
+    const o = owner.replace(/-/g, '');
+    if (stem.length < 3 || stem[0] !== o[0]) return false;
+    let j = 0;
+    for (const ch of o) if (ch === stem[j]) j++;
+    return j === stem.length;
+  };
+  const stemOk = owners.some((owner) => {
+    const declared = TIER4_DECLARED_STEMS.get(owner);
+    if (declared && `${segs.join('-')}-`.startsWith(`${declared.stem}-`)) return true;
+    for (let k = 1; k < segs.length; k++) if (abbreviates(segs.slice(0, k).join(''), owner)) return true;
+    return false;
+  });
+  if (!stemOk) problems.push(`stem does not name its component (${owners.join(', ')}) — lead with the component, e.g. --bds-${owners[0]}-…`);
+  return problems;
+}
+
+let tier4CommittedCache;
+function tier4Committed() {
+  if (tier4CommittedCache === undefined) {
+    tier4CommittedCache = fs.existsSync(TIER4_REGISTRY_PATH) ? JSON.parse(fs.readFileSync(TIER4_REGISTRY_PATH, 'utf8')) : null;
+  }
+  return tier4CommittedCache;
+}
+
+/** Whole-registry checks: shape, unread, stale alias, and drift against the committed file. */
+function checkTier4Registry(scan, generated, committed) {
+  const violations = [];
+  const at = (o) => ({ file: path.join(REPO_ROOT, o.rel), line: o.line, column: 1 });
+  for (const [name, row] of Object.entries(generated.hooks)) {
+    const { reads, sets } = scan.get(name);
+    const first = reads[0] || sets[0];
+    const problems = tier4ShapeProblems(name, [...new Set([...row.readBy, ...sets.map((s) => s.owner)])]);
+    if (problems.length) {
+      violations.push({ rule: 'tier4-shape', severity: 'error', ...at(first), message: `Tier 4 hook "${name}": ${problems.join('; ')}`, suggestion: 'Rename to --bds-{component}[-{part}]-{property} (ADR-014). Keep the old name as a fallback-chain alias in TIER4_ALIASES for one minor version.' });
+    }
+    if (!reads.length) {
+      violations.push({ rule: 'tier4-unread', severity: 'error', ...at(sets[0]), message: `Tier 4 hook "${name}" is set but no component reads it — a dead hook`, suggestion: 'Read it with var() in the component, or delete the declaration' });
+    }
+  }
+  for (const [oldName, newName] of TIER4_ALIASES) {
+    if (!generated.hooks[newName]) {
+      violations.push({ rule: 'tier4-registry-drift', severity: 'error', file: path.join(__dirname, 'lint-tokens.js'), line: 1, column: 1, message: `TIER4_ALIASES maps "${oldName}" to "${newName}", which no component reads`, suggestion: 'Fix the alias target, or drop the alias once it is past its removal version' });
+    }
+  }
+  if (!committed) {
+    violations.push({ rule: 'tier4-registry-drift', severity: 'error', file: TIER4_REGISTRY_PATH, line: 1, column: 1, message: 'manifest/tier4-hooks.json is missing', suggestion: 'Run npm run tier4:registry and commit the file' });
+    return violations;
+  }
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  const names = new Set([...Object.keys(generated.hooks), ...Object.keys(committed.hooks || {})]);
+  for (const name of [...names].sort()) {
+    const gen = generated.hooks[name];
+    const com = committed.hooks?.[name];
+    if (same(gen, com)) continue;
+    // A new hook read through var() is reported where it is read (tier4-unregistered).
+    if (!com && scan.get(name).reads.some((r) => !r.js && !r.rel.endsWith('.ts'))) continue;
+    const what = !gen ? 'no longer read or set in source' : !com ? 'is not registered' : 'has changed (kind, readers or setters)';
+    violations.push({ rule: 'tier4-registry-drift', severity: 'error', file: TIER4_REGISTRY_PATH, line: 1, column: 1, message: `Tier 4 hook "${name}" ${what}`, suggestion: 'Run npm run tier4:registry and commit manifest/tier4-hooks.json' });
+  }
+  if (!same(generated.aliases, committed.aliases)) {
+    violations.push({ rule: 'tier4-registry-drift', severity: 'error', file: TIER4_REGISTRY_PATH, line: 1, column: 1, message: 'aliases differ from TIER4_ALIASES', suggestion: 'Run npm run tier4:registry and commit manifest/tier4-hooks.json' });
+  }
+  return violations;
+}
+
 /**
  * Rule 3: Unknown tokens
  * Flags any var(--...) reference that doesn't exist in the Webflow CSS
@@ -698,20 +894,28 @@ function checkUnknownTokens(line, lineNum, file, tokens, isComponent) {
       continue;
     }
 
-    // --bds-{component}-{property} is the sanctioned Tier 4 component-token
-    // namespace (ADR-014): component-local custom properties — either an
-    // override knob or a runtime binding set by the component's JS/TSX. It is
-    // recognized BY RULE here, not as a blind spot; its var() fallback is
-    // separately policed by checkFallbackLiterals (must resolve to a Semantic
-    // token, never a raw value). The retired --bp-* and bare --{component}-*
-    // shapes are NOT skipped — they fall through to unknown-token / the
-    // --bp- regression gate.
+    // --bds-{component}[-{part}]-{property} is the sanctioned Tier 4 hook
+    // namespace (ADR-014): an override knob or a runtime binding set by the
+    // component's JS/TSX. A read resolves only when the hook is registered in
+    // manifest/tier4-hooks.json (#2651); its shape is checked once per hook by
+    // checkTier4Registry, and its var() fallback by checkFallbackLiterals. The
+    // retired --bp-* and bare --{component}-* shapes are NOT Tier 4 — they fall
+    // through to unknown-token / the --bp- regression gate.
     // After ADR-043 the prefix leads every tier, so a body on a Primitive/Semantic
     // slot (`--bds-spce-600` is not, `--bds-space-999` is) must still resolve.
-    if (tokenName.startsWith(ID_PREFIX)) {
-      const body = tokenName.slice(ID_PREFIX.length);
-      const onSlot = GRAMMAR.slots.some((e) => e.tier !== 'component' && (body === e.slot || body.startsWith(`${e.slot}-`)));
-      if (!onSlot) continue;
+    if (isTier4Name(tokenName, tokens.allTokens)) {
+      const registry = tier4Committed();
+      if (registry?.hooks?.[tokenName] || registry?.aliases?.[tokenName]) continue;
+      violations.push({
+        rule: 'tier4-unregistered',
+        severity: isComponent ? 'error' : 'warning',
+        file,
+        line: lineNum,
+        column: match.index + 1,
+        message: `Tier 4 hook "var(${tokenName})" is not in manifest/tier4-hooks.json`,
+        suggestion: 'A new hook: name it --bds-{component}[-{part}]-{property} (ADR-014), then run npm run tier4:registry and commit the file. A typo: fix the name.',
+      });
+      continue;
     }
 
     // Some component-specific CSS properties (e.g. in Storybook theme wrappers)
@@ -1741,6 +1945,16 @@ function main() {
 
   // 1. Parse CSS tokens
   const tokens = parseCssTokens();
+
+  // `npm run tier4:registry` — regenerate manifest/tier4-hooks.json and stop.
+  if (args.includes('--write-tier4-registry')) {
+    const registry = buildTier4Registry(scanTier4Hooks(tokens.allTokens));
+    fs.mkdirSync(path.dirname(TIER4_REGISTRY_PATH), { recursive: true });
+    fs.writeFileSync(TIER4_REGISTRY_PATH, `${JSON.stringify(registry, null, 2)}\n`);
+    const n = Object.values(registry.hooks);
+    console.log(`  Wrote ${repoRel(TIER4_REGISTRY_PATH)}: ${n.length} hooks (${n.filter((h) => h.kind === 'runtime').length} runtime), ${Object.keys(registry.aliases).length} aliases\n`);
+    process.exit(0);
+  }
   // px → scale-token maps for the CSS raw-value rule (css-raw-value).
   const valueMaps = buildValueMaps();
   if (!jsonMode) console.log(`  Loaded ${tokens.allTokens.size} tokens (${tokens.semanticTokens.size} semantic, ${tokens.primitiveTokens.size} primitive)`);
@@ -2233,6 +2447,11 @@ function main() {
     }
   }
 
+  // 4d. Tier 4 hook registry (#2651) — always a full scan, like the drift checks
+  // above, so a staged-file run still sees a hook another file stopped reading.
+  const tier4Scan = scanTier4Hooks(tokens.allTokens);
+  allViolations.push(...checkTier4Registry(tier4Scan, buildTier4Registry(tier4Scan), tier4Committed()));
+
   // 5. If --check-grid, also scan the token CSS sources for off-grid token values.
   // modes-spacing.css joined the scan in #2588 — the base track was audited while
   // every [data-mode-spacing] override went unread.
@@ -2301,4 +2520,8 @@ module.exports = {
   buildValueMaps,
   checkCssRawValues,
   CSS_RAW_VALUE_PROPS,
+  scanTier4Hooks,
+  buildTier4Registry,
+  checkTier4Registry,
+  tier4ShapeProblems,
 };

@@ -199,6 +199,9 @@ jobs:
             'scripts/__tests__/lint-deleted-token-consumers.test.mjs' \
             'scripts/__tests__/lint-token-shadowing.test.mjs' \
             'scripts/__tests__/lint-tokens-deprecated.test.mjs' \
+            'scripts/__tests__/lint-tokens-tier4.test.mjs' \
+            'content-system/blueprints/**' \
+            'manifest/tier4-hooks.json' \
             '.github/workflows/tokens-gate.yml')"; then
             echo "✗ git diff failed for $BASE_SHA..$HEAD_SHA — cannot classify; failing closed."
             exit 1
@@ -379,6 +382,17 @@ jobs:
       # NOT #1910 AC#5's naming gate, which rejects a name whose SEGMENTS fall
       # outside the ADR. This answers the narrower already-decided question:
       # does the doc still name every slot that ships?
+      # ─── lint-tokens, incl. the Tier 4 hook registry (#2651) ────────────────
+      #
+      # Until #2651 lint-tokens ran only in the pre-commit hook and release.yml,
+      # so a --no-verify commit merged unchecked. Rule 15 makes every Tier 4
+      # hook (ADR-014) a registered, shape-checked row in
+      # manifest/tier4-hooks.json; this step makes a new or renamed hook block
+      # the PR rather than the next release. Reads tokens/*.css, not dist.
+      - name: Token lint (lint-tokens, incl. Tier 4 hook registry)
+        if: always() && steps.install.outcome == 'success'
+        run: npm run lint-tokens -- --errors-only
+
       - name: Token purpose slot check
         if: always() && steps.dist.outcome == 'success'
         run: npm run lint-token-purpose-slots -- --census
@@ -477,6 +491,7 @@ jobs:
             scripts/__tests__/generate-color-ramps.test.mjs \
             scripts/__tests__/generate-layout-fluid.test.mjs \
             scripts/__tests__/lint-tokens-deprecated.test.mjs \
+            scripts/__tests__/lint-tokens-tier4.test.mjs \
             scripts/__tests__/lint-token-purpose-slots.test.mjs \
             scripts/__tests__/lint-token-self-reference.test.mjs \
             scripts/__tests__/lint-token-tiers.test.mjs \

@@ -16,6 +16,21 @@ a consumer greps this file before bumping.
 > `#1186` will add the manifest + CI check that *enforces* this section. Until
 > it lands, the entry is a convention, not a gate.
 
+## Unreleased
+
+Six Tier 4 hooks are renamed to the ADR-014 shape `--bds-{component}[-{part}]-{property}` ([#2651](https://github.com/brikdesigns/brik-bds/issues/2651)). Each old name still works: the component reads it first and falls back to the new one. The old names are **deprecated** and drop in the next major. Every hook is now listed in `manifest/tier4-hooks.json`, with whether a consumer may set it (`knob`) or the component sets it at render (`runtime`).
+
+**Deprecated (consumer CSS):** rename these in your override CSS before the next major.
+
+| Old | New |
+|---|---|
+| `--bds-bg-field-src` | `--bds-ambient-field-src` |
+| `--bds-bg-field-tint` | `--bds-ambient-field-tint` |
+| `--bds-bg-field-opacity` | `--bds-ambient-field-opacity` |
+| `--bds-bg-field-particle` | `--bds-ambient-field-particle-color` |
+| `--bds-social-icon-brand` | `--bds-social-icon-platform-color` |
+| `--bds-board-card-accent` | `--bds-board-card-accent-color` |
+
 ## v0.223.0 — 2026-11-04
 
 `BlueprintSection` takes `title` / `subtitle`; `heading` / `subheading` still render but are deprecated and drop in the next major. A section carries one spelling or the other, never a mix, and every blueprint reads it through `resolveSectionTitles()` ([#2563](https://github.com/brikdesigns/brik-bds/issues/2563)). A minor, per `docs/RELEASE.md` on 0.x.
