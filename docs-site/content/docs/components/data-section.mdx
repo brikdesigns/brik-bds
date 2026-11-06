@@ -125,6 +125,19 @@ Consecutive DataSections show a divider automatically — the sibling combinator
 </DataSection>
 ```
 
+## Slot contents
+
+What each slot holds, and what never goes in it. A fact about the record — a status, "Managed", "Hours Complete", "DNS Pointed" — is a [Field](/docs/components/field) in the body, not something in the header.
+
+| Slot | Holds | Never |
+|---|---|---|
+| `title` / `subtitle` | Heading text; a one-line description | Status |
+| `actions` | A `ButtonGroup` of secondary text buttons (View · Edit · Refresh). At most one primary action per page. | [Tag](/docs/components/tag), [Badge](/docs/components/badge), [Dot](/docs/components/dot), raw links, icon-only buttons |
+| `headerControl` | A control that changes the body (toggle, select) | Status |
+| Body `Field` | Every fact about the record | — |
+
+Button ladder on a record page: one primary in the page header (if any), secondary text buttons in section `actions`, ghost buttons only inside a table row or list item. Icon-only buttons belong in a toolbar with a visible group label, not in a section's View/Edit pair.
+
 ## Rules
 
 <Callout type="warn">
