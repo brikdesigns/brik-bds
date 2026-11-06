@@ -25,12 +25,17 @@ No token takes both, so density modes and device modes never multiply ([ADR-042]
 
 ## Semantic padding tokens
 
-Purpose-bound spacing used in components. These values change with the density mode: compact, default, comfortable, and spacious.
+Purpose-bound spacing used in components. From `tiny` up, these values change with the density mode: compact, default, comfortable, and spacious.
+
+The three `nano` rungs below `tiny` — `--padding-3nano` (2px), `--padding-2nano` (4px), `--padding-nano` (6px) — are **fixed in every mode**. They are for dense table cells, badges, and pills that need a padding value smaller than any density rung. Because they do not move with the mode, they sit outside the seven-rung `spacing-mode-track` check. In `compact`, `--padding-tiny` drops to 2px, so it is smaller than `--padding-nano` there ([ADR-033 § Amendments](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md)).
 
 <SemanticSpacing
   title="Padding"
   tokens={{
     'padding-none': semanticSpace['none'],
+    'padding-3nano': semanticSpace['3nano'],
+    'padding-2nano': semanticSpace['2nano'],
+    'padding-nano': semanticSpace['nano'],
     'padding-tiny': semanticSpace['tiny'],
     'padding-xs': semanticSpace['xs'],
     'padding-sm': semanticSpace['sm'],
