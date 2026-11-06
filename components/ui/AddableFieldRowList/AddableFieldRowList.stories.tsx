@@ -5,6 +5,7 @@ import { TextInput } from '../TextInput';
 import { TextArea } from '../TextArea';
 import { Select } from '../Select';
 import { Checkbox } from '../Checkbox';
+import { expect, userEvent, within } from 'storybook/test';
 
 const meta: Meta<typeof AddableFieldRowList> = {
   title: 'Containers/addable-field-row-list',
@@ -28,6 +29,9 @@ const meta: Meta<typeof AddableFieldRowList> = {
     emptyLabel: { control: 'text' },
     addLabel: { control: 'text' },
     removeLabel: { control: 'text' },
+    reorderable: { control: 'boolean', description: 'Show per-row move-up / move-down buttons.' },
+    moveUpLabel: { control: 'text' },
+    moveDownLabel: { control: 'text' },
     maxItems: { control: 'number' },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
   },
@@ -325,6 +329,54 @@ export const MaxItemsCap: Story = {
               onChange={(e) => update({ text: e.target.value })}
               aria-label="Note"
               placeholder="Type a quick note…"
+              fullWidth
+            />
+          )}
+        </AddableFieldRowList>
+      </div>
+    );
+  },
+};
+
+/** @summary Rows with move-up / move-down reorder buttons */
+export const Reorderable: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const inputs = () => canvas.getAllByLabelText('Step') as HTMLInputElement[];
+    // First row can't move up; last row can't move down.
+    await expect(canvas.getAllByRole('button', { name: 'Move step up' })[0]).toBeDisabled();
+    await expect(canvas.getAllByRole('button', { name: 'Move step down' })[2]).toBeDisabled();
+    await userEvent.click(canvas.getAllByRole('button', { name: 'Move step down' })[0]);
+    await expect(inputs().map((i) => i.value)).toEqual([
+      'Confirm the reason for the call',
+      'Greet the caller',
+      'Offer the next available appointment',
+    ]);
+  },
+  render: () => {
+    const [steps, setSteps] = useState([
+      { text: 'Greet the caller' },
+      { text: 'Confirm the reason for the call' },
+      { text: 'Offer the next available appointment' },
+    ]);
+    return (
+      <div style={{ maxWidth: 640 }}>
+        <AddableFieldRowList
+          values={steps}
+          onChange={setSteps}
+          newRow={() => ({ text: '' })}
+          label="Call script steps"
+          addLabel="Add step"
+          removeLabel="Remove step"
+          moveUpLabel="Move step up"
+          moveDownLabel="Move step down"
+          reorderable
+        >
+          {({ row, update }) => (
+            <TextInput
+              value={row.text}
+              onChange={(e) => update({ text: e.target.value })}
+              aria-label="Step"
               fullWidth
             />
           )}
