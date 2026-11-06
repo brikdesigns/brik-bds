@@ -69,11 +69,11 @@ AmbientField expects a positioned parent. Compose it into MediaBand's `graphic` 
 
 ## Source: prop or token
 
-Pass `src`, or leave it off and set `--bds-bg-field-src`. The token is the per-client swap path — one theme declaration changes the loop across every field on the page.
+Pass `src`, or leave it off and set `--bds-ambient-field-src`. The token is the per-client swap path — one theme declaration changes the loop across every field on the page.
 
 ```css
 .theme-acme .bds-ambient-field {
-  --bds-bg-field-src: url('/acme/field.json');
+  --bds-ambient-field-src: url('/acme/field.json');
 }
 ```
 
@@ -97,7 +97,7 @@ The canvas field uses a fixed seed, so the still frame is the same composition e
 
 - Renders `aria-hidden="true"` with `pointer-events: none` — out of the accessibility tree and out of the tab order.
 - The reduced-motion poster frame is the ship gate above; nothing about the layer moves once it is honoured.
-- The layer carries no contrast guarantee of its own. Use `--bds-bg-field-tint` and `--bds-bg-field-opacity` to hold contrast for the content stacked above it.
+- The layer carries no contrast guarantee of its own. Use `--bds-ambient-field-tint` and `--bds-ambient-field-opacity` to hold contrast for the content stacked above it.
 
 ## API
 
@@ -114,12 +114,14 @@ Plus all standard HTML attributes for the rendered `div`.
 
 | Variable | Default | Controls |
 |---|---|---|
-| `--bds-bg-field-src` | `none` | Lottie source when no `src` prop is passed |
-| `--bds-bg-field-tint` | `transparent` | Flat wash over the field |
-| `--bds-bg-field-opacity` | `1` | Opacity of the whole layer |
-| `--bds-bg-field-particle` | `var(--bds-text-muted)` | Particle colour for `mode="canvas"` |
+| `--bds-ambient-field-src` | `none` | Lottie source when no `src` prop is passed |
+| `--bds-ambient-field-tint` | `transparent` | Flat wash over the field |
+| `--bds-ambient-field-opacity` | `1` | Opacity of the whole layer |
+| `--bds-ambient-field-particle-color` | `var(--bds-text-muted)` | Particle colour for `mode="canvas"` |
 
-`--bds-bg-field-particle` reaches the canvas through the element's inherited `color`, because a 2D context cannot read a custom property. The indirection keeps the value in the token layer instead of hardcoded in the paint loop.
+Deprecated aliases: `--bds-bg-field-src`, `--bds-bg-field-tint`, `--bds-bg-field-opacity` and `--bds-bg-field-particle` still work until the next major.
+
+`--bds-ambient-field-particle-color` reaches the canvas through the element's inherited `color`, because a 2D context cannot read a custom property. The indirection keeps the value in the token layer instead of hardcoded in the paint loop.
 
 ## Related
 

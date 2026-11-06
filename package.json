@@ -223,6 +223,7 @@
     "lint-tokens": "node scripts/lint-tokens.js",
     "example:consumer-breakpoints": "node examples/consumer-breakpoints/build.mjs",
     "lint-tokens:grid": "node scripts/lint-tokens.js --check-grid",
+    "tier4:registry": "node scripts/lint-tokens.js --write-tier4-registry",
     "lint-jsdoc": "node scripts/lint-jsdoc.js",
     "lint-storybook-recipe": "node scripts/lint-storybook-recipe.js",
     "lint-story-shape": "node scripts/lint-story-shape.js",
