@@ -117,7 +117,8 @@
       "brand",
       "elevated",
       "raised",
-      "borderless"
+      "borderless",
+      "filled"
     ],
     "status": [
       "not-configured",
@@ -345,6 +346,13 @@
     "size": [
       "sm",
       "lg"
+    ]
+  },
+  "Stat": {
+    "size": [
+      "lg",
+      "xl",
+      "2xl"
     ]
   },
   "Stepper": {

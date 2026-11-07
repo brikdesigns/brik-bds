@@ -48,6 +48,9 @@ public enum BDSSpace {
     public static let paddingHuge: CGFloat = 48
     public static let paddingXs: CGFloat = 10
     public static let paddingTiny: CGFloat = 8
+    public static let padding3nano: CGFloat = 2
+    public static let padding2nano: CGFloat = 4
+    public static let paddingNano: CGFloat = 6
     public static let gapNone: CGFloat = 0
     public static let gapMd: CGFloat = 8
     public static let gapLg: CGFloat = 16

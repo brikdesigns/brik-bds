@@ -46,7 +46,7 @@ The **ID** is always the first segment. It names the *system* that owns the deci
 | Primitive (colour) | `color-{family}-{step}` | `--color-poppy-500` | `--bds-color-poppy-500` |
 | Primitive (scale) | `{scale}-{step}` | `--space-400` | `--bds-space-400` |
 | Semantic | `{purpose}-{role}[-{state}]` | `--background-brand-primary` | `--bds-background-brand-primary` |
-| Component | `{component}-{property}` | `--bds-slider-thumb-size` | `--bds-slider-thumb-size` |
+| Component | `{component}[-{part}]-{property}` | `--bds-slider-thumb-size` | `--bds-slider-thumb-size` |
 
 {/* lint-mdx-tokens-ignore-end */}
 
@@ -91,7 +91,7 @@ Every token sits at exactly one Tier. Higher tiers reference lower tiers via `va
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Tier 4 — Component    (component-scoped knobs)         │
-│  --bds-{component}-{property}: var(<Semantic>)          │
+│  --bds-{component}[-{part}]-{property}: var(<Semantic>) │
 │  Example: --bds-toast-shadow: var(--bds-shadow-md)      │
 └─────────────────────────────────────────────────────────┘
                           ▲
@@ -127,7 +127,7 @@ Tiers 2 and 3 show their **body**; the target name is `--{id}-{body}`. The examp
 | **Raw** | Literal `#e35335` — no name, no ID | Figma swatch / hex chosen by design | **No** — never in component CSS |
 | **Primitive** | `color-{family}-{step}` (color), `{scale}-{step}` (`font-size-{step}`, `space-{step}`, …) | Auto-generated from Figma Variables → Style Dictionary | **No** — never in component CSS (use Semantic) |
 | **Semantic** | `{purpose}-{role}[-{state}]` — Color foundations vocabulary | Auto-generated; a tenant declares its own values under its own ID and binds the BDS name to them ([below](#how-a-tenant-binds-bds-names)) | **Yes** — this is the contract |
-| **Component** | `{component}-{property}`, ID always `bds` | Authored in component / blueprint CSS; runtime values set by the component's JS/TSX | **Yes** — but only as a *knob*: it must resolve to a Semantic token (see below) |
+| **Component** | `{component}[-{part}]-{property}`, ID always `bds` | Authored in component / blueprint CSS; runtime values set by the component's JS/TSX | **Yes** — but only as a *knob*: it must resolve to a Semantic token (see below) |
 
 <Callout type="warn">
   **Components consume Semantic tokens, never Primitives directly.** A button's CSS references `--background-brand-primary`, not `--color-poppy-500`. Why: Semantic is the layer that varies per brand. Bypassing it locks the component to one brand.
@@ -157,7 +157,7 @@ The cascade mechanism is unchanged: `@layer client-theme` still wins over `@laye
 
 ### About Tier 4
 
-The Component tier is **`--bds-{component}-{property}`** — a component- or blueprint-scoped custom property, where `{component}` is the component/blueprint identifier and `{property}` is the styled aspect (`--bds-toast-shadow`, `--bds-slider-thumb-shadow`, `--bds-hero-img-card-bg`). Its ID is always `bds`. This is the only sanctioned Component-tier namespace ([ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md)).
+The Component tier is **`--bds-{component}[-{part}]-{property}`** — a component- or blueprint-scoped custom property, where `{component}` is the component/blueprint identifier (or a recognisable abbreviation of it, such as `bg-pattern` for BackgroundPattern), the optional `{part}` names a sub-element, and `{property}` is the styled aspect (`--bds-toast-shadow`, `--bds-slider-thumb-shadow`, `--bds-hero-img-card-bg`). The property names *what* is styled, never a role: `--bds-social-icon-platform-color`, not `--bds-social-icon-brand`. Its ID is always `bds`. This is the only sanctioned Component-tier namespace ([ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md)).
 
 A Tier 4 token serves one of two roles, both under the same name:
 
@@ -174,12 +174,14 @@ A Tier 4 token serves one of two roles, both under the same name:
 
 2. **Runtime binding** — a value the component's JS/TSX sets at render (e.g. `--bds-slider-percent`), read by the CSS to position or size an element.
 
+Every hook is listed in `manifest/tier4-hooks.json`, generated from source by `npm run tier4:registry` and committed. Each row says which components read the hook, where it is set, and whether it is a `knob` or `runtime`. A consumer overriding a `runtime` hook is overwritten on the next render. `scripts/lint-tokens.js` fails a PR when a hook is read but not registered, has the wrong shape, is set but never read, or when the committed file no longer matches source (brik-bds#2651).
+
 <Callout type="warn">
   **Tier 4 never terminates at a raw value.** A knob's fallback is a Semantic token; a runtime binding is computed from one. A literal inside a `var()` fallback on a tokenized property is Tier-1 leakage and is flagged by `scripts/lint-tokens.js`. The `--bds-` prefix is mandatory — `--bp-*` and bare `--{component}-*` are retired (see [Drift patterns](#drift-patterns-to-avoid) below).
 </Callout>
 
 <Callout type="info">
-  **`--bds-*` is for tokens BDS authors *and reads* — there is no consumer-authored *Component* namespace** ([ADR-034](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-034-token-tier-derived-tokens-and-consumer-namespace.md)). A consumer that needs to restyle a BDS component sets a **BDS-defined** `--bds-{component}-{property}` hook (or uses a BDS variant) — it never invents its own token name. (For Primitive and Semantic tokens a tenant prefix is legitimate only as a registered ID followed by a grammar body — see [The ID registry](#the-id-registry).) A consumer styling *its own* markup writes plain local CSS, which is outside the token system and needs no `--bds-`/`--brik-` prefix and no BDS blessing. The drift table's "migrate to `--bds-*`" remedy (below) is for **BDS-authored** knobs that shipped without the prefix — a consumer override migrates by moving into a BDS hook/variant, not by prefixing an invented name.
+  **`--bds-*` is for tokens BDS authors *and reads* — there is no consumer-authored *Component* namespace** ([ADR-034](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-034-token-tier-derived-tokens-and-consumer-namespace.md)). A consumer that needs to restyle a BDS component sets a **BDS-defined** `--bds-{component}[-{part}]-{property}` hook (or uses a BDS variant) — it never invents its own token name. (For Primitive and Semantic tokens a tenant prefix is legitimate only as a registered ID followed by a grammar body — see [The ID registry](#the-id-registry).) A consumer styling *its own* markup writes plain local CSS, which is outside the token system and needs no `--bds-`/`--brik-` prefix and no BDS blessing. The drift table's "migrate to `--bds-*`" remedy (below) is for **BDS-authored** knobs that shipped without the prefix — a consumer override migrates by moving into a BDS hook/variant, not by prefixing an invented name.
 </Callout>
 
 {/* cascade-vocab-ok:end */}
@@ -196,7 +198,7 @@ A token's name is `--{id}-{body}`. The formulas below are the **body** of each T
 | Primitive (scale) | `--{scale}-{step}` | a **scale** — named for the CSS property it feeds | `--font-size-100`, `--space-400` |
 | Semantic (color) | `--{purpose}-{role}[-{state}]` | a **purpose** (`page` / `surface` / `background` / `text` / `border`) | `--background-brand-primary` |
 | Semantic (non-color) | `--{role}-{step}` | a semantic **role** | `--gap-md`, `--heading-xl` |
-| Component | `--bds-{component}-{property}` | the **component** | `--bds-toast-shadow` |
+| Component | `--bds-{component}[-{part}]-{property}` | the **component** | `--bds-toast-shadow` |
 
 <Callout type="warn">
   **The first slot differs by tier — don't borrow one tier's order for another.** At the Component tier the first slot is the *component*, not a purpose: `--bds-footer-surface` (component `footer`, property `surface`) is correct; `--bds-surface-footer` — "corrected" to a purpose-first order borrowed from the color Semantic form — is drift. The two Semantic formulas differ too: color leads with a `purpose`, non-color leads with a `role`.

@@ -1,0 +1,70 @@
+---
+title: Split
+description: Two regions side by side at a fixed ratio, stacking to one column on small screens. Use for media + copy and copy + aside.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Split places exactly two regions side by side at a fixed `ratio` and stacks them into one column below a breakpoint. It is the only Layout primitive that takes an uneven ratio. Child order is reading order and stacking order — put the region that should come first on a phone first.
+
+## Use it for
+
+- Media beside copy — an `Image` next to a `ContentBlock`
+- Copy beside a form, or beside a contact aside
+- Any two-region band where one side should be wider than the other
+
+## Import
+
+```tsx
+import { Split } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Ratio
+
+`50-50` (default), `60-40` or `40-60` — first region to second. To put the media on the other side, swap the child order rather than the ratio.
+
+```tsx
+<Split ratio="60-40">
+  <ContentBlock title="Our story" description="…" titleAs="h2" />
+  <Image src="/team.jpg" alt="The team at work" ratio="4-3" />
+</Split>
+```
+
+### Stacking
+
+Below the tablet breakpoint (under 768px) the two regions become one column, in child order. This is fixed, not a prop.
+
+## When *not* to use
+
+<Callout type="warn">
+  **Three or more equal cells are a [Grid](/docs/components/grid), not a Split.** Split is always two regions.
+</Callout>
+
+- For a single line of small items (an icon beside a label), use [Row](/docs/components/row).
+
+## Accessibility
+
+- Renders a plain element (`<div>` by default, override with `as`) with `display: grid`. It adds no semantics; children keep their own roles.
+- Stacking never reorders children, so reading order and visual order match at every width.
+
+## API
+
+{/* props-check: SplitProps @ components/ui/Split/Split.tsx */}
+| Prop | Type | Default |
+|---|---|---|
+| `ratio` | `SplitRatio` | `'50-50'` |
+| `gap` | `SplitGap` | `'xl'` |
+| `align` | `SplitAlign` | `'center'` |
+| `as` | `ElementType` | `'div'` |
+| `children` | `ReactNode` | — |
+
+`SplitRatio` is `'50-50' | '60-40' | '40-60'`. `SplitGap` is `'none'` plus the `xs`–`huge` gap scale. `SplitAlign` is `'start' | 'center' | 'end' | 'stretch'`. Plus all standard HTML attributes for the rendered element.
+
+## Related
+
+- [Grid](/docs/components/grid) — N equal cells
+- [Row](/docs/components/row) — one horizontal line that never wraps
+- [MediaBlock](/docs/components/media-block) — media stacked above copy
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/layouts-split--default)**

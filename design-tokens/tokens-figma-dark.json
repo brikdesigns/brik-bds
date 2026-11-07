@@ -1106,6 +1106,18 @@
     "tiny": {
       "$value": "{space.200}",
       "$type": "number"
+    },
+    "3nano": {
+      "$value": "{space.50}",
+      "$type": "number"
+    },
+    "2nano": {
+      "$value": "{space.100}",
+      "$type": "number"
+    },
+    "nano": {
+      "$value": "{space.150}",
+      "$type": "number"
     }
   },
   "gap": {

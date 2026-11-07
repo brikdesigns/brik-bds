@@ -54,6 +54,16 @@ export interface AddableFieldRowListProps<T>
   /** Accessible label for the per-row remove button (default "Remove row") */
   removeLabel?: string;
   /**
+   * Render per-row move-up / move-down buttons next to the remove button.
+   * Move-up is disabled on the first row, move-down on the last. Reordering
+   * calls `onChange` with the reordered array. Default `false`.
+   */
+  reorderable?: boolean;
+  /** Accessible label for the per-row move-up button (default "Move row up") */
+  moveUpLabel?: string;
+  /** Accessible label for the per-row move-down button (default "Move row down") */
+  moveDownLabel?: string;
+  /**
    * Maximum number of rows. When reached, the Add button is hidden.
    * Omitted = unlimited.
    */
@@ -74,7 +84,8 @@ const BUTTON_SIZE: Record<AddableFieldRowListSize, ButtonSize> = {
  * Replaces hand-rolled "add/remove rows of structured data" patterns with a
  * type-safe render-prop API. The consumer supplies the per-row field markup
  * (TextInput, Select, Checkbox, etc.); the primitive owns add/remove
- * handlers, grid layout, and the per-row remove IconButton.
+ * handlers, grid layout, the per-row remove IconButton, and optional
+ * move-up / move-down buttons (`reorderable`).
  *
  * Per ADR-005, this is the canonical primitive for the multi-field row
  * shape — distinct from `AddableTagList` (single-string tag list, with an
@@ -139,6 +150,9 @@ export function AddableFieldRowList<T>({
   emptyLabel,
   addLabel = 'Add row',
   removeLabel = 'Remove row',
+  reorderable = false,
+  moveUpLabel = 'Move row up',
+  moveDownLabel = 'Move row down',
   maxItems,
   size = 'md',
   className,
@@ -155,9 +169,26 @@ export function AddableFieldRowList<T>({
     onChange(values.filter((_, i) => i !== index));
   };
 
+  const move = (from: number, to: number) => {
+    const next = [...values];
+    const [item] = next.splice(from, 1);
+    next.splice(to, 0, item);
+    onChange(next);
+  };
+
   const append = () => {
     onChange([...values, newRow()]);
   };
+
+  const removeButton = (index: number) => (
+    <Button
+      size={BUTTON_SIZE[size]}
+      variant="ghost"
+      icon={<Icon icon="ph:minus-circle" />}
+      label={removeLabel}
+      onClick={() => remove(index)}
+    />
+  );
 
   const showEmpty = values.length === 0 && emptyLabel;
 
@@ -188,13 +219,29 @@ export function AddableFieldRowList<T>({
                 index,
                 update: (patch) => update(index, patch),
               })}
-              <Button
-                size={BUTTON_SIZE[size]}
-                variant="ghost"
-                icon={<Icon icon="ph:minus-circle" />}
-                label={removeLabel}
-                onClick={() => remove(index)}
-              />
+              {reorderable ? (
+                <div className="bds-addable-field-row-list__actions">
+                  <Button
+                    size={BUTTON_SIZE[size]}
+                    variant="ghost"
+                    icon={<Icon icon="ph:arrow-up" />}
+                    label={moveUpLabel}
+                    disabled={index === 0}
+                    onClick={() => move(index, index - 1)}
+                  />
+                  <Button
+                    size={BUTTON_SIZE[size]}
+                    variant="ghost"
+                    icon={<Icon icon="ph:arrow-down" />}
+                    label={moveDownLabel}
+                    disabled={index === values.length - 1}
+                    onClick={() => move(index, index + 1)}
+                  />
+                  {removeButton(index)}
+                </div>
+              ) : (
+                removeButton(index)
+              )}
             </li>
           ))}
         </ul>

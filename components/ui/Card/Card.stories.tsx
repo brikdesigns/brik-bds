@@ -26,9 +26,9 @@ const meta: Meta<typeof Card> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['outlined', 'brand', 'elevated', 'raised', 'borderless'],
+      options: ['outlined', 'brand', 'elevated', 'raised', 'borderless', 'filled'],
       description:
-        'Visual variant (Default shape only). `outlined` = secondary border; `brand` = primary-color border; `elevated` = surface fill, no border, no shadow; `raised` = surface fill, no border, `--bds-box-shadow-md` drop shadow; `borderless` = transparent, no border, no shadow (for cards on a colored surface).',
+        'Visual variant (Default shape only). `outlined` = secondary border; `brand` = primary-color border; `elevated` = surface fill, no border, no shadow; `raised` = surface fill, no border, `--bds-box-shadow-md` drop shadow; `borderless` = transparent, no border, no shadow (for cards on a colored surface); `filled` = neutral recessed panel, surface-secondary fill + muted border.',
     },
     padding: {
       control: 'select',

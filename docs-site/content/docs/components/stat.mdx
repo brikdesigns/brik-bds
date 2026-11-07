@@ -1,0 +1,73 @@
+---
+title: Stat
+description: A figure and what it counts — value, label, optional detail — as one unbordered Block. Use in stats bands and dashboard rows.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Stat pairs a figure with what it counts, plus an optional detail line. It owns the rhythm between its own slots and nothing else: arrange several with [Grid](/docs/components/grid) or [Cluster](/docs/components/cluster).
+
+## Use it for
+
+- A stats band on a marketing page
+- A hero proof strip
+- A dashboard row of figures
+
+## Import
+
+```tsx
+import { Stat } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Order
+
+`value-first` (default) puts the figure on top — the stats-band shape. `label-first` puts the label on top — the dashboard shape. DOM order follows visual order.
+
+```tsx
+<Stat order="label-first" value="$12,480" label="Outstanding balance" />
+```
+
+### Size
+
+`size` sets the value on the heading scale — `lg`, `xl` (default) or `2xl`.
+
+```tsx
+<Stat size="2xl" value="24" label="Years in practice" />
+```
+
+### On color
+
+`onColor` switches all three text slots to `--text-on-color-dark` for a Stat on a filled brand or dark band.
+
+## When *not* to use
+
+<Callout type="warn">
+  **A figure that needs its own bordered surface is [`Card layout="metric"`](/docs/components/card), not a bare Stat.** Stat has no surface.
+</Callout>
+
+## Accessibility
+
+- Renders a plain element (`<div>` by default, override with `as`). The value and label read in the order they appear.
+
+## API
+
+{/* props-check: StatProps @ components/ui/Stat/Stat.tsx */}
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `ReactNode` *(required)* | — |
+| `label` | `ReactNode` *(required)* | — |
+| `detail` | `ReactNode` | — |
+| `order` | `StatOrder` | `'value-first'` |
+| `size` | `StatSize` | `'xl'` |
+| `onColor` | `boolean` | `false` |
+| `as` | `ElementType` | `'div'` |
+
+`StatOrder` is `'value-first' | 'label-first'`. `StatSize` is `'lg' | 'xl' | '2xl'`. Plus all standard HTML attributes for the rendered element.
+
+## Related
+
+- [Card](/docs/components/card) — `layout="metric"` is the bordered tile
+- [Grid](/docs/components/grid) — arranges several Stats
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/content-stat--default)**

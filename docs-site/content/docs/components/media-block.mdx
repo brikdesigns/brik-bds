@@ -1,0 +1,67 @@
+---
+title: MediaBlock
+description: A media slot stacked above a ContentBlock. Use for team members, case-study teasers, and captioned gallery items.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+MediaBlock stacks a media slot above a [ContentBlock](/docs/components/content-block). The text slots are ContentBlock's, so the rhythm matches every other content unit.
+
+## Use it for
+
+- A team member — portrait, name, role, short bio
+- A case-study or article teaser
+- A gallery item with a caption
+
+## Import
+
+```tsx
+import { MediaBlock } from '@brikdesigns/bds';
+```
+
+## Variants
+
+MediaBlock has no layout variants — it is always stacked. The text slots take ContentBlock's `size`, `titleAs` and `onColor`.
+
+```tsx
+<MediaBlock
+  media={<Image src="/dr-lee.jpg" alt="Dr. Lee" ratio="4-5" />}
+  title="Dr. Ana Lee"
+  subtitle="Lead dentist"
+  description="Twelve years in restorative care."
+/>
+```
+
+## When *not* to use
+
+<Callout type="warn">
+  **Media beside copy is a [Split](/docs/components/split) of an `Image` and a `ContentBlock`, not a MediaBlock.** Orientation is a Layout decision, never a Block variant (ADR-023 §5).
+</Callout>
+
+- Media that needs a bordered surface around it belongs in a [Card](/docs/components/card).
+
+## Accessibility
+
+- Renders a `<div>` with the media first and the text second. Give the media its own `alt`, or `alt=""` when the title already says what it shows.
+
+## API
+
+{/* props-check: MediaBlockProps @ components/ui/MediaBlock/MediaBlock.tsx */}
+| Prop | Type | Default |
+|---|---|---|
+| `media` | `ReactNode` *(required)* | — |
+| `title` | `ReactNode` | — |
+| `subtitle` | `ReactNode` | — |
+| `description` | `ReactNode` | — |
+| `actions` | `ReactNode` | — |
+| `titleAs` | `ContentBlockTitleAs` | — |
+| `size` | `ContentBlockSize` | — |
+| `onColor` | `boolean` | — |
+
+The text props pass straight to ContentBlock, which owns their defaults. Plus all standard HTML attributes for the outer `<div>`.
+
+## Related
+
+- [ContentBlock](/docs/components/content-block) — the text unit inside
+- [Split](/docs/components/split) — media beside copy
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/content-media-block--default)**

@@ -149,6 +149,18 @@ When `values.length === 0`, `emptyLabel` shows in place of the row list. When `v
 </AddableFieldRowList>
 ```
 
+## Reordering
+
+Set `reorderable` to add move-up / move-down buttons beside the remove button. Reordering calls `onChange` with the reordered array — the `values` / `onChange` / `children` contract is unchanged. Drag-and-drop is not supported.
+
+```tsx
+<AddableFieldRowList<Step> values={steps} onChange={setSteps} newRow={() => ({ text: '' })} reorderable>
+  {({ row, update }) => (
+    <TextInput value={row.text} onChange={(e) => update({ text: e.target.value })} aria-label="Step" />
+  )}
+</AddableFieldRowList>
+```
+
 ## Render-prop context
 
 The `children` render-prop receives `{ row, index, update }`:
@@ -190,6 +202,7 @@ Per-row remove uses `IconButton variant="ghost"` with `ph:dash-circle`. The icon
 
 - Each row is a `<div role="group">` with the field label as an `aria-labelledby` reference.
 - Per-row remove button uses the `removeLabel` prop as its accessible name.
+- With `reorderable`, each row gets move-up / move-down buttons named by `moveUpLabel` / `moveDownLabel`. They are real `<button>`s (keyboard-operable) and are `disabled` at the first / last row.
 - The Add button is a real `<button>` with the `addLabel` prop as its name.
 - Type-safe row data via the generic doesn't affect runtime — all ARIA wiring is unchanged.
 
@@ -208,6 +221,9 @@ Per-row remove uses `IconButton variant="ghost"` with `ph:dash-circle`. The icon
 | `emptyLabel` | `string` | — |
 | `addLabel` | `string` | `'Add row'` |
 | `removeLabel` | `string` | `'Remove row'` |
+| `reorderable` | `boolean` | `false` |
+| `moveUpLabel` | `string` | `'Move row up'` |
+| `moveDownLabel` | `string` | `'Move row down'` |
 | `maxItems` | `number` | unlimited |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
 

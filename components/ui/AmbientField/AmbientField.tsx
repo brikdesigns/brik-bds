@@ -31,7 +31,7 @@ export interface AmbientFieldProps extends HTMLAttributes<HTMLDivElement> {
    * Lottie source — parsed animation JSON, or a path/URL to fetch it from.
    * `mode="lottie"` only.
    *
-   * Omit it to fall back to `--bds-bg-field-src`, which is the per-client swap
+   * Omit it to fall back to `--bds-ambient-field-src`, which is the per-client swap
    * path: a theme sets the custom property and every AmbientField on the page
    * picks up that client's loop with no prop change. The token is read once on
    * mount via `getComputedStyle` — a CSS custom property is not available to
@@ -80,7 +80,7 @@ function unwrapCssUrl(raw: string): string | undefined {
  * </MediaBand>
  *
  * // Per-client loop, no prop:
- * // .theme-acme { --bds-bg-field-src: url('/acme/field.json'); }
+ * // .theme-acme { --bds-ambient-field-src: url('/acme/field.json'); }
  * <MediaBand as="section" graphic={<AmbientField />}>…</MediaBand>
  *
  * // Physics feel instead of a designed loop:
@@ -111,7 +111,7 @@ export function AmbientField({
     if (!node || typeof window === 'undefined') return;
     const raw = window
       .getComputedStyle(node)
-      .getPropertyValue('--bds-bg-field-src');
+      .getPropertyValue('--bds-ambient-field-src');
     setTokenSrc(unwrapCssUrl(raw));
   }, [src, mode]);
 

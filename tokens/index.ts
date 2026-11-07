@@ -674,6 +674,9 @@ export const label = {
  */
 export const semanticSpace = {
   "none": "var(--bds-space-0)",
+  "3nano": "var(--bds-space-50)",
+  "2nano": "var(--bds-space-100)",
+  "nano": "var(--bds-space-150)",
   "tiny": "var(--bds-space-200)",
   "xs": "var(--bds-space-250)",
   "sm": "var(--bds-space-300)",

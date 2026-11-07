@@ -1,0 +1,58 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Split.stories';
+import { Split } from './Split';
+
+<Meta of={Stories} />
+
+export const Panel = ({ children }) => (
+  <div
+    style={{
+      padding: 'var(--bds-padding-md)',
+      background: 'var(--bds-surface-secondary)',
+      border: '1px solid var(--bds-border-secondary)',
+      fontFamily: 'var(--bds-font-family-label)',
+      fontSize: 'var(--bds-label-sm)',
+      color: 'var(--bds-text-primary)',
+    }}
+  >
+    {children}
+  </div>
+);
+
+export const RatioScale = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-lg)' }}>
+    {['50-50', '60-40', '40-60'].map((r) => (
+      <Split key={r} ratio={r} gap="md">
+        <Panel>ratio="{r}" — first</Panel>
+        <Panel>second</Panel>
+      </Split>
+    ))}
+  </div>
+);
+
+# Split
+
+<ComponentLinks slug="split" />
+
+Split places exactly two regions side by side at a fixed `ratio` and stacks them into one column below the tablet breakpoint. Child order is reading order and stacking order, so put the region that should come first on a phone first.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Copy with aside
+
+<Canvas of={Stories.CopyWithAside} />
+
+### Ratio scale
+
+<Canvas>
+  <RatioScale />
+</Canvas>
+
+## Props
+
+<ArgTypes of={Stories} />

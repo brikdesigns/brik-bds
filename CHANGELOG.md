@@ -16,9 +16,24 @@ a consumer greps this file before bumping.
 > `#1186` will add the manifest + CI check that *enforces* this section. Until
 > it lands, the entry is a convention, not a gate.
 
+## Unreleased
+
+Six Tier 4 hooks are renamed to the ADR-014 shape `--bds-{component}[-{part}]-{property}` ([#2651](https://github.com/brikdesigns/brik-bds/issues/2651)). Each old name still works: the component reads it first and falls back to the new one. The old names are **deprecated** and drop in the next major. Every hook is now listed in `manifest/tier4-hooks.json`, with whether a consumer may set it (`knob`) or the component sets it at render (`runtime`).
+
+**Deprecated (consumer CSS):** rename these in your override CSS before the next major.
+
+| Old | New |
+|---|---|
+| `--bds-bg-field-src` | `--bds-ambient-field-src` |
+| `--bds-bg-field-tint` | `--bds-ambient-field-tint` |
+| `--bds-bg-field-opacity` | `--bds-ambient-field-opacity` |
+| `--bds-bg-field-particle` | `--bds-ambient-field-particle-color` |
+| `--bds-social-icon-brand` | `--bds-social-icon-platform-color` |
+| `--bds-board-card-accent` | `--bds-board-card-accent-color` |
+
 ## Migration: prefix bridge removed (#2711)
 
-Ships in the release after 0.224.0 (minor). The ADR-043 prefix bridge is gone: the 719 pre-prefix token names (`--text-primary`, `--color-poppy-light`, `--color-system-youtube`, the renamed component knobs, ...) no longer resolve. A read of an old name is an unset custom property, and an override of one is a no-op. Read and set the `--bds-` name.
+Ships in the release after 0.226.1 (minor). The ADR-043 prefix bridge is gone: the 719 pre-prefix token names (`--text-primary`, `--color-poppy-light`, `--color-system-youtube`, the renamed component knobs, ...) no longer resolve. A read of an old name is an unset custom property, and an override of one is a no-op. Read and set the `--bds-` name.
 
 **Breaking (consumer tokens):**
 

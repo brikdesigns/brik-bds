@@ -66,7 +66,7 @@
       "states": ["hover", "pressed", "disabled"]
     },
     "component": {
-      "body": "{component}-{property}",
+      "body": "{component}[-{part}]-{property}",
       "stemRule": "The first body segment is the component stem. It may not begin with a reserved word (ADR-043 section 5)."
     }
   },
@@ -129,6 +129,10 @@
     "$comment": "ADR-033 section 3 as amended by #2594. tShirt is the lint-naming-canon rule-1 vocabulary; slotAuditTShirt is the narrower set lint-token-purpose-slots has always classified with (no 3xs/3xl) - kept distinct so its output is unchanged.",
     "tShirt": ["tiny", "3xs", "2xs", "xs", "sm", "md", "lg", "xl", "2xl", "xxl", "3xl", "huge"],
     "slotAuditTShirt": ["tiny", "2xs", "xs", "sm", "md", "lg", "xl", "2xl", "xxl", "huge"],
+    "familySteps": {
+      "$comment": "ADR-033 section Amendments, #1285. Step words legal in ONE body-keyed family only, ordered low to high. `nano` is three fixed rungs below `tiny`, mode-invariant, padding only.",
+      "--padding-": ["3nano", "2nano", "nano"]
+    },
     "reset": ["none", "0"],
     "retired": {
       "standard": { "--border-width-": "deleted, not renamed", "default": "md" },
@@ -174,7 +178,8 @@
     "density": { "concept": "spacing compression", "values": ["comfortable", "compact"] },
     "orientation": { "concept": "layout direction", "values": ["horizontal", "vertical"] },
     "layout": { "concept": "component arrangement", "values": null },
-    "span": { "concept": "grid-cell extent", "values": ["full"] }
+    "span": { "concept": "grid-cell extent", "values": ["full"] },
+    "ratio": { "concept": "proportion", "values": null }
   },
   "docs": {
     "$comment": "token-anatomy.mdx must contain, verbatim, the formula strings derived from tiers above: --{semantic.formula}, --{primitive.color.body}, --{ids.componentId}-{component.body}, plus the shape (--{id}-{body}) and the scale body (--{primitive.scale.body}) (scripts/lint-naming-grammar-docs.mjs). #2666 rewrote the page around them.",

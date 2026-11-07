@@ -1,0 +1,50 @@
+@layer bds-components {
+/* ─── Stat — value + label (+ detail) Block ──────────────────── */
+/* Gap is --bds-gap-sm, not --bds-gap-tiny: tiny resolves to 0px outside the
+   default spacing mode (same call as the StatsBar blueprint). */
+
+.bds-stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-gap-sm);
+  min-width: 0;
+}
+
+.bds-stat__value {
+  font-family: var(--bds-font-family-heading);
+  font-weight: var(--bds-font-weight-bold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
+  margin: 0;
+}
+
+.bds-stat--size-lg  .bds-stat__value { font-size: var(--bds-heading-lg); }
+.bds-stat--size-xl  .bds-stat__value { font-size: var(--bds-heading-xl); }
+.bds-stat--size-2xl .bds-stat__value { font-size: var(--bds-heading-2xl); }
+
+.bds-stat__label {
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  line-height: var(--bds-font-line-height-normal);
+  text-transform: var(--bds-text-transform-label);
+  color: var(--bds-text-secondary);
+  margin: 0;
+}
+
+.bds-stat__detail {
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-muted);
+  margin: 0;
+}
+
+/* ─── On a filled brand / dark surface ───────────────────────── */
+/* Child combinator — a Stat nested in another's slot keeps its own colours. */
+
+.bds-stat--on-color > .bds-stat__value,
+.bds-stat--on-color > .bds-stat__label,
+.bds-stat--on-color > .bds-stat__detail {
+  color: var(--bds-text-on-color-dark);
+}
+}

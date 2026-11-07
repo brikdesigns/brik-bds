@@ -50,6 +50,15 @@
   align-items: end;
 }
 
+/* ─── Row actions (reorderable) ───────────────────────────── */
+/* Groups move-up / move-down / remove into the single auto track. */
+
+.bds-addable-field-row-list__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--bds-gap-xs);
+}
+
 /* ─── Empty state ─────────────────────────────────────────── */
 
 .bds-addable-field-row-list__empty {

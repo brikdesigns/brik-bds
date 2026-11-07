@@ -56,6 +56,7 @@ Compose freely with the Title / Description / Footer subcomponents. Omit `layout
 - **`brand`** — Primary-color border for emphasis.
 - **`elevated`** — Surface-primary fill, no border, no shadow (flat since brik-bds#1146; for a shadow use `raised`).
 - **`raised`** — Surface-primary fill, no border, with a cast `--box-shadow-md` drop shadow. The shadow-casting counterpart to the now-flat `elevated`; use for a focal/lone card or a grid cell that needs a lifted, contained read.
+- **`filled`** — Neutral recessed panel: surface-secondary fill with a muted border. For a grouping container that reads as part of the page; not a service-line wash (use `tint` for that).
 - **`borderless`** — Transparent fill, no border, no shadow. Use for cards sitting on a colored surface, where the border ring reads as visual noise.
 
 The `layout` arrangements take the grid-cell subset — `borderless`, `elevated`, `raised` — so one option set covers every surface treatment.
@@ -244,7 +245,7 @@ Two behavior notes on the way across:
 {/* props-check: CardProps @ components/ui/Card/Card.tsx */}
 | Prop | Type | Default |
 |---|---|---|
-| `variant` | `'outlined' \| 'brand' \| 'elevated' \| 'raised' \| 'borderless'` | `'outlined'` |
+| `variant` | `'outlined' \| 'brand' \| 'elevated' \| 'raised' \| 'borderless' \| 'filled'` | `'outlined'` |
 | `padding` | `'none' \| 'sm' \| 'md' \| 'lg'` | `'md'` |
 | `interactive` | `boolean` | `false` |
 | `href` | `string` | — |
