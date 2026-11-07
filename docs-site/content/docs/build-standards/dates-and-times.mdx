@@ -1,0 +1,36 @@
+---
+title: Dates and times
+description: The three shapes a rendered date takes — date, timestamp, relative — and which one each consumer uses.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Every rendered date is one of three shapes. [`DateTime`](/docs/components/date-time) renders all three as a `<time dateTime="ISO">`, so a surface picks a shape instead of inventing a format.
+
+## The three shapes
+
+| Shape | `mode` | Example | Means |
+|---|---|---|---|
+| Date | `date` | "Nov 6, 2026" | A calendar day |
+| Timestamp | `timestamp` | "Nov 6, 2026, 2:30 PM CST" | An instant, always ending in a zone label |
+| Relative | `relative` | "3 days ago" | An age; `title` holds the exact zone-labelled timestamp |
+
+## Which consumer uses which
+
+| Consumer | Shape |
+|---|---|
+| [Field](/docs/components/field) value | `date` or `timestamp` — **never `relative`** |
+| Feed row (e.g. [Activity timeline](/docs/components/activity-timeline)) | `relative` |
+| Card meta line | `relative` |
+
+<Callout type="warn">
+  **A Field value is a record of fact, so it is never relative.** "3 days ago" decays the moment the page is read and cannot be copied into a report. Use `date` or `timestamp`.
+</Callout>
+
+## Zones
+
+DateTime renders what it is given and labels the zone. It does not decide which zone a product speaks in: pass `timeZone` (the portal passes `America/Chicago`, matching its `formatDate` / `formatTimestamp` helpers), or leave it off to use the runtime zone. A date-only value is a calendar day and never shifts with the zone.
+
+## Empty
+
+No value renders a muted `—`, never a `<time>`.

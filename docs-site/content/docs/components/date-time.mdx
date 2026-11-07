@@ -1,0 +1,79 @@
+---
+title: Date time
+description: A rendered date — calendar day, zone-labelled timestamp, or relative age — in a semantic time element.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+DateTime is the one home for a rendered date. It always renders `<time dateTime="ISO">`, in one of three shapes. See [Dates and times](/docs/build-standards/dates-and-times) for which shape each consumer uses.
+
+## Use it for
+
+- A date or timestamp value inside a [Field](/docs/components/field)
+- A relative age on a feed row or card meta line
+
+## Import
+
+```tsx
+import { DateTime } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Date
+
+A calendar day. A date-only string (`2026-11-06`) never shifts with the zone.
+
+```tsx
+<DateTime value="2026-11-06" />
+```
+
+### Timestamp
+
+A zone-labelled instant, e.g. `Nov 6, 2026, 2:30 PM CST`.
+
+```tsx
+<DateTime mode="timestamp" value="2026-11-06T20:30:00Z" timeZone="America/Chicago" />
+```
+
+### Relative
+
+An age, e.g. `3 days ago`. `title` carries the exact zone-labelled timestamp so it shows on hover.
+
+```tsx
+<DateTime mode="relative" value={row.updatedAt} timeZone="America/Chicago" />
+```
+
+### Empty
+
+`null`, `undefined`, or an unparseable value renders `emptyLabel` (default `—`) in a plain `<span>`, never a `<time>`.
+
+## When *not* to use
+
+<Callout type="warn">
+  **DateTime owns no zone logic.** It labels the zone you pass in `timeZone` and otherwise uses the runtime zone. A product that needs one fixed zone (the portal uses `America/Chicago`) passes it, or formats upstream.
+</Callout>
+
+## Accessibility
+
+- Renders a native `<time>` with the ISO value in `dateTime`, so assistive tech and crawlers read the machine value.
+- `relative` output depends on the current time. On server-rendered pages pass `now` so server and client agree.
+
+## API
+
+{/* props-check: DateTimeProps @ components/ui/DateTime/DateTime.tsx */}
+| Prop | Type | Default |
+|---|---|---|
+| `value` | `DateTimeValue` *(required)* | — |
+| `mode` | `DateTimeMode` | `'date'` |
+| `timeZone` | `string` | runtime zone |
+| `now` | `Date \| number` | current time |
+| `emptyLabel` | `string` | `'—'` |
+
+`DateTimeMode` is `'date' | 'timestamp' | 'relative'`. `DateTimeValue` is `string | number | Date | null | undefined`. Plus all standard HTML attributes for the rendered element.
+
+## Related
+
+- [Dates and times](/docs/build-standards/dates-and-times) — which shape each consumer uses
+- [Date picker](/docs/components/date-picker) and [Time picker](/docs/components/time-picker) — the input counterparts
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/content-date-time--default)**

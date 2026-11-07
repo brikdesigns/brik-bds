@@ -1,0 +1,33 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './DateTime.stories';
+
+<Meta of={Stories} />
+
+# Date time
+
+<ComponentLinks slug="date-time" />
+
+DateTime renders a date as one of three shapes — a calendar day, a zone-labelled instant, or an age — inside a `<time dateTime>` element. It renders what it is given and labels the zone; it does not decide which zone.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Timestamp
+
+<Canvas of={Stories.Timestamp} />
+
+### Relative
+
+<Canvas of={Stories.Relative} />
+
+### Empty
+
+<Canvas of={Stories.Empty} />
+
+## Props
+
+<ArgTypes of={Stories} />

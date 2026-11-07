@@ -80,6 +80,7 @@
     "content-block",
     "media-block",
     "stat",
+    "date-time",
     "prose",
     "section-header",
     "marquee",
