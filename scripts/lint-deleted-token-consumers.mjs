@@ -117,8 +117,11 @@ const CONSUMER_GLOBS = ['*.css', '*.scss', '*.ts', '*.tsx', '*.js', '*.jsx', '*.
 /**
  * Never swept in any consumer. `docs/reports/` holds dated HTML records that no
  * build renders, so a token name quoted there is history, not a `var()` read.
+ * `__tests__/` never ships: a test asserting on a generator's own output (the
+ * portal's mockup compiler emits `--display-xl` itself) names a token, it does
+ * not read BDS's.
  */
-const CONSUMER_EXCLUDES = [':(exclude)docs/reports/'];
+const CONSUMER_EXCLUDES = [':(exclude)docs/reports/', ':(exclude)**/__tests__/**'];
 
 /** The `git grep` pathspecs for one consumer: its globs, scoped to `paths` when set. */
 function consumerPathspecs(consumer) {

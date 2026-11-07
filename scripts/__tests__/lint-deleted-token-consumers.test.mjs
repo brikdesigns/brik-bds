@@ -94,7 +94,10 @@ beforeAll(() => {
   // A dated report quoting a token name is history, never a `var()` read.
   mkdirSync(join(consumer, 'docs', 'reports'), { recursive: true });
   writeFileSync(join(consumer, 'docs', 'reports', 'audit.html'), '<p><code>--bds-measure-md</code> was the width.</p>\n');
-  git(['add', 'src/page.css', 'docs/reports/audit.html'], consumer);
+  // A test asserting on a generator's own output names a token, never reads it.
+  mkdirSync(join(consumer, 'src', '__tests__'), { recursive: true });
+  writeFileSync(join(consumer, 'src', '__tests__', 'gen.test.ts'), "expect(css).toContain('--bds-measure-md: 60ch;');\n");
+  git(['add', 'src/page.css', 'docs/reports/audit.html', 'src/__tests__/gen.test.ts'], consumer);
   git(['-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-qm', 'consumer'], consumer);
 });
 
@@ -139,6 +142,17 @@ describe('lint-deleted-token-consumers', { timeout: 30_000 }, () => {
     expect(quoted).toContain('docs/reports/audit.html:1');
     const { json } = run();
     expect(json.findings.map((f) => f.at)).not.toEqual(expect.arrayContaining([expect.stringContaining('docs/reports')]));
+  });
+
+  it('never sweeps __tests__', () => {
+    // Positive control: the test file does quote the deleted name.
+    const quoted = execFileSync('git', ['grep', '-c', '-F', '-e', '--bds-measure-md', '--', 'src/__tests__'], {
+      cwd: consumer,
+      encoding: 'utf8',
+    });
+    expect(quoted).toContain('src/__tests__/gen.test.ts:1');
+    const { json } = run();
+    expect(json.findings.map((f) => f.at)).not.toEqual(expect.arrayContaining([expect.stringContaining('__tests__')]));
   });
 
   it('sweeps only the paths a consumer is scoped to', () => {
