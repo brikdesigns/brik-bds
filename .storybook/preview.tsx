@@ -42,7 +42,6 @@ import '../tokens/font-audit.css';
 import '../tokens/animations.css';
 import '../css/animations.css';
 import '../css/premium-effects.css';
-import '../tokens/compat/prefix-bridge.css';
 import './storybook-overrides.css';
 
 // Hides one React 18 dev warning from lottie-react v3, and only that one.

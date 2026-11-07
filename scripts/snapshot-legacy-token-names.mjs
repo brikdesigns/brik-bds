@@ -7,9 +7,9 @@
  * writes tokens/compat/legacy-token-names.json: every declared custom-property
  * name, plus the word-step -> numeric-step aliases (ADR-043 section 4).
  *
- * The prefix bridge (build-token-bridge.mjs) aliases exactly this set. It is
- * frozen on purpose: the bridge covers names consumers could already read, so a
- * token added after the migration needs no alias.
+ * dist/retired-token-names.json (build-dist-tokens.js) maps exactly this set. It is
+ * frozen on purpose: it covers names consumers could already read, so a
+ * token added after the migration needs no entry.
  *
  *   node scripts/snapshot-legacy-token-names.mjs <git-ref>
  */
@@ -51,7 +51,7 @@ for (const [, decls] of declarationMap(css)) {
 
 const out = {
   $comment:
-    'Frozen by scripts/snapshot-legacy-token-names.mjs: the custom-property names the previous minor declared in dist/tokens.css. build-token-bridge.mjs aliases exactly this set; a token added later needs no alias. Do not edit.',
+    'Frozen by scripts/snapshot-legacy-token-names.mjs: the custom-property names the previous minor declared in dist/tokens.css. dist/retired-token-names.json maps exactly this set; a token added later needs no entry. Do not edit.',
   base: sha,
   names: [...names].sort(),
   wordSteps: Object.fromEntries(Object.entries(wordSteps).sort(([a], [b]) => a.localeCompare(b))),

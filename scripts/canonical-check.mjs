@@ -82,7 +82,7 @@ export const DEFAULT_EXCLUDE_PATH_PATTERNS = [
 
 // ── Allowlist ────────────────────────────────────────────────────────────
 
-/** Start of the generated compat-alias section in dist/tokens.css (scripts/lib/bds-prefix.mjs BRIDGE_BEGIN). */
+/** Start of the compat-alias section older dist/tokens.css files (<= 0.224.0) end with; removed in #2711, tolerated for consumers on old pins. */
 const BRIDGE_SECTION_MARKER = '/* ===== BEGIN BDS PREFIX BRIDGE';
 
 /**
@@ -93,10 +93,10 @@ const BRIDGE_SECTION_MARKER = '/* ===== BEGIN BDS PREFIX BRIDGE';
  * are merely `var(--name)` references — `(` is not a declaration boundary.
  */
 export function parseAllowlist(cssText, { includeBridge = true } = {}) {
-  // ADR-043: dist/tokens.css ends with a generated compat section that re-declares
-  // every pre-prefix name as an alias of its `--bds-` name. Consumers still on the
-  // old spelling keep resolving, so it is allowed by default; the BDS repo itself
-  // passes `includeBridge: false` so a bare name in its own source is a violation.
+  // dist/tokens.css up to 0.224.0 ends with a generated compat section that re-declares
+  // every pre-prefix name as an alias of its `--bds-` name (removed in #2711; a current
+  // dist has none, so this is a no-op there). It is allowed by default for consumers on
+  // an old pin; the BDS repo itself passes `includeBridge: false`.
   if (!includeBridge) {
     const at = cssText.indexOf(BRIDGE_SECTION_MARKER);
     if (at !== -1) cssText = cssText.slice(0, at);

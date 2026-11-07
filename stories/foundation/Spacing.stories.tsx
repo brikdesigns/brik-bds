@@ -75,7 +75,7 @@ export const Scale: Story = {
     <Page>
       <SemanticSpacing title="Padding — container edges" tokens={PADDING} varPrefix="--padding" />
       <SemanticSpacing title="Gap — between siblings" tokens={GAP} varPrefix="--gap" />
-      <SpacingScale title="Primitive step ladder" scale={spaceScale} prefix="--space" />
+      <SpacingScale title="Primitive step ladder" scale={spaceScale} prefix="--bds-space" />
     </Page>
   ),
 };

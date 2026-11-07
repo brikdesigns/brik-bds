@@ -60,7 +60,7 @@
  * `--local` greps existing checkouts under the Github group dirs instead of
  * cloning — the dev path. CI clones, because a runner has no checkouts.
  *
- * `--consumer owner/repo[@branch]` (repeatable) REPLACES the default consumer
+ * `--consumer owner/repo[@branch][:path,...]` (repeatable) REPLACES the default consumer
  * set with the ones named — a scoped sweep, and what the test suite uses to
  * stay hermetic.
  *
@@ -94,11 +94,16 @@ import process from 'node:process';
  * land when BDS deletes the name, it lands when that site bumps — and by then
  * the deletion is many releases back and nobody connects the two. That is the
  * #2271 timeline exactly.
+ *
+ * `paths` (optional) narrows a consumer to the directories its build reads.
+ * tncld's root `css/`, `js/` and `*.html` are a copy of the legacy Webflow
+ * export that Netlify never serves (`publish = ".next"`, tncld CLAUDE.md), so
+ * only `src/` can break when a name leaves BDS.
  */
 const CONSUMERS = [
   { repo: 'brikdesigns/brikdesigns', branch: 'staging' }, // bds 0.187.0
   { repo: 'brikdesigns/brik-client-portal', branch: 'staging' }, // bds ^0.187.0
-  { repo: 'brikdesigns/tncld', branch: 'main' }, // bds ^0.158.0
+  { repo: 'brikdesigns/tncld', branch: 'main', paths: ['src'] }, // bds ^0.158.0
   { repo: 'brikdesigns/vale-partners', branch: 'main' }, // bds ^0.129.0
   { repo: 'brikdesigns/birdwell-mutlak', branch: 'main' }, // bds ^0.58.0
 ];
@@ -108,6 +113,23 @@ const TOKEN_SOURCE_PATHSPEC = 'tokens';
 
 /** Extensions a `var(--x)` reference can appear in. */
 const CONSUMER_GLOBS = ['*.css', '*.scss', '*.ts', '*.tsx', '*.js', '*.jsx', '*.astro', '*.mdx', '*.html'];
+
+/**
+ * Never swept in any consumer. `docs/reports/` holds dated HTML records that no
+ * build renders, so a token name quoted there is history, not a `var()` read.
+ * `__tests__/` never ships: a test asserting on a generator's own output (the
+ * portal's mockup compiler emits `--display-xl` itself) names a token, it does
+ * not read BDS's.
+ */
+const CONSUMER_EXCLUDES = [':(exclude)docs/reports/', ':(exclude)**/__tests__/**'];
+
+/** The `git grep` pathspecs for one consumer: its globs, scoped to `paths` when set. */
+function consumerPathspecs(consumer) {
+  const globs = consumer.paths
+    ? consumer.paths.flatMap((p) => CONSUMER_GLOBS.map((g) => `${p}/${g}`))
+    : CONSUMER_GLOBS;
+  return [...globs, ...CONSUMER_EXCLUDES];
+}
 
 const DIST_TOKENS = 'dist/tokens.css';
 
@@ -123,9 +145,10 @@ function parseArgs(argv) {
     else if (a === '--json') opts.json = true;
     else if (a === '--consumer') {
       const spec = argv[++i] ?? '';
-      const m = /^([^/]+\/[^@]+)(?:@(.+))?$/.exec(spec);
-      if (!m) die(2, `--consumer expects owner/repo[@branch], got: ${spec || '(nothing)'}`);
-      opts.consumers.push({ repo: m[1], branch: m[2] || 'main' });
+      // A git ref cannot contain `:`, so it safely separates the optional paths.
+      const m = /^([^/]+\/[^@:]+)(?:@([^:]+))?(?::(.+))?$/.exec(spec);
+      if (!m) die(2, `--consumer expects owner/repo[@branch][:path,...], got: ${spec || '(nothing)'}`);
+      opts.consumers.push({ repo: m[1], branch: m[2] || 'main', ...(m[3] && { paths: m[3].split(',') }) });
     } else die(2, `unknown argument: ${a}`);
   }
   if (!opts.base) die(2, 'missing required --base <ref>');
@@ -247,10 +270,10 @@ function consumerCheckout(consumer, { local, tmpRoot }) {
  * BSD grep rejects `--no-color`, so the dev path and the CI path would have
  * diverged.
  */
-function referencesIn(dir, name) {
+function referencesIn(dir, name, pathspecs) {
   // `-e` is required, not stylistic: every token name starts with `--`, so a
   // bare pattern is parsed as an unknown long option and the search never runs.
-  const args = ['grep', '--no-color', '-n', '-F', '-I', '-e', name, '--', ...CONSUMER_GLOBS];
+  const args = ['grep', '--no-color', '-n', '-F', '-I', '-e', name, '--', ...pathspecs];
   let out = '';
   try {
     out = run('git', args, { cwd: dir, maxBuffer: 32 * 1024 * 1024 });
@@ -306,7 +329,7 @@ function main() {
       for (const name of deleted) {
         let hits;
         try {
-          hits = referencesIn(dir, name);
+          hits = referencesIn(dir, name, consumerPathspecs(consumer));
         } catch (err) {
           // A search that failed is not a search that found nothing.
           die(2, `${consumer.repo}: ${err.message}`);

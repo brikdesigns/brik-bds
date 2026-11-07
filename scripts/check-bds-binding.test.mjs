@@ -1,7 +1,7 @@
 /**
  * Tests for scripts/check-bds-binding.mjs (#2720).
  *
- * Each case plants a throwaway consumer `src/` plus a tiny bridge / tokens / styles trio, then
+ * Each case plants a throwaway consumer `src/` plus a tiny retired-names / tokens / styles trio, then
  * runs the CLI against them — the same seam as scripts/lint-consumer-shadows.test.mjs.
  */
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from 'node:fs';
@@ -13,11 +13,11 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 const GATE = join(dirname(fileURLToPath(import.meta.url)), 'check-bds-binding.mjs');
 
-// The CLI refuses a bridge under 500 names, so pad the real ones with filler.
+// The CLI refuses a retired-name map under 500 names, so pad the real ones with filler.
 const REAL = ['text-primary', 'background-brand-primary', 'surface-inverse'];
-const BRIDGE = [...REAL, ...Array.from({ length: 500 }, (_, i) => `filler-${i}`)]
-  .map((body) => `  --${body}: var(--bds-${body});`)
-  .join('\n');
+const BRIDGE = JSON.stringify(
+  Object.fromEntries([...REAL, ...Array.from({ length: 500 }, (_, i) => `filler-${i}`)].map((body) => [`--${body}`, `--bds-${body}`])),
+);
 const TOKENS = ':root {\n  --bds-text-primary: #000;\n  --bds-background-brand-primary: #e35335;\n}\n';
 const STYLES = '.bds-footer { background: var(--bds-footer-surface, var(--bds-surface-inverse)); }\n';
 
@@ -28,10 +28,10 @@ afterEach(() => {
 });
 
 /** Plant a consumer repo: `files` maps a path under the repo to its body. Returns the repo root. */
-function plant(files, bridge = `:root {\n${BRIDGE}\n}\n`) {
+function plant(files, bridge = BRIDGE) {
   const root = mkdtempSync(join(tmpdir(), 'check-bds-binding-'));
   dirs.push(root);
-  const all = { 'bds/prefix-bridge.css': bridge, 'bds/tokens.css': TOKENS, 'bds/styles.css': STYLES, ...files };
+  const all = { 'bds/retired-token-names.json': bridge, 'bds/tokens.css': TOKENS, 'bds/styles.css': STYLES, ...files };
   for (const [rel, body] of Object.entries(all)) {
     const abs = join(root, rel);
     mkdirSync(dirname(abs), { recursive: true });
@@ -42,7 +42,7 @@ function plant(files, bridge = `:root {\n${BRIDGE}\n}\n`) {
 
 /** Run the CLI from the planted repo. Returns `{ status, output }` without throwing on a non-zero exit. */
 function run(root, ...args) {
-  const inputs = ['--bridge', 'bds/prefix-bridge.css', '--tokens', 'bds/tokens.css', '--styles', 'bds/styles.css'];
+  const inputs = ['--retired', 'bds/retired-token-names.json', '--tokens', 'bds/tokens.css', '--styles', 'bds/styles.css'];
   try {
     const output = execFileSync('node', [GATE, 'src', ...inputs, ...args], { cwd: root, encoding: 'utf8' });
     return { status: 0, output };
@@ -74,7 +74,7 @@ describe('old-name-override in CSS', () => {
     expect(run(root).status).toBe(1);
   });
 
-  it('ignores reads, comments and names the bridge does not alias', () => {
+  it('ignores reads, comments and names that were never retired', () => {
     const root = plant({
       'src/theme.css':
         '/* --text-primary: #fff; */\n.a { color: var(--text-primary); --plan-tier-price: 1px; --bds-surface-inverse: #000 }\n',
@@ -83,7 +83,7 @@ describe('old-name-override in CSS', () => {
   });
 
   it('keeps a quoted CSS font stack intact in the message', () => {
-    const bridge = `:root {\n${BRIDGE}\n  --font-family-body: var(--bds-font-family-body);\n}\n`;
+    const bridge = JSON.stringify({ ...JSON.parse(BRIDGE), '--font-family-body': '--bds-font-family-body' });
     const root = plant({ 'src/a.css': ".a { --font-family-body: 'Lato', serif; }\n" }, bridge);
     expect(run(root).output).toContain("--font-family-body: 'Lato', serif — set");
   });
@@ -144,11 +144,11 @@ describe('binding-shape (--theme)', () => {
 });
 
 describe('invocation', () => {
-  it('exits 2 on a bridge too small to be the real one', () => {
-    const root = plant({ 'src/a.css': '' }, ':root { --text-primary: var(--bds-text-primary); }\n');
+  it('exits 2 on a retired-name map too small to be the real one', () => {
+    const root = plant({ 'src/a.css': '' }, '{ "--text-primary": "--bds-text-primary" }');
     const { status, output } = run(root);
     expect(status).toBe(2);
-    expect(output).toContain('read only 1 bridged names');
+    expect(output).toContain('read only 1 retired names');
   });
 
   it('exits 2 on --id without --theme', () => {

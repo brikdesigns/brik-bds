@@ -80,7 +80,6 @@ import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { resolve, join, dirname, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
-import { canonicalPart } from './lib/bds-prefix.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, '..');
@@ -212,7 +211,7 @@ function buildKnownTokens(tokensOverride) {
   // bare name a consumer can still read resolves. Bridge names that retire a
   // body (word steps) are gated as deprecated below.
   const dist = readFileSync(DIST_TOKENS, 'utf8');
-  const registry = canonicalPart(dist);
+  const registry = dist;
   const bridge = dist.slice(registry.length);
   const known = declaredNamesIn(dist);
   // ∪ component-scoped custom properties (CSS-Override-API knobs) — real names

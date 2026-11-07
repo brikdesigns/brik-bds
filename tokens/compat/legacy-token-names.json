@@ -1,5 +1,5 @@
 {
-  "$comment": "Frozen by scripts/snapshot-legacy-token-names.mjs: the custom-property names the previous minor declared in dist/tokens.css. build-token-bridge.mjs aliases exactly this set; a token added later needs no alias. Do not edit.",
+  "$comment": "Frozen by scripts/snapshot-legacy-token-names.mjs: the custom-property names the previous minor declared in dist/tokens.css. dist/retired-token-names.json maps exactly this set; a token added later needs no entry. Do not edit.",
   "base": "d83ef148",
   "names": [
     "--aspect-1-1",

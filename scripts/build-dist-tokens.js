@@ -6,7 +6,7 @@
  * Produces:
  *   dist/tokens.css  — figma-tokens.css + figma-tokens-dark.css + theme-brand-brik.generated.css + modes-*.css + gap-fills.css + modes-elevation.css + layout-fluid.css + ratios.css + fluid-type.css + animations.css concatenated
  *   dist/bridge.css  — clean name ↔ Webflow internal name aliases
- *   dist/prefix-bridge.css — old-name → `--bds-` aliases (ADR-043); also appended to dist/tokens.css
+ *   dist/retired-token-names.json — { "--old-name": "--bds-new-name" } for guard tooling (ADR-043, #2711); the old names no longer resolve
  */
 const fs = require('fs');
 const path = require('path');
@@ -34,9 +34,10 @@ for (const [src, dest] of Object.entries(sdCopyMap)) {
 }
 
 // Build tokens.css: the canonical token cascade (assembled by the shared
-// dist-assemble.mjs so the equivalence gate builds its "before" side with the
-// same code), then the generated System ID prefix bridge in a delimited
-// trailing section (ADR-043, #2670).
+// dist-assemble.mjs), then the retired-name map beside it. The ADR-043 prefix
+// bridge (old name -> `--bds-` alias) was removed in #2711: old names no longer
+// resolve, and they leave dist/tokens.css, which brik-llm's token-name-guard
+// reads as its allowlist.
 //
 // Concat order is load-bearing:
 //   - Mode overrides (modes-borderwidth/spacing/typography/borderradius) override
@@ -55,8 +56,7 @@ for (const [src, dest] of Object.entries(sdCopyMap)) {
 //   - animations.css is the shared keyframe library (bds-spin, bds-pulse, ...).
 async function main() {
   const { assembleCanonical } = await import('./lib/dist-assemble.mjs');
-  const { generateBridge } = await import('./lib/token-bridge.mjs');
-  const { BRIDGE_BEGIN, BRIDGE_END } = await import('./lib/bds-prefix.mjs');
+  const { buildRetiredNames } = await import('./lib/bds-prefix.mjs');
 
   const read = (rel) => {
     const p = path.join(TOKENS_DIR, '..', rel);
@@ -64,25 +64,15 @@ async function main() {
   };
   const canonical = assembleCanonical(read, console.log);
 
-  // Generated prefix bridge: old name -> `--bds-` name, re-declared in every
-  // selector block where the new name is declared. Held out of the tier scans
-  // under tokens/compat/ (ADR-035), published standalone and appended here so
-  // consumers importing only tokens.css (and brik-llm's token-name-guard, which
-  // reads this file as its allowlist) still see every old name.
-  const { css: prefixBridge, aliasCount, blockCount, missing } = generateBridge(canonical);
-  if (missing.length) {
-    throw new Error(`prefix bridge: ${missing.length} legacy name(s) have no declared --bds- target:\n  ${missing.join('\n  ')}`);
-  }
-  fs.writeFileSync(path.join(TOKENS_DIR, 'compat', 'prefix-bridge.css'), prefixBridge);
-  console.log(`  ✓ tokens/compat/prefix-bridge.css (${aliasCount} aliases, ${blockCount} selector blocks)`);
-
-  fs.writeFileSync(
-    path.join(DIST_DIR, 'tokens.css'),
-    `${canonical}\n\n${BRIDGE_BEGIN}\n${prefixBridge}${BRIDGE_END}\n`,
-  );
+  fs.writeFileSync(path.join(DIST_DIR, 'tokens.css'), `${canonical}\n`);
   console.log('  ✓ dist/tokens.css');
-  fs.writeFileSync(path.join(DIST_DIR, 'prefix-bridge.css'), prefixBridge);
-  console.log('  ✓ dist/prefix-bridge.css');
+
+  const { map: retired, missing } = buildRetiredNames(canonical);
+  if (missing.length) {
+    throw new Error(`retired names: ${missing.length} legacy name(s) have no declared --bds- target:\n  ${missing.join('\n  ')}`);
+  }
+  fs.writeFileSync(path.join(DIST_DIR, 'retired-token-names.json'), `${JSON.stringify(retired, null, 2)}\n`);
+  console.log(`  ✓ dist/retired-token-names.json (${Object.keys(retired).length} names)`);
 
   // Copy bridge.css — sourced from tokens/compat/ (the alias-compat layer, held
   // out of the tier-direction scan set per ADR-035; still published as dist/bridge.css)

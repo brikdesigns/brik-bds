@@ -46,8 +46,8 @@ function commitTokens({ source, dist, message }) {
   git(['-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-qm', message], bds);
 }
 
-function run(extraArgs = [], base = 'base') {
-  const args = [SCRIPT, '--base', base, '--json', '--local', '--consumer', 'fake/consumer@main', ...extraArgs];
+function run(extraArgs = [], base = 'base', consumerSpec = 'fake/consumer@main') {
+  const args = [SCRIPT, '--base', base, '--json', '--local', '--consumer', consumerSpec, ...extraArgs];
   let code = 0;
   let stdout = '';
   let stderr = '';
@@ -91,7 +91,13 @@ beforeAll(() => {
   // Untracked files are invisible to `git grep`, which is the point — a stale
   // node_modules copy of BDS must never read as consumer usage.
   writeFileSync(join(consumer, 'src', 'untracked.css'), '.x { width: var(--bds-measure-lg); }\n');
-  git(['add', 'src/page.css'], consumer);
+  // A dated report quoting a token name is history, never a `var()` read.
+  mkdirSync(join(consumer, 'docs', 'reports'), { recursive: true });
+  writeFileSync(join(consumer, 'docs', 'reports', 'audit.html'), '<p><code>--bds-measure-md</code> was the width.</p>\n');
+  // A test asserting on a generator's own output names a token, never reads it.
+  mkdirSync(join(consumer, 'src', '__tests__'), { recursive: true });
+  writeFileSync(join(consumer, 'src', '__tests__', 'gen.test.ts'), "expect(css).toContain('--bds-measure-md: 60ch;');\n");
+  git(['add', 'src/page.css', 'docs/reports/audit.html', 'src/__tests__/gen.test.ts'], consumer);
   git(['-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-qm', 'consumer'], consumer);
 });
 
@@ -125,6 +131,43 @@ describe('lint-deleted-token-consumers', { timeout: 30_000 }, () => {
     expect(json.findings).toHaveLength(1);
     expect(json.findings[0]).toMatchObject({ repo: 'fake/consumer', token: '--bds-measure-md' });
     expect(json.findings[0].at).toContain('src/page.css');
+  });
+
+  it('never sweeps docs/reports', () => {
+    // Positive control: the report does quote the deleted name.
+    const quoted = execFileSync('git', ['grep', '-c', '-F', '-e', '--bds-measure-md', '--', 'docs/reports'], {
+      cwd: consumer,
+      encoding: 'utf8',
+    });
+    expect(quoted).toContain('docs/reports/audit.html:1');
+    const { json } = run();
+    expect(json.findings.map((f) => f.at)).not.toEqual(expect.arrayContaining([expect.stringContaining('docs/reports')]));
+  });
+
+  it('never sweeps __tests__', () => {
+    // Positive control: the test file does quote the deleted name.
+    const quoted = execFileSync('git', ['grep', '-c', '-F', '-e', '--bds-measure-md', '--', 'src/__tests__'], {
+      cwd: consumer,
+      encoding: 'utf8',
+    });
+    expect(quoted).toContain('src/__tests__/gen.test.ts:1');
+    const { json } = run();
+    expect(json.findings.map((f) => f.at)).not.toEqual(expect.arrayContaining([expect.stringContaining('__tests__')]));
+  });
+
+  it('sweeps only the paths a consumer is scoped to', () => {
+    mkdirSync(join(consumer, 'legacy'), { recursive: true });
+    writeFileSync(join(consumer, 'legacy', 'export.css'), '.old { width: var(--bds-measure-md); }\n');
+    git(['add', 'legacy/export.css'], consumer);
+    git(['-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-qm', 'legacy export'], consumer);
+
+    // Unscoped, the legacy file is a finding — so the scoped run below is a real filter.
+    const unscoped = run();
+    expect(unscoped.json.findings.map((f) => f.at.split(':')[0]).sort()).toEqual(['legacy/export.css', 'src/page.css']);
+
+    const scoped = run([], 'base', 'fake/consumer@main:src');
+    expect(scoped.code).toBe(1);
+    expect(scoped.json.findings.map((f) => f.at.split(':')[0])).toEqual(['src/page.css']);
   });
 
   it('passes when the deleted name ships on as a deprecated alias', () => {

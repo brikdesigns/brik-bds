@@ -2,17 +2,17 @@
 /**
  * check-bds-binding — fails a consumer that overrides a pre-ADR-043 token name (#2720).
  *
- * From 0.195.0, BDS components read only `--bds-*` names (ADR-043). `prefix-bridge.css`
- * aliases each old name to its `--bds-` name, so a READ of `--text-primary` keeps
- * resolving. An OVERRIDE of `--text-primary` changes only the alias, though, and no BDS
- * component sees it. Typecheck and build stay green while themed pages render Brik
- * defaults: tncld#188 shipped exactly that, and its primary buttons went Poppy.
+ * From 0.195.0, BDS components read only `--bds-*` names (ADR-043). The prefix bridge that
+ * aliased each old name to its `--bds-` name was removed in #2711, so an old name no longer
+ * resolves at all and an OVERRIDE of `--text-primary` is a pure no-op: no BDS component
+ * sees it. Typecheck and build stay green while themed pages render Brik defaults: tncld#188
+ * shipped exactly that, and its primary buttons went Poppy. That is why the check stays.
  *
  * Generalised from brikdesigns/tncld `scripts/check-bds-binding.mjs` (tncld#190), which is
  * itself brik-client-portal's `theme-bds-binding.test.ts` (#4454). Ships from BDS so every
  * consumer, and propagate.sh before it opens a bump, runs the identical rule.
  *
- *   old-name-override  a bridged old name declared with a value, in CSS / SCSS / Astro or as
+ *   old-name-override  a retired old name declared with a value, in CSS / SCSS / Astro or as
  *                      an inline style key in TSX / JSX / TS / JS / Astro. Two shapes are
  *                      legal: the re-scope alias `--X: var(--bds-X)`, and a pair where the
  *                      same `{ … }` block also sets `--bds-X` (the old name then only
@@ -25,15 +25,15 @@
  *                      For System ID `bds` the binding collapses to `--bds-X: value`, so any
  *                      value is legal.
  *
- * The bridge and token list are read from THIS package's `dist/`, so the check always
+ * The retired-name map (`retired-token-names.json`) and token list are read from THIS package's `dist/`, so the check always
  * matches the BDS version the consumer has installed.
  *
  * Usage:
  *   bds-check-binding [path...]                       default: ./src, else .
  *   bds-check-binding src --theme src/styles/theme-tncld.css --id tncld
- *   bds-check-binding --bridge <f> --tokens <f> --styles <f>   override the dist/ inputs
+ *   bds-check-binding --retired <f> --tokens <f> --styles <f>   override the dist/ inputs
  *
- * Exit: 0 clean · 1 violations · 2 bad invocation or unreadable bridge.
+ * Exit: 0 clean · 1 violations · 2 bad invocation or unreadable retired-name map.
  */
 import { existsSync, readFileSync, readdirSync, realpathSync, statSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
@@ -54,7 +54,7 @@ const SKIP_FILE = /\.(?:d\.ts|test\.[a-z]+|spec\.[a-z]+|stories\.[a-z]+)$/;
 const DECL = /(--[a-z0-9-]+)\s*:\s*([^;{}]+)(?:;|(?=\}))/g;
 // Inline style object keys: `'--text-primary': value` / `"--text-primary": value`.
 const INLINE = /['"](--[a-z0-9-]+)['"]\s*:\s*([^,}\n]+)/g;
-// A sanity floor: a moved or renamed bridge must fail loudly, not pass vacuously.
+// A sanity floor: a moved or renamed retired-name map must fail loudly, not pass vacuously.
 const MIN_BRIDGED = 500;
 
 function fail(message) {
@@ -65,7 +65,7 @@ function fail(message) {
 function parseArgs(argv) {
   const opts = {
     paths: [],
-    bridge: join(HERE, '../dist/prefix-bridge.css'),
+    retired: join(HERE, '../dist/retired-token-names.json'),
     tokens: join(HERE, '../dist/tokens.css'),
     styles: join(HERE, '../dist/styles.css'),
     theme: null,
@@ -78,7 +78,7 @@ function parseArgs(argv) {
       if (!v || v.startsWith('--')) fail(`${arg} needs a value`);
       return v;
     };
-    if (arg === '--bridge') opts.bridge = value();
+    if (arg === '--retired') opts.retired = value();
     else if (arg === '--tokens') opts.tokens = value();
     else if (arg === '--styles') opts.styles = value();
     else if (arg === '--theme') opts.theme = value();
@@ -130,15 +130,20 @@ function readCss(file) {
   }
 }
 
-/** Old (pre-ADR-043) name → the `--bds-` name the bridge aliases it to. */
-function loadBridge(file) {
-  const bridged = new Map();
-  for (const [, name, value] of readCss(file).matchAll(DECL)) {
-    const target = value.trim().match(/^var\((--bds-[a-z0-9-]+)\)$/)?.[1];
-    if (target) bridged.set(name, target);
+/** Old (pre-ADR-043) name → the `--bds-` name that replaced it, from retired-token-names.json. */
+function loadRetired(file) {
+  let parsed;
+  try {
+    parsed = JSON.parse(readFileSync(file, 'utf8'));
+  } catch {
+    fail(`cannot read ${file}`);
   }
-  if (bridged.size < MIN_BRIDGED) fail(`read only ${bridged.size} bridged names from ${file}`);
-  return bridged;
+  const retired = new Map();
+  for (const [name, target] of Object.entries(parsed ?? {})) {
+    if (/^--[a-z0-9-]+$/.test(name) && /^--bds-[a-z0-9-]+$/.test(String(target))) retired.set(name, target);
+  }
+  if (retired.size < MIN_BRIDGED) fail(`read only ${retired.size} retired names from ${file}`);
+  return retired;
 }
 
 function walk(path, out) {
@@ -217,7 +222,7 @@ export function checkTheme(file, rawText, bdsNames, id) {
 
 function main() {
   const opts = parseArgs(process.argv.slice(2));
-  const bridged = loadBridge(opts.bridge);
+  const bridged = loadRetired(opts.retired);
   const problems = [];
 
   const files = opts.paths.flatMap((p) => walk(resolve(p), []));
@@ -238,7 +243,7 @@ function main() {
     process.exit(1);
   }
   process.stdout.write(
-    `${GREEN}check-bds-binding: ok${NC} — ${files.length} file(s), no old-name overrides (${bridged.size} bridged names checked)\n`,
+    `${GREEN}check-bds-binding: ok${NC} — ${files.length} file(s), no old-name overrides (${bridged.size} retired names checked)\n`,
   );
 }
 
