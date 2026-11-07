@@ -26,9 +26,23 @@ describe('DateTime', () => {
     expect(html).toContain('>Nov 6, 2026</time>');
   });
 
+  it('a date-only string renders as its day in every mode and carries no time', () => {
+    for (const mode of ['timestamp', 'relative'] as const) {
+      const html = render({ value: '2026-11-06', mode, timeZone: ZONE, now: NOW });
+      expect(html).toContain('dateTime="2026-11-06"');
+      expect(html).toContain('>Nov 6, 2026</time>');
+      expect(html).not.toContain('title=');
+    }
+  });
+
+  it('a non-ISO string is normalised to an ISO dateTime attribute', () => {
+    const html = render({ value: 'Nov 6, 2026 20:30 UTC', mode: 'timestamp', timeZone: ZONE });
+    expect(html).toContain('dateTime="2026-11-06T20:30:00.000Z"');
+  });
+
   it('timestamp mode carries a zone label', () => {
     const html = render({ value: INSTANT, mode: 'timestamp', timeZone: ZONE });
-    expect(html).toContain(`dateTime="${INSTANT}"`);
+    expect(html).toContain(`dateTime="${new Date(INSTANT).toISOString()}"`);
     expect(html).toContain('>Nov 6, 2026, 2:30 PM CST</time>');
   });
 
@@ -36,7 +50,7 @@ describe('DateTime', () => {
     const html = render({ value: INSTANT, mode: 'relative', timeZone: ZONE, now: NOW });
     expect(html).toContain('>3 days ago</time>');
     expect(html).toContain('title="Nov 6, 2026, 2:30 PM CST"');
-    expect(html).toContain(`dateTime="${INSTANT}"`);
+    expect(html).toContain(`dateTime="${new Date(INSTANT).toISOString()}"`);
   });
 
   it('relative mode handles the future and the present', () => {

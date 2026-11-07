@@ -118,18 +118,21 @@ export function DateTime({
   }
 
   const dayOnly = typeof value === 'string' && DATE_ONLY.test(value);
-  const iso = typeof value === 'string' ? value : date.toISOString();
+  const iso = dayOnly ? (value as string) : date.toISOString();
 
   let text: string;
   let resolvedTitle = title;
-  if (mode === 'relative') {
+  if (dayOnly) {
+    // A date-only string is a calendar day with no instant: every mode renders
+    // the day in UTC, so it never shifts and never invents a time.
+    text = formatDay(date, 'UTC');
+  } else if (mode === 'relative') {
     text = formatRelative(date, now === undefined ? new Date() : new Date(now));
     resolvedTitle = title ?? formatTimestamp(date, timeZone);
   } else if (mode === 'timestamp') {
     text = formatTimestamp(date, timeZone);
   } else {
-    // A date-only string is a calendar day: format in UTC so it never shifts.
-    text = formatDay(date, dayOnly ? 'UTC' : timeZone);
+    text = formatDay(date, timeZone);
   }
 
   return (

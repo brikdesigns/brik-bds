@@ -6,7 +6,7 @@
  */
 
 .bds-date-time {
-  font-family: var(--bds-font-family-body);
+  font-family: inherit;
   color: inherit;
   font-variant-numeric: tabular-nums;
 }
