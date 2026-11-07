@@ -1,0 +1,252 @@
+name: issue-facet-gate
+
+# Creation-time gate: every new Issue must carry a `size:*`, a `priority:*`, a
+# `theme:*` and a `model:*` label. Was `issue-size-gate`, which enforced size
+# alone. `model:*` joined 2026-11-05 (OPERATOR SAID, chat: "it's REQUIRED we tag
+# priority, size and model when adding issues to github" → "Proceed with A"),
+# reversing model-strategy.md's old "absence = Sonnet" rule.
+#
+# WHY IT GREW. Measured 2026-09-21 across 305 open issues, coverage tracked
+# ENFORCEMENT and nothing else:
+#
+#   area:*      no gate (convention only)        91%
+#   size:*      this gate, blocking              86%
+#   priority:*  a reporter that never blocks     81%
+#   theme:*     nothing at all                   43%
+#
+# theme was the only facet under 80%, and the only one with neither a gate nor a
+# reporter. That is not a discipline problem — agent-filed issues are in fact the
+# better-labelled cohort (95% sized / 90% prioritized / 48% themed, against
+# 72/67/35 for everything else). It is a missing gate, so this is one gate now.
+#
+# ONE WORKFLOW, NOT THREE. Three copies of this file would triple the trigger
+# count on every issue event to enforce one idea, and drift apart the first time
+# an exemption changed. The facets differ only in their prefix, their `needs:*`
+# flag, and who is exempt — so they are DATA here, not duplicated control flow.
+#
+# It does NOT hard-fail (Issues have no merge gate). It flags the issue with the
+# matching `needs:*` label and posts one comment, so the gap is visible and
+# filterable (`is:open label:needs:theme`). Adding the missing label clears the
+# flag on the next event.
+#
+# EXEMPTIONS ARE PER-FACET, because the reasons genuinely differ:
+#
+#   size      `meta:project` parents (sized by the rollup of their sub-issues)
+#             and `icebox` (parked behind a trigger; not active backlog).
+#             Sub-issues are NOT exempt: they are sized independently of the
+#             parent (issue-style.md:194, :326).
+#   priority  Sub-issues only. A `meta:project` parent still carries a ROADMAP
+#             priority — gh-issue-hygiene.py:278-281 makes the same distinction,
+#             exempting Projects from size but never from priority.
+#   theme     `meta:project` only. A theme describes one unit of work; a Project
+#             spans several and its children each carry their own. There is no
+#             inheritance rule for theme, so sub-issues are NOT exempt.
+#   model     `meta:project` only, same reason as theme: a model tier names who
+#             does one unit of work. Sub-issues and icebox issues are NOT exempt.
+#
+# Rollout to other repos: copy this single file into each repo's
+# .github/workflows/ — it is self-contained (creates each `needs:*` label on
+# first run if absent) and has no repo-specific paths.
+#
+# Taxonomy source of truth: scripts/github/labels.json (label-registry-gate.py
+# fails this workflow if a `needs:*` name here drifts from the registry).
+#
+# Budget: no new workflow and no new trigger — this edit changes one exemption
+# predicate and one fixture in an existing issues-event job (a few seconds per
+# issue event, unchanged).
+
+on:
+  issues:
+    types: [opened, reopened, labeled, unlabeled]
+
+concurrency:
+  group: issue-facet-gate-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+permissions:
+  issues: write
+
+jobs:
+  facet-label-gate:
+    runs-on: ubuntu-latest
+    # Skip the events the gate triggers on itself (adding/removing any needs:*
+    # flag), so it doesn't chase its own label churn. All four are listed —
+    # matching only needs:size would let the gate re-enter on its own
+    # needs:theme write, which is the self-trigger loop this guard exists for.
+    if: >-
+      github.event.action != 'labeled' && github.event.action != 'unlabeled'
+      || (github.event.label.name != 'needs:size'
+          && github.event.label.name != 'needs:priority'
+          && github.event.label.name != 'needs:theme'
+          && github.event.label.name != 'needs:model')
+    steps:
+      - name: Enforce size, priority, theme and model labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issue = context.payload.issue;
+            const number = issue.number;
+            const MARKER = '<!-- issue-facet-gate -->';
+
+            const labels = (issue.labels || []).map(l => (typeof l === 'string' ? l : l.name));
+            // meta:project / icebox are derived inside facetsMissing from the
+            // label list it is handed — hoisting them here would give the
+            // fixtures a different input than production, which is how a
+            // self-test comes to pass on logic the live path never runs.
+
+            // One GraphQL call for the whole run, not one per facet.
+            const q = `query($owner:String!,$repo:String!,$num:Int!){
+              repository(owner:$owner,name:$repo){ issue(number:$num){ parent { number } } } }`;
+            const res = await github.graphql(q, { owner, repo, num: number });
+            const isSubIssue = !!res.repository.issue.parent;
+
+            // The facets. `exempt` is a predicate over an explicit context so
+            // the whole decision is a PURE FUNCTION of (labels, isSubIssue) —
+            // which is what makes the fixture table below able to test it
+            // without a live issue.
+            const FACETS = [
+              {
+                prefix: 'size:',
+                needs: 'needs:size',
+                exempt: c => c.isProject || c.isIcebox,
+                advice: 'Add one — `size:xs` (≤2h) / `size:s` (3–6h) / `size:m` (7–21h) / `size:l` (22–56h) per `estimation.md`. Anything larger than `size:l` should be a Project, not an Issue (`pm-system.md` § Hierarchy).',
+              },
+              {
+                prefix: 'priority:',
+                needs: 'needs:priority',
+                exempt: c => c.isSubIssue,
+                advice: 'Add one — `priority:p0-now` / `p1-week` / `p2-month` / `p3-someday`. If it is parked behind a trigger rather than scheduled, use `icebox` instead.',
+              },
+              {
+                prefix: 'theme:',
+                needs: 'needs:theme',
+                exempt: c => c.isProject,
+                advice: 'Add one — see the `theme:*` set in `scripts/github/labels.json`. The theme is what the work is ABOUT (tech-debt, observability, security-hardening); `area:*` is where it lives.',
+              },
+              {
+                prefix: 'model:',
+                needs: 'needs:model',
+                exempt: c => c.isProject,
+                advice: 'Add one — `model:sonnet` (default build work) / `model:opus` (architecture, cross-system, hard debugging) / `model:fable` (rare high-stakes; never on client data) per `model-strategy.md` § A model-tier label marks the tier, never the ID.',
+              },
+            ];
+
+            // The whole rule, in one place, with no I/O.
+            const facetsMissing = (lbls, isSub) => {
+              const ctx = {
+                isProject: lbls.includes('meta:project'),
+                isIcebox: lbls.includes('icebox'),
+                isSubIssue: isSub,
+              };
+              return FACETS.filter(f =>
+                !lbls.some(n => n.startsWith(f.prefix)) && !f.exempt(ctx));
+            };
+
+            // ── self-test ────────────────────────────────────────────────
+            // An exemption table is exactly the kind of logic that looks right
+            // and silently inverts. These run on every invocation; the gate
+            // fails loudly rather than mislabelling issues quietly.
+            const FIXTURES = [
+              { name: 'bare issue needs all four',
+                labels: [], sub: false, expect: ['needs:size', 'needs:priority', 'needs:theme', 'needs:model'] },
+              { name: 'fully labelled issue needs nothing',
+                labels: ['size:s', 'priority:p1-week', 'theme:tech-debt', 'model:sonnet'], sub: false, expect: [] },
+              { name: 'sub-issue inherits priority, still needs its own size, theme and model',
+                labels: [], sub: true, expect: ['needs:size', 'needs:theme', 'needs:model'] },
+              { name: 'meta:project carries a roadmap priority but no size, theme or model',
+                labels: ['meta:project'], sub: false, expect: ['needs:priority'] },
+              { name: 'icebox needs no size, still needs priority, theme and model',
+                labels: ['icebox'], sub: false, expect: ['needs:priority', 'needs:theme', 'needs:model'] },
+              { name: 'a theme alone does not satisfy size, priority or model',
+                labels: ['theme:observability'], sub: false, expect: ['needs:size', 'needs:priority', 'needs:model'] },
+              { name: 'any model tier satisfies the model facet',
+                labels: ['size:m', 'priority:p2-month', 'theme:tech-debt', 'model:opus'], sub: false, expect: [] },
+              { name: 'prefix match is not substring match',
+                labels: ['area:ops'], sub: false, expect: ['needs:size', 'needs:priority', 'needs:theme', 'needs:model'] },
+            ];
+
+            const selfTestFailures = [];
+            for (const f of FIXTURES) {
+              const got = facetsMissing(f.labels, f.sub).map(x => x.needs);
+              if (JSON.stringify(got) !== JSON.stringify(f.expect)) {
+                selfTestFailures.push(
+                  `  ${f.name}: expected ${JSON.stringify(f.expect)}, got ${JSON.stringify(got)}`);
+              }
+            }
+            if (selfTestFailures.length) {
+              core.setFailed(
+                'issue-facet-gate self-test failed — the exemption table does not do what it says:\n'
+                + selfTestFailures.join('\n'));
+              return;
+            }
+
+            const COLOR = 'f9a825';
+            const shouldFlag = new Set(facetsMissing(labels, isSubIssue).map(f => f.needs));
+            const missing = [];
+
+            for (const facet of FACETS) {
+              const flagged = labels.includes(facet.needs);
+
+              // `shouldFlag` already folds in "has the label" AND "is exempt" —
+              // the decision lives in facetsMissing and nowhere else, so the
+              // self-test above covers the real branch rather than a copy.
+              if (!shouldFlag.has(facet.needs)) {
+                if (flagged) {
+                  await github.rest.issues.removeLabel({
+                    owner, repo, issue_number: number, name: facet.needs,
+                  }).catch(e => { if (e.status !== 404) throw e; });
+                  core.info(`Cleared ${facet.needs} on #${number}`);
+                }
+                continue;
+              }
+
+              // Self-provision the flag label so the file stays copy-paste
+              // portable to a repo that has never run it.
+              await github.rest.issues.getLabel({ owner, repo, name: facet.needs })
+                .catch(async (e) => {
+                  if (e.status !== 404) throw e;
+                  await github.rest.issues.createLabel({
+                    owner, repo, name: facet.needs, color: COLOR,
+                    description: `Auto-applied by issue-facet-gate: no ${facet.prefix}* label; add one to clear.`,
+                  });
+                  core.info(`Created label ${facet.needs}`);
+                });
+
+              if (!flagged) {
+                await github.rest.issues.addLabels({
+                  owner, repo, issue_number: number, labels: [facet.needs],
+                });
+              }
+              missing.push(facet);
+            }
+
+            if (missing.length === 0) {
+              core.info(`#${number} OK — nothing missing`);
+              return;
+            }
+
+            // ONE comment per issue, covering every missing facet. Three
+            // comments for three facets would be three notifications about one
+            // filing mistake.
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner, repo, issue_number: number, per_page: 100,
+            });
+            if (comments.some(c => c.body && c.body.includes(MARKER))) {
+              core.info(`#${number} already flagged — skipping comment`);
+              return;
+            }
+
+            const lines = missing.map(f => `- **No \`${f.prefix}*\` label.** ${f.advice}`);
+            await github.rest.issues.createComment({
+              owner, repo, issue_number: number,
+              body: [
+                MARKER,
+                `**This issue is missing ${missing.length} required label${missing.length === 1 ? '' : 's'}.**`,
+                '',
+                ...lines,
+                '',
+                `Each \`needs:*\` flag clears automatically once the matching label is added. Exemptions: sub-issues inherit priority from their parent (size, theme and model are their own); \`meta:project\` parents carry no size, theme or model of their own; \`icebox\` issues need no size.`,
+              ].join('\n'),
+            });
+            core.info(`Flagged #${number}: ${missing.map(f => f.needs).join(', ')}`);
