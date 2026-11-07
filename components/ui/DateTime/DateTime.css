@@ -1,0 +1,17 @@
+@layer bds-components {
+/**
+ * BDS DateTime — a rendered date, instant, or age.
+ *
+ * Naming: BEM-lite — .bds-date-time, .bds-date-time--empty
+ */
+
+.bds-date-time {
+  font-family: inherit;
+  color: inherit;
+  font-variant-numeric: tabular-nums;
+}
+
+.bds-date-time--empty {
+  color: var(--bds-text-muted);
+}
+}
