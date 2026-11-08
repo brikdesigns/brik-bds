@@ -778,7 +778,7 @@
               <div class="bfb-list__comment">${esc(p.comment || '')}</div>
             </div>
           </li>`).join('')
-      : `<li class="bfb-list__empty">${total === 0 ? 'No feedback yet.' : 'No open comments — all done. 🎉'}</li>`;
+      : `<li class="bfb-list__empty">${total === 0 ? 'No feedback yet.' : 'No open comments — all done.'}</li>`;
     return `
       <div class="bfb-list__header">
         <span class="bfb-list__title">Feedback (${total})</span>
