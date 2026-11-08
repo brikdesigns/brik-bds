@@ -93,7 +93,7 @@ export {
 } from './color-primitive-tier';
 
 // ── Expression modes (ADR-039 Style axis, #2774) ──────────────────
-// The five `[data-mode-*]` axes, one closed list per axis, each equal to the
+// The six `[data-mode-*]` axes, one closed list per axis, each equal to the
 // selector values in the matching tokens/modes-*.css. See
 // `expression-modes.test.ts` for the contract and each module's header for
 // why the attribute-absent default is not a member.
@@ -127,3 +127,9 @@ export {
   isBorderWidthMode,
   type BorderWidthMode,
 } from './borderwidth-mode';
+
+export {
+  WIDTH_MODE_VALUES,
+  isWidthMode,
+  type WidthMode,
+} from './width-mode';

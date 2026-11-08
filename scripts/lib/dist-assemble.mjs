@@ -65,13 +65,22 @@ export function assembleCanonical(read, log = () => {}) {
     log('  ✓ Including modes-elevation.css (post gap-fills)');
   }
 
+  // Width mode overrides — MUST concat AFTER gap-fills.css: it re-points
+  // --bds-content-width-xl, declared there on :root at the same specificity.
+  const width = read('tokens/modes-width.css');
+  let widthMode = '';
+  if (width !== null) {
+    widthMode = '\n\n' + width;
+    log('  ✓ Including modes-width.css (post gap-fills)');
+  }
+
   const layoutFluid = need('tokens/layout-fluid.css');
   const ratios = need('tokens/ratios.css');
   const fluidType = need('tokens/fluid-type.css');
   const animations = need('tokens/animations.css');
 
   return (
-    HEADER + figmaTokens + darkTokens + themeBrandBrik + modeOverrides + '\n\n' + gapFills + elevationMode +
+    HEADER + figmaTokens + darkTokens + themeBrandBrik + modeOverrides + '\n\n' + gapFills + elevationMode + widthMode +
     '\n\n' + layoutFluid + '\n\n' + ratios + '\n\n' + fluidType + '\n\n' + animations
   );
 }

@@ -6,7 +6,7 @@
  * names end in Variant | Appearance | Size | Status and whose values are
  * string-literal unions, then emits `dist/component-axes.json`.
  *
- * Also emits the `@modes` entry: the five `[data-mode-*]` expression axes
+ * Also emits the `@modes` entry: the six `[data-mode-*]` expression axes
  * (ADR-039 Style axis, #2774), read from their BCS vocabulary modules in
  * `content-system/vocabularies/`. Those axes are NOT component props — no
  * component declares them — but the portal's enum gate reads one manifest, so
@@ -52,6 +52,7 @@ const MODE_AXES = {
   radius: ['radius-mode.ts', 'RADIUS_MODE_VALUES'],
   spacing: ['spacing-mode.ts', 'SPACING_MODE_VALUES'],
   typography: ['typography-mode.ts', 'TYPOGRAPHY_MODE_VALUES'],
+  width: ['width-mode.ts', 'WIDTH_MODE_VALUES'],
 };
 
 /** Reserved manifest key for the mode axes. `@` can't start a TS export name. */
