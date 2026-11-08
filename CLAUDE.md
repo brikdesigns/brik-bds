@@ -4,8 +4,7 @@ Brik Design System — React component library + canonical token registry.
 
 Hosts:
 
-- React components (`components/ui/`) published as `@brikdesigns/bds` and consumed by 6 downstream repos
-- Canonical token registry — `dist/tokens.css` is the live allowlist for every `--text-*` / `--surface-*` / `--background-*` / `--border-*` / `--color-*` (primitives) name in any Brik repo
+- React components (`components/ui/`) published as `@brikdesigns/bds`; its consumers are `NPM_CONSUMERS` in [`scripts/propagate.sh`](scripts/propagate.sh), less `FROZEN_CONSUMERS`
 - Style Dictionary build pipeline — Figma → `tokens-studio.json` → per-platform outputs
 - Brik Content System (`content-system/`) — vocabulary peer to the token system, published as `@brikdesigns/bds/content-system`
 - Storybook + Chromatic — `localhost:6006` for in-repo dev (Storybook MCP is dev-only); the hosted build is human-facing (a client-rendered SPA). Consumer-repo agents read BDS from **source**, not over the network → § Reading BDS from a consumer repo
@@ -16,11 +15,10 @@ READ this file only inside brik-bds: portal and brik-llm `@import` `BDS-CONSUMER
 
 - **Active dev** — `~/Documents/GitHub/brik/brik-bds/`. NEVER edit the read-only mirror at `brik-llm/foundations/brik-bds/`.
 - **Canon for CSS** — INVOKE the `canon-css` / `validate-token-names` skill before writing any `--text-*` / `--surface-*` / `--background-*` / semantic `--border-*` declaration. `dist/tokens.css` is the only authority.
-- **Tokens in TS/TSX** — IMPORT from `@/lib/tokens` and `@/lib/styles`. NEVER write raw `var(--...)` strings inline.
 - **Component composition** — USE Radix UI primitives (`@radix-ui/react-*`) for a11y behavior; BDS owns styling. NEVER use shadcn/ui or other CSS-variable libraries.
 - **Pre-implementation** — BUILD new / composite components in Storybook + code with tokens (Storybook + the coded component are the source of truth; Figma is the *token* source, NOT a component-layout gate; Paper is for client sites, NEVER BDS). PREFER nesting existing primitives over new components → [component-build](.claude/standards/component-build.md).
 - **Pre-PR** — RUN `./scripts/pr-checklist.sh` before any PR touching tokens, themes, or component CSS. ONE concern per PR.
-- **Publish** — `git tag v0.X.Y && git push origin v0.X.Y` triggers [`Release` workflow](.github/workflows/release.yml). After publish, UPDATE the brik-llm submodule pointer.
+- **Publish** — `git tag v0.X.Y && git push origin v0.X.Y` triggers [`Release` workflow](.github/workflows/release.yml). `scripts/propagate.sh` then opens each consumer's bump PR, the brik-llm submodule pointer included; NEVER hand-bump either.
 - **Chromatic = hosting, NOT a visual gate** — RUN `npm run chromatic` after any component CSS or story change; NEVER treat a green Chromatic check as visual coverage (a quota-exhausted build exits 0) → [`.claude/references/chromatic.md`](.claude/references/chromatic.md), `→ rag:chromatic`.
 - **Reading BDS from a consumer repo** (portal / `web/{slug}/` agents) — PREFER **source**: `node_modules/@brikdesigns/bds/components/`, which pins the exact version the consumer renders.
 - Else read the sibling `~/Documents/GitHub/brik/brik-bds/` (`components/ui/**/*.{mdx,tsx,css}`).
