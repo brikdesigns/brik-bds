@@ -38,6 +38,16 @@ Omit `href` and pass `onClick`. Renders a `<button type="button">`.
 <CellLink onClick={() => openSheet(row.id)}>Acme Corporation</CellLink>
 ```
 
+### Link that opens a sheet
+
+Add `onActivate` to the anchor form to keep a real route but open a sheet over the list on a plain left-click. `href` stays rendered; Cmd/Ctrl/Shift/Alt-click and middle-click skip `onActivate` and open the route in a new tab.
+
+```tsx
+<CellLink href={`/companies/${row.id}`} onActivate={() => openSheet(row.id)}>
+  Acme Corporation
+</CellLink>
+```
+
 ## Sizing
 
 CellLink inherits the cell's font size and weight, so a linked cell and a plain-text cell in one column always match. There is no `size` or `weight` prop; set them on the cell.
@@ -65,6 +75,7 @@ CellLink inherits the cell's font size and weight, so a linked cell and a plain-
 | `href` | `string` | — |
 | `iconBefore` | `ReactNode` | — |
 | `iconAfter` | `ReactNode` | — |
+| `onActivate` | `(event: MouseEvent<HTMLAnchorElement>) => void` *(anchor form only)* | — |
 
 Plus all standard `<a>` attributes with `href`, or `<button>` attributes without it.
 

@@ -16,6 +16,11 @@ const meta: Meta<typeof CellLink> = {
     children: { control: 'text', description: 'Cell text — the row identifier.' },
     iconBefore: { control: false, description: 'Leading slot — company mark, avatar.' },
     iconAfter: { control: false, description: 'Trailing slot — a `Tag`, an external-link glyph.' },
+    onActivate: {
+      control: false,
+      description:
+        'Anchor form only. Runs on a plain left-click after preventing navigation — e.g. open a sheet. Modified and middle clicks follow `href`.',
+    },
   },
 };
 
@@ -44,6 +49,23 @@ export const Button: Story = {
     await userEvent.click(button);
     await expect(args.onClick).toHaveBeenCalledTimes(1);
     await expect(button).toHaveAttribute('type', 'button');
+  },
+};
+
+/**
+ * `onActivate` keeps a real `href` but takes over a plain left-click — for a
+ * cell that opens a sheet over the list. Cmd/Ctrl/Shift/Alt-click and
+ * middle-click skip it, so the route still opens in a new tab.
+ *
+ * @summary Anchor that opens a sheet on plain click
+ */
+export const Activate: Story = {
+  args: { href: '/companies/acme', children: 'Acme Corporation', onActivate: fn() },
+  play: async ({ canvasElement, args }) => {
+    const link = within(canvasElement).getByRole('link', { name: 'Acme Corporation' });
+    await expect(link).toHaveAttribute('href', '/companies/acme');
+    await userEvent.click(link);
+    await expect(args.onActivate).toHaveBeenCalledTimes(1);
   },
 };
 
