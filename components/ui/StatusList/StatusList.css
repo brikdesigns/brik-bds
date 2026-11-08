@@ -22,19 +22,19 @@
     font-size: var(--bds-body-md);
   }
 
-  .bds-status-list__icon--complete {
+  .bds-status-list__icon--status-complete {
     color: var(--bds-text-positive);
   }
 
-  .bds-status-list__icon--in-progress {
+  .bds-status-list__icon--status-in-progress {
     color: var(--bds-text-warning);
   }
 
-  .bds-status-list__icon--not-started {
+  .bds-status-list__icon--status-not-started {
     color: var(--bds-text-muted);
   }
 
-  .bds-status-list__icon--error {
+  .bds-status-list__icon--tone-negative {
     color: var(--bds-text-negative);
   }
 

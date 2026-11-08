@@ -360,7 +360,7 @@
       "complete",
       "in_progress",
       "not_started",
-      "error"
+      "negative"
     ]
   },
   "Stepper": {

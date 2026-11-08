@@ -14,7 +14,7 @@ describe('StatusList', () => {
       { ...ROW, id: '1', status: 'complete' },
       { ...ROW, id: '2', status: 'in_progress' },
       { ...ROW, id: '3', status: 'not_started' },
-      { ...ROW, id: '4', status: 'error' },
+      { ...ROW, id: '4', status: 'negative' },
     ]);
     for (const label of ['Complete', 'In Progress', 'Not Started', 'Error']) {
       expect(html).toContain(`>${label}<`);
@@ -31,18 +31,18 @@ describe('StatusList', () => {
     expect(html).not.toContain('line-through');
   });
 
-  it('announces the error message with role="alert", only on error rows', () => {
-    const error = render([{ ...ROW, status: 'error', errorMessage: 'Agent run failed' }]);
-    expect(error).toContain('role="alert"');
-    expect(error).toContain('Agent run failed');
+  it('announces the error message with role="alert", only on negative rows', () => {
+    const negative = render([{ ...ROW, status: 'negative', message: 'Agent run failed' }]);
+    expect(negative).toContain('role="alert"');
+    expect(negative).toContain('Agent run failed');
 
-    const ok = render([{ ...ROW, status: 'complete', errorMessage: 'ignored' }]);
+    const ok = render([{ ...ROW, status: 'complete', message: 'ignored' }]);
     expect(ok).not.toContain('role="alert"');
     expect(ok).not.toContain('ignored');
   });
 
-  it('renders no alert region for an error row without a message', () => {
-    expect(render([{ ...ROW, status: 'error' }])).not.toContain('role="alert"');
+  it('renders no alert region for a negative row without a message', () => {
+    expect(render([{ ...ROW, status: 'negative' }])).not.toContain('role="alert"');
   });
 
   it('renders ReactNode descriptions', () => {

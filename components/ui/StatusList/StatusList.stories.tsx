@@ -13,7 +13,7 @@ const meta: Meta<typeof StatusList> = {
     items: {
       control: 'object',
       description:
-        'Rows — each `{ id, title, description?, status, errorMessage? }`. `status` is `complete`, `in_progress`, `not_started` or `error`.',
+        'Rows — each `{ id, title, description?, status, message? }`. `status` is `complete`, `in_progress`, `not_started` or `negative`.',
     },
     className: { control: 'text', description: 'Extra class on the wrapping `<ul>`.' },
   },
@@ -45,8 +45,8 @@ const ITEMS: StatusListItem[] = [
     id: 'seo',
     title: 'SEO Metadata',
     description: 'Meta titles, descriptions and Open Graph tags.',
-    status: 'error',
-    errorMessage: 'The agent run failed before it finished. Retry it from the Tasks tab.',
+    status: 'negative',
+    message: 'The agent run failed before it finished. Retry it from the Tasks tab.',
   },
   {
     id: 'legal',
@@ -64,7 +64,7 @@ const ITEMS: StatusListItem[] = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════
-   DEFAULT — all four states, including an error row with a message
+   DEFAULT — all four states, including a negative row with a message
    and a row whose description holds a small TextLink.
    ═══════════════════════════════════════════════════════════════ */
 
