@@ -24,7 +24,7 @@ READ this file only inside brik-bds: portal and brik-llm `@import` `BDS-CONSUMER
 - Else read the sibling `~/Documents/GitHub/brik/brik-bds/` (`components/ui/**/*.{mdx,tsx,css}`).
 - With no checkout, use the agent-readable docs surface → [`docs/runbooks/agent-docs-access.md`](docs/runbooks/agent-docs-access.md).
 - NEVER hand-roll a primitive because the docs "weren't reachable" → `→ rag:bds-docs-access`.
-- **Visual regression** — a self-hosted Vitest `toMatchScreenshot` gate (`VISUAL_GATE=1`) runs on every PR to `main` via [`visual.yml`](.github/workflows/visual.yml) and is a **required status check** — a red `visual` blocks merge, no merge-wait discipline needed (#2077). NEVER regenerate baselines locally; run the **Update Visual Baselines** workflow → [`tests/visual/README.md`](tests/visual/README.md).
+- **Visual regression** — a self-hosted Vitest `toMatchScreenshot` gate (`VISUAL_GATE=1`) runs on every PR to `main` via [`visual.yml`](.github/workflows/visual.yml) and is a **required status check** — a red `visual` blocks merge, no merge-wait discipline needed (#2077). NEVER regenerate baselines locally; ADD the `visual:rebaseline` label to the PR (the agent path; a `workflow_dispatch` of **Update Visual Baselines** returns 403 for `brik-agent`) → [`tests/visual/README.md`](tests/visual/README.md).
 
 ## Where deeper context lives
 
