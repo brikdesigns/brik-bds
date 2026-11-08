@@ -18,10 +18,9 @@ import { WIDTH_MODE_VALUES, isWidthMode } from './width-mode';
  * values the shipped CSS actually switches on. "BDS CSS selector values win"
  * is the rule; this is the instrument that enforces it.
  *
- * WHY THE CSS AND NOT THE REGISTRY. Five of the six mode files are emitted from
- * the COLLECTIONS registry in `scripts/generate-modes-css.mjs` (border-width
- * since #2601); `modes-width.css` is hand-authored, so the registry cannot see
- * it at all. The CSS is also the artifact that actually ships in
+ * WHY THE CSS AND NOT THE REGISTRY. All six mode files are emitted from the
+ * COLLECTIONS registry in `scripts/generate-modes-css.mjs` (border-width since
+ * #2601, width since #894). The CSS is the artifact that actually ships in
  * dist/tokens.css — a drift the CSS does not show cannot reach a browser.
  *
  * DEFAULT MODES ARE NOT MEMBERS. Each axis has a default expressed by the

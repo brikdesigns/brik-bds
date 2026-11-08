@@ -7337,6 +7337,48 @@
       }
     }
   },
+  "width/contained": {
+    "content-width": {
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "1280px",
+        "$description": "Page-band cap (ADR-041 --bds-content-width-xl). `full` re-points to the content-width-full rung (100%)."
+      }
+    }
+  },
+  "width/wide": {
+    "content-width": {
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "1440px",
+        "$description": "Page-band cap (ADR-041 --bds-content-width-xl). `full` re-points to the content-width-full rung (100%)."
+      }
+    }
+  },
+  "width/full-bleed": {
+    "content-width": {
+      "xl": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "full",
+        "$description": "Page-band cap (ADR-041 --bds-content-width-xl). `full` re-points to the content-width-full rung (100%)."
+      }
+    }
+  },
   "$metadata": {
     "tokenSetOrder": [
       "global",
@@ -7364,7 +7406,10 @@
       "typography/compact",
       "typography/comfortable",
       "typography/spacious",
-      "typography/expressive"
+      "typography/expressive",
+      "width/contained",
+      "width/wide",
+      "width/full-bleed"
     ]
   },
   "$themes": []

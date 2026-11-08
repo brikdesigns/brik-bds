@@ -6,9 +6,9 @@
  * selector values win") and `expression-modes.test.ts` parses it to hold this
  * list to it.
  *
- * `modes-width.css` is hand-authored: no Figma `width` collection exists to
- * generate it from, unlike the other five axes (brik-bds#959 AC3, promotion
- * tracked on brik-bds#894).
+ * `modes-width.css` is generated from the Figma `width` collection by
+ * `npm run build:modes`, like the other five axes (brik-bds#959 AC3, promoted
+ * to Figma in brik-bds#894).
  *
  * The DEFAULT width mode is `contained`, the attribute-ABSENT state (the
  * `--bds-content-width-xl` band in gap-fills.css stands). It is deliberately
