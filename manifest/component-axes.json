@@ -355,6 +355,14 @@
       "2xl"
     ]
   },
+  "StatusList": {
+    "status": [
+      "complete",
+      "in_progress",
+      "not_started",
+      "negative"
+    ]
+  },
   "Stepper": {
     "size": [
       "sm",

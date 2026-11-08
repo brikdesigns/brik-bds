@@ -1,0 +1,25 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './StatusList.stories';
+
+<Meta of={Stories} />
+
+# Status list
+
+<ComponentLinks slug="status-list" />
+
+A read-only list of tracked outputs. Each row shows a title, an optional description, and one of four states — `complete`, `in_progress`, `not_started` or `negative` — as a distinct icon plus a status badge. Rows are display-only: no click target, and labels are never struck through.
+
+## Playground
+
+<Canvas of={Stories.Default} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — A `negative` row can carry an `message`, rendered under its description in a `role="alert"` region so assistive technology announces the failure when it appears. The message is ignored on any other status.
+
+> **Note** — Choosing between the list components. Use StatusList to *read* the state of each item. Use [`Checklist`](/?path=/docs/components-checklist--docs) or [`ChecklistGroup`](/?path=/docs/components-checklist-group--docs) when the user *toggles* completion, which strikes the label through. Use [`ProgressStepper`](/?path=/docs/components-progress-stepper--docs) for position in one linear flow, where a single active step decides which steps are complete or upcoming and there is no per-item negative state.
