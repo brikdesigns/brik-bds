@@ -1,6 +1,6 @@
-11efeae09eaf740ad1ed46d5a720ca7beb68a712f6479750dc54d4895a1ec926  brik-bds/.storybook/public/brik-feedback-widget.js
-11efeae09eaf740ad1ed46d5a720ca7beb68a712f6479750dc54d4895a1ec926  brik/brik-llm/scripts/brik-dev-tool/widgets/feedback-widget.js
-17e46ada2bbadb35ae737e1f106f8da15400b1afbd0fa7b6c85b6cc0c2631024  product/brik-client-portal/scripts/mockup-shared/feedback-widget.js
+775276dd17cd7ff7ff5a97094b9b0d06f6e555c74817936b4ee59ccb14f4bbe2  brik-bds/.storybook/public/brik-feedback-widget.js
+775276dd17cd7ff7ff5a97094b9b0d06f6e555c74817936b4ee59ccb14f4bbe2  brik/brik-llm/scripts/brik-dev-tool/widgets/feedback-widget.js
+11efeae09eaf740ad1ed46d5a720ca7beb68a712f6479750dc54d4895a1ec926  product/brik-client-portal/scripts/mockup-shared/feedback-widget.js
 5a71087ac8450a1bd9fd1f03e137851ae4bd2d54517eaafe7f9053b66123fd55  brik-bds/.storybook/public/brik-devbar.js
 5a71087ac8450a1bd9fd1f03e137851ae4bd2d54517eaafe7f9053b66123fd55  brik/brik-llm/scripts/brik-dev-tool/widgets/devbar.js
 b2bb07c960ad90e0286de974cfb59e8648d29a8e794e26260ab20ef1c964fe7c  brik/brikdesigns/public/brik-devbar.js
