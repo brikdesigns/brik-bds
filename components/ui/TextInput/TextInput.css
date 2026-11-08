@@ -111,6 +111,11 @@
   cursor: not-allowed;
 }
 
+/* ADR-028 § Amendment §4 (#3016): a faded --text-muted placeholder measures 2.24:1 light / 1.62:1 dark on the input fill; --text-primary measures 3.32:1 / 4.43:1. Scoped to the disabled state; the fade is unchanged. */
+.bds-text-input-field:disabled::placeholder {
+  color: var(--bds-text-primary);
+}
+
 /* Error border — wins over hover/focus, mirroring the previous inline-style
    precedence (inline borderColor beat the stylesheet :hover/:focus rules). */
 .bds-text-input-field--tone-negative,

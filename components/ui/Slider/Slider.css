@@ -115,20 +115,36 @@
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--bds-background-brand-primary) 30%, transparent);
 }
 
-/* Disabled */
+/* Disabled — ADR-028 § Amendment §4 (#3016): the progress fill and thumb paint a
+   brand fill, so they take the swap (--text-disabled, 6.90:1 light / 5.46:1 dark
+   against the page) instead of the fade (1.93:1 / 2.06:1; light never clears 3:1
+   at any opacity). Nothing here fades, so the rail keeps its enabled colour. */
 .bds-slider-input:disabled {
   cursor: not-allowed;
-  opacity: var(--bds-state-disabled-opacity);
   pointer-events: none;
 }
 
+.bds-slider-input:disabled::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    to right,
+    var(--bds-text-disabled) 0%, /* bds-lint-ignore token-family — intentional alias: disabled progress takes the disabled foreground (the only disabled token that clears 3:1 against the page in both themes); see ADR-028 Amendment §4, #3016 */
+    var(--bds-text-disabled) var(--bds-slider-percent, 50%),
+    var(--bds-border-secondary) var(--bds-slider-percent, 50%),
+    var(--bds-border-secondary) 100%
+  );
+}
+
+.bds-slider-input:disabled::-moz-range-progress {
+  background: var(--bds-text-disabled); /* bds-lint-ignore token-family — intentional alias: disabled progress takes the disabled foreground; see ADR-028 Amendment §4, #3016 */
+}
+
 .bds-slider-input:disabled::-webkit-slider-thumb {
-  background: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: disabled thumb flattened to border neutral; see docs/TOKEN-PR-CHECKLIST.md, #777 */
-  border-color: var(--bds-border-secondary);
+  background: var(--bds-text-disabled); /* bds-lint-ignore token-family — intentional alias: disabled thumb takes the disabled foreground; see ADR-028 Amendment §4, #3016 */
+  border-color: var(--bds-text-disabled); /* bds-lint-ignore token-family — intentional alias: disabled thumb ring takes the disabled foreground; see docs/TOKEN-PR-CHECKLIST.md, ADR-028 Amendment §4 (#3016) */
 }
 
 .bds-slider-input:disabled::-moz-range-thumb {
-  background: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: disabled thumb flattened to border neutral; see docs/TOKEN-PR-CHECKLIST.md, #777 */
-  border-color: var(--bds-border-secondary);
+  background: var(--bds-text-disabled); /* bds-lint-ignore token-family — intentional alias: disabled thumb takes the disabled foreground; see ADR-028 Amendment §4, #3016 */
+  border-color: var(--bds-text-disabled); /* bds-lint-ignore token-family — intentional alias: disabled thumb ring takes the disabled foreground; see docs/TOKEN-PR-CHECKLIST.md, ADR-028 Amendment §4 (#3016) */
 }
 }

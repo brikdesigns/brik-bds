@@ -79,7 +79,7 @@ A 1–2px line or a thin neutral UI element has no content box to hang a `border
 | `ActivityTimeline.css` | `--bds-border-muted` | hairline connector (2px) |
 | `Board.css` | `--bds-border-muted`, `--bds-border-secondary` | scrollbar thumb |
 | `ProgressStepper.css` | `--bds-border-secondary` | connector line (2px) + inactive dot |
-| `Slider.css` | `--bds-border-secondary` | track rail + disabled thumb |
+| `Slider.css` | `--bds-border-secondary` | track rail |
 
 **`--surface-muted` rendered as `border-color` — `TaskConsole` in-progress spinner track.**
 The spinner ring's 3/4 track must stay *subtle on whatever surface it sits on* across themes. No border-family token does this: `--border-primary` resolves to `grayscale-darkest` (#1b1b1b) under `.theme-brand-brik` and reads dark on white; `--border-muted` is mid-grey (#828282) in `:root`. `--surface-muted` is the only token that tracks surface lightness per theme (#f2f2f2 light / #1b1b1b dark), keeping the track subtle in both modes while the leading quadrant carries `--border-brand-primary`. This is a surface-tracking fill in a border slot by design, not a hue mismatch.
@@ -87,6 +87,14 @@ The spinner ring's 3/4 track must stay *subtle on whatever surface it sits on* a
 | Site | Token | Element |
 |---|---|---|
 | `TaskConsole.css` | `--bds-surface-muted` | spinner track (`border-color`, 3/4 ring) |
+
+**`--text-disabled` rendered as `background` / `border-color` — disabled graphic foregrounds ([#3016](https://github.com/brikdesigns/brik-bds/issues/3016), ADR-028 § Amendment §4).**
+A disabled control that paints a graphic against the page (a Slider's progress fill and thumb, a CompletionToggle's check mark) must clear 3:1 (WCAG 1.4.11) *unfaded*. Of the disabled trio only the foreground does in both themes: `--text-disabled` is 6.90:1 light / 5.46:1 dark on the page, where `--background-disabled` is 1.32:1 / 1.66:1 and `--border-disabled` is 1.66:1 in dark. The token is the disabled *foreground* by intent, expressed as a fill or a border by mechanics. It carries the same consumer-theming contract as the rest of the trio (ADR-028 pt-5).
+
+| Site | Token | Element |
+|---|---|---|
+| `Slider.css` | `--bds-text-disabled` | disabled progress fill + thumb (`background`, `border-color`) |
+| `CompletionToggle.css` | `--bds-text-disabled` | disabled check mark (`border-color`) |
 
 ---
 

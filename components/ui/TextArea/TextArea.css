@@ -101,6 +101,11 @@
   resize: none;
 }
 
+/* ADR-028 § Amendment §4 (#3016): a faded --text-muted placeholder measures 2.24:1 light / 1.62:1 dark on the input fill; --text-primary measures 3.32:1 / 4.43:1. Scoped to the disabled state; the fade is unchanged. */
+.bds-text-area-field:disabled::placeholder {
+  color: var(--bds-text-primary);
+}
+
 /* ─── Helper / error text ────────────────────────────────────── */
 
 .bds-text-area__helper,

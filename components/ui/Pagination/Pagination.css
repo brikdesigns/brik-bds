@@ -47,8 +47,12 @@
   flex-shrink: 0;
 }
 
+/* ADR-028 § Amendment §4: the arrow paints a brand fill, so it takes the pt-1
+   token swap, not the fade — a faded white-on-Poppy arrow measures 1.93:1 light /
+   2.58:1 dark against the 3:1 floor; the swap measures 5.22:1 / 3.29:1 (#3016). */
 .bds-pagination__arrow--disabled {
-  opacity: var(--bds-state-disabled-opacity);
+  background-color: var(--bds-background-disabled);
+  color: var(--bds-text-disabled);
   cursor: not-allowed;
 }
 
