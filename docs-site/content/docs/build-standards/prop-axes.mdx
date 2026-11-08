@@ -124,7 +124,7 @@ No axis yet: CalloutPanel, HeroMediaCardPrice, TestimonialsFeaturedLarge (both r
 
 ## Expression modes
 
-The five **expression-mode axes** are the Style half of [ADR-039](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-039-blueprint-parameterization-axes.md). They are not component props — no component declares them. They are attributes set once on `:root` (the `<html>` element), and every component inherits the retuned tokens.
+The six **expression-mode axes** are the Style half of [ADR-039](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-039-blueprint-parameterization-axes.md). They are not component props — no component declares them. They are attributes set once on `:root` (the `<html>` element), and every component inherits the retuned tokens.
 
 | Axis | Attribute on `:root` | Values | Default (no attribute) |
 |---|---|---|---|
@@ -133,12 +133,13 @@ The five **expression-mode axes** are the Style half of [ADR-039](https://github
 | Radius | `data-mode-radius` | `sharp` · `round` · `pill` | `soft` |
 | Elevation | `data-mode-elevation` | `flat` · `lifted` · `dramatic` | `subtle` |
 | Border width | `data-mode-borderwidth` | `thin` · `thick` | `default` |
+| Width | `data-mode-width` | `wide` · `full-bleed` | `contained` |
 
 <Callout type="warn">
   **Each default is the attribute-ABSENT state** — there is no `[data-mode-radius="soft"]` selector, and setting one does nothing. Omit the attribute to get the default. For the same reason the defaults are not members of the closed vocabularies below.
 </Callout>
 
-Closed value lists live in `content-system/vocabularies/{spacing,typography,radius,elevation,borderwidth}-mode.ts`, published as `@brikdesigns/bds/content-system`. They are surfaced to the portal's enum gate under the reserved `@modes` key in [`manifest/component-axes.json`](https://github.com/brikdesigns/brik-bds/blob/main/manifest/component-axes.json), alongside the component axes.
+Closed value lists live in `content-system/vocabularies/{spacing,typography,radius,elevation,borderwidth,width}-mode.ts`, published as `@brikdesigns/bds/content-system`. They are surfaced to the portal's enum gate under the reserved `@modes` key in [`manifest/component-axes.json`](https://github.com/brikdesigns/brik-bds/blob/main/manifest/component-axes.json), alongside the component axes.
 
 The authority is the CSS, not the TypeScript: `tokens/modes-*.css` is what ships, and `content-system/vocabularies/expression-modes.test.ts` parses it to hold each list equal to the selectors it declares. A Figma mode rename fails that test rather than drifting into a portal pick-list.
 

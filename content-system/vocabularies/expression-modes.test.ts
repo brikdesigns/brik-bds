@@ -9,18 +9,20 @@ import {
   BORDERWIDTH_MODE_VALUES,
   isBorderWidthMode,
 } from './borderwidth-mode';
+import { WIDTH_MODE_VALUES, isWidthMode } from './width-mode';
 
 /**
  * Expression-mode vocabulary contract (ADR-039 amendment, #2774).
  *
- * The five Style-axis vocabularies must equal the `[data-mode-*]` selector
+ * The six Style-axis vocabularies must equal the `[data-mode-*]` selector
  * values the shipped CSS actually switches on. "BDS CSS selector values win"
  * is the rule; this is the instrument that enforces it.
  *
- * WHY THE CSS AND NOT THE REGISTRY. All five mode files are emitted from the
- * COLLECTIONS registry in `scripts/generate-modes-css.mjs` (border-width since
- * #2601), but the CSS is the artifact that actually ships in dist/tokens.css —
- * a drift the CSS does not show cannot reach a browser.
+ * WHY THE CSS AND NOT THE REGISTRY. Five of the six mode files are emitted from
+ * the COLLECTIONS registry in `scripts/generate-modes-css.mjs` (border-width
+ * since #2601); `modes-width.css` is hand-authored, so the registry cannot see
+ * it at all. The CSS is also the artifact that actually ships in
+ * dist/tokens.css — a drift the CSS does not show cannot reach a browser.
  *
  * DEFAULT MODES ARE NOT MEMBERS. Each axis has a default expressed by the
  * ABSENCE of the attribute (`soft` radius, `subtle` elevation, `default`
@@ -107,6 +109,14 @@ const MODE_AXES: readonly ModeAxis[] = [
     values: BORDERWIDTH_MODE_VALUES,
     guard: isBorderWidthMode,
     defaultMode: 'default',
+  },
+  {
+    axis: 'width-mode',
+    attribute: 'width',
+    cssFile: 'modes-width.css',
+    values: WIDTH_MODE_VALUES,
+    guard: isWidthMode,
+    defaultMode: 'contained',
   },
 ];
 

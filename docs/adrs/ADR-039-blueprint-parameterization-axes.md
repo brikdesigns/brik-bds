@@ -76,9 +76,9 @@ Every axis value is a member of a closed TypeScript union, surfaced in `manifest
 
 — where **A** = "BDS owns every design vocabulary; the portal imports, never copies" and **B** = "design-decision inputs move from the design phase to engagement setup".
 
-### A1. The five Style-axis value lists
+### A1. The six Style-axis value lists
 
-Published from `content-system/vocabularies/{spacing,typography,radius,elevation,borderwidth}-mode.ts`, one closed `as const` list + `is*` guard per axis, same shape as `animation-tier.ts`:
+Published from `content-system/vocabularies/{spacing,typography,radius,elevation,borderwidth,width}-mode.ts`, one closed `as const` list + `is*` guard per axis, same shape as `animation-tier.ts`:
 
 | Axis | Attribute | Values | Default |
 |---|---|---|---|
@@ -87,6 +87,9 @@ Published from `content-system/vocabularies/{spacing,typography,radius,elevation
 | radius | `data-mode-radius` | `sharp` · `round` · `pill` | `soft` |
 | elevation | `data-mode-elevation` | `flat` · `lifted` · `dramatic` | `subtle` |
 | borderwidth | `data-mode-borderwidth` | `thin` · `thick` | `default` |
+| width | `data-mode-width` | `wide` · `full-bleed` | `contained` |
+
+*Width was added as the sixth axis for brik-bds#959 (2026-11-08). It re-points only `--bds-content-width-xl`, the page band of the [ADR-041](./ADR-041-one-content-width-ladder.md) ladder (`wide` 1440px, `full-bleed` 100%). `tokens/modes-width.css` is hand-authored — no Figma `width` collection exists yet, so `build:modes` cannot emit it (promotion tracked on #894) — and A2 holds unchanged: its selectors are the authority.*
 
 **Each default is the attribute-ABSENT state and is therefore not a vocabulary member.** No `[data-mode-radius="soft"]` selector exists; omitting the attribute is how you get `soft`. A pick-list that offers the default as a value offers a string the CSS will ignore — which is half of how the portal's copies drifted (`base`, `soft`, `subtle`, `none` are all defaults promoted to members).
 
@@ -98,8 +101,8 @@ The typography axis is heading-scale-variant selection, not strictly density ([A
 
 This is the same gate discipline ADR-039 § Decision-4 already applies to the other three axes, pointed at the one axis that was exempt. Enforcement, no new workflow:
 
-1. `content-system/vocabularies/expression-modes.test.ts` parses `tokens/modes-*.css` and asserts set equality per axis, that no axis claims its attribute-absent default, and that the glob reads exactly one file per declared axis — a sixth mode file shipping without a vocabulary fails there. It parses the CSS rather than the `COLLECTIONS` registry in `scripts/generate-modes-css.mjs` because the CSS is what ships. (When this was written `modes-borderwidth.css` was hand-authored and the registry covered four of five axes; since #2601 it covers all five, and border-width's `bold` was renamed to Figma's `thick`.)
-2. `manifest/component-axes.json` surfaces the five lists under the reserved `@modes` key (ADR-009), read from the vocabulary modules by `scripts/generate-component-axes.mjs` and gated by the existing `npm run typegen:axes:check`. `@` cannot begin a TS export name, so the key can never collide with a component.
+1. `content-system/vocabularies/expression-modes.test.ts` parses `tokens/modes-*.css` and asserts set equality per axis, that no axis claims its attribute-absent default, and that the glob reads exactly one file per declared axis — a seventh mode file shipping without a vocabulary fails there. It parses the CSS rather than the `COLLECTIONS` registry in `scripts/generate-modes-css.mjs` because the CSS is what ships. (When this was written `modes-borderwidth.css` was hand-authored and the registry covered four of five axes; since #2601 it covers all five, and border-width's `bold` was renamed to Figma's `thick`. `modes-width.css` is now the one hand-authored file the registry cannot see — which is why the test reads the CSS.)
+2. `manifest/component-axes.json` surfaces the six lists under the reserved `@modes` key (ADR-009), read from the vocabulary modules by `scripts/generate-component-axes.mjs` and gated by the existing `npm run typegen:axes:check`. `@` cannot begin a TS export name, so the key can never collide with a component.
 3. `tokens/index.ts` aliases its `SpacingMode` / `BorderMode` to the vocabularies instead of re-declaring them, retiring the `rounded` drift.
 
 The portal imports from `@brikdesigns/bds/content-system` and deletes its copies ([brik-client-portal#4382](https://github.com/brikdesigns/brik-client-portal/issues/4382), [#4973](https://github.com/brikdesigns/brik-client-portal/issues/4973)) — out of scope here, but the reason the lists are published rather than internal.
