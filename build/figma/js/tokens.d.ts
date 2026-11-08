@@ -425,3 +425,5 @@ export const pageAccentYellow: string;
 export const pageAccentOrange: string;
 export const pageAccentRed: string;
 export const pageAccentPurple: string;
+/** Page-band cap (ADR-041 --bds-content-width-xl). `full` re-points to the content-width-full rung (100%). */
+export const contentWidthXl: string;

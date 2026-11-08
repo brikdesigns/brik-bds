@@ -253,6 +253,7 @@
   --bds-box-shadow-md: 8px;
   --bds-box-shadow-lg: 10px;
   --bds-box-shadow-xl: 12px;
+  --bds-content-width-xl: 1280px; /** Page-band cap (ADR-041 --bds-content-width-xl). `full` re-points to the content-width-full rung (100%). */
   --bds-font-weight-heading: var(--bds-font-weight-semibold);
   --bds-border-radius-lg: var(--bds-border-radius-600);
   --bds-border-radius-md: var(--bds-border-radius-400);
