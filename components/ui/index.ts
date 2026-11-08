@@ -119,6 +119,7 @@ export * from './Spinner';
 export * from './Split';
 export * from './Stack';
 export * from './Stat';
+export * from './StatusList';
 export * from './Stepper';
 export * from './SubNavigation';
 export * from './SyncedMediaSteps';

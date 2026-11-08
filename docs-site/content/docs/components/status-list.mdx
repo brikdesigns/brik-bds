@@ -1,0 +1,71 @@
+---
+title: Status list
+description: Read-only list of tracked outputs, each complete, in progress, not started or failed, with a failure message under a failed row.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+StatusList is a read-only list of tracked outputs. Each row shows a title, an optional description, and one of four states as a distinct icon plus a status badge. It is a readout, not a control: rows are not click targets and labels are never struck through.
+
+## Use it for
+
+- A tracker where a person reads the state of each output, such as the outputs of a project phase
+- Any list that needs to show a failed item and why it failed, without opening another view
+
+## Import
+
+```tsx
+import { StatusList } from '@brikdesigns/bds';
+```
+
+## Variants
+
+### Default
+
+Pass `items`. A row's `description` is a `ReactNode`, so it can hold inline content such as a small `TextLink`. An `error` row renders its optional `errorMessage` under the description.
+
+```tsx
+<StatusList
+  items={[
+    { id: 'structure', title: 'Site Structure', status: 'complete' },
+    { id: 'content', title: 'Page Content', status: 'in_progress' },
+    { id: 'cms', title: 'CMS Content', status: 'not_started' },
+    {
+      id: 'seo',
+      title: 'SEO Metadata',
+      status: 'error',
+      errorMessage: 'The agent run failed before it finished.',
+    },
+  ]}
+/>
+```
+
+## Choosing a list component
+
+| Need | Use |
+|---|---|
+| Read the state of each item, including a failed one | StatusList |
+| Let the user mark a single task done | [Checklist](/docs/components/checklist) |
+| Let the user mark off a titled set of tasks with a count | [ChecklistGroup](/docs/components/checklist-group) |
+| Show position in one linear flow (wizard, onboarding) | [ProgressStepper](/docs/components/progress-stepper) |
+
+<Callout type="warn">
+  **Don't use StatusList to collect input.** It has no change handler and its rows do nothing on click. If the user needs to toggle completion, use [Checklist](/docs/components/checklist) or [ChecklistGroup](/docs/components/checklist-group).
+</Callout>
+
+## Accessibility
+
+- Renders a `<ul>` with one `<li>` per row, so assistive technology announces the item count.
+- State is carried by the badge text, not by color or icon alone. The icon is decorative and hidden from assistive technology.
+- The `errorMessage` is rendered in a `role="alert"` region, which is announced assertively when it appears. A failure is the one state the reader must not miss. A row that is already in the error state at page load is read in place with the rest of the list.
+
+## API
+
+{/* props-check: StatusListProps @ components/ui/StatusList/StatusList.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `items` | `StatusListItem[]` | — |
+| `className` | `string` | — |
+
+`StatusListItem` is `{ id: string; title: string; description?: ReactNode; status: 'complete' | 'in_progress' | 'not_started' | 'error'; errorMessage?: ReactNode }`.

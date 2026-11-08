@@ -1,0 +1,44 @@
+@layer bds-components {
+  /* ─── StatusList ────────────────────────────────────────────────
+     Read-only stack of InteractiveListItem rows. This file only owns the
+     list reset, the status icon colour and the error message. */
+
+  .bds-status-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bds-gap-sm);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .bds-status-list__item {
+    margin: 0;
+    padding: 0;
+  }
+
+  .bds-status-list__icon {
+    display: inline-flex;
+    font-size: var(--bds-body-md);
+  }
+
+  .bds-status-list__icon--complete {
+    color: var(--bds-text-positive);
+  }
+
+  .bds-status-list__icon--in-progress {
+    color: var(--bds-text-warning);
+  }
+
+  .bds-status-list__icon--not-started {
+    color: var(--bds-text-muted);
+  }
+
+  .bds-status-list__icon--error {
+    color: var(--bds-text-negative);
+  }
+
+  .bds-status-list__message {
+    color: var(--bds-text-negative);
+  }
+}
