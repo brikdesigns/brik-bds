@@ -22,6 +22,12 @@ Pass `href` to navigate. For a real call-to-action use `TextLink` (brand blue), 
 
 Omit `href` and pass `onClick` for a row that opens a sheet or runs a callback. It renders a real `<button type="button">`.
 
+## Activate
+
+<Canvas of={Stories.Activate} />
+
+Add `onActivate` to the anchor form when a cell has a real route but should open a sheet over the list on a plain left-click (for example with `useSheetStack`). `href` stays rendered. Cmd/Ctrl/Shift/Alt-click and middle-click skip `onActivate` and open the route in a new tab or window. A consumer `onClick` runs first and can veto with `preventDefault()`. The button form does not accept it — use `onClick`.
+
 ## In a table
 
 <Canvas of={Stories.InTable} />
