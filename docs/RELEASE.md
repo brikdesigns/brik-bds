@@ -59,9 +59,19 @@ fresh.
      consumer install command. No manual note-cutting — the tag push is the record
      gesture. Idempotent: re-runs skip an already-created Release.
 
-5. **Bump consumers.** Each consumer needs `npm install @brikdesigns/bds@0.46.0`
-   in a follow-up PR. The release workflow's job summary surfaces the exact
-   install command.
+5. **Bump consumers: propagate opens the PRs; never hand-bump.**
+   [`scripts/propagate.sh`](../scripts/propagate.sh) opens one bump PR per
+   consumer in `NPM_CONSUMERS` (less `FROZEN_CONSUMERS`), plus the brik-llm
+   submodule pointer. It runs daily at 09:00 on brik-mini
+   (`com.brikdesigns.bds-propagate` in brik-llm) and closes the older bump PRs
+   each new one supersedes. Need a release live sooner? Run
+   `./scripts/propagate.sh --only <consumer>`.
+
+   **A breaking minor's issue owns its consumer bumps.** Keep the BDS issue
+   that shipped the breaking change open until every consumer's bump PR is
+   green: link the release PR with `Part of #N`, not a closing keyword. A red
+   bump PR is that issue's work. Fix the consumer code on the bump PR's
+   branch; never open a fresh hand-bump PR (brik-llm#5388, gap 2).
 
 ## Re-running a failed publish
 
