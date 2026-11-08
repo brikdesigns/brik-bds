@@ -341,3 +341,38 @@ describe('deprecated `heading` / `subheading` spelling still renders (#2563)', (
     expect([mixedA, mixedB]).toHaveLength(2);
   });
 });
+
+describe('mediaPosition / orientation section axes reach the dispatched path (#3051)', () => {
+  const axisCase = (name: string, rest: Partial<BlueprintSectionContent>): Case => {
+    const base = CASES.find((x) => x.name === name)!;
+    return { ...base, section: { ...base.section, ...rest } };
+  };
+
+  it('hero_split: non-default axes emit their attributes; vertical defaults media to 16-9', () => {
+    const start = dispatch(axisCase('hero_split', { mediaPosition: 'start' }));
+    expect(start).toContain('data-media-position="start"');
+    expect(start).not.toContain('data-orientation');
+    expect(start).toContain('ratio-4-5');
+
+    const vertical = dispatch(axisCase('hero_split', { orientation: 'vertical' }));
+    expect(vertical).toContain('data-orientation="vertical"');
+    expect(vertical).toContain('ratio-16-9');
+  });
+
+  it('hero_interior_minimal: the axes are split-only and never emitted', () => {
+    const html = dispatch(axisCase('hero_interior_minimal', { mediaPosition: 'start', orientation: 'vertical' }));
+    expect(html).not.toContain('data-media-position');
+    expect(html).not.toContain('data-orientation');
+  });
+
+  it('story_split: the axes reach the narrative section', () => {
+    const html = dispatch(axisCase('story_split', { mediaPosition: 'start', orientation: 'vertical' }));
+    expect(html).toContain('data-media-position="start"');
+    expect(html).toContain('data-orientation="vertical"');
+  });
+
+  it('default values emit nothing, so existing markup is unchanged', () => {
+    const c = CASES.find((x) => x.name === 'hero_split')!;
+    expect(dispatch(axisCase('hero_split', { mediaPosition: 'end', orientation: 'horizontal' }))).toBe(dispatch(c));
+  });
+});

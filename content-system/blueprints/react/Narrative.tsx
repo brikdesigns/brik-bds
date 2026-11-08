@@ -42,7 +42,13 @@ import { type HTMLAttributes } from 'react';
 
 import { CardTestimonial } from '../../../components';
 import { bdsClass } from '../../../components/utils';
-import type { BlueprintAlign, BlueprintProps, KnownBlueprintKey } from '../astro/types';
+import type {
+  BlueprintAlign,
+  BlueprintMediaPosition,
+  BlueprintOrientation,
+  BlueprintProps,
+  KnownBlueprintKey,
+} from '../astro/types';
 import { resolveSectionTitles } from '../astro/types';
 import '../section-shell.css';
 import './Narrative.css';
@@ -81,6 +87,19 @@ export interface NarrativeProps extends HTMLAttributes<HTMLElement> {
    * most naturally on the single-column (no-testimonial) narrative.
    */
   align?: BlueprintAlign;
+  /**
+   * Pull-quote (aside) column side (structure axis, ADR-039, #3051). `end`
+   * (default) keeps it after the narrative; `start` places it first from the
+   * tablet rung up (with `orientation="vertical"`, at every width). Emits
+   * `data-media-position="start"`; DOM order is unchanged.
+   */
+  mediaPosition?: BlueprintMediaPosition;
+  /**
+   * Narrative / pull-quote stacking (structure axis, ADR-039, #3051).
+   * `horizontal` (default) sits them side by side from the tablet rung up;
+   * `vertical` stacks them at every width. Emits `data-orientation="vertical"`.
+   */
+  orientation?: BlueprintOrientation;
 }
 
 /** Dispatched-mode props: a `BlueprintSection` plus the key rendered as the marker. */
@@ -96,6 +115,8 @@ function NarrativeShell({
   body,
   testimonial,
   align = 'left',
+  mediaPosition = 'end',
+  orientation = 'horizontal',
   className,
   ...rest
 }: NarrativeProps) {
@@ -110,6 +131,8 @@ function NarrativeShell({
         className,
       )}
       aria-labelledby={titleId}
+      data-media-position={mediaPosition !== 'end' ? mediaPosition : undefined}
+      data-orientation={orientation !== 'horizontal' ? orientation : undefined}
       {...rest}
     >
       <div className="bds-blueprint-section__container bds-narrative__container">
@@ -150,6 +173,8 @@ function NarrativeFromSection({ section, blueprintKey }: NarrativeSectionProps) 
           ? { quote: callout.description, author: callout.title }
           : undefined
       }
+      mediaPosition={section.mediaPosition}
+      orientation={section.orientation}
       data-blueprint-key={blueprintKey}
     />
   );

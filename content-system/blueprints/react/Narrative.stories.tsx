@@ -14,6 +14,8 @@ const meta: Meta<typeof Narrative> = {
     title: { control: 'text', description: 'Section heading (the narrative h2).' },
     body: { control: 'text', description: 'Narrative body copy.' },
     align: { control: 'inline-radio', options: ['left', 'center'], description: 'Narrative-column placement (structure axis, ADR-039). `left` default; `center` emits `bds-narrative--align-center`.' },
+    mediaPosition: { control: 'inline-radio', options: ['end', 'start'], description: 'Pull-quote column side (structure axis, ADR-039, #3051). `end` default; `start` emits `data-media-position="start"` and places the pull-quote first.' },
+    orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'], description: 'Narrative / pull-quote stacking (structure axis, ADR-039, #3051). `horizontal` default; `vertical` emits `data-orientation="vertical"` and stacks them at every width.' },
     testimonial: { control: false, description: 'Optional pull-quote `{ quote, author, authorRole }` — renders a composed CardTestimonial aside and flips to two columns.' },
   },
   parameters: {
@@ -79,6 +81,35 @@ export const AlignCenter: Story = {
     ...NarrativeOnly.args,
     sectionKey: 'about-align-center',
     align: 'center',
+  },
+};
+
+/**
+ * Distinct meaningful state: `mediaPosition="start"` places the pull-quote
+ * column first from the tablet rung up (structure axis, ADR-039, #3051). DOM
+ * order is unchanged — the narrative still reads first.
+ *
+ * @summary Media-start — pull-quote column first
+ */
+export const MediaStart: Story = {
+  args: {
+    ...Default.args,
+    sectionKey: 'about-media-start',
+    mediaPosition: 'start',
+  },
+};
+
+/**
+ * Distinct meaningful state: `orientation="vertical"` stacks the narrative and
+ * the pull-quote at every width (structure axis, ADR-039, #3051).
+ *
+ * @summary Vertical — narrative and pull-quote stacked
+ */
+export const Vertical: Story = {
+  args: {
+    ...Default.args,
+    sectionKey: 'about-vertical',
+    orientation: 'vertical',
   },
 };
 

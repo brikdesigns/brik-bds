@@ -156,6 +156,35 @@
     aspect-ratio: var(--bds-aspect-4-5);
   }
 
+  /* ── --split mediaPosition / orientation: structure axes (ADR-039, #3051) ──
+     Mirrors ../react/Hero.css. `[data-*]` attributes, not modifiers — same
+     convention as MediaTabs / SyncedMediaSteps. Emitted only for the
+     non-default value, so existing heroes render unchanged. The media column is
+     any container child other than the content column, so a composed media node
+     is placed too. DOM order (content first) is never changed. */
+  .bds-hero--split[data-orientation='vertical'] .bds-hero__missing {
+    aspect-ratio: var(--bds-aspect-16-9);
+  }
+
+  .bds-hero--split[data-orientation='vertical'][data-media-position='start']
+    .bds-hero__container > :not(.bds-hero__content) {
+    order: -1;
+  }
+
+  @media (min-width: 768px) {
+    .bds-hero--split[data-media-position='start'] .bds-hero__container {
+      grid-template-columns: 2fr 3fr;
+    }
+
+    .bds-hero--split[data-media-position='start'] .bds-hero__container > :not(.bds-hero__content) {
+      order: -1;
+    }
+
+    .bds-hero--split[data-orientation='vertical'] .bds-hero__container {
+      grid-template-columns: 1fr;
+    }
+  }
+
   /* ── --with-pricing-card: interior split (content trail + image/price card) ──
    *
    * Consolidates the former bp-hero-img-card blueprint (brik-bds#1165). Left

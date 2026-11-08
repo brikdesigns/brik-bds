@@ -38,10 +38,17 @@
  *   --bds-narrative-eyebrow-color   (default: var(--bds-text-brand-primary))
  *
  * a11y: h2 + aria-labelledby. Pull-quote uses semantic blockquote + cite.
- * Reading order: narrative first (left column), supporting callout second
- * (right) — matches DOM order on every viewport.
+ * Reading order: narrative first, supporting callout second — DOM order on
+ * every viewport. `mediaPosition="start"` moves the callout visually only
+ * (`order`), as MediaTabs does; the narrative stays first for assistive tech.
  */
-import type { BlueprintAlign, BlueprintProps, KnownBlueprintKey } from './types';
+import type {
+  BlueprintAlign,
+  BlueprintMediaPosition,
+  BlueprintOrientation,
+  BlueprintProps,
+  KnownBlueprintKey,
+} from './types';
 import { resolveSectionTitles } from './types';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
@@ -58,9 +65,29 @@ interface Props extends BlueprintProps {
    * `center`; emits `bds-narrative--align-center`. Matches the React twin.
    */
   align?: BlueprintAlign;
+  /**
+   * Pull-quote (aside) column side (structure axis, ADR-039, #3051). `end`
+   * (default) keeps it after the narrative; `start` places it first from the
+   * tablet rung up (with `orientation="vertical"`, at every width). Emits
+   * `data-media-position="start"`; matches the React twin.
+   */
+  mediaPosition?: BlueprintMediaPosition;
+  /**
+   * Narrative / pull-quote stacking (structure axis, ADR-039, #3051).
+   * `horizontal` (default) sits them side by side from the tablet rung up;
+   * `vertical` stacks them at every width. Emits `data-orientation="vertical"`;
+   * matches the React twin.
+   */
+  orientation?: BlueprintOrientation;
 }
 
-const { section, blueprintKey, align = 'left' } = Astro.props;
+const {
+  section,
+  blueprintKey,
+  align = 'left',
+  mediaPosition = 'end',
+  orientation = 'horizontal',
+} = Astro.props;
 const titles = resolveSectionTitles(section);
 const titleId = `${section.sectionKey}-title`;
 const callout = section.items[0];
@@ -70,6 +97,8 @@ const callout = section.items[0];
   class={`bds-blueprint-section bds-narrative${align === 'center' ? ' bds-narrative--align-center' : ''}`}
   aria-labelledby={titleId}
   data-blueprint-key={blueprintKey}
+  data-media-position={mediaPosition !== 'end' ? mediaPosition : undefined}
+  data-orientation={orientation !== 'horizontal' ? orientation : undefined}
 >
   <div class="bds-blueprint-section__container bds-narrative__container">
     <div class="bds-narrative__narrative">
@@ -110,6 +139,28 @@ const callout = section.items[0];
       grid-template-columns: 3fr 2fr;
       gap: var(--bds-gap-huge);
       align-items: start;
+    }
+  }
+
+  /* ── mediaPosition / orientation: structure axes (ADR-039, #3051) ──
+     Mirrors ../react/Narrative.css. `[data-*]` attributes, emitted only for the
+     non-default value; they move the pull-quote (aside) column. DOM order
+     (narrative first) is never changed. */
+  .bds-narrative[data-orientation='vertical'][data-media-position='start'] .bds-narrative__callout {
+    order: -1;
+  }
+
+  @media (min-width: 768px) {
+    .bds-narrative[data-media-position='start'] .bds-narrative__container:has(.bds-narrative__callout) {
+      grid-template-columns: 2fr 3fr;
+    }
+
+    .bds-narrative[data-media-position='start'] .bds-narrative__callout {
+      order: -1;
+    }
+
+    .bds-narrative[data-orientation='vertical'] .bds-narrative__container:has(.bds-narrative__callout) {
+      grid-template-columns: 1fr;
     }
   }
 

@@ -65,6 +65,8 @@ import { bdsClass } from '../../../components/utils';
 import type {
   BlueprintAlign,
   BlueprintCta,
+  BlueprintMediaPosition,
+  BlueprintOrientation,
   BlueprintProps,
   BlueprintReveal,
   HeroLayout,
@@ -116,6 +118,21 @@ export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
    */
   align?: BlueprintAlign;
   /**
+   * `split` media-column side (structure axis, ADR-039, #3051). `end` (default)
+   * keeps the media after the content; `start` places it first from the tablet
+   * rung up (with `orientation="vertical"`, at every width). Emits
+   * `data-media-position="start"`; DOM order is unchanged. Ignored by the other
+   * layouts.
+   */
+  mediaPosition?: BlueprintMediaPosition;
+  /**
+   * `split` column stacking (structure axis, ADR-039, #3051). `horizontal`
+   * (default) sits content and media side by side from the tablet rung up;
+   * `vertical` stacks them at every width. Emits `data-orientation="vertical"`.
+   * Ignored by the other layouts.
+   */
+  orientation?: BlueprintOrientation;
+  /**
    * Content-column entrance (motion axis, ADR-039 §Decision 2). `none` (default)
    * keeps the current rendering; `fade` / `rise` reveal the content column as a
    * unit; `stagger` reveals its children (eyebrow → h1 → lead → CTA) in turn.
@@ -154,7 +171,9 @@ export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
  * `blueprintKey` (what `BlueprintDispatcher` passes). `align` / `reveal` are not
  * read here — the dispatched path never carried them (the Astro rail reads them
  * from the section; the React adapters did not, and this collapse must not
- * change the markup).
+ * change the markup). `section.mediaPosition` / `section.orientation` ARE read
+ * (#3051): they are new, so no existing section carries them and reading them
+ * changes no current markup.
  */
 export interface HeroSectionProps extends BlueprintProps {
   /** `split` (default) or `interior-minimal`. `with-pricing-card` is composed-only. */
@@ -171,6 +190,8 @@ function HeroShell({
   cta,
   layout = 'split',
   align = 'left',
+  mediaPosition = 'end',
+  orientation = 'horizontal',
   reveal = 'none',
   media,
   breadcrumb,
@@ -181,6 +202,7 @@ function HeroShell({
 }: HeroProps) {
   const titleId = `${sectionKey}-title`;
   const hasMedia = layout !== 'interior-minimal' && layout !== 'centered';
+  const isSplit = layout === 'split';
 
   return (
     <section
@@ -192,6 +214,8 @@ function HeroShell({
         className,
       )}
       aria-labelledby={titleId}
+      data-media-position={isSplit && mediaPosition !== 'end' ? mediaPosition : undefined}
+      data-orientation={isSplit && orientation !== 'horizontal' ? orientation : undefined}
       {...rest}
     >
       <div className="bds-blueprint-section__container bds-hero__container">
@@ -223,6 +247,10 @@ function HeroShell({
 function HeroFromSection({ section, clientFacts, layout = 'split', blueprintKey }: HeroSectionProps) {
   const titles = resolveSectionTitles(section);
   const heroImage = clientFacts.heroImageUrl;
+  // A stacked (`vertical`) media column spans the full container width, where a
+  // portrait 4-5 frame would out-height the viewport; it defaults to 16-9 —
+  // same as the Astro rail's `splitMediaRatio`.
+  const ratio = section.orientation === 'vertical' ? '16-9' : '4-5';
 
   // Media axis (ADR-039, #2493): the media column renders through the shared
   // `<BlockMedia>` primitive, class-identical to the Astro rail's `<Media>`.
@@ -235,7 +263,7 @@ function HeroFromSection({ section, clientFacts, layout = 'split', blueprintKey 
     layout === 'split' ? (
       heroImage ? (
         <div className="bds-hero__media">
-          <BlockMedia media="image" src={heroImage} alt="" ratio="4-5" loading="eager" />
+          <BlockMedia media="image" src={heroImage} alt="" ratio={ratio} loading="eager" />
         </div>
       ) : (
         <div
@@ -256,6 +284,8 @@ function HeroFromSection({ section, clientFacts, layout = 'split', blueprintKey 
       subtitle={titles.subtitle ?? undefined}
       lead={section.body ?? undefined}
       cta={section.cta ?? undefined}
+      mediaPosition={section.mediaPosition}
+      orientation={section.orientation}
       media={media}
       data-blueprint-key={blueprintKey}
     />

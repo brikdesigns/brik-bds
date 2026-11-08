@@ -134,7 +134,7 @@ import type { BlueprintSection, KnownBlueprintKey }
 
 ### Shipped blocks
 
-Eight components. A component is a **block**; the layout it renders in is a **prop**, never a filename — so twelve blueprint keys resolve onto eight files. Each follows the same `BlueprintProps` contract (`section` + `clientFacts` + `theme`), plus `layout` where the block has more than one.
+A component is a **block**; the layout it renders in is a **prop**, never a filename — so the sixteen keys in [`blueprint-library.json`](https://github.com/brikdesigns/brik-bds/blob/main/blueprints/blueprint-library.json) resolve onto twelve files. The table lists the eight core blocks and their twelve keys; the other four keys map one-to-one — `logo_wall` → `<LogoWall>`, `collection_index` → `<CollectionIndex>`, `collection_entry` → `<CollectionEntry>`, `faq_accordion_grouped` → `<FaqAccordion>`. Each follows the same `BlueprintProps` contract (`section` + `clientFacts` + `theme`), plus `layout` where the block has more than one.
 
 `<BlueprintDispatcher>` owns the key → (block, layout) mapping, so a consumer that dispatches never picks a layout by hand.
 

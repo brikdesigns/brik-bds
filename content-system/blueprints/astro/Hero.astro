@@ -67,7 +67,15 @@
  * - Image alt: the decorative-default empty string (the h1 conveys meaning);
  *   the price-card image takes `section.priceCard.imageAlt` when informational.
  */
-import type { BlueprintAlign, BlueprintMedia, BlueprintProps, HeroLayout, KnownBlueprintKey } from './types';
+import type {
+  BlueprintAlign,
+  BlueprintMedia,
+  BlueprintMediaPosition,
+  BlueprintOrientation,
+  BlueprintProps,
+  HeroLayout,
+  KnownBlueprintKey,
+} from './types';
 import { resolveSectionTitles } from './types';
 import HeroMediaCard from './HeroMediaCard.astro';
 import HeroMediaCardImage from './HeroMediaCardImage.astro';
@@ -107,6 +115,22 @@ interface Props extends BlueprintProps {
    */
   align?: BlueprintAlign;
   /**
+   * `--split` media-column side (structure axis, ADR-039, #3051). `end`
+   * (default) keeps the media after the content; `start` places it first from
+   * the tablet rung up (with `orientation="vertical"`, at every width). Emits
+   * `data-media-position="start"`; matches the React twin. Ignored by the other
+   * layouts.
+   */
+  mediaPosition?: BlueprintMediaPosition;
+  /**
+   * `--split` column stacking (structure axis, ADR-039, #3051). `horizontal`
+   * (default) sits content and media side by side from the tablet rung up;
+   * `vertical` stacks them at every width, and the media ratio defaults to
+   * `16-9` instead of `4-5`. Emits `data-orientation="vertical"`; matches the
+   * React twin. Ignored by the other layouts.
+   */
+  orientation?: BlueprintOrientation;
+  /**
    * Media the `--split` layout's media column carries (media axis, ADR-039).
    * `image` (default) renders the hero image; `video` a controllable player;
    * `bg-video` an ambient reduced-motion-gated loop; `none` no media column.
@@ -138,6 +162,8 @@ const {
   clientFacts,
   layout = 'split',
   align = 'left',
+  mediaPosition = 'end',
+  orientation = 'horizontal',
   media = 'image',
   blueprintKey,
   imageRatio,
@@ -173,7 +199,9 @@ const heroImage = clientFacts.heroImageUrl;
 // owns the aspect-lock via `<Frame>`, so no `aspect-ratio` is written here.
 const splitMediaSrc = media === 'image' ? heroImage : (clientFacts.heroVideoUrl ?? null);
 const splitMediaPoster = clientFacts.heroVideoPoster ?? heroImage ?? undefined;
-const splitMediaRatio = imageRatio ?? '4-5';
+// A stacked (`vertical`) media column spans the full container width, where a
+// portrait 4-5 frame would out-height the viewport; it defaults to 16-9.
+const splitMediaRatio = imageRatio ?? (orientation === 'vertical' ? '16-9' : '4-5');
 const priceCardRatio = imageRatio ?? 'square';
 
 // The pricing-card layout sits on an audience-tinted surface, so its single
@@ -189,6 +217,8 @@ const ctaClass = isPricingCard
   aria-labelledby={titleId}
   data-blueprint-key={blueprintKey}
   data-service-line={isPricingCard ? serviceLine : undefined}
+  data-media-position={isSplit && mediaPosition !== 'end' ? mediaPosition : undefined}
+  data-orientation={isSplit && orientation !== 'horizontal' ? orientation : undefined}
 >
   <div class="bds-blueprint-section__container bds-hero__container">
     <div class={contentClass}>
@@ -462,6 +492,35 @@ const ctaClass = isPricingCard
 
   .bds-hero--split .bds-hero__missing {
     aspect-ratio: var(--bds-aspect-4-5);
+  }
+
+  /* ── --split mediaPosition / orientation: structure axes (ADR-039, #3051) ──
+     Mirrors ../react/Hero.css. `[data-*]` attributes, not modifiers — same
+     convention as MediaTabs / SyncedMediaSteps. Emitted only for the
+     non-default value, so existing heroes render unchanged. The media column is
+     any container child other than the content column, so a composed media node
+     is placed too. DOM order (content first) is never changed. */
+  .bds-hero--split[data-orientation='vertical'] .bds-hero__missing {
+    aspect-ratio: var(--bds-aspect-16-9);
+  }
+
+  .bds-hero--split[data-orientation='vertical'][data-media-position='start']
+    .bds-hero__container > :not(.bds-hero__content) {
+    order: -1;
+  }
+
+  @media (min-width: 768px) {
+    .bds-hero--split[data-media-position='start'] .bds-hero__container {
+      grid-template-columns: 2fr 3fr;
+    }
+
+    .bds-hero--split[data-media-position='start'] .bds-hero__container > :not(.bds-hero__content) {
+      order: -1;
+    }
+
+    .bds-hero--split[data-orientation='vertical'] .bds-hero__container {
+      grid-template-columns: 1fr;
+    }
   }
 
   /* ── --with-pricing-card: interior split (content trail + image/price card) ──
