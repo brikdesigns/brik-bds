@@ -238,7 +238,7 @@ The input *value* (`--text-primary` on `--background-input`, 3.32 / 4.43) and th
 
 **Tradeoff stated.** A disabled input's placeholder and value are now the same color (`--text-primary` at the fade). The disabled state no longer distinguishes empty from filled by color; the placeholder text itself still does. This is chosen over the swap because the swap would contradict test 3 for six components to fix a text pairing.
 
-**Slider rail, light, stays a tracked exception.** Unfaded `--border-secondary` on the page measures 1.32 enabled. This is existing debt on the enabled rail, not something the disabled state introduced. No disabled token clears it without equalling the progress color, and `--border-input` (3.84 / 3.04) equals the dark rail color, so rail and fill would be indistinguishable. The dark exception is removed. `lightException` points at #3016.
+**Slider rail, light, stays a tracked exception.** Unfaded `--border-secondary` on the page measures 1.32 enabled. This is existing debt on the enabled rail, not something the disabled state introduced. No disabled token clears it without equalling the progress color, and `--border-input` (3.84 / 3.04) equals the dark rail color, so rail and fill would be indistinguishable. The dark exception is removed. `lightException` points at [#3056](https://github.com/brikdesigns/brik-bds/issues/3056), which owns the rail token.
 
 **ADR-015 is not reopened.** The brand label stays `--text-on-color-dark`, never darkened or bolded, for the enabled state. The disabled swap replaces the brand fill itself, so no brand-fill label is left to darken.
 

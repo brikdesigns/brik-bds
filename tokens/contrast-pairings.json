@@ -128,8 +128,8 @@
       "components": ["Slider"],
       "thresholdType": "AA-large",
       "lightException": {
-        "issue": 3016,
-        "reason": "1.32:1 light. The disabled rail is unfaded and so reads exactly as the ENABLED rail does; it fails before any disabled treatment, so neither the swap nor an opacity retune can fix it (no existing border token both clears 3:1 on the page and keeps the rail a thin neutral line distinct from the --bds-text-disabled progress in dark). Owned here as pre-existing enabled debt; the fix is a rail token, not a disabled one. Dark clears at 3.04:1."
+        "issue": 3056,
+        "reason": "1.32:1 light. The disabled rail is unfaded and so reads exactly as the ENABLED rail does; it fails before any disabled treatment, so neither the swap nor an opacity retune can fix it (no existing border token both clears 3:1 on the page and keeps the rail a thin neutral line distinct from the --bds-text-disabled progress in dark). Pre-existing enabled debt, kept by #3016 and owned by #3056; the fix is a rail token, not a disabled one. Dark clears at 3.04:1."
       },
       "note": "Slider's track rail. Was scored faded (1.14:1 light / 1.52:1 dark) until #3016 removed the fade from Slider; unfaded, dark now clears. ADR-028 \u00a7 Amendment \u00a74."
     },
