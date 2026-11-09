@@ -177,6 +177,25 @@ export const COLLECTIONS = {
       'attribute) and uses the hand-authored --bds-shadow-* in tokens/gap-fills.css, ' +
       'which this overrides.',
   },
+  width: {
+    // Page-band cap (brik-bds#959 AC3 / #894). One STRING variable, not a FLOAT:
+    // `full-bleed` is the content-width-full rung (100%), which no px number can
+    // carry. The Figma value `full` re-points to that rung by var() instead of
+    // minting a second container token (ADR-041: one ladder for every cap).
+    groups: ['content-width'],
+    defaultMode: 'contained',
+    nonDefaultModes: ['wide', 'full-bleed'],
+    unitSuffix: '',
+    tokenName: (group, name) => `${PREFIX}${group}-${name}`,
+    resolve: (value) => (value === 'full' ? `var(${PREFIX}content-width-full)` : value),
+    description:
+      'Width — the page-band cap an expression mode picks per brand. Re-points ' +
+      'ONE rung of the ADR-041 ladder, --bds-content-width-xl (the page band: ' +
+      'hero, header, footer, section shell). The text rungs (-text-*) and the ' +
+      'narrower bands (-sm/-md/-lg) are untouched. `contained` is the default ' +
+      '(no attribute): the 1280px band in tokens/gap-fills.css stands. Must trail ' +
+      'gap-fills.css in dist/tokens.css (equal specificity, later source order wins).',
+  },
 };
 
 // ─── Helpers ────────────────────────────────────────────────────────

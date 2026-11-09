@@ -1733,5 +1733,12 @@
       "$value": "{color.system.purple}",
       "$type": "color"
     }
+  },
+  "content-width": {
+    "xl": {
+      "$value": "1280px",
+      "$type": "string",
+      "$description": "Page-band cap (ADR-041 --bds-content-width-xl). `full` re-points to the content-width-full rung (100%)."
+    }
   }
 }
