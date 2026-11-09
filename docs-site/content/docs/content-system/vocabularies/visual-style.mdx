@@ -1,0 +1,391 @@
+---
+title: Visual Style
+description: What each of the 13 Visual Styles means at four levels (content, theming, structure, motion), with the sites and decisions behind it.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+import {
+  VISUAL_STYLE_VALUES,
+  VISUAL_STYLE_PRESETS,
+  VISUAL_STYLE_EXAMPLES,
+  MOOD_TO_VISUAL_STYLE,
+  MOOD_TO_PERSONALITY,
+} from '@brikdesigns/bds/content-system';
+import blueprintLibrary from '@brikdesigns/bds/blueprints/library.json';
+
+export const PRESET_ROWS = [
+  ['themeMode', 'Theme Mode'],
+  ['atmosphere', 'Atmosphere'],
+  ['spacingMode', 'Spacing'],
+  ['typographyMode', 'Typography'],
+  ['radiusMode', 'Radius'],
+  ['elevationMode', 'Elevation'],
+  ['borderWidthMode', 'Border width'],
+  ['animationTier', 'Animation tier'],
+];
+
+export const TIER_MOVES = {
+  subtle: 'Fade-ups on scroll only. No GSAP.',
+  moderate: 'Fade-ups, a split-text hero headline, stat counters, hover lifts and an animated CSS gradient.',
+  expressive: 'Split text, scroll parallax, staggered card entrances, a Granim gradient and Lenis smooth scroll.',
+};
+
+export const ATMOSPHERE_CHARACTER = {
+  none: 'No atmosphere layer. Pure theme tokens.',
+  'editorial-luxury': 'Quiet luxury. Blur and noise give depth; hero photography breathes.',
+  'cinematic-dramatic': 'Aurora drift gradients, a centred hero glow, edge vignettes. No grain.',
+  'warm-soft': 'One soft rose vignette and reduced grain.',
+  'organic-textured': 'SVG grain at 40% opacity and a subtle earth-tone tint.',
+};
+
+export const PALETTE_USE = {
+  Colorful: 'Uses more of the client palette on a page.',
+  Monochrome: 'Uses less of the client palette on a page.',
+};
+
+export const moodsFor = (style) =>
+  Object.keys(MOOD_TO_VISUAL_STYLE).filter((mood) => MOOD_TO_VISUAL_STYLE[mood].includes(style));
+
+export const personalitiesFor = (style) => [
+  ...new Set(moodsFor(style).flatMap((mood) => MOOD_TO_PERSONALITY[mood])),
+];
+
+export const blueprintsFor = (style) => {
+  const moods = moodsFor(style);
+  return blueprintLibrary.blueprints.filter((bp) => bp.moods.some((m) => moods.includes(m)));
+};
+
+export const Settings = ({ style }) => {
+  const preset = VISUAL_STYLE_PRESETS[style];
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Setting</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {PRESET_ROWS.map(([key, label]) => (
+          <tr key={key}>
+            <td>{label}</td>
+            <td>{preset[key] ? <code>{preset[key]}</code> : 'Not set. The default applies.'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+export const Levels = ({ style }) => {
+  const preset = VISUAL_STYLE_PRESETS[style];
+  const moods = moodsFor(style);
+  const personalities = personalitiesFor(style);
+  const blueprints = blueprintsFor(style);
+  const theming = (
+    <>
+      {preset.themeMode ? <>Theme Mode <code>{preset.themeMode}</code>.</> : 'Theme Mode is not set.'}{' '}
+      {preset.atmosphere ? ATMOSPHERE_CHARACTER[preset.atmosphere] : 'No atmosphere is set.'}{' '}
+      {PALETTE_USE[style]}
+    </>
+  );
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Level</th>
+          <th>What it says</th>
+          <th>Source</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Content</td>
+          <td>
+            {personalities.length
+              ? <>Pairs with Personality {personalities.map((p) => <code key={p}> {p}</code>)}. No Voice or Image Mood pairing is recorded.</>
+              : 'No Personality, Voice or Image Mood pairing is recorded.'}
+          </td>
+          <td>{moods.length ? <><code>MOOD_TO_VISUAL_STYLE</code> and <code>MOOD_TO_PERSONALITY</code>, mood <code>{moods.join(', ')}</code></> : <><code>MOOD_TO_VISUAL_STYLE</code>: no mood projects here</>}</td>
+        </tr>
+        <tr>
+          <td>Theming</td>
+          <td>{theming}</td>
+          <td><code>VISUAL_STYLE_PRESETS</code>; atmosphere character from <code>atmosphere.ts</code></td>
+        </tr>
+        <tr>
+          <td>Structure</td>
+          <td>
+            {blueprints.length
+              ? <>Blueprints carrying a mood that projects here: {blueprints.map((bp, i) => <span key={bp.key}>{i ? ', ' : ''}<code>{bp.key}</code></span>)}.</>
+              : 'No blueprint carries a mood that projects to this style.'}
+            {' '}Spacing <code>{preset.spacingMode ?? 'default'}</code>, radius <code>{preset.radiusMode ?? 'default'}</code>, elevation <code>{preset.elevationMode ?? 'default'}</code>.
+          </td>
+          <td><code>blueprint-library.json</code> moods through <code>MOOD_TO_VISUAL_STYLE</code>; <code>VISUAL_STYLE_PRESETS</code></td>
+        </tr>
+        <tr>
+          <td>Motion</td>
+          <td>{preset.animationTier ? <>Tier <code>{preset.animationTier}</code>. {TIER_MOVES[preset.animationTier]}</> : 'No animation tier is set.'}</td>
+          <td><code>VISUAL_STYLE_PRESETS</code>; tier moves from <code>animation-tier.ts</code></td>
+        </tr>
+      </tbody>
+    </table>
+  );
+};
+
+export const Examples = ({ style }) => {
+  const rows = VISUAL_STYLE_EXAMPLES.filter((ex) => ex.primaryStyle === style && ex.referenceSiteUrl);
+  if (!rows.length) return <p>No evidence yet.</p>;
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Site</th>
+          <th>Kind</th>
+          <th>Date</th>
+          <th>What it showed</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((ex) => (
+          <tr key={ex.referenceSiteUrl}>
+            <td><a href={ex.referenceSiteUrl}>{ex.referenceSiteUrl.replace('https://', '')}</a></td>
+            <td>Inspiration</td>
+            <td>2026-04-19</td>
+            <td>The mood-board reference for {style}, added to <code>VISUAL_STYLE_EXAMPLES</code> on this date.</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+export const Decisions = ({ style }) => (
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Decision</th>
+        <th>Evidence</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>2026-11-05</td>
+        <td>The preset above was ratified for all 13 styles.</td>
+        <td>The operator's ratification on brik-bds#3007, recorded in the comment above <code>VISUAL_STYLE_PRESETS</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+);
+
+A Visual Style is a named look, such as Modern or Dark. A client picks up to three. This page says what each one means, and the sites and decisions behind that meaning.
+
+The tags already exist. This page adds no new tag. It reads the preset for each style from `@brikdesigns/bds/content-system` and never copies it by hand.
+
+## How to read a section
+
+Each of the 13 sections has four parts.
+
+- **Settings.** The preset, rendered from `VISUAL_STYLE_PRESETS`.
+- **Four levels.** Content, theming, structure and motion. Every line names its source. A line the sources cannot support says so instead of guessing.
+- **Evidence.** The sites that showed this style, with a date.
+- **Decisions.** A dated log. Each row points at the evidence behind it.
+
+A preset never sets a colour, font or logo. Those come from the client theme ([ADR-048](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-048-visual-style-and-theming-taxonomy.md) § 1).
+
+## Visual Style and Personality
+
+Four words are in both lists: Bold, Minimal, Modern and Playful. Personality is the brand's character. Visual Style is how it looks. A Playful brand can use a Minimal style ([ADR-048](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-048-visual-style-and-theming-taxonomy.md) § 4). See the [Glossary](/docs/getting-started/glossary#visual-style) for the definitions.
+
+## Minimal
+
+<Settings style="Minimal" />
+
+<Levels style="Minimal" />
+
+### Evidence
+
+<Examples style="Minimal" />
+
+### Decisions
+
+<Decisions style="Minimal" />
+
+## Bold
+
+<Settings style="Bold" />
+
+<Levels style="Bold" />
+
+### Evidence
+
+<Examples style="Bold" />
+
+### Decisions
+
+<Decisions style="Bold" />
+
+## Editorial
+
+<Settings style="Editorial" />
+
+<Levels style="Editorial" />
+
+### Evidence
+
+<Examples style="Editorial" />
+
+### Decisions
+
+<Decisions style="Editorial" />
+
+## Playful
+
+<Settings style="Playful" />
+
+<Levels style="Playful" />
+
+### Evidence
+
+<Examples style="Playful" />
+
+### Decisions
+
+<Decisions style="Playful" />
+
+## Luxurious
+
+<Settings style="Luxurious" />
+
+<Levels style="Luxurious" />
+
+### Evidence
+
+<Examples style="Luxurious" />
+
+### Decisions
+
+<Decisions style="Luxurious" />
+
+## Modern
+
+<Settings style="Modern" />
+
+<Levels style="Modern" />
+
+### Evidence
+
+<Examples style="Modern" />
+
+### Decisions
+
+<Decisions style="Modern" />
+
+## Classic
+
+<Settings style="Classic" />
+
+<Levels style="Classic" />
+
+### Evidence
+
+<Examples style="Classic" />
+
+### Decisions
+
+<Decisions style="Classic" />
+
+## Dark
+
+<Settings style="Dark" />
+
+<Levels style="Dark" />
+
+### Evidence
+
+<Examples style="Dark" />
+
+### Decisions
+
+<Decisions style="Dark" />
+
+## Light
+
+<Settings style="Light" />
+
+<Levels style="Light" />
+
+### Evidence
+
+<Examples style="Light" />
+
+### Decisions
+
+<Decisions style="Light" />
+
+## Colorful
+
+<Settings style="Colorful" />
+
+<Levels style="Colorful" />
+
+### Evidence
+
+<Examples style="Colorful" />
+
+### Decisions
+
+<Decisions style="Colorful" />
+
+## Monochrome
+
+<Settings style="Monochrome" />
+
+<Levels style="Monochrome" />
+
+### Evidence
+
+<Examples style="Monochrome" />
+
+### Decisions
+
+<Decisions style="Monochrome" />
+
+## Textural
+
+<Settings style="Textural" />
+
+<Levels style="Textural" />
+
+### Evidence
+
+<Examples style="Textural" />
+
+### Decisions
+
+<Decisions style="Textural" />
+
+## Brutalist
+
+<Settings style="Brutalist" />
+
+<Levels style="Brutalist" />
+
+### Evidence
+
+<Examples style="Brutalist" />
+
+### Decisions
+
+<Decisions style="Brutalist" />
+
+## How This Page Grows
+
+- **Evidence rows** come by docs PR, from portal inspiration-site analyses ([portal#6575](https://github.com/brikdesigns/brik-client-portal/issues/6575)) and approved client homepages.
+- **A decision that changes a preset** edits `VISUAL_STYLE_PRESETS` in the same PR ([ADR-048](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-048-visual-style-and-theming-taxonomy.md) § 7).
+- **Evidence that no style fits** is a proposal for a new style. Adding one is the operator's call (ADR-048 § 7).
+
+<Callout type="info">
+  There are {VISUAL_STYLE_VALUES.length} styles on this page. The list comes from `VISUAL_STYLE_VALUES`, so a style added there and missing here shows as a count mismatch.
+</Callout>
