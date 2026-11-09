@@ -14,6 +14,8 @@ const meta: Meta<typeof Hero> = {
     sectionKey: { control: 'text', description: 'Unique section key — drives element ids.' },
     layout: { control: 'inline-radio', options: ['split', 'interior-minimal', 'with-pricing-card', 'centered'], description: 'Structural layout modifier per ADR-008 §3.' },
     align: { control: 'inline-radio', options: ['left', 'center'], description: 'Content-column placement (structure axis, ADR-039). `left` default; `center` emits `bds-hero--align-center`.' },
+    mediaPosition: { control: 'inline-radio', options: ['end', 'start'], description: '`split` media-column side (structure axis, ADR-039, #3051). `end` default; `start` emits `data-media-position="start"` and places the media first.' },
+    orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'], description: '`split` column stacking (structure axis, ADR-039, #3051). `horizontal` default; `vertical` emits `data-orientation="vertical"` and stacks content and media at every width.' },
     subtitle: { control: 'text', description: 'Eyebrow above the h1.' },
     title: { control: 'text', description: 'Page h1 — Hero blueprints own the page heading. Accepts a node, so inline emphasis (`<em>`) can sit inside it.' },
     lead: { control: 'text', description: 'Supporting lead paragraph.' },
@@ -98,6 +100,21 @@ export const AlignCenter: Story = {
     ...Default.args,
     sectionKey: 'hero-align-center',
     align: 'center',
+  },
+};
+
+/**
+ * Distinct meaningful state: `mediaPosition="start"` places the media column
+ * first from the tablet rung up and flips the split to 40/60 (structure axis,
+ * ADR-039, #3051). DOM order is unchanged — the h1 still reads first.
+ *
+ * @summary Split media-start — media column first
+ */
+export const SplitMediaStart: Story = {
+  args: {
+    ...Default.args,
+    sectionKey: 'hero-split-media-start',
+    mediaPosition: 'start',
   },
 };
 
@@ -220,6 +237,32 @@ export const DispatchedSplit: Story = {
     theme: baseTheme,
     layout: 'split',
     blueprintKey: 'hero_split',
+  },
+};
+
+/**
+ * `section.mediaPosition = 'start'` — the dispatched path reads the axis from
+ * the section, as the Astro dispatcher does (#3051).
+ *
+ * @summary Dispatched split, media-start — section-driven axis
+ */
+export const DispatchedSplitMediaStart: Story = {
+  args: {
+    ...DispatchedSplit.args,
+    section: { ...splitSection, sectionKey: 'hero-split-media-start', mediaPosition: 'start' },
+  },
+};
+
+/**
+ * `section.orientation = 'vertical'` — content and media stacked at every
+ * width; the block-built image defaults to a 16:9 frame instead of 4:5 (#3051).
+ *
+ * @summary Dispatched split, vertical — stacked, 16:9 media
+ */
+export const DispatchedSplitVertical: Story = {
+  args: {
+    ...DispatchedSplit.args,
+    section: { ...splitSection, sectionKey: 'hero-split-vertical', orientation: 'vertical' },
   },
 };
 

@@ -73,6 +73,18 @@ const BLOCKS = [
 ];
 
 /**
+ * Structure-axis variants (#3051) — a block rendered with one non-default axis
+ * prop, so each axis value is browsable on the canonical rail. The default
+ * values (`end`, `horizontal`) are the block's plain `BLOCKS` render above.
+ */
+const AXIS_VARIANTS = [
+  { name: 'Hero', layout: 'split', slug: 'Hero--split-media-start', props: { mediaPosition: 'start' } },
+  { name: 'Hero', layout: 'split', slug: 'Hero--split-vertical', props: { orientation: 'vertical' } },
+  { name: 'Narrative', layout: null, slug: 'Narrative--media-start', props: { mediaPosition: 'start' } },
+  { name: 'Narrative', layout: null, slug: 'Narrative--vertical', props: { orientation: 'vertical' } },
+];
+
+/**
  * Output basename for a (block, layout) pair.
  *
  * The separator is `--`, not `.`, on purpose: `canonical-class-check`'s CSS
@@ -111,6 +123,33 @@ async function main() {
 
   const emitted = [];
 
+  const renderBlock = async (mod, name, layout, slug, axisProps = {}) => {
+    const container = await experimental_AstroContainer.create();
+    const html = await container.renderToString(mod.default, {
+      props: {
+        theme: baseTheme,
+        clientFacts: { ...baseClientFacts, heroImageUrl: placeholderImage(960, 1200, '#eaf1fb', '#1f3d70', name) },
+        section: sectionFor(name, layout),
+        ...(layout ? { layout } : {}),
+        ...axisProps,
+      },
+    });
+
+    // `data-astro-source-*` are dev annotations carrying absolute paths — they
+    // would make the emitted HTML machine-specific and churn every diff.
+    const clean = html
+      .replace(/\sdata-astro-source-(file|loc)="[^"]*"/g, '')
+      // A processed `<script>` (e.g. `_CountUp.astro`'s count-up runtime,
+      // #2529) renders as a `?astro&type=script` module reference carrying the
+      // absolute on-disk path — machine-specific (churns `--check` across
+      // boxes) and dead in a static story anyway (the preview is the static
+      // state). Same strip the SiteHeader block applies to its client script.
+      .replace(/<script type="module" src="[^"]*\?astro&type=script[^"]*"><\/script>/g, '')
+      .trim();
+    writeFile(join(outDir, `${slug}.html`), `${clean}\n`);
+    emitted.push(`${slug}.html`);
+  };
+
   for (const { name, layouts } of BLOCKS) {
     const mod = await server.ssrLoadModule(join(astroDir, `${name}.astro`));
     const source = readFileSync(join(astroDir, `${name}.astro`), 'utf8');
@@ -121,31 +160,13 @@ async function main() {
     emitted.push(`${name}.css`);
 
     for (const layout of layouts) {
-      const container = await experimental_AstroContainer.create();
-      const html = await container.renderToString(mod.default, {
-        props: {
-          theme: baseTheme,
-          clientFacts: { ...baseClientFacts, heroImageUrl: placeholderImage(960, 1200, '#eaf1fb', '#1f3d70', name) },
-          section: sectionFor(name, layout),
-          ...(layout ? { layout } : {}),
-        },
-      });
-
-      const slug = slugFor(name, layout);
-      // `data-astro-source-*` are dev annotations carrying absolute paths — they
-      // would make the emitted HTML machine-specific and churn every diff.
-      const clean = html
-        .replace(/\sdata-astro-source-(file|loc)="[^"]*"/g, '')
-        // A processed `<script>` (e.g. `_CountUp.astro`'s count-up runtime,
-        // #2529) renders as a `?astro&type=script` module reference carrying the
-        // absolute on-disk path — machine-specific (churns `--check` across
-        // boxes) and dead in a static story anyway (the preview is the static
-        // state). Same strip the SiteHeader block applies to its client script.
-        .replace(/<script type="module" src="[^"]*\?astro&type=script[^"]*"><\/script>/g, '')
-        .trim();
-      writeFile(join(outDir, `${slug}.html`), `${clean}\n`);
-      emitted.push(`${slug}.html`);
+      await renderBlock(mod, name, layout, slugFor(name, layout));
     }
+  }
+
+  for (const { name, layout, slug, props } of AXIS_VARIANTS) {
+    const mod = await server.ssrLoadModule(join(astroDir, `${name}.astro`));
+    await renderBlock(mod, name, layout, slug, props);
   }
 
   // SiteHeader — the site-shell nav component. Not a blueprint (it takes direct
@@ -305,9 +326,10 @@ async function assertDispatcherRendersEveryKey(server, { theme, clientFacts, pla
  */
 function assertStylesheetCoverage() {
   const shell = readFileSync(join(astroDir, '_AstroFrame.tsx'), 'utf8');
-  const blockHtml = BLOCKS.flatMap(({ name, layouts }) =>
-    layouts.map((l) => readFileSync(join(outDir, `${slugFor(name, l)}.html`), 'utf8')),
-  );
+  const blockHtml = [
+    ...BLOCKS.flatMap(({ name, layouts }) => layouts.map((l) => slugFor(name, l))),
+    ...AXIS_VARIANTS.map(({ slug }) => slug),
+  ].map((slug) => readFileSync(join(outDir, `${slug}.html`), 'utf8'));
   // SiteHeader's generated markup is checked too, so a future edit that reaches
   // for a BDS component class (`bds-button`, …) is caught even though today it
   // emits only its own `bp-site-header__*` classes.

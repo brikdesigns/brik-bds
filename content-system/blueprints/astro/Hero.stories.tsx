@@ -6,6 +6,8 @@ import split from './__generated__/Hero--split.html?raw';
 import interiorMinimal from './__generated__/Hero--interior-minimal.html?raw';
 import withPricingCard from './__generated__/Hero--with-pricing-card.html?raw';
 import centered from './__generated__/Hero--centered.html?raw';
+import splitMediaStart from './__generated__/Hero--split-media-start.html?raw';
+import splitVertical from './__generated__/Hero--split-vertical.html?raw';
 
 /**
  * `Hero.astro` on the canonical rail (ADR-037), pre-rendered by
@@ -39,3 +41,9 @@ export const WithPricingCard: Story = { render: () => <AstroFrame html={withPric
 
 /** @summary Centered — single centred column, no media. */
 export const Centered: Story = { render: () => <AstroFrame html={centered} /> };
+
+/** @summary Split, media-start — media column first */
+export const SplitMediaStart: Story = { render: () => <AstroFrame html={splitMediaStart} /> };
+
+/** @summary Split, vertical — content over 16-9 media */
+export const SplitVertical: Story = { render: () => <AstroFrame html={splitVertical} /> };

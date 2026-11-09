@@ -48,6 +48,30 @@
   text-align: center;
 }
 
+/* ── mediaPosition / orientation: structure axes (ADR-039, #3051) ────────────
+   `[data-*]` attributes, not modifiers — same convention as MediaTabs /
+   SyncedMediaSteps (ADR-033 § 4 has no closed start/end or horizontal/vertical
+   axis). Emitted only for the non-default value; they move the pull-quote
+   (aside) column. DOM order (narrative first) is never changed. Mirrors
+   ../astro/Narrative.astro. */
+.bds-narrative[data-orientation='vertical'][data-media-position='start'] .bds-narrative__callout {
+  order: -1;
+}
+
+@media (--bds-up-tablet) {
+  .bds-narrative[data-media-position='start'] .bds-narrative__container:has(.bds-narrative__callout) {
+    grid-template-columns: 2fr 3fr;
+  }
+
+  .bds-narrative[data-media-position='start'] .bds-narrative__callout {
+    order: -1;
+  }
+
+  .bds-narrative[data-orientation='vertical'] .bds-narrative__container:has(.bds-narrative__callout) {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ── Content rhythm (ADR-023 §3) ──────────────────────────────────────────
    Adjacency margins, not one uniform flex `gap`: eyebrow→title is tight
    (--bds-gap-sm), title→lead is medium (--bds-gap-md). The composed `callout` slot

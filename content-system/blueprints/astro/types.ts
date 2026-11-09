@@ -168,6 +168,35 @@ export type BlueprintAlign = 'center' | 'left';
 export type BlueprintColumns = 2 | 3 | 4;
 
 /**
+ * Structure axis — which side of a two-column block its media column sits on
+ * (ADR-039 §Decision 1, #3051). Same vocabulary as `MediaTabs` /
+ * `SyncedMediaSteps` `mediaPosition`. `end` (default) keeps the media column
+ * after the content; `start` places it first. On `Narrative` the "media" column
+ * is the aside (pull-quote) column.
+ *
+ * Like those components, it renders as a `[data-media-position]` attribute, not
+ * a BEM modifier — `start`/`end` has no closed axis in ADR-033 § 4's
+ * MODIFIER_AXES. The block emits it only for the non-default value, so the axis
+ * is additive and changes no existing rendering. DOM order is unchanged (content
+ * first), so reading order is the same for every value.
+ *
+ * Declared here — the framework-agnostic contract both rails share (#2302) — so
+ * the axis cannot be added to one rail only.
+ */
+export type BlueprintMediaPosition = 'start' | 'end';
+
+/**
+ * Structure axis — how a two-column block's content and media columns stack
+ * (ADR-039 §Decision 1, #3051). `horizontal` (default) sits them side by side
+ * from the tablet rung up; `vertical` keeps them stacked at every width, the
+ * media column after the content (`mediaPosition="start"` puts it first).
+ *
+ * Rendered as a `[data-orientation]` attribute, emitted only for the non-default
+ * value — same convention as `BlueprintMediaPosition`.
+ */
+export type BlueprintOrientation = 'horizontal' | 'vertical';
+
+/**
  * Media axis — the media a block carries (ADR-039 §Media axis, #2493).
  *
  * A curated closed union, NOT hand-rolled `<video>` markup: an agent picks a
@@ -546,6 +575,16 @@ export interface BlueprintSectionContent {
    * blocks that declare a `columns` prop (`Features`, `CardGrid`).
    */
   readonly columns?: BlueprintColumns;
+  /**
+   * Structure axis — media-column side (ADR-039 §Decision 1, #3051). Read by
+   * blocks that declare a `mediaPosition` prop (`Hero` split, `Narrative`).
+   */
+  readonly mediaPosition?: BlueprintMediaPosition;
+  /**
+   * Structure axis — column stacking direction (ADR-039 §Decision 1, #3051).
+   * Read by blocks that declare an `orientation` prop (`Hero` split, `Narrative`).
+   */
+  readonly orientation?: BlueprintOrientation;
   /**
    * Media axis — per-section media (ADR-039 §Media axis). Same shape as the
    * portal's `planMediaSchemaLoose`: `role` is the `BlueprintMedia` the block's

@@ -33,6 +33,17 @@ describe('resolveSectionProps', () => {
     expect(out.align).toBe('left');
   });
 
+  it('passes mediaPosition and orientation through (#3051)', () => {
+    const out = resolveSectionProps(defaults, { mediaPosition: 'start', orientation: 'vertical' });
+    expect(out).toMatchObject({ mediaPosition: 'start', orientation: 'vertical' });
+  });
+
+  it('omits mediaPosition and orientation when the section leaves them unset', () => {
+    const out = resolveSectionProps(defaults, {});
+    expect('mediaPosition' in out).toBe(false);
+    expect('orientation' in out).toBe(false);
+  });
+
   it('media role none sets media without a ratio', () => {
     const out = resolveSectionProps(defaults, { media: { role: 'none' } });
     expect(out.media).toBe('none');
