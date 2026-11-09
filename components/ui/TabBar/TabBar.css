@@ -28,14 +28,16 @@
   pointer-events: none;
 }
 
-/* ADR-028 pt-2: the fade, on every item except the selected box item. That one
-   paints a brand fill, so it takes the pt-1 swap (Amendment §4, below) — opacity
-   cannot be switched off per-element once the base rule sets it, hence the
-   variant-keyed list instead of one `.bds-tab-bar-item:disabled` rule. */
+/* ADR-028 pt-2: the fade, on every item except the selected box item off-color.
+   That one paints a brand fill, so it takes the pt-1 swap (Amendment §4, below) —
+   opacity cannot be switched off per-element once the base rule sets it, hence
+   the variant-keyed list instead of one `.bds-tab-bar-item:disabled` rule. The
+   on-color selected box item has no swap, so it keeps the fade. */
 .bds-tab-bar--tab .bds-tab-bar-item:disabled,
 .bds-tab-bar--text .bds-tab-bar-item:disabled,
 .bds-tab-bar--text-underline .bds-tab-bar-item:disabled, /* bds-lint-ignore — canonical-check: --text-underline modifier selector, not a token reference */
-.bds-tab-bar--box .bds-tab-bar-item:disabled:not([aria-selected="true"]) {
+.bds-tab-bar--box .bds-tab-bar-item:disabled:not([aria-selected="true"]),
+.bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"]:disabled {
   opacity: var(--bds-state-disabled-opacity);
 }
 

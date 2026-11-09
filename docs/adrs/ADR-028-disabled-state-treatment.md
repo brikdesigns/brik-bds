@@ -231,7 +231,7 @@ The input *value* (`--text-primary` on `--background-input`, 3.32 / 4.43) and th
 
 **What moves.**
 - **§ Amendment §2 test 3 stands for the input family.** Those controls paint `--background-input`, a surface token, and stay on the fade.
-- **§ Amendment §2 test 3 moves for exactly one control, CompletionToggle's unchecked box.** It paints `--background-input`, but its faded boundary cannot clear 3:1 (1.80 / 1.52); unfaded `--border-input` does (3.84 / 3.04). The carve-out is the boundary, not the fill rule in general.
+- **§ Amendment §2 test 3 moves for exactly one control, CompletionToggle's unchecked box.** It paints `--background-input`, but its faded boundary cannot clear 3:1 (1.80 / 1.52); unfaded `--border-input` over a `--background-disabled` fill does (3.84 / 3.04). The carve-out is this one control's boundary and fill, not the fill rule in general.
 - **#1687's 0.5 floor is not moved.** `--state-disabled-opacity` stays 0.5; no component's opacity changes.
 
 **Why not retune the opacity.** 0.55 fixes only the three `--text-secondary` light rows (3.23). At 0.8 the brand label is still 2.93 light, muted on input is 2.54 dark, and `--border-input` is 2.78 / 2.30. A global change touches 28 fade components / 31 rules to fix three rows. After this change: 25 fade components / 28 rules, and 9 swap components.
