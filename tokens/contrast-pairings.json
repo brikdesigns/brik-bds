@@ -107,8 +107,40 @@
       "label": "Disabled control label on disabled fill",
       "fg": "--bds-text-disabled",
       "bg": "--bds-background-disabled",
+      "components": ["Button", "Chip", "FilterButton", "FilterToggle", "Tag", "Pagination", "CompletionToggle", "TabBar"],
       "thresholdType": "AA-large",
-      "note": "WCAG 1.4.3 exempts inactive components, so this pairing is gated at AA-large (3:1) as intentionally-muted text rather than AA \u2014 the point is legibility, not conformance. It is in the dataset because the Figma source emitted fg and bg as the same --bds-color-grayscale-500, painting a disabled Button's label in its own background at 1.00:1 (#1571). A 1:1 pairing can never pass this gate again."
+      "note": "WCAG 1.4.3 exempts inactive components, so this pairing is gated at AA-large (3:1) as intentionally-muted text rather than AA \u2014 the point is legibility, not conformance. It is in the dataset because the Figma source emitted fg and bg as the same --bds-color-grayscale-500, painting a disabled Button's label in its own background at 1.00:1 (#1571). A 1:1 pairing can never pass this gate again. Since #3016 it also scores the brand-filled sub-parts that take the swap one level down: Pagination's arrow, CompletionToggle's checked disc and check, TabBar box's selected item (5.22:1 light / 3.29:1 dark; they faded to 1.93:1 / 2.58:1)."
+    },
+    {
+      "group": "neutral",
+      "label": "Disabled Slider progress and thumb on page",
+      "fg": "--bds-text-disabled",
+      "bg": "--bds-background-primary",
+      "components": ["Slider"],
+      "thresholdType": "AA-large",
+      "note": "UI-component boundary, WCAG 1.4.11 (3:1). A disabled Slider paints its progress fill and thumb --bds-text-disabled, unfaded: 6.90:1 light / 5.46:1 dark. The brand fill faded to 1.93:1 / 2.06:1 and never clears in light. Of the disabled trio only the foreground clears the page in both themes (--bds-background-disabled is 1.32:1 / 1.66:1, --bds-border-disabled is 1.66:1 dark). ADR-028 \u00a7 Amendment \u00a74, #3016."
+    },
+    {
+      "group": "neutral",
+      "label": "Disabled Slider track rail on page",
+      "fg": "--bds-border-secondary",
+      "bg": "--bds-background-primary",
+      "components": ["Slider"],
+      "thresholdType": "AA-large",
+      "lightException": {
+        "issue": 3016,
+        "reason": "1.32:1 light. The disabled rail is unfaded and so reads exactly as the ENABLED rail does; it fails before any disabled treatment, so neither the swap nor an opacity retune can fix it (no existing border token both clears 3:1 on the page and keeps the rail a thin neutral line distinct from the --bds-text-disabled progress in dark). Owned here as pre-existing enabled debt; the fix is a rail token, not a disabled one. Dark clears at 3.04:1."
+      },
+      "note": "Slider's track rail. Was scored faded (1.14:1 light / 1.52:1 dark) until #3016 removed the fade from Slider; unfaded, dark now clears. ADR-028 \u00a7 Amendment \u00a74."
+    },
+    {
+      "group": "neutral",
+      "label": "Disabled CompletionToggle boundary on page",
+      "fg": "--bds-border-input",
+      "bg": "--bds-background-primary",
+      "components": ["CompletionToggle"],
+      "thresholdType": "AA-large",
+      "note": "UI-component boundary, WCAG 1.4.11 (3:1). A disabled CompletionToggle keeps --bds-border-input, unfaded: 3.84:1 light / 3.04:1 dark. Faded it measured 1.80:1 / 1.52:1 and no opacity up to 0.80 clears either theme. The fill takes --bds-background-disabled, the check --bds-text-disabled (the pair above). ADR-028 \u00a7 Amendment \u00a74, #3016."
     },
     {
       "group": "neutral",
@@ -140,6 +172,7 @@
       "fg": "--bds-text-primary",
       "bg": "--bds-background-primary",
       "alpha": "--bds-state-disabled-opacity",
+      "components": ["TabBar"],
       "thresholdType": "AA-large",
       "note": "ADR-028 pt-2: a control with no fill of its own (inputs, checkboxes, radios, switches, ghost/outline labels, menu items) fades on --bds-state-disabled-opacity. `alpha` is the mechanism this dataset lacked until #1687 \u2014 opacity composites the label AND the fill toward the same backdrop, producing a pair of computed colours that appear in no token file, so the 26-component fade cohort was unmeasured by construction. This pairing is what pins the token's value: 3.32:1 light / 4.82:1 dark at 0.5, and 2.88:1 light at 0.45. Reading the token name rather than a literal means a retune re-scores here automatically. There is deliberately NO --bds-text-muted counterpart: it is only 3.04:1 against the dark page while ENABLED, so no alpha up to 0.80 rescues it faded (2.30:1 peak), which is why ADR-028 pt-4's muted-text swap was retired rather than retuned (#1687). `scripts/measure-disabled-contrast.mjs` keeps those numbers visible as a report; a pairing here would assert BDS paints it, and nothing does."
     },
@@ -158,129 +191,23 @@
     },
     {
       "group": "faded",
-      "label": "Faded sub-part label on brand fill",
-      "fg": "--bds-text-on-color-dark",
-      "bg": "--bds-background-brand-primary",
-      "alpha": "--bds-state-disabled-opacity",
-      "components": ["Pagination", "CompletionToggle", "TabBar"],
-      "thresholdType": "AA-large",
-      "lightException": {
-        "issue": 3016,
-        "reason": "1.93:1 light, 2.58:1 dark at 0.5 (enabled 3.78:1). Pagination's arrow, CompletionToggle's checked mark and TabBar box's selected item paint this pair inside a parent that fades once, so the label and the fill composite toward the page together \u2014 the ADR-028 pt-1 defect one level down. Light does not reach 3:1 at any opacity up to 0.80 (2.93:1). ADR-015's 2026-09-12 amendment bars darkening or bolding the label, so the options are the token swap or accepting the debt. Decision tracked in #3016."
-      },
-      "darkException": {
-        "issue": 3016,
-        "reason": "2.58:1 dark at 0.5; clears 3:1 at 0.65. Same pairing and same decision as the light exception, tracked in #3016."
-      },
-      "note": "Sub-part fills under a faded parent (brik-bds#1742). Measured by scripts/measure-disabled-contrast.mjs; reproduced independently of it."
-    },
-    {
-      "group": "faded",
-      "label": "Faded sub-part brand graphic on page",
-      "fg": "--bds-background-brand-primary",
-      "bg": "--bds-background-primary",
-      "alpha": "--bds-state-disabled-opacity",
-      "components": ["Slider"],
-      "thresholdType": "AA-large",
-      "lightException": {
-        "issue": 3016,
-        "reason": "1.93:1 light, 2.06:1 dark at 0.5 (enabled 3.78:1 / 5.55:1). Slider's progress fill and thumb border are a UI boundary against the page (WCAG 1.4.11, 3:1). Light never clears at any opacity up to 0.80; dark clears at 0.70. Decision tracked in #3016."
-      },
-      "darkException": {
-        "issue": 3016,
-        "reason": "2.06:1 dark at 0.5; clears 3:1 at 0.70. Tracked in #3016."
-      },
-      "note": "Slider progress + thumb border, brik-bds#1742. The enabled track rail (--bds-border-secondary on page, 1.32:1 light) fails before any fade is applied, so it is not scored here."
-    },
-    {
-      "group": "faded",
-      "label": "Faded Slider track rail on page",
-      "fg": "--bds-border-secondary",
-      "bg": "--bds-background-primary",
-      "alpha": "--bds-state-disabled-opacity",
-      "components": [
-        "Slider"
-      ],
-      "thresholdType": "AA-large",
-      "lightException": {
-        "issue": 3016,
-        "reason": "1.14:1 light at 0.5, but the ENABLED rail is already 1.32:1, so the fade is not what fails it; light never clears 3:1 at any opacity. A thin neutral rail whose value is carried by the progress fill and the thumb (the row above), kept here so Slider's track is measured and not assumed. Tracked in #3016."
-      },
-      "darkException": {
-        "issue": 3016,
-        "reason": "1.52:1 dark at 0.5 (enabled 3.04:1, so the fade does cause this one); no opacity up to 0.80 clears 3:1 (2.30:1 at 0.80). Tracked in #3016."
-      },
-      "note": "Slider's track rail (--bds-border-secondary), brik-bds#1742. The one pairing here whose light result fails before any fade is applied."
-    },
-    {
-      "group": "faded",
-      "label": "Faded muted placeholder on input fill",
-      "fg": "--bds-text-muted",
-      "bg": "--bds-background-input",
-      "alpha": "--bds-state-disabled-opacity",
-      "components": ["TextInput", "TextArea", "NumberInput", "AddressInput", "DatePicker", "TimePicker"],
-      "thresholdType": "AA-large",
-      "lightException": {
-        "issue": 3016,
-        "reason": "2.24:1 light, 1.62:1 dark at 0.5 (enabled 6.90:1 / 3.38:1). TextInput, TextArea, NumberInput, AddressInput, DatePicker and TimePicker placeholders. Clears 3:1 in light at 0.65; dark never clears (2.54:1 at 0.80) because --bds-text-muted is only 3.38:1 on the dark input fill while enabled. Fixing it contradicts ADR-028 Amendment \u00a72 test 3 or moves #1687's 0.5 floor. Decision tracked in #3016."
-      },
-      "darkException": {
-        "issue": 3016,
-        "reason": "1.62:1 dark at 0.5; no opacity up to 0.80 clears 3:1. Tracked in #3016."
-      },
-      "note": "The input family's placeholder, brik-bds#1742. Distinct from the retired fill-less muted-on-page case in the 'Faded fill-less control label' note: this pair is what a faded input paints."
-    },
-    {
-      "group": "faded",
-      "label": "Faded secondary text on input fill",
-      "fg": "--bds-text-secondary",
-      "bg": "--bds-background-input",
-      "alpha": "--bds-state-disabled-opacity",
-      "components": ["Select"],
-      "thresholdType": "AA-large",
-      "lightException": {
-        "issue": 3016,
-        "reason": "2.85:1 light at 0.5 (enabled 12.63:1); clears 3:1 at 0.55. Select's placeholder. Dark passes (3.90:1). Decision tracked in #3016."
-      },
-      "note": "Select's placeholder text, brik-bds#1742."
-    },
-    {
-      "group": "faded",
-      "label": "Faded secondary text on surface-primary",
-      "fg": "--bds-text-secondary",
+      "label": "Faded disabled hint on surface-primary",
+      "fg": "--bds-text-primary",
       "bg": "--bds-surface-primary",
       "alpha": "--bds-state-disabled-opacity",
       "components": ["FileUploader"],
       "thresholdType": "AA-large",
-      "lightException": {
-        "issue": 3016,
-        "reason": "2.85:1 light at 0.5 (enabled 12.63:1); clears 3:1 at 0.55. FileUploader's hint text on its dropzone. Dark passes (4.24:1). Decision tracked in #3016."
-      },
-      "note": "FileUploader dropzone hint, brik-bds#1742."
+      "note": "FileUploader's dropzone hint under the fade: 3.32:1 light / 4.82:1 dark at 0.5. A disabled dropzone paints its hint --bds-text-primary, not --bds-text-secondary (2.85:1 light faded) \u2014 ADR-028 \u00a7 Amendment \u00a74, #3016."
     },
     {
       "group": "faded",
-      "label": "Faded secondary text on page",
-      "fg": "--bds-text-secondary",
-      "bg": "--bds-background-primary",
-      "alpha": "--bds-state-disabled-opacity",
-      "components": ["TabBar"],
-      "thresholdType": "AA-large",
-      "lightException": {
-        "issue": 3016,
-        "reason": "2.85:1 light at 0.5 (enabled 12.63:1); clears 3:1 at 0.55. TabBar box's unselected label. Dark passes (4.24:1). Decision tracked in #3016."
-      },
-      "note": "TabBar box unselected item, brik-bds#1742. Sits beside 'Faded fill-less control label', which pins --bds-text-primary only."
-    },
-    {
-      "group": "faded",
-      "label": "Faded input value on input fill",
+      "label": "Faded input value and disabled placeholder on input fill",
       "fg": "--bds-text-primary",
       "bg": "--bds-background-input",
       "alpha": "--bds-state-disabled-opacity",
       "components": ["TextInput", "TextArea", "NumberInput", "AddressInput", "Select", "DatePicker", "TimePicker"],
       "thresholdType": "AA-large",
-      "note": "Input value text under the fade: 3.32:1 light / 4.43:1 dark at 0.5. Passes, and is pinned so the surface-token fill the issue worried about (#1742) is measured rather than assumed."
+      "note": "Input value text AND the disabled placeholder under the fade: 3.32:1 light / 4.43:1 dark at 0.5. A disabled input paints its placeholder --bds-text-primary (the enabled --bds-text-muted faded to 2.24:1 light / 1.62:1 dark; Select's --bds-text-secondary to 2.85:1 light), so one pair measures both \u2014 ADR-028 \u00a7 Amendment \u00a74, #3016. The input fill stays on the fade, so Amendment \u00a72 test 3 stands for this family."
     },
     {
       "group": "faded",
@@ -291,24 +218,6 @@
       "components": ["Stepper"],
       "thresholdType": "AA-large",
       "note": "Stepper's button icon on its --bds-surface-secondary fill under the fade: 3.15:1 light / 4.43:1 dark at 0.5 (#1742). Passes \u2014 a surface-token fill that is safe by measurement, not by assumption."
-    },
-    {
-      "group": "faded",
-      "label": "Faded unchecked CompletionToggle border on page",
-      "fg": "--bds-border-input",
-      "bg": "--bds-background-primary",
-      "alpha": "--bds-state-disabled-opacity",
-      "components": ["CompletionToggle"],
-      "thresholdType": "AA-large",
-      "lightException": {
-        "issue": 3016,
-        "reason": "1.80:1 light, 1.52:1 dark at 0.5 (enabled 3.84:1 / 3.04:1). The unchecked toggle's boundary is --bds-border-input against the page (WCAG 1.4.11). Neither theme clears 3:1 at any opacity up to 0.80 (2.78:1 / 2.30:1). Decision tracked in #3016."
-      },
-      "darkException": {
-        "issue": 3016,
-        "reason": "1.52:1 dark at 0.5; no opacity up to 0.80 clears 3:1 (2.30:1). Tracked in #3016."
-      },
-      "note": "CompletionToggle's unchecked boundary, brik-bds#1742."
     },
     {
       "group": "brand",

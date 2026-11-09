@@ -51,6 +51,13 @@
   cursor: not-allowed;
 }
 
+/* ADR-028 § Amendment §4 (#3016): a faded --text-secondary hint measures 2.85:1
+   light on the dropzone; --text-primary measures 3.32:1 light / 4.82:1 dark.
+   Scoped to the disabled state; the fade is unchanged. */
+.bds-file-uploader__dropzone--disabled .bds-file-uploader__helper {
+  color: var(--bds-text-primary);
+}
+
 .bds-file-uploader__dropzone--tone-negative {
   border-color: var(--bds-border-negative);
 }

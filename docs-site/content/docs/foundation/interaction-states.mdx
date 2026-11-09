@@ -62,13 +62,13 @@ These four tokens are mode-invariant — they resolve to the same value in light
 ```
 
 <Callout type="warn">
-  **The fade is not the universal disabled treatment.** It applies only to a control with no fill of its own, where the page or an ancestor surface shows through. A control that paints its own fill swaps tokens instead: `--background-disabled`, `--text-disabled`, `--border-disabled`. `Button`, `FilterButton`, and `FilterToggle` are the fill-bearing cases today.
+  **The fade is not the universal disabled treatment.** It applies only to a control with no fill of its own, where the page or an ancestor surface shows through. A control that paints its own fill swaps tokens instead: `--background-disabled`, `--text-disabled`, `--border-disabled`. `Button`, `FilterButton`, and `FilterToggle` are the fill-bearing cases today, and the rule applies one level down: a brand-filled sub-part swaps too (`Pagination`'s arrow, `CompletionToggle`'s checked disc and check, `TabBar`'s selected box item). A disabled graphic against the page is swapped, not faded: `Slider`'s progress and thumb take `--text-disabled` (the only disabled token that clears 3:1 on the page in both themes) and `CompletionToggle` keeps `--border-input`.
 
   The reason is measurable, not stylistic. `opacity` composites the label **and** the fill toward the same backdrop, so a filled control's contrast collapses as it fades — a brand-filled button lands at 1.68:1 in light mode against a 3:1 floor it clears at 5.22:1 with the swap. Pick by asking whether the control has a fill, not by counting which treatment is more common.
 </Callout>
 
 <Callout type="info">
-  Never set a disabled `opacity` literal — `npm run lint-disabled-fade` fails the build on one, because the visual suite cannot catch it (`disabled` is an `argTypes` control, so it has no baseline to move). Every disabled rule reads `--state-disabled-opacity` so one token governs the whole cohort and the contrast gate can score it. `0.5` is the measured floor: below it, a faded `--text-primary` label misses 3:1 in light mode. Do not pair the fade with a `--text-muted` label either — that stacks two reductions on the same text and no opacity value rescues it in dark mode.
+  Never set a disabled `opacity` literal — `npm run lint-disabled-fade` fails the build on one, because the visual suite cannot catch it (`disabled` is an `argTypes` control, so it has no baseline to move). Every disabled rule reads `--state-disabled-opacity` so one token governs the whole cohort and the contrast gate can score it. `0.5` is the measured floor: below it, a faded `--text-primary` label misses 3:1 in light mode. Do not pair the fade with a `--text-muted` label either — that stacks two reductions on the same text and no opacity value rescues it in dark mode. The same goes for a `--text-secondary` placeholder or hint in light mode (2.85:1 faded): a faded control's disabled placeholder or hint is painted `--text-primary` (3.32:1 light / 4.43:1 dark), scoped to the disabled state. See ADR-028 § Amendment §4.
 </Callout>
 
 ## Brand state pairs

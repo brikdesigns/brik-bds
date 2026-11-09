@@ -198,6 +198,22 @@ const CASES = [
   { group: 'surface-token fill', label: 'Stepper button icon on surface-secondary', fill: '--bds-surface-secondary', text: '--bds-text-primary' },
   { group: 'surface-token fill', label: 'TabBar box unselected label on page', fill: '--bds-background-primary', text: '--bds-text-secondary' },
   // ── fill-less (the cohort the fade suits) ──
+  // ── ADR-028 § Amendment §4 (#3016): what the eight pairings paint AFTER the
+  // decision. `unfaded: true` scores the pair at alpha 1 — the swap and the
+  // un-faded graphics do not composite, so the alpha column is ignored for them.
+  { group: 'after #3016 (swap, unfaded)', label: 'Disabled label on disabled fill (Pagination arrow, CompletionToggle checked, TabBar box selected)', fill: '--bds-background-disabled', text: '--bds-text-disabled', unfaded: true },
+  { group: 'after #3016 (swap, unfaded)', label: 'Slider progress + thumb: --text-disabled on page', fill: null, text: '--bds-text-disabled', unfaded: true },
+  { group: 'after #3016 (swap, unfaded)', label: 'Slider rail: --border-secondary on page (unchanged, enabled debt)', fill: null, text: '--bds-border-secondary', unfaded: true },
+  { group: 'after #3016 (swap, unfaded)', label: 'CompletionToggle boundary: --border-input on page', fill: null, text: '--bds-border-input', unfaded: true },
+  { group: 'after #3016 (fade, stronger foreground)', label: 'Disabled input placeholder: --text-primary on input fill', fill: '--bds-background-input', text: '--bds-text-primary' },
+  { group: 'after #3016 (fade, stronger foreground)', label: 'Disabled FileUploader hint: --text-primary on surface-primary', fill: '--bds-surface-primary', text: '--bds-text-primary' },
+  { group: 'after #3016 (fade, stronger foreground)', label: 'Disabled TabBar label: --text-primary on page', fill: '--bds-background-primary', text: '--bds-text-primary' },
+  // Candidates measured and NOT chosen, so the choice is reproducible.
+  { group: 'candidates rejected for the Slider graphic (unfaded, on page)', label: '--background-disabled (trio fill)', fill: null, text: '--bds-background-disabled', unfaded: true },
+  { group: 'candidates rejected for the Slider graphic (unfaded, on page)', label: '--border-disabled (trio border)', fill: null, text: '--bds-border-disabled', unfaded: true },
+  { group: 'candidates rejected for the Slider graphic (unfaded, on page)', label: '--border-input (equals the dark rail, indistinguishable)', fill: null, text: '--bds-border-input', unfaded: true },
+  { group: 'candidates rejected for the placeholder (faded)', label: '--text-secondary on input fill (light fails)', fill: '--bds-background-input', text: '--bds-text-secondary' },
+
   { group: 'fill-less', label: 'Button outline / ghost label', fill: null, text: '--bds-text-primary' },
   { group: 'fill-less', label: 'TextInput value', fill: null, text: '--bds-text-primary' },
   { group: 'fill-less', label: 'TextInput placeholder', fill: null, text: '--bds-text-muted' },
@@ -214,7 +230,8 @@ const PAGE = '--bds-background-primary';
  * a failure the user never sees. Only the disabled element fades; its container
  * stays put, so the container is the backdrop.
  */
-function score(c, vars, alpha) {
+function score(c, vars, requestedAlpha) {
+  const alpha = c.unfaded ? 1 : requestedAlpha;
   const page = hexOf(c.backdrop ?? PAGE, vars);
   const fill = c.fill ? hexOf(c.fill, vars) : page;
   const text = hexOf(c.text, vars);

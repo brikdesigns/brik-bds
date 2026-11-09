@@ -118,6 +118,13 @@
   color: var(--bds-text-secondary);
 }
 
+/* ADR-028 § Amendment §4 (#3016): a faded --text-secondary placeholder measures
+   2.85:1 light on the input fill; --text-primary measures 3.32:1 light / 4.43:1
+   dark. Scoped to the disabled state; the fade is unchanged. */
+.bds-select--placeholder:disabled {
+  color: var(--bds-text-primary);
+}
+
 /* Error state */
 .bds-select--tone-negative {
   border-color: var(--bds-border-negative);
