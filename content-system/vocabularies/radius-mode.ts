@@ -13,7 +13,8 @@
  *
  * Mode semantics (from the generated file's own header):
  *   - sharp / round — tighten or loosen the --border-radius-{none,sm,md,lg} ramp.
- *   - pill          — maps every step to the full 999px round.
+ *   - pill          — the full 999px round for controls only; containers keep
+ *                     the round ramp (#3050).
  *
  * The DEFAULT radius mode is `soft`, the attribute-ABSENT state
  * (figma-tokens.css base). It is deliberately not a member: no
