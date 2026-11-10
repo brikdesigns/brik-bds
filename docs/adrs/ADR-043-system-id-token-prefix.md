@@ -90,7 +90,7 @@ The ID is always the first segment. The body is what the tier already defines, u
 |---|---|---|
 | Raw | — (a literal, never a name) | `#e35335` |
 | Primitive | `color-{family}-{step}` · `{scale}-{step}` | `--bds-color-poppy-500`, `--vale-partners-color-{family}-500`, `--bds-space-400` |
-| Semantic | `{purpose}-{role}[-{state}]` | `--bds-background-brand-primary`, `--vale-partners-background-brand-primary` |
+| Semantic | `{purpose}-{role}[-{state}]` · `{role}-{step}` | `--bds-background-brand-primary`, `--vale-partners-background-brand-primary`, `--bds-gap-md` |
 | Component | `{component}-{property}` | `--bds-button-padding` |
 
 **The Component tier's ID is always `bds`.** ADR-034 still holds there: only BDS authors components, so only BDS authors Component tokens. A tenant sets a BDS hook; it never mints one.

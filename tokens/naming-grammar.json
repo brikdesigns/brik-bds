@@ -57,7 +57,9 @@
       }
     },
     "semantic": {
+      "$comment": "Two forms. formula is the colour Semantic (a purpose leads); roleFormula is the non-colour Semantic, a role from roles plus a step (--gap-md, --heading-xl). #2743.",
       "formula": "{purpose}-{role}[-{state}]",
+      "roleFormula": "{role}-{step}",
       "purposes": ["page", "surface", "background", "text", "border"],
       "roles": [
         "gap", "padding", "section", "heading", "display", "body", "label", "subtitle", "icon",
@@ -182,7 +184,7 @@
     "ratio": { "concept": "proportion", "values": null }
   },
   "docs": {
-    "$comment": "token-anatomy.mdx must contain, verbatim, the formula strings derived from tiers above: --{semantic.formula}, --{primitive.color.body}, --{ids.componentId}-{component.body}, plus the shape (--{id}-{body}) and the scale body (--{primitive.scale.body}) (scripts/lint-naming-grammar-docs.mjs). #2666 rewrote the page around them.",
+    "$comment": "token-anatomy.mdx must contain, verbatim, the formula strings derived from tiers above: --{semantic.formula}, --{semantic.roleFormula}, --{primitive.color.body}, --{ids.componentId}-{component.body}, plus the shape (--{id}-{body}) and the scale body (--{primitive.scale.body}) (scripts/lint-naming-grammar-docs.mjs). #2666 rewrote the page around them.",
     "page": "docs-site/content/docs/foundation/token-anatomy.mdx"
   }
 }
