@@ -63,15 +63,15 @@
     to right,
     var(--bds-background-brand-primary) 0%,
     var(--bds-background-brand-primary) var(--bds-slider-percent, 50%),
-    var(--bds-border-secondary) var(--bds-slider-percent, 50%),
-    var(--bds-border-secondary) 100%
+    var(--bds-border-input) var(--bds-slider-percent, 50%),
+    var(--bds-border-input) 100%
   );
 }
 
 .bds-slider-input::-moz-range-track {
   height: var(--bds-slider-track-height, var(--bds-size-150));
   border-radius: var(--bds-border-radius-pill);
-  background: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: track rail (thin neutral line, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md, #777 */
+  background: var(--bds-border-input); /* bds-lint-ignore token-family — intentional alias: track rail takes the input boundary (the only border token that clears 3:1 on the page in both themes; #3056); see docs/TOKEN-PR-CHECKLIST.md, #777 */
   border: none;
 }
 
@@ -129,8 +129,8 @@
     to right,
     var(--bds-text-disabled) 0%, /* bds-lint-ignore token-family — intentional alias: disabled progress takes the disabled foreground (the only disabled token that clears 3:1 against the page in both themes); see ADR-028 Amendment §4, #3016 */
     var(--bds-text-disabled) var(--bds-slider-percent, 50%),
-    var(--bds-border-secondary) var(--bds-slider-percent, 50%),
-    var(--bds-border-secondary) 100%
+    var(--bds-border-input) var(--bds-slider-percent, 50%),
+    var(--bds-border-input) 100%
   );
 }
 
