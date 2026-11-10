@@ -26,7 +26,8 @@
 # body, the base-sync suite gate, label parity, the open-PR refresh) is NOT a twin
 # candidate: each is either missing from at least one copy or only observable by
 # actually opening a PR, and brik-llm's copy is already pinned against it by the
-# per-repo suite in pr-task-contract.yml. This asserts the shared floor instead.
+# per-repo suite in contract-tests.yml (job pr-task-contract). This asserts the
+# shared floor instead.
 #
 # No network: a throwaway repo, fake `gh` on PATH. Both guards exit before any gh
 # call, so the fake is defensive only. The GIT_* unset is per brik-bds#1539 — a
