@@ -1,6 +1,6 @@
 # ADR-034 — No consumer-authored token namespace: BDS internals override via `--bds-*` hooks; consumer-own styling is local CSS
 
-**Status:** Proposed — amended 2026-11-10 to conform to [ADR-043](./ADR-043-system-id-token-prefix.md) (Accepted 2026-10-01); stays Proposed until the operator ratifies it in their own words (#2645)
+**Status:** Accepted 2026-11-10 — ratified (§ Ratification), amended the same day to conform to [ADR-043](./ADR-043-system-id-token-prefix.md)
 **Date:** 2026-08-30
 **Supersedes:** —
 **Superseded by:** —
@@ -53,3 +53,9 @@ A tenant's brand colour ramp is `--{tenant-id}-color-{family}-{step}`. The tenan
 ## Not in this ADR
 
 Classifying `--gutter-page` in the tier model — its tier and whether "gutter" is the right name — is [#2173](https://github.com/brikdesigns/brik-bds/issues/2173)'s original scope and is **deferred to a focused pass**; the naming question (a gutter is conventionally between columns; this token is the page-edge inset) deserves its own decision and, if it renames, a shipped-token migration (it is Accepted in ADR-025, gated by `lint-page-grid`, and consumed downstream).
+
+## Ratification
+
+OPERATOR SAID 2026-11-10 (Claude Code chat, /resume 3052 session, brik-bds): "ratify ADR-034"
+
+The ratified text is this ADR as amended by disposition 3, which carries [ADR-043](./ADR-043-system-id-token-prefix.md) § 3 (Accepted 2026-10-01). Resolves [#2645](https://github.com/brikdesigns/brik-bds/issues/2645).
