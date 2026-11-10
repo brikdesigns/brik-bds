@@ -64,9 +64,7 @@ function parseRoleStep(name) {
   const id = Object.keys(grammar.ids.registry).find((i) => bare.startsWith(`${i}-`));
   if (!id) return null;
   const body = bare.slice(id.length + 1);
-  const role = [...grammar.tiers.semantic.roles]
-    .sort((a, b) => b.length - a.length)
-    .find((r) => body.startsWith(`${r}-`));
+  const role = grammar.tiers.semantic.roles.find((r) => body.startsWith(`${r}-`));
   if (!role) return null;
   const step = body.slice(role.length + 1);
   return /^[a-z0-9]+$/.test(step) ? { role, step } : null;
@@ -86,7 +84,7 @@ describe('non-colour Semantic form {role}-{step} (#2743)', () => {
     expect(parseRoleStep(name)).toEqual({ role, step });
   });
 
-  it.each(['--bds-background-brand-primary', '--bds-gap', '--bds-space-400', '--gap-md'])('does not parse: %s', (name) => {
+  it.each(['--bds-background-brand-primary', '--bds-gap', '--bds-gap-md-hover', '--bds-space-400', '--gap-md'])('does not parse: %s', (name) => {
     expect(parseRoleStep(name)).toBeNull();
   });
 });
