@@ -750,6 +750,14 @@ export const StickyEndColumn: Story = {
     const cell = canvasElement.querySelector('.bds-table-actions-cell--sticky') as HTMLElement;
     await waitFor(() => expect(wrapper.scrollWidth).toBeGreaterThan(wrapper.clientWidth));
     await expect(getComputedStyle(cell).position).toBe('sticky');
+    // An unstriped row is transparent over the page canvas, so its pinned cell
+    // must paint the canvas colour in every theme (dark splits it from
+    // `--bds-background-primary`).
+    const canvas = document.createElement('div');
+    canvas.style.backgroundColor = 'var(--bds-page-primary)';
+    canvasElement.appendChild(canvas);
+    await expect(getComputedStyle(cell).backgroundColor).toBe(getComputedStyle(canvas).backgroundColor);
+    canvas.remove();
     // Scrolled to the start, the pinned cell sits inside the wrapper's end edge
     // and the divider shows; fully scrolled, the divider goes.
     await waitFor(() => expect(wrapper).toHaveAttribute('data-end-clipped', 'true'));
