@@ -1219,16 +1219,6 @@
         "components/ui/TabBar/TabBar.css"
       ]
     },
-    "--bds-table-sticky-end-bg": {
-      "kind": "knob",
-      "readBy": [
-        "table"
-      ],
-      "readIn": [
-        "components/ui/Table/Table.css"
-      ],
-      "setIn": []
-    },
     "--bds-testimonials-featured-bg": {
       "kind": "knob",
       "readBy": [
