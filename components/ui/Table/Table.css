@@ -428,14 +428,22 @@
 
 /* Pinned to the `scrollable` wrapper's end edge. Cells are transparent by
    default, so a pinned one needs an opaque fill or the scrolling columns show
-   through it; the fill follows the row's own state. Override with
-   `--bds-table-sticky-end-bg`. */
+   through it; the fill follows the row's own state. Unstriped rows are
+   transparent over the page canvas, so the default is `--bds-page-primary`
+   (`--bds-background-primary` is a different colour in dark). Override with
+   `--bds-table-sticky-end-bg` when the table sits on a Card/surface. */
 .bds-table-head--sticky,
 .bds-table-cell--sticky,
 .bds-table-actions-cell--sticky {
   position: sticky;
   inset-inline-end: 0;
   z-index: 1;
+  background-color: var(--bds-table-sticky-end-bg, var(--bds-page-primary));
+}
+
+/* A `data-header-bg="primary"` header paints `--bds-background-primary`, so its
+   pinned cell follows it rather than the page canvas. */
+.bds-table[data-header-bg="primary"] .bds-table-head--sticky {
   background-color: var(--bds-table-sticky-end-bg, var(--bds-background-primary));
 }
 
