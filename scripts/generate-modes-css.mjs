@@ -103,12 +103,26 @@ export const COLLECTIONS = {
     // contradicts the token's meaning and gives it two value types (naming-canon
     // Rule 2 / ADR-033 § 5). Hold it out of the mode ladder.
     skipTokens: ['none'],
+    // Pill is a CONTROL shape, not a container shape (#3050). Figma's pill slice
+    // maps lg/md/sm all to 999px, and Card / Modal / MediaTabs / frames read the
+    // same three tokens as Button, so a root-level pill turned containers into
+    // stadiums. Instead the root block takes its ramp from `containerMode`
+    // (bounded), and the pill slice's values are re-bound only inside the control
+    // selectors below. Same token names, narrower scope — no new token.
+    // Add a selector here to make a control pill-round; TextArea is left out on
+    // purpose (a multi-line field with a 999px radius reads as a lozenge).
+    scopedModes: {
+      pill: {
+        containerMode: 'round',
+        controlSelectors: ['.bds-button', '.bds-text-input-field', '.bds-select', '.bds-tag'],
+      },
+    },
     tokenName: (_group, name) => `${PREFIX}border-radius-${name}`,
     resolve: resolveRadiusRef,
     description:
       'Corner-radius mode — overrides the semantic --border-radius-{none,sm,md,lg} ' +
       'tokens. sharp / round tighten or loosen the ramp; pill maps every step to ' +
-      'the full 999px round for fully-rounded surfaces. Default (soft) is the ' +
+      'the full 999px round for controls only (containers keep the round ramp). Default (soft) is the ' +
       'figma-tokens.css base and emits no attribute. Emitted as raw primitive px ' +
       'values (like the spacing modes) rather than var() aliases — the pill/circle ' +
       'primitives are Semantic-tier by name, so a var() alias would be off-model.',
@@ -280,7 +294,11 @@ function emitCollection(data, collectionKey) {
 
   // Emit one selector block per non-default mode
   for (const modeName of cfg.nonDefaultModes) {
-    const slice = readModeTokens(data, collectionKey, modeName);
+    const scoped = cfg.scopedModes?.[modeName];
+    const controlSlice = readModeTokens(data, collectionKey, modeName);
+    // A scoped mode's root block carries the container ramp; its own slice
+    // is emitted afterwards, scoped to the control selectors.
+    const slice = scoped ? readModeTokens(data, collectionKey, scoped.containerMode) : controlSlice;
 
     // Buffer the override lines so empty groups/modes emit nothing — e.g.
     // typography's display-* group is mode-invariant in Figma today, so it
@@ -315,6 +333,19 @@ function emitCollection(data, collectionKey) {
     lines.push(...body);
     lines.push('}');
     lines.push('');
+
+    if (scoped) {
+      const controlBody = [];
+      for (const [tokenName, def] of Object.entries(controlSlice).sort(([a], [b]) => a.localeCompare(b))) {
+        if (cfg.skipTokens?.includes(tokenName)) continue;
+        controlBody.push(`  ${cfg.tokenName(null, tokenName)}: ${cfg.resolve(def.$value, primitives)}${cfg.unitSuffix};`);
+      }
+      lines.push(`/* ${modeName} controls — fully round; containers above keep the ${scoped.containerMode} ramp */`);
+      lines.push(scoped.controlSelectors.map((c) => `[data-mode-${attr}="${modeName}"] ${c}`).join(',\n') + ' {');
+      lines.push(...controlBody);
+      lines.push('}');
+      lines.push('');
+    }
   }
 
   return lines.join('\n');

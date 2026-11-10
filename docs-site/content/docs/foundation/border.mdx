@@ -28,18 +28,24 @@ Border radius tokens control corner rounding across components — from sharp (0
 
 ### Radius modes
 
-<Callout type="warn">
-  **Radius modes are not wired yet — this is the planned design, not a shipped switch.** Unlike [width modes](#width-modes) and [spacing](/docs/foundation/spacing#spacing-modes), there is no `modes-borderradius.css` and **no `data-mode-radius` selector ships in `dist/tokens.css`** today. Setting the attribute does nothing until [#340](https://github.com/brikdesigns/brik-bds/issues/340) (wire `data-mode` overrides for non-color tokens) lands. Change the radius feel per theme by overriding the `--border-radius-*` semantic values directly for now.
-</Callout>
-
-Figma defines border-radius modes to drive the overall shape feel of a theme. Once #340 wires them, `data-mode-radius` will select one (default `soft`):
+`data-mode-radius` on the root element selects a radius mode (default `soft`, the attribute-absent state). The mode rewrites `--bds-border-radius-sm`, `-md` and `-lg`; `none` never changes.
 
 | Mode | Effect | Use case |
 |---|---|---|
-| Sharp | All radii near 0 | Corporate, minimal |
-| Soft | Moderate radii | Default, balanced |
-| Round | Generous radii | Friendly, modern |
-| Pill | Maximum radii (999px) | Buttons, tags |
+| Sharp | 2 / 4 / 8px (sm / md / lg) | Corporate, minimal |
+| Soft | 8 / 12 / 16px | Default, balanced |
+| Round | 16 / 24 / 40px | Friendly, modern |
+| Pill | Controls fully round (999px); containers keep the Round ramp (16 / 24 / 40px) | Pill buttons and inputs without stadium-shaped cards |
+
+### Pill is a control shape, not a container shape
+
+Buttons and cards read the same `--bds-border-radius-{sm,md,lg}` tokens, so setting those to 999px at the root turned every Card, Modal, media frame and CTA panel into a stadium. Under `data-mode-radius="pill"` the root therefore carries the bounded Round ramp, and the 999px values are re-bound only inside the control selectors: Button, TextInput, Select and Tag. Containers inherit the root ramp and stay bounded.
+
+- Fully round: `.bds-button`, `.bds-text-input-field`, `.bds-select`, `.bds-tag`.
+- Bounded (Round ramp): Card, Modal, MediaTabs, media frames, TextArea (a multi-line field reads as a lozenge at 999px), and everything else.
+- To add a control, append its class to `scopedModes.pill.controlSelectors` in `scripts/generate-modes-css.mjs` and regenerate; do not hand-edit `tokens/modes-borderradius.css`.
+
+See the live pair in Storybook: Containers / card, `PillRadiusMode`.
 
 ## Border width
 
