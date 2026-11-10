@@ -66,7 +66,7 @@
  *   2  Bad invocation (no files, unreadable file, etc.)
  */
 
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 /**
@@ -495,7 +495,9 @@ function main() {
   process.exit(all.length > 0 ? 1 : 0);
 }
 
-// Run as CLI only when invoked directly (not when imported as a library).
-if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+// Run as CLI only when invoked directly (not when imported as a library). argv[1]
+// goes through realpath: npx / node_modules/.bin run a bin through a symlink and
+// Node resolves symlinks for import.meta.url but not argv[1] (#2732).
+if (process.argv[1] && fileURLToPath(import.meta.url) === realpathSync(process.argv[1])) {
   main();
 }
