@@ -471,14 +471,14 @@
   /* Aspect ratio + object-fit owned by the consumer's <Frame> wrapper. */
 }
 
-/* Standard media-slot image radius (also applied on the default `media` slot's
- * wrapper, and on row's media below) — the consumer's media
- * sits nested inside its own <Frame>, so the radius targets the rendered
- * element directly rather than a wrapper this component doesn't own. */
+/* Media-slot image radius matches the card corner (`.bds-card` is
+ * --bds-border-radius-md); the `row` and `pricing` rules below follow it. The
+ * consumer's media sits nested inside its own <Frame>, so the radius targets
+ * the rendered element directly rather than a wrapper this component doesn't own. */
 .bds-card__stack-media img,
 .bds-card__stack-media video,
 .bds-card__stack-media svg {
-  border-radius: var(--bds-border-radius-sm);
+  border-radius: var(--bds-border-radius-md);
 }
 
 .bds-card__stack-badge {
@@ -578,11 +578,11 @@
   /* Aspect ratio + object-fit owned by the consumer's <Frame> wrapper. */
 }
 
-/* Standard media-slot image radius — see the stack note above. */
+/* Media-slot image radius matches the card corner — see the stack note above. */
 .bds-card__row-media img,
 .bds-card__row-media video,
 .bds-card__row-media svg {
-  border-radius: var(--bds-border-radius-sm);
+  border-radius: var(--bds-border-radius-md);
 }
 
 .bds-card__row-body {
@@ -646,7 +646,7 @@
 }
 
 .bds-card__pricing-media :is(img, video, svg) {
-  border-radius: var(--bds-border-radius-sm);
+  border-radius: var(--bds-border-radius-md);
 }
 
 .bds-card__pricing-header {
