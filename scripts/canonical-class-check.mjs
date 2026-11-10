@@ -60,7 +60,7 @@
  *   2  Bad invocation (missing args, unreadable allowlist, etc.)
  */
 
-import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync, statSync, realpathSync } from 'node:fs';
 import { resolve, join, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -638,7 +638,9 @@ function main() {
 
 const isCliEntry = (() => {
   try {
-    return resolve(fileURLToPath(import.meta.url)) === resolve(process.argv[1] ?? '');
+    // realpath, not resolve(): a bin run through a node_modules/.bin symlink has an
+    // unresolved argv[1] while import.meta.url is already resolved (#2732).
+    return !!process.argv[1] && existsSync(process.argv[1]) && realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1]);
   } catch (err) {
     process.stderr.write(`canonical-class-check: could not determine CLI entry — ${err.message}\n`);
     return false;

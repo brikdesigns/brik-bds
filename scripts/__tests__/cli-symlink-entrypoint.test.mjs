@@ -39,4 +39,17 @@ describe('CLI entry-point detection through an npm-style bin symlink', () => {
     const stdout = runThroughSymlink('lint-icon-weight-parity.mjs', ['--help']);
     expect(stdout).toContain('lint-icon-weight-parity — bundled-collection coverage');
   });
+
+  // brik-bds#2732: three more bins had the same compare. Each printed 0 bytes and
+  // exited 0 through a symlink, so a gate wired to the bin passed having checked
+  // nothing. A non-empty usage text is the proof main() ran; an empty one fails.
+  it.each([
+    ['cascade-contract-check.mjs', 'cascade-contract-check — enforce the BDS token adoption contract'],
+    ['canonical-check.mjs', 'canonical-check — Canonical token-name enforcement'],
+    ['canonical-class-check.mjs', 'canonical-class-check — Canonical CSS-class enforcement'],
+  ])('%s --help runs main() and prints usage', (bin, usage) => {
+    const stdout = runThroughSymlink(bin, ['--help']);
+    expect(stdout.length).toBeGreaterThan(0);
+    expect(stdout).toContain(usage);
+  });
 });
