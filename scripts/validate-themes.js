@@ -36,6 +36,7 @@
  *   node scripts/validate-themes.js --emit-matrix # Markdown matrix for the foundation doc
  *   node scripts/validate-themes.js --check-matrix # fail if color-pairings.mdx matrix drifted from the generator
  *   node scripts/validate-themes.js --emit-resolved <file> # write the per-mode RESOLVED pairing set the consumer lint reads (#1155)
+ *   node scripts/validate-themes.js --pairings <file> # score this dataset instead of tokens/contrast-pairings.json
  */
 
 const fs = require('fs');
@@ -48,7 +49,12 @@ const GAP_FILLS = path.join(ROOT, 'tokens', 'gap-fills.css');
 // Brik's Brand Kit compiled as a client theme; :root is Foundations-only (#2910).
 const BRAND_BRIK_GEN = path.join(ROOT, 'tokens', 'theme-brand-brik.generated.css');
 
-const DATASET = require(path.join(ROOT, 'tokens', 'contrast-pairings.json'));
+// --pairings <file> scores another dataset — the test fixture that keeps a light
+// exception once the shipped set has none (#3056).
+const pairingsIdx = process.argv.indexOf('--pairings');
+const DATASET = require(pairingsIdx === -1
+  ? path.join(ROOT, 'tokens', 'contrast-pairings.json')
+  : path.resolve(process.argv[pairingsIdx + 1]));
 
 const jsonMode = process.argv.includes('--json');
 const matrixMode = process.argv.includes('--emit-matrix');

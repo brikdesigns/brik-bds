@@ -69,20 +69,64 @@ describe('the shipped dataset', () => {
     }
   });
 
-  it('the gate reports a light exception as tracked, not as a failure', () => {
-    // Redirect stdout to a FILE, not a pipe: the gate calls process.exit() right
-    // after console.log, and a pipe truncates the ~100 KB JSON at 64 KiB.
-    const file = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'contrast-json-')), 'out.json');
-    const fd = fs.openSync(file, 'w');
-    const run = spawnSync('node', [SCRIPT, '--json'], { stdio: ['ignore', fd, 'pipe'], encoding: 'utf8' });
-    fs.closeSync(fd);
-    // Exit 0 is the proof the gate did not fail on the light-mode rows.
+  it('the gate passes with no failing row', () => {
+    const { run, out } = runGate();
     expect(run.status, run.stderr).toBe(0);
-    const out = JSON.parse(fs.readFileSync(file, 'utf8'));
+    expect(out.results.filter((r) => r.status === 'fail')).toEqual([]);
+  });
+});
+
+describe('the gate', () => {
+  // The shipped set has had no light exception since #3056, so the fixture adds
+  // one back: the Slider rail on --bds-border-secondary, 1.32:1 light / 3.04:1 dark.
+  const fixture = {
+    ...DATASET,
+    pairings: [
+      ...DATASET.pairings,
+      {
+        group: 'neutral',
+        label: 'Fixture: Slider rail on --bds-border-secondary',
+        fg: '--bds-border-secondary',
+        bg: '--bds-background-primary',
+        thresholdType: 'AA-large',
+        lightException: tracked,
+      },
+    ],
+  };
+
+  it('reports a light exception as tracked, not as a failure', () => {
+    const { run, out } = runGate(fixture);
+    // Exit 0 is the proof the gate did not fail on the light-mode row.
+    expect(run.status, run.stderr).toBe(0);
     const light = out.results.filter((r) => r.theme === 'light' && r.status === 'exception');
-    expect(light.length).toBeGreaterThan(0);
+    expect(light.map((r) => r.label)).toContain('Fixture: Slider rail on --bds-border-secondary');
     for (const r of light) expect(Number.isInteger(r.exception.issue)).toBe(true);
     expect(out.results.filter((r) => r.status === 'fail')).toEqual([]);
     expect(out.exceptions).toBeGreaterThanOrEqual(light.length);
   });
+
+  it('fails the same row once its lightException is removed', () => {
+    const bare = { ...fixture, pairings: fixture.pairings.map(({ lightException, ...p }) => p) };
+    const { run, out } = runGate(bare);
+    expect(run.status).toBe(1);
+    const fails = out.results.filter((r) => r.status === 'fail');
+    expect(fails.map((r) => `${r.theme} ${r.label}`)).toContain('light Fixture: Slider rail on --bds-border-secondary');
+  });
 });
+
+// Redirect stdout to a FILE, not a pipe: the gate calls process.exit() right
+// after console.log, and a pipe truncates the ~100 KB JSON at 64 KiB.
+function runGate(dataset) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'contrast-json-'));
+  const args = [SCRIPT, '--json'];
+  if (dataset) {
+    const pairings = path.join(dir, 'pairings.json');
+    fs.writeFileSync(pairings, JSON.stringify(dataset));
+    args.push('--pairings', pairings);
+  }
+  const file = path.join(dir, 'out.json');
+  const fd = fs.openSync(file, 'w');
+  const run = spawnSync('node', args, { stdio: ['ignore', fd, 'pipe'], encoding: 'utf8' });
+  fs.closeSync(fd);
+  return { run, out: JSON.parse(fs.readFileSync(file, 'utf8')) };
+}
