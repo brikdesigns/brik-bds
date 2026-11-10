@@ -1,11 +1,11 @@
 # ADR-034 — No consumer-authored token namespace: BDS internals override via `--bds-*` hooks; consumer-own styling is local CSS
 
-**Status:** Proposed
+**Status:** Proposed — amended 2026-11-10 to conform to [ADR-043](./ADR-043-system-id-token-prefix.md) (Accepted 2026-10-01); stays Proposed until the operator ratifies it in their own words (#2645)
 **Date:** 2026-08-30
 **Supersedes:** —
 **Superseded by:** —
 **Owner:** Nick Stanerson
-**Related:** [#2173](https://github.com/brikdesigns/brik-bds/issues/2173) (this ADR's issue — the "consumer-local component-token namespace" scope-add), [ADR-014](./ADR-014-component-token-hook-namespace.md) (`--bds-{component}-{property}` Tier 4 hooks — the mechanism this ADR points overrides at), [ADR-011](./ADR-011-service-line-token-value-model.md) (service-line scoped intent — the surface these overrides skin), [token-anatomy.mdx](../../docs-site/content/docs/foundation/token-anatomy.mdx) (the Tier canon)
+**Related:** [#2173](https://github.com/brikdesigns/brik-bds/issues/2173) (this ADR's issue — the "consumer-local component-token namespace" scope-add), [#2645](https://github.com/brikdesigns/brik-bds/issues/2645) (the tenant-prefix ambiguity this amendment resolves), [ADR-043](./ADR-043-system-id-token-prefix.md) (system-ID prefix; the source of disposition 3), [ADR-014](./ADR-014-component-token-hook-namespace.md) (`--bds-{component}-{property}` Tier 4 hooks — the mechanism this ADR points overrides at), [ADR-011](./ADR-011-service-line-token-value-model.md) (service-line scoped intent — the surface these overrides skin), [token-anatomy.mdx](../../docs-site/content/docs/foundation/token-anatomy.mdx) (the Tier canon)
 
 ## Context
 
@@ -24,13 +24,16 @@ Three reach *into* BDS component internals (`.bds-button--primary`, `.bds-pricin
 
 ## Decision
 
-**There is no consumer-authored token namespace. BDS does not bless one — not `--brik-*`, and not a consumer arm of `--bds-*`.** A consumer-declared custom property falls into exactly one of two dispositions:
+**There is no consumer-authored Component-tier token namespace. BDS does not bless one — not `--brik-*`, and not a consumer arm of `--bds-*`.** A consumer-declared custom property falls into one of three dispositions. The first two cover the Component tier and consumer-own styling; the third covers Primitive and Semantic tokens a tenant mints under a registered ID:
 
 **1. It overrides a BDS component → use a BDS-defined `--bds-{component}-{property}` hook, or a BDS variant.**
 A consumer reaching into `.bds-button--primary` / `.bds-pricing-card__price` with its own class + var is patching a **BDS gap**, not exercising a legitimate consumer token. BDS owns its components' internals. The sanctioned override surface already exists — ADR-014's `--bds-*` hook (override knob or runtime binding): BDS *defines* the hook name and its Semantic default; the consumer only *sets* it. The consumer never authors a component-tier token name. Where the need is a recurring, identity-level restyle (a service-themed CTA), the right answer is a BDS **variant**, not a hook at all.
 
 **2. It styles the consumer's own element → it is local CSS, outside the BDS token system.**
 `--related-band-*` and `--support-cta-image-size` style consumer markup BDS never renders. Whether the consumer expresses `180px` as a literal or a `--var` (for a light/dark swap or a TSX handoff) is a **consumer-local style choice with no BDS dimension**. It is not a "design token" in the BDS sense — it answers none of the six Anatomy questions ([token-anatomy.mdx](../../docs-site/content/docs/foundation/token-anatomy.mdx)), carries no BDS ownership, and no BDS lint should claim or bless it. Calling it a design token was the category error that made a namespace look necessary.
+
+**3. It is a tenant's Primitive or Semantic token → it leads with a registered system ID.** *(Added 2026-11-10 by [ADR-043](./ADR-043-system-id-token-prefix.md) § 3; resolves [#2645](https://github.com/brikdesigns/brik-bds/issues/2645).)*
+A tenant's brand colour ramp is `--{tenant-id}-color-{family}-{step}`. The tenant ID must be in the registry in ADR-043 (`vale-partners`, `birdwell`; Brik's own is `bds`), followed by a grammar body that BDS owns. A tenant prefix is legitimate if, and only if, it is a registered ID plus a grammar body. This is not the rejected `--brik-*` tier: BDS still owns the grammar, the registry and every body, and a tenant never authors a Component token. ADR-043 does not rest on a collision argument, because that premise was refuted (comment on #2645, 2026-10-01).
 
 **Corollary — the drift table's remedy does not apply to consumer-owned tokens.** [token-anatomy.mdx](../../docs-site/content/docs/foundation/token-anatomy.mdx) flags bare `--{component}-{prop}` → "migrate to `--bds-*`". That remedy is for **BDS-authored** knobs that shipped without the prefix. A consumer token that turns out to override a BDS component migrates by moving the override into a BDS-defined hook/variant (disposition 1) — not by prefixing the consumer's own invented name with `--bds-`, which would falsely claim BDS ownership.
 
@@ -43,7 +46,7 @@ A consumer reaching into `.bds-button--primary` / `.bds-pricing-card__price` wit
 
 ## Alternatives considered
 
-- **Distinct consumer prefix (`--brik-*`) reserving `--bds-*` for BDS hooks.** Rejected: it institutionalizes a consumer-authored token tier — a sanctioned door for exactly the parallel-taxonomy drift the single-allowlist system (`dist/tokens.css`) exists to prevent. And it is unnecessary: every real case resolves to a BDS hook or plain local CSS, neither of which needs a new namespace.
+- **Distinct consumer prefix (`--brik-*`) reserving `--bds-*` for BDS hooks.** Rejected as a hand-authored consumer *component* tier. A registry-governed tenant ID on a Primitive or Semantic name (disposition 3, [ADR-043](./ADR-043-system-id-token-prefix.md)) is a different thing and is allowed. What is rejected: it institutionalizes a consumer-authored token tier — a sanctioned door for exactly the parallel-taxonomy drift the single-allowlist system (`dist/tokens.css`) exists to prevent. And it is unnecessary: every real case resolves to a BDS hook or plain local CSS, neither of which needs a new namespace.
 - **Reuse `--bds-*` for consumer-authored tokens.** Rejected: erodes ADR-014's invariant that `--bds-` means *BDS authors and reads it*, and risks a future BDS token colliding with a consumer-minted `--bds-*` of the same name.
 - **Bless the six as-is under some naming rule.** Rejected: three are BDS-gap patches that should push the capability into BDS (system-thinking, not a local shortcut); two aren't BDS's concern at all. Neither warrants canon.
 
