@@ -685,7 +685,7 @@ const isCliEntry = (() => {
   try {
     // realpath, not resolve(): a bin run through a node_modules/.bin symlink has an
     // unresolved argv[1] while import.meta.url is already resolved (#2732).
-    return !!process.argv[1] && realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1]);
+    return !!process.argv[1] && existsSync(process.argv[1]) && realpathSync(fileURLToPath(import.meta.url)) === realpathSync(process.argv[1]);
   } catch (err) {
     process.stderr.write(`canonical-check: could not determine CLI entry — ${err.message}\n`);
     return false;

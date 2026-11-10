@@ -498,6 +498,6 @@ function main() {
 // Run as CLI only when invoked directly (not when imported as a library). argv[1]
 // goes through realpath: npx / node_modules/.bin run a bin through a symlink and
 // Node resolves symlinks for import.meta.url but not argv[1] (#2732).
-if (process.argv[1] && fileURLToPath(import.meta.url) === realpathSync(process.argv[1])) {
+if (process.argv[1] && existsSync(process.argv[1]) && fileURLToPath(import.meta.url) === realpathSync(process.argv[1])) {
   main();
 }
