@@ -36,7 +36,7 @@ A table wider than its column should scroll inside its own box, not stretch the 
 
 ### Sticky end column
 
-Set `stickyEnd` on the header and every cell of the last column — `TableHead`, `TableCell` or `TableActionsCell` — to pin it to the end edge while the table scrolls sideways. It needs `scrollable`: the pin sticks to that wrapper. The pinned fill follows the row state (default, striped, selected), a divider shows while columns remain to scroll under it, and `--bds-table-sticky-end-bg` overrides the fill. Its default is the page canvas (`--bds-page-primary`) — the colour an unstriped row shows through to — so set `--bds-table-sticky-end-bg` when the table sits on a Card or other surface.
+Set `stickyEnd` on the header and every cell of the last column — `TableHead`, `TableCell` or `TableActionsCell` — to pin it to the end edge while the table scrolls sideways. It needs `scrollable`: the pin sticks to that wrapper. The pinned fill follows the row state (default, striped, selected), a divider shows while columns remain to scroll under it. An unstriped pinned cell paints the page canvas (`--bds-page-primary`) — the colour an unstriped row shows through to. For a Table on a Card or other surface there is no override hook, so the pinned cell stays the page canvas.
 
 <Canvas of={Stories.StickyEndColumn} />
 
