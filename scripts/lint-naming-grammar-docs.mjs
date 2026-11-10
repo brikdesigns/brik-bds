@@ -21,6 +21,7 @@ export function expectedFormulas(grammar) {
   return [
     grammar.shape,
     `--${grammar.tiers.semantic.formula}`,
+    `--${grammar.tiers.semantic.roleFormula}`,
     `--${grammar.tiers.primitive.color.body}`,
     `--${grammar.tiers.primitive.scale.body}`,
     `--${grammar.ids.componentId}-${grammar.tiers.component.body}`,

@@ -58,6 +58,37 @@ describe('grammar consistency', () => {
   });
 });
 
+/** Parse a `--{id}-{role}-{step}` name into { role, step }, or null if it is not that form. */
+function parseRoleStep(name) {
+  const bare = name.replace(/^--/, '');
+  const id = Object.keys(grammar.ids.registry).find((i) => bare.startsWith(`${i}-`));
+  if (!id) return null;
+  const body = bare.slice(id.length + 1);
+  const role = grammar.tiers.semantic.roles.find((r) => body.startsWith(`${r}-`));
+  if (!role) return null;
+  const step = body.slice(role.length + 1);
+  return /^[a-z0-9]+$/.test(step) ? { role, step } : null;
+}
+
+describe('non-colour Semantic form {role}-{step} (#2743)', () => {
+  it('the grammar declares it', () => {
+    expect(grammar.tiers.semantic.roleFormula).toBe('{role}-{step}');
+  });
+
+  it.each([
+    ['--bds-gap-md', 'gap', 'md'],
+    ['--bds-gap-2xl', 'gap', '2xl'],
+    ['--bds-gap-huge', 'gap', 'huge'],
+    ['--bds-heading-xl', 'heading', 'xl'],
+  ])('parses: %s', (name, role, step) => {
+    expect(parseRoleStep(name)).toEqual({ role, step });
+  });
+
+  it.each(['--bds-background-brand-primary', '--bds-gap', '--bds-gap-md-hover', '--bds-space-400', '--gap-md'])('does not parse: %s', (name) => {
+    expect(parseRoleStep(name)).toBeNull();
+  });
+});
+
 describe('token-anatomy.mdx docs check', () => {
   const mdx = fs.readFileSync(path.join(REPO, grammar.docs.page), 'utf8');
 
@@ -69,7 +100,12 @@ describe('token-anatomy.mdx docs check', () => {
     const drifted = structuredClone(grammar);
     drifted.tiers.semantic.formula = '{purpose}-{role}-{state}';
     expect(missingFormulas(drifted, mdx)).toEqual(['--{purpose}-{role}-{state}']);
-    expect(expectedFormulas(grammar)).toHaveLength(5);
+    expect(expectedFormulas(grammar)).toHaveLength(6);
+  });
+
+  it('fails when the page does not print the non-colour Semantic form --{role}-{step}', () => {
+    const noRole = mdx.replaceAll(`--${grammar.tiers.semantic.roleFormula}`, '--{role}');
+    expect(missingFormulas(grammar, noRole)).toEqual([`--${grammar.tiers.semantic.roleFormula}`]);
   });
 
   it('fails when the page does not print the --{id}-{body} shape', () => {
