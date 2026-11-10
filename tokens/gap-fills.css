@@ -278,7 +278,7 @@
 
   /* ── System color hover/pressed states ──
      Darken system colors for interactive feedback on destructive/positive buttons.
-     TODO(#894): promote to Figma variables once interaction states are modeled for system colors. */
+     Stays a gap-fill by design (#894): a Figma COLOR variable cannot hold a color-mix() derivation. */
   --bds-background-negative-hover:   color-mix(in srgb, var(--bds-color-system-red) 85%, black);
   --bds-background-negative-pressed: color-mix(in srgb, var(--bds-color-system-red) 70%, black);
   --bds-background-positive-hover:   color-mix(in srgb, var(--bds-color-system-green) 85%, black);
@@ -293,7 +293,7 @@
   /* ── Shadow Semantic Tokens ──
      Composed box-shadow values for consistent elevation.
      Components should use these instead of raw rgba() values.
-     TODO(#894): promote to Figma variables → Style Dictionary once layer is stable. */
+     TODO(#3058): promote to Figma variables → Style Dictionary (composite shadows; see issue). */
   --bds-shadow-sm:      0px 2px 4px 0px rgba(0, 0, 0, 0.06);
   --bds-shadow-md:      0px 4px 12px 0px rgba(0, 0, 0, 0.12);
   --bds-shadow-lg:      0px 4px 16px 0px rgba(0, 0, 0, 0.12);
