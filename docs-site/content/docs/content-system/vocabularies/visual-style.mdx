@@ -111,7 +111,7 @@ export const Levels = ({ style }) => {
         <tr>
           <td>Theming</td>
           <td>{theming}</td>
-          <td><code>VISUAL_STYLE_PRESETS</code>; atmosphere character from <code>atmosphere.ts</code></td>
+          <td><code>VISUAL_STYLE_PRESETS</code>; atmosphere character from <code>atmosphere.ts</code>{PALETTE_USE[style] ? <>; palette use from <a href="https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-048-visual-style-and-theming-taxonomy.md">ADR-048</a> § 1</> : null}</td>
         </tr>
         <tr>
           <td>Structure</td>
