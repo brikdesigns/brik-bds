@@ -547,6 +547,15 @@ npx playwright install chromium chromium-headless-shell 2>&1 | tail -1
 echo -e "${YELLOW}▸ Installing docs-site dependencies (separate lockfile)...${NC}"
 (cd docs-site && npm ci --prefer-offline 2>&1 | tail -1)
 
+# ── Build dist/tokens.css ──
+# CLAUDE.md and component-build.md name `dist/tokens.css` as the only token
+# authority an agent greps before writing a token. `dist/` is git-ignored, so a
+# fresh worktree has no such file, and `grep -F -e "--text-primary" dist/tokens.css`
+# then reads as "token absent" — 43 of 43 real tokens did on the repro (#2059).
+# A concat of committed `tokens/*.css`, ~1s, so build it unconditionally.
+echo -e "${YELLOW}▸ Building dist/tokens.css (the token authority canon points at)...${NC}"
+npm run build:dist-tokens 2>&1 | tail -1
+
 # ── Summary ──
 echo ""
 echo -e "${GREEN}═══════════════════════════════════════${NC}"
