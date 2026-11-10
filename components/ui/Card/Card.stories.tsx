@@ -4,6 +4,7 @@ import { Image } from '../Image';
 import { Logo } from '../Logo';
 import { Button } from '../Button';
 import { Badge } from '../Badge';
+import '../../../tokens/modes-borderradius.css';
 
 /* Story-only 3:2 landscape thumbnail (data URI, no network) — a schematic
    photo standing in for real display-card media in the image-slot demos. */
@@ -86,6 +87,25 @@ export const Default: Story = {
   decorators: [
     (Story) => (
       <div style={{ width: 320 }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
+ * Pill radius mode (`data-mode-radius="pill"`) scopes the full 999px round to
+ * controls only — the Button here is a pill, the Card keeps the bounded `round`
+ * ramp instead of becoming a stadium. The attribute is set on the wrapper; in a
+ * product it sits on `<html>`.
+ *
+ * @summary data-mode-radius="pill" — round Button beside a bounded Card
+ */
+export const PillRadiusMode: Story = {
+  args: Default.args,
+  decorators: [
+    (Story) => (
+      <div data-mode-radius="pill" style={{ width: 320 }}>
         <Story />
       </div>
     ),

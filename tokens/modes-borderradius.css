@@ -5,7 +5,7 @@
  * design-tokens/tokens-studio.json. Do not hand-edit — re-run
  * the generator after any Figma mode update.
  *
- * Corner-radius mode — overrides the semantic --border-radius-{none,sm,md,lg} tokens. sharp / round tighten or loosen the ramp; pill maps every step to the full 999px round for fully-rounded surfaces. Default (soft) is the figma-tokens.css base and emits no attribute. Emitted as raw primitive px values (like the spacing modes) rather than var() aliases — the pill/circle primitives are Semantic-tier by name, so a var() alias would be off-model.
+ * Corner-radius mode — overrides the semantic --border-radius-{none,sm,md,lg} tokens. sharp / round tighten or loosen the ramp; pill maps every step to the full 999px round for controls only (containers keep the round ramp). Default (soft) is the figma-tokens.css base and emits no attribute. Emitted as raw primitive px values (like the spacing modes) rather than var() aliases — the pill/circle primitives are Semantic-tier by name, so a var() alias would be off-model.
  *
  * Selector contract: `[data-mode-radius="sharp|round|pill"]`
  * on :root (html). Default mode requires no attribute (uses figma-tokens.css base).
@@ -30,6 +30,16 @@
 
 /* ─── Pill ────────────────────────────────────────── */
 [data-mode-radius="pill"] {
+  --bds-border-radius-lg: 40px;
+  --bds-border-radius-md: 24px;
+  --bds-border-radius-sm: 16px;
+}
+
+/* pill controls — fully round; containers above keep the round ramp */
+[data-mode-radius="pill"] .bds-button,
+[data-mode-radius="pill"] .bds-text-input-field,
+[data-mode-radius="pill"] .bds-select,
+[data-mode-radius="pill"] .bds-tag {
   --bds-border-radius-lg: 999px;
   --bds-border-radius-md: 999px;
   --bds-border-radius-sm: 999px;
