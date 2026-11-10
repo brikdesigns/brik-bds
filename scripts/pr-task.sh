@@ -151,7 +151,7 @@ if [[ "${SKIP_STORY_CHECK:-}" != "1" ]]; then
     echo ""
     if [ -t 0 ]; then
       # Interactive TTY — confirm at the prompt (unchanged behavior).
-      echo -n "   Verified in Storybook? [y/N] (or set SKIP_STORY_CHECK=1 for non-visual diffs): "
+      echo -n "   Verified in Storybook? [y/N] (or re-run with --skip-story-check / SKIP_STORY_CHECK=1 for non-visual diffs): "
       read -r STORY_CONFIRM
       if [[ ! "$STORY_CONFIRM" =~ ^[Yy]$ ]]; then
         echo -e "${RED}✗ PR creation blocked. Verify the change in Storybook, then re-run.${NC}"
@@ -178,7 +178,7 @@ if [[ "${SKIP_STORY_CHECK:-}" != "1" ]]; then
       echo -e "${YELLOW}   Run the story's own assertions, then re-run with STORY_VERIFIED=1:${NC}"
       echo -e "${YELLOW}     npx vitest run --project storybook <path/to/Component.stories.tsx>${NC}"
       echo -e "${YELLOW}   Pixels are gated post-PR by visual.yml (VISUAL_GATE=1), not by this flag and not by Chromatic (#1967).${NC}"
-      echo -e "${YELLOW}   For a genuinely non-visual diff, use SKIP_STORY_CHECK=1 instead.${NC}"
+      echo -e "${YELLOW}   For a genuinely non-visual diff, use --skip-story-check (or SKIP_STORY_CHECK=1) instead.${NC}"
       exit 1
     fi
   fi

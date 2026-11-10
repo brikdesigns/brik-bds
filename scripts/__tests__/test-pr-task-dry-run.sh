@@ -35,6 +35,11 @@
 set -u
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_NAMESPACE \
       GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES
+# The gate flags are cleared for the whole suite, not only inside run_dry (#2548):
+# the STORY_VERIFIED case below calls pr-task.sh directly, and a caller's
+# SKIP_STORY_CHECK=1 (the documented non-visual path) short-circuited its gate
+# and failed this suite in the pre-push hook. Cases that want a flag set it inline.
+unset STORY_VERIFIED SKIP_STORY_CHECK PR_TASK_DRY_RUN
 
 SCRIPTS="$(cd "$(dirname "$0")/.." && pwd)"
 [ -f "$SCRIPTS/pr-task.sh" ] || { echo "pr-task.sh not found under $SCRIPTS"; exit 1; }
@@ -217,6 +222,15 @@ RC=$?
 assert_eq "still blocks with a leaked flag" "1"  "$RC"
 case "$OUT" in *"the Storybook gate can't be answered here"*) L=yes ;; *) L=no ;; esac
 assert_eq "still prints the gate message"   "yes" "$L"
+
+for LEAKED in STORY_VERIFIED SKIP_STORY_CHECK PR_TASK_DRY_RUN; do
+  echo "── the story gate blocks even when the CALLER exported only $LEAKED ──"
+  : > "$GH_LOG"
+  PRIMARY="$(build_repo "$TMPROOT/gateleak-$LEAKED" component)"
+  OUT="$( export "$LEAKED=1"; run_dry "$PRIMARY" --dry-run )"
+  RC=$?
+  assert_eq "still blocks with leaked $LEAKED" "1" "$RC"
+done
 
 echo "── STORY_VERIFIED=1 clears the gate, dry run still pushes nothing ──"
 : > "$GH_LOG"

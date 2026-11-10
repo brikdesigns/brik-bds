@@ -151,10 +151,13 @@ for (const step of steps) {
   } catch (err) {
     const elapsed = ((Date.now() - start) / 1000).toFixed(1);
     console.log(`${RED}FAIL${NC}  ${DIM}${elapsed}s${NC}`);
-    if (err.stderr) {
-      const summary = err.stderr.toString().split('\n').filter(l => l.trim()).slice(0, 3).join('\n');
-      if (summary) console.log(`  ${DIM}${summary}${NC}`);
-    }
+    // A step may write its failure to either stream (a bash self-test prints its
+    // ✗ lines on stdout), so read both and lead with the lines that name the
+    // failure rather than the first three of whichever stream happens to be set (#2548).
+    const lines = `${err.stderr || ''}\n${err.stdout || ''}`.split('\n').filter(l => l.trim());
+    const failing = lines.filter(l => /✗|FAIL|error/i.test(l));
+    const summary = (failing.length ? failing : lines).slice(0, 3).join('\n');
+    if (summary) console.log(`  ${DIM}${summary}${NC}`);
     failures++;
   }
 }
