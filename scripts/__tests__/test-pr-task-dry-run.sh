@@ -35,6 +35,11 @@
 set -u
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_NAMESPACE \
       GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES
+# The gate flags are cleared for the whole suite, not only inside run_dry (#2548):
+# the STORY_VERIFIED case below calls pr-task.sh directly, and a caller's
+# SKIP_STORY_CHECK=1 (the documented non-visual path) short-circuited its gate
+# and failed this suite in the pre-push hook. Cases that want a flag set it inline.
+unset STORY_VERIFIED SKIP_STORY_CHECK PR_TASK_DRY_RUN
 
 SCRIPTS="$(cd "$(dirname "$0")/.." && pwd)"
 [ -f "$SCRIPTS/pr-task.sh" ] || { echo "pr-task.sh not found under $SCRIPTS"; exit 1; }
@@ -217,6 +222,26 @@ RC=$?
 assert_eq "still blocks with a leaked flag" "1"  "$RC"
 case "$OUT" in *"the Storybook gate can't be answered here"*) L=yes ;; *) L=no ;; esac
 assert_eq "still prints the gate message"   "yes" "$L"
+
+echo "── the suite clears the caller's gate flags at the top (the only guard direct invocations have) ──"
+assert_eq "suite-wide unset of the gate flags present" "yes" \
+  "$(grep -q '^unset STORY_VERIFIED SKIP_STORY_CHECK PR_TASK_DRY_RUN' "${BASH_SOURCE[0]}" && echo yes || echo no)"
+
+# Invoked directly, not through run_dry: run_dry strips these flags, so a leak
+# set around it would never reach pr-task.sh and the case would pass whatever the
+# suite-wide unset above does (#2548).
+for LEAKED in SKIP_STORY_CHECK PR_TASK_DRY_RUN; do
+  echo "── a CALLER-exported $LEAKED reaches pr-task.sh, so the suite must not inherit it ──"
+  PRIMARY="$(build_repo "$TMPROOT/gateleak-$LEAKED" component)"
+  OUT="$( cd "$PRIMARY" && PATH="$TMPROOT/bin:$PATH" env "$LEAKED=1" \
+            ./scripts/pr-task.sh 2>&1 </dev/null )"
+  case "$LEAKED" in
+    SKIP_STORY_CHECK) want="no" ;;   # the flag short-circuits the gate: no gate message
+    PR_TASK_DRY_RUN)  want="yes" ;;  # dry run still reaches the gate and blocks
+  esac
+  case "$OUT" in *"the Storybook gate can't be answered here"*) got=yes ;; *) got=no ;; esac
+  assert_eq "leaked $LEAKED changes pr-task.sh's gate as documented" "$want" "$got"
+done
 
 echo "── STORY_VERIFIED=1 clears the gate, dry run still pushes nothing ──"
 : > "$GH_LOG"
