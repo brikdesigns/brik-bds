@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from 'storybook/test';
 import { Card, CardTitle, CardDescription, CardFooter } from './Card';
 import { Image } from '../Image';
 import { Logo } from '../Logo';
@@ -320,6 +321,11 @@ export const Stack: Story = {
       description:
         'Service-line surface tint — a pale wash keyed to a service line. Sets only the surface; border/size unchanged. Default = no tint.',
     },
+    tintInverse: {
+      control: 'boolean',
+      description:
+        'Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. Default = false.',
+    },
     titleAs: {
       control: 'inline-radio',
       options: ['h2', 'h3', 'h4'],
@@ -403,6 +409,11 @@ export const Row: Story = {
       description:
         'Service-line surface tint — a pale wash keyed to a service line. Sets only the surface. Default = no tint.',
     },
+    tintInverse: {
+      control: 'boolean',
+      description:
+        'Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. Default = false.',
+    },
     titleAs: {
       control: 'inline-radio',
       options: ['h2', 'h3', 'h4'],
@@ -419,3 +430,98 @@ export const Row: Story = {
   ],
 };
 
+
+const TINT_LINES = ['brand', 'marketing', 'information', 'product', 'back-office'] as const;
+/* Explicit token names so canonical-check can resolve each one. */
+const TINT_SURFACES = {
+  'brand': {
+    light: 'var(--bds-surface-service-brand-light)',
+    inverse: 'var(--bds-surface-service-brand-inverse)',
+  },
+  'marketing': {
+    light: 'var(--bds-surface-service-marketing-light)',
+    inverse: 'var(--bds-surface-service-marketing-inverse)',
+  },
+  'information': {
+    light: 'var(--bds-surface-service-information-light)',
+    inverse: 'var(--bds-surface-service-information-inverse)',
+  },
+  'product': {
+    light: 'var(--bds-surface-service-product-light)',
+    inverse: 'var(--bds-surface-service-product-inverse)',
+  },
+  'back-office': {
+    light: 'var(--bds-surface-service-back-office-light)',
+    inverse: 'var(--bds-surface-service-back-office-inverse)',
+  },
+} as const;
+
+/**
+ * Both `tintInverse` values for every service line. Switch the toolbar theme to
+ * dark to see `inverse` flip from white to the deep hue while `light` stays a
+ * pale wash.
+ *
+ * @summary tintInverse — light wash vs theme-flipping inverse
+ */
+export const TintTones: Story = {
+  parameters: { layout: 'padded' },
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 240px)', gap: 16 }}>
+      {TINT_LINES.flatMap((line) =>
+        (['light', 'inverse'] as const).map((tone) => (
+          <Card key={`${line}-${tone}`} layout="stack" tint={line} tintInverse={tone === 'inverse'} title={`${line} · ${tone}`} />
+        )),
+      )}
+    </div>
+  ),
+};
+
+/**
+ * Asserts each card's fill resolves to `--bds-surface-service-{line}-{tone}`
+ * in light and dark — the table in #2294, read back from the rendered DOM.
+ *
+ * @summary Verifies light/inverse tone resolves in both themes
+ */
+export const InteractionTestTintTones: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  render: TintTones.render,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const root = document.documentElement;
+    const previous = root.getAttribute('data-theme');
+    const fill = (line: (typeof TINT_LINES)[number], tone: 'light' | 'inverse') => {
+      const probe = document.createElement('div');
+      probe.style.backgroundColor = TINT_SURFACES[line][tone];
+      canvasElement.appendChild(probe);
+      const value = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return value;
+    };
+    try {
+      for (const theme of ['light', 'dark']) {
+        root.setAttribute('data-theme', theme);
+        for (const line of TINT_LINES) {
+          for (const tone of ['light', 'inverse'] as const) {
+            const card = canvas.getByText(`${line} · ${tone}`).closest('.bds-card') as HTMLElement;
+            await expect(getComputedStyle(card).backgroundColor).toBe(fill(line, tone));
+          }
+        }
+      }
+      // `row` composes the same surface as `stack`.
+      const row = document.createElement('div');
+      canvasElement.appendChild(row);
+      const rowCard = document.createElement('div');
+      rowCard.className = 'bds-card bds-card--layout-row bds-card--tint-marketing bds-card--emphasis-inverse';
+      row.appendChild(rowCard);
+      await expect(getComputedStyle(rowCard).backgroundColor).toBe(fill('marketing', 'inverse'));
+      row.remove();
+      // The two tones must actually differ in dark, or the prop is a no-op.
+      const light = canvas.getByText('marketing · light').closest('.bds-card') as HTMLElement;
+      const inverse = canvas.getByText('marketing · inverse').closest('.bds-card') as HTMLElement;
+      await expect(getComputedStyle(inverse).backgroundColor).not.toBe(getComputedStyle(light).backgroundColor);
+    } finally {
+      if (previous === null) root.removeAttribute('data-theme');
+      else root.setAttribute('data-theme', previous);
+    }
+  },
+};

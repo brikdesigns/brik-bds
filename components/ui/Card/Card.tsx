@@ -247,6 +247,8 @@ interface CardAnatomyProps extends CardBaseProps {
   badge?: ReactNode;
   /** Service-line surface tint (`stack`/`row`) — pale wash keyed to a service line. Border/size unchanged. */
   tint?: CardTint;
+  /** Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. */
+  tintInverse?: boolean;
   /** Surface treatment for a cell on a colored grid — `borderless` / `elevated` / `raised` (`stack`). */
   variant?: 'borderless' | 'elevated' | 'raised';
   /** Image column width for `row` — `narrow` (25%) / `standard` (35%, default) / `wide` (50%) / any CSS length. */
@@ -461,6 +463,7 @@ function renderAnatomy({
   action,
   badge,
   tint,
+  tintInverse,
   variant,
   imageWidth = 'standard',
   mediaTreatment = 'flush',
@@ -565,6 +568,7 @@ function renderAnatomy({
           cardVariantClass(variant ?? 'outlined'),
           'bds-card--layout-pricing',
           tint && `bds-card--tint-${tint}`,
+          tint && tintInverse && 'bds-card--emphasis-inverse',
           className,
         )}
         style={style}
@@ -605,6 +609,7 @@ function renderAnatomy({
       'bds-card--layout-row',
       isNamed && `bds-card--layout-row-${imageWidth}`,
       tint && `bds-card--tint-${tint}`,
+      tint && tintInverse && 'bds-card--emphasis-inverse',
       href && 'bds-card--link',
       className,
     );
@@ -649,6 +654,7 @@ function renderAnatomy({
       insetPadding === 'lg' &&
       'bds-card--layout-stack-inset-lg',
     tint && `bds-card--tint-${tint}`,
+    tint && tintInverse && 'bds-card--emphasis-inverse',
     href && 'bds-card--link',
     className,
   );
