@@ -82,15 +82,17 @@
     {
       "path": "docs/reports/2026-11-11-token-naming-drift-audit.html",
       "title": "Token Naming Drift Audit — 2026-11-11",
-      "status": null,
-      "type": null,
-      "themes": null,
-      "subject": null,
-      "owner": null,
-      "generated": null,
-      "supersedes": null,
-      "cadence": null,
-      "source": null
+      "status": "active",
+      "type": "audit",
+      "themes": [
+        "design-system"
+      ],
+      "subject": "bds",
+      "owner": "nstaner",
+      "generated": "2026-11-11",
+      "supersedes": "none",
+      "cadence": "once",
+      "source": "manual"
     },
     {
       "path": "docs/reports/blueprints-wiring-audit.html",
