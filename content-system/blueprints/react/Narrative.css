@@ -16,7 +16,7 @@
  */
 
 .bds-narrative {
-  background: var(--bds-narrative-bg, var(--bds-page-primary));
+  background: var(--bds-narrative-background, var(--bds-narrative-bg, var(--bds-page-primary)));
 }
 
 .bds-narrative__container {

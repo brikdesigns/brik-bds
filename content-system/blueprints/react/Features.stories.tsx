@@ -101,7 +101,7 @@ const meta: Meta<typeof Features> = {
     docs: {
       description: {
         component:
-          'The `bds-features` feature-grid section primitive (brik-bds#1197) — the Phase D consolidation of the features family, retiring the ADR-008-banned `bp-features-branded-dark` (`--dark` = theme, `--branded` = appearance, `3col` = count). Single-member family, so no layout modifier: the block is the responsive grid. The dark surface is the `--bds-features-bg` default, not a class name. Each card emits `data-service-line` to re-bind `--bds-background-brand-primary` per the BDS scope-binding pattern; stories include a representative cascade block. Card title uses bold weight + 18px, description 16px regular — the AA-clearing posture for white-on-saturated-brand backgrounds (BDS contrast burndown #40).',
+          'The `bds-features` feature-grid section primitive (brik-bds#1197) — the Phase D consolidation of the features family, retiring the ADR-008-banned `bp-features-branded-dark` (`--dark` = theme, `--branded` = appearance, `3col` = count). Single-member family, so no layout modifier: the block is the responsive grid. The dark surface is the `--bds-features-background` default, not a class name. Each card emits `data-service-line` to re-bind `--bds-background-brand-primary` per the BDS scope-binding pattern; stories include a representative cascade block. Card title uses bold weight + 18px, description 16px regular — the AA-clearing posture for white-on-saturated-brand backgrounds (BDS contrast burndown #40).',
       },
     },
   },

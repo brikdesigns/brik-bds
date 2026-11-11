@@ -15,8 +15,8 @@
  * theme-layer tokens only.
  *
  * CSS custom properties — variation API:
- *   --bds-callout-panel-bg          (default: var(--bds-page-primary))
- *   --bds-callout-panel-card-bg     (default: var(--bds-surface-secondary))
+ *   --bds-callout-panel-background          (default: var(--bds-page-primary))
+ *   --bds-callout-panel-card-background     (default: var(--bds-surface-secondary))
  *   --bds-callout-panel-card-radius (default: var(--bds-border-radius-lg))
  *   --bds-callout-panel-gap         (default: var(--bds-gap-xl))
  *   --bds-callout-panel-card-pad    (default: var(--bds-padding-xl))
@@ -29,7 +29,7 @@
  */
 
 .bds-callout-panel {
-  background: var(--bds-callout-panel-bg, var(--bds-page-primary));
+  background: var(--bds-callout-panel-background, var(--bds-callout-panel-bg, var(--bds-page-primary)));
 }
 
 /* ── Section header ────────────────────────────────────────────── */
@@ -115,7 +115,7 @@
 .bds-callout-panel__main {
   /* Repaint the composed outlined Card as a filled callout panel —
    * same visual the Webflow source ships. */
-  background: var(--bds-callout-panel-card-bg, var(--bds-surface-secondary));
+  background: var(--bds-callout-panel-card-background, var(--bds-callout-panel-card-bg, var(--bds-surface-secondary)));
   border: none;
   border-radius: var(--bds-callout-panel-card-radius, var(--bds-border-radius-lg));
   padding: var(--bds-callout-panel-card-pad, var(--bds-padding-xl));

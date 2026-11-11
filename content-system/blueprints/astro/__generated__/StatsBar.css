@@ -1,5 +1,5 @@
 .bp-stats-bar {
-    background: var(--bds-stats-bar-bg, var(--bds-surface-inverse, var(--bds-color-grayscale-black)));
+    background: var(--bds-stats-bar-background, var(--bds-stats-bar-bg, var(--bds-surface-inverse, var(--bds-color-grayscale-black))));
     padding-block: var(
       --bds-stats-bar-padding-y,
       clamp(var(--bds-padding-lg), 5vw, var(--bds-padding-xl))

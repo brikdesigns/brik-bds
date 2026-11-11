@@ -2,7 +2,7 @@
   "schema": 1,
   "generated_by": "brikdesigns/brik-llm:scripts/reports/report-meta.py",
   "contract": "docs/reports/README.md#metadata-contract",
-  "count": 8,
+  "count": 9,
   "reports": [
     {
       "path": "docs/reports/2026-09-26-foundations-disconnect-assessment.html",
@@ -75,6 +75,21 @@
       "subject": "bds",
       "owner": "nstaner",
       "generated": "2026-10-01",
+      "supersedes": "none",
+      "cadence": "once",
+      "source": "manual"
+    },
+    {
+      "path": "docs/reports/2026-11-11-token-naming-drift-audit.html",
+      "title": "Token Naming Drift Audit — 2026-11-11",
+      "status": "active",
+      "type": "audit",
+      "themes": [
+        "design-system"
+      ],
+      "subject": "bds",
+      "owner": "nstaner",
+      "generated": "2026-11-11",
       "supersedes": "none",
       "cadence": "once",
       "source": "manual"

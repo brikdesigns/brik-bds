@@ -10,7 +10,7 @@
  * (ADR-008 §3 — a modifier needs a sibling layout to contrast against): the
  * block *is* the feature grid. Column count is a responsive CSS concern
  * (1 → 2 → 3), not a class token. The dark surface is a themeable default
- * via the `--bds-features-bg` Tier-4 hook (fallback `--bds-page-inverse`), not a
+ * via the `--bds-features-background` Tier-4 hook (fallback `--bds-page-inverse`), not a
  * name — the same "surface is a default, not a class" move ADR-008 applied to
  * `bds-cta`.
  *

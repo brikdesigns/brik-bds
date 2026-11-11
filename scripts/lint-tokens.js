@@ -670,6 +670,25 @@ const TIER4_ALIASES = new Map([
   ['--bds-bg-field-particle', '--bds-ambient-field-particle-color'],
   ['--bds-social-icon-brand', '--bds-social-icon-platform-color'],
   ['--bds-board-card-accent', '--bds-board-card-accent-color'],
+  // BackgroundPattern → Texture (#3080). The color hook was removed, not
+  // renamed: the component reads --bds-border-secondary directly.
+  ['--bds-bg-pattern-size', '--bds-texture-spacing'],
+  ['--bds-bg-pattern-dot-size', '--bds-texture-mark-size'],
+  ['--bds-bg-pattern-opacity', '--bds-texture-opacity'],
+  ['--bds-bg-pattern-fade', '--bds-texture-fade'],
+  ['--bds-bg-pattern-color', '--bds-border-secondary'],
+  // `-bg` is banned in a component-tier segment (token-anatomy § About Tier 4): full words only (#3080).
+  ['--bds-callout-panel-bg', '--bds-callout-panel-background'],
+  ['--bds-callout-panel-card-bg', '--bds-callout-panel-card-background'],
+  ['--bds-cta-bg', '--bds-cta-background'],
+  ['--bds-features-bg', '--bds-features-background'],
+  ['--bds-hero-bg', '--bds-hero-background'],
+  ['--bds-hero-media-bg', '--bds-hero-media-background'],
+  ['--bds-narrative-bg', '--bds-narrative-background'],
+  ['--bds-site-header-bg', '--bds-site-header-background'],
+  ['--bds-site-header-cta-bg', '--bds-site-header-cta-background'],
+  ['--bds-stats-bar-bg', '--bds-stats-bar-background'],
+  ['--bds-testimonials-featured-bg', '--bds-testimonials-featured-background'],
 ]);
 
 // A stem is the full kebab component name (`background-pattern`, `sub-navigation`),
@@ -684,30 +703,15 @@ const TIER4_DECLARED_STEMS = new Map([
 // each keyed to the issue that renames it. A COUNTDOWN, not a carve-out: checkTier4Registry
 // fails on an entry that no longer violates (renamed, removed, or turned into a TIER4_ALIASES
 // alias), so the list can only shrink. Never add a row to keep a new hook green; rename it.
-// 3084 = Texture + `-bg` to `-background` renames; 2656 = Tier-4 namespace enforcement.
+// 2656 = Tier-4 namespace enforcement.
 const TIER4_SHAPE_BASELINE = new Map([
-  ['--bds-bg-pattern-color', 3084],
-  ['--bds-bg-pattern-dot-size', 3084],
-  ['--bds-bg-pattern-fade', 3084],
-  ['--bds-bg-pattern-opacity', 3084],
-  ['--bds-bg-pattern-size', 3084],
-  ['--bds-callout-panel-bg', 3084],
-  ['--bds-callout-panel-card-bg', 3084],
-  ['--bds-cta-bg', 3084],
-  ['--bds-features-bg', 3084],
-  ['--bds-hero-bg', 3084],
-  ['--bds-hero-media-bg', 3084],
-  ['--bds-narrative-bg', 3084],
-  ['--bds-site-header-bg', 3084],
-  ['--bds-site-header-cta-bg', 3084],
-  ['--bds-stats-bar-bg', 3084],
-  ['--bds-testimonials-featured-bg', 3084],
   ['--bds-ambient-field-src', 2656],
   ['--bds-callout-panel-card-pad', 2656],
   ['--bds-chip-sm-icon-size', 2656],
   ['--bds-features-image-pad', 2656],
   ['--bds-grid-min-col-width', 2656],
   ['--bds-subnav-width', 2656],
+  ['--bds-testimonials-featured-background', 2656],
   ['--bds-testimonials-featured-cite-color', 2656],
   ['--bds-testimonials-featured-mark-color', 2656],
   ['--bds-testimonials-featured-padding-y', 2656],
@@ -852,8 +856,12 @@ function tier4Committed() {
   return tier4CommittedCache;
 }
 
-/** Whole-registry checks: shape, unread, stale alias, and drift against the committed file. */
-function checkTier4Registry(scan, generated, committed) {
+/**
+ * Whole-registry checks: shape, unread, stale alias, and drift against the committed file.
+ * An alias target is a hook a component reads, or — for a hook that was removed
+ * rather than renamed — the token the component now reads directly.
+ */
+function checkTier4Registry(scan, generated, committed, allTokens = new Set(), aliases = TIER4_ALIASES) {
   const violations = [];
   const at = (o) => ({ file: path.join(REPO_ROOT, o.rel), line: o.line, column: 1 });
   for (const [name, row] of Object.entries(generated.hooks)) {
@@ -874,9 +882,9 @@ function checkTier4Registry(scan, generated, committed) {
       violations.push({ rule: 'tier4-shape', severity: 'error', file: path.join(__dirname, 'lint-tokens.js'), line: 1, column: 1, message: `TIER4_SHAPE_BASELINE lists "${name}" (#${issue}), which no longer violates the shape rules`, suggestion: 'Delete the entry — the baseline can only shrink' });
     }
   }
-  for (const [oldName, newName] of TIER4_ALIASES) {
-    if (!generated.hooks[newName]) {
-      violations.push({ rule: 'tier4-registry-drift', severity: 'error', file: path.join(__dirname, 'lint-tokens.js'), line: 1, column: 1, message: `TIER4_ALIASES maps "${oldName}" to "${newName}", which no component reads`, suggestion: 'Fix the alias target, or drop the alias once it is past its removal version' });
+  for (const [oldName, newName] of aliases) {
+    if (!generated.hooks[newName] && !allTokens.has(newName)) {
+      violations.push({ rule: 'tier4-registry-drift', severity: 'error', file: path.join(__dirname, 'lint-tokens.js'), line: 1, column: 1, message: `TIER4_ALIASES maps "${oldName}" to "${newName}", which is neither a hook a component reads nor a token`, suggestion: 'Fix the alias target, or drop the alias once it is past its removal version' });
     }
   }
   if (!committed) {
@@ -2508,7 +2516,7 @@ function main() {
   // 4d. Tier 4 hook registry (#2651) — always a full scan, like the drift checks
   // above, so a staged-file run still sees a hook another file stopped reading.
   const tier4Scan = scanTier4Hooks(tokens.allTokens);
-  allViolations.push(...checkTier4Registry(tier4Scan, buildTier4Registry(tier4Scan), tier4Committed()));
+  allViolations.push(...checkTier4Registry(tier4Scan, buildTier4Registry(tier4Scan), tier4Committed(), tokens.allTokens));
 
   // 5. If --check-grid, also scan the token CSS sources for off-grid token values.
   // modes-spacing.css joined the scan in #2588 — the base track was audited while

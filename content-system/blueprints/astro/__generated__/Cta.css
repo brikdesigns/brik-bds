@@ -9,7 +9,7 @@
   /* ── Shared spine ─────────────────────────────────────────────── */
 
   .bds-cta {
-    background: var(--bds-cta-bg, var(--bds-surface-inverse, var(--bds-color-grayscale-black)));
+    background: var(--bds-cta-background, var(--bds-cta-bg, var(--bds-surface-inverse, var(--bds-color-grayscale-black))));
   }
 
   .bds-cta__container {
@@ -80,7 +80,7 @@
   /* ── --split: message column + contact-method aside ─────────────── */
 
   .bds-cta--split {
-    background: var(--bds-cta-bg, var(--bds-surface-primary));
+    background: var(--bds-cta-background, var(--bds-cta-bg, var(--bds-surface-primary)));
   }
 
   .bds-cta--split .bds-cta__container {

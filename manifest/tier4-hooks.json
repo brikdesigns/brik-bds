@@ -5,8 +5,24 @@
     "--bds-bg-field-particle": "--bds-ambient-field-particle-color",
     "--bds-bg-field-src": "--bds-ambient-field-src",
     "--bds-bg-field-tint": "--bds-ambient-field-tint",
+    "--bds-bg-pattern-color": "--bds-border-secondary",
+    "--bds-bg-pattern-dot-size": "--bds-texture-mark-size",
+    "--bds-bg-pattern-fade": "--bds-texture-fade",
+    "--bds-bg-pattern-opacity": "--bds-texture-opacity",
+    "--bds-bg-pattern-size": "--bds-texture-spacing",
     "--bds-board-card-accent": "--bds-board-card-accent-color",
-    "--bds-social-icon-brand": "--bds-social-icon-platform-color"
+    "--bds-callout-panel-bg": "--bds-callout-panel-background",
+    "--bds-callout-panel-card-bg": "--bds-callout-panel-card-background",
+    "--bds-cta-bg": "--bds-cta-background",
+    "--bds-features-bg": "--bds-features-background",
+    "--bds-hero-bg": "--bds-hero-background",
+    "--bds-hero-media-bg": "--bds-hero-media-background",
+    "--bds-narrative-bg": "--bds-narrative-background",
+    "--bds-site-header-bg": "--bds-site-header-background",
+    "--bds-site-header-cta-bg": "--bds-site-header-cta-background",
+    "--bds-social-icon-brand": "--bds-social-icon-platform-color",
+    "--bds-stats-bar-bg": "--bds-stats-bar-background",
+    "--bds-testimonials-featured-bg": "--bds-testimonials-featured-background"
   },
   "hooks": {
     "--bds-addable-entry-list-max-height": {
@@ -93,66 +109,6 @@
         "components/ui/AmbientField/AmbientField.css"
       ]
     },
-    "--bds-bg-pattern-color": {
-      "kind": "knob",
-      "readBy": [
-        "background-pattern"
-      ],
-      "readIn": [
-        "components/ui/BackgroundPattern/BackgroundPattern.css"
-      ],
-      "setIn": [
-        "components/ui/BackgroundPattern/BackgroundPattern.css"
-      ]
-    },
-    "--bds-bg-pattern-dot-size": {
-      "kind": "knob",
-      "readBy": [
-        "background-pattern"
-      ],
-      "readIn": [
-        "components/ui/BackgroundPattern/BackgroundPattern.css"
-      ],
-      "setIn": [
-        "components/ui/BackgroundPattern/BackgroundPattern.css"
-      ]
-    },
-    "--bds-bg-pattern-fade": {
-      "kind": "knob",
-      "readBy": [
-        "background-pattern"
-      ],
-      "readIn": [
-        "components/ui/BackgroundPattern/BackgroundPattern.css"
-      ],
-      "setIn": [
-        "components/ui/BackgroundPattern/BackgroundPattern.css"
-      ]
-    },
-    "--bds-bg-pattern-opacity": {
-      "kind": "knob",
-      "readBy": [
-        "background-pattern"
-      ],
-      "readIn": [
-        "components/ui/BackgroundPattern/BackgroundPattern.css"
-      ],
-      "setIn": [
-        "components/ui/BackgroundPattern/BackgroundPattern.css"
-      ]
-    },
-    "--bds-bg-pattern-size": {
-      "kind": "knob",
-      "readBy": [
-        "background-pattern"
-      ],
-      "readIn": [
-        "components/ui/BackgroundPattern/BackgroundPattern.css"
-      ],
-      "setIn": [
-        "components/ui/BackgroundPattern/BackgroundPattern.css"
-      ]
-    },
     "--bds-blueprint-section-content-width": {
       "kind": "knob",
       "readBy": [
@@ -220,7 +176,7 @@
         "components/ui/Board/Board.css"
       ]
     },
-    "--bds-callout-panel-bg": {
+    "--bds-callout-panel-background": {
       "kind": "knob",
       "readBy": [
         "callout-panel"
@@ -232,7 +188,7 @@
       ],
       "setIn": []
     },
-    "--bds-callout-panel-card-bg": {
+    "--bds-callout-panel-card-background": {
       "kind": "knob",
       "readBy": [
         "callout-panel"
@@ -342,7 +298,7 @@
         "components/ui/CountUp/CountUp.css"
       ]
     },
-    "--bds-cta-bg": {
+    "--bds-cta-background": {
       "kind": "knob",
       "readBy": [
         "cta"
@@ -414,7 +370,7 @@
         "components/ui/DataView/DataView.css"
       ]
     },
-    "--bds-features-bg": {
+    "--bds-features-background": {
       "kind": "knob",
       "readBy": [
         "features"
@@ -582,7 +538,7 @@
       ],
       "setIn": []
     },
-    "--bds-hero-bg": {
+    "--bds-hero-background": {
       "kind": "knob",
       "readBy": [
         "hero"
@@ -680,7 +636,7 @@
         "content-system/blueprints/react/Hero.css"
       ]
     },
-    "--bds-hero-media-bg": {
+    "--bds-hero-media-background": {
       "kind": "knob",
       "readBy": [
         "hero"
@@ -909,7 +865,7 @@
         "components/ui/Modal/Modal.css"
       ]
     },
-    "--bds-narrative-bg": {
+    "--bds-narrative-background": {
       "kind": "knob",
       "readBy": [
         "narrative"
@@ -993,7 +949,7 @@
         "components/ui/Select/Select.css"
       ]
     },
-    "--bds-site-header-bg": {
+    "--bds-site-header-background": {
       "kind": "knob",
       "readBy": [
         "site-header"
@@ -1007,7 +963,7 @@
         "content-system/blueprints/astro/__generated__/SiteHeader.css"
       ]
     },
-    "--bds-site-header-cta-bg": {
+    "--bds-site-header-cta-background": {
       "kind": "knob",
       "readBy": [
         "site-header"
@@ -1098,7 +1054,7 @@
         "components/ui/SocialIcon/SocialIcon.css"
       ]
     },
-    "--bds-stats-bar-bg": {
+    "--bds-stats-bar-background": {
       "kind": "knob",
       "readBy": [
         "stats-bar"
@@ -1219,7 +1175,7 @@
         "components/ui/TabBar/TabBar.css"
       ]
     },
-    "--bds-testimonials-featured-bg": {
+    "--bds-testimonials-featured-background": {
       "kind": "knob",
       "readBy": [
         "testimonials-featured-large"
@@ -1284,6 +1240,54 @@
       ],
       "setIn": [
         "components/ui/TextArea/TextArea.css"
+      ]
+    },
+    "--bds-texture-fade": {
+      "kind": "knob",
+      "readBy": [
+        "texture"
+      ],
+      "readIn": [
+        "components/ui/Texture/Texture.css"
+      ],
+      "setIn": [
+        "components/ui/Texture/Texture.css"
+      ]
+    },
+    "--bds-texture-mark-size": {
+      "kind": "knob",
+      "readBy": [
+        "texture"
+      ],
+      "readIn": [
+        "components/ui/Texture/Texture.css"
+      ],
+      "setIn": [
+        "components/ui/Texture/Texture.css"
+      ]
+    },
+    "--bds-texture-opacity": {
+      "kind": "knob",
+      "readBy": [
+        "texture"
+      ],
+      "readIn": [
+        "components/ui/Texture/Texture.css"
+      ],
+      "setIn": [
+        "components/ui/Texture/Texture.css"
+      ]
+    },
+    "--bds-texture-spacing": {
+      "kind": "knob",
+      "readBy": [
+        "texture"
+      ],
+      "readIn": [
+        "components/ui/Texture/Texture.css"
+      ],
+      "setIn": [
+        "components/ui/Texture/Texture.css"
       ]
     },
     "--bds-toast-shadow": {

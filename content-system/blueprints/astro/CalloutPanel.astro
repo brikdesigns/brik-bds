@@ -107,7 +107,7 @@ const ctaUrl = cta && 'url' in cta ? cta.url : undefined;
   /* Section rhythm + centred container: ../section-shell.css (ADR-021).
      This family's rhythm moved from 9vw to the harmonised 7vw. */
   .bds-callout-panel {
-    background: var(--bds-callout-panel-bg, var(--bds-page-primary));
+    background: var(--bds-callout-panel-background, var(--bds-callout-panel-bg, var(--bds-page-primary)));
   }
 
   /* ── Section header ─────────────────────────────────────────── */
@@ -191,7 +191,7 @@ const ctaUrl = cta && 'url' in cta ? cta.url : undefined;
   /* ── Plan callout card ──────────────────────────────────────── */
 
   .bds-callout-panel__main {
-    background: var(--bds-callout-panel-card-bg, var(--bds-surface-secondary));
+    background: var(--bds-callout-panel-card-background, var(--bds-callout-panel-card-bg, var(--bds-surface-secondary)));
     border-radius: var(--bds-callout-panel-card-radius, var(--bds-border-radius-lg));
     padding: var(--bds-callout-panel-card-pad, var(--bds-padding-xl));
     display: flex;

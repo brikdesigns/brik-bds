@@ -21,7 +21,7 @@
  *
  * CSS custom properties:
  *   --bds-stats-bar-padding-y
- *   --bds-stats-bar-bg        (default: var(--bds-surface-inverse))
+ *   --bds-stats-bar-background        (default: var(--bds-surface-inverse))
  *   --bds-stats-bar-value-color   (default: var(--bds-text-inverse))
  *   --bds-stats-bar-label-color   (default: var(--bds-text-inverse))
  *   --bds-stats-bar-divider       (default: var(--bds-border-secondary))
@@ -79,7 +79,7 @@ const motion = section.contentMotion ?? 'none';
 
 <style>
   .bp-stats-bar {
-    background: var(--bds-stats-bar-bg, var(--bds-surface-inverse, var(--bds-color-grayscale-black)));
+    background: var(--bds-stats-bar-background, var(--bds-stats-bar-bg, var(--bds-surface-inverse, var(--bds-color-grayscale-black))));
     padding-block: var(
       --bds-stats-bar-padding-y,
       clamp(var(--bds-padding-lg), 5vw, var(--bds-padding-xl))

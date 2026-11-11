@@ -1,20 +1,20 @@
 import { type HTMLAttributes } from 'react';
 import { bdsClass } from '../../utils';
-import './BackgroundPattern.css';
+import './Texture.css';
 
 /**
- * BackgroundPattern shape — the form axis (ADR-033 § 2: mutually exclusive
+ * Texture shape — the form axis (ADR-033 § 2: mutually exclusive
  * visual shape, no valence), so the prop is `variant` like Card / Skeleton /
  * ServiceTag.
  * - `dot-grid`  — radial-gradient dot lattice.
  * - `line-grid` — linear-gradient grid lines.
  * - `diagonal`  — repeating-linear-gradient 45° slash hatch.
  */
-export type BackgroundPatternVariant = 'dot-grid' | 'line-grid' | 'diagonal';
+export type TextureVariant = 'dot-grid' | 'line-grid' | 'diagonal';
 
-export interface BackgroundPatternProps extends HTMLAttributes<HTMLDivElement> {
+export interface TextureProps extends HTMLAttributes<HTMLDivElement> {
   /** Pattern shape. Default `dot-grid`. */
-  variant?: BackgroundPatternVariant;
+  variant?: TextureVariant;
   /**
    * Fade the pattern out toward the edges of its container via
    * `mask-image`. Default `false` (uniform coverage).
@@ -23,7 +23,7 @@ export interface BackgroundPatternProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
- * BackgroundPattern — decorative CSS-gradient texture layer.
+ * Texture — decorative CSS-gradient texture layer.
  *
  * Absolutely positioned (`inset: 0; z-index: 0`) and non-interactive
  * (`pointer-events: none`) — place it as the first child of a
@@ -36,25 +36,28 @@ export interface BackgroundPatternProps extends HTMLAttributes<HTMLDivElement> {
  * @example
  * ```tsx
  * <div style={{ position: 'relative' }}>
- *   <BackgroundPattern variant="dot-grid" fade />
+ *   <Texture variant="dot-grid" fade />
  *   <div style={{ position: 'relative', zIndex: 1 }}>Content</div>
  * </div>
  * ```
  *
  * @summary Decorative CSS-gradient background texture
  */
-export function BackgroundPattern({
+export function Texture({
   variant = 'dot-grid',
   fade = false,
   className,
   style,
   ...props
-}: BackgroundPatternProps) {
+}: TextureProps) {
   return (
     <div
       className={bdsClass(
+        'bds-texture',
+        `bds-texture--variant-${variant}`,
+        // @deprecated marker for one minor: consumer selectors such as
+        // `:not(.bds-background-pattern)` keep matching. Styles live on `.bds-texture`.
         'bds-background-pattern',
-        `bds-background-pattern--variant-${variant}`,
         className
       )}
       data-fade={fade || undefined}
@@ -65,4 +68,4 @@ export function BackgroundPattern({
   );
 }
 
-export default BackgroundPattern;
+export default Texture;

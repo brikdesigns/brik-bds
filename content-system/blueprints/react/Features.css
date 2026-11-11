@@ -2,7 +2,7 @@
  * Features — `bds-features` section styles (Phase D, brik-bds#1197).
  * Consolidates the former bp-features-branded-dark. The `--branded-dark`
  * class descriptor is gone (ADR-008 §3 — theme + appearance are not names);
- * the dark surface is now the `--bds-features-bg` default, and the column
+ * the dark surface is now the `--bds-features-background` default, and the column
  * count lives here as a responsive grid, never in a class name.
  *
  * Bold + 18px card title, 16px regular description — the AA-clearing posture
@@ -20,7 +20,7 @@
  */
 
 .bds-features {
-  background: var(--bds-features-bg, var(--bds-page-inverse));
+  background: var(--bds-features-background, var(--bds-features-bg, var(--bds-page-inverse)));
   color: var(--bds-text-on-color-dark);
 }
 
