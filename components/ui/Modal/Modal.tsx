@@ -1,5 +1,5 @@
-import { type ReactNode, useEffect, useId } from 'react';
-import { createPortal } from 'react-dom';
+import { type ReactNode, useEffect, useId, useRef } from 'react';
+import * as Dialog from '@radix-ui/react-dialog';
 import { Button } from '../Button';
 import { CloseButton } from '../CloseButton';
 import { bdsClass, resolveRetiredValue, type ModalAccessibleNameProps } from '../../utils';
@@ -10,6 +10,11 @@ export type ModalPreset = 'confirm';
 export type ModalConfirmVariant = 'primary' | 'negative';
 
 const RETIRED_CONFIRM_VARIANTS: Record<string, ModalConfirmVariant> = { destructive: 'negative' };
+
+type DismissProps = Pick<
+  React.ComponentPropsWithoutRef<typeof Dialog.Content>,
+  'onEscapeKeyDown' | 'onPointerDownOutside' | 'onInteractOutside' | 'onCloseAutoFocus'
+>;
 
 interface ModalBaseProps {
   isOpen: boolean;
@@ -128,14 +133,13 @@ export function Modal(props: ModalProps) {
   const isConfirmPreset = props.preset === 'confirm';
   const titleId = useId();
 
+  // Radix returns focus to a <Dialog.Trigger>; Modal is controlled by `isOpen`
+  // and has none, so remember the opener ourselves. This effect runs before the
+  // portalled content mounts and moves focus inside.
+  const openerRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
-    if (!isOpen || !closeOnEscape) return;
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, closeOnEscape, onClose]);
+    if (isOpen) openerRef.current = document.activeElement as HTMLElement | null;
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -144,21 +148,28 @@ export function Modal(props: ModalProps) {
     }
   }, [isOpen]);
 
-  const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (closeOnBackdrop && event.target === event.currentTarget) onClose();
+  // Radix Dialog owns the focus trap, focus-in on open, focus return on close,
+  // Escape and outside-pointer dismissal. BDS classes own the styling.
+  const dismissProps: DismissProps = {
+    onEscapeKeyDown: (event) => { if (!closeOnEscape) event.preventDefault(); },
+    onPointerDownOutside: (event) => { if (!closeOnBackdrop) event.preventDefault(); },
+    onInteractOutside: (event) => { if (!closeOnBackdrop) event.preventDefault(); },
+    onCloseAutoFocus: (event) => {
+      event.preventDefault();
+      openerRef.current?.focus();
+    },
   };
 
-  if (!isOpen) return null;
-
-  const modal = isConfirmPreset
-    ? renderConfirmPreset(props as ModalConfirmPresetProps, onClose, titleId)
-    : renderDefault(props as ModalDefaultProps, onClose, size, titleId);
-
-  return createPortal(
-    <div className="bds-modal-backdrop" onClick={handleBackdropClick}>
-      {modal}
-    </div>,
-    document.body,
+  return (
+    <Dialog.Root open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="bds-modal-backdrop">
+          {isConfirmPreset
+            ? renderConfirmPreset(props as ModalConfirmPresetProps, onClose, titleId, dismissProps)
+            : renderDefault(props as ModalDefaultProps, onClose, size, titleId, dismissProps)}
+        </Dialog.Overlay>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
 
@@ -167,14 +178,15 @@ function renderDefault(
   onClose: () => void,
   size: ModalSize,
   titleId: string,
+  dismissProps: DismissProps,
 ) {
   return (
-    <div
+    <Dialog.Content
+      {...dismissProps}
       className={bdsClass('bds-modal', `bds-modal--${size}`)}
-      role="dialog"
-      aria-modal="true"
       aria-labelledby={title ? titleId : undefined}
       aria-label={title ? undefined : ariaLabel}
+      aria-describedby={undefined}
     >
       {(title || showCloseButton) && (
         <div className="bds-modal__header">
@@ -186,7 +198,7 @@ function renderDefault(
       )}
       <div className="bds-modal__body">{children}</div>
       {footer && <div className="bds-modal__footer">{footer}</div>}
-    </div>
+    </Dialog.Content>
   );
 }
 
@@ -206,6 +218,7 @@ function renderConfirmPreset(
   }: ModalConfirmPresetProps,
   onClose: () => void,
   titleId: string,
+  dismissProps: DismissProps,
 ) {
   const resolvedConfirmVariant =
     resolveRetiredValue('Modal', 'confirmVariant', confirmVariant, RETIRED_CONFIRM_VARIANTS) ?? 'primary';
@@ -228,10 +241,10 @@ function renderConfirmPreset(
   );
 
   return (
-    <div
+    <Dialog.Content
+      {...dismissProps}
       className={bdsClass('bds-modal', 'bds-modal--preset-confirm')}
       role="alertdialog"
-      aria-modal="true"
       aria-labelledby={title ? titleId : undefined}
       aria-label={title ? undefined : ariaLabel}
       aria-describedby={descId}
@@ -246,7 +259,7 @@ function renderConfirmPreset(
       <div className="bds-modal__confirm-actions">
         {footer ?? autoFooter}
       </div>
-    </div>
+    </Dialog.Content>
   );
 }
 
