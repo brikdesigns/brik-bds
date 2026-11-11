@@ -184,6 +184,7 @@ function renderDefault(
     <Dialog.Content
       {...dismissProps}
       className={bdsClass('bds-modal', `bds-modal--${size}`)}
+      aria-modal="true"
       aria-labelledby={title ? titleId : undefined}
       aria-label={title ? undefined : ariaLabel}
       aria-describedby={undefined}
@@ -245,6 +246,7 @@ function renderConfirmPreset(
       {...dismissProps}
       className={bdsClass('bds-modal', 'bds-modal--preset-confirm')}
       role="alertdialog"
+      aria-modal="true"
       aria-labelledby={title ? titleId : undefined}
       aria-label={title ? undefined : ariaLabel}
       aria-describedby={descId}

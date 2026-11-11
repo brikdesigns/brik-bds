@@ -112,6 +112,10 @@ export const Default: Story = {
     // title is wired to the dialog via aria-labelledby (#844).
     await expect(dialog).toHaveAccessibleName('Title goes here');
 
+    // Radix Dialog sets no aria-modal of its own; consumers' a11y gates
+    // assert it (brikdesigns contact-booking-modal.spec.ts).
+    await expect(dialog).toHaveAttribute('aria-modal', 'true');
+
     // Opening moves focus inside the dialog (#3068).
     await waitFor(() => expect(dialog).toContainElement(document.activeElement as HTMLElement));
 
@@ -197,6 +201,7 @@ export const Confirm: Story = {
     const dialog = body.getByRole('alertdialog');
     await expect(dialog).toHaveAccessibleName('Save changes?');
     await expect(dialog).toHaveAccessibleDescription('Your edits will be applied to the live record.');
+    await expect(dialog).toHaveAttribute('aria-modal', 'true');
 
     // Same trap and focus return as the default preset (#3068).
     await waitFor(() => expect(dialog).toContainElement(document.activeElement as HTMLElement));
