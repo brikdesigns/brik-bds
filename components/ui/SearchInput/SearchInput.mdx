@@ -36,6 +36,12 @@ The clear button appears automatically when the field has a value and disappears
 
 > **Note** — For controlled usage, wire `value` + `onChange` + `onClear` together. `onClear` fires when the ✕ button is clicked; in controlled mode it is your responsibility to reset `value` to `''`.
 
+> **Note** — `debounceMs` delays `onChange` after the last keystroke; the field text always updates at once. It defaults to `0` (every keystroke). Pass `250` for global search ([ADR-049 § 4](../../../docs/adrs/ADR-049-search-modes-filter-lookup-global.md)). `onSearch(value)` fires on Enter and skips the delay.
+
+> **Note** — Esc ([ADR-049 § 3](../../../docs/adrs/ADR-049-search-modes-filter-lookup-global.md)): while `aria-expanded` is `true` a popup is open, so Esc is left to the popup and the text stays. With no popup open, Esc clears a non-empty field and fires `onClear`; on an empty field it does nothing and the event keeps bubbling.
+
+> **Note** — The field is not a search landmark ([ADR-049 § 5](../../../docs/adrs/ADR-049-search-modes-filter-lookup-global.md)). When it is the page's search, wrap it in `<div role="search" aria-label="…">`.
+
 > **Note** — All `TextInput` updates (focus ring, error styling, sizing tokens) propagate here automatically. `type`, `iconBefore`, and `iconAfter` are reserved by `SearchInput`; everything else passes through.
 
 > **Note** — An accessible name is required and type-enforced: pass `label` (visible), `aria-label`, or `aria-labelledby`. Omitting all three is a type error. The name is applied to the input.
