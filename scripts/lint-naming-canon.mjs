@@ -38,6 +38,12 @@
  *                  (ADR-043 § 2, § 4: closed families, numeric steps 50-950).
  *                  Word steps (`-light`, `-darkest`, …) retire in #2670. Reads
  *                  dist/tokens.css.
+ *   8  segment     A `--bds-*` name with a banned abbreviation (`bg`, `pad`, `nav`, …)
+ *                  or a run-on component name (`subnav`) in any segment, per
+ *                  tokens/naming-grammar.json § segments (#3080). Reads
+ *                  dist/tokens.css and the Primitive/Semantic names components/ui
+ *                  CSS declares. A Tier 4 hook is judged by lint-tokens.js
+ *                  (`tier4-shape`); a name kept as a TIER4_ALIASES alias is exempt.
  *
  * ── Why rule 6 reads references, when 1-5 read names ───────────────────────
  *
@@ -1097,6 +1103,56 @@ function colorBodyFindings(byName) {
   return findings;
 }
 
+// ── Rule 8 — no banned segment in a --bds-* name (#3080) ───────────────────
+
+const SEGMENT_RULES = GRAMMAR.segments;
+const ALLOWED_ABBREVIATIONS = new Set(SEGMENT_RULES.allowedAbbreviations);
+const BANNED_SEGMENTS = new Set(SEGMENT_RULES.bannedSegments.filter((w) => !ALLOWED_ABBREVIATIONS.has(w)));
+const JOINED_STEMS = Object.fromEntries(Object.entries(SEGMENT_RULES.bannedJoinedStems).filter(([k]) => k !== '$comment'));
+const TIER4_REGISTRY = path.join('manifest', 'tier4-hooks.json');
+
+/** The old spellings TIER4_ALIASES keeps for one minor — the existing alias mechanism, mirrored in the registry. */
+function tier4AliasNames() {
+  if (!fs.existsSync(TIER4_REGISTRY)) return new Set();
+  return new Set(Object.keys(JSON.parse(fs.readFileSync(TIER4_REGISTRY, 'utf8')).aliases ?? {}));
+}
+
+/**
+ * Names the gate judges: every `--bds-*` declared in dist/tokens.css, plus any
+ * Primitive/Semantic name (one on a registry slot) a component stylesheet
+ * declares. A component-scoped Tier 4 hook has no slot, so it is lint-tokens'.
+ */
+function collectSegmentNames(tokenNames, componentsDir) {
+  const names = new Map();
+  for (const name of tokenNames) if (name.startsWith(`--${ID}-`)) names.set(name, 'dist/tokens.css');
+  for (const file of walk(componentsDir, '.css')) {
+    for (const m of blankComments(fs.readFileSync(file, 'utf8')).matchAll(/(--[A-Za-z0-9_-]+)\s*:/g)) {
+      if (m[1].startsWith(`--${ID}-`) && slotFor(m[1]) && !names.has(m[1])) names.set(m[1], file);
+    }
+  }
+  return names;
+}
+
+function segmentFindings(names, aliases) {
+  const findings = [];
+  for (const [name, where] of names) {
+    if (aliases.has(name)) continue;
+    for (const seg of new Set(bodyOf(name).split('-'))) {
+      const joined = JOINED_STEMS[seg];
+      if (!joined && !BANNED_SEGMENTS.has(seg)) continue;
+      const fix = joined ?? SEGMENT_RULES.suggestions[seg];
+      findings.push({
+        rule: 8,
+        id: name,
+        where,
+        detail: `\`${seg}\` is ${joined ? 'a run-on component name' : 'a banned abbreviation'} — `
+          + `${fix ? `write \`${fix}\`` : 'spell the full word'} (tokens/naming-grammar.json § segments)`,
+      });
+    }
+  }
+  return findings;
+}
+
 // ── Baseline ────────────────────────────────────────────────────────────────
 
 /**
@@ -1125,6 +1181,7 @@ const RULE_NAMES = {
   5: 'word on no closed list — default-deny (§ 6)',
   6: 'reference to a deleted --*-status-* token (§ Token families)',
   7: 'colour Primitive is not color-{family}-{step} (ADR-043 § 2, § 4)',
+  8: 'banned abbreviation or run-on stem in a --bds-* name (#3080)',
 };
 
 function main() {
@@ -1143,7 +1200,7 @@ function main() {
   const onlyRule = args.includes('--rule') ? Number(flag('--rule', '0')) : null;
 
   if (onlyRule !== null && !RULE_NAMES[onlyRule]) {
-    console.error(`lint-naming-canon: --rule must be 1-7, got ${onlyRule}`);
+    console.error(`lint-naming-canon: --rule must be 1-8, got ${onlyRule}`);
     process.exit(2);
   }
 
@@ -1209,6 +1266,7 @@ function main() {
     ...vocabularyFindings(unions.unions, modifiers.mods),
     ...referenceFindings(refs),
     ...colorBodyFindings(tokens.byName),
+    ...segmentFindings(collectSegmentNames(tokens.byName.keys(), componentsDir), tier4AliasNames()),
   ];
   if (onlyRule !== null) all = all.filter((f) => f.rule === onlyRule);
 
@@ -1257,7 +1315,7 @@ function main() {
     + `${lines.size} service line(s) exempt on ${slBlocks.size} block(s)`
   );
 
-  for (const rule of onlyRule !== null ? [onlyRule] : [1, 2, 3, 4, 5, 6, 7]) {
+  for (const rule of onlyRule !== null ? [onlyRule] : [1, 2, 3, 4, 5, 6, 7, 8]) {
     const l = live.filter((f) => f.rule === rule);
     const b = baselined.filter((f) => f.rule === rule);
     if (l.length === 0 && b.length === 0) continue;
