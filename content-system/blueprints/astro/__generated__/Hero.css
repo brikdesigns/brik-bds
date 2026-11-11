@@ -9,7 +9,7 @@
   /* ── Shared spine ─────────────────────────────────────────────── */
 
   .bds-hero {
-    background: var(--bds-hero-bg, var(--bds-page-primary));
+    background: var(--bds-hero-background, var(--bds-hero-bg, var(--bds-page-primary)));
   }
 
   .bds-hero__content {
@@ -197,7 +197,7 @@
    * `.bds-blueprint-section`. */
 
   .bds-hero--with-pricing-card {
-    background: var(--bds-hero-bg, var(--bds-page-secondary));
+    background: var(--bds-hero-background, var(--bds-hero-bg, var(--bds-page-secondary)));
     padding-block: var(
       --bds-hero-padding-y,
       clamp(var(--bds-padding-xl), 6vw, var(--bds-padding-huge))
@@ -395,7 +395,7 @@
   }
 
   .bds-hero__media-card {
-    background: var(--bds-hero-media-bg, var(--bds-surface-primary));
+    background: var(--bds-hero-media-background, var(--bds-hero-media-bg, var(--bds-surface-primary)));
     border-radius: var(--bds-hero-radius, var(--bds-border-radius-lg));
     padding: var(--bds-padding-md);
     box-shadow: var(--bds-shadow-md);

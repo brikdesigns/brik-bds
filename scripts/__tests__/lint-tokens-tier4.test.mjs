@@ -34,7 +34,7 @@ describe('tier4-shape', () => {
   it('passes --bds-{component}[-{part}]-{property}', () => {
     expect(tier4ShapeProblems('--bds-ambient-field-tint', ['ambient-field'])).toEqual([]);
     expect(tier4ShapeProblems('--bds-slider-thumb-size', ['slider'])).toEqual([]);
-    expect(tier4ShapeProblems('--bds-bg-pattern-opacity', ['background-pattern'])).toEqual([]);
+    expect(tier4ShapeProblems('--bds-subnav-width', ['sub-navigation'])).toEqual([]);
   });
 
   it('flags a stem that does not name its component', () => {
@@ -109,6 +109,27 @@ describe('tier4-registry-drift', () => {
   it('flags a missing registry file', () => {
     const v = checkTier4Registry(s(), buildTier4Registry(s()), null);
     expect(v.some((x) => x.rule === 'tier4-registry-drift' && /is missing/.test(x.message))).toBe(true);
+  });
+});
+
+describe('tier4 alias targets', () => {
+  // A hook that was removed (not renamed) has no successor hook: its alias
+  // points at the Semantic token the component now reads directly.
+  const s = () => scan({ 'Widget.css': '.w { color: var(--widget-old-color, var(--bds-border-secondary)); }\n.x { gap: var(--bds-widget-gap-size); }\n' });
+  const aliasViolations = (violations) => violations.filter((v) => /TIER4_ALIASES maps/.test(v.message));
+
+  it('accepts an alias whose target is a token, not a hook', () => {
+    const scanned = s();
+    const generated = buildTier4Registry(scanned);
+    const v = checkTier4Registry(scanned, generated, generated, new Set(['--bds-border-secondary']), new Map([['--bds-widget-old-color', '--bds-border-secondary']]));
+    expect(aliasViolations(v)).toEqual([]);
+  });
+
+  it('still flags an alias whose target is neither a hook nor a token', () => {
+    const scanned = s();
+    const generated = buildTier4Registry(scanned);
+    const v = checkTier4Registry(scanned, generated, generated, new Set(), new Map([['--bds-widget-old-color', '--bds-border-secondary']]));
+    expect(aliasViolations(v)).toHaveLength(1);
   });
 });
 

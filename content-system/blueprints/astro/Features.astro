@@ -10,7 +10,7 @@
  * `bp-features-branded-dark` class is retired for the structural `bds-features`
  * block; `--branded-dark` is banned by ADR-008 §3 (theme + appearance), and the
  * `3col` count lives in the responsive grid CSS, not the name. The dark surface
- * is the `--bds-features-bg` default, not a class. Dark section, grid of cards
+ * is the `--bds-features-background` default, not a class. Dark section, grid of cards
  * filled with per-card brand colors — each card sets `data-service-line` to
  * re-bind `--brand-primary` for that subtree. Drives brikdesigns.com's "Other
  * Service Lines" cross-sell module.
@@ -64,7 +64,7 @@
  * path shows the neutral blank brand block (no React primitive available).
  *
  * CSS custom properties — variation API:
- *   --bds-features-bg          (default: var(--bds-page-inverse))
+ *   --bds-features-background          (default: var(--bds-page-inverse))
  *   --bds-features-card-radius (default: var(--bds-border-radius-lg))
  *   --bds-features-gap         (default: var(--bds-gap-lg))
  *   --bds-features-image-pad   (default: var(--bds-padding-xl))
@@ -180,7 +180,7 @@ const sectionClass = [
   /* Section rhythm + centred container: ../section-shell.css (ADR-021).
      This family's rhythm moved from 9vw to the harmonised 7vw. */
   .bds-features {
-    background: var(--bds-features-bg, var(--bds-page-inverse));
+    background: var(--bds-features-background, var(--bds-features-bg, var(--bds-page-inverse)));
     color: var(--bds-text-on-color-dark);
   }
 

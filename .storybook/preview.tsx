@@ -411,7 +411,7 @@ const preview: Preview = {
             'logo',
             'avatar',
             'image',
-            'background-pattern',
+            'texture',
             'brik-blocks',
             '*',
           ],

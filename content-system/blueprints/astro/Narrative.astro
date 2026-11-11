@@ -32,7 +32,7 @@
  * required_facts: []. Section-driven.
  *
  * CSS custom properties (Tier-4 hooks):
- *   --bds-narrative-bg              (default: var(--bds-page-primary))
+ *   --bds-narrative-background              (default: var(--bds-page-primary))
  *   --bds-narrative-heading-color   (default: var(--bds-text-primary))
  *   --bds-narrative-body-color      (default: var(--bds-text-secondary))
  *   --bds-narrative-eyebrow-color   (default: var(--bds-text-brand-primary))
@@ -125,7 +125,7 @@ const callout = section.items[0];
 <style>
   /* Section rhythm + centred container: ../section-shell.css (ADR-021). */
   .bds-narrative {
-    background: var(--bds-narrative-bg, var(--bds-page-primary));
+    background: var(--bds-narrative-background, var(--bds-narrative-bg, var(--bds-page-primary)));
   }
 
   .bds-narrative__container {

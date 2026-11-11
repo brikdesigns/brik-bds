@@ -10,7 +10,7 @@
  * 8px = --bds-gap-md (gap) — same idiom as Badge's --bds-size-600 dot (Badge.css:30-31).
  *
  * The per-cell fill is a data attribute, not a BEM modifier — mirroring
- * BackgroundPattern's `data-fade` — because `light`/`dark`/`poppy` is not a
+ * Texture's `data-fade` — because `light`/`dark`/`poppy` is not a
  * value on any ADR-033 §2 governed axis (not `tone`, not `emphasis`), so it
  * has no axis prefix to carry.
  */

@@ -26,7 +26,7 @@ const meta: Meta<typeof Cta> = {
     docs: {
       description: {
         component:
-          'The `bds-cta` closing-CTA section primitive (brik-bds#582). Replaces the ADR-008-banned `bp-cta-dark-centered` (`--dark` = theme, `--centered` = alignment — both lie when re-themed). The structural truth: a single-column closing CTA (`bds-cta`, default) or a two-column copy-plus-aside variant (`bds-cta--split`). Supports a primary + optional secondary action (brik-bds#590). The default surface is inverse and `--split` retints to the primary surface via the `--bds-cta-bg` hook — neither theme is named in a class.',
+          'The `bds-cta` closing-CTA section primitive (brik-bds#582). Replaces the ADR-008-banned `bp-cta-dark-centered` (`--dark` = theme, `--centered` = alignment — both lie when re-themed). The structural truth: a single-column closing CTA (`bds-cta`, default) or a two-column copy-plus-aside variant (`bds-cta--split`). Supports a primary + optional secondary action (brik-bds#590). The default surface is inverse and `--split` retints to the primary surface via the `--bds-cta-background` hook — neither theme is named in a class.',
       },
     },
   },

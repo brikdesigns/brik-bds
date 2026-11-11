@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { BackgroundPattern } from './BackgroundPattern';
+import { Texture } from './Texture';
 
-const meta: Meta<typeof BackgroundPattern> = {
-  title: 'Assets/background-pattern',
-  component: BackgroundPattern,
+const meta: Meta<typeof Texture> = {
+  title: 'Assets/texture',
+  component: Texture,
   tags: ['surface-shared'],
   parameters: {
     layout: 'padded',
@@ -21,9 +21,9 @@ const meta: Meta<typeof BackgroundPattern> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof BackgroundPattern>;
+type Story = StoryObj<typeof Texture>;
 
-const Demo = (args: React.ComponentProps<typeof BackgroundPattern>) => (
+const Demo = (args: React.ComponentProps<typeof Texture>) => (
   <div
     style={{
       position: 'relative',
@@ -34,7 +34,7 @@ const Demo = (args: React.ComponentProps<typeof BackgroundPattern>) => (
       borderRadius: 'var(--bds-border-radius-md)',
     }}
   >
-    <BackgroundPattern {...args} />
+    <Texture {...args} />
     <div
       style={{
         position: 'relative',

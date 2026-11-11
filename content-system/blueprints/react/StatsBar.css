@@ -17,7 +17,7 @@
  */
 
 .bds-stats-bar {
-  background: var(--bds-stats-bar-bg, var(--bds-surface-inverse));
+  background: var(--bds-stats-bar-background, var(--bds-stats-bar-bg, var(--bds-surface-inverse)));
 }
 
 .bds-stats-bar__list {

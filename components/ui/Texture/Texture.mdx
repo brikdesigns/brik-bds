@@ -1,0 +1,55 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Texture.stories';
+
+<Meta of={Stories} />
+
+# Texture
+
+<ComponentLinks slug="texture" />
+
+Decorative CSS-gradient texture layer for behind-content surfaces. Place it as the first child of a `position: relative` container, with real content stacked above it.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Line grid
+
+<Canvas of={Stories.LineGrid} />
+
+### Diagonal
+
+<Canvas of={Stories.Diagonal} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## CSS Override API
+
+Component-scoped CSS variables declared on `.bds-texture`. Override them with a rule that targets the element (or its `style` prop) — a value set on a wrapping element is replaced by the element's own declaration.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--bds-texture-spacing` | `var(--bds-space-400)` (16px) | Grid pitch — distance between dots or lines |
+| `--bds-texture-mark-size` | `var(--bds-border-width-md)` (1px) | Dot diameter / line thickness |
+| `--bds-texture-opacity` | `0.3` | Layer opacity |
+| `--bds-texture-fade` | `radial-gradient(ellipse at center, black 50%, transparent 100%)` | `mask-image` applied when `fade` is set |
+
+The mark color is not a hook — it reads `--bds-border-secondary`, which already flips per theme.
+
+```css
+/* Example: a denser grid in a hero section */
+.hero .bds-texture {
+  --bds-texture-spacing: var(--bds-space-300);
+}
+```
+
+**Renamed from `BackgroundPattern`.** The `--bds-bg-pattern-size`, `-dot-size`, `-opacity`, `-fade` and `-color` names are still read as fallbacks for one minor, then removed. Move to the names above. The `.bds-background-pattern` class is still emitted beside `.bds-texture` for the same period; select on `.bds-texture`.
+
+## Notes
+
+> **Note** — Static by construction (CSS gradients, no animation or JS) — carries no `prefers-reduced-motion` concern.

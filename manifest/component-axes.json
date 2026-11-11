@@ -76,13 +76,6 @@
       "subtle"
     ]
   },
-  "BackgroundPattern": {
-    "variant": [
-      "dot-grid",
-      "line-grid",
-      "diagonal"
-    ]
-  },
   "Badge": {
     "size": [
       "xs",
@@ -433,6 +426,13 @@
     "size": [
       "default",
       "small"
+    ]
+  },
+  "Texture": {
+    "variant": [
+      "dot-grid",
+      "line-grid",
+      "diagonal"
     ]
   },
   "TimePicker": {
