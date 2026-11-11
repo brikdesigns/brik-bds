@@ -151,6 +151,50 @@ export const VISUAL_STYLE_EXAMPLES: readonly VisualStyleExample[] = [
 ];
 
 /**
+ * A site audited against the vocabulary. Unlike `VisualStyleExample` it has no
+ * image: it shows only as a row in the docs Evidence table, never on the mood
+ * board, so no third-party screenshot is published.
+ */
+export interface VisualStyleEvidence {
+  siteUrl: string;
+  /** The style the site is filed under (best fit to the presets). */
+  primaryStyle: VisualStyle;
+  modifiers: readonly VisualStyle[];
+  kind: 'Reference audit';
+  /** ISO date of the audit. */
+  date: string;
+  /** One plain sentence of observed settings, not site copy. */
+  observation: string;
+}
+
+export const VISUAL_STYLE_EVIDENCE: readonly VisualStyleEvidence[] = [
+  {
+    siteUrl: 'https://centreup.ca/en/',
+    primaryStyle: 'Playful',
+    modifiers: ['Colorful', 'Modern'],
+    kind: 'Reference audit',
+    date: '2026-11-11',
+    observation: 'Warm, medium-saturation imagery with flat grading, pill corners, a dominant orange accent on soft tonal fields, flat elevation, and expressive motion (logo intro, scroll-linked colour-field changes between pinned panels).',
+  },
+  {
+    siteUrl: 'https://www.intandem.com/',
+    primaryStyle: 'Minimal',
+    modifiers: ['Editorial', 'Light'],
+    kind: 'Reference audit',
+    date: '2026-11-11',
+    observation: 'Light warm-soft surfaces with a restrained orange accent, subtle corners, thin borders, flat elevation, an editorial type scale at regular weight, and minimal motion (sticky nav, image carousel).',
+  },
+  {
+    siteUrl: 'https://buddleskincare.com/',
+    primaryStyle: 'Modern',
+    modifiers: ['Light', 'Minimal'],
+    kind: 'Reference audit',
+    date: '2026-11-11',
+    observation: 'Light warm off-white ground with a restrained oxblood accent, subtle corners of roughly 8 to 12px, flat elevation, regular-weight serif headings over a sans body, and minimal motion (marquee ticker, carousels).',
+  },
+];
+
+/**
  * All examples that feature `style` as the primary or as a modifier.
  * Used by Storybook per-style pages and the portal onboarding picker.
  */

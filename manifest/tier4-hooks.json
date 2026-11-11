@@ -310,43 +310,7 @@
       ],
       "setIn": []
     },
-    "--bds-cta-body-color": {
-      "kind": "knob",
-      "readBy": [
-        "cta"
-      ],
-      "readIn": [
-        "content-system/blueprints/astro/Cta.astro",
-        "content-system/blueprints/astro/__generated__/Cta.css",
-        "content-system/blueprints/react/Cta.css"
-      ],
-      "setIn": []
-    },
     "--bds-cta-divider": {
-      "kind": "knob",
-      "readBy": [
-        "cta"
-      ],
-      "readIn": [
-        "content-system/blueprints/astro/Cta.astro",
-        "content-system/blueprints/astro/__generated__/Cta.css",
-        "content-system/blueprints/react/Cta.css"
-      ],
-      "setIn": []
-    },
-    "--bds-cta-heading-color": {
-      "kind": "knob",
-      "readBy": [
-        "cta"
-      ],
-      "readIn": [
-        "content-system/blueprints/astro/Cta.astro",
-        "content-system/blueprints/astro/__generated__/Cta.css",
-        "content-system/blueprints/react/Cta.css"
-      ],
-      "setIn": []
-    },
-    "--bds-cta-method-color": {
       "kind": "knob",
       "readBy": [
         "cta"
@@ -877,42 +841,6 @@
       ],
       "setIn": []
     },
-    "--bds-narrative-body-color": {
-      "kind": "knob",
-      "readBy": [
-        "narrative"
-      ],
-      "readIn": [
-        "content-system/blueprints/astro/Narrative.astro",
-        "content-system/blueprints/astro/__generated__/Narrative.css",
-        "content-system/blueprints/react/Narrative.css"
-      ],
-      "setIn": []
-    },
-    "--bds-narrative-eyebrow-color": {
-      "kind": "knob",
-      "readBy": [
-        "narrative"
-      ],
-      "readIn": [
-        "content-system/blueprints/astro/Narrative.astro",
-        "content-system/blueprints/astro/__generated__/Narrative.css",
-        "content-system/blueprints/react/Narrative.css"
-      ],
-      "setIn": []
-    },
-    "--bds-narrative-heading-color": {
-      "kind": "knob",
-      "readBy": [
-        "narrative"
-      ],
-      "readIn": [
-        "content-system/blueprints/astro/Narrative.astro",
-        "content-system/blueprints/astro/__generated__/Narrative.css",
-        "content-system/blueprints/react/Narrative.css"
-      ],
-      "setIn": []
-    },
     "--bds-popover-min-width": {
       "kind": "knob",
       "readBy": [
@@ -1078,18 +1006,6 @@
       ],
       "setIn": []
     },
-    "--bds-stats-bar-label-color": {
-      "kind": "knob",
-      "readBy": [
-        "stats-bar"
-      ],
-      "readIn": [
-        "content-system/blueprints/astro/StatsBar.astro",
-        "content-system/blueprints/astro/__generated__/StatsBar.css",
-        "content-system/blueprints/react/StatsBar.css"
-      ],
-      "setIn": []
-    },
     "--bds-stats-bar-padding-y": {
       "kind": "knob",
       "readBy": [
@@ -1098,18 +1014,6 @@
       "readIn": [
         "content-system/blueprints/astro/StatsBar.astro",
         "content-system/blueprints/astro/__generated__/StatsBar.css"
-      ],
-      "setIn": []
-    },
-    "--bds-stats-bar-value-color": {
-      "kind": "knob",
-      "readBy": [
-        "stats-bar"
-      ],
-      "readIn": [
-        "content-system/blueprints/astro/StatsBar.astro",
-        "content-system/blueprints/astro/__generated__/StatsBar.css",
-        "content-system/blueprints/react/StatsBar.css"
       ],
       "setIn": []
     },
@@ -1186,40 +1090,7 @@
       ],
       "setIn": []
     },
-    "--bds-testimonials-featured-cite-color": {
-      "kind": "knob",
-      "readBy": [
-        "testimonials-featured-large"
-      ],
-      "readIn": [
-        "content-system/blueprints/astro/TestimonialsFeaturedLarge.astro",
-        "content-system/blueprints/astro/__generated__/TestimonialsFeaturedLarge.css"
-      ],
-      "setIn": []
-    },
-    "--bds-testimonials-featured-mark-color": {
-      "kind": "knob",
-      "readBy": [
-        "testimonials-featured-large"
-      ],
-      "readIn": [
-        "content-system/blueprints/astro/TestimonialsFeaturedLarge.astro",
-        "content-system/blueprints/astro/__generated__/TestimonialsFeaturedLarge.css"
-      ],
-      "setIn": []
-    },
     "--bds-testimonials-featured-padding-y": {
-      "kind": "knob",
-      "readBy": [
-        "testimonials-featured-large"
-      ],
-      "readIn": [
-        "content-system/blueprints/astro/TestimonialsFeaturedLarge.astro",
-        "content-system/blueprints/astro/__generated__/TestimonialsFeaturedLarge.css"
-      ],
-      "setIn": []
-    },
-    "--bds-testimonials-featured-quote-color": {
       "kind": "knob",
       "readBy": [
         "testimonials-featured-large"

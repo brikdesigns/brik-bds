@@ -94,8 +94,8 @@ Pass a custom `footer` to override the auto-rendered actions while keeping the r
 
 - **An accessible name is required (type-enforced).** Pass `title` (labels the dialog via `aria-labelledby`) or `aria-label` for a titleless modal; omitting both is a type error.
 - Renders `role="dialog"` (or `alertdialog` for confirm preset) with `aria-labelledby` linking the title.
-- Focus trap inside the modal — `Tab` cycles within, focus returns to the trigger on close.
-- `Escape` closes (auto). Backdrop click closes by default; opt out via `closeOnBackdrop={false}`.
+- Built on `@radix-ui/react-dialog`. Opening moves focus inside the dialog; `Tab` and `Shift+Tab` cycle within it. Closing by `Escape`, the close button, or the backdrop returns focus to the element that opened it.
+- `Escape` closes by default; opt out via `closeOnEscape={false}`. Backdrop click closes by default; opt out via `closeOnBackdrop={false}`.
 - Body scroll is locked while the modal is open.
 
 ## API
