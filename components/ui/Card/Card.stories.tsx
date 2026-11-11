@@ -52,6 +52,18 @@ const meta: Meta<typeof Card> = {
       description:
         'Leading 1:1 media (Default shape only) — `{ avatar: {…} }`, `{ image: {…} }`, or `{ logo: { set, name } }`. Renders an `Avatar`, a square `Image`, or a bundled `Logo` on the left, with `children` stacked to the right. Which of the three is content, not a semantic axis — set it here rather than in a per-media story (ADR-010 Q2).',
     },
+    tint: {
+      control: 'select',
+      options: ['none', 'brand', 'marketing', 'information', 'product', 'back-office'],
+      mapping: { none: undefined },
+      description:
+        'Service-line surface tint (Default shape, `stack`, `row`, `pricing`) — a pale wash keyed to a service line. Sets only the surface; the variant border stays. Default = no tint.',
+    },
+    tintInverse: {
+      control: 'boolean',
+      description:
+        'Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. Default = false.',
+    },
   },
 };
 
@@ -519,6 +531,66 @@ export const InteractionTestTintTones: Story = {
       const light = canvas.getByText('marketing · light').closest('.bds-card') as HTMLElement;
       const inverse = canvas.getByText('marketing · inverse').closest('.bds-card') as HTMLElement;
       await expect(getComputedStyle(inverse).backgroundColor).not.toBe(getComputedStyle(light).backgroundColor);
+    } finally {
+      if (previous === null) root.removeAttribute('data-theme');
+      else root.setAttribute('data-theme', previous);
+    }
+  },
+};
+
+/**
+ * Asserts the default (no `layout`) card and `layout="pricing"` resolve `tint`
+ * and `tintInverse` to the same surface as `stack` in light and dark, and keep
+ * the variant border (#2294).
+ *
+ * @summary Verifies tint on default + pricing cards, both themes
+ */
+export const InteractionTestTintAcrossShapes: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  parameters: { layout: 'padded' },
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 240px)', gap: 16 }}>
+      {(['light', 'inverse'] as const).map((tone) => (
+        <Card key={`default-${tone}`} tint="marketing" tintInverse={tone === 'inverse'}>
+          <CardTitle>{`default · ${tone}`}</CardTitle>
+        </Card>
+      ))}
+      {(['light', 'inverse'] as const).map((tone) => (
+        <Card
+          key={`pricing-${tone}`}
+          layout="pricing"
+          tint="marketing"
+          tintInverse={tone === 'inverse'}
+          title={`pricing · ${tone}`}
+          price="$49"
+        />
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const root = document.documentElement;
+    const previous = root.getAttribute('data-theme');
+    const fill = (tone: 'light' | 'inverse') => {
+      const probe = document.createElement('div');
+      probe.style.backgroundColor = TINT_SURFACES.marketing[tone];
+      canvasElement.appendChild(probe);
+      const value = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return value;
+    };
+    try {
+      for (const theme of ['light', 'dark']) {
+        root.setAttribute('data-theme', theme);
+        for (const shape of ['default', 'pricing']) {
+          for (const tone of ['light', 'inverse'] as const) {
+            const card = canvas.getByText(`${shape} · ${tone}`).closest('.bds-card') as HTMLElement;
+            await expect(getComputedStyle(card).backgroundColor).toBe(fill(tone));
+            // `tint` sets only the surface — the outlined border survives.
+            await expect(getComputedStyle(card).borderTopStyle).toBe('solid');
+          }
+        }
+      }
     } finally {
       if (previous === null) root.removeAttribute('data-theme');
       else root.setAttribute('data-theme', previous);

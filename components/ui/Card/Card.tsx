@@ -43,7 +43,8 @@ export type CardLayout = 'stack' | 'row' | 'metric' | 'control' | 'pricing';
 /** Heading level for a card's title — decouples document outline from the token-driven visual size. */
 export type CardHeadingLevel = 'h2' | 'h3' | 'h4';
 /**
- * Service-line surface tint for the `stack`/`row` layouts. Maps to the
+ * Service-line surface tint for the default card and the `stack`/`row`/`pricing`
+ * layouts. Maps to the
  * canonical `--surface-service-{line}-light` pastel surface token — never an
  * invented name. Excludes the deprecated `service` alias of `ServiceLine`;
  * pass `back-office`.
@@ -206,6 +207,10 @@ interface CardDefaultProps extends CardBaseProps {
    * usual; they render in the content column. Omit for a plain vertical card.
    */
   media?: CardMedia;
+  /** Service-line surface tint — pale wash keyed to a service line. Sets only the surface; the `variant` border stays. */
+  tint?: CardTint;
+  /** Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. */
+  tintInverse?: boolean;
   /** Card content — composes `<CardTitle>`, `<CardDescription>`, `<CardFooter>`, etc. */
   children: ReactNode;
 }
@@ -245,7 +250,7 @@ interface CardAnatomyProps extends CardBaseProps {
   action?: ReactNode;
   /** Overlay badge anchored to the media corner (`stack`); the leading badge in `control`. */
   badge?: ReactNode;
-  /** Service-line surface tint (`stack`/`row`) — pale wash keyed to a service line. Border/size unchanged. */
+  /** Service-line surface tint (`stack`/`row`/`pricing`) — pale wash keyed to a service line. Border/size unchanged. */
   tint?: CardTint;
   /** Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. */
   tintInverse?: boolean;
@@ -384,6 +389,8 @@ function renderDefault({
   interactive = false,
   href,
   padding = 'md',
+  tint,
+  tintInverse,
   className,
   style,
   ...rest
@@ -392,6 +399,8 @@ function renderDefault({
     'bds-card',
     cardVariantClass(variant),
     `bds-card--padding-${padding}`,
+    tint && `bds-card--tint-${tint}`,
+    tint && tintInverse && 'bds-card--emphasis-inverse',
     media && 'bds-card--media',
     interactive && 'bds-card--interactive',
     href && 'bds-card--link',
