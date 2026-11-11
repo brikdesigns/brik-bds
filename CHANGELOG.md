@@ -31,6 +31,20 @@ Six Tier 4 hooks are renamed to the ADR-014 shape `--bds-{component}[-{part}]-{p
 | `--bds-social-icon-brand` | `--bds-social-icon-platform-color` |
 | `--bds-board-card-accent` | `--bds-board-card-accent-color` |
 
+**Removed (consumer CSS):** 11 Tier 4 text-color hooks that nothing in BDS set and no consumer sets are gone ([#3027](https://github.com/brikdesigns/brik-bds/issues/3027)). Each section now reads its Semantic text token directly, with the same value as before. A swept consumer set none of them (brik-client-portal `origin/staging`, brikdesigns, brik-templates, brik-website-themes, every `web/*` site). To recolor one of these, set the text role on the section, not a hook.
+
+| Removed | Now reads |
+|---|---|
+| `--bds-cta-heading-color`, `--bds-cta-method-color` | `--bds-text-inverse` (`--split`: `--bds-text-primary`) |
+| `--bds-cta-body-color` | `--bds-text-inverse` (`--split`: `--bds-text-secondary`) |
+| `--bds-narrative-heading-color` | `--bds-text-primary` |
+| `--bds-narrative-body-color` | `--bds-text-secondary` |
+| `--bds-narrative-eyebrow-color` | `--bds-text-brand-primary` |
+| `--bds-stats-bar-value-color`, `--bds-stats-bar-label-color` | `--bds-text-inverse` |
+| `--bds-testimonials-featured-quote-color` | `--bds-text-primary` |
+| `--bds-testimonials-featured-cite-color` | `--bds-text-secondary` |
+| `--bds-testimonials-featured-mark-color` | `--bds-text-brand-primary` |
+
 ## Migration: prefix bridge removed (#2711)
 
 Ships in the release after 0.226.1 (minor). The ADR-043 prefix bridge is gone: the 719 pre-prefix token names (`--text-primary`, `--color-poppy-light`, `--color-system-youtube`, the renamed component knobs, ...) no longer resolve. A read of an old name is an unset custom property, and an override of one is a no-op. Read and set the `--bds-` name.
