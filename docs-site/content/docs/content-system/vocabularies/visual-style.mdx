@@ -8,6 +8,7 @@ import {
   VISUAL_STYLE_VALUES,
   VISUAL_STYLE_PRESETS,
   VISUAL_STYLE_EXAMPLES,
+  VISUAL_STYLE_EVIDENCE,
   MOOD_TO_VISUAL_STYLE,
   MOOD_TO_PERSONALITY,
 } from '@brikdesigns/bds/content-system';
@@ -135,7 +136,8 @@ export const Levels = ({ style }) => {
 
 export const Examples = ({ style }) => {
   const rows = VISUAL_STYLE_EXAMPLES.filter((ex) => ex.primaryStyle === style && ex.referenceSiteUrl);
-  if (!rows.length) return <p>No evidence yet.</p>;
+  const audits = VISUAL_STYLE_EVIDENCE.filter((ev) => ev.primaryStyle === style);
+  if (!rows.length && !audits.length) return <p>No evidence yet.</p>;
   return (
     <table>
       <thead>
@@ -153,6 +155,14 @@ export const Examples = ({ style }) => {
             <td>Inspiration</td>
             <td>2026-04-19</td>
             <td>The mood-board reference for {style}, added to <code>VISUAL_STYLE_EXAMPLES</code> on this date.</td>
+          </tr>
+        ))}
+        {audits.map((ev) => (
+          <tr key={ev.siteUrl}>
+            <td><a href={ev.siteUrl}>{ev.siteUrl.replace('https://', '')}</a></td>
+            <td>{ev.kind}</td>
+            <td>{ev.date}</td>
+            <td>{ev.observation} Modifiers: {ev.modifiers.join(', ')}.</td>
           </tr>
         ))}
       </tbody>
