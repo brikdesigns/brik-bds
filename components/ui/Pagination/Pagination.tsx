@@ -1,5 +1,6 @@
 import { type HTMLAttributes, useCallback } from 'react';
 import { Icon } from '../Icon';
+import { Select } from '../Select';
 import { CaretLeft, CaretRight } from '../../icons';
 import { bdsClass } from '../../utils';
 import './Pagination.css';
@@ -23,7 +24,20 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, 'onCh
   onChange: (page: number) => void;
   /** Number of sibling pages to show around current page */
   siblingCount?: number;
+  /** Rows per page. With `totalItems`, renders a "Showing X–Y of N" count. */
+  pageSize?: number;
+  /** Total rows across all pages. Needs `pageSize` to render the count. */
+  totalItems?: number;
+  /** Row-count choices for the selector. Default `[25, 50, 100]`. */
+  pageSizeOptions?: number[];
+  /**
+   * Renders the rows-per-page selector when provided (needs `pageSize`).
+   * The consumer owns resetting `currentPage` to 1 when the size changes.
+   */
+  onPageSizeChange?: (pageSize: number) => void;
 }
+
+const DEFAULT_PAGE_SIZE_OPTIONS = [25, 50, 100];
 
 /**
  * Generate page numbers with ellipsis
@@ -100,6 +114,10 @@ export function Pagination({
   position = 'center',
   onChange,
   siblingCount = 1,
+  pageSize,
+  totalItems,
+  pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
+  onPageSizeChange,
   className = '',
   style,
   ...props
@@ -112,15 +130,43 @@ export function Pagination({
     if (currentPage < totalPages) onChange(currentPage + 1);
   }, [currentPage, totalPages, onChange]);
 
-  const pages = getPageNumbers(currentPage, totalPages, siblingCount);
+  const pages = getPageNumbers(currentPage, Math.max(totalPages, 1), siblingCount);
+
+  const showSizeSelect = pageSize !== undefined && onPageSizeChange !== undefined;
+  const showCount = pageSize !== undefined && totalItems !== undefined;
+  const hasMeta = showSizeSelect || showCount;
+  const rangeStart = totalItems === 0 || !showCount ? 0 : (currentPage - 1) * (pageSize ?? 0) + 1;
+  const rangeEnd = showCount ? Math.min(currentPage * (pageSize ?? 0), totalItems ?? 0) : 0;
+  const sizeOptions = pageSize !== undefined && !pageSizeOptions.includes(pageSize)
+    ? [...pageSizeOptions, pageSize].sort((a, b) => a - b)
+    : pageSizeOptions;
 
   return (
     <nav
       aria-label="Pagination"
-      className={bdsClass('bds-pagination', `bds-pagination--${position}`, className)}
+      className={bdsClass('bds-pagination', `bds-pagination--${position}`, hasMeta && 'bds-pagination--with-meta', className)}
       style={style}
       {...props}
     >
+      {hasMeta && (
+        <div className="bds-pagination__meta">
+          {showSizeSelect && (
+            <Select
+              aria-label="Rows per page"
+              size="sm"
+              fullWidth={false}
+              value={String(pageSize)}
+              options={sizeOptions.map((n) => ({ value: String(n), label: `${n} rows` }))}
+              onChange={(e) => onPageSizeChange(Number(e.target.value))}
+            />
+          )}
+          {showCount && (
+            <span className="bds-pagination__count" aria-live="polite">
+              {`Showing ${rangeStart}–${rangeEnd} of ${totalItems}`}
+            </span>
+          )}
+        </div>
+      )}
       <div className="bds-pagination__items">
         <button
           type="button"

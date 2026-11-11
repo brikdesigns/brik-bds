@@ -81,6 +81,21 @@ Standard table footer pattern — count on the left, controls on the right.
 </div>
 ```
 
+## Pattern: rows per page
+
+Pass `pageSize` + `onPageSizeChange` for the selector (default 25 / 50 / 100 rows; override with `pageSizeOptions`) and `totalItems` for the "Showing X–Y of N" count. Reset to page 1 when the size changes.
+
+```tsx
+<Pagination
+  currentPage={page}
+  totalPages={Math.max(1, Math.ceil(total / pageSize))}
+  onChange={setPage}
+  pageSize={pageSize}
+  totalItems={total}
+  onPageSizeChange={(size) => { setPageSize(size); setPage(1); }}
+/>
+```
+
 ## When *not* to use
 
 - **Don't use Pagination for infinite-scroll lists.** Pagination implies discrete pages with stable URLs. For continuous loading, use a "Load more" button or true infinite scroll.
@@ -103,6 +118,10 @@ Standard table footer pattern — count on the left, controls on the right.
 | `onChange` | `(page: number) => void` *(required)* | — |
 | `position` | `'left' \| 'center' \| 'right'` | `'center'` |
 | `siblingCount` | `number` | `1` |
+| `pageSize` | `number` | — |
+| `totalItems` | `number` | — |
+| `pageSizeOptions` | `number[]` | `[25, 50, 100]` |
+| `onPageSizeChange` | `(pageSize: number) => void` | — |
 
 Plus standard `<nav>` HTML attributes (excluding native `onChange`).
 
