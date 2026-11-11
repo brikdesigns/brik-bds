@@ -365,3 +365,45 @@ export const InteractionTestBreadcrumbNoStrut: Story = {
     ).toBeLessThan(0.5);
   },
 };
+
+/**
+ * Regression for #2652: a service line on `layout="split"` reaches the cascade.
+ * The headline resolves to the line's `--bds-text-service-{line}-on-light` token
+ * rather than the neutral `--bds-text-primary` it used to fall back to, so a
+ * consumer no longer hand-wires `--bds-hero-headline-color`. The tinted surface
+ * stays pricing-card-only, so the split hero keeps its page background.
+ *
+ * @summary Split + service line — identity on any layout
+ */
+export const InteractionTestSplitServiceLine: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    sectionKey: 'hero-split-service-line',
+    layout: 'split',
+    subtitle: 'Marketing',
+    title: 'Websites that turn visitors into customers',
+    media: demoImage,
+    'data-service-line': 'marketing',
+  } as Story['args'],
+  play: async ({ canvasElement }) => {
+    const hero = canvasElement.querySelector<HTMLElement>('.bds-hero')!;
+    const title = canvasElement.querySelector<HTMLElement>('.bds-hero__title')!;
+    const probe = document.createElement('span');
+    probe.style.color = 'var(--bds-text-service-marketing-on-light)';
+    canvasElement.appendChild(probe);
+    const expected = getComputedStyle(probe).color;
+    probe.remove();
+    const neutral = (() => {
+      const p = document.createElement('span');
+      p.style.color = 'var(--bds-text-primary)';
+      canvasElement.appendChild(p);
+      const c = getComputedStyle(p).color;
+      p.remove();
+      return c;
+    })();
+
+    await expect(hero.getAttribute('data-service-line')).toBe('marketing');
+    await expect(getComputedStyle(title).color).toBe(expected);
+    await expect(expected).not.toBe(neutral);
+  },
+};
