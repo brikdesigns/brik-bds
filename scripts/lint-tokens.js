@@ -712,10 +712,7 @@ const TIER4_SHAPE_BASELINE = new Map([
   ['--bds-grid-min-col-width', 2656],
   ['--bds-subnav-width', 2656],
   ['--bds-testimonials-featured-background', 2656],
-  ['--bds-testimonials-featured-cite-color', 2656],
-  ['--bds-testimonials-featured-mark-color', 2656],
   ['--bds-testimonials-featured-padding-y', 2656],
-  ['--bds-testimonials-featured-quote-color', 2656],
   ['--bds-textarea-min-width', 2656],
 ]);
 
