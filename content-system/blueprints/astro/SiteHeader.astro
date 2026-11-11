@@ -373,16 +373,19 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
    * and drawer behavior. Implemented: editorial-transparent, utility-first. */
 
   .bp-site-header {
-    /* Per-client tuning */
-    --bds-site-header-bg: var(--bds-surface-navigation, transparent);
+    /* Per-client tuning. The retired --bds-site-header-bg / -cta-bg names are
+     * read first at each use (TIER4_ALIASES), so a consumer still setting one
+     * keeps working for one minor — this block declares the new names on the
+     * element, so the old name must lead the chain to win. */
+    --bds-site-header-background: var(--bds-surface-navigation, transparent);
     --bds-site-header-text-color: var(--bds-text-primary);
-    --bds-site-header-cta-bg: var(--bds-background-brand-primary);
+    --bds-site-header-cta-background: var(--bds-background-brand-primary);
     --bds-site-header-cta-color: var(--bds-text-on-color-dark, var(--bds-text-inverse));
 
     position: sticky;
     top: 0;
     z-index: 100;
-    background: var(--bds-site-header-bg);
+    background: var(--bds-site-header-bg, var(--bds-site-header-background));
     padding-block: var(--bds-padding-md);
     transition: box-shadow var(--bds-duration-md) var(--bds-ease-out), background var(--bds-duration-md) var(--bds-ease-out),
       transform var(--bds-duration-md) var(--bds-ease-out);
@@ -406,7 +409,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
    * hides. Gains a subtle elevation shadow once the page is scrolled,
    * set by the runtime script via [data-scrolled]. */
   .bp-site-header--utility-first {
-    --bds-site-header-bg: var(--bds-surface-navigation);
+    --bds-site-header-background: var(--bds-surface-navigation);
   }
 
   .bp-site-header--utility-first[data-scrolled] {
@@ -419,12 +422,12 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
    * additionally drives hide-on-scroll / reveal-on-scroll-up. The client
    * sets the over-hero text color via --bds-site-header-text-color. */
   .bp-site-header--editorial-transparent {
-    --bds-site-header-bg: transparent;
+    --bds-site-header-background: transparent;
     box-shadow: none;
   }
 
   .bp-site-header--editorial-transparent[data-scrolled] {
-    --bds-site-header-bg: var(--bds-surface-navigation);
+    --bds-site-header-background: var(--bds-surface-navigation);
     backdrop-filter: blur(var(--bds-blur-radius-md));
     box-shadow: var(--bds-shadow-sm);
   }
@@ -433,7 +436,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
    * surface (like utility-first) with an elevation shadow on scroll; the
    * shared mega-menu markup carries the multi-column flyout. */
   .bp-site-header--service-centric {
-    --bds-site-header-bg: var(--bds-surface-navigation);
+    --bds-site-header-background: var(--bds-surface-navigation);
   }
 
   .bp-site-header--service-centric[data-scrolled] {
@@ -444,12 +447,12 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
    * the hero, solid on scroll, wide letter tracking. Hide-on-scroll /
    * reveal-up is driven by the runtime (reveal-on-scroll behavior). */
   .bp-site-header--portfolio-minimal {
-    --bds-site-header-bg: transparent;
+    --bds-site-header-background: transparent;
     box-shadow: none;
   }
 
   .bp-site-header--portfolio-minimal[data-scrolled] {
-    --bds-site-header-bg: var(--bds-surface-navigation);
+    --bds-site-header-background: var(--bds-surface-navigation);
     box-shadow: var(--bds-shadow-sm);
   }
 
@@ -462,7 +465,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
    * at low contrast (muted surface), no dropdowns, never hides. Nothing
    * moves on scroll beyond the elevation shadow. */
   .bp-site-header--calm-flat {
-    --bds-site-header-bg: var(--bds-surface-muted);
+    --bds-site-header-background: var(--bds-surface-muted);
   }
 
   .bp-site-header--calm-flat[data-scrolled] {
@@ -742,7 +745,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
 
   .bp-site-header__cta {
     padding: var(--bds-padding-sm) var(--bds-padding-md);
-    background: var(--bds-site-header-cta-bg);
+    background: var(--bds-site-header-cta-bg, var(--bds-site-header-cta-background));
     color: var(--bds-site-header-cta-color);
     font-family: var(--bds-font-family-label);
     font-size: var(--bds-label-xl);
@@ -802,7 +805,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
   .bp-site-header__drawer {
     position: fixed;
     inset: 0;
-    background: var(--bds-site-header-bg);
+    background: var(--bds-site-header-bg, var(--bds-site-header-background));
     padding: var(--bds-padding-xl);
     display: none;
   }

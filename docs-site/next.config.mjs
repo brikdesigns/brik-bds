@@ -96,6 +96,17 @@ const nextConfig = {
         destination: '/docs/foundation.md',
         permanent: true,
       },
+      // BackgroundPattern was renamed Texture (brik-bds#3080).
+      {
+        source: '/docs/components/background-pattern',
+        destination: '/docs/components/texture',
+        permanent: true,
+      },
+      {
+        source: '/docs/components/background-pattern.md',
+        destination: '/docs/components/texture.md',
+        permanent: true,
+      },
       {
         source: '/docs/primitives/:slug*',
         destination: '/docs/foundation/:slug*',

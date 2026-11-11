@@ -19,7 +19,7 @@
  */
 
 .bds-cta {
-  background: var(--bds-cta-bg, var(--bds-surface-inverse));
+  background: var(--bds-cta-background, var(--bds-cta-bg, var(--bds-surface-inverse)));
 }
 
 .bds-cta__container {
@@ -93,7 +93,7 @@
 /* ── --split: two-column copy + aside, on the primary surface ────────────── */
 
 .bds-cta--split {
-  background: var(--bds-cta-bg, var(--bds-surface-primary));
+  background: var(--bds-cta-background, var(--bds-cta-bg, var(--bds-surface-primary)));
 }
 
 .bds-cta--split .bds-cta__container {

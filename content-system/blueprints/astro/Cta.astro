@@ -39,7 +39,7 @@
  * place of the missing method — CI grep on `dist/` blocks publish.
  *
  * ── CSS custom properties (Tier-4 hooks) ─────────────────────────
- *   --bds-cta-bg              (default: var(--bds-surface-inverse);
+ *   --bds-cta-background              (default: var(--bds-surface-inverse);
  *                              --split: var(--bds-surface-primary))
  *   --bds-cta-heading-color   (default: var(--bds-text-inverse); --split: var(--bds-text-primary))
  *   --bds-cta-body-color      (default: var(--bds-text-inverse); --split: var(--bds-text-secondary))
@@ -159,7 +159,7 @@ const methods = isSplit
   /* ── Shared spine ─────────────────────────────────────────────── */
 
   .bds-cta {
-    background: var(--bds-cta-bg, var(--bds-surface-inverse, var(--bds-color-grayscale-black)));
+    background: var(--bds-cta-background, var(--bds-cta-bg, var(--bds-surface-inverse, var(--bds-color-grayscale-black))));
   }
 
   .bds-cta__container {
@@ -230,7 +230,7 @@ const methods = isSplit
   /* ── --split: message column + contact-method aside ─────────────── */
 
   .bds-cta--split {
-    background: var(--bds-cta-bg, var(--bds-surface-primary));
+    background: var(--bds-cta-background, var(--bds-cta-bg, var(--bds-surface-primary)));
   }
 
   .bds-cta--split .bds-cta__container {

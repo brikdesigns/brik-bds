@@ -10,14 +10,14 @@ AmbientField is the living background layer: a slow, ambient motion field that s
     {
       title: 'AmbientField',
       whenToUse: 'A Premium-tier surface that has spent the motion budget on a living, moving background.',
-      whenNotToUse: 'A non-Premium surface, or a layer that must paint from SSR — that\'s BackgroundPattern.',
+      whenNotToUse: 'A non-Premium surface, or a layer that must paint from SSR — that\'s Texture.',
       code: `<AmbientField src={fieldLoop} />`,
     },
     {
-      title: 'BackgroundPattern',
+      title: 'Texture',
       whenToUse: 'Static dot- or line-grid texture — costs nothing and needs no reduced-motion handling.',
       whenNotToUse: 'The brief asks for ambient motion on a Premium surface — that\'s AmbientField.',
-      code: `<BackgroundPattern variant="dot-grid" />`,
+      code: `<Texture variant="dot-grid" />`,
     },
     {
       title: 'MediaBand',
@@ -34,7 +34,7 @@ AmbientField is the living background layer: a slow, ambient motion field that s
 - A hero or section band that should read as alive without animating anything the reader is trying to use
 - Per-client atmosphere, where the loop itself is swapped from a theme rather than from JSX
 
-Not for content-bearing media — the layer is `aria-hidden` and non-interactive, so nothing inside it reaches the accessibility tree. Not for non-Premium surfaces either: prefer the static [BackgroundPattern](/docs/components/background-pattern), which costs nothing and needs no reduced-motion handling.
+Not for content-bearing media — the layer is `aria-hidden` and non-interactive, so nothing inside it reaches the accessibility tree. Not for non-Premium surfaces either: prefer the static [Texture](/docs/components/texture), which costs nothing and needs no reduced-motion handling.
 
 ## Import
 
@@ -127,4 +127,4 @@ Deprecated aliases: `--bds-bg-field-src`, `--bds-bg-field-tint`, `--bds-bg-field
 
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-ambient-field--overview)**
 - **[MediaBand](/docs/components/media-band)** — the stacking context this slots into
-- **[BackgroundPattern](/docs/components/background-pattern)** — the static, non-Premium alternative
+- **[Texture](/docs/components/texture)** — the static, non-Premium alternative

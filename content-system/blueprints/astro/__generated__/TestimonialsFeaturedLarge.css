@@ -1,5 +1,5 @@
 .bp-testimonials-featured {
-    background: var(--bds-testimonials-featured-bg, var(--bds-surface-primary));
+    background: var(--bds-testimonials-featured-background, var(--bds-testimonials-featured-bg, var(--bds-surface-primary)));
     padding-block: var(--bds-testimonials-featured-padding-y, var(--bds-section-padding-block));
   }
 

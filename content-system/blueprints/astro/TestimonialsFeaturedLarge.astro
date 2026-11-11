@@ -28,7 +28,7 @@
  *
  * CSS custom properties:
  *   --bds-testimonials-featured-padding-y
- *   --bds-testimonials-featured-bg         (default: var(--bds-surface-primary))
+ *   --bds-testimonials-featured-background         (default: var(--bds-surface-primary))
  *   --bds-testimonials-featured-quote-color (default: var(--bds-text-primary))
  *   --bds-testimonials-featured-cite-color  (default: var(--bds-text-secondary))
  *   --bds-testimonials-featured-mark-color  (default: var(--bds-text-brand-primary))
@@ -85,7 +85,7 @@ const featured = section.items[0];
 
 <style>
   .bp-testimonials-featured {
-    background: var(--bds-testimonials-featured-bg, var(--bds-surface-primary));
+    background: var(--bds-testimonials-featured-background, var(--bds-testimonials-featured-bg, var(--bds-surface-primary)));
     padding-block: var(--bds-testimonials-featured-padding-y, var(--bds-section-padding-block));
   }
 

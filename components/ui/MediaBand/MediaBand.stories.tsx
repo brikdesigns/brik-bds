@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { BackgroundPattern } from '../BackgroundPattern';
+import { Texture } from '../Texture';
 import { MediaBand } from './MediaBand';
 
 /* ─── Fixtures ────────────────────────────────────────────────── */
@@ -135,7 +135,7 @@ export const Default: Story = {
   args: {
     as: 'section',
     seam: 'none',
-    graphic: <BackgroundPattern variant="dot-grid" fade />,
+    graphic: <Texture variant="dot-grid" fade />,
     children: <BandContent />,
   },
   render: (args) => (

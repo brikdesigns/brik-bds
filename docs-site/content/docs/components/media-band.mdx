@@ -10,14 +10,14 @@ MediaBand owns the "decorative graphic behind content" recipe as one primitive: 
     {
       title: 'MediaBand',
       whenToUse: 'A whole section band with a decorative graphic behind real content — owns the stacking, clip, and seam-fade recipe.',
-      whenNotToUse: 'Content-bearing media the reader acts on (Frame), or just a texture layer with no band (BackgroundPattern).',
-      code: `<MediaBand graphic={<BackgroundPattern />}>…</MediaBand>`,
+      whenNotToUse: 'Content-bearing media the reader acts on (Frame), or just a texture layer with no band (Texture).',
+      code: `<MediaBand graphic={<Texture />}>…</MediaBand>`,
     },
     {
-      title: 'BackgroundPattern',
+      title: 'Texture',
       whenToUse: 'The bare decorative texture layer that usually fills MediaBand\'s graphic slot.',
       whenNotToUse: 'You need the full band recipe — z-order, clip, seam fade — that\'s MediaBand.',
-      code: `<BackgroundPattern variant="dot-grid" />`,
+      code: `<Texture variant="dot-grid" />`,
     },
     {
       title: 'Frame',
@@ -59,7 +59,7 @@ The decorative layer renders either way. Fill the `graphic` slot with JSX, or le
 
 ```tsx
 // Slot
-<MediaBand as="section" graphic={<BackgroundPattern fade />}>
+<MediaBand as="section" graphic={<Texture fade />}>
   <SectionHeader title="How we work" />
 </MediaBand>
 ```
@@ -113,4 +113,4 @@ Plus all standard HTML attributes for the rendered element.
 ## Related
 
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-media-band--overview)**
-- **[BackgroundPattern](/docs/components/background-pattern)** — the usual occupant of the decorative slot
+- **[Texture](/docs/components/texture)** — the usual occupant of the decorative slot

@@ -11,7 +11,7 @@ export type MediaBandSeam = 'none' | 'top' | 'bottom' | 'both';
 export interface MediaBandProps extends HTMLAttributes<HTMLElement> {
   /**
    * Decorative layer content (`z-index: 0`) — an illustration, `<img>`, or a
-   * `BackgroundPattern`. Rendered inside an `aria-hidden`, non-interactive
+   * `Texture`. Rendered inside an `aria-hidden`, non-interactive
    * layer, so it never enters the accessibility tree or the tab order.
    *
    * The layer renders whether or not this slot is filled: with the slot empty
@@ -53,7 +53,7 @@ export interface MediaBandProps extends HTMLAttributes<HTMLElement> {
  *
  * @example
  * ```tsx
- * <MediaBand as="section" seam="bottom" graphic={<BackgroundPattern fade />}>
+ * <MediaBand as="section" seam="bottom" graphic={<Texture fade />}>
  *   <SectionHeader title="How we work" />
  * </MediaBand>
  *

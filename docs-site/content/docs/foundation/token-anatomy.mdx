@@ -157,7 +157,7 @@ The cascade mechanism is unchanged: `@layer client-theme` still wins over `@laye
 
 ### About Tier 4
 
-The Component tier is **`--bds-{component}[-{part}]-{property}`** — a component- or blueprint-scoped custom property, where `{component}` is the component/blueprint identifier (or a recognisable abbreviation of it, such as `bg-pattern` for BackgroundPattern), the optional `{part}` names a sub-element, and `{property}` is the styled aspect (`--bds-toast-shadow`, `--bds-slider-thumb-shadow`, `--bds-hero-img-card-bg`). The property names *what* is styled, never a role: `--bds-social-icon-platform-color`, not `--bds-social-icon-brand`. Its ID is always `bds`. This is the only sanctioned Component-tier namespace ([ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md)).
+The Component tier is **`--bds-{component}[-{part}]-{property}`** — a component- or blueprint-scoped custom property, where `{component}` is the component/blueprint identifier (or a recognisable abbreviation of it, such as `subnav` for SubNavigation), the optional `{part}` names a sub-element, and `{property}` is the styled aspect (`--bds-toast-shadow`, `--bds-slider-thumb-shadow`, `--bds-hero-media-background`). The `{part}` and `{property}` segments are full words, with no abbreviations such as `bg`. The property names *what* is styled, never a role: `--bds-social-icon-platform-color`, not `--bds-social-icon-brand`. Its ID is always `bds`. This is the only sanctioned Component-tier namespace ([ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md)).
 
 A Tier 4 token serves one of two roles, both under the same name:
 

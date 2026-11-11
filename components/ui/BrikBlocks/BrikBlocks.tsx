@@ -29,7 +29,7 @@ export interface BrikBlocksProps extends HTMLAttributes<HTMLDivElement> {
  *
  * Renders a run of 24×24px squares with an 8px gap, each cell tinted
  * `light` / `dark` / `poppy` in the order given. Purely decorative
- * (`aria-hidden`, `pointer-events: none`) — like BackgroundPattern, place it
+ * (`aria-hidden`, `pointer-events: none`) — like Texture, place it
  * anywhere layout allows and it never intercepts interaction or a screen
  * reader.
  *

@@ -1,6 +1,6 @@
 /* Section rhythm + centred container: ../section-shell.css (ADR-021). */
   .bds-narrative {
-    background: var(--bds-narrative-bg, var(--bds-page-primary));
+    background: var(--bds-narrative-background, var(--bds-narrative-bg, var(--bds-page-primary)));
   }
 
   .bds-narrative__container {
