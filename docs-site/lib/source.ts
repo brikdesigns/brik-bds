@@ -1,5 +1,6 @@
 import { docs } from '@/.source/server';
 import { llms, loader } from 'fumadocs-core/source';
+import { renderDataComponents } from './render-data-components';
 
 export const source = loader({
   baseUrl: '/docs',
@@ -48,7 +49,7 @@ export function renderIndex(): string {
 
 /** One page as Markdown, titled and self-locating. */
 export async function renderPage(page: DocsPage): Promise<string> {
-  const body = await page.data.getText('processed');
+  const body = renderDataComponents(await page.data.getText('processed'), page.data._exports);
   return `# ${page.data.title} (${page.url})\n\n${body}`;
 }
 
