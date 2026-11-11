@@ -7,9 +7,10 @@
  * Component-local tokens (ADR-014 Tier 4, --bds-{component}[-{part}]-{property} —
  * defined here with defaults, overridable by a client theme or `style`):
  *   --bds-texture-spacing       Grid pitch — distance between dots/lines.
- *                               Defaults to --bds-space-400 (16px).
- *   --bds-texture-mark-size     Dot diameter / line thickness. Defaults to
- *                               --bds-border-width-md (1px).
+ *                               15px — no 15px space token exists, and
+ *                               the rename must render identically (#3095).
+ *   --bds-texture-mark-size     Dot diameter / line thickness. 1px, fixed
+ *                               across border-width modes (#3095).
  *   --bds-texture-opacity       Layer opacity. 0.3 — no opacity token
  *                               exists yet (open item, brik-bds#3080).
  *   --bds-texture-fade          mask-image value applied when `fade` is set.
@@ -29,8 +30,8 @@
  */
 
 .bds-texture {
-  --bds-texture-spacing: var(--bds-space-400);
-  --bds-texture-mark-size: var(--bds-border-width-md);
+  --bds-texture-spacing: 15px;
+  --bds-texture-mark-size: 1px;
   --bds-texture-opacity: 0.3;
   --bds-texture-fade: radial-gradient(ellipse at center, black 50%, transparent 100%);
 
