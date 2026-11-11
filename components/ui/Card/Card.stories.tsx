@@ -434,6 +434,29 @@ export const Row: Story = {
 
 
 const TINT_LINES = ['brand', 'marketing', 'information', 'product', 'back-office'] as const;
+/* Explicit token names so canonical-check can resolve each one. */
+const TINT_SURFACES = {
+  'brand': {
+    light: 'var(--bds-surface-service-brand-light)',
+    inverse: 'var(--bds-surface-service-brand-inverse)',
+  },
+  'marketing': {
+    light: 'var(--bds-surface-service-marketing-light)',
+    inverse: 'var(--bds-surface-service-marketing-inverse)',
+  },
+  'information': {
+    light: 'var(--bds-surface-service-information-light)',
+    inverse: 'var(--bds-surface-service-information-inverse)',
+  },
+  'product': {
+    light: 'var(--bds-surface-service-product-light)',
+    inverse: 'var(--bds-surface-service-product-inverse)',
+  },
+  'back-office': {
+    light: 'var(--bds-surface-service-back-office-light)',
+    inverse: 'var(--bds-surface-service-back-office-inverse)',
+  },
+} as const;
 
 /**
  * Both `tintTone` values for every service line. Switch the toolbar theme to
@@ -468,9 +491,9 @@ export const InteractionTestTintTones: Story = {
     const canvas = within(canvasElement);
     const root = document.documentElement;
     const previous = root.getAttribute('data-theme');
-    const fill = (line: string, tone: string) => {
+    const fill = (line: (typeof TINT_LINES)[number], tone: 'light' | 'inverse') => {
       const probe = document.createElement('div');
-      probe.style.backgroundColor = `var(--bds-surface-service-${line}-${tone})`;
+      probe.style.backgroundColor = TINT_SURFACES[line][tone];
       canvasElement.appendChild(probe);
       const value = getComputedStyle(probe).backgroundColor;
       probe.remove();
@@ -480,7 +503,7 @@ export const InteractionTestTintTones: Story = {
       for (const theme of ['light', 'dark']) {
         root.setAttribute('data-theme', theme);
         for (const line of TINT_LINES) {
-          for (const tone of ['light', 'inverse']) {
+          for (const tone of ['light', 'inverse'] as const) {
             const card = canvas.getByText(`${line} · ${tone}`).closest('.bds-card') as HTMLElement;
             await expect(getComputedStyle(card).backgroundColor).toBe(fill(line, tone));
           }
