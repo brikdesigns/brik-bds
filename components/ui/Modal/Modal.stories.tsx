@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Modal, type ModalProps } from './Modal';
 import { Button } from '../Button';
 
@@ -99,21 +99,49 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const trigger = canvas.getByRole('button', { name: 'Open modal' });
+    const body = within(document.body);
 
     // Open the modal
     await userEvent.click(trigger);
 
     // Modal renders in a portal — query from document.body
-    const dialog = within(document.body).getByRole('dialog');
+    const dialog = body.getByRole('dialog');
     await expect(dialog).toBeVisible();
 
     // role="dialog" must expose an accessible name (WCAG 4.1.2) — the
     // title is wired to the dialog via aria-labelledby (#844).
     await expect(dialog).toHaveAccessibleName('Title goes here');
 
-    // Close via the close button
-    const closeButton = within(dialog).getByLabelText('Close');
-    await userEvent.click(closeButton);
+    // Opening moves focus inside the dialog (#3068).
+    await waitFor(() => expect(dialog).toContainElement(document.activeElement as HTMLElement));
+
+    // Tab / Shift+Tab never leave the dialog: more presses than it has
+    // focusable controls (close, Cancel, Save) wrap back inside.
+    for (let i = 0; i < 5; i++) {
+      await userEvent.tab();
+      await expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    }
+    for (let i = 0; i < 5; i++) {
+      await userEvent.tab({ shift: true });
+      await expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    }
+
+    // Escape, the close button, and the backdrop each return focus to the opener.
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(body.queryByRole('dialog')).toBeNull());
+    await waitFor(() => expect(trigger).toHaveFocus());
+
+    await userEvent.click(trigger);
+    await userEvent.click(within(body.getByRole('dialog')).getByLabelText('Close'));
+    await waitFor(() => expect(body.queryByRole('dialog')).toBeNull());
+    await waitFor(() => expect(trigger).toHaveFocus());
+
+    await userEvent.click(trigger);
+    await body.findByRole('dialog');
+    const backdrop = document.querySelector('.bds-modal-backdrop') as HTMLElement;
+    await userEvent.click(backdrop);
+    await waitFor(() => expect(body.queryByRole('dialog')).toBeNull());
+    await waitFor(() => expect(trigger).toHaveFocus());
   },
 };
 
@@ -159,6 +187,26 @@ export const Confirm: Story = {
         />
       </>
     );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: 'Confirm action' });
+    const body = within(document.body);
+
+    await userEvent.click(trigger);
+    const dialog = body.getByRole('alertdialog');
+    await expect(dialog).toHaveAccessibleName('Save changes?');
+    await expect(dialog).toHaveAccessibleDescription('Your edits will be applied to the live record.');
+
+    // Same trap and focus return as the default preset (#3068).
+    await waitFor(() => expect(dialog).toContainElement(document.activeElement as HTMLElement));
+    for (let i = 0; i < 4; i++) {
+      await userEvent.tab();
+      await expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    }
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(body.queryByRole('alertdialog')).toBeNull());
+    await waitFor(() => expect(trigger).toHaveFocus());
   },
 };
 
