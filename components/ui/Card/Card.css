@@ -425,28 +425,28 @@
   background-color: var(--bds-surface-service-back-office-light);
 }
 
-/* `tintTone="inverse"` — the theme-flipping service surface (ADR-012): white
+/* `tintInverse` — the theme-flipping service surface (ADR-012): white
  * in light, the deep hue in dark. Three-class selectors beat the `-light`
  * rules above, so the pale wash only applies when no tone is set.
  */
-.bds-card--layout-stack.bds-card--tint-inverse.bds-card--tint-brand,
-.bds-card--layout-row.bds-card--tint-inverse.bds-card--tint-brand {
+.bds-card--layout-stack.bds-card--emphasis-inverse.bds-card--tint-brand,
+.bds-card--layout-row.bds-card--emphasis-inverse.bds-card--tint-brand {
   background-color: var(--bds-surface-service-brand-inverse);
 }
-.bds-card--layout-stack.bds-card--tint-inverse.bds-card--tint-marketing,
-.bds-card--layout-row.bds-card--tint-inverse.bds-card--tint-marketing {
+.bds-card--layout-stack.bds-card--emphasis-inverse.bds-card--tint-marketing,
+.bds-card--layout-row.bds-card--emphasis-inverse.bds-card--tint-marketing {
   background-color: var(--bds-surface-service-marketing-inverse);
 }
-.bds-card--layout-stack.bds-card--tint-inverse.bds-card--tint-information,
-.bds-card--layout-row.bds-card--tint-inverse.bds-card--tint-information {
+.bds-card--layout-stack.bds-card--emphasis-inverse.bds-card--tint-information,
+.bds-card--layout-row.bds-card--emphasis-inverse.bds-card--tint-information {
   background-color: var(--bds-surface-service-information-inverse);
 }
-.bds-card--layout-stack.bds-card--tint-inverse.bds-card--tint-product,
-.bds-card--layout-row.bds-card--tint-inverse.bds-card--tint-product {
+.bds-card--layout-stack.bds-card--emphasis-inverse.bds-card--tint-product,
+.bds-card--layout-row.bds-card--emphasis-inverse.bds-card--tint-product {
   background-color: var(--bds-surface-service-product-inverse);
 }
-.bds-card--layout-stack.bds-card--tint-inverse.bds-card--tint-back-office,
-.bds-card--layout-row.bds-card--tint-inverse.bds-card--tint-back-office {
+.bds-card--layout-stack.bds-card--emphasis-inverse.bds-card--tint-back-office,
+.bds-card--layout-row.bds-card--emphasis-inverse.bds-card--tint-back-office {
   background-color: var(--bds-surface-service-back-office-inverse);
 }
 

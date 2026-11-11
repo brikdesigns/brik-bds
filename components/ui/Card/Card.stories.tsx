@@ -321,11 +321,10 @@ export const Stack: Story = {
       description:
         'Service-line surface tint — a pale wash keyed to a service line. Sets only the surface; border/size unchanged. Default = no tint.',
     },
-    tintTone: {
-      control: 'inline-radio',
-      options: ['light', 'inverse'],
+    tintInverse: {
+      control: 'boolean',
       description:
-        'Which service-line surface `tint` resolves to. `light` (default) = pale wash; `inverse` = theme-flipping surface (white in light, deep hue in dark). Needs `tint`.',
+        'Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. Default = false.',
     },
     titleAs: {
       control: 'inline-radio',
@@ -410,11 +409,10 @@ export const Row: Story = {
       description:
         'Service-line surface tint — a pale wash keyed to a service line. Sets only the surface. Default = no tint.',
     },
-    tintTone: {
-      control: 'inline-radio',
-      options: ['light', 'inverse'],
+    tintInverse: {
+      control: 'boolean',
       description:
-        'Which service-line surface `tint` resolves to. `light` (default) = pale wash; `inverse` = theme-flipping surface (white in light, deep hue in dark). Needs `tint`.',
+        'Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. Default = false.',
     },
     titleAs: {
       control: 'inline-radio',
@@ -459,11 +457,11 @@ const TINT_SURFACES = {
 } as const;
 
 /**
- * Both `tintTone` values for every service line. Switch the toolbar theme to
+ * Both `tintInverse` values for every service line. Switch the toolbar theme to
  * dark to see `inverse` flip from white to the deep hue while `light` stays a
  * pale wash.
  *
- * @summary tintTone — light wash vs theme-flipping inverse
+ * @summary tintInverse — light wash vs theme-flipping inverse
  */
 export const TintTones: Story = {
   parameters: { layout: 'padded' },
@@ -471,7 +469,7 @@ export const TintTones: Story = {
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 240px)', gap: 16 }}>
       {TINT_LINES.flatMap((line) =>
         (['light', 'inverse'] as const).map((tone) => (
-          <Card key={`${line}-${tone}`} layout="stack" tint={line} tintTone={tone} title={`${line} · ${tone}`} />
+          <Card key={`${line}-${tone}`} layout="stack" tint={line} tintInverse={tone === 'inverse'} title={`${line} · ${tone}`} />
         )),
       )}
     </div>
@@ -509,6 +507,14 @@ export const InteractionTestTintTones: Story = {
           }
         }
       }
+      // `row` composes the same surface as `stack`.
+      const row = document.createElement('div');
+      canvasElement.appendChild(row);
+      const rowCard = document.createElement('div');
+      rowCard.className = 'bds-card bds-card--layout-row bds-card--tint-marketing bds-card--emphasis-inverse';
+      row.appendChild(rowCard);
+      await expect(getComputedStyle(rowCard).backgroundColor).toBe(fill('marketing', 'inverse'));
+      row.remove();
       // The two tones must actually differ in dark, or the prop is a no-op.
       const light = canvas.getByText('marketing · light').closest('.bds-card') as HTMLElement;
       const inverse = canvas.getByText('marketing · inverse').closest('.bds-card') as HTMLElement;
