@@ -51,7 +51,7 @@ describe('tier4-shape', () => {
     expect(tier4ShapeProblems('--bds-slider', ['slider']).join()).toMatch(/needs a component stem and a property/);
   });
 
-  // brik-bds#3080: tokens/naming-grammar.json § segments bans abbreviated segments,
+  // brik-bds#3088: tokens/naming-grammar.json § segments bans abbreviated segments,
   // run-on component names and prop/position/state words in {part}.
   it('flags a banned segment and a prop word in {part}: --bds-table-sticky-end-bg', () => {
     const p = tier4ShapeProblems('--bds-table-sticky-end-bg', ['table']).join();

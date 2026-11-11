@@ -775,7 +775,7 @@ describe('rule 7 — a colour Primitive is color-{family}-{step} (ADR-043 § 2, 
   });
 });
 
-describe('rule 8 — no banned segment in a --bds-* name (#3080)', () => {
+describe('rule 8 — no banned segment in a --bds-* name (#3088)', () => {
   it('fails on an abbreviation: --bds-surface-nav', () => {
     const { code, out } = run({ tokens: withTokens('--bds-surface-nav: #fff;') });
     expect(code).toBe(1);

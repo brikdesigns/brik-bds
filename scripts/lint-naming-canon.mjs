@@ -40,7 +40,7 @@
  *                  dist/tokens.css.
  *   8  segment     A `--bds-*` name with a banned abbreviation (`bg`, `pad`, `nav`, …)
  *                  or a run-on component name (`subnav`) in any segment, per
- *                  tokens/naming-grammar.json § segments (#3080). Reads
+ *                  tokens/naming-grammar.json § segments (#3088). Reads
  *                  dist/tokens.css and the Primitive/Semantic names components/ui
  *                  CSS declares. A Tier 4 hook is judged by lint-tokens.js
  *                  (`tier4-shape`); a name kept as a TIER4_ALIASES alias is exempt.
@@ -1103,7 +1103,7 @@ function colorBodyFindings(byName) {
   return findings;
 }
 
-// ── Rule 8 — no banned segment in a --bds-* name (#3080) ───────────────────
+// ── Rule 8 — no banned segment in a --bds-* name (#3088) ───────────────────
 
 const SEGMENT_RULES = GRAMMAR.segments;
 const ALLOWED_ABBREVIATIONS = new Set(SEGMENT_RULES.allowedAbbreviations);
@@ -1181,7 +1181,7 @@ const RULE_NAMES = {
   5: 'word on no closed list — default-deny (§ 6)',
   6: 'reference to a deleted --*-status-* token (§ Token families)',
   7: 'colour Primitive is not color-{family}-{step} (ADR-043 § 2, § 4)',
-  8: 'banned abbreviation or run-on stem in a --bds-* name (#3080)',
+  8: 'banned abbreviation or run-on stem in a --bds-* name (#3088)',
 };
 
 function main() {

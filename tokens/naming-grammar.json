@@ -160,7 +160,7 @@
     ]
   },
   "segments": {
-    "$comment": "Word-level rules for every segment of a token name, brik-bds#3080. Read by lint-tokens.js (Tier 4 shape, rule tier4-shape) and lint-naming-canon.mjs (rule 8). The anatomy page is token-anatomy.mdx § About Tier 4. OPERATOR SAID 2026-11-11 (chat): \"yes -bg should be banned - we should be following strict naming logic across all our environments\". Spell every segment as a full word; the only short forms are allowedAbbreviations, the T-shirt steps in a step slot, and the axis letters x and y.",
+    "$comment": "Word-level rules for every segment of a token name, brik-bds#3088. Read by lint-tokens.js (Tier 4 shape, rule tier4-shape) and lint-naming-canon.mjs (rule 8). The anatomy page is token-anatomy.mdx § About Tier 4. OPERATOR SAID 2026-11-11 (chat): \"yes -bg should be banned - we should be following strict naming logic across all our environments\". Spell every segment as a full word; the only short forms are allowedAbbreviations, the T-shirt steps in a step slot, and the axis letters x and y.",
     "bannedSegments": ["bg", "btn", "fs", "fw", "lh", "pad", "dur", "col", "mx", "my", "nav", "src", "pre", "cat", "ch", "fg", "expo", "v", "img", "txt", "hdr", "desc"],
     "suggestions": {
       "$comment": "The full word for a banned segment that has an unambiguous one. A banned segment absent here is reported without a suggestion: spell it out.",

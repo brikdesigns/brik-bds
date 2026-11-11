@@ -673,14 +673,14 @@ const TIER4_ALIASES = new Map([
 ]);
 
 // A stem is the full kebab component name (`background-pattern`, `sub-navigation`),
-// never an abbreviation of it (brik-bds#3080). These owners use a stem that is not
+// never an abbreviation of it (brik-bds#3088). These owners use a stem that is not
 // their name, each for a stated reason.
 const TIER4_DECLARED_STEMS = new Map([
   ['page', { stem: 'gutter', reason: 'ADR-043 § 5 / #2670 — `page` is a reserved Semantic word' }],
   ['section-shell', { stem: 'blueprint-section', reason: 'the shell every blueprint section composes; its hooks are read by each section' }],
 ]);
 
-// Hooks that broke the word-level shape rules the day they were tightened (brik-bds#3080),
+// Hooks that broke the word-level shape rules the day they were tightened (brik-bds#3088),
 // each keyed to the issue that renames it. A COUNTDOWN, not a carve-out: checkTier4Registry
 // fails on an entry that no longer violates (renamed, removed, or turned into a TIER4_ALIASES
 // alias), so the list can only shrink. Never add a row to keep a new hook green; rename it.
@@ -715,7 +715,7 @@ const TIER4_SHAPE_BASELINE = new Map([
   ['--bds-textarea-min-width', 2656],
 ]);
 
-// Word-level vocabulary, declared once in tokens/naming-grammar.json § segments (brik-bds#3080).
+// Word-level vocabulary, declared once in tokens/naming-grammar.json § segments (brik-bds#3088).
 const SEGMENT_RULES = GRAMMAR.segments;
 const TIER4_ALLOWED_ABBREVIATIONS = new Set(SEGMENT_RULES.allowedAbbreviations);
 const TIER4_BANNED_SEGMENTS = new Set(SEGMENT_RULES.bannedSegments.filter((s) => !TIER4_ALLOWED_ABBREVIATIONS.has(s)));
@@ -829,7 +829,7 @@ function tier4ShapeProblems(name, owners) {
   });
   const stemLen = Math.max(0, ...stemLengths);
   if (!stemLen) problems.push(`stem does not name its component (${owners.join(', ')}) — lead with the full component name, e.g. --bds-${owners[0]}-…`);
-  // Word-level vocabulary: tokens/naming-grammar.json § segments (brik-bds#3080).
+  // Word-level vocabulary: tokens/naming-grammar.json § segments (brik-bds#3088).
   for (const seg of new Set(segs)) {
     if (TIER4_JOINED_STEMS.has(seg)) problems.push(`"${seg}" is a run-on component name — write "${TIER4_JOINED_STEMS.get(seg)}"`);
     else if (TIER4_BANNED_SEGMENTS.has(seg)) problems.push(`"${seg}" is a banned abbreviation${TIER4_SEGMENT_SUGGESTIONS[seg] ? ` — write "${TIER4_SEGMENT_SUGGESTIONS[seg]}"` : ' — spell the full word'}`);
