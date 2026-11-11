@@ -124,3 +124,5 @@ The 2026-04-24 consolidation of `EmailInput` was correct (5-line wrapper, no UX 
 | `URLInput` | ❌ Never ship | Same reasoning as `EmailInput` |
 
 Restoration of `SearchInput` and addition of `NumberInput` as first-class components is tracked separately.
+
+> **Amended 2026-11-11 by [ADR-049](./ADR-049-search-modes-filter-lookup-global.md) § 5.** The `role="search"` named above (and in the 2026-05-17 amendment's `SearchInput` example) never existed in `components/ui` (`grep -rn 'role="search"' components/ui` returns 0), and a landmark belongs on the container that holds the whole search feature, not on the input. Read the `SearchInput` row's distinct UX as "search affordance, clear-button interaction, Escape and `onSearch`/`debounceMs` behaviour". The verdict (own component) stands.
