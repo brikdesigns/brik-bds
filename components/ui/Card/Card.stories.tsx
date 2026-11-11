@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, within } from 'storybook/test';
 import { Card, CardTitle, CardDescription, CardFooter } from './Card';
 import { Image } from '../Image';
 import { Logo } from '../Logo';
@@ -320,6 +321,12 @@ export const Stack: Story = {
       description:
         'Service-line surface tint — a pale wash keyed to a service line. Sets only the surface; border/size unchanged. Default = no tint.',
     },
+    tintTone: {
+      control: 'inline-radio',
+      options: ['light', 'inverse'],
+      description:
+        'Which service-line surface `tint` resolves to. `light` (default) = pale wash; `inverse` = theme-flipping surface (white in light, deep hue in dark). Needs `tint`.',
+    },
     titleAs: {
       control: 'inline-radio',
       options: ['h2', 'h3', 'h4'],
@@ -403,6 +410,12 @@ export const Row: Story = {
       description:
         'Service-line surface tint — a pale wash keyed to a service line. Sets only the surface. Default = no tint.',
     },
+    tintTone: {
+      control: 'inline-radio',
+      options: ['light', 'inverse'],
+      description:
+        'Which service-line surface `tint` resolves to. `light` (default) = pale wash; `inverse` = theme-flipping surface (white in light, deep hue in dark). Needs `tint`.',
+    },
     titleAs: {
       control: 'inline-radio',
       options: ['h2', 'h3', 'h4'],
@@ -419,3 +432,67 @@ export const Row: Story = {
   ],
 };
 
+
+const TINT_LINES = ['brand', 'marketing', 'information', 'product', 'back-office'] as const;
+
+/**
+ * Both `tintTone` values for every service line. Switch the toolbar theme to
+ * dark to see `inverse` flip from white to the deep hue while `light` stays a
+ * pale wash.
+ *
+ * @summary tintTone — light wash vs theme-flipping inverse
+ */
+export const TintTones: Story = {
+  parameters: { layout: 'padded' },
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 240px)', gap: 16 }}>
+      {TINT_LINES.flatMap((line) =>
+        (['light', 'inverse'] as const).map((tone) => (
+          <Card key={`${line}-${tone}`} layout="stack" tint={line} tintTone={tone} title={`${line} · ${tone}`} />
+        )),
+      )}
+    </div>
+  ),
+};
+
+/**
+ * Asserts each card's fill resolves to `--bds-surface-service-{line}-{tone}`
+ * in light and dark — the table in #2294, read back from the rendered DOM.
+ *
+ * @summary Verifies light/inverse tone resolves in both themes
+ */
+export const InteractionTestTintTones: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  render: TintTones.render,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const root = document.documentElement;
+    const previous = root.getAttribute('data-theme');
+    const fill = (line: string, tone: string) => {
+      const probe = document.createElement('div');
+      probe.style.backgroundColor = `var(--bds-surface-service-${line}-${tone})`;
+      canvasElement.appendChild(probe);
+      const value = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return value;
+    };
+    try {
+      for (const theme of ['light', 'dark']) {
+        root.setAttribute('data-theme', theme);
+        for (const line of TINT_LINES) {
+          for (const tone of ['light', 'inverse']) {
+            const card = canvas.getByText(`${line} · ${tone}`).closest('.bds-card') as HTMLElement;
+            await expect(getComputedStyle(card).backgroundColor).toBe(fill(line, tone));
+          }
+        }
+      }
+      // The two tones must actually differ in dark, or the prop is a no-op.
+      const light = canvas.getByText('marketing · light').closest('.bds-card') as HTMLElement;
+      const inverse = canvas.getByText('marketing · inverse').closest('.bds-card') as HTMLElement;
+      await expect(getComputedStyle(inverse).backgroundColor).not.toBe(getComputedStyle(light).backgroundColor);
+    } finally {
+      if (previous === null) root.removeAttribute('data-theme');
+      else root.setAttribute('data-theme', previous);
+    }
+  },
+};

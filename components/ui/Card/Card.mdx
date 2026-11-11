@@ -38,7 +38,7 @@ Which of the three renders is content, not a semantic axis — set `media` in th
 
 ### Stack layout
 
-`layout="stack"` — vertical content card and the malleable `CardGrid` cell. Optional top `media`, an `overline` eyebrow, `title`, a `children` body, and a bottom-anchored `action`. All slots are optional so one arrangement serves any content type — service, blog post, customer story, property listing, team bio. `variant` / `tint` set the surface for a cell on a colored grid.
+`layout="stack"` — vertical content card and the malleable `CardGrid` cell. Optional top `media`, an `overline` eyebrow, `title`, a `children` body, and a bottom-anchored `action`. All slots are optional so one arrangement serves any content type — service, blog post, customer story, property listing, team bio. `variant` / `tint` set the surface for a cell on a colored grid; `tintTone="inverse"` swaps the pale `-light` wash for the theme-flipping `--bds-surface-service-{line}-inverse` surface (white in light, deep hue in dark) — never hand-set `backgroundColor` for it.
 
 <Canvas of={Stories.Stack} />
 
