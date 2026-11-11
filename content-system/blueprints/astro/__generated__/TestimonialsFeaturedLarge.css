@@ -31,7 +31,7 @@
     font-family: var(--bds-font-family-display, var(--bds-font-family-heading));
     font-size: clamp(var(--bds-display-sm), 8vw, var(--bds-display-md));
     line-height: 1;
-    color: var(--bds-testimonials-featured-mark-color, var(--bds-text-brand-primary));
+    color: var(--bds-text-brand-primary);
   }
 
   .bp-testimonials-featured__quote-text {
@@ -40,7 +40,7 @@
     font-size: clamp(var(--bds-heading-md), 2.5vw, var(--bds-heading-xl));
     font-weight: var(--bds-font-weight-medium);
     line-height: var(--bds-font-line-height-relaxed);
-    color: var(--bds-testimonials-featured-quote-color, var(--bds-text-primary));
+    color: var(--bds-text-primary);
     max-width: var(--bds-content-width-text-sm);
   }
 
@@ -50,5 +50,5 @@
     font-style: normal;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--bds-testimonials-featured-cite-color, var(--bds-text-secondary));
+    color: var(--bds-text-secondary);
   }

@@ -65,7 +65,7 @@
   font-size: clamp(var(--bds-heading-xl), 4vw, var(--bds-heading-huge));
   font-weight: var(--bds-font-weight-semibold);
   line-height: var(--bds-font-line-height-tight);
-  color: var(--bds-stats-bar-value-color, var(--bds-text-inverse));
+  color: var(--bds-text-inverse);
 }
 
 .bds-stats-bar__label {
@@ -73,5 +73,5 @@
   font-size: var(--bds-label-lg);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--bds-stats-bar-label-color, var(--bds-text-inverse));
+  color: var(--bds-text-inverse);
 }

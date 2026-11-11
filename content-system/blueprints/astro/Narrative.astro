@@ -33,9 +33,6 @@
  *
  * CSS custom properties (Tier-4 hooks):
  *   --bds-narrative-background              (default: var(--bds-page-primary))
- *   --bds-narrative-heading-color   (default: var(--bds-text-primary))
- *   --bds-narrative-body-color      (default: var(--bds-text-secondary))
- *   --bds-narrative-eyebrow-color   (default: var(--bds-text-brand-primary))
  *
  * a11y: h2 + aria-labelledby. Pull-quote uses semantic blockquote + cite.
  * Reading order: narrative first, supporting callout second — DOM order on
@@ -195,7 +192,7 @@ const callout = section.items[0];
     font-weight: var(--bds-font-weight-medium);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--bds-narrative-eyebrow-color, var(--bds-text-brand-primary));
+    color: var(--bds-text-brand-primary);
   }
 
   .bds-narrative__title {
@@ -204,7 +201,7 @@ const callout = section.items[0];
     font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-xl));
     font-weight: var(--bds-font-weight-semibold);
     line-height: var(--bds-font-line-height-tight);
-    color: var(--bds-narrative-heading-color, var(--bds-text-primary));
+    color: var(--bds-text-primary);
   }
 
   .bds-narrative__lead {
@@ -212,7 +209,7 @@ const callout = section.items[0];
     font-family: var(--bds-font-family-body);
     font-size: var(--bds-heading-sm);
     line-height: var(--bds-font-line-height-relaxed);
-    color: var(--bds-narrative-body-color, var(--bds-text-secondary));
+    color: var(--bds-text-secondary);
     max-width: 65ch;
   }
 
