@@ -159,6 +159,27 @@
       "--color-system-transparent", "--color-system-lightbox"
     ]
   },
+  "segments": {
+    "$comment": "Word-level rules for every segment of a token name, brik-bds#3088. Read by lint-tokens.js (Tier 4 shape, rule tier4-shape) and lint-naming-canon.mjs (rule 8). The anatomy page is token-anatomy.mdx § About Tier 4. OPERATOR SAID 2026-11-11 (chat): \"yes -bg should be banned - we should be following strict naming logic across all our environments\". Spell every segment as a full word; the only short forms are allowedAbbreviations, the T-shirt steps in a step slot, and the axis letters x and y.",
+    "bannedSegments": ["bg", "btn", "fs", "fw", "lh", "pad", "dur", "col", "mx", "my", "nav", "src", "pre", "cat", "ch", "fg", "expo", "v", "img", "txt", "hdr", "desc"],
+    "suggestions": {
+      "$comment": "The full word for a banned segment that has an unambiguous one. A banned segment absent here is reported without a suggestion: spell it out.",
+      "bg": "background", "btn": "button", "fs": "font-size", "fw": "font-weight", "lh": "font-line-height",
+      "pad": "padding", "dur": "duration", "col": "column", "nav": "navigation", "src": "source",
+      "cat": "category", "img": "image", "txt": "text", "hdr": "header", "desc": "description"
+    },
+    "allowedAbbreviations": ["cta", "ghl", "dns", "x", "y"],
+    "allowedAbbreviationsSource": "OPERATOR CHOSE 2026-11-11: which short forms stay allowed in token names → \"Acronyms cta / ghl / dns, T-shirt steps sm/md/lg, Axis letters x / y\". The T-shirt steps live in steps.tShirt, which are legal in a step slot only, so a Tier 4 {part} or {property} segment may not be one.",
+    "bannedJoinedStems": {
+      "$comment": "A component name written as one run-on word. The kebab form is the only spelling.",
+      "pageheader": "page-header",
+      "subnav": "sub-navigation"
+    },
+    "bannedParts": {
+      "$comment": "A Tier 4 {part} names a sub-element. A prop, a position or a state word names none, so it cannot stand in the {part} slot.",
+      "words": ["sticky", "start", "end", "active", "open", "selected", "hover"]
+    }
+  },
   "valence": {
     "words": ["negative", "positive", "warning", "info", "neutral"],
     "retired": {

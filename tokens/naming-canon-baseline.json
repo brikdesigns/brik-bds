@@ -184,6 +184,11 @@
       "CounterTone.brand": 1925,
       "DotTone.default": 1925,
       "ToastTone.default": 1925
+    },
+    "8": {
+      "--bds-pageheader-top": 2865,
+      "--bds-subnav-top": 2865,
+      "--bds-surface-nav": 2865
     }
   }
 }

@@ -775,6 +775,29 @@ describe('rule 7 — a colour Primitive is color-{family}-{step} (ADR-043 § 2, 
   });
 });
 
+describe('rule 8 — no banned segment in a --bds-* name (#3088)', () => {
+  it('fails on an abbreviation: --bds-surface-nav', () => {
+    const { code, out } = run({ tokens: withTokens('--bds-surface-nav: #fff;') });
+    expect(code).toBe(1);
+    expect(out).toMatch(/Rule 8/);
+    expect(out).toMatch(/--bds-surface-nav — `nav` is a banned abbreviation — write `navigation`/);
+  });
+
+  it('fails on a run-on component name: --bds-pageheader-top', () => {
+    const { code, out } = run({ tokens: withTokens('--bds-pageheader-top: 0;') });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--bds-pageheader-top — `pageheader` is a run-on component name — write `page-header`/);
+  });
+
+  it('passes the spelled-out names and the declared short forms', () => {
+    const { code, out } = run({
+      tokens: withTokens('--bds-surface-navigation: #fff; --bds-page-header-top: 0; --bds-hero-gap-x: 0; --bds-cta-gap: 0;'),
+    });
+    expect(out).not.toMatch(/Rule 8/);
+    expect(code).toBe(0);
+  });
+});
+
 describe('the baseline can only shrink', () => {
   const planted = { tokens: withTokens('--bds-content-width-narrow: 640px;') };
 
@@ -849,6 +872,6 @@ describe('a broken scan never reads as clean', () => {
   it('exit 2 on a bad --rule', () => {
     const { code, out } = run({ args: ['--rule', '9'] });
     expect(code).toBe(2);
-    expect(out).toMatch(/--rule must be 1-7/);
+    expect(out).toMatch(/--rule must be 1-8/);
   });
 });

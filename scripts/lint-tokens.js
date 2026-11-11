@@ -691,13 +691,39 @@ const TIER4_ALIASES = new Map([
   ['--bds-testimonials-featured-bg', '--bds-testimonials-featured-background'],
 ]);
 
-// A stem must abbreviate its component (`subnav` ← SubNavigation,
-// `ambient` ← AmbientField). These owners use a stem that does not, each for
-// a stated reason.
+// A stem is the full kebab component name (`background-pattern`, `sub-navigation`),
+// never an abbreviation of it (brik-bds#3088). These owners use a stem that is not
+// their name, each for a stated reason.
 const TIER4_DECLARED_STEMS = new Map([
   ['page', { stem: 'gutter', reason: 'ADR-043 § 5 / #2670 — `page` is a reserved Semantic word' }],
   ['section-shell', { stem: 'blueprint-section', reason: 'the shell every blueprint section composes; its hooks are read by each section' }],
 ]);
+
+// Hooks that broke the word-level shape rules the day they were tightened (brik-bds#3088),
+// each keyed to the issue that renames it. A COUNTDOWN, not a carve-out: checkTier4Registry
+// fails on an entry that no longer violates (renamed, removed, or turned into a TIER4_ALIASES
+// alias), so the list can only shrink. Never add a row to keep a new hook green; rename it.
+// 2656 = Tier-4 namespace enforcement.
+const TIER4_SHAPE_BASELINE = new Map([
+  ['--bds-ambient-field-src', 2656],
+  ['--bds-callout-panel-card-pad', 2656],
+  ['--bds-chip-sm-icon-size', 2656],
+  ['--bds-features-image-pad', 2656],
+  ['--bds-grid-min-col-width', 2656],
+  ['--bds-subnav-width', 2656],
+  ['--bds-testimonials-featured-background', 2656],
+  ['--bds-testimonials-featured-padding-y', 2656],
+  ['--bds-textarea-min-width', 2656],
+]);
+
+// Word-level vocabulary, declared once in tokens/naming-grammar.json § segments (brik-bds#3088).
+const SEGMENT_RULES = GRAMMAR.segments;
+const TIER4_ALLOWED_ABBREVIATIONS = new Set(SEGMENT_RULES.allowedAbbreviations);
+const TIER4_BANNED_SEGMENTS = new Set(SEGMENT_RULES.bannedSegments.filter((s) => !TIER4_ALLOWED_ABBREVIATIONS.has(s)));
+const TIER4_SEGMENT_SUGGESTIONS = SEGMENT_RULES.suggestions;
+const TIER4_JOINED_STEMS = new Map(Object.entries(SEGMENT_RULES.bannedJoinedStems).filter(([k]) => k !== '$comment'));
+const TIER4_BANNED_PARTS = new Set(SEGMENT_RULES.bannedParts.words);
+const TIER4_STEP_WORDS = new Set(GRAMMAR.steps.tShirt);
 
 const TIER4_RESERVED_STEMS = new Set(
   Object.entries(GRAMMAR.reservedWords).filter(([k]) => k !== '$comment').flatMap(([, words]) => words),
@@ -795,20 +821,27 @@ function tier4ShapeProblems(name, owners) {
   if (segs.length < 2) problems.push('needs a component stem and a property: --bds-{component}[-{part}]-{property}');
   if (TIER4_RESERVED_STEMS.has(segs[0])) problems.push(`stem "${segs[0]}" is a reserved word, which reads as a token tier (ADR-043 § 5)`);
   if (TIER4_ROLE_WORDS.has(segs.at(-1))) problems.push(`ends in the role word "${segs.at(-1)}" — name the styled property (color, fill, …), not the role`);
-  const abbreviates = (stem, owner) => {
-    const o = owner.replace(/-/g, '');
-    if (stem.length < 3 || stem[0] !== o[0]) return false;
-    let j = 0;
-    for (const ch of o) if (ch === stem[j]) j++;
-    return j === stem.length;
-  };
-  const stemOk = owners.some((owner) => {
+  // The stem is the full kebab component name, or the stem declared for that owner. No abbreviation.
+  const stemLengths = owners.map((owner) => {
     const declared = TIER4_DECLARED_STEMS.get(owner);
-    if (declared && `${segs.join('-')}-`.startsWith(`${declared.stem}-`)) return true;
-    for (let k = 1; k < segs.length; k++) if (abbreviates(segs.slice(0, k).join(''), owner)) return true;
-    return false;
+    const joined = `${segs.join('-')}-`;
+    if (declared && joined.startsWith(`${declared.stem}-`)) return declared.stem.split('-').length;
+    return joined.startsWith(`${owner}-`) ? owner.split('-').length : 0;
   });
-  if (!stemOk) problems.push(`stem does not name its component (${owners.join(', ')}) — lead with the component, e.g. --bds-${owners[0]}-…`);
+  const stemLen = Math.max(0, ...stemLengths);
+  if (!stemLen) problems.push(`stem does not name its component (${owners.join(', ')}) — lead with the full component name, e.g. --bds-${owners[0]}-…`);
+  // Word-level vocabulary: tokens/naming-grammar.json § segments (brik-bds#3088).
+  for (const seg of new Set(segs)) {
+    if (TIER4_JOINED_STEMS.has(seg)) problems.push(`"${seg}" is a run-on component name — write "${TIER4_JOINED_STEMS.get(seg)}"`);
+    else if (TIER4_BANNED_SEGMENTS.has(seg)) problems.push(`"${seg}" is a banned abbreviation${TIER4_SEGMENT_SUGGESTIONS[seg] ? ` — write "${TIER4_SEGMENT_SUGGESTIONS[seg]}"` : ' — spell the full word'}`);
+  }
+  // A {part} sits between the stem and the property; a T-shirt step belongs in a step slot, never there.
+  for (const part of segs.slice(stemLen || 1, -1)) {
+    if (TIER4_BANNED_PARTS.has(part)) problems.push(`part "${part}" is a prop, position or state word, not a sub-element`);
+  }
+  for (const seg of segs.slice(stemLen || 1)) {
+    if (TIER4_STEP_WORDS.has(seg)) problems.push(`"${seg}" is a T-shirt step, legal only in a step slot, not as a {part} or {property}`);
+  }
   return problems;
 }
 
@@ -832,11 +865,18 @@ function checkTier4Registry(scan, generated, committed, allTokens = new Set(), a
     const { reads, sets } = scan.get(name);
     const first = reads[0] || sets[0];
     const problems = tier4ShapeProblems(name, [...new Set([...row.readBy, ...sets.map((s) => s.owner)])]);
-    if (problems.length) {
+    if (problems.length && !TIER4_SHAPE_BASELINE.has(name)) {
       violations.push({ rule: 'tier4-shape', severity: 'error', ...at(first), message: `Tier 4 hook "${name}": ${problems.join('; ')}`, suggestion: 'Rename to --bds-{component}[-{part}]-{property} (ADR-014). Keep the old name as a fallback-chain alias in TIER4_ALIASES for one minor version.' });
     }
     if (!reads.length) {
       violations.push({ rule: 'tier4-unread', severity: 'error', ...at(sets[0]), message: `Tier 4 hook "${name}" is set but no component reads it — a dead hook`, suggestion: 'Read it with var() in the component, or delete the declaration' });
+    }
+  }
+  for (const [name, issue] of TIER4_SHAPE_BASELINE) {
+    const row = generated.hooks[name];
+    const owners = row ? [...new Set([...row.readBy, ...scan.get(name).sets.map((s) => s.owner)])] : [];
+    if (!row || !tier4ShapeProblems(name, owners).length) {
+      violations.push({ rule: 'tier4-shape', severity: 'error', file: path.join(__dirname, 'lint-tokens.js'), line: 1, column: 1, message: `TIER4_SHAPE_BASELINE lists "${name}" (#${issue}), which no longer violates the shape rules`, suggestion: 'Delete the entry — the baseline can only shrink' });
     }
   }
   for (const [oldName, newName] of aliases) {
