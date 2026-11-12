@@ -47,6 +47,40 @@ export const Default: Story = {
   ),
 };
 
+const RICH_HTML = `
+  <h2>Event details</h2>
+  <p>Join us for an evening of networking, learning, and celebration.</p>
+  <h3>What to bring</h3>
+  <ul>
+    <li>A government-issued photo ID</li>
+    <li>Your registration confirmation</li>
+    <li>Business cards, if you have them</li>
+  </ul>
+  <p>Doors open at 6pm; the program starts promptly at 6:30pm.</p>
+  <hr />
+  <h2>Agenda</h2>
+  <ol>
+    <li>Welcome and introductions</li>
+    <li>Keynote</li>
+    <li>Open networking</li>
+  </ol>
+  <p>Space is limited — <a href="#">reserve your spot</a> before the deadline.</p>
+`;
+
+/**
+ * Full adjacency map: heading→paragraph (md), paragraph→heading (xl),
+ * paragraph/heading→list (md), list item→list item (sm), and `hr` (xl each side).
+ * @summary Headings, paragraphs, lists and hr together
+ */
+export const RichContent: Story = {
+  args: { html: RICH_HTML },
+  render: (args) => (
+    <Frame>
+      <Prose {...args} />
+    </Frame>
+  ),
+};
+
 /**
  * Empty/falsy `html` renders nothing — Prose is a no-op, not an empty wrapper.
  * @summary Empty `html` renders nothing

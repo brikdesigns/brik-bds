@@ -32,4 +32,28 @@
 .bds-prose p + p {
   margin-top: var(--bds-gap-lg);
 }
+
+/* Heading-lead: a heading introduces a new section, so the space ABOVE it
+   is the largest step (xl) — larger than the wide p→p step (lg) and far
+   larger than heading→p (md) beneath it, so a heading binds to what it
+   introduces, not to what precedes it. */
+.bds-prose :is(p, ul, ol) + :is(h1, h2, h3) {
+  margin-top: var(--bds-gap-xl);
+}
+
+/* Paragraph/heading → list: the list belongs to its lead-in, so it takes
+   the medium step (same as heading → paragraph), not the wide p→p step. */
+.bds-prose :is(p, h1, h2, h3) + :is(ul, ol) {
+  margin-top: var(--bds-gap-md);
+}
+
+/* List item → list item: tight (sm) so items read as one group. */
+.bds-prose li + li {
+  margin-top: var(--bds-gap-sm);
+}
+
+/* hr: a hard section break, so the wide xl step on both sides. */
+.bds-prose hr {
+  margin-block: var(--bds-gap-xl);
+}
 }
