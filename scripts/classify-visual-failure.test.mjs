@@ -33,6 +33,21 @@ const regressedSuite = (name) => ({
   ],
 });
 
+/** #1796: the suite ran, but the capture never stabilised — pixel count unmeasured. */
+const unstableSuite = (name) => ({
+  name,
+  status: 'failed',
+  assertionResults: [
+    {
+      title: 'Live demo',
+      status: 'failed',
+      failureMessages: [
+        'Error: expect(element).toMatchScreenshot()\n\nScreenshot does not match the stored reference.\n372 pixels (ratio 0.01) differ.\n\nCaused by: Error: Matcher did not succeed in time',
+      ],
+    },
+  ],
+});
+
 const passedSuite = (name) => ({
   name,
   status: 'passed',
@@ -71,6 +86,26 @@ describe('classifySuite', () => {
       const s = { name: 'x.stories.tsx', status: 'failed', message: msg, assertionResults: [] };
       expect(classifySuite(s).kind, msg).toBe('drop');
     }
+  });
+});
+
+describe('unstable capture (#1796)', () => {
+  it('calls a failed test that timed out waiting for a stable frame a drop, flagged unstable', () => {
+    expect(classifySuite(unstableSuite('i.stories.tsx'))).toMatchObject({ kind: 'drop', unstable: true });
+  });
+
+  // Safety direction: one genuine mismatch alongside a timeout is still a regression.
+  it('keeps a suite a regression when any failed test lacks the timeout cause', () => {
+    const mixed = unstableSuite('m.stories.tsx');
+    mixed.assertionResults.push({ title: 'Neutral', status: 'failed', failureMessages: ['Screenshot does not match'] });
+    expect(classifySuite(mixed).kind).toBe('regression');
+  });
+
+  it('lists the unstable suite for retry and exits 2, not 1', () => {
+    const r = classifyReport({ testResults: [unstableSuite('i.stories.tsx')] });
+    expect(r.drops).toEqual([{ name: 'i.stories.tsx', failedTests: 1, unstable: true }]);
+    expect(r.regressions).toEqual([]);
+    expect(exitCodeFor(r)).toBe(2);
   });
 });
 
