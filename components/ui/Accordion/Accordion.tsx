@@ -47,6 +47,7 @@ function AccordionItem({ item, isOpen, onToggle, hideSubtitleWhenOpen }: Accordi
     <div className="bds-accordion-item">
       <button
         type="button"
+        id={`accordion-trigger-${item.id}`}
         className="bds-accordion-trigger"
         onClick={onToggle}
         aria-expanded={isOpen}
@@ -70,6 +71,7 @@ function AccordionItem({ item, isOpen, onToggle, hideSubtitleWhenOpen }: Accordi
           id={`accordion-content-${item.id}`}
           className="bds-accordion-content"
           role="region"
+          aria-labelledby={`accordion-trigger-${item.id}`}
         >
           {item.content}
         </div>
