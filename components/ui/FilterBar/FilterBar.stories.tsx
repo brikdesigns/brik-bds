@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, fn, within } from 'storybook/test';
-import { FilterBar } from './FilterBar';
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test';
+import { FilterBar, type FilterBarProps } from './FilterBar';
 import { FilterButton } from '../FilterButton';
 import { FilterToggle } from '../FilterToggle';
 import { Button } from '../Button';
@@ -118,6 +118,11 @@ const meta: Meta<typeof FilterBar> = {
       control: false,
       description:
         'Action buttons (typically a `ButtonGroup`) rendered flush-right, after the filter controls. Unlike `children`, `actions` does NOT fold into the `Filters` popover on collapse — it stays reachable at any width.',
+    },
+    search: {
+      control: false,
+      description:
+        'Search slot. Takes `SearchInput` props (one of `label` / `aria-label` / `aria-labelledby` is required) and renders the field at the start of the bar. Presence of the slot turns the bar into a `role="search"` landmark and mounts a `role="status"` region announcing `filtered of total`. Stays visible when the filter controls collapse. The consumer owns the query-to-rows logic; pass `value` to control the field, omit it to leave the field uncontrolled.',
     },
   },
 };
@@ -435,5 +440,219 @@ export const InteractionTestSize: Story = {
     const canvas = within(canvasElement);
     await expect(canvas.getByRole('button', { name: 'Clear filters' })).toHaveClass('bds-button--sm');
     await expect(canvas.getByRole('button', { name: 'Export' })).toHaveClass('bds-button--sm');
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   SEARCH — the `search` slot (ADR-049 § 5–6, #3103). The slot's
+   presence is the axis, and it changes the bar's composition (a
+   landmark, a live count, a field that outlives the collapse), so the
+   three shapes below are stories rather than a Control on Default.
+   Hook-driven (ADR-010 Q4): query → rows → recount → clear cannot be
+   expressed as args. The consumer owns the query-to-rows logic; the
+   demo filters `rows` by name in memory.
+   ═══════════════════════════════════════════════════════════════ */
+
+type SearchDemoProps = {
+  args: FilterBarProps;
+  /** Render the Industry + Active only controls beside the search field. */
+  filters?: boolean;
+  /** Pass `value` to the slot. Omitted: the field is uncontrolled. */
+  controlled?: boolean;
+};
+
+function SearchDemo({ args, filters = false, controlled = true }: SearchDemoProps) {
+  const [query, setQuery] = useState('');
+  const [industry, setIndustry] = useState<string | undefined>(undefined);
+  const [activeOnly, setActiveOnly] = useState(false);
+
+  const filteredRows = useMemo(
+    () =>
+      rows.filter((r) => {
+        if (query && !r.name.toLowerCase().includes(query.toLowerCase())) return false;
+        if (industry && r.industry !== industry) return false;
+        if (activeOnly && r.status !== 'active') return false;
+        return true;
+      }),
+    [query, industry, activeOnly],
+  );
+
+  const handleClear = () => {
+    // Uncontrolled: the bar clears the field itself, so the query is not reset here.
+    if (controlled) setQuery('');
+    setIndustry(undefined);
+    setActiveOnly(false);
+    args.onClear?.();
+  };
+
+  return (
+    <FilterBar
+      {...args}
+      total={rows.length}
+      filtered={filteredRows.length}
+      activeFilterCount={(industry ? 1 : 0) + (activeOnly ? 1 : 0)}
+      onClear={handleClear}
+      search={{
+        'aria-label': 'Search engagements',
+        placeholder: 'Search engagements',
+        ...(controlled ? { value: query } : {}),
+        onChange: (e) => setQuery(e.target.value),
+        onClear: () => setQuery(''),
+      }}
+    >
+      {filters && (
+        <>
+          <FilterButton
+            label="Industry"
+            options={industryOptions}
+            value={industry}
+            onChange={setIndustry}
+          />
+          <FilterToggle
+            label="Active only"
+            active={activeOnly}
+            onToggle={() => setActiveOnly((prev) => !prev)}
+          />
+        </>
+      )}
+    </FilterBar>
+  );
+}
+
+const searchArgs = {
+  title: 'Engagements',
+  label: 'engagements',
+  clearLabel: 'Clear filters',
+  activeStatus: 'brand',
+  onClear: fn(),
+} satisfies Partial<FilterBarProps>;
+
+/** @summary Search field + counter, no filter controls */
+export const SearchOnly: Story = {
+  args: searchArgs,
+  render: (args) => <SearchDemo args={args as FilterBarProps} />,
+};
+
+/** @summary Search field plus filter controls and clear-all */
+export const SearchWithFilters: Story = {
+  args: searchArgs,
+  render: (args) => <SearchDemo args={args as FilterBarProps} filters />,
+};
+
+/* Below ~600px of own width (ADR-019) the filter controls fold into the
+   `Filters (N)` popover; the search field is not a filter control and stays
+   inline. The 420px container forces the collapse. */
+
+/** @summary Below 600px: field stays inline, filters fold away */
+export const SearchCollapsed: Story = {
+  args: searchArgs,
+  decorators: [
+    (Story) => (
+      <div style={{ width: 420, minHeight: 320 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  render: (args) => <SearchDemo args={args as FilterBarProps} filters />,
+};
+
+/** @summary Verifies one search landmark, on the bar with the slot */
+export const InteractionTestSearchLandmark: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  render: () => (
+    <>
+      <FilterBar
+        title="Engagements"
+        label="engagements"
+        total={rows.length}
+        filtered={rows.length}
+        search={{ 'aria-label': 'Search engagements' }}
+      />
+      <FilterBar title="Documents" label="documents" total={24} filtered={24} />
+    </>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    // Two bars on the page, one with the slot: exactly one landmark.
+    const landmarks = canvas.getAllByRole('search');
+    await expect(landmarks).toHaveLength(1);
+    await expect(landmarks[0]).toHaveAccessibleName('Engagements filter bar');
+    await expect(landmarks[0]).toContainElement(canvas.getByRole('searchbox'));
+    // The field itself carries no landmark role.
+    await expect(canvas.getByRole('searchbox')).not.toHaveAttribute('role');
+    // The slot is the first thing in the bar.
+    await expect(landmarks[0].firstElementChild).toContainElement(canvas.getByRole('searchbox'));
+  },
+};
+
+/** @summary Verifies count follows the query, zero included */
+export const InteractionTestSearchCount: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: searchArgs,
+  render: (args) => <SearchDemo args={args as FilterBarProps} />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByRole('searchbox');
+    const status = canvas.getByRole('status');
+    await expect(status).toHaveTextContent('8 of 8 engagements');
+    await expect(canvas.getByLabelText('Count: 8')).toBeInTheDocument();
+
+    await userEvent.type(input, 'acme');
+    await waitFor(() => expect(status).toHaveTextContent('1 of 8 engagements'));
+    await expect(canvas.getByLabelText('Count: 1')).toBeInTheDocument();
+
+    await userEvent.type(input, 'zzz');
+    await waitFor(() => expect(status).toHaveTextContent('0 of 8 engagements'));
+    await expect(canvas.getByLabelText('Count: 0')).toBeInTheDocument();
+    // Same node throughout: the region stays mounted so the change is announced.
+    await expect(canvas.getByRole('status')).toBe(status);
+  },
+};
+
+/** @summary Verifies bar onClear clears the query (both modes) */
+export const InteractionTestSearchClear: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: searchArgs,
+  render: (args) => (
+    <>
+      <div data-testid="uncontrolled">
+        <SearchDemo args={args as FilterBarProps} filters controlled={false} />
+      </div>
+      <div data-testid="controlled">
+        <SearchDemo args={args as FilterBarProps} filters controlled />
+      </div>
+    </>
+  ),
+  play: async ({ canvasElement }) => {
+    for (const id of ['uncontrolled', 'controlled']) {
+      const scope = within(within(canvasElement).getByTestId(id));
+      const input = scope.getByRole('searchbox');
+      await userEvent.type(input, 'zzz');
+      await waitFor(() => expect(scope.getByRole('status')).toHaveTextContent('0 of 8 engagements'));
+      await userEvent.click(scope.getByRole('button', { name: 'Clear filters' }));
+      await waitFor(() => expect(input).toHaveValue(''));
+      await waitFor(() => expect(scope.getByRole('status')).toHaveTextContent('8 of 8 engagements'));
+    }
+  },
+};
+
+/** @summary Verifies field stays inline below 600px, filters fold */
+export const InteractionTestSearchCollapsed: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: searchArgs,
+  decorators: [
+    (Story) => (
+      <div style={{ width: 420, minHeight: 320 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  render: (args) => <SearchDemo args={args as FilterBarProps} filters />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await waitFor(() => expect(canvas.getByRole('button', { name: 'Filters' })).toBeInTheDocument());
+    await expect(canvas.queryByRole('button', { name: /^Industry/ })).not.toBeInTheDocument();
+    await expect(canvas.getByRole('searchbox')).toBeVisible();
+    await expect(canvas.getByRole('search')).toContainElement(canvas.getByRole('searchbox'));
   },
 };
