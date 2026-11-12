@@ -90,6 +90,38 @@ It settles **atmosphere** separately, and the mode never filters it:
 
 The company's **Branding** tab shows both values (Visual Direction).
 
+## Test brand kits
+
+The portal's lifecycle test fixtures each carry one complete brand kit, so a website-builder test run exercises a known [Visual Style](/docs/content-system/vocabularies/visual-style) preset instead of a hand-entered partial profile. A kit is a JSON file in the portal at `scripts/fixtures/brand-kits/<slug>.json`, validated against the BDS vocabularies before it is written to `company_profiles` (brik-client-portal#6781).
+
+**The preset owns the axes, not the kit.** A kit names one `visual_style` and restates only `theme_mode` and `atmosphere`, because the generator reads those two columns directly. The loader refuses a kit that contradicts `VISUAL_STYLE_PRESETS` on either. Spacing, typography, radius, elevation, border width and animation come from the preset through the resolver's fallback, so the columns below are read from the preset, never from the kit file.
+
+| Kit | Visual Style | Theme mode | Atmosphere | Spacing / typography / radius | Image approach | Fixture |
+|---|---|---|---|---|---|---|
+| `minimal` | Minimal | `light` | `none` | spacious / comfortable / sharp | `stock` | Standard build (`brik-lifecycle-test`) |
+| `bold` | Bold | `dark` (kit; preset leaves it open) | `cinematic-dramatic` | comfortable / expressive / sharp | `stock` | None by default; the dark theme sheet |
+| `playful` | Playful | `light` | `warm-soft` | comfortable / expressive / pill | `illustration` | One-page build (`brik-lifecycle-1page-test`) |
+
+Every kit carries a `primary` tier on its brand colour, three reference sites keyed `a`, `b`, `c`, display / heading / body typography, and an empty `logo_assets`. None is Figma-backed: `acme-corp-test` stays the one Figma extraction fixture.
+
+Seed commands, run from the portal repo against the local or staging database:
+
+```bash
+# Build both fixtures with their default kits
+npx tsx scripts/seed-engagement-lifecycle-fixture.ts up
+
+# Build with one kit on every fixture
+npx tsx scripts/seed-engagement-lifecycle-fixture.ts up --brand-kit bold
+
+# Rewrite only the profile of an existing fixture
+npx tsx scripts/seed-engagement-lifecycle-fixture.ts kit bold brik-lifecycle-test
+
+# Read back theme mode, atmosphere and image approach per fixture
+npx tsx scripts/seed-engagement-lifecycle-fixture.ts status
+```
+
+`kit` writes only to companies flagged `is_test_fixture`, and the script refuses the production project.
+
 ## Token cascade
 
 The full cascade order in a consuming project's `globals.css` (order matters):
