@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, within } from 'storybook/test';
 import { Accordion } from './Accordion';
 
 /* ─── Sample Data ─────────────────────────────────────────────── */
@@ -59,6 +60,15 @@ export const Default: Story = {
     allowMultiple: false,
     defaultOpenItems: [],
     hideSubtitleWhenOpen: false,
+  },
+  // Each expanded region is named by its trigger (#1377).
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: 'What services do you offer?' });
+    await userEvent.click(trigger);
+    const region = await canvas.findByRole('region');
+    await expect(region).toHaveAccessibleName('What services do you offer?');
+    await expect(region).toHaveAttribute('aria-labelledby', trigger.id);
   },
 };
 
