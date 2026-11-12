@@ -4,9 +4,15 @@ import {
   useRef,
   useEffect,
   useCallback,
+  useMemo,
+  useState,
 } from 'react';
+import { Button } from '../Button/Button';
+import { SearchInput } from '../SearchInput/SearchInput';
 import { bdsClass } from '../../utils';
 import './Menu.css';
+
+const DEFAULT_SEARCH_THRESHOLD = 8;
 
 /**
  * MenuItem data shape
@@ -51,6 +57,32 @@ function isItemGroup(entry: MenuItemData | MenuItemGroup): entry is MenuItemGrou
   return 'items' in entry;
 }
 
+/** Item count, with each group counted by the items it holds. */
+function countItems(entries: (MenuItemData | MenuItemGroup)[]): number {
+  return entries.reduce((n, entry) => n + (isItemGroup(entry) ? entry.items.length : 1), 0);
+}
+
+/**
+ * Lookup search for a {@link Menu} (ADR-049 § 1, lookup mode): type ahead to
+ * pick one item from a known list. Every field is optional; pass `{}` for the
+ * defaults. Further lookup controls join this object as optional fields, so
+ * adding one never breaks an existing caller.
+ */
+export interface MenuSearch {
+  /**
+   * The field shows once the item count is greater than this. Default `8`;
+   * `0` always shows it. A short list is scannable without a field.
+   */
+  threshold?: number;
+  /**
+   * The count `threshold` is measured against. Defaults to the number of
+   * items (a group counts its items). Pass the full count when `items` is
+   * already narrowed, e.g. by a filter, so the field stays put as the list
+   * shrinks.
+   */
+  total?: number;
+}
+
 /**
  * Menu open direction relative to its trigger.
  * - `bottom` (default) — panel opens downward; the consumer's relatively
@@ -90,6 +122,16 @@ export interface MenuProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childre
    * content would overflow the viewport.
    */
   placement?: MenuPlacement;
+  /**
+   * Lookup search (ADR-049). Above the threshold a labelled field leads the
+   * panel, takes focus on open and narrows items by label, case-insensitively
+   * (not by `description`); groups with no match drop out. A `role="status"`
+   * line counts the matches, and `0 results` offers a "Clear search" next
+   * step. The query resets each time the menu closes; Escape in the field
+   * closes the menu without clearing it first. No search landmark (§ 5).
+   * See {@link MenuSearch}.
+   */
+  search?: MenuSearch;
 }
 
 /**
@@ -147,7 +189,8 @@ export function MenuItem({ item, isActive, className, style, ...props }: MenuIte
  *
  * A floating panel containing a list of selectable items with optional icons.
  * Closes on outside click or Escape key. Use alongside a trigger element
- * (Button, IconButton, etc.) in a relatively positioned wrapper.
+ * (Button, IconButton, etc.) in a relatively positioned wrapper. Pass
+ * `search` to add a lookup field to a long list (ADR-049).
  *
  * @example
  * ```tsx
@@ -173,11 +216,46 @@ export function Menu({
   activeId,
   header,
   placement = 'bottom',
+  search,
   className = '',
   style,
   ...props
 }: MenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const [query, setQuery] = useState('');
+
+  const showSearch =
+    !!search &&
+    (search.total ?? countItems(items)) > (search.threshold ?? DEFAULT_SEARCH_THRESHOLD);
+  // The status stays mounted whenever search is on and the panel has a header,
+  // so a consumer that narrows `items` itself (a filter in `header`) still has
+  // its empty result announced while the field is hidden.
+  const hasStatus = !!search && (showSearch || header != null);
+
+  // A query left in the field would greet the next open with a stale,
+  // narrowed list.
+  useEffect(() => {
+    if (!isOpen) setQuery('');
+  }, [isOpen]);
+
+  const needle = showSearch ? query.trim().toLowerCase() : '';
+  const visibleItems = useMemo(() => {
+    if (!needle) return items;
+    const matches = (item: MenuItemData) => item.label.toLowerCase().includes(needle);
+    return items.flatMap<MenuItemData | MenuItemGroup>((entry) => {
+      if (!isItemGroup(entry)) return matches(entry) ? [entry] : [];
+      const groupItems = entry.items.filter(matches);
+      return groupItems.length > 0 ? [{ ...entry, items: groupItems }] : [];
+    });
+  }, [items, needle]);
+  const visibleCount = countItems(visibleItems);
+
+  // ADR-049 § 6: a search always reports its count, zero included.
+  const statusText =
+    needle || visibleCount === 0
+      ? `${visibleCount} ${visibleCount === 1 ? 'result' : 'results'}`
+      : null;
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -218,12 +296,54 @@ export function Menu({
       style={style}
       {...props}
     >
-      {header != null && (
-        <div className="bds-menu__header" role="presentation">
+      {(header != null || showSearch) && (
+        <div
+          className={bdsClass('bds-menu__header', hasStatus && 'bds-menu__header--sticky')}
+          role="presentation"
+        >
+          {showSearch && (
+            <SearchInput
+              ref={searchRef}
+              size="sm"
+              fullWidth
+              aria-label="Search options"
+              placeholder="Search"
+              autoFocus
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onClear={() => setQuery('')}
+              // ADR-049 § 3: the menu is open, so Escape is the menu's to
+              // close it. Stop the field clearing itself first; the query
+              // resets when the menu closes.
+              onKeyDown={(e) => {
+                if (e.key === 'Escape') e.preventDefault();
+              }}
+            />
+          )}
           {header}
+          {/* Always mounted so assistive tech announces the count; a live
+              region inserted already populated is often missed. */}
+          {hasStatus && (
+            <div className="bds-menu__status" role="status">
+              {statusText}
+            </div>
+          )}
+          {needle && visibleCount === 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="bds-menu__next-step"
+              onClick={() => {
+                setQuery('');
+                searchRef.current?.focus();
+              }}
+            >
+              Clear search
+            </Button>
+          )}
         </div>
       )}
-      {items.map((entry) =>
+      {visibleItems.map((entry) =>
         isItemGroup(entry) ? (
           <div
             key={entry.label}

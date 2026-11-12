@@ -116,6 +116,7 @@ For more sophisticated positioning (collision detection, viewport-aware flips), 
 - The trigger should set `aria-haspopup="menu"` and `aria-expanded` to reflect Menu state.
 - Keyboard arrows move between items; `Enter` activates; `Escape` closes (auto-handled).
 - Outside click closes — auto-handled.
+- With `search`, the field is a labelled searchbox ("Search options") with no `role="search"` landmark. A `role="status"` line announces the count; with no match it reads `0 results` and offers a **Clear search** button. Escape closes the menu without clearing the field first.
 - Focus trap: focus moves into the menu on open; closing returns focus to the trigger.
 
 ## API
@@ -129,6 +130,7 @@ For more sophisticated positioning (collision detection, viewport-aware flips), 
 | `activeId` | `string` | — |
 | `header` | `ReactNode` | — |
 | `placement` | `MenuPlacement` | `'bottom'` |
+| `search` | `MenuSearch` (`{ threshold?, total? }`) | — (field shows when the item count is greater than `threshold`, default `8`) |
 
 Plus standard `<div>` HTML attributes (excluding `children`).
 

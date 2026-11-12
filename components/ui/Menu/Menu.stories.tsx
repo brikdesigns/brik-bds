@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent, waitFor } from 'storybook/test';
 import { Icon } from '@iconify/react';
 import { Menu } from './Menu';
 import { FilterButton } from '../FilterButton';
@@ -68,6 +69,20 @@ const serviceTagItems = [
   { id: 'product', label: 'Product', content: <ServiceTag category="product" variant="icon-text" label="Product" />, onClick: () => {} },
 ];
 
+// A list long enough to pass the default search threshold (8).
+const clientItems = [
+  'Acme Dental',
+  'Beacon Orthodontics',
+  'Cedar Family Dentistry',
+  'Delta Chiropractic',
+  'Elm Street Chiropractic',
+  'Fern Veterinary',
+  'Grove Physical Therapy',
+  'Harbor Dermatology',
+  'Iris Optometry',
+  'Juniper Pediatrics',
+].map((label) => ({ id: label, label, onClick: () => {} }));
+
 /* ─── Meta ────────────────────────────────────────────── */
 
 const meta = {
@@ -83,6 +98,11 @@ const meta = {
       description: 'Direction the panel opens relative to its trigger',
     },
     activeId: { control: 'text', description: 'ID of the item to highlight as active' },
+    search: {
+      control: 'object',
+      description:
+        'Lookup search (ADR-049). A labelled field narrows items by label, case-insensitively, once the item count is greater than `threshold` (default `8`; `0` always shows it). Pass `{}` for the defaults. Takes `{ threshold?, total? }`; pass `total` when `items` is already narrowed.',
+    },
   },
   decorators: [
     (Story) => (
@@ -309,5 +329,155 @@ export const Scrolling: Story = {
     isOpen: true,
     onClose: () => {},
     style: { position: 'relative' },
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   SEARCH — lookup mode (ADR-049 § 1). `search` adds a labelled field
+   once the item count passes `threshold` (default 8).
+   ═══════════════════════════════════════════════════════════════ */
+
+/**
+ * Ten items pass the default threshold of eight, so `search` shows a labelled
+ * field above the list. Typing narrows items by label; a status line counts
+ * the matches, and an empty result offers a next step.
+ *
+ * @summary Long list with a lookup search field
+ */
+export const WithSearch: Story = {
+  args: {
+    items: clientItems,
+    search: {},
+    isOpen: true,
+    onClose: () => {},
+    style: { position: 'relative' },
+  },
+};
+
+/**
+ * A short list (six items, at or below the threshold of eight) shows no search
+ * field even with `search` set: the list is scannable without one.
+ * @summary Asserts no search field at or below the threshold
+ */
+export const InteractionTestSearchHiddenBelowThreshold: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: sampleItems,
+    search: {},
+    isOpen: true,
+    onClose: () => {},
+    style: { position: 'relative' },
+  },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('menu')).toBeInTheDocument();
+    await expect(canvas.getAllByRole('menuitem')).toHaveLength(sampleItems.length);
+    await expect(canvas.queryByRole('searchbox')).not.toBeInTheDocument();
+    await expect(canvas.queryByRole('status')).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * `total` sets the count the threshold is measured against, for a consumer
+ * that already narrowed `items` (e.g. by a filter): three items with a total
+ * of ten keep the field.
+ * @summary Asserts the threshold counts total when passed
+ */
+export const InteractionTestSearchThresholdTotal: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: clientItems.slice(0, 3),
+    search: { total: clientItems.length },
+    isOpen: true,
+    onClose: () => {},
+    style: { position: 'relative' },
+  },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('searchbox', { name: 'Search options' })).toBeInTheDocument();
+  },
+};
+
+/**
+ * Typing narrows items by label, case-insensitively, and the status line
+ * counts the matches. A query with no match reads `0 results` in a
+ * `role="status"` region and offers a next step that clears the query and
+ * returns focus to the field.
+ * @summary Asserts search narrows, counts, and offers a next step
+ */
+export const InteractionTestSearchNarrows: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: clientItems,
+    search: {},
+    isOpen: true,
+    onClose: () => {},
+    style: { position: 'relative' },
+  },
+  play: async ({ canvas }) => {
+    const search = canvas.getByRole('searchbox', { name: 'Search options' });
+    await expect(search).toHaveFocus();
+    await expect(canvas.getAllByRole('menuitem')).toHaveLength(clientItems.length);
+
+    await userEvent.type(search, 'CHIRO');
+    await waitFor(() => expect(canvas.getAllByRole('menuitem')).toHaveLength(2));
+    await expect(canvas.getByRole('status')).toHaveTextContent('2 results');
+
+    await userEvent.clear(search);
+    await waitFor(() => expect(canvas.getAllByRole('menuitem')).toHaveLength(clientItems.length));
+
+    await userEvent.type(search, 'zzz-no-match');
+    await waitFor(() => expect(canvas.getByRole('status')).toHaveTextContent('0 results'));
+    await expect(canvas.queryAllByRole('menuitem')).toHaveLength(0);
+
+    // The field's own clear button comes first; the next step is the last.
+    const clearButtons = canvas.getAllByRole('button', { name: 'Clear search' });
+    await userEvent.click(clearButtons[clearButtons.length - 1]);
+    await waitFor(() => expect(canvas.getAllByRole('menuitem')).toHaveLength(clientItems.length));
+    await expect(search).toHaveValue('');
+    await expect(search).toHaveFocus();
+  },
+};
+
+/**
+ * Escape in the field belongs to the menu (ADR-049 § 3): it calls `onClose`
+ * and leaves the text alone, so a menu kept open by its owner still shows it.
+ * @summary Asserts Escape closes the menu, not the field
+ */
+export const InteractionTestSearchEscape: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: clientItems,
+    search: {},
+    isOpen: true,
+    onClose: fn(),
+    style: { position: 'relative' },
+  },
+  play: async ({ canvas, args }) => {
+    const search = canvas.getByRole('searchbox', { name: 'Search options' });
+    await userEvent.type(search, 'grove');
+    await userEvent.keyboard('{Escape}');
+    await expect(args.onClose).toHaveBeenCalled();
+    await expect(search).toHaveValue('grove');
+  },
+};
+
+/**
+ * Search runs inside groups too: a group with no match drops out, so no empty
+ * header is left behind.
+ * @summary Asserts search narrows grouped items, drops empty groups
+ */
+export const InteractionTestSearchGroups: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: groupedItems,
+    search: { threshold: 0 },
+    isOpen: true,
+    onClose: () => {},
+    style: { position: 'relative' },
+  },
+  play: async ({ canvas }) => {
+    await userEvent.type(canvas.getByRole('searchbox', { name: 'Search options' }), 'product');
+    await waitFor(() => expect(canvas.getAllByRole('menuitem')).toHaveLength(1));
+    await expect(canvas.getByRole('group', { name: 'Design' })).toBeInTheDocument();
+    await expect(canvas.queryByRole('group', { name: 'Growth' })).not.toBeInTheDocument();
   },
 };

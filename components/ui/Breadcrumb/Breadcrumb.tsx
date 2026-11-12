@@ -10,7 +10,6 @@ import {
 import { type BdsLinkComponent } from '../NavItem';
 import { Menu } from '../Menu/Menu';
 import { Button } from '../Button/Button';
-import { SearchInput } from '../SearchInput/SearchInput';
 import { FilterToggle } from '../FilterToggle/FilterToggle';
 import { Icon } from '../Icon/Icon';
 import { bdsClass } from '../../utils';
@@ -112,7 +111,7 @@ export interface BreadcrumbSwitchMenuProps {
   /**
    * A labelled search box (filters options by label, case-insensitive) shows
    * once the option count is greater than this. Default `8`; pass `0` to
-   * always search.
+   * always search. The search is `Menu`'s (see `MenuSearch`).
    */
   searchThreshold?: number;
 }
@@ -148,8 +147,6 @@ export interface BreadcrumbProps
    */
   onNavigate?: (href: string, option: BreadcrumbSwitchOption) => void;
 }
-
-const DEFAULT_SEARCH_THRESHOLD = 8;
 
 const SEPARATOR_CHARS: Record<BreadcrumbSeparator, string> = {
   slash: '/',
@@ -316,39 +313,31 @@ function BreadcrumbSwitch({
   onNavigate,
   filters,
   scopeLabel,
-  searchThreshold = DEFAULT_SEARCH_THRESHOLD,
+  searchThreshold,
 }: BreadcrumbSwitchMenuProps & {
   options: BreadcrumbSwitchOption[];
   switchLabel?: string;
   onNavigate?: (href: string, option: BreadcrumbSwitchOption) => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState('');
   const [activeFilterIds, setActiveFilterIds] = useState<ReadonlySet<string>>(new Set());
   const triggerRef = useRef<HTMLButtonElement>(null);
   const wasOpen = useRef(false);
 
   const activeHref = options.find((option) => option.current)?.href;
 
-  const showSearch = options.length > searchThreshold;
   const hasFilters = !!filters && filters.length > 0;
-  const hasControls = showSearch || hasFilters || !!scopeLabel;
+  const hasControls = hasFilters || !!scopeLabel;
 
-  // A search left in the box would greet the next open with a stale narrowed
-  // list. Filter toggles are a deliberate lens, so they persist across opens.
-  useEffect(() => {
-    if (!isOpen) setQuery('');
-  }, [isOpen]);
-
+  // Search is Menu's (ADR-049 lookup mode); it resets on close. Filter
+  // toggles are a deliberate lens, so they persist across opens.
   const visibleOptions = useMemo(() => {
-    const needle = query.trim().toLowerCase();
     const live = (filters ?? []).filter((filter) => activeFilterIds.has(filter.id));
     return options.filter((option) => {
-      if (showSearch && needle && !option.label.toLowerCase().includes(needle)) return false;
       if (option.current) return true;
       return live.every((filter) => option.facets?.[filter.facet] === filter.value);
     });
-  }, [options, query, filters, activeFilterIds, showSearch]);
+  }, [options, filters, activeFilterIds]);
 
   const toggleFilter = (id: string) =>
     setActiveFilterIds((prev) => {
@@ -394,22 +383,12 @@ function BreadcrumbSwitch({
         onClose={() => setIsOpen(false)}
         activeId={activeHref}
         className="bds-breadcrumb__switch-menu"
+        // `total` keeps the field in place while a filter shrinks the list.
+        search={{ threshold: searchThreshold, total: options.length }}
         header={
           hasControls ? (
             <div className="bds-breadcrumb__switch-controls">
               {scopeLabel && <span className="bds-breadcrumb__switch-scope">{scopeLabel}</span>}
-              {showSearch && (
-                <SearchInput
-                  size="sm"
-                  fullWidth
-                  aria-label="Search options"
-                  placeholder="Search"
-                  autoFocus
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onClear={() => setQuery('')}
-                />
-              )}
               {hasFilters && (
                 <div className="bds-breadcrumb__switch-filters">
                   {filters!.map((filter) => (
@@ -423,11 +402,6 @@ function BreadcrumbSwitch({
                   ))}
                 </div>
               )}
-              {/* Always mounted so assistive tech announces the empty result;
-                  a live region inserted already populated is often missed. */}
-              <div className="bds-breadcrumb__switch-status" role="status">
-                {visibleOptions.length === 0 ? 'No matches' : null}
-              </div>
             </div>
           ) : undefined
         }
