@@ -99,9 +99,10 @@ const [open, setOpen] = useState(false);
 ## Accessibility
 
 - The trigger receives `aria-haspopup="dialog"` and `aria-expanded` reflecting Popover state.
-- Content panel uses `role="dialog"` with `aria-labelledby` (or `aria-label` if no obvious label).
-- Click outside or `Escape` dismisses (auto).
+- Content panel uses `role="dialog"`; name it with the `panelLabel` prop (applied as `aria-label`). Always supply one.
+- Click outside or `Escape` dismisses (auto); `Escape` returns focus to the trigger.
 - Focus moves into the popover on open with click trigger; stays on trigger with hover trigger.
+- With `trigger="hover"` the trigger does not receive `aria-expanded` — the panel opens by pointer, not activation.
 
 ## API
 
@@ -112,6 +113,7 @@ const [open, setOpen] = useState(false);
 | `content` | `ReactNode` *(required)* | — |
 | `placement` | `'top' \| 'bottom' \| 'left' \| 'right'` | `'bottom'` |
 | `trigger` | `'click' \| 'hover'` | `'click'` |
+| `panelLabel` | `string` (accessible name of the dialog panel) | — |
 | `isOpen` | `boolean` (controlled) | — |
 | `onOpenChange` | `(open: boolean) => void` | — |
 

@@ -15,7 +15,6 @@
 /* ─── Panel ───────────────────────────────────────────── */
 
 .bds-popover__panel {
-  position: absolute;
   background-color: var(--bds-background-primary);
   border-radius: var(--bds-border-radius-lg);
   box-shadow: var(--bds-shadow-lg);
@@ -25,35 +24,5 @@
   box-sizing: border-box;
   --bds-popover-min-width: 200px; /* component-local dimension; no shared registry rung (#2133) */
   min-width: var(--bds-popover-min-width);
-}
-
-/* ─── Placement modifiers ─────────────────────────────── */
-
-.bds-popover__panel--top {
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: var(--bds-gap-sm);
-}
-
-.bds-popover__panel--bottom {
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: var(--bds-gap-sm);
-}
-
-.bds-popover__panel--left {
-  right: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  margin-right: var(--bds-gap-sm);
-}
-
-.bds-popover__panel--right {
-  left: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-  margin-left: var(--bds-gap-sm);
 }
 }
