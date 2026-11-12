@@ -17,6 +17,14 @@
  * as a fix for the drops (#1781). The distinguishing signal is cheap and exact:
  * a dropped suite has ZERO failed tests. A regression has at least one.
  *
+ * A third shape sits between them (#1796): the suite RAN and a test FAILED, but
+ * the failure is `Matcher did not succeed in time` — `toMatchScreenshot` never
+ * got two consecutive identical frames. Its headline still prints a concrete
+ * pixel count against a named reference, which reads exactly like a regression
+ * and invites regenerating the baseline from an unstable frame. That pixel
+ * count was not measured, so such a suite is classified as a DROP (retry class,
+ * listed by `--list-drops`) and flagged `unstable`.
+ *
  * Reads vitest's JSON report and prints a verdict. Exit codes are distinct so
  * the workflow step (and a human skimming it) can tell the classes apart:
  *
@@ -48,6 +56,12 @@ const DROP_SIGNATURES = [
   'WebSocket',
 ];
 
+/** The trailing cause when `toMatchScreenshot` never captured a stable frame. */
+const UNSTABLE_CAPTURE_SIGNATURE = 'Matcher did not succeed in time';
+
+const isUnstableCapture = (test) =>
+  (test.failureMessages ?? []).some((m) => m.includes(UNSTABLE_CAPTURE_SIGNATURE));
+
 const isDropMessage = (msg) =>
   !!msg && DROP_SIGNATURES.some((sig) => msg.toLowerCase().includes(sig.toLowerCase()));
 
@@ -62,6 +76,11 @@ const isDropMessage = (msg) =>
 export function classifySuite(suite) {
   const tests = suite.assertionResults ?? [];
   const failedTests = tests.filter((t) => t.status === 'failed');
+  // Every failed test timed out waiting for a stable frame: nothing was
+  // measured. One failed test WITHOUT that cause keeps the suite a regression.
+  if (failedTests.length > 0 && failedTests.every(isUnstableCapture)) {
+    return { kind: 'drop', failedTests: failedTests.length, unstable: true };
+  }
   if (failedTests.length > 0) {
     return { kind: 'regression', failedTests: failedTests.length };
   }
@@ -83,8 +102,8 @@ export function classifyReport(report) {
   const regressions = [];
   const unknown = [];
   for (const suite of suites) {
-    const { kind, failedTests } = classifySuite(suite);
-    const entry = { name: suite.name, failedTests };
+    const { kind, failedTests, unstable } = classifySuite(suite);
+    const entry = { name: suite.name, failedTests, ...(unstable && { unstable }) };
     if (kind === 'drop') drops.push(entry);
     else if (kind === 'regression') regressions.push(entry);
     else unknown.push(entry);
@@ -134,6 +153,14 @@ function render({ drops, regressions, unknown, totalSuites, failedSuites }) {
     lines.push('  before the story rendered. Zero failed tests in these suites, so this says');
     lines.push('  NOTHING about whether the UI regressed — the gate did not measure it.');
     lines.push('');
+    const unstable = drops.filter((d) => d.unstable);
+    if (unstable.length > 0) {
+      lines.push(`  ${unstable.length} of these ran and reported a pixel diff, but ended in "Matcher did not`);
+      lines.push('  succeed in time": no stable frame was captured, so that pixel count is');
+      lines.push('  UNMEASURED. Do not regenerate a baseline from it (#1796).');
+      for (const u of unstable) lines.push(`    · ${u.name} (unstable capture)`);
+      lines.push('');
+    }
     lines.push('  This is the #1778 failure mode. Check, in this order:');
     lines.push('    · Is `--ipc=host` still on the job container? Without it Chromium');
     lines.push('      exhausts its 64 MB default /dev/shm and the browser dies outright.');

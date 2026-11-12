@@ -204,6 +204,10 @@ jobs:
           # A suite that never rendered must NOT be committed as a silent no-op —
           # it keeps its stale baseline while the commit message claims a complete
           # regeneration.
+          # --list-drops also names a suite whose capture never stabilised
+          # ("Matcher did not succeed in time", #1796): it retries above, and one
+          # still unstable here is refused below rather than committed as a
+          # reference captured from an unstable frame.
           LEFT=$(sort -u /tmp/still-dropped.txt | grep -c . || true)
           if [ "$LEFT" -ne 0 ]; then
             echo ""
