@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ContactIcon, CONTACT_ICON_PLATFORMS } from './ContactIcon';
-import type { ContactIconEmphasis, ContactIconType } from './ContactIcon';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -63,49 +62,17 @@ export const Default: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   ALL MARKS — the full type × emphasis matrix, every bundled mark.
-   Irreducible: a single args set can't show 20 combinations at once
-   (mirrors SocialIcon's own coverage gallery — brik-bds#1716 split).
+   PER-STATE — Q3 semantic values (ADR-010). Each differs from Default's
+   `glyph` / `neutral`. The full platform × type × emphasis matrix lives in
+   ContactIcon.mdx (`MarkMatrix`).
    ═══════════════════════════════════════════════════════════════ */
 
-const TYPES: ContactIconType[] = ['badge', 'glyph'];
-const EMPHASES: ContactIconEmphasis[] = ['neutral', 'accent'];
+/** @summary Neutral badge: glyph knocked out on a filled tile */
+export const Badge: Story = {
+  args: { platform: 'email', type: 'badge', emphasis: 'neutral', size: 'lg' },
+};
 
-/**
- * Every bundled mark across the full `type` × `emphasis` matrix — the coverage
- * grid brik-bds#1716 asked for.
- * @summary Full type × emphasis matrix, every bundled mark
- */
-export const AllMarks: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-md)' }}>
-      {CONTACT_ICON_PLATFORMS.map((platform) => (
-        <div key={platform} style={{ display: 'flex', alignItems: 'center', gap: 'var(--bds-gap-md)' }}>
-          <span
-            style={{
-              width: '80px',
-              flexShrink: 0,
-              fontFamily: 'var(--bds-font-family-label)',
-              fontSize: 'var(--bds-label-sm)',
-              color: 'var(--bds-text-secondary)',
-            }}
-          >
-            {platform}
-          </span>
-          <div style={{ display: 'flex', gap: 'var(--bds-gap-md)', flexWrap: 'wrap' }}>
-            {TYPES.flatMap((type) =>
-              EMPHASES.map((emphasis) => (
-                <div key={`${type}-${emphasis}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--bds-gap-tiny)' }}>
-                  <ContactIcon platform={platform} type={type} emphasis={emphasis} size="sm" />
-                  <span style={{ fontSize: '0.625rem', color: 'var(--bds-text-muted)' }}>
-                    {type}/{emphasis}
-                  </span>
-                </div>
-              )),
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-  ),
+/** @summary Bare glyph colored with the brand accent */
+export const Accent: Story = {
+  args: { platform: 'email', type: 'glyph', emphasis: 'accent', size: 'lg' },
 };

@@ -1,7 +1,40 @@
 import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
 import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
 import * as Stories from './SocialIcon.stories';
-import { SocialIcon } from './SocialIcon';
+import { SocialIcon, SOCIAL_ICON_PLATFORMS } from './SocialIcon';
+
+
+export const MarkMatrix = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-md)' }}>
+    {SOCIAL_ICON_PLATFORMS.map((platform) => (
+      <div key={platform} style={{ display: 'flex', alignItems: 'center', gap: 'var(--bds-gap-md)' }}>
+        <span
+          style={{
+            width: '80px',
+            flexShrink: 0,
+            fontFamily: 'var(--bds-font-family-label)',
+            fontSize: 'var(--bds-label-sm)',
+            color: 'var(--bds-text-secondary)',
+          }}
+        >
+          {platform}
+        </span>
+        <div style={{ display: 'flex', gap: 'var(--bds-gap-md)', flexWrap: 'wrap' }}>
+          {['badge', 'glyph'].flatMap((type) =>
+            ['neutral', 'brand', 'accent', 'inverse'].map((emphasis) => (
+              <div key={`${type}-${emphasis}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--bds-gap-tiny)' }}>
+                <SocialIcon platform={platform} type={type} emphasis={emphasis} size="sm" />
+                <span style={{ fontSize: '0.625rem', color: 'var(--bds-text-muted)' }}>
+                  {type}/{emphasis}
+                </span>
+              </div>
+            )),
+          )}
+        </div>
+      </div>
+    ))}
+  </div>
+);
 
 <Meta of={Stories} />
 
@@ -19,7 +52,9 @@ Recolorable platform mark — social (youtube, twitter, instagram, facebook, lin
 
 `type` (`badge` / `glyph`) and `emphasis` (`neutral` / `brand` / `accent` / `inverse`) are both Controls on `Default`. The gallery below is the full matrix across every bundled platform — `platform` is a Control, so the sidebar can't show it side-by-side.
 
-<Canvas of={Stories.AllMarks} />
+<Canvas>
+  <MarkMatrix />
+</Canvas>
 
 ## Props
 
