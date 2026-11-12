@@ -118,6 +118,28 @@ function EngagementsTable({ rows }) {
 }
 ```
 
+### With search
+
+`search` takes [SearchInput](/docs/components/search-input) props and renders the field at the start of the bar (filter mode, ADR-049). The consumer owns the query-to-rows logic; the bar displays `filtered` and `total`.
+
+```tsx
+<FilterBar
+  title="Engagements"
+  total={rows.length}
+  filtered={visible.length}
+  label="engagements"
+  onClear={() => setQuery('')}
+  search={{
+    'aria-label': 'Search engagements',
+    value: query,
+    onChange: (e) => setQuery(e.target.value),
+    onClear: () => setQuery(''),
+  }}
+/>
+```
+
+The field stays visible below 600px of the bar's own width while the filter children fold into the `Filters` popover. Pass `value` to control the field and reset it from `onClear`; omit `value` and the bar clears the field itself.
+
 ## When *not* to use
 
 <Callout type="warn">
@@ -131,6 +153,7 @@ FilterBar is still the right component for a collection with no filterable axes:
 - The title renders as an `<h2>` by default. Pass `titleAs="h3"` when the bar sits under an existing `<h2>` — a collection tab inside a record page — so the document outline stays contiguous.
 - The container carries an `aria-label` (falls back to `"{title} filter bar"` or `"{label} filter bar"`).
 - The counter announces `"Count: {n}"` via `aria-label`.
+- With a `search` slot the container is a `role="search"` landmark named by that `aria-label`, and a visually hidden `role="status"` region announces `"{filtered} of {total} {label}"`, zero included. A bar without `search` claims no landmark.
 
 ## API
 
@@ -152,6 +175,7 @@ FilterBar is still the right component for a collection with no filterable axes:
 | `activeFilterCount` | `number` | — |
 | `actions` | `ReactNode` | — |
 | `size` | `ButtonSize` | `'sm'` |
+| `search` | `SearchInputProps` | — |
 
 Plus all standard `<div>` HTML attributes (excluding `title`).
 

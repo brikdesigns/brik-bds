@@ -10,7 +10,7 @@ import * as Stories from './FilterBar.stories';
 
 Toolbar that pairs a result counter with one or more filter controls ([`FilterButton`](/?path=/docs/components-filter-button--docs), [`FilterToggle`](/?path=/docs/components-filter-toggle--docs), or any compatible child). Use above tables and lists to expose filtering plus a clear-all affordance.
 
-Layout: `[title] [counter] ... [filter children] [clear?] [actions]`
+Layout: `[search?] [title] [counter] ... [filter children] [clear?] [actions]`
 
 ## Playground
 
@@ -21,6 +21,25 @@ Layout: `[title] [counter] ... [filter children] [clear?] [actions]`
 <Canvas of={Stories.WithActions} />
 
 `actions` renders a `ButtonGroup` of secondary / outline buttons (or any node) flush-right, after the filter controls and clear button. It is intentionally **exempt from the narrow-own-width collapse** (ADR-019): shrink the bar below ~600px of its own width and the filter controls fold into the `Filters (N)` popover, but `actions` stays visible outside it — an action like "Assign service" must never hide behind a popover trigger. Filter-bar buttons are **never primary** and default to `sm` (`size` prop) — one step below the `md` page-header buttons, so the bar sits lower in the page hierarchy; `actions` children without their own `size` inherit it.
+
+## Search slot
+
+<Canvas of={Stories.SearchWithFilters} />
+
+`search` takes [`SearchInput`](/?path=/docs/components-search-input--docs) props (one of `label`, `aria-label` or `aria-labelledby` is required) and renders the field at the start of the bar. This is **filter** mode in [ADR-049](../../../docs/adrs/ADR-049-search-modes-filter-lookup-global.md): the query narrows rows already on the page, in memory, and the consumer owns the query-to-rows logic — the bar only displays `filtered` and `total`.
+
+- **Landmark** — with a search slot the bar is a `role="search"` landmark named by the bar's `aria-label` (`"{title} filter bar"` by default; override it when two bars share a page). `SearchInput` itself carries no landmark. A bar with no `search` claims none: a title + counter + filters row is not a page search.
+- **Count** — the counter follows `filtered`, zero included. A visually hidden `role="status"` region, always mounted while the slot is present, announces `filtered of total` (`0 of 8 engagements`) so the change is heard.
+- **Clear** — `onClear` shows the "Clear filters" button whenever `filtered < total`, and clears an uncontrolled field. For a controlled field (`search.value`), reset the query inside `onClear`; the bar owns no state.
+- **Below 600px** — the field is not a filter control, so it stays inline while the controls fold into the `Filters (N)` popover (ADR-019).
+
+<Canvas of={Stories.SearchOnly} />
+
+Search only: no `children`, so there is no controls row and no `Filters` trigger.
+
+<Canvas of={Stories.SearchCollapsed} />
+
+The 420px canvas is below the 600px own-width threshold: the field stays, the filters fold.
 
 ## No filters
 

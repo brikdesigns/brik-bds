@@ -1,8 +1,9 @@
-import { Children, cloneElement, isValidElement } from 'react';
+import { Children, cloneElement, isValidElement, useRef } from 'react';
 import type { HTMLAttributes, ReactElement, ReactNode } from 'react';
 import { Button, type ButtonSize } from '../Button';
 import { Counter, type CounterStatus } from '../Counter';
 import { Popover } from '../Popover';
+import { SearchInput, type SearchInputProps } from '../SearchInput';
 import { useElementWidth } from '../shared';
 import { bdsClass } from '../../utils';
 import './FilterBar.css';
@@ -69,12 +70,26 @@ export interface FilterBarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'ti
    * the page hierarchy.
    */
   size?: ButtonSize;
+  /**
+   * Search slot (ADR-049 § 5–6). Takes `SearchInput` props — one of `label`,
+   * `aria-label` or `aria-labelledby` is required — and renders the field at
+   * the start of the bar. Its presence makes the bar a `role="search"`
+   * landmark (named by the bar's `aria-label`) and mounts a `role="status"`
+   * region announcing `filtered of total`, including zero. Unlike `children`,
+   * the field stays visible when the bar collapses on narrow widths (ADR-019).
+   *
+   * The bar owns no query state: the consumer filters its rows and passes
+   * `filtered`. Pass `value` to control the field (reset it from the bar's
+   * `onClear`); omit it and the bar clears the uncontrolled field itself when
+   * `onClear` runs. Omit the slot and the bar claims no landmark.
+   */
+  search?: SearchInputProps;
 }
 
 /**
  * FilterBar — shared heading + counter + filter-controls row for list views.
  *
- * Layout: `[title] [counter]          [filter children] [clear?] [actions]`
+ * Layout: `[search?] [title] [counter]          [filter children] [clear?] [actions]`
  *
  * The counter shows the current filtered count. When `filtered < total` the
  * counter switches to `activeStatus` (default `brand`) and, if `onClear` is
@@ -84,6 +99,13 @@ export interface FilterBarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'ti
  * FilterBar for its title + counter — the controls row is dropped entirely
  * rather than rendered empty — so an unfilterable list never needs a
  * hand-rolled heading row.
+ *
+ * `search` adds a `SearchInput` at the start of the bar and makes the bar a
+ * `role="search"` landmark (ADR-049 § 5); the count then follows the query and
+ * is announced through a status region, zero included (§ 6). The field is not a
+ * filter control, so it stays inline when the controls collapse. The bar's
+ * `onClear` clears an uncontrolled field; for a controlled one, reset `value`
+ * there.
  *
  * The bar owns no outer margin; the gap to the display below belongs to the
  * consumer's layout primitive.
@@ -125,6 +147,7 @@ export function FilterBar({
   activeFilterCount,
   actions,
   size = 'sm',
+  search,
   className,
   style,
   ...props
@@ -138,6 +161,21 @@ export function FilterBar({
   const [ref, width] = useElementWidth<HTMLDivElement>();
   const collapsed = width !== null && width < COLLAPSE_BELOW_PX;
 
+  // The bar owns no query state. A controlled field (`search.value`) is reset
+  // by the consumer's `onClear`; an uncontrolled one the bar clears itself, the
+  // same way SearchInput's clear button does (native setter + input event, so
+  // `search.onChange` and the field's own clear affordance both hear about it).
+  const searchRef = useRef<HTMLInputElement>(null);
+  const handleClear = () => {
+    const input = searchRef.current;
+    if (input && search?.value === undefined && input.value !== '') {
+      const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set;
+      setter?.call(input, '');
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    onClear?.();
+  };
+
   // A bar with no filter children and no visible Clear button has no controls
   // row at all — it renders neither the inline slot nor the collapse popover,
   // so an unfilterable collection reads as a title + counter, not as an empty
@@ -150,7 +188,7 @@ export function FilterBar({
     <>
       {children}
       {onClear && isFiltered && (
-        <Button variant="ghost" size={size} onClick={onClear}>
+        <Button variant="ghost" size={size} onClick={handleClear}>
           {clearLabel}
         </Button>
       )}
@@ -168,14 +206,23 @@ export function FilterBar({
       className={bdsClass('bds-filter-bar', className)}
       style={style}
       aria-label={ariaLabel}
+      role={search ? 'search' : undefined}
       {...props}
     >
+      {search && <SearchInput ref={searchRef} {...search} />}
       {title && <TitleTag className="bds-filter-bar__title">{title}</TitleTag>}
       <Counter
         count={filtered}
         status={isFiltered ? activeStatus : 'neutral'}
         size="sm"
       />
+      {/* Always mounted so assistive tech announces the change, zero included;
+          a live region inserted already populated is often missed. */}
+      {search && (
+        <span className="bds-filter-bar__status" role="status">
+          {`${filtered} of ${total} ${label}`}
+        </span>
+      )}
 
       {hasControls &&
         (collapsed ? (
