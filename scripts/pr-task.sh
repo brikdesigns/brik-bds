@@ -8,6 +8,7 @@
 #   ./scripts/pr-task.sh "Custom PR title"   # override title
 #   ./scripts/pr-task.sh --no-issue "<reason>"  # feat/fix with no tracked issue
 #   ./scripts/pr-task.sh --area area:tooling    # set the area:* label explicitly
+#   ./scripts/pr-task.sh --screenshots <dir>    # story captures satisfy the Storybook gate
 #   ./scripts/pr-task.sh --dry-run    # run every gate, print the resolved PR, push nothing
 #
 # --dry-run (or PR_TASK_DRY_RUN=1) exists because this script's gates could not
@@ -60,6 +61,7 @@ source "${SCRIPT_DIR}/lib/pr-labels.sh"
 # ── Parse flags ──
 NO_ISSUE_REASON=""
 AREA_OVERRIDE=""
+SCREENSHOTS_DIR=""
 # Env form so a caller that cannot edit the argv (a hook, a wrapper, a test
 # harness) can still ask for a no-op run. --dry-run sets the same variable.
 DRY_RUN="${PR_TASK_DRY_RUN:-}"
@@ -73,6 +75,13 @@ while [[ $# -gt 0 ]]; do
     --dry-run)
       DRY_RUN=1
       shift
+      ;;
+    --screenshots)
+      # Evidence path for the story gate: a directory of story captures
+      # (node scripts/capture-story-shots.mjs <dir>) satisfies it without a
+      # prompt, so an agent can prove the render rather than assert it (#813).
+      SCREENSHOTS_DIR="${2:-}"
+      shift 2 || shift
       ;;
     --area)
       # Set the area:* label explicitly, for work whose linked issue carries
@@ -149,7 +158,18 @@ if [[ "${SKIP_STORY_CHECK:-}" != "1" ]]; then
     echo -e "${YELLOW}   Project rule: component changes must be verified in Storybook (npm run storybook)${NC}"
     echo -e "${YELLOW}   before opening a PR. Typecheck alone is not sufficient.${NC}"
     echo ""
-    if [ -t 0 ]; then
+    if [ -n "$SCREENSHOTS_DIR" ]; then
+      SHOT_COUNT=0
+      if [ -d "$SCREENSHOTS_DIR" ]; then
+        SHOT_COUNT=$(find "$SCREENSHOTS_DIR" -type f -name '*.png' -size +0c | wc -l | tr -d ' ')
+      fi
+      if [ "$SHOT_COUNT" -lt 1 ]; then
+        echo -e "${RED}✗ --screenshots ${SCREENSHOTS_DIR}: no non-empty .png captures found.${NC}"
+        echo -e "${YELLOW}   Capture them: npm run build-storybook && node scripts/capture-story-shots.mjs ${SCREENSHOTS_DIR}${NC}"
+        exit 1
+      fi
+      echo -e "${GREEN}   → ${SHOT_COUNT} story screenshot(s) in ${SCREENSHOTS_DIR} — Storybook gate satisfied; visual.yml gates pixels on the PR.${NC}"
+    elif [ -t 0 ]; then
       # Interactive TTY — confirm at the prompt (unchanged behavior).
       echo -n "   Verified in Storybook? [y/N] (or re-run with --skip-story-check / SKIP_STORY_CHECK=1 for non-visual diffs): "
       read -r STORY_CONFIRM
