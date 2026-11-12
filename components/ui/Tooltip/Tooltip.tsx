@@ -1,4 +1,15 @@
-import { type ReactNode, type HTMLAttributes, useState, useRef, useCallback, useLayoutEffect } from 'react';
+import {
+  type ReactNode,
+  type HTMLAttributes,
+  cloneElement,
+  isValidElement,
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+} from 'react';
 import { createPortal } from 'react-dom';
 import { bdsClass } from '../../utils';
 import './Tooltip.css';
@@ -59,6 +70,7 @@ export function Tooltip({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
   const bubbleRef = useRef<HTMLDivElement>(null);
+  const bubbleId = useId();
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
@@ -78,6 +90,16 @@ export function Tooltip({
     setIsVisible(false);
     setPos(null);
   }, [clearTimer]);
+
+  // Escape dismisses a visible tooltip without moving the pointer or focus (WCAG 1.4.13).
+  useEffect(() => {
+    if (!isVisible) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') hide();
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [isVisible, hide]);
 
   // Calculate fixed position once the bubble is mounted and measurable
   useLayoutEffect(() => {
@@ -115,6 +137,7 @@ export function Tooltip({
   const bubble = (
     <div
       ref={bubbleRef}
+      id={bubbleId}
       role="tooltip"
       className={bdsClass(
         'bds-tooltip__bubble',
@@ -131,6 +154,15 @@ export function Tooltip({
     </div>
   );
 
+  // describedby has to land on the focusable child, not the wrapper, to be read.
+  const trigger = isValidElement<{ 'aria-describedby'?: string }>(children)
+    ? cloneElement(children, {
+        'aria-describedby': isVisible
+          ? [children.props['aria-describedby'], bubbleId].filter(Boolean).join(' ')
+          : children.props['aria-describedby'],
+      })
+    : children;
+
   return (
     <div
       ref={triggerRef}
@@ -142,7 +174,7 @@ export function Tooltip({
       onBlur={hide}
       {...props}
     >
-      {children}
+      {trigger}
       {isVisible && typeof document !== 'undefined' && createPortal(bubble, document.body)}
     </div>
   );
