@@ -1,4 +1,4 @@
-import { type HTMLAttributes } from 'react';
+import { type HTMLAttributes, type KeyboardEvent } from 'react';
 import { Icon } from '../Icon';
 import { Minus, Plus } from '../../icons';
 import { bdsClass } from '../../utils';
@@ -29,6 +29,9 @@ export interface StepperProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onCh
  * Figma: bds-stepper (node 26432:14777)
  * - Two icon buttons (- / +) flanking a numeric display
  * - Respects min/max bounds
+ * - The value is a focusable `role="spinbutton"` (WAI-ARIA spinbutton pattern):
+ *   ArrowUp/ArrowDown step, PageUp/PageDown step by 10, Home/End jump to
+ *   `min` / `max` (End only when `max` is finite)
  *
  * @summary Numeric input with increment/decrement buttons
  */
@@ -55,6 +58,24 @@ export function Stepper({
     if (canIncrement) onChange(value + step);
   };
 
+  const clamp = (next: number) => Math.min(max, Math.max(min, next));
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLSpanElement>) => {
+    if (disabled) return;
+    let next: number | null = null;
+    switch (event.key) {
+      case 'ArrowUp': next = clamp(value + step); break;
+      case 'ArrowDown': next = clamp(value - step); break;
+      case 'PageUp': next = clamp(value + step * 10); break;
+      case 'PageDown': next = clamp(value - step * 10); break;
+      case 'Home': next = min; break;
+      case 'End': if (Number.isFinite(max)) next = max; break;
+    }
+    if (next === null) return;
+    event.preventDefault();
+    if (next !== value) onChange(next);
+  };
+
   return (
     <div
       className={bdsClass('bds-stepper', `bds-stepper--${size}`, className)}
@@ -74,7 +95,14 @@ export function Stepper({
       </button>
       <span
         className={bdsClass('bds-stepper__value', disabled && 'bds-stepper__value--disabled')}
-        aria-live="polite"
+        role="spinbutton"
+        aria-label="Value"
+        aria-valuenow={value}
+        aria-valuemin={min}
+        aria-valuemax={Number.isFinite(max) ? max : undefined}
+        aria-disabled={disabled || undefined}
+        tabIndex={disabled ? -1 : 0}
+        onKeyDown={handleKeyDown}
       >
         {value}
       </span>
