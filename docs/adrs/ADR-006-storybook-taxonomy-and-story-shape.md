@@ -159,6 +159,15 @@ Pre-existing `*.stories.tsx` files keep whatever shape ADR-007's page-recipe pas
 
 ## Amendments
 
+### 2026-11-12 — Part A: product page archetypes live in `Blueprints/` (#2526)
+
+AGENT DECIDED (revisable): broaden `Blueprints/` to hold product page archetypes; `Containers/read-mode-page` → **`Blueprints/read-mode-page`**. A forward-only `title:` re-title; no component code changes.
+
+- **Why.** `read-mode-page` composes `PageHeader` + `DataSection` + `FieldGrid` + `Field` into a whole page, which is the Blueprint layer of the six composition layers, not a bounded holder. `Blueprints/` already means "assembled page-region template"; the only difference is surface (marketing vs product), and `read-mode-page` carries `surface-product` while the section templates carry `surface-web`.
+- **Rejected: new `Archetypes/` top-level.** One Storybook member today (record edit, collection, profile and section hub are documented in docs-site only), so a new bucket would add a navigation hop with no discovery payoff, the same finding that dissolved `Blocks/` (2026-07-29).
+- **Revert.** Re-title to `Containers/read-mode-page`, restore the inbound links (`containers-read-mode-page--*`) and the `preview.tsx` comment.
+- **Visual baselines.** The two `containers-read-mode-page-*` baselines are renamed by the **Update Visual Baselines** workflow (`visual:rebaseline` label), never locally.
+
 ### 2026-09-10 — Part A: Modal → `Containers/`, Dialog → `Deprecated/` (#2365)
 
 Two overlay-family corrections, both forward-only `title:` re-titles; no component code changes.

@@ -440,8 +440,8 @@ const preview: Preview = {
           // the card family + collapsible are bounded holders → Containers.
           // Assets (top-level, 2026-09-12) holds icon-family + logo + avatar + image + pattern art; Displays dissolved into Containers.
           // Component-bearing categories omit child lists — sorted
-          // alphabetically by `method` above. `read-mode-page` is the one
-          // Containers entry still curated elsewhere (docs consolidation, #1453).
+          // alphabetically by `method` above. `read-mode-page` lives in `Blueprints/`
+          // (product page archetypes, ADR-006 amendment 2026-11-12, #2526).
           'Components',
           'Containers',
           'Forms',
