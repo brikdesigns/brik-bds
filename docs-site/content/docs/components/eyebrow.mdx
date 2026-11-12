@@ -1,0 +1,65 @@
+---
+title: Eyebrow
+description: Short uppercase kicker above a heading — label type, tight gap below, on-color aware.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Eyebrow is the short uppercase kicker that sits above a heading. It owns the label font family, label-tier size, semibold weight, letter-spacing, and the tight gap to the heading below it.
+
+## Use it for
+
+- A category or section kicker above a [ContentBlock](/docs/components/content-block) title
+- A kicker on a filled brand band (`onColor`)
+
+## Import
+
+```tsx
+import { Eyebrow } from '@brikdesigns/bds';
+```
+
+## Usage
+
+```tsx
+<Eyebrow>Membership</Eyebrow>
+<ContentBlock title="Membership Plans" />
+```
+
+### On color
+
+`onColor` swaps the text to `--text-on-color-dark` for a filled brand or dark surface. Never push a `color` or `opacity` override from the consumer.
+
+```tsx
+<Eyebrow onColor>Client review</Eyebrow>
+```
+
+### Tone
+
+`muted` (default) or `primary`.
+
+## When *not* to use
+
+<Callout type="warn">
+  **An eyebrow is not a heading, a Tag, or a Badge.** It renders `p` or `span`, never `h*`. For a status or category pill use [Tag](/docs/components/tag) or [Badge](/docs/components/badge). For a secondary line under a title use ContentBlock `subtitle`.
+</Callout>
+
+## Accessibility
+
+- Renders `p` (default) or `span`; never a heading, so it adds nothing to the document outline.
+- On `--surface-brand-primary`, `onColor` text is 3.78:1 — AA-large, not AA. Keep the eyebrow short.
+
+## API
+
+{/* props-check: EyebrowProps @ components/ui/Eyebrow/Eyebrow.tsx */}
+| Prop | Type | Default |
+|---|---|---|
+| `as` | `'p' \| 'span'` | `'p'` |
+| `tone` | `'muted' \| 'primary'` | `'muted'` |
+| `onColor` | `boolean` | `false` |
+
+Plus all standard HTML attributes for the rendered element.
+
+## Related
+
+- [Content block](/docs/components/content-block) — the title the eyebrow sits above
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/content-eyebrow--default)**

@@ -52,6 +52,7 @@ export * from './Dialog';
 export * from './Divider';
 export * from './Dot';
 export * from './EmptyState';
+export * from './Eyebrow';
 export * from './Field';
 export * from './FieldGrid';
 export * from './FileCard';

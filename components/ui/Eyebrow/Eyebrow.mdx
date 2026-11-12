@@ -1,0 +1,33 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Eyebrow.stories';
+
+<Meta of={Stories} />
+
+# Eyebrow
+
+<ComponentLinks slug="eyebrow" />
+
+The short uppercase kicker that sits above a heading. Owns the label font family, label-tier size, semibold weight, letter-spacing, and the tight gap to the heading below it. It renders `p` or `span`, never a heading — an eyebrow is not an outline node. It is not a `Tag` or `Badge`: those are status/category pills; an eyebrow is a plain line of text.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Above a ContentBlock title
+
+<Canvas of={Stories.AboveContentBlock} />
+
+## Patterns
+
+`onColor` swaps the text to `--text-on-color-dark` for a filled brand or dark surface — no per-instance `color` or `opacity`.
+
+<Canvas of={Stories.OnColor} />
+
+`tone` is `muted` (default, shown above) or `primary`.
+
+<Canvas of={Stories.Primary} />
+
+## Props
+
+<ArgTypes of={Stories} />
