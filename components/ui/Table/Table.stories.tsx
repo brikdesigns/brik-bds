@@ -743,7 +743,7 @@ export const StickyStartColumn: Story = {
   ),
   play: async ({ canvasElement }) => {
     const wrapper = canvasElement.querySelector('.bds-table-scroll') as HTMLElement;
-    const cell = canvasElement.querySelector('.bds-table-cell--sticky-start') as HTMLElement;
+    const cell = canvasElement.querySelector('.bds-table-cell[data-sticky="start"]') as HTMLElement;
     await expect(getComputedStyle(cell).position).toBe('sticky');
     await expect(wrapper.scrollWidth).toBeGreaterThan(wrapper.clientWidth);
     // Unscrolled: pinned cell sits on the wrapper's start edge, no divider yet.
@@ -752,14 +752,14 @@ export const StickyStartColumn: Story = {
     // Scrolled far off the start: a sibling cell has left the wrapper, the
     // pinned one has not moved. This is the measurement that proves the pin
     // resolves against the scroll wrapper (#2276), not just that CSS applies.
-    const sibling = canvasElement.querySelector('.bds-table-cell:not(.bds-table-cell--sticky-start)') as HTMLElement;
+    const sibling = canvasElement.querySelector('.bds-table-cell:not([data-sticky="start"])') as HTMLElement;
     const siblingBefore = sibling.getBoundingClientRect().left;
     wrapper.scrollLeft = 200;
     await waitFor(() => expect(wrapper).toHaveAttribute('data-start-clipped', 'true'));
     await expect(Math.round(cell.getBoundingClientRect().left)).toBe(Math.round(start));
     await expect(sibling.getBoundingClientRect().left).toBeLessThan(siblingBefore - 100);
     // Striped even row: the pinned cell paints the row fill, not the canvas.
-    const evenCell = canvasElement.querySelectorAll('.bds-table-body .bds-table-row')[1].querySelector('.bds-table-cell--sticky-start') as HTMLElement;
+    const evenCell = canvasElement.querySelectorAll('.bds-table-body .bds-table-row')[1].querySelector('.bds-table-cell[data-sticky="start"]') as HTMLElement;
     const secondary = document.createElement('div');
     secondary.style.backgroundColor = 'var(--bds-background-secondary)';
     canvasElement.appendChild(secondary);

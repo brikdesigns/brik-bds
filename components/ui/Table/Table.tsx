@@ -265,10 +265,10 @@ export function TableHead({
         'bds-table-head',
         sortable && 'bds-table-head--sortable',
         stickyEnd && 'bds-table-head--sticky',
-        stickyStart && 'bds-table-head--sticky-start',
         className,
       )}
       style={style}
+      data-sticky={stickyStart ? 'start' : undefined}
       onClick={sortable ? onSort : undefined}
       aria-sort={
         sortable
@@ -357,13 +357,9 @@ export function TableCell({
 }: TableCellProps) {
   return (
     <td
-      className={bdsClass(
-        'bds-table-cell',
-        stickyEnd && 'bds-table-cell--sticky',
-        stickyStart && 'bds-table-cell--sticky-start',
-        className,
-      )}
+      className={bdsClass('bds-table-cell', stickyEnd && 'bds-table-cell--sticky', className)}
       style={style}
+      data-sticky={stickyStart ? 'start' : undefined}
       {...props}
     >
       {children}
