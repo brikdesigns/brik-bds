@@ -5,13 +5,9 @@ import './Eyebrow.css';
 /** Never `h*` — an eyebrow is not an outline node (build-standards/html-semantics). */
 export type EyebrowAs = 'p' | 'span';
 
-export type EyebrowTone = 'muted' | 'primary';
-
 export interface EyebrowProps extends HTMLAttributes<HTMLElement> {
   /** HTML element. `p` (default) for a kicker on its own line above a heading; `span` inline. Never a heading. */
   as?: EyebrowAs;
-  /** Text colour. `muted` (default) is the common case; `primary` for stronger emphasis. Ignored when `onColor` is set. */
-  tone?: EyebrowTone;
   /**
    * On-color mode — for an eyebrow on a filled brand/dark surface. Swaps text to
    * `--bds-text-on-color-dark`, same contract as `ContentBlock.onColor`, so the
@@ -30,7 +26,6 @@ export interface EyebrowProps extends HTMLAttributes<HTMLElement> {
  */
 export function Eyebrow({
   as: Tag = 'p',
-  tone = 'muted',
   onColor = false,
   className,
   ...props
@@ -39,7 +34,6 @@ export function Eyebrow({
     <Tag
       className={bdsClass(
         'bds-eyebrow',
-        `bds-eyebrow--tone-${tone}`,
         onColor ? 'bds-eyebrow--on-color' : '',
         className,
       )}

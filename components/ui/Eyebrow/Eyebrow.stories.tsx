@@ -14,7 +14,6 @@ const meta: Meta<typeof Eyebrow> = {
   parameters: { layout: 'padded' },
   argTypes: {
     as: { control: 'select', options: ['p', 'span'] },
-    tone: { control: 'select', options: ['muted', 'primary'] },
     onColor: {
       control: { type: 'boolean' },
       description:
@@ -73,10 +72,3 @@ export const OnColor: Story = {
   ),
 };
 
-/**
- * `primary` tone for stronger emphasis; `muted` is the default.
- * @summary Primary tone
- */
-export const Primary: Story = {
-  args: { children: 'Brand guide', tone: 'primary' },
-};
