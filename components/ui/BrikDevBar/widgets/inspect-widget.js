@@ -1581,9 +1581,11 @@
     toolbarEl.className = 'bi-toolbar';
 
     toggleBtn = document.createElement('button');
-    toggleBtn.className = 'bi-btn';
+    // Build from the current state: `?inspect=1` activates in init() before
+    // this timer-deferred build runs, so toggleActive() had no button to paint.
+    toggleBtn.className = active ? 'bi-btn bi-btn--active' : 'bi-btn';
     toggleBtn.type = 'button';
-    toggleBtn.innerHTML = `${iconCrosshair()} Inspect`;
+    toggleBtn.innerHTML = active ? `${iconCrosshair()} Inspecting…` : `${iconCrosshair()} Inspect`;
     toggleBtn.addEventListener('click', toggleActive);
     toolbarEl.appendChild(toggleBtn);
 
