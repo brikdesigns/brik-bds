@@ -127,6 +127,7 @@ jobs:
     # would be one of several indistinguishable rows in the PR checks list.
     name: classify diff (components)
     runs-on: ubuntu-slim
+    timeout-minutes: 5  # #3090: p95 18s, 60 green runs to 2026-11-12
     outputs:
       lints: ${{ steps.classify.outputs.lints }}
       bundlescan: ${{ steps.classify.outputs.bundlescan }}
@@ -278,6 +279,7 @@ jobs:
   lints:
     name: component lints
     runs-on: ubuntu-slim
+    timeout-minutes: 10  # #3090: p95 95s, 60 green runs to 2026-11-12
     needs: changes
     permissions:
       contents: read
@@ -392,6 +394,7 @@ jobs:
   bundlescan:
     name: storybook bundle scan
     runs-on: ubuntu-latest
+    timeout-minutes: 10  # #3090: p95 54s, 60 green runs to 2026-11-12
     needs: changes
     permissions:
       contents: read
@@ -441,6 +444,7 @@ jobs:
   astro:
     name: blueprints astro
     runs-on: ubuntu-latest
+    timeout-minutes: 10  # #3090: p95 109s, 60 green runs to 2026-11-12
     needs: changes
     permissions:
       contents: read
@@ -490,6 +494,7 @@ jobs:
   test:
     name: test suite
     runs-on: ubuntu-latest
+    timeout-minutes: 15  # #3090: p95 260s, 60 green runs to 2026-11-12
     needs: changes
     permissions:
       contents: read
@@ -533,6 +538,7 @@ jobs:
   components-gate:
     name: components-gate
     runs-on: ubuntu-slim
+    timeout-minutes: 5  # #3090: p95 5s, 60 green runs to 2026-11-12
     needs: [changes, lints, bundlescan, astro, test]
     if: always()
     steps:
