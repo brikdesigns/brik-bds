@@ -373,6 +373,27 @@ assert_eq "a non-closing form never becomes Closes" \
 assert_eq "the GH-N form resolves" "Closes GH-2442" \
   "$(build_issue_links 'fix(x): thing' 'Closes GH-2442' | tr -d '\n')"
 
+echo "── the short repo#N form is qualified, not bare (#2239) ──"
+# `brik-llm#2916` is what the watched-twin sync commits actually write. The bare
+# `#[0-9]+` read it as `#2916`, which GitHub resolves against THIS repo.
+assert_eq "a short-form subject ref is owner-qualified, never bare" \
+  "Refs brikdesigns/brik-llm#2916" \
+  "$(build_issue_links 'chore(ops): re-sync the predicate (brik-llm#2916)' '' | tr -d '\n')"
+assert_eq "a short-form closing ref cannot close a same-numbered local issue" \
+  "Closes brikdesigns/brik-llm#2916" \
+  "$(build_issue_links 'fix(x): thing' 'Closes brik-llm#2916' | tr -d '\n')"
+assert_eq "a short-form non-closing ref is a Refs, qualified" \
+  "Refs brikdesigns/brik-llm#2916" \
+  "$(build_issue_links 'fix(x): thing' 'Part of brik-llm#2916' | tr -d '\n')"
+assert_eq "short and fully-qualified spellings of one ticket collapse to one line" \
+  "Refs brikdesigns/brik-llm#2916" \
+  "$(build_issue_links 'chore: x (brik-llm#2916)' 'Part of brikdesigns/brik-llm#2916' | tr -d '\n')"
+assert_eq "a bare #N still renders as Refs #N" "Refs #2916" \
+  "$(build_issue_links 'chore: x (#2916)' '' | tr -d '\n')"
+assert_eq "a non-brik word before # is not read as a repo (PR#12 stays local)" \
+  "Refs #12" \
+  "$(build_issue_links 'fix: x (PR#12)' '' | tr -d '\n')"
+
 echo "── a QUOTED CLOSING keyword is not a directive (#2240) ──"
 # The over-CLOSING half. brik-client-portal#3550's body said "This does **not**
 # close #2942"; GitHub ignored the negation and shut the issue on merge. #3556 —
