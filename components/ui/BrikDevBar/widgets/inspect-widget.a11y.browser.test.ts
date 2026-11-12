@@ -67,39 +67,12 @@ function mountFixture(): HTMLElement {
  */
 function mountWidget(): void {
   // The widget self-disables unless data-auto-enable or ?inspect=1 is present.
-  // `?inspect=1` also auto-activates it (inspect-widget.js:1585), so hover and
+  // `?inspect=1` also auto-activates it (inspect-widget.js, init()), so hover and
   // click work without touching the toggle.
   history.replaceState(null, '', `${location.pathname}?inspect=1`);
   const script = document.createElement('script');
   script.textContent = widgetSource;
   document.body.appendChild(script);
-}
-
-interface InspectApi {
-  setActive: (next: boolean) => void;
-  isActive: () => boolean;
-}
-
-function inspectApi(): InspectApi {
-  const api = (window as unknown as { BrikInspect?: InspectApi }).BrikInspect;
-  if (!api?.setActive) throw new Error('widget did not expose BrikInspect.setActive');
-  return api;
-}
-
-/**
- * Paint the active state onto the fallback toolbar button.
- *
- * `?inspect=1` activates synchronously, but the fallback toolbar is built 80ms
- * later behind a setTimeout (inspect-widget.js:1575), so `toggleActive` runs
- * with `toggleBtn` still undefined and the button renders un-styled while the
- * widget is active. Re-driving the public API once the button exists is what
- * puts `.bi-btn--active` in the DOM for auditing. This helper works around that
- * desync so the active fill can be measured; it does not assert it.
- */
-function repaintActiveToggle(): void {
-  const api = inspectApi();
-  api.setActive(false);
-  api.setActive(true);
 }
 
 async function auditWidgetChrome(): Promise<string[]> {
@@ -140,7 +113,6 @@ describe('inspect widget — WCAG 2.1 AA (#1792)', () => {
   });
 
   it('active toolbar button has no violations', async () => {
-    repaintActiveToggle();
     await settle();
 
     // Assert the fixture before auditing it — a button that silently failed to
