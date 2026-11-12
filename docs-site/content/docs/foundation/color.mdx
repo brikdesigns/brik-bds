@@ -124,6 +124,17 @@ Canonical Figma tokens for positive, negative, and warning states. Background va
   columns={3}
 />
 
+**Which state takes which valence** — the tokens above say what each valence looks like, not which lifecycle state earns it. One table decides, and every status badge, dot and row resolves through it rather than choosing a colour of its own. [StatusList](/docs/components/status-list) renders the first five rows as one list.
+
+| Lifecycle state | Valence | Example label |
+| --- | --- | --- |
+| Complete, active | `positive` | Complete, Active |
+| In progress | `info` | In Progress |
+| Not started, inactive, cancelled | `neutral` | Not Started, Inactive, Cancelled |
+| Needs an action before it can proceed (pending, blocked on someone) | `warning` | Needs Attention, Blocked |
+| Failed, overdue | `negative` | Failed, Overdue |
+| Elevated tier | `brand` | Premium |
+
 **The `info` signal** — blue, and one of the five valence values. It came from Figma under the `status-` segment until [#1959](https://github.com/brikdesigns/brik-bds/issues/1959) freed the name: the gray family that used to hold `--*-info` is now `--*-neutral`, so `info` means blue and only blue. The `--*-status-info*` spellings still resolve as deprecated aliases for one minor ([#1958](https://github.com/brikdesigns/brik-bds/issues/1958) deletes them). `info` has no Figma source. It is a hand-written gap-fill (`tokens/gap-fills.css:237-240`: background, text, surface and border), declared once in `:root` with no dark-mode value, so it does not flip with the theme. `--border-info` is the blue edge of an `outline` Badge.
 
 <ColorGrid

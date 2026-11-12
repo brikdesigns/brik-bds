@@ -5,7 +5,7 @@ import { InteractiveListItem } from '../InteractiveListItem';
 import { bdsClass } from '../../utils';
 import './StatusList.css';
 
-export type StatusListStatus = 'complete' | 'in_progress' | 'not_started' | 'negative';
+export type StatusListStatus = 'complete' | 'in_progress' | 'not_started' | 'blocked' | 'negative';
 
 export interface StatusListItem {
   /** Stable identity for the row. */
@@ -38,14 +38,15 @@ const STATUS: Record<
   { icon: string; tone: BadgeTone; label: string; modifier: string }
 > = {
   complete: { icon: 'ph:check-circle', tone: 'positive', label: 'Complete', modifier: 'status-complete' },
-  in_progress: { icon: 'ph:clock', tone: 'warning', label: 'In Progress', modifier: 'status-in-progress' },
+  in_progress: { icon: 'ph:clock', tone: 'info', label: 'In Progress', modifier: 'status-in-progress' },
   not_started: { icon: 'ph:circle', tone: 'neutral', label: 'Not Started', modifier: 'status-not-started' },
-  negative: { icon: 'ph:warning-circle', tone: 'negative', label: 'Error', modifier: 'tone-negative' },
+  blocked: { icon: 'ph:warning', tone: 'warning', label: 'Blocked', modifier: 'status-blocked' },
+  negative: { icon: 'ph:warning-circle', tone: 'negative', label: 'Failed', modifier: 'tone-negative' },
 };
 
 /**
  * StatusList — a read-only list of tracked outputs, each shown as complete, in
- * progress, not started or failed. Rows are display-only `InteractiveListItem`s
+ * progress, not started, blocked or failed. Rows are display-only `InteractiveListItem`s
  * (no click target, no strikethrough) with a status icon and a `Badge`. A failed
  * row can carry an `message` that is announced to assistive technology.
  *

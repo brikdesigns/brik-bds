@@ -8,7 +8,17 @@ import * as Stories from './StatusList.stories';
 
 <ComponentLinks slug="status-list" />
 
-A read-only list of tracked outputs. Each row shows a title, an optional description, and one of four states — `complete`, `in_progress`, `not_started` or `negative` — as a distinct icon plus a status badge. Rows are display-only: no click target, and labels are never struck through.
+A read-only list of tracked outputs. Each row shows a title, an optional description, and one of five states as a distinct icon plus a status badge. Each state maps to one tone:
+
+| Status | Badge label | Tone | Icon |
+| --- | --- | --- | --- |
+| `complete` | Complete | positive | `ph:check-circle` |
+| `in_progress` | In Progress | info | `ph:clock` |
+| `not_started` | Not Started | neutral | `ph:circle` |
+| `blocked` | Blocked | warning | `ph:warning` |
+| `negative` | Failed | negative | `ph:warning-circle` |
+
+ Rows are display-only: no click target, and labels are never struck through.
 
 ## Playground
 

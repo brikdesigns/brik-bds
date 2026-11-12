@@ -13,7 +13,7 @@ const meta: Meta<typeof StatusList> = {
     items: {
       control: 'object',
       description:
-        'Rows — each `{ id, title, description?, status, message? }`. `status` is `complete`, `in_progress`, `not_started` or `negative`.',
+        'Rows — each `{ id, title, description?, status, message? }`. `status` is `complete`, `in_progress`, `not_started`, `blocked` or `negative`.',
     },
     className: { control: 'text', description: 'Extra class on the wrapping `<ul>`.' },
   },
@@ -42,6 +42,12 @@ const ITEMS: StatusListItem[] = [
     status: 'not_started',
   },
   {
+    id: 'hosting',
+    title: 'Hosting Setup',
+    description: 'Waiting on DNS access before the site can go live.',
+    status: 'blocked',
+  },
+  {
     id: 'seo',
     title: 'SEO Metadata',
     description: 'Meta titles, descriptions and Open Graph tags.',
@@ -64,11 +70,11 @@ const ITEMS: StatusListItem[] = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════
-   DEFAULT — all four states, including a negative row with a message
+   DEFAULT — all five states, including a negative row with a message
    and a row whose description holds a small TextLink.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All four states, error message, and inline link */
+/** @summary All five states, error message, and inline link */
 export const Default: Story = {
   args: { items: ITEMS },
 };

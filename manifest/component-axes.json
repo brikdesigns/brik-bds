@@ -357,6 +357,7 @@
       "complete",
       "in_progress",
       "not_started",
+      "blocked",
       "negative"
     ]
   },
