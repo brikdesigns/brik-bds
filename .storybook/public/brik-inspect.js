@@ -155,17 +155,24 @@
     colorGrayscaleDarker:  '#333333', // --bds-color-grayscale-800
     colorGrayscaleDarkest: '#1b1b1b', // --bds-color-grayscale-950
     colorTanLightest:      '#f1f0ec', // --bds-color-tan-100
-    // Semantic surfaces (light theme — inspector mirrors feedback widget)
-    backgroundBrandPrimary: '#e35335', // --bds-background-brand-primary
-    textPrimary:   '#333333', // --bds-text-primary
-    textSecondary: '#4f4f4f', // --bds-text-secondary
+    // Semantic surfaces (light theme — inspector mirrors feedback widget).
+    // The semantic tokens are redeclared per theme, so "the" value is a cascade
+    // question (#1791): --bds-text-primary and --bds-border-primary resolve to
+    // grayscale-950 at base :root, and --bds-background-brand-primary does only
+    // under .theme-brand-brik. These entries pin the rendered Brik light look, so
+    // each is annotated with the primitive whose value it holds, not the semantic.
+    backgroundBrandPrimary: '#e35335', // --bds-color-poppy-500
+    textPrimary:   '#333333', // --bds-color-grayscale-800
+    // Standalone: no BDS grayscale stop is #4f4f4f (700 is #5a5a5a, 800 is #333333).
+    // It is the 7.44:1 value the panel's 10–12px labels were tuned to.
+    textSecondary: '#4f4f4f', // standalone — no BDS stop
     // --bds-text-muted (#828282) is 3.84:1 on white — sanctioned at AA-LARGE only
     // (tokens/contrast-pairings.json). Every label in this panel is 10–12px, so
     // nothing here qualifies; they use --bds-text-secondary (7.44:1) instead. The
     // entry stays because the panel may yet need a large-text muted role.
     textMuted:     '#828282', // --bds-text-muted
     textInverse:   '#ffffff', // --bds-text-inverse
-    borderPrimary: '#e0e0e0', // --bds-border-primary
+    borderPrimary: '#e0e0e0', // --bds-color-grayscale-300
     // Status. Each carries white text or sits on white, so each is picked to
     // clear AA 4.5:1 rather than to match the 6-step status hues.
     colorGreenLightest:    '#f8fff3', // --bds-color-green-100
@@ -177,8 +184,10 @@
     // Typography
     fontFamily:         "'Poppins', system-ui, sans-serif",
     fontFamilyMono:     "'JetBrains Mono', ui-monospace, SF Mono, Menlo, Consolas, monospace",
-    fontSizeXs:         '10.26px', // --bds-font-size-25
-    fontSizeSm:         '11.54px', // --bds-font-size-50
+    // Rounded from --bds-font-size-25 / -50, which export as float32 artifacts
+    // (10.260000228881836px / 11.539999961853027px) of these two-decimal values.
+    fontSizeXs:         '10.26px',
+    fontSizeSm:         '11.54px',
     fontSizeBody:       '14px',    // --bds-font-size-75
     fontSizeMd:         '16px',    // --bds-font-size-100
     fontWeightMedium:   '500',
@@ -196,7 +205,7 @@
     // Border radius
     radius100: '4px',   // --bds-border-radius-100
     radius200: '8px',   // --bds-border-radius-200
-    radius300: '12px',  // --bds-border-radius-300
+    radius300: '10px',  // --bds-border-radius-300
     radiusPill:'999px', // --bds-border-radius-pill
   };
 
