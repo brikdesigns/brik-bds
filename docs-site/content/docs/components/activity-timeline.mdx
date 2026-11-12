@@ -83,7 +83,8 @@ The category channel is the `icon` slot plus a `Tag` inside `content`. There is 
 ## Accessibility
 
 - Renders an `<ol>` with each event as `<li>` — semantically a chronological list.
-- Each event's timestamp uses `<time>` for proper screen reader announcement.
+- Each event's timestamp renders inside a `<time>` element. Pass `dateTime` (ISO 8601) on the event to set its `datetime` attribute; without it the element carries no machine-readable value.
+- Events are keyed by `id` when given, else by timestamp + label + position. Pass a stable `id` when events can be inserted or reordered.
 
 ## API
 
@@ -103,6 +104,8 @@ interface TimelineEvent {
   detail?: string | null;   // secondary line, e.g. "by Emily Rivera"
   content?: ReactNode;      // rich body below detail, above timestamp (Tags, text, links)
   timestamp: string;        // pre-formatted by the consumer
+  dateTime?: string;        // ISO 8601, set on <time datetime>
+  id?: string;              // stable React key
   isOrigin?: boolean;       // brand-colored dot; defaults to the first event
 }
 ```
