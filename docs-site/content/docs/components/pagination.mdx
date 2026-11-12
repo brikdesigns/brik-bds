@@ -81,6 +81,19 @@ Standard table footer pattern — count on the left, controls on the right.
 </div>
 ```
 
+## Pattern: rows per page
+
+`usePagination` owns the page and page-size state — the page resets to 1 when the size changes and clamps when `totalItems` shrinks. Spread `paginationProps` onto `Pagination` for the selector (25 / 50 / 100 rows) and the "Showing X–Y of N" count.
+
+```tsx
+const { offset, limit, paginationProps } = usePagination({ totalItems: rows.length });
+const visible = rows.slice(offset, offset + limit);
+
+<Pagination {...paginationProps} position="right" />
+```
+
+For server paging, pass the server's total as `totalItems` and send `offset` / `limit` with the request. Options: `initialPageSize` (25), `initialPage` (1), `pageSizeOptions` ([25, 50, 100]).
+
 ## When *not* to use
 
 - **Don't use Pagination for infinite-scroll lists.** Pagination implies discrete pages with stable URLs. For continuous loading, use a "Load more" button or true infinite scroll.
@@ -103,6 +116,10 @@ Standard table footer pattern — count on the left, controls on the right.
 | `onChange` | `(page: number) => void` *(required)* | — |
 | `position` | `'left' \| 'center' \| 'right'` | `'center'` |
 | `siblingCount` | `number` | `1` |
+| `pageSize` | `number` | — |
+| `totalItems` | `number` | — |
+| `pageSizeOptions` | `number[]` | `[25, 50, 100]` |
+| `onPageSizeChange` | `(pageSize: number) => void` | — |
 
 Plus standard `<nav>` HTML attributes (excluding native `onChange`).
 

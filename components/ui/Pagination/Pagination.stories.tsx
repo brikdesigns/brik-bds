@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Pagination } from './Pagination';
+import { usePagination } from './usePagination';
 
 /* ─── Meta ────────────────────────────────────────────── */
 
@@ -26,6 +27,22 @@ const meta = {
     onChange: {
       control: false,
       description: 'Callback fired with the new page number when a page or arrow control is clicked.',
+    },
+    pageSize: {
+      control: { type: 'number', min: 1 },
+      description: 'Rows per page. With `totalItems`, renders a "Showing X–Y of N" count.',
+    },
+    totalItems: {
+      control: { type: 'number', min: 0 },
+      description: 'Total rows across all pages.',
+    },
+    pageSizeOptions: {
+      control: 'object',
+      description: 'Row-count choices for the selector. Default `[25, 50, 100]`.',
+    },
+    onPageSizeChange: {
+      control: false,
+      description: 'Renders the rows-per-page selector when provided. Consumer resets `currentPage` to 1.',
     },
     siblingCount: {
       control: { type: 'number', min: 0, max: 3 },
@@ -57,3 +74,12 @@ export const Default: Story = {
   },
 };
 
+
+/** @summary Rows-per-page selector with result count — the table footer */
+export const WithPageSize: Story = {
+  render: (args) => {
+    const { paginationProps } = usePagination({ totalItems: args.totalItems ?? 0 });
+    return <Pagination {...args} {...paginationProps} />;
+  },
+  args: { totalItems: 240, position: 'right', currentPage: 1, totalPages: 10, onChange: () => {} },
+};
