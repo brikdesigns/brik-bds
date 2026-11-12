@@ -83,18 +83,16 @@ Standard table footer pattern — count on the left, controls on the right.
 
 ## Pattern: rows per page
 
-Pass `pageSize` + `onPageSizeChange` for the selector (default 25 / 50 / 100 rows; override with `pageSizeOptions`) and `totalItems` for the "Showing X–Y of N" count. Reset to page 1 when the size changes.
+`usePagination` owns the page and page-size state — the page resets to 1 when the size changes and clamps when `totalItems` shrinks. Spread `paginationProps` onto `Pagination` for the selector (25 / 50 / 100 rows) and the "Showing X–Y of N" count.
 
 ```tsx
-<Pagination
-  currentPage={page}
-  totalPages={Math.max(1, Math.ceil(total / pageSize))}
-  onChange={setPage}
-  pageSize={pageSize}
-  totalItems={total}
-  onPageSizeChange={(size) => { setPageSize(size); setPage(1); }}
-/>
+const { offset, limit, paginationProps } = usePagination({ totalItems: rows.length });
+const visible = rows.slice(offset, offset + limit);
+
+<Pagination {...paginationProps} position="right" />
 ```
+
+For server paging, pass the server's total as `totalItems` and send `offset` / `limit` with the request. Options: `initialPageSize` (25), `initialPage` (1), `pageSizeOptions` ([25, 50, 100]).
 
 ## When *not* to use
 

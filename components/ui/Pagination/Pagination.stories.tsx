@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Pagination } from './Pagination';
+import { usePagination } from './usePagination';
 
 /* ─── Meta ────────────────────────────────────────────── */
 
@@ -77,22 +78,8 @@ export const Default: Story = {
 /** @summary Rows-per-page selector with result count — the table footer */
 export const WithPageSize: Story = {
   render: (args) => {
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(25);
-    const totalItems = args.totalItems ?? 0;
-    return (
-      <Pagination
-        {...args}
-        currentPage={page}
-        pageSize={pageSize}
-        totalPages={Math.max(1, Math.ceil(totalItems / pageSize))}
-        onChange={setPage}
-        onPageSizeChange={(size) => {
-          setPageSize(size);
-          setPage(1);
-        }}
-      />
-    );
+    const { paginationProps } = usePagination({ totalItems: args.totalItems ?? 0 });
+    return <Pagination {...args} {...paginationProps} />;
   },
   args: { totalItems: 240, position: 'right', currentPage: 1, totalPages: 10, onChange: () => {} },
 };
