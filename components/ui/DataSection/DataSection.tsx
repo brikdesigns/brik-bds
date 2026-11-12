@@ -78,7 +78,7 @@ export interface DataSectionProps extends Omit<HTMLAttributes<HTMLElement>, 'tit
  * rendered with heading-tier typography. It is NOT an uppercase label.
  * @summary Page-side wrapper for read-mode data sections
  *
- * @see Containers/read-mode-page — composition with FieldGrid + Field + ButtonGroup.
+ * @see Blueprints/read-mode-page — composition with FieldGrid + Field + ButtonGroup.
  */
 export function DataSection({
   title,

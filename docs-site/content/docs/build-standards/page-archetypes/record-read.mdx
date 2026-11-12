@@ -81,7 +81,7 @@ Three levels, and the element follows outline position rather than the token —
 
 The record read page never holds a form. Editing is per section, and BDS supports two conventions — a `Sheet` overlay, or an in-place body swap. Both keep the page in read mode; neither adds a page-level Save.
 
-Those two conventions, their selection rules, and the live canvases live in Storybook: [`Containers/read-mode-page`](https://storybook.brikdesigns.com/?path=/docs/containers-read-mode-page--overview). Do not mix them on one page.
+Those two conventions, their selection rules, and the live canvases live in Storybook: [`Blueprints/read-mode-page`](https://storybook.brikdesigns.com/?path=/docs/blueprints-read-mode-page--overview). Do not mix them on one page.
 
 The page-level `[Edit]` in `PageHeader` is a different thing — it routes to the [record edit](/docs/build-standards/page-archetypes/record-edit) page. Wire it with `mode="read"` plus `onEdit`, which auto-renders the button; a hand-placed `actions` button overrides mode-driven actions entirely.
 
@@ -98,5 +98,5 @@ The page-level `[Edit]` in `PageHeader` is a different thing — it routes to th
 - [Record Edit](/docs/build-standards/page-archetypes/record-edit) — the write half of the same record.
 - [Collection](/docs/build-standards/page-archetypes/collection) — the archetype when the page is about a set rather than one record.
 - [Profile](/docs/build-standards/page-archetypes/profile) — this archetype as one tab of a tabbed entity page.
-- [Storybook — read-mode-page](https://storybook.brikdesigns.com/?path=/docs/containers-read-mode-page--overview) — live canvases and the two section-level edit conventions.
+- [Storybook — read-mode-page](https://storybook.brikdesigns.com/?path=/docs/blueprints-read-mode-page--overview) — live canvases and the two section-level edit conventions.
 - [Display Choice](/docs/build-standards/display-choice) — why one record's own scalars are a field grid and not a table, and which display a status list or a single active subscription gets.

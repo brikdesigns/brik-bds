@@ -184,7 +184,7 @@ Don't reach for raw `<h3>` / `<table>` / `<ul>` inside a Sheet body — each has
 
 ## Composing a read-mode sheet
 
-A read-mode sheet is the narrow-view sibling of the [Read-Mode Page](https://storybook.brikdesigns.com/?path=/docs/containers-read-mode-page--overview) pattern — where a page surfaces an entire record at once, a sheet surfaces one facet of it. The composition is always the same four primitives: Sheet, [SheetSection](/docs/components/sheet-section), [FieldGrid](/docs/components/field-grid), and [Field](/docs/components/field). [DataSection](/docs/components/data-section) never appears inside a Sheet — it's page-scoped and carries page-tier title typography that overwhelms the narrow view; SheetSection is its sheet-side sibling.
+A read-mode sheet is the narrow-view sibling of the [Read-Mode Page](https://storybook.brikdesigns.com/?path=/docs/blueprints-read-mode-page--overview) pattern — where a page surfaces an entire record at once, a sheet surfaces one facet of it. The composition is always the same four primitives: Sheet, [SheetSection](/docs/components/sheet-section), [FieldGrid](/docs/components/field-grid), and [Field](/docs/components/field). [DataSection](/docs/components/data-section) never appears inside a Sheet — it's page-scoped and carries page-tier title typography that overwhelms the narrow view; SheetSection is its sheet-side sibling.
 
 Three conventions cover how the read ↔ edit lifecycle attaches to that composition.
 
@@ -247,7 +247,7 @@ The vertical gap between consecutive `SheetSection`s is `SheetSection`'s own con
 
 ## Sheet vs page
 
-Both [Read-Mode Page](https://storybook.brikdesigns.com/?path=/docs/containers-read-mode-page--overview) and a read-mode sheet compose the same atomic primitives (FieldGrid, Field, BulletList) — the wrapper is the decision.
+Both [Read-Mode Page](https://storybook.brikdesigns.com/?path=/docs/blueprints-read-mode-page--overview) and a read-mode sheet compose the same atomic primitives (FieldGrid, Field, BulletList) — the wrapper is the decision.
 
 | Choose a page (`DataSection`) when… | Choose a sheet (`SheetSection`) when… |
 |---|---|

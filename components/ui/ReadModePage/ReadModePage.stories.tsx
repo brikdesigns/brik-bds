@@ -14,7 +14,7 @@ import { ButtonGroup } from '../ButtonGroup';
  * docs page owns the two section-level edit conventions.
  */
 const meta: Meta = {
-  title: 'Containers/read-mode-page',
+  title: 'Blueprints/read-mode-page',
   tags: ['surface-product'],
   parameters: { layout: 'padded' },
 };
