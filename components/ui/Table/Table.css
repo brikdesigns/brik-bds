@@ -441,13 +441,26 @@
   background-color: var(--bds-page-primary);
 }
 
+/* Start-pinned mirror: same fill + stacking, anchored to the start edge. */
+.bds-table-head--sticky-start,
+.bds-table-cell--sticky-start {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 1;
+  background-color: var(--bds-page-primary);
+}
+
 /* A `data-header-bg="primary"` header paints `--bds-background-primary`, so its
    pinned cell follows it rather than the page canvas. */
-.bds-table[data-header-bg="primary"] .bds-table-head--sticky {
+.bds-table[data-header-bg="primary"] .bds-table-head--sticky,
+.bds-table[data-header-bg="primary"] .bds-table-head--sticky-start {
   background-color: var(--bds-background-primary);
 }
 
 .bds-table[data-header-bg="secondary"] .bds-table-head--sticky,
+.bds-table[data-header-bg="secondary"] .bds-table-head--sticky-start,
+.bds-table-row--selected .bds-table-cell--sticky-start,
+.bds-table[data-striped="true"] .bds-table-body .bds-table-row:nth-child(even) .bds-table-cell--sticky-start,
 .bds-table-row--selected .bds-table-cell--sticky,
 .bds-table-row--selected .bds-table-actions-cell--sticky,
 .bds-table[data-striped="true"] .bds-table-body .bds-table-row:nth-child(even) .bds-table-cell--sticky,
@@ -460,5 +473,11 @@
 .bds-table-scroll[data-end-clipped="true"] .bds-table-cell--sticky,
 .bds-table-scroll[data-end-clipped="true"] .bds-table-actions-cell--sticky {
   box-shadow: inset var(--bds-border-width-md) 0 0 var(--bds-border-muted);
+}
+
+/* Start edge divider — only once the table has scrolled off its start. */
+.bds-table-scroll[data-start-clipped="true"] .bds-table-head--sticky-start,
+.bds-table-scroll[data-start-clipped="true"] .bds-table-cell--sticky-start {
+  box-shadow: inset calc(-1 * var(--bds-border-width-md)) 0 0 var(--bds-border-muted);
 }
 }

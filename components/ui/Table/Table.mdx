@@ -40,6 +40,12 @@ Set `stickyEnd` on the header and every cell of the last column — `TableHead`,
 
 <Canvas of={Stories.StickyEndColumn} />
 
+### Sticky start column
+
+Set `stickyStart` on the header and every cell of the first column — `TableHead` or `TableCell` — to pin it to the start edge while the table scrolls sideways. Same rules as `stickyEnd`: it needs `scrollable`, the fill follows the row state, and the divider shows once the table has scrolled off its start.
+
+<Canvas of={Stories.StickyStartColumn} />
+
 ## Patterns
 
 The trailing `[View][Edit][⋯]` cluster composes with `<TableActionsCell>` — it owns alignment, shrink-to-content width, and the `--bds-gap-sm` rhythm, so consumers stop hand-rolling `style={{ textAlign: 'right' }}` on `<TableCell>`.
