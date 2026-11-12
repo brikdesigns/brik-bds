@@ -1,0 +1,51 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './SearchOverlay.stories';
+
+<Meta of={Stories} />
+
+# Search overlay
+
+<ComponentLinks slug="search-overlay" />
+
+Command-style global search in a modal: a large search field, optional scope chips, grouped results with an icon, title and muted trail, recents before typing, a result count after every query, and key hints in the footer.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Results
+
+<Canvas of={Stories.Results} />
+
+### Zero results
+
+<Canvas of={Stories.ZeroResults} />
+
+### Loading
+
+<Canvas of={Stories.Loading} />
+
+### With scopes
+
+<Canvas of={Stories.WithScopes} />
+
+## Patterns
+
+### Closed trigger
+
+`SearchOverlayTrigger` is a separate export, sized for an `AppBar` `actions` slot. The consumer binds the shortcut key; the button only displays the hint.
+
+<Canvas of={Stories.ClosedTrigger} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — The consumer owns the data. Pass the `groups` for the current `query`; below 2 characters the overlay shows `recents` instead, and `onQueryChange` fires 250 ms after the last keystroke ([ADR-049](../../../docs/adrs/ADR-049-search-modes-filter-lookup-global.md) § 4).
+
+> **Note** — Esc closes the overlay and resets the query; the next open starts empty ([ADR-049](../../../docs/adrs/ADR-049-search-modes-filter-lookup-global.md) § 3). A scope id narrows the visible groups to the group with the same id.

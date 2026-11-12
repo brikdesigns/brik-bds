@@ -1,0 +1,168 @@
+@layer bds-components {
+/* SearchOverlay — command-style global search inside a Modal.
+ * The shell (backdrop, surface, focus trap, footer) is Modal's; this file
+ * styles only what sits inside it. */
+
+.bds-search-overlay {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-gap-lg);
+}
+
+/* ─── Scope chips ─────────────────────────────────────── */
+
+.bds-search-overlay__scopes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bds-gap-md);
+}
+
+/* ─── Count (live region, always mounted) ─────────────── */
+
+.bds-search-overlay__count {
+  margin: 0;
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  color: var(--bds-text-muted);
+}
+
+.bds-search-overlay__count:empty {
+  display: none;
+}
+
+/* ─── Loading + zero states ───────────────────────────── */
+
+.bds-search-overlay__loading,
+.bds-search-overlay__zero {
+  display: flex;
+  justify-content: center;
+  padding: var(--bds-padding-lg);
+}
+
+/* ─── Results ─────────────────────────────────────────── */
+
+.bds-search-overlay__results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-gap-lg);
+  max-height: min(50vh, 28rem); /* bds-lint-ignore — viewport-relative scroll cap so a long result list never grows past the viewport */
+  overflow-y: auto;
+}
+
+.bds-search-overlay__results[hidden] {
+  display: none;
+}
+
+.bds-search-overlay__group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-gap-xs);
+}
+
+.bds-search-overlay__group-label {
+  padding-inline: var(--bds-padding-md);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  color: var(--bds-text-secondary);
+}
+
+/* ─── Row ─────────────────────────────────────────────── */
+
+.bds-search-overlay__row {
+  display: flex;
+  align-items: center;
+  gap: var(--bds-gap-md);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
+  border-radius: var(--bds-border-radius-md);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  color: var(--bds-text-primary);
+  cursor: pointer;
+}
+
+.bds-search-overlay__row--active {
+  background-color: var(--bds-background-secondary);
+}
+
+.bds-search-overlay__row-icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  font-size: var(--bds-icon-md);
+  color: var(--bds-text-secondary);
+}
+
+.bds-search-overlay__row-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bds-search-overlay__row-trail {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--bds-body-sm);
+  color: var(--bds-text-muted);
+}
+
+/* ─── Footer key hints ────────────────────────────────── */
+
+.bds-search-overlay__hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bds-gap-lg);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bds-search-overlay__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bds-gap-sm);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  color: var(--bds-text-muted);
+}
+
+.bds-search-overlay__key {
+  padding: var(--bds-padding-2xs) var(--bds-padding-sm);
+  border: var(--bds-border-width-sm) solid var(--bds-border-secondary);
+  border-radius: var(--bds-border-radius-sm);
+  background-color: var(--bds-background-secondary);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-xs);
+  color: var(--bds-text-secondary);
+}
+
+/* ─── Trigger ─────────────────────────────────────────── */
+
+.bds-search-overlay-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bds-gap-md);
+  height: var(--bds-size-1000);
+  padding-inline: var(--bds-padding-lg);
+  border: none;
+  border-radius: var(--bds-border-radius-md);
+  background-color: var(--bds-background-secondary);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-md);
+  font-weight: var(--bds-font-weight-semibold);
+  color: var(--bds-text-primary);
+  cursor: pointer;
+  transition: background-color var(--bds-duration-fast) var(--bds-ease-out);
+}
+
+.bds-search-overlay-trigger:hover {
+  background-color: var(--bds-background-secondary-hover);
+}
+
+.bds-search-overlay-trigger:focus-visible {
+  outline: var(--bds-border-width-md) solid var(--bds-border-focus);
+  outline-offset: var(--bds-border-width-md);
+}
+}
