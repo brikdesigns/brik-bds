@@ -144,7 +144,7 @@ export function Pagination({
   return (
     <nav
       aria-label="Pagination"
-      className={bdsClass('bds-pagination', `bds-pagination--${position}`, hasMeta && 'bds-pagination--with-meta', className)}
+      className={bdsClass('bds-pagination', `bds-pagination--${position}`, className)}
       style={style}
       {...props}
     >

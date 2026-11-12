@@ -24,7 +24,7 @@
 
 /* ─── Meta (rows-per-page + count) — pushes controls to the far edge ─── */
 
-.bds-pagination--with-meta {
+.bds-pagination:has(.bds-pagination__meta) {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
