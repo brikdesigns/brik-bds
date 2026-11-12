@@ -159,6 +159,14 @@ Pre-existing `*.stories.tsx` files keep whatever shape ADR-007's page-recipe pas
 
 ## Amendments
 
+### 2026-11-12 — Part A: `Containers/calendar` → `Components/calendar` (#2148)
+
+AGENT DECIDED (revisable): re-title `Containers/calendar` to `Components/calendar`, joining the date/time family. Forward-only `title:` re-title; no component code changes.
+
+- **Evidence.** `Containers/` is a "styled holder … own border/padding/elevation/radius" (Part A table). Calendar is an unbuilt placeholder ([Calendar.stories.tsx](../../components/ui/Calendar/Calendar.stories.tsx)) with no CSS file, so nothing supports the holder claim. `date-picker`, `time-picker` and `period-nav` are all `Components/`.
+- **Revert.** Re-title back to `Containers/calendar` and restore the docs link `containers-calendar--placeholder` if the built component turns out to own a bounded surface.
+- **Visual baseline.** `containers-calendar-placeholder` is renamed by the **Update Visual Baselines** workflow (`visual:rebaseline` label), never locally.
+
 ### 2026-11-12 — Part A: product page archetypes live in `Blueprints/` (#2526)
 
 AGENT DECIDED (revisable): broaden `Blueprints/` to hold product page archetypes; `Containers/read-mode-page` → **`Blueprints/read-mode-page`**. A forward-only `title:` re-title; no component code changes.
