@@ -5,7 +5,7 @@ description: Read-only list of tracked outputs, each complete, in progress, not 
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-StatusList is a read-only list of tracked outputs. Each row shows a title, an optional description, and one of four states as a distinct icon plus a status badge. It is a readout, not a control: rows are not click targets and labels are never struck through.
+StatusList is a read-only list of tracked outputs. Each row shows a title, an optional description, and one of five states as a distinct icon plus a status badge. It is a readout, not a control: rows are not click targets and labels are never struck through.
 
 ## Use it for
 
@@ -30,6 +30,7 @@ Pass `items`. A row's `description` is a `ReactNode`, so it can hold inline cont
     { id: 'structure', title: 'Site Structure', status: 'complete' },
     { id: 'content', title: 'Page Content', status: 'in_progress' },
     { id: 'cms', title: 'CMS Content', status: 'not_started' },
+    { id: 'hosting', title: 'Hosting Setup', status: 'blocked' },
     {
       id: 'seo',
       title: 'SEO Metadata',
@@ -68,4 +69,4 @@ Pass `items`. A row's `description` is a `ReactNode`, so it can hold inline cont
 | `items` | `StatusListItem[]` | — |
 | `className` | `string` | — |
 
-`StatusListItem` is `{ id: string; title: string; description?: ReactNode; status: 'complete' | 'in_progress' | 'not_started' | 'negative'; message?: ReactNode }`.
+`StatusListItem` is `{ id: string; title: string; description?: ReactNode; status: 'complete' | 'in_progress' | 'not_started' | 'blocked' | 'negative'; message?: ReactNode }`.
