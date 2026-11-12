@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { SocialIcon, SOCIAL_ICON_PLATFORMS } from './SocialIcon';
-import type { SocialIconEmphasis, SocialIconType } from './SocialIcon';
 
 /* ─── Meta ────────────────────────────────────────────────────── */
 
@@ -63,53 +62,27 @@ export const Default: Story = {
 };
 
 /* ═══════════════════════════════════════════════════════════════
-   ALL MARKS — the full type × emphasis matrix, every bundled platform.
-   Irreducible: a single args set can't show 36 combinations at once
-   (mirrors `Assets/icon-catalog` / Logo's `CreditCard` coverage galleries;
-   Icon's `BundledSet` was folded into that catalog's offline flag, #2628).
+   PER-STATE — Q3 semantic values (ADR-010). Each pairs a `type` with an
+   `emphasis`, distinct from Default's `badge` / `neutral`. The full
+   platform × type × emphasis matrix lives in SocialIcon.mdx (`MarkMatrix`).
    ═══════════════════════════════════════════════════════════════ */
 
-const TYPES: SocialIconType[] = ['badge', 'glyph'];
-const EMPHASES: SocialIconEmphasis[] = ['neutral', 'brand', 'accent', 'inverse'];
+/** @summary Platform-colored badge with a white knocked-out glyph */
+export const Badge: Story = {
+  args: { platform: 'youtube', type: 'badge', emphasis: 'brand', size: 'lg' },
+};
 
-/**
- * Every bundled platform across the full `type` × `emphasis` matrix — the
- * coverage grid brik-bds#1716 asked for, extended to the `inverse` value in
- * brik-bds#2274. Every platform has a Foundations brand-color token, so
- * `brand` never falls back to a neutral here (contrast the pre-split #1713
- * behavior).
- * @summary Full type × emphasis matrix, every bundled platform
- */
-export const AllMarks: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--bds-gap-md)' }}>
-      {SOCIAL_ICON_PLATFORMS.map((platform) => (
-        <div key={platform} style={{ display: 'flex', alignItems: 'center', gap: 'var(--bds-gap-md)' }}>
-          <span
-            style={{
-              width: '80px',
-              flexShrink: 0,
-              fontFamily: 'var(--bds-font-family-label)',
-              fontSize: 'var(--bds-label-sm)',
-              color: 'var(--bds-text-secondary)',
-            }}
-          >
-            {platform}
-          </span>
-          <div style={{ display: 'flex', gap: 'var(--bds-gap-md)', flexWrap: 'wrap' }}>
-            {TYPES.flatMap((type) =>
-              EMPHASES.map((emphasis) => (
-                <div key={`${type}-${emphasis}`} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--bds-gap-tiny)' }}>
-                  <SocialIcon platform={platform} type={type} emphasis={emphasis} size="sm" />
-                  <span style={{ fontSize: '0.625rem', color: 'var(--bds-text-muted)' }}>
-                    {type}/{emphasis}
-                  </span>
-                </div>
-              )),
-            )}
-          </div>
-        </div>
-      ))}
-    </div>
-  ),
+/** @summary Bare neutral mark on a transparent background */
+export const Glyph: Story = {
+  args: { platform: 'youtube', type: 'glyph', emphasis: 'neutral', size: 'lg' },
+};
+
+/** @summary Bare mark colored with the platform's brand token */
+export const Brand: Story = {
+  args: { platform: 'youtube', type: 'glyph', emphasis: 'brand', size: 'lg' },
+};
+
+/** @summary Near-black badge for light surfaces */
+export const Inverse: Story = {
+  args: { platform: 'youtube', type: 'badge', emphasis: 'inverse', size: 'lg' },
 };

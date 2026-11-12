@@ -90,7 +90,7 @@ describe('SocialIcon — offline mark resolution (no 404)', () => {
  * vitest project runs with Vitest's default `css: false`, which stubs a CSS
  * module to the empty string — `?raw` and `?inline` both measured length 0
  * here — so a text assertion would pass vacuously rather than guard anything.
- * The rules themselves are covered by the `AllMarks` story's emphasis × type
+ * The rules themselves are covered by the `MarkMatrix` docs gallery's emphasis × type
  * grid (SocialIcon.stories.tsx) under the Storybook visual gate.
  */
 const EMPHASIS_COVERAGE: Record<SocialIconEmphasis, true> = {
