@@ -298,7 +298,7 @@ export function Menu({
     >
       {(header != null || showSearch) && (
         <div
-          className={bdsClass('bds-menu__header', hasStatus && 'bds-menu__header--search')}
+          className={bdsClass('bds-menu__header', hasStatus && 'bds-menu__header--sticky')}
           role="presentation"
         >
           {showSearch && (

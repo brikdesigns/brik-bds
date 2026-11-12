@@ -69,7 +69,7 @@
 /* With `search` the header holds the field, any consumer header and the
    status line. It is pinned while the list scrolls so the field never
    scrolls out of reach. */
-.bds-menu__header--search {
+.bds-menu__header--sticky {
   position: sticky;
   top: calc(-1 * var(--bds-padding-md));
   z-index: 1;
