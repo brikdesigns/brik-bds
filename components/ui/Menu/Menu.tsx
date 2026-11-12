@@ -1,5 +1,6 @@
 import {
   type HTMLAttributes,
+  type KeyboardEvent as ReactKeyboardEvent,
   type ReactNode,
   useRef,
   useEffect,
@@ -188,7 +189,9 @@ export function MenuItem({ item, isActive, className, style, ...props }: MenuIte
  * Menu - BDS dropdown menu component
  *
  * A floating panel containing a list of selectable items with optional icons.
- * Closes on outside click or Escape key. Use alongside a trigger element
+ * Closes on outside click or Escape key. Focus moves to the first enabled
+ * item on open, arrow keys rove between items, and closing returns focus to
+ * whatever held it before open. Use alongside a trigger element
  * (Button, IconButton, etc.) in a relatively positioned wrapper. Pass
  * `search` to add a lookup field to a long list (ADR-049).
  *
@@ -219,11 +222,21 @@ export function Menu({
   search,
   className = '',
   style,
+  onKeyDown,
   ...props
 }: MenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState('');
+  const [tabStopId, setTabStopId] = useState<string | null>(null);
+  // Menu does not own its trigger, so focus return restores whatever held
+  // focus before open. Read during render: a child `autoFocus` (the search
+  // field) takes focus at commit, before any effect of this component runs.
+  const openedRef = useRef(false);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+  if (isOpen && !openedRef.current && typeof document !== 'undefined') {
+    returnFocusRef.current = document.activeElement as HTMLElement | null;
+  }
 
   const showSearch =
     !!search &&
@@ -236,7 +249,10 @@ export function Menu({
   // A query left in the field would greet the next open with a stale,
   // narrowed list.
   useEffect(() => {
-    if (!isOpen) setQuery('');
+    if (!isOpen) {
+      setQuery('');
+      setTabStopId(null);
+    }
   }, [isOpen]);
 
   const needle = showSearch ? query.trim().toLowerCase() : '';
@@ -250,6 +266,59 @@ export function Menu({
     });
   }, [items, needle]);
   const visibleCount = countItems(visibleItems);
+
+  // Roving tabindex: one enabled item is the Tab stop, the rest are -1.
+  const enabledIds = useMemo(
+    () =>
+      visibleItems
+        .flatMap((entry) => (isItemGroup(entry) ? entry.items : [entry]))
+        .filter((item) => !item.disabled)
+        .map((item) => item.id),
+    [visibleItems],
+  );
+  const effectiveTabStop =
+    tabStopId != null && enabledIds.includes(tabStopId) ? tabStopId : enabledIds[0];
+
+  // Focus enters the menu on open (the search field, when shown, takes it
+  // instead) and goes back to where it was on close — unless the user has
+  // since moved it to another control.
+  useEffect(() => {
+    if (isOpen) {
+      openedRef.current = true;
+      if (!showSearch) {
+        menuRef.current?.querySelector<HTMLElement>('[role="menuitem"]:not(:disabled)')?.focus();
+      }
+      return;
+    }
+    if (!openedRef.current) return;
+    openedRef.current = false;
+    const active = document.activeElement;
+    if (!active || active === document.body) returnFocusRef.current?.focus();
+    returnFocusRef.current = null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- showSearch is read only at the moment of opening
+  }, [isOpen]);
+
+  const handleMenuKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {
+    onKeyDown?.(e);
+    if (e.defaultPrevented) return;
+    const { key } = e;
+    if (key !== 'ArrowDown' && key !== 'ArrowUp' && key !== 'Home' && key !== 'End') return;
+    const target = e.target as HTMLElement;
+    // Home / End in the search field move its caret.
+    if ((key === 'Home' || key === 'End') && target.getAttribute('role') !== 'menuitem') return;
+    const rows = Array.from(
+      menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]:not(:disabled)') ?? [],
+    );
+    if (rows.length === 0) return;
+    const i = rows.indexOf(target);
+    let next: number;
+    if (key === 'Home') next = 0;
+    else if (key === 'End') next = rows.length - 1;
+    else if (key === 'ArrowDown') next = i < 0 ? 0 : (i + 1) % rows.length;
+    else next = i < 0 ? rows.length - 1 : (i - 1 + rows.length) % rows.length;
+    e.preventDefault();
+    rows[next].focus();
+  };
 
   // ADR-049 § 6: a search always reports its count, zero included.
   const statusText =
@@ -295,6 +364,7 @@ export function Menu({
       className={bdsClass('bds-menu', `bds-menu--${placement}`, className)}
       style={style}
       {...props}
+      onKeyDown={handleMenuKeyDown}
     >
       {(header != null || showSearch) && (
         <div
@@ -355,11 +425,23 @@ export function Menu({
               {entry.label}
             </div>
             {entry.items.map((item) => (
-              <MenuItem key={item.id} item={item} isActive={activeId === item.id} />
+              <MenuItem
+                key={item.id}
+                item={item}
+                isActive={activeId === item.id}
+                tabIndex={item.id === effectiveTabStop ? 0 : -1}
+                onFocus={() => setTabStopId(item.id)}
+              />
             ))}
           </div>
         ) : (
-          <MenuItem key={entry.id} item={entry} isActive={activeId === entry.id} />
+          <MenuItem
+            key={entry.id}
+            item={entry}
+            isActive={activeId === entry.id}
+            tabIndex={entry.id === effectiveTabStop ? 0 : -1}
+            onFocus={() => setTabStopId(entry.id)}
+          />
         ),
       )}
     </div>

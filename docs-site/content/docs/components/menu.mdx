@@ -114,10 +114,11 @@ For more sophisticated positioning (collision detection, viewport-aware flips), 
 
 - Menu carries `role="menu"`; each item is `role="menuitem"`.
 - The trigger should set `aria-haspopup="menu"` and `aria-expanded` to reflect Menu state.
-- Keyboard arrows move between items; `Enter` activates; `Escape` closes (auto-handled).
+- Focus roves: `ArrowDown` / `ArrowUp` move between enabled items (wrapping, across groups, skipping disabled), `Home` / `End` jump to the first and last, `Enter` activates, `Escape` closes (auto-handled).
+- Exactly one item has `tabIndex={0}`; the rest are `-1`. `Tab` is not trapped — it leaves the menu.
 - Outside click closes — auto-handled.
 - With `search`, the field is a labelled searchbox ("Search options") with no `role="search"` landmark. A `role="status"` line announces the count; with no match it reads `0 results` and offers a **Clear search** button. Escape closes the menu without clearing the field first.
-- Focus trap: focus moves into the menu on open; closing returns focus to the trigger.
+- On open, focus moves to the first enabled item (or the search field, when shown). On close, focus returns to the element that held it before open — Menu does not own the trigger — unless focus has already moved to another control.
 
 ## API
 

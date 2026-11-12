@@ -481,3 +481,114 @@ export const InteractionTestSearchGroups: Story = {
     await expect(canvas.queryByRole('group', { name: 'Growth' })).not.toBeInTheDocument();
   },
 };
+
+/* ═══════════════════════════════════════════════════════════════
+   INTERACTION TESTS — roving focus and focus return (#3072)
+   ═══════════════════════════════════════════════════════════════ */
+
+const rovingItems = [
+  {
+    label: 'Design',
+    items: [
+      { id: 'brand', label: 'Brand design', onClick: () => {} },
+      { id: 'locked', label: 'Locked design', disabled: true, onClick: () => {} },
+    ],
+  },
+  {
+    label: 'Growth',
+    items: [
+      { id: 'marketing', label: 'Marketing design', onClick: () => {} },
+      { id: 'info', label: 'Information design', onClick: () => {} },
+    ],
+  },
+];
+
+/** A consumer-owned trigger, as Menu expects: the story holds `isOpen`. */
+function RovingHarness() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div style={{ position: 'relative', display: 'inline-block' }}>
+      <Button variant="outline" onClick={() => setOpen(!open)}>Open menu</Button>
+      <Menu items={rovingItems} isOpen={open} onClose={() => setOpen(false)} />
+    </div>
+  );
+}
+
+/**
+ * @summary Asserts open moves focus to the first enabled item
+ */
+export const InteractionTestFocusMovesIn: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: { items: rovingItems, isOpen: false, onClose: () => {} },
+  render: () => <RovingHarness />,
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Open menu' }));
+    await waitFor(() => expect(canvas.getByRole('menuitem', { name: 'Brand design' })).toHaveFocus());
+  },
+};
+
+/**
+ * @summary Asserts arrows wrap across groups and skip disabled items
+ */
+export const InteractionTestArrowKeys: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: { items: rovingItems, isOpen: false, onClose: () => {} },
+  render: () => <RovingHarness />,
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Open menu' }));
+    const item = (name: string) => canvas.getByRole('menuitem', { name });
+    await waitFor(() => expect(item('Brand design')).toHaveFocus());
+
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(item('Marketing design')).toHaveFocus();
+    await userEvent.keyboard('{ArrowDown}{ArrowDown}');
+    await expect(item('Brand design')).toHaveFocus();
+    await userEvent.keyboard('{ArrowUp}');
+    await expect(item('Information design')).toHaveFocus();
+    await userEvent.keyboard('{Home}');
+    await expect(item('Brand design')).toHaveFocus();
+    await userEvent.keyboard('{End}');
+    await expect(item('Information design')).toHaveFocus();
+  },
+};
+
+/**
+ * @summary Asserts one item is the Tab stop and Tab is not trapped
+ */
+export const InteractionTestRovingTabindex: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: { items: rovingItems, isOpen: false, onClose: () => {} },
+  render: () => <RovingHarness />,
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Open menu' }));
+    await waitFor(() => expect(canvas.getByRole('menuitem', { name: 'Brand design' })).toHaveFocus());
+    const stops = () => canvas.getAllByRole('menuitem').filter((el) => el.tabIndex === 0);
+    await expect(stops()).toHaveLength(1);
+
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(stops()).toHaveLength(1);
+    await expect(stops()[0]).toHaveFocus();
+
+    await userEvent.tab();
+    await expect(canvas.getAllByRole('menuitem').some((el) => el === document.activeElement)).toBe(false);
+  },
+};
+
+/**
+ * @summary Asserts Escape returns focus to the pre-open element
+ */
+export const InteractionTestEscapeReturnsFocus: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: { items: rovingItems, isOpen: false, onClose: () => {} },
+  render: () => <RovingHarness />,
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: 'Open menu' });
+    trigger.focus();
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(canvas.getByRole('menuitem', { name: 'Brand design' })).toHaveFocus());
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(canvas.queryByRole('menu')).toBeNull());
+    await expect(trigger).toHaveFocus();
+  },
+};
