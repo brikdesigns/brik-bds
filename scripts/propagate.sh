@@ -39,6 +39,8 @@ source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/bump-pr-guard.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/release-tag-guard.sh"
 # shellcheck source=scripts/lib/binding-check.sh
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/binding-check.sh"
+# shellcheck source=scripts/lib/self-update.sh
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/lib/self-update.sh"
 
 # ─── Configuration ────────────────────────────────────────────────
 BDS_DIR="$(cd "$(dirname "$0")/.." && pwd)"
@@ -121,6 +123,7 @@ FROZEN_CONSUMERS=(
 )
 
 # ─── Argument Parsing ─────────────────────────────────────────────
+ORIG_ARGS=("$@")  # the self-update re-exec below needs them after the loop shifts them away
 DRY_RUN=false
 AUTO=false
 ONLY=""
@@ -241,6 +244,13 @@ DEGRADED=false
 # It also removes the dry-run binding check's packed release (#2720).
 BINDING_TMP=""
 trap 'cleanup_claimed_worktree; [ -z "$BINDING_TMP" ] || rm -rf "$BINDING_TMP"' EXIT
+
+# ─── Self-update (#2736) ──────────────────────────────────────────
+# The unattended run executes from the primary checkout. Run the origin/main
+# copy of this script, or exit non-zero so launchd flags it — never a stale one.
+if [ "$AUTO" = true ]; then
+  propagate_self_update "$BDS_DIR" "$BDS_REMOTE" "$BDS_BRANCH" "$0" ${ORIG_ARGS[@]+"${ORIG_ARGS[@]}"} || exit 1
+fi
 
 # ─── Preflight ────────────────────────────────────────────────────
 info "Running preflight checks..."

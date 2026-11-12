@@ -359,6 +359,12 @@ jobs:
           bash scripts/test/test-overlap-filters.sh < /dev/null
           bash scripts/test/test-base-freshness.sh < /dev/null
 
+      # The unattended propagate run must execute origin/main's copy of itself or
+      # exit non-zero (#2736). Fails silently otherwise: a stale copy still exits 0.
+      - name: Propagate self-update contract
+        if: always()
+        run: bash scripts/test/test-propagate-self-update.sh < /dev/null
+
       # ─── issue-link-resolver-check ──────────────────────────────────────────
       - name: Issue-link resolver contract holds
         if: always()
