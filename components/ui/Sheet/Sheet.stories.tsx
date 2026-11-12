@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, userEvent, within } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Sheet } from './Sheet';
 import { Button } from '../Button';
 import { TextInput } from '../TextInput';
@@ -139,6 +139,68 @@ export const Default: Story = {
     side: 'right',
     width: '400px',
   },
+  // Modal variant a11y (#3069): named by its title, traps Tab, returns focus.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(document.body);
+    const trigger = canvas.getByRole('button', { name: 'Open sheet' });
+
+    await userEvent.click(trigger);
+    const dialog = await body.findByRole('dialog');
+    await expect(dialog).toHaveAccessibleName('Details');
+
+    await waitFor(() => expect(dialog).toContainElement(document.activeElement as HTMLElement));
+    for (let i = 0; i < 5; i++) {
+      await userEvent.tab();
+      await expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    }
+    for (let i = 0; i < 5; i++) {
+      await userEvent.tab({ shift: true });
+      await expect(dialog).toContainElement(document.activeElement as HTMLElement);
+    }
+
+    // Escape, the close button, and the backdrop each return focus to the opener.
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(body.queryByRole('dialog')).toBeNull());
+    await waitFor(() => expect(trigger).toHaveFocus());
+
+    await userEvent.click(trigger);
+    await userEvent.click(within(await body.findByRole('dialog')).getByLabelText('Close'));
+    await waitFor(() => expect(body.queryByRole('dialog')).toBeNull());
+    await waitFor(() => expect(trigger).toHaveFocus());
+
+    await userEvent.click(trigger);
+    await body.findByRole('dialog');
+    const backdrop = document.querySelector('.bds-sheet-backdrop') as HTMLElement;
+    await userEvent.click(backdrop);
+    await waitFor(() => expect(body.queryByRole('dialog')).toBeNull());
+    await waitFor(() => expect(trigger).toHaveFocus());
+  },
+};
+
+/**
+ * A sheet with no `title` takes its accessible name from `aria-label`.
+ *
+ * @summary Titleless sheet — named by aria-label
+ */
+export const Titleless: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <Button onClick={() => setOpen(true)}>Open filters</Button>
+        <Sheet isOpen={open} onClose={() => setOpen(false)} aria-label="Filters">
+          <SampleContent />
+        </Sheet>
+      </>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole('button', { name: 'Open filters' }));
+    const dialog = await within(document.body).findByRole('dialog');
+    await expect(dialog).toHaveAccessibleName('Filters');
+    await expect(dialog).not.toHaveAttribute('aria-labelledby');
+  },
 };
 
 /* ═══════════════════════════════════════════════════════════════
@@ -264,6 +326,30 @@ export const Floating: Story = {
       </>
     );
   },
+  // Non-modal (#3069): focus moves in on open, Tab is NOT trapped, and Escape
+  // returns focus to the opener.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const body = within(document.body);
+    const trigger = canvas.getByRole('button', { name: 'View company' });
+
+    await userEvent.click(trigger);
+    const dialog = await body.findByRole('dialog');
+    await expect(dialog).toHaveAccessibleName('Brik Designs');
+    await waitFor(() => expect(dialog).toContainElement(document.activeElement as HTMLElement));
+
+    let escaped = false;
+    for (let i = 0; i < 10 && !escaped; i++) {
+      await userEvent.tab();
+      escaped = !dialog.contains(document.activeElement);
+    }
+    await expect(escaped).toBe(true);
+    await expect(dialog).toBeInTheDocument();
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(body.queryByRole('dialog')).toBeNull());
+    await waitFor(() => expect(trigger).toHaveFocus());
+  },
 };
 
 /* `density` is a Control on Default (which threads args through its trigger
@@ -297,6 +383,14 @@ export const Loading: Story = {
         </Sheet>
       </>
     );
+  },
+  // While loading the title is a Skeleton: no aria-labelledby may point at an
+  // id that isn't in the DOM (#3069).
+  play: async ({ canvasElement }) => {
+    await userEvent.click(within(canvasElement).getByRole('button', { name: 'View company (loading)' }));
+    const dialog = await within(document.body).findByRole('dialog');
+    await expect(dialog).toHaveAttribute('aria-busy', 'true');
+    await expect(dialog).not.toHaveAttribute('aria-labelledby');
   },
 };
 
