@@ -1,0 +1,39 @@
+name: Visual Probe 1746
+# THROWAWAY probe for #1746 — never merge. Runs the suite N times back to back
+# in ONE x64 container (the original evidence shape) and prints failing tests.
+on:
+  pull_request:
+    paths:
+      - .github/workflows/visual-probe-1746.yml
+jobs:
+  loop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    container:
+      image: mcr.microsoft.com/playwright:v1.59.1-noble
+      options: --ipc=host
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      - run: uname -m; nproc; free -m
+      - name: Run suite 8 times
+        run: |
+          i=1
+          while [ "$i" -le 8 ]; do
+            VISUAL_GATE=1 VISUAL_FLOOR_PIXELS=0 npx vitest run --project storybook --maxWorkers=1 \
+              --reporter=json --outputFile="inv$i.json" > "inv$i.log" 2>&1 || true
+            echo "=== invocation $i ==="
+            node -e "const r=require('./inv$i.json');console.log('total',r.numTotalTests,'failed',r.numFailedTests);for(const f of r.testResults)for(const t of f.assertionResults)if(t.status==='failed')console.log('  FAIL',t.fullName,'|',(t.failureMessages[0]||'').split('\n')[0].slice(0,140))"
+            i=$((i+1))
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: probe-logs
+          path: |
+            inv*.json
+            inv*.log
