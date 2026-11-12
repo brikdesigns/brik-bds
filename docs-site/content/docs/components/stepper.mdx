@@ -64,9 +64,10 @@ const [count, setCount] = useState(1);
 
 ## Accessibility
 
-- Renders a `<div role="group">` containing two `<button>`s and a value `<span>` (with `aria-live="polite"` so the value is announced on change). There is no `<input>` element.
+- Renders a `<div role="group">` containing two `<button>`s and a value `<span role="spinbutton">`. There is no `<input>` element.
+- The value carries `aria-valuenow`, `aria-valuemin` and (when `max` is finite) `aria-valuemax`, and is named `aria-label="Value"`. A screen reader announces the current value and range on focus and on every change.
 - The buttons carry `aria-label="Decrease"` / `aria-label="Increase"`.
-- Keyboard: `Tab` to each button, `Enter` / `Space` to activate. Arrow-key increment and `spinbutton` value semantics (`aria-valuenow` / `-valuemin` / `-valuemax`) are not yet implemented — tracked as source work.
+- Keyboard: `Tab` reaches the decrease button, the value, then the increase button. On the value, `ArrowUp` / `ArrowDown` change it by `step`, `PageUp` / `PageDown` by `step × 10`, `Home` jumps to `min`, and `End` jumps to `max` (ignored when `max` is unbounded). Every change is clamped to [`min`, `max`]. A disabled stepper takes no focus and ignores keys.
 
 ## API
 

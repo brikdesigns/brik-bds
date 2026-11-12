@@ -76,3 +76,8 @@
   opacity: var(--bds-state-disabled-opacity);
 }
 }
+
+.bds-stepper__value:focus-visible {
+  outline: 2px solid var(--bds-border-focus); /* bds-lint-ignore — focus ring width, mirrors Button */
+  outline-offset: 2px; /* bds-lint-ignore — focus ring offset, mirrors Button */
+}
