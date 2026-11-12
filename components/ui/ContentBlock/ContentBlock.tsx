@@ -19,7 +19,7 @@ export type ContentBlockSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 export interface ContentBlockProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Primary text slot. Omit for a description/actions-only block. */
   title?: ReactNode;
-  /** Secondary line paired with `title`. Never `eyebrow`/`kicker`. */
+  /** Secondary line paired with `title`. Never `eyebrow`/`kicker` — use `Eyebrow` for the kicker above a title. */
   subtitle?: ReactNode;
   /** Explanatory prose under `title`/`subtitle` — longer and more neutral than `subtitle`. */
   description?: ReactNode;

@@ -1,0 +1,26 @@
+@layer bds-components {
+/* ─── Eyebrow ──────────────────────────────────────────────────── */
+
+.bds-eyebrow {
+  margin: 0;
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  letter-spacing: var(--bds-letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--bds-text-muted);
+}
+
+/* On-color: no opacity hack. */
+.bds-eyebrow--on-color {
+  color: var(--bds-text-on-color-dark);
+}
+
+/* Tight gap to the heading below (same step as ContentBlock title → subtitle).
+   Skipped when the eyebrow is the last child so a lone eyebrow adds no
+   trailing space. */
+.bds-eyebrow:not(:last-child) {
+  margin-block-end: var(--bds-gap-sm);
+}
+}
