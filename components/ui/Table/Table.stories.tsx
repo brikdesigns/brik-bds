@@ -711,6 +711,66 @@ export const Scrollable: Story = {
 };
 
 /**
+ * `stickyStart` on the header and each cell of the first column pins it to the
+ * wrapper's start edge while the other columns scroll under it — the mirror of
+ * `stickyEnd`. The divider appears once the table has scrolled off its start,
+ * and the pinned fill follows the row state (`striped` here). Needs `scrollable`.
+ *
+ * @summary Pinned start column stays visible during sideways scroll
+ */
+export const StickyStartColumn: Story = {
+  render: () => (
+    <div style={{ maxWidth: 'var(--bds-content-width-text-xs)' }}>
+      <Table scrollable striped aria-label="Clients">
+        <TableHeader>
+          <TableRow>
+            {wideColumns.map((column, index) => (
+              <TableHead key={column} stickyStart={index === 0}>{column}</TableHead>
+            ))}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {Array.from({ length: 4 }, (_, row) => (
+            <TableRow key={row}>
+              {wideColumns.map((column, index) => (
+                <TableCell key={column} stickyStart={index === 0}>{`${column} ${row + 1}`}</TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const wrapper = canvasElement.querySelector('.bds-table-scroll') as HTMLElement;
+    const cell = canvasElement.querySelector('.bds-table-cell[data-sticky="start"]') as HTMLElement;
+    await expect(getComputedStyle(cell).position).toBe('sticky');
+    await expect(wrapper.scrollWidth).toBeGreaterThan(wrapper.clientWidth);
+    // Unscrolled: pinned cell sits on the wrapper's start edge, no divider yet.
+    const start = wrapper.getBoundingClientRect().left;
+    await expect(wrapper).not.toHaveAttribute('data-start-clipped');
+    // Scrolled far off the start: a sibling cell has left the wrapper, the
+    // pinned one has not moved. This is the measurement that proves the pin
+    // resolves against the scroll wrapper (#2276), not just that CSS applies.
+    const sibling = canvasElement.querySelector('.bds-table-cell:not([data-sticky="start"])') as HTMLElement;
+    const siblingBefore = sibling.getBoundingClientRect().left;
+    wrapper.scrollLeft = 200;
+    await waitFor(() => expect(wrapper).toHaveAttribute('data-start-clipped', 'true'));
+    await expect(Math.round(cell.getBoundingClientRect().left)).toBe(Math.round(start));
+    await expect(sibling.getBoundingClientRect().left).toBeLessThan(siblingBefore - 100);
+    // Striped even row: the pinned cell paints the row fill, not the canvas.
+    const evenCell = canvasElement.querySelectorAll('.bds-table-body .bds-table-row')[1].querySelector('.bds-table-cell[data-sticky="start"]') as HTMLElement;
+    const secondary = document.createElement('div');
+    secondary.style.backgroundColor = 'var(--bds-background-secondary)';
+    canvasElement.appendChild(secondary);
+    await expect(getComputedStyle(evenCell).backgroundColor).toBe(getComputedStyle(secondary).backgroundColor);
+    secondary.remove();
+    wrapper.scrollLeft = 0;
+    await waitFor(() => expect(wrapper).not.toHaveAttribute('data-start-clipped'));
+  },
+};
+
+/**
  * `stickyEnd` on the header and each cell of the last column pins it to the
  * wrapper's end edge while the other columns scroll under it. The divider
  * appears only while columns remain to scroll, and the pinned fill follows the

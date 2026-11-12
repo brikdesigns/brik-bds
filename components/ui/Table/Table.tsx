@@ -118,12 +118,15 @@ function TableScroll({ label, children }: { label?: string; children: ReactEleme
   // True while content still sits past the end edge — a pinned end column
   // only needs its elevation then, not once the table is scrolled fully across.
   const [endClipped, setEndClipped] = useState(false);
+  // True once scrolled off the start edge — the pinned start column's divider.
+  const [startClipped, setStartClipped] = useState(false);
 
   useEffect(() => {
     const wrapper = ref.current;
     if (!wrapper || typeof ResizeObserver === 'undefined') return;
     const measure = () => {
       setOverflowing(wrapper.scrollWidth > wrapper.clientWidth);
+      setStartClipped(wrapper.scrollLeft > 0);
       setEndClipped(Math.ceil(wrapper.scrollLeft + wrapper.clientWidth) < wrapper.scrollWidth);
     };
     const observer = new ResizeObserver(measure);
@@ -142,6 +145,7 @@ function TableScroll({ label, children }: { label?: string; children: ReactEleme
       ref={ref}
       className="bds-table-scroll"
       data-end-clipped={endClipped || undefined}
+      data-start-clipped={startClipped || undefined}
       tabIndex={overflowing ? 0 : undefined}
       role={label ? 'region' : undefined}
       aria-label={label}
@@ -228,6 +232,13 @@ export interface TableHeadProps extends ThHTMLAttributes<HTMLTableCellElement> {
    * `Table` — the pin sticks to that wrapper.
    */
   stickyEnd?: boolean;
+  /**
+   * Pin this column to the start edge while the table scrolls sideways — the
+   * mirror of `stickyEnd`, for a first column that identifies the row. Set it on
+   * the header and every body cell of the column. Needs `scrollable` on the
+   * `Table` — the pin sticks to that wrapper.
+   */
+  stickyStart?: boolean;
   children: ReactNode;
 }
 
@@ -242,6 +253,7 @@ export function TableHead({
   sortDirection = 'none',
   onSort,
   stickyEnd = false,
+  stickyStart = false,
   children,
   className,
   style,
@@ -256,6 +268,7 @@ export function TableHead({
         className,
       )}
       style={style}
+      data-sticky={stickyStart ? 'start' : undefined}
       onClick={sortable ? onSort : undefined}
       aria-sort={
         sortable
@@ -324,11 +337,19 @@ export interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
    * `Table` — the pin sticks to that wrapper.
    */
   stickyEnd?: boolean;
+  /**
+   * Pin this column to the start edge while the table scrolls sideways — the
+   * mirror of `stickyEnd`, for a first column that identifies the row. Set it on
+   * the header and every body cell of the column. Needs `scrollable` on the
+   * `Table` — the pin sticks to that wrapper.
+   */
+  stickyStart?: boolean;
   children?: ReactNode;
 }
 
 export function TableCell({
   stickyEnd = false,
+  stickyStart = false,
   children,
   className,
   style,
@@ -338,6 +359,7 @@ export function TableCell({
     <td
       className={bdsClass('bds-table-cell', stickyEnd && 'bds-table-cell--sticky', className)}
       style={style}
+      data-sticky={stickyStart ? 'start' : undefined}
       {...props}
     >
       {children}
