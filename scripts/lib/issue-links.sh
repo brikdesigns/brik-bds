@@ -143,6 +143,20 @@ _IL_LINKING_RE="^[[:space:]]*(${_IL_LINKING}):? *(${_IL_REF})"
 # is what "stays open" means. Line-anchored for the reason above.
 _IL_STAYS_OPEN_RE="^[[:space:]]*#[0-9]+[[:space:]]+stays[[:space:]]+open"
 
+# _il_qualify_short — rewrite the short `brik-llm#2916` form to the
+# owner-qualified `brikdesigns/brik-llm#2916` BEFORE any scan (#2239). The sync
+# commits that land watched twins here cite their brik-llm ticket this way, and
+# _IL_REF's `#[0-9]+` cannot see what precedes the `#`: `brik-llm#2916` reduced
+# to `#2916`, which GitHub resolves against THIS repo — and a `Closes` over it
+# would close the wrong issue. It runs on the text, not in _IL_REF, because the
+# keyword scans need to see a ref directly after the keyword and _IL_REF is
+# pinned equal to the gate's own REF (test-issue-links.sh). Only `brik-*` names
+# are rewritten: a looser `<word>#N` would read `PR#12` or `issue#5` as a repo.
+# Cross-repo `owner/brik-x#N` is left alone — the `/` guard.
+_il_qualify_short() {
+  sed -E 's|(^\|[^A-Za-z0-9._/-])(brik-[A-Za-z0-9._-]+#[0-9]+)|\1brikdesigns/\2|g'
+}
+
 # _il_refs_only <text> — keep just the reference tokens from a keyword match.
 # Two passes rather than a capture group: BSD grep has no `-P` and no way to
 # print a single group, so the keyword is matched first and the ref extracted
@@ -163,21 +177,22 @@ _il_sort_refs() {
 # issue_refs_in_subjects <text> — every reference, one per line, unsorted.
 # A conventional-commit subject carries the issue it is the work FOR.
 issue_refs_in_subjects() {
-  printf '%s\n' "${1:-}" | _il_refs_only
+  printf '%s\n' "${1:-}" | _il_qualify_short | _il_refs_only
 }
 
 # issue_refs_closed_in_bodies <text> — every ref under a CLOSING keyword.
 # Keyword-gated on purpose: scanning whole bodies for a bare #N would pick up
 # issues merely mentioned in prose ("recurring: #1434, #1437") and close them.
 issue_refs_closed_in_bodies() {
-  printf '%s\n' "${1:-}" | grep -oiE "$_IL_CLOSING_RE" | _il_refs_only
+  printf '%s\n' "${1:-}" | _il_qualify_short | grep -oiE "$_IL_CLOSING_RE" | _il_refs_only
 }
 
 # issue_refs_linked_in_bodies <text> — every ref under a NON-closing keyword,
 # plus the trailing-keyword `#N stays open` form.
 # Same keyword gating, opposite polarity: these become `Refs`, never `Closes`.
 issue_refs_linked_in_bodies() {
-  local text="${1:-}"
+  local text
+  text="$(printf '%s\n' "${1:-}" | _il_qualify_short)"
   { printf '%s\n' "$text" | grep -oiE "$_IL_LINKING_RE" || true
     printf '%s\n' "$text" | grep -oiE "$_IL_STAYS_OPEN_RE" || true
   } | _il_refs_only
