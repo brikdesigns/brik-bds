@@ -1,11 +1,11 @@
 import {
   type ReactNode,
   type HTMLAttributes,
+  isValidElement,
   useState,
-  useRef,
-  useEffect,
   useCallback,
 } from 'react';
+import * as RadixPopover from '@radix-ui/react-popover';
 import { bdsClass } from '../../utils';
 import './Popover.css';
 
@@ -21,6 +21,8 @@ export interface PopoverProps extends Omit<HTMLAttributes<HTMLDivElement>, 'cont
   placement?: PopoverPlacement;
   /** How to trigger the popover */
   trigger?: PopoverTrigger;
+  /** Accessible name for the `role="dialog"` panel. Always supply one — a dialog without a name is announced as just "dialog". */
+  panelLabel?: string;
   /** Controlled open state */
   isOpen?: boolean;
   /** Controlled change handler */
@@ -31,7 +33,8 @@ export interface PopoverProps extends Omit<HTMLAttributes<HTMLDivElement>, 'cont
  * Popover — floating content panel anchored to a trigger element.
  *
  * Supports click or hover triggering, 4 placements, and controlled/uncontrolled modes.
- * Uses click-outside pattern from Menu and positioning from Tooltip.
+ * Built on Radix Popover: the click trigger carries `aria-haspopup`/`aria-expanded`,
+ * focus moves into the panel on open and returns to the trigger on close.
  *
  * @summary Floating content panel anchored to a trigger
  */
@@ -40,6 +43,7 @@ export function Popover({
   content,
   placement = 'bottom',
   trigger = 'click',
+  panelLabel,
   isOpen: controlledOpen,
   onOpenChange,
   className = '',
@@ -47,7 +51,6 @@ export function Popover({
   ...props
 }: PopoverProps) {
   const [internalOpen, setInternalOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
 
   const isControlled = controlledOpen !== undefined;
   const isOpen = isControlled ? controlledOpen : internalOpen;
@@ -60,66 +63,51 @@ export function Popover({
     [isControlled, onOpenChange],
   );
 
-  const handleClickOutside = useCallback(
-    (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    },
-    [setOpen],
-  );
-
-  const handleEscape = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
-    },
-    [setOpen],
-  );
-
-  useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('keydown', handleEscape);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [isOpen, handleClickOutside, handleEscape]);
-
-  const handleClick = () => {
-    if (trigger === 'click') setOpen(!isOpen);
-  };
+  const isHover = trigger === 'hover';
 
   const handleMouseEnter = () => {
-    if (trigger === 'hover') setOpen(true);
+    if (isHover) setOpen(true);
   };
 
   const handleMouseLeave = () => {
-    if (trigger === 'hover') setOpen(false);
+    if (isHover) setOpen(false);
   };
 
   return (
-    <div
-      ref={containerRef}
-      className={bdsClass('bds-popover', className)}
-      style={style}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      {...props}
-    >
-      <div className="bds-popover__trigger" onClick={handleClick}>
-        {children}
+    <RadixPopover.Root open={isOpen} onOpenChange={setOpen}>
+      <div
+        className={bdsClass('bds-popover', className)}
+        style={style}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        {...props}
+      >
+        {isHover ? (
+          // Hover opens by pointer, not by activation — an Anchor keeps Radix's
+          // click-toggle (and its aria-expanded) off the trigger.
+          <RadixPopover.Anchor className="bds-popover__trigger">{children}</RadixPopover.Anchor>
+        ) : (
+          <div className="bds-popover__trigger">
+            <RadixPopover.Trigger asChild={isValidElement(children)}>{children}</RadixPopover.Trigger>
+          </div>
+        )}
       </div>
-      {isOpen && (
-        <div
-          className={bdsClass('bds-popover__panel', `bds-popover__panel--${placement}`)}
+      <RadixPopover.Portal>
+        <RadixPopover.Content
+          className={bdsClass('bds-popover__panel')}
+          side={placement}
+          sideOffset={4}
           role="dialog"
+          aria-label={panelLabel}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onOpenAutoFocus={isHover ? (e) => e.preventDefault() : undefined}
+          onCloseAutoFocus={isHover ? (e) => e.preventDefault() : undefined}
         >
           {content}
-        </div>
-      )}
-    </div>
+        </RadixPopover.Content>
+      </RadixPopover.Portal>
+    </RadixPopover.Root>
   );
 }
 
