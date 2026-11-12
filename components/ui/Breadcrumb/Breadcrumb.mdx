@@ -98,6 +98,9 @@ per-crumb `switcher` alike:
 - **Search** — a labelled search box appears once the option count is greater
   than `searchThreshold` (default `8`; `0` always shows it). It matches the
   option `label`, case-insensitively, and resets each time the menu closes.
+  The search is [`Menu`](/?path=/docs/containers-menu--docs)'s `search`: an
+  empty result reads `0 results` in a status region, with a **Clear search**
+  next step.
 - **Filters** — pass `filters` (`{ id, label, facet, value }`) to render
   `FilterToggle`s, off by default. Turning one on keeps only options whose
   `facets[facet] === value`; the `current` option always stays visible. Give
@@ -110,7 +113,8 @@ Options may also carry a `hint` — secondary text under the label (the
 industry, say). It is display only and not searched.
 
 Search takes focus when the menu opens. Escape closes the menu and returns
-focus to the caret from the search box or a toggle.
+focus to the caret from the search box or a toggle — one press, without
+clearing the query first.
 
 <Canvas of={Stories.WithSwitcherFilters} />
 

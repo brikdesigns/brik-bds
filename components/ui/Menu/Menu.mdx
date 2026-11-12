@@ -30,6 +30,21 @@ Set `content` on a `MenuItemData` to render a custom node — e.g. a line-colore
 
 <Canvas of={Stories.CustomContent} />
 
+### Search
+
+Pass `search` to add a lookup field to a long list (ADR-049 lookup mode). The field appears once the item count is greater than `search.threshold` (default `8`; `0` always shows it), so a short list never shows it. It leads the panel, takes focus when the menu opens, and matches the item `label` case-insensitively — not the `description`. A group with no matching items is dropped.
+
+<Canvas of={Stories.WithSearch} />
+
+- **Count and no results** — a `role="status"` line reads the count while a query is set. With no match it reads `0 results` and offers one next step, a **Clear search** button that empties the field and returns focus to it.
+- **Escape** — closes the menu in one press without clearing the field first; the query resets on close.
+- **No landmark** — the field is a labelled `searchbox` with no `role="search"`, and no debounce.
+- **Pre-filtered lists** — when `items` is already narrowed (by filters, say), pass `search.total` with the full count so the field does not vanish as the list shrinks.
+
+```tsx
+<Menu isOpen={open} onClose={() => setOpen(false)} search={{}} items={clients} />
+```
+
 ## Patterns
 
 A Menu needs a trigger and open state. The canonical integrations: a `FilterButton` trigger, a `Button` trigger with an action menu, and an "Add" menu whose items carry a `description`.

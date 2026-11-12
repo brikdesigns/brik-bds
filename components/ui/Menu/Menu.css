@@ -64,6 +64,37 @@
   user-select: none;
 }
 
+/* ─── Search (lookup mode, ADR-049) ───────────────────── */
+
+/* With `search` the header holds the field, any consumer header and the
+   status line. It is pinned while the list scrolls so the field never
+   scrolls out of reach. */
+.bds-menu__header--search {
+  position: sticky;
+  top: calc(-1 * var(--bds-padding-md));
+  z-index: 1;
+  gap: var(--bds-gap-md);
+  /* Opaque so items scroll beneath it, and tall enough to cover the panel's
+     own top padding the negative `top` reaches into. */
+  background-color: var(--bds-background-primary);
+  padding-top: var(--bds-padding-md);
+}
+
+/* The header uppercases its text; the count reads as a sentence. */
+.bds-menu__status {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: var(--bds-font-weight-regular);
+}
+
+.bds-menu__status:empty {
+  display: none;
+}
+
+.bds-menu__next-step {
+  align-self: flex-start;
+}
+
 /* ─── Group (labelled section of items) ──────────────── */
 
 .bds-menu__group {

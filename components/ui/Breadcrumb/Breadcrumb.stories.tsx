@@ -581,7 +581,7 @@ export const InteractionTestSearchNarrows: Story = {
     await waitFor(() => expect(canvas.getAllByRole('menuitem')).toHaveLength(INDUSTRY_CLIENTS.length));
 
     await userEvent.type(search, 'zzz-no-match');
-    await expect(await canvas.findByText('No matches')).toBeInTheDocument();
+    await expect(await canvas.findByText('0 results')).toBeInTheDocument();
     await expect(canvas.queryAllByRole('menuitem')).toHaveLength(0);
 
     await userEvent.keyboard('{Escape}');
