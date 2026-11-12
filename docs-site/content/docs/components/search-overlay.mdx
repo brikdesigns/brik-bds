@@ -1,0 +1,88 @@
+---
+title: Search overlay
+description: Command-style global search in a modal — grouped results, recents, scope chips.
+---
+
+SearchOverlay is the global search mode of [ADR-049](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-049-search-modes-filter-lookup-global.md): cross-entity results grouped by type, recents before typing, a result count after every query, and key hints in the footer. The consumer fetches the data; the overlay owns the keyboard model.
+
+## Use it for
+
+- Search from anywhere in the app shell that lists records of several types
+- A trigger in an `AppBar` `actions` slot
+
+For narrowing a list already on the page, use the [FilterBar](/docs/components/filter-bar) search slot. For picking one option, use [Menu](/docs/components/menu).
+
+## Import
+
+```tsx
+import { SearchOverlay, SearchOverlayTrigger } from '@brikdesigns/bds';
+```
+
+## Usage
+
+```tsx
+<SearchOverlayTrigger onClick={() => setOpen(true)} />
+
+<SearchOverlay
+  aria-label="Search"
+  isOpen={open}
+  onClose={() => setOpen(false)}
+  query={query}
+  onQueryChange={setQuery}
+  groups={groups}
+  recents={recents}
+  onSelect={(result, { newTab }) => openRecord(result, newTab)}
+/>
+```
+
+## Behavior
+
+- Below 2 characters the overlay shows `recents`; `onQueryChange` fires 250 ms after the last keystroke.
+- The count (`0 results` included) lives in a `role="status"` region. A zero state offers a next step: clear the query, or search all when a scope is set. Pass `zeroAction` to replace it.
+- A scope with the same `id` as a group narrows the visible groups to that group.
+- Esc closes the overlay and resets the query.
+
+## Accessibility
+
+- Opens in a [Modal](/docs/components/modal): focus is trapped and returns to the opener.
+- The content is a `role="search"` landmark labelled by `aria-label`.
+- The field is a `combobox` over a `listbox`. Up and Down move through rows, Enter opens, Cmd/Ctrl+Enter opens in a new tab.
+
+## API
+
+### SearchOverlay
+
+{/* props-check: SearchOverlayProps @ components/ui/SearchOverlay/SearchOverlay.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `isOpen` | `boolean` *(required)* | — |
+| `onClose` | `() => void` *(required)* | — |
+| `query` | `string` *(required)* | — |
+| `onQueryChange` | `(query: string) => void` *(required)* | — |
+| `groups` | `SearchOverlayGroup[]` *(required)* | — |
+| `recents` | `SearchOverlayGroup` | — |
+| `scopes` | `SearchOverlayScope[]` | — |
+| `activeScope` | `string` | — |
+| `onScopeChange` | `(scopeId: string \| undefined) => void` | — |
+| `loading` | `boolean` | `false` |
+| `zeroAction` | `ReactNode` | — |
+| `onSelect` | `(result: SearchOverlayResult, options: SearchOverlaySelectOptions) => void` *(required)* | — |
+| `aria-label` | `string` *(required)* | — |
+
+### SearchOverlayTrigger
+
+{/* props-check: SearchOverlayTriggerProps @ components/ui/SearchOverlay/SearchOverlay.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `shortcutHint` | `string` | `'⌘K'` |
+
+Plus all standard `<button>` HTML attributes (excluding `children`).
+
+## Related
+
+- [Modal](/docs/components/modal) — the dialog shell
+- [Search input](/docs/components/search-input) — the field
+- [Filter toggle](/docs/components/filter-toggle) — the scope chips
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-search-overlay--default)**
