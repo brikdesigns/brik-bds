@@ -110,9 +110,16 @@ concurrency:
   #
   # `queue: max` and `cancel-in-progress: true` are a workflow validation error
   # together, so they always change as a pair.
+  #
+  # #3090 carves out ONE event. A `pull_request` run is keyed by `refs/pull/N/merge`,
+  # so its group is never shared with `merge_group` or `push: main`, and a PR run
+  # for an outdated head is dead weight: the next push gets its own check-run on
+  # its own SHA. Only there does a newer run cancel the in-flight one, with
+  # `queue: single` because `max` is not valid beside `cancel-in-progress: true`.
+  # `merge_group` and `push` keep the false + max pair above.
   group: components-gate-${{ github.ref }}
-  cancel-in-progress: false
-  queue: max
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  queue: ${{ github.event_name == 'pull_request' && 'single' || 'max' }}
 
 jobs:
   # ─── The job-level diff tests ───────────────────────────────────────────────
