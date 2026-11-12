@@ -280,8 +280,11 @@ Both [Read-Mode Page](https://storybook.brikdesigns.com/?path=/docs/containers-r
 
 ## Accessibility
 
-- Renders `role="dialog"` with `aria-labelledby` linking the title.
-- Focus trap inside the sheet; focus returns to the trigger on close.
+- Built on `@radix-ui/react-dialog`. Renders `role="dialog"`; with a `title`, `aria-labelledby` links it as the accessible name.
+- A titleless sheet takes its name from the `aria-label` prop. While `loading`, the title is a skeleton, so `aria-label` is the only name and no `aria-labelledby` is rendered.
+- Opening moves focus inside the sheet; closing (Escape, the close button, or the backdrop) returns focus to the element that opened it.
+- Default variant is modal: `Tab` and `Shift+Tab` stay inside the sheet, and the page behind is inert.
+- `variant="floating"` is non-modal: no trap, so `Tab` from the last control moves focus out of the sheet, and clicking the page behind does not close it.
 - `Escape` closes (default `closeOnEscape={true}`); backdrop click closes (default `closeOnBackdrop={true}` — no effect on `floating` variant since there's no backdrop).
 - Auto-footer Save button announces `aria-busy` while `saveLoading={true}`.
 
@@ -316,6 +319,7 @@ Both [Read-Mode Page](https://storybook.brikdesigns.com/?path=/docs/containers-r
 | `onTabChange` | `(tabId: string) => void` | — |
 | `density` | `SheetDensity` | `'comfortable'` |
 | `loading` | `boolean` | `false` |
+| `aria-label` | `string` | — |
 
 ## Related
 

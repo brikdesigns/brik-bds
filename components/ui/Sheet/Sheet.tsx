@@ -1,5 +1,5 @@
-import { type ReactNode, type CSSProperties, useState, useEffect } from 'react';
-import { createPortal } from 'react-dom';
+import { type ReactNode, type CSSProperties, useState, useEffect, useId, useRef } from 'react';
+import * as Dialog from '@radix-ui/react-dialog';
 import { Icon } from '../Icon';
 import { ArrowLeftBold, Pen } from '../../icons';
 import { Button } from '../Button';
@@ -211,7 +211,17 @@ export interface SheetProps {
    * and `tabs` are suppressed. Default `false`.
    */
   loading?: boolean;
+  /**
+   * Accessible name for a titleless sheet. Ignored when `title` is set and
+   * the sheet is not `loading` (the title names the dialog then).
+   */
+  'aria-label'?: string;
 }
+
+type DismissProps = Pick<
+  React.ComponentPropsWithoutRef<typeof Dialog.Content>,
+  'onEscapeKeyDown' | 'onPointerDownOutside' | 'onInteractOutside' | 'onCloseAutoFocus'
+>;
 
 /**
  * Sheet — sliding panel overlay for contextual content.
@@ -256,6 +266,7 @@ export function Sheet({
   activeTab: controlledTab,
   onTabChange,
   loading = false,
+  'aria-label': ariaLabel,
 }: SheetProps) {
   const isFloating = variant === 'floating';
   const [internalTab, setInternalTab] = useState(tabs?.[0]?.id ?? '');
@@ -268,14 +279,15 @@ export function Sheet({
     }
   }, [tabs, controlledTab]);
 
+  const titleId = useId();
+
+  // Radix returns focus to a <Dialog.Trigger>; Sheet is controlled by `isOpen`
+  // and has none, so remember the opener ourselves. This effect runs before the
+  // portalled content mounts and moves focus inside (same shape as Modal).
+  const openerRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
-    if (!isOpen || !closeOnEscape) return;
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
-  }, [isOpen, closeOnEscape, onClose]);
+    if (isOpen) openerRef.current = document.activeElement as HTMLElement | null;
+  }, [isOpen]);
 
   useEffect(() => {
     if (isOpen && !isFloating) {
@@ -284,11 +296,23 @@ export function Sheet({
     }
   }, [isOpen, isFloating]);
 
-  if (!isOpen) return null;
-
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (closeOnBackdrop && e.target === e.currentTarget) onClose();
+  // Radix Dialog owns focus-in on open, focus return on close, Escape, and (for
+  // the modal variant) the focus trap and backdrop dismissal. The floating
+  // variant is non-modal: it never closes on outside interaction or focus-out,
+  // so the page behind it stays usable.
+  const dismissProps: DismissProps = {
+    onEscapeKeyDown: (event) => { if (!closeOnEscape) event.preventDefault(); },
+    onPointerDownOutside: (event) => { if (isFloating || !closeOnBackdrop) event.preventDefault(); },
+    onInteractOutside: (event) => { if (isFloating || !closeOnBackdrop) event.preventDefault(); },
+    onCloseAutoFocus: (event) => {
+      event.preventDefault();
+      openerRef.current?.focus();
+    },
   };
+
+  // A title names the dialog; while `loading` the title is a Skeleton with no
+  // id to point at, so fall back to `aria-label`.
+  const hasTitleName = !loading && Boolean(title);
 
   const handleTabClick = (tabId: string) => {
     if (onTabChange) {
@@ -389,13 +413,26 @@ export function Sheet({
   // instead of any tab's content.
   const showTabs = !loading && tabs;
 
-  const sheet = (
-    <>
-      {!isFloating && <div className="bds-sheet-backdrop" onClick={handleBackdropClick} />}
-      <div
+  return (
+    <Dialog.Root
+      open={isOpen}
+      modal={!isFloating}
+      onOpenChange={(open) => { if (!open) onClose(); }}
+    >
+      <Dialog.Portal>
+      {!isFloating && <Dialog.Overlay className="bds-sheet-backdrop" />}
+      <Dialog.Content
+        {...dismissProps}
+        // Radix's FocusScope sets `loop` even on a non-modal Dialog, so Tab would
+        // wrap inside the floating sheet. Stopping Tab before it reaches that
+        // handler lets the browser move focus on, out of the sheet.
+        onKeyDownCapture={isFloating ? (e) => { if (e.key === 'Tab') e.stopPropagation(); } : undefined}
         className={bdsClass('bds-sheet', `bds-sheet--${side}`, isFloating ? 'bds-sheet--floating' : '', density === 'compact' ? 'bds-sheet--compact' : '')}
         role="dialog"
         aria-modal={!isFloating}
+        aria-labelledby={hasTitleName ? titleId : undefined}
+        aria-label={hasTitleName ? undefined : ariaLabel}
+        aria-describedby={undefined}
         aria-busy={loading || undefined}
         style={widthStyle}
         data-mode={mode}
@@ -424,7 +461,7 @@ export function Sheet({
                   ) : (
                     <>
                       {subtitle && <span className="bds-sheet__subtitle">{subtitle}</span>}
-                      {title && <h2 className="bds-sheet__title">{title}</h2>}
+                      {title && <h2 id={titleId} className="bds-sheet__title">{title}</h2>}
                       {description && <p className="bds-sheet__description">{description}</p>}
                     </>
                   )}
@@ -465,11 +502,10 @@ export function Sheet({
               : children}
         </div>
         {resolvedFooter && <div className="bds-sheet__footer">{resolvedFooter}</div>}
-      </div>
-    </>
+      </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
-
-  return createPortal(sheet, document.body);
 }
 
 export default Sheet;
