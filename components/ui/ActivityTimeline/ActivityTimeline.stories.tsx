@@ -112,3 +112,30 @@ export const InteractionTestContent: Story = {
     await expect(link).toHaveAttribute('href', 'https://example.com/evidence/acceptance-2026-04-12.pdf');
   },
 };
+
+/**
+ * Guards the list semantics: an ordered list of list items, with each
+ * timestamp in a `<time>` element carrying its ISO `datetime` (#1376).
+ *
+ * @summary Verifies ol/li structure and the time element
+ */
+export const InteractionTestListSemantics: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    events: [
+      { icon: <Icon icon="ph:plus" />, label: 'Created', timestamp: 'Apr 12, 2026', dateTime: '2026-04-12', isOrigin: true },
+      { icon: <Icon icon="ph:check-circle" />, label: 'Completed', timestamp: 'Apr 13, 2026', dateTime: '2026-04-13' },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const list = canvas.getByRole('list');
+    await expect(list.tagName).toBe('OL');
+    const items = canvas.getAllByRole('listitem');
+    await expect(items).toHaveLength(2);
+    await expect(items[0].tagName).toBe('LI');
+    const time = canvas.getByText('Apr 13, 2026');
+    await expect(time.tagName).toBe('TIME');
+    await expect(time).toHaveAttribute('datetime', '2026-04-13');
+  },
+};

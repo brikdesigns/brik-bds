@@ -21,6 +21,14 @@ export interface TimelineEvent {
   content?: ReactNode;
   /** Timestamp string (pre-formatted by consumer) */
   timestamp: string;
+  /**
+   * Machine-readable ISO 8601 date/time for the `<time datetime>` attribute
+   * (e.g. `2026-04-12` or `2026-04-12T09:30:00Z`). `timestamp` stays the
+   * visible text; without `dateTime` the `<time>` element carries no datetime.
+   */
+  dateTime?: string;
+  /** Stable React key. Defaults to `timestamp` + `label` + position. */
+  id?: string;
   /** Whether this is the "origin" event — uses brand-colored dot */
   isOrigin?: boolean;
 }
@@ -58,13 +66,13 @@ export function ActivityTimeline({ events, className = '' }: ActivityTimelinePro
   if (events.length === 0) return null;
 
   return (
-    <div className={bdsClass('bds-activity-timeline', className)}>
+    <ol className={bdsClass('bds-activity-timeline', className)}>
       {events.map((event, idx) => {
         const isLast = idx === events.length - 1;
         const isOrigin = event.isOrigin ?? idx === 0;
 
         return (
-          <div key={idx} className="bds-activity-timeline__event">
+          <li key={event.id ?? `${event.timestamp}-${event.label}-${idx}`} className="bds-activity-timeline__event">
             {/* Rail column: dot + connector line */}
             <div className="bds-activity-timeline__rail">
               <div
@@ -87,12 +95,14 @@ export function ActivityTimeline({ events, className = '' }: ActivityTimelinePro
               {event.content && (
                 <div className="bds-activity-timeline__body">{event.content}</div>
               )}
-              <div className="bds-activity-timeline__timestamp">{event.timestamp}</div>
+              <div className="bds-activity-timeline__timestamp">
+                <time dateTime={event.dateTime}>{event.timestamp}</time>
+              </div>
             </div>
-          </div>
+          </li>
         );
       })}
-    </div>
+    </ol>
   );
 }
 
