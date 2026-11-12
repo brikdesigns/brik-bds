@@ -12,11 +12,10 @@ const CalendarPlaceholder = () => (
 );
 
 const meta: Meta<typeof CalendarPlaceholder> = {
-  // NOTE (#2148): the `Containers/` home is provisional. Calendar is still an
-  // unbuilt placeholder, so whether it belongs under Containers/ (composite) or
-  // Components/ (leaf) can only be settled once its real composition exists —
-  // decide the taxonomy at implementation, not before.
-  title: 'Containers/calendar',
+  // #2148: joins the date/time family (date-picker, time-picker, period-nav) under
+  // `Components/`. A date grid is a control, not a bounded holder (ADR-006 amendment
+  // 2026-11-12). Revisit if the built component gains its own border/elevation.
+  title: 'Components/calendar',
   component: CalendarPlaceholder,
   tags: ['wip', 'surface-shared', '!manifest'], // placeholder — hide from MCP discovery until shipped
 };
