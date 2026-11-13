@@ -101,7 +101,12 @@
 
   // ── State ───────────────────────────────────────────────────────────────
   let feedbackMode = false;
+  // `allPins` is every pin loaded for the variant, each tagged with the page it
+  // was left on (pagePath). `pins` is the subset for the page currently shown,
+  // numbered within that page — everything below reads `pins`.
+  let allPins = [];
   let pins = [];
+  let currentPagePath = null;
   let pendingPin = null;
   let authorName = localStorage.getItem('brik-feedback-name') || '';
   let authorEmail = localStorage.getItem('brik-feedback-email') || '';
@@ -341,6 +346,7 @@
       padding: 10px 12px;
       font-size: 14px;
       font-family: inherit;
+      color: ${C.ink};
       margin-bottom: 10px;
       box-sizing: border-box;
       transition: border-color 0.15s;
@@ -544,24 +550,58 @@
         (f) => f.variant_key === VARIANT_KEY && f.pin_x != null
       );
 
-      variantFeedback.forEach((f, i) => {
-        pins.push({
+      variantFeedback.forEach((f) => {
+        allPins.push({
           id: f.id,
           x: f.pin_x,
           y: f.pin_y,
           comment: f.comment,
           author: f.author_name,
-          number: i + 1,
+          number: 0,
+          pagePath: pagePathOf(f.page_url),
           clientCompleted: f.client_completed_at != null,
           section: f.section || f.section_context?.section_label || f.section_context?.section_type || null,
         });
       });
 
+      scopePins();
       renderPins();
     } catch (e) {
       console.warn('[Brik Feedback] Could not load existing feedback:', e);
     }
   }
+
+  // ── Scope pins to the current page ──────────────────────────────────────
+  // One widget instance can serve many pages under a single variant key (the
+  // portal mounts it once in the layout), so a pin belongs to the page it was
+  // left on. Matching is on pathname only (no query/hash, no trailing slash).
+  // A pin with no stored page_url (legacy rows, older API) matches every page,
+  // which is the behaviour single-page mockups rely on.
+  function pagePathOf(url) {
+    if (!url) return null;
+    try {
+      return new URL(url, window.location.href).pathname.replace(/\/+$/, '') || '/';
+    } catch (e) {
+      console.warn('[Brik Feedback] Could not parse page url:', url, e);
+      return null;
+    }
+  }
+
+  function scopePins() {
+    currentPagePath = pagePathOf(window.location.href);
+    pins = allPins.filter((p) => p.pagePath == null || p.pagePath === currentPagePath);
+    pins.forEach((p, i) => { p.number = i + 1; });
+  }
+
+  // The widget loads once, so a client-side navigation (history.pushState, no
+  // reload) must re-scope the pins itself. Polling the pathname avoids patching
+  // the host app's history API.
+  setInterval(() => {
+    if (pagePathOf(window.location.href) === currentPagePath) return;
+    scopePins();
+    renderPins();
+    refreshListPanel();
+  }, 400);
 
   // ── Render pins on page ─────────────────────────────────────────────────
   function renderPins() {
@@ -1117,16 +1157,19 @@
 
       // Convert pending pin to permanent
       const pinNumber = pins.length + 1;
-      pins.push({
+      const newPin = {
         id: created?.feedback?.id,
         x: pinX,
         y: pinY,
         comment,
         author: name,
         number: pinNumber,
+        pagePath: pagePathOf(window.location.href),
         clientCompleted: false,
         section: currentSectionContext?.section_label || currentSectionContext?.section_type || null,
-      });
+      };
+      allPins.push(newPin);
+      pins.push(newPin);
 
       screenshotBase64 = null;
       removePendingPin();
