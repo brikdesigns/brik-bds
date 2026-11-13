@@ -1,0 +1,55 @@
+---
+title: Search modes
+description: Pick filter, lookup or global search for a surface, and apply the shared defaults for debounce, Escape, result count and no-results.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+Search comes in three modes. Each has one owning component, and every mode renders [SearchInput](/docs/components/search-input) as its field. Pick the mode from what the user is searching, not from how the surface looks. The decision record is [ADR-049](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-049-search-modes-filter-lookup-global.md).
+
+## Pick a mode
+
+| Mode | Use it when | Owner | Debounce | Minimum characters |
+|---|---|---|---|---|
+| **Filter** | Narrowing a list already on the page, in place. The data is in memory. | [FilterBar](/docs/components/filter-bar) `search` slot | `0` | `0` |
+| **Lookup** | Picking one entity from a known option set inside a popup. | [Menu](/docs/components/menu) `search`, consumed by the Breadcrumb switcher | `0` | `0` |
+| **Global** | Finding any record from anywhere in the shell. Results come from the server, grouped by entity. | [SearchOverlay](/docs/components/search-overlay) | `250` | `2` |
+
+<Callout type="info">
+Lookup shows its search box only above a threshold of items (default `8`). That count is the gate, not a character count.
+</Callout>
+
+Global search below 2 characters shows recents instead of querying. A command palette (actions, not records) is a possible fourth mode and is deferred: no component is reserved for it.
+
+## Escape
+
+| State when Esc is pressed | Result |
+|---|---|
+| A popup the field controls is open (a Menu, the SearchOverlay) | Close the popup. The field keeps its text. |
+| No popup is open and the field has text | Clear the field and fire `onClear`. |
+| No popup is open and the field is empty | Nothing happens. The event is not stopped, so a parent Modal or page still gets it. |
+
+Where the field lives inside the popup, closing also resets the query, so the next open starts empty.
+
+## Result count and no results
+
+- **Always show the count, zero included.** It sits in a `role="status"` region that stays mounted, so assistive tech announces each change. Zero reads `0 results`, never `No matches`.
+- **On zero, offer one next step:** clear the query, or widen the scope when a scope chip is set. The wording is Brik Content System copy.
+
+## Landmarks
+
+| Surface | `role="search"` |
+|---|---|
+| A stand-alone SearchInput | No. A plain field stays a plain field. |
+| FilterBar search slot | Yes: the field plus its count. |
+| SearchOverlay content | Yes: field, scope chips and results. |
+| Lookup (Menu, Breadcrumb switcher) | No. A picker inside a popup is not a page search. |
+
+Give each landmark a distinct `aria-label` so two on one page are told apart.
+
+## Related
+
+- [SearchInput](/docs/components/search-input) — the field every mode renders
+- [FilterBar](/docs/components/filter-bar#with-search) — filter mode
+- [Menu](/docs/components/menu) — lookup mode
+- [SearchOverlay](/docs/components/search-overlay) — global mode
