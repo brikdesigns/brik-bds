@@ -74,6 +74,19 @@ Inherited from TextInput. `error` triggers `aria-invalid` and replaces `helperTe
 - **Pass a `label`** (or an `aria-label` via passthrough props) so the field has an accessible name.
 - `type`, `iconBefore`, and `iconAfter` are reserved by SearchInput and cannot be overridden.
 
+### Debounce, Enter and Escape
+
+`debounceMs` delays `onChange` after the last keystroke; the field text updates at once. It defaults to `0`, so existing fields behave as before. `onSearch` fires with the value on Enter and skips the debounce. Escape clears a field that has text and fires `onClear`. Which delay a surface should use is set by its [search mode](/docs/build-standards/search-modes).
+
+```tsx
+<SearchInput
+  aria-label="Search records"
+  debounceMs={250}
+  onChange={(e) => runSearch(e.target.value)}
+  onSearch={runSearch}
+/>
+```
+
 ## API
 
 {/* props-check: SearchInputProps @ components/ui/SearchInput/SearchInput.tsx */}
@@ -81,12 +94,15 @@ Inherited from TextInput. `error` triggers `aria-invalid` and replaces `helperTe
 | Prop | Type | Default |
 |---|---|---|
 | `onClear` | `() => void` | — |
+| `debounceMs` | `number` | `0` |
+| `onSearch` | `(value: string) => void` | — |
 
 Inherits all [TextInput](/docs/components/text-input) props except `type` (forced to `"search"`), `iconBefore` (reserved for the magnifying glass), and `iconAfter` (reserved for the clear button) — including `label`, `size`, `error`, `helperText`, `fullWidth`, and `disabled`.
 
 ## Related
 
 - [TextInput](/docs/components/text-input) — the base field SearchInput wraps
+- [Search modes](/docs/build-standards/search-modes) — filter, lookup or global: which to use and the shared defaults
 - [FilterBar](/docs/components/filter-bar) — composed search-and-filters region
 - [MultiSelect](/docs/components/multi-select) — for picking from a searchable set rather than free-text query
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-search-input--overview)**
