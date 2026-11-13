@@ -358,8 +358,19 @@ job had and this setup did not — the x64 runner, its memory or `/dev/shm`
 pressure, or the exact job shape — and it is **not** a warm-vs-cold Vite
 dependency-cache effect, since warm invocations were identical to each other.
 Treat the caveat above as still in force; this narrows the search, it does not
-retire it. To resume, reproduce on an x64 runner via `workflow_dispatch`
-before changing anything.
+retire it.
+
+**Not reproduced on x64 either (#1746, 2026-11-12).** A throwaway PR (#3142,
+closed unmerged) ran the full `storybook` project eight times back to back in
+one `ubuntu-latest` (x86_64, 16 GB) job, same pinned image, `--ipc=host`,
+`--maxWorkers=1`, `VISUAL_FLOOR_PIXELS=0` against the committed baselines
+([run 43287591417](https://github.com/brikdesigns/brik-bds/actions/runs/43287591417)).
+All eight invocations ran 634 tests and failed the **same 16**, each by 1–8 px
+(below the 10 px default floor), with identical pixel counts every time.
+`Icons :: Setup` and `DevFeedbackWidget :: Default` never failed. Nothing
+changed between invocations, so no state persisted. The original leak is
+unreproduced on arm64 (13 invocations) and x64 (8). Re-open #1746 only if a
+real gate run shows it again, and capture that run first.
 
 ## Reading a value out of the gate (#1800)
 
