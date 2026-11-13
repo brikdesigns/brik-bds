@@ -14,14 +14,25 @@ describe('StatusList', () => {
       { ...ROW, id: '1', status: 'complete' },
       { ...ROW, id: '2', status: 'in_progress' },
       { ...ROW, id: '3', status: 'not_started' },
-      { ...ROW, id: '4', status: 'negative' },
+      { ...ROW, id: '4', status: 'blocked' },
+      { ...ROW, id: '5', status: 'negative' },
     ]);
-    for (const label of ['Complete', 'In Progress', 'Not Started', 'Error']) {
+    for (const label of ['Complete', 'In Progress', 'Not Started', 'Blocked', 'Failed']) {
       expect(html).toContain(`>${label}<`);
     }
-    for (const tone of ['positive', 'warning', 'neutral', 'negative']) {
+    for (const tone of ['positive', 'info', 'neutral', 'warning', 'negative']) {
       expect(html).toContain(`bds-badge--tone-${tone}`);
     }
+  });
+
+  it('keeps the icon colour on the same tone as the badge', () => {
+    const html = render([
+      { ...ROW, id: '1', status: 'in_progress' },
+      { ...ROW, id: '2', status: 'blocked' },
+    ]);
+    expect(html).toContain('bds-status-list__icon--status-in-progress');
+    expect(html).toContain('bds-status-list__icon--status-blocked');
+    expect(html).not.toContain('Error');
   });
 
   it('renders rows as non-interactive (no button, no strikethrough class)', () => {

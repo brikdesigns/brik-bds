@@ -347,6 +347,20 @@ fixed: [`visual.yml`](../../.github/workflows/visual.yml) runs the suite once,
 and invocation 1 is clean. The root cause is unidentified and tracked
 separately — tracked in #1746.
 
+**Not reproduced under Docker on arm64 (#1746, 2026-11-12).** The pinned
+`mcr.microsoft.com/playwright:v1.59.1-noble` image on an arm64 Colima VM
+(3.8 GB), `--ipc=host`, `--maxWorkers=1`, full `storybook` project, baselines
+written by the experiment's own invocation 1 so macOS-vs-Linux rendering is
+out of the comparison. Invocations 3–13 (11 in a row) each ran 634 of 634
+tests with 0 mismatches; invocations 1–2 failed only with "No existing
+reference" (baseline creation). So the leak needs something the original CI
+job had and this setup did not — the x64 runner, its memory or `/dev/shm`
+pressure, or the exact job shape — and it is **not** a warm-vs-cold Vite
+dependency-cache effect, since warm invocations were identical to each other.
+Treat the caveat above as still in force; this narrows the search, it does not
+retire it. To resume, reproduce on an x64 runner via `workflow_dispatch`
+before changing anything.
+
 ## Reading a value out of the gate (#1800)
 
 A browser `console.log` from `.storybook/vitest.visual.setup.ts` never reaches
