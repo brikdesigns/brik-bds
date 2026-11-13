@@ -1,0 +1,37 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './CommentComposer.stories';
+
+<Meta of={Stories} />
+
+# Comment composer
+
+<ComponentLinks slug="comment-composer" />
+
+A labelled textarea with a submit button and optional `@mention` suggestions from a list the caller supplies.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Pending
+
+<Canvas of={Stories.Pending} />
+
+### With mentions
+
+Typing `@` opens a suggestion list filtered by what follows. Up and Down move, Enter or Tab insert `@label`, Esc closes the list.
+
+<Canvas of={Stories.WithMentions} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — `onSubmit` may return a Promise. The composer shows its own pending state until it settles, clears on resolve, and keeps the text on reject; report the failure through `error`.
+
+> **Note** — The payload is `{ body, mentions }`. `mentions` holds the entries picked from the list that are still in `body`, so the caller never re-parses the text.

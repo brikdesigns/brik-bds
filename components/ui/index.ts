@@ -37,6 +37,8 @@ export * from './CloseButton';
 export * from './Cluster';
 export * from './Collapsible';
 export * from './CollapsibleCard';
+export * from './CommentComposer';
+export * from './CommentThread';
 export * from './CompletionToggle';
 export * from './ContactIcon';
 export * from './ContentBlock';

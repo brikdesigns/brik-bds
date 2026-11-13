@@ -1,0 +1,82 @@
+---
+title: Comment thread
+description: An activity timeline of events with a comment composer below it.
+---
+
+CommentThread composes [Activity timeline](/docs/components/activity-timeline) and [Comment composer](/docs/components/comment-composer). The caller supplies the events, oldest first, and handles each submitted comment.
+
+## Use it for
+
+- The Activity section of a record: comments, status changes, references
+- Project notes and engagement threads
+
+For a timeline with no composer, use [Activity timeline](/docs/components/activity-timeline).
+
+## Import
+
+```tsx
+import { CommentThread } from '@brikdesigns/bds';
+```
+
+## Usage
+
+```tsx
+<CommentThread
+  events={[
+    {
+      id: 'e1',
+      actor: 'Emily Rivera',
+      action: 'commented',
+      kind: 'Comment',
+      body: 'Can we get this on the backlog page?',
+      timestamp: 'Apr 12, 2026, 1:04 PM',
+      dateTime: '2026-04-12T13:04:00Z',
+    },
+  ]}
+  mentions={mentions}
+  onSubmit={async ({ body, mentions }) => {
+    await addComment(body, mentions);
+  }}
+/>
+```
+
+## Behavior
+
+- Each event is an `ActivityTimeline` event. `actor` is its label, `action` its detail, and `kind` a read-only [Tag](/docs/components/tag) in its `content` slot, above `body`.
+- `icon` defaults to a chat bubble. Pass one per event to tell kinds apart.
+- With no events, `emptyMessage` shows instead of the timeline.
+- Omit `onSubmit` for a read-only thread: no composer renders.
+- The composer props `mentions`, `label`, `placeholder`, `submitLabel`, `pending`, `disabled` and `error` pass through unchanged.
+
+## Accessibility
+
+- The timeline is an ordered list; each timestamp is a `<time>`. Pass `dateTime` for a machine-readable value.
+- The composer keeps its own behaviour: a named textarea, a keyboard-operable mention list, focus back in the textarea after a submit.
+
+## API
+
+{/* props-check: CommentThreadProps @ components/ui/CommentThread/CommentThread.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `events` | `CommentThreadEvent[]` *(required)* | — |
+| `onSubmit` | `(payload: CommentSubmitPayload) => void \| Promise<unknown>` | — |
+| `emptyMessage` | `string` | `'No activity yet.'` |
+| `mentions` | `CommentMention[]` | — |
+| `label` | `string` | — |
+| `placeholder` | `string` | — |
+| `submitLabel` | `string` | — |
+| `pending` | `boolean` | — |
+| `disabled` | `boolean` | — |
+| `error` | `string` | — |
+
+Plus all standard `<div>` HTML attributes (excluding `children` and `onSubmit`).
+
+`CommentThreadEvent` is `{ id, actor, action?, kind?, kindColor?, body?, timestamp, dateTime?, icon? }`.
+
+## Related
+
+- [Activity timeline](/docs/components/activity-timeline) — the timeline
+- [Comment composer](/docs/components/comment-composer) — the composer
+- [Tag](/docs/components/tag) — the kind label
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/containers-comment-thread--default)**

@@ -1,0 +1,71 @@
+---
+title: Comment composer
+description: A labelled comment textarea with submit and optional @mention suggestions.
+---
+
+CommentComposer is a textarea with a submit button. Typing `@` opens a list of suggestions the caller supplies; picking one inserts `@label` and is reported in the submit payload.
+
+## Use it for
+
+- Adding a comment to a record's activity
+- Notes or replies where people or agents can be mentioned
+
+For the thread it usually sits under, use [Comment thread](/docs/components/comment-thread). For longer form fields, use [Text area](/docs/components/text-area).
+
+## Import
+
+```tsx
+import { CommentComposer } from '@brikdesigns/bds';
+```
+
+## Usage
+
+```tsx
+<CommentComposer
+  mentions={[{ id: 'a1', label: 'design-system', description: 'Components and tokens' }]}
+  onSubmit={async ({ body, mentions }) => {
+    await addComment(body, mentions.map((m) => m.id));
+  }}
+/>
+```
+
+## Behavior
+
+- `onSubmit` may return a Promise. The composer shows pending until it settles, clears on resolve, and keeps the text on reject. Show the failure through `error`.
+- `pending` adds a caller-owned pending state, for a form action the composer cannot see.
+- Cmd/Ctrl+Enter submits. The submit button is off while the text is empty.
+- The payload's `mentions` lists the picks still present in `body`, once each.
+
+## Accessibility
+
+- The textarea is named by `label` (default "Add a comment") through `aria-label`.
+- Mentions: Up and Down move through the list, Enter or Tab insert, Esc closes it without closing a surrounding Modal. The active option is exposed with `aria-activedescendant`, and a status region announces how many suggestions are available.
+- After a submit settles, focus returns to the textarea.
+- While pending the textarea is read-only, not disabled, so it keeps focus.
+
+## API
+
+{/* props-check: CommentComposerProps @ components/ui/CommentComposer/CommentComposer.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `onSubmit` | `(payload: CommentSubmitPayload) => void \| Promise<unknown>` *(required)* | — |
+| `mentions` | `CommentMention[]` | `[]` |
+| `label` | `string` | `'Add a comment'` |
+| `placeholder` | `string` | — |
+| `submitLabel` | `string` | `'Comment'` |
+| `pending` | `boolean` | `false` |
+| `disabled` | `boolean` | `false` |
+| `error` | `string` | — |
+| `rows` | `number` | `3` |
+
+Plus all standard `<div>` HTML attributes (excluding `children` and `onSubmit`).
+
+`CommentMention` is `{ id: string; label: string; description?: string }`. `CommentSubmitPayload` is `{ body: string; mentions: CommentMention[] }`.
+
+## Related
+
+- [Comment thread](/docs/components/comment-thread) — a timeline with this composer below it
+- [Text area](/docs/components/text-area) — the field
+- [Button](/docs/components/button) — the submit action
+- **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-comment-composer--default)**
