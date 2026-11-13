@@ -450,7 +450,8 @@ jobs:
   # `stats_bar` the assertion went red on `main` and nothing reported it (#2313).
   astro:
     name: blueprints astro
-    runs-on: ubuntu-latest
+    # Pinned: Playwright has no chromium build for ubuntu-latest's 26.04 image (#3161).
+    runs-on: ubuntu-24.04
     timeout-minutes: 10  # #3090: p95 109s, 60 green runs to 2026-11-12
     needs: changes
     permissions:
@@ -500,7 +501,8 @@ jobs:
   # runtime (brik-llm#2713), which is why an all-inert diff still opts out.
   test:
     name: test suite
-    runs-on: ubuntu-latest
+    # Pinned: Playwright has no chromium build for ubuntu-latest's 26.04 image (#3161).
+    runs-on: ubuntu-24.04
     timeout-minutes: 15  # #3090: p95 260s, 60 green runs to 2026-11-12
     needs: changes
     permissions:
