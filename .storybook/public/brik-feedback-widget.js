@@ -106,7 +106,9 @@
   // numbered within that page — everything below reads `pins`.
   let allPins = [];
   let pins = [];
-  let currentPagePath = null;
+  // Seeded at boot, not on first scopePins(): if the pin load is slow or fails,
+  // the nav poll below must still compare against the page the widget loaded on.
+  let currentPagePath = pagePathOf(window.location.href);
   let pendingPin = null;
   let authorName = localStorage.getItem('brik-feedback-name') || '';
   let authorEmail = localStorage.getItem('brik-feedback-email') || '';
@@ -595,9 +597,13 @@
 
   // The widget loads once, so a client-side navigation (history.pushState, no
   // reload) must re-scope the pins itself. Polling the pathname avoids patching
-  // the host app's history API.
+  // the host app's history API. An open form and its dropped pin belong to the
+  // page they were left on, so they close here too rather than sit over the new
+  // page and submit with its path (#3157).
   setInterval(() => {
     if (pagePathOf(window.location.href) === currentPagePath) return;
+    removePendingPin();
+    removeForm();
     scopePins();
     renderPins();
     refreshListPanel();
