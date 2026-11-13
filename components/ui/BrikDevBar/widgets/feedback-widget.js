@@ -1324,6 +1324,14 @@
     }
   });
 
+  // The inspector's "Feedback" button emits `brik:inspect:report` and exits
+  // inspect mode (ADR-007: feedback surfaces consume that event). Open pin mode
+  // so the click lands on the feedback UI instead of nothing. Guarded so an
+  // already-open feedback mode is not toggled off by a second report.
+  window.addEventListener('brik:inspect:report', () => {
+    if (!feedbackMode) setFeedbackMode(true);
+  });
+
   // Escape closes the open comment popover (cancel), mirroring the Cancel
   // button and matching form-mode behavior (#1235).
   document.addEventListener('keydown', (e) => {
