@@ -1,5 +1,5 @@
-deaf631cb230a9a84397921fb578dfdc28905afb0888bc0a78ba02d8ec702f61  brik-bds/.storybook/public/brik-feedback-widget.js
-deaf631cb230a9a84397921fb578dfdc28905afb0888bc0a78ba02d8ec702f61  brik/brik-llm/scripts/brik-dev-tool/widgets/feedback-widget.js
+d597445130874f8774dd31ef07f0ab7124cdd18aab6e504760e2c075b0627a44  brik-bds/.storybook/public/brik-feedback-widget.js
+d597445130874f8774dd31ef07f0ab7124cdd18aab6e504760e2c075b0627a44  brik/brik-llm/scripts/brik-dev-tool/widgets/feedback-widget.js
 11efeae09eaf740ad1ed46d5a720ca7beb68a712f6479750dc54d4895a1ec926  product/brik-client-portal/scripts/mockup-shared/feedback-widget.js
 5a71087ac8450a1bd9fd1f03e137851ae4bd2d54517eaafe7f9053b66123fd55  brik-bds/.storybook/public/brik-devbar.js
 5a71087ac8450a1bd9fd1f03e137851ae4bd2d54517eaafe7f9053b66123fd55  brik/brik-llm/scripts/brik-dev-tool/widgets/devbar.js
