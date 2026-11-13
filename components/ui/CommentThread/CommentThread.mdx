@@ -1,0 +1,31 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './CommentThread.stories';
+
+<Meta of={Stories} />
+
+# Comment thread
+
+<ComponentLinks slug="comment-thread" />
+
+An activity timeline of events with a comment composer below it, newest last.
+
+## Default
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Empty
+
+<Canvas of={Stories.Empty} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — Each event's `kind` renders as a read-only `Tag` in the timeline's `content` slot, so `ActivityTimeline` needed no change. Put a reference link or any other node in `body`.
+
+> **Note** — Omit `onSubmit` for a read-only thread; no composer renders. The heading above the thread belongs to the page.

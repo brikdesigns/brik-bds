@@ -1,0 +1,29 @@
+@layer bds-components {
+/**
+ * BDS CommentThread — ActivityTimeline + CommentComposer
+ * Naming: BEM — .bds-comment-thread, .bds-comment-thread__body
+ */
+
+.bds-comment-thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-gap-lg);
+}
+
+.bds-comment-thread__empty {
+  margin: 0;
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  color: var(--bds-text-secondary);
+}
+
+/* Comment text sits under the kind Tag, in the timeline's body colour. */
+.bds-comment-thread__body {
+  margin-top: var(--bds-gap-sm);
+  font-size: var(--bds-body-sm);
+  color: var(--bds-text-primary);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+} /* end @layer bds-components */
