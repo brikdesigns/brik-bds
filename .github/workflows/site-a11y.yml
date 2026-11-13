@@ -78,7 +78,8 @@ permissions:
 
 jobs:
   axe:
-    runs-on: ubuntu-latest
+    # Pinned: Playwright has no chromium build for ubuntu-latest's 26.04 image (#3161).
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v6
