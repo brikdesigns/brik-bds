@@ -42,12 +42,21 @@ function fire(el: Element, type: string): void {
 
 const slot = (id: string) => document.querySelector<HTMLElement>(`.bdb-slot[data-slot-id="${id}"]`);
 
+// Bodies of the feedback POSTs the widget sent, in order.
+let posts: Array<Record<string, unknown>> = [];
+
 /** Boot all three scripts, turn the inspector on and lock `#target`. */
 async function bootAndLockTarget(): Promise<void> {
-  document.body.innerHTML = '<main><p id="target">Hello target text</p></main>';
-  vi.spyOn(window, 'fetch').mockImplementation(
-    async () => new Response(JSON.stringify({ review: { design_feedback: [] } }), { status: 200 }),
-  );
+  document.body.innerHTML =
+    '<main><div class="bds-card"><p id="target">Hello target text</p></div></main>';
+  posts = [];
+  vi.spyOn(window, 'fetch').mockImplementation(async (_url, init) => {
+    if (init?.method === 'POST') {
+      posts.push(JSON.parse(String(init.body)));
+      return new Response(JSON.stringify({ feedback: { id: `fb-${posts.length}` } }), { status: 200 });
+    }
+    return new Response(JSON.stringify({ review: { design_feedback: [] } }), { status: 200 });
+  });
   inject(devbarSource);
   inject(inspectSource, { 'data-auto-enable': '1' });
   inject(widgetSource, {
@@ -140,5 +149,72 @@ describe('inspector Feedback button with the review feedback widget mounted', ()
 
     expect(slot('feedback')!.getAttribute('data-active')).toBe('true');
     expect(document.documentElement.classList.contains('bfb-crosshair')).toBe(true);
+  });
+});
+
+/** Drop a pin on `#target` (pin mode must be on), fill the form, submit. */
+async function dropPinAndSubmit(comment: string): Promise<void> {
+  fire(document.getElementById('target')!, 'click');
+  await settle();
+  document.querySelector<HTMLInputElement>('.bfb-form .bfb-name')!.value = 'Reviewer';
+  document.querySelector<HTMLTextAreaElement>('.bfb-form .bfb-comment')!.value = comment;
+  document.querySelector<HTMLElement>('.bfb-form .bfb-submit')!.click();
+  await settle();
+}
+
+const sectionContextOf = (i: number) => posts[i].section_context as Record<string, string> | undefined;
+
+describe('inspector context reaches the review submission (#3158)', () => {
+  it('carries dom_path and component from the report into section_context', async () => {
+    await bootAndLockTarget();
+    document.querySelector<HTMLElement>('.bi-panel [data-action="report-feedback"]')!.click();
+    await settle();
+
+    await dropPinAndSubmit('Tighten this copy');
+
+    expect(posts).toHaveLength(1);
+    const ctx = sectionContextOf(0);
+    expect(ctx?.dom_path, 'section_context.dom_path missing from the POST').toContain('.bds-card');
+    expect(ctx?.dom_path).toContain('p:nth-of-type(1)');
+    expect(ctx?.component).toBe('bds-card');
+    expect(ctx?.element_tag).toBe('p');
+  });
+
+  it('does not attach a prior report to a later comment with no report', async () => {
+    await bootAndLockTarget();
+    document.querySelector<HTMLElement>('.bi-panel [data-action="report-feedback"]')!.click();
+    await settle();
+    await dropPinAndSubmit('From the inspector');
+
+    slot('feedback')!.click();
+    await dropPinAndSubmit('Plain pin, no inspector');
+
+    expect(posts).toHaveLength(2);
+    expect(sectionContextOf(1)?.dom_path).toBeUndefined();
+    expect(sectionContextOf(1)?.component).toBeUndefined();
+  });
+
+  it('drops an unused report when pin mode is toggled off', async () => {
+    await bootAndLockTarget();
+    document.querySelector<HTMLElement>('.bi-panel [data-action="report-feedback"]')!.click();
+    await settle();
+
+    slot('feedback')!.click(); // pin mode off, no pin was dropped
+    slot('feedback')!.click(); // pin mode on again, no new report
+    await dropPinAndSubmit('Plain pin after toggle');
+
+    expect(sectionContextOf(0)?.dom_path).toBeUndefined();
+  });
+
+  it('drops an unused report on client-side navigation', async () => {
+    await bootAndLockTarget();
+    document.querySelector<HTMLElement>('.bi-panel [data-action="report-feedback"]')!.click();
+    await settle();
+
+    window.history.pushState({}, '', '/admin/projects');
+    await settle(600);
+    await dropPinAndSubmit('Plain pin after nav');
+
+    expect(sectionContextOf(0)?.dom_path).toBeUndefined();
   });
 });

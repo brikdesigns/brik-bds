@@ -17,6 +17,14 @@
  * #1385 once brikdesigns DevTools migrated to the React DevFeedbackWidget
  * (brikdesigns#479) — no live consumer remained.
  *
+ * Inspector bridge contract (brik-bds#3158, ADR-007): two surfaces consume the
+ * inspector's `brik:inspect:report` event and its `detail` (page, section,
+ * component, dom_path, element_tag) — the React DevFeedbackWidget
+ * (brik-client-portal src/components/DevFeedbackWidget.tsx) and this review
+ * widget, which carries the detail into the submission's `section_context`.
+ * Dropping or swapping either listener silently breaks element context: the
+ * comment still posts, it just names no element (portal #6543 did exactly that).
+ *
  * Configuration via data attributes on the script tag. `data-review-token` and
  * `data-api-url` are BOTH required — the widget disables itself if either is
  * absent. Point `data-api-url` at the portal tier that issued the review token;
@@ -602,6 +610,7 @@
   // page and submit with its path (#3157).
   setInterval(() => {
     if (pagePathOf(window.location.href) === currentPagePath) return;
+    lastReportDetail = null;
     removePendingPin();
     removeForm();
     scopePins();
@@ -728,6 +737,7 @@
       toast('Click anywhere on the page to drop a pin');
     } else {
       document.documentElement.classList.remove('bfb-crosshair');
+      lastReportDetail = null;
       removePendingPin();
       removeForm();
     }
@@ -906,6 +916,26 @@
     return ctx;
   }
 
+  // The last `brik:inspect:report` detail, held until the next pin consumes it
+  // (or pin mode closes / the page changes). It describes the element the
+  // reviewer locked in the inspector, so it must never ride along on a pin the
+  // report did not start (#3158).
+  let lastReportDetail = null;
+
+  // Fold the inspector's report into a pin's section_context. The detector
+  // output already on `ctx` wins for fields both set; an empty or partial
+  // detail adds nothing, so it cannot clobber detector output.
+  function mergeReportDetail(ctx, detail) {
+    if (!detail) return ctx;
+    const merged = Object.assign({}, ctx);
+    if (detail.page) merged.page = detail.page;
+    if (detail.dom_path) merged.dom_path = detail.dom_path;
+    if (detail.component) merged.component = detail.component;
+    if (detail.section && !merged.section_label) merged.section_label = detail.section;
+    if (detail.element_tag && !merged.element_tag) merged.element_tag = detail.element_tag;
+    return merged;
+  }
+
   // ── Click to pin ────────────────────────────────────────────────────────
   let currentSectionContext = null;
 
@@ -923,7 +953,8 @@
     const y = e.pageY;
 
     // Detect section context before creating the pin overlay
-    currentSectionContext = sectionContextFromDetector(e.target);
+    currentSectionContext = mergeReportDetail(sectionContextFromDetector(e.target), lastReportDetail);
+    lastReportDetail = null;
 
     pendingPin = document.createElement('div');
     pendingPin.className = 'bfb-pin bfb-pin--pending';
@@ -1081,6 +1112,7 @@
     wireTagGroup(formEl.querySelector('.bfb-tags--disposition'), 'data-disposition', (v) => { pendingDisposition = v; });
 
     formEl.querySelector('.bfb-cancel').addEventListener('click', () => {
+      lastReportDetail = null;
       screenshotBase64 = null;
       removePendingPin();
       removeForm();
@@ -1177,6 +1209,7 @@
       allPins.push(newPin);
       pins.push(newPin);
 
+      lastReportDetail = null;
       screenshotBase64 = null;
       removePendingPin();
       removeForm();
@@ -1334,8 +1367,13 @@
   // inspect mode (ADR-007: feedback surfaces consume that event). Open pin mode
   // so the click lands on the feedback UI instead of nothing. Guarded so an
   // already-open feedback mode is not toggled off by a second report.
-  window.addEventListener('brik:inspect:report', () => {
+  // Keep the event's `detail` so the pin dropped next submits with the element
+  // context (dom_path, component, ...) the inspector resolved (#3158). Set after
+  // setFeedbackMode, which is where a stale report would be cleared.
+  window.addEventListener('brik:inspect:report', (e) => {
     if (!feedbackMode) setFeedbackMode(true);
+    const detail = e.detail;
+    lastReportDetail = detail && Object.keys(detail).length > 0 ? detail : null;
   });
 
   // Escape closes the open comment popover (cancel), mirroring the Cancel
@@ -1343,6 +1381,7 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && formEl) {
       e.preventDefault();
+      lastReportDetail = null;
       screenshotBase64 = null;
       removePendingPin();
       removeForm();
