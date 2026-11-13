@@ -15,6 +15,8 @@ import {
 } from 'react';
 import { bdsClass } from '../../utils';
 import { Avatar, type AvatarStatus } from '../Avatar';
+import { Button } from '../Button';
+import { Checkbox } from '../Checkbox';
 import type { ButtonSize } from '../Button';
 import { Image } from '../Image';
 import { Logo, type LogoProps } from '../Logo';
@@ -196,12 +198,17 @@ export function TableBody({
 // ─── TableRow (<tr>) ───────────────────────────────────────────
 
 export interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
+  /**
+   * Selected state. Pass it on every row of a selectable table: it sets
+   * `aria-selected="true"` / `"false"` and the selected fill. Leave it unset on
+   * a table without selection and the row carries no `aria-selected`.
+   */
   selected?: boolean;
   children: ReactNode;
 }
 
 export function TableRow({
-  selected = false,
+  selected,
   children,
   className,
   style,
@@ -211,6 +218,7 @@ export function TableRow({
     <tr
       className={bdsClass('bds-table-row', selected && 'bds-table-row--selected', className)}
       style={style}
+      aria-selected={selected === undefined ? undefined : selected}
       {...props}
     >
       {children}
@@ -821,3 +829,140 @@ export function TableServiceTagCell({
 }
 
 export default Table;
+
+// ─── Row selection: TableSelectHead / TableSelectCell / TableBulkBar ──
+
+export interface TableSelectHeadProps extends Omit<ThHTMLAttributes<HTMLTableCellElement>, 'onChange'> {
+  /** True when every row on the page is selected. */
+  checked: boolean;
+  /** True when some, not all, rows are selected — shows the mixed state. */
+  indeterminate?: boolean;
+  /** Called with the new state: `true` selects every row, `false` clears them all. */
+  onCheckedChange: (checked: boolean) => void;
+  /** Accessible name of the header checkbox. Default `Select all rows`. */
+  label?: string;
+}
+
+/**
+ * TableSelectHead — the leading `<th>` of a selectable table, holding the
+ * select-all checkbox. Controlled: the consumer derives `checked` and
+ * `indeterminate` from its selected set and answers `onCheckedChange`.
+ *
+ * @summary Header cell with the select-all checkbox
+ */
+export function TableSelectHead({
+  checked,
+  indeterminate = false,
+  onCheckedChange,
+  label = 'Select all rows',
+  className,
+  ...props
+}: TableSelectHeadProps) {
+  return (
+    <TableHead className={bdsClass('bds-table-select-cell', className)} {...props}>
+      <Checkbox
+        label=""
+        aria-label={label}
+        checked={checked}
+        indeterminate={indeterminate}
+        onChange={(event) => onCheckedChange(event.target.checked)}
+      />
+    </TableHead>
+  );
+}
+
+export interface TableSelectCellProps extends Omit<TdHTMLAttributes<HTMLTableCellElement>, 'onChange'> {
+  /** Whether this row is selected. */
+  checked: boolean;
+  /** Called with the new state when the checkbox is toggled. */
+  onCheckedChange: (checked: boolean) => void;
+  /** Accessible name of the row checkbox — name the row, e.g. `Select BUG-101 Save button`. */
+  label: string;
+}
+
+/**
+ * TableSelectCell — the leading `<td>` of a selectable row, holding its
+ * checkbox. Shrinks to the checkbox and carries the row's accessible name.
+ * Pair it with `TableRow selected` so the row reports `aria-selected`.
+ *
+ * @summary Row cell with a named selection checkbox
+ */
+export function TableSelectCell({
+  checked,
+  onCheckedChange,
+  label,
+  className,
+  ...props
+}: TableSelectCellProps) {
+  return (
+    <TableCell className={bdsClass('bds-table-select-cell', className)} {...props}>
+      <Checkbox
+        label=""
+        aria-label={label}
+        checked={checked}
+        onChange={(event) => onCheckedChange(event.target.checked)}
+      />
+    </TableCell>
+  );
+}
+
+export interface TableBulkBarCount {
+  /** Noun shown after the number, e.g. `bugs`. */
+  label: string;
+  count: number;
+}
+
+export interface TableBulkBarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+  /** Number of selected rows. The bar renders nothing while this is 0. */
+  count: number;
+  /** Consumer counts shown beside the total, e.g. `[{ label: 'bugs', count: 9 }]`. */
+  counts?: TableBulkBarCount[];
+  /** Empties the selection. */
+  onClear: () => void;
+  /** The consumer's bulk action — a button, or a select and a button. */
+  children?: ReactNode;
+}
+
+/**
+ * TableBulkBar — the bar that appears above a table while rows are selected.
+ * States the count, shows optional consumer counts, holds the consumer's
+ * action and offers Clear. It never takes focus, so a keyboard user stays on
+ * the checkbox they just toggled; the count is announced politely.
+ *
+ * @summary Bulk action bar for selected table rows
+ */
+export function TableBulkBar({
+  count,
+  counts,
+  onClear,
+  children,
+  className,
+  ...props
+}: TableBulkBarProps) {
+  if (count < 1) return null;
+  return (
+    <div
+      role="region"
+      aria-label="Bulk actions"
+      className={bdsClass('bds-table-bulk-bar', className)}
+      {...props}
+    >
+      <span className="bds-table-bulk-bar__count" role="status">
+        {count} selected
+      </span>
+      {counts && counts.length > 0 && (
+        <span className="bds-table-bulk-bar__counts">
+          {counts.map((c) => (
+            <span key={c.label}>
+              {c.count} {c.label}
+            </span>
+          ))}
+        </span>
+      )}
+      {children && <span className="bds-table-bulk-bar__action">{children}</span>}
+      <Button variant="ghost" size="sm" onClick={onClear}>
+        Clear
+      </Button>
+    </div>
+  );
+}

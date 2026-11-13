@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { expect, waitFor } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { Icon } from '@iconify/react';
 import {
   Table,
@@ -18,7 +18,11 @@ import {
   TableLogoCell,
   TableServiceTagCell,
   TableSubheader,
+  TableSelectHead,
+  TableSelectCell,
+  TableBulkBar,
 } from './Table';
+import { Select } from '../Select';
 import { Badge } from '../Badge';
 import { Tag } from '../Tag';
 import { Button } from '../Button';
@@ -180,6 +184,126 @@ export const SortableWithSelection: Story = {
       </TableBody>
     </Table>
   ),
+};
+
+const backlog = [
+  { id: 'BUG-101', title: 'Save button stays disabled', kind: 'bug' },
+  { id: 'BUG-102', title: 'Dates render in UTC', kind: 'bug' },
+  { id: 'UI-210', title: 'Align card gutters', kind: 'UI' },
+  { id: 'SUG-301', title: 'Add keyboard shortcuts', kind: 'suggestion' },
+];
+
+function SelectableBacklog() {
+  const [selected, setSelected] = useState<ReadonlySet<string>>(new Set());
+  const allSelected = selected.size === backlog.length;
+  const toggle = (id: string, on: boolean) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (on) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  const countOf = (kind: string) => backlog.filter((r) => selected.has(r.id) && r.kind === kind).length;
+
+  return (
+    <>
+      <TableBulkBar
+        count={selected.size}
+        counts={[
+          { label: 'bugs', count: countOf('bug') },
+          { label: 'UI', count: countOf('UI') },
+          { label: 'suggestions', count: countOf('suggestion') },
+        ]}
+        onClear={() => setSelected(new Set())}
+      >
+        <span>Add {selected.size} selected to</span>
+        <Select
+          aria-label="Release"
+          size="sm"
+          fullWidth={false}
+          options={[{ label: 'Release 1.4', value: '1.4' }, { label: 'Release 1.5', value: '1.5' }]}
+        />
+        <Button size="sm">Add</Button>
+      </TableBulkBar>
+      <Table aria-label="Backlog items">
+        <TableHeader>
+          <TableRow>
+            <TableSelectHead
+              checked={allSelected}
+              indeterminate={selected.size > 0 && !allSelected}
+              onCheckedChange={(on) => setSelected(on ? new Set(backlog.map((r) => r.id)) : new Set())}
+            />
+            <TableHead>Item</TableHead>
+            <TableHead>Type</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {backlog.map((r) => (
+            <TableRow key={r.id} selected={selected.has(r.id)}>
+              <TableSelectCell
+                label={`Select ${r.id} ${r.title}`}
+                checked={selected.has(r.id)}
+                onCheckedChange={(on) => toggle(r.id, on)}
+              />
+              <TableCell>{r.id} {r.title}</TableCell>
+              <TableCell>{r.kind}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </>
+  );
+}
+
+/**
+ * Controlled row selection. The consumer owns the selected set and passes it
+ * in: `TableSelectHead` carries the select-all / clear / mixed state,
+ * `TableSelectCell` names its row, `TableRow selected` sets `aria-selected`, and
+ * `TableBulkBar` appears while anything is selected with the count, the
+ * consumer's action, optional per-kind counts and Clear. Irreducible — the
+ * behaviour lives on sub-components, not `Table` args.
+ *
+ * @summary Row selection with a header checkbox and a bulk action bar
+ */
+export const RowSelectionBulkBar: Story = {
+  render: () => <SelectableBacklog />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const rows = canvas.getAllByRole('row').slice(1);
+    const header = canvas.getByRole('checkbox', { name: 'Select all rows' });
+
+    // Selection on, nothing picked: rows say so, no bar.
+    for (const row of rows) await expect(row).toHaveAttribute('aria-selected', 'false');
+    await expect(canvas.queryByRole('region', { name: 'Bulk actions' })).toBeNull();
+
+    // Space toggles a focused row checkbox; focus stays when the bar appears.
+    const first = canvas.getByRole('checkbox', { name: 'Select BUG-101 Save button stays disabled' });
+    first.focus();
+    await userEvent.keyboard(' ');
+    await expect(first).toBeChecked();
+    await expect(first).toHaveFocus();
+    await expect(rows[0]).toHaveAttribute('aria-selected', 'true');
+    const bar = canvas.getByRole('region', { name: 'Bulk actions' });
+    await expect(bar).toHaveTextContent('1 selected');
+    await expect(header).toHaveProperty('indeterminate', true);
+
+    // Header selects every row, then clears them all.
+    await userEvent.click(header);
+    for (const row of rows) await expect(row).toHaveAttribute('aria-selected', 'true');
+    await expect(bar).toHaveTextContent('4 selected');
+    await expect(bar).toHaveTextContent('2 bugs');
+    await expect(bar).toHaveTextContent('1 UI');
+    await expect(bar).toHaveTextContent('1 suggestions');
+    await expect(header).toBeChecked();
+    await userEvent.click(header);
+    await expect(canvas.queryByRole('region', { name: 'Bulk actions' })).toBeNull();
+
+    // Clear empties the selection.
+    await userEvent.click(first);
+    await userEvent.click(within(canvas.getByRole('region', { name: 'Bulk actions' })).getByRole('button', { name: 'Clear' }));
+    await expect(first).not.toBeChecked();
+    await expect(canvas.queryByRole('region', { name: 'Bulk actions' })).toBeNull();
+  },
 };
 
 /**
