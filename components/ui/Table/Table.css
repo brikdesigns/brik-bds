@@ -481,3 +481,47 @@
   box-shadow: inset calc(-1 * var(--bds-border-width-md)) 0 0 var(--bds-border-muted);
 }
 }
+
+/* ─── Selection column ───────────────────────────────────────── */
+
+.bds-table-select-cell {
+  /* Shrink to the checkbox so content columns keep their sizing. */
+  width: 1%;
+  white-space: nowrap;
+}
+
+/* ─── Bulk action bar ────────────────────────────────────────── */
+
+.bds-table-bulk-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--bds-gap-lg);
+  padding: var(--bds-padding-sm) var(--bds-padding-md);
+  margin-bottom: var(--bds-gap-md);
+  background-color: var(--bds-background-secondary);
+  border: var(--bds-border-width-sm) solid var(--bds-border-muted);
+  border-radius: var(--bds-border-radius-md);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-md);
+  color: var(--bds-text-primary);
+}
+
+.bds-table-bulk-bar__count {
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-md);
+}
+
+.bds-table-bulk-bar__counts {
+  display: flex;
+  gap: var(--bds-gap-md);
+  color: var(--bds-text-secondary);
+}
+
+.bds-table-bulk-bar__action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--bds-gap-sm);
+  margin-inline-start: auto;
+}
