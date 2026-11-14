@@ -19,6 +19,10 @@ const warned = new Set<string>();
  * @param prop       Prop name, for the warning body.
  * @param value      The incoming value — canonical, retired, or undefined.
  * @param retired    Retired spelling → canonical spelling.
+ * @param replacement  Retired spelling → the full replacement to print, for a
+ *                   value that moved to a different prop (`variant="negative"`
+ *                   → `variant="primary" tone="negative"`). Defaults to
+ *                   `prop="canonical"`.
  * @returns The canonical value; `value` unchanged when it is not retired.
  */
 export function resolveRetiredValue<T extends string>(
@@ -26,6 +30,7 @@ export function resolveRetiredValue<T extends string>(
   prop: string,
   value: T | undefined,
   retired: Record<string, T>,
+  replacement?: Record<string, string>,
 ): T | undefined {
   if (value === undefined) return undefined;
   const canonical = retired[value];
@@ -36,7 +41,7 @@ export function resolveRetiredValue<T extends string>(
     warned.add(key);
     console.warn(
       `[BDS ${component}] \`${prop}="${value}"\` is retired (ADR-033) — ` +
-        `use \`${prop}="${canonical}"\`. The old spelling is honoured for one ` +
+        `use \`${replacement?.[value] ?? `${prop}="${canonical}"`}\`. The old spelling is honoured for one ` +
         `minor version and then removed.`,
     );
   }

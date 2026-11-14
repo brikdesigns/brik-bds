@@ -24,14 +24,32 @@ Triggers an event or action. A single unified component covering four render sha
 
 ## Variants
 
-`ButtonVariant` ships **8 values**. Per ADR-010 §components-without-a-variant-axis, Button variants are pure hierarchy/color (no `role` / icon / context semantic differences) — they collapse to a single `variant` Control on the Playground rather than per-variant stories. Mirrors Carbon's Button (single `Default` with `kind` Control).
+Three orthogonal props, one concept each (ADR-033 § 2). `variant` is the **form**; `tone` is the **valence**; `emphasis` is the **hue source**. They collapse to Controls on the Playground rather than per-value stories (ADR-010 §components-without-a-variant-axis).
 
 <Canvas of={Stories.Default} />
 
-- **6 brand variants** — `primary` / `outline` / `secondary` / `ghost` / `inverse` / `on-color`. General action hierarchy.
-- **2 system valence variants** — `negative` / `positive`. Semantic action meaning.
+| Prop | Values | Default |
+|---|---|---|
+| `variant` (form) | `primary` · `outline` · `secondary` · `ghost` | `primary` |
+| `tone` (valence) | `negative` · `positive` | none |
+| `emphasis` (hue source) | `inverse` · `on-color` | none |
 
-Four earlier spellings (`destructive` / `danger` / `danger-outline` / `danger-ghost`) still resolve to `negative` — see [Retired spellings](#retired-spellings) below.
+### Combinations that ship
+
+| | `primary` | `outline` | `secondary` | `ghost` |
+|---|---|---|---|---|
+| (no tone) | yes | yes | yes | yes |
+| `tone="negative"` | yes — solid system red | yes — red text + border | **no** | yes — red text |
+| `tone="positive"` | yes — solid system green | **no** | **no** | **no** |
+| `emphasis="inverse"` | yes | **no** | **no** | **no** |
+| `emphasis="on-color"` | yes | **no** | **no** | **no** |
+
+A pairing that does not ship is dropped to its form with a one-time console warning, never half-styled. The reasons:
+
+- **`secondary` + any tone** — `secondary` is a neutral grayscale surface fill; a negative or positive tint on it needs a surface/text pairing the token set has not minted. Add it in Figma first.
+- **`positive` on `outline` / `ghost`** — `positive` confirms a completed action; no caller wants a low-emphasis confirmation, so default-deny (ADR-033 § 6) applies. The negative pair exists because a destructive action must be reachable at every emphasis rung.
+- **`emphasis` on `outline` / `secondary` / `ghost`** — `inverse` and `on-color` each paint the solid fill; a transparent or bordered form has no fill for them to paint.
+- **`emphasis` alongside `tone`** — both pick what colours the fill, so they cannot both win. `tone` takes it and `emphasis` is dropped.
 
 State props (`disabled`, `loading`, `fullWidth`, `selected`) and composition slots (`iconBefore`, `iconAfter`) are also Controls in the Playground, not standalone stories — per ADR-010 Q2.
 
@@ -39,14 +57,16 @@ State props (`disabled`, `loading`, `fullWidth`, `selected`) and composition slo
 
 ### Retired spellings
 
-Four spellings resolve to `negative` at runtime (`resolveRetiredValue`) for back-compat. Per ADR-033 §1 they're honoured for one minor then removed, and they are **not** members of the `ButtonVariant` type:
+These `variant` values resolve at runtime (`resolveRetiredValue`) and warn once. Per ADR-033 they're honoured for one minor then removed, and they are **not** members of the `ButtonVariant` type:
 
-- `destructive` → `negative`
-- `danger` → `negative`
-- `danger-outline` → `negative`
-- `danger-ghost` → `negative`
+| Retired | Use instead |
+|---|---|
+| `variant="negative"` · `destructive` · `danger` · `danger-outline` · `danger-ghost` | `tone="negative"` |
+| `variant="positive"` | `tone="positive"` |
+| `variant="inverse"` | `emphasis="inverse"` |
+| `variant="on-color"` | `emphasis="on-color"` |
 
-New code picks from the 8 above.
+An explicit `tone` / `emphasis` wins over the one a retired `variant` value implies.
 
 ## Modes
 

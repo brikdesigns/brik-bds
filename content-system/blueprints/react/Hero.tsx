@@ -31,7 +31,7 @@
  *
  * `breadcrumb` and `eyebrow` are optional composed nodes (used by
  * `--with-pricing-card`); they render above the eyebrow text when present and
- * are absent for the simpler layouts. `ctaVariant` lets the pricing-card
+ * are absent for the simpler layouts. `ctaEmphasis` lets the pricing-card
  * variant render its `inverse` CTA against the service-line-tinted surface.
  * `data-service-line` (a plain attribute forwarded via `...rest`) drives the
  * service-token cascade in `Hero.css`.
@@ -60,7 +60,7 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
 
 import { Button } from '../../../components';
-import type { ButtonVariant } from '../../../components/ui/Button';
+import type { ButtonVariant, ButtonEmphasis } from '../../../components/ui/Button';
 import { bdsClass } from '../../../components/utils';
 import type {
   BlueprintAlign,
@@ -159,11 +159,14 @@ export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
    */
   eyebrow?: ReactNode;
   /**
-   * Button variant for the primary CTA. Defaults to `primary`; the
-   * `--with-pricing-card` variant passes `inverse` to sit on its
-   * service-line-tinted surface.
+   * Button form for the primary CTA. Defaults to `primary`.
    */
   ctaVariant?: ButtonVariant;
+  /**
+   * Button hue source for the primary CTA; the `--with-pricing-card` variant
+   * passes `inverse` to sit on its service-line-tinted surface.
+   */
+  ctaEmphasis?: ButtonEmphasis;
 }
 
 /**
@@ -197,6 +200,7 @@ function HeroShell({
   breadcrumb,
   eyebrow,
   ctaVariant = 'primary',
+  ctaEmphasis,
   className,
   ...rest
 }: HeroProps) {
@@ -231,6 +235,7 @@ function HeroShell({
             <Button
               {...(isActionCta(cta) ? { onClick: cta.onClick } : { href: cta.url })}
               variant={ctaVariant}
+              emphasis={ctaEmphasis}
               size="md"
             >
               {cta.label}

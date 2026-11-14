@@ -65,7 +65,7 @@ import { Button, LinkButton, IconButton } from '@brikdesigns/bds';
 
 ## Variants
 
-Twelve variants. Pick by **action emphasis** and **destructive intent**, not by aesthetics.
+Four forms (`variant`), plus a valence (`tone`) and a hue source (`emphasis`) that layer on top. Pick by **action emphasis** and **destructive intent**, not by aesthetics.
 
 ### Standard ladder
 
@@ -97,28 +97,27 @@ Twelve variants. Pick by **action emphasis** and **destructive intent**, not by 
 
 ### Destructive
 
-`negative` is the destructive action — confirm dialogs, delete-and-go flows.
+`tone="negative"` is the destructive action — confirm dialogs, delete-and-go flows. It is a separate axis from the form, so a destructive action can sit at any rung of the ladder it ships on: `primary`, `outline` or `ghost`.
 
-<ComponentPreview code={`<Button variant="negative">Delete project</Button>`}>
-  <BDS.Button variant="negative">Delete project</BDS.Button>
+<ComponentPreview code={`<Button tone="negative">Delete project</Button>
+<Button variant="outline" tone="negative">Delete</Button>
+<Button variant="ghost" tone="negative">Remove</Button>`}>
+  <BDS.Button tone="negative">Delete project</BDS.Button>
+  <BDS.Button variant="outline" tone="negative">Delete</BDS.Button>
+  <BDS.Button variant="ghost" tone="negative">Remove</BDS.Button>
 </ComponentPreview>
 
-The `danger` / `danger-outline` / `danger-ghost` trio that used to sit below it was
-retired in #1957: it carried the brand accent-red rather than the system negative, and
-had zero call sites across every consumer repo. The retired spellings still resolve to
-`negative` for one minor and warn once in the console.
+`secondary` takes no tone, and `positive` ships on `primary` only — the full matrix and the reasons are in Storybook → Components/button → *Combinations that ship*.
 
-Lower-emphasis destructive (an outline or ghost button that is *also* negative) is not
-expressible today, because `variant` carries form and valence on one axis. Tracked in
-#1983.
+The `danger` / `danger-outline` / `danger-ghost` trio was retired in #1957: it carried the brand accent-red rather than the system negative. `variant="negative"` and `variant="positive"` (#1983) and the old `destructive` / `danger*` spellings still resolve to `tone` for one minor and warn once in the console.
 
 ### State variants
 
-`positive` confirms a completed action. `inverse` and `on-color` are for placement on dark or branded surfaces. To mark the active option in a group, pass the boolean `selected` prop on top of any variant — it is a state modifier, not a variant value.
+`tone="positive"` confirms a completed action. `emphasis="inverse"` and `emphasis="on-color"` are for placement on dark or branded surfaces. To mark the active option in a group, pass the boolean `selected` prop on top of any variant — it is a state modifier, not a variant value.
 
-<ComponentPreview code={`<BDS.Button variant="positive">Saved</BDS.Button>
+<ComponentPreview code={`<BDS.Button tone="positive">Saved</BDS.Button>
 <BDS.Button variant="outline" selected>Selected</BDS.Button>`}>
-  <BDS.Button variant="positive">Saved</BDS.Button>
+  <BDS.Button tone="positive">Saved</BDS.Button>
   <BDS.Button variant="outline" selected>Selected</BDS.Button>
 </ComponentPreview>
 
@@ -198,7 +197,7 @@ An icon-only button with a **required** `label` prop for accessibility. The labe
 ```tsx
 // Preferred — unified Button API
 <Button icon={<CloseIcon />} label="Close dialog" variant="ghost" />
-<Button icon={<TrashIcon />} label="Delete item" variant="negative" />
+<Button icon={<TrashIcon />} label="Delete item" tone="negative" />
 
 // Deprecated — thin wrapper, same result
 <IconButton icon={<CloseIcon />} label="Close dialog" variant="ghost" />
@@ -231,6 +230,8 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 | Prop | Type | Default |
 |---|---|---|
 | `variant` | `ButtonVariant` | `'primary'` |
+| `tone` | `ButtonTone` | — |
+| `emphasis` | `ButtonEmphasis` | — |
 | `size` | `ButtonSize` | `'md'` |
 | `iconBefore` | `ReactNode` | — |
 | `iconAfter` | `ReactNode` | — |
@@ -246,6 +247,8 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 |---|---|---|
 | `href` | `string` *(required)* | — |
 | `variant` | `ButtonVariant` | `'primary'` |
+| `tone` | `ButtonTone` | — |
+| `emphasis` | `ButtonEmphasis` | — |
 | `size` | `ButtonSize` | `'md'` |
 | `iconBefore` | `ReactNode` | — |
 | `iconAfter` | `ReactNode` | — |
@@ -261,6 +264,8 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 | `icon` | `ReactNode` *(required)* | — |
 | `label` | `string` *(required)* | — |
 | `variant` | `ButtonVariant` | `'ghost'` |
+| `tone` | `ButtonTone` | — |
+| `emphasis` | `ButtonEmphasis` | — |
 | `size` | `ButtonSize` | `'md'` |
 | `loading` | `boolean` | `false` |
 | `selected` | `boolean` | `false` |
@@ -268,11 +273,9 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 ### Type unions
 
 ```ts
-type ButtonVariant =
-  | 'primary' | 'outline' | 'secondary' | 'ghost'
-  | 'inverse' | 'on-color'
-  | 'danger' | 'danger-outline' | 'danger-ghost' | 'destructive'
-  | 'positive';
+type ButtonVariant = 'primary' | 'outline' | 'secondary' | 'ghost';
+type ButtonTone     = 'negative' | 'positive';
+type ButtonEmphasis = 'inverse' | 'on-color';
 
 type ButtonSize = 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
 ```

@@ -40,9 +40,14 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ASTRO_DIR = join(HERE, '../content-system/blueprints/astro');
 const BUTTON_TSX = join(HERE, '../components/ui/Button/Button.tsx');
 
-const VARIANTS: ButtonVariant[] = [
-  'primary', 'outline', 'secondary', 'ghost', 'inverse', 'on-color',
-  'destructive', 'positive', 'danger', 'danger-outline', 'danger-ghost',
+// Every shipped form × tone × emphasis combination (#1983) — an unshipped one is
+// dropped by Button with a warning, so it cannot add a class to the contract.
+type Axes = { variant: ButtonVariant; tone?: 'negative' | 'positive'; emphasis?: 'inverse' | 'on-color' };
+const AXES: Axes[] = [
+  { variant: 'primary' }, { variant: 'outline' }, { variant: 'secondary' }, { variant: 'ghost' },
+  { variant: 'primary', tone: 'negative' }, { variant: 'outline', tone: 'negative' },
+  { variant: 'ghost', tone: 'negative' }, { variant: 'primary', tone: 'positive' },
+  { variant: 'primary', emphasis: 'inverse' }, { variant: 'primary', emphasis: 'on-color' },
 ];
 const SIZES: ButtonSize[] = ['tiny', 'sm', 'md', 'lg', 'xl'];
 
@@ -53,14 +58,14 @@ function contractTokens(): Set<string> {
   const tokens = new Set<string>();
 
   // Outer classes, exhaustively across the prop space that drives them.
-  for (const variant of VARIANTS) {
+  for (const { variant, tone, emphasis } of AXES) {
     for (const size of SIZES) {
       for (const iconOnly of [false, true]) {
         for (const fullWidth of [false, true]) {
           for (const loading of [false, true]) {
             for (const selected of [false, true]) {
               const cls = composeButtonClasses({
-                variant, size, iconOnly, fullWidth, loading, selected,
+                variant, tone, emphasis, size, iconOnly, fullWidth, loading, selected,
               });
               for (const m of cls.match(BUTTON_TOKEN) ?? []) tokens.add(m);
             }

@@ -571,22 +571,22 @@ describe('rule 5 — `inverse` on the emphasis axis (§ Amendments, #2279)', () 
   });
 
   it('still denies a neighbouring word the amendment did NOT admit', () => {
-    // `on-color` is the same axis by the same evidence (§ Amendments) and is
-    // deliberately left out until #1983 gives it a caller. Default-deny has to
-    // keep holding for it, or the amendment read as "open the axis".
+    // `on-color` was the neighbour here until #1983 gave it a caller and a § 6
+    // amendment. Default-deny has to keep holding for any other word, or the
+    // amendments read as "open the axis".
     const { code, out } = run({
-      tsx: `${CLEAN_TSX}export type ChipEmphasis = 'neutral' | 'on-color';\n`,
+      tsx: `${CLEAN_TSX}export type ChipEmphasis = 'neutral' | 'knockout';\n`,
     });
     expect(code).toBe(1);
-    expect(out).toMatch(/ChipEmphasis\.on-color — `on-color` is on no closed list for the emphasis axis/);
+    expect(out).toMatch(/ChipEmphasis\.knockout — `knockout` is on no closed list for the emphasis axis/);
     expect(out).toMatch(/needs a § 6 amendment/);
   });
 
   it('makes ButtonVariant\'s three-axis mixing visible to rule 3', () => {
-    // The one live violation the amendment surfaces on untouched code, and the
-    // reason a baseline row keyed to #1983 exists. Before `inverse` was on a
-    // closed list, only `negative`/`positive` were claimed — one axis, so
-    // mixedAxes() returned null and the union read as clean.
+    // The violation #2279 surfaced and #1983 then fixed — planted here so the
+    // gate keeps catching it. Before `inverse` was on a closed list, only
+    // `negative`/`positive` were claimed — one axis, so mixedAxes() returned
+    // null and the union read as clean.
     const { code, out } = run({
       tsx: `${CLEAN_TSX}export type ButtonVariant = 'primary' | 'ghost' | 'inverse' | 'negative';\n`,
     });

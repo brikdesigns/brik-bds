@@ -1,5 +1,5 @@
 import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
-import { Button, type ButtonVariant, type ButtonSize } from './Button';
+import { Button, type ButtonVariant, type ButtonTone, type ButtonEmphasis, type ButtonSize } from './Button';
 
 /**
  * IconButton props — label is required for accessibility.
@@ -11,6 +11,10 @@ import { Button, type ButtonVariant, type ButtonSize } from './Button';
 export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   /** Visual style variant */
   variant?: ButtonVariant;
+  /** Valence — see `Button` */
+  tone?: ButtonTone;
+  /** Hue source — see `Button` */
+  emphasis?: ButtonEmphasis;
   /** Size of the button */
   size?: ButtonSize;
   /** The icon to render */
@@ -34,7 +38,7 @@ export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
  * @summary Deprecated icon-only button wrapper — delegates to Button
  */
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
-  { icon, label, variant, size, loading, selected, ...rest },
+  { icon, label, variant, tone, emphasis, size, loading, selected, ...rest },
   ref,
 ) {
   return (
@@ -43,6 +47,8 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
       icon={icon}
       label={label}
       variant={variant}
+      tone={tone}
+      emphasis={emphasis}
       size={size}
       loading={loading}
       selected={selected}

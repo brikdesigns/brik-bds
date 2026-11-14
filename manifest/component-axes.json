@@ -94,11 +94,7 @@
       "primary",
       "outline",
       "secondary",
-      "ghost",
-      "inverse",
-      "on-color",
-      "negative",
-      "positive"
+      "ghost"
     ],
     "size": [
       "xs",

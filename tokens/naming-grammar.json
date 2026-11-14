@@ -195,7 +195,7 @@
     "tone": { "concept": "valence", "valuesFrom": "valence" },
     "status": { "concept": "presence/lifecycle", "values": null },
     "variant": { "concept": "form", "values": null },
-    "emphasis": { "concept": "hue source", "values": ["neutral", "brand", "accent", "inverse"] },
+    "emphasis": { "concept": "hue source", "values": ["neutral", "brand", "accent", "inverse", "on-color"] },
     "appearance": { "concept": "fill treatment", "values": ["solid", "subtle", "outline"] },
     "color": { "concept": "accent hue", "values": ["neutral", "blue", "green", "orange", "purple", "yellow", "red"] },
     "density": { "concept": "spacing compression", "values": ["comfortable", "compact"] },
