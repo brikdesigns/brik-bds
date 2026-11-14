@@ -13,13 +13,13 @@
 /* ─── Sizes ──────────────────────────────────────────────────── */
 /* bds-lint-ignore — Figma-driven spinner dimensions */
 
-.bds-spinner--sm {
+.bds-spinner--size-sm {
   width: var(--bds-size-400);
   height: var(--bds-size-400);
   border-width: var(--bds-border-width-lg);
 }
 
-.bds-spinner--lg {
+.bds-spinner--size-lg {
   width: var(--bds-size-1200);
   height: var(--bds-size-1200);
   border-width: var(--bds-border-width-huge);

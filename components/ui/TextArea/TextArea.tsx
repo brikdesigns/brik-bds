@@ -89,7 +89,7 @@ export function TextArea({
           htmlFor={inputId}
           className={bdsClass(
             'bds-text-area__label',
-            `bds-text-area__label--${size}`,
+            `bds-text-area__label--size-${size}`,
             hasError && 'bds-text-area__label--tone-negative',
           )}
         >
@@ -108,7 +108,7 @@ export function TextArea({
         onChange={onChange}
         className={bdsClass(
           'bds-text-area-field',
-          `bds-text-area-field--${size}`,
+          `bds-text-area-field--size-${size}`,
           `bds-text-area-field--resize-${resize}`,
           hasError && 'bds-text-area-field--tone-negative',
           className,

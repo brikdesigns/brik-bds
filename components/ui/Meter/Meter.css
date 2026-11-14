@@ -24,17 +24,17 @@
   overflow: hidden;
 }
 
-.bds-meter__track--sm {
+.bds-meter__track--size-sm {
   height: 8px; /* bds-lint-ignore — Figma-driven bar height */
   border-radius: 4px; /* bds-lint-ignore — half of bar height */
 }
 
-.bds-meter__track--md {
+.bds-meter__track--size-md {
   height: 12px; /* bds-lint-ignore — Figma-driven bar height */
   border-radius: 6px; /* bds-lint-ignore — half of bar height */
 }
 
-.bds-meter__track--lg {
+.bds-meter__track--size-lg {
   height: 16px; /* bds-lint-ignore — Figma-driven bar height */
   border-radius: 8px; /* bds-lint-ignore — half of bar height */
 }
@@ -46,15 +46,15 @@
   transition: width 0.3s ease;
 }
 
-.bds-meter__fill--sm {
+.bds-meter__fill--size-sm {
   border-radius: 4px; /* bds-lint-ignore — half of bar height */
 }
 
-.bds-meter__fill--md {
+.bds-meter__fill--size-md {
   border-radius: 6px; /* bds-lint-ignore — half of bar height */
 }
 
-.bds-meter__fill--lg {
+.bds-meter__fill--size-lg {
   border-radius: 8px; /* bds-lint-ignore — half of bar height */
 }
 

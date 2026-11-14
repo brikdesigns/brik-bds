@@ -24,9 +24,9 @@
   font-family: var(--bds-font-family-label);
 }
 
-.bds-toggle-switch__label--sm { font-size: var(--bds-label-sm); }
-.bds-toggle-switch__label--md { font-size: var(--bds-label-md); }
-.bds-toggle-switch__label--lg { font-size: var(--bds-label-lg); }
+.bds-toggle-switch__label--size-sm { font-size: var(--bds-label-sm); }
+.bds-toggle-switch__label--size-md { font-size: var(--bds-label-md); }
+.bds-toggle-switch__label--size-lg { font-size: var(--bds-label-lg); }
 
 /* ─── Hidden input ───────────────────────────────────────────── */
 

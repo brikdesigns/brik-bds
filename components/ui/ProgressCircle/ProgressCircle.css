@@ -82,15 +82,15 @@
   pointer-events: none;
 }
 
-.bds-progress-circle__center--sm {
+.bds-progress-circle__center--size-sm {
   font-size: var(--bds-body-md);
 }
 
-.bds-progress-circle__center--md {
+.bds-progress-circle__center--size-md {
   font-size: var(--bds-heading-tiny);
 }
 
-.bds-progress-circle__center--lg {
+.bds-progress-circle__center--size-lg {
   font-size: var(--bds-heading-sm);
 }
 }

@@ -175,7 +175,7 @@ export const InteractiveListItem = forwardRef<InteractiveListItemElement, Intera
           className={bdsClass(
             'bds-interactive-list-item',
             'bds-interactive-list-item--readonly',
-            `bds-interactive-list-item--${size}`,
+            `bds-interactive-list-item--size-${size}`,
             className,
           )}
           {...(props as unknown as HTMLAttributes<HTMLDivElement>)}
@@ -196,7 +196,7 @@ export const InteractiveListItem = forwardRef<InteractiveListItemElement, Intera
           ref={ref as Ref<HTMLLabelElement>}
           className={bdsClass(
             'bds-interactive-list-item',
-            `bds-interactive-list-item--${size}`,
+            `bds-interactive-list-item--size-${size}`,
             isSelected && 'bds-interactive-list-item--selected',
             isDisabled && 'bds-interactive-list-item--disabled',
             className,
@@ -223,7 +223,7 @@ export const InteractiveListItem = forwardRef<InteractiveListItemElement, Intera
         type="button"
         className={bdsClass(
           'bds-interactive-list-item',
-          `bds-interactive-list-item--${size}`,
+          `bds-interactive-list-item--size-${size}`,
           selected && 'bds-interactive-list-item--selected',
           disabled && 'bds-interactive-list-item--disabled',
           className,

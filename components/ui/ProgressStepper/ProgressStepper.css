@@ -34,8 +34,8 @@
   align-items: center;
 }
 
-.bds-progress-stepper--variant-dots.bds-progress-stepper--sm { gap: var(--bds-gap-sm); }
-.bds-progress-stepper--variant-dots.bds-progress-stepper--md { gap: var(--bds-gap-md); }
+.bds-progress-stepper--variant-dots.bds-progress-stepper--size-sm { gap: var(--bds-gap-sm); }
+.bds-progress-stepper--variant-dots.bds-progress-stepper--size-md { gap: var(--bds-gap-md); }
 
 /* ─── Step row ───────────────────────────────────────────────── */
 
@@ -48,11 +48,11 @@
   cursor: pointer;
 }
 
-.bds-progress-stepper__step-row--sm {
+.bds-progress-stepper__step-row--size-sm {
   gap: var(--bds-gap-xs);
 }
 
-.bds-progress-stepper__step-row--md {
+.bds-progress-stepper__step-row--size-md {
   gap: var(--bds-gap-sm);
 }
 
@@ -69,13 +69,13 @@
   transition: all 0.15s ease;
 }
 
-.bds-progress-stepper__circle--sm {
+.bds-progress-stepper__circle--size-sm {
   width: 24px; /* bds-lint-ignore — Figma-driven step circle size */
   height: 24px; /* bds-lint-ignore — Figma-driven step circle size */
   font-size: var(--bds-body-tiny);
 }
 
-.bds-progress-stepper__circle--md {
+.bds-progress-stepper__circle--size-md {
   width: 32px; /* bds-lint-ignore — Figma-driven step circle size */
   height: 32px; /* bds-lint-ignore — Figma-driven step circle size */
   font-size: var(--bds-body-sm);
@@ -103,11 +103,11 @@
   transition: color 0.15s ease;
 }
 
-.bds-progress-stepper__label--sm {
+.bds-progress-stepper__label--size-sm {
   font-size: var(--bds-body-sm);
 }
 
-.bds-progress-stepper__label--md {
+.bds-progress-stepper__label--size-md {
   font-size: var(--bds-body-md);
 }
 
@@ -136,11 +136,11 @@
   margin-top: var(--bds-space-50);
 }
 
-.bds-progress-stepper__desc--sm {
+.bds-progress-stepper__desc--size-sm {
   font-size: var(--bds-body-tiny);
 }
 
-.bds-progress-stepper__desc--md {
+.bds-progress-stepper__desc--size-md {
   font-size: var(--bds-body-sm);
 }
 
@@ -153,11 +153,11 @@
   transition: background-color 0.15s ease;
 }
 
-.bds-progress-stepper__connector--sm {
+.bds-progress-stepper__connector--size-sm {
   margin-left: 11px; /* bds-lint-ignore — (24 - 2) / 2 to center under circle */
 }
 
-.bds-progress-stepper__connector--md {
+.bds-progress-stepper__connector--size-md {
   margin-left: 15px; /* bds-lint-ignore — (32 - 2) / 2 to center under circle */
 }
 
@@ -194,11 +194,11 @@
 }
 
 /* Center the line on the circle: (circle - 2) / 2 */
-.bds-progress-stepper--orientation-horizontal .bds-progress-stepper__connector--sm {
+.bds-progress-stepper--orientation-horizontal .bds-progress-stepper__connector--size-sm {
   margin-top: 11px; /* bds-lint-ignore — (24 - 2) / 2 to center beside circle */
 }
 
-.bds-progress-stepper--orientation-horizontal .bds-progress-stepper__connector--md {
+.bds-progress-stepper--orientation-horizontal .bds-progress-stepper__connector--size-md {
   margin-top: 15px; /* bds-lint-ignore — (32 - 2) / 2 to center beside circle */
 }
 

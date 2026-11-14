@@ -369,14 +369,14 @@ function renderCardMedia(media: CardMedia) {
     // constrains the caller to valid pairs).
     const size = media.logo.size ?? 'md';
     return (
-      <div className={bdsClass('bds-card__media', `bds-card__media--${size}`)}>
+      <div className={bdsClass('bds-card__media', `bds-card__media--size-${size}`)}>
         <Logo {...(media.logo as LogoProps)} size={size} />
       </div>
     );
   }
   const { src, alt, size = 'md', fit = 'contain' } = media.image;
   return (
-    <div className={bdsClass('bds-card__media', `bds-card__media--${size}`)}>
+    <div className={bdsClass('bds-card__media', `bds-card__media--size-${size}`)}>
       <Image src={src} alt={alt} ratio="1-1" fit={fit} />
     </div>
   );

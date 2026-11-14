@@ -172,7 +172,7 @@ import { Breadcrumb } from '../../components/ui/Breadcrumb/Breadcrumb';
 
 ```astro
 {/* Astro composes BDS classes via the canonical button pattern */}
-<a href={cta.url} class="bds-button bds-button--primary bds-button--md">
+<a href={cta.url} class="bds-button bds-button--primary bds-button--size-md">
   <span class="bds-button__content">{cta.label}</span>
 </a>
 ```

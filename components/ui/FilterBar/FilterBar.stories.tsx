@@ -438,8 +438,8 @@ export const InteractionTestSize: Story = {
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByRole('button', { name: 'Clear filters' })).toHaveClass('bds-button--sm');
-    await expect(canvas.getByRole('button', { name: 'Export' })).toHaveClass('bds-button--sm');
+    await expect(canvas.getByRole('button', { name: 'Clear filters' })).toHaveClass('bds-button--size-sm');
+    await expect(canvas.getByRole('button', { name: 'Export' })).toHaveClass('bds-button--size-sm');
   },
 };
 

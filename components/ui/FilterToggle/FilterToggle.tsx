@@ -57,7 +57,7 @@ export function FilterToggle({
       type="button"
       className={bdsClass(
         'bds-filter-toggle',
-        `bds-filter-toggle--${size}`,
+        `bds-filter-toggle--size-${size}`,
         active && 'bds-filter-toggle--active',
         disabled && 'bds-filter-toggle--disabled',
         className,

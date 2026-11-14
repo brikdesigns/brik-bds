@@ -35,9 +35,9 @@
 }
 
 /* Label sizes */
-.bds-date-picker--sm .bds-date-picker__label { font-size: var(--bds-label-sm); }
-.bds-date-picker--md .bds-date-picker__label { font-size: var(--bds-label-md); }
-.bds-date-picker--lg .bds-date-picker__label { font-size: var(--bds-label-lg); }
+.bds-date-picker--size-sm .bds-date-picker__label { font-size: var(--bds-label-sm); }
+.bds-date-picker--size-md .bds-date-picker__label { font-size: var(--bds-label-md); }
+.bds-date-picker--size-lg .bds-date-picker__label { font-size: var(--bds-label-lg); }
 
 /* ─── Trigger ────────────────────────────────────────────────── */
 
@@ -80,9 +80,9 @@
 }
 
 /* Trigger sizes — heights match Button scale (8px steps, 4px grid) */
-.bds-date-picker--sm .bds-date-picker__trigger { font-size: var(--bds-body-sm); height: 32px; }
-.bds-date-picker--md .bds-date-picker__trigger { font-size: var(--bds-body-md); height: 40px; }
-.bds-date-picker--lg .bds-date-picker__trigger { font-size: var(--bds-body-lg); height: 48px; }
+.bds-date-picker--size-sm .bds-date-picker__trigger { font-size: var(--bds-body-sm); height: 32px; }
+.bds-date-picker--size-md .bds-date-picker__trigger { font-size: var(--bds-body-md); height: 40px; }
+.bds-date-picker--size-lg .bds-date-picker__trigger { font-size: var(--bds-body-lg); height: 48px; }
 
 /* ─── Trigger placeholder & caret ────────────────────────────── */
 

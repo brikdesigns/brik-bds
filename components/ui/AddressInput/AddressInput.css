@@ -32,11 +32,11 @@
   text-transform: var(--bds-text-transform-field-label);
 }
 
-.bds-address-input--sm .bds-address-input__label {
+.bds-address-input--size-sm .bds-address-input__label {
   font-size: var(--bds-label-sm);
 }
 
-.bds-address-input--md .bds-address-input__label {
+.bds-address-input--size-md .bds-address-input__label {
   font-size: var(--bds-label-md);
 }
 
@@ -80,14 +80,14 @@
 
 /* Size — heights match the Button scale (8px steps on the 4px grid).
    Left padding clears the leading icon (icon inset + 24px glyph slot). */
-.bds-address-input--md .bds-address-input__input {
+.bds-address-input--size-md .bds-address-input__input {
   font-size: var(--bds-body-md);
   height: var(--bds-size-1000);
   padding-right: var(--bds-padding-sm);
   padding-left: calc(var(--bds-padding-sm) + 24px);
 }
 
-.bds-address-input--sm .bds-address-input__input {
+.bds-address-input--size-sm .bds-address-input__input {
   font-size: var(--bds-body-sm);
   height: var(--bds-size-800);
   padding-right: var(--bds-padding-xs);

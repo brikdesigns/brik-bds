@@ -34,19 +34,19 @@
      - sm: narrow contexts (DevBar slot panels, popovers) where the
        default padding crowds the text column. */
 
-  .bds-interactive-list-item--md {
+  .bds-interactive-list-item--size-md {
     gap: var(--bds-gap-md);
     padding: var(--bds-padding-md) var(--bds-padding-lg);
   }
 
-  .bds-interactive-list-item--sm {
+  .bds-interactive-list-item--size-sm {
     gap: var(--bds-gap-sm);
     padding: var(--bds-padding-sm);
   }
 
   /* `sm` is for narrow contexts (DevBar slot panels, popovers) — the
      default `--bds-label-md` title crowds these layouts and reads as oversized. */
-  .bds-interactive-list-item--sm .bds-interactive-list-item__title {
+  .bds-interactive-list-item--size-sm .bds-interactive-list-item__title {
     font-size: var(--bds-label-sm);
   }
 

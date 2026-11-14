@@ -47,21 +47,21 @@
 
 /* ─── Sizes ───────────────────────────────────────────────────── */
 
-.bds-chip--sm {
+.bds-chip--size-sm {
   padding: var(--bds-padding-tiny) var(--bds-padding-sm);
   font-size: var(--bds-label-tiny);
   gap: var(--bds-gap-xs);
   height: var(--bds-size-700);
 }
 
-.bds-chip--md {
+.bds-chip--size-md {
   padding: var(--bds-padding-sm) var(--bds-padding-md);
   font-size: var(--bds-label-sm);
   gap: var(--bds-gap-sm);
   height: var(--bds-size-800);
 }
 
-.bds-chip--lg {
+.bds-chip--size-lg {
   padding: var(--bds-padding-sm) var(--bds-padding-md);
   font-size: var(--bds-label-md);
   gap: var(--bds-gap-md);
@@ -107,20 +107,20 @@
 }
 
 /* Icon font-size matches container so the glyph fills the box */
-.bds-chip--sm .bds-chip__icon {
+.bds-chip--size-sm .bds-chip__icon {
   --bds-chip-sm-icon-size: 10px; /* component-local micro-graphic size; no registry rung (#2138) */
   width: var(--bds-chip-sm-icon-size);
   height: var(--bds-chip-sm-icon-size);
   font-size: var(--bds-label-tiny);
 }
 
-.bds-chip--md .bds-chip__icon {
+.bds-chip--size-md .bds-chip__icon {
   width: var(--bds-size-400);
   height: var(--bds-size-400);
   font-size: var(--bds-icon-sm);
 }
 
-.bds-chip--lg .bds-chip__icon {
+.bds-chip--size-lg .bds-chip__icon {
   width: var(--bds-icon-lg);
   height: var(--bds-icon-lg);
   font-size: var(--bds-label-xl);

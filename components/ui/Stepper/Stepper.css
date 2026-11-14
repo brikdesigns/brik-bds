@@ -11,32 +11,32 @@
 
 /* ─── Size ────────────────────────────────────────────── */
 
-.bds-stepper--sm { gap: var(--bds-gap-sm); }
-.bds-stepper--md { gap: var(--bds-gap-md); }
-.bds-stepper--lg { gap: var(--bds-gap-md); }
+.bds-stepper--size-sm { gap: var(--bds-gap-sm); }
+.bds-stepper--size-md { gap: var(--bds-gap-md); }
+.bds-stepper--size-lg { gap: var(--bds-gap-md); }
 
-.bds-stepper--sm .bds-stepper__button {
+.bds-stepper--size-sm .bds-stepper__button {
   width: var(--bds-size-700);
   height: var(--bds-size-700);
   border-radius: var(--bds-border-radius-sm);
   font-size: var(--bds-body-tiny);
 }
-.bds-stepper--md .bds-stepper__button {
+.bds-stepper--size-md .bds-stepper__button {
   width: var(--bds-size-900);
   height: var(--bds-size-900);
   border-radius: var(--bds-border-radius-md);
   font-size: var(--bds-body-xs);
 }
-.bds-stepper--lg .bds-stepper__button {
+.bds-stepper--size-lg .bds-stepper__button {
   width: var(--bds-size-1100);
   height: var(--bds-size-1100);
   border-radius: var(--bds-border-radius-md);
   font-size: var(--bds-body-sm);
 }
 
-.bds-stepper--sm .bds-stepper__value { font-size: var(--bds-label-sm); min-width: 28px; }
-.bds-stepper--md .bds-stepper__value { font-size: var(--bds-label-md); min-width: 36px; }
-.bds-stepper--lg .bds-stepper__value { font-size: var(--bds-label-lg); min-width: 44px; }
+.bds-stepper--size-sm .bds-stepper__value { font-size: var(--bds-label-sm); min-width: 28px; }
+.bds-stepper--size-md .bds-stepper__value { font-size: var(--bds-label-md); min-width: 36px; }
+.bds-stepper--size-lg .bds-stepper__value { font-size: var(--bds-label-lg); min-width: 44px; }
 
 /* ─── Buttons ─────────────────────────────────────────── */
 

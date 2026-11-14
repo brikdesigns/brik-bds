@@ -413,7 +413,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
       <div
         className={bdsClass(
           'bds-date-picker',
-          `bds-date-picker--${size}`,
+          `bds-date-picker--size-${size}`,
           fullWidth && 'bds-date-picker--full-width',
           className,
         )}

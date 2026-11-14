@@ -193,7 +193,7 @@ export function composeButtonClasses({
     variantModifier(resolveRetiredValue('Button', 'variant', variant, RETIRED_VARIANTS) ?? 'primary'),
     (() => {
       const s = resolveRetiredValue('Button', 'size', size, RETIRED_SIZES) ?? 'md';
-      return iconOnly ? `bds-icon-button--${s}` : `bds-button--${s}`;
+      return iconOnly ? `bds-icon-button--size-${s}` : `bds-button--size-${s}`;
     })(),
     fullWidth && 'bds-button--full-width',
     loading && 'bds-button--loading',

@@ -35,9 +35,9 @@
 }
 
 /* Label sizes */
-.bds-time-picker--sm .bds-time-picker__label { font-size: var(--bds-label-sm); }
-.bds-time-picker--md .bds-time-picker__label { font-size: var(--bds-label-md); }
-.bds-time-picker--lg .bds-time-picker__label { font-size: var(--bds-label-lg); }
+.bds-time-picker--size-sm .bds-time-picker__label { font-size: var(--bds-label-sm); }
+.bds-time-picker--size-md .bds-time-picker__label { font-size: var(--bds-label-md); }
+.bds-time-picker--size-lg .bds-time-picker__label { font-size: var(--bds-label-lg); }
 
 /* ─── Trigger ────────────────────────────────────────────────── */
 
@@ -90,9 +90,9 @@
 }
 
 /* Trigger sizes — heights match Button scale (8px steps, 4px grid) */
-.bds-time-picker--sm .bds-time-picker__trigger { font-size: var(--bds-body-sm); height: 32px; }
-.bds-time-picker--md .bds-time-picker__trigger { font-size: var(--bds-body-md); height: 40px; }
-.bds-time-picker--lg .bds-time-picker__trigger { font-size: var(--bds-body-lg); height: 48px; }
+.bds-time-picker--size-sm .bds-time-picker__trigger { font-size: var(--bds-body-sm); height: 32px; }
+.bds-time-picker--size-md .bds-time-picker__trigger { font-size: var(--bds-body-md); height: 40px; }
+.bds-time-picker--size-lg .bds-time-picker__trigger { font-size: var(--bds-body-lg); height: 48px; }
 
 /* ─── Trigger placeholder & icon ─────────────────────────────── */
 

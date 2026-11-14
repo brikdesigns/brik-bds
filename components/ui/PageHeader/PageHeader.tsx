@@ -285,7 +285,7 @@ export function PageHeader({
       ref={headerRef}
       className={bdsClass(
         'bds-page-header',
-        isFull && size !== 'lg' && `bds-page-header--${size}`,
+        isFull && size !== 'lg' && `bds-page-header--size-${size}`,
         !isFull && `bds-page-header--${variant}`,
         sticky && 'bds-page-header--sticky',
         className,

@@ -20,19 +20,19 @@
 
 /* ─── Sizes ──────────────────────────────────────────────────── */
 
-.bds-service-tag--sm {
+.bds-service-tag--size-sm {
   height: var(--bds-size-700);
   padding-inline: var(--bds-padding-sm);
   font-size: var(--bds-label-tiny);
 }
 
-.bds-service-tag--md {
+.bds-service-tag--size-md {
   height: var(--bds-size-800);
   padding-inline: var(--bds-padding-sm);
   font-size: var(--bds-label-sm);
 }
 
-.bds-service-tag--lg {
+.bds-service-tag--size-lg {
   height: var(--bds-size-1000);
   padding-inline: var(--bds-padding-md);
   font-size: var(--bds-label-md);
@@ -41,8 +41,8 @@
 /* lg is the only size with extra inline padding (--bds-padding-md vs --bds-padding-sm).
    With an icon present that reads as too much lead-in space before the glyph,
    so icon-text lg drops back to the sm/md inline padding. Two-class selector
-   outranks the single-class --lg rule, so order is irrelevant. */
-.bds-service-tag--lg.bds-service-tag--has-icon {
+   outranks the single-class --size-lg rule, so order is irrelevant. */
+.bds-service-tag--size-lg.bds-service-tag--has-icon {
   padding-inline: var(--bds-padding-sm);
 }
 
@@ -105,13 +105,13 @@
   font-size: var(--bds-icon-xs);
 }
 
-.bds-service-tag--sm .bds-service-tag__icon,
-.bds-service-tag--md .bds-service-tag__icon,
+.bds-service-tag--size-sm .bds-service-tag__icon,
+.bds-service-tag--size-md .bds-service-tag__icon,
 .bds-service-tag--icon-md .bds-service-tag__icon {
   font-size: var(--bds-icon-sm);
 }
 
-.bds-service-tag--lg .bds-service-tag__icon,
+.bds-service-tag--size-lg .bds-service-tag__icon,
 .bds-service-tag--icon-lg .bds-service-tag__icon {
   font-size: var(--bds-icon-lg);
 }
@@ -159,7 +159,7 @@
 /* bds-lint-ignore — dot marker dimensions match the shared Dot component's
    sm/md/lg scale (Dot.css), not the pill's own sm/md/lg (28/32/40 height)
    scale, so both "dot" concepts in BDS stay visually consistent. */
-.bds-service-tag__dot--sm { width: 6px; height: 6px; }
-.bds-service-tag__dot--md { width: 8px; height: 8px; }
-.bds-service-tag__dot--lg { width: 10px; height: 10px; }
+.bds-service-tag__dot--size-sm { width: 6px; height: 6px; }
+.bds-service-tag__dot--size-md { width: 8px; height: 8px; }
+.bds-service-tag__dot--size-lg { width: 10px; height: 10px; }
 }

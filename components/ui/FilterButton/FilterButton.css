@@ -44,21 +44,21 @@
 
 /* Size variants — height scale matches Button/IconButton (4px grid, 8px steps) */
 
-.bds-filter-button__trigger--sm {
+.bds-filter-button__trigger--size-sm {
   height: var(--bds-size-800);
   padding-inline: var(--bds-padding-sm);
   font-size: var(--bds-label-sm);
   gap: var(--bds-gap-sm);
 }
 
-.bds-filter-button__trigger--md {
+.bds-filter-button__trigger--size-md {
   height: var(--bds-size-1000);
   padding-inline: var(--bds-padding-lg);
   font-size: var(--bds-label-md);
   gap: var(--bds-gap-md);
 }
 
-.bds-filter-button__trigger--lg {
+.bds-filter-button__trigger--size-lg {
   height: var(--bds-size-1200);
   padding-inline: var(--bds-padding-xl);
   font-size: var(--bds-label-lg);

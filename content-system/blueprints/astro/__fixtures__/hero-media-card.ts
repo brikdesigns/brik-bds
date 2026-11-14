@@ -35,7 +35,7 @@ export const HERO_MEDIA_CARD_PRICE_FIXTURE = {
  * same button the React twin's `Default` story renders via `<Button>`.
  */
 export const HERO_MEDIA_CARD_CTA_HTML =
-  '<a href="#start" class="bds-button bds-button--primary bds-button--sm"><span class="bds-button__content">Get started</span></a>';
+  '<a href="#start" class="bds-button bds-button--primary bds-button--size-sm"><span class="bds-button__content">Get started</span></a>';
 
 export const HERO_MEDIA_CARD_MISSING_FIXTURE = {
   ratio: 'square' as const,

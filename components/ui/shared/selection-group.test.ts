@@ -79,7 +79,7 @@ describe('InteractiveListItem inside a CheckboxGroup', () => {
   });
 
   it('keeps the size modifier on the label root', () => {
-    expect(count(markup, 'bds-interactive-list-item--md')).toBe(3);
+    expect(count(markup, 'bds-interactive-list-item--size-md')).toBe(3);
   });
 });
 

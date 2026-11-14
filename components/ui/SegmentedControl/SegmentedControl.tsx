@@ -124,7 +124,7 @@ export function SegmentedControl({
     <div
       className={bdsClass(
         'bds-segmented-control',
-        `bds-segmented-control--${size}`,
+        `bds-segmented-control--size-${size}`,
         fullWidth && 'bds-segmented-control--full-width',
         className,
       )}

@@ -79,7 +79,7 @@ export function Avatar({
     <div
       className={bdsClass(
         'bds-avatar',
-        `bds-avatar--${size}`,
+        `bds-avatar--size-${size}`,
         // Color only styles the initials fill; when an image loads it covers
         // the background, so applying the class unconditionally is harmless.
         color && !showImage ? `bds-avatar--accent-${color}` : undefined,

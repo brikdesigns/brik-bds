@@ -26,7 +26,7 @@ export function Spinner({
     <div
       role="status"
       aria-label="Loading"
-      className={bdsClass('bds-spinner', `bds-spinner--${size}`, className)}
+      className={bdsClass('bds-spinner', `bds-spinner--size-${size}`, className)}
       style={style}
       {...props}
     />

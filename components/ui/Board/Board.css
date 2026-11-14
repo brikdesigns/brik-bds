@@ -254,10 +254,10 @@
 
 /* Compact density — tighter card for multi-card-per-column boards.
    Title drops one step; subtitle reads as label-family metadata. */
-.bds-board-card--compact .bds-board-card__title {
+.bds-board-card--density-compact .bds-board-card__title {
   font-size: var(--bds-label-md);
 }
-.bds-board-card--compact .bds-board-card__subtitle {
+.bds-board-card--density-compact .bds-board-card__subtitle {
   font-family: var(--bds-font-family-label);
   text-transform: var(--bds-text-transform-label);
 }

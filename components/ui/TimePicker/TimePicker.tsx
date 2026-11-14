@@ -253,7 +253,7 @@ export const TimePicker = forwardRef<HTMLButtonElement, TimePickerProps>(
       <div
         className={bdsClass(
           'bds-time-picker',
-          `bds-time-picker--${size}`,
+          `bds-time-picker--size-${size}`,
           fullWidth && 'bds-time-picker--full-width',
           className,
         )}

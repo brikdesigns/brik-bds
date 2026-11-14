@@ -64,17 +64,17 @@
 
 /* ── Size ── */
 
-.bds-segmented-control--sm .bds-segmented-control-item {
+.bds-segmented-control--size-sm .bds-segmented-control-item {
   padding: calc(var(--bds-gap-xs) - var(--bds-border-width-md)) calc(var(--bds-padding-md) - var(--bds-border-width-md));
   font-size: var(--bds-label-sm);
 }
 
-.bds-segmented-control--md .bds-segmented-control-item {
+.bds-segmented-control--size-md .bds-segmented-control-item {
   padding: calc(var(--bds-gap-sm) - var(--bds-border-width-md)) calc(var(--bds-padding-lg) - var(--bds-border-width-md));
   font-size: var(--bds-label-md);
 }
 
-.bds-segmented-control--lg .bds-segmented-control-item {
+.bds-segmented-control--size-lg .bds-segmented-control-item {
   padding: calc(var(--bds-gap-md) - var(--bds-border-width-md)) calc(var(--bds-padding-xl) - var(--bds-border-width-md));
   font-size: var(--bds-label-md);
 }

@@ -514,7 +514,7 @@ export function TableActionsCell({
     <td
       className={bdsClass(
         'bds-table-actions-cell',
-        `bds-table-actions-cell--${align}`,
+        `bds-table-actions-cell--align-${align}`,
         stickyEnd && 'bds-table-actions-cell--sticky',
         className,
       )}
@@ -723,7 +723,7 @@ export function TableImageCell({
 }: TableImageCellProps) {
   return (
     <td
-      className={bdsClass('bds-table-image-cell', `bds-table-image-cell--${size}`, className)}
+      className={bdsClass('bds-table-image-cell', `bds-table-image-cell--size-${size}`, className)}
       style={style}
       {...props}
     >
@@ -778,7 +778,7 @@ export function TableLogoCell({
 }: TableLogoCellProps) {
   return (
     <td
-      className={bdsClass('bds-table-image-cell', `bds-table-image-cell--${size}`, className)}
+      className={bdsClass('bds-table-image-cell', `bds-table-image-cell--size-${size}`, className)}
       style={style}
       {...props}
     >

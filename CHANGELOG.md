@@ -18,6 +18,19 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** eight bare BEM modifiers that twinned an axis-prefixed value now carry their axis prefix, per ADR-033 § 4 ([#1926](https://github.com/brikdesigns/brik-bds/issues/1926)). No alias ships: the old class is no longer emitted, so an override that targets it stops matching with no build error. Rename the selector. The class is now `bds-{block}--{axis}-{value}`, derived from the prop.
+
+| Old (every block) | New | Prop |
+|---|---|---|
+| `--xs` `--sm` `--md` `--lg` `--xl` | `--size-xs` `--size-sm` `--size-md` `--size-lg` `--size-xl` | `size` |
+| `--compact` on Badge, Tag, Sheet, BoardCard | `--density-compact` | `density="compact"` |
+| `--center` `--start` on SectionHeader | `--align-center` `--align-start` | `align` |
+| `--left` `--center` `--right` on TableActionsCell | `--align-left` `--align-center` `--align-right` | `align` |
+
+Blocks carrying a size modifier: AddressInput, Avatar, Badge, Button (`bds-button`, `bds-icon-button`), Card (`__media`), Chip, Counter, DatePicker, Dot, FilterButton (`__trigger`), FilterToggle, InteractiveListItem, Logo, Meter (`__track`, `__fill`), Modal, PageHeader, ProgressCircle (`__center`), ProgressStepper (and its parts), SegmentedControl, Select (`bds-select`, `bds-select-label`), ServiceTag (and `__dot`), Spinner, Stepper, Tag, TextArea, TextInput, TimePicker, ToggleSwitch (`__label`), TableImageCell. Astro blueprint markup (`Cta`, `Hero`, `CalloutPanel`) now emits `bds-button--size-md` / `--size-lg`.
+
+Not renamed, still bare (their prop axis has no legal prefix, so they ride with #1927): `bds-pagination--center` (`position`) and `bds-field--compact` (`tier`).
+
 Six Tier 4 hooks are renamed to the ADR-014 shape `--bds-{component}[-{part}]-{property}` ([#2651](https://github.com/brikdesigns/brik-bds/issues/2651)). Each old name still works: the component reads it first and falls back to the new one. The old names are **deprecated** and drop in the next major. Every hook is now listed in `manifest/tier4-hooks.json`, with whether a consumer may set it (`knob`) or the component sets it at render (`runtime`).
 
 **Deprecated (consumer CSS):** rename these in your override CSS before the next major.

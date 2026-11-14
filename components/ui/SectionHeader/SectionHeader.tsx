@@ -61,7 +61,7 @@ export function SectionHeader({
     <div
       className={bdsClass(
         'bds-section-header',
-        `bds-section-header--${align}`,
+        `bds-section-header--align-${align}`,
         `bds-section-header--measure-${measure}`,
         className,
       )}

@@ -427,7 +427,7 @@ export function Sheet({
         // wrap inside the floating sheet. Stopping Tab before it reaches that
         // handler lets the browser move focus on, out of the sheet.
         onKeyDownCapture={isFloating ? (e) => { if (e.key === 'Tab') e.stopPropagation(); } : undefined}
-        className={bdsClass('bds-sheet', `bds-sheet--${side}`, isFloating ? 'bds-sheet--floating' : '', density === 'compact' ? 'bds-sheet--compact' : '')}
+        className={bdsClass('bds-sheet', `bds-sheet--${side}`, isFloating ? 'bds-sheet--floating' : '', density === 'compact' ? 'bds-sheet--density-compact' : '')}
         role="dialog"
         aria-modal={!isFloating}
         aria-labelledby={hasTitleName ? titleId : undefined}

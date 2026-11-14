@@ -187,7 +187,7 @@ function StepsRender({
             <div
               className={bdsClass(
                 'bds-progress-stepper__step-row',
-                `bds-progress-stepper__step-row--${size}`,
+                `bds-progress-stepper__step-row--size-${size}`,
                 isClickable && 'bds-progress-stepper__step-row--clickable',
               )}
               onClick={handleClick}
@@ -200,7 +200,7 @@ function StepsRender({
               <div
                 className={bdsClass(
                   'bds-progress-stepper__circle',
-                  `bds-progress-stepper__circle--${size}`,
+                  `bds-progress-stepper__circle--size-${size}`,
                   `bds-progress-stepper__circle--${status}`,
                 )}
               >
@@ -217,7 +217,7 @@ function StepsRender({
                 <div
                   className={bdsClass(
                     'bds-progress-stepper__label',
-                    `bds-progress-stepper__label--${size}`,
+                    `bds-progress-stepper__label--size-${size}`,
                     `bds-progress-stepper__label--${status}`,
                   )}
                 >
@@ -227,7 +227,7 @@ function StepsRender({
                   <div
                     className={bdsClass(
                       'bds-progress-stepper__desc',
-                      `bds-progress-stepper__desc--${size}`,
+                      `bds-progress-stepper__desc--size-${size}`,
                     )}
                   >
                     {step.description}
@@ -239,7 +239,7 @@ function StepsRender({
               <div
                 className={bdsClass(
                   'bds-progress-stepper__connector',
-                  `bds-progress-stepper__connector--${size}`,
+                  `bds-progress-stepper__connector--size-${size}`,
                   status === 'complete'
                     ? 'bds-progress-stepper__connector--complete'
                     : 'bds-progress-stepper__connector--incomplete',
@@ -272,7 +272,7 @@ function DotsRender({
       className={bdsClass(
         'bds-progress-stepper',
         'bds-progress-stepper--variant-dots',
-        `bds-progress-stepper--${size}`,
+        `bds-progress-stepper--size-${size}`,
         className,
       )}
       style={style}

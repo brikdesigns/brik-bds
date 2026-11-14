@@ -138,7 +138,7 @@ export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
         ref={wrapperRef}
         className={bdsClass(
           'bds-address-input',
-          `bds-address-input--${size}`,
+          `bds-address-input--size-${size}`,
           fullWidth && 'bds-address-input--full-width',
           className,
         )}

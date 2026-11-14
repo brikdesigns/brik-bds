@@ -123,7 +123,7 @@ export function ToggleSwitch({
         <span className="bds-toggle-switch__knob" style={knobStyle} />
       </span>
       {label && (
-        <span className={bdsClass('bds-toggle-switch__label', `bds-toggle-switch__label--${size}`)}>
+        <span className={bdsClass('bds-toggle-switch__label', `bds-toggle-switch__label--size-${size}`)}>
           {label}
         </span>
       )}

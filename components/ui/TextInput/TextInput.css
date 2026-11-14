@@ -36,9 +36,9 @@
   text-transform: var(--bds-text-transform-field-label);
 }
 
-.bds-text-input__label--sm { font-size: var(--bds-label-sm); }
-.bds-text-input__label--md { font-size: var(--bds-label-md); }
-.bds-text-input__label--lg { font-size: var(--bds-label-lg); }
+.bds-text-input__label--size-sm { font-size: var(--bds-label-sm); }
+.bds-text-input__label--size-md { font-size: var(--bds-label-md); }
+.bds-text-input__label--size-lg { font-size: var(--bds-label-lg); }
 
 .bds-text-input__label--tone-negative {
   color: var(--bds-text-negative);
@@ -76,9 +76,9 @@
 }
 
 /* Size — heights match the Button scale (8px steps on the 4px grid) */
-.bds-text-input--sm .bds-text-input-field { font-size: var(--bds-body-sm); height: 32px; }
-.bds-text-input--md .bds-text-input-field { font-size: var(--bds-body-md); height: 40px; }
-.bds-text-input--lg .bds-text-input-field { font-size: var(--bds-body-lg); height: 48px; }
+.bds-text-input--size-sm .bds-text-input-field { font-size: var(--bds-body-sm); height: 32px; }
+.bds-text-input--size-md .bds-text-input-field { font-size: var(--bds-body-md); height: 40px; }
+.bds-text-input--size-lg .bds-text-input-field { font-size: var(--bds-body-lg); height: 48px; }
 
 /* Icon clearance — pad the side that carries an icon */
 .bds-text-input-field--has-icon-before { padding-left: calc(var(--bds-padding-xs) * 4); }

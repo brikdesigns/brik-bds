@@ -21,9 +21,9 @@
   text-transform: var(--bds-text-transform-field-label);
 }
 
-.bds-select-label--sm { font-size: var(--bds-label-sm); }
-.bds-select-label--md { font-size: var(--bds-label-md); }
-.bds-select-label--lg { font-size: var(--bds-label-lg); }
+.bds-select-label--size-sm { font-size: var(--bds-label-sm); }
+.bds-select-label--size-md { font-size: var(--bds-label-md); }
+.bds-select-label--size-lg { font-size: var(--bds-label-lg); }
 
 .bds-select-label--tone-negative {
   color: var(--bds-text-negative);
@@ -68,17 +68,17 @@
  * Horizontal padding lives on the base .bds-select rule.
  * Browser auto-centers text within the explicit height.
  */
-.bds-select--sm {
+.bds-select--size-sm {
   font-size: var(--bds-body-sm);
   height: var(--bds-size-800);
 }
 
-.bds-select--md {
+.bds-select--size-md {
   font-size: var(--bds-body-md);
   height: var(--bds-size-1000);
 }
 
-.bds-select--lg {
+.bds-select--size-lg {
   font-size: var(--bds-body-lg);
   height: var(--bds-size-1200);
 }

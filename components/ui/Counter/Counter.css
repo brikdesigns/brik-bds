@@ -17,10 +17,10 @@
 
 /* ─── Sizes ──────────────────────────────────────────────────── */
 
-.bds-counter--xs { padding: var(--bds-space-50) var(--bds-padding-tiny); font-size: var(--bds-label-tiny); }
-.bds-counter--sm { padding: var(--bds-padding-tiny) var(--bds-padding-sm); font-size: var(--bds-label-tiny); }
-.bds-counter--md { padding: var(--bds-padding-sm) var(--bds-padding-md); font-size: var(--bds-label-sm); }
-.bds-counter--lg { padding: var(--bds-padding-sm) var(--bds-padding-md); font-size: var(--bds-label-md); }
+.bds-counter--size-xs { padding: var(--bds-space-50) var(--bds-padding-tiny); font-size: var(--bds-label-tiny); }
+.bds-counter--size-sm { padding: var(--bds-padding-tiny) var(--bds-padding-sm); font-size: var(--bds-label-tiny); }
+.bds-counter--size-md { padding: var(--bds-padding-sm) var(--bds-padding-md); font-size: var(--bds-label-sm); }
+.bds-counter--size-lg { padding: var(--bds-padding-sm) var(--bds-padding-md); font-size: var(--bds-label-md); }
 
 /* ─── Status colors ──────────────────────────────────────────── */
 
