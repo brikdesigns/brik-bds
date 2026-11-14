@@ -95,7 +95,7 @@ export const OnColor: Story = {
   args: {
     title: 'Get in touch',
     description: 'Starting a new project or want to collaborate with us?',
-    actions: <Button variant="on-color">Let&apos;s Talk</Button>,
+    actions: <Button emphasis="on-color">Let&apos;s Talk</Button>,
     onColor: true,
   },
   render: (args) => (

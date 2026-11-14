@@ -22,20 +22,22 @@ const meta: Meta<typeof Button> = {
     },
     variant: {
       control: 'select',
-      options: [
-        'primary',
-        'outline',
-        'secondary',
-        'ghost',
-        'inverse',
-        'on-color',
-        'negative',
-        'positive',
-      ],
+      options: ['primary', 'outline', 'secondary', 'ghost'],
+      description: 'Form (hierarchy): `primary` → `outline` → `secondary` → `ghost`.',
+    },
+    tone: {
+      control: 'select',
+      options: [undefined, 'negative', 'positive'],
       description:
-        'Brand hierarchy: `primary` → `outline` → `secondary` → `ghost`. ' +
-        '`inverse` for inverse surfaces; `on-color` for brand-primary surfaces. ' +
-        'System valence: `negative` / `positive`.',
+        'Valence. `negative` ships on `primary` / `outline` / `ghost`; `positive` on `primary` only. ' +
+        'Any other pairing is dropped with a console warning.',
+    },
+    emphasis: {
+      control: 'select',
+      options: [undefined, 'inverse', 'on-color'],
+      description:
+        'Hue source. `inverse` for inverse surfaces; `on-color` for brand-primary surfaces. ' +
+        '`primary` form only, and not alongside `tone`.',
     },
     size: {
       control: 'select',

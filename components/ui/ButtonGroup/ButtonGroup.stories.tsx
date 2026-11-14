@@ -113,7 +113,7 @@ export const IconButtonGroup: Story = {
     <ButtonGroup {...args}>
       <Button icon={<Edit />} label="Edit" variant="secondary" />
       <Button icon={<Copy />} label="Copy" variant="secondary" />
-      <Button icon={<Trash />} label="Delete" variant="negative" />
+      <Button icon={<Trash />} label="Delete" tone="negative" />
     </ButtonGroup>
   ),
 };
@@ -157,7 +157,7 @@ export const IconOverflow: Story = {
       <Button icon={<Edit />} label="Edit" variant="secondary" />
       <Button icon={<Copy />} label="Copy" variant="secondary" />
       <Button icon={<Share />} label="Share" variant="secondary" />
-      <Button icon={<Trash />} label="Delete" variant="negative" />
+      <Button icon={<Trash />} label="Delete" tone="negative" />
       <Button icon={<Edit />} label="Rename" variant="secondary" />
     </ButtonGroup>
   ),
@@ -192,7 +192,7 @@ export const InteractionTestOverflow: Story = {
       <Button icon={<Edit />} label="Edit" variant="secondary" />
       <Button icon={<Copy />} label="Copy" variant="secondary" />
       <Button icon={<Share />} label="Share" variant="secondary" />
-      <Button icon={<Trash />} label="Delete" variant="negative" />
+      <Button icon={<Trash />} label="Delete" tone="negative" />
       <Button icon={<Edit />} label="Rename" variant="secondary" />
     </ButtonGroup>
   ),

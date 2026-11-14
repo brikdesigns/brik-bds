@@ -122,7 +122,7 @@ The prop layer migrates to the token layer's vocabulary, not the reverse. `error
 | Valence — what this communicates about a state | `tone` | § 1's five words | Field (`helperTone`); Banner's prop *name* | Badge, Counter, Dot, Meter, ProgressCircle (`status` → `tone`); Toast, Button (valence members leave `variant`); Banner (`announcement` leaves the union) |
 | Presence / lifecycle — the state of a named subject | `status` | per-subject, scoped-intent token-backed | Avatar, Card, Table, TaskConsole | — |
 | Form — mutually exclusive visual or structural shape, no valence | `variant` | per-component | Card, TabBar, Skeleton, Sheet, ServiceTag, Testimonial, Footer, ToggleSwitch, ProgressStepper | — |
-| Hue source — which palette paints it | `emphasis` | `neutral` · `brand` · `accent` · `inverse` | TextLink, SocialIcon, ContactIcon (`tone` → `emphasis` landed, #1925) | Banner, Badge, Counter (brand member extracted, below); Button (`inverse`, `on-color` leave `variant` — #1983) — `inverse` added by § Amendments (#2279) |
+| Hue source — which palette paints it | `emphasis` | `neutral` · `brand` · `accent` · `inverse` · `on-color` | TextLink, SocialIcon, ContactIcon (`tone` → `emphasis` landed, #1925) | Banner, Badge, Counter (brand member extracted, below); Button (`inverse`, `on-color` left `variant` — #1983) — `inverse` added by § Amendments (#2279), `on-color` by § Amendments (#1983) |
 | Fill treatment intensity | `appearance` | `solid` · `subtle` · `outline` (amended by #2943; Tag's `subtle`→`outline`, `muted`→`subtle`) | Badge, Tag, Avatar (`solid` · `subtle` only) | — |
 | Spacing compression | `density` | `comfortable` · `compact` | Tag, Sheet | — |
 | Accent hue — which named hue paints it | `color` | `neutral` · `blue` · `green` · `orange` · `purple` · `yellow` · `red` | Tag (`--color-{hue}`) | Avatar (`--accent-{hue}` → `--color-{hue}`, with #1927) — added by § Amendments (#2943) |
@@ -477,3 +477,18 @@ New words admitted or retired after acceptance, per § 6. Each entry names the w
 **Standing rule (#2594) applies.** These are Foundations variables (`spacing/{compact,default,comfortable,spacious}` → `padding/3nano`, `padding/2nano`, `padding/nano`). This PR lands the repo mirror (`design-tokens/foundations.json`). The rungs are not complete until the same three variables exist in ❖ Brik Foundations, or the next pull deletes them.
 
 **Enforcement.** `tokens/naming-grammar.json` gains `steps.familySteps["--padding-"]`. `lint-naming-canon` reads it into `FAMILY_STEPS`, and rule 1 allows those words only inside that family. It does not add them to `T_SHIRT`, so `--gap-nano` is still denied. `scripts/__tests__/lint-naming-canon.test.mjs` plants the three admitted padding rungs and a denied `--bds-gap-nano` / `--bds-icon-2nano`. No new rule, script or workflow. **Baseline:** none. The amendment lands with the tokens that need it.
+
+### `on-color` admitted to the emphasis axis (2026-11-14, [#1983](https://github.com/brikdesigns/brik-bds/issues/1983))
+
+**Does an existing § 2 word name this axis?** The axis is `emphasis`, and § Amendments (#2279) already left this word to #1983. Searched as string literals in `components/` and `content-system/` (`.ts`/`.tsx`, non-story, non-test) for the concept's synonyms — `on-brand`, `knockout`, `reversed`, `on-dark`, `static-white` — and every one came back empty. The only hit for `on-color` is `ButtonVariant` itself ([Button.tsx](../../components/ui/Button/Button.tsx)).
+
+- **Axis:** emphasis — which palette paints it (unchanged; this admits a fifth value).
+- **Word:** `on-color`. **Closed values now:** `neutral` · `brand` · `accent` · `inverse` · `on-color`.
+- **Correct today:** none — `on-color` sat on `variant` at its one site.
+- **Migrates:** Button (`on-color` leaves `variant`, #1983).
+
+**Why it earns the word.** `on-color` is the token layer's own word for a static white fill on a brand-colored surface (`--bds-background-on-color-dark`, `--bds-text-on-color-*`), and it is a hue source by the same test as `inverse`: it paints the primary form's fill and leaves the shape alone. It is distinct from `inverse`, which flips with the theme, and from `brand`, which is the brand palette itself rather than a fill placed on it. It has callers now — Banner, BannerGroup, ContentBlock and SectionHeader place it on brand surfaces.
+
+**Enforcement.** `tokens/naming-grammar.json` `axes.emphasis.values` gains `on-color` in this PR, per § 6 step 3; the planted-violation test that used `on-color` as its denied neighbour now plants `knockout`.
+
+**Baseline.** `ButtonVariant#mixed` → `1983` leaves `tokens/naming-canon-baseline.json`: `ButtonVariant` is now form-only, so the row is stale and the gate would fail on it.

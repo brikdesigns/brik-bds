@@ -48,7 +48,7 @@ export const Default: Story = {
       <Banner
         title="Want to set up a new client?"
         description="Click to begin the setup workflow for new clients."
-        action={<Button variant="on-color" size="sm">Get started</Button>}
+        action={<Button emphasis="on-color" size="sm">Get started</Button>}
       />
     </BannerGroup>
   ),

@@ -188,7 +188,7 @@ export function HeroSplitImageCardOverlay({
       subtitle={titles.subtitle ?? undefined}
       lead={section.body ?? undefined}
       cta={section.cta ?? undefined}
-      ctaVariant="inverse"
+      ctaEmphasis="inverse"
       breadcrumb={breadcrumbNode}
       eyebrow={eyebrowNode}
       media={media}

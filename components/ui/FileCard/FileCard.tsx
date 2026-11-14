@@ -189,7 +189,7 @@ export function FileCard({
           )}
           {onDelete && (
             <Button
-              variant="negative"
+              tone="negative"
               size="sm"
               iconBefore={<Icon icon={Trash} />}
               onClick={onDelete}

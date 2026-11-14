@@ -117,7 +117,7 @@
   color: var(--bds-text-on-color-light);
 }
 
-/* ─── System Variants (semantic actions) ─────────────────────── */
+/* ─── Tone (valence) — solid fill on the primary form; outline / ghost compounds below ─── */
 
 .bds-button--tone-negative {
   background-color: var(--bds-background-negative);
@@ -230,6 +230,28 @@
 .bds-button--tone-positive:active:not(:disabled) {
   background-color: var(--bds-background-positive-pressed);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+/* ── Negative × low-emphasis forms (#1983) ──
+ * Two classes outrank the solid `.bds-button--tone-negative` fill above, so the
+ * outline / ghost shape survives and only the hue moves to system negative.
+ * Hover keeps the neutral tint those forms already use. */
+.bds-button--outline.bds-button--tone-negative {
+  background-color: transparent;
+  color: var(--bds-text-negative);
+  border-color: var(--bds-border-negative);
+}
+
+.bds-button--ghost.bds-button--tone-negative {
+  background-color: transparent;
+  color: var(--bds-text-negative);
+}
+
+.bds-button--outline.bds-button--tone-negative:hover:not(:disabled):not(.bds-button--loading),
+.bds-button--ghost.bds-button--tone-negative:hover:not(:disabled):not(.bds-button--loading),
+.bds-button--outline.bds-button--tone-negative:active:not(:disabled),
+.bds-button--ghost.bds-button--tone-negative:active:not(:disabled) {
+  background-color: var(--bds-background-primary-hover);
 }
 
 /* ── Disabled (all variants, except loading) ── */

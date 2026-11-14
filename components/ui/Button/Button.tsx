@@ -11,55 +11,105 @@ import { bdsClass, resolveRetiredValue } from '../../utils';
 import './Button.css';
 
 /**
- * Button variants — visual hierarchy for actions.
+ * Button form — the shape of the control (ADR-033 § 2: `variant` = form).
  *
- * Brand variants (UI hierarchy):
  * - `primary`     — Main CTA (brand fill)
  * - `outline`     — Secondary emphasis (brand border)
  * - `secondary`   — Tertiary/subtle (surface fill)
  * - `ghost`       — Minimal emphasis (no background)
- * - `inverse`     — For dark theme surfaces (flips with theme)
- * - `on-color`    — For brand-colored surfaces (does not flip with theme)
  *
- * Valence variants (semantic actions):
- * - `negative`    — Destructive action (system red)
- * - `positive`    — Confirming action (system green)
+ * Valence rides `tone`, hue source rides `emphasis`; the three props are
+ * orthogonal. See `Button.mdx` for the combinations that ship.
  *
- * Retired spellings (ADR-033 § 1, honoured for one minor then removed):
- * `destructive`, `danger`, `danger-outline`, `danger-ghost` → `negative`.
- * The `danger*` trio carried the brand accent-red rather than the system
- * negative; it had zero call sites across all eight consumer repos, so it
- * folds into `negative` rather than earning a tone × form split.
+ * Retired spellings (honoured at runtime for one minor, then removed; the type
+ * rejects them at once): `negative` / `positive` → `tone`; `inverse` /
+ * `on-color` → `emphasis`; `destructive`, `danger`, `danger-outline`,
+ * `danger-ghost` → `tone="negative"` (#1957, #1983).
  *
  * `selected` is NOT a variant — it is a boolean state prop. Pass
  * `selected={true}` alongside any variant to render the selected modifier.
  */
-export type ButtonVariant =
-  | 'primary'
-  | 'outline'
-  | 'secondary'
-  | 'ghost'
-  | 'inverse'
-  | 'on-color'
-  | 'negative'
-  | 'positive';
-
-const RETIRED_VARIANTS: Record<string, ButtonVariant> = {
-  destructive: 'negative',
-  danger: 'negative',
-  'danger-outline': 'negative',
-  'danger-ghost': 'negative',
-};
+export type ButtonVariant = 'primary' | 'outline' | 'secondary' | 'ghost';
 
 /**
- * The two valence values live in a form-axis union, so their modifier carries
- * the `tone-` prefix ADR-033 § 4 requires while the form values stay bare
- * (those are #1927's caseload, not this one).
+ * Button valence — what the action communicates (ADR-033 § 1, § 2).
+ * `negative` is the destructive action (system red); `positive` confirms.
  */
-const VALENCE_VARIANTS = new Set<ButtonVariant>(['negative', 'positive']);
+export type ButtonTone = 'negative' | 'positive';
 
-function variantModifier(variant: ButtonVariant): string {
-  return VALENCE_VARIANTS.has(variant) ? `bds-button--tone-${variant}` : `bds-button--${variant}`;
+/**
+ * Button hue source — which palette paints the fill (ADR-033 § 2, § Amendments).
+ * - `inverse`  — dark-theme surfaces (flips with theme)
+ * - `on-color` — brand-colored surfaces (does not flip with theme)
+ */
+export type ButtonEmphasis = 'inverse' | 'on-color';
+
+/** Where a retired `variant` value landed — the form, plus the axis it left for. */
+const RETIRED_VARIANT_AXES: Record<string, { tone?: ButtonTone; emphasis?: ButtonEmphasis }> = {
+  negative: { tone: 'negative' },
+  positive: { tone: 'positive' },
+  destructive: { tone: 'negative' },
+  danger: { tone: 'negative' },
+  'danger-outline': { tone: 'negative' },
+  'danger-ghost': { tone: 'negative' },
+  inverse: { emphasis: 'inverse' },
+  'on-color': { emphasis: 'on-color' },
+};
+
+const RETIRED_VARIANTS: Record<string, ButtonVariant> = Object.fromEntries(
+  Object.keys(RETIRED_VARIANT_AXES).map((k) => [k, 'primary' as const]),
+);
+
+const RETIRED_VARIANT_REPLACEMENTS: Record<string, string> = Object.fromEntries(
+  Object.entries(RETIRED_VARIANT_AXES).map(([k, { tone, emphasis }]) => [
+    k,
+    tone ? `variant="primary" tone="${tone}"` : `variant="primary" emphasis="${emphasis}"`,
+  ]),
+);
+
+/**
+ * The tone × form cross-product that ships. A tone on any other form is
+ * dropped (with a one-time warning) rather than half-styled.
+ */
+const TONE_FORMS: Record<ButtonTone, readonly ButtonVariant[]> = {
+  negative: ['primary', 'outline', 'ghost'],
+  positive: ['primary'],
+};
+
+const warnedCombos = new Set<string>();
+function warnCombo(message: string): void {
+  if (warnedCombos.has(message)) return;
+  warnedCombos.add(message);
+  console.warn(`[BDS Button] ${message}`);
+}
+
+function resolveAxes(
+  variant: ButtonVariant | undefined,
+  tone: ButtonTone | undefined,
+  emphasis: ButtonEmphasis | undefined,
+): { form: ButtonVariant; tone?: ButtonTone; emphasis?: ButtonEmphasis } {
+  const form =
+    resolveRetiredValue('Button', 'variant', variant, RETIRED_VARIANTS, RETIRED_VARIANT_REPLACEMENTS) ??
+    'primary';
+  const implied = variant !== undefined ? RETIRED_VARIANT_AXES[variant] : undefined;
+  let resolvedTone = tone ?? implied?.tone;
+  let resolvedEmphasis = emphasis ?? implied?.emphasis;
+
+  if (resolvedTone && resolvedEmphasis) {
+    warnCombo(`\`tone="${resolvedTone}"\` and \`emphasis="${resolvedEmphasis}"\` both paint the fill — emphasis ignored.`);
+    resolvedEmphasis = undefined;
+  }
+  if (resolvedEmphasis && form !== 'primary') {
+    warnCombo(`\`emphasis="${resolvedEmphasis}"\` ships on \`variant="primary"\` only — ignored on "${form}".`);
+    resolvedEmphasis = undefined;
+  }
+  if (resolvedTone && !TONE_FORMS[resolvedTone].includes(form)) {
+    warnCombo(
+      `\`tone="${resolvedTone}"\` ships on ${TONE_FORMS[resolvedTone].map((f) => `"${f}"`).join(' / ')} only — ignored on "${form}".`,
+    );
+    resolvedTone = undefined;
+  }
+  return { form, tone: resolvedTone, emphasis: resolvedEmphasis };
 }
 
 /** Button sizes — shared across text and icon-only modes. */
@@ -76,8 +126,12 @@ const RETIRED_SIZES: Record<string, ButtonSize> = { tiny: 'xs' };
 // ─── Shared styling props ──────────────────────────────────────────
 
 interface StyleProps {
-  /** Visual style variant */
+  /** Form of the button. Default `primary`. */
   variant?: ButtonVariant;
+  /** Valence — `negative` (destructive) or `positive`. Ships on some forms only; see Button.mdx. */
+  tone?: ButtonTone;
+  /** Hue source — `inverse` / `on-color` fill. `primary` form only, and not alongside `tone`. */
+  emphasis?: ButtonEmphasis;
   /** Size of the button */
   size?: ButtonSize;
   /** Stretch to fill container width */
@@ -164,14 +218,17 @@ function isAnchor(props: ElementProps): props is AnchorElementProps {
 /**
  * Shared class composer for Button (text and icon-only modes).
  *
- * Text mode:  `bds-button bds-button--{variant} bds-button--{size}` (+ modifiers)
- * Icon mode:  `bds-button bds-icon-button bds-button--{variant} bds-icon-button--{size}` (+ modifiers)
+ * Text mode:  `bds-button bds-button--{variant} [bds-button--tone-{tone}] bds-button--{size}` (+ modifiers)
+ * Icon mode:  `bds-button bds-icon-button bds-button--{variant} [bds-button--tone-{tone}] bds-icon-button--{size}` (+ modifiers)
+ * With `emphasis`, `bds-button--{emphasis}` takes the place of the variant class.
  *
  * Exported for tests and downstream micro-components that need exact class
  * parity (e.g. theming wrappers). Most callers should render `<Button>` directly.
  */
 export function composeButtonClasses({
-  variant = 'primary',
+  variant,
+  tone,
+  emphasis,
   size = 'md',
   fullWidth = false,
   loading = false,
@@ -180,6 +237,8 @@ export function composeButtonClasses({
   className,
 }: {
   variant?: ButtonVariant;
+  tone?: ButtonTone;
+  emphasis?: ButtonEmphasis;
   size?: ButtonSize;
   fullWidth?: boolean;
   loading?: boolean;
@@ -187,10 +246,13 @@ export function composeButtonClasses({
   iconOnly?: boolean;
   className?: string;
 }): string {
+  const axes = resolveAxes(variant, tone, emphasis);
   return bdsClass(
     'bds-button',
     iconOnly && 'bds-icon-button',
-    variantModifier(resolveRetiredValue('Button', 'variant', variant, RETIRED_VARIANTS) ?? 'primary'),
+    // `inverse` / `on-color` paint the primary form's fill, so they replace it.
+    `bds-button--${axes.emphasis ?? axes.form}`,
+    axes.tone && `bds-button--tone-${axes.tone}`,
     (() => {
       const s = resolveRetiredValue('Button', 'size', size, RETIRED_SIZES) ?? 'md';
       return iconOnly ? `bds-icon-button--${s}` : `bds-button--${s}`;
@@ -213,6 +275,9 @@ export function composeButtonClasses({
  * - **Icon link**:     `<Button variant="ghost" icon={<X/>} label="Open" href="/x" />`
  * - **Router link**:   `<Button href="/x" linkComponent={Link}>Open</Button>` (e.g. `next/link`)
  *
+ * Axes: `variant` (form) · `tone` (valence) · `emphasis` (hue source) — e.g.
+ * `<Button variant="ghost" tone="negative">Remove</Button>`.
+ *
  * State props (combine with any variant):
  * - `selected`  — active state modifier on top of variant; on a `<button>` it also sets `aria-pressed` when defined
  * - `disabled`  — non-interactive (button mode only — anchors lack native disabled)
@@ -234,7 +299,9 @@ export function composeButtonClasses({
  */
 export const Button = forwardRef<ButtonRef, ButtonProps>(function Button(props, ref) {
   const {
-    variant = 'primary',
+    variant,
+    tone,
+    emphasis,
     size = 'md',
     fullWidth = false,
     loading = false,
@@ -246,6 +313,8 @@ export const Button = forwardRef<ButtonRef, ButtonProps>(function Button(props, 
   const iconOnly = isIconOnly(rest as ContentProps);
   const classes = composeButtonClasses({
     variant,
+    tone,
+    emphasis,
     size,
     fullWidth,
     loading,

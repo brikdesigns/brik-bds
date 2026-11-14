@@ -242,7 +242,7 @@ export const ConfirmDestructive: Story = {
     const [isOpen, setIsOpen] = useState(false);
     return (
       <>
-        <Button variant="negative" onClick={() => setIsOpen(true)}>Delete item</Button>
+        <Button tone="negative" onClick={() => setIsOpen(true)}>Delete item</Button>
         <Modal
           {...(args as ModalConfirmArgs)}
           isOpen={isOpen}

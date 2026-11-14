@@ -1,5 +1,5 @@
 import { forwardRef, type AnchorHTMLAttributes, type ReactNode } from 'react';
-import { Button, type ButtonVariant, type ButtonSize } from './Button';
+import { Button, type ButtonVariant, type ButtonTone, type ButtonEmphasis, type ButtonSize } from './Button';
 
 /**
  * LinkButton props — href is required.
@@ -11,6 +11,10 @@ import { Button, type ButtonVariant, type ButtonSize } from './Button';
 export interface LinkButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /** Visual style variant */
   variant?: ButtonVariant;
+  /** Valence — see `Button` */
+  tone?: ButtonTone;
+  /** Hue source — see `Button` */
+  emphasis?: ButtonEmphasis;
   /** Size of the button */
   size?: ButtonSize;
   /** Stretch to fill container width */
@@ -38,7 +42,7 @@ export interface LinkButtonProps extends AnchorHTMLAttributes<HTMLAnchorElement>
  * @summary Deprecated anchor-styled button wrapper — delegates to Button
  */
 export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(function LinkButton(
-  { href, children, variant, size, fullWidth, iconBefore, iconAfter, selected, ...rest },
+  { href, children, variant, tone, emphasis, size, fullWidth, iconBefore, iconAfter, selected, ...rest },
   ref,
 ) {
   return (
@@ -46,6 +50,8 @@ export const LinkButton = forwardRef<HTMLAnchorElement, LinkButtonProps>(functio
       ref={ref}
       href={href}
       variant={variant}
+      tone={tone}
+      emphasis={emphasis}
       size={size}
       fullWidth={fullWidth}
       iconBefore={iconBefore}
