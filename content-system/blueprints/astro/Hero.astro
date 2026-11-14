@@ -319,7 +319,7 @@ const ctaClass = isPricingCard
         {(priceCard.priceLabel || priceCard.price || priceCard.cta) && (
           <HeroMediaCardPrice label={priceCard.priceLabel} value={priceCard.price}>
             {priceCard.cta && 'url' in priceCard.cta && (
-              <a href={priceCard.cta.url} class={`bds-button bds-button--primary bds-button--${priceCard.cta.size ?? 'sm'}`}>
+              <a href={priceCard.cta.url} class={`bds-button bds-button--primary bds-button--size-${priceCard.cta.size ?? 'sm'}`}>
                 <span class="bds-button__content">{priceCard.cta.label}</span>
               </a>
             )}
