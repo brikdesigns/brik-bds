@@ -50,7 +50,7 @@ The `mediaTreatment` prop controls how the `media` slot relates to the card edge
 
 `layout="pricing"` — a vertical pricing tier: optional top `media`, a `badge` + `title` header, the `price` / `period` block, a `children` body, a divider, the `features` checklist, and a bottom-anchored `action`. Supersedes the standalone [`PricingCard`](?path=/docs/deprecated-pricing-card--docs); see [ADR-038 § Amendment 2026-09-18](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md) for why the pricing anatomy earns a layout rather than a `stack` recipe.
 
-`price`, `period` and `features` are this layout's own slots — the same shape as `control`'s `connectionStatus` / `lastSynced` / `actionAlign`. The recommended tier is **not** a `highlighted` prop: set `variant="raised"` (or a `tint`) so it composes from the one shared surface set like every other layout.
+`price`, `period` and `features` are this layout's own slots — the same shape as `control`'s `connectionStatus` / `stamp` / `actionAlign`. The recommended tier is **not** a `highlighted` prop: set `variant="raised"` (or a `tint`) so it composes from the one shared surface set like every other layout.
 
 <Canvas of={Stories.Pricing} />
 
@@ -82,9 +82,29 @@ Two optional slots extend `metric` for a labelled selection (the shape the remov
 
 `layout="control"` — settings / integration row. Leading `media` (logo) + `title` / `description` on the left, (`connectionStatus` indicator + `action`) on the right. Use `actionAlign="top"` for long descriptions where the action should anchor to the upper-right corner.
 
-The `connectionStatus` prop accepts `not-configured | linked | connected | syncing | synced | failed` (`linked` = connected to the source but nothing read yet; renders a neutral dot, never green — only `connected` and `synced` mean data is flowing) and renders a status indicator in the trailing block, coexisting with the `action` slot; pass `lastSynced` for a timestamp beneath it. `connectionStatus` is a **state of one card, not a set of variants** — cycle it in the Controls panel on the story below rather than reaching for separate stories.
+`connectionStatus` accepts exactly `not-configured | connected | synced | error | disabled` (`disabled` = Brik switched the source off: the card mutes and shows one "Enable" action). Retired `linked` / `syncing` / `failed` still map onto `connected` / `connected` / `error` for one minor. `stamp` (`{ kind, at, actor? }`, `at` an ISO 8601 timestamp) replaces `lastSynced` and renders through `DateTime`. Actions render in a `ButtonGroup`, driven by status: `onSetup` → "Setup" (not-configured), `onRetry` → "Retry" before `action` (error), `onEnable` → "Enable" (disabled). `readOnly` + `manageHref` replace every action with one "Manage on profile" link.
 
 <Canvas of={Stories.Control} />
+
+**Not configured** — one "Setup" button, no stamp.
+
+<Canvas of={Stories.ControlNotConfigured} />
+
+**Connected**
+
+<Canvas of={Stories.ControlConnected} />
+
+**Error** — Retry first.
+
+<Canvas of={Stories.ControlError} />
+
+**Disabled** — muted, one "Enable" action.
+
+<Canvas of={Stories.ControlDisabled} />
+
+**Read-only** — one "Manage on profile" link.
+
+<Canvas of={Stories.ControlReadOnly} />
 
 ## Props
 

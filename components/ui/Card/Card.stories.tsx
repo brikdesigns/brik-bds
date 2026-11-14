@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Decorator, Meta, StoryObj } from '@storybook/react-vite';
 import { expect, within } from 'storybook/test';
 import { Card, CardTitle, CardDescription, CardFooter } from './Card';
 import { Image } from '../Image';
@@ -188,16 +188,30 @@ export const Pricing: Story = {
   ],
 };
 
+const controlDecorator: Decorator = (Story) => (
+  <div style={{ width: 560 }}>
+    <Story />
+  </div>
+);
+
+const controlArgTypes: Story['argTypes'] = {
+  variant: { table: { disable: true } },
+  padding: { table: { disable: true } },
+  interactive: { table: { disable: true } },
+  href: { table: { disable: true } },
+};
+
 /**
  * `layout="control"` — settings / integration-row layout (ADR-038; replaces
  * `preset="control"`). Leading `media` (logo) + `title` / `description` on the
  * left; a trailing `connectionStatus` indicator + `action` on the right.
  *
- * `connectionStatus`, `lastSynced`, and `actionAlign` are **Controls** — the
- * status is a *state of one card*, not a set of variants, so cycle it in the
- * panel rather than adding stories.
+ * This story is the **Synced** row of the source-card lifecycle; the other
+ * rows follow as `ControlNotConfigured`, `ControlConnected`, `ControlError`,
+ * `ControlDisabled` and `ControlReadOnly` (brik-bds#3159). `connectionStatus`,
+ * `stamp`, and `actionAlign` are also **Controls**.
  *
- * @summary layout="control" — settings / integration row
+ * @summary layout="control" — settings / integration row (Synced)
  */
 export const Control: Story = {
   args: {
@@ -206,7 +220,7 @@ export const Control: Story = {
     title: 'Notion Meetings Database',
     description: 'Discovery-call meeting notes for proposal generation.',
     connectionStatus: 'synced',
-    lastSynced: 'Last synced 3 min ago',
+    stamp: { kind: 'synced', at: '2026-11-06T20:30:00.000Z' },
     action: (
       <Button variant="outline" size="sm">
         Configure
@@ -232,23 +246,140 @@ export const Control: Story = {
     },
     connectionStatus: {
       control: 'select',
-      options: ['not-configured', 'linked', 'connected', 'syncing', 'synced', 'failed'],
+      options: ['not-configured', 'connected', 'synced', 'error', 'disabled'],
       description:
-        'Connection-status state (a state of this one card, not a variant). Renders a status indicator in the trailing block alongside the `action`.',
+        'Connection-status state. Renders a status indicator in the trailing block; `disabled` mutes the card. Retired `linked` / `syncing` / `failed` still map onto `connected` / `connected` / `error`.',
     },
-    lastSynced: {
-      control: 'text',
+    stamp: {
+      control: 'object',
       description:
-        'Human-readable "last synced" label below the status indicator. Shown only when `connectionStatus` is set and is not `not-configured`.',
+        'Typed stamp `{ kind, at (ISO 8601), actor? }` below the status indicator, rendered through `DateTime`. Hidden for `not-configured`.',
     },
+    readOnly: {
+      control: 'boolean',
+      description: 'Replaces every action with one "Manage on profile" link to `manageHref`.',
+    },
+    manageHref: { control: 'text', description: 'Destination of the read-only "Manage on profile" link.' },
+    onSetup: { control: false, description: 'Renders the "Setup" button for `not-configured`.' },
+    onRetry: { control: false, description: 'Renders "Retry" before `action` for `error`.' },
+    onEnable: { control: false, description: 'Renders "Enable" for `disabled`.' },
   },
-  decorators: [
-    (Story) => (
-      <div style={{ width: 560 }}>
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [controlDecorator],
+};
+
+const controlBase = {
+  layout: 'control',
+  media: <Logo set="integration" name="notion" size="sm" />,
+  title: 'Notion Meetings Database',
+  description: 'Discovery-call meeting notes for proposal generation.',
+  actionAlign: 'top',
+} as const;
+
+const configureAction = (
+  <Button variant="outline" size="sm">
+    Configure
+  </Button>
+);
+
+/**
+ * Source card, **Not configured** — one "Setup" button, no stamp.
+ *
+ * @summary layout="control" — Not configured
+ */
+export const ControlNotConfigured: Story = {
+  args: { ...controlBase, connectionStatus: 'not-configured', onSetup: () => {} },
+  argTypes: controlArgTypes,
+  decorators: [controlDecorator],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getAllByRole('button')).toHaveLength(1);
+    await expect(canvas.getByRole('button', { name: 'Setup' })).toBeVisible();
+  },
+};
+
+/**
+ * Source card, **Connected** — linked, no data read yet. Stamp records who connected it.
+ *
+ * @summary layout="control" — Connected
+ */
+export const ControlConnected: Story = {
+  args: {
+    ...controlBase,
+    connectionStatus: 'connected',
+    stamp: { kind: 'connected', at: '2026-11-06T20:30:00.000Z', actor: 'Nick' },
+    action: configureAction,
+  },
+  argTypes: controlArgTypes,
+  decorators: [controlDecorator],
+};
+
+/**
+ * Source card, **Error** — Retry first, then the card's own action.
+ *
+ * @summary layout="control" — Error
+ */
+export const ControlError: Story = {
+  args: {
+    ...controlBase,
+    connectionStatus: 'error',
+    stamp: { kind: 'error', at: '2026-11-06T20:30:00.000Z' },
+    onRetry: () => {},
+    action: configureAction,
+  },
+  argTypes: controlArgTypes,
+  decorators: [controlDecorator],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const buttons = canvas.getAllByRole('button');
+    await expect(buttons[0]).toHaveTextContent('Retry');
+    await expect(buttons[1]).toHaveTextContent('Configure');
+  },
+};
+
+/**
+ * Source card, **Disabled** — Brik switched this source off. Muted, with one "Enable" action.
+ *
+ * @summary layout="control" — Disabled
+ */
+export const ControlDisabled: Story = {
+  args: {
+    ...controlBase,
+    connectionStatus: 'disabled',
+    stamp: { kind: 'disabled', at: '2026-11-06T20:30:00.000Z', actor: 'Brik' },
+    onEnable: () => {},
+    action: configureAction,
+  },
+  argTypes: controlArgTypes,
+  decorators: [controlDecorator],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getAllByRole('button')).toHaveLength(1);
+    await expect(canvas.getByRole('button', { name: 'Enable' })).toBeVisible();
+  },
+};
+
+/**
+ * Source card, **engagement read-only** — one "Manage on profile" link, no status actions.
+ *
+ * @summary layout="control" — read-only
+ */
+export const ControlReadOnly: Story = {
+  args: {
+    ...controlBase,
+    connectionStatus: 'synced',
+    stamp: { kind: 'synced', at: '2026-11-06T20:30:00.000Z' },
+    readOnly: true,
+    manageHref: '/admin/companies/acme',
+  },
+  argTypes: controlArgTypes,
+  decorators: [controlDecorator],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('link', { name: 'Manage on profile' })).toHaveAttribute(
+      'href',
+      '/admin/companies/acme',
+    );
+  },
 };
 
 /**

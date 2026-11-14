@@ -4,6 +4,9 @@ import { Avatar, type AvatarStatus } from '../Avatar';
 import { Image } from '../Image';
 import { Logo, type LogoProps } from '../Logo';
 import { Dot, type DotTone } from '../Dot';
+import { Button } from '../Button';
+import { ButtonGroup } from '../ButtonGroup';
+import { DateTime } from '../DateTime';
 import { Icon } from '../Icon';
 import type { ServiceLine } from '../ServiceTag/service-config';
 import './Card.css';
@@ -55,22 +58,48 @@ export type CardControlActionAlign = 'center' | 'top';
  * Connection-status state for the `control` layout integration card.
  * Maps to canonical semantic token pairs:
  * - `not-configured` → `--bds-text-muted` / `--background-status-neutral` (neutral/unconfigured)
- * - `linked`         → `--bds-text-muted` / `--background-status-neutral` (linked, nothing read yet — NOT green)
  * - `connected`      → `--bds-text-positive` / `--bds-background-positive`
- * - `syncing`        → `--text-status-info` / `--background-status-info` (blue/in-progress)
  * - `synced`         → `--bds-text-positive` / `--bds-background-positive`
- * - `failed`         → `--bds-text-negative` / `--bds-background-negative`
+ * - `error`          → `--bds-text-negative` / `--bds-background-negative`
+ * - `disabled`       → `--bds-text-muted` / neutral dot (Brik switched the source off)
+ *
+ * Retired spellings (`linked`, `syncing`, `failed`) are still honoured for one
+ * minor via `RETIRED_CONNECTION_STATUS`.
  */
 export type CardControlConnectionStatus =
   | 'not-configured'
-  | 'linked'
   | 'connected'
-  | 'syncing'
   | 'synced'
-  | 'failed';
+  | 'error'
+  | 'disabled';
 
 const RETIRED_CONNECTION_STATUS: Record<string, CardControlConnectionStatus> = {
-  error: 'failed',
+  linked: 'connected',
+  syncing: 'connected',
+  failed: 'error',
+};
+
+/** What the control-card stamp records — selects its label. */
+export type CardControlStampKind = 'connected' | 'synced' | 'error' | 'disabled';
+
+/**
+ * Typed "who did what, when" stamp beneath the control-card status. Replaces
+ * the free-form `lastSynced` string. `at` is an ISO 8601 timestamp, rendered
+ * through `DateTime` (relative, exact time on hover).
+ */
+export interface CardControlStamp {
+  kind: CardControlStampKind;
+  /** ISO 8601 timestamp. */
+  at: string;
+  /** Who performed it — a person or `Brik`. Omit for system events. */
+  actor?: string;
+}
+
+const STAMP_LABELS: Record<CardControlStampKind, string> = {
+  connected: 'Connected',
+  synced:    'Last synced',
+  error:     'Failed',
+  disabled:  'Disabled',
 };
 /**
  * Image-column width for the `row` layout. Named values resolve to fixed
@@ -268,10 +297,20 @@ interface CardAnatomyProps extends CardBaseProps {
   description?: ReactNode;
   /** Trailing-block vertical alignment (`control` only) — `center` (default) / `top`. */
   actionAlign?: CardControlActionAlign;
-  /** Connection-status indicator (`control` only) — `not-configured` / `linked` / `connected` / `syncing` / `synced` / `failed`. */
+  /** Connection-status indicator (`control` only) — `not-configured` / `connected` / `synced` / `error` / `disabled`. `disabled` mutes the card. */
   connectionStatus?: CardControlConnectionStatus;
-  /** "Last synced" label below the status indicator (`control` only). */
-  lastSynced?: string;
+  /** Typed stamp (kind, ISO timestamp, optional actor) below the status indicator (`control` only). Hidden for `not-configured`. */
+  stamp?: CardControlStamp;
+  /** Read-only source (`control` only) — replaces every action with one "Manage on profile" link to `manageHref`. */
+  readOnly?: boolean;
+  /** Destination of the read-only "Manage on profile" link (`control` only). */
+  manageHref?: string;
+  /** Renders the "Setup" button when `connectionStatus="not-configured"` (`control` only). */
+  onSetup?: () => void;
+  /** Renders "Retry" before `action` when `connectionStatus="error"` (`control` only). */
+  onRetry?: () => void;
+  /** Renders "Enable" when `connectionStatus="disabled"` (`control` only). */
+  onEnable?: () => void;
   /** Secondary detail line below the value (`metric` only) — e.g. a price • frequency, a delta, a unit. */
   detail?: ReactNode;
   /** Price display (`pricing` only) — e.g. `"$49"`, `"Free"`. Pre-formatted; the card applies no numeric formatting. */
@@ -324,7 +363,7 @@ export type CardProps = CardDefaultProps | CardAnatomyProps;
  *   description="Pull session and conversion data into your dashboard."
  *   media={<Avatar src="/logos/google-analytics.png" alt="Google Analytics" size="sm" />}
  *   connectionStatus="synced"
- *   lastSynced="Last synced 3 min ago"
+ *   stamp={{ kind: 'synced', at: '2026-11-06T20:30:00Z' }}
  *   action={<Button variant="outline" size="sm">Configure</Button>}
  * />
  * ```
@@ -436,11 +475,10 @@ function renderDefault({
 
 const CONNECTION_STATUS_LABELS: Record<CardControlConnectionStatus, string> = {
   'not-configured': 'Not configured',
-  linked:           'Linked',
   connected:        'Connected',
-  syncing:          'Syncing',
   synced:           'Synced',
-  failed:           'Error',
+  error:            'Error',
+  disabled:         'Disabled',
 };
 
 /**
@@ -450,12 +488,58 @@ const CONNECTION_STATUS_LABELS: Record<CardControlConnectionStatus, string> = {
  */
 const CONNECTION_STATUS_DOT: Record<CardControlConnectionStatus, DotTone> = {
   'not-configured': 'neutral',
-  linked:           'neutral',
   connected:        'positive',
-  syncing:          'info',
   synced:           'positive',
-  failed:           'negative',
+  error:            'negative',
+  disabled:         'neutral',
 };
+
+/**
+ * The control card's action row, owned by its status: not-configured → Setup,
+ * error → Retry then `action`, disabled → Enable, otherwise `action`. A
+ * read-only card shows one "Manage on profile" link and nothing else.
+ */
+function controlActions(
+  status: CardControlConnectionStatus | undefined,
+  { action, readOnly, manageHref, onSetup, onRetry, onEnable }: Pick<
+    CardAnatomyProps,
+    'action' | 'readOnly' | 'manageHref' | 'onSetup' | 'onRetry' | 'onEnable'
+  >,
+): ReactNode {
+  if (readOnly) {
+    return (
+      <Button variant="ghost" size="sm" href={manageHref ?? '#'}>
+        Manage on profile
+      </Button>
+    );
+  }
+  if (status === 'not-configured') {
+    return onSetup ? (
+      <Button variant="primary" size="sm" onClick={onSetup}>
+        Setup
+      </Button>
+    ) : null;
+  }
+  if (status === 'disabled') {
+    return onEnable ? (
+      <Button variant="outline" size="sm" onClick={onEnable}>
+        Enable
+      </Button>
+    ) : null;
+  }
+  const retry =
+    status === 'error' && onRetry ? (
+      <Button variant="primary" size="sm" onClick={onRetry}>
+        Retry
+      </Button>
+    ) : null;
+  return retry || action ? (
+    <>
+      {retry}
+      {action}
+    </>
+  ) : null;
+}
 
 /**
  * Render the flat anatomy Card (ADR-038). Each `layout` owns a dedicated BEM
@@ -481,7 +565,12 @@ function renderAnatomy({
   description,
   actionAlign = 'center',
   connectionStatus,
-  lastSynced,
+  stamp,
+  readOnly,
+  manageHref,
+  onSetup,
+  onRetry,
+  onEnable,
   detail,
   price,
   period,
@@ -497,13 +586,22 @@ function renderAnatomy({
       connectionStatus,
       RETIRED_CONNECTION_STATUS,
     );
-    const hasTrailing = action || resolvedConnectionStatus;
+    const actions = controlActions(resolvedConnectionStatus, {
+      action,
+      readOnly,
+      manageHref,
+      onSetup,
+      onRetry,
+      onEnable,
+    });
+    const hasTrailing = actions || resolvedConnectionStatus;
     return (
       <div
         className={bdsClass(
           'bds-card',
           'bds-card--layout-control',
           `bds-card--layout-control-action-${actionAlign}`,
+          resolvedConnectionStatus === 'disabled' && 'bds-card--layout-control-disabled',
           className,
         )}
         style={style}
@@ -535,12 +633,19 @@ function renderAnatomy({
                 <span className="bds-card__control-status-label">
                   {CONNECTION_STATUS_LABELS[resolvedConnectionStatus]}
                 </span>
-                {lastSynced && resolvedConnectionStatus !== 'not-configured' && (
-                  <span className="bds-card__control-status-synced">{lastSynced}</span>
+                {stamp && resolvedConnectionStatus !== 'not-configured' && (
+                  <span className="bds-card__control-status-stamp">
+                    {STAMP_LABELS[stamp.kind]} <DateTime value={stamp.at} mode="relative" />
+                    {stamp.actor && ` by ${stamp.actor}`}
+                  </span>
                 )}
               </div>
             )}
-            {action && <div className="bds-card__control-action">{action}</div>}
+            {actions && (
+              <div className="bds-card__control-action">
+                <ButtonGroup align="end">{actions}</ButtonGroup>
+              </div>
+            )}
           </div>
         )}
       </div>

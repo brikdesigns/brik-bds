@@ -243,11 +243,10 @@
  *
  * State → token mapping:
  *   not-configured → --background-status-neutral / --bds-text-muted (label)
- *   linked         → neutral tone (--tone-neutral modifier) → --bds-text-muted (label)
  *   connected      → --bds-background-positive / --bds-text-positive
- *   syncing        → --background-status-info / --text-status-info
  *   synced         → --bds-background-positive / --bds-text-positive
  *   error          → --bds-background-negative / --bds-text-negative
+ *   disabled       → neutral tone (--tone-neutral modifier) → --bds-text-muted (label)
  */
 
 .bds-card__control-status {
@@ -270,8 +269,8 @@
   line-height: var(--bds-font-line-height-tight);
 }
 
-/* Last-synced line — drops below the dot+label row */
-.bds-card__control-status-synced {
+/* Stamp line (kind + DateTime + actor) — drops below the dot+label row */
+.bds-card__control-status-stamp {
   width: 100%;
   text-align: right;
   font-family: var(--bds-font-family-body);
@@ -294,16 +293,20 @@
   color: var(--bds-text-positive);
 }
 
-.bds-card__control-status--syncing .bds-card__control-status-label {
-  color: var(--bds-text-info);
-}
-
 .bds-card__control-status--synced .bds-card__control-status-label {
   color: var(--bds-text-positive);
 }
 
-.bds-card__control-status--failed .bds-card__control-status-label {
+.bds-card__control-status--error .bds-card__control-status-label {
   color: var(--bds-text-negative);
+}
+
+/* ── Disabled — Brik switched this source off ──
+ * The card has no fill of its own to swap, so the content (logo + text) takes
+ * the ADR-028 opacity fade; the trailing block stays full strength so the
+ * "Enable" action is still readable and reachable. */
+.bds-card--layout-control-disabled .bds-card__control-content {
+  opacity: var(--bds-state-disabled-opacity);
 }
 
 /* ─── Layout: metric ─────────────────────────────────────────── */
