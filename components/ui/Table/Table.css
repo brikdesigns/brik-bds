@@ -216,11 +216,11 @@
   align-items: center;
 }
 
-.bds-table-actions-cell--right .bds-table-actions-cell__group {
+.bds-table-actions-cell--align-right .bds-table-actions-cell__group {
   justify-content: flex-end;
 }
 
-.bds-table-actions-cell--center .bds-table-actions-cell__group {
+.bds-table-actions-cell--align-center .bds-table-actions-cell__group {
   justify-content: center;
 }
 
@@ -385,12 +385,12 @@
 }
 
 /* bds-lint-ignore — Figma-driven thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
-.bds-table-image-cell--sm .bds-table-image-cell__media {
+.bds-table-image-cell--size-sm .bds-table-image-cell__media {
   width: var(--bds-size-800);
 }
 
 /* bds-lint-ignore — Figma-driven thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
-.bds-table-image-cell--md .bds-table-image-cell__media {
+.bds-table-image-cell--size-md .bds-table-image-cell__media {
   width: var(--bds-size-1000);
 }
 

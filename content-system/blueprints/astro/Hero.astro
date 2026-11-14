@@ -207,8 +207,8 @@ const priceCardRatio = imageRatio ?? 'square';
 // The pricing-card layout sits on an audience-tinted surface, so its single
 // action is the inverse button; the other layouts use the primary fill.
 const ctaClass = isPricingCard
-  ? 'bds-button bds-button--inverse bds-button--md'
-  : 'bds-button bds-button--primary bds-button--md';
+  ? 'bds-button bds-button--inverse bds-button--size-md'
+  : 'bds-button bds-button--primary bds-button--size-md';
 
 ---
 
@@ -319,7 +319,7 @@ const ctaClass = isPricingCard
         {(priceCard.priceLabel || priceCard.price || priceCard.cta) && (
           <HeroMediaCardPrice label={priceCard.priceLabel} value={priceCard.price}>
             {priceCard.cta && 'url' in priceCard.cta && (
-              <a href={priceCard.cta.url} class={`bds-button bds-button--primary bds-button--${priceCard.cta.size ?? 'sm'}`}>
+              <a href={priceCard.cta.url} class={`bds-button bds-button--primary bds-button--size-${priceCard.cta.size ?? 'sm'}`}>
                 <span class="bds-button__content">{priceCard.cta.label}</span>
               </a>
             )}

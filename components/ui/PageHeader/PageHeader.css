@@ -81,8 +81,8 @@
   font-size: var(--bds-heading-md);
 }
 
-.bds-page-header--md[data-condensed='true'] .bds-page-header__title,
-.bds-page-header--sm[data-condensed='true'] .bds-page-header__title {
+.bds-page-header--size-md[data-condensed='true'] .bds-page-header__title,
+.bds-page-header--size-sm[data-condensed='true'] .bds-page-header__title {
   font-size: var(--bds-heading-tiny);
 }
 
@@ -103,7 +103,7 @@
    `compact` keeps media, title, actions and tabs. Its title stays at the
    `size="lg"` Section-headline step above; a variant changes which slots
    render, never the title step. Size classes apply to `full` only, so
-   `--md` / `--sm` never reach a compact header.
+   `--size-md` / `--size-sm` never reach a compact header.
    `tabs-only` shows only the tabs; its <h1> stays in the accessibility tree. */
 
 .bds-page-header__title--hidden {
@@ -143,7 +143,7 @@
 /* The page's <h1> is a Section-headline step (`--bds-heading-xl` … `--bds-heading-huge`,
    semibold), not a Container title. Build standards: headings § Role by layer,
    and the record-read archetype's heading ramp. This is the `size="lg"` default;
-   `--md` / `--sm` below are the reduced scales. brik-bds#1971. */
+   `--size-md` / `--size-sm` below are the reduced scales. brik-bds#1971. */
 .bds-page-header__title {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-xl);
@@ -152,11 +152,11 @@
   margin: 0;
 }
 
-.bds-page-header--md .bds-page-header__title {
+.bds-page-header--size-md .bds-page-header__title {
   font-size: var(--bds-heading-md);
 }
 
-.bds-page-header--sm .bds-page-header__title {
+.bds-page-header--size-sm .bds-page-header__title {
   font-size: var(--bds-heading-sm);
 }
 

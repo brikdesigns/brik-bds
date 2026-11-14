@@ -23,8 +23,8 @@
    is keyed to the shared Avatar / Card-media scale (32/40/48/64) so <Logo>
    drops into Card media + table cells at the same footprint as <Avatar> and a
    1:1 <Image>. */
-.bds-logo--sm { width: 32px; height: 32px; }
-.bds-logo--md { width: 40px; height: 40px; }
-.bds-logo--lg { width: 48px; height: 48px; }
-.bds-logo--xl { width: 64px; height: 64px; }
+.bds-logo--size-sm { width: 32px; height: 32px; }
+.bds-logo--size-md { width: 40px; height: 40px; }
+.bds-logo--size-lg { width: 48px; height: 48px; }
+.bds-logo--size-xl { width: 64px; height: 64px; }
 }

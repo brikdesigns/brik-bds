@@ -121,7 +121,7 @@ export const InteractionTestDefaultMarkup: Story = {
     await expect(heading).toHaveClass('bds-content-block__title');
 
     const wrapper = canvasElement.querySelector('.bds-section-header');
-    await expect(wrapper).toHaveClass('bds-section-header--center');
+    await expect(wrapper).toHaveClass('bds-section-header--align-center');
     await expect(wrapper).toHaveClass('bds-section-header--measure-md');
   },
 };

@@ -230,11 +230,11 @@
    data-dense surfaces that need more content per viewport. Horizontal
    padding is unchanged, so the body/footer stay aligned with the header. */
 
-.bds-sheet--compact .bds-sheet__body {
+.bds-sheet--density-compact .bds-sheet__body {
   padding-block: var(--bds-padding-lg);
 }
 
-.bds-sheet--compact .bds-sheet__footer {
+.bds-sheet--density-compact .bds-sheet__footer {
   padding-block: var(--bds-padding-md);
 }
 

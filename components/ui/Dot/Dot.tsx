@@ -53,7 +53,7 @@ export function Dot({
       aria-label={`${resolved} status`}
       className={bdsClass(
         'bds-dot',
-        `bds-dot--${size}`,
+        `bds-dot--size-${size}`,
         `bds-dot--tone-${resolved}`,
         pulse && 'bds-dot--pulse',
         className

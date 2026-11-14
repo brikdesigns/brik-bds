@@ -118,11 +118,11 @@ export function Meter({
   );
 
   const track = (
-    <div className={bdsClass('bds-meter__track', `bds-meter__track--${size}`)}>
+    <div className={bdsClass('bds-meter__track', `bds-meter__track--size-${size}`)}>
       <div
         className={bdsClass(
           'bds-meter__fill',
-          `bds-meter__fill--${size}`,
+          `bds-meter__fill--size-${size}`,
           !fillColor && `bds-meter__fill--tone-${resolvedTone}`,
         )}
         style={{

@@ -10,9 +10,9 @@
 /* ─── Sizes ──────────────────────────────────────────────────── */
 /* bds-lint-ignore — Figma-driven dot dimensions */
 
-.bds-dot--sm { width: 6px; height: 6px; }
-.bds-dot--md { width: 8px; height: 8px; }
-.bds-dot--lg { width: 10px; height: 10px; }
+.bds-dot--size-sm { width: 6px; height: 6px; }
+.bds-dot--size-md { width: 8px; height: 8px; }
+.bds-dot--size-lg { width: 10px; height: 10px; }
 
 /* ─── Tone colors ────────────────────────────────────────────── */
 /* Dot is an indicator — a small element placed ON a surface — so every fill

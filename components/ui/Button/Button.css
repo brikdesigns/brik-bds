@@ -5,7 +5,7 @@
  * All visual styles live here. Component TSX handles logic + class composition only.
  * Token references use the BDS semantic token layer (never primitives).
  *
- * Naming: BEM-lite — .bds-button, .bds-button--primary, .bds-button--sm
+ * Naming: BEM-lite — .bds-button, .bds-button--primary, .bds-button--size-sm
  */
 
 /* ─── Base ────────────────────────────────────────────────────── */
@@ -52,7 +52,7 @@
  * Only padding-inline remains for horizontal spacing.
  */
 
-.bds-button--xs {
+.bds-button--size-xs {
   height: var(--bds-size-600);
   padding-inline: var(--bds-padding-tiny);
   font-size: var(--bds-label-xs);
@@ -60,25 +60,25 @@
   border-radius: var(--bds-border-radius-sm);
 }
 
-.bds-button--sm {
+.bds-button--size-sm {
   height: var(--bds-size-800);
   padding-inline: var(--bds-padding-sm);
   font-size: var(--bds-label-sm);
 }
 
-.bds-button--md {
+.bds-button--size-md {
   height: var(--bds-size-1000);
   padding-inline: var(--bds-padding-md);
   font-size: var(--bds-label-md);
 }
 
-.bds-button--lg {
+.bds-button--size-lg {
   height: var(--bds-size-1200);
   padding-inline: var(--bds-padding-md);
   font-size: var(--bds-label-lg);
 }
 
-.bds-button--xl {
+.bds-button--size-xl {
   height: var(--bds-size-1400);
   padding-inline: var(--bds-padding-lg);
   font-size: var(--bds-label-xl);
@@ -299,7 +299,7 @@
   gap: var(--bds-gap-sm);
 }
 
-.bds-button--xs .bds-button__content {
+.bds-button--size-xs .bds-button__content {
   gap: var(--bds-gap-xs);
 }
 
@@ -329,22 +329,22 @@
 }
 
 /* Size-specific spinner scale — mirrors IconButton icon scale (tiny=12, sm=14, md=16, lg=20, xl=24) */
-.bds-button--xs .bds-button__spinner-icon {
+.bds-button--size-xs .bds-button__spinner-icon {
   width: var(--bds-icon-2xs);   /* 12px */
   height: var(--bds-icon-2xs);
 }
 
-.bds-button--sm .bds-button__spinner-icon {
+.bds-button--size-sm .bds-button__spinner-icon {
   width: var(--bds-icon-xs);    /* 14px */
   height: var(--bds-icon-xs);
 }
 
-.bds-button--lg .bds-button__spinner-icon {
+.bds-button--size-lg .bds-button__spinner-icon {
   width: var(--bds-icon-lg);
   height: var(--bds-icon-lg);
 }
 
-.bds-button--xl .bds-button__spinner-icon {
+.bds-button--size-xl .bds-button__spinner-icon {
   width: var(--bds-icon-2xl);   /* 24px */
   height: var(--bds-icon-2xl);
 }
@@ -373,27 +373,27 @@
   flex-shrink: 0;
 }
 
-.bds-icon-button--xs {
+.bds-icon-button--size-xs {
   width: var(--bds-size-600);    /* 24px */
   height: var(--bds-size-600);
 }
 
-.bds-icon-button--sm {
+.bds-icon-button--size-sm {
   width: var(--bds-size-800);    /* 32px */
   height: var(--bds-size-800);
 }
 
-.bds-icon-button--md {
+.bds-icon-button--size-md {
   width: var(--bds-size-1000);   /* 40px */
   height: var(--bds-size-1000);
 }
 
-.bds-icon-button--lg {
+.bds-icon-button--size-lg {
   width: var(--bds-size-1200);   /* 48px */
   height: var(--bds-size-1200);
 }
 
-.bds-icon-button--xl {
+.bds-icon-button--size-xl {
   width: var(--bds-size-1400);   /* 56px */
   height: var(--bds-size-1400);
 }
@@ -407,19 +407,19 @@
   font-size: var(--bds-icon-sm);   /* md default (16px) */
 }
 
-.bds-icon-button--xs .bds-icon-button__icon {
+.bds-icon-button--size-xs .bds-icon-button__icon {
   font-size: var(--bds-icon-2xs);  /* 12px */
 }
 
-.bds-icon-button--sm .bds-icon-button__icon {
+.bds-icon-button--size-sm .bds-icon-button__icon {
   font-size: var(--bds-icon-sm);   /* 16px */
 }
 
-.bds-icon-button--lg .bds-icon-button__icon {
+.bds-icon-button--size-lg .bds-icon-button__icon {
   font-size: var(--bds-icon-lg);
 }
 
-.bds-icon-button--xl .bds-icon-button__icon {
+.bds-icon-button--size-xl .bds-icon-button__icon {
   font-size: var(--bds-icon-2xl);  /* 24px */
 }
 

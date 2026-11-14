@@ -82,7 +82,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       <div
         className={bdsClass(
           'bds-text-input',
-          `bds-text-input--${size}`,
+          `bds-text-input--size-${size}`,
           fullWidth && 'bds-text-input--full-width',
           className,
         )}
@@ -93,7 +93,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             htmlFor={inputId}
             className={bdsClass(
               'bds-text-input__label',
-              `bds-text-input__label--${size}`,
+              `bds-text-input__label--size-${size}`,
               hasError && 'bds-text-input__label--tone-negative',
             )}
           >

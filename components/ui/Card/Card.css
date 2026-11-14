@@ -105,22 +105,22 @@
 /* Fixed square wrapper for the 1:1 image variant, keyed to the Avatar size
  * scale so an avatar and an image read at the same footprint. Avatars size
  * themselves, so these modifiers apply only to image media. */
-.bds-card__media--sm,
-.bds-card__media--md,
-.bds-card__media--lg,
-.bds-card__media--xl {
+.bds-card__media--size-sm,
+.bds-card__media--size-md,
+.bds-card__media--size-lg,
+.bds-card__media--size-xl {
   overflow: hidden;
   border-radius: var(--bds-border-radius-sm);
 }
 
 /* bds-lint-ignore — thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
-.bds-card__media--sm { width: 32px; }
+.bds-card__media--size-sm { width: 32px; }
 /* bds-lint-ignore — thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
-.bds-card__media--md { width: 40px; }
+.bds-card__media--size-md { width: 40px; }
 /* bds-lint-ignore — thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
-.bds-card__media--lg { width: 48px; }
+.bds-card__media--size-lg { width: 48px; }
 /* bds-lint-ignore — thumbnail dimensions aligned to the Avatar size scale; no semantic size token */
-.bds-card__media--xl { width: 64px; }
+.bds-card__media--size-xl { width: 64px; }
 
 /* ─── Subcomponents ──────────────────────────────────────────── */
 

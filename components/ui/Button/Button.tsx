@@ -255,7 +255,7 @@ export function composeButtonClasses({
     axes.tone && `bds-button--tone-${axes.tone}`,
     (() => {
       const s = resolveRetiredValue('Button', 'size', size, RETIRED_SIZES) ?? 'md';
-      return iconOnly ? `bds-icon-button--${s}` : `bds-button--${s}`;
+      return iconOnly ? `bds-icon-button--size-${s}` : `bds-button--size-${s}`;
     })(),
     fullWidth && 'bds-button--full-width',
     loading && 'bds-button--loading',

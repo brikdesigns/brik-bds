@@ -129,12 +129,12 @@ export function ServiceTag({
     // the label reads as "status dot + text" rather than a flooded pill.
     return (
       <span
-        className={bdsClass('bds-service-tag', 'bds-service-tag--dot', `bds-service-tag--${size}`, className)}
+        className={bdsClass('bds-service-tag', 'bds-service-tag--dot', `bds-service-tag--size-${size}`, className)}
         style={style}
         {...props}
       >
         <span
-          className={bdsClass('bds-service-tag__dot', `bds-service-tag__dot--${size}`, `bds-service-tag--${category}`)}
+          className={bdsClass('bds-service-tag__dot', `bds-service-tag__dot--size-${size}`, `bds-service-tag--${category}`)}
           aria-hidden
         />
         {displayLabel}
@@ -149,7 +149,7 @@ export function ServiceTag({
     <span
       className={bdsClass(
         'bds-service-tag',
-        `bds-service-tag--${size}`,
+        `bds-service-tag--size-${size}`,
         `bds-service-tag--${category}`,
         showIcon && 'bds-service-tag--has-icon',
         !!trailing && 'bds-service-tag--has-trailing',

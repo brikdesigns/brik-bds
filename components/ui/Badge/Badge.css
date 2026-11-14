@@ -25,7 +25,7 @@
 
 /* ─── Sizes (shared scale with Tag) ──────────────────────────── */
 
-.bds-badge--xs {
+.bds-badge--size-xs {
   /* bds-lint-ignore — 24px icon-only badge matches shared indicator spec */
   width: var(--bds-size-600);
   height: var(--bds-size-600);
@@ -35,21 +35,21 @@
   gap: 0;
 }
 
-.bds-badge--sm {
+.bds-badge--size-sm {
   padding: var(--bds-padding-tiny) var(--bds-padding-sm);
   gap: var(--bds-gap-xs);
   font-size: var(--bds-label-tiny);
   height: var(--bds-size-700);
 }
 
-.bds-badge--md {
+.bds-badge--size-md {
   padding: var(--bds-padding-sm) var(--bds-padding-md);
   gap: var(--bds-gap-sm);
   font-size: var(--bds-label-sm);
   height: var(--bds-size-800);
 }
 
-.bds-badge--lg {
+.bds-badge--size-lg {
   padding: var(--bds-padding-sm) var(--bds-padding-md);
   gap: var(--bds-gap-md);
   font-size: var(--bds-label-md);
@@ -62,12 +62,12 @@
    down per size (sm→xs, md/lg→sm); height and vertical padding are
    unchanged. xs is icon-only and is unaffected. */
 
-.bds-badge--compact.bds-badge--sm {
+.bds-badge--density-compact.bds-badge--size-sm {
   padding-inline: var(--bds-padding-xs);
 }
 
-.bds-badge--compact.bds-badge--md,
-.bds-badge--compact.bds-badge--lg {
+.bds-badge--density-compact.bds-badge--size-md,
+.bds-badge--density-compact.bds-badge--size-lg {
   padding-inline: var(--bds-padding-sm);
 }
 
@@ -98,23 +98,23 @@
 }
 
 /* Icon font-size matches container so the glyph fills the box */
-.bds-badge--xs .bds-badge__icon {
+.bds-badge--size-xs .bds-badge__icon {
   font-size: var(--bds-icon-sm);
 }
 
-.bds-badge--sm .bds-badge__icon {
+.bds-badge--size-sm .bds-badge__icon {
   width: var(--bds-size-400);
   height: var(--bds-size-400);
   font-size: var(--bds-icon-sm);
 }
 
-.bds-badge--md .bds-badge__icon {
+.bds-badge--size-md .bds-badge__icon {
   width: var(--bds-size-400);
   height: var(--bds-size-400);
   font-size: var(--bds-icon-sm);
 }
 
-.bds-badge--lg .bds-badge__icon {
+.bds-badge--size-lg .bds-badge__icon {
   width: var(--bds-icon-lg);
   height: var(--bds-icon-lg);
   font-size: var(--bds-label-xl);

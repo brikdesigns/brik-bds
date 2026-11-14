@@ -73,7 +73,7 @@ export function BoardCard({
       className={bdsClass(
         'bds-board-card',
         checked && 'bds-board-card--checked',
-        density === 'compact' && 'bds-board-card--compact',
+        density === 'compact' && 'bds-board-card--density-compact',
         className
       )}
       style={{

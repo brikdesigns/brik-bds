@@ -161,7 +161,7 @@ export function FilterButton({
         type="button"
         className={bdsClass(
           'bds-filter-button__trigger',
-          `bds-filter-button__trigger--${size}`,
+          `bds-filter-button__trigger--size-${size}`,
           isActive && 'bds-filter-button__trigger--active',
           disabled && 'bds-filter-button__trigger--disabled',
         )}

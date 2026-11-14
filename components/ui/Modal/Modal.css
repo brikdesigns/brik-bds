@@ -37,10 +37,10 @@
 /* ─── Sizes ──────────────────────────────────────────────────── */
 /* bds-lint-ignore — design-spec max-widths */
 
-.bds-modal--sm  { max-width: 640px; }
-.bds-modal--md  { max-width: 720px; }
-.bds-modal--lg  { max-width: 800px; }
-.bds-modal--xl  { max-width: 1000px; }
+.bds-modal--size-sm  { max-width: 640px; }
+.bds-modal--size-md  { max-width: 720px; }
+.bds-modal--size-lg  { max-width: 800px; }
+.bds-modal--size-xl  { max-width: 1000px; }
 .bds-modal--full { max-width: 95vw; }
 
 /* ─── Header ─────────────────────────────────────────────────── */
