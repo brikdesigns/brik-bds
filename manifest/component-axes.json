@@ -119,11 +119,10 @@
     ],
     "status": [
       "not-configured",
-      "linked",
       "connected",
-      "syncing",
       "synced",
-      "failed"
+      "error",
+      "disabled"
     ],
     "size": [
       "sm",

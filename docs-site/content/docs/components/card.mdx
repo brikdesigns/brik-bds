@@ -176,7 +176,7 @@ Two optional slots extend `metric` for a labelled selection — the shape the re
 />
 ```
 
-`actionAlign` controls vertical alignment of the trailing block — `center` (default) or `top`, which anchors to the upper-right when descriptions are tall. `connectionStatus` accepts `not-configured`, `linked` (linked, nothing read yet: neutral, never green), `connected`, `syncing`, `synced`, or `failed` and renders a status indicator alongside the action; pass `lastSynced` for a timestamp beneath it.
+`actionAlign` controls vertical alignment of the trailing block — `center` (default) or `top`, which anchors to the upper-right when descriptions are tall. `connectionStatus` accepts exactly `not-configured | connected | synced | error | disabled` (`disabled` = Brik switched the source off: the card mutes and shows one "Enable" action). Retired `linked` / `syncing` / `failed` still map onto `connected` / `connected` / `error` for one minor. `stamp` (`{ kind, at, actor? }`, `at` an ISO 8601 timestamp) replaces `lastSynced` and renders through `DateTime`. Actions render in a `ButtonGroup`, driven by status: `onSetup` → "Setup" (not-configured), `onRetry` → "Retry" before `action` (error), `onEnable` → "Enable" (disabled). `readOnly` + `manageHref` replace every action with one "Manage on profile" link.
 
 <Callout type="info">
   **`layout="control"` replaces the standalone `<CardControl>` component**, which is deprecated per [ADR-004](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-004-component-bloat-guardrails.md) ([#657](https://github.com/brikdesigns/brik-bds/issues/657)). New code should use the layout; see the [CardControl migration guide](/docs/components/card-control#migration).
@@ -200,7 +200,7 @@ Two optional slots extend `metric` for a labelled selection — the shape the re
 </Card>
 ```
 
-`price`, `period` and `features` are this layout's own slots, the same shape as `control`'s `connectionStatus` / `lastSynced` / `actionAlign`. Pre-format the price — the card applies no numeric formatting. Omit `features` (or pass `[]`) to drop the checklist and its divider.
+`price`, `period` and `features` are this layout's own slots, the same shape as `control`'s `connectionStatus` / `stamp` / `actionAlign`. Pre-format the price — the card applies no numeric formatting. Omit `features` (or pass `[]`) to drop the checklist and its divider.
 
 Mark the recommended tier with `variant="raised"` or a `tint`. There is deliberately **no `highlighted` prop**: the surface set is shared across every layout, so a per-layout highlight modifier would re-declare what `variant` already owns.
 
@@ -274,8 +274,11 @@ One flat slot set serves all four arrangements. A slot that a layout does not re
 | `mediaTreatment` | `'flush' \| 'inset'` | `'flush'` |
 | `description` | `ReactNode` | — |
 | `actionAlign` | `'center' \| 'top'` | `'center'` |
-| `connectionStatus` | `'not-configured' \| 'linked' \| 'connected' \| 'syncing' \| 'synced' \| 'failed'` | — |
-| `lastSynced` | `string` | — |
+| `connectionStatus` | `'not-configured' \| 'connected' \| 'synced' \| 'error' \| 'disabled'` | — |
+| `stamp` | `CardControlStamp` | — |
+| `readOnly` | `boolean` | — |
+| `manageHref` | `string` | — |
+| `onSetup` / `onRetry` / `onEnable` | `() => void` | — |
 | `detail` | `ReactNode` | — |
 
 Slots by layout:
@@ -285,7 +288,7 @@ Slots by layout:
 | `stack` | `media`, `overline`, `title`, `children`, `action`, `badge`, `tint`, `variant`, `mediaTreatment`, `href` |
 | `row` | the `stack` set plus `imageWidth`, minus `mediaTreatment` |
 | `metric` | `media`, `overline`, `title`, `detail`, `action` |
-| `control` | `media`, `title`, `description`, `action`, `actionAlign`, `connectionStatus`, `lastSynced` |
+| `control` | `media`, `title`, `description`, `action`, `actionAlign`, `connectionStatus`, `stamp`, `readOnly`, `manageHref`, `onSetup`, `onRetry`, `onEnable` |
 
 All modes accept standard `<div>` HTML attributes (excluding `title`, which is repurposed by the layouts and the control layout).
 
