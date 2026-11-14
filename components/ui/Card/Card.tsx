@@ -189,7 +189,7 @@ interface CardDefaultProps extends CardBaseProps {
    * (default `outlined`). `filled` — neutral recessed panel: `--bds-surface-secondary`
    * fill with a `--bds-border-muted` border, for a grouping container inside a page. Use `borderless` for cards sitting on a colored
    * surface, where the border ring reads as visual noise. `raised` —
-   * surface-primary fill, no border, with a `--bds-box-shadow-md` drop shadow;
+   * surface-primary fill, no border, with a `--bds-shadow-md` drop shadow;
    * use for a focal/lone card or a grid cell that needs a lifted, contained
    * read (the shadow-casting counterpart to the now-flat `elevated`).
    */

@@ -72,7 +72,6 @@ const CLEAN = `:root {
   --bds-subtitle-md: var(--bds-font-size-100);
   --bds-icon-md: var(--bds-font-size-100);
   --bds-shadow-md: 0px 4px 12px rgba(0, 0, 0, 0.12);
-  --bds-box-shadow-md: var(--bds-shadow-md);
   --bds-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --bds-content-width-wide: 1024px;
   --bds-measure-md: 60ch;
