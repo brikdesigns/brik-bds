@@ -33,6 +33,11 @@ set -uo pipefail
 unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_NAMESPACE \
       GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES
 
+# The REMOVE guard keeps a worktree written inside BRIK_SWEEP_SLIM_IDLE_MIN (#5667). Most
+# fixtures here create their dirt seconds before the sweep, so they run with the window off
+# ("the caller owns the worktree"); the #5667 cases below set it explicitly.
+export BRIK_SWEEP_SLIM_IDLE_MIN=0
+
 VERBOSE=false
 [ "${1:-}" = "-v" ] && VERBOSE=true
 
@@ -1464,6 +1469,48 @@ if [ -d "$OUTSIDE7" ] && [ -d "$PRIMARY7/.claude/worktrees/agent-merged" ]; then
 else
   echo -e "  ${RED}FAIL${NC}  a path outside \$WORKTREE_ROOT was removed"; FAIL=$((FAIL+1))
 fi
+
+# ── #5667: a merged, clean worktree is KEPT while a session is using it ───────
+# All three are fast-forward merged and clean, so the PR/ancestor logic says REMOVE for each.
+#   idle    nothing running, nothing written          → REMOVE (control: the guard can say no)
+#   live    a process has its cwd inside it           → KEEP — live process
+#   active  ignored build output written just now     → KEEP — written within
+echo
+echo -e "${YELLOW}▸ live-session guard (#5667)${NC}"
+PRIMARY8="$TMPROOT/primary8"
+WT8="$TMPROOT/primary8-worktrees"
+REMOTE8="$TMPROOT/remote8.git"
+git init -q --bare "$REMOTE8"
+git init -q -b main "$PRIMARY8"
+assert_throwaway_repo "$PRIMARY8" "sweep fixture primary8"
+g -C "$PRIMARY8" config user.email "guardtest@example.com"
+g -C "$PRIMARY8" config user.name "guardtest"
+g -C "$PRIMARY8" config commit.gpgsign false
+printf '.next/\n' > "$PRIMARY8/.gitignore"
+g -C "$PRIMARY8" add .gitignore
+g -C "$PRIMARY8" commit -q -m "seed"
+g -C "$PRIMARY8" remote add origin "$REMOTE8"
+g -C "$PRIMARY8" push -q -u origin main
+mkdir -p "$WT8"
+for slug in idle live active; do
+  g -C "$PRIMARY8" worktree add -q -b "task/$slug" "$WT8/$slug" main
+  commit_on "$WT8/$slug" "$slug.txt"
+  g -C "$PRIMARY8" push -q origin "task/$slug:main"
+  g -C "$PRIMARY8" fetch -q origin main
+  g -C "$PRIMARY8" merge -q --ff-only origin/main 2>/dev/null || g -C "$PRIMARY8" reset -q --hard origin/main
+done
+mkdir -p "$WT8/active/.next"; echo built > "$WT8/active/.next/server.js"
+(cd "$WT8/live" && exec sleep 300) &
+LIVE_PID=$!
+sleep 1
+O8="$( (cd "$PRIMARY8" && PATH="$STUB7:$PATH" BRIK_WORKTREE_ROOT="$WT8" BRIK_SWEEP_SLIM_IDLE_MIN=60 "$SWEEPER" 2>&1) )"
+kill "$LIVE_PID" 2>/dev/null
+wait "$LIVE_PID" 2>/dev/null || true
+$VERBOSE && { echo "$O8"; echo; }
+l8() { grep -E "^task/$1[[:space:]]" <<<"$O8"; }
+check "idle merged worktree is still REMOVE"        "REMOVE — merged into main"  "$(l8 idle)"
+check "live process in worktree → KEEP"             "KEEP — live process"        "$(l8 live)"
+check "recent write inside the idle window → KEEP"  "KEEP — written within 60m"  "$(l8 active)"
 
 echo
 if [ "$FAIL" -eq 0 ]; then
