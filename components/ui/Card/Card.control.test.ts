@@ -34,7 +34,7 @@ describe('Card control statuses', () => {
     ['not-configured', 'Not configured'],
     ['connected', 'Connected'],
     ['synced', 'Synced'],
-    ['error', 'Error'],
+    ['negative', 'Error'],
     ['disabled', 'Disabled'],
   ])('renders %s as "%s"', (status, label) => {
     const html = render({ connectionStatus: status });
@@ -45,7 +45,7 @@ describe('Card control statuses', () => {
   it.each([
     ['linked', 'connected'],
     ['syncing', 'connected'],
-    ['failed', 'error'],
+    ['failed', 'negative'],
   ])('maps retired %s onto %s', (retired, current) => {
     const html = render({ connectionStatus: retired });
     expect(html).toContain(`bds-card__control-status--${current}`);
@@ -89,9 +89,9 @@ describe('Card control actions', () => {
     expect(buttonLabels(html)).toEqual(['Setup']);
   });
 
-  it('error puts Retry before the supplied action', () => {
+  it('negative puts Retry before the supplied action', () => {
     const html = render({
-      connectionStatus: 'error',
+      connectionStatus: 'negative',
       onRetry: noop,
       action: createElement('button', null, 'Configure'),
     });
@@ -112,7 +112,7 @@ describe('Card control actions', () => {
     const html = render({
       readOnly: true,
       manageHref: '/admin/companies/acme',
-      connectionStatus: 'error',
+      connectionStatus: 'negative',
       onRetry: noop,
     });
     expect(html).toContain('href="/admin/companies/acme"');

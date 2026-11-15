@@ -121,7 +121,7 @@
       "not-configured",
       "connected",
       "synced",
-      "error",
+      "negative",
       "disabled"
     ],
     "size": [

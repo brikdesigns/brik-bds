@@ -70,17 +70,17 @@ export type CardControlConnectionStatus =
   | 'not-configured'
   | 'connected'
   | 'synced'
-  | 'error'
+  | 'negative'
   | 'disabled';
 
 const RETIRED_CONNECTION_STATUS: Record<string, CardControlConnectionStatus> = {
   linked: 'connected',
   syncing: 'connected',
-  failed: 'error',
+  failed: 'negative',
 };
 
 /** What the control-card stamp records — selects its label. */
-export type CardControlStampKind = 'connected' | 'synced' | 'error' | 'disabled';
+export type CardControlStampKind = 'connected' | 'synced' | 'negative' | 'disabled';
 
 /**
  * Typed "who did what, when" stamp beneath the control-card status. Replaces
@@ -98,7 +98,7 @@ export interface CardControlStamp {
 const STAMP_LABELS: Record<CardControlStampKind, string> = {
   connected: 'Connected',
   synced:    'Last synced',
-  error:     'Failed',
+  negative:    'Failed',
   disabled:  'Disabled',
 };
 /**
@@ -297,7 +297,7 @@ interface CardAnatomyProps extends CardBaseProps {
   description?: ReactNode;
   /** Trailing-block vertical alignment (`control` only) — `center` (default) / `top`. */
   actionAlign?: CardControlActionAlign;
-  /** Connection-status indicator (`control` only) — `not-configured` / `connected` / `synced` / `error` / `disabled`. `disabled` mutes the card. */
+  /** Connection-status indicator (`control` only) — `not-configured` / `connected` / `synced` / `negative` / `disabled`. `disabled` mutes the card. */
   connectionStatus?: CardControlConnectionStatus;
   /** Typed stamp (kind, ISO timestamp, optional actor) below the status indicator (`control` only). Hidden for `not-configured`. */
   stamp?: CardControlStamp;
@@ -307,7 +307,7 @@ interface CardAnatomyProps extends CardBaseProps {
   manageHref?: string;
   /** Renders the "Setup" button when `connectionStatus="not-configured"` (`control` only). */
   onSetup?: () => void;
-  /** Renders "Retry" before `action` when `connectionStatus="error"` (`control` only). */
+  /** Renders "Retry" before `action` when `connectionStatus="negative"` (`control` only). */
   onRetry?: () => void;
   /** Renders "Enable" when `connectionStatus="disabled"` (`control` only). */
   onEnable?: () => void;
@@ -477,7 +477,7 @@ const CONNECTION_STATUS_LABELS: Record<CardControlConnectionStatus, string> = {
   'not-configured': 'Not configured',
   connected:        'Connected',
   synced:           'Synced',
-  error:            'Error',
+  negative:           'Error',
   disabled:         'Disabled',
 };
 
@@ -490,13 +490,13 @@ const CONNECTION_STATUS_DOT: Record<CardControlConnectionStatus, DotTone> = {
   'not-configured': 'neutral',
   connected:        'positive',
   synced:           'positive',
-  error:            'negative',
+  negative:           'negative',
   disabled:         'neutral',
 };
 
 /**
  * The control card's action row, owned by its status: not-configured → Setup,
- * error → Retry then `action`, disabled → Enable, otherwise `action`. A
+ * negative → Retry then `action`, disabled → Enable, otherwise `action`. A
  * read-only card shows one "Manage on profile" link and nothing else.
  */
 function controlActions(
@@ -528,7 +528,7 @@ function controlActions(
     ) : null;
   }
   const retry =
-    status === 'error' && onRetry ? (
+    status === 'negative' && onRetry ? (
       <Button variant="primary" size="sm" onClick={onRetry}>
         Retry
       </Button>

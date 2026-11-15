@@ -261,7 +261,7 @@ export const Control: Story = {
     },
     manageHref: { control: 'text', description: 'Destination of the read-only "Manage on profile" link.' },
     onSetup: { control: false, description: 'Renders the "Setup" button for `not-configured`.' },
-    onRetry: { control: false, description: 'Renders "Retry" before `action` for `error`.' },
+    onRetry: { control: false, description: 'Renders "Retry" before `action` for `negative`.' },
     onEnable: { control: false, description: 'Renders "Enable" for `disabled`.' },
   },
   decorators: [controlDecorator],
@@ -321,8 +321,8 @@ export const ControlConnected: Story = {
 export const ControlError: Story = {
   args: {
     ...controlBase,
-    connectionStatus: 'error',
-    stamp: { kind: 'error', at: '2026-11-06T20:30:00.000Z' },
+    connectionStatus: 'negative',
+    stamp: { kind: 'negative', at: '2026-11-06T20:30:00.000Z' },
     onRetry: () => {},
     action: configureAction,
   },

@@ -136,10 +136,10 @@ OPERATOR SAID 2026-09-18 (chat): "Option A (thanks)" — chosen over composing t
 
 The portal renders every integration source through `layout="control"` (brikdesigns/brik-client-portal#6826, adopted in #6830). The control layout's slots accepted anything, offered `linked` / `syncing` / `failed`, and stamped with a free-form `lastSynced` string. This amendment fixes the contract as part of ADR-038; it adds no component and does not accept or reject the ADR as a whole.
 
-- **Five statuses, exactly:** `not-configured`, `connected`, `synced`, `error`, `disabled`. The retired `linked` / `syncing` / `failed` map to `connected` / `connected` / `error` through `resolveRetiredValue` for one minor (ADR-033).
+- **Five statuses, exactly:** `not-configured`, `connected`, `synced`, `negative`, `disabled`. The retired `linked` / `syncing` / `failed` map to `connected` / `connected` / `negative` through `resolveRetiredValue` for one minor (ADR-033).
 - **`disabled` means Brik switched the source off for this client**, not "unavailable for this client's services". The card mutes its content with the ADR-028 opacity fade (`--bds-state-disabled-opacity`) and keeps the trailing block at full strength so "Enable" stays reachable.
 - **`stamp` replaces `lastSynced`:** `{ kind, at, actor? }`, with `at` an ISO 8601 timestamp rendered through `DateTime` (relative, exact time on hover) so the card never formats a date itself. `kind` selects the label (`connected` / `synced` / `error` / `disabled`).
-- **Status owns the actions, inside a `ButtonGroup`:** `onSetup` → "Setup" alone (not-configured); `onRetry` → "Retry" before `action` (error); `onEnable` → "Enable" alone (disabled); otherwise `action`. `readOnly` + `manageHref` replace all of them with one "Manage on profile" link. A handler that is not passed renders no button.
+- **Status owns the actions, inside a `ButtonGroup`:** `onSetup` → "Setup" alone (not-configured); `onRetry` → "Retry" before `action` ((negative)); `onEnable` → "Enable" alone (disabled); otherwise `action`. `readOnly` + `manageHref` replace all of them with one "Manage on profile" link. A handler that is not passed renders no button.
 - **`lastSynced` is removed, not deprecated.** Its only consumers are the two portal Sources surfaces that #6830 migrates.
 
 OPERATOR SAID 2026-11-13 (Claude Code chat, `2919b7d7-16fb-43a6-8eca-28d95f254f66.jsonl:118`): "1 - we switched off; 2 - OK"

@@ -82,7 +82,7 @@ Two optional slots extend `metric` for a labelled selection (the shape the remov
 
 `layout="control"` — settings / integration row. Leading `media` (logo) + `title` / `description` on the left, (`connectionStatus` indicator + `action`) on the right. Use `actionAlign="top"` for long descriptions where the action should anchor to the upper-right corner.
 
-`connectionStatus` accepts exactly `not-configured | connected | synced | error | disabled` (`disabled` = Brik switched the source off: the card mutes and shows one "Enable" action). Retired `linked` / `syncing` / `failed` still map onto `connected` / `connected` / `error` for one minor. `stamp` (`{ kind, at, actor? }`, `at` an ISO 8601 timestamp) replaces `lastSynced` and renders through `DateTime`. Actions render in a `ButtonGroup`, driven by status: `onSetup` → "Setup" (not-configured), `onRetry` → "Retry" before `action` (error), `onEnable` → "Enable" (disabled). `readOnly` + `manageHref` replace every action with one "Manage on profile" link.
+`connectionStatus` accepts exactly `not-configured | connected | synced | negative | disabled` (`disabled` = Brik switched the source off: the card mutes and shows one "Enable" action). Retired `linked` / `syncing` / `failed` still map onto `connected` / `connected` / `error` for one minor. `stamp` (`{ kind, at, actor? }`, `at` an ISO 8601 timestamp) replaces `lastSynced` and renders through `DateTime`. Actions render in a `ButtonGroup`, driven by status: `onSetup` → "Setup" (not-configured), `onRetry` → "Retry" before `action` (error), `onEnable` → "Enable" (disabled). `readOnly` + `manageHref` replace every action with one "Manage on profile" link.
 
 <Canvas of={Stories.Control} />
 

@@ -297,7 +297,7 @@
   color: var(--bds-text-positive);
 }
 
-.bds-card__control-status--error .bds-card__control-status-label {
+.bds-card__control-status--tone-negative .bds-card__control-status-label {
   color: var(--bds-text-negative);
 }
 
