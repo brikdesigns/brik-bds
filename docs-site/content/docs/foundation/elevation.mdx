@@ -6,7 +6,7 @@ description: The Figma Elevation collection — box-shadow and blur-radius primi
 import { Callout } from 'fumadocs-ui/components/callout';
 import { shadowBlurScale, shadowSpreadScale } from '@bds-tokens';
 
-**Elevation** is the Figma collection that governs depth (modes `flat` / `subtle` / `lifted` / `dramatic`). It ships two Primitive groups — `box-shadow` and `blur-radius` — that compose into the ready-to-use semantic `--shadow-*` values components reference. The CSS variable prefix stays `--shadow-*` / `--box-shadow-*`; the *collection and this page* carry Figma's name, Elevation.
+**Elevation** is the Figma collection that governs depth (modes `flat` / `subtle` / `lifted` / `dramatic`). It ships two Primitive groups — `box-shadow` and `blur-radius` — that compose into the ready-to-use semantic `--shadow-*` values components reference. The CSS variable prefix is `--shadow-*`; the *collection and this page* carry Figma's name, Elevation.
 
 <Callout type="warn">
   **Use composed semantic shadows in component CSS** — `--shadow-sm`, `--shadow-md`, `--shadow-lg`, `--shadow-xl`. Never compose raw blur and spread values yourself; the semantic tokens are tuned together for consistent perceived elevation.
@@ -14,16 +14,16 @@ import { shadowBlurScale, shadowSpreadScale } from '@bds-tokens';
 
 ## From Figma Elevation to shadow tokens
 
-A Figma variable holds a single dimension, so the Elevation collection's `box-shadow` group exports as `--box-shadow-sm/md/lg/xl` carrying only a **blur value** (e.g. `2px`) — not a usable `box-shadow` shorthand. [`tokens/gap-fills.css`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/gap-fills.css) closes the gap: it defines the real multi-part `--shadow-*` shorthands, then re-aliases `--box-shadow-* → var(--shadow-*)` so either name resolves to the correct value.
+A Figma variable holds a single dimension, so the Elevation collection's `box-shadow` group carries only a **blur value** (e.g. `2px`) per step — not a usable `box-shadow` shorthand. That group is retired from the CSS output ([#1924](https://github.com/brikdesigns/brik-bds/issues/1924), ADR-033 § 5): Style Dictionary filters it out in `isCanonicalCssToken`, so it does not return on the next Figma pull. [`tokens/gap-fills.css`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/gap-fills.css) defines the real multi-part `--shadow-*` shorthands.
 
 | Layer | Names | Where |
 |---|---|---|
 | Figma collection | `Elevation` → groups `box-shadow`, `blur-radius` | `design-tokens/tokens-studio.json` |
-| Style Dictionary output | `--box-shadow-*` (single blur), `--blur-radius-*`, `--shadow-blur/offset/spread-*` | `tokens/figma-tokens.css` |
+| Style Dictionary output | `--blur-radius-*`, `--shadow-blur/offset/spread-*` | `tokens/figma-tokens.css` |
 | Composed semantic (what you use) | `--bds-shadow-sm/md/lg/xl`, `--bds-shadow-overlay` | `tokens/gap-fills.css` |
 
 <Callout type="info">
-  **`--shadow-*` is canonical for elevation; `--box-shadow-{sm,md,lg,xl}` is a deprecated alias** ([#2233](https://github.com/brikdesigns/brik-bds/issues/2233)). Both ship and resolve identically, but component CSS now references only `--shadow-*` — the safe composed base, defined once. The `--box-shadow-{sm..xl}` aliases survive only for existing consumers; don't reach for them in new work. Note `--box-shadow-none` (value `none`, for *suppressing* a shadow) is a separate token with no `--shadow-*` twin — it stays as-is.
+  **`--shadow-*` is the only elevation family.** `--box-shadow-{sm,md,lg,xl}` is retired (#1924). To suppress a shadow write `box-shadow: none` — `none` is a CSS keyword, not a token step, so there is no reset token.
 </Callout>
 
 ## Composed shadow tokens

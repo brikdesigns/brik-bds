@@ -55,7 +55,7 @@ Compose freely with the Title / Description / Footer subcomponents. Omit `layout
 - **`outlined`** (default) — Subtle secondary border.
 - **`brand`** — Primary-color border for emphasis.
 - **`elevated`** — Surface-primary fill, no border, no shadow (flat since brik-bds#1146; for a shadow use `raised`).
-- **`raised`** — Surface-primary fill, no border, with a cast `--box-shadow-md` drop shadow. The shadow-casting counterpart to the now-flat `elevated`; use for a focal/lone card or a grid cell that needs a lifted, contained read.
+- **`raised`** — Surface-primary fill, no border, with a cast `--shadow-md` drop shadow. The shadow-casting counterpart to the now-flat `elevated`; use for a focal/lone card or a grid cell that needs a lifted, contained read.
 - **`filled`** — Neutral recessed panel: surface-secondary fill with a muted border. For a grouping container that reads as part of the page; not a service-line wash (use `tint` for that).
 - **`borderless`** — Transparent fill, no border, no shadow. Use for cards sitting on a colored surface, where the border ring reads as visual noise.
 
@@ -114,7 +114,7 @@ Under a `layout`, `media` is a plain `ReactNode` instead — pass the `<Frame>`,
 </Card>
 ```
 
-`title` renders as `titleAs` (default `h3`) — set it to keep the document outline correct under a grid-section heading; the visual size is token-driven and unchanged by the level. For a cell on a colored (service-tinted) grid, `variant="borderless"` (transparent), `variant="elevated"` (fill + shadow), or `variant="raised"` (fill + cast `--box-shadow-md` shadow) swaps the surface treatment, and `tint` applies a pale service-line wash. `badge` renders only when `media` is also set.
+`title` renders as `titleAs` (default `h3`) — set it to keep the document outline correct under a grid-section heading; the visual size is token-driven and unchanged by the level. For a cell on a colored (service-tinted) grid, `variant="borderless"` (transparent), `variant="elevated"` (fill + shadow), or `variant="raised"` (fill + cast `--shadow-md` shadow) swaps the surface treatment, and `tint` applies a pale service-line wash. `badge` renders only when `media` is also set.
 
 `mediaTreatment` controls how the media slot meets the card edge. `flush` (default) bleeds the media to the edge and pads only the body — the blog/story/product-grid look. `inset` frames media and body together in a single inset — the service-card look.
 

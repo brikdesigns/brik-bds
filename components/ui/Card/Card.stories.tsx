@@ -30,7 +30,7 @@ const meta: Meta<typeof Card> = {
       control: 'select',
       options: ['outlined', 'brand', 'elevated', 'raised', 'borderless', 'filled'],
       description:
-        'Visual variant (Default shape only). `outlined` = secondary border; `brand` = primary-color border; `elevated` = surface fill, no border, no shadow; `raised` = surface fill, no border, `--bds-box-shadow-md` drop shadow; `borderless` = transparent, no border, no shadow (for cards on a colored surface); `filled` = neutral recessed panel, surface-secondary fill + muted border.',
+        'Visual variant (Default shape only). `outlined` = secondary border; `brand` = primary-color border; `elevated` = surface fill, no border, no shadow; `raised` = surface fill, no border, `--bds-shadow-md` drop shadow; `borderless` = transparent, no border, no shadow (for cards on a colored surface); `filled` = neutral recessed panel, surface-secondary fill + muted border.',
     },
     padding: {
       control: 'select',
@@ -324,7 +324,7 @@ export const Stack: Story = {
         raised: 'raised',
       },
       description:
-        'Surface treatment for a cell on a colored (service-tinted) grid. `borderless` = transparent, no border/shadow; `elevated` = fill, no border; `raised` = fill, no border, `--bds-box-shadow-md` shadow. Default = outlined white fill.',
+        'Surface treatment for a cell on a colored (service-tinted) grid. `borderless` = transparent, no border/shadow; `elevated` = fill, no border; `raised` = fill, no border, `--bds-shadow-md` shadow. Default = outlined white fill.',
     },
     tint: {
       control: 'select',

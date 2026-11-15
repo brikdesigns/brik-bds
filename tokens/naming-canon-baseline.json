@@ -9,12 +9,7 @@
       "--bds-duration-normal": 2226,
       "--bds-duration-slow": 2226
     },
-    "2": {
-      "--bds-box-shadow-lg": 1924,
-      "--bds-box-shadow-md": 1924,
-      "--bds-box-shadow-sm": 1924,
-      "--bds-box-shadow-xl": 1924
-    },
+    "2": {},
     "3": {
       "BadgeTone#mixed": 1925,
       "BannerTone#axis": 1925,

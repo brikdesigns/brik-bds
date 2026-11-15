@@ -63,7 +63,7 @@
       "purposes": ["page", "surface", "background", "text", "border"],
       "roles": [
         "gap", "padding", "section", "heading", "display", "body", "label", "subtitle", "icon",
-        "shadow", "box-shadow", "ease", "content-width", "measure", "state", "z", "shell"
+        "shadow", "ease", "content-width", "measure", "state", "z", "shell"
       ],
       "states": ["hover", "pressed", "disabled"]
     },
@@ -120,7 +120,6 @@
     { "slot": "subtitle", "family": "role", "tier": "semantic" },
     { "slot": "icon", "family": "role", "tier": "semantic" },
     { "slot": "shadow", "family": "role", "tier": "semantic" },
-    { "slot": "box-shadow", "family": "role", "tier": "semantic" },
     { "slot": "ease", "family": "role", "tier": "semantic" },
     { "slot": "content-width", "family": "role", "tier": "semantic" },
     { "slot": "measure", "family": "role", "tier": "semantic" },
