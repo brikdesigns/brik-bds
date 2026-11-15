@@ -2,7 +2,7 @@
   "version": "3.0.0",
   "last_reviewed": "2026-09-09",
   "review_cadence": "quarterly",
-  "_comment": "Shipped blueprint inventory — every entry dispatches on both rails unless it declares `rails` (#2308, #2304); collection_index, collection_entry and faq_accordion_grouped declare `[\"astro\"]` (#872). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
+  "_comment": "Shipped blueprint inventory — every entry dispatches on both rails unless it declares `rails` (#2308, #2304); collection_index, collection_entry, faq_accordion_grouped and hero_centered declare `[\"astro\"]` (#872, #3186). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
   "blueprints": [
     {
       "key": "hero_split",
@@ -252,6 +252,39 @@
       "atmospheres": [
         "warm-soft",
         "none"
+      ]
+    },
+    {
+      "key": "hero_centered",
+      "name": "Centered Hero",
+      "section_type": "hero",
+      "industries": [
+        "universal",
+        "saas",
+        "ecommerce",
+        "beauty",
+        "salon"
+      ],
+      "moods": [
+        "bold",
+        "modern",
+        "energetic",
+        "playful"
+      ],
+      "layout_spec": "Single centred column with no media, opening a page. Optional eyebrow, then an h1 headline, an optional body paragraph and an optional single call to action, all centred in a narrow column. Any background glow comes from the resolved atmosphere (cinematic-dramatic paints a centred radial glow behind the hero) or from the consumer's hero background hook, never from the layout. Pairs with a following stats_bar or logo_wall for proof. Drives home and campaign landing pages that lead with one message.",
+      "css_hints": ".bds-hero--centered .bds-hero__container { display: flex; flex-direction: column; gap: var(--bds-gap-md); max-width: var(--bds-content-width-md); } .bds-hero--centered .bds-hero__content { align-items: center; text-align: center; }",
+      "source": "brik-bds#3186 — graduated from blueprint-roadmap.json onto the canonical rail (ADR-037)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-11-15",
+      "required_facts": [],
+      "atmospheres": [
+        "cinematic-dramatic",
+        "none"
+      ],
+      "rails": [
+        "astro"
       ]
     },
     {

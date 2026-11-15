@@ -31,6 +31,7 @@ export type KnownBlueprintKey =
   | 'hero_split'
   | 'hero_split_image_card_overlay'
   | 'hero_interior_minimal'
+  | 'hero_centered'
   | 'two_column_detail'
   | 'card_grid'
   | 'callout_split'
@@ -68,6 +69,7 @@ export const WIRED_BLUEPRINT_KEYS = [
   'hero_split',
   'hero_split_image_card_overlay',
   'hero_interior_minimal',
+  'hero_centered',
   'two_column_detail',
   'card_grid',
   'callout_split',
