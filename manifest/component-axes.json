@@ -115,11 +115,10 @@
     ],
     "status": [
       "not-configured",
-      "linked",
       "connected",
-      "syncing",
       "synced",
-      "failed"
+      "negative",
+      "disabled"
     ],
     "size": [
       "sm",

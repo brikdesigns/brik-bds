@@ -12,6 +12,8 @@ export {
   type CardFooterProps,
   // Control-layout prop types for integration/connection-status cards.
   type CardControlConnectionStatus,
+  type CardControlStamp,
+  type CardControlStampKind,
   // Default-Card leading-media (avatar / 1:1 image) types.
   type CardMedia,
   type CardAvatarMedia,
