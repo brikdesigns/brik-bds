@@ -42,6 +42,7 @@
  *
  *   hero_split                    → Hero            layout="split"
  *   hero_split_image_card_overlay → Hero            layout="with-pricing-card"
+ *   hero_centered                 → Hero            layout="centered"
  *   hero_interior_minimal         → Hero            layout="interior-minimal"
  *   two_column_detail             → CardGrid        layout="two-column-list"
  *   card_grid                     → CardGrid        layout="card-grid"
@@ -102,6 +103,7 @@ import { resolveSectionProps } from './section-axes';
 const BLUEPRINT_REGISTRY = {
   hero_split: { component: Hero, props: { layout: 'split', blueprintKey: 'hero_split' } },
   hero_split_image_card_overlay: { component: Hero, props: { layout: 'with-pricing-card', blueprintKey: 'hero_split_image_card_overlay' } },
+  hero_centered: { component: Hero, props: { layout: 'centered', blueprintKey: 'hero_centered' } },
   hero_interior_minimal: { component: Hero, props: { layout: 'interior-minimal', blueprintKey: 'hero_interior_minimal' } },
   two_column_detail: { component: CardGrid, props: { layout: 'two-column-list' } },
   card_grid: { component: CardGrid, props: { layout: 'card-grid' } },

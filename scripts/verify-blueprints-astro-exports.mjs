@@ -630,7 +630,7 @@ import { GhlForm } from '@brikdesigns/bds/blueprints-astro';
 
 // Dispatcher page fixture — exercises <BlueprintDispatcher> end-to-end.
 // Includes 8 known sections (covering every v0.1 component) + 1
-// UNKNOWN section with blueprintKey='hero_centered_gradient' (valid
+// UNKNOWN section with blueprintKey='hero_fullbleed_photo' (valid
 // library key but no Astro component yet). The unknown falls through
 // to BlueprintFallback which emits the data-blueprint-unknown-key
 // attribute that CI greps for.
@@ -703,7 +703,8 @@ const sections: BlueprintSection[] = [
   ] }),
   sec('cta_split_contact', { sectionKey: 'd_cta_split', sectionType: 'cta', title: 'Reach out', body: 'Split CTA exercising phone + email.', cta: { label: 'Contact', url: '/contact' } }),
   // Unknown key — falls through to BlueprintFallback.
-  sec('hero_centered_gradient' as KnownBlueprintKey, { sectionKey: 'd_unknown', sectionType: 'hero', title: 'Not shipped yet' }),
+  sec('hero_fullbleed_photo' as KnownBlueprintKey, { sectionKey: 'd_unknown', sectionType: 'hero', title: 'Not shipped yet' }),
+  sec('hero_centered', { sectionKey: 'd_hero_centered', sectionType: 'hero', title: 'A centred opening', body: 'One column, no media.', cta: { label: 'Start', url: '/start' } }),
   sec('cta_centered', { sectionKey: 'd_cta_dark', sectionType: 'cta', title: 'End of proof', cta: { label: 'Home', url: '/' } }),
   sec('collection_index', { sectionKey: 'd_collection_index', sectionType: 'content_block', title: 'Latest entries', items: [
     { title: 'First entry', description: 'An excerpt.', href: '/entries/first' },
@@ -750,7 +751,8 @@ const DISPATCH_FIXTURE_KEYS = [
   'story_split',
   'testimonials_featured_large',
   'cta_split_contact',
-  'hero_centered_gradient',
+  'hero_fullbleed_photo',
+  'hero_centered',
   'cta_centered',
   'collection_index',
   'collection_entry',
