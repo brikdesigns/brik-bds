@@ -548,6 +548,19 @@ slim_recently_active() {  # $1=worktree path -> 0 when active
   return 1
 }
 
+# Does any process have its cwd inside the worktree? A dev server or test run there is a
+# live session whatever the PR says (#5667). One system-wide `lsof` per run, read lazily,
+# because a clean merged worktree is exactly where a `next dev` keeps running. lsof prints
+# real paths, so match on `pwd -P`. When lsof is missing or fails the answer is "no live
+# process" — the idle-window check beside it is the second guard.
+LIVE_CWDS=""; LIVE_CWDS_READ=false
+worktree_has_live_process() {  # $1=worktree path -> 0 when a process runs inside it
+  local real
+  $LIVE_CWDS_READ || { LIVE_CWDS="$(lsof -nP -d cwd -Fn 2>/dev/null | sed -n 's/^n//p' | sort -u)"; LIVE_CWDS_READ=true; }
+  real="$(cd "$1" 2>/dev/null && pwd -P)" || return 1
+  [ -n "$real" ] && grep -qE "^$(printf '%s' "$real" | sed 's/[][\.*^$/]/\\&/g')(/|$)" <<<"$LIVE_CWDS"
+}
+
 slim_merged_worktrees() {
   local path ref branch tip head slim_n=0 slim_kb=0 skip i d kb hit only wt_root_phys p_phys
   local -a targets
@@ -726,6 +739,10 @@ while IFS=$'\t' read -r path ref; do
 
   if [ "$dirty" != "0" ]; then
     verdict="KEEP — ${dirty} uncommitted change(s): ${DIRTY_WHY}"; KEPT=$((KEPT+1))
+  elif worktree_has_live_process "$path"; then
+    verdict="KEEP — live process in worktree"; KEPT=$((KEPT+1))
+  elif slim_recently_active "$path"; then
+    verdict="KEEP — written within ${SLIM_IDLE_MIN}m"; KEPT=$((KEPT+1))
   elif $landed; then
     reason=$([ "$prstate" = "MERGED" ] && echo "PR $prnum merged" || echo "merged into main")
     verdict="REMOVE — $reason"
