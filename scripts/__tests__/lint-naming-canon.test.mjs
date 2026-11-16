@@ -453,6 +453,39 @@ describe('rule 4 — a BEM modifier carries its axis prefix (ADR-033 § 4)', () 
     expect(out).not.toMatch(/--disabled|--loading/);
     expect(code).toBe(0);
   });
+
+  it('admits the boolean-sourced modifiers #1927 kind A classified', () => {
+    // Each is emitted from a boolean prop or predicate on every block that uses
+    // it: `highlighted && …` (PricingCard.tsx:73), `isClickable ? … : …--non-clickable`
+    // (ProgressStepper.tsx:305), `wrap ? …--wrap : …--nowrap` (TagGroup.tsx:38),
+    // `Boolean(iconBefore) && …` (TextInput.tsx:118). All 27 were rule-4 findings
+    // before the set grew, so this fails against the old list.
+    const admitted = [
+      'clickable', 'non-clickable', 'exiting', 'flash', 'highlighted',
+      'indeterminate', 'interactive', 'sortable', 'today', 'placeholder', 'last',
+      'origin', 'full-width', 'auto-width', 'icon-only', 'no-border', 'wrap',
+      'nowrap', 'has-dot', 'has-errors', 'has-icon', 'has-icon-after',
+      'has-icon-before', 'has-tabs', 'has-trailing', 'with-control', 'with-description',
+    ];
+    const css = CLEAN_CSS + admitted.map((m) => `.bds-badge--${m} { opacity: 1; }\n`).join('');
+    const { code, out } = run({ css });
+    for (const m of admitted) expect(out).not.toMatch(new RegExp(`--${m} — `));
+    expect(code).toBe(0);
+  });
+
+  it('does NOT admit a word one block emits from an axis value', () => {
+    // The set is keyed by word, so it holds only words that are boolean
+    // everywhere. `with-pricing-card` is a Hero `layout` value, `scroll` is a
+    // TabBar `overflow` value, and `pulse` is one of Badge's three CSS-only
+    // animations. A `has-` / `with-` prefix rule would have hidden the first.
+    const css = `${CLEAN_CSS}.bds-badge--with-pricing-card { color: red; }\n`
+      + '.bds-badge--scroll { color: red; }\n.bds-badge--pulse { color: red; }\n';
+    const { code, out } = run({ css });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--with-pricing-card — bare modifier/);
+    expect(out).toMatch(/--scroll — bare modifier/);
+    expect(out).toMatch(/--pulse — bare modifier/);
+  });
 });
 
 describe('rule 4 — the service-line carve-out (§ Named exceptions, #1982)', () => {
