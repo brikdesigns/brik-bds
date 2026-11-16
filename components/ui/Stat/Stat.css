@@ -57,8 +57,8 @@
   color: var(--bds-text-secondary);
 }
 
-.bds-stat__trend--up   { color: var(--bds-text-positive); }
-.bds-stat__trend--down { color: var(--bds-text-negative); }
+.bds-stat__trend--direction-up   { color: var(--bds-text-positive); }
+.bds-stat__trend--direction-down { color: var(--bds-text-negative); }
 
 .bds-stat__supplementary { min-width: 0; }
 

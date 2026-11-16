@@ -102,7 +102,7 @@ export function Stat({
         <div className="bds-stat__meta">
           {meta}
           {trend != null && (
-            <span className={bdsClass('bds-stat__trend', `bds-stat__trend--${trend.direction}`)}>
+            <span className={bdsClass('bds-stat__trend', `bds-stat__trend--direction-${trend.direction}`)}>
               <Icon icon={TREND_ICON[trend.direction]} aria-hidden="true" />
               {trend.delta}
             </span>
