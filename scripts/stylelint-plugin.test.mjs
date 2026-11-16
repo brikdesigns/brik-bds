@@ -10,7 +10,7 @@ import plugin from './stylelint-plugin.mjs';
 
 const config = {
   plugins: [plugin],
-  rules: { 'bds/canonical-token-name': true, 'bds/no-token-redefinition': true },
+  rules: { 'bds/canonical-token-name': true, 'bds/cascade-contract': true },
 };
 
 async function lint(code, codeFilename = 'consumer.css', rules = config.rules) {
@@ -39,14 +39,14 @@ describe('bds/canonical-token-name', () => {
   });
 });
 
-describe('bds/no-token-redefinition', () => {
+describe('bds/cascade-contract', () => {
   it('flags redefining a scale token at :root (positive control)', async () => {
-    const warnings = await lint(':root {\n  --heading-lg: 2rem;\n}', 'consumer.css', { 'bds/no-token-redefinition': true });
-    expect(warnings.map((w) => w.rule)).toContain('bds/no-token-redefinition');
+    const warnings = await lint(':root {\n  --heading-lg: 2rem;\n}', 'consumer.css', { 'bds/cascade-contract': true });
+    expect(warnings.map((w) => w.rule)).toContain('bds/cascade-contract');
     expect(warnings[0].line).toBe(2);
   });
 
   it('allows a brandable token inside a theme file', async () => {
-    expect(await lint(':root {\n  --surface-primary: #fff;\n}', 'theme-acme.css', { 'bds/no-token-redefinition': true })).toEqual([]);
+    expect(await lint(':root {\n  --surface-primary: #fff;\n}', 'theme-acme.css', { 'bds/cascade-contract': true })).toEqual([]);
   });
 });
