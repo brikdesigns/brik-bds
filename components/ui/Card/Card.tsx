@@ -3,6 +3,7 @@ import { bdsClass, resolveRetiredValue } from '../../utils';
 import { Avatar, type AvatarStatus } from '../Avatar';
 import { Image } from '../Image';
 import { Logo, type LogoProps } from '../Logo';
+import { Stat } from '../Stat';
 import { Dot, type DotTone } from '../Dot';
 import { Button } from '../Button';
 import { ButtonGroup } from '../ButtonGroup';
@@ -663,11 +664,13 @@ function renderAnatomy({
       <div className={bdsClass('bds-card', 'bds-card--layout-metric', className)} style={style} {...rest}>
         <div className="bds-card__metric-inner">
           {media && <div className="bds-card__metric-media">{media}</div>}
-          <div className="bds-card__metric-content">
-            {overline != null && <p className="bds-card__metric-label">{overline}</p>}
-            {title != null && <p className="bds-card__metric-value">{title}</p>}
-            {detail != null && <p className="bds-card__metric-detail">{detail}</p>}
-          </div>
+          <Stat
+            className="bds-card__metric-content"
+            order="label-first"
+            label={overline}
+            value={title}
+            detail={detail}
+          />
           {action && <div className="bds-card__metric-action">{action}</div>}
         </div>
       </div>

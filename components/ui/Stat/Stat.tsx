@@ -1,11 +1,27 @@
 import { type HTMLAttributes, type ReactNode, type ElementType } from 'react';
 import { bdsClass } from '../../utils';
+import { Icon } from '../Icon';
 import './Stat.css';
 
 /** Which slot reads first. DOM order follows visual order. */
 export type StatOrder = 'value-first' | 'label-first';
 /** Value size — maps to the `--heading-{size}` scale. */
 export type StatSize = 'lg' | 'xl' | '2xl';
+
+/** Direction of a `trend` — picks the arrow and the valence colour. */
+export type StatTrendDirection = 'up' | 'down' | 'flat';
+
+export interface StatTrend {
+  /** The change — `"+12%"`, `"3 fewer than last month"`. Pre-formatted. */
+  delta: ReactNode;
+  direction: StatTrendDirection;
+}
+
+const TREND_ICON: Record<StatTrendDirection, string> = {
+  up: 'ph:arrow-up',
+  down: 'ph:arrow-down',
+  flat: 'ph:arrow-right',
+};
 
 export interface StatProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   /** The figure — `"24"`, `"98%"`, `"$1.2M"`. */
@@ -14,6 +30,14 @@ export interface StatProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   label: ReactNode;
   /** Optional supporting line under the pair — a trend, a period, a source. */
   detail?: ReactNode;
+  /** Change against a prior period — an arrow plus the pre-formatted delta, beside `meta`. */
+  trend?: StatTrend;
+  /** A Badge (or icon) reading the metric's state — `<Badge status="positive">On track</Badge>`. */
+  meta?: ReactNode;
+  /** A slot under the figure for a ProgressBar or Meter. A time series belongs in a chart, not here. */
+  supplementary?: ReactNode;
+  /** Context for the figure — clamped to two lines. */
+  description?: ReactNode;
   /** Which slot reads first. Default `value-first`. */
   order?: StatOrder;
   /** Value size. Default `xl`. */
@@ -41,12 +65,16 @@ export interface StatProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
  * </Grid>
  * ```
  *
- * @summary A figure and what it counts — value, label, optional detail.
+ * @summary A figure and what it counts — value, label, optional detail, trend, meta, supplementary, description.
  */
 export function Stat({
   value,
   label,
   detail,
+  trend,
+  meta,
+  supplementary,
+  description,
   order = 'value-first',
   size = 'xl',
   onColor = false,
@@ -54,8 +82,8 @@ export function Stat({
   className,
   ...props
 }: StatProps) {
-  const valueNode = <div className="bds-stat__value">{value}</div>;
-  const labelNode = <div className="bds-stat__label">{label}</div>;
+  const valueNode = value != null && <div className="bds-stat__value">{value}</div>;
+  const labelNode = label != null && <div className="bds-stat__label">{label}</div>;
 
   return (
     <Element
@@ -70,6 +98,19 @@ export function Stat({
       {order === 'label-first' ? labelNode : valueNode}
       {order === 'label-first' ? valueNode : labelNode}
       {detail != null && <div className="bds-stat__detail">{detail}</div>}
+      {(trend != null || meta != null) && (
+        <div className="bds-stat__meta">
+          {meta}
+          {trend != null && (
+            <span className={bdsClass('bds-stat__trend', `bds-stat__trend--${trend.direction}`)}>
+              <Icon icon={TREND_ICON[trend.direction]} aria-hidden="true" />
+              {trend.delta}
+            </span>
+          )}
+        </div>
+      )}
+      {supplementary != null && <div className="bds-stat__supplementary">{supplementary}</div>}
+      {description != null && <div className="bds-stat__description">{description}</div>}
     </Element>
   );
 }

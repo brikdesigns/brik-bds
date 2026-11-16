@@ -39,12 +39,50 @@
   margin: 0;
 }
 
+/* Single-stat anatomy: meta badge + trend, supplementary, description. */
+.bds-stat__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--bds-gap-sm);
+}
+
+.bds-stat__trend {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bds-gap-sm);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
+}
+
+.bds-stat__trend--up   { color: var(--bds-text-positive); }
+.bds-stat__trend--down { color: var(--bds-text-negative); }
+
+.bds-stat__supplementary { min-width: 0; }
+
+.bds-stat__description {
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-muted);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
 /* ─── On a filled brand / dark surface ───────────────────────── */
 /* Child combinator — a Stat nested in another's slot keeps its own colours. */
 
 .bds-stat--on-color > .bds-stat__value,
 .bds-stat--on-color > .bds-stat__label,
-.bds-stat--on-color > .bds-stat__detail {
+.bds-stat--on-color > .bds-stat__detail,
+.bds-stat--on-color > .bds-stat__description,
+.bds-stat--on-color > .bds-stat__meta > .bds-stat__trend {
   color: var(--bds-text-on-color-dark);
 }
 }
