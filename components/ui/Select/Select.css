@@ -32,6 +32,12 @@
 /* ─── Field wrapper ──────────────────────────────────────────── */
 
 .bds-select-field {
+  /* ─── Component-scoped override surface ──
+     Declared here, not on .bds-select: the chevron and leading icon are
+     siblings of the <select>, so only this shared parent reaches them. */
+  --bds-select-chevron-color: var(--bds-text-muted);
+  --bds-select-icon-color: var(--bds-text-muted);
+
   position: relative;
   display: flex;
   align-items: center;
@@ -40,10 +46,6 @@
 /* ─── Select element ─────────────────────────────────────────── */
 
 .bds-select {
-  /* ─── Component-scoped override surface ── */
-  --bds-select-chevron-color: var(--bds-text-muted);
-  --bds-select-icon-color: var(--bds-text-muted);
-
   display: inline-block;
   width: 100%;
   font-family: var(--bds-font-family-body);
