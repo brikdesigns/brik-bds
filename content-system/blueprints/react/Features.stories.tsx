@@ -94,7 +94,7 @@ const meta: Meta<typeof Features> = {
     items: { control: false, description: 'Feature cards `{ title, description, href, serviceLine }[]`; each emits `data-service-line` for brand-color re-binding.' },
     align: { control: 'inline-radio', options: ['center', 'left'], description: 'Section-header placement (structure axis, ADR-039). `center` default; `left` emits `bds-features--align-left`. Header only — the grid is unaffected.' },
     columns: { control: 'inline-radio', options: [undefined, 2, 3, 4], description: 'Widest-breakpoint column count (structure axis, ADR-039). Omitted → the default 1 → 2 → 3 ramp; set → `bds-features--cols-*`.' },
-    layout: { control: 'inline-radio', options: ['grid', 'alternating-split'], description: 'Structure axis (ADR-039, #3189). `grid` default is the card grid; `alternating-split` renders text + media rows with the sides swapped on even rows, and emits `bds-features--alternating-split`.' },
+    layout: { control: 'inline-radio', options: ['grid', 'alternating-split', 'bento'], description: 'Structure axis (ADR-039, #3189, #3188). `bento` is the asymmetric card grid: first item featured (spans two rows from desktop), an item with `stat` is a stat cell; emits `bds-features--bento`. `grid` default is the card grid; `alternating-split` renders text + media rows with the sides swapped on even rows, and emits `bds-features--alternating-split`.' },
     mediaPosition: { control: 'inline-radio', options: ['end', 'start'], description: '`alternating-split` media-side start (structure axis, ADR-039). `end` default; `start` emits `data-media-position="start"` and puts the first row\'s media first. Ignored by `grid`.' },
     contentMotion: { control: 'inline-radio', options: ['none', 'animated-svg'], description: 'Content-motion axis (ADR-039 §Decision 2, #2533). `animated-svg` animates each card icon via the Lottie `AnimatedIcon` primitive (from `items[].animationUrl`), React rail only; the Astro twin renders the static `imageUrl` poster. `none` (default) is static.' },
   },
@@ -103,7 +103,7 @@ const meta: Meta<typeof Features> = {
     docs: {
       description: {
         component:
-          'The `bds-features` feature-grid section primitive (brik-bds#1197) — the Phase D consolidation of the features family, retiring the ADR-008-banned `bp-features-branded-dark` (`--dark` = theme, `--branded` = appearance, `3col` = count). The default `grid` layout is the responsive grid; `layout="alternating-split"` (#3189) renders text + media rows instead. The dark surface is the `--bds-features-background` default, not a class name. Each card emits `data-service-line` to re-bind `--bds-background-brand-primary` per the BDS scope-binding pattern; stories include a representative cascade block. Card title uses bold weight + 18px, description 16px regular — the AA-clearing posture for white-on-saturated-brand backgrounds (BDS contrast burndown #40).',
+          'The `bds-features` feature-grid section primitive (brik-bds#1197) — the Phase D consolidation of the features family, retiring the ADR-008-banned `bp-features-branded-dark` (`--dark` = theme, `--branded` = appearance, `3col` = count). The default `grid` layout is the responsive grid; `layout="alternating-split"` (#3189) renders text + media rows instead, and `layout="bento"` (#3188) an asymmetric card grid. The dark surface is the `--bds-features-background` default, not a class name. Each card emits `data-service-line` to re-bind `--bds-background-brand-primary` per the BDS scope-binding pattern; stories include a representative cascade block. Card title uses bold weight + 18px, description 16px regular — the AA-clearing posture for white-on-saturated-brand backgrounds (BDS contrast burndown #40).',
       },
     },
   },
@@ -157,6 +157,48 @@ export const AlternatingSplit: Story = {
       {
         title: 'Review as it comes together',
         description: 'Check in at each step, so what we deliver is what you pictured.',
+        href: '#',
+      },
+    ],
+  },
+};
+
+/**
+ * Distinct meaningful state: `layout="bento"` renders an asymmetric card grid —
+ * the first item is the featured cell (spanning two rows from the desktop rung
+ * up), an item with `stat` is a stat cell, and a cell with no image renders the
+ * missing-media placeholder. One column below the tablet rung. The Astro twin is
+ * `Blueprints/astro-features`.
+ *
+ * @summary Bento — featured cell, media cells and a stat cell
+ */
+export const Bento: Story = {
+  args: {
+    sectionKey: 'features-bento',
+    layout: 'bento',
+    subtitle: 'What we do',
+    title: 'One feature leads, the rest support it',
+    body: 'A featured cell beside a few smaller ones, so the section can lead with its strongest point.',
+    items: [
+      {
+        title: 'Start with a conversation',
+        description: 'A short call to learn what you need before anything is planned or priced.',
+        href: '#',
+        imageUrl: placeholderImage(960, 720, '#eaf1fb', '#1f3d70', 'Feature 1'),
+        imageAlt: 'Feature 1',
+      },
+      {
+        title: 'See the plan in writing',
+        description: 'A clear scope, timeline and fixed fee before any work begins.',
+      },
+      {
+        title: 'Clients who would recommend us',
+        description: 'Measured after every engagement.',
+        stat: '98%',
+      },
+      {
+        title: 'Review as it comes together',
+        description: 'Check in at each step.',
         href: '#',
       },
     ],

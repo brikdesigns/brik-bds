@@ -83,30 +83,6 @@
       "catalogued_on": "2026-04-18"
     },
     {
-      "key": "features_bento_asymmetric",
-      "name": "Asymmetric Bento Grid",
-      "section_type": "features",
-      "disposition": "roadmap",
-      "industries": [
-        "universal",
-        "saas",
-        "ecommerce",
-        "real_estate",
-        "hospitality"
-      ],
-      "moods": [
-        "bold",
-        "modern",
-        "energetic",
-        "luxury"
-      ],
-      "layout_spec": "CSS grid with asymmetric column sizes (2fr 1fr 1fr). Two rows. Top-left card spans both rows (featured card — large photography or dark card with big stat). Remaining cards are equal-size: photography cards with overlay text bottom-left, one stat card in accent background color. All cards have border-radius: 12px and overflow: hidden. Photography cards: image with dark gradient overlay, label and title bottom-left. Stat card: large number (52px, 800 weight) and short descriptor.",
-      "css_hints": ".bento { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 280px 280px; gap: 12px; } .bento-featured { grid-row: span 2; } .bento-card { border-radius: 12px; overflow: hidden; position: relative; }",
-      "source": "Vale demo",
-      "required_facts": [],
-      "catalogued_on": "2026-04-18"
-    },
-    {
       "key": "stats_centered_light",
       "name": "Centered Stats on Light",
       "section_type": "stats",

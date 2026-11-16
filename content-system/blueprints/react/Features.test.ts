@@ -77,3 +77,48 @@ describe('Features layout="alternating-split" (#3189)', () => {
     expect(markup({ layout: 'alternating-split', columns: 4 })).not.toContain('bds-features--cols-');
   });
 });
+
+describe('Features layout="bento" (#3188)', () => {
+  const bentoItems = [
+    { title: 'Lead', description: 'Featured.', href: '/lead', imageUrl: '/lead.jpg', imageAlt: 'Lead image' },
+    { title: 'Two', description: 'Second.' },
+    { title: 'Customers', description: 'Would recommend us.', stat: '98%' },
+    { title: 'Four', description: 'Fourth.', href: '/four' },
+  ];
+
+  it('emits the layout modifier and marks only the first item featured', () => {
+    const html = markup({ layout: 'bento', items: bentoItems });
+    expect(html).toContain('bds-features--bento');
+    expect(html).toContain('data-blueprint-key="features_bento_asymmetric"');
+    expect(html.match(/bds-features__item--featured/g)).toHaveLength(1);
+    expect(html).not.toContain('bds-features__card');
+  });
+
+  it('renders the stat cell without media', () => {
+    const html = markup({ layout: 'bento', items: bentoItems });
+    expect(html.match(/bds-features__item--stat/g)).toHaveLength(1);
+    expect(html).toContain('<p class="bds-features__stat">98%</p>');
+    expect(html.match(/class="bds-features__media"/g)).toHaveLength(3);
+  });
+
+  it('renders the missing-media placeholder for every media cell with no image', () => {
+    const html = markup({
+      layout: 'bento',
+      items: bentoItems.map(({ title, description }) => ({ title, description })),
+    });
+    expect(html.match(/data-content-needed="feature_image_url"/g)).toHaveLength(4);
+    expect(html).not.toContain('<img');
+  });
+
+  it('puts media before text and renders the CTA only with an href', () => {
+    const html = markup({ layout: 'bento', items: bentoItems });
+    expect(html.match(/bds-features__cta"/g)).toHaveLength(2);
+    expect(html).toContain('<img src="/lead.jpg" alt="Lead image"');
+  });
+
+  it('does not emit the cols or media-position markers', () => {
+    const html = markup({ layout: 'bento', items: bentoItems, columns: 4, mediaPosition: 'start' });
+    expect(html).not.toContain('bds-features--cols-');
+    expect(html).not.toContain('data-media-position');
+  });
+});

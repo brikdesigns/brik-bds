@@ -80,7 +80,7 @@ Source of truth: [`content-system/blueprints/astro/types.ts`](https://github.com
 
 | Axis | ADR-039 axis | Values | Omitted → | Decides |
 |---|---|---|---|---|
-| `layout` | Structure | per block — `HeroLayout`: `split` · `interior-minimal` · `with-pricing-card` · `centered` · `statement`; `CtaLayout`: `default` · `split`; `CardGridLayout`: `card-grid` · `two-column-list`; `FeaturesLayout`: `grid` · `alternating-split` | `split` · `default` · `card-grid` · `grid` | The shape the block renders in. A layout is a prop, never a filename. |
+| `layout` | Structure | per block — `HeroLayout`: `split` · `interior-minimal` · `with-pricing-card` · `centered` · `statement`; `CtaLayout`: `default` · `split`; `CardGridLayout`: `card-grid` · `two-column-list`; `FeaturesLayout`: `grid` · `alternating-split` · `bento` | `split` · `default` · `card-grid` · `grid` | The shape the block renders in. A layout is a prop, never a filename. |
 | `align` | Structure | `center` · `left` | the block's own default (matrix below) | Content placement. The `--align-*` modifier is written only for the non-default value. |
 | `columns` | Structure | `2` · `3` · `4` | the responsive ramp 1 → 2 → 3 | Column count of the block's own item grid. |
 | `mediaPosition` | Structure | `start` · `end` | `end` | Which side of a two-column block its media (or aside) column sits on. `start` puts it first from the tablet rung up; DOM order never changes. Written as `data-media-position`, only for `start` — the same attribute `MediaTabs` and `SyncedMediaSteps` use. |
@@ -119,7 +119,7 @@ No axis yet: CalloutPanel, HeroMediaCardPrice, TestimonialsFeaturedLarge (both r
 - **Hero `media`** — Astro takes the enum. React takes a composed `media` node, normally a `<BlockMedia media=…>`; its dispatched path renders `image` only.
 - **Hero `reveal`** — Astro reads `section.reveal`. React takes the `reveal` prop on a composed `<Hero>`; its dispatched path does not read `section.reveal`.
 - **CardGrid `columns`** — Astro only. The React `CardGrid` composes children, so column count belongs to the consumer's `<Grid columns>`.
-- **Features `layout`** — `alternating-split` is dispatched by the Astro-only key `features_alternating_split`; the React `<Features>` takes the same `layout` / `mediaPosition` props when composed, and its dispatched path does not read them.
+- **Features `layout`** — `alternating-split` and `bento` are dispatched by the Astro-only keys `features_alternating_split` and `features_bento_asymmetric`; the React `<Features>` takes the same `layout` / `mediaPosition` props when composed, and its dispatched path does not read them.
 - **Features `contentMotion: animated-svg`** — animates on React. Astro shows each card's static `imageUrl` poster, which is also the reduced-motion and no-JS state.
 
 <Callout type="info">
