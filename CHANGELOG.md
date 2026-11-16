@@ -31,6 +31,12 @@ Blocks carrying a size modifier: AddressInput, Avatar, Badge, Button (`bds-butto
 
 Not renamed, still bare (their prop axis has no legal prefix, so they ride with #1927): `bds-pagination--center` (`position`) and `bds-field--compact` (`tier`).
 
+**Breaking (consumer CSS):** Avatar's initials fill now carries the `color` axis it derives from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-avatar--accent-{blue,green,orange,purple,red,yellow}` | `bds-avatar--color-{blue,green,orange,purple,red,yellow}` | `color` |
+
 Six Tier 4 hooks are renamed to the ADR-014 shape `--bds-{component}[-{part}]-{property}` ([#2651](https://github.com/brikdesigns/brik-bds/issues/2651)). Each old name still works: the component reads it first and falls back to the new one. The old names are **deprecated** and drop in the next major. Every hook is now listed in `manifest/tier4-hooks.json`, with whether a consumer may set it (`knob`) or the component sets it at render (`runtime`).
 
 **Deprecated (consumer CSS):** rename these in your override CSS before the next major.

@@ -35,13 +35,13 @@ describe('Tag appearance + color markup', () => {
 describe('Avatar appearance markup', () => {
   it('stays solid by default — no subtle modifier', () => {
     const html = avatar({ color: 'blue' });
-    expect(html).toContain('bds-avatar--accent-blue');
+    expect(html).toContain('bds-avatar--color-blue');
     expect(html).not.toContain('bds-avatar--subtle');
   });
 
   it('adds the subtle modifier alongside the accent color', () => {
     const html = avatar({ appearance: 'subtle', color: 'blue' });
     expect(html).toContain('bds-avatar--subtle');
-    expect(html).toContain('bds-avatar--accent-blue');
+    expect(html).toContain('bds-avatar--color-blue');
   });
 });
