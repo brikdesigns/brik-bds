@@ -5,6 +5,7 @@ import { Image } from '../Image';
 import { Logo } from '../Logo';
 import { Button } from '../Button';
 import { Badge } from '../Badge';
+import { Tag } from '../Tag';
 import { DateTime } from '../DateTime';
 import '../../../tokens/modes-borderradius.css';
 
@@ -431,7 +432,7 @@ export const Stack: Story = {
   args: {
     layout: 'stack',
     media: <Image src={landscapeThumb} alt="Marketing service" ratio="3-2" />,
-    overline: <Badge>Marketing</Badge>,
+    overline: <Tag>Marketing</Tag>,
     title: 'Service one',
     children: (
       <CardDescription>
@@ -512,7 +513,7 @@ export const Row: Story = {
   args: {
     layout: 'row',
     media: <Image src={landscapeThumb} alt="Web design retainer" ratio="3-2" />,
-    overline: <Badge>Marketing</Badge>,
+    overline: <Tag>Marketing</Tag>,
     title: 'Web Design Retainer',
     children: (
       <>
