@@ -338,22 +338,10 @@
   min-width: 0;
 }
 
-.bds-card__metric-label {
-  font-family: var(--bds-font-family-body);
+/* Label / value / detail are Stat's slots (ADR-033); the card only sets the
+ * label to the larger card-scale size. */
+.bds-card--layout-metric .bds-stat__label {
   font-size: var(--bds-body-lg);
-  color: var(--bds-text-secondary);
-  line-height: var(--bds-font-line-height-normal);
-  margin: 0;
-  text-transform: var(--bds-text-transform-label);
-}
-
-.bds-card__metric-value {
-  font-family: var(--bds-font-family-heading);
-  font-size: var(--bds-heading-xl);
-  font-weight: var(--bds-font-weight-bold);
-  color: var(--bds-text-primary);
-  line-height: var(--bds-font-line-height-tight);
-  margin: 0;
 }
 
 /* Leading glyph slot for `layout="metric"` (e.g. a `<ServiceTag>`) — sits beside
@@ -362,16 +350,6 @@
 .bds-card__metric-media {
   flex-shrink: 0;
   display: flex;
-}
-
-/* Secondary detail line under the value (`layout="metric"`) — e.g. price •
- * frequency. Muted body text; additive, only emitted by the metric layout. */
-.bds-card__metric-detail {
-  font-family: var(--bds-font-family-body);
-  font-size: var(--bds-body-sm);
-  color: var(--bds-text-muted);
-  line-height: var(--bds-font-line-height-normal);
-  margin: 0;
 }
 
 .bds-card__metric-action {

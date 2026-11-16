@@ -38,6 +38,14 @@ Stat pairs a figure with what it counts, plus an optional detail line, as one un
 
 <Canvas of={Stories.LabelFirst} />
 
+### Single-stat anatomy
+
+Top to bottom: label · value · detail · meta badge and trend · supplementary slot · description. `meta` takes a Badge, `trend` takes `{ delta, direction }`, `supplementary` takes a ProgressBar or Meter, and `description` clamps to two lines.
+
+<Canvas of={Stories.SingleStat} />
+
+Use it for how a metric is performing right now. A number over a period is a chart, not a Stat with a sparkline in `supplementary`.
+
 ### On color
 
 <Canvas of={Stories.OnColor} />

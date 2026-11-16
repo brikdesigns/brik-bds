@@ -37,6 +37,14 @@ import { Stat } from '@brikdesigns/bds';
 <Stat size="2xl" value="24" label="Years in practice" />
 ```
 
+### Single-stat anatomy
+
+Top to bottom: label · value · detail · `meta` badge and `trend` · `supplementary` slot · `description`. `meta` takes a Badge, `supplementary` takes a ProgressBar or Meter, and `description` clamps to two lines.
+
+<Callout type="warn">
+  **A number over a period is a chart, not a Stat.** Use Stat for how a metric is performing right now.
+</Callout>
+
 ### On color
 
 `onColor` switches all three text slots to `--text-on-color-dark` for a Stat on a filled brand or dark band.
@@ -59,12 +67,16 @@ import { Stat } from '@brikdesigns/bds';
 | `value` | `ReactNode` *(required)* | — |
 | `label` | `ReactNode` *(required)* | — |
 | `detail` | `ReactNode` | — |
+| `trend` | `StatTrend` | — |
+| `meta` | `ReactNode` | — |
+| `supplementary` | `ReactNode` | — |
+| `description` | `ReactNode` | — |
 | `order` | `StatOrder` | `'value-first'` |
 | `size` | `StatSize` | `'xl'` |
 | `onColor` | `boolean` | `false` |
 | `as` | `ElementType` | `'div'` |
 
-`StatOrder` is `'value-first' | 'label-first'`. `StatSize` is `'lg' | 'xl' | '2xl'`. Plus all standard HTML attributes for the rendered element.
+`StatTrend` is `{ delta: ReactNode; direction: 'up' | 'down' | 'flat' }`. `StatOrder` is `'value-first' | 'label-first'`. `StatSize` is `'lg' | 'xl' | '2xl'`. Plus all standard HTML attributes for the rendered element.
 
 ## Related
 

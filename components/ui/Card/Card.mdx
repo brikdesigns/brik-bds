@@ -101,6 +101,8 @@ The classification the portal applies before any card is written. It composes di
 
 Two optional slots extend `metric` for a labelled selection (the shape the removed `ProductSummaryCard` component folded into, ADR-038 §4): `media` renders a leading glyph (e.g. a `<ServiceTag>`) beside the stat, and `detail` renders a secondary line below the value (e.g. `price • frequency`). Both are additive — a plain stat omits them.
 
+Inside, `metric` renders a Stat (`order="label-first"`): `overline` is its label, `title` its value, `detail` its detail line. Stat owns that anatomy, so `trend`, `meta`, `supplementary` and `description` are Stat props — compose `<Card><Stat /></Card>` when you need them.
+
 ```tsx
 <Card
   layout="metric"
