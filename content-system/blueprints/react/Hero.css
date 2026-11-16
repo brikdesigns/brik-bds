@@ -104,6 +104,63 @@
   text-align: center;
 }
 
+/* ── --statement: left-aligned short headline + one CTA ─────────── */
+/* The shared container, left-aligned, at the wide reading width — where
+   --interior-minimal is a narrow banner and --centered is centred. The
+   headline steps up to the display ramp and the eyebrow carries a short rule.
+   Surface and text colours come from the shared spine's hooks, so the layout
+   follows the theme mode; nothing here pins a dark surface. */
+.bds-hero--statement .bds-hero__container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--bds-gap-xl);
+  align-items: center;
+}
+
+.bds-hero--statement .bds-hero__subtitle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bds-gap-md);
+}
+
+.bds-hero--statement .bds-hero__subtitle::before {
+  content: '';
+  width: var(--bds-size-1200);
+  border-top: var(--bds-border-width-sm) solid currentColor;
+}
+
+.bds-hero--statement .bds-hero__title {
+  max-width: var(--bds-content-width-md);
+  font-size: var(--bds-hero-title-font-size, clamp(var(--bds-heading-xxl), 7vw, var(--bds-display-lg)));
+  font-weight: var(--bds-font-weight-bold);
+}
+
+.bds-hero--statement .bds-hero__lead {
+  font-size: var(--bds-body-xl);
+}
+
+.bds-hero--statement .bds-hero__decoration {
+  color: var(--bds-text-brand-primary);
+  justify-self: center;
+  width: 100%;
+  max-width: var(--bds-content-width-text-xs);
+}
+
+@media (--bds-up-tablet) {
+  .bds-hero--statement[data-decoration] .bds-hero__container {
+    grid-template-columns: 3fr 2fr;
+    gap: var(--bds-gap-huge);
+  }
+}
+
+/* `--statement` decoration: the slotted node is any SVG or image. */
+.bds-hero__decoration svg,
+.bds-hero__decoration img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 /* ── --split: content column + media column (60/40) ──────────────────────── */
 
 /* One step larger than the base title. The Astro twin has carried this since
