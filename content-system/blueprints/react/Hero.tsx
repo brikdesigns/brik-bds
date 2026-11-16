@@ -108,10 +108,8 @@ export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
    * `with-pricing-card` = interior split; content trail + an `aside` image/price card.
    * `centered` = single centred column, no media; re-scale its h1 with the
    * `--bds-hero-title-font-family` / `-font-size` hooks.
-   * `statement` is Astro-rail only (`hero_statement` declares `rails: ["astro"]`),
-   * so this rail does not accept it.
    */
-  layout?: Exclude<HeroLayout, 'statement'>;
+  layout?: HeroLayout;
   /**
    * Content-column placement (structure axis, ADR-039). `left` (default) keeps
    * the content flush-start; `center` centres the eyebrow → h1 → lead → CTA
@@ -182,7 +180,7 @@ export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
  */
 export interface HeroSectionProps extends BlueprintProps {
   /** `split` (default) or `interior-minimal`. `with-pricing-card` is composed-only. */
-  layout?: Exclude<HeroLayout, 'with-pricing-card' | 'statement'>;
+  layout?: Exclude<HeroLayout, 'with-pricing-card'>;
   /** Rendered as `data-blueprint-key` so the scaffold contract can assert on it. */
   blueprintKey?: KnownBlueprintKey;
 }
