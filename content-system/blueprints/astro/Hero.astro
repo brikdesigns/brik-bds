@@ -15,6 +15,8 @@
  *   interior-minimal  — `bds-hero--interior-minimal`   narrow content column, no media
  *   with-pricing-card — `bds-hero--with-pricing-card`  content trail + image/price card
  *   centered          — `bds-hero--centered`           single centred column, no media
+ *   statement         — `bds-hero--statement`          left-aligned short headline + one CTA,
+ *                                                      eyebrow with a rule, optional decoration
  *
  * `HeroLayout` is imported from `./types`, the contract module both rails
  * share, so a layout cannot be added to one rail only.
@@ -27,6 +29,9 @@
  *   - section.subtitle             — eyebrow above h1 (optional)
  *   - section.body                 — lead paragraph (optional)
  *   - section.cta                  — primary CTA (optional)
+ *   - <slot name="decoration">     — `--statement` right column (optional, direct
+ *     composition only: the dispatcher passes no slots). Absent, the column is
+ *     not rendered and the content column keeps the full measure.
  *   - clientFacts.heroImageUrl     — `--split` media column; emits a
  *     `data-content-needed="hero_image_url"` stub when missing (CI greppable)
  *   - section.breadcrumb           — `--with-pricing-card` trail (optional)
@@ -191,6 +196,8 @@ const contentClass = ['bds-hero__content', reveal !== 'none' && `bds-block-revea
 
 const isSplit = layout === 'split';
 const isPricingCard = layout === 'with-pricing-card';
+const isStatement = layout === 'statement';
+const hasDecoration = isStatement && Astro.slots.has('decoration');
 const heroImage = clientFacts.heroImageUrl;
 
 // Split media column (media axis, ADR-039). `image` reads the hero image;
@@ -217,6 +224,7 @@ const ctaClass = isPricingCard
   aria-labelledby={titleId}
   data-blueprint-key={blueprintKey}
   data-service-line={serviceLine}
+  data-decoration={hasDecoration ? 'end' : undefined}
   data-media-position={isSplit && mediaPosition !== 'end' ? mediaPosition : undefined}
   data-orientation={isSplit && orientation !== 'horizontal' ? orientation : undefined}
 >
@@ -285,6 +293,12 @@ const ctaClass = isPricingCard
         </a>
       )}
     </div>
+
+    {hasDecoration && (
+      <div class="bds-hero__decoration" aria-hidden="true">
+        <slot name="decoration" />
+      </div>
+    )}
 
     {isSplit && media !== 'none' && (splitMediaSrc ? (
       <div class="bds-hero__media">
@@ -431,6 +445,55 @@ const ctaClass = isPricingCard
   .bds-hero--centered .bds-hero__content {
     align-items: center;
     text-align: center;
+  }
+
+  /* ── --statement: left-aligned short headline + one CTA ─────────── */
+  /* The shared container, left-aligned, at the wide reading width — where
+     --interior-minimal is a narrow banner and --centered is centred. The
+     headline steps up to the display ramp and the eyebrow carries a short rule.
+     Surface and text colours come from the shared spine's hooks, so the layout
+     follows the theme mode; nothing here pins a dark surface. */
+  .bds-hero--statement .bds-hero__container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--bds-gap-xl);
+    align-items: center;
+  }
+
+  .bds-hero--statement .bds-hero__subtitle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--bds-gap-md);
+  }
+
+  .bds-hero--statement .bds-hero__subtitle::before {
+    content: '';
+    width: var(--bds-size-1200);
+    border-top: var(--bds-border-width-sm) solid currentColor;
+  }
+
+  .bds-hero--statement .bds-hero__title {
+    max-width: var(--bds-content-width-md);
+    font-size: var(--bds-hero-title-font-size, clamp(var(--bds-heading-xxl), 7vw, var(--bds-display-lg)));
+    font-weight: var(--bds-font-weight-bold);
+  }
+
+  .bds-hero--statement .bds-hero__lead {
+    font-size: var(--bds-body-xl);
+  }
+
+  .bds-hero--statement .bds-hero__decoration {
+    color: var(--bds-text-brand-primary);
+    justify-self: center;
+    width: 100%;
+    max-width: var(--bds-content-width-text-xs);
+  }
+
+  @media (min-width: 768px) {
+    .bds-hero--statement[data-decoration] .bds-hero__container {
+      grid-template-columns: 3fr 2fr;
+      gap: var(--bds-gap-huge);
+    }
   }
 
   /* ── --interior-minimal: single narrow content column, no media ── */
@@ -785,6 +848,15 @@ const ctaClass = isPricingCard
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /* `--statement` decoration — the slotted node comes from the caller, so it
+     carries no scope id and a scoped rule would not reach it. */
+  .bds-hero__decoration svg,
+  .bds-hero__decoration img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   .bds-hero__price-label {

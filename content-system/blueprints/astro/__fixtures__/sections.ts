@@ -68,6 +68,25 @@ const heroCentered: Section = {
   },
 };
 
+// `statement` is dispatched by `hero_statement`; the generated `Hero--statement`
+// markup is rendered with an explicit `layout="statement"`. A 3–5 word headline,
+// no lead, one CTA.
+const heroStatement: Section = {
+  ...heroInteriorMinimal,
+  sectionKey: 'hero-statement-default',
+  title: 'Say it plainly',
+  subtitle: 'Our approach',
+  body: null,
+  cta: { label: 'Get started', url: '#' },
+  visualNotes: {
+    blueprintKey: 'hero_statement',
+    moodKeywords: ['minimal'],
+    layoutBlueprint: 'hero_statement',
+    imageOpportunity: null,
+    illustrationOpportunity: null,
+  },
+};
+
 const heroWithPricingCard: Section = {
   sectionKey: 'hero-img-card-default',
   sectionType: 'hero',
@@ -493,6 +512,7 @@ const SECTIONS: Record<string, Section> = {
   'Hero:interior-minimal': heroInteriorMinimal,
   'Hero:with-pricing-card': heroWithPricingCard,
   'Hero:centered': heroCentered,
+  'Hero:statement': heroStatement,
   'Cta:default': ctaDefault,
   'Cta:split': ctaSplit,
   'CardGrid:card-grid': cardGrid,

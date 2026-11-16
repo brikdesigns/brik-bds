@@ -2,7 +2,7 @@
   "version": "3.0.0",
   "last_reviewed": "2026-09-09",
   "review_cadence": "quarterly",
-  "_comment": "Shipped blueprint inventory — every entry dispatches on both rails unless it declares `rails` (#2308, #2304); collection_index, collection_entry, faq_accordion_grouped and hero_centered declare `[\"astro\"]` (#872, #3186). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
+  "_comment": "Shipped blueprint inventory — every entry dispatches on both rails unless it declares `rails` (#2308, #2304); collection_index, collection_entry, faq_accordion_grouped, hero_centered and hero_statement declare `[\"astro\"]` (#872, #3186, #3187). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
   "blueprints": [
     {
       "key": "hero_split",
@@ -274,6 +274,38 @@
       "layout_spec": "Single centred column with no media, opening a page. Optional eyebrow, then an h1 headline, an optional body paragraph and an optional single call to action, all centred in a narrow column. Any background glow comes from the resolved atmosphere (cinematic-dramatic paints a centred radial glow behind the hero) or from the consumer's hero background hook, never from the layout. Pairs with a following stats_bar or logo_wall for proof. Drives home and campaign landing pages that lead with one message.",
       "css_hints": ".bds-hero--centered .bds-hero__container { display: flex; flex-direction: column; gap: var(--bds-gap-md); max-width: var(--bds-content-width-md); } .bds-hero--centered .bds-hero__content { align-items: center; text-align: center; }",
       "source": "brik-bds#3186 — graduated from blueprint-roadmap.json onto the canonical rail (ADR-037)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-11-15",
+      "required_facts": [],
+      "atmospheres": [
+        "cinematic-dramatic",
+        "none"
+      ],
+      "rails": [
+        "astro"
+      ]
+    },
+    {
+      "key": "hero_statement",
+      "name": "Statement Hero",
+      "section_type": "hero",
+      "industries": [
+        "universal",
+        "legal",
+        "finance",
+        "corporate"
+      ],
+      "moods": [
+        "corporate",
+        "minimal",
+        "trustworthy",
+        "professional"
+      ],
+      "layout_spec": "Left-aligned opening section on the page surface. A short eyebrow label is preceded by a short horizontal rule. Below it a headline of three to five words at display size, then one primary call to action. An optional lead paragraph renders if supplied but the layout is built to stand without one. When a decoration is slotted, a right column holds a single abstract shape or minimal illustration (hidden from assistive tech); without one the content column keeps the full width and the right side stays empty. Stacks to one column on narrow screens. The surface and all text colours come from the active theme mode, so the same markup renders light or dark; atmosphere is layered on top, never part of the layout. Differs from hero_interior_minimal (a compact banner with no call to action) and hero_split (which requires an image).",
+      "css_hints": ".bds-hero--statement .bds-hero__subtitle::before { width: var(--bds-size-1200); border-top: var(--bds-border-width-sm) solid currentColor; } .bds-hero--statement .bds-hero__title { font-size: clamp(var(--bds-heading-xxl), 7vw, var(--bds-display-lg)); font-weight: var(--bds-font-weight-bold); }",
+      "source": "brik-bds#3187 — graduated from blueprint-roadmap.json onto the canonical rail (ADR-037)",
       "tier": "internal",
       "is_active": true,
       "version": "1.0.0",
