@@ -189,13 +189,13 @@ describe('lint-tokens Rule 13 (responsive-token-swap)', () => {
   it('handles a multi-line comma-separated selector list (Grid.css shape)', () => {
     const file = join(tmpDir, 'MultiSelector.css');
     writeFileSync(file, `
-      .bds-grid--cols-3,
-      .bds-grid--cols-4 {
+      .bds-grid--columns-3,
+      .bds-grid--columns-4 {
         gap: var(--bds-gap-sm);
       }
       @media (max-width: 991px) {
-        .bds-grid--cols-3,
-        .bds-grid--cols-4 {
+        .bds-grid--columns-3,
+        .bds-grid--columns-4 {
           gap: var(--bds-gap-xl);
         }
       }
@@ -203,8 +203,8 @@ describe('lint-tokens Rule 13 (responsive-token-swap)', () => {
     const violations = runLinter([file]);
     expect(violations).toHaveLength(2);
     expect(violations.map((v) => v.message)).toEqual([
-      expect.stringContaining('.bds-grid--cols-3 { gap } inverts'),
-      expect.stringContaining('.bds-grid--cols-4 { gap } inverts'),
+      expect.stringContaining('.bds-grid--columns-3 { gap } inverts'),
+      expect.stringContaining('.bds-grid--columns-4 { gap } inverts'),
     ]);
   });
 

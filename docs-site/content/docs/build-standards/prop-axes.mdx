@@ -1,6 +1,6 @@
 ---
 title: Prop Axes
-description: The sixteen shared axis words — tone, status, variant, emphasis, appearance, density, color, orientation, layout, span, fit, anchor, resize, marker, underline, measure — that any BDS component with overlapping concerns must use.
+description: The eighteen shared axis words — tone, status, variant, emphasis, appearance, density, color, orientation, layout, span, ratio, fit, anchor, resize, marker, underline, measure, columns — that any BDS component with overlapping concerns must use.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -16,19 +16,21 @@ Source of truth: [ADR-033 § 2](https://github.com/brikdesigns/brik-bds/blob/mai
 | `tone` | `negative` · `positive` · `warning` · `info` · `neutral` | Valence — what this communicates about a state | Badge, Dot, Banner, Field (`helperTone`) |
 | `status` | per-subject | Presence or lifecycle — the state of a named subject | Avatar, Card, Table, TaskConsole |
 | `variant` | per-component (see matrix) | Form — mutually exclusive visual or structural shape, no valence | Card, TabBar, Skeleton, Sheet, ServiceTag, Testimonial, Footer, ToggleSwitch, ProgressStepper |
-| `emphasis` | `neutral` · `brand` · `accent` · `inverse` | Hue source — which palette paints it | TextLink, SocialIcon, ContactIcon |
+| `emphasis` | `neutral` · `brand` · `accent` · `inverse` · `on-color` | Hue source — which palette paints it | TextLink, SocialIcon, ContactIcon |
 | `appearance` | `solid` · `subtle` · `outline` | Fill treatment — how the shape is filled vs bordered | Badge, Tag, Avatar (`solid` · `subtle` only) |
 | `density` | `comfortable` · `compact` | Spacing compression | Tag, Sheet |
 | `color` | `neutral` · `blue` · `green` · `orange` · `purple` · `yellow` · `red` | Accent hue — which named hue paints it | Tag, Avatar |
 | `orientation` | `horizontal` · `vertical` | Layout direction, no valence | ButtonGroup, Divider, CardList |
 | `layout` | per-component | Arrangement — which arrangement of one shared slot set a Container renders | Card |
 | `span` | `full` | Grid extent — how many of its parent grid's tracks a grid child occupies | Field |
+| `ratio` | per-component | A fixed proportion the component holds — an aspect slug or a column split | Frame, Split |
 | `fit` | `cover` · `contain` · `fill` · `none` | Media fit — how media fills its box | Frame, Image, Card, Table |
 | `anchor` | `width` · `height` | Which dimension a ratio is held from | Frame, Image |
 | `resize` | `none` · `both` · `horizontal` · `vertical` | Which directions the user may resize | TextArea |
 | `marker` | `disc` · `decimal` · `none` | List item marker | BulletList |
 | `underline` | `hover` · `always` · `none` | When a link shows its underline | TextLink |
 | `measure` | `sm` · `md` · `lg` | Text column width | SectionHeader |
+| `columns` | `1`–`6` · `auto-fit` · `auto-fill` | Grid column count — a fixed count, or a reflow strategy | Grid, FieldGrid |
 
 `error` and `progress` are retired valence words: use `negative` and `info` ([ADR-033 § Retired vocabulary](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md#retired-vocabulary)). `brand` is not a valence either: ADR-033 moves it to `emphasis="brand"`. Badge's `tone` still accepts `brand` until that migration lands (see the matrix below), so do not copy it into a new union.
 

@@ -76,7 +76,7 @@ export function Grid({
     <Element
       className={bdsClass(
         'bds-grid',
-        isAuto ? `bds-grid--${columns}` : `bds-grid--cols-${columns}`,
+        `bds-grid--columns-${columns}`,
         gap !== 'none' && `bds-grid--gap-${gap}`,
         className,
       )}
