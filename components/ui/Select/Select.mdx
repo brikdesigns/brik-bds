@@ -44,7 +44,7 @@ Set `allOption` for a selectable empty-value entry (e.g. "All service lines") â€
 
 ## CSS Override API
 
-Component-scoped CSS variables exposed on `.bds-select`. Set on a wrapping element to override without touching BDS internals.
+Component-scoped CSS variables exposed on `.bds-select-field`, the wrapper around the select, chevron and leading icon. Override by targeting `.bds-select-field` (a variable set on an ancestor is shadowed by the default declared here).
 
 | Variable | Default | Controls |
 |---|---|---|
@@ -53,7 +53,7 @@ Component-scoped CSS variables exposed on `.bds-select`. Set on a wrapping eleme
 
 ```css
 /* Example: match chevron to brand color in a themed form */
-.branded-form {
+.branded-form .bds-select-field {
   --bds-select-chevron-color: var(--bds-text-brand-primary);
   --bds-select-icon-color: var(--bds-text-brand-primary);
 }
