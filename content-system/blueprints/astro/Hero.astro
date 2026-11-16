@@ -160,6 +160,12 @@ interface Props extends BlueprintProps {
    * hero's `data-service-line` theming. Default true. (brik-bds#871)
    */
   showServiceTag?: boolean;
+  /**
+   * `card` opts a dark-mode hero out of the `-on-dark` content-text flips for
+   * consumers whose section is a light band and only the media card paints
+   * `-inverse`. Emits `data-inverse-scope`. Default: unset. (brik-bds#1028)
+   */
+  inverseScope?: 'card';
 }
 
 const {
@@ -173,6 +179,7 @@ const {
   blueprintKey,
   imageRatio,
   showServiceTag = true,
+  inverseScope,
 } = Astro.props;
 const titles = resolveSectionTitles(section);
 
@@ -224,6 +231,7 @@ const ctaClass = isPricingCard
   aria-labelledby={titleId}
   data-blueprint-key={blueprintKey}
   data-service-line={serviceLine}
+  data-inverse-scope={inverseScope}
   data-decoration={hasDecoration ? 'end' : undefined}
   data-media-position={isSplit && mediaPosition !== 'end' ? mediaPosition : undefined}
   data-orientation={isSplit && orientation !== 'horizontal' ? orientation : undefined}
@@ -716,36 +724,57 @@ const ctaClass = isPricingCard
    * (6.89–9.06:1) via contrast-gate (brik-bds#1017). The inner inverse <Button>
    * is unaffected: its label/fill ride --bds-text-inverse / --bds-background-inverse
    * (surface-service-{line}-dark), handled above. */
-  :root[data-theme="dark"] .bds-hero[data-service-line='brand'] {
+  :root[data-theme="dark"] .bds-hero[data-service-line='brand']:not([data-inverse-scope="card"]) {
     --bds-hero-headline-color: var(--bds-text-service-brand-on-dark);
     --bds-hero-eyebrow-color: var(--bds-text-service-brand-on-dark);
     --bds-hero-lead-color: var(--bds-text-service-brand-on-dark);
     --bds-text-brand-primary: var(--bds-text-service-brand-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero[data-service-line='marketing'] {
+  :root[data-theme="dark"] .bds-hero[data-service-line='marketing']:not([data-inverse-scope="card"]) {
     --bds-hero-headline-color: var(--bds-text-service-marketing-on-dark);
     --bds-hero-eyebrow-color: var(--bds-text-service-marketing-on-dark);
     --bds-hero-lead-color: var(--bds-text-service-marketing-on-dark);
     --bds-text-brand-primary: var(--bds-text-service-marketing-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero[data-service-line='information'] {
+  :root[data-theme="dark"] .bds-hero[data-service-line='information']:not([data-inverse-scope="card"]) {
     --bds-hero-headline-color: var(--bds-text-service-information-on-dark);
     --bds-hero-eyebrow-color: var(--bds-text-service-information-on-dark);
     --bds-hero-lead-color: var(--bds-text-service-information-on-dark);
     --bds-text-brand-primary: var(--bds-text-service-information-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero[data-service-line='product'] {
+  :root[data-theme="dark"] .bds-hero[data-service-line='product']:not([data-inverse-scope="card"]) {
     --bds-hero-headline-color: var(--bds-text-service-product-on-dark);
     --bds-hero-eyebrow-color: var(--bds-text-service-product-on-dark);
     --bds-hero-lead-color: var(--bds-text-service-product-on-dark);
     --bds-text-brand-primary: var(--bds-text-service-product-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero[data-service-line='back-office'],
-  :root[data-theme="dark"] .bds-hero[data-service-line='service'] {
+  :root[data-theme="dark"] .bds-hero[data-service-line='back-office']:not([data-inverse-scope="card"]),
+  :root[data-theme="dark"] .bds-hero[data-service-line='service']:not([data-inverse-scope="card"]) {
     --bds-hero-headline-color: var(--bds-text-service-back-office-on-dark);
     --bds-hero-eyebrow-color: var(--bds-text-service-back-office-on-dark);
     --bds-hero-lead-color: var(--bds-text-service-back-office-on-dark);
     --bds-text-brand-primary: var(--bds-text-service-back-office-on-dark);
+  }
+
+  /* ── Dark-mode, opt-in `data-inverse-scope="card"` (brik-bds#1028): the section is a light band and only the media card paints `-inverse`. The content-text flips above skip a flagged hero (stay `-on-light`); the card's primary CTA is repainted with the `-on-dark` tint + grayscale-950 text (the `-on-light` fill is `{hue}-darkest`, invisible on the card). Rest-state only so BDS hover/press feedback still wins. Text is the grayscale-950 primitive: the hero rebinds --bds-text-on-color-light to white. */
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"] .bds-hero__media-card .bds-button--primary {
+    color: var(--bds-color-grayscale-950);
+  }
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='brand'] .bds-hero__media-card .bds-button--primary:not(:hover):not(:active) {
+    background-color: var(--bds-background-service-brand-on-dark);
+  }
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='marketing'] .bds-hero__media-card .bds-button--primary:not(:hover):not(:active) {
+    background-color: var(--bds-background-service-marketing-on-dark);
+  }
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='information'] .bds-hero__media-card .bds-button--primary:not(:hover):not(:active) {
+    background-color: var(--bds-background-service-information-on-dark);
+  }
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='product'] .bds-hero__media-card .bds-button--primary:not(:hover):not(:active) {
+    background-color: var(--bds-background-service-product-on-dark);
+  }
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='back-office'] .bds-hero__media-card .bds-button--primary:not(:hover):not(:active),
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='service'] .bds-hero__media-card .bds-button--primary:not(:hover):not(:active) {
+    background-color: var(--bds-background-service-back-office-on-dark);
   }
 
   .bds-hero--with-pricing-card .bds-hero__container {

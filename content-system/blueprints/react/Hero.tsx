@@ -37,7 +37,11 @@
  * are absent for the simpler layouts. `ctaEmphasis` lets the pricing-card
  * variant render its `inverse` CTA against the service-line-tinted surface.
  * `data-service-line` (a plain attribute forwarded via `...rest`) drives the
- * service-token cascade in `Hero.css`.
+ * service-token cascade in `Hero.css`. `data-inverse-scope="card"` (opt-in, same
+ * forwarding) is for a hero whose section is a light band and only the media card
+ * paints `-inverse`: in dark mode it skips the `-on-dark` content-text flips (text
+ * stays `-on-light`) and pins the card's primary CTA to the `-on-dark` fill +
+ * grayscale-950 text. Unset, the default hero contract is unchanged (brik-bds#1028).
  *
  * Hero blueprints own the page's singular `h1`.
  *
