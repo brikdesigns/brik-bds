@@ -289,12 +289,24 @@ Component-scoped CSS variables exposed on `.bds-button`. Set these on a wrapping
 | `--button-active-translate-y` | `1px` | Downward shift on `:active` press |
 | `--button-focus-outline-width` | `2px` | Focus ring stroke width |
 | `--button-focus-outline-offset` | `2px` | Gap between button edge and focus ring |
+| `--bds-button-primary-background` | `var(--bds-background-brand-primary)` | Primary fill. Set the `-hover` and `-pressed` variants with it |
+| `--bds-button-primary-background-hover` | `var(--bds-background-brand-primary-hover)` | Primary fill on hover |
+| `--bds-button-primary-background-pressed` | `var(--bds-background-brand-primary-pressed)` | Primary fill while pressed |
+| `--bds-button-primary-color` | `var(--bds-text-on-color-dark)` | Primary label and icon ink |
 
 ```css
 /* Example: flatten press effect in a toolbar context */
 .my-toolbar {
   --button-active-translate-y: 0;
   --button-focus-outline-width: 3px;
+}
+```
+
+```css
+/* Example: a service-themed section re-skins every primary Button inside it.
+   Values must be Semantic tokens, never raw literals (ADR-014). Hover and pressed keep the brand shades unless you set their hooks too. */
+.service-section {
+  --bds-button-primary-background: var(--bds-background-info);
 }
 ```
 

@@ -86,9 +86,12 @@
 
 /* ─── Variants ────────────────────────────────────────────────── */
 
+/* Override hooks (ADR-014): a service-themed section sets these on the button
+ * or any ancestor; unset, each resolves to the brand Semantic default. Set the
+ * background trio together so hover and pressed track the new fill. */
 .bds-button--primary {
-  background-color: var(--bds-background-brand-primary);
-  color: var(--bds-text-on-color-dark);
+  background-color: var(--bds-button-primary-background, var(--bds-background-brand-primary));
+  color: var(--bds-button-primary-color, var(--bds-text-on-color-dark));
 }
 
 .bds-button--outline {
@@ -147,11 +150,11 @@
 
 /* ── Primary ── */
 .bds-button--primary:hover:not(:disabled):not(.bds-button--loading) {
-  background-color: var(--bds-background-brand-primary-hover);
+  background-color: var(--bds-button-primary-background-hover, var(--bds-background-brand-primary-hover));
 }
 
 .bds-button--primary:active:not(:disabled) {
-  background-color: var(--bds-background-brand-primary-pressed);
+  background-color: var(--bds-button-primary-background-pressed, var(--bds-background-brand-primary-pressed));
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
