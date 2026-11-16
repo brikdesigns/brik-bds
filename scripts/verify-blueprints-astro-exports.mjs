@@ -710,6 +710,11 @@ const sections: BlueprintSection[] = [
     { title: 'First row', description: 'Text on one side, media on the other.', href: '/first' },
     { title: 'Second row', description: 'The sides swap.' },
   ] }),
+  sec('features_bento_asymmetric', { sectionKey: 'd_features_bento', sectionType: 'features', title: 'One feature leads', items: [
+    { title: 'Featured cell', description: 'Spans two rows on desktop.', href: '/featured' },
+    { title: 'Supporting cell', description: 'An equal cell.' },
+    { title: 'Stat cell', description: 'A headline figure.', stat: '98%' },
+  ] }),
   sec('cta_centered', { sectionKey: 'd_cta_dark', sectionType: 'cta', title: 'End of proof', cta: { label: 'Home', url: '/' } }),
   sec('collection_index', { sectionKey: 'd_collection_index', sectionType: 'content_block', title: 'Latest entries', items: [
     { title: 'First entry', description: 'An excerpt.', href: '/entries/first' },
@@ -760,6 +765,7 @@ const DISPATCH_FIXTURE_KEYS = [
   'hero_centered',
   'hero_statement',
   'features_alternating_split',
+  'features_bento_asymmetric',
   'cta_centered',
   'collection_index',
   'collection_entry',

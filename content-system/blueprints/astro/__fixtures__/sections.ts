@@ -320,6 +320,57 @@ const featuresAlternatingSplitImages: Section = {
   })),
 };
 
+// `bento` is dispatched by `features_bento_asymmetric`. The first item is the
+// featured cell and the third carries a `stat`, so one fixture exercises the
+// featured, media and stat cells. No images are supplied, so every media cell
+// renders the missing-media placeholder; the `-images` variant supplies one each.
+const featuresBento: Section = {
+  sectionKey: 'features-bento-default',
+  sectionType: 'features',
+  title: 'One feature leads, the rest support it',
+  subtitle: 'What we do',
+  body: 'A featured cell beside a few smaller ones, so the section can lead with its strongest point.',
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'features_bento_asymmetric',
+    moodKeywords: ['bold', 'modern'],
+    layoutBlueprint: 'features_bento_asymmetric',
+    imageOpportunity: 'one image per media cell',
+    illustrationOpportunity: null,
+  },
+  items: [
+    {
+      title: 'Start with a conversation',
+      description: 'A short call to learn what you need before anything is planned or priced.',
+      href: '#',
+    },
+    {
+      title: 'See the plan in writing',
+      description: 'A clear scope, timeline and fixed fee before any work begins.',
+    },
+    {
+      title: 'Clients who would recommend us',
+      description: 'Measured after every engagement.',
+      stat: '98%',
+    },
+    {
+      title: 'Review as it comes together',
+      description: 'Check in at each step.',
+      href: '#',
+    },
+  ],
+};
+
+const featuresBentoImages: Section = {
+  ...featuresBento,
+  sectionKey: 'features-bento-images',
+  items: featuresBento.items.map((item, i) => ({
+    ...item,
+    imageUrl: placeholderImage(960, 720, '#eaf1fb', '#1f3d70', `Feature ${i + 1}`),
+    imageAlt: `Feature ${i + 1}`,
+  })),
+};
+
 const calloutPanel: Section = {
   sectionKey: 'support-plan-default',
   sectionType: 'cta',
@@ -567,6 +618,8 @@ const SECTIONS: Record<string, Section> = {
   Features: features,
   'Features:alternating-split': featuresAlternatingSplit,
   'Features:alternating-split-images': featuresAlternatingSplitImages,
+  'Features:bento': featuresBento,
+  'Features:bento-images': featuresBentoImages,
   CalloutPanel: calloutPanel,
   StatsBar: statsBar,
   'StatsBar:count-up': statsBarCountUp,

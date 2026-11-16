@@ -38,6 +38,7 @@ export type KnownBlueprintKey =
   | 'callout_split'
   | 'feature_grid'
   | 'features_alternating_split'
+  | 'features_bento_asymmetric'
   | 'story_split'
   | 'stats_bar'
   | 'testimonials_featured_large'
@@ -78,6 +79,7 @@ export const WIRED_BLUEPRINT_KEYS = [
   'callout_split',
   'feature_grid',
   'features_alternating_split',
+  'features_bento_asymmetric',
   'story_split',
   'stats_bar',
   'testimonials_featured_large',
@@ -146,10 +148,15 @@ export type CardGridLayout = 'card-grid' | 'two-column-list';
  *                         the sides swapped on every even row (from the tablet
  *                         rung up; rows stack text-then-media below it). Takes
  *                         the `mediaPosition` axis to start on the media side.
+ *   `bento`             — an asymmetric card grid: the first item is the featured
+ *                         cell, spanning two rows beside the others from the
+ *                         desktop rung up; an item carrying `stat` renders a stat
+ *                         cell (the figure plus a descriptor) instead of media.
+ *                         Collapses to one column below the tablet rung.
  *
  * The React `<Features>` takes the same `layout` prop.
  */
-export type FeaturesLayout = 'grid' | 'alternating-split';
+export type FeaturesLayout = 'grid' | 'alternating-split' | 'bento';
 
 /**
  * Structure axis — content placement (ADR-039 §Decision 1, #2492).
@@ -444,6 +451,12 @@ export interface BlueprintSectionContent {
      */
     readonly href?: string;
     readonly imageUrl?: string;
+    /**
+     * Headline figure for a `bento` stat cell (`features_bento_asymmetric`),
+     * e.g. `98%`. An item carrying it renders the figure with `title` as its
+     * descriptor and no media. Additive, optional.
+     */
+    readonly stat?: string;
     /** ServiceLine slug — see `ServiceTag` props in `@brikdesigns/bds`.
      * `back-office` is canonical; `service` is a @deprecated alias. */
     readonly category?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';

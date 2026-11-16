@@ -9,7 +9,8 @@
  * `features` was a single-member family, so the feature grid is the unmodified
  * block (ADR-008 §3 — a modifier needs a sibling layout to contrast against).
  * `layout="alternating-split"` (#3189) is that sibling: rows of text + media
- * under `bds-features--alternating-split`. Column count is a responsive CSS concern
+ * under `bds-features--alternating-split`; `layout="bento"` (#3188) is the
+ * asymmetric card grid under `bds-features--bento`. Column count is a responsive CSS concern
  * (1 → 2 → 3), not a class token. The dark surface is a themeable default
  * via the `--bds-features-background` Tier-4 hook (fallback `--bds-page-inverse`), not a
  * name — the same "surface is a default, not a class" move ADR-008 applied to
@@ -82,6 +83,8 @@ export interface FeatureItem {
   imageUrl?: string;
   /** Alt text for `imageUrl`. Empty (decorative) when omitted. */
   imageAlt?: string;
+  /** `bento` stat cell headline figure (e.g. `98%`); `title` becomes its descriptor. */
+  stat?: string;
   /**
    * Lottie source for the `contentMotion: animated-svg` axis (#2533) — a URL to
    * fetch, or parsed Lottie JSON (mirrors `AnimatedIcon`'s `src`). When the
@@ -181,6 +184,7 @@ function FeaturesShell({
   const titleId = `${sectionKey}-title`;
   const hasHeader = Boolean(title || subtitle || body);
   const isSplit = layout === 'alternating-split';
+  const isBento = layout === 'bento';
 
   return (
     <section
@@ -189,10 +193,13 @@ function FeaturesShell({
         'bds-features',
         align === 'left' && 'bds-features--align-left',
         isSplit && 'bds-features--alternating-split',
-        !isSplit && columns && `bds-features--cols-${columns}`,
+        isBento && 'bds-features--bento',
+        !isSplit && !isBento && columns && `bds-features--cols-${columns}`,
         className,
       )}
-      data-blueprint-key={isSplit ? 'features_alternating_split' : 'feature_grid'}
+      data-blueprint-key={
+        isSplit ? 'features_alternating_split' : isBento ? 'features_bento_asymmetric' : 'feature_grid'
+      }
       data-media-position={isSplit && mediaPosition !== 'end' ? mediaPosition : undefined}
       aria-labelledby={title ? titleId : undefined}
       {...rest}
@@ -215,6 +222,57 @@ function FeaturesShell({
 
         <ul className="bds-features__grid" role="list">
           {items.map((item, idx) => {
+            if (isBento) {
+              const figure = item.stat;
+              const cellClass = bdsClass(
+                'bds-features__item',
+                idx === 0 && 'bds-features__item--featured',
+                Boolean(figure) && 'bds-features__item--stat',
+              );
+              return (
+                <li key={`${sectionKey}-${idx}`} className={cellClass}>
+                  {figure ? (
+                    <p className="bds-features__stat">{figure}</p>
+                  ) : (
+                    <div className="bds-features__media">
+                      {item.imageUrl ? (
+                        <img
+                          src={item.imageUrl}
+                          alt={item.imageAlt ?? ''}
+                          className="bds-features__image"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      ) : (
+                        <div
+                          className="bds-blueprint-section__missing"
+                          data-content-needed="feature_image_url"
+                          role="presentation"
+                        >
+                          <p className="bds-blueprint-section__missing-label">
+                            Feature image missing for this client.
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  <div className="bds-features__content">
+                    <h3 className="bds-features__title">{item.title}</h3>
+                    {item.description && (
+                      <p className="bds-features__description">{item.description}</p>
+                    )}
+                    {item.href && (
+                      <a className="bds-features__cta" href={item.href}>
+                        {item.ctaLabel ?? 'Learn more'}
+                        <span aria-hidden="true" className="bds-features__cta-arrow">
+                          →
+                        </span>
+                      </a>
+                    )}
+                  </div>
+                </li>
+              );
+            }
             if (isSplit) {
               return (
                 <li key={`${sectionKey}-${idx}`} className="bds-features__item">

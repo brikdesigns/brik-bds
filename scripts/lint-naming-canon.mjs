@@ -574,8 +574,13 @@ function collectUnions(componentsDir) {
  * `ModalSize`, so claiming it in `axesOf` would read `'full' | 'compact'` as
  * span + density and fail a union that is not about grid extent. Rule 5 still
  * default-denies any other `--span-*` / `*Span` member through `spec.values`.
+ *
+ * The #1927 axes join it for the same reason. Their values are CSS keywords
+ * and t-shirt rungs (`none`, `md`, `horizontal`) that other unions share, so
+ * `DividerSpacing = 'none' | 'sm' | 'md' | 'lg'` would read as marker +
+ * measure and fail rule 3.
  */
-const SPAN_AXIS = 'span';
+const PREFIX_JUDGED_AXES = new Set(['span', 'fit', 'anchor', 'resize', 'marker', 'underline', 'measure']);
 
 /**
  * Every axis whose closed list claims this member. A SET, not one axis: ADR-033
@@ -601,7 +606,7 @@ function axesOf(member) {
     axes.add(RETIRED_AXIS_VALUES[member].axis);
   }
   for (const [axis, spec] of Object.entries(AXES)) {
-    if (axis === SPAN_AXIS) continue;
+    if (PREFIX_JUDGED_AXES.has(axis)) continue;
     if (spec.values && spec.values.has(member)) axes.add(axis);
   }
   return axes;

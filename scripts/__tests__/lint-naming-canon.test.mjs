@@ -662,6 +662,49 @@ describe('rule 4 — the `ratio` axis (§ Amendments, #2037)', () => {
   });
 });
 
+describe('rule 4 + 5 — the fit · anchor · resize · marker · underline · measure axes (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed modifiers components already emit', () => {
+    // Every one was a baselined `bare modifier` until the axes were admitted:
+    // the prefix was right, the gate just had no axis list to read it against.
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-frame--fit-cover { object-fit: cover; }
+.bds-frame--anchor-height { height: 100%; }
+.bds-text-area--resize-vertical { resize: vertical; }
+.bds-bullet-list--marker-decimal { list-style: decimal; }
+.bds-text-link--underline-hover { text-decoration: none; }
+.bds-section-header--measure-md { max-width: 60ch; }
+`,
+    });
+    expect(out).not.toMatch(/--(fit|anchor|resize|marker|underline|measure)-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies a value the amendment did NOT admit', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-frame--fit-stretch { object-fit: fill; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--fit-stretch — `stretch` is on no closed list for the fit axis/);
+  });
+
+  it('still denies a novel member in a governed union', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type ListMarker = 'disc' | 'square';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/ListMarker\.square — `square` is on no closed list for the marker axis/);
+  });
+
+  it('does not read shared values on an unrelated union as these axes', () => {
+    // DividerSpacing's real shape. `none` and `sm/md/lg` are on the resize,
+    // measure and marker lists too; claiming them by value would make rule 3
+    // read this as mixed.
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type DividerSpacing = 'none' | 'sm' | 'md' | 'lg';\n`,
+    });
+    expect(out).not.toMatch(/DividerSpacing/);
+    expect(code).toBe(0);
+  });
+});
+
 describe('rule 6 — the deleted --*-status-* family cannot come back (§ Token families)', () => {
   it('fails on a var() reference to a deleted name', () => {
     const { code, out } = run({ refs: '.x { background: var(--surface-status-warning); }' });
