@@ -549,14 +549,28 @@ slim_recently_active() {  # $1=worktree path -> 0 when active
 }
 
 # Does any process have its cwd inside the worktree? A dev server or test run there is a
-# live session whatever the PR says (#5667). One system-wide `lsof` per run, read lazily,
-# because a clean merged worktree is exactly where a `next dev` keeps running. lsof prints
-# real paths, so match on `pwd -P`. When lsof is missing or fails the answer is "no live
-# process" — the idle-window check beside it is the second guard.
-LIVE_CWDS=""; LIVE_CWDS_READ=false
-worktree_has_live_process() {  # $1=worktree path -> 0 when a process runs inside it
+# live session whatever the PR says (#5667). One system-wide scan per run, read lazily,
+# because a clean merged worktree is exactly where a `next dev` keeps running. `lsof` first,
+# `/proc/*/cwd` where it is absent (the slim Linux CI image has none); both print real
+# paths, so match on `pwd -P`. A scan that cannot see THIS process's own cwd is blind, not
+# empty — the sweeper is a delete path, so a blind scan answers "live" and KEEPs.
+# BRIK_SWEEP_LSOF / BRIK_SWEEP_PROC_DIR point the two sources elsewhere (the contract test).
+LIVE_CWDS=""; LIVE_CWDS_READ=false; LIVE_CWDS_BLIND=false
+read_live_cwds() {
+  local lsof_bin="${BRIK_SWEEP_LSOF:-lsof}" proc_dir="${BRIK_SWEEP_PROC_DIR:-/proc}" me
+  if command -v "$lsof_bin" >/dev/null 2>&1; then
+    LIVE_CWDS="$("$lsof_bin" -nP -d cwd -Fn 2>/dev/null | sed -n 's/^n//p' | sort -u)"
+  elif [ -d "$proc_dir/self" ]; then
+    LIVE_CWDS="$(for c in "$proc_dir"/[0-9]*/cwd; do readlink "$c" 2>/dev/null; done | sort -u)"
+  fi
+  me="$(pwd -P)"
+  grep -qxF "$me" <<<"$LIVE_CWDS" || LIVE_CWDS_BLIND=true
+  LIVE_CWDS_READ=true
+}
+worktree_has_live_process() {  # $1=worktree path -> 0 when a process runs inside it (or the scan is blind)
   local real
-  $LIVE_CWDS_READ || { LIVE_CWDS="$(lsof -nP -d cwd -Fn 2>/dev/null | sed -n 's/^n//p' | sort -u)"; LIVE_CWDS_READ=true; }
+  $LIVE_CWDS_READ || read_live_cwds
+  $LIVE_CWDS_BLIND && return 0
   real="$(cd "$1" 2>/dev/null && pwd -P)" || return 1
   [ -n "$real" ] && grep -qE "^$(printf '%s' "$real" | sed 's/[][\.*^$/]/\\&/g')(/|$)" <<<"$LIVE_CWDS"
 }
@@ -740,7 +754,9 @@ while IFS=$'\t' read -r path ref; do
   if [ "$dirty" != "0" ]; then
     verdict="KEEP — ${dirty} uncommitted change(s): ${DIRTY_WHY}"; KEPT=$((KEPT+1))
   elif worktree_has_live_process "$path"; then
-    verdict="KEEP — live process in worktree"; KEPT=$((KEPT+1))
+    if $LIVE_CWDS_BLIND; then verdict="KEEP — cannot see live processes (no lsof or /proc)"
+    else verdict="KEEP — live process in worktree"; fi
+    KEPT=$((KEPT+1))
   elif slim_recently_active "$path"; then
     verdict="KEEP — written within ${SLIM_IDLE_MIN}m"; KEPT=$((KEPT+1))
   elif $landed; then

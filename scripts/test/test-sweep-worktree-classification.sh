@@ -1512,6 +1512,26 @@ check "idle merged worktree is still REMOVE"        "REMOVE — merged into main
 check "live process in worktree → KEEP"             "KEEP — live process"        "$(l8 live)"
 check "recent write inside the idle window → KEEP"  "KEEP — written within 60m"  "$(l8 active)"
 
+# A scan with no lsof and no /proc cannot see a live process; the sweeper is a delete path, so
+# that is "live", never "none". Same idle worktree as the control above, which REMOVEs.
+O9="$( (cd "$PRIMARY8" && PATH="$STUB7:$PATH" BRIK_WORKTREE_ROOT="$WT8" BRIK_SWEEP_SLIM_IDLE_MIN=60 \
+  BRIK_SWEEP_LSOF=/nonexistent BRIK_SWEEP_PROC_DIR=/nonexistent "$SWEEPER" 2>&1) )"
+$VERBOSE && { echo "$O9"; echo; }
+check "no lsof and no /proc → idle worktree is KEPT (fail closed)" "KEEP — cannot see live processes" "$(grep -E '^task/idle[[:space:]]' <<<"$O9")"
+# Without lsof, /proc still answers: the idle worktree REMOVEs, the live one KEEPs.
+if [ -d /proc/self ]; then
+  (cd "$WT8/live" && exec sleep 300) &
+  LIVE_PID9=$!
+  sleep 1
+  O10="$( (cd "$PRIMARY8" && PATH="$STUB7:$PATH" BRIK_WORKTREE_ROOT="$WT8" BRIK_SWEEP_SLIM_IDLE_MIN=60 \
+    BRIK_SWEEP_LSOF=/nonexistent "$SWEEPER" 2>&1) )"
+  kill "$LIVE_PID9" 2>/dev/null
+  wait "$LIVE_PID9" 2>/dev/null || true
+  $VERBOSE && { echo "$O10"; echo; }
+  check "no lsof: /proc finds the live process → KEEP"   "KEEP — live process"        "$(grep -E '^task/live[[:space:]]' <<<"$O10")"
+  check "no lsof: /proc sees an idle worktree → REMOVE"  "REMOVE — merged into main"  "$(grep -E '^task/idle[[:space:]]' <<<"$O10")"
+fi
+
 echo
 if [ "$FAIL" -eq 0 ]; then
   echo -e "${GREEN}✓ ${PASS} passed${NC}"
