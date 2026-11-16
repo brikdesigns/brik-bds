@@ -1,6 +1,6 @@
 ---
 title: Prop Axes
-description: The ten shared axis words — tone, status, variant, emphasis, appearance, density, color, orientation, layout, span — that any BDS component with overlapping concerns must use.
+description: The sixteen shared axis words — tone, status, variant, emphasis, appearance, density, color, orientation, layout, span, fit, anchor, resize, marker, underline, measure — that any BDS component with overlapping concerns must use.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -23,6 +23,12 @@ Source of truth: [ADR-033 § 2](https://github.com/brikdesigns/brik-bds/blob/mai
 | `orientation` | `horizontal` · `vertical` | Layout direction, no valence | ButtonGroup, Divider, CardList |
 | `layout` | per-component | Arrangement — which arrangement of one shared slot set a Container renders | Card |
 | `span` | `full` | Grid extent — how many of its parent grid's tracks a grid child occupies | Field |
+| `fit` | `cover` · `contain` · `fill` · `none` | Media fit — how media fills its box | Frame, Image, Card, Table |
+| `anchor` | `width` · `height` | Which dimension a ratio is held from | Frame, Image |
+| `resize` | `none` · `both` · `horizontal` · `vertical` | Which directions the user may resize | TextArea |
+| `marker` | `disc` · `decimal` · `none` | List item marker | BulletList |
+| `underline` | `hover` · `always` · `none` | When a link shows its underline | TextLink |
+| `measure` | `sm` · `md` · `lg` | Text column width | SectionHeader |
 
 `error` and `progress` are retired valence words: use `negative` and `info` ([ADR-033 § Retired vocabulary](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md#retired-vocabulary)). `brand` is not a valence either: ADR-033 moves it to `emphasis="brand"`. Badge's `tone` still accepts `brand` until that migration lands (see the matrix below), so do not copy it into a new union.
 
