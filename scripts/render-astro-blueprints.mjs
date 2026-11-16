@@ -54,7 +54,7 @@ const BLOCKS = [
   { name: 'Cta', layouts: ['default', 'split'] },
   { name: 'CardGrid', layouts: ['card-grid', 'two-column-list'] },
   { name: 'Narrative', layouts: [null] },
-  { name: 'Features', layouts: [null] },
+  { name: 'Features', layouts: [null, 'alternating-split'] },
   { name: 'CalloutPanel', layouts: [null] },
   // StatsBar's second slug is the content-motion axis (count-up), not a
   // layout — it renders the static bar and the count-up treatment (#2529).
@@ -85,6 +85,8 @@ const AXIS_VARIANTS = [
   { name: 'Hero', layout: 'split', slug: 'Hero--split-media-start', props: { mediaPosition: 'start' } },
   { name: 'Hero', layout: 'split', slug: 'Hero--split-vertical', props: { orientation: 'vertical' } },
   { name: 'Hero', layout: 'statement', slug: 'Hero--statement-decoration', slots: { decoration: STATEMENT_DECORATION_SVG } },
+  { name: 'Features', layout: 'alternating-split', slug: 'Features--alternating-split-images', fixture: 'alternating-split-images' },
+  { name: 'Features', layout: 'alternating-split', slug: 'Features--alternating-split-media-start', props: { mediaPosition: 'start' } },
   { name: 'Narrative', layout: null, slug: 'Narrative--media-start', props: { mediaPosition: 'start' } },
   { name: 'Narrative', layout: null, slug: 'Narrative--vertical', props: { orientation: 'vertical' } },
 ];
@@ -128,13 +130,13 @@ async function main() {
 
   const emitted = [];
 
-  const renderBlock = async (mod, name, layout, slug, axisProps = {}, slots = undefined) => {
+  const renderBlock = async (mod, name, layout, slug, axisProps = {}, slots = undefined, fixture = layout) => {
     const container = await experimental_AstroContainer.create();
     const html = await container.renderToString(mod.default, {
       props: {
         theme: baseTheme,
         clientFacts: { ...baseClientFacts, heroImageUrl: placeholderImage(960, 1200, '#eaf1fb', '#1f3d70', name) },
-        section: sectionFor(name, layout),
+        section: sectionFor(name, fixture),
         ...(layout ? { layout } : {}),
         ...axisProps,
       },
@@ -170,9 +172,9 @@ async function main() {
     }
   }
 
-  for (const { name, layout, slug, props, slots } of AXIS_VARIANTS) {
+  for (const { name, layout, slug, props, slots, fixture } of AXIS_VARIANTS) {
     const mod = await server.ssrLoadModule(join(astroDir, `${name}.astro`));
-    await renderBlock(mod, name, layout, slug, props, slots);
+    await renderBlock(mod, name, layout, slug, props, slots, fixture);
   }
 
   // SiteHeader — the site-shell nav component. Not a blueprint (it takes direct

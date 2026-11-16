@@ -219,3 +219,112 @@
   .bds-features__card-link:focus-visible .bds-features__cta-arrow {
     transform: translateX(4px);
   }
+
+  /* ── --alternating-split: layout (#3189) ─────────────────────────────────────
+     One row per item: a text side (`__content`) and a media side (`__media`), the
+     sides swapped on every even row from the tablet rung up. DOM order is always
+     text first (the reading order), so the swap is `order` only and the rows stack
+     text-then-media below the tablet rung with no alternation. `mediaPosition=
+     "start"` (`data-media-position`) starts on the media side instead. The surface
+     is the page surface, not the dark `grid` default — the `--bds-features-*`
+     hooks still rethemes it. Mirrors ../react/Features.css. */
+
+  .bds-features--alternating-split {
+    background: var(--bds-features-background, var(--bds-features-bg, var(--bds-page-primary)));
+    color: var(--bds-text-primary);
+  }
+
+  .bds-features--alternating-split .bds-features__subtitle {
+    color: var(--bds-text-brand-primary);
+    opacity: 1;
+  }
+
+  .bds-features--alternating-split .bds-features__header .bds-features__title {
+    color: var(--bds-text-primary);
+  }
+
+  .bds-features--alternating-split .bds-features__lead {
+    color: var(--bds-text-secondary);
+    opacity: 1;
+  }
+
+  /* The default 1 → 2 → 3 card ramp is replaced by a single column of rows. */
+  .bds-features--alternating-split .bds-features__grid {
+    grid-template-columns: 1fr;
+    gap: var(--bds-features-gap, var(--bds-gap-huge));
+  }
+
+  .bds-features--alternating-split .bds-features__item {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--bds-gap-xl);
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .bds-features--alternating-split .bds-features__item {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--bds-gap-huge);
+    }
+
+    .bds-features--alternating-split .bds-features__item:nth-child(even) .bds-features__media {
+      order: -1;
+    }
+
+    .bds-features--alternating-split[data-media-position='start'] .bds-features__item:nth-child(odd) .bds-features__media {
+      order: -1;
+    }
+
+    .bds-features--alternating-split[data-media-position='start'] .bds-features__item:nth-child(even) .bds-features__media {
+      order: 0;
+    }
+  }
+
+  .bds-features--alternating-split .bds-features__content {
+    padding: 0;
+    flex: none;
+    align-items: flex-start;
+  }
+
+  .bds-features--alternating-split .bds-features__content .bds-features__title {
+    margin: 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: var(--bds-heading-lg);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bds-features--alternating-split .bds-features__description {
+    color: var(--bds-text-secondary);
+  }
+
+  .bds-features--alternating-split .bds-features__cta {
+    margin-top: 0;
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bds-features--alternating-split .bds-features__cta:hover .bds-features__cta-arrow,
+  .bds-features--alternating-split .bds-features__cta:focus-visible .bds-features__cta-arrow {
+    transform: translateX(4px);
+  }
+
+  .bds-features--alternating-split .bds-features__media {
+    aspect-ratio: var(--bds-aspect-4-3);
+    padding: 0;
+    border-radius: var(--bds-features-card-radius, var(--bds-border-radius-lg));
+  }
+
+  .bds-features--alternating-split .bds-features__image {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: cover;
+  }
+
+  .bds-features--alternating-split .bds-features__media > [data-content-needed] {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: inherit;
+  }

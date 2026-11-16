@@ -2,7 +2,7 @@
   "version": "3.0.0",
   "last_reviewed": "2026-09-09",
   "review_cadence": "quarterly",
-  "_comment": "Shipped blueprint inventory — every entry dispatches on both rails unless it declares `rails` (#2308, #2304); collection_index, collection_entry, faq_accordion_grouped, hero_centered and hero_statement declare `[\"astro\"]` (#872, #3186, #3187). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
+  "_comment": "Shipped blueprint inventory — every entry dispatches on both rails unless it declares `rails` (#2308, #2304); collection_index, collection_entry, faq_accordion_grouped, hero_centered, hero_statement and features_alternating_split declare `[\"astro\"]` (#872, #3186, #3187, #3189). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
   "blueprints": [
     {
       "key": "hero_split",
@@ -98,6 +98,40 @@
       "spacing_modes": [
         "spacious",
         "comfortable"
+      ]
+    },
+    {
+      "key": "features_alternating_split",
+      "name": "Alternating Content Splits",
+      "section_type": "features",
+      "industries": [
+        "universal",
+        "healthcare",
+        "real_estate",
+        "legal",
+        "beauty",
+        "salon"
+      ],
+      "moods": [
+        "approachable",
+        "warm",
+        "professional",
+        "trustworthy"
+      ],
+      "layout_spec": "Page-surface features section: an optional section header (eyebrow, heading, lead) above a single column of rows, one row per item. Each row is two equal columns, a text side and a media side, with a wide gap between them and a wider gap between rows. The text side holds the item heading, a short description and an optional link with an arrow, shown only when the item has a link target. The media side is a 4:3 box with rounded corners holding the item's image cropped to fill, or the `bds-blueprint-section__missing` labelled placeholder when no image is supplied — never drawn or generated art. From the tablet width up, the media side sits after the text on odd rows and before it on even rows; `mediaPosition=\"start\"` starts on the media side instead. Below the tablet width every row stacks text first, then media, with no alternation. DOM order is always text first. Differs from feature_grid (a dark grid of brand-coloured cards, no alternation) and story_split (one narrative with a pull-quote, not repeated rows).",
+      "css_hints": ".bds-features--alternating-split .bds-features__grid { gap: var(--bds-gap-huge); } .bds-features--alternating-split .bds-features__item { display: grid; gap: var(--bds-gap-xl); align-items: center; } .bds-features--alternating-split .bds-features__media { aspect-ratio: var(--bds-aspect-4-3); border-radius: var(--bds-border-radius-lg); } .bds-features--alternating-split .bds-features__image { object-fit: cover; }",
+      "source": "brik-bds#3189 — graduated from blueprint-roadmap.json onto the canonical rail (ADR-037)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-11-15",
+      "required_facts": [],
+      "atmospheres": [
+        "warm-soft",
+        "none"
+      ],
+      "rails": [
+        "astro"
       ]
     },
     {

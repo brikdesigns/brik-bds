@@ -37,6 +37,7 @@ export type KnownBlueprintKey =
   | 'card_grid'
   | 'callout_split'
   | 'feature_grid'
+  | 'features_alternating_split'
   | 'story_split'
   | 'stats_bar'
   | 'testimonials_featured_large'
@@ -76,6 +77,7 @@ export const WIRED_BLUEPRINT_KEYS = [
   'card_grid',
   'callout_split',
   'feature_grid',
+  'features_alternating_split',
   'story_split',
   'stats_bar',
   'testimonials_featured_large',
@@ -135,6 +137,19 @@ export type CtaLayout = 'default' | 'split';
  * Adding a third layout still means adding it here first.
  */
 export type CardGridLayout = 'card-grid' | 'two-column-list';
+
+/**
+ * `bds-features` layouts.
+ *   `grid`              — the responsive grid of brand-coloured feature cards on
+ *                         the dark default surface.
+ *   `alternating-split` — one row per item, each a text side and a media side,
+ *                         the sides swapped on every even row (from the tablet
+ *                         rung up; rows stack text-then-media below it). Takes
+ *                         the `mediaPosition` axis to start on the media side.
+ *
+ * The React `<Features>` takes the same `layout` prop.
+ */
+export type FeaturesLayout = 'grid' | 'alternating-split';
 
 /**
  * Structure axis — content placement (ADR-039 §Decision 1, #2492).

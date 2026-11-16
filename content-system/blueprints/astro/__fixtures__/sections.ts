@@ -274,6 +274,52 @@ const features: Section = {
   ],
 };
 
+// `alternating-split` is dispatched by `features_alternating_split`. The default
+// fixture supplies no images, so every media side renders the missing-media
+// placeholder; the `-images` variant supplies one per item. Two of the three
+// items carry an `href`, so the optional link renders on some rows and not others.
+const featuresAlternatingSplit: Section = {
+  sectionKey: 'features-alternating-split-default',
+  sectionType: 'features',
+  title: 'One story, told in rows',
+  subtitle: 'How it works',
+  body: 'Each feature gets a row of its own, so the page can tell a longer story than a single split.',
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'features_alternating_split',
+    moodKeywords: ['approachable', 'warm'],
+    layoutBlueprint: 'features_alternating_split',
+    imageOpportunity: 'one image per row',
+    illustrationOpportunity: null,
+  },
+  items: [
+    {
+      title: 'Start with a conversation',
+      description: 'A short call to learn what you need before anything is planned or priced.',
+      href: '#',
+    },
+    {
+      title: 'See the plan in writing',
+      description: 'You get a clear scope, a timeline and a fixed fee before any work begins.',
+    },
+    {
+      title: 'Review as it comes together',
+      description: 'Check in at each step, so what we deliver is what you pictured.',
+      href: '#',
+    },
+  ],
+};
+
+const featuresAlternatingSplitImages: Section = {
+  ...featuresAlternatingSplit,
+  sectionKey: 'features-alternating-split-images',
+  items: featuresAlternatingSplit.items.map((item, i) => ({
+    ...item,
+    imageUrl: placeholderImage(960, 720, '#eaf1fb', '#1f3d70', `Feature ${i + 1}`),
+    imageAlt: `Feature ${i + 1}`,
+  })),
+};
+
 const calloutPanel: Section = {
   sectionKey: 'support-plan-default',
   sectionType: 'cta',
@@ -519,6 +565,8 @@ const SECTIONS: Record<string, Section> = {
   'CardGrid:two-column-list': cardGridTwoColumnList,
   Narrative: narrative,
   Features: features,
+  'Features:alternating-split': featuresAlternatingSplit,
+  'Features:alternating-split-images': featuresAlternatingSplitImages,
   CalloutPanel: calloutPanel,
   StatsBar: statsBar,
   'StatsBar:count-up': statsBarCountUp,

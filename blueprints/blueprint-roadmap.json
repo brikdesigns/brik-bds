@@ -83,31 +83,6 @@
       "catalogued_on": "2026-04-18"
     },
     {
-      "key": "features_alternating_split",
-      "name": "Alternating Content Splits",
-      "section_type": "features",
-      "disposition": "roadmap",
-      "industries": [
-        "universal",
-        "healthcare",
-        "real_estate",
-        "legal",
-        "beauty",
-        "salon"
-      ],
-      "moods": [
-        "approachable",
-        "warm",
-        "professional",
-        "trustworthy"
-      ],
-      "layout_spec": "Alternating left/right layout. Each feature is a two-column row: one side is text (eyebrow, heading, 1-sentence body, optional CTA), other side is image, illustration, or abstract visual. Odd rows: text left, visual right. Even rows: visual left, text right. Generous vertical padding between rows (80–100px). Light section background with subtle background color variation between rows.",
-      "css_hints": ".feature-row { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; padding: 80px 0; } .feature-row:nth-child(even) .feature-text { order: 2; } .feature-row:nth-child(even) .feature-visual { order: 1; }",
-      "source": "Framer - Mentara",
-      "required_facts": [],
-      "catalogued_on": "2026-04-18"
-    },
-    {
       "key": "features_bento_asymmetric",
       "name": "Asymmetric Bento Grid",
       "section_type": "features",
