@@ -1,0 +1,11 @@
+name: probe-a
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+permissions:
+  contents: read
+jobs:
+  a:
+    runs-on: ubuntu-slim
+    steps:
+      - run: echo probe-a minimal pull_request_target on ubuntu-slim

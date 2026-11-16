@@ -1,0 +1,17 @@
+name: probe-c
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+  merge_group:
+concurrency:
+  group: probe-c-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+  queue: max
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  c:
+    runs-on: ubuntu-slim
+    steps:
+      - run: echo probe-c adds merge_group and pull-requests write
