@@ -738,6 +738,42 @@ describe('rule 4 + 5 — the fit · anchor · resize · marker · underline · m
   });
 });
 
+describe('rule 4 + 5 — the `columns` axis (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed modifiers Grid and FieldGrid emit from `columns`', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-grid--columns-3 { grid-template-columns: repeat(3, 1fr); }
+.bds-grid--columns-auto-fit { grid-template-columns: repeat(auto-fit, 1fr); }
+.bds-field-grid--columns-2 { container-type: inline-size; }
+`,
+    });
+    expect(out).not.toMatch(/columns-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies the retired `cols` spelling and a bare auto-sizing keyword', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-grid--cols-3 { grid-template-columns: repeat(3, 1fr); }\n.bds-grid--auto-fit { grid-template-columns: repeat(auto-fit, 1fr); }\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--cols-3 — bare modifier/);
+    expect(out).toMatch(/--auto-fit — bare modifier/);
+  });
+
+  it('still denies a count the amendment did NOT admit', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-grid--columns-7 { grid-template-columns: repeat(7, 1fr); }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--columns-7 — `7` is on no closed list for the columns axis/);
+  });
+
+  it('still denies a novel member in a governed union', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type TileColumns = 'auto-fit' | 'masonry';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/TileColumns\.masonry — `masonry` is on no closed list for the columns axis/);
+  });
+});
+
 describe('rule 6 — the deleted --*-status-* family cannot come back (§ Token families)', () => {
   it('fails on a var() reference to a deleted name', () => {
     const { code, out } = run({ refs: '.x { background: var(--surface-status-warning); }' });

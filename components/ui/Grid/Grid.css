@@ -8,23 +8,23 @@
 
 /* ─── Fixed column counts ────────────────────────────────────── */
 
-.bds-grid--cols-1 { grid-template-columns: 1fr; }
-.bds-grid--cols-2 { grid-template-columns: repeat(2, 1fr); }
-.bds-grid--cols-3 { grid-template-columns: repeat(3, 1fr); }
-.bds-grid--cols-4 { grid-template-columns: repeat(4, 1fr); }
-.bds-grid--cols-5 { grid-template-columns: repeat(5, 1fr); }
-.bds-grid--cols-6 { grid-template-columns: repeat(6, 1fr); }
+.bds-grid--columns-1 { grid-template-columns: 1fr; }
+.bds-grid--columns-2 { grid-template-columns: repeat(2, 1fr); }
+.bds-grid--columns-3 { grid-template-columns: repeat(3, 1fr); }
+.bds-grid--columns-4 { grid-template-columns: repeat(4, 1fr); }
+.bds-grid--columns-5 { grid-template-columns: repeat(5, 1fr); }
+.bds-grid--columns-6 { grid-template-columns: repeat(6, 1fr); }
 
 /* ─── Auto-sized columns ─────────────────────────────────────── */
 /* min-col-width is exposed as a CSS variable so consumers can
    override per-instance via the `minColumnWidth` prop without
    patching the component. */
 
-.bds-grid--auto-fit {
+.bds-grid--columns-auto-fit {
   grid-template-columns: repeat(auto-fit, minmax(min(var(--bds-grid-min-col-width, 240px), 100%), 1fr));
 }
 
-.bds-grid--auto-fill {
+.bds-grid--columns-auto-fill {
   grid-template-columns: repeat(auto-fill, minmax(min(var(--bds-grid-min-col-width, 240px), 100%), 1fr));
 }
 
@@ -42,20 +42,20 @@
    `auto-fit` / `auto-fill` reflow on their own and don't need this. */
 
 @media (--bds-down-desktop) {
-  .bds-grid--cols-3,
-  .bds-grid--cols-4,
-  .bds-grid--cols-5,
-  .bds-grid--cols-6 {
+  .bds-grid--columns-3,
+  .bds-grid--columns-4,
+  .bds-grid--columns-5,
+  .bds-grid--columns-6 {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (--bds-down-tablet) {
-  .bds-grid--cols-2,
-  .bds-grid--cols-3,
-  .bds-grid--cols-4,
-  .bds-grid--cols-5,
-  .bds-grid--cols-6 {
+  .bds-grid--columns-2,
+  .bds-grid--columns-3,
+  .bds-grid--columns-4,
+  .bds-grid--columns-5,
+  .bds-grid--columns-6 {
     grid-template-columns: 1fr;
   }
 }

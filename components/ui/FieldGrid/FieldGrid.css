@@ -17,7 +17,7 @@
  * generates no box. That keeps the default grid's box identical in every parent,
  * including shrink-to-fit ones (see below).
  *
- * The `--cols-N` / `--gap-*` modifiers stay on the root, where they always were,
+ * The `--columns-N` / `--gap-*` modifiers stay on the root, where they always were,
  * and target the cells element from there.
  *
  * Constraint for `columns` 3 and 4: inline-size containment gives the root no
@@ -31,8 +31,8 @@
   text-align: left;
 }
 
-.bds-field-grid--cols-3,
-.bds-field-grid--cols-4 {
+.bds-field-grid--columns-3,
+.bds-field-grid--columns-4 {
   container-type: inline-size;
 }
 
@@ -56,29 +56,29 @@
  * FieldGrid.mdx § Container thresholds; keep this table, the mdx and the
  * browser test in step.
  */
-.bds-field-grid--cols-2 {
+.bds-field-grid--columns-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
 }
 
-.bds-field-grid--cols-2 > .bds-field-grid__cells {
+.bds-field-grid--columns-2 > .bds-field-grid__cells {
   display: contents;
 }
 
-.bds-field-grid--cols-3 > .bds-field-grid__cells,
-.bds-field-grid--cols-4 > .bds-field-grid__cells {
+.bds-field-grid--columns-3 > .bds-field-grid__cells,
+.bds-field-grid--columns-4 > .bds-field-grid__cells {
   grid-template-columns: 1fr 1fr;
 }
 
 @container (min-width: 480px) {
-  .bds-field-grid--cols-3 > .bds-field-grid__cells,
-  .bds-field-grid--cols-4 > .bds-field-grid__cells {
+  .bds-field-grid--columns-3 > .bds-field-grid__cells,
+  .bds-field-grid--columns-4 > .bds-field-grid__cells {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @container (min-width: 720px) {
-  .bds-field-grid--cols-4 > .bds-field-grid__cells {
+  .bds-field-grid--columns-4 > .bds-field-grid__cells {
     grid-template-columns: repeat(4, 1fr);
   }
 }
