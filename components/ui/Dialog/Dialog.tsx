@@ -1,6 +1,7 @@
 import { type ReactNode, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { bdsClass, resolveRetiredValue } from '../../utils';
+import { resolveRetiredValue } from '../../utils';
+import { Button } from '../Button';
 import './Dialog.css';
 
 export type DialogVariant = 'default' | 'negative';
@@ -110,25 +111,17 @@ export function Dialog({
           <p id="bds-dialog-desc" className="bds-dialog__description">{description}</p>
         ))}
         <div className="bds-dialog__actions">
-          <button
-            type="button"
-            className={bdsClass('bds-dialog__button', 'bds-dialog__button--cancel')}
-            onClick={onClose}
-          >
+          <Button type="button" variant="secondary" onClick={onClose}>
             {cancelLabel}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
-            className={bdsClass(
-              'bds-dialog__button',
-              resolvedVariant === 'negative'
-                ? 'bds-dialog__button--tone-negative'
-                : 'bds-dialog__button--confirm',
-            )}
+            variant="primary"
+            tone={resolvedVariant === 'negative' ? 'negative' : undefined}
             onClick={() => onConfirm?.()}
           >
             {confirmLabel}
-          </button>
+          </Button>
         </div>
       </div>
     </div>
