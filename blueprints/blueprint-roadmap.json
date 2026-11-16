@@ -32,29 +32,6 @@
       "catalogued_on": "2026-04-18"
     },
     {
-      "key": "hero_dark_minimal",
-      "name": "Dark Minimal Hero",
-      "section_type": "hero",
-      "disposition": "roadmap",
-      "industries": [
-        "universal",
-        "legal",
-        "finance",
-        "corporate"
-      ],
-      "moods": [
-        "corporate",
-        "minimal",
-        "trustworthy",
-        "professional"
-      ],
-      "layout_spec": "Dark background (near-black). Left-aligned content. Eyebrow label in accent color with a short horizontal line before it. Headline is 3–5 words maximum, 64–80px, 800 weight, white. No subheading — rely on a single short stat or trust line instead. One primary CTA only. Right side is either empty (letting the headline breathe) or contains a single abstract geometric shape or minimal illustration.",
-      "css_hints": "background: var(--ink); color: #fff; .eyebrow::before { content: \"\"; display: inline-block; width: 20px; height: 1px; background: currentColor; margin-right: 8px; vertical-align: middle; }",
-      "source": "Original research",
-      "required_facts": [],
-      "catalogued_on": "2026-04-18"
-    },
-    {
       "key": "services_numbered_rows",
       "name": "Numbered Service Rows",
       "section_type": "services",

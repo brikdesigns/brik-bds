@@ -32,6 +32,7 @@ export type KnownBlueprintKey =
   | 'hero_split_image_card_overlay'
   | 'hero_interior_minimal'
   | 'hero_centered'
+  | 'hero_statement'
   | 'two_column_detail'
   | 'card_grid'
   | 'callout_split'
@@ -70,6 +71,7 @@ export const WIRED_BLUEPRINT_KEYS = [
   'hero_split_image_card_overlay',
   'hero_interior_minimal',
   'hero_centered',
+  'hero_statement',
   'two_column_detail',
   'card_grid',
   'callout_split',
@@ -114,7 +116,7 @@ export type WiredBlueprintKey = (typeof WIRED_BLUEPRINT_KEYS)[number];
  *   `centered`          — single centred column, no media; measure capped at
  *                         `--bds-content-width-md`.
  */
-export type HeroLayout = 'split' | 'interior-minimal' | 'with-pricing-card' | 'centered';
+export type HeroLayout = 'split' | 'interior-minimal' | 'with-pricing-card' | 'centered' | 'statement';
 
 /**
  * `bds-cta` layouts.

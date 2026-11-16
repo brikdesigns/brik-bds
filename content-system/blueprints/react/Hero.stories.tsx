@@ -12,7 +12,7 @@ const meta: Meta<typeof Hero> = {
   tags: ['surface-web'],
   argTypes: {
     sectionKey: { control: 'text', description: 'Unique section key — drives element ids.' },
-    layout: { control: 'inline-radio', options: ['split', 'interior-minimal', 'with-pricing-card', 'centered'], description: 'Structural layout modifier per ADR-008 §3.' },
+    layout: { control: 'inline-radio', options: ['split', 'interior-minimal', 'with-pricing-card', 'centered', 'statement'], description: 'Structural layout modifier per ADR-008 §3.' },
     align: { control: 'inline-radio', options: ['left', 'center'], description: 'Content-column placement (structure axis, ADR-039). `left` default; `center` emits `bds-hero--align-center`.' },
     mediaPosition: { control: 'inline-radio', options: ['end', 'start'], description: '`split` media-column side (structure axis, ADR-039, #3051). `end` default; `start` emits `data-media-position="start"` and places the media first.' },
     orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'], description: '`split` column stacking (structure axis, ADR-039, #3051). `horizontal` default; `vertical` emits `data-orientation="vertical"` and stacks content and media at every width.' },
@@ -144,6 +144,30 @@ export const Centered: Story = {
       </div>
     ),
   ],
+};
+
+/**
+ * `layout="statement"`: left-aligned short headline and one CTA under an eyebrow
+ * with a short rule, no media. The optional `decoration` fills a right column
+ * from the tablet rung up; without it the content keeps the full measure.
+ *
+ * @summary Statement — short headline + one CTA, optional decoration
+ */
+export const Statement: Story = {
+  args: {
+    sectionKey: 'hero-statement',
+    layout: 'statement',
+    subtitle: 'Our approach',
+    title: 'Say it plainly',
+    cta: { label: 'Get started', url: '#start' },
+    decoration: (
+      <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" aria-hidden="true" focusable="false">
+        <circle cx="60" cy="60" r="56" />
+        <circle cx="60" cy="60" r="38" />
+        <circle cx="60" cy="60" r="20" />
+      </svg>
+    ),
+  },
 };
 
 /**
