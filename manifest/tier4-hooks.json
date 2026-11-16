@@ -176,6 +176,46 @@
         "components/ui/Board/Board.css"
       ]
     },
+    "--bds-button-primary-background": {
+      "kind": "knob",
+      "readBy": [
+        "button"
+      ],
+      "readIn": [
+        "components/ui/Button/Button.css"
+      ],
+      "setIn": []
+    },
+    "--bds-button-primary-background-hover": {
+      "kind": "knob",
+      "readBy": [
+        "button"
+      ],
+      "readIn": [
+        "components/ui/Button/Button.css"
+      ],
+      "setIn": []
+    },
+    "--bds-button-primary-background-pressed": {
+      "kind": "knob",
+      "readBy": [
+        "button"
+      ],
+      "readIn": [
+        "components/ui/Button/Button.css"
+      ],
+      "setIn": []
+    },
+    "--bds-button-primary-color": {
+      "kind": "knob",
+      "readBy": [
+        "button"
+      ],
+      "readIn": [
+        "components/ui/Button/Button.css"
+      ],
+      "setIn": []
+    },
     "--bds-callout-panel-background": {
       "kind": "knob",
       "readBy": [
@@ -852,6 +892,16 @@
       "setIn": [
         "components/ui/Popover/Popover.css"
       ]
+    },
+    "--bds-pricing-card-price-color": {
+      "kind": "knob",
+      "readBy": [
+        "pricing-card"
+      ],
+      "readIn": [
+        "components/ui/PricingCard/PricingCard.css"
+      ],
+      "setIn": []
     },
     "--bds-select-chevron-color": {
       "kind": "knob",

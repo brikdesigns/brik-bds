@@ -29,3 +29,18 @@ A pricing tier display card with title, price, features list, and call-to-action
 ## Props
 
 <ArgTypes of={Stories} />
+
+## CSS Override API
+
+Tier-4 hook (ADR-014). Set it on a wrapping element or the card; unset, it resolves to the default below.
+
+| Variable | Default | Controls |
+|---|---|---|
+| `--bds-pricing-card-price-color` | `var(--bds-text-primary)` | Price ink |
+
+```css
+/* Example: a service-themed surface sets the price ink. Use a Semantic token. */
+.service-section {
+  --bds-pricing-card-price-color: var(--bds-text-brand-primary);
+}
+```

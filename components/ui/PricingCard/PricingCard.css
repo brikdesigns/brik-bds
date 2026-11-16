@@ -68,7 +68,8 @@
   font-size: var(--bds-heading-xl);
   font-weight: var(--bds-font-weight-bold);
   line-height: var(--bds-font-line-height-tight);
-  color: var(--bds-text-primary);
+  /* Override hook (ADR-014): a service-themed surface sets the price ink here. */
+  color: var(--bds-pricing-card-price-color, var(--bds-text-primary));
   margin: 0;
 }
 
