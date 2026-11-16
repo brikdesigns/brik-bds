@@ -6,6 +6,8 @@ import html from './__generated__/Features.html?raw';
 import alternatingSplit from './__generated__/Features--alternating-split.html?raw';
 import alternatingSplitImages from './__generated__/Features--alternating-split-images.html?raw';
 import alternatingSplitMediaStart from './__generated__/Features--alternating-split-media-start.html?raw';
+import bento from './__generated__/Features--bento.html?raw';
+import bentoImages from './__generated__/Features--bento-images.html?raw';
 
 /**
  * `Features.astro` on the canonical rail (ADR-037), pre-rendered by
@@ -35,3 +37,9 @@ export const AlternatingSplitImages: Story = { render: () => <AstroFrame html={a
 
 /** @summary Alternating split — media-start */
 export const AlternatingSplitMediaStart: Story = { render: () => <AstroFrame html={alternatingSplitMediaStart} /> };
+
+/** @summary Bento — featured cell, placeholder media and a stat cell */
+export const Bento: Story = { render: () => <AstroFrame html={bento} /> };
+
+/** @summary Bento, with images */
+export const BentoImages: Story = { render: () => <AstroFrame html={bentoImages} /> };

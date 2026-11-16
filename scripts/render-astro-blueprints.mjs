@@ -54,7 +54,7 @@ const BLOCKS = [
   { name: 'Cta', layouts: ['default', 'split'] },
   { name: 'CardGrid', layouts: ['card-grid', 'two-column-list'] },
   { name: 'Narrative', layouts: [null] },
-  { name: 'Features', layouts: [null, 'alternating-split'] },
+  { name: 'Features', layouts: [null, 'alternating-split', 'bento'] },
   { name: 'CalloutPanel', layouts: [null] },
   // StatsBar's second slug is the content-motion axis (count-up), not a
   // layout — it renders the static bar and the count-up treatment (#2529).
@@ -86,6 +86,7 @@ const AXIS_VARIANTS = [
   { name: 'Hero', layout: 'split', slug: 'Hero--split-vertical', props: { orientation: 'vertical' } },
   { name: 'Hero', layout: 'statement', slug: 'Hero--statement-decoration', slots: { decoration: STATEMENT_DECORATION_SVG } },
   { name: 'Features', layout: 'alternating-split', slug: 'Features--alternating-split-images', fixture: 'alternating-split-images' },
+  { name: 'Features', layout: 'bento', slug: 'Features--bento-images', fixture: 'bento-images' },
   { name: 'Features', layout: 'alternating-split', slug: 'Features--alternating-split-media-start', props: { mediaPosition: 'start' } },
   { name: 'Narrative', layout: null, slug: 'Narrative--media-start', props: { mediaPosition: 'start' } },
   { name: 'Narrative', layout: null, slug: 'Narrative--vertical', props: { orientation: 'vertical' } },

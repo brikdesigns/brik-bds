@@ -363,3 +363,142 @@
   box-sizing: border-box;
   border-radius: inherit;
 }
+
+/* ── --bento: layout (#3188) ─────────────────────────────────────────────────
+   An asymmetric card grid on the page surface. One column below the tablet rung;
+   two from the tablet rung (the featured cell spans the row); from the desktop
+   rung a 2fr 1fr 1fr grid of two rows where the featured cell (the first item)
+   spans both. Each cell is a media box over its text; a `--stat` cell is a
+   brand-filled figure. Mirrors ../astro/Features.astro. */
+
+.bds-features--bento {
+  background: var(--bds-features-background, var(--bds-features-bg, var(--bds-page-primary)));
+  color: var(--bds-text-primary);
+}
+
+.bds-features--bento .bds-features__subtitle {
+  color: var(--bds-text-brand-primary);
+  opacity: 1;
+}
+
+.bds-features--bento .bds-features__header .bds-features__title {
+  color: var(--bds-text-primary);
+}
+
+.bds-features--bento .bds-features__lead {
+  color: var(--bds-text-secondary);
+  opacity: 1;
+}
+
+.bds-features--bento .bds-features__grid {
+  grid-template-columns: 1fr;
+  grid-auto-rows: 1fr;
+  gap: var(--bds-features-gap, var(--bds-gap-lg));
+}
+
+.bds-features--bento .bds-features__item {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bds-surface-secondary);
+  border-radius: var(--bds-features-card-radius, var(--bds-border-radius-lg));
+}
+
+@media (--bds-up-tablet) {
+  .bds-features--bento .bds-features__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bds-features--bento .bds-features__item--featured {
+    grid-column: span 2;
+  }
+}
+
+@media (--bds-up-desktop) {
+  .bds-features--bento .bds-features__grid {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+
+  .bds-features--bento .bds-features__item--featured {
+    grid-column: auto;
+    grid-row: span 2;
+  }
+}
+
+.bds-features--bento .bds-features__media {
+  flex: 1 1 auto;
+  aspect-ratio: var(--bds-aspect-4-3);
+  padding: 0;
+}
+
+.bds-features--bento .bds-features__item--featured .bds-features__media {
+  aspect-ratio: var(--bds-aspect-16-9);
+}
+
+@media (--bds-up-desktop) {
+  .bds-features--bento .bds-features__item--featured .bds-features__media {
+    aspect-ratio: auto;
+  }
+}
+
+.bds-features--bento .bds-features__image {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: cover;
+}
+
+.bds-features--bento .bds-features__media > [data-content-needed] {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+.bds-features--bento .bds-features__content {
+  flex: none;
+  padding: var(--bds-padding-lg);
+}
+
+.bds-features--bento .bds-features__content .bds-features__title {
+  margin: 0;
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-md);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
+}
+
+.bds-features--bento .bds-features__description {
+  color: var(--bds-text-secondary);
+}
+
+.bds-features--bento .bds-features__cta {
+  margin-top: 0;
+  color: var(--bds-text-brand-primary);
+}
+
+.bds-features--bento .bds-features__cta:hover .bds-features__cta-arrow,
+.bds-features--bento .bds-features__cta:focus-visible .bds-features__cta-arrow {
+  transform: translateX(4px);
+}
+
+.bds-features--bento .bds-features__item--stat {
+  justify-content: center;
+  background: var(--bds-background-brand-primary);
+}
+
+.bds-features--bento .bds-features__stat {
+  margin: 0;
+  padding: var(--bds-padding-lg) var(--bds-padding-lg) 0;
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-3xl);
+  font-weight: var(--bds-font-weight-extrabold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-on-color-dark);
+}
+
+.bds-features--bento .bds-features__item--stat .bds-features__content .bds-features__title,
+.bds-features--bento .bds-features__item--stat .bds-features__description {
+  color: var(--bds-text-on-color-dark);
+}

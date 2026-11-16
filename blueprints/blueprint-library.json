@@ -2,7 +2,7 @@
   "version": "3.0.0",
   "last_reviewed": "2026-09-09",
   "review_cadence": "quarterly",
-  "_comment": "Shipped blueprint inventory — every entry dispatches on both rails unless it declares `rails` (#2308, #2304); collection_index, collection_entry, faq_accordion_grouped, hero_centered, hero_statement and features_alternating_split declare `[\"astro\"]` (#872, #3186, #3187, #3189). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
+  "_comment": "Shipped blueprint inventory — every entry dispatches on both rails unless it declares `rails` (#2308, #2304); collection_index, collection_entry, faq_accordion_grouped, hero_centered, hero_statement, features_alternating_split and features_bento_asymmetric declare `[\"astro\"]` (#872, #3186, #3187, #3189, #3188). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
   "blueprints": [
     {
       "key": "hero_split",
@@ -128,6 +128,38 @@
       "required_facts": [],
       "atmospheres": [
         "warm-soft",
+        "none"
+      ],
+      "rails": [
+        "astro"
+      ]
+    },
+    {
+      "key": "features_bento_asymmetric",
+      "name": "Asymmetric Bento Grid",
+      "section_type": "features",
+      "industries": [
+        "universal",
+        "saas",
+        "ecommerce",
+        "real_estate",
+        "hospitality"
+      ],
+      "moods": [
+        "bold",
+        "modern",
+        "energetic",
+        "luxury"
+      ],
+      "layout_spec": "Page-surface features section: an optional section header (eyebrow, heading, lead) above an asymmetric card grid. From the desktop width up the grid is three columns sized 2fr 1fr 1fr over two rows; the first item is the featured cell and spans both rows. Every other cell is an equal-size card: a media box (4:3, the item's image cropped to fill, or the `bds-blueprint-section__missing` labelled placeholder when no image is supplied — never drawn or generated art) above the item heading, a short description and an optional link with an arrow. An item that carries a headline figure renders as a stat cell instead: the figure large on the brand fill, with the item heading and description beneath, and no media. Cells have rounded corners. At the tablet width the grid is two columns and the featured cell spans the full row; below it every cell stacks in one column. Differs from feature_grid (a dark grid of equal brand-coloured cards) and features_alternating_split (one text-and-media row per item, no featured cell).",
+      "css_hints": ".bds-features--bento .bds-features__grid { grid-template-columns: 2fr 1fr 1fr; gap: var(--bds-gap-lg); } .bds-features--bento .bds-features__item { border-radius: var(--bds-border-radius-lg); overflow: hidden; background: var(--bds-surface-secondary); } .bds-features--bento .bds-features__item--featured { grid-row: span 2; } .bds-features--bento .bds-features__media { aspect-ratio: var(--bds-aspect-4-3); } .bds-features--bento .bds-features__item--stat { background: var(--bds-background-brand-primary); }",
+      "source": "brik-bds#3188 — graduated from blueprint-roadmap.json onto the canonical rail (ADR-037)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-11-16",
+      "required_facts": [],
+      "atmospheres": [
         "none"
       ],
       "rails": [

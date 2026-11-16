@@ -38,7 +38,7 @@
  * Since #2302 the Astro rail is one component per BLOCK, with the layout
  * carried as a prop, matching the React API. The registry is therefore what
  * turns a blueprint key into a (block, layout) pair — the key is no longer a
- * filename. Twelve blocks cover the nineteen wired keys:
+ * filename. Twelve blocks cover the twenty wired keys:
  *
  *   hero_split                    → Hero            layout="split"
  *   hero_split_image_card_overlay → Hero            layout="with-pricing-card"
@@ -50,6 +50,7 @@
  *   callout_split                 → CalloutPanel
  *   feature_grid                  → Features
  *   features_alternating_split    → Features        layout="alternating-split"
+ *   features_bento_asymmetric     → Features        layout="bento"
  *   story_split                   → Narrative
  *   stats_bar                     → StatsBar
  *   testimonials_featured_large   → TestimonialsFeaturedLarge
@@ -113,6 +114,7 @@ const BLUEPRINT_REGISTRY = {
   callout_split: { component: CalloutPanel, props: {} },
   feature_grid: { component: Features, props: { blueprintKey: 'feature_grid' } },
   features_alternating_split: { component: Features, props: { layout: 'alternating-split', blueprintKey: 'features_alternating_split' } },
+  features_bento_asymmetric: { component: Features, props: { layout: 'bento', blueprintKey: 'features_bento_asymmetric' } },
   story_split: { component: Narrative, props: { blueprintKey: 'story_split' } },
   stats_bar: { component: StatsBar, props: {} },
   testimonials_featured_large: { component: TestimonialsFeaturedLarge, props: {} },

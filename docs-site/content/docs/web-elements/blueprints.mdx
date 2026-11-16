@@ -134,7 +134,7 @@ import type { BlueprintSection, KnownBlueprintKey }
 
 ### Shipped blocks
 
-A component is a **block**; the layout it renders in is a **prop**, never a filename — so the nineteen keys in [`blueprint-library.json`](https://github.com/brikdesigns/brik-bds/blob/main/blueprints/blueprint-library.json) resolve onto twelve files. The table lists the eight core blocks and their fifteen keys; the other four keys map one-to-one — `logo_wall` → `<LogoWall>`, `collection_index` → `<CollectionIndex>`, `collection_entry` → `<CollectionEntry>`, `faq_accordion_grouped` → `<FaqAccordion>`. Each follows the same `BlueprintProps` contract (`section` + `clientFacts` + `theme`), plus `layout` where the block has more than one.
+A component is a **block**; the layout it renders in is a **prop**, never a filename — so the twenty keys in [`blueprint-library.json`](https://github.com/brikdesigns/brik-bds/blob/main/blueprints/blueprint-library.json) resolve onto twelve files. The table lists the eight core blocks and their sixteen keys; the other four keys map one-to-one — `logo_wall` → `<LogoWall>`, `collection_index` → `<CollectionIndex>`, `collection_entry` → `<CollectionEntry>`, `faq_accordion_grouped` → `<FaqAccordion>`. Each follows the same `BlueprintProps` contract (`section` + `clientFacts` + `theme`), plus `layout` where the block has more than one.
 
 `<BlueprintDispatcher>` owns the key → (block, layout) mapping, so a consumer that dispatches never picks a layout by hand.
 
@@ -152,6 +152,7 @@ A component is a **block**; the layout it renders in is a **prop**, never a file
 | `<Narrative>` | — | `story_split` | `about` | [astro-narrative — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-narrative--default) |
 | `<Features>` | `grid` | `feature_grid` | `features` | [astro-features — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-features--default) |
 | `<Features>` | `alternating-split` | `features_alternating_split` | `features` | [astro-features — Alternating Split](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-features--alternating-split) |
+| `<Features>` | `bento` | `features_bento_asymmetric` | `features` | [astro-features — Bento](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-features--bento) |
 | `<CalloutPanel>` | — | `callout_split` | `support_plan` | [astro-callout-panel — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-callout-panel--default) |
 | `<StatsBar>` | — | `stats_bar` | `stats` | [astro-stats-bar — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-stats-bar--default) |
 | `<TestimonialsFeaturedLarge>` | — | `testimonials_featured_large` | `testimonials` | [astro-testimonials-featured-large — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-testimonials-featured-large--default) |
