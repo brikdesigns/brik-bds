@@ -23,6 +23,13 @@ const TREND_ICON: Record<StatTrendDirection, string> = {
   flat: 'ph:arrow-right',
 };
 
+/** Direction → valence class on the trend (`tone` axis, ADR-033). */
+const TREND_TONE: Record<StatTrendDirection, string> = {
+  up: 'positive',
+  down: 'negative',
+  flat: 'neutral',
+};
+
 export interface StatProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   /** The figure — `"24"`, `"98%"`, `"$1.2M"`. */
   value: ReactNode;
@@ -102,7 +109,7 @@ export function Stat({
         <div className="bds-stat__meta">
           {meta}
           {trend != null && (
-            <span className={bdsClass('bds-stat__trend', `bds-stat__trend--direction-${trend.direction}`)}>
+            <span className={bdsClass('bds-stat__trend', `bds-stat__trend--tone-${TREND_TONE[trend.direction]}`)}>
               <Icon icon={TREND_ICON[trend.direction]} aria-hidden="true" />
               {trend.delta}
             </span>
