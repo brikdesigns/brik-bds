@@ -33,7 +33,7 @@ export const dental: IndustryPack = {
       // Stats intentionally absent — render only when content generation
       // emits a sectionType: 'stats' section (i.e. the practice has real
       // numbers worth leading with). See issue #217.
-      blueprintDefaults: ['hero_split', 'two_column_detail', 'testimonials_3col_cards', 'cta_split_contact'],
+      blueprintDefaults: ['hero_split', 'two_column_detail', 'testimonials_card_grid', 'cta_split_contact'],
     },
     {
       slug: 'meet-the-doctor',

@@ -500,7 +500,7 @@ export const realEstateRvMhc: IndustryPack = {
       sections: [
         'hero_fullbleed_photo',
         'two_column_detail',
-        'testimonials_3col_cards',
+        'testimonials_card_grid',
         'cta_split_contact',
       ],
     },

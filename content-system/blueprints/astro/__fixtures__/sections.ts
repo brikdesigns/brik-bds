@@ -427,6 +427,41 @@ const statsBarCountUp: Section = {
   contentMotion: 'count-up',
 };
 
+// ── TestimonialsCardGrid (brik-bds#3190) ────────────────────────────────────
+// The first item carries a rating; the second has none (no stars row) and no
+// avatar — both are optional and render only when supplied.
+const testimonialsCardGrid: Section = {
+  sectionKey: 'testimonials-card-grid-default',
+  sectionType: 'testimonials',
+  title: 'What clients say',
+  subtitle: 'Testimonials',
+  body: null,
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'testimonials_card_grid',
+    moodKeywords: ['approachable', 'trustworthy'],
+    layoutBlueprint: 'testimonials_card_grid',
+    imageOpportunity: null,
+    illustrationOpportunity: null,
+  },
+  items: [
+    {
+      title: 'Sample Name · Role · Company',
+      description: 'A short quote that says what changed for this client and the outcome they can point at.',
+      rating: 5,
+    },
+    {
+      title: 'Second Name · Role · Company',
+      description: 'A second quote, shown without a star rating because none was supplied.',
+    },
+    {
+      title: 'Third Name · Role · Company',
+      description: 'A third quote that fills out the row on a desktop-width grid.',
+      rating: 4,
+    },
+  ],
+};
+
 const testimonialsFeaturedLarge: Section = {
   sectionKey: 'testimonials-featured-default',
   sectionType: 'testimonials',
@@ -630,6 +665,7 @@ const SECTIONS: Record<string, Section> = {
   CollectionIndex: collectionIndex,
   CollectionEntry: collectionEntry,
   FaqAccordion: faqAccordion,
+  TestimonialsCardGrid: testimonialsCardGrid,
 };
 
 /** Resolves the fixture for a block, optionally narrowed to one layout. */

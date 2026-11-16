@@ -38,7 +38,7 @@
  * Since #2302 the Astro rail is one component per BLOCK, with the layout
  * carried as a prop, matching the React API. The registry is therefore what
  * turns a blueprint key into a (block, layout) pair — the key is no longer a
- * filename. Twelve blocks cover the twenty wired keys:
+ * filename. Thirteen blocks cover the twenty-one wired keys:
  *
  *   hero_split                    → Hero            layout="split"
  *   hero_split_image_card_overlay → Hero            layout="with-pricing-card"
@@ -54,6 +54,7 @@
  *   story_split                   → Narrative
  *   stats_bar                     → StatsBar
  *   testimonials_featured_large   → TestimonialsFeaturedLarge
+ *   testimonials_card_grid        → TestimonialsCardGrid
  *   cta_split_contact             → Cta             layout="split"
  *   cta_centered                  → Cta             layout="default"
  *   logo_wall                     → LogoWall
@@ -93,6 +94,7 @@ import CardGrid from './CardGrid.astro';
 import CalloutPanel from './CalloutPanel.astro';
 import StatsBar from './StatsBar.astro';
 import TestimonialsFeaturedLarge from './TestimonialsFeaturedLarge.astro';
+import TestimonialsCardGrid from './TestimonialsCardGrid.astro';
 import LogoWall from './LogoWall.astro';
 import CollectionIndex from './CollectionIndex.astro';
 import CollectionEntry from './CollectionEntry.astro';
@@ -118,6 +120,7 @@ const BLUEPRINT_REGISTRY = {
   story_split: { component: Narrative, props: { blueprintKey: 'story_split' } },
   stats_bar: { component: StatsBar, props: {} },
   testimonials_featured_large: { component: TestimonialsFeaturedLarge, props: {} },
+  testimonials_card_grid: { component: TestimonialsCardGrid, props: { blueprintKey: 'testimonials_card_grid' } },
   cta_split_contact: { component: Cta, props: { layout: 'split', blueprintKey: 'cta_split_contact' } },
   cta_centered: { component: Cta, props: { layout: 'default', blueprintKey: 'cta_centered' } },
   logo_wall: { component: LogoWall, props: {} },
