@@ -4,13 +4,21 @@
  * Runs real Stylelint against inline CSS. Each rule has a positive control (a known
  * violation MUST be reported) so a green run cannot mean the rule went blind.
  */
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import stylelint from 'stylelint';
 import plugin from './stylelint-plugin.mjs';
 
+// A fixture tokens.css keeps the test hermetic: dist/ is a build output CI's test job does not have.
+const tokensPath = join(mkdtempSync(join(tmpdir(), 'bds-stylelint-')), 'tokens.css');
+writeFileSync(tokensPath, ':root {\n  --bds-text-negative: red;\n}\n');
+
+const canonical = [true, { tokensPath }];
 const config = {
   plugins: [plugin],
-  rules: { 'bds/canonical-token-name': true, 'bds/cascade-contract': true },
+  rules: { 'bds/canonical-token-name': canonical, 'bds/cascade-contract': true },
 };
 
 async function lint(code, codeFilename = 'consumer.css', rules = config.rules) {
@@ -30,7 +38,7 @@ describe('bds/canonical-token-name', () => {
   });
 
   it('honours the exemptTokens burn-down option', async () => {
-    const rules = { 'bds/canonical-token-name': [true, { exemptTokens: ['--text-nonexistent-xyz'] }] };
+    const rules = { 'bds/canonical-token-name': [true, { tokensPath, exemptTokens: ['--text-nonexistent-xyz'] }] };
     expect(await lint('.a { color: var(--text-nonexistent-xyz); }', 'consumer.css', rules)).toEqual([]);
   });
 

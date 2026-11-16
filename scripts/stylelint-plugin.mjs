@@ -14,7 +14,9 @@
  *   rules: { 'bds/canonical-token-name': true, 'bds/cascade-contract': true }
  *
  * Secondary option on both rules: `{ exemptTokens: ['--legacy-name', /^--vendor-/] }`, the same
- * burn-down allowlist the CLI checks take. The CLI checks stay the CI gate.
+ * burn-down allowlist the CLI checks take. `bds/canonical-token-name` also takes `tokensPath`
+ * (a tokens.css to read the allowlist from; default `node_modules/@brikdesigns/bds/dist/tokens.css`).
+ * The CLI checks stay the CI gate.
  */
 import stylelint from 'stylelint';
 import {
@@ -38,15 +40,14 @@ const cascadeMessages = utils.ruleMessages(CASCADE_RULE, {
   rejected: (message) => message,
 });
 
-const secondaryOptionsSchema = {
-  exemptTokens: [(v) => typeof v === 'string' || v instanceof RegExp],
-  optional: true,
-};
+const exemptTokensSchema = [(v) => typeof v === 'string' || v instanceof RegExp];
+const canonicalOptionsSchema = { exemptTokens: exemptTokensSchema, tokensPath: [(v) => typeof v === 'string'], optional: true };
+const cascadeOptionsSchema = { exemptTokens: exemptTokensSchema, optional: true };
 
 /** Allowlist per resolved tokens.css path — parsed once per Stylelint process, not per file. */
 const allowlistCache = new Map();
-function allowlistFor(cwd) {
-  const path = resolveDefaultAllowlistPath(cwd);
+function allowlistFor(cwd, tokensPath) {
+  const path = tokensPath ?? resolveDefaultAllowlistPath(cwd);
   if (!allowlistCache.has(path)) allowlistCache.set(path, parseAllowlistFromFile(path));
   return allowlistCache.get(path);
 }
@@ -55,10 +56,10 @@ const isExempt = (token, patterns) =>
   patterns.some((p) => (typeof p === 'string' ? p === token : p.test(token)));
 
 const canonicalRule = (primary, secondary) => (root, result) => {
-  if (!utils.validateOptions(result, CANONICAL_RULE, { actual: primary }, { actual: secondary, possible: secondaryOptionsSchema, optional: true })) return;
+  if (!utils.validateOptions(result, CANONICAL_RULE, { actual: primary }, { actual: secondary, possible: canonicalOptionsSchema, optional: true })) return;
   if (!primary) return;
 
-  const allowlist = allowlistFor(result.opts?.cwd ?? process.cwd());
+  const allowlist = allowlistFor(result.opts?.cwd ?? process.cwd(), secondary?.tokensPath);
   const exempt = [...DEFAULT_EXEMPT_PATTERNS, ...(secondary?.exemptTokens ?? [])];
 
   root.walkDecls((decl) => {
@@ -79,7 +80,7 @@ function nodeAtLine(root, line) {
 }
 
 const cascadeRule = (primary, secondary) => (root, result) => {
-  if (!utils.validateOptions(result, CASCADE_RULE, { actual: primary }, { actual: secondary, possible: secondaryOptionsSchema, optional: true })) return;
+  if (!utils.validateOptions(result, CASCADE_RULE, { actual: primary }, { actual: secondary, possible: cascadeOptionsSchema, optional: true })) return;
   if (!primary) return;
 
   const { violations } = scanCascadeContract({
