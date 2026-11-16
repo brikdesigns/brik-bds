@@ -62,7 +62,7 @@ describe('Badge CSS — subtle and outline', () => {
 
 describe('Avatar CSS — subtle', () => {
   it.each(HUES)('subtle %s fills with --bds-background-accent-%s-light', (hue) => {
-    expect(css('Avatar')).toContain(`.bds-avatar--subtle.bds-avatar--accent-${hue}`);
+    expect(css('Avatar')).toContain(`.bds-avatar--subtle.bds-avatar--color-${hue}`);
     expect(css('Avatar')).toContain(`--bds-background-accent-${hue}-light`);
   });
 });
