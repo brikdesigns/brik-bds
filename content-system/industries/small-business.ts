@@ -30,7 +30,7 @@ export const smallBusiness: IndustryPack = {
       slug: 'home',
       displayName: 'Home',
       required: true,
-      blueprintDefaults: ['hero_split', 'two_column_detail', 'testimonials_3col_cards', 'cta_split_contact'],
+      blueprintDefaults: ['hero_split', 'two_column_detail', 'testimonials_card_grid', 'cta_split_contact'],
     },
     {
       slug: 'about',
@@ -54,7 +54,7 @@ export const smallBusiness: IndustryPack = {
       slug: 'testimonials',
       displayName: 'Testimonials',
       required: false,
-      blueprintDefaults: ['testimonials_3col_cards', 'testimonials_featured_large'],
+      blueprintDefaults: ['testimonials_card_grid', 'testimonials_featured_large'],
     },
     {
       slug: 'pricing',

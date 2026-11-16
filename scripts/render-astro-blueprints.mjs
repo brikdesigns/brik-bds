@@ -70,6 +70,7 @@ const BLOCKS = [
   { name: 'CollectionIndex', layouts: [null] },
   { name: 'CollectionEntry', layouts: [null] },
   { name: 'FaqAccordion', layouts: [null] },
+  { name: 'TestimonialsCardGrid', layouts: [null] },
 ];
 
 /**

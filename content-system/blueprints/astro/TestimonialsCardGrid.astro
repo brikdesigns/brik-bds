@@ -1,0 +1,301 @@
+---
+/**
+ * TestimonialsCardGrid — a grid of testimonial quote cards. Astro-only block on
+ * the canonical rail (ADR-037, brik-bds#3190): `rails: ["astro"]` in
+ * blueprint-library.json, so there is no React twin. Section header, then one
+ * card per item.
+ *
+ * Why a new block, not a `layout` on an existing one (ADR-037 one-file-per-block
+ * amendment): `TestimonialsFeaturedLarge` is built around one featured quote
+ * (its first item) and `CardGrid` renders services-style cards (media, category
+ * pill, CTA). A quote card is a different item shape — optional rating, a
+ * blockquote, an author row — so it gets its own file.
+ *
+ * `blueprintKey` is supplied by `BlueprintDispatcher.astro` and rendered as
+ * `data-blueprint-key`; composing this block directly emits no key marker.
+ *
+ * Contract: BlueprintProps.
+ *   - section.title / subtitle / body — header (h2 / eyebrow / lead)
+ *   - section.items[]                 — one card per item:
+ *       item.title        = attribution line, `name · role · company`. The
+ *                           first segment is the name; the rest is the role.
+ *       item.description  = the quote
+ *       item.rating?      = 1–5; stars render only when supplied
+ *       item.avatarUrl?   = author photo; renders only when supplied. No
+ *                           avatar is generated and no avatar service is called.
+ *
+ * Column count is the `columns` prop (structure axis, ADR-039), not part of the
+ * key. Omitted → the responsive ramp 1 → 2 → 3.
+ *
+ * Classes are `bp-testimonials-grid__*`, not `bds-*`: the canonical-class gate
+ * checks `bds-*` names against `dist/styles.css`, which is built from the React
+ * rail, and this block has no React twin (same reason as `FaqAccordion.astro`).
+ *
+ * required_facts: []. Section-driven.
+ *
+ * Token pairs — paired family ↔ size only:
+ *   subtitle    : --bds-font-family-subtitle + --bds-subtitle-lg + --bds-text-transform-subtitle
+ *   title (h2)  : --bds-font-family-heading  + clamp(--bds-heading-lg, ..., --bds-heading-xl)
+ *   lead        : --bds-font-family-body     + --bds-body-md
+ *   quote       : --bds-font-family-body     + --bds-body-md
+ *   name        : --bds-font-family-label    + --bds-label-lg
+ *   role        : --bds-font-family-body     + --bds-body-sm
+ *
+ * a11y: h2 + aria-labelledby; the cards are a list. Stars are decorative and
+ * the rating is announced once as visually-hidden text. The avatar is
+ * decorative (empty alt) because the author's name sits beside it. The hover
+ * lift is gated on `prefers-reduced-motion: no-preference`.
+ */
+import type { BlueprintColumns, BlueprintProps, KnownBlueprintKey } from './types';
+import { resolveSectionTitles } from './types';
+
+// Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
+import '../section-shell.css';
+
+interface Props extends BlueprintProps {
+  /** Supplied by `BlueprintDispatcher.astro`; rendered as `data-blueprint-key`. */
+  blueprintKey?: KnownBlueprintKey;
+  /** Widest-breakpoint column count (structure axis). Omitted → 1 → 2 → 3 ramp. */
+  columns?: BlueprintColumns;
+}
+
+const { section, blueprintKey, columns } = Astro.props;
+const titles = resolveSectionTitles(section);
+const titleId = `${section.sectionKey}-title`;
+
+const sectionClass = [
+  'bds-blueprint-section',
+  'bp-testimonials-grid',
+  columns ? `bp-testimonials-grid--cols-${columns}` : null,
+].filter(Boolean).join(' ');
+
+// `name · role · company` → name, then the remainder as the role line.
+const cards = section.items.map((item) => {
+  const [name, ...rest] = item.title.split('·').map((part) => part.trim()).filter(Boolean);
+  const stars =
+    typeof item.rating === 'number' && item.rating >= 1
+      ? Math.min(5, Math.round(item.rating))
+      : 0;
+  return { item, name: name ?? item.title, role: rest.join(' · '), stars };
+});
+---
+
+<section
+  class={sectionClass}
+  aria-labelledby={titleId}
+  data-blueprint-key={blueprintKey}
+>
+  <div class="bds-blueprint-section__container">
+    <header class="bp-testimonials-grid__header">
+      {titles.subtitle && (
+        <p class="bp-testimonials-grid__subtitle">{titles.subtitle}</p>
+      )}
+      <h2 id={titleId} class="bp-testimonials-grid__title">{titles.title ?? 'What clients say'}</h2>
+      {section.body && (
+        <p class="bp-testimonials-grid__description">{section.body}</p>
+      )}
+    </header>
+
+    <ul class="bp-testimonials-grid__list">
+      {cards.map(({ item, name, role, stars }) => (
+        <li class="bp-testimonials-grid__item">
+          <figure class="bp-testimonials-grid__card">
+            {stars > 0 && (
+              <p class="bp-testimonials-grid__rating">
+                <span class="bds-visually-hidden">Rated {stars} out of 5</span>
+                <span class="bp-testimonials-grid__stars" aria-hidden="true">{'★'.repeat(stars)}</span>
+              </p>
+            )}
+            <blockquote class="bp-testimonials-grid__quote">
+              <p>{item.description}</p>
+            </blockquote>
+            <figcaption class="bp-testimonials-grid__author">
+              {item.avatarUrl && (
+                <img
+                  class="bp-testimonials-grid__avatar"
+                  src={item.avatarUrl}
+                  alt=""
+                  loading="lazy"
+                />
+              )}
+              <span class="bp-testimonials-grid__attribution">
+                <cite class="bp-testimonials-grid__name">{name}</cite>
+                {role && <span class="bp-testimonials-grid__role">{role}</span>}
+              </span>
+            </figcaption>
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  /* Section rhythm + centred container: ../section-shell.css (ADR-021). */
+
+  .bp-testimonials-grid__header {
+    max-width: var(--bds-content-width-text-md);
+    margin-inline: auto;
+    margin-bottom: var(--bds-padding-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Content rhythm (ADR-023 §3): subtitle→title tight, title→description medium. */
+  .bp-testimonials-grid__header > * + * {
+    margin-top: var(--bds-gap-md);
+  }
+
+  .bp-testimonials-grid__subtitle + .bp-testimonials-grid__title {
+    margin-top: var(--bds-gap-sm);
+  }
+
+  .bp-testimonials-grid__subtitle {
+    margin: 0;
+    font-family: var(--bds-font-family-subtitle);
+    font-size: var(--bds-subtitle-lg);
+    font-weight: var(--bds-font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: var(--bds-text-transform-subtitle, uppercase);
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bp-testimonials-grid__title {
+    margin: 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-xl));
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-testimonials-grid__description {
+    margin: 0;
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    line-height: var(--bds-font-line-height-normal);
+    color: var(--bds-text-secondary);
+  }
+
+  /* ── Grid: 1 → 2 → 3 ramp; `--cols-*` caps the widest breakpoint ── */
+  .bp-testimonials-grid__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--bds-gap-lg);
+  }
+
+  @media (min-width: 768px) {
+    .bp-testimonials-grid__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 992px) {
+    .bp-testimonials-grid__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .bp-testimonials-grid--cols-2 .bp-testimonials-grid__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bp-testimonials-grid--cols-4 .bp-testimonials-grid__list {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .bp-testimonials-grid__item {
+    display: flex;
+  }
+
+  /* ── Card ─────────────────────────────────────────────────────── */
+  .bp-testimonials-grid__card {
+    margin: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: var(--bds-gap-md);
+    padding: var(--bds-padding-xl);
+    background: var(--bds-surface-primary);
+    border: var(--bds-border-width-sm) solid var(--bds-border-secondary);
+    border-radius: var(--bds-border-radius-lg);
+  }
+
+  /* Hover lift — motion only for visitors who have not asked to reduce it. */
+  @media (prefers-reduced-motion: no-preference) {
+    .bp-testimonials-grid__card {
+      transition:
+        transform var(--bds-duration-md) var(--bds-ease-out),
+        box-shadow var(--bds-duration-md) var(--bds-ease-out);
+    }
+
+    .bp-testimonials-grid__card:hover {
+      transform: translateY(calc(var(--bds-gap-xs) * -1));
+      box-shadow: var(--bds-shadow-md);
+    }
+  }
+
+  .bp-testimonials-grid__rating {
+    margin: 0;
+    line-height: 1;
+  }
+
+  .bp-testimonials-grid__stars {
+    font-size: var(--bds-icon-xl);
+    letter-spacing: 0.1em;
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bp-testimonials-grid__quote {
+    margin: 0;
+    flex: 1;
+  }
+
+  .bp-testimonials-grid__quote p {
+    margin: 0;
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    font-style: italic;
+    line-height: var(--bds-font-line-height-relaxed);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-testimonials-grid__author {
+    display: flex;
+    align-items: center;
+    gap: var(--bds-gap-md);
+  }
+
+  .bp-testimonials-grid__avatar {
+    flex: none;
+    width: var(--bds-size-1000);
+    height: var(--bds-size-1000);
+    border-radius: var(--bds-border-radius-circle);
+    object-fit: cover;
+  }
+
+  .bp-testimonials-grid__attribution {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bds-gap-tiny);
+  }
+
+  .bp-testimonials-grid__name {
+    font-family: var(--bds-font-family-label);
+    font-size: var(--bds-label-lg);
+    font-style: normal;
+    font-weight: var(--bds-font-weight-semibold);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-testimonials-grid__role {
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-sm);
+    color: var(--bds-text-secondary);
+  }
+</style>

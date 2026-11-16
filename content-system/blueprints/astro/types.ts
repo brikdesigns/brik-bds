@@ -42,6 +42,7 @@ export type KnownBlueprintKey =
   | 'story_split'
   | 'stats_bar'
   | 'testimonials_featured_large'
+  | 'testimonials_card_grid'
   | 'cta_centered'
   | 'cta_split_contact'
   | 'logo_wall'
@@ -83,6 +84,7 @@ export const WIRED_BLUEPRINT_KEYS = [
   'story_split',
   'stats_bar',
   'testimonials_featured_large',
+  'testimonials_card_grid',
   'cta_split_contact',
   'cta_centered',
   'logo_wall',
@@ -481,6 +483,16 @@ export interface BlueprintSectionContent {
      */
     readonly group?: string;
     /**
+     * Star rating (1–5) for `testimonials_card_grid`. Stars render only when
+     * supplied; omitted → no rating row. Additive, optional.
+     */
+    readonly rating?: number;
+    /**
+     * Author photo for `testimonials_card_grid`. Renders only when supplied —
+     * there is no generated or third-party fallback avatar. Additive, optional.
+     */
+    readonly avatarUrl?: string;
+    /**
      * Per-item video source for the media axis (`media: 'video'`, ADR-039
      * #2493/#2518). Consumed by `testimonials_featured_large`, which renders a
      * foreground, user-controlled player through the shared `BlockMedia`
@@ -604,7 +616,7 @@ export interface BlueprintSectionContent {
   /**
    * Structure axis — per-section item-grid column count (ADR-039 §Decision 1).
    * Applied over the registry default by `BlueprintDispatcher`; read by
-   * blocks that declare a `columns` prop (`Features`, `CardGrid`).
+   * blocks that declare a `columns` prop (`Features`, `CardGrid`, `TestimonialsCardGrid`).
    */
   readonly columns?: BlueprintColumns;
   /**

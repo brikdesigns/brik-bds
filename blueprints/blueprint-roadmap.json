@@ -107,26 +107,6 @@
       "catalogued_on": "2026-04-18"
     },
     {
-      "key": "testimonials_3col_cards",
-      "name": "3-Column Testimonial Cards",
-      "section_type": "testimonials",
-      "disposition": "roadmap",
-      "industries": [
-        "universal"
-      ],
-      "moods": [
-        "approachable",
-        "warm",
-        "trustworthy",
-        "professional"
-      ],
-      "layout_spec": "Light or white background. 3-column card grid. Each card: star rating (5 stars, accent color) top, quote text (italic, 15px, 3–4 lines max), then author row at bottom with avatar (40px circle from UI Avatars), name (700 weight, 14px), and role/company below (muted, 12px). Cards have a subtle border (1px, rule color), border-radius: 12px, and lift on hover (translateY -4px, shadow). Section heading centered above.",
-      "css_hints": ".testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; } .testimonial-card { padding: 32px 28px; border: 1px solid var(--rule); border-radius: 12px; transition: transform 0.25s ease, box-shadow 0.25s; } .testimonial-card:hover { transform: translateY(-4px); }",
-      "source": "Vale demo",
-      "required_facts": [],
-      "catalogued_on": "2026-04-18"
-    },
-    {
       "key": "gallery_masonry_3col",
       "name": "Masonry Portfolio Grid",
       "section_type": "gallery",
