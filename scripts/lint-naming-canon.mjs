@@ -294,12 +294,27 @@ const MODIFIER_AXES = new Set([
  *
  * Kept deliberately short. A value that names a *choice along an axis* belongs
  * behind a prefix; only a boolean belongs here.
+ *
+ * The set is keyed by word, not by block, so a word joins only when EVERY block
+ * that emits it does so from a boolean prop or predicate (#1927 kind A). That is
+ * why `pulse` (Dot's boolean, but one of Badge's three CSS-only animations) and
+ * `scroll` (PageContent's boolean, but a `TabBar` `overflow` value) are absent.
+ * `has-*` / `with-*` are listed word by word rather than admitted as a prefix:
+ * `--with-pricing-card` is a Hero `layout` value, and a prefix rule would hide it.
  */
 const BOOLEAN_MODIFIERS = new Set([
   'disabled', 'active', 'selected', 'open', 'closed', 'loading', 'readonly',
   'required', 'checked', 'expanded', 'collapsed', 'collapsible', 'sticky',
   'unread', 'empty', 'hidden', 'visible', 'focused', 'hovered', 'pressed',
   'dragging', 'invalid',
+  // States and predicates (#1927 kind A).
+  'clickable', 'non-clickable', 'exiting', 'flash', 'highlighted',
+  'indeterminate', 'interactive', 'sortable', 'today', 'placeholder', 'last',
+  'origin',
+  // Structural booleans (#1927 kind A).
+  'full-width', 'auto-width', 'icon-only', 'no-border', 'wrap', 'nowrap',
+  'has-dot', 'has-errors', 'has-icon', 'has-icon-after', 'has-icon-before',
+  'has-tabs', 'has-trailing', 'with-control', 'with-description',
 ]);
 
 /**
