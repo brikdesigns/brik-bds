@@ -492,3 +492,29 @@ New words admitted or retired after acceptance, per § 6. Each entry names the w
 **Enforcement.** `tokens/naming-grammar.json` `axes.emphasis.values` gains `on-color` in this PR, per § 6 step 3; the planted-violation test that used `on-color` as its denied neighbour now plants `knockout`.
 
 **Baseline.** `ButtonVariant#mixed` → `1983` leaves `tokens/naming-canon-baseline.json`: `ButtonVariant` is now form-only, so the row is stale and the gate would fail on it.
+
+### `fit` · `anchor` · `resize` · `marker` · `underline` · `measure` axes (2026-11-16, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
+
+**Does an existing § 2 word name these axes?** No. Each is a prop five components already turn into a correctly prefixed modifier. The gate baselined those modifiers as bare because the prefix was on no axis list, not because the class was wrong. None of these concepts fits § 2's words or the amended ones (`orientation`, `layout`, `span`, `ratio`, `color`). Synonyms were searched across `components/ui/**` (`.tsx` + `.css`, stories and tests excluded) as prop keys, union type names and `--{word}-*` modifiers:
+
+- **fit** — `cover`, `crop`: zero hits. The other `fit` props are the same concept: Image reuses `FrameFit` ([Image.tsx:32](../../components/ui/Image/Image.tsx)), and Card's `CardMediaImageFit` ([Card.tsx:153](../../components/ui/Card/Card.tsx)) and Table's `TableImageFit` ([Table.tsx:687](../../components/ui/Table/Table.tsx)) are `'contain' | 'cover'`, a subset of the list below. `objectFit` appears only as an inline style in DevFeedbackWidget. CardList's `fitContent` is a sizing boolean, not this axis.
+- **anchor** — `lock`, `hold`: no proportion prop. Image reuses `FrameAnchor` ([Image.tsx:39](../../components/ui/Image/Image.tsx)). Button's `AnchorLinkProps` is the `<a>` element, a homonym, not a prop axis.
+- **resize** — `resizable`, `grow`: zero. The one other `resize` is an inline style ([DevFeedbackWidget.tsx:510](../../components/ui/DevFeedbackWidget/DevFeedbackWidget.tsx)).
+- **marker** — `listStyle`, `numbered`, `ordered`: no competing prop (the only `ordered` hit is `bordered`). `BulletListDensity` is the density axis.
+- **underline** — `decoration`: zero.
+- **measure** — `readable`, `textWidth`: zero. Footer's `containerMaxWidth` is a container width, not a text measure.
+
+| Axis | Word | Closed values | Correct today |
+|---|---|---|---|
+| Media fit in its box | `fit` | `cover` · `contain` · `fill` · `none` | Frame (`bds-frame--fit-${fit}`, [Frame.tsx:144](../../components/ui/Frame/Frame.tsx)); Image, Card, Table props |
+| Dimension a ratio is held from | `anchor` | `width` · `height` | Frame (`bds-frame--anchor-height`, [Frame.tsx:145](../../components/ui/Frame/Frame.tsx)); Image prop |
+| User resize direction | `resize` | `none` · `both` · `horizontal` · `vertical` | TextArea (`bds-text-area-field--resize-${resize}`, [TextArea.tsx:112](../../components/ui/TextArea/TextArea.tsx)) |
+| List item marker | `marker` | `disc` · `decimal` · `none` | BulletList (`bds-bullet-list--marker-${marker}`, [BulletList.tsx:41](../../components/ui/BulletList/BulletList.tsx)) |
+| Link underline trigger | `underline` | `hover` · `always` · `none` | TextLink (`--underline-always` / `--underline-none`, [TextLink.tsx:104](../../components/ui/TextLink/TextLink.tsx)) |
+| Text column width | `measure` | `sm` · `md` · `lg` | SectionHeader (`bds-section-header--measure-${measure}`, [SectionHeader.tsx:65](../../components/ui/SectionHeader/SectionHeader.tsx)) |
+
+Each value list is the component's union as it ships. The amendment admits what exists and invents no value.
+
+**`tint` is not admitted.** Card's `--tint-*` is prefixed the same way, but the search found a second word for its concept. BlockQuote picks a service line with `serviceLine` ([BlockQuote.tsx:17](../../components/ui/BlockQuote/BlockQuote.tsx), the term #788 chose) and paints the same `--surface-service-*-light` wash ([BlockQuote.css:50](../../components/ui/BlockQuote/BlockQuote.css)) that Card's `tint` paints ([Card.css:391](../../components/ui/Card/Card.css)). Admitting `tint` would put one concept under two words, which § 2 forbids. Its five rows stay baselined under #1927 until that issue picks one word.
+
+**Enforcement.** `tokens/naming-grammar.json` gains the six axes. `lint-naming-canon` reads them into `AXES` and `MODIFIER_AXES`, so the modifiers carry a blessed prefix and rule 5 default-denies any other value (`--fit-stretch`, a `*Marker` union with `square`). One mechanism change, the same one `span` needed: these values are CSS keywords and t-shirt rungs that other unions share, so rule 3 claiming them by value would read `DividerSpacing = 'none' | 'sm' | 'md' | 'lg'` as `marker + measure`. All six join `span` in `PREFIX_JUDGED_AXES`, which `axesOf()` skips (the gate's old `SPAN_AXIS` constant becomes this set). Planted cases in `scripts/__tests__/lint-naming-canon.test.mjs` admit the six modifiers, deny `--fit-stretch`, and keep a `DividerSpacing`-shaped union clean. **Baseline:** −17. The six families' rule-4 rows keyed to #1927 leave `tokens/naming-canon-baseline.json` because they no longer violate. The two rows keyed to the closed #1926 (`--center`, `--compact`) move to #1927, which now owns them.
