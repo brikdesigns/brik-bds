@@ -279,6 +279,10 @@ interface CardAnatomyProps extends CardBaseProps {
   action?: ReactNode;
   /** Overlay badge anchored to the media corner (`stack`); the leading badge in `control`. */
   badge?: ReactNode;
+  /** Trailing indicator (`stack`/`row`) — a `Badge` / `Tag` / `Dot`. An indicator goes here, never in `action`. Renders nothing when omitted. */
+  status?: ReactNode;
+  /** Short fact line under the body (`stack`/`row`) — a `DateTime` or one fact. Renders nothing when omitted. */
+  meta?: ReactNode;
   /** Service-line surface tint (`stack`/`row`/`pricing`) — pale wash keyed to a service line. Border/size unchanged. */
   tint?: CardTint;
   /** Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. */
@@ -555,6 +559,8 @@ function renderAnatomy({
   children,
   action,
   badge,
+  status,
+  meta,
   tint,
   tintInverse,
   variant,
@@ -722,6 +728,7 @@ function renderAnatomy({
       'bds-card',
       'bds-card--layout-row',
       isNamed && `bds-card--layout-row-${imageWidth}`,
+      status != null && 'bds-card--layout-row-has-status',
       tint && `bds-card--tint-${tint}`,
       tint && tintInverse && 'bds-card--emphasis-inverse',
       href && 'bds-card--link',
@@ -737,8 +744,10 @@ function renderAnatomy({
           {overline != null && <span className="bds-card__row-overline">{overline}</span>}
           {title != null && <Heading className="bds-card__row-title">{title}</Heading>}
           {children}
+          {meta != null && <div className="bds-card__row-meta">{meta}</div>}
           {action && <div className="bds-card__row-action">{action}</div>}
         </div>
+        {status != null && <div className="bds-card__row-status">{status}</div>}
       </>
     );
     if (href) {
@@ -784,6 +793,8 @@ function renderAnatomy({
         {overline != null && <span className="bds-card__stack-overline">{overline}</span>}
         {title != null && <Heading className="bds-card__stack-title">{title}</Heading>}
         {children}
+        {meta != null && <div className="bds-card__stack-meta">{meta}</div>}
+        {status != null && <div className="bds-card__stack-status">{status}</div>}
         {action && <div className="bds-card__stack-action">{action}</div>}
       </div>
     </>

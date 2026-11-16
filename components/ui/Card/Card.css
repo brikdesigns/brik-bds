@@ -540,6 +540,17 @@
   color: var(--bds-text-primary);
 }
 
+.bds-card__stack-status {
+  display: inline-flex;
+  align-self: flex-start;
+}
+
+.bds-card__stack-meta {
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  color: var(--bds-text-secondary);
+}
+
 .bds-card__stack-action {
   /* Anchor to bottom so multiple cards in a grid align actions
    * regardless of description length. */
@@ -638,8 +649,29 @@
   margin-top: auto;
 }
 
+/* `status` (trailing indicator) adds a third, content-sized column; `meta`
+ * is a short fact line under the body. Both mirror the control card's
+ * `__control-trailing` / `__control-status` pairing. */
+.bds-card--layout-row-has-status {
+  grid-template-columns: var(--bds-card-image-width) 1fr auto;
+}
+
+.bds-card__row-status {
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.bds-card__row-meta {
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  color: var(--bds-text-secondary);
+}
+
 @media (--bds-down-tablet) {
-  .bds-card--layout-row {
+  .bds-card--layout-row,
+  .bds-card--layout-row-has-status {
     grid-template-columns: 1fr;
   }
 }

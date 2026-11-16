@@ -5,6 +5,7 @@ import { Image } from '../Image';
 import { Logo } from '../Logo';
 import { Button } from '../Button';
 import { Badge } from '../Badge';
+import { DateTime } from '../DateTime';
 import '../../../tokens/modes-borderradius.css';
 
 /* Story-only 3:2 landscape thumbnail (data URI, no network) — a schematic
@@ -573,6 +574,65 @@ export const Row: Story = {
   ],
 };
 
+
+/**
+ * `layout="row"` with the trailing `status` indicator and the `meta` fact line.
+ * An indicator (Badge / Tag / Dot) goes in `status`, never in `action`; a date
+ * goes in `meta` through `DateTime`.
+ *
+ * @summary layout="row" — status Badge and DateTime meta
+ */
+export const RowStatusMeta: Story = {
+  args: {
+    layout: 'row',
+    overline: <Badge>Marketing</Badge>,
+    title: 'Web Design Retainer',
+    children: <CardDescription>Ongoing design partnership for marketing pages.</CardDescription>,
+    status: <Badge status="positive">Active</Badge>,
+    meta: <DateTime mode="relative" value="2026-11-01T12:00:00Z" />,
+    action: (
+      <Button variant="secondary" size="sm">
+        View
+      </Button>
+    ),
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 720, display: 'flex' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
+ * `layout="stack"` with the `status` indicator and the `meta` fact line;
+ * `badge` remains the media-corner overlay.
+ *
+ * @summary layout="stack" — status Badge and DateTime meta
+ */
+export const StackStatusMeta: Story = {
+  args: {
+    layout: 'stack',
+    overline: <Badge>Marketing</Badge>,
+    title: 'Web Design Retainer',
+    children: <CardDescription>Ongoing design partnership for marketing pages.</CardDescription>,
+    status: <Badge status="positive">Active</Badge>,
+    meta: <DateTime mode="relative" value="2026-11-01T12:00:00Z" />,
+    action: (
+      <Button variant="secondary" size="sm">
+        View
+      </Button>
+    ),
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 320, display: 'flex' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
 
 const TINT_LINES = ['brand', 'marketing', 'information', 'product', 'back-office'] as const;
 /* Explicit token names so canonical-check can resolve each one. */

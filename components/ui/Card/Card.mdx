@@ -60,6 +60,39 @@ The `mediaTreatment` prop controls how the `media` slot relates to the card edge
 
 <Canvas of={Stories.Row} />
 
+#### Status and meta (`stack` and `row`)
+
+`status` is a trailing indicator (a `Badge`, `Tag`, or `Dot`) and `meta` is a short fact line under the body (a `DateTime` or one fact). Neither renders an element when omitted. On `row`, `status` takes a trailing column (`bds-card__row-status`) and `meta` sits under the body (`bds-card__row-meta`); on `stack` they render as `bds-card__stack-status` / `bds-card__stack-meta`. `badge` stays the media-corner overlay on `stack`.
+
+**Indicators vs actions** — an indicator goes in `status`, never in `action`. `action` is for a button or link the user can press; a Badge there reads as a control.
+
+<Canvas of={Stories.RowStatusMeta} />
+
+<Canvas of={Stories.StackStatusMeta} />
+
+### Button emphasis on a card
+
+A card holds at most one `primary`, and only when the card is the surface's call to action (an onboarding step, an empty-state CTA). A record card's own action is `secondary`. `ghost` is reserved for in-row and toolbar actions inside the card body.
+
+### The standard, in one table
+
+The classification the portal applies before any card is written. It composes display-choice (which display) with Card anatomy (which layout) and indicators (which pill).
+
+| You have… | Render | Never |
+| --- | --- | --- |
+| Peer entities, each with its own link or button | `Card layout="row"` (list) or `"stack"` (grid): overline Tag · title · body · meta DateTime · status Badge · one action | an inline `<h2 style={heading.card}>`; a Badge in `action` |
+| One record's own attributes | DataSection → FieldGrid → Field | a Card of label/value rows |
+| Rows you compare down a column | Table in TableView | a Card around a table |
+| One big number | `Card layout="metric"` (surfaced) / Stat (in a band) | a Field with a huge value |
+| A number against a range or a fraction done | Meter (fraction text) / ProgressBar | "3 of 8" prose |
+| A source with connect/sync/configure | `Card layout="control"`: logo · title · description · status · stamp · status-driven actions | a hand-rolled status string, a free-form "Synced …" |
+| A wizard position | ProgressStepper | "Step 1 of 4" prose |
+| A date on a card | DateTime `mode="relative"` (meta) or `"date"` (fact) | `toLocaleDateString`, `formatDate` |
+| A form section or editor | DataSection in edit mode | an elevated Card per step |
+| A surface-level warning | Banner | a Card with a red heading |
+| Nothing yet | EmptyState in the view shell | a Card with "No X yet" |
+
+
 ### Metric layout
 
 `layout="metric"` — compact stat card: an `overline` label above a large `title` value, with an optional trailing `action`. Context-neutral — a revenue figure, an active-user count, a storage total. Pre-format the value; the card applies no numeric formatting.
