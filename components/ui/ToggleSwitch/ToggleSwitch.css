@@ -56,7 +56,7 @@
 }
 
 /* accent-knob keeps the track neutral in both states — state moves to the knob */
-.bds-toggle-switch--accent-knob .bds-toggle-switch__input:checked ~ .bds-toggle-switch__track {
+.bds-toggle-switch--variant-accent-knob .bds-toggle-switch__input:checked ~ .bds-toggle-switch__track {
   background-color: var(--bds-border-muted); /* bds-lint-ignore token-family — accent-knob track stays the neutral rail; reviewed alias (#777) */
 }
 
@@ -71,11 +71,11 @@
 }
 
 /* accent-knob variant carries state on the knob: muted off, brand on */
-.bds-toggle-switch--accent-knob .bds-toggle-switch__knob {
+.bds-toggle-switch--variant-accent-knob .bds-toggle-switch__knob {
   background-color: var(--bds-text-secondary); /* bds-lint-ignore token-family — off-state knob is a graphic foreground, 6.16:1 light / 11.29:1 dark on the track; reviewed alias (#777) */
 }
 
-.bds-toggle-switch--accent-knob .bds-toggle-switch__input:checked ~ .bds-toggle-switch__track .bds-toggle-switch__knob {
+.bds-toggle-switch--variant-accent-knob .bds-toggle-switch__input:checked ~ .bds-toggle-switch__track .bds-toggle-switch__knob {
   background-color: var(--bds-background-brand-primary);
 }
 }

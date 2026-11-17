@@ -71,6 +71,13 @@ Not renamed, still bare (their prop axis has no legal prefix, so they ride with 
 |---|---|---|
 | `bds-tab-bar--text-underline` | `bds-tab-bar--variant-text-underline` | `variant="text-underline"` |
 
+**Breaking (consumer CSS):** CompletionToggle's brand hover modifier and ToggleSwitch's `accent-knob` modifier now carry the axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). CompletionToggle's brand is a hue source, so it takes `emphasis`; ToggleSwitch's is a form, so it takes `variant`. No alias ships. Rename the selector. Both prop values are unchanged.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-completion-toggle--accent-brand` | `bds-completion-toggle--emphasis-brand` | `accent="brand"` |
+| `bds-toggle-switch--accent-knob` | `bds-toggle-switch--variant-accent-knob` | `variant="accent-knob"` |
+
 Six Tier 4 hooks are renamed to the ADR-014 shape `--bds-{component}[-{part}]-{property}` ([#2651](https://github.com/brikdesigns/brik-bds/issues/2651)). Each old name still works: the component reads it first and falls back to the new one. The old names are **deprecated** and drop in the next major. Every hook is now listed in `manifest/tier4-hooks.json`, with whether a consumer may set it (`knob`) or the component sets it at render (`runtime`).
 
 **Deprecated (consumer CSS):** rename these in your override CSS before the next major.
