@@ -22,6 +22,14 @@ Bounded-value indicator for completion counters, scores, and capacity displays. 
 
 <Canvas of={Stories.CustomFillColor} />
 
+### Fraction
+
+`valueFormat="fraction"` renders the visible text as "N of M" plus `unit` (no " Score" suffix) — the form for completion summaries like "3 of 8 tasks done". `valueFormatter`, when passed, still wins.
+
+A wizard position ("Step 2 of 5") is [ProgressStepper](?path=/docs/components-progressstepper--docs), never Meter or hand-written prose.
+
+<Canvas of={Stories.Fraction} />
+
 ## Props
 
 <ArgTypes of={Stories} />
