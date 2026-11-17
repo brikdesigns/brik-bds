@@ -348,7 +348,7 @@ resolve_in_shell() {   # <shell> <ref> → "<rc>|<stdout>"
 # A missing zsh is a loud SKIP, not a failure. This suite is also executed by
 # generic runners that own no shell dependency — repro-before-fix runs whatever
 # a PR names as its Repro command — and making them all install zsh to stay green
-# is a wider tax than the arm is worth. issue-claim-gate-contract.yml installs
+# is a wider tax than the arm is worth. contract-tests.yml (job issue-claim-gate-contract) installs
 # zsh explicitly, so CI never actually skips it; the capture-array assertion at
 # the end of this section is shell-independent and always runs either way.
 SHELLS=(bash)
@@ -356,7 +356,7 @@ if command -v zsh >/dev/null 2>&1; then
   SHELLS+=(zsh)
 else
   echo "  ⚠ SKIP: zsh not on PATH — the cross-shell arm did NOT run (brik-llm#2798)."
-  echo "         issue-claim-gate-contract.yml installs zsh; if you are seeing this"
+  echo "         contract-tests.yml (job issue-claim-gate-contract) installs zsh; if you are seeing this"
   echo "         line in THAT workflow's log, the install step regressed."
 fi
 
@@ -576,6 +576,23 @@ assert_ok "…and saying my branch is one the claim names" grep -q 'a branch thi
 
 assert_eq "same-session resume returns 0" "0" "$(resume_as first-session)"
 assert_not "…and prints no warning" grep -q 'already claimed' "$FAKE/out"
+
+# ── a comment that only QUOTES the marker is not the claim (brik-llm#5673) ────
+#
+# _ic_find_claim picked "the claim" with a substring match, newest wins, so a
+# later /hand-off that quoted the marker shadowed the real claim — and every
+# reader read the ticket as unclaimed. The real claim is first in $GH_COMMENTS;
+# the quoting comment is newer.
+REAL_CLAIM="$(claim_marker_body "$MY_HOST" "o/r:task/shared" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" first-session)"
+{
+  jq -cn --arg b "$REAL_CLAIM" '{id: 42, login: "nstaner", created_at: "2026-10-05T15:23:37Z", body: $b}'
+  jq -cn --arg b "Hand-off: the claim comment starts with ${CLAIM_MARKER} so readers find it." \
+    '{id: 43, login: "nstaner", created_at: "2026-10-05T16:00:00Z", body: $b}'
+} >"$GH_COMMENTS"
+assert_eq "a later comment quoting the marker mid-body does not shadow the real claim" "42" \
+  "$( cd "$FAKE" && PATH="$FAKE:$PATH" bash -c "source '$LIB'; _ic_find_claim o r 7" | head -n1 | cut -f1 )"
+assert_eq "…and the same on the strict read" "42" \
+  "$( cd "$FAKE" && PATH="$FAKE:$PATH" bash -c "source '$LIB'; _ic_find_claim o r 7 strict" | head -n1 | cut -f1 )"
 rm -rf "$FAKE"
 
 # ── --fail-closed: an unread claim is not a clear one (brik-llm#4306) ─────────
