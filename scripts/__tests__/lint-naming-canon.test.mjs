@@ -774,6 +774,33 @@ describe('rule 4 + 5 — the `columns` axis (§ Amendments, #1927)', () => {
   });
 });
 
+describe('rule 4 + 5 — the `spacing` axis (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed modifiers Divider, DataSection and SheetSection emit from `spacing`', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-divider--spacing-sm { margin-top: 8px; }
+.bds-data-section--spacing-lg + .bds-data-section { margin-top: 24px; }
+.bds-sheet-section--spacing-md + .bds-sheet-section { margin-top: 16px; }
+`,
+    });
+    expect(out).not.toMatch(/spacing-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies a rung the amendment did NOT admit', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-divider--spacing-xl { margin-top: 32px; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--spacing-xl — `xl` is on no closed list for the spacing axis/);
+  });
+
+  it('still denies a novel member in a governed union', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type PanelSpacing = 'md' | 'loose';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/PanelSpacing\.loose — `loose` is on no closed list for the spacing axis/);
+  });
+});
+
 describe('rule 6 — the deleted --*-status-* family cannot come back (§ Token families)', () => {
   it('fails on a var() reference to a deleted name', () => {
     const { code, out } = run({ refs: '.x { background: var(--surface-status-warning); }' });
