@@ -105,8 +105,8 @@ export function ServiceTag({
       <span
         className={bdsClass(
           'bds-service-tag',
-          'bds-service-tag--icon',
-          `bds-service-tag--icon-${size}`,
+          'bds-service-tag--variant-icon',
+          `bds-service-tag--size-${size}`,
           `bds-service-tag--${category}`,
           className,
         )}
@@ -124,12 +124,12 @@ export function ServiceTag({
   }
 
   if (variant === 'dot') {
-    // Neutral pill (`--dot` fill, not the per-category fill the other
+    // Neutral pill (`--variant-dot` fill, not the per-category fill the other
     // variants use) — only the marker below carries the service color, so
     // the label reads as "status dot + text" rather than a flooded pill.
     return (
       <span
-        className={bdsClass('bds-service-tag', 'bds-service-tag--dot', `bds-service-tag--size-${size}`, className)}
+        className={bdsClass('bds-service-tag', 'bds-service-tag--variant-dot', `bds-service-tag--size-${size}`, className)}
         style={style}
         {...props}
       >
