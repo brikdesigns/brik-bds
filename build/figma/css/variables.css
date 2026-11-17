@@ -47,6 +47,19 @@
   --bds-color-annotation-light-purple: #e6dbff;
   --bds-color-annotation-light-blue: #d1e5ff;
   --bds-color-green-950: #2a5542; /** AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542. */
+  --bds-color-chart-blue: #4794f2;
+  --bds-color-chart-orange: #994601;
+  --bds-color-chart-teal: #0f857b;
+  --bds-color-chart-violet: #6e44bc;
+  --bds-color-chart-olive: #869b34;
+  --bds-color-chart-cyan: #075061;
+  --bds-color-chart-amber: #a16c03;
+  --bds-color-chart-blue-on-dark: #2574d0;
+  --bds-color-chart-orange-on-dark: #ea741f;
+  --bds-color-chart-teal-on-dark: #088378;
+  --bds-color-chart-violet-on-dark: #d8ccff;
+  --bds-color-chart-olive-on-dark: #c6dd78;
+  --bds-color-chart-cyan-on-dark: #03a3c5;
   --bds-font-weight-bold: 700;
   --bds-font-weight-medium: 500;
   --bds-font-weight-regular: 400;
@@ -404,4 +417,16 @@
   --bds-page-accent-orange: var(--bds-color-system-orange);
   --bds-page-accent-red: var(--bds-color-system-red);
   --bds-page-accent-purple: var(--bds-color-system-purple);
+  --bds-chart-neutral: var(--bds-color-grayscale-500);
+  --bds-chart-categorical-1: var(--bds-color-chart-blue);
+  --bds-chart-categorical-2: var(--bds-color-chart-orange);
+  --bds-chart-categorical-3: var(--bds-color-chart-teal);
+  --bds-chart-categorical-4: var(--bds-color-chart-violet);
+  --bds-chart-categorical-5: var(--bds-color-chart-olive);
+  --bds-chart-categorical-6: var(--bds-color-chart-cyan);
+  --bds-chart-positive: var(--bds-color-green-950);
+  --bds-chart-warning: var(--bds-color-chart-amber);
+  --bds-chart-negative: var(--bds-color-system-red);
+  --bds-chart-info: var(--bds-color-system-blue);
+  --bds-chart-brand: var(--bds-border-brand-primary);
 }

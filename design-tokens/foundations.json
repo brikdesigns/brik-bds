@@ -483,6 +483,125 @@
           "$value": "#2a5542",
           "$description": "AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542."
         }
+      },
+      "chart": {
+        "blue": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#4794f2"
+        },
+        "orange": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#994601"
+        },
+        "teal": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#0f857b"
+        },
+        "violet": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#6e44bc"
+        },
+        "olive": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#869b34"
+        },
+        "cyan": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#075061"
+        },
+        "amber": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#a16c03"
+        },
+        "blue-on-dark": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#2574d0"
+        },
+        "orange-on-dark": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#ea741f"
+        },
+        "teal-on-dark": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#088378"
+        },
+        "violet-on-dark": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#d8ccff"
+        },
+        "olive-on-dark": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#c6dd78"
+        },
+        "cyan-on-dark": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#03a3c5"
+        }
       }
     },
     "font-weight": {
@@ -6543,6 +6662,140 @@
         "$type": "color",
         "$value": "{color.system.purple}"
       }
+    },
+    "chart": {
+      "brand": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{border.brand-primary}"
+      },
+      "neutral": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.500}"
+      },
+      "categorical-1": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.chart.blue}"
+      },
+      "categorical-2": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.chart.orange}"
+      },
+      "categorical-3": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.chart.teal}"
+      },
+      "categorical-4": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.chart.violet}"
+      },
+      "categorical-5": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.chart.olive}"
+      },
+      "categorical-6": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.chart.cyan}"
+      },
+      "positive": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.green.950}"
+      },
+      "warning": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.chart.amber}"
+      },
+      "negative": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.red}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.blue}"
+      }
     }
   },
   "color/dark": {
@@ -7368,6 +7621,140 @@
         },
         "$type": "color",
         "$value": "{color.system.purple}"
+      }
+    },
+    "chart": {
+      "brand": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{border.brand-primary}"
+      },
+      "neutral": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.500}"
+      },
+      "categorical-1": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.chart.blue-on-dark}"
+      },
+      "categorical-2": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.chart.orange-on-dark}"
+      },
+      "categorical-3": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.chart.teal-on-dark}"
+      },
+      "categorical-4": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.chart.violet-on-dark}"
+      },
+      "categorical-5": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.chart.olive-on-dark}"
+      },
+      "categorical-6": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.chart.cyan-on-dark}"
+      },
+      "positive": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.green}"
+      },
+      "warning": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.yellow}"
+      },
+      "negative": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.red}"
+      },
+      "info": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "FRAME_FILL",
+            "SHAPE_FILL",
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.blue}"
       }
     }
   },
