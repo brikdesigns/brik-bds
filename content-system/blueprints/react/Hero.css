@@ -489,8 +489,8 @@
 }
 
 /* Scoped to `img` only: this slot also carries `<ServiceTag variant="icon">`,
-   whose `.bds-service-tag--icon` centering (inline-flex) must not be clobbered
-   by `display: block`. The ServiceTag self-sizes via `.bds-service-tag--icon-lg`
+   whose `.bds-service-tag--variant-icon` centering (inline-flex) must not be clobbered
+   by `display: block`. The ServiceTag self-sizes via `.bds-service-tag--size-lg`
    (40px = 2.5rem). See brik-bds#873. */
 img.bds-hero__icon {
   display: block;

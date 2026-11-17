@@ -283,7 +283,7 @@ const ctaClass = isPricingCard
         />
       ) : serviceLine ? (
         <span
-          class={`bds-service-tag bds-service-tag--icon bds-service-tag--icon-lg bds-service-tag--${serviceLine} bds-hero__icon`}
+          class={`bds-service-tag bds-service-tag--variant-icon bds-service-tag--size-lg bds-service-tag--${serviceLine} bds-hero__icon`}
           role="img"
           aria-label={`${serviceLine} category`}
         />
@@ -796,8 +796,8 @@ const ctaClass = isPricingCard
   }
 
   /* Scoped to `img` only: this slot also carries the ServiceTag icon variant
-     (a `<span class="bds-service-tag--icon …">`), whose inline-flex centering
-     must survive. The span self-sizes via `bds-service-tag--icon-lg` (40px =
+     (a `<span class="bds-service-tag--variant-icon …">`), whose inline-flex centering
+     must survive. The span self-sizes via `bds-service-tag--size-lg` (40px =
      2.5rem). See brik-bds#873. */
   img.bds-hero__icon {
     display: block;
