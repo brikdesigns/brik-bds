@@ -27,6 +27,7 @@ export * from './CardControl';
 export * from './AddableCatalogList';
 export * from './CardList';
 export * from './CardTestimonial';
+export * from './Chart';
 export * from './Testimonial';
 export * from './Checkbox';
 export * from './CheckboxGroup';
