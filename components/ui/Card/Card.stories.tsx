@@ -54,17 +54,17 @@ const meta: Meta<typeof Card> = {
       description:
         'Leading 1:1 media (Default shape only) — `{ avatar: {…} }`, `{ image: {…} }`, or `{ logo: { set, name } }`. Renders an `Avatar`, a square `Image`, or a bundled `Logo` on the left, with `children` stacked to the right. Which of the three is content, not a semantic axis — set it here rather than in a per-media story (ADR-010 Q2).',
     },
-    tint: {
+    serviceLine: {
       control: 'select',
       options: ['none', 'brand', 'marketing', 'information', 'product', 'back-office'],
       mapping: { none: undefined },
       description:
         'Service-line surface tint (Default shape, `stack`, `row`, `pricing`) — a pale wash keyed to a service line. Sets only the surface; the variant border stays. Default = no tint.',
     },
-    tintInverse: {
+    serviceLineInverse: {
       control: 'boolean',
       description:
-        'Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. Default = false.',
+        'Resolve `serviceLine` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `serviceLine`. Default = false.',
     },
   },
 };
@@ -135,7 +135,7 @@ export const PillRadiusMode: Story = {
  *
  * The recommended tier is **not** a `highlighted` prop — it composes from the
  * shared surface set like every other layout, so set `variant="raised"` (or a
- * `tint`) in Controls to mark it.
+ * `serviceLine`) in Controls to mark it.
  *
  * @summary layout="pricing" — tier with price + feature list
  */
@@ -422,7 +422,7 @@ export const Metric: Story = {
  * `layout="stack"` — vertical content card: optional top `media`, `overline`,
  * `title`, `children` (body), bottom-anchored `action` (ADR-038; replaces
  * `preset="display"`). The malleable `CardGrid` cell — compose inside
- * `<CardGrid>`. `variant` / `tint` set the surface for a cell on a colored grid;
+ * `<CardGrid>`. `variant` / `serviceLine` set the surface for a cell on a colored grid;
  * `mediaTreatment="inset"` frames media + body together (the former
  * `DisplayInset` story, now a Control).
  *
@@ -459,17 +459,17 @@ export const Stack: Story = {
       description:
         'Surface treatment for a cell on a colored (service-tinted) grid. `borderless` = transparent, no border/shadow; `elevated` = fill, no border; `raised` = fill, no border, `--bds-shadow-md` shadow. Default = outlined white fill.',
     },
-    tint: {
+    serviceLine: {
       control: 'select',
       options: ['none', 'brand', 'marketing', 'information', 'product', 'back-office'],
       mapping: { none: undefined },
       description:
         'Service-line surface tint — a pale wash keyed to a service line. Sets only the surface; border/size unchanged. Default = no tint.',
     },
-    tintInverse: {
+    serviceLineInverse: {
       control: 'boolean',
       description:
-        'Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. Default = false.',
+        'Resolve `serviceLine` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `serviceLine`. Default = false.',
     },
     titleAs: {
       control: 'inline-radio',
@@ -547,17 +547,17 @@ export const Row: Story = {
       description:
         'Image column width. Named: `narrow` 25%, `standard` 35%, `wide` 50%. Pass a CSS length / percentage to override.',
     },
-    tint: {
+    serviceLine: {
       control: 'select',
       options: ['none', 'brand', 'marketing', 'information', 'product', 'back-office'],
       mapping: { none: undefined },
       description:
         'Service-line surface tint — a pale wash keyed to a service line. Sets only the surface. Default = no tint.',
     },
-    tintInverse: {
+    serviceLineInverse: {
       control: 'boolean',
       description:
-        'Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. Default = false.',
+        'Resolve `serviceLine` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `serviceLine`. Default = false.',
     },
     titleAs: {
       control: 'inline-radio',
@@ -661,11 +661,11 @@ const TINT_SURFACES = {
 } as const;
 
 /**
- * Both `tintInverse` values for every service line. Switch the toolbar theme to
+ * Both `serviceLineInverse` values for every service line. Switch the toolbar theme to
  * dark to see `inverse` flip from white to the deep hue while `light` stays a
  * pale wash.
  *
- * @summary tintInverse — light wash vs theme-flipping inverse
+ * @summary serviceLineInverse — light wash vs theme-flipping inverse
  */
 export const TintTones: Story = {
   parameters: { layout: 'padded' },
@@ -673,7 +673,7 @@ export const TintTones: Story = {
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 240px)', gap: 16 }}>
       {TINT_LINES.flatMap((line) =>
         (['light', 'inverse'] as const).map((tone) => (
-          <Card key={`${line}-${tone}`} layout="stack" tint={line} tintInverse={tone === 'inverse'} title={`${line} · ${tone}`} />
+          <Card key={`${line}-${tone}`} layout="stack" serviceLine={line} serviceLineInverse={tone === 'inverse'} title={`${line} · ${tone}`} />
         )),
       )}
     </div>
@@ -715,7 +715,7 @@ export const InteractionTestTintTones: Story = {
       const row = document.createElement('div');
       canvasElement.appendChild(row);
       const rowCard = document.createElement('div');
-      rowCard.className = 'bds-card bds-card--layout-row bds-card--tint-marketing bds-card--emphasis-inverse';
+      rowCard.className = 'bds-card bds-card--layout-row bds-card--service-line-marketing bds-card--emphasis-inverse';
       row.appendChild(rowCard);
       await expect(getComputedStyle(rowCard).backgroundColor).toBe(fill('marketing', 'inverse'));
       row.remove();
@@ -731,8 +731,8 @@ export const InteractionTestTintTones: Story = {
 };
 
 /**
- * Asserts the default (no `layout`) card and `layout="pricing"` resolve `tint`
- * and `tintInverse` to the same surface as `stack` in light and dark, and keep
+ * Asserts the default (no `layout`) card and `layout="pricing"` resolve `serviceLine`
+ * and `serviceLineInverse` to the same surface as `stack` in light and dark, and keep
  * the variant border (#2294).
  *
  * @summary Verifies tint on default + pricing cards, both themes
@@ -743,7 +743,7 @@ export const InteractionTestTintAcrossShapes: Story = {
   render: () => (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 240px)', gap: 16 }}>
       {(['light', 'inverse'] as const).map((tone) => (
-        <Card key={`default-${tone}`} tint="marketing" tintInverse={tone === 'inverse'}>
+        <Card key={`default-${tone}`} serviceLine="marketing" serviceLineInverse={tone === 'inverse'}>
           <CardTitle>{`default · ${tone}`}</CardTitle>
         </Card>
       ))}
@@ -751,8 +751,8 @@ export const InteractionTestTintAcrossShapes: Story = {
         <Card
           key={`pricing-${tone}`}
           layout="pricing"
-          tint="marketing"
-          tintInverse={tone === 'inverse'}
+          serviceLine="marketing"
+          serviceLineInverse={tone === 'inverse'}
           title={`pricing · ${tone}`}
           price="$49"
         />
@@ -778,7 +778,7 @@ export const InteractionTestTintAcrossShapes: Story = {
           for (const tone of ['light', 'inverse'] as const) {
             const card = canvas.getByText(`${shape} · ${tone}`).closest('.bds-card') as HTMLElement;
             await expect(getComputedStyle(card).backgroundColor).toBe(fill(tone));
-            // `tint` sets only the surface — the outlined border survives.
+            // `serviceLine` sets only the surface — the outlined border survives.
             await expect(getComputedStyle(card).borderTopStyle).toBe('solid');
           }
         }

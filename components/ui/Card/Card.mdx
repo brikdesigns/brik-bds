@@ -27,10 +27,10 @@ The default shape also takes a `variant`: `outlined` (default, secondary border)
 Cycle `variant` in the Controls panel on the story above — it is a fill/border treatment, not a distinct semantic variant, so it is a control rather than a story per [ADR-010](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-010-storybook-axes-of-information.md).
 
 - `raised` — surface-primary fill, no border, with a cast `--bds-shadow-md` drop shadow. The shadow-casting counterpart to the now-flat `elevated` (brik-bds#1146 / BACKLOG-493 removed `elevated`'s shadow so portal cards read flat). Use for a focal/lone card or a grid cell that needs a lifted, contained read.
-- `filled` (class `bds-card--variant-filled`) — neutral recessed panel: `--bds-surface-secondary` fill with a `--bds-border-muted` border. Use for a grouping container that should read as part of the page rather than a raised object. Not a service-line wash — for that use `tint`.
+- `filled` (class `bds-card--variant-filled`) — neutral recessed panel: `--bds-surface-secondary` fill with a `--bds-border-muted` border. Use for a grouping container that should read as part of the page rather than a raised object. Not a service-line wash — for that use `serviceLine`.
 - `borderless` — transparent fill, no border, no shadow. Use for cards placed on a colored surface (service-tier or brand-image background) where the `outlined` border ring reads as visual noise. The card inherits the parent surface rather than forcing its own.
 
-The default shape takes `tint` / `tintInverse` too, exactly as the `stack`, `row`, and `pricing` layouts do: `tint` sets the pale `--bds-surface-service-{line}-light` wash, and `tintInverse` swaps it for the theme-flipping `-inverse` surface. Both set only the fill, so the `variant` border stays — never hand-set `backgroundColor` for either.
+The default shape takes `serviceLine` / `serviceLineInverse` too, exactly as the `stack`, `row`, and `pricing` layouts do: `serviceLine` sets the pale `--bds-surface-service-{line}-light` wash, and `serviceLineInverse` swaps it for the theme-flipping `-inverse` surface. Both set only the fill, so the `variant` border stays — never hand-set `backgroundColor` for either.
 
 ### Leading media (avatar / image / logo)
 
@@ -40,7 +40,7 @@ Which of the three renders is content, not a semantic axis — set `media` in th
 
 ### Stack layout
 
-`layout="stack"` — vertical content card and the malleable `CardGrid` cell. Optional top `media`, an `overline` eyebrow, `title`, a `children` body, and a bottom-anchored `action`. All slots are optional so one arrangement serves any content type — service, blog post, customer story, property listing, team bio. `variant` / `tint` set the surface for a cell on a colored grid; `tintInverse` swaps the pale `-light` wash for the theme-flipping `--bds-surface-service-{line}-inverse` surface (white in light, deep hue in dark) — never hand-set `backgroundColor` for it.
+`layout="stack"` — vertical content card and the malleable `CardGrid` cell. Optional top `media`, an `overline` eyebrow, `title`, a `children` body, and a bottom-anchored `action`. All slots are optional so one arrangement serves any content type — service, blog post, customer story, property listing, team bio. `variant` / `serviceLine` set the surface for a cell on a colored grid; `serviceLineInverse` swaps the pale `-light` wash for the theme-flipping `--bds-surface-service-{line}-inverse` surface (white in light, deep hue in dark) — never hand-set `backgroundColor` for it.
 
 <Canvas of={Stories.Stack} />
 
@@ -50,7 +50,7 @@ The `mediaTreatment` prop controls how the `media` slot relates to the card edge
 
 `layout="pricing"` — a vertical pricing tier: optional top `media`, a `badge` + `title` header, the `price` / `period` block, a `children` body, a divider, the `features` checklist, and a bottom-anchored `action`. Supersedes the standalone [`PricingCard`](?path=/docs/deprecated-pricing-card--docs); see [ADR-038 § Amendment 2026-09-18](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md) for why the pricing anatomy earns a layout rather than a `stack` recipe.
 
-`price`, `period` and `features` are this layout's own slots — the same shape as `control`'s `connectionStatus` / `stamp` / `actionAlign`. The recommended tier is **not** a `highlighted` prop: set `variant="raised"` (or a `tint`) so it composes from the one shared surface set like every other layout.
+`price`, `period` and `features` are this layout's own slots — the same shape as `control`'s `connectionStatus` / `stamp` / `actionAlign`. The recommended tier is **not** a `highlighted` prop: set `variant="raised"` (or a `serviceLine`) so it composes from the one shared surface set like every other layout.
 
 <Canvas of={Stories.Pricing} />
 

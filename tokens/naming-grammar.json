@@ -213,7 +213,8 @@
     "measure": { "concept": "text column width", "values": ["sm", "md", "lg"] },
     "columns": { "concept": "grid column count", "values": ["1", "2", "3", "4", "5", "6", "auto-fit", "auto-fill"] },
     "spacing": { "concept": "outer separation from adjacent blocks", "values": ["none", "sm", "md", "lg"] },
-    "corner": { "concept": "viewport corner a fixed element docks to", "values": ["bottom-right", "bottom-left"] }
+    "corner": { "concept": "viewport corner a fixed element docks to", "values": ["bottom-right", "bottom-left"] },
+    "service-line": { "concept": "service line whose surface paints the block", "values": ["brand", "marketing", "information", "product", "back-office"] }
   },
   "docs": {
     "$comment": "token-anatomy.mdx must contain, verbatim, the formula strings derived from tiers above: --{semantic.formula}, --{semantic.roleFormula}, --{primitive.color.body}, --{ids.componentId}-{component.body}, plus the shape (--{id}-{body}) and the scale body (--{primitive.scale.body}) (scripts/lint-naming-grammar-docs.mjs). #2666 rewrote the page around them.",
