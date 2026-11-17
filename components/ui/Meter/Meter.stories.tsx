@@ -39,6 +39,15 @@ const meta: Meta<typeof Meter> = {
       control: false,
       description: 'Custom value formatter function (default renders "value/max"). Set via code, not Controls.',
     },
+    valueFormat: {
+      control: 'inline-radio',
+      options: ['ratio', 'fraction'],
+      description: 'Visible text form: "ratio" → "6/7" (default), "fraction" → "3 of 8". `valueFormatter` wins when passed.',
+    },
+    unit: {
+      control: 'text',
+      description: 'Unit after a fraction value (e.g. "tasks done"). Only used with `valueFormat="fraction"`.',
+    },
     labelPosition: {
       control: 'select',
       options: ['above', 'below'],
@@ -90,5 +99,16 @@ export const CustomFillColor: Story = {
     label: 'Department A',
     valueSuffix: '',
     fillColor: 'var(--bds-color-purple-500)',
+  },
+};
+
+/** @summary Fraction form — "3 of 8 tasks done" completion summary */
+export const Fraction: Story = {
+  args: {
+    value: 3,
+    max: 8,
+    tone: 'positive',
+    valueFormat: 'fraction',
+    unit: 'tasks done',
   },
 };

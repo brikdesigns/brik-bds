@@ -14,6 +14,8 @@ Meter is a gauge primitive — a value within a known range, rendered as a horiz
 
 For task progress that updates over time, use [ProgressBar](/docs/components/progress-bar) — it's percent-only and process-oriented; Meter is value-within-range and judgment-oriented.
 
+For a completion summary ("3 of 8 tasks done"), set `valueFormat="fraction"` and `unit`. A wizard position is [ProgressStepper](/docs/components/progress-stepper), never Meter or prose.
+
 ## Import
 
 ```tsx
@@ -107,6 +109,8 @@ Set `showValue={false}` to hide the displayed value.
 | `label` | `string` | — |
 | `showValue` | `boolean` | `true` |
 | `valueFormatter` | `(value: number, max: number) => string` | renders as `{value}/{max}` |
+| `valueFormat` | `'ratio' \| 'fraction'` | `'ratio'` |
+| `unit` | `string` | — |
 | `labelPosition` | `'above' \| 'below'` | `'below'` |
 | `valueSuffix` | `string` | `' Score'` |
 | `fillColor` | `string` | — |
