@@ -462,6 +462,46 @@ const testimonialsCardGrid: Section = {
   ],
 };
 
+// ── ProcessStepsNumbered (brik-bds#3191) ────────────────────────────────────
+// Step count is the number of items: the default fixture has four steps, and
+// the `steps-3` / `steps-5` variants render the other desktop row sizes.
+const processStepsNumbered: Section = {
+  sectionKey: 'process-steps-numbered-default',
+  sectionType: 'features',
+  title: 'How it works',
+  subtitle: 'Our process',
+  body: null,
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'process_steps_numbered',
+    moodKeywords: ['professional', 'trustworthy'],
+    layoutBlueprint: 'process_steps_numbered',
+    imageOpportunity: null,
+    illustrationOpportunity: null,
+  },
+  items: [
+    { title: 'Discovery call', description: 'We learn your goals, timeline and constraints before anything is proposed.' },
+    { title: 'Scope and plan', description: 'You get a written scope with milestones, owners and a clear price.' },
+    { title: 'Build and review', description: 'We deliver in stages and check each one with you before moving on.' },
+    { title: 'Launch and support', description: 'We go live together and stay on hand for the first weeks after.' },
+  ],
+};
+
+const processStepsNumbered3: Section = {
+  ...processStepsNumbered,
+  sectionKey: 'process-steps-numbered-3',
+  items: processStepsNumbered.items.slice(0, 3),
+};
+
+const processStepsNumbered5: Section = {
+  ...processStepsNumbered,
+  sectionKey: 'process-steps-numbered-5',
+  items: [
+    ...processStepsNumbered.items,
+    { title: 'Ongoing review', description: 'We meet on a regular schedule to check results and plan what comes next.' },
+  ],
+};
+
 const testimonialsFeaturedLarge: Section = {
   sectionKey: 'testimonials-featured-default',
   sectionType: 'testimonials',
@@ -666,6 +706,9 @@ const SECTIONS: Record<string, Section> = {
   CollectionEntry: collectionEntry,
   FaqAccordion: faqAccordion,
   TestimonialsCardGrid: testimonialsCardGrid,
+  ProcessStepsNumbered: processStepsNumbered,
+  'ProcessStepsNumbered:steps-3': processStepsNumbered3,
+  'ProcessStepsNumbered:steps-5': processStepsNumbered5,
 };
 
 /** Resolves the fixture for a block, optionally narrowed to one layout. */

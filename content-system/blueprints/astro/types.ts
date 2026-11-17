@@ -43,6 +43,7 @@ export type KnownBlueprintKey =
   | 'stats_bar'
   | 'testimonials_featured_large'
   | 'testimonials_card_grid'
+  | 'process_steps_numbered'
   | 'cta_centered'
   | 'cta_split_contact'
   | 'logo_wall'
@@ -85,6 +86,7 @@ export const WIRED_BLUEPRINT_KEYS = [
   'stats_bar',
   'testimonials_featured_large',
   'testimonials_card_grid',
+  'process_steps_numbered',
   'cta_split_contact',
   'cta_centered',
   'logo_wall',

@@ -726,6 +726,11 @@ const sections: BlueprintSection[] = [
   sec('testimonials_card_grid', { sectionKey: 'd_test_grid', sectionType: 'testimonials', title: 'What clients say', items: [
     { title: 'Sample Name · Role', description: 'A short quote.', rating: 5 },
   ] }),
+  sec('process_steps_numbered', { sectionKey: 'd_process', sectionType: 'features', title: 'How it works', items: [
+    { title: 'Step one', description: 'First thing that happens.' },
+    { title: 'Step two', description: 'Second thing that happens.' },
+    { title: 'Step three', description: 'Third thing that happens.' },
+  ] }),
 ];
 ---
 <html lang="en">
@@ -774,6 +779,7 @@ const DISPATCH_FIXTURE_KEYS = [
   'collection_entry',
   'faq_accordion_grouped',
   'testimonials_card_grid',
+  'process_steps_numbered',
 ];
 
 /**
@@ -1132,6 +1138,7 @@ const expectedFiles = [
   'content-system/blueprints/astro/CollectionEntry.astro',
   'content-system/blueprints/astro/FaqAccordion.astro',
   'content-system/blueprints/astro/TestimonialsCardGrid.astro',
+  'content-system/blueprints/astro/ProcessStepsNumbered.astro',
   'content-system/blueprints/astro/entry-body.ts',
   // Dispatch surface (PR #7)
   'content-system/blueprints/astro/BlueprintDispatcher.astro',

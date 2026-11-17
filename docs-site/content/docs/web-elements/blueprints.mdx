@@ -134,7 +134,7 @@ import type { BlueprintSection, KnownBlueprintKey }
 
 ### Shipped blocks
 
-A component is a **block**; the layout it renders in is a **prop**, never a filename — so the twenty-one keys in [`blueprint-library.json`](https://github.com/brikdesigns/brik-bds/blob/main/blueprints/blueprint-library.json) resolve onto thirteen files. The table lists the eight core blocks and their sixteen keys; the other five keys map one-to-one — `logo_wall` → `<LogoWall>`, `testimonials_card_grid` → `<TestimonialsCardGrid>`, `collection_index` → `<CollectionIndex>`, `collection_entry` → `<CollectionEntry>`, `faq_accordion_grouped` → `<FaqAccordion>`. Each follows the same `BlueprintProps` contract (`section` + `clientFacts` + `theme`), plus `layout` where the block has more than one.
+A component is a **block**; the layout it renders in is a **prop**, never a filename — so the twenty-two keys in [`blueprint-library.json`](https://github.com/brikdesigns/brik-bds/blob/main/blueprints/blueprint-library.json) resolve onto fourteen files. The table lists the eight core blocks and their sixteen keys; the other six keys map one-to-one — `logo_wall` → `<LogoWall>`, `testimonials_card_grid` → `<TestimonialsCardGrid>`, `process_steps_numbered` → `<ProcessStepsNumbered>`, `collection_index` → `<CollectionIndex>`, `collection_entry` → `<CollectionEntry>`, `faq_accordion_grouped` → `<FaqAccordion>`. Each follows the same `BlueprintProps` contract (`section` + `clientFacts` + `theme`), plus `layout` where the block has more than one.
 
 `<BlueprintDispatcher>` owns the key → (block, layout) mapping, so a consumer that dispatches never picks a layout by hand.
 

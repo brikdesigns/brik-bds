@@ -57,7 +57,7 @@ export const realEstateCommercial: IndustryPack = {
       slug: 'healthcare',
       displayName: 'Healthcare Real Estate',
       required: true,
-      blueprintDefaults: ['hero_interior_minimal', 'two_column_detail', 'process_grid_4step_numbered', 'testimonials_featured_large', 'cta_split_contact'],
+      blueprintDefaults: ['hero_interior_minimal', 'two_column_detail', 'process_steps_numbered', 'testimonials_featured_large', 'cta_split_contact'],
       description: 'Dedicated audience pathway for healthcare professionals (dental, veterinary, optometry). Tone is clinically precise — these are educated professionals who expect competence. Lead with specialized knowledge, not generic real-estate-speak.',
     },
     {
@@ -74,7 +74,7 @@ export const realEstateCommercial: IndustryPack = {
       // Commercial pages benefit from stats only when the broker has
       // representative deal volume / square-footage placed numbers.
       // Content generation decides.
-      blueprintDefaults: ['hero_interior_minimal', 'two_column_detail', 'process_grid_4step_numbered', 'cta_centered'],
+      blueprintDefaults: ['hero_interior_minimal', 'two_column_detail', 'process_steps_numbered', 'cta_centered'],
       description: 'Businesses looking for the right space, market, and lease terms — retail, food service, professional services, fitness, banks, car washes, and other owner-occupant or tenant categories outside healthcare. Tone is operationally fluent: foot traffic, co-tenancy, build-out, and lease structure (CAM, exclusivity, escalation) are the levers, not cap rates. Page leans on process + a relevant proof point. NEVER frame this audience as "investors" or center capital-markets language — that is a different audience this pack does not serve.',
     },
     {
@@ -555,7 +555,7 @@ export const realEstateCommercial: IndustryPack = {
       sections: [
         'hero_interior_minimal',
         'two_column_detail',
-        'process_grid_4step_numbered',
+        'process_steps_numbered',
         'testimonials_featured_large',
         'cta_split_contact',
       ],
@@ -574,7 +574,7 @@ export const realEstateCommercial: IndustryPack = {
       sections: [
         'hero_interior_minimal',
         'two_column_detail',
-        'process_grid_4step_numbered',
+        'process_steps_numbered',
         'cta_centered',
       ],
     },

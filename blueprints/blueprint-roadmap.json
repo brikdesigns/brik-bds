@@ -301,30 +301,6 @@
       "notes": "TODO (BDS-PACK-ADD-001): Astro component stubbed — layout declared for pack composition reference only. Build the ServicesNumberedAccordion.astro component in a dedicated session."
     },
     {
-      "key": "process_grid_4step_numbered",
-      "name": "Process Grid — 4-Step Numbered",
-      "section_type": "features",
-      "disposition": "roadmap",
-      "industries": [
-        "universal",
-        "real_estate",
-        "legal",
-        "corporate",
-        "finance"
-      ],
-      "moods": [
-        "professional",
-        "trustworthy",
-        "corporate",
-        "modern"
-      ],
-      "layout_spec": "Four-column grid explaining a process in ordered steps. Each cell contains: a large step number (1–4, 56–64px, bold, brand accent), a short step title (H4, 16px, heading font), and a 2-sentence body description (14px, body font, muted color). Optional divider arrows between cells on desktop (hidden on mobile). Background: surface-primary or brand-dark for contrast. No images in cells — numbers carry the visual weight. Used for commercial transactions, brokerage processes, or any trust-building sequence. Collapses to 2×2 on tablet, single column on mobile.",
-      "source": "Vale Partners commercial real-estate — transaction process pattern",
-      "required_facts": [],
-      "catalogued_on": "2026-04-23",
-      "notes": "TODO (BDS-PACK-ADD-001): Astro component stubbed — layout declared for pack composition reference only. Build the ProcessGrid4StepNumbered.astro component in a dedicated session."
-    },
-    {
       "key": "nav_mega_audience_pathways",
       "name": "Mega Nav — Audience Pathways",
       "section_type": "nav",
