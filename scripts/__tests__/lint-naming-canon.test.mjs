@@ -801,6 +801,38 @@ describe('rule 4 + 5 — the `spacing` axis (§ Amendments, #1927)', () => {
   });
 });
 
+describe('rule 4 + 5 — the `corner` axis (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed modifiers TaskConsole emits from `position` as `corner`', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-task-console--corner-bottom-right { bottom: 16px; right: 16px; }
+.bds-task-console--corner-bottom-left { bottom: 16px; left: 16px; }
+`,
+    });
+    expect(out).not.toMatch(/corner-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies the bare corner modifier', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-task-console--bottom-right { bottom: 16px; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--bottom-right/);
+  });
+
+  it('still denies a corner the amendment did NOT admit', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-task-console--corner-top-left { top: 16px; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--corner-top-left — `top-left` is on no closed list for the corner axis/);
+  });
+
+  it('still denies a novel member in a governed union', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type ConsoleCorner = 'bottom-right' | 'top-left';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/ConsoleCorner\.top-left — `top-left` is on no closed list for the corner axis/);
+  });
+});
+
 describe('rule 6 — the deleted --*-status-* family cannot come back (§ Token families)', () => {
   it('fails on a var() reference to a deleted name', () => {
     const { code, out } = run({ refs: '.x { background: var(--surface-status-warning); }' });
