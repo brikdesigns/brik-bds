@@ -93,4 +93,16 @@
   --bds-page-accent-orange: var(--bds-color-system-orange);
   --bds-page-accent-red: var(--bds-color-system-red);
   --bds-page-accent-purple: var(--bds-color-system-purple);
+  --bds-chart-neutral: var(--bds-color-grayscale-500);
+  --bds-chart-categorical-1: var(--bds-color-chart-blue-on-dark);
+  --bds-chart-categorical-2: var(--bds-color-chart-orange-on-dark);
+  --bds-chart-categorical-3: var(--bds-color-chart-teal-on-dark);
+  --bds-chart-categorical-4: var(--bds-color-chart-violet-on-dark);
+  --bds-chart-categorical-5: var(--bds-color-chart-olive-on-dark);
+  --bds-chart-categorical-6: var(--bds-color-chart-cyan-on-dark);
+  --bds-chart-positive: var(--bds-color-system-green);
+  --bds-chart-warning: var(--bds-color-system-yellow);
+  --bds-chart-negative: var(--bds-color-system-red);
+  --bds-chart-info: var(--bds-color-system-blue);
+  --bds-chart-brand: var(--bds-border-brand-primary);
 }

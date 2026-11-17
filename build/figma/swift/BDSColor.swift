@@ -53,4 +53,17 @@ public enum BDSColor {
     public static let colorAnnotationLightPurple = Color(red: 0.9020, green: 0.8588, blue: 1.0000)
     public static let colorAnnotationLightBlue = Color(red: 0.8196, green: 0.8980, blue: 1.0000)
     public static let colorGreen950 = Color(red: 0.1647, green: 0.3333, blue: 0.2588) /// AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542.
+    public static let colorChartBlue = Color(red: 0.2784, green: 0.5804, blue: 0.9490)
+    public static let colorChartOrange = Color(red: 0.6000, green: 0.2745, blue: 0.0039)
+    public static let colorChartTeal = Color(red: 0.0588, green: 0.5216, blue: 0.4824)
+    public static let colorChartViolet = Color(red: 0.4314, green: 0.2667, blue: 0.7373)
+    public static let colorChartOlive = Color(red: 0.5255, green: 0.6078, blue: 0.2039)
+    public static let colorChartCyan = Color(red: 0.0275, green: 0.3137, blue: 0.3804)
+    public static let colorChartAmber = Color(red: 0.6314, green: 0.4235, blue: 0.0118)
+    public static let colorChartBlueOnDark = Color(red: 0.1451, green: 0.4549, blue: 0.8157)
+    public static let colorChartOrangeOnDark = Color(red: 0.9176, green: 0.4549, blue: 0.1216)
+    public static let colorChartTealOnDark = Color(red: 0.0314, green: 0.5137, blue: 0.4706)
+    public static let colorChartVioletOnDark = Color(red: 0.8471, green: 0.8000, blue: 1.0000)
+    public static let colorChartOliveOnDark = Color(red: 0.7765, green: 0.8667, blue: 0.4706)
+    public static let colorChartCyanOnDark = Color(red: 0.0118, green: 0.6392, blue: 0.7725)
 }

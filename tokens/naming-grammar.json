@@ -33,11 +33,13 @@
           "$purposes": {
             "system": "Messaging colours (error, success, warning, neutral, info, plus link blue and accent hues) for Alert, Badge and Toast; components never read them directly, they read the Semantic that aliases them.",
             "social": "Third-party brand marks (YouTube, X/Twitter, Facebook, Instagram, LinkedIn, Yelp, Google, Apple, Bing, TikTok) used by SocialIcon; these are the platforms' colours, not Brik's, and no brand kit rebinds them.",
-            "annotation": "Annotation-tooling colours (pink, purple, blue and their light tints) used to mark up designs and docs, never product UI."
+            "annotation": "Annotation-tooling colours (pink, purple, blue and their light tints) used to mark up designs and docs, never product UI.",
+            "chart": "Data-visualization fills (ADR-050 § 1): the six categorical hues plus the light-mode warning amber, each solved to 3:1 on the page and card surfaces; -on-dark is the dark-mode partner. Components never read them directly, they read the --chart-* Semantic, and no brand kit rebinds them, so the validated contrast and colour-blind separation hold under every client theme."
           },
           "system": ["red", "green", "yellow", "blue", "purple", "orange", "neutral", "blue-light", "neutral-light", "green-light", "red-light", "yellow-light", "orange-light", "purple-light", "red-surface", "green-surface", "blue-surface"],
           "social": ["youtube", "twitter", "facebook", "instagram", "linkedin", "yelp", "google", "apple", "bing", "tiktok"],
-          "annotation": ["pink", "purple", "blue", "light-pink", "light-purple", "light-blue"]
+          "annotation": ["pink", "purple", "blue", "light-pink", "light-purple", "light-blue"],
+          "chart": ["blue", "orange", "teal", "violet", "olive", "cyan", "amber", "blue-on-dark", "orange-on-dark", "teal-on-dark", "violet-on-dark", "olive-on-dark", "cyan-on-dark"]
         },
         "namedSteps": {
           "$comment": "#2677: named endpoints of a numeric family.",
@@ -60,7 +62,7 @@
       "$comment": "Two forms. formula is the colour Semantic (a purpose leads); roleFormula is the non-colour Semantic, a role from roles plus a step (--gap-md, --heading-xl). #2743.",
       "formula": "{purpose}-{role}[-{state}]",
       "roleFormula": "{role}-{step}",
-      "purposes": ["page", "surface", "background", "text", "border"],
+      "purposes": ["page", "surface", "background", "text", "border", "chart"],
       "roles": [
         "gap", "padding", "section", "heading", "display", "body", "label", "subtitle", "icon",
         "shadow", "ease", "content-width", "measure", "state", "z", "shell"
@@ -77,7 +79,7 @@
     "color": ["color"],
     "scale": ["font", "letter", "space", "size", "border", "shadow", "blur", "duration", "delay", "iteration", "breakpoint", "aspect"],
     "purposeAndRole": [
-      "page", "surface", "background", "text", "border",
+      "page", "surface", "background", "text", "border", "chart",
       "gap", "padding", "section", "heading", "display", "body", "label", "subtitle", "icon",
       "shadow", "box", "ease", "content", "measure", "state", "z", "shell"
     ]
@@ -89,6 +91,7 @@
     { "slot": "background", "family": "color", "tier": "semantic" },
     { "slot": "text", "family": "color", "tier": "semantic" },
     { "slot": "border", "family": "color", "tier": "semantic" },
+    { "slot": "chart", "family": "color", "tier": "semantic" },
     { "slot": "font-size", "family": "property", "tier": "primitive" },
     { "slot": "font-weight", "family": "property", "tier": "primitive" },
     { "slot": "font-family", "family": "property", "tier": "primitive" },

@@ -50,7 +50,7 @@ const LIGHT_SELECTOR = '.theme-brand-brik';
 const DARK_SELECTOR = ':root[data-theme="dark"] .theme-brand-brik';
 
 // The groups figma-tokens-dark.css emits (sd.config.dark.mjs SEMANTIC_GROUPS).
-const SEMANTIC = /^--bds-(background|text|border|surface|page|interaction)-/;
+const SEMANTIC = /^--bds-(background|text|border|surface|page|interaction|chart)-/;
 
 const check = process.argv.includes('--check');
 

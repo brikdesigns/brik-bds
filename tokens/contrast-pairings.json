@@ -901,6 +901,175 @@
       "bg": "--bds-background-brand-secondary",
       "thresholdType": "AA",
       "note": "The `subtle` appearance of a brand Badge and of an Avatar with no `color` (brik-bds#2943). Brand has no `-light` token: its pale fill is --bds-background-brand-secondary, which resolves per theme (tan-100 light, near-black dark). --bds-text-brand-primary-strong follows it in both themes (poppy-700 light, poppy-500 dark), so one row covers both and replaces the two `appliesTo`-scoped rows that tracked Badge's old dark-mode override."
+    },
+    {
+      "group": "chart",
+      "label": "Brand series fill on page",
+      "fg": "--bds-chart-brand",
+      "bg": "--bds-page-primary",
+      "thresholdType": "AA-large",
+      "note": "ADR-050 § 1. A chart fill is a non-text graphic object (WCAG 1.4.11), so it is gated at 3:1 against the surfaces a chart sits on, in both themes. No text is set on a chart colour, and colour is never the only carrier of meaning: every series also has a label, legend entry or pattern."
+    },
+    {
+      "group": "chart",
+      "label": "Brand series fill on card surface",
+      "fg": "--bds-chart-brand",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Neutral series fill on page",
+      "fg": "--bds-chart-neutral",
+      "bg": "--bds-page-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Neutral series fill on card surface",
+      "fg": "--bds-chart-neutral",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Categorical series 1 fill on page",
+      "fg": "--bds-chart-categorical-1",
+      "bg": "--bds-page-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Categorical series 1 fill on card surface",
+      "fg": "--bds-chart-categorical-1",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Categorical series 2 fill on page",
+      "fg": "--bds-chart-categorical-2",
+      "bg": "--bds-page-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Categorical series 2 fill on card surface",
+      "fg": "--bds-chart-categorical-2",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Categorical series 3 fill on page",
+      "fg": "--bds-chart-categorical-3",
+      "bg": "--bds-page-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Categorical series 3 fill on card surface",
+      "fg": "--bds-chart-categorical-3",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Categorical series 4 fill on page",
+      "fg": "--bds-chart-categorical-4",
+      "bg": "--bds-page-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Categorical series 4 fill on card surface",
+      "fg": "--bds-chart-categorical-4",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Categorical series 5 fill on page",
+      "fg": "--bds-chart-categorical-5",
+      "bg": "--bds-page-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Categorical series 5 fill on card surface",
+      "fg": "--bds-chart-categorical-5",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Categorical series 6 fill on page",
+      "fg": "--bds-chart-categorical-6",
+      "bg": "--bds-page-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Categorical series 6 fill on card surface",
+      "fg": "--bds-chart-categorical-6",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Positive series fill on page",
+      "fg": "--bds-chart-positive",
+      "bg": "--bds-page-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Positive series fill on card surface",
+      "fg": "--bds-chart-positive",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Warning series fill on page",
+      "fg": "--bds-chart-warning",
+      "bg": "--bds-page-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Warning series fill on card surface",
+      "fg": "--bds-chart-warning",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Negative series fill on page",
+      "fg": "--bds-chart-negative",
+      "bg": "--bds-page-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Negative series fill on card surface",
+      "fg": "--bds-chart-negative",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Info series fill on page",
+      "fg": "--bds-chart-info",
+      "bg": "--bds-page-primary",
+      "thresholdType": "AA-large"
+    },
+    {
+      "group": "chart",
+      "label": "Info series fill on card surface",
+      "fg": "--bds-chart-info",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA-large"
     }
   ]
 }

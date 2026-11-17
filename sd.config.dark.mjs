@@ -19,7 +19,7 @@ register(StyleDictionary);
 registerBdsHooks(StyleDictionary);
 
 // Semantic color groups — only these change between light and dark modes
-const SEMANTIC_GROUPS = ['background', 'text', 'border', 'surface', 'page', 'interaction'];
+const SEMANTIC_GROUPS = ['background', 'text', 'border', 'surface', 'page', 'interaction', 'chart'];
 
 export default {
   log: {

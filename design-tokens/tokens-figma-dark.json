@@ -216,6 +216,60 @@
         "$type": "color",
         "$description": "AA-safe green text step (8.5:1 on white). Added for bds#1812; replaces gap-fills literal #2a5542."
       }
+    },
+    "chart": {
+      "blue": {
+        "$value": "#4794f2",
+        "$type": "color"
+      },
+      "orange": {
+        "$value": "#994601",
+        "$type": "color"
+      },
+      "teal": {
+        "$value": "#0f857b",
+        "$type": "color"
+      },
+      "violet": {
+        "$value": "#6e44bc",
+        "$type": "color"
+      },
+      "olive": {
+        "$value": "#869b34",
+        "$type": "color"
+      },
+      "cyan": {
+        "$value": "#075061",
+        "$type": "color"
+      },
+      "amber": {
+        "$value": "#a16c03",
+        "$type": "color"
+      },
+      "blue-on-dark": {
+        "$value": "#2574d0",
+        "$type": "color"
+      },
+      "orange-on-dark": {
+        "$value": "#ea741f",
+        "$type": "color"
+      },
+      "teal-on-dark": {
+        "$value": "#088378",
+        "$type": "color"
+      },
+      "violet-on-dark": {
+        "$value": "#d8ccff",
+        "$type": "color"
+      },
+      "olive-on-dark": {
+        "$value": "#c6dd78",
+        "$type": "color"
+      },
+      "cyan-on-dark": {
+        "$value": "#03a3c5",
+        "$type": "color"
+      }
     }
   },
   "font-weight": {
@@ -1731,6 +1785,56 @@
     },
     "accent-purple": {
       "$value": "{color.system.purple}",
+      "$type": "color"
+    }
+  },
+  "chart": {
+    "brand": {
+      "$value": "{border.brand-primary}",
+      "$type": "color"
+    },
+    "neutral": {
+      "$value": "{color.grayscale.500}",
+      "$type": "color"
+    },
+    "categorical-1": {
+      "$value": "{color.chart.blue-on-dark}",
+      "$type": "color"
+    },
+    "categorical-2": {
+      "$value": "{color.chart.orange-on-dark}",
+      "$type": "color"
+    },
+    "categorical-3": {
+      "$value": "{color.chart.teal-on-dark}",
+      "$type": "color"
+    },
+    "categorical-4": {
+      "$value": "{color.chart.violet-on-dark}",
+      "$type": "color"
+    },
+    "categorical-5": {
+      "$value": "{color.chart.olive-on-dark}",
+      "$type": "color"
+    },
+    "categorical-6": {
+      "$value": "{color.chart.cyan-on-dark}",
+      "$type": "color"
+    },
+    "positive": {
+      "$value": "{color.system.green}",
+      "$type": "color"
+    },
+    "warning": {
+      "$value": "{color.system.yellow}",
+      "$type": "color"
+    },
+    "negative": {
+      "$value": "{color.system.red}",
+      "$type": "color"
+    },
+    "info": {
+      "$value": "{color.system.blue}",
       "$type": "color"
     }
   },
