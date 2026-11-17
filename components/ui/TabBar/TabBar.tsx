@@ -79,6 +79,15 @@ export interface TabBarProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
+ * Class for a variant. `text-underline` is the one member emitted with its axis
+ * prefix (`bds-tab-bar--variant-text-underline`) — ADR-033 § 4 rejects a bare
+ * modifier, and the older bare siblings are baselined, not a licence to add one.
+ */
+function tabBarVariantClass(variant: TabBarVariant): string {
+  return variant === 'text-underline' ? 'bds-tab-bar--variant-text-underline' : `bds-tab-bar--${variant}`;
+}
+
+/**
  * TabBar — BDS horizontal tab navigation
  *
  * Four visual variants:
@@ -126,7 +135,7 @@ export function TabBar({
   style,
   ...props
 }: TabBarProps) {
-  const variantClass = `bds-tab-bar--${variant}`;
+  const variantClass = tabBarVariantClass(variant);
   const onColorClass = onColor ? 'bds-tab-bar--on-color' : '';
   const scrollClass = overflow === 'scroll' && orientation === 'horizontal' ? 'bds-tab-bar--scroll' : '';
 
