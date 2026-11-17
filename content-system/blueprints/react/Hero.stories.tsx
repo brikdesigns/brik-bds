@@ -476,3 +476,54 @@ export const InteractionTestInverseScopeCard: Story = {
     }
   },
 };
+
+/**
+ * The pricing-card band flips the breadcrumb's `--bds-text-secondary` to the
+ * line's `-on-dark` step in dark mode (Breadcrumb.css). A hero flagged
+ * `data-inverse-scope="card"` is a light band, so it is exempt and keeps
+ * `-on-light` (brik-bds#1028) — the current crumb would otherwise be dark-hue
+ * on light.
+ *
+ * @summary Dark mode — flagged hero keeps `-on-light` breadcrumb
+ */
+export const InteractionTestInverseScopeCardBreadcrumb: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    sectionKey: 'hero-inverse-scope-card-breadcrumb',
+    layout: 'interior-minimal',
+    title: 'Websites that turn visitors into customers',
+    breadcrumb: <Breadcrumb items={crumbs} />,
+    className: 'bds-hero--with-pricing-card',
+    'data-service-line': 'marketing',
+    'data-inverse-scope': 'card',
+  } as Story['args'],
+  play: async ({ canvasElement }) => {
+    const root = document.documentElement;
+    const prev = root.getAttribute('data-theme');
+    root.setAttribute('data-theme', 'dark');
+    try {
+      const resolve = (token: string) => {
+        const p = document.createElement('span');
+        p.style.color = `var(${token})`;
+        canvasElement.appendChild(p);
+        const c = getComputedStyle(p).color;
+        p.remove();
+        return c;
+      };
+      const onLight = resolve('--bds-text-service-marketing-on-light');
+      const onDark = resolve('--bds-text-service-marketing-on-dark');
+      await expect(onLight).not.toBe(onDark);
+
+      const hero = canvasElement.querySelector<HTMLElement>('.bds-hero')!;
+      const crumb = canvasElement.querySelector<HTMLElement>('.bds-breadcrumb__current')!;
+      await expect(getComputedStyle(crumb).color).toBe(onLight);
+
+      // Positive control: drop the flag and the SAME hero must take the flip.
+      hero.removeAttribute('data-inverse-scope');
+      await expect(getComputedStyle(crumb).color).toBe(onDark);
+    } finally {
+      if (prev === null) root.removeAttribute('data-theme');
+      else root.setAttribute('data-theme', prev);
+    }
+  },
+};
