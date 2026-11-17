@@ -65,6 +65,12 @@ Not renamed, still bare (their prop axis has no legal prefix, so they ride with 
 |---|---|---|
 | `bds-task-console--bottom-right` · `bds-task-console--bottom-left` | `bds-task-console--corner-bottom-right` · `bds-task-console--corner-bottom-left` | `position` |
 
+**Breaking (consumer CSS):** TabBar's `text-underline` variant modifier now carries the `variant` axis it derives from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector. The `variant` prop value is unchanged.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-tab-bar--text-underline` | `bds-tab-bar--variant-text-underline` | `variant="text-underline"` |
+
 Six Tier 4 hooks are renamed to the ADR-014 shape `--bds-{component}[-{part}]-{property}` ([#2651](https://github.com/brikdesigns/brik-bds/issues/2651)). Each old name still works: the component reads it first and falls back to the new one. The old names are **deprecated** and drop in the next major. Every hook is now listed in `manifest/tier4-hooks.json`, with whether a consumer may set it (`knob`) or the component sets it at render (`runtime`).
 
 **Deprecated (consumer CSS):** rename these in your override CSS before the next major.
