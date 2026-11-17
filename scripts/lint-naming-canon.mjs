@@ -593,9 +593,10 @@ function collectUnions(componentsDir) {
  * The #1927 axes join it for the same reason. Their values are CSS keywords
  * and t-shirt rungs (`none`, `md`, `horizontal`) that other unions share, so
  * `DividerSpacing = 'none' | 'sm' | 'md' | 'lg'` would read as marker +
- * measure and fail rule 3.
+ * measure and fail rule 3. `spacing` (#1927) is that union's own axis, and its
+ * values are the same shared rungs, so it is prefix-judged too.
  */
-const PREFIX_JUDGED_AXES = new Set(['span', 'fit', 'anchor', 'resize', 'marker', 'underline', 'measure']);
+const PREFIX_JUDGED_AXES = new Set(['span', 'fit', 'anchor', 'resize', 'marker', 'underline', 'measure', 'spacing']);
 
 /**
  * Every axis whose closed list claims this member. A SET, not one axis: ADR-033
