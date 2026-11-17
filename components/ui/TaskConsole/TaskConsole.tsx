@@ -114,7 +114,7 @@ export function TaskConsole({
     <div
       className={bdsClass(
         'bds-task-console',
-        `bds-task-console--${position}`,
+        `bds-task-console--corner-${position}`,
         allSucceeded && 'bds-task-console--tone-positive',
         allDone && failedCount > 0 && 'bds-task-console--has-errors',
         className,

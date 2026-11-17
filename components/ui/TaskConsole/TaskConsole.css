@@ -18,12 +18,12 @@
 
 /* ─── Position modifiers ─────────────────────────────────────── */
 
-.bds-task-console--bottom-right {
+.bds-task-console--corner-bottom-right {
   bottom: var(--bds-padding-lg);
   right: var(--bds-padding-lg);
 }
 
-.bds-task-console--bottom-left {
+.bds-task-console--corner-bottom-left {
   bottom: var(--bds-padding-lg);
   left: var(--bds-padding-lg);
 }
