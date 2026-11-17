@@ -53,6 +53,12 @@ Not renamed, still bare (their prop axis has no legal prefix, so they ride with 
 | `bds-service-tag--dot` | `bds-service-tag--variant-dot` | `variant="dot"` |
 | `bds-service-tag--icon-{sm,md,lg}` | `bds-service-tag--size-{sm,md,lg}` (alongside `--variant-icon`) | `size` |
 
+**Breaking (consumer CSS):** CardControl's action-alignment modifiers now carry the `align` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-card-control--action-center` · `bds-card-control--action-top` | `bds-card-control--align-center` · `bds-card-control--align-top` | `actionAlign` |
+
 Six Tier 4 hooks are renamed to the ADR-014 shape `--bds-{component}[-{part}]-{property}` ([#2651](https://github.com/brikdesigns/brik-bds/issues/2651)). Each old name still works: the component reads it first and falls back to the new one. The old names are **deprecated** and drop in the next major. Every hook is now listed in `manifest/tier4-hooks.json`, with whether a consumer may set it (`knob`) or the component sets it at render (`runtime`).
 
 **Deprecated (consumer CSS):** rename these in your override CSS before the next major.
