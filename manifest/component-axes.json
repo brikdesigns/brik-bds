@@ -104,6 +104,13 @@
       "xl"
     ]
   },
+  "CalendarToolbar": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
+    ]
+  },
   "Card": {
     "variant": [
       "outlined",
