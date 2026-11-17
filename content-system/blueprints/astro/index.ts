@@ -90,6 +90,7 @@ export { default as CalloutPanel }              from './CalloutPanel.astro';
 export { default as StatsBar }                  from './StatsBar.astro';
 export { default as TestimonialsFeaturedLarge } from './TestimonialsFeaturedLarge.astro';
 export { default as TestimonialsCardGrid } from './TestimonialsCardGrid.astro';
+export { default as ProcessStepsNumbered } from './ProcessStepsNumbered.astro';
 
 // `<LogoWall>` — logo / partner / trust strip; the first block to adopt the
 // content-motion axis (ADR-039 §Decision 2, #2529). Its logo strip renders

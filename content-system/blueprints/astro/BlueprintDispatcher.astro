@@ -55,6 +55,7 @@
  *   stats_bar                     → StatsBar
  *   testimonials_featured_large   → TestimonialsFeaturedLarge
  *   testimonials_card_grid        → TestimonialsCardGrid
+ *   process_steps_numbered        → ProcessStepsNumbered
  *   cta_split_contact             → Cta             layout="split"
  *   cta_centered                  → Cta             layout="default"
  *   logo_wall                     → LogoWall
@@ -95,6 +96,7 @@ import CalloutPanel from './CalloutPanel.astro';
 import StatsBar from './StatsBar.astro';
 import TestimonialsFeaturedLarge from './TestimonialsFeaturedLarge.astro';
 import TestimonialsCardGrid from './TestimonialsCardGrid.astro';
+import ProcessStepsNumbered from './ProcessStepsNumbered.astro';
 import LogoWall from './LogoWall.astro';
 import CollectionIndex from './CollectionIndex.astro';
 import CollectionEntry from './CollectionEntry.astro';
@@ -121,6 +123,7 @@ const BLUEPRINT_REGISTRY = {
   stats_bar: { component: StatsBar, props: {} },
   testimonials_featured_large: { component: TestimonialsFeaturedLarge, props: {} },
   testimonials_card_grid: { component: TestimonialsCardGrid, props: { blueprintKey: 'testimonials_card_grid' } },
+  process_steps_numbered: { component: ProcessStepsNumbered, props: { blueprintKey: 'process_steps_numbered' } },
   cta_split_contact: { component: Cta, props: { layout: 'split', blueprintKey: 'cta_split_contact' } },
   cta_centered: { component: Cta, props: { layout: 'default', blueprintKey: 'cta_centered' } },
   logo_wall: { component: LogoWall, props: {} },

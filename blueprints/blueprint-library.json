@@ -2,7 +2,7 @@
   "version": "3.0.0",
   "last_reviewed": "2026-09-09",
   "review_cadence": "quarterly",
-  "_comment": "Shipped blueprint inventory — every entry dispatches on both rails unless it declares `rails` (#2308, #2304); collection_index, collection_entry, faq_accordion_grouped, hero_centered, hero_statement, features_alternating_split and features_bento_asymmetric and testimonials_card_grid declare `[\"astro\"]` (#872, #3186, #3187, #3189, #3188, #3190). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
+  "_comment": "Shipped blueprint inventory — every entry dispatches on both rails unless it declares `rails` (#2308, #2304); collection_index, collection_entry, faq_accordion_grouped, hero_centered, hero_statement, features_alternating_split and features_bento_asymmetric, testimonials_card_grid and process_steps_numbered declare `[\"astro\"]` (#872, #3186, #3187, #3189, #3188, #3190, #3191). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
   "blueprints": [
     {
       "key": "hero_split",
@@ -247,6 +247,38 @@
       "is_active": true,
       "version": "1.0.0",
       "last_reviewed": "2026-11-16",
+      "required_facts": [],
+      "atmospheres": [
+        "none"
+      ],
+      "rails": [
+        "astro"
+      ]
+    },
+    {
+      "key": "process_steps_numbered",
+      "name": "Process Steps — Numbered",
+      "section_type": "features",
+      "industries": [
+        "universal",
+        "real_estate",
+        "legal",
+        "corporate",
+        "finance"
+      ],
+      "moods": [
+        "professional",
+        "trustworthy",
+        "corporate",
+        "modern"
+      ],
+      "layout_spec": "Page-surface process section: a centred section header (eyebrow, heading, lead) above an ordered row of steps. The step count is the number of items, not part of the key: three, four or five steps fill one row from the desktop width up, two steps fill two columns, and any other count uses three columns and wraps; the tablet width is two columns and mobile is one. Each step has a brand-coloured rule on top, a large step number, a short step title and a short muted description. No images; the numbers carry the visual weight. Used for transactions, onboarding and any trust-building sequence.",
+      "css_hints": ".bp-process-steps__list { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--bds-gap-xl); } .bp-process-steps__step { padding-top: var(--bds-padding-md); border-top: var(--bds-border-width-lg) solid var(--bds-border-brand-primary); } .bp-process-steps__number { font-family: var(--bds-font-family-heading); font-size: var(--bds-display-md); font-weight: var(--bds-font-weight-bold); color: var(--bds-text-brand-primary); }",
+      "source": "brik-bds#3191 — graduated from blueprint-roadmap.json onto the canonical rail (ADR-037)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-11-17",
       "required_facts": [],
       "atmospheres": [
         "none"

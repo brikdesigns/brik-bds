@@ -71,6 +71,7 @@ const BLOCKS = [
   { name: 'CollectionEntry', layouts: [null] },
   { name: 'FaqAccordion', layouts: [null] },
   { name: 'TestimonialsCardGrid', layouts: [null] },
+  { name: 'ProcessStepsNumbered', layouts: [null] },
 ];
 
 /**
@@ -91,6 +92,9 @@ const AXIS_VARIANTS = [
   { name: 'Features', layout: 'alternating-split', slug: 'Features--alternating-split-media-start', props: { mediaPosition: 'start' } },
   { name: 'Narrative', layout: null, slug: 'Narrative--media-start', props: { mediaPosition: 'start' } },
   { name: 'Narrative', layout: null, slug: 'Narrative--vertical', props: { orientation: 'vertical' } },
+  // Step count is the item count, so the 3- and 5-step runs are fixture variants (#3191).
+  { name: 'ProcessStepsNumbered', layout: null, slug: 'ProcessStepsNumbered--steps-3', fixture: 'steps-3' },
+  { name: 'ProcessStepsNumbered', layout: null, slug: 'ProcessStepsNumbered--steps-5', fixture: 'steps-5' },
 ];
 
 /**
