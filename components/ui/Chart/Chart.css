@@ -1,0 +1,310 @@
+@layer bds-components {
+/* Chart family — ChartFrame chrome + SVG marks (ADR-050).
+   Colour rule: every mark reads `currentColor`, and the only place a chart
+   colour enters is the `[data-chart-color]` rules at the bottom, each
+   pointing at one `--bds-chart-*` token. No hex in this file (brik-bds issue 3182 greps for it). */
+
+/* ─── Frame ───────────────────────────────────────────── */
+
+.bds-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-gap-md);
+  min-width: 0;
+  font-family: var(--bds-font-family-body);
+  color: var(--bds-text-primary);
+}
+
+.bds-chart__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--bds-gap-md);
+}
+
+.bds-chart__heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-gap-xs);
+  min-width: 0;
+}
+
+.bds-chart__title {
+  margin: 0;
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
+}
+
+.bds-chart__description {
+  margin: 0;
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
+}
+
+.bds-chart__body {
+  position: relative;
+  min-width: 0;
+}
+
+.bds-chart__plot {
+  position: relative;
+  width: 100%;
+}
+
+.bds-chart__axis-label {
+  margin: 0;
+  font-size: var(--bds-body-xs);
+  line-height: var(--bds-font-line-height-normal);
+  color: var(--bds-text-secondary);
+}
+
+.bds-chart__axis-label[data-axis='y'] {
+  margin-block-end: var(--bds-gap-sm);
+}
+
+.bds-chart__axis-label[data-axis='x'] {
+  margin-block-start: var(--bds-gap-sm);
+  text-align: center;
+}
+
+/* ─── Legend ──────────────────────────────────────────── */
+
+.bds-chart__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bds-gap-xs) var(--bds-gap-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bds-chart__legend-toggle,
+.bds-chart__legend-static {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--bds-gap-xs);
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
+}
+
+.bds-chart__legend-toggle {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--bds-border-radius-sm);
+  background: none;
+}
+
+/* The disabled toggle is the last visible series — still drawn, so it keeps
+   full colour (no fade); it only loses the pointer. */
+.bds-chart__legend-toggle:enabled {
+  cursor: pointer;
+}
+
+.bds-chart__legend-toggle:focus-visible {
+  outline: var(--bds-border-width-lg) solid var(--bds-border-brand-primary);
+  outline-offset: 2px; /* bds-lint-ignore — focus-ring offset, not layout rhythm */
+}
+
+.bds-chart__legend-toggle[aria-pressed='false'] .bds-chart__legend-label {
+  color: var(--bds-text-secondary);
+  text-decoration: line-through;
+}
+
+.bds-chart__legend-detail {
+  color: var(--bds-text-secondary);
+}
+
+.bds-chart__swatch {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  width: 12px; /* bds-lint-ignore — legend swatch glyph size, matches the 12px chart key convention */
+  height: 12px; /* bds-lint-ignore — legend swatch glyph size */
+  border: var(--bds-border-width-md) solid currentColor;
+  border-radius: var(--bds-border-radius-sm);
+  background-color: currentColor;
+}
+
+.bds-chart__swatch--hidden {
+  background-color: transparent;
+}
+
+/* ─── SVG marks ───────────────────────────────────────── */
+
+.bds-chart__svg {
+  display: block;
+  overflow: visible;
+}
+
+.bds-chart__grid {
+  stroke: var(--bds-border-muted);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.bds-chart__axis {
+  stroke: var(--bds-border-secondary);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+
+.bds-chart__guide {
+  stroke: var(--bds-border-secondary);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.bds-chart__tick,
+.bds-chart__direct-label,
+.bds-chart__center-label {
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-xs);
+  fill: var(--bds-text-secondary);
+}
+
+.bds-chart__center-value {
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  fill: var(--bds-text-primary);
+}
+
+.bds-chart__bar {
+  fill: currentColor;
+}
+
+.bds-chart__line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Dots and slices carry a surface-coloured stroke so touching marks stay
+   separate (ADR-050 § 1 "Separate adjacent fills"). */
+.bds-chart__dot,
+.bds-chart__slice {
+  fill: currentColor;
+  stroke: var(--bds-surface-primary);
+  stroke-width: 2;
+}
+
+.bds-chart__hit {
+  fill: transparent;
+}
+
+/* ─── Tooltip ─────────────────────────────────────────── */
+
+.bds-chart__tooltip-anchor {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.bds-chart__tooltip {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-gap-xs);
+  box-sizing: border-box;
+  padding: var(--bds-padding-xs) var(--bds-padding-sm);
+  border: var(--bds-border-width-md) solid var(--bds-border-secondary);
+  border-radius: var(--bds-border-radius-md);
+  background-color: var(--bds-background-primary);
+  box-shadow: var(--bds-shadow-md);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  line-height: var(--bds-font-line-height-tight);
+  color: var(--bds-text-primary);
+  pointer-events: none;
+  z-index: var(--bds-z-dropdown);
+}
+
+.bds-chart__tooltip-title {
+  font-weight: var(--bds-font-weight-semibold);
+}
+
+.bds-chart__tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: var(--bds-gap-xs);
+}
+
+.bds-chart__tooltip-value {
+  margin-inline-start: auto;
+  padding-inline-start: var(--bds-gap-md);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Data table ──────────────────────────────────────── */
+
+/* Scoped under the table so it outranks `.bds-table-head { text-align: left }`. */
+.bds-chart__table .bds-chart__cell--align-end {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* TableHead paints --bds-text-muted, which is gated AA-large only and fails
+   AA at 14px in Brik dark (brik-bds issue 3225). The data table is the chart's
+   accessible alternative, so its header uses the AA-gated secondary text.
+   Remove once issue 3225 fixes TableHead itself. */
+.bds-chart__table .bds-table-head {
+  color: var(--bds-text-secondary);
+}
+
+.bds-chart__visually-hidden {
+  position: absolute;
+  width: 1px; /* bds-lint-ignore — visually-hidden clip pattern, not layout */
+  height: 1px; /* bds-lint-ignore — visually-hidden clip pattern, not layout */
+  padding: 0;
+  margin: -1px; /* bds-lint-ignore — visually-hidden clip pattern, not text rhythm */
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ─── Sparkline ───────────────────────────────────────── */
+
+.bds-sparkline {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.bds-sparkline__line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bds-sparkline__dot {
+  fill: currentColor;
+}
+
+/* ─── Chart colour — the only entry point for --bds-chart-* ── */
+
+[data-chart-color='brand'] { color: var(--bds-chart-brand); }
+[data-chart-color='neutral'] { color: var(--bds-chart-neutral); }
+[data-chart-color='categorical-1'] { color: var(--bds-chart-categorical-1); }
+[data-chart-color='categorical-2'] { color: var(--bds-chart-categorical-2); }
+[data-chart-color='categorical-3'] { color: var(--bds-chart-categorical-3); }
+[data-chart-color='categorical-4'] { color: var(--bds-chart-categorical-4); }
+[data-chart-color='categorical-5'] { color: var(--bds-chart-categorical-5); }
+[data-chart-color='categorical-6'] { color: var(--bds-chart-categorical-6); }
+[data-chart-color='positive'] { color: var(--bds-chart-positive); }
+[data-chart-color='warning'] { color: var(--bds-chart-warning); }
+[data-chart-color='negative'] { color: var(--bds-chart-negative); }
+[data-chart-color='info'] { color: var(--bds-chart-info); }
+}

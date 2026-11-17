@@ -88,6 +88,7 @@ const MULTI_EXPORT = {
   SheetTypography: ['SheetSectionTitle', 'SheetFieldLabel', 'SheetFieldValue', 'SheetHelperText'],
   DataView: ['TableView', 'ListView', 'ProfileView'],
   Page: ['Page', 'PageContent'],
+  Chart: ['ChartFrame', 'BarChart', 'LineChart', 'DonutChart', 'Sparkline'],
 };
 
 // Build the (file, exportName) scan tasks.
