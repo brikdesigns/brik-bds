@@ -40,7 +40,7 @@ export function CardControl({
     <div
       className={bdsClass(
         'bds-card-control',
-        `bds-card-control--action-${actionAlign}`,
+        `bds-card-control--align-${actionAlign}`,
         className,
       )}
       style={style}
