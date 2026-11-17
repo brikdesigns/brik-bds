@@ -5,7 +5,24 @@ description: Heading + count + filter-controls row for list and table views.
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-FilterBar is the standard heading-and-controls strip above lists and tables. It renders a `heading-sm` title and a Counter on the left, filter children on the right, and an optional ghost "Clear filters" button that appears when any filter is active.
+FilterBar is the standard heading-and-controls strip above lists and tables. It renders a `heading-sm` title and a Counter on the left, filter children and an optional search field on the right, and an optional ghost "Clear filters" button that appears when any filter is active.
+
+Layout: `[title] [counter] ... [filter children] [clear?] [search?] [actions]`
+
+## Purpose
+
+A FilterBar heads a collection and narrows it: it names the collection, shows how many rows remain, and holds the controls that cut the set down. It is not navigation (it never moves the user to another page or period) and it is not a page header (the page's `<h1>` and its one primary action live in [PageHeader](/docs/components/page-header)).
+
+## Placement rules
+
+- **Search sits on the right**, after the filter controls and before `actions`. The title and counter own the left edge.
+- **Inputs are exactly as tall as the bar's buttons.** Every control (Clear, the `Filters` trigger, FilterButton, FilterToggle, the search field, any `actions` child) takes the bar's `size`, default `sm` (32px), unless it sets its own. Never mix an `md` field with `sm` buttons.
+- **Horizontal only on desktop.** Controls share one row. Never stack an input over a segmented control or a button; when the row runs out of room the filters fold into the `Filters` popover (ADR-019) rather than wrapping.
+- **Actions are never primary.** The page header owns the page's one primary.
+
+## Relationship to CalendarToolbar
+
+[CalendarToolbar](/docs/components/calendar-toolbar) is the same family with a date axis instead of a count: `[‹] [Today] [›] [title] ... [filters] [view switch]`. It shares the bar's `sm` control height, spacing, and own-width collapse. Use FilterBar when the content below is a list or table; use CalendarToolbar when it is a calendar. [PeriodNav](/docs/components/period-nav) is the minimal period stepper with no filters.
 
 Pairs naturally with [FilterButton](/docs/components/filter-button) (dropdown filters) and [FilterToggle](/docs/components/filter-toggle) (boolean toggle filters) for the control children.
 
@@ -120,7 +137,7 @@ function EngagementsTable({ rows }) {
 
 ### With search
 
-`search` takes [SearchInput](/docs/components/search-input) props and renders the field at the start of the bar (filter mode, ADR-049). The consumer owns the query-to-rows logic; the bar displays `filtered` and `total`.
+`search` takes [SearchInput](/docs/components/search-input) props and renders the field at the end of the bar, after the filter controls (filter mode, ADR-049). Its `size` defaults to the bar's `size`, so the field matches the bar's buttons; pass `search.size` to override. The consumer owns the query-to-rows logic; the bar displays `filtered` and `total`.
 
 ```tsx
 <FilterBar
@@ -183,5 +200,6 @@ Plus all standard `<div>` HTML attributes (excluding `title`).
 
 - [FilterButton](/docs/components/filter-button) — dropdown control children
 - [FilterToggle](/docs/components/filter-toggle) — boolean control children
+- [CalendarToolbar](/docs/components/calendar-toolbar) — the same family for calendars
 - [Counter](/docs/components/counter) — the counter primitive used by the bar
 - **[Storybook playground](https://storybook.brikdesigns.com/?path=/docs/components-filter-bar--overview)**

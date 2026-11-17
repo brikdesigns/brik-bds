@@ -134,6 +134,7 @@
     "data-view",
     "chart",
     "calendar",
+    "calendar-toolbar",
     "activity-timeline",
     "comment-thread",
     "meter",

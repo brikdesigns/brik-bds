@@ -216,6 +216,18 @@
       ],
       "setIn": []
     },
+    "--bds-calendar-toolbar-panel-min-width": {
+      "kind": "knob",
+      "readBy": [
+        "calendar-toolbar"
+      ],
+      "readIn": [
+        "components/ui/CalendarToolbar/CalendarToolbar.css"
+      ],
+      "setIn": [
+        "components/ui/CalendarToolbar/CalendarToolbar.css"
+      ]
+    },
     "--bds-callout-panel-background": {
       "kind": "knob",
       "readBy": [

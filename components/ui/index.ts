@@ -21,6 +21,7 @@ export * from './BreadcrumbSwitcher';
 export * from './BulletList';
 export * from './Button';
 export * from './Calendar';
+export * from './CalendarToolbar';
 export * from './ButtonGroup';
 export * from './Card';
 export * from './CardControl';
