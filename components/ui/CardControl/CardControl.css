@@ -16,8 +16,8 @@
 
 /* ─── Action alignment ───────────────────────────────────────── */
 
-.bds-card-control--action-center { align-items: center; }
-.bds-card-control--action-top    { align-items: flex-start; }
+.bds-card-control--align-center { align-items: center; }
+.bds-card-control--align-top    { align-items: flex-start; }
 
 /* ─── Content — badge + text ─────────────────────────────────── */
 
