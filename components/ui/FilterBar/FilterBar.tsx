@@ -4,7 +4,7 @@ import { Button, type ButtonSize } from '../Button';
 import { Counter, type CounterStatus } from '../Counter';
 import { Popover } from '../Popover';
 import { SearchInput, type SearchInputProps } from '../SearchInput';
-import { useElementWidth } from '../shared';
+import { useElementWidth, withBarSize } from '../shared';
 import { bdsClass } from '../../utils';
 import './FilterBar.css';
 
@@ -64,16 +64,19 @@ export interface FilterBarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'ti
    */
   actions?: ReactNode;
   /**
-   * Size of the bar's own buttons (Clear, the collapsed `Filters` trigger),
-   * forwarded to any `actions` child that has no `size` of its own. Default
-   * `sm` — one step below the `md` page-header buttons so the bar sits lower in
-   * the page hierarchy.
+   * Size of every control in the bar — Clear, the collapsed `Filters` trigger,
+   * the search field, and any filter `children` / `actions` child that has no
+   * `size` of its own. Default `sm` (32px) — one step below the `md`
+   * page-header buttons so the bar sits lower in the page hierarchy, and so
+   * inputs and buttons share one height.
    */
   size?: ButtonSize;
   /**
    * Search slot (ADR-049 § 5–6). Takes `SearchInput` props — one of `label`,
    * `aria-label` or `aria-labelledby` is required — and renders the field at
-   * the start of the bar. Its presence makes the bar a `role="search"`
+   * the END of the bar (after the filter controls, before `actions`). Its
+   * `size` defaults to the bar's `size` so the field is the same height as the
+   * bar's buttons; pass `search.size` to override. Its presence makes the bar a `role="search"`
    * landmark (named by the bar's `aria-label`) and mounts a `role="status"`
    * region announcing `filtered of total`, including zero. Unlike `children`,
    * the field stays visible when the bar collapses on narrow widths (ADR-019).
@@ -89,7 +92,7 @@ export interface FilterBarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'ti
 /**
  * FilterBar — shared heading + counter + filter-controls row for list views.
  *
- * Layout: `[search?] [title] [counter]          [filter children] [clear?] [actions]`
+ * Layout: `[title] [counter]          [filter children] [clear?] [search?] [actions]`
  *
  * The counter shows the current filtered count. When `filtered < total` the
  * counter switches to `activeStatus` (default `brand`) and, if `onClear` is
@@ -100,7 +103,8 @@ export interface FilterBarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'ti
  * rather than rendered empty — so an unfilterable list never needs a
  * hand-rolled heading row.
  *
- * `search` adds a `SearchInput` at the start of the bar and makes the bar a
+ * `search` adds a `SearchInput` at the end of the bar, after the filter
+ * controls, and makes the bar a
  * `role="search"` landmark (ADR-049 § 5); the count then follows the query and
  * is announced through a status region, zero included (§ 6). The field is not a
  * filter control, so it stays inline when the controls collapse. The bar's
@@ -153,6 +157,8 @@ export function FilterBar({
   ...props
 }: FilterBarProps) {
   const TitleTag = titleAs;
+  // Text fields have no xs/xl: clamp to the nearest field size so the field still tracks the bar.
+  const fieldSize = size === 'xs' ? 'sm' : size === 'xl' ? 'lg' : size;
   const isFiltered = filtered < total;
   const ariaLabel =
     (props['aria-label'] as string | undefined) ??
@@ -186,7 +192,7 @@ export function FilterBar({
   // the interactive filter controls are never duplicated in the DOM.
   const controls = (
     <>
-      {children}
+      {withBarSize(children, size)}
       {onClear && isFiltered && (
         <Button variant="ghost" size={size} onClick={handleClear}>
           {clearLabel}
@@ -209,7 +215,6 @@ export function FilterBar({
       role={search ? 'search' : undefined}
       {...props}
     >
-      {search && <SearchInput ref={searchRef} {...search} />}
       {title && <TitleTag className="bds-filter-bar__title">{title}</TitleTag>}
       <Counter
         count={filtered}
@@ -240,6 +245,12 @@ export function FilterBar({
         ) : (
           <div className="bds-filter-bar__controls">{controls}</div>
         ))}
+
+      {search && (
+        <div className="bds-filter-bar__search">
+          <SearchInput ref={searchRef} size={fieldSize} {...search} />
+        </div>
+      )}
 
       {actions && (
         <div className="bds-filter-bar__actions">

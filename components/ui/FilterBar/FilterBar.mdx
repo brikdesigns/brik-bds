@@ -10,7 +10,22 @@ import * as Stories from './FilterBar.stories';
 
 Toolbar that pairs a result counter with one or more filter controls ([`FilterButton`](/?path=/docs/components-filter-button--docs), [`FilterToggle`](/?path=/docs/components-filter-toggle--docs), or any compatible child). Use above tables and lists to expose filtering plus a clear-all affordance.
 
-Layout: `[search?] [title] [counter] ... [filter children] [clear?] [actions]`
+Layout: `[title] [counter] ... [filter children] [clear?] [search?] [actions]`
+
+## Purpose
+
+A FilterBar **heads a collection and narrows it**. It names the collection, shows how many rows are left, and holds the controls that cut that set down. It is not navigation (it never moves the user to another page or period) and it is not a page header (the page's `<h1>` and its one primary action live in [`PageHeader`](/?path=/docs/components-page-header--docs)).
+
+## Placement rules
+
+- **Search sits on the right**, after the filter controls and before `actions`. The title and counter own the left edge.
+- **Inputs are exactly as tall as the bar's buttons.** Every control — Clear, the `Filters` trigger, `FilterButton`, `FilterToggle`, the search field, any `actions` child — takes the bar's `size` (default `sm`, 32px) unless it sets its own. Do not mix an `md` field with `sm` buttons.
+- **Horizontal only on desktop.** Controls share one row. Never stack an input over a segmented control or a button; when the row runs out of room the filters fold into the `Filters` popover (ADR-019), they do not wrap onto a second line.
+- **Actions are never primary** — the page header owns the page's one primary.
+
+## Relationship to CalendarToolbar
+
+[`CalendarToolbar`](/?path=/docs/components-calendar-toolbar--docs) is the same family with a date axis instead of a count: `[‹] [Today] [›] [title] ... [filters] [view switch]`. It shares the bar's `sm` control height, spacing, and own-width collapse. Reach for FilterBar when the thing below is a list or table; reach for CalendarToolbar when it is a calendar. [`PeriodNav`](/?path=/docs/navigation-period-nav--docs) is the minimal period stepper with no filters.
 
 ## Playground
 
@@ -26,7 +41,7 @@ Layout: `[search?] [title] [counter] ... [filter children] [clear?] [actions]`
 
 <Canvas of={Stories.SearchWithFilters} />
 
-`search` takes [`SearchInput`](/?path=/docs/components-search-input--docs) props (one of `label`, `aria-label` or `aria-labelledby` is required) and renders the field at the start of the bar. This is **filter** mode in [ADR-049](../../../docs/adrs/ADR-049-search-modes-filter-lookup-global.md): the query narrows rows already on the page, in memory, and the consumer owns the query-to-rows logic — the bar only displays `filtered` and `total`.
+`search` takes [`SearchInput`](/?path=/docs/components-search-input--docs) props (one of `label`, `aria-label` or `aria-labelledby` is required) and renders the field at the end of the bar (right side, after the filter controls). Its `size` defaults to the bar's `size`, so it matches the bar's buttons; pass `search.size` to override. This is **filter** mode in [ADR-049](../../../docs/adrs/ADR-049-search-modes-filter-lookup-global.md): the query narrows rows already on the page, in memory, and the consumer owns the query-to-rows logic — the bar only displays `filtered` and `total`.
 
 - **Landmark** — with a search slot the bar is a `role="search"` landmark named by the bar's `aria-label` (`"{title} filter bar"` by default; override it when two bars share a page). `SearchInput` itself carries no landmark. A bar with no `search` claims none: a title + counter + filters row is not a page search.
 - **Count** — the counter follows `filtered`, zero included. A visually hidden `role="status"` region, always mounted while the slot is present, announces `filtered of total` (`0 of 8 engagements`) so the change is heard.

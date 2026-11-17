@@ -1,0 +1,106 @@
+---
+title: Calendar toolbar
+description: Calendar header row — prev / Today / next, title, filters, and a view switch in one row.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+CalendarToolbar is the header row of a calendar, in the [FilterBar](/docs/components/filter-bar) family. Where FilterBar heads a count-based collection, CalendarToolbar heads a date-based one: previous / Today / next navigation, the current period as a title, filter controls, and a view switch, all in one horizontal row.
+
+Layout: `[‹] [Today] [›] [title] ... [filters] [view switch] [actions]`
+
+## Purpose
+
+A calendar toolbar steps through time and narrows what the calendar shows. It owns no calendar state: the consumer holds the date and the view and passes the title string. It is not a page header.
+
+## Use it for
+
+- The header above a month or week calendar
+- Any date-range view that needs step navigation, a few filters, and a view switch
+
+## Import
+
+```tsx
+import { CalendarToolbar, Select } from '@brikdesigns/bds';
+```
+
+## Example
+
+```tsx
+<CalendarToolbar
+  title="November 2026"
+  onPrev={prev}
+  onToday={today}
+  onNext={next}
+  views={[
+    { label: 'Month', value: 'month' },
+    { label: 'Week', value: 'week' },
+  ]}
+  view={view}
+  onViewChange={setView}
+>
+  <Select aria-label="Filter by company" options={companyOptions} />
+  <Select aria-label="Filter by channel" options={channelOptions} />
+</CalendarToolbar>
+```
+
+## Placement rules
+
+- **One row on desktop, never stacked.** Navigation, title, filters and the view switch share a single line. Never put filter inputs above or below the view switch.
+- **Inputs are exactly as tall as the buttons.** Every control takes the toolbar's `size`, default `sm` (32px): the icon buttons, Today, each Select, and the segmented view switch. Children without their own `size` inherit it.
+- **Navigation is secondary, not ghost.** Previous and Next are icon-only secondary buttons with `aria-label`s; Today is a secondary text button.
+- **The view switch is a SegmentedControl** on the right, after the filters.
+- **Same collapse as FilterBar.** Below 600px of its own width (ADR-019) the filters fold into a `Filters (N)` popover; navigation, title and the view switch stay.
+
+<Callout type="warn">
+  **Don't stack filters over the view switch.** If the row is too tight the filters collapse into the `Filters` popover; they never wrap onto a second line on desktop.
+</Callout>
+
+## Choosing between the family
+
+| Component | Axis | Use for |
+| --- | --- | --- |
+| [FilterBar](/docs/components/filter-bar) | Count | Lists, tables, boards: title + counter + filters + search |
+| CalendarToolbar | Date range | Calendars: prev / Today / next + title + filters + view switch |
+| [PeriodNav](/docs/components/period-nav) | Period | A bare Previous / label / Next stepper with no filters |
+
+## Accessibility
+
+- The toolbar is a `role="group"` named "Calendar toolbar"; the navigation buttons are a nested group named "Navigate calendar".
+- Previous and Next are icon-only, named by `prevLabel` / `nextLabel`.
+- The title is a heading (`h2` by default, `h3` via `titleAs`) with `aria-live="polite"`, so stepping to a new period is announced.
+- The view switch is a labelled radiogroup (`viewLabel`).
+
+## API
+
+### CalendarToolbar
+
+{/* props-check: CalendarToolbarProps @ components/ui/CalendarToolbar/CalendarToolbar.tsx */}
+
+| Prop | Type | Default |
+|---|---|---|
+| `title` | `ReactNode` *(required)* | — |
+| `onPrev` | `() => void` *(required)* | — |
+| `onToday` | `() => void` *(required)* | — |
+| `onNext` | `() => void` *(required)* | — |
+| `titleAs` | `'h2' \| 'h3'` | `'h2'` |
+| `prevLabel` | `string` | `'Previous'` |
+| `todayLabel` | `string` | `'Today'` |
+| `nextLabel` | `string` | `'Next'` |
+| `views` | `SegmentItem[]` | — |
+| `view` | `string` | — |
+| `onViewChange` | `(view: string) => void` | — |
+| `viewLabel` | `string` | `'Calendar view'` |
+| `children` | `ReactNode` | — |
+| `activeFilterCount` | `number` | — |
+| `actions` | `ReactNode` | — |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'sm'` |
+
+Plus all standard `<div>` HTML attributes (excluding `title`).
+
+## Related
+
+- [FilterBar](/docs/components/filter-bar) — the count-based sibling
+- [PeriodNav](/docs/components/period-nav) — minimal period stepper
+- [SegmentedControl](/docs/components/segmented-control) — the view switch
+- [Calendar](/docs/components/calendar) — date-based display

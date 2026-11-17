@@ -1,0 +1,61 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './CalendarToolbar.stories';
+
+<Meta of={Stories} />
+
+# Calendar toolbar
+
+<ComponentLinks slug="calendar-toolbar" />
+
+The header row of a calendar, in the [`FilterBar`](/?path=/docs/components-filter-bar--docs) family. Where `FilterBar` heads a count-based collection, `CalendarToolbar` heads a date-based one: previous / Today / next navigation, the current period as a title, filter controls, and a view switch, all in **one horizontal row**.
+
+Layout: `[‹] [Today] [›] [title] ... [filters] [view switch] [actions]`
+
+## Purpose
+
+A calendar toolbar steps through time and narrows what the calendar shows. It owns no calendar state: the consumer holds the date and the view, and passes the title string. It is not a page header.
+
+## Playground
+
+<Canvas of={Stories.Default} />
+
+## Placement rules
+
+- **One row on desktop, never stacked.** Navigation, title, filters and the view switch share a single line. Never put filter inputs above or below the view switch.
+- **Inputs are exactly as tall as the buttons.** Every control takes the toolbar's `size` (default `sm`, 32px): the icon buttons, Today, each `Select`, and the segmented view switch. Children without a `size` of their own inherit it.
+- **Navigation is secondary, not ghost.** Previous and Next are icon-only secondary buttons with `aria-label`s; Today is a secondary text button.
+- **The view switch is a `SegmentedControl`** (Month / Week), on the right after the filters.
+- **Same collapse as FilterBar.** Below ~600px of its own width (ADR-019) the filters fold into a `Filters (N)` popover; navigation, title and the view switch stay.
+
+<Canvas of={Stories.Collapsed} />
+
+## No filters
+
+<Canvas of={Stories.NoFilters} />
+
+With no filter children the view switch takes the flush-right slot.
+
+## Actions
+
+<Canvas of={Stories.WithActions} />
+
+`actions` renders after the view switch and stays visible when the filters collapse. Actions are never `primary`: the page header owns the page's one primary.
+
+## Choosing between the family
+
+| Component | Axis | Use for |
+| --- | --- | --- |
+| [`FilterBar`](/?path=/docs/components-filter-bar--docs) | Count | Lists, tables, boards: title + counter + filters + search |
+| `CalendarToolbar` | Date range | Calendars: prev / Today / next + title + filters + view switch |
+| [`PeriodNav`](/?path=/docs/navigation-period-nav--docs) | Period | A bare Previous / label / Next stepper with no filters |
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — The title carries `aria-live="polite"`, so stepping to a new period is announced. Previous and Next are named by `prevLabel` / `nextLabel` ("Previous period" is a good override); the view switch is a labelled radiogroup (`viewLabel`).
+
+> **Note** — Heights are asserted in the `InteractionTestOneRowSameHeight` story by measuring the rendered controls, not by reading CSS. `SegmentedControl`'s own height is content-driven, so the toolbar pins it to the control height.

@@ -8,3 +8,4 @@ export { useAddableList, isAddableDuplicate } from './useAddableList';
 export type { UseAddableListOptions, UseAddableListReturn } from './useAddableList';
 export { useElementWidth } from './useElementWidth';
 export { usePrefersReducedMotion } from './usePrefersReducedMotion';
+export { withBarSize } from './withBarSize';

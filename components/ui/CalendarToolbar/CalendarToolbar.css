@@ -1,0 +1,106 @@
+@layer bds-components {
+/* CalendarToolbar — prev / Today / next, title, filters, view switch in ONE row */
+
+/*
+ * One horizontal row on desktop: `nowrap` so the row never stacks inputs over
+ * the view switch. Narrow own-width (< 600px, ADR-019) folds the filters into a
+ * popover and only then allows the row to wrap.
+ */
+.bds-calendar-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--bds-gap-sm);
+  flex-wrap: nowrap;
+}
+
+.bds-calendar-toolbar--collapsed {
+  flex-wrap: wrap;
+}
+
+/* ─── Navigation (secondary buttons) ───────────────────── */
+
+.bds-calendar-toolbar__nav {
+  display: flex;
+  align-items: center;
+  gap: var(--bds-gap-xs);
+  flex-shrink: 0;
+}
+
+/* ─── Title (heading-sm, same as FilterBar) ────────────── */
+
+.bds-calendar-toolbar__title {
+  font-family: var(--bds-font-family-heading);
+  font-size: var(--bds-heading-sm);
+  font-weight: var(--bds-font-weight-semibold);
+  line-height: var(--bds-font-line-height-snug);
+  color: var(--bds-text-primary);
+  margin: 0;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ─── Filters (inline) ─────────────────────────────────── */
+
+.bds-calendar-toolbar__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--bds-gap-xs);
+  margin-left: auto;
+}
+
+.bds-calendar-toolbar__collapse {
+  margin-left: auto;
+}
+
+.bds-calendar-toolbar__collapse-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-gap-sm);
+  --bds-calendar-toolbar-panel-min-width: 200px; /* component-local dimension; mirrors FilterBar's panel, no shared registry rung (#2133) */
+  min-width: var(--bds-calendar-toolbar-panel-min-width);
+}
+
+/* ─── View switch ──────────────────────────────────────── */
+/*
+ * Exactly one element on the line carries `margin-left: auto`: the filters when
+ * present, else the view switch, else the actions (same structural rule as
+ * FilterBar). SegmentedControl's height is content-driven, so it is pinned to
+ * the bar's control height and its segments stretch to fill the track.
+ */
+.bds-calendar-toolbar__view {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.bds-calendar-toolbar__controls ~ .bds-calendar-toolbar__view,
+.bds-calendar-toolbar__collapse ~ .bds-calendar-toolbar__view {
+  margin-left: 0;
+}
+
+.bds-calendar-toolbar--size-sm .bds-segmented-control { height: var(--bds-size-800); }
+.bds-calendar-toolbar--size-md .bds-segmented-control { height: var(--bds-size-1000); }
+.bds-calendar-toolbar--size-lg .bds-segmented-control { height: var(--bds-size-1200); }
+
+.bds-calendar-toolbar .bds-segmented-control-item {
+  align-self: stretch;
+}
+
+/* ─── Actions ──────────────────────────────────────────── */
+
+.bds-calendar-toolbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--bds-gap-xs);
+  margin-left: auto;
+}
+
+.bds-calendar-toolbar__controls ~ .bds-calendar-toolbar__actions,
+.bds-calendar-toolbar__collapse ~ .bds-calendar-toolbar__actions,
+.bds-calendar-toolbar__view ~ .bds-calendar-toolbar__actions {
+  margin-left: 0;
+}
+}
