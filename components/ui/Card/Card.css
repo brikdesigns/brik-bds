@@ -380,46 +380,46 @@
 
 /* Service-line surface tint — a pale wash keyed to a service line, shared by
  * the default card and the stack / row / pricing layouts (the render paths
- * that emit `bds-card--tint-*`). Sets only the surface (border / shadow
+ * that emit `bds-card--service-line-*`). Sets only the surface (border / shadow
  * unchanged), so it composes with the variant shape. Two-class selectors
  * clear the single-class variant / layout fill regardless of source order.
  * Uses the canonical `--surface-service-{line}-light` pastel step; dark mode
  * is handled by the token cascade. Not for combining with `borderless`
  * (transparent by design).
  */
-.bds-card.bds-card--tint-brand {
+.bds-card.bds-card--service-line-brand {
   background-color: var(--bds-surface-service-brand-light);
 }
-.bds-card.bds-card--tint-marketing {
+.bds-card.bds-card--service-line-marketing {
   background-color: var(--bds-surface-service-marketing-light);
 }
-.bds-card.bds-card--tint-information {
+.bds-card.bds-card--service-line-information {
   background-color: var(--bds-surface-service-information-light);
 }
-.bds-card.bds-card--tint-product {
+.bds-card.bds-card--service-line-product {
   background-color: var(--bds-surface-service-product-light);
 }
-.bds-card.bds-card--tint-back-office {
+.bds-card.bds-card--service-line-back-office {
   background-color: var(--bds-surface-service-back-office-light);
 }
 
-/* `tintInverse` — the theme-flipping service surface (ADR-012): white
+/* `serviceLineInverse` — the theme-flipping service surface (ADR-012): white
  * in light, the deep hue in dark. Three-class selectors beat the `-light`
  * rules above, so the pale wash only applies when no tone is set.
  */
-.bds-card.bds-card--emphasis-inverse.bds-card--tint-brand {
+.bds-card.bds-card--emphasis-inverse.bds-card--service-line-brand {
   background-color: var(--bds-surface-service-brand-inverse);
 }
-.bds-card.bds-card--emphasis-inverse.bds-card--tint-marketing {
+.bds-card.bds-card--emphasis-inverse.bds-card--service-line-marketing {
   background-color: var(--bds-surface-service-marketing-inverse);
 }
-.bds-card.bds-card--emphasis-inverse.bds-card--tint-information {
+.bds-card.bds-card--emphasis-inverse.bds-card--service-line-information {
   background-color: var(--bds-surface-service-information-inverse);
 }
-.bds-card.bds-card--emphasis-inverse.bds-card--tint-product {
+.bds-card.bds-card--emphasis-inverse.bds-card--service-line-product {
   background-color: var(--bds-surface-service-product-inverse);
 }
-.bds-card.bds-card--emphasis-inverse.bds-card--tint-back-office {
+.bds-card.bds-card--emphasis-inverse.bds-card--service-line-back-office {
   background-color: var(--bds-surface-service-back-office-inverse);
 }
 
@@ -657,7 +657,7 @@
 /* ─── Layout: pricing ─────────────────────────────────────────── */
 /* Ported from the deprecated standalone `PricingCard` (#2571). Structural
  * rules only — the fill / border / shadow come from `.bds-card--{variant}`
- * above, and the recommended tier is `variant="raised"` (or a `tint`) rather
+ * above, and the recommended tier is `variant="raised"` (or a `serviceLine`) rather
  * than the bespoke `--highlighted` modifier the old block owned. */
 
 .bds-card--layout-pricing {

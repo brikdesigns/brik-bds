@@ -521,9 +521,9 @@ describe('rule 4 — the service-line carve-out (§ Named exceptions, #1982)', (
     // import-level test would exempt that and hide a real § 4 finding.
     const { code, out } = run({
       tsx: `import type { ServiceLine } from '../ServiceTag/service-config';
-export type CardTint = Exclude<ServiceLine, 'service'>;
+export type CardServiceLine = Exclude<ServiceLine, 'service'>;
 export type CardVariant = 'brand' | 'plain';
-export interface CardProps { variant: CardVariant; tint?: CardTint }
+export interface CardProps { variant: CardVariant; serviceLine?: CardServiceLine }
 export function Card({ variant }: CardProps) {
   return <div className={\`bds-card--\${variant}\`} />;
 }`,
@@ -830,6 +830,39 @@ describe('rule 4 + 5 — the `corner` axis (§ Amendments, #1927)', () => {
     });
     expect(code).toBe(1);
     expect(out).toMatch(/ConsoleCorner\.top-left — `top-left` is on no closed list for the corner axis/);
+  });
+});
+
+describe('rule 4 + 5 — the `service-line` axis (§ Amendments, #1927)', () => {
+  it('admits the five service-line modifiers Card emits from `serviceLine`, `information` included', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-card--service-line-brand { color: red; }
+.bds-card--service-line-marketing { color: red; }
+.bds-card--service-line-information { color: red; }
+.bds-card--service-line-product { color: red; }
+.bds-card--service-line-back-office { color: red; }
+`,
+    });
+    expect(out).not.toMatch(/service-line-/);
+    expect(code).toBe(0);
+  });
+
+  it('still flags `information` as retired valence on an axis whose list does not hold it', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-alert--tone-information { color: red; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--tone-information — retired valence word `information` → `info`/);
+  });
+
+  it('denies the retired `--tint-*` spelling', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-card--tint-brand { color: red; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--tint-brand/);
+  });
+
+  it('denies a service line the amendment did NOT admit (the deprecated `service` alias)', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-card--service-line-service { color: red; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--service-line-service — `service` is on no closed list for the service-line axis/);
   });
 });
 

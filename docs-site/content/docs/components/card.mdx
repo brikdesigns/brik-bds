@@ -56,7 +56,7 @@ Compose freely with the Title / Description / Footer subcomponents. Omit `layout
 - **`brand`** — Primary-color border for emphasis.
 - **`elevated`** — Surface-primary fill, no border, no shadow (flat since brik-bds#1146; for a shadow use `raised`).
 - **`raised`** — Surface-primary fill, no border, with a cast `--shadow-md` drop shadow. The shadow-casting counterpart to the now-flat `elevated`; use for a focal/lone card or a grid cell that needs a lifted, contained read.
-- **`filled`** — Neutral recessed panel: surface-secondary fill with a muted border. For a grouping container that reads as part of the page; not a service-line wash (use `tint` for that).
+- **`filled`** — Neutral recessed panel: surface-secondary fill with a muted border. For a grouping container that reads as part of the page; not a service-line wash (use `serviceLine` for that).
 - **`borderless`** — Transparent fill, no border, no shadow. Use for cards sitting on a colored surface, where the border ring reads as visual noise.
 
 The `layout` arrangements take the grid-cell subset — `borderless`, `elevated`, `raised` — so one option set covers every surface treatment.
@@ -114,7 +114,7 @@ Under a `layout`, `media` is a plain `ReactNode` instead — pass the `<Frame>`,
 </Card>
 ```
 
-`title` renders as `titleAs` (default `h3`) — set it to keep the document outline correct under a grid-section heading; the visual size is token-driven and unchanged by the level. For a cell on a colored (service-tinted) grid, `variant="borderless"` (transparent), `variant="elevated"` (fill + shadow), or `variant="raised"` (fill + cast `--shadow-md` shadow) swaps the surface treatment, and `tint` applies a pale service-line wash. `badge` renders only when `media` is also set.
+`title` renders as `titleAs` (default `h3`) — set it to keep the document outline correct under a grid-section heading; the visual size is token-driven and unchanged by the level. For a cell on a colored (service-tinted) grid, `variant="borderless"` (transparent), `variant="elevated"` (fill + shadow), or `variant="raised"` (fill + cast `--shadow-md` shadow) swaps the surface treatment, and `serviceLine` applies a pale service-line wash. `badge` renders only when `media` is also set.
 
 `mediaTreatment` controls how the media slot meets the card edge. `flush` (default) bleeds the media to the edge and pads only the body — the blog/story/product-grid look. `inset` frames media and body together in a single inset — the service-card look.
 
@@ -202,7 +202,7 @@ Two optional slots extend `metric` for a labelled selection — the shape the re
 
 `price`, `period` and `features` are this layout's own slots, the same shape as `control`'s `connectionStatus` / `stamp` / `actionAlign`. Pre-format the price — the card applies no numeric formatting. Omit `features` (or pass `[]`) to drop the checklist and its divider.
 
-Mark the recommended tier with `variant="raised"` or a `tint`. There is deliberately **no `highlighted` prop**: the surface set is shared across every layout, so a per-layout highlight modifier would re-declare what `variant` already owns.
+Mark the recommended tier with `variant="raised"` or a `serviceLine`. There is deliberately **no `highlighted` prop**: the surface set is shared across every layout, so a per-layout highlight modifier would re-declare what `variant` already owns.
 
 <Callout type="info">
   **`layout="pricing"` supersedes the standalone `<PricingCard>`**, which is deprecated as a standalone surface ([#2571](https://github.com/brikdesigns/brik-bds/issues/2571)). See [ADR-038 § Amendment 2026-09-18](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-038-card-anatomy-over-preset-union.md) for why the pricing anatomy earns a layout rather than a `stack` recipe.
@@ -268,7 +268,7 @@ One flat slot set serves all four arrangements. A slot that a layout does not re
 | `action` | `ReactNode` | — |
 | `badge` | `ReactNode` | — |
 | `variant` | `'borderless' \| 'elevated' \| 'raised'` | — |
-| `tint` | `CardTint` (service line) | — |
+| `serviceLine` | `CardServiceLine` (service line) | — |
 | `href` | `string` | — |
 | `imageWidth` | `CardDisplayRowImageWidth` (narrow / standard / wide, or any CSS length) | `'standard'` |
 | `mediaTreatment` | `'flush' \| 'inset'` | `'flush'` |
@@ -285,7 +285,7 @@ Slots by layout:
 
 | Layout | Renders |
 |---|---|
-| `stack` | `media`, `overline`, `title`, `children`, `action`, `badge`, `tint`, `variant`, `mediaTreatment`, `href` |
+| `stack` | `media`, `overline`, `title`, `children`, `action`, `badge`, `serviceLine`, `variant`, `mediaTreatment`, `href` |
 | `row` | the `stack` set plus `imageWidth`, minus `mediaTreatment` |
 | `metric` | `media`, `overline`, `title`, `detail`, `action` |
 | `control` | `media`, `title`, `description`, `action`, `actionAlign`, `connectionStatus`, `stamp`, `readOnly`, `manageHref`, `onSetup`, `onRetry`, `onEnable` |

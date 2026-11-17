@@ -53,7 +53,7 @@ export type CardHeadingLevel = 'h2' | 'h3' | 'h4';
  * invented name. Excludes the deprecated `service` alias of `ServiceLine`;
  * pass `back-office`.
  */
-export type CardTint = Exclude<ServiceLine, 'service'>;
+export type CardServiceLine = Exclude<ServiceLine, 'service'>;
 export type CardControlActionAlign = 'center' | 'top';
 /**
  * Connection-status state for the `control` layout integration card.
@@ -238,9 +238,9 @@ interface CardDefaultProps extends CardBaseProps {
    */
   media?: CardMedia;
   /** Service-line surface tint — pale wash keyed to a service line. Sets only the surface; the `variant` border stays. */
-  tint?: CardTint;
-  /** Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. */
-  tintInverse?: boolean;
+  serviceLine?: CardServiceLine;
+  /** Resolve `serviceLine` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `serviceLine`. */
+  serviceLineInverse?: boolean;
   /** Card content — composes `<CardTitle>`, `<CardDescription>`, `<CardFooter>`, etc. */
   children: ReactNode;
 }
@@ -285,9 +285,9 @@ interface CardAnatomyProps extends CardBaseProps {
   /** Short fact line under the body (`stack`/`row`) — a `DateTime` or one fact. Renders nothing when omitted. */
   meta?: ReactNode;
   /** Service-line surface tint (`stack`/`row`/`pricing`) — pale wash keyed to a service line. Border/size unchanged. */
-  tint?: CardTint;
-  /** Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. */
-  tintInverse?: boolean;
+  serviceLine?: CardServiceLine;
+  /** Resolve `serviceLine` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `serviceLine`. */
+  serviceLineInverse?: boolean;
   /** Surface treatment for a cell on a colored grid — `borderless` / `elevated` / `raised` (`stack`). */
   variant?: 'borderless' | 'elevated' | 'raised';
   /** Image column width for `row` — `narrow` (25%) / `standard` (35%, default) / `wide` (50%) / any CSS length. */
@@ -433,8 +433,8 @@ function renderDefault({
   interactive = false,
   href,
   padding = 'md',
-  tint,
-  tintInverse,
+  serviceLine,
+  serviceLineInverse,
   className,
   style,
   ...rest
@@ -443,8 +443,8 @@ function renderDefault({
     'bds-card',
     cardVariantClass(variant),
     `bds-card--padding-${padding}`,
-    tint && `bds-card--tint-${tint}`,
-    tint && tintInverse && 'bds-card--emphasis-inverse',
+    serviceLine && `bds-card--service-line-${serviceLine}`,
+    serviceLine && serviceLineInverse && 'bds-card--emphasis-inverse',
     media && 'bds-card--media',
     interactive && 'bds-card--interactive',
     href && 'bds-card--link',
@@ -562,8 +562,8 @@ function renderAnatomy({
   badge,
   status,
   meta,
-  tint,
-  tintInverse,
+  serviceLine,
+  serviceLineInverse,
   variant,
   imageWidth = 'standard',
   mediaTreatment = 'flush',
@@ -679,7 +679,7 @@ function renderAnatomy({
 
   if (layout === 'pricing') {
     // `highlighted` is not a prop: the recommended tier is a surface choice, so
-    // it composes from the shared surface set (`variant="raised"` / `tint`)
+    // it composes from the shared surface set (`variant="raised"` / `serviceLine`)
     // exactly as every other layout does. That is the one behaviour that did
     // NOT carry over from `PricingCard`, which owned a bespoke
     // `--highlighted` modifier.
@@ -690,8 +690,8 @@ function renderAnatomy({
           'bds-card',
           cardVariantClass(variant ?? 'outlined'),
           'bds-card--layout-pricing',
-          tint && `bds-card--tint-${tint}`,
-          tint && tintInverse && 'bds-card--emphasis-inverse',
+          serviceLine && `bds-card--service-line-${serviceLine}`,
+          serviceLine && serviceLineInverse && 'bds-card--emphasis-inverse',
           className,
         )}
         style={style}
@@ -732,8 +732,8 @@ function renderAnatomy({
       'bds-card--layout-row',
       isNamed && `bds-card--layout-row-${imageWidth}`,
       status != null && 'bds-card--layout-row-has-status',
-      tint && `bds-card--tint-${tint}`,
-      tint && tintInverse && 'bds-card--emphasis-inverse',
+      serviceLine && `bds-card--service-line-${serviceLine}`,
+      serviceLine && serviceLineInverse && 'bds-card--emphasis-inverse',
       href && 'bds-card--link',
       className,
     );
@@ -779,8 +779,8 @@ function renderAnatomy({
     mediaTreatment === 'inset' &&
       insetPadding === 'lg' &&
       'bds-card--layout-stack-inset-lg',
-    tint && `bds-card--tint-${tint}`,
-    tint && tintInverse && 'bds-card--emphasis-inverse',
+    serviceLine && `bds-card--service-line-${serviceLine}`,
+    serviceLine && serviceLineInverse && 'bds-card--emphasis-inverse',
     href && 'bds-card--link',
     className,
   );

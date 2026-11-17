@@ -594,9 +594,11 @@ function collectUnions(componentsDir) {
  * and t-shirt rungs (`none`, `md`, `horizontal`) that other unions share, so
  * `DividerSpacing = 'none' | 'sm' | 'md' | 'lg'` would read as marker +
  * measure and fail rule 3. `spacing` (#1927) is that union's own axis, and its
- * values are the same shared rungs, so it is prefix-judged too.
+ * values are the same shared rungs, so it is prefix-judged too. `service-line`
+ * (#1927) shares `brand` with emphasis, so a `'brand' | 'positive'` union would
+ * read as three axes instead of emphasis + tone.
  */
-const PREFIX_JUDGED_AXES = new Set(['span', 'fit', 'anchor', 'resize', 'marker', 'underline', 'measure', 'spacing']);
+const PREFIX_JUDGED_AXES = new Set(['span', 'fit', 'anchor', 'resize', 'marker', 'underline', 'measure', 'spacing', 'service-line']);
 
 /**
  * Every axis whose closed list claims this member. A SET, not one axis: ADR-033
@@ -785,8 +787,9 @@ function serviceLines(componentsDir) {
  * The BEM blocks that emit a modifier from a `ServiceLine`-typed value. Both
  * halves are required: the identifier has to be annotated `ServiceLine`, AND
  * the block has to interpolate that identifier. Card is why — it imports
- * `ServiceLine` and derives `CardTint` from it, but emits its service tint as
- * the already-compliant `bds-card--tint-${tint}` while `.bds-card--brand` is an
+ * `ServiceLine` and derives `CardServiceLine` from it, but emits its service
+ * surface as the prefixed `bds-card--service-line-${serviceLine}` while
+ * `.bds-card--brand` is an
  * unrelated variant. A directory-level "imports ServiceLine" test would exempt
  * that variant and hide a real § 4 finding.
  */
@@ -837,7 +840,11 @@ function modifierFindings(mods, exempt = () => false) {
     if (prefix) {
       // Prefixed — the axis is explicit, so the VALUE is judgeable.
       const value = mod.slice(prefix.length + 1);
-      if (Object.prototype.hasOwnProperty.call(RETIRED_VALENCE, value)) {
+      // A word on this axis's own closed list is canonical here, whatever it
+      // means on another axis: `information` is retired as a valence (→ `info`)
+      // but is the service line's name on `service-line` (#1927).
+      const onOwnList = Boolean(AXES[prefix]?.values?.has(value));
+      if (!onOwnList && Object.prototype.hasOwnProperty.call(RETIRED_VALENCE, value)) {
         findings.push({
           rule: 4, id: `--${mod}`, where,
           detail: `retired valence word \`${value}\` → \`${RETIRED_VALENCE[value]}\``,
