@@ -431,3 +431,48 @@ export const InteractionTestSplitServiceLine: Story = {
     await expect(expected).not.toBe(neutral);
   },
 };
+
+/**
+ * Opt-in `data-inverse-scope="card"` (brik-bds#1028). A hero whose section is a
+ * light band and whose media card alone paints `-inverse` must NOT take the dark
+ * `-on-dark` content-text flip: in dark mode its headline stays on the line's
+ * `-on-light` step. An unflagged hero in dark mode still flips (default contract
+ * unchanged, asserted via the sibling probe below).
+ *
+ * @summary Dark mode — flagged hero keeps `-on-light` content text
+ */
+export const InteractionTestInverseScopeCard: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    sectionKey: 'hero-inverse-scope-card',
+    layout: 'split',
+    subtitle: 'Marketing',
+    title: 'Websites that turn visitors into customers',
+    media: demoImage,
+    'data-service-line': 'marketing',
+    'data-inverse-scope': 'card',
+  } as Story['args'],
+  play: async ({ canvasElement }) => {
+    const root = document.documentElement;
+    const prev = root.getAttribute('data-theme');
+    root.setAttribute('data-theme', 'dark');
+    try {
+      const title = canvasElement.querySelector<HTMLElement>('.bds-hero__title')!;
+      const resolve = (token: string) => {
+        const p = document.createElement('span');
+        p.style.color = `var(${token})`;
+        canvasElement.appendChild(p);
+        const c = getComputedStyle(p).color;
+        p.remove();
+        return c;
+      };
+      const onLight = resolve('--bds-text-service-marketing-on-light');
+      const onDark = resolve('--bds-text-service-marketing-on-dark');
+      await expect(onLight).not.toBe(onDark);
+      await expect(getComputedStyle(title).color).toBe(onLight);
+    } finally {
+      if (prev === null) root.removeAttribute('data-theme');
+      else root.setAttribute('data-theme', prev);
+    }
+  },
+};

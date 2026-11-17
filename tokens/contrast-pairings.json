@@ -637,6 +637,56 @@
       ]
     },
     {
+      "group": "service",
+      "label": "Service brand \u2014 inverse card CTA text (dark, data-inverse-scope=card)",
+      "fg": "--bds-color-grayscale-950",
+      "bg": "--bds-background-service-brand-on-dark",
+      "thresholdType": "AA",
+      "appliesTo": [
+        "dark"
+      ]
+    },
+    {
+      "group": "service",
+      "label": "Service marketing \u2014 inverse card CTA text (dark, data-inverse-scope=card)",
+      "fg": "--bds-color-grayscale-950",
+      "bg": "--bds-background-service-marketing-on-dark",
+      "thresholdType": "AA",
+      "appliesTo": [
+        "dark"
+      ]
+    },
+    {
+      "group": "service",
+      "label": "Service information \u2014 inverse card CTA text (dark, data-inverse-scope=card)",
+      "fg": "--bds-color-grayscale-950",
+      "bg": "--bds-background-service-information-on-dark",
+      "thresholdType": "AA",
+      "appliesTo": [
+        "dark"
+      ]
+    },
+    {
+      "group": "service",
+      "label": "Service product \u2014 inverse card CTA text (dark, data-inverse-scope=card)",
+      "fg": "--bds-color-grayscale-950",
+      "bg": "--bds-background-service-product-on-dark",
+      "thresholdType": "AA",
+      "appliesTo": [
+        "dark"
+      ]
+    },
+    {
+      "group": "service",
+      "label": "Service back-office / service \u2014 inverse card CTA text (dark, data-inverse-scope=card)",
+      "fg": "--bds-color-grayscale-950",
+      "bg": "--bds-background-service-back-office-on-dark",
+      "thresholdType": "AA",
+      "appliesTo": [
+        "dark"
+      ]
+    },
+    {
       "group": "positive",
       "label": "Positive/success text on surface",
       "fg": "--bds-text-positive",
