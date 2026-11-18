@@ -116,7 +116,7 @@
 <table>
 <tr><th>Sub-Issue</th><th>Names</th><th>What It Covers</th></tr>
 <tr><td>#3244</td><td class="n">14</td><td>No consumer, or docs mentions only</td></tr>
-<tr><td>#3246</td><td class="n">46</td><td>Second name for a token that already exists. 37 swaps leave every value as it is; 9 move a value and wait on an open call</td></tr>
+<tr><td>#3246</td><td class="n">46</td><td>Second name for a token that already exists. 38 swaps leave every value as it is; 8 move a value and wait on an open call</td></tr>
 <tr><td>#3247</td><td class="n">8</td><td>Replacement is itself on the promote list; blocked until that sync</td></tr>
 </table>
 <div class="wrap"><table>
@@ -180,7 +180,7 @@
 <tr><td><code>--bds-padding-2xl</code></td><td><code>--bds-padding-huge</code></td><td class="n">0</td><td class="n">0</td><td class="n">4</td><td class="n">0</td><td>#3246 — open call</td></tr>
 <tr><td><code>--bds-padding-2xs</code></td><td><code>--bds-padding-tiny</code></td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246 — open call</td></tr>
 <tr><td><code>--bds-surface-navigation</code></td><td><code>--bds-surface-nav</code> (Brik Brand Kit variable)</td><td class="n">12</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246 — open call</td></tr>
-<tr><td><code>--bds-tooltip-text</code></td><td><code>--bds-text-inverse</code></td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246 — open call</td></tr>
+<tr><td><code>--bds-tooltip-text</code></td><td><code>--bds-text-inverse</code></td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
 <tr><td><code>--bds-background-info-light</code></td><td><code>--bds-surface-info</code> (after it is promoted)</td><td class="n">1</td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td>#3247</td></tr>
 <tr><td><code>--bds-content-width-default</code></td><td><code>--bds-content-width-md</code> (after it is promoted)</td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td class="n">0</td><td>#3247</td></tr>
 <tr><td><code>--bds-content-width-narrow</code></td><td><code>--bds-content-width-sm</code> (after it is promoted)</td><td class="n">0</td><td class="n">0</td><td class="n">3</td><td class="n">0</td><td>#3247</td></tr>
@@ -191,8 +191,8 @@
 <tr><td><code>--bds-measure-lg</code></td><td><code>--bds-content-width-text-md</code> (after it is promoted)</td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3247</td></tr>
 </table></div>
 
-<h3>Open Call — 9 Swaps That Move A Value</h3>
-<p>These 9 have consumers, and the replacement resolves to a different value in the scope named. A <code>:root</code> alias is fixed at the root; the Figma-backed name follows the theme or mode. The aliases are stale, so the swap is likely the fix, but it changes what renders. They stay untouched in #3246 until the operator says move or hold.</p>
+<h3>Open Call — 8 Swaps That Move A Value</h3>
+<p>These 8 have consumers, and the replacement resolves to a different value in the scope named. A <code>:root</code> alias is fixed at the root; the Figma-backed name follows the theme or mode. The aliases are stale, so the swap is likely the fix, but it changes what renders. They stay untouched in #3246 until the operator says move or hold.</p>
 <div class="wrap"><table>
 <tr><th>Name</th><th>Replacement</th><th>Scope: Alias Today → Replacement</th><th>BDS</th><th>Portal</th><th>Site</th><th>Token Files</th></tr>
 <tr><td><code>--bds-background-accent-red-light</code></td><td><code>--bds-surface-accent-red</code></td><td><code>.theme-brand-brik</code>: #fccccc → #e35335</td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td class="n">0</td></tr>
@@ -203,7 +203,6 @@
 <tr><td><code>--bds-padding-2xl</code></td><td><code>--bds-padding-huge</code></td><td><code>[data-mode-spacing=&quot;compact&quot;]</code>: 48px → 32px<br><code>[data-mode-spacing=&quot;comfortable&quot;]</code>: 48px → 80px<br><code>[data-mode-spacing=&quot;spacious&quot;]</code>: 48px → 128px</td><td class="n">0</td><td class="n">0</td><td class="n">4</td><td class="n">0</td></tr>
 <tr><td><code>--bds-padding-2xs</code></td><td><code>--bds-padding-tiny</code></td><td><code>[data-mode-spacing=&quot;compact&quot;]</code>: 8px → 2px<br><code>[data-mode-spacing=&quot;spacious&quot;]</code>: 8px → 12px</td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td class="n">0</td></tr>
 <tr><td><code>--bds-surface-navigation</code></td><td><code>--bds-surface-nav</code> (Brik Brand Kit variable)</td><td><code>:root[data-theme=&quot;dark&quot;] .theme-brand-brik</code>: #ffffff → #000000</td><td class="n">12</td><td class="n">0</td><td class="n">0</td><td class="n">0</td></tr>
-<tr><td><code>--bds-tooltip-text</code></td><td><code>--bds-text-inverse</code></td><td><code>:root[data-theme=&quot;dark&quot;]</code>: #ffffff → #000000<br><code>:root[data-theme=&quot;dark&quot;] .theme-brand-brik</code>: #ffffff → #000000</td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td class="n">0</td></tr>
 </table></div>
 <p>A <code>[data-mode-*]</code> row applies only where that attribute sits below the root element.</p>
 
