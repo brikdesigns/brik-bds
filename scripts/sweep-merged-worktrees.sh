@@ -21,9 +21,11 @@
 #        session's first commit (brik-llm#1616). Their verdict comes from the
 #        ticket's claim (#4376): live → KEEP; stale or absent, with the branch
 #        also older than CLAIM_STALE_SECONDS → REMOVE; unreadable → REVIEW.
-#      - DETACHED worktrees (no branch ref at all) are flagged for REVIEW, never
-#        removed (brik-llm#2277). They used to be invisible here — see the block
-#        in pass 1 for why the verdict is FLAG-only.
+#      - DETACHED worktrees (no branch ref at all) are flagged for REVIEW
+#        (brik-llm#2277), with one exception: clean, idle, under the worktree root,
+#        HEAD contained in a branch origin still holds at that sha, and HEAD
+#        >= BRIK_SWEEP_DETACHED_DAYS (14) old is REMOVABLE (#5339). See the block in
+#        pass 1.
 #      - Clean+unlanded+no-PR worktrees are flagged for REVIEW, with a loud STALE
 #        marker once the tip is >=7 days old (never removed — brik-llm#3997).
 #      - CLOSED-unmerged PR + clean + tip == PR head is REMOVABLE after >=14 days
@@ -485,15 +487,34 @@ WORKTREE_ROOT="${BRIK_WORKTREE_ROOT:-$(dirname "$PRIMARY")/$(basename "$PRIMARY"
 
 # Remote branch heads, fetched once. REMOTE_OK distinguishes "fetched, branch
 # absent" (safe to reap) from "couldn't reach origin" (unknown → never reap).
-REMOTE_HEADS=""; REMOTE_OK=false
-if command -v git >/dev/null 2>&1 && REMOTE_HEADS="$(git ls-remote --heads origin 2>/dev/null | sed 's#.*refs/heads/##')"; then
+REMOTE_HEADS=""; REMOTE_HEAD_SHAS=""; REMOTE_OK=false
+if command -v git >/dev/null 2>&1 && REMOTE_HEAD_SHAS="$(git ls-remote --heads origin 2>/dev/null | awk '{ sub("^refs/heads/", "", $2); print $1 " " $2 }')"; then
   REMOTE_OK=true
+  REMOTE_HEADS="$(awk '{ print $2 }' <<<"$REMOTE_HEAD_SHAS")"
 fi
 
 branch_exists_local() { git show-ref --verify --quiet "refs/heads/$1"; }
 # "remote-absent" is only trustworthy when the fetch succeeded; otherwise treat
 # the branch as present so an unreachable origin can never trigger a reap.
 branch_absent_remote() { $REMOTE_OK && ! grep -qxF "$1" <<<"$REMOTE_HEADS"; }
+
+# A detached worktree is reapable when its HEAD is recoverable from origin (#5339).
+# The local remote-tracking refs answer "which branch contains HEAD", but they can
+# be stale: a branch deleted or force-pushed on origin still has its old
+# refs/remotes/origin/<b> here until a prune. So a containing ref counts only when
+# origin, read live by ls-remote above, still has that branch AT THAT SHA.
+# Unreachable origin → no answer → never reaped.
+DETACHED_REAP_DAYS="${BRIK_SWEEP_DETACHED_DAYS:-14}"
+detached_tip_on_remote() {  # $1=worktree path -> sets DETACHED_REMOTE (branch or empty) + DETACHED_WHY
+  local sha b
+  DETACHED_REMOTE=""; DETACHED_WHY=""
+  if ! $REMOTE_OK; then DETACHED_WHY="origin unreachable"; return; fi
+  while read -r sha b; do
+    if [ -z "$b" ] || [ "$b" = "HEAD" ]; then continue; fi
+    if grep -qxF "$sha $b" <<<"$REMOTE_HEAD_SHAS"; then DETACHED_REMOTE="$b"; return; fi
+    DETACHED_WHY="origin/$b is stale here"
+  done < <(git -C "$1" for-each-ref --contains HEAD --format='%(objectname) %(refname:lstrip=3)' refs/remotes/origin 2>/dev/null)
+}
 
 # True when everything in $1 is build output git never tracks: .next, .source,
 # node_modules, and a `supabase` tree holding no files. Top-level names only —
@@ -662,8 +683,8 @@ while IFS=$'\t' read -r path ref; do
   # never printed at all: the sweeper reported `Nothing to remove` with a detached
   # worktree sitting in the swept root, which reads as the reaper being broken.
   #
-  # The verdict is FLAG-ONLY — REVIEW, never REMOVE — and it is deliberately
-  # narrower than the two cleanup-merged-worktrees.sh copies this script replaced,
+  # The verdict is REVIEW unless origin proves the tip recoverable (#5339, below),
+  # and it is deliberately narrower than the two cleanup-merged-worktrees.sh copies this script replaced,
   # which removed `detached || branch ref missing` outright (portal :125,
   # brik-bds :146). Every REMOVE in this pass rests on a branch ref: the PR lookup
   # keys on it and `--is-ancestor` needs a named tip, and those two ARE how "this
@@ -684,8 +705,39 @@ while IFS=$'\t' read -r path ref; do
     dirty_count "$path"; dirty="$DIRTY_N"
     if [ "$dirty" != "0" ]; then
       verdict="KEEP — ${dirty} uncommitted change(s), detached HEAD: ${DIRTY_WHY}"; KEPT=$((KEPT+1))
+    elif worktree_has_live_process "$path"; then
+      if $LIVE_CWDS_BLIND; then verdict="KEEP — cannot see live processes (no lsof or /proc), detached HEAD"
+      else verdict="KEEP — live process in worktree, detached HEAD"; fi
+      KEPT=$((KEPT+1))
+    elif slim_recently_active "$path"; then
+      verdict="KEEP — written within ${SLIM_IDLE_MIN}m, detached HEAD"; KEPT=$((KEPT+1))
     else
-      verdict="REVIEW — detached HEAD, no branch ref to prove it landed"; REVIEW=$((REVIEW+1))
+      # The one REMOVE shape for a detached worktree (#5339): its tip is provably
+      # recoverable from origin, which is the #2277 objection answered rather than
+      # waived. 13 such worktrees held ~35 GB on brik-mini on 2026-11-03 and were
+      # removed by hand on exactly this predicate.
+      detached_tip_on_remote "$path"
+      dtip_age="$(age_days "$(git -C "$path" log -1 --format=%ct HEAD 2>/dev/null)")"
+      p_phys="$(cd "$path" 2>/dev/null && pwd -P)"
+      wt_root_phys="$(cd "$WORKTREE_ROOT" 2>/dev/null && pwd -P)"
+      if [ -z "$DETACHED_REMOTE" ]; then
+        verdict="REVIEW — detached HEAD, no branch ref to prove it landed${DETACHED_WHY:+ (${DETACHED_WHY})}"; REVIEW=$((REVIEW+1))
+      elif [ -z "$dtip_age" ]; then
+        verdict="REVIEW — detached HEAD on origin/${DETACHED_REMOTE}, tip age unreadable"; REVIEW=$((REVIEW+1))
+      elif [ "$dtip_age" -lt "$DETACHED_REAP_DAYS" ]; then
+        verdict="REVIEW — detached HEAD on origin/${DETACHED_REMOTE}, tip ${dtip_age}d old (reapable at ${DETACHED_REAP_DAYS}d)"; REVIEW=$((REVIEW+1))
+      else
+        case "${p_phys:-/nonexistent}" in
+          "${wt_root_phys:-/nonexistent-root}"/?*)
+            reason="detached, tip on origin/${DETACHED_REMOTE}, ${dtip_age}d old"
+            verdict="REMOVE — $reason"
+            # Empty branch: there is no ref to delete, and the removal loop skips
+            # --delete-branches for it (a `git branch -D ""` would only fail loudly).
+            REMOVE_PATHS+=("$path"); REMOVE_BRANCHES+=(""); REMOVE_LABELS+=("$reason") ;;
+          *)
+            verdict="REVIEW — detached HEAD on origin/${DETACHED_REMOTE}, but outside the worktree root"; REVIEW=$((REVIEW+1)) ;;
+        esac
+      fi
     fi
     $JSON || printf '%-50s %-9s %-9s %s\n' "$slug (detached)" "$([ "$dirty" = 0 ] && echo clean || echo "DIRTY")" "-" "$verdict"
     json_row worktree "$slug (detached)" "$([ "$dirty" = 0 ] && echo clean || echo "DIRTY")" "-" "$verdict"
@@ -1172,13 +1224,15 @@ if [ "$n" -gt 0 ]; then
   echo -e "${YELLOW}▸ Removing ${n} worktree(s)...${NC}"
   for i in "${!REMOVE_PATHS[@]}"; do
     p="${REMOVE_PATHS[$i]}"; b="${REMOVE_BRANCHES[$i]}"
+    # A detached REMOVE (#5339) has no branch: show the path, delete no ref.
+    name="${b:-$(basename "$p") (detached)}"
     # Capture the real error instead of discarding it: the old `2>/dev/null` plus
     # a guessed "(locked or untracked junk?)" message sent an operator hunting for
     # junk that was not there. git states the actual reason.
     if err="$(git worktree remove "$p" 2>&1)"; then
-      echo -e "  ${GREEN}✓${NC} ${b} (${REMOVE_LABELS[$i]})"
+      echo -e "  ${GREEN}✓${NC} ${name} (${REMOVE_LABELS[$i]})"
       removed=$((removed+1))
-      $DELETE_BRANCHES && delete_landed_branch "$b"
+      $DELETE_BRANCHES && [ -n "$b" ] && delete_landed_branch "$b"
     elif printf '%s' "$err" | grep -qE 'containing submodules|[Dd]irectory not empty'; then
       # `git worktree remove` refuses outright on a populated submodule — this
       # repo has foundations/brik-bds, so ANY worktree whose submodule got
@@ -1231,16 +1285,16 @@ if [ "$n" -gt 0 ]; then
       case "${p_phys:-/nonexistent}" in
         "${wt_root_phys:-/nonexistent-root}"/?*)
           if rm -rf "$p_phys"; then
-            echo -e "  ${GREEN}✓${NC} ${b} (${REMOVE_LABELS[$i]}; submodule fallback: rm + prune)"
+            echo -e "  ${GREEN}✓${NC} ${name} (${REMOVE_LABELS[$i]}; submodule fallback: rm + prune)"
             removed=$((removed+1))
-            $DELETE_BRANCHES && delete_landed_branch "$b"
+            $DELETE_BRANCHES && [ -n "$b" ] && delete_landed_branch "$b"
           else
-            echo -e "  ${RED}✗${NC} ${b} — submodule fallback rm failed; skipped"
+            echo -e "  ${RED}✗${NC} ${name} — submodule fallback rm failed; skipped"
           fi ;;
         *) echo -e "  ${RED}✗${NC} refusing to rm outside \$WORKTREE_ROOT: $p" >&2 ;;
       esac
     else
-      echo -e "  ${RED}✗${NC} ${b} — 'git worktree remove' failed; skipped"
+      echo -e "  ${RED}✗${NC} ${name} — 'git worktree remove' failed; skipped"
       printf '%s\n' "$err" | sed 's/^/        /' >&2
     fi
   done
