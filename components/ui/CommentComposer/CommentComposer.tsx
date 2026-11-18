@@ -13,6 +13,7 @@ import { Badge } from '../Badge';
 import { Button } from '../Button';
 import { TextArea } from '../TextArea';
 import { bdsClass } from '../../utils';
+import { useFloatingPanel } from '../shared/useFloatingPanel';
 import './CommentComposer.css';
 
 /** `@` followed by non-space characters, at the caret, after the start or whitespace. */
@@ -112,6 +113,7 @@ export function CommentComposer({
   const baseId = useId();
   const listId = `${baseId}-mentions`;
   const rootRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
   const [value, setValue] = useState('');
   const [picked, setPicked] = useState<CommentMention[]>([]);
   const [trigger, setTrigger] = useState<MentionTrigger | null>(null);
@@ -129,6 +131,7 @@ export function CommentComposer({
   const open = suggestions.length > 0;
   const active = suggestions[Math.min(activeIndex, suggestions.length - 1)];
   const optionId = (id: string) => `${baseId}-option-${id}`;
+  useFloatingPanel(listRef, open);
 
   /** Caret index to restore once the picked mention is in the controlled value. */
   const caretAfterPick = useRef<number | null>(null);
@@ -248,6 +251,7 @@ export function CommentComposer({
           />
           {open && (
             <ul
+              ref={listRef}
               id={listId}
               role="listbox"
               aria-label="Mention suggestions"
