@@ -26,6 +26,12 @@ a consumer greps this file before bumping.
 | `bds-progress-stepper__connector--{complete,incomplete}` | `bds-progress-stepper__connector--status-{complete,incomplete}` | `currentStep` |
 | `bds-progress-stepper__dot--{active,complete,inactive}` | `bds-progress-stepper__dot--status-{active,complete,inactive}` | `currentStep` |
 
+**Breaking (consumer CSS):** TaskConsole's item and icon state modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-task-console__{item,icon}--{completed,failed,in-progress,pending}` | `bds-task-console__{item,icon}--status-{completed,failed,in-progress,pending}` | `items[].status` |
+
 **Breaking (consumer CSS):** Card's control-status modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
 
 | Old | New | Prop |
