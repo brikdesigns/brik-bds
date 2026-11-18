@@ -19,7 +19,7 @@ const meta: Meta<typeof CommentComposer> = {
   parameters: { layout: 'centered' },
   argTypes: {
     onSubmit: { action: 'submitted', description: 'Called with `{ body, mentions }`. May return a Promise: pending shows until it settles, the text clears on resolve and stays on reject.' },
-    mentions: { control: 'object', description: 'Suggestions offered after typing `@`: `{ id, label, description? }`. Omit for a plain composer.' },
+    mentions: { control: 'object', description: 'Suggestions offered after typing `@`: `{ id, label, description?, kind? }`. `kind: \'person\' | \'agent\'` adds a text marker. Omit for a plain composer.' },
     label: { control: 'text', description: 'Accessible name of the textarea.' },
     placeholder: { control: 'text', description: 'Placeholder text.' },
     submitLabel: { control: 'text', description: 'Submit button text.' },
@@ -46,6 +46,23 @@ export const Default: Story = {};
 
 /** @summary Submit in flight; button spinner, text read-only */
 export const Pending: Story = { args: { pending: true } };
+
+const mixedMentions: CommentMention[] = [
+  { id: 'person-ada', label: 'ada', description: 'Account lead', kind: 'person' },
+  { id: 'agent-qa', label: 'qa', description: 'Code review', kind: 'agent' },
+  { id: 'agent-design-system', label: 'design-system', kind: 'agent' },
+];
+
+/** @summary Person and agent suggestions carry a text marker */
+export const WithKinds: Story = {
+  args: { mentions: mixedMentions },
+  play: async ({ canvas }) => {
+    await userEvent.type(canvas.getByRole('textbox', { name: 'Add a comment' }), '@');
+    await expect(await canvas.findAllByRole('option')).toHaveLength(3);
+    await expect(canvas.getByRole('option', { name: /@ada.*Person/ })).toBeInTheDocument();
+    await expect(canvas.getByRole('option', { name: /@qa.*Agent/ })).toBeInTheDocument();
+  },
+};
 
 /** @summary Typing `@` opens the suggestion list */
 export const WithMentions: Story = {
@@ -82,6 +99,26 @@ export const InteractionTestMentionKeyboard: Story = {
         mentions: [mentions[1]],
       }),
     );
+  },
+};
+
+/** @summary Payload returns kind unchanged; no marker without kind */
+export const InteractionTestMentionKind: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: { mentions: [...mixedMentions, { id: 'plain', label: 'plain' }], onSubmit: fn(async () => {}) },
+  play: async ({ args, canvas }) => {
+    const textbox = canvas.getByRole('textbox', { name: 'Add a comment' });
+    await userEvent.click(textbox);
+    await userEvent.keyboard('@plain');
+    await expect(canvas.getByRole('option', { name: '@plain' })).toBeInTheDocument();
+    await userEvent.keyboard('{Enter}{Backspace}{Backspace}{Backspace}{Backspace}{Backspace}{Backspace}{Backspace}');
+    await userEvent.keyboard('@qa');
+    await userEvent.keyboard('{Enter}');
+    await userEvent.keyboard('hi{Meta>}{Enter}{/Meta}');
+    await waitFor(() =>
+      expect(args.onSubmit).toHaveBeenCalledWith({ body: '@qa hi', mentions: [mixedMentions[1]] }),
+    );
+    await expect(mixedMentions[1].kind).toBe('agent');
   },
 };
 
