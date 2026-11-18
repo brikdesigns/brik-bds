@@ -7,9 +7,13 @@
  *
  * See tokens/CASCADE.md for the full load-order + decision tree.
  *
- * Supplements figma-tokens.css with tokens that are NOT yet in Figma/Style Dictionary.
+ * FROZEN — THIS FILE TAKES NO NEW NAMES (#3239). A token name is born in Figma
+ * only: add the variable in Figma and re-pull, so Style Dictionary writes it to
+ * figma-tokens.css. Every name declared here has no Figma variable behind it;
+ * the set is listed in tokens/naming-canon-baseline.json (rule 9) and sorted in
+ * #3241 — promote in Figma, or delete. `lint-naming-canon` fails a new one.
  *
- * What lives here:
+ * What still lives here:
  *   - Semantic tokens not yet promoted to Figma variables
  *   - Status/service/presence semantic tokens
  *   - Shadow, overlay, and interaction state tokens

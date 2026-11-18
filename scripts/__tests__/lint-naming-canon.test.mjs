@@ -137,11 +137,14 @@ const CLEAN_SERVICE_CSS = `.bds-service-tag--information { background: var(--bds
  * judged on its own, not against the repo's live baseline. `--refs` is always
  * pointed at the fixture too: left to its default it would scan the real
  * `components/`, `docs-site/`, … and every case would then depend on repo state.
+ * `--figma` likewise: it defaults to the fixture's own tokens file, so every
+ * name counts as Figma-born and only a rule-9 case (which passes `figma`) can
+ * trip rule 9.
  */
 function run({
   tokens = CLEAN_TOKENS, tsx = CLEAN_TSX, css = CLEAN_CSS, refs = CLEAN_REFS, refsDir,
   serviceConfig = CLEAN_SERVICE_CONFIG, serviceTsx = CLEAN_SERVICE_TSX, serviceCss = CLEAN_SERVICE_CSS,
-  baseline, args = [],
+  baseline, figma, args = [],
 } = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'naming-canon-'));
   const tokensPath = path.join(dir, 'tokens.css');
@@ -163,9 +166,13 @@ function run({
   fs.mkdirSync(refsPath, { recursive: true });
   fs.writeFileSync(path.join(refsPath, 'consumer.css'), refs);
 
+  const figmaPath = path.join(dir, 'figma-tokens.css');
+  if (figma !== undefined && figma !== null) fs.writeFileSync(figmaPath, figma);
+
   const argv = [
     GATE, '--tokens', tokensPath, '--components', path.join(dir, 'ui'),
-    '--refs', refsDir === undefined ? refsPath : refsDir, ...args,
+    '--refs', refsDir === undefined ? refsPath : refsDir,
+    '--figma', figma === undefined ? tokensPath : figmaPath, ...args,
   ];
   if (baseline === undefined) {
     argv.push('--no-baseline');
@@ -1002,6 +1009,39 @@ describe('rule 8 — no banned segment in a --bds-* name (#3088)', () => {
   });
 });
 
+describe('rule 9 — every name is born in Figma (#3240)', () => {
+  // The Figma sync wrote CLEAN_TOKENS; the bundle then gains one hand-written name.
+  const planted = { tokens: withTokens('--bds-background-info-light: var(--bds-color-blue-300);'), figma: CLEAN_TOKENS };
+
+  it('fails on a name no Figma-generated file declares', () => {
+    const { code, out } = run(planted);
+    expect(code).toBe(1);
+    expect(out).toMatch(/Rule 9 — name with no Figma variable behind it \(#3240\): 1 live/);
+    expect(out).toMatch(/--bds-background-info-light — declared in no Figma-generated file/);
+  });
+
+  it('passes once the Figma sync declares the name', () => {
+    const { code, out } = run({ tokens: planted.tokens, figma: planted.tokens });
+    expect(out).not.toMatch(/Rule 9/);
+    expect(code).toBe(0);
+  });
+
+  it('a frozen name is green, and its entry goes stale when the name is promoted or deleted', () => {
+    const baseline = { rules: { 9: { '--bds-background-info-light': 3239 } } };
+    expect(run({ ...planted, baseline }).code).toBe(0);
+    const { code, out } = run({ figma: CLEAN_TOKENS, baseline });
+    expect(code).toBe(1);
+    expect(out).toMatch(/rule 9: --bds-background-info-light/);
+  });
+
+  it('exit 2 when a Figma-generated file is missing or declares nothing', () => {
+    expect(run({ figma: null }).code).toBe(2);
+    const { code, out } = run({ figma: ':root {\n}\n' });
+    expect(code).toBe(2);
+    expect(out).toMatch(/parsed 0 Figma-generated names/);
+  });
+});
+
 describe('the baseline can only shrink', () => {
   const planted = { tokens: withTokens('--bds-content-width-narrow: 640px;') };
 
@@ -1074,8 +1114,8 @@ describe('a broken scan never reads as clean', () => {
   });
 
   it('exit 2 on a bad --rule', () => {
-    const { code, out } = run({ args: ['--rule', '9'] });
+    const { code, out } = run({ args: ['--rule', '10'] });
     expect(code).toBe(2);
-    expect(out).toMatch(/--rule must be 1-8/);
+    expect(out).toMatch(/--rule must be 1-9/);
   });
 });

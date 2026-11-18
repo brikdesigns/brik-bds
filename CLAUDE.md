@@ -14,7 +14,7 @@ READ this file only inside brik-bds: portal and brik-llm `@import` `BDS-CONSUMER
 ## brik-bds specifics
 
 - **Active dev** — `~/Documents/GitHub/brik/brik-bds/`. NEVER edit the read-only mirror at `brik-llm/foundations/brik-bds/`.
-- **Canon for CSS** — INVOKE the `canon-css` / `validate-token-names` skill before writing any `--text-*` / `--surface-*` / `--background-*` / semantic `--border-*` declaration. `dist/tokens.css` is the only authority.
+- **Canon for CSS** — INVOKE the `canon-css` / `validate-token-names` skill before writing any `--text-*` / `--surface-*` / `--background-*` / semantic `--border-*` declaration. A token name is BORN IN FIGMA ONLY: the authority is the Figma-generated files (`tokens/figma-tokens*.css`, `modes-*.css`, `layout-fluid.css`), NEVER `dist/tokens.css`, which also bundles hand-written names. NEVER add a name to `gap-fills.css` or any hand-written token file; `lint-naming-canon` rule 9 fails it → [#3239](https://github.com/brikdesigns/brik-bds/issues/3239).
 - **Component composition** — USE Radix UI primitives (`@radix-ui/react-*`) for a11y behavior; BDS owns styling. NEVER use shadcn/ui or other CSS-variable libraries.
 - **Pre-implementation** — BUILD new / composite components in Storybook + code with tokens (Storybook + the coded component are the source of truth; Figma is the *token* source, NOT a component-layout gate; Paper is for client sites, NEVER BDS). PREFER nesting existing primitives over new components → [component-build](.claude/standards/component-build.md).
 - **Pre-PR** — RUN `./scripts/pr-checklist.sh` before any PR touching tokens, themes, or component CSS. ONE concern per PR.

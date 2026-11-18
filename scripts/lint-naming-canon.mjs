@@ -16,7 +16,7 @@
  * ADR-033 closes those lists. This gate is what stops them re-opening — it is
  * #1910 AC #5, and ADR-033 § Enforcement is its spec.
  *
- * ── The seven rules (rules 1-6: ADR-033 § Enforcement; rule 7: ADR-043) ────
+ * ── The nine rules (rules 1-6: ADR-033 § Enforcement; rule 7: ADR-043) ─────
  *
  *   1  step        A token's step falls outside its family's vocabulary (§ 3)
  *                  and is not a § Named exception. Reads dist/tokens.css.
@@ -44,6 +44,13 @@
  *                  dist/tokens.css and the Primitive/Semantic names components/ui
  *                  CSS declares. A Tier 4 hook is judged by lint-tokens.js
  *                  (`tier4-shape`); a name kept as a TIER4_ALIASES alias is exempt.
+ *   9  provenance  A name in dist/tokens.css that no Figma-generated file
+ *                  declares (#3240). Figma is the only place a token name is
+ *                  born: Style Dictionary and generate-modes-css write it into
+ *                  FIGMA_GENERATED, and dist/tokens.css also bundles the
+ *                  hand-written files, so a name invented there reads as canon
+ *                  to every consumer. The hand-written set is frozen at the
+ *                  baseline and sorted in #3241 — promote in Figma, or delete.
  *
  * ── Why rule 6 reads references, when 1-5 read names ───────────────────────
  *
@@ -109,12 +116,13 @@
  * `main` unnoticed, which is the whole failure the gate exists to prevent.
  *
  * ── CLI ────────────────────────────────────────────────────────────────────
- *   node scripts/lint-naming-canon.mjs              all seven rules
+ *   node scripts/lint-naming-canon.mjs              all nine rules
  *   node scripts/lint-naming-canon.mjs --rule 3     one rule
  *   node scripts/lint-naming-canon.mjs --json       machine-readable
  *   node scripts/lint-naming-canon.mjs --census     every finding, baselined too
  *   node scripts/lint-naming-canon.mjs --no-baseline  ignore the baseline
  *   node scripts/lint-naming-canon.mjs --tokens <f> --components <dir>
+ *   node scripts/lint-naming-canon.mjs --figma <f,f>  rule 9's generated files
  *
  * Exit 0 = clean, 1 = a violation or a stale baseline entry, 2 = the check
  * broke. Exit 2 matters: a parse that finds nothing must never read as clean
@@ -1181,6 +1189,45 @@ function segmentFindings(names, aliases) {
   return findings;
 }
 
+// ── Rule 9 — every name is born in Figma (#3240) ───────────────────────────
+
+/**
+ * The files the Figma sync writes: Style Dictionary (figma-tokens*), then
+ * generate-modes-css (modes-*, layout-fluid) and the Brand Kit compile, all from
+ * design-tokens/. dist-assemble.mjs bundles these WITH the hand-written files
+ * (gap-fills, ratios, fluid-type, animations) — a name only those declare has no
+ * Figma variable behind it.
+ */
+const FIGMA_GENERATED = [
+  'figma-tokens.css', 'figma-tokens-dark.css', 'theme-brand-brik.generated.css',
+  'modes-borderwidth.css', 'modes-spacing.css', 'modes-typography.css', 'modes-borderradius.css',
+  'modes-elevation.css', 'modes-width.css', 'layout-fluid.css',
+].map((f) => path.join('tokens', f));
+
+function collectFigmaNames(files) {
+  const names = new Set();
+  for (const file of files) {
+    if (!fs.existsSync(file)) throw new Error(`${file} does not exist (rule 9 reads the Figma-generated files)`);
+    for (const m of blankComments(fs.readFileSync(file, 'utf8')).matchAll(/(--[A-Za-z0-9_-]+)\s*:/g)) names.add(m[1]);
+  }
+  return names;
+}
+
+function provenanceFindings(tokenNames, figmaNames) {
+  const findings = [];
+  for (const name of tokenNames) {
+    if (figmaNames.has(name)) continue;
+    findings.push({
+      rule: 9,
+      id: name,
+      where: 'dist/tokens.css',
+      detail: 'declared in no Figma-generated file — add the variable in Figma and re-run the sync; '
+        + 'a hand-written token file takes no new names',
+    });
+  }
+  return findings;
+}
+
 // ── Baseline ────────────────────────────────────────────────────────────────
 
 /**
@@ -1210,6 +1257,7 @@ const RULE_NAMES = {
   6: 'reference to a deleted --*-status-* token (§ Token families)',
   7: 'colour Primitive is not color-{family}-{step} (ADR-043 § 2, § 4)',
   8: 'banned abbreviation or run-on stem in a --bds-* name (#3088)',
+  9: 'name with no Figma variable behind it (#3240)',
 };
 
 function main() {
@@ -1225,10 +1273,11 @@ function main() {
   const componentsDir = flag('--components', DEFAULT_COMPONENTS);
   const baselinePath = flag('--baseline', BASELINE_PATH);
   const referenceDirs = flag('--refs', REFERENCE_DIRS.join(',')).split(',').filter(Boolean);
+  const figmaFiles = flag('--figma', FIGMA_GENERATED.join(',')).split(',').filter(Boolean);
   const onlyRule = args.includes('--rule') ? Number(flag('--rule', '0')) : null;
 
   if (onlyRule !== null && !RULE_NAMES[onlyRule]) {
-    console.error(`lint-naming-canon: --rule must be 1-8, got ${onlyRule}`);
+    console.error(`lint-naming-canon: --rule must be 1-9, got ${onlyRule}`);
     process.exit(2);
   }
 
@@ -1241,7 +1290,7 @@ function main() {
     process.exit(2);
   }
 
-  let tokens; let unions; let modifiers; let refs; let lines; let slBlocks;
+  let tokens; let unions; let modifiers; let refs; let lines; let slBlocks; let figmaNames;
   try {
     tokens = collectDeclarations(tokensPath);
     unions = collectUnions(componentsDir);
@@ -1249,6 +1298,7 @@ function main() {
     refs = collectReferences(referenceDirs);
     lines = serviceLines(componentsDir);
     slBlocks = serviceLineBlocks(componentsDir);
+    figmaNames = collectFigmaNames(figmaFiles);
   } catch (err) {
     console.error(`SCAN FAILED — ${err.message}`);
     process.exit(2);
@@ -1268,6 +1318,7 @@ function main() {
     // what the ADR says it does, so neither may read as a clean scan.
     ['service lines', lines.size],
     ['service-line blocks', slBlocks.size],
+    ['Figma-generated names', figmaNames.size],
   ];
   const empty = denominators.filter(([, n]) => n === 0);
   if (empty.length > 0) {
@@ -1295,6 +1346,7 @@ function main() {
     ...referenceFindings(refs),
     ...colorBodyFindings(tokens.byName),
     ...segmentFindings(collectSegmentNames(tokens.byName.keys(), componentsDir), tier4AliasNames()),
+    ...provenanceFindings(tokens.byName.keys(), figmaNames),
   ];
   if (onlyRule !== null) all = all.filter((f) => f.rule === onlyRule);
 
@@ -1343,7 +1395,7 @@ function main() {
     + `${lines.size} service line(s) exempt on ${slBlocks.size} block(s)`
   );
 
-  for (const rule of onlyRule !== null ? [onlyRule] : [1, 2, 3, 4, 5, 6, 7, 8]) {
+  for (const rule of onlyRule !== null ? [onlyRule] : [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
     const l = live.filter((f) => f.rule === rule);
     const b = baselined.filter((f) => f.rule === rule);
     if (l.length === 0 && b.length === 0) continue;
