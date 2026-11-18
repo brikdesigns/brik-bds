@@ -61,7 +61,6 @@ const WEBSITE_ONLY = new Set([
 // dirs, or pure shims that render another component (no styled markup of their
 // own). A CSS file is not expected. Excluded from CSS completeness check.
 const DOCS_ONLY = new Set([
-  'Calendar',  // placeholder — calendar is a sub-component of DatePicker
   'Icons',     // reference page — icon grid stories only, no styled component
   'BreadcrumbSwitcher',  // deprecated shim — renders Breadcrumb; styles live in Breadcrumb.css (#2521)
   'ReadModePage',  // page-archetype pattern doc — composes DataSection/FieldGrid/Field, no CSS of its own (#2525)
