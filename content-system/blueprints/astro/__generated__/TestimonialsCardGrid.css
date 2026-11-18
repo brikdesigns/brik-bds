@@ -97,8 +97,8 @@
   @media (prefers-reduced-motion: no-preference) {
     .bp-testimonials-grid__card {
       transition:
-        transform var(--bds-duration-md) var(--bds-ease-out),
-        box-shadow var(--bds-duration-md) var(--bds-ease-out);
+        transform var(--bds-duration-200) var(--bds-ease-out),
+        box-shadow var(--bds-duration-200) var(--bds-ease-out);
     }
 
     .bp-testimonials-grid__card:hover {

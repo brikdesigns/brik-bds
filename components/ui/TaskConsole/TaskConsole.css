@@ -118,7 +118,7 @@
   padding: var(--bds-padding-md) var(--bds-padding-lg);
   gap: var(--bds-gap-md);
   border-bottom: var(--bds-border-width-md) solid var(--bds-border-primary);
-  transition: background-color var(--bds-duration-sm) var(--bds-ease-out);
+  transition: background-color var(--bds-duration-100) var(--bds-ease-out);
 }
 
 .bds-task-console__item:last-child {

@@ -242,7 +242,7 @@
 }
 
 .bds-breadcrumb__switch-caret {
-  transition: transform var(--bds-duration-sm) var(--bds-ease-out);
+  transition: transform var(--bds-duration-100) var(--bds-ease-out);
 }
 
 .bds-breadcrumb__switch [aria-expanded='true'] .bds-breadcrumb__switch-caret {

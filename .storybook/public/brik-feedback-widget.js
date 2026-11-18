@@ -161,8 +161,8 @@
       text-transform: uppercase;
       cursor: pointer;
       box-shadow: var(--elevation-md, 0 4px 24px rgba(0,0,0,0.3));
-      transition: background var(--bds-duration-fast, 0.15s) var(--ease-default, ease),
-                  transform var(--bds-duration-fast, 0.15s) var(--ease-default, ease);
+      transition: background var(--bds-duration-100, 0.15s) var(--ease-default, ease),
+                  transform var(--bds-duration-100, 0.15s) var(--ease-default, ease);
       display: inline-flex;
       align-items: center;
       justify-content: center;

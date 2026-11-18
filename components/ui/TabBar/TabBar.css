@@ -11,11 +11,11 @@
 
 .bds-tab-bar-item {
   border: 0;
-  transition: opacity var(--bds-duration-sm) var(--bds-ease-out),
-    background-color var(--bds-duration-sm) var(--bds-ease-out),
-    color var(--bds-duration-sm) var(--bds-ease-out),
-    border-color var(--bds-duration-sm) var(--bds-ease-out),
-    transform var(--bds-duration-sm) var(--bds-ease-out);
+  transition: opacity var(--bds-duration-100) var(--bds-ease-out),
+    background-color var(--bds-duration-100) var(--bds-ease-out),
+    color var(--bds-duration-100) var(--bds-ease-out),
+    border-color var(--bds-duration-100) var(--bds-ease-out),
+    transform var(--bds-duration-100) var(--bds-ease-out);
 }
 
 /* Micro press feedback on click */

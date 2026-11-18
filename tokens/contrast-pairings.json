@@ -827,7 +827,7 @@
       "group": "indicator",
       "label": "Subtle indicator label on the neutral pale fill",
       "fg": "--bds-text-on-color-light",
-      "bg": "--bds-background-neutral-light",
+      "bg": "--bds-surface-neutral",
       "thresholdType": "AA",
       "note": "The `subtle` appearance of Badge, Tag and Avatar (brik-bds#2943). Each --bds-background-{role}-light holds a pale value in BOTH themes, so the label is the theme-stable dark ink --bds-text-on-color-light, never a theme-flipping --bds-text-{role} (OPERATOR CHOSE 2026-11-03). Gated AA, the indicator-label floor; these eleven rows are what stop a future re-point of a -light fill onto a mid-tone step."
     },
@@ -835,21 +835,21 @@
       "group": "indicator",
       "label": "Subtle indicator label on the positive pale fill",
       "fg": "--bds-text-on-color-light",
-      "bg": "--bds-background-positive-light",
+      "bg": "--bds-surface-positive",
       "thresholdType": "AA"
     },
     {
       "group": "indicator",
       "label": "Subtle indicator label on the warning pale fill",
       "fg": "--bds-text-on-color-light",
-      "bg": "--bds-background-warning-light",
+      "bg": "--bds-surface-warning",
       "thresholdType": "AA"
     },
     {
       "group": "indicator",
       "label": "Subtle indicator label on the negative pale fill",
       "fg": "--bds-text-on-color-light",
-      "bg": "--bds-background-negative-light",
+      "bg": "--bds-surface-negative",
       "thresholdType": "AA"
     },
     {
@@ -863,35 +863,35 @@
       "group": "indicator",
       "label": "Subtle indicator label on the accent-blue pale fill",
       "fg": "--bds-text-on-color-light",
-      "bg": "--bds-background-accent-blue-light",
+      "bg": "--bds-surface-accent-blue",
       "thresholdType": "AA"
     },
     {
       "group": "indicator",
       "label": "Subtle indicator label on the accent-green pale fill",
       "fg": "--bds-text-on-color-light",
-      "bg": "--bds-background-accent-green-light",
+      "bg": "--bds-surface-accent-green",
       "thresholdType": "AA"
     },
     {
       "group": "indicator",
       "label": "Subtle indicator label on the accent-orange pale fill",
       "fg": "--bds-text-on-color-light",
-      "bg": "--bds-background-accent-orange-light",
+      "bg": "--bds-surface-accent-orange",
       "thresholdType": "AA"
     },
     {
       "group": "indicator",
       "label": "Subtle indicator label on the accent-purple pale fill",
       "fg": "--bds-text-on-color-light",
-      "bg": "--bds-background-accent-purple-light",
+      "bg": "--bds-surface-accent-purple",
       "thresholdType": "AA"
     },
     {
       "group": "indicator",
       "label": "Subtle indicator label on the accent-yellow pale fill",
       "fg": "--bds-text-on-color-light",
-      "bg": "--bds-background-accent-yellow-light",
+      "bg": "--bds-surface-accent-yellow",
       "thresholdType": "AA"
     },
     {

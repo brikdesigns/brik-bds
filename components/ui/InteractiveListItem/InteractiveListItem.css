@@ -23,8 +23,8 @@
     color: inherit;
     font: inherit;
     transition:
-      background-color var(--bds-duration-sm) var(--bds-ease-out),
-      transform var(--bds-duration-sm) var(--bds-ease-out);
+      background-color var(--bds-duration-100) var(--bds-ease-out),
+      transform var(--bds-duration-100) var(--bds-ease-out);
   }
 
   /* ─── Size variants ────────────────────────────────────────────

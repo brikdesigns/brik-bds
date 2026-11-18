@@ -69,7 +69,7 @@ function parseDecls(body) {
 // Blank comment bodies before looking for the block's closing `}` — a brace in a
 // comment otherwise truncates the block and every token below it reads as
 // undefined (#1965; validate-themes.js `blankComments`). This copy lacked it, so
-// `--bds-background-neutral-light` (gap-fills.css:280) never resolved here.
+// `--bds-surface-neutral` (gap-fills.css:280) never resolved here.
 const blankComments = (src) => src.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
 
 function extractBlock(cssPath, selectorRe) {
@@ -172,7 +172,7 @@ const CASES = [
   // whole script. Repointed to the neutral pair Tag.css:46-49 paints today (the
   // old `--muted` variant is `--subtle` now), so the harness measures a fill Tag
   // still ships rather than a token that no longer exists.
-  { group: 'fill-bearing (already fades)', label: 'Tag subtle neutral', fill: '--bds-background-neutral-light', text: '--bds-text-on-color-light' },
+  { group: 'fill-bearing (already fades)', label: 'Tag subtle neutral', fill: '--bds-surface-neutral', text: '--bds-text-on-color-light' },
   // Only the ITEM carries :disabled here, never the track — so these fade
   // toward the track, not the page. An inactive item is transparent (fill-less
   // against the track); an active one paints the `--background-primary` pill.

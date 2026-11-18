@@ -6,8 +6,8 @@
   flex-direction: column;
   gap: var(--bds-gap-md);
   border-radius: var(--bds-border-radius-md);
-  transition: box-shadow var(--bds-duration-md) var(--bds-ease-out),
-    transform var(--bds-duration-md) var(--bds-ease-out);
+  transition: box-shadow var(--bds-duration-200) var(--bds-ease-out),
+    transform var(--bds-duration-200) var(--bds-ease-out);
 }
 
 /* ─── Variants ───────────────────────────────────────────────── */

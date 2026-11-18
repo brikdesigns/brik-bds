@@ -19,7 +19,7 @@
     background-color: transparent;
     cursor: pointer;
     user-select: none;
-    transition: background-color var(--bds-duration-md) var(--bds-ease-out);
+    transition: background-color var(--bds-duration-200) var(--bds-ease-out);
   }
 
   /* Hover + pressed mirror the ghost Button (--bds-background-primary-hover /
@@ -87,7 +87,7 @@
     font-weight: var(--bds-font-weight-medium);
     color: var(--bds-text-primary);
     line-height: var(--bds-font-line-height-normal);
-    transition: color var(--bds-duration-md) var(--bds-ease-out);
+    transition: color var(--bds-duration-200) var(--bds-ease-out);
   }
 
   .bds-checklist--checked .bds-checklist__label {
