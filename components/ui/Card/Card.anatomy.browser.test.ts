@@ -179,7 +179,7 @@ describe('Card anatomy API (ADR-038)', () => {
     const el = await mount(
       h(Card as never, { layout: 'control', title: 'Source', connectionStatus: 'disabled' }),
     );
-    const status = el.querySelector('.bds-card__control-status--disabled');
+    const status = el.querySelector('.bds-card__control-status--status-disabled');
     expect(status).not.toBeNull();
     expect(status?.querySelector('.bds-card__control-status-label')?.textContent).toBe('Disabled');
     expect(status?.querySelector('.bds-dot--tone-neutral')).not.toBeNull();

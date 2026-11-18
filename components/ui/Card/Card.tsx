@@ -628,7 +628,7 @@ function renderAnatomy({
               <div
                 className={bdsClass(
                   'bds-card__control-status',
-                  `bds-card__control-status--${resolvedConnectionStatus}`,
+                  `bds-card__control-status--status-${resolvedConnectionStatus}`,
                   `bds-card__control-status--tone-${CONNECTION_STATUS_DOT[resolvedConnectionStatus]}`,
                 )}
                 role="status"

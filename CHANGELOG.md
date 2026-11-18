@@ -18,6 +18,12 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** Card's control-status modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-card__control-status--{not-configured,connected,synced,negative,disabled}` | `bds-card__control-status--status-{not-configured,connected,synced,negative,disabled}` | `connectionStatus` |
+
 **Breaking (consumer CSS):** Avatar's presence dot modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
 
 | Old | New | Prop |
