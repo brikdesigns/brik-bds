@@ -17,10 +17,10 @@ The default choice. These carry the overwhelming majority of motion in BDS, and 
 
 | Token | Resolves to | Use case |
 |---|---|---|
-| `--bds-duration-sm` | `100ms` | Micro-interactions — hover, focus |
-| `--bds-duration-md` | `200ms` | Standard transitions — buttons, cards |
-| `--bds-duration-lg` | `300ms` | Emphasis — modals, sheets, reveals |
-| `--bds-duration-xl` | `500ms` | Cross-fades, long reveals — one rung past `--bds-duration-lg` |
+| `--bds-duration-100` | `100ms` | Micro-interactions — hover, focus |
+| `--bds-duration-200` | `200ms` | Standard transitions — buttons, cards |
+| `--bds-duration-300` | `300ms` | Emphasis — modals, sheets, reveals |
+| `--bds-duration-400` | `500ms` | Cross-fades, long reveals — one rung past `--bds-duration-300` |
 
 Defined in `tokens/gap-fills.css` as aliases of the numeric primitives below. The step words follow the t-shirt ramp per [ADR-033 § 3](/docs); the legacy `fast` / `normal` / `slow` are `sm` / `md` / `lg` grandfathered pending rename.
 
@@ -93,7 +93,7 @@ Motion tokens are authored in three different places, which matters when you nee
 | Token group | Source | Editable |
 |---|---|---|
 | `--bds-duration-100` … `--bds-duration-600` | Figma → `design-tokens/tokens-studio.json` → `tokens/figma-tokens.css` | Figma only — the CSS is auto-generated |
-| `--bds-duration-sm` / `-normal` / `-slow`, all `--ease-*` | `tokens/gap-fills.css` | Hand-authored |
+| `--bds-duration-100` / `-normal` / `-slow`, all `--ease-*` | `tokens/gap-fills.css` | Hand-authored |
 | `--stagger-1` … `--stagger-6` | `tokens/bridge.css` | Hand-authored |
 
 Ready-made utility classes built on these tokens — `.bds-enter-*`, `.bds-anim-*` — live in `tokens/motion-classes.css` over the keyframes in `tokens/animations.css`. Prefer an existing class before writing a new animation.

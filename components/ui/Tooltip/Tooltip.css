@@ -14,7 +14,7 @@
   position: absolute;
   padding: var(--bds-padding-tiny) var(--bds-padding-md);
   background-color: var(--bds-tooltip-background);
-  color: var(--bds-tooltip-text);
+  color: var(--bds-text-inverse);
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
   line-height: var(--bds-font-line-height-normal);
@@ -23,7 +23,7 @@
   z-index: var(--bds-z-tooltip);
   pointer-events: none;
   opacity: 0;
-  transition: opacity var(--bds-duration-md) var(--bds-ease-out);
+  transition: opacity var(--bds-duration-200) var(--bds-ease-out);
 }
 
 .bds-tooltip__bubble--visible {

@@ -154,7 +154,7 @@
   font-weight: var(--bds-font-weight-semibold);
   color: var(--bds-text-primary);
   cursor: pointer;
-  transition: background-color var(--bds-duration-fast) var(--bds-ease-out);
+  transition: background-color var(--bds-duration-100) var(--bds-ease-out);
 }
 
 .bds-search-overlay-trigger:hover {

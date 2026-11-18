@@ -34,17 +34,10 @@ const PRIMITIVES = [
   { slug: '21-9', value: '21 / 9', note: 'Cinematic, full-bleed backgrounds' },
 ] as const;
 
-const ALIASES = [
-  { slug: 'square',           resolves: '1-1',  note: 'Alias for `1-1`' },
-  { slug: 'photo-landscape',  resolves: '3-2',  note: 'Alias for `3-2` — role-named photo crop' },
-  { slug: 'photo-portrait',   resolves: '2-3',  note: 'Alias for `2-3` — role-named photo crop' },
-  { slug: 'cinema',           resolves: '16-9', note: 'Alias for `16-9` — role-named hero/video slot' },
-] as const;
-
 const DEPRECATED = [
   { slug: 'portrait',  use: '3-4' },
   { slug: 'landscape', use: '4-3' },
-  { slug: 'wide',      use: '16-9 or cinema' },
+  { slug: 'wide',      use: '16-9' },
   { slug: 'ultrawide', use: '21-9' },
 ] as const;
 
@@ -148,9 +141,8 @@ const Card = ({
 /* ─── Catalog ─────────────────────────────────────────────────── */
 
 /**
- * All canonical ratios, semantic aliases, and deprecated
- * mode-words side by side.
- * @summary Canonical ratios, aliases, deprecated mode-words
+ * All canonical ratios and deprecated mode-words side by side.
+ * @summary Canonical ratios, deprecated mode-words
  */
 export const Catalog: Story = {
   render: () => (
@@ -165,23 +157,6 @@ export const Catalog: Story = {
               meta={
                 <>
                   {value} — {note}
-                </>
-              }
-            />
-          ))}
-        </Grid>
-      </Section>
-
-      <Section title="Semantic aliases">
-        <Grid>
-          {ALIASES.map(({ slug, resolves, note }) => (
-            <Card
-              key={slug}
-              slug={slug}
-              token={`--bds-aspect-${slug}`}
-              meta={
-                <>
-                  Resolves to <code>--bds-aspect-{resolves}</code> — {note}
                 </>
               }
             />

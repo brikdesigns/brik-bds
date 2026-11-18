@@ -101,7 +101,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--bds-gap-xs);
-  animation: bds-tag-list-dropdown-enter var(--bds-duration-sm) var(--bds-ease-out);
+  animation: bds-tag-list-dropdown-enter var(--bds-duration-100) var(--bds-ease-out);
   transform-origin: top center;
 }
 
@@ -121,7 +121,7 @@
   line-height: var(--bds-font-line-height-normal);
   color: var(--bds-text-primary);
   cursor: pointer;
-  transition: background-color var(--bds-duration-sm) var(--bds-ease-out);
+  transition: background-color var(--bds-duration-100) var(--bds-ease-out);
 }
 
 .bds-addable-tag-list__option:hover,

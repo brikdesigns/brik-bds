@@ -35,10 +35,10 @@
   border: var(--bds-border-width-md) solid transparent;
   background: none;
   color: inherit;
-  transition: background-color var(--bds-duration-md) var(--bds-ease-out),
-    border-color var(--bds-duration-md) var(--bds-ease-out),
-    color var(--bds-duration-md) var(--bds-ease-out),
-    opacity var(--bds-duration-md) var(--bds-ease-out);
+  transition: background-color var(--bds-duration-200) var(--bds-ease-out),
+    border-color var(--bds-duration-200) var(--bds-ease-out),
+    color var(--bds-duration-200) var(--bds-ease-out),
+    opacity var(--bds-duration-200) var(--bds-ease-out);
   box-sizing: border-box;
 }
 

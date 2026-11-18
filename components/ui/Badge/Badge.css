@@ -174,17 +174,17 @@
    tokens/contrast-pairings.json. */
 
 .bds-badge--subtle.bds-badge--tone-positive {
-  background-color: var(--bds-background-positive-light);
+  background-color: var(--bds-surface-positive);
   color: var(--bds-text-on-color-light);
 }
 
 .bds-badge--subtle.bds-badge--tone-warning {
-  background-color: var(--bds-background-warning-light);
+  background-color: var(--bds-surface-warning);
   color: var(--bds-text-on-color-light);
 }
 
 .bds-badge--subtle.bds-badge--tone-negative {
-  background-color: var(--bds-background-negative-light);
+  background-color: var(--bds-surface-negative);
   color: var(--bds-text-on-color-light);
 }
 
@@ -203,7 +203,7 @@
 }
 
 .bds-badge--subtle.bds-badge--tone-neutral {
-  background-color: var(--bds-background-neutral-light);
+  background-color: var(--bds-surface-neutral);
   color: var(--bds-text-on-color-light);
 }
 
@@ -230,7 +230,7 @@
 
 /* Pop-in: badge appears with a bounce scale */
 .bds-badge--animate-in {
-  animation: bds-pop var(--bds-duration-lg) var(--bds-ease-out);
+  animation: bds-pop var(--bds-duration-300) var(--bds-ease-out);
 }
 
 /* Shake: bell icon / notification attention-getter */
@@ -240,7 +240,7 @@
 
 /* Pulse: persistent attention on unread notification badges */
 .bds-badge--pulse {
-  animation: bds-pop var(--bds-duration-lg) var(--bds-ease-out),
+  animation: bds-pop var(--bds-duration-300) var(--bds-ease-out),
     bds-pulse 1.4s var(--bds-ease-in-out) 0.3s infinite;
 }
 

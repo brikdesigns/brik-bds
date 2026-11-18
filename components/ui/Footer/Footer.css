@@ -146,7 +146,7 @@
   font-weight: var(--bds-font-weight-regular);
   line-height: var(--bds-font-line-height-normal);
   text-decoration: none;
-  transition: opacity var(--bds-duration-sm) var(--bds-ease-out);
+  transition: opacity var(--bds-duration-100) var(--bds-ease-out);
   display: inline-flex;
   align-items: center;
   gap: var(--bds-gap-sm);
@@ -213,7 +213,7 @@
   font-weight: var(--bds-font-weight-regular);
   line-height: var(--bds-font-line-height-tight);
   text-decoration: none;
-  transition: opacity var(--bds-duration-sm) var(--bds-ease-out);
+  transition: opacity var(--bds-duration-100) var(--bds-ease-out);
 }
 
 .bds-footer__bottom-link:hover {

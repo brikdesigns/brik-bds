@@ -31,10 +31,10 @@
 .bds-frame--ratio-21-9  { aspect-ratio: var(--bds-aspect-21-9); }
 
 /* Semantic aliases */
-.bds-frame--ratio-square           { aspect-ratio: var(--bds-aspect-square); }
-.bds-frame--ratio-photo-landscape  { aspect-ratio: var(--bds-aspect-photo-landscape); }
-.bds-frame--ratio-photo-portrait   { aspect-ratio: var(--bds-aspect-photo-portrait); }
-.bds-frame--ratio-cinema           { aspect-ratio: var(--bds-aspect-cinema); }
+.bds-frame--ratio-square           { aspect-ratio: var(--bds-aspect-1-1); }
+.bds-frame--ratio-photo-landscape  { aspect-ratio: var(--bds-aspect-3-2); }
+.bds-frame--ratio-photo-portrait   { aspect-ratio: var(--bds-aspect-2-3); }
+.bds-frame--ratio-cinema           { aspect-ratio: var(--bds-aspect-16-9); }
 
 /* Deprecated mode-words — kept working for one minor version.
    Migrate: portrait → 3-4, landscape → 4-3, wide → 16-9 or cinema,

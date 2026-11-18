@@ -12,7 +12,7 @@
 
 .bds-menu {
   /* ─── Component-scoped override surface ── */
-  --menu-enter-duration: var(--bds-duration-md); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+  --menu-enter-duration: var(--bds-duration-200); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   --menu-enter-ease: var(--bds-ease-out);            /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 
   position: absolute;
@@ -147,7 +147,7 @@
 /* ─── Item hover ─────────────────────────────────────── */
 
 .bds-menu__item:not(.bds-menu__item--disabled) {
-  transition: background-color var(--bds-duration-sm) var(--bds-ease-out);
+  transition: background-color var(--bds-duration-100) var(--bds-ease-out);
 }
 
 .bds-menu__item:hover:not(.bds-menu__item--disabled) {
