@@ -128,12 +128,12 @@
 
 /* Dark label: white on --bds-background-positive (#27ae60) is 2.87:1 (fails AA);
    --bds-text-on-color-light is 6.00:1 in both themes (#995). */
-.bds-badge--solid.bds-badge--tone-positive {
+.bds-badge--appearance-solid.bds-badge--tone-positive {
   background-color: var(--bds-background-positive);
   color: var(--bds-text-on-color-light);
 }
 
-.bds-badge--solid.bds-badge--tone-warning {
+.bds-badge--appearance-solid.bds-badge--tone-warning {
   background-color: var(--bds-background-warning);
   color: var(--bds-text-neutral);
 }
@@ -141,19 +141,19 @@
 /* White label: --bds-background-negative is #e52424 after the #2096 primitive
    darken, where white is 4.56:1 in both themes and the old dark label fell to
    3.78:1. (At the prior #eb5757 it was the reverse: white 3.48:1, dark 4.95:1, #995.) */
-.bds-badge--solid.bds-badge--tone-negative {
+.bds-badge--appearance-solid.bds-badge--tone-negative {
   background-color: var(--bds-background-negative);
   color: var(--bds-text-on-color-dark);
 }
 
 /* Blue — the info signal, freed for this family in #1959. Was spelled
    `progress` until ADR-033 § 1 retired the third synonym. */
-.bds-badge--solid.bds-badge--tone-info {
+.bds-badge--appearance-solid.bds-badge--tone-info {
   background-color: var(--bds-background-info);
   color: var(--bds-text-on-color-dark);
 }
 
-.bds-badge--solid.bds-badge--tone-brand {
+.bds-badge--appearance-solid.bds-badge--tone-brand {
   background-color: var(--bds-background-brand-primary);
   color: var(--bds-text-on-color-dark);
 }
@@ -161,7 +161,7 @@
 /* Neutral — the saturated system neutral. `--bds-text-neutral` resolves to the
    same #363636, so the label must be --bds-text-on-color-dark (10.6:1), not
    --bds-text-neutral (1.00:1 — the trap contrast-pairings.json records). */
-.bds-badge--solid.bds-badge--tone-neutral {
+.bds-badge--appearance-solid.bds-badge--tone-neutral {
   background-color: var(--bds-background-neutral);
   color: var(--bds-text-on-color-dark);
 }
@@ -173,22 +173,22 @@
    surface tints in dark mode, #2402). Every pair is gated in
    tokens/contrast-pairings.json. */
 
-.bds-badge--subtle.bds-badge--tone-positive {
+.bds-badge--appearance-subtle.bds-badge--tone-positive {
   background-color: var(--bds-surface-positive);
   color: var(--bds-text-on-color-light);
 }
 
-.bds-badge--subtle.bds-badge--tone-warning {
+.bds-badge--appearance-subtle.bds-badge--tone-warning {
   background-color: var(--bds-surface-warning);
   color: var(--bds-text-on-color-light);
 }
 
-.bds-badge--subtle.bds-badge--tone-negative {
+.bds-badge--appearance-subtle.bds-badge--tone-negative {
   background-color: var(--bds-surface-negative);
   color: var(--bds-text-on-color-light);
 }
 
-.bds-badge--subtle.bds-badge--tone-info {
+.bds-badge--appearance-subtle.bds-badge--tone-info {
   background-color: var(--bds-background-info-light);
   color: var(--bds-text-on-color-light);
 }
@@ -197,12 +197,12 @@
    which resolves per theme (tan-100 light, near-black dark). The strong brand
    text step follows it in both themes — poppy-700 in light, poppy-500 in dark
    (#2270) — so no dark-mode override is needed. */
-.bds-badge--subtle.bds-badge--tone-brand {
+.bds-badge--appearance-subtle.bds-badge--tone-brand {
   background-color: var(--bds-background-brand-secondary);
   color: var(--bds-text-brand-primary-strong);
 }
 
-.bds-badge--subtle.bds-badge--tone-neutral {
+.bds-badge--appearance-subtle.bds-badge--tone-neutral {
   background-color: var(--bds-surface-neutral);
   color: var(--bds-text-on-color-light);
 }
@@ -213,18 +213,18 @@
    the edge is decorative and not held to WCAG 1.4.11's 3:1 (Understanding
    1.4.11, Boundaries): contrast-pairings.json gates the label, not the edge. */
 
-.bds-badge--outline {
+.bds-badge--appearance-outline {
   background-color: transparent;
   color: var(--bds-text-primary);
   border: var(--bds-border-width-md) solid transparent;
 }
 
-.bds-badge--outline.bds-badge--tone-positive { border-color: var(--bds-border-positive); }
-.bds-badge--outline.bds-badge--tone-warning  { border-color: var(--bds-border-warning); }
-.bds-badge--outline.bds-badge--tone-negative { border-color: var(--bds-border-negative); }
-.bds-badge--outline.bds-badge--tone-info     { border-color: var(--bds-border-info); }
-.bds-badge--outline.bds-badge--tone-brand    { border-color: var(--bds-border-brand-primary); }
-.bds-badge--outline.bds-badge--tone-neutral  { border-color: var(--bds-border-neutral); }
+.bds-badge--appearance-outline.bds-badge--tone-positive { border-color: var(--bds-border-positive); }
+.bds-badge--appearance-outline.bds-badge--tone-warning  { border-color: var(--bds-border-warning); }
+.bds-badge--appearance-outline.bds-badge--tone-negative { border-color: var(--bds-border-negative); }
+.bds-badge--appearance-outline.bds-badge--tone-info     { border-color: var(--bds-border-info); }
+.bds-badge--appearance-outline.bds-badge--tone-brand    { border-color: var(--bds-border-brand-primary); }
+.bds-badge--appearance-outline.bds-badge--tone-neutral  { border-color: var(--bds-border-neutral); }
 
 /* ─── Notification micro-interactions (keyframes in tokens/animations.css) ── */
 
