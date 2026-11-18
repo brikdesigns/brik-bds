@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- report-meta: contract in docs/reports/README.md (ADR-046) -->
+<meta name="report-status" content="active">
+<meta name="report-type" content="audit">
+<meta name="report-themes" content="design-system">
+<meta name="report-subject" content="bds">
+<meta name="report-owner" content="nstaner">
+<meta name="report-generated" content="2026-11-18">
+<meta name="report-supersedes" content="none">
+<meta name="report-cadence" content="once">
+<meta name="report-source" content="manual">
+<!-- /report-meta -->
+<title>Hand-Written Token Names — Verdicts</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font: 15px/1.55 -apple-system, "Segoe UI", sans-serif; max-width: 70rem; margin: 2rem auto; padding: 0 1rem; color: #222; background: #fff; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2.25rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+  h3 { font-size: 1rem; margin-top: 1.25rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; font-size: 14px; }
+  th, td { border: 1px solid #ccc; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+  th { background: #f4f4f4; }
+  td.n { text-align: right; font-variant-numeric: tabular-nums; }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: .92em; background: #f3f3f3; padding: 0 .2em; overflow-wrap: anywhere; }
+  .verdict { background: #fff4e5; border-left: 4px solid #e58a00; padding: .75rem 1rem; }
+  .quote { background: #f7f7f7; border-left: 4px solid #888; padding: .6rem 1rem; margin: .75rem 0; }
+  .verdict p, .quote p { margin: .35rem 0; }
+  .wrap { overflow-x: auto; }
+  ol, ul { padding-left: 1.3rem; } li { margin: .25rem 0; }
+</style>
+</head>
+<body>
+
+<h1>Hand-Written Token Names — Verdicts</h1>
+<p><strong>Date:</strong> 2026-11-18 &middot; <strong>Issue:</strong> brik-bds#3241 &middot; <strong>Umbrella:</strong> brik-bds#3239 &middot; <strong>Mode:</strong> read-only; no token, component or Figma variable was changed.</p>
+
+<h2>1. Answer</h2>
+<div class="verdict">
+<p><strong>140 names have no Figma variable behind them. 51 go into Figma, 68 get deleted, 21 stay hand-written.</strong></p>
+<table>
+<tr><th>Verdict</th><th>Names</th><th>Who Acts</th><th>Where</th></tr>
+<tr><td>Promote</td><td class="n">51</td><td>Operator adds the variables in Figma</td><td>Section 2, <code>info</code> first</td></tr>
+<tr><td>Delete</td><td class="n">68</td><td>Agent, after consumers move</td><td>Section 3 — #3244, #3246, #3247</td></tr>
+<tr><td>Keep</td><td class="n">21</td><td>Nobody</td><td>Section 4</td></tr>
+</table>
+<p>The issue title says 139. The frozen set is 140: 133 found first, plus 7 that the brand compile re-emits (brik-bds#3242).</p>
+<p>Every verdict here is a proposal until the operator rules on it. The promote list names what Figma would need; it does not decide that Figma should have it.</p>
+</div>
+<div class="quote"><p>OPERATOR SAID 2026-11-18 (chat, e268b355-16ab-4707-aeb3-0df333f7e38d.jsonl:108): "Figma wins - this has been expressed several times now! Figma is our source and style dictionary fetches and converts to our codebase. Why aren't we progressing on this topic? Seems like we're moving backwards."</p></div>
+
+<h2>2. Promote — The Figma Add List</h2>
+<p>51 names in 4 groups. Each has a consumer and no Figma-generated name that does its job. The first column is the CSS name the sync must emit; the Figma collection and path are the operator's to choose.</p>
+<h3>A · Info status role — 4</h3><div class="wrap"><table><tr><th>CSS Name The Sync Must Produce</th><th>Figma Type</th><th>Value Today</th><th>Note</th><th>BDS</th><th>Portal</th><th>Site</th></tr>
+<tr><td><code>--bds-background-info</code></td><td>Color</td><td><code>var(--bds-color-system-blue)</code></td><td>status role: info — Figma has positive / warning / negative / neutral, no info</td><td class="n">8</td><td class="n">0</td><td class="n">1</td></tr>
+<tr><td><code>--bds-border-info</code></td><td>Color</td><td><code>var(--bds-color-system-blue)</code></td><td>status role: info — Figma has positive / warning / negative / neutral, no info</td><td class="n">1</td><td class="n">1</td><td class="n">0</td></tr>
+<tr><td><code>--bds-surface-info</code></td><td>Color</td><td><code>var(--bds-color-system-blue-light)</code></td><td>status role: info — Figma has positive / warning / negative / neutral, no info</td><td class="n">2</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-text-info</code></td><td>Color</td><td><code>var(--bds-color-system-blue)</code></td><td>status role: info — Figma has positive / warning / negative / neutral, no info</td><td class="n">4</td><td class="n">0</td><td class="n">0</td></tr>
+</table></div>
+<h3>B · Status and state colours — 17</h3><div class="wrap"><table><tr><th>CSS Name The Sync Must Produce</th><th>Figma Type</th><th>Value Today</th><th>Note</th><th>BDS</th><th>Portal</th><th>Site</th></tr>
+<tr><td><code>--bds-background-negative-hover</code></td><td>Color</td><td><code>color-mix(in srgb, var(--bds-color-system-red) 85%, black)</code></td><td>status fill interaction state (colour)</td><td class="n">1</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-background-negative-pressed</code></td><td>Color</td><td><code>color-mix(in srgb, var(--bds-color-system-red) 70%, black)</code></td><td>status fill interaction state (colour)</td><td class="n">1</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-background-overlay</code></td><td>Color</td><td><code>rgba(0, 0, 0, 0.4)</code></td><td>scrim (colour); Figma surface-overlay is white, a different role</td><td class="n">7</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-background-positive-hover</code></td><td>Color</td><td><code>color-mix(in srgb, var(--bds-color-system-green) 85%, black)</code></td><td>status fill interaction state (colour)</td><td class="n">1</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-background-positive-pressed</code></td><td>Color</td><td><code>color-mix(in srgb, var(--bds-color-system-green) 70%, black)</code></td><td>status fill interaction state (colour)</td><td class="n">1</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-background-presence-away</code></td><td>Color</td><td><code>var(--bds-color-system-yellow)</code></td><td>Avatar presence dot (colour)</td><td class="n">1</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-background-presence-busy</code></td><td>Color</td><td><code>var(--bds-color-system-red)</code></td><td>Avatar presence dot (colour)</td><td class="n">1</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-background-presence-offline</code></td><td>Color</td><td><code>var(--bds-color-grayscale-500)</code></td><td>Avatar presence dot (colour)</td><td class="n">1</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-background-presence-online</code></td><td>Color</td><td><code>var(--bds-color-system-green)</code></td><td>Avatar presence dot (colour)</td><td class="n">2</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-background-tertiary</code></td><td>Color</td><td><code>var(--bds-color-grayscale-300)</code></td><td>third background step (colour)</td><td class="n">5</td><td class="n">9</td><td class="n">2</td></tr>
+<tr><td><code>--bds-border-focus</code></td><td>Color</td><td><code>var(--bds-border-brand-primary)</code></td><td>focus ring (colour)</td><td class="n">31</td><td class="n">1</td><td class="n">6</td></tr>
+<tr><td><code>--bds-border-on-color-dark-muted</code></td><td>Color</td><td><code>color-mix(in srgb, var(--bds-border-on-color-dark) 12%, transparent)</code></td><td>hairline on dark fill (colour)</td><td class="n">1</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-state-disabled-opacity</code></td><td>Number</td><td><code>0.5</code></td><td>number 0.5</td><td class="n">31</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-state-hover-overlay</code></td><td>Color</td><td><code>rgba(0, 0, 0, 0.04)</code></td><td>interaction overlay (colour)</td><td class="n">6</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-state-pressed-overlay</code></td><td>Color</td><td><code>rgba(0, 0, 0, 0.08)</code></td><td>interaction overlay (colour)</td><td class="n">5</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-text-link</code></td><td>Color</td><td><code>var(--bds-text-text-link)</code></td><td>rename the Figma variable text/text-link to text/link</td><td class="n">10</td><td class="n">6</td><td class="n">10</td></tr>
+<tr><td><code>--bds-tooltip-background</code></td><td>Color</td><td><code>var(--bds-color-grayscale-950)</code></td><td>Tooltip fill (colour)</td><td class="n">5</td><td class="n">0</td><td class="n">0</td></tr>
+</table></div>
+<h3>C · Sizes and layers — 22</h3><div class="wrap"><table><tr><th>CSS Name The Sync Must Produce</th><th>Figma Type</th><th>Value Today</th><th>Note</th><th>BDS</th><th>Portal</th><th>Site</th></tr>
+<tr><td><code>--bds-content-width-lg</code></td><td>Number</td><td><code>1024px</code></td><td>number (px); Figma has only content-width-xl</td><td class="n">13</td><td class="n">1</td><td class="n">3</td></tr>
+<tr><td><code>--bds-content-width-md</code></td><td>Number</td><td><code>800px</code></td><td>number (px); Figma has only content-width-xl</td><td class="n">13</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-content-width-sm</code></td><td>Number</td><td><code>640px</code></td><td>number (px); Figma has only content-width-xl</td><td class="n">4</td><td class="n">0</td><td class="n">1</td></tr>
+<tr><td><code>--bds-content-width-text-md</code></td><td>Number</td><td><code>720px</code></td><td>number (px); Figma has only content-width-xl</td><td class="n">34</td><td class="n">0</td><td class="n">9</td></tr>
+<tr><td><code>--bds-content-width-text-sm</code></td><td>Number</td><td><code>600px</code></td><td>number (px); Figma has only content-width-xl</td><td class="n">12</td><td class="n">0</td><td class="n">8</td></tr>
+<tr><td><code>--bds-content-width-text-xs</code></td><td>Number</td><td><code>448px</code></td><td>number (px); Figma has only content-width-xl</td><td class="n">11</td><td class="n">0</td><td class="n">1</td></tr>
+<tr><td><code>--bds-icon-2xl</code></td><td>Number</td><td><code>var(--bds-size-600)</code></td><td>icon size step (number); Figma icon scale has no such step</td><td class="n">3</td><td class="n">0</td><td class="n">4</td></tr>
+<tr><td><code>--bds-icon-2xs</code></td><td>Number</td><td><code>var(--bds-size-300)</code></td><td>icon size step (number); Figma icon scale has no such step</td><td class="n">3</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-shadow-overlay</code></td><td>Effect (as shadow-sm … shadow-xl are today)</td><td><code>0px 4px 32px 0px rgba(0, 0, 0, 0.24)</code></td><td>shadow; Figma already yields shadow-sm … shadow-xl</td><td class="n">4</td><td class="n">0</td><td class="n">1</td></tr>
+<tr><td><code>--bds-shell-top-bar-height</code></td><td>Number</td><td><code>var(--bds-size-1600)</code></td><td>number (px)</td><td class="n">24</td><td class="n">2</td><td class="n">0</td></tr>
+<tr><td><code>--bds-slider-thumb-size</code></td><td>Number</td><td><code>20px</code></td><td>number (px)</td><td class="n">9</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-slider-track-height</code></td><td>Number</td><td><code>4px</code></td><td>number (px)</td><td class="n">7</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-z-dialog</code></td><td>Number</td><td><code>1100</code></td><td>number (layer order)</td><td class="n">2</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-z-dropdown</code></td><td>Number</td><td><code>100</code></td><td>number (layer order)</td><td class="n">11</td><td class="n">1</td><td class="n">0</td></tr>
+<tr><td><code>--bds-z-max</code></td><td>Number</td><td><code>9999</code></td><td>number (layer order)</td><td class="n">3</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-z-modal</code></td><td>Number</td><td><code>1000</code></td><td>number (layer order)</td><td class="n">3</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-z-page-header</code></td><td>Number</td><td><code>20</code></td><td>number (layer order)</td><td class="n">5</td><td class="n">1</td><td class="n">0</td></tr>
+<tr><td><code>--bds-z-sheet</code></td><td>Number</td><td><code>901</code></td><td>number (layer order)</td><td class="n">2</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-z-sheet-backdrop</code></td><td>Number</td><td><code>900</code></td><td>number (layer order)</td><td class="n">2</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-z-shell</code></td><td>Number</td><td><code>30</code></td><td>number (layer order)</td><td class="n">4</td><td class="n">1</td><td class="n">0</td></tr>
+<tr><td><code>--bds-z-sticky</code></td><td>Number</td><td><code>10</code></td><td>number (layer order)</td><td class="n">4</td><td class="n">1</td><td class="n">0</td></tr>
+<tr><td><code>--bds-z-tooltip</code></td><td>Number</td><td><code>1200</code></td><td>number (layer order)</td><td class="n">2</td><td class="n">0</td><td class="n">0</td></tr>
+</table></div>
+<h3>D · Motion — 8</h3><div class="wrap"><table><tr><th>CSS Name The Sync Must Produce</th><th>Figma Type</th><th>Value Today</th><th>Note</th><th>BDS</th><th>Portal</th><th>Site</th></tr>
+<tr><td><code>--bds-duration-autoplay</code></td><td>Timing</td><td><code>10s</code></td><td>timing variable</td><td class="n">9</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-duration-marquee</code></td><td>Timing</td><td><code>55s</code></td><td>timing variable</td><td class="n">2</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-ease-in</code></td><td>Easing</td><td><code>cubic-bezier(0.7, 0, 0.84, 0)</code></td><td>easing variable (Figma has an Easing type)</td><td class="n">5</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-ease-in-out</code></td><td>Easing</td><td><code>cubic-bezier(0.65, 0, 0.35, 1)</code></td><td>easing variable (Figma has an Easing type)</td><td class="n">10</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-ease-linear</code></td><td>Easing</td><td><code>linear</code></td><td>easing variable (Figma has an Easing type)</td><td class="n">7</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-ease-out</code></td><td>Easing</td><td><code>cubic-bezier(0.16, 1, 0.3, 1)</code></td><td>easing variable (Figma has an Easing type)</td><td class="n">152</td><td class="n">15</td><td class="n">12</td></tr>
+<tr><td><code>--bds-ease-spring</code></td><td>Easing</td><td><code>cubic-bezier(0.34, 1.56, 0.64, 1)</code></td><td>easing variable (Figma has an Easing type)</td><td class="n">5</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-ease-spring-soft</code></td><td>Easing</td><td><code>cubic-bezier(0, 1.08, 0.77, 1.01)</code></td><td>easing variable (Figma has an Easing type)</td><td class="n">3</td><td class="n">0</td><td class="n">0</td></tr>
+</table></div>
+
+<h2>3. Delete</h2>
+<table>
+<tr><th>Sub-Issue</th><th>Names</th><th>What It Covers</th></tr>
+<tr><td>#3244</td><td class="n">16</td><td>No consumer, or docs mentions only</td></tr>
+<tr><td>#3246</td><td class="n">46</td><td>Second name for a token that already exists; consumers move, values do not</td></tr>
+<tr><td>#3247</td><td class="n">6</td><td>Replacement is itself on the promote list; blocked until that sync</td></tr>
+</table>
+<div class="wrap"><table>
+<tr><th>Name</th><th>Replacement</th><th>BDS</th><th>Portal</th><th>Site</th><th>Sub-Issue</th></tr>
+<tr><td><code>--bds-border-on-color-light-muted</code></td><td>none needed</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-color-system-lightbox</code></td><td>none needed</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-color-system-transparent</code></td><td>none needed</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-display-fluid-sm</code></td><td>none needed</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-easing-ease-in</code></td><td>none needed</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-easing-ease-in-out</code></td><td>none needed</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-measure-md</code></td><td>none needed</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-measure-sm</code></td><td>none needed</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-shell-rail-width</code></td><td>none needed; docs and one example mention it</td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-shell-sidebar-width</code></td><td>none needed; docs and one example mention it</td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-shell-sidebar-width-collapsed</code></td><td>none needed; docs and one example mention it</td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-text-on-color-dark-muted</code></td><td>none needed</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-text-on-color-light-muted</code></td><td>none needed</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-text-transform-body</code></td><td>none needed</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-text-transform-display</code></td><td>none needed</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-text-transform-heading</code></td><td>none needed</td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3244</td></tr>
+<tr><td><code>--bds-aspect-cinema</code></td><td>the numeric --bds-aspect-* name it aliases (kept)</td><td class="n">3</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-aspect-photo-landscape</code></td><td>the numeric --bds-aspect-* name it aliases (kept)</td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-aspect-photo-portrait</code></td><td>the numeric --bds-aspect-* name it aliases (kept)</td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-aspect-square</code></td><td>the numeric --bds-aspect-* name it aliases (kept)</td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-background-accent-blue-light</code></td><td><code>--bds-surface-accent-blue</code></td><td class="n">2</td><td class="n">1</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-background-accent-green-light</code></td><td><code>--bds-surface-accent-green</code></td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-background-accent-orange-light</code></td><td><code>--bds-surface-accent-orange</code></td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-background-accent-purple-light</code></td><td><code>--bds-surface-accent-purple</code></td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-background-accent-red-light</code></td><td><code>--bds-surface-accent-red</code></td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-background-accent-yellow-light</code></td><td><code>--bds-surface-accent-yellow</code></td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-background-negative-light</code></td><td><code>--bds-surface-negative</code></td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-background-neutral-light</code></td><td><code>--bds-surface-neutral</code></td><td class="n">2</td><td class="n">1</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-background-positive-light</code></td><td><code>--bds-surface-positive</code></td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-background-warning-light</code></td><td><code>--bds-surface-warning</code></td><td class="n">1</td><td class="n">1</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-body-2xl</code></td><td><code>--bds-body-huge</code></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-body-2xs</code></td><td><code>--bds-body-tiny</code></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-border-width-2xl</code></td><td><code>--bds-border-width-huge</code></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-color-system-blue-surface</code></td><td><code>--bds-color-system-blue-light</code></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-color-system-green-surface</code></td><td><code>--bds-color-system-green-light</code></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-color-system-red-surface</code></td><td><code>--bds-color-system-red-light</code></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-duration-fast</code></td><td><code>--bds-duration-100</code></td><td class="n">5</td><td class="n">3</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-duration-lg</code></td><td><code>--bds-duration-300</code></td><td class="n">31</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-duration-md</code></td><td><code>--bds-duration-200</code></td><td class="n">71</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-duration-normal</code></td><td><code>--bds-duration-200</code></td><td class="n">3</td><td class="n">12</td><td class="n">2</td><td>#3246</td></tr>
+<tr><td><code>--bds-duration-slow</code></td><td><code>--bds-duration-300</code></td><td class="n">0</td><td class="n">3</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-duration-sm</code></td><td><code>--bds-duration-100</code></td><td class="n">56</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-duration-xl</code></td><td><code>--bds-duration-400</code></td><td class="n">9</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-font-weight--bold</code></td><td><code>--bds-font-weight-bold</code></td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td>#3246</td></tr>
+<tr><td><code>--bds-font-weight--light</code></td><td><code>--bds-font-weight-light</code></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-font-weight--medium</code></td><td><code>--bds-font-weight-medium</code></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-font-weight--regular</code></td><td><code>--bds-font-weight-regular</code></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-font-weight--semi-bold</code></td><td><code>--bds-font-weight-semibold</code></td><td class="n">1</td><td class="n">6</td><td class="n">1</td><td>#3246</td></tr>
+<tr><td><code>--bds-font-weight--thin</code></td><td><code>--bds-font-weight-light</code></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-font-weight-thin</code></td><td><code>--bds-font-weight-light</code></td><td class="n">0</td><td class="n">2</td><td class="n">2</td><td>#3246</td></tr>
+<tr><td><code>--bds-gap-2xl</code></td><td><code>--bds-gap-huge</code></td><td class="n">0</td><td class="n">0</td><td class="n">9</td><td>#3246</td></tr>
+<tr><td><code>--bds-gap-2xs</code></td><td><code>--bds-gap-tiny</code></td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td>#3246</td></tr>
+<tr><td><code>--bds-heading-2xl</code></td><td><code>--bds-heading-xxl</code></td><td class="n">1</td><td class="n">0</td><td class="n">1</td><td>#3246</td></tr>
+<tr><td><code>--bds-heading-3xl</code></td><td><code>--bds-heading-huge</code></td><td class="n">3</td><td class="n">0</td><td class="n">2</td><td>#3246</td></tr>
+<tr><td><code>--bds-heading-xs</code></td><td><code>--bds-heading-tiny</code></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-icon-3xl</code></td><td><code>--bds-icon-huge</code></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-icon-3xs</code></td><td><code>--bds-icon-tiny</code></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-label-2xs</code></td><td><code>--bds-label-tiny</code></td><td class="n">0</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-padding-2xl</code></td><td><code>--bds-padding-huge</code></td><td class="n">0</td><td class="n">0</td><td class="n">4</td><td>#3246</td></tr>
+<tr><td><code>--bds-padding-2xs</code></td><td><code>--bds-padding-tiny</code></td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-surface-navigation</code></td><td><code>--bds-surface-nav</code> (Brik Brand Kit variable)</td><td class="n">12</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-tooltip-text</code></td><td><code>--bds-text-inverse</code></td><td class="n">1</td><td class="n">0</td><td class="n">0</td><td>#3246</td></tr>
+<tr><td><code>--bds-background-info-light</code></td><td><code>--bds-surface-info</code> (after it is promoted)</td><td class="n">1</td><td class="n">2</td><td class="n">0</td><td>#3247</td></tr>
+<tr><td><code>--bds-content-width-default</code></td><td><code>--bds-content-width-md</code> (after it is promoted)</td><td class="n">0</td><td class="n">0</td><td class="n">1</td><td>#3247</td></tr>
+<tr><td><code>--bds-content-width-narrow</code></td><td><code>--bds-content-width-sm</code> (after it is promoted)</td><td class="n">0</td><td class="n">0</td><td class="n">3</td><td>#3247</td></tr>
+<tr><td><code>--bds-content-width-wide</code></td><td><code>--bds-content-width-lg</code> (after it is promoted)</td><td class="n">0</td><td class="n">0</td><td class="n">2</td><td>#3247</td></tr>
+<tr><td><code>--bds-easing-ease-out</code></td><td><code>--bds-ease-out</code> (after it is promoted; the curve differs)</td><td class="n">3</td><td class="n">0</td><td class="n">0</td><td>#3247</td></tr>
+<tr><td><code>--bds-measure-lg</code></td><td><code>--bds-content-width-text-md</code> (after it is promoted)</td><td class="n">2</td><td class="n">0</td><td class="n">0</td><td>#3247</td></tr>
+</table></div>
+
+<h2>4. Keep</h2>
+<p>21 names stay hand-written because the value is not something a Figma variable holds, or is not a design value at all.</p>
+<div class="wrap"><table>
+<tr><th>Name</th><th>Value</th><th>Why Figma Cannot Hold It</th><th>BDS</th><th>Portal</th><th>Site</th></tr>
+<tr><td><code>--bds-aspect-1-1</code></td><td><code>1 / 1</code></td><td>a ratio (16 / 9); a Figma number holds one number to two decimals</td><td class="n">13</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-aspect-16-9</code></td><td><code>16 / 9</code></td><td>a ratio (16 / 9); a Figma number holds one number to two decimals</td><td class="n">10</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-aspect-2-3</code></td><td><code>2 / 3</code></td><td>a ratio (16 / 9); a Figma number holds one number to two decimals</td><td class="n">3</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-aspect-21-9</code></td><td><code>21 / 9</code></td><td>a ratio (16 / 9); a Figma number holds one number to two decimals</td><td class="n">3</td><td class="n">1</td><td class="n">0</td></tr>
+<tr><td><code>--bds-aspect-3-2</code></td><td><code>3 / 2</code></td><td>a ratio (16 / 9); a Figma number holds one number to two decimals</td><td class="n">3</td><td class="n">2</td><td class="n">0</td></tr>
+<tr><td><code>--bds-aspect-3-4</code></td><td><code>3 / 4</code></td><td>a ratio (16 / 9); a Figma number holds one number to two decimals</td><td class="n">3</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-aspect-4-3</code></td><td><code>4 / 3</code></td><td>a ratio (16 / 9); a Figma number holds one number to two decimals</td><td class="n">13</td><td class="n">2</td><td class="n">3</td></tr>
+<tr><td><code>--bds-aspect-4-5</code></td><td><code>4 / 5</code></td><td>a ratio (16 / 9); a Figma number holds one number to two decimals</td><td class="n">5</td><td class="n">1</td><td class="n">0</td></tr>
+<tr><td><code>--bds-aspect-9-16</code></td><td><code>9 / 16</code></td><td>a ratio (16 / 9); a Figma number holds one number to two decimals</td><td class="n">2</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-content-width-full</code></td><td><code>100%</code></td><td>100%; generated modes-width.css points -xl at it (scripts/generate-modes-css.mjs:204)</td><td class="n">2</td><td class="n">0</td><td class="n">2</td></tr>
+<tr><td><code>--bds-display-fluid-lg</code></td><td><code>clamp(var(--bds-font-size-1100), 7vw, var(--bds-font-size-1600))</code></td><td>clamp() expression; endpoints are Figma font sizes</td><td class="n">0</td><td class="n">0</td><td class="n">1</td></tr>
+<tr><td><code>--bds-display-fluid-md</code></td><td><code>clamp(var(--bds-font-size-1000), 6.5vw, var(--bds-font-size-1500))</code></td><td>clamp() expression; endpoints are Figma font sizes</td><td class="n">0</td><td class="n">0</td><td class="n">1</td></tr>
+<tr><td><code>--bds-display-fluid-xl</code></td><td><code>clamp(var(--bds-font-size-1200), 8vw, var(--bds-font-size-1800))</code></td><td>clamp() expression; endpoints are Figma font sizes</td><td class="n">0</td><td class="n">0</td><td class="n">2</td></tr>
+<tr><td><code>--bds-letter-spacing-wide</code></td><td><code>0.05em</code></td><td>0.05em; Figma reads a letter-spacing variable as px, not %</td><td class="n">14</td><td class="n">0</td><td class="n">1</td></tr>
+<tr><td><code>--bds-pageheader-top</code></td><td><code>0px</code></td><td>runtime slot: a component or shell sets it per instance; it carries no design value</td><td class="n">21</td><td class="n">1</td><td class="n">0</td></tr>
+<tr><td><code>--bds-slider-percent</code></td><td><code>0%</code></td><td>runtime slot: a component or shell sets it per instance; it carries no design value</td><td class="n">7</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-state-focus</code></td><td><code>currentColor</code></td><td>value is currentColor; a Figma colour variable holds a colour</td><td class="n">12</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-subnav-top</code></td><td><code>0px</code></td><td>runtime slot: a component or shell sets it per instance; it carries no design value</td><td class="n">17</td><td class="n">2</td><td class="n">0</td></tr>
+<tr><td><code>--bds-text-transform-field-label</code></td><td><code>capitalize</code></td><td>text case; a Figma string variable binds to font family, style, weight or text content, not case</td><td class="n">17</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-text-transform-label</code></td><td><code>none</code></td><td>text case; a Figma string variable binds to font family, style, weight or text content, not case</td><td class="n">12</td><td class="n">0</td><td class="n">0</td></tr>
+<tr><td><code>--bds-text-transform-subtitle</code></td><td><code>uppercase</code></td><td>text case; a Figma string variable binds to font family, style, weight or text content, not case</td><td class="n">36</td><td class="n">0</td><td class="n">0</td></tr>
+</table></div>
+
+<h2>5. How This Was Measured</h2>
+<ul>
+<li><strong>The 140 names:</strong> rule 9 of <code>tokens/naming-canon-baseline.json</code> on <code>main</code> at <code>be4798fc</code>.</li>
+<li><strong>Figma-backed:</strong> declared in <code>tokens/figma-tokens*.css</code>, <code>tokens/modes-*.css</code> or <code>tokens/layout-fluid.css</code> (432 names), or a variable in <code>design-tokens/brand-kits/brik.json</code>. Every <code>--bds-*</code> replacement in section 3 was checked against that set, except the six that wait on a promote.</li>
+<li><strong>Consumer counts</strong> are occurrences, not files. BDS: <code>main</code> outside <code>tokens/</code>, <code>dist/</code>, <code>design-tokens/</code>, <code>docs/</code>, <code>scripts/</code>, <code>tests/</code> and <code>*.md</code>. Portal: <code>src/</code> on <code>staging</code>. Site: brikdesigns <code>src/</code> on <code>main</code>.</li>
+<li><strong>Not scanned:</strong> client sites under <code>web/*</code>, brik-templates, brik-website-themes. A zero here is a zero in three repos, not in the fleet.</li>
+<li><strong>Figma variable types</strong> (Color, Number, String, Boolean, Timing, Easing) and what each binds to: <a href="https://help.figma.com/hc/en-us/articles/14506821864087-Overview-of-variables-collections-and-modes">Figma, Overview of variables, collections, and modes</a>, fetched 2026-11-18. That page says a number is "whole numbers or any decimal number up to the hundredth place" and letter spacing is "interpreted as Px, not %". It is silent on ratios, <code>clamp()</code> and <code>currentColor</code>; those keep verdicts rest on the number and colour definitions, not on a stated limit.</li>
+</ul>
+
+<h2>6. Unverified</h2>
+<ul>
+<li>Whether the Style Dictionary sync reads Figma's Timing and Easing types today. The eight motion names in group D depend on it. Figma's six <code>duration-*</code> names already sync; no easing does.</li>
+<li>Whether <code>--bds-shadow-overlay</code> can arrive the way <code>--bds-shadow-sm … -xl</code> do. Figma's page says shadow colour and offsets bind to variables; it does not say a whole effect does.</li>
+<li><code>--bds-tooltip-background</code> equals <code>--bds-background-inverse</code> in light mode. Dark mode was not compared, so it is on the promote list, not the delete list.</li>
+</ul>
+
+</body>
+</html>
