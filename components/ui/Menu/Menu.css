@@ -37,7 +37,7 @@
 /* `bottom` (default) keeps the existing contract — the consumer's relatively
    positioned wrapper anchors the downward panel. `top` anchors the panel above
    the trigger internally so no consumer inline `bottom` / `top: auto` is needed. */
-.bds-menu--top {
+.bds-menu--placement-top {
   top: auto;
   bottom: 100%;
   margin-bottom: var(--bds-gap-md);

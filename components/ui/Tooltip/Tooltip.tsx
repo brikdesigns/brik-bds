@@ -150,7 +150,7 @@ export function Tooltip({
       }
     >
       {content}
-      <div className={bdsClass('bds-tooltip__arrow', `bds-tooltip__arrow--${placement}`)} />
+      <div className={bdsClass('bds-tooltip__arrow', `bds-tooltip__arrow--placement-${placement}`)} />
     </div>
   );
 

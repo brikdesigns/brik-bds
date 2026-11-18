@@ -604,9 +604,11 @@ function collectUnions(componentsDir) {
  * measure and fail rule 3. `spacing` (#1927) is that union's own axis, and its
  * values are the same shared rungs, so it is prefix-judged too. `service-line`
  * (#1927) shares `brand` with emphasis, so a `'brand' | 'positive'` union would
- * read as three axes instead of emphasis + tone.
+ * read as three axes instead of emphasis + tone. `placement` (#1927) shares
+ * `top`, `left` and `right` with Sheet's `side` and Pagination's `position`
+ * unions, which are other concepts, so a value match would misread those.
  */
-const PREFIX_JUDGED_AXES = new Set(['span', 'fit', 'anchor', 'resize', 'marker', 'underline', 'measure', 'spacing', 'service-line']);
+const PREFIX_JUDGED_AXES = new Set(['span', 'fit', 'anchor', 'resize', 'marker', 'underline', 'measure', 'spacing', 'service-line', 'placement']);
 
 /**
  * Every axis whose closed list claims this member. A SET, not one axis: ADR-033
