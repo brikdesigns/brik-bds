@@ -52,14 +52,14 @@ export interface TaskConsoleProps extends Omit<HTMLAttributes<HTMLDivElement>, '
 function StatusIcon({ status }: { status: TaskItemStatus }) {
   switch (status) {
     case 'completed':
-      return <Icon icon={CheckCircle} className="bds-task-console__icon bds-task-console__icon--completed" />;
+      return <Icon icon={CheckCircle} className="bds-task-console__icon bds-task-console__icon--status-completed" />;
     case 'failed':
-      return <Icon icon={WarningCircle} className="bds-task-console__icon bds-task-console__icon--failed" />;
+      return <Icon icon={WarningCircle} className="bds-task-console__icon bds-task-console__icon--status-failed" />;
     case 'in_progress':
-      return <Spinner size="sm" className="bds-task-console__icon bds-task-console__icon--in-progress" />;
+      return <Spinner size="sm" className="bds-task-console__icon bds-task-console__icon--status-in-progress" />;
     case 'pending':
     default:
-      return <Icon icon={Circle} className="bds-task-console__icon bds-task-console__icon--pending" />;
+      return <Icon icon={Circle} className="bds-task-console__icon bds-task-console__icon--status-pending" />;
   }
 }
 
@@ -176,7 +176,7 @@ export function TaskConsole({
                 'bds-task-console__item',
                 // Emit a kebab-case BEM modifier (ADR-008 §4) — the `status`
                 // prop stays snake_case (`in_progress`) for API stability.
-                `bds-task-console__item--${item.status.replace(/_/g, '-')}`,
+                `bds-task-console__item--status-${item.status.replace(/_/g, '-')}`,
               )}
             >
               <div className="bds-task-console__item-content">
