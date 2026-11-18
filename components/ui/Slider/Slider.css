@@ -92,7 +92,7 @@
   box-shadow: var(--bds-slider-thumb-shadow);
   cursor: pointer;
   margin-top: calc((var(--bds-slider-track-height, var(--bds-size-150)) - var(--bds-slider-thumb-size, var(--bds-size-500))) / 2);
-  transition: box-shadow var(--bds-duration-sm) var(--bds-ease-out);
+  transition: box-shadow var(--bds-duration-100) var(--bds-ease-out);
 }
 
 .bds-slider-input::-moz-range-thumb {
@@ -103,7 +103,7 @@
   border: var(--bds-border-width-300) solid var(--bds-background-brand-primary);
   box-shadow: var(--bds-slider-thumb-shadow);
   cursor: pointer;
-  transition: box-shadow var(--bds-duration-sm) var(--bds-ease-out);
+  transition: box-shadow var(--bds-duration-100) var(--bds-ease-out);
 }
 
 /* Focus */

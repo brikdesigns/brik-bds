@@ -64,7 +64,7 @@
    sentinel above the header with a hysteresis band (condenseOnScroll.ts), so no
    size change here can feed back into it. */
 .bds-page-header[data-condensed] .bds-page-header__title {
-  transition: font-size var(--bds-duration-md) var(--bds-ease-out);
+  transition: font-size var(--bds-duration-200) var(--bds-ease-out);
 }
 
 .bds-page-header[data-condensed='true'] {

@@ -2,8 +2,11 @@
  * One indicator anatomy across Badge, Tag and Avatar — the CSS half (brik-bds#2943).
  *
  * Every `appearance × color` / `appearance × tone` combination has a rule, each
- * fill is a `--bds-background-*-light` / accent token, and Badge, Tag and Avatar
- * CSS read no `--bds-surface-*` token and no `--bds-color-*` primitive. The
+ * fill is a `--bds-surface-{tone}` / `--bds-surface-accent-{hue}` token (red and info keep
+ * their own `-light` background variables), and Badge,
+ * Tag and Avatar CSS read no `--bds-color-*` primitive. (#3246: the `-light`
+ * background names were value-neutral aliases of these Figma-backed surface
+ * names and are retired.) The
  * markup half lives in components/ui/Tag/Tag.appearance.test.ts; this half sits
  * under scripts/ because the `components` project stubs CSS (`?raw` reads '')
  * and carries no node types.
@@ -18,6 +21,12 @@ const css = (name) => readFileSync(join(UI, name, `${name}.css`), 'utf8');
 
 const HUES = ['blue', 'green', 'orange', 'purple', 'yellow', 'red'];
 const TONES = ['positive', 'warning', 'negative', 'info', 'brand', 'neutral'];
+
+// The subtle-fill token per hue / tone. Red and info are Figma variables of their
+// own (`--bds-background-accent-red-light`, `--bds-background-info-light`); the
+// other hues and tones fill from the Figma-backed `--bds-surface-*` names (#3246).
+const accentFill = (hue) => (hue === 'red' ? '--bds-background-accent-red-light' : `--bds-surface-accent-${hue}`);
+const toneFill = (tone) => (tone === 'info' ? '--bds-background-info-light' : `--bds-surface-${tone}`);
 
 describe('Tag CSS — appearance × color', () => {
   const tagCss = css('Tag');
@@ -36,8 +45,8 @@ describe('Tag CSS — appearance × color', () => {
     expect(tagCss).toContain(`--bds-border-accent-${hue}`);
   });
 
-  it.each(HUES)('subtle %s fills with --bds-background-accent-%s-light', (hue) => {
-    expect(tagCss).toContain(`--bds-background-accent-${hue}-light`);
+  it.each(HUES)('subtle %s fills with its accent surface', (hue) => {
+    expect(tagCss).toContain(accentFill(hue));
   });
 });
 
@@ -49,9 +58,9 @@ describe('Badge CSS — subtle and outline', () => {
   });
 
   it.each(['positive', 'warning', 'negative', 'info', 'neutral'])(
-    'subtle %s fills with --bds-background-%s-light',
+    'subtle %s fills with its tone surface',
     (tone) => {
-      expect(badgeCss).toContain(`--bds-background-${tone}-light`);
+      expect(badgeCss).toContain(toneFill(tone));
     },
   );
 
@@ -61,14 +70,14 @@ describe('Badge CSS — subtle and outline', () => {
 });
 
 describe('Avatar CSS — subtle', () => {
-  it.each(HUES)('subtle %s fills with --bds-background-accent-%s-light', (hue) => {
+  it.each(HUES)('subtle %s fills with its accent surface', (hue) => {
     expect(css('Avatar')).toContain(`.bds-avatar--appearance-subtle.bds-avatar--color-${hue}`);
-    expect(css('Avatar')).toContain(`--bds-background-accent-${hue}-light`);
+    expect(css('Avatar')).toContain(accentFill(hue));
   });
 });
 
-describe('indicator CSS reads no surface token and no color primitive', () => {
+describe('indicator CSS reads no color primitive', () => {
   it.each(['Badge', 'Tag', 'Avatar'])('%s.css', (name) => {
-    expect(css(name)).not.toMatch(/var\(--bds-(surface|color)-/);
+    expect(css(name)).not.toMatch(/var\(--bds-color-/);
   });
 });

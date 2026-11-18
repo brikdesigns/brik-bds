@@ -1200,9 +1200,8 @@ function segmentFindings(names, aliases) {
  *
  * The Brik Brand Kit is read as its pulled variables (brik.json), NOT as the
  * compiled theme-brand-brik.generated.css: compileClientTheme re-emits
- * hand-written names beside the kit's own (`--bds-background-accent-blue-light`
- * has no `background/accent-blue-light` variable), so the compiled file would
- * launder them into canon.
+ * hand-written names beside the kit's own (a name with no matching Figma
+ * variable), so the compiled file would launder them into canon.
  */
 const FIGMA_GENERATED = [
   ...[

@@ -39,7 +39,7 @@
 
 .bds-collapsible-card__section-label {
   font-family: var(--bds-font-family-heading);
-  font-weight: var(--bds-font-weight--semi-bold);
+  font-weight: var(--bds-font-weight-semibold);
   font-size: var(--bds-heading-tiny);
   color: var(--bds-text-secondary);
   text-transform: var(--bds-text-transform-subtitle);
@@ -52,7 +52,7 @@
 
 .bds-collapsible-card__title {
   font-family: var(--bds-font-family-heading);
-  font-weight: var(--bds-font-weight--bold);
+  font-weight: var(--bds-font-weight-bold);
   font-size: var(--bds-heading-sm);
   color: var(--bds-text-primary);
   line-height: var(--bds-font-line-height-tight);

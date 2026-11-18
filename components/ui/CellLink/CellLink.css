@@ -19,7 +19,7 @@
   color: var(--bds-text-primary);
   text-decoration: none;
   cursor: pointer;
-  transition: color var(--bds-duration-sm) var(--bds-ease-out);
+  transition: color var(--bds-duration-100) var(--bds-ease-out);
 }
 
 .bds-cell-link:hover {

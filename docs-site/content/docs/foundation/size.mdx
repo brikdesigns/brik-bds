@@ -206,14 +206,14 @@ Four aliases point at the primitive above so intent reads at the call site — p
 
 | Alias | Resolves to | Names |
 |---|---|---|
-| `--bds-aspect-square` | `--bds-aspect-1-1` | Avatars, thumbnails |
-| `--bds-aspect-cinema` | `--bds-aspect-16-9` | Video, hero media |
-| `--bds-aspect-photo-landscape` | `--bds-aspect-3-2` | Landscape photography |
-| `--bds-aspect-photo-portrait` | `--bds-aspect-2-3` | Portrait photography |
+| `--bds-aspect-1-1` | `--bds-aspect-1-1` | Avatars, thumbnails |
+| `--bds-aspect-16-9` | `--bds-aspect-16-9` | Video, hero media |
+| `--bds-aspect-3-2` | `--bds-aspect-3-2` | Landscape photography |
+| `--bds-aspect-2-3` | `--bds-aspect-2-3` | Portrait photography |
 
 ```css
 .media-frame {
-  aspect-ratio: var(--bds-aspect-cinema);
+  aspect-ratio: var(--bds-aspect-16-9);
 }
 ```
 
