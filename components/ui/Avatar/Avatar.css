@@ -84,8 +84,8 @@
 .bds-avatar--size-lg .bds-avatar__status,
 .bds-avatar--size-xl .bds-avatar__status { width: 12px; height: 12px; }
 
-.bds-avatar__status--online  { background-color: var(--bds-background-presence-online); }
-.bds-avatar__status--offline { background-color: var(--bds-background-presence-offline); }
-.bds-avatar__status--busy    { background-color: var(--bds-background-presence-busy); }
-.bds-avatar__status--away    { background-color: var(--bds-background-presence-away); }
+.bds-avatar__status--status-online  { background-color: var(--bds-background-presence-online); }
+.bds-avatar__status--status-offline { background-color: var(--bds-background-presence-offline); }
+.bds-avatar__status--status-busy    { background-color: var(--bds-background-presence-busy); }
+.bds-avatar__status--status-away    { background-color: var(--bds-background-presence-away); }
 }

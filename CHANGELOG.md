@@ -18,6 +18,12 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** Avatar's presence dot modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-avatar__status--{online,offline,busy,away}` | `bds-avatar__status--status-{online,offline,busy,away}` | `status` |
+
 **Breaking (consumer CSS):** eight bare BEM modifiers that twinned an axis-prefixed value now carry their axis prefix, per ADR-033 § 4 ([#1926](https://github.com/brikdesigns/brik-bds/issues/1926)). No alias ships: the old class is no longer emitted, so an override that targets it stops matching with no build error. Rename the selector. The class is now `bds-{block}--{axis}-{value}`, derived from the prop.
 
 | Old (every block) | New | Prop |
