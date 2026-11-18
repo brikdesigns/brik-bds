@@ -39,7 +39,7 @@ describe('Card control statuses', () => {
   ])('renders %s as "%s"', (status, label) => {
     const html = render({ connectionStatus: status });
     expect(labelOf(html)).toBe(label);
-    expect(html).toContain(`bds-card__control-status--${status}`);
+    expect(html).toContain(`bds-card__control-status--status-${status}`);
   });
 
   it.each([
@@ -48,8 +48,8 @@ describe('Card control statuses', () => {
     ['failed', 'negative'],
   ])('maps retired %s onto %s', (retired, current) => {
     const html = render({ connectionStatus: retired });
-    expect(html).toContain(`bds-card__control-status--${current}`);
-    expect(html).not.toContain(`bds-card__control-status--${retired}`);
+    expect(html).toContain(`bds-card__control-status--status-${current}`);
+    expect(html).not.toContain(`bds-card__control-status--status-${retired}`);
   });
 });
 
