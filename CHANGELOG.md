@@ -18,6 +18,14 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** ProgressStepper's step-state modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-progress-stepper__{circle,label}--{active,complete,upcoming}` | `bds-progress-stepper__{circle,label}--status-{active,complete,upcoming}` | `currentStep` |
+| `bds-progress-stepper__connector--{complete,incomplete}` | `bds-progress-stepper__connector--status-{complete,incomplete}` | `currentStep` |
+| `bds-progress-stepper__dot--{active,complete,inactive}` | `bds-progress-stepper__dot--status-{active,complete,inactive}` | `currentStep` |
+
 **Breaking (consumer CSS):** Card's control-status modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
 
 | Old | New | Prop |
