@@ -21,8 +21,8 @@ export interface CountUpProps extends HTMLAttributes<HTMLSpanElement> {
  * `prefers-reduced-motion: reduce`, or for an unparseable value it renders as a
  * plain static number — the animation is a pure enhancement on top (the same
  * by-construction gate `_Media.astro`'s `bg-video` uses). Duration and easing
- * come from `--bds-count-up-duration` / `--bds-count-up-ease` (token-backed:
- * `--bds-duration-400` / `--bds-ease-out`), overridable per consumer.
+ * come from `--bds-count-up-duration` / `--bds-count-up-ease` (defaults from
+ * the `--bds-duration-400` and `--bds-ease-out` motion tokens), overridable per consumer.
  *
  * `tabular-nums` (in `CountUp.css`) holds the width steady as digits change, so
  * the surrounding layout does not jitter through the sweep.
