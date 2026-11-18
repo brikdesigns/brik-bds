@@ -107,7 +107,7 @@ export function Badge({
     'bds-badge',
     `bds-badge--tone-${resolvedTone}`,
     `bds-badge--size-${size}`,
-    `bds-badge--${appearance}`,
+    `bds-badge--appearance-${appearance}`,
     density === 'compact' && 'bds-badge--density-compact',
     className
   );

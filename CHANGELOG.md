@@ -18,6 +18,13 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** Badge, Tag and Avatar fill modifiers now carry the `appearance` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector. Button's `--outline` is a different axis and is untouched.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-{badge,tag}--{solid,subtle,outline}` | `bds-{badge,tag}--appearance-{solid,subtle,outline}` | `appearance` |
+| `bds-avatar--subtle` | `bds-avatar--appearance-subtle` | `appearance` |
+
 **Breaking (consumer CSS):** ProgressStepper's step-state modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
 
 | Old | New | Prop |

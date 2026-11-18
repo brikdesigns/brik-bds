@@ -24,7 +24,7 @@ describe('Tag CSS — appearance × color', () => {
 
   it.each(['neutral', ...HUES])('has solid, subtle and outline rules for color=%s', (color) => {
     for (const appearance of ['solid', 'subtle', 'outline']) {
-      expect(tagCss, `${appearance} × ${color}`).toContain(`.bds-tag--${appearance}.bds-tag--color-${color}`);
+      expect(tagCss, `${appearance} × ${color}`).toContain(`.bds-tag--appearance-${appearance}.bds-tag--color-${color}`);
     }
   });
 
@@ -45,7 +45,7 @@ describe('Badge CSS — subtle and outline', () => {
   const badgeCss = css('Badge');
 
   it.each(TONES)('has an outline rule for tone=%s', (tone) => {
-    expect(badgeCss).toContain(`.bds-badge--outline.bds-badge--tone-${tone}`);
+    expect(badgeCss).toContain(`.bds-badge--appearance-outline.bds-badge--tone-${tone}`);
   });
 
   it.each(['positive', 'warning', 'negative', 'info', 'neutral'])(
@@ -62,7 +62,7 @@ describe('Badge CSS — subtle and outline', () => {
 
 describe('Avatar CSS — subtle', () => {
   it.each(HUES)('subtle %s fills with --bds-background-accent-%s-light', (hue) => {
-    expect(css('Avatar')).toContain(`.bds-avatar--subtle.bds-avatar--color-${hue}`);
+    expect(css('Avatar')).toContain(`.bds-avatar--appearance-subtle.bds-avatar--color-${hue}`);
     expect(css('Avatar')).toContain(`--bds-background-accent-${hue}-light`);
   });
 });
