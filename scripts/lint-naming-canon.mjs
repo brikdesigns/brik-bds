@@ -1192,22 +1192,47 @@ function segmentFindings(names, aliases) {
 // ── Rule 9 — every name is born in Figma (#3240) ───────────────────────────
 
 /**
- * The files the Figma sync writes: Style Dictionary (figma-tokens*), then
- * generate-modes-css (modes-*, layout-fluid) and the Brand Kit compile, all from
- * design-tokens/. dist-assemble.mjs bundles these WITH the hand-written files
- * (gap-fills, ratios, fluid-type, animations) — a name only those declare has no
- * Figma variable behind it.
+ * The files the Figma sync writes: Style Dictionary (figma-tokens*) and
+ * generate-modes-css (modes-*, layout-fluid), all from design-tokens/.
+ * dist-assemble.mjs bundles these WITH the hand-written files (gap-fills,
+ * ratios, fluid-type, animations) — a name only those declare has no Figma
+ * variable behind it.
+ *
+ * The Brik Brand Kit is read as its pulled variables (brik.json), NOT as the
+ * compiled theme-brand-brik.generated.css: compileClientTheme re-emits
+ * hand-written names beside the kit's own (`--bds-background-accent-blue-light`
+ * has no `background/accent-blue-light` variable), so the compiled file would
+ * launder them into canon.
  */
 const FIGMA_GENERATED = [
-  'figma-tokens.css', 'figma-tokens-dark.css', 'theme-brand-brik.generated.css',
-  'modes-borderwidth.css', 'modes-spacing.css', 'modes-typography.css', 'modes-borderradius.css',
-  'modes-elevation.css', 'modes-width.css', 'layout-fluid.css',
-].map((f) => path.join('tokens', f));
+  ...[
+    'figma-tokens.css', 'figma-tokens-dark.css',
+    'modes-borderwidth.css', 'modes-spacing.css', 'modes-typography.css', 'modes-borderradius.css',
+    'modes-elevation.css', 'modes-width.css', 'layout-fluid.css',
+  ].map((f) => path.join('tokens', f)),
+  path.join('design-tokens', 'brand-kits', 'brik.json'),
+];
+
+/** A pulled Figma variable set: `{ "<collection/mode>": { group: { name: { $value } } } }` → `--bds-group-name`. */
+function variableNames(node, segments, names) {
+  if (node === null || typeof node !== 'object') return;
+  if ('$value' in node || 'value' in node) {
+    names.add(`--${ID}-${segments.join('-').replace(/[/\s]+/g, '-').toLowerCase()}`);
+    return;
+  }
+  for (const [key, child] of Object.entries(node)) variableNames(child, [...segments, key], names);
+}
 
 function collectFigmaNames(files) {
   const names = new Set();
   for (const file of files) {
     if (!fs.existsSync(file)) throw new Error(`${file} does not exist (rule 9 reads the Figma-generated files)`);
+    if (file.endsWith('.json')) {
+      for (const [key, collection] of Object.entries(JSON.parse(fs.readFileSync(file, 'utf8')))) {
+        if (!key.startsWith('$')) variableNames(collection, [], names);
+      }
+      continue;
+    }
     for (const m of blankComments(fs.readFileSync(file, 'utf8')).matchAll(/(--[A-Za-z0-9_-]+)\s*:/g)) names.add(m[1]);
   }
   return names;

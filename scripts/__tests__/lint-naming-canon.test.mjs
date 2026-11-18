@@ -171,9 +171,9 @@ function run({
 
   const argv = [
     GATE, '--tokens', tokensPath, '--components', path.join(dir, 'ui'),
-    '--refs', refsDir === undefined ? refsPath : refsDir,
-    '--figma', figma === undefined ? tokensPath : figmaPath, ...args,
+    '--refs', refsDir === undefined ? refsPath : refsDir, ...args,
   ];
+  if (!args.includes('--figma')) argv.push('--figma', figma === undefined ? tokensPath : figmaPath);
   if (baseline === undefined) {
     argv.push('--no-baseline');
   } else {
@@ -1032,6 +1032,19 @@ describe('rule 9 — every name is born in Figma (#3240)', () => {
     const { code, out } = run({ figma: CLEAN_TOKENS, baseline });
     expect(code).toBe(1);
     expect(out).toMatch(/rule 9: --bds-background-info-light/);
+  });
+
+  it('reads a pulled Brand Kit as its variables, not as compiled CSS', () => {
+    const kit = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'naming-canon-kit-')), 'kit.json');
+    fs.writeFileSync(kit, JSON.stringify({
+      $metadata: {}, 'color/light': { background: { 'info-light': { $value: '{color.blue.300}' } } },
+    }));
+    const tokensFile = path.join(path.dirname(kit), 'figma.css');
+    fs.writeFileSync(tokensFile, CLEAN_TOKENS);
+    const withKit = run({ tokens: planted.tokens, args: ['--figma', `${tokensFile},${kit}`] });
+    expect(withKit.out).not.toMatch(/Rule 9/);
+    expect(withKit.code).toBe(0);
+    expect(run({ tokens: planted.tokens, args: ['--figma', tokensFile] }).code).toBe(1);
   });
 
   it('exit 2 when a Figma-generated file is missing or declares nothing', () => {
