@@ -9,6 +9,7 @@ import {
   type KeyboardEvent,
   type SyntheticEvent,
 } from 'react';
+import { Badge } from '../Badge';
 import { Button } from '../Button';
 import { TextArea } from '../TextArea';
 import { bdsClass } from '../../utils';
@@ -24,6 +25,8 @@ export interface CommentMention {
   label: string;
   /** Muted second line in the suggestion list. */
   description?: string;
+  /** Marks the suggestion as a person or an agent; omit for no marker. Returned unchanged in the submit payload. */
+  kind?: 'person' | 'agent';
 }
 
 export interface CommentSubmitPayload {
@@ -266,6 +269,11 @@ export function CommentComposer({
                   onClick={() => pick(mention)}
                 >
                   <span className="bds-comment-composer__option-label">@{mention.label}</span>
+                  {mention.kind && (
+                    <Badge size="sm" appearance="subtle" tone={mention.kind === 'agent' ? 'brand' : 'neutral'}>
+                      {mention.kind === 'agent' ? 'Agent' : 'Person'}
+                    </Badge>
+                  )}
                   {mention.description && (
                     <span className="bds-comment-composer__option-description">{mention.description}</span>
                   )}
