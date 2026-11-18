@@ -18,6 +18,13 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** Tooltip and Menu side modifiers now carry the `placement` axis they derive from, per ADR-033 § 6 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). A new `placement` axis (`top · bottom · left · right`) is admitted. No aliases ship. Tooltip's `__bubble--*` placement rules were never emitted by the component; they are renamed with the arrow's, not removed.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-tooltip__{arrow,bubble}--{top,bottom,left,right}` | `bds-tooltip__{arrow,bubble}--placement-{top,bottom,left,right}` | `placement` |
+| `bds-menu--top` | `bds-menu--placement-top` | `placement` |
+
 **Breaking (consumer CSS):** Badge, Tag and Avatar fill modifiers now carry the `appearance` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector. Button's `--outline` is a different axis and is untouched.
 
 | Old | New | Prop |

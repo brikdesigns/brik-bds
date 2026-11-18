@@ -361,7 +361,7 @@ export function Menu({
     <div
       ref={menuRef}
       role="menu"
-      className={bdsClass('bds-menu', `bds-menu--${placement}`, className)}
+      className={bdsClass('bds-menu', `bds-menu--placement-${placement}`, className)}
       style={style}
       {...props}
       onKeyDown={handleMenuKeyDown}

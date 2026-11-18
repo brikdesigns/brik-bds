@@ -1132,3 +1132,37 @@ describe('a broken scan never reads as clean', () => {
     expect(out).toMatch(/--rule must be 1-9/);
   });
 });
+
+describe('rule 4 + 5 — the `placement` axis (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed modifiers Tooltip and Menu emit from `placement`', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-menu--placement-top { bottom: 100%; }
+.bds-tooltip__arrow--placement-bottom { top: -4px; }
+.bds-tooltip__arrow--placement-left { right: -4px; }
+.bds-tooltip__arrow--placement-right { left: -4px; }
+`,
+    });
+    expect(out).not.toMatch(/placement-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies the bare placement modifier', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-menu--top { bottom: 100%; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--top/);
+  });
+
+  it('still denies a placement the amendment did NOT admit', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-menu--placement-center { top: 0; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--placement-center — `center` is on no closed list for the placement axis/);
+  });
+
+  it('still denies a novel member in a governed union', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type MenuPlacement = 'top' | 'bottom' | 'center';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/MenuPlacement\.center — `center` is on no closed list for the placement axis/);
+  });
+});

@@ -214,6 +214,7 @@
     "columns": { "concept": "grid column count", "values": ["1", "2", "3", "4", "5", "6", "auto-fit", "auto-fill"] },
     "spacing": { "concept": "outer separation from adjacent blocks", "values": ["none", "sm", "md", "lg"] },
     "corner": { "concept": "viewport corner a fixed element docks to", "values": ["bottom-right", "bottom-left"] },
+    "placement": { "concept": "side of its anchor a floating element opens on", "values": ["top", "bottom", "left", "right"] },
     "service-line": { "concept": "service line whose surface paints the block", "values": ["brand", "marketing", "information", "product", "back-office"] }
   },
   "docs": {
