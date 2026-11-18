@@ -101,7 +101,7 @@ export function Avatar({
       )}
       {status && (
         <div
-          className={bdsClass('bds-avatar__status', `bds-avatar__status--${status}`)}
+          className={bdsClass('bds-avatar__status', `bds-avatar__status--status-${status}`)}
           title={status}
         />
       )}

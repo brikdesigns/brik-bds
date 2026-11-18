@@ -1532,6 +1532,112 @@ if [ -d /proc/self ]; then
   check "no lsof: /proc sees an idle worktree → REMOVE"  "REMOVE — merged into main"  "$(grep -E '^task/idle[[:space:]]' <<<"$O10")"
 fi
 
+# ── #5339: a clean detached worktree whose tip is on origin, old enough, is REMOVED ──
+# #2277 made every detached worktree REVIEW because nothing proved its commits were
+# recoverable. A tip that origin still holds, at that sha, IS that proof. 13 such
+# worktrees held ~35 GB on brik-mini on 2026-11-03 until removed by hand.
+#   old-remote    tip on origin/task/old-remote, 30d old           → REMOVE
+#   young-remote  tip on origin/task/young-remote, committed now   → REVIEW (reapable at 14d)
+#   old-unpushed  30d-old tip on no remote branch                  → REVIEW (no branch ref)
+#   old-dirty     tip on origin, 30d old, uncommitted file         → KEEP
+#   old-stale     30d-old tip; local origin/task/old-stale exists
+#                 but the branch was deleted on origin, unpruned   → REVIEW (stale ref)
+echo
+echo -e "${YELLOW}▸ detached worktree with its tip on origin (#5339)${NC}"
+PRIMARY11="$TMPROOT/primary11"
+WT11="$TMPROOT/primary11-worktrees"
+REMOTE11="$TMPROOT/remote11.git"
+git init -q --bare "$REMOTE11"
+git init -q -b main "$PRIMARY11"
+assert_throwaway_repo "$PRIMARY11" "sweep fixture primary11"
+g -C "$PRIMARY11" config user.email "guardtest@example.com"
+g -C "$PRIMARY11" config user.name "guardtest"
+g -C "$PRIMARY11" config commit.gpgsign false
+echo seed > "$PRIMARY11/README.md"
+g -C "$PRIMARY11" add README.md
+g -C "$PRIMARY11" commit -q -m "seed"
+g -C "$PRIMARY11" remote add origin "$REMOTE11"
+g -C "$PRIMARY11" push -q -u origin main
+mkdir -p "$WT11"
+OLD11="$(date -u -v-30d +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -d '30 days ago' +%Y-%m-%dT%H:%M:%SZ)"
+# A commit on its own branch (old or now), optionally pushed, then the branch worktree
+# is swapped for a DETACHED one at the same sha and the local branch is deleted — the
+# shape a harness or `git checkout --detach` leaves behind.
+detached_at() {  # $1=slug  $2=old|new  $3=push|nopush
+  local sha
+  g -C "$PRIMARY11" worktree add -q -b "task/$1" "$WT11/$1" main
+  echo "$1" > "$WT11/$1/$1.txt"
+  g -C "$WT11/$1" add "$1.txt"
+  if [ "$2" = old ]; then GIT_COMMITTER_DATE="$OLD11" g -C "$WT11/$1" commit -q -m "$1"
+  else g -C "$WT11/$1" commit -q -m "$1"; fi
+  sha="$(g -C "$WT11/$1" rev-parse HEAD)"
+  [ "$3" = push ] && g -C "$PRIMARY11" push -q origin "task/$1"
+  g -C "$WT11/$1" checkout -q --detach "$sha"
+  g -C "$PRIMARY11" branch -q -D "task/$1"
+}
+detached_at old-remote   old push
+detached_at young-remote new push
+detached_at old-unpushed old nopush
+detached_at old-dirty    old push
+detached_at old-stale    old push
+echo scratch > "$WT11/old-dirty/scratch.txt"
+# Delete on origin but keep the local tracking ref (no prune): the stale shape.
+g -C "$REMOTE11" branch -q -D task/old-stale
+g -C "$PRIMARY11" fetch -q origin
+if g -C "$PRIMARY11" rev-parse -q --verify refs/remotes/origin/task/old-stale >/dev/null; then
+  echo -e "  ${GREEN}PASS${NC}  fixture: stale origin/task/old-stale survives locally"; PASS=$((PASS+1))
+else
+  echo -e "  ${RED}FAIL${NC}  fixture: origin/task/old-stale was pruned — the stale case tests nothing"; FAIL=$((FAIL+1))
+fi
+
+O11="$( (cd "$PRIMARY11" && PATH="$STUB7:$PATH" BRIK_WORKTREE_ROOT="$WT11" "$SWEEPER" 2>&1) )"
+$VERBOSE && { echo "$O11"; echo; }
+l11() { grep -F "$1 (detached)" <<<"$2"; }
+check "clean, on origin, 30d old → REMOVE"        "REMOVE — detached, tip on origin/task/old-remote" "$(l11 old-remote "$O11")"
+check "on origin but 0d old → REVIEW"             "(reapable at 14d)"                                "$(l11 young-remote "$O11")"
+check "30d old, on no remote → REVIEW"            "REVIEW — detached HEAD, no branch ref"            "$(l11 old-unpushed "$O11")"
+check "dirty, on origin, 30d old → KEEP"          "KEEP — 1 uncommitted change(s), detached HEAD"    "$(l11 old-dirty "$O11")"
+check "local tracking ref stale on origin → REVIEW" "origin/task/old-stale is stale here"            "$(l11 old-stale "$O11")"
+for slug in young-remote old-unpushed old-dirty old-stale; do
+  if l11 "$slug" "$O11" | grep -q 'REMOVE'; then
+    echo -e "  ${RED}FAIL${NC}  $slug (detached) read REMOVE"; FAIL=$((FAIL+1))
+  else
+    echo -e "  ${GREEN}PASS${NC}  $slug (detached) never reads REMOVE"; PASS=$((PASS+1))
+  fi
+done
+check "only old-remote is removable" "1 worktree(s) removable" "$O11"
+
+# The threshold is env-tunable, like BRIK_SWEEP_CLOSED_DAYS (#3997).
+O11T="$( (cd "$PRIMARY11" && PATH="$STUB7:$PATH" BRIK_WORKTREE_ROOT="$WT11" BRIK_SWEEP_DETACHED_DAYS=0 "$SWEEPER" 2>&1) )"
+check "BRIK_SWEEP_DETACHED_DAYS=0 → young-remote REMOVE" "REMOVE — detached, tip on origin/task/young-remote" "$(l11 young-remote "$O11T")"
+
+# Origin unreachable: no proof, so nothing detached is removed.
+O11U="$( (cd "$PRIMARY11" && PATH="$STUB7:$PATH" BRIK_WORKTREE_ROOT="$WT11" \
+  GIT_CONFIG_COUNT=1 GIT_CONFIG_KEY_0="url.$TMPROOT/nonexistent.git.insteadOf" GIT_CONFIG_VALUE_0="$REMOTE11" "$SWEEPER" 2>&1) )"
+check "origin unreachable → REVIEW, never REMOVE" "(origin unreachable)" "$(l11 old-remote "$O11U")"
+
+# --apply --delete-branches removes it, and does not try to delete an empty branch name.
+A11="$( (cd "$PRIMARY11" && PATH="$STUB7:$PATH" BRIK_WORKTREE_ROOT="$WT11" "$SWEEPER" --apply --delete-branches 2>&1) )"
+$VERBOSE && { echo "$A11"; echo; }
+if [ -d "$WT11/old-remote" ]; then
+  echo -e "  ${RED}FAIL${NC}  old-remote still on disk after --apply"; FAIL=$((FAIL+1))
+else
+  echo -e "  ${GREEN}PASS${NC}  old-remote removed by --apply"; PASS=$((PASS+1))
+fi
+check "--apply names the detached row" "old-remote (detached) (detached, tip on origin/task/old-remote" "$A11"
+if grep -q 'branch NOT deleted' <<<"$A11"; then
+  echo -e "  ${RED}FAIL${NC}  --delete-branches tried to delete a branch for a detached worktree"; FAIL=$((FAIL+1))
+else
+  echo -e "  ${GREEN}PASS${NC}  --delete-branches skips the detached row"; PASS=$((PASS+1))
+fi
+for slug in young-remote old-unpushed old-dirty old-stale; do
+  if [ -d "$WT11/$slug" ]; then
+    echo -e "  ${GREEN}PASS${NC}  $slug survives --apply"; PASS=$((PASS+1))
+  else
+    echo -e "  ${RED}FAIL${NC}  $slug was removed by --apply"; FAIL=$((FAIL+1))
+  fi
+done
+
 echo
 if [ "$FAIL" -eq 0 ]; then
   echo -e "${GREEN}✓ ${PASS} passed${NC}"
