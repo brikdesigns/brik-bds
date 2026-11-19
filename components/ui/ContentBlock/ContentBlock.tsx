@@ -75,7 +75,7 @@ export function ContentBlock({
       className={bdsClass(
         'bds-content-block',
         `bds-content-block--size-${size}`,
-        onColor ? 'bds-content-block--on-color' : '',
+        onColor ? 'bds-content-block--emphasis-on-color' : '',
         className,
       )}
       style={style}

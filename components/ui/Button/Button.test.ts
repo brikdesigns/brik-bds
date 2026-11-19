@@ -85,7 +85,7 @@ describe('Button tone × form (#1983)', () => {
     const c = cls({ emphasis: 'inverse' });
     expect(c).toContain('bds-button--inverse');
     expect(c).not.toContain('bds-button--primary');
-    expect(cls({ emphasis: 'on-color' })).toContain('bds-button--on-color');
+    expect(cls({ emphasis: 'on-color' })).toContain('bds-button--emphasis-on-color');
   });
 
   it('drops emphasis on outline / alongside tone, and warns', () => {
@@ -100,7 +100,7 @@ describe('Button tone × form (#1983)', () => {
     ['destructive', 'bds-button--tone-negative'],
     ['danger-outline', 'bds-button--tone-negative'],
     ['inverse', 'bds-button--inverse'],
-    ['on-color', 'bds-button--on-color'],
+    ['on-color', 'bds-button--emphasis-on-color'],
   ])('still honours retired variant="%s"', (variant, expected) => {
     expect(cls({ variant })).toContain(expected);
     expect(warn).toHaveBeenCalled();

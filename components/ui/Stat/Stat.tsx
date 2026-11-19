@@ -97,7 +97,7 @@ export function Stat({
       className={bdsClass(
         'bds-stat',
         `bds-stat--size-${size}`,
-        onColor && 'bds-stat--on-color',
+        onColor && 'bds-stat--emphasis-on-color',
         className,
       )}
       {...props}

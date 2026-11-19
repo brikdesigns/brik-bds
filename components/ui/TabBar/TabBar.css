@@ -37,7 +37,7 @@
 .bds-tab-bar--text .bds-tab-bar-item:disabled,
 .bds-tab-bar--variant-text-underline .bds-tab-bar-item:disabled,
 .bds-tab-bar--box .bds-tab-bar-item:disabled:not([aria-selected="true"]),
-.bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"]:disabled {
+.bds-tab-bar--box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"]:disabled {
   opacity: var(--bds-state-disabled-opacity);
 }
 
@@ -45,13 +45,13 @@
    --text-secondary. Secondary on the page measures 2.85:1 light once faded;
    primary measures 3.32:1 light / 4.82:1 dark. On-color bars keep their own
    foreground. */
-.bds-tab-bar:not(.bds-tab-bar--on-color) .bds-tab-bar-item:disabled:not([aria-selected="true"]) {
+.bds-tab-bar:not(.bds-tab-bar--emphasis-on-color) .bds-tab-bar-item:disabled:not([aria-selected="true"]) {
   color: var(--bds-text-primary);
 }
 
 /* Selected box item: brand fill + white label fades to 1.93:1 light / 2.58:1
    dark; the swap measures 5.22:1 / 3.29:1. Not faded (see the list above). */
-.bds-tab-bar--box:not(.bds-tab-bar--on-color) .bds-tab-bar-item[aria-selected="true"]:disabled {
+.bds-tab-bar--box:not(.bds-tab-bar--emphasis-on-color) .bds-tab-bar-item[aria-selected="true"]:disabled {
   background-color: var(--bds-background-disabled);
   color: var(--bds-text-disabled);
 }
@@ -78,11 +78,11 @@
 
 /* ── Text variant on-color ── */
 
-.bds-tab-bar--text.bds-tab-bar--on-color .bds-tab-bar-item:hover:not(:disabled) {
+.bds-tab-bar--text.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:hover:not(:disabled) {
   opacity: 1;
 }
 
-.bds-tab-bar--text.bds-tab-bar--on-color .bds-tab-bar-item:active:not(:disabled) {
+.bds-tab-bar--text.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:active:not(:disabled) {
   opacity: 0.5;
 }
 
@@ -122,20 +122,20 @@
 
 /* ── Tab variant on-color ── */
 
-.bds-tab-bar--tab.bds-tab-bar--on-color {
+.bds-tab-bar--tab.bds-tab-bar--emphasis-on-color {
   border-bottom-color: var(--bds-border-on-color-dark);
 }
 
-.bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] {
+.bds-tab-bar--tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"] {
   border-bottom-color: var(--bds-border-on-color-dark);
 }
 
-.bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
+.bds-tab-bar--tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
   opacity: 0.8;
   border-bottom-color: var(--bds-border-on-color-dark);
 }
 
-.bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item:active:not(:disabled) {
+.bds-tab-bar--tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:active:not(:disabled) {
   opacity: 0.5;
 }
 
@@ -156,17 +156,17 @@
 
 /* ── Box variant on-color ── */
 
-.bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
+.bds-tab-bar--box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
   opacity: 0.8;
 }
 
-.bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item:active:not(:disabled):not([aria-selected="true"]) {
+.bds-tab-bar--box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:active:not(:disabled):not([aria-selected="true"]) {
   opacity: 0.5;
 }
 
 /* ════════════════════════════════════════════════════════════════════════
    Base values — migrated from inline CSSProperties builders (brik-bds#892).
-   Keyed on the variant class, [aria-selected], and the --on-color modifier so
+   Keyed on the variant class, [aria-selected], and the --emphasis-on-color modifier so
    they express the same active / on-color matrix the JS builders did, while
    letting external rules override via normal cascade. Pseudo-state rules above
    (hover/active/disabled) keep their higher specificity and are unaffected.
@@ -259,11 +259,11 @@
 .bds-tab-bar--text .bds-tab-bar-item[aria-selected="true"] {
   color: var(--bds-text-brand-primary);
 }
-.bds-tab-bar--text.bds-tab-bar--on-color .bds-tab-bar-item {
+.bds-tab-bar--text.bds-tab-bar--emphasis-on-color .bds-tab-bar-item {
   color: var(--bds-text-on-color-dark);
   opacity: 0.6;
 }
-.bds-tab-bar--text.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] {
+.bds-tab-bar--text.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"] {
   opacity: 1;
 }
 
@@ -277,12 +277,12 @@
   color: var(--bds-text-brand-primary);
   border-bottom-color: var(--bds-border-brand-primary);
 }
-.bds-tab-bar--variant-text-underline.bds-tab-bar--on-color .bds-tab-bar-item {
+.bds-tab-bar--variant-text-underline.bds-tab-bar--emphasis-on-color .bds-tab-bar-item {
   color: var(--bds-text-on-color-dark);
   opacity: 0.6;
   border-bottom-color: transparent;
 }
-.bds-tab-bar--variant-text-underline.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] {
+.bds-tab-bar--variant-text-underline.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"] {
   opacity: 1;
   border-bottom-color: var(--bds-border-on-color-dark);
 }
@@ -297,11 +297,11 @@
 .bds-tab-bar--tab .bds-tab-bar-item[aria-selected="true"] {
   color: var(--bds-text-brand-primary);
 }
-.bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item {
+.bds-tab-bar--tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item {
   color: var(--bds-text-on-color-dark);
   opacity: 0.6;
 }
-.bds-tab-bar--tab.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] {
+.bds-tab-bar--tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"] {
   opacity: 1;
 }
 
@@ -317,12 +317,12 @@
   background-color: var(--bds-background-brand-primary);
   border-color: transparent;
 }
-.bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item {
+.bds-tab-bar--box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item {
   color: var(--bds-text-on-color-dark);
   border-color: var(--bds-border-on-color-dark);
   opacity: 0.6;
 }
-.bds-tab-bar--box.bds-tab-bar--on-color .bds-tab-bar-item[aria-selected="true"] {
+.bds-tab-bar--box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"] {
   color: var(--bds-text-on-color-dark);
   background-color: var(--bds-background-brand-primary);
   border-color: transparent;
@@ -362,7 +362,7 @@
   background-position: 0 calc(100% - (var(--bds-tab-bar-bleed) - var(--bds-border-width-md))); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
-.bds-tab-bar--scroll.bds-tab-bar--tab.bds-tab-bar--on-color {
+.bds-tab-bar--scroll.bds-tab-bar--tab.bds-tab-bar--emphasis-on-color {
   --bds-tab-bar-baseline: var(--bds-border-on-color-dark); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 }

@@ -18,6 +18,13 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** The `on-color` modifiers now carry the `emphasis` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). `on-color` was already admitted to `emphasis` by #1983. No aliases ship. Button's `--inverse` is a separate Rule 4 row and is untouched.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-button--on-color` | `bds-button--emphasis-on-color` | `emphasis="on-color"` |
+| `bds-{tab-bar,content-block,eyebrow,stat}--on-color` | `bds-{tab-bar,content-block,eyebrow,stat}--emphasis-on-color` | `onColor` |
+
 **Fix (consumer CSS):** Modal's `full` size rule is renamed `bds-modal--full` → `bds-modal--size-full`, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). `Modal.tsx` already emitted `bds-modal--size-full`, so the old selector never matched and `size="full"` got no `max-width: 95vw`; it does now. No alias ships.
 
 **Breaking (consumer CSS):** Sheet and Pagination side modifiers now carry an axis, per ADR-033 § 6 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). A new `side` axis (`right · left · bottom`) is admitted for Sheet. Pagination uses the existing `align` prefix. No aliases ship.

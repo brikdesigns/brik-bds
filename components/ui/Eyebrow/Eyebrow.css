@@ -13,7 +13,7 @@
 }
 
 /* On-color: no opacity hack. */
-.bds-eyebrow--on-color {
+.bds-eyebrow--emphasis-on-color {
   color: var(--bds-text-on-color-dark);
 }
 
