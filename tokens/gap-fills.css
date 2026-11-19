@@ -466,13 +466,6 @@
 
      `content-width` is NOT backed by a ❖ Brik Foundations variable, so
      #2594's revert does not reach it — it stays retired. */
-  /* KEPT three more releases (#3246): still named by consumers that cannot migrate in
-     the same release — fast by the portal's mockup widget mirror (byte-locked to the
-     installed package), md and slow by birdwell-mutlak and vale-partners on `main`.
-     Pointed at the Figma primitives; the follow-up deletes all three. */
-  --bds-duration-fast:       var(--bds-duration-100);       /* bds-lint-ignore — DEPRECATED, use --bds-duration-100 (#3246); drop once the portal widget mirror and client sites migrate */
-  --bds-duration-md:         var(--bds-duration-200);       /* bds-lint-ignore — DEPRECATED, use --bds-duration-200 (#3246); drop once the client sites migrate */
-  --bds-duration-slow:       var(--bds-duration-300);       /* bds-lint-ignore — DEPRECATED, use --bds-duration-300 (#3246); drop once the client sites migrate */
   --bds-content-width-narrow:  var(--bds-content-width-sm); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-sm (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
   --bds-content-width-default: var(--bds-content-width-md); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-md (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
   --bds-content-width-wide:    var(--bds-content-width-lg); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-lg (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
