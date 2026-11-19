@@ -1166,3 +1166,29 @@ describe('rule 4 + 5 — the `placement` axis (§ Amendments, #1927)', () => {
     expect(out).toMatch(/MenuPlacement\.center — `center` is on no closed list for the placement axis/);
   });
 });
+
+describe('rule 4 + 5 — the `side` axis and Pagination on `align` (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed modifiers Sheet and Pagination emit', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-sheet--side-right { right: 0; }
+.bds-sheet--side-left { left: 0; }
+.bds-sheet--side-bottom { bottom: 0; }
+.bds-pagination--align-center { justify-content: center; }
+`,
+    });
+    expect(out).not.toMatch(/--side-|--align-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies the bare side modifier', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-sheet--left { left: 0; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--left/);
+  });
+
+  it('still denies a side the amendment did NOT admit', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-sheet--side-top { top: 0; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--side-top — `top` is on no closed list for the side axis/);
+  });
+});

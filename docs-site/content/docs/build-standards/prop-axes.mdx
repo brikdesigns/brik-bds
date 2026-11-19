@@ -1,6 +1,6 @@
 ---
 title: Prop Axes
-description: The twenty-two shared axis words — tone, status, variant, emphasis, appearance, density, color, orientation, layout, span, ratio, fit, anchor, resize, marker, underline, measure, columns, spacing, corner, placement, service-line — that any BDS component with overlapping concerns must use.
+description: The twenty-three shared axis words — tone, status, variant, emphasis, appearance, density, color, orientation, layout, span, ratio, fit, anchor, resize, marker, underline, measure, columns, spacing, corner, placement, side, service-line — that any BDS component with overlapping concerns must use.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -35,6 +35,7 @@ Source of truth: [ADR-033 § 2](https://github.com/brikdesigns/brik-bds/blob/mai
 | `corner` | `bottom-right` · `bottom-left` | Which viewport corner a fixed element docks to (TaskConsole's `position` prop) | TaskConsole |
 | `service-line` | `brand` · `marketing` · `information` · `product` · `back-office` | Which service line's surface paints the block (the `serviceLine` prop) | Card, BlockQuote (bare, under ADR-033 § 4's service-line exception) |
 | `placement` | `top` · `bottom` · `left` · `right` | Which side of its anchor a floating element opens on (the `placement` prop) | Tooltip, Popover, Menu |
+| `side` | `right` · `left` · `bottom` | Which viewport edge a docked panel anchors to (the `side` prop) | Sheet |
 
 `error` and `progress` are retired valence words: use `negative` and `info` ([ADR-033 § Retired vocabulary](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md#retired-vocabulary)). `brand` is not a valence either: ADR-033 moves it to `emphasis="brand"`. Badge's `tone` still accepts `brand` until that migration lands (see the matrix below), so do not copy it into a new union.
 

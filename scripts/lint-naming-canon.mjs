@@ -606,9 +606,10 @@ function collectUnions(componentsDir) {
  * (#1927) shares `brand` with emphasis, so a `'brand' | 'positive'` union would
  * read as three axes instead of emphasis + tone. `placement` (#1927) shares
  * `top`, `left` and `right` with Sheet's `side` and Pagination's `position`
- * unions, which are other concepts, so a value match would misread those.
+ * unions, which are other concepts, so a value match would misread those. `side`
+ * (#1927) is Sheet's own axis and shares `left`, `right` and `bottom` with `placement`.
  */
-const PREFIX_JUDGED_AXES = new Set(['span', 'fit', 'anchor', 'resize', 'marker', 'underline', 'measure', 'spacing', 'service-line', 'placement']);
+const PREFIX_JUDGED_AXES = new Set(['span', 'fit', 'anchor', 'resize', 'marker', 'underline', 'measure', 'spacing', 'service-line', 'placement', 'side']);
 
 /**
  * Every axis whose closed list claims this member. A SET, not one axis: ADR-033

@@ -18,6 +18,13 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** Sheet and Pagination side modifiers now carry an axis, per ADR-033 § 6 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). A new `side` axis (`right · left · bottom`) is admitted for Sheet. Pagination uses the existing `align` prefix. No aliases ship.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-sheet--{right,left,bottom}` | `bds-sheet--side-{right,left,bottom}` | `side` |
+| `bds-pagination--{left,center,right}` | `bds-pagination--align-{left,center,right}` | `position` |
+
 **Breaking (consumer CSS):** Tooltip and Menu side modifiers now carry the `placement` axis they derive from, per ADR-033 § 6 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). A new `placement` axis (`top · bottom · left · right`) is admitted. No aliases ship. Tooltip's `__bubble--*` placement rules were never emitted by the component; they are renamed with the arrow's, not removed.
 
 | Old | New | Prop |

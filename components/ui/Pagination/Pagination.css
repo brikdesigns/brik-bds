@@ -10,15 +10,15 @@
   box-sizing: border-box;
 }
 
-.bds-pagination--left {
+.bds-pagination--align-left {
   justify-content: flex-start;
 }
 
-.bds-pagination--center {
+.bds-pagination--align-center {
   justify-content: center;
 }
 
-.bds-pagination--right {
+.bds-pagination--align-right {
   justify-content: flex-end;
 }
 
