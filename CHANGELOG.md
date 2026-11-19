@@ -18,11 +18,10 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
-**Breaking (consumer CSS):** Button's `inverse` and Footer's variant modifiers now carry an axis, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). Button `inverse` is a hue source, so it rides `emphasis`; Footer's prop is `variant`, so its modifiers ride `variant`. No aliases ship. The Hero blueprint and its generated output move with the Button class.
+**Breaking (consumer CSS):** Footer's variant modifiers now carry the `variant` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No aliases ship.
 
 | Old | New | Prop |
 |---|---|---|
-| `bds-button--inverse` | `bds-button--emphasis-inverse` | `emphasis="inverse"` |
 | `bds-footer--{default,brand,inverse}` | `bds-footer--variant-{default,brand,inverse}` | `variant` |
 
 **Breaking (consumer CSS):** The `on-color` modifiers now carry the `emphasis` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). `on-color` was already admitted to `emphasis` by #1983. No aliases ship. Button's `--inverse` is a separate Rule 4 row and is untouched.
