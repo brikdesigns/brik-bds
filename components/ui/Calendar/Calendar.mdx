@@ -1,0 +1,60 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Calendar.stories';
+
+<Meta of={Stories} />
+
+# Calendar
+
+<ComponentLinks slug="calendar" />
+
+A month or week grid of dated events, headed by a [`CalendarToolbar`](/?path=/docs/components-calendar-toolbar--docs). Built on FullCalendar and themed with BDS tokens; navigation, the title and the view switch are wired for you.
+
+## Purpose
+
+A calendar shows *when* things happen. Use it when the date is the main way people read the data: scheduled posts, appointments, closures. For picking one date use `DatePicker`; for a chronological feed use `ActivityTimeline`.
+
+## Playground
+
+<Canvas of={Stories.Default} />
+
+## Week
+
+<Canvas of={Stories.Week} />
+
+The week view places timed events on a time grid. All-day events sit in the row above it (`allDaySlot`, default on).
+
+## Event fills
+
+Each event takes **one** fill:
+
+- **`tone`** for status, in Badge's words: `neutral` (default), `positive`, `warning`, `negative`.
+- **`color`** for a category with no status meaning, in Tag's hues: `blue`, `green`, `orange`, `purple`, `yellow`, `red`. `color` wins when both are set.
+
+Event text is always `--bds-text-on-color-light`, the pairing every fill clears AA with.
+
+## Filters and actions
+
+<Canvas of={Stories.WithFilters} />
+
+`filters` and `actions` pass straight to the toolbar, so they size and collapse the way `CalendarToolbar` does.
+
+## Rescheduling
+
+<Canvas of={Stories.Reschedule} />
+
+Passing `onEventMove` turns dragging on. It is called with the event and its new start. Throw or reject (for example when a save fails) and the event snaps back.
+
+## Custom event body
+
+<Canvas of={Stories.CustomEvent} />
+
+## Props
+
+<ArgTypes of={Stories} />
+
+## Notes
+
+> **Note** — Passing `onEventClick` makes each event focusable and activatable with Enter or Space. Without it events are not interactive.
+
+> **Note** — Today's date shows as a brand pill with white text. FullCalendar's own today background is turned off so the pill is the only marker.
