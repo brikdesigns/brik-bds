@@ -2,7 +2,7 @@
   "schema": 1,
   "generated_by": "brikdesigns/brik-llm:scripts/reports/report-meta.py",
   "contract": "docs/reports/README.md#metadata-contract",
-  "count": 11,
+  "count": 12,
   "reports": [
     {
       "path": "docs/reports/2026-09-26-foundations-disconnect-assessment.html",
@@ -166,6 +166,22 @@
       "subject": "bds",
       "owner": "nstaner",
       "generated": "2026-10-31",
+      "supersedes": "none",
+      "cadence": "once",
+      "source": "manual"
+    },
+    {
+      "path": "docs/reports/token-formula-reassessment-2026-11-18.html",
+      "title": "Token Formula Reassessment",
+      "status": "active",
+      "type": "assessment",
+      "themes": [
+        "design-system",
+        "agent-ops"
+      ],
+      "subject": "bds",
+      "owner": "nstaner",
+      "generated": "2026-11-18",
       "supersedes": "none",
       "cadence": "once",
       "source": "manual"
