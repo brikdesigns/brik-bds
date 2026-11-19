@@ -1,5 +1,5 @@
 {
-  "$comment": "ADR-043 section 5: Component knobs renamed off a reserved stem (text-, page-). Old name -> new name. Read by scripts/lib/bds-prefix.mjs (bridge + codemod) and scripts/lint-tokens.js. ADR-043 section 2 / #2677: the six doubled `--color-annotation-annotation-*` colours are renamed `--bds-color-annotation-{hue}` (same file, same bridge path). #3246: also carries the legacy names whose `--bds-` alias was deleted (value-neutral swaps to the Figma-backed name); the legacy snapshot is frozen, so the replacement lives here. #3244: also carries the legacy names deleted with no consumer; a name with no successor points at the nearest declared sibling, since guard tooling reads the key set, not the target.",
+  "$comment": "ADR-043 section 5: Component knobs renamed off a reserved stem (text-, page-). Old name -> new name. Read by scripts/lib/bds-prefix.mjs (bridge + codemod) and scripts/lint-tokens.js. ADR-043 section 2 / #2677: the six doubled `--color-annotation-annotation-*` colours are renamed `--bds-color-annotation-{hue}` (same file, same bridge path). #3246: also carries the legacy names whose `--bds-` alias was deleted (value-neutral swaps to the Figma-backed name); the legacy snapshot is frozen, so the replacement lives here. #3244: also carries the legacy names deleted with no consumer; a name with no successor points at the nearest declared sibling, since guard tooling reads the key set, not the target. #3247 / Figma primitive-colour rebuild (2026-11-19): the one-step system colours moved to numeric 3-step ramps in Figma, so the legacy `--color-system-{hue}` names point at `-500` (the old base) and `-{hue}-light` at `-200`.",
   "--bds-text-area-min-width": "--bds-textarea-min-width",
   "--bds-page-padding-inline": "--bds-gutter-padding-inline",
   "--color-annotation-annotation-pink": "--bds-color-annotation-pink",
@@ -52,5 +52,19 @@
   "--text-transform-display": "--bds-font-casing-none",
   "--text-transform-heading": "--bds-font-casing-none",
   "--color-system-lightbox": "--bds-background-overlay",
-  "--color-system-transparent": "--bds-color-system-neutral-light"
+  "--color-system-transparent": "--bds-color-system-neutral-200",
+  "--color-system-blue": "--bds-color-system-blue-500",
+  "--color-system-blue-light": "--bds-color-system-blue-200",
+  "--color-system-green": "--bds-color-system-green-500",
+  "--color-system-green-light": "--bds-color-system-green-200",
+  "--color-system-neutral": "--bds-color-system-neutral-500",
+  "--color-system-neutral-light": "--bds-color-system-neutral-200",
+  "--color-system-orange": "--bds-color-system-orange-500",
+  "--color-system-orange-light": "--bds-color-system-orange-200",
+  "--color-system-purple": "--bds-color-system-purple-500",
+  "--color-system-purple-light": "--bds-color-system-purple-200",
+  "--color-system-red": "--bds-color-system-red-500",
+  "--color-system-red-light": "--bds-color-system-red-200",
+  "--color-system-yellow": "--bds-color-system-yellow-500",
+  "--color-system-yellow-light": "--bds-color-system-yellow-200"
 }

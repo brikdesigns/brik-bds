@@ -2,7 +2,7 @@ import type { CSSProperties, ReactNode } from 'react';
 import type { DataViewEmpty } from '../DataView/DataView';
 
 /**
- * A chart colour — the suffix of one `--bds-chart-*` token (ADR-050 § 1).
+ * A chart colour — the suffix of one `--bds-background-chart-*` token (ADR-050 § 1, amended 2026-11-19: chart is a role under background/border, not a purpose).
  *
  * - `brand` — the one highlighted series, or a single-series chart.
  * - `neutral` — context: the comparison period, "other", a target line.

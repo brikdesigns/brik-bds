@@ -3,8 +3,6 @@
 
 import SwiftUI
 public enum BDSMotion {
-    public static let easingEaseIn = "String value"
-    public static let easingEaseOut = "String value"
     public static let delay0: CGFloat = 0
     public static let delay100: CGFloat = 100
     public static let delay200: CGFloat = 200

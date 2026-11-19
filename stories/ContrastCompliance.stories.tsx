@@ -155,7 +155,7 @@ const ratioBadge = (pass: boolean): CSSProperties => ({
   fontSize: 'var(--bds-body-xs)',
   fontFamily: 'var(--bds-font-family-label)',
   fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number,
-  backgroundColor: pass ? 'var(--bds-color-system-green)' : 'var(--bds-color-system-red)',
+  backgroundColor: pass ? 'var(--bds-color-system-green-500)' : 'var(--bds-color-system-red-500)',
   color: '#FFFFFF',                                  // bds-lint-ignore — badge text always white for max contrast
 });
 
