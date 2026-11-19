@@ -69,7 +69,8 @@ Figma organises variables into named collections. Each collection has modes. Sty
 | `border-radius` | `soft` | `--bds-border-radius-sm/md/lg` |
 | `border-width` | `default` | `--bds-border-width-sm/md/lg` |
 | `elevation` | `subtle` | composed `--bds-shadow-*` (`gap-fills.css`), `--bds-blur-radius-*` |
-| `width` | `contained` | `--bds-content-width-{sm,md,lg,xl}` — the band rungs; `wide` / `full-bleed` re-point them via `[data-mode-width]` in `modes-width.css` |
+| `content-width` | `contained` | `--bds-content-width-sm/md/lg/xl` (the band rungs) and `--bds-content-width-text-md`; `wide` / `full-bleed` re-point the band rungs via `[data-mode-width]` in `modes-width.css` |
+| `motion` | `default` | `--bds-ease-out/in/in-out/spring/spring-soft/linear` |
 | `breakpoint` | `default` | `--bds-breakpoint-mobile/tablet/desktop/wide/wider` |
 | `layout` | `mobile` + `tablet` + `desktop` | `--bds-page-inset`, `--bds-section-padding-block` — **not** flattened by Style Dictionary; the build turns all three modes into one fluid `clamp()` in `layout-fluid.css` ([layout tier](/docs/foundation/spacing#layout-tier)) |
 
