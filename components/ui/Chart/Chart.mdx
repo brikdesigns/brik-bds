@@ -10,7 +10,7 @@ import * as Stories from './Chart.stories';
 
 The data-visualization family (ADR-050). `BarChart`, `LineChart` and `DonutChart` render inside one `ChartFrame` — title, legend, axis labels, tooltip and a "Show data table" toggle. Loading, empty and error states come from the DataView shell. `Sparkline` is the frameless trend for a `Stat`'s `supplementary` slot.
 
-Colour comes only from the 12 `--bds-chart-*` tokens. Pick one per series with `ChartSeries.color` (type `ChartColor`). Peer series default to `CHART_CATEGORICAL_COLORS` in order; a single series is `brand`.
+Colour comes only from the 12 `--bds-background-chart-*` tokens (fills; a same-valued `--bds-border-chart-*` stroke set exists for line and axis marks). Pick one per series with `ChartSeries.color` (type `ChartColor`). Peer series default to `CHART_CATEGORICAL_COLORS` in order; a single series is `brand`.
 
 **The chart-type rule.** Pick by the question asked:
 

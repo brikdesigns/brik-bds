@@ -198,10 +198,8 @@
      --bds-background-accent-purple / -orange resolve to the same
      --bds-color-system-purple / -orange these aliases did. So the two names
      retired into an existing family rather than minting a word. */
-  --bds-background-info:                 var(--bds-color-system-blue);
-  --bds-text-info:                       var(--bds-color-system-blue);
-  --bds-surface-info:                    var(--bds-color-system-blue-light);
-  --bds-border-info:                     var(--bds-color-system-blue);
+  --bds-text-info:                       var(--bds-color-system-blue-500);
+  --bds-border-info:                     var(--bds-color-system-blue-500);
 
   /* Six more `status-` aliases (info + neutral) stood here as the one-minor
      compatibility shim #1955 and #1959 shipped alongside the intent-form
@@ -242,20 +240,20 @@
      saturated brand color, and the brand pastel is already
      --bds-background-brand-secondary. */
   --bds-background-info-light:          var(--bds-surface-info);
-  --bds-background-accent-red-light:    var(--bds-color-system-red-light);
+  --bds-background-accent-red-light:    var(--bds-color-system-red-200);
 
   /* ── System color hover/pressed states ──
      Darken system colors for interactive feedback on destructive/positive buttons.
      Stays a gap-fill by design (#894): a Figma COLOR variable cannot hold a color-mix() derivation. */
-  --bds-background-negative-hover:   color-mix(in srgb, var(--bds-color-system-red) 85%, black);
-  --bds-background-negative-pressed: color-mix(in srgb, var(--bds-color-system-red) 70%, black);
-  --bds-background-positive-hover:   color-mix(in srgb, var(--bds-color-system-green) 85%, black);
-  --bds-background-positive-pressed: color-mix(in srgb, var(--bds-color-system-green) 70%, black);
+  --bds-background-negative-hover:   color-mix(in srgb, var(--bds-color-system-red-500) 85%, black);
+  --bds-background-negative-pressed: color-mix(in srgb, var(--bds-color-system-red-500) 70%, black);
+  --bds-background-positive-hover:   color-mix(in srgb, var(--bds-color-system-green-500) 85%, black);
+  --bds-background-positive-pressed: color-mix(in srgb, var(--bds-color-system-green-500) 70%, black);
 
   /* Presence (for Avatar online/away/busy/offline indicators) */
-  --bds-background-presence-online:  var(--bds-color-system-green);
-  --bds-background-presence-away:    var(--bds-color-system-yellow);
-  --bds-background-presence-busy:    var(--bds-color-system-red);
+  --bds-background-presence-online:  var(--bds-color-system-green-500);
+  --bds-background-presence-away:    var(--bds-color-system-yellow-500);
+  --bds-background-presence-busy:    var(--bds-color-system-red-500);
   --bds-background-presence-offline: var(--bds-color-grayscale-500);
 
   /* ── Shadow Semantic Tokens ──

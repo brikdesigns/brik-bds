@@ -172,6 +172,36 @@ describe('sync-figma-mcp prune (brik-bds#754)', () => {
     expect(out.theme.brik['poppy-red'].$value).toBe('#e35335'); // NOT pruned
   });
 
+  it('keeps the children when a leaf was re-shaped into a group in Figma', () => {
+    // The 2026-11-19 Foundations rebuild turned the one-step leaf
+    // `color/system/red` into the three-step group `color/system/red/{200,500,800}`.
+    // applyToSet writes the new steps INSIDE the old leaf node, so the prune pass
+    // used to see `system/red` as a deleted leaf and delete the whole node — the
+    // new steps with it — leaving every `{color.system.red.500}` alias dangling.
+    const lib = join(tmpDir, 'lib-reshape.json');
+    const dump = join(tmpDir, 'dump-reshape.json');
+    writeFileSync(lib, JSON.stringify(libraryFile({
+      'color/system/red': '#e52424',
+      'color/poppy/light': '#e35335',
+    })));
+    writeFileSync(dump, JSON.stringify(pullDump([
+      { name: 'color/system/red/200', value: '#fccccc' },
+      { name: 'color/system/red/500', value: '#e52424' },
+      { name: 'color/system/red/800', value: '#841c19' },
+      { name: 'color/poppy/light', value: '#e35335' },
+    ])));
+
+    const res = runSync([dump, `--target=${lib}`, `--source-root=${emptyRoot}`], tmpDir);
+    expect(res.status).toBe(0);
+    expect(res.stdout).toContain('color/system/red'); // reported as removed
+
+    const out = JSON.parse(readFileSync(lib, 'utf8'))['primitives/value'];
+    expect(out.color.system.red.$value).toBeUndefined(); // the old leaf is gone
+    expect(out.color.system.red[200].$value).toBe('#fccccc');
+    expect(out.color.system.red[500].$value).toBe('#e52424');
+    expect(out.color.system.red[800].$value).toBe('#841c19');
+  });
+
   it('never prunes for the legacy flat-map shape (shape 2)', () => {
     const lib = join(tmpDir, 'lib-legacy.json');
     const dump = join(tmpDir, 'dump-legacy.json');

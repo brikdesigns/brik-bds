@@ -2417,7 +2417,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.blue}"
+        "$value": "{color.system.blue.500}"
       },
       "on-color-light": {
         "$extensions": {
@@ -2440,7 +2440,7 @@
       },
       "warning": {
         "$type": "color",
-        "$value": "{color.system.yellow}",
+        "$value": "{color.system.yellow.500}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -2598,7 +2598,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.red}"
+        "$value": "{color.system.red.500}"
       },
       "brand-primary-strong": {
         "$extensions": {
@@ -2745,7 +2745,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.yellow}"
+        "$value": "{color.system.yellow.500}"
       },
       "accent-blue": {
         "$extensions": {
@@ -2754,7 +2754,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.blue}"
+        "$value": "{color.system.blue.500}"
       },
       "accent-green": {
         "$extensions": {
@@ -2763,7 +2763,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.green}"
+        "$value": "{color.system.green.500}"
       },
       "accent-purple": {
         "$extensions": {
@@ -2772,7 +2772,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.purple}"
+        "$value": "{color.system.purple.500}"
       },
       "accent-orange": {
         "$extensions": {
@@ -2781,7 +2781,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.orange}"
+        "$value": "{color.system.orange.500}"
       },
       "accent-red": {
         "$extensions": {
@@ -2790,7 +2790,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.red}"
+        "$value": "{color.system.red.500}"
       }
     }
   },
@@ -3687,7 +3687,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.blue}"
+        "$value": "{color.system.blue.500}"
       },
       "on-color-light": {
         "$extensions": {
@@ -3710,7 +3710,7 @@
       },
       "warning": {
         "$type": "color",
-        "$value": "{color.system.yellow}",
+        "$value": "{color.system.yellow.500}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -3868,7 +3868,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.red}"
+        "$value": "{color.system.red.500}"
       },
       "brand-primary-strong": {
         "$extensions": {
@@ -4015,7 +4015,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.yellow}"
+        "$value": "{color.system.yellow.500}"
       },
       "accent-blue": {
         "$extensions": {
@@ -4024,7 +4024,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.blue}"
+        "$value": "{color.system.blue.500}"
       },
       "accent-green": {
         "$extensions": {
@@ -4033,7 +4033,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.green}"
+        "$value": "{color.system.green.500}"
       },
       "accent-purple": {
         "$extensions": {
@@ -4042,7 +4042,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.purple}"
+        "$value": "{color.system.purple.500}"
       },
       "accent-orange": {
         "$extensions": {
@@ -4051,7 +4051,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.orange}"
+        "$value": "{color.system.orange.500}"
       },
       "accent-red": {
         "$extensions": {
@@ -4060,7 +4060,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.red}"
+        "$value": "{color.system.red.500}"
       }
     }
   },
