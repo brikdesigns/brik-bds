@@ -31,15 +31,17 @@
         "namedFamilies": {
           "$comment": "#2677, ratified by the operator 2026-10-01. Non-numeric colour families: body is color-{family}-{name}, {name} from the closed list. A new name is a PR to this file. #2689: every family states its purpose in $purposes; a name that does not fit its family's purpose belongs in another family.",
           "$purposes": {
-            "system": "Messaging colours (error, success, warning, neutral, info, plus link blue and accent hues) for Alert, Badge and Toast; components never read them directly, they read the Semantic that aliases them.",
+            "system": "Messaging colours (error, success, warning, neutral, info, link blue) for Alert, Badge and Toast; components never read them directly, they read the Semantic that aliases them. Figma rebuild 2026-11-19 (#3247, OPERATOR CHOSE: \"We approve the numeric approach for our foundation colors\"): each hue is a 3-step ramp {hue}-200 (tint), {hue}-500 (base, the old one-step name) and {hue}-800 (shade); neutral carries 200 and 500 only. Brand kits adopt these; they do not rebind them.",
             "social": "Third-party brand marks (YouTube, X/Twitter, Facebook, Instagram, LinkedIn, Yelp, Google, Apple, Bing, TikTok) used by SocialIcon; these are the platforms' colours, not Brik's, and no brand kit rebinds them.",
             "annotation": "Annotation-tooling colours (pink, purple, blue and their light tints) used to mark up designs and docs, never product UI.",
-            "chart": "Data-visualization fills (ADR-050 § 1): the six categorical hues plus the light-mode warning amber, each solved to 3:1 on the page and card surfaces; -on-dark is the dark-mode partner. Components never read them directly, they read the --chart-* Semantic, and no brand kit rebinds them, so the validated contrast and colour-blind separation hold under every client theme."
+            "accent": "Non-messaging hues (#3247, Figma rebuild 2026-11-19): the categorical set that data-visualization fills and strokes alias (background/chart/* and border/chart/*, ADR-050 amended 2026-11-19), each a 3-step ramp {hue}-200 / -500 / -800 like system; cyan carries 200 and 500 only. Components never read them directly, they read the Semantic that aliases them; a brand kit may re-point the Semantic, never the primitive.",
+            "chart": "Retired as a family on 2026-11-19 (#3247, OPERATOR SAID: \"why would we have primitives for our charts? ... Let's remove our chart primitives\"): the light-mode hues moved to the accent family above. Only the six -on-dark partners remain, held in Figma until the operator reviews the accent 800 steps; they leave this list with that review."
           },
-          "system": ["red", "green", "yellow", "blue", "purple", "orange", "neutral", "blue-light", "neutral-light", "green-light", "red-light", "yellow-light", "orange-light", "purple-light", "red-surface", "green-surface", "blue-surface"],
+          "system": ["red-200", "red-500", "red-800", "green-200", "green-500", "green-800", "yellow-200", "yellow-500", "yellow-800", "blue-200", "blue-500", "blue-800", "purple-200", "purple-500", "purple-800", "orange-200", "orange-500", "orange-800", "neutral-200", "neutral-500"],
           "social": ["youtube", "twitter", "facebook", "instagram", "linkedin", "yelp", "google", "apple", "bing", "tiktok"],
           "annotation": ["pink", "purple", "blue", "light-pink", "light-purple", "light-blue"],
-          "chart": ["blue", "orange", "teal", "violet", "olive", "cyan", "amber", "blue-on-dark", "orange-on-dark", "teal-on-dark", "violet-on-dark", "olive-on-dark", "cyan-on-dark"]
+          "accent": ["blue-200", "blue-500", "blue-800", "orange-200", "orange-500", "orange-800", "teal-200", "teal-500", "teal-800", "violet-200", "violet-500", "violet-800", "olive-200", "olive-500", "olive-800", "cyan-200", "cyan-500", "amber-200", "amber-500", "amber-800"],
+          "chart": ["blue-on-dark", "orange-on-dark", "teal-on-dark", "violet-on-dark", "olive-on-dark", "cyan-on-dark"]
         },
         "namedSteps": {
           "$comment": "#2677: named endpoints of a numeric family.",
