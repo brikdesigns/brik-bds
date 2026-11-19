@@ -1,35 +1,106 @@
 ---
 title: Calendar
-description: Date-based display for scheduling and event views. Currently in development.
+description: Month and week grid of dated events, headed by CalendarToolbar.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
+Calendar is a month or week grid of dated events, headed by a [CalendarToolbar](/docs/components/calendar-toolbar). It is built on FullCalendar and themed with BDS tokens; navigation, the title and the view switch are wired for you.
+
+## Purpose
+
+A calendar shows *when* things happen. Use it when the date is the main way people read the data.
+
+## Use it for
+
+- Scheduled content: posts, emails, campaigns
+- Appointments and closures across a month or week
+
+For picking one date use [DatePicker](/docs/components/date-picker). For a chronological feed use [ActivityTimeline](/docs/components/activity-timeline). For per-shift column scheduling use [Board](/docs/components/board).
+
+## Import
+
+```tsx
+import { Calendar } from '@brikdesigns/bds';
+```
+
+## Example
+
+```tsx
+<Calendar
+  events={[
+    { id: '1', title: 'Launch post', start: '2026-11-20T09:00', tone: 'positive' },
+    { id: '2', title: 'Office closed', start: '2026-11-26', allDay: true, color: 'orange' },
+  ]}
+  onEventClick={(event) => router.push(`/posts/${event.id}`)}
+  onEventMove={(event, start) => reschedule(event.id, start)}
+  filters={<Select aria-label="Filter by channel" options={channelOptions} />}
+/>
+```
+
+## Event fills
+
+Each event takes one fill:
+
+- **`tone`** for status, in Badge's words: `neutral` (default), `positive`, `warning`, `negative`.
+- **`color`** for a category with no status meaning, in Tag's hues: `blue`, `green`, `orange`, `purple`, `yellow`, `red`. `color` wins when both are set.
+
 <Callout type="warn">
-  **Calendar is a work-in-progress placeholder.** The component is not yet implemented in BDS — only the directory + skeleton stories exist. New code should not depend on Calendar's API; it will change before stable release.
+  **Don't colour events by hand.** Pick a `tone` or `color`; event text is always `--bds-text-on-color-light`, the pairing every fill clears AA with.
 </Callout>
 
-Calendar is reserved for date-based display surfaces — month / week / day views, event grids, scheduling overlays. Tracking placeholder so consumers don't reach for raw HTML calendar implementations while the proper component is being designed.
+## Rescheduling
 
-**When to use:** not yet — Calendar is a WIP placeholder with no implementation, so nothing should reach for it. Until it ships, pick a sibling from the table below by what the surface actually does.
+Passing `onEventMove` turns drag-to-reschedule on. It is called with the event and its new start. Throw or reject, for example when a save fails, and the event snaps back.
 
-## Until Calendar ships
+## Accessibility
 
-For date *picking*, use [DatePicker](/docs/components/date-picker) — it's implemented and stable.
+- The toolbar title is a heading with `aria-live="polite"`, so stepping to a new period is announced.
+- Passing `onEventClick` makes each event focusable and activatable with Enter or Space; the event title is its accessible name.
+- Focused events show a `--bds-border-focus` outline.
 
-For event lists chronologically, use [ActivityTimeline](/docs/components/activity-timeline) (implemented).
+## API
 
-For board-style scheduling (per-shift staff coverage), use [Board](/docs/components/board).
+### Calendar
 
-## Status
+{/* props-check: CalendarProps @ components/ui/Calendar/Calendar.tsx */}
 
-| Status | Notes |
-|---|---|
-| **WIP** | Component not implemented — placeholder only. |
+| Prop | Type | Default |
+|---|---|---|
+| `events` | `CalendarEvent<TData>[]` *(required)* | — |
+| `views` | `CalendarView[]` | `['month', 'week']` |
+| `defaultView` | `CalendarView` | first of `views` |
+| `initialDate` | `Date \| string` | today |
+| `onEventClick` | `(event: CalendarEvent) => void` | — |
+| `onEventMove` | `(event: CalendarEvent, start: Date) => void \| Promise<void>` | — |
+| `renderEvent` | `(event: CalendarEvent) => ReactNode` | event `title` |
+| `filters` | `ReactNode` | — |
+| `activeFilterCount` | `number` | — |
+| `actions` | `ReactNode` | — |
+| `titleAs` | `'h2' \| 'h3'` | `'h2'` |
+| `size` | `'sm' \| 'md' \| 'lg'` | `'sm'` |
+| `allDaySlot` | `boolean` | `true` |
+
+Plus all standard `<div>` HTML attributes (excluding `title` and `children`).
+
+`CalendarView` is `'month' \| 'week'`.
+
+### CalendarEvent
+
+| Field | Type | Default |
+|---|---|---|
+| `id` | `string` *(required)* | — |
+| `title` | `string` *(required)* | — |
+| `start` | `Date \| string` *(required)* | — |
+| `end` | `Date \| string` | — |
+| `allDay` | `boolean` | `false` |
+| `tone` | `'neutral' \| 'positive' \| 'warning' \| 'negative'` | `'neutral'` |
+| `color` | `'blue' \| 'green' \| 'orange' \| 'purple' \| 'yellow' \| 'red'` | — |
+| `data` | `TData` | — |
 
 ## Related
 
-- [DatePicker](/docs/components/date-picker) — for date picking
+- [CalendarToolbar](/docs/components/calendar-toolbar) — the header row, usable on its own
+- [DatePicker](/docs/components/date-picker) — picking one date
 - [ActivityTimeline](/docs/components/activity-timeline) — chronological events
 - [Board](/docs/components/board) — column-based scheduling
-- **[Storybook placeholder](https://storybook.brikdesigns.com/?path=/story/components-calendar--placeholder)**
