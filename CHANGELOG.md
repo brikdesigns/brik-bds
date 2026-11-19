@@ -34,6 +34,7 @@ a consumer greps this file before bumping.
 | `bds-button--primary.bds-button--tone-positive` | `bds-button--variant-positive` | `variant="positive"` |
 
 **Deprecated (props):** `tone` and `emphasis` on Button, IconButton and LinkButton, the `ButtonTone` and `ButtonEmphasis` types, and Hero's `ctaEmphasis` still work for one minor. Each folds into `variant` and warns once in the console. Use `variant` instead.
+
 **Breaking (consumer CSS):** Footer's variant modifiers now carry the `variant` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No aliases ship.
 
 | Old | New | Prop |
