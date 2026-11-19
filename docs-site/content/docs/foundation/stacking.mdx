@@ -41,3 +41,13 @@ Listed from the bottom of the stack to the top. A higher row always paints over 
 - The **shell** sits above the **page header**, so a sticky header scrolling under the top bar never paints over it.
 - Both sit below **dropdown**, **sheet**, **modal**, **dialog** and **tooltip**, so an open overlay covers the shell.
 - Don't add `calc(var(--bds-z-modal) + 1)`. If a layer needs its own rung, it needs a token added to the scale.
+
+
+## Floating panels render in place
+
+A panel that opens from a trigger (Menu, FilterButton, the CommentComposer mention list, AddressInput, AddableTagList, AddableEntryList, Popover, DatePicker) stays in the DOM beside its trigger. It is never portaled to `body`.
+
+- `useFloatingPanel` switches the panel to `position: fixed` and places it against the viewport: it flips to the side with more room, shifts away from the edges, and caps its height to the room left (never below three rows). A Sheet's scrolling body no longer clips it.
+- The panel keeps `--bds-z-dropdown`. Because it shares the Sheet's stacking context, it paints above the Sheet body; the Sheet's focus trap and theme variables apply to it.
+- Popover and DatePicker use Radix's own `fixed` positioning with no `Portal`. A portaled panel lands on `body` with the Radix wrapper's z-index of 100, below `--bds-z-sheet`, and paints under the Sheet.
+- Any ancestor with `transform`, `filter` or `contain: layout/paint` captures a fixed panel. Keep those off a panel's wrapper.

@@ -92,21 +92,19 @@ export function Popover({
           </div>
         )}
       </div>
-      <RadixPopover.Portal>
-        <RadixPopover.Content
-          className={bdsClass('bds-popover__panel')}
-          side={placement}
-          sideOffset={4}
-          role="dialog"
-          aria-label={panelLabel}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          onOpenAutoFocus={isHover ? (e) => e.preventDefault() : undefined}
-          onCloseAutoFocus={isHover ? (e) => e.preventDefault() : undefined}
-        >
-          {content}
-        </RadixPopover.Content>
-      </RadixPopover.Portal>
+      <RadixPopover.Content
+        className={bdsClass('bds-popover__panel')}
+        side={placement}
+        sideOffset={4}
+        role="dialog"
+        aria-label={panelLabel}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onOpenAutoFocus={isHover ? (e) => e.preventDefault() : undefined}
+        onCloseAutoFocus={isHover ? (e) => e.preventDefault() : undefined}
+      >
+        {content}
+      </RadixPopover.Content>
     </RadixPopover.Root>
   );
 }

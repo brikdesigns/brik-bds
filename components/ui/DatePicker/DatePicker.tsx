@@ -462,32 +462,30 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
             </button>
           </Popover.Trigger>
 
-          <Popover.Portal>
-            <Popover.Content
-              sideOffset={4}
-              align="start"
-              style={{ outline: 'none' }}
-              aria-label={precision === 'month' ? 'Choose month' : 'Choose date'}
-            >
-              {precision === 'month' ? (
-                <MonthGrid
-                  value={value}
-                  onChange={handleSelect}
-                  minDate={minDate}
-                  maxDate={maxDate}
-                  onClose={() => setOpen(false)}
-                />
-              ) : (
-                <Calendar
-                  value={value}
-                  onChange={handleSelect}
-                  minDate={minDate}
-                  maxDate={maxDate}
-                  onClose={() => setOpen(false)}
-                />
-              )}
-            </Popover.Content>
-          </Popover.Portal>
+          <Popover.Content
+            sideOffset={4}
+            align="start"
+            style={{ outline: 'none' }}
+            aria-label={precision === 'month' ? 'Choose month' : 'Choose date'}
+          >
+            {precision === 'month' ? (
+              <MonthGrid
+                value={value}
+                onChange={handleSelect}
+                minDate={minDate}
+                maxDate={maxDate}
+                onClose={() => setOpen(false)}
+              />
+            ) : (
+              <Calendar
+                value={value}
+                onChange={handleSelect}
+                minDate={minDate}
+                maxDate={maxDate}
+                onClose={() => setOpen(false)}
+              />
+            )}
+          </Popover.Content>
         </Popover.Root>
 
         {error && (
