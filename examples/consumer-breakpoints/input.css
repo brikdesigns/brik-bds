@@ -6,7 +6,7 @@
 @media (--bds-up-tablet) {
   .shell {
     display: grid;
-    grid-template-columns: var(--bds-shell-sidebar-width) 1fr;
+    grid-template-columns: 260px 1fr;
   }
 }
 

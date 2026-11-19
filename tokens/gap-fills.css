@@ -28,20 +28,16 @@
 :root {
   /* ── Typography Text-Transform ──
      Semantic casing rules per font role.
-     heading/label = none (copy renders as authored; Title Case is a content standard, #2831)
+     label = none (copy renders as authored; Title Case is a content standard, #2831)
      field-label = capitalize (form-control labels render Title Case via CSS even when the
        author writes sentence case; Button/Tag/nav stay on label = none; #2831)
      subtitle = uppercase (all-caps labels)
-     body/display = none (no forced casing)
      These are visual transforms; copy casing is a content standard.
      Components reference these via var(), Webflow classes inherit directly.
      Override per-theme by redefining in .body.theme-N blocks. */
-  --bds-text-transform-heading: none;
   --bds-text-transform-label: none;
   --bds-text-transform-field-label: capitalize;
   --bds-text-transform-subtitle: uppercase;
-  --bds-text-transform-body: none;
-  --bds-text-transform-display: none;
 
   /* ── Letter-spacing (gap-fill — not yet in Figma/SD; #1845) ──
      One semantic tracking token for the wide, uppercase-label style shared by
@@ -53,8 +49,6 @@
   --bds-letter-spacing-wide: 0.05em;
 
   /* ── System Color Extras ── */
-  --bds-color-system-transparent: #0000;
-  --bds-color-system-lightbox: #000000a3;
 
   /* ── Focus ring (gap-fill — not yet in Figma/SD) ──
      References the border brand-primary token. Override per-theme for branded focus rings. */
@@ -479,8 +473,6 @@
      resolves to the px width its `ch` value already rendered at the fixed 16px
      body size (44ch→448, 60ch→600, 72ch→720), so this is a ≤3px move, not a
      retune. The follow-up drops this block once brikdesigns#1856 has migrated. */
-  --bds-measure-sm: var(--bds-content-width-text-xs); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-text-xs (ADR-041, #2615); drop next minor */
-  --bds-measure-md: var(--bds-content-width-text-sm); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-text-sm (ADR-041, #2615); drop next minor */
   --bds-measure-lg: var(--bds-content-width-text-md); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-text-md (ADR-041, #2615); drop next minor */
 
   /* ── Stacking order (brik-bds#2840, components moved on in #2845) ──
@@ -511,15 +503,8 @@
      Fixed dimensions of the product app shell. Sources:
        top bar 64px  — brik-client-portal src/components/portal-top-bar.tsx:57
                        (height: '64px') and src/app/globals.css:970-971; aliases
-                       --bds-size-1600 (tokens/figma-tokens.css:284)
-       sidebar 260px / 80px collapsed — SidebarNavigation.tsx:75 defaults
-                       (the portal passes no width); 80px aliases --bds-size-1800
-       section rail 220px — brik-client-portal src/app/globals.css:932
-                       (.portal-page__rail width) */
+                       --bds-size-1600 (tokens/figma-tokens.css:284) */
   --bds-shell-top-bar-height:       var(--bds-size-1600);
-  --bds-shell-sidebar-width:        260px;
-  --bds-shell-sidebar-width-collapsed: var(--bds-size-1800);
-  --bds-shell-rail-width:           220px;
 
   /* SubNavigation sticky offset (brik-bds#2841). 0px, not the top-bar height:
      the canonical app shell has no top bar. A shell with one sets it to
