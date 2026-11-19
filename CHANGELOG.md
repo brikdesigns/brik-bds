@@ -18,6 +18,12 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** Footer's variant modifiers now carry the `variant` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No aliases ship.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-footer--{default,brand,inverse}` | `bds-footer--variant-{default,brand,inverse}` | `variant` |
+
 **Breaking (consumer CSS):** The `on-color` modifiers now carry the `emphasis` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). `on-color` was already admitted to `emphasis` by #1983. No aliases ship. Button's `--inverse` is a separate Rule 4 row and is untouched.
 
 | Old | New | Prop |
