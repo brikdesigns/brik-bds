@@ -6,6 +6,7 @@ import { TextInput, type TextInputSize } from '../TextInput';
 import { TextArea, type TextAreaSize } from '../TextArea';
 import { useSuggestionFilter } from '../shared/useSuggestionFilter';
 import { useAddableList } from '../shared/useAddableList';
+import { useFloatingPanel } from '../shared/useFloatingPanel';
 import './AddableEntryList.css';
 
 export type AddableEntryListSize = 'sm' | 'md' | 'lg';
@@ -392,6 +393,7 @@ function SuggestionModeEdit({
   const primaryInputRef = useRef<HTMLInputElement>(null);
   const secondaryWrapRef = useRef<HTMLDivElement>(null);
   const comboContainerRef = useRef<HTMLDivElement>(null);
+  const comboListRef = useRef<HTMLUListElement>(null);
 
   const focusSecondary = () => {
     const ta = secondaryWrapRef.current?.querySelector('textarea');
@@ -455,6 +457,7 @@ function SuggestionModeEdit({
     },
     onCancel: cancel,
   });
+  useFloatingPanel(comboListRef, combo.isOpen && combo.filtered.length > 0);
 
   const handleComboPrimaryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPrimaryDraft(e.target.value);
@@ -554,6 +557,7 @@ function SuggestionModeEdit({
 
               {combo.isOpen && combo.filtered.length > 0 && (
                 <ul
+                  ref={comboListRef}
                   id={combo.listboxId}
                   role="listbox"
                   aria-label={primaryLabel ? `${primaryLabel} suggestions` : 'Suggestions'}

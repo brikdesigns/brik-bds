@@ -9,6 +9,9 @@ import { Sheet } from '../Sheet/Sheet';
 import { FilterButton } from '../FilterButton/FilterButton';
 import { CommentComposer } from '../CommentComposer/CommentComposer';
 import { FieldGrid } from '../FieldGrid/FieldGrid';
+import { AddressInput } from '../AddressInput/AddressInput';
+import { AddableTagList } from '../AddableTagList/AddableTagList';
+import { AddableEntryList } from '../AddableEntryList/AddableEntryList';
 
 /**
  * useFloatingPanel (brik-bds#3258): Menu, FilterButton and the CommentComposer
@@ -305,5 +308,68 @@ describe('useFloatingPanel (#3258)', () => {
     expect(panel.scrollHeight).toBeGreaterThan(panel.clientHeight);
     expect(panelRect.height).toBeGreaterThanOrEqual(threeRows - 1);
     expect(rectOf(rows[2]).bottom).toBeLessThanOrEqual(panelRect.bottom + 0.5);
+  });
+});
+
+describe('useFloatingPanel on the address and addable-list dropdowns (#3260)', () => {
+  const options = Array.from({ length: 8 }, (_, i) => `Option ${i}`);
+
+  async function typeInto(input: HTMLInputElement, value: string) {
+    await act(async () => {
+      input.focus();
+      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(input, value);
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+  }
+
+  async function clickButton(text: string) {
+    const button = [...document.querySelectorAll('button')].find((b) => b.textContent?.trim() === text)!;
+    await act(async () => {
+      button.click();
+    });
+  }
+
+  /** Pin `anchor` 8px above the sheet body's bottom edge, then check the panel flipped up and fits. */
+  async function expectFlippedUp(panelSelector: string, anchorSelector: string) {
+    await settle();
+    const panel = document.querySelector<HTMLElement>(panelSelector)!;
+    const anchor = document.querySelector(anchorSelector)!;
+    expect(panel).not.toBeNull();
+    expectInsideViewport(rectOf(panel));
+    expectPaintedOnTop(panel);
+    expect(rectOf(panel).bottom).toBeLessThanOrEqual(rectOf(anchor).top + 1);
+  }
+
+  it('AddressInput suggestions near the bottom of a Sheet flip up and stay in the viewport', async () => {
+    const suggestions = options.map((label, id) => ({ id: String(id), label }));
+    await mount(sheetOf(spacerEl(), h(AddressInput, { suggestions, label: 'Address' })));
+    pinToBottom(document.querySelector('.bds-address-input__field')!, document.querySelector<HTMLElement>('[data-spacer]')!, 8);
+    await act(async () => {
+      document.querySelector('input')!.focus();
+    });
+    await expectFlippedUp('.bds-address-input__dropdown', '.bds-address-input__field');
+  });
+
+  it('AddableTagList suggestions near the bottom of a Sheet flip up and stay in the viewport', async () => {
+    await mount(
+      sheetOf(spacerEl(), h(AddableTagList, { values: [], onChange: () => {}, suggestions: options, addLabel: 'Add tag' })),
+    );
+    await clickButton('Add tag');
+    pinToBottom(document.querySelector('input')!, document.querySelector<HTMLElement>('[data-spacer]')!, 8);
+    await typeInto(document.querySelector('input')!, 'Option');
+    await expectFlippedUp('.bds-addable-tag-list__dropdown', 'input');
+  });
+
+  it('AddableEntryList suggestions near the bottom of a Sheet flip up and stay in the viewport', async () => {
+    await mount(
+      sheetOf(
+        spacerEl(),
+        h(AddableEntryList, { entries: [], onChange: () => {}, primarySuggestions: options, addLabel: 'Add entry' }),
+      ),
+    );
+    await clickButton('Add entry');
+    pinToBottom(document.querySelector('input')!, document.querySelector<HTMLElement>('[data-spacer]')!, 8);
+    await typeInto(document.querySelector('input')!, 'Option');
+    await expectFlippedUp('.bds-addable-entry-list__dropdown', 'input');
   });
 });
