@@ -199,7 +199,8 @@
   --bds-page-accent: var(--bds-color-tan-100);
   --bds-page-service-green: var(--bds-color-green-500);
   --bds-page-service-blue: var(--bds-color-blue-200);
-  --bds-chart-brand: var(--bds-border-brand-primary);
+  --bds-border-chart-brand: var(--bds-border-brand-primary);
+  --bds-background-chart-brand: var(--bds-border-brand-primary);
   --bds-border-focus: var(--bds-border-brand-primary);
 }
 
@@ -320,7 +321,8 @@
   --bds-page-accent: var(--bds-color-tan-950);
   --bds-page-service-green: var(--bds-color-green-500);
   --bds-page-service-blue: var(--bds-color-blue-200);
-  --bds-chart-brand: var(--bds-border-brand-primary);
+  --bds-border-chart-brand: var(--bds-border-brand-primary);
+  --bds-background-chart-brand: var(--bds-border-brand-primary);
   --bds-border-focus: var(--bds-border-brand-primary);
   --bds-text-on-color-light-muted: color-mix(in srgb, var(--bds-text-on-color-light) 70%, transparent);
 }

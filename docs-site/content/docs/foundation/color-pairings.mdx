@@ -55,7 +55,7 @@ Chart colours are graphics, not text. Each `--chart-*` token is a bar, line, sli
 - **Separate adjacent fills** with a stroke in the surface colour.
 - **Gridlines and axes** use `--border-muted` / `--border-secondary`, never a chart colour.
 
-`--chart-brand` follows the brand: Poppy under Brik, the client's brand colour under a client theme. The categorical and status fills come from their own `--color-chart-*` primitives. No brand kit rebinds those, so the contrast and colour-blind separation hold under every theme.
+`--background-chart-brand` follows the brand: Poppy under Brik, the client's brand colour under a client theme. The categorical and status fills alias the `--color-accent-*` primitives (chart is a role under `background` and `border`, not a purpose — ADR-050 amended 2026-11-19). No brand kit rebinds those primitives, so the contrast and colour-blind separation hold under every theme.
 
 ## The standard
 

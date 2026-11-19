@@ -316,14 +316,19 @@ function collectLeafPaths(node, prefix, out) {
     const childPath = prefix ? `${prefix}/${key}` : key;
     if (value.$value !== undefined) {
       out.push(childPath);
-    } else {
-      collectLeafPaths(value, childPath, out);
     }
+    // Always descend. A leaf that Figma re-shaped into a group — `color/system/red`
+    // becoming `color/system/red/{200,500,800}` — holds BOTH its old `$value` and
+    // the new children after `applyToSet` (getOrCreate walks into the leaf). A
+    // pure leaf has only `$`-keys, so descending into it yields nothing.
+    collectLeafPaths(value, childPath, out);
   }
 }
 
 // Delete the leaf at `varName` within `set`, then remove any parent group that
-// became empty as a result (bottom-up).
+// became empty as a result (bottom-up). A leaf that also carries child groups
+// (re-shaped into a group by this same sync) keeps its children: only the
+// `$`-keys that made it a leaf are stripped.
 function deleteLeaf(set, varName) {
   const parts = varName.split('/');
   const chain = []; // [parentObj, key] from root down to the leaf's parent
@@ -333,7 +338,15 @@ function deleteLeaf(set, varName) {
     chain.push([current, parts[i]]);
     current = current[parts[i]];
   }
-  delete current[parts[parts.length - 1]];
+  const leafKey = parts[parts.length - 1];
+  const leaf = current[leafKey];
+  const hasChildren = leaf && typeof leaf === 'object'
+    && Object.keys(leaf).some((k) => !k.startsWith('$'));
+  if (hasChildren) {
+    for (const k of Object.keys(leaf)) if (k.startsWith('$')) delete leaf[k];
+    return; // the node is now a group holding live leaves — nothing to collapse
+  }
+  delete current[leafKey];
   for (let i = chain.length - 1; i >= 0; i--) {
     const [parent, key] = chain[i];
     if (parent[key] && typeof parent[key] === 'object' && Object.keys(parent[key]).length === 0) {

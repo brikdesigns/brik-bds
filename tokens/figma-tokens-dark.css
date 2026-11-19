@@ -3,25 +3,25 @@
  */
 
 :root[data-theme="dark"] {
-  --bds-text-negative: var(--bds-color-system-red);
-  --bds-text-positive: var(--bds-color-system-green);
-  --bds-text-warning: var(--bds-color-system-yellow);
-  --bds-text-accent-red: var(--bds-color-system-red);
+  --bds-text-negative: var(--bds-color-system-red-500);
+  --bds-text-positive: var(--bds-color-system-green-500);
+  --bds-text-warning: var(--bds-color-system-yellow-500);
+  --bds-text-accent-red: var(--bds-color-system-red-500);
   --bds-text-primary: var(--bds-color-grayscale-100);
   --bds-text-secondary: var(--bds-color-grayscale-100);
   --bds-text-muted: var(--bds-color-grayscale-600);
   --bds-text-inverse: var(--bds-color-grayscale-black);
   --bds-text-on-color-dark: var(--bds-color-grayscale-white);
   --bds-text-on-color-light: var(--bds-color-grayscale-950);
-  --bds-text-neutral: var(--bds-color-system-neutral);
+  --bds-text-neutral: var(--bds-color-system-neutral-500);
   --bds-text-brand-primary: var(--bds-color-grayscale-100);
-  --bds-text-text-link: var(--bds-color-system-blue);
+  --bds-text-text-link: var(--bds-color-system-blue-500);
   --bds-text-disabled: var(--bds-color-grayscale-500); /** Disabled button text (all variants) */
-  --bds-text-error: var(--bds-color-system-red);
-  --bds-text-accent-orange: var(--bds-color-system-orange);
-  --bds-border-negative: var(--bds-color-system-red);
-  --bds-border-positive: var(--bds-color-system-green);
-  --bds-border-warning: var(--bds-color-system-yellow);
+  --bds-text-error: var(--bds-color-system-red-500);
+  --bds-text-accent-orange: var(--bds-color-system-orange-500);
+  --bds-border-negative: var(--bds-color-system-red-500);
+  --bds-border-positive: var(--bds-color-system-green-500);
+  --bds-border-warning: var(--bds-color-system-yellow-500);
   --bds-border-input: var(--bds-color-grayscale-700);
   --bds-border-primary: var(--bds-color-grayscale-900);
   --bds-border-secondary: var(--bds-color-grayscale-800);
@@ -29,25 +29,36 @@
   --bds-border-inverse: var(--bds-color-grayscale-950);
   --bds-border-on-color-dark: var(--bds-color-grayscale-white);
   --bds-border-on-color-light: var(--bds-color-grayscale-950);
-  --bds-border-neutral: var(--bds-color-system-neutral);
+  --bds-border-neutral: var(--bds-color-system-neutral-500);
   --bds-border-brand-primary: var(--bds-color-grayscale-100);
   --bds-border-disabled: var(--bds-color-grayscale-500); /** Disabled button border (all variants) */
-  --bds-border-accent-yellow: var(--bds-color-system-yellow);
-  --bds-border-accent-blue: var(--bds-color-system-blue);
-  --bds-border-accent-green: var(--bds-color-system-green);
-  --bds-border-accent-purple: var(--bds-color-system-purple);
-  --bds-border-accent-orange: var(--bds-color-system-orange);
-  --bds-border-accent-red: var(--bds-color-system-red);
-  --bds-background-negative: var(--bds-color-system-red);
-  --bds-background-positive: var(--bds-color-system-green);
-  --bds-background-warning: var(--bds-color-system-yellow);
+  --bds-border-accent-yellow: var(--bds-color-system-yellow-500);
+  --bds-border-accent-blue: var(--bds-color-system-blue-500);
+  --bds-border-accent-green: var(--bds-color-system-green-500);
+  --bds-border-accent-purple: var(--bds-color-system-purple-500);
+  --bds-border-accent-orange: var(--bds-color-system-orange-500);
+  --bds-border-accent-red: var(--bds-color-system-red-500);
+  --bds-border-chart-neutral: var(--bds-color-grayscale-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/neutral; this one styles a border/stroke. */
+  --bds-border-chart-categorical-1: var(--bds-color-chart-blue-on-dark); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-1; this one styles a border/stroke. */
+  --bds-border-chart-categorical-2: var(--bds-color-chart-orange-on-dark); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-2; this one styles a border/stroke. */
+  --bds-border-chart-categorical-3: var(--bds-color-chart-teal-on-dark); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-3; this one styles a border/stroke. */
+  --bds-border-chart-categorical-4: var(--bds-color-chart-violet-on-dark); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-4; this one styles a border/stroke. */
+  --bds-border-chart-categorical-5: var(--bds-color-chart-olive-on-dark); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-5; this one styles a border/stroke. */
+  --bds-border-chart-categorical-6: var(--bds-color-chart-cyan-on-dark); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-6; this one styles a border/stroke. */
+  --bds-border-chart-positive: var(--bds-color-system-green-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/positive; this one styles a border/stroke. */
+  --bds-border-chart-warning: var(--bds-color-system-yellow-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/warning; this one styles a border/stroke. */
+  --bds-border-chart-negative: var(--bds-color-system-red-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/negative; this one styles a border/stroke. */
+  --bds-border-chart-info: var(--bds-color-system-blue-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/info; this one styles a border/stroke. */
+  --bds-background-negative: var(--bds-color-system-red-500);
+  --bds-background-positive: var(--bds-color-system-green-500);
+  --bds-background-warning: var(--bds-color-system-yellow-500);
   --bds-background-primary-hover: var(--bds-color-grayscale-950);
   --bds-background-secondary-hover: var(--bds-color-grayscale-800);
   --bds-background-secondary-pressed: var(--bds-color-grayscale-950);
-  --bds-background-accent-red: var(--bds-color-system-red);
-  --bds-background-accent-purple: var(--bds-color-system-purple);
-  --bds-background-accent-blue: var(--bds-color-system-blue);
-  --bds-background-accent-green: var(--bds-color-system-green);
+  --bds-background-accent-red: var(--bds-color-system-red-500);
+  --bds-background-accent-purple: var(--bds-color-system-purple-500);
+  --bds-background-accent-blue: var(--bds-color-system-blue-500);
+  --bds-background-accent-green: var(--bds-color-system-green-500);
   --bds-background-primary: var(--bds-color-grayscale-950);
   --bds-background-primary-pressed: var(--bds-color-grayscale-800);
   --bds-background-secondary: var(--bds-color-grayscale-black);
@@ -56,16 +67,28 @@
   --bds-background-input: var(--bds-color-grayscale-black);
   --bds-background-on-color-dark: var(--bds-color-grayscale-white);
   --bds-background-on-color-light: var(--bds-color-grayscale-950);
-  --bds-background-accent-yellow: var(--bds-color-system-yellow);
-  --bds-background-neutral: var(--bds-color-system-neutral);
+  --bds-background-accent-yellow: var(--bds-color-system-yellow-500);
+  --bds-background-neutral: var(--bds-color-system-neutral-500);
   --bds-background-brand-primary: var(--bds-color-grayscale-950);
   --bds-background-brand-primary-hover: var(--bds-color-grayscale-800);
   --bds-background-brand-primary-pressed: var(--bds-color-grayscale-black);
   --bds-background-disabled: var(--bds-color-grayscale-800); /** Disabled button background (all variants) */
-  --bds-background-accent-orange: var(--bds-color-system-orange);
-  --bds-surface-positive: var(--bds-color-system-green-light);
-  --bds-surface-negative: var(--bds-color-system-red-light);
-  --bds-surface-warning: var(--bds-color-system-yellow-light);
+  --bds-background-accent-orange: var(--bds-color-system-orange-500);
+  --bds-background-chart-neutral: var(--bds-color-grayscale-500);
+  --bds-background-chart-categorical-1: var(--bds-color-chart-blue-on-dark);
+  --bds-background-chart-categorical-2: var(--bds-color-chart-orange-on-dark);
+  --bds-background-chart-categorical-3: var(--bds-color-chart-teal-on-dark);
+  --bds-background-chart-categorical-4: var(--bds-color-chart-violet-on-dark);
+  --bds-background-chart-categorical-5: var(--bds-color-chart-olive-on-dark);
+  --bds-background-chart-categorical-6: var(--bds-color-chart-cyan-on-dark);
+  --bds-background-chart-positive: var(--bds-color-system-green-500);
+  --bds-background-chart-warning: var(--bds-color-system-yellow-500);
+  --bds-background-chart-negative: var(--bds-color-system-red-500);
+  --bds-background-chart-info: var(--bds-color-system-blue-500);
+  --bds-background-info: var(--bds-color-system-blue-500);
+  --bds-surface-positive: var(--bds-color-system-green-200);
+  --bds-surface-negative: var(--bds-color-system-red-200);
+  --bds-surface-warning: var(--bds-color-system-yellow-200);
   --bds-surface-secondary-hover: var(--bds-color-grayscale-700); /** Secondary button hover (dark mode) */
   --bds-surface-muted: var(--bds-color-grayscale-950);
   --bds-surface-overlay: var(--bds-color-grayscale-black);
@@ -75,34 +98,25 @@
   --bds-surface-secondary: var(--bds-color-grayscale-950);
   --bds-surface-secondary-pressed: var(--bds-color-grayscale-950);
   --bds-surface-inverse: var(--bds-color-grayscale-950);
-  --bds-surface-neutral: var(--bds-color-system-neutral-light);
+  --bds-surface-neutral: var(--bds-color-system-neutral-200);
   --bds-surface-brand-primary: var(--bds-color-grayscale-950);
   --bds-surface-brand-primary-hover: var(--bds-color-grayscale-800);
   --bds-surface-brand-primary-pressed: var(--bds-color-grayscale-black);
-  --bds-surface-accent-yellow: var(--bds-color-system-yellow-light);
-  --bds-surface-accent-blue: var(--bds-color-system-blue-light);
-  --bds-surface-accent-green: var(--bds-color-system-green-light);
-  --bds-surface-accent-purple: var(--bds-color-system-purple-light);
-  --bds-surface-accent-orange: var(--bds-color-system-orange-light);
-  --bds-surface-accent-red: var(--bds-color-system-red-light);
+  --bds-surface-accent-yellow: var(--bds-color-system-yellow-200);
+  --bds-surface-accent-blue: var(--bds-color-system-blue-200);
+  --bds-surface-accent-green: var(--bds-color-system-green-200);
+  --bds-surface-accent-purple: var(--bds-color-system-purple-200);
+  --bds-surface-accent-orange: var(--bds-color-system-orange-200);
+  --bds-surface-accent-red: var(--bds-color-system-red-200);
+  --bds-surface-info: var(--bds-color-system-blue-200);
   --bds-page-primary: var(--bds-color-grayscale-black);
   --bds-page-secondary: var(--bds-color-grayscale-black);
   --bds-page-inverse: var(--bds-color-grayscale-100);
   --bds-page-brand-primary: var(--bds-color-grayscale-950);
-  --bds-page-accent-yellow: var(--bds-color-system-yellow);
-  --bds-page-accent-orange: var(--bds-color-system-orange);
-  --bds-page-accent-red: var(--bds-color-system-red);
-  --bds-page-accent-purple: var(--bds-color-system-purple);
-  --bds-chart-neutral: var(--bds-color-grayscale-500);
-  --bds-chart-categorical-1: var(--bds-color-chart-blue-on-dark);
-  --bds-chart-categorical-2: var(--bds-color-chart-orange-on-dark);
-  --bds-chart-categorical-3: var(--bds-color-chart-teal-on-dark);
-  --bds-chart-categorical-4: var(--bds-color-chart-violet-on-dark);
-  --bds-chart-categorical-5: var(--bds-color-chart-olive-on-dark);
-  --bds-chart-categorical-6: var(--bds-color-chart-cyan-on-dark);
-  --bds-chart-positive: var(--bds-color-system-green);
-  --bds-chart-warning: var(--bds-color-system-yellow);
-  --bds-chart-negative: var(--bds-color-system-red);
-  --bds-chart-info: var(--bds-color-system-blue);
-  --bds-chart-brand: var(--bds-border-brand-primary);
+  --bds-page-accent-yellow: var(--bds-color-system-yellow-500);
+  --bds-page-accent-orange: var(--bds-color-system-orange-500);
+  --bds-page-accent-red: var(--bds-color-system-red-500);
+  --bds-page-accent-purple: var(--bds-color-system-purple-500);
+  --bds-border-chart-brand: var(--bds-border-brand-primary); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke. */
+  --bds-background-chart-brand: var(--bds-border-brand-primary);
 }

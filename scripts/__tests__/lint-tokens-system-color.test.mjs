@@ -24,10 +24,10 @@ function lint(css) {
 
 describe('lint-tokens Rule 18 (system-color-direct-read)', () => {
   it('flags a component reading --bds-color-system-red', () => {
-    const v = lint('.x { color: var(--bds-color-system-red); }');
+    const v = lint('.x { color: var(--bds-color-system-red-500); }');
     expect(v).toHaveLength(1);
     expect(v[0].severity).toBe('error');
-    expect(v[0].message).toContain('--bds-color-system-red');
+    expect(v[0].message).toContain('--bds-color-system-red-500');
   });
 
   it('passes the Semantic that aliases it', () => {
