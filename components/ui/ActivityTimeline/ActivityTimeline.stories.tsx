@@ -101,8 +101,8 @@ export const WithContent: Story = {
 export const WithDateTimeTimestamp: Story = {
   args: {
     events: [
-      { icon: <Icon icon="ph:plus" />, label: 'Request submitted', detail: 'by Emily Rivera', timestamp: <DateTime value="2026-04-12T13:04:00Z" mode="relative" />, isOrigin: true },
-      { icon: <Icon icon="ph:user" />, label: 'Assigned', detail: 'to Nick Stanerson', timestamp: <DateTime value="2026-04-12T15:15:00Z" mode="relative" /> },
+      { icon: <Icon icon="ph:plus" />, label: 'Request submitted', detail: 'by Emily Rivera', timestamp: <DateTime value="2026-04-12T13:04:00Z" mode="timestamp" timeZone="UTC" />, isOrigin: true },
+      { icon: <Icon icon="ph:user" />, label: 'Assigned', detail: 'to Nick Stanerson', timestamp: <DateTime value="2026-04-12T15:15:00Z" mode="timestamp" timeZone="UTC" /> },
     ],
   },
   play: async ({ canvasElement }) => {
