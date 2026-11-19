@@ -3,7 +3,7 @@
  *
  * The Astro blueprints (`content-system/blueprints/astro/*.astro`) hand-roll
  * `Button`'s markup as literal class strings
- * (`bds-button bds-button--{variant} bds-button--{size}` + a
+ * (`bds-button bds-button--variant-{variant} bds-button--size-{size}` + a
  * `bds-button__content` span) because Astro can't render the React `<Button>`.
  * That copy is invisible to the type system: if `Button`'s class contract
  * changes — a renamed modifier, a dropped variant, a restructured content slot
@@ -40,14 +40,10 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ASTRO_DIR = join(HERE, '../content-system/blueprints/astro');
 const BUTTON_TSX = join(HERE, '../components/ui/Button/Button.tsx');
 
-// Every shipped form × tone × emphasis combination (#1983) — an unshipped one is
-// dropped by Button with a warning, so it cannot add a class to the contract.
-type Axes = { variant: ButtonVariant; tone?: 'negative' | 'positive'; emphasis?: 'inverse' | 'on-color' };
-const AXES: Axes[] = [
-  { variant: 'primary' }, { variant: 'outline' }, { variant: 'secondary' }, { variant: 'ghost' },
-  { variant: 'primary', tone: 'negative' }, { variant: 'outline', tone: 'negative' },
-  { variant: 'ghost', tone: 'negative' }, { variant: 'primary', tone: 'positive' },
-  { variant: 'primary', emphasis: 'inverse' }, { variant: 'primary', emphasis: 'on-color' },
+// Every shipped style — Button's `variant` is one flat list (#3275).
+const VARIANTS: ButtonVariant[] = [
+  'primary', 'secondary', 'outline', 'ghost', 'inverse', 'on-color',
+  'negative', 'negative-outline', 'negative-ghost', 'positive',
 ];
 const SIZES: ButtonSize[] = ['tiny', 'sm', 'md', 'lg', 'xl'];
 
@@ -58,14 +54,14 @@ function contractTokens(): Set<string> {
   const tokens = new Set<string>();
 
   // Outer classes, exhaustively across the prop space that drives them.
-  for (const { variant, tone, emphasis } of AXES) {
+  for (const variant of VARIANTS) {
     for (const size of SIZES) {
       for (const iconOnly of [false, true]) {
         for (const fullWidth of [false, true]) {
           for (const loading of [false, true]) {
             for (const selected of [false, true]) {
               const cls = composeButtonClasses({
-                variant, tone, emphasis, size, iconOnly, fullWidth, loading, selected,
+                variant, size, iconOnly, fullWidth, loading, selected,
               });
               for (const m of cls.match(BUTTON_TOKEN) ?? []) tokens.add(m);
             }

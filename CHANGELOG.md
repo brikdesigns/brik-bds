@@ -18,6 +18,23 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** Button's style is now one flat `variant` list, and every style class carries the `variant` axis ([#3275](https://github.com/brikdesigns/brik-bds/issues/3275), ADR-033 § Amendments). The separate `tone` and `emphasis` classes are gone: a Button now emits exactly one `bds-button--variant-*` class. No aliases ship. The same classes apply to `IconButton` and `LinkButton`.
+
+| Old (0.247.0) | New | Prop |
+|---|---|---|
+| `bds-button--primary` | `bds-button--variant-primary` | `variant="primary"` |
+| `bds-button--secondary` | `bds-button--variant-secondary` | `variant="secondary"` |
+| `bds-button--outline` | `bds-button--variant-outline` | `variant="outline"` |
+| `bds-button--ghost` | `bds-button--variant-ghost` | `variant="ghost"` |
+| `bds-button--inverse` | `bds-button--variant-inverse` | `variant="inverse"` |
+| `bds-button--emphasis-on-color` | `bds-button--variant-on-color` | `variant="on-color"` |
+| `bds-button--primary.bds-button--tone-negative` | `bds-button--variant-negative` | `variant="negative"` |
+| `bds-button--outline.bds-button--tone-negative` | `bds-button--variant-negative-outline` | `variant="negative-outline"` |
+| `bds-button--ghost.bds-button--tone-negative` | `bds-button--variant-negative-ghost` | `variant="negative-ghost"` |
+| `bds-button--primary.bds-button--tone-positive` | `bds-button--variant-positive` | `variant="positive"` |
+
+**Deprecated (props):** `tone` and `emphasis` on Button, IconButton and LinkButton, the `ButtonTone` and `ButtonEmphasis` types, and Hero's `ctaEmphasis` still work for one minor. Each folds into `variant` and warns once in the console. Use `variant` instead.
+
 **Breaking (consumer CSS):** Footer's variant modifiers now carry the `variant` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No aliases ship.
 
 | Old | New | Prop |

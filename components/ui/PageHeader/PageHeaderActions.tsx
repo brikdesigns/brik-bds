@@ -63,7 +63,7 @@ export interface PageHeaderActionsProps {
  *   title="Acme Corp"
  *   actions={
  *     <PageHeaderActions
- *       destructive={<Button tone="negative">Delete</Button>}
+ *       destructive={<Button variant="negative">Delete</Button>}
  *       secondary={<Button variant="outline">Edit</Button>}
  *       primary={<Button variant="primary">New Proposal</Button>}
  *     />

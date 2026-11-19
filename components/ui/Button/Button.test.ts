@@ -45,13 +45,14 @@ describe('Button selected -> aria-pressed', () => {
 });
 
 /**
- * #1983 — `variant` is the form axis only. Valence rides `tone`, hue source
- * rides `emphasis` (ADR-033 § 2). Retired `variant` values still resolve.
+ * #3275 — Button's style is one flat `variant` list (ADR-033 § Amendments).
+ * The class is `bds-button--variant-{value}`. The retired `tone` / `emphasis`
+ * props and the `danger*` / `destructive` values still fold in for one minor.
  */
 import { vi, beforeEach, afterEach } from 'vitest';
 import { composeButtonClasses } from './Button';
 
-describe('Button tone × form (#1983)', () => {
+describe('Button flat variant (#3275)', () => {
   let warn: ReturnType<typeof vi.spyOn>;
   beforeEach(() => {
     warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
@@ -60,59 +61,41 @@ describe('Button tone × form (#1983)', () => {
 
   const cls = (props: Record<string, unknown>) => composeButtonClasses(props as never).split(' ');
 
-  it.each(['primary', 'outline', 'ghost'])('ships tone="negative" on %s', (variant) => {
-    const c = cls({ variant, tone: 'negative' });
-    expect(c).toContain(`bds-button--${variant}`);
-    expect(c).toContain('bds-button--tone-negative');
+  it.each([
+    'primary', 'secondary', 'outline', 'ghost', 'inverse', 'on-color',
+    'negative', 'negative-outline', 'negative-ghost', 'positive',
+  ])('emits one class for variant="%s" and warns nothing', (variant) => {
+    const c = cls({ variant });
+    expect(c).toContain(`bds-button--variant-${variant}`);
+    expect(c.filter((x) => x.startsWith('bds-button--variant-'))).toHaveLength(1);
     expect(warn).not.toHaveBeenCalled();
   });
 
-  it('ships tone="positive" on primary only', () => {
-    expect(cls({ variant: 'primary', tone: 'positive' })).toContain('bds-button--tone-positive');
-    const c = cls({ variant: 'outline', tone: 'positive' });
-    expect(c).toContain('bds-button--outline');
-    expect(c).not.toContain('bds-button--tone-positive');
-  });
-
-  it('drops a tone on secondary and warns', () => {
-    const c = cls({ variant: 'secondary', tone: 'negative' });
-    expect(c).toContain('bds-button--secondary');
-    expect(c).not.toContain('bds-button--tone-negative');
-    expect(warn).toHaveBeenCalled();
-  });
-
-  it('puts emphasis on a primary-form fill', () => {
-    const c = cls({ emphasis: 'inverse' });
-    expect(c).toContain('bds-button--inverse');
-    expect(c).not.toContain('bds-button--primary');
-    expect(cls({ emphasis: 'on-color' })).toContain('bds-button--emphasis-on-color');
-  });
-
-  it('drops emphasis on outline / alongside tone, and warns', () => {
-    expect(cls({ variant: 'outline', emphasis: 'inverse' })).not.toContain('bds-button--inverse');
-    expect(cls({ tone: 'negative', emphasis: 'inverse' })).not.toContain('bds-button--inverse');
-    expect(warn).toHaveBeenCalled();
+  it('defaults to primary', () => {
+    expect(cls({})).toContain('bds-button--variant-primary');
   });
 
   it.each([
-    ['negative', 'bds-button--tone-negative'],
-    ['positive', 'bds-button--tone-positive'],
-    ['destructive', 'bds-button--tone-negative'],
-    ['danger-outline', 'bds-button--tone-negative'],
-    ['inverse', 'bds-button--inverse'],
-    ['on-color', 'bds-button--emphasis-on-color'],
-  ])('still honours retired variant="%s"', (variant, expected) => {
-    expect(cls({ variant })).toContain(expected);
-    expect(warn).toHaveBeenCalled();
+    [{ variant: 'destructive' }, 'negative'],
+    [{ variant: 'danger' }, 'negative'],
+    [{ variant: 'danger-outline' }, 'negative-outline'],
+    [{ variant: 'danger-ghost' }, 'negative-ghost'],
+    [{ tone: 'negative' }, 'negative'],
+    [{ variant: 'outline', tone: 'negative' }, 'negative-outline'],
+    [{ variant: 'ghost', tone: 'negative' }, 'negative-ghost'],
+    [{ tone: 'positive' }, 'positive'],
+    [{ emphasis: 'inverse' }, 'inverse'],
+    [{ variant: 'primary', emphasis: 'on-color' }, 'on-color'],
+  ])('folds retired %o into variant="%s"', (props, expected) => {
+    expect(cls(props)).toContain(`bds-button--variant-${expected}`);
   });
 
-  it('an explicit tone beats the tone a retired variant implies', () => {
-    const c = cls({ variant: 'negative', tone: 'positive' });
-    expect(c).toContain('bds-button--tone-positive');
-    expect(c).not.toContain('bds-button--tone-negative');
+  it('keeps the variant when a retired prop has no style on it', () => {
+    expect(cls({ variant: 'secondary', tone: 'negative' })).toContain('bds-button--variant-secondary');
+    expect(cls({ variant: 'outline', emphasis: 'inverse' })).toContain('bds-button--variant-outline');
   });
 
-  it('renders the pair through <Button>', () => {
-    expect(html({ variant: 'ghost', tone: 'negative' })).toContain('bds-button--ghost bds-button--tone-negative');
+  it('renders through <Button>', () => {
+    expect(html({ variant: 'negative-ghost' })).toContain('bds-button--variant-negative-ghost');
   });
 });

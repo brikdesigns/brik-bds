@@ -231,7 +231,7 @@ function renderConfirmPreset(
         {cancelLabel}
       </Button>
       <Button
-        tone={resolvedConfirmVariant === 'negative' ? 'negative' : undefined}
+        variant={resolvedConfirmVariant === 'negative' ? 'negative' : 'primary'}
         onClick={() => onConfirm?.()}
         disabled={confirmDisabled}
         loading={confirmLoading}

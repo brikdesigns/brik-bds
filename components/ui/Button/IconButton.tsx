@@ -11,9 +11,9 @@ import { Button, type ButtonVariant, type ButtonTone, type ButtonEmphasis, type 
 export interface IconButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   /** Visual style variant */
   variant?: ButtonVariant;
-  /** Valence — see `Button` */
+  /** @deprecated Use `variant` — see `Button` (#3275). */
   tone?: ButtonTone;
-  /** Hue source — see `Button` */
+  /** @deprecated Use `variant` — see `Button` (#3275). */
   emphasis?: ButtonEmphasis;
   /** Size of the button */
   size?: ButtonSize;
