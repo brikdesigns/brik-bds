@@ -1,0 +1,151 @@
+@layer bds-components {
+/* Calendar — CalendarToolbar over a FullCalendar month / week grid */
+
+.bds-calendar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bds-gap-md);
+}
+
+/*
+ * FullCalendar injects its own stylesheet at runtime; its `--fc-*` variables
+ * are the supported theming hook. Scoped to `.bds-calendar` so a second,
+ * un-themed FullCalendar on the page keeps its defaults.
+ */
+.bds-calendar .fc {
+  --fc-border-color: var(--bds-border-muted);
+  --fc-page-bg-color: var(--bds-surface-primary);
+  --fc-neutral-bg-color: var(--bds-surface-secondary);
+  --fc-today-bg-color: transparent;
+  --fc-now-indicator-color: var(--bds-border-brand-primary);
+  --fc-event-bg-color: var(--bds-surface-neutral);
+  --fc-event-border-color: var(--bds-border-neutral);
+  --fc-event-text-color: var(--bds-text-on-color-light);
+  font-family: var(--bds-font-family-body);
+  font-size: var(--bds-body-sm);
+  color: var(--bds-text-primary);
+}
+
+/* ─── Day headers + day numbers ────────────────────────── */
+
+.bds-calendar .fc .fc-col-header-cell-cushion,
+.bds-calendar .fc .fc-daygrid-day-number {
+  color: var(--bds-text-secondary);
+  text-decoration: none;
+}
+
+.bds-calendar__day-header,
+.bds-calendar__day-number {
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  font-weight: var(--bds-font-weight-semibold);
+}
+
+.bds-calendar__day-header--today {
+  color: var(--bds-text-primary);
+}
+
+/* Today: day number as a brand pill — white text on the brand fill is canon */
+.bds-calendar__day-number--today {
+  display: inline-block;
+  padding: var(--bds-padding-tiny) var(--bds-padding-xs);
+  border-radius: var(--bds-border-radius-pill);
+  background-color: var(--bds-background-brand-primary);
+  color: var(--bds-text-on-color-dark);
+}
+
+.bds-calendar .fc .fc-day-other .bds-calendar__day-number {
+  color: var(--bds-text-muted);
+}
+
+.bds-calendar .fc .fc-timegrid-slot-label-cushion,
+.bds-calendar .fc .fc-timegrid-axis-cushion {
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  color: var(--bds-text-secondary);
+}
+
+.bds-calendar .fc .fc-daygrid-more-link {
+  font-family: var(--bds-font-family-label);
+  font-size: var(--bds-label-sm);
+  color: var(--bds-text-secondary);
+}
+
+/* ─── Events ───────────────────────────────────────────── */
+
+.bds-calendar .fc .bds-calendar__event {
+  border-radius: var(--bds-border-radius-sm);
+  border-width: var(--bds-border-width-sm);
+  padding: var(--bds-padding-tiny) var(--bds-padding-xs);
+  background-color: var(--bds-surface-neutral);
+  border-color: var(--bds-border-neutral);
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-calendar .fc .bds-calendar__event:focus-visible {
+  outline: var(--bds-border-width-md) solid var(--bds-border-focus);
+  outline-offset: var(--bds-border-width-sm);
+}
+
+.bds-calendar .fc .bds-calendar__event .fc-event-main {
+  color: var(--bds-text-on-color-light);
+}
+
+.bds-calendar__event-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: var(--bds-body-xs);
+  line-height: var(--bds-font-line-height-snug);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Tone (valence, as Badge) + color (accent hue, as Tag) */
+
+.bds-calendar .fc .bds-calendar__event--tone-positive {
+  background-color: var(--bds-surface-positive);
+  border-color: var(--bds-border-positive);
+}
+
+.bds-calendar .fc .bds-calendar__event--tone-warning {
+  background-color: var(--bds-surface-warning);
+  border-color: var(--bds-border-warning);
+}
+
+.bds-calendar .fc .bds-calendar__event--tone-negative {
+  background-color: var(--bds-surface-negative);
+  border-color: var(--bds-border-negative);
+}
+
+.bds-calendar .fc .bds-calendar__event--color-blue {
+  background-color: var(--bds-surface-accent-blue);
+  border-color: var(--bds-border-accent-blue);
+}
+
+.bds-calendar .fc .bds-calendar__event--color-green {
+  background-color: var(--bds-surface-accent-green);
+  border-color: var(--bds-border-accent-green);
+}
+
+.bds-calendar .fc .bds-calendar__event--color-orange {
+  background-color: var(--bds-surface-accent-orange);
+  border-color: var(--bds-border-accent-orange);
+}
+
+.bds-calendar .fc .bds-calendar__event--color-purple {
+  background-color: var(--bds-surface-accent-purple);
+  border-color: var(--bds-border-accent-purple);
+}
+
+.bds-calendar .fc .bds-calendar__event--color-red {
+  background-color: var(--bds-surface-accent-red);
+  border-color: var(--bds-border-accent-red);
+}
+
+.bds-calendar .fc .bds-calendar__event--color-yellow {
+  background-color: var(--bds-surface-accent-yellow);
+  border-color: var(--bds-border-accent-yellow);
+}
+}

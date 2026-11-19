@@ -76,7 +76,6 @@ const componentDirs = fs
 
 // Storybook reference pages — no exported React component, nothing to check.
 const EXEMPT_COMPONENTS = new Set([
-  'Calendar', // index.ts: "Calendar — placeholder, component not yet implemented"
   'Icons', // index.ts: "Icons — reference page only, no exported component"
   'ReadModePage', // page-archetype pattern doc — composes DataSection/FieldGrid/Field, no component of its own
 ]);
